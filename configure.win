@@ -4,12 +4,17 @@
 # tests if src/zlib and src/lpng exists 
 # This file is part of RGL
 #
-# $Id: configure.win,v 1.4 2004/02/27 17:34:07 dadler Exp $
+# $Id: configure.win,v 1.5 2004/04/30 11:40:25 dadler Exp $
 #
 
 if [ -e "src/zlib" ] && [ -e "src/lpng" ]; then
   exit 0
 else
+  if [ -e "${R_HOME}/src/gnuwin32/bitmap/libpng" ] && [ -e "${R_HOME}/src/extra/zlib" ]; then
+    cp -r ${R_HOME}/src/gnuwin32/bitmap/libpng src/lpng
+    cp -r ${R_HOME}/src/extra/zlib src/zlib
+    exit 0
+  else 
   cat <<EOF
 rgl on win32 platform depends on zlib and libpng sources.
 Please download zlib and libpng and setup the following steps:
@@ -28,5 +33,6 @@ run a batch-script that will download, rename and move the files.
 For detailed information see rgl/README and rgl/src/build/README-WIN32.txt.
 EOF
   exit 1
+  fi
 fi
 
