@@ -108,3 +108,5 @@ v0.64-14
   - added selection functions
   - added trackball navigation functions
   - added user-selectable mouse handlers  
+  - z-distance sorted rendering of alpha-blended faces 
+  - updated math.h using template functions, removed defines

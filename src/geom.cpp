@@ -95,7 +95,7 @@ Sphere::Sphere(const Vertex& in_center, const float in_radius)
 
 void Frustum::enclose(float sphere_radius, float fovangle, int width, int height)
 {
-  float fovradians = deg2radf(fovangle/2.0f);
+  float fovradians = math::deg2rad(fovangle/2.0f);
 
   float s = sinf(fovradians);
   float t = tanf(fovradians);

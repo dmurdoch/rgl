@@ -87,10 +87,10 @@ void Background::render(RenderContext* renderContext)
 
     float fov = renderContext->viewpoint->getFOV();
 
-    float rad = deg2radf(fov/2.0f);
+    float rad = math::deg2rad(fov/2.0f);
 
-    float hlen  = sinf(rad) * cosf(deg2radf(45.0));
-    float znear = hlen / tanf(rad);
+    float hlen  = math::sin(rad) * math::cos(math::deg2rad(45.0));
+    float znear = hlen / math::tan(rad);
     float zfar  = znear + 1.0f;
     float hwidth, hheight;
 
