@@ -44,3 +44,8 @@ v0.64-4
     (acording to latex, and codoc)
   - uploaded to cvs
 
+v0.64-5
+  - MacOS X port
+
+v0.64-6
+  - updated build system: added setversion.sh
