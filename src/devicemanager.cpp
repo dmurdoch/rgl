@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp,v 1.4 2005/02/08 21:23:10 dadler Exp $
+// $Id: devicemanager.cpp,v 1.5 2005/02/15 19:45:12 dadler Exp $
 
 #include "DeviceManager.hpp"
 #include "types.h"
@@ -92,7 +92,6 @@ int DeviceManager::getCurrent() {
  **/
 void DeviceManager::notifyDisposed(Disposable* disposed)
 {
-  printMessage("DISPOSED!");
   Container::iterator pos = std::find( devices.begin(), devices.end(), static_cast<Device*>( disposed ) );
   assert( pos != devices.end() );  
   if ( pos == current ) {
