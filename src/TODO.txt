@@ -2,11 +2,75 @@ BUGS
 ====
 
 - win32/mingw: pixmap loading fails
+DONE
+
+- using Rcmd SHLIB as the dll build tool
+
+    does not work in the common way, as we require a custom build step for zlib/libpng 
+    solution: add dll resources manually, pro: we require an icon to be compiled into the dll
+
+  DONE!  
+
+- R crashes when loading RGL library and closing R
+
+    RGL has been designed to be called cleanly , now a more agnostic design...
+
+  DONE!
+
+- two warnings:
+  
+g++ -Wall -pedantic -O2 -fomit-frame-pointer -fno-exceptions -fno-rtti -Izlib -I
+lpng124 -DHAVE_PNG_H  -c -o win32lib.o win32lib.cpp
+In file included from win32lib.cpp:13:
+win32gui.h:17: warning: `class gui::Win32GUIFactory' has virtual functions but
+   non-virtual destructor
+g++ -Wall -pedantic -O2 -fomit-frame-pointer -fno-exceptions -fno-rtti -Izlib -I
+lpng124 -DHAVE_PNG_H  -c -o win32gui.o win32gui.cpp
+In file included from win32gui.cpp:6:
+win32gui.h:17: warning: `class gui::Win32GUIFactory' has virtual functions but
+   non-virtual destructor
 
 - x11: rgl.snapshot requires window to be opened
        fix with offscreen pixmap rendering and support for output parameters
 
 - x11: ChooseVisual for depth,alpha and 15,16 bit failed on dadler's machine
+
+
+- win32: window icon
+
+- verify docs added:
+
+  BUILD/mingw requirements:
+  - R Version 1.8.0
+  - ActiveState Perl
+  - cygwin's autoconf/automake for zlib/libpng
+  - rtools
+  - HTML Help Workshop
+
+  path order:
+  - ActiveState Perl BEFORE cygwin's perl
+  - MinGW BEFORE cygwin's gcc
+
+- Maintainer Build:
+  - change to directory root-directory containing rgl
+
+- current mingw installation requires setup mingw
+  - removed to be the default mechanism
+  - make vc build to be optional
+  - hhc to be optional ?! -> pixmap requires these so we make it as a rule
+
+- pure win32 mingw/rtools build fails using x11gui x11lib
+  - without cygwin fails either
+
+- mingw warnings
+- rgl-maintainer manual page not accessable, to be removed!
+- rgl.bbox labels
+- pixmap support for 
+- z-sorted alpha-blended surfaces
+- perspective mouse-based adjusting using 3-button emulation
+- namespaces
+
+
        
 TODO
 ====
