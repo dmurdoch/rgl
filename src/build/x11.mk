@@ -1,9 +1,12 @@
 #
-# win32 platform config
+# x11 platform config
 # GNU Make include file
 #
 
-PLATFORM_OBJS=	\
+MODS+=		\
 x11lib.o	\
 x11gui.o
+
+HEADERS+=	\
+x11gui.h
 
