@@ -5,10 +5,10 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: types.h,v 1.4 2004/05/28 08:41:07 dadler Exp $
+// $Id: types.h,v 1.5 2004/05/28 11:00:48 dadler Exp $
 
 
-#include <cstdlib>
+#include <cstring>
 
 //
 //
