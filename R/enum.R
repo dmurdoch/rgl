@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: enum.R,v 1.1 2003/03/25 00:13:21 dadler Exp $
+## $Id: enum.R,v 1.2 2003/11/21 21:57:40 dadler Exp $
 ##
 
 
@@ -56,4 +56,10 @@ rgl.enum.primtype <- function (primtype)
 
 rgl.enum.halign <- function( halign)
   return ( rgl.enum (halign, left=-1, center=0, right=1 ) )
+  
+rgl.enum.texminfilter <- function (magfiltertype)
+  return ( rgl.enum (magfiltertype, nearest=0, linear=1, nearest.mipmap.nearest=2, nearest.mipmap.linear=3, linear.mipmap.nearest=4, linear.mipmap.linear=5) )
+  
+rgl.enum.texmagfilter <- function (minfiltertype)
+  return ( rgl.enum (minfiltertype, nearest=0, linear=1) )
 
