@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp,v 1.2 2004/09/22 10:39:34 dadler Exp $
+// $Id: devicemanager.cpp,v 1.3 2005/01/10 14:16:32 dadler Exp $
 
 #include "DeviceManager.hpp"
 #include "types.h"
@@ -120,9 +120,11 @@ void DeviceManager::previousDevice()
 {
   if ( current != devices.end() ) {
     // cycle to previous
-    if (current == devices.begin() )
-      current = devices.end();
-    --current;
+    Iterator prev = current;
+    if (prev == devices.begin() )
+      prev = devices.end();
+    --prev;
+    setCurrent( (*prev)->getID() );
   } else {
     // ignore: no devices
   }
