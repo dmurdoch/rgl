@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h,v 1.3 2003/06/04 08:52:51 dadler Exp $
+// $Id: gui.h,v 1.4 2003/11/21 15:22:01 dadler Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -135,7 +135,7 @@ public:
   virtual void buttonRelease(int button, int mouseX, int mouseY);
   virtual void wheelRotate(int direction);
   virtual void mouseMove(int mouseX, int mouseY);
-  virtual void captureLost() { }
+  virtual void captureLost();
 
 // protected services:
 
