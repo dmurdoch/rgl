@@ -4,11 +4,13 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h,v 1.8 2004/08/09 19:33:28 murdoch Exp $
+// $Id: gui.h,v 1.9 2004/09/22 14:04:35 dadler Exp $
 
 #include "types.h"
 #include "glgui.h"
 #include <string.h>
+
+#include "Disposable.hpp"
 
 namespace gui {
 
@@ -166,7 +168,7 @@ public:
 //   - title: untitled
 //
 
-class Window : public View
+class Window : public View, public Disposable
 {
 public:
 
@@ -178,7 +180,6 @@ public:
 
 // services:
   void setTitle(const char* title);
-  void setDestroyHandler(DestroyHandler* destroyHandler, void* userdata);
   void setVisibility(bool state);
   void update(void);
 
@@ -204,8 +205,6 @@ public:
 // data:
   View* child;
   const char* title;
-  DestroyHandler* destroyHandler;
-  void* destroyHandler_userdata;
 
 };
 

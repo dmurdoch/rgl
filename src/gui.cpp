@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp,v 1.7 2004/08/09 19:33:28 murdoch Exp $
+// $Id: gui.cpp,v 1.8 2004/09/22 14:04:35 dadler Exp $
 
 #include "gui.h"
 #include "lib.h"
@@ -141,7 +141,6 @@ Window::Window(View* in_child, GUIFactory* factory)
 {
   child          = in_child;
   title          = "untitled";
-  destroyHandler = NULL;
 
   windowImpl = factory->createWindowImpl(this);
 
@@ -152,20 +151,12 @@ Window::Window(View* in_child, GUIFactory* factory)
 
 Window::~Window()
 {
-  if (child)
+  if (child) {
     delete child;
-
-
-  if (destroyHandler)
-    destroyHandler->notifyDestroy(destroyHandler_userdata);
+  }
+  fireNotifyDisposed();  
 }
 
-
-void Window::setDestroyHandler(DestroyHandler* inDestroyHandler, void* inUserdata)
-{
-  destroyHandler = inDestroyHandler;
-  destroyHandler_userdata = inUserdata;
-}
 
 void Window::setWindowImpl(WindowImpl* impl)
 {
@@ -235,9 +226,7 @@ void Window::notifyDestroy(void)
     delete child;
     child = NULL;
   }
-
-  if (destroyHandler)
-    destroyHandler->notifyDestroy(destroyHandler_userdata);
+  fireNotifyDisposed();
 }
 void Window::buttonPress(int button, int mouseX, int mouseY)
 {
