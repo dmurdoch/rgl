@@ -1,12 +1,13 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp,v 1.3 2005/01/10 14:16:32 dadler Exp $
+// $Id: devicemanager.cpp,v 1.4 2005/02/08 21:23:10 dadler Exp $
 
 #include "DeviceManager.hpp"
 #include "types.h"
 #include <algorithm>
 #include <cstdio>
+#include <cassert>
 #include "lib.h"
 
 DeviceManager::DeviceManager() 
