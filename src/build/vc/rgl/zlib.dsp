@@ -65,8 +65,8 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "zlib___Win32_Debug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ  /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ  /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -107,11 +107,7 @@ SOURCE=..\..\..\zlib\gzio.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\zlib\infblock.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\zlib\infcodes.c
+SOURCE=..\..\..\zlib\infback.c
 # End Source File
 # Begin Source File
 
@@ -124,10 +120,6 @@ SOURCE=..\..\..\zlib\inflate.c
 # Begin Source File
 
 SOURCE=..\..\..\zlib\inftrees.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\zlib\infutil.c
 # End Source File
 # Begin Source File
 
