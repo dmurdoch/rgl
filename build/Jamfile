@@ -46,20 +46,42 @@ if $(NT) {
     src/win32gui.cpp
     src/win32lib.cpp
   ;
+  REQUIREMENTS +=
+    <find-library>kernel32
+    <find-library>user32
+    <find-library>gdi32
+    <find-library>opengl32
+    <find-library>glu32
+    <runtime-link>static
+  ;  
+
 } else {
+
+  if ( $(OS) = "MACOSX" ) {
+    OSX = 1 ;
+  }
+
   SOURCES +=
     src/x11gui.cpp
     src/x11lib.cpp
   ;
+
+  if $(OSX) {
+    REQUIREMENTS += 
+      <link-format>bundle
+      <framework>/Library/Frameworks/R
+      <include>/Library/Frameworks/R.framework/Headers
+      <include>/usr/X11R6/include
+      <library-path>/usr/X11R6/lib
+      <find-library>X11
+      <find-library>GL
+    ; 
+  }
+  
 }
 
-dll rgl : $(SOURCES) : 
-  <find-library>kernel32
-  <find-library>user32
-  <find-library>gdi32
-  <find-library>opengl32
-  <find-library>glu32
-  <runtime-link>static  
+dll rgl :
+  $(SOURCES) : $(REQUIREMENTS)
 ;
 
 stage install : <dll>rgl ;
