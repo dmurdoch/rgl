@@ -23,6 +23,16 @@ BUILD TOOL REQUIREMENTS
 
 PREPARING THE SOURCE
 --------------------
+  Make sure the R_HOME variable is set to the
+  source directory.
+
+  zlib and libpng are used from the R directory.
+  Make sure you built R with Rbitmap support, so
+  that the libpng sources are available from that
+  directory.  
+
+  Alternatively...
+  
   download, unpack and move zlib and libpng sources
   - zlib source (v1.2.1) goes to "rgl/src/zlib"
     http://www.gzip.org/zlib
