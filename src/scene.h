@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h,v 1.2 2003/05/30 08:28:35 dadler Exp $
+// $Id: scene.h,v 1.3 2003/11/21 21:56:03 dadler Exp $
 
 
 #include "types.h"
@@ -310,14 +310,14 @@ private:
 //   Texture
 //
 
-class Texture
+class Texture : public AutoDestroy
 {
 public:
  
   enum Type { ALPHA = 1 , LUMINANCE, LUMINANCE_ALPHA, RGB, RGBA };
 
-  Texture(const char* filename, Type type);
-  ~Texture();
+  Texture(const char* filename, Type type, bool mipmap, unsigned int minfilter, unsigned int magfilter);
+  virtual ~Texture();
   bool isValid() const;
   void beginUse(RenderContext* renderContext);
   void endUse(RenderContext* renderContext);
@@ -325,6 +325,9 @@ private:
   Pixmap* pixmap;
   GLuint  texName;
   Type    type;
+  bool    mipmap;
+  GLenum  minfilter;
+  GLenum  magfilter;
 };
 
 //
@@ -343,7 +346,6 @@ public:
   };
 
   Material( Color bg, Color fg );
-  ~Material();
 
   void setup();
   // called when complete
@@ -353,20 +355,20 @@ public:
   void useColor(int index);
   void colorPerVertex(bool enable, int numVertices=0);
 
-  Color       ambient;
-  Color       specular;
-  Color       emission;
-  float       shininess;
-  float       size;          // point size, line width
-  ColorArray  colors;        // color or if lit, represents diffuse color
-  Texture*    texture;
-  PolygonMode front;
-  PolygonMode back;
-  bool        alphablend;
-  bool        smooth;
-  bool        lit;
-  bool        fog;
-  bool        useColorArray;
+  Color        ambient;
+  Color        specular;
+  Color        emission;
+  float        shininess;
+  float        size;          // point size, line width
+  ColorArray   colors;        // color or if lit, represents diffuse color
+  Ref<Texture> texture;
+  PolygonMode  front;
+  PolygonMode  back;
+  bool         alphablend;
+  bool         smooth;
+  bool         lit;
+  bool         fog;
+  bool         useColorArray;
 };
 
 

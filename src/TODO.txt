@@ -1,6 +1,21 @@
 ChangeLog
 =========
 
+2003-11-21 - dadler
+
+* added mouse capturing
+
+* memory leak bugfix: texture objects are now AutoDestroy and used through Ref's
+
+* resource management improvment: pixmaps gets free'd when they become unused
+  e.g. texture objects are created.
+
+* no limitations on pixmap sizes
+
+* mipmap support
+
+* support for different texture minification and magnification filters
+
 2003-11-15 - dadler
 
 * with MinGW version 3.0.1 pixmap loading does work
@@ -21,7 +36,7 @@ ChangeLog
 CHECK
 =====
 
-- unix build system
+- captureMouse/releaseMouse on x11
 - R 1.8.0 shutdown behaviour eventually using a C++ static object that
   calls rgl_quit
 
@@ -113,9 +128,6 @@ scene:
 
   - allow png image size to be of arbitary size!
   
-gui: 
-  - capture mouse
-
 exec:
   - embedded multi-threading framework
 

@@ -1,38 +1,10 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: types.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: types.cpp,v 1.2 2003/11/21 21:56:03 dadler Exp $
 
 #include "types.h"
 
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLASS IMPLEMENTATION
-//   AutoDestroy
-//
-
-AutoDestroy::AutoDestroy()
-{
-  refcount = 1;
-}
-
-AutoDestroy::~AutoDestroy()
-{
-}
-
-void AutoDestroy::ref()
-{
-  refcount++;
-}
-
-void AutoDestroy::unref()
-{
-  refcount--;
-  if (refcount == 0)
-    delete this;
-}
 
 
 //////////////////////////////////////////////////////////////////////////////

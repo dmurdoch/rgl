@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp,v 1.4 2003/11/16 12:52:03 dadler Exp $
+// $Id: scene.cpp,v 1.5 2003/11/21 21:56:03 dadler Exp $
 
 #include "scene.h"
 #include "math.h"
@@ -1173,7 +1173,7 @@ Material::Material(Color bg, Color fg)
   shininess(50.0f),
   size(1.0f),
   colors(bg,fg),
-  texture(NULL),
+  texture(),
   front(FILL_FACE),
   back(FILL_FACE),
   smooth(true),
@@ -1184,18 +1184,9 @@ Material::Material(Color bg, Color fg)
   alphablend = ( ( bg.getAlphaf() < 1.0f ) || ( fg.getAlphaf() < 1.0f ) ) ? true : false;
 }
 
-Material::~Material()
-{
-/*
-  if (texture)
-    delete texture;
-*/
-}
-
 void Material::setup()
 {
 }
-
 
 void Material::beginUse(RenderContext* renderContext)
 {
@@ -1851,11 +1842,44 @@ void Background::draw(RenderContext* renderContext)
 //   Texture
 //
 
-Texture::Texture(const char* filename, Type in_type)
+Texture::Texture(const char* filename, Type in_type, bool in_mipmap, unsigned int in_minfilter, unsigned int in_magfilter)
 {
   texName = 0;
   pixmap = new Pixmap();
   type   = in_type;
+  mipmap = in_mipmap;
+  magfilter = (in_magfilter) ? GL_LINEAR : GL_NEAREST;
+  if (mipmap) {
+    switch(in_minfilter) {
+      case 0:
+        minfilter = GL_NEAREST;
+        break;
+      case 1:
+        minfilter = GL_LINEAR;
+        break;
+      case 2:
+        minfilter = GL_NEAREST_MIPMAP_NEAREST;
+        break;
+      case 3:
+        minfilter = GL_NEAREST_MIPMAP_LINEAR;
+        break;
+      case 4:
+        minfilter = GL_LINEAR_MIPMAP_NEAREST;
+        break;
+      default:
+        minfilter = GL_LINEAR_MIPMAP_LINEAR;
+        break;
+    }
+  } else {
+    switch(in_minfilter) {
+      case 0:
+        minfilter = GL_NEAREST;
+        break;
+      default:
+        minfilter = GL_LINEAR;
+        break;
+    }
+  }
 
   if ( !pixmap->load(filename) ) {
     delete pixmap;
@@ -1878,6 +1902,20 @@ bool Texture::isValid() const
   return (pixmap) ? true : false;
 }
 
+unsigned int texsize(unsigned int s)
+{
+  return 1U << msb(s-1);
+}
+
+static void printGluErrorMessage(GLint error) 
+{
+  const GLubyte* gluError;
+  char buf[256];        
+  gluError = gluErrorString (error);
+  sprintf(buf, "GLU Library Error : %s", (const char*) gluError);
+  printMessage(buf);
+}
+
 void Texture::beginUse(RenderContext* renderContext)
 {
   if (!texName) {
@@ -1885,30 +1923,30 @@ void Texture::beginUse(RenderContext* renderContext)
     glBindTexture(GL_TEXTURE_2D, texName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);                                                       
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magfilter);
 
-
-    GLint gltexfmt = 0;
-    GLenum glpixfmt = 0;
-    GLint ualign;
+    GLint  internalFormat = 0;
+    GLenum format = 0;
+    GLint  ualign;
+    unsigned int bytesperpixel = 0;
 
     switch(type)
     {
     case ALPHA:
-      gltexfmt = GL_ALPHA;
+      internalFormat = GL_ALPHA;
       break;
     case LUMINANCE:
-      gltexfmt = GL_LUMINANCE;
+      internalFormat = GL_LUMINANCE;
       break;
     case LUMINANCE_ALPHA:
-      gltexfmt = GL_LUMINANCE_ALPHA;
+      internalFormat = GL_LUMINANCE_ALPHA;
       break;
     case RGB:
-      gltexfmt = GL_RGB;
+      internalFormat = GL_RGB;
       break;
     case RGBA:
-      gltexfmt = GL_RGBA;
+      internalFormat = GL_RGBA;
       break;
     }
 
@@ -1916,37 +1954,71 @@ void Texture::beginUse(RenderContext* renderContext)
     {
     case GRAY8:
       ualign = 1;
-      switch(gltexfmt)
+      bytesperpixel = 1;
+      switch(internalFormat)
       {
       case GL_LUMINANCE:
-        glpixfmt = GL_LUMINANCE;
+        format = GL_LUMINANCE;
         break;
       case GL_ALPHA:
-        glpixfmt = GL_ALPHA;
+        format = GL_ALPHA;
         break;
       case GL_LUMINANCE_ALPHA:
-        glpixfmt = GL_LUMINANCE;
+        format = GL_LUMINANCE;
         break;
       }
       break;
     case RGB24:
       ualign = 1;
-      glpixfmt = GL_RGB;
+      format = GL_RGB;
+      bytesperpixel = 3;
       break;
     case RGB32:
       ualign = 2;
-      glpixfmt = GL_RGB;
+      format = GL_RGB;
+      bytesperpixel = 4;
       break;
     case RGBA32:
       ualign = 2;
-      glpixfmt = GL_RGBA;
+      format = GL_RGBA;
+      bytesperpixel = 4;
       break;
     default: // INVALID
       return;
     }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, ualign);
-    glTexImage2D(GL_TEXTURE_2D, 0, gltexfmt, pixmap->width, pixmap->height, 0, glpixfmt, GL_UNSIGNED_BYTE, pixmap->data);
+    GLenum gl_type = GL_UNSIGNED_BYTE;
+    
+    int maxSize;    
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);        
+    
+    if (mipmap) {                  
+      int gluError = gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat, pixmap->width, pixmap->height, format, gl_type, pixmap->data);    
+      if (gluError)
+        printGluErrorMessage(gluError);
+    } else {
+      unsigned int width  = texsize(pixmap->width);
+      unsigned int height = texsize(pixmap->height);
+      
+      if ( (width > maxSize) || (height > maxSize) ) {
+        char buf[256];
+        sprintf(buf, "GL Library : Maximum texture size of %dx%d exceeded.\n(Perhaps enabling mipmapping could help.)", maxSize,maxSize);
+        printMessage(buf);
+      } else if ( (pixmap->width != width) || ( pixmap->height != height) ) {
+        char* data = new char[width * height * bytesperpixel];
+        int gluError = gluScaleImage(format, pixmap->width, pixmap->height, gl_type, pixmap->data, width, height, gl_type, data);
+        if (gluError)
+          printGluErrorMessage(gluError);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, gl_type , data);
+        delete[] data;
+      } else {
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
+      }
+    }
+    
+    delete pixmap;
+    pixmap = NULL;
   }
 
   glPushAttrib(GL_TEXTURE_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);
@@ -1955,9 +2027,10 @@ void Texture::beginUse(RenderContext* renderContext)
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
   glBindTexture(GL_TEXTURE_2D, texName);
 
-  if (type == GL_ALPHA) {
+  if (type == ALPHA) {
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
   }
 }
 

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.3 2003/11/15 18:20:36 dadler Exp $
+// $Id: api.cpp,v 1.4 2003/11/21 21:56:03 dadler Exp $
 
 #include "lib.h"
 
@@ -435,11 +435,14 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.back      = (Material::PolygonMode) idata[4];
   mat.fog       = (idata[5]) ? true : false;
   Texture::Type textype = (Texture::Type) idata[6];
-  int    nalpha = idata[7];
-  mat.ambient.set3iv( &idata[8] );
-  mat.specular.set3iv( &idata[11] );
-  mat.emission.set3iv( &idata[14] );
-  int* colors   = &idata[17];
+  bool mipmap = (idata[7]) ? true : false;
+  int  minfilter = idata[8];
+  int  magfilter = idata[9];
+  int    nalpha = idata[10];
+  mat.ambient.set3iv( &idata[11] );
+  mat.specular.set3iv( &idata[14] );
+  mat.emission.set3iv( &idata[17] );
+  int* colors   = &idata[20];
 
   char*  pixmapfn = cdata[0];
 
@@ -447,10 +450,11 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.size        = (float) ddata[1];
   double* alpha   = &ddata[2];
 
-  if ( strlen(pixmapfn) > 0 ) {
-    mat.texture = new Texture(pixmapfn, textype);
+  if ( strlen(pixmapfn) > 0 ) {  
+    mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter);
     if ( !mat.texture->isValid() ) {
-      delete mat.texture;
+      mat.texture->unref();
+      // delete mat.texture;
       mat.texture = NULL;
     }
   } else

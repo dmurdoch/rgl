@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pixmap.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: pixmap.h,v 1.2 2003/11/21 21:56:03 dadler Exp $
 
 #include <stdio.h>
 #include "opengl.h"
@@ -28,10 +28,10 @@ public:
   bool save(PixmapFormat* format, const char* filename);
 
   PixmapTypeID typeID;
-  int width;
-  int height;
-  int bits_per_channel;
-  int bytesperrow;
+  unsigned int width;
+  unsigned int height;
+  unsigned int bits_per_channel;
+  unsigned int bytesperrow;
   unsigned char *data;
 };
 

@@ -4,10 +4,27 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: math.h,v 1.3 2003/11/21 15:13:55 dadler Exp $
+// $Id: math.h,v 1.4 2003/11/21 21:56:03 dadler Exp $
 
 #include <math.h>
 #include <float.h>
+
+/**
+ * get most significant bit
+ * @param x unsigned value
+ * @return bit position between 1..32 or 0 if value was 0
+ **/
+inline int msb(unsigned int x) {
+  if (x) {
+    int bit = sizeof(int)*8;
+    unsigned int mask = 1<<((sizeof(int)*8)-1);
+    while ( !(x & mask) ) {
+      --bit; mask >>= 1;
+    }
+    return bit;
+  } else
+    return 0;
+}
 
 #ifndef PI
 #define PI      3.1415926535897932384626433832795
