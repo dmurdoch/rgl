@@ -5,7 +5,7 @@
   rgl.light adds a light source to the scene.
 }
 \usage{
-rgl.light( theta = 0, phi = 0, viewpoint.rel = FALSE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF")
+rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF")
 }
 \arguments{
   \item{theta, phi}{polar coordinates}
