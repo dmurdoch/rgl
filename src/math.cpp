@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: math.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: math.cpp,v 1.2 2004/05/28 11:19:41 dadler Exp $
 
 #include "math.h"
 
@@ -122,7 +122,7 @@ Vertex4::Vertex4(const float in_x, const float in_y, const float in_z, const flo
   y = in_y;
   z = in_z;
   w = in_w;
-};
+}
 
 float Vertex4::operator * (const Vertex4& v) const
 {

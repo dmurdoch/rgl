@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: glgui.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: glgui.cpp,v 1.2 2004/05/28 11:19:41 dadler Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -26,5 +26,5 @@ void GLBitmapFont::draw(char* text, int length, int justify) {
   } 
 
   glCallLists(length, GL_UNSIGNED_BYTE, text);
-};
+}
 

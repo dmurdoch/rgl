@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp,v 1.6 2003/11/22 08:40:38 dadler Exp $
+// $Id: scene.cpp,v 1.7 2004/05/28 11:19:41 dadler Exp $
 
 #include "scene.h"
 #include "math.h"
@@ -876,7 +876,7 @@ Viewpoint::Viewpoint(PolarCoord in_position, float in_fov, float in_zoom, bool i
     zoom(in_zoom),
     interactive(in_interactive)
 {
-};
+}
 
 
 PolarCoord& Viewpoint::getPosition()
@@ -1566,7 +1566,7 @@ PointSet::PointSet(Material& in_material, int in_nelements, double* in_vertex)
   : PrimitiveSet(in_material, GL_POINTS, in_nelements, in_vertex) 
 {
   material.lit = false;
-}; 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1578,7 +1578,7 @@ LineSet::LineSet(Material& in_material, int in_nelements, double* in_vertex)
   : PrimitiveSet(in_material, GL_LINES, in_nelements, in_vertex) 
 {
   material.lit = false;
-}; 
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1616,7 +1616,7 @@ TriangleSet::TriangleSet(Material& in_material, int in_nelements, double* in_ver
       normalArray[i+2] = normalArray[i+1] = normalArray[i] = vertexArray.getNormal(i,i+1,i+2);
     }
   }
-}; 
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1633,7 +1633,7 @@ QuadSet::QuadSet(Material& in_material, int in_nelements, double* in_vertex)
       normalArray[i+3] = normalArray[i+2] = normalArray[i+1] = normalArray[i] = vertexArray.getNormal(i,i+1,i+2);
     }
   }
-}; 
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
