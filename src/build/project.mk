@@ -1,20 +1,19 @@
 #
-# project config
-# GNU Make include file
+# project modules
 #
 
-MODULES=	\
-types		\
-math		\
-fps		\
-pixmap		\
-gui		\
-api		\
-device		\
+MODS=		\
+types 		\
+math 		\
+fps 		\
+pixmap 		\
+gui 		\
+api 		\
+device 		\
 devicemanager	\
-rglview		\
-scene		\
+rglview 	\
+scene 		\
 glgui
 
-OBJS=$(foreach x, $(MODULES), $x.o )
-
+dump-mods:
+	@echo -n $(MODS)

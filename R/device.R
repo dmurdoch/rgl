@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R,v 1.1 2003/03/25 00:13:21 dadler Exp $
+## $Id: device.R,v 1.2 2003/06/04 07:46:44 dadler Exp $
 ##
 
 ##
@@ -79,17 +79,6 @@ rgl.set <- function(which) {
 }
 
 
-
-##
-## device system shutdown
-## 
-##
-
-rgl.quit <- function() {
-
-  detach("package:rgl")
-
-}
 
 ##
 ## export image
