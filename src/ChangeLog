@@ -80,3 +80,9 @@ v0.64-9
   - support for automatic downloading of zlib and lpng on win32 
   - added demo directory with several examples using demo(rgl)
 
+v0.64-10
+  - updated .C() calls using PACKAGE="rgl"
+  - updated Maintainer.mk using correct zlib version
+  - improved dynamic unload using library.dynam.unload()
+  - conditional macos x darwin code in .First.lib()
+
