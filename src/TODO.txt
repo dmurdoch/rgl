@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+2003-11-26 - dadler
+
+* rgl.sprites radius bug fixed
+
 2003-11-21 - dadler
 
 * added mouse capturing
@@ -43,8 +47,11 @@ CHECK
 BUGS
 ====
 
-- win32: example(boat3d) with rgl crashes R
+- win32: example(boat3d) with rgl crashes R, 
+         yat=1 arg on rgl.bbox crashes
 
+- X11: rgl.close() crashes ... gui rewrite
+         
 COSMETICS
 =========
 
