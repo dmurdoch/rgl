@@ -158,8 +158,8 @@ void Texture::beginUse(RenderContext* renderContext)
     glPixelStorei(GL_UNPACK_ALIGNMENT, ualign);
     GLenum gl_type = GL_UNSIGNED_BYTE;
     
-    unsigned int maxSize;    
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, (int*) &maxSize);        
+    GLint maxSize;    
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE,  &maxSize);        
     
     if (mipmap) {                  
       int gluError = gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat, pixmap->width, pixmap->height, format, gl_type, pixmap->data);    
