@@ -94,6 +94,9 @@ DETAILS: IMPORTANT FILES
 setup.bat		
 	sets up build tool and configures source-tree.
 	- creates 'includer' Makefile in src/Makefile.win
+  
+setup.win
+  bash-version of setup.bat
 
 src/build/win32.mk	
 	win32 platform modules (included by src/build/mingw/Makefile)
