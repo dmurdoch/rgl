@@ -2,5 +2,4 @@
 # Cleanup package
 #
 
-rm -Rf autom4te.cache config.log config.status src/Makefile src/Makevars src/*.o src/*.so
-exit 0
+rm -Rf autom4te.cache config.log config.status src/Makefile src/Makevars

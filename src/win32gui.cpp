@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp,v 1.2 2003/05/30 08:53:51 dadler Exp $
+// $Id: win32gui.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
 
 #include "win32gui.h"
 
@@ -136,7 +136,7 @@ namespace gui {
     //   GL Context
     //
   
-    bool initGL () {
+    bool Win32WindowImpl::initGL () {
   
       bool success = false;
   
@@ -199,7 +199,7 @@ namespace gui {
     }
   
   
-    void shutdownGL(void) {
+    void Win32WindowImpl::shutdownGL(void) {
     
       dcHandle = GetDC(windowHandle);
       wglMakeCurrent(NULL,NULL);
@@ -213,7 +213,7 @@ namespace gui {
     //   GL Bitmap Fonts
     //
   
-    void initGLBitmapFont(u8 firstGlyph, u8 lastGlyph) {
+    void Win32WindowImpl::initGLBitmapFont(u8 firstGlyph, u8 lastGlyph) {
   
       beginGL();
   
@@ -235,7 +235,7 @@ namespace gui {
       endGL();
     }
   
-    void destroyGLFont(void) {
+    void Win32WindowImpl::destroyGLFont(void) {
       beginGL();
       glDeleteLists( font.listBase + font.firstGlyph, font.nglyph);
       delete [] font.widths;

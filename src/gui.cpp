@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp,v 1.2 2003/06/04 08:52:51 dadler Exp $
+// $Id: gui.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
 
 #include "gui.h"
 #include "lib.h"
@@ -41,10 +41,8 @@ View::View(int inBaseX, int inBaseY, int inWidth, int inHeight, int inFlags)
 
 View::~View()
 {
-  if ((windowImpl) && (flags & WINDOW_IMPL_OWNER)) {
-    windowImpl->unbind();
+  if ((windowImpl) && (flags & WINDOW_IMPL_OWNER))
     windowImpl->destroy();
-  }
 }
 
 
@@ -151,7 +149,6 @@ Window::~Window()
   if (child)
     delete child;
 
-
   if (destroyHandler)
     destroyHandler->notifyDestroy(destroyHandler_userdata);
 }
@@ -220,10 +217,8 @@ void Window::closeRequest(void)
 }
 void Window::notifyDestroy(void)
 {
-  if (child) {
+  if (child)
     delete child;
-    child = NULL;
-  }
   
   if (destroyHandler)
     destroyHandler->notifyDestroy(destroyHandler_userdata);
