@@ -1,6 +1,6 @@
 #
 # Generic 3D interface for R
-# $Id: r3d.R,v 1.3 2004/09/06 21:08:34 murdoch Exp $
+# $Id: r3d.R,v 1.4 2005/02/08 23:36:54 dadler Exp $
 #
 
 # ===[ GENERIC RENDERING FUNCTIONS ]==========================================
@@ -13,8 +13,8 @@ pop3d <- function ( type="shapes" )
   do.call(paste("pop3d", dev3d, sep="."), list(type=type) )
 bg3d <- function ( color, ... ) 
   do.call(paste("bg3d",dev3d, sep="."), list(color=color, ...) )
-light3d <- function ( x, ... ) 
-  do.call(paste("light3d",dev3d, sep="."), list(x,...) )
+light3d <- function ( theta=0, phi=0, ... ) 
+  do.call(paste("light3d",dev3d, sep="."), list( theta=theta, phi=phi, ... ) )
 
 # primitive shapes
   
