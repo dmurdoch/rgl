@@ -48,7 +48,10 @@ REQUIREMENTS
 ------------
 Windowing System (x11 or win32)
 OpenGL and GLU Library (implementation for X11 or Win32)
-png library (optional on un*x)
+
+OPTIONS
+-------
+libpng library
 
 
 BUILDING/INSTALLING THE SOURCE PACKAGE
@@ -82,9 +85,10 @@ KNOWN BUGS
 CREDITS
 -------
 Daniel Adler <dadler@uni-goettingen.de>
+Duncan Murdoch <murdoch@stats.uwo.ca>
 Oleg Nenadic <onenadi@uni-goettingen.de>
 Simon Urbanek <simon.urbanek@math.uni-augsburg.de>
-
+Ming Chen <FIXME>
 
 WEBSITE
 -------
