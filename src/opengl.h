@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: opengl.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: opengl.h,v 1.2 2003/05/14 10:58:36 dadler Exp $
 
 #ifdef _WIN32
 #include <windows.h>
@@ -12,8 +12,13 @@
 
 extern "C" {
 
+#ifdef NO_GL_PREFIX
+#include <gl.h>
+#include <glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
 
 };
 

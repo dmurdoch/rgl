@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R,v 1.2 2003/03/25 04:13:56 dadler Exp $
+## $Id: zzz.R,v 1.3 2003/05/14 10:58:36 dadler Exp $
 ##
 
 ##
@@ -17,8 +17,12 @@
 
 .First.lib <- function(lib, pkg)
 {
-  # load shared library
+  # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
+  # because it would override Apple's OpenGL framework
+  Sys.putenv("DYLD_LIBRARY_PATH"=sub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
 
+  # load shared library
+  
   library.dynam( "rgl", pkg, lib)
   
   ret <- .C( symbol.C("rgl_init"), 
