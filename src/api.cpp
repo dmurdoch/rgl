@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.10 2004/09/22 10:39:34 dadler Exp $
+// $Id: api.cpp,v 1.11 2005/02/08 21:21:56 dadler Exp $
 
 #include "lib.h"
 
@@ -664,7 +664,7 @@ void rgl_mouseMode(int* successptr, int *idata, int* ddata)
 
 	MouseModeID mouseMode = (MouseModeID) idata[0];
  	RGLView* rglview = device->getRGLView();
-        (MouseModeID)(idata[0]) = rglview->getMouseMode(button);
+  idata[0] = static_cast<int>( rglview->getMouseMode(button) );
 
 	rglview->setMouseMode(button, mouseMode);
 
