@@ -4,8 +4,6 @@ REM This file is part of the RGL software
 REM (c) 2003 D.Adler
 
 set SRC=src
-set DEST=src
-set CFG=config.mk
 
 REM === SETUP build tool =====================================================
 
