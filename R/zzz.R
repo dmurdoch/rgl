@@ -2,34 +2,12 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R,v 1.5 2004/01/26 07:32:44 dadler Exp $
+## $Id: zzz.R,v 1.6 2004/03/03 22:09:44 dadler Exp $
 ##
 
 ##
 ## ===[ SECTION: package entry/exit point ]===================================
 ##
-
-##
-## unload DLL
-## 
-
-.rgl.unload.dll <- function()
-{
-  # unload dll
-  
-  dyn.unload( system.file( "libs", paste( "rgl", .Platform$dynlib.ext, sep=""), package="rgl" ) )
-    
-  # fix .DynLibs() string
-    
-  libs <- .dynLibs()
-
-  index <- match("rgl",libs)
-  
-  if ( !is.na(index) ) {
-    libs <- libs[-index]
-    .dynLibs(libs)
-  }
-}
 
 ##
 ## entry-point
@@ -38,16 +16,24 @@
 
 .First.lib <- function(lib, pkg)
 {
-  # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
-  # because it would override Apple's OpenGL framework
-  Sys.putenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
-
+  # OS-specific 
+  
+  if ( .Platform$OS.type == "unix" ) {
+    unixos <- shell("uname",intern=TRUE)
+    if ( unixos == "Darwin" ) {
+      # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
+      # because it would override Apple's OpenGL framework
+      Sys.putenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))      
+    }
+  }
+	
   # load shared library
   
   library.dynam( "rgl", pkg, lib)
   
   ret <- .C( symbol.C("rgl_init"), 
-    success=FALSE 
+    success=FALSE , 
+    PACKAGE="rgl"
   )
   
   if (!ret$success) {
@@ -69,8 +55,11 @@
   
   ret <- .C( symbol.C("rgl_quit"), 
     success=FALSE, 
+    PACKAGE="rgl"
   )
   
-  .rgl.unload.dll()
+  # unload shared library
+
+  library.dynam.unload("rgl",libpath=system.file(package="rgl"))
 }
 

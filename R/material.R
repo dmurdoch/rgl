@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R,v 1.2 2003/11/21 21:57:40 dadler Exp $
+## $Id: material.R,v 1.3 2004/03/03 22:09:44 dadler Exp $
 ##
 
 ##
@@ -80,6 +80,7 @@ rgl.material <- function (
     success = FALSE,
     idata,
     cdata,
-    ddata
+    ddata,
+    PACKAGE="rgl"
   )
 }

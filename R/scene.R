@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.4 2004/02/29 10:41:23 dadler Exp $
+## $Id: scene.R,v 1.5 2004/03/03 22:09:44 dadler Exp $
 ##
 
 ##
@@ -23,7 +23,8 @@ rgl.clear <- function( type = "shapes" )
 
   ret <- .C( symbol.C("rgl_clear"), 
     success=FALSE,
-    idata
+    idata,
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -44,7 +45,8 @@ rgl.pop <- function( type = "shapes" )
 
   ret <- .C( symbol.C("rgl_pop"),
     success = FALSE,
-    idata
+    idata, 
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -74,7 +76,8 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 0.0, inte
   ret <- .C( symbol.C("rgl_viewpoint"),
     success=FALSE,
     idata,
-    ddata
+    ddata,
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -97,7 +100,8 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
 
   ret <- .C( symbol.C("rgl_bg"), 
     success=FALSE,
-    idata
+    idata,
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -161,7 +165,8 @@ rgl.bbox <- function(
     as.numeric(yat),
     as.character(ylab),
     as.numeric(zat),
-    as.character(zlab)
+    as.character(zlab),
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -186,7 +191,8 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   ret <- .C( symbol.C("rgl_light"),
     success=FALSE,
     idata,
-    ddata
+    ddata,
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -216,6 +222,7 @@ rgl.primitive <- function( type, x, y, z, ... )
     success=FALSE,
     idata,
     as.numeric(vertex),
+    PACKAGE="rgl"
   );
 
   if (! ret$success)
@@ -271,7 +278,8 @@ rgl.surface <- function( x, z, y, ... )
     idata,
     as.numeric(x),
     as.numeric(z),
-    as.numeric(y)
+    as.numeric(y),
+    PACKAGE="rgl"
   );
 
   if (! ret$success)
@@ -297,7 +305,8 @@ rgl.spheres <- function( x, y, z,radius=1.0,...)
     success=FALSE,
     idata,
     as.numeric(vertex),    
-    as.numeric(radius)
+    as.numeric(radius),
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -325,7 +334,8 @@ rgl.texts <- function(x, y, z, text, justify="center", ... )
     success=FALSE,
     idata,
     as.character(text),
-    as.numeric(vertex)
+    as.numeric(vertex),
+    PACKAGE="rgl"
   )
   
   if (! ret$success)
@@ -352,8 +362,9 @@ rgl.sprites <- function( x, y, z, radius=1.0, ... )
     success=FALSE,
     idata,
     as.numeric(center),
-    as.numeric(radius)
-  );
+    as.numeric(radius),
+    PACKAGE="rgl"
+  )
 
   if (! ret$success)
     print("rgl_sprites failed")
