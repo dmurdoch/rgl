@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.7 2004/08/10 01:43:06 murdoch Exp $
+## $Id: scene.R,v 1.8 2004/08/27 16:03:47 dadler Exp $
 ##
 
 ##
@@ -508,7 +508,7 @@ rgl.getprojection <- function()
     	 view = ret$view)
 }
      
-select3d <- function() {
+rgl.select3d <- function() {
   rect <- rgl.select()
   llx <- rect[1]
   lly <- rect[2]
@@ -534,34 +534,4 @@ select3d <- function() {
   }
 }
 
-points3d <- function ( x, y, z, ... )
-{
-  rgl.primitive( "points", x, y, z, ... )
-}
-
-lines3d <- function ( x, y, z, ... )
-{
-  rgl.primitive( "linestrips", x, y, z, ... )
-}
-
-segments3d <- function ( x, y, z, ... )
-{
-  rgl.primitive( "lines", x, y, z, ... )
-}
-
-triangles3d <- function ( x, y, z, ... )
-{
-  rgl.primitive( "triangles", x, y, z, ... )
-}
-
-
-quads3d <- function ( x, y, z, ... )
-{
-  rgl.primitive( "quadrangles", x, y, z, ... )
-}
-
-text3d <- function(x, y, z, text, adj = 0.5, ... )
-{
-	rgl.texts(x, y, z, text, adj = adj, ... )
-}
 
