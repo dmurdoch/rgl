@@ -1,0 +1,12 @@
+#
+# R Makevars file auto-generated using template Makevars.in 
+# AUTO-GENERATED from Makevars.in (using configure/configure.win)
+# This file is part of the RGL project.
+#
+# $Id: Makevars.in,v 1.4 2005/02/15 19:34:49 dadler Exp $
+#
+PKG_CPPFLAGS=@CPPFLAGS@
+PKG_CFLAGS=@CFLAGS@
+PKG_CXXFLAGS=@CXXFLAGS@
+PKG_LIBS=@LIBS@ 
+
