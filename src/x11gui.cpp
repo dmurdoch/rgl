@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp,v 1.2 2003/06/03 07:51:56 dadler Exp $
+// $Id: x11gui.cpp,v 1.3 2003/06/03 07:56:33 dadler Exp $
 
 #include "x11gui.h"
 #include "lib.h"
@@ -261,8 +261,9 @@ void X11GUIFactory::connect(const char* displayname)
 
   // query glx extension
    
-  if ( glXQueryExtension(xdisplay, &errorBase, &eventBase) == False )
-    throw_error("GLX extension missing on server");
+  if ( glXQueryExtension(xdisplay, &errorBase, &eventBase) == False ) {
+    throw_error("GLX extension missing on server"); return;
+  }
   
   static int attribList[] =
   {
