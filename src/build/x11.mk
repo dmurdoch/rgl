@@ -4,8 +4,8 @@
 #
 
 MODS+=		\
-x11lib.o	\
-x11gui.o
+x11lib		\
+x11gui
 
 HEADERS+=	\
 x11gui.h
