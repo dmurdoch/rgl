@@ -78,3 +78,5 @@ v0.64-9
   - MacOS X 'Panther' G5 fix for OpenGL library loading in .first.lib
   - removed lpng and zlib from source tree 
   - support for automatic downloading of zlib and lpng on win32 
+  - added demo directory with several examples using demo(rgl)
+
