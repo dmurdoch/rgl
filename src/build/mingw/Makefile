@@ -2,7 +2,7 @@
 # Makefile for win32/mingwl
 # This file is part of RGL
 #
-# $Id: Makefile,v 1.10 2004/08/09 19:33:29 murdoch Exp $
+# $Id: Makefile,v 1.11 2005/02/15 19:40:21 dadler Exp $
 #
 
 all: target
@@ -113,9 +113,9 @@ rgl.dll: $(OBJS) rgl_res.o
 	$(LINK.dll)
 
 # MISC
+#	if test -d $(ZLIBDIR) ; then cd $(ZLIBDIR) ; make -f Makefile.win clean ; fi
 	
 clean:
-	if test -d $(ZLIBDIR) ; then make -C $(ZLIBDIR) clean ; fi
 	if test -d $(LIBPNGDIR) ; then make -C $(LIBPNGDIR) -f scripts/makefile.gcc clean ; fi
 	$(RM) *.o *.a *.dll *.def .deps rgl_res.rc
 
@@ -123,3 +123,4 @@ deps:
 	$(CC) -MM $(SRCS) >$@
 
 -include .deps
+
