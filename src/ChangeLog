@@ -86,3 +86,8 @@ v0.64-10
   - improved dynamic unload using library.dynam.unload()
   - conditional macos x darwin code in .First.lib()
 
+v0.64-11
+  - removed several redundant semicolons, required by gcc 3.4 ansi-pedantic mode.
+  - win32: uses R's zlib and libpng sources
+  - win32: added virtual destructor in Win32GUIFactory (removes warning)
+  
