@@ -4,6 +4,7 @@
 #
 
 MODULES=	\
+Rplugin		\
 types		\
 math		\
 fps		\
