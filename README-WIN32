@@ -1,61 +1,54 @@
 BUILDING RGL ON WIN32
 =====================
 
+
 SUPPORTED BUILD TOOLS
 ---------------------
+
 - MinGW (v3.2.3) [default]
 - Visual C++ (v6.0)
 - Dev-CPP IDE/MinGW/GCC
 
- 
+
 BUILD TOOL REQUIREMENTS
 -----------------------
+
 - ActiveState Perl (v5.8.2)
 - Microsoft HTML Help Workshop (v4.74.8702)
-
 - precompiled Rtools[1] or CygWin
   If one encounters problems when cleaning up the zlib source
   tree, try CygWin instead.
-  
 - environment variable TMPDIR is set to a temporary directory.
 
 
 PREPARING THE SOURCE
 --------------------
-
   download, unpack and move zlib and libpng sources
-  
   - zlib source (v1.2.1) goes to "rgl/src/zlib"
     http://www.gzip.org/zlib
-  
   - libpng source (v1.2.5) goes to "rgl/src/lpng"
     http://www.libpng.org
 
   or use a script 
-
+  
    > sh rgl/src/build/win32/download.sh
-    
 
+    
 BUILDING USING MINGW
 --------------------
-   
+
    > Rcmd INSTALL rgl
-      
-  
+
+
 BUILDING USING Bloodsheed Dev-C++ (v4.9.8.0) 
 --------------------------------------------
 
   1. change to in rgl/src:
-  
   2. make additional libs and resources
-  
    > make -f Makefile.win libs rgl_res.o
- 
   3. start Dev-C++ IDE:
-
   - open project file 'rgl/src/build/devcpp/rgl.dev'
   - build
- 
   4. change to parent directory of "rgl" and install
 
    > Rcmd INSTALL rgl
@@ -63,32 +56,31 @@ BUILDING USING Bloodsheed Dev-C++ (v4.9.8.0)
 
 BUILDING USING VISUAL C++ STUDIO
 --------------------------------
-
   1. start visual c++
-
+  - setup R include path 
   - open Workspace "src/build/vc/rgl.dsw"
-  - select Configuration. ("Win32 Release" or "Win32 Debug")
+  - choose Active Configuration. ("Win32 Release" or "Win32 Debug")
   - build 
 
-  2. change to top-level package directory
-  
+  2. in console, change to top-level rgl package directory
   3. setup source tree to use visual studio
+  
    > .\setup.bat vc
-   
-  4. change to parent directory of "rgl" and install
 
-   > Rcmd build --binary rgl
+  4. change to parent directory of "rgl" and install
+  
+   > Rcmd INSTALL rgl
 
 
 DETAILS: COMPILER SETUPS
 ------------------------
-We use a quite different build approach on win32 platforms, as
-rgl supports additional build tools.
+This package uses a quite different build approach on win32 platforms, 
+as rgl supports additional build tools.
 
 The 'setup.bat' script located in the top-level directory
 configures the source-tree to build either vc or mingw.
 
-  >  setup.bat [ vc | mingw ]
+   >  setup.bat [ vc | mingw ]
 
        vc    -  Build with Visual C++
        mingw -  Build with MinGW
@@ -98,11 +90,10 @@ The package distribution comes up with a default setup for MinGW.
 
 DETAILS: IMPORTANT FILES
 ------------------------
+
 setup.bat		
 	sets up build tool and configures source-tree.
-	- creates src/Makefile.win and src/Makefile
-	  which include build/$(BUILDTOOL)/Makefile
-	- copies src/build/$(BUILDTOOL)/configure.win to $(TOPDIR)/configure.win
+	- creates 'includer' Makefile in src/Makefile.win
 
 src/build/win32.mk	
 	win32 platform modules (included by src/build/mingw/Makefile)
@@ -111,72 +102,31 @@ src/build/mingw/Makefile
 	Makefile for mingw build
 
 src/build/vc/Makefile
-	Makefile for vc build (included in src/build/Makefile.win)
+	Makefile for vc build
 
-
+	
 APPENDIX: R BUILD ENVIRONMENT
 -----------------------------
-here is an example env configuration batch:
+the order of tools in the PATH chain is important:
 
-  call \env\mingw.bat
-  call \env\perl.bat
-  call \env\hhc.bat
-  path C:\R\rw1081\bin;%path%
-  call \env\rtools.bat
-
-  REM SETUP R_HOME
-  set R_HOME=C:/R/rw1081
-
-  REM SETUP TMPDIR
-  set TMPDIR=C:/tmp
+using r-tools:
+  first 'r-tools'
+  then mingw, perl, html helpwork shop, R bin directory
   
-where each batch appends to the FRONT of the path
-so the order of path locations would be:
-  
-  first: RTOOLS
-  then:  R, HHC, PERL, MINGW
+using cygwin:
+  perl and mingw comes before cygwin 
+  (otherwise cygwin-gcc and cygwin-perl would be used)
+  html help workshop and R bin directory
+    
+set TMPDIR variable to point to some temporary directory.
+ 
 
-  
 REFERENCES
+
 ----------
+
 [1] Building R for Windows
+
     http://www.stats.ox.ac.uk/pub/Rtools/
-    
-BUILDING ON WIN32 PLATFORM
----------------------------
-  
-  Configure
 
-  1. Unpack source tar ball
-
-  2. Change to rgl directory
-
-
-  Build with Visual C++
-
-    1. Start Visual C++
-
-    2. Open workspace src\build\vc\rgl\rgl.dsw
-
-    3. Select build type "Release" or "Debug"
-
-    4. Build all
-
-    -SHELL-
-    
-    5. Change to parent directory containing rgl directory
-
-    6. Run
-       
-       $ RCMD INSTALL rgl
-
-       
-  Build with MinGW
-
-    1. Change to parent directory containing rgl directory
-    
-    2. Run
-    
-       $ RCMD INSTALL rgl
-       
 
