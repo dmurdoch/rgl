@@ -111,4 +111,5 @@ v0.64-14
   - z-distance sorted rendering of alpha-blended faces 
   - updated math.h using template functions, removed defines
   - added win32/darwin build support for boost.jam
+  - uses 'R' build system .. platform-specific *.cpp files went to *.inc files
   
