@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h,v 1.4 2003/11/21 15:22:01 dadler Exp $
+// $Id: gui.h,v 1.5 2004/02/28 18:45:38 dadler Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -205,3 +205,4 @@ public:
 };
 
 #endif /* GUI_H */
+
