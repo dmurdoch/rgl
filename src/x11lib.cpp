@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11lib.cpp,v 1.3 2003/06/03 07:51:56 dadler Exp $
+// $Id: x11lib.cpp,v 1.4 2003/06/04 07:44:05 dadler Exp $
 
 #include "lib.h"
 
@@ -28,7 +28,7 @@ gui::GUIFactory* getGUIFactory()
 
 static InputHandler* R_handler = NULL;
 
-static void R_event_handler(void * userData)
+static void R_rgl_eventHandler(void * userData)
 {
   gpX11GUIFactory->processEvents();
 }
@@ -38,10 +38,12 @@ static void set_R_handler()
   // add R input handler (R_ext/eventloop.h)
   // approach taken from GtkDevice ... good work guys!
   
-  R_handler = ::addInputHandler(R_InputHandlers, gpX11GUIFactory->getFD(), R_event_handler, -1);
+  R_handler = ::addInputHandler(R_InputHandlers, gpX11GUIFactory->getFD(), R_rgl_eventHandler, XActivity);
+
+  // seek end of node
   
-  if (R_handler == NULL) 
-    printMessage("unable to install input handler");
+  while(R_handler->next)
+    R_handler = R_handler->next;
 }
 
 static void unset_R_handler()
@@ -60,6 +62,9 @@ static void unset_R_handler()
 bool lib_init()
 {
   bool success = false;
+
+  // construct GUI Factory
+  
   gpX11GUIFactory = new gui::X11GUIFactory(NULL);
  
   if ( gpX11GUIFactory->isConnected() ) {
