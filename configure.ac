@@ -1,11 +1,9 @@
 ## 
 ## This file is part of RGL
 ##
-## use src/build/setversion.sh to update configure.ac
 ## Process this file with autoconf to produce a configure script.
-## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac,v 1.7 2005/02/15 19:33:40 dadler Exp $
+## $Id: configure.ac,v 1.8 2005/02/15 20:38:44 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -19,12 +17,10 @@ AC_CONFIG_AUX_DIR(src/build/autoconf)
 
 AC_PATH_X
 if test x$no_x == xyes ; then
-  AC_MSG_ERROR([X11 not found, configure aborted.
-reason: RGL requires X11 on non-win32 platforms.])
+  AC_MSG_ERROR([X11 not found but required, configure aborted.])
 fi
-
-LIBS="${LIBS} -L${x_libraries} -lX11 -lXext"
 CPPFLAGS="${CPPFLAGS} -I${x_includes}"
+LIBS="${LIBS} -L${x_libraries} -lX11"
 
 ## --- OpenGL ----------------------------------------------------------------
 
