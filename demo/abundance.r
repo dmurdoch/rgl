@@ -1,6 +1,6 @@
 # rgl-demo: animal abundance
 # author: Oleg Nenadic, Daniel Adler
-# $Id: abundance.r,v 1.1 2004/02/29 12:00:48 dadler Exp $
+# $Id: abundance.r,v 1.2 2004/03/02 19:53:56 dadler Exp $
 
 ########
 ##### Animal abundance:
