@@ -1,11 +1,11 @@
 ## 
 ## This file is part of RGL
 ##
-## use src/build/Maintainer.mk to update configure.ac
+## use src/build/setversion.sh to update configure.ac
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.10 2003/11/22 08:37:45 dadler Exp $
+## $Id: configure.ac.in,v 1.11 2004/02/27 17:46:51 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -19,16 +19,6 @@ AC_CONFIG_AUX_DIR(src/build/autoconf)
 ## ---[ check host ]----------------------------------------------------------
 
 AC_CANONICAL_HOST
-
-case "${host_os}" in
-  cygwin*|mingw*|windows*|winnt)
-    echo "Windows port: use R CMD INSTALL to build (configure.win)"
-    exit -1
-  ;;
-  *)
-  ;;
-esac
-
 
 ##
 ## ===[ X11 Port ]============================================================
