@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: x11gui.cpp,v 1.2 2003/06/03 07:51:56 dadler Exp $
 
 #include "x11gui.h"
 #include "lib.h"
@@ -238,11 +238,11 @@ void X11GUIFactory::throw_error(const char* string)
 // connect
 //
 
-void X11GUIFactory::connect()
+void X11GUIFactory::connect(const char* displayname)
 {
   // open one display connection for all RGL X11 devices
   
-  xdisplay = XOpenDisplay(NULL);
+  xdisplay = XOpenDisplay(displayname);
   
   if (xdisplay == NULL) {
     throw_error("unable to open display"); return;
@@ -378,7 +378,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   xvisualinfo = NULL;
   glxctx      = NULL;
 
-  connect(); 
+  connect(displayname); 
 }
 
 
