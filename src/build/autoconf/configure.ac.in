@@ -5,7 +5,7 @@
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.7 2003/11/18 03:26:32 dadler Exp $
+## $Id: configure.ac.in,v 1.8 2003/11/18 04:21:08 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -49,6 +49,11 @@ CXXFLAGS="${CFLAGS} -fno-exceptions -fno-rtti"
 ## X11 backend
 
 AC_PATH_X
+if test x$no_x == xyes ; then
+  AC_MSG_ERROR([X11 not found, configure aborted.
+reason: RGL requires X11 on non-win32 platforms.])
+fi
+
 LDFLAGS="${LDFLAGS} -L${x_libraries}"
 LIBS="${LIBS} -lX11 -lXext"
 CPPFLAGS="${CPPFLAGS} -I${x_includes}"
@@ -91,6 +96,20 @@ if test "x$enable_libpng" != "xno"; then
     CFLAGS="${CFLAGS} `libpng-config --cflags`"
     LDFLAGS="${LDFLAGS} `libpng-config --ldflags`"
     LIBS="${LIBS} `libpng-config --libs`"
+  else    
+    TEST_DIRS="/usr/local /usr"
+    for I in $TEST_DIRS ; do
+      AC_MSG_CHECKING([libpng in $I])
+      if ( test -f $I/lib/libpng.so || test -f $I/lib/libpng.a ) && 
+         ( test -f $I/include/png.h ) ; then
+        CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${I}/include"
+        LDFLAGS="${LDFLAGS} -L${I}/lib"
+        LIBS="${LIBS} -lpng"
+        AC_MSG_RESULT([found])
+      else
+        AC_MSG_RESULT([not found])
+      fi
+    done
   fi
  
 fi
