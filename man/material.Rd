@@ -1,5 +1,6 @@
 \name{rgl.material}
 \alias{rgl.material}
+\alias{material3d}
 \title{generic Appearance setup}
 \description{
   Set material properties for geometry appearance.
