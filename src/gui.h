@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h,v 1.2 2003/05/30 08:25:34 dadler Exp $
+// $Id: gui.h,v 1.3 2003/06/04 08:52:51 dadler Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -56,6 +56,7 @@ class WindowImpl
 public:
   inline WindowImpl(Window* in_window)
   { window = in_window; }
+  inline  void unbind() { window = NULL; }
   virtual void setTitle(const char* title) = 0;
   virtual void setLocation(int x, int y) = 0;
   virtual void setSize(int width, int height) = 0;
