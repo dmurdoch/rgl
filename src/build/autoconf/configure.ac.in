@@ -5,7 +5,7 @@
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.1 2003/05/27 13:28:28 dadler Exp $
+## $Id: configure.ac.in,v 1.2 2003/06/01 09:45:41 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -46,7 +46,7 @@ LIBS=""
 ## C language
 
 CPPFLAGS=""
-CFLAGS=""
+CFLAGS="-Wall -pedantic"
 
 
 ## C++ language
