@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: opengl.h,v 1.2 2003/05/14 10:58:36 dadler Exp $
+// $Id: opengl.h,v 1.3 2004/05/28 08:41:07 dadler Exp $
 
 #ifdef _WIN32
 #include <windows.h>
@@ -20,7 +20,7 @@ extern "C" {
 #include <GL/glu.h>
 #endif
 
-};
+}
 
 //
 // CLASS

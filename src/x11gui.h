@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: x11gui.h,v 1.4 2003/06/04 07:44:05 dadler Exp $
+// $Id: x11gui.h,v 1.5 2004/05/28 08:41:07 dadler Exp $
 
 
 #include "gui.h"
@@ -67,6 +67,6 @@ namespace gui {
     
     WindowMap windowMap;
   };
-};
+} // namespace gui
 
 #endif /* X11_GUI_H */

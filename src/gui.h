@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h,v 1.6 2004/05/28 07:05:26 dadler Exp $
+// $Id: gui.h,v 1.7 2004/05/28 08:41:07 dadler Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -92,7 +92,7 @@ public:
 };
 
 
-};
+} // namespace gui
 
 //
 // implementation specific
@@ -209,7 +209,7 @@ public:
 
 };
 
-};
+} // namespace gui
 
 #endif /* GUI_H */
 
