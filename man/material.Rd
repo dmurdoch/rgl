@@ -6,11 +6,23 @@
 }
 \usage{
 rgl.material(
-  color = "white",  alpha = 1.0,
-  lit = TRUE, ambient = "black",  specular="white", emission = "black", shininess = 50.0, 
-  smooth = TRUE,  texture = NULL, textype = "rgb",
-  front = "fill", back = "fill",
-  size = 1.0, fog = TRUE
+  color        = c("white"),
+  alpha        = c(1.0),
+  lit          = TRUE, 
+  ambient      = "black",
+  specular     = "white", 
+  emission     = "black", 
+  shininess    = 50.0, 
+  smooth       = TRUE,
+  texture      = NULL, 
+  textype      = "rgb", 
+  texmipmap    = FALSE, 
+  texminfilter = "linear", 
+  texmagfilter = "linear",  
+  front        = "fill", 
+  back         = "fill",
+  size         = 1.0, 
+  fog          = TRUE
 )
 }
 \arguments{
@@ -32,25 +44,46 @@ rgl.material(
     logical, specifying whether gourad shading(smooth) or flat shading should be used
   }
   \item{texture}{ 
-    path to a texture image file (currently 256 x 256 is a must!) Supported formats: png.
+    path to a texture image file. Supported formats: png.
   }
   \item{textype}{
-    specifies the texture type:
-    \itemize{
-      \item \"alpha\"           alpha texture
-      \item \"luminance\"       luminance texture
-      \item \"luminance.alpha\" luminance/alpha texture
-      \item \"rgb\"             color texture
-      \item \"rgba\"            color/alpha texture
+    specifies what the pixmap actually determines
+    \describe{
+      \item{"alpha"}{alpha values}
+      \item{"luminance"}{luminance}
+      \item{"luminance.alpha"}{luminance and alpha}
+      \item{"rgb"}{color}
+      \item{"rgba"}{color and alpha texture}
+    }
+  }
+  \item{texmipmap}{
+    Logical, specifying if texture should be mipmapped.
+  }
+  \item{texmagfilter}{
+    specifies the magnification filtering type (sorted by ascending quality):
+    \describe{
+      \item{"nearest"}{texel nearest to the center of the pixel}
+      \item{"linear"}{weighted linear average of 2x2 array of texel}
+    }
+  }
+  \item{texminfilter}{
+    specifies the minification filtering type (sorted by ascending quality):
+    \describe{
+      \item{"nearest"}{texel nearest to the center of the pixel}
+      \item{"linear"}{weighted linear average of 2x2 array of texel}
+      \item{"nearest.mipmap.nearest"}{FIXME}
+      \item{"nearest.mipmap.linear"}{FIXME}
+      \item{"linear.mipmap.nearest"}{FIXME}
+      \item{"linear.mipmap.linear"}{FIXME}
     }
   }
   \item{front, back}{
     Specifies the polygon mode for the specified side:
-    \itemize{
-      \item \"fill\" fill polygon
-      \item \"line\" wireframe polygon
-      \item \"points\" point polygon
-      \item \"cull\" cull (hide) polygon
+    \describe{
+      \item{"fill"}{fill polygon}
+      \item{"line"}{wireframe polygon}
+      \item{"points"}{point polygon}
+      \item{"cull"}{cull (hide) polygon}
     }
   }
   \item{size}{ 
@@ -68,3 +101,4 @@ rgl.material(
 \code{\link{rgl.light}}
 }
 \keyword{dynamic}
+

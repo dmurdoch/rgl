@@ -30,6 +30,7 @@ rgl.points(rnorm(1000),rnorm(1000),rnorm(1000),color=heat.colors(1000),size=2)
 \code{\link{rgl.material}},
 \code{\link{rgl.spheres}},
 \code{\link{rgl.texts}},
-\code{\link{rgl.surface}}
+\code{\link{rgl.surface}},
+\code{\link{rgl.sprites}}
 }
 \keyword{dynamic}

@@ -10,19 +10,24 @@ rgl.clear( type = "shapes" )
 rgl.pop( type = "shapes" )  
 }
 \arguments{
-  \item{type}{Possible types are
-    \itemize{
-      \item \code{"shapes"} to clear all model datas
-      \item \code{"lights"} to clear all lights
-      \item \code{"bbox"}   remove bounding box
+  \item{type}{Select subtype:
+    \describe{
+      \item{"shapes"}{shape stack}
+      \item{"lights"}{light stack}
+      \item{"bbox"}{bounding box}
     }
   }
 }
 \details{
-rgl holds a stack for shapes and lights. \code{rgl.clear} clears the stack,
-while \code{rgl.pop} pops off the top-most (last added) node on the stack.
+RGL holds two stacks. One for shapes and another for lights. 
+\code{rgl.clear} clears the specified stack, while \code{rgl.pop} pops off 
+the top-most (last added) node on the stack.
+Additionally as the bounding box is an optional element, one can disable it 
+by calling \code{rgl.clear} on it.
 }
 \seealso{
 \code{\link{rgl}}
+\code{\link{rgl.bbox}}
+\code{\link{rgl.light}}
 }
 \keyword{dynamic}
