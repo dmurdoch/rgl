@@ -1,0 +1,32 @@
+#
+# configure for win32
+#
+# tests if src/zlib and src/lpng exists 
+# This file is part of RGL
+#
+# $Id: configure.win,v 1.4 2004/02/27 17:34:07 dadler Exp $
+#
+
+if [ -e "src/zlib" ] && [ -e "src/lpng" ]; then
+  exit 0
+else
+  cat <<EOF
+rgl on win32 platform depends on zlib and libpng sources.
+Please download zlib and libpng and setup the following steps:
+1. unpack the rgl package
+2. download zlib and libpng
+3. unpack/rename zlib in rgl/src/zlib
+4. unpack/rename libpng in rgl/src/libpng
+5. install again using  
+  > R CMD install rgl
+
+if you have wget and unzip at hand (e.g. from cygwin) you can 
+run a batch-script that will download, rename and move the files.  
+
+  > sh rgl/src/build/win32/download.sh
+
+For detailed information see rgl/README and rgl/src/build/README-WIN32.txt.
+EOF
+  exit 1
+fi
+
