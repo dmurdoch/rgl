@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: api.cpp,v 1.2 2003/06/03 13:57:53 dadler Exp $
 
 #include "lib.h"
 
@@ -97,6 +97,9 @@ void rgl_init(int* successptr)
 //
 // FUNCTION
 //   rgl_quit
+//
+// DESCRIPTION
+//   Gets called by .Last.lib ( R function )
 //
 
 void rgl_quit(int* successptr)
