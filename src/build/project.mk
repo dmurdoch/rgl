@@ -27,6 +27,7 @@ Viewpoint
 
 MODS=		\
 $(SCENE_MODS)	\
+Disposable	\
 api 		\
 device 		\
 devicemanager	\
