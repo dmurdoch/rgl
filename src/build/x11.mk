@@ -1,12 +1,10 @@
 #
-# x11 platform config
-# GNU Make include file
+# x11 platform modules
 #
 
-MODS+=		\
-x11lib		\
+X11_MODS=		\
+x11lib 			\
 x11gui
 
-HEADERS+=	\
-x11gui.h
-
+dump-x11-mods:
+	@echo -n $(X11_MODS)
