@@ -40,6 +40,8 @@ rgl.enum.textype(textype)
 rgl.enum.fogtype(fogtype)
 rgl.enum.primtype(primtype)
 rgl.enum.halign(halign)
+rgl.enum.texmagfilter(maxfilter)
+rgl.enum.texminfilter(minfilter)
 }
 \details{
   These are not to be called by the user.
