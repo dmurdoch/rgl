@@ -10,7 +10,6 @@ set CFG=config.mk
 REM === SETUP build tool =====================================================
 
 set TARGET=x%1
-if %TARGET% == xclean goto clean
 if %TARGET% == xmingw goto mingw
 if %TARGET% == xvc    goto vc
 goto usage
