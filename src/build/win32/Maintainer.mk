@@ -4,53 +4,55 @@
 #
 # Usage: copy this Makefile to a working direction where rgl's
 #        source tree lives in.
-#        $ make target - builds mingw,vc and src tar-ball
-#        $ make upload - uploads a v$(VERSION) directory
+#        $ make target  - builds mingw,vc and src tar-ball (default)
+#        $ make upload  - uploads a v$(VERSION) directory
+#	 $ make clean   - clean up previous build with this version
 #
-# $Id: Maintainer.mk,v 1.2 2003/05/27 09:44:18 dadler Exp $
+# $Id: Maintainer.mk,v 1.3 2003/05/27 13:02:14 dadler Exp $
 #
 
-VERSION=0.64-6
-DATE=2003-06-01
-TMINGW=rgl_$(VERSION)_R_win32_mingw.zip
-TVC=rgl_$(VERSION)_R_win32_vc.zip
-TSRC=rgl_$(VERSION).tar.gz
+SRCDIR=rgl
 
-target: release
+include $(SRCDIR)/src/build/VERSION
 
-release: mingw vc src
+DESTDIR=release/$(VERSION)
 
-mark:
-	sed -e s/@VERSION@/$(VERSION)/ -e s/@DATE@/$(DATE)/ DESCRIPTION.in >rgl/DESCRIPTION
+
+TMINGW=$(DESTDIR)/rgl_$(VERSION)_R_win32_mingw.zip
+TVC=$(DESTDIR)/rgl_$(VERSION)_R_win32_vc.zip
+TSRC=$(DESTDIR)/rgl_$(VERSION).tar.gz
+
+target: release 
 
 upload:
-	mkdir v$(VERSION)
-	cp rgl_$(VERSION)* v$(VERSION)
-	scp -r v$(VERSION) dadler@wsopuppenkiste.wiso.uni-goettingen.de:~/public_html/rgl
+	scp -r $(DESTDIR) dadler@wsopuppenkiste.wiso.uni-goettingen.de:~/public_html/rgl/$(VERSION)
 
-	
+destdir:
+	mkdir -p $(DESTDIR)
+
+release: destdir mingw vc src
+
 $(TMINGW):
 	cd rgl ; ./setup.bat mingw
 	rcmd build --binary rgl
-	mv rgl_$(VERSION).zip $(TMINGW)
+	mv -f rgl_$(VERSION).zip $(TMINGW)
 	cd rgl ; sh cleanup.win
 
 $(TVC):
 	cd rgl ; ./setup.bat vc
 	rcmd build --binary rgl
-	mv rgl_$(VERSION).zip $(TVC)
+	mv -f rgl_$(VERSION).zip $(TVC)
 	cd rgl ; sh cleanup.win
 
 $(TSRC):
 	rcmd build rgl
+	mv -f rgl_$(VERSION).tar.gz $(TSRC)
+	cd rgl ; sh cleanup
 
 src: $(TSRC)
 vc: $(TVC)
 mingw: $(TMINGW)
 
 clean:
-	cd rgl ; sh cleanup ; sh cleanup.win
-
-dist-clean:
-	rm -f rgl_$(VERSION)*
+	rm -Rf $(DESTDIR)
 
