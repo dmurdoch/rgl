@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.6 2004/08/09 19:33:27 murdoch Exp $
+## $Id: scene.R,v 1.7 2004/08/10 01:43:06 murdoch Exp $
 ##
 
 ##
@@ -427,6 +427,68 @@ rgl.window2user <- function( x, y, z = 0, projection = rgl.getprojection())
   return(matrix(ret$point, ncol(window), 3, byrow = TRUE))
 }
 
+rgl.mousemode <- function(mode = "current")
+{
+	mode <- rgl.enum(mode, current = 0, normal = 1, selection = 2)
+	idata <- as.integer(mode)
+	
+	ret <- .C( symbol.C("rgl_mousemode"), 
+	    success=FALSE,
+	    mode=idata,
+	    PACKAGE="rgl"
+	)
+	
+	if (! ret$success)
+	    stop("rgl_mousemode")
+
+	c("normal", "selection")[ret$mode]
+}
+
+rgl.selectstate <- function()
+{
+	ret <- .C( symbol.C("rgl_selectstate"),
+    	success=FALSE,
+    	state = as.integer(0),
+    	mouseposition = double(4),
+    	PACKAGE="rgl"
+  	)
+
+  	if (! ret$success)
+    	stop("rgl_selectstate")
+    return(ret)
+}
+
+
+rgl.select <- function()
+{
+	rgl.mousemode("selection")
+	
+	# number 3 means the mouse selection is done. ?? how to change 3 to done
+	while ((result <- rgl.selectstate())$state != 3)
+		Sys.sleep(0.1)
+	
+	rgl.setselectstate("none")
+	rgl.mousemode("normal")
+	return(result$mouseposition)
+}
+
+rgl.setselectstate <- function(state = "current")
+{
+	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3)
+	idata <- as.integer(c(state))
+	
+	  ret <- .C( symbol.C("rgl_setselectstate"), 
+	    success=FALSE,
+	    state = idata,
+	    PACKAGE="rgl"
+	  )
+	
+	  if (! ret$success)
+	    stop("rgl_setselectstate")
+
+	c("none", "middle", "done")[ret$state]
+}
+
 rgl.getprojection <- function()
 {
     ret <- .C( symbol.C("rgl_projection"),
@@ -444,6 +506,32 @@ rgl.getprojection <- function()
     list(model = matrix(ret$model, 4, 4),
     	 proj = matrix(ret$proj, 4, 4),
     	 view = ret$view)
+}
+     
+select3d <- function() {
+  rect <- rgl.select()
+  llx <- rect[1]
+  lly <- rect[2]
+  urx <- rect[3]
+  ury <- rect[4]
+  
+  if ( llx > urx ){
+  	temp <- llx
+  	llx <- urx
+  	urx <- temp
+  }
+  if ( lly > ury ){
+  	temp <- lly
+  	lly <- ury
+  	ury <- temp
+  }
+  proj <- rgl.getprojection();
+  function(x,y,z) {
+    pixel <- rgl.user2window(x,y,z,proj=proj)
+    apply(pixel,1,function(p) (llx <= p[1]) && (p[1] <= urx)
+                           && (lly <= p[2]) && (p[2] <= ury)
+                           && (0 <= p[3])   && (p[3] <= 1))
+  }
 }
 
 points3d <- function ( x, y, z, ... )

@@ -6,6 +6,7 @@ MODS=		\
 types 		\
 math 		\
 fps 		\
+select		\
 pixmap 		\
 gui 		\
 api 		\
