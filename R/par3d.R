@@ -1,0 +1,37 @@
+.Par3d <- c("FOV", 
+	   "mouseMode", 
+	   "modelMatrix", "projMatrix", "userMatrix", 
+	   "viewport", "zoom"
+	   )
+	   
+.Par3d.readonly <- c("FOV", 
+	   "mouseMode", 
+	   "modelMatrix", "projMatrix", 
+	   "viewport", "zoom"
+	   )
+
+par3d <- function (..., no.readonly = FALSE)
+{
+    single <- FALSE
+    args <- list(...)
+    if (!length(args))
+	args <- as.list(if (no.readonly)
+                        .Par3d[-match(.Par3d.readonly, .Par3d)]
+        else .Par3d)
+    else {
+	if (all(unlist(lapply(args, is.character))))
+	    args <- as.list(unlist(args))
+	if (length(args) == 1) {
+	    if (is.list(args[[1]]) | is.null(args[[1]]))
+		args <- args[[1]]
+	    else
+		if(is.null(names(args)))
+		    single <- TRUE
+	}
+    }
+    value <-
+        if (single) .External("par3d", args, PACKAGE = "rgl")[[1]] 
+        else .External("par3d", args, PACKAGE = "rgl")
+    if(!is.null(names(args))) invisible(value) else value
+}
+
