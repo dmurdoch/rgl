@@ -1,0 +1,99 @@
+\name{par3d}
+\alias{par3d}
+\alias{.Par3d}
+\alias{.Par3d.readonly}
+\concept{FOV}
+\concept{modelMatrix}
+\concept{mouseMode}
+\concept{projMatrix}
+\concept{userMatrix}
+\concept{viewport}
+\concept{zoom}
+
+\title{Set or Query RGL Parameters}
+
+\description{
+  \code{par3d} can be used to set or query graphical parameters in rgl.
+  Parameters can be set by specifying them as arguments to \code{par3d} in
+  \code{tag = value} form, or by passing them as a list of tagged
+  values.
+}
+\usage{
+par3d(\dots, no.readonly = FALSE)
+
+}
+
+\arguments{
+  \item{\dots}{arguments in \code{tag = value} form, or a list of tagged
+    values.  The tags must come from the graphical parameters described
+    below.}
+  \item{no.readonly}{logical; if \code{TRUE} and there are no other
+    arguments, only those parameters which can be set by a
+    subsequent \code{par3d()} call are returned.}
+}
+
+\details{
+  Parameters are queried by giving one or more character vectors to
+  \code{par3d}.
+
+  \code{par3d()} (no arguments) or \code{par3d(no.readonly=TRUE)} is used to
+  get \emph{all} the graphical parameters (as a named list).  Their
+  names are currently taken from the variable \code{.Par3d}.
+  \code{.Par3d.readonly} contains the names of the \code{par3d} arguments
+  which are \emph{readonly}.
+
+  \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
+  may only be used in queries, i.e., they do \emph{not} set anything.
+
+ }
+
+\value{
+  When parameters are set, their former values are returned in an
+  invisible named list.  Such a list can be passed as an argument to
+  \code{par} to restore the parameter values.
+  Use \code{par3d(no.readonly = TRUE)} for the full list of parameters
+  that can be restored.
+
+  When just one parameter is queried, its value is returned directly.
+  When two or more parameters are queried, the result is a list of
+  values, with the list names giving the parameters.
+
+  Note the inconsistency: setting one parameter returns a list, but
+  querying one parameter returns an object.
+}
+
+\section{Parameters}{
+  \describe{
+    \item{\code{FOV}}{real.  The field of view, from 1 to 179 degrees.  This controls
+      the degree of parallax in the perspective view.}
+    \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
+      of the user data.}
+    \item{\code{mouseMode}}{character.  A vector of strings describing
+      what the 3 mouse buttons do. Partial matching is used.}
+    \item{\code{projMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the current
+      projection of the scene.}
+    \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
+      display the scene.}
+    \item{\code{viewport}}{\emph{\bold{R.O.}}; real.  A vector giving the dimensions of the
+      window in pixels.}
+    \item{\code{zoom}}{real. A positive value indicating the current
+      magnification of the scene.}
+  }
+}
+
+\details{
+Possible values for \code{mouseMode} are \code{c("none", "trackball", "polar", "selecting", "zoom", "fov")}.
+}
+
+\seealso{\code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
+}
+
+\examples{
+    save <- par3d(userMatrix = rotate3d(90*pi/180, 1,0,0))
+    save
+    par3d("userMatrix")    
+    par3d(userMatrix = save)
+    par3d("userMatrix")
+}
+
+\keyword{dynamic}

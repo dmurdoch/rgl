@@ -1,4 +1,4 @@
-\name{rgl.clear}
+\name{scene}
 \alias{rgl.clear}
 \alias{rgl.pop}
 \title{scene management}
