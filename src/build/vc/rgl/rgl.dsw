@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "libpng"=.\libpng\libpng.dsp - Package Owner=<4>
+Project: "libpng"=..\..\..\lpng\projects\msvc\libpng.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -11,6 +11,9 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name zlib
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -33,7 +36,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "zlib"=.\zlib\zlib.dsp - Package Owner=<4>
+Project: "zlib"=..\..\..\lpng\projects\msvc\zlib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
