@@ -1,0 +1,12 @@
+Package: rgl
+Version: 0.65
+Date: 2005-02-15
+Title: 3D visualization device system (OpenGL)
+Author: Daniel Adler <dadler@uni-goettingen.de>
+Maintainer: Daniel Adler <dadler@uni-goettingen.de>
+Depends: R (>= 1.4.1)
+Description: 3D visualization device (OpenGL)
+License: GPL
+URL: http://wsopuppenkiste.wiso.uni-goettingen.de/~dadler/rgl
+SystemRequirements: OpenGL, GLU Library
+
