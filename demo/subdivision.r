@@ -1,30 +1,7 @@
 # rgl-demo: subdivision surfaces
 # author: Daniel Adler
 # notes: demo contains preview material of r3d, a generic 3D interface for R
-# $Id: subdivision.r,v 1.3 2004/05/28 07:05:26 dadler Exp $
-
-#
-# R3D
-#
-
-dev3d <- "rgl"
-
-# generic 3d interface
-
-points3d <- function ( x, ... )
-  UseMethod( paste("points3d", dev3d, sep=".") )
-
-lines3d <- function ( x, ... )
-  UseMethod( paste("lines3d", dev3d, sep=".") )
-  
-surface3d <- function ( x, ... )
-  UseMethod( paste("surface3d",dev3d,sep=".") ) 
-
-transform3d <- function ( x, tm )
-  UseMethod( paste("transform3d",dev3d,sep=".") )
-
-translate3d <- function ( x, tx, ty, tz )
-  UseMethod( paste("translate3d",dev3d,sep=".") )
+# $Id: subdivision.r,v 1.4 2004/09/03 13:51:06 dadler Exp $
   
 # 3d meshes
   
@@ -43,6 +20,10 @@ qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL ) {
   class(object) <- "qmesh3d" 
   return( object )
 }
+
+dot3d.qmesh3d <- function ( x, ... ) points3d(x$vb[1,]/x$vb[4,],x$vb[2,]/x$vb[4,],x$vb[3,]/x$vb[4,], ... )
+wire3d.qmesh3d <- function ( x, ... ) quads3d(x$vb[1,x$ib]/x$vb[4,x$ib],x$vb[2,x$ib]/x$vb[4,x$ib],x$vb[3,x$ib]/x$vb[4,x$ib], front="lines", back="lines", ... )
+shade3d.qmesh3d <- function ( x, ... ) quads3d(x$vb[1,x$ib]/x$vb[4,x$ib],x$vb[2,x$ib]/x$vb[4,x$ib],x$vb[3,x$ib]/x$vb[4,x$ib], ... )
 
 cube3d.vb <- c(
   -1.0, -1.0, -1.0, 1.0,
@@ -164,9 +145,6 @@ o3d <- qmesh3d( o3d.vb, o3d.ib )
 #
 # subdivision3d
 #
-
-subdivision3d <- function ( x , ... ) 
-  UseMethod("subdivision3d")
 
 dragpoint <- function( mesh, vb=mesh$vb, ib=mesh$ib )
 {
@@ -359,16 +337,8 @@ subdivision3d.demo1 <- function() {
 
 require(rgl)
 
-points3d.rgl.qmesh3d <- function ( x, ... )
-  rgl.points(x$vb[1,]/x$vb[4,],x$vb[2,]/x$vb[4,],x$vb[3,]/x$vb[4,], ... )
 
-lines3d.rgl.qmesh3d <- function ( x, ... )
-  rgl.quads(x$vb[1,x$ib]/x$vb[4,x$ib],x$vb[2,x$ib]/x$vb[4,x$ib],x$vb[3,x$ib]/x$vb[4,x$ib], front="lines", back="lines", ... )
-  3
-surface3d.rgl.qmesh3d <- function ( x, ... )
-  rgl.quads(x$vb[1,x$ib]/x$vb[4,x$ib],x$vb[2,x$ib]/x$vb[4,x$ib],x$vb[3,x$ib]/x$vb[4,x$ib], ... )
-
-translate3d.rgl.qmesh3d <- function ( x, tx, ty, tz ) {
+translate3d.qmesh3d <- function ( x, tx, ty, tz ) {
   for ( i in 1:(dim(x$vb)[2]) ) {
   x$vb[,i] <- matrix( 
     data=c( 1, 0, 0,tx,
@@ -392,19 +362,25 @@ subdivide <- function(mesh,normalize=F,depth=1) {
   return(mesh)  
 }
 
-render.part <- function(x, tx,depth, func, ...) {
+render.part <- function(x, tx,depth, func, color, ...) {
   x <- translate3d(x,tx,0,0)
-  surface3d(x, color="gray30",front="lines",alpha=0.5,back="lines")
-  surface3d(func(x,depth=depth, ...),color="red")
+  shade3d(x, color="gray30",front="lines",alpha=0.5,back="lines")
+  shade3d(func(x,depth=depth, ...), alpha=0.5, color=color )
 }
 
 render.levels <- function(ty,func, ... ) {
   x <- translate3d(o3d,0,ty,0)
-  render.part(x,-5.5, 0,func, ... )
-  render.part(x,-1.75,1,func, ... )
-  render.part(x, 1.75,2,func, ... )
-  render.part(x, 5.5, 3,func, ... )
+  render.part(x,-5.5, 0,func, "blue",   ... )
+  render.part(x,-1.75,1,func, "yellow", ... )
+  render.part(x, 1.75,2,func, "red",    ... )
+  render.part(x, 5.5, 3,func, "green",  ... )
 }
+
+clear3d()
+clear3d(type="bbox")
+clear3d(type="lights")
+bg3d(color="gray")
+light3d()
 
 rgl.clear()
 rgl.clear(type="bbox")
@@ -412,3 +388,4 @@ rgl.clear(type="lights")
 rgl.bg(color="gray")
 rgl.light()
 render.levels( 0, func=subdivide, normalize=F )
+
