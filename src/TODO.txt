@@ -1,0 +1,63 @@
+BUGS
+====
+
+- win32/mingw: pixmap loading fails
+
+- x11: rgl.snapshot requires window to be opened
+       fix with offscreen pixmap rendering and support for output parameters
+
+TODO
+====
+
+- package vignette
+
+- manual page "rgl" rewrite: toc
+
+    overview
+    devices
+    scene
+      shapes
+      appearance
+      environment
+    navigation
+    utils
+
+scene: 
+  - alpha blended shapes rendered in stack order results in visual errors
+    z-distance sorted faces and back to front order
+
+  - bbox: non-uniform scale per axis
+
+  - allow png image size to be of arbitary size!
+  
+gui: 
+  - capture mouse
+
+exec:
+  - embedded multi-threading framework
+
+IDEAS
+=====
+
+R api:
+  - 3d util functions
+
+  - parametric shapes:
+  
+  implicit planes  e.g. y=0
+           lines   e.g. x=1, y=2
+           spheres e.g. x^2 + y^2 + z^2 -1 = 0
+
+  - spheres,bg: specify sections and segments 
+
+  - bg: sphere horizontal color range
+
+  - material: texture magnify filter as optional using material
+
+C++:
+  - use STL
+  
+
+render:
+
+  - multi-pass rendering (through accumulation) ... depth of field?!
