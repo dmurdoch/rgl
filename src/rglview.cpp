@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp,v 1.4 2004/08/10 01:43:07 murdoch Exp $
+// $Id: rglview.cpp,v 1.5 2004/08/27 15:58:57 dadler Exp $
 
 #include "rglview.h"
 #include "opengl.h"
@@ -66,8 +66,8 @@ void RGLView::resize(int width, int height) {
 
   View::resize(width, height);
 
-  renderContext.size.width = width;
-  renderContext.size.height = height;
+  renderContext.rect.width = width;
+  renderContext.rect.height = height;
 
 }
 

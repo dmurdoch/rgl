@@ -1,35 +1,23 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef RGL_MATH_H
+#define RGL_MATH_H
 
 // C++ header file
 // This file is part of RGL
 //
-// $Id: math.h,v 1.4 2003/11/21 21:56:03 dadler Exp $
+// $Id: math.h,v 1.5 2004/08/27 15:58:57 dadler Exp $
 
 #include <math.h>
 #include <float.h>
 
-/**
- * get most significant bit
- * @param x unsigned value
- * @return bit position between 1..32 or 0 if value was 0
- **/
-inline int msb(unsigned int x) {
-  if (x) {
-    int bit = sizeof(int)*8;
-    unsigned int mask = 1<<((sizeof(int)*8)-1);
-    while ( !(x & mask) ) {
-      --bit; mask >>= 1;
-    }
-    return bit;
-  } else
-    return 0;
-}
+
+#include "types.h"
 
 #ifndef PI
 #define PI      3.1415926535897932384626433832795
+#define CONST_PI 3.1415926535897932384626433832795
 #endif
 
+/*
 #ifndef sinf
 #define sinf(X) sin(X)
 #define cosf(X) cos(X)
@@ -38,48 +26,98 @@ inline int msb(unsigned int x) {
 #define tanf(X) tan(X)
 #define sqrtf(X) sqrt(X)
 #endif
+ */
 
-inline float deg2radf(float deg) { return ((float)(PI/180.0)) * deg; }
-inline float rad2degf(float rad) { return rad / ((float)(PI/180.0)); }
-
-inline int   getMin(int a, int b)     { return (a <= b) ? a : b; }
-inline float getMin(float a, float b) { return (a <= b) ? a : b; }
-inline int   getMax(int a, int b)     { return (a >= b) ? a : b; }
-inline float getMax(float a, float b) { return (a >= b) ? a : b; }
-
-inline float clamp(float v, float floor, float ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
-inline int   clamp(int   v, int   floor, int   ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
-
-struct Vertex
+template<class T>
+inline T pi()
 {
-  Vertex() {};
-  Vertex(float x,float y, float z);
-  float getLength() const;
+  return static_cast<T>( CONST_PI );
+}  
+
+template<class T>
+inline T deg2rad(T deg)
+{
+  return ( pi<T>() / T(180.0) ) * deg;
+}
+
+template<class T>
+inline T rad2deg(T rad)
+{
+  return rad / ( pi<T>() / T(180.0) );
+}
+
+template<class T>
+T square(T x)
+{
+  return static_cast<T>( sqrt( static_cast<double>(x) ) );
+}
+
+template<>
+inline float square(float x)
+{
+  return sqrtf( x );
+}
+
+// inline float deg2radf(float deg) { return ((float)(PI/180.0)) * deg; }
+// inline float rad2degf(float rad) { return rad / ((float)(PI/180.0)); }
+
+inline float deg2radf(float deg) { return deg2rad<float>(deg); }
+inline float rad2degf(float rad) { return rad2deg<float>(rad); }
+
+
+struct Vec3
+{
+
+  float x,y,z;
+  
+  Vec3() : x(0),y(0),z(0) { }
+  Vec3(float in_x,float in_y, float in_z) : x(in_x), y(in_y), z(in_z) { }
+  Vec3(const Vec3& that) : x(that.x), y(that.y), z(that.z) { }
+  inline float getLength() const
+  {
+    return square<float>( x*x + y*y + z*z );
+  }
   void normalize();
-  Vertex cross(Vertex op2) const;
-  float operator * (Vertex op2);
-  Vertex operator * (float value);
-  Vertex operator+(Vertex op2) const;
-  Vertex operator-(Vertex op2) const;
-  void   operator+=(Vertex op2);
+  Vec3 cross(Vec3 op2) const;
+  float operator * (Vec3 op2);
+  Vec3 operator * (float value);
+  Vec3 operator+(Vec3 op2) const;
+  Vec3 operator-(Vec3 op2) const;
+  void   operator+=(Vec3 op2);
   void   rotateX(float degree);
   void   rotateY(float degree);
-  float x,y,z;
+
+  static inline Vec3& asVec3(float* ptr) {
+    return *( reinterpret_cast<Vec3*>( ptr ) );
+  }
 };
 
+template<>
+inline void copy(double* from, Vec3* to, int size)
+{
+  copy(from, (float*) to, size*3);
+}
+
+typedef Vec3    Vertex;
 typedef Vertex  Vertex3;
 typedef Vertex3 Normal;
 
 
-struct Vertex4
+struct Vec4
 {
-  Vertex4(const Normal& n) : x(n.x), y(n.y), z(n.z), w(0.0f) {};
-  Vertex4() {};
-  Vertex4(const float x, const float y, const float z, const float w=1.0f);
-  float operator * (const Vertex4& op2) const;
-  Vertex4 operator * (const float value) const;
-  Vertex4 operator + (const Vertex4& op2) const;
+  
   float x,y,z,w;
+
+  Vec4(const Normal& n) : x(n.x), y(n.y), z(n.z), w(0.0f) {};
+  Vec4() {};
+  Vec4(const float x, const float y, const float z, const float w=1.0f);
+  float operator * (const Vec4& op2) const;
+  Vec4 operator * (const float value) const;
+  Vec4 operator + (const Vec4& op2) const;
+
+  static inline Vec4& asVec4(float* ptr) {
+    return *( reinterpret_cast<Vec4*>( ptr ) );
+  }
 };
 
 class Matrix4x4
@@ -88,8 +126,8 @@ public:
   Matrix4x4();
   Matrix4x4(const Matrix4x4& src);
   Matrix4x4(const double*);
-  Vertex operator*(Vertex op2) const;
-  Vertex4 operator*(const Vertex4& op2) const;
+  Vec3 operator*(Vec3 op2) const;
+  Vec4 operator*(const Vec4& op2) const;
   Matrix4x4 operator*(const Matrix4x4& op2) const;
   void setIdentity(void);
   void setRotate(int axis, float degree);
@@ -113,6 +151,12 @@ struct RectSize
   int height;
 };
 
+struct Rect
+{
+  int x, y;
+  int width, height;
+};
+
 
 //
 // CLASS
@@ -124,58 +168,13 @@ struct PolarCoord
   PolarCoord(float in_theta=0.0f, float in_phi=0.0f) : theta(in_theta), phi(in_phi) {};
   PolarCoord(const PolarCoord& src) : theta(src.theta), phi(src.phi) {};
   PolarCoord operator + (const PolarCoord& op2) const { return PolarCoord(theta+op2.theta, phi+op2.phi); }
-  PolarCoord operator - (const PolarCoord& op2) const { return PolarCoord(theta-op2.theta, phi-op2.phi); }
+  PolarCoord operator - (const PolarCoord& op2) const { return PolarCoord(theta-op2.theta, phi-op2.phi); }  
+  Vec3 vector() const;
   float theta;
   float phi;
 };
 
 
-//
-// CLASS
-//   AABox (axis-aligned box)
-//
-
-class Sphere;
-
-class AABox {
-public:
-  AABox();
-  void invalidate(void);
-  bool isValid(void) const;
-  void operator += (const AABox& aabox);
-  void operator += (const Sphere& sphere);
-  void operator += (const Vertex& vertex);
-  Vertex getCenter(void) const;
-  Vertex vmin, vmax;
-};
-
-
-//
-// CLASS
-//   Sphere
-//
-
-class Sphere {
-public:
-  Sphere() : center(0,0,0), radius(1) {};
-  Sphere(const Vertex& center, const float radius);
-  Sphere(const float radius);
-  Sphere(const AABox& aabox);
-  Vertex center;
-  float radius;
-};
-
-
-//
-// CLASS
-//   Frustum
-//
-
-class Frustum {
-public:
-  void enclose(float sphere_radius, float fovangle, RectSize& winsize);
-  float left, right, bottom, top, znear, zfar, distance;
-};
-
+typedef Vec4 Vertex4;
 
 #endif /* MATH_H */
