@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.3 2003/11/15 18:20:36 dadler Exp $
+// $Id: api.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
 
 #include "lib.h"
 
@@ -83,7 +83,7 @@ DeviceManager* deviceManager = NULL;
 #include "lib.h"
 
 void rgl_init(int* successptr)
-{  
+{
   bool success = false;
   
   if ( lib_init() ) {
@@ -98,16 +98,11 @@ void rgl_init(int* successptr)
 // FUNCTION
 //   rgl_quit
 //
-// DESCRIPTION
-//   Gets called by .Last.lib ( R function )
-//
 
 void rgl_quit(int* successptr)
 {
-  if (deviceManager) {
+  if (deviceManager)
     delete deviceManager;
-    deviceManager = NULL;
-  }
 
   lib_quit();
   

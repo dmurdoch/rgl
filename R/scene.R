@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.2 2003/05/27 14:03:27 dadler Exp $
+## $Id: scene.R,v 1.1 2003/03/25 00:13:21 dadler Exp $
 ##
 
 ##
@@ -114,7 +114,7 @@ rgl.bbox <- function(
   xat=NULL, xlab=NULL, xunit=0, xlen=5,
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=TRUE, ...) {
+  marklen=15.0, marklen.rel=T, ...) {
 
   rgl.material( ... )
 

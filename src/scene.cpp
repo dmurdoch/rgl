@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp,v 1.4 2003/11/16 12:52:03 dadler Exp $
+// $Id: scene.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
 
 #include "scene.h"
 #include "math.h"
@@ -9,7 +9,7 @@
 #include "lib.h"
 #include "opengl.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <malloc.h>
 
 #include "pixmap.h"
 
@@ -526,6 +526,7 @@ Scene::Scene()
   nlights    = 0;
   bboxDeco   = NULL;
  
+  add( new BBoxDeco );
   add( new Background );
   add( new Viewpoint );
   add( new Light ); 
@@ -1889,8 +1890,8 @@ void Texture::beginUse(RenderContext* renderContext)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 
-    GLint gltexfmt = 0;
-    GLenum glpixfmt = 0;
+    GLint gltexfmt;
+    GLenum glpixfmt;
     GLint ualign;
 
     switch(type)
@@ -2280,7 +2281,6 @@ void BBoxDeco::render(RenderContext* renderContext)
           high     = bbox.vmax.y;
           break;
         case 2:
-	default:
           axis     = &zaxis;
           axisedge = zaxisedge;
           nedges   = 4;

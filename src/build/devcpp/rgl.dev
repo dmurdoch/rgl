@@ -1,31 +1,31 @@
 [Project]
 FileName=rgl.dev
 Name=rgl
-UnitCount=26
+UnitCount=24
 Type=3
 Ver=1
 ObjFiles=
-Includes=..\..\..\src\zlib;..\..\..\src\lpng124
-Libs=..\..\..\src\zlib;..\..\..\src\lpng124
+Includes=
+Libs=
 PrivateResource=
 ResourceIncludes=
 MakeIncludes=
-Compiler=-DBUILDING_DLL=1_@@_-DNDEBUG_@@_-DHAVE_PNG_H_@@_
-Linker=--no-export-all-symbols --add-stdcall-alias_@@_-lopengl32_@@_-lgdi32_@@_-lpng_@@_-lz_@@_../../rgl_res.o_@@_
+Resources=
+Compiler=-DBUILDING_DLL=1
+Linker=--no-export-all-symbols --add-stdcall-alias
 IsCpp=1
 Icon=
-ExeOutput=..\..\..\src
-ObjectOutput=..\..\..\src
+ExeOutput=
+ObjectOutput=
 OverrideOutput=0
-OverrideOutputName=rgl.dll
+OverrideOutputName=
 HostApplication=
 Folders=
 CommandLine=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=000000000000000000
-CppCompiler=-fno-exceptions_@@_-fno-rtti_@@_-fomit-frame-pointer_@@_-DBUILDING_DLL=1_@@_-DNDEBUG_@@_-DHAVE_PNG_H_@@_
+CompilerSettings=
 
 [Unit1]
 FileName=..\..\win32lib.cpp
@@ -34,8 +34,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit2]
 FileName=..\..\device.cpp
@@ -44,8 +42,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit3]
 FileName=..\..\device.h
@@ -54,8 +50,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit4]
 FileName=..\..\devicemanager.cpp
@@ -64,8 +58,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit5]
 FileName=..\..\devicemanager.h
@@ -74,8 +66,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit6]
 FileName=..\..\fps.cpp
@@ -84,8 +74,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit7]
 FileName=..\..\fps.h
@@ -94,8 +82,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit8]
 FileName=..\..\gui.cpp
@@ -104,8 +90,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit9]
 FileName=..\..\gui.h
@@ -114,8 +98,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit10]
 FileName=..\..\lib.h
@@ -124,8 +106,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit11]
 FileName=..\..\math.cpp
@@ -134,8 +114,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit12]
 FileName=..\..\math.h
@@ -144,8 +122,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit13]
 FileName=..\..\opengl.h
@@ -154,8 +130,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit14]
 FileName=..\..\pixmap.cpp
@@ -164,8 +138,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit15]
 FileName=..\..\pixmap.h
@@ -174,8 +146,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit16]
 FileName=..\..\rglview.cpp
@@ -184,8 +154,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit17]
 FileName=..\..\rglview.h
@@ -194,8 +162,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit18]
 FileName=..\..\scene.cpp
@@ -204,8 +170,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit19]
 FileName=..\..\scene.h
@@ -214,8 +178,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit20]
 FileName=..\..\types.cpp
@@ -224,8 +186,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit21]
 FileName=..\..\types.h
@@ -234,8 +194,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit22]
 FileName=..\..\win32gui.cpp
@@ -244,8 +202,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit23]
 FileName=..\..\win32gui.h
@@ -254,8 +210,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [Unit24]
 FileName=..\..\api.cpp
@@ -264,8 +218,6 @@ Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
 BuildCmd=
-Link=1
-Priority=1000
 
 [VersionInfo]
 Major=0
@@ -283,25 +235,4 @@ LegalTrademarks=
 OriginalFilename=
 ProductName=
 ProductVersion=
-AutoIncBuildNr=0
-
-[Unit25]
-FileName=..\..\glgui.h
-CompileCpp=1
-Folder=rgl
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit26]
-FileName=..\..\glgui.cpp
-CompileCpp=1
-Folder=rgl
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
 
