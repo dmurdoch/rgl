@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp,v 1.2 2003/11/21 15:16:11 dadler Exp $
+// $Id: rglview.cpp,v 1.3 2004/08/09 19:33:28 murdoch Exp $
 
 #include "rglview.h"
 #include "opengl.h"
@@ -80,6 +80,11 @@ void RGLView::paint(void) {
 
   windowImpl->beginGL();
   scene->render(&renderContext);
+
+  glGetDoublev(GL_MODELVIEW_MATRIX,modelMatrix);
+  glGetDoublev(GL_PROJECTION_MATRIX,projMatrix);
+  glGetIntegerv(GL_VIEWPORT,viewport);
+
   if (flags & FSHOWFPS)
     fps.render(renderContext.time, &renderContext );
   glFinish();

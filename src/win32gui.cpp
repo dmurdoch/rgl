@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp,v 1.5 2004/05/28 08:41:07 dadler Exp $
+// $Id: win32gui.cpp,v 1.6 2004/08/09 19:33:29 murdoch Exp $
 
 #include "win32gui.h"
 
@@ -77,12 +77,25 @@ namespace gui {
     }
 
 #ifdef _WIN32
-    void bringToTop(void)
+    int isTopmost(HWND handle)
+    {
+      return GetWindowLong(handle, GWL_EXSTYLE) & WS_EX_TOPMOST;
+    }
+
+    void bringToTop(int stay) /* stay=0 for regular, 1 for topmost, 2 for toggle */
     {
 
       if (windowHandle) {
-		SetForegroundWindow(windowHandle); /* needed in Rterm */
+	SetForegroundWindow(windowHandle); /* needed in Rterm */
     	BringWindowToTop(windowHandle);    /* needed in Rgui --mdi */
+
+    	if (stay == 2) stay = !isTopmost(windowHandle);
+
+    	if (stay) SetWindowPos(windowHandle, HWND_TOPMOST, 0, 0, 0, 0,
+	    				SWP_NOMOVE | SWP_NOSIZE);
+	else SetWindowPos(windowHandle, HWND_NOTOPMOST, 0, 0, 0, 0,
+	    				SWP_NOMOVE | SWP_NOSIZE);
+
       } else
         printMessage("window not bound");
     }

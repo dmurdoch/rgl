@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: rglview.h,v 1.2 2004/08/09 19:33:28 murdoch Exp $
 
 
 #include "gui.h"
@@ -31,6 +31,10 @@ public:
   void captureLost();
   void keyPress(int code);
   Scene* getScene();
+
+  // These are set after rendering the scene
+  GLdouble modelMatrix[16], projMatrix[16];
+  GLint viewport[4];
 
 protected:
 

@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: device.h,v 1.2 2004/05/28 07:05:26 dadler Exp $
+// $Id: device.h,v 1.3 2004/08/09 19:33:28 murdoch Exp $
 
 #include "types.h"
 #include "rglview.h"
@@ -41,8 +41,10 @@ public: // -- all methods are blocking until action completed
   void notifyDestroy(void* userdata);
 
 #ifdef _WIN32
-  void bringToTop(void);
+  void bringToTop(int stay);
 #endif
+
+  RGLView* getRGLView(void);
 // event handlers
 private:
   void update(void);
