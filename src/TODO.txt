@@ -107,6 +107,8 @@ COSMETICS
 TODO
 ====
 
+- pixmap index format
+
 - manual page "rgl" rewrite: toc
 
     overview
