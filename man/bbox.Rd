@@ -9,7 +9,7 @@ rgl.bbox(
   xat=NULL, xlab=NULL, xunit=0, xlen=5, 
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=T, ...)
+  marklen=15.0, marklen.rel=TRUE, ...)
 }
 \arguments{
   \item{xat,yat,zat}{vector specifying the tickmark positions}
@@ -28,7 +28,7 @@ rgl.bbox(
   Primary color specifies the bounding box, while secondary color specifies the tick mark and font color.
 }
 \examples{
-  rgl.bbox(color="#333377", emission="#333377",specular="#3333FF", shinines=5,alpha=0.8)
+  rgl.bbox(color="#333377", emission="#333377",specular="#3333FF", shininess=5, alpha=0.8 )
 }
 \seealso{
   \code{\link{rgl.material}}

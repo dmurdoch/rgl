@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: scene.h,v 1.2 2003/05/30 08:28:35 dadler Exp $
 
 
 #include "types.h"
@@ -583,7 +583,7 @@ struct AxisInfo {
   AxisInfo(int in_nticks, double* in_values, char** in_texts, int xlen, float xunit);
   AxisInfo(AxisInfo& from);
   ~AxisInfo();
-  void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, float marklen, String& string);
+  void draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, float marklen, String& string);
 
   int    mode;
   int    nticks;

@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: gui.h,v 1.3 2003/06/04 08:52:51 dadler Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -20,7 +20,7 @@ enum {
 
 enum {
   GUI_WheelForward = 1,
-  GUI_WheelBackward,
+  GUI_WheelBackward
 };
 
 enum {
@@ -56,6 +56,7 @@ class WindowImpl
 public:
   inline WindowImpl(Window* in_window)
   { window = in_window; }
+  inline  void unbind() { window = NULL; }
   virtual void setTitle(const char* title) = 0;
   virtual void setLocation(int x, int y) = 0;
   virtual void setSize(int width, int height) = 0;

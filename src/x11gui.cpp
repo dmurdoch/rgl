@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: x11gui.cpp,v 1.4 2003/06/04 07:44:05 dadler Exp $
 
 #include "x11gui.h"
 #include "lib.h"
@@ -74,7 +74,10 @@ public:
   
   }
   virtual ~X11WindowImpl()
-  { }
+  { 
+    if (xwindow != 0)
+      destroy();
+  }
   void setTitle(const char* title)
   {
     XStoreName(factory->xdisplay,xwindow,title);
@@ -106,6 +109,7 @@ public:
   void destroy()
   {
     XDestroyWindow(factory->xdisplay, xwindow);
+    xwindow = 0;
     factory->flushX();
   }
   void beginGL()
@@ -238,11 +242,11 @@ void X11GUIFactory::throw_error(const char* string)
 // connect
 //
 
-void X11GUIFactory::connect()
+void X11GUIFactory::connect(const char* displayname)
 {
   // open one display connection for all RGL X11 devices
   
-  xdisplay = XOpenDisplay(NULL);
+  xdisplay = XOpenDisplay(displayname);
   
   if (xdisplay == NULL) {
     throw_error("unable to open display"); return;
@@ -261,18 +265,19 @@ void X11GUIFactory::connect()
 
   // query glx extension
    
-  if ( glXQueryExtension(xdisplay, &errorBase, &eventBase) == False )
-    throw_error("GLX extension missing on server");
+  if ( glXQueryExtension(xdisplay, &errorBase, &eventBase) == False ) {
+    throw_error("GLX extension missing on server"); return;
+  }
   
   static int attribList[] =
   {
     GLX_RGBA,
     GLX_DOUBLEBUFFER,
-    GLX_RED_SIZE, 5,
-    GLX_GREEN_SIZE, 5,
-    GLX_BLUE_SIZE, 5,
+    GLX_RED_SIZE, 1,
+    GLX_GREEN_SIZE, 1,
+    GLX_BLUE_SIZE, 1,
     GLX_ALPHA_SIZE, 0,
-    GLX_DEPTH_SIZE, 0,
+    GLX_DEPTH_SIZE, 1,
     None
   };
 
@@ -282,6 +287,8 @@ void X11GUIFactory::connect()
   
   xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
 
+  /* xvisualinfo = NULL; */
+  
   if (xvisualinfo == NULL) {
     throw_error("no suitable visual available"); return;
   }
@@ -289,8 +296,9 @@ void X11GUIFactory::connect()
   // create opengl context
     
   glxctx = glXCreateContext(xdisplay, xvisualinfo, NULL, True);
-  if (!glxctx)
-    printMessage("ERROR: can't create glx context");
+  if (!glxctx) {
+    throw_error("unable to create GLX Context"); return;
+  }
 
 }
 
@@ -301,8 +309,14 @@ void X11GUIFactory::connect()
 
 void X11GUIFactory::disconnect()
 {
-  // FIXME: shutdown all windows
-
+  // shutdown all X11 windows
+  
+  for (WindowMap::iterator i = windowMap.begin() ; i != windowMap.end() ; ++ i ) {
+    X11WindowImpl* impl = i->second;
+    if (impl)
+      delete impl;
+  }
+  
   // destroy GL context
   
   if (glxctx) {
@@ -349,21 +363,26 @@ void X11GUIFactory::flushX()
 
 void X11GUIFactory::processEvents()
 {
-  int nevents = XEventsQueued(xdisplay, QueuedAfterReading);
+  for(;;) {
+    int nevents = XEventsQueued(xdisplay, QueuedAfterReading);
 
-  while(nevents--) {
+    if (nevents == 0)
+      return;
     
-    XEvent ev;
-    XNextEvent(xdisplay,&ev);
+    while(nevents--) {
+      
+      XEvent ev;
+      XNextEvent(xdisplay,&ev);
 
-    X11WindowImpl* impl = windowMap[ev.xany.window];
+      X11WindowImpl* impl = windowMap[ev.xany.window];
 
-    if (impl)
-      impl->processEvent(ev);
-    else
-      fprintf(stderr,"unknown window id %lx\n", (long)ev.xany.window);
-    
-  }
+      if (impl)
+        impl->processEvent(ev);
+      else
+        fprintf(stderr,"unknown window id %lx\n", (long)ev.xany.window);
+      
+    }
+  } 
 }
 
 
@@ -378,7 +397,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   xvisualinfo = NULL;
   glxctx      = NULL;
 
-  connect(); 
+  connect(displayname); 
 }
 
 
@@ -468,7 +487,8 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 
 void X11GUIFactory::notifyDelete(::Window xwindowid)
 {
-  windowMap[xwindowid] = NULL;
+  // remove window from map
+  windowMap.erase(xwindowid);
 }
 
 };

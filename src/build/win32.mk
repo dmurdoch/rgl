@@ -3,9 +3,9 @@
 # GNU Make include file
 #
 
-PLATFORM_MODULES=\
+MODS+=		\
 win32lib	\
 win32gui
 
-PLATFORM_OBJS=$(foreach x, $(PLATFORM_MODULES), $x.o)
-
+HEADERS+=	\
+win32gui.h

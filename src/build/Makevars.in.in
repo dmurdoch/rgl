@@ -2,9 +2,10 @@
 # Makevars file for X11 port 
 # AUTO-GENERATED file from Makevars.in (using autoconf)
 #
-# $Id: Makevars.in,v 1.2 2003/03/25 03:50:48 dadler Exp $
+# $Id: Makevars.in.in,v 1.1 2003/11/19 18:00:38 dadler Exp $
 #
 
+OBJS=@RGL_OBJS@
 PKG_CPPFLAGS=@CPPFLAGS@
 PKG_CXXFLAGS=@CXXFLAGS@
-PKG_LIBS=@LIBS@ 
+PKG_LIBS=@LDFLAGS@ @LIBS@ 
