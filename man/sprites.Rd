@@ -18,7 +18,7 @@ rgl.sprites(x, y, z, radius, ...)
   using alpha blending textures.
 }
 \examples{
-rgl.sprites(rnorm(500),rnorm(500),rnorm(500),color=rainbow(100),lit=F,textype="alpha",texture=system.file("textures/particle.png",package="rgl"),alpha=0.2)
+rgl.sprites(rnorm(500),rnorm(500),rnorm(500),color=rainbow(100),lit=FALSE,textype="alpha",texture=system.file("textures/particle.png",package="rgl"),alpha=0.2)
 }
 \seealso{
   \code{\link{rgl.material}}
