@@ -28,7 +28,7 @@ rgl.bbox(
   Primary color specifies the bounding box, while secondary color specifies the tick mark and font color.
 }
 \examples{
-  rgl.bbox(color="#333377", emission="#333377",specular="#3333FF", shinines=5,alpha=0.8)
+  rgl.bbox(color="#333377", emission="#333377",specular="#3333FF", shininess=5, alpha=0.8 )
 }
 \seealso{
   \code{\link{rgl.material}}
