@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp,v 1.7 2004/09/06 21:08:35 murdoch Exp $
+// $Id: rglview.cpp,v 1.8 2005/01/28 09:45:14 dadler Exp $
 
 #include "rglview.h"
 #include "opengl.h"
@@ -219,8 +219,8 @@ static PolarCoord screenToPolar(int width, int height, int mouseX, int mouseY) {
 
   return PolarCoord(
 
-    rad2degf( asinf( dx/r ) ),
-    rad2degf( asinf( dy/r ) )
+    math::rad2deg( math::asin( dx/r ) ),
+    math::rad2deg( math::asin( dy/r ) )
     
   );
 
@@ -244,16 +244,16 @@ static Vertex screenToVector(int width, int height, int mouseX, int mouseY) {
     }
     // Find length to first edge
 
-    float maxlen = sqrt(2.0f);
+    float maxlen = math::sqrt(2.0f);
 
     // zero length is vertical, max length is horizontal
-    float angle = (maxlen - len)/maxlen*PI/2.0f;
+    float angle = (maxlen - len)/maxlen*math::pi<float>()/2.0f;
 
-    float z = sin(angle);
+    float z = math::sin(angle);
 
     // renorm to unit length
 
-    len = sqrt(1.0f - z*z);
+    len = math::sqrt(1.0f - z*z);
     x = x*len;
     y = y*len;
 
