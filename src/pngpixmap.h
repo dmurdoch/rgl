@@ -5,7 +5,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pngpixmap.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: pngpixmap.h,v 1.2 2003/11/27 21:05:33 dadler Exp $
 
 class PNGPixmapFormat : public PixmapFormat {
 public:
@@ -338,7 +338,7 @@ unsupported:
 
       png_bytep rowptr = (png_bytep) ( ((u8*)pixmap->data) + (pixmap->height - 1) * pixmap->bytesperrow );
 
-      for(int i=0;i<pixmap->height;i++) {
+      for(unsigned int i=0;i<pixmap->height;i++) {
         png_write_row(png_ptr, rowptr);
         rowptr -= pixmap->bytesperrow;
       }
