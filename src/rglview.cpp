@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: rglview.cpp,v 1.2 2003/11/21 15:16:11 dadler Exp $
 
 #include "rglview.h"
 #include "opengl.h"
@@ -109,21 +109,18 @@ void RGLView::buttonPress(int button, int mouseX, int mouseY)
 {
   Viewpoint* viewpoint = scene->getViewpoint();
   if ( viewpoint->isInteractive() ) {
-
     if (!drag) {
-
+      drag = button;
+      windowImpl->captureMouse(this);
       switch(button) {
         case BUTTON_DRAGDIRECTION:
           adjustDirectionBegin(mouseX,mouseY);
-          drag = button;
           break;
         case BUTTON_DRAGZOOM:
           adjustZoomBegin(mouseX,mouseY);
-          drag = button;
           break;
         case BUTTON_DRAGFOV:
           adjustFOVBegin(mouseX,mouseY);
-          drag = button;
           break;
       }
     }
@@ -134,19 +131,17 @@ void RGLView::buttonPress(int button, int mouseX, int mouseY)
 void RGLView::buttonRelease(int button, int mouseX, int mouseY)
 {
   if (drag == button) {
-
+    windowImpl->releaseMouse();
+    drag = 0;
     switch(button) {
       case BUTTON_DRAGDIRECTION:
         adjustDirectionEnd();
-        drag = 0;
         break;
       case BUTTON_DRAGZOOM:
         adjustZoomEnd();
-        drag = 0;
         break;
       case BUTTON_DRAGFOV:
         adjustFOVEnd();
-        drag = 0;
         break;
     }
   }
@@ -155,6 +150,8 @@ void RGLView::buttonRelease(int button, int mouseX, int mouseY)
 
 void RGLView::mouseMove(int mouseX, int mouseY)
 {
+  mouseX = clamp(mouseX, 0, width-1);
+  mouseY = clamp(mouseY, 0, height-1);
   switch(drag) {
     case BUTTON_DRAGDIRECTION:
       adjustDirectionUpdate(mouseX,mouseY);
