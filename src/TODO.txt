@@ -1,3 +1,19 @@
+- check win32 build using \ instead of /  
+- Move ChangeLog section from here to ChangeLog
+- demo()
+- Rcmd check
+- build on linux
+- build on freebsd
+- make a prompt on configure.win to download files (shell?!)
+- FIXME: hhc optional or dependant in build process?
+- version number 0.64-9 , 0.65, 0.65-1 or 0.7, 0.7-1?!
+- website
+- merge documents 
+   src/build.txt 
+   src/build/README-WIN32.txt
+   -> README.X11
+   -> README.W32
+
 ChangeLog
 =========
 
