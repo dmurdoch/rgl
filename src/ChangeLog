@@ -42,4 +42,5 @@ v0.64-4
   - aquired valid CRAN package status, 
     rcmd check runs through with 2 WARNINGS 
     (acording to latex, and codoc)
+  - uploaded to cvs
 
