@@ -26,10 +26,10 @@ rgl.quit()     # shutdown rgl device system
   The device design is oriented towards the R device metaphor. If you send
   scene management instructions, and there's no device open, it will be opened
   automatically.
-  Opened devices automatically gain the current device focus. The focus may be
+  Opened devices automatically get the current device focus. The focus may be
   changed by using rgl.set().
-  rgl.quit() does shutdown the rgl subsystem and all open devices, 
-  detaches the package inclusive the shared library and additional system libraries.
+  rgl.quit() shuts down the rgl subsystem and all open devices, 
+  detaches the package including the shared library and additional system libraries.
 }
 \examples{
 example(rgl.surface)

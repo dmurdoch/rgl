@@ -1,6 +1,6 @@
 \name{rgl.viewpoint}
 \alias{rgl.viewpoint}
-\title{setup Viewpoint}
+\title{setup viewpoint}
 \description{
   Set the viewpoint orientation.
 }
@@ -14,10 +14,10 @@ rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 0, interactive = TRUE )
   \item{interactive}{logical, specifying if interactive navigation is allowed}
 }
 \details{
-The viewpoint is always positioned orbiting around the data model. 
-It may be specified by using the command or interactively using the pointing device of
+The viewpoint is always set in an orbit around the data model. 
+It can be either specified with \code{rgl.viewpoint} or interactively using the pointing device of
 your graphics user-interface.
-Using the pointing device, you may drag on the device window using the buttons:
+With the pointing device you can use the buttons as follows:
 
 \itemize{
 \item{left}{adjust viewpoint position}
