@@ -5,7 +5,7 @@
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.6 2003/11/16 14:07:33 dadler Exp $
+## $Id: configure.ac.in,v 1.7 2003/11/18 03:26:32 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -21,12 +21,7 @@ AC_CONFIG_AUX_DIR(src/build/autoconf)
 AC_CANONICAL_HOST
 
 case "${host_os}" in
-  macos*)
-    echo "MacOS port not supported yet."
-    exit -1
-  ;;
   cygwin*|mingw*|windows*|winnt)
-
     echo "Windows port: use R CMD INSTALL to build (configure.win)"
     exit -1
   ;;
@@ -54,14 +49,15 @@ CXXFLAGS="${CFLAGS} -fno-exceptions -fno-rtti"
 ## X11 backend
 
 AC_PATH_X
-LIBS="${LIBS} -L${x_libraries} -lX11 -lXext"
+LDFLAGS="${LDFLAGS} -L${x_libraries}"
+LIBS="${LIBS} -lX11 -lXext"
 CPPFLAGS="${CPPFLAGS} -I${x_includes}"
 
 ## OpenGL backend
 
 AC_ARG_WITH(gl-includes,
 [  --with-gl-includes=DIR  specify location of OpenGL headers],
-[CPPFLAGS="${CPPFLAGS} -I${withval}"],
+[CPPFLAGS="${CPPFLAGS} -I${withval}"]
 )
 
 AC_ARG_WITH(gl-libs,
@@ -76,19 +72,27 @@ AC_ARG_WITH(gl-libname,
 
 ## LibPNG support
 
-AC_ARG_WITH(libpng-includes,
-[  --with-libpng-includes=DIR specify location of libpng headers],
-[CPPFLAGS="${CPPFLAGS} -I${withval}"],
+AC_ARG_ENABLE([libpng],
+[  --disable-libpng           compile without PNG image support]
 )
-AC_ARG_WITH(libpng-libs,
-[  --with-libpng-libs=DIR     specify location of libpng library],
-[LIBS="${LIBS} -L${withval}"]
-)
-AC_ARG_ENABLE(libpng,
-[  --disable-libpng           compile without PNG image support])
 AC_MSG_RESULT([$enable_libpng])
+
 if test "x$enable_libpng" != "xno"; then
-AC_CHECK_HEADERS(png.h,CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H=1"; LIBS="${LIBS} ${PNGLIB:=-lpng}")
+
+  AC_ARG_ENABLE([libpng-config],
+  [  --disable-libpng-config    disable libpng-config test and configuration]
+  )
+  if test "x$enable_libpng_config" != "xno"; then
+    AC_CHECK_PROG([HAVE_LIBPNG_CONFIG],[libpng-config],[yes],[no])
+  fi
+
+  if test "x$HAVE_LIBPNG_CONFIG" == "xyes" ; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --cppflags`"
+    CFLAGS="${CFLAGS} `libpng-config --cflags`"
+    LDFLAGS="${LDFLAGS} `libpng-config --ldflags`"
+    LIBS="${LIBS} `libpng-config --libs`"
+  fi
+ 
 fi
 
 ## Darwin/MacOS X stuff
@@ -111,9 +115,11 @@ fi
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
+AC_SUBST(LDFLAGS)
 AC_SUBST(LIBS)
+AC_SUBST(DEFS)
     
 AC_OUTPUT(
-src/Makefile
 src/Makevars
+src/Makefile
 )
