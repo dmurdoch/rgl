@@ -1,0 +1,8 @@
+#
+# Makevars file for X11 port 
+# AUTO-GENERATED file from Makevars.in (using autoconf)
+#
+
+PKG_CPPFLAGS=@CPPFLAGS@
+PKG_CXXFLAGS=@CXXFLAGS@
+PKG_LIBS=@LIBS@ 

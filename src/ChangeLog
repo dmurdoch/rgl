@@ -1,0 +1,45 @@
+v0.60 (mini-thesis release)
+
+v0.61 (workshop release)
+  - added: rgl.sprites
+  - added: fps counter
+  - added: autoUpdate, modified win32 mainloop, on hide, autoUpdate disabled, on show enabled
+  - modified material: added alpha vector
+
+v0.62
+  - modified sphere set
+  - support R color strings
+  - use system.file( <subpath>, package="rgl" ) in examples to retrieve texture files
+  - rewrote R code : 
+    - clear enum types
+    - vertex vector datatype (internal representation matrix)
+
+v0.63
+  - api: added rgl_init, rgl_quit: explicit client initialization
+  - added setup.bat: build setup for windows
+  - win32 setup: mingw compiler
+  - win32 setup: visual c++ compiler through gui environment
+
+v0.64
+  - autoconf build system
+  - moved textures to inst/ directory
+  - x11 port
+  - win32/vc: fixed fpu control word precision to remain on 64 bit
+    links with fp10.obj
+  - changed texture mapping t coordinate for Surface node
+
+v0.64-2
+  - rgl.quads: enum id was broken, fixed ("quads" -> "quadrangles")
+  
+v0.64-3
+  - configure.ac: X11 library path broken, fixed
+  - x11gui: glXChooseVisual part fixed
+  - code cleanup: rglview.h  
+  - added: man/maintainer.Rd maintainer information
+
+v0.64-4
+  - manual update
+  - aquired valid CRAN package status, 
+    rcmd check runs through with 2 WARNINGS 
+    (acording to latex, and codoc)
+

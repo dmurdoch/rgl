@@ -1,0 +1,134 @@
+RGL - 3D visualization device system for R using OpenGL
+=======================================================
+
+INTRODUCTION
+------------
+
+The RGL package is a visualization device system for R, using 
+OpenGL as the rendering backend.
+
+
+FEATURES
+--------
+  * portable R Plug-in (win32, X11)
+  * R programing interface 
+  * interactive viewpoint navigation
+  * automatic data focus
+  * geometry primitives: 
+      points, lines, triangles, quads, texts, 3D sprites, 
+      surface, spheres
+  * up to 8 light sources
+  * alpha-blending (transparency)
+  * side-dependant rendering
+  * texture-mapping support (rgb, alpha and luminance)
+  * environmental effects:
+      fogging, background sphere
+  * bounding box with axis ticks marks
+  * undo operation
+
+
+LICENSE
+-------
+
+The software is released under the GNU Public License. 
+See "COPYING" textfile for details.
+
+
+SOURCES
+-------
+
+The source distribution includes sources for zlib v1.1.4 and libpng v1.2.4 (used by the win32 port).
+
+
+PLATFORMS
+---------
+
+  un*x/x11 (GCC)
+  win32 (MinGW or Microsoft Visual C++)
+
+
+BUILDING ON UN*X PLATFORM
+-------------------------
+
+  Configure, Build and Install
+
+  1. Unpack source tar ball
+ 
+  2. Change to parent directory containing rgl directory
+
+  3. Run
+
+     $ R CMD INSTALL --configure-args=<ARGS> rgl
+
+     optionally, you can specify several build parameters:
+
+        --x-includes=<path>
+
+        --x-libraries=<path>
+
+        --with-gl-includes=<path>
+
+        --with-gl-libraries=<path>
+
+        --with-gl-prefix=<libprefix>
+        
+        --disable-png
+
+    
+BUILDING ON WIN32 PLATFORM
+---------------------------
+  
+  Configure
+
+  1. Unpack source tar ball
+
+  2. Change to rgl directory
+
+  3. Run setup.bat to select build environment
+
+     setup.bat [ vc | mingw ]
+
+       vc    -  Build with Visual C++
+       mingw -  Build with MinGW
+
+
+  Build with Visual C++
+
+    1. Start Visual C++
+
+    2. Open workspace src\build\vc\rgl\rgl.dsw
+
+    3. Select build type "Release" or "Debug"
+
+    4. Build all
+
+    -SHELL-
+    
+    5. Change to parent directory containing rgl directory
+
+    6. Run
+       
+       $ RCMD INSTALL rgl
+
+       
+  Build with MinGW
+
+    1. Change to parent directory containing rgl directory
+    
+    2. Run
+    
+       $ RCMD INSTALL rgl
+       
+    
+DOCUMENTATION
+-------------
+
+See rgl manuals. For additional information, visit the website.
+
+
+AUTHOR
+------
+  
+EMAIL: Daniel Adler <dadler@gwdg.de>
+WEB:   http://wsopuppenkiste.wiso.uni-goettingen.de/~dadler/rgl
+

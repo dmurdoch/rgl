@@ -1,0 +1,6 @@
+#
+# Makefile for Win32 port 
+# This file is part of RGL
+#
+
+include build/mingw/Makefile 
