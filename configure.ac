@@ -1,9 +1,11 @@
 ## 
 ## This file is part of RGL
 ##
+## use src/build/Maintainer.mk to update configure.ac
 ## Process this file with autoconf to produce a configure script.
+## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac,v 1.4 2003/05/21 11:08:25 dadler Exp $
+## $Id: configure.ac,v 1.5 2003/06/04 07:48:49 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -11,7 +13,7 @@ AC_PREREQ(2.50)
 
 ## ---[ VERSION ]-------------------------------------------------------------
 
-AC_INIT([rgl], [0.64-5], [dadler@gwdg.de])
+AC_INIT([rgl], [0.64-6], [dadler@gwdg.de])
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
 ## ---[ check host ]----------------------------------------------------------
@@ -37,20 +39,20 @@ esac
 ## ===[ X11 Port ]============================================================
 ##
 
-PLATFORM_MODULES="x11lib x11gui"
-LIBS=""
+## PLATFORM_MODULES="x11lib x11gui"
+## LIBS=""
 
 
 ## C language
 
 CPPFLAGS=""
-CFLAGS=""
+CFLAGS="-Wall -pedantic"
 
 
 ## C++ language
 
 LIBS="-lstdc++"
-CXXFLAGS="-fno-exceptions -fno-rtti"
+CXXFLAGS="$CFLAGS -fno-exceptions -fno-rtti"
 
 
 ## X11 backend
@@ -101,7 +103,7 @@ fi
 
 ## Output
 
-AC_SUBST(PLATFORM_MODULES)
+## AC_SUBST(PLATFORM_MODULES)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
