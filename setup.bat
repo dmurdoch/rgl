@@ -25,7 +25,6 @@ REM === build tool: mingw ====================================================
 
 :mingw
 echo include build/mingw/Makefile >%SRC%\Makefile.win
-echo include build/mingw/Makefile >%SRC%\Makefile
 copy src\build\mingw\configure.win configure.win
 goto done
 
@@ -33,7 +32,6 @@ REM === build tool: vc =======================================================
 
 :vc
 echo include build/vc/Makefile >%SRC%\Makefile.win
-echo include build/vc/Makefile >%SRC%\Makefile
 copy src\build\vc\configure.win configure.win
 goto done
 
