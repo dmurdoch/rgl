@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.2 2003/05/27 14:03:27 dadler Exp $
+## $Id: scene.R,v 1.3 2003/11/27 20:55:43 dadler Exp $
 ##
 
 ##
@@ -343,7 +343,7 @@ rgl.sprites <- function( x, y, z, radius=1.0, ... )
 
   center  <- rgl.vertex(x,y,z)
   ncenter <- rgl.nvertex(center)
-  radius  <- rgl.attr(center, radius)
+  radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
  
   idata   <- as.integer( c(ncenter,nradius) )
