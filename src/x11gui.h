@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: x11gui.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: x11gui.h,v 1.2 2003/03/25 04:13:56 dadler Exp $
 
 
 #include "gui.h"
@@ -29,7 +29,8 @@ namespace gui {
     X11GUIFactory (const char* displayname);
     virtual ~X11GUIFactory ();
     WindowImpl* createWindowImpl(Window* window);
-    inline int getFD() { return ConnectionNumber(xdisplay); }
+    inline bool isConnected() { return (xdisplay) ? true : false; }
+    inline int  getFD()     { return ConnectionNumber(xdisplay); }
     
     void notifyDelete(::Window xwindowid);
     
