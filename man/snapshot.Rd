@@ -6,8 +6,6 @@
 }
 \usage{
 rgl.snapshot( filename, fmt="png" )
-
-rgl.snapshot(filename)
 }
 \arguments{
   \item{filename}{full path to filename}
