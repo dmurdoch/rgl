@@ -4,7 +4,6 @@
 #
 
 OBJS=	\
-Rplugin.o		\
 types.o		\
 math.o		\
 fps.o		\
