@@ -2,7 +2,7 @@
 # Makefile for win32/mingwl
 # This file is part of RGL
 #
-# $Id: Makefile,v 1.7 2004/01/30 13:15:20 dadler Exp $
+# $Id: Makefile,v 1.8 2004/02/29 08:39:37 dadler Exp $
 #
 
 all: target
@@ -84,7 +84,7 @@ CPPFLAGS+=-I$(ZLIBDIR) -I$(LIBPNGDIR) -DHAVE_PNG_H
 LOADLIBES=-L$(ZLIBDIR) -L$(LIBPNGDIR) -lpng -lz
 
 $(ZLIB):
-	CFLAGS="$(CFLAGS)" make -e -C zlib
+	CFLAGS="$(CFLAGS)" make -e -C zlib -f win32/makefile.gcc
 
 $(LIBPNG): $(ZLIB)
 	CFLAGS="$(CFLAGS) -I../zlib" make -e -C lpng -f scripts/makefile.gcc
