@@ -1,6 +1,36 @@
-TODO
-====
-- remove "INFO POPUP"
+SHORT-TERM
+==========
+ - configure.win -> don't use copy just link with Rbitmap.dll
+ - build Rbitmap.a
+ - cleanup configure 
+ - test on solaris
+ - par3d (duncan)
+ 
+   scale = "uniform", "nonuniform", "auto"
+   scale.vector = ( 1, 2, 2 ) 
+   caption of window
+   
+ - contour3d ... crashes with 'z-sort' rgl
+ - rgl.set should return the previous device id
+ - uv patch
+ - remove 'debug' build from default 
+ - bbox: non-uniform scale per axis
+ - expanding the space a bit
+ - flip the 'z' extrusion
+ - triangle strips/fans, quadrangle strips
+ - rgl.mesh
+
+LONG-TERM
+=========
+ - layers
+ - win32: shape window
+ - x3d-style export
+ - x3d-style import
+ - four-view
+ - multi-texture support
+
+ARCHIVE
+=======
 - update rgl manual ... reference all public functions
 - check header defines to be prefixed with RGL_
 - remove -DDEBUG from default build
