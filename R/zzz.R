@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R,v 1.1 2003/03/25 00:13:21 dadler Exp $
+## $Id: zzz.R,v 1.2 2003/03/25 04:13:56 dadler Exp $
 ##
 
 ##
@@ -22,11 +22,13 @@
   library.dynam( "rgl", pkg, lib)
   
   ret <- .C( symbol.C("rgl_init"), 
-    success=FALSE, 
+    success=FALSE 
   )
   
-  if (!ret$success)
+  if (!ret$success) {
+    dyn.unload( file.path( libpath, "libs", paste( "rgl", .Platform$dynlib.ext, sep="") ) )
     stop("error rgl_init")
+  }
   
 }
 
