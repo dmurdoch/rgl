@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.3 2003/11/27 20:55:43 dadler Exp $
+## $Id: scene.R,v 1.4 2004/02/29 10:41:23 dadler Exp $
 ##
 
 ##
@@ -174,7 +174,7 @@ rgl.bbox <- function(
 ##
 ##
 
-rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = FALSE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF")
+rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF")
 {
   ambient  <- rgl.color(ambient)
   diffuse  <- rgl.color(diffuse)
