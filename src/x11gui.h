@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: x11gui.h,v 1.2 2003/03/25 04:13:56 dadler Exp $
+// $Id: x11gui.h,v 1.3 2003/06/03 07:51:56 dadler Exp $
 
 
 #include "gui.h"
@@ -51,7 +51,7 @@ namespace gui {
 
   private:
 
-    void connect();
+    void connect(const char* displayname);
     void disconnect();
     void throw_error(const char* string);
 

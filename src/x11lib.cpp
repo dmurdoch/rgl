@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11lib.cpp,v 1.2 2003/03/25 04:13:56 dadler Exp $
+// $Id: x11lib.cpp,v 1.3 2003/06/03 07:51:56 dadler Exp $
 
 #include "lib.h"
 
@@ -26,7 +26,7 @@ gui::GUIFactory* getGUIFactory()
 #include <R.h>
 #include <R_ext/eventloop.h>
 
-static InputHandler* R_handler;
+static InputHandler* R_handler = NULL;
 
 static void R_event_handler(void * userData)
 {
@@ -51,6 +51,11 @@ static void unset_R_handler()
     R_handler = NULL;
   }
 }
+
+//
+// ===[ LIB INIT / QUIT ]=====================================================
+//
+
 
 bool lib_init()
 {
@@ -81,9 +86,7 @@ void lib_quit()
 #include <stdio.h>
 
 void printMessage( const char* string ) {
-  fprintf(stderr, "RGL: ");
-  fprintf(stderr, string );
-  fprintf(stderr, "\n" );
+  fprintf(stderr, "RGL: %s\n", string);
 }
 
 //
