@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: gui.h,v 1.2 2003/05/30 08:25:34 dadler Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -20,7 +20,7 @@ enum {
 
 enum {
   GUI_WheelForward = 1,
-  GUI_WheelBackward,
+  GUI_WheelBackward
 };
 
 enum {
