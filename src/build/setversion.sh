@@ -11,7 +11,7 @@
 #		(win32 dos/mingw:)  
 #			$ sh rgl/src/build/setversion.sh
 #
-# $Id: setversion.sh,v 1.3 2003/11/19 18:00:39 dadler Exp $
+# $Id: setversion.sh,v 1.4 2003/11/19 22:51:55 dadler Exp $
 #
 
 TOPDIR=rgl
@@ -20,8 +20,8 @@ TOPDIR=rgl
 
 . rgl/src/build/VERSION
 
-MODS=`make -f rgl/src/build/project.mk dump-mods`
-X11_MODS=`make -f rgl/src/build/x11.mk dump-x11-mods`
+MODS=`make -s -f rgl/src/build/project.mk dump-mods`
+X11_MODS=`make -s -f rgl/src/build/x11.mk dump-x11-mods`
 
 OBJS=
 for i in $X11_MODS ; do 
@@ -59,7 +59,7 @@ echo create configure.ac
 sed -e s/@VERSION@/$VERSION/ >$TOPDIR/configure.ac $TOPDIR/src/build/autoconf/configure.ac.in
 cd $TOPDIR
 
-echo create configure
+echo run autoconf
 
 autoconf
 
