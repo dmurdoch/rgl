@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32lib.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: win32lib.cpp,v 1.2 2003/11/15 18:22:13 dadler Exp $
 
 #include "lib.h"
 
@@ -31,8 +31,40 @@ bool lib_init()
 
 void lib_quit()
 {
-  delete gpWin32GUIFactory;
+  if (gpWin32GUIFactory) {
+    delete gpWin32GUIFactory;
+    gpWin32GUIFactory = NULL;
+  }
 }
+
+#include <windows.h>
+
+#define EXPORT_SYMBOL   __declspec(dllexport)
+
+extern "C" {
+void rgl_quit(int* successptr);
+EXPORT_SYMBOL BOOL APIENTRY DllMain( HINSTANCE moduleHandle, DWORD reason, LPVOID lpReserved );
+}
+
+BOOL APIENTRY DllMain( HINSTANCE moduleHandle, DWORD reason, LPVOID lpReserved )
+{
+  bool success = FALSE;
+
+  switch(reason) {
+    case DLL_PROCESS_ATTACH:
+      success = TRUE;
+      break;
+    case DLL_PROCESS_DETACH:
+      // shutdown sub-systems
+      {
+        int success;
+        rgl_quit(&success);
+      }
+      break;
+  }
+  return success;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 //
