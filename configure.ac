@@ -3,7 +3,7 @@
 ##
 ## Process this file with autoconf to produce a configure script.
 ##
-## $Id: configure.ac,v 1.3 2003/05/14 10:58:36 dadler Exp $
+## $Id: configure.ac,v 1.4 2003/05/21 11:08:25 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -11,7 +11,7 @@ AC_PREREQ(2.50)
 
 ## ---[ VERSION ]-------------------------------------------------------------
 
-AC_INIT([rgl], [0.64-4], [dadler@gwdg.de])
+AC_INIT([rgl], [0.64-5], [dadler@gwdg.de])
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
 ## ---[ check host ]----------------------------------------------------------
