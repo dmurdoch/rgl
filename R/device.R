@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R,v 1.2 2003/06/04 07:46:44 dadler Exp $
+## $Id: device.R,v 1.3 2004/03/03 22:09:44 dadler Exp $
 ##
 
 ##
@@ -17,7 +17,7 @@
 
 rgl.open <- function() {
 
-  ret <- .C( symbol.C("rgl_dev_open"), success=FALSE )
+  ret <- .C( symbol.C("rgl_dev_open"), success=FALSE, PACKAGE="rgl" )
 
   if (! ret$success)
     stop("failed")
@@ -32,7 +32,7 @@ rgl.open <- function() {
 
 rgl.close <- function() {
 
-  ret <- .C( symbol.C("rgl_dev_close"), success=FALSE )
+  ret <- .C( symbol.C("rgl_dev_close"), success=FALSE, PACKAGE="rgl" )
 
   if (! ret$success)
     stop("no device opened.")
@@ -49,7 +49,8 @@ rgl.cur <- function() {
 
   ret <- .C( symbol.C("rgl_dev_getcurrent"), 
     success=FALSE, 
-    id=as.integer(0) 
+    id=as.integer(0), 
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -71,7 +72,8 @@ rgl.set <- function(which) {
 
   ret <- .C( symbol.C("rgl_dev_setcurrent"), 
     success=FALSE, 
-    idata 
+    idata,
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
@@ -92,9 +94,11 @@ rgl.snapshot <- function( filename, fmt="png" )
   ret <- .C( symbol.C("rgl_snapshot"),
     success=FALSE,
     idata,
-    as.character(filename)
+    as.character(filename),
+    PACKAGE="rgl"
   )
 
   if (! ret$success)
     print("failed")
 }
+
