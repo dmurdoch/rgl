@@ -2,6 +2,8 @@
 # Makefile for win32/mingwl
 # This file is part of RGL
 #
+# $Id: Makefile,v 1.2 2003/03/25 03:50:48 dadler Exp $
+#
 
 # TOOLS
 

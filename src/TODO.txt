@@ -6,6 +6,8 @@ BUGS
 - x11: rgl.snapshot requires window to be opened
        fix with offscreen pixmap rendering and support for output parameters
 
+- x11: ChooseVisual for depth,alpha and 15,16 bit failed on dadler's machine
+       
 TODO
 ====
 

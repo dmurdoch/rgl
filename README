@@ -43,12 +43,12 @@ The source distribution includes sources for zlib v1.1.4 and libpng v1.2.4 (used
 PLATFORMS
 ---------
 
-  un*x/x11 (GCC)
+  un*x/x11, macosx/x11 (GCC)
   win32 (MinGW or Microsoft Visual C++)
 
 
-BUILDING ON UN*X PLATFORM
--------------------------
+BUILDING ON UN*X / MAC OS X PLATFORM
+------------------------------------
 
   Configure, Build and Install
 
@@ -126,9 +126,16 @@ DOCUMENTATION
 See rgl manuals. For additional information, visit the website.
 
 
-AUTHOR
-------
-  
-EMAIL: Daniel Adler <dadler@gwdg.de>
-WEB:   http://wsopuppenkiste.wiso.uni-goettingen.de/~dadler/rgl
+CREDITS
+-------
+
+Code              Daniel Adler <dadler@gwdg.de>
+Support           Oleg Nenadic <onenadi@uni-goettingen.de>
+MacOS X port      Simon Urbanek <simon.urbanek@math.uni-augsburg.de>
+
+
+WEBSITE
+-------
+
+http://wsopuppenkiste.wiso.uni-goettingen.de/~dadler/rgl
 
