@@ -3,7 +3,7 @@
 #
 # Usage: make info 
 #
-# $Id: Maintainer.mk,v 1.8 2004/03/03 22:59:20 dadler Exp $
+# $Id: Maintainer.mk,v 1.9 2004/05/26 19:07:02 dadler Exp $
 #
 
 all: info
@@ -34,19 +34,18 @@ update:
 # --- SOURCE SETUP ------------------------------------------------------------
 	
 gen:
-	cd $(CVSDIR) ; sh rgl/src/build/setversion.sh
+	cd $(CVSDIR)/rgl ; sh src/build/setversion.sh
 
 # --- SOURCE BUILD ------------------------------------------------------------
 	
 package:
-	cd $(CVSDIR)/rgl ; sh ./cleanup.win ; ./setup.bat mingw
+	cd $(CVSDIR)/rgl ; sh cleanup.win
+	cd $(CVSDIR)/rgl ; sh setup.win mingw	
 	cd $(CVSDIR) ; Rcmd build --force rgl
 	mkdir -p $(DESTDIR)/src
 	mv -f $(CVSDIR)/rgl_$(VERSION).tar.gz $(DESTDIR)/src
 
-
 # --- BINARY BUILD ------------------------------------------------------------
-
 
 download:
 	mkdir -p $(ARCDIR)
@@ -57,19 +56,26 @@ unpack:
 	rm -Rf $(SRCDIR)/rgl
 	mkdir -p $(SRCDIR)
 	tar -xzvf $(DESTDIR)/src/rgl_$(VERSION).tar.gz -C $(SRCDIR)
+	
+unpack-all:
+	rm -Rf $(SRCDIR)/rgl
+	mkdir -p $(SRCDIR)
+	tar -xzvf $(DESTDIR)/src/rgl_$(VERSION).tar.gz -C $(SRCDIR)
 	unzip $(ARCDIR)/$(ZLIB).zip -d $(SRCDIR)/rgl/src/zlib
 	unzip $(ARCDIR)/$(LPNG).zip -d $(SRCDIR)/rgl/src
 	mv $(SRCDIR)/rgl/src/$(LPNG) $(SRCDIR)/rgl/src/lpng
 
 mingw:
-	cd $(SRCDIR)/rgl ; sh ./cleanup.win ; ./setup.bat mingw
+	cd $(SRCDIR)/rgl ; sh ./cleanup.win
+	cd $(SRCDIR)/rgl ; sh ./setup.win mingw
 	cd $(SRCDIR) ; Rcmd build --binary rgl
 	mkdir -p $(DESTDIR)/win32-mingw
 	mv -f $(SRCDIR)/rgl_$(VERSION).zip $(DESTDIR)/win32-mingw
 	cd $(SRCDIR)/rgl ; sh ./cleanup.win
 
 vc:
-	cd $(SRCDIR)/rgl ; sh ./cleanup.win ; ./setup.bat vc
+	cd $(SRCDIR)/rgl ; sh ./cleanup.win
+	cd $(SRCDIR)/rgl ; sh ./setup.win vc
 	cd $(SRCDIR) ; Rcmd build --binary rgl
 	mkdir -p $(DESTDIR)/win32-vc
 	mv -f $(SRCDIR)/rgl_$(VERSION).zip $(DESTDIR)/win32-vc
@@ -83,7 +89,8 @@ info:
 	@echo " gen        - generate auto files dep: checkout/update" 
 	@echo " package    - build source package dep: gen"
 	@echo " download   - download aux libs (zlib and libpng)"
-	@echo " unpack     - unpack source package and aux libs dep: package, download"
+	@echo " unpack     - unpack source package dep: package"
+	@echo " unpack-all - unpack source package and aux libs dep: package, download"
 	@echo " mingw      - build binary package using mingw dep: unpack"
 	@echo " vc         - build binary package using vc dep: unpack"  
 
@@ -91,8 +98,12 @@ info:
 release: clean update source unpack mingw vc upload
 
 clean:
-	rm -Rf $(DESTDIR)
-	
+	rm -Rf $(SRCDIR)
+
+maintainer-clean: clean
+	rm -Rf $(ARCDIR)
+	rm -Rf $(CVSDIR)
+
 upload:
 	scp -r $(DESTDIR) dadler@wsopuppenkiste.wiso.uni-goettingen.de:~/public_html/rgl/download
 
@@ -101,5 +112,3 @@ destdir:
 	mkdir -p $(DESTDIR)/win32-vc
 	mkdir -p $(DESTDIR)/src
 
-maintainer-clean:
-	rm -Rf $(CVSDIR) $(SRCDIR) $(DESTDIR) $(ARCDIR)
