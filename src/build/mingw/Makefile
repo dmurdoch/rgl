@@ -2,7 +2,7 @@
 # Makefile for win32/mingwl
 # This file is part of RGL
 #
-# $Id: Makefile,v 1.2 2003/03/25 03:50:48 dadler Exp $
+# $Id: Makefile,v 1.3 2003/06/01 09:45:05 dadler Exp $
 #
 
 # TOOLS
@@ -19,7 +19,7 @@ LIBPNGDIR=lpng124
 # CONFIG
 
 CPPFLAGS=-I$(ZLIBDIR) -I$(LIBPNGDIR) -DHAVE_PNG_H
-CFLAGS=-Wall -O2 -fomit-frame-pointer
+CFLAGS=-Wall -pedantic -O2 -fomit-frame-pointer
 CXXFLAGS=$(CFLAGS) -fno-exceptions -fno-rtti
 
 DLLFLAGS=-lopengl32 -lgdi32 -L$(ZLIBDIR) -L$(LIBPNGDIR) -lpng -lz
