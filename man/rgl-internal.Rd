@@ -17,6 +17,8 @@
 \alias{rgl.enum.fogtype}
 \alias{rgl.enum.primtype}
 \alias{rgl.enum.halign}
+\alias{rgl.enum.texmagfilter}
+\alias{rgl.enum.texminfilter}
 \description{
   internal rgl functions
 }
