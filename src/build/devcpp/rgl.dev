@@ -1,7 +1,7 @@
 [Project]
 FileName=rgl.dev
 Name=rgl
-UnitCount=26
+UnitCount=28
 Type=3
 Ver=1
 ObjFiles=
@@ -11,7 +11,7 @@ PrivateResource=
 ResourceIncludes=
 MakeIncludes=
 Compiler=-DBUILDING_DLL=1_@@_-DNDEBUG_@@_-DHAVE_PNG_H_@@_
-Linker=--no-export-all-symbols --add-stdcall-alias_@@_-lopengl32_@@_-lgdi32_@@_-lpng_@@_-lz_@@_../../rgl_res.o_@@_
+Linker=--no-export-all-symbols --add-stdcall-alias_@@_-lopengl32_@@_-lglu32_@@_-lgdi32_@@_-lpng_@@_-lz_@@_../../rgl_res.o_@@_
 IsCpp=1
 Icon=
 ExeOutput=..\..\..\src
@@ -29,7 +29,7 @@ CppCompiler=-fno-exceptions_@@_-fno-rtti_@@_-fomit-frame-pointer_@@_-DBUILDING_D
 
 [Unit1]
 FileName=..\..\win32lib.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -39,7 +39,7 @@ Priority=1000
 
 [Unit2]
 FileName=..\..\device.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -49,7 +49,7 @@ Priority=1000
 
 [Unit3]
 FileName=..\..\device.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -59,7 +59,7 @@ Priority=1000
 
 [Unit4]
 FileName=..\..\devicemanager.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -69,7 +69,7 @@ Priority=1000
 
 [Unit5]
 FileName=..\..\devicemanager.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -79,7 +79,7 @@ Priority=1000
 
 [Unit6]
 FileName=..\..\fps.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -89,7 +89,7 @@ Priority=1000
 
 [Unit7]
 FileName=..\..\fps.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -99,7 +99,7 @@ Priority=1000
 
 [Unit8]
 FileName=..\..\gui.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -109,7 +109,7 @@ Priority=1000
 
 [Unit9]
 FileName=..\..\gui.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -119,7 +119,7 @@ Priority=1000
 
 [Unit10]
 FileName=..\..\lib.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -129,7 +129,7 @@ Priority=1000
 
 [Unit11]
 FileName=..\..\math.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -139,7 +139,7 @@ Priority=1000
 
 [Unit12]
 FileName=..\..\math.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -149,7 +149,7 @@ Priority=1000
 
 [Unit13]
 FileName=..\..\opengl.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -159,7 +159,7 @@ Priority=1000
 
 [Unit14]
 FileName=..\..\pixmap.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -169,7 +169,7 @@ Priority=1000
 
 [Unit15]
 FileName=..\..\pixmap.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -179,7 +179,7 @@ Priority=1000
 
 [Unit16]
 FileName=..\..\rglview.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -189,7 +189,7 @@ Priority=1000
 
 [Unit17]
 FileName=..\..\rglview.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -199,7 +199,7 @@ Priority=1000
 
 [Unit18]
 FileName=..\..\scene.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -209,7 +209,7 @@ Priority=1000
 
 [Unit19]
 FileName=..\..\scene.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -219,7 +219,7 @@ Priority=1000
 
 [Unit20]
 FileName=..\..\types.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -229,7 +229,7 @@ Priority=1000
 
 [Unit21]
 FileName=..\..\types.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -239,7 +239,7 @@ Priority=1000
 
 [Unit22]
 FileName=..\..\win32gui.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -249,7 +249,7 @@ Priority=1000
 
 [Unit23]
 FileName=..\..\win32gui.h
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -259,7 +259,7 @@ Priority=1000
 
 [Unit24]
 FileName=..\..\api.cpp
-Folder=rgl
+Folder=
 Compile=1
 CompileCpp=1
 OverrideBuildCmd=0
@@ -288,7 +288,7 @@ AutoIncBuildNr=0
 [Unit25]
 FileName=..\..\glgui.h
 CompileCpp=1
-Folder=rgl
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -298,7 +298,26 @@ BuildCmd=
 [Unit26]
 FileName=..\..\glgui.cpp
 CompileCpp=1
-Folder=rgl
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit27]
+FileName=..\..\TODO.txt
+Folder=
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit28]
+FileName=..\..\pngpixmap.h
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000
