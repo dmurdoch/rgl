@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp,v 1.3 2003/05/30 08:53:51 dadler Exp $
+// $Id: scene.cpp,v 1.4 2003/11/16 12:52:03 dadler Exp $
 
 #include "scene.h"
 #include "math.h"
@@ -526,7 +526,6 @@ Scene::Scene()
   nlights    = 0;
   bboxDeco   = NULL;
  
-  add( new BBoxDeco );
   add( new Background );
   add( new Viewpoint );
   add( new Light ); 
