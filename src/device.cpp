@@ -1,46 +1,32 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp,v 1.3 2004/08/09 19:33:28 murdoch Exp $
+// $Id: device.cpp,v 1.4 2004/09/22 10:39:34 dadler Exp $
 
-#include "device.h"
-#include "rglview.h"
-#include "gui.h"
+#include "Device.hpp"
+#include "lib.h"
 
-Device::Device()
+Device::Device(int id) : id_(id)
 {
-  destroyHandler = NULL;
-
   scene   = new Scene();
   rglview = new RGLView(scene);
   window  = new Window( rglview, getGUIFactory() );
-
-  window->setDestroyHandler(this, window);
+  window->addDisposeListener(this);
 }
 
 Device::~Device()
 {
-  if (destroyHandler)
-    destroyHandler->notifyDestroy(destroyHandler_userdata);
-
-  if (window) {
-    window->setDestroyHandler(NULL, NULL);
-    delete window;
-  }
-
+  fireNotifyDisposed();
   delete scene;
 }
 
-void Device::notifyDestroy(void* userdata)
-{
-  window = NULL;
-  delete this;
+int  Device::getID() {
+  return id_;
 }
 
-void Device::setDestroyHandler(DestroyHandler* inDestroyHandler, void* userdata)
+void Device::notifyDisposed(Disposable* disposable)
 {
-  destroyHandler = inDestroyHandler;
-  destroyHandler_userdata = userdata;
+  delete this;
 }
 
 void Device::setName(const char* string)
@@ -61,7 +47,7 @@ bool Device::open(void)
 
 void Device::close(void)
 {
-  delete this;
+  window->dispose();
 }
 
 #ifdef _WIN32

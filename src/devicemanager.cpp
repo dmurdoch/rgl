@@ -1,214 +1,131 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: devicemanager.cpp,v 1.2 2004/09/22 10:39:34 dadler Exp $
 
-#include "devicemanager.h"
+#include "DeviceManager.hpp"
 #include "types.h"
-#include <stdio.h>
+#include <algorithm>
+#include <cstdio>
+#include "lib.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STRUCT
-//   DeviceInfo
-//
-
-
-DeviceManager::DeviceInfo::DeviceInfo(Device* inDevice, int inId)
-{ 
-  device = inDevice;
-  id = inId;
-}
-
-
-DeviceManager::DeviceInfo::~DeviceInfo()
-{
-  if (device)
-    delete device;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//   DeviceManager
-//
-
-DeviceManager::DeviceManager()
-{
-  current = NULL;
-  idCount = 1;
-}
-
+DeviceManager::DeviceManager() 
+ : newID(1), devices(), current( devices.end() )
+{ }
 
 DeviceManager::~DeviceManager()
 {
-
-  //
-  // unset destroy handler on all open devices
-  //
-
-  ListIterator iter(&deviceInfos);
-
-  for(iter.first(); !iter.isDone(); iter.next()) {
-    DeviceInfo* info = (DeviceInfo*) iter.getCurrent();
-    info->device->setDestroyHandler(NULL,NULL);
+  std::vector<Device*> disposeList( devices.begin(), devices.end() );
+  for (std::vector<Device*>::iterator i = disposeList.begin(); i != disposeList.end() ; ++ i ) {
+    // remove manager from listeners    
+    (*i)->removeDisposeListener(this);
+    // close device
+    (*i)->close();
   }
-
-  //
-  // destroy devices
-  //
-
-  deviceInfos.deleteItems();
-
 }
 
-
-//
-// DESTROY HANDLER for class Device
-//
-
-void DeviceManager::notifyDestroy(void* userdata)
+bool DeviceManager::openDevice() 
 {
-  DeviceInfo* destroyed = (DeviceInfo*) userdata;
-
-  // device already destroyed
-  destroyed->device = NULL;
-
-  if (current == destroyed) {
-
-    // current device is destroyed, adjust focus
-
-    RingIterator ringiter(&deviceInfos);
-
-    ringiter.set(current);
-    ringiter.next();
-
-    DeviceInfo* newcurrent = (DeviceInfo*) ringiter.getCurrent();
-
-    if (newcurrent == current) {
-      // there's only one open device
-      deviceInfos.remove(destroyed);
-      delete destroyed;
-      current = NULL;
-      setCurrent(0);
-    }
-    else {
-      // more than one, so focus the new one
-      deviceInfos.remove(destroyed);
-      delete destroyed;
-      current = NULL;
-      setCurrent(newcurrent->id);
-    }
+  Device* pDevice = new Device(newID);  
+  if ( pDevice->open() ) {
+    ++newID;
+    pDevice->addDisposeListener(this);
+    devices.insert( devices.end(), pDevice );
+    setCurrent( pDevice->getID() );
+    return true;
   } else {
-
-    deviceInfos.remove(destroyed);
-    delete destroyed;
-
+    delete pDevice;
+    return false;
   }
 }
 
-//
-// METHOD openDevice
-//
-
-bool DeviceManager::openDevice(void)
+Device* DeviceManager::getCurrentDevice()
 {
-  bool success = false;
-  
-  Device* device = new Device();
-  if (device) {
-
-    if ( device->open() ) {
-
-      int id;
-
-      id = idCount++;
-
-      DeviceInfo* deviceInfo = new DeviceInfo(device,id);
-
-      deviceInfos.addTail( deviceInfo );
-      device->setDestroyHandler( this, (void*) deviceInfo );
-
-      success = setCurrent(id);
-    }
-
-  }
-
-  return success;
+  if ( current != devices.end() )
+    return *current;
+  else
+    return NULL;
 }
 
-
-//
-// METHOD getCurrent
-//
-
-Device* DeviceManager::getCurrentDevice(void)
+Device* DeviceManager::getAnyDevice()
 {
-  return (current) ? current->device : NULL;
-}
-
-//
-// METHOD getAnyDevice
-//
-
-Device* DeviceManager::getAnyDevice(void)
-{
-  if (current == NULL)
+  Device* pDevice = getCurrentDevice();
+  if (pDevice == NULL) {
     openDevice();
-
-  return getCurrentDevice();
-
+    pDevice = getCurrentDevice();
+  }
+  return pDevice;
 }
-
-
-//
-// METHOD getCurrent
-//
-
-int DeviceManager::getCurrent()
-{
-  return (current) ? current->id : 0;
-}
-
-
-//
-// METHOD setCurrent
-//
 
 bool DeviceManager::setCurrent(int id)
 {
-  bool success = false;
-  DeviceInfo* found = NULL;
-
-  ListIterator iter(&deviceInfos);
-
-  for( iter.first(); !iter.isDone() ; iter.next() ) {
-
-    DeviceInfo* deviceInfo = (DeviceInfo*) iter.getCurrent();
-
-    if (deviceInfo->id == id) {
-      found = deviceInfo;
-      break;
-    }
+  char buffer[64];
+  
+  Container::iterator i;
+  for (i = devices.begin() ; i != devices.end() ; ++ i ) {
+    if ( (*i)->getID() == id )
+      break; 
   }
-
-  if (found) {
-
-    char buffer[64];
-
-    if (current) {
-      sprintf(buffer, "RGL device %d (inactive)", current->id);
-      current->device->setName(buffer);
+  if ( i != devices.end() ) {
+    if ( current != devices.end() ) {
+      sprintf(buffer, "RGL device %d", (*current)->getID() );    
+      (*current)->setName(buffer);
     }
-    
-    current = found;
-
-    sprintf(buffer, "RGL device %d (active)", current->id);
-    current->device->setName(buffer);
-    
-    success = true;
-  }
-
-  return success;
+    current = i;
+    sprintf(buffer, "RGL device %d [Focus]", (*current)->getID() );    
+    (*current)->setName(buffer);
+    return true;
+  } else
+    return false;
 }
+
+int DeviceManager::getCurrent() {
+  if ( current != devices.end() )
+    return (*current)->getID();
+  else
+    return 0;
+}
+
+/**
+ * Device disposed handler
+ **/
+void DeviceManager::notifyDisposed(Disposable* disposed)
+{
+  printMessage("DISPOSED!");
+  Container::iterator pos = std::find( devices.begin(), devices.end(), static_cast<Device*>( disposed ) );
+  assert( pos != devices.end() );  
+  if ( pos == current ) {
+    if ( devices.size() == 1 )
+      current = devices.end();
+    else
+      nextDevice();
+  }  
+  devices.erase(pos);  
+}
+
+void DeviceManager::nextDevice()
+{
+  if ( current != devices.end() ) {
+    // cycle to next
+    Iterator next = ++current;
+    if ( next == devices.end() )
+      next = devices.begin();
+    setCurrent( (*next)->getID() );
+  } else {
+    // ignore: no devices    
+  }
+}
+
+void DeviceManager::previousDevice()
+{
+  if ( current != devices.end() ) {
+    // cycle to previous
+    if (current == devices.begin() )
+      current = devices.end();
+    --current;
+  } else {
+    // ignore: no devices
+  }
+}
+
+
