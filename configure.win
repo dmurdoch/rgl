@@ -1,11 +1,11 @@
 #
-# configure for Win32/MinGW 
+# configure for visual c++
+# origin: build/src/vc/configure.win
 #
-# Makefile configuration is: Makefile.win, Makevars.win
-# origin: src/build/mingw/configure.win
 # This file is part of RGL
 #
+# $Id: configure.win,v 1.2 2003/03/25 03:50:48 dadler Exp $
+#
 
-cd src/zlib ; ./configure
-
+# do nothing
 

@@ -3,6 +3,8 @@
 ##
 ## Process this file with autoconf to produce a configure script.
 ##
+## $Id: configure.ac,v 1.2 2003/03/25 03:50:48 dadler Exp $
+##
 
 AC_PREREQ(2.50)
 
