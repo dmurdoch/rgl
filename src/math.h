@@ -4,13 +4,22 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: math.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: math.h,v 1.2 2003/05/14 10:58:36 dadler Exp $
 
 #include <math.h>
 #include <float.h>
 
 #ifndef PI
 #define PI      3.1415926535897932384626433832795
+#endif
+
+#ifndef sinf
+#define sinf(X) sin(X)
+#define cosf(X) cos(X)
+#define asinf(X) asin(X)
+#define acosf(X) acos(X)
+#define tanf(X) tan(X)
+#define sqrtf(X) sqrt(X)
 #endif
 
 inline float deg2radf(float deg) { return ((float)(PI/180.0)) * deg; }
