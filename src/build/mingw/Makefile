@@ -2,7 +2,7 @@
 # Makefile for win32/mingwl
 # This file is part of RGL
 #
-# $Id: Makefile,v 1.5 2003/11/16 09:58:33 dadler Exp $
+# $Id: Makefile,v 1.6 2003/11/27 21:07:10 dadler Exp $
 #
 
 all: target
@@ -70,7 +70,7 @@ SRCS=$(foreach x, $(MODS), $x.cpp)
 
 CFLAGS+=-Wall -pedantic
 CXXFLAGS=$(CFLAGS) -fno-exceptions -fno-rtti
-LDLIBS=-lopengl32 -lgdi32
+LDLIBS=-lopengl32 -lglu32 -lgdi32
 
 # ---[ PNG ADD-ON ]-----------------------------------------------------------
 
