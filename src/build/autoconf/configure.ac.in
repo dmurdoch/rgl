@@ -5,7 +5,7 @@
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.4 2003/06/04 07:44:47 dadler Exp $
+## $Id: configure.ac.in,v 1.5 2003/06/15 15:01:14 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -52,14 +52,14 @@ CFLAGS="-Wall -pedantic"
 ## C++ language
 
 LIBS="-lstdc++"
-CXXFLAGS="$CFLAGS -fno-exceptions -fno-rtti"
+CXXFLAGS="${CFLAGS} -fno-exceptions -fno-rtti"
 
 
 ## X11 backend
 
 AC_PATH_X
-LIBS="${LIBS} -L${x_libraries} -lX11"
-
+LIBS="${LIBS} -L${x_libraries} -lX11 -lXext"
+CPPFLAGS="${CPPFLAGS} -I${x_includes}"
 
 ## OpenGL backend
 

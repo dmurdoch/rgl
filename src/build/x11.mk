@@ -3,9 +3,7 @@
 # GNU Make include file
 #
 
-PLATFORM_MODULES=\
-x11lib	\
-x11gui
-
-PLATFORM_OBJS=$(foreach x, $(PLATFORM_MODULES), $x.o)
+PLATFORM_OBJS=	\
+x11lib.o	\
+x11gui.o
 
