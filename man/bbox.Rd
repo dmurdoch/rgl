@@ -9,7 +9,7 @@ rgl.bbox(
   xat=NULL, xlab=NULL, xunit=0, xlen=5, 
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=T, ...)
+  marklen=15.0, marklen.rel=TRUE, ...)
 }
 \arguments{
   \item{xat,yat,zat}{vector specifying the tickmark positions}
