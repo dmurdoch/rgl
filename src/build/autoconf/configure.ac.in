@@ -5,7 +5,7 @@
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.9 2003/11/19 18:00:39 dadler Exp $
+## $Id: configure.ac.in,v 1.10 2003/11/22 08:37:45 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -71,8 +71,13 @@ AC_ARG_WITH(gl-libs,
 )
 
 AC_ARG_WITH(gl-libname,
-[  --with-gl-libnae=NAME specify Library name (defaults to "GL")], 
+[  --with-gl-libname=NAME specify Library name (defaults to "GL")], 
 [LIBS="${LIBS} -l${withval}"], [LIBS="${LIBS} -lGL"]
+)
+
+AC_ARG_WITH(glu-libname,
+[  --with-glu-libname=NAME specify GLU Library name (defaults to "GLU")],
+[LIBS="${LIBS} -l${withval}"], [LIBS="${LIBS} -lGLU"]
 )
 
 ## LibPNG support
