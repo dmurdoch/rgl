@@ -5,7 +5,7 @@
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.8 2003/11/18 04:21:08 dadler Exp $
+## $Id: configure.ac.in,v 1.9 2003/11/19 18:00:39 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -138,7 +138,4 @@ AC_SUBST(LDFLAGS)
 AC_SUBST(LIBS)
 AC_SUBST(DEFS)
     
-AC_OUTPUT(
-src/Makevars
-src/Makefile
-)
+AC_OUTPUT(src/Makevars)
