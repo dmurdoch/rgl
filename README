@@ -44,6 +44,13 @@ un*x/x11 (gcc)
 win32 (MinGW/gcc, MSVC 6, devcpp)
 
 
+REQUIREMENTS
+------------
+Windowing System (x11 or win32)
+OpenGL and GLU Library (implementation for X11 or Win32)
+png library (optional on un*x)
+
+
 BUILDING/INSTALLING THE SOURCE PACKAGE
 --------------------------------------
 The R build tool ("R CMD build" (un*x) / "Rcmd BUILD" (win32) ) 

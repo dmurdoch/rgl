@@ -3,7 +3,7 @@
 #
 # Usage: make info 
 #
-# $Id: Maintainer.mk,v 1.7 2004/01/30 13:36:25 dadler Exp $
+# $Id: Maintainer.mk,v 1.8 2004/03/03 22:59:20 dadler Exp $
 #
 
 all: info
@@ -15,7 +15,7 @@ ARCDIR=arc
 
 # --- DEPENDEND SOURCE FILES --------------------------------------------------
 
-ZLIB=zlib114
+ZLIB=zlib121
 LPNG=lpng125
 
 -include $(CVSDIR)/rgl/src/build/VERSION

@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R,v 1.6 2004/03/03 22:09:44 dadler Exp $
+## $Id: zzz.R,v 1.7 2004/03/03 22:59:20 dadler Exp $
 ##
 
 ##
@@ -19,7 +19,7 @@
   # OS-specific 
   
   if ( .Platform$OS.type == "unix" ) {
-    unixos <- shell("uname",intern=TRUE)
+    unixos <- system("uname",intern=TRUE)
     if ( unixos == "Darwin" ) {
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
       # because it would override Apple's OpenGL framework
@@ -37,7 +37,6 @@
   )
   
   if (!ret$success) {
-    .rgl.unload.dll() 
     stop("error rgl_init")
   }
   
@@ -53,10 +52,7 @@
 { 
   # shutdown
   
-  ret <- .C( symbol.C("rgl_quit"), 
-    success=FALSE, 
-    PACKAGE="rgl"
-  )
+  ret <- .C( symbol.C("rgl_quit"), success=FALSE )
   
   # unload shared library
 
