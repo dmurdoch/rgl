@@ -14,4 +14,5 @@ TODO
 - spheres,bg: specify sections and segments 
 - bg: sphere horizontal color range
 - multi-pass rendering (through accumulation) ... depth of field?!
+- win32/visualc++: built resets fpu word (detected with options(warn.FPU=t) )
 
