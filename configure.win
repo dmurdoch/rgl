@@ -1,38 +1,44 @@
 #
-# configure for win32
+# png pixmap support
+# test zlib and libpng libraries are available 
 #
-# tests if src/zlib and src/lpng exists 
-# This file is part of RGL
-#
-# $Id: configure.win,v 1.5 2004/04/30 11:40:25 dadler Exp $
-#
+echo "  configure.win32..."
 
-if [ -e "src/zlib" ] && [ -e "src/lpng" ]; then
-  exit 0
+# --- win32 base configuration -----------------------------------------------
+
+CPPFLAGS=
+CFLAGS=
+CXXFLAGS="-fno-exceptions -fno-rtti"
+LIBS="-lgdi32 -lopengl32 -lglu32"
+ 
+# --- libpng -----------------------------------------------------------------
+
+echo -n "  checking for libpng..."
+if [ -e "${R_HOME}/src/gnuwin32/bitmap/libpng/libpng.a" ] && [ -e "${R_HOME}/src/extra/zlib/libz.a" ]; then
+  echo "yes"
+  CPPFLAGS="${CPPFLAGS} -I${R_HOME}/src/extra/zlib -DHAVE_PNG_H -I${R_HOME}/src/gnuwin32/bitmap/libpng "
+  LIBS="$LIBS -L${R_HOME}/src/extra/zlib -lz -L${R_HOME}/src/gnuwin32/bitmap/libpng -lpng"
 else
-  if [ -e "${R_HOME}/src/gnuwin32/bitmap/libpng" ] && [ -e "${R_HOME}/src/extra/zlib" ]; then
-    cp -r ${R_HOME}/src/gnuwin32/bitmap/libpng src/lpng
-    cp -r ${R_HOME}/src/extra/zlib src/zlib
-    exit 0
-  else 
-  cat <<EOF
-rgl on win32 platform depends on zlib and libpng sources.
-Please download zlib and libpng and setup the following steps:
-1. unpack the rgl package
-2. download zlib and libpng
-3. unpack/rename zlib in rgl/src/zlib
-4. unpack/rename libpng in rgl/src/libpng
-5. install again using  
-  > R CMD install rgl
-
-if you have wget and unzip at hand (e.g. from cygwin) you can 
-run a batch-script that will download, rename and move the files.  
-
-  > sh rgl/src/build/win32/download.sh
-
-For detailed information see rgl/README and rgl/src/build/README-WIN32.txt.
-EOF
-  exit 1
-  fi
+  echo "no"
 fi
+
+# --- dump configuration -----------------------------------------------------
+
+cat <<EOF
+---------- win32 configuration: ----------
+CPPFLAGS = $CPPFLAGS
+CFLAGS   = $CFLAGS
+CXXFLAGS = $CXXFLAGS
+LIBS     = $LIBS
+------------------------------------------  
+EOF
+
+# --- output Makevars --------------------------------------------------------
+
+sed \
+-e "s^@CPPFLAGS@^$CPPFLAGS^" \
+-e "s^@CFLAGS@^$CFLAGS^" \
+-e "s^@CXXFLAGS@^$CXXFLAGS^" \
+-e "s^@LIBS@^$LIBS^" \
+src/Makevars.in >src/Makevars
 
