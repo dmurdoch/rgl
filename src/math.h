@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: math.h,v 1.2 2003/05/14 10:58:36 dadler Exp $
+// $Id: math.h,v 1.3 2003/11/21 15:13:55 dadler Exp $
 
 #include <math.h>
 #include <float.h>
@@ -30,7 +30,8 @@ inline float getMin(float a, float b) { return (a <= b) ? a : b; }
 inline int   getMax(int a, int b)     { return (a >= b) ? a : b; }
 inline float getMax(float a, float b) { return (a >= b) ? a : b; }
 
-inline float clamp(float v, float floor, float ceil) { return (v<floor) ? floor : (v>ceil) ? ceil : v; }
+inline float clamp(float v, float floor, float ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
+inline int   clamp(int   v, int   floor, int   ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
 
 struct Vertex
 {
