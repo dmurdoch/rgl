@@ -2,7 +2,7 @@
 # Makefile for win32/mingwl
 # This file is part of RGL
 #
-# $Id: Makefile,v 1.6 2003/11/27 21:07:10 dadler Exp $
+# $Id: Makefile,v 1.7 2004/01/30 13:15:20 dadler Exp $
 #
 
 all: target
@@ -75,7 +75,7 @@ LDLIBS=-lopengl32 -lglu32 -lgdi32
 # ---[ PNG ADD-ON ]-----------------------------------------------------------
 
 ZLIBDIR=zlib
-LIBPNGDIR=lpng124
+LIBPNGDIR=lpng
 
 ZLIB=$(ZLIBDIR)/libz.a
 LIBPNG=$(LIBPNGDIR)/libpng.a
@@ -87,7 +87,7 @@ $(ZLIB):
 	CFLAGS="$(CFLAGS)" make -e -C zlib
 
 $(LIBPNG): $(ZLIB)
-	CFLAGS="$(CFLAGS) -I../zlib" make -e -C lpng124 -f scripts/makefile.gcc
+	CFLAGS="$(CFLAGS) -I../zlib" make -e -C lpng -f scripts/makefile.gcc
 
 LIB_TARGETS+=$(LIBPNG)
 
@@ -115,8 +115,8 @@ rgl.dll: $(OBJS) rgl_res.o
 # MISC
 	
 clean:
-	make -C $(ZLIBDIR) clean
-	make -C $(LIBPNGDIR) -f scripts/makefile.gcc clean
+	if test -d $(ZLIBDIR) ; then make -C $(ZLIBDIR) clean ; fi
+	if test -d $(LIBPNGDIR) ; then make -C $(LIBPNGDIR) -f scripts/makefile.gcc clean ; fi
 	$(RM) *.o *.a *.dll *.def .deps rgl_res.rc
 
 deps: 

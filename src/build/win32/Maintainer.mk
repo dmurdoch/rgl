@@ -1,13 +1,9 @@
 # RGL Win32 BUILDER SITE
 # This file is part of rgl
 #
-# Usage: copy this Makefile to a working direction where rgl's
-#        source tree lives in.
-#        $ make target  - builds mingw,vc and src tar-ball (default)
-#        $ make upload  - uploads a v$(VERSION) directory
-#	 $ make clean   - clean up previous build with this version
+# Usage: make info 
 #
-# $Id: Maintainer.mk,v 1.5 2003/11/19 22:57:10 dadler Exp $
+# $Id: Maintainer.mk,v 1.6 2004/01/30 13:15:20 dadler Exp $
 #
 
 all: info
@@ -15,6 +11,12 @@ all: info
 CVSDIR=cvs
 SRCDIR=current
 DESTDIR=release
+ARCDIR=arc
+
+# --- DEPENDEND SOURCE FILES --------------------------------------------------
+
+ZLIB=zlib114
+LPNG=lpng125
 
 -include $(CVSDIR)/rgl/src/build/VERSION
 
@@ -28,25 +30,36 @@ checkout:
 update:
 	cd $(CVSDIR)/rgl ; cvs update
 
+
 # --- SOURCE SETUP ------------------------------------------------------------
 	
-version:
+gen:
 	cd $(CVSDIR) ; sh rgl/src/build/setversion.sh
 
 # --- SOURCE BUILD ------------------------------------------------------------
 	
-source:
+package:
 	cd $(CVSDIR)/rgl ; sh ./cleanup.win ; ./setup.bat mingw
 	cd $(CVSDIR) ; Rcmd build --force rgl
 	mkdir -p $(DESTDIR)/src
 	mv -f $(CVSDIR)/rgl_$(VERSION).tar.gz $(DESTDIR)/src
 
+
 # --- BINARY BUILD ------------------------------------------------------------
+
+
+download:
+	mkdir -p $(ARCDIR)
+	wget -nc -P $(ARCDIR) www.gzip.org/zlib/$(ZLIB).zip
+	wget -nc -P $(ARCDIR) download.sourceforge.net/libpng/$(LPNG).zip
 
 unpack:
 	rm -Rf $(SRCDIR)/rgl
 	mkdir -p $(SRCDIR)
 	tar -xzvf $(DESTDIR)/src/rgl_$(VERSION).tar.gz -C $(SRCDIR)
+	unzip $(ARCDIR)/$(ZLIB).zip -d $(SRCDIR)/rgl/src/zlib
+	unzip $(ARCDIR)/$(LPNG).zip -d $(SRCDIR)/rgl/src
+	mv $(SRCDIR)/rgl/src/$(LPNG) $(SRCDIR)/rgl/src/lpng
 
 mingw:
 	cd $(SRCDIR)/rgl ; sh ./cleanup.win ; ./setup.bat mingw
@@ -65,6 +78,15 @@ vc:
 
 info:
 	@echo "Win32 RGL BUILDER SITE"
+	@echo " checkout   - check out cvs tree"
+	@echo " update     - update cvs tree dep: checkout"
+	@echo " gen        - generate auto files dep: checkout/update" 
+	@echo " package    - build source package dep: gen"
+	@echo " download   - download aux libs (zlib and libpng)"
+	@echo " unpack     - unpack source package and aux libs dep: package, download"
+	@echo " mingw      - build binary package using mingw dep: unpack"
+	@echo " vc         - build binary package using vc dep: unpack"  
+
 
 release: clean update source unpack mingw vc upload
 

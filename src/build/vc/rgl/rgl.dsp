@@ -131,7 +131,7 @@ SOURCE=..\..\..\math.cpp
 # Begin Source File
 
 SOURCE=..\..\..\pixmap.cpp
-# ADD CPP /I "../../../lpng124" /I "../../../zlib"
+# ADD CPP /I "../../../lpng" /I "../../../zlib"
 # End Source File
 # Begin Source File
 
