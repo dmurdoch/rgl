@@ -3,3 +3,4 @@
 #
 
 rm -Rf autom4te.cache config.log config.status src/Makefile src/Makevars
+exit 0

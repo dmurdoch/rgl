@@ -3,13 +3,15 @@
 ##
 ## Process this file with autoconf to produce a configure script.
 ##
+## $Id: configure.ac,v 1.4 2003/05/21 11:08:25 dadler Exp $
+##
 
 AC_PREREQ(2.50)
 
 
 ## ---[ VERSION ]-------------------------------------------------------------
 
-AC_INIT([rgl], [0.64-4], [dadler@gwdg.de])
+AC_INIT([rgl], [0.64-5], [dadler@gwdg.de])
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
 ## ---[ check host ]----------------------------------------------------------
@@ -81,6 +83,20 @@ AC_ARG_ENABLE(png,
 AC_MSG_RESULT([$enable_png])
 if test "x$enable_png" != "xno"; then
 AC_CHECK_HEADERS(png.h,CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H=1"; LIBS="${LIBS} ${PNGLIB:=-lpng}")
+fi
+
+## Darwin/MacOS X stuff
+
+if test `uname` = "Darwin" ; then
+  CPPFLAGS="${CPPFLAGS} -DDarwin"
+  CFLAGS="${CFLAGS} -DDarwin"
+  # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
+  if test -e /System/Library/Frameworks/OpenGL.framework ; then
+    CPPFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers ${CPPFLAGS} -DNO_GL_PREFIX"
+    LIBS="-framework OpenGL ${LIBS}"
+  fi
+  # X11 must come *after* the OpenGL stuff
+  CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
 fi
 
 ## Output

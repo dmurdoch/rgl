@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: scene.cpp,v 1.2 2003/05/14 10:58:36 dadler Exp $
 
 #include "scene.h"
 #include "math.h"
@@ -9,7 +9,7 @@
 #include "lib.h"
 #include "opengl.h"
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 #include "pixmap.h"
 
