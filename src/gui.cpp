@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp,v 1.2 2003/06/04 08:52:51 dadler Exp $
+// $Id: gui.cpp,v 1.3 2003/11/21 15:21:36 dadler Exp $
 
 #include "gui.h"
 #include "lib.h"
@@ -122,6 +122,10 @@ void View::mouseMove(int mouseX, int mouseY)
 }
 
 void View::wheelRotate(int direction)
+{
+}
+
+void View::captureLost()
 {
 }
 
