@@ -1,6 +1,6 @@
 # demo: regression
 # author: Daniel Adler
-# $Id: regression.r,v 1.2 2004/03/02 19:53:56 dadler Exp $
+# $Id: regression.r,v 1.3 2004/05/28 07:05:26 dadler Exp $
 
 rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zlim=c(0,100)) {
 
@@ -35,5 +35,4 @@ rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zl
 }
 
 rgl.demo.regression()
-
 

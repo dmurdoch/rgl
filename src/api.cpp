@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.4 2003/11/21 21:56:03 dadler Exp $
+// $Id: api.cpp,v 1.5 2004/05/28 07:05:26 dadler Exp $
 
 #include "lib.h"
 
@@ -40,6 +40,9 @@ EXPORT_SYMBOL void rgl_dev_open      (int* successptr);
 EXPORT_SYMBOL void rgl_dev_close     (int* successptr);
 EXPORT_SYMBOL void rgl_dev_getcurrent(int* successptr, int* idptr);
 EXPORT_SYMBOL void rgl_dev_setcurrent(int* successptr, int* idata);
+#ifdef _WIN32
+EXPORT_SYMBOL void rgl_dev_bringtotop(int* successptr);
+#endif
 
 // device services
 
@@ -83,14 +86,14 @@ DeviceManager* deviceManager = NULL;
 #include "lib.h"
 
 void rgl_init(int* successptr)
-{  
+{
   bool success = false;
-  
+
   if ( lib_init() ) {
     deviceManager = new DeviceManager();
     success = true;
   }
-  
+
   *successptr = (int) success;
 }
 
@@ -110,7 +113,7 @@ void rgl_quit(int* successptr)
   }
 
   lib_quit();
-  
+
   *successptr = (int) true;
 }
 
@@ -122,7 +125,7 @@ void rgl_quit(int* successptr)
 void rgl_dev_open(int* successptr)
 {
   bool success;
-  
+
   success = deviceManager->openDevice();
 
   *successptr = (int) success;
@@ -152,6 +155,25 @@ void rgl_dev_close(int* successptr)
   *successptr = (int) success;
 }
 
+#ifdef _WIN32
+void rgl_dev_bringtotop(int* successptr)
+{
+  bool success = false;
+
+  Device* device;
+
+  device = deviceManager->getCurrentDevice();
+
+  if (device) {
+
+    device->bringToTop();
+    success = true;
+
+  }
+
+  *successptr = (int) success;
+}
+#endif
 
 //
 // FUNCTION
@@ -294,7 +316,7 @@ void rgl_light ( int* successptr, int* idata, double* ddata )
   if ( device ) {
 
     bool  viewpoint_rel = (bool)  idata[0];
-    
+
     Color ambient;
     Color diffuse;
     Color specular;
@@ -314,7 +336,7 @@ void rgl_light ( int* successptr, int* idata, double* ddata )
 }
 
 
-void rgl_viewpoint(int* successptr, int* idata, double* ddata) 
+void rgl_viewpoint(int* successptr, int* idata, double* ddata)
 {
   bool success = false;
 
@@ -386,7 +408,7 @@ void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y)
     success = device->add( new Surface(currentMaterial, nx, nz, x, z, y) );
 
   }
-  
+
   *successptr = (int) success;
 }
 
@@ -425,7 +447,7 @@ void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius)
 void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 {
   Material& mat = currentMaterial;
-  
+
   bool success = false;
 
   int ncolor    = idata[0];
@@ -450,7 +472,7 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.size        = (float) ddata[1];
   double* alpha   = &ddata[2];
 
-  if ( strlen(pixmapfn) > 0 ) {  
+  if ( strlen(pixmapfn) > 0 ) {
     mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
@@ -486,10 +508,10 @@ void rgl_texts(int* successptr, int* idata, char** text, double* vertex)
   *successptr = (int) success;
 }
 
-void rgl_bbox(int* successptr, 
+void rgl_bbox(int* successptr,
               int* idata,
               double* ddata,
-              double* xat, char** xtext, 
+              double* xat, char** xtext,
               double* yat, char** ytext,
               double* zat, char** ztext)
 {
@@ -514,7 +536,7 @@ void rgl_bbox(int* successptr,
 
     AxisInfo xaxis(xticks, xat, xtext, xlen, xunit);
     AxisInfo yaxis(yticks, yat, ytext, ylen, yunit);
-    AxisInfo zaxis(zticks, zat, ztext, zlen, zunit); 
+    AxisInfo zaxis(zticks, zat, ztext, zlen, zunit);
 
     success = device->add( new BBoxDeco(currentMaterial, xaxis, yaxis, zaxis, marklen, (bool) marklen_rel ) );
   }

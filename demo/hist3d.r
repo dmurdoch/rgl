@@ -109,4 +109,3 @@ set.seed(1000)
 
 # Drawing a 3d histogramm of 2500 normaly distributed observations:
 hist3d(rnorm(2500),rnorm(2500),alpha=0.4,nclass=7,scale=30)
-

@@ -1,7 +1,7 @@
 # rgl-demo: subdivision surfaces
 # author: Daniel Adler
 # notes: demo contains preview material of r3d, a generic 3D interface for R
-# $Id: subdivision.r,v 1.2 2004/03/02 19:53:56 dadler Exp $
+# $Id: subdivision.r,v 1.3 2004/05/28 07:05:26 dadler Exp $
 
 #
 # R3D
@@ -412,4 +412,3 @@ rgl.clear(type="lights")
 rgl.bg(color="gray")
 rgl.light()
 render.levels( 0, func=subdivide, normalize=F )
-
