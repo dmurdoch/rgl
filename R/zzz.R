@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R,v 1.7 2004/03/03 22:59:20 dadler Exp $
+## $Id: zzz.R,v 1.8 2004/03/04 07:16:36 dadler Exp $
 ##
 
 ##
@@ -52,7 +52,7 @@
 { 
   # shutdown
   
-  ret <- .C( symbol.C("rgl_quit"), success=FALSE )
+  ret <- .C( symbol.C("rgl_quit"), success=FALSE, PACKAGE="rgl" )
   
   # unload shared library
 
