@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.7 2004/08/10 01:43:07 murdoch Exp $
+// $Id: api.cpp,v 1.8 2004/08/27 15:58:57 dadler Exp $
 
 #include "lib.h"
 
@@ -495,7 +495,7 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.colors.set( ncolor, colors, nalpha, alpha);
   mat.alphablend  = mat.colors.hasAlpha();
 
-  mat.setup();
+  mat.setup(); 
 
   success = true;
 

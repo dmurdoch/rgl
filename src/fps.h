@@ -1,10 +1,10 @@
-#ifndef PLX_FPS_H
-#define PLX_FPS_H
+#ifndef RGL_FPS_H
+#define RGL_FPS_H
 
 // C++ header file
 // This file is part of RGL
 //
-// $Id: fps.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: fps.h,v 1.2 2004/08/27 15:58:57 dadler Exp $
 
 #include "scene.h"
 
@@ -24,5 +24,5 @@ public:
   void render(double t, RenderContext* ctx);
 };
 
-#endif // PLX_FPS_H
+#endif // RGL_FPS_H
 

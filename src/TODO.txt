@@ -1,12 +1,16 @@
 TODO
 ====
+- remove "INFO POPUP"
+- update rgl manual ... reference all public functions
+- check header defines to be prefixed with RGL_
+- z-distance sorted rendering of alpha-blended faces 
+- remove -DDEBUG from default build
 - package vignette 
 - win32: window icon
 - rgl.bbox labels
 - z-sorted alpha-blended surfaces
 - R namespaces
 - pixmap index format
-- z-distance sorted rendering of alpha-blended faces 
 - bbox: non-uniform scale per axis
 - embedded multi-threaded framework
 - 3d util functions
