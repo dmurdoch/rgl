@@ -1,0 +1,6 @@
+hist3d.r      3d histogram using basic building blocks.
+bivar.r       Bivariate densities kernel smoothing using rgl.surface and alpha-channel.
+abundance.r   Animal Abundance, visualization of multi-dimension data using multiple techniques.
+lsystem.r     plant modelling using a turtle and l-system.
+subdivision.r Subdivision surfaces using generic meshes (preview of generic 3D interface).
+
