@@ -5,7 +5,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: types.h,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: types.h,v 1.2 2003/11/21 21:56:03 dadler Exp $
 
 
 //
@@ -42,14 +42,28 @@ typedef long          u32;
 class AutoDestroy
 {
 public:
-  AutoDestroy();
-  virtual ~AutoDestroy();
-  void ref();
-  void unref();
+  AutoDestroy() { refcount = 0; }
+  virtual ~AutoDestroy() { }
+  void ref() { refcount++; }
+  void unref() { if ( !(--refcount) ) delete this; }
 private:
   int refcount;
 };
 
+template<class T>
+class Ref
+{
+public:
+  Ref() : ptr(NULL) { }
+  Ref(T* in_ptr) : ptr(in_ptr) { if (ptr) ptr->ref(); }
+  Ref(const Ref& ref) : ptr(ref.ptr) { if (ptr) ptr->ref(); }
+  ~Ref() { if (ptr) ptr->unref(); }
+  Ref& operator = (T* in_ptr) { if (ptr) ptr->unref(); ptr = in_ptr; if (ptr) ptr->ref(); }
+  T* operator -> () { return ptr; }
+  operator bool () { return (ptr); }
+private:
+  T* ptr;
+};
 
 //
 // CLASS
