@@ -11,7 +11,7 @@
 #		(win32 dos/mingw:)  
 #			$ sh rgl/src/build/setversion.sh
 #
-# $Id: setversion.sh,v 1.1 2003/05/27 13:02:14 dadler Exp $
+# $Id: setversion.sh,v 1.2 2003/06/15 15:13:14 dadler Exp $
 #
 
 # ---[ SET VERSION ]----------------------------------------------------------
@@ -31,7 +31,7 @@ DATE=`date +%Y-%m-%d`
 # ----------------------------------------------------------------------------
 
 echo VERSION = $VERSION
-echo DATA    = $DATE
+echo DATE    = $DATE
 
 
 echo create DESCRIPTION
