@@ -5,7 +5,7 @@
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.5 2003/06/15 15:01:14 dadler Exp $
+## $Id: configure.ac.in,v 1.6 2003/11/16 14:07:33 dadler Exp $
 ##
 
 AC_PREREQ(2.50)
@@ -13,7 +13,7 @@ AC_PREREQ(2.50)
 
 ## ---[ VERSION ]-------------------------------------------------------------
 
-AC_INIT([rgl], [@VERSION@], [dadler@gwdg.de])
+AC_INIT([rgl], [@VERSION@], [dadler@uni-goettingen.de])
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
 ## ---[ check host ]----------------------------------------------------------
@@ -38,10 +38,6 @@ esac
 ##
 ## ===[ X11 Port ]============================================================
 ##
-
-## PLATFORM_MODULES="x11lib x11gui"
-## LIBS=""
-
 
 ## C language
 
@@ -73,17 +69,25 @@ AC_ARG_WITH(gl-libs,
 [LIBS="${LIBS} -L${withval}"]
 )
 
-AC_ARG_WITH(gl-prefix,
-[  --with-gl-prefix=PREFIX specify Library prefix ("GL" (default) or "MesaGL")], 
+AC_ARG_WITH(gl-libname,
+[  --with-gl-libnae=NAME specify Library name (defaults to "GL")], 
 [LIBS="${LIBS} -l${withval}"], [LIBS="${LIBS} -lGL"]
 )
 
 ## LibPNG support
 
-AC_ARG_ENABLE(png,
-[  --disable-png           compile without PNG image support])
-AC_MSG_RESULT([$enable_png])
-if test "x$enable_png" != "xno"; then
+AC_ARG_WITH(libpng-includes,
+[  --with-libpng-includes=DIR specify location of libpng headers],
+[CPPFLAGS="${CPPFLAGS} -I${withval}"],
+)
+AC_ARG_WITH(libpng-libs,
+[  --with-libpng-libs=DIR     specify location of libpng library],
+[LIBS="${LIBS} -L${withval}"]
+)
+AC_ARG_ENABLE(libpng,
+[  --disable-libpng           compile without PNG image support])
+AC_MSG_RESULT([$enable_libpng])
+if test "x$enable_libpng" != "xno"; then
 AC_CHECK_HEADERS(png.h,CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H=1"; LIBS="${LIBS} ${PNGLIB:=-lpng}")
 fi
 
