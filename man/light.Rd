@@ -18,5 +18,6 @@ rgl.light( theta = 0, phi = 0, viewpoint.rel = FALSE, ambient = "#FFFFFF", diffu
 }
 \seealso{
   \code{\link{rgl.clear}}
+  \code{\link{rgl.pop}}
 }
 \keyword{dynamic}

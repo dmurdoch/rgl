@@ -7,29 +7,27 @@
 \alias{rgl.set}
 \alias{rgl.quit}
 \description{
-  3D visualization device system using OpenGL.
+  3D real-time rendering device-driver system
 }
 \usage{
 rgl.open()     # open new device
-rgl.close()    # close 
-rgl.cur()      # returns active device
+rgl.close()    # close current device
+rgl.cur()      # returns active device id
 rgl.set(which) # set device as active
-rgl.quit()     # force rgl sub-system shutdown and detach package
+rgl.quit()     # shutdown rgl device system
 }
 \arguments{
   \item{which}{device id}
 }
 \details{
-  The rgl R package allows for creating multiple rgl devices, 
-  where one at a time has the current focus.
-
+  RGL is a 3D real-time rendering device driver system for R.
+  Multiple devices are managed at a time, where one has the current focus
+  that receives instructions from the R command-line.
   The device design is oriented towards the R device metaphor. If you send
   scene management instructions, and there's no device open, it will be opened
   automatically.
-
   Opened devices automatically gain the current device focus. The focus may be
   changed by using rgl.set().
-
   rgl.quit() does shutdown the rgl subsystem and all open devices, 
   detaches the package inclusive the shared library and additional system libraries.
 }
@@ -51,7 +49,6 @@ example(rgl.surface)
 \code{\link{rgl.surface}},
 \code{\link{rgl.spheres}},
 \code{\link{rgl.sprites}},
-\code{\link{rgl.snapshot}},
-\code{\link{rgl-maintainer}}
+\code{\link{rgl.snapshot}}
 }
 \keyword{dynamic}
