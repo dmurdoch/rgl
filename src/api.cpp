@@ -1,85 +1,13 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.11 2005/02/08 21:21:56 dadler Exp $
+// $Id: api.cpp,v 1.12 2005/02/15 19:35:20 dadler Exp $
 
 #include "lib.h"
 
-//
-// RGL API EXPORT MACRO
-//
-
-#ifdef _WIN32
-#define EXPORT_SYMBOL   __declspec(dllexport)
-#else
-#define EXPORT_SYMBOL   extern
-#endif
-
 extern "C" {
 
-//
-// RGL API IMPLEMENTATION
-//
-//
-// C API FUNCTION DESIGN
-//  rgl_<name> ( successptr , ... )
-//
-// PARAMETERS
-//   successptr
-//     [0]  function success status
-//
-
-// library service
-
-EXPORT_SYMBOL void rgl_init          (int* successptr);
-EXPORT_SYMBOL void rgl_quit          (int* successptr);
-
-// device management
-
-EXPORT_SYMBOL void rgl_dev_open      (int* successptr);
-EXPORT_SYMBOL void rgl_dev_close     (int* successptr);
-EXPORT_SYMBOL void rgl_dev_getcurrent(int* successptr, int* idptr);
-EXPORT_SYMBOL void rgl_dev_setcurrent(int* successptr, int* idata);
-#ifdef _WIN32
-EXPORT_SYMBOL void rgl_dev_bringtotop(int* successptr, int* stay);
-#endif
-
-// device services
-
-EXPORT_SYMBOL void rgl_snapshot (int* successptr, int* idata, char** cdata);
-
-// scene management
-
-EXPORT_SYMBOL void rgl_clear    (int* successptr, int* idata);
-EXPORT_SYMBOL void rgl_pop      (int* successptr, int* idata);
-
-EXPORT_SYMBOL void rgl_material (int* successptr, int* idata, char** cdata, double* ddata);
-
-EXPORT_SYMBOL void rgl_light    (int* successptr, int* idata, double* ddata );
-
-EXPORT_SYMBOL void rgl_viewpoint(int* successptr, int* idata, double* ddata);
-
-EXPORT_SYMBOL void rgl_bg       (int* successptr, int* idata);
-EXPORT_SYMBOL void rgl_bbox     (int* successptr, int* idata, double* ddata, double* xat, char** xtext, double* yat, char** ytext, double* zat, char** ztext);
-
-EXPORT_SYMBOL void rgl_primitive(int* successptr, int* idata, double* vertex);
-EXPORT_SYMBOL void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex);
-EXPORT_SYMBOL void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius);
-EXPORT_SYMBOL void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y);
-EXPORT_SYMBOL void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius);
-
-EXPORT_SYMBOL void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
-EXPORT_SYMBOL void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
-EXPORT_SYMBOL void rgl_locator(int* successptr, double* locations);
-EXPORT_SYMBOL void rgl_mouseMode(int* successptr, int* idata, int* ddata);
-EXPORT_SYMBOL void rgl_selectstate(int* successptr, int* selectstate, double* locations);
-EXPORT_SYMBOL void rgl_setselectstate(int* successptr, int *idata);
-EXPORT_SYMBOL void rgl_projection(int* successptr, double* model, double* proj, int* view);
-EXPORT_SYMBOL void rgl_getUserMatrix(int* successptr, double* userMatrix);
-EXPORT_SYMBOL void rgl_setUserMatrix(int* successptr, double* userMatrix);
-EXPORT_SYMBOL void rgl_getZoom(int* successptr, double* zoom);
-EXPORT_SYMBOL void rgl_getFOV(int* successptr, double* fov);
-
+#include "api.h"
 
 } // extern C
 
@@ -654,25 +582,35 @@ void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, 
   *successptr = (int) success;
 }
 
-void rgl_mouseMode(int* successptr, int *idata, int* ddata)
+void rgl_getMouseMode(int* successptr, int *button, int* mode)
 {
   bool success = false;
   Device* device = deviceManager->getCurrentDevice();
 
   if (device) {
-	int button = ddata[0];
-
-	MouseModeID mouseMode = (MouseModeID) idata[0];
  	RGLView* rglview = device->getRGLView();
-  idata[0] = static_cast<int>( rglview->getMouseMode(button) );
+  	*mode = static_cast<int>( rglview->getMouseMode(*button) );
+    	success = true;
+  }
 
-	rglview->setMouseMode(button, mouseMode);
+  *successptr = success;
+}
+
+void rgl_setMouseMode(int* successptr, int* button, int* mode)
+{
+  bool success = false;
+  Device* device = deviceManager->getCurrentDevice();
+
+  if (device) {
+ 	RGLView* rglview = device->getRGLView();
+	rglview->setMouseMode(*button, (MouseModeID)(*mode));
 
     	success = true;
   }
 
   *successptr = success;
 }
+
 
 void rgl_selectstate(int* successptr, int* selectstate, double* locations)
 {
@@ -717,28 +655,13 @@ void rgl_setselectstate(int* successptr, int *idata)
   *successptr = success;
 }
 
-void rgl_projection(int* successptr, double* model, double* proj, int* view)
+void rgl_projection(int* successptr, double* model, double* proj, double* view)
 {
-    bool success = false;
-    int i;
-    Device* device = deviceManager->getCurrentDevice();
-
-
-    if (device){
-
-		RGLView* rglview = device->getRGLView();
-		for (i=0; i<16; i++) {
-	    	model[i] = rglview->modelMatrix[i];
-	    	proj[i] = rglview->projMatrix[i];
-		}
-		for (i=0; i<4; i++)
-	    	view[i] = rglview->viewport[i];
-
-    		success = true;
-	}
-
-	*successptr = success;
-
+    rgl_getModelMatrix(successptr, model);
+    if (*successptr) 
+    	rgl_getProjMatrix(successptr, proj);
+    if (*successptr)
+    	rgl_getViewport(successptr, view);
 }
 
 void rgl_getUserMatrix(int* successptr, double* userMatrix)
@@ -777,3 +700,53 @@ void rgl_setUserMatrix(int* successptr, double* userMatrix)
 
 }
 
+void rgl_getModelMatrix(int* successptr, double* modelMatrix)
+{
+	bool success = false;
+  	Device* device = deviceManager->getCurrentDevice();
+
+	if (device){
+
+		RGLView* rglview = device->getRGLView();
+		for (int i=0; i<16; i++) {
+	    		modelMatrix[i] = rglview->modelMatrix[i];
+		}
+    		success = true;
+  	}
+
+  *successptr = success;
+}
+
+void rgl_getProjMatrix(int* successptr, double* projMatrix)
+{
+	bool success = false;
+  	Device* device = deviceManager->getCurrentDevice();
+
+	if (device){
+
+		RGLView* rglview = device->getRGLView();
+		for (int i=0; i<16; i++) {
+	    		projMatrix[i] = rglview->projMatrix[i];
+		}
+    		success = true;
+  	}
+
+  *successptr = success;
+}
+
+void rgl_getViewport(int* successptr, double* viewport)
+{
+	bool success = false;
+  	Device* device = deviceManager->getCurrentDevice();
+
+	if (device){
+
+		RGLView* rglview = device->getRGLView();
+		for (int i=0; i<4; i++) {
+	    		viewport[i] = rglview->viewport[i];
+		}
+    		success = true;
+  	}
+
+  *successptr = success;
+}
