@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: math.cpp,v 1.4 2004/09/05 20:03:10 murdoch Exp $
+// $Id: math.cpp,v 1.5 2005/01/28 09:42:16 dadler Exp $
 
 #include "math.h"
 
@@ -31,12 +31,11 @@ Vec3 Vec3::cross(Vec3 op2) const
   return v;
 }
 
-float Vec3::angle(Vec3 op2) const
+float Vec3::angle(const Vec3& that) const
 {
-
   float dot;
-  dot = x*op2.x + y*op2.y + z*op2.z;
-  return rad2degf(acosf( dot/(this->getLength() * op2.getLength())));
+  dot = x*that.x + y*that.y + z*that.z;
+  return math::rad2deg(math::acos( dot/(this->getLength() * that.getLength())));
 
 }
 
@@ -87,9 +86,9 @@ void Vec3::rotateX(float degree)
 {
   Vec3 t(*this);
 
-  float rad = deg2radf(degree);
-  float s = sinf(rad);
-  float c = cosf(rad);
+  float rad = math::deg2rad(degree);
+  float s = math::sin(rad);
+  float c = math::cos(rad);
 
   y = c*t.y + -s*t.z;
   z = s*t.y +  c*t.z;
@@ -99,9 +98,9 @@ void Vec3::rotateY(float degree)
 {
   Vec3 t(*this);
 
-  float rad = deg2radf(degree);
-  float s = sinf(rad);
-  float c = cosf(rad);
+  float rad = math::deg2rad(degree);
+  float s = math::sin(rad);
+  float c = math::cos(rad);
 
   x =  c*t.x + s*t.z;
   z = -s*t.x + c*t.z;
@@ -216,9 +215,9 @@ void Matrix4x4::setIdentity(void) {
 }
 
 void Matrix4x4::setRotate(const int axis, const float degree) {
-  float rad = deg2radf(degree);
-  float s   = sinf(rad);
-  float c   = cosf(rad);
+  float rad = math::deg2rad(degree);
+  float s   = math::sin(rad);
+  float c   = math::cos(rad);
   setIdentity();
   switch(axis) {
     case 0:
@@ -249,11 +248,11 @@ void Matrix4x4::getData(double* dest)
 }
 
 Vertex PolarCoord::vector() const { 
-  float t = deg2radf(theta);
-  float p = deg2radf(phi);
+  float t = math::deg2rad(theta);
+  float p = math::deg2rad(phi);
   return Vertex (
-    cosf(p) * sinf(t),
-    sinf(p),
-    cosf(p) * cosf(t)
+    math::cos(p) * math::sin(t),
+    math::sin(p),
+    math::cos(p) * math::cos(t)
   );
 }
