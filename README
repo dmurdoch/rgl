@@ -3,139 +3,82 @@ RGL - 3D visualization device system for R using OpenGL
 
 INTRODUCTION
 ------------
-
 The RGL package is a visualization device system for R, using 
-OpenGL as the rendering backend.
-
-
-FEATURES
---------
-  * portable R Plug-in (win32, X11)
-  * R programing interface 
-  * interactive viewpoint navigation
-  * automatic data focus
-  * geometry primitives: 
-      points, lines, triangles, quads, texts, 3D sprites, 
-      surface, spheres
-  * up to 8 light sources
-  * alpha-blending (transparency)
-  * side-dependant rendering
-  * texture-mapping support (rgb, alpha and luminance)
-  * environmental effects:
-      fogging, background sphere
-  * bounding box with axis ticks marks
-  * undo operation
+OpenGL as the rendering backend. An rgl device at its core 
+is a real-time 3D engine written in C++. It provides an 
+interactive viewpoint navigation facility (mouse + wheel support)
+and an R programming interface.
 
 
 LICENSE
 -------
-
 The software is released under the GNU Public License. 
 See "COPYING" textfile for details.
 
 
-SOURCES
+FEATURES
+--------
+- portable R Plug-in using OpenGL on win32 and X11
+- R programing interface 
+- interactive viewpoint navigation
+- automatic data focus
+- geometry primitives: 
+  points, lines, triangles, quads, texts, point sprites
+- high-level geometry:
+  surface, spheres
+- up to 8 light sources
+- alpha-blending (transparency)
+- side-dependant fill-mode rendering
+- texture-mapping support (rgb, alpha and luminance)
+- environmental effects:
+  fogging, background sphere
+- bounding box with axis ticks marks
+- undo operation
+  shapes and light-sources are managed on type stacks
+
+
+PLATFORMS & BUILD TOOLS
+-----------------------
+un*x/x11 (gcc)
+win32 (MinGW/gcc, MSVC 6, devcpp)
+
+
+INSTALL
 -------
-
-The source distribution includes sources for zlib v1.1.4 and libpng v1.2.4 (used by the win32 port).
-
-
-PLATFORMS
----------
-
-  un*x/x11, macosx/x11 (GCC)
-  win32 (MinGW or Microsoft Visual C++)
+rgl is distributed as source R packaged.
+For the windows platform, there are also precompiled binary
+zip packages available. 
 
 
-BUILDING ON UN*X / MAC OS X PLATFORM
-------------------------------------
+INSTALLING WIN32 BINARIES
+-------------------------
+Select 'Install local zip' and select the rgl_<version>.zip. 
 
-  Configure, Build and Install
+> library(rgl)
+> demo(rgl)
 
-  1. Unpack source tar ball
- 
-  2. Change to parent directory containing rgl directory
+BUILDING/INSTALLING THE SOURCE PACKAGE
+--------------------------------------
+The R build tool ("R CMD build" (un*x) / "Rcmd BUILD" (win32) ) 
+is the primary tool to build the RGL package.
 
-  3. Run
+The building process comes in two flavours X11/Un*x and windows.
 
-     $ R CMD INSTALL --configure-args=<ARGS> rgl
+Please read the appropriate README file:
 
-     optionally, you can specify several build parameters:
+README.X11                  building on un*x/x11
+README.WIN32                building on windows
 
-        --x-includes=<path>
-
-        --x-libraries=<path>
-
-        --with-gl-includes=<path>
-
-        --with-gl-libraries=<path>
-
-        --with-gl-prefix=<libprefix>
-        
-        --disable-png
-
-    
-BUILDING ON WIN32 PLATFORM
----------------------------
-  
-  Configure
-
-  1. Unpack source tar ball
-
-  2. Change to rgl directory
-
-  3. Run setup.bat to select build environment
-
-     setup.bat [ vc | mingw ]
-
-       vc    -  Build with Visual C++
-       mingw -  Build with MinGW
-
-
-  Build with Visual C++
-
-    1. Start Visual C++
-
-    2. Open workspace src\build\vc\rgl\rgl.dsw
-
-    3. Select build type "Release" or "Debug"
-
-    4. Build all
-
-    -SHELL-
-    
-    5. Change to parent directory containing rgl directory
-
-    6. Run
-       
-       $ RCMD INSTALL rgl
-
-       
-  Build with MinGW
-
-    1. Change to parent directory containing rgl directory
-    
-    2. Run
-    
-       $ RCMD INSTALL rgl
-       
-    
-DOCUMENTATION
--------------
-
-See rgl manuals. For additional information, visit the website.
 
 
 CREDITS
 -------
-
-Code              Daniel Adler <dadler@uni-goettingen.de>
-Support           Oleg Nenadic <onenadi@uni-goettingen.de>
-MacOS X port      Simon Urbanek <simon.urbanek@math.uni-augsburg.de>
+Daniel Adler <dadler@uni-goettingen.de>
+Oleg Nenadic <onenadi@uni-goettingen.de>
+Simon Urbanek <simon.urbanek@math.uni-augsburg.de>
 
 
 WEBSITE
 -------
-
 http://wsopuppenkiste.wiso.uni-goettingen.de/~dadler/rgl
 
