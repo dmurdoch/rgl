@@ -1,0 +1,29 @@
+BUILDING ON X11 (MacOS X,Linux,FreeBSD,UN*X derivates)
+======================================================
+
+Several options can be tweaked from R INSTALL
+
+$ R CMD INSTALL [ --configure-args=<ARGS> ] rgl
+
+
+BUILD OPTIONS
+-------------
+  --x-includes=<path>
+    X11 C header files include path
+
+  --x-libraries=<path>
+    X11 library linkage path
+
+  --with-gl-includes=<path>
+    GL C header files include path
+
+  --with-gl-libraries=<path>
+    GL library linkage path
+
+  --with-gl-prefix=<libprefix>
+    GL library prefix (e.g. Mesa)
+  
+  --disable-png
+    explicitly do not use png pixmap format
+
+
