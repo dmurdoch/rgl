@@ -2,21 +2,32 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R,v 1.1 2003/03/25 00:13:21 dadler Exp $
+## $Id: material.R,v 1.2 2003/11/21 21:57:40 dadler Exp $
 ##
 
 ##
 ## ===[ SECTION: generic appearance function ]================================
 ##
 
-rgl.material <- function ( 
-  color = "white",  alpha = 1.0,
-  lit = TRUE, ambient = "black",  specular="white", emission = "black", shininess = 50.0, 
-  smooth = TRUE,  texture = NULL, textype = "rgb",
-  front = "fill", back = "fill",
-  size = 1.0, fog = TRUE )
-{
-
+rgl.material <- function (
+  color        = c("white"),
+  alpha        = c(1.0),
+  lit          = TRUE, 
+  ambient      = "black",
+  specular     = "white", 
+  emission     = "black", 
+  shininess    = 50.0, 
+  smooth       = TRUE,
+  texture      = NULL, 
+  textype      = "rgb", 
+  texmipmap    = FALSE, 
+  texminfilter = "linear", 
+  texmagfilter = "linear",
+  front        = "fill", 
+  back         = "fill",
+  size         = 1.0, 
+  fog          = TRUE
+) {
   # solid or diffuse component
 
   color     <- rgl.mcolor(color)
@@ -42,6 +53,8 @@ rgl.material <- function (
 
   # texture mapping
 
+  rgl.bool(texmipmap)
+
   if (length(texture) > 1)
     stop("texture should be a single character string or NULL")
 
@@ -49,6 +62,8 @@ rgl.material <- function (
     texture <- ""
 
   textype <- rgl.enum.textype( textype )
+  texminfilter <- rgl.enum.texminfilter( texminfilter )
+  texmagfilter <- rgl.enum.texmagfilter( texmagfilter )
 
   # vector length
 
@@ -57,7 +72,7 @@ rgl.material <- function (
 
   # pack data
 
-  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, nalpha, ambient, specular, emission, color ) )
+  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, nalpha, ambient, specular, emission, color ) )
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, alpha ))
 
