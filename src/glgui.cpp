@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: glgui.cpp,v 1.2 2004/05/28 11:19:41 dadler Exp $
+// $Id: glgui.cpp,v 1.3 2004/08/09 19:33:28 murdoch Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -11,19 +11,16 @@
 //   GLBitmapFont
 //
 
-void GLBitmapFont::draw(char* text, int length, int justify) {
+void GLBitmapFont::draw(char* text, int length, double adj) {
 
-  if (justify != 1) {
+  if (adj > 0) {
     unsigned int textWidth = 0;
 
     for(int i=0;i<length;i++)
       textWidth += widths[(text[i]-firstGlyph)];
 
-    if (justify == 0)
-      glBitmap(0,0, 0.0f,0.0f, - ((float)textWidth) * 0.5f, 0.0f, NULL);
-    else
-      glBitmap(0,0, 0.0f,0.0f, - ((float)textWidth), 0.0f, NULL);
-  } 
+    glBitmap(0,0, 0.0f,0.0f, - (float)(textWidth * adj), 0.0f, NULL);
+  }
 
   glCallLists(length, GL_UNSIGNED_BYTE, text);
 }

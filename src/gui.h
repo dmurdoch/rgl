@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h,v 1.7 2004/05/28 08:41:07 dadler Exp $
+// $Id: gui.h,v 1.8 2004/08/09 19:33:28 murdoch Exp $
 
 #include "types.h"
 #include "glgui.h"
@@ -65,7 +65,7 @@ public:
   virtual void update(void) = 0;
 
 #ifdef _WIN32
-  virtual void bringToTop(void) = 0;
+  virtual void bringToTop(int stay) = 0;
 #endif
 
   /// @doc notifyDestroy will be called on success
@@ -198,7 +198,7 @@ public:
   void wheelRotate(int dir);
 
 #ifdef _WIN32
-  void bringToTop(void);
+  void bringToTop(int stay);
 #endif
 
 // data:

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp,v 1.6 2004/05/28 08:41:07 dadler Exp $
+// $Id: gui.cpp,v 1.7 2004/08/09 19:33:28 murdoch Exp $
 
 #include "gui.h"
 #include "lib.h"
@@ -195,9 +195,9 @@ void Window::setVisibility(bool state)
 }
 
 #ifdef _WIN32
-void Window::bringToTop(void)
+void Window::bringToTop(int stay)
 {
-  windowImpl->bringToTop();
+  windowImpl->bringToTop(stay);
 }
 #endif
 

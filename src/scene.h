@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h,v 1.3 2003/11/21 21:56:03 dadler Exp $
+// $Id: scene.h,v 1.4 2004/08/09 19:33:29 murdoch Exp $
 
 
 #include "types.h"
@@ -441,6 +441,12 @@ public:
   LineSet(Material& material, int in_nelements, double* in_vertex);
 };
 
+class LineStripSet : public PrimitiveSet
+{
+public:
+  LineStripSet(Material& material, int in_nelements, double* in_vertex);
+};
+
 //
 // ABSTRACT CLASS
 //   FaceSet
@@ -511,7 +517,7 @@ public:
 
 class TextSet : public Shape {
 public:
-  TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, int in_justify);
+  TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, double adj);
   ~TextSet();
   void draw(RenderContext* renderContext);
 private:
@@ -519,7 +525,7 @@ private:
   VertexArray vertexArray;
   StringArray textArray;
 
-  int justify;
+  double adj;
 };
 
 //

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.5 2004/05/28 07:05:26 dadler Exp $
+// $Id: api.cpp,v 1.6 2004/08/09 19:33:28 murdoch Exp $
 
 #include "lib.h"
 
@@ -41,7 +41,7 @@ EXPORT_SYMBOL void rgl_dev_close     (int* successptr);
 EXPORT_SYMBOL void rgl_dev_getcurrent(int* successptr, int* idptr);
 EXPORT_SYMBOL void rgl_dev_setcurrent(int* successptr, int* idata);
 #ifdef _WIN32
-EXPORT_SYMBOL void rgl_dev_bringtotop(int* successptr);
+EXPORT_SYMBOL void rgl_dev_bringtotop(int* successptr, int* stay);
 #endif
 
 // device services
@@ -63,11 +63,14 @@ EXPORT_SYMBOL void rgl_bg       (int* successptr, int* idata);
 EXPORT_SYMBOL void rgl_bbox     (int* successptr, int* idata, double* ddata, double* xat, char** xtext, double* yat, char** ytext, double* zat, char** ztext);
 
 EXPORT_SYMBOL void rgl_primitive(int* successptr, int* idata, double* vertex);
-EXPORT_SYMBOL void rgl_texts    (int* successptr, int* idata, char** text, double* vertex);
+EXPORT_SYMBOL void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex);
 EXPORT_SYMBOL void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius);
 EXPORT_SYMBOL void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y);
 EXPORT_SYMBOL void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius);
 
+EXPORT_SYMBOL void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
+EXPORT_SYMBOL void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
+EXPORT_SYMBOL void rgl_projection(int* successptr, int* set, double* model, double* proj, int* view);
 } // extern C
 
 //
@@ -156,7 +159,7 @@ void rgl_dev_close(int* successptr)
 }
 
 #ifdef _WIN32
-void rgl_dev_bringtotop(int* successptr)
+void rgl_dev_bringtotop(int* successptr, int* stay)
 {
   bool success = false;
 
@@ -166,7 +169,7 @@ void rgl_dev_bringtotop(int* successptr)
 
   if (device) {
 
-    device->bringToTop();
+    device->bringToTop(*stay);
     success = true;
 
   }
@@ -384,6 +387,9 @@ void rgl_primitive(int* successptr, int* idata, double* vertex)
     case 4: // RGL_QUADS:
       node = new QuadSet( currentMaterial, nvertex, vertex);
       break;
+    case 5: // RGL_LINE_STRIP:
+      node = new LineStripSet( currentMaterial, nvertex, vertex);
+      break;
     default:
       node = NULL;
     }
@@ -492,7 +498,7 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   *successptr = success;
 }
 
-void rgl_texts(int* successptr, int* idata, char** text, double* vertex)
+void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex)
 {
   bool success = false;
 
@@ -500,9 +506,8 @@ void rgl_texts(int* successptr, int* idata, char** text, double* vertex)
 
   if (device) {
     int ntext   = idata[0];
-    int justify = idata[2];
 
-    success = device->add( new TextSet(currentMaterial, ntext, text, vertex, justify) );
+    success = device->add( new TextSet(currentMaterial, ntext, text, vertex, *adj) );
   }
 
   *successptr = (int) success;
@@ -559,5 +564,94 @@ void rgl_snapshot(int* successptr, int* idata, char** cdata)
   }
 
   *successptr = (int) success;
+}
+
+
+void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
+{
+  bool success = false;
+  GLdouble* vertex = pixel;
+  int columns = idata[0];
+
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+  	for (int i=0; i<columns; i++) {
+		gluProject(point[0],point[1],point[2],model,proj,view,
+		vertex,vertex+1,vertex+2);
+		vertex[0] /= view[2];
+		vertex[1] /= view[3];
+		point += 3;
+		vertex += 3;
+	}
+	success = true;
+  }
+
+  *successptr = (int) success;
+}
+
+void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
+{
+  bool success = false;
+  GLdouble* vertex = point;
+  int columns = idata[0];
+
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+  	for (int i=0; i<columns; i++) {
+	        pixel[0] *= view[2];
+	        pixel[1] *= view[3];
+		gluUnProject(pixel[0],pixel[1],pixel[2],model,proj,view,
+		vertex,vertex+1,vertex+2);
+		pixel += 3;
+		vertex += 3;
+	}
+	success = true;
+  }
+
+  *successptr = (int) success;
+}
+
+void rgl_projection(int* successptr, int* set, double* model, double* proj, int* view)
+{
+    bool success = false;
+    GLdouble td;
+    GLint ti;
+    int i;
+    Device* device = deviceManager->getCurrentDevice();
+
+
+    if (device){
+
+		RGLView* rglview = device->getRGLView();
+		if (*set) {
+		for (i=0; i<16; i++) {
+	    	td = rglview->modelMatrix[i];
+	    	rglview->modelMatrix[i] = model[i];
+	    	model[i] = td;
+	    	td = rglview->projMatrix[i];
+	    	rglview->projMatrix[i] = proj[i];
+	    	proj[i] = td;
+		}
+		for (i=0; i<4; i++) {
+	    	ti = rglview->viewport[i];
+	    	rglview->viewport[i] = view[i];
+	    	view[i] = ti;
+		}
+    	} else {
+		for (i=0; i<16; i++) {
+	    	model[i] = rglview->modelMatrix[i];
+	    	proj[i] = rglview->projMatrix[i];
+		}
+		for (i=0; i<4; i++)
+	    	view[i] = rglview->viewport[i];
+    	}
+
+    	success = true;
+	}
+
+	*successptr = success;
+
 }
 

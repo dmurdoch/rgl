@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp,v 1.7 2004/05/28 11:19:41 dadler Exp $
+// $Id: scene.cpp,v 1.8 2004/08/09 19:33:28 murdoch Exp $
 
 #include "scene.h"
 #include "math.h"
@@ -1583,6 +1583,17 @@ LineSet::LineSet(Material& in_material, int in_nelements, double* in_vertex)
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
+//   LineStripSet
+//
+LineStripSet::LineStripSet(Material& in_material, int in_nelements, double* in_vertex)
+  : PrimitiveSet(in_material, GL_LINE_STRIP, in_nelements, in_vertex)
+{
+  material.lit = false;
+};
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// CLASS
 //   FaceSet
 //
 
@@ -1645,7 +1656,7 @@ QuadSet::QuadSet(Material& in_material, int in_nelements, double* in_vertex)
 //   a separate length buffer holds string lengths in order
 //
 
-TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, int in_justify)
+TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, double in_adj)
  : Shape(in_material), textArray(in_ntexts, in_texts)
 {
   int i;
@@ -1653,7 +1664,7 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
   material.lit = false;
   material.colorPerVertex(false);
 
-  justify = in_justify;
+  adj = in_adj;
 
   // init vertex array
 
@@ -1688,7 +1699,7 @@ void TextSet::draw(RenderContext* renderContext) {
     material.useColor(cnt);
     glRasterPos3f( vertexArray[cnt].x, vertexArray[cnt].y, vertexArray[cnt].z );
     String text = iter.getCurrent();
-    renderContext->font->draw( text.text, text.length, justify );
+    renderContext->font->draw( text.text, text.length, adj );
   }
 
   material.endUse(renderContext);
@@ -1923,7 +1934,7 @@ void Texture::beginUse(RenderContext* renderContext)
     glBindTexture(GL_TEXTURE_2D, texName);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);                                                       
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magfilter);
 
     GLint  internalFormat = 0;

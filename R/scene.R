@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.5 2004/03/03 22:09:44 dadler Exp $
+## $Id: scene.R,v 1.6 2004/08/09 19:33:27 murdoch Exp $
 ##
 
 ##
@@ -249,6 +249,11 @@ rgl.quads <- function ( x, y, z, ... )
   rgl.primitive( "quadrangles", x, y, z, ... )
 }
 
+rgl.linestrips<- function ( x, y, z, ... )
+{
+  rgl.primitive( "linestrips", x, y, z, ... )
+}
+
 ##
 ## add surface
 ##
@@ -318,7 +323,7 @@ rgl.spheres <- function( x, y, z,radius=1.0,...)
 ## add texts
 ##
 
-rgl.texts <- function(x, y, z, text, justify="center", ... )
+rgl.texts <- function(x, y, z, text, adj = 0.5, ... )
 {
   rgl.material( ... )
 
@@ -326,13 +331,12 @@ rgl.texts <- function(x, y, z, text, justify="center", ... )
   nvertex <- rgl.nvertex(vertex)
   text    <- rep(text, length.out=nvertex)
 
-  justify <- rgl.enum.halign( justify );
-
-  idata <- as.integer( c(nvertex, justify) )
+  idata <- as.integer(nvertex)
 
   ret <- .C( symbol.C("rgl_texts"),
     success=FALSE,
     idata,
+    as.double(adj),
     as.character(text),
     as.numeric(vertex),
     PACKAGE="rgl"
@@ -370,3 +374,106 @@ rgl.sprites <- function( x, y, z, radius=1.0, ... )
     print("rgl_sprites failed")
 
 }
+
+##
+## convert user coordinate to window coordinate
+## Ming Chen
+
+rgl.user2window <- function( x, y, z, projection = rgl.getprojection())
+{
+  
+  points <- rbind(x,y,z)
+  idata  <- as.integer(ncol(points))
+  
+  ret <- .C( symbol.C("rgl_user2window"),
+  	success=FALSE,
+	idata,
+	as.double(points),
+	window=double(length(points)),
+	model=as.double(projection$model),
+	proj=as.double(projection$proj),
+	view=as.integer(projection$view),
+	PACKAGE="rgl"
+  )
+
+  if (! ret$success)
+    stop("rgl_user2window failed")
+  return(matrix(ret$window, ncol(points), 3, byrow = TRUE))
+}
+
+##
+## convert window coordiate to user coordiante
+## Ming Chen
+
+rgl.window2user <- function( x, y, z = 0, projection = rgl.getprojection())
+{
+  
+  window <- rbind(x,y,z)
+  idata  <- as.integer(ncol(window))
+  
+  ret <- .C( symbol.C("rgl_window2user"),
+  	success=FALSE,
+	idata,
+	point=double(length(window)),
+	window,
+	model=as.double(projection$model),
+	proj=as.double(projection$proj),
+	view=as.integer(projection$view),
+	PACKAGE="rgl"
+  )
+
+  if (! ret$success)
+    stop("rgl_window2user failed")
+  return(matrix(ret$point, ncol(window), 3, byrow = TRUE))
+}
+
+rgl.getprojection <- function()
+{
+    ret <- .C( symbol.C("rgl_projection"),
+    	success=FALSE,
+    	set = as.integer(0),
+    	model = double(16),
+    	proj = double(16),
+    	view = integer(4),
+    	PACKAGE = "rgl"
+    )
+    
+    if (! ret$success)
+	    stop("rgl_projection")
+	    
+    list(model = matrix(ret$model, 4, 4),
+    	 proj = matrix(ret$proj, 4, 4),
+    	 view = ret$view)
+}
+
+points3d <- function ( x, y, z, ... )
+{
+  rgl.primitive( "points", x, y, z, ... )
+}
+
+lines3d <- function ( x, y, z, ... )
+{
+  rgl.primitive( "linestrips", x, y, z, ... )
+}
+
+segments3d <- function ( x, y, z, ... )
+{
+  rgl.primitive( "lines", x, y, z, ... )
+}
+
+triangles3d <- function ( x, y, z, ... )
+{
+  rgl.primitive( "triangles", x, y, z, ... )
+}
+
+
+quads3d <- function ( x, y, z, ... )
+{
+  rgl.primitive( "quadrangles", x, y, z, ... )
+}
+
+text3d <- function(x, y, z, text, adj = 0.5, ... )
+{
+	rgl.texts(x, y, z, text, adj = adj, ... )
+}
+

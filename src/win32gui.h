@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: win32gui.h,v 1.3 2004/05/28 12:06:31 dadler Exp $
+// $Id: win32gui.h,v 1.4 2004/08/09 19:33:29 murdoch Exp $
 
 
 #include "gui.h"

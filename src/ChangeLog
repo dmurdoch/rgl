@@ -97,3 +97,12 @@ v0.64-12
 v0.64-13
   - DESCRIPTION fix: moved R 1.41 -> R 1.4.1 dependency
 
+v0.64-14
+  Merging changes from murdoch-branch:  
+  - text justification from 0 to 1
+  - linestrips
+  - djmrgl style functions:  points3d, etc.
+  - fixed rgl.bringtotop, added stay option
+  - added 4x4 matrix functions from djmrgl
+  - added rgl.user2window and rgl.window2user functions
+  

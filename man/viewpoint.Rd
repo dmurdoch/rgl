@@ -30,8 +30,8 @@ With the pointing device you can use the buttons as follows:
 
 # animated round trip tour
 
-for(i in 1:360) {
-  rgl.viewpoint(i,i/4); 
+for(i in 1:36) {
+  rgl.viewpoint(i*10,i*10/4); 
 }
 
 }
