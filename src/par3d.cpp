@@ -29,13 +29,11 @@ static void par_error(char *what)
     error(_("invalid value specified for rgl parameter \"%s\""),  what);
 }
 
-#ifdef UNUSED
 static void lengthCheck(char *what, SEXP v, int n)
 {
     if (length(v) != n)
 	error(_("parameter \"%s\" has the wrong length"), what);
 }
-#endif
 
 static void dimCheck(char *what, SEXP v, int r, int c)
 {
@@ -62,6 +60,7 @@ static void naIntCheck(int x, char *s)
     if (x == NA_INTEGER)
 	par_error(s);
 }
+#endif
 
 static void posRealCheck(double x, char *s)
 {
@@ -69,6 +68,7 @@ static void posRealCheck(double x, char *s)
 	par_error(s);
 }
 
+#ifdef UNUSED
 static void nonnegRealCheck(double x, char *s)
 {
     if (!R_FINITE(x) || x < 0)
@@ -80,7 +80,7 @@ static void naRealCheck(double x, char *s)
     if (!R_FINITE(x))
 	par_error(s);
 }
-
+#endif
 
 static void BoundsCheck(double x, double a, double b, char *s)
 {
@@ -88,7 +88,10 @@ static void BoundsCheck(double x, double a, double b, char *s)
     if (!R_FINITE(x) || (R_FINITE(a) && x < a) || (R_FINITE(b) && x > b))
 	par_error(s);
 }
-#endif
+
+/* These modes must match the definitions of mmTRACKBALL etc in rglview.h ! */ 
+
+char* mouseModes[] = {"none", "trackball", "polar", "selecting", "zoom", "fov"};
 
 static void Specify(char *what, SEXP value)
 {
@@ -98,16 +101,53 @@ static void Specify(char *what, SEXP value)
 
  */
     SEXP x;
+    double v;
     int success;
-    
+
     success = 0;
 
-    if (streql(what, "userMatrix")) {
+    if (streql(what, "FOV")) {
+    	lengthCheck(what, value, 1);	v = asReal(value);
+	BoundsCheck(v, 1.0, 179.0, what);
+	rgl_setFOV(&success, &v);
+    }
+    else if (streql(what, "mouseMode")) {
+    	value = coerceVector(value, STRSXP);
+	if (length(value) > 3) par_error(what);   
+        for (int i=1; i<=3 && i <= length(value); i++) {
+            if (STRING_ELT(value, i-1) != NA_STRING) {
+		success = 0;
+		/* check exact first, then partial */
+		for (int mode = 0; mode < 6; mode++) {
+		    if (psmatch(mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)TRUE)) {
+			rgl_setMouseMode(&success, &i, &mode);
+			break;
+		    }
+		}
+		if (!success) {
+		    for (int mode = 0; mode < 6; mode++) {
+			if (psmatch(mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)FALSE)) {
+			    rgl_setMouseMode(&success, &i, &mode);
+			    break;
+			}
+		    }		
+		}
+		if (!success) par_error(what);
+	    }
+   	}
+    }
+    else if (streql(what, "userMatrix")) {
 	dimCheck(what, value, 4, 4);
 	x = coerceVector(value, REALSXP);
 	
 	rgl_setUserMatrix(&success, REAL(x));
     }
+    else if (streql(what, "zoom")) {
+    	lengthCheck(what, value, 1);	v = asReal(value);
+	posRealCheck(v, what);
+	rgl_setZoom(&success, &v);
+    }
+    
      else warning(_("parameter \"%s\" cannot be set"), what);
  
     if (!success) par_error(what);
@@ -119,13 +159,6 @@ static void Specify(char *what, SEXP value)
  /* Do NOT forget to update  ../R/par3d.R */
  /* if you  ADD a NEW  par !! */
  
-/* These defines are repeated here in a C context */
-
-#define mmTRACKBALL 	1
-#define mmPOLAR 	2
-#define mmSELECTING 	3
-#define mmZOOM 		4
-#define mmFOV		5
  
 static SEXP Query(char *what)
 {
@@ -145,26 +178,9 @@ static SEXP Query(char *what)
     else if (streql(what, "mouseMode")) {
     	PROTECT(value = allocVector(STRSXP, 3));
     	for (i=1; i<4; i++) {
-    	    rgl_getMouseMode(&success, &i, &mode); 
-    	    switch(mode) {
-    	    case mmTRACKBALL:
-    	    	SET_STRING_ELT(value, i-1, mkChar("trackball"));
-    	    	break;
-    	    case mmPOLAR:
-    	    	SET_STRING_ELT(value, i-1, mkChar("polar"));
-    	    	break;
-    	    case mmSELECTING:
-    	    	SET_STRING_ELT(value, i-1, mkChar("selecting"));
-    	    	break;
-    	    case mmZOOM:
-    	    	SET_STRING_ELT(value, i-1, mkChar("zoom"));
-    	    	break;
-    	    case mmFOV:
-    	    	SET_STRING_ELT(value, i-1, mkChar("fov"));
-    	    	break;
-    	    default:
-    	    	SET_STRING_ELT(value, i-1, mkChar("none"));
-    	    };
+	    rgl_getMouseMode(&success, &i, &mode); 
+	    if (mode < 0 || mode > 5) mode = 0;
+	    SET_STRING_ELT(value, i-1, mkChar(mouseModes[mode]));
     	};    
     	PROTECT(names = allocVector(STRSXP, 3));
     	SET_STRING_ELT(names, 0, mkChar("left"));

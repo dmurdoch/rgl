@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.12 2005/02/15 19:35:20 dadler Exp $
+// $Id: api.cpp,v 1.13 2005/02/17 15:17:02 murdoch Exp $
 
 #include "lib.h"
 
@@ -314,6 +314,21 @@ void rgl_getZoom(int* successptr, double* zoom)
   *successptr = success;
 }
 
+void rgl_setZoom(int* successptr, double* zoom)
+{
+  bool success = false;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Viewpoint* viewpoint = scene->getViewpoint();
+    viewpoint->setZoom((*zoom - 1.0f)/((float)(VIEWPOINT_MAX_ZOOM-1)));
+    rglview->update();
+    success = true;
+  }
+  *successptr = success;
+}
 
 void rgl_getFOV(int* successptr, double* fov)
 {
@@ -325,6 +340,22 @@ void rgl_getFOV(int* successptr, double* fov)
     Scene* scene = rglview->getScene();
     Viewpoint* viewpoint = scene->getViewpoint();
     *fov = viewpoint->getFOV();
+    success = true;
+  }
+  *successptr = success;
+}
+
+void rgl_setFOV(int* successptr, double* fov)
+{
+  bool success = false;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Viewpoint* viewpoint = scene->getViewpoint();
+    viewpoint->setFOV(*fov);
+    rglview->update();
     success = true;
   }
   *successptr = success;
@@ -585,7 +616,7 @@ void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, 
 void rgl_getMouseMode(int* successptr, int *button, int* mode)
 {
   bool success = false;
-  Device* device = deviceManager->getCurrentDevice();
+  Device* device = deviceManager->getAnyDevice();
 
   if (device) {
  	RGLView* rglview = device->getRGLView();
@@ -599,7 +630,7 @@ void rgl_getMouseMode(int* successptr, int *button, int* mode)
 void rgl_setMouseMode(int* successptr, int* button, int* mode)
 {
   bool success = false;
-  Device* device = deviceManager->getCurrentDevice();
+  Device* device = deviceManager->getAnyDevice();
 
   if (device) {
  	RGLView* rglview = device->getRGLView();
@@ -617,7 +648,7 @@ void rgl_selectstate(int* successptr, int* selectstate, double* locations)
 	bool success = false;
 	Device* device;
 
-	device = deviceManager->getCurrentDevice();
+	device = deviceManager->getAnyDevice();
 
   	if (device){
 
@@ -640,7 +671,7 @@ void rgl_selectstate(int* successptr, int* selectstate, double* locations)
 void rgl_setselectstate(int* successptr, int *idata)
 {
   bool success = false;
-  Device* device = deviceManager->getCurrentDevice();
+  Device* device = deviceManager->getAnyDevice();
 
   if (device) {
 
@@ -667,7 +698,7 @@ void rgl_projection(int* successptr, double* model, double* proj, double* view)
 void rgl_getUserMatrix(int* successptr, double* userMatrix)
 {
 	bool success = false;
-  	Device* device = deviceManager->getCurrentDevice();
+  	Device* device = deviceManager->getAnyDevice();
 
   	if (device) {
 
@@ -685,7 +716,7 @@ void rgl_setUserMatrix(int* successptr, double* userMatrix)
 {
 
 	bool success = false;
-  	Device* device = deviceManager->getCurrentDevice();
+  	Device* device = deviceManager->getAnyDevice();
 
   	if (device) {
 
@@ -703,7 +734,7 @@ void rgl_setUserMatrix(int* successptr, double* userMatrix)
 void rgl_getModelMatrix(int* successptr, double* modelMatrix)
 {
 	bool success = false;
-  	Device* device = deviceManager->getCurrentDevice();
+  	Device* device = deviceManager->getAnyDevice();
 
 	if (device){
 
@@ -720,7 +751,7 @@ void rgl_getModelMatrix(int* successptr, double* modelMatrix)
 void rgl_getProjMatrix(int* successptr, double* projMatrix)
 {
 	bool success = false;
-  	Device* device = deviceManager->getCurrentDevice();
+  	Device* device = deviceManager->getAnyDevice();
 
 	if (device){
 
@@ -737,7 +768,7 @@ void rgl_getProjMatrix(int* successptr, double* projMatrix)
 void rgl_getViewport(int* successptr, double* viewport)
 {
 	bool success = false;
-  	Device* device = deviceManager->getCurrentDevice();
+  	Device* device = deviceManager->getAnyDevice();
 
 	if (device){
 

@@ -4,10 +4,9 @@
 	   "viewport", "zoom"
 	   )
 	   
-.Par3d.readonly <- c("FOV", 
-	   "mouseMode", 
-	   "modelMatrix", "projMatrix", 
-	   "viewport", "zoom"
+.Par3d.readonly <- c( 
+	   "modelMatrix", "projMatrix",
+	   "viewport"
 	   )
 
 par3d <- function (..., no.readonly = FALSE)
@@ -19,7 +18,7 @@ par3d <- function (..., no.readonly = FALSE)
                         .Par3d[-match(.Par3d.readonly, .Par3d)]
         else .Par3d)
     else {
-	if (all(unlist(lapply(args, is.character))))
+	if (is.null(names(args)) && all(unlist(lapply(args, is.character))))
 	    args <- as.list(unlist(args))
 	if (length(args) == 1) {
 	    if (is.list(args[[1]]) | is.null(args[[1]]))

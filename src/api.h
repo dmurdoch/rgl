@@ -77,7 +77,9 @@ EXPORT_SYMBOL void rgl_projection(int* successptr, double* model, double* proj, 
 EXPORT_SYMBOL void rgl_getUserMatrix(int* successptr, double* userMatrix);
 EXPORT_SYMBOL void rgl_setUserMatrix(int* successptr, double* userMatrix);
 EXPORT_SYMBOL void rgl_getZoom(int* successptr, double* zoom);
+EXPORT_SYMBOL void rgl_setZoom(int* successptr, double* zoom);
 EXPORT_SYMBOL void rgl_getFOV(int* successptr, double* fov);
+EXPORT_SYMBOL void rgl_setFOV(int* successptr, double* fov);
 EXPORT_SYMBOL void rgl_getModelMatrix(int* successptr, double* modelMatrix);
 EXPORT_SYMBOL void rgl_getProjMatrix(int* successptr, double* projMatrix);
 EXPORT_SYMBOL void rgl_getViewport(int* successptr, double* viewport);

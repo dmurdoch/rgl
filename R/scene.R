@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.9 2004/09/05 20:03:09 murdoch Exp $
+## $Id: scene.R,v 1.10 2005/02/17 15:17:02 murdoch Exp $
 ##
 
 ##
@@ -85,53 +85,6 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, inte
   if (! ret$success)
     stop("rgl_viewpoint")
 }
-
-##
-## get and set zoom
-##
-##
-
-rgl.zoom <- function(zoom)
-{
-	ret <- .C( symbol.C("rgl_getZoom"), 
-		  success=FALSE,
-		  zoom = double(1), 
-		  PACKAGE = "rgl")
-
-	if (! ret$success)
-		stop("rgl_zoom")
-	lastroom  <- ret$zoom
-	
-	if (! missing(zoom))
-		rgl.viewpoint(zoom = zoom, fov = rgl.fov(), userMatrix = rgl.userMatrix()) 
-	
-	lastroom
-	
-}
-
-
-
-##
-## get and set FOV
-##
-##
-
-rgl.fov <- function(fov)
-{
-    ret <- .C( symbol.C("rgl_getFOV"), 
-      success=FALSE,
-      fov = double(1), 
-      PACKAGE = "rgl")
-      
-    if (! ret$success)
-      stop("rgl_fov")
-    lastfov <- ret$fov
-    
-    if (! missing(fov))
-    	rgl.viewpoint(fov=fov, zoom = rgl.zoom(), userMatrix = rgl.userMatrix()) 
-    lastfov
-    
-}	
 
 ##
 ## set background
@@ -592,27 +545,3 @@ rgl.select3d <- function() {
   }
 }
 
-
-rgl.userMatrix <- function(userMatrix)
-{
-	prev <- .C( symbol.C("rgl_getUserMatrix"),
-    	success=FALSE,
-    	userMatrix = double(16),
-    	PACKAGE="rgl"
-  	)
-
-  	if (! prev$success)
-    	stop("getUserMatrix failed")
-    	prev <- matrix(prev$userMatrix, 4, 4)
-    	if (!missing(userMatrix)) {
-	    ret <- .C( symbol.C("rgl_setUserMatrix"),
-    			success=FALSE,
-    			userMatrix = as.double(userMatrix),
-    			PACKAGE="rgl"
-  			)
-
-  	    if (! ret$success)
-    	    stop("setUserMatrix failed")
-	}
-	prev
-}

@@ -1,4 +1,4 @@
-\name{rgl.viewpoint}
+\name{viewpoint}
 \alias{rgl.viewpoint}
 \title{setup viewpoint}
 \description{
