@@ -3,7 +3,7 @@
 #
 # Usage: make info 
 #
-# $Id: Maintainer.mk,v 1.6 2004/01/30 13:15:20 dadler Exp $
+# $Id: Maintainer.mk,v 1.7 2004/01/30 13:36:25 dadler Exp $
 #
 
 all: info
@@ -25,10 +25,10 @@ LPNG=lpng125
 checkout:
 	rm -Rf $(CVSDIR)
 	mkdir -p $(CVSDIR)
-	cd $(CVSDIR) ; cvs checkout rgl
+	cd $(CVSDIR) ; cvs checkout -P rgl
 
 update:
-	cd $(CVSDIR)/rgl ; cvs update
+	cd $(CVSDIR)/rgl ; cvs update -dP
 
 
 # --- SOURCE SETUP ------------------------------------------------------------
@@ -101,3 +101,5 @@ destdir:
 	mkdir -p $(DESTDIR)/win32-vc
 	mkdir -p $(DESTDIR)/src
 
+maintainer-clean:
+	rm -Rf $(CVSDIR) $(SRCDIR) $(DESTDIR) $(ARCDIR)
