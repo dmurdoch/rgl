@@ -1,6 +1,7 @@
 #ifndef VIEWPOINT_HPP
 #define VIEWPOINT_HPP
 
+#include "opengl.h"
 #include "SceneNode.hpp"
 
 #include "render.h"
@@ -14,9 +15,10 @@ class Viewpoint : public SceneNode
 public:
 
   Viewpoint(PolarCoord position=PolarCoord(0.0f,15.0f), float fov=90.0f, float zoom=0.0f, bool interactive=true);
-  
+  Viewpoint(double* userMatrix, float fov=90.0f, float zoom=0.0f, bool interactive=true);
   PolarCoord& getPosition();
   void        setPosition(const PolarCoord& position);
+  void	      clearMouseMatrix();
   float       getZoom(void) const; 
   void        setZoom(const float zoom);
   float       getFOV(void) const;
@@ -25,6 +27,11 @@ public:
   void        setupTransformation(RenderContext* rctx, const Sphere& viewvolumeSphere);
   void        setupOrientation(RenderContext* rctx) const;
   bool        isInteractive() const;
+  void        updateMouseMatrix(Vertex dragStart,Vertex dragCurrent);
+  void	      updateMouseMatrix(PolarCoord newpos);
+  void 	      mergeMouseMatrix();
+  void        getUserMatrix(double* dest);
+  void	      setUserMatrix(double* src);
   Frustum     frustum;
   Vertex      getCOP(const Sphere& viewvolumeSphere) const;
 
@@ -33,6 +40,7 @@ private:
   float       fov;
   float       zoom;
   bool        interactive;
+  GLdouble    userMatrix[16], mouseMatrix[16];
 
 };
 

@@ -106,4 +106,5 @@ v0.64-14
   - added 4x4 matrix functions from djmrgl
   - added rgl.user2window and rgl.window2user functions
   - added selection functions
-  
+  - added trackball navigation functions
+  - added user-selectable mouse handlers  

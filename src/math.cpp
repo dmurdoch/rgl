@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: math.cpp,v 1.3 2004/08/27 15:58:57 dadler Exp $
+// $Id: math.cpp,v 1.4 2004/09/05 20:03:10 murdoch Exp $
 
 #include "math.h"
 
@@ -29,6 +29,15 @@ Vec3 Vec3::cross(Vec3 op2) const
   v.y = z * op2.x - x * op2.z;
   v.z = x * op2.y - y * op2.x;
   return v;
+}
+
+float Vec3::angle(Vec3 op2) const
+{
+
+  float dot;
+  dot = x*op2.x + y*op2.y + z*op2.z;
+  return rad2degf(acosf( dot/(this->getLength() * op2.getLength())));
+
 }
 
 Vec3 Vec3::operator * (float s)
@@ -231,6 +240,12 @@ void Matrix4x4::setRotate(const int axis, const float degree) {
       ref(1,1) = c;
       break;
   }
+}
+
+void Matrix4x4::getData(double* dest)
+{
+	for(int i=0;i<16;i++)
+    	dest[i] = data[i];
 }
 
 Vertex PolarCoord::vector() const { 

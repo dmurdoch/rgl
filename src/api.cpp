@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.8 2004/08/27 15:58:57 dadler Exp $
+// $Id: api.cpp,v 1.9 2004/09/05 20:03:10 murdoch Exp $
 
 #include "lib.h"
 
@@ -71,17 +71,24 @@ EXPORT_SYMBOL void rgl_sprites  (int* successptr, int* idata, double* vertex, do
 EXPORT_SYMBOL void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
 EXPORT_SYMBOL void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
 EXPORT_SYMBOL void rgl_locator(int* successptr, double* locations);
-EXPORT_SYMBOL void rgl_mousemode(int* successptr, int* idata);
+EXPORT_SYMBOL void rgl_mouseMode(int* successptr, int* idata, int* ddata);
 EXPORT_SYMBOL void rgl_selectstate(int* successptr, int* selectstate, double* locations);
 EXPORT_SYMBOL void rgl_setselectstate(int* successptr, int *idata);
-EXPORT_SYMBOL void rgl_projection(int* successptr, int* set, double* model, double* proj, int* view);
+EXPORT_SYMBOL void rgl_projection(int* successptr, double* model, double* proj, int* view);
+EXPORT_SYMBOL void rgl_getUserMatrix(int* successptr, double* userMatrix);
+EXPORT_SYMBOL void rgl_setUserMatrix(int* successptr, double* userMatrix);
+EXPORT_SYMBOL void rgl_getZoom(int* successptr, double* zoom);
+EXPORT_SYMBOL void rgl_getFOV(int* successptr, double* fov);
+
+
 } // extern C
+
+#include "devicemanager.h"
+#include "rglview.h"
 
 //
 // GLOBAL: deviceManager pointer
 //
-
-#include "devicemanager.h"
 
 DeviceManager* deviceManager = NULL;
 
@@ -351,17 +358,47 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
 
   if (device) {
 
-    float theta       = (float) ddata[0];
-    float phi         = (float) ddata[1];
-    float fov         = (float) ddata[2];
-    float zoom        = (float) ddata[3];
+    float fov         = (float) ddata[0];
+    float zoom        = ((float) ddata[1] - 1.0f)/((float)(VIEWPOINT_MAX_ZOOM-1));
 
     int   interactive =         idata[0];
 
-    success = device->add( new Viewpoint( PolarCoord(theta, phi), fov, zoom, interactive) );
+    success = device->add( new Viewpoint(ddata+2, fov, zoom, interactive) );
 
   }
 
+  *successptr = success;
+}
+
+void rgl_getZoom(int* successptr, double* zoom)
+{
+  bool success = false;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Viewpoint* viewpoint = scene->getViewpoint();
+    *zoom = viewpoint->getZoom();
+    *zoom = 1.0f+(*zoom)* ((float)(VIEWPOINT_MAX_ZOOM-1)) ;
+    success = true;
+  }
+  *successptr = success;
+}
+
+
+void rgl_getFOV(int* successptr, double* fov)
+{
+  bool success = false;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Viewpoint* viewpoint = scene->getViewpoint();
+    *fov = viewpoint->getFOV();
+    success = true;
+  }
   *successptr = success;
 }
 
@@ -617,21 +654,21 @@ void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, 
   *successptr = (int) success;
 }
 
-#include "rglview.h"
-
-void rgl_mousemode(int* successptr, int *idata)
+void rgl_mouseMode(int* successptr, int *idata, int* ddata)
 {
   bool success = false;
   Device* device = deviceManager->getCurrentDevice();
 
   if (device) {
+	int button = ddata[0];
 
-    MouseModeID mouseMode = (MouseModeID) idata[0];
-	RGLView* rglview = device->getRGLView();
-	rglview->setMouseMode(mouseMode);
+	MouseModeID mouseMode = (MouseModeID) idata[0];
+ 	RGLView* rglview = device->getRGLView();
+        (MouseModeID)(idata[0]) = rglview->getMouseMode(button);
 
-    success = true;
+	rglview->setMouseMode(button, mouseMode);
 
+    	success = true;
   }
 
   *successptr = success;
@@ -680,11 +717,9 @@ void rgl_setselectstate(int* successptr, int *idata)
   *successptr = success;
 }
 
-void rgl_projection(int* successptr, int* set, double* model, double* proj, int* view)
+void rgl_projection(int* successptr, double* model, double* proj, int* view)
 {
     bool success = false;
-    GLdouble td;
-    GLint ti;
     int i;
     Device* device = deviceManager->getCurrentDevice();
 
@@ -692,33 +727,53 @@ void rgl_projection(int* successptr, int* set, double* model, double* proj, int*
     if (device){
 
 		RGLView* rglview = device->getRGLView();
-		if (*set) {
-		for (i=0; i<16; i++) {
-	    	td = rglview->modelMatrix[i];
-	    	rglview->modelMatrix[i] = model[i];
-	    	model[i] = td;
-	    	td = rglview->projMatrix[i];
-	    	rglview->projMatrix[i] = proj[i];
-	    	proj[i] = td;
-		}
-		for (i=0; i<4; i++) {
-	    	ti = rglview->viewport[i];
-	    	rglview->viewport[i] = view[i];
-	    	view[i] = ti;
-		}
-    	} else {
 		for (i=0; i<16; i++) {
 	    	model[i] = rglview->modelMatrix[i];
 	    	proj[i] = rglview->projMatrix[i];
 		}
 		for (i=0; i<4; i++)
 	    	view[i] = rglview->viewport[i];
-    	}
 
-    	success = true;
+    		success = true;
 	}
 
 	*successptr = success;
+
+}
+
+void rgl_getUserMatrix(int* successptr, double* userMatrix)
+{
+	bool success = false;
+  	Device* device = deviceManager->getCurrentDevice();
+
+  	if (device) {
+
+		RGLView* rglview = device->getRGLView();
+		rglview->getUserMatrix(userMatrix);
+
+    	success = true;
+
+  	}
+
+  *successptr = success;
+}
+
+void rgl_setUserMatrix(int* successptr, double* userMatrix)
+{
+
+	bool success = false;
+  	Device* device = deviceManager->getCurrentDevice();
+
+  	if (device) {
+
+		RGLView* rglview = device->getRGLView();
+		rglview->setUserMatrix(userMatrix);
+
+		success = true;
+
+  	}
+
+  *successptr = success;
 
 }
 

@@ -12,12 +12,15 @@ rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 0, interactive = TRUE )
   \item{fov}{field-of-view angle}
   \item{zoom}{zoom factor}
   \item{interactive}{logical, specifying if interactive navigation is allowed}
+  \item{userMatrix}{4x4 matrix specifying user point of view}
 }
 \details{
-The viewpoint is always set in an orbit around the data model. 
-It can be either specified with \code{rgl.viewpoint} or interactively using the pointing device of
-your graphics user-interface.
-With the pointing device you can use the buttons as follows:
+The viewpoint can be set in an orbit around the data model, using the polar coordinates \code{\theta}
+and \code{phi}.  Alternatively, it can be set in a completely general way using the 4x4 matrix
+\code{userMatrix}.  If \code{userMatrix} is specified, \code{theta} and \code{phi} are ignored.
+
+The pointing device of your graphics user-interface can also be used to 
+set the viewpoint interactively. With the pointing device the buttons are by default set as follows:
 
 \itemize{
 \item{left}{adjust viewpoint position}
@@ -26,12 +29,13 @@ With the pointing device you can use the buttons as follows:
 }
 
 }
+\seealso{\code{\link{rgl.mouseMode}}}
 \examples{
 
 # animated round trip tour
 
-for(i in 1:36) {
-  rgl.viewpoint(i*10,i*10/4); 
+for(i in 1:360) {
+  rgl.viewpoint(i,i/4); 
 }
 
 }

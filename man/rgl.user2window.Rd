@@ -7,8 +7,8 @@ This function converts from 3-dimensional user coordinates
 to 3-dimensional window coordinates.
 }
 \usage{
-rgl.user2window(x, y, z, projection = rgl.getprojection())
-rgl.window2user(x, y, z = 0, projection = rgl.getprojection())
+rgl.user2window(x, y, z, projection = rgl.projection())
+rgl.window2user(x, y, z = 0, projection = rgl.projection())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

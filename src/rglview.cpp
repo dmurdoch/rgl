@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp,v 1.5 2004/08/27 15:58:57 dadler Exp $
+// $Id: rglview.cpp,v 1.6 2004/09/05 20:03:10 murdoch Exp $
 
 #include "rglview.h"
 #include "opengl.h"
@@ -13,14 +13,6 @@
 #include "select.h"
 
 //
-// GUI config
-//
-
-#define BUTTON_DRAGDIRECTION   GUI_ButtonLeft
-#define BUTTON_DRAGZOOM        GUI_ButtonRight
-#define BUTTON_DRAGFOV         GUI_ButtonMiddle
-
-//
 // CAMERA config
 //
 
@@ -29,13 +21,14 @@
 
 
 RGLView::RGLView(Scene* in_scene)
- : View(0,0,256,256,0), camBase(0.0f,0.0f), dragBase(0.0f,0.0f),dragCurrent(0.0f,0.0f), autoUpdate(false)
+ : View(0,0,256,256,0), dragBase(0.0f,0.0f),dragCurrent(0.0f,0.0f), autoUpdate(false)
 {
-  scene = in_scene;   
+  scene = in_scene;
   drag  = 0;
   flags = 0;
-  mouseMode = mmNAVIGATING;
   selectState = msNONE;
+
+  setDefaultMouseFunc();
 }
 
 RGLView::~RGLView()
@@ -118,74 +111,34 @@ void RGLView::keyPress(int key)
 
 void RGLView::buttonPress(int button, int mouseX, int mouseY)
 {
-
-    if (mouseMode == mmSELECTING)
-  	mouseSelectionBegin(mouseX,mouseY);
-    else{
-	Viewpoint* viewpoint = scene->getViewpoint();
-	  if ( viewpoint->isInteractive() ) {
-	    if (!drag) {
-	      drag = button;
-	      windowImpl->captureMouse(this);
-	      switch(button) {
-	        case BUTTON_DRAGDIRECTION:
-	          adjustDirectionBegin(mouseX,mouseY);
-	          break;
-	        case BUTTON_DRAGZOOM:
-	          adjustZoomBegin(mouseX,mouseY);
-	          break;
-	        case BUTTON_DRAGFOV:
-	          adjustFOVBegin(mouseX,mouseY);
-	          break;
-	      }
-	    }
-  	  }
+    Viewpoint* viewpoint = scene->getViewpoint();
+      if ( viewpoint->isInteractive() ) {
+	if (!drag) {
+	  drag = button;
+	  windowImpl->captureMouse(this);
+	  (this->*ButtonBeginFunc[button-1])(mouseX,mouseY);
 	}
-
+      }
 }
+
 
 void RGLView::buttonRelease(int button, int mouseX, int mouseY)
 {
-
-  if (mouseMode == mmSELECTING)
-      mouseSelectionEnd(mouseX,mouseY);
-  else{
   	if (drag == button) {
 	    windowImpl->releaseMouse();
 	    drag = 0;
-	    switch(button) {
-	      case BUTTON_DRAGDIRECTION:
-	        adjustDirectionEnd();
-	        break;
-	      case BUTTON_DRAGZOOM:
-	        adjustZoomEnd();
-	        break;
-	      case BUTTON_DRAGFOV:
-	        adjustFOVEnd();
-	        break;
-	    }
-  	}
-  }
+	    (this->*ButtonEndFunc[button-1])();
+ 	}
 }
 
 void RGLView::mouseMove(int mouseX, int mouseY)
 {
-  mouseX = clamp(mouseX, 0, width-1);
-  mouseY = clamp(mouseY, 0, height-1);
+    if (drag) {
+  	mouseX = clamp(mouseX, 0, width-1);
+  	mouseY = clamp(mouseY, 0, height-1);
 
-  if (mouseMode == mmSELECTING)
-      mouseSelectionContinue(mouseX,mouseY);
-  switch(drag) {
-    case BUTTON_DRAGDIRECTION:
-      adjustDirectionUpdate(mouseX,mouseY);
-      break;
-    case BUTTON_DRAGZOOM:
-      adjustZoomUpdate(mouseX,mouseY);
-      break;
-    case BUTTON_DRAGFOV:
-      adjustFOVUpdate(mouseX,mouseY);
-      break;
-  }
+  	(this->*ButtonUpdateFunc[drag-1])(mouseX,mouseY);
+    }
 }
 
 void RGLView::wheelRotate(int dir)
@@ -215,20 +168,8 @@ void RGLView::wheelRotate(int dir)
 void RGLView::captureLost()
 {
   if (drag) {
-    switch(drag) {
-      case BUTTON_DRAGDIRECTION:
-        adjustDirectionEnd();
-        drag = 0;
-        break;
-      case BUTTON_DRAGZOOM:
-        adjustZoomEnd();
-        drag = 0;
-        break;
-      case BUTTON_DRAGFOV:
-        adjustFOVEnd();
-        drag = 0;
-        break;
-    }
+    (this->*ButtonEndFunc[drag-1])();
+    drag = 0;
   }
 }
 
@@ -283,22 +224,77 @@ static PolarCoord screenToPolar(int width, int height, int mouseX, int mouseY) {
 
 }
 
+static Vertex screenToVector(int width, int height, int mouseX, int mouseY) {
 
-void RGLView::adjustDirectionBegin(int mouseX, int mouseY)
-{
-  Viewpoint* viewpoint = scene->getViewpoint();
+    float radius = (float) getMax(width, height) * 0.5f;
 
-  camBase = viewpoint->getPosition();
+    float cx = ((float)width) * 0.5f;
+    float cy = ((float)height) * 0.5f;
+    float x  = (((float)mouseX) - cx)/radius;
+    float y  = (((float)mouseY) - cy)/radius;
 
-  dragBase = screenToPolar(width,height,mouseX,height-mouseY);
+    // Make unit vector
+
+    float len = sqrt(x*x + y*y);
+    if (len > 1.0e-6) {
+        x = x/len;
+        y = y/len;
+    }
+    // Find length to first edge
+
+    float maxlen = sqrt(2.0f);
+
+    // zero length is vertical, max length is horizontal
+    float angle = (maxlen - len)/maxlen*PI/2.0f;
+
+    float z = sin(angle);
+
+    // renorm to unit length
+
+    len = sqrt(1.0f - z*z);
+    x = x*len;
+    y = y*len;
+
+    return Vertex(x, y, z);
 }
 
-
-void RGLView::adjustDirectionUpdate(int mouseX, int mouseY)
+void RGLView::trackballBegin(int mouseX, int mouseY)
 {
-  Viewpoint* viewpoint = scene->getViewpoint();
+	rotBase = screenToVector(width,height,mouseX,height-mouseY);
+}
 
-  // float phiDragNow, thetaDragNow;
+void RGLView::trackballUpdate(int mouseX, int mouseY)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+  	rotCurrent = screenToVector(width,height,mouseX,height-mouseY);
+
+	windowImpl->beginGL();
+	viewpoint->updateMouseMatrix(rotBase,rotCurrent);
+	windowImpl->endGL();
+
+	View::update();
+}
+
+void RGLView::trackballEnd()
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+    viewpoint->mergeMouseMatrix();
+}
+
+void RGLView::polarBegin(int mouseX, int mouseY)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+  	camBase = viewpoint->getPosition();
+
+	dragBase = screenToPolar(width,height,mouseX,height-mouseY);
+
+}
+
+void RGLView::polarUpdate(int mouseX, int mouseY)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
 
   dragCurrent = screenToPolar(width,height,mouseX,height-mouseY);
 
@@ -310,9 +306,12 @@ void RGLView::adjustDirectionUpdate(int mouseX, int mouseY)
   View::update();
 }
 
-
-void RGLView::adjustDirectionEnd()
+void RGLView::polarEnd()
 {
+
+ //    Viewpoint* viewpoint = scene->getViewpoint();
+ //    viewpoint->mergeMouseMatrix();
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -422,9 +421,42 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
   return success;
 }
 
-void RGLView::setMouseMode(MouseModeID mode)
+void RGLView::setMouseMode(int button, MouseModeID mode)
 {
-    	mouseMode = mode;
+	int index = button-1;
+    	mouseMode[index] = mode;
+	switch (mode) {
+	    case mmTRACKBALL:
+	    	ButtonBeginFunc[index] = &RGLView::trackballBegin;
+	    	ButtonUpdateFunc[index] = &RGLView::trackballUpdate;
+	    	ButtonEndFunc[index] = &RGLView::trackballEnd;
+	    	break;
+	    case mmPOLAR:
+ 	    	ButtonBeginFunc[index] = &RGLView::polarBegin;
+	    	ButtonUpdateFunc[index] = &RGLView::polarUpdate;
+	    	ButtonEndFunc[index] = &RGLView::polarEnd;
+	    	break;
+	    case mmSELECTING:
+ 	    	ButtonBeginFunc[index] = &RGLView::mouseSelectionBegin;
+	    	ButtonUpdateFunc[index] = &RGLView::mouseSelectionUpdate;
+	    	ButtonEndFunc[index] = &RGLView::mouseSelectionEnd;
+	    	break;
+	    case mmZOOM:
+ 	    	ButtonBeginFunc[index] = &RGLView::adjustZoomBegin;
+	    	ButtonUpdateFunc[index] = &RGLView::adjustZoomUpdate;
+	    	ButtonEndFunc[index] = &RGLView::adjustZoomEnd;
+	    	break;
+	    case mmFOV:
+ 	    	ButtonBeginFunc[index] = &RGLView::adjustFOVBegin;
+	    	ButtonUpdateFunc[index] = &RGLView::adjustFOVUpdate;
+	    	ButtonEndFunc[index] = &RGLView::adjustFOVEnd;
+	    	break;
+	}
+}
+
+MouseModeID RGLView::getMouseMode(int button)
+{
+    return mouseMode[button-1];
 }
 
 MouseSelectionID RGLView::getSelectState()
@@ -449,26 +481,46 @@ double* RGLView::getMousePosition()
 //
 void RGLView::mouseSelectionBegin(int mouseX,int mouseY)
 {
-       	windowImpl->captureMouse(this);
 	mousePosition[0] = (float)mouseX/(float)width;
 	mousePosition[1] = (float)(height - mouseY)/(float)height;
+	mousePosition[2] = mousePosition[0];
+	mousePosition[3] = mousePosition[1];
 	selectState = msCHANGING;
 }
 
-void RGLView::mouseSelectionContinue(int mouseX,int mouseY)
+void RGLView::mouseSelectionUpdate(int mouseX,int mouseY)
 {
 	mousePosition[2] = (float)mouseX/(float)width;
 	mousePosition[3] = (float)(height - mouseY)/(float)height;
 	View::update();
 }
 
-void RGLView::mouseSelectionEnd(int mouseX,int mouseY)
+void RGLView::mouseSelectionEnd()
 {
-    windowImpl->releaseMouse();
-	mousePosition[2] = (float)mouseX/(float)width;
-	mousePosition[3] = (float)(height- mouseY)/(float)height;
-	mouseMode = mmNAVIGATING;
 	selectState = msDONE;
 	View::update();
+}
+
+void RGLView::getUserMatrix(double* dest)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+	viewpoint->getUserMatrix(dest);
+}
+
+void RGLView::setUserMatrix(double* src)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+	viewpoint->setUserMatrix(src);
+
+	View::update();
+}
+
+void RGLView::setDefaultMouseFunc()
+{
+    setMouseMode(1, mmTRACKBALL);
+    setMouseMode(2, mmFOV);
+    setMouseMode(3, mmZOOM);
 }
 
