@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.9 2004/09/05 20:03:10 murdoch Exp $
+// $Id: api.cpp,v 1.10 2004/09/22 10:39:34 dadler Exp $
 
 #include "lib.h"
 
@@ -83,7 +83,7 @@ EXPORT_SYMBOL void rgl_getFOV(int* successptr, double* fov);
 
 } // extern C
 
-#include "devicemanager.h"
+#include "DeviceManager.hpp"
 #include "rglview.h"
 
 //

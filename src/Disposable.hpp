@@ -39,7 +39,7 @@ public:
    * dispose object. 
    * Default implementatin will fire NotifyDisposed.
    **/
-  virtual void dispose();
+  void dispose();
 protected:
   /**
    * fires 'notifyDisposed' on all registered listeners.
