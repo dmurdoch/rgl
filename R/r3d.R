@@ -1,6 +1,6 @@
 #
 # Generic 3D interface for R
-# $Id: r3d.R,v 1.1 2004/08/27 16:03:47 dadler Exp $
+# $Id: r3d.R,v 1.2 2004/09/03 13:51:06 dadler Exp $
 #
 
 # ===[ GENERIC RENDERING FUNCTIONS ]==========================================
@@ -23,13 +23,13 @@ points3d <- function ( x, y, z, ... )
 lines3d <- function ( x, y, z, ... ) 
   do.call( paste("lines3d", dev3d, sep="."),list(x,y,z,...) )
 segments3d <- function( x, y, z, ... ) 
-  do.call( paste("segments3d", dev3d, sep="."),list(x,y,z...) )
+  do.call( paste("segments3d", dev3d, sep="."),list(x,y,z,...) )
 triangles3d <- function( x, y, z, ... ) 
   do.call( paste("triangles3d", dev3d, sep="."),list(x,y,z,...) ) 
 quads3d <- function( x, y, z, ... ) 
   do.call( paste("quads3d", dev3d, sep="."),list(x,y,z,...) )  
 texts3d <- function( x, y, z, text, adj=0.5, ... ) 
-  do.call( paste("text3d", dev3d, sep="."),list(x,y,z,text,adj=adj,...) )  
+  do.call( paste("texts3d", dev3d, sep="."),list(x,y,z,text,adj=adj,...) )  
 
 # high-level shapes
 
