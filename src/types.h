@@ -5,7 +5,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: types.h,v 1.2 2003/11/21 21:56:03 dadler Exp $
+// $Id: types.h,v 1.3 2003/11/27 21:12:23 dadler Exp $
 
 
 //
@@ -58,7 +58,7 @@ public:
   Ref(T* in_ptr) : ptr(in_ptr) { if (ptr) ptr->ref(); }
   Ref(const Ref& ref) : ptr(ref.ptr) { if (ptr) ptr->ref(); }
   ~Ref() { if (ptr) ptr->unref(); }
-  Ref& operator = (T* in_ptr) { if (ptr) ptr->unref(); ptr = in_ptr; if (ptr) ptr->ref(); }
+  Ref& operator = (T* in_ptr) { if (ptr) ptr->unref(); ptr = in_ptr; if (ptr) ptr->ref(); return *this; }
   T* operator -> () { return ptr; }
   operator bool () { return (ptr); }
 private:
