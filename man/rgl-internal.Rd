@@ -52,8 +52,11 @@ rgl.selectstate()
 rgl.select()
 rgl.setselectstate(state)
 rgl.getprojection()
+edgemap(size)
+edgeindex(from,to,size,row,col)
 }
 \details{
   These are not to be called by the user.
 }
 \keyword{internal}
+
