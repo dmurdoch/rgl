@@ -2,10 +2,13 @@
 # Makefile for win32/mingwl
 # This file is part of RGL
 #
-# $Id: Makefile,v 1.4 2003/11/15 15:39:55 dadler Exp $
+# $Id: Makefile,v 1.5 2003/11/16 09:58:33 dadler Exp $
 #
 
 all: target
+
+.PHONY : clean deps
+
 
 # ---[ C PREPROCESSOR ]--------------------------------------------------------
 
@@ -114,11 +117,9 @@ rgl.dll: $(OBJS) rgl_res.o
 clean:
 	make -C $(ZLIBDIR) clean
 	make -C $(LIBPNGDIR) -f scripts/makefile.gcc clean
-	$(RM) *.o *.a *.dll *.def .deps
+	$(RM) *.o *.a *.dll *.def .deps rgl_res.rc
 
-deps: .deps
-
-.deps:
+deps: 
 	$(CC) -MM $(SRCS) >$@
 
 -include .deps
