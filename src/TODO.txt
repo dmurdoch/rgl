@@ -43,6 +43,8 @@ CHECK
 BUGS
 ====
 
+- win32: example(boat3d) with rgl crashes R
+
 COSMETICS
 =========
 
