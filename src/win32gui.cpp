@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp,v 1.2 2003/05/30 08:53:51 dadler Exp $
+// $Id: win32gui.cpp,v 1.3 2003/11/21 15:13:07 dadler Exp $
 
 #include "win32gui.h"
 
@@ -320,27 +320,28 @@ namespace gui {
           break;
   
         case WM_LBUTTONDOWN:
-          ( (captureView) ? captureView : window ) -> buttonPress(GUI_ButtonLeft, LOWORD(lParam), HIWORD(lParam));
+          ( (captureView) ? captureView : window ) -> buttonPress(GUI_ButtonLeft, (short) LOWORD(lParam), (short) HIWORD(lParam) );
           break;
   
         case WM_LBUTTONUP:
-          ( (captureView) ? captureView : window ) -> buttonRelease(GUI_ButtonLeft, LOWORD(lParam), HIWORD(lParam));
+          ( (captureView) ? captureView : window ) -> buttonRelease(GUI_ButtonLeft, (short) LOWORD(lParam), (short) HIWORD(lParam));
           break;
   
         case WM_RBUTTONDOWN:
-          ( (captureView) ? captureView : window ) -> buttonPress(GUI_ButtonRight, LOWORD(lParam), HIWORD(lParam));
+          ( (captureView) ? captureView : window ) -> buttonPress(GUI_ButtonRight,(short) LOWORD(lParam), (short) HIWORD(lParam) );
           break;
   
         case WM_RBUTTONUP:
-          ( (captureView) ? captureView : window ) -> buttonRelease(GUI_ButtonRight, LOWORD(lParam), HIWORD(lParam));
+          ( (captureView) ? captureView : window ) -> buttonRelease(GUI_ButtonRight,(short) LOWORD(lParam), (short) HIWORD(lParam) );
           break;
   
         case WM_MBUTTONDOWN:
-          ( (captureView) ? captureView : window ) -> buttonPress(GUI_ButtonMiddle, LOWORD(lParam), HIWORD(lParam));
+          ( (captureView) ? captureView : window )
+           -> buttonPress(GUI_ButtonMiddle, (short) LOWORD(lParam), (short) HIWORD(lParam) );
           break;
   
         case WM_MBUTTONUP:
-          ( (captureView) ? captureView : window ) -> buttonRelease(GUI_ButtonMiddle, LOWORD(lParam), HIWORD(lParam));
+          ( (captureView) ? captureView : window ) -> buttonRelease(GUI_ButtonMiddle, (short) LOWORD(lParam), (short) HIWORD(lParam) );
           break;
 #if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)          
         case WM_MOUSEWHEEL: 
@@ -352,7 +353,7 @@ namespace gui {
 #endif
   
         case WM_MOUSEMOVE:
-          ( (captureView) ? captureView : window ) -> mouseMove(LOWORD(lParam), HIWORD(lParam));
+          ( (captureView) ? captureView : window ) -> mouseMove( ( (short) LOWORD(lParam) ), ( (short) HIWORD(lParam) ) );
           break;
         case WM_CAPTURECHANGED:
           if (captureView) {
