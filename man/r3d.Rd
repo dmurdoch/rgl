@@ -35,7 +35,7 @@
 \code{\link{segments3d}}
 \code{\link{triangles3d}}
 \code{\link{quads3d}}
-\code{\link{texts3d}}
+\code{\link{text3d}}
 \code{\link{spheres3d}}
 \code{\link{sprites3d}}
 \code{\link{terrain3d}}

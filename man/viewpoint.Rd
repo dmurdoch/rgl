@@ -5,7 +5,7 @@
   Set the viewpoint orientation.
 }
 \usage{
-rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 0, interactive = TRUE )
+rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, interactive = TRUE, userMatrix )
 }
 \arguments{
   \item{theta,phi}{polar coordinates}

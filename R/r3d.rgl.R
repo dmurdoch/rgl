@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R,v 1.1 2004/08/27 16:03:47 dadler Exp $
+# $Id: r3d.rgl.R,v 1.2 2004/09/06 21:08:34 murdoch Exp $
 # 
 
 dev3d <- "rgl"
@@ -28,7 +28,7 @@ triangles3d.rgl <- function ( x, y, z, ... )
   rgl.triangles( x, y, z, ... )
 quads3d.rgl <- function( x, y, z, ... ) 
   rgl.quads(x, y, z, ... )
-texts3d.rgl <- function( x, y, z, texts, adj, ... ) 
+text3d.rgl <- function( x, y, z, texts, adj, ... ) 
   rgl.texts( x, y, z, texts, adj, ... ) 
 
 # high-level shape implementation

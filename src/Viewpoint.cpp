@@ -10,7 +10,6 @@
 
 Viewpoint::Viewpoint(PolarCoord in_position, float in_fov, float in_zoom, bool in_interactive) :
     SceneNode(VIEWPOINT),
-    position( in_position ),
     fov(in_fov),
     zoom(in_zoom),
     interactive(in_interactive)

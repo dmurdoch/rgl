@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp,v 1.6 2004/09/05 20:03:10 murdoch Exp $
+// $Id: rglview.cpp,v 1.7 2004/09/06 21:08:35 murdoch Exp $
 
 #include "rglview.h"
 #include "opengl.h"
@@ -29,6 +29,8 @@ RGLView::RGLView(Scene* in_scene)
   selectState = msNONE;
 
   setDefaultMouseFunc();
+  renderContext.rect.x = 0;
+  renderContext.rect.y = 0; // size is set elsewhere
 }
 
 RGLView::~RGLView()

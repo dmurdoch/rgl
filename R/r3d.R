@@ -1,6 +1,6 @@
 #
 # Generic 3D interface for R
-# $Id: r3d.R,v 1.2 2004/09/03 13:51:06 dadler Exp $
+# $Id: r3d.R,v 1.3 2004/09/06 21:08:34 murdoch Exp $
 #
 
 # ===[ GENERIC RENDERING FUNCTIONS ]==========================================
@@ -28,8 +28,8 @@ triangles3d <- function( x, y, z, ... )
   do.call( paste("triangles3d", dev3d, sep="."),list(x,y,z,...) ) 
 quads3d <- function( x, y, z, ... ) 
   do.call( paste("quads3d", dev3d, sep="."),list(x,y,z,...) )  
-texts3d <- function( x, y, z, text, adj=0.5, ... ) 
-  do.call( paste("texts3d", dev3d, sep="."),list(x,y,z,text,adj=adj,...) )  
+text3d <- function( x, y, z, text, adj=0.5, ... ) 
+  do.call( paste("text3d", dev3d, sep="."),list(x,y,z,text,adj=adj,...) )  
 
 # high-level shapes
 
@@ -43,7 +43,7 @@ terrain3d <- function ( x, y, z, ... )
 # interaction
 
 select3d <- function() 
-  do.call( paste("select3d", dev3d, sep=".") ) 
+  do.call( paste("select3d", dev3d, sep="."),list() ) 
 
 # ===[ GENERIC GEOMETRY METHODS ]=============================================
 
