@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp,v 1.4 2003/06/04 07:44:05 dadler Exp $
+// $Id: x11gui.cpp,v 1.5 2004/05/28 08:41:07 dadler Exp $
 
 #include "x11gui.h"
 #include "lib.h"
@@ -491,4 +491,5 @@ void X11GUIFactory::notifyDelete(::Window xwindowid)
   windowMap.erase(xwindowid);
 }
 
-};
+} // namespace gui
+
