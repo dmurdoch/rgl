@@ -7,10 +7,11 @@
 #        $ make target - builds mingw,vc and src tar-ball
 #        $ make upload - uploads a v$(VERSION) directory
 #
-# $Id: Maintainer.mk,v 1.1 2003/03/25 03:26:06 dadler Exp $
+# $Id: Maintainer.mk,v 1.2 2003/05/27 09:44:18 dadler Exp $
 #
 
-VERSION=0.64-4
+VERSION=0.64-6
+DATE=2003-06-01
 TMINGW=rgl_$(VERSION)_R_win32_mingw.zip
 TVC=rgl_$(VERSION)_R_win32_vc.zip
 TSRC=rgl_$(VERSION).tar.gz
@@ -18,6 +19,9 @@ TSRC=rgl_$(VERSION).tar.gz
 target: release
 
 release: mingw vc src
+
+mark:
+	sed -e s/@VERSION@/$(VERSION)/ -e s/@DATE@/$(DATE)/ DESCRIPTION.in >rgl/DESCRIPTION
 
 upload:
 	mkdir v$(VERSION)
