@@ -70,3 +70,7 @@ v0.64-7
   - mipmap support
   - support for different texture minification and magnification filters
 
+v0.64-8
+  - build bugfix : removed rgl/src/Makefile
+  - updated configure to check and setup LDFLAGS for OpenGLU library
+
