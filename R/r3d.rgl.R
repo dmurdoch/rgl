@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R,v 1.2 2004/09/06 21:08:34 murdoch Exp $
+# $Id: r3d.rgl.R,v 1.3 2005/02/08 23:36:55 dadler Exp $
 # 
 
 dev3d <- "rgl"
@@ -13,8 +13,8 @@ pop3d.rgl <- function( type )
   rgl.pop( type )
 bg3d.rgl <- function( color, ... ) 
   rgl.bg( color=color, ... )
-light3d.rgl <- function( x, ... ) 
-  rgl.light( x, ... )
+light3d.rgl <- function( theta, phi, ... ) 
+  rgl.light( theta=theta, phi=phi, ... )
 
 # primitive shape implementation
 
