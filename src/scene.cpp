@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp,v 1.5 2003/11/21 21:56:03 dadler Exp $
+// $Id: scene.cpp,v 1.6 2003/11/22 08:40:38 dadler Exp $
 
 #include "scene.h"
 #include "math.h"
@@ -1990,8 +1990,8 @@ void Texture::beginUse(RenderContext* renderContext)
     glPixelStorei(GL_UNPACK_ALIGNMENT, ualign);
     GLenum gl_type = GL_UNSIGNED_BYTE;
     
-    int maxSize;    
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);        
+    unsigned int maxSize;    
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, (int*) &maxSize);        
     
     if (mipmap) {                  
       int gluError = gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat, pixmap->width, pixmap->height, format, gl_type, pixmap->data);    
