@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: math.h,v 1.8 2005/02/08 21:25:49 dadler Exp $
+// $Id: math.h,v 1.9 2005/02/12 17:11:54 murdoch Exp $
 
 #include <math.h>
 #include <float.h>
@@ -22,7 +22,7 @@ namespace math {
   template<typename T> inline T acos(T x) { return static_cast<T>( ::acos( static_cast<double>(x) ) ); }
   template<typename T> inline T asin(T x) { return static_cast<T>( ::asin( static_cast<double>(x) ) ); }
   template<typename T> inline T atan(T x) { return static_cast<T>( ::atan( static_cast<double>(x) ) ); }
-  template<typename T> inline T atan2(T x) { return static_cast<T>( ::atan2( static_cast<double>(x) ) ); }
+  template<typename T> inline T atan2(T x, T y) { return static_cast<T>( ::atan2( static_cast<double>(x), static_cast<double>(y) ) ); }
   template<typename T> inline T cos(T x) { return static_cast<T>( ::cos( static_cast<double>(x) ) ); }
   template<typename T> inline T sin(T x) { return static_cast<T>( ::sin( static_cast<double>(x) ) ); }
   template<> inline float sin(float rad) { return ::sinf(rad); }
@@ -35,7 +35,7 @@ namespace math {
   template<typename T> inline T tanh(T x) { return static_cast<T>( ::tanh( static_cast<double>(x) ) ); }
   template<typename T> inline T exp(T x) { return static_cast<T>( ::exp( static_cast<double>(x) ) ); }
   template<typename T> inline T exp2(T x) { return static_cast<T>( ::exp2( static_cast<double>(x) ) ); }
-  template<typename T> inline T expm1(T x) { return static_cast<T>( ::expm1( static_cast<double>(x) ) ); }
+//  template<typename T> inline T expm1(T x) { return static_cast<T>( ::expm1( static_cast<double>(x) ) ); }
   template<typename T> inline T log(T x) { return static_cast<T>( ::log( static_cast<double>(x) ) ); }
   template<typename T> inline T log10(T x) { return static_cast<T>( ::log10( static_cast<double>(x) ) ); }
   template<typename T> inline T log2(T x) { return static_cast<T>( ::log2( static_cast<double>(x) ) ); }
@@ -45,12 +45,12 @@ namespace math {
   template<> inline double modf(double x, double* y) { return ::modf(x,y); }
   template<> inline float  modf(float x, float* y) { return ::modff(x,y); }
   template<typename T> inline T ldexp(T x, int y) { return static_cast<T>( ::ldexp(static_cast<double>(x),y) ); }
-  template<typename T> inline T frexp(T x, int* y) { return static_cast<T>( ::frexp( static_cast<double>(x),n) ); }
+//  template<typename T> inline T frexp(T x, int* y) { return static_cast<T>( ::frexp( static_cast<double>(x),n) ); }
   template<typename T> inline int ilogb(T x) { return ::ilogb( static_cast<double>(x) ); }
   template<typename T> inline T scalbn(T x, int n) { return static_cast<T>( ::scalbn( static_cast<double>(x),n ) ); }
   template<typename T> inline T fabs(T x) { return static_cast<T>( ::fabs( static_cast<double>(x) ) ); }
   template<typename T> inline T cbrt(T x) { return static_cast<T>( ::cbrt( static_cast<double>(x) ) ); }
-  template<typename T> inline T hypot(T x) { return static_cast<T>( ::hypot( static_cast<double>(x) ) ); }
+//  template<typename T> inline T hypot(T x) { return static_cast<T>( ::hypot( static_cast<double>(x) ) ); }
   template<typename T> inline T pow(T x, T y) { return static_cast<T>( ::pow( static_cast<double>(x), static_cast<double>(y) ) ); }
   template<typename T> inline T sqrt(T x) { return static_cast<T>( ::sqrt( static_cast<double>(x) ) ); }
   template<typename T> inline T erf(T x) { return static_cast<T>( ::erf( static_cast<double>(x) ) ); }
@@ -61,15 +61,15 @@ namespace math {
   template<typename T> inline T floor(T x) { return static_cast<T>( ::floor( static_cast<double>(x) ) ); }
   template<typename T> inline T nearbyint(T x) { return static_cast<T>( ::nearbyint( static_cast<double>(x) ) ); }
   template<typename T> inline T rint(T x) { return static_cast<T>( ::rint( static_cast<double>(x) ) ); }
-  template<typename T> inline long int lrint(T x) { ::lrint( static_cast<double>(x) ); }
-  template<typename T> inline long long int llrint(T x) { return ::llrint( static_cast<double>(x) ); }
+  template<typename T> inline long int lrint(T x) { return ( ::lrint( static_cast<double>(x) ) ); }
+//  template<typename T> inline long long int llrint(T x) { return ::llrint( static_cast<double>(x) ); }
   template<typename T> inline T round(T x) { return static_cast<T>( ::round( static_cast<double>(x) ) ); }
 
   template<class T> inline T pi() { return static_cast<T>( M_PI ); }  
   template<class T> inline T deg2rad(T deg) { return ( pi<T>() / T(180.0) ) * deg; }
   template<class T> inline T rad2deg(T rad) { return rad / ( pi<T>() / T(180.0) ); }
 
-};
+}
 
 
 // inline float deg2radf(float deg) { return ((float)(PI/180.0)) * deg; }
