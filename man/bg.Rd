@@ -2,7 +2,7 @@
 \alias{rgl.bg}
 \title{setup Background}
 \description{
-  Setup the background environment in the scene.
+  Setup the background environment of the scene.
 }
 \usage{
 rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines", ...)
@@ -17,7 +17,7 @@ rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines"
     }
   }
   \item{sphere}{
-  logical, if true, an environmental sphere geometry is used for background decoration
+  logical, if true, an environmental sphere geometry is used for the background decoration.
   }
   \item{color}{
   Primary color is used for background clearing.
@@ -29,7 +29,7 @@ rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines"
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
 }
 \details{
-  If sphere is set TRUE, an environmental sphere enclosing the whole scene is drawn.
+  If sphere is set to TRUE, an environmental sphere enclosing the whole scene is drawn.
 }
 \examples{
 
@@ -39,7 +39,7 @@ rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines"
 
   # an environmental sphere with a nice texture.
 
-  rgl.bg(sphere=TRUE, texture= system.file("textures/sunsleep.png",package="rgl"), back="filled" )
+  rgl.bg(sphere=TRUE, texture=system.file("textures/sunsleep.png", package="rgl"), back="filled" )
 }
 \seealso{
   \code{\link{rgl.material}}

@@ -8,11 +8,11 @@
 rgl.snapshot( filename, fmt="png" )
 }
 \arguments{
-  \item{filename}{full path to filename}
-  \item{fmt}{image export format, currently supported \"png\"}
+  \item{filename}{full path to filename.}
+  \item{fmt}{image export format, currently supported: \"png\"}
 }
 \details{
-Animations can be created using a loop to modify the scene and save 
+Animations can be created in a loop modifying the scene and saving 
 a screenshot to a file. (See example below)
 }
 \examples{

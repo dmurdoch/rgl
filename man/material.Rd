@@ -27,27 +27,27 @@ rgl.material(
 }
 \arguments{
   \item{color}{
-    vector of R color character vectors. Represents the diffuse component in case of lighting calculation (lit = TRUE),
+    vector of R color characters. Represents the diffuse component in case of lighting calculation (lit = TRUE),
     otherwise it describes the solid color characteristics.
   }
   \item{lit}{
     logical, specifying if lighting calculation should take place on geometry
   }
   \item{ambient, specular, emission, shininess}{
-    properties for lighting calculation. ambient, specular, emission are R color character string values, shininess represents a
+    properties for lighting calculation. ambient, specular, emission are R color character string values; shininess represents a
     numerical.
   }
   \item{alpha}{ 
-    vector of alpha values between 0.0 (full transparency) .. 1.0 (opaque).
+    vector of alpha values between 0.0 (fully transparent) .. 1.0 (opaque).
   }
   \item{smooth}{
-    logical, specifying whether gourad shading(smooth) or flat shading should be used
+    logical, specifying whether gourad shading (smooth) or flat shading should be used.
   }
   \item{texture}{ 
     path to a texture image file. Supported formats: png.
   }
   \item{textype}{
-    specifies what the pixmap actually determines
+    specifies what is defined with the pixmap
     \describe{
       \item{"alpha"}{alpha values}
       \item{"luminance"}{luminance}
@@ -57,39 +57,39 @@ rgl.material(
     }
   }
   \item{texmipmap}{
-    Logical, specifying if texture should be mipmapped.
+    Logical, specifies if the texture should be mipmapped.
   }
   \item{texmagfilter}{
     specifies the magnification filtering type (sorted by ascending quality):
     \describe{
       \item{"nearest"}{texel nearest to the center of the pixel}
-      \item{"linear"}{weighted linear average of 2x2 array of texel}
+      \item{"linear"}{weighted linear average of a 2x2 array of texels}
     }
   }
   \item{texminfilter}{
     specifies the minification filtering type (sorted by ascending quality):
     \describe{
       \item{"nearest"}{texel nearest to the center of the pixel}
-      \item{"linear"}{weighted linear average of 2x2 array of texel}
-      \item{"nearest.mipmap.nearest"}{FIXME}
-      \item{"nearest.mipmap.linear"}{FIXME}
-      \item{"linear.mipmap.nearest"}{FIXME}
-      \item{"linear.mipmap.linear"}{FIXME}
+      \item{"linear"}{weighted linear average of a 2x2 array of texels}
+      \item{"nearest.mipmap.nearest"}{low quality mipmapping}
+      \item{"nearest.mipmap.linear"}{medium quality mipmapping}
+      \item{"linear.mipmap.nearest"}{medium quality mipmapping}
+      \item{"linear.mipmap.linear"}{high quality mipmapping}
     }
   }
   \item{front, back}{
-    Specifies the polygon mode for the specified side:
+    Determines the polygon mode for the specified side:
     \describe{
-      \item{"fill"}{fill polygon}
-      \item{"line"}{wireframe polygon}
+      \item{"fill"}{filled polygon}
+      \item{"line"}{wireframed polygon}
       \item{"points"}{point polygon}
-      \item{"cull"}{cull (hide) polygon}
+      \item{"cull"}{culled (hidden) polygon}
     }
   }
   \item{size}{ 
     numeric, specifying the line and point size.
   }
-  \item{fog}{logical, specifying if fog effect should take place on associated shape}
+  \item{fog}{logical, specifying if fog effect should be applied on the corresponding shape}
 }
 \details{
   Only one side at a time can be culled.

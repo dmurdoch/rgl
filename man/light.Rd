@@ -9,7 +9,7 @@ rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffus
 }
 \arguments{
   \item{theta, phi}{polar coordinates}
-  \item{viewpoint.rel}{logical, if true light is a viewpoint light that is positioned relative to the actual viewpoint position}
+  \item{viewpoint.rel}{logical, if TRUE light is a viewpoint light that is positioned relative to the current viewpoint}
   \item{ambient, diffuse, specular } { light color values used for lighting calculation }
 }
 \details{

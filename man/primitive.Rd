@@ -24,7 +24,7 @@ rgl.quads(x, y, z, ... )
 }
 \examples{
 rgl.clear()
-rgl.points(rnorm(1000),rnorm(1000),rnorm(1000),color=heat.colors(1000),size=2)
+rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000), size=2)
 }
 \seealso{
 \code{\link{rgl.material}},

@@ -13,12 +13,14 @@ rgl.sprites(x, y, z, radius, ...)
   \item{ ... }{material properties, texture mapping is supported}
 }
 \details{
-  Sprites are rectangle planes that are billboarded towards the viewpoint.
-  Its primary used for fast faked atmospherical effects e.g. particles and clouds
-  using alpha blending textures.
+  Sprites are rectangle planes that are directed towards the viewpoint.
+  Its primary used for fast (and faked) atmospherical effects, e.g. particles and clouds
+  using alpha blended textures.
 }
 \examples{
-rgl.sprites(rnorm(500),rnorm(500),rnorm(500),color=rainbow(100),lit=FALSE,textype="alpha",texture=system.file("textures/particle.png",package="rgl"),alpha=0.2)
+rgl.sprites(rnorm(500), rnorm(500), rnorm(500), color=rainbow(100), lit=FALSE,
+            textype="alpha", texture=system.file("textures/particle.png", package="rgl"), 
+            alpha=.2)
 }
 \seealso{
   \code{\link{rgl.material}}

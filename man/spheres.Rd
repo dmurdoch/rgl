@@ -15,7 +15,7 @@ rgl.spheres(x, y, z, radius, ...)
 \details{
 }
 \examples{
-rgl.spheres(rnorm(10),rnorm(10),rnorm(10),radius=1,color=rainbow(10))
+rgl.spheres(rnorm(10), rnorm(10), rnorm(10), radius=.2, color=rainbow(10))
 }
 \seealso{
   \code{\link{rgl.material}}
