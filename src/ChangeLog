@@ -90,4 +90,10 @@ v0.64-11
   - removed several redundant semicolons, required by gcc 3.4 ansi-pedantic mode.
   - win32: uses R's zlib and libpng sources
   - win32: added virtual destructor in Win32GUIFactory (removes warning)
-  
+ 
+v0.64-12
+  - cran bugfix: permissions of cleanup fixed.
+
+v0.64-13
+  - DESCRIPTION fix: moved R 1.41 -> R 1.4.1 dependency
+
