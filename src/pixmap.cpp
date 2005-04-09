@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: pixmap.cpp,v 1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id$
 
 #include "pixmap.h"
 

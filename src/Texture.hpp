@@ -11,7 +11,7 @@
 class RenderContext;
 class Pixmap;
 
-#include "opengl.h"
+#include "opengl.hpp"
 
 class Texture : public AutoDestroy
 {

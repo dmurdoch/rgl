@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp,v 1.5 2005/02/15 19:45:12 dadler Exp $
+// $Id$
 
 #include "DeviceManager.hpp"
 #include "types.h"

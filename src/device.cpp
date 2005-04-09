@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp,v 1.4 2004/09/22 10:39:34 dadler Exp $
+// $Id$
 
 #include "Device.hpp"
 #include "lib.h"

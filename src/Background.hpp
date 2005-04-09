@@ -3,7 +3,7 @@
 
 #include "Shape.hpp"
 
-#include "opengl.h"
+#include "opengl.hpp"
 
 //
 // CLASS

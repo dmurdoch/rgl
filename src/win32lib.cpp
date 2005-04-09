@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32lib.cpp,v 1.2 2003/11/15 18:22:13 dadler Exp $
+// $Id$
 
 #include "lib.h"
 

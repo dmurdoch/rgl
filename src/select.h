@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: select.h,v 1.2 2004/08/10 01:43:07 murdoch Exp $
+// $Id$
 
 #include "scene.h"
 

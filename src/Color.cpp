@@ -109,7 +109,7 @@ void Color::set3iv(int* color)
 
 // TODO: move to rendergl.cpp
 
-#include "opengl.h"
+#include "opengl.hpp"
 
 void Color::useClearColor() const
 {

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11lib.cpp,v 1.4 2003/06/04 07:44:05 dadler Exp $
+// $Id$
 
 #include "lib.h"
 

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp,v 1.5 2004/05/28 08:41:07 dadler Exp $
+// $Id$
 
 #include "x11gui.h"
 #include "lib.h"
