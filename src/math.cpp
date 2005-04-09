@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: math.cpp,v 1.5 2005/01/28 09:42:16 dadler Exp $
+// $Id$
 
 #include "math.h"
 

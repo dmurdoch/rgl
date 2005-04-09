@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: fps.h,v 1.2 2004/08/27 15:58:57 dadler Exp $
+// $Id$
 
 #include "scene.h"
 

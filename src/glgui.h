@@ -4,9 +4,9 @@
 // C++ header
 // This file is part of rgl
 //
-// $Id: glgui.h,v 1.2 2004/08/09 19:33:28 murdoch Exp $
+// $Id$
 
-#include "opengl.h"
+#include "opengl.hpp"
 
 //
 // CLASS

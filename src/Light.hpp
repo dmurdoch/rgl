@@ -12,7 +12,7 @@
 #include "Color.hpp"
 #include "RenderContext.hpp"
 
-#include "opengl.h"
+#include "opengl.hpp"
 
 class Light : public SceneNode
 {

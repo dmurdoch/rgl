@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp,v 1.13 2005/02/17 15:17:02 murdoch Exp $
+// $Id$
 
 #include "lib.h"
 

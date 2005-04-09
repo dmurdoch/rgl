@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: device.h,v 1.3 2004/08/09 19:33:28 murdoch Exp $
+// $Id$
 
 #include "types.h"
 #include "rglview.h"

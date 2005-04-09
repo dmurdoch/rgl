@@ -1,7 +1,7 @@
 #ifndef VIEWPOINT_HPP
 #define VIEWPOINT_HPP
 
-#include "opengl.h"
+#include "opengl.hpp"
 #include "SceneNode.hpp"
 
 #include "render.h"

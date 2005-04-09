@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h,v 1.5 2004/08/27 15:58:58 dadler Exp $
+// $Id$
 
 #include "types.h"
 #include <vector>

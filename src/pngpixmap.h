@@ -5,7 +5,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pngpixmap.h,v 1.2 2003/11/27 21:05:33 dadler Exp $
+// $Id$
 
 class PNGPixmapFormat : public PixmapFormat {
 public:

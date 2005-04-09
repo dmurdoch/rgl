@@ -5,7 +5,7 @@
 #include "Material.hpp"
 #include "RenderContext.hpp"
 
-#include "opengl.h"
+#include "opengl.hpp"
 #include "geom.hpp"
 
 //

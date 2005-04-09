@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: select.cpp,v 1.2 2004/08/10 01:43:07 murdoch Exp $
+// $Id$
 
 #include "select.h"
 

@@ -1,10 +1,10 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp,v 1.8 2005/01/28 09:45:14 dadler Exp $
+// $Id$
 
 #include "rglview.h"
-#include "opengl.h"
+#include "opengl.hpp"
 #include <stdio.h>
 #include "lib.h"
 #include "math.h"

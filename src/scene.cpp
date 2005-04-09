@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp,v 1.10 2005/01/10 14:16:32 dadler Exp $
+// $Id$
 
 
 #include "scene.h"
