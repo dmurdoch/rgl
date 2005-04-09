@@ -3,7 +3,7 @@
 ##
 ## Process this file with autoconf to produce a configure script.
 ##
-## $Id: configure.ac,v 1.8 2005/02/15 20:38:44 dadler Exp $
+## $Id$
 ##
 
 AC_PREREQ(2.50)
@@ -13,17 +13,26 @@ AC_PREREQ(2.50)
 AC_INIT([rgl])
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
-## --- X11 -------------------------------------------------------------------
-
-AC_PATH_X
-if test x$no_x == xyes ; then
-  AC_MSG_ERROR([X11 not found but required, configure aborted.])
-fi
-CPPFLAGS="${CPPFLAGS} -I${x_includes}"
-LIBS="${LIBS} -L${x_libraries} -lX11"
-
-## --- OpenGL ----------------------------------------------------------------
-
+if test `uname` = "Darwin" ; then
+  CPPFLAGS="${CPPFLAGS} -I/System/Library/Frameworks/AGL.framework/Headers"
+  LIBS="${LIBS} -framework AGL"
+else
+  AC_PATH_X
+  if test x$no_x == xyes ; then
+    AC_MSG_ERROR([X11 not found but required, configure aborted.])
+  fi
+  CPPFLAGS="${CPPFLAGS} -I${x_includes}"
+  LIBS="${LIBS} -L${x_libraries} -lX11"
+  if test `uname` = "Darwin" ; then
+    CPPFLAGS="${CPPFLAGS} -DDarwin"
+    # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
+    if test -e /System/Library/Frameworks/OpenGL.framework ; then
+      CPPFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers ${CPPFLAGS} -DNO_GL_PREFIX"
+      LIBS="-framework OpenGL ${LIBS}"
+    fi
+    # X11 must come *after* the OpenGL stuff
+    CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
+  fi
 AC_ARG_WITH(gl-includes,
 [  --with-gl-includes=DIR  specify location of OpenGL headers],
 [CPPFLAGS="${CPPFLAGS} -I${withval}"]
@@ -43,6 +52,10 @@ AC_ARG_WITH(glu-libname,
 [  --with-glu-libname=NAME specify GLU Library name (defaults to "GLU")],
 [LIBS="${LIBS} -l${withval}"], [LIBS="${LIBS} -lGLU"]
 )
+
+fi
+
+## --- OpenGL/X11 ------------------------------------------------------------
 
 ## --- LibPNG ----------------------------------------------------------------
 
@@ -81,17 +94,6 @@ if test "x$enable_libpng" != "xno"; then
 fi
 
 ## --- Darwin ----------------------------------------------------------------
-
-if test `uname` = "Darwin" ; then
-  CPPFLAGS="${CPPFLAGS} -DDarwin"
-  # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
-  if test -e /System/Library/Frameworks/OpenGL.framework ; then
-    CPPFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers ${CPPFLAGS} -DNO_GL_PREFIX"
-    LIBS="-framework OpenGL ${LIBS}"
-  fi
-  # X11 must come *after* the OpenGL stuff
-  CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
-fi
 
 ## --- Output ----------------------------------------------------------------
 
