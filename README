@@ -18,7 +18,7 @@ See "COPYING" textfile for details.
 
 FEATURES
 --------
-- portable R Plug-in using OpenGL on win32 and X11
+- portable R Plug-in using OpenGL on MacOSX, Win32 and X11
 - R programming interface 
 - interactive viewpoint navigation
 - automatic data focus
