@@ -1,5 +1,5 @@
-#ifndef GUI_H
-#define GUI_H
+#ifndef RGL_GUI_HPP
+#define RGL_GUI_HPP
 
 // C++ header file
 // This file is part of RGL
@@ -210,5 +210,5 @@ public:
 
 } // namespace gui
 
-#endif /* GUI_H */
+#endif // RGL_GUI_HPP 
 

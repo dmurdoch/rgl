@@ -1,3 +1,6 @@
+#include "config.hpp"
+#ifdef RGL_W32
+
 // C++ source
 // This file is part of RGL.
 //
@@ -85,3 +88,6 @@ void printMessage( const char* string ) {
 double getTime() {
   return ( (double) GetTickCount() ) * ( 1.0 / 1000.0 );
 }
+
+#endif // RGL_W32
+

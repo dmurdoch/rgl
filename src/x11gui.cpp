@@ -1,3 +1,5 @@
+#include "config.hpp"
+#ifdef RGL_X11
 // C++ source
 // This file is part of RGL.
 //
@@ -492,4 +494,6 @@ void X11GUIFactory::notifyDelete(::Window xwindowid)
 }
 
 } // namespace gui
+
+#endif // RGL_X11
 
