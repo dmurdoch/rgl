@@ -7,7 +7,7 @@
 
 #include "win32gui.hpp"
 
-#include "lib.h"
+#include "lib.hpp"
 
 #include <winuser.h>
 

@@ -4,7 +4,7 @@
 // $Id$
 
 #include "gui.hpp"
-#include "lib.h"
+#include "lib.hpp"
 #include <string.h>
 
 namespace gui {

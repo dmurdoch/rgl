@@ -73,7 +73,7 @@ unsigned int texsize(unsigned int s)
   return 1U << msb(s-1);
 }
 
-#include "lib.h"
+#include "lib.hpp"
 
 static void printGluErrorMessage(GLint error) 
 {

@@ -3,7 +3,7 @@
 //
 // $Id$
 
-#include "lib.h"
+#include "lib.hpp"
 
 extern "C" {
 
@@ -25,7 +25,7 @@ DeviceManager* deviceManager = NULL;
 //   rgl_init
 //
 
-#include "lib.h"
+#include "lib.hpp"
 
 void rgl_init(int* successptr)
 {
