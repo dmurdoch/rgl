@@ -10,7 +10,7 @@
 // ---------------------------------------------------------------------------
 void printMessage(const char* message)
 {
-  printf(message);
+  printf(message); printf("\n");
 }
 // ---------------------------------------------------------------------------
 double getTime()
@@ -27,6 +27,7 @@ gui::GUIFactory* getGUIFactory()
 // ---------------------------------------------------------------------------
 bool lib_init()
 {
+	printMessage("RGL/OSX Carbon");
   gGUIFactory = new gui::OSXGUIFactory();
   return true;
 }
