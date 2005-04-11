@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cassert>
-#include "lib.h"
+#include "lib.hpp"
 
 DeviceManager::DeviceManager() 
  : newID(1), devices(), current( devices.end() )

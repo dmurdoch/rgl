@@ -6,7 +6,7 @@
 //
 // $Id$
 
-#include "lib.h"
+#include "lib.hpp"
 
 
 //

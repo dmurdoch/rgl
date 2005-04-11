@@ -5,7 +5,7 @@
 
 #include "pixmap.h"
 
-#include "lib.h"
+#include "lib.hpp"
 
 // PNG FORMAT IMPLEMENTATION
 

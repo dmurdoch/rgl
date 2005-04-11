@@ -216,7 +216,7 @@ bool Scene::pop(TypeID type)
 
 static bool tested  = false;
 
-#include "lib.h"
+#include "lib.hpp"
 
 void Scene::render(RenderContext* renderContext)
 {

@@ -4,7 +4,7 @@
 // $Id$
 
 #include "Device.hpp"
-#include "lib.h"
+#include "lib.hpp"
 
 Device::Device(int id) : id_(id)
 {
