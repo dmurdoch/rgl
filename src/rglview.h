@@ -7,7 +7,7 @@
 // $Id$
 
 
-#include "gui.h"
+#include "gui.hpp"
 #include "scene.h"
 #include "fps.h"
 #include "select.h"

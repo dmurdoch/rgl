@@ -3,7 +3,7 @@
 //
 // $Id$
 // ---------------------------------------------------------------------------
-#include "x11gui.h"
+#include "x11gui.hpp"
 #include "lib.h"
 
 #include <X11/keysym.h>

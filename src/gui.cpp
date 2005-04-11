@@ -3,7 +3,7 @@
 //
 // $Id$
 
-#include "gui.h"
+#include "gui.hpp"
 #include "lib.h"
 #include <string.h>
 

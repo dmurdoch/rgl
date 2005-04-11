@@ -7,7 +7,7 @@
 // $Id$
 
 #include "types.h"
-#include "glgui.h"
+#include "glgui.hpp"
 #include <string.h>
 
 #include "Disposable.hpp"

@@ -10,7 +10,7 @@
 // ===[ GUI IMPLEMENTATION ]=================================================
 //
 
-#include "win32gui.h"
+#include "win32gui.hpp"
 
 gui::Win32GUIFactory* gpWin32GUIFactory = NULL;
 
