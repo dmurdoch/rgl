@@ -4,7 +4,7 @@
 // $Id$
 
 #include "types.h"
-#include "glgui.h"
+#include "glgui.hpp"
 
 //
 // CLASS

@@ -7,7 +7,7 @@
 // $Id$
 
 
-#include "gui.h"
+#include "gui.hpp"
 
 #include <windows.h>
 

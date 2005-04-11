@@ -10,7 +10,7 @@
 // ===[ GUI IMPLEMENTATION ]=================================================
 //
 
-#include "x11gui.h"
+#include "x11gui.hpp"
 
 gui::X11GUIFactory* gpX11GUIFactory = NULL;
 

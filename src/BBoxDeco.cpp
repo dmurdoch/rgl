@@ -1,6 +1,6 @@
 #include "BBoxDeco.hpp"
 
-#include "glgui.h"
+#include "glgui.hpp"
 #include "scene.h"
 #include <cstdio>
 
