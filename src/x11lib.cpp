@@ -1,3 +1,6 @@
+#include "config.hpp"
+#ifdef RGL_X11
+
 // C++ source
 // This file is part of RGL.
 //
@@ -106,3 +109,6 @@ double getTime() {
   gettimeofday(&t,NULL);
   return ( (double) t.tv_sec ) * 1000.0 + ( ( (double) t.tv_usec ) / 1000.0 ); 
 }
+
+#endif // RGL_X11
+

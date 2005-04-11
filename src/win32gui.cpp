@@ -1,3 +1,5 @@
+#include "config.hpp"
+#ifdef RGL_W32
 // C++ source
 // This file is part of RGL.
 //
@@ -522,4 +524,6 @@ namespace gui {
   }
 
 } // namespace gui
+
+#endif // RGL_W32
 

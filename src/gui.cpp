@@ -256,10 +256,3 @@ void Window::wheelRotate(int dir)
 
 }
 
-
-#ifdef WIN32
-#include "win32gui.inc"
-#else
-#include "x11gui.inc"
-#endif
-
