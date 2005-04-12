@@ -10,7 +10,7 @@ Device::Device(int id) : id_(id)
 {
   scene   = new Scene();
   rglview = new RGLView(scene);
-  window  = new Window( rglview, getGUIFactory() );
+  window  = new Window( rglview, lib::getGUIFactory() );
   window->addDisposeListener(this);
 }
 

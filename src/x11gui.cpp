@@ -117,7 +117,7 @@ public:
   void beginGL()
   {
     if ( glXMakeCurrent(factory->xdisplay, xwindow, factory->glxctx) == False )
-      printMessage("ERROR: can't bind glx context to window");
+      lib::printMessage("ERROR: can't bind glx context to window");
   }
   void endGL()
   {
@@ -235,7 +235,7 @@ private:
 
 void X11GUIFactory::throw_error(const char* string)
 {
-  printMessage(string);
+  lib::printMessage(string);
   disconnect();
 }
 
@@ -263,7 +263,7 @@ void X11GUIFactory::connect(const char* displayname)
   Status s = XInternAtoms(xdisplay, atom_names, sizeof(atom_names)/sizeof(char*), True, atoms);
 
   if (!s)
-    printMessage("some atoms not available");
+    lib::printMessage("some atoms not available");
 
   // query glx extension
    
@@ -465,7 +465,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     n++;
   }
   else
-    printMessage("NO WM_DELETE\n");
+    lib::printMessage("NO WM_DELETE\n");
   
   if (n)
     XSetWMProtocols(xdisplay,xwindow,proto_atoms,n);

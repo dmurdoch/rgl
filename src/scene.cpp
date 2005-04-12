@@ -8,28 +8,6 @@
 #include "math.h"
 #include "render.h"
 #include "geom.hpp"
-/*
-#include "String.cpp"
-#include "Color.cpp"
-#include "Texture.cpp"
-#include "Material.cpp"
-#include "Light.cpp"
-#include "Shape.cpp"
-#include "PrimitiveSet.cpp"
-#include "PointSet.cpp"
-#include "LineSet.cpp"
-#include "FaceSet.cpp"
-#include "TriangleSet.cpp"
-#include "QuadSet.cpp"
-#include "TextSet.cpp"
-#include "SpriteSet.cpp"
-#include "SphereSet.cpp"
-#include "Surface.cpp"
-#include "Viewpoint.cpp"
-#include "Background.cpp"
-#include "BBoxDeco.cpp"
- */
-
 #include <map>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -214,20 +192,8 @@ bool Scene::pop(TypeID type)
   return success;
 }
 
-static bool tested  = false;
-
-#include "lib.hpp"
-
 void Scene::render(RenderContext* renderContext)
 {
-/*  
-  if (tested == false) {
-    tested = true;
-    const unsigned char* text = glGetString(GL_EXTENSIONS);
-    printMessage( reinterpret_cast<const char*>(text) );
-  }
- */
-
 
   renderContext->scene     = this;
   renderContext->viewpoint = viewpoint;

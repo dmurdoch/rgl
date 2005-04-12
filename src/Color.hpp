@@ -68,3 +68,4 @@ private:
 };
 
 #endif // COLOR_HPP
+

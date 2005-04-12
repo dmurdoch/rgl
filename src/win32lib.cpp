@@ -8,7 +8,7 @@
 
 #include "lib.hpp"
 
-
+i
 //
 // ===[ GUI IMPLEMENTATION ]=================================================
 //
@@ -75,7 +75,7 @@ BOOL APIENTRY DllMain( HINSTANCE moduleHandle, DWORD reason, LPVOID lpReserved )
 //
 
 //
-// STATIC METHOD printMessage
+// STATIC METHOD lib::printMessage
 //
 // DESCRIPTION
 //   prints message to the user

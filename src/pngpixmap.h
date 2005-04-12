@@ -31,10 +31,10 @@ public:
       bool success;
       success = load.process();
       if (!success)
-        printMessage("pixmap png loader: process failed");
+        lib::printMessage("pixmap png loader: process failed");
       return success;
     } else {
-      printMessage("pixmap png loader: init failed");
+      lib::printMessage("pixmap png loader: init failed");
       return false;
     }
   }
@@ -111,13 +111,13 @@ private:
     static void printError(const char* error_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Loader Error: %s", error_msg);
-      printMessage(buf);
+      lib::printMessage(buf);
     }
 
     static void printWarning(const char* warning_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Loader Warning: %s", warning_msg);
-      printMessage(buf);
+      lib::printMessage(buf);
     }
 
 
@@ -205,7 +205,7 @@ init:
 
 unsupported:
       sprintf(buffer,"%s%s format unsupported: %lux%lu (%d bits per channel)", interlace_string, color_type_name, width, height, bit_depth);
-      printMessage(buffer);
+      lib::printMessage(buffer);
       load->error = true;
       png_read_update_info(load->png_ptr,load->info_ptr);
       return;
@@ -360,13 +360,13 @@ unsupported:
     static void printError(const char* error_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Saver Error: %s", error_msg);
-      printMessage(buf);
+      lib::printMessage(buf);
     }
 
     static void printWarning(const char* warning_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Saver Warning: %s", warning_msg);
-      printMessage(buf);
+      lib::printMessage(buf);
     }
 
 
