@@ -8,6 +8,7 @@
 #include "win32gui.hpp"
 
 #include "lib.hpp"
+#include "glgui.hpp"
 
 #include <winuser.h>
 
