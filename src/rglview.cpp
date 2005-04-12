@@ -39,7 +39,7 @@ RGLView::~RGLView()
 
 void RGLView::show()
 {
-  fps.init( getTime() );
+  fps.init( lib::getTime() );
 }
 
 void RGLView::hide()
@@ -69,7 +69,7 @@ void RGLView::resize(int width, int height) {
 void RGLView::paint(void) {
 
   double last = renderContext.time;
-  double t    = getTime();
+  double t    = lib::getTime();
 
   double dt   = (last != 0.0f) ? last - t : 0.0f;
 

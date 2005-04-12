@@ -88,7 +88,7 @@ bool Pixmap::load(const char* filename)
   if (!file) {
     char buffer[256];
     sprintf(buffer, "Pixmap load: unable to open file '%s' for reading", filename);
-    printMessage(buffer);
+    lib::printMessage(buffer);
     return false;
   }
 
@@ -108,11 +108,11 @@ bool Pixmap::load(const char* filename)
   }
 
   if (!support) {
-    printMessage("Pixmap load: file format unsupported");
+    lib::printMessage("Pixmap load: file format unsupported");
   }
   
   if (!success) {
-    printMessage("Pixmap load: failed");
+    lib::printMessage("Pixmap load: failed");
   }
 
   fclose(file);
@@ -129,7 +129,7 @@ bool Pixmap::save(PixmapFormat* format, const char* filename)
   if (!file) {
     char buffer[256];
     sprintf(buffer, "Pixmap save: unable to open file '%s' for writing", filename);
-    printMessage(buffer);
+    lib::printMessage(buffer);
     return false;
   }
   

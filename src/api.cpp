@@ -31,7 +31,7 @@ void rgl_init(int* successptr)
 {
   bool success = false;
 
-  if ( lib_init() ) {
+  if ( lib::init() ) {
     deviceManager = new DeviceManager();
     success = true;
   }
@@ -54,7 +54,7 @@ void rgl_quit(int* successptr)
     deviceManager = NULL;
   }
 
-  lib_quit();
+  lib::quit();
 
   *successptr = (int) true;
 }

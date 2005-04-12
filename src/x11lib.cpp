@@ -59,9 +59,9 @@ static void unset_R_handler()
 //
 // ===[ LIB INIT / QUIT ]=====================================================
 //
+namespace lib {
 
-
-bool lib_init()
+bool init()
 {
   bool success = false;
 
@@ -76,7 +76,7 @@ bool lib_init()
   return success;
 }
 
-void lib_quit()
+void quit()
 {
   unset_R_handler();
   delete gpX11GUIFactory;
@@ -108,6 +108,8 @@ double getTime() {
   gettimeofday(&t,NULL);
   return ( (double) t.tv_sec ) * 1000.0 + ( ( (double) t.tv_usec ) / 1000.0 ); 
 }
+
+} // namespace lib
 // ---------------------------------------------------------------------------
 #endif // RGL_X11
 

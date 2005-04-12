@@ -1,30 +1,29 @@
 #ifndef RGL_GUI_HPP
 #define RGL_GUI_HPP
-
+// ---------------------------------------------------------------------------
 // C++ header file
 // This file is part of RGL
 //
 // $Id$
-
+// ---------------------------------------------------------------------------
 #include "types.h"
 #include "glgui.hpp"
 #include <string.h>
-
 #include "Disposable.hpp"
-
+// ---------------------------------------------------------------------------
 namespace gui {
-
+// ---------------------------------------------------------------------------
 enum {
   GUI_ButtonLeft = 1,
-  GUI_ButtonMiddle,
-  GUI_ButtonRight
+  GUI_ButtonRight,
+  GUI_ButtonMiddle
 };
-
+// ---------------------------------------------------------------------------
 enum {
   GUI_WheelForward = 1,
   GUI_WheelBackward
 };
-
+// ---------------------------------------------------------------------------
 enum {
   GUI_KeyF1  = 128,
   GUI_KeyF2,
@@ -45,14 +44,14 @@ enum {
   GUI_KeyRight,
   GUI_KeyInsert
 };
-
+// ---------------------------------------------------------------------------
 //
 // IMPLEMENTATION INTERFACE
 //
-
+// ---------------------------------------------------------------------------
 class View;
 class Window;
-
+// ---------------------------------------------------------------------------
 class WindowImpl
 {
 public:
@@ -82,39 +81,38 @@ public:
 protected:
   Window*      window;
 };
-
+// ---------------------------------------------------------------------------
 //
 // GUIFactory to be used in ABSTRACT GUI TOOLKIT
 //
-
+// ---------------------------------------------------------------------------
 class GUIFactory
 {
 public:
   virtual WindowImpl* createWindowImpl(Window*) = 0;
 };
-
-
+// ---------------------------------------------------------------------------
 } // namespace gui
-
+// ---------------------------------------------------------------------------
 //
 // implementation specific
 //
-
-extern gui::GUIFactory* getGUIFactory();
-
-
+namespace lib {
+gui::GUIFactory* getGUIFactory();
+}
+// ---------------------------------------------------------------------------
 namespace gui {
-
+// ---------------------------------------------------------------------------
 //
 // ABSTRACT GUI TOOLKIT
 //
-
+// ---------------------------------------------------------------------------
 //
 // view flags
 //
-
+// ---------------------------------------------------------------------------
 #define WINDOW_IMPL_OWNER   (1<<0)
-
+// ---------------------------------------------------------------------------
 class View : public Node
 {
 public:
@@ -157,7 +155,7 @@ public:
 
   friend class Window;
 };
-
+// ---------------------------------------------------------------------------
 //
 // WINDOW
 //
@@ -167,12 +165,12 @@ public:
 //   - size: 256,256
 //   - title: untitled
 //
-
+// ---------------------------------------------------------------------------
 class Window : public View, public Disposable
 {
 public:
 
-  Window(View* child=NULL, GUIFactory* factory=getGUIFactory() );
+  Window(View* child=NULL, GUIFactory* factory=lib::getGUIFactory() );
   ~Window();
 
 // overloaded view methods:
@@ -205,10 +203,9 @@ public:
 // data:
   View* child;
   const char* title;
-
 };
-
+// ---------------------------------------------------------------------------
 } // namespace gui
-
+// ---------------------------------------------------------------------------
 #endif // RGL_GUI_HPP 
 

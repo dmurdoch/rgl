@@ -69,7 +69,7 @@ namespace gui {
         ShowWindow(windowHandle, SW_SHOW);
         UpdateWindow(windowHandle);
       } else
-        printMessage("window not bound");
+        lib::printMessage("window not bound");
     }
 
     void hide(void)
@@ -100,7 +100,7 @@ namespace gui {
 	    				SWP_NOMOVE | SWP_NOSIZE);
 
       } else
-        printMessage("window not bound");
+        lib::printMessage("window not bound");
     }
 #endif
 
@@ -214,11 +214,11 @@ namespace gui {
           if ( ( glrcHandle = wglCreateContext( dcHandle ) ) )
               success = true;
           else
-            printMessage("wglCreateContext failed");
+            lib::printMessage("wglCreateContext failed");
 
         }
         else
-          printMessage("iPixelFormat == 0!");
+          lib::printMessage("iPixelFormat == 0!");
 
         ReleaseDC(windowHandle,dcHandle);
       }
@@ -284,7 +284,7 @@ namespace gui {
     bool  updateMode;             // window is currently updated
     bool  autoUpdate;             // update/refresh automatically
 
-    static void printMessage(const char* string) {
+    static void lib::printMessage(const char* string) {
       MessageBox(NULL, string, "RGL GUI/Win32 port", MB_OK|MB_ICONINFORMATION);
     }
 
@@ -485,7 +485,7 @@ namespace gui {
       inModuleHandle = GetModuleHandle(NULL);
 
     if ( !Win32WindowImpl::registerClass(inModuleHandle) )
-      Win32WindowImpl::printMessage("error: window class registration failed");
+      Win32WindowImpl::lib::printMessage("error: window class registration failed");
   }
 
   Win32GUIFactory::~Win32GUIFactory() {
@@ -517,7 +517,7 @@ namespace gui {
     );
 
     if (!success) {
-      printMessage("gui/win32: unable to create window failed");
+      lib::printMessage("gui/win32: unable to create window failed");
       return NULL;
     }
 
