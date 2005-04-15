@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef RGL_TYPES_H
+#define RGL_TYPES_H
 
 #include "pragma.h"
 
@@ -243,39 +243,5 @@ inline float getMax(float a, float b) { return (a >= b) ? a : b; }
 inline float clamp(float v, float floor, float ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
 inline int   clamp(int   v, int   floor, int   ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
 
-/**
- * Listener utility
- **/
-#if 0
-#include <vector>
+#endif /* RGL_TYPES_H */
 
-template<class ListenerT>
-class ListenerList
-{
-public:
-  typedef ListenerT::EventT EventT;
-  typedef void (ListenerT::* MemberPtrT) (const EventT&);
-  void add(ListenerT* l)
-  {
-    listeners.push_back(l);
-  }
-  void remove(ListenerT* l)
-  {
-    std::vector<ListenerT*>::iterator iter = std::find( listeners.begin() , listeners.end() , l);
-    if ( iter != listeners.end() )
-      listeners.erase(iter);
-  }
-  void fire(MemberPtrT ptr, const EventT& event) 
-  {
-    std::vector<ListenerT*>::iterator iter;
-    for (iter = listeners.begin() ; iter != listeners.end() ; ++ iter ) {
-      ListenerT* l = *iter;
-      (l->*ptr)(event);
-    }
-  }
-private:
-  std::vector<ListenerT*> listeners;
-};
-#endif
-
-#endif /* TYPES_H */

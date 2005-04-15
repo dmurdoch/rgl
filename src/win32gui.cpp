@@ -284,10 +284,6 @@ namespace gui {
     bool  updateMode;             // window is currently updated
     bool  autoUpdate;             // update/refresh automatically
 
-    static void lib::printMessage(const char* string) {
-      MessageBox(NULL, string, "RGL GUI/Win32 port", MB_OK|MB_ICONINFORMATION);
-    }
-
 
     LRESULT processMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
       LRESULT returnValue = 0;
@@ -485,7 +481,7 @@ namespace gui {
       inModuleHandle = GetModuleHandle(NULL);
 
     if ( !Win32WindowImpl::registerClass(inModuleHandle) )
-      Win32WindowImpl::lib::printMessage("error: window class registration failed");
+      lib::printMessage("error: window class registration failed");
   }
 
   Win32GUIFactory::~Win32GUIFactory() {
