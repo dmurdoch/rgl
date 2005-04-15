@@ -1,32 +1,23 @@
-#ifndef WIN32_GUI_H
-#define WIN32_GUI_H
-
-// C++ header file
-// This file is part of RGL
-//
+#ifndef RGL_W32_GUI_HPP
+#define RGL_W32_GUI_HPP
+// ---------------------------------------------------------------------------
 // $Id$
-
-
+// ---------------------------------------------------------------------------
 #include "gui.hpp"
-
+// ---------------------------------------------------------------------------
 #include <windows.h>
-
+// ---------------------------------------------------------------------------
 namespace gui {
-
-  class Win32GUIFactory : public GUIFactory
-  {
-  
-  public:
-  
-    Win32GUIFactory(HINSTANCE inModuleHandle);
-    virtual ~Win32GUIFactory();
-  
-    WindowImpl* createWindowImpl(Window* window);
-      
-  };
-
+// ---------------------------------------------------------------------------
+class Win32GUIFactory : public GUIFactory
+{
+public:
+  Win32GUIFactory();
+  virtual ~Win32GUIFactory();
+  WindowImpl* createWindowImpl(Window* window);
+};
+// ---------------------------------------------------------------------------
 } // namespace gui
-
-
-#endif /* WIN32_GUI_H */
+// ---------------------------------------------------------------------------
+#endif // RGL_W32_GUI_HPP
 
