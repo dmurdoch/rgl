@@ -7,6 +7,7 @@
 #include "lib.hpp"
 #include "win32gui.hpp"
 #include <windows.h>
+#include <cassert>
 // ---------------------------------------------------------------------------
 namespace lib {
 // ---------------------------------------------------------------------------
@@ -36,7 +37,7 @@ double getTime() {
 bool init()
 {
   assert(gpWin32GUIFactory == NULL);
-  gpWin32GUIFactory = new gui::Win32GUIFactory(NULL);  
+  gpWin32GUIFactory = new gui::Win32GUIFactory();  
   return true;
 }
 // ---------------------------------------------------------------------------
