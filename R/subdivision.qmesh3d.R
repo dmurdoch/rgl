@@ -5,7 +5,7 @@
 # using addition operations and homogenous coordinates 
 # by Daniel Adler 
 #
-# $Id: subdivision.qmesh3d.R,v 1.1 2004/08/27 16:03:47 dadler Exp $
+# $Id$
 # 
 
 edgemap <- function( size ) {
@@ -100,7 +100,7 @@ deform.qmesh3d <- function( mesh, vb=mesh$vb, ib=mesh$ib )
   return(mesh)
 }
 
-subdivision3d.qmesh3d <- function(mesh,depth=1,normalize=F,deform=T) {
+subdivision3d.qmesh3d <- function(mesh,depth=1,normalize=FALSE,deform=TRUE) {
   if (depth) {
     mesh <- divide.qmesh3d(mesh)
     if (normalize)
