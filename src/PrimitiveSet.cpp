@@ -113,11 +113,15 @@ FaceSet::FaceSet(
 {
   if (material.lit) {
     normalArray.alloc(nvertices);
-    for (int i=0;i<=nvertices-nverticesperelement;i+=nverticesperelement) {
-      normalArray[i+3] = normalArray[i+2] = normalArray[i+1] = normalArray[i] = vertexArray.getNormal(i,i+1,i+2);
+    for (int i=0;i<=nvertices-nverticesperelement;i+=nverticesperelement) 
+    {    
+      normalArray[i] = vertexArray.getNormal(i,i+1,i+2);
+      for (int j=1;j<nverticesperelement;++j)    
+        normalArray[i+j] = normalArray[i];
     }
   }
 }
+
 
 // ---------------------------------------------------------------------------
 
