@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.10 2005/02/17 15:17:02 murdoch Exp $
+## $Id$
 ##
 
 ##
@@ -215,6 +215,13 @@ rgl.primitive <- function( type, x, y, z, ... )
 
   type <- rgl.enum.primtype(type)
 
+  if (any(is.na(c(x,y,z)))) {
+    d <- complete.cases(cbind(x,y,z))
+    x <- x[d]
+    y <- y[d]
+    z <- z[d]
+    warning("NA/NaN values ignored")
+  }
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   idata   <- as.integer( c(type, nvertex ) )
@@ -440,7 +447,7 @@ rgl.mouseMode <- function(button = c("left", "middle", "right"),
 	
 	ddata <- as.integer(button)
 	
-	ret <- .C( symbol.C("rgl_mouseMode"), 
+	ret <- .C( symbol.C("rgl_setMouseMode"), 
 		    success=FALSE,
 		    mode = idata,
 		    ddata,
