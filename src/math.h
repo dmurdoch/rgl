@@ -27,12 +27,12 @@ namespace math {
   template<typename T> inline T sin(T x) { return static_cast<T>( ::sin( static_cast<double>(x) ) ); }
   template<> inline float sin(float rad) { return ::sinf(rad); }
   template<typename T> inline T tan(T x) { return static_cast<T>( ::tan( static_cast<double>(x) ) ); }
-  template<typename T> inline T acosh(T x) { return static_cast<T>( ::acosh( static_cast<double>(x) ) ); }
-  template<typename T> inline T asinh(T x) { return static_cast<T>( ::asinh( static_cast<double>(x) ) ); }
-  template<typename T> inline T atanh(T x) { return static_cast<T>( ::atanh( static_cast<double>(x) ) ); }
-  template<typename T> inline T cosh(T x) { return static_cast<T>( ::cosh( static_cast<double>(x) ) ); }
-  template<typename T> inline T sinh(T x) { return static_cast<T>( ::sinh( static_cast<double>(x) ) ); }
-  template<typename T> inline T tanh(T x) { return static_cast<T>( ::tanh( static_cast<double>(x) ) ); }
+  // template<typename T> inline T acosh(T x) { return static_cast<T>( ::acosh( static_cast<double>(x) ) ); }
+  // template<typename T> inline T asinh(T x) { return static_cast<T>( ::asinh( static_cast<double>(x) ) ); }
+  // template<typename T> inline T atanh(T x) { return static_cast<T>( ::atanh( static_cast<double>(x) ) ); }
+  // template<typename T> inline T cosh(T x) { return static_cast<T>( ::cosh( static_cast<double>(x) ) ); }
+  // template<typename T> inline T sinh(T x) { return static_cast<T>( ::sinh( static_cast<double>(x) ) ); }
+  // template<typename T> inline T tanh(T x) { return static_cast<T>( ::tanh( static_cast<double>(x) ) ); }
   template<typename T> inline T exp(T x) { return static_cast<T>( ::exp( static_cast<double>(x) ) ); }
   template<typename T> inline T exp2(T x) { return static_cast<T>( ::exp2( static_cast<double>(x) ) ); }
 //  template<typename T> inline T expm1(T x) { return static_cast<T>( ::expm1( static_cast<double>(x) ) ); }
