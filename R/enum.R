@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: enum.R,v 1.4 2004/08/09 19:33:27 murdoch Exp $
+## $Id$
 ##
 
 
@@ -63,3 +63,6 @@ rgl.enum.texminfilter <- function (minfiltertype)
 rgl.enum.texmagfilter <- function (magfiltertype)
   return ( rgl.enum (magfiltertype, nearest=0, linear=1) )
 
+# see GL2PS_XXX defines in ../src/gl2ps.h
+rgl.enum.gl2ps <- function (postscripttype)
+  return ( rgl.enum (postscripttype, ps=1, eps=2, tex=3, pdf=4) )
