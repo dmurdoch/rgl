@@ -141,7 +141,7 @@ private:
       char buffer[256];
       Load* load = (Load*) png_get_progressive_ptr(png_ptr);
 
-      unsigned long width, height;
+      png_uint_32 width, height;
       int  bit_depth, color_type, interlace_type, compression_type, filter_type;
 
       png_get_IHDR(load->png_ptr, load->info_ptr, &width, &height,
