@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R,v 1.4 2004/05/28 07:05:25 dadler Exp $
+## $Id$
 ##
 
 ##
@@ -92,6 +92,26 @@ rgl.snapshot <- function( filename, fmt="png" )
   idata <- as.integer(rgl.enum.pixfmt(fmt))
 
   ret <- .C( symbol.C("rgl_snapshot"),
+    success=FALSE,
+    idata,
+    as.character(filename),
+    PACKAGE="rgl"
+  )
+
+  if (! ret$success)
+    print("failed")
+}
+
+##
+## export postscript image
+##
+##
+
+rgl.postscript <- function( filename, fmt="eps" )
+{
+  idata <- as.integer(rgl.enum.gl2ps(fmt))
+
+  ret <- .C( symbol.C("rgl_postscript"),
     success=FALSE,
     idata,
     as.character(filename),
