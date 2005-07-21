@@ -99,3 +99,8 @@ RGLView* Device::getRGLView(void)
 {
 	return rglview;
 }
+
+bool Device::postscript(int format, const char* filename)
+{
+  return rglview->postscript( format, filename);
+}

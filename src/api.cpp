@@ -781,3 +781,21 @@ void rgl_getViewport(int* successptr, double* viewport)
 
   *successptr = success;
 }
+
+void rgl_postscript(int* successptr, int* idata, char** cdata)
+{
+  bool success = false;
+ 
+  Device* device = deviceManager->getCurrentDevice();
+
+  if (device) {
+
+    int   format   = idata[0];
+    char* filename = cdata[0];
+
+    success = device->postscript( format, filename );
+  }
+
+  *successptr = (int) success;
+}
+
