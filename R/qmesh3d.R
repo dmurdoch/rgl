@@ -32,7 +32,7 @@ translate3d.qmesh3d <- function ( x, tx, ty, tz ) {
     data=c( 1, 0, 0,tx,
             0, 1, 0,ty,
             0, 0, 1,tz,
-            0, 0, 0, 1 ), nrow=4, ncol=4, byrow=T) %*%  x$vb[,i] 
+            0, 0, 0, 1 ), nrow=4, ncol=4, byrow=TRUE) %*%  x$vb[,i] 
   }
   return(x)                            
 }  
