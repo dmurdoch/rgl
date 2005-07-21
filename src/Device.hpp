@@ -33,6 +33,7 @@ public: // -- all methods are blocking until action completed
   bool open(void); // -- if failed, instance is invalid and should be deleted
   void close(void); // -- when done, instance is invalid and should be deleted
   bool snapshot(int format, const char* filename);
+  bool postscript(int format, const char* filename);
 
   bool clear(TypeID stackTypeID);
   bool add(SceneNode* node);
