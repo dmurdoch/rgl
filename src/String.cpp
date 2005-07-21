@@ -59,8 +59,10 @@ StringArray::StringArray()
 
 StringArray::StringArray(int in_ntexts, char** in_texts)
 {
-  if (in_ntexts > 0)
+  if (in_ntexts > 0) {
     impl = new StringArrayImpl(in_ntexts, in_texts);
+    impl->ref();
+  }
   else
     impl = NULL;
 }
