@@ -83,6 +83,7 @@ EXPORT_SYMBOL void rgl_setFOV(int* successptr, double* fov);
 EXPORT_SYMBOL void rgl_getModelMatrix(int* successptr, double* modelMatrix);
 EXPORT_SYMBOL void rgl_getProjMatrix(int* successptr, double* projMatrix);
 EXPORT_SYMBOL void rgl_getViewport(int* successptr, int* viewport);
+EXPORT_SYMBOL void rgl_getBoundingbox(int* successptr, double* bboxvec);
 
 #ifdef __cplusplus
 }

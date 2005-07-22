@@ -39,6 +39,12 @@ public: // -- all methods are blocking until action completed
   bool add(SceneNode* node);
   bool pop(TypeID stackTypeID);
 
+  // accessor method for Scene, modeled after getBoundingBox()
+  // from scene.h
+  const Scene* getScene() const { return scene; }
+
+
+
 #ifdef _WIN32
   void bringToTop(int stay);
 #endif

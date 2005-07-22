@@ -9,6 +9,7 @@
 \concept{userMatrix}
 \concept{viewport}
 \concept{zoom}
+\concept{bbox}
 
 \title{Set or Query RGL Parameters}
 
@@ -88,6 +89,8 @@ par3d(\dots, no.readonly = FALSE)
       window in pixels.}
     \item{\code{zoom}}{real. A positive value indicating the current
       magnification of the scene.}
+      \item{\code{bbox}}{\emph{\bold{R.O.}; real. A vector of six values indicating the current values of the
+      bounding box of the scene (xmin, xmax, ymin, ymax, zmin, zmax)}
   }
 }
 
