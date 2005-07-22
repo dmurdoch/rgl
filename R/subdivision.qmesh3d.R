@@ -100,7 +100,8 @@ deform.qmesh3d <- function( mesh, vb=mesh$vb, ib=mesh$ib )
   return(mesh)
 }
 
-subdivision3d.qmesh3d <- function(mesh,depth=1,normalize=FALSE,deform=TRUE) {
+subdivision3d.qmesh3d <- function(x,depth=1,normalize=FALSE,deform=TRUE,...) {
+  mesh <- x
   if (depth) {
     mesh <- divide.qmesh3d(mesh)
     if (normalize)

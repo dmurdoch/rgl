@@ -50,4 +50,4 @@
 \code{\link{cube3d}}
 \code{\link{rgl}}
 }
-
+\keyword{dynamic}
