@@ -10,7 +10,7 @@
   3D Quadrangle Mesh object creation and a collection of sample objects.
 }
 \usage{
-  qmesh3d(vertices,indices,homogeneous=TRUE,material=NULL}
+  qmesh3d(vertices,indices,homogeneous=TRUE,material=NULL)
   cube3d()  # cube object
   oh3d()    # an 'o' object
 }
@@ -50,4 +50,4 @@
 \seealso{
   \code{\link{r3d}}
 }
-
+\keyword{dynamic}
