@@ -16,9 +16,13 @@
 
 gui::X11GUIFactory* gpX11GUIFactory = NULL;
 
+
+namespace lib {
+
 gui::GUIFactory* getGUIFactory()
 {
   return (gui::GUIFactory*) gpX11GUIFactory;
+}
 }
 
 //
