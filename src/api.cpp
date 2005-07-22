@@ -686,15 +686,6 @@ void rgl_setselectstate(int* successptr, int *idata)
   *successptr = success;
 }
 
-void rgl_projection(int* successptr, double* model, double* proj, double* view)
-{
-    rgl_getModelMatrix(successptr, model);
-    if (*successptr) 
-    	rgl_getProjMatrix(successptr, proj);
-    if (*successptr)
-    	rgl_getViewport(successptr, view);
-}
-
 void rgl_getUserMatrix(int* successptr, double* userMatrix)
 {
 	bool success = false;
@@ -765,7 +756,7 @@ void rgl_getProjMatrix(int* successptr, double* projMatrix)
   *successptr = success;
 }
 
-void rgl_getViewport(int* successptr, double* viewport)
+void rgl_getViewport(int* successptr, int* viewport)
 {
 	bool success = false;
   	Device* device = deviceManager->getAnyDevice();
