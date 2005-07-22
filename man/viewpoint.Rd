@@ -29,7 +29,7 @@ set the viewpoint interactively. With the pointing device the buttons are by def
 }
 
 }
-\seealso{\code{\link{rgl.mouseMode}}}
+\seealso{\code{\link{par3d}}}
 \examples{
 
 # animated round trip tour
