@@ -74,7 +74,6 @@ EXPORT_SYMBOL void rgl_getMouseMode(int* successptr, int* button, int* mode);
 EXPORT_SYMBOL void rgl_setMouseMode(int* successptr, int* button, int* mode);
 EXPORT_SYMBOL void rgl_selectstate(int* successptr, int* selectstate, double* locations);
 EXPORT_SYMBOL void rgl_setselectstate(int* successptr, int *idata);
-EXPORT_SYMBOL void rgl_projection(int* successptr, double* model, double* proj, double* view);
 EXPORT_SYMBOL void rgl_getUserMatrix(int* successptr, double* userMatrix);
 EXPORT_SYMBOL void rgl_setUserMatrix(int* successptr, double* userMatrix);
 EXPORT_SYMBOL void rgl_getZoom(int* successptr, double* zoom);
@@ -83,7 +82,7 @@ EXPORT_SYMBOL void rgl_getFOV(int* successptr, double* fov);
 EXPORT_SYMBOL void rgl_setFOV(int* successptr, double* fov);
 EXPORT_SYMBOL void rgl_getModelMatrix(int* successptr, double* modelMatrix);
 EXPORT_SYMBOL void rgl_getProjMatrix(int* successptr, double* projMatrix);
-EXPORT_SYMBOL void rgl_getViewport(int* successptr, double* viewport);
+EXPORT_SYMBOL void rgl_getViewport(int* successptr, int* viewport);
 
 #ifdef __cplusplus
 }

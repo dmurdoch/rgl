@@ -488,20 +488,9 @@ rgl.setselectstate <- function(state = "current")
 
 rgl.projection <- function()
 {
-    ret <- .C( symbol.C("rgl_projection"),
-    	success = FALSE,
-    	model = double(16),
-    	proj = double(16),
-    	view = integer(4),
-    	PACKAGE = "rgl"
-    )
-    
-    if (! ret$success)
-	    stop("rgl_projection failed")
-	    
-    list(model = matrix(ret$model, 4, 4),
-    	 proj = matrix(ret$proj, 4, 4),
-    	 view = ret$view)
+    list(model = par3d("modelMatrix"),
+    	 proj = par3d("projMatrix"),
+    	 view = par3d("viewport"))
 }   
      
 rgl.select3d <- function() {

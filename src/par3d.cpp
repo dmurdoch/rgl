@@ -199,8 +199,8 @@ static SEXP Query(char *what)
 	rgl_getUserMatrix(&success, REAL(value));
     }
     else if (streql(what, "viewport")) {
-	value = allocVector(REALSXP, 4);
-	rgl_getViewport(&success, REAL(value));
+	value = allocVector(INTSXP, 4);
+	rgl_getViewport(&success, INTEGER(value));
     }
     else if (streql(what, "zoom")) {
 	value = allocVector(REALSXP, 1);
