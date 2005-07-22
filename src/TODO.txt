@@ -48,3 +48,7 @@ ARCHIVE
 - multi-pass rendering (through accumulation) ... depth of field?!
 - win32/visualc++: built resets fpu word (detected with options(warn.FPU=t) )
 
+
+some additions
+==============
+
