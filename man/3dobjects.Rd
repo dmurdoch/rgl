@@ -67,6 +67,6 @@ text3d(-3*(0:5)+3, 3*(0:5), 0,
        c('points3d','lines3d','segments3d',
          'triangles3d', 'quads3d','text3d'),
        adj = 0)
-rgl.bringtotop()
+if (.Platform$OS.type=="windows") rgl.bringtotop()
 }
 \keyword{dynamic}
