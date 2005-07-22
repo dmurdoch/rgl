@@ -206,6 +206,10 @@ static SEXP Query(char *what)
 	value = allocVector(REALSXP, 1);
 	rgl_getZoom(&success, REAL(value));
     }
+    else if (streql(what, "bbox")) {
+      value = allocVector(REALSXP, 6);
+      rgl_getBoundingbox(&success, REAL(value));
+    }
     else
   	value = R_NilValue;
   	

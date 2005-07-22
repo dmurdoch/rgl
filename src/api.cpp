@@ -790,3 +790,25 @@ void rgl_postscript(int* successptr, int* idata, char** cdata)
   *successptr = (int) success;
 }
 
+
+void rgl_getBoundingbox(int* successptr, double* bboxvec)
+{
+	bool success = false;
+  	Device* device = deviceManager->getAnyDevice();
+
+	if (device){
+
+	  const AABox& bbox = device->getScene()->getBoundingBox();
+	  bboxvec[0] = bbox.vmin.x;
+	  bboxvec[1] = bbox.vmax.x;
+	  bboxvec[2] = bbox.vmin.y;
+	  bboxvec[3] = bbox.vmax.y;
+	  bboxvec[4] = bbox.vmin.z;
+	  bboxvec[5] = bbox.vmax.z;
+
+	  success = true;
+	}
+	
+	*successptr = success;
+}
+
