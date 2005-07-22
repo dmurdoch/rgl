@@ -68,8 +68,18 @@ par3d(\dots, no.readonly = FALSE)
       the degree of parallax in the perspective view.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
       of the user data.}
-    \item{\code{mouseMode}}{character.  A vector of strings describing
-      what the 3 mouse buttons do. Partial matching is used.}
+    \item{\code{mouseMode}}{character.  A vector of 3 strings describing
+      what the 3 mouse buttons do. Partial matching is used.  Possible values for \code{mouseMode} are 
+	\describe{
+	 \item{\code{"none"}}{No action for this button.}
+	 \item{\code{"trackball"}}{Mouse acts as a virtual trackball, rotating the scene.}
+	 \item{\code{"polar"}}{Mouse rotates the scene by moving in polar coordinates.}
+	 \item{\code{"selecting"}}{Mouse is used for selection.  This is not normally set by the
+	 user, but is used internally by the \code{\link{select3d}} function.}
+	 \item{\code{"zoom"}}{Mouse is used to zoom the display.}
+	 \item{\code{"fov"}}{Mouse changes the field of view of the display.}
+	}
+    }
     \item{\code{projMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the current
       projection of the scene.}
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
@@ -79,10 +89,6 @@ par3d(\dots, no.readonly = FALSE)
     \item{\code{zoom}}{real. A positive value indicating the current
       magnification of the scene.}
   }
-}
-
-\details{
-Possible values for \code{mouseMode} are \code{c("none", "trackball", "polar", "selecting", "zoom", "fov")}.
 }
 
 \seealso{\code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
