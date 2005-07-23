@@ -2,7 +2,7 @@
 # Makevars file for X11 port 
 # AUTO-GENERATED file from Makevars.in (using autoconf)
 #
-# $Id: Makevars.in.in,v 1.1 2003/11/19 18:00:38 dadler Exp $
+# $Id$
 #
 
 OBJS=@RGL_OBJS@

@@ -5,7 +5,7 @@
 ## Process this file with autoconf to produce a configure script.
 ## origin: src/build/autoconf/configure.ac.in
 ##
-## $Id: configure.ac.in,v 1.11 2004/02/27 17:46:51 dadler Exp $
+## $Id$
 ##
 
 AC_PREREQ(2.50)

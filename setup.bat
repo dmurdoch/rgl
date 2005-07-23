@@ -2,7 +2,7 @@
 REM RGL windows build tool setup
 REM This file is part of the RGL software
 REM (c) 2003 D.Adler
-REM $Id: setup.bat,v 1.7 2005/02/08 21:18:01 dadler Exp $
+REM $Id$
 
 set SRC=src
 
