@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R,v 1.3 2005/02/08 23:36:55 dadler Exp $
+# $Id$
 # 
 
 dev3d <- "rgl"

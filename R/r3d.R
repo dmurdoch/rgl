@@ -1,6 +1,6 @@
 #
 # Generic 3D interface for R
-# $Id: r3d.R,v 1.4 2005/02/08 23:36:54 dadler Exp $
+# $Id$
 #
 
 # ===[ GENERIC RENDERING FUNCTIONS ]==========================================
