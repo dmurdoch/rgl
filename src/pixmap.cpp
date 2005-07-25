@@ -66,6 +66,8 @@ bool Pixmap::init(PixmapTypeID in_typeID, int in_width, int in_height, int in_bi
 
   if (typeID == RGB24)
     channels = 3;
+  else if (typeID == RGBA32)
+    channels = 4;
   else if (typeID == GRAY8)
     channels = 1;
   else
