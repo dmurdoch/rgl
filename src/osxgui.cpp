@@ -1,6 +1,6 @@
 #include "config.hpp"
 // ---------------------------------------------------------------------------
-#ifdef RGL_OSX
+#ifdef RGL_CARBON
 /**
  * TODO
 - get font width
@@ -125,6 +125,7 @@ void OSXWindowImpl::on_dispose()
   dispose_glfont();
   if (window)
     window->notifyDestroy();
+  delete this;
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::init_glfont()
@@ -309,5 +310,5 @@ WindowImpl* OSXGUIFactory::createWindowImpl(Window* window)
 // ---------------------------------------------------------------------------
 } // namespace gui
 // ---------------------------------------------------------------------------
-#endif // RGL_OSX
+#endif // RGL_CARBON
 

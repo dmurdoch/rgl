@@ -13,9 +13,12 @@ AC_PREREQ(2.50)
 
 AC_INIT()
 AC_CONFIG_AUX_DIR(src/build/autoconf)
+AC_ARG_ENABLE([carbon],
+[  --disable-carbonn          os x: use X11 instead of Carbon]
+)
 
-if test `uname` = "Darwin" ; then
-  CPPFLAGS="${CPPFLAGS} -I/System/Library/Frameworks/AGL.framework/Headers"
+if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then
+  CPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
   LIBS="${LIBS} -framework AGL"
 else
   AC_PATH_X

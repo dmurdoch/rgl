@@ -218,7 +218,8 @@ public:
         break;
       case DestroyNotify:
         factory->notifyDelete(xwindow);
-        window->notifyDestroy();
+        if (window)
+          window->notifyDestroy();
         delete this;
         break;
     }
@@ -464,36 +465,32 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     proto_atoms[n] = atoms[GUI_X11_ATOM_WM_DELETE];
     n++;
   }
-  else
-    lib::printMessage("NO WM_DELETE\n");
   
   if (n)
     XSetWMProtocols(xdisplay,xwindow,proto_atoms,n);
 
   // create window implementation instance
-    
-  impl = new X11WindowImpl(window, this, xwindow);
   
+  impl = new X11WindowImpl(window, this, xwindow);
 
   // register instance
-    
+  
   windowMap[xwindow] = impl;
   
-
   // flush X requests
-    
+  
   flushX();
     
   return (WindowImpl*) impl;
 }
-
+// ---------------------------------------------------------------------------
 void X11GUIFactory::notifyDelete(::Window xwindowid)
 {
   // remove window from map
   windowMap.erase(xwindowid);
 }
-
+// ---------------------------------------------------------------------------
 } // namespace gui
 // ---------------------------------------------------------------------------
-#endif // RGL_X11
+#endif // RGL_X11_HPP
 
