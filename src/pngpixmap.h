@@ -189,7 +189,9 @@ private:
         case PNG_COLOR_TYPE_GRAY:
           typeID = GRAY8;
           goto init;
-        case PNG_COLOR_TYPE_RGB_ALPHA:        
+        case PNG_COLOR_TYPE_RGB_ALPHA:
+          typeID = RGBA32;
+          goto init;        
         case PNG_COLOR_TYPE_PALETTE:
         case PNG_COLOR_TYPE_GRAY_ALPHA:
         default:
