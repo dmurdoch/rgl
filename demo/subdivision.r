@@ -1,7 +1,7 @@
 # rgl-demo: subdivision surfaces
 # author: Daniel Adler
 # notes: demo contains preview material of r3d, a generic 3D interface for R
-# $Id$
+# $Id: subdivision.r,v 1.4 2004/09/03 13:51:06 dadler Exp $
   
 # 3d meshes
   

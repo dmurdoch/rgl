@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id$
+## $Id: material.R,v 1.3 2004/03/03 22:09:44 dadler Exp $
 ##
 
 ##

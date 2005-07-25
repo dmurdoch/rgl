@@ -5,7 +5,7 @@
 # with zlib and lpng.
 # This file is part of rgl.
 #
-# $Id$
+# $Id: download.sh,v 1.2 2005/02/08 21:26:48 dadler Exp $
 # 
 
 ZLIB=zlib121

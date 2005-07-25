@@ -195,6 +195,7 @@ public:
   void mouseMove(int mouseX, int mouseY);
   void keyPress(int code);
   void wheelRotate(int dir);
+  void dispose();
 
 #ifdef _WIN32
   void bringToTop(int stay);

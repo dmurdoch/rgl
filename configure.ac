@@ -11,7 +11,7 @@ AC_PREREQ(2.50)
 
 ## ---[ VERSION ]-------------------------------------------------------------
 
-AC_INIT([rgl])
+AC_INIT()
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
 if test `uname` = "Darwin" ; then

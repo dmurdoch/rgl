@@ -253,6 +253,14 @@ void Window::wheelRotate(int dir)
   if (child)
     child->wheelRotate(dir);
 }
+void Window::dispose()
+{
+  if (windowImpl) {
+    windowImpl->unbind();
+    windowImpl->destroy();
+  }
+  Disposable::dispose();
+}
 
 }
 

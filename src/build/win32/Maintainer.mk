@@ -3,7 +3,7 @@
 #
 # Usage: make info 
 #
-# $Id$
+# $Id: Maintainer.mk,v 1.9 2004/05/26 19:07:02 dadler Exp $
 #
 
 all: info

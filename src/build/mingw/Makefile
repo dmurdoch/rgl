@@ -2,7 +2,7 @@
 # Makefile for win32/mingwl
 # This file is part of RGL
 #
-# $Id$
+# $Id: Makefile,v 1.11 2005/02/15 19:40:21 dadler Exp $
 #
 
 all: target
