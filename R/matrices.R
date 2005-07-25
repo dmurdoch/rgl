@@ -1,15 +1,15 @@
 # Functions for creating 4x4 graphics matrices
 
-scale3d <- function(x,y,z) diag(c(x,y,z,1))
+scale.matrix <- function(x,y,z) diag(c(x,y,z,1))
 
-Translate3d <- function(x,y,z)
+translation.matrix <- function(x,y,z)
 {
     result <- diag(4)
     result[4,1:3] <- c(x,y,z)
     result
 }
 
-rotate3d <- function(angle,x,y,z,matrix)
+rotation.matrix <- function(angle,x,y,z,matrix)
 {
     if (missing(matrix))
     {
