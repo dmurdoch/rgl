@@ -1,48 +1,44 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R,v 1.3 2005/02/08 23:36:55 dadler Exp $
+# $Id$
 # 
 
-dev3d <- "rgl"
+# Node Management
 
-# scene management - RGL implementation
+clear3d     <- function(...) rgl.clear(...)
+pop3d       <- function(...) rgl.pop(...)
 
-clear3d.rgl <- function( type ) 
-  rgl.clear( type )
-pop3d.rgl <- function( type ) 
-  rgl.pop( type )
-bg3d.rgl <- function( color, ... ) 
-  rgl.bg( color=color, ... )
-light3d.rgl <- function( theta, phi, ... ) 
-  rgl.light( theta=theta, phi=phi, ... )
+# Environment
 
-# primitive shape implementation
+bg3d        <- function(...) rgl.bg(...)
+light3d     <- function(theta=0,phi=15,...) rgl.light(theta=theta,phi=phi,...)
+view3d      <- function(theta,phi,...) rgl.viewpoint(theta=theta,phi=phi)
 
-points3d.rgl <- function ( x, y, z, ... ) 
-  rgl.points( x, y, z, ... )
-lines3d.rgl <- function ( x, y, z, ... ) 
-  rgl.linestrips( x, y, z, ... )
-segments3d.rgl <- function ( x, y, z, ... ) 
-  rgl.lines( x, y, z, ... )
-triangles3d.rgl <- function ( x, y, z, ... ) 
-  rgl.triangles( x, y, z, ... )
-quads3d.rgl <- function( x, y, z, ... ) 
-  rgl.quads(x, y, z, ... )
-text3d.rgl <- function( x, y, z, texts, adj, ... ) 
-  rgl.texts( x, y, z, texts, adj, ... ) 
+# Shapes
 
-# high-level shape implementation
+points3d    <- function(x,y,z,size...) rgl.points(x=x,y=y,z=z,size=s,...)
+lines3d     <- function(x,y,z,...) rgl.linestrips(x=x,y=y,z=z,...)
+segments3d  <- function(x,y,z,...) rgl.lines(x=x,y=y,z=z,...)
+triangles3d <- function(x,y,z,...) rgl.triangles(x=x,y=y,z=z,...)
+quads3d     <- function(x,y,z,...) rgl.quads(x=x,y=y,z=z,...)
+texts3d     <- function(x,y,z,texts,adj=0.5,justify=adj,...) rgl.texts(x=x,y=y,z=z,text=texts,adj=justify,...)
+spheres3d   <- function(x,y,z,radius,...) rgl.spheres(x=x,y=y,z=z,radius=radius,...)
+sprites3d   <- function(x,y,z,radius,...) rgl.sprites(x=x,y=y,z=z,radius=radius,...)
+terrain3d   <- function(x,y,z,...) rgl.surface(x=x,y=y,z=z,...)
 
-spheres3d.rgl <- function( x, y, z, radius, ...) 
-  rgl.spheres( x, y, z, radius, ...)
-sprites3d.rgl <- function ( x, y, z, radius, ...) 
-  rgl.sprites( x, y, z, radius, ... )
-terrain3d.rgl <- function ( x, y, z, ...) 
-  rgl.surfaces( x, z, y, ... )  
+# Interaction
 
-# interaction implementation
+select3d    <- function() rgl.select3d()
 
-select3d.rgl <- function() 
-  rgl.select3d() 
+# 3D Generic Object Rendering Attributes
 
+dot3d <- function(x,...) UseMethod("dot3d")
+wire3d  <- function(x,...) UseMethod("wire3d")
+shade3d <- function(x,...) UseMethod("shade3d")
+
+# 3D Generic transformation
+
+transform3d <- function(x,transform,...) UseMethod("transform3d")
+translate3d <- function(x,tx,ty,tz,...) UseMethod("translate3d")
+subdivision3d <- function(x,...) UseMethod("subdivision3d")
 
