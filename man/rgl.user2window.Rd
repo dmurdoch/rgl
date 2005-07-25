@@ -32,8 +32,8 @@ A matrix with columns corresponding to the X, Y, and Z coordinates.
 rgl.clear()
 points3d(rnorm(100), rnorm(100), rnorm(100))
 # Calculate a square in the middle of the display and plot it
+\dontrun{
 square <- rgl.window2user(c(0.25, 0.25, 0.75, 0.75, 0.25), c(0.25, 0.75, 0.75, 0.25, 0.25), 0)
-lines3d(square[,1], square[,2], square[,3])
-
+lines3d(square[,1], square[,2], square[,3])}
 }
 \keyword{ dynamic }

@@ -93,7 +93,7 @@ par3d(\dots, no.readonly = FALSE)
       bounding box of the scene (xmin, xmax, ymin, ymax, zmin, zmax)}
   }
 }
-
+}
 \seealso{\code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
 }
 

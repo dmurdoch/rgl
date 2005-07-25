@@ -1,6 +1,9 @@
 \name{subdivision3d}
 \alias{subdivision3d}
 \alias{subdivision3d.qmesh3d}
+\alias{divide.qmesh3d}
+\alias{normalize.qmesh3d}
+\alias{deform.qmesh3d}
 \title{generic subdivision surface method}
 \description{
 The Subdivision surface algorithm divide and refine (deform) a
@@ -10,17 +13,21 @@ The divide step generates for each quad four new quads, the deform
 step drags the points (refinement step).
 }
 \usage{
-  subdivision3d( mesh, depth, ...)
-  subdivision3d.qmesh3d( mesh, depth, normalize=F, deform=T )
-  divide.qmesh3d(mesh, ib=mesh$ib, vb=mesh$vb )
+  subdivision3d( x,  ...)
+  subdivision3d.qmesh3d( x, depth=1, normalize=FALSE, deform=TRUE, ... )
+  divide.qmesh3d(mesh,  vb=mesh$vb, ib=mesh$ib )
   normalize.qmesh3d(mesh)
   deform.qmesh3d(mesh,vb=mesh$vb,ib=mesh$ib)
 }
 \arguments{
+  \item{x}{3d geometry mesh}
   \item{mesh}{3d geometry mesh}
   \item{depth}{recursion depth}
   \item{normalize}{normalize qmesh3d coordinates after division if deform is TRUE otherwise}
   \item{deform}{deform mesh after normalization}
+  \item{ib}{}
+  \item{vb}{}
+  \item{...}{other arguments}
 }
 \details{
   Generic subdivision surface method. Currently there exists

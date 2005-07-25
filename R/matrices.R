@@ -2,7 +2,7 @@
 
 scale3d <- function(x,y,z) diag(c(x,y,z,1))
 
-translate3d <- function(x,y,z)
+Translate3d <- function(x,y,z)
 {
     result <- diag(4)
     result[4,1:3] <- c(x,y,z)
