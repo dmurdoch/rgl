@@ -89,7 +89,7 @@ par3d(\dots, no.readonly = FALSE)
       window in pixels.}
     \item{\code{zoom}}{real. A positive value indicating the current
       magnification of the scene.}
-      \item{\code{bbox}}{\emph{\bold{R.O.}; real. A vector of six values indicating the current values of the
+      \item{\code{bbox}}{\emph{\bold{R.O.}}; real. A vector of six values indicating the current values of the
       bounding box of the scene (xmin, xmax, ymin, ymax, zmin, zmax)}
   }
 }
@@ -98,7 +98,7 @@ par3d(\dots, no.readonly = FALSE)
 }
 
 \examples{
-    save <- par3d(userMatrix = rotate3d(90*pi/180, 1,0,0))
+    save <- par3d(userMatrix = rotation.matrix(90*pi/180, 1,0,0))
     save
     par3d("userMatrix")    
     par3d(userMatrix = save)

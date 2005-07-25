@@ -71,7 +71,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, inte
   fov  <- rgl.clamp(fov,1,179)
 
   if (missing(userMatrix)) 
-    userMatrix <- rotate3d(phi*pi/180, 1, 0, 0) %*% rotate3d(-theta*pi/180, 0, 1, 0)
+    userMatrix <- rotation.matrix(phi*pi/180, 1, 0, 0) %*% rotation.matrix(-theta*pi/180, 0, 1, 0)
   idata <- as.integer(c(interactive))
   ddata <- as.numeric(c(fov,zoom,userMatrix[1:16]))
 
