@@ -11,7 +11,7 @@
 #		(win32 dos/mingw:)  
 #			$ sh rgl/src/build/setversion.sh
 #
-# $Id$
+# $Id: setversion.sh,v 1.5 2004/04/30 11:41:17 dadler Exp $
 #
 
 # ---[ SET VERSION ]----------------------------------------------------------

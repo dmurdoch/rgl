@@ -1,6 +1,6 @@
 # rgl demo: rgl-bivar.r
 # author: Daniel Adler
-# $Id$
+# $Id: bivar.r,v 1.4 2004/05/28 07:05:25 dadler Exp $
 
 if ( require(sm) == TRUE ) {
 

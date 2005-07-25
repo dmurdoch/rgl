@@ -522,7 +522,7 @@ void RGLView::setUserMatrix(double* src)
 
 void RGLView::setDefaultMouseFunc()
 {
-    setMouseMode(1, mmTRACKBALL);
+    setMouseMode(1, mmPOLAR);
     setMouseMode(2, mmFOV);
     setMouseMode(3, mmZOOM);
 }

@@ -1,6 +1,6 @@
 #
 # R 3d object : o3d
-# $Id$
+# $Id: oh3d.R,v 1.1 2004/08/27 16:03:47 dadler Exp $
 #
 
 oh3d.vb <- c(   
