@@ -1,6 +1,6 @@
 \name{matrices3d}
 \alias{scale3d}
-\alias{translate3d}
+\alias{Translate3d}
 \alias{rotate3d}
 \alias{as.homogeneous}
 \alias{as.euclidean}
@@ -12,7 +12,7 @@ between homogeneous and Euclidean coordinates.
 }
 \usage{
 scale3d(x, y, z)
-translate3d(x, y, z)
+Translate3d(x, y, z)
 rotate3d(angle, x, y, z, matrix)
 as.homogeneous(x)
 as.euclidean(x)
@@ -34,7 +34,7 @@ to apply the matrix on the left first, followed by the one on the right.
 \code{scale3d} scales each coordinate by the given factor.  In Euclidean
 coordinates, \code{(u, v, w)} is transformed to \code{(x*u, y*v, z*w)}.
 
-\code{translate3d} translates each coordinate by the given translation, i.e.
+\code{Translate3d} translates each coordinate by the given translation, i.e.
 \code{(u,v,w)} is transformed to \code{(u+x,v+y,w+z)}.
 
 \code{rotate3d} can be called in two ways.  With 
