@@ -1,15 +1,15 @@
 # Functions for creating 4x4 graphics matrices
 
-scale.matrix <- function(x,y,z) diag(c(x,y,z,1))
+scaleMatrix <- function(x,y,z) diag(c(x,y,z,1))
 
-translation.matrix <- function(x,y,z)
+translationMatrix <- function(x,y,z)
 {
     result <- diag(4)
     result[4,1:3] <- c(x,y,z)
     result
 }
 
-rotation.matrix <- function(angle,x,y,z,matrix)
+rotationMatrix <- function(angle,x,y,z,matrix)
 {
     if (missing(matrix))
     {
@@ -30,7 +30,7 @@ rotation.matrix <- function(angle,x,y,z,matrix)
 
 # Coordinate conversions
 
-as.homogeneous <- function(x) c(x,1)
+asHomogeneous <- function(x) c(x,1)
 
-as.euclidean <- function(x) c(x[1]/x[4],x[2]/x[4],x[3]/x[4])
+asEuclidean <- function(x) c(x[1]/x[4],x[2]/x[4],x[3]/x[4])
 
