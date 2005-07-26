@@ -331,10 +331,16 @@ rgl.spheres <- function( x, y, z,radius=1.0,...)
 ## add texts
 ##
 
-rgl.texts <- function(x, y, z, text, adj = 0.5, ... )
+rgl.texts <- function(x, y, z, text, adj = 0.5, justify, ... )
 {
   rgl.material( ... )
 
+  if (!missing(justify)) {
+     warning("justify is deprecated: please use adj instead")
+     if (!missing(adj)) {
+        warning("adj and justify both specified: justify ignored")
+     } else adj <- switch(justify,left=0,center=0.5,right=1)
+  }
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   text    <- rep(text, length.out=nvertex)

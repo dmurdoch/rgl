@@ -7,13 +7,17 @@
   A bitmap font which is always oriented towards the camera is used.
 }
 \usage{
-rgl.texts(x, y, z, text, adj = 0.5, ...)
-text3d(x, y, z, text, adj = 0.5, ...) 
+rgl.texts(x, y, z, text, adj = 0.5, justify, ...)
+text3d(x, y, z, text, adj = 0.5, justify, ...) 
 }
 \arguments{
   \item{x, y, z}{point coordinates}
   \item{text}{text character vector to draw}
   \item{adj}{ one value specifying the horizontal adjustment }.
+  \item{justify}{(deprecated, please use adj instead) character string
+specifying the horizontal adjustment; options are \code{"left"}, \code{"right"},
+    \code{"center"}.
+  }
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
 }
 \details{
