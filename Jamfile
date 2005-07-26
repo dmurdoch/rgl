@@ -1,5 +1,0 @@
-# This file is part of rgl.
-project-root ;
-project rgl ;
-subinclude build ;
-
