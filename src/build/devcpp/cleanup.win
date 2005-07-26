@@ -1,1 +1,0 @@
-rm -f rgl.layout Makefile.win .deps librgl.a librgl.def
