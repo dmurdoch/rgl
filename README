@@ -38,48 +38,97 @@ FEATURES
   where the top-most objects can be pop'ed
 
 
-PLATFORMS & BUILD TOOLS
------------------------
-un*x/x11 (gcc)
-win32 (MinGW/gcc, MSVC 6, devcpp)
+PLATFORMS
+---------
+Mac OS X
+Windows 2000/XP
+Unix-derivates
+
+
+BUILD TOOLS
+-----------
+R recommended tools (gcc toolchain)
 
 
 REQUIREMENTS
 ------------
-Windowing System (x11 or win32)
-OpenGL and GLU Library (implementation for X11 or Win32)
+Windowing System (osx/carbon, unix/x11 or win32)
+OpenGL Library + Driver
+OpenGL Utility Library (GLU)
+
 
 OPTIONS
 -------
-libpng library
+libpng library (pixmap import/export support)
 
 
-BUILDING/INSTALLING THE SOURCE PACKAGE
---------------------------------------
-The R build tool ("R CMD build" (un*x) / "Rcmd BUILD" (win32) ) 
-is the primary tool to build the RGL package.
-
-The building process comes in two flavours X11/Un*x and windows.
-
-Please read the appropriate README file:
-
-README.X11                  building on un*x/x11
-README.WIN32                building on windows
- 
-For the windows platform, there are also precompiled binary
-zip packages available. 
+BUILDING/INSTALLING FROM SOURCE PACKAGE
+---------------------------------------
+The R build tool is the primary tool to build the RGL package.
 
 
-LOADING LIBRARY AND RUNNING DEMONSTRATIONS
-------------------------------------------
+BUILDING ON MICROSOFT WINDOWS
+-----------------------------
+
+Libpng support:
+
+Make sure bitmap dll has been built as described in the 
+R Build Instructions for Windows.
+
+Check to see if these two files are available:
+
+%R_HOME%\src\gnuwin32\bitmap\libpng\libpng.a
+%R_HOME%\src\extra\zlib\libz.a
+
+
+BUILDING ON UNIX-STYLE OS (MacOS X, Linux, FreeBSD, ... ) 
+---------------------------------------------------------
+
+The build is controlled by an autoconf configure script.
+You provide the options through the R CMD build/INSTALL command
+
+  e.g. 
+    $ R CMD INSTALL --configure-args="<configure args...>" rgl
+
+
+  COMMON UNIX-STYLE OS OPTIONS
+  ----------------------------
+
+  --with-gl-includes=<path>
+    GL C header files include path
+
+  --with-gl-libraries=<path>
+    GL library linkage path
+
+  --with-gl-prefix=<libprefix>
+    GL library prefix (e.g. Mesa)
+  
+  --disable-png
+    explicitly disable libpng support
+
+
+  MAC OS X OPTIONS
+  ----------------
+
+  --disable-carbon
+    force a X11 port
+
+
+  X11 WINDOWING SYSTEM OPTIONS
+  ----------------------------
+
+  --x-includes=<path>
+    X11 C header files include path
+
+  --x-libraries=<path>
+    X11 library linkage path
+
+
+FIRST DEMOS: LOADING LIBRARY AND RUNNING DEMONSTRATIONS
+-------------------------------------------------------
 
 > library(rgl)
 > demo(rgl)
-
-
-KNOWN BUGS
-----------
-- X11: rgl.close() and rgl.shutdown might crash
 
 
 CREDITS
@@ -90,7 +139,8 @@ Oleg Nenadic <onenadi@uni-goettingen.de>
 Simon Urbanek <simon.urbanek@math.uni-augsburg.de>
 Ming Chen <mchen34@uwo.ca>
 
+
 WEBSITE
 -------
-http://wsopuppenkiste.wiso.uni-goettingen.de/~dadler/rgl
+http://rgl.neoscientists.org
 
