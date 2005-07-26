@@ -26,11 +26,9 @@ rgl.sprites(x, y, z, radius = 1, ...)
 \examples{
 particles3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100) )
 # is the same as
-sprites3d(
-  , rnorm(100), rnorm(100), rnorm(100), color=rainbow(100)
-  , lit=FALSE, alpha=.2
-  , textype="alpha", texture=system.file("textures/particle.png", package="rgl"), 
-)
+sprites3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100),
+  lit=FALSE, alpha=.2,
+  textype="alpha", texture=system.file("textures/particle.png", package="rgl") )
 }
 \seealso{
   \code{\link{rgl.material}}

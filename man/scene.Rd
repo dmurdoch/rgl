@@ -8,9 +8,9 @@
 Clear shapes, lights, bbox
 }
 \usage{
-clear3d( type = "shapes" ) 
+clear3d( ... ) 
 rgl.clear( type = "shapes" )
-pop3d( type = "shapes" )
+pop3d( ... )
 rgl.pop( type = "shapes" )  
 }
 \arguments{
@@ -21,6 +21,7 @@ rgl.pop( type = "shapes" )
       \item{"bbox"}{bounding box}
     }
   }
+  \item{...}{generic arguments passed through to RGL-specific (or other) functions}
 }
 \details{
 RGL holds two stacks. One is for shapes and the other is for lights. 
