@@ -3,8 +3,8 @@
 \title{Generic 3D interface}
 \description{Generic 3D interface for 3D rendering and computational geometry.}
 \details{  
-  R3D provide an interface for 3d rendering and computation without dependency
-  to a specific rendering implementation. Additionally, R3D comes up with a collection
+  R3D provides an interface for 3d rendering and computation without dependency
+  on a specific rendering implementation. Additionally, R3D comes up with a collection
   of 3D objects and geometry algorithms that can be applied.
   All r3d interface functions represent generic functions that delegate to implementation functions and
   are suffixed with '3d'.
