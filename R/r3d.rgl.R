@@ -10,20 +10,20 @@ pop3d       <- function(...) rgl.pop(...)
 
 # Environment
 
-bg3d        <- function(...) rgl.bg(...)
+bg3d        <- function(color, ...) rgl.bg(color=color, ...)
 light3d     <- function(theta=0,phi=15,...) rgl.light(theta=theta,phi=phi,...)
 view3d      <- function(theta,phi,...) rgl.viewpoint(theta=theta,phi=phi)
 
 # Shapes
 
-points3d    <- function(x,y,z,size...) rgl.points(x=x,y=y,z=z,size=s,...)
+points3d    <- function(x,y,z,...) rgl.points(x=x,y=y,z=z,...)
 lines3d     <- function(x,y,z,...) rgl.linestrips(x=x,y=y,z=z,...)
 segments3d  <- function(x,y,z,...) rgl.lines(x=x,y=y,z=z,...)
 triangles3d <- function(x,y,z,...) rgl.triangles(x=x,y=y,z=z,...)
 quads3d     <- function(x,y,z,...) rgl.quads(x=x,y=y,z=z,...)
-texts3d     <- function(x,y,z,texts,adj=0.5,justify=adj,...) rgl.texts(x=x,y=y,z=z,text=texts,adj=justify,...)
-spheres3d   <- function(x,y,z,radius,...) rgl.spheres(x=x,y=y,z=z,radius=radius,...)
-sprites3d   <- function(x,y,z,radius,...) rgl.sprites(x=x,y=y,z=z,radius=radius,...)
+text3d      <- function(x,y,z,texts,adj=0.5,justify=adj,...) rgl.texts(x=x,y=y,z=z,text=texts,adj=justify,...)
+spheres3d   <- function(x,y,z,radius=1,...) rgl.spheres(x=x,y=y,z=z,radius=radius,...)
+sprites3d   <- function(x,y,z,radius=1,...) rgl.sprites(x=x,y=y,z=z,radius=radius,...)
 terrain3d   <- function(x,y,z,...) rgl.surface(x=x,y=y,z=z,...)
 
 # Interaction
