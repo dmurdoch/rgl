@@ -42,3 +42,13 @@ transform3d <- function(x,transform,...) UseMethod("transform3d")
 translate3d <- function(x,tx,ty,tz,...) UseMethod("translate3d")
 subdivision3d <- function(x,...) UseMethod("subdivision3d")
 
+# 3D Custom shapes
+
+particles3d <- function(x,y,z,radius=1,...) sprites3d(
+  x=x,y=y,z=z,radius=radius,
+  lit=FALSE,alpha=0.2,
+  textype="alpha",
+  texture=system.file("textures/particle.png",package="rgl"),
+  ...
+)    
+
