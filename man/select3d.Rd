@@ -1,5 +1,6 @@
 \name{select3d}
 \alias{select3d}
+\alias{rgl.select3d}
 \title{ Select a rectangle in an RGL scene }
 \description{
   This function allows the user to use the mouse to

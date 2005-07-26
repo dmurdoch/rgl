@@ -1,11 +1,14 @@
-\name{rgl.bg}
+\name{bg}
 \alias{rgl.bg}
+\alias{bg3d}
 \title{setup Background}
 \description{
   Setup the background environment of the scene.
 }
 \usage{
+bg3d(color, ...) 
 rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines", ...)
+
 }
 \arguments{
   \item{fogtype}{fog type:
@@ -32,6 +35,9 @@ rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines"
   If sphere is set to TRUE, an environmental sphere enclosing the whole scene is drawn.
 }
 \examples{
+  # a simple white background
+  
+  bg3d("white")
 
   # the holo-globe (inspired by star trek):
 

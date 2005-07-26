@@ -1,7 +1,10 @@
 \name{qmesh3d}
 \alias{qmesh3d}
+\alias{dot3d}
 \alias{dot3d.qmesh3d}
+\alias{wire3d}
 \alias{wire3d.qmesh3d}
+\alias{shade3d}
 \alias{shade3d.qmesh3d}
 \alias{cube3d}
 \alias{oh3d}
@@ -13,12 +16,20 @@
   qmesh3d(vertices,indices,homogeneous=TRUE,material=NULL)
   cube3d()  # cube object
   oh3d()    # an 'o' object
+  
+  dot3d(x, ...)   # draw dots at the vertices of an object
+  \method{dot3d}{qmesh3d}(x, ...)
+  wire3d(x, ...)  # draw a wireframe objecct
+  \method{wire3d}{qmesh3d}(x, ...)
+  shade3d(x, ...) # draw a shaded object
+  \method{shade3d}{qmesh3d}(x, ...)
 }
 \arguments{
   \item{vertices}{3- or 4-component vector of coordinates}
   \item{indices}{4-component vector of quad indices}
   \item{homogeneous}{logical indicating if homogeneous (four component) coodinates are used.}
   \item{material}{material properties for later rendering}
+  \item{...}{additional rendering parameters}
 }
 \examples{
 

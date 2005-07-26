@@ -1,12 +1,16 @@
 \name{scene}
 \alias{rgl.clear}
 \alias{rgl.pop}
+\alias{clear3d}
+\alias{pop3d}
 \title{scene management}
 \description{
 Clear shapes, lights, bbox
 }
 \usage{
+clear3d( type = "shapes" ) 
 rgl.clear( type = "shapes" )
+pop3d( type = "shapes" )
 rgl.pop( type = "shapes" )  
 }
 \arguments{
@@ -20,10 +24,10 @@ rgl.pop( type = "shapes" )
 }
 \details{
 RGL holds two stacks. One is for shapes and the other is for lights. 
-\code{rgl.clear} clears the specified stack, while \code{rgl.pop} removes 
+\code{clear3d} and \code{rgl.clear} clear the specified stack, while \code{rgl.pop} removes 
 the top-most (last added) node on the stack.
 Since the bounding box is an optional element, one can disable it 
-with \code{rgl.clear}.
+with \code{clear3d}.
 }
 \seealso{
 \code{\link{rgl}}

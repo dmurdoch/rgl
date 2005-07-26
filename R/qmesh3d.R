@@ -26,7 +26,7 @@ shade3d.qmesh3d <- function ( x, ... ) quads3d(x$vb[1,x$ib]/x$vb[4,x$ib],x$vb[2,
 
 # translation support
 
-translate3d.qmesh3d <- function ( x, tx, ty, tz ) {
+translate3d.qmesh3d <- function ( x, tx, ty, tz, ... ) {
   for ( i in 1:(dim(x$vb)[2]) ) {
   x$vb[,i] <- matrix( 
     data=c( 1, 0, 0,tx,
