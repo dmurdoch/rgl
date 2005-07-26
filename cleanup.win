@@ -1,7 +1,0 @@
-#!/bin/sh
-echo "--[ cleanup ]--"
-rm -f config.status
-cd src
-make -f build/vc/Makefile clean
-make -f build/mingw/Makefile clean
-exit 0
