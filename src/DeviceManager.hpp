@@ -18,7 +18,7 @@ class DeviceManager : protected IDisposeListener {
 
 public:
   DeviceManager();
-  ~DeviceManager();
+  virtual ~DeviceManager();
   bool    openDevice(void);
   Device* getCurrentDevice(void);
   Device* getAnyDevice(void);
