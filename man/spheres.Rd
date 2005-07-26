@@ -1,10 +1,12 @@
-\name{rgl.spheres}
+\name{spheres}
 \alias{rgl.spheres}
+\alias{spheres3d}
 \title{add sphere set shape}
 \description{
   Adds a sphere set shape node to the scene
 }
 \usage{
+spheres3d(x, y, z, radius, ...)
 rgl.spheres(x, y, z, radius, ...)
 }
 \arguments{
@@ -15,7 +17,7 @@ rgl.spheres(x, y, z, radius, ...)
 \details{
 }
 \examples{
-rgl.spheres(rnorm(10), rnorm(10), rnorm(10), radius=.2, color=rainbow(10))
+spheres3d(rnorm(10), rnorm(10), rnorm(10), radius=runif(10), color=rainbow(10))
 }
 \seealso{
   \code{\link{rgl.material}}

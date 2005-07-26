@@ -1,13 +1,14 @@
-\name{rgl.texts}
+\name{texts}
 \alias{rgl.texts}
 \alias{text3d}
-\title{add text set shape}
+\title{add text}
 \description{
   Adds text to the scene. The text is positioned in 3D space. 
   A bitmap font which is always oriented towards the camera is used.
 }
 \usage{
 rgl.texts(x, y, z, text, adj = 0.5, ...)
+text3d(x, y, z, text, adj = 0.5, ...) 
 }
 \arguments{
   \item{x, y, z}{point coordinates}
@@ -22,9 +23,9 @@ specified coordinate.  Use \code{adj = 0} to place the left bottom corner at
 to put the right bottom corner there.
 }
 \examples{
-rgl.texts(rnorm(10)*100,rnorm(10)*100,rnorm(10)*100,text=1:10,adj = 0.5, color=heat.colors(10))
+text3d(rnorm(10)*100,rnorm(10)*100,rnorm(10)*100,text=1:10,adj = 0.5, color=heat.colors(10))
 }
 \seealso{
-  \code{\link{rgl.material}}
+  \code{\link{r3d}}
 }
 \keyword{dynamic}

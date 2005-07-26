@@ -1,10 +1,12 @@
-\name{rgl.light}
+\name{light}
 \alias{rgl.light}
+\alias{light3d}
 \title{add light source}
 \description{
-  rgl.light adds a light source to the scene.
+  add a light source to the scene.
 }
 \usage{
+light3d(theta = 0, phi = 0, ...)
 rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF")
 }
 \arguments{

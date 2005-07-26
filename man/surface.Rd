@@ -1,11 +1,14 @@
 \name{rgl.surface}
 \title{add height-field surface shape}
 \alias{rgl.surface}
+\alias{surface3d}
+\alias{terrain3d}
 \description{
   Adds a surface to the current scene. The surface is defined by two
   grid mark vectors and a matrix defining the height of each grid point.
 }
 \usage{
+terrain3d(x, z, y, ...)
 rgl.surface(x, z, y, ...)
 }
 \arguments{

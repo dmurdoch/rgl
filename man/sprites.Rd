@@ -1,11 +1,13 @@
-\name{rgl.sprites}
+\name{sprites}
 \alias{rgl.sprites}
+\alias{sprites3d}
 \title{add sprite set shape}
 \description{
   Adds a sprite set shape node to the scene.
 }
 \usage{
-rgl.sprites(x, y, z, radius, ...)
+sprites3d(x, y, z, radius = 1, ...)
+rgl.sprites(x, y, z, radius = 1, ...)
 }
 \arguments{
   \item{ x, y, z }{point coordinates}
@@ -14,11 +16,11 @@ rgl.sprites(x, y, z, radius, ...)
 }
 \details{
   Sprites are rectangle planes that are directed towards the viewpoint.
-  Its primary used for fast (and faked) atmospherical effects, e.g. particles and clouds
+  Their primary use is for fast (and faked) atmospherical effects, e.g. particles and clouds
   using alpha blended textures.
 }
 \examples{
-rgl.sprites(rnorm(500), rnorm(500), rnorm(500), color=rainbow(100), lit=FALSE,
+sprites3d(rnorm(500), rnorm(500), rnorm(500), color=rainbow(100), lit=FALSE,
             textype="alpha", texture=system.file("textures/particle.png", package="rgl"), 
             alpha=.2)
 }
