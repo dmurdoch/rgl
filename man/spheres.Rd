@@ -6,7 +6,7 @@
   Adds a sphere set shape node to the scene
 }
 \usage{
-spheres3d(x, y, z, radius, ...)
+spheres3d(x, y, z, radius = 1, ...)
 rgl.spheres(x, y, z, radius, ...)
 }
 \arguments{
