@@ -8,7 +8,7 @@
 }
 \usage{
 rgl.texts(x, y, z, text, adj = 0.5, justify, ...)
-text3d(x, y, z, text, adj = 0.5, justify, ...) 
+text3d(x, y, z, texts, adj = 0.5, justify, ...) 
 }
 \arguments{
   \item{x, y, z}{point coordinates}
