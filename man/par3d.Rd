@@ -98,7 +98,7 @@ par3d(\dots, no.readonly = FALSE)
 }
 
 \examples{
-    save <- par3d(userMatrix = rotation.matrix(90*pi/180, 1,0,0))
+    save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))
     save
     par3d("userMatrix")    
     par3d(userMatrix = save)
