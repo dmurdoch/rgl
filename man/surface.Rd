@@ -8,7 +8,7 @@
   grid mark vectors and a matrix defining the height of each grid point.
 }
 \usage{
-terrain3d(x, z, y, ...)
+terrain3d(x, y, z, ...)
 rgl.surface(x, z, y, ...)
 }
 \arguments{
