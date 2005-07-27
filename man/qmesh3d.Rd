@@ -19,15 +19,16 @@
   
   dot3d(x, ...)   # draw dots at the vertices of an object
   \method{dot3d}{qmesh3d}(x, ...)
-  wire3d(x, ...)  # draw a wireframe objecct
+  wire3d(x, ...)  # draw a wireframe object
   \method{wire3d}{qmesh3d}(x, ...)
   shade3d(x, ...) # draw a shaded object
   \method{shade3d}{qmesh3d}(x, ...)
 }
 \arguments{
+  \item{x}{a qmesh3d object (class qmesh3d)}
   \item{vertices}{3- or 4-component vector of coordinates}
   \item{indices}{4-component vector of quad indices}
-  \item{homogeneous}{logical indicating if homogeneous (four component) coodinates are used.}
+  \item{homogeneous}{logical indicating if homogeneous (four component) coordinates are used.}
   \item{material}{material properties for later rendering}
   \item{...}{additional rendering parameters}
 }
