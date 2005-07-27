@@ -25,6 +25,8 @@ text3d      <- function(x,y,z,texts,adj=0.5,justify,...) rgl.texts(x=x,y=y,z=z,t
 spheres3d   <- function(x,y,z,radius=1,...) rgl.spheres(x=x,y=y,z=z,radius=radius,...)
 sprites3d   <- function(x,y,z,radius=1,...) rgl.sprites(x=x,y=y,z=z,radius=radius,...)
 terrain3d   <- function(x,y,z,...) rgl.surface(x=x,y=y,z=z,...)
+## NB flip y/z convention
+surface3d   <- function(x,y,z,...) rgl.surface(x=x,z=y,y=z,...)
 
 # Interaction
 
