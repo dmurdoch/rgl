@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R,v 1.9 2004/08/09 19:33:27 murdoch Exp $
+## $Id$
 ##
 
 ##
@@ -14,7 +14,7 @@
 ##
 ##
 
-.First.lib <- function(lib, pkg)
+.onLoad <- function(lib, pkg)
 {
   # OS-specific 
   
@@ -27,10 +27,6 @@
     }
   }
 	
-  # load shared library
-  
-  library.dynam( "rgl", pkg, lib)
-  
   ret <- .C( symbol.C("rgl_init"), 
     success=FALSE , 
     PACKAGE="rgl"
