@@ -12,7 +12,7 @@ pop3d       <- function(...) rgl.pop(...)
 
 bg3d        <- function(color, ...) rgl.bg(color=color, ...)
 light3d     <- function(theta=0,phi=15,...) rgl.light(theta=theta,phi=phi,...)
-view3d      <- function(theta,phi,...) rgl.viewpoint(theta=theta,phi=phi)
+view3d      <- function(theta=0,phi=15,...) rgl.viewpoint(theta=theta,phi=phi,...)
 
 # Shapes
 
@@ -40,8 +40,12 @@ shade3d <- function(x,...) UseMethod("shade3d")
 
 # 3D Generic transformation
 
-transform3d <- function(x,transform,...) UseMethod("transform3d")
-translate3d <- function(x,tx,ty,tz,...) UseMethod("translate3d")
+
+translate3d <- function(obj,x,y,z,...) UseMethod("translate3d")
+scale3d <- function(obj,x,y,z,...) UseMethod("scale3d")
+rotate3d <- function(obj,angle,x,y,z,matrix,...) UseMethod("rotate3d")
+transform3d <- function(obj,matrix,...) rotate3d(obj, matrix=matrix, ...)
+
 subdivision3d <- function(x,...) UseMethod("subdivision3d")
 
 # 3D Custom shapes
