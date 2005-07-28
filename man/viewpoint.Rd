@@ -1,14 +1,17 @@
 \name{viewpoint}
 \alias{rgl.viewpoint}
+\alias{view3d}
 \title{setup viewpoint}
 \description{
   Set the viewpoint orientation.
 }
 \usage{
+view3d( theta = 0, phi = 15, ...)
 rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, interactive = TRUE, userMatrix )
 }
 \arguments{
   \item{theta,phi}{polar coordinates}
+  \item{...}{additional parameters to pass to \code{rgl.viewpoint}}
   \item{fov}{field-of-view angle}
   \item{zoom}{zoom factor}
   \item{interactive}{logical, specifying if interactive navigation is allowed}
