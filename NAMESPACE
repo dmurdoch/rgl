@@ -10,7 +10,7 @@ export(asEuclidean, asHomogeneous, bg3d, clear3d, cube3d, dot3d,
 	scale3d, scaleMatrix, segments3d, select3d, shade3d,
 	spheres3d, sprites3d, subdivision3d, surface3d, terrain3d, text3d,
 	transform3d, translate3d, translationMatrix, triangles3d,
-	view3d, wire3d)
+	view3d, wire3d, .Last.lib)
  
  S3method(dot3d, qmesh3d)
  S3method(wire3d, qmesh3d)
