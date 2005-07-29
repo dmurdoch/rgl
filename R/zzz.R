@@ -44,14 +44,11 @@
 ##
 ##
 
-.Last.lib <- function(libpath)
+.onUnload <- function(libpath)
 { 
   # shutdown
   
   ret <- .C( symbol.C("rgl_quit"), success=FALSE, PACKAGE="rgl" )
   
-  # unload shared library
-
-  library.dynam.unload("rgl",libpath=system.file(package="rgl"))
 }
 
