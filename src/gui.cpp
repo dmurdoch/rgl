@@ -185,12 +185,10 @@ void Window::setVisibility(bool state)
     windowImpl->hide();
 }
 
-#ifdef _WIN32
 void Window::bringToTop(int stay)
 {
   windowImpl->bringToTop(stay);
 }
-#endif
 
 //
 // EVENTS:

@@ -50,12 +50,10 @@ void Device::close(void)
   window->dispose();
 }
 
-#ifdef _WIN32
 void Device::bringToTop(int stay)
 {
   window->bringToTop(stay);
 }
-#endif
 
 //
 // scene management:

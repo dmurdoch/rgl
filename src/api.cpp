@@ -105,7 +105,6 @@ void rgl_dev_close(int* successptr)
   *successptr = success;
 }
 
-#ifdef _WIN32
 void rgl_dev_bringtotop(int* successptr, int* stay)
 {
   int success = RGL_FAIL;
@@ -123,7 +122,6 @@ void rgl_dev_bringtotop(int* successptr, int* stay)
 
   *successptr = success;
 }
-#endif
 
 //
 // FUNCTION
