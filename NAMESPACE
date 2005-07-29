@@ -8,7 +8,7 @@ export(asEuclidean, asHomogeneous, bg3d, clear3d, cube3d, dot3d,
 	rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
 	rgl.viewpoint, rgl.window2user, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, segments3d, select3d, shade3d,
-	spheres3d, sprites3d, subdivision3d, terrain3d, text3d,
+	spheres3d, sprites3d, subdivision3d, surface3d, terrain3d, text3d,
 	transform3d, translate3d, translationMatrix, triangles3d,
 	view3d, wire3d)
  

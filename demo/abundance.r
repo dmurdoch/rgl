@@ -1,54 +1,45 @@
-# rgl-demo: animal abundance
-# author: Oleg Nenadic, Daniel Adler
-# $Id: abundance.r,v 1.2 2004/03/02 19:53:56 dadler Exp $
+# RGL-Demo: animal abundance
+# Authors: Oleg Nenadic, Daniel Adler
+# $Id$
 
-########
-##### Animal abundance:
-########
+# Clear scene:
+clear3d()               # remove all shapes
+clear3d(type="lights")  # remove all lights
+clear3d(type="bbox")    # disable bounding-box
 
-# Clearing the Scene:
+# Setup environment:
+bg3d(col="#cccccc")     # setup background
+light3d()               # setup head-light
 
-# remove all shapes
-rgl.clear()
-# remove all lights
-rgl.clear(type="lights")
-# disable bounding-box
-rgl.clear(type="bbox")
-
-# setup background
-rgl.bg(color="gray")
-# setup head-light
-rgl.light()
-
-# Importing the animal data (created with wisp)
-test<-dget(system.file("demo/region.dat",package="rgl"))
+# Importing animal data (created with wisp)
+terrain<-dget(system.file("demo/region.dat",package="rgl"))
 pop<-dget(system.file("demo/population.dat",package="rgl"))
 
-# Defining colors for the 'terrain':
-zlim <- range(test)
+# Define colors for terrain
+zlim <- range(terrain)
 zlen <- zlim[2] - zlim[1] + 1
 colorlut <- terrain.colors(82) 
-col1 <- colorlut[9*sqrt(3.6*(test-zlim[1])+2)]
+col1 <- colorlut[9*sqrt(3.6*(terrain-zlim[1])+2)]
 
-# Setting colour to blue for regions with zero 'altitude':
-col1[test==0]<-"#0000FF"
+# Set color to (water-)blue for regions with zero 'altitude' 
+col1[terrain==0]<-"#0000FF"
 
-# Drawing the 'landscape' (i.e. population density):
-rgl.surface(1:100,seq(1,60,length=100),test,col=col1,spec="#000000",
-            ambient="#333333",back="lines")
+# Add terrain surface shape (i.e. population density):
+surface3d( 
+    1:100,seq(1,60,length=100),terrain,
+    col=col1,spec="#000000", ambient="#333333", back="lines"
+)
 
-# Setting the background to lightgrey:
-rgl.bg(col="#cccccc")
-
-# Defining colours for simulated populations (males:blue, females:red):
+# Define colors for simulated populations (males:blue, females:red):
 col2<-pop[,4]
 col2[col2==0]<-"#3333ff"
 col2[col2==1]<-"#ff3333"
 
-# Adding simulated populations as spheres to the plot:
-for(i in 1:100)
-  {rgl.spheres(pop[i,1],test[ceiling(pop[i,1]),ceiling(pop[i,2]*10/6)]+0.5,
-               pop[i,2],radius=0.2*pop[i,3],col=col2[i],alpha=(1-(pop[i,5])/10))
-  }
-
+# Add simulated populations as sphere-set shape
+spheres3d(
+  pop[,1],
+  terrain[cbind( ceiling(pop[,1]),ceiling(pop[,2]*10/6) )]+0.5,
+  pop[,2],
+  radius=0.2*pop[,3], col=col2, alpha=(1-(pop[,5])/10 )
+)
 
