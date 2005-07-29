@@ -65,9 +65,7 @@ public:
   virtual void hide(void) = 0;
   virtual void update(void) = 0;
 
-#ifdef _WIN32
   virtual void bringToTop(int stay) = 0;
-#endif
 
   /// @doc notifyDestroy will be called on success
   virtual void destroy(void) = 0;
@@ -197,9 +195,7 @@ public:
   void wheelRotate(int dir);
   void dispose();
 
-#ifdef _WIN32
   void bringToTop(int stay);
-#endif
 
 // data:
   View* child;

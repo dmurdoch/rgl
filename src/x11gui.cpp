@@ -103,6 +103,10 @@ public:
     XUnmapWindow(factory->xdisplay, xwindow);
     factory->flushX();
   }
+  void bringToTop(int stay) { 
+    XRaiseWindow(factory->xdisplay, xwindow);
+    factory->flushX();
+  }
   void update()
   {
     window->paint();
@@ -441,7 +445,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     | ButtonReleaseMask;
 
   attrib.colormap = XCreateColormap(xdisplay, DefaultRootWindow(xdisplay), xvisualinfo->visual, AllocNone);
-    
+
   ::Window xwindow = XCreateWindow(
     xdisplay, RootWindow(xdisplay, DefaultScreen(xdisplay)),
     0, 0, 256, 256, 0, 

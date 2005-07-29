@@ -38,9 +38,7 @@ EXPORT_SYMBOL void rgl_dev_open      (int* successptr);
 EXPORT_SYMBOL void rgl_dev_close     (int* successptr);
 EXPORT_SYMBOL void rgl_dev_getcurrent(int* successptr, int* idptr);
 EXPORT_SYMBOL void rgl_dev_setcurrent(int* successptr, int* idata);
-#ifdef _WIN32
 EXPORT_SYMBOL void rgl_dev_bringtotop(int* successptr, int* stay);
-#endif
 
 /* device services */
 

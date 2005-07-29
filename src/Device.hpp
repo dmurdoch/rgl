@@ -43,11 +43,7 @@ public: // -- all methods are blocking until action completed
   // from scene.h
   const Scene* getScene() const { return scene; }
 
-
-
-#ifdef _WIN32
   void bringToTop(int stay);
-#endif
 
   RGLView* getRGLView(void);
 // event handlers
