@@ -30,17 +30,16 @@ gui::GUIFactory* getGUIFactory()
 // ---------------------------------------------------------------------------
 bool init()
 {
-	lib::printMessage("RGL/OSX Carbon");
   assert(gGUIFactory == 0);
-	gGUIFactory = new gui::OSXGUIFactory();
+  gGUIFactory = new gui::OSXGUIFactory();
   return true;
 }
 // ---------------------------------------------------------------------------
 void quit()
 {
-	assert(gGUIFactory);
+  assert(gGUIFactory);
   delete gGUIFactory;
-	gGUIFactory = 0;
+  gGUIFactory = 0;
 }
 // ---------------------------------------------------------------------------
 } // namespace lib
