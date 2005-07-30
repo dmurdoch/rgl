@@ -267,7 +267,7 @@ rgl.linestrips<- function ( x, y, z, ... )
 ##
 ##
 
-rgl.surface <- function( x, z, y, ... )
+rgl.surface <- function( x, z, y, coords=1:3, ... )
 {
   rgl.material(...)
 
@@ -283,6 +283,9 @@ rgl.surface <- function( x, z, y, ... )
   
   if ( nz < 2 )   
     stop("y length < 2")
+    
+  if ( length(coords) != 3 || !all.equal(sort(coords), 1:3) )
+    stop("coords must be a permutation of 1:3")
 
   idata <- as.integer( c( nx, nz ) )
 
@@ -292,6 +295,7 @@ rgl.surface <- function( x, z, y, ... )
     as.numeric(x),
     as.numeric(z),
     as.numeric(y),
+    as.integer(coords),
     PACKAGE="rgl"
   );
 
