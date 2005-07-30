@@ -1,7 +1,7 @@
 \name{par3d}
 \alias{par3d}
-\alias{.Par3d}
-\alias{.Par3d.readonly}
+\alias{open3d}
+\alias{r3dDefaults}
 \concept{FOV}
 \concept{modelMatrix}
 \concept{mouseMode}
@@ -22,6 +22,8 @@
 \usage{
 par3d(\dots, no.readonly = FALSE)
 
+open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
+
 }
 
 \arguments{
@@ -31,6 +33,7 @@ par3d(\dots, no.readonly = FALSE)
   \item{no.readonly}{logical; if \code{TRUE} and there are no other
     arguments, only those parameters which can be set by a
     subsequent \code{par3d()} call are returned.}
+  \item{params}{a list of graphical parameters}
 }
 
 \details{
@@ -38,20 +41,25 @@ par3d(\dots, no.readonly = FALSE)
   \code{par3d}.
 
   \code{par3d()} (no arguments) or \code{par3d(no.readonly=TRUE)} is used to
-  get \emph{all} the graphical parameters (as a named list).  Their
-  names are currently taken from the variable \code{.Par3d}.
-  \code{.Par3d.readonly} contains the names of the \code{par3d} arguments
-  which are \emph{readonly}.
+  get \emph{all} the graphical parameters (as a named list).  
 
   \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
   may only be used in queries, i.e., they do \emph{not} set anything.
 
- }
+  \code{open3d} opens a new rgl device, and sets the parameters as
+  requested.  The \code{r3dDefaults} list will be used as default
+  values for parameters.  As installed this sets the point of view to
+  'world coordinates' (i.e. x running from left to right, y from front
+  to back, z from bottom to top), the \code{mouseMode} to
+  \code{(trackball, zoom, fov)}, and the field of view to 30 degrees.
+  Users may create their own variable of that name in the global
+  environment and it will override the installed one.
+}
 
 \value{
   When parameters are set, their former values are returned in an
   invisible named list.  Such a list can be passed as an argument to
-  \code{par} to restore the parameter values.
+  \code{par3d} to restore the parameter values.
   Use \code{par3d(no.readonly = TRUE)} for the full list of parameters
   that can be restored.
 
@@ -98,6 +106,8 @@ par3d(\dots, no.readonly = FALSE)
 }
 
 \examples{
+    open3d()
+    
     save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))
     save
     par3d("userMatrix")    

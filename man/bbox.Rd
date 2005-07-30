@@ -1,5 +1,6 @@
 \name{rgl.bbox}
 \alias{rgl.bbox}
+\alias{bbox3d}
 \title{setup Bounding Box decoration}
 \description{
   Setup the bounding box decoration.
@@ -10,6 +11,7 @@ rgl.bbox(
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
   marklen=15.0, marklen.rel=TRUE, ...)
+bbox3d(...)  
 }
 \arguments{
   \item{xat,yat,zat}{vector specifying the tickmark positions}
@@ -18,7 +20,8 @@ rgl.bbox(
   \item{xlen,ylen,zlen}{value specifying the number of tickmarks}
   \item{marklen}{value specifying the length of the tickmarks}
   \item{marklen.rel}{logical, if TRUE tick mark length is calculated using 1/\code{marklen} * axis length, otherwise tick mark length is \code{marklen} in coordinate space}
-  \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}
+  \item{ ... }{Material properties (or other \code{rgl.bbox} parameters
+  in the case of \code{bbox3d}). See \code{\link{rgl.material}} for details.}
 }
 \details{
   Three different types of tick mark layouts are possible.

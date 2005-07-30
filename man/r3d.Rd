@@ -1,6 +1,5 @@
 \name{r3d}
 \alias{r3d}
-\alias{open3d}
 \title{Generic 3D interface}
 \description{Generic 3D interface for 3D rendering and computational geometry.}
 \details{  
