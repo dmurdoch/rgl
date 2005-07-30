@@ -31,7 +31,7 @@ public:
   void show();
   void hide() { }
   void update();
-  void bringToTop(int stay) { }
+  void bringToTop(int stay);
   void destroy();
   void beginGL();
   void endGL();
@@ -210,6 +210,15 @@ void OSXWindowImpl::show()
   GetWindowBounds(mWindowRef,kWindowContentRgn,&mRect);
   if (window) 
     window->resize( mRect.right - mRect.left, mRect.bottom - mRect.top );
+}
+// ---------------------------------------------------------------------------
+void OSXWindowImpl::bringToTop(int stay)
+{
+  BringToFront( mWindowRef );
+  /* stay will be ignored for now, as making a window floating,
+     requires to recreate a new window using a different window class
+     on carbon.
+  */
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::on_paint()
