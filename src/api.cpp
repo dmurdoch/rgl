@@ -467,7 +467,8 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.ambient.set3iv( &idata[11] );
   mat.specular.set3iv( &idata[14] );
   mat.emission.set3iv( &idata[17] );
-  int* colors   = &idata[20];
+  bool envmap = (idata[20]) ? true : false;
+  int* colors   = &idata[21];
 
   char*  pixmapfn = cdata[0];
 
@@ -476,7 +477,7 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   double* alpha   = &ddata[2];
 
   if ( strlen(pixmapfn) > 0 ) {
-    mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter);
+    mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter, envmap);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;

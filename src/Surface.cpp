@@ -32,7 +32,7 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
 
       vertexArray[iy] = v;
 
-      if (material.texture) {
+      if ( (material.texture) && (! material.texture->is_envmap() ) ) {
         texCoordArray[iy].s = ((float)ix)/((float)(nx-1));
         texCoordArray[iy].t = 1.0f - ((float)iz)/((float)(nx-1));
       }
@@ -77,7 +77,10 @@ void Surface::draw(RenderContext* renderContext)
   material.beginUse(renderContext);
   vertexArray.beginUse();
 
-  if (material.texture)
+  bool use_texcoord = material.texture && !(material.texture->is_envmap() );
+  bool use_normal   = material.lit || ( (material.texture) && (material.texture->is_envmap() ) );
+
+  if (use_texcoord)
     texCoordArray.beginUse();
 
   for(int iz=0;iz<nz-1;iz++) {
@@ -87,12 +90,12 @@ void Surface::draw(RenderContext* renderContext)
       int i;
 
       i = (iz)  *nx+ix;
-      if (material.lit)
+      if (use_normal)
         setNormal(ix, iz);
       glArrayElement( i );
 
       i = (iz+1)*nx+ix;
-      if (material.lit)
+      if (use_normal)
         setNormal(ix, iz+1);
       glArrayElement( i );
 
@@ -100,7 +103,7 @@ void Surface::draw(RenderContext* renderContext)
     glEnd();
   }
 
-  if (material.texture)
+  if (use_texcoord)
     texCoordArray.endUse();
 
   vertexArray.endUse();

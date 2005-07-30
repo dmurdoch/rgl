@@ -25,9 +25,9 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype)
     if (material.back == Material::FILL_FACE)
       clearColorBuffer = false;
 
-    if (material.lit)
+    if ( (material.lit) || ( (material.texture) && (material.texture->is_envmap() ) ) )
       sphereMesh.setGenNormal(true);
-    if (material.texture)
+    if ( (material.texture) && (!material.texture->is_envmap() ) )
       sphereMesh.setGenTexCoord(true);
 
     sphereMesh.setGlobe (16,16);

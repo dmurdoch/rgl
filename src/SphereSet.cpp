@@ -15,7 +15,7 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
 
   if (material.lit)
     sphereMesh.setGenNormal(true);
-  if (material.texture)
+  if ( (material.texture) && (!material.texture->is_envmap() ) )
     sphereMesh.setGenTexCoord(true);
 
   sphereMesh.setGlobe(16,16);

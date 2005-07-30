@@ -19,7 +19,8 @@ rgl.material(
   textype      = "rgb", 
   texmipmap    = FALSE, 
   texminfilter = "linear", 
-  texmagfilter = "linear",  
+  texmagfilter = "linear",
+  texenvmap    = FALSE,
   front        = "fill", 
   back         = "fill",
   size         = 1.0, 
@@ -77,6 +78,10 @@ rgl.material(
       \item{"linear.mipmap.nearest"}{medium quality mipmapping}
       \item{"linear.mipmap.linear"}{high quality mipmapping}
     }
+  }
+  \item{texenvmap}{
+    logical, specifies if auto-generated texture coordinates for environment-mapping 
+    should be performed on geometry.
   }
   \item{front, back}{
     Determines the polygon mode for the specified side:
