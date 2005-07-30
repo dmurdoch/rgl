@@ -1,31 +1,42 @@
 \name{rgl.surface}
 \title{add height-field surface shape}
 \alias{rgl.surface}
-\alias{surface3d}
-\alias{terrain3d}
 \description{
-  Adds a surface to the current scene. The surface is defined by two
-  grid mark vectors and a matrix defining the height of each grid point.
+  Adds a surface to the current scene. The surface is defined by 
+  a matrix defining the height of each grid point and two vectors
+  defining the grid.
 }
 \usage{
-terrain3d(x, y, z, ...)
 rgl.surface(x, z, y, coords=1:3, ...)
 }
 \arguments{
-  \item{ x, z }{
-    x,z axis tick marks
+  \item{ x }{
+    values corresponding to rows of \code{y}
   }
   \item{ y }{
-    y height values
+    matrix of height values
+  }
+  \item{ z }{
+    values corresponding to columns of \code{y}
   }
   \item{ coords }{
     See details
+  }
   \item{ ... }{Material and texture properties. See \code{\link{rgl.material}} for details.}    
 }
 \details{
-  Adds a surface mesh to the current scene. The surface is evaluated by 
-  defining the x- and z-axis tick marks for the control grid. The
-  matrix y defines the height values for each point.
+  Adds a surface mesh to the current scene. The surface is defined by 
+  the matrix of height values in \code{y}, with rows corresponding 
+  to the values in \code{x} and columns corresponding to the values in 
+  \code{z}.
+  
+  The \code{coords} parameter can be used to change the geometric
+  interpretation of \code{x}, \code{y}, and \code{z}.  The first entry 
+  of \code{coords} indicates which coordinate (\code{1=X}, 
+  \code{2=Y}, \code{3=Z}) corresponds to the \code{x} parameter.
+  Similarly the second entry corresponds to the \code{y} parameter,
+  and the third entry to the \code{z} parameter.  In this way 
+  surfaces may be defined over any coordinate plane.
   
   The \code{coords} parameter can be used to change the geometric
   interpretation of the x, y, and z coordinates.  The first entry of
@@ -59,6 +70,6 @@ rgl.surface(x, z, y, color=col)
 
 }
 \seealso{
-  \code{\link{rgl.material}}
+  \code{\link{rgl.material}}, \code{\link{surface3d}}, \code{\link{terrain3d}}
 }
 \keyword{dynamic}

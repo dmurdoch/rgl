@@ -63,7 +63,7 @@ particles3d <- function(x,y,z,radius=1,...) sprites3d(
 
 r3dDefaults <- list(userMatrix = rotationMatrix(3*pi/2, 1, 0, 0),
 		  mouseMode = c("trackball", "zoom", "fov"),
-		  FOV = 40)
+		  FOV = 30)
 
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {

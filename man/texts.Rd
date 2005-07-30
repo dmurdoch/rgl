@@ -1,6 +1,7 @@
 \name{texts}
 \alias{rgl.texts}
 \alias{text3d}
+\alias{texts3d}
 \title{add text}
 \description{
   Adds text to the scene. The text is positioned in 3D space. 
@@ -9,6 +10,7 @@
 \usage{
 rgl.texts(x, y, z, text, adj = 0.5, justify, ...)
 text3d(x, y, z, texts, adj = 0.5, justify, ...) 
+texts3d(x, y, z, texts, adj = 0.5, justify, ...) 
 }
 \arguments{
   \item{x, y, z}{point coordinates}
@@ -26,6 +28,13 @@ The \code{adj} parameter determines the position of the text relative to the
 specified coordinate.  Use \code{adj = 0} to place the left bottom corner at
 \code{(x,y,z)}, \code{adj = 0.5} to center the text there, and \code{adj = 1}
 to put the right bottom corner there.
+
+\code{text3d} and \code{texts3d} draw text using the \link{r3d}
+conventions. These are synonyms; the former is singular to be
+consistent with the classic 2-D graphics functions, and the latter is
+plural to be consistent with all the other graphics primitives.  Take
+your choice!
+
 }
 \examples{
 text3d(rnorm(10)*100,rnorm(10)*100,rnorm(10)*100,text=1:10,adj = 0.5, color=heat.colors(10))
