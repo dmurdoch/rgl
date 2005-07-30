@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R,v 1.3 2004/03/03 22:09:44 dadler Exp $
+## $Id$
 ##
 
 ##
@@ -23,6 +23,7 @@ rgl.material <- function (
   texmipmap    = FALSE, 
   texminfilter = "linear", 
   texmagfilter = "linear",
+  texenvmap    = FALSE,
   front        = "fill", 
   back         = "fill",
   size         = 1.0, 
@@ -64,6 +65,7 @@ rgl.material <- function (
   textype <- rgl.enum.textype( textype )
   texminfilter <- rgl.enum.texminfilter( texminfilter )
   texmagfilter <- rgl.enum.texmagfilter( texmagfilter )
+  rgl.bool(texenvmap)
 
   # vector length
 
@@ -72,7 +74,7 @@ rgl.material <- function (
 
   # pack data
 
-  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, nalpha, ambient, specular, emission, color ) )
+  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, nalpha, ambient, specular, emission, texenvmap, color ) )
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, alpha ))
 
