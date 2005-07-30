@@ -41,6 +41,7 @@ public:
 private:
   void on_init();
   void on_dispose();
+  void on_paint();
   void init_gl();
   void init_glfont();
   void dispose_gl();
@@ -150,7 +151,7 @@ void OSXWindowImpl::init_glfont()
   assert(success == GL_TRUE);
   font.firstGlyph = first;
   font.listBase = listBase - first;
-  font.widths = new int[count];
+  font.widths = new unsigned int[count];
   for (int i=0;i<count;++i)
     font.widths[i] = 8;
 }
@@ -207,7 +208,15 @@ void OSXWindowImpl::show()
 {
   ShowWindow(mWindowRef);
   GetWindowBounds(mWindowRef,kWindowContentRgn,&mRect);
-  window->resize( mRect.right - mRect.left, mRect.bottom - mRect.top );
+  if (window) 
+    window->resize( mRect.right - mRect.left, mRect.bottom - mRect.top );
+}
+// ---------------------------------------------------------------------------
+void OSXWindowImpl::on_paint()
+{
+  if (window)
+    window->paint();
+  swap();
 }
 // ---------------------------------------------------------------------------
 OSStatus OSXWindowImpl::windowHandler(EventHandlerCallRef next, EventRef e) {
@@ -218,9 +227,8 @@ OSStatus OSXWindowImpl::windowHandler(EventHandlerCallRef next, EventRef e) {
       {
         switch( kind ) {
           case kEventWindowDrawContent:
-            window->paint();
-            swap();
-            return noErr;
+            on_paint();
+            break;
           case kEventWindowClosed:
             on_dispose();
             break;
@@ -228,7 +236,8 @@ OSStatus OSXWindowImpl::windowHandler(EventHandlerCallRef next, EventRef e) {
             {
               aglUpdateContext(mGLContext);
               GetWindowBounds(mWindowRef,kWindowContentRgn,&mRect);
-              window->resize( mRect.right - mRect.left, mRect.bottom - mRect.top );
+              if (window)
+                window->resize( mRect.right - mRect.left, mRect.bottom - mRect.top );
             }
             break; 
         }
