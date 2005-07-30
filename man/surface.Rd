@@ -9,7 +9,7 @@
 }
 \usage{
 terrain3d(x, y, z, ...)
-rgl.surface(x, z, y, ...)
+rgl.surface(x, z, y, coords=1:3, ...)
 }
 \arguments{
   \item{ x, z }{
@@ -18,12 +18,21 @@ rgl.surface(x, z, y, ...)
   \item{ y }{
     y height values
   }
+  \item{ coords }{
+    See details
   \item{ ... }{Material and texture properties. See \code{\link{rgl.material}} for details.}    
 }
 \details{
   Adds a surface mesh to the current scene. The surface is evaluated by 
   defining the x- and z-axis tick marks for the control grid. The
   matrix y defines the height values for each point.
+  
+  The \code{coords} parameter can be used to change the geometric
+  interpretation of the x, y, and z coordinates.  The first entry of
+  the \code{coords} vector indicates which coordinate (\code{1=x}, 
+  \code{2=y}, \code{3=z}) corresponds to the \code{x} parameter.
+  Similarly the second entry corresponds to the \code{y} parameter,
+  and the third entry to the \code{z} parameter.
 }
 \examples{
 

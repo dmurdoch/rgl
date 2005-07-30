@@ -1,16 +1,19 @@
 \name{r3d}
 \alias{r3d}
+\alias{open3d}
 \title{Generic 3D interface}
 \description{Generic 3D interface for 3D rendering and computational geometry.}
 \details{  
-  R3D provides an interface for 3d rendering and computation without dependency
-  on a specific rendering implementation. Additionally, R3D comes up with a collection
-  of 3D objects and geometry algorithms that can be applied.
-  All r3d interface functions represent generic functions that delegate to implementation functions and
-  are suffixed with '3d'.
+  R3d is a design for an interface for 3d rendering and computation without dependency
+  on a specific rendering implementation. R3d includes a collection
+  of 3D objects and geometry algorithms.
+  All r3d interface functions are named \code{*3d}.  They represent generic functions that delegate 
+  to implementation functions.
+  
   The interface can be grouped into 8 categories: Scene Management, Primitive Shapes,
   High-level Shapes, Geometry Objects, Visualization, Interaction, Transformation,
   Subdivision.  
+  
   The rendering interface gives an abstraction to the underlying rendering model. It can
   be grouped into four categories:    
   \enumerate{
@@ -19,7 +22,9 @@
     \item{High-level Shapes:}{Generic high-level 3D graphics shapes such as spheres, sprites and terrain.}
     \item{Interaction:}{Generic interface to select points in 3D space using the pointer device.}
   }
-  This interface comes up with a default rendering model implementation using rgl. 
+  
+  In this package we include an implementation of r3d using the underlying \code{rgl.*} functions.
+  
   3D computation is supported through the use of object structures that live entirely in R.
   \enumerate{
     \item{Geometry Objects:}{Geometry and mesh objects allow to define high-level geometry for computational purpose such as quadrangle meshes (qmesh3d).}
@@ -27,6 +32,26 @@
     \item{Visualization:}{Generic rendering of 3d objects such as dotted, wired or shaded.}
     \item{Computation:}{Generic subdivision of 3d objects.}
   }
+  
+  At present, the main practical difference between the r3d functions
+  and the \code{rgl.*} functions is that the r3d functions call
+  \code{\link{open3d}} if there is no device open, and the
+  \code{rgl.*} functions call \code{\link{rgl.open}}. By default
+  \code{\link{open3d}} sets the initial orientation of the coordinate
+  system in 'world coordinates', i.e. a right-handed coordinate system
+  in which the x-axis increasingfrom left to right, the y-axis
+  increases with depth into the scene, and the z-axis increases from
+  bottom to top of the screen.  \code{rgl.*} functions, on the other
+  hand, use a right-handed coordinate system similar to that used in
+  OpenGL.  The x-axis matches that of r3d, but the y-axis increases
+  from bottom to top, and the z-axis decreases with depth into the
+  scene.  Since the user can manipulate the scene, either system can
+  be rotated into the other one.  
+  
+  The other difference is that the r3d functions change the mouse mode
+  to use a 'trackball' on the left mouse button.
+  
+  The example code below illustrates the two coordinate systems.
 }
 
 \seealso{
@@ -50,4 +75,23 @@
 \code{\link{cube3d}}
 \code{\link{rgl}}
 }
+\examples{
+    
+     x <- c(0,1,0,0)
+     y <- c(0,0,1,0)
+     z <- c(0,0,0,1)
+     labels <- c("Origin", "X", "Y", "Z")
+     i <- c(1,2,1,3,1,4)
+
+     rgl.open()
+     rgl.texts(x,y,z,labels)
+     rgl.texts(1,1,1,"rgl.* coordinates")
+     rgl.lines(x[i],y[i],z[i])
+
+     open3d()
+     text3d(x,y,z,labels)
+     text3d(1,1,1,"*3d coordinates")
+     segments3d(x[i],y[i],z[i])
+}
+
 \keyword{dynamic}

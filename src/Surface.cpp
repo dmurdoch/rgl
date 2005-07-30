@@ -6,11 +6,15 @@
 //   Surface
 //
 
-Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, double* in_z, double* in_y)
+Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, double* in_z, double* in_y, 
+	         int* in_coords)
 : Shape(in_material)
 {
   nx = in_nx;
   nz = in_nz;
+  coords[0] = *(in_coords++);
+  coords[1] = *(in_coords++);
+  coords[2] = *(in_coords++);
 
   int nvertex = nx*nz;
 
@@ -22,13 +26,22 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
     texCoordArray.alloc(nvertex);
 
   Vertex v;
+  float *x,*y,*z, *va[3];
+  
+  va[0] = &(v.x);
+  va[1] = &(v.y);
+  va[2] = &(v.z);
+  
+  x = va[coords[0]-1];
+  y = va[coords[1]-1];
+  z = va[coords[2]-1];
 
   int iy  = 0;
   for(int iz=0;iz<nz;iz++) {
-    v.z = (float) in_z[iz];
+    *z = (float) in_z[iz];
     for(int ix=0;ix<nx;ix++,iy++) {
-      v.x = (float) in_x[ix];
-      v.y = (float) in_y[iy];
+      *x = (float) in_x[ix];
+      *y = (float) in_y[iy];
 
       vertexArray[iy] = v;
 
