@@ -1,46 +1,48 @@
 # rgl demo: rgl-bivar.r
 # author: Daniel Adler
-# $Id: bivar.r,v 1.4 2004/05/28 07:05:25 dadler Exp $
+# $Id$
 
-if ( require(sm) == TRUE ) {
-
+rgl.demo.bivar <- function()
+{
+  require(sm2);
+  
   # parameters:
   n<-50; ngrid<-40
   
   # generate samples:
   set.seed(31415)
-  x<-rnorm(n); z<-rnorm(n)
+  x<-rnorm(n); y<-rnorm(n)
   
   # estimate non-parameteric density surface via kernel smoothing
-  smobj<-sm.density(cbind(x,z), display="none", ngrid=ngrid)
-  sm.y <-smobj$estimate
+  smobj<-sm.density(cbind(x,y), display="none", ngrid=ngrid)
+  sm.z <-smobj$estimate
   
   # generate parameteric density surface of a bivariate normal distribution
   xgrid <- seq(min(x),max(x),len=ngrid)
-  zgrid <- seq(min(z),max(z),len=ngrid)
-  bi.y <- dnorm(xgrid)%*%t(dnorm(zgrid))
+  ygrid <- seq(min(y),max(y),len=ngrid)
+  bi.z <- dnorm(xgrid)%*%t(dnorm(ygrid))
   
   # visualize:
-  yscale<-20
+  zscale<-20
   
   # clear scene:
-  rgl.clear()
-  rgl.clear(type="bbox")
-  rgl.clear(type="lights")
+  clear3d()
+  clear3d(type="bbox")
+  clear3d(type="lights")
   
   # setup env:
-  rgl.bg(color="#887777")
-  rgl.light()
+  bg3d(color="#887777")
+  light3d()
   
   # Draws the simulated data as spheres on the baseline
-  rgl.spheres(x,rep(0,n),z,radius=0.1,color="#CCCCFF")
+  spheres3d(x,rep(0,n),y,radius=0.1,color="#CCCCFF")
   
   # Draws non-parametric density
-  rgl.surface(xgrid,zgrid,sm.y*yscale,color="#FF2222",alpha=0.5)
+  surface3d(xgrid,ygrid,sm.z*zscale,color="#FF2222",alpha=0.5)
   
   # Draws parameteric density
-  rgl.surface(xgrid,zgrid,bi.y*yscale,color="#CCCCFF",front="lines")
+  surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines") 
+}
 
-} 
-
+rgl.demo.bivar()
 
