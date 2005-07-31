@@ -5,35 +5,301 @@
 //
 // $Id$
 // ---------------------------------------------------------------------------
+#include <X11/keysym.h>
+#include <cstdio>
 #include "x11gui.hpp"
 #include "lib.hpp"
-
-#include <X11/keysym.h>
-
-#include <cstdio>
-
-//
-// X11 Window Implementation
-//
-
+// ---------------------------------------------------------------------------
 namespace gui {
-
-//
-// X11 Atoms
-//
-
-static char* atom_names[GUI_X11_ATOM_LAST] = {
-  "WM_DELETE_WINDOW"
+// ---------------------------------------------------------------------------
+class X11WindowImpl : public WindowImpl
+{
+public:
+  X11WindowImpl(Window* in_window
+  , X11GUIFactory* in_factory
+  , ::Window in_xwindow
+  );
+  virtual ~X11WindowImpl();
+  void setTitle(const char* title);
+  void setLocation(int x, int y);
+  void setSize(int w, int h);
+  void show();
+  void hide();
+  void bringToTop(int stay);
+  void update();
+  void destroy();
+  void beginGL();
+  void endGL();
+  void swap();
+  void captureMouse(gui::View* captureview);
+  void releaseMouse();
+private:
+  void initGL();
+  void initGLFont();
+  void destroyGLFont();
+  void shutdownGL();
+  static int translate_key(KeySym keysym);
+  void on_init();
+  void on_shutdown();
+  void processEvent(XEvent& ev); 
+  X11GUIFactory* factory;
+  ::Window       xwindow;
+  ::GLXContext   glxctx;
+  friend class X11GUIFactory;
 };
+// ---------------------------------------------------------------------------
+// X11WindowImpl Implementation
+// ---------------------------------------------------------------------------
+X11WindowImpl::X11WindowImpl(Window* w, X11GUIFactory* f, ::Window in_xwindow)
+: WindowImpl(w)
+, factory(f)
+, xwindow(in_xwindow)
+{
+  on_init();
+}
+// ---------------------------------------------------------------------------
+X11WindowImpl::~X11WindowImpl()
+{
+  if (xwindow != 0)
+    destroy();
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::setTitle(const char* title)
+{
+  XStoreName(factory->xdisplay,xwindow,title);
+  factory->flushX();
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::setLocation(int x, int y)
+{
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::setSize(int w, int h)
+{
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::show()
+{
+  XMapWindow(factory->xdisplay, xwindow);
+  factory->flushX();
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::hide()
+{
+  XUnmapWindow(factory->xdisplay, xwindow);
+  factory->flushX();
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::bringToTop(int stay)
+{
+  XRaiseWindow(factory->xdisplay, xwindow);
+  factory->flushX();
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::update()
+{
+  window->paint();
+  swap();
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::destroy()
+{
+  on_shutdown();
+  XDestroyWindow(factory->xdisplay, xwindow);
+  factory->flushX();
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::beginGL()
+{
+    if ( glXMakeCurrent(factory->xdisplay, xwindow, glxctx) == False )
+      lib::printMessage("ERROR: can't bind glx context to window");
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::endGL()
+{
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::swap()
+{
+  glXSwapBuffers(factory->xdisplay, xwindow);
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::captureMouse(gui::View* captureview)
+{
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::releaseMouse()
+{
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::processEvent(XEvent& ev)
+{
+  char   keybuffer[8];
+  KeySym keysym;
+  XComposeStatus compose;
+  int    count, keycode;
+  ::Window root, child;
+  int    rootx, rooty, winx, winy;
+  unsigned int  mask;
+  
+  switch(ev.type) {
+    case ButtonPress:
+      switch(ev.xbutton.button) {
+        case 1:
+          if (window)
+            window->buttonPress( GUI_ButtonLeft, ev.xbutton.x, ev.xbutton.y );
+          break;
+        case 2:
+          if (window)
+            window->buttonPress( GUI_ButtonMiddle, ev.xbutton.x, ev.xbutton.y );
+          break;
+        case 3:
+          if (window)
+            window->buttonPress( GUI_ButtonRight, ev.xbutton.x, ev.xbutton.y );
+          break;
+        case 4:
+          if (window)
+            window->wheelRotate( GUI_WheelForward );
+          break;
+        case 5:
+          if (window)
+            window->wheelRotate( GUI_WheelBackward );
+          break;
+      }
+      break;
+    case ButtonRelease:
+      switch(ev.xbutton.button) {
+        case 1:
+          if (window)
+            window->buttonRelease( GUI_ButtonLeft, ev.xbutton.x, ev.xbutton.y );
+          break;
+        case 2:
+          if (window)
+            window->buttonRelease( GUI_ButtonMiddle, ev.xbutton.x, ev.xbutton.y );
+          break;
+        case 3:
+          if (window)
+            window->buttonRelease( GUI_ButtonRight, ev.xbutton.x, ev.xbutton.y );
+          break;
+      }
+      break;
+    case KeyPress:
+      count = XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
+      keycode = translate_key(keysym);
+      if (keycode)
+        if (window)
+          window->keyPress(keycode);
+      break;
+    case KeyRelease:
+      count = XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
+      keycode = translate_key(keysym);
+      if (keycode)
+        if (window)
+          window->keyRelease(keycode);
+      break;
+    case MappingNotify:
+      XRefreshKeyboardMapping(&ev.xmapping);
+      break;
+    case MotionNotify:
+      if( XQueryPointer(factory->xdisplay, xwindow, &root, &child, &rootx, &rooty, &winx, &winy, &mask) == True )
+        if (window)
+          window->mouseMove( winx, winy );
+      break;
+    case Expose:
+      if (ev.xexpose.count == 0) {
+        if (window) 
+          window->paint();
+        swap();
+      }
+      break;
+    case ConfigureNotify:
+      if (window)
+        window->resize( ev.xconfigure.width, ev.xconfigure.height );
+      break;
+    case MapNotify:
+      if (window)
+        window->show();
+      break;
+    case UnmapNotify:
+      if (window)
+        window->hide();
+      break;
+    case ClientMessage:
+      if ( ( (::Atom) ev.xclient.data.l[0] ) == factory->atoms[GUI_X11_ATOM_WM_DELETE])
+        if (window)
+          window->on_close();
+      break;
+    case DestroyNotify:
+      factory->notifyDelete(xwindow);
+      xwindow = 0;
+      if (window)
+        window->notifyDestroy();
+      delete this;
+      break;
+  }
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::initGL()
+{  
+  glxctx = glXCreateContext(factory->xdisplay, factory->xvisualinfo, NULL, True);
+  if (!glxctx)
+    factory->throw_error("unable to create GLX Context"); 
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::shutdownGL()
+{
+  // destroy GL context
+  
+  if (glxctx) {
+    glXMakeCurrent(factory->xdisplay, None, NULL);
+    glXDestroyContext(factory->xdisplay, glxctx);
+    glxctx = NULL;
+  }
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::initGLFont()
+{
+  beginGL();
+  font.nglyph     = GL_BITMAP_FONT_COUNT;
+  font.firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
+  GLuint listBase = glGenLists(font.nglyph);
+  font.listBase   = listBase - font.firstGlyph;
+  glXUseXFont(factory->xfont, font.firstGlyph, font.nglyph, listBase);
 
+  font.widths = new unsigned int[font.nglyph];
+
+  for(unsigned int i=0;i<font.nglyph;i++)
+    font.widths[i] = 9;
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::destroyGLFont()
+{
+  beginGL();
+  glDeleteLists(font.listBase + font.firstGlyph, font.nglyph);
+  delete [] font.widths;  
+  endGL();
+}
+// ---------------------------------------------------------------------------
+void X11WindowImpl::on_init()
+{
+  initGL();
+  initGLFont();
+}
+
+void X11WindowImpl::on_shutdown()
+{
+  destroyGLFont();
+  shutdownGL();
+}
+// ---------------------------------------------------------------------------
 //
 // FUNCTION
 //   translate_key
 //
 // translates X11 KeySym keycode to GUI_Key code
 //
-
-int translate_key(KeySym keysym)
+// ---------------------------------------------------------------------------
+int X11WindowImpl::translate_key(KeySym keysym)
 {
   if ( (keysym >= XK_space) && (keysym <= XK_asciitilde) )
     return (int) keysym;
@@ -51,230 +317,49 @@ int translate_key(KeySym keysym)
     
 }
 
-class X11WindowImpl : public WindowImpl
-{
-public:
-  X11WindowImpl(Window* in_window, X11GUIFactory* in_factory, ::Window in_xwindow)
-    : WindowImpl(in_window), factory(in_factory), xwindow(in_xwindow)
-  { 
-  
-    // init font
-
-    beginGL();
-    font.nglyph   = GL_BITMAP_FONT_COUNT;
-    font.firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
-    GLuint listBase = glGenLists(font.nglyph);
-    font.listBase   = listBase - font.firstGlyph;
-    glXUseXFont(factory->xfont, font.firstGlyph, font.nglyph, listBase);
-
-    font.widths = new unsigned int[font.nglyph];
-
-    for(unsigned int i=0;i<font.nglyph;i++)
-      font.widths[i] = 9;
-    
-    endGL();
-  
-  }
-  virtual ~X11WindowImpl()
-  { 
-    if (xwindow != 0)
-      destroy();
-  }
-  void setTitle(const char* title)
-  {
-    XStoreName(factory->xdisplay,xwindow,title);
-    factory->flushX();
-  }
-  void setLocation(int x, int y)
-  {
-    // FIXME
-  }
-  void setSize(int width, int height)
-  {
-    // FIXME
-  }
-  void show()
-  {
-    XMapWindow(factory->xdisplay, xwindow);
-    factory->flushX();
-  }
-  void hide()
-  {
-    XUnmapWindow(factory->xdisplay, xwindow);
-    factory->flushX();
-  }
-  void bringToTop(int stay) { 
-    XRaiseWindow(factory->xdisplay, xwindow);
-    factory->flushX();
-  }
-  void update()
-  {
-    window->paint();
-    swap();
-  }
-  void destroy()
-  {
-    XDestroyWindow(factory->xdisplay, xwindow);
-    xwindow = 0;
-    factory->flushX();
-  }
-  void beginGL()
-  {
-    if ( glXMakeCurrent(factory->xdisplay, xwindow, factory->glxctx) == False )
-      lib::printMessage("ERROR: can't bind glx context to window");
-  }
-  void endGL()
-  {
-  }
-  void swap()
-  {
-    glXSwapBuffers(factory->xdisplay, xwindow);
-  }
-  void captureMouse(gui::View* captureView)
-  {
-  }
-  void releaseMouse()
-  {
-  }
-  //
-  // dispatch event 
-  //
-  void processEvent(XEvent& ev)
-  {
-    char   keybuffer[8];
-    KeySym keysym;
-    XComposeStatus compose;
-    int    count, keycode;
-    ::Window root, child;
-    int    rootx, rooty, winx, winy;
-    unsigned int  mask;
-    
-    switch(ev.type) {
-      case ButtonPress:
-        switch(ev.xbutton.button) {
-          case 1:
-            window->buttonPress( GUI_ButtonLeft, ev.xbutton.x, ev.xbutton.y );
-            break;
-          case 2:
-            window->buttonPress( GUI_ButtonMiddle, ev.xbutton.x, ev.xbutton.y );
-            break;
-          case 3:
-            window->buttonPress( GUI_ButtonRight, ev.xbutton.x, ev.xbutton.y );
-            break;
-          case 4:
-            window->wheelRotate( GUI_WheelForward );
-            break;
-          case 5:
-            window->wheelRotate( GUI_WheelBackward );
-            break;
-        }
-        break;
-      case ButtonRelease:
-        switch(ev.xbutton.button) {
-          case 1:
-            window->buttonRelease( GUI_ButtonLeft, ev.xbutton.x, ev.xbutton.y );
-            break;
-          case 2:
-            window->buttonRelease( GUI_ButtonMiddle, ev.xbutton.x, ev.xbutton.y );
-            break;
-          case 3:
-            window->buttonRelease( GUI_ButtonRight, ev.xbutton.x, ev.xbutton.y );
-            break;
-        }
-        break;
-      case KeyPress:
-        count = XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
-        keycode = translate_key(keysym);
-        if (keycode)
-          window->keyPress(keycode);
-        break;
-      case KeyRelease:
-        count = XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
-        keycode = translate_key(keysym);
-        if (keycode)
-          window->keyRelease(keycode);
-        break;
-      case MappingNotify:
-        XRefreshKeyboardMapping(&ev.xmapping);
-        break;
-      case MotionNotify:
-        if( XQueryPointer(factory->xdisplay, xwindow, &root, &child, &rootx, &rooty, &winx, &winy, &mask) == True )
-          window->mouseMove( winx, winy );
-        break;
-      case Expose:
-        if (ev.xexpose.count == 0) { 
-          window->paint();
-          swap();
-        }
-        break;
-      case ConfigureNotify:
-        window->resize( ev.xconfigure.width, ev.xconfigure.height );
-        break;
-      case MapNotify:
-        window->show();
-        break;
-      case UnmapNotify:
-        window->hide();
-        break;
-      case ClientMessage:
-        if ( ( (::Atom) ev.xclient.data.l[0] ) == factory->atoms[GUI_X11_ATOM_WM_DELETE])
-          window->closeRequest();
-        break;
-      case DestroyNotify:
-        factory->notifyDelete(xwindow);
-        if (window)
-          window->notifyDestroy();
-        delete this;
-        break;
-    }
-  }
-  
-private:
-  X11GUIFactory* factory;
-  ::Window       xwindow;
-};
-
-//
+// ---------------------------------------------------------------------------
+// X11GUIFactory Implementation
+// ---------------------------------------------------------------------------
 // throw error
-//
-
+// ---------------------------------------------------------------------------
 void X11GUIFactory::throw_error(const char* string)
 {
   lib::printMessage(string);
   disconnect();
 }
-
-
-//
-// connect
-//
-
-void X11GUIFactory::connect(const char* displayname)
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+X11GUIFactory::X11GUIFactory(const char* displayname)
+: xdisplay(0)
+, xvisualinfo(0)
+, xfont(0)
 {
-  // open one display connection for all RGL X11 devices
-  
+  // Open one display connection for all RGL X11 devices
   xdisplay = XOpenDisplay(displayname);
   
-  if (xdisplay == NULL) {
+  if (xdisplay == 0) {
     throw_error("unable to open display"); return;
   }
   
-  // load font
-  
+  // Load System font
   xfont = XLoadFont(xdisplay,"fixed");
 
-  // obtain display atoms
-
+  // Obtain display atoms
+  static char* atom_names[GUI_X11_ATOM_LAST] = {
+    "WM_DELETE_WINDOW"
+  };
   Status s = XInternAtoms(xdisplay, atom_names, sizeof(atom_names)/sizeof(char*), True, atoms);
 
   if (!s)
     lib::printMessage("some atoms not available");
-
-  // query glx extension
+  
+  // Query glx extension
    
   if ( glXQueryExtension(xdisplay, &errorBase, &eventBase) == False ) {
     throw_error("GLX extension missing on server"); return;
   }
+  
+  // Choose GLX visual
   
   static int attribList[] =
   {
@@ -288,86 +373,53 @@ void X11GUIFactory::connect(const char* displayname)
     None
   };
 
-  //
-  // choose GL visual
-  //
-  
   xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
-
-  /* xvisualinfo = NULL; */
-  
-  if (xvisualinfo == NULL) {
+  if (xvisualinfo == 0) {
     throw_error("no suitable visual available"); return;
   }
-    
-  // create opengl context
-    
-  glxctx = glXCreateContext(xdisplay, xvisualinfo, NULL, True);
-  if (!glxctx) {
-    throw_error("unable to create GLX Context"); return;
-  }
-
 }
-
-
-//
-// disconnect
-//
-
+// ---------------------------------------------------------------------------
+X11GUIFactory::~X11GUIFactory()
+{
+  disconnect();
+}
+// ---------------------------------------------------------------------------
 void X11GUIFactory::disconnect()
 {
   // shutdown all X11 windows
-  
-  for (WindowMap::iterator i = windowMap.begin() ; i != windowMap.end() ; ++ i ) {
-    X11WindowImpl* impl = i->second;
-    if (impl)
-      delete impl;
-  }
-  
-  // destroy GL context
-  
-  if (glxctx) {
-    glXMakeCurrent(xdisplay, None, NULL);
-    glXDestroyContext(xdisplay, glxctx);
-    glxctx = NULL;
-  }
+/*
+  WindowMap::iterator i;
 
-  // free XVisualInfo structure
+  for(;;) {
+    i = windowMap.begin();
+    if (i == windowMap.end() )
+      break;
+    X11WindowImpl* impl = i->second;
+    impl->destroy();
+  }
+*/
   
   if (xvisualinfo) {
     XFree(xvisualinfo);
-    xvisualinfo = NULL;
+    xvisualinfo = 0;
   }
-
-  // free xfont
 
   if (xfont) {
     XUnloadFont(xdisplay, xfont);
+    xfont = 0;
   }
-  
-  // disconnect from X server
   
   if (xdisplay) {
     XCloseDisplay(xdisplay);
-    xdisplay = NULL;
+    xdisplay = 0;
   }
 }
-
-
-//
-// flush X requests
-//
-
+// ---------------------------------------------------------------------------
 void X11GUIFactory::flushX()
 {
   XFlush(xdisplay);
 }
-
-
-//
-// X event dispatcher
-//
-
+// ---------------------------------------------------------------------------
 void X11GUIFactory::processEvents()
 {
   for(;;) {
@@ -386,43 +438,14 @@ void X11GUIFactory::processEvents()
       if (impl)
         impl->processEvent(ev);
       else
-        fprintf(stderr,"unknown window id %lx\n", (long)ev.xany.window);
-      
+        fprintf(stderr,"unknown window id %lx(code %lx)\n"
+        , static_cast<long>(ev.xany.window)
+        , static_cast<long>(ev.type) 
+        );
     }
   } 
 }
-
-
-//
-// CONSTRUCTOR
-//
-
-X11GUIFactory::X11GUIFactory(const char* displayname)
-{
-  xdisplay    = NULL;
-  xfont       = 0;
-  xvisualinfo = NULL;
-  glxctx      = NULL;
-
-  connect(displayname); 
-}
-
-
-//
-// DESTRUCTOR
-//
-
-X11GUIFactory::~X11GUIFactory()
-{
-  disconnect();
-}
-
-
-//
-// FACTORY METHOD
-//   createWindowImpl
-//
-
+// ---------------------------------------------------------------------------
 WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 {
   X11WindowImpl* impl = NULL;

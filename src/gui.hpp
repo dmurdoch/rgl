@@ -6,9 +6,9 @@
 //
 // $Id$
 // ---------------------------------------------------------------------------
+#include <string.h>
 #include "types.h"
 #include "glgui.hpp"
-#include <string.h>
 #include "Disposable.hpp"
 // ---------------------------------------------------------------------------
 namespace gui {
@@ -56,8 +56,10 @@ class WindowImpl
 {
 public:
   inline WindowImpl(Window* in_window)
-  { window = in_window; }
-  inline  void unbind() { window = NULL; }
+  : window(in_window)
+  { 
+  }
+  inline  void unbind() { window = 0; }
   virtual void setTitle(const char* title) = 0;
   virtual void setLocation(int x, int y) = 0;
   virtual void setSize(int width, int height) = 0;
@@ -154,16 +156,6 @@ public:
   friend class Window;
 };
 // ---------------------------------------------------------------------------
-//
-// WINDOW
-//
-// INITIAL STATE
-//   - visibility: hidden
-//   - location: 0,0
-//   - size: 256,256
-//   - title: untitled
-//
-// ---------------------------------------------------------------------------
 class Window : public View, public Disposable
 {
 public:
@@ -179,21 +171,26 @@ public:
   void setVisibility(bool state);
   void update(void);
 
+/**
+ * Close the window. 
+ **/
+public:
+  void close() { if (windowImpl) windowImpl->destroy(); else dispose(); }
+
 // protected:
 
 // event handlers:
-  void show(void);
-  void hide(void);
+  void show();
+  void hide();
   void resize(int width, int height);
-  void paint(void);
-  void closeRequest(void);
-  void notifyDestroy(void);
+  void paint();
+  void on_close();
+  void notifyDestroy();
   void buttonPress(int button, int mouseX, int mouseY);
   void buttonRelease(int button, int mouseX, int mouseY);
   void mouseMove(int mouseX, int mouseY);
   void keyPress(int code);
   void wheelRotate(int dir);
-  void dispose();
 
   void bringToTop(int stay);
 

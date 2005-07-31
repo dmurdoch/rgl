@@ -324,7 +324,7 @@ else SetWindowPos(windowHandle, HWND_NOTOPMOST, 0, 0, 0, 0,
           break;
 
         case WM_CLOSE:
-          window->closeRequest();
+          window->on_close();
           break;
 
 
