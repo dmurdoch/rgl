@@ -26,7 +26,7 @@ else
     AC_MSG_ERROR([X11 not found but required, configure aborted.])
   fi
   CPPFLAGS="${CPPFLAGS} -I${x_includes}"
-  LIBS="${LIBS} -L${x_libraries} -lX11"
+  LIBS="${LIBS} -L${x_libraries} -lX11 -lXext"
   if test `uname` = "Darwin" ; then
     CPPFLAGS="${CPPFLAGS} -DDarwin"
     # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
