@@ -118,4 +118,5 @@ v0.65
   - added r3d generic visualization/rendering interface
   - added Mac OS X/Carbon port
   - bugfix: rgl.close() , rgl.quit() crashed on X11 occasionally.
-
+  - generalized rgl.surface() to allow surface over any coordinate plane.
+  - added r3dDefaults variable to allow user to set defaults.
