@@ -108,7 +108,7 @@ void printMessage( const char* string ) {
 #include <unistd.h>
 
 double getTime() {
-  struct timeval t;
+  struct ::timeval t;
   gettimeofday(&t,NULL);
   return ( (double) t.tv_sec ) * 1000.0 + ( ( (double) t.tv_usec ) / 1000.0 ); 
 }
