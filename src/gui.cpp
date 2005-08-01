@@ -146,11 +146,10 @@ void Window::setWindowImpl(WindowImpl* impl)
     child->setWindowImpl(impl);
 }
 // ---------------------------------------------------------------------------
-void Window::setTitle(const char* inTitle)
+void Window::setTitle(const char* title)
 {
-  title = inTitle;
   if (windowImpl)
-    windowImpl->setTitle( strdup(title) );
+    windowImpl->setTitle(title);
 }
 // ---------------------------------------------------------------------------
 void Window::update(void)
