@@ -13,7 +13,8 @@ rgl.snapshot( filename, fmt="png" )
 }
 \details{
 Animations can be created in a loop modifying the scene and saving 
-a screenshot to a file. (See example below)
+each screenshot to a file. Various graphics programs (e.g. ImageMagick)
+can put these together into a single animation. (See example below)
 }
 \examples{
 
@@ -23,12 +24,17 @@ a screenshot to a file. (See example below)
 # create animation
 #
 
+shade3d(oh3d(), color="red")
+rgl.viewpoint(0,20)
+
+setwd(tempdir())
 for (i in 1:45) {
   rgl.viewpoint(i,20)
-  print( paste("pic",formatC(i,digits=1,flag="0"),".png",sep="") )
+  filename <- paste("pic",formatC(i,digits=1,flag="0"),".png",sep="")
   rgl.snapshot(filename)
 }
-
+## Now run ImageMagick command:
+##    convert -delay 10 *.png -loop 0 pic.gif
 }
 
 }

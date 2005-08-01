@@ -40,9 +40,8 @@ set the viewpoint interactively. With the pointing device the buttons are by def
 rgl.open()
 shade3d(oh3d(), color="red")
 
-start <- Sys.time()
-while ((i <- 36*as.numeric(difftime(Sys.time(),start, 
-                           units="secs"))) < 360) {
+start <- proc.time()[3]
+while ((i <- 36*(proc.time()[3]-start)) < 360) {
   rgl.viewpoint(i,i/4); 
 }
 
