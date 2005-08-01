@@ -10,6 +10,16 @@ class GLBitmapFont;
 class RenderContext
 {
 public:
+  RenderContext()
+  : scene(0)
+  , rect(0,0,0,0)
+  , viewpoint(0)
+  , font(0)
+  , time(0.0)
+  , lastTime(0.0)
+  , deltaTime(0.0)
+  , cop()
+  { }
   Scene* scene;
   Rect   rect;
   // RectSize size;
