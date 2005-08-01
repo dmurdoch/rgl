@@ -45,7 +45,7 @@ v0.64-4
   - uploaded to cvs
 
 v0.64-5
-  - MacOS X port
+  - MacOS X/X11 port
 
 v0.64-6
   - updated build system: added setversion.sh 
@@ -97,7 +97,7 @@ v0.64-12
 v0.64-13
   - DESCRIPTION fix: moved R 1.41 -> R 1.4.1 dependency
 
-v0.64-14
+v0.65
   - merge murdoch-branch:  
     - text justification from 0 to 1
     - linestrips
@@ -115,4 +115,8 @@ v0.64-14
     are compiled but protected using #IF <PLATFORM> .. #ELSE
   ( switched to subversion )
   - added gl2ps patch ( by Albrecht Gebhard )
- 
+  - added r3d generic visualization/rendering interface
+  - added Mac OS X/Carbon port
+  - bugfix: rgl.close() , rgl.quit() crashed on X11 occasionally.
+  - generalized rgl.surface() to allow surface over any coordinate plane.
+  - added r3dDefaults variable to allow user to set defaults.
