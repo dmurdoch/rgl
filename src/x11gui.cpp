@@ -1,9 +1,14 @@
 #include "config.hpp"
 #ifdef RGL_X11
+// ---------------------------------------------------------------------------
 // C++ source
 // This file is part of RGL.
 //
 // $Id$
+
+// Uncomment for verbose output on stderr:
+// #define RGL_X11_DEBUG
+
 // ---------------------------------------------------------------------------
 #include <X11/keysym.h>
 #include <cstdio>
@@ -41,6 +46,7 @@ private:
   static int translate_key(KeySym keysym);
   void on_init();
   void on_shutdown();
+  void on_paint();
   void processEvent(XEvent& ev); 
   X11GUIFactory* factory;
   ::Window       xwindow;
@@ -78,10 +84,18 @@ void X11WindowImpl::setSize(int w, int h)
 {
 }
 // ---------------------------------------------------------------------------
+static Bool IsMapNotify(Display* d, XEvent* ev, XPointer arg)
+{
+  ::Window w = (::Window) arg;
+  return ( (ev->xany.window == w) && (ev->type == MapNotify) );
+}
 void X11WindowImpl::show()
 {
   XMapWindow(factory->xdisplay, xwindow);
-  factory->flushX();
+  XEvent ev;
+  XIfEvent(factory->xdisplay, &ev, IsMapNotify, (XPointer) xwindow );
+  factory->processEvents();
+  update();
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::hide()
@@ -96,17 +110,26 @@ void X11WindowImpl::bringToTop(int stay)
   factory->flushX();
 }
 // ---------------------------------------------------------------------------
+void X11WindowImpl::on_paint()
+{
+  if (window)
+    window->paint();
+  swap();
+}
+// ---------------------------------------------------------------------------
 void X11WindowImpl::update()
 {
-  window->paint();
-  swap();
+  on_paint();
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::destroy()
 {
-  on_shutdown();
-  XDestroyWindow(factory->xdisplay, xwindow);
-  factory->flushX();
+  if (xwindow != 0) 
+  {
+    on_shutdown();
+    XDestroyWindow(factory->xdisplay, xwindow);
+    factory->flushX();
+  }
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::beginGL()
@@ -386,29 +409,23 @@ X11GUIFactory::~X11GUIFactory()
 // ---------------------------------------------------------------------------
 void X11GUIFactory::disconnect()
 {
-  // shutdown all X11 windows
-/*
-  WindowMap::iterator i;
+  // process pending XDestroyNotify events
+  XSync(xdisplay, False);
+  processEvents();
 
-  for(;;) {
-    i = windowMap.begin();
-    if (i == windowMap.end() )
-      break;
-    X11WindowImpl* impl = i->second;
-    impl->destroy();
-  }
-*/
-  
+  // free XVisualInfo structure
   if (xvisualinfo) {
     XFree(xvisualinfo);
     xvisualinfo = 0;
   }
 
+  // free xfont
   if (xfont) {
     XUnloadFont(xdisplay, xfont);
     xfont = 0;
   }
   
+  // disconnect from X server
   if (xdisplay) {
     XCloseDisplay(xdisplay);
     xdisplay = 0;
@@ -437,11 +454,13 @@ void X11GUIFactory::processEvents()
 
       if (impl)
         impl->processEvent(ev);
+#ifdef RGL_X11_DEBUG
       else
         fprintf(stderr,"unknown window id %lx(code %lx)\n"
         , static_cast<long>(ev.xany.window)
         , static_cast<long>(ev.type) 
         );
+#endif        
     }
   } 
 }
@@ -513,6 +532,9 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 // ---------------------------------------------------------------------------
 void X11GUIFactory::notifyDelete(::Window xwindowid)
 {
+#ifdef RGL_X11_DEBUG
+  fprintf(stderr,"notifyDelete %lx\n", xwindowid);
+#endif
   // remove window from map
   windowMap.erase(xwindowid);
 }
