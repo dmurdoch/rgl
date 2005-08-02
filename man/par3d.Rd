@@ -74,7 +74,10 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
 \section{Parameters}{
   \describe{
     \item{\code{FOV}}{real.  The field of view, from 1 to 179 degrees.  This controls
-      the degree of parallax in the perspective view.}
+      the degree of parallax in the perspective view.
+      Isometric perspective (which would
+      correspond to \code{FOV=0}) is not currently possible, but one can
+      approximate it by specifying \code{par3d(FOV=1)}.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
       of the user data.}
     \item{\code{mouseMode}}{character.  A vector of 3 strings describing
