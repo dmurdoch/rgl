@@ -1,4 +1,5 @@
 \name{matrices}
+\alias{matrices}
 \alias{scaleMatrix}
 \alias{translationMatrix}
 \alias{rotationMatrix}
@@ -82,6 +83,8 @@ in homogeneous coordinates.
 and produce a new object of the same class.
 }
 \author{ Duncan Murdoch }
+\seealso{\code{\link{par3d}} for a description of how rgl uses matrices in
+rendering.}
 
 \examples{
 # A 90 degree rotation about the x axis:

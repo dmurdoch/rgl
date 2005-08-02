@@ -102,7 +102,33 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   }
 }
 
+\section{Rendering}{
+The parameters returned by \code{par3d} are sufficient to determine where rgl would render
+a point on the screen.  Given a column vector \code{(x,y,z)}, it performs the equivalent of 
+the following operations:
+\enumerate{
+\item It converts the point to homogeneous coordinates by appending \code{w=1}, giving
+the vector \code{v = (x,y,z,1)}.
+\item It obtains the model matrix \code{M = par3d("modelMatrix")} and multiplies
+the point by this giving \code{u = M \%*\% v}.  Using this location and information on the
+normals (which have been similarly transformed), it performs lighting calculations.
+\item It obtains the projection matrix \code{P = par3d("projMatrix")} and
+multiplies the point by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.
+\item It converts back to Euclidean coordinates by dividing the first 3 coordinates by \code{w2}.
+\item The new value \code{z2/w2} represents the depth into the scene of the point.  Depending
+on what has already been plotted, this depth might be obscured, in which case nothing more is plotted.
+\item If the point is not culled due to depth, the \code{x2} and \code{y2} values are used
+to determine the point in the image.  The \code{par3d("viewport")} values are used to translate
+from the range \code{(-1, 1)} to pixel locations, and the point is plotted.
+}
+See ?\link{matrices} for more information on homogeneous and Euclidean coordinates.
+}
+
 \seealso{\code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
+}
+
+\references{
+OpenGL Architecture Review Board (1997).  OpenGL Programming Guide.  Addison-Wesley.
 }
 
 \examples{
