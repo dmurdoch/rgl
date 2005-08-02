@@ -1,5 +1,5 @@
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef RGL_DEVICE_HPP
+#define RGL_DEVICE_HPP
 
 // C++ header file
 // This file is part of RGL
@@ -62,4 +62,5 @@ private:
   int    id_;
 };
 
-#endif /* DEVICE_H */
+#endif // RGL_DEVICE_HPP
+
