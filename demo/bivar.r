@@ -4,7 +4,7 @@
 
 rgl.demo.bivar <- function()
 {
-  require(sm);
+  require(sm2);
   
   # parameters:
   n<-50; ngrid<-40
@@ -41,7 +41,7 @@ rgl.demo.bivar <- function()
   surface3d(xgrid,ygrid,sm.z*zscale,color="#FF2222",alpha=0.5)
   
   # Draws parameteric density
-  surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines") 
+  surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",back="lines") 
 }
 
 rgl.demo.bivar()

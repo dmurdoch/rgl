@@ -5,11 +5,9 @@
 // CLASS
 //   Surface
 //
-// in_coords permutes the coordinates to allow surfaces over arbitrary planes
-// orientation is 1 to swap front and back
 
 Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, double* in_z, double* in_y, 
-	         int* in_coords, int in_orientation)
+	         int* in_coords)
 : Shape(in_material)
 {
   nx = in_nx;
@@ -17,7 +15,6 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
   coords[0] = *(in_coords++);
   coords[1] = *(in_coords++);
   coords[2] = *(in_coords++);
-  orientation = in_orientation;
 
   int nvertex = nx*nz;
 
@@ -85,8 +82,7 @@ void Surface::setNormal(int ix, int iz)
 
   total.normalize();
 
-  if (orientation) glNormal3f(-total.x,-total.y,-total.z);
-  else glNormal3f(total.x,total.y,total.z);    
+  glNormal3f(total.x,total.y,total.z);
 }
 
 void Surface::draw(RenderContext* renderContext)
@@ -105,17 +101,15 @@ void Surface::draw(RenderContext* renderContext)
     for(int ix=0;ix<nx;ix++) {
 
       int i;
-      
-      // If orientation == 1, we draw iz+1 first, otherwise iz first
 
-      i = (iz+  orientation)*nx+ix;
+      i = (iz)  *nx+ix;
       if (use_normal)
-        setNormal(ix, iz+orientation);
+        setNormal(ix, iz);
       glArrayElement( i );
 
-      i = (iz+ !orientation)*nx+ix;
+      i = (iz+1)*nx+ix;
       if (use_normal)
-        setNormal(ix, iz+!orientation);
+        setNormal(ix, iz+1);
       glArrayElement( i );
 
     }

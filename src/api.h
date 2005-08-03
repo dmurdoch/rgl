@@ -62,7 +62,7 @@ EXPORT_SYMBOL void rgl_bbox     (int* successptr, int* idata, double* ddata, dou
 EXPORT_SYMBOL void rgl_primitive(int* successptr, int* idata, double* vertex);
 EXPORT_SYMBOL void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex);
 EXPORT_SYMBOL void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius);
-EXPORT_SYMBOL void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y, int* coords, int* orientation);
+EXPORT_SYMBOL void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y, int* coords);
 EXPORT_SYMBOL void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius);
 
 EXPORT_SYMBOL void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
