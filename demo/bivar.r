@@ -4,7 +4,7 @@
 
 rgl.demo.bivar <- function()
 {
-  require(sm2);
+  require(MASS);
   
   # parameters:
   n<-50; ngrid<-40
@@ -14,12 +14,12 @@ rgl.demo.bivar <- function()
   x<-rnorm(n); y<-rnorm(n)
   
   # estimate non-parameteric density surface via kernel smoothing
-  smobj<-sm.density(cbind(x,y), display="none", ngrid=ngrid)
-  sm.z <-smobj$estimate
+  denobj<-kde2d(x, y, n=ngrid)
+  den.z <-denobj$z
   
   # generate parameteric density surface of a bivariate normal distribution
-  xgrid <- seq(min(x),max(x),len=ngrid)
-  ygrid <- seq(min(y),max(y),len=ngrid)
+  xgrid <- denobj$x
+  ygrid <- denobj$y
   bi.z <- dnorm(xgrid)%*%t(dnorm(ygrid))
   
   # visualize:
@@ -38,7 +38,7 @@ rgl.demo.bivar <- function()
   spheres3d(x,y,rep(0,n),radius=0.1,color="#CCCCFF")
   
   # Draws non-parametric density
-  surface3d(xgrid,ygrid,sm.z*zscale,color="#FF2222",alpha=0.5)
+  surface3d(xgrid,ygrid,den.z*zscale,color="#FF2222",alpha=0.5)
   
   # Draws parameteric density
   surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",back="lines") 
