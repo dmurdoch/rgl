@@ -29,7 +29,7 @@ rgl.demo.abundance <- function()
   # Add terrain surface shape (i.e. population density):
   surface3d( 
       1:100,seq(1,60,length=100),terrain,
-      col=col1,spec="#000000", ambient="#333333", front="lines"
+      col=col1,spec="#000000", ambient="#333333", back="lines"
   )
   
   # Define colors for simulated populations (males:blue, females:red):
