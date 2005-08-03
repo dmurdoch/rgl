@@ -282,12 +282,16 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
 
   if (device) {
 
-    float fov         = static_cast<float>( ddata[0] );
-    float zoom        = static_cast<float>( ddata[1] - 1.0 )/static_cast<float>(VIEWPOINT_MAX_ZOOM-1);
+    float theta	      = static_cast<float>( ddata[0] );
+    float phi	      = static_cast<float>( ddata[1] );
+    float fov         = static_cast<float>( ddata[2] );
+    float zoom        = static_cast<float>( ddata[3] - 1.0 )/static_cast<float>(VIEWPOINT_MAX_ZOOM-1);
 
     int   interactive = idata[0];
-
-    success = as_success( device->add( new Viewpoint(ddata+2, fov, zoom, interactive) ) );
+    int   polar       = idata[1];
+    
+    if (polar) success = as_success( device->add( new Viewpoint(PolarCoord(theta, phi), fov, zoom, interactive) ) );
+    else       success = as_success( device->add( new Viewpoint(ddata + 4, fov, zoom, interactive) ) );
 
   }
 
