@@ -12,8 +12,7 @@
 
 class Surface : public Shape {
 public:
-  Surface(Material& material, int nx, int nz, double* x, double* z, double* y, int* coords, 
-  	  int orientation);
+  Surface(Material& material, int nx, int nz, double* x, double* z, double* y, int* coords);
   /**
    * overload
    **/
@@ -27,7 +26,7 @@ private:
 
   VertexArray vertexArray;
   TexCoordArray texCoordArray;
-  int nx, nz, coords[3], orientation;
+  int nx, nz, coords[3];
 };
 
 #endif // SURFACE_HPP

@@ -38,10 +38,12 @@ rgl.surface(x, z, y, coords=1:3, ...)
   and the third entry to the \code{z} parameter.  In this way 
   surfaces may be defined over any coordinate plane.
   
-  \code{rgl.surface} always draws the surface with the `front' upwards
-  (i.e. towards higher \code{y} values).  This can be used to render
-  the top and bottom differently; see \code{\link{rgl.material}} and
-  the example below.
+  The \code{coords} parameter can be used to change the geometric
+  interpretation of the x, y, and z coordinates.  The first entry of
+  the \code{coords} vector indicates which coordinate (\code{1=x}, 
+  \code{2=y}, \code{3=z}) corresponds to the \code{x} parameter.
+  Similarly the second entry corresponds to the \code{y} parameter,
+  and the third entry to the \code{z} parameter.
 }
 \examples{
 
@@ -64,7 +66,7 @@ colorlut <- terrain.colors(ylen) # height color lookup table
 col <- colorlut[ y-ylim[1]+1 ] # assign colors to heights for each point
 
 rgl.clear()
-rgl.surface(x, z, y, color=col, back="lines")
+rgl.surface(x, z, y, color=col)
 
 }
 \seealso{
