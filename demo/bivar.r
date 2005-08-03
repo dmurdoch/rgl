@@ -35,13 +35,13 @@ rgl.demo.bivar <- function()
   light3d()
   
   # Draws the simulated data as spheres on the baseline
-  spheres3d(x,rep(0,n),y,radius=0.1,color="#CCCCFF")
+  spheres3d(x,y,rep(0,n),radius=0.1,color="#CCCCFF")
   
   # Draws non-parametric density
   surface3d(xgrid,ygrid,sm.z*zscale,color="#FF2222",alpha=0.5)
   
   # Draws parameteric density
-  surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines") 
+  surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",back="lines") 
 }
 
 rgl.demo.bivar()
