@@ -284,7 +284,7 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
   if ( nz < 2 )   
     stop("y length < 2")
     
-  if ( length(coords) != 3 || !all.equal(sort(coords), 1:3) )
+  if ( length(coords) != 3 || !identical(all.equal(sort(coords), 1:3), TRUE) )
     stop("coords must be a permutation of 1:3")
 
   idata <- as.integer( c( nx, nz ) )
