@@ -25,7 +25,7 @@ rotationMatrix <- function(angle,x,y,z,matrix)
         matrix[3,1] <- matrix[3,1] - sina*u[2]
         matrix[3,2] <- matrix[3,2] + sina*u[1]
     }
-    if (all.equal(dim(matrix), c(3,3))) 
+    if (identical(all.equal(dim(matrix), c(3,3)), TRUE)) 
         matrix <- cbind(rbind(matrix,c(0,0,0)),c(0,0,0,1))
     return(matrix)    
 }
