@@ -130,7 +130,54 @@ void Surface::draw(RenderContext* renderContext)
   material.endUse(renderContext);
 }
 
+Vertex Surface::getCenter(int ix, int iz)
+{
+  Vertex accu = vertexArray[iz*nx + ix]     + vertexArray[iz*nx + ix+1] 
+               +vertexArray[(iz+1)*nx + ix] + vertexArray[(iz+1)*nx + ix+1];
+  return accu * 0.25f;  
+} 
+  
 void Surface::renderZSort(RenderContext* renderContext)
 {
-  Shape::renderZSort(renderContext);
+  std::multimap<float,int> distanceMap;
+  for (int ix = 0 ; ix < nx-1 ; ++ix ) {
+    for (int iz = 0 ; iz < nz-1 ; ++iz ) {
+      float distance = renderContext->getDistance( getCenter(ix, iz) );
+      distanceMap.insert( std::pair<float,int>(-distance,iz*nx + ix) );
+    }
+  }
+
+  material.beginUse(renderContext);
+  vertexArray.beginUse();
+
+  bool use_texcoord = material.texture && !(material.texture->is_envmap() );
+  bool use_normal   = material.lit || ( (material.texture) && (material.texture->is_envmap() ) );
+
+  if (use_texcoord)
+    texCoordArray.beginUse();
+
+  for ( std::multimap<float,int>::iterator iter = distanceMap.begin(); iter != distanceMap.end() ; ++ iter ) {
+    glBegin(GL_QUAD_STRIP);
+    for (int i = 0 ; i < 2; ++i ) {
+      int ix = iter->second % nx + i;
+      for (int j = 0 ; j < 2; ++j ) {
+        int iz;
+        if (orientation)
+          iz = iter->second / nx + !j;
+        else
+          iz = iter->second / nx + j;
+        if (use_normal)
+          setNormal(ix, iz);
+        glArrayElement( iz*nx + ix );       
+      }
+    }
+    glEnd();
+  }  
+
+  if (use_texcoord)
+    texCoordArray.endUse();
+
+  vertexArray.endUse();
+
+  material.endUse(renderContext);
 }
