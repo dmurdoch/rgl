@@ -17,7 +17,7 @@ rgl.demo.bivar <- function()
   denobj<-kde2d(x, y, n=ngrid)
   den.z <-denobj$z
   
-  # generate parameteric density surface of a bivariate normal distribution
+  # generate parametric density surface of a bivariate normal distribution
   xgrid <- denobj$x
   ygrid <- denobj$y
   bi.z <- dnorm(xgrid)%*%t(dnorm(ygrid))

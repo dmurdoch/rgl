@@ -4,6 +4,6 @@ demo(abundance)
 demo(regression)
 demo(lsystem)
 demo(subdivision)
-# requires sm library
+# requires MASS library
 demo(bivar)
 
