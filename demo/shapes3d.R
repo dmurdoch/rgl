@@ -46,7 +46,7 @@ ellipsoid3d <- function(a=2,b=3,c=1,n=30,ctr=c(0,0,0),...) {
  i2 <- i1+1
  i3 <- (i1+n-1) %% n^2 + 1
  i4 <- (i2+n-1) %% n^2 + 1
- i <- rbind(i1,i3,i2,i4)
+ i <- rbind(i1,i2,i4,i3)
  quads3d(v[1,i],v[2,i],v[3,i],...)
 }
 
