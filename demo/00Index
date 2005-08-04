@@ -1,9 +1,11 @@
 rgl           RGL Demonstration
-hist3d        3d histogram using basic building blocks.
-bivar         Bivariate densities kernel smoothing using rgl.surface and alpha-channel.
-abundance     Animal Abundance, visualization of multi-dimension data using multiple techniques.
-lsystem       Plant modelling using a turtle and l-system.
-subdivision   Subdivision surfaces using generic meshes (preview of generic 3D interface).
-regression    Bivariate regression (require: sm library).
-envmap        Environment Mapping
+hist3d        3D histogram using basic building blocks
+bivar         Bivariate densities: kernel smoothing using rgl.surface and alpha-channel (requires MASS package)
+abundance     Animal abundance, visualization of multi-dimension data using multiple techniques
+lsystem       Plant modelling using a turtle and L-system
+subdivision   Subdivision surfaces using generic meshes (preview of generic 3D interface)
+regression    Bivariate regression
+envmap        Environment mapping
+shapes3d      3D shape primitives (cones, ellipsoids, cubes), some taken from qmesh3d
+lollipop3d    "Lollipop" plots (3D scatterplot with lines between points and a surface)
 
