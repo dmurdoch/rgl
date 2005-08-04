@@ -24,13 +24,10 @@ SpriteSet::~SpriteSet()
 
 void SpriteSet::renderZSort(RenderContext* renderContext)
 {
-  const Vertex& cop = renderContext->cop;
-
   std::multimap<float,int> distanceMap;
 
   for(int index=0;index<vertex.size();index++) {
-    const Vertex& o = vertex.get(index);
-    float distance = (o - cop).getLength();
+    float distance = renderContext->getDistance( vertex.get(index) );
     distanceMap.insert( std::pair<float,int>( -distance , index ) );
   }
   std::multimap<float,int>::iterator iter;

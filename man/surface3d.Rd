@@ -29,6 +29,11 @@ terrain3d(x, y, z, ...)
   to the values in \code{x} and columns corresponding to the values in 
   \code{y}.  This is the same parametrization as used in \code{\link{persp}}.
   
+  \code{surface3d} always draws the surface with the `front' upwards
+  (i.e. towards higher \code{z} values).  This can be used to render
+  the top and bottom differently; see \code{\link{rgl.material}} and
+  the example below.
+  
   For more flexibility in defining the surface, use \code{\link{rgl.surface}}.
   
   \code{surface3d} and \code{terrain3d} are synonyms.
@@ -54,7 +59,7 @@ colorlut <- terrain.colors(zlen) # height color lookup table
 col <- colorlut[ z-zlim[1]+1 ] # assign colors to heights for each point
 
 open3d()
-surface3d(x, y, z, color=col)
+surface3d(x, y, z, color=col, back="lines")
 
 }
 \seealso{

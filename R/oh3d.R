@@ -92,5 +92,5 @@ oh3d.ib <- c(
     7, 23, 27, 11  
 )
 
-oh3d <- function() qmesh3d( oh3d.vb, oh3d.ib )  
+oh3d <- function(trans = par3d("userMatrix")) rotate3d(qmesh3d( oh3d.vb, oh3d.ib ), matrix=trans)
 

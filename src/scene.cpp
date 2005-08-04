@@ -320,8 +320,7 @@ void Scene::render(RenderContext* renderContext)
     //
     // RENDER BLENDED SHAPES
     //
-    // render shapes in bounding-box sorted order according to cop-distance
-    // FIXME: must be (cop+znear)-distance
+    // render shapes in bounding-box sorted order according to z value
     //
 
     // DISABLE Z-BUFFER FOR WRITING
@@ -334,27 +333,34 @@ void Scene::render(RenderContext* renderContext)
     glEnable(GL_BLEND);
 
     //
-    // CALCULATE CENTER OF PROJECTION
+    // GET THE TRANSFORMATION
     //
 
-    renderContext->cop = viewpoint->getCOP(total_bsphere);
-
+    viewpoint->setupTransformation(renderContext, total_bsphere);
+    
+    double data[16];
+        
+    glGetDoublev(GL_MODELVIEW_MATRIX,data);
+    Matrix4x4 M(data);
+    
+    glGetDoublev(GL_PROJECTION_MATRIX,data);
+    Matrix4x4 P(data);
+    P = P*M;
+    
+    renderContext->Zrow = P.getRow(2);
+    renderContext->Wrow = P.getRow(3);
+    
     {
       std::vector<Shape*>::iterator iter;
       std::multimap<float, int> distanceMap;
       int index = 0;
-
-      const Vertex& cop    = viewpoint->getCOP(total_bsphere);
 
       for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
         Shape* shape = *iter;
       
         const AABox& aabox = shape->getBoundingBox();
 
-        const Vertex& center = aabox.getCenter();
-
-        float distance = ( cop - center ).getLength();
-
+        float distance = renderContext->getDistance( aabox.getCenter() );
         distanceMap.insert( std::pair<float,int>(-distance, index) );
         index++;
 

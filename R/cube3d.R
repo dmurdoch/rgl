@@ -22,7 +22,6 @@ cube3d.ib <- c(
   5, 6, 8, 7      
 )
   
-cube3d <- function( )
-  return( qmesh3d( cube3d.vb, cube3d.ib ) )
+cube3d <- function( trans = par3d("userMatrix") )
+  return( rotate3d( qmesh3d( cube3d.vb, cube3d.ib ), matrix = trans) )
   
-

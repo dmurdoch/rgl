@@ -14,8 +14,8 @@
 }
 \usage{
   qmesh3d(vertices,indices,homogeneous=TRUE,material=NULL)
-  cube3d()  # cube object
-  oh3d()    # an 'o' object
+  cube3d(trans = par3d("userMatrix"))  # cube object
+  oh3d(trans = par3d("userMatrix"))    # an 'o' object
   
   dot3d(x, ...)   # draw dots at the vertices of an object
   \method{dot3d}{qmesh3d}(x, ...)
@@ -30,6 +30,7 @@
   \item{indices}{4-component vector of quad indices}
   \item{homogeneous}{logical indicating if homogeneous (four component) coordinates are used.}
   \item{material}{material properties for later rendering}
+  \item{trans}{transformation to apply to objects}
   \item{...}{additional rendering parameters}
 }
 \examples{

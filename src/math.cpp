@@ -205,6 +205,17 @@ Matrix4x4 Matrix4x4::operator * (const Matrix4x4& op2) const {
   return r;
 }
 
+Vec4 Matrix4x4::getRow(int row) {
+  Vec4 r;
+  
+  r.x = val(row, 0);
+  r.y = val(row, 1);
+  r.z = val(row, 2);
+  r.w = val(row, 3);
+  
+  return r;
+}
+
 void Matrix4x4::setIdentity(void) {
   for(int i=0;i<16;i++)
     data[i] = 0.0f;

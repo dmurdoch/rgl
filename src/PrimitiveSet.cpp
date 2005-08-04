@@ -77,13 +77,11 @@ void PrimitiveSet::draw(RenderContext* renderContext)
 
 void PrimitiveSet::renderZSort(RenderContext* renderContext)
 {
-  // sort by z-distance 
-
-  Vertex cop = renderContext->cop;
-
+  // sort by z-depth
+  
   std::multimap<float,int> distanceMap;
   for (int index = 0 ; index < nprimitives ; ++index ) {
-    float distance = ( getCenter(index) - cop ).getLength();
+    float distance = renderContext->getDistance( getCenter(index) );
     distanceMap.insert( std::pair<float,int>(-distance,index) );
   }
 
