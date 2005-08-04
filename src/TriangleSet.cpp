@@ -36,9 +36,9 @@ void TriangleSet::renderEnd()
 void TriangleSet::renderZSort(RenderContext* renderContext)
 {
   std::multimap<float,int> distanceMap;
-  for (int index = 0 ; i < nelements ; ++index ) {
+  for (int index = 0 ; index < nelements ; ++index ) {
     float distance = renderContext->getDistance( getCenter(index) );
-    insert( std::pair<float,int>(distance,index)
+    distanceMap.insert( std::pair<float,int>(distance,index) );
   }
 
   drawBegin();
