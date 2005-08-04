@@ -23,7 +23,7 @@ cone3d <- function(base,tip,rad,n=30,draw.base=TRUE,...) {
   } else {
     p1 <- c(0,1,0); p2 <- c(1,0,0)
   }
-  degvec <- seq(0,2*pi,length=n)
+  degvec <- seq(0,2*pi,length=n+1)[-1]
   ecoord2 <- function(theta) {
     base+rad*(cos(theta)*p1+sin(theta)*p2)
   }
@@ -31,9 +31,9 @@ cone3d <- function(base,tip,rad,n=30,draw.base=TRUE,...) {
   i <- rbind(1:n,c(2:n,1),rep(n+1,n))
   if (draw.base) {
     v <- cbind(v,base)
-    i <- cbind(i,rbind(1:n,c(2:n,1),rep(n+2,n)))
+    i <- cbind(i,rbind(c(2:n,1),1:n,rep(n+2,n)))
   }
-  triangles3d(v[1,i],v[2,i],v[3,i])
+  triangles3d(v[1,i],v[2,i],v[3,i],...)
 }
 
 ellipsoid3d <- function(a=2,b=3,c=1,n=30,ctr=c(0,0,0),...) {
