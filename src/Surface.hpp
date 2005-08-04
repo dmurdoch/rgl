@@ -5,6 +5,8 @@
 
 #include "render.h"
 
+#include <map>
+
 //
 // CLASS
 //   Surface
@@ -22,6 +24,9 @@ public:
    * overload
    **/
   virtual void renderZSort(RenderContext* renderContext);
+  
+  /* Center of square with upper left at (ix, iz) */
+  Vertex getCenter(int ix, int iz);  
 private:
   void setNormal(int ix, int iz);
 
