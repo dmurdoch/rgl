@@ -40,8 +40,8 @@ rgl.demo.bivar <- function()
   # Draws non-parametric density
   surface3d(xgrid,ygrid,den.z*zscale,color="#FF2222",alpha=0.5)
   
-  # Draws parameteric density
-  surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",back="lines") 
+  # Draws parametric density
+  surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines") 
 }
 
 rgl.demo.bivar()

@@ -18,7 +18,8 @@ public:
   , time(0.0)
   , lastTime(0.0)
   , deltaTime(0.0)
-  , cop()
+  , Zrow()
+  , Wrow()
   { }
   Scene* scene;
   Rect   rect;
@@ -28,7 +29,9 @@ public:
   double time;
   double lastTime;
   double deltaTime;
-  Vertex cop;
+  float getDistance(const Vertex& v);
+  Vec4 Zrow;
+  Vec4 Wrow;
 };
 
 #endif // RENDERCONTEXT_HPP

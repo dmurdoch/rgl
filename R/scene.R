@@ -268,6 +268,22 @@ rgl.linestrips<- function ( x, y, z, ... )
 ##
 ##
 
+# Utility function:
+# calculates the parity of a permutation of integers
+
+perm_parity <- function(p) {  
+  x <- seq(along=p)
+  result <- 0
+  for (i in seq(along=p)) {
+    if (x[i] != p[i]) {
+      x[x==p[i]] <- x[i]
+      # x[i] <- p[i]     # not needed
+      result <- result+1
+    }
+  }
+  return(result %% 2)
+}
+
 rgl.surface <- function( x, z, y, coords=1:3, ... )
 {
   rgl.material(...)
@@ -290,6 +306,8 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
 
   idata <- as.integer( c( nx, nz ) )
 
+  parity <- (perm_parity(coords) + (x[2] < x[1]) + (z[2] < z[1]) ) %% 2
+  
   ret <- .C( symbol.C("rgl_surface"),
     success=FALSE,
     idata,
@@ -297,6 +315,7 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
     as.numeric(z),
     as.numeric(y),
     as.integer(coords),
+    as.integer(parity),
     PACKAGE="rgl"
   );
 

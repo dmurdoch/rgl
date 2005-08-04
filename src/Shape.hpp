@@ -26,7 +26,7 @@ public:
   virtual void render(RenderContext* renderContext);
 
   /**
-   * render shape using z-distance to COP (FIXME: should be znear plane)
+   * render shape using z value in renderContext
    * Implementation: does call render()
    **/
   virtual void renderZSort(RenderContext* renderContext);

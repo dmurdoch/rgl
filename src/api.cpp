@@ -404,7 +404,7 @@ void rgl_primitive(int* successptr, int* idata, double* vertex)
   *successptr = success;
 }
 
-void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, int* coords)
+void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, int* coords, int* orientation)
 {
   int success = RGL_FAIL;
 
@@ -414,7 +414,7 @@ void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, i
     int nx         = idata[0];
     int nz         = idata[1];
 
-    success = as_success( device->add( new Surface(currentMaterial, nx, nz, x, z, y, coords) ) );
+    success = as_success( device->add( new Surface(currentMaterial, nx, nz, x, z, y, coords, *orientation) ) );
 
   }
 
