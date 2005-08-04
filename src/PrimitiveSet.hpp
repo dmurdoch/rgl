@@ -172,6 +172,7 @@ class LineStripSet : public PrimitiveSet
 {
 public:
   LineStripSet(Material& material, int in_nelements, double* in_vertex);
+  void drawElement(RenderContext* renderContext, int index);  
 };
 
 #endif // PRIMITIVE_SET_HPP

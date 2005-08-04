@@ -28,22 +28,38 @@ SphereSet::~SphereSet()
 {
 }
 
+void SphereSet::drawElement(RenderContext* renderContext, int i) 
+{
+   material.useColor(i);
+
+   sphereMesh.setCenter( center.get(i) );
+   sphereMesh.setRadius( radius.getRecycled(i) );
+
+   sphereMesh.update();
+
+   sphereMesh.draw(renderContext);
+}
+
 void SphereSet::draw(RenderContext* renderContext)
 {
   material.beginUse(renderContext);
 
-  for(int i=0;i<center.size();i++) {
+  for(int i=0;i<center.size();i++) drawElement(renderContext, i);
   
-    material.useColor(i);
-
-    sphereMesh.setCenter( center.get(i) );
-    sphereMesh.setRadius( radius.getRecycled(i) );
-
-    sphereMesh.update();
-
-    sphereMesh.draw(renderContext);
-  }
-
   material.endUse(renderContext);
 }
 
+void SphereSet::renderZSort(RenderContext* renderContext)
+{
+  std::multimap<float,int> distanceMap;
+  for (int index = 0 ; index < center.size() ; ++index ) {
+    float distance = renderContext->getDistance( center.get(index) );
+    distanceMap.insert( std::pair<float,int>(-distance,index) );
+  }
+
+  material.beginUse(renderContext);
+  for ( std::multimap<float,int>::iterator iter = distanceMap.begin(); iter != distanceMap.end() ; ++ iter ) {
+    drawElement( renderContext, iter->second );
+  }  
+  material.endUse(renderContext);
+}

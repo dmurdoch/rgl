@@ -3,6 +3,7 @@
 
 #include "Shape.hpp"
 #include "SphereMesh.hpp"
+#include <map>
 
 class SphereSet : public Shape {
 private:
@@ -17,6 +18,13 @@ public:
    * overload
    **/
   void draw(RenderContext* renderContext);
+  
+  /**
+   * overload
+   **/
+  void renderZSort(RenderContext* renderContext);
+  
+  void drawElement(RenderContext* renderContext, int i);
 };
 
 #endif // SPHERESET_HPP
