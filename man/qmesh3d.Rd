@@ -14,8 +14,8 @@
 }
 \usage{
   qmesh3d(vertices,indices,homogeneous=TRUE,material=NULL)
-  cube3d(trans)  # cube object
-  oh3d(trans)    # an 'o' object
+  cube3d(trans = par3d("userMatrix"))  # cube object
+  oh3d(trans = par3d("userMatrix"))    # an 'o' object
   
   dot3d(x, ...)   # draw dots at the vertices of an object
   \method{dot3d}{qmesh3d}(x, ...)
@@ -37,8 +37,8 @@
   The \code{cube3d} and \code{oh3d} objects optionally take a matrix transformation as 
   an argument.  This transformation is applied to all vertices of the default shape.
   
-  If the transformation is missing, \code{\link{par3d}("userMatrix")} is used, or if
-  no rgl window is open, an identity transformation.
+  The default transforms the coordinates according to \code{par3d("userMatrix")}.
+  If no rgl window is open an identity transformation is used.
 }
 \examples{
 
@@ -68,6 +68,6 @@
   
 }
 \seealso{
-  \code{\link{r3d}}
+  \code{\link{r3d}}, \code{\link{par3d}} 
 }
 \keyword{dynamic}
