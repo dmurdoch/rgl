@@ -92,5 +92,9 @@ oh3d.ib <- c(
     7, 23, 27, 11  
 )
 
-oh3d <- function(trans = par3d("userMatrix")) rotate3d(qmesh3d( oh3d.vb, oh3d.ib ), matrix=trans)
+oh3d <- function( trans  ) {
+  if ( missing(trans) )
+    trans <- if ( rgl.cur() ) par3d("userMatrix") else diag(4)
+  return(rotate3d(qmesh3d( oh3d.vb, oh3d.ib ), matrix=trans))
+}
 
