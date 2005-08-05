@@ -25,9 +25,11 @@ step drags the points (refinement step).
   \item{depth}{recursion depth}
   \item{normalize}{normalize qmesh3d coordinates after division if deform is TRUE otherwise}
   \item{deform}{deform mesh after normalization}
-  \item{ib}{}
-  \item{vb}{}
-  \item{...}{other arguments}
+  \item{ib}{vector of indices (i.e., which sets of vertices to combine
+    into quads); 4xn matrix or equivalent vector}
+  \item{vb}{vector of vertices: 4xn matrix (rows x,y,z,h) or equivalent
+    vector, where h indicates scaling of each plotted quad}
+  \item{...}{other arguments (unused)}
 }
 \details{
   Generic subdivision surface method. Currently there exists
