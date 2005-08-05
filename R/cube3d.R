@@ -22,6 +22,8 @@ cube3d.ib <- c(
   5, 6, 8, 7      
 )
   
-cube3d <- function( trans = par3d("userMatrix") )
+cube3d <- function( trans  ) {
+  if ( missing(trans) )
+    trans <- if ( rgl.cur() ) par3d("userMatrix") else diag(4)
   return( rotate3d( qmesh3d( cube3d.vb, cube3d.ib ), matrix = trans) )
-  
+}  
