@@ -1,5 +1,6 @@
 \name{matrices}
 \alias{matrices}
+\alias{identityMatrix}
 \alias{scaleMatrix}
 \alias{translationMatrix}
 \alias{rotationMatrix}
@@ -16,6 +17,7 @@ in the homogeneous coordinate system used by OpenGL, and translate
 vectors between homogeneous and Euclidean coordinates.
 }
 \usage{
+identityMatrix()
 scaleMatrix(x, y, z)
 translationMatrix(x, y, z)
 rotationMatrix(angle, x, y, z, matrix)
@@ -55,6 +57,8 @@ objects.
 To compose transformations, use matrix multiplication.  The effect is
 to apply the matrix on the left first, followed by the one on the right.
 
+\code{identityMatrix} returns an identity matrix.
+
 \code{scaleMatrix} scales each coordinate by the given factor.  In Euclidean
 coordinates, \code{(u, v, w)} is transformed to \code{(x*u, y*v, z*w)}.
 
@@ -75,6 +79,7 @@ homogeneous coordinates, and \code{asEuclidean(x)} for the reverse transformatio
 
 }
 \value{
+\code{identityMatrix},
 \code{scaleMatrix}, \code{translationMatrix}, and \code{rotationMatrix} produce
 a 4x4 matrix representing the requested transformation
 in homogeneous coordinates.  
