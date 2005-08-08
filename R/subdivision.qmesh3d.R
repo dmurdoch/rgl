@@ -71,7 +71,7 @@ divide.qmesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib ) {
 
     }
   }
-  return ( qmesh3d(outvb[,1:vcnt], outib) )
+  return ( qmesh3d(outvb[,1:vcnt], outib, material = mesh$material ) )
 }
 
 normalize.qmesh3d <- function (mesh) {

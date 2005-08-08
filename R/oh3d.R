@@ -92,8 +92,7 @@ oh3d.ib <- c(
     7, 23, 27, 11  
 )
 
-oh3d <- function( trans = par3d("userMatrix") ) {
-  if ( missing(trans) && !rgl.cur() ) trans <- diag(4)
-  return(rotate3d(qmesh3d( oh3d.vb, oh3d.ib ), matrix=trans))
+oh3d <- function( trans = identityMatrix(), ... ) {
+  return(rotate3d(qmesh3d( oh3d.vb, oh3d.ib, material=list(...) ), matrix=trans))
 }
 

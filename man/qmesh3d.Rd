@@ -13,16 +13,16 @@
   3D Quadrangle Mesh object creation and a collection of sample objects.
 }
 \usage{
-  qmesh3d(vertices,indices,homogeneous=TRUE,material=NULL)
-  cube3d(trans = par3d("userMatrix"))  # cube object
-  oh3d(trans = par3d("userMatrix"))    # an 'o' object
+  qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL)
+  cube3d(trans = identityMatrix(), ...)  # cube object
+  oh3d(trans = identityMatrix(), ...)    # an 'o' object
   
   dot3d(x, ...)   # draw dots at the vertices of an object
-  \method{dot3d}{qmesh3d}(x, ...)
+  \method{dot3d}{qmesh3d}(x, override = TRUE, ...)
   wire3d(x, ...)  # draw a wireframe object
-  \method{wire3d}{qmesh3d}(x, ...)
+  \method{wire3d}{qmesh3d}(x, override = TRUE, ...)
   shade3d(x, ...) # draw a shaded object
-  \method{shade3d}{qmesh3d}(x, ...)
+  \method{shade3d}{qmesh3d}(x, override = TRUE, ...)
 }
 \arguments{
   \item{x}{a qmesh3d object (class qmesh3d)}
@@ -32,13 +32,14 @@
   \item{material}{material properties for later rendering}
   \item{trans}{transformation to apply to objects; see below for defaults}
   \item{...}{additional rendering parameters}
+  \item{override}{should the parameters specified here override those stored in the object?}
 }
 \details{
   The \code{cube3d} and \code{oh3d} objects optionally take a matrix transformation as 
   an argument.  This transformation is applied to all vertices of the default shape.
   
-  The default transforms the coordinates according to \code{par3d("userMatrix")}.
-  If no rgl window is open an identity transformation is used.
+  The default is an identity transformation.  Use \code{par3d("userMatrix")} to render the
+  object vertically in the current user view.
 }
 \examples{
 
@@ -54,15 +55,16 @@
   clear3d()  
   wire3d( qmesh3d(vertices,indices) )
   
-  # render 4 meshes
+  # render 4 meshes vertically in the current view
 
   clear3d()  
   bg3d("gray")
-  shade3d( translate3d( oh3d(), -6, 0, 0 ), color="red" )
-  l1 <- subdivision3d( oh3d() )
-  shade3d( translate3d( l1 , -2, 0, 0 ), color="red" )
+  l0 <- oh3d(tran = par3d("userMatrix"), color = "green" )
+  shade3d( translate3d( l0, -6, 0, 0 ))
+  l1 <- subdivision3d( l0 )
+  shade3d( translate3d( l1 , -2, 0, 0 ), color="red", override = FALSE )
   l2 <- subdivision3d( l1 )
-  shade3d( translate3d( l2 , 2, 0, 0 ), color="red" )
+  shade3d( translate3d( l2 , 2, 0, 0 ), color="red", override = TRUE )
   l3 <- subdivision3d( l2 )
   shade3d( translate3d( l3 , 6, 0, 0 ), color="red" )
   
