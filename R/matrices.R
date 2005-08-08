@@ -1,5 +1,7 @@
 # Functions for creating 4x4 graphics matrices
 
+identityMatrix <- function() diag(nrow=4)
+
 scaleMatrix <- function(x,y,z) diag(c(x,y,z,1))
 
 translationMatrix <- function(x,y,z)
