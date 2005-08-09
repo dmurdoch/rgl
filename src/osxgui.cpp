@@ -51,6 +51,8 @@ private:
   ::WindowRef mWindowRef;
   Rect mRect;
   ::AGLContext mGLContext;
+  UInt32 mMouseDownMod;
+  UInt32 mButtonDown;
 };
 // ---------------------------------------------------------------------------
 OSXWindowImpl::OSXWindowImpl(Window* window)
@@ -254,21 +256,36 @@ OSStatus OSXWindowImpl::windowHandler(EventHandlerCallRef next, EventRef e) {
       break;
     case kEventClassMouse:
       {
-        UInt32 mod = GetCurrentKeyModifiers();
         EventMouseButton button;
         GetEventParameter(e,kEventParamMouseButton,   typeMouseButton, NULL, sizeof(button), NULL, &button);
-        if (mod & EMULATE_RIGHT_KEYMOD) button = GUI_ButtonRight;
-        else if (mod & EMULATE_MIDDLE_KEYMOD)  button = GUI_ButtonMiddle;; 
         Point location;
         GetEventParameter(e,kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &location);
         int mouseX = location.h - mRect.left;
         int mouseY = location.v - mRect.top;
         switch( kind ) {
           case kEventMouseDown:
-            window->buttonPress( button,mouseX,mouseY);
+            {
+          
+              UInt32 mod = GetCurrentKeyModifiers();
+              if (mod & EMULATE_RIGHT_KEYMOD) {
+                mButtonDown = GUI_ButtonRight;
+                mMouseDownMod = EMULATE_RIGHT_KEYMOD;
+              } else if (mod & EMULATE_MIDDLE_KEYMOD) {
+                mButtonDown = GUI_ButtonMiddle;
+                mMouseDownMod = EMULATE_MIDDLE_KEYMOD;
+              } else {
+                mButtonDown = button;
+                mMouseDownMod = 0;
+              }
+              window->buttonPress( mButtonDown,mouseX,mouseY);
+            }
             break;
           case kEventMouseUp:
-            window->buttonRelease(button,mouseX,mouseY);
+            if ( (mButtonDown) && ( (mMouseDownMod) || (mButtonDown == button) ) ) {
+              window->buttonRelease( mButtonDown,mouseX,mouseY);
+              mMouseDownMod = 0;
+              mButtonDown   = 0;
+            }
             break;
           case kEventMouseMoved:
           case kEventMouseDragged:
@@ -294,6 +311,9 @@ OSStatus OSXWindowImpl::windowHandler(EventHandlerCallRef next, EventRef e) {
           case kEventRawKeyDown:
             break;
           case kEventRawKeyUp:
+            break;
+          case kEventRawKeyModifiersChanged:
+            
             break;
           default:
             break;
