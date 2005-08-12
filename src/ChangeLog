@@ -106,7 +106,7 @@ v0.65
   - added 4x4 matrix functions from djmrgl
   - added rgl.user2window and rgl.window2user functions
   - added user-selectable mouse handlers
-  - adaed selection mouse handler
+  - added selection mouse handler
   - added trackball mouse handler
   - added z-distance sorted rendering of alpha-blended faces 
   - added gl2ps patch ( contributed by Albrecht Gebhard )
