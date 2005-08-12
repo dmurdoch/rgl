@@ -1,0 +1,49 @@
+RGL Version 0.65 [r400 / 2005-08-12]
+
+DESCRIPTION
+The RGL package is a visualization device system for R, using 
+OpenGL as the rendering backend. An rgl device at its core 
+is a real-time 3D engine written in C++. It provides an 
+interactive viewpoint navigation facility (mouse + wheel support)
+and an R programming interface.
+
+RELEASE INFO
+This is a Beta release. We target a stable release at the end of September 2005.
+
+WHATS NEW
+* A native Mac OS X / Carbon version is shipped with this release.
+  No need to start an X11 Server. 
+  The X11 Port is still available, but configure defaults to use Carbon.
+
+* The X11 port has been improved. The crash (using rgl.close() or rgl.quit()
+  has been fixed.
+
+* User-selectable mouse handlers featuring trackball navigation and 
+  interactive selection.
+
+* A new interface concept "R3D" is available for preview and discussion 
+  using the function name pattern:
+    XXX3d() 
+
+  The functions map to rgl functions internally (with some exceptions).
+
+  Here's a short list of interesting spots in the interface API:
+
+  * par3d() can be used to get/set values on the current RGL device.
+
+  * Primitives functions such as points3d(), lines3d(), surface3d(), ...
+
+  * First bunch of generic transformation utilities, rendering methods 
+    and mesh objects are implemented.
+
+  The rgl interface using the pattern "rgl.XXX()" is still available.
+  You can decide between more OpenGL/RGL'is low-level functions or
+  more R'ish functions using the R3D interface concept.
+
+* Rendering of blended surfaces using hierarchical z-sorting.
+
+* New material property: Texture environment mapping
+
+WEBSITE
+http://rgl.neoscientists.org
+
