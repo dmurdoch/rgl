@@ -17,10 +17,10 @@ rgl.demo.subdivision <- function()
   part <- function( level, tx, ... )
   {
     shade3d( translate3d( obj, tx, 0, 0 )
-    , color="gray30", front="lines",alpha=0.5,back="lines"
+    , color="gray30", front="lines",alpha=0.5,back="lines", override=TRUE
     )
     shade3d( translate3d( subdivision3d( obj, depth=level ), tx, 0, 0 )
-    , ... )
+    , override=TRUE, ... )
   }
   
   common <- c(alpha=0.5)
