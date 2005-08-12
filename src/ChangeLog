@@ -98,25 +98,21 @@ v0.64-13
   - DESCRIPTION fix: moved R 1.41 -> R 1.4.1 dependency
 
 v0.65
-  - merge murdoch-branch:  
-    - text justification from 0 to 1
-    - linestrips
-    - djmrgl style functions:  points3d, etc.
-    - fixed rgl.bringtotop, added stay option
-    - added 4x4 matrix functions from djmrgl
-    - added rgl.user2window and rgl.window2user functions
-    - added selection functions
-    - added trackball navigation functions
-    - added user-selectable mouse handlers    
+  - simplified build system: uses 'R' build system
+  - added generic visualization/rendering interface (R3D)
+  - text justification from 0 to 1
+  - added primitive type: linestrips
+  - fixed rgl.bringtotop, added stay option (win32)
+  - added 4x4 matrix functions from djmrgl
+  - added rgl.user2window and rgl.window2user functions
+  - added user-selectable mouse handlers
+  - adaed selection mouse handler
+  - added trackball mouse handler
   - added z-distance sorted rendering of alpha-blended faces 
-  - updated math.h using template functions, removed defines
-  - added win32/darwin build support for boost.jam
-  - uses 'R' build system .. platform-specific *.cpp files 
-    are compiled but protected using #IF <PLATFORM> .. #ELSE
-  ( switched to subversion )
-  - added gl2ps patch ( by Albrecht Gebhard )
-  - added r3d generic visualization/rendering interface
-  - added Mac OS X/Carbon port
+  - added gl2ps patch ( contributed by Albrecht Gebhard )
+  - added port: native Mac OS X Carbon
   - bugfix: rgl.close() , rgl.quit() crashed on X11 occasionally.
   - generalized rgl.surface() to allow surface over any coordinate plane.
-  - added r3dDefaults variable to allow user to set defaults.
+  - added r3dDefaults variable to allow user to set defaults
+  - added environment texture-mapping
+
