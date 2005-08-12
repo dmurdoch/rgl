@@ -15,6 +15,10 @@ rgl.postscript( filename, fmt="eps" )
 Animations can be created in a loop modifying the scene and saving 
 a screenshot to a file. (See example below)
 }
+\references{
+GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine
+}
+\author{ Christophe Geuzaine / Albrecht Gebhardt }
 \examples{
 
 \dontrun{
