@@ -4,7 +4,7 @@ Date: 2005-02-15
 Title: 3D visualization device system (OpenGL)
 Author: Daniel Adler <dadler@uni-goettingen.de>
 Maintainer: Daniel Adler <dadler@uni-goettingen.de>
-Depends: R (>= 1.4.1)
+Depends: R (>= 1.9.0)
 Description: 3D visualization device (OpenGL)
 License: GPL
 URL: http://rgl.neoscientists.org
