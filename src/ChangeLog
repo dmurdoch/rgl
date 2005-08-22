@@ -116,3 +116,5 @@ v0.65
   - added r3dDefaults variable to allow user to set defaults
   - added environment texture-mapping
 
+v0.65-2
+  - added "all" and "viewpoint" to rgl.clear and clear3d

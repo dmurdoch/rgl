@@ -26,9 +26,7 @@ rgl.demo.bivar <- function()
   zscale<-20
   
   # clear scene:
-  clear3d()
-  clear3d(type="bbox")
-  clear3d(type="lights")
+  clear3d("all")
   
   # setup env:
   bg3d(color="#887777")

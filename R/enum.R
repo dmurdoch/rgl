@@ -17,18 +17,26 @@
 ## utility function translating literals to ids
 ##
 
-rgl.enum   <- function ( name, ... )
+rgl.enum   <- function ( name, ..., multi = FALSE)
 {
   choices <- list( ... )
   names   <- attr(choices,"names")
 
-  pos <- pmatch( name, names )
+  if (multi) pos <- pmatch( name, c(names, "all") )
+  else pos <- pmatch( name, names )
+ 
+  max <- length(names)
 
-  if ( is.na(pos) )
-    stop("symbolic value must be of ", list(names) )
-
-  id  <- choices[[pos]]
+  if ( any( is.na(pos) ) )
+    stop("symbolic value must be chosen from ", list(names) )
+  else if ( (max+1) %in% pos )
+    pos <- seq(along = names)
+    
+  id  <- unlist(choices[pos])
   
+  if ( length(id) > 1 && !multi )
+    stop("multiple choices not allowed")
+ 
   return( id )
 }
 
@@ -37,7 +45,7 @@ rgl.enum   <- function ( name, ... )
 ##
 
 rgl.enum.nodetype <- function (type)
-  return ( rgl.enum( type, shapes=1, lights=2, bboxdeco=3 ) )
+  return ( rgl.enum( type, shapes=1, lights=2, bboxdeco=3, viewpoint=4, multi = TRUE ) )
 
 rgl.enum.pixfmt <- function (fmt)
   return ( rgl.enum( fmt, png=0 ) )

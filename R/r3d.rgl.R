@@ -5,7 +5,14 @@
 
 # Node Management
 
-clear3d     <- function(...) {.check3d(); rgl.clear(...)}
+clear3d     <- function(type = "shapes") {
+    .check3d()
+    rgl.clear( type )
+    if ( 4 %in% rgl.enum.nodetype(type) ) { # viewpoint
+	do.call("par3d", get("r3dDefaults", envir=.GlobalEnv)[c("FOV", "userMatrix")])
+    }
+}
+
 pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 
 # Environment

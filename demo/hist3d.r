@@ -42,9 +42,7 @@ hist3d<-function(x,y,nclass="auto",alpha=1,col="#ff0000",scale=10)
 ################################################################################
 
 # Clearing the Scene:
-rgl.clear()
-rgl.clear(type="lights")
-rgl.clear(type="bbox")
+rgl.clear("all")
 
 rgl.bg(color="gray")
 rgl.light()
@@ -65,7 +63,7 @@ rgl.bg(col="#cccccc")
 # readline()
 
 # Clearing the Scene:
-rgl.clear()
+rgl.clear("shapes")
 
 # Defining transparency and colors:
 alpha<-0.7; topcol<-"#ff0000"; sidecol<-"#aaaaaa"
@@ -99,7 +97,7 @@ rgl.lines(xl,zl,yl,col="#000000")
 # readline()
 
 # Clearing the Scene:
-rgl.clear()
+rgl.clear("shapes")
 
 # Choosing a lightgrey background:
 rgl.bg(col="#cccccc")

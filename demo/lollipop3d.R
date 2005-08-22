@@ -158,10 +158,7 @@ lollipop3d <- function(data.x,data.y,data.z,surf.fun,surf.n=50,
   z.interc <- z.adj*z.interc
   z.ticks <- z.adj*z.ticks
   zlim <- z.adj*zlim
-  ## FIXME: what assumption are we making/
-  ##   should we make about previous graphs?
-  clear3d("shapes")
-  clear3d("bbox")
+  clear3d("all")
   bg3d(color=c(bg,fg))
   if (!missing(surf.fun)) 
     surface3d(surf.x,surf.y,surf.z,alpha=alpha.surf,

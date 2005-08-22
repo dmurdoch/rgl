@@ -19,13 +19,16 @@ rgl.clear <- function( type = "shapes" )
 {
   type <- rgl.enum.nodetype(type)
 
-  idata <- as.integer(c(type))
+  idata <- as.integer(c(length(type), type))
 
   ret <- .C( symbol.C("rgl_clear"), 
     success=FALSE,
     idata,
     PACKAGE="rgl"
   )
+  
+  if ( 4 %in% type ) # viewpoint
+    rgl.viewpoint()
 
   if (! ret$success)
     stop("rgl_clear")

@@ -5,9 +5,7 @@
 rgl.demo.abundance <- function()
 {
   # Clear scene:
-  clear3d()               # remove all shapes
-  clear3d(type="lights")  # remove all lights
-  clear3d(type="bbox")    # disable bounding-box
+  clear3d("all")               # remove all shapes, lights, bounding-box, and restore viewpoint
   
   # Setup environment:
   bg3d(col="#cccccc")     # setup background

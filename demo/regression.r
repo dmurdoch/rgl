@@ -4,8 +4,7 @@
 
 rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zlim=c(0,100)) {
 
-  rgl.clear()
-  rgl.clear(type="lights")
+  rgl.clear("all")
   rgl.bg(sphere = TRUE, color = c("black", "green"), lit = FALSE, size=2, alpha=0.2, back = "lines")
   rgl.light()
   rgl.bbox()
