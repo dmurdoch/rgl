@@ -142,13 +142,13 @@ ellipsoid3d <- function(rx=1,ry=1,rz=1,n=30,ctr=c(0,0,0),
 }
 
 ############
-clear3d()
+clear3d("all")
 ellipsoid3d(ctr=c(2,2,2),rx=3,ry=2,col="red",alpha=0.4)
 cone3d(base=c(-2,-2,-2),rad=0.5,tip=c(-3,0,-4),col="blue",front="lines",back="lines")
 shade3d(translate3d(cube3d(),3,-2,3,col="purple"))
 
 ### now with qmesh()
-clear3d()
+clear3d("all")
 q1 <- cone3d(qmesh=TRUE,trans=diag(4))  ## the "unit cone";
                                         ## height=1,radius=1, base at (0,0,0)
 shade3d(q1)
@@ -161,7 +161,7 @@ shade3d(translate3d(q1,0,0,3),col="red")
 shade3d(translate3d(rotate3d(scale3d(q1,1,1,2),pi/4,0,1,0),0,0,6),col="red")
 
 axis3d()
-clear3d()
+clear3d("all")
 
 s1 <- ellipsoid3d(qmesh=TRUE,trans=diag(4))  ## the "unit sphere";
                                         ## radius=1, ctr at (0,0,0)

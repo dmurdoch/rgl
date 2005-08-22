@@ -165,20 +165,23 @@ static Material currentMaterial(Color(1.0f,1.0f,1.0f),Color(1.0f,0.0f,0.0f));
 //
 // PARAMETERS
 //   idata
-//     [0]  TypeID
+//     [0]  count of types
+//     [1], [2], ...  TypeID 1, 2, ...
 //
 //
 
 void rgl_clear(int* successptr, int *idata)
 {
-  int success = RGL_FAIL;
+  int success = RGL_SUCCESS;
   Device* device = deviceManager->getAnyDevice();
+  int num = idata[0];
 
   if (device) {
+    for (int i=1; success && i<=num; i++) {
+      TypeID stackTypeID = (TypeID) idata[i];
 
-    TypeID stackTypeID = (TypeID) idata[0];
-
-    success = as_success( device->clear( stackTypeID ) );
+      success = as_success( device->clear( stackTypeID ) ); // viewpoint handled in R, background ignored
+    }
   }
 
   *successptr = success;

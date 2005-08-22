@@ -5,9 +5,7 @@
 rgl.demo.subdivision <- function()
 {
   # setup environment
-  clear3d()
-  clear3d(type="bbox")
-  clear3d(type="lights")
+  rgl.clear("all")
   bg3d(color="gray")
   light3d()
 
