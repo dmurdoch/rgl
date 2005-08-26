@@ -812,6 +812,8 @@ Optional Features:
 
   --disable-libpng-config    disable libpng-config test and configuration
 
+  --disable-libpng-dynamic   disable dynamic libpng linkage, force static version linkage
+
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -821,6 +823,7 @@ Optional Packages:
   --with-gl-libs=DIR      specify location of OpenGL libs
   --with-gl-libname=NAME specify Library name (defaults to "GL")
   --with-glu-libname=NAME specify GLU Library name (defaults to "GLU")
+  --with-libpng-prefix=PREFIX specify libpng prefix
 
 Some influential environment variables:
   CC          C compiler command
@@ -2710,7 +2713,7 @@ echo "$as_me: error: X11 not found but required, configure aborted." >&2;}
    { (exit 1); exit 1; }; }
   fi
   CPPFLAGS="${CPPFLAGS} -I${x_includes}"
-  LIBS="${LIBS} -L${x_libraries} -lX11"
+  LIBS="${LIBS} -L${x_libraries} -lX11 -lXext"
   if test `uname` = "Darwin" ; then
     CPPFLAGS="${CPPFLAGS} -DDarwin"
     # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
@@ -2721,6 +2724,9 @@ echo "$as_me: error: X11 not found but required, configure aborted." >&2;}
     # X11 must come *after* the OpenGL stuff
     CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
   fi
+
+## --- OpenGL ----------------------------------------------------------------
+
 
 # Check whether --with-gl-includes or --without-gl-includes was given.
 if test "${with_gl_includes+set}" = set; then
@@ -2759,8 +2765,6 @@ fi;
 
 fi
 
-## --- OpenGL/X11 ------------------------------------------------------------
-
 ## --- LibPNG ----------------------------------------------------------------
 
 # Check whether --enable-libpng or --disable-libpng was given.
@@ -2768,18 +2772,29 @@ if test "${enable_libpng+set}" = set; then
   enableval="$enable_libpng"
 
 fi;
-echo "$as_me:$LINENO: result: $enable_libpng" >&5
-echo "${ECHO_T}$enable_libpng" >&6
 
-if test "x$enable_libpng" != "xno"; then
+# Check whether --with-libpng-prefix or --without-libpng-prefix was given.
+if test "${with_libpng_prefix+set}" = set; then
+  withval="$with_libpng_prefix"
+  libpng_prefix="${withval}"
 
-  # Check whether --enable-libpng-config or --disable-libpng-config was given.
+fi;
+# Check whether --enable-libpng-config or --disable-libpng-config was given.
 if test "${enable_libpng_config+set}" = set; then
   enableval="$enable_libpng_config"
 
 fi;
-  if test "x$enable_libpng_config" != "xno"; then
-    # Extract the first word of "libpng-config", so it can be a program name with args.
+# Check whether --enable-libpng-dynamic or --disable-libpng-dynamic was given.
+if test "${enable_libpng_dynamic+set}" = set; then
+  enableval="$enable_libpng_dynamic"
+
+fi;
+
+if test "x$enable_libpng" != "xno"; then
+
+  if test "x$libpng_prefix" == "x"; then
+    if test "x$enable_libpng_config" != "xno"; then
+      # Extract the first word of "libpng-config", so it can be a program name with args.
 set dummy libpng-config; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -2815,27 +2830,49 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
+    fi
+
+    if test "x$HAVE_LIBPNG_CONFIG" == "xyes" ; then
+      { echo "$as_me:$LINENO: using libpng-config" >&5
+echo "$as_me: using libpng-config" >&6;}
+      CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
+      if test "x$enable_libpng_dynamic" != "xno"; then
+        { echo "$as_me:$LINENO: using libpng dynamic linkage" >&5
+echo "$as_me: using libpng dynamic linkage" >&6;}
+        LIBS="${LIBS} `libpng-config --ldflags`"
+      else
+        LIBPNG_PREFIX="`libpng-config --prefix`"
+      fi
+    else
+      TEST_DIRS="/usr/local /usr"
+      for I in $TEST_DIRS ; do
+        echo "$as_me:$LINENO: checking libpng in $I" >&5
+echo $ECHO_N "checking libpng in $I... $ECHO_C" >&6
+        if ( test -f $I/lib/libpng.so || test -f $I/lib/libpng.a ) &&
+           ( test -f $I/include/png.h ) ; then
+          echo "$as_me:$LINENO: result: found" >&5
+echo "${ECHO_T}found" >&6
+          CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${I}/include"
+          libpng_prefix="${I}"
+          break
+        else
+          echo "$as_me:$LINENO: result: not found" >&5
+echo "${ECHO_T}not found" >&6
+        fi
+      done
+    fi
   fi
 
-  if test "x$HAVE_LIBPNG_CONFIG" == "xyes" ; then
-    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
-    LIBS="${LIBS} `libpng-config --ldflags`"
-  else
-    TEST_DIRS="/usr/local /usr"
-    for I in $TEST_DIRS ; do
-      echo "$as_me:$LINENO: checking libpng in $I" >&5
-echo $ECHO_N "checking libpng in $I... $ECHO_C" >&6
-      if ( test -f $I/lib/libpng.so || test -f $I/lib/libpng.a ) &&
-         ( test -f $I/include/png.h ) ; then
-        CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${I}/include"
-        LIBS="${LIBS} -L${I}/lib -lpng"
-        echo "$as_me:$LINENO: result: found" >&5
-echo "${ECHO_T}found" >&6
-      else
-        echo "$as_me:$LINENO: result: not found" >&5
-echo "${ECHO_T}not found" >&6
-      fi
-    done
+  if test "x$libpng_prefix" != "x"; then
+    if test "x$enable_libpng_dynamic" != "xno"; then
+      { echo "$as_me:$LINENO: using libpng dynamic linkage" >&5
+echo "$as_me: using libpng dynamic linkage" >&6;}
+      LIBS="${LIBS} -L${libpng_prefix}/lib -lpng"
+    else
+      { echo "$as_me:$LINENO: using libpng static linkage" >&5
+echo "$as_me: using libpng static linkage" >&6;}
+      LIBS="${LIBS} ${libpng_prefix}/lib/libpng.a"
+    fi
   fi
 
 fi
