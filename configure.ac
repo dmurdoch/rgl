@@ -37,6 +37,9 @@ else
     # X11 must come *after* the OpenGL stuff
     CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
   fi
+
+## --- OpenGL ----------------------------------------------------------------
+
 AC_ARG_WITH(gl-includes,
 [  --with-gl-includes=DIR  specify location of OpenGL headers],
 [CPPFLAGS="${CPPFLAGS} -I${withval}"]
@@ -59,42 +62,65 @@ AC_ARG_WITH(glu-libname,
 
 fi
 
-## --- OpenGL/X11 ------------------------------------------------------------
-
 ## --- LibPNG ----------------------------------------------------------------
 
 AC_ARG_ENABLE([libpng],
 [  --disable-libpng           compile without PNG image support]
 )
-AC_MSG_RESULT([$enable_libpng])
+AC_ARG_WITH(libpng-prefix,
+[  --with-libpng-prefix=PREFIX specify libpng prefix],
+[libpng_prefix="${withval}"]
+)
+AC_ARG_ENABLE([libpng-config],
+[  --disable-libpng-config    disable libpng-config test and configuration]
+)
+AC_ARG_ENABLE([libpng-dynamic],
+[  --disable-libpng-dynamic   disable dynamic libpng linkage, force static version linkage]
+)
 
 if test "x$enable_libpng" != "xno"; then
 
-  AC_ARG_ENABLE([libpng-config],
-  [  --disable-libpng-config    disable libpng-config test and configuration]
-  )
-  if test "x$enable_libpng_config" != "xno"; then
-    AC_CHECK_PROG([HAVE_LIBPNG_CONFIG],[libpng-config],[yes],[no])
+  if test "x$libpng_prefix" == "x"; then
+    if test "x$enable_libpng_config" != "xno"; then
+      AC_CHECK_PROG([HAVE_LIBPNG_CONFIG],[libpng-config],[yes],[no])
+    fi
+
+    if test "x$HAVE_LIBPNG_CONFIG" == "xyes" ; then
+      AC_MSG_NOTICE([using libpng-config])
+      CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
+      if test "x$enable_libpng_dynamic" != "xno"; then
+        AC_MSG_NOTICE([using libpng dynamic linkage])
+        LIBS="${LIBS} `libpng-config --ldflags`"
+      else
+        LIBPNG_PREFIX="`libpng-config --prefix`"
+      fi
+    else
+      TEST_DIRS="/usr/local /usr"
+      for I in $TEST_DIRS ; do
+        AC_MSG_CHECKING([libpng in $I])
+        if ( test -f $I/lib/libpng.so || test -f $I/lib/libpng.a ) && 
+           ( test -f $I/include/png.h ) ; then
+          AC_MSG_RESULT([found])
+          CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${I}/include"
+          libpng_prefix="${I}"
+          break
+        else
+          AC_MSG_RESULT([not found])
+        fi
+      done
+    fi
   fi
 
-  if test "x$HAVE_LIBPNG_CONFIG" == "xyes" ; then
-    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
-    LIBS="${LIBS} `libpng-config --ldflags`"
-  else    
-    TEST_DIRS="/usr/local /usr"
-    for I in $TEST_DIRS ; do
-      AC_MSG_CHECKING([libpng in $I])
-      if ( test -f $I/lib/libpng.so || test -f $I/lib/libpng.a ) && 
-         ( test -f $I/include/png.h ) ; then
-        CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${I}/include"
-        LIBS="${LIBS} -L${I}/lib -lpng"
-        AC_MSG_RESULT([found])
-      else
-        AC_MSG_RESULT([not found])
-      fi
-    done
+  if test "x$libpng_prefix" != "x"; then
+    if test "x$enable_libpng_dynamic" != "xno"; then
+      AC_MSG_NOTICE([using libpng dynamic linkage])
+      LIBS="${LIBS} -L${libpng_prefix}/lib -lpng"
+    else
+      AC_MSG_NOTICE([using libpng static linkage])
+      LIBS="${LIBS} ${libpng_prefix}/lib/libpng.a"
+    fi
   fi
- 
+
 fi
 
 ## --- Darwin ----------------------------------------------------------------

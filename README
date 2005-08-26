@@ -103,8 +103,17 @@ You provide the options through the R CMD build/INSTALL command
   --with-gl-prefix=<libprefix>
     GL library prefix (e.g. Mesa)
   
-  --disable-png
-    explicitly disable libpng support
+  --disable-libpng
+    disable libpng support
+
+  --with-libpng-prefix=<install location>
+    force LibPNG library install prefix (e.g. /usr/local)
+
+  --disable-libpng-config
+    explicitly disable libpng-config
+  
+  --disable-libpng-dynamic
+    use static libpng library
 
 
   MAC OS X OPTIONS
