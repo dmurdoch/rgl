@@ -2841,7 +2841,7 @@ echo "$as_me: using libpng-config" >&6;}
 echo "$as_me: using libpng dynamic linkage" >&6;}
         LIBS="${LIBS} `libpng-config --ldflags`"
       else
-        LIBPNG_PREFIX="`libpng-config --prefix`"
+        libpng_prefix="`libpng-config --prefix`"
       fi
     else
       TEST_DIRS="/usr/local /usr"

@@ -92,7 +92,7 @@ if test "x$enable_libpng" != "xno"; then
         AC_MSG_NOTICE([using libpng dynamic linkage])
         LIBS="${LIBS} `libpng-config --ldflags`"
       else
-        LIBPNG_PREFIX="`libpng-config --prefix`"
+        libpng_prefix="`libpng-config --prefix`"
       fi
     else
       TEST_DIRS="/usr/local /usr"
