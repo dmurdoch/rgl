@@ -118,3 +118,5 @@ v0.65
 
 v0.65-2
   - added "all" and "viewpoint" to rgl.clear and clear3d
+  - added static libpng build support and user customizable prefix (unix)
+
