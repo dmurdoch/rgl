@@ -30,6 +30,9 @@ RGL holds two stacks. One is for shapes and the other is for lights.
 \code{clear3d} and \code{rgl.clear} clear the specified stack, or restore
 the defaults for the bounding box (not visible) or viewpoint.  \code{rgl.pop} removes 
 the top-most (last added) node on the shape stack.
+
+Note that clearing the light stack leaves the scene in darkness; it should normally
+be followed by a call to \code{\link{rgl.light}} or \code{\link{light3d}}.
 }
 \seealso{
 \code{\link{rgl}}

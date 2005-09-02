@@ -159,6 +159,7 @@ lollipop3d <- function(data.x,data.y,data.z,surf.fun,surf.n=50,
   z.ticks <- z.adj*z.ticks
   zlim <- z.adj*zlim
   clear3d("all")
+  light3d()
   bg3d(color=c(bg,fg))
   if (!missing(surf.fun)) 
     surface3d(surf.x,surf.y,surf.z,alpha=alpha.surf,
