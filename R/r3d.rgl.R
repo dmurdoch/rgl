@@ -24,16 +24,16 @@ bbox3d	    <- function(...) {.check3d(); rgl.bbox(...)}
 
 # Shapes
 
-points3d    <- function(x,y,z,...) {.check3d(); rgl.points(x=x,y=y,z=z,...)}
-lines3d     <- function(x,y,z,...) {.check3d(); rgl.linestrips(x=x,y=y,z=z,...)}
-segments3d  <- function(x,y,z,...) {.check3d(); rgl.lines(x=x,y=y,z=z,...)}
-triangles3d <- function(x,y,z,...) {.check3d(); rgl.triangles(x=x,y=y,z=z,...)}
-quads3d     <- function(x,y,z,...) {.check3d(); rgl.quads(x=x,y=y,z=z,...)}
-text3d      <- function(x,y,z,texts,adj=0.5,justify,...) {.check3d(); rgl.texts(x=x,y=y,z=z,text=texts,adj,justify,...)}
+points3d    <- function(x,y=NULL,z=NULL,...) {.check3d(); rgl.points(x=x,y=y,z=z,...)}
+lines3d     <- function(x,y=NULL,z=NULL,...) {.check3d(); rgl.linestrips(x=x,y=y,z=z,...)}
+segments3d  <- function(x,y=NULL,z=NULL,...) {.check3d(); rgl.lines(x=x,y=y,z=z,...)}
+triangles3d <- function(x,y=NULL,z=NULL,...) {.check3d(); rgl.triangles(x=x,y=y,z=z,...)}
+quads3d     <- function(x,y=NULL,z=NULL,...) {.check3d(); rgl.quads(x=x,y=y,z=z,...)}
+text3d      <- function(x,y=NULL,z=NULL,texts,adj=0.5,justify,...) {.check3d(); rgl.texts(x=x,y=y,z=z,text=texts,adj,justify,...)}
 texts3d	    <- text3d
-spheres3d   <- function(x,y,z,radius=1,...) {.check3d(); rgl.spheres(x=x,y=y,z=z,radius=radius,...)}
-sprites3d   <- function(x,y,z,radius=1,...) {.check3d(); rgl.sprites(x=x,y=y,z=z,radius=radius,...)}
-terrain3d   <- function(x,y,z,...) {.check3d(); rgl.surface(x=x,y=z,z=y,coords=c(1,3,2),...)}
+spheres3d   <- function(x,y=NULL,z=NULL,radius=1,...) {.check3d(); rgl.spheres(x=x,y=y,z=z,radius=radius,...)}
+sprites3d   <- function(x,y=NULL,z=NULL,radius=1,...) {.check3d(); rgl.sprites(x=x,y=y,z=z,radius=radius,...)}
+terrain3d   <- function(x,y=NULL,z=NULL,...) {.check3d(); rgl.surface(x=x,y=z,z=y,coords=c(1,3,2),...)}
 surface3d   <- terrain3d
 
 # Interaction
@@ -58,7 +58,7 @@ subdivision3d <- function(x,...) UseMethod("subdivision3d")
 
 # 3D Custom shapes
 
-particles3d <- function(x,y,z,radius=1,...) sprites3d(
+particles3d <- function(x,y=NULL,z=NULL,radius=1,...) sprites3d(
   x=x,y=y,z=z,radius=radius,
   lit=FALSE,alpha=0.2,
   textype="alpha",

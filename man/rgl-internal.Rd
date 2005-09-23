@@ -37,7 +37,7 @@
 rgl.bool(x)
 rgl.numeric(x)
 rgl.range(x, low, high)
-rgl.vertex(x,y,z)
+rgl.vertex(x, y = NULL, z = NULL)
 rgl.nvertex(vertex)
 rgl.color(color)
 rgl.mcolor(colors)

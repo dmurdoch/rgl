@@ -23,7 +23,9 @@ remain the same, no longer corresponding to a rectangle on the screen.
 \value{
 Returns a function \code{f(x,y,z)} which tests whether each
 of the points \code{(x,y,z)} is in the selected region, returning
-a logical vector.
+a logical vector.  This function accepts input in a wide
+variety of formats as it uses \code{\link{xyz.coords}} 
+to interpret its parameters.
 }
 \author{ Ming Chen / Duncan Murdoch }
 \seealso{ \code{\link{locator}} }

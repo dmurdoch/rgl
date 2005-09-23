@@ -7,12 +7,14 @@
   Adds a sprite set shape node to the scene.
 }
 \usage{
-sprites3d(x, y, z, radius = 1, ...)
-particles3d(x, y, z, radius = 1, ...)
-rgl.sprites(x, y, z, radius = 1, ...)
+sprites3d(x, y = NULL, z = NULL, radius = 1, ...)
+particles3d(x, y = NULL, z = NULL, radius = 1, ...)
+rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
 }
 \arguments{
-  \item{ x, y, z }{point coordinates}
+  \item{ x, y, z }{point coordinates.  Any reasonable way of defining the
+    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    for details.}
   \item{ radius } {vector or singe value defining the sphere radius}
   \item{ ... }{material properties, texture mapping is supported}
 }

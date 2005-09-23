@@ -213,11 +213,16 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y, z, ... )
+rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
 {
   rgl.material( ... )
 
   type <- rgl.enum.primtype(type)
+  
+  xyz <- xyz.coords(x,y,z,recycle=TRUE)
+  x <- xyz$x
+  y <- xyz$y
+  z <- xyz$z
 
   if (any(is.na(c(x,y,z)))) {
     d <- complete.cases(cbind(x,y,z))
@@ -241,27 +246,27 @@ rgl.primitive <- function( type, x, y, z, ... )
     stop("rgl_points")
 }
 
-rgl.points <- function ( x, y, z, ... )
+rgl.points <- function ( x, y=NULL, z=NULL, ... )
 {
   rgl.primitive( "points", x, y, z, ... )
 }
 
-rgl.lines <- function (x, y, z, ... )
+rgl.lines <- function (x, y=NULL, z=NULL, ... )
 {
   rgl.primitive( "lines", x, y, z, ... )
 }
 
-rgl.triangles <- function (x, y, z, ... )
+rgl.triangles <- function (x, y=NULL, z=NULL, ... )
 {
   rgl.primitive( "triangles", x, y, z, ... )
 }
 
-rgl.quads <- function ( x, y, z, ... )
+rgl.quads <- function ( x, y=NULL, z=NULL, ... )
 {
   rgl.primitive( "quadrangles", x, y, z, ... )
 }
 
-rgl.linestrips<- function ( x, y, z, ... )
+rgl.linestrips<- function ( x, y=NULL, z=NULL, ... )
 {
   rgl.primitive( "linestrips", x, y, z, ... )
 }
@@ -330,7 +335,7 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
 ## add spheres
 ##
 
-rgl.spheres <- function( x, y, z,radius=1.0,...)
+rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
 {
   rgl.material(...)
 
@@ -358,7 +363,7 @@ rgl.spheres <- function( x, y, z,radius=1.0,...)
 ## add texts
 ##
 
-rgl.texts <- function(x, y, z, text, adj = 0.5, justify, ... )
+rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
 {
   rgl.material( ... )
 
@@ -392,7 +397,7 @@ rgl.texts <- function(x, y, z, text, adj = 0.5, justify, ... )
 ## add sprites
 ##
 
-rgl.sprites <- function( x, y, z, radius=1.0, ... )
+rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
 {
   rgl.material(...)
 
@@ -420,10 +425,11 @@ rgl.sprites <- function( x, y, z, radius=1.0, ... )
 ## convert user coordinate to window coordinate
 ## 
 
-rgl.user2window <- function( x, y, z, projection = rgl.projection())
+rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection())
 {
+  xyz <- xyz.coords(x,y,z,recycle=TRUE)
+  points <- rbind(xyz$x,xyz$y,xyz$z)
   
-  points <- rbind(x,y,z)
   idata  <- as.integer(ncol(points))
   
   ret <- .C( symbol.C("rgl_user2window"),
@@ -443,13 +449,13 @@ rgl.user2window <- function( x, y, z, projection = rgl.projection())
 }
 
 ##
-## convert window coordiate to user coordiante
+## convert window coordinate to user coordiante
 ## 
 
-rgl.window2user <- function( x, y, z = 0, projection = rgl.projection())
+rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
 {
-  
-  window <- rbind(x,y,z)
+  xyz <- xyz.coords(x,y,z,recycle=TRUE)
+  window <- rbind(xyz$x,xyz$y,xyz$z)
   idata  <- as.integer(ncol(window))
   
   ret <- .C( symbol.C("rgl_window2user"),
@@ -544,7 +550,7 @@ rgl.select3d <- function() {
   	ury <- temp
   }
   proj <- rgl.projection();
-  function(x,y,z) {
+  function(x,y=NULL,z=NULL) {
     pixel <- rgl.user2window(x,y,z,proj=proj)
     apply(pixel,1,function(p) (llx <= p[1]) && (p[1] <= urx)
                            && (lly <= p[2]) && (p[2] <= ury)

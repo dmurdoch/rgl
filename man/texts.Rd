@@ -8,12 +8,14 @@
   A bitmap font which is always oriented towards the camera is used.
 }
 \usage{
-rgl.texts(x, y, z, text, adj = 0.5, justify, ...)
-text3d(x, y, z, texts, adj = 0.5, justify, ...) 
-texts3d(x, y, z, texts, adj = 0.5, justify, ...) 
+rgl.texts(x, y = NULL, z = NULL, text, adj = 0.5, justify, ...)
+text3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
+texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
 }
 \arguments{
-  \item{x, y, z}{point coordinates}
+  \item{x, y, z}{point coordinates.  Any reasonable way of defining the
+    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    for details.}
   \item{text}{text character vector to draw}
   \item{texts}{text character vector to draw}
   \item{adj}{ one value specifying the horizontal adjustment }.
