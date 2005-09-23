@@ -10,14 +10,16 @@
   Adds a shape node to the current scene
 }
 \usage{
-rgl.points(x, y, z, ... )
-rgl.lines(x, y, z, ... )
-rgl.linestrips(x, y, z, ...)
-rgl.triangles(x, y, z, ... )
-rgl.quads(x, y, z, ... )
+rgl.points(x, y = NULL, z = NULL, ... )
+rgl.lines(x, y = NULL, z = NULL, ... )
+rgl.linestrips(x, y = NULL, z = NULL, ...)
+rgl.triangles(x, y = NULL, z = NULL, ... )
+rgl.quads(x, y = NULL, z = NULL, ... )
 }
 \arguments{
-  \item{x, y, z}{coordinates}
+  \item{x, y, z}{coordinates.  Any reasonable way of defining the
+    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    for details.}
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
 }
 \details{

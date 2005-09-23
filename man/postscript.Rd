@@ -24,13 +24,16 @@ GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine
 \dontrun{
 
 #
-# create animation
+# create a series of frames for an animation
 #
+
+shade3d(oh3d(), color="red")
+rgl.viewpoint(0,20)
 
 for (i in 1:45) {
   rgl.viewpoint(i,20)
-  print( paste("pic",formatC(i,digits=1,flag="0"),".eps",sep="") )
-  rgl.postscript(filename, fmt=eps)
+  filename <- paste("pic",formatC(i,digits=1,flag="0"),".eps",sep="") 
+  rgl.postscript(filename, fmt="eps")
 }
 
 }
