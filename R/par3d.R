@@ -1,6 +1,6 @@
 .Par3d <- c("FOV", 
 	   "mouseMode", 
-	   "modelMatrix", "projMatrix", "userMatrix", 
+	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
 	   "viewport", "zoom", "bbox"
 	   )
 	   

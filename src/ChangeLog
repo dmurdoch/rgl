@@ -121,3 +121,5 @@ v0.65-2
   - added static libpng build support and user customizable prefix (unix)
   - used xyz.coords in all functions taking x, y, z coordinates, allowing
     matrix or dataframe arguments (among others)
+  - added par3d(skipRedraw=TRUE) to allow drawing to be done without
+    being rendered

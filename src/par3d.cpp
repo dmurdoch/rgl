@@ -101,6 +101,7 @@ static void Specify(char *what, SEXP value)
  */
     SEXP x;
     double v;
+    int iv;
     int success;
 
     success = 0;
@@ -134,6 +135,10 @@ static void Specify(char *what, SEXP value)
 		if (!success) par_error(what);
 	    }
    	}
+    }
+    else if (streql(what, "skipRedraw")) {
+    	lengthCheck(what, value, 1);	iv = asLogical(value);
+    	rgl_setSkipRedraw(&success, &iv);
     }
     else if (streql(what, "userMatrix")) {
 	dimCheck(what, value, 4, 4);
@@ -192,6 +197,10 @@ static SEXP Query(char *what)
     else if (streql(what, "projMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
 	rgl_getProjMatrix(&success, REAL(value));    
+    }
+    else if (streql(what, "skipRedraw")) {
+    	value = allocVector(LGLSXP, 1);
+    	rgl_getSkipRedraw(&success, LOGICAL(value));
     }
     else if (streql(what, "userMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);

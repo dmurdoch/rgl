@@ -94,6 +94,8 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
     }
     \item{\code{projMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the current
       projection of the scene.}
+    \item{\code{skipRedraw}}{whether to update the display.  Set to \code{FALSE} to suspend
+      updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.}
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
       display the scene.}
     \item{\code{viewport}}{\emph{\bold{R.O.}}; real.  A vector giving the dimensions of the

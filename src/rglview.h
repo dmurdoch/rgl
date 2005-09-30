@@ -45,6 +45,9 @@ public:
   double*     getMousePosition();
   void        getUserMatrix(double* dest);
   void        setUserMatrix(double* src);
+  int         getSkipRedraw(void);
+  void        setSkipRedraw(int in_skipRedraw);
+  
   // These are set after rendering the scene
   GLdouble modelMatrix[16], projMatrix[16];
   GLint viewport[4];
@@ -120,6 +123,7 @@ private:
   RenderContext renderContext;
 
   bool autoUpdate;
+  bool skipRedraw;
 
   enum {
     FSHOWFPS    = 1<<0,
