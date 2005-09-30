@@ -364,6 +364,33 @@ void rgl_setFOV(int* successptr, double* fov)
   *successptr = success;
 }
 
+void rgl_getSkipRedraw(int* successptr, int* skipRedraw)
+{
+  int success = RGL_FAIL;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    RGLView* rglview = device->getRGLView();
+    *skipRedraw = rglview->getSkipRedraw();
+    success = RGL_SUCCESS;
+  }
+  *successptr = success;
+}
+
+void rgl_setSkipRedraw(int* successptr, int* skipRedraw)
+{
+  int success = RGL_FAIL;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    RGLView* rglview = device->getRGLView();
+    rglview->setSkipRedraw(*skipRedraw);
+    if (!*skipRedraw) rglview->update();
+    success = RGL_SUCCESS;
+  }
+  *successptr = success;
+}
+
 void rgl_primitive(int* successptr, int* idata, double* vertex)
 {
   int success = RGL_FAIL;

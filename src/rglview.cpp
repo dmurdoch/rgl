@@ -28,6 +28,7 @@ RGLView::RGLView(Scene* in_scene)
   drag  = 0;
   flags = 0;
   selectState = msNONE;
+  skipRedraw = false;
 
   setDefaultMouseFunc();
   renderContext.rect.x = 0;
@@ -73,6 +74,8 @@ void RGLView::paint(void) {
   double t    = lib::getTime();
 
   double dt   = (last != 0.0f) ? last - t : 0.0f;
+  
+  if (skipRedraw) return;
 
   renderContext.time = t;
   renderContext.deltaTime = dt;
@@ -475,6 +478,16 @@ void RGLView::setSelectState(MouseSelectionID state)
 double* RGLView::getMousePosition()
 {
     	return mousePosition;
+}
+
+void RGLView::setSkipRedraw(const int in_skipRedraw)
+{
+	skipRedraw = (bool)in_skipRedraw;
+}
+
+int RGLView::getSkipRedraw(void)
+{
+	return (int)skipRedraw;
 }
 
 //////////////////////////////////////////////////////////////////////////////
