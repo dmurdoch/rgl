@@ -56,6 +56,16 @@ void Device::bringToTop(int stay)
   window->bringToTop(stay);
 }
 // ---------------------------------------------------------------------------
+int Device::getSkipRedraw(void)
+{
+  return window->getSkipRedraw();
+}
+// ---------------------------------------------------------------------------
+void Device::setSkipRedraw(int in_skipRedraw)
+{
+  window->setSkipRedraw(in_skipRedraw);
+}
+// ---------------------------------------------------------------------------
 bool Device::clear(TypeID stackTypeID)
 {
   bool success;

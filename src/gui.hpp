@@ -170,6 +170,8 @@ public:
   void setTitle(const char* title);
   void setVisibility(bool state);
   void update(void);
+  int getSkipRedraw(void);
+  void setSkipRedraw(int in_skipRedraw);
 
 /**
  * Close the window. 
@@ -197,6 +199,7 @@ public:
 // data:
   View* child;
   const char* title;
+  bool skipRedraw;  
 };
 // ---------------------------------------------------------------------------
 } // namespace gui

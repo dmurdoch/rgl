@@ -226,7 +226,10 @@ void OSXWindowImpl::bringToTop(int stay)
 void OSXWindowImpl::on_paint()
 {
   if (window)
+  {
+    if (window->skipRedraw) return;
     window->paint();
+  }  
   swap();
 }
 // ---------------------------------------------------------------------------
