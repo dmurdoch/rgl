@@ -370,8 +370,7 @@ void rgl_getSkipRedraw(int* successptr, int* skipRedraw)
   Device* device = deviceManager->getAnyDevice();
 
   if ( device ) {
-    RGLView* rglview = device->getRGLView();
-    *skipRedraw = rglview->getSkipRedraw();
+    *skipRedraw = device->getSkipRedraw();
     success = RGL_SUCCESS;
   }
   *successptr = success;
@@ -384,8 +383,7 @@ void rgl_setSkipRedraw(int* successptr, int* skipRedraw)
 
   if ( device ) {
     RGLView* rglview = device->getRGLView();
-    rglview->setSkipRedraw(*skipRedraw);
-    if (!*skipRedraw) rglview->update();
+    device->setSkipRedraw(*skipRedraw);
     success = RGL_SUCCESS;
   }
   *successptr = success;

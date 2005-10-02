@@ -46,6 +46,9 @@ public: // -- all methods are blocking until action completed
   void bringToTop(int stay);
 
   RGLView* getRGLView(void);
+  int getSkipRedraw(void);
+  void setSkipRedraw(int in_skipRedraw);
+
 // event handlers
 protected:
   void notifyDisposed(Disposable* disposable);

@@ -112,8 +112,10 @@ void X11WindowImpl::bringToTop(int stay)
 // ---------------------------------------------------------------------------
 void X11WindowImpl::on_paint()
 {
-  if (window)
+  if (window) {
+    if (window->skipRedraw) return;
     window->paint();
+  }  
   swap();
 }
 // ---------------------------------------------------------------------------

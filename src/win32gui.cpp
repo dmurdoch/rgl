@@ -301,9 +301,10 @@ else SetWindowPos(windowHandle, HWND_NOTOPMOST, 0, 0, 0, 0,
           break;
 
         case WM_PAINT:
-
-          window->paint();
-          swap();
+	  if (!window->skipRedraw) {
+            window->paint();
+            swap();
+          }  
           ValidateRect(hwnd, NULL);
   /*
           if (autoUpdate)
