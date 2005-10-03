@@ -232,8 +232,10 @@ void X11WindowImpl::processEvent(XEvent& ev)
       break;
     case Expose:
       if (ev.xexpose.count == 0) {
-        if (window) 
+        if (window) {
+          if (window->skipRedraw) break;
           window->paint();
+        }  
         swap();
       }
       break;
