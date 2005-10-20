@@ -11,6 +11,12 @@ Shape::Shape(Material& in_material, TypeID in_typeID)
 {
 }
 
+Shape::~Shape()
+{
+  if (displayList)
+    glDeleteLists(displayList, 1);
+}
+
 void Shape::update(RenderContext* renderContext)
 {
   doUpdate = false;

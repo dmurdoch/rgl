@@ -17,6 +17,7 @@ class Shape : public SceneNode
 {
 public:
   Shape(Material& in_material,TypeID in_typeID=SHAPE);
+  ~Shape();
   
   /**
    * render shape.

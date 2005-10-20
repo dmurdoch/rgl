@@ -123,3 +123,4 @@ v0.65-2
     matrix or dataframe arguments (among others)
   - added par3d(skipRedraw=TRUE) to allow drawing to be done without
     being rendered
+  - fixed display list memory leak when drawing shapes (e.g. spheres)
