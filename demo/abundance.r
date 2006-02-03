@@ -12,8 +12,8 @@ rgl.demo.abundance <- function()
   light3d()               # setup head-light
   
   # Importing animal data (created with wisp)
-  terrain<-dget(system.file("demo/region.dat",package="rgl"))
-  pop<-dget(system.file("demo/population.dat",package="rgl"))
+  terrain<-dget(system.file("demodata/region.dat",package="rgl"))
+  pop<-dget(system.file("demodata/population.dat",package="rgl"))
   
   # Define colors for terrain
   zlim <- range(terrain)
