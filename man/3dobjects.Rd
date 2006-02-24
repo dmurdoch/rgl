@@ -45,14 +45,28 @@ See \code{\link{rgl.material}} for details.
 }
 
 \examples{
-# Show 12 random vertices in various ways. Force 4-tuples into 
-# planes so that quads3d works.
+# Show 12 random vertices in various ways. 
 x <- rnorm(12)
 y <- rnorm(12)
 z <- rnorm(12)
-for (i in c(4,8,12)) 
-  z[i] <- predict(lm(z ~ x+y, 
-            data=data.frame(x=x[(i-3):i], y=y[(i-3):i], z=z[(i-3):i])))[4]
+
+# Force 4-tuples into planes so that quads3d works.
+
+M<-cbind(x,y,z)
+i<-c(1,5,9)
+A<-(M[i,]-M[i+1,])
+C<-(M[i+2,]-M[i+1,])
+D<-(M[i+3,]-M[i+1,])
+
+coeffs <- matrix(NA, 3, 2)
+
+for(t in c(1:3))
+    coeffs[t,]<-pmax(1, abs(coefficients(lm(D[t,] ~ A[t,]+C[t,]-1))))
+    
+M[i+3,] <- coeffs[,1]*A + coeffs[,2]*C + M[i+1,]
+x <- M[,1]
+y <- M[,2]
+z <- M[,3]
 
 rgl.open()
 
