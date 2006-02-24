@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.65-2
+Version: 0.66
 Date: 2005-08-21
 Title: 3D visualization device system (OpenGL)
 Author: Daniel Adler <dadler@uni-goettingen.de>
@@ -9,4 +9,4 @@ Description: 3D visualization device (OpenGL)
 License: GPL
 URL: http://rgl.neoscientists.org
 SystemRequirements: OpenGL, GLU Library, libpng (optional)
-
+Packaged: Fri Feb 24 11:22:44 2006; dadler
