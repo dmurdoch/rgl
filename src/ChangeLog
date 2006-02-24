@@ -116,7 +116,7 @@ v0.65
   - added r3dDefaults variable to allow user to set defaults
   - added environment texture-mapping
 
-v0.65-2
+v0.66
   - added "all" and "viewpoint" to rgl.clear and clear3d
   - added static libpng build support and user customizable prefix (unix)
   - used xyz.coords in all functions taking x, y, z coordinates, allowing
@@ -124,3 +124,4 @@ v0.65-2
   - added par3d(skipRedraw=TRUE) to allow drawing to be done without
     being rendered
   - fixed display list memory leak when drawing shapes (e.g. spheres)
+  - Changes for compatibility with strict enforcement of file naming rules in R 2.3.0.

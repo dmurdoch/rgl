@@ -1,4 +1,4 @@
-RGL Version 0.65 [r405 / 2005-08-14]
+RGL Version 0.66 [r420 / 2006-02-24]
 
 DESCRIPTION
 The RGL package is a visualization device system for R, using 
@@ -8,9 +8,24 @@ interactive viewpoint navigation facility (mouse + wheel support)
 and an R programming interface.
 
 RELEASE INFO
-This is a Beta release. We target a stable release at the end of September 2005.
+Small bugfix release due to new package conventions in R
 
-WHATS NEW
+CHANGES IN 0.66
+* Changes for compatibility with strict enforcement of file naming rules in R 2.3.0.
+
+* Fixed display list memory leak when drawing shapes (e.g. spheres)
+
+* Added "all" and "viewpoint" to rgl.clear and clear3d
+
+* Added static libpng build support and user customizable prefix (unix)
+
+* Uses xyz.coords in all functions taking x, y, z coordinates, allowing
+  matrix or dataframe arguments (among others)
+
+* Added par3d(skipRedraw=TRUE) to allow drawing to be done without
+  being rendered
+
+WHATS NEW 0.65
 * A native Mac OS X / Carbon version is shipped with this release.
   No need to start an X11 Server. 
   The X11 Port is still available, but configure defaults to use Carbon.
