@@ -59,7 +59,7 @@ OpenGL Utility Library (GLU)
 
 OPTIONS
 -------
-libpng library (pixmap import/export support)
+libpng library version 1.0.4 or newer (pixmap import/export support)
 
 
 BUILDING/INSTALLING FROM SOURCE PACKAGE
