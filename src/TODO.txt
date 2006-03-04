@@ -19,8 +19,6 @@ SHORT-TERM
  - flip the 'z' extrusion
  - triangle strips/fans, quadrangle strips
  - rgl.mesh
- 
- - quads don't look as though they are displaying properly, e.g. points3d example.
 
 LONG-TERM
 =========
