@@ -111,6 +111,10 @@ static void Specify(char *what, SEXP value)
 	BoundsCheck(v, 1.0, 179.0, what);
 	rgl_setFOV(&success, &v);
     }
+    else if (streql(what, "ignoreExtent")) {
+    	lengthCheck(what, value, 1);	iv = asLogical(value);
+    	rgl_setIgnoreExtent(&success, &iv);
+    }    
     else if (streql(what, "mouseMode")) {
     	value = coerceVector(value, STRSXP);
 	if (length(value) > 3) par_error(what);   
@@ -175,6 +179,10 @@ static SEXP Query(char *what)
 	value = allocVector(REALSXP, 1);
 	rgl_getFOV(&success, REAL(value));
     }
+    else if (streql(what, "ignoreExtent")) {
+    	value = allocVector(LGLSXP, 1);
+    	rgl_getIgnoreExtent(&success, LOGICAL(value));
+    }    
     else if (streql(what, "modelMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
 	rgl_getModelMatrix(&success, REAL(value));

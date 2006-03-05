@@ -13,7 +13,7 @@ private:
   ARRAY<float>  size;
 
 public:
-  SpriteSet(Material& in_material, int nvertex, double* vertex, int nsize, double* size);
+  SpriteSet(Material& in_material, int nvertex, double* vertex, int nsize, double* size, int in_ignoreExtent);
   ~SpriteSet();
 
   /**

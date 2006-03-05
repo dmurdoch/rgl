@@ -24,6 +24,7 @@ Scene::Scene()
   viewpoint  = NULL;
   nlights    = 0;
   bboxDeco   = NULL;
+  ignoreExtent = false;
  
   add( new Background );
   add( new Viewpoint );
@@ -78,8 +79,10 @@ bool Scene::clear(TypeID typeID)
 }
 
 void Scene::addShape(Shape* shape) {
-  const AABox& bbox = shape->getBoundingBox();
-  data_bbox += bbox;
+  if (!shape->getIgnoreExtent()) {
+    const AABox& bbox = shape->getBoundingBox();
+    data_bbox += bbox;
+  }
 
   shapes.addTail(shape);
 
@@ -447,9 +450,19 @@ void Scene::calcDataBBox()
   for(iter.first(); !iter.isDone(); iter.next() ) {
     Shape* shape = (Shape*) iter.getCurrent();
 
-    data_bbox += shape->getBoundingBox();
+    if (!shape->getIgnoreExtent()) data_bbox += shape->getBoundingBox();
   }
 }
 
+// ---------------------------------------------------------------------------
+int Scene::getIgnoreExtent(void)
+{
+  return (int)ignoreExtent;
+}
+// ---------------------------------------------------------------------------
+void Scene::setIgnoreExtent(int in_ignoreExtent)
+{
+  ignoreExtent = (bool)in_ignoreExtent;
+}
 
 

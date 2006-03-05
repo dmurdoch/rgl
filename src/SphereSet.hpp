@@ -11,7 +11,8 @@ private:
   ARRAY<float>  radius;
   SphereMesh    sphereMesh;
 public:
-  SphereSet(Material& in_material, int nsphere, double* center, int nradius, double* radius);
+  SphereSet(Material& in_material, int nsphere, double* center, int nradius, double* radius, 
+            int in_ignoreExtent);
   ~SphereSet();
 
   /**

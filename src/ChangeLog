@@ -129,3 +129,7 @@ v0.66
 v0.66-2
   - added support for png files with palettes, and grayscale pngs with 1, 2 or 4 bits 
     per pixel
+  - added "ignoreExtent" option to par3d:  objects plotted when this is true
+    are ignored when calculating the bounding box
+  - added axis3d, axes3d, box3d, mtext3d, title3d functions from djmrgl for 
+    annotating plots.

@@ -6,8 +6,8 @@
 //   LineStripSet
 //
 
-LineStripSet::LineStripSet(Material& in_material, int in_nvertices, double* in_vertex)
-  : PrimitiveSet(in_material, in_nvertices, in_vertex, GL_LINE_STRIP, 1)
+LineStripSet::LineStripSet(Material& in_material, int in_nvertices, double* in_vertex, int in_ignoreExtent)
+  : PrimitiveSet(in_material, in_nvertices, in_vertex, GL_LINE_STRIP, 1, in_ignoreExtent)
 {
   material.lit = false;
 }

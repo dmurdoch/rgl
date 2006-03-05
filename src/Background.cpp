@@ -12,7 +12,7 @@
 Material Background::defaultMaterial( Color(0.3f,0.3f,0.3f), Color(1.0f,0.0f,0.0f) );
 
 Background::Background(Material& in_material, bool in_sphere, int in_fogtype)
-: Shape(in_material, BACKGROUND), sphere(in_sphere), fogtype(in_fogtype)
+: Shape(in_material, true, BACKGROUND), sphere(in_sphere), fogtype(in_fogtype)
 {
   clearColorBuffer = true;
 

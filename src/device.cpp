@@ -56,6 +56,16 @@ void Device::bringToTop(int stay)
   window->bringToTop(stay);
 }
 // ---------------------------------------------------------------------------
+int Device::getIgnoreExtent(void)
+{
+  return scene->getIgnoreExtent();
+}
+// ---------------------------------------------------------------------------
+void Device::setIgnoreExtent(int in_ignoreExtent)
+{
+  scene->setIgnoreExtent(in_ignoreExtent);
+}
+// ---------------------------------------------------------------------------
 int Device::getSkipRedraw(void)
 {
   return window->getSkipRedraw();

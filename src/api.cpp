@@ -364,6 +364,30 @@ void rgl_setFOV(int* successptr, double* fov)
   *successptr = success;
 }
 
+void rgl_getIgnoreExtent(int* successptr, int* ignoreExtent)
+{
+  int success = RGL_FAIL;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    *ignoreExtent = device->getIgnoreExtent();
+    success = RGL_SUCCESS;
+  }
+  *successptr = success;
+}
+
+void rgl_setIgnoreExtent(int* successptr, int* ignoreExtent)
+{
+  int success = RGL_FAIL;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    device->setIgnoreExtent(*ignoreExtent);
+    success = RGL_SUCCESS;
+  }
+  *successptr = success;
+}
+
 void rgl_getSkipRedraw(int* successptr, int* skipRedraw)
 {
   int success = RGL_FAIL;
@@ -397,24 +421,25 @@ void rgl_primitive(int* successptr, int* idata, double* vertex)
 
     int   type    = idata[0];
     int   nvertex = idata[1];
-
+    int   ignoreExtent = device->getIgnoreExtent();
+    
     SceneNode* node;
 
     switch(type) {
     case 1: // RGL_POINTS:
-      node = new PointSet( currentMaterial, nvertex, vertex);
+      node = new PointSet( currentMaterial, nvertex, vertex, ignoreExtent);
       break;
     case 2: // RGL_LINES:
-      node = new LineSet( currentMaterial, nvertex, vertex);
+      node = new LineSet( currentMaterial, nvertex, vertex, ignoreExtent);
       break;
     case 3: // RGL_TRIANGLES:
-      node = new TriangleSet( currentMaterial, nvertex, vertex);
+      node = new TriangleSet( currentMaterial, nvertex, vertex, ignoreExtent);
       break;
     case 4: // RGL_QUADS:
-      node = new QuadSet( currentMaterial, nvertex, vertex);
+      node = new QuadSet( currentMaterial, nvertex, vertex, ignoreExtent);
       break;
     case 5: // RGL_LINE_STRIP:
-      node = new LineStripSet( currentMaterial, nvertex, vertex);
+      node = new LineStripSet( currentMaterial, nvertex, vertex, ignoreExtent);
       break;
     default:
       node = NULL;
@@ -441,7 +466,8 @@ void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, i
     int nx         = idata[0];
     int nz         = idata[1];
 
-    success = as_success( device->add( new Surface(currentMaterial, nx, nz, x, z, y, coords, *orientation) ) );
+    success = as_success( device->add( new Surface(currentMaterial, nx, nz, x, z, y, coords, *orientation,
+    						   device->getIgnoreExtent()) ) );
 
   }
 
@@ -458,7 +484,8 @@ void rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
     int nvertex = idata[0];
     int nradius = idata[1];
 
-    success = as_success( device->add( new SphereSet(currentMaterial, nvertex, vertex, nradius, radius) ) );
+    success = as_success( device->add( new SphereSet(currentMaterial, nvertex, vertex, nradius, radius,
+    						     device->getIgnoreExtent()) ) );
   }
 
   *successptr = success;
@@ -474,7 +501,8 @@ void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius)
     int nvertex = idata[0];
     int nradius = idata[1];
 
-    success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius) ) );
+    success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
+    						     device->getIgnoreExtent()) ) );
   }
 
   *successptr = success;
@@ -534,7 +562,8 @@ void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* ve
   if (device) {
     int ntext   = idata[0];
 
-    success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, *adj) ) );
+    success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, *adj,
+    						   device->getIgnoreExtent()) ) );
   }
 
   *successptr = success;

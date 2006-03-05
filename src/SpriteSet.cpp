@@ -8,8 +8,9 @@
 //   SpriteSet
 //
 
-SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, int in_nsize, double* in_size)
- : Shape(in_material), 
+SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, int in_nsize, double* in_size,
+                     int in_ignoreExtent)
+ : Shape(in_material, in_ignoreExtent), 
   vertex(in_nvertex, in_vertex),
    size(in_nsize, in_size)
 { 

@@ -15,7 +15,7 @@
 class Surface : public Shape {
 public:
   Surface(Material& material, int nx, int nz, double* x, double* z, double* y, int* coords, 
-  	  int orientation);
+  	  int orientation, int in_ignoreExtent);
   /**
    * overload
    **/

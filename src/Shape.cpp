@@ -6,8 +6,9 @@
 //   Shape
 //
 
-Shape::Shape(Material& in_material, TypeID in_typeID)
-: SceneNode(in_typeID), material(in_material), displayList(0), doUpdate(true)
+Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID)
+: SceneNode(in_typeID), ignoreExtent(in_ignoreExtent), material(in_material), 
+  displayList(0), doUpdate(true)
 {
 }
 

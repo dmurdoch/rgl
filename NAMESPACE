@@ -1,6 +1,8 @@
-export(asEuclidean, asHomogeneous, bbox3d, bg3d, clear3d, cube3d, dot3d,
+export(asEuclidean, asHomogeneous, axes3d, axis3d, box3d,
+        bbox3d, bg3d, clear3d, cube3d, dot3d,
 	identityMatrix,
-	light3d, lines3d, oh3d, open3d, par3d, particles3d, points3d, pop3d,
+	light3d, lines3d, mtext3d, 
+	oh3d, open3d, par3d, particles3d, points3d, pop3d,
 	qmesh3d, quads3d, rgl.bbox, rgl.bg, rgl.bringtotop, rgl.clear,
 	rgl.close, rgl.cur, rgl.light, rgl.lines, rgl.linestrips,
 	rgl.material, rgl.open, rgl.points, rgl.pop, rgl.postscript,
@@ -10,7 +12,7 @@ export(asEuclidean, asHomogeneous, bbox3d, bg3d, clear3d, cube3d, dot3d,
 	rgl.viewpoint, rgl.window2user, r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, segments3d, select3d, shade3d,
 	spheres3d, sprites3d, subdivision3d, surface3d, terrain3d, text3d,
-	texts3d, transform3d, translate3d, translationMatrix, triangles3d,
+	texts3d, title3d, transform3d, translate3d, translationMatrix, triangles3d,
 	view3d, wire3d)
  
  S3method(dot3d, qmesh3d)

@@ -16,7 +16,7 @@
 class Shape : public SceneNode
 {
 public:
-  Shape(Material& in_material,TypeID in_typeID=SHAPE);
+  Shape(Material& in_material,bool in_ignoreExtent,TypeID in_typeID=SHAPE);
   ~Shape();
   
   /**
@@ -52,13 +52,20 @@ public:
    * obtain material
    **/
   const Material& getMaterial() const { return material; }
+  
+  const bool getIgnoreExtent() const { return ignoreExtent; }
 
 protected:
   /**
    * bounding volume of overall geometry
    **/
   AABox    boundingBox;
-
+  
+  /*
+   * whether this object should be ignored in scene bounding box calculations
+   */ 
+  bool     ignoreExtent; 
+  
   /**
    * material
    **/
