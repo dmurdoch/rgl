@@ -70,6 +70,14 @@ public:
    * obtain bounded viewpoint
    **/
   Viewpoint* getViewpoint();
+  
+  /**
+   * Get and set flag to ignore elements in bounding box
+   **/
+  
+  int getIgnoreExtent(void);
+  void setIgnoreExtent(int in_ignoreExtent);
+  
 
 private:
 
@@ -129,6 +137,8 @@ private:
    * bounding box of overall scene
    **/
   AABox data_bbox;
+  
+  bool ignoreExtent;
 };
 
 

@@ -32,7 +32,8 @@ protected:
       int in_nvertices, 
       double* vertex, 
       int in_type, 
-      int in_nverticesperelement
+      int in_nverticesperelement,
+      int in_ignoreExtent
   );
 
   /**
@@ -99,7 +100,8 @@ protected:
     int in_nelements, 
     double* in_vertex, 
     int in_type, 
-    int in_nverticesperelement
+    int in_nverticesperelement,
+    int in_ignoreExtent
   );
   
   /**
@@ -123,7 +125,7 @@ private:
 class PointSet : public PrimitiveSet
 { 
 public:
-  PointSet(Material& material, int nvertices, double* vertices);
+  PointSet(Material& material, int nvertices, double* vertices, int in_ignoreExtent);
 };
 
 //
@@ -134,7 +136,7 @@ public:
 class LineSet : public PrimitiveSet
 { 
 public:
-  LineSet(Material& material, int nvertices, double* vertices);
+  LineSet(Material& material, int nvertices, double* vertices, int in_ignoreExtent);
 };
 
 //
@@ -145,8 +147,8 @@ public:
 class TriangleSet : public FaceSet
 { 
 public:
-  TriangleSet(Material& in_material, int in_nvertex, double* in_vertex)
-    : FaceSet(in_material,in_nvertex, in_vertex, GL_TRIANGLES, 3)
+  TriangleSet(Material& in_material, int in_nvertex, double* in_vertex, int in_ignoreExtent)
+    : FaceSet(in_material,in_nvertex, in_vertex, GL_TRIANGLES, 3, in_ignoreExtent)
   { }
 };
 
@@ -158,8 +160,8 @@ public:
 class QuadSet : public FaceSet
 { 
 public:
-  QuadSet(Material& in_material, int in_nvertex, double* in_vertex)
-    : FaceSet(in_material,in_nvertex,in_vertex, GL_QUADS, 4)
+  QuadSet(Material& in_material, int in_nvertex, double* in_vertex, int in_ignoreExtent)
+    : FaceSet(in_material,in_nvertex,in_vertex, GL_QUADS, 4, in_ignoreExtent)
   { }
 };
 
@@ -171,7 +173,7 @@ public:
 class LineStripSet : public PrimitiveSet
 {
 public:
-  LineStripSet(Material& material, int in_nelements, double* in_vertex);
+  LineStripSet(Material& material, int in_nelements, double* in_vertex, int in_ignoreExtent);
   void drawElement(RenderContext* renderContext, int index);  
 };
 

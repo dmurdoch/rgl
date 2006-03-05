@@ -12,7 +12,8 @@
 
 class TextSet : public Shape {
 public:
-  TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, double in_adj);
+  TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, double in_adj,
+          int in_ignoreExtent);
   ~TextSet();
   void draw(RenderContext* renderContext);
 private:

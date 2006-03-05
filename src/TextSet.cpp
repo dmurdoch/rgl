@@ -12,8 +12,9 @@
 //   a separate length buffer holds string lengths in order
 //
 
-TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, double in_adj)
- : Shape(in_material), textArray(in_ntexts, in_texts)
+TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, double in_adj,
+                 int in_ignoreExtent)
+ : Shape(in_material, in_ignoreExtent), textArray(in_ntexts, in_texts)
 {
   int i;
 

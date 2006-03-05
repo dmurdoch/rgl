@@ -46,6 +46,9 @@ public: // -- all methods are blocking until action completed
   void bringToTop(int stay);
 
   RGLView* getRGLView(void);
+  
+  int getIgnoreExtent(void);
+  void setIgnoreExtent(int in_ignoreExtent);  
   int getSkipRedraw(void);
   void setSkipRedraw(int in_skipRedraw);
 

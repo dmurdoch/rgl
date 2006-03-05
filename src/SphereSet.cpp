@@ -6,8 +6,9 @@
 //   SphereSet
 //
 
-SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, int in_nradius, double* in_radius)
- : Shape(in_material), 
+SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, int in_nradius, double* in_radius,
+                     int in_ignoreExtent)
+ : Shape(in_material, in_ignoreExtent), 
    center(in_ncenter, in_center), 
    radius(in_nradius, in_radius)
 {

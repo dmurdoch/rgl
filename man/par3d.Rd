@@ -78,6 +78,8 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
       Isometric perspective (which would
       correspond to \code{FOV=0}) is not currently possible, but one can
       approximate it by specifying \code{par3d(FOV=1)}.}
+    \item{\code{ignoreExtent}}{logical.  Set to \code{TRUE} so that subsequently plotted objects
+      will be ignored in calculating the bounding box of the scene.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
       of the user data.}
     \item{\code{mouseMode}}{character.  A vector of 3 strings describing

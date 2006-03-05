@@ -8,11 +8,12 @@ PrimitiveSet::PrimitiveSet (
     int in_nvertices, 
     double* in_vertices, 
     int in_type, 
-    int in_nverticesperelement
+    int in_nverticesperelement,
+    int in_ignoreExtent
 
 )
   :
-Shape(in_material)
+Shape(in_material, in_ignoreExtent, SHAPE)
 {
   type                = in_type;
   nverticesperelement = in_nverticesperelement;
@@ -104,10 +105,11 @@ FaceSet::FaceSet(
   int in_nelements, 
   double* in_vertex, 
   int in_type, 
-  int in_nverticesperelement
+  int in_nverticesperelement,
+  int in_ignoreExtent
 
 )
-: PrimitiveSet(in_material, in_nelements, in_vertex, in_type, in_nverticesperelement)
+: PrimitiveSet(in_material, in_nelements, in_vertex, in_type, in_nverticesperelement, in_ignoreExtent)
 {
   if (material.lit) {
     normalArray.alloc(nvertices);
