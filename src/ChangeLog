@@ -133,3 +133,4 @@ v0.66-2
     are ignored when calculating the bounding box
   - added axis3d, axes3d, box3d, mtext3d, title3d functions from djmrgl for 
     annotating plots.
+  - added plot3d high level plot function
