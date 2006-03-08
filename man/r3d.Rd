@@ -47,8 +47,12 @@
   scene.  Since the user can manipulate the scene, either system can
   be rotated into the other one.  
   
-  The other difference is that the r3d functions change the mouse mode
+  Another difference is that the r3d functions change the mouse mode
   to use a 'trackball' on the left mouse button.
+  
+  The r3d functions also preserve the \code{rgl.material} setting across
+  calls (except for texture elements, in the current implementation), whereas
+  the \code{rgl.*} functions leave it as set by the last call.
   
   The example code below illustrates the two coordinate systems.
 }

@@ -553,6 +553,56 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   *successptr = RGL_SUCCESS;
 }
 
+void rgl_getcolorcount(int* count)
+{
+  *count = currentMaterial.colors.getLength();
+}
+
+void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
+{
+  Material& mat = currentMaterial;
+  unsigned int i,j;
+  
+  idata[1] = mat.lit ? 1 : 0;
+  idata[2] = mat.smooth ? 1 : 0;
+  idata[3] = (int) mat.front;
+  idata[4] = (int) mat.back;
+  idata[5] = mat.fog ? 1 : 0;
+  idata[6] = 0; /* mat.texture.type; */
+  idata[7] = 0; /* mat.texture.mipmap ? 1 : 0; */
+  idata[8] = 0; /* mat.texture.minfilter; */
+  idata[9] = 0; /* mat.texture.magfilter; */
+
+  idata[11] = (int) mat.ambient.getRedub();
+  idata[12] = (int) mat.ambient.getGreenub();
+  idata[13] = (int) mat.ambient.getBlueub();
+  idata[14] = (int) mat.specular.getRedub();
+  idata[15] = (int) mat.specular.getGreenub();
+  idata[16] = (int) mat.specular.getBlueub();  
+  idata[17] = (int) mat.emission.getRedub();
+  idata[18] = (int) mat.emission.getGreenub();
+  idata[19] = (int) mat.emission.getBlueub();
+  idata[20] = 0; /* mat.texture.envmap ? 1 : 0; */
+  for (i=0, j=21; (i < mat.colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+    idata[j++] = (int) mat.colors.getColor(i).getRedub();
+    idata[j++] = (int) mat.colors.getColor(i).getGreenub();
+    idata[j++] = (int) mat.colors.getColor(i).getBlueub();
+  }
+  idata[0] = i;
+
+  ddata[0] = (double) mat.shininess;
+  ddata[1] = (double) mat.size;
+  
+  if (mat.colors.hasAlpha()) {
+    for (i=0, j=2; (i < mat.colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
+      ddata[j++] = (double) mat.colors.getColor(i).getAlphaf();
+    idata[10] = i;
+  } else 
+    idata[10] = 0;
+  
+  *successptr = RGL_SUCCESS;
+}
+
 void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex)
 {
   int success = RGL_FAIL;

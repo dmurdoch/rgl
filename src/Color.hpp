@@ -23,10 +23,10 @@ public:
   float  getGreenf() const { return data[1]; }
   float  getBluef()  const { return data[2]; }
   float  getAlphaf() const { return data[3]; }
-  u8     getRedub()  const { return (u8) (data[0]/255.0f); }
-  u8     getGreenub()const { return (u8) (data[1]/255.0f); }
-  u8     getBlueub() const { return (u8) (data[2]/255.0f); }
-  u8     getAlphaub()const { return (u8) (data[3]/255.0f); }
+  u8     getRedub()  const { return (u8) (data[0]*255.0f); }
+  u8     getGreenub()const { return (u8) (data[1]*255.0f); }
+  u8     getBlueub() const { return (u8) (data[2]*255.0f); }
+  u8     getAlphaub()const { return (u8) (data[3]*255.0f); }
   float* getFloatPtr() const { return (float*) data; }
   /// set by integer ptr
   void   set3iv(int* color);

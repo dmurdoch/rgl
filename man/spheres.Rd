@@ -12,7 +12,7 @@ rgl.spheres(x, y = NULL, z = NULL, radius, ...)
 \arguments{
   \item{x, y, z}{Numeric vector of point coordinates corresponding to
    the center of each sphere.  Any reasonable way of defining the
-    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{radius}{Vector or single value defining the sphere radius/radii}
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}

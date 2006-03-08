@@ -13,7 +13,7 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
 }
 \arguments{
   \item{ x, y, z }{point coordinates.  Any reasonable way of defining the
-    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{ radius } {vector or singe value defining the sphere radius}
   \item{ ... }{material properties, texture mapping is supported}

@@ -20,7 +20,7 @@ rgl.open <- function() {
   ret <- .C( symbol.C("rgl_dev_open"), success=FALSE, PACKAGE="rgl" )
 
   if (! ret$success)
-    stop("failed")
+    stop("rgl.open failed")
 
 }
 

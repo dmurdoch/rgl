@@ -17,7 +17,7 @@ quads3d(x, y = NULL, z = NULL, ...)
 }
 \arguments{
   \item{x, y, z}{coordinates. Any reasonable way of defining the
-    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
 }
@@ -60,7 +60,7 @@ for (i in c(1,5,9)) {
     M[,i+0:3] <- as.matrix(quad)
 }
 
-rgl.open()
+open3d()
 
 # Rows of M are x, y, z coords; transpose to plot
 
