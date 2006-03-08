@@ -51,6 +51,8 @@ EXPORT_SYMBOL void rgl_clear    (int* successptr, int* idata);
 EXPORT_SYMBOL void rgl_pop      (int* successptr, int* idata);
 
 EXPORT_SYMBOL void rgl_material (int* successptr, int* idata, char** cdata, double* ddata);
+EXPORT_SYMBOL void rgl_getcolorcount(int* count);
+EXPORT_SYMBOL void rgl_getmaterial (int* successptr, int* idata, char** cdata, double* ddata);
 
 EXPORT_SYMBOL void rgl_light    (int* successptr, int* idata, double* ddata );
 

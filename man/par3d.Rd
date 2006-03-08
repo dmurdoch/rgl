@@ -53,7 +53,11 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   to back, z from bottom to top), the \code{mouseMode} to
   \code{(trackball, zoom, fov)}, and the field of view to 30 degrees.
   Users may create their own variable of that name in the global
-  environment and it will override the installed one.
+  environment and it will override the installed one.  If there
+  is a \code{bg} element in the list or the arguments, it should be
+  a list of arguments to pass to the \code{\link{bg3d}} function to 
+  set the background.  A \code{material} element should be a list
+  of arguments to pass to \code{\link{material3d}} to set the material.
 }
 
 \value{
@@ -139,6 +143,7 @@ OpenGL Architecture Review Board (1997).  OpenGL Programming Guide.  Addison-Wes
 }
 
 \examples{
+    r3dDefaults
     open3d()
     
     save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))

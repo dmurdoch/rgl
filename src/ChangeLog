@@ -134,3 +134,6 @@ v0.66-2
   - added axis3d, axes3d, box3d, mtext3d, title3d functions from djmrgl for 
     annotating plots.
   - added plot3d high level plot function
+  - added material3d, which can both set and query material properties; changed
+  - changed open3d() to set background and material defaults
+    most *3d functions so they leave material invariant across calls.

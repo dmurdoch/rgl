@@ -18,7 +18,7 @@ rgl.quads(x, y = NULL, z = NULL, ... )
 }
 \arguments{
   \item{x, y, z}{coordinates.  Any reasonable way of defining the
-    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
 }

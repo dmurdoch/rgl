@@ -8,13 +8,13 @@ Draws a 3D scatterplot.
 \usage{
 plot3d(x, ...)
 \method{plot3d}{default}(x, y, z, xlim, ylim, zlim, 
-	xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', col = 'white',  
-	box = TRUE, axes = TRUE, add = FALSE, main = NULL, sub = NULL, 
+	xlab, ylab, zlab, type = 'p', col,  
+	box, axes = TRUE, add = FALSE, main, sub, 
 	top = TRUE, ...)
 }
 \arguments{
   \item{x, y, z}{vectors of points to be plotted. Any reasonable way of defining the
-    coordinates is acceptable.  See the function \code{\link[graphics]{xyz.coords}}
+    coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{xlim, ylim, zlim}{limits to use for the coordinates.}
   \item{xlab, ylab, zlab}{labels for the coordinates.}
@@ -54,10 +54,10 @@ Missing values in the data are not currently supported.
 }
 \examples{
   open3d()
-  x <- rnorm(1000)
+  x <- sort(rnorm(1000))
   y <- rnorm(1000)
   z <- rnorm(1000) + atan2(x,y)
-  plot3d(x, y, z)
+  plot3d(x, y, z, col=rainbow(1000), size=2)
 }
 \keyword{dynamic}
 

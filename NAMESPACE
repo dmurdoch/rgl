@@ -1,7 +1,7 @@
 export(asEuclidean, asHomogeneous, axes3d, axis3d, box3d,
         bbox3d, bg3d, clear3d, cube3d, dot3d,
 	identityMatrix,
-	light3d, lines3d, mtext3d, 
+	light3d, lines3d, material3d, mtext3d, 
 	oh3d, open3d, par3d, particles3d, plot3d, points3d, pop3d,
 	qmesh3d, quads3d, rgl.bbox, rgl.bg, rgl.bringtotop, rgl.clear,
 	rgl.close, rgl.cur, rgl.light, rgl.lines, rgl.linestrips,

@@ -6,7 +6,7 @@
   Setup the background environment of the scene.
 }
 \usage{
-bg3d(color, ...) 
+bg3d(...) 
 rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines", ...)
 
 }

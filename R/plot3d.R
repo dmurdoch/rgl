@@ -2,12 +2,12 @@ plot3d <- function(x, ...) UseMethod("plot3d")
 
 plot3d.default <- function(x, y = NULL, z = NULL, 
         xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zlim, 
-	xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', col = 'white', 
+	xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', col = material3d("color")[1], 
 	box = TRUE, axes = TRUE, add = FALSE, main = NULL, sub = NULL,
 	top = TRUE, ...)
 {
     if (!add) clear3d()
-    skip <- par3d(skipRedraw=TRUE,...)
+    skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
     
     xlabel <- if (!missing(x)) deparse(substitute(x))
@@ -24,12 +24,12 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     if (is.null(zlab)) zlab <- xyz$zlab
 
     switch(type,
-		p = points3d(x, y, z, col=col),
-		l = lines3d(x, y, z, col=col),
+		p = points3d(x, y, z, color=col, ...),
+		l = lines3d(x, y, z, color=col, ...),
 		h = segments3d(rep(x,rep(2,length(x))),
 					   rep(y,rep(2,length(y))),
 					   rbind(rep(0,length(z)),z),
-					   col = rep(col, rep(2,length(col)))),
+					   color = rep(col, rep(2,length(col))),...),
 	# this is a hack to plot invisible segments
         n = if (!add) segments3d(rep(range(x), c(2,2)),
                                  rep(range(y), c(2,2)),

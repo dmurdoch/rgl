@@ -14,7 +14,7 @@ texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...)
 }
 \arguments{
   \item{x, y, z}{point coordinates.  Any reasonable way of defining the
-    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{text}{text character vector to draw}
   \item{texts}{text character vector to draw}
