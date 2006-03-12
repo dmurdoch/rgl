@@ -60,13 +60,17 @@ axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
                        labels)
 }
 
-axes3d <- function(edges=c('x','y','z'),labels=TRUE,
+axes3d <- function(edges='bbox', labels=TRUE,
                    tick=TRUE, ...)
 {
-    save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE, ...)
+    save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
     on.exit(par3d(save))
-    for (e in edges)
-        axis3d(e,labels=labels,tick=tick)
+    if (identical(edges, 'bbox')) {
+        do.call('bbox3d', .fixMaterialArgs(..., Params = list(front='lines', back='lines')))
+    } else {
+    	for (e in edges)
+            axis3d(e,labels=labels,tick=tick)
+    }
 }
 
 box3d <- function(...)

@@ -5,7 +5,7 @@
 
 # Node Management
 
-clear3d     <- function(type = "shapes") {
+clear3d     <- function(type = c("shapes", "bboxdeco")) {
     .check3d()
     rgl.clear( type )
     if ( 4 %in% rgl.enum.nodetype(type) ) { # viewpoint
@@ -80,9 +80,15 @@ view3d      <- function(theta=0,phi=15,...) {
   rgl.viewpoint(theta=theta,phi=phi,...)
 }
 
-bbox3d	    <- function(...) {  
+bbox3d	    <- function(xat = pretty(xrange), yat = pretty(yrange), zat = pretty(zrange), 
+		        expand = 1.03, ...) {  
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.bbox", .fixMaterialArgs(..., Params = save))
+  ranges <- par3d("bbox")
+  xrange <- ranges[1:2]
+  yrange <- ranges[3:4]
+  zrange <- ranges[5:6]
+  do.call("rgl.bbox", c(list(xat=xat, yat=yat, zat=zat, expand=expand), 
+                        .fixMaterialArgs(..., Params = save)))
 }
 
 # Shapes
@@ -177,7 +183,7 @@ r3dDefaults <- list(userMatrix = rotationMatrix(5, 1, 0, 0),
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {
     rgl.open()
-    params[names(list(...))] <- list(...)
+    params <- .fixMaterialArgs(..., Params = params)
     if (!is.null(params$bg)) {
       do.call("bg3d", params$bg)
       params$bg <- NULL
