@@ -41,7 +41,8 @@ struct AxisInfo {
 class BBoxDeco : public SceneNode 
 {
 public:
-  BBoxDeco(Material& in_material=defaultMaterial, AxisInfo& xaxis=defaultAxis, AxisInfo& yaxis=defaultAxis, AxisInfo& zaxis=defaultAxis, float marklen=15.0, bool marklen_fract=true);
+  BBoxDeco(Material& in_material=defaultMaterial, AxisInfo& xaxis=defaultAxis, AxisInfo& yaxis=defaultAxis, AxisInfo& zaxis=defaultAxis, float marklen=15.0, bool marklen_fract=true,
+           float in_expand=1.0);
   void render(RenderContext* renderContext);
   AABox getBoundingBox(const AABox& boundingBox) const;
   float getMarkLength(const AABox& boundingBox) const;
@@ -50,6 +51,7 @@ private:
   AxisInfo xaxis, yaxis, zaxis;
   float marklen_value;
   bool  marklen_fract;
+  float expand;
 
   static Material defaultMaterial;
   static AxisInfo defaultAxis;

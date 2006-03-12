@@ -8,7 +8,7 @@
 Clear shapes, lights, bbox
 }
 \usage{
-clear3d( type = "shapes" ) 
+clear3d( type = c("shapes", "bboxdeco") ) 
 rgl.clear( type = "shapes" )
 pop3d( ... )
 rgl.pop( type = "shapes" )  
@@ -18,7 +18,7 @@ rgl.pop( type = "shapes" )
     \describe{
       \item{"shapes"}{shape stack}
       \item{"lights"}{light stack}
-      \item{"bbox"}{bounding box}
+      \item{"bboxdeco"}{bounding box}
       \item{"viewpoint"}{viewpoint}
       \item{"all"}{all of the above}
     }

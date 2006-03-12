@@ -11,7 +11,7 @@ These functions draw axes, boxes and text outside the range of the data.
 normally the others need not be called directly by users.
 }
 \usage{
-axes3d(edges=c("x", "y", "z"), labels=TRUE, tick=TRUE, ...)
+axes3d(edges="bbox", labels=TRUE, tick=TRUE, ...)
 box3d(...) 
 title3d(main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
     zlab = NULL, line = NA, ...) 
@@ -31,7 +31,7 @@ mtext3d(text, edge, line = 0, at = NULL, pos = NA, ...)
   \item{edge, pos}{ the position at which to draw the axis or text }
   \item{text}{ the text to draw }
   \item{at}{ the value of a coordinate at which to draw the axis }
-  \item{\dots}{ additional parameters which are passed to \code{\link{par3d}}}
+  \item{\dots}{ additional parameters which are passed to \code{\link{bbox3d}} or \code{\link{material3d}} }
 }
 
 \details{
@@ -43,7 +43,12 @@ one or two characters are given, the remaining characters default to `-'.
 For example \code{edge = 'x+'} draws an x-axis at the high level of y and the
 low level of z.
 
-If \code{pos} is a numeric vector of length 3, \code{edges} determines
+By default, \code{axes3d} uses the \code{\link{bbox3d}} function to draw the axes.  
+The labels will move so that they do not obscure the data.  Alternatively,
+a vector of arguments as described above may be used, in which case
+fixed axes are drawn using \code{axis3d}.
+
+If \code{pos} is a numeric vector of length 3, \code{edge} determines
 the direction of the axis and the tick marks, and the values of the
 other two coordinates in \code{pos} determine the position.  See the
 examples.
@@ -54,17 +59,14 @@ These functions are called for their side effects.
 \author{ Duncan Murdoch }
 
 \seealso{\code{\link{axis}}, \code{\link{box}},
-\code{title}, \code{mtext}}
+\code{title}, \code{mtext}, \link{bbox3d}}
 
 \examples{
   clear3d()
   points3d(rnorm(10),rnorm(10),rnorm(10), size=3)
 
   # First add standard axes
-  axes3d()
-
-  # Put 4 x-axes on the plot
-  axes3d(c('x--','x-+','x+-','x++'))
+  axes3d()  
 
   # and one in the middle (the NA will be ignored, a number would 
   # do as well)
@@ -74,6 +76,19 @@ These functions are called for their side effects.
   title3d('main','sub','xlab','ylab','zlab')
 
   rgl.bringtotop()
+  
+  open3d()
+  points3d(rnorm(10),rnorm(10),rnorm(10), size=3)
+  
+  # Use fixed axes
+  
+  axes3d(c('x','y','z'))
+         
+  # Put 4 x-axes on the plot
+  axes3d(c('x--','x-+','x+-','x++'))         
+  
+  axis3d('x',pos=c(NA, 0, 0))     
+  title3d('main','sub','xlab','ylab','zlab')
 }
 
 

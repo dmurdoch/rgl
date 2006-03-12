@@ -123,7 +123,7 @@ rgl.bbox <- function(
   xat=NULL, xlab=NULL, xunit=0, xlen=5,
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=TRUE, ...) {
+  marklen=15.0, marklen.rel=TRUE, expand=1, ...) {
 
   rgl.material( ... )
 
@@ -157,9 +157,11 @@ rgl.bbox <- function(
   length(xunit)       <- 1
   length(yunit)       <- 1
   length(zunit)       <- 1
+  length(marklen)     <- 1
+  length(expand)      <- 1
 
   idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel))
-  ddata <- as.numeric(c(xunit, yunit, zunit, marklen))
+  ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
 
   ret <- .C( symbol.C("rgl_bbox"),
     success=FALSE,

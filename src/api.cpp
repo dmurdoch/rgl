@@ -644,12 +644,14 @@ void rgl_bbox(int* successptr,
     float yunit      = (float) ddata[1];
     float zunit      = (float) ddata[2];
     float marklen    = (float) ddata[3];
+    float expand     = (float) ddata[4];    
+
 
     AxisInfo xaxis(xticks, xat, xtext, xlen, xunit);
     AxisInfo yaxis(yticks, yat, ytext, ylen, yunit);
     AxisInfo zaxis(zticks, zat, ztext, zlen, zunit);
 
-    success = as_success( device->add( new BBoxDeco(currentMaterial, xaxis, yaxis, zaxis, marklen, (bool) marklen_rel ) ) );
+    success = as_success( device->add( new BBoxDeco(currentMaterial, xaxis, yaxis, zaxis, marklen, (bool) marklen_rel, expand ) ) );
   }
 
   *successptr = success;
