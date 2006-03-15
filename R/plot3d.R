@@ -47,7 +47,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     if (!add) {
     	if (axes) axes3d()
 	if (box) box3d()
-	title3d(xlab = xlabel, ylab = ylabel, zlab = zlabel, 
+	title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
 		main = main, sub = sub)
     }
     if (top) rgl.bringtotop()
