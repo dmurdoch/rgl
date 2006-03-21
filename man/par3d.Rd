@@ -145,11 +145,11 @@ OpenGL Architecture Review Board (1997).  OpenGL Programming Guide.  Addison-Wes
 \examples{
     r3dDefaults
     open3d()
-    
+    shade3d(cube3d(color=rep(rainbow(6),rep(4,6))))
     save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))
     save
     par3d("userMatrix")    
-    par3d(userMatrix = save)
+    par3d(save)
     par3d("userMatrix")
 }
 
