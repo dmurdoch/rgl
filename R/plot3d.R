@@ -1,14 +1,20 @@
 plot3d <- function(x, ...) UseMethod("plot3d")
 
+
 plot3d.default <- function(x, y = NULL, z = NULL, 
         xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zlim, 
 	xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', col = material3d("color")[1], 
 	box = TRUE, axes = TRUE, add = FALSE, main = NULL, sub = NULL,
-	top = TRUE, ...)
+	top = TRUE, aspect = !add, ...)
 {
     if (!add) clear3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
+     	
+    if (is.logical(aspect)) {
+    	autoscale <- aspect
+    	aspect <- c(1,1,1)
+    } else autoscale <- TRUE
     
     xlabel <- if (!missing(x)) deparse(substitute(x))
     ylabel <- if (!missing(y)) deparse(substitute(y))
@@ -44,11 +50,17 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     if (!missing(xlim) | !missing(ylim) | !missing(zlim)) {
 	    segments3d(matrix(ranges[rep(1:6, rep(2,6))], 4, 3))
     }
+    
     if (!add) {
-    	if (axes) axes3d()
+    	if (axes) {
+    	    if (autoscale) axes3d(c('x','y','z'))
+    	    else axes3d()
+    	}
 	if (box) box3d()
 	title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
 		main = main, sub = sub)
     }
+    if (autoscale) aspect3d(aspect)
+    
     if (top) rgl.bringtotop()
 }
