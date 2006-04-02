@@ -10,7 +10,7 @@ plot3d(x, ...)
 \method{plot3d}{default}(x, y, z, xlim, ylim, zlim, 
 	xlab, ylab, zlab, type = 'p', col,  
 	box, axes = TRUE, add = FALSE, main, sub, 
-	top = TRUE, ...)
+	top = TRUE, aspect = !add, ...)
 }
 \arguments{
   \item{x, y, z}{vectors of points to be plotted. Any reasonable way of defining the
@@ -26,6 +26,7 @@ plot3d(x, ...)
   \item{box, axes}{whether to draw a box and axes.}
   \item{add}{whether to add the points to an existing plot.}
   \item{top}{whether to bring the window to the top when done.}
+  \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio}
   \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}}.
 }
 \value{
@@ -43,6 +44,9 @@ a long thin or flat plot region may result.
 
 Missing values in the data are not currently supported.
 
+If \code{aspect} is \code{TRUE}, aspect ratios of \code{c(1,1,1)} are passed to
+\code{\link{aspect3d}}.  If \code{FALSE}, no aspect adjustment is done.  In other
+cases, the value is passed to \code{\link{aspect3d}}.
 
 }
 \author{
