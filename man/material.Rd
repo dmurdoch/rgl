@@ -115,7 +115,7 @@ properties; see the examples below.
 \code{\link{rgl.bg}},
 \code{\link{rgl.light}}
 }
-\example{
+\examples{
 save <- material3d("color")
 material3d(color="red")
 material3d("color")
