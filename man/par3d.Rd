@@ -122,7 +122,9 @@ the following operations:
 the vector \code{v = (x,y,z,1)}.
 \item It obtains the model matrix \code{M = par3d("modelMatrix")} and multiplies
 the point by this giving \code{u = M \%*\% v}.  Using this location and information on the
-normals (which have been similarly transformed), it performs lighting calculations.
+normals (which have been similarly transformed), it performs lighting calculations.  (The 
+\code{par3d("userMatrix")} is used in the construction of the model matrix, along with
+other transformations to center the object being displayed.)
 \item It obtains the projection matrix \code{P = par3d("projMatrix")} and
 multiplies the point by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.
 \item It converts back to Euclidean coordinates by dividing the first 3 coordinates by \code{w2}.
