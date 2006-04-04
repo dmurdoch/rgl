@@ -73,13 +73,16 @@ AxisInfo::~AxisInfo()
   }
 }
 
-void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, float marklen, String& string) {
+void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Vertex& marklen, String& string) {
 
   Vertex4 p;
 
   // draw mark ( 1 time ml away )
 
-  p = v + dir * marklen;
+  p.x = v.x + dir.x * marklen.x;
+  p.y = v.y + dir.y * marklen.y;
+  p.z = v.z + dir.z * marklen.z;  
+  
   glBegin(GL_LINES);
   glVertex3f(v.x,v.y,v.z);
   glVertex3f(p.x,p.y,p.z);
@@ -87,7 +90,9 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, floa
 
   // draw text ( 2 times ml away )
 
-  p = v + dir * marklen * 2;
+  p.x = v.x + 2 * dir.x * marklen.x;
+  p.y = v.y + 2 * dir.y * marklen.y;
+  p.z = v.z + 2 * dir.z * marklen.z; 
 
   glRasterPos3f( p.x, p.y, p.z );
   renderContext->font->draw(string.text, string.length, 0);
@@ -171,18 +176,18 @@ BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis
   material.colors.recycle(2);
 }
 
-float BBoxDeco::getMarkLength(const AABox& boundingBox) const
+Vertex BBoxDeco::getMarkLength(const AABox& boundingBox) const
 {
-  return (marklen_fract) ? Sphere(boundingBox).radius / marklen_value : marklen_value;
+  return (marklen_fract) ? (boundingBox.vmax - boundingBox.vmin) * (1 / marklen_value) : Vertex(1,1,1) * marklen_value;
 }
 
 AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
 {
   AABox bbox(in_bbox);
 
-  float marklen = getMarkLength(bbox);
+  Vertex marklen = getMarkLength(bbox);
 
-  Vertex v = Vertex(1,1,1) * 2 * marklen;
+  Vertex v = marklen * 2;
 
   bbox += bbox.vmin - v;
   bbox += bbox.vmax + v;
@@ -286,7 +291,7 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     // setup mark length
 
-    float marklen = getMarkLength(bbox);
+    Vertex marklen = getMarkLength(bbox);
 
 
     // draw axis and tickmarks
