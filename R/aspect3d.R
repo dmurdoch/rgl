@@ -3,6 +3,7 @@ aspect3d <- function(x, y = NULL, z = NULL) {
     	scale <- diag(4)
     } else {
 	if (is.null(y)) {
+	    x <- rep(x, len=3)
 	    z <- x[3]
 	    y <- x[2]
 	    x <- x[1]
@@ -16,7 +17,8 @@ aspect3d <- function(x, y = NULL, z = NULL) {
 	avgscale <- sqrt((scalex^2 + scaley^2 + scalez^2)/3)
         scale <- scaleMatrix(x*avgscale/scalex, y*avgscale/scaley, z*avgscale/scalez)
     }
-    s <- svd(par3d("userMatrix"))
-    
+    u <- par3d("userMatrix")
+    if (any(!is.finite(u))) u <- r3dDefaults$userMatrix
+    s <- svd(u)
     par3d(userMatrix = s$u %*% t(s$v) %*% scale)    
 }
