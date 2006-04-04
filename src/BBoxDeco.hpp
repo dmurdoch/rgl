@@ -27,7 +27,7 @@ struct AxisInfo {
   AxisInfo(int in_nticks, double* in_values, char** in_texts, int xlen, float xunit);
   AxisInfo(AxisInfo& from);
   ~AxisInfo();
-  void draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, float marklen, String& string);
+  void draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Vertex& marklen, String& string);
 
   int    mode;
   int    nticks;
@@ -45,7 +45,7 @@ public:
            float in_expand=1.0);
   void render(RenderContext* renderContext);
   AABox getBoundingBox(const AABox& boundingBox) const;
-  float getMarkLength(const AABox& boundingBox) const;
+  Vertex getMarkLength(const AABox& boundingBox) const;
 private:
   Material material;
   AxisInfo xaxis, yaxis, zaxis;

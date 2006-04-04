@@ -227,7 +227,11 @@ void Scene::render(RenderContext* renderContext)
   glClear(clearFlags);
   // renderContext.clear(viewport);
 
-
+  // userMatrix might change the length of normals.  If this slows us
+  // down, we should test for that instead of just enabling GL_NORMALIZE
+  
+  glEnable(GL_NORMALIZE);
+  
   //
   // SETUP LIGHTING MODEL
   //

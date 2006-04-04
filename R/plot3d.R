@@ -52,10 +52,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     }
     
     if (!add) {
-    	if (axes) {
-    	    if (autoscale) axes3d(c('x','y','z'))
-    	    else axes3d()
-    	}
+    	if (axes) axes3d()
 	if (box) box3d()
 	title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
 		main = main, sub = sub)
