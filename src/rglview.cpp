@@ -297,7 +297,7 @@ void RGLView::oneAxisUpdate(int mouseX, int mouseY)
   	rotCurrent = screenToVector(width,height,mouseX,height/2);
 
 	windowImpl->beginGL();
-	viewpoint->mouseOneAxis(rotBase,rotCurrent,axis);
+	viewpoint->mouseOneAxis(rotBase,rotCurrent,axis[drag-1]);
 	windowImpl->endGL();
 
 	View::update();
@@ -458,9 +458,9 @@ void RGLView::setMouseMode(int button, MouseModeID mode)
 	    	ButtonBeginFunc[index] = &RGLView::oneAxisBegin;
 	    	ButtonUpdateFunc[index] = &RGLView::oneAxisUpdate;
 	    	ButtonEndFunc[index] = &RGLView::trackballEnd; // No need for separate function
-	    	if (mode == mmXAXIS)      axis = Vertex(1,0,0);
-	    	else if (mode == mmYAXIS) axis = Vertex(0,1,0);
-	    	else                      axis = Vertex(0,0,1);
+	    	if (mode == mmXAXIS)      axis[index] = Vertex(1,0,0);
+	    	else if (mode == mmYAXIS) axis[index] = Vertex(0,1,0);
+	    	else                      axis[index] = Vertex(0,0,1);
 	    	break;	    	
 	    case mmPOLAR:
  	    	ButtonBeginFunc[index] = &RGLView::polarBegin;
