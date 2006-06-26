@@ -13,6 +13,10 @@ aspect3d <- function(x, y = NULL, z = NULL) {
 	scalex <- bbox[2]-bbox[1]
 	scaley <- bbox[4]-bbox[3]
 	scalez <- bbox[6]-bbox[5]
+	
+	if (scalex <= 0) scalex <- 1
+	if (scaley <= 0) scaley <- 1
+	if (scalez <= 0) scalez <- 1
 
 	avgscale <- sqrt((scalex^2 + scaley^2 + scalez^2)/3)
         scale <- scaleMatrix(x*avgscale/scalex, y*avgscale/scaley, z*avgscale/scalez)
