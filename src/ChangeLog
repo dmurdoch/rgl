@@ -139,3 +139,5 @@ v0.66-2
     most *3d functions so they leave material invariant across calls.
   - added aspect3d to control the aspect ratio of the bounding box.
   - added xAxis, yAxis and zAxis mouse modes, set zAxis as r3d default.
+  - added persp3d function
+  

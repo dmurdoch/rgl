@@ -26,11 +26,11 @@ plot3d(x, ...)
   \item{box, axes}{whether to draw a box and axes.}
   \item{add}{whether to add the points to an existing plot.}
   \item{top}{whether to bring the window to the top when done.}
-  \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio}
-  \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}}.
+  \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio.}
+  \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}.}
 }
 \value{
-  the 3D handle for the item that was plotted.
+  This function is called for the side effect of drawing the plot; no useful value is returned.
 }
 \details{
 This is a partial 3D analogue of plot.default.
@@ -38,9 +38,6 @@ This is a partial 3D analogue of plot.default.
 Note that since \code{rgl} does not currently support
 clipping, all points will be plotted, and \code{xlim}, \code{ylim}, and \code{zlim}
 will only be used to increase the respective ranges.
-
-No rescaling of points will be done, so if the variables are on widely differing scales,
-a long thin or flat plot region may result.
 
 Missing values in the data are not currently supported.
 
