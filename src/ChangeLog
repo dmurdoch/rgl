@@ -148,4 +148,6 @@ v0.66 unreleased revisions
   - added par3d("scale") to handle aspect3d operations internally.
   - added ellipse3d() generic and methods for drawing confidence ellipsoids
   - added decorate3d() to draw all the decorations, plot3d.qmesh3d() method.
-  
+  - changed zoom to use ratio scale over larger range
+  - fixed bug causing jump after resize in Mac OSX (and maybe other platforms)  
+  - rgl.primitive now does sanity checks on inputs

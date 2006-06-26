@@ -236,17 +236,24 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
   }
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
-  idata   <- as.integer( c(type, nvertex ) )
-
-  ret <- .C( "rgl_primitive",
-    success=FALSE,
-    idata,
-    as.numeric(vertex),
-    PACKAGE="rgl"
-  );
-
-  if (! ret$success)
-    stop("rgl_points")
+  if (nvertex > 0) {
+    
+    perelement <- c(points=1, lines=2, triangles=3, quadrangles=4, linestrips=1)[type]
+    if (nvertex %% perelement) 
+      stop("illegal number of vertices")
+    
+    idata   <- as.integer( c(type, nvertex ) )
+  
+    ret <- .C( "rgl_primitive",
+      success=FALSE,
+      idata,
+      as.numeric(vertex),
+      PACKAGE="rgl"
+    );
+  
+    if (! ret$success)
+      stop("rgl_points")
+  }
 }
 
 rgl.points <- function ( x, y=NULL, z=NULL, ... )
