@@ -21,7 +21,9 @@ coordinates should all be displayed at the same scale, i.e. the bounding box sho
 rescaled.  (This corresponds to the default display before \code{aspect3d} has been called.)
 Partial matches to \code{"iso"} are allowed.
 
-This function works by modifying the \code{\link[par3d]{userMatrix}} to adjust the \code{modelMatrix}.
+This function works by modifying the \code{userMatrix} to adjust the \code{modelMatrix},
+so it must be applied after other functions (e.g. \code{\link{par3d}}, \code{\link{view3d}} or \code{\link{rgl.viewpoint}}) 
+that set the \code{userMatrix}.
 }
 \value{
 The previous value of the \code{\link[par3d]{userMatrix}} is returned.

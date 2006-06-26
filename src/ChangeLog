@@ -135,8 +135,8 @@ v0.66-2
     annotating plots.
   - added plot3d high level plot function
   - added material3d, which can both set and query material properties; changed
-  - changed open3d() to set background and material defaults
     most *3d functions so they leave material invariant across calls.
+  - changed open3d() to set background and material defaults
   - added aspect3d to control the aspect ratio of the bounding box.
   - added xAxis, yAxis and zAxis mouse modes, set zAxis as r3d default.
   - added persp3d function
