@@ -1,5 +1,6 @@
 \name{persp3d}
 \alias{persp3d}
+\alias{persp3d.default}
 \title{ Surface plots }
 \description{
   This function draws plots of surfaces over the
@@ -10,7 +11,7 @@ persp3d(x, \dots)
 \method{persp3d}{default}(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     z, xlim = range(x), ylim = range(y), zlim = range(z, na.rm = TRUE),
     xlab = NULL, ylab = NULL, zlab = NULL, main = NULL, sub = NULL, box = TRUE, axes = TRUE,
-    add = FALSE, top = TRUE, aspect = !add, ...)
+    top = TRUE, add = FALSE, aspect = !add, ...)
 }
 \arguments{
   \item{x, y}{locations of grid lines at which the values in \code{z} are
@@ -32,8 +33,8 @@ persp3d(x, \dots)
   \item{axes}{should ticks and labels be added to the box.  The
     default is \code{TRUE}.  If \code{box} is \code{FALSE} then no
     ticks or labels are drawn.}
-  \item{add}{whether to add the points to an existing plot.}    
   \item{top}{whether to bring the window to the top when done.}
+  \item{add}{whether to add the points to an existing plot.}    
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio}
     
   \item{\dots}{additional material parameters to be passed to \code{\link{surface3d}}.}
