@@ -1,5 +1,5 @@
 export(asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
-        bbox3d, bg3d, clear3d, cube3d, dot3d, ellipse3d,
+        bbox3d, bg3d, clear3d, cube3d, decorate3d, dot3d, ellipse3d,
 	identityMatrix,
 	light3d, lines3d, material3d, mtext3d, 
 	oh3d, open3d, par3d, particles3d, persp3d, plot3d, points3d, pop3d,
@@ -33,6 +33,7 @@ export(asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
  S3method(ellipse3d, nls)
  
  S3method(plot3d, default)
+ S3method(plot3d, qmesh3d)
  S3method(persp3d, default)
  
  useDynLib(rgl)

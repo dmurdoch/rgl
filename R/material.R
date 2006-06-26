@@ -27,7 +27,8 @@ rgl.material <- function (
   front        = "fill", 
   back         = "fill",
   size         = 1.0, 
-  fog          = TRUE
+  fog          = TRUE,
+  ...
 ) {
   # solid or diffuse component
 

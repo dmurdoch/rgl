@@ -78,7 +78,7 @@ if (require(MASS)) {
   
   plot3d(x, size=3, box=FALSE)
   
-  shade3d( ellipse3d(Sigma, centre=Mean), col="green", alpha=0.5)
+  plot3d( ellipse3d(Sigma, centre=Mean), col="green", alpha=0.5, add = TRUE)
 }  
 
 # Plot the estimate and joint 90\% confidence region for the displacement and cylinder
@@ -88,10 +88,6 @@ data(mtcars)
 fit <- lm(mpg ~ disp + cyl , mtcars)
 
 open3d()
-shade3d(ellipse3d(fit, level = 0.90), col="blue", alpha=0.5)
-aspect3d(1)
-axes3d()
-nm <- names(coefficients(fit))
-title3d(xlab = nm[1], ylab = nm[2], zlab = nm[3])
+plot3d(ellipse3d(fit, level = 0.90), col="blue", alpha=0.5, aspect=TRUE)
 }
 \keyword{dplot}
