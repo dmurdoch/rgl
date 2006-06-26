@@ -33,7 +33,7 @@
   )
   
   if (!ret$success) {
-    stop("error rgl_init")
+    warning("error in rgl_init")
   }
   
 }

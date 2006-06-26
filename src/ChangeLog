@@ -143,4 +143,6 @@ v0.66-2
   - changed error messages to go through REprintf in X11 and OSX
   - fixed segfault if rgl_init failed
   - converted type of viewport arg in user2window and window2user calls
+  - if the rgl_init call fails, the package will still load with a warning (but
+    most function calls will result in errors).
   
