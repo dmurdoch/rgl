@@ -414,8 +414,10 @@ X11GUIFactory::~X11GUIFactory()
 void X11GUIFactory::disconnect()
 {
   // process pending XDestroyNotify events
-  XSync(xdisplay, False);
-  processEvents();
+  if (xdisplay) {
+    XSync(xdisplay, False);
+    processEvents();
+  }
 
   // free XVisualInfo structure
   if (xvisualinfo) {

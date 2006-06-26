@@ -94,10 +94,10 @@ void quit()
 // printMessage
 //
 
-#include <stdio.h>
+#include <R.h>
 
 void printMessage( const char* string ) {
-  fprintf(stderr, "RGL: %s\n", string);
+  REprintf("RGL: %s\n", string);
 }
 
 //

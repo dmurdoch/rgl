@@ -140,4 +140,7 @@ v0.66-2
   - added aspect3d to control the aspect ratio of the bounding box.
   - added xAxis, yAxis and zAxis mouse modes, set zAxis as r3d default.
   - added persp3d function
+  - changed error messages to go through REprintf in X11 and OSX
+  - fixed segfault if rgl_init failed
+  - converted type of viewport arg in user2window and window2user calls
   
