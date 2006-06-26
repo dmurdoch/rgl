@@ -52,6 +52,15 @@ ARCHIVE
 some additions
 ==============
 
+ellipse3d with interface like ellipse from package ellipse -- done
+
+round points
+
+plane3d function
+
+truncation within viewing region
+
+fix boxes and scaling so they adapt to scale changes
 
 
 

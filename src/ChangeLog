@@ -146,4 +146,5 @@ v0.66-2
   - if the rgl_init call fails, the package will still load with a warning (but
     most function calls will result in errors).
   - added par3d("scale") to handle aspect3d operations internally.
+  - added ellipse3d() generic and methods for drawing confidence ellipsoids
   

@@ -174,11 +174,11 @@ particles3d <- function(x,y=NULL,z=NULL,radius=1,...) sprites3d(
 
 # r3d default settings for new windows
 
-r3dDefaults <- list(userMatrix = rotationMatrix(5, 1, 0, 0),
-		  mouseMode = c("zAxis", "zoom", "fov"),
+r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
+		  mouseMode = c("trackball", "zoom", "fov"),
 		  FOV = 30,
-		  bg = list(color="black"),
-		  material = list(color="white", fog=FALSE))
+		  bg = list(color="white"),
+		  material = list(color="black", fog=FALSE))
 
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {

@@ -1,74 +1,4 @@
 
-axis3d <- function(side=1:3,at,lim,labels,arrow=FALSE,arrow.type=c("arrow","cone"),
-                     x,y,z,lwd=1,
-                     alen=0.05,awid=0.01,...) {
-  ## wishlist: ticktypes, labels in margins, ticks,
-  ## choice of which side to put axes on (front/back/etc.)
-  if ((!missing(at) || !missing(labels) || !missing(lim)) &&
-      length(side)>1)
-    warning("at/labels/lim will be identical for all axes")
-  arrow.type <- match.arg(arrow.type)
-  bbox <- par3d("bbox")
-  if (missing(x)) x <- bbox[1]
-  if (missing(y)) y <- bbox[3]
-  if (missing(z)) z <- bbox[5]
-  ## mgp <- par("mgp")  ## turns on 2D graphics window! not used yet ...
-  if (missing(lim)) lim <- NULL
-  if (missing(at)) at <- NULL
-  if (missing(labels)) labels <- "auto"
-  tmpf <- function(s) {
-    if (is.null(lim)) {
-      if (is.null(at)) lim1 <- bbox[2*s+c(-1,0)] else
-      lim1 <- range(at)
-    } else lim1 <- lim
-    if (is.null(at)) {
-      at1 <- pretty(lim1)
-      at1 <- at1[at1>=min(lim1) & at1<=max(lim1)]
-    } else at1 <- at
-    if (identical(labels,"auto")) labels1 <- as.character(at1) else labels1 <- labels
-    diffs <- bbox[c(2,4,6)]-bbox[c(1,3,5)]
-    switch(s,
-           ## x (side==1)
-         {lines3d(lim1,rep(y,2),rep(z,2),size=lwd,...)
-          if (!is.null(labels1))
-            text3d(at1,y,z,labels1,...)
-          if (arrow) {
-            if (arrow.type=="arrow") { triangles3d(lim1[2]+c(0,1,0)*alen*diffs[1],
-                         y+c(-1,0,1)*awid*diffs[2],
-                         z+c(-1,0,1)*awid*diffs[3],lit=FALSE,...)
-            } else {
-              cone3d(base=c(lim1[2],y,z),tip=c(lim1[2]+alen*diffs[1],y,z),
-                       rad=awid*diffs[2],lit=FALSE,...)
-            }}},
-           ## y (side==2)
-         {lines3d(rep(x,2),lim1,rep(z,2),size=lwd,...)
-          if (!is.null(labels1))
-            text3d(x,at1,z,labels1,...)
-          if (arrow) {
-            if (arrow.type=="arrow") { triangles3d(x+c(-1,0,1)*awid*diffs[1],
-                         lim1[2]+c(0,1,0)*alen*diffs[2],
-                         z+c(-1,0,1)*awid*diffs[3],lit=FALSE,...)
-            } else {
-              cone3d(base=c(x,lim1[2],z),tip=c(x,lim1[2]+alen*diffs[2],z),
-                       rad=awid*diffs[1],lit=FALSE,...)
-            }}},             
-           ## z (side==3)
-         { lines3d(rep(x,2),rep(y,2),size=lwd,lim1,...)
-           if (!is.null(labels1))
-             text3d(x,y,at1,labels1,...)
-           if (arrow) {
-             if (arrow.type=="arrow") { triangles3d(x+c(-1,0,1)*awid*diffs[1],
-                   y+c(-1,0,1)*awid*diffs[2],
-                   lim1[2]+c(0,1,0)*alen*diffs[3],lit=FALSE,...)
-             } else {
-               cone3d(base=c(x,y,lim1[2]),tip=c(x,y,lim1[2]+alen*diffs[2]),
-                        rad=awid*diffs[1],lit=FALSE,...)
-             }}})
-  }
-  invisible(sapply(side,tmpf))
-}
-
-
 cone3d <- function(base=c(0,0,0),tip=c(0,0,1),rad=1,n=30,draw.base=TRUE,qmesh=FALSE,
                    trans = par3d("userMatrix"), ...) {
   ax <- tip-base
@@ -162,7 +92,7 @@ dot3d(translate3d(scale3d(q1,2,1,1),0,6,0),col="green")
 shade3d(translate3d(q1,0,0,3),col="red")
 shade3d(translate3d(rotate3d(scale3d(q1,1,1,2),pi/4,0,1,0),0,0,6),col="red")
 
-axis3d()
+axes3d()
 clear3d("all")
 light3d()
 
@@ -177,4 +107,4 @@ dot3d(translate3d(scale3d(s1,2,1,1),0,6,0),col="green")
 shade3d(translate3d(s1,0,0,3),col="red")
 shade3d(translate3d(rotate3d(scale3d(s1,1,1,2),pi/4,0,1,0),0,0,6),col="red")
 
-axis3d()
+axes3d()
