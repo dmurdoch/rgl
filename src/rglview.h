@@ -84,7 +84,7 @@ private:
   void oneAxisUpdate(int mouseX, int mouseY);  
 
   PolarCoord camBase, dragBase, dragCurrent;
-  Vertex rotBase, rotCurrent, axis;
+  Vertex rotBase, rotCurrent, axis[3];
 
 
 // o DRAG FEATURE: adjustZoom
