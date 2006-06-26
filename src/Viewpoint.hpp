@@ -14,8 +14,8 @@ class Viewpoint : public SceneNode
 
 public:
 
-  Viewpoint(PolarCoord position=PolarCoord(0.0f,15.0f), float fov=90.0f, float zoom=0.0f, bool interactive=true);
-  Viewpoint(double* userMatrix, float fov=90.0f, float zoom=0.0f, bool interactive=true);
+  Viewpoint(PolarCoord position=PolarCoord(0.0f,15.0f), float fov=90.0f, float zoom=0.0f, Vec3 in_scale=Vec3(1.0f, 1.0f, 1.0f), bool interactive=true);
+  Viewpoint(double* userMatrix, float fov=90.0f, float zoom=0.0f, Vec3 in_scale=Vec3(1.0f, 1.0f, 1.0f), bool interactive=true);
   PolarCoord& getPosition();
   void        setPosition(const PolarCoord& position);
   void	      clearMouseMatrix();
@@ -33,6 +33,8 @@ public:
   void 	      mergeMouseMatrix();
   void        getUserMatrix(double* dest);
   void	      setUserMatrix(double* src);
+  void	      getScale(double* dest);
+  void	      setScale(double* src);
   Frustum     frustum;
   Vertex      getCOP(const Sphere& viewvolumeSphere) const;
 
@@ -42,7 +44,7 @@ private:
   float       zoom;
   bool        interactive;
   GLdouble    userMatrix[16], mouseMatrix[16];
-
+  GLdouble    scale[3];
 };
 
 #endif // VIEWPOINT_HPP

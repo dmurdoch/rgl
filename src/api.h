@@ -76,6 +76,8 @@ EXPORT_SYMBOL void rgl_selectstate(int* successptr, int* selectstate, double* lo
 EXPORT_SYMBOL void rgl_setselectstate(int* successptr, int *idata);
 EXPORT_SYMBOL void rgl_getUserMatrix(int* successptr, double* userMatrix);
 EXPORT_SYMBOL void rgl_setUserMatrix(int* successptr, double* userMatrix);
+EXPORT_SYMBOL void rgl_getScale(int* successptr, double* scale);
+EXPORT_SYMBOL void rgl_setScale(int* successptr, double* scale);
 EXPORT_SYMBOL void rgl_getZoom(int* successptr, double* zoom);
 EXPORT_SYMBOL void rgl_setZoom(int* successptr, double* zoom);
 EXPORT_SYMBOL void rgl_getFOV(int* successptr, double* fov);

@@ -145,4 +145,5 @@ v0.66-2
   - converted type of viewport arg in user2window and window2user calls
   - if the rgl_init call fails, the package will still load with a warning (but
     most function calls will result in errors).
+  - added par3d("scale") to handle aspect3d operations internally.
   

@@ -292,12 +292,13 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
     float phi	      = static_cast<float>( ddata[1] );
     float fov         = static_cast<float>( ddata[2] );
     float zoom        = static_cast<float>( ddata[3] - 1.0 )/static_cast<float>(VIEWPOINT_MAX_ZOOM-1);
-
+    Vec3  scale       = Vec3( ddata[4], ddata[5], ddata[6] );
+    
     int   interactive = idata[0];
     int   polar       = idata[1];
     
-    if (polar) success = as_success( device->add( new Viewpoint(PolarCoord(theta, phi), fov, zoom, interactive) ) );
-    else       success = as_success( device->add( new Viewpoint(ddata + 4, fov, zoom, interactive) ) );
+    if (polar) success = as_success( device->add( new Viewpoint(PolarCoord(theta, phi), fov, zoom, scale, interactive) ) );
+    else       success = as_success( device->add( new Viewpoint(ddata + 7, fov, zoom, scale, interactive) ) );
 
   }
 
@@ -843,6 +844,42 @@ void rgl_setUserMatrix(int* successptr, double* userMatrix)
 
 		RGLView* rglview = device->getRGLView();
 		rglview->setUserMatrix(userMatrix);
+
+		success = RGL_SUCCESS;
+
+  	}
+
+  *successptr = success;
+
+}
+
+void rgl_getScale(int* successptr, double* scale)
+{
+	int success = RGL_FAIL;
+  	Device* device = deviceManager->getAnyDevice();
+
+  	if (device) {
+
+		RGLView* rglview = device->getRGLView();
+		rglview->getScale(scale);
+
+    	success = RGL_SUCCESS;
+
+  	}
+
+  *successptr = success;
+}
+
+void rgl_setScale(int* successptr, double* scale)
+{
+
+	int success = RGL_FAIL;
+  	Device* device = deviceManager->getAnyDevice();
+
+  	if (device) {
+
+		RGLView* rglview = device->getRGLView();
+		rglview->setScale(scale);
 
 		success = RGL_SUCCESS;
 
