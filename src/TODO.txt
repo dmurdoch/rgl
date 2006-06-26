@@ -62,7 +62,7 @@ truncation within viewing region
 
 fix boxes and scaling so they adapt to scale changes
 
-
+R functions as mouse actions
 
 
 

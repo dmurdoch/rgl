@@ -93,12 +93,10 @@ void Viewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 
   // zoom
 
-  float factor = 1.0f/(1.0f+zoom* ((float)(VIEWPOINT_MAX_ZOOM-1)) );
-
-  frustum.left *= factor;
-  frustum.right *= factor;
-  frustum.bottom *= factor;
-  frustum.top *= factor;
+  frustum.left *= zoom;
+  frustum.right *= zoom;
+  frustum.bottom *= zoom;
+  frustum.top *= zoom;
 }
 
 void Viewpoint::setupOrientation(RenderContext* rctx) const
