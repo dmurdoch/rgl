@@ -10,8 +10,7 @@ persp3d(x, \dots)
 
 \method{persp3d}{default}(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     z, xlim = range(x), ylim = range(y), zlim = range(z, na.rm = TRUE),
-    xlab = NULL, ylab = NULL, zlab = NULL, main = NULL, sub = NULL, box = TRUE, axes = TRUE,
-    top = TRUE, add = FALSE, aspect = !add, ...)
+    xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, ...)
 }
 \arguments{
   \item{x, y}{locations of grid lines at which the values in \code{z} are
@@ -27,17 +26,11 @@ persp3d(x, \dots)
   \item{xlab, ylab, zlab}{titles for the axes.  N.B. These must be
     character strings; expressions are not accepted.  Numbers will be
     coerced to character strings.}
-  \item{main, sub}{main and sub title, as for \code{\link{title}}.}
-  \item{box}{should the bounding box for the surface be displayed.
-    The default is \code{TRUE}.}
-  \item{axes}{should ticks and labels be added to the box.  The
-    default is \code{TRUE}.  If \code{box} is \code{FALSE} then no
-    ticks or labels are drawn.}
-  \item{top}{whether to bring the window to the top when done.}
   \item{add}{whether to add the points to an existing plot.}    
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio}
     
-  \item{\dots}{additional material parameters to be passed to \code{\link{surface3d}}.}
+  \item{\dots}{additional material parameters to be passed to \code{\link{surface3d}}
+  and \code{\link{decorate3d}}.}
 }
 \details{
   This is similar to \code{\link{persp}} with user interaction.  See \code{\link{plot3d}}

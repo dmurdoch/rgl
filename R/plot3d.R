@@ -2,20 +2,13 @@ plot3d <- function(x, ...) UseMethod("plot3d")
 
 
 plot3d.default <- function(x, y = NULL, z = NULL, 
-        xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zlim, 
-	xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', col = material3d("color")[1], 
-	box = TRUE, axes = TRUE, add = FALSE, main = NULL, sub = NULL,
-	top = TRUE, aspect = !add, ...)
+        xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', 
+        col = material3d("color")[1], add = FALSE, aspect = !add, ...)
 {
     if (!add) clear3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
      	
-    if (is.logical(aspect)) {
-    	autoscale <- aspect
-    	aspect <- c(1,1,1)
-    } else autoscale <- TRUE
-    
     xlabel <- if (!missing(x)) deparse(substitute(x))
     ylabel <- if (!missing(y)) deparse(substitute(y))
     zlabel <- if (!missing(z)) deparse(substitute(z))
@@ -41,6 +34,37 @@ plot3d.default <- function(x, y = NULL, z = NULL,
                                  rep(range(y), c(2,2)),
                                  rep(range(z), c(2,2)))
 	)
+    if (!add) decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, ...)
+}
+
+plot3d.qmesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
+	add = FALSE, ...)
+{
+    if (!add) clear3d()
+    skip <- par3d(skipRedraw=TRUE)
+    on.exit(par3d(skip))
+    
+    if (missing(xlab) && !is.null(x$xlab)) xlab <- x$xlab
+    if (missing(ylab) && !is.null(x$ylab)) ylab <- x$ylab
+    if (missing(zlab) && !is.null(x$zlab)) zlab <- x$zlab
+    
+    switch(match.arg(type),
+    	shade = shade3d(x, ...),
+    	wire = wire3d(x, ...),
+    	dots = dot3d(x, ...))
+    
+    if (!add) decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, ...)
+}
+
+decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zlim, 
+	xlab = "x", ylab = "y", zlab = "z", 
+	box = TRUE, axes = TRUE, main = NULL, sub = NULL,
+	top = TRUE, aspect = FALSE, ...) {
+
+    if (is.logical(aspect)) {
+    	autoscale <- aspect
+    	aspect <- c(1,1,1)
+    } else autoscale <- TRUE	
 
     ranges <- par3d('bbox')
     if (!missing(xlim)) ranges[1:2] <- xlim
@@ -51,12 +75,11 @@ plot3d.default <- function(x, y = NULL, z = NULL,
 	    segments3d(matrix(ranges[rep(1:6, rep(2,6))], 4, 3))
     }
     
-    if (!add) {
-    	if (axes) axes3d()
-	if (box) box3d()
-	title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
-		main = main, sub = sub)
-    }
+    if (axes) axes3d()
+    if (box) box3d()
+    title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
+	    main = main, sub = sub)
+   
     if (autoscale) aspect3d(aspect)
     
     if (top) rgl.bringtotop()

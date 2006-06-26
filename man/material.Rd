@@ -24,7 +24,8 @@ rgl.material(
   front        = "fill", 
   back         = "fill",
   size         = 1.0, 
-  fog          = TRUE
+  fog          = TRUE, 
+  ...
 )
 material3d(...)
 }
@@ -108,6 +109,8 @@ they will be left unchanged.  \code{material3d} may also be used to query the ma
 properties; see the examples below.
 
   The current implementation does not return parameters for textures.
+  
+  The \code{...} parameter to \code{rgl.material} is ignored.
 }
 \seealso{
 \code{\link{rgl.primitive}},

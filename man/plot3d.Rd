@@ -1,39 +1,51 @@
 \name{plot3d}
 \alias{plot3d}
 \alias{plot3d.default}
+\alias{plot3d.qmesh3d}
+\alias{decorate3d}
 \title{3D Scatterplot}
 \description{
 Draws a 3D scatterplot.
 }
 \usage{
 plot3d(x, ...)
-\method{plot3d}{default}(x, y, z, xlim, ylim, zlim, 
-	xlab, ylab, zlab, type = 'p', col,  
-	box, axes = TRUE, add = FALSE, main, sub, 
-	top = TRUE, aspect = !add, ...)
+\method{plot3d}{default}(x, y, z,  
+	xlab, ylab, zlab, type = "p", col,  
+	add = FALSE, aspect = !add, ...)
+\method{plot3d}{qmesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
+	add = FALSE, ...)	
+decorate3d(xlim, ylim, zlim, 
+	xlab = "x", ylab = "y", zlab = "z", 
+	box = TRUE, axes = TRUE, main = NULL, sub = NULL,
+	top = TRUE, aspect = FALSE, ...)
 }
 \arguments{
   \item{x, y, z}{vectors of points to be plotted. Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
-  \item{xlim, ylim, zlim}{limits to use for the coordinates.}
   \item{xlab, ylab, zlab}{labels for the coordinates.}
-  \item{type}{a single character indicating the type of item to plot.  
-  Supported types are: 'p' for points, 'l' for lines, 'h' for line segments
-  from \code{z=0}, and 'n' for nothing.}
-  \item{main, sub}{main title and subtitle.}
+  \item{type}{For the default method, a single character indicating the type of item to plot.  
+  Supported types are: 'p' for points, 'l' for lines, 'h' for line segments 
+  from \code{z=0}, and 'n' for nothing.  For the \code{qmesh3d} method, one of 
+  'shade', 'wire', or 'dots'.  Partial matching is used.
+  }
   \item{col}{the colour to be used for plotted items.}
-  \item{box, axes}{whether to draw a box and axes.}
   \item{add}{whether to add the points to an existing plot.}
-  \item{top}{whether to bring the window to the top when done.}
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio.}
-  \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}.}
+  \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}, \code{\link{material3d}}
+  or \code{decorate3d}.}
+  \item{xlim, ylim, zlim}{limits to use for the coordinates.}
+  \item{box, axes}{whether to draw a box and axes.}
+  \item{main, sub}{main title and subtitle.}
+  \item{top}{whether to bring the window to the top when done.}
 }
 \value{
-  This function is called for the side effect of drawing the plot; no useful value is returned.
+  \code{plot3d} is called for the side effect of drawing the plot; no useful value is returned.
+  
+  \code{decorate3d} adds the usual decorations to a plot:  labels, axes, etc.
 }
 \details{
-This is a partial 3D analogue of plot.default.
+\code{plot3d} is a partial 3D analogue of plot.default.
 
 Note that since \code{rgl} does not currently support
 clipping, all points will be plotted, and \code{xlim}, \code{ylim}, and \code{zlim}
