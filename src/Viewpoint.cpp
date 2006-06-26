@@ -143,6 +143,19 @@ void Viewpoint::updateMouseMatrix(PolarCoord newpos)
     M.getData((double*)mouseMatrix);
 }
 
+void Viewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axis)
+{
+    float angle = math::rad2deg(dragCurrent.x-dragStart.x);
+    Matrix4x4 M((double *)userMatrix);
+    Vec4 v = M * Vec4(axis.x, axis.y, axis.z);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glRotatef((GLfloat)angle, (GLfloat)v.x/v.w, (GLfloat)v.y/v.w, (GLfloat)v.z/v.w);
+    glGetDoublev(GL_MODELVIEW_MATRIX,mouseMatrix);
+    glPopMatrix();
+}
+
 void Viewpoint::mergeMouseMatrix()
 {
     Matrix4x4 M((double *)userMatrix), N((double *)mouseMatrix);

@@ -15,7 +15,7 @@
 
 using namespace gui;
 
-enum MouseModeID {mmTRACKBALL = 1, mmPOLAR, mmSELECTING, mmZOOM, mmFOV};
+enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, mmSELECTING, mmZOOM, mmFOV};
 enum MouseSelectionID {msNONE=1, msCHANGING, msDONE};
 
 class RGLView : public View
@@ -79,9 +79,12 @@ private:
   void trackballBegin(int mouseX, int mouseY);
   void trackballUpdate(int mouseX, int mouseY);
   void trackballEnd();
+  
+  void oneAxisBegin(int mouseX, int mouseY);
+  void oneAxisUpdate(int mouseX, int mouseY);  
 
   PolarCoord camBase, dragBase, dragCurrent;
-  Vertex rotBase, rotCurrent;
+  Vertex rotBase, rotCurrent, axis;
 
 
 // o DRAG FEATURE: adjustZoom

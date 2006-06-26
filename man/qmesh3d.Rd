@@ -52,7 +52,8 @@
      -1.0,  1.0, 0, 1.0
   )
   indices <- c( 1, 2, 3, 4 )
-  clear3d()  
+  
+  open3d()  
   wire3d( qmesh3d(vertices,indices) )
   
   # render 4 meshes vertically in the current view
