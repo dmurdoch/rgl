@@ -192,13 +192,13 @@ static SEXP Query(char *what)
     	PROTECT(value = allocVector(STRSXP, 3));
     	for (i=1; i<4; i++) {
 	    rgl_getMouseMode(&success, &i, &mode); 
-	    if (mode < 0 || mode > 5) mode = 0;
+	    if (mode < 0 || mode > mmLAST) mode = 0;
 	    SET_STRING_ELT(value, i-1, mkChar(mouseModes[mode]));
     	};    
     	PROTECT(names = allocVector(STRSXP, 3));
     	SET_STRING_ELT(names, 0, mkChar("left"));
-    	SET_STRING_ELT(names, 1, mkChar("middle"));  
-    	SET_STRING_ELT(names, 2, mkChar("right"));
+    	SET_STRING_ELT(names, 1, mkChar("right"));  
+    	SET_STRING_ELT(names, 2, mkChar("middle"));
     	UNPROTECT(2);
     	value = namesgets(value, names);
     	success = 1;
