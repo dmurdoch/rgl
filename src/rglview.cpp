@@ -548,6 +548,23 @@ void RGLView::setUserMatrix(double* src)
 	View::update();
 }
 
+void RGLView::getScale(double* dest)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+	
+	viewpoint->getScale(dest);
+}
+
+void RGLView::setScale(double* src)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+	viewpoint->setScale(src);
+
+	View::update();
+}
+
+
 void RGLView::setDefaultMouseFunc()
 {
     setMouseMode(1, mmPOLAR);

@@ -151,6 +151,12 @@ static void Specify(char *what, SEXP value)
 	
 	rgl_setUserMatrix(&success, REAL(x));
     }
+    else if (streql(what, "scale")) {
+	lengthCheck(what, value, 3);
+	x = coerceVector(value, REALSXP);
+	
+	rgl_setScale(&success, REAL(x));
+    }    
     else if (streql(what, "zoom")) {
     	lengthCheck(what, value, 1);	v = asReal(value);
 	posRealCheck(v, what);
@@ -214,6 +220,10 @@ static SEXP Query(char *what)
     else if (streql(what, "userMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
 	rgl_getUserMatrix(&success, REAL(value));
+    }
+    else if (streql(what, "scale")) {
+        value = allocVector(REALSXP, 3);
+        rgl_getScale(&success, REAL(value));
     }
     else if (streql(what, "viewport")) {
 	value = allocVector(INTSXP, 4);

@@ -67,7 +67,8 @@ rgl.pop <- function( type = "shapes" )
 ##
 ##
 
-rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, interactive = TRUE, userMatrix )
+rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scale = par3d("scale"),
+                           interactive = TRUE, userMatrix )
 {
   zoom <- rgl.clamp(zoom,0,Inf)
   phi  <- rgl.clamp(phi,-90,90)
@@ -77,7 +78,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, inte
   if (polar) userMatrix <- diag(4)
   
   idata <- as.integer(c(interactive,polar))
-  ddata <- as.numeric(c(theta,phi,fov,zoom,userMatrix[1:16]))
+  ddata <- as.numeric(c(theta,phi,fov,zoom,scale,userMatrix[1:16]))
 
   ret <- .C( "rgl_viewpoint",
     success=FALSE,

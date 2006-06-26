@@ -45,7 +45,9 @@ public:
   double*     getMousePosition();
   void        getUserMatrix(double* dest);
   void        setUserMatrix(double* src);
-  
+  void        getScale(double* dest);
+  void        setScale(double* src);
+
   // These are set after rendering the scene
   GLdouble modelMatrix[16], projMatrix[16];
   GLint viewport[4];
