@@ -680,12 +680,14 @@ void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, 
   int success = RGL_FAIL;
   GLdouble* vertex = pixel;
   int columns = idata[0];
+  GLint viewport[4];
 
   Device* device = deviceManager->getAnyDevice();
 
   if ( device ) {
+  	for (int i=0; i<4; i++) viewport[i] = view[i];
   	for (int i=0; i<columns; i++) {
-		gluProject(point[0],point[1],point[2],model,proj,view,
+		gluProject(point[0],point[1],point[2],model,proj,viewport,
 		vertex,vertex+1,vertex+2);
 		vertex[0] /= view[2];
 		vertex[1] /= view[3];
@@ -703,14 +705,16 @@ void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, 
   int success = RGL_FAIL;
   GLdouble* vertex = point;
   int columns = idata[0];
+  GLint viewport[4];
 
   Device* device = deviceManager->getAnyDevice();
 
   if ( device ) {
+    	for (int i=0; i<4; i++) viewport[i] = view[i];
   	for (int i=0; i<columns; i++) {
 	        pixel[0] *= view[2];
 	        pixel[1] *= view[3];
-		gluUnProject(pixel[0],pixel[1],pixel[2],model,proj,view,
+		gluUnProject(pixel[0],pixel[1],pixel[2],model,proj,viewport,
 		vertex,vertex+1,vertex+2);
 		pixel += 3;
 		vertex += 3;
