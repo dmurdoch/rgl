@@ -116,7 +116,7 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   }
 }
 
-\details{
+\section{note}{
 The \code{"xAxis"}, \code{"yAxis"} and \code{"zAxis"} mouse modes rotate relative to the coordinate
 system of the data, regardless of the current orientation of the scene.
 }
