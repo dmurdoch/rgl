@@ -29,6 +29,7 @@ public:
   bool        isInteractive() const;
   void        updateMouseMatrix(Vertex dragStart,Vertex dragCurrent);
   void	      updateMouseMatrix(PolarCoord newpos);
+  void	      mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axis);
   void 	      mergeMouseMatrix();
   void        getUserMatrix(double* dest);
   void	      setUserMatrix(double* src);

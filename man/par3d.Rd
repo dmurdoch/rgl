@@ -51,7 +51,7 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   values for parameters.  As installed this sets the point of view to
   'world coordinates' (i.e. x running from left to right, y from front
   to back, z from bottom to top), the \code{mouseMode} to
-  \code{(trackball, zoom, fov)}, and the field of view to 30 degrees.
+  \code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.
   Users may create their own variable of that name in the global
   environment and it will override the installed one.  If there
   is a \code{bg} element in the list or the arguments, it should be
@@ -91,6 +91,9 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
 	\describe{
 	 \item{\code{"none"}}{No action for this button.}
 	 \item{\code{"trackball"}}{Mouse acts as a virtual trackball, rotating the scene.}
+	 \item{\code{"xAxis"}}{Similar to \code{"trackball"}, but restricted to X axis rotation.}
+	 \item{\code{"yAxis"}}{Y axis rotation.}
+	 \item{\code{"zAxis"}}{Z axis rotation.}
 	 \item{\code{"polar"}}{Mouse rotates the scene by moving in polar coordinates.}
 	 \item{\code{"selecting"}}{Mouse is used for selection.  This is not normally set by the
 	 user, but is used internally by the \code{\link{select3d}} function.}

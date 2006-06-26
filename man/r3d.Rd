@@ -48,7 +48,7 @@
   be rotated into the other one.  
   
   Another difference is that the r3d functions change the mouse mode
-  to use a 'trackball' on the left mouse button.
+  to use 'zAxis' rotation on the left mouse button.
   
   The r3d functions also preserve the \code{rgl.material} setting across
   calls (except for texture elements, in the current implementation), whereas

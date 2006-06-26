@@ -285,6 +285,24 @@ void RGLView::trackballEnd()
     viewpoint->mergeMouseMatrix();
 }
 
+void RGLView::oneAxisBegin(int mouseX, int mouseY)
+{
+	rotBase = screenToVector(width,height,mouseX,height/2);
+}
+
+void RGLView::oneAxisUpdate(int mouseX, int mouseY)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+  	rotCurrent = screenToVector(width,height,mouseX,height/2);
+
+	windowImpl->beginGL();
+	viewpoint->mouseOneAxis(rotBase,rotCurrent,axis);
+	windowImpl->endGL();
+
+	View::update();
+}
+
 void RGLView::polarBegin(int mouseX, int mouseY)
 {
 	Viewpoint* viewpoint = scene->getViewpoint();
@@ -434,6 +452,16 @@ void RGLView::setMouseMode(int button, MouseModeID mode)
 	    	ButtonUpdateFunc[index] = &RGLView::trackballUpdate;
 	    	ButtonEndFunc[index] = &RGLView::trackballEnd;
 	    	break;
+	    case mmXAXIS:
+	    case mmYAXIS:
+	    case mmZAXIS:
+	    	ButtonBeginFunc[index] = &RGLView::oneAxisBegin;
+	    	ButtonUpdateFunc[index] = &RGLView::oneAxisUpdate;
+	    	ButtonEndFunc[index] = &RGLView::trackballEnd; // No need for separate function
+	    	if (mode == mmXAXIS)      axis = Vertex(1,0,0);
+	    	else if (mode == mmYAXIS) axis = Vertex(0,1,0);
+	    	else                      axis = Vertex(0,0,1);
+	    	break;	    	
 	    case mmPOLAR:
  	    	ButtonBeginFunc[index] = &RGLView::polarBegin;
 	    	ButtonUpdateFunc[index] = &RGLView::polarUpdate;

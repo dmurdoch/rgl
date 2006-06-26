@@ -90,7 +90,8 @@ static void BoundsCheck(double x, double a, double b, char *s)
 
 /* These modes must match the definitions of mmTRACKBALL etc in rglview.h ! */ 
 
-char* mouseModes[] = {"none", "trackball", "polar", "selecting", "zoom", "fov"};
+char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov"};
+#define mmLAST 9
 
 static void Specify(char *what, SEXP value)
 {
@@ -122,14 +123,14 @@ static void Specify(char *what, SEXP value)
             if (STRING_ELT(value, i-1) != NA_STRING) {
 		success = 0;
 		/* check exact first, then partial */
-		for (int mode = 0; mode < 6; mode++) {
+		for (int mode = 0; mode < mmLAST; mode++) {
 		    if (psmatch(mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)TRUE)) {
 			rgl_setMouseMode(&success, &i, &mode);
 			break;
 		    }
 		}
 		if (!success) {
-		    for (int mode = 0; mode < 6; mode++) {
+		    for (int mode = 0; mode < mmLAST; mode++) {
 			if (psmatch(mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)FALSE)) {
 			    rgl_setMouseMode(&success, &i, &mode);
 			    break;
