@@ -116,6 +116,11 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   }
 }
 
+\details{
+The \code{"xAxis"}, \code{"yAxis"} and \code{"zAxis"} mouse modes rotate relative to the coordinate
+system of the data, regardless of the current orientation of the scene.
+}
+
 \section{Rendering}{
 The parameters returned by \code{par3d} are sufficient to determine where rgl would render
 a point on the screen.  Given a column vector \code{(x,y,z)}, it performs the equivalent of 

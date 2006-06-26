@@ -27,7 +27,7 @@
     }
   }
 	
-  ret <- .C( symbol.C("rgl_init"), 
+  ret <- .C( "rgl_init", 
     success=FALSE , 
     PACKAGE="rgl"
   )
@@ -48,7 +48,7 @@
 { 
   # shutdown
   
-  ret <- .C( symbol.C("rgl_quit"), success=FALSE, PACKAGE="rgl" )
+  ret <- .C( "rgl_quit", success=FALSE, PACKAGE="rgl" )
   
 }
 
