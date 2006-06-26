@@ -291,7 +291,7 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
     float theta	      = static_cast<float>( ddata[0] );
     float phi	      = static_cast<float>( ddata[1] );
     float fov         = static_cast<float>( ddata[2] );
-    float zoom        = static_cast<float>( ddata[3] - 1.0 )/static_cast<float>(VIEWPOINT_MAX_ZOOM-1);
+    float zoom        = static_cast<float>( ddata[3] );
     Vec3  scale       = Vec3( ddata[4], ddata[5], ddata[6] );
     
     int   interactive = idata[0];
@@ -316,7 +316,6 @@ void rgl_getZoom(int* successptr, double* zoom)
     Scene* scene = rglview->getScene();
     Viewpoint* viewpoint = scene->getViewpoint();
     *zoom = viewpoint->getZoom();
-    *zoom = 1.0f+(*zoom)* ((float)(VIEWPOINT_MAX_ZOOM-1)) ;
     success = RGL_SUCCESS;
   }
   *successptr = success;
@@ -332,7 +331,7 @@ void rgl_setZoom(int* successptr, double* zoom)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     Viewpoint* viewpoint = scene->getViewpoint();
-    viewpoint->setZoom((*zoom - 1.0f)/((float)(VIEWPOINT_MAX_ZOOM-1)));
+    viewpoint->setZoom( *zoom );
     rglview->update();
     success = RGL_SUCCESS;
   }

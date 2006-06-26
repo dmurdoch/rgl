@@ -17,8 +17,8 @@
 // CAMERA config
 //
 
-#define ZOOM_MIN  0.0f
-#define ZOOM_MAX  1.0f
+#define ZOOM_MIN  0.0001f
+#define ZOOM_MAX  10000.0f
 
 
 RGLView::RGLView(Scene* in_scene)
@@ -64,7 +64,7 @@ void RGLView::resize(int width, int height) {
 
   renderContext.rect.width = width;
   renderContext.rect.height = height;
-
+  if (drag) captureLost();
 }
 
 void RGLView::paint(void) {
@@ -150,15 +150,16 @@ void RGLView::wheelRotate(int dir)
   
   float zoom = viewpoint->getZoom();
 
-#define ZOOM_STEP   ((ZOOM_MAX - ZOOM_MIN) / 10)
+#define ZOOM_STEP  1.05f 
+#define ZOOM_PIXELLOGSTEP 0.02f
   
   switch(dir)
   {
     case GUI_WheelForward:
-      zoom += ZOOM_STEP;
+      zoom *= ZOOM_STEP;
       break;
     case GUI_WheelBackward:
-      zoom -= ZOOM_STEP;
+      zoom /= ZOOM_STEP;
       break;
   }
 
@@ -388,9 +389,7 @@ void RGLView::adjustZoomUpdate(int mouseX, int mouseY)
 
   int dy = mouseY - zoomBaseY;
 
-  float py = (float)dy/(float)height;
-
-  float zoom = clamp ( viewpoint->getZoom() + ( -py * ZOOM_MAX ), ZOOM_MIN, ZOOM_MAX);
+  float zoom = clamp ( viewpoint->getZoom() * exp(-dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
   viewpoint->setZoom(zoom);
 
   View::update();
