@@ -126,7 +126,7 @@ v0.66
   - fixed display list memory leak when drawing shapes (e.g. spheres)
   - Changes for compatibility with strict enforcement of file naming rules in R 2.3.0.
 
-v0.66 unreleased revisions
+v0.67
   - added support for png files with palettes, and grayscale pngs with 1, 2 or 4 bits 
     per pixel
   - added "ignoreExtent" option to par3d:  objects plotted when this is true
