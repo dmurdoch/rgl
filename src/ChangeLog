@@ -151,3 +151,6 @@ v0.67
   - changed zoom to use ratio scale over larger range
   - fixed bug causing jump after resize in Mac OSX (and maybe other platforms)  
   - rgl.primitive now does sanity checks on inputs
+
+v0.67-2
+  - typo correction
