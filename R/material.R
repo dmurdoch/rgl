@@ -107,7 +107,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
     PACKAGE="rgl"
   )
   
-  if (!ret$success) error('rgl.getmaterial')
+  if (!ret$success) stop('rgl.getmaterial')
   
   polymodes = c("filled", "lines", "points", "culled")
   
