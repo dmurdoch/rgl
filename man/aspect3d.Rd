@@ -21,15 +21,13 @@ coordinates should all be displayed at the same scale, i.e. the bounding box sho
 rescaled.  (This corresponds to the default display before \code{aspect3d} has been called.)
 Partial matches to \code{"iso"} are allowed.
 
-This function works by modifying the \code{userMatrix} to adjust the \code{modelMatrix},
-so it must be applied after other functions (e.g. \code{\link{par3d}}, \code{\link{view3d}} or \code{\link{rgl.viewpoint}}) 
-that set the \code{userMatrix}.
+\code{aspect3d} works by modifying \code{par3d("scale")}.
 }
 \value{
-The previous value of the \code{\link[par3d]{userMatrix}} is returned.
+The previous value of the scale is returned invisibly.
 }
 \author{Duncan Murdoch}
-\seealso{\code{\link{plot3d}}}
+\seealso{\code{\link{plot3d}}, \code{\link{par3d}}}}
 \examples{
   x <- rnorm(100)
   y <- rnorm(100)*2

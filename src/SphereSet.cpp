@@ -1,4 +1,5 @@
 #include "SphereSet.hpp"
+#include "Viewpoint.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -31,12 +32,16 @@ SphereSet::~SphereSet()
 
 void SphereSet::drawElement(RenderContext* renderContext, int i) 
 {
+   double scale[3];
+   
    material.useColor(i);
 
    sphereMesh.setCenter( center.get(i) );
    sphereMesh.setRadius( radius.getRecycled(i) );
 
-   sphereMesh.update();
+   renderContext->viewpoint->getScale ((double *)scale) ;
+   
+   sphereMesh.update( scale );
 
    sphereMesh.draw(renderContext);
 }
