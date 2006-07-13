@@ -153,4 +153,8 @@ v0.67
   - rgl.primitive now does sanity checks on inputs
 
 v0.67-2
-  - typo correction
+  - minor correction
+
+v0.67-3
+  - fixed sphere drawing so spheres are spheres regardless of par3d("scale")
+  - added type="s" to plot3d to draw spheres

@@ -3,7 +3,8 @@ plot3d <- function(x, ...) UseMethod("plot3d")
 
 plot3d.default <- function(x, y = NULL, z = NULL, 
         xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', 
-        col = material3d("color")[1], add = FALSE, aspect = !add, ...)
+        col = material3d("color")[1], size = material3d("size"), 
+        radius = avgscale*size/20, add = FALSE, aspect = !add, ...)
 {
     if (!add) clear3d()
     skip <- par3d(skipRedraw=TRUE)
@@ -22,8 +23,14 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     if (is.null(ylab)) ylab <- xyz$ylab
     if (is.null(zlab)) zlab <- xyz$zlab
 
+    if (type == "s" && missing(radius)) {
+	avgscale <- sqrt(sum(c(diff(range(x)), 
+                               diff(range(y)), 
+                               diff(range(z)))^2/3))
+    }
     switch(type,
 		p = points3d(x, y, z, color=col, ...),
+	        s = spheres3d(x, y, z, radius=radius, color=col, ...),
 		l = lines3d(x, y, z, color=col, ...),
 		h = segments3d(rep(x,rep(2,length(x))),
 					   rep(y,rep(2,length(y))),
