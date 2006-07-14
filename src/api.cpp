@@ -292,7 +292,7 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
     float phi	      = static_cast<float>( ddata[1] );
     float fov         = static_cast<float>( ddata[2] );
     float zoom        = static_cast<float>( ddata[3] );
-    Vec3  scale       = Vec3( ddata[4], ddata[5], ddata[6] );
+    Vertex scale      = Vertex( ddata[4], ddata[5], ddata[6] );
     
     int   interactive = idata[0];
     int   polar       = idata[1];

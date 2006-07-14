@@ -27,7 +27,7 @@ public:
   void setCenter      (const Vertex& center);
   void setRadius      (float radius);
   void update();
-  void update	      (double *scale);
+  void update	      (const Vertex& scale);
 
 /*
   void beginDraw(RenderContext* renderContext);

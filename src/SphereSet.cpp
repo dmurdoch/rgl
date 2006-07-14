@@ -32,16 +32,12 @@ SphereSet::~SphereSet()
 
 void SphereSet::drawElement(RenderContext* renderContext, int i) 
 {
-   double scale[3];
-   
    material.useColor(i);
 
    sphereMesh.setCenter( center.get(i) );
    sphereMesh.setRadius( radius.getRecycled(i) );
-
-   renderContext->viewpoint->getScale ((double *)scale) ;
    
-   sphereMesh.update( scale );
+   sphereMesh.update( renderContext->viewpoint->scale );
 
    sphereMesh.draw(renderContext);
 }
