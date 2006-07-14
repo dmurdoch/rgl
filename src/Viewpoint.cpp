@@ -14,9 +14,7 @@ Viewpoint::Viewpoint(PolarCoord in_position, float in_fov, float in_zoom, Vec3 i
     zoom(in_zoom),
     interactive(in_interactive)
 {
-    scale[0] = in_scale.x;
-    scale[1] = in_scale.y;
-    scale[2] = in_scale.z;
+    scale = in_scale;
      
     setPosition(in_position);
     clearMouseMatrix();
@@ -38,9 +36,7 @@ Viewpoint::Viewpoint(double* in_userMatrix, float in_fov, float in_zoom, Vec3 in
     for (int i=0; i<16; i++) {
 	userMatrix[i] = in_userMatrix[i];
     }
-    scale[0] = in_scale.x;
-    scale[1] = in_scale.y;
-    scale[2] = in_scale.z;
+    scale = in_scale;
     
     clearMouseMatrix();
 }
@@ -122,7 +118,7 @@ void Viewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSpher
   glTranslatef( 0.0f, 0.0f, -frustum.distance );
 
   setupOrientation(rctx);
-  glScaled(scale[0], scale[1], scale[2]);
+  glScaled(scale.x, scale.y, scale.z);
   glTranslatef( -viewSphere.center.x, -viewSphere.center.y, -viewSphere.center.z );
 }
 
@@ -185,16 +181,16 @@ void Viewpoint::setUserMatrix(double* src)
 
 void Viewpoint::getScale(double* dest)
 {
-    dest[0] = scale[0];
-    dest[1] = scale[1];
-    dest[2] = scale[2];
+    dest[0] = scale.x;
+    dest[1] = scale.y;
+    dest[2] = scale.z;
 }
 
 void Viewpoint::setScale(double* src)
 {
-    scale[0] = src[0];
-    scale[1] = src[1];
-    scale[2] = src[2];
+    scale.x = src[0];
+    scale.y = src[1];
+    scale.z = src[2];
 }
 
 Vertex Viewpoint::getCOP(const Sphere& viewSphere) const

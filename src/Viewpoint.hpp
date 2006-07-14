@@ -37,14 +37,13 @@ public:
   void	      setScale(double* src);
   Frustum     frustum;
   Vertex      getCOP(const Sphere& viewvolumeSphere) const;
-
+  Vertex      scale;
 private:
   PolarCoord  position;
   float       fov;
   float       zoom;
   bool        interactive;
   GLdouble    userMatrix[16], mouseMatrix[16];
-  GLdouble    scale[3];
 };
 
 #endif // VIEWPOINT_HPP
