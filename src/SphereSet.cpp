@@ -51,6 +51,12 @@ void SphereSet::draw(RenderContext* renderContext)
   material.endUse(renderContext);
 }
 
+void SphereSet::render(RenderContext* renderContext) {
+  if (renderContext->viewpoint->scaleChanged) 
+    doUpdate = TRUE;
+  Shape::render(renderContext);
+}
+
 void SphereSet::renderZSort(RenderContext* renderContext)
 {
   std::multimap<float,int> distanceMap;

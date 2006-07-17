@@ -38,6 +38,7 @@ public:
   Frustum     frustum;
   Vertex      getCOP(const Sphere& viewvolumeSphere) const;
   Vertex      scale;
+  bool        scaleChanged;
 private:
   PolarCoord  position;
   float       fov;
