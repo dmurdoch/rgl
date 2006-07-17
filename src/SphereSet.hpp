@@ -23,6 +23,11 @@ public:
   /**
    * overload
    **/
+  
+  /* Check whether scale has changed before rendering */
+  void render(RenderContext* renderContext);
+  
+  /* Sort spheres by depth */
   void renderZSort(RenderContext* renderContext);
   
   void drawElement(RenderContext* renderContext, int i);
