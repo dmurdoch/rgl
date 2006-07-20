@@ -25,7 +25,9 @@ namespace math {
   template<typename T> inline T atan2(T x, T y) { return static_cast<T>( ::atan2( static_cast<double>(x), static_cast<double>(y) ) ); }
   template<typename T> inline T cos(T x) { return static_cast<T>( ::cos( static_cast<double>(x) ) ); }
   template<typename T> inline T sin(T x) { return static_cast<T>( ::sin( static_cast<double>(x) ) ); }
+#ifdef HAVE_SINF
   template<> inline float sin(float rad) { return ::sinf(rad); }
+#endif
   template<typename T> inline T tan(T x) { return static_cast<T>( ::tan( static_cast<double>(x) ) ); }
   // template<typename T> inline T acosh(T x) { return static_cast<T>( ::acosh( static_cast<double>(x) ) ); }
   // template<typename T> inline T asinh(T x) { return static_cast<T>( ::asinh( static_cast<double>(x) ) ); }
