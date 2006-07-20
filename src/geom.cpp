@@ -97,8 +97,8 @@ void Frustum::enclose(float sphere_radius, float fovangle, int width, int height
 {
   float fovradians = math::deg2rad(fovangle/2.0f);
 
-  float s = sinf(fovradians);
-  float t = tanf(fovradians);
+  float s = math::sin(fovradians);
+  float t = math::tan(fovradians);
 
   distance = sphere_radius / s;
 
