@@ -37,7 +37,7 @@ Viewpoint::Viewpoint(double* in_userMatrix, float in_fov, float in_zoom, Vec3 in
 	userMatrix[i] = in_userMatrix[i];
     }
     scale = in_scale;
-    scaleChanged = TRUE;
+    scaleChanged = true;
     
     clearMouseMatrix();
 }
@@ -192,7 +192,7 @@ void Viewpoint::setScale(double* src)
     scale.x = src[0];
     scale.y = src[1];
     scale.z = src[2];
-    scaleChanged = TRUE;
+    scaleChanged = true;
 }
 
 Vertex Viewpoint::getCOP(const Sphere& viewSphere) const

@@ -53,7 +53,7 @@ void SphereSet::draw(RenderContext* renderContext)
 
 void SphereSet::render(RenderContext* renderContext) {
   if (renderContext->viewpoint->scaleChanged) 
-    doUpdate = TRUE;
+    doUpdate = true;
   Shape::render(renderContext);
 }
 
