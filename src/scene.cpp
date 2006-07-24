@@ -386,7 +386,7 @@ void Scene::render(RenderContext* renderContext)
     }
 #endif
     /* Reset flag(s) now that scene has been rendered */
-    renderContext->viewpoint->scaleChanged = FALSE;
+    renderContext->viewpoint->scaleChanged = false;
   }
 }
 
