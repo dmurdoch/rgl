@@ -78,9 +78,9 @@ void Material::beginUse(RenderContext* renderContext)
 
   if (lit) {
     glEnable(GL_LIGHTING);
-
+ 
 #ifdef GL_VERSION_1_2
-    // glLightModeli(GL_LIGHT_MODEL_COLOUR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR );
+    glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR );
 #endif
 
     glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);

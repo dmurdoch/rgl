@@ -1,0 +1,24 @@
+demogl.{c,h} - OpenGL rendering routines (this directory. Shared by
+               programs in threee directories below).
+
+The following three directories have the same "demo.c" program which
+uses demogl, but is setup three different ways.
+
+singlewin   - Window setup to render in a single window. Most normal 
+              aplications work this way and don't have do anything 
+              special for OpenGL 1.2, 1.3 and extension procs.
+
+multiwin    - Multiple windows with a single message loop. At any given
+              time, there is only context which is current. The application
+              defines its own method for accessing the proc table 
+              (see _APP_PROCTABLE flag in the Makefile). Since there is
+              only window which is current, a global variable can be used
+              to provide reference to the current proc table.
+
+multithread - Multiple windows with a multiple message loops using 
+              multiple threads. At any given time, there can be multiple
+              current contexts.  The application defines its own method 
+              for accessing the proc table (see _APP_PROCTABLE flag in 
+              the Makefile). However, there can me multiple current contexts
+              on different thread, the application uses thread local 
+              storage to define proper access to the current proc table.
