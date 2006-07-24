@@ -1,0 +1,110 @@
+The currently shipping OpenGL32.DLL from Microsoft only has entry points
+for OpenGL 1.1. If an application wants to use OpenGL {1.2, 1.3, 1.4, 1.5}
+functions, it has to use wglGetProcAddress() in order to obtain the entry
+points from the driver. The files in this distribution enable the application
+pretend that there is full support for OpenGL {1.2/1.3/1.4/1.5} if the
+underlying implementation supports OpenGL {1.2/1.3/1.4/1.5}.
+
+A useful feature of the framework is that it provides a safety layer by
+initializing each function to a "default" initialization function with
+matching arguments and return type. On debug builds, the initialization
+function adds an ASSERT to catch unwitting usage of NULL function pointers
+by the application.
+
+The framework is also readily usable for multi-context and multi-threaded
+applications, including application code that demonstrates how to
+achieve this.
+
+Additionally, this distribution provides full support for all the 
+extension entry points in glext.h and wglext.h.
+
+In order to use this scheme, the application needs to do the following:
+
+=====================================================================
+
+For applications that do not create rendering contexts on different devices 
+(e.g. multi-display with different vendors supporting the two displays):
+
+1. Include "glprocs.h"  in addition to including "gl.h"
+2. Compile "glprocs.c" and ensure that glprocs.obj is linked with the
+   application code.
+3. Call OpenGL{1.2,1.3,1.4,1.5} and extension procs after verifying that
+   the implementation has support for the underlying feature. Example:
+
+   if (supports12) {
+       glDrawRangeElements (.....)
+   }
+   
+   NOTE: The application can call "glGetString(GL_VERSION)" to determine
+   the version of OpenGL supported on a particular implementation.
+
+=====================================================================
+
+For aplications that create rendering contexts on different devices, the
+application has to perform the following additional steps:
+
+1. Allocate memory for _GLextensionProcs in the application data
+   structures for each device. Example:
+
+   typedef struct {
+        appType             appData;
+
+        _GLextensionProcs   extensionProcs;
+   } ContextData;
+
+   ContextData cdev1, cdev2;
+
+2. Initialize the extension procs.
+
+   _InitExtensionProcs (&cdev1.extensionProcs);
+   _InitExtensionProcs (&cdev2.extensionProcs);
+
+3. Provide a mechanism for accessing the current device. Example:
+
+   ContextData *currentContextData;
+
+   static _inline _GLextensionProcs *_GET_TLS_PROCTABLE(void)
+   {
+       return (&currentContxtData->extensionProcs);
+   }
+
+   Another Example (when the two different devices are being used
+   on two different contexts):
+
+   static _inline _GLextensionProcs *_GET_TLS_PROCTABLE(void)
+   {
+       ContextData *tla = GetThreadSpecificData();
+       return (&tla->extensionProcs);
+   }
+
+   (NOTE: Aplication has to replace this function in glprocs.h with 
+    its own customized function).
+        
+=====================================================================
+
+This distribution additionally contains the following:
+
+Windows Demo Source:
+--------------------
+windemo:
+    demogl.{c|h} - sample initialization, rendering functions and a sample
+    data structure for tracking per-window data (useful for apps. with 
+    multiple windows).
+    Makefile:Builds all the demos (singlewin, multiwin, and multithread)
+
+singlewin:
+    demo.c: Shows how to use the SDK for an application with a single window.
+    Makefile: Builds the singlewin sample (demo.exe).
+
+multiwin:
+    demo.c: Shows how to use the SDK for an application with two windows
+    Makefile: Builds the multiwin sample (demo.exe)
+
+multithread:
+    demo.c: Shows how to use the SDK for a multi-threaded application.
+    Makefile: Builds the multithread sample (demo.exe).
+
+GLX Demo Source:
+--------------------
+glxdemo:
+GLX demo similar to the singlewin Windows demo.

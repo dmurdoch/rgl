@@ -4,8 +4,8 @@
 # This file is part of the RGL project.
 #
 # $Id$
-#
-PKG_CPPFLAGS=@CPPFLAGS@
+#-DGL_VERSION_1_2 
+PKG_CPPFLAGS=@CPPFLAGS@ -Iext
 PKG_CFLAGS=@CFLAGS@
 PKG_CXXFLAGS=@CXXFLAGS@
 PKG_LIBS=@LIBS@ 
