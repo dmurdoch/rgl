@@ -39,10 +39,28 @@ inline bool as_bool(int idata) { return (idata) ? true : false; }
 //   rgl_init
 //
 
-void rgl_init(int* successptr)
+namespace gui {
+
+int gMDIHandle;
+
+}
+
+//
+// FUNCTION
+//   rgl_init
+//
+// PARAMETERS
+//   ioptions
+//     [0]  multiple-document-interface console handle (MDI) 
+//          or 0 (SDI)
+//
+
+void rgl_init(int* successptr, int* ioptions)
 {
   int success = RGL_FAIL;
-
+  
+  gMDIHandle =  ioptions[0];
+  
   if ( lib::init() ) {
     deviceManager = new DeviceManager();
     success = RGL_SUCCESS;
