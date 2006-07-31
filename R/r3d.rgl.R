@@ -200,3 +200,5 @@ open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
     if (result<-rgl.cur()) return(result)
     else return(open3d())
 }
+
+snapshot3d <- function(...) rgl.snapshot(...)
