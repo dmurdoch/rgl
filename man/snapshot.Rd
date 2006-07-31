@@ -1,15 +1,18 @@
 \name{rgl.snapshot}
 \alias{rgl.snapshot}
+\alias{snapshot3d}
 \title{export screenshot}
 \description{
   Saves the screenshot as png file.
 }
 \usage{
 rgl.snapshot( filename, fmt="png" )
+snapshot3d( ... )
 }
 \arguments{
   \item{filename}{full path to filename.}
   \item{fmt}{image export format, currently supported: png }
+  \item{...}{arguments to pass to \code{rgl.snapshot} }
 }
 \details{
 Animations can be created in a loop modifying the scene and saving 
