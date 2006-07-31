@@ -39,7 +39,7 @@ and viewport.  See \code{\link{par3d}} for more details.
 \author{ Ming Chen / Duncan Murdoch}
 \seealso{\code{\link{select3d}} }
 \examples{
-clear3d()
+open3d()
 points3d(rnorm(100), rnorm(100), rnorm(100))
 if (interactive() || !.Platform$OS=="unix") {
 # Calculate a square in the middle of the display and plot it

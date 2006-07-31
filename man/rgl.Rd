@@ -32,7 +32,8 @@ rgl.quit()     # shutdown rgl device system
   detaches the package including the shared library and additional system libraries.
 }
 \examples{
-example(rgl.surface)
+example(surface3d)
+example(plot3d)
 }
 \seealso{
 \code{\link{rgl.clear}}, 

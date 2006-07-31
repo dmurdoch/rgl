@@ -58,7 +58,7 @@
   
   # render 4 meshes vertically in the current view
 
-  clear3d()  
+  open3d()  
   bg3d("gray")
   l0 <- oh3d(tran = par3d("userMatrix"), color = "green" )
   shade3d( translate3d( l0, -6, 0, 0 ))

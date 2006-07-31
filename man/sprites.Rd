@@ -26,6 +26,7 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
   the illusion of clouds and gasses.
 }
 \examples{
+open3d()
 particles3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100) )
 # is the same as
 sprites3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100),

@@ -44,5 +44,6 @@ rgl.demo.abundance <- function()
   )
 
 }
+rgl.open()
 rgl.demo.abundance()
 

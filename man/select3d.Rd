@@ -38,7 +38,7 @@ if (interactive()) {
  x <- rnorm(1000)
  y <- rnorm(1000)
  z <- rnorm(1000)
- rgl.open()
+ open3d()
  points3d(x,y,z,size=2)
  f <- select3d()
  keep <- f(x,y,z)

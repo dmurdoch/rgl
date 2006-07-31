@@ -17,5 +17,6 @@ rgl.demo.envmap <- function()
   , texenvmap=TRUE
   )
 }
+rgl.open()
 rgl.demo.envmap()
 

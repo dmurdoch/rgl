@@ -33,5 +33,6 @@ rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zl
   rgl.quads(lx,ly,lz,color="red",size=5,front="lines",back="lines",lit=F)
 }
 
+rgl.open()
 rgl.demo.regression()
 

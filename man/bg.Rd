@@ -35,6 +35,8 @@ rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines"
   If sphere is set to TRUE, an environmental sphere enclosing the whole scene is drawn.
 }
 \examples{
+  rgl.open()
+  
   # a simple white background
   
   bg3d("white")
