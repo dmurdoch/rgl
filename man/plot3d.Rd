@@ -63,7 +63,8 @@ cases, the value is passed to \code{\link{aspect3d}}.
 
 With \code{type = "s"}, spheres are drawn centered at the specified locations.
 The radius may be controlled by \code{size} (specifying the size relative
-to the plot display) or \code{radius} (specifying it on the data scale
+to the plot display, with \code{size=1} giving a radius 
+about 1/20 of the plot region) or \code{radius} (specifying it on the data scale
 if an isometric aspect ratio is chosen, or on an average scale
 if not). 
 }

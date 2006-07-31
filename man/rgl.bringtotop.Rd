@@ -21,7 +21,7 @@ window managers such as KDE may block this action
 Not currently implemented under OS/X.}
 \seealso{ \code{\link[graphics]{bringToTop}}}
 \examples{
-rgl.clear()
+rgl.open()
 rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000), size=2)
 rgl.bringtotop(stay = TRUE)    
 }

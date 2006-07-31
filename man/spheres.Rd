@@ -29,6 +29,7 @@ with \code{scale < 1} is underestimated, and that of axes with
 \code{scale > 1} is overestimated.
 } 
 \examples{
+open3d()
 spheres3d(rnorm(10), rnorm(10), rnorm(10), radius=runif(10), color=rainbow(10))
 }
 \seealso{

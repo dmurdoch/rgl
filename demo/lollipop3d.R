@@ -1,71 +1,3 @@
-axis3d <- function(side=1:3,at,lim,labels,arrow=FALSE,arrow.type=c("arrow","cone"),
-                     x,y,z,lwd=1,
-                     alen=0.05,awid=0.01,...) {
-  ## wishlist: ticktypes, labels in margins, ticks,
-  ## choice of which side to put axes on (front/back/etc.)
-  if ((!missing(at) || !missing(labels) || !missing(lim)) &&
-      length(side)>1)
-    warning("at/labels/lim will be identical for all axes")
-  arrow.type <- match.arg(arrow.type)
-  bbox <- par3d("bbox")
-  if (missing(x)) x <- bbox[1]
-  if (missing(y)) y <- bbox[3]
-  if (missing(z)) z <- bbox[5]
-  ## mgp <- par("mgp")  ## turns on 2D graphics window! not used yet ...
-  if (missing(lim)) lim <- NULL
-  if (missing(at)) at <- NULL
-  if (missing(labels)) labels <- "auto"
-  tmpf <- function(s) {
-    if (is.null(lim)) {
-      if (is.null(at)) lim1 <- bbox[2*s+c(-1,0)] else
-      lim1 <- range(at)
-    } else lim1 <- lim
-    if (is.null(at)) {
-      at1 <- pretty(lim1)
-      at1 <- at1[at1>=min(lim1) & at1<=max(lim1)]
-    } else at1 <- at
-    if (identical(labels,"auto")) labels1 <- as.character(at1) else labels1 <- labels
-    diffs <- bbox[c(2,4,6)]-bbox[c(1,3,5)]
-    switch(s,
-           ## x (side==1)
-         {lines3d(lim1,rep(y,2),rep(z,2),size=lwd,...)
-          if (!is.null(labels1))
-            text3d(at1,y,z,labels1,...)
-          if (arrow) {
-            if (arrow.type=="arrow") { triangles3d(lim1[2]+c(0,1,0)*alen*diffs[1],
-                         y+c(-1,0,1)*awid*diffs[2],
-                         z+c(-1,0,1)*awid*diffs[3],lit=FALSE,...)
-            } else {
-              cone3d(base=c(lim1[2],y,z),tip=c(lim1[2]+alen*diffs[1],y,z),
-                       rad=awid*diffs[2],lit=FALSE,...)
-            }}},
-           ## y (side==2)
-         {lines3d(rep(x,2),lim1,rep(z,2),size=lwd,...)
-          if (!is.null(labels1))
-            text3d(x,at1,z,labels1,...)
-          if (arrow) {
-            if (arrow.type=="arrow") { triangles3d(x+c(-1,0,1)*awid*diffs[1],
-                         lim1[2]+c(0,1,0)*alen*diffs[2],
-                         z+c(-1,0,1)*awid*diffs[3],lit=FALSE,...)
-            } else {
-              cone3d(base=c(x,lim1[2],z),tip=c(x,lim1[2]+alen*diffs[2],z),
-                       rad=awid*diffs[1],lit=FALSE,...)
-            }}},             
-           ## z (side==3)
-         { lines3d(rep(x,2),rep(y,2),size=lwd,lim1,...)
-           if (!is.null(labels1))
-             text3d(x,y,at1,labels1,...)
-           if (arrow) {
-             if (arrow.type=="arrow") { triangles3d(x+c(-1,0,1)*awid*diffs[1],
-                   y+c(-1,0,1)*awid*diffs[2],
-                   lim1[2]+c(0,1,0)*alen*diffs[3],lit=FALSE,...)
-             } else {
-               cone3d(base=c(x,y,lim1[2]),tip=c(x,y,lim1[2]+alen*diffs[2]),
-                        rad=awid*diffs[1],lit=FALSE,...)
-             }}})
-  }
-  invisible(sapply(side,tmpf))
-}
 
 cone3d <- function(base,tip,rad,n=30,...) {
   degvec <- seq(0,2*pi,length=n)
@@ -112,7 +44,6 @@ lollipop3d <- function(data.x,data.y,data.z,surf.fun,surf.n=50,
 			 xlab=deparse(substitute(x)),
 			 ylab=deparse(substitute(y)),
 			 zlab=deparse(substitute(z)),
-			 axlabpos=1,
 			 alpha.surf=0.4,
                          col.surf=fg,col.stem=c(fg,fg),
                          col.pt="gray",type.surf="line",ptsize,
@@ -184,29 +115,23 @@ lollipop3d <- function(data.x,data.y,data.z,surf.fun,surf.n=50,
              zat=z.ticks,zlab=z.ticklabs,lit=lit)
   } else if (axes=="lines") { ## set up axis lines
     bbox <- par3d("bbox")
-    axis3d(side=1,at=x.ticks,labels=x.ticklabs,
-           lim=bbox[1:2],y=bbox[3],z=bbox[5],
+    axis3d(edge="x",at=x.ticks,labels=x.ticklabs,
            col=col.axes,arrow=axis.arrow)
-    axis3d(side=2,at=y.ticks,labels=y.ticklabs,
-           lim=bbox[3:4],x=bbox[1],z=bbox[5],
+    axis3d(edge="y",at=y.ticks,labels=y.ticklabs,
            col=col.axes,arrow=axis.arrow)
-    axis3d(side=3,at=z.ticks,labels=z.ticklabs,
-           lim=bbox[5:6],x=bbox[1],y=bbox[3],
+    axis3d(edge="z",at=z.ticks,labels=z.ticklabs,
            col=col.axes,arrow=axis.arrow)
+    box3d(col=col.axes)
   }
-  xlabpos <- sum(c(1-axlabpos,axlabpos)*bbox[1:2])
-  ylabpos <- sum(c(1-axlabpos,axlabpos)*bbox[3:4])
-  zlabpos <- sum(c(1-axlabpos,axlabpos)*bbox[5:6])
-  text3d(xlabpos,bbox[3],bbox[5],xlab,col=col.axlabs)
-  text3d(bbox[1],ylabpos,bbox[5],ylab,col=col.axlabs)
-  text3d(bbox[1],bbox[3],zlabpos,zlab,col=col.axlabs)
+  decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, box=FALSE, axes=FALSE, col=col.axlabs)
 }
 
 x <- 1:5
 y <- x*10
 z <- (x+y)/20
+open3d()
 spheres3d(x,y,z)
-axis3d()
+axes3d()
 set.seed(1001)
 x <- runif(30)
 y <- runif(30,max=2)
@@ -214,9 +139,13 @@ dfun <- function(x,y) { 2*x+3*y+2*x*y+3*y^2 }
 z <- dfun(x,y)+rnorm(30,sd=0.5)
 ## lollipops only
 lollipop3d(x,y,z)
+
 ## lollipops plus theoretical surface
+open3d()
 lollipop3d(x,y,z,dfun,col.pt="red",col.stem=c("red","blue"))
 ## lollipops plus regression fit
+
+open3d()
 linmodel <- lm(z~x+y)
 dfun <- function(x,y) {predict(linmodel,newdata=data.frame(x=x,y=y))}
 lollipop3d(x,y,z,dfun,col.pt="red",col.stem=c("red","blue"))

@@ -27,6 +27,7 @@ GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine
 # create a series of frames for an animation
 #
 
+rgl.open()
 shade3d(oh3d(), color="red")
 rgl.viewpoint(0,20)
 

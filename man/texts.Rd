@@ -39,6 +39,7 @@ your choice!
 
 }
 \examples{
+open3d()
 text3d(rnorm(10)*100,rnorm(10)*100,rnorm(10)*100,text=1:10,adj = 0.5, color=heat.colors(10))
 }
 \seealso{

@@ -36,6 +36,7 @@ step drags the points (refinement step).
   an algorithm that can be applied on qmesh3d objects.
 }
 \examples{
+  open3d()
   shade3d( subdivision3d( cube3d(), depth=3 ), color="red", alpha=0.5 )
 }
 \seealso{

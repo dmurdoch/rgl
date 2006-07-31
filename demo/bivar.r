@@ -42,5 +42,6 @@ rgl.demo.bivar <- function()
   surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines") 
 }
 
+rgl.open()
 rgl.demo.bivar()
 

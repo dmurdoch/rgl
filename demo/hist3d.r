@@ -49,8 +49,7 @@ hist3d<-function(x,y=NULL,nclass="auto",alpha=1,col="#ff0000",scale=10)
 }
 ################################################################################
 
-# Clearing the Scene:
-rgl.clear("all")
+rgl.open()
 
 rgl.bg(color="gray")
 rgl.light()
@@ -70,8 +69,7 @@ rgl.bg(col="#cccccc")
 # Waiting for user-input to create next scenery:
 # readline()
 
-# Clearing the Scene:
-rgl.clear("shapes")
+rgl.open()
 
 # Defining transparency and colors:
 alpha<-0.7; topcol<-"#ff0000"; sidecol<-"#aaaaaa"
@@ -104,8 +102,7 @@ rgl.lines(xl,zl,yl,col="#000000")
 # Waiting for user-input to create next scenery:
 # readline()
 
-# Clearing the Scene:
-rgl.clear("shapes")
+rgl.open()
 
 # Choosing a lightgrey background:
 rgl.bg(col="#cccccc")

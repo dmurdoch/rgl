@@ -62,7 +62,7 @@ These functions are called for their side effects.
 \code{title}, \code{mtext}, \link{bbox3d}}
 
 \examples{
-  clear3d()
+  open3d()
   points3d(rnorm(10),rnorm(10),rnorm(10), size=3)
 
   # First add standard axes

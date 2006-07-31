@@ -30,5 +30,6 @@ rgl.demo.subdivision <- function()
 
 }
 
+rgl.open()
 rgl.demo.subdivision()
 

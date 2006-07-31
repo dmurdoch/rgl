@@ -187,5 +187,6 @@ rgl.demo.lsystem <- function (level=0) {
   lsystem.plot(plant,level)  
 }
 
+rgl.open()
 rgl.demo.lsystem(level=1)
 
