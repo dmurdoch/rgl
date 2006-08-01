@@ -26,7 +26,7 @@ enum TypeID {
 
 typedef unsigned int TypeID;
 
-class SceneNode : public Node
+class SceneNode
 {
 public:
   inline const TypeID getTypeID() const { return typeID; }
