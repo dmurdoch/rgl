@@ -121,16 +121,19 @@ private:
   /**
    * list of light sources
    **/
-  List lights;
+  std::vector<Light*> lights;
 
   /**
    * list of shapes
    **/
-  List shapes;
+  std::vector<Shape*> shapes;
 
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
 
+  void deleteShapes();
+  void deleteLights();
+  
   // ---[ grouping data ]----------------------------------------------------
   
   /**
