@@ -382,7 +382,7 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
       }
       break;
     case WM_DESTROY:
-      destroyGLFont();
+      delete [] font.widths; // Can't call destroyGLFont because we don't have a valid DC now
       shutdownGL();
       SetWindowLong(hwnd, GWL_USERDATA, (LONG) NULL );
       if (window)
