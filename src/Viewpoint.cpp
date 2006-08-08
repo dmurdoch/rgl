@@ -195,6 +195,18 @@ void Viewpoint::setScale(double* src)
     scaleChanged = true;
 }
 
+void Viewpoint::getPosition(double* dest)
+{
+    dest[0] = position.theta;
+    dest[1] = position.phi;
+}
+
+void Viewpoint::setPosition(double* src)
+{
+    position.theta = src[0];
+    position.phi = src[1];
+}
+
 Vertex Viewpoint::getCOP(const Sphere& viewSphere) const
 {
   return viewSphere.center + ( position.vector() * frustum.distance * 2.0f );

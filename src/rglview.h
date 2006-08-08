@@ -47,6 +47,11 @@ public:
   void        setUserMatrix(double* src);
   void        getScale(double* dest);
   void        setScale(double* src);
+  
+  /* NB:  these functions do not maintain consistency with userMatrix */
+  
+  void        getPosition(double* dest);
+  void 	      setPosition(double* src);
 
   // These are set after rendering the scene
   GLdouble modelMatrix[16], projMatrix[16];

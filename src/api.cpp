@@ -870,6 +870,30 @@ void rgl_setUserMatrix(int* successptr, double* userMatrix)
 
 }
 
+void rgl_getPosition(double* position)
+{
+   Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+		RGLView* rglview = device->getRGLView();
+		rglview->getPosition(position);
+
+  	}
+}
+
+void rgl_setPosition(double* position)
+{
+  	Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+		RGLView* rglview = device->getRGLView();
+		rglview->setPosition(position);
+
+  	}
+}
+
 void rgl_getScale(int* successptr, double* scale)
 {
 	int success = RGL_FAIL;

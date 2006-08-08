@@ -91,6 +91,10 @@ EXPORT_SYMBOL void rgl_setSkipRedraw(int* successptr, int* skipRedraw);
 EXPORT_SYMBOL void rgl_getViewport(int* successptr, int* viewport);
 EXPORT_SYMBOL void rgl_getBoundingbox(int* successptr, double* bboxvec);
 
+/* not for users:  does not maintain consistency */
+EXPORT_SYMBOL void rgl_setPosition(double* position);
+EXPORT_SYMBOL void rgl_getPosition(double* position);
+
 #ifdef __cplusplus
 }
 #endif

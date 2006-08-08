@@ -563,6 +563,19 @@ void RGLView::setScale(double* src)
 	View::update();
 }
 
+void RGLView::getPosition(double* dest)
+{    
+    Viewpoint* viewpoint = scene->getViewpoint();
+    viewpoint->getPosition(dest);
+}
+
+void RGLView::setPosition(double* src)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+	viewpoint->setPosition(src);
+}
+
 
 void RGLView::setDefaultMouseFunc()
 {
