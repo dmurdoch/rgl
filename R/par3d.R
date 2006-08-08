@@ -28,9 +28,21 @@ par3d <- function (..., no.readonly = FALSE)
 		    single <- TRUE
 	}
     }
+     if ("userMatrix" %in% names(args)) {
+        m <- args$userMatrix
+        svd <- svd(m[1:3, 1:3])
+        m[1:3, 1:3] <- svd$u %*% t(svd$v)
+        theta <- -asin(m[1,3])*180/pi
+	    m <-  m %*% rotationMatrix(theta*pi/180, 0,1,0)
+	    svd <- svd(m[1:3, 1:3])
+	    m[1:3,1:3] <- svd$u %*% t(svd$v)	
+	    phi <- -asin(m[2,3])*180/pi
+	    args$.position <- c(theta, phi)
+    }   
     value <-
         if (single) .External("par3d", args, PACKAGE = "rgl")[[1]] 
         else .External("par3d", args, PACKAGE = "rgl")
+
     if(!is.null(names(args))) invisible(value) else value
 }
 

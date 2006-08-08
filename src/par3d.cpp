@@ -162,6 +162,13 @@ static void Specify(char *what, SEXP value)
 	posRealCheck(v, what);
 	rgl_setZoom(&success, &v);
     }
+    else if (streql(what, ".position")) {
+	lengthCheck(what, value, 2);
+	x = coerceVector(value, REALSXP);
+	
+	rgl_setPosition(REAL(x));
+	success = 1;
+    }
     
      else warning(_("parameter \"%s\" cannot be set"), what);
  
@@ -236,6 +243,11 @@ static SEXP Query(char *what)
     else if (streql(what, "bbox")) {
       value = allocVector(REALSXP, 6);
       rgl_getBoundingbox(&success, REAL(value));
+    }
+    else if (streql(what, ".position")) {
+      value = allocVector(REALSXP, 2);
+      rgl_getPosition(REAL(value));
+      success = 1;
     }
     else
   	value = R_NilValue;
