@@ -112,6 +112,16 @@ properties; see the examples below.
   
   The \code{...} parameter to \code{rgl.material} is ignored.
 }
+\value{
+\code{rgl.material()} is called for the side effect of setting the material properties.
+It returns a value invisibly which is not intended for use by the user.
+
+Users should use \code{material3d()} to query material properties.  It returns values similarly
+to \code{\link{par3d}} as follows:
+When setting properties, it returns the previous values in a named list.  A named list is also
+returned when more than one value is queried.  When a single value is queried it is returned 
+directly.
+} 
 \seealso{
 \code{\link{rgl.primitive}},
 \code{\link{rgl.bbox}},

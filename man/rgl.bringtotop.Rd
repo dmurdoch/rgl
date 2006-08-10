@@ -2,7 +2,7 @@
 \alias{rgl.bringtotop}
 \title{Assign focus to an RGL window }
 \description{
-'rgl.bringtotop' brings the specified RGL window to the
+'rgl.bringtotop' brings the current RGL window to the
 front of the window stack (and gives it focus).}
 \usage{
 rgl.bringtotop(stay = FALSE)

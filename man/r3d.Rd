@@ -32,7 +32,7 @@
     \item{Computation:}{Generic subdivision of 3d objects.}
   }
   
-  At present, the main practical difference between the r3d functions
+  At present, there are two main practical differences between the r3d functions
   and the \code{rgl.*} functions is that the r3d functions call
   \code{\link{open3d}} if there is no device open, and the
   \code{rgl.*} functions call \code{\link{rgl.open}}. By default
@@ -46,9 +46,6 @@
   from bottom to top, and the z-axis decreases with depth into the
   scene.  Since the user can manipulate the scene, either system can
   be rotated into the other one.  
-  
-  Another difference is that the r3d functions change the mouse mode
-  to use 'zAxis' rotation on the left mouse button.
   
   The r3d functions also preserve the \code{rgl.material} setting across
   calls (except for texture elements, in the current implementation), whereas
