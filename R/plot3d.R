@@ -73,13 +73,11 @@ decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zli
     	aspect <- c(1,1,1)
     } else autoscale <- TRUE	
 
-    ranges <- par3d('bbox')
-    if (!missing(xlim)) ranges[1:2] <- xlim
-    if (!missing(ylim)) ranges[3:4] <- ylim
-    if (!missing(zlim)) ranges[5:6] <- zlim
+    ranges <- .getRanges()
 
     if (!missing(xlim) | !missing(ylim) | !missing(zlim)) {
-	    segments3d(matrix(ranges[rep(1:6, rep(2,6))], 4, 3))
+        ind <- c(1,1,2,2)
+	segments3d(xlim[ind], ylim[ind], zlim[ind])
     }
     
     if (axes) axes3d()

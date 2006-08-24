@@ -1,15 +1,39 @@
+# This internal function returns a list with the following components:
+# xlim, ylim, zlim:  the bounding box expanded so no coordinate has zero or negative extent
+# strut:  a boolean indicating whether an expansion was done above
+# x, y, z:  the box above expanded by a factor of expand
+
+.getRanges <- function(expand = 1.03) {
+    ranges <- par3d('bbox')
+    ranges <- list(xlim=ranges[1:2], ylim=ranges[3:4], zlim=ranges[5:6])
+
+    strut <<- FALSE
+    
+    ranges <- lapply(ranges, function(r) {
+                       d <- diff(r)
+                       if (d > 0) return(r)
+                       strut <<- TRUE
+                       if (d < 0) return(c(0,1))
+                       else if (r[1] == 0) return(c(-1, 1))
+                       else return(r[1] + 0.4*abs(r[1])*c(-1,1))
+                     })
+                     
+    ranges$strut <- strut
+    
+    ranges$x <- (ranges$xlim - mean(ranges$xlim))*expand + mean(ranges$xlim)
+    ranges$y <- (ranges$ylim - mean(ranges$ylim))*expand + mean(ranges$ylim)
+    ranges$z <- (ranges$zlim - mean(ranges$zlim))*expand + mean(ranges$zlim)
+   
+    ranges
+}
+
 axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
     pos = NULL, ...)
 {
         save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
         on.exit(par3d(save))
         
-        ranges <- par3d('bbox')
-        ranges <- list(xlim=ranges[1:2], ylim=ranges[3:4], zlim=ranges[5:6])
-
-        ranges$x <- (ranges$xlim - mean(ranges$xlim))*1.03 + mean(ranges$xlim)
-        ranges$y <- (ranges$ylim - mean(ranges$ylim))*1.03 + mean(ranges$ylim)
-        ranges$z <- (ranges$zlim - mean(ranges$zlim))*1.03 + mean(ranges$zlim)
+	ranges <- .getRanges()
 
 	edge <- c(strsplit(edge, '')[[1]], '-', '-')[1:3]
 	coord <- match(toupper(edge[1]), c('X', 'Y', 'Z')) 
@@ -75,14 +99,18 @@ axes3d <- function(edges='bbox', labels=TRUE,
 
 box3d <- function(...)
 {
-        save <- par3d(ignoreExtent = TRUE)
+        save <- par3d(ignoreExtent = TRUE)        
         on.exit(par3d(save))
-        ranges <- par3d('bbox')
-        ranges <- list(xlim=ranges[1:2], ylim=ranges[3:4], zlim=ranges[5:6])
-
-        ranges$x <- (ranges$xlim - mean(ranges$xlim))*1.03 + mean(ranges$xlim)
-        ranges$y <- (ranges$ylim - mean(ranges$ylim))*1.03 + mean(ranges$ylim)
-        ranges$z <- (ranges$zlim - mean(ranges$zlim))*1.03 + mean(ranges$zlim)
+        
+        ranges <- .getRanges()          
+        if (ranges$strut) {
+            par3d(ignoreExtent = FALSE)
+            segments3d(rep(ranges$xlim, c(2,2)),
+                       rep(ranges$ylim, c(2,2)),
+                       rep(ranges$zlim, c(2,2)))
+            par3d(ignoreExtent = TRUE)
+        }
+                       
         x <- c(rep(ranges$x[1],8),rep(ranges$x,4),rep(ranges$x[2],8))
         y <- c(rep(ranges$y,2),rep(ranges$y,c(2,2)),rep(ranges$y,c(4,4)),
                rep(ranges$y,2),rep(ranges$y,c(2,2)))
@@ -96,13 +124,8 @@ mtext3d <- function(text, edge, line = 0, at = NULL, pos = NA, ...)
         save <- par3d(ignoreExtent = TRUE)
         on.exit(par3d(save))
 
-        ranges <- par3d('bbox')
-        ranges <- list(xlim=ranges[1:2], ylim=ranges[3:4], zlim=ranges[5:6])
-
-        ranges$x <- (ranges$xlim - mean(ranges$xlim))*1.03 + mean(ranges$xlim)
-        ranges$y <- (ranges$ylim - mean(ranges$ylim))*1.03 + mean(ranges$ylim)
-        ranges$z <- (ranges$zlim - mean(ranges$zlim))*1.03 + mean(ranges$zlim)
-
+        ranges <- .getRanges()
+        
 	edge <- c(strsplit(edge, '')[[1]], '-', '-')[1:3]
 	coord <- match(toupper(edge[1]), c('X', 'Y', 'Z')) 
 	

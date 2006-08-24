@@ -9,8 +9,8 @@ aspect3d <- function(x, y = NULL, z = NULL) {
 	    x <- x[1]
 	}
 
-	bbox <- par3d("bbox")
-	scale <- c(bbox[2]-bbox[1], bbox[4]-bbox[3], bbox[6]-bbox[5])
+	bbox <- .getRanges()
+	scale <- c(diff(bbox$xlim), diff(bbox$ylim), diff(bbox$zlim))
 	scale <- ifelse(scale <= 0, 1, scale)
 
 	avgscale <- sqrt(sum(scale^2)/3)
