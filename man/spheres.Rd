@@ -28,6 +28,9 @@ isometric scale, so in this case it is inaccurate:  the extent of axes
 with \code{scale < 1} is underestimated, and that of axes with 
 \code{scale > 1} is overestimated.
 } 
+\value{
+  A shape ID of the spheres object is returned.
+}
 \examples{
 open3d()
 spheres3d(rnorm(10), rnorm(10), rnorm(10), radius=runif(10), color=rainbow(10))

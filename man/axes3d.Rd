@@ -54,7 +54,8 @@ other two coordinates in \code{pos} determine the position.  See the
 examples.
 }
 \value{
-These functions are called for their side effects.
+These functions are called for their side effects.  They return the object IDs of
+objects added to the scene.
 }
 \author{ Duncan Murdoch }
 

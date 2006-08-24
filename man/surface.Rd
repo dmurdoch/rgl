@@ -43,6 +43,9 @@ rgl.surface(x, z, y, coords=1:3, ...)
   the top and bottom differently; see \code{\link{rgl.material}} and
   the example below.
 }
+\value{
+  The object ID of the displayed surface is returned invisibly.
+}
 \examples{
 
 #

@@ -40,6 +40,11 @@ and so on, and are provided for convenience.
 The appearance of the new objects are defined by the material properties.
 See \code{\link{rgl.material}} for details.
 }
+\value{
+   Each function returns the integer object id of the shape that
+   was added to the scene.  These can be passed to \code{\link{rgl.pop}}
+   to remove the object from the scene.
+}
 \author{
   Ming Chen and Duncan Murdoch
 }

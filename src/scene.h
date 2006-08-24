@@ -46,9 +46,15 @@ public:
   bool add(SceneNode* node);
   
   /**
-   * remove last-added node of given type.
+   * remove specified node of given type, or last-added if id==0
    **/
-  bool pop(TypeID stackTypeID);
+  bool pop(TypeID stackTypeID, int id);
+  
+  /**
+   * get information about stacks
+   */
+  int get_id_count(TypeID type);
+  void get_ids(TypeID type, int* ids, char** types);
 
   // ---[ grouping component ]-----------------------------------------------
   
@@ -130,6 +136,8 @@ private:
 
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
+  
+  void deleteAll(std::vector<SceneNode*> list);
 
   void deleteShapes();
   void deleteLights();

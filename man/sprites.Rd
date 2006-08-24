@@ -25,6 +25,10 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
   Particles are Sprites using an alpha-blended particle texture giving
   the illusion of clouds and gasses.
 }
+\value{
+  These functions are called for the side effect of displaying the sprites.
+  The shape ID of the displayed object is returned.
+}
 \examples{
 open3d()
 particles3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100) )

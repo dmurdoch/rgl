@@ -16,6 +16,8 @@ public:
           int in_ignoreExtent);
   ~TextSet();
   void draw(RenderContext* renderContext);
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "text", buflen); };
+
 private:
 
   VertexArray vertexArray;

@@ -28,7 +28,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
                                diff(range(y)), 
                                diff(range(z)))^2/3))
     }
-    switch(type,
+    result <- c( data=switch(type,
 		p = points3d(x, y, z, color=col, ...),
 	        s = spheres3d(x, y, z, radius=radius, color=col, ...),
 		l = lines3d(x, y, z, color=col, ...),
@@ -39,9 +39,10 @@ plot3d.default <- function(x, y = NULL, z = NULL,
 	# this is a hack to plot invisible segments
         n = if (!add) segments3d(rep(range(x), c(2,2)),
                                  rep(range(y), c(2,2)),
-                                 rep(range(z), c(2,2)))
+                                 rep(range(z), c(2,2))))
 	)
-    if (!add) decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, ...)
+    if (!add) result <- c(result, decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, ...))
+    invisible(result)
 }
 
 plot3d.qmesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
@@ -74,18 +75,22 @@ decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zli
     } else autoscale <- TRUE	
 
     ranges <- .getRanges()
+    
+    result <- numeric(0)
 
     if (!missing(xlim) | !missing(ylim) | !missing(zlim)) {
         ind <- c(1,1,2,2)
-	segments3d(xlim[ind], ylim[ind], zlim[ind])
+        result <- c(result, strut=segments3d(xlim[ind], ylim[ind], zlim[ind]))
     }
     
-    if (axes) axes3d()
-    if (box) box3d()
-    title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
-	    main = main, sub = sub)
+    if (axes) result <- c(result, axes=axes3d())
+    if (box) result <- c(result, box=box3d())
+    result <- c(result, title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
+	    main = main, sub = sub))
    
     if (autoscale) aspect3d(aspect)
     
     if (top) rgl.bringtotop()
+    
+    invisible(result)
 }

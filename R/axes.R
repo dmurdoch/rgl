@@ -76,12 +76,14 @@ axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
                 y <- c(y,as.double(rbind(mpos[2,],mpos[2,]+ticksize[2])))
                 z <- c(z,as.double(rbind(mpos[3,],mpos[3,]+ticksize[3])))
         }
-        segments3d(x,y,z,...)
+        result <- c(ticks=segments3d(x,y,z,...))
+
         if (!all(is.na(labels)))
-                text3d(mpos[1,]+3*ticksize[1],
+                result <- c(result, labels=text3d(mpos[1,]+3*ticksize[1],
                        mpos[2,]+3*ticksize[2],
                        mpos[3,]+3*ticksize[3],
-                       labels, ...)
+                       labels, ...))
+	invisible(result)
 }
 
 axes3d <- function(edges='bbox', labels=TRUE,
@@ -90,11 +92,14 @@ axes3d <- function(edges='bbox', labels=TRUE,
     save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
     on.exit(par3d(save))
     if (identical(edges, 'bbox')) {
-        do.call('bbox3d', .fixMaterialArgs(..., Params = list(front='lines', back='lines')))
+        result <- do.call('bbox3d', .fixMaterialArgs(..., Params = list(front='lines', back='lines')))
     } else {
+        result <- numeric(0)
     	for (e in edges)
-            axis3d(e,labels=labels,tick=tick, ...)
-    }
+            result <- c(result, axis3d(e,labels=labels,tick=tick, ...))
+	names(result) <- e
+    }	
+    invisible(result)  
 }
 
 box3d <- function(...)
@@ -102,12 +107,14 @@ box3d <- function(...)
         save <- par3d(ignoreExtent = TRUE)        
         on.exit(par3d(save))
         
+        result <- numeric(0)
+        
         ranges <- .getRanges()          
         if (ranges$strut) {
             par3d(ignoreExtent = FALSE)
-            segments3d(rep(ranges$xlim, c(2,2)),
+            result <- c(result, strut=segments3d(rep(ranges$xlim, c(2,2)),
                        rep(ranges$ylim, c(2,2)),
-                       rep(ranges$zlim, c(2,2)))
+                       rep(ranges$zlim, c(2,2))))
             par3d(ignoreExtent = TRUE)
         }
                        
@@ -116,7 +123,7 @@ box3d <- function(...)
                rep(ranges$y,2),rep(ranges$y,c(2,2)))
         z <- c(rep(ranges$z,c(2,2)),rep(ranges$z,2),rep(rep(ranges$z,c(2,2)),2),
                rep(ranges$z,c(2,2)),rep(ranges$z,2))
-        segments3d(x,y,z,...)
+        invisible(c(result, lines=segments3d(x,y,z,...)))
 }
 
 mtext3d <- function(text, edge, line = 0, at = NULL, pos = NA, ...)
@@ -167,25 +174,26 @@ title3d <- function (main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
 {
         save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
         on.exit(par3d(save))
+	result <- numeric(0)
         if (!is.null(main)) {
             aline <- ifelse(is.na(line), 2, line)
-            mtext3d(main, 'x++', line = aline, ...)
+            result <- c(result, main=mtext3d(main, 'x++', line = aline, ...))
         }
         if (!is.null(sub)) {
             aline <- ifelse(is.na(line), 3, line)
-            mtext3d(sub, 'x', line = aline, ...)
+            result <- c(result, sub=mtext3d(sub, 'x', line = aline, ...))
         }
         if (!is.null(xlab)) {
             aline <- ifelse(is.na(line), 2, line)
-            mtext3d(xlab, 'x', line = aline, ...)
+            result <- c(result, xlab=mtext3d(xlab, 'x', line = aline, ...))
         }
         if (!is.null(ylab)) {
             aline <- ifelse(is.na(line), 2, line)
-            mtext3d(ylab, 'y', line = aline, ...)
+            result <- c(result, ylab=mtext3d(ylab, 'y', line = aline, ...))
         }
         if (!is.null(zlab)) {
             aline <- ifelse(is.na(line), 2, line)
-            mtext3d(zlab, 'z', line = aline, ...)
+            result <- c(result, zlab=mtext3d(zlab, 'z', line = aline, ...))
         }                  
-
+        invisible(result)
 }

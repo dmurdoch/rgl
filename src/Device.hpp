@@ -36,8 +36,8 @@ public: // -- all methods are blocking until action completed
   bool postscript(int format, const char* filename);
 
   bool clear(TypeID stackTypeID);
-  bool add(SceneNode* node);
-  bool pop(TypeID stackTypeID);
+  int add(SceneNode* node); // -- return a unique id if successful, or zero if not
+  bool pop(TypeID stackTypeID, int id);
 
   // accessor method for Scene, modeled after getBoundingBox()
   // from scene.h

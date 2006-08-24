@@ -44,7 +44,8 @@ decorate3d(xlim, ylim, zlim,
   \item{top}{whether to bring the window to the top when done.}
 }
 \value{
-  \code{plot3d} is called for the side effect of drawing the plot; no useful value is returned.
+  \code{plot3d} is called for the side effect of drawing the plot; a vector
+  of object IDs is returned.
   
   \code{decorate3d} adds the usual decorations to a plot:  labels, axes, etc.
 }
