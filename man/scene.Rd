@@ -54,15 +54,15 @@ be followed by a call to \code{\link{rgl.light}} or \code{\link{light3d}}.
   x <- rnorm(100)
   y <- rnorm(100)
   z <- rnorm(100)
-  plot3d(x, y, z, type='s')
+  p <- plot3d(x, y, z, type='s')
   rgl.ids()
   lines3d(x, y, z)
   rgl.ids()
   if (interactive()) {
-    readline("Hit enter to change color of spheres")
-    ids <- rgl.ids()
-    rgl.pop(id = ids$id[ids$type == "spheres"])
-    spheres3d(x, y, z, col="red", radius=1/4)
+    readline("Hit enter to change spheres")
+    rgl.pop(id = p[c("data", "box.lines")])
+    spheres3d(x, y, z, col="red", radius=1/5)
+    box3d()
   }
 }
 \keyword{dynamic}
