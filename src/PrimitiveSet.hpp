@@ -22,6 +22,10 @@ public:
    * overloaded
    **/
   virtual void renderZSort(RenderContext* renderContext);
+  /**
+   * overloaded
+   **/  
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "primitive", buflen); };;
 protected:
 
   /**
@@ -113,6 +117,10 @@ protected:
    * overload
    **/
   virtual void drawEnd(RenderContext* renderContext);
+  /**
+   * overloaded
+   **/  
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "faces", buflen); };  
 private:
   NormalArray normalArray;
 };
@@ -126,6 +134,10 @@ class PointSet : public PrimitiveSet
 { 
 public:
   PointSet(Material& material, int nvertices, double* vertices, int in_ignoreExtent);
+  /**
+   * overloaded
+   **/  
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "points", buflen); };
 };
 
 //
@@ -137,6 +149,10 @@ class LineSet : public PrimitiveSet
 { 
 public:
   LineSet(Material& material, int nvertices, double* vertices, int in_ignoreExtent);
+  /**
+   * overloaded
+   **/  
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "lines", buflen); };
 };
 
 //
@@ -150,6 +166,10 @@ public:
   TriangleSet(Material& in_material, int in_nvertex, double* in_vertex, int in_ignoreExtent)
     : FaceSet(in_material,in_nvertex, in_vertex, GL_TRIANGLES, 3, in_ignoreExtent)
   { }
+  /**
+   * overloaded
+   **/  
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "triangles", buflen); };
 };
 
 //
@@ -163,6 +183,10 @@ public:
   QuadSet(Material& in_material, int in_nvertex, double* in_vertex, int in_ignoreExtent)
     : FaceSet(in_material,in_nvertex,in_vertex, GL_QUADS, 4, in_ignoreExtent)
   { }
+  /**
+   * overloaded
+   **/  
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "quads", buflen); };
 };
 
 //
@@ -174,7 +198,11 @@ class LineStripSet : public PrimitiveSet
 {
 public:
   LineStripSet(Material& material, int in_nelements, double* in_vertex, int in_ignoreExtent);
-  void drawElement(RenderContext* renderContext, int index);  
+  void drawElement(RenderContext* renderContext, int index);
+  /**
+   * overloaded
+   **/  
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "linestrip", buflen); };
 };
 
 #endif // PRIMITIVE_SET_HPP

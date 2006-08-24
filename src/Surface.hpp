@@ -27,6 +27,8 @@ public:
   
   /* Center of square with upper left at (ix, iz) */
   Vertex getCenter(int ix, int iz);  
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "surface", buflen); };
+
 private:
   void setNormal(int ix, int iz);
 

@@ -55,6 +55,7 @@ public:
   
   const bool getIgnoreExtent() const { return ignoreExtent; }
 
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "shape", buflen); };
 protected:
   /**
    * bounding volume of overall geometry

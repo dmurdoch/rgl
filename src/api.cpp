@@ -27,7 +27,9 @@ DeviceManager* deviceManager = NULL;
 //
 #define RGL_FAIL     0
 #define RGL_SUCCESS  1
-inline int as_success(bool b) { return (b) ? RGL_SUCCESS : RGL_FAIL; }
+inline int as_success(int b) { return (b) ; }
+
+
 
 //
 // data type conversion utilities:
@@ -214,6 +216,7 @@ void rgl_clear(int* successptr, int *idata)
 // PARAMETERS
 //   idata
 //     [0]  stack TypeID
+//     [1]  id SceneNode identifier
 //
 //
 
@@ -226,15 +229,48 @@ void rgl_pop(int* successptr, int* idata)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
 
     TypeID stackTypeID = (TypeID) idata[0];
+    int id = idata[1];
  
-    success = as_success( device->pop( stackTypeID ) );
+    success = as_success( device->pop( stackTypeID, id ) );
 
   }
 
   *successptr = success;
 }
 
+//
+// FUNCTION
+//   rgl_id_count
+//
 
+void rgl_id_count(int* type, int* count)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    
+    *count = scene->get_id_count((TypeID) *type);
+  } else {
+    *count = 0;
+  }
+}  
+
+//
+// FUNCTION
+//   rgl_ids
+//
+
+void rgl_ids(int* type, int* ids, char** types)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    
+    scene->get_ids((TypeID) *type, ids, types);
+  }
+} 
 //
 // FUNCTION
 //   rgl_bg   ( successPtr, idata )

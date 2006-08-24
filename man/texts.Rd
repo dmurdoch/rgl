@@ -38,6 +38,9 @@ plural to be consistent with all the other graphics primitives.  Take
 your choice!
 
 }
+\value{
+  The object ID of the text object is returned invisibly.
+}
 \examples{
 open3d()
 text3d(rnorm(10)*100,rnorm(10)*100,rnorm(10)*100,text=1:10,adj = 0.5, color=heat.colors(10))

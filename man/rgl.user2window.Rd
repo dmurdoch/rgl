@@ -25,7 +25,7 @@ These functions convert between user coordinates and window coordinates.
 Window coordinates run from 0 to 1 in X, Y, and Z.  X runs from 0 on the
 left to 1 on the right; Y runs from 0 at the bottom to 1 at the top;
 Z runs from 0 foremost to 1 in the background.  \code{rgl} does not currently
-display outside of this range, but in normal circumstances will automatically resize the
+display vertices plotted outside of this range, but in normal circumstances will automatically resize the
 display to show them.  In the example below this has been suppressed.
 
 }

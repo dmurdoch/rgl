@@ -38,8 +38,9 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     if (any(diff(x) <= 0) || any(diff(y) <= 0))
         stop("increasing 'x' and 'y' values expected")
         
-    surface3d(x,y,z,...)
+    result <- c(surface=surface3d(x,y,z,...))
     
-    decorate3d(xlim = xlim, ylim = ylim, zlim = zlim, 
-               xlab = xlab, ylab = ylab, zlab = zlab, aspect = aspect, ...)
+    result <- c(result, decorate3d(xlim = xlim, ylim = ylim, zlim = zlim, 
+               xlab = xlab, ylab = ylab, zlab = zlab, aspect = aspect, ...))
+    invisible(result)
 }

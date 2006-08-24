@@ -26,6 +26,11 @@ rgl.quads(x, y = NULL, z = NULL, ... )
   Adds a shape node to the scene. The appearance is defined by the material properties.
   See \code{\link{rgl.material}} for details.
 }
+\value{
+   Each primitive function returns the integer object id of the shape that
+   was added to the scene.  These can be passed to \code{\link{rgl.pop}}
+   to remove the object from the scene.
+}
 \examples{
 rgl.open()
 rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000), size=2)

@@ -9,6 +9,8 @@
 #include "render.h"
 #include "geom.hpp"
 #include <map>
+#include <algorithm>
+#include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -165,39 +167,80 @@ bool Scene::add(SceneNode* node)
   return success;
 }
 
+bool sameID(SceneNode* node, int id) { return node->getObjID() == id; }
 
-bool Scene::pop(TypeID type)
+bool Scene::pop(TypeID type, int id)
 {
   bool success = false;
+  std::vector<Shape*>::iterator ishape;
+  std::vector<Light*>::iterator ilight;
+  
+  switch(type) {
+    case SHAPE: {
+      if (id == BBOXID) {
+        type = BBOXDECO; 
+        id = 0;
+      }
+      else if (shapes.empty()) 
+        return false;
+      break;
+    }
+    case LIGHT: if (lights.empty()) return false;
+    default: break;
+  }
+  
+  if (id == 0) {
+    switch(type) {
+    case SHAPE:  
+      ishape = shapes.end() - 1;
+      id = (*ishape)->getObjID(); /* for zsort or unsort */
+      break;
+    case LIGHT:
+      ilight = lights.end() - 1;
+      break;
+    default:
+      break;
+    }
+  } else {
+    switch(type) {
+    case SHAPE:
+      ishape = std::find_if(shapes.begin(), shapes.end(), 
+                            std::bind2nd(std::ptr_fun(&sameID), id));
+      if (ishape == shapes.end()) return false;
+      break;
+    case LIGHT:
+      ilight = std::find_if(lights.begin(), lights.end(),
+      						std::bind2nd(std::ptr_fun(&sameID), id));
+      if (ilight == lights.end()) return false;
+      break;
+    default:
+      return false;
+    }
+  }
 
   switch(type) {
   case SHAPE:
     {
-      if (shapes.size()) {
-        Shape* tail = shapes.back();
-        shapes.pop_back();
-        if ( tail->getMaterial().isBlended() )
-          zsortShapes.pop_back();
-        else
-          unsortedShapes.pop_back();
-
-        delete tail;
-
-        calcDataBBox();
-
-        success = true;
-      }
-    }
+      Shape* shape = *ishape;
+      shapes.erase(ishape);
+      if ( shape->getMaterial().isBlended() )
+          zsortShapes.erase(std::find_if(zsortShapes.begin(), zsortShapes.end(),
+                                         std::bind2nd(std::ptr_fun(&sameID), id)));
+      else
+        unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
+                                       std::bind2nd(std::ptr_fun(&sameID), id)));
+      delete shape;
+      calcDataBBox();
+      success = true;
+    }  
     break;
   case LIGHT:
     {
-      if (lights.size()) {
-        Light* tail = lights.back();
-        lights.pop_back();
-        delete tail;
-        nlights--;
-        success = true;
-      }
+      Light* light = *ilight;
+      lights.erase(ilight);
+      delete light;
+      nlights--;
+      success = true;
     }
     break;
   case BBOXDECO:
@@ -215,6 +258,41 @@ bool Scene::pop(TypeID type)
 
   return success;
 }
+
+int Scene::get_id_count(TypeID type)
+{
+  switch(type) {
+  case SHAPE:  return shapes.size();
+  case LIGHT:  return lights.size();
+  default:     return 0;
+  }
+}
+
+void Scene::get_ids(TypeID type, int* ids, char** types)
+{
+  char buffer[20];
+  switch(type) {
+  case SHAPE: 
+    for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
+      *ids++ = (*i)->getObjID();
+      buffer[19] = 0;
+      (*i)->getShapeName(buffer, 20);
+      *types = R_alloc(strlen(buffer), 1);
+      strcpy(*types, buffer);
+      types++;
+    }
+    return;
+  case LIGHT: 
+    for (std::vector<Light*>::iterator i = lights.begin(); i != lights.end() ; ++ i ) {
+      *ids++ = (*i)->getObjID();
+      *types = R_alloc(strlen("light"), 1);
+      strcpy(*types, "light");
+      types++;
+    }
+    return;
+  default:	return;
+  }
+}  
 
 void Scene::render(RenderContext* renderContext)
 {

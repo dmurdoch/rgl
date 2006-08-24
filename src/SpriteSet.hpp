@@ -31,6 +31,8 @@ public:
    **/
   virtual void draw(RenderContext* renderContext);
 
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "sprites", buflen); };
+
 };
 
 #endif // SPRITE_SET_HPP

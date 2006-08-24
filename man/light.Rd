@@ -19,6 +19,10 @@ rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffus
   Up to 8 light sources are supported. They are positioned either in world space
   or relative to the camera using polar coordinates. Light sources are directional.
 }
+\value{
+  This function is called for the side effect of adding a light.  A light ID is
+  returned to allow \code{\link{rgl.pop}} to remove it.
+}
 \seealso{
   \code{\link{rgl.clear}}
   \code{\link{rgl.pop}}

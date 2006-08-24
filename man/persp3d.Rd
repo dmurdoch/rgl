@@ -37,7 +37,8 @@ persp3d(x, \dots)
   for more details.
 }
 \value{
-  This function is called for the side effect of drawing the plot; no useful value is returned.
+  This function is called for the side effect of drawing the plot.  A vector 
+  of shape IDs is returned.
 }
 \author{Duncan Murdoch}
 \seealso{\code{\link{plot3d}}, \code{\link{persp}}}

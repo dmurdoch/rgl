@@ -84,19 +84,20 @@ bool Device::clear(TypeID stackTypeID)
   return success;
 }
 // ---------------------------------------------------------------------------
-bool Device::add(SceneNode* node)
+int Device::add(SceneNode* node)
 {
   bool success;
   success = scene->add(node);
   rglview->update();
-  return success;
+  if (success) return node->getObjID();
+  else return 0;
 }
 // ---------------------------------------------------------------------------
 
-bool Device::pop(TypeID stackTypeID)
+bool Device::pop(TypeID stackTypeID, int id)
 {
   bool success;
-  success = scene->pop(stackTypeID);
+  success = scene->pop(stackTypeID, id);
   rglview->update();
   return success;
 }

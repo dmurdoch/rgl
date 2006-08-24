@@ -37,6 +37,10 @@ bbox3d(xat, yat, zat, expand=1.03, ...)
   \code{\link{axes3d}} offers more flexibility in the specification of the axes, but 
   they are static, unlike those drawn by \code{\link{rgl.bbox}} and \code{\link{bbox3d}}.
 }
+\value{
+  This function is called for the side effect of setting the bounding box decoration.
+  A shape ID is returned to allow \code{\link{rgl.pop}} to delete it.
+}
 \examples{
   rgl.open()
   rgl.points(rnorm(100), rnorm(100), rnorm(100))
