@@ -51,5 +51,5 @@ rgl.enum.texmagfilter <- function (magfiltertype)
 rgl.enum (magfiltertype, nearest=0, linear=1)
 
 rgl.enum.gl2ps <- function (postscripttype)
-rgl.enum (postscripttype, ps=1, eps=2, tex=3, pdf=4)
+rgl.enum (postscripttype, ps=0, eps=1, tex=2, pdf=3, svg=4, pgf=5)
 

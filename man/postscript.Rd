@@ -9,7 +9,7 @@ rgl.postscript( filename, fmt="eps" )
 }
 \arguments{
   \item{filename}{full path to filename.}
-  \item{fmt}{export format, currently supported: ps, eps, tex, pdf }
+  \item{fmt}{export format, currently supported: ps, eps, tex, pdf, svg, pgf }
 }
 \details{
 Animations can be created in a loop modifying the scene and saving 
