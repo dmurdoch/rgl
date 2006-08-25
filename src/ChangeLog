@@ -165,4 +165,5 @@ v0.67-3
   - changed rgl.viewpoint default to be compatible with r3dDefaults
   - added id return values to primitives and higher level functions, 
     and to rgl.pop(); added rgl.ids() to report on them.
+  - updated gl2ps to version 1.3.1, adding support for svg and pgf output formats.
     
