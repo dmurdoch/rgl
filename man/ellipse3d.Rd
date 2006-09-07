@@ -34,7 +34,7 @@ Additional parameters to pass to the default method or to \code{\link{qmesh3d}}.
 }
 \item{scale}{
 If \code{x} is a correlation matrix, then the standard deviations of each
-parameter can be given in the scale parameter.  This defaults to \code{c(1, 1)},
+parameter can be given in the scale parameter.  This defaults to \code{c(1, 1, 1)},
 so no rescaling will be done.
 }
 \item{centre}{

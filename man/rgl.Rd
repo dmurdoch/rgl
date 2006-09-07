@@ -12,12 +12,12 @@
 \usage{
 rgl.open()     # open new device
 rgl.close()    # close current device
-rgl.cur()      # returns active device id
+rgl.cur()      # returns active device ID
 rgl.set(which) # set device as active
 rgl.quit()     # shutdown rgl device system
 }
 \arguments{
-  \item{which}{device id}
+  \item{which}{device ID}
 }
 \details{
   RGL is a 3D real-time rendering device driver system for R.

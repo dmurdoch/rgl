@@ -1,9 +1,9 @@
 \name{rgl.bbox}
 \alias{rgl.bbox}
 \alias{bbox3d}
-\title{setup Bounding Box decoration}
+\title{Set up Bounding Box decoration}
 \description{
-  Setup the bounding box decoration.
+  Set up the bounding box decoration.
 }
 \usage{
 rgl.bbox( 
@@ -26,9 +26,9 @@ bbox3d(xat, yat, zat, expand=1.03, ...)
 }
 \details{
   Three different types of tick mark layouts are possible.
-  If at is not NULL, the ticks are setup at custom positions.
-  If unit is not zero, it defines the tick mark base.
-  If length is not zero, it specifies the number of ticks that are automatically specified.
+  If \code{at} is not \code{NULL}, the ticks are set up at custom positions.
+  If \code{unit} is not zero, it defines the tick mark base.
+  If \code{length} is not zero, it specifies the number of ticks that are automatically specified.
   The first colour specifies the bounding box, while the second one specifies the tick mark and font colour.
   
   \code{bbox3d} defaults to \code{\link{pretty}} locations for the axis labels and a slightly larger
@@ -44,13 +44,15 @@ bbox3d(xat, yat, zat, expand=1.03, ...)
 \examples{
   rgl.open()
   rgl.points(rnorm(100), rnorm(100), rnorm(100))
-  rgl.bbox(color=c("#333377","white"), emission="#333377", specular="#3333FF", shininess=5, alpha=0.8 )
+  rgl.bbox(color=c("#333377","white"), emission="#333377", 
+           specular="#3333FF", shininess=5, alpha=0.8 )
   
   open3d()
   points3d(rnorm(100), rnorm(100), rnorm(100))
-  bbox3d(color=c("#333377","white"), emission="#333377", specular="#3333FF", shininess=5, alpha=0.8)
+  bbox3d(color=c("#333377","white"), emission="#333377", 
+         specular="#3333FF", shininess=5, alpha=0.8)
 }
 \seealso{
-  \code{\link{rgl.material}, \code{\link{axes3d}} }
+  \code{\link{rgl.material}}, \code{\link{axes3d}} 
 }
 \keyword{dynamic}

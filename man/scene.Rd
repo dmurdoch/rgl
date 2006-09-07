@@ -25,7 +25,7 @@ rgl.ids( type = "shapes" )
       \item{"all"}{all of the above}
     }
   }
-  \item{id}{vector of id numbers of items to remove}
+  \item{id}{vector of ID numbers of items to remove}
   \item{...}{generic arguments passed through to RGL-specific (or other) functions}
 }
 \details{
@@ -36,7 +36,7 @@ with \code{id=0} \code{rgl.pop} removes
 the top-most (last added) node on the shape stack.  The \code{id} argument
 may be used to specify arbitrary item(s) to remove from the specified stack.
 
-\code{rgl.ids} returns a dataframe containing the ids in the currently active
+\code{rgl.ids} returns a dataframe containing the IDs in the currently active
 rgl window, along with an indicator of their type.
 
 For convenience, \code{type="shapes"} and 
