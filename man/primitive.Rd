@@ -27,7 +27,7 @@ rgl.quads(x, y = NULL, z = NULL, ... )
   See \code{\link{rgl.material}} for details.
 }
 \value{
-   Each primitive function returns the integer object id of the shape that
+   Each primitive function returns the integer object ID of the shape that
    was added to the scene.  These can be passed to \code{\link{rgl.pop}}
    to remove the object from the scene.
 }

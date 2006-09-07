@@ -1,7 +1,7 @@
 \name{bg}
 \alias{rgl.bg}
 \alias{bg3d}
-\title{setup Background}
+\title{Set up Background}
 \description{
   Setup the background environment of the scene.
 }

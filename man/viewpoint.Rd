@@ -1,7 +1,7 @@
 \name{viewpoint}
 \alias{rgl.viewpoint}
 \alias{view3d}
-\title{setup viewpoint}
+\title{Set up viewpoint}
 \description{
   Set the viewpoint orientation.
 }
