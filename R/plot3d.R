@@ -29,13 +29,13 @@ plot3d.default <- function(x, y = NULL, z = NULL,
                                diff(range(z)))^2/3))
     }
     result <- c( data=switch(type,
-		p = points3d(x, y, z, color=col, ...),
+		p = points3d(x, y, z, color=col, size=size, ...),
 	        s = spheres3d(x, y, z, radius=radius, color=col, ...),
-		l = lines3d(x, y, z, color=col, ...),
+		l = lines3d(x, y, z, color=col, size=size, ...),
 		h = segments3d(rep(x,rep(2,length(x))),
 					   rep(y,rep(2,length(y))),
 					   rbind(rep(0,length(z)),z),
-					   color = rep(col, rep(2,length(col))),...),
+					   color = rep(col, rep(2,length(col))), size=size, ...),
 	# this is a hack to plot invisible segments
         n = if (!add) segments3d(rep(range(x), c(2,2)),
                                  rep(range(y), c(2,2)),
