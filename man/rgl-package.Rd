@@ -1,5 +1,6 @@
-\name{rgl}
+\name{rgl-package}
 \title{3D visualization device system}
+\alias{rgl-package}
 \alias{rgl}
 \alias{rgl.open}
 \alias{rgl.close}
