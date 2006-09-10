@@ -7,7 +7,8 @@
 }
 \usage{
 bg3d(...) 
-rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines", ...)
+rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), 
+        back="lines", ...)
 
 }
 \arguments{
@@ -47,7 +48,8 @@ rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines"
 
   # an environmental sphere with a nice texture.
 
-  rgl.bg(sphere=TRUE, texture=system.file("textures/sunsleep.png", package="rgl"), back="filled" )
+  rgl.bg(sphere=TRUE, texture=system.file("textures/sunsleep.png", package="rgl"), 
+         back="filled" )
 }
 \seealso{
   \code{\link{rgl.material}}
