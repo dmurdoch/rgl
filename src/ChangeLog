@@ -155,7 +155,7 @@ v0.67
 v0.67-2
   - minor correction
 
-v0.67-3
+v0.68
   - fixed sphere drawing so spheres are spheres regardless of par3d("scale")
   - added type="s" to plot3d to draw spheres
   - fixed handling of "..." in axis related functions
