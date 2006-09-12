@@ -11,12 +11,12 @@ These functions draw axes, boxes and text outside the range of the data.
 normally the others need not be called directly by users.
 }
 \usage{
-axes3d(edges="bbox", labels=TRUE, tick=TRUE, ...)
+axes3d(edges = "bbox", labels = TRUE, tick = TRUE, nticks = 5, ...)
 box3d(...) 
 title3d(main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
     zlab = NULL, line = NA, ...) 
 axis3d(edge, at = NULL, labels = TRUE, tick = TRUE, line = 0, 
-    pos = NULL, ...) 
+    pos = NULL, nticks = 5, ...) 
 mtext3d(text, edge, line = 0, at = NULL, pos = NA, ...) 
 }
 \arguments{
@@ -24,6 +24,7 @@ mtext3d(text, edge, line = 0, at = NULL, pos = NA, ...)
   \item{labels}{ whether to label the axes, or (for \code{axis3d}) the
   labels to use}
   \item{tick}{ whether to use tick marks }
+  \item{nticks}{ suggested number of ticks }
   \item{main}{ the main title for the plot }
   \item{sub}{ the subtitle for the plot }
   \item{xlab, ylab, zlab}{ the axis labels for the plot }

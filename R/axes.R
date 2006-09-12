@@ -28,7 +28,7 @@
 }
 
 axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
-    pos = NULL, ...)
+    pos = NULL, nticks = 5, ...)
 {
         save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
         on.exit(par3d(save))
@@ -45,7 +45,7 @@ axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
         range <- ranges[[coord]]
 
         if (is.null(at)) {
-                at <- pretty(range)
+                at <- pretty(range, nticks)
                 at <- at[at >= range[1] & at <= range[2]]
         }
 
@@ -87,16 +87,17 @@ axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
 }
 
 axes3d <- function(edges='bbox', labels=TRUE,
-                   tick=TRUE, ...)
+                   tick=TRUE, nticks = 5, ...)
 {
     save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
     on.exit(par3d(save))
     if (identical(edges, 'bbox')) {
-        result <- do.call('bbox3d', .fixMaterialArgs(..., Params = list(front='lines', back='lines')))
+        result <- do.call('bbox3d', c(list(nticks=nticks), 
+                                      .fixMaterialArgs(..., Params = list(front='lines', back='lines'))))
     } else {
         result <- numeric(0)
     	for (e in edges)
-            result <- c(result, axis3d(e,labels=labels,tick=tick, ...))
+            result <- c(result, axis3d(e,labels=labels,tick=tick,nticks=nticks, ...))
 	names(result) <- e
     }	
     invisible(result)  
