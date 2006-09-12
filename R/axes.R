@@ -7,7 +7,7 @@
     ranges <- par3d('bbox')
     ranges <- list(xlim=ranges[1:2], ylim=ranges[3:4], zlim=ranges[5:6])
 
-    strut <<- FALSE
+    strut <- FALSE
     
     ranges <- lapply(ranges, function(r) {
                        d <- diff(r)
