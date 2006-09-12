@@ -80,8 +80,10 @@ view3d      <- function(theta=0,phi=15,...) {
   rgl.viewpoint(theta=theta,phi=phi,...)
 }
 
-bbox3d	    <- function(xat = pretty(ranges$x), yat = pretty(ranges$y), zat = pretty(ranges$z), 
-		        expand = 1.03, ...) {  
+bbox3d	    <- function(xat = pretty(ranges$x, nticks), 
+                        yat = pretty(ranges$y, nticks), 
+                        zat = pretty(ranges$z, nticks), 
+		        expand = 1.03, nticks = 5, ...) {  
   .check3d(); save <- material3d(); on.exit(material3d(save))
   ranges <- .getRanges(expand = expand)
   do.call("rgl.bbox", c(list(xat=xat, yat=yat, zat=zat, expand=expand), 

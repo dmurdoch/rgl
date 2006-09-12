@@ -11,7 +11,7 @@ rgl.bbox(
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
   marklen=15.0, marklen.rel=TRUE, expand=1, ...)
-bbox3d(xat, yat, zat, expand=1.03, ...)  
+bbox3d(xat, yat, zat, expand=1.03, nticks=5, ...)  
 }
 \arguments{
   \item{xat,yat,zat}{vector specifying the tickmark positions}
@@ -21,6 +21,7 @@ bbox3d(xat, yat, zat, expand=1.03, ...)
   \item{marklen}{value specifying the length of the tickmarks}
   \item{marklen.rel}{logical, if TRUE tick mark length is calculated using 1/\code{marklen} * axis length, otherwise tick mark length is \code{marklen} in coordinate space}
   \item{expand}{value specifying how much to expand the bounding box around the data}
+  \item{nticks}{suggested number of ticks to use on axes}
   \item{ ... }{Material properties (or other \code{rgl.bbox} parameters
   in the case of \code{bbox3d}). See \code{\link{rgl.material}} for details.}
 }
