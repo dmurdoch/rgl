@@ -7,8 +7,14 @@
   select a region in an RGL scene.  
 }
 \usage{
-select3d()
+rgl.select3d(button = c("left", "middle", "right"))
+select3d(...)
 }
+\arguments{
+  \item{ button }{ Which button to use for selection.}
+  \item{ ... }{ Button argument to pass to \code{rgl.select3d}}
+}
+
 \details{
     
 This function selects 3-dimensional regions by allowing the

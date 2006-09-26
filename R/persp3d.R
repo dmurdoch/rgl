@@ -40,7 +40,7 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
         
     result <- c(surface=surface3d(x,y,z,...))
     
-    result <- c(result, decorate3d(xlim = xlim, ylim = ylim, zlim = zlim, 
-               xlab = xlab, ylab = ylab, zlab = zlab, aspect = aspect, ...))
+    if (!add) result <- c(result, decorate3d(xlim = xlim, ylim = ylim, zlim = zlim, 
+                          xlab = xlab, ylab = ylab, zlab = zlab, aspect = aspect, ...))
     invisible(result)
 }

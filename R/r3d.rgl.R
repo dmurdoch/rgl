@@ -143,7 +143,7 @@ surface3d   <- terrain3d
 
 # Interaction
 
-select3d    <- function() {.check3d(); rgl.select3d()}
+select3d    <- function(...) {.check3d(); rgl.select3d(...)}
 
 # 3D Generic Object Rendering Attributes
 
