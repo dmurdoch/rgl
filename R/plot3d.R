@@ -56,12 +56,13 @@ plot3d.qmesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shad
     if (missing(ylab) && !is.null(x$ylab)) ylab <- x$ylab
     if (missing(zlab) && !is.null(x$zlab)) zlab <- x$zlab
     
-    switch(match.arg(type),
+    result <- switch(match.arg(type),
     	shade = shade3d(x, ...),
     	wire = wire3d(x, ...),
     	dots = dot3d(x, ...))
     
-    if (!add) decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, ...)
+    if (!add) result <- c(result, decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, ...))
+    invisible(result)
 }
 
 decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zlim, 

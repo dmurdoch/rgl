@@ -565,8 +565,8 @@ rgl.projection <- function()
     	 view = par3d("viewport"))
 }   
      
-rgl.select3d <- function() {
-  rect <- rgl.select()
+rgl.select3d <- function(button = c("left", "middle", "right")) {
+  rect <- rgl.select(button = button)
   llx <- rect[1]
   lly <- rect[2]
   urx <- rect[3]
