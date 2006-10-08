@@ -172,3 +172,4 @@ v0.68.528
   - persp3d partially ignored add=TRUE
   - plot3d.qmesh3d did not return result
   - allow selection to use any button
+  - allow NA in primitives, surfaces, texts, and sprites

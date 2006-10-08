@@ -19,13 +19,15 @@ void AABox::invalidate(void)
 
 void AABox::operator += (const Vertex& v)
 {
-  vmin.x = getMin(vmin.x, v.x);
-  vmin.y = getMin(vmin.y, v.y);
-  vmin.z = getMin(vmin.z, v.z);
+  if (!v.missing()) {
+    vmin.x = getMin(vmin.x, v.x);
+    vmin.y = getMin(vmin.y, v.y);
+    vmin.z = getMin(vmin.z, v.z);
 
-  vmax.x = getMax(vmax.x, v.x);
-  vmax.y = getMax(vmax.y, v.y);
-  vmax.z = getMax(vmax.z, v.z);
+    vmax.x = getMax(vmax.x, v.x);
+    vmax.y = getMax(vmax.y, v.y);
+    vmax.z = getMax(vmax.z, v.z);
+  }
 }
 
 void AABox::operator += (const AABox& aabox)

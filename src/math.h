@@ -103,6 +103,7 @@ struct Vec3
   void   operator+=(Vec3 op2);
   void   rotateX(float degree);
   void   rotateY(float degree);
+  bool   missing() const;  /* Any components missing */
 
   static inline Vec3& asVec3(float* ptr) {
     return *( reinterpret_cast<Vec3*>( ptr ) );
@@ -131,6 +132,7 @@ struct Vec4
   float operator * (const Vec4& op2) const;
   Vec4 operator * (const float value) const;
   Vec4 operator + (const Vec4& op2) const;
+  bool   missing() const;  /* Any components missing */
 
   static inline Vec4& asVec4(float* ptr) {
     return *( reinterpret_cast<Vec4*>( ptr ) );

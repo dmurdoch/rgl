@@ -42,6 +42,8 @@ rgl.surface(x, z, y, coords=1:3, ...)
   (i.e. towards higher \code{y} values).  This can be used to render
   the top and bottom differently; see \code{\link{rgl.material}} and
   the example below.
+  
+  \code{NA} values in the height matrix are not drawn.
 }
 \value{
   The object ID of the displayed surface is returned invisibly.
