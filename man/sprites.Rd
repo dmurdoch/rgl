@@ -24,6 +24,8 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
   using alpha blended textures.
   Particles are Sprites using an alpha-blended particle texture giving
   the illusion of clouds and gasses.
+  
+  If any coordinate is \code{NA}, the sprite is not plotted.
 }
 \value{
   These functions are called for the side effect of displaying the sprites.

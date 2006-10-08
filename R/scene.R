@@ -242,13 +242,6 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
   y <- xyz$y
   z <- xyz$z
 
-  if (any(is.na(c(x,y,z)))) {
-    d <- complete.cases(cbind(x,y,z))
-    x <- x[d]
-    y <- y[d]
-    z <- z[d]
-    warning("NA/NaN values ignored")
-  }
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   if (nvertex > 0) {
@@ -263,6 +256,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
       success = as.integer(FALSE),
       idata,
       as.numeric(vertex),
+      NAOK = TRUE,
       PACKAGE="rgl"
     );
   
@@ -351,6 +345,7 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
     as.numeric(y),
     as.integer(coords),
     as.integer(parity),
+    NAOK=TRUE,
     PACKAGE="rgl"
   );
 
@@ -372,7 +367,15 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   nvertex <- rgl.nvertex(vertex)
   radius  <- rgl.attr(radius, nvertex)
   nradius <- length(radius)
- 
+  
+  d <- !complete.cases(cbind(t(vertex), radius))
+  if (any(d)) {
+    vertex  <- vertex[,!d]
+    nvertex <- rgl.nvertex(vertex)
+    radius  <- radius[!d]
+    nradius <- length(radius)
+  }
+  
   idata <- as.integer( c( nvertex, nradius ) )
    
   ret <- .C( "rgl_spheres",
@@ -407,7 +410,14 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   text    <- rep(text, length.out=nvertex)
-
+  
+  d <- !complete.cases(t(vertex), text)
+  if (any(d)) {
+    vertex  <- vertex[,!d]
+    nvertex <- rgl.nvertex(vertex)
+    text  <- text[!d]
+  }
+  
   idata <- as.integer(nvertex)
 
   ret <- .C( "rgl_texts",
@@ -437,7 +447,15 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
   ncenter <- rgl.nvertex(center)
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
- 
+  
+  d <- !complete.cases(cbind(t(center), radius))
+  if (any(d)) {
+    center  <- center[,!d]
+    ncenter <- rgl.nvertex(center)
+    radius  <- radius[!d]
+    nradius <- length(radius)
+  } 
+  
   idata   <- as.integer( c(ncenter,nradius) )
    
   ret <- .C( "rgl_sprites",

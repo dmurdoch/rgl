@@ -56,7 +56,7 @@ Note that since \code{rgl} does not currently support
 clipping, all points will be plotted, and \code{xlim}, \code{ylim}, and \code{zlim}
 will only be used to increase the respective ranges.
 
-Missing values in the data are not currently supported.
+Missing values in the data are skipped, as in standard graphics.
 
 If \code{aspect} is \code{TRUE}, aspect ratios of \code{c(1,1,1)} are passed to
 \code{\link{aspect3d}}.  If \code{FALSE}, no aspect adjustment is done.  In other

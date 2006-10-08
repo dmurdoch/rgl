@@ -84,7 +84,7 @@ protected:
   int nvertices;
   int nprimitives;
   VertexArray vertexArray;
-
+  bool hasmissing; 	/* whether any vertices contain missing values */
 };
 
 

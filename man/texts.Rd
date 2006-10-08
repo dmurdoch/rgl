@@ -37,6 +37,7 @@ consistent with the classic 2-D graphics functions, and the latter is
 plural to be consistent with all the other graphics primitives.  Take
 your choice!
 
+If any coordinate or text is \code{NA}, that text is not plotted.
 }
 \value{
   The object ID of the text object is returned invisibly.

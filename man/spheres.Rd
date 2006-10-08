@@ -27,6 +27,8 @@ Note that the bounding box calculation is always done assuming an
 isometric scale, so in this case it is inaccurate:  the extent of axes 
 with \code{scale < 1} is underestimated, and that of axes with 
 \code{scale > 1} is overestimated.
+
+If any coordinate or radius is \code{NA}, the sphere is not plotted.
 } 
 \value{
   A shape ID of the spheres object is returned.

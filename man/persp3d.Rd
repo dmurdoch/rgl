@@ -18,8 +18,8 @@ persp3d(x, \dots)
     spaced values from 0 to 1 are used.  If \code{x} is a \code{list},
     its components \code{x$x} and \code{x$y} are used for \code{x}
     and \code{y}, respectively.}
-  \item{z}{a matrix containing the values to be plotted (\code{NA}s are
-    not allowed).  Note that \code{x} can be used instead of \code{z} for
+  \item{z}{a matrix containing the values to be plotted.  
+    Note that \code{x} can be used instead of \code{z} for
     convenience.}
   \item{xlim, ylim, zlim}{x-, y-  and z-limits.  The plot is produced
     so that the rectangular volume defined by these limits is visible.}
