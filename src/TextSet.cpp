@@ -53,10 +53,12 @@ void TextSet::draw(RenderContext* renderContext) {
   StringArrayIterator iter(&textArray);
 
   for( cnt = 0, iter.first(); !iter.isDone(); iter.next(), cnt++ ) {
-    material.useColor(cnt);
-    glRasterPos3f( vertexArray[cnt].x, vertexArray[cnt].y, vertexArray[cnt].z );
-    String text = iter.getCurrent();
-    renderContext->font->draw( text.text, text.length, adj );
+    if (!vertexArray[cnt].missing()) {
+      material.useColor(cnt);
+      glRasterPos3f( vertexArray[cnt].x, vertexArray[cnt].y, vertexArray[cnt].z );
+      String text = iter.getCurrent();
+      renderContext->font->draw( text.text, text.length, adj );
+    }
   }
 
   material.endUse(renderContext);

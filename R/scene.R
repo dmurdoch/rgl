@@ -404,13 +404,6 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
   nvertex <- rgl.nvertex(vertex)
   text    <- rep(text, length.out=nvertex)
   
-  d <- !complete.cases(t(vertex), text)
-  if (any(d)) {
-    vertex  <- vertex[,!d]
-    nvertex <- rgl.nvertex(vertex)
-    text  <- text[!d]
-  }
-  
   idata <- as.integer(nvertex)
 
   ret <- .C( "rgl_texts",
@@ -419,6 +412,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
     as.double(adj),
     as.character(text),
     as.numeric(vertex),
+    NAOK=TRUE,
     PACKAGE="rgl"
   )
   
