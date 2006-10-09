@@ -1,4 +1,5 @@
 #include "geom.hpp"
+#include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -19,13 +20,16 @@ void AABox::invalidate(void)
 
 void AABox::operator += (const Vertex& v)
 {
-  if (!v.missing()) {
+  if (!ISNAN(v.x)) {
     vmin.x = getMin(vmin.x, v.x);
+    vmax.x = getMax(vmax.x, v.x);   
+  }
+  if (!ISNAN(v.y)) {
     vmin.y = getMin(vmin.y, v.y);
+    vmax.y = getMax(vmax.y, v.y);   
+  }
+  if (!ISNAN(v.z)) {
     vmin.z = getMin(vmin.z, v.z);
-
-    vmax.x = getMax(vmax.x, v.x);
-    vmax.y = getMax(vmax.y, v.y);
     vmax.z = getMax(vmax.z, v.z);
   }
 }

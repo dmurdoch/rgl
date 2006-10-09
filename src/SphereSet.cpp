@@ -1,5 +1,6 @@
 #include "SphereSet.hpp"
 #include "Viewpoint.hpp"
+#include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -32,6 +33,8 @@ SphereSet::~SphereSet()
 
 void SphereSet::drawElement(RenderContext* renderContext, int i) 
 {
+   if ( center.get(i).missing() || ISNAN(radius.getRecycled(i)) ) return;
+
    material.useColor(i);
 
    sphereMesh.setCenter( center.get(i) );
