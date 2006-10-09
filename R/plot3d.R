@@ -24,9 +24,9 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     if (is.null(zlab)) zlab <- xyz$zlab
 
     if (type == "s" && missing(radius)) {
-	avgscale <- sqrt(sum(c(diff(range(x)), 
-                               diff(range(y)), 
-                               diff(range(z)))^2/3))
+	avgscale <- sqrt(sum(c(diff(range(x,na.rm=TRUE)), 
+                               diff(range(y,na.rm=TRUE)), 
+                               diff(range(z,na.rm=TRUE)))^2/3))
     }
     result <- c( data=switch(type,
 		p = points3d(x, y, z, color=col, size=size, ...),

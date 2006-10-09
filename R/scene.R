@@ -368,14 +368,6 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   radius  <- rgl.attr(radius, nvertex)
   nradius <- length(radius)
   
-  d <- !complete.cases(cbind(t(vertex), radius))
-  if (any(d)) {
-    vertex  <- vertex[,!d]
-    nvertex <- rgl.nvertex(vertex)
-    radius  <- radius[!d]
-    nradius <- length(radius)
-  }
-  
   idata <- as.integer( c( nvertex, nradius ) )
    
   ret <- .C( "rgl_spheres",
@@ -383,6 +375,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
     idata,
     as.numeric(vertex),    
     as.numeric(radius),
+    NAOK=TRUE,
     PACKAGE="rgl"
   )
 
@@ -448,14 +441,6 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
   
-  d <- !complete.cases(cbind(t(center), radius))
-  if (any(d)) {
-    center  <- center[,!d]
-    ncenter <- rgl.nvertex(center)
-    radius  <- radius[!d]
-    nradius <- length(radius)
-  } 
-  
   idata   <- as.integer( c(ncenter,nradius) )
    
   ret <- .C( "rgl_sprites",
@@ -463,6 +448,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
     idata,
     as.numeric(center),
     as.numeric(radius),
+    NAOK=TRUE,
     PACKAGE="rgl"
   )
 

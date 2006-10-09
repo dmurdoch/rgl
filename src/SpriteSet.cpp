@@ -1,6 +1,7 @@
 #include "SpriteSet.hpp"
 
 #include <map>
+#include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -55,9 +56,11 @@ void SpriteSet::renderZSort(RenderContext* renderContext)
     int index = iter->second;
     
     Vertex& o = vertex.get(index);
-    float   s = size.getRecycled(index) * 0.5f;
-    Vertex  v;
+    float   s = size.getRecycled(index);
+    if (o.missing() || ISNAN(s)) continue;
 
+    Vertex  v;
+    s = s * 0.5f;
     v = m * o;
 
     material.useColor(index);
@@ -108,9 +111,11 @@ void SpriteSet::render(RenderContext* renderContext)
   for(int i=0;i<vertex.size();i++) {
 
     Vertex& o = vertex.get(i);
-    float   s = size.getRecycled(i) * 0.5f;
-    Vertex  v;
+    float   s = size.getRecycled(i);
+    if (o.missing() || ISNAN(s)) continue;
 
+    Vertex  v;
+    s = 0.5f * s;
     v = m * o;
 
     material.useColor(i);
