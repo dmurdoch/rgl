@@ -21,7 +21,7 @@ double getTime()
   return 0.0;
 }
 // ---------------------------------------------------------------------------
-gui::GUIFactory* gGUIFactory = 0;
+gui::OSXGUIFactory* gGUIFactory = 0;
 // ---------------------------------------------------------------------------
 gui::GUIFactory* getGUIFactory()
 { 
@@ -32,7 +32,10 @@ bool init()
 {
   assert(gGUIFactory == 0);
   gGUIFactory = new gui::OSXGUIFactory();
-  return true;
+  if (!gGUIFactory->hasEventLoop()) {
+	Rprintf("RGL: configured for Carbon/Cocoa, must run in R.app\n");
+	return false;
+  } else return true;
 }
 // ---------------------------------------------------------------------------
 void quit()

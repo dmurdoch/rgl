@@ -14,7 +14,7 @@ AC_PREREQ(2.50)
 AC_INIT()
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 AC_ARG_ENABLE([carbon],
-[  --disable-carbonn          os x: use X11 instead of Carbon]
+[  --disable-carbon          os x: use X11 instead of Carbon]
 )
 
 if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then
