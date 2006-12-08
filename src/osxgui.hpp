@@ -11,6 +11,7 @@ public:
   OSXGUIFactory();
 	~OSXGUIFactory();
   WindowImpl* createWindowImpl(Window* w); 
+  bool hasEventLoop();
 };
 // ---------------------------------------------------------------------------
 } // namespace gui

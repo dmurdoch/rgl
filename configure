@@ -806,7 +806,7 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --disable-carbonn          os x: use X11 instead of Carbon
+  --disable-carbon           os x: use X11 instead of Carbon
 
   --disable-libpng           compile without PNG image support
 

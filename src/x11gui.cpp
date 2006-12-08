@@ -365,7 +365,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   xdisplay = XOpenDisplay(displayname);
   
   if (xdisplay == 0) {
-    throw_error("unable to open display"); return;
+    throw_error("unable to open X11 display"); return;
   }
   
   // Load System font

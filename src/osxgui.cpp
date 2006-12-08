@@ -250,8 +250,10 @@ OSStatus OSXWindowImpl::windowHandler(EventHandlerCallRef next, EventRef e) {
             {
               aglUpdateContext(mGLContext);
               GetWindowBounds(mWindowRef,kWindowContentRgn,&mRect);
-              if (window)
+              if (window) {
                 window->resize( mRect.right - mRect.left, mRect.bottom - mRect.top );
+                update();
+		      }
             }
             break; 
         }
@@ -347,6 +349,12 @@ OSXGUIFactory::~OSXGUIFactory()
 WindowImpl* OSXGUIFactory::createWindowImpl(Window* window)
 {
   return new OSXWindowImpl(window);
+}
+// ---------------------------------------------------------------------------
+extern int gInitValue;
+bool OSXGUIFactory::hasEventLoop()
+{
+  return gInitValue != 0;
 }
 // ---------------------------------------------------------------------------
 } // namespace gui

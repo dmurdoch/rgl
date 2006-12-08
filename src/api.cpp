@@ -43,7 +43,7 @@ inline bool as_bool(int idata) { return (idata) ? true : false; }
 
 namespace gui {
 
-int gMDIHandle;
+int gInitValue;
 
 }
 
@@ -52,17 +52,20 @@ int gMDIHandle;
 //   rgl_init
 //
 // PARAMETERS
-//   ioptions
-//     [0]  multiple-document-interface console handle (MDI) 
+//   ioptions - platform-specific options.
+//     Windows:
+//     [0]  multiple-document-interface console handle (MDI)
 //          or 0 (SDI)
+//     MacOSX:
+//     [0]  indicator of presence (1) or absence (0) of Carbon/Cocoa
 //
 
 void rgl_init(int* successptr, int* ioptions)
 {
   int success = RGL_FAIL;
   
-  gMDIHandle =  ioptions[0];
-  
+  gInitValue =  ioptions[0];
+
   if ( lib::init() ) {
     deviceManager = new DeviceManager();
     success = RGL_SUCCESS;
