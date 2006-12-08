@@ -168,7 +168,7 @@ v0.68
   - updated gl2ps to version 1.3.1, adding support for svg and pgf output formats.
   - added grid3d(), added nticks argument to bbox3d, axis3d and axes3d.
     
-v0.68.532
+v0.69
   - persp3d partially ignored add=TRUE
   - plot3d.qmesh3d did not return result
   - allow selection to use any button
