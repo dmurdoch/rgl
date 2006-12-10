@@ -14,7 +14,7 @@ step drags the points (refinement step).
 }
 \usage{
   subdivision3d( x,  ...)
-  subdivision3d.qmesh3d( x, depth=1, normalize=FALSE, deform=TRUE, ... )
+  \method{subdivision3d}{qmesh3d}( x, depth=1, normalize=FALSE, deform=TRUE, ... )
   divide.qmesh3d(mesh,  vb=mesh$vb, ib=mesh$ib )
   normalize.qmesh3d(mesh)
   deform.qmesh3d(mesh,vb=mesh$vb,ib=mesh$ib)
