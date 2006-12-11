@@ -14,13 +14,17 @@ AC_PREREQ(2.50)
 AC_INIT()
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 AC_ARG_ENABLE([carbon],
-[  --disable-carbon          os x: use X11 instead of Carbon]
+[  --disable-carbon           os x: use X11 instead of Carbon]
 )
 
 if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then
-  CPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
-  LIBS="${LIBS} -framework AGL"
+  AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
+  AGLLIBS="${LIBS} -framework AGL"
+  BUILDAGL=TRUE
 else
+  BUILDAGL=""
+fi
+
   AC_PATH_X
   if test x$no_x == xyes ; then
     AC_MSG_ERROR([X11 not found but required, configure aborted.])
@@ -59,8 +63,6 @@ AC_ARG_WITH(glu-libname,
 [  --with-glu-libname=NAME specify GLU Library name (defaults to "GLU")],
 [LIBS="${LIBS} -l${withval}"], [LIBS="${LIBS} -lGLU"]
 )
-
-fi
 
 ## --- LibPNG ----------------------------------------------------------------
 
@@ -130,6 +132,10 @@ fi
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
-AC_SUBST(LIBS)    
+AC_SUBST(LIBS)
+AC_SUBST(AGLCPPFLAGS)
+AC_SUBST(AGLLIBS)
+AC_SUBST(BUILDAGL)
+
 AC_OUTPUT(src/Makevars)
 

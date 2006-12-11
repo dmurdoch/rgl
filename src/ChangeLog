@@ -175,3 +175,6 @@ v0.69
   - allow NA in primitives, surfaces, texts, and sprites
   - report error in OSX if the wrong configure options were used.
   - display was not being updated properly in OSX
+  
+v0.69.535
+  - OSX now builds two libraries, one for AGL, one for X11

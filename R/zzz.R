@@ -14,6 +14,8 @@
 ##
 ##
 
+rgl <- "rgl"
+
 .onLoad <- function(lib, pkg)
 {
   # OS-specific 
@@ -25,7 +27,11 @@
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
       # because it would override Apple's OpenGL framework
       Sys.putenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
-      initValue <- as.integer(.Platform$GUI == "AQUA")
+      if ( .Platform$GUI == "AQUA" && 
+           file.exists(system.file("libs", "aglrgl.so", package = "rgl"))) {
+        initValue <- 1
+        rgl <<- "aglrgl"
+      }
     }
   } 
   
@@ -33,11 +39,12 @@
     if ( getWindowsHandle("Frame") ) initValue <- getWindowsHandle("Console")
   } 
   
+  library.dynam(rgl, "rgl")
   	
   ret <- .C( "rgl_init", 
     success=FALSE ,
     as.integer(initValue),
-    PACKAGE="rgl"
+    PACKAGE=rgl
   )
   
   if (!ret$success) {
@@ -56,7 +63,7 @@
 { 
   # shutdown
   
-  ret <- .C( "rgl_quit", success=FALSE, PACKAGE="rgl" )
+  ret <- .C( "rgl_quit", success=FALSE, PACKAGE=rgl )
   
 }
 
