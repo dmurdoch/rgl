@@ -5,8 +5,34 @@
 #
 # $Id$
 #-DGL_VERSION_1_2 
+
+ifdef MAKINGAGL
+PKG_CPPFLAGS=@AGLCPPFLAGS@ -Iext
+PKG_LIBS=@AGLLIBS@
+else
 PKG_CPPFLAGS=@CPPFLAGS@ -Iext
+PKG_LIBS=@LIBS@
+endif
+
 PKG_CFLAGS=@CFLAGS@
 PKG_CXXFLAGS=@CXXFLAGS@
-PKG_LIBS=@LIBS@ 
+BUILDAGL=@BUILDAGL@
 
+ifdef BUILDAGL
+
+ifndef MAKINGAGL
+
+AGLSHLIB=agl$(SHLIB)
+
+all: $(SHLIB) $(AGLSHLIB)
+
+$(AGLSHLIB): $(SHLIB)
+	-mkdir Temp
+	-mv *.o Temp
+	MAKINGAGL=TRUE \
+	R CMD SHLIB  -o $@ *.cpp *.c
+	mv Temp/* .
+	rm -rf Temp
+endif
+
+endif

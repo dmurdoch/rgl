@@ -17,7 +17,7 @@
 
 rgl.open <- function() {
 
-  ret <- .C( "rgl_dev_open", success=FALSE, PACKAGE="rgl" )
+  ret <- .C( "rgl_dev_open", success=FALSE, PACKAGE=rgl )
 
   if (! ret$success)
     stop("rgl.open failed")
@@ -32,7 +32,7 @@ rgl.open <- function() {
 
 rgl.close <- function() {
 
-  ret <- .C( "rgl_dev_close", success=FALSE, PACKAGE="rgl" )
+  ret <- .C( "rgl_dev_close", success=FALSE, PACKAGE=rgl )
 
   if (! ret$success)
     stop("no device opened.")
@@ -50,7 +50,7 @@ rgl.cur <- function() {
   ret <- .C( "rgl_dev_getcurrent", 
     success=FALSE, 
     id=as.integer(0), 
-    PACKAGE="rgl"
+    PACKAGE=rgl
   )
 
   if (! ret$success)
@@ -73,7 +73,7 @@ rgl.set <- function(which) {
   ret <- .C( "rgl_dev_setcurrent", 
     success=FALSE, 
     idata,
-    PACKAGE="rgl"
+    PACKAGE=rgl
   )
 
   if (! ret$success)
@@ -95,7 +95,7 @@ rgl.snapshot <- function( filename, fmt="png" )
     success=FALSE,
     idata,
     as.character(filename),
-    PACKAGE="rgl"
+    PACKAGE=rgl
   )
 
   if (! ret$success)
@@ -115,7 +115,7 @@ rgl.postscript <- function( filename, fmt="eps" )
     success=FALSE,
     idata,
     as.character(filename),
-    PACKAGE="rgl"
+    PACKAGE=rgl
   )
 
   if (! ret$success)
