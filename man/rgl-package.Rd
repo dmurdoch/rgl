@@ -7,6 +7,7 @@
 \alias{rgl.cur}
 \alias{rgl.set}
 \alias{rgl.quit}
+\alias{rgl.init}
 \description{
   3D real-time rendering device-driver system
 }
@@ -16,9 +17,11 @@ rgl.close()    # close current device
 rgl.cur()      # returns active device ID
 rgl.set(which) # set device as active
 rgl.quit()     # shutdown rgl device system
+rgl.init(initValue=0)     # re-initialize rgl
 }
 \arguments{
   \item{which}{device ID}
+  \item{initValue}{value for internal use only}
 }
 \details{
   RGL is a 3D real-time rendering device driver system for R.
@@ -28,9 +31,16 @@ rgl.quit()     # shutdown rgl device system
   scene management instructions, and there's no device open, it will be opened
   automatically.
   Opened devices automatically get the current device focus. The focus may be
-  changed by using rgl.set().
-  rgl.quit() shuts down the rgl subsystem and all open devices, 
+  changed by using \code{rgl.set()}.
+  \code{rgl.quit()} shuts down the rgl subsystem and all open devices, 
   detaches the package including the shared library and additional system libraries.
+  
+  If \code{rgl.open()} fails (e.g. because X windows is not running, or its
+  \code{DISPLAY} variable is not set properly), then you can retry the initialization
+  by calling \code{rgl.init()}.  Do not do this when windows have 
+  already been successfully opened:  they will be orphaned, with no way to 
+  remove them other than closing R.  In fact, it's probably a good idea not to do this
+  at all:  quitting R and restarting it is a better solution.
 }
 \examples{
 example(surface3d)
