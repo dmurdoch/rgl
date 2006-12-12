@@ -10,7 +10,8 @@ CPPFLAGS=
 CFLAGS=
 CXXFLAGS="-fno-exceptions -fno-rtti"
 LIBS="-lgdi32 -lopengl32 -lglu32"
- 
+BUILDAGL=""
+
 # --- libpng -----------------------------------------------------------------
 
 echo -n "  checking for libpng..."
@@ -40,5 +41,6 @@ sed \
 -e "s^@CFLAGS@^$CFLAGS^" \
 -e "s^@CXXFLAGS@^$CXXFLAGS^" \
 -e "s^@LIBS@^$LIBS^" \
+-e "s^@BUILDAGL@^$BUILDAGL^" \
 src/Makevars.in >src/Makevars
 
