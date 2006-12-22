@@ -40,8 +40,8 @@ par3d <- function (..., no.readonly = FALSE)
 	    args$.position <- c(theta, phi)
     }   
     value <-
-        if (single) .External("par3d", args, PACKAGE=rgl)[[1]] 
-        else .External("par3d", args, PACKAGE=rgl)
+        if (single) .External(rgl_par3d, args, PACKAGE=rgl)[[1]] 
+        else .External(rgl_par3d, args, PACKAGE=rgl)
 
     if(!is.null(names(args))) invisible(value) else value
 }
