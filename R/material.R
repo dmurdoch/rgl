@@ -79,7 +79,7 @@ rgl.material <- function (
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, alpha ))
 
-  ret <- .C( "rgl_material",
+  ret <- .C( rgl_material,
     success = FALSE,
     idata,
     cdata,
@@ -88,7 +88,7 @@ rgl.material <- function (
   )
 }
 
-rgl.getcolorcount <- function() .C( "rgl_getcolorcount", count=integer(1), PACKAGE=rgl )$count
+rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1), PACKAGE=rgl )$count
   
 rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
 
@@ -99,7 +99,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   cdata <- character(0)
   ddata <- rep(0, 2+ncolors)
   
-  ret <- .C( "rgl_getmaterial",
+  ret <- .C( rgl_getmaterial,
     success = FALSE,
     idata = as.integer(idata),
     cdata = cdata,

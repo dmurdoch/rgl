@@ -176,5 +176,6 @@ v0.69
   - report error in OSX if the wrong configure options were used.
   - display was not being updated properly in OSX
   
-v0.69.535
+v0.69.537
   - OSX now builds two libraries, one for AGL, one for X11
+  - Use useDynLib to resolve entry points

@@ -17,7 +17,7 @@
 
 rgl.open <- function() {
 
-  ret <- .C( "rgl_dev_open", success=FALSE, PACKAGE=rgl )
+  ret <- .C( rgl_dev_open, success=FALSE, PACKAGE=rgl )
 
   if (! ret$success)
     stop("rgl.open failed")
@@ -32,7 +32,7 @@ rgl.open <- function() {
 
 rgl.close <- function() {
 
-  ret <- .C( "rgl_dev_close", success=FALSE, PACKAGE=rgl )
+  ret <- .C( rgl_dev_close, success=FALSE, PACKAGE=rgl )
 
   if (! ret$success)
     stop("no device opened.")
@@ -47,7 +47,7 @@ rgl.close <- function() {
 
 rgl.cur <- function() {
 
-  ret <- .C( "rgl_dev_getcurrent", 
+  ret <- .C( rgl_dev_getcurrent, 
     success=FALSE, 
     id=as.integer(0), 
     PACKAGE=rgl
@@ -70,7 +70,7 @@ rgl.set <- function(which) {
 
   idata <- c( as.integer(which) )
 
-  ret <- .C( "rgl_dev_setcurrent", 
+  ret <- .C( rgl_dev_setcurrent, 
     success=FALSE, 
     idata,
     PACKAGE=rgl
@@ -91,7 +91,7 @@ rgl.snapshot <- function( filename, fmt="png" )
 {
   idata <- as.integer(rgl.enum.pixfmt(fmt))
 
-  ret <- .C( "rgl_snapshot",
+  ret <- .C( rgl_snapshot,
     success=FALSE,
     idata,
     as.character(filename),
@@ -111,7 +111,7 @@ rgl.postscript <- function( filename, fmt="eps" )
 {
   idata <- as.integer(rgl.enum.gl2ps(fmt))
 
-  ret <- .C( "rgl_postscript",
+  ret <- .C( rgl_postscript,
     success=FALSE,
     idata,
     as.character(filename),

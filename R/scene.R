@@ -21,7 +21,7 @@ rgl.clear <- function( type = "shapes" )
 
   idata <- as.integer(c(length(type), type))
 
-  ret <- .C( "rgl_clear", 
+  ret <- .C( rgl_clear, 
     success = as.integer(FALSE),
     idata,
     PACKAGE=rgl
@@ -47,7 +47,7 @@ rgl.pop <- function( type = "shapes", id = 0)
   for (i in id) {
     idata <- as.integer(c(type, i))
 
-    ret <- .C( "rgl_pop",
+    ret <- .C( rgl_pop,
       success = as.integer(FALSE),
       idata, 
       PACKAGE=rgl
@@ -62,10 +62,10 @@ rgl.ids <- function( type = "shapes" )
 {
   type <- rgl.enum.nodetype(type)
   
-  count <- .C( "rgl_id_count", as.integer(type), count = integer(1),
+  count <- .C( rgl_id_count, as.integer(type), count = integer(1),
                                PACKAGE=rgl)$count
   
-  as.data.frame( .C( "rgl_ids", as.integer(type), id=integer(count), 
+  as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
                                 type=rep("",count), PACKAGE=rgl )[2:3] )
 }
 
@@ -93,7 +93,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
   idata <- as.integer(c(interactive,polar))
   ddata <- as.numeric(c(theta,phi,fov,zoom,scale,userMatrix[1:16]))
 
-  ret <- .C( "rgl_viewpoint",
+  ret <- .C( rgl_viewpoint,
     success = as.integer(FALSE),
     idata,
     ddata,
@@ -117,7 +117,7 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
 
   idata   <- as.integer(c(sphere,fogtype))
 
-  ret <- .C( "rgl_bg", 
+  ret <- .C( rgl_bg, 
     success = as.integer(FALSE),
     idata,
     PACKAGE=rgl
@@ -177,7 +177,7 @@ rgl.bbox <- function(
   idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel))
   ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
 
-  ret <- .C( "rgl_bbox",
+  ret <- .C( rgl_bbox,
     success = as.integer(FALSE),
     idata,
     ddata,
@@ -211,7 +211,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   idata <- as.integer(c(viewpoint.rel, ambient, diffuse, specular))
   ddata <- as.numeric(c(theta, phi))
 
-  ret <- .C( "rgl_light",
+  ret <- .C( rgl_light,
     success = as.integer(FALSE),
     idata,
     ddata,
@@ -252,7 +252,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
     
     idata   <- as.integer( c(type, nvertex ) )
   
-    ret <- .C( "rgl_primitive",
+    ret <- .C( rgl_primitive,
       success = as.integer(FALSE),
       idata,
       as.numeric(vertex),
@@ -337,7 +337,7 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
 
   parity <- (perm_parity(coords) + (x[2] < x[1]) + (z[2] < z[1]) ) %% 2
   
-  ret <- .C( "rgl_surface",
+  ret <- .C( rgl_surface,
     success = as.integer(FALSE),
     idata,
     as.numeric(x),
@@ -370,7 +370,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   
   idata <- as.integer( c( nvertex, nradius ) )
    
-  ret <- .C( "rgl_spheres",
+  ret <- .C( rgl_spheres,
     success = as.integer(FALSE),
     idata,
     as.numeric(vertex),    
@@ -406,7 +406,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
   
   idata <- as.integer(nvertex)
 
-  ret <- .C( "rgl_texts",
+  ret <- .C( rgl_texts,
     success = as.integer(FALSE),
     idata,
     as.double(adj),
@@ -437,7 +437,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
   
   idata   <- as.integer( c(ncenter,nradius) )
    
-  ret <- .C( "rgl_sprites",
+  ret <- .C( rgl_sprites,
     success = as.integer(FALSE),
     idata,
     as.numeric(center),
@@ -463,7 +463,7 @@ rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection())
   
   idata  <- as.integer(ncol(points))
   
-  ret <- .C( "rgl_user2window",
+  ret <- .C( rgl_user2window,
   	success = as.integer(FALSE),
 	idata,
 	as.double(points),
@@ -489,7 +489,7 @@ rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
   window <- rbind(xyz$x,xyz$y,xyz$z)
   idata  <- as.integer(ncol(window))
   
-  ret <- .C( "rgl_window2user",
+  ret <- .C( rgl_window2user,
   	success = as.integer(FALSE),
 	idata,
 	point=double(length(window)),
@@ -508,7 +508,7 @@ rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
 
 rgl.selectstate <- function()
 {
-	ret <- .C( "rgl_selectstate",
+	ret <- .C( rgl_selectstate,
     	success = as.integer(FALSE),
     	state = as.integer(0),
     	mouseposition = double(4),
@@ -544,7 +544,7 @@ rgl.setselectstate <- function(state = "current")
 	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3)
 	idata <- as.integer(c(state))
 	
-	  ret <- .C( "rgl_setselectstate", 
+	  ret <- .C( rgl_setselectstate, 
 	    success = as.integer(FALSE),
 	    state = idata,
 	    PACKAGE=rgl
