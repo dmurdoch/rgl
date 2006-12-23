@@ -23,8 +23,7 @@ rgl.clear <- function( type = "shapes" )
 
   ret <- .C( rgl_clear, 
     success = as.integer(FALSE),
-    idata,
-    PACKAGE=rgl
+    idata
   )
   
   if ( 4 %in% type ) # viewpoint
@@ -49,8 +48,7 @@ rgl.pop <- function( type = "shapes", id = 0)
 
     ret <- .C( rgl_pop,
       success = as.integer(FALSE),
-      idata, 
-      PACKAGE=rgl
+      idata
     )
 
     if (! ret$success)
@@ -62,11 +60,10 @@ rgl.ids <- function( type = "shapes" )
 {
   type <- rgl.enum.nodetype(type)
   
-  count <- .C( rgl_id_count, as.integer(type), count = integer(1),
-                               PACKAGE=rgl)$count
+  count <- .C( rgl_id_count, as.integer(type), count = integer(1))$count
   
   as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
-                                type=rep("",count), PACKAGE=rgl )[2:3] )
+                                type=rep("",count) )[2:3] )
 }
 
 ##
@@ -96,8 +93,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
   ret <- .C( rgl_viewpoint,
     success = as.integer(FALSE),
     idata,
-    ddata,
-    PACKAGE=rgl
+    ddata
   )
 
   if (! ret$success)
@@ -119,8 +115,7 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
 
   ret <- .C( rgl_bg, 
     success = as.integer(FALSE),
-    idata,
-    PACKAGE=rgl
+    idata
   )
 
   if (! ret$success)
@@ -186,8 +181,7 @@ rgl.bbox <- function(
     as.numeric(yat),
     as.character(ylab),
     as.numeric(zat),
-    as.character(zlab),
-    PACKAGE=rgl
+    as.character(zlab)
   )
 
   if (! ret$success)
@@ -214,8 +208,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   ret <- .C( rgl_light,
     success = as.integer(FALSE),
     idata,
-    ddata,
-    PACKAGE=rgl
+    ddata
   )
 
   if (! ret$success)
@@ -256,8 +249,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
       success = as.integer(FALSE),
       idata,
       as.numeric(vertex),
-      NAOK = TRUE,
-      PACKAGE=rgl
+      NAOK = TRUE
     );
   
     if (! ret$success)
@@ -345,8 +337,7 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
     as.numeric(y),
     as.integer(coords),
     as.integer(parity),
-    NAOK=TRUE,
-    PACKAGE=rgl
+    NAOK=TRUE
   );
 
   if (! ret$success)
@@ -375,8 +366,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
     idata,
     as.numeric(vertex),    
     as.numeric(radius),
-    NAOK=TRUE,
-    PACKAGE=rgl
+    NAOK=TRUE
   )
 
   if (! ret$success)
@@ -412,8 +402,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
     as.double(adj),
     as.character(text),
     as.numeric(vertex),
-    NAOK=TRUE,
-    PACKAGE=rgl
+    NAOK=TRUE
   )
   
   if (! ret$success)
@@ -442,8 +431,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
     idata,
     as.numeric(center),
     as.numeric(radius),
-    NAOK=TRUE,
-    PACKAGE=rgl
+    NAOK=TRUE
   )
 
   if (! ret$success)
@@ -470,8 +458,7 @@ rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection())
 	window=double(length(points)),
 	model=as.double(projection$model),
 	proj=as.double(projection$proj),
-	view=as.integer(projection$view),
-	PACKAGE=rgl
+	view=as.integer(projection$view)
   )
 
   if (! ret$success)
@@ -496,8 +483,7 @@ rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
 	window,
 	model=as.double(projection$model),
 	proj=as.double(projection$proj),
-	view=as.integer(projection$view),
-	PACKAGE=rgl
+	view=as.integer(projection$view)
   )
 
   if (! ret$success)
@@ -511,8 +497,7 @@ rgl.selectstate <- function()
 	ret <- .C( rgl_selectstate,
     	success = as.integer(FALSE),
     	state = as.integer(0),
-    	mouseposition = double(4),
-    	PACKAGE=rgl
+    	mouseposition = double(4)
   	)
 
   	if (! ret$success)
@@ -546,8 +531,7 @@ rgl.setselectstate <- function(state = "current")
 	
 	  ret <- .C( rgl_setselectstate, 
 	    success = as.integer(FALSE),
-	    state = idata,
-	    PACKAGE=rgl
+	    state = idata
 	  )
 	
 	  if (! ret$success)

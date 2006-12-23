@@ -83,12 +83,11 @@ rgl.material <- function (
     success = FALSE,
     idata,
     cdata,
-    ddata,
-    PACKAGE=rgl
+    ddata
   )
 }
 
-rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1), PACKAGE=rgl )$count
+rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
 rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
 
@@ -103,8 +102,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
     success = FALSE,
     idata = as.integer(idata),
     cdata = cdata,
-    ddata = as.numeric(ddata),
-    PACKAGE=rgl
+    ddata = as.numeric(ddata)
   )
   
   if (!ret$success) stop('rgl.getmaterial')
