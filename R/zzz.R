@@ -31,7 +31,7 @@
       # because it would override Apple's OpenGL framework
       Sys.putenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
       if ( .Platform$GUI == "AQUA" && 
-            file.exists(system.file("libs",.Platform$r_arch, "aglrgl.so", package = "rgl"))) {
+            file.exists(system.file("libs",.Platform$r_arch, "aglrgl.so", lib.loc=lib, package = pkg))) {
           dll <- "aglrgl"
           initValue <- 1
       }
@@ -43,7 +43,7 @@
   } 
   
   useDynLib <- function(dll, entries) {
-      dll <- library.dynam(dll, "rgl")
+      dll <- library.dynam(dll, pkg, lib.loc=lib)
       names <- entries
       if (length(names(entries))) {
   	  rename <- names(entries) != ""
