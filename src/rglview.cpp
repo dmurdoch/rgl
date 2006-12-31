@@ -592,6 +592,8 @@ bool RGLView::postscript(int formatID, const char* filename)
   GLint buffsize = 0, state = GL2PS_OVERFLOW;
   GLint viewport[4];
 
+  windowImpl->beginGL();
+  
   glGetIntegerv(GL_VIEWPORT, viewport);
  
   while( state == GL2PS_OVERFLOW ){ 
@@ -603,19 +605,17 @@ bool RGLView::postscript(int formatID, const char* filename)
                    GL_RGBA, 0, NULL, 0, 0, 0, buffsize,
                    fp, filename );
 
-    windowImpl->beginGL();
-
     // redraw:
 
-    paint();
-
-    windowImpl->endGL();
+    scene->render(&renderContext);
+    glFinish();
 
     success = true;
 
     state = gl2psEndPage();
   }
   
+  windowImpl->endGL();
   fclose(fp);
 
   return success;
