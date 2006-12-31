@@ -22,18 +22,16 @@ GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine
 \author{ Christophe Geuzaine / Albrecht Gebhardt }
 \examples{
 
-# Save the first persp3d example.
-# Include the persp3da.tex and persp3db.tex files in latex or pdflatex document
+x <- y <- seq(-10,10,length=20)
+z <- outer(x,y,function(x,y) x^2 + y^2)
+persp3d(x,y,z, col='lightblue')
 
-example(persp3d)
-rgl.close()  # delete the second example
-
-title3d("Using LaTeX text")
+title3d("Using LaTeX text", col='red')
 rgl.postscript("persp3da.ps","ps",drawText=FALSE)
 rgl.postscript("persp3da.pdf","pdf",drawText=FALSE)
 rgl.postscript("persp3da.tex","tex")
 rgl.pop()
-title3d("Using ps/pdf text")
+title3d("Using ps/pdf text", col='red')
 rgl.postscript("persp3db.ps","ps")
 rgl.postscript("persp3db.pdf","pdf")
 rgl.postscript("persp3db.tex","tex",drawText=FALSE)
