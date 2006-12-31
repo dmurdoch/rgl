@@ -176,6 +176,7 @@ v0.69
   - report error in OSX if the wrong configure options were used.
   - display was not being updated properly in OSX
   
-v0.69.537
+v0.69.541
   - OSX now builds two libraries, one for AGL, one for X11
-  - Use useDynLib to resolve entry points
+  - resolve entry points at load time, not call time
+  - updated gl2ps to version 1.3.2
