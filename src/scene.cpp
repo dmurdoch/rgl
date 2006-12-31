@@ -568,4 +568,11 @@ void Scene::setIgnoreExtent(int in_ignoreExtent)
   ignoreExtent = (bool)in_ignoreExtent;
 }
 
-
+// ---------------------------------------------------------------------------
+void Scene::invalidateDisplaylists()
+{
+  std::vector<Shape*>::iterator iter;
+  for (iter = shapes.begin(); iter != shapes.end(); ++iter) {
+    (*iter)->invalidateDisplaylist();
+  }
+}

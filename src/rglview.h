@@ -24,7 +24,7 @@ public:
   RGLView(Scene* scene);
   ~RGLView();
   bool snapshot(PixmapFileFormatID formatID, const char* filename);
-  bool postscript(int format, const char* filename);
+  bool postscript(int format, const char* filename, bool drawText);
 // event handler:
   void show(void);
   void hide(void);

@@ -26,14 +26,14 @@ public:
     int buflen = 0;
 
     for(i=0;i<ntexts;i++)
-      buflen += lengths[i] = strlen(in_texts[i]);
+      buflen += 1 + ( lengths[i] = strlen(in_texts[i]) );
 
     char* tptr = textbuffer = new char [buflen];
 
     for(i=0;i<ntexts;i++) {
       int len = lengths[i];
-      memcpy(tptr, in_texts[i], len);
-      tptr += len;
+      memcpy(tptr, in_texts[i], 1 + len);
+      tptr += 1 + len;
     }
   }
 
@@ -103,7 +103,7 @@ void StringArrayIterator::first()
 void StringArrayIterator::next()
 {
   if ( (textptr) && (cnt < array->impl->ntexts) )
-    textptr += array->impl->lengths[cnt++];
+    textptr += 1 + array->impl->lengths[cnt++];
 }
 
 String StringArrayIterator::getCurrent()

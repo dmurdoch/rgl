@@ -1,6 +1,7 @@
 #include "TextSet.hpp"
 
 #include "glgui.hpp"
+#include "gl2ps.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -57,7 +58,8 @@ void TextSet::draw(RenderContext* renderContext) {
       material.useColor(cnt);
       glRasterPos3f( vertexArray[cnt].x, vertexArray[cnt].y, vertexArray[cnt].z );
       String text = iter.getCurrent();
-      renderContext->font->draw( text.text, text.length, adj );
+      if (renderContext->gl2psActive) gl2psTextOpt(text.text, GL2PS_FONT, GL2PS_FONTSIZE, GL2PS_TEXT_C, 0.0);
+      else renderContext->font->draw( text.text, text.length, adj );
     }
   }
 

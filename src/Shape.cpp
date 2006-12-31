@@ -42,3 +42,8 @@ void Shape::renderZSort(RenderContext* renderContext)
 {
   render(renderContext);
 }
+
+void Shape::invalidateDisplaylist()
+{
+  doUpdate = true;
+}
