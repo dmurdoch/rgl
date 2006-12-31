@@ -84,6 +84,10 @@ public:
   int getIgnoreExtent(void);
   void setIgnoreExtent(int in_ignoreExtent);
   
+  /**
+   * invalidate display lists so objects will be rendered again
+   **/
+  void invalidateDisplaylists();
 
 private:
 

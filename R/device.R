@@ -104,9 +104,9 @@ rgl.snapshot <- function( filename, fmt="png" )
 ##
 ##
 
-rgl.postscript <- function( filename, fmt="eps" )
+rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
 {
-  idata <- as.integer(rgl.enum.gl2ps(fmt))
+  idata <- as.integer(c(rgl.enum.gl2ps(fmt), as.logical(drawText)))
 
   ret <- .C( rgl_postscript,
     success=FALSE,

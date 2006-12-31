@@ -1029,9 +1029,10 @@ void rgl_postscript(int* successptr, int* idata, char** cdata)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
 
     int   format   = idata[0];
+    bool  drawText = (bool)idata[1];
     char* filename = cdata[0];
 
-    success = as_success( device->postscript( format, filename ) );
+    success = as_success( device->postscript( format, filename, drawText ) );
   }
 
   *successptr = success;

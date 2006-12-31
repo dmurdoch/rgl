@@ -35,6 +35,9 @@ public:
 #define GL_BITMAP_FONT_LAST_GLYPH   127
 #define GL_BITMAP_FONT_COUNT       (GL_BITMAP_FONT_LAST_GLYPH-GL_BITMAP_FONT_FIRST_GLYPH+1)
 
+#define GL2PS_FONT 	"Helvetica"
+#define GL2PS_FONTSIZE 	12
+
 
 #endif /* GL_GUI_H */
 

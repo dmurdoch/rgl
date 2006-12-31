@@ -112,8 +112,8 @@ RGLView* Device::getRGLView(void)
   return rglview;
 }
 // ---------------------------------------------------------------------------
-bool Device::postscript(int format, const char* filename)
+bool Device::postscript(int format, const char* filename, bool drawText)
 {
-  return rglview->postscript( format, filename);
+  return rglview->postscript( format, filename, drawText);
 }
 

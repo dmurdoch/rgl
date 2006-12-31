@@ -3,6 +3,7 @@
 #include "glgui.hpp"
 #include "scene.h"
 #include <cstdio>
+#include "gl2ps.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -95,7 +96,8 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Vert
   p.z = v.z + 2 * dir.z * marklen.z; 
 
   glRasterPos3f( p.x, p.y, p.z );
-  renderContext->font->draw(string.text, string.length, 0);
+  if (renderContext->gl2psActive) gl2psTextOpt(string.text, GL2PS_FONT, GL2PS_FONTSIZE, GL2PS_TEXT_C, 0.0);
+  else renderContext->font->draw(string.text, string.length, 0);
 
 }
 
