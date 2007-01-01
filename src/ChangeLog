@@ -176,8 +176,9 @@ v0.69
   - report error in OSX if the wrong configure options were used.
   - display was not being updated properly in OSX
   
-v0.69.543
+v0.69.545
   - OSX now builds two libraries, one for AGL, one for X11
   - resolve entry points at load time, not call time
   - updated gl2ps to version 1.3.2
   - fixed bug in rgl.postscript in Linux, added text support to it
+  - tweaked positioning of labels in bounding box decoration

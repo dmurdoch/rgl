@@ -35,6 +35,6 @@ void FPS::render(double t, RenderContext* ctx)
   glRasterPos2f( 1.0f, -0.9f);
 
   ctx->font->enable();
-  ctx->font->draw(buffer, strlen(buffer), -1);
+  ctx->font->draw(buffer, strlen(buffer), -1, 0);
   framecnt++;
 }

@@ -20,7 +20,7 @@ public:
   , deltaTime(0.0)
   , Zrow()
   , Wrow()
-  , gl2psActive(false)
+  , gl2psActive(0)
   { }
   Scene* scene;
   Rect   rect;
@@ -33,7 +33,7 @@ public:
   float getDistance(const Vertex& v);
   Vec4 Zrow;
   Vec4 Wrow;
-  bool gl2psActive;
+  int gl2psActive;
 };
 
 #endif // RENDERCONTEXT_HPP
