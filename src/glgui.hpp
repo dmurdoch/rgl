@@ -22,8 +22,8 @@ public:
     glListBase(listBase);
   };
 
-  void draw(char* text, int length, double adj);
-
+  void draw(char* text, int length, double adj, int gl2psActive);
+  
   GLuint listBase;
   GLuint firstGlyph;
   GLuint nglyph;
@@ -37,7 +37,11 @@ public:
 
 #define GL2PS_FONT 	"Helvetica"
 #define GL2PS_FONTSIZE 	12
+#define GL2PS_SCALING   0.8
 
+#define GL2PS_NONE	 0
+#define GL2PS_LEFT_ONLY	 1
+#define GL2PS_POSITIONAL 2
 
 #endif /* GL_GUI_H */
 

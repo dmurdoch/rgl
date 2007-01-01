@@ -3,7 +3,7 @@
 #include "glgui.hpp"
 #include "scene.h"
 #include <cstdio>
-#include "gl2ps.h"
+#include <math.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -74,10 +74,11 @@ AxisInfo::~AxisInfo()
   }
 }
 
-void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Vertex& marklen, String& string) {
+void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matrix4x4& modelview, 
+                    Vertex& marklen, String& string) {
 
   Vertex4 p;
-
+    
   // draw mark ( 1 time ml away )
 
   p.x = v.x + dir.x * marklen.x;
@@ -96,8 +97,19 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Vert
   p.z = v.z + 2 * dir.z * marklen.z; 
 
   glRasterPos3f( p.x, p.y, p.z );
-  if (renderContext->gl2psActive) gl2psTextOpt(string.text, GL2PS_FONT, GL2PS_FONTSIZE, GL2PS_TEXT_C, 0.0);
-  else renderContext->font->draw(string.text, string.length, 0);
+  
+  // Work out the text adjustment 
+  
+  float adj = 0.5;  
+  Vertex4 eyedir = modelview * dir;
+  bool  xlarge = fabs(eyedir.x) > fabs(eyedir.y);
+  
+  if (xlarge) {
+    adj = fabs(eyedir.y)/fabs(eyedir.x)/2.0;
+    if (eyedir.x < 0) adj = 1.0 - adj;
+  }
+  
+  renderContext->font->draw(string.text, string.length, adj, renderContext->gl2psActive);
 
 }
 
@@ -395,7 +407,7 @@ void BBoxDeco::render(RenderContext* renderContext)
                 
                   String string = iter.getCurrent();
                   *valueptr = value;
-                  axis->draw(renderContext, v, edge->dir, marklen, string);
+                  axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
                 }
 
               }
@@ -416,7 +428,7 @@ void BBoxDeco::render(RenderContext* renderContext)
 
                 String string(strlen(text),text);
 
-                axis->draw(renderContext, v, edge->dir, marklen, string);
+                axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
               }
             }
             break;
@@ -432,7 +444,7 @@ void BBoxDeco::render(RenderContext* renderContext)
 
                 String s (strlen(text),text);
 
-                axis->draw(renderContext, v, edge->dir, marklen, s );
+                axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
 
                 value += axis->unit;
               }
