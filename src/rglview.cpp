@@ -424,17 +424,15 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
 
     glPushAttrib(GL_PIXEL_MODE_BIT);
 
-    glReadBuffer(GL_BACK);
+    glReadBuffer(GL_FRONT);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
     glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
 
     glPopAttrib();
 
-    snapshot.save( pixmapFormat[formatID], filename );
+    success = snapshot.save( pixmapFormat[formatID], filename );
 
     windowImpl->endGL();
-
-    success = true;
 
   }
 
