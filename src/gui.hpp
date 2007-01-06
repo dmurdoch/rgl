@@ -71,7 +71,7 @@ public:
 
   /// @doc notifyDestroy will be called on success
   virtual void destroy(void) = 0;
-  virtual void beginGL(void) = 0;
+  virtual bool beginGL(void) = 0;
   virtual void endGL(void) = 0;
   virtual void swap(void) = 0;
   virtual void captureMouse(View* captureView) = 0;

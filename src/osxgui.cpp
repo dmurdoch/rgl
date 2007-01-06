@@ -33,7 +33,7 @@ public:
   void update();
   void bringToTop(int stay);
   void destroy();
-  void beginGL();
+  bool beginGL();
   void endGL();
   void swap();
   void captureMouse(View* captureView) { }
@@ -192,9 +192,10 @@ void OSXWindowImpl::swap()
   aglSwapBuffers(mGLContext);
 }
 // ---------------------------------------------------------------------------
-void OSXWindowImpl::beginGL()
+bool OSXWindowImpl::beginGL()
 {
-  aglSetCurrentContext(mGLContext);
+  if (aglSetCurrentContext(mGLContext) == GL_TRUE) return true;
+  else return false;
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::endGL()

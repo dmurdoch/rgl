@@ -1,6 +1,6 @@
 Package: rgl
-Version: 0.69.546
-Date: 2007-01-04
+Version: 0.69.547
+Date: 2007-01-06
 Title: 3D visualization device system (OpenGL)
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>
 Maintainer: Daniel Adler <dadler@uni-goettingen.de>
