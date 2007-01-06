@@ -33,7 +33,7 @@ public:
   void bringToTop(int stay);
   void update();
   void destroy();
-  void beginGL();
+  bool beginGL();
   void endGL();
   void swap();
   void captureMouse(gui::View* captureview);
@@ -134,10 +134,13 @@ void X11WindowImpl::destroy()
   }
 }
 // ---------------------------------------------------------------------------
-void X11WindowImpl::beginGL()
+bool X11WindowImpl::beginGL()
 {
-    if ( glXMakeCurrent(factory->xdisplay, xwindow, glxctx) == False )
+    if ( glXMakeCurrent(factory->xdisplay, xwindow, glxctx) == False ) {
       lib::printMessage("ERROR: can't bind glx context to window");
+      return false;
+    };
+    else return true;
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::endGL()
@@ -286,25 +289,28 @@ void X11WindowImpl::shutdownGL()
 // ---------------------------------------------------------------------------
 void X11WindowImpl::initGLFont()
 {
-  beginGL();
-  font.nglyph     = GL_BITMAP_FONT_COUNT;
-  font.firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
-  GLuint listBase = glGenLists(font.nglyph);
-  font.listBase   = listBase - font.firstGlyph;
-  glXUseXFont(factory->xfont, font.firstGlyph, font.nglyph, listBase);
+  if (beginGL()) {
+    font.nglyph     = GL_BITMAP_FONT_COUNT;
+    font.firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
+    GLuint listBase = glGenLists(font.nglyph);
+    font.listBase   = listBase - font.firstGlyph;
+    glXUseXFont(factory->xfont, font.firstGlyph, font.nglyph, listBase);
 
-  font.widths = new unsigned int[font.nglyph];
+    font.widths = new unsigned int[font.nglyph];
 
-  for(unsigned int i=0;i<font.nglyph;i++)
-    font.widths[i] = 9;
+    for(unsigned int i=0;i<font.nglyph;i++)
+      font.widths[i] = 9;
+    endGL();  // Should this be added?
+  }
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::destroyGLFont()
 {
-  beginGL();
-  glDeleteLists(font.listBase + font.firstGlyph, font.nglyph);
-  delete [] font.widths;  
-  endGL();
+  if (beginGL()) {
+    glDeleteLists(font.listBase + font.firstGlyph, font.nglyph);
+    delete [] font.widths;  
+    endGL();
+  }
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::on_init()

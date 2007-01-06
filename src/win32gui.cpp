@@ -76,7 +76,7 @@ private:
   friend class Win32GUIFactory;
 
 public:
-  void beginGL();
+  bool beginGL();
   void endGL();
   void swap();
 private:
@@ -186,10 +186,11 @@ void Win32WindowImpl::destroy()
   else DestroyWindow(windowHandle);
 }
 
-void Win32WindowImpl::beginGL()
+bool Win32WindowImpl::beginGL()
 {
   dcHandle = GetDC(windowHandle);
-  wglMakeCurrent( dcHandle, glrcHandle );
+  if (wglMakeCurrent( dcHandle, glrcHandle )) return true;
+  else return false;
 }
 
 void Win32WindowImpl::endGL()
@@ -275,24 +276,26 @@ void Win32WindowImpl::shutdownGL()
 
 void Win32WindowImpl::initGLBitmapFont(u8 firstGlyph, u8 lastGlyph) 
 {
-  beginGL();
-  SelectObject (dcHandle, GetStockObject (SYSTEM_FONT) );
-  font.nglyph     = lastGlyph-firstGlyph+1;
-  font.widths     = new unsigned int [font.nglyph];
-  GLuint listBase = glGenLists(font.nglyph);
-  font.firstGlyph = firstGlyph;
-  font.listBase   = listBase - firstGlyph;
-  GetCharWidth32( dcHandle, font.firstGlyph, lastGlyph,  (LPINT) font.widths );
-  wglUseFontBitmaps(dcHandle, font.firstGlyph, font.nglyph, listBase);
-  endGL();
+  if (beginGL()) {
+    SelectObject (dcHandle, GetStockObject (SYSTEM_FONT) );
+    font.nglyph     = lastGlyph-firstGlyph+1;
+    font.widths     = new unsigned int [font.nglyph];
+    GLuint listBase = glGenLists(font.nglyph);
+    font.firstGlyph = firstGlyph;
+    font.listBase   = listBase - firstGlyph;
+    GetCharWidth32( dcHandle, font.firstGlyph, lastGlyph,  (LPINT) font.widths );
+    wglUseFontBitmaps(dcHandle, font.firstGlyph, font.nglyph, listBase);
+    endGL();
+  }
 }
 
 void Win32WindowImpl::destroyGLFont() 
 {
-  beginGL();
-  glDeleteLists( font.listBase + font.firstGlyph, font.nglyph);
-  delete [] font.widths;
-  endGL();
+  if (beginGL()) {
+    glDeleteLists( font.listBase + font.firstGlyph, font.nglyph);
+    delete [] font.widths;
+    endGL();
+  }
 }
 
 LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
