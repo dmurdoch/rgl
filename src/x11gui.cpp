@@ -139,7 +139,7 @@ bool X11WindowImpl::beginGL()
     if ( glXMakeCurrent(factory->xdisplay, xwindow, glxctx) == False ) {
       lib::printMessage("ERROR: can't bind glx context to window");
       return false;
-    };
+    }
     else return true;
 }
 // ---------------------------------------------------------------------------
