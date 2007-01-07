@@ -176,7 +176,7 @@ v0.69
   - report error in OSX if the wrong configure options were used.
   - display was not being updated properly in OSX
   
-v0.69.547
+v0.70
   - OSX now builds two libraries, one for AGL, one for X11
   - resolve entry points at load time, not call time
   - updated gl2ps to version 1.3.2
@@ -184,3 +184,5 @@ v0.69.547
   - tweaked positioning of labels in bounding box decoration
   - snapshot3d wasn't being exported, and snapshots were from the back buffer
   - fixed bug that could cause crash on shutdown
+  - moved this file (ChangeLog) to inst directory, so it will be installed,
+    and added code to display it to the rgl help topic.
