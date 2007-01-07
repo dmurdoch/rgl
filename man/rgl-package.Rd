@@ -41,8 +41,11 @@ rgl.init(initValue=0)     # re-initialize rgl
   already been successfully opened:  they will be orphaned, with no way to 
   remove them other than closing R.  In fact, it's probably a good idea not to do this
   at all:  quitting R and restarting it is a better solution.
+
+  See the first example below to display the ChangeLog.
 }
 \examples{
+file.show(system.file("ChangeLog", package="rgl"))
 example(surface3d)
 example(plot3d)
 }
