@@ -29,7 +29,9 @@ fi
   if test x$no_x == xyes ; then
     AC_MSG_ERROR([X11 not found but required, configure aborted.])
   fi
-  CPPFLAGS="${CPPFLAGS} -I${x_includes}"
+  if test "x${x_includes}" != "x" ; then 
+    CPPFLAGS="${CPPFLAGS} -I${x_includes}"; 
+  fi
   LIBS="${LIBS} -L${x_libraries} -lX11 -lXext"
   if test `uname` = "Darwin" ; then
     CPPFLAGS="${CPPFLAGS} -DDarwin"
