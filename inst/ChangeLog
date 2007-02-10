@@ -186,3 +186,6 @@ v0.70
   - fixed bug that could cause crash on shutdown
   - moved this file (ChangeLog) to inst directory, so it will be installed,
     and added code to display it to the rgl help topic.
+
+v0.70.553
+  - change to configure script from Laszlo Kajan
