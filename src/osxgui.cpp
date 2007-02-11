@@ -133,17 +133,13 @@ void OSXWindowImpl::on_dispose()
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::init_glfont()
 {
-  SInt16 fontid;
-  unsigned char pname[256];
-  CopyCStringToPascal("systemFont",pname);
-  GetFNum(pname,&fontid);
   GLuint first = GL_BITMAP_FONT_FIRST_GLYPH;
   GLuint last = GL_BITMAP_FONT_LAST_GLYPH;
   GLuint count = last-first+1;
   GLuint listBase = glGenLists(count);
   GLboolean success = aglUseFont(
     mGLContext,
-    fontid,
+    0,  // system font
     normal,
     12, // GLsizei
     first,
