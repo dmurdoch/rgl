@@ -644,11 +644,11 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
   idata[4] = (int) mat.back;
   idata[5] = mat.fog ? 1 : 0;
   if (mat.texture) {
-    mat.texture->getParameters( (Texture::Type*) idata + 6,
-                               (bool*) idata + 7,
-                               (unsigned int*) idata + 8,
-                               (unsigned int*) idata + 9,
-                               (bool*) idata + 20,
+    mat.texture->getParameters( (Texture::Type*) (idata + 6),
+                               (bool*) (idata + 7),
+                               (unsigned int*) (idata + 8),
+                               (unsigned int*) (idata + 9),
+                               (bool*) (idata + 20),
                                strlen(cdata[0]),
                                cdata[0] );
   } else {
