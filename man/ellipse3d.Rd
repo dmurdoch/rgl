@@ -15,7 +15,7 @@ for three parameters.
 \usage{
 ellipse3d(x, \dots)
 \method{ellipse3d}{default}(x, scale = c(1, 1, 1), centre = c(0, 0, 0), level = 0.95, 
-            t = sqrt(qchisq(level, 3)), which = 1:3, subdivide = 4, ...)
+            t = sqrt(qchisq(level, 3)), which = 1:3, subdivide = 3, smooth = TRUE, ...)
 \method{ellipse3d}{lm}(x, which = 1:3, level = 0.95, t = sqrt(3 * qf(level, 
                                                 3, x$df.residual)), ...)     
 \method{ellipse3d}{glm}(x, which = 1:3, level = 0.95, t, dispersion, ...) 
@@ -56,6 +56,10 @@ plotted.  The default is the first 3.
 \item{subdivide}{
 This controls the number of subdivisions (see \code{\link{subdivision3d}})
 used in constructing the ellipsoid.  Higher numbers give a smoother shape.
+}
+\item{smooth}{
+If \code{TRUE}, smooth interpolation of normals is used; if \code{FALSE}, 
+a faceted ellipsoid will be displayed.
 }
 \item{dispersion}{
 The value of dispersion to use.  If specified, it is treated as fixed,

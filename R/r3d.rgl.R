@@ -18,10 +18,11 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 # Environment
 
 .material3d <- c("color", "alpha", "lit", "ambient", "specular",
-    "emission", "shininess", "smooth", "front", "back", "size", "fog")
-    
-.material3d.writeOnly <- c("texture", "textype", "texmipmap",
+    "emission", "shininess", "smooth", "front", "back", "size", "fog",
+    "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap")
+
+.material3d.writeOnly <- character(0)
 
 .fixMaterialArgs <- function(..., Params = material3d()) {
    f <- function(...) list(...)

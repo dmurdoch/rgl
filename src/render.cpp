@@ -117,10 +117,13 @@ TexCoord& TexCoordArray::operator [] (int index) {
 }
 
 void TexCoordArray::beginUse() {
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glTexCoordPointer(2, GL_FLOAT, 0, (const GLvoid*) arrayptr );
+  if (arrayptr) {
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, (const GLvoid*) arrayptr );
+  }
 }
 
 void TexCoordArray::endUse() {
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  if (arrayptr)
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }

@@ -75,7 +75,8 @@ rgl.material <- function (
 
   # pack data
 
-  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, nalpha, ambient, specular, emission, texenvmap, color ) )
+  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, 
+                          nalpha, ambient, specular, emission, texenvmap, color ) )
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, alpha ))
 
@@ -95,7 +96,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   idata[1] <- ncolors
   idata[11] <- ncolors
   
-  cdata <- character(0)
+  cdata <- paste(rep(" ", 512), collapse="")
   ddata <- rep(0, 2+ncolors)
   
   ret <- .C( rgl_getmaterial,
@@ -107,10 +108,14 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   
   if (!ret$success) stop('rgl.getmaterial')
   
-  polymodes = c("filled", "lines", "points", "culled")
-  
+  polymodes <- c("filled", "lines", "points", "culled")
+  textypes <- c("alpha", "luminance", "luminance.alpha", "rgb", "rgba")
+  minfilters <- c("nearest", "linear", "nearest.mipmap.nearest", "nearest.mipmap.linear", 
+                  "linear.mipmap.nearest", "linear.mipmap.linear")
+  magfilters <- c("nearest", "linear")
   idata <- ret$idata
   ddata <- ret$ddata
+  cdata <- ret$cdata
   
   list(color = rgb(idata[19 + 3*(1:idata[1])], idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], maxColorValue = 255),
        alpha = ddata[seq(from=3, length=idata[11])],
@@ -120,6 +125,12 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
        emission = rgb(idata[18], idata[19], idata[20], maxColorValue = 255),
        shininess = ddata[1],
        smooth = idata[3] > 0,
+       texture = if (cdata == "") NULL else cdata,
+       textype      = textypes[idata[7]], 
+       texmipmap    = idata[8] == 1,
+       texminfilter = minfilters[idata[9] + 1],
+       texmagfilter = magfilters[idata[10] + 1],
+       texenvmap    = idata[21] == 1,
        front = polymodes[idata[4]],
        back = polymodes[idata[5]],
        size = ddata[2],

@@ -13,7 +13,7 @@
   3D Quadrangle Mesh object creation and a collection of sample objects.
 }
 \usage{
-  qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL)
+  qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, normals = NULL)
   cube3d(trans = identityMatrix(), ...)  # cube object
   oh3d(trans = identityMatrix(), ...)    # an 'o' object
   
@@ -30,6 +30,7 @@
   \item{indices}{4-component vector of quad indices}
   \item{homogeneous}{logical indicating if homogeneous (four component) coordinates are used.}
   \item{material}{material properties for later rendering}
+  \item{normals}{normals at each vertex}
   \item{trans}{transformation to apply to objects; see below for defaults}
   \item{...}{additional rendering parameters}
   \item{override}{should the parameters specified here override those stored in the object?}
