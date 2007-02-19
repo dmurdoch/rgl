@@ -19,7 +19,8 @@ quads3d(x, y = NULL, z = NULL, ...)
   \item{x, y, z}{coordinates. Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
-  \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
+  \item{ ... }{Material properties (see \code{\link{rgl.material}}), normals and 
+  texture coordinates (see \code{\link{rgl.primitive}}).}  
 }
 \details{
 
@@ -35,10 +36,14 @@ are blended over the extent of the object.  Quadrilaterals must be entirely
 in one plane and convex, or the results are undefined.
 
 These functions call the lower level functions \code{\link{rgl.points}}, \code{\link{rgl.linestrips}},
-and so on, and are provided for convenience.
+and so on, and are provided for convenience.  
 
 The appearance of the new objects are defined by the material properties.
 See \code{\link{rgl.material}} for details.
+
+The principal difference between the \code{rgl.*} functions and the \code{*3d} functions 
+is that the former make persistent changes to material properties with each call, 
+whereas the latter make temporary changes only for the duration of the call.
 }
 \value{
    Each function returns the integer object ID of the shape that
