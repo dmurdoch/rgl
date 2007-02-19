@@ -41,6 +41,13 @@ rgl.quads(x, y = NULL, z = NULL, normals=NULL, texcoords=NULL, ... )
   at the lower left, \code{(1,1)} at the upper right.  The texture
   is used to modulate the colour of the polygon.
   
+  These are the lower level functions called by
+  \code{\link{points3d}}, \code{\link{lines3d}}, etc.  The principal
+  difference between the \code{rgl.*} functions and the \code{*3d}
+  functions is that the former make persistent changes to material
+  properties with each call, whereas the latter make temporary changes
+  only for the duration of the call.
+
 }
 \value{
    Each primitive function returns the integer object ID of the shape that
