@@ -102,12 +102,16 @@ protected:
   FaceSet(
     Material& in_material, 
     int in_nelements, 
-    double* in_vertex, 
+    double* in_vertex,
+    double* in_normals,
+    double* in_texcoords,
     int in_type, 
     int in_nverticesperelement,
-    int in_ignoreExtent
+    int in_ignoreExtent,
+    int in_useNormals,
+    int in_useTexcoords
   );
-  
+ 
   /**
    * overload
    **/
@@ -123,6 +127,7 @@ protected:
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "faces", buflen); };  
 private:
   NormalArray normalArray;
+  TexCoordArray texCoordArray;
 };
 
 //
@@ -163,9 +168,12 @@ public:
 class TriangleSet : public FaceSet
 { 
 public:
-  TriangleSet(Material& in_material, int in_nvertex, double* in_vertex, int in_ignoreExtent)
-    : FaceSet(in_material,in_nvertex, in_vertex, GL_TRIANGLES, 3, in_ignoreExtent)
+  TriangleSet(Material& in_material, int in_nvertex, double* in_vertex, double* in_normals,
+              double* in_texcoords, int in_ignoreExtent, int in_useNormals, int in_useTexcoords)
+    : FaceSet(in_material,in_nvertex, in_vertex, in_normals, in_texcoords, 
+              GL_TRIANGLES, 3, in_ignoreExtent, in_useNormals, in_useTexcoords)
   { }
+  
   /**
    * overloaded
    **/  
@@ -180,9 +188,12 @@ public:
 class QuadSet : public FaceSet
 { 
 public:
-  QuadSet(Material& in_material, int in_nvertex, double* in_vertex, int in_ignoreExtent)
-    : FaceSet(in_material,in_nvertex,in_vertex, GL_QUADS, 4, in_ignoreExtent)
+  QuadSet(Material& in_material, int in_nvertex, double* in_vertex, double* in_normals,
+          double* in_texcoords, int in_ignoreExtent, int in_useNormals, int in_useTexcoords)
+    : FaceSet(in_material,in_nvertex,in_vertex, in_normals, in_texcoords, 
+              GL_QUADS, 4, in_ignoreExtent, in_useNormals, in_useTexcoords)
   { }
+  
   /**
    * overloaded
    **/  

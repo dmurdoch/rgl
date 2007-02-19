@@ -84,6 +84,15 @@ rgl.vertex <- function (x,y=NULL,z=NULL)
   return ( matrix( rbind(xyz$x,xyz$y,xyz$z), nrow=3, dimnames=list( c("x","y","z"), NULL ) ) )
 }
 
+#
+# texture coordinate data object
+#
+
+rgl.texcoords <- function(s,t=NULL) 
+{
+  xy <- xy.coords(s, t, recycle=TRUE)
+  return( matrix( rbind(xy$x, xy$y), nrow=2, dimnames=list( c("s", "t"), NULL ) ) )
+}
 
 #
 # obtain number of vertices

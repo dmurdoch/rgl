@@ -480,7 +480,7 @@ void rgl_setSkipRedraw(int* successptr, int* skipRedraw)
   *successptr = success;
 }
 
-void rgl_primitive(int* successptr, int* idata, double* vertex)
+void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals, double* texcoords)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -490,6 +490,8 @@ void rgl_primitive(int* successptr, int* idata, double* vertex)
     int   type    = idata[0];
     int   nvertex = idata[1];
     int   ignoreExtent = device->getIgnoreExtent();
+    int   useNormals = idata[2];
+    int   useTexcoords = idata[3];
     
     SceneNode* node;
 
@@ -501,10 +503,12 @@ void rgl_primitive(int* successptr, int* idata, double* vertex)
       node = new LineSet( currentMaterial, nvertex, vertex, ignoreExtent);
       break;
     case 3: // RGL_TRIANGLES:
-      node = new TriangleSet( currentMaterial, nvertex, vertex, ignoreExtent);
+      node = new TriangleSet( currentMaterial, nvertex, vertex, normals, texcoords, 
+                              ignoreExtent, useNormals, useTexcoords);
       break;
     case 4: // RGL_QUADS:
-      node = new QuadSet( currentMaterial, nvertex, vertex, ignoreExtent);
+      node = new QuadSet( currentMaterial, nvertex, vertex, normals, texcoords, 
+                              ignoreExtent, useNormals, useTexcoords);
       break;
     case 5: // RGL_LINE_STRIP:
       node = new LineStripSet( currentMaterial, nvertex, vertex, ignoreExtent);
@@ -639,11 +643,22 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
   idata[3] = (int) mat.front;
   idata[4] = (int) mat.back;
   idata[5] = mat.fog ? 1 : 0;
-  idata[6] = 0; /* mat.texture.type; */
-  idata[7] = 0; /* mat.texture.mipmap ? 1 : 0; */
-  idata[8] = 0; /* mat.texture.minfilter; */
-  idata[9] = 0; /* mat.texture.magfilter; */
-
+  if (mat.texture) {
+    mat.texture->getParameters( (Texture::Type*) idata + 6,
+                               (bool*) idata + 7,
+                               (unsigned int*) idata + 8,
+                               (unsigned int*) idata + 9,
+                               (bool*) idata + 20,
+                               strlen(cdata[0]),
+                               cdata[0] );
+  } else {
+    idata[6] = 4; /* mat.texture.type; */
+    idata[7] = 0; /* mat.texture.mipmap ? 1 : 0; */
+    idata[8] = 1; /* mat.texture.minfilter; */
+    idata[9] = 1; /* mat.texture.magfilter; */
+    idata[20] = 0; /* mat.texture.envmap ? 1 : 0; */
+    cdata[0][0] = '\0';
+  }
   idata[11] = (int) mat.ambient.getRedub();
   idata[12] = (int) mat.ambient.getGreenub();
   idata[13] = (int) mat.ambient.getBlueub();
@@ -653,7 +668,7 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
   idata[17] = (int) mat.emission.getRedub();
   idata[18] = (int) mat.emission.getGreenub();
   idata[19] = (int) mat.emission.getBlueub();
-  idata[20] = 0; /* mat.texture.envmap ? 1 : 0; */
+
   for (i=0, j=21; (i < mat.colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat.colors.getColor(i).getRedub();
     idata[j++] = (int) mat.colors.getColor(i).getGreenub();

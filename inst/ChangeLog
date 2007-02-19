@@ -190,3 +190,6 @@ v0.70
 v0.70.554
   - change to configure script from Laszlo Kajan
   - removed deprecated OSX font setting calls
+  - texture properties are now returned by material3d()
+  - allowed normals and texture coordinates to be specified in triangles and quads
+  - normals may be specified in qmesh objects, but (at present) subdivide removes them

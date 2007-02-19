@@ -9,7 +9,7 @@
 //
 
 Texture::Texture(
-  const char* filename
+  const char* in_filename
 , Type in_type
 , bool in_mipmap
 , unsigned int in_minfilter
@@ -53,7 +53,10 @@ Texture::Texture(
         break;
     }
   }
-
+  
+  filename = new char [1 + strlen(in_filename)];
+  memcpy(filename, in_filename, 1 + strlen(in_filename));
+  
   if ( !pixmap->load(filename) ) {
     delete pixmap;
     pixmap = NULL;
@@ -73,6 +76,40 @@ Texture::~Texture()
 bool Texture::isValid() const 
 {
   return (pixmap) ? true : false;
+}
+
+void Texture::getParameters(Type *out_type, bool *out_mipmap, 
+                            unsigned int *out_minfilter, unsigned int *out_magfilter, 
+                            bool *out_envmap, int buflen, char *out_filename)
+{
+  *out_type = type;
+  *out_mipmap = mipmap;
+  switch(minfilter) {
+      case GL_NEAREST:
+        *out_minfilter = 0;
+        break;
+      case GL_LINEAR:
+        *out_minfilter = 1;      
+        break;
+      case GL_NEAREST_MIPMAP_NEAREST:
+        *out_minfilter = 2;
+        break;
+      case GL_NEAREST_MIPMAP_LINEAR:
+        *out_minfilter = 3;
+        break;
+      case GL_LINEAR_MIPMAP_NEAREST:
+        *out_minfilter = 4;
+        break;
+      case GL_LINEAR_MIPMAP_LINEAR:
+        *out_minfilter = 5;
+        break;
+      default:
+        *out_minfilter = 6;
+        break;
+  }
+  *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
+  *out_envmap = envmap;
+  strncpy(out_filename, filename, buflen);
 }
 
 unsigned int texsize(unsigned int s)

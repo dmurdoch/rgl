@@ -224,7 +224,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
+rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
 {
   rgl.material( ... )
 
@@ -243,17 +243,38 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
     if (nvertex %% perelement) 
       stop("illegal number of vertices")
     
-    idata   <- as.integer( c(type, nvertex ) )
-  
+    idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords) ) )
+    
+    if (is.null(normals)) normals <- 0
+    else {
+    
+      normals <- xyz.coords(normals, recycle=TRUE)
+      x <- rep(normals$x, len=nvertex)
+      y <- rep(normals$y, len=nvertex)
+      z <- rep(normals$z, len=nvertex)
+      normals <- rgl.vertex(x,y,z)
+    }
+    
+    if (is.null(texcoords)) texcoords <- 0
+    else {
+    
+      texcoords <- xy.coords(texcoords, recycle=TRUE)
+      s <- rep(texcoords$x, len=nvertex)
+      t <- rep(texcoords$y, len=nvertex)
+      texcoords <- rgl.texcoords(s,t)
+    } 
+    
     ret <- .C( rgl_primitive,
       success = as.integer(FALSE),
       idata,
       as.numeric(vertex),
+      as.numeric(normals),
+      as.numeric(texcoords),
       NAOK = TRUE
-    );
-  
+    );      
+        
     if (! ret$success)
-      stop("rgl_points")
+      stop("rgl_primitive")
       
     invisible(ret$success)
   }
@@ -269,14 +290,14 @@ rgl.lines <- function (x, y=NULL, z=NULL, ... )
   rgl.primitive( "lines", x, y, z, ... )
 }
 
-rgl.triangles <- function (x, y=NULL, z=NULL, ... )
+rgl.triangles <- function (x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
 {
-  rgl.primitive( "triangles", x, y, z, ... )
+  rgl.primitive( "triangles", x, y, z, normals, texcoords, ... )
 }
 
-rgl.quads <- function ( x, y=NULL, z=NULL, ... )
+rgl.quads <- function ( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
 {
-  rgl.primitive( "quadrangles", x, y, z, ... )
+  rgl.primitive( "quadrangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.linestrips<- function ( x, y=NULL, z=NULL, ... )

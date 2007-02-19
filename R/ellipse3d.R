@@ -3,7 +3,7 @@ ellipse3d <- function (x, ...)
 
 ellipse3d.default <-
   function (x, scale = c(1, 1, 1), centre = c(0, 0, 0), level = 0.95, 
-            t = sqrt(qchisq(level, 3)), which = 1:3, subdivide = 4, ...) 
+            t = sqrt(qchisq(level, 3)), which = 1:3, subdivide = 3, smooth = TRUE, ...) 
 {
   stopifnot(is.matrix(x))
   
@@ -14,6 +14,7 @@ ellipse3d.default <-
   norm <- sqrt( sphere$vb[1,]^2 + sphere$vb[2,]^2 + sphere$vb[3,]^2 )
   for (i in 1:3) sphere$vb[i,] <- sphere$vb[i,]/norm
   sphere$vb[4,] <- 1
+  sphere$normals <- sphere$vb
   
   result <-scale3d(transform3d( sphere, chol), t,t,t)
   
