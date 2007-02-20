@@ -42,9 +42,11 @@ rgl.quads(x, y = NULL, z = NULL, normals=NULL, texcoords=NULL, ... )
   is used to modulate the colour of the polygon.
   
   These are the lower level functions called by
-  \code{\link{points3d}}, \code{\link{lines3d}}, etc.  The principal
-  difference between the \code{rgl.*} functions and the \code{*3d}
-  functions is that the former make persistent changes to material
+  \code{\link{points3d}}, \code{\link{lines3d}}, etc.  The two
+  principal differences between the \code{rgl.*} functions and the
+  \code{*3d} functions are that the former set all unspecified
+  material properties to defaults, whereas the latter use current
+  values as defaults; the former make persistent changes to material
   properties with each call, whereas the latter make temporary changes
   only for the duration of the call.
 
