@@ -41,9 +41,13 @@ and so on, and are provided for convenience.
 The appearance of the new objects are defined by the material properties.
 See \code{\link{rgl.material}} for details.
 
-The principal difference between the \code{rgl.*} functions and the \code{*3d} functions 
-is that the former make persistent changes to material properties with each call, 
-whereas the latter make temporary changes only for the duration of the call.
+The two principal differences between the \code{rgl.*} functions and
+the \code{*3d} functions are that the former set all unspecified
+material properties to defaults, whereas the latter use current values
+as defaults; the former make persistent changes to material properties
+with each call, whereas the latter make temporary changes only for the
+duration of the call.  
+
 }
 \value{
    Each function returns the integer object ID of the shape that
