@@ -32,7 +32,7 @@ fi
   if test "x${x_includes}" != "x" ; then 
     CPPFLAGS="${CPPFLAGS} -I${x_includes}"; 
   fi
-  LIBS="${LIBS} -L${x_libraries} -lX11 -lXext"
+  LIBS="${LIBS} -L${x_libraries} -lX11"
   if test `uname` = "Darwin" ; then
     CPPFLAGS="${CPPFLAGS} -DDarwin"
     # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
