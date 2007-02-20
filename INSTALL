@@ -1,0 +1,62 @@
+INSTALLING rgl
+
+This file is part of a source distribution of the rgl package for R.
+Most users should be able to use binary builds of the package, and
+won't need to follow these instructions.
+
+General
+
+In general, all systems use the same 3 steps to install rgl.  
+
+1.  Collect the necessary libraries/headers etc.  These vary from
+    system to system; see the hints below.
+    
+2.a)  Obtain the tarball containing the rgl source from a CRAN mirror
+    (you can start at
+    http://cran.r-project.org/src/contrib/Descriptions/rgl.html).  The
+    source tarball has a name of the form rgl_0.70.tar.gz, where the
+    0.70 will be replaced as newer versions are released.
+    
+  b)  Alternatively, obtain the source by checking it out of the
+    repository using Subversion.  The URL is
+    https://devel.neoscientists.org/svn/rgl/trunk for the development
+    version.  Check it out to a directory named "rgl".
+    
+3.a)  Run "R CMD INSTALL rgl_0.70.tar.gz" with enough permissions to
+    compile and install to your R library.
+    
+  b)  Alternatively, run "R CMD INSTALL rgl", if "rgl" is the
+    directory name.
+  
+  
+Steps 2 and 3 can be done from within R by
+
+> install.packages("rgl")
+
+to use a package from CRAN.  
+
+
+Windows instructions:
+
+Most Windows users should be using a binary build.  To build rgl on
+Windows, you need a source installation of R and all the tools
+necessary to build it.  Build R first, being sure to build the bitmap
+dlls.  Then the instructions above should work if you use the R.exe
+from that build.
+
+If you just get the tools but don't build the R bitmap dlls, the
+functions for snapshots and other bitmap conversions will not work.
+
+
+Mac OSX instructions:
+
+(Someone who knows please tell me.)
+
+
+*nix instructions:
+
+The most likely problem with the instructions above are that some of
+the necessary libraries or header files are missing on your system.
+Some files that have been reported as necessary additions:
+
+FC6 32 bit:  mesa-libGLU-devel, libXext-devel (obtained using yum).
