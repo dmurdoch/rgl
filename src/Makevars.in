@@ -6,33 +6,25 @@
 # $Id$
 #-DGL_VERSION_1_2 
 
-ifdef MAKINGAGL
-PKG_CPPFLAGS=@AGLCPPFLAGS@ -Iext
-PKG_LIBS=@AGLLIBS@
-else
-PKG_CPPFLAGS=@CPPFLAGS@ -Iext
-PKG_LIBS=@LIBS@
-endif
-
 PKG_CFLAGS=@CFLAGS@
 PKG_CXXFLAGS=@CXXFLAGS@
-BUILDAGL=@BUILDAGL@
-
-ifdef BUILDAGL
-
-ifndef MAKINGAGL
-
+PKG_CPPFLAGS=@CPPFLAGS@ -Iext
+PKG_LIBS=@LIBS@
 AGLSHLIB=agl$(SHLIB)
 
-all: $(SHLIB) $(AGLSHLIB)
+## the following are used under MacOS X when this calls SHLIB
+## to make the AGL version
+@BUILD_AGL_TRUE@ ifdef MAKINGAGL
+@BUILD_AGL_TRUE@ PKG_CPPFLAGS=@AGLCPPFLAGS@ -Iext
+@BUILD_AGL_TRUE@ PKG_LIBS=@AGLLIBS@
+@BUILD_AGL_TRUE@ AGLSHLIB=
+@BUILD_AGL_TRUE@ endif
+
+all: $(SHLIB) @BUILD_AGL_TRUE@ $(AGLSHLIB)
 
 $(AGLSHLIB): $(SHLIB)
 	-mkdir Temp
 	-mv *.o Temp
-	MAKINGAGL=TRUE \
-	R CMD SHLIB  -o $@ *.cpp *.c
+	MAKINGAGL=TRUE $(R_HOME)/bin/R CMD SHLIB  -o $@ *.cpp *.c
 	mv Temp/* .
 	rm -rf Temp
-endif
-
-endif

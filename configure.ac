@@ -20,13 +20,13 @@ AC_ARG_ENABLE([carbon],
 if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then
   AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
   AGLLIBS="${LIBS} -framework AGL"
-  BUILDAGL=TRUE
+  BUILD_AGL_TRUE=""
 else
-  BUILDAGL=""
+  BUILD_AGL_TRUE="#"
 fi
 
   AC_PATH_X
-  if test x$no_x == xyes ; then
+  if test x$no_x = xyes ; then
     AC_MSG_ERROR([X11 not found but required, configure aborted.])
   fi
   if test "x${x_includes}" != "x" ; then 
@@ -84,12 +84,12 @@ AC_ARG_ENABLE([libpng-dynamic],
 
 if test "x$enable_libpng" != "xno"; then
 
-  if test "x$libpng_prefix" == "x"; then
+  if test "x$libpng_prefix" = "x"; then
     if test "x$enable_libpng_config" != "xno"; then
       AC_CHECK_PROG([HAVE_LIBPNG_CONFIG],[libpng-config],[yes],[no])
     fi
 
-    if test "x$HAVE_LIBPNG_CONFIG" == "xyes" ; then
+    if test "x$HAVE_LIBPNG_CONFIG" = "xyes" ; then
       AC_MSG_NOTICE([using libpng-config])
       CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
       if test "x$enable_libpng_dynamic" != "xno"; then
@@ -100,6 +100,9 @@ if test "x$enable_libpng" != "xno"; then
       fi
     else
       TEST_DIRS="/usr/local /usr"
+      ## FIXME: Linux 64bit systems mainly use lib64
+      ## and Solaris ones use lib/sparcv9
+      ## This should use proper autoconf tests.
       for I in $TEST_DIRS ; do
         AC_MSG_CHECKING([libpng in $I])
         if ( test -f $I/lib/libpng.so || test -f $I/lib/libpng.a ) && 
@@ -137,7 +140,7 @@ AC_SUBST(CXXFLAGS)
 AC_SUBST(LIBS)
 AC_SUBST(AGLCPPFLAGS)
 AC_SUBST(AGLLIBS)
-AC_SUBST(BUILDAGL)
+AC_SUBST(BUILD_AGL_TRUE)
 
 AC_OUTPUT(src/Makevars)
 
