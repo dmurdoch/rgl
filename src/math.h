@@ -40,7 +40,7 @@ namespace math {
 //  template<typename T> inline T expm1(T x) { return static_cast<T>( ::expm1( static_cast<double>(x) ) ); }
   template<typename T> inline T log(T x) { return static_cast<T>( ::log( static_cast<double>(x) ) ); }
   template<typename T> inline T log10(T x) { return static_cast<T>( ::log10( static_cast<double>(x) ) ); }
-  template<typename T> inline T log2(T x) { return static_cast<T>( ::log2( static_cast<double>(x) ) ); }
+//  template<typename T> inline T log2(T x) { return static_cast<T>( ::log2( static_cast<double>(x) ) ); }
   template<typename T> inline T log1p(T x) { return static_cast<T>( ::log1p( static_cast<double>(x) ) ); }
   template<typename T> inline T logb(T x) { return static_cast<T>( ::logb( static_cast<double>(x) ) ); }
   template<typename T> inline T modf(T x, T* y) { double i; double r = ::modf( static_cast<double>(x), &i ); *y = static_cast<T>(i); return static_cast<T>(r); }

@@ -7,10 +7,8 @@ echo "  configure.win32..."
 # --- win32 base configuration -----------------------------------------------
 
 CPPFLAGS=
-CFLAGS=
 CXXFLAGS="-fno-exceptions -fno-rtti"
 LIBS="-lgdi32 -lopengl32 -lglu32"
-BUILDAGL=""
 
 # --- libpng -----------------------------------------------------------------
 
@@ -27,10 +25,9 @@ fi
 
 cat <<EOF
 ---------- win32 configuration: ----------
-CPPFLAGS = $CPPFLAGS
-CFLAGS   = $CFLAGS
-CXXFLAGS = $CXXFLAGS
-LIBS     = $LIBS
+PKG_CPPFLAGS = $CPPFLAGS
+PKG_CXXFLAGS = $CXXFLAGS
+PKG_LIBS     = $LIBS
 ------------------------------------------  
 EOF
 
@@ -38,9 +35,8 @@ EOF
 
 sed \
 -e "s^@CPPFLAGS@^$CPPFLAGS^" \
--e "s^@CFLAGS@^$CFLAGS^" \
 -e "s^@CXXFLAGS@^$CXXFLAGS^" \
 -e "s^@LIBS@^$LIBS^" \
--e "s^@BUILDAGL@^$BUILDAGL^" \
+-e "s^@BUILD_AGL_TRUE@^#^" \
 src/Makevars.in >src/Makevars
 
