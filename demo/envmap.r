@@ -4,6 +4,7 @@
 
 rgl.demo.envmap <- function()
 {
+  open3d()
   # Clear scene:
   clear3d("all")
   light3d()
@@ -18,6 +19,5 @@ rgl.demo.envmap <- function()
   , color = "white"
   )
 }
-rgl.open()
 rgl.demo.envmap()
 

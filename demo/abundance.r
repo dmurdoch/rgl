@@ -4,7 +4,7 @@
 
 rgl.demo.abundance <- function()
 {
-  # Clear scene:
+  open3d()
   clear3d("all")               # remove all shapes, lights, bounding-box, and restore viewpoint
   
   # Setup environment:
@@ -44,6 +44,5 @@ rgl.demo.abundance <- function()
   )
 
 }
-rgl.open()
 rgl.demo.abundance()
 
