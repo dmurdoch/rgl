@@ -6,11 +6,11 @@
 # $Id$
 #-DGL_VERSION_1_2 
 
-PKG_CFLAGS=@CFLAGS@
-PKG_CXXFLAGS=@CXXFLAGS@
 PKG_CPPFLAGS=@CPPFLAGS@ -Iext
 PKG_LIBS=@LIBS@
 AGLSHLIB=agl$(SHLIB)
+## needed on Windows
+PKG_CXXFLAGS=@CXXFLAGS@
 
 ## the following are used under MacOS X when this calls SHLIB
 ## to make the AGL version

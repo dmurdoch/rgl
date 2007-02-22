@@ -13,9 +13,23 @@ AC_PREREQ(2.50)
 
 AC_INIT()
 AC_CONFIG_AUX_DIR(src/build/autoconf)
+
+## pick up compiler as will be used by R CMD INSTALL/SHLIB
+if test -n "${R_HOME}"; then
+  CC=`${R_HOME}/bin/R CMD config CC`
+  CFLAGS=`${R_HOME}/bin/R CMD config CFLAGS`
+fi
+
 AC_ARG_ENABLE([carbon],
 [  --disable-carbon           os x: use X11 instead of Carbon]
 )
+
+if test `uname` = "Darwin" ; then
+  darwin="yes"
+else
+  darwin="no"
+fi
+
 
 if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then
   AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
@@ -29,11 +43,15 @@ fi
   if test x$no_x = xyes ; then
     AC_MSG_ERROR([X11 not found but required, configure aborted.])
   fi
-  if test "x${x_includes}" != "x" ; then 
-    CPPFLAGS="${CPPFLAGS} -I${x_includes}"; 
+  if test -n "${x_includes}"; then
+    CPPFLAGS="${CPPFLAGS} -I${x_includes}"
   fi
-  LIBS="${LIBS} -L${x_libraries} -lX11"
-  if test `uname` = "Darwin" ; then
+  if test -n "${x_libraries}"; then
+    LIBS="${LIBS} -L${x_libraries} -lX11"
+  else
+    LIBS="${LIBS} -lX11"
+  fi
+  if test $darwin = yes; then
     CPPFLAGS="${CPPFLAGS} -DDarwin"
     # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
     if test -e /System/Library/Frameworks/OpenGL.framework ; then
@@ -51,80 +69,89 @@ AC_ARG_WITH(gl-includes,
 [CPPFLAGS="${CPPFLAGS} -I${withval}"]
 )
 
+if test $darwin != yes; then
+  AC_CHECK_HEADERS(GL/gl.h GL/glu.h)
+  if test "x$ac_cv_header_GL_gl_h" = xno; then
+    AC_ERROR([missing required header GL/gl.h])
+  fi
+  if test "x$ac_cv_header_GL_glu_h" = xno; then
+    AC_ERROR([missing required header GL/glu.h])
+  fi
+fi
+
 AC_ARG_WITH(gl-libs,
 [  --with-gl-libs=DIR      specify location of OpenGL libs],
 [LIBS="${LIBS} -L${withval}"]
 )
 
 AC_ARG_WITH(gl-libname,
-[  --with-gl-libname=NAME specify Library name (defaults to "GL")], 
-[LIBS="${LIBS} -l${withval}"], [LIBS="${LIBS} -lGL"]
+[  --with-gl-libname=NAME  specify Library name (defaults to "GL")], 
+[lGL=${withval}], [lGL=GL]
 )
+AC_CHECK_LIB($lGL, glEnd)
+this=`eval echo '${'$as_ac_Lib'}'`
+if test "x$this" != xyes; then
+  AC_ERROR([missing required library ${lGL}])
+fi
 
 AC_ARG_WITH(glu-libname,
 [  --with-glu-libname=NAME specify GLU Library name (defaults to "GLU")],
-[LIBS="${LIBS} -l${withval}"], [LIBS="${LIBS} -lGLU"]
+[lGLU=${withval}], [lGLU=GLU]
 )
+AC_CHECK_LIB($lGLU, gluProject)
+this=`eval echo '${'$as_ac_Lib'}'`
+if test "x$this" != xyes; then
+  AC_ERROR([missing required library ${lGLU}])
+fi
 
 ## --- LibPNG ----------------------------------------------------------------
 
 AC_ARG_ENABLE([libpng],
 [  --disable-libpng           compile without PNG image support]
 )
-AC_ARG_WITH(libpng-prefix,
-[  --with-libpng-prefix=PREFIX specify libpng prefix],
-[libpng_prefix="${withval}"]
-)
 AC_ARG_ENABLE([libpng-config],
 [  --disable-libpng-config    disable libpng-config test and configuration]
 )
 AC_ARG_ENABLE([libpng-dynamic],
-[  --disable-libpng-dynamic   disable dynamic libpng linkage, force static version linkage]
+[  --disable-libpng-dynamic   disable dynamic libpng linkage, force static version linkage (only with --enable-libpng-config)]
 )
 
 if test "x$enable_libpng" != "xno"; then
 
-  if test "x$libpng_prefix" = "x"; then
-    if test "x$enable_libpng_config" != "xno"; then
-      AC_CHECK_PROG([HAVE_LIBPNG_CONFIG],[libpng-config],[yes],[no])
-    fi
-
-    if test "x$HAVE_LIBPNG_CONFIG" = "xyes" ; then
-      AC_MSG_NOTICE([using libpng-config])
-      CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
-      if test "x$enable_libpng_dynamic" != "xno"; then
-        AC_MSG_NOTICE([using libpng dynamic linkage])
-        LIBS="${LIBS} `libpng-config --ldflags`"
-      else
-        libpng_prefix="`libpng-config --prefix`"
-      fi
-    else
-      TEST_DIRS="/usr/local /usr"
-      ## FIXME: Linux 64bit systems mainly use lib64
-      ## and Solaris ones use lib/sparcv9
-      ## This should use proper autoconf tests.
-      for I in $TEST_DIRS ; do
-        AC_MSG_CHECKING([libpng in $I])
-        if ( test -f $I/lib/libpng.so || test -f $I/lib/libpng.a ) && 
-           ( test -f $I/include/png.h ) ; then
-          AC_MSG_RESULT([found])
-          CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${I}/include"
-          libpng_prefix="${I}"
-          break
-        else
-          AC_MSG_RESULT([not found])
-        fi
-      done
-    fi
+  if test "x$enable_libpng_config" != "xno"; then
+    AC_CHECK_PROG([HAVE_LIBPNG_CONFIG],[libpng-config],[yes],[no])
   fi
 
-  if test "x$libpng_prefix" != "x"; then
+  if test "x$HAVE_LIBPNG_CONFIG" = "xyes" ; then
+    AC_MSG_NOTICE([using libpng-config])
+    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
     if test "x$enable_libpng_dynamic" != "xno"; then
       AC_MSG_NOTICE([using libpng dynamic linkage])
-      LIBS="${LIBS} -L${libpng_prefix}/lib -lpng"
+      LIBS="${LIBS} `libpng-config --ldflags`"
     else
       AC_MSG_NOTICE([using libpng static linkage])
-      LIBS="${LIBS} ${libpng_prefix}/lib/libpng.a"
+      LIBS="${LIBS} `libpng-config --static --L_opts`/libpng.a"
+    fi
+  else
+    AC_MSG_CHECKING([libpng])
+    save_LIBS="${LIBS}"
+    save_CPPFLAGS="${CPPFLAGS}"
+    AC_CHECK_HEADERS(png.h)
+    AC_CHECK_LIB(png, png_read_update_info)
+    if test "${ac_cv_header_png_h}"; then
+      if test "${ac_cv_lib_png_png_read_update_info}"; then
+	CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
+	AC_MSG_NOTICE([libpng header and lib found])
+	if test "x$enable_libpng_dynamic" != "xno"; then
+	  AC_MSG_NOTICE([using libpng dynamic linkage])
+	else
+	  AC_MSG_NOTICE([using libpng static linkage])
+	fi
+      else
+	LIBS=${save_LIBS}
+	CPPFLAGS=${save_CPPFLAGS}
+	AC_MSG_NOTICE([libpng header and lib not found])
+      fi
     fi
   fi
 
@@ -135,7 +162,6 @@ fi
 ## --- Output ----------------------------------------------------------------
 
 AC_SUBST(CPPFLAGS)
-AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(LIBS)
 AC_SUBST(AGLCPPFLAGS)
