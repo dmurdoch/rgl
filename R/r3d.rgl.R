@@ -24,6 +24,11 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 
 .material3d.writeOnly <- character(0)
 
+# This function expands a list of arguments by putting
+# all entries from Params (i.e. the current settings by default)
+# in place for any entries that are not listed.  
+# Unrecognized args are left in place.
+
 .fixMaterialArgs <- function(..., Params = material3d()) {
    f <- function(...) list(...)
    formals(f) <- c(Params, formals(f))
@@ -58,6 +63,7 @@ material3d  <- function (...)
     }
     value <- rgl.getmaterial()[argnames]
     if (length(args)) {
+    	args <- do.call(".fixMaterialArgs", args)
         do.call("rgl.material", args)
         return(invisible(value))
     } else if (length(argnames) == 1) return(value[[1]])
@@ -183,15 +189,21 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {
     rgl.open()
-    params <- .fixMaterialArgs(..., Params = params)
+    rgl.material()
+    
+    material <- material3d()
+    if (!is.null(params$material)) {
+      material <- do.call(".fixMaterialArgs", c(params$material, Params = material))    
+      params$material <- NULL
+    }
+    material <- .fixMaterialArgs(..., Params = material)
+    do.call("material3d", material)    
+    
     if (!is.null(params$bg)) {
       do.call("bg3d", params$bg)
       params$bg <- NULL
     }
-    if (!is.null(params$material)) {
-      do.call("material3d", params$material)
-      params$material <- NULL
-    }
+
     do.call("par3d", params)   
     return(rgl.cur())
 }

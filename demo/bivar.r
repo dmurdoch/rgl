@@ -25,6 +25,9 @@ rgl.demo.bivar <- function()
   # visualize:
   zscale<-20
   
+  # New window
+  open3d()
+  
   # clear scene:
   clear3d("all")
   
@@ -42,6 +45,5 @@ rgl.demo.bivar <- function()
   surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines") 
 }
 
-rgl.open()
 rgl.demo.bivar()
 

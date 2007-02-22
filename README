@@ -114,6 +114,13 @@ You provide the options through the R CMD build/INSTALL command
   
   --disable-libpng-dynamic
     use static libpng library
+    
+You may find that your distro doesn't have all necessary development
+libraries installed:  read the error messages for hints!  This line
+has been reported to be sufficient on FC 5 or 6:
+
+ yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
+
 
 
   MAC OS X OPTIONS

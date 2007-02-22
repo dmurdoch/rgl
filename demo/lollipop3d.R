@@ -89,6 +89,7 @@ lollipop3d <- function(data.x,data.y,data.z,surf.fun,surf.n=50,
   z.interc <- z.adj*z.interc
   z.ticks <- z.adj*z.ticks
   zlim <- z.adj*zlim
+  open3d()
   clear3d("all")
   light3d()
   bg3d(color=c(bg,fg))
@@ -141,11 +142,10 @@ z <- dfun(x,y)+rnorm(30,sd=0.5)
 lollipop3d(x,y,z)
 
 ## lollipops plus theoretical surface
-open3d()
+
 lollipop3d(x,y,z,dfun,col.pt="red",col.stem=c("red","blue"))
 ## lollipops plus regression fit
 
-open3d()
 linmodel <- lm(z~x+y)
 dfun <- function(x,y) {predict(linmodel,newdata=data.frame(x=x,y=y))}
 lollipop3d(x,y,z,dfun,col.pt="red",col.stem=c("red","blue"))
