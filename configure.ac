@@ -30,6 +30,60 @@ else
   darwin="no"
 fi
 
+## --- LibPNG ----------------------------------------------------------------
+
+AC_ARG_ENABLE([libpng],
+[  --disable-libpng           compile without PNG image support]
+)
+AC_ARG_ENABLE([libpng-config],
+[  --disable-libpng-config    disable libpng-config test and configuration]
+)
+AC_ARG_ENABLE([libpng-dynamic],
+[  --disable-libpng-dynamic   disable dynamic libpng linkage, force static version linkage (only with --enable-libpng-config)]
+)
+
+if test "x$enable_libpng" != "xno"; then
+
+  if test "x$enable_libpng_config" != "xno"; then
+    AC_CHECK_PROG([HAVE_LIBPNG_CONFIG],[libpng-config],[yes],[no])
+  fi
+
+  if test "x$HAVE_LIBPNG_CONFIG" = "xyes" ; then
+    AC_MSG_NOTICE([using libpng-config])
+    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
+    if test "x$enable_libpng_dynamic" != "xno"; then
+      AC_MSG_NOTICE([using libpng dynamic linkage])
+      LIBS="${LIBS} `libpng-config --ldflags`"
+    else
+      AC_MSG_NOTICE([using libpng static linkage])
+      LIBS="${LIBS} `libpng-config --static --L_opts`/libpng.a"
+    fi
+  else
+    AC_MSG_CHECKING([libpng])
+    save_LIBS="${LIBS}"
+    save_CPPFLAGS="${CPPFLAGS}"
+    AC_CHECK_HEADERS(png.h)
+    AC_CHECK_LIB(png, png_read_update_info)
+    if test "${ac_cv_header_png_h}"; then
+      if test "${ac_cv_lib_png_png_read_update_info}"; then
+	CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
+	AC_MSG_NOTICE([libpng header and lib found])
+	if test "x$enable_libpng_dynamic" != "xno"; then
+	  AC_MSG_NOTICE([using libpng dynamic linkage])
+	else
+	  AC_MSG_NOTICE([using libpng static linkage])
+	fi
+      else
+	LIBS=${save_LIBS}
+	CPPFLAGS=${save_CPPFLAGS}
+	AC_MSG_NOTICE([libpng header and lib not found])
+      fi
+    fi
+  fi
+
+fi
+
+## --- Darwin ----------------------------------------------------------------
 
 if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then
   AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
@@ -38,6 +92,8 @@ if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then
 else
   BUILD_AGL_TRUE="#"
 fi
+
+# ---[ X11 ]------------------------------------------------------------------
 
   AC_PATH_X
   if test x$no_x = xyes ; then
@@ -103,61 +159,6 @@ this=`eval echo '${'$as_ac_Lib'}'`
 if test "x$this" != xyes; then
   AC_ERROR([missing required library ${lGLU}])
 fi
-
-## --- LibPNG ----------------------------------------------------------------
-
-AC_ARG_ENABLE([libpng],
-[  --disable-libpng           compile without PNG image support]
-)
-AC_ARG_ENABLE([libpng-config],
-[  --disable-libpng-config    disable libpng-config test and configuration]
-)
-AC_ARG_ENABLE([libpng-dynamic],
-[  --disable-libpng-dynamic   disable dynamic libpng linkage, force static version linkage (only with --enable-libpng-config)]
-)
-
-if test "x$enable_libpng" != "xno"; then
-
-  if test "x$enable_libpng_config" != "xno"; then
-    AC_CHECK_PROG([HAVE_LIBPNG_CONFIG],[libpng-config],[yes],[no])
-  fi
-
-  if test "x$HAVE_LIBPNG_CONFIG" = "xyes" ; then
-    AC_MSG_NOTICE([using libpng-config])
-    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H `libpng-config --I_opts`"
-    if test "x$enable_libpng_dynamic" != "xno"; then
-      AC_MSG_NOTICE([using libpng dynamic linkage])
-      LIBS="${LIBS} `libpng-config --ldflags`"
-    else
-      AC_MSG_NOTICE([using libpng static linkage])
-      LIBS="${LIBS} `libpng-config --static --L_opts`/libpng.a"
-    fi
-  else
-    AC_MSG_CHECKING([libpng])
-    save_LIBS="${LIBS}"
-    save_CPPFLAGS="${CPPFLAGS}"
-    AC_CHECK_HEADERS(png.h)
-    AC_CHECK_LIB(png, png_read_update_info)
-    if test "${ac_cv_header_png_h}"; then
-      if test "${ac_cv_lib_png_png_read_update_info}"; then
-	CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
-	AC_MSG_NOTICE([libpng header and lib found])
-	if test "x$enable_libpng_dynamic" != "xno"; then
-	  AC_MSG_NOTICE([using libpng dynamic linkage])
-	else
-	  AC_MSG_NOTICE([using libpng static linkage])
-	fi
-      else
-	LIBS=${save_LIBS}
-	CPPFLAGS=${save_CPPFLAGS}
-	AC_MSG_NOTICE([libpng header and lib not found])
-      fi
-    fi
-  fi
-
-fi
-
-## --- Darwin ----------------------------------------------------------------
 
 ## --- Output ----------------------------------------------------------------
 
