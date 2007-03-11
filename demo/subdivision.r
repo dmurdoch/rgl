@@ -5,7 +5,8 @@
 rgl.demo.subdivision <- function()
 {
   # setup environment
-  rgl.clear("all")
+  clear3d("all")
+  view3d()
   bg3d(color="gray")
   light3d()
 
@@ -30,6 +31,6 @@ rgl.demo.subdivision <- function()
 
 }
 
-rgl.open()
+open3d()
 rgl.demo.subdivision()
 
