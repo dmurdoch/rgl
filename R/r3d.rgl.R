@@ -5,11 +5,17 @@
 
 # Node Management
 
-clear3d     <- function(type = c("shapes", "bboxdeco")) {
+clear3d     <- function(type = c("shapes", "bboxdeco", "material"), 
+                        defaults=get("r3dDefaults", envir=.GlobalEnv)) {
     .check3d()
     rgl.clear( type )
-    if ( 4 %in% rgl.enum.nodetype(type) ) { # viewpoint
-	do.call("par3d", get("r3dDefaults", envir=.GlobalEnv)[c("FOV", "userMatrix")])
+    type <- rgl.enum.nodetype(type)
+    if ( 4 %in% type ) { # viewpoint
+	do.call("par3d", defaults[c("FOV", "userMatrix")])
+    }
+    if ( 5 %in% type ) { # material
+        if (length(defaults$material))
+    	    do.call("material3d", defaults$material)
     }
 }
 
@@ -189,21 +195,15 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {
     rgl.open()
-    rgl.material()
     
-    material <- material3d()
-    if (!is.null(params$material)) {
-      material <- do.call(".fixMaterialArgs", c(params$material, Params = material))    
-      params$material <- NULL
-    }
-    material <- .fixMaterialArgs(..., Params = material)
-    do.call("material3d", material)    
+    clear3d("material", defaults = params)
+    params$material <- NULL
     
     if (!is.null(params$bg)) {
       do.call("bg3d", params$bg)
       params$bg <- NULL
     }
-
+ 
     do.call("par3d", params)   
     return(rgl.cur())
 }

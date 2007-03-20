@@ -18,16 +18,24 @@
 rgl.clear <- function( type = "shapes" )
 {
   type <- rgl.enum.nodetype(type)
+  
+  viewpoint <- 4 %in% type
+  material  <- 5 %in% type
 
+  type <- type[!(type %in% 4:5)]
+  
   idata <- as.integer(c(length(type), type))
-
+ 
   ret <- .C( rgl_clear, 
     success = as.integer(FALSE),
     idata
   )
   
-  if ( 4 %in% type ) # viewpoint
+  if ( viewpoint ) 
     rgl.viewpoint()
+    
+  if ( material ) 
+    rgl.material()
 
   if (! ret$success)
     stop("rgl_clear")
