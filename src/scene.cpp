@@ -90,10 +90,6 @@ bool Scene::clear(TypeID typeID)
       bboxDeco = NULL;
       success = true;
       break;
-    case VIEWPOINT:
-      success = true;  // Handled in R code
-    default:
-      break;
   }
   return success;
 }

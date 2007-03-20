@@ -204,7 +204,7 @@ void rgl_clear(int* successptr, int *idata)
     for (int i=1; success && i<=num; i++) {
       TypeID stackTypeID = (TypeID) idata[i];
 
-      success = as_success( device->clear( stackTypeID ) ); // viewpoint handled in R, background ignored
+      success = as_success( device->clear( stackTypeID ) ); // viewpoint & material handled in R, background ignored
     }
   }
 

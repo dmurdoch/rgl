@@ -187,7 +187,7 @@ v0.70
   - moved this file (ChangeLog) to inst directory, so it will be installed,
     and added code to display it to the rgl help topic.
 
-v0.70.563
+v0.70.569
   - changes to configure script from Laszlo Kajan and Brian Ripley:  should 
     now be much more portable
   - removed deprecated OSX font setting calls
@@ -196,4 +196,5 @@ v0.70.563
   - normals may be specified in qmesh objects, but (at present) subdivide removes them
   - material3d() now preserves the values of unspecified parameters (as documented,
     but not previously functioning)
-  - open3d() now resets all material properties to the defaults.
+  - clear3d() can now reset material properties to the defaults, and
+    open3d() does this.
