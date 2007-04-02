@@ -12,6 +12,7 @@
 #include "fps.h"
 #include "select.h"
 #include "gl2ps.h"
+#include <locale>
 
 //
 // CAMERA config
