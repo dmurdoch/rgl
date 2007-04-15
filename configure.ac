@@ -14,10 +14,14 @@ AC_PREREQ(2.50)
 AC_INIT()
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
+AC_PROG_CXX()
+
 ## pick up compiler as will be used by R CMD INSTALL/SHLIB
 if test -n "${R_HOME}"; then
   CC=`${R_HOME}/bin/R CMD config CC`
   CFLAGS=`${R_HOME}/bin/R CMD config CFLAGS`
+  CXX=`${R_HOME}/bin/R CMD config CXX`
+  CXXFLAGS=`${R_HOME}/bin/R CMD config CXXFLAGS`
 fi
 
 AC_ARG_ENABLE([carbon],
