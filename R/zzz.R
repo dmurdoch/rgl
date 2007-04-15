@@ -27,9 +27,14 @@
   if ( .Platform$OS.type == "unix" ) {
     unixos <- system("uname",intern=TRUE)
     if ( unixos == "Darwin" ) {
+    
+      # Sys.putenv was renamed to Sys.setenv in R 2.5.0
+      if ( as.numeric(R.version$minor) < 5 )
+          Sys.setenv <- Sys.putenv
+          
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
       # because it would override Apple's OpenGL framework
-      Sys.putenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
+      Sys.setenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
       if ( .Platform$GUI == "AQUA" && 
             file.exists(system.file("libs",.Platform$r_arch, "aglrgl.so", lib.loc=lib, package = pkg))) {
           dll <- "aglrgl"
