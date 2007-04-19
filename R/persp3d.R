@@ -35,7 +35,8 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
         y <- x$y
         x <- x$x
     }
-    if (any(diff(x) <= 0) || any(diff(y) <= 0))
+    if ( (!is.matrix(x) && any(diff(x) <= 0)) 
+      || (!is.matrix(y) && any(diff(y) <= 0)))
         stop("increasing 'x' and 'y' values expected")
         
     result <- c(surface=surface3d(x,y,z,...))
