@@ -11,13 +11,13 @@ rgl.surface(x, z, y, coords=1:3, ...)
 }
 \arguments{
   \item{ x }{
-    values corresponding to rows of \code{y}
+    values corresponding to rows of \code{y}, or matrix of x coordinates
   }
   \item{ y }{
     matrix of height values
   }
   \item{ z }{
-    values corresponding to columns of \code{y}
+    values corresponding to columns of \code{y}, or matrix of z coordinates
   }
   \item{ coords }{
     See details
@@ -42,6 +42,11 @@ rgl.surface(x, z, y, coords=1:3, ...)
   (i.e. towards higher \code{y} values).  This can be used to render
   the top and bottom differently; see \code{\link{rgl.material}} and
   the example below.
+  
+  If the \code{x} or \code{z} argument is a matrix, then it must be of the same
+  dimension as \code{y}, and the values in the matrix will be used for the corresponding
+  coordinates. This is used to plot shapes such as cylinders
+  where y is not a function of x and z.
   
   \code{NA} values in the height matrix are not drawn.
 }

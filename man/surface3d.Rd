@@ -13,10 +13,10 @@ terrain3d(x, y, z, ...)
 }
 \arguments{
   \item{ x }{
-    values corresponding to rows of \code{z}
+    values corresponding to rows of \code{z}, or matrix of x coordinates
   }
   \item{ y }{
-    values corresponding to the columns of \code{z}
+    values corresponding to the columns of \code{z}, or matrix of y coordinates
   }
   \item{ z }{
     matrix of heights
@@ -28,6 +28,11 @@ terrain3d(x, y, z, ...)
   the matrix of height values in \code{z}, with rows corresponding 
   to the values in \code{x} and columns corresponding to the values in 
   \code{y}.  This is the same parametrization as used in \code{\link{persp}}.
+  
+  If the \code{x} or \code{y} argument is a matrix, then it must be of the same
+  dimension as \code{z}, and the values in the matrix will be used for the corresponding
+  coordinates. This is used to plot shapes such as cylinders
+  where z is not a function of x and y.
   
   \code{surface3d} always draws the surface with the `front' upwards
   (i.e. towards higher \code{z} values).  This can be used to render

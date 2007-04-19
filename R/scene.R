@@ -337,19 +337,31 @@ perm_parity <- function(p) {
 rgl.surface <- function( x, z, y, coords=1:3, ... )
 {
   rgl.material(...)
-
-  nx <- length(x)
-  nz <- length(z)
+  
+  matrices <- c(FALSE, FALSE, TRUE)
+  
+  if (is.matrix(x)) {
+    nx <- nrow(x)
+    matrices[1] <- TRUE
+    if ( !identical( dim(x), dim(y) ) ) stop( "bad dimension for rows") 
+  } else nx <- length(x)
+  
+  if (is.matrix(z)) {
+    nz <- ncol(z)
+    matrices[2] <- TRUE
+    if ( !identical( dim(z), dim(y) ) ) stop( "bad dimension for cols")     
+  } else nz <- length(z)
+  
   ny <- length(y)
 
   if ( nx*nz != ny)
-    stop("y length != x length * z length")
+    stop("y length != x rows * z cols")
 
   if ( nx < 2 )
-    stop("x length < 2")
+    stop("rows < 2")
   
   if ( nz < 2 )   
-    stop("y length < 2")
+    stop("cols < 2")
     
   if ( length(coords) != 3 || !identical(all.equal(sort(coords), 1:3), TRUE) )
     stop("coords must be a permutation of 1:3")
@@ -366,6 +378,7 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
     as.numeric(y),
     as.integer(coords),
     as.integer(parity),
+    as.integer(matrices),
     NAOK=TRUE
   );
 

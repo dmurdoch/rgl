@@ -9,7 +9,7 @@
 // orientation is 1 to swap front and back
 
 Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, double* in_z, double* in_y, 
-	         int* in_coords, int in_orientation, int in_ignoreExtent)
+	         int* in_coords, int in_orientation, int* in_matrices, int in_ignoreExtent)
 : Shape(in_material, in_ignoreExtent)
 {
   nx = in_nx;
@@ -38,12 +38,15 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
   x = va[coords[0]-1];
   y = va[coords[1]-1];
   z = va[coords[2]-1];
-
+  
+  int xmat = in_matrices[0];
+  int zmat = in_matrices[1];
+  
   int iy  = 0;
   for(int iz=0;iz<nz;iz++) {
-    *z = (float) in_z[iz];
-    for(int ix=0;ix<nx;ix++,iy++) {
-      *x = (float) in_x[ix];
+    for(int ix=0;ix<nx;ix++,iy++) {    
+      *z = (float) in_z[zmat ? iy : iz];
+      *x = (float) in_x[xmat ? iy : ix];
       *y = (float) in_y[iy];
 
       vertexArray[iy] = v;

@@ -200,3 +200,5 @@ v0.70.572
     open3d() does this.
   - minor fix for gcc 4.3 compatibility
   - minor fix for R 2.5+ compatibility
+  - allowed more general surfaces to be plotted by rgl.surface, surface3d and 
+    persp3d, by specifying matrices for x and y coordinates.
