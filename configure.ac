@@ -14,8 +14,6 @@ AC_PREREQ(2.50)
 AC_INIT()
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
-AC_PROG_CXX()
-
 ## pick up compiler as will be used by R CMD INSTALL/SHLIB
 if test -n "${R_HOME}"; then
   CC=`${R_HOME}/bin/R CMD config CC`
@@ -23,6 +21,9 @@ if test -n "${R_HOME}"; then
   CXX=`${R_HOME}/bin/R CMD config CXX`
   CXXFLAGS=`${R_HOME}/bin/R CMD config CXXFLAGS`
 fi
+
+AC_PROG_CPP
+AC_PROG_CC
 
 AC_ARG_ENABLE([carbon],
 [  --disable-carbon           os x: use X11 instead of Carbon]
