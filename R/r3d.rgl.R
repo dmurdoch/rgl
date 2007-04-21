@@ -148,9 +148,11 @@ sprites3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius), .fixMaterialArgs(..., Params = save)))
 }
 
-terrain3d   <- function(x,y=NULL,z=NULL,...) {
+terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z=NULL) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.surface", c(list(x=x,y=z,z=y,coords=c(1,3,2)), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.surface", c(list(x=x,y=z,z=y,coords=c(1,3,2),
+                                normal_x=normal_x,normal_y=normal_z,normal_z=normal_y), 
+                           .fixMaterialArgs(..., Params = save)))
 }
 surface3d   <- terrain3d
 

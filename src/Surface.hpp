@@ -14,8 +14,10 @@
 
 class Surface : public Shape {
 public:
-  Surface(Material& material, int nx, int nz, double* x, double* z, double* y, int* coords, 
-  	  int orientation, int* matrices, int in_ignoreExtent);
+  Surface(Material& material, int nx, int nz, double* x, double* z, double* y,
+	         double* normal_x, double* normal_z, double* normal_y,
+	         double* texture_s, double* texture_t,
+	         int* coords, int orientation, int* flags, int ignoreExtent);
   /**
    * overload
    **/
@@ -33,8 +35,9 @@ private:
   void setNormal(int ix, int iz);
 
   VertexArray vertexArray;
+  NormalArray normalArray;
   TexCoordArray texCoordArray;
-  int nx, nz, coords[3], orientation;
+  int nx, nz, coords[3], orientation, user_normals, user_textures;
 };
 
 #endif // SURFACE_HPP

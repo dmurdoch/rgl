@@ -334,21 +334,22 @@ perm_parity <- function(p) {
   return(result %% 2)
 }
 
-rgl.surface <- function( x, z, y, coords=1:3, ... )
+rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL, normal_z=NULL,
+                         texture_s=NULL, texture_t=NULL)
 {
   rgl.material(...)
   
-  matrices <- c(FALSE, FALSE, TRUE)
+  flags <- rep(FALSE, 4)
   
   if (is.matrix(x)) {
     nx <- nrow(x)
-    matrices[1] <- TRUE
+    flags[1] <- TRUE
     if ( !identical( dim(x), dim(y) ) ) stop( "bad dimension for rows") 
   } else nx <- length(x)
   
   if (is.matrix(z)) {
     nz <- ncol(z)
-    matrices[2] <- TRUE
+    flags[2] <- TRUE
     if ( !identical( dim(z), dim(y) ) ) stop( "bad dimension for cols")     
   } else nz <- length(z)
   
@@ -365,6 +366,23 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
     
   if ( length(coords) != 3 || !identical(all.equal(sort(coords), 1:3), TRUE) )
     stop("coords must be a permutation of 1:3")
+  
+  nulls <- c(is.null(normal_x), is.null(normal_y), is.null(normal_z))
+  if (!all( nulls ) ) {
+    if (any( nulls )) stop("All normals must be supplied")
+    if ( !identical(dim(y), dim(normal_x)) 
+      || !identical(dim(y), dim(normal_y))
+      || !identical(dim(y), dim(normal_z)) ) stop("bad dimension for normals")
+    flags[3] <- TRUE
+  }
+  
+  nulls <- c(is.null(texture_s), is.null(texture_t))
+  if (!all( nulls ) ) {
+    if (any( nulls )) stop("Both texture coordinates must be supplied")
+    if ( !identical(dim(y), dim(texture_s))
+      || !identical(dim(y), dim(texture_t)) ) stop("bad dimensions for textures")
+    flags[4] <- TRUE
+  }
 
   idata <- as.integer( c( nx, nz ) )
 
@@ -376,9 +394,14 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
     as.numeric(x),
     as.numeric(z),
     as.numeric(y),
+    as.numeric(normal_x),
+    as.numeric(normal_z),
+    as.numeric(normal_y),
+    as.numeric(texture_s),
+    as.numeric(texture_t),
     as.integer(coords),
     as.integer(parity),
-    as.integer(matrices),
+    as.integer(flags),
     NAOK=TRUE
   );
 

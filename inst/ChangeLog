@@ -192,7 +192,7 @@ v0.70.572
     now be much more portable
   - removed deprecated OSX font setting calls
   - texture properties are now returned by material3d()
-  - allowed normals and texture coordinates to be specified in triangles and quads
+  - allowed normals and texture coordinates to be specified in triangles, quads and surfaces
   - normals may be specified in qmesh objects, but (at present) subdivide removes them
   - material3d() now preserves the values of unspecified parameters (as documented,
     but not previously functioning)
@@ -201,4 +201,5 @@ v0.70.572
   - minor fix for gcc 4.3 compatibility
   - minor fix for R 2.5+ compatibility
   - allowed more general surfaces to be plotted by rgl.surface, surface3d and 
-    persp3d, by specifying matrices for x and y coordinates.
+    persp3d, by specifying matrices for x and y coordinates; added world
+    map texture.
