@@ -8,8 +8,8 @@
   defining the grid.
 }
 \usage{
-surface3d(x, y, z, ...)
-terrain3d(x, y, z, ...)
+surface3d(x, y, z, ..., normal_x=NULL, normal_y=NULL, normal_z=NULL)
+terrain3d(x, y, z, ..., normal_x=NULL, normal_y=NULL, normal_z=NULL)
 }
 \arguments{
   \item{ x }{
@@ -22,6 +22,9 @@ terrain3d(x, y, z, ...)
     matrix of heights
   }
   \item{ ... }{Material and texture properties. See \code{\link{rgl.material}} for details.}    
+  \item{normal_x, normal_y, normal_z}{
+    matrices of the same dimension as \code{z} giving the coordinates of normals at 
+    each grid point}
 }
 \details{
   Adds a surface mesh to the current scene. The surface is defined by 
@@ -33,6 +36,9 @@ terrain3d(x, y, z, ...)
   dimension as \code{z}, and the values in the matrix will be used for the corresponding
   coordinates. This is used to plot shapes such as cylinders
   where z is not a function of x and y.
+  
+  If the normals are not supplied, they will be calculated automatically based
+  on neighbouring points.
   
   \code{surface3d} always draws the surface with the `front' upwards
   (i.e. towards higher \code{z} values).  This can be used to render

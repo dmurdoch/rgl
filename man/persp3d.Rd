@@ -39,8 +39,8 @@ persp3d(x, \dots)
   
   If the \code{x} or \code{y} argument is a matrix, then it must be of the same
   dimension as \code{z}, and the values in the matrix will be used for the corresponding
-  coordinates. This is used to plot shapes such as cylinders
-  where z is not a function of x and y.  See the fourth example below.
+  coordinates. This is used to plot shapes such as spheres or cylinders
+  where z is not a function of x and y.  See the fourth and fifth examples below.
 }
 \value{
   This function is called for the side effect of drawing the plot.  A vector 
@@ -98,5 +98,29 @@ y <- r*sin(theta*2*pi)
 
 open3d()
 persp3d(x, y, z, col="red")
+
+# (5) A globe
+
+lat <- matrix(seq(-90,90, len=50)*pi/180, 50, 50, byrow=TRUE)
+long <- matrix(seq(-180, 180, len=50)*pi/180, 50, 50)
+
+r <- 6378.1 # radius of Earth in km
+x <- -r*cos(lat)*cos(-long)
+y <- r*sin(lat)
+z <- r*cos(lat)*sin(-long)
+
+open3d()
+persp3d(x, y, z, col="white", 
+       texture=system.file("textures/worldsmall.png",package="rgl"), 
+       specular="black", axes=FALSE, box=FALSE, xlab="", ylab="", zlab="",
+       normal_x=x, normal_y=y, normal_z=z)
+
+\dontrun{
+# This looks much better, but is slow because the texture is very big
+persp3d(x, y, z, col="white", 
+       texture=system.file("textures/world.png",package="rgl"), 
+       specular="black", axes=FALSE, box=FALSE, xlab="", ylab="", zlab="",
+       normal_x=x, normal_y=y, normal_z=z)
+}
 }
 \keyword{ dynamic }
