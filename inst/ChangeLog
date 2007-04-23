@@ -187,7 +187,7 @@ v0.70
   - moved this file (ChangeLog) to inst directory, so it will be installed,
     and added code to display it to the rgl help topic.
 
-v0.70.572
+v0.71
   - changes to configure script from Laszlo Kajan and Brian Ripley:  should 
     now be much more portable
   - removed deprecated OSX font setting calls
@@ -201,5 +201,5 @@ v0.70.572
   - minor fix for gcc 4.3 compatibility
   - minor fix for R 2.5+ compatibility
   - allowed more general surfaces to be plotted by rgl.surface, surface3d and 
-    persp3d, by specifying matrices for x and y coordinates; added world
-    map texture.
+    persp3d, by specifying matrices for x and y coordinates
+  - added world map texture, used in example(persp3d)
