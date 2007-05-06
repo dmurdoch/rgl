@@ -27,7 +27,7 @@ Partial matches to \code{"iso"} are allowed.
 The previous value of the scale is returned invisibly.
 }
 \author{Duncan Murdoch}
-\seealso{\code{\link{plot3d}}, \code{\link{par3d}}}}
+\seealso{\code{\link{plot3d}}, \code{\link{par3d}}}
 \examples{
   x <- rnorm(100)
   y <- rnorm(100)*2
