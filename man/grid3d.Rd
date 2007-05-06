@@ -43,7 +43,6 @@ Multiple grids may be drawn by specifying multiple values for \code{side}
 or for the component of \code{at} that specifies the grid location.
 }
 \value{ A vector or matrix of object ids is returned invisibly. }
-}
 \author{ Ben Bolker and Duncan Murdoch }
 \seealso{ \code{\link{axis3d}} }
 \examples{
