@@ -101,13 +101,13 @@ persp3d(x, y, z, col="red")
 
 # (5) A globe
 
-lat <- matrix(seq(-90,90, len=50)*pi/180, 50, 50, byrow=TRUE)
+lat <- matrix(seq(90,-90, len=50)*pi/180, 50, 50, byrow=TRUE)
 long <- matrix(seq(-180, 180, len=50)*pi/180, 50, 50)
 
 r <- 6378.1 # radius of Earth in km
-x <- -r*cos(lat)*cos(-long)
+x <- -r*cos(lat)*cos(long)
 y <- r*sin(lat)
-z <- r*cos(lat)*sin(-long)
+z <- r*cos(lat)*sin(long)
 
 open3d()
 persp3d(x, y, z, col="white", 
