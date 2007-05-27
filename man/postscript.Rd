@@ -2,7 +2,7 @@
 \alias{rgl.postscript}
 \title{export screenshot}
 \description{
-  Saves the screenshot as PostScript file.
+  Saves the screenshot to a file in PostScript or other vector graphics format.
 }
 \usage{
 rgl.postscript( filename, fmt="eps", drawText=TRUE )
@@ -15,9 +15,15 @@ rgl.postscript( filename, fmt="eps", drawText=TRUE )
 \details{
 Animations can be created in a loop modifying the scene and saving 
 a screenshot to a file. (See example below)
+
+This function is a wrapper for the GL2PS library by Christophe Geuzaine,
+and has the same limitations as that library:  not all OpenGL features
+are supported, and some are only supported in some formats.
+See the reference for full details.
 }
 \references{
-GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine
+GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine,
+\url{http://www.geuz.org/gl2ps/}, version 1.3.2.
 }
 \author{ Christophe Geuzaine / Albrecht Gebhardt }
 \examples{
