@@ -203,3 +203,6 @@ v0.71
   - allowed more general surfaces to be plotted by rgl.surface, surface3d and 
     persp3d, by specifying matrices for x and y coordinates
   - added world map texture, used in example(persp3d)
+  
+v0.72
+  - declaration changes for compatibility with R 2.6.0 (from Brian Ripley)
