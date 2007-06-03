@@ -23,18 +23,18 @@ EXPORT_SYMBOL SEXP par3d(SEXP args);
  *	Query(.)	[ par(what) ]
  */
 
-static void par_error(char *what)
+static void par_error(const char *what)
 {
     error(_("invalid value specified for rgl parameter \"%s\""),  what);
 }
 
-static void lengthCheck(char *what, SEXP v, int n)
+static void lengthCheck(const char *what, SEXP v, int n)
 {
     if (length(v) != n)
 	error(_("parameter \"%s\" has the wrong length"), what);
 }
 
-static void dimCheck(char *what, SEXP v, int r, int c)
+static void dimCheck(const char *what, SEXP v, int r, int c)
 {
     SEXP dim = coerceVector(getAttrib(v, R_DimSymbol), INTSXP);
     if (length(dim) != 2 || INTEGER(dim)[0] != r || INTEGER(dim)[1] != c)
@@ -42,46 +42,46 @@ static void dimCheck(char *what, SEXP v, int r, int c)
 }
 
 #ifdef UNUSED
-static void nonnegIntCheck(int x, char *s)
+static void nonnegIntCheck(int x, const char *s)
 {
     if (x == NA_INTEGER || x < 0)
 	par_error(s);
 }
 
-static void posIntCheck(int x, char *s)
+static void posIntCheck(int x, const char *s)
 {
     if (x == NA_INTEGER || x <= 0)
 	par_error(s);
 }
 
-static void naIntCheck(int x, char *s)
+static void naIntCheck(int x, const char *s)
 {
     if (x == NA_INTEGER)
 	par_error(s);
 }
 #endif
 
-static void posRealCheck(double x, char *s)
+static void posRealCheck(double x, const char *s)
 {
     if (!R_FINITE(x) || x <= 0)
 	par_error(s);
 }
 
 #ifdef UNUSED
-static void nonnegRealCheck(double x, char *s)
+static void nonnegRealCheck(double x, const char *s)
 {
     if (!R_FINITE(x) || x < 0)
 	par_error(s);
 }
 
-static void naRealCheck(double x, char *s)
+static void naRealCheck(double x, const char *s)
 {
     if (!R_FINITE(x))
 	par_error(s);
 }
 #endif
 
-static void BoundsCheck(double x, double a, double b, char *s)
+static void BoundsCheck(double x, double a, double b, const char *s)
 {
 /* Check if   a <= x <= b */
     if (!R_FINITE(x) || (R_FINITE(a) && x < a) || (R_FINITE(b) && x > b))
@@ -93,7 +93,7 @@ static void BoundsCheck(double x, double a, double b, char *s)
 char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov"};
 #define mmLAST 9
 
-static void Specify(char *what, SEXP value)
+static void Specify(const char *what, SEXP value)
 {
  
  /* Do NOT forget to update  ../R/par3d.R */
@@ -182,7 +182,7 @@ static void Specify(char *what, SEXP value)
  /* if you  ADD a NEW  par !! */
  
  
-static SEXP Query(char *what)
+static SEXP Query(const char *what)
 {
     SEXP value, names;
     int i, mode, success;
