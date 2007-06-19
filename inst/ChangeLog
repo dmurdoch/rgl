@@ -206,3 +206,6 @@ v0.71
   
 v0.72
   - declaration changes for compatibility with R 2.6.0 (from Brian Ripley)
+
+v0.72.584
+  - partial changes to avoid crash on MacOSX with Xvfb

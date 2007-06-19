@@ -14,6 +14,7 @@
 #include <cstdio>
 #include "x11gui.hpp"
 #include "lib.hpp"
+#include "R.h"
 // ---------------------------------------------------------------------------
 namespace gui {
 // ---------------------------------------------------------------------------
@@ -141,6 +142,7 @@ bool X11WindowImpl::beginGL()
       return false;
     }
     else return true;
+
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::endGL()
@@ -362,6 +364,21 @@ void X11GUIFactory::throw_error(const char* string)
 }
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
+static int error_code; 
+
+static void ConvertError(Display *dsp)
+{
+  char buff[1000];
+  XGetErrorText(dsp, error_code, buff, 1000);
+  error("X11 protocol error: %s", buff);
+}
+
+static int X11SaveErr(Display *dsp, XErrorEvent *event)
+{
+  error_code = event->error_code;
+  return 0;
+}
+
 X11GUIFactory::X11GUIFactory(const char* displayname)
 : xdisplay(0)
 , xvisualinfo(0)
@@ -369,14 +386,14 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
 {
   // Open one display connection for all RGL X11 devices
   xdisplay = XOpenDisplay(displayname);
-  
   if (xdisplay == 0) {
     throw_error("unable to open X11 display"); return;
   }
-  
+/*  XSynchronize(xdisplay, True); */
+
   // Load System font
   xfont = XLoadFont(xdisplay,"fixed");
-
+ 
   // Obtain display atoms
   static char* atom_names[GUI_X11_ATOM_LAST] = {
     "WM_DELETE_WINDOW"
@@ -385,7 +402,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
 
   if (!s)
     lib::printMessage("some atoms not available");
-  
+ 
   // Query glx extension
    
   if ( glXQueryExtension(xdisplay, &errorBase, &eventBase) == False ) {
@@ -486,6 +503,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   unsigned long valuemask=CWEventMask|CWColormap;
     
   XSetWindowAttributes attrib;
+  XErrorHandler old_handler;
   
   attrib.event_mask = 
       ButtonMotionMask 
@@ -498,10 +516,18 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     | KeyReleaseMask
     | ButtonReleaseMask;
 
-  attrib.colormap = XCreateColormap(xdisplay, DefaultRootWindow(xdisplay), xvisualinfo->visual, AllocNone);
 
+  ::Window xparent = RootWindow(xdisplay, DefaultScreen(xdisplay));
+
+  attrib.colormap = XCreateColormap(xdisplay, xparent, xvisualinfo->visual, AllocNone);
+
+  /* Work around problems with Xvfb on MacOSX:  temporarily catch protocol errors and convert
+     to R errors */
+  error_code = 0;
+  old_handler = XSetErrorHandler(X11SaveErr);
+  
   ::Window xwindow = XCreateWindow(
-    xdisplay, RootWindow(xdisplay, DefaultScreen(xdisplay)),
+    xdisplay, xparent,
     0, 0, 256, 256, 0, 
     xvisualinfo->depth,
     InputOutput,
@@ -509,7 +535,12 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     valuemask,
     &attrib
   );
-
+  XSync(xdisplay, False);
+  
+  XSetErrorHandler(old_handler);
+  
+  if (error_code) ConvertError(xdisplay);  /* will not return */
+  
   if (!xwindow)
     return NULL;
 
@@ -538,7 +569,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   // flush X requests
   
   flushX();
-    
+  
   return (WindowImpl*) impl;
 }
 // ---------------------------------------------------------------------------
