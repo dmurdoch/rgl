@@ -14,12 +14,6 @@ extern "C" {
 #include "DeviceManager.hpp"
 #include "rglview.h"
 
-//
-// GLOBAL: deviceManager pointer
-//
-
-DeviceManager* deviceManager = NULL;
-
 #include "lib.hpp"
 
 //
@@ -37,42 +31,10 @@ inline int as_success(int b) { return (b) ; }
 inline bool as_bool(int idata) { return (idata) ? true : false; }
 
 //
-// FUNCTION
-//   rgl_init
+//   rgl_init moved to init.cpp
 //
 
-namespace gui {
-
-int gInitValue;
-
-}
-
-//
-// FUNCTION
-//   rgl_init
-//
-// PARAMETERS
-//   ioptions - platform-specific options.
-//     Windows:
-//     [0]  multiple-document-interface console handle (MDI)
-//          or 0 (SDI)
-//     MacOSX:
-//     [0]  indicator of presence (1) or absence (0) of Carbon/Cocoa
-//
-
-void rgl_init(int* successptr, int* ioptions)
-{
-  int success = RGL_FAIL;
-  
-  gInitValue =  ioptions[0];
-
-  if ( lib::init() ) {
-    deviceManager = new DeviceManager();
-    success = RGL_SUCCESS;
-  }
-
-  *successptr = success;
-}
+extern DeviceManager* deviceManager;
 
 //
 // FUNCTION

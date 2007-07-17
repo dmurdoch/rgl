@@ -15,6 +15,7 @@
 namespace gui {
 
 extern int     gInitValue;
+extern HANDLE  gHandle;
 static WNDPROC gDefWindowProc;
 static HWND    gMDIClientHandle = 0;
 static HWND    gMDIFrameHandle  = 0;
@@ -182,7 +183,7 @@ void Win32WindowImpl::update()
 
 void Win32WindowImpl::destroy()
 {
-  if (gInitValue) SendMessage(gMDIClientHandle, WM_MDIDESTROY, (WPARAM) windowHandle, 0);
+  if (gHandle) SendMessage(gMDIClientHandle, WM_MDIDESTROY, (WPARAM) windowHandle, 0);
   else DestroyWindow(windowHandle);
 }
 
@@ -305,7 +306,7 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
       windowHandle = hwnd;
       initGL();
       initGLBitmapFont(GL_BITMAP_FONT_FIRST_GLYPH, GL_BITMAP_FONT_LAST_GLYPH);
-      if (gInitValue) {
+      if (gHandle) {
         refreshMenu = true;
       }
       break;
@@ -333,7 +334,7 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
       break;
     case WM_SIZE:
       window->resize(LOWORD(lParam), HIWORD(lParam));
-      if (gInitValue)
+      if (gHandle)
         return gDefWindowProc(hwnd,message,wParam,lParam);
       else
         break;
@@ -409,7 +410,7 @@ LRESULT CALLBACK Win32WindowImpl::windowProc(HWND hwnd, UINT message, WPARAM wPa
   if (message == WM_CREATE) {
     Win32WindowImpl* windowImpl;
     LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);        
-    if ( gInitValue) {
+    if (gHandle) {
       LPMDICREATESTRUCT pMDICreateStruct = reinterpret_cast<LPMDICREATESTRUCT>(pCreateStruct->lpCreateParams);
       windowImpl = reinterpret_cast<Win32WindowImpl*>( pMDICreateStruct->lParam );
     } else {
@@ -455,9 +456,13 @@ ATOM Win32WindowImpl::classAtom = (ATOM) NULL;
 Win32GUIFactory::Win32GUIFactory()
 {
   if (gInitValue) {
+    // we must be running in pre-2.6.0 R
+    gHandle = reinterpret_cast<HANDLE>(gInitValue);
+  }
+  if (gHandle) {
     // the handle is given for the console window, so that
     // client and frame windows can be derived
-    HWND consoleHandle = reinterpret_cast<HWND>(gInitValue);
+    HWND consoleHandle = reinterpret_cast<HWND>(gHandle);
     gMDIClientHandle = GetParent(consoleHandle);
     gMDIFrameHandle  = GetParent(gMDIClientHandle);
     gDefWindowProc   = &DefMDIChildProc;
@@ -491,7 +496,7 @@ WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
 
   HWND success = 0;
   
-  if (gInitValue) {
+  if (gHandle) {
     success = CreateMDIWindow(
       MAKEINTATOM(Win32WindowImpl::classAtom)
     , in_window->title

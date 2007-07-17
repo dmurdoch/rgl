@@ -29,7 +29,6 @@ extern "C" {
 
 /* library service */
 
-EXPORT_SYMBOL void rgl_init          (int* successptr, int* ioptions);
 EXPORT_SYMBOL void rgl_quit          (int* successptr);
 
 /* device management */

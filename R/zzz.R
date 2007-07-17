@@ -44,7 +44,12 @@
   } 
   
   if ( .Platform$OS.type == "windows" ) {
-    if ( getWindowsHandle("Frame") ) initValue <- getWindowsHandle("Console")
+    frame <- getWindowsHandle("Frame")    
+    ## getWindowsHandle was numeric pre-2.6.0 
+    if ( is.numeric(frame) ) {
+    	if (frame ) initValue <- getWindowsHandle("Console")
+    } else
+    	if ( !is.null(frame) ) initValue <- getWindowsHandle("Console")
   } 
   
   useDynLib <- function(dll, entries) {
@@ -79,10 +84,8 @@
   
 }
 
-rgl.init <- function(initValue = 0) .C( rgl_init, 
-    success=FALSE ,
-    as.integer(initValue)
-  )$success
+rgl.init <- function(initValue = 0) .Call( rgl_init, 
+    initValue )
 
 ##
 ## exit-point
