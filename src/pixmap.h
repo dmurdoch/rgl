@@ -6,7 +6,7 @@
 //
 // $Id$
 
-#include <stdio.h>
+#include <cstdio>
 #include "opengl.hpp"
 
 class PixmapFormat;

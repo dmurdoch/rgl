@@ -29,7 +29,7 @@ gui::GUIFactory* getGUIFactory()
 // ===[ R INTEGRATION ]=======================================================
 //
 
-#include <R.h>
+#include "R.h"
 #include <R_ext/eventloop.h>
 
 static InputHandler* R_handler = NULL;
@@ -94,8 +94,6 @@ void quit()
 // printMessage
 //
 
-#include <R.h>
-
 void printMessage( const char* string ) {
   REprintf("RGL: %s\n", string);
 }
@@ -105,7 +103,7 @@ void printMessage( const char* string ) {
 //
 
 #include <sys/time.h>
-#include <unistd.h>
+#include <cunistd>
 
 double getTime() {
   struct ::timeval t;

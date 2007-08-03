@@ -7,7 +7,7 @@
 
 #include "glgui.hpp"
 
-#include <stdio.h>
+#include <cstdio>
 
 void FPS::init(double time)
 {

@@ -6,7 +6,7 @@
 //
 // $Id$
 // ---------------------------------------------------------------------------
-#include <string.h>
+#include <cstring>
 #include "types.h"
 #include "glgui.hpp"
 #include "Disposable.hpp"

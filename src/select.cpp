@@ -5,7 +5,7 @@
 
 #include "select.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 void SELECT::render(double* position)
 {
