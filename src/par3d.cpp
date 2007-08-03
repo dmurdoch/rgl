@@ -1,7 +1,7 @@
 /* Avoid conflict with Rinternals.h */
 // #undef DEBUG
 
-#include <R.h>
+#include "R.h"
 
 #include "api.h"
 
@@ -10,9 +10,11 @@
 #define _  
 #define streql(s, t)	(!strcmp((s), (t)))
 
-extern "C" {
 #include <Rdefines.h>
 #include <Rinternals.h>
+
+extern "C" {
+
 EXPORT_SYMBOL SEXP par3d(SEXP args);
 }
 /* par3d implementation based on R's par implementation

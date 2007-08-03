@@ -2,8 +2,7 @@
 #include "types.h"
 
 #include <cstdlib>
-#include <stdlib.h> // for realoc and free
-#include <string.h> // for memcpy
+#include <cstring> // for memcpy
 
 //
 // COLOR UTILS

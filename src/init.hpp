@@ -1,6 +1,10 @@
 #ifndef RGL_INIT_H
 #define RGL_INIT_H
 
+#include "R.h"
+#include <Rdefines.h> 
+#include <Rinternals.h> 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -15,9 +19,6 @@ extern "C" {
 #define EXPORT_SYMBOL   extern
 #endif
 
-#include <R.h>
-#include <Rdefines.h> 
-#include <Rinternals.h> 
 /*
 // RGL initialization
 //

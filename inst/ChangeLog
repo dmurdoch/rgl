@@ -210,3 +210,6 @@ v0.72
 v0.73
   - partial changes to avoid crash on MacOSX with Xvfb
   - change to rgl_init for R 2.6.0 compatibility
+  
+v0.73.1186
+  - clean up #includes

@@ -6,8 +6,8 @@
 //
 // $Id$
 
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 
 #include "types.h"
 

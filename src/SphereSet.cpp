@@ -33,7 +33,7 @@ SphereSet::~SphereSet()
 
 void SphereSet::drawElement(RenderContext* renderContext, int i) 
 {
-   if ( center.get(i).missing() || ISNAN(radius.getRecycled(i)) ) return;
+   if ( center.get(i).missing() || !R_FINITE(radius.getRecycled(i)) ) return;
 
    material.useColor(i);
 

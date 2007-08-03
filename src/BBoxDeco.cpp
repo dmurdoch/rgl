@@ -3,7 +3,7 @@
 #include "glgui.hpp"
 #include "scene.h"
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 
 //////////////////////////////////////////////////////////////////////////////
 //

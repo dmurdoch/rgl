@@ -5,7 +5,7 @@
 
 #include "rglview.h"
 #include "opengl.hpp"
-#include <stdio.h>
+#include <cstdio>
 #include "lib.hpp"
 #include "math.h"
 #include "pixmap.h"
