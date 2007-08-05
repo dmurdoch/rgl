@@ -109,7 +109,7 @@ void PrimitiveSet::renderZSort(RenderContext* renderContext)
   std::multimap<float,int> distanceMap;
   for (int index = 0 ; index < nprimitives ; ++index ) {
     float distance = renderContext->getDistance( getCenter(index) );
-    distanceMap.insert( std::pair<float,int>(-distance,index) );
+    distanceMap.insert( std::pair<const float,int>(-distance,index) );
   }
 
   // render ordered

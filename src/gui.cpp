@@ -146,10 +146,10 @@ void Window::setWindowImpl(WindowImpl* impl)
     child->setWindowImpl(impl);
 }
 // ---------------------------------------------------------------------------
-void Window::setTitle(const char* title)
+void Window::setTitle(const char* in_title)
 {
   if (windowImpl)
-    windowImpl->setTitle(title);
+    windowImpl->setTitle(in_title);
 }
 // ---------------------------------------------------------------------------
 void Window::update(void)
@@ -193,10 +193,10 @@ void Window::hide(void)
     child->hide();
 }
 // ---------------------------------------------------------------------------
-void Window::resize(int width, int height)
+void Window::resize(int in_width, int in_height)
 {
   if (child)
-    child->resize(width,height);
+    child->resize(in_width,in_height);
 }
 // ---------------------------------------------------------------------------
 void Window::paint(void)

@@ -103,7 +103,7 @@ void printMessage( const char* string ) {
 //
 
 #include <sys/time.h>
-#include <cunistd>
+#include <unistd.h>
 
 double getTime() {
   struct ::timeval t;
