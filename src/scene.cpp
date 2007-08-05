@@ -463,7 +463,7 @@ void Scene::render(RenderContext* renderContext)
         const AABox& aabox = shape->getBoundingBox();
 
         float distance = renderContext->getDistance( aabox.getCenter() );
-        distanceMap.insert( std::pair<float,int>(-distance, index) );
+        distanceMap.insert( std::pair<const float,int>(-distance, index) );
         index++;
 
       }

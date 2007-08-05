@@ -30,7 +30,7 @@ void SpriteSet::renderZSort(RenderContext* renderContext)
 
   for(int index=0;index<vertex.size();index++) {
     float distance = renderContext->getDistance( vertex.get(index) );
-    distanceMap.insert( std::pair<float,int>( -distance , index ) );
+    distanceMap.insert( std::pair<const float,int>( -distance , index ) );
   }
   std::multimap<float,int>::iterator iter;
 

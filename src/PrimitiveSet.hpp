@@ -25,7 +25,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "primitive", buflen); };
+  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "primitive", buflen); }
 protected:
 
   /**

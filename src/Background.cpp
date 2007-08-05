@@ -51,12 +51,12 @@ GLbitfield Background::getClearFlags(RenderContext* renderContext)
 
 void Background::render(RenderContext* renderContext)
 {
-  const AABox& boundingBox = renderContext->scene->getBoundingBox();
+  const AABox& bbox = renderContext->scene->getBoundingBox();
 
   // setup fog
   
-  if ((fogtype != FOG_NONE) && (boundingBox.isValid() )) {
-    // Sphere bsphere(boundingBox);
+  if ((fogtype != FOG_NONE) && (bbox.isValid() )) {
+    // Sphere bsphere(bbox);
 
     glFogfv(GL_FOG_COLOR, material.colors.getColor(0).getFloatPtr() );
 

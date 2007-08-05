@@ -16,7 +16,13 @@ DeviceManager::DeviceManager()
 
 DeviceManager::~DeviceManager()
 {
-  std::vector<Device*> disposeList( devices.begin(), devices.end() );
+  std::vector<Device*> disposeList;
+  {
+    for( Container::const_iterator i = devices.begin(), end = devices.end() ;  i!=end ; ++i ) {
+      disposeList.push_back(*i);
+    }
+  }
+  // disploseList. devices.begin(), devices.end() );
   for (std::vector<Device*>::iterator i = disposeList.begin(); i != disposeList.end() ; ++ i ) {
     // remove manager from listeners    
     (*i)->removeDisposeListener(this);
