@@ -200,7 +200,7 @@ void Surface::renderZSort(RenderContext* renderContext)
   for (int ix = 0 ; ix < nx-1 ; ++ix ) {
     for (int iz = 0 ; iz < nz-1 ; ++iz ) {
       float distance = renderContext->getDistance( getCenter(ix, iz) );
-      distanceMap.insert( std::pair<float,int>(-distance,iz*nx + ix) );
+      distanceMap.insert( std::pair<const float,int>(-distance,iz*nx + ix) );
     }
   }
 
