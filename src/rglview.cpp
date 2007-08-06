@@ -33,10 +33,22 @@ RGLView::RGLView(Scene* in_scene)
   setDefaultMouseFunc();
   renderContext.rect.x = 0;
   renderContext.rect.y = 0; // size is set elsewhere
+  
+  for (int i=0; i<3; i++) {
+    beginCallback[i] = NULL;
+    updateCallback[i] = NULL;
+    endCallback[i] = NULL;
+    cleanupCallback[i] = NULL;
+    for (int j=0; j<3; j++)
+      userData[3*i + j] = NULL;
+  }
 }
 
 RGLView::~RGLView()
 {
+  for (int i=0; i<3; i++) 
+    if (cleanupCallback[i])
+      (*cleanupCallback[i])(userData + 3*i);
 }
 
 void RGLView::show()
@@ -373,6 +385,42 @@ void RGLView::adjustFOVEnd()
 {
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//
+// INTERACTIVE FEATURE
+//   user callback
+//
+
+
+void RGLView::userBegin(int mouseX, int mouseY)
+{
+  int ind = drag - 1;
+  activeButton = drag;
+  if (beginCallback[ind]) {
+    busy = true;
+    (*beginCallback[ind])(userData[3*ind+0], mouseX, mouseY);
+    busy = false;
+  }
+}
+
+
+void RGLView::userUpdate(int mouseX, int mouseY)
+{
+  int ind = activeButton - 1;
+  if (!busy && updateCallback[ind]) {
+    busy = true;
+    (*updateCallback[ind])(userData[3*ind+1], mouseX, mouseY);
+    busy = false;
+  }
+}
+
+void RGLView::userEnd()
+{
+  int ind = activeButton - 1;
+  if (endCallback[ind])
+    (*endCallback[ind])(userData[3*ind+2]);
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -482,8 +530,40 @@ void RGLView::setMouseMode(int button, MouseModeID mode)
 	    	ButtonUpdateFunc[index] = &RGLView::adjustFOVUpdate;
 	    	ButtonEndFunc[index] = &RGLView::adjustFOVEnd;
 	    	break;
+	    case mmUSER:
+ 	    	ButtonBeginFunc[index] = &RGLView::userBegin;
+	    	ButtonUpdateFunc[index] = &RGLView::userUpdate;
+	    	ButtonEndFunc[index] = &RGLView::userEnd;
+	    	break;	    	
 	}
 }
+
+void RGLView::setMouseCallbacks(int button, userControlPtr begin, userControlPtr update, 
+                                userControlEndPtr end, userCleanupPtr cleanup, void** user)
+{
+  int ind = button - 1;
+  beginCallback[ind] = begin;
+  updateCallback[ind] = update;
+  endCallback[ind] = end;
+  cleanupCallback[ind] = cleanup;
+  userData[3*ind + 0] = *(user++);
+  userData[3*ind + 1] = *(user++);
+  userData[3*ind + 2] = *user;
+  setMouseMode(button, mmUSER);
+}
+
+void RGLView::getMouseCallbacks(int button, userControlPtr *begin, userControlPtr *update, 
+                                            userControlEndPtr *end, userCleanupPtr *cleanup, void** user)
+{
+  int ind = button - 1;
+  *begin = beginCallback[ind];
+  *update = updateCallback[ind];
+  *end = endCallback[ind];
+  *cleanup = cleanupCallback[ind];
+  *(user++) = userData[3*ind + 0];
+  *(user++) = userData[3*ind + 1];
+  *(user++) = userData[3*ind + 2];
+} 
 
 MouseModeID RGLView::getMouseMode(int button)
 {

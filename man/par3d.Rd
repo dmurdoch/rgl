@@ -131,11 +131,17 @@ the following operations:
 \enumerate{
 \item It converts the point to homogeneous coordinates by appending \code{w=1}, giving
 the vector \code{v = (x,y,z,1)}.
-\item It obtains the model matrix \code{M = par3d("modelMatrix")} and multiplies
-the point by this giving \code{u = M \%*\% v}.  Using this location and information on the
-normals (which have been similarly transformed), it performs lighting calculations.  (The 
-\code{par3d("userMatrix")} is used in the construction of the model matrix, along with
-other transformations to center the object being displayed.)
+\item It calculates the \code{M = par3d("modelMatrix")} as a product from right to left
+of the following matrices:
+  \itemize{  
+  \item A matrix to translate the centre of the bounding box to the origin.
+  \item A matrix to rescale according to \code{par3d("scale")}.
+  \item The \code{par3d("userMatrix")} as set by the user.
+  \item A matrix which may be set by mouse movements.
+  \item A matrix to translate the origin to the centre of the viewing region.
+  }
+\item It multiplies the point by \code{M} giving \code{u = M \%*\% v}.  Using this location and information on the
+normals (which have been similarly transformed), it performs lighting calculations. 
 \item It obtains the projection matrix \code{P = par3d("projMatrix")} and
 multiplies the point by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.
 \item It converts back to Euclidean coordinates by dividing the first 3 coordinates by \code{w2}.

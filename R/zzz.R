@@ -65,14 +65,15 @@
   }
           
   entries <- c("rgl_init", "rgl_dev_open", "rgl_dev_close",
-  	 "rgl_dev_getcurrent", "rgl_dev_setcurrent", "rgl_snapshot",
-  	 "rgl_postscript", "rgl_material", "rgl_getmaterial",
-  	 "rgl_getcolorcount", "rgl_dev_bringtotop", "rgl_clear",
-  	 "rgl_pop", "rgl_id_count", "rgl_ids", "rgl_viewpoint",
-  	 "rgl_bg", "rgl_bbox", "rgl_light", "rgl_primitive",
-  	 "rgl_surface", "rgl_spheres", "rgl_texts", "rgl_sprites",
-  	 "rgl_user2window", "rgl_window2user", "rgl_selectstate",
-	 "rgl_setselectstate", rgl_par3d="par3d", "rgl_quit")
+	 "rgl_dev_getcurrent", "rgl_dev_setcurrent", "rgl_snapshot",
+	 "rgl_postscript", "rgl_material", "rgl_getmaterial",
+	 "rgl_getcolorcount", "rgl_dev_bringtotop", "rgl_clear",
+	 "rgl_pop", "rgl_id_count", "rgl_ids", "rgl_viewpoint",
+	 "rgl_bg", "rgl_bbox", "rgl_light", "rgl_primitive",
+	 "rgl_setMouseCallbacks", "rgl_surface", "rgl_spheres",
+	 "rgl_texts", "rgl_sprites", "rgl_user2window",
+	 "rgl_window2user", "rgl_selectstate", "rgl_setselectstate",
+	 rgl_par3d="par3d", "rgl_quit")
 	 
   useDynLib(dll, entries)
 	 

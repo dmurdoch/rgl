@@ -15,8 +15,13 @@
 
 using namespace gui;
 
-enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, mmSELECTING, mmZOOM, mmFOV};
+enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
+                  mmSELECTING, mmZOOM, mmFOV, mmUSER};
 enum MouseSelectionID {msNONE=1, msCHANGING, msDONE};
+
+typedef void (*userControlPtr)(void *userData, int mouseX, int mouseY);
+typedef void (*userControlEndPtr)(void *userData);
+typedef void (*userCleanupPtr)(void **userData);
 
 class RGLView : public View
 {
@@ -40,6 +45,10 @@ public:
 
   MouseModeID getMouseMode(int button);
   void        setMouseMode(int button, MouseModeID mode);
+  void        setMouseCallbacks(int button, userControlPtr begin, userControlPtr update, 
+                                            userControlEndPtr end, userCleanupPtr cleanup, void** user);
+  void        getMouseCallbacks(int button, userControlPtr *begin, userControlPtr *update, 
+                                            userControlEndPtr *end, userCleanupPtr *cleanup, void** user);
   MouseSelectionID getSelectState();
   void        setSelectState(MouseSelectionID state);
   double*     getMousePosition();
@@ -110,6 +119,21 @@ private:
   void adjustFOVEnd();
 
   int fovBaseY;
+  
+// o DRAG FEATURE: user supplied callback
+
+  void userBegin(int mouseX, int mouseY);
+  void userUpdate(int mouseX, int mouseY);
+  void userEnd();
+  
+  void* userData[9];
+  userControlPtr beginCallback[3], updateCallback[3];
+  userControlEndPtr endCallback[3];
+  userCleanupPtr cleanupCallback[3];
+  int activeButton;
+  bool busy;
+  
+  
 
 // o DRAG FEATURE: mouseSelection
   void mouseSelectionBegin(int mouseX,int mouseY);
