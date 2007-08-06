@@ -14,7 +14,6 @@
 #include <Rinternals.h>
 
 extern "C" {
-
 EXPORT_SYMBOL SEXP par3d(SEXP args);
 }
 /* par3d implementation based on R's par implementation
@@ -92,7 +91,7 @@ static void BoundsCheck(double x, double a, double b, const char *s)
 
 /* These modes must match the definitions of mmTRACKBALL etc in rglview.h ! */ 
 
-char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov"};
+char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
 #define mmLAST 9
 
 static void Specify(const char *what, SEXP value)
