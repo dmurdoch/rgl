@@ -47,7 +47,7 @@ RGLView::RGLView(Scene* in_scene)
 RGLView::~RGLView()
 {
   for (int i=0; i<3; i++) 
-    if (cleanupCallback[i])
+    if (cleanupCallback[i]) 
       (*cleanupCallback[i])(userData + 3*i);
 }
 
@@ -542,6 +542,8 @@ void RGLView::setMouseCallbacks(int button, userControlPtr begin, userControlPtr
                                 userControlEndPtr end, userCleanupPtr cleanup, void** user)
 {
   int ind = button - 1;
+  if (cleanupCallback[ind])
+    (*cleanupCallback[ind])(userData + 3*ind);
   beginCallback[ind] = begin;
   updateCallback[ind] = update;
   endCallback[ind] = end;

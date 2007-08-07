@@ -53,9 +53,6 @@ SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end)
     
     rglview->getMouseCallbacks(b, &beginCallback, &updateCallback, &endCallback, 
                                &cleanupCallback, (void**)&userData);
-    if (cleanupCallback)
-      (*cleanupCallback)(userData);
-      
     if (isFunction(begin)) {
       beginCallback = &userControl;
       userData[0] = (void*)begin;
