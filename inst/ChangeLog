@@ -215,3 +215,5 @@ v0.73.589
   - clean up #includes
   - clean up some calls for SunStudio 12 compiler
   - add rgl.setMouseCallbacks to allow user actions
+  - only use assert() when DEBUG is defined
+  
