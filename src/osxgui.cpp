@@ -12,6 +12,10 @@
 #include <Carbon/Carbon.h>
 #include <AGL/agl.h>
 #include "opengl.hpp"
+#ifndef DEBUG
+#define NDEBUG
+#endif
+#include <cassert>
 // ---------------------------------------------------------------------------
 // configuration
 // ---------------------------------------------------------------------------

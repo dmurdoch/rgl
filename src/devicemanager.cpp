@@ -7,6 +7,9 @@
 #include "types.h"
 #include <algorithm>
 #include <cstdio>
+#ifndef DEBUG
+#define NDEBUG
+#endif
 #include <cassert>
 #include "lib.hpp"
 

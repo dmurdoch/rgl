@@ -11,6 +11,10 @@
 #include "glgui.hpp"
 
 #include <winuser.h>
+#ifndef DEBUG
+#define NDEBUG
+#endif
+#include <cassert>
 // ---------------------------------------------------------------------------
 namespace gui {
 

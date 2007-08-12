@@ -2,6 +2,9 @@
 
 #include <algorithm>
 #include <vector>
+#ifndef DEBUG
+#define NDEBUG
+#endif
 #include <cassert>
 
 void Disposable::addDisposeListener(IDisposeListener* l)
