@@ -7,9 +7,6 @@
 #include "lib.hpp"
 #include "win32gui.hpp"
 #include <windows.h>
-#ifndef DEBUG
-#define NDEBUG
-#endif
 #include <cassert>
 // ---------------------------------------------------------------------------
 namespace lib {

@@ -12,6 +12,8 @@ AGLSHLIB=agl$(SHLIB)
 ## needed on Windows
 PKG_CXXFLAGS=@CXXFLAGS@
 
+BUILD=GCC3
+
 ## the following are used under MacOS X when this calls SHLIB
 ## to make the AGL version
 @BUILD_AGL_TRUE@ ifdef MAKINGAGL
