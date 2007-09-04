@@ -1,0 +1,115 @@
+# These functions are adapted from the orientlib package
+
+# Convert an array of rotation matrices to a matrix of unit quaternions
+toQuaternions <- function(x) {
+    nicesqrt <- function(x) sqrt(pmax(x,0))
+    q4 <- nicesqrt((1 + x[1,1,] + x[2,2,] + x[3,3,])/4)  # may go negative by rounding
+    zeros <- zapsmall(q4) == 0 
+    q1 <- ifelse(!zeros, (x[2,3,] - x[3,2,])/4/q4, nicesqrt(-(x[2,2,]+x[3,3,])/2))
+    q2 <- ifelse(!zeros, (x[3,1,] - x[1,3,])/4/q4, 
+    			 ifelse(zapsmall(q1) != 0, x[1,2,]/2/q1, nicesqrt((1-x[3,3,])/2)))
+    q3 <- ifelse(!zeros, (x[1,2,] - x[2,1,])/4/q4, 
+    			 ifelse(zapsmall(q1) != 0, x[1,3,]/2/q1, 
+    				ifelse(zapsmall(q2) != 0, x[2,3,]/2/q2, 1)))
+    cbind(q1, q2, q3, q4)
+}
+
+# Convert a single quaternion to a rotation matrix
+
+toRotmatrix <- function(x) {
+    x <- x/sqrt(sum(x^2))
+    matrix(c(1-2*x[2]^2-2*x[3]^2, 
+	      2*x[1]*x[2]-2*x[3]*x[4],
+	      2*x[1]*x[3]+2*x[2]*x[4],
+	      2*x[1]*x[2]+2*x[3]*x[4],
+    	      1-2*x[1]^2-2*x[3]^2,
+    	      2*x[2]*x[3] - 2*x[4]*x[1],
+    	      2*x[1]*x[3] - 2*x[2]*x[4],
+    	      2*x[2]*x[3] + 2*x[1]*x[4],
+    	      1 - 2*x[1]^2 - 2*x[2]^2), 3,3)
+}
+
+interpfn3d <- function(times = 0:1, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
+                     extrapolate = c("oscillate","cycle","constant")) {
+    
+    data <- matrix(0, length(times), 0)
+    if (!missing(userMatrix)) {
+	stopifnot( length(userMatrix) == 16*length(times) )
+	userMatrix <- array(userMatrix, c(4,4,length(times)))
+	xlat <- ncol(data) + 1:4
+	data <- cbind(data, t(userMatrix[,4,]))
+	persp <- ncol(data) + 1:3
+	data <- cbind(data, t(userMatrix[4,1:3,]))
+	rot <- ncol(data) + 1:4
+	data <- cbind(data, toQuaternions(userMatrix[1:3,1:3,]))
+    } else {
+        xlat <- NULL
+    }
+    if (!missing(scale)) {
+    	stopifnot( dim(scale)[1] == length(times) )
+    	sc <- ncol(data) + 1:3
+    	data <- cbind(data, log(scale))
+    } else sc <- NULL
+    if (!missing(zoom)) {
+    	stopifnot( length(zoom) == length(times) )
+    	zm <- ncol(data) + 1
+    	data <- cbind(data, log(zoom))
+    } else zm <- NULL
+    if (!missing(FOV)) {
+        stopifnot( length(FOV) == length(times) )
+        fov <- ncol(data) + 1
+        data <- cbind(data, FOV)
+    } else fov <- NULL
+    
+    method <- match.arg(method)
+    extrapolate <- match.arg(extrapolate)
+    if (extrapolate == "oscillate") {
+    	times <- c(times, -rev(times) + 2*times[length(times)] + diff(times[1:2]))
+    	data <- rbind(data, data[nrow(data):1,,drop=F])
+    	extrapolate <- "cycle"
+    }
+    
+    if (method == "spline") {
+    	fns <- apply(data, 2, function(col) splinefun(times, col, 
+    	                         method = ifelse(extrapolate == "cycle", "periodic", "natural")))
+    } else {
+    	fns <- apply(data, 2, function(col) approxfun(times, col, rule=2))
+    }
+    
+    mintime <- min(times)
+    maxtime <- max(times)
+    
+    function(time) {
+        stopifnot(rgl.cur() != 0)
+        if (time < mintime || time > maxtime) {
+            if (extrapolate == "constant")
+            	time <- ifelse(time < mintime, mintime, maxtime)
+            else
+                time <- (time - mintime) %% (maxtime - mintime) + mintime
+        }
+    	data <- sapply(fns, function(f) f(time))
+    	result <- list()
+    	if (!is.null(xlat)) {
+    	    userMatrix <- matrix(0, 4,4)
+    	    userMatrix[,4] <- data[xlat]
+    	    userMatrix[4,1:3] <- data[persp]
+    	    userMatrix[1:3,1:3] <- toRotmatrix(data[rot])
+    	    result$userMatrix <- userMatrix
+    	}
+    	if (!is.null(sc)) 
+    	    result$scale <- exp(data[sc])
+    	if (!is.null(zm))
+    	    result$zoom <- exp(data[zm])
+    	if (!is.null(fov))
+    	    result$FOV <- data[fov]
+    	result
+    }
+}
+
+play3d <- function(f) {
+    start <- proc.time()[3]
+    repeat {
+       time <- proc.time()[3] - start
+       par3d(f(time))
+    }
+}
