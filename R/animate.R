@@ -29,9 +29,14 @@ toRotmatrix <- function(x) {
     	      1 - 2*x[1]^2 - 2*x[2]^2), 3,3)
 }
 
-interpfn3d <- function(times = 0:1, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
+interpfn3d <- function(times, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
                      extrapolate = c("oscillate","cycle","constant")) {
-    
+    if (missing(times)) {
+    	times <- if (!missing(userMatrix)) 0:(length(userMatrix)/16 - 1)
+    	    else if (!missing(scale)) 0:(dim(scale)[1] - 1)
+    	    else if (!missing(zoom)) 0:(length(zoom) - 1)
+    	    else if (!missing(FOV)) 0:(length(FOV) - 1)
+    }
     data <- matrix(0, length(times), 0)
     if (!missing(userMatrix)) {
 	stopifnot( length(userMatrix) == 16*length(times) )
@@ -64,8 +69,10 @@ interpfn3d <- function(times = 0:1, userMatrix, scale, zoom, FOV, method=c("spli
     method <- match.arg(method)
     extrapolate <- match.arg(extrapolate)
     if (extrapolate == "oscillate") {
-    	times <- c(times, -rev(times) + 2*times[length(times)] + diff(times[1:2]))
-    	data <- rbind(data, data[nrow(data):1,,drop=F])
+        n <- length(times)
+    	times <- c(times[-n], -rev(times) + 2*times[length(times)])
+    	data <- rbind(data[-n,,drop=FALSE], data[n:1,,drop=FALSE])
+    	n <- 2*n - 1
     	extrapolate <- "cycle"
     }
     
@@ -106,10 +113,11 @@ interpfn3d <- function(times = 0:1, userMatrix, scale, zoom, FOV, method=c("spli
     }
 }
 
-play3d <- function(f) {
+play3d <- function(f, dev = rgl.cur(), ...) {
     start <- proc.time()[3]
     repeat {
+       rgl.set(dev)
        time <- proc.time()[3] - start
-       par3d(f(time))
+       par3d(f(time, ...))
     }
 }
