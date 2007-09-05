@@ -1,4 +1,4 @@
-# These functions are adapted from the orientlib package
+# These quaternion functions are adapted from the orientlib package
 
 # Convert an array of rotation matrices to a matrix of unit quaternions
 toQuaternions <- function(x) {
@@ -29,9 +29,20 @@ toRotmatrix <- function(x) {
     	      1 - 2*x[1]^2 - 2*x[2]^2), 3,3)
 }
 
-interpfn3d <- function(times, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
+par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
                      extrapolate = c("oscillate","cycle","constant")) {
-    if (missing(times)) {
+    if (is.list(times)) {
+    	for (n in setdiff(names(times), "times")) assign(n, times[[n]])
+    	if ("times" %in% names(times)) times <- times[["times"]]
+    	else times <- NULL
+    }
+    
+    if (!missing(userMatrix) && is.list(userMatrix)) userMatrix <- do.call(cbind, userMatrix)
+    if (!missing(scale) && is.list(scale)) scale <- do.call(rbind, scale)
+    if (!missing(zoom) && is.list(zoom)) zoom <- unlist(zoom)
+    if (!missing(FOV) && is.list(FOV)) FOV <- unlist(FOV)
+    
+    if (is.null(times)) {
     	times <- if (!missing(userMatrix)) 0:(length(userMatrix)/16 - 1)
     	    else if (!missing(scale)) 0:(dim(scale)[1] - 1)
     	    else if (!missing(zoom)) 0:(length(zoom) - 1)
@@ -113,11 +124,17 @@ interpfn3d <- function(times, userMatrix, scale, zoom, FOV, method=c("spline", "
     }
 }
 
-play3d <- function(f, dev = rgl.cur(), ...) {
+play3d <- function(f, duration = Inf, dev = rgl.cur(), ...) {
+    # Don't want to start timing until args are known: they may be obtained
+    # interactively
+    force(f)  
+    force(duration)
+    force(dev)
     start <- proc.time()[3]
     repeat {
-       rgl.set(dev)
+       if(rgl.cur() != dev) rgl.set(dev)
        time <- proc.time()[3] - start
+       if (time > duration) return(invisible(NULL))
        par3d(f(time, ...))
     }
 }
