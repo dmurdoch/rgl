@@ -19,6 +19,14 @@ Animations can be created in a loop modifying the scene and saving
 each screenshot to a file. Various graphics programs (e.g. ImageMagick)
 can put these together into a single animation. (See example below)
 }
+\note{
+On some systems, the snapshot
+will include content from other windows if they cover the active rgl
+window.  Use \code{\link{rgl.bringtotop}} before \code{rgl.snapshot}
+to avoid this.  (See \url{http://www.opengl.org/resources/faq/technical/rasterization.htm#rast0070}
+for more details.)
+}
+
 \examples{
 
 \dontrun{
@@ -28,6 +36,7 @@ can put these together into a single animation. (See example below)
 #
 
 shade3d(oh3d(), color="red")
+rgl.bringtotop()
 rgl.viewpoint(0,20)
 
 setwd(tempdir())
