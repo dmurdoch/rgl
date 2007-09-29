@@ -1,35 +1,56 @@
 \name{play3d}
 \alias{play3d}
+\alias{movie3d}
 \title{ Play animation of rgl scene }
 \description{
 \code{play3d} calls a function repeatedly, passing it the elapsed
 time in seconds, and using the result of the function to
-reset the viewpoint.
+reset the viewpoint.  \code{movie3d} does the same, but
+records each frame to a file to make a movie.
 }
 \usage{
 play3d(f, duration = Inf, dev = rgl.cur(), ...)
+movie3d(f, duration, dev = rgl.cur(), ..., fps = 10, 
+                    movie = "movie", frames = movie, dir = tempdir(), 
+                    convert = TRUE, clean = TRUE, verbose=TRUE) 
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{f}{ A function returning a list that may be passed to \code{\link{par3d}} }
-  \item{duration}{ The duration of the animation }
+  \item{duration}{ The duration of the animation }    
   \item{dev}{ Which rgl device to select }
-  \item{\dots}{ Additional parameters to pass to the function. }
+  \item{\dots}{ Additional parameters to pass to \code{f}. }
+  \item{fps}{ Number of frames per second }
+  \item{movie}{ The base of the output filename, not including .gif }
+  \item{frames}{ The base of the name for each frame }
+  \item{dir}{ A directory in which to create temporary files for each frame of the movie }  
+  \item{convert}{ Whether to try to convert the frames to a single GIF movie, or a command to do so }
+  \item{clean}{ If \code{convert} is \code{TRUE}, whether to delete the individual frames }
+  \item{verbose}{ Whether to report the \code{convert} command and the output filename }
+
 }
 \details{
-The function will be called in a loop with the first argument being the time in
+The function \code{f} will be called in a loop with the first argument being the time in
 seconds since the start (where the start is measured after all 
 arguments have been evaluated).  
 
-It is likely to place a high load
+\code{play3d} is likely to place a high load
 on the CPU; if this is a problem, calls to \code{\link{Sys.sleep}}
 should be made within the function to release time to other processes.
+
+\code{movie3d} saves each frame to disk in a filename of the form "framesXXX.png", where
+XXX is the frame number, starting from 0.  If \code{convert} is \code{TRUE}, it
+uses ImageMagick to convert them to an animated GIF.  Alternatively, \code{convert}
+can be a command to execute in the standard shell (wildcards are allowed).
+All work is done in the directory \code{dir}, so paths are not needed in
+the command.  
 }
 \value{
 This function is called for the side effect of its repeated calls to \code{f}.
 It returns \code{NULL} invisibly.
 }
-\author{ Duncan Murdoch }
+\author{ Duncan Murdoch, based on code by Michael Friendly }
 \seealso{ \code{\link{spin3d}} and \code{\link{par3dinterp}} return functions suitable 
           to use as \code{f}. }
 \examples{
@@ -40,5 +61,9 @@ play3d( par3dinterp( userMatrix=list(M,
                                      rotate3d(M, pi/2, 1, 0, 0),
                                      rotate3d(M, pi/2, 0, 1, 0) ) ), 
         duration=4 )
+\dontrun{
+movie3d( spin3d(), duration=5 )
+}
+
 }
 \keyword{ dplot }

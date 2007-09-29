@@ -144,3 +144,52 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ...) {
        par3d(f(time, ...))
     }
 }
+
+movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10, 
+                    movie = "movie", frames = movie, dir = tempdir(), 
+                    convert = TRUE, clean = TRUE, verbose=TRUE) {
+    
+    olddir <- setwd(dir)
+    on.exit(setwd(olddir))
+
+    for (i in 0:(duration*fps)) {
+	time <- i/fps        
+	if(rgl.cur() != dev) rgl.set(dev)
+	par3d(f(time, ...))
+	filename <- sprintf("%s%03d.png",frames,i)
+	if (verbose) {
+	    cat("Writing", filename, "\r")
+	    flush.console()
+	}
+	rgl.bringtotop()
+        rgl.snapshot(filename=filename, fmt="png")
+    }	
+    cat("\n")
+    if (.Platform$OS.type == "windows") system <- shell
+    if (is.logical(convert) && convert) {
+        # Check for ImageMagick
+        version <- system("convert --version", intern=TRUE)
+        if (!length(grep("ImageMagick", version)))
+            stop("ImageMagick not found")    
+        filename <- paste(movie, ".gif", sep="")
+        if (verbose) cat("Will create: ", file.path(dir, filename), "\n")
+        wildcard <- paste(frames,"*.png", sep="")
+    	convert <- paste("convert -delay 1x", fps, " ",wildcard, " ", filename, sep="")
+    }
+    if (is.character(convert)) {
+	if (verbose) {
+	    cat("Executing: ", convert, "\n")
+	    flush.console()
+	}
+	system(convert)
+	if (clean) {
+	    if (verbose)
+	    	cat("Deleting frames.\n")
+	    for (i in 0:(duration*fps)) {
+	    	filename <- sprintf("%s%03d.png",frames,i)
+	    	unlink(filename)
+	    }
+	}
+    }
+}
+
