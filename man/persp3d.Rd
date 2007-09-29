@@ -105,15 +105,16 @@ lat <- matrix(seq(90,-90, len=50)*pi/180, 50, 50, byrow=TRUE)
 long <- matrix(seq(-180, 180, len=50)*pi/180, 50, 50)
 
 r <- 6378.1 # radius of Earth in km
-x <- -r*cos(lat)*cos(long)
-y <- r*sin(lat)
-z <- r*cos(lat)*sin(long)
+x <- r*cos(lat)*cos(long)
+y <- r*cos(lat)*sin(long)
+z <- r*sin(lat)
 
 open3d()
 persp3d(x, y, z, col="white", 
        texture=system.file("textures/worldsmall.png",package="rgl"), 
        specular="black", axes=FALSE, box=FALSE, xlab="", ylab="", zlab="",
        normal_x=x, normal_y=y, normal_z=z)
+play3d(spin3d(axis=c(0,0,1), rpm=8), duration=5)
 
 \dontrun{
 # This looks much better, but is slow because the texture is very big
