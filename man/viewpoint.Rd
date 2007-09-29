@@ -36,7 +36,7 @@ set the viewpoint interactively. With the pointing device the buttons are by def
 }
 \seealso{\code{\link{par3d}}}
 \examples{
-
+\dontrun{
 # animated round trip tour for 10 seconds
 
 rgl.open()
@@ -46,6 +46,6 @@ start <- proc.time()[3]
 while ((i <- 36*(proc.time()[3]-start)) < 360) {
   rgl.viewpoint(i,i/4); 
 }
-
+}
 }
 \keyword{dynamic}

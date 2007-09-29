@@ -124,6 +124,12 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
     }
 }
 
+spin3d <- function(axis = c(0, 0, 1), rpm = 5) {
+    M <- par3d("userMatrix")
+    function(time) 
+    	list(userMatrix = rotate3d(M, time*rpm*pi/30, axis[1], axis[2], axis[3]))
+}
+    
 play3d <- function(f, duration = Inf, dev = rgl.cur(), ...) {
     # Don't want to start timing until args are known: they may be obtained
     # interactively

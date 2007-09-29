@@ -68,7 +68,7 @@ coordinates, \code{(u, v, w)} is transformed to \code{(x*u, y*v, z*w)}.
 \code{rotationMatrix} can be called in three ways.  With 
 arguments \code{angle, x, y, z} it represents a rotation 
 of \code{angle} radians about the axis 
-\code{x, y, z}.  If a 3x3 rotation matrix can be given;
+\code{x, y, z}.  If \code{matrix} is a 3x3 rotation matrix,
 it will be converted into the corresponding matrix in 4x4 homogeneous
 coordinates.  Finally, if a 4x4 matrix is given, it will be returned unchanged.
 (The latter behaviour is used to allow \code{transform3d} to act like a 
