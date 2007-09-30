@@ -106,7 +106,7 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
       projection of the scene.}
     \item{\code{scale}}{real.  A vector of 3 values indicating the amount by which to
       rescale each axis before display.  Set by \code{\link{aspect3d}}.}
-    \item{\code{skipRedraw}}{whether to update the display.  Set to \code{FALSE} to suspend
+    \item{\code{skipRedraw}}{whether to update the display.  Set to \code{TRUE} to suspend
       updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.}
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
       display the scene.}
