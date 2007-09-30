@@ -147,7 +147,8 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ...) {
 
 movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
-                    convert = TRUE, clean = TRUE, verbose=TRUE) {
+                    convert = TRUE, clean = TRUE, verbose=TRUE,
+                    top = TRUE) {
     
     olddir <- setwd(dir)
     on.exit(setwd(olddir))
@@ -161,8 +162,7 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
 	    cat("Writing", filename, "\r")
 	    flush.console()
 	}
-	rgl.bringtotop()
-        rgl.snapshot(filename=filename, fmt="png")
+        rgl.snapshot(filename=filename, fmt="png", top=top)
     }	
     cat("\n")
     if (.Platform$OS.type == "windows") system <- shell

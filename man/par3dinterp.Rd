@@ -21,8 +21,8 @@ par3dinterp(times = NULL, userMatrix, scale, zoom, FOV,
 }
 \details{
 This function is intended to be used in constructing animations.  It produces
-a function that returns a list suitable to pass to \code{\link{par3d}}, to set the viewpoint
-at a given point in time.
+a function that returns a list suitable to pass to \code{\link{par3d}}, to set 
+the viewpoint at a given point in time.
 
 All of the parameters are optional.  Only those \code{par3d} parameters that are 
 specified will be returned.
@@ -51,6 +51,11 @@ should be equal, or the last one will be dropped.
 \value{
 A function is returned.  The function takes one argument, and returns a list of 
 \code{par3d} settings interpolated to that time.
+}
+\note{
+Due to a bug in R (fixed in R 2.6.0), using 
+\code{extrapolate} equal to \code{"oscillate"} 
+will sometimes fail when only two points are given.  
 }
 \author{Duncan Murdoch }
 \seealso{ \code{\link{play3d}} to play the animation. }
