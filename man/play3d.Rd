@@ -57,7 +57,8 @@ It returns \code{NULL} invisibly.
 }
 \author{ Duncan Murdoch, based on code by Michael Friendly }
 \seealso{ \code{\link{spin3d}} and \code{\link{par3dinterp}} return functions suitable 
-          to use as \code{f}. }
+          to use as \code{f}. See \code{demo(flag)} for an example that modifies the
+          scene in \code{f}.}
 \examples{
 open3d()
 plot3d( cube3d(col="green") )
