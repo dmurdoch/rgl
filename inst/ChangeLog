@@ -216,5 +216,5 @@ v0.74
   - clean up some calls for SunStudio 12 compiler
   - add rgl.setMouseCallbacks to allow user actions
   
-v0.74.600
-  - add play3d, movie3d, par3dinterp, and spin3d functions
+v0.74.604
+  - add play3d, movie3d, par3dinterp, and spin3d functions, with flag demo
