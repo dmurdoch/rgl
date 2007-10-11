@@ -32,11 +32,11 @@ par3d <- function (..., no.readonly = FALSE)
         m <- args$userMatrix
         svd <- svd(m[1:3, 1:3])
         m[1:3, 1:3] <- svd$u %*% t(svd$v)
-        theta <- -asin(pmin.int(pmax.int(m[1,3], -1),1))
+        theta <- atan2(-m[1,3], m[1,1])
 	m <-  m %*% rotationMatrix(theta, 0,1,0)
 	svd <- svd(m[1:3, 1:3])
 	m[1:3,1:3] <- svd$u %*% t(svd$v)	
-	phi <- -asin(pmin.int(pmax.int(m[2,3], -1),1))
+	phi <- atan2(-m[2,3], m[3,3])
 	args$.position <- c(theta, phi)*180/pi
     }   
     value <-
