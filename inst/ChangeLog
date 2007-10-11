@@ -218,3 +218,4 @@ v0.74
   
 v0.74.604
   - add play3d, movie3d, par3dinterp, and spin3d functions, with flag demo
+  - rounding error could cause par3d(userMatrix) to generate NaNs and fail
