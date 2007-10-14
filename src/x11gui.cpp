@@ -499,8 +499,9 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   X11WindowImpl* impl = NULL;
     
   // create X11 window
-  
-  unsigned long valuemask=CWEventMask|CWColormap;
+
+  // We don't want a border, but MacOSX Xvfb requires one.  
+  unsigned long valuemask=CWEventMask|CWColormap|CWBorderPixel;
     
   XSetWindowAttributes attrib;
   XErrorHandler old_handler;
@@ -520,7 +521,8 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   ::Window xparent = RootWindow(xdisplay, DefaultScreen(xdisplay));
 
   attrib.colormap = XCreateColormap(xdisplay, xparent, xvisualinfo->visual, AllocNone);
-
+  attrib.border_pixel = 0;
+  
   /* Work around problems with Xvfb on MacOSX:  temporarily catch protocol errors and convert
      to R errors */
   error_code = 0;
