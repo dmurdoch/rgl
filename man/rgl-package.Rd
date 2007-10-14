@@ -9,9 +9,10 @@
 \alias{rgl.quit}
 \alias{rgl.init}
 \description{
-  3D real-time rendering device-driver system
+  3D real-time rendering system.
 }
 \usage{
+# Low level rgl.* interface
 rgl.open()     # open new device
 rgl.close()    # close current device
 rgl.cur()      # returns active device ID
@@ -42,6 +43,11 @@ rgl.init(initValue=0)     # re-initialize rgl
   remove them other than closing R.  In fact, it's probably a good idea not to do this
   at all:  quitting R and restarting it is a better solution.
 
+  This package also includes a higher level interface which is described
+  in the \link{r3d} help topic.  That interface is designed to act more like
+  classic 2D R graphics.  We recommend that you avoid mixing
+  \code{rgl.*} and \code{*3d} calls.
+
   See the first example below to display the ChangeLog.
 }
 \examples{
@@ -50,6 +56,7 @@ example(surface3d)
 example(plot3d)
 }
 \seealso{
+\link{r3d},
 \code{\link{rgl.clear}}, 
 \code{\link{rgl.pop}},
 \code{\link{rgl.viewpoint}},
