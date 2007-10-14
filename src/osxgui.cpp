@@ -202,6 +202,7 @@ void OSXWindowImpl::endGL()
 void OSXWindowImpl::update()
 {
   InvalWindowRect(mWindowRef, &mRect);
+  on_paint();
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::show()
