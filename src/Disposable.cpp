@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <vector>
-#include <cassert>
+#include "assert.hpp"
 
 void Disposable::addDisposeListener(IDisposeListener* l)
 {

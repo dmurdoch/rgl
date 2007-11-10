@@ -7,7 +7,7 @@
 #include "lib.hpp"
 #include "win32gui.hpp"
 #include <windows.h>
-#include <cassert>
+#include "assert.hpp"
 // ---------------------------------------------------------------------------
 namespace lib {
 // ---------------------------------------------------------------------------
