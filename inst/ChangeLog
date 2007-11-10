@@ -220,3 +220,6 @@ v0.75
   - add play3d, movie3d, par3dinterp, and spin3d functions, with flag demo
   - rounding error could cause par3d(userMatrix) to generate NaNs and fail
   - workaround for Xvfb on MacOSX problems
+  
+ v 0.75.611
+  - put our own assert() macro in place to avoid crashing R.

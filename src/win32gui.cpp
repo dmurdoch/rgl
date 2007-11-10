@@ -11,7 +11,7 @@
 #include "glgui.hpp"
 
 #include <winuser.h>
-#include <cassert>
+#include "assert.hpp"
 // ---------------------------------------------------------------------------
 namespace gui {
 

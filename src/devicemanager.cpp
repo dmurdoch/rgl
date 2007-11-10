@@ -7,7 +7,7 @@
 #include "types.h"
 #include <algorithm>
 #include <cstdio>
-#include <cassert>
+#include "assert.hpp"
 #include "lib.hpp"
 
 DeviceManager::DeviceManager() 

@@ -12,7 +12,7 @@
 #include <Carbon/Carbon.h>
 #include <AGL/agl.h>
 #include "opengl.hpp"
-#include <cassert>
+#include "assert.hpp"
 // ---------------------------------------------------------------------------
 // configuration
 // ---------------------------------------------------------------------------
