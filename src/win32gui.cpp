@@ -53,8 +53,8 @@ class Win32WindowImpl : public WindowImpl
 public:
   Win32WindowImpl(Window* in_window);
   void setTitle(const char* title);
-  void setLocation(int x, int y);
-  void setSize(int width, int height);
+  void setWindowRect(int left, int top, int right, int bottom);
+  void getWindowRect(int *left, int *top, int *right, int *bottom);
   void show();
   void hide();
   int  isTopmost(HWND handle);
@@ -111,14 +111,35 @@ void Win32WindowImpl::setTitle(const char* title)
   SetWindowText(windowHandle, title);
 }
 
-void Win32WindowImpl::setLocation(int x, int y)
+void Win32WindowImpl::setWindowRect(int left, int top, int right, int bottom)
 {
-  // FIXME
+  if (windowHandle) 
+    MoveWindow(windowHandle, left, top, right-left, bottom-top, TRUE);   
 }
 
-void Win32WindowImpl::setSize(int width, int height)
+void Win32WindowImpl::getWindowRect(int *left, int *top, int *right, int *bottom)
 {
-  // FIXME
+  if (windowHandle) {
+    RECT rect;
+    GetWindowRect(windowHandle, &rect);
+    // Rect is now in screen coordinates; convert to client area coordinates 
+    // for MDI
+    HWND parent = GetParent(windowHandle);
+    if (parent) {
+      POINT pt;
+      pt.x = rect.left;
+      pt.y = rect.top;
+      ScreenToClient(parent, &pt);
+      rect.right += pt.x - rect.left;
+      rect.left = pt.x;
+      rect.bottom += pt.y - rect.top;
+      rect.top = pt.y;
+    }
+    *left = rect.left;
+    *top = rect.top;
+    *right = rect.right;
+    *bottom = rect.bottom;
+  }
 }
 
 void Win32WindowImpl::show()

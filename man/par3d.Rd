@@ -116,6 +116,8 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
       magnification of the scene.}
       \item{\code{bbox}}{\emph{\bold{R.O.}}; real. A vector of six values indicating the current values of the
       bounding box of the scene (xmin, xmax, ymin, ymax, zmin, zmax)}
+    \item{\code{windowRect}}{integer.  A vector of 3 values indicating the left, top, right and 
+      bottom of the displayed window (in pixels).}
   }
 }
 

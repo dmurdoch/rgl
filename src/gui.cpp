@@ -40,17 +40,21 @@ View::~View()
 // ---------------------------------------------------------------------------
 void View::setSize(int inWidth, int inHeight)
 {
-  if ((windowImpl) && (flags & WINDOW_IMPL_OWNER))
-    windowImpl->setSize(inWidth, inHeight);
-  else
+  if ((windowImpl) && (flags & WINDOW_IMPL_OWNER)) {
+    int left, top, right, bottom;
+    windowImpl->getWindowRect(&left, &top, &right, &bottom);
+    windowImpl->setWindowRect(left, top, left+inWidth, top+inHeight);
+  } else
     resize(inWidth, inHeight);
 }
 // ---------------------------------------------------------------------------
 void View::setLocation(int inBaseX, int inBaseY)
 {
-  if ((windowImpl) && (flags & WINDOW_IMPL_OWNER))
-    windowImpl->setLocation(inBaseX, inBaseY);
-  else
+  if ((windowImpl) && (flags & WINDOW_IMPL_OWNER)) {
+    int left, top, right, bottom;
+    windowImpl->getWindowRect(&left, &top, &right, &bottom);
+    windowImpl->setWindowRect(inBaseX, inBaseY, inBaseX + left-right, inBaseY + bottom-top);
+  } else
     relocate(inBaseX, inBaseY);
 }
 // ---------------------------------------------------------------------------
@@ -170,6 +174,18 @@ void Window::bringToTop(int stay)
   windowImpl->bringToTop(stay);
 }
 // ---------------------------------------------------------------------------
+void Window::getWindowRect(int *left, int *top, int *width, int *height)
+{
+  windowImpl->getWindowRect(left, top, width, height);
+}
+// ---------------------------------------------------------------------------
+void Window::setWindowRect(int left, int top, int width, int height)
+{
+  windowImpl->setWindowRect(left, top, width, height);
+}
+
+// ---------------------------------------------------------------------------
+
 int Window::getSkipRedraw(void)
 {
   return (int)skipRedraw;
