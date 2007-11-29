@@ -1003,6 +1003,30 @@ void rgl_getViewport(int* successptr, int* viewport)
   *successptr = success;
 }
 
+void rgl_getWindowRect(int* successptr, int* rect)
+{
+  int success = RGL_FAIL;
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+   
+     device->getWindowRect(rect, rect+1, rect+2, rect+3);
+     success = RGL_SUCCESS;
+  }
+}
+
+void rgl_setWindowRect(int* successptr, int* rect)
+{
+  int success = RGL_FAIL;
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  
+    device->setWindowRect(rect[0], rect[1], rect[2], rect[3]);
+    success = RGL_SUCCESS;
+  }
+}
+
 void rgl_postscript(int* successptr, int* idata, char** cdata)
 {
   int success = RGL_FAIL;

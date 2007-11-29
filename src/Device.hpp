@@ -51,6 +51,10 @@ public: // -- all methods are blocking until action completed
   void setIgnoreExtent(int in_ignoreExtent);  
   int getSkipRedraw(void);
   void setSkipRedraw(int in_skipRedraw);
+  
+  void setWindowRect(int left, int top, int right, int bottom);
+  void getWindowRect(int *left, int *top, int *right, int *bottom);
+  
 
 // event handlers
 protected:

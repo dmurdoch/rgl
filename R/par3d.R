@@ -1,7 +1,7 @@
 .Par3d <- c("FOV", "ignoreExtent",
 	   "mouseMode", 
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
-	   "scale", "viewport", "zoom", "bbox"
+	   "scale", "viewport", "zoom", "bbox", "windowRect"
 	   )
 	   
 .Par3d.readonly <- c( 

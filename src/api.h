@@ -94,6 +94,8 @@ EXPORT_SYMBOL void rgl_getSkipRedraw(int* successptr, int* skipRedraw);
 EXPORT_SYMBOL void rgl_setSkipRedraw(int* successptr, int* skipRedraw);
 EXPORT_SYMBOL void rgl_getViewport(int* successptr, int* viewport);
 EXPORT_SYMBOL void rgl_getBoundingbox(int* successptr, double* bboxvec);
+EXPORT_SYMBOL void rgl_getWindowRect(int* successptr, int* rect);
+EXPORT_SYMBOL void rgl_setWindowRect(int* successptr, int* rect);
 
 /* not for users:  does not maintain consistency */
 EXPORT_SYMBOL void rgl_setPosition(double* position);

@@ -55,6 +55,17 @@ void Device::bringToTop(int stay)
 {
   window->bringToTop(stay);
 }
+
+void Device::setWindowRect(int left, int top, int right, int bottom)
+{
+  window->setWindowRect(left, top, right, bottom);
+}
+
+void Device::getWindowRect(int *left, int *top, int *right, int *bottom)
+{
+  window->getWindowRect(left, top, right, bottom);
+}
+
 // ---------------------------------------------------------------------------
 int Device::getIgnoreExtent(void)
 {

@@ -224,3 +224,6 @@ v0.75
  v 0.75.611
   - put our own assert() macro in place to avoid crashing R.
   - rename ChangeLog file to NEWS, as per discussion on R-devel
+  - add "windowRect" to par3d parameters to allow window size to be
+    controlled. 
+    

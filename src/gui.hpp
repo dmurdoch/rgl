@@ -61,8 +61,8 @@ public:
   }
   inline  void unbind() { window = 0; }
   virtual void setTitle(const char* title) = 0;
-  virtual void setLocation(int x, int y) = 0;
-  virtual void setSize(int width, int height) = 0;
+  virtual void setWindowRect(int left, int top, int right, int bottom) = 0;
+  virtual void getWindowRect(int *left, int *top, int *right, int *bottom) = 0;
   virtual void show(void) = 0;
   virtual void hide(void) = 0;
   virtual void update(void) = 0;
@@ -195,6 +195,8 @@ public:
   void wheelRotate(int dir);
 
   void bringToTop(int stay);
+  void setWindowRect(int left, int top, int right, int bottom);
+  void getWindowRect(int *left, int *top, int *right, int *bottom);
 
 // data:
   View* child;
