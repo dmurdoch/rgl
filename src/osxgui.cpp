@@ -27,8 +27,8 @@ public:
   OSXWindowImpl(Window* window);
   ~OSXWindowImpl();
   void setTitle(const char* title);
-  void setLocation(int x, int y) { }
-  void setSize(int width, int height) { }
+  void setWindowRect(int left, int top, int right, int bottom);
+  void getWindowRect(int *left, int *top, int *right, int *bottom);
   void show();
   void hide() { }
   void update();
@@ -109,6 +109,25 @@ void OSXWindowImpl::setTitle(const char* text)
   , kCFStringEncodingASCII
   );
   SetWindowTitleWithCFString( mWindowRef, s );
+}
+void OSXWindowImpl::setWindowRect(int left, int top, int right, int bottom)
+{
+  mRect.left = left;
+  mRect.top = top;
+  mRect.right = right;
+  mRect.bottom = bottom;
+  MoveWindow(mWindowRef, left, top, false);
+  SizeWindow(mWindowRef, right-left, bottom-top, true);
+}
+// ---------------------------------------------------------------------------
+void OSXWindowImpl::getWindowRect(int *left, int *top, int *right, int *bottom)
+{
+  Rect rect;
+  GetWindowBounds(mWindowRef, kWindowContentRgn, &rect);
+  *left = rect.left;
+  *top = rect.top;
+  *right = rect.right;
+  *bottom = rect.bottom;
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::destroy()

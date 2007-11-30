@@ -27,8 +27,8 @@ public:
   );
   virtual ~X11WindowImpl();
   void setTitle(const char* title);
-  void setLocation(int x, int y);
-  void setSize(int w, int h);
+  void setWindowRect(int left, int top, int right, int bottom);
+  void getWindowRect(int *left, int *top, int *right, int *bottom);
   void show();
   void hide();
   void bringToTop(int stay);
@@ -77,13 +77,31 @@ void X11WindowImpl::setTitle(const char* title)
   factory->flushX();
 }
 // ---------------------------------------------------------------------------
-void X11WindowImpl::setLocation(int x, int y)
+void X11WindowImpl::setWindowRect(int left, int top, int right, int bottom) 
 {
+  ::Window root, child, parent, *children;
+  int x, y;
+  unsigned int nchildren;
+  XQueryTree(factory->xdisplay, xwindow, &root, &parent, &children, &nchildren);
+  XTranslateCoordinates(factory->xdisplay, xwindow, parent, 0, 0, &x, &y, &child);
+  // The weird calculation below (subtracting twice (x,y)) compensates for the diff
+  // between coordinates of the rgl window within the parent window.
+  // There's probably a smarter way to do this...
+  XMoveWindow(factory->xdisplay, xwindow, left-2*x, top-2*y);
+  XResizeWindow(factory->xdisplay, xwindow, right-left, bottom-top);
+  factory->flushX();
 }
 // ---------------------------------------------------------------------------
-void X11WindowImpl::setSize(int w, int h)
+void X11WindowImpl::getWindowRect(int *left, int *top, int *right, int *bottom)
 {
+  ::Window root, child;
+  int x, y;
+  unsigned int width, height, border_width, depth;
+  XGetGeometry(factory->xdisplay, xwindow, &root, &x, &y, &width, &height, &border_width, &depth);
+  XTranslateCoordinates(factory->xdisplay, xwindow, root, x, y, left, top, &child);
+  XTranslateCoordinates(factory->xdisplay, xwindow, root, x+width, y+height, right, bottom, &child);
 }
+
 // ---------------------------------------------------------------------------
 static Bool IsMapNotify(Display* d, XEvent* ev, XPointer arg)
 {
