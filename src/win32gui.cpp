@@ -113,27 +113,34 @@ void Win32WindowImpl::setTitle(const char* title)
 
 void Win32WindowImpl::setWindowRect(int left, int top, int right, int bottom)
 {
-  if (windowHandle) 
-    MoveWindow(windowHandle, left, top, right-left, bottom-top, TRUE);   
+  if (windowHandle) {
+    RECT rect;
+    
+    rect.left = left;
+    rect.top = top;
+    rect.right = right;
+    rect.bottom = bottom;
+    
+    // Specification gives the desired client coordinates; expand to include the frame
+    AdjustWindowRectEx(&rect, GetWindowLong(windowHandle, GWL_STYLE), FALSE,
+                              GetWindowLong(windowHandle, GWL_EXSTYLE)); 
+    MoveWindow(windowHandle, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top, TRUE);
+  }
 }
 
 void Win32WindowImpl::getWindowRect(int *left, int *top, int *right, int *bottom)
 {
   if (windowHandle) {
     RECT rect;
-    GetWindowRect(windowHandle, &rect);
-    // Rect is now in screen coordinates; convert to client area coordinates 
+    GetClientRect(windowHandle, &rect);
+    ClientToScreen(windowHandle, (LPPOINT)&rect.left);
+    ClientToScreen(windowHandle, (LPPOINT)&rect.right);
+    // Rect is now in screen coordinates; convert to parent client area coordinates 
     // for MDI
     HWND parent = GetParent(windowHandle);
     if (parent) {
-      POINT pt;
-      pt.x = rect.left;
-      pt.y = rect.top;
-      ScreenToClient(parent, &pt);
-      rect.right += pt.x - rect.left;
-      rect.left = pt.x;
-      rect.bottom += pt.y - rect.top;
-      rect.top = pt.y;
+      ScreenToClient(parent, (LPPOINT)&rect.left);
+      ScreenToClient(parent, (LPPOINT)&rect.right);
     }
     *left = rect.left;
     *top = rect.top;
