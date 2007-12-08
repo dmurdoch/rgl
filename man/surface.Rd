@@ -96,6 +96,7 @@ rgl.surface(x, z, y, color=col, back="lines")
 
 }
 \seealso{
-  \code{\link{rgl.material}}, \code{\link{surface3d}}, \code{\link{terrain3d}}
+  \code{\link{rgl.material}}, \code{\link{surface3d}}, \code{\link{terrain3d}}.
+  See \code{\link{persp3d}} for a higher level interface.
 }
 \keyword{dynamic}

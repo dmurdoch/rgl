@@ -74,6 +74,7 @@ surface3d(x, y, z, color=col, back="lines")
 
 }
 \seealso{
-  \code{\link{rgl.material}}, \code{\link{rgl.surface}}, \code{\link{persp}}
+  \code{\link{rgl.material}}, \code{\link{rgl.surface}}.
+  See \code{\link{persp3d}} for a higher level interface.
 }
 \keyword{dynamic}
