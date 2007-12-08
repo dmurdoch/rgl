@@ -34,8 +34,17 @@ persp3d(x, \dots)
   and \code{\link{decorate3d}}.}
 }
 \details{
-  This is similar to \code{\link{persp}} with user interaction.  See \code{\link{plot3d}}
-  for more details
+  This is similar to \code{\link[graphics]{persp}} with user interaction.  See \code{\link{plot3d}}
+  for more general details.
+  
+  One difference from \code{\link[graphics]{persp}} is that colors are specified on each
+  vertex, rather than on each facet of the surface.  To emulate the \code{\link[graphics]{persp}}
+  color handling, you need to do the following.  First, convert the color vector to 
+  an \code{(nx-1)} by \code{(ny-1)} matrix; then add an extra row before row 1, 
+  and an extra column after the last column, to convert it to \code{nx} by \code{ny}.
+  (These extra colors will not be used).  For example, 
+  \code{col <- rbind(0, cbind(matrix(col, nx-1, ny-1), 0))}.
+  Finally, call \code{persp3d} with material property \code{smooth = FALSE}.
   
   If the \code{x} or \code{y} argument is a matrix, then it must be of the same
   dimension as \code{z}, and the values in the matrix will be used for the corresponding
