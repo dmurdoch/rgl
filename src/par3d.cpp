@@ -175,7 +175,6 @@ static void Specify(const char *what, SEXP value)
         x = coerceVector(value, INTSXP);
         
         rgl_setWindowRect(&success, INTEGER(x));
-        success = 1;
     }    
      else warning(_("parameter \"%s\" cannot be set"), what);
  
@@ -259,7 +258,6 @@ static SEXP Query(const char *what)
     else if (streql(what, "windowRect")) {
       value = allocVector(INTSXP, 4);
       rgl_getWindowRect(&success, INTEGER(value));
-      success = 1;
     }
     else
   	value = R_NilValue;
