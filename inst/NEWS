@@ -227,3 +227,6 @@ v0.76
   - add "windowRect" to par3d parameters to allow window size to be
     controlled from R.
     
+ v0.76.622
+  - par3d("windowRect") returned garbage if there was no window open.
+    
