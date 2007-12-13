@@ -56,7 +56,8 @@ persp3d(x, \dots)
   of shape IDs is returned.
 }
 \author{Duncan Murdoch}
-\seealso{\code{\link{plot3d}}, \code{\link{persp}}}
+\seealso{\code{\link{plot3d}}, \code{\link{persp}}. The \code{\link[emdbook]{curve3d}}
+function in the \code{emdbook} package draws surface plots of functions.}
 \examples{
 
 # (1) The Obligatory Mathematical surface.
