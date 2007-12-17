@@ -37,9 +37,9 @@ plot3d.default <- function(x, y = NULL, z = NULL,
 					   rbind(rep(0,length(z)),z),
 					   color = rep(col, rep(2,length(col))), size=size, ...),
 	# this is a hack to plot invisible segments
-        n = if (!add) segments3d(rep(range(x), c(2,2)),
-                                 rep(range(y), c(2,2)),
-                                 rep(range(z), c(2,2))))
+        n = if (!add) segments3d(rep(range(x, na.rm=TRUE), c(2,2)),
+                                 rep(range(y, na.rm=TRUE), c(2,2)),
+                                 rep(range(z, na.rm=TRUE), c(2,2))))
 	)
     if (!add) result <- c(result, decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, ...))
     invisible(result)

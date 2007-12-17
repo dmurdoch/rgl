@@ -3,7 +3,8 @@ persp3d <- function(x, ...) UseMethod("persp3d")
 
 persp3d.default <-
 function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
-    z, xlim = range(x), ylim = range(y), zlim = range(z, na.rm = TRUE),
+    z, xlim = range(x, na.rm = TRUE), 
+    ylim = range(y, na.rm = TRUE), zlim = range(z, na.rm = TRUE),
     xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, ...)
 {
     if (!add) clear3d()
