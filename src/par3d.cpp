@@ -2,6 +2,7 @@
 // #undef DEBUG
 
 #include "R.h"
+#include "Rversion.h"
 
 #include "api.h"
 
@@ -94,6 +95,14 @@ static void BoundsCheck(double x, double a, double b, const char *s)
 const char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
 #define mmLAST 10
 
+/* At R 2.6.0, the type of the first arg to psmatch changed to const char *.  Conditionally cast 
+   to char * if we're in an old version */
+#if defined(R_VERSION) && R_VERSION < R_Version(2, 6, 0)
+#define OLDCAST (char *)
+#else
+#define OLDCAST
+#endif
+
 static void Specify(const char *what, SEXP value)
 {
  
@@ -125,14 +134,14 @@ static void Specify(const char *what, SEXP value)
 		success = 0;
 		/* check exact first, then partial */
 		for (int mode = 0; mode < mmLAST; mode++) {
-		    if (psmatch(mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)TRUE)) {
+		    if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)TRUE)) {
 			rgl_setMouseMode(&success, &i, &mode);
 			break;
 		    }
 		}
 		if (!success) {
 		    for (int mode = 0; mode < mmLAST; mode++) {
-			if (psmatch(mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)FALSE)) {
+			if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)FALSE)) {
 			    rgl_setMouseMode(&success, &i, &mode);
 			    break;
 			}

@@ -153,22 +153,22 @@ private:
 
       switch(color_type) {
         case PNG_COLOR_TYPE_RGB:
-          color_type_name = "RGB";
+          color_type_name = (char*)"RGB";
           break;
         case PNG_COLOR_TYPE_GRAY:
-          color_type_name = "GRAY";
+          color_type_name = (char*)"GRAY";
           break;
         case PNG_COLOR_TYPE_PALETTE:
-          color_type_name = "INDEX";
+          color_type_name = (char*)"INDEX";
           break;
         case PNG_COLOR_TYPE_RGB_ALPHA:
-          color_type_name = "RGBALPHA";
+          color_type_name = (char*)"RGBALPHA";
           break;
         case PNG_COLOR_TYPE_GRAY_ALPHA:
-          color_type_name = "GRAYALPHA";
+          color_type_name = (char*)"GRAYALPHA";
           break;
         default:
-          color_type_name = "unknown";
+          color_type_name = (char*)"unknown";
           break;
       };
 
@@ -345,8 +345,8 @@ unsupported:
 
       png_text text[1];
 
-      text[0].key  = "Software";
-      text[0].text = "R/RGL package/libpng";
+      text[0].key  = (png_charp)"Software";
+      text[0].text = (png_charp)"R/RGL package/libpng";
       text[0].compression = PNG_TEXT_COMPRESSION_NONE;
 
       png_set_text(png_ptr, info_ptr, text, sizeof(text)/sizeof(png_text) );
