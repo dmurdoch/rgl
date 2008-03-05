@@ -632,9 +632,11 @@ rgl.select3d <- function(button = c("left", "middle", "right")) {
   proj <- rgl.projection();
   function(x,y=NULL,z=NULL) {
     pixel <- rgl.user2window(x,y,z,proj=proj)
-    apply(pixel,1,function(p) (llx <= p[1]) && (p[1] <= urx)
-                           && (lly <= p[2]) && (p[2] <= ury)
-                           && (0 <= p[3])   && (p[3] <= 1))
+    x <- pixel[,1]
+    y <- pixel[,2]
+    z <- pixel[,3]
+    (llx <= x) & (x <= urx) & (lly <= y) & (y <= ury) & 
+    (0 <= z) & (z <= 1)
   }
 }
 
