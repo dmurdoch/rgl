@@ -132,7 +132,8 @@ void Viewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	glRotatef((GLfloat)angle, (GLfloat)axis.x, (GLfloat)axis.y, (GLfloat)axis.z);
+	if (axis.getLength() > 0)
+	  glRotatef((GLfloat)angle, (GLfloat)axis.x, (GLfloat)axis.y, (GLfloat)axis.z);
 	glGetDoublev(GL_MODELVIEW_MATRIX,mouseMatrix);
 	glPopMatrix();
 }
