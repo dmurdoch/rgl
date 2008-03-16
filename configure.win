@@ -13,16 +13,16 @@ LIBS="-lgdi32 -lopengl32 -lglu32"
 # --- libpng -----------------------------------------------------------------
 
 echo -n "  checking for zlib..."
-if [ -e "${R_HOME}/src/extra/zlib/libz.a" ]; then
-  CPPFLAGS="${CPPFLAGS} -I${R_HOME}/src/extra/zlib "
-  LIBS="$LIBS -L${R_HOME}/src/extra/zlib -lz"
-  havezlib=yes
-elif [ -e "${R_HOME}/bin/Rzlib.dll" ]; then
-  CPPFLAGS="${CPPFLAGS} -I${R_HOME}/src/extra/zlib "
-  LIBS="$LIBS -L${R_HOME}/bin/zlib -lRzlib "
-  havezlib=yes
+if [ -e "${R_HOME}/bin/Rzlib.dll" ]; then
+   CPPFLAGS="${CPPFLAGS} -I${R_HOME}/include "
+   LIBS="$LIBS -L${R_HOME}/bin -lRzlib "
+   havezlib=yes
+elif [ -e "${R_HOME}/src/extra/zlib/libz.a" ]; then
+   CPPFLAGS="${CPPFLAGS} -I${R_HOME}/src/extra/zlib "
+   LIBS="$LIBS -L${R_HOME}/src/extra/zlib -lz"
+   havezlib=yes
 else
-  havezlib=no
+   havezlib=no
 fi
 echo ${havezlib}
 
