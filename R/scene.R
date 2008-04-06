@@ -50,7 +50,8 @@ rgl.clear <- function( type = "shapes" )
 rgl.pop <- function( type = "shapes", id = 0)
 {
   type <- rgl.enum.nodetype(type)
-
+  save <- par3d(skipRedraw = TRUE)
+  on.exit(par3d(save))
   for (i in id) {
     idata <- as.integer(c(type, i))
 
