@@ -232,6 +232,7 @@ v0.76
   - persp3d() and plot3d() sometimes miscalculated ranges involving NAs.
   - select3d() and rgl.select() produced a very inefficient test function.
   
- v0.77.650
+ v0.77.661
   - fix miscalculation of mouseMatrix that caused disappearing views.
+  - rgl.pop was very slow when given a long list of ids.
     
