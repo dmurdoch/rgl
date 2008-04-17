@@ -77,8 +77,8 @@ persp3d(x, y, z, aspect=c(1, 1, 0.5), col = "lightblue",
 # (2) Add to existing persp plot:
 
 xE <- c(-10,10); xy <- expand.grid(xE, xE)
-points3d(xy[,1], xy[,2], 6, col = 2, size = 3)
-lines3d(x, y=10, z= 6 + sin(x), col = 3)
+points3d(xy[,1], xy[,2], 6, col = "red", size = 3)
+lines3d(x, y=10, z= 6 + sin(x), col = "green")
 
 phi <- seq(0, 2*pi, len = 201)
 r1 <- 7.725 # radius of 2nd maximum
