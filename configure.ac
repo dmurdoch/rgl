@@ -117,7 +117,8 @@ fi
     # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
     if test -e /System/Library/Frameworks/OpenGL.framework ; then
       CPPFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers ${CPPFLAGS} -DNO_GL_PREFIX"
-      LIBS="-framework OpenGL ${LIBS}"
+    # OSX 10.5 messes up X11; this works around it
+      LIBS="-framework OpenGL -dylib_file /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib ${LIBS}"
     fi
     # X11 must come *after* the OpenGL stuff
     CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
