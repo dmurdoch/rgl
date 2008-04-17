@@ -15,6 +15,7 @@ extern "C" {
 #include "rglview.h"
 
 #include "lib.hpp"
+#include "R.h"
 
 //
 // API Success is encoded as integer type:
@@ -657,18 +658,27 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
   *successptr = RGL_SUCCESS;
 }
 
-void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex)
+void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex,
+               int* nfonts, char** family, int* style, double* cex, 
+               int* useFreeType)
 {
   int success = RGL_FAIL;
 
   Device* device;
+  
+#ifndef HAVE_FREETYPE
+  if (*useFreeType) error("FreeType not supported in this build");
+#endif
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int ntext   = idata[0];
-
-    success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, *adj,
-    						   device->getIgnoreExtent()) ) );
+    
+    FontArray fonts;
+    device->getFonts(fonts, *nfonts, family, style, cex, (bool) *useFreeType);
+    success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
+                                                   adj[0], adj[1],
+    						   device->getIgnoreExtent(), fonts) ) );
   }
 
   *successptr = success;
@@ -1069,3 +1079,106 @@ void rgl_getBoundingbox(int* successptr, double* bboxvec)
 	*successptr = success;
 }
 
+/* font access functions.  These are only used from par3d */
+
+char* getFamily()
+{
+  Device* device;
+  const char* f;
+  char* result = NULL;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    f = device->getRGLView()->getFontFamily();
+    result = R_alloc(strlen(f)+1, 1);
+    strcpy(result, f);
+  } 
+  return result;
+}
+
+bool setFamily(const char *family)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    device->getRGLView()->setFontFamily(family);
+    return true;
+  } else
+    return false;
+}
+
+int getFont()
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    return device->getRGLView()->getFontStyle();
+  } else
+    return -1;
+}
+
+bool setFont(int font)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    device->getRGLView()->setFontStyle(font);
+    return true;
+  } else
+    return false;
+}
+
+double getCex()
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    return  device->getRGLView()->getFontCex();
+  } else
+    return -1;
+}
+
+bool setCex(double cex)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    device->getRGLView()->setFontCex(cex);
+    return true;
+  } else
+    return false;
+}
+
+int getUseFreeType()
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    return  (int) device->getRGLView()->getFontUseFreeType();
+  } else
+    return -1;
+}
+
+bool setUseFreeType(bool useFreeType)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    device->getRGLView()->setFontUseFreeType(useFreeType);
+    return true;
+  } else
+    return false;
+}
+
+char* getFontname()
+{
+  Device* device;
+  const char* f;
+  char* result = NULL;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    f = device->getRGLView()->getFontname();
+    result = R_alloc(strlen(f)+1, 1);
+    strcpy(result, f);
+  } 
+  return result;
+}

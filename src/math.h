@@ -172,9 +172,9 @@ struct RectSize
   int height;
 };
 
-struct Rect
+struct Rect2
 {
-  Rect(int in_x, int in_y, int in_w, int in_h)
+  Rect2(int in_x, int in_y, int in_w, int in_h)
   : x(in_x)
   , y(in_y)
   , width(in_w)

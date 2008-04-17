@@ -234,5 +234,7 @@ v0.76
   
  v0.77.661
   - fix miscalculation of mouseMatrix that caused disappearing views.
+  - rgl.texts() and text3d() can now handle font and size specifications
+    using the FreeType library. 
+  - adj is supported both horizontally and vertically in drawing text.
   - rgl.pop was very slow when given a long list of ids.
-    

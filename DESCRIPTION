@@ -9,5 +9,5 @@ Suggests: MASS
 Description: 3D visualization device (OpenGL)
 License: GPL
 URL: http://rgl.neoscientists.org
-SystemRequirements: OpenGL, GLU Library, zlib (optional), libpng (optional)
+SystemRequirements: OpenGL, GLU Library, zlib (optional), libpng (optional), FreeType (optional)
 

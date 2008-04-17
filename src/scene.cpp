@@ -273,7 +273,7 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
       *ids++ = (*i)->getObjID();
       buffer[19] = 0;
       (*i)->getShapeName(buffer, 20);
-      *types = R_alloc(strlen(buffer), 1);
+      *types = R_alloc(strlen(buffer)+1, 1);
       strcpy(*types, buffer);
       types++;
     }
@@ -281,7 +281,7 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
   case LIGHT: 
     for (std::vector<Light*>::iterator i = lights.begin(); i != lights.end() ; ++ i ) {
       *ids++ = (*i)->getObjID();
-      *types = R_alloc(strlen("light"), 1);
+      *types = R_alloc(strlen("light")+1, 1);
       strcpy(*types, "light");
       types++;
     }
@@ -387,12 +387,18 @@ void Scene::render(RenderContext* renderContext)
 
     viewpoint->setupTransformation( renderContext, total_bsphere);
 
+    // Save matrices for projection/unprojection later
+    
+    glGetDoublev(GL_MODELVIEW_MATRIX,renderContext->modelview);
+    glGetDoublev(GL_PROJECTION_MATRIX,renderContext->projection);
+    glGetIntegerv(GL_VIEWPORT, renderContext->viewport);    
+    
     //
     // RENDER BBOX DECO
     //
 
-    if (bboxDeco)
-      bboxDeco->render(renderContext);
+    if (bboxDeco) 
+      bboxDeco->render(renderContext);  // This changes the modelview/projection/viewport
 
     //
     // RENDER SOLID SHAPES
@@ -439,14 +445,9 @@ void Scene::render(RenderContext* renderContext)
     //
 
     viewpoint->setupTransformation(renderContext, total_bsphere);
-    
-    double data[16];
-        
-    glGetDoublev(GL_MODELVIEW_MATRIX,data);
-    Matrix4x4 M(data);
-    
-    glGetDoublev(GL_PROJECTION_MATRIX,data);
-    Matrix4x4 P(data);
+
+    Matrix4x4 M(renderContext->modelview);    
+    Matrix4x4 P(renderContext->projection);
     P = P*M;
     
     renderContext->Zrow = P.getRow(2);

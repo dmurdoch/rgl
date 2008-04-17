@@ -63,7 +63,8 @@ EXPORT_SYMBOL void rgl_bg       (int* successptr, int* idata);
 EXPORT_SYMBOL void rgl_bbox     (int* successptr, int* idata, double* ddata, double* xat, char** xtext, double* yat, char** ytext, double* zat, char** ztext);
 
 EXPORT_SYMBOL void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals, double* texcoords);
-EXPORT_SYMBOL void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex);
+EXPORT_SYMBOL void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex,
+                                 int* nfonts, char** family, int* style, double* cex, int* useFreeType);
 EXPORT_SYMBOL void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius);
 EXPORT_SYMBOL void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y, 
 	                         double* normal_x, double* normal_z, double* normal_y,
@@ -100,6 +101,18 @@ EXPORT_SYMBOL void rgl_setWindowRect(int* successptr, int* rect);
 /* not for users:  does not maintain consistency */
 EXPORT_SYMBOL void rgl_setPosition(double* position);
 EXPORT_SYMBOL void rgl_getPosition(double* position);
+
+/* These functions are related to the API, but only accessed internally */
+
+char*   getFamily();
+bool    setFamily(const char *family);
+int     getFont();
+bool    setFont(int font);
+double  getCex();
+bool    setCex(double cex);
+int     getUseFreeType();
+bool    setUseFreeType(bool useFreeType);
+char*	getFontname();
 
 #ifdef __cplusplus
 }
