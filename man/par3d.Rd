@@ -78,6 +78,11 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
 
 \section{Parameters}{
   \describe{
+    \item{\code{cex}}{real.  The default size for text.}
+    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.}
+    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}.}
+    \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?}
+    \item{\code{fontname}}{\emph{\bold{R.O.}}; the system-dependent name of the current font.}
     \item{\code{FOV}}{real.  The field of view, from 1 to 179 degrees.  This controls
       the degree of parallax in the perspective view.
       Isometric perspective (which would

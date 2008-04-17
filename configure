@@ -308,7 +308,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP HAVE_LIBPNG_CONFIG EGREP CXXFLAGS AGLCPPFLAGS AGLLIBS BUILD_AGL_TRUE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP HAVE_LIBPNG_CONFIG EGREP HAVE_FREETYPE_CONFIG CXXFLAGS AGLCPPFLAGS AGLLIBS BUILD_AGL_TRUE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -850,6 +850,8 @@ Optional Features:
   --disable-libpng-config    disable libpng-config test and configuration
 
   --disable-libpng-dynamic   disable dynamic libpng linkage, force static version linkage (only with --enable-libpng-config)
+
+  --disable-ftgl             compile without FTGL font support
 
 
 Optional Packages:
@@ -4461,6 +4463,65 @@ echo "$as_me: error: missing required library ${lGLU}" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
+## --- FTGL ------------------------------------------------------------------
+
+# Check whether --enable-ftgl or --disable-ftgl was given.
+if test "${enable_ftgl+set}" = set; then
+  enableval="$enable_ftgl"
+
+fi;
+if test "x$enable_ftgl" != "xno"; then
+  # Extract the first word of "freetype-config", so it can be a program name with args.
+set dummy freetype-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_HAVE_FREETYPE_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$HAVE_FREETYPE_CONFIG"; then
+  ac_cv_prog_HAVE_FREETYPE_CONFIG="$HAVE_FREETYPE_CONFIG" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_HAVE_FREETYPE_CONFIG="yes"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_prog_HAVE_FREETYPE_CONFIG" && ac_cv_prog_HAVE_FREETYPE_CONFIG="no"
+fi
+fi
+HAVE_FREETYPE_CONFIG=$ac_cv_prog_HAVE_FREETYPE_CONFIG
+if test -n "$HAVE_FREETYPE_CONFIG"; then
+  echo "$as_me:$LINENO: result: $HAVE_FREETYPE_CONFIG" >&5
+echo "${ECHO_T}$HAVE_FREETYPE_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
+    LIBS="${LIBS} `freetype-config --libs`"
+    AGLCPPFLAGS="${AGLCPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
+    AGLLIBS="${AGLLIBS} `freetype-config --libs`"
+    { echo "$as_me:$LINENO: using Freetype and FTGL" >&5
+echo "$as_me: using Freetype and FTGL" >&6;}
+  fi
+else
+  { echo "$as_me:$LINENO: compiling without FTGL support" >&5
+echo "$as_me: compiling without FTGL support" >&6;}
+fi
+
+# TODO: try to autodetect the place of the freetype libraries
+
 ## --- Output ----------------------------------------------------------------
 
 
@@ -5115,6 +5176,7 @@ s,@OBJEXT@,$OBJEXT,;t t
 s,@CPP@,$CPP,;t t
 s,@HAVE_LIBPNG_CONFIG@,$HAVE_LIBPNG_CONFIG,;t t
 s,@EGREP@,$EGREP,;t t
+s,@HAVE_FREETYPE_CONFIG@,$HAVE_FREETYPE_CONFIG,;t t
 s,@CXXFLAGS@,$CXXFLAGS,;t t
 s,@AGLCPPFLAGS@,$AGLCPPFLAGS,;t t
 s,@AGLLIBS@,$AGLLIBS,;t t

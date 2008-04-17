@@ -446,7 +446,8 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
 ## add texts
 ##
 
-rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
+rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d("family"), 
+                      font=par3d("font"), cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... )
 {
   rgl.material( ... )
 
@@ -456,18 +457,35 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
         warning("adj and justify both specified: justify ignored")
      } else adj <- switch(justify,left=0,center=0.5,right=1)
   }
+  if (length(adj) == 0) adj = c(0.5, 0.5)
+  if (length(adj) == 1) adj = c(adj, 0.5)
+  if (length(adj) > 2) warning("Only the first two entries of adj are used")
+  
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   text    <- rep(text, length.out=nvertex)
   
   idata <- as.integer(nvertex)
-
+  
+  nfonts <- max(length(family), length(font), length(cex)) 
+  family <- rep(family, len=nfonts)
+  font <- rep(font, len=nfonts)
+  cex <- rep(cex, len=nfonts)  
+  
+  family[font == 5] <- "symbol"
+  font <- ifelse( font < 0 | font > 4, 1, font)  
+  
   ret <- .C( rgl_texts,
     success = as.integer(FALSE),
     idata,
     as.double(adj),
     as.character(text),
     as.numeric(vertex),
+    as.integer(nfonts),
+    as.character(family), 
+    as.integer(font),
+    as.numeric(cex),
+    as.integer(useFreeType),
     NAOK=TRUE
   )
   

@@ -185,6 +185,33 @@ static void Specify(const char *what, SEXP value)
         
         rgl_setWindowRect(&success, INTEGER(x));
     }    
+    else if (streql(what, "family")) {
+      lengthCheck(what, value, 1);
+      x = coerceVector(value, STRSXP);
+      if (setFamily(CHAR(STRING_ELT(x, 0)))) success = 1;
+    }
+    else if (streql(what, "font")) {
+      lengthCheck(what, value, 1);
+      x=coerceVector(value, INTSXP);
+      if (INTEGER(x)[0] < 1 || INTEGER(x)[0] > 5) { par_error(what); }
+      if (setFont(INTEGER(x)[0])) success = 1;
+    }
+    else if (streql(what, "cex")) {
+      lengthCheck(what, value, 1);
+      x=coerceVector(value, REALSXP);
+      if (REAL(x)[0] <= 0) { par_error(what); }
+      if (setCex(REAL(x)[0])) success = 1;
+    }
+    else if (streql(what, "useFreeType")) {
+      lengthCheck(what, value, 1);
+      x=coerceVector(value, LGLSXP);
+#ifndef HAVE_FREETYPE
+      if (LOGICAL(x)[0])
+          warning("FreeType not supported in this build");
+#endif
+      if (setUseFreeType(LOGICAL(x)[0])) success = 1;
+    }
+    
      else warning(_("parameter \"%s\" cannot be set"), what);
  
     if (!success) par_error(what);
@@ -201,8 +228,10 @@ static SEXP Query(const char *what)
 {
     SEXP value, names;
     int i, mode, success;
+    char* buf;
 
     success = 0;
+    value = R_NilValue;
     
     if (streql(what, "FOV")) {
 	value = allocVector(REALSXP, 1);
@@ -268,10 +297,42 @@ static SEXP Query(const char *what)
       value = allocVector(INTSXP, 4);
       rgl_getWindowRect(&success, INTEGER(value));
     }
-    else
-  	value = R_NilValue;
+    else if (streql(what, "family")) {
+      buf = getFamily();
+      if (buf) {
+        value = mkString(buf);
+        success = 1;
+      } 
+    }
+    else if (streql(what, "font")) {
+      value = allocVector(INTSXP, 1);
+      INTEGER(value)[0] = getFont();
+      success = INTEGER(value)[0] >= 0;
+    }
+    else if (streql(what, "cex")) {
+      value = allocVector(REALSXP, 1);
+      REAL(value)[0] = getCex();
+      success = REAL(value)[0] >= 0;
+    }    
+    else if (streql(what, "useFreeType")) {
+      int useFreeType = getUseFreeType();
+      value = allocVector(LGLSXP, 1);
+      if (useFreeType < 0) {
+        LOGICAL(value)[0] = false;
+        success = 0;
+      } else {
+        LOGICAL(value)[0] = (bool)useFreeType;
+        success = 1;
+      }
+    }    
+    else if (streql(what, "fontname")) {
+      buf = getFontname();
+      if (buf) {
+        value = mkString(buf);
+        success = 1;
+      } 
+    }    
   	
-    	
     if (! success) error(_("unknown error getting rgl parameter \"%s\""),  what);
 
     return value;

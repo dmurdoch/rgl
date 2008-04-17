@@ -15,6 +15,8 @@
 #include "x11gui.hpp"
 #include "lib.hpp"
 #include "R.h"
+#include <Rinternals.h>
+
 // ---------------------------------------------------------------------------
 namespace gui {
 // ---------------------------------------------------------------------------
@@ -39,10 +41,12 @@ public:
   void swap();
   void captureMouse(gui::View* captureview);
   void releaseMouse();
+  GLFont* getFont(const char* family, int style, double cex, 
+                  bool useFreeType);
+
 private:
   void initGL();
-  void initGLFont();
-  void destroyGLFont();
+  GLBitmapFont* initGLFont();
   void shutdownGL();
   static int translate_key(KeySym keysym);
   void on_init();
@@ -307,41 +311,63 @@ void X11WindowImpl::shutdownGL()
   }
 }
 // ---------------------------------------------------------------------------
-void X11WindowImpl::initGLFont()
+GLFont* X11WindowImpl::getFont(const char* family, int style, double cex, 
+                                 bool useFreeType)
 {
+  for (unsigned int i=0; i < fonts.size(); i++) {
+    if (fonts[i]->cex == cex && fonts[i]->style == style && !strcmp(fonts[i]->family, family)
+     && fonts[i]->useFreeType == useFreeType)
+      return fonts[i];
+  }
+  
+  if (useFreeType) {
+#ifdef HAVE_FREETYPE
+    int len=0;
+    SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
+                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          0);
+    if (isString(Rfontname) && length(Rfontname) >= style) {
+      const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
+      GLFTFont* font=new GLFTFont(family, style, cex, fontname);
+      fonts.push_back(font);
+      UNPROTECT(1);
+      return font;
+    }
+    UNPROTECT(1);
+#endif
+  }
+  return fonts[0];  
+}
+
+GLBitmapFont* X11WindowImpl::initGLFont()
+{
+  GLBitmapFont* font = NULL; 
   if (beginGL()) {
-    font.nglyph     = GL_BITMAP_FONT_COUNT;
-    font.firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
-    GLuint listBase = glGenLists(font.nglyph);
-    font.listBase   = listBase - font.firstGlyph;
-    glXUseXFont(factory->xfont, font.firstGlyph, font.nglyph, listBase);
+    font = new GLBitmapFont("bitmap", 1, 1, "fixed");  
+    font->nglyph     = GL_BITMAP_FONT_COUNT;
+    font->firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
+    GLuint listBase = glGenLists(font->nglyph);
+    font->listBase   = listBase - font->firstGlyph;
+    glXUseXFont(factory->xfont->fid, font->firstGlyph, font->nglyph, listBase);
 
-    font.widths = new unsigned int[font.nglyph];
+    font->widths = new unsigned int[font->nglyph];
 
-    for(unsigned int i=0;i<font.nglyph;i++)
-      font.widths[i] = 9;
+    for(unsigned int i=0;i<font->nglyph;i++)
+      font->widths[i] = 9;
+    font->ascent = factory->xfont->ascent;
     endGL();  // Should this be added?
   }
-}
-// ---------------------------------------------------------------------------
-void X11WindowImpl::destroyGLFont()
-{
-  if (beginGL()) {
-    glDeleteLists(font.listBase + font.firstGlyph, font.nglyph);
-    delete [] font.widths;  
-    endGL();
-  }
+  return font;
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::on_init()
 {
   initGL();
-  initGLFont();
+  fonts[0] = initGLFont();
 }
 
 void X11WindowImpl::on_shutdown()
 {
-  destroyGLFont();
   shutdownGL();
 }
 // ---------------------------------------------------------------------------
@@ -410,7 +436,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
 /*  XSynchronize(xdisplay, True); */
 
   // Load System font
-  xfont = XLoadFont(xdisplay,"fixed");
+  xfont = XLoadQueryFont(xdisplay,"fixed");
  
   // Obtain display atoms
   static char* atom_names[GUI_X11_ATOM_LAST] = {
@@ -468,7 +494,7 @@ void X11GUIFactory::disconnect()
 
   // free xfont
   if (xfont) {
-    XUnloadFont(xdisplay, xfont);
+    XUnloadFont(xdisplay, xfont->fid);
     xfont = 0;
   }
   

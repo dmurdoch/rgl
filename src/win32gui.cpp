@@ -11,7 +11,11 @@
 #include "glgui.hpp"
 
 #include <winuser.h>
+#include <shlobj.h>
 #include "assert.hpp"
+#include "R.h"
+#include <Rinternals.h>
+
 // ---------------------------------------------------------------------------
 namespace gui {
 
@@ -52,6 +56,7 @@ class Win32WindowImpl : public WindowImpl
 { 
 public:
   Win32WindowImpl(Window* in_window);
+  ~Win32WindowImpl();
   void setTitle(const char* title);
   void setWindowRect(int left, int top, int right, int bottom);
   void getWindowRect(int *left, int *top, int *right, int *bottom);
@@ -63,6 +68,9 @@ public:
   void destroy();
   void captureMouse(View* pView);
   void releaseMouse();
+  GLFont* getFont(const char* family, int style, double cex, 
+                  bool useFreeType);
+
 private:
   LRESULT processMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
   static bool registerClass();
@@ -72,7 +80,7 @@ private:
   static ATOM classAtom;
   HWND  windowHandle;
   View* captureView;
-  bool  updateMode;             // window is currently updated
+  bool  painting;               // window is currently busy painting
   bool  autoUpdate;             // update/refresh automatically
   bool  refreshMenu;		// need to tell Windows to update the menu
   friend class Win32GUIFactory;
@@ -84,8 +92,7 @@ public:
 private:
   bool initGL();
   void shutdownGL();
-  void initGLBitmapFont(u8 firstGlyph, u8 lastGlyph);
-  void destroyGLFont();
+  GLBitmapFont* initGLBitmapFont(u8 firstGlyph, u8 lastGlyph);
   HDC   dcHandle;               // temporary variable setup by lock
   HGLRC glrcHandle;
 };
@@ -101,9 +108,18 @@ Win32WindowImpl::Win32WindowImpl(Window* in_window)
   dcHandle = NULL;
   glrcHandle = NULL;
 
-  updateMode = false;
+  painting = false;
   autoUpdate = false;
   refreshMenu = false;
+}
+
+Win32WindowImpl::~Win32WindowImpl()
+{
+  beginGL();
+  for (unsigned int i=0; i < fonts.size(); i++) {
+    delete fonts[i];
+  }
+  endGL();
 }
 
 void Win32WindowImpl::setTitle(const char* title)
@@ -304,28 +320,130 @@ void Win32WindowImpl::shutdownGL()
   wglDeleteContext(glrcHandle);
 }
 
-void Win32WindowImpl::initGLBitmapFont(u8 firstGlyph, u8 lastGlyph) 
+GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex, 
+                                 bool useFreeType)
 {
-  if (beginGL()) {
-    SelectObject (dcHandle, GetStockObject (SYSTEM_FONT) );
-    font.nglyph     = lastGlyph-firstGlyph+1;
-    font.widths     = new unsigned int [font.nglyph];
-    GLuint listBase = glGenLists(font.nglyph);
-    font.firstGlyph = firstGlyph;
-    font.listBase   = listBase - firstGlyph;
-    GetCharWidth32( dcHandle, font.firstGlyph, lastGlyph,  (LPINT) font.widths );
-    wglUseFontBitmaps(dcHandle, font.firstGlyph, font.nglyph, listBase);
-    endGL();
+  for (unsigned int i=0; i < fonts.size(); i++) {
+    if (fonts[i]->cex == cex && fonts[i]->style == style && !strcmp(fonts[i]->family, family)
+     && fonts[i]->useFreeType == useFreeType)
+      return fonts[i];
+  }
+  
+  if (!useFreeType) {
+    // Not found, so create it.  This is based on code from graphapp gdraw.c
+    if (strcmp(family, "NA") && beginGL()) {  // User passes NA_character_ for default, looks like "NA" here
+      
+      SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("windowsFonts"), 
+                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          0);
+      if (isString(Rfontname)) {
+        const char* fontname = CHAR(STRING_ELT(Rfontname, 0)); 
+        GLBitmapFont* font = new GLBitmapFont(family, style, cex, fontname);
+        HFONT hf;
+        LOGFONT lf;
+    
+        double size = 12*cex + 0.5;
+    
+        lf.lfHeight = -MulDiv(size, GetDeviceCaps(dcHandle, LOGPIXELSY), 72);
+  
+        lf.lfWidth = 0 ;
+        lf.lfEscapement = lf.lfOrientation = 0;
+        lf.lfWeight = FW_NORMAL;
+        lf.lfItalic = lf.lfUnderline = lf.lfStrikeOut = 0;
+        if ((! strcmp(fontname, "Symbol")) || (! strcmp(fontname, "Wingdings")))
+          lf.lfCharSet = SYMBOL_CHARSET;
+        else
+          lf.lfCharSet = DEFAULT_CHARSET;
+        lf.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+        lf.lfQuality = DEFAULT_QUALITY;
+        lf.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
+        if ((strlen(fontname) > 1) && (fontname[0] == 'T') && (fontname[1] == 'T')) {
+          const char *pf;
+          lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;
+          for (pf = &fontname[2]; isspace(*pf) ; pf++);
+          strncpy(lf.lfFaceName, pf, LF_FACESIZE-1);
+        }
+        else {
+          lf.lfOutPrecision = OUT_DEFAULT_PRECIS;
+          strncpy(lf.lfFaceName, fontname, LF_FACESIZE-1);
+        }
+        if (style == 2 || style == 4) lf.lfWeight = FW_BOLD;
+        if (style == 3 || style == 4) lf.lfItalic = 1;
+      
+        if ((hf = CreateFontIndirect(&lf))) {
+          SelectObject (dcHandle, hf );
+          font->nglyph     = GL_BITMAP_FONT_LAST_GLYPH - GL_BITMAP_FONT_FIRST_GLYPH + 1;
+          font->widths     = new unsigned int [font->nglyph];
+          GLuint listBase = glGenLists(font->nglyph);
+          font->firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
+          font->listBase   = listBase - font->firstGlyph;
+          GetCharWidth32( dcHandle, font->firstGlyph, GL_BITMAP_FONT_LAST_GLYPH,  (LPINT) font->widths );
+          {
+            TEXTMETRIC tm;
+            GetTextMetrics( dcHandle, &tm);
+            font->ascent = tm.tmAscent;
+          }
+          wglUseFontBitmaps(dcHandle, font->firstGlyph, font->nglyph, listBase);
+          DeleteObject( hf );
+          endGL();  
+          fonts.push_back(font);
+          UNPROTECT(1);
+          return font;
+        } 
+        delete font;
+        endGL();
+      }
+      UNPROTECT(1);
+    }  
+    return fonts[0];
+  } else { // useFreeType
+#ifdef HAVE_FREETYPE
+    char fontname_absolute[MAX_PATH+1] = "";
+    int len=0;
+    SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
+                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          0);
+    if (isString(Rfontname) && length(Rfontname) >= style) {
+      const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
+      if (!IS_ABSOLUTE_PATH(fontname)) {
+        LPITEMIDLIST pidlFonts;
+        assert(SUCCEEDED(SHGetSpecialFolderLocation(0, CSIDL_FONTS, &pidlFonts))
+            && SUCCEEDED(SHGetPathFromIDList(pidlFonts, fontname_absolute)) );
+        len = strlen(fontname_absolute);
+        if (len && fontname_absolute[len-1] != '\\') {
+          strcat(fontname_absolute, "\\");
+          len++;
+        }
+      }
+      assert(len + strlen(fontname) <= MAX_PATH);
+      strcat(fontname_absolute, fontname);  
+      GLFTFont* font=new GLFTFont(family, style, cex, fontname_absolute);
+      fonts.push_back(font);
+      UNPROTECT(1);
+      return font;
+    }
+    UNPROTECT(1);
+#endif
+    return fonts[0];  
   }
 }
 
-void Win32WindowImpl::destroyGLFont() 
+GLBitmapFont* Win32WindowImpl::initGLBitmapFont(u8 firstGlyph, u8 lastGlyph) 
 {
+  GLBitmapFont* font = NULL; 
   if (beginGL()) {
-    glDeleteLists( font.listBase + font.firstGlyph, font.nglyph);
-    delete [] font.widths;
+    font = new GLBitmapFont("bitmap", 1, 1, "System");
+    SelectObject (dcHandle, GetStockObject (SYSTEM_FONT) );
+    font->nglyph     = lastGlyph-firstGlyph+1;
+    font->widths     = new unsigned int [font->nglyph];
+    GLuint listBase = glGenLists(font->nglyph);
+    font->firstGlyph = firstGlyph;
+    font->listBase   = listBase - firstGlyph;
+    GetCharWidth32( dcHandle, font->firstGlyph, lastGlyph,  (LPINT) font->widths );
+    wglUseFontBitmaps(dcHandle, font->firstGlyph, font->nglyph, listBase);
     endGL();
   }
+  return font;
 }
 
 LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -334,7 +452,7 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
     case WM_CREATE:
       windowHandle = hwnd;
       initGL();
-      initGLBitmapFont(GL_BITMAP_FONT_FIRST_GLYPH, GL_BITMAP_FONT_LAST_GLYPH);
+      fonts[0] = initGLBitmapFont(GL_BITMAP_FONT_FIRST_GLYPH, GL_BITMAP_FONT_LAST_GLYPH);
       if (gHandle) {
         refreshMenu = true;
       }
@@ -349,17 +467,21 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
         autoUpdate = false;
       }
       break;
-    case WM_PAINT:
-      if (refreshMenu) {
-        SendMessage(gMDIClientHandle, WM_MDIREFRESHMENU, 0, 0);    
-        DrawMenuBar(gMDIFrameHandle);
-        refreshMenu = false;
-      }        
-      if (!window->skipRedraw) {
-        window->paint();
-        swap();
-      }  
-      ValidateRect(hwnd, NULL);
+    case WM_PAINT: // Warning:  don't put Rprintf calls in paint/render/draw methods, or you get a permanent loop!
+      if (!painting) {
+        painting = true;
+        if (refreshMenu) {
+          SendMessage(gMDIClientHandle, WM_MDIREFRESHMENU, 0, 0);    
+          DrawMenuBar(gMDIFrameHandle);
+          refreshMenu = false;
+        }        
+        if (!window->skipRedraw) {
+          window->paint();
+          swap();
+        }  
+        ValidateRect(hwnd, NULL);
+        painting = false;
+      }
       break;
     case WM_SIZE:
       window->resize(LOWORD(lParam), HIWORD(lParam));
@@ -415,7 +537,6 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
       }
       break;
     case WM_DESTROY:
-      delete [] font.widths; // Can't call destroyGLFont because we don't have a valid DC now
       shutdownGL();
       SetWindowLong(hwnd, GWL_USERDATA, (LONG) NULL );
       if (window)

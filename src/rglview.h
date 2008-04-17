@@ -56,6 +56,16 @@ public:
   void        setUserMatrix(double* src);
   void        getScale(double* dest);
   void        setScale(double* src);
+  const char* getFontFamily() const;
+  void        setFontFamily(const char *family);
+  int         getFontStyle() const;
+  void        setFontStyle(int style);
+  double      getFontCex() const;
+  void        setFontCex(double cex);
+  bool        getFontUseFreeType() const;
+  void        setFontUseFreeType(bool useFreeType);
+  void	      setDefaultFont(const char *family, int style, double cex, bool useFreeType);
+  const char* getFontname() const;
   
   /* NB:  these functions do not maintain consistency with userMatrix */
   

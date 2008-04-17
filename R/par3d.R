@@ -1,12 +1,13 @@
 .Par3d <- c("FOV", "ignoreExtent",
 	   "mouseMode", 
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
-	   "scale", "viewport", "zoom", "bbox", "windowRect"
+	   "scale", "viewport", "zoom", "bbox", "windowRect",
+           "family", "font", "cex", "useFreeType", "fontname"
 	   )
 	   
 .Par3d.readonly <- c( 
 	   "modelMatrix", "projMatrix",
-	   "viewport", "bbox"
+	   "viewport", "bbox", "fontname"
 	   )
 
 par3d <- function (..., no.readonly = FALSE)

@@ -13,6 +13,8 @@
 #include <AGL/agl.h>
 #include "opengl.hpp"
 #include "assert.hpp"
+#include "R.h"
+#include <Rinternals.h>
 // ---------------------------------------------------------------------------
 // configuration
 // ---------------------------------------------------------------------------
@@ -39,14 +41,16 @@ public:
   void swap();
   void captureMouse(View* captureView) { }
   void releaseMouse(void) { }
+  GLFont* getFont(const char* family, int style, double cex, 
+                  bool useFreeType);
+  
 private:
   void on_init();
   void on_dispose();
   void on_paint();
   void init_gl();
-  void init_glfont();
+  GLBitmapFont* initGLFont();
   void dispose_gl();
-  void dispose_glfont();
   OSStatus windowHandler(EventHandlerCallRef next, EventRef e);
   static OSStatus memberDelegate(EventHandlerCallRef next, EventRef e,void* userdata);
   ::WindowRef mWindowRef;
@@ -138,21 +142,50 @@ void OSXWindowImpl::destroy()
 void OSXWindowImpl::on_init()
 {
   init_gl();
-  init_glfont();
+  fonts[0] = initGLFont();
   aglUpdateContext(mGLContext);
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::on_dispose()
 {
   dispose_gl();
-  dispose_glfont();
   if (window)
     window->notifyDestroy();
   delete this;
 }
 // ---------------------------------------------------------------------------
-void OSXWindowImpl::init_glfont()
+GLFont* OSXWindowImpl::getFont(const char* family, int style, double cex, 
+                                 bool useFreeType)
 {
+  for (unsigned int i=0; i < fonts.size(); i++) {
+    if (fonts[i]->cex == cex && fonts[i]->style == style && !strcmp(fonts[i]->family, family)
+     && fonts[i]->useFreeType == useFreeType)
+      return fonts[i];
+  }
+  
+  if (useFreeType) {
+#ifdef HAVE_FREETYPE
+    int len=0;
+    SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
+                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          0);
+    if (isString(Rfontname) && length(Rfontname) >= style) {
+      const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
+      GLFTFont* font=new GLFTFont(family, style, cex, fontname);
+      fonts.push_back(font);
+      UNPROTECT(1);
+      return font;
+    }
+    UNPROTECT(1);
+#endif
+  }
+  return fonts[0];  
+}
+// ---------------------------------------------------------------------------
+
+GLBitmapFont* OSXWindowImpl::initGLFont()
+{
+  GLBitmapFont* font = new GLBitmapFont("bitmap", 1, 1, "fixed");  
   GLuint first = GL_BITMAP_FONT_FIRST_GLYPH;
   GLuint last = GL_BITMAP_FONT_LAST_GLYPH;
   GLuint count = last-first+1;
@@ -167,11 +200,13 @@ void OSXWindowImpl::init_glfont()
     listBase
   );
   assert(success == GL_TRUE);
-  font.firstGlyph = first;
-  font.listBase = listBase - first;
-  font.widths = new unsigned int[count];
+  font->firstGlyph = first;
+  font->listBase = listBase - first;
+  font->widths = new unsigned int[count];
   for (int i=0;i<count;++i)
-    font.widths[i] = 8;
+    font->widths[i] = 8;
+  font->ascent = 10;  // Pure guess
+  return font;
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::init_gl()
@@ -197,10 +232,6 @@ void OSXWindowImpl::dispose_gl()
 {
   aglSetCurrentContext(0);
   aglDestroyContext(mGLContext);
-}
-// ---------------------------------------------------------------------------
-void OSXWindowImpl::dispose_glfont()
-{
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::swap()

@@ -109,7 +109,8 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
     if (eyedir.x < 0) adj = 1.0 - adj;
   }
   
-  renderContext->font->draw(string.text, string.length, adj, renderContext->gl2psActive);
+  if (renderContext->font)
+    renderContext->font->draw(string.text, string.length, adj, 0.5, *renderContext);
 
 }
 
@@ -242,13 +243,9 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     Vertex4 eyev[8];
 
-    // transform vertices: used for edge distance criterion
+    // transform vertices: used for edge distance criterion and text justification
 
-    double mdata[16] = { 0 };
-
-    glGetDoublev(GL_MODELVIEW_MATRIX, mdata);
-
-    Matrix4x4 modelview(mdata);
+    Matrix4x4 modelview(renderContext->modelview);
 
     for(i=0;i<8;i++)
       eyev[i] = modelview * boxv[i];
@@ -256,7 +253,6 @@ void BBoxDeco::render(RenderContext* renderContext)
     // setup material
 
     material.beginUse(renderContext);
-    renderContext->font->enable();
 
     // edge adjacent matrix
 

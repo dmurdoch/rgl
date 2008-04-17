@@ -35,6 +35,30 @@ if [ "${havezlib}" = "yes" ]; then
   else
     echo "no"
   fi
+else
+  echo "  libpng requires zlib, so not installed."
+fi
+
+# --- freetype and ftgl ------------------------------------------------------
+
+if [ "${havezlib}" = "yes" ]; then
+  echo -n "  checking for freetype..."
+  if [ -n "$LIB_FREETYPE" ]; then
+    echo "yes" 
+    mkdir -p $DPKG/libs
+    cp $LIB_FREETYPE/bin/freetype6.dll $DPKG/libs
+    if [ -e "${R_HOME}/bin/Rzlib.dll" ]; then
+      cp ${R_HOME}/bin/Rzlib.dll $DPKG/libs/zlib1.dll
+    else
+      echo "  Note:  freetype may require zlib1.dll"
+    fi
+    CPPFLAGS="${CPPFLAGS} -Iext/ftgl -I${LIB_FREETYPE}/include -I${LIB_FREETYPE}/include/freetype2 -DHAVE_FREETYPE"
+    LIBS="$LIBS -L$DPKG/libs -lfreetype6 "
+  else
+    echo "no"
+  fi
+else
+  echo "  freetype requires zlib, so not installed."
 fi
 
 # --- dump configuration -----------------------------------------------------

@@ -46,7 +46,7 @@ public:
   int errorBase, eventBase;
   
   // Font specific
-  ::Font xfont;
+  XFontStruct* xfont;
   
   void throw_error(const char* string);
 private:
