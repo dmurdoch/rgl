@@ -238,3 +238,7 @@ v0.76
     using the FreeType library. 
   - adj is supported both horizontally and vertically in drawing text.
   - rgl.pop was very slow when given a long list of ids.
+  - a workaround for OSX 10.5 OpenGL problems has been incorporated
+    (thanks to mkv22@cam.ac.uk).
+
+
