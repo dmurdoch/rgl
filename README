@@ -35,14 +35,15 @@ FEATURES
 - bounding box with axis ticks marks
 - undo operation:
   shapes and light-sources are managed on type stacks,
-  where the top-most objects can be pop'ed
+  where the top-most objects can be pop'ed, or any item specified by
+  an identifier can be removed
 
 
 PLATFORMS
 ---------
 Mac OS X
-Windows 2000/XP
-Unix-derivates
+Windows 2000/XP/Vista
+Unix-derivatives
 
 
 BUILD TOOLS
@@ -60,6 +61,7 @@ OpenGL Utility Library (GLU)
 OPTIONS
 -------
 libpng library version 1.0.4 or newer (pixmap import/export support)
+freetype library for resizable anti-aliased fonts
 
 
 BUILDING/INSTALLING FROM SOURCE PACKAGE
@@ -75,10 +77,19 @@ Libpng support:
 Make sure bitmap dll has been built as described in the 
 R Build Instructions for Windows.
 
-Check to see if these two files are available:
+These two files are needed:
 
 %R_HOME%\src\gnuwin32\bitmap\libpng\libpng.a
-%R_HOME%\src\extra\zlib\libz.a
+%R_HOME%\bin\Rzlib.dll (or %R_HOME%\src\extra\zlib\libz.a, in older R versions)
+
+Freetype support:
+
+You need to obtain a Windows build of the Freetype library, version 2.3.5 or better.
+A version is available at http://gnuwin32.sourceforge.net/packages/freetype.htm.
+Set the environment variable LIB_FREETYPE to give the full path to the
+install directory.  (If not set, this defaults to directory freetype in 
+the same directory as directory rgl; this default will only work if you are
+installing directly from the source directory, not from the tarball.)
 
 
 BUILDING ON UNIX-STYLE OS (MacOS X, Linux, FreeBSD, ... ) 
@@ -156,6 +167,7 @@ Simon Urbanek <simon.urbanek@math.uni-augsburg.de>
 Ming Chen <mchen34@uwo.ca>
 Albrecht Gebhardt <albrecht.gebhardt@uni-klu.ac.at>
 Ben Bolker <bolker@zoo.ufl.edu>
+Gabor Csardi <csardi@rmki.kfki.hu>
 
 
 WEBSITE
