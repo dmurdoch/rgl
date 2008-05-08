@@ -44,7 +44,7 @@ fi
 if [ "${havezlib}" = "yes" ]; then
   echo -n "  checking for freetype..."
   if [ -n "$LIB_FREETYPE" ]; then
-    echo "yes" 
+    echo "yes, LIB_FREETYPE=$LIB_FREETYPE" 
     mkdir -p $DPKG/libs
     cp $LIB_FREETYPE/bin/freetype6.dll $DPKG/libs
     if [ -e "${R_HOME}/bin/Rzlib.dll" ]; then
@@ -55,7 +55,7 @@ if [ "${havezlib}" = "yes" ]; then
     CPPFLAGS="${CPPFLAGS} -Iext/ftgl -I${LIB_FREETYPE}/include -I${LIB_FREETYPE}/include/freetype2 -DHAVE_FREETYPE"
     LIBS="$LIBS -L$DPKG/libs -lfreetype6 "
   else
-    echo "no"
+    echo "no, LIB_FREETYPE undefined"
   fi
 else
   echo "  freetype requires zlib, so not installed."

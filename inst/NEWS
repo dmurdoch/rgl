@@ -232,10 +232,10 @@ v0.76
   - persp3d() and plot3d() sometimes miscalculated ranges involving NAs.
   - select3d() and rgl.select() produced a very inefficient test function.
   
- v0.77.661
+ v0.78
   - fix miscalculation of mouseMatrix that caused disappearing views.
   - rgl.texts() and text3d() can now handle font and size specifications
-    using the FreeType library. 
+    using the FreeType library on any platform, or GDI on Windows. 
   - adj is supported both horizontally and vertically in drawing text.
   - rgl.pop was very slow when given a long list of ids.
   - a workaround for OSX 10.5 OpenGL problems has been incorporated
