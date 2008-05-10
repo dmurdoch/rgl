@@ -90,7 +90,13 @@ platforms use the current working directory.
 
 If FreeType fonts are not used, then bitmapped fonts will be used instead.
 On Windows these will be based on the fonts specified using the 
-\code{\link{windowsFonts}} function, and are resizable.
+#ifdef windows
+\code{\link{windowsFonts}} 
+#endif
+#ifndef windows
+\code{windowsFonts}
+#endif
+function, and are resizable.
 Other platforms will use the default bitmapped font which is not
 resizeable.
 }
