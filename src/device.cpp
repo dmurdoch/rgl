@@ -108,7 +108,11 @@ int Device::add(SceneNode* node)
 bool Device::pop(TypeID stackTypeID, int id)
 {
   bool success;
-  success = scene->pop(stackTypeID, id);
+  if (rglview->windowImpl->beginGL()) { // Need to set context for display lists.
+    success = scene->pop(stackTypeID, id);
+    rglview->windowImpl->endGL();
+  } else 
+    success = false;
   rglview->update();
   return success;
 }
