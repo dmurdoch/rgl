@@ -87,10 +87,7 @@ Freetype support:
 You need to obtain a Windows build of the Freetype library, version 2.3.5 or better.
 A version is available at http://gnuwin32.sourceforge.net/packages/freetype.htm.
 Set the environment variable LIB_FREETYPE to give the full path to the
-install directory.  (If not set, this defaults to directory freetype in 
-the same directory as directory rgl; this default will only work if you are
-installing directly from the source directory, not from the tarball.)
-
+install directory.
 
 BUILDING ON UNIX-STYLE OS (MacOS X, Linux, FreeBSD, ... ) 
 ---------------------------------------------------------
