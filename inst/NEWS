@@ -241,6 +241,8 @@ v0.76
   - a workaround for OSX 10.5 OpenGL problems has been incorporated
     (thanks to mkv22@cam.ac.uk).
 
-v0.78.672
+v0.78.673
   - rgl.pop() could cause corruption when multiple windows were open.
-
+  - added mouseCallbacks demo, to show R implementations of standard
+    mouse handlers.
+  - added natural spline extrapolation to par3dinterp.

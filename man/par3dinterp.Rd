@@ -8,12 +8,12 @@ suitable for use in animations.
 \usage{
 par3dinterp(times = NULL, userMatrix, scale, zoom, FOV, 
             method = c("spline", "linear"), 
-            extrapolate = c("oscillate", "cycle", "constant"))
+            extrapolate = c("oscillate", "cycle", "constant", "natural"))
 }
 \arguments{
   \item{times}{ Times at which values are recorded or a list; see below }
   \item{userMatrix}{ Values of \code{par3d("userMatrix")} }
-  \item{scale}{ Values of \code{par3d("userMatrix")} }
+  \item{scale}{ Values of \code{par3d("scale")} }
   \item{zoom}{ Values of \code{par3d("zoom")} }
   \item{FOV}{ Values of \code{par3d("FOV")} }
   \item{method}{ Method of interpolation }
@@ -43,9 +43,11 @@ use this function with the \code{\link[tkrgl]{tkrgl}} function
 Interpolation is by cubic spline or linear interpolation in an appropriate
 coordinate-wise fashion.  Extrapolation may oscillate
 (repeat the sequence forward, backward, forward, etc.), cycle (repeat
-it forward), or be constant (no repetition outside the specified time
-range).  In the case of cycling, the first and last specified values
-should be equal, or the last one will be dropped.
+it forward), be constant (no repetition outside the specified time
+range), or be natural (linear on an appropriate scale).   
+In the case of cycling, the first and last specified values
+should be equal, or the last one will be dropped.  Natural extrapolation
+is only supported with spline interpolation.
 
 }
 \value{
