@@ -30,7 +30,7 @@ toRotmatrix <- function(x) {
 }
 
 par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
-                     extrapolate = c("oscillate","cycle","constant")) {
+                     extrapolate = c("oscillate","cycle","constant", "natural")) {                
     if (is.list(times)) {
     	for (n in setdiff(names(times), "times")) assign(n, times[[n]])
     	if ("times" %in% names(times)) times <- times[["times"]]
@@ -85,7 +85,8 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
     	data <- rbind(data[-n,,drop=FALSE], data[n:1,,drop=FALSE])
     	n <- 2*n - 1
     	extrapolate <- "cycle"
-    }
+    } else if (extrapolate == "natural" && method != "spline")
+    	stop("natural extrapolation only supported for spline method")
     
     if (method == "spline") {
     	fns <- apply(data, 2, function(col) splinefun(times, col, 
@@ -102,7 +103,7 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
         if (time < mintime || time > maxtime) {
             if (extrapolate == "constant")
             	time <- ifelse(time < mintime, mintime, maxtime)
-            else
+            else if (extrapolate == "cycle")
                 time <- (time - mintime) %% (maxtime - mintime) + mintime
         }
     	data <- sapply(fns, function(f) f(time))

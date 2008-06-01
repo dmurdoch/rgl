@@ -1,0 +1,277 @@
+xprod <- function(a, b) 
+    c(a[2]*b[3] - a[3]*b[2],
+       a[3]*b[1] - a[1]*b[3],
+       a[1]*b[2] - a[2]*b[1])
+       
+vlen <- function(a) sqrt(sum(a^2))
+
+angle <- function(a,b) {
+    dot <- sum(a*b)
+    acos(dot/vlen(a)/vlen(b))
+}
+ 
+clamp <- function(x, min, max)  pmin(pmax(x, min), max)
+
+mouseNone <- function(button = 1, dev = rgl.cur() ) {
+
+    cur <- rgl.cur()
+    
+    for (i in dev) {
+        rgl.set(i)
+        rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL)
+    }
+    rgl.set(cur)
+}
+
+mouseTrackball <- function(button = 1, dev = rgl.cur() ) {
+    width <- height <- rotBase <- NULL
+    userMatrix <- list()
+    cur <- rgl.cur()
+    
+    screenToVector <- function(x, y) {
+      radius <- max(width, height)/2
+      centre <- c(width, height)/2
+      pt <- (c(x, y) - centre)/radius
+      len <- vlen(pt)
+
+      if (len > 1.e-6) pt <- pt/len
+
+      maxlen <- sqrt(2)
+      angle <- (maxlen - len)/maxlen*pi/2
+      z <- sin(angle)
+      len <- sqrt(1 - z^2)
+      pt <- pt * len
+      return (c(pt, z))
+    }
+    
+    trackballBegin <- function(x, y) {
+        vp <- par3d("viewport")
+        width <<- vp[3]
+        height <<- vp[4]
+        cur <<- rgl.cur()
+        for (i in dev) {
+            rgl.set(i)
+            userMatrix[[i]] <<- par3d("userMatrix")
+        }
+        rgl.set(cur)
+        rotBase <<- screenToVector(x, height - y)
+    }
+    
+    trackballUpdate <- function(x,y) {
+        rotCurrent <- screenToVector(x, height - y)
+        angle <- angle(rotBase, rotCurrent)
+        axis <- xprod(rotBase, rotCurrent)
+        mouseMatrix <- rotationMatrix(angle, axis[1], axis[2], axis[3])
+        for (i in dev) {
+            rgl.set(i)
+            par3d(userMatrix = mouseMatrix %*% userMatrix[[i]])
+        }
+        rgl.set(cur)
+    }
+    
+    for (i in dev) {
+        rgl.set(i)
+        rgl.setMouseCallbacks(button, begin = trackballBegin, update = trackballUpdate, end = NULL)
+    }
+    rgl.set(cur)
+}
+
+mouseXAxis<- function(button = 1, dev = rgl.cur() , left=TRUE) {
+    setOneAxis(button, dev, axis=c(1,0,0), left=left) 
+}
+
+mouseYAxis<- function(button = 1, dev = rgl.cur(), left = TRUE ) {
+    setOneAxis(button, dev, axis=c(0,1,0), left=left) 
+}
+
+mouseZAxis<- function(button = 1, dev = rgl.cur(), left=TRUE) {
+    setOneAxis(button, dev, axis=c(0,0,1), left=left) 
+}
+
+mouseOneAxis <- function(button = 1, dev = rgl.cur(), axis = c(1,0,0), left = TRUE ) {
+    width <- height <- rotBase <- NULL
+    userMatrix <- list()
+    cur <- rgl.cur()
+    
+    screenToVector <- function(x, y) {
+      radius <- max(width, height)/2
+      centre <- c(width, height)/2
+      pt <- (c(x, y) - centre)/radius
+      len <- vlen(pt)
+
+      if (len > 1.e-6) pt <- pt/len
+
+      maxlen <- sqrt(2)
+      angle <- (maxlen - len)/maxlen*pi/2
+      z <- sin(angle)
+      len <- sqrt(1 - z^2)
+      pt <- pt * len
+      return (c(pt, z))
+    }
+
+    oneAxisBegin <- function(x, y) {
+        vp <- par3d("viewport")
+        width <<- vp[3]
+        height <<- vp[4]
+        cur <<- rgl.cur()
+        for (i in dev) {
+            rgl.set(i)
+            userMatrix[[i]] <<- par3d("userMatrix")
+        }
+        rgl.set(cur)
+        rotBase <<- screenToVector(x, height/2)
+    }
+    
+    oneAxisUpdate <- function(x,y) {
+        rotCurrent <- screenToVector(x, height/2)
+        angle <- rotCurrent[1] - rotBase[1]
+        mouseMatrix <- rotationMatrix(angle, axis[1], axis[2], axis[3])
+        for (i in dev) {
+            rgl.set(i)
+            if (left)
+            	par3d(userMatrix = mouseMatrix %*% userMatrix[[i]])
+            else
+                par3d(userMatrix = userMatrix[[i]] %*% mouseMatrix)
+        }
+        rgl.set(cur)
+    }
+    
+    for (i in dev) {
+        rgl.set(i)
+        rgl.setMouseCallbacks(button, begin = oneAxisBegin, update = oneAxisUpdate, end = NULL)
+    }
+    rgl.set(cur)
+}
+
+mousePolar <- function(button = 1, dev = rgl.cur()) {
+   
+    screenToPolar <- function(x,y) {
+    	r <- min(width, height)/2
+    	dx <- clamp(x - width/2, -r, r)
+    	dy <- clamp(y - height/2, -r, r)
+    	return( asin( c(dx, -dy)/r ) )
+    }
+
+    cur <- rgl.cur()
+    width <- height <- dragBase <- dragCurrent <- NULL
+    camBase <- list()
+    
+    polarBegin <- function(x, y) {
+        vp <- par3d("viewport")
+        width <<- vp[3]
+        height <<- vp[4]
+        dragBase <<- screenToPolar(x, y)
+    	cur <<- rgl.cur()
+    	for (i in dev) {
+	    rgl.set(i)
+	    m <- par3d("userMatrix")
+	    svd <- svd(m[1:3, 1:3])
+	    m[1:3, 1:3] <- svd$u %*% t(svd$v)
+	    theta <- atan2(-m[1,3], m[1,1])
+	    m <-  m %*% rotationMatrix(theta, 0,1,0)
+	    svd <- svd(m[1:3, 1:3])
+	    m[1:3,1:3] <- svd$u %*% t(svd$v)	
+	    phi <- atan2(-m[2,3], m[3,3])
+	    camBase[[i]] <<- c(theta, phi)
+	}
+        rgl.set(cur)
+    }   
+    
+    polarUpdate <- function(x,y) {
+        dragCurrent <<- screenToPolar(x, y)        
+        for (i in dev) {
+	    newpos <- camBase[[i]] - ( dragCurrent - dragBase )
+	    newpos[2] <- clamp(newpos[2], -pi/2, pi/2)
+	    mouseMatrix <- rotationMatrix(newpos[2], 1, 0, 0) %*% rotationMatrix(-newpos[1], 0, 1, 0)
+	    rgl.set(i)
+	    par3d(userMatrix = mouseMatrix) 
+        }
+        rgl.set(cur)
+    }
+    
+    for (i in dev) {
+	rgl.set(i)
+	rgl.setMouseCallbacks(button, begin = polarBegin, update = polarUpdate, end = NULL)
+    }
+    rgl.set(cur)
+}
+
+# Set background colour based on x,y position in the window
+
+mouseBG <- function(button = 1, dev = rgl.cur(), init = "white", rate = cbind(c(1,0,1),c(0,1,1)), space = c("rgb", "hsv")) {
+    cur <- rgl.cur()
+    space <- match.arg(space)
+    init <- col2rgb(init)/255
+    if (space == "hsv")
+    	init <- rgb2hsv(init*255)
+
+    lambda0 <- lambda <- NULL
+    
+    bgBegin <- function(x, y) {
+        lambda0 <<- c(x/width, 1-y/height)    
+        vp <- par3d("viewport")
+    	width <<- vp[3]
+    	height <<- vp[4]
+    }
+        
+    bgUpdate <- function(x,y) {
+        lambda <<- c(x/width, 1-y/height) - lambda0
+        color <- clamp(init + rate %*% lambda, 0, 1)
+        x <- color[1]
+        y <- color[2]
+        z <- color[3]
+        if (space == "rgb")
+            color <- rgb(x,y,z)    
+        else
+            color <- hsv(x,y,z)
+        for (i in dev) {
+            rgl.set(i)
+            bg3d(color=color)  
+        }
+        rgl.set(cur)
+    }
+    
+    bgEnd <- function() {
+        init <<- clamp(init + rate %*% lambda, 0, 1)
+    }
+    
+    for (i in dev) {
+        rgl.set(i)
+        rgl.setMouseCallbacks(button, begin = bgBegin, update = bgUpdate, end = bgEnd)
+    }
+    rgl.set(cur)
+}
+
+# Set time using an arbitrary par3dinterp function
+
+mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0) {
+    cur <- rgl.cur()
+    time <- init
+    x0 <- width <- height <- NULL
+    
+    interpBegin <- function(x, y) {
+    	vp <- par3d("viewport")
+        width <<- vp[3]
+        height <<- vp[4]
+        x0 <<- x
+    }
+        
+    interpUpdate <- function(x,y) {
+        time <<- init + (x - x0)/width
+        for (i in dev) {
+            rgl.set(i)
+            par3d(fn(time))
+        }
+        rgl.set(cur)
+    }
+    
+    interpEnd <- function() {
+        init <<- time
+    }
+    
+    for (i in dev) {
+        rgl.set(i)
+        rgl.setMouseCallbacks(button, begin = interpBegin, update = interpUpdate, end = interpEnd)
+    }
+    rgl.set(cur)
+}
