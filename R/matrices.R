@@ -15,6 +15,8 @@ rotationMatrix <- function(angle,x,y,z,matrix)
 {
     if (missing(matrix))
     {
+    	if (angle == 0) return(identityMatrix())
+    	
         u <- c(x,y,z)/sqrt(x^2+y^2+z^2)
         cosa <- cos(angle)
         sina <- sin(angle)
