@@ -282,14 +282,20 @@ mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, direction=c(1
     rgl.set(cur)
 }
 
+mouseZoom <- function(button = 1, dev = rgl.cur()) 
+    mouseInterp(button,dev=dev,fn=par3dinterp(times=c(1,10)/10, zoom=c(1,10),extrap="natural"),init=par3d("zoom")/10,direction=c(0,-1))
+ 
+mouseFOV <- function(button = 1, dev = rgl.cur())
+    mouseInterp(button,dev=dev,fn=par3dinterp(times=c(1,179)/180, FOV=c(1,179), extrap="constant"), 
+                      init=par3d("FOV")/180, direction=c(0,1))
+                      
 # Synchronize mouse control of two windows for stereo view
-
 example(surface3d)
-par3d(windowRect= c(0,0,400,400), userMatrix = rotationMatrix(-5*pi/180, 0,1,0) %*% par3d("userMatrix") )
+par3d(windowRect= c(0,0,512,512), userMatrix = rotationMatrix(5*pi/180, 0,1,0) %*% par3d("userMatrix") )
 w1 <- rgl.cur()
 example(surface3d)
-par3d(windowRect = c(400,0,800,400))
+par3d(windowRect = c(512,0,1024,512))
 w2 <- rgl.cur()
 mouseTrackball(dev=c(w1,w2))
-mouseInterp(2,dev=c(w1,w2),fn=par3dinterp(zoom=c(1,10),extrap="natural"),direction=c(0,-1))
-
+mouseZoom(2,dev=c(w1,w2))
+mouseFOV(3,dev=c(w1,w2))
