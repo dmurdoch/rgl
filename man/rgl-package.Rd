@@ -16,12 +16,13 @@
 rgl.open()     # open new device
 rgl.close()    # close current device
 rgl.cur()      # returns active device ID
-rgl.set(which) # set device as active
+rgl.set(which, silent=FALSE) # set device as active
 rgl.quit()     # shutdown rgl device system
 rgl.init(initValue=0)     # re-initialize rgl
 }
 \arguments{
   \item{which}{device ID}
+  \item{silent}{whether to suppress update of window titles}
   \item{initValue}{value for internal use only}
 }
 \details{

@@ -65,9 +65,9 @@ rgl.cur <- function() {
 ##
 ##
 
-rgl.set <- function(which) {
+rgl.set <- function(which, silent = FALSE) {
 
-  idata <- c( as.integer(which) )
+  idata <- c( as.integer(which), as.integer(silent) )
 
   ret <- .C( rgl_dev_setcurrent, 
     success=FALSE, 

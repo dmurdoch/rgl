@@ -22,7 +22,7 @@ public:
   bool    openDevice(void);
   Device* getCurrentDevice(void);
   Device* getAnyDevice(void);
-  bool    setCurrent(int id);
+  bool    setCurrent(int id, bool silent = false);
   int     getCurrent();
 protected:
   /**
