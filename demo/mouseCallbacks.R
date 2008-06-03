@@ -250,7 +250,7 @@ mouseBG <- function(button = 1, dev = rgl.cur(), init = "white", rate = cbind(c(
 
 # Set time using an arbitrary par3dinterp function
 
-mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, direction=c(1,0)) {
+mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, range = NULL, direction=c(1,0)) {
     cur <- rgl.cur()
     time <- init
     x0 <- width <- height <- NULL
@@ -264,6 +264,7 @@ mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, direction=c(1
         
     interpUpdate <- function(x,y) {
         time <<- init + (sum(direction*c(x,y)) - x0)/width
+        if (!is.null(range)) time <<- clamp(time, range[1], range[2])
         for (i in dev) {
             if (inherits(try(rgl.set(i)), "try-error")) dev <<- dev[dev != i]
             else par3d(fn(time))
@@ -283,11 +284,12 @@ mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, direction=c(1
 }
 
 mouseZoom <- function(button = 1, dev = rgl.cur()) 
-    mouseInterp(button,dev=dev,fn=par3dinterp(times=c(1,10)/10, zoom=c(1,10),extrap="natural"),init=par3d("zoom")/10,direction=c(0,-1))
+    mouseInterp(button,dev=dev,fn=par3dinterp(times=c(-4,4)/4, zoom=c(10^(-4),10^4),method="linear"),
+                      init=log10(par3d("zoom"))/4,range=c(-4,4)/4,direction=c(0,-1))
  
 mouseFOV <- function(button = 1, dev = rgl.cur())
-    mouseInterp(button,dev=dev,fn=par3dinterp(times=c(1,179)/180, FOV=c(1,179), extrap="constant"), 
-                      init=par3d("FOV")/180, direction=c(0,1))
+    mouseInterp(button,dev=dev,fn=par3dinterp(times=c(1,179)/180, FOV=c(1,179),method="linear"), 
+                      init=par3d("FOV")/180, range = c(1,179)/180, direction=c(0,1))
                       
 # Synchronize mouse control of two windows for stereo view
 example(surface3d)
