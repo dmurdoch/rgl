@@ -64,7 +64,7 @@ Device* DeviceManager::getAnyDevice()
   return pDevice;
 }
 
-bool DeviceManager::setCurrent(int id)
+bool DeviceManager::setCurrent(int id, bool silent)
 {
   char buffer[64];
   
@@ -74,13 +74,15 @@ bool DeviceManager::setCurrent(int id)
       break; 
   }
   if ( i != devices.end() ) {
-    if ( current != devices.end() ) {
+    if ( !silent && current != devices.end() ) {
       sprintf(buffer, "RGL device %d", (*current)->getID() );    
       (*current)->setName(buffer);
     }
     current = i;
-    sprintf(buffer, "RGL device %d [Focus]", (*current)->getID() );    
-    (*current)->setName(buffer);
+    if ( !silent ) {
+      sprintf(buffer, "RGL device %d [Focus]", (*current)->getID() );    
+      (*current)->setName(buffer);
+    }
     return true;
   } else
     return false;

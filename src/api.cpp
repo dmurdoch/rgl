@@ -135,7 +135,8 @@ void rgl_dev_getcurrent(int* successptr, int* idptr)
 void rgl_dev_setcurrent(int* successptr, int* idata)
 {
   int id = idata[0];
-  *successptr = as_success ( deviceManager && deviceManager->setCurrent(id) );
+  bool silent = (bool) idata[1];
+  *successptr = as_success ( deviceManager && deviceManager->setCurrent(id, silent) );
 }
 
 
