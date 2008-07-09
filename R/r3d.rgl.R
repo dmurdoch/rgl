@@ -195,6 +195,9 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  family = "sans",
 		  material = list(color="black", fog=FALSE))
 
+if ( Sys.info()["sysname"] == "Darwin" ) 
+  r3dDefaults$useFreeType <- FALSE
+  
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {
     rgl.open()
