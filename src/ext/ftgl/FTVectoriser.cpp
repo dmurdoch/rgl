@@ -5,9 +5,9 @@
 #define CALLBACK
 #endif
 
-#ifdef __APPLE_CC__    
+#if defined(__APPLE_CC__) && MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
     typedef GLvoid (*GLUTesselatorFunction)(...);
-#elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD_kernel__)  || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
+#elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD_kernel__)  || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__) || defined(__APPLE_CC__)
     typedef GLvoid (*GLUTesselatorFunction)();
 #elif defined ( WIN32)
     typedef GLvoid (CALLBACK *GLUTesselatorFunction)( );

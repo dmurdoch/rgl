@@ -248,3 +248,9 @@ v0.79
   - added "silent" argument to rgl.set(), to allow temporary changes
     to focus without changing window labels.
   - added natural spline extrapolation to par3dinterp.
+
+v0.79.679
+  - Mac OSX 10.5 (Leopard) fixed the declaration of gluTessCallback
+    so the workaround in FTGL needs to be version-specific.
+  - FTGL still can't read font files properly in OSX, so the default
+    has been set to useFreeType = FALSE on that system.
