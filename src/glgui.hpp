@@ -87,7 +87,7 @@ public:
 };
 
 #ifdef HAVE_FREETYPE
-#include "FTFont.h"
+#include "FTGL/ftgl.h"
 #endif
 
 //

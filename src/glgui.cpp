@@ -103,11 +103,7 @@ void GLBitmapFont::draw(const wchar_t* text, int length,
 
 #ifdef HAVE_FREETYPE
 
-#include "FTGLOutlineFont.h"
-#include "FTGLPolygonFont.h"
-#include "FTGLBitmapFont.h"
-#include "FTGLTextureFont.h"
-#include "FTGLPixmapFont.h"
+#include "FTGL/ftgl.h"
 #include "R.h"
 
 GLFTFont::GLFTFont(const char* in_family, int in_style, double in_cex, const char* in_fontname) 
