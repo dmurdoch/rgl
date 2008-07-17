@@ -11,11 +11,7 @@
 #include "String.hpp"
 #include "glgui.hpp"
 #ifdef HAVE_FREETYPE
-#include "FTGLOutlineFont.h"
-#include "FTGLPolygonFont.h"
-#include "FTGLBitmapFont.h"
-#include "FTGLTextureFont.h"
-#include "FTGLPixmapFont.h"
+#include "FTGL/ftgl.h"
 #endif
 
 class TextSet : public Shape {
