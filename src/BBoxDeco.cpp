@@ -5,6 +5,110 @@
 #include <cstdio>
 #include <cmath>
 
+#if 0
+// This is debugging code to track down font problems.
+
+#include "R.h"
+
+static GLenum flags[] = {
+GL_ALPHA_TEST ,
+GL_AUTO_NORMAL ,
+GL_MAP2_VERTEX_4,
+GL_BLEND,
+
+GL_CLIP_PLANE0,
+GL_CLIP_PLANE1,
+GL_CLIP_PLANE2,
+GL_COLOR_LOGIC_OP,
+
+GL_COLOR_MATERIAL,
+GL_COLOR_TABLE,
+GL_CONVOLUTION_1D,
+GL_CONVOLUTION_2D,
+
+GL_CULL_FACE,
+GL_DEPTH_TEST,
+GL_DITHER,
+GL_FOG,
+
+GL_HISTOGRAM,
+GL_INDEX_LOGIC_OP,
+GL_LIGHT0,
+GL_LIGHT1,
+
+GL_LIGHT2,
+GL_LIGHTING,
+GL_LINE_SMOOTH,
+GL_LINE_STIPPLE,
+
+GL_MAP1_COLOR_4,
+GL_MAP1_INDEX,
+GL_MAP1_NORMAL,
+GL_MAP1_TEXTURE_COORD_1,
+
+GL_MAP1_TEXTURE_COORD_2,
+GL_MAP1_TEXTURE_COORD_3,
+GL_MAP1_TEXTURE_COORD_4,
+GL_MAP1_VERTEX_3,
+
+GL_MAP1_VERTEX_4,
+GL_MAP2_COLOR_4,
+GL_MAP2_INDEX,
+GL_MAP2_NORMAL,
+
+GL_MAP2_TEXTURE_COORD_1,
+GL_MAP2_TEXTURE_COORD_2,
+GL_MAP2_TEXTURE_COORD_3,
+GL_MAP2_TEXTURE_COORD_4,
+
+GL_MAP2_VERTEX_3,
+GL_MAP2_VERTEX_4,
+GL_MINMAX,
+GL_NORMALIZE,
+
+GL_POINT_SMOOTH,
+GL_POLYGON_OFFSET_FILL,
+GL_POLYGON_OFFSET_LINE,
+GL_POLYGON_OFFSET_POINT,
+
+GL_POINT,
+GL_POLYGON_SMOOTH,
+GL_POLYGON_STIPPLE,
+GL_POST_COLOR_MATRIX_COLOR_TABLE,
+
+GL_POST_CONVOLUTION_COLOR_TABLE,
+GL_RESCALE_NORMAL,
+GL_SEPARABLE_2D,
+GL_SCISSOR_TEST,
+
+GL_STENCIL_TEST,
+GL_TEXTURE_1D,
+GL_TEXTURE_2D,
+GL_TEXTURE_3D,
+
+GL_TEXTURE_GEN_Q,
+GL_TEXTURE_GEN_R,
+GL_TEXTURE_GEN_S,
+GL_TEXTURE_GEN_T};
+
+void Rpf(const char * msg)
+{
+  int flag1=0, flag2 = 0;
+  for (int i=0; i< 32; i++) {
+    GLboolean f;
+    glGetBooleanv( flags[i], &f);
+    if (f) flag1 += (1 << i);
+    glGetBooleanv( flags[i+32], &f);
+    if (f) flag2 += (1 << i);
+    }
+  
+  Rprintf("%s: Flags 0 to 31: %x 32 to 63: %x\n", msg, flag1, flag2);
+  GLint modes[2];
+  glGetIntegerv( GL_POLYGON_MODE, modes);
+  Rprintf("    Polygon modes: %X %X\n", modes[0], modes[1]);
+ }  
+#endif 
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
@@ -222,7 +326,7 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     // Sphere bsphere(bbox);
 
-    glPushAttrib(GL_ENABLE_BIT);
+    glPushAttrib(GL_ENABLE_BIT | GL_POLYGON_BIT);
 
     glDisable(GL_DEPTH_TEST);
 
@@ -251,7 +355,7 @@ void BBoxDeco::render(RenderContext* renderContext)
       eyev[i] = modelview * boxv[i];
  
     // setup material
-
+    
     material.beginUse(renderContext);
 
     // edge adjacent matrix
@@ -306,11 +410,13 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     // draw axis and tickmarks
     // find contours
-
+    
     glDisable(GL_LIGHTING);
 
     material.useColor(1);
 
+    glPolygonMode(GL_FRONT, GL_FILL); // Needed on OSX for FreeType text
+    
     for(i=0;i<3;i++) {
 
       Vertex4 v;
