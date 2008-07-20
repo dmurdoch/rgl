@@ -326,7 +326,7 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     // Sphere bsphere(bbox);
 
-    glPushAttrib(GL_ENABLE_BIT | GL_POLYGON_BIT);
+    glPushAttrib(GL_ENABLE_BIT);
 
     glDisable(GL_DEPTH_TEST);
 
@@ -415,8 +415,6 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     material.useColor(1);
 
-    glPolygonMode(GL_FRONT, GL_FILL); // Needed on OSX for FreeType text
-    
     for(i=0;i<3;i++) {
 
       Vertex4 v;
