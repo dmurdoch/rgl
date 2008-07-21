@@ -1,2 +1,2 @@
 #! /bin/sh
-rm -f config.* src/Makevars src/*.o src/*.so
+rm -f config.* src/Makevars src/*.o src/*.so src/*.dll src/*.def
