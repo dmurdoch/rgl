@@ -249,6 +249,6 @@ v0.79
     to focus without changing window labels.
   - added natural spline extrapolation to par3dinterp.
 
-v0.79.681
+v0.80
   - worked around bug(?) in Mac OSX FTGL rendering
   - updated FTGL to 2.1.3rc5
