@@ -67,16 +67,3 @@ rglFonts <- function(...) {
 rglFont <- function(family) {
   checkrglFont(family)
 }
-
-if ( .Platform$OS.type == "windows" ) {
-   rglFonts(       serif = rglFont(c("times.ttf", "timesbd.ttf", "timesi.ttf", "timesbi.ttf")),
-                   sans = rglFont(c("arial.ttf", "arialbd.ttf", "ariali.ttf", "arialbi.ttf")),
-                   mono = rglFont(c("cour.ttf", "courbd.ttf", "couri.ttf", "courbi.ttf")),
-                   symbol = rglFont(rep("symbol.ttf", 4)))
-} else {
-  local({ 
-          rglFonts(serif = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4),
-                   sans  = rep(system.file("fonts/FreeSans.ttf", package="rgl"), 4),
-                   mono  = rep(system.file("fonts/FreeMono.ttf", package="rgl"), 4),
-                   symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4)) })
-}

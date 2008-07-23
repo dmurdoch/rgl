@@ -253,6 +253,8 @@ v0.80
   - worked around bug(?) in Mac OSX FTGL rendering
   - updated FTGL to 2.1.3rc5
   
-v0.80.688
+v0.80.689
   - converted Freetype font error into warning
+  - rglFonts was being set at install time, but it should be set at load
+    time.
   
