@@ -417,10 +417,15 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
       }
       assert(len + strlen(fontname) <= MAX_PATH);
       strcat(fontname_absolute, fontname);  
-      GLFTFont* font=new GLFTFont(family, style, cex, fontname_absolute);
-      fonts.push_back(font);
-      UNPROTECT(1);
-      return font;
+      try {
+        GLFTFont* font=new GLFTFont(family, style, cex, fontname_absolute);
+        fonts.push_back(font);
+        UNPROTECT(1);
+        return font;
+      }
+      catch (const char * msg) {
+        warning(msg);
+      }
     }
     UNPROTECT(1);
 #endif
