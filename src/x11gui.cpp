@@ -328,14 +328,14 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
                                           0);
     if (isString(Rfontname) && length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
-      try {
-        GLFTFont* font=new GLFTFont(family, style, cex, fontname);
+      GLFTFont* font=new GLFTFont(family, style, cex, fontname);
+      if (font->font) {
         fonts.push_back(font);
         UNPROTECT(1);
         return font;
-      }
-      catch (const char* msg) {
-        warning(msg);
+      } else {
+        warning(font->errmsg);
+        delete font;
       }
     }
     UNPROTECT(1);

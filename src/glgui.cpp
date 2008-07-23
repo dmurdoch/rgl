@@ -111,18 +111,28 @@ GLFTFont::GLFTFont(const char* in_family, int in_style, double in_cex, const cha
 {
   font=new FTGLPixmapFont(fontname);
   if (font->Error()) { 
-    throw (const char *) "Cannot create Freetype font";
-  }
-  unsigned int size = 16*cex + 0.5;
-  if (size<1) { size=1; }
-  if (!font->FaceSize(size)) {
-    error("Cannot create font of size %f.", size);
+    errmsg = "Cannot create Freetype font";
+    delete font;
+    font = NULL;
+  } else {
+    unsigned int size = 16*cex + 0.5;
+    if (size<1) { size=1; }
+    if (!font->FaceSize(size)) {
+      errmsg = "Cannot create Freetype font of requested size";
+      delete font;
+      font = NULL;
+    }
   }
 /*  font->CharMap(ft_encoding_unicode);
   if (font->Error()) {
     error("Cannot set unicode encoding."); 
   }*/
 
+}
+
+GLFTFont::~GLFTFont()
+{
+  if (font) delete font;
 }
 
 double GLFTFont::width(const char* text) {

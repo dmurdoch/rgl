@@ -109,6 +109,7 @@ public:
   double height();
   
   FTFont *font;
+  const char *errmsg;
 #endif
 };
 
