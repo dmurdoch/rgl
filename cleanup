@@ -1,2 +1,3 @@
 #! /bin/sh
-rm -f config.* src/Makevars src/*.o src/*.so src/*.dll src/*.def
+rm -f config.* src/Makevars src/Makedeps src/*.o src/*.so src/*.dll src/*.def 
+rm -rf src/AGL autom4te.cache
