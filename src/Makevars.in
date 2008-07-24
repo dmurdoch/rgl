@@ -26,7 +26,10 @@ all: $(SHLIB) @BUILD_AGL_TRUE@ $(AGLSHLIB)
 
 $(AGLSHLIB): $(SHLIB)
 	-mkdir Temp
-	-mv *.o Temp
+	-mv x11*.o osx*.o Temp
+	mkdir -p AGL
+	-mv AGL/* .
 	MAKINGAGL=TRUE $(R_HOME)/bin/R CMD SHLIB  -o $@ *.cpp *.c
+	mv x11*.o osx*.o AGL
 	mv Temp/* .
 	rm -rf Temp
