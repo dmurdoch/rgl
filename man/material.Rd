@@ -24,7 +24,8 @@ rgl.material(
   front        = "fill", 
   back         = "fill",
   size         = 1.0, 
-  fog          = TRUE, 
+  fog          = TRUE,
+  antialias    = FALSE,
   ...
 )
 material3d(...)
@@ -98,6 +99,7 @@ material3d(...)
     numeric, specifying the line and point size.
   }
   \item{fog}{logical, specifying if fog effect should be applied on the corresponding shape}
+  \item{antialias}{logical, specifying if points and lines should be antialiased}
   \item{...}{Any of the arguments above; see Details below.}
 }
 \details{
@@ -109,6 +111,12 @@ they will be left unchanged.  \code{material3d} may also be used to query the ma
 properties; see the examples below.
 
   The current implementation does not return parameters for textures.
+  
+  If \code{antialias} is \code{TRUE}, points will be drawn as circles; otherwise, they
+will be drawn as squares.  Lines tend to appear heavier with antialiasing.
+
+  The \code{material} member of the \code{\link{r3dDefaults}} list may be used to 
+set default values for material properties.
   
   The \code{...} parameter to \code{rgl.material} is ignored.
 }

@@ -28,6 +28,7 @@ rgl.material <- function (
   back         = "fill",
   size         = 1.0, 
   fog          = TRUE,
+  antialias    = FALSE,
   ...
 ) {
   # solid or diffuse component
@@ -45,6 +46,7 @@ rgl.material <- function (
   rgl.bool(lit)
   rgl.bool(fog)
   rgl.bool(smooth)
+  rgl.bool(antialias)
   rgl.clamp(shininess,0,128)
   rgl.numeric(size)
   
@@ -76,7 +78,7 @@ rgl.material <- function (
   # pack data
 
   idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, 
-                          nalpha, ambient, specular, emission, texenvmap, color ) )
+                          nalpha, ambient, specular, emission, texenvmap, antialias, color ) )
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, alpha ))
 
@@ -92,7 +94,7 @@ rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
 rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
 
-  idata <- rep(0, 21+3*ncolors)
+  idata <- rep(0, 22+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -117,7 +119,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[19 + 3*(1:idata[1])], idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], maxColorValue = 255),
+  list(color = rgb(idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], maxColorValue = 255),
        alpha = ddata[seq(from=3, length=idata[11])],
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
@@ -134,6 +136,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
        front = polymodes[idata[4]],
        back = polymodes[idata[5]],
        size = ddata[2],
-       fog = idata[6] > 0)
+       fog = idata[6] > 0,
+       antialias = idata[22] == 1)
                    
 }
