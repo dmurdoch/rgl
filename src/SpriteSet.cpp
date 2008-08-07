@@ -1,6 +1,5 @@
 #include "SpriteSet.hpp"
 
-#include <map>
 #include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -24,21 +23,23 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
 SpriteSet::~SpriteSet()
 { }
 
-void SpriteSet::renderZSort(RenderContext* renderContext)
+int SpriteSet::getElementCount(void) 
 {
-  std::multimap<float,int> distanceMap;
+  return vertex.size();
+}
+  
+Vertex SpriteSet::getElementCenter(int index)
+{
+  return vertex.get(index);
+}
 
-  for(int index=0;index<vertex.size();index++) {
-    float distance = renderContext->getDistance( vertex.get(index) );
-    distanceMap.insert( std::pair<const float,int>( -distance , index ) );
-  }
-  std::multimap<float,int>::iterator iter;
-
+void SpriteSet::drawBegin(RenderContext* renderContext)
+{
   double mdata[16] = { 0 };
 
   glGetDoublev(GL_MODELVIEW_MATRIX, mdata);
 
-  Matrix4x4 m(mdata);
+  m = Matrix4x4(mdata);
 
   material.beginUse(renderContext);
   
@@ -46,43 +47,44 @@ void SpriteSet::renderZSort(RenderContext* renderContext)
 
   glLoadIdentity();
   
-  bool doTex = (material.texture) ? true : false;
+  doTex = (material.texture) ? true : false;
 
   glNormal3f(0.0f,0.0f,1.0f);
 
   glBegin(GL_QUADS);
+}
 
-  for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++iter ) {
-    int index = iter->second;
-    
-    Vertex& o = vertex.get(index);
-    float   s = size.getRecycled(index);
-    if (o.missing() || ISNAN(s)) continue;
+void SpriteSet::drawElement(RenderContext* renderContext, int index)
+{
+  Vertex& o = vertex.get(index);
+  float   s = size.getRecycled(index);
+  if (o.missing() || ISNAN(s)) return;
 
-    Vertex  v;
-    s = s * 0.5f;
-    v = m * o;
+  Vertex  v;
+  s = s * 0.5f;
+  v = m * o;
 
-    material.useColor(index);
+  material.useColor(index);
 
-    if (doTex)
-      glTexCoord2f(0.0f,0.0f);
-    glVertex3f(v.x - s, v.y - s, v.z);
+  if (doTex)
+    glTexCoord2f(0.0f,0.0f);
+  glVertex3f(v.x - s, v.y - s, v.z);
 
-    if (doTex)
-      glTexCoord2f(1.0f,0.0f);
-    glVertex3f(v.x + s, v.y - s, v.z);
+  if (doTex)
+    glTexCoord2f(1.0f,0.0f);
+  glVertex3f(v.x + s, v.y - s, v.z);
 
-    if (doTex)
-      glTexCoord2f(1.0f,1.0f);
-    glVertex3f(v.x + s, v.y + s, v.z);
+  if (doTex)
+    glTexCoord2f(1.0f,1.0f);
+  glVertex3f(v.x + s, v.y + s, v.z);
 
-    if (doTex)
-      glTexCoord2f(0.0f,1.0f);
-    glVertex3f(v.x - s, v.y + s, v.z);
-
-
-  } 
+  if (doTex)
+    glTexCoord2f(0.0f,1.0f);
+  glVertex3f(v.x - s, v.y + s, v.z);
+}
+  
+void SpriteSet::drawEnd(RenderContext* renderContext)
+{
   glEnd();
   glPopMatrix();
 
@@ -91,61 +93,5 @@ void SpriteSet::renderZSort(RenderContext* renderContext)
 
 void SpriteSet::render(RenderContext* renderContext)
 { 
-  double mdata[16] = { 0 };
-
-  glGetDoublev(GL_MODELVIEW_MATRIX, mdata);
-
-  Matrix4x4 m(mdata);
-
-  material.beginUse(renderContext);
-  
-  glPushMatrix();
-
-  glLoadIdentity();
-  
-  bool doTex = (material.texture) ? true : false;
-
-  glNormal3f(0.0f,0.0f,1.0f);
-
-  glBegin(GL_QUADS);
-  for(int i=0;i<vertex.size();i++) {
-
-    Vertex& o = vertex.get(i);
-    float   s = size.getRecycled(i);
-    if (o.missing() || ISNAN(s)) continue;
-
-    Vertex  v;
-    s = 0.5f * s;
-    v = m * o;
-
-    material.useColor(i);
-
-    if (doTex)
-      glTexCoord2f(0.0f,0.0f);
-    glVertex3f(v.x - s, v.y - s, v.z);
-
-    if (doTex)
-      glTexCoord2f(1.0f,0.0f);
-    glVertex3f(v.x + s, v.y - s, v.z);
-
-    if (doTex)
-      glTexCoord2f(1.0f,1.0f);
-    glVertex3f(v.x + s, v.y + s, v.z);
-
-    if (doTex)
-      glTexCoord2f(0.0f,1.0f);
-    glVertex3f(v.x - s, v.y + s, v.z);
-
-  }
-  glEnd();
-
-  glPopMatrix();
-
-  material.endUse(renderContext);
+  draw(renderContext);
 }
-
-void SpriteSet::draw(RenderContext* renderContext)
-{ 
-}
-
-

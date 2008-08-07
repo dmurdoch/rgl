@@ -20,7 +20,8 @@ public:
   };
   Background( Material& in_material = defaultMaterial, bool sphere=false, int fogtype=FOG_NONE);
   void render(RenderContext* renderContext);
-  void draw(RenderContext* renderContext);
+  int getElementCount(void) { return 1; }
+  void drawElement(RenderContext* renderContext, int index);  
   GLbitfield getClearFlags(RenderContext* renderContext);
 protected:
   bool clearColorBuffer;

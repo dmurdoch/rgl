@@ -26,6 +26,34 @@ public:
    * overloaded
    **/  
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "primitive", buflen); }
+  /**
+   * overloaded
+   **/
+  virtual int getElementCount(void) { return nprimitives; }
+  /**
+   * overloaded
+   **/
+  virtual Vertex getElementCenter(int item) { return getCenter(item); }
+  
+  /**
+   * begin sending primitives 
+   * interface
+   **/
+  virtual void drawBegin(RenderContext* renderContext);
+  
+  /**
+   * send primitive
+   * interface
+   **/
+  virtual void drawElement(RenderContext* renderContext, int index);
+  
+  /**
+   * end sending primitives
+   * interface
+   **/
+  virtual void drawEnd(RenderContext* renderContext);
+  
+   
 protected:
 
   /**
@@ -55,29 +83,12 @@ protected:
 
   // ---[ PRIMITIVE DRAW INTERFACE ]------------------------------------------
 
-  /**
-   * begin sending primitives 
-   * interface
-   **/
-  virtual void drawBegin(RenderContext* renderContext);
   
   /**
    * send all elements
    * interface
    **/
   virtual void drawAll(RenderContext* renderContext);
-  
-  /**
-   * send primitive
-   * interface
-   **/
-  virtual void drawElement(RenderContext* renderContext, int index);
-  
-  /**
-   * end sending primitives
-   * interface
-   **/
-  virtual void drawEnd(RenderContext* renderContext);
 
   int type;
   int nverticesperelement;

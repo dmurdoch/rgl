@@ -31,26 +31,27 @@ SphereSet::~SphereSet()
 {
 }
 
-void SphereSet::drawElement(RenderContext* renderContext, int i) 
+void SphereSet::drawBegin(RenderContext* renderContext)
 {
-   if ( center.get(i).missing() || ISNAN(radius.getRecycled(i)) ) return;
+  material.beginUse(renderContext);
+}
 
-   material.useColor(i);
+void SphereSet::drawElement(RenderContext* renderContext, int index) 
+{
+   if ( center.get(index).missing() || ISNAN(radius.getRecycled(index)) ) return;
 
-   sphereMesh.setCenter( center.get(i) );
-   sphereMesh.setRadius( radius.getRecycled(i) );
+   material.useColor(index);
+
+   sphereMesh.setCenter( center.get(index) );
+   sphereMesh.setRadius( radius.getRecycled(index) );
    
    sphereMesh.update( renderContext->viewpoint->scale );
 
    sphereMesh.draw(renderContext);
 }
 
-void SphereSet::draw(RenderContext* renderContext)
+void SphereSet::drawEnd(RenderContext* renderContext)
 {
-  material.beginUse(renderContext);
-
-  for(int i=0;i<center.size();i++) drawElement(renderContext, i);
-  
   material.endUse(renderContext);
 }
 
@@ -58,19 +59,4 @@ void SphereSet::render(RenderContext* renderContext) {
   if (renderContext->viewpoint->scaleChanged) 
     doUpdate = true;
   Shape::render(renderContext);
-}
-
-void SphereSet::renderZSort(RenderContext* renderContext)
-{
-  std::multimap<float,int> distanceMap;
-  for (int index = 0 ; index < center.size() ; ++index ) {
-    float distance = renderContext->getDistance( center.get(index) );
-    distanceMap.insert( std::pair<const float,int>(-distance,index) );
-  }
-
-  material.beginUse(renderContext);
-  for ( std::multimap<float,int>::iterator iter = distanceMap.begin(); iter != distanceMap.end() ; ++ iter ) {
-    drawElement( renderContext, iter->second );
-  }  
-  material.endUse(renderContext);
 }

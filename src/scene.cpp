@@ -102,7 +102,7 @@ void Scene::addShape(Shape* shape) {
 
   shapes.push_back(shape);
 
-  if ( shape->getMaterial().isBlended() ) {
+  if ( shape->isBlended() ) {
     zsortShapes.push_back(shape);
   } else
     unsortedShapes.push_back(shape);
@@ -219,7 +219,7 @@ bool Scene::pop(TypeID type, int id)
     {
       Shape* shape = *ishape;
       shapes.erase(ishape);
-      if ( shape->getMaterial().isBlended() )
+      if ( shape->isBlended() )
           zsortShapes.erase(std::find_if(zsortShapes.begin(), zsortShapes.end(),
                                          std::bind2nd(std::ptr_fun(&sameID), id)));
       else
@@ -289,6 +289,64 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
   default:	return;
   }
 }  
+
+void Scene::renderZsort(RenderContext* renderContext, bool fast)
+{
+  if (fast) { // Fast rendering
+    std::vector<Shape*>::iterator iter;
+    std::multimap<float, int> distanceMap;
+    int index = 0;
+
+    for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
+      Shape* shape = *iter;
+    
+      const AABox& aabox = shape->getBoundingBox();
+
+      float distance = renderContext->getDistance( aabox.getCenter() );
+      distanceMap.insert( std::pair<const float,int>(-distance, index) );
+      index++;
+    }
+
+    {
+      std::multimap<float,int>::iterator iter;
+      for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
+        int index = iter->second;
+        Shape* shape = zsortShapes[index];
+        shape->renderZSort(renderContext);
+      }
+    }
+  } else {  // Slow, more accurate rendering
+    std::vector<Shape*>::iterator iter;
+    std::multimap<float, ShapeItem*> distanceMap;
+    int index = 0;
+
+    for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
+      Shape* shape = *iter;
+	for (int j = 0; j < shape->getElementCount(); j++) {
+	  ShapeItem* item = new ShapeItem(shape, j);
+	  float distance = renderContext->getDistance( shape->getElementCenter(j) );
+        distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
+        index++;
+	}
+    }
+
+    {
+      Shape* prev = NULL;
+      std::multimap<float,ShapeItem*>::iterator iter;
+      for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
+        ShapeItem* item = iter->second;
+        Shape* shape = item->shape;
+        if (shape != prev) {
+          if (prev) prev->drawEnd(renderContext);
+          shape->drawBegin(renderContext);
+          prev = shape;
+        }
+        shape->drawElement(renderContext, item->itemnum);
+      }
+      if (prev) prev->drawEnd(renderContext);
+    }
+  }
+}
 
 void Scene::render(RenderContext* renderContext)
 {
@@ -453,32 +511,10 @@ void Scene::render(RenderContext* renderContext)
     renderContext->Zrow = P.getRow(2);
     renderContext->Wrow = P.getRow(3);
     
-    {
-      std::vector<Shape*>::iterator iter;
-      std::multimap<float, int> distanceMap;
-      int index = 0;
-
-      for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
-        Shape* shape = *iter;
-      
-        const AABox& aabox = shape->getBoundingBox();
-
-        float distance = renderContext->getDistance( aabox.getCenter() );
-        distanceMap.insert( std::pair<const float,int>(-distance, index) );
-        index++;
-
-      }
-
-      {
-        std::multimap<float,int>::iterator iter;
-        for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
-          int index = iter->second;
-          Shape* shape = zsortShapes[index];
-          shape->renderZSort(renderContext);
-        }
-      }
-    }
-#endif
+    bool fast = false;
+    
+    renderZsort(renderContext, fast);
+#endif    
     /* Reset flag(s) now that scene has been rendered */
     renderContext->viewpoint->scaleChanged = false;
   }

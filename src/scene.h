@@ -141,6 +141,8 @@ private:
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
   
+  void renderZsort(RenderContext* renderContext, bool fast);
+  
   void deleteAll(std::vector<SceneNode*> list);
 
   void deleteShapes();

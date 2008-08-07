@@ -22,8 +22,15 @@ public:
   ~TextSet();
   /* Can't use display lists */
   void render(RenderContext* renderContext);
-  void draw(RenderContext* renderContext);
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "text", buflen); };
+
+  int getElementCount(void){ return fonts.size(); }
+  
+  Vertex getElementCenter(int index) { return vertexArray[index]; }
+
+  void drawBegin(RenderContext* renderContext);
+  void drawElement(RenderContext* renderContext, int index);
+  void drawEnd(RenderContext* renderContext);
 
 private:
 

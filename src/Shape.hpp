@@ -41,7 +41,7 @@ public:
   /**
    * draw. 
    **/
-  virtual void draw(RenderContext* renderContext) = 0;
+  virtual void draw(RenderContext* renderContext);
 
   /**
    * obtain bounding box
@@ -61,6 +61,37 @@ public:
    * invalidate display list
    **/
   void invalidateDisplaylist();
+  
+  /**
+   * access to individual items
+   **/
+   
+  virtual int getElementCount(void) = 0; 
+  
+  /**
+   * location of individual items
+   **/
+  
+  virtual Vertex getElementCenter(int index) { return boundingBox.getCenter(); }
+
+  /**
+   * begin sending items 
+   **/
+  virtual void drawBegin(RenderContext* renderContext) {};
+
+  /**
+   * send one item
+   **/
+  virtual void drawElement(RenderContext* renderContext, int index) = 0;
+
+  /**
+   * end sending items
+   **/
+  virtual void drawEnd(RenderContext* renderContext) {};
+
+  const bool isTransparent() const { return transparent; }
+  
+  const bool isBlended() const { return blended; }
   
 protected:
   /**
@@ -87,6 +118,14 @@ protected:
    * update indicator
    **/
   bool     doUpdate;
+  bool     transparent, blended;
+};
+
+class ShapeItem {
+public:
+  ShapeItem(Shape* in_shape, int in_itemnum) : shape(in_shape), itemnum(in_itemnum) {};
+  Shape* shape;
+  int itemnum;
 };
 
 #endif // SHAPE_HPP

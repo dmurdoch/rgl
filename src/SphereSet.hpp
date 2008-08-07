@@ -18,20 +18,33 @@ public:
   /**
    * overload
    **/
-  void draw(RenderContext* renderContext);
-  
-  /**
-   * overload
-   **/
   
   /* Check whether scale has changed before rendering */
   void render(RenderContext* renderContext);
   
-  /* Sort spheres by depth */
-  void renderZSort(RenderContext* renderContext);
+  int getElementCount(void){ return center.size(); }
   
-  void drawElement(RenderContext* renderContext, int i);
+  /**
+   * location of individual items
+   **/
   
+  Vertex getElementCenter(int index) { return center.get(index); }
+
+  /**
+   * begin sending items 
+   **/
+  void drawBegin(RenderContext* renderContext);
+
+  /**
+   * send one item
+   **/
+  void drawElement(RenderContext* renderContext, int index);
+
+  /**
+   * end sending items
+   **/
+  void drawEnd(RenderContext* renderContext);
+
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "spheres", buflen); };
 
 };
