@@ -21,17 +21,34 @@ public:
    **/
   virtual void render(RenderContext* renderContext);
   
-  /**
-   * overload
-   **/
-  virtual void renderZSort(RenderContext* renderContext);
-
-  /**
-   * overload
-   **/
-  virtual void draw(RenderContext* renderContext);
-
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "sprites", buflen); };
+  
+  virtual int getElementCount(void);
+  
+  /**
+   * location of individual items
+   **/
+  
+  virtual Vertex getElementCenter(int index);
+  
+  /**
+   * begin sending items 
+   **/
+  virtual void drawBegin(RenderContext* renderContext);
+  
+  /**
+   * send one item
+   **/
+  virtual void drawElement(RenderContext* renderContext, int index);
+  
+  /**
+   * end sending items
+   **/
+  virtual void drawEnd(RenderContext* renderContext);
+  
+private:
+  Matrix4x4 m;
+  bool doTex;
 
 };
 

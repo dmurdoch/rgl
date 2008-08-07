@@ -25,6 +25,8 @@ public:
   StringArray(int ntexts, char** in_texts);
   StringArray(StringArray& from);
   ~StringArray();
+  String operator[](int index);
+
 private:
   StringArrayImpl* impl;
   friend class StringArrayIterator;

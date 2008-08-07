@@ -29,7 +29,7 @@ public:
   void endUse(RenderContext* renderContext);
   void useColor(int index);
   void colorPerVertex(bool enable, int numVertices=0);
-  bool isBlended() const { return alphablend; }
+  bool isTransparent() const { return alphablend; }
 
   Color        ambient;
   Color        specular;

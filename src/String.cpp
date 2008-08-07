@@ -22,12 +22,15 @@ public:
     ntexts = in_ntexts;
 
     lengths = new unsigned int [ntexts];
+    starts = new unsigned int [ntexts];
 
     int buflen = 0;
 
-    for(i=0;i<ntexts;i++)
+    for(i=0;i<ntexts;i++) {
+      starts[i] = buflen;
       buflen += 1 + ( lengths[i] = strlen(in_texts[i]) );
-
+    }
+    
     char* tptr = textbuffer = new char [buflen];
 
     for(i=0;i<ntexts;i++) {
@@ -45,6 +48,7 @@ public:
   int   ntexts;
   char* textbuffer;
   unsigned int*  lengths;
+  unsigned int*  starts;
 };
 
 //
@@ -79,6 +83,14 @@ StringArray::~StringArray()
 {
   if (impl)
     impl->unref();
+}
+
+String StringArray::operator[](int index)
+{
+  if (impl && index < impl->ntexts)
+    return String(impl->lengths[index], impl->textbuffer + impl->starts[index]);
+  else
+    return String(0, NULL);
 }
 
 //

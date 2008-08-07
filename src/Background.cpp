@@ -49,6 +49,8 @@ GLbitfield Background::getClearFlags(RenderContext* renderContext)
     return 0;
 }
 
+// FIXME:  this doesn't follow the pattern of other render methods.
+
 void Background::render(RenderContext* renderContext)
 {
   const AABox& bbox = renderContext->scene->getBoundingBox();
@@ -124,7 +126,7 @@ void Background::render(RenderContext* renderContext)
   } 
 }
 
-void Background::draw(RenderContext* renderContext)
+void Background::drawElement(RenderContext* renderContext, int index)
 {
   glPushAttrib(GL_ENABLE_BIT);
 

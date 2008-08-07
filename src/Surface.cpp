@@ -80,6 +80,10 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
       boundingBox += v;
     }
   }
+  
+  use_texcoord  = user_textures || ( material.texture && !(material.texture->is_envmap() ) ); 
+  use_normal    = !user_normals && ( material.lit || ( (material.texture) && (material.texture->is_envmap() ) ) );
+
 }
 
 void Surface::setNormal(int ix, int iz)
@@ -116,18 +120,8 @@ void Surface::setNormal(int ix, int iz)
 
 void Surface::draw(RenderContext* renderContext)
 {
-  material.beginUse(renderContext);
-  vertexArray.beginUse();
-
-  bool use_texcoord = user_textures || ( material.texture && !(material.texture->is_envmap() ) );
-  bool use_normal   = !user_normals && ( material.lit || ( (material.texture) && (material.texture->is_envmap() ) ) );
   bool missing;
-  
-  if (use_texcoord)
-    texCoordArray.beginUse();
-    
-  if (user_normals)
-    normalArray.beginUse();
+  drawBegin(renderContext);
 
   for(int iz=0;iz<nz-1;iz++) {
 
@@ -159,15 +153,7 @@ void Surface::draw(RenderContext* renderContext)
     if (!missing) glEnd();
   }
 
-  if (user_normals)
-    normalArray.endUse();
-    
-  if (use_texcoord)
-    texCoordArray.endUse();
-
-  vertexArray.endUse();
-
-  material.endUse(renderContext);
+  drawEnd(renderContext);
 }
 
 Vertex Surface::getCenter(int ix, int iz)
@@ -193,53 +179,51 @@ Vertex Surface::getCenter(int ix, int iz)
   if (num) accu = accu * (1.0/num);
   return accu;  
 } 
-  
-void Surface::renderZSort(RenderContext* renderContext)
-{
-  std::multimap<float,int> distanceMap;
-  for (int ix = 0 ; ix < nx-1 ; ++ix ) {
-    for (int iz = 0 ; iz < nz-1 ; ++iz ) {
-      float distance = renderContext->getDistance( getCenter(ix, iz) );
-      distanceMap.insert( std::pair<const float,int>(-distance,iz*nx + ix) );
-    }
-  }
 
+Vertex Surface::getElementCenter(int index) 
+{
+  return getCenter( index % (nx-1), index / (nx-1) );
+}
+
+void Surface::drawBegin(RenderContext* renderContext)
+{
   material.beginUse(renderContext);
   vertexArray.beginUse();
-
-  bool use_texcoord = user_textures || ( material.texture && !(material.texture->is_envmap() ) ); 
-  bool use_normal   = !user_normals && ( material.lit || ( (material.texture) && (material.texture->is_envmap() ) ) );
 
   if (use_texcoord)
     texCoordArray.beginUse();
     
   if (user_normals)
     normalArray.beginUse();
+}
 
-  for ( std::multimap<float,int>::iterator iter = distanceMap.begin(); iter != distanceMap.end() ; ++ iter ) {
-    int s = iter->second;
-    if (!vertexArray[s].missing() &&
-        !vertexArray[s+1].missing() &&
-        !vertexArray[s+nx].missing() &&
-        !vertexArray[s+nx+1].missing()) {
-      glBegin(GL_QUAD_STRIP);
-      for (int i = 0 ; i < 2; ++i ) {
-        int ix = s % nx + i;
-        for (int j = 0 ; j < 2; ++j ) {
-          int iz;
-          if (orientation)
-            iz = s / nx + !j;
-          else
-            iz = s / nx + j;
-          if (use_normal)
-            setNormal(ix, iz);
-          glArrayElement( iz*nx + ix );       
-        }
+void Surface::drawElement(RenderContext* renderContext, int index)
+{
+  int ix = index % (nx-1), iz = index / (nx-1),
+      s = iz*nx + ix;
+  if (!vertexArray[s].missing() &&
+      !vertexArray[s+1].missing() &&
+      !vertexArray[s+nx].missing() &&
+      !vertexArray[s+nx+1].missing()) {
+    glBegin(GL_QUAD_STRIP);
+    for (int i = 0 ; i < 2; ++i ) {
+      ix = s % nx + i;
+      for (int j = 0 ; j < 2; ++j ) {
+        if (orientation)
+          iz = s / nx + !j;
+        else
+          iz = s / nx + j;
+        if (use_normal)
+          setNormal(ix, iz);
+        glArrayElement( iz*nx + ix );       
       }
-      glEnd();
     }
-  }  
-
+    glEnd();
+  }
+}  
+  
+void Surface::drawEnd(RenderContext* renderContext) 
+{
   if (user_normals)
     normalArray.endUse();
     
@@ -250,3 +234,4 @@ void Surface::renderZSort(RenderContext* renderContext)
 
   material.endUse(renderContext);
 }
+
