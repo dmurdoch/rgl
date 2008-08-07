@@ -260,8 +260,10 @@ v0.81
   - fixed configuration problems in OS X
   - fixed executable marker on a number of files
   
-v0.81.694
+v0.81.695
   - rewrote internal rendering of transparent and anti-aliased shapes,
     so they will be rendered better when there are several in the same 
     scene
+  - added material property "antialias", which causes points to be 
+    drawn as smooth circles and lines to be antialiased.
   

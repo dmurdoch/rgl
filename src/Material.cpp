@@ -24,7 +24,8 @@ Material::Material(Color bg, Color fg)
   smooth(true),
   lit(true), 
   fog(true),
-  useColorArray(false)
+  useColorArray(false),
+  antialias(false)
 {
   alphablend = ( ( bg.getAlphaf() < 1.0f ) || ( fg.getAlphaf() < 1.0f ) ) ? true : false;
 }
@@ -106,6 +107,7 @@ void Material::beginUse(RenderContext* renderContext)
 
   if (!fog)
     glDisable(GL_FOG);
+    
 }
 
 void Material::useColor(int index)

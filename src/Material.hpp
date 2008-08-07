@@ -30,6 +30,7 @@ public:
   void useColor(int index);
   void colorPerVertex(bool enable, int numVertices=0);
   bool isTransparent() const { return alphablend; }
+  bool isBlended() const { return antialias; }
 
   Color        ambient;
   Color        specular;
@@ -45,6 +46,7 @@ public:
   bool         lit;
   bool         fog;
   bool         useColorArray;
+  bool         antialias;
 };
 
 

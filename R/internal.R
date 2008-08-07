@@ -59,7 +59,7 @@ rgl.clamp <- function(value, low, high)
 rgl.bool <- function ( x )
 {
   if (length(x) > 1)
-    stop( deparse(substitute(x)), " must be a single color character string")
+    stop( deparse(substitute(x)), " must be a single boolean value")
 }
 
 
