@@ -328,8 +328,6 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     glPushAttrib(GL_ENABLE_BIT);
 
-    glDisable(GL_DEPTH_TEST);
-
     int i,j;
 
     // vertex array:
@@ -358,6 +356,19 @@ void BBoxDeco::render(RenderContext* renderContext)
     
     material.beginUse(renderContext);
 
+    if (material.isBlended() || material.isTransparent()) {
+      // SETUP BLENDING
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+  
+      // ENABLE BLENDING
+      glEnable(GL_BLEND);
+      
+      if (material.isBlended()) {
+        glEnable(GL_POINT_SMOOTH);
+        glEnable(GL_LINE_SMOOTH);
+      }
+    }
+    
     // edge adjacent matrix
 
     int adjacent[8][8] = { { 0 } };
