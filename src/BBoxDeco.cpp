@@ -182,6 +182,7 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
                     Vertex& marklen, String& string) {
 
   Vertex4 p;
+  GLboolean valid;
     
   // draw mark ( 1 time ml away )
 
@@ -202,19 +203,22 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
 
   glRasterPos3f( p.x, p.y, p.z );
   
-  // Work out the text adjustment 
+  glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
+  if (valid) {  
+    // Work out the text adjustment 
   
-  float adj = 0.5;  
-  Vertex4 eyedir = modelview * dir;
-  bool  xlarge = fabs(eyedir.x) > fabs(eyedir.y);
+    float adj = 0.5;  
+    Vertex4 eyedir = modelview * dir;
+    bool  xlarge = fabs(eyedir.x) > fabs(eyedir.y);
   
-  if (xlarge) {
-    adj = fabs(eyedir.y)/fabs(eyedir.x)/2.0;
-    if (eyedir.x < 0) adj = 1.0 - adj;
-  }
+    if (xlarge) {
+      adj = fabs(eyedir.y)/fabs(eyedir.x)/2.0;
+      if (eyedir.x < 0) adj = 1.0 - adj;
+    }
   
-  if (renderContext->font)
-    renderContext->font->draw(string.text, string.length, adj, 0.5, *renderContext);
+    if (renderContext->font)
+      renderContext->font->draw(string.text, string.length, adj, 0.5, *renderContext);
+  }      
 
 }
 
