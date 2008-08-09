@@ -26,6 +26,7 @@ public:
   StringArray(StringArray& from);
   ~StringArray();
   String operator[](int index);
+  int size();
 
 private:
   StringArrayImpl* impl;

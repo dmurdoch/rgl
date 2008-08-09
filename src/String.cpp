@@ -93,6 +93,12 @@ String StringArray::operator[](int index)
     return String(0, NULL);
 }
 
+int StringArray::size()
+{
+  if (impl) return impl->ntexts;
+  else return 0;
+}
+
 //
 // CLASS
 //   StringArrayIterator

@@ -24,7 +24,7 @@ public:
   void render(RenderContext* renderContext);
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "text", buflen); };
 
-  int getElementCount(void){ return fonts.size(); }
+  int getElementCount(void){ return textArray.size(); }
   
   Vertex getElementCenter(int index) { return vertexArray[index]; }
 
