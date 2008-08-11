@@ -445,6 +445,11 @@ GLBitmapFont* Win32WindowImpl::initGLBitmapFont(u8 firstGlyph, u8 lastGlyph)
     font->firstGlyph = firstGlyph;
     font->listBase   = listBase - firstGlyph;
     GetCharWidth32( dcHandle, font->firstGlyph, lastGlyph,  (LPINT) font->widths );
+    {  
+      TEXTMETRIC tm;
+      GetTextMetrics( dcHandle, &tm);
+      font->ascent = tm.tmAscent;
+    }    
     wglUseFontBitmaps(dcHandle, font->firstGlyph, font->nglyph, listBase);
     endGL();
   }
