@@ -268,4 +268,6 @@ v0.81.697
     drawn as smooth circles and lines to be antialiased.
   - fixed a bug in the bounding box decoration which caused axis labels
     to be plotted in the wrong place.
+  - fixed a bug in the Windows driver which caused the standard system 
+    font to disappear when justified.
   
