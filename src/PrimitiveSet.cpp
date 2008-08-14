@@ -38,14 +38,7 @@ Shape(in_material, in_ignoreExtent, SHAPE)
 void PrimitiveSet::drawBegin(RenderContext* renderContext)
 {
   material.beginUse(renderContext);
-  if (material.isBlended()) {
-    // These must follow beginUse, and will be restored by endUse
-    glEnable(GL_POINT_SMOOTH);
-    glEnable(GL_LINE_SMOOTH);
-  }
   vertexArray.beginUse();
-  if (blended && !transparent)
-    glDepthMask(GL_TRUE);  
 }
 
 // ---------------------------------------------------------------------------
@@ -92,8 +85,6 @@ void PrimitiveSet::drawElement(RenderContext* renderContext, int index)
 
 void PrimitiveSet::drawEnd(RenderContext* renderContext)
 {
-  if (blended && !transparent)
-    glDepthMask(GL_FALSE);   
   vertexArray.endUse();
   material.endUse(renderContext);
 }

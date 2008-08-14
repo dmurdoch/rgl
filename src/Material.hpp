@@ -36,7 +36,8 @@ public:
   Color        specular;
   Color        emission;
   float        shininess;
-  float        size;          // point size, line width
+  float        size;          // point size
+  float        lwd;           // line width
   ColorArray   colors;        // color or if lit, represents diffuse color
   Ref<Texture> texture;
   PolygonMode  front;

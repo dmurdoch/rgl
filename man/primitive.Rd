@@ -58,7 +58,7 @@ rgl.quads(x, y = NULL, z = NULL, normals=NULL, texcoords=NULL, ... )
 }
 \examples{
 rgl.open()
-rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000), size=2)
+rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000))
 }
 \seealso{
 \code{\link{rgl.material}},

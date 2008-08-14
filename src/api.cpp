@@ -578,8 +578,9 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   char*  pixmapfn = cdata[0];
 
   mat.shininess   = (float) ddata[0];
-  mat.size        = (float) ddata[1];
-  double* alpha   = &ddata[2];
+  mat.size      = (float) ddata[1];
+  mat.lwd         = (float) ddata[2];
+  double* alpha   = &ddata[3];
 
   if ( strlen(pixmapfn) > 0 ) {
     mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter, envmap);
@@ -650,9 +651,10 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
 
   ddata[0] = (double) mat.shininess;
   ddata[1] = (double) mat.size;
+  ddata[2] = (double) mat.lwd;
   
   if (mat.colors.hasAlpha()) {
-    for (i=0, j=2; (i < mat.colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
+    for (i=0, j=3; (i < mat.colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
       ddata[j++] = (double) mat.colors.getColor(i).getAlphaf();
     idata[10] = i;
   } else 

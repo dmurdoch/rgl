@@ -4,7 +4,8 @@ plot3d <- function(x, ...) UseMethod("plot3d")
 plot3d.default <- function(x, y = NULL, z = NULL, 
         xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', 
         col = material3d("color")[1], size = material3d("size"), 
-        radius = avgscale*size/20, add = FALSE, aspect = !add, ...)
+        lwd = material3d("lwd"),
+        radius = avgscale*size/60, add = FALSE, aspect = !add, ...)
 {
     if (!add) clear3d()
     skip <- par3d(skipRedraw=TRUE)
@@ -31,11 +32,11 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     result <- c( data=switch(type,
 		p = points3d(x, y, z, color=col, size=size, ...),
 	        s = spheres3d(x, y, z, radius=radius, color=col, ...),
-		l = lines3d(x, y, z, color=col, size=size, ...),
+		l = lines3d(x, y, z, color=col, lwd=lwd, ...),
 		h = segments3d(rep(x,rep(2,length(x))),
 					   rep(y,rep(2,length(y))),
 					   rbind(rep(0,length(z)),z),
-					   color = rep(col, rep(2,length(col))), size=size, ...),
+					   color = rep(col, rep(2,length(col))), lwd=lwd, ...),
 	# this is a hack to plot invisible segments
         n = if (!add) segments3d(rep(range(x, na.rm=TRUE), c(2,2)),
                                  rep(range(y, na.rm=TRUE), c(2,2)),

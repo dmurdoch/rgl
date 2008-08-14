@@ -81,7 +81,7 @@ open3d()
 M <- t(M)
 shift <- matrix(c(-3,3,0), 12, 3, byrow=TRUE)
 
-points3d(M, size=2)
+points3d(M)
 lines3d(M + shift)
 segments3d(M + 2*shift)
 triangles3d(M + 3*shift, col='red')
