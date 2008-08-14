@@ -11,7 +11,7 @@ Draws a 3D scatterplot.
 plot3d(x, ...)
 \method{plot3d}{default}(x, y, z,  
 	xlab, ylab, zlab, type = "p", col,  
-        size, radius,
+        size, lwd, radius,
 	add = FALSE, aspect = !add, ...)
 \method{plot3d}{qmesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
 	add = FALSE, ...)	
@@ -32,7 +32,8 @@ decorate3d(xlim, ylim, zlim,
   'shade', 'wire', or 'dots'.  Partial matching is used.
   }
   \item{col}{the colour to be used for plotted items.}
-  \item{size}{the size for plotted items.}
+  \item{size}{the size for plotted points.}
+  \item{lwd}{the line width for plotted items.}
   \item{radius}{the radius of spheres:  see Details below.}
   \item{add}{whether to add the points to an existing plot.}
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio.}
@@ -64,7 +65,7 @@ cases, the value is passed to \code{\link{aspect3d}}.
 
 With \code{type = "s"}, spheres are drawn centered at the specified locations.
 The radius may be controlled by \code{size} (specifying the size relative
-to the plot display, with \code{size=1} giving a radius 
+to the plot display, with the default \code{size=3} giving a radius 
 about 1/20 of the plot region) or \code{radius} (specifying it on the data scale
 if an isometric aspect ratio is chosen, or on an average scale
 if not). 
@@ -81,7 +82,7 @@ if not).
   x <- sort(rnorm(1000))
   y <- rnorm(1000)
   z <- rnorm(1000) + atan2(x,y)
-  plot3d(x, y, z, col=rainbow(1000), size=2)
+  plot3d(x, y, z, col=rainbow(1000))
 }
 \keyword{dynamic}
 

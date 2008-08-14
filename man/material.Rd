@@ -23,7 +23,8 @@ rgl.material(
   texenvmap    = FALSE,
   front        = "fill", 
   back         = "fill",
-  size         = 1.0, 
+  size         = 3.0, 
+  lwd          = 1.0,
   fog          = TRUE,
   antialias    = FALSE,
   ...
@@ -96,7 +97,10 @@ material3d(...)
     }
   }
   \item{size}{ 
-    numeric, specifying the line and point size.
+    numeric, specifying the size of points in pixels
+  }
+  \item{lwd}{
+    numeric, specifying the line width in pixels
   }
   \item{fog}{logical, specifying if fog effect should be applied on the corresponding shape}
   \item{antialias}{logical, specifying if points and lines should be antialiased}

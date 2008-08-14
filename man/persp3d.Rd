@@ -77,14 +77,14 @@ persp3d(x, y, z, aspect=c(1, 1, 0.5), col = "lightblue",
 # (2) Add to existing persp plot:
 
 xE <- c(-10,10); xy <- expand.grid(xE, xE)
-points3d(xy[,1], xy[,2], 6, col = "red", size = 3)
+points3d(xy[,1], xy[,2], 6, col = "red")
 lines3d(x, y=10, z= 6 + sin(x), col = "green")
 
 phi <- seq(0, 2*pi, len = 201)
 r1 <- 7.725 # radius of 2nd maximum
 xr <- r1 * cos(phi)
 yr <- r1 * sin(phi)
-lines3d(xr,yr, f(xr,yr), col = "pink", size = 2)
+lines3d(xr,yr, f(xr,yr), col = "pink", lwd = 2)
 
 # (3) Visualizing a simple DEM model
 

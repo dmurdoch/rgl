@@ -260,7 +260,7 @@ v0.81
   - fixed configuration problems in OS X
   - fixed executable marker on a number of files
   
-v0.81.697
+v0.81.700
   - rewrote internal rendering of transparent and anti-aliased shapes,
     so they will be rendered better when there are several in the same 
     scene
@@ -270,4 +270,6 @@ v0.81.697
     to be plotted in the wrong place.
   - fixed a bug in the Windows driver which caused the standard system 
     font to disappear when justified.
-  
+  - added material parameter lwd for line width; size now applies only
+    to points.
+  - increased default point size to 3 pixels across.

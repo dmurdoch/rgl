@@ -59,12 +59,6 @@ void TextSet::render(RenderContext* renderContext)
 void TextSet::drawBegin(RenderContext* renderContext) 
 {
   material.beginUse(renderContext);
-  
-// Currently text is the only thing that can be blended but not transparent, so this
-// temporarily restores the depth masking.  
-
-  if (blended & !transparent)    
-    glDepthMask(GL_TRUE);
 }
 
 void TextSet::drawElement(RenderContext* renderContext, int index) 
@@ -88,7 +82,5 @@ void TextSet::drawElement(RenderContext* renderContext, int index)
 
 void TextSet::drawEnd(RenderContext* renderContext)
 {
-  if (blended & !transparent)
-    glDepthMask(GL_FALSE);
   material.endUse(renderContext);
 }

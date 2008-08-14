@@ -57,7 +57,7 @@ grid3d <- function (side, at = NULL, col="gray",
     result[sidenames[cside]] <- segments3d(x=c(rbind(mpos1[,1],mpos2[,1])),
                y=c(rbind(mpos1[,2],mpos2[,2])),
                z=c(rbind(mpos1[,3],mpos2[,3])),
-               size=lwd,color=col)
+               lwd=lwd,color=col)
   }
   invisible(result)
 }

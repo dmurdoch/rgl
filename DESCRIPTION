@@ -1,13 +1,12 @@
 Package: rgl
-Version: 0.81
-Date: 2008-07-25
+Version: 0.81.700
+Date: 2008-08-14
 Title: 3D visualization device system (OpenGL)
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>
-Maintainer: Daniel Adler <dadler@uni-goettingen.de>
+Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 2.4.0),stats,grDevices
 Suggests: MASS
 Description: 3D visualization device (OpenGL)
 License: GPL
 URL: http://rgl.neoscientists.org
 SystemRequirements: OpenGL, GLU Library, zlib (optional), libpng (optional), FreeType (optional)
-Packaged: Fri Jul 25 15:06:19 2008; murdoch

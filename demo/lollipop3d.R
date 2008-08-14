@@ -107,7 +107,7 @@ lollipop3d <- function(data.x,data.y,data.z,surf.fun,surf.n=50,
                   y=rep(X[2],2),
                   z=c(X[3],X[4]),
                   col=ifelse(X[3]>X[4],col.stem[1],
-                    col.stem[2]),size=lwd.stem)
+                    col.stem[2]),lwd=lwd.stem)
         })
   bbox <- par3d("bbox")
   if (axes=="box") {

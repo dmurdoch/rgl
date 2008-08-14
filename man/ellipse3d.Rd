@@ -82,7 +82,7 @@ if (require(MASS)) {
   
   open3d()
   
-  plot3d(x, size=3, box=FALSE)
+  plot3d(x, box=FALSE)
   
   plot3d( ellipse3d(Sigma, centre=Mean), col="green", alpha=0.5, add = TRUE)
 }  

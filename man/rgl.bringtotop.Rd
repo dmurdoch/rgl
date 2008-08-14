@@ -22,7 +22,7 @@ Not currently implemented under OS/X.}
 \seealso{ \code{\link[grDevices]{bringToTop}}}
 \examples{
 rgl.open()
-rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000), size=2)
+rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000))
 rgl.bringtotop(stay = TRUE)    
 }
 \keyword{ dynamic }

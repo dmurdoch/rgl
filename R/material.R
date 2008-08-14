@@ -26,7 +26,8 @@ rgl.material <- function (
   texenvmap    = FALSE,
   front        = "fill", 
   back         = "fill",
-  size         = 1.0, 
+  size         = 3.0,
+  lwd          = 1.0, 
   fog          = TRUE,
   antialias    = FALSE,
   ...
@@ -49,6 +50,7 @@ rgl.material <- function (
   rgl.bool(antialias)
   rgl.clamp(shininess,0,128)
   rgl.numeric(size)
+  rgl.numeric(lwd)
   
   # side-dependant rendering
 
@@ -80,7 +82,7 @@ rgl.material <- function (
   idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, 
                           nalpha, ambient, specular, emission, texenvmap, antialias, color ) )
   cdata <- as.character(c( texture ))
-  ddata <- as.numeric(c( shininess, size, alpha ))
+  ddata <- as.numeric(c( shininess, size, lwd, alpha ))
 
   ret <- .C( rgl_material,
     success = FALSE,
@@ -120,7 +122,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   cdata <- ret$cdata
   
   list(color = rgb(idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], maxColorValue = 255),
-       alpha = ddata[seq(from=3, length=idata[11])],
+       alpha = ddata[seq(from=4, length=idata[11])],
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
        specular = rgb(idata[15], idata[16], idata[17], maxColorValue = 255),
@@ -136,6 +138,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
        front = polymodes[idata[4]],
        back = polymodes[idata[5]],
        size = ddata[2],
+       lwd  = ddata[3],
        fog = idata[6] > 0,
        antialias = idata[22] == 1)
                    

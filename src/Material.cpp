@@ -16,7 +16,8 @@ Material::Material(Color bg, Color fg)
   specular(1.0f,1.0f,1.0f,1.0f),
   emission(0.0f,0.0f,0.0f,0.0f),
   shininess(50.0f),
-  size(1.0f),
+  size(3.0f),
+  lwd(1.0f),
   colors(bg,fg),
   texture(),
   front(FILL_FACE),
@@ -38,19 +39,16 @@ void Material::beginUse(RenderContext* renderContext)
 {
   int ncolor = colors.getLength();
 
-  glPushAttrib( /* GL_DEPTH_BUFFER_BIT | */ GL_ENABLE_BIT | GL_POLYGON_BIT );
+  glPushAttrib( GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_POLYGON_BIT );
 
-#if 0
-  if (alphablend) {    
-    glDepthMask(GL_FALSE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE );
-  } else {
+  if (!alphablend) 
     glDepthMask(GL_TRUE);
-  }
-#endif
 
+  if (antialias) {
+    glEnable(GL_POINT_SMOOTH);
+    glEnable(GL_LINE_SMOOTH);
+  }
+  
   glDisable(GL_CULL_FACE);
 
   for (int i=0;i<2;i++) {
@@ -100,7 +98,7 @@ void Material::beginUse(RenderContext* renderContext)
     colors.useColor(0);
 
   glPointSize( size );
-  glLineWidth( size );
+  glLineWidth( lwd );
 
   if (texture)
     texture->beginUse(renderContext);

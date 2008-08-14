@@ -65,7 +65,7 @@ objects added to the scene.
 
 \examples{
   open3d()
-  points3d(rnorm(10),rnorm(10),rnorm(10), size=3)
+  points3d(rnorm(10),rnorm(10),rnorm(10))
 
   # First add standard axes
   axes3d()  
@@ -80,7 +80,7 @@ objects added to the scene.
   rgl.bringtotop()
   
   open3d()
-  points3d(rnorm(10),rnorm(10),rnorm(10), size=3)
+  points3d(rnorm(10),rnorm(10),rnorm(10))
   
   # Use fixed axes
   

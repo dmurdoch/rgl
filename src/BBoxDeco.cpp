@@ -367,10 +367,6 @@ void BBoxDeco::render(RenderContext* renderContext)
       // ENABLE BLENDING
       glEnable(GL_BLEND);
       
-      if (material.isBlended()) {
-        glEnable(GL_POINT_SMOOTH);
-        glEnable(GL_LINE_SMOOTH);
-      }
     }
     
     // edge adjacent matrix

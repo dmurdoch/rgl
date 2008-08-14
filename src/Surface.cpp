@@ -1,4 +1,5 @@
 #include "Surface.hpp"
+#include "Material.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -83,7 +84,11 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
   
   use_texcoord  = user_textures || ( material.texture && !(material.texture->is_envmap() ) ); 
   use_normal    = !user_normals && ( material.lit || ( (material.texture) && (material.texture->is_envmap() ) ) );
-
+  if (material.antialias && 
+       (material.front == material.LINE_FACE ||
+        material.front == material.POINT_FACE ||
+        material.back  == material.LINE_FACE ||
+        material.back  == material.POINT_FACE)) blended = true;
 }
 
 void Surface::setNormal(int ix, int iz)
@@ -195,6 +200,7 @@ void Surface::drawBegin(RenderContext* renderContext)
     
   if (user_normals)
     normalArray.beginUse();
+
 }
 
 void Surface::drawElement(RenderContext* renderContext, int index)
@@ -224,6 +230,7 @@ void Surface::drawElement(RenderContext* renderContext, int index)
   
 void Surface::drawEnd(RenderContext* renderContext) 
 {
+
   if (user_normals)
     normalArray.endUse();
     
