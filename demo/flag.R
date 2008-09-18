@@ -14,12 +14,12 @@ wave <- function(time) {
   
   par3d(skipRedraw = TRUE)
   if (nrow(rgl.ids())) rgl.pop()
-  surface3d(x,y,z, texture_s=matrix(arclen/2, length(x), 20), texture_t=z)
+  surface3d(x,y,z, texture_s=matrix(arclen/2, length(x), 20), texture_t=z, col="white")
   c(list(skipRedraw = FALSE), spin(time))
 }
 
 open3d()
-material3d(texture = system.file("textures","rgl2.png", package="rgl"), col="white")
+material3d(texture = system.file("textures","rgl2.png", package="rgl"))
 spin <- spin3d(rpm=6,axis=c(0,0,1))
 play3d(wave, 10)
 
