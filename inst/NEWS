@@ -264,8 +264,9 @@ v0.81.704
   - rewrote internal rendering of transparent and anti-aliased shapes,
     so they will be rendered better when there are several in the same 
     scene
-  - added material property "antialias", which causes points to be 
-    drawn as smooth circles and lines to be antialiased.
+  - added material properties "point_antialias", which causes points to be 
+    drawn as smooth circles, and "line_antialias", which causes
+    lines to be antialiased.
   - fixed a bug in the bounding box decoration which caused axis labels
     to be plotted in the wrong place.
   - fixed a bug in the Windows driver which caused the standard system 

@@ -26,7 +26,8 @@ Material::Material(Color bg, Color fg)
   lit(true), 
   fog(true),
   useColorArray(false),
-  antialias(false)
+  point_antialias(false),
+  line_antialias(false)
 {
   alphablend = ( ( bg.getAlphaf() < 1.0f ) || ( fg.getAlphaf() < 1.0f ) ) ? true : false;
 }
@@ -44,10 +45,8 @@ void Material::beginUse(RenderContext* renderContext)
   if (!alphablend) 
     glDepthMask(GL_TRUE);
 
-  if (antialias) {
-    glEnable(GL_POINT_SMOOTH);
-    glEnable(GL_LINE_SMOOTH);
-  }
+  if (point_antialias) glEnable(GL_POINT_SMOOTH);
+  if (line_antialias)  glEnable(GL_LINE_SMOOTH);
   
   glDisable(GL_CULL_FACE);
 

@@ -84,11 +84,10 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
   
   use_texcoord  = user_textures || ( material.texture && !(material.texture->is_envmap() ) ); 
   use_normal    = !user_normals && ( material.lit || ( (material.texture) && (material.texture->is_envmap() ) ) );
-  if (material.antialias && 
-       (material.front == material.LINE_FACE ||
-        material.front == material.POINT_FACE ||
-        material.back  == material.LINE_FACE ||
-        material.back  == material.POINT_FACE)) blended = true;
+  if ((material.point_antialias && ( material.front == material.POINT_FACE 
+                                  || material.back  == material.POINT_FACE))
+   || (material.line_antialias  && ( material.front == material.LINE_FACE 
+                                  || material.back  == material.LINE_FACE))) blended = true;
 }
 
 void Surface::setNormal(int ix, int iz)
