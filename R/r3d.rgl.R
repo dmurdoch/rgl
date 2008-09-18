@@ -200,6 +200,14 @@ open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {
     rgl.open()
     
+    args <- list(...)
+    if (!is.null(args$material)) {
+    	params$material <- do.call(.fixMaterialArgs, c(args$material, Params=list(params$material)))
+    	args$material <- NULL
+    }
+    
+    params[names(args)] <- args
+        
     clear3d("material", defaults = params)
     params$material <- NULL
     
