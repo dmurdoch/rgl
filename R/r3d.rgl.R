@@ -25,7 +25,7 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 
 .material3d <- c("color", "alpha", "lit", "ambient", "specular",
     "emission", "shininess", "smooth", "front", "back", "size", 
-    "lwd", "fog", "antialias",
+    "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap")
 

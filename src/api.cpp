@@ -572,8 +572,9 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.specular.set3iv( &idata[14] );
   mat.emission.set3iv( &idata[17] );
   bool envmap = (idata[20]) ? true : false;
-  mat.antialias = (idata[21]) ? true : false;
-  int* colors   = &idata[22];
+  mat.point_antialias = (idata[21]) ? true : false;
+  mat.line_antialias = (idata[22]) ? true : false;
+  int* colors   = &idata[23];
 
   char*  pixmapfn = cdata[0];
 
@@ -640,9 +641,10 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
   idata[17] = (int) mat.emission.getRedub();
   idata[18] = (int) mat.emission.getGreenub();
   idata[19] = (int) mat.emission.getBlueub();
-  idata[21] = mat.antialias ? 1 : 0;
+  idata[21] = mat.point_antialias ? 1 : 0;
+  idata[22] = mat.line_antialias ? 1 : 0;
 
-  for (i=0, j=22; (i < mat.colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=23; (i < mat.colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat.colors.getColor(i).getRedub();
     idata[j++] = (int) mat.colors.getColor(i).getGreenub();
     idata[j++] = (int) mat.colors.getColor(i).getBlueub();

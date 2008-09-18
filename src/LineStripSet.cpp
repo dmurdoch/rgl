@@ -10,7 +10,7 @@ LineStripSet::LineStripSet(Material& in_material, int in_nvertices, double* in_v
   : PrimitiveSet(in_material, in_nvertices, in_vertex, GL_LINE_STRIP, 1, in_ignoreExtent)
 {
   material.lit = false;
-  if (material.isBlended()) blended = true;
+  if (material.line_antialias) blended = true;
 }
 
 void LineStripSet::drawElement(RenderContext* renderContext, int index)

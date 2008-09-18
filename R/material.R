@@ -29,7 +29,8 @@ rgl.material <- function (
   size         = 3.0,
   lwd          = 1.0, 
   fog          = TRUE,
-  antialias    = FALSE,
+  point_antialias = FALSE,
+  line_antialias = FALSE,
   ...
 ) {
   # solid or diffuse component
@@ -47,7 +48,8 @@ rgl.material <- function (
   rgl.bool(lit)
   rgl.bool(fog)
   rgl.bool(smooth)
-  rgl.bool(antialias)
+  rgl.bool(point_antialias)
+  rgl.bool(line_antialias)
   rgl.clamp(shininess,0,128)
   rgl.numeric(size)
   rgl.numeric(lwd)
@@ -79,8 +81,10 @@ rgl.material <- function (
 
   # pack data
 
-  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, 
-                          nalpha, ambient, specular, emission, texenvmap, antialias, color ) )
+  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, 
+                          textype, texmipmap, texminfilter, texmagfilter, 
+                          nalpha, ambient, specular, emission, texenvmap, 
+                          point_antialias, line_antialias, color ) )
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, lwd, alpha ))
 
@@ -140,6 +144,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
        size = ddata[2],
        lwd  = ddata[3],
        fog = idata[6] > 0,
-       antialias = idata[22] == 1)
+       point_antialias = idata[22] == 1,
+       line_antialias = idata[23] == 1)
                    
 }

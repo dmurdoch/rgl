@@ -360,7 +360,7 @@ void BBoxDeco::render(RenderContext* renderContext)
     
     material.beginUse(renderContext);
 
-    if (material.isBlended() || material.isTransparent()) {
+    if (material.line_antialias || material.isTransparent()) {
       // SETUP BLENDING
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
   
