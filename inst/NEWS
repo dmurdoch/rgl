@@ -260,7 +260,7 @@ v0.81
   - fixed configuration problems in OS X
   - fixed executable marker on a number of files
   
-v0.81.700
+v0.81.704
   - rewrote internal rendering of transparent and anti-aliased shapes,
     so they will be rendered better when there are several in the same 
     scene
@@ -273,3 +273,4 @@ v0.81.700
   - added material parameter lwd for line width; size now applies only
     to points.
   - increased default point size to 3 pixels across.
+  - fixed bug in open3d:  "..." was being ignored.

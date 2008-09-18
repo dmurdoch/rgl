@@ -57,8 +57,12 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   environment and it will override the installed one.  If there
   is a \code{bg} element in the list or the arguments, it should be
   a list of arguments to pass to the \code{\link{bg3d}} function to 
-  set the background.  A \code{material} element should be a list
-  of arguments to pass to \code{\link{material3d}} to set the material.
+  set the background.  
+  
+  The arguments to \code{open3d} may include \code{material}, a list
+  of material properties as in \code{\link{r3dDefaults}}, but note
+  that high level functions such as \code{\link{plot3d}} normally use
+  the \code{r3dDefaults} values in preference to this setting. 
 }
 
 \value{
