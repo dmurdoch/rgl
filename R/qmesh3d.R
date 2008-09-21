@@ -19,10 +19,12 @@ qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
     vb=matrix(vertices,nrow=vrows),
     ib=matrix(indices,nrow=4),
     primitivetype="quad",
-    homogeneous=homogeneous,
     material=material,
     normals=normals
   ) 
+  
+  if (!homogeneous) object$vb <- rbind(object$vb, 1)
+  
   class(object) <- "qmesh3d" 
   return( object )
 }
