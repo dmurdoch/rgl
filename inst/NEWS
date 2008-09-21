@@ -260,7 +260,7 @@ v0.81
   - fixed configuration problems in OS X
   - fixed executable marker on a number of files
   
-v0.81.706
+v0.81.707
   - rewrote internal rendering of transparent and anti-aliased shapes,
     so they will be rendered better when there are several in the same 
     scene
@@ -275,3 +275,5 @@ v0.81.706
     to points.
   - increased default point size to 3 pixels across.
   - fixed bug in open3d:  "..." was being ignored.
+  - fixed bug in qmesh3d:  homogeneous=FALSE coordinates were not
+    handled properly.
