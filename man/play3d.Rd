@@ -13,7 +13,7 @@ play3d(f, duration = Inf, dev = rgl.cur(), ...)
 movie3d(f, duration, dev = rgl.cur(), ..., fps = 10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
                     convert = TRUE, clean = TRUE, verbose=TRUE,
-                    top = TRUE) 
+                    top = TRUE, type = "gif") 
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -30,6 +30,7 @@ movie3d(f, duration, dev = rgl.cur(), ..., fps = 10,
   \item{clean}{ If \code{convert} is \code{TRUE}, whether to delete the individual frames }
   \item{verbose}{ Whether to report the \code{convert} command and the output filename }
   \item{top}{ Whether to call \code{\link{rgl.bringtotop}} before each frame }
+  \item{type}{ What type of movie to create.  See Details. }
 }
 \details{
 The function \code{f} will be called in a loop with the first argument being the time in
@@ -42,10 +43,19 @@ should be made within the function to release time to other processes.
 
 \code{movie3d} saves each frame to disk in a filename of the form "framesXXX.png", where
 XXX is the frame number, starting from 0.  If \code{convert} is \code{TRUE}, it
-uses ImageMagick to convert them to an animated GIF.  Alternatively, \code{convert}
-can be a command to execute in the standard shell (wildcards are allowed).
-All work is done in the directory \code{dir}, so paths are not needed in
-the command.  
+uses ImageMagick to convert them to a single file, by default an animated GIF.  
+The \code{type} argument will be passed to ImageMagick to use as a file extension
+to choose the file type.
+
+Alternatively, \code{convert} can be a template for a command to
+execute in the standard shell (wildcards are allowed). The template is
+converted to a command using \code{\link{sprintf}(convert, fps,
+frames, movie, type, dir, duration)}.  For example, \code{code=TRUE}
+uses the template \code{"convert -delay 1x%d %s*.png %s.%s"}. All work
+is done in the directory \code{dir}, so paths should not be needed in
+the command.  (Note that \code{\link{sprintf}} does not require all
+arguments to be used, and supports formats that use them in an
+arbitrary order.)
 
 The \code{top=TRUE} default is designed to work around an OpenGL limitation:
 in some implementations, \code{\link{rgl.snapshot}} will fail if the window
