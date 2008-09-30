@@ -149,7 +149,7 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ...) {
 movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
                     convert = TRUE, clean = TRUE, verbose=TRUE,
-                    top = TRUE) {
+                    top = TRUE, type = "gif") {
     
     olddir <- setwd(dir)
     on.exit(setwd(olddir))
@@ -172,12 +172,12 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
         version <- system("convert --version", intern=TRUE)
         if (!length(grep("ImageMagick", version)))
             stop("ImageMagick not found")    
-        filename <- paste(movie, ".gif", sep="")
+        filename <- paste(movie, ".", type, sep="")
         if (verbose) cat("Will create: ", file.path(dir, filename), "\n")
-        wildcard <- paste(frames,"*.png", sep="")
-    	convert <- paste("convert -delay 1x", fps, " ",wildcard, " ", filename, sep="")
+        convert <- "convert -delay 1x%d %s*.png %s.%s"
     }
     if (is.character(convert)) {
+    	convert <- sprintf(convert, fps, frames, movie, type, duration, dir)
 	if (verbose) {
 	    cat("Executing: ", convert, "\n")
 	    flush.console()
