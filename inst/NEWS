@@ -279,3 +279,5 @@ v0.81.708
     handled properly.
   - movie3d gains a "type" argument to set the output type, and the 
     "convert" argument is more flexible.
+  - rgl.snapshot() gives more informative error messages when libpng is
+    not available.
