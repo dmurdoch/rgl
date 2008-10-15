@@ -3,6 +3,9 @@
 //
 // $Id$
 
+
+#include "R.h"		// for error()
+
 #include "rglview.h"
 #include "opengl.hpp"
 #include <cstdio>
@@ -470,30 +473,30 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
 {
   bool success = false;
 
-  if ( (formatID < PIXMAP_FILEFORMAT_LAST) && (pixmapFormat[formatID]) 
-      && windowImpl->beginGL() ) {
+  if ( (formatID < PIXMAP_FILEFORMAT_LAST) && (pixmapFormat[formatID])) { 
+    if ( windowImpl->beginGL() ) {
 
-    // alloc pixmap memory
+      // alloc pixmap memory
 
-    Pixmap snapshot;
-  
-    snapshot.init(RGB24, width, height, 8);
+      Pixmap snapshot;
+   
+      snapshot.init(RGB24, width, height, 8);
 
-    // read front buffer
+      // read front buffer
 
-    glPushAttrib(GL_PIXEL_MODE_BIT);
+      glPushAttrib(GL_PIXEL_MODE_BIT);
 
-    glReadBuffer(GL_FRONT);
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
+      glReadBuffer(GL_FRONT);
+      glPixelStorei(GL_PACK_ALIGNMENT, 1);
+      glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
 
-    glPopAttrib();
+      glPopAttrib();
 
-    success = snapshot.save( pixmapFormat[formatID], filename );
+      success = snapshot.save( pixmapFormat[formatID], filename );
 
-    windowImpl->endGL();
-
-  }
+      windowImpl->endGL();
+    }
+  } else error("pixmap save format not supported in this build");
 
   return success;
 }
