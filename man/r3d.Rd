@@ -15,7 +15,7 @@
   
   The rendering interface gives an abstraction to the underlying rendering model. It can
   be grouped into four categories:    
-  \enumerate{
+  \describe{
     \item{Scene Management:}{A 3D scene consists of shapes, lights and background environment.} 
     \item{Primitive Shapes:}{Generic primitive 3D graphics shapes such as points, lines, triangles, quadrangles and texts.} 
     \item{High-level Shapes:}{Generic high-level 3D graphics shapes such as spheres, sprites and terrain.}
@@ -25,7 +25,7 @@
   In this package we include an implementation of r3d using the underlying \code{rgl.*} functions.
   
   3D computation is supported through the use of object structures that live entirely in R.
-  \enumerate{
+  \describe{
     \item{Geometry Objects:}{Geometry and mesh objects allow to define high-level geometry for computational purpose such as quadrangle meshes (qmesh3d).}
     \item{Transformation:}{Generic interface to transform 3d objects.}
     \item{Visualization:}{Generic rendering of 3d objects such as dotted, wired or shaded.}
