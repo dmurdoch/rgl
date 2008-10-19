@@ -20,14 +20,14 @@ rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, scale = par3d("scale"),
   \item{userMatrix}{4x4 matrix specifying user point of view}
 }
 \details{
-The viewpoint can be set in an orbit around the data model, using the polar coordinates \code{\theta}
+The viewpoint can be set in an orbit around the data model, using the polar coordinates \code{theta}
 and \code{phi}.  Alternatively, it can be set in a completely general way using the 4x4 matrix
 \code{userMatrix}.  If \code{userMatrix} is specified, \code{theta} and \code{phi} are ignored.
 
 The pointing device of your graphics user-interface can also be used to 
 set the viewpoint interactively. With the pointing device the buttons are by default set as follows:
 
-\itemize{
+\describe{
 \item{left}{adjust viewpoint position}
 \item{middle}{adjust field of view angle}
 \item{right or wheel}{adjust zoom factor}
