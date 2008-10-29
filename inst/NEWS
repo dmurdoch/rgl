@@ -281,3 +281,5 @@ v0.81.708
     "convert" argument is more flexible.
   - rgl.snapshot() gives more informative error messages when libpng is
     not available.
+  - axis3d() now uses format() rather than as.character() to give
+    nicer looking labels.
