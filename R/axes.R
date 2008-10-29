@@ -50,7 +50,7 @@ axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
         }
 
         if (is.logical(labels)) {
-                if (labels) labels <- as.character(at)
+                if (labels) labels <- format(at)
                 else labels <- NA
         }
 
