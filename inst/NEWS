@@ -260,7 +260,7 @@ v0.81
   - fixed configuration problems in OS X
   - fixed executable marker on a number of files
   
-v0.81.708
+v0.81.713
   - rewrote internal rendering of transparent and anti-aliased shapes,
     so they will be rendered better when there are several in the same 
     scene
@@ -283,3 +283,4 @@ v0.81.708
     not available.
   - axis3d() now uses format() rather than as.character() to give
     nicer looking labels.
+  - the clipping volume calculation was incorrect when scaling was used.

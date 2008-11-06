@@ -398,7 +398,7 @@ void Scene::render(RenderContext* renderContext)
     // GET DATA VOLUME SPHERE
     //
 
-    total_bsphere = Sphere( (bboxDeco) ? bboxDeco->getBoundingBox(data_bbox) : data_bbox );
+    total_bsphere = Sphere( (bboxDeco) ? bboxDeco->getBoundingBox(data_bbox) : data_bbox, viewpoint->scale );
 
   } else {
     total_bsphere = Sphere( Vertex(0,0,0), 1 );
