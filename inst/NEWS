@@ -284,3 +284,4 @@ v0.81.713
   - axis3d() now uses format() rather than as.character() to give
     nicer looking labels.
   - the clipping volume calculation was incorrect when scaling was used.
+  - use R warning() to report messages, rather than popups or REprintf.

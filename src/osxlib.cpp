@@ -13,7 +13,7 @@ namespace lib {
 // ---------------------------------------------------------------------------
 void printMessage(const char* message)
 {
-  REprintf("RGL: %s\n", message);
+  warning("RGL: %s\n", message);
 }
 // ---------------------------------------------------------------------------
 double getTime()

@@ -95,7 +95,7 @@ void quit()
 //
 
 void printMessage( const char* string ) {
-  REprintf("RGL: %s\n", string);
+  warning("RGL: %s\n", string);
 }
 
 //
