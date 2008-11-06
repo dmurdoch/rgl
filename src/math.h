@@ -100,6 +100,7 @@ struct Vec3
   Vec3 operator * (float value);
   Vec3 operator+(Vec3 op2) const;
   Vec3 operator-(Vec3 op2) const;
+  Vec3 scale(const Vec3& op2) const;
   void   operator+=(Vec3 op2);
   void   rotateX(float degree);
   void   rotateY(float degree);

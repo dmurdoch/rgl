@@ -74,6 +74,15 @@ void Vec3::operator += (Vec3 op2)
   z += op2.z;
 }
 
+Vec3 Vec3::scale(const Vec3& op2) const
+{
+  Vec3 t(*this);
+  t.x *= op2.x;
+  t.y *= op2.y;
+  t.z *= op2.z;
+  return t;
+}
+
 Vec3 Vertex::operator + (Vec3 op2) const
 {
   Vec3 t(*this);

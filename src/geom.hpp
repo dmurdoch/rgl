@@ -38,6 +38,7 @@ public:
   Sphere(const Vertex& center, const float radius);
   Sphere(const float radius);
   Sphere(const AABox& aabox);
+  Sphere(const AABox& aabox, const Vertex& scale);
   Vertex center;
   float radius;
 };

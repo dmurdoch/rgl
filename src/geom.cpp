@@ -75,6 +75,13 @@ Sphere::Sphere(const AABox& bbox)
   radius = hdiagonal.getLength();
 }
 
+Sphere::Sphere(const AABox& bbox, const Vertex& s)
+{
+  Vertex hdiagonal( ((bbox.vmax - bbox.vmin) * 0.5f).scale(s) );
+  center = bbox.getCenter();
+  radius = hdiagonal.getLength();
+}
+
 Sphere::Sphere(const float in_radius)
 : center(0.0f, 0.0f, 0.0f), radius(in_radius)
 {
