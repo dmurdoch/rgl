@@ -501,6 +501,34 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
   return success;
 }
 
+bool RGLView::pixels( int* ll, int* size, int component, float* result )
+{
+  bool success = false;
+  GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
+                      GL_DEPTH_COMPONENT, GL_LUMINANCE};   
+  glEnable(GL_DEPTH_TEST);
+  glDepthMask(GL_TRUE);
+  
+  if ( windowImpl->beginGL() ) {
+
+    // read front buffer
+
+    glPushAttrib(GL_PIXEL_MODE_BIT);
+ 
+    glReadBuffer(GL_FRONT);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadPixels(ll[0],ll[1],size[0],size[1],format[component], GL_FLOAT, (GLvoid*) result);
+
+    glPopAttrib();
+
+    success = true;
+
+    windowImpl->endGL();
+  }
+
+  return success;
+}
+
 void RGLView::setMouseMode(int button, MouseModeID mode)
 {
 	int index = button-1;

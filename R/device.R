@@ -120,3 +120,31 @@ rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
     print("failed")
 }
 
+##
+## read image
+##
+##
+
+rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("viewport"), top=TRUE )
+{
+  if (top) rgl.bringtotop()
+  
+  compnum <- as.integer(sapply(component, rgl.enum.pixelcomponent))
+  stopifnot(length(viewport) == 4)
+  ll <- as.integer(viewport[1:2])
+  size <- as.integer(viewport[3:4])
+  result <- array(NA_real_, dim=c(size[1], size[2], length(component)))
+  dimnames(result) <- list(NULL, NULL, component)
+  for (i in seq_along(compnum)) {
+    ret <- .C( rgl_pixels,
+      success=FALSE,
+      ll, size, compnum[i],
+      values = single(size[1]*size[2]))
+ 
+    if (! ret$success)
+      stop("Error reading component", component[i])
+    result[,,i] <- ret$values
+  }
+  if (length(component) > 1) return(result)
+  else return(result[,,1])
+}
