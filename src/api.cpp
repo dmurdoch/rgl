@@ -746,6 +746,20 @@ void rgl_snapshot(int* successptr, int* idata, char** cdata)
   *successptr = success;
 }
 
+void rgl_pixels(int* successptr, int* ll, int* size, int* component, float* result)
+{
+  int success = RGL_FAIL;
+  
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    
+    success = as_success( device->pixels( ll, size, *component, result) );
+    
+  }
+  
+  *successptr = success;
+}
 
 void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
 {

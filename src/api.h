@@ -42,6 +42,7 @@ EXPORT_SYMBOL void rgl_dev_bringtotop(int* successptr, int* stay);
 /* device services */
 
 EXPORT_SYMBOL void rgl_snapshot (int* successptr, int* idata, char** cdata);
+EXPORT_SYMBOL void rgl_pixels(int* successptr, int* ll, int* size, int* component, float* result);
 EXPORT_SYMBOL void rgl_postscript (int* successptr, int* idata, char** cdata);
 
 /* scene management */

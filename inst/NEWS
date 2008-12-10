@@ -285,3 +285,4 @@ v0.81.713
     nicer looking labels.
   - the clipping volume calculation was incorrect when scaling was used.
   - use R warning() to report messages, rather than popups or REprintf.
+  - added rgl.pixels() to read the generated image.

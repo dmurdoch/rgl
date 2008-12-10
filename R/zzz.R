@@ -69,7 +69,7 @@
 	 "rgl_postscript", "rgl_material", "rgl_getmaterial",
 	 "rgl_getcolorcount", "rgl_dev_bringtotop", "rgl_clear",
 	 "rgl_pop", "rgl_id_count", "rgl_ids", "rgl_viewpoint",
-	 "rgl_bg", "rgl_bbox", "rgl_light", "rgl_primitive",
+	 "rgl_bg", "rgl_bbox", "rgl_light", "rgl_pixels", "rgl_primitive",
 	 "rgl_setMouseCallbacks", "rgl_surface", "rgl_spheres",
 	 "rgl_texts", "rgl_sprites", "rgl_user2window",
 	 "rgl_window2user", "rgl_selectstate", "rgl_setselectstate",
