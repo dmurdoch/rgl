@@ -28,7 +28,9 @@ block requested (length 1 dimensions are dropped); if more, an array, whose last
 is the list of components.
 }
 \author{ Duncan Murdoch }
-\seealso{ \code{rgl.snapshot} to write a copy to a file. }
+\seealso{ \code{\link{rgl.snapshot}} to write a copy to a file,
+\code{demo("stereo")} for functions that make use of this to draw
+a random dot stereogram and an anaglyph. }
 \examples{
 example(surface3d)
 depth <- rgl.pixels(component="depth")

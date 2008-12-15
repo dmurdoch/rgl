@@ -260,7 +260,7 @@ v0.81
   - fixed configuration problems in OS X
   - fixed executable marker on a number of files
   
-v0.81.713
+v0.81.716
   - rewrote internal rendering of transparent and anti-aliased shapes,
     so they will be rendered better when there are several in the same 
     scene
@@ -285,4 +285,5 @@ v0.81.713
     nicer looking labels.
   - the clipping volume calculation was incorrect when scaling was used.
   - use R warning() to report messages, rather than popups or REprintf.
-  - added rgl.pixels() to read the generated image.
+  - added rgl.pixels() to read the generated image, and demo("stereo")
+    to illustrate its use.
