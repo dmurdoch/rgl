@@ -9,4 +9,5 @@ envmap        Environment mapping
 shapes3d      3D shape primitives (cones, ellipsoids, cubes), some taken from qmesh3d
 lollipop3d    "Lollipop" plots (3D scatterplot with lines between points and a surface)
 flag	      play3d() function that waves a flag
-mouseCallbacks	Standard mouse handlers implemented in R
+mouseCallbacks	Standard mouse handlers implemented in R, for a stereo view
+stereo	      Stereo views using a random dot stereogram & an anaglyph
