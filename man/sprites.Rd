@@ -15,7 +15,7 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
   \item{ x, y, z }{point coordinates.  Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
-  \item{ radius } {vector or singe value defining the sphere radius}
+  \item{ radius }{vector or single value defining the sphere radius}
   \item{ ... }{material properties, texture mapping is supported}
 }
 \details{
