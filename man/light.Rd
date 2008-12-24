@@ -13,7 +13,7 @@ rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF",
 \arguments{
   \item{theta, phi}{polar coordinates}
   \item{viewpoint.rel}{logical, if TRUE light is a viewpoint light that is positioned relative to the current viewpoint}
-  \item{ambient, diffuse, specular } { light color values used for lighting calculation }
+  \item{ambient, diffuse, specular }{ light color values used for lighting calculation }
   \item{...}{generic arguments passed through to RGL-specific (or other) functions}
 }
 \details{
