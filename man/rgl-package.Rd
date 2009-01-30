@@ -52,7 +52,7 @@ rgl.init(initValue=0)     # re-initialize rgl
   See the first example below to display the ChangeLog.
 }
 \examples{
-file.show(system.file("ChangeLog", package="rgl"))
+file.show(system.file("NEWS", package="rgl"))
 example(surface3d)
 example(plot3d)
 }
