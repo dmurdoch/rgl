@@ -288,3 +288,8 @@ v0.82
   - added rgl.pixels() to read the generated image, and demo("stereo")
     to illustrate its use.
   - corrected the ?rgl example to display this file.
+
+v0.82.721
+  - Don't try to build Carbon driver in 64 bit Mac OS (contributed by
+    Brian Ripley).
+  - Fix rgl.pixels example for weird displays.

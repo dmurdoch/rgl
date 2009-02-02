@@ -34,6 +34,7 @@ a random dot stereogram and an anaglyph. }
 \examples{
 example(surface3d)
 depth <- rgl.pixels(component="depth")
-contour(depth)
+if (is.matrix(depth)) # Protect against single pixel windows
+    contour(depth)
 }
 \keyword{ dynamic }
