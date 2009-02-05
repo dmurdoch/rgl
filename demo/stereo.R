@@ -111,14 +111,10 @@ anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1)) {
   force(right)
 
   rgl.set(left)
-  rgl.bringtotop()
-  Sys.sleep(0.1)
   vp <- par3d("viewport")
   leftPixels <- rgl.pixels(viewport=vp)
   leftPixels <- (leftPixels[,,1]+leftPixels[,,2]+leftPixels[,,3])/3
   rgl.set(right)
-  rgl.bringtotop()
-  Sys.sleep(0.1)  # give time to refresh
   rightPixels <- rgl.pixels(viewport=vp)
   rightPixels <- (rightPixels[,,1]+rightPixels[,,2]+rightPixels[,,3])/3
   red <- leftPixels*leftColor[1] + rightPixels*rightColor[1]

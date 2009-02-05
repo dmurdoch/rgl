@@ -130,8 +130,9 @@ void X11WindowImpl::hide()
 void X11WindowImpl::bringToTop(int stay)
 {
   XRaiseWindow(factory->xdisplay, xwindow);
-  factory->flushX();
+  factory->processEvents();
   XSync(factory->xdisplay, False);
+  glXWaitX();
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::on_paint()
