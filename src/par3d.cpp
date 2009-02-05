@@ -364,12 +364,14 @@ SEXP par3d(SEXP args)
 		SET_VECTOR_ELT(value, i, Query(CHAR(tag)));
 		SET_STRING_ELT(newnames, i, tag);
 		Specify(CHAR(tag), val);
+		CHECKGLERROR;
 	    }
 	    else if (isString(val) && length(val) > 0) {
 		tag = STRING_ELT(val, 0);
 		if (tag != R_NilValue && CHAR(tag)[0]) {
 		    SET_VECTOR_ELT(value, i, Query(CHAR(tag)));
 		    SET_STRING_ELT(newnames, i, tag);
+		    CHECKGLERROR;
 		}
 	    }
 	    else {

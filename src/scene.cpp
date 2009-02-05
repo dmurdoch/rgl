@@ -361,6 +361,8 @@ void Scene::render(RenderContext* renderContext)
 
   GLbitfield clearFlags = 0;
 
+  SAVEGLERROR;
+
   // Depth Buffer
 
   glClearDepth(1.0);
@@ -404,6 +406,7 @@ void Scene::render(RenderContext* renderContext)
     total_bsphere = Sphere( Vertex(0,0,0), 1 );
   }
 
+  SAVEGLERROR;
 
   //
   // SETUP VIEWPORT TRANSFORMATION
@@ -432,6 +435,7 @@ void Scene::render(RenderContext* renderContext)
 
   background->render(renderContext);
 
+  SAVEGLERROR;
   
   //
   // RENDER MODEL
@@ -470,6 +474,8 @@ void Scene::render(RenderContext* renderContext)
 
     // DISABLE BLENDING
     glDisable(GL_BLEND);
+    
+    SAVEGLERROR;
 
     {
       std::vector<Shape*>::iterator iter;
@@ -498,6 +504,8 @@ void Scene::render(RenderContext* renderContext)
     // ENABLE BLENDING
     glEnable(GL_BLEND);
 
+    SAVEGLERROR;
+
     //
     // GET THE TRANSFORMATION
     //
@@ -517,6 +525,8 @@ void Scene::render(RenderContext* renderContext)
 #endif    
     /* Reset flag(s) now that scene has been rendered */
     renderContext->viewpoint->scaleChanged = false;
+    
+    SAVEGLERROR;
   }
 }
 
@@ -552,6 +562,8 @@ void Scene::setupLightModel(RenderContext* rctx)
       light->setup(rctx);
   }
 
+  SAVEGLERROR;
+
   //
   // viewpoint lights
   //
@@ -567,6 +579,8 @@ void Scene::setupLightModel(RenderContext* rctx)
       light->setup(rctx);
 
   }
+
+  SAVEGLERROR;
 
   //
   // disable unused lights

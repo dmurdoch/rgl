@@ -1,9 +1,9 @@
 #include "TextSet.hpp"
 
 #include "glgui.hpp"
+#include "R.h"
 #ifdef HAVE_FREETYPE
 #include "Viewpoint.hpp"
-#include "R.h"
 #include <map>
 #endif
 //////////////////////////////////////////////////////////////////////////////
@@ -78,6 +78,7 @@ void TextSet::drawElement(RenderContext* renderContext, int index)
       }
     }
   }
+  SAVEGLERROR;
 }
 
 void TextSet::drawEnd(RenderContext* renderContext)

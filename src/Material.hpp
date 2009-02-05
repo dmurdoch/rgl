@@ -48,6 +48,8 @@ public:
   bool         useColorArray;
   bool         point_antialias;
   bool         line_antialias;
+  
+  float        glVersion;
 };
 
 

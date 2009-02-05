@@ -131,6 +131,7 @@ void X11WindowImpl::bringToTop(int stay)
 {
   XRaiseWindow(factory->xdisplay, xwindow);
   factory->flushX();
+  XSync(factory->xdisplay, False);
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::on_paint()

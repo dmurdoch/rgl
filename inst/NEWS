@@ -289,7 +289,11 @@ v0.82
     to illustrate its use.
   - corrected the ?rgl example to display this file.
 
-v0.82.721
+v0.82.722
   - Don't try to build Carbon driver in 64 bit Mac OS (contributed by
     Brian Ripley).
-  - Fix rgl.pixels example for weird displays.
+  - Fixed rgl.pixels example for weird displays.
+  - Did not assume OpenGL 1.2 was available in material properties.
+  - Added numerous error checks.
+  - Fixed demo(stereo) to add delay:  X windows seemed to grab images
+    before they were redrawn.
