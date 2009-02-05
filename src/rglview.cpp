@@ -24,7 +24,6 @@
 #define ZOOM_MIN  0.0001f
 #define ZOOM_MAX  10000.0f
 
-
 RGLView::RGLView(Scene* in_scene)
  : View(0,0,256,256,0), dragBase(0.0f,0.0f),dragCurrent(0.0f,0.0f), autoUpdate(false)
 {
@@ -101,8 +100,12 @@ void RGLView::paint(void) {
   renderContext.time = t;
   renderContext.deltaTime = dt;
 
+  SAVEGLERROR;  
+  
   if (windowImpl->beginGL()) {
     scene->render(&renderContext);
+    
+
 
     glGetDoublev(GL_MODELVIEW_MATRIX,modelMatrix);
     glGetDoublev(GL_PROJECTION_MATRIX,projMatrix);
@@ -115,6 +118,8 @@ void RGLView::paint(void) {
 
     glFinish();
     windowImpl->endGL();
+    
+    SAVEGLERROR;
   }
 
 //  if (flags & FAUTOUPDATE)
