@@ -12,7 +12,7 @@ static int SaveLine;
 void saveGLerror(const char * file, int line)
 {
   GLenum errnum;
-  if ((errnum = glGetError()) != GL_NO_ERROR) {
+  if (SaveErrnum == GL_NO_ERROR && (errnum = glGetError()) != GL_NO_ERROR) {
     SaveErrnum = errnum;
     SaveFile = file;
     SaveLine = line;
