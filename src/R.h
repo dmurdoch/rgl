@@ -6,7 +6,15 @@
 
 #include <R.h>
 
+/* Set this to 1 to turn on more extensive testing */
+#define USE_SAVEGLERROR 0
+
+#if USE_SAVEGLERROR
 #define SAVEGLERROR saveGLerror(__FILE__, __LINE__);
+#else
+#define SAVEGLERROR 
+#endif 
+
 #define CHECKGLERROR checkGLerror(__FILE__, __LINE__);
 
 /* saveGLerror is safe to call from a message handler.  It saves one error.          */
