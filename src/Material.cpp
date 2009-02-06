@@ -40,15 +40,23 @@ void Material::setup()
 void Material::beginUse(RenderContext* renderContext)
 {
   int ncolor = colors.getLength();
+  
+  SAVEGLERROR;
 
   glPushAttrib( GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_POLYGON_BIT );
+  
+  SAVEGLERROR;
 
   if (!alphablend) 
     glDepthMask(GL_TRUE);
 
+  SAVEGLERROR;
+
   if (point_antialias) glEnable(GL_POINT_SMOOTH);
   if (line_antialias)  glEnable(GL_LINE_SMOOTH);
   
+  SAVEGLERROR;
+
   glDisable(GL_CULL_FACE);
 
   for (int i=0;i<2;i++) {
@@ -56,6 +64,8 @@ void Material::beginUse(RenderContext* renderContext)
     PolygonMode mode = (i==0) ? front : back;
     
     GLenum face = (i==0) ? GL_FRONT : GL_BACK;
+
+    SAVEGLERROR;
 
     switch (mode) {
       case FILL_FACE:
@@ -74,11 +84,17 @@ void Material::beginUse(RenderContext* renderContext)
     }
   }
 
+  SAVEGLERROR;
+
   glShadeModel( (smooth) ? GL_SMOOTH : GL_FLAT );
+
+  SAVEGLERROR;
 
   if (lit) {
     glEnable(GL_LIGHTING);
  
+    SAVEGLERROR;
+
 #ifdef GL_VERSION_1_2
     if (glVersion >= 1.2)
       glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR ); 
@@ -94,17 +110,23 @@ void Material::beginUse(RenderContext* renderContext)
     glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION, emission.data);
   }
 
+  SAVEGLERROR;
+
   if ( (useColorArray) && ( ncolor > 1 ) ) {
     glEnableClientState(GL_COLOR_ARRAY);
     colors.useArray();
   } else
     colors.useColor(0);
 
+  SAVEGLERROR;
+
   glPointSize( size );
   glLineWidth( lwd );
 
   if (texture)
     texture->beginUse(renderContext);
+
+  SAVEGLERROR;
 
   if (!fog)
     glDisable(GL_FOG);
