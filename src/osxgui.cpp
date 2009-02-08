@@ -257,7 +257,9 @@ void OSXWindowImpl::endGL()
 void OSXWindowImpl::update()
 {
   InvalWindowRect(mWindowRef, &mRect);
+  SAVEGLERROR;
   on_paint();
+  SAVEGLERROR;
 }
 // ---------------------------------------------------------------------------
 void OSXWindowImpl::show()

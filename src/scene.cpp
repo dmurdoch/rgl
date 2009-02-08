@@ -75,18 +75,24 @@ bool Scene::clear(TypeID typeID)
   switch(typeID) {
     case SHAPE:
       deleteShapes();
+      SAVEGLERROR;
       zsortShapes.clear();
+      SAVEGLERROR;
       unsortedShapes.clear();
+      SAVEGLERROR;
       data_bbox.invalidate();
+      SAVEGLERROR;
       success = true;
       break;
     case LIGHT:
       deleteLights();
+      SAVEGLERROR;
       nlights = 0;
       success = true;
       break;
     case BBOXDECO:
       delete bboxDeco;
+      SAVEGLERROR;
       bboxDeco = NULL;
       success = true;
       break;
