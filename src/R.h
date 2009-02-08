@@ -7,7 +7,7 @@
 #include <R.h>
 
 /* Set this to 1 to turn on more extensive testing */
-#define USE_SAVEGLERROR 0
+#define USE_SAVEGLERROR 1
 
 #if USE_SAVEGLERROR
 #define SAVEGLERROR saveGLerror(__FILE__, __LINE__);

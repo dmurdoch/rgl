@@ -223,7 +223,9 @@ void Win32WindowImpl::bringToTop(int stay) /* stay=0 for regular, 1 for topmost,
 void Win32WindowImpl::update()
 {
   InvalidateRect(windowHandle, NULL, false);
+  SAVEGLERROR;
   UpdateWindow(windowHandle);
+  SAVEGLERROR;
 }
 
 void Win32WindowImpl::destroy()
