@@ -489,6 +489,7 @@ void Scene::render(RenderContext* renderContext)
       for (iter = unsortedShapes.begin() ; iter != unsortedShapes.end() ; ++iter ) {
         Shape* shape = *iter;
         shape->render(renderContext);
+        SAVEGLERROR;
       }
     }
 
@@ -504,9 +505,13 @@ void Scene::render(RenderContext* renderContext)
     // DISABLE Z-BUFFER FOR WRITING
     glDepthMask(GL_FALSE);
     
+    SAVEGLERROR;
+    
     // SETUP BLENDING
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+    SAVEGLERROR;
+    
     // ENABLE BLENDING
     glEnable(GL_BLEND);
 
