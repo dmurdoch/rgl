@@ -30,11 +30,14 @@ void Shape::update(RenderContext* renderContext)
 void Shape::draw(RenderContext* renderContext)
 { 
   drawBegin(renderContext);
+  SAVEGLERROR;
   
   for(int i=0;i<getElementCount();i++) 
     drawElement(renderContext, i);
     
+  SAVEGLERROR;  
   drawEnd(renderContext);
+  SAVEGLERROR;
 }
 
 void Shape::render(RenderContext* renderContext)
@@ -70,13 +73,16 @@ void Shape::renderZSort(RenderContext* renderContext)
   std::multimap<float,int>::iterator iter;
 
   drawBegin(renderContext);
-
+  SAVEGLERROR;
+  
   for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++iter ) {
     int index = iter->second;
     drawElement(renderContext, index);
   } 
-
+  SAVEGLERROR;
+  
   drawEnd(renderContext);
+  SAVEGLERROR;
 }
 
 void Shape::invalidateDisplaylist()

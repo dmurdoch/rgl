@@ -53,7 +53,7 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
 
   glNormal3f(0.0f,0.0f,1.0f);
 
-  glBegin(GL_QUADS);
+
 }
 
 void SpriteSet::drawElement(RenderContext* renderContext, int index)
@@ -67,7 +67,9 @@ void SpriteSet::drawElement(RenderContext* renderContext, int index)
   v = m * o;
 
   material.useColor(index);
-
+  
+  glBegin(GL_QUADS);
+  
   if (doTex)
     glTexCoord2f(0.0f,0.0f);
   glVertex3f(v.x - s, v.y - s, v.z);
@@ -82,12 +84,13 @@ void SpriteSet::drawElement(RenderContext* renderContext, int index)
 
   if (doTex)
     glTexCoord2f(0.0f,1.0f);
-  glVertex3f(v.x - s, v.y + s, v.z);
+  glVertex3f(v.x - s, v.y + s, v.z);  
+  
+  glEnd();
 }
   
 void SpriteSet::drawEnd(RenderContext* renderContext)
 {
-  glEnd();
   glPopMatrix();
 
   material.endUse(renderContext);
