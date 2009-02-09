@@ -1212,7 +1212,7 @@ double getCex()
   Device* device;
   
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-    int result = device->getRGLView()->getFontCex();
+    double result = device->getRGLView()->getFontCex();
     CHECKGLERROR;  
     return result;
   } else
