@@ -132,7 +132,9 @@ source(system.file("demo/mouseCallbacks.R", package="rgl"), echo=FALSE )
 # This version assumes the eyes diverge for the stereo view.  
 # Reverse the two arguments for the cross-eyed view.
 
-dev.new(width=9, height=7)
+if (R.version$major >= 2 && R.version$minor >= 8.0) 
+  dev.new(width=9, height=7)
+
 randomDot(rgl.cur()-1, rgl.cur())
 
 # A red-cyan anaglyph (for 3D glasses).  Use optional args to anaglyph for other glasses.

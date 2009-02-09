@@ -550,7 +550,11 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
       break;
     case WM_DESTROY:
       shutdownGL();
+#if defined (WIN64) || defined(_MSC_VER) 
+	  SetWindowLongPtr(hwnd, GWLP_USERDATA, (long)NULL);
+#else
       SetWindowLong(hwnd, GWL_USERDATA, (LONG) NULL );
+#endif
       if (window)
         window->notifyDestroy();
       delete this;
@@ -563,7 +567,11 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
     
 // static 
 LRESULT CALLBACK Win32WindowImpl::delegateWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+#if defined (WIN64) || defined(_MSC_VER) 
+  Win32WindowImpl* windowImpl = (Win32WindowImpl*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+#else
   Win32WindowImpl* windowImpl = (Win32WindowImpl*) GetWindowLong(hwnd, GWL_USERDATA);
+#endif
   return windowImpl->processMessage(hwnd, message, wParam, lParam);
 }
 
@@ -578,8 +586,13 @@ LRESULT CALLBACK Win32WindowImpl::windowProc(HWND hwnd, UINT message, WPARAM wPa
     } else {
       windowImpl = reinterpret_cast<Win32WindowImpl*>( pCreateStruct->lpCreateParams );
     }
+#if defined (WIN64) || defined(_MSC_VER) 
+    SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)windowImpl );
+    SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR) delegateWindowProc );
+#else
     SetWindowLong(hwnd, GWL_USERDATA, (long) windowImpl );
     SetWindowLong(hwnd, GWL_WNDPROC, (long) delegateWindowProc );
+#endif
     return windowImpl->processMessage(hwnd, message, wParam, lParam);
   } 
   return gDefWindowProc(hwnd, message, wParam, lParam); 
