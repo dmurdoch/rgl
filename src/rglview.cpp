@@ -4,7 +4,6 @@
 // $Id$
 
 
-#include "R.h"		// for error()
 
 #include "rglview.h"
 #include "opengl.hpp"
@@ -16,6 +15,7 @@
 #include "select.h"
 #include "gl2ps.h"
 #include <locale>
+#include "R.h"		// for error()
 
 //
 // CAMERA config
