@@ -77,7 +77,7 @@ public:
   /**
    * begin sending items 
    **/
-  virtual void drawBegin(RenderContext* renderContext) {};
+  virtual void drawBegin(RenderContext* renderContext);
 
   /**
    * send one item
@@ -87,7 +87,7 @@ public:
   /**
    * end sending items
    **/
-  virtual void drawEnd(RenderContext* renderContext) {};
+  virtual void drawEnd(RenderContext* renderContext);
 
   const bool isTransparent() const { return transparent; }
   
@@ -113,6 +113,7 @@ private:
    * display list
    **/
   GLuint   displayList;
+  int	   drawLevel;     /* for debugging */
 protected:
   /**
    * update indicator

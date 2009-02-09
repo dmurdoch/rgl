@@ -58,6 +58,7 @@ void TextSet::render(RenderContext* renderContext)
 
 void TextSet::drawBegin(RenderContext* renderContext) 
 {
+  Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
 }
 

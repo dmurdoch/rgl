@@ -37,6 +37,7 @@ Shape(in_material, in_ignoreExtent, SHAPE)
 
 void PrimitiveSet::drawBegin(RenderContext* renderContext)
 {
+  Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
   vertexArray.beginUse();
 }
@@ -87,6 +88,7 @@ void PrimitiveSet::drawEnd(RenderContext* renderContext)
 {
   vertexArray.endUse();
   material.endUse(renderContext);
+  Shape::drawEnd(renderContext);
 }
 
 // ---------------------------------------------------------------------------
