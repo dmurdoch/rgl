@@ -1,5 +1,6 @@
 #include <map>
 #include "Shape.hpp"
+#include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -40,14 +41,21 @@ void Shape::render(RenderContext* renderContext)
 {
   if (displayList == 0)
     displayList = glGenLists(1);
-
+    
+  SAVEGLERROR;
   if (doUpdate) {
     update(renderContext);
+    SAVEGLERROR;
     glNewList(displayList, GL_COMPILE_AND_EXECUTE);
+    SAVEGLERROR;
     draw(renderContext);
+    SAVEGLERROR;
     glEndList();
-  } else 
+    SAVEGLERROR;
+  } else {
     glCallList(displayList);
+    SAVEGLERROR;
+  }  
 }
 
 
