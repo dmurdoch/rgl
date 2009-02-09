@@ -36,6 +36,8 @@ Vertex SpriteSet::getElementCenter(int index)
 void SpriteSet::drawBegin(RenderContext* renderContext)
 {
   double mdata[16] = { 0 };
+  
+  Shape::drawBegin(renderContext);
 
   glGetDoublev(GL_MODELVIEW_MATRIX, mdata);
 
@@ -89,6 +91,7 @@ void SpriteSet::drawEnd(RenderContext* renderContext)
   glPopMatrix();
 
   material.endUse(renderContext);
+  Shape::drawEnd(renderContext);
 }
 
 void SpriteSet::render(RenderContext* renderContext)

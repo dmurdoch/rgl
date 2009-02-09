@@ -10,7 +10,7 @@
 
 Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID)
 : SceneNode(in_typeID), ignoreExtent(in_ignoreExtent), material(in_material), 
-  displayList(0), doUpdate(true), transparent(in_material.isTransparent()),
+  displayList(0), drawLevel(0), doUpdate(true), transparent(in_material.isTransparent()),
   blended(in_material.isTransparent())
   
 {
@@ -82,4 +82,16 @@ void Shape::renderZSort(RenderContext* renderContext)
 void Shape::invalidateDisplaylist()
 {
   doUpdate = true;
+}
+
+void Shape::drawBegin(RenderContext* renderContext)
+{
+  if (drawLevel) error("Internal error:  nested Shape::drawBegin");
+  drawLevel++;
+}
+
+void Shape::drawEnd(RenderContext* renderContext)
+{
+  if (drawLevel != 1) error("Internal error: Shape::drawEnd without drawBegin");
+  drawLevel--;
 }
