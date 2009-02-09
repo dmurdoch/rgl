@@ -146,12 +146,16 @@ void Material::endUse(RenderContext* renderContext)
 
   if ( (useColorArray) && ( ncolor > 1 ) ) {
     glDisableClientState(GL_COLOR_ARRAY);
+    SAVEGLERROR;
   }
 
-  if (texture)
+  if (texture) {
     texture->endUse(renderContext);
-
+    SAVEGLERROR;
+  }
+  
   glPopAttrib();
+  SAVEGLERROR;
 }
 
 void Material::colorPerVertex(bool enable, int numVertices)
