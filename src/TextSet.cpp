@@ -85,4 +85,5 @@ void TextSet::drawElement(RenderContext* renderContext, int index)
 void TextSet::drawEnd(RenderContext* renderContext)
 {
   material.endUse(renderContext);
+  Shape::drawEnd(renderContext);
 }

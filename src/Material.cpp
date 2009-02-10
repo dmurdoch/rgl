@@ -153,8 +153,9 @@ void Material::endUse(RenderContext* renderContext)
     texture->endUse(renderContext);
     SAVEGLERROR;
   }
-  
+  saveGLerror(__FILE__, __LINE__);
   glPopAttrib();
+  if (SaveErrnum == GL_NO_ERROR) glGetError(); /* work around bug in some glX implementations */
   SAVEGLERROR;
 }
 

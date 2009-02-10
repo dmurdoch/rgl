@@ -23,6 +23,8 @@
 /* Neither one can be called with glBegin() ... glEnd() pairs.                       */
 /* These are defined in glErrors.cpp                                                 */
 
+extern int SaveErrnum;
+
 void saveGLerror(const char *, int);  
 void checkGLerror(const char *, int);
 

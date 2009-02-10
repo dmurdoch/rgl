@@ -92,7 +92,10 @@ void Shape::invalidateDisplaylist()
 
 void Shape::drawBegin(RenderContext* renderContext)
 {
-  if (drawLevel) error("Internal error:  nested Shape::drawBegin");
+  if (drawLevel) {
+    drawLevel = 0;
+    error("Internal error:  nested Shape::drawBegin");
+  }
   drawLevel++;
 }
 
