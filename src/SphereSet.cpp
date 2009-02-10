@@ -49,7 +49,6 @@ void SphereSet::drawElement(RenderContext* renderContext, int index)
    sphereMesh.update( renderContext->viewpoint->scale );
 
    sphereMesh.draw(renderContext);
-   Shape::drawEnd(renderContext);
 }
 
 void SphereSet::drawEnd(RenderContext* renderContext)
