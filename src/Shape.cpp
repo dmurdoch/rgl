@@ -101,6 +101,9 @@ void Shape::drawBegin(RenderContext* renderContext)
 
 void Shape::drawEnd(RenderContext* renderContext)
 {
-  if (drawLevel != 1) error("Internal error: Shape::drawEnd without drawBegin");
+  if (drawLevel != 1) {
+    drawLevel = 0;
+    error("Internal error: Shape::drawEnd without drawBegin");
+  }
   drawLevel--;
 }
