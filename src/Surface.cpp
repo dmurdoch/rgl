@@ -240,5 +240,7 @@ void Surface::drawEnd(RenderContext* renderContext)
   vertexArray.endUse();
 
   material.endUse(renderContext);
+  Shape::drawEnd(renderContext);
+
 }
 

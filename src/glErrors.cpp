@@ -5,7 +5,7 @@
 #include "R.h"
 #include "opengl.hpp"
 
-static GLenum SaveErrnum = GL_NO_ERROR;
+int SaveErrnum = GL_NO_ERROR;
 static const char * SaveFile;
 static int SaveLine;
 
@@ -23,8 +23,10 @@ void checkGLerror(const char * file, int line)
 {
   saveGLerror(file, line);
   if (SaveErrnum != GL_NO_ERROR) {
+    int err = SaveErrnum;
+    SaveErrnum = GL_NO_ERROR;
     while (glGetError() != GL_NO_ERROR) {} /* clear other errors, if any */
-    error("OpenGL error at %s:%d: %s", SaveFile, SaveLine, gluErrorString(SaveErrnum));
+    error("OpenGL error at %s:%d: %s", SaveFile, SaveLine, gluErrorString(err));
   }
 }
 
