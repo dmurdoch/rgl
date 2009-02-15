@@ -292,11 +292,10 @@ mouseFOV <- function(button = 1, dev = rgl.cur())
                       init=par3d("FOV")/180, range = c(1,179)/180, direction=c(0,1))
                       
 # Synchronize mouse control of two windows for stereo view
-Example <- system.file("R-ex/surface3d.R", package="rgl")
-source(Example, echo = FALSE)
+example(surface3d, echo = FALSE)
 par3d(windowRect= c(0,32,512,544), userMatrix = rotationMatrix(5*pi/180, 0,1,0) %*% par3d("userMatrix") )
 w1 <- rgl.cur()
-source(Example, echo = FALSE)
+example(surface3d, echo = FALSE)
 par3d(windowRect = c(512,32,1024,544))
 w2 <- rgl.cur()
 mouseTrackball(dev=c(w1,w2))
