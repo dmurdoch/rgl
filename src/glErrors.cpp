@@ -2,8 +2,8 @@
 // This file is part of RGL.
 //
 
-#include "R.h"
 #include "opengl.hpp"
+#include "R.h"
 
 int SaveErrnum = GL_NO_ERROR;
 static const char * SaveFile;
