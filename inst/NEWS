@@ -289,7 +289,7 @@ v0.82
     to illustrate its use.
   - corrected the ?rgl example to display this file.
 
-v0.83
+v0.83-1
   - Don't try to build Carbon driver in 64 bit Mac OS (contributed by
     Brian Ripley).
   - Fixed rgl.pixels example for weird displays.
@@ -297,3 +297,5 @@ v0.83
   - Added numerous error checks.
   - Fixed demo(stereo) to add sync in X11:  X windows seemed to grab
     images before they were redrawn.
+  - Rearranged headers for Win64 compatibility (contributed by Alex 
+    Chen).
