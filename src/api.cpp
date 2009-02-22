@@ -170,7 +170,7 @@ void rgl_clear(int* successptr, int *idata)
   Device* device;
   int num = idata[0];
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     for (int i=1; success && i<=num; i++) {
       TypeID stackTypeID = (TypeID) idata[i];
@@ -266,7 +266,7 @@ void rgl_bg(int* successptr, int* idata)
 
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     bool sphere    = as_bool( idata[0] );
     int  fogtype   = idata[1];
@@ -290,7 +290,7 @@ void rgl_light ( int* successptr, int* idata, double* ddata )
 
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     bool  viewpoint_rel = as_bool( idata[0] );
 
@@ -320,7 +320,7 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
 
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     float theta	      = static_cast<float>( ddata[0] );
     float phi	      = static_cast<float>( ddata[1] );
@@ -345,7 +345,7 @@ void rgl_getZoom(int* successptr, double* zoom)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
@@ -362,7 +362,7 @@ void rgl_setZoom(int* successptr, double* zoom)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
@@ -380,7 +380,7 @@ void rgl_getFOV(int* successptr, double* fov)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
@@ -397,7 +397,7 @@ void rgl_setFOV(int* successptr, double* fov)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
@@ -415,7 +415,7 @@ void rgl_getIgnoreExtent(int* successptr, int* ignoreExtent)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     *ignoreExtent = device->getIgnoreExtent();
     success = RGL_SUCCESS;
@@ -429,7 +429,7 @@ void rgl_setIgnoreExtent(int* successptr, int* ignoreExtent)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     device->setIgnoreExtent(*ignoreExtent);
     success = RGL_SUCCESS;
@@ -443,7 +443,7 @@ void rgl_getSkipRedraw(int* successptr, int* skipRedraw)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     *skipRedraw = device->getSkipRedraw();
     success = RGL_SUCCESS;
@@ -457,7 +457,7 @@ void rgl_setSkipRedraw(int* successptr, int* skipRedraw)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     device->setSkipRedraw(*skipRedraw);
     success = RGL_SUCCESS;
@@ -471,7 +471,7 @@ void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals,
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int   type    = idata[0];
     int   nvertex = idata[1];
@@ -524,7 +524,7 @@ void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y,
 
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int nx         = idata[0];
     int nz         = idata[1];
@@ -547,7 +547,7 @@ void rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
 
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int nvertex = idata[0];
     int nradius = idata[1];
@@ -566,7 +566,7 @@ void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius)
 
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int nvertex = idata[0];
     int nradius = idata[1];
@@ -706,7 +706,7 @@ void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* ve
   if (*useFreeType) error("FreeType not supported in this build");
 #endif
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int ntext   = idata[0];
     
@@ -732,7 +732,7 @@ void rgl_bbox(int* successptr,
 
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int   xticks     =        idata[0];
     int   yticks     =        idata[1];
@@ -803,7 +803,7 @@ void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, 
 
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
   
   	for (int i=0; i<4; i++) viewport[i] = view[i];
   	for (int i=0; i<columns; i++) {
@@ -830,7 +830,7 @@ void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, 
 
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
   
     	for (int i=0; i<4; i++) viewport[i] = view[i];
   	for (int i=0; i<columns; i++) {
@@ -853,7 +853,7 @@ void rgl_getMouseMode(int* successptr, int *button, int* mode)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
   
  	RGLView* rglview = device->getRGLView();
   	*mode = static_cast<int>( rglview->getMouseMode(*button) );
@@ -869,7 +869,7 @@ void rgl_setMouseMode(int* successptr, int* button, int* mode)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
   
  	RGLView* rglview = device->getRGLView();
 	rglview->setMouseMode(*button, (MouseModeID)(*mode));
@@ -887,7 +887,7 @@ void rgl_selectstate(int* successptr, int* selectstate, double* locations)
 	int success = RGL_FAIL;
 	Device* device;
 
-	if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+	if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 		RGLView* rglview = device->getRGLView();
 		
@@ -911,7 +911,7 @@ void rgl_setselectstate(int* successptr, int *idata)
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     MouseSelectionID selectState = (MouseSelectionID) idata[0];
 	RGLView* rglview = device->getRGLView();
@@ -930,7 +930,7 @@ void rgl_getUserMatrix(int* successptr, double* userMatrix)
 	int success = RGL_FAIL;
   	Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 		RGLView* rglview = device->getRGLView();
 		rglview->getUserMatrix(userMatrix);
@@ -949,7 +949,7 @@ void rgl_setUserMatrix(int* successptr, double* userMatrix)
 	int success = RGL_FAIL;
   	Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 		RGLView* rglview = device->getRGLView();
 		rglview->setUserMatrix(userMatrix);
@@ -967,7 +967,7 @@ void rgl_getPosition(double* position)
 {
    Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 		RGLView* rglview = device->getRGLView();
 		rglview->getPosition(position);
@@ -981,7 +981,7 @@ void rgl_setPosition(double* position)
 {
   	Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 		RGLView* rglview = device->getRGLView();
 		rglview->setPosition(position);
@@ -994,7 +994,7 @@ void rgl_setPosition(double* position)
 void rgl_getScale(int* successptr, double* scale)
 {
 	int success = RGL_FAIL;
-  	Device* device = deviceManager->getCurrentDevice();
+  	Device* device = deviceManager->getAnyDevice();
 
   	if (device) {
 
@@ -1013,7 +1013,7 @@ void rgl_setScale(int* successptr, double* scale)
 {
 
 	int success = RGL_FAIL;
-  	Device* device = deviceManager->getCurrentDevice();
+  	Device* device = deviceManager->getAnyDevice();
 
   	if (device) {
 
@@ -1034,7 +1034,7 @@ void rgl_getModelMatrix(int* successptr, double* modelMatrix)
 	int success = RGL_FAIL;
   	Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 		RGLView* rglview = device->getRGLView();
 		for (int i=0; i<16; i++) {
@@ -1052,7 +1052,7 @@ void rgl_getProjMatrix(int* successptr, double* projMatrix)
 	int success = RGL_FAIL;
   	Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 		RGLView* rglview = device->getRGLView();
 		for (int i=0; i<16; i++) {
@@ -1070,7 +1070,7 @@ void rgl_getViewport(int* successptr, int* viewport)
 	int success = RGL_FAIL;
   	Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 		RGLView* rglview = device->getRGLView();
 		for (int i=0; i<4; i++) {
@@ -1136,7 +1136,7 @@ void rgl_getBoundingbox(int* successptr, double* bboxvec)
 	int success = RGL_FAIL;
   	Device* device;
 
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
 	  const AABox& bbox = device->getScene()->getBoundingBox();
 	  bboxvec[0] = bbox.vmin.x;
