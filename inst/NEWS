@@ -299,3 +299,7 @@ v0.83-1
     images before they were redrawn.
   - Rearranged headers for Win64 compatibility (contributed by Alex 
     Chen).
+    
+v0.83-3
+  - Quick fix for R 2.9.x compatibility, and to remove accidental change
+    introduced in v0.83 which caused errors on plotting without open3d().
