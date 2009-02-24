@@ -303,3 +303,7 @@ v0.83-1
 v0.83-3
   - Quick fix for R 2.9.x compatibility, and to remove accidental change
     introduced in v0.83 which caused errors on plotting without open3d().
+
+v0.83-748
+  - Added triangle meshes, shape lists and the Platonic solids.
+  

@@ -1,7 +1,7 @@
 export(asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
-        bbox3d, bg3d, clear3d, cube3d, decorate3d, dot3d, ellipse3d,
-	grid3d, identityMatrix,  
-	light3d, lines3d, material3d, movie3d, mtext3d, oh3d, open3d, 
+        bbox3d, bg3d, clear3d, cube3d, decorate3d, dodecahedron3d, dot3d, ellipse3d,
+	grid3d, icosahedron3d, identityMatrix,  
+	light3d, lines3d, material3d, movie3d, mtext3d, octahedron3d, oh3d, open3d, 
 	par3d, par3dinterp, particles3d, persp3d, play3d, plot3d, points3d, pop3d,
 	qmesh3d, quads3d, rgl.bbox, rgl.bg, rgl.bringtotop, rgl.clear,
 	rgl.close, rgl.cur, rgl.ids, rgl.init, rgl.light, rgl.lines, rgl.linestrips,
@@ -10,19 +10,32 @@ export(asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
 	rgl.select3d, rgl.set, rgl.snapshot, rgl.spheres, rgl.sprites,
 	rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
 	rgl.viewpoint, rgl.window2user, rglFonts, r3dDefaults, rotate3d, rotationMatrix,
-	scale3d, scaleMatrix, segments3d, select3d, rgl.setMouseCallbacks, shade3d, snapshot3d,
-	spheres3d, spin3d, sprites3d, subdivision3d, surface3d, terrain3d, text3d,
-	texts3d, title3d, transform3d, translate3d, translationMatrix, triangles3d,
+	scale3d, scaleMatrix, segments3d, select3d, rgl.setMouseCallbacks, shade3d, 
+	shapelist3d, snapshot3d,
+	spheres3d, spin3d, sprites3d, subdivision3d, surface3d, terrain3d, 
+	tetrahedron3d, text3d,
+	texts3d, title3d, tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
 	view3d, wire3d)
  
- S3method(dot3d, qmesh3d)
+ S3method(dot3d, shapelist3d)
+ S3method(wire3d, shapelist3d)
+ S3method(shade3d, shapelist3d)  
+ S3method(translate3d, shapelist3d)
+ S3method(rotate3d, shapelist3d)
+ S3method(scale3d, shapelist3d)
+ 
+ S3method(dot3d, mesh3d)
+ S3method(translate3d, mesh3d)
+ S3method(rotate3d, mesh3d)
+ S3method(scale3d, mesh3d)
+ 
  S3method(wire3d, qmesh3d)
- S3method(shade3d, qmesh3d)
- S3method(translate3d, qmesh3d)
- S3method(rotate3d, qmesh3d)
- S3method(scale3d, qmesh3d)
+ S3method(shade3d, qmesh3d) 
  S3method(subdivision3d, qmesh3d)
  
+ S3method(wire3d, tmesh3d)
+ S3method(shade3d, tmesh3d)
+
  S3method(translate3d, default)
  S3method(rotate3d, default)
  S3method(scale3d, default)
@@ -33,7 +46,6 @@ export(asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
  S3method(ellipse3d, nls)
  
  S3method(plot3d, default)
- S3method(plot3d, qmesh3d)
  S3method(persp3d, default)
  
  if(tools:::.OStype() == "windows") {

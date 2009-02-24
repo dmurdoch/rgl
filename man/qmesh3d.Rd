@@ -1,33 +1,53 @@
-\name{qmesh3d}
+\name{mesh3d}
+\alias{shape3d}
+\alias{mesh3d}
 \alias{qmesh3d}
+\alias{tmesh3d}
 \alias{dot3d}
-\alias{dot3d.qmesh3d}
+\alias{dot3d.qmesh3d} % for back compatibility
+\alias{dot3d.mesh3d}
 \alias{wire3d}
 \alias{wire3d.qmesh3d}
+\alias{wire3d.tmesh3d}
 \alias{shade3d}
 \alias{shade3d.qmesh3d}
+\alias{shade3d.tmesh3d}
 \alias{cube3d}
 \alias{oh3d}
-\title{3D Quadrangle Mesh objects}
+\alias{tetrahedron3d}
+\alias{octahedron3d}
+\alias{icosahedron3d}
+\alias{dodecahedron3d}
+
+\title{3D Mesh objects}
 \description{
-  3D Quadrangle Mesh object creation and a collection of sample objects.
+  3D triangle and quadrangle mesh object creation and a collection of sample objects.
 }
 \usage{
   qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, normals = NULL)
-  cube3d(trans = identityMatrix(), ...)  # cube object
+  tmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, normals = NULL)
+  
+  cube3d(trans = identityMatrix(), ...)  
+  tetrahedron3d(trans = identityMatrix(), ...)  
+  octahedron3d(trans = identityMatrix(), ...)  
+  icosahedron3d(trans = identityMatrix(), ...)
+  dodecahedron3d(trans = identityMatrix(), ...)
+  
   oh3d(trans = identityMatrix(), ...)    # an 'o' object
   
   dot3d(x, ...)   # draw dots at the vertices of an object
-  \method{dot3d}{qmesh3d}(x, override = TRUE, ...)
+  \method{dot3d}{mesh3d}(x, override = TRUE, ...)
   wire3d(x, ...)  # draw a wireframe object
   \method{wire3d}{qmesh3d}(x, override = TRUE, ...)
+  \method{wire3d}{tmesh3d}(x, override = TRUE, ...)
   shade3d(x, ...) # draw a shaded object
   \method{shade3d}{qmesh3d}(x, override = TRUE, ...)
+  \method{shade3d}{tmesh3d}(x, override = TRUE, ...)
 }
 \arguments{
-  \item{x}{a qmesh3d object (class qmesh3d)}
+  \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d})}
   \item{vertices}{3- or 4-component vector of coordinates}
-  \item{indices}{4-component vector of quad indices}
+  \item{indices}{4-component vector of vertex indices}
   \item{homogeneous}{logical indicating if homogeneous (four component) coordinates are used.}
   \item{material}{material properties for later rendering}
   \item{normals}{normals at each vertex}
@@ -36,14 +56,34 @@
   \item{override}{should the parameters specified here override those stored in the object?}
 }
 \details{
-  The \code{cube3d} and \code{oh3d} objects optionally take a matrix transformation as 
-  an argument.  This transformation is applied to all vertices of the default shape.
+  These functions create and work with \code{mesh3d} objects, which consist of a matrix
+  of vertex coordinates together with a matrix of indices indicating which vertex is
+  part of which face.  There are both \code{tmesh3d} objects with triangular faces and
+  \code{qmesh3d} objects with planar quadrilateral faces.
   
-  The default is an identity transformation.  Use \code{par3d("userMatrix")} to render the
-  object vertically in the current user view.
+  The sample objects optionally take a matrix transformation \code{trans} as 
+  an argument.  This transformation is applied to all vertices of the default shape.
+  The default is an identity transformation. 
+  
+  The \code{"shape3d"} class is a general class for shapes that can be plotted
+  by \code{dot3d}, \code{wire3d} or \code{shade3d}.
+  
+  The \code{"mesh3d"} class is a class of objects that form meshes: the vertices
+  are in member \code{vb}.
+  
+  The \code{"tmesh3d"} class is for triangle meshes:  the vertex indices in 
+  \code{ib} are a \code{3 * n} matrix.  
+  
+  The \code{"qmesh3d"} class is for quad meshes:  the vertex indices in \code{ib}
+  are a \code{4 * n} matrix.
 }
 \value{
-  \code{qmesh3d}, \code{cube3d}, and \code{oh3d} return \code{qmesh3d} objects.
+  \code{qmesh3d}, \code{cube3d}, and \code{oh3d} return objects of class
+  \code{c("qmesh3d", "mesh3d", "shape3d")} .
+  
+  \code{tmesh3d}, \code{tetrahedron3d}, \code{octahedron3d}, \code{icosahedron3d}
+  and \code{dodecahedron3d} return objects of class
+  \code{c("tmesh3d", "mesh3d", "shape3d")} .
   
   \code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
   of drawing an object into the scene; they return an object ID.
@@ -76,8 +116,15 @@
   l3 <- subdivision3d( l2 )
   shade3d( translate3d( l3 , 6, 0, 0 ), color="red" )
   
+  # render all of the Platonic solids
+  open3d()
+  shade3d( translate3d( tetrahedron3d(col="red"), 0, 0, 0) )
+  shade3d( translate3d( cube3d(col="green"), 3, 0, 0) )
+  shade3d( translate3d( octahedron3d(col="blue"), 6, 0, 0) )
+  shade3d( translate3d( dodecahedron3d(col="cyan"), 9, 0, 0) )
+  shade3d( translate3d( icosahedron3d(col="magenta"), 12, 0, 0) )
 }
 \seealso{
-  \code{\link{r3d}}, \code{\link{par3d}} 
+  \code{\link{r3d}}, \code{\link{par3d}}, \code{\link{shapelist3d}} for multiple shapes
 }
 \keyword{dynamic}
