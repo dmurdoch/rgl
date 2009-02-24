@@ -25,13 +25,13 @@ qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
   
   if (!homogeneous) object$vb <- rbind(object$vb, 1)
   
-  class(object) <- "qmesh3d" 
+  class(object) <- c("qmesh3d", "mesh3d", "shape3d")
   return( object )
 }
 
 # rendering support
 
-dot3d.qmesh3d <- function ( x, override = TRUE, ... ) {
+dot3d.mesh3d <- function ( x, override = TRUE, ... ) {
   if ( override ) {
     material <- x$material
     if (is.null(material)) material <- list()
@@ -45,7 +45,9 @@ dot3d.qmesh3d <- function ( x, override = TRUE, ... ) {
                                     y = x$vb[2,]/x$vb[4,], 
                                     z = x$vb[3,]/x$vb[4,]), 
                                material ))
-}                               
+}     
+
+dot3d.qmesh3d <- dot3d.mesh3d   # for back-compatibility
   
 wire3d.qmesh3d <- function ( x, override = TRUE, ... ) {
   if ( override ) {
@@ -89,12 +91,12 @@ shade3d.qmesh3d <- function ( x, override = TRUE, ... ) {
 
 # transformation support
 
-translate3d.qmesh3d <- function ( obj, x, y, z, ... ) {
+translate3d.mesh3d <- function ( obj, x, y, z, ... ) {
   obj$vb <- t(translate3d(t(obj$vb), x, y, z))
   return(obj)                            
 }  
 
-rotate3d.qmesh3d <- function ( obj,angle,x,y,z,matrix, ... ) {
+rotate3d.mesh3d <- function ( obj,angle,x,y,z,matrix, ... ) {
   obj$vb <- t(rotate3d(t(obj$vb), angle, x, y, z, matrix))
   if ( !is.null(obj$normals) ) {
     if ( missing(matrix) ) 
@@ -106,7 +108,7 @@ rotate3d.qmesh3d <- function ( obj,angle,x,y,z,matrix, ... ) {
   return(obj)                            
 }  
 
-scale3d.qmesh3d <- function ( obj, x, y, z, ... ) {
+scale3d.mesh3d <- function ( obj, x, y, z, ... ) {
   obj$vb <- t(scale3d(t(obj$vb), x, y, z))
   if ( !is.null(obj$normals) ) {
     obj$normals <- scale3d(t(obj$normals), 1/x, 1/y, 1/z)
@@ -115,3 +117,9 @@ scale3d.qmesh3d <- function ( obj, x, y, z, ... ) {
   }
   return(obj)
 }
+
+# for back-compatibility
+translate3d.qmesh3d <- translate3d.mesh3d
+rotate3d.qmesh3d <- rotate3d.mesh3d
+scale3d.qmesh3d <- scale3d.mesh3d
+
