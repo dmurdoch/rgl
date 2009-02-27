@@ -1,39 +1,39 @@
 \name{subdivision3d}
 \alias{subdivision3d}
-\alias{subdivision3d.qmesh3d}
-\alias{divide.qmesh3d}
-\alias{normalize.qmesh3d}
-\alias{deform.qmesh3d}
+\alias{subdivision3d.mesh3d}
+\alias{divide.mesh3d}
+\alias{normalize.mesh3d}
+\alias{deform.mesh3d}
 \title{generic subdivision surface method}
 \description{
 The Subdivision surface algorithm divide and refine (deform) a
 given mesh recursively to certain degree (depth).
-The qmesh3d algorithm consists of two stages: divide and deform.
-The divide step generates for each quad four new quads, the deform
+The mesh3d algorithm consists of two stages: divide and deform.
+The divide step generates for each triangle or quad four new triangles or quads, the deform
 step drags the points (refinement step).
 }
 \usage{
   subdivision3d( x,  ...)
-  \method{subdivision3d}{qmesh3d}( x, depth=1, normalize=FALSE, deform=TRUE, ... )
-  divide.qmesh3d(mesh,  vb=mesh$vb, ib=mesh$ib )
-  normalize.qmesh3d(mesh)
-  deform.qmesh3d(mesh,vb=mesh$vb,ib=mesh$ib)
+  \method{subdivision3d}{mesh3d}( x, depth=1, normalize=FALSE, deform=TRUE, ... )
+  divide.mesh3d(mesh,  vb=mesh$vb, ib=mesh$ib, it=mesh$it )
+  normalize.mesh3d(mesh)
+  deform.mesh3d(mesh,vb=mesh$vb,ib=mesh$ib,it=mesh$it )
 }
 \arguments{
   \item{x}{3d geometry mesh}
   \item{mesh}{3d geometry mesh}
   \item{depth}{recursion depth}
-  \item{normalize}{normalize qmesh3d coordinates after division if deform is TRUE otherwise}
-  \item{deform}{deform mesh after normalization}
-  \item{ib}{vector of indices (i.e., which sets of vertices to combine
-    into quads); 4xn matrix or equivalent vector}
-  \item{vb}{vector of vertices: 4xn matrix (rows x,y,z,h) or equivalent
+  \item{normalize}{normalize mesh3d coordinates after division if \code{deform} is \code{TRUE}}
+  \item{deform}{deform mesh}
+  \item{it}{indices for triangular faces}
+  \item{ib}{indices for quad faces}
+  \item{vb}{matrix of vertices: 4xn matrix (rows x,y,z,h) or equivalent
     vector, where h indicates scaling of each plotted quad}
   \item{...}{other arguments (unused)}
 }
 \details{
   Generic subdivision surface method. Currently there exists
-  an algorithm that can be applied on qmesh3d objects.
+  an algorithm that can be applied on mesh3d objects.
 }
 \examples{
   open3d()
@@ -41,6 +41,6 @@ step drags the points (refinement step).
 }
 \seealso{
   \code{\link{r3d}}
-  \code{\link{qmesh3d}}
+  \code{\link{mesh3d}}
 }
 \keyword{dynamic}

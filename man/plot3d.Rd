@@ -1,7 +1,7 @@
 \name{plot3d}
 \alias{plot3d}
 \alias{plot3d.default}
-\alias{plot3d.qmesh3d}
+\alias{plot3d.mesh3d}
 \alias{decorate3d}
 \title{3D Scatterplot}
 \description{
@@ -13,7 +13,7 @@ plot3d(x, ...)
 	xlab, ylab, zlab, type = "p", col,  
         size, lwd, radius,
 	add = FALSE, aspect = !add, ...)
-\method{plot3d}{qmesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
+\method{plot3d}{mesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
 	add = FALSE, ...)	
 decorate3d(xlim, ylim, zlim, 
 	xlab = "x", ylab = "y", zlab = "z", 
@@ -28,7 +28,7 @@ decorate3d(xlim, ylim, zlim,
   \item{type}{For the default method, a single character indicating the type of item to plot.  
   Supported types are: 'p' for points, 's' for spheres, 
   'l' for lines, 'h' for line segments 
-  from \code{z=0}, and 'n' for nothing.  For the \code{qmesh3d} method, one of 
+  from \code{z=0}, and 'n' for nothing.  For the \code{mesh3d} method, one of 
   'shade', 'wire', or 'dots'.  Partial matching is used.
   }
   \item{col}{the colour to be used for plotted items.}

@@ -46,7 +46,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     invisible(result)
 }
 
-plot3d.qmesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
+plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
 	add = FALSE, ...)
 {
     if (!add) clear3d()

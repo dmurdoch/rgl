@@ -51,7 +51,7 @@ for \code{rotate3d(obj, matrix=matrix)}.
 By default, it is assumed that \code{obj} is a row vector
 (or a matrix of row vectors) which will be multiplied on the right by
 the corresponding matrix, but users may write methods for these generics
-which operate differently.  Methods are supplied for \code{\link{qmesh3d}}
+which operate differently.  Methods are supplied for \code{\link{mesh3d}}
 objects.
 
 To compose transformations, use matrix multiplication.  The effect is
