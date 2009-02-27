@@ -26,7 +26,8 @@
   
   3D computation is supported through the use of object structures that live entirely in R.
   \describe{
-    \item{Geometry Objects:}{Geometry and mesh objects allow to define high-level geometry for computational purpose such as quadrangle meshes (qmesh3d).}
+    \item{Geometry Objects:}{Geometry and mesh objects allow to define high-level geometry for computational purpose such as triangle or 
+                             quadrangle meshes (see \code{\link{mesh3d}}.}
     \item{Transformation:}{Generic interface to transform 3d objects.}
     \item{Visualization:}{Generic rendering of 3d objects such as dotted, wired or shaded.}
     \item{Computation:}{Generic subdivision of 3d objects.}
@@ -71,7 +72,7 @@
 \code{\link{transform3d}}
 \code{\link{rotate3d}}
 \code{\link{subdivision3d}}
-\code{\link{qmesh3d}}
+\code{\link{mesh3d}}
 \code{\link{cube3d}}
 \code{\link{rgl}}
 }

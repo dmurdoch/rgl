@@ -68,7 +68,7 @@ taken from \code{summary(x)}.
 }
 }
 \value{
-A \code{\link{qmesh3d}} object representing the ellipsoid.
+A \code{\link{mesh3d}} object representing the ellipsoid.
 }
 \examples{
 # Plot a random sample and an ellipsoid of concentration corresponding to a 95\% 

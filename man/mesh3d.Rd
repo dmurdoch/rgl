@@ -7,11 +7,11 @@
 \alias{dot3d.qmesh3d} % for back compatibility
 \alias{dot3d.mesh3d}
 \alias{wire3d}
-\alias{wire3d.qmesh3d}
-\alias{wire3d.tmesh3d}
+\alias{wire3d.qmesh3d} % for back compatibility
+\alias{wire3d.mesh3d}
 \alias{shade3d}
-\alias{shade3d.qmesh3d}
-\alias{shade3d.tmesh3d}
+\alias{shade3d.qmesh3d} % for back compatibility
+\alias{shade3d.mesh3d}
 \alias{cube3d}
 \alias{oh3d}
 \alias{tetrahedron3d}
@@ -38,11 +38,9 @@
   dot3d(x, ...)   # draw dots at the vertices of an object
   \method{dot3d}{mesh3d}(x, override = TRUE, ...)
   wire3d(x, ...)  # draw a wireframe object
-  \method{wire3d}{qmesh3d}(x, override = TRUE, ...)
-  \method{wire3d}{tmesh3d}(x, override = TRUE, ...)
+  \method{wire3d}{mesh3d}(x, override = TRUE, ...)
   shade3d(x, ...) # draw a shaded object
-  \method{shade3d}{qmesh3d}(x, override = TRUE, ...)
-  \method{shade3d}{tmesh3d}(x, override = TRUE, ...)
+  \method{shade3d}{mesh3d}(x, override = TRUE, ...)
 }
 \arguments{
   \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d})}
@@ -58,8 +56,8 @@
 \details{
   These functions create and work with \code{mesh3d} objects, which consist of a matrix
   of vertex coordinates together with a matrix of indices indicating which vertex is
-  part of which face.  There are both \code{tmesh3d} objects with triangular faces and
-  \code{qmesh3d} objects with planar quadrilateral faces.
+  part of which face.  Such objects may have  triangular faces,
+  planar quadrilateral faces, or both.
   
   The sample objects optionally take a matrix transformation \code{trans} as 
   an argument.  This transformation is applied to all vertices of the default shape.
@@ -69,21 +67,18 @@
   by \code{dot3d}, \code{wire3d} or \code{shade3d}.
   
   The \code{"mesh3d"} class is a class of objects that form meshes: the vertices
-  are in member \code{vb}.
-  
-  The \code{"tmesh3d"} class is for triangle meshes:  the vertex indices in 
-  \code{ib} are a \code{3 * n} matrix.  
-  
-  The \code{"qmesh3d"} class is for quad meshes:  the vertex indices in \code{ib}
-  are a \code{4 * n} matrix.
+  are in member \code{vb}, as a 3 or 4 by \code{n} matrix.  Meshes with triangular
+  faces will contain \code{it}, a \code{3 * n} matrix giving the indices of the 
+  vertices in each face.  Quad meshes will have vertex indices in \code{ib},
+  a \code{4 * n} matrix.
 }
 \value{
-  \code{qmesh3d}, \code{cube3d}, and \code{oh3d} return objects of class
-  \code{c("qmesh3d", "mesh3d", "shape3d")} .
-  
-  \code{tmesh3d}, \code{tetrahedron3d}, \code{octahedron3d}, \code{icosahedron3d}
-  and \code{dodecahedron3d} return objects of class
-  \code{c("tmesh3d", "mesh3d", "shape3d")} .
+
+  \code{qmesh3d}, \code{cube3d}, \code{oh3d}, \code{tmesh3d},
+  \code{tetrahedron3d}, \code{octahedron3d}, \code{icosahedron3d} and
+  \code{dodecahedron3d} return objects of class \code{c("mesh3d",
+  "shape3d")}.  The first three of these are quad meshes, the rest are
+  triangle meshes.
   
   \code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
   of drawing an object into the scene; they return an object ID.

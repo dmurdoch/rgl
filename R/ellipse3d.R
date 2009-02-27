@@ -33,7 +33,7 @@ ellipse3d.lm <-
   names <- names(x$coefficients[which])
   structure(c(ellipse3d.default(s$sigma^2 * s$cov.unscaled[which, which], 
                               centre = x$coefficients[which], t = t, ...),
-              xlab=names[1], ylab=names[2], zlab=names[3]), class="qmesh3d")
+              xlab=names[1], ylab=names[2], zlab=names[3]), class="mesh3d")
 }
 
 ellipse3d.glm <- function (x, which = 1:3, level = 0.95, t, dispersion, ...) 
@@ -47,7 +47,7 @@ ellipse3d.glm <- function (x, which = 1:3, level = 0.95, t, dispersion, ...)
   names <- names(x$coefficients[which])			                           
   structure(c(ellipse3d.default(dispersion * s$cov.unscaled[which, which], 
                   centre = x$coefficients[which], t = t, ...),
-              xlab=names[1], ylab=names[2], zlab=names[3]), class="qmesh3d")
+              xlab=names[1], ylab=names[2], zlab=names[3]), class="mesh3d")
 }
 
 ellipse3d.nls <- function (x, which = 1:3, level = 0.95, t = sqrt(3 * qf(level, 
@@ -57,6 +57,6 @@ ellipse3d.nls <- function (x, which = 1:3, level = 0.95, t = sqrt(3 * qf(level,
   names <- names(x$m$getPars()[which])
   structure(c(ellipse3d.default(s$sigma^2 * s$cov.unscaled[which, which], 
                   centre = x$m$getPars()[which], t = t, ...),
-	      xlab=names[1], ylab=names[2], zlab=names[3]), class="qmesh3d")                  
+	      xlab=names[1], ylab=names[2], zlab=names[3]), class="mesh3d")                  
 }
 
