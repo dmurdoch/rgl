@@ -304,8 +304,8 @@ v0.83-3
   - Quick fix for R 2.9.x compatibility, and to remove accidental change
     introduced in v0.83 which caused errors on plotting without open3d().
 
-v0.83-749
-  - Added triangle meshes, shape lists and the Platonic solids.
+v0.83-750
+  - Added triangle meshes, shape lists, the Platonic solids and a cuboctahedron.
   - Added classes mesh3d and shapelist3d; qmesh3d is only kept for 
     back compatibility. 
   
