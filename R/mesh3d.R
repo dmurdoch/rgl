@@ -92,16 +92,18 @@ wire3d.mesh3d <- function ( x, override = TRUE, ... ) {
   material["front"] <- "lines"
   material["back"] <- "lines"
   
+  result <- integer(0)
   if (!is.null(x$it))
-    do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
+    result <- c(triangles = do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
                                          y = x$vb[2,x$it]/x$vb[4,x$it],
                                          z = x$vb[3,x$it]/x$vb[4,x$it]), 
-                                    material))  
+                                    material)))
   if (!is.null(x$ib))
-    do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
+    result <- c(result, quads = do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
                                      y = x$vb[2,x$ib]/x$vb[4,x$ib],
                                      z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
-                                material))
+                                material)))
+  invisible(result)
 }
 
 shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
@@ -113,32 +115,34 @@ shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
     material <- list(...)
     material[names(x$material)] <- x$material
   }
+  result <- integer(0)
   if ( is.null(x$normals) ) {
     if (!is.null(x$it))
-      do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
+      result <- c(triangles = do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
                                            y = x$vb[2,x$it]/x$vb[4,x$it],
                                            z = x$vb[3,x$it]/x$vb[4,x$it]), 
-                                      material))    
+                                      material)))
   
     if (!is.null(x$ib))
-      do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
+      result <- c(result, quads = do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
                                        y = x$vb[2,x$ib]/x$vb[4,x$ib],
                                        z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
-                                  material))
+                                  material)))
   } else {
     if (!is.null(x$it))
-      do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
+      result <- c(triangles = do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
                                            y = x$vb[2,x$it]/x$vb[4,x$it],
                                            z = x$vb[3,x$it]/x$vb[4,x$it],
                                            normals = t(x$normals[,x$it])), 
-                                      material))    
+                                      material)))
     if (!is.null(x$ib))
-      do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
+      result <- c(quads = do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
                                        y = x$vb[2,x$ib]/x$vb[4,x$ib],
                                        z = x$vb[3,x$ib]/x$vb[4,x$ib],
                                        normals = t(x$normals[,x$ib])), 
-                                  material))                                
+                                  material)))
   }
+  invisible(result)
 }
 
 # transformation support

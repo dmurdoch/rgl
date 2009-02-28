@@ -163,3 +163,41 @@ dodecahedron3d <- function( trans = identityMatrix(), ...) {
   m <- matrix(dodec3d.if, 5, 12)
   return( rotate3d( tmesh3d( dodec3d.vb, c(m[c(1,2,3, 1,3,4, 1,4,5),]), material=list(...) ), matrix=trans) )
 }
+
+cuboct3d.vb <- c(
+ -1, -1, 0, 1,
+ -1,  1, 0, 1,
+  1, -1, 0, 1,
+  1,  1, 0, 1,
+ -1,  0,-1, 1,
+ -1,  0, 1, 1,
+  1,  0,-1, 1,
+  1,  0, 1, 1,
+  0, -1,-1, 1,
+  0, -1, 1, 1,
+  0,  1,-1, 1,
+  0,  1, 1, 1)
+  
+cuboct3d.ib <- c(
+  1, 6, 2, 5,
+  1, 9, 3, 10,
+  2, 12,4, 11,
+  3, 7, 4, 8,
+  5, 11, 7, 9,
+  6, 10, 8, 12)
+  
+cuboct3d.it <- c(
+  1, 5, 9,
+  1, 10, 6,
+  2, 11, 5,
+  2, 6, 12,
+  3, 9, 7,
+  3, 8, 10,
+  4, 7, 11,
+  4, 12, 8)
+  
+cuboctahedron3d <- function( trans = identityMatrix(), ...) {
+  result <- rotate3d( qmesh3d( cuboct3d.vb, cuboct3d.ib, material=list(...) ), matrix = trans)
+  result$it <- matrix(cuboct3d.it, nrow=3)
+  result
+}  

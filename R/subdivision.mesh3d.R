@@ -27,14 +27,13 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   # copy old points
   outvb[,1:nv] <- vb  
   vcnt <- nv
-  
+  em    <- edgemap( nv )
   result <- structure(list(material=mesh$material, normals=mesh$normals), class="mesh3d")
   
   if (nq) {
     newnq <- nq*4
 
     outib <- matrix(nrow=4,ncol=newnq)
-    em    <- edgemap( nv )  
     vcnt  <- vcnt + nq
   
     for (i in 1:nq ) {
@@ -81,7 +80,6 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   if (nt) {
     newnt <- nt*4
     outit <- matrix(nrow=3,ncol=newnt)
-    em    <- edgemap( nv )  
   
     for (i in 1:nt ) {
       for (j in 1:3 ) {
@@ -143,8 +141,8 @@ deform.mesh3d <- function( mesh, vb=mesh$vb, ib=mesh$ib, it=mesh$it )
   nv <- dim(vb)[2]
   nq <- if (is.null(ib)) 0 else dim(ib)[2]
   nt <- if (is.null(it)) 0 else dim(it)[2]
+  out <- matrix(0, nrow=4, ncol=nv )
   if (nq) {
-    out <- matrix(0, nrow=4, ncol=nv )
     for ( i in 1:nq ) {
       for (j in 1:4 ) {
         iprev <- ib[((j+2)%%4) + 1, i]
@@ -156,7 +154,6 @@ deform.mesh3d <- function( mesh, vb=mesh$vb, ib=mesh$ib, it=mesh$it )
     mesh$vb <- out
   }
   if (nt) {
-    out <- matrix(0, nrow=4, ncol=nv )
     for ( i in 1:nt ) {
       for (j in 1:3 ) {
         iprev <- it[((j+1)%%3) + 1, i]

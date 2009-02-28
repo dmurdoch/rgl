@@ -18,6 +18,7 @@
 \alias{octahedron3d}
 \alias{icosahedron3d}
 \alias{dodecahedron3d}
+\alias{cuboctahedron3d}
 
 \title{3D Mesh objects}
 \description{
@@ -32,6 +33,7 @@
   octahedron3d(trans = identityMatrix(), ...)  
   icosahedron3d(trans = identityMatrix(), ...)
   dodecahedron3d(trans = identityMatrix(), ...)
+  cuboctahedron3d(trans = identityMatrix(), ...)
   
   oh3d(trans = identityMatrix(), ...)    # an 'o' object
   
