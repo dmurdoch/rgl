@@ -34,7 +34,9 @@ Material::Material(Color bg, Color fg)
 
 void Material::setup()
 {
-  glVersion = atof((const char*)glGetString(GL_VERSION));
+  const char* version = (const char*)glGetString(GL_VERSION);
+  if (version) glVersion = atof(version);
+  else glVersion = 1.0;
 }
 
 void Material::beginUse(RenderContext* renderContext)
