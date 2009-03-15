@@ -8,7 +8,7 @@
 
 #include "SceneNode.hpp"
 
-#include "math.h"
+#include "rglmath.h"
 #include "Color.hpp"
 #include "RenderContext.hpp"
 

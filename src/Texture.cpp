@@ -1,3 +1,4 @@
+using namespace std;
 #include "Texture.hpp"
 
 #include "pixmap.h"

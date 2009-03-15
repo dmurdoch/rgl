@@ -1,7 +1,7 @@
 #include "Background.hpp"
 #include "Viewpoint.hpp"
 #include "scene.h"
-#include "math.h"
+#include "rglmath.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //

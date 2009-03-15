@@ -3,6 +3,7 @@
 //
 // $Id$
 
+using namespace std;
 #include "pixmap.h"
 
 #include "lib.hpp"
