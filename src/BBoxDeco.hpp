@@ -8,7 +8,7 @@
 //   BBoxDeco
 //
 
-#include "math.h"
+#include "rglmath.h"
 #include "geom.hpp"
 
 #include "RenderContext.hpp"

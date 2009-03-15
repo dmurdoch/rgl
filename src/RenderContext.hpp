@@ -5,7 +5,7 @@ class Scene;
 class Viewpoint;
 class GLFont;
 
-#include "math.h"
+#include "rglmath.h"
 #include "opengl.hpp"
 
 class RenderContext

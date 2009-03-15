@@ -6,6 +6,9 @@
 //
 // $Id$
 
+
+using namespace std;
+
 #include <cmath>
 #include <cfloat>
 
@@ -45,7 +48,7 @@ namespace math {
   template<typename T> inline T logb(T x) { return static_cast<T>( ::logb( static_cast<double>(x) ) ); }
   template<typename T> inline T modf(T x, T* y) { double i; double r = ::modf( static_cast<double>(x), &i ); *y = static_cast<T>(i); return static_cast<T>(r); }
   template<> inline double modf(double x, double* y) { return ::modf(x,y); }
-  template<> inline float  modf(float x, float* y) { return ::modff(x,y); }
+  //template<> inline float  modf(float x, float* y) { return ::modff(x,y); }
   template<typename T> inline T ldexp(T x, int y) { return static_cast<T>( ::ldexp(static_cast<double>(x),y) ); }
 //  template<typename T> inline T frexp(T x, int* y) { return static_cast<T>( ::frexp( static_cast<double>(x),n) ); }
   template<typename T> inline int ilogb(T x) { return ::ilogb( static_cast<double>(x) ); }

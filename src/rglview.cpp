@@ -9,7 +9,7 @@
 #include "opengl.hpp"
 #include <cstdio>
 #include "lib.hpp"
-#include "math.h"
+#include "rglmath.h"
 #include "pixmap.h"
 #include "fps.h"
 #include "select.h"

@@ -310,4 +310,8 @@ v0.84
     back compatibility. 
   - Bug fix to stop crashes when material is set before the first window is
     opened.
+    
+v0.84-1
+  - Added some namespace declarations to the C++, and renamed math.h, for
+    compatibility with Sun compilers (contributed by Brian Ripley).
   

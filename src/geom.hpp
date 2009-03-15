@@ -1,7 +1,7 @@
 #ifndef GEOM_HPP
 #define GEOM_HPP
 
-#include "math.h"
+#include "rglmath.h"
 
 //
 // CLASS

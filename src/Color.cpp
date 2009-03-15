@@ -1,6 +1,7 @@
 #include "Color.hpp"
 #include "types.h"
 
+using namespace std;
 #include <cstdlib>
 #include <cstring> // for memcpy
 
