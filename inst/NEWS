@@ -311,7 +311,9 @@ v0.84
   - Bug fix to stop crashes when material is set before the first window is
     opened.
     
-v0.84-1
+v0.84-754
   - Added some namespace declarations to the C++, and renamed math.h, for
-    compatibility with Sun compilers (contributed by Brian Ripley).
+    compatibility with Sun compilers (contributed by Brian Ripley).  
+  - Added addNormals generic, to add normals for smooth surface rendering.
+  - Fixed visibility of some shade3d, wire3d and points3d methods.
   
