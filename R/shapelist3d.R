@@ -44,7 +44,7 @@ dot3d.shapelist3d <- function(x, override = TRUE, ...) {
     save <- par3d(skipRedraw = TRUE)
     on.exit(par3d(save))
     
-    unlist(sapply( x, function(item) dot3d(item, override=override, ...) ) )
+    invisible(unlist(sapply( x, function(item) dot3d(item, override=override, ...) ) ) )
 }
 
 wire3d.shapelist3d <- function(x, override = TRUE, ...) {
@@ -52,7 +52,7 @@ wire3d.shapelist3d <- function(x, override = TRUE, ...) {
     save <- par3d(skipRedraw = TRUE)
     on.exit(par3d(save))
     
-    unlist(sapply( x, function(item) wire3d(item, override=override, ...) ) )
+    invisible(unlist(sapply( x, function(item) wire3d(item, override=override, ...) ) ) )
 }
 
 
@@ -61,7 +61,7 @@ shade3d.shapelist3d <- function(x, override = TRUE, ...) {
     save <- par3d(skipRedraw = TRUE)
     on.exit(par3d(save))
     
-    unlist(sapply( x, function(item) shade3d(item, override=override, ...) ) )
+    invisible(unlist(sapply( x, function(item) shade3d(item, override=override, ...) ) ) )
 }
 
 translate3d.shapelist3d <- function ( obj, x, y, z, ... ) {
@@ -77,4 +77,9 @@ rotate3d.shapelist3d <- function ( obj,angle,x,y,z,matrix, ... ) {
 scale3d.shapelist3d <- function ( obj, x, y, z, ... ) {
   structure(lapply( obj, function(item) scale3d(item, x,y,z,...) ),
             class = class(obj))
+}
+
+addNormals.shapelist3d <- function ( x, ... ) {
+  structure(lapply( x, function(item) addNormals(item, ...) ),
+            class = class(x))
 }

@@ -1,4 +1,4 @@
-export(asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
+export(addNormals, asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
         bbox3d, bg3d, clear3d, cube3d, cuboctahedron3d, 
         decorate3d, dodecahedron3d, dot3d, ellipse3d,
 	grid3d, icosahedron3d, identityMatrix,  
@@ -24,6 +24,7 @@ export(asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
  S3method(translate3d, shapelist3d)
  S3method(rotate3d, shapelist3d)
  S3method(scale3d, shapelist3d)
+ S3method(addNormals, shapelist3d)
  
  S3method(dot3d, mesh3d)
  S3method(translate3d, mesh3d)
@@ -33,6 +34,7 @@ export(asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
  S3method(wire3d, mesh3d)
  S3method(shade3d, mesh3d) 
  S3method(subdivision3d, mesh3d)
+ S3method(addNormals, mesh3d)
  
  S3method(plot3d, mesh3d)
  

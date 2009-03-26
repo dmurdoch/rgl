@@ -83,7 +83,8 @@
   triangle meshes.
   
   \code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
-  of drawing an object into the scene; they return an object ID.
+  of drawing an object into the scene; they return an object ID (or vector of IDs, for some 
+  classes) invisibly.
 }
 \examples{
 
