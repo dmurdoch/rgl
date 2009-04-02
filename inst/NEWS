@@ -311,9 +311,11 @@ v0.84
   - Bug fix to stop crashes when material is set before the first window is
     opened.
     
-v0.84-755
+v0.85
   - Added some namespace declarations to the C++, and renamed math.h, for
     compatibility with Sun compilers (contributed by Brian Ripley).  
   - Fixed visibility of some shade3d, wire3d and points3d methods.
   - Added addNormals generic, to add normals for smooth surface rendering.
   - Added cylinder3d function, to make cylindrical or "tube" plots.
+  - Fixed material3d("color") bug introduced in 0.82.
+  
