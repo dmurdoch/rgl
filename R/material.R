@@ -100,7 +100,7 @@ rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
 rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
 
-  idata <- rep(0, 22+3*ncolors)
+  idata <- rep(0, 23+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -125,7 +125,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], maxColorValue = 255),
+  list(color = rgb(idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], idata[23 + 3*(1:idata[1])], maxColorValue = 255),
        alpha = ddata[seq(from=4, length=idata[11])],
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
