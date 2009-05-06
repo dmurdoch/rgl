@@ -91,7 +91,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
 {
   zoom <- rgl.clamp(zoom,0,Inf)
   phi  <- rgl.clamp(phi,-90,90)
-  fov  <- rgl.clamp(fov,1,179)
+  fov  <- rgl.clamp(fov,0,179)
 
   polar <- missing(userMatrix)
   if (polar) userMatrix <- diag(4)

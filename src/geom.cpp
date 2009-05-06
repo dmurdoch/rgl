@@ -108,10 +108,18 @@ Sphere::Sphere(const Vertex& in_center, const float in_radius)
 
 void Frustum::enclose(float sphere_radius, float fovangle, int width, int height)
 {
-  float fovradians = math::deg2rad(fovangle/2.0f);
+  float s=0.5, t=1.0;
+  
+  if (fovangle != 0.0) {
+    float fovradians = math::deg2rad(fovangle/2.0f);
 
-  float s = math::sin(fovradians);
-  float t = math::tan(fovradians);
+    s = math::sin(fovradians);
+    t = math::tan(fovradians);
+
+    ortho = false;
+  } else {
+    ortho = true;
+  }
 
   distance = sphere_radius / s;
 
