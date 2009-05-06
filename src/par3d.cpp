@@ -119,7 +119,7 @@ static void Specify(const char *what, SEXP value)
 
     if (streql(what, "FOV")) {
     	lengthCheck(what, value, 1);	v = asReal(value);
-	BoundsCheck(v, 1.0, 179.0, what);
+	BoundsCheck(v, 0.0, 179.0, what);
 	rgl_setFOV(&success, &v);
     }
     else if (streql(what, "ignoreExtent")) {

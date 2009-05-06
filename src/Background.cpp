@@ -88,11 +88,18 @@ void Background::render(RenderContext* renderContext)
   if (sphere) {
 
     float fov = renderContext->viewpoint->getFOV();
+    float hlen, znear;
+    
+    if (fov > 0.0) {
+      float rad = math::deg2rad(fov/2.0f);
 
-    float rad = math::deg2rad(fov/2.0f);
-
-    float hlen  = math::sin(rad) * math::cos(math::deg2rad(45.0));
-    float znear = hlen / math::tan(rad);
+      hlen  = math::sin(rad) * math::cos(math::deg2rad(45.0));
+      znear = hlen / math::tan(rad);
+    } else {
+      hlen = math::cos(math::deg2rad(45.0));
+      znear = hlen;
+    }
+    
     float zfar  = znear + 1.0f;
     float hwidth, hheight;
 
@@ -111,8 +118,12 @@ void Background::render(RenderContext* renderContext)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-hwidth, hwidth, -hheight, hheight, znear, zfar );
-
+    if (fov != 0.0) {
+      glFrustum(-hwidth, hwidth, -hheight, hheight, znear, zfar );
+    } else {
+      glOrtho(-hwidth, hwidth, -hheight, hheight, znear, zfar );
+    }
+    
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 

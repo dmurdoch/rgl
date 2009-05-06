@@ -13,7 +13,7 @@ rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, scale = par3d("scale"),
 \arguments{
   \item{theta,phi}{polar coordinates}
   \item{...}{additional parameters to pass to \code{rgl.viewpoint}}
-  \item{fov}{field-of-view angle}
+  \item{fov}{field-of-view angle in degrees}
   \item{zoom}{zoom factor}
   \item{scale}{real length 3 vector specifying the rescaling to apply to each axis}
   \item{interactive}{logical, specifying if interactive navigation is allowed}
@@ -32,6 +32,10 @@ set the viewpoint interactively. With the pointing device the buttons are by def
 \item{middle}{adjust field of view angle}
 \item{right or wheel}{adjust zoom factor}
 }
+
+If the \code{fov} angle is set to 0, a parallel or orthogonal
+projection is used. Small non-zero values (e.g. 0.01 or less, but not
+0.0) are likely to lead to rendering errors due to OpenGL limitations.
 
 }
 \seealso{\code{\link{par3d}}}

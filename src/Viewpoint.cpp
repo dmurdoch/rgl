@@ -76,7 +76,7 @@ bool Viewpoint::isInteractive() const
 
 void Viewpoint::setFOV(const float in_fov)
 {
-  fov = clamp(in_fov, 1.0, 179.0 );
+  fov = clamp(in_fov, 0.0, 179.0 );
 }
 
 float Viewpoint::getFOV() const
@@ -109,7 +109,11 @@ void Viewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSpher
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
+  if (frustum.ortho) {
+    glOrtho(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
+  } else {
+    glFrustum(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
+  }
 
   // modelview
 
