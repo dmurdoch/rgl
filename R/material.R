@@ -36,6 +36,8 @@ rgl.material <- function (
   # solid or diffuse component
 
   color     <- rgl.mcolor(color)
+  if (length(color) < 1)
+    stop("there must be at least one color")
 
   # light properties
 
