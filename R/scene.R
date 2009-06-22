@@ -323,12 +323,11 @@ rgl.linestrips<- function ( x, y=NULL, z=NULL, ... )
 # calculates the parity of a permutation of integers
 
 perm_parity <- function(p) {  
-  x <- seq(along=p)
+  x <- seq_along(p)
   result <- 0
-  for (i in seq(along=p)) {
+  for (i in x) {
     if (x[i] != p[i]) {
       x[x==p[i]] <- x[i]
-      # x[i] <- p[i]     # not needed
       result <- result+1
     }
   }

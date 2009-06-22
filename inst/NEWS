@@ -319,7 +319,8 @@ v0.85
   - Added cylinder3d function, to make cylindrical or "tube" plots.
   - Fixed material3d("color") bug introduced in 0.82.
   
-v0.85-761
+v0.86
   - Allowed FOV to be set to 0, for an orthogonal projection.
   - Fixed crash when zero-length color vector was used.
+  - Changed seq(along=...) to seq_along(...).
   
