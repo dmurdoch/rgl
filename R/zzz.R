@@ -59,7 +59,7 @@
   	  rename <- names(entries) != ""
   	  names[rename] <- names(entries)[rename]
       }
-      for (i in seq(along=entries)) 
+      for (i in seq_along(entries)) 
       	  assign(names[i], getNativeSymbolInfo(entries[i], PACKAGE = dll),
       	         envir = environment(.onLoad))
   }

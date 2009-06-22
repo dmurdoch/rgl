@@ -13,7 +13,7 @@ rgl.enum <- function ( name, ..., multi = FALSE)
   if ( any( is.na(pos) ) )
     stop("symbolic value must be chosen from ", list(names) )
   else if ( (max+1) %in% pos )
-    pos <- seq(along = names)
+    pos <- seq_along(names)
     
   id  <- unlist(choices[pos])
   
