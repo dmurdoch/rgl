@@ -98,7 +98,7 @@ On Windows these will be based on the fonts specified using the
 #endif
 function, and are resizable.
 Other platforms will use the default bitmapped font which is not
-resizeable.  Currently MacOSX defaults to the bitmapped font, as
+resizable.  Currently MacOSX defaults to the bitmapped font, as
 our font library appears unable to read fonts properly on that platform.
 }
 \value{

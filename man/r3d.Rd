@@ -39,7 +39,7 @@
   \code{rgl.*} functions call \code{\link{rgl.open}}. By default
   \code{\link{open3d}} sets the initial orientation of the coordinate
   system in 'world coordinates', i.e. a right-handed coordinate system
-  in which the x-axis increasingfrom left to right, the y-axis
+  in which the x-axis increases from left to right, the y-axis
   increases with depth into the scene, and the z-axis increases from
   bottom to top of the screen.  \code{rgl.*} functions, on the other
   hand, use a right-handed coordinate system similar to that used in

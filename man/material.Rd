@@ -48,7 +48,7 @@ material3d(...)
     vector of alpha values between 0.0 (fully transparent) .. 1.0 (opaque).
   }
   \item{smooth}{
-    logical, specifying whether gourad shading (smooth) or flat shading should be used.
+    logical, specifying whether Gouraud shading (smooth) or flat shading should be used.
   }
   \item{texture}{ 
     path to a texture image file. Supported formats: png.
