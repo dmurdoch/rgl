@@ -41,7 +41,7 @@ so no rescaling will be done.
 The centre of the ellipse will be at this position.
 }
 \item{level}{
-The confidence level of a simulataneous confidence region.  The default is
+The confidence level of a simultaneous confidence region.  The default is
 0.95, for a 95\% region.  This is used to control the size of the ellipsoid.
 }
 \item{t}{
