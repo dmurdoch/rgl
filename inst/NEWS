@@ -11,8 +11,8 @@ v0.62
   - support R color strings
   - use system.file( <subpath>, package="rgl" ) in examples to retrieve texture files
   - rewrote R code : 
-    - clear enum types
-    - vertex vector datatype (internal representation matrix)
+    * clear enum types
+    * vertex vector datatype (internal representation matrix)
 
 v0.63
   - api: added rgl_init, rgl_quit: explicit client initialization
