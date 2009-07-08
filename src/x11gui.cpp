@@ -159,6 +159,11 @@ void X11WindowImpl::destroy()
     on_shutdown();
     XDestroyWindow(factory->xdisplay, xwindow);
     factory->flushX();
+    factory->notifyDelete(xwindow); /* Why didn't this happen in the lines above, from the DestroyNotify event? */
+    xwindow = 0;
+    if (window)
+        window->notifyDestroy();
+    delete this;
   }
 }
 // ---------------------------------------------------------------------------
