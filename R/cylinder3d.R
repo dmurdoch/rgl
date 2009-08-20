@@ -50,7 +50,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   } else 
     e1 <- (center[ind2,] - center[ind0,])[1:n,]
   if (!is.null(e2)) {
-    e2 <- as.matrix(as.data.frame(xyz.coords(e3)[c("x", "y", "z")]))
+    e2 <- as.matrix(as.data.frame(xyz.coords(e2)[c("x", "y", "z")]))
     e2 <- e2[rep(1:nrow(e2), len=n),] 
   } else
     e2 <- (e1[ind2,] - e1[ind0,])[1:n,]
