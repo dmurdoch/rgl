@@ -19,8 +19,8 @@ addNormals(x, ...)
   \item{\dots}{Additional parameters which will be passed to the methods.  Currently unused.}
 }
 \details{
-Currently methods are supplied for \code{\link[mesh3d]{"mesh3d"}} and 
-\code{\link[shapelist3d]{"shapelist3d"}} classes.
+Currently methods are supplied for \code{\link[=mesh3d]{"mesh3d"}} and 
+\code{\link[=shapelist3d]{"shapelist3d"}} classes.
 }
 \value{
 A new object of the same class as \code{x}, with normals added.

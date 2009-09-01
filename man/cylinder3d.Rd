@@ -4,7 +4,7 @@
 Create cylindrical or "tube" plots.
 }
 \description{
-This function converts a description of a space curve into a \code{\link[mesh3d]{"mesh3d"}}
+This function converts a description of a space curve into a \code{\link[=mesh3d]{"mesh3d"}}
 object forming a cylindrical tube around the curve.
 }
 \usage{
@@ -38,7 +38,7 @@ to an approximation to the binormal vector, to which the \code{x} axis of the po
 vectors are orthogonalized and normalized at each point.
 }
 \value{
-A \code{\link[mesh3d]{"mesh3d"}} object holding the cylinder.
+A \code{\link[=mesh3d]{"mesh3d"}} object holding the cylinder.
 }
 \author{
 Duncan Murdoch
