@@ -16,7 +16,7 @@ GramSchmidt <- function(v1, v2, v3, order=1:3) {
 }
 
 cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL, 
-                       sides=8, closed=0, debug=FALSE) {
+                       sides=8, closed=0, debug=FALSE, keepVars=FALSE) {
   center <- as.matrix(as.data.frame(xyz.coords(center)[c("x", "y", "z")]))
   n <- nrow(center)  
   if (closed) {
@@ -76,9 +76,9 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   
   if (debug) {
     for (i in 1:n) {
-      segments3d(rbind(center[i,],center[i,]+e3[i,],
-                     center[i,],center[i,]+e2[i,],
-                     center[i,],center[i,]+e1[i,]), 
+      segments3d(rbind(center[i,],center[i,]+e3[i,]*radius[i]*1.5,
+                     center[i,],center[i,]+e2[i,]*radius[i]*1.5,
+                     center[i,],center[i,]+e1[i,]*radius[i]*1.5), 
                  col=rep(c("red", "green", "blue"), each=2))
       text3d(center, text=1:n)
     }
@@ -119,5 +119,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
       }
     }
   }
+  if (keepVars)
+    attr(result, "vars") <- environment()
   result
 }
