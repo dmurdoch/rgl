@@ -40,7 +40,7 @@ vectors are orthogonalized and normalized at each point.
 }
 \value{
 A \code{\link[=mesh3d]{"mesh3d"}} object holding the cylinder, possibly with
-attribute \code{"debug"} containing the local environment of the function.
+attribute \code{"vars"} containing the local environment of the function.
 }
 \author{
 Duncan Murdoch
