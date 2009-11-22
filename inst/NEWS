@@ -1,4 +1,5 @@
-v0.60 (mini-thesis release)
+v0.60 
+  - (mini-thesis release)
 
 v0.61 (workshop release)
   - added: rgl.sprites
@@ -327,5 +328,7 @@ v0.87
   - Fixed typo in cylinder3d.
   - Cleaned up bad links in Rd files.
   
-v0.87.771
+v0.87.771 
+  - Add keepVars argument to cylinder3d(), for debugging or special
+    effects.
   
