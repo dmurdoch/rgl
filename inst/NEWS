@@ -328,7 +328,8 @@ v0.87
   - Fixed typo in cylinder3d.
   - Cleaned up bad links in Rd files.
   
-v0.87.771 
+v0.88
   - Add keepVars argument to cylinder3d(), for debugging or special
     effects.
+  - Add BugReports field to DESCRIPTION.
   
