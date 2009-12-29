@@ -333,6 +333,7 @@ v0.88
     effects.
   - Add BugReports field to DESCRIPTION.
   
-v0.88.776
-  - Fixed rounding errors and Xvfb errors in rgl.pixels examples and demo
+v0.89 
+  - Fixed rounding errors and Xvfb errors in rgl.pixels examples
+    and demo.
   
