@@ -120,7 +120,7 @@ anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1)) {
   red <- leftPixels*leftColor[1] + rightPixels*rightColor[1]
   green <- leftPixels*leftColor[2] + rightPixels*rightColor[2]
   blue <- leftPixels*leftColor[3] + rightPixels*rightColor[3]
-  col <- rgb(red, green, blue)
+  col <- rgb(pmin(red,1), pmin(green,1), pmin(blue,1))
   colf <- factor(col)
   z <- as.numeric(colf)
   dim(z) <- dim(leftPixels)
