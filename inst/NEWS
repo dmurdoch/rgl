@@ -336,4 +336,6 @@ v0.88
 v0.89 
   - Fixed rounding errors and Xvfb errors in rgl.pixels examples
     and demo.
-  
+    
+v0.89.778
+  - Added startTime argument to play3d() and movie3d().
