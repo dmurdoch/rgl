@@ -131,13 +131,13 @@ spin3d <- function(axis = c(0, 0, 1), rpm = 5) {
     	list(userMatrix = rotate3d(M, time*rpm*pi/30, axis[1], axis[2], axis[3]))
 }
     
-play3d <- function(f, duration = Inf, dev = rgl.cur(), ...) {
+play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
     # Don't want to start timing until args are known: they may be obtained
     # interactively
     force(f)  
     force(duration)
     force(dev)
-    start <- proc.time()[3]
+    start <- proc.time()[3] - startTime
     repeat {
        if(rgl.cur() != dev) rgl.set(dev)
        time <- proc.time()[3] - start
@@ -149,12 +149,12 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ...) {
 movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
                     convert = TRUE, clean = TRUE, verbose=TRUE,
-                    top = TRUE, type = "gif") {
+                    top = TRUE, type = "gif", startTime = 0) {
     
     olddir <- setwd(dir)
     on.exit(setwd(olddir))
 
-    for (i in 0:(duration*fps)) {
+    for (i in round(startTime*fps):(duration*fps)) {
 	time <- i/fps        
 	if(rgl.cur() != dev) rgl.set(dev)
 	par3d(f(time, ...))

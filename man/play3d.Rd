@@ -9,11 +9,11 @@ reset the viewpoint.  \code{movie3d} does the same, but
 records each frame to a file to make a movie.
 }
 \usage{
-play3d(f, duration = Inf, dev = rgl.cur(), ...)
+play3d(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0)
 movie3d(f, duration, dev = rgl.cur(), ..., fps = 10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
                     convert = TRUE, clean = TRUE, verbose=TRUE,
-                    top = TRUE, type = "gif") 
+                    top = TRUE, type = "gif", startTime = 0) 
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,6 +22,7 @@ movie3d(f, duration, dev = rgl.cur(), ..., fps = 10,
   \item{duration}{ The duration of the animation }    
   \item{dev}{ Which rgl device to select }
   \item{\dots}{ Additional parameters to pass to \code{f}. }
+  \item{startTime}{ Initial time at which to start the animation }
   \item{fps}{ Number of frames per second }
   \item{movie}{ The base of the output filename, not including .gif }
   \item{frames}{ The base of the name for each frame }
@@ -33,9 +34,9 @@ movie3d(f, duration, dev = rgl.cur(), ..., fps = 10,
   \item{type}{ What type of movie to create.  See Details. }
 }
 \details{
-The function \code{f} will be called in a loop with the first argument being the time in
-seconds since the start (where the start is measured after all 
-arguments have been evaluated).  
+The function \code{f} will be called in a loop with the first argument
+being the \code{startTime} plus the time in seconds since the start 
+(where the start is measured after all arguments have been evaluated).
 
 \code{play3d} is likely to place a high load
 on the CPU; if this is a problem, calls to \code{\link{Sys.sleep}}
