@@ -157,7 +157,8 @@ fi
 
 AC_ARG_WITH(gl-libs,
 [  --with-gl-libs=DIR      specify location of OpenGL libs],
-[LIBS="${LIBS} -L${withval}"]
+[LDFLAGS="${LDFLAGS} -L${withval}"
+L_LIB="-L${withval}"]
 )
 
 AC_ARG_WITH(gl-libname,
@@ -178,6 +179,10 @@ AC_CHECK_LIB($lGLU, gluProject)
 this=`eval echo '${'$as_ac_Lib'}'`
 if test "x$this" != xyes; then
   AC_ERROR([missing required library ${lGLU}])
+fi
+
+if test x$L_LIB != x; then
+  LIBS="${L_LIB} ${LIBS}"
 fi
 
 ## --- FTGL ------------------------------------------------------------------
