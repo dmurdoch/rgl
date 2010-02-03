@@ -177,7 +177,7 @@ private:
       if (bit_depth == 16)
         png_set_strip_16(png_ptr);
       else if (bit_depth < 8  && color_type == PNG_COLOR_TYPE_GRAY)
-        png_set_gray_1_2_4_to_8(png_ptr);
+        png_set_expand_gray_1_2_4_to_8(png_ptr);
       else if (bit_depth != 8)  /* this should never happen with current formats... */
         goto unsupported;
       
@@ -221,7 +221,9 @@ init:
       return;
 
 unsupported:
-      sprintf(buffer,"%s%s format unsupported: %lux%lu (%d bits per channel)", interlace_string, color_type_name, width, height, bit_depth);
+      sprintf(buffer,"%s%s format unsupported: %lux%lu (%d bits per channel)", 
+              interlace_string, color_type_name, 
+              (long unsigned int)width, (long unsigned int)height, bit_depth);
       lib::printMessage(buffer);
       load->error = true;
       png_read_update_info(load->png_ptr,load->info_ptr);
@@ -324,7 +326,7 @@ unsupported:
 
     bool process(void)
     {
-      if (setjmp(png_ptr->jmpbuf)) {
+      if (setjmp(png_jmpbuf(png_ptr))) {
         printError("an error occured");
         png_destroy_write_struct(&png_ptr, &info_ptr);
         return false;
