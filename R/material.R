@@ -107,7 +107,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   idata[11] <- ncolors
   
   cdata <- paste(rep(" ", 512), collapse="")
-  ddata <- rep(0, 2+ncolors)
+  ddata <- rep(0, 3+ncolors)
   
   ret <- .C( rgl_getmaterial,
     success = FALSE,
@@ -128,7 +128,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   cdata <- ret$cdata
   
   list(color = rgb(idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], idata[23 + 3*(1:idata[1])], maxColorValue = 255),
-       alpha = ddata[seq(from=4, length=idata[11])],
+       alpha = if (idata[11]) ddata[seq(from=4, length=idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
        specular = rgb(idata[15], idata[16], idata[17], maxColorValue = 255),
