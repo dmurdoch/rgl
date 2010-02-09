@@ -337,7 +337,9 @@ v0.89
   - Fixed rounding errors and Xvfb errors in rgl.pixels examples
     and demo.
     
-v0.89.781
+v0.90
   - Added startTime argument to play3d() and movie3d().
   - Fixed configure.ac as suggested by Jens Elkner.
   - Updated declarations for libpng 1.4.0 compatibility.
+  - An off-by-one error caused the "alpha" component of the material
+    properties to be messed up. (Bug #809)
