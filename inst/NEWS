@@ -343,3 +343,7 @@ v0.90
   - Updated declarations for libpng 1.4.0 compatibility.
   - An off-by-one error caused the "alpha" component of the material
     properties to be messed up. (Bug #809)
+
+v0.90.783
+  - Fixed bug in rgl.texts:  zero-length texts argument caused crash.
+    (Reported by Michael Friendly.)

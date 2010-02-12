@@ -462,6 +462,12 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
   
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
+  if (!length(text)) {
+    if (nvertex)
+      warning("No text to plot")
+    return(invisible(integer(0)))
+  }
+    
   text    <- rep(text, length.out=nvertex)
   
   idata <- as.integer(nvertex)
