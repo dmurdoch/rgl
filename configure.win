@@ -19,9 +19,9 @@ fi
 # --- libpng -----------------------------------------------------------------
 
 echo -n "  checking for zlib..."
-if [ -e "${R_HOME}/bin/Rzlib.dll" ]; then
+if [ -e "${R_HOME}/bin${R_ARCH_BIN}/Rzlib.dll" ]; then
    CPPFLAGS="${CPPFLAGS} -I${R_HOME}/include "
-   LIBS="$LIBS -L${R_HOME}/bin -lRzlib "
+   LIBS="$LIBS -L${R_HOME}/bin${R_ARCH_BIN} -lRzlib "
    havezlib=yes
 elif [ -e "${R_HOME}/src/extra/zlib/libz.a" ]; then
    CPPFLAGS="${CPPFLAGS} -I${R_HOME}/src/extra/zlib "
@@ -51,15 +51,15 @@ if [ "${havezlib}" = "yes" ]; then
   echo -n "  checking for freetype..."
   if [ -n "$LIB_FREETYPE" ]; then
     echo "yes, LIB_FREETYPE=$LIB_FREETYPE" 
-    mkdir -p $R_PACKAGE_DIR/libs
-    cp $LIB_FREETYPE/bin/freetype6.dll $R_PACKAGE_DIR/libs
-    if [ -e "${R_HOME}/bin/Rzlib.dll" ]; then
-      cp ${R_HOME}/bin/Rzlib.dll $R_PACKAGE_DIR/libs/zlib1.dll
+    mkdir -p $R_PACKAGE_DIR/libs${R_ARCH}
+    cp $LIB_FREETYPE/bin${R_ARCH_BIN}/freetype6.dll $R_PACKAGE_DIR/libs${R_ARCH}
+    if [ -e "${R_HOME}/bin${R_ARCH_BIN}/Rzlib.dll" ]; then
+      cp ${R_HOME}/bin${R_ARCH_BIN}/Rzlib.dll $R_PACKAGE_DIR/libs${R_ARCH}/zlib1.dll
     else
       echo "  Note:  freetype may require zlib1.dll"
     fi
     CPPFLAGS="${CPPFLAGS} -Iext/ftgl -I${LIB_FREETYPE}/include -I${LIB_FREETYPE}/include/freetype2 -DHAVE_FREETYPE"
-    LIBS="$LIBS -L$R_PACKAGE_DIR/libs -lfreetype6 "
+    LIBS="$LIBS -L$R_PACKAGE_DIR/libs${R_ARCH} -lfreetype6 "
   else
     echo "no, LIB_FREETYPE undefined"
   fi

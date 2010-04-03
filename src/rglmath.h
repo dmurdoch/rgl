@@ -149,12 +149,12 @@ public:
   Matrix4x4();
   Matrix4x4(const Matrix4x4& src);
   Matrix4x4(const double*);
-  Vec3 operator*(Vec3 op2) const;
+  Vec3 operator*(const Vec3 op2) const;
   Vec4 operator*(const Vec4& op2) const;
   Matrix4x4 operator*(const Matrix4x4& op2) const;
   Vec4 getRow(int row);
   void setIdentity(void);
-  void setRotate(int axis, float degree);
+  void setRotate(const int axis, const float degree);
   void getData(double* dest);
 private:
   inline float  val(int row, int column) const { return data[4*column+row]; }

@@ -344,6 +344,9 @@ v0.90
   - An off-by-one error caused the "alpha" component of the material
     properties to be messed up. (Bug #809)
 
-v0.90.783
+v0.91
   - Fixed bug in rgl.texts:  zero-length texts argument caused crash.
     (Reported by Michael Friendly.)
+  - Added R_ARCH* macros to configure.win for Win64 compatibility
+  - Fixed bad declaration in rglmath.h
+  
