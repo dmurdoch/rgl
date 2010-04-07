@@ -15,7 +15,7 @@ persp3d(x, \dots)
 \arguments{
   \item{x, y}{locations of grid lines at which the values in \code{z} are
     measured.  These may be given as vectors or matrices.
-    If vectors, they must be in ascending order.   Either one or both may matrices.
+    If vectors, they must be in ascending order.   Either one or both may be matrices.
     If \code{x} is a \code{list},
     its components \code{x$x} and \code{x$y} are used for \code{x}
     and \code{y}, respectively.}
