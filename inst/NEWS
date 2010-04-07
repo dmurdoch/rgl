@@ -350,3 +350,6 @@ v0.91
   - Added R_ARCH* macros to configure.win for Win64 compatibility
   - Fixed bad declaration in rglmath.h
   
+v0.91.785
+  - Added detection of 64 bit MacPorts compiler to configure script. 
+    (Bug #861)
