@@ -33,7 +33,7 @@ AC_ARG_ENABLE([carbon],
 if test `uname` = "Darwin" ; then
   darwin="yes"
   ## we want the *build* cputype and not the host one.
-  cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64'`
+  cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64|-m64'`
   if test -n "$cmd"; then
     have_64bit="yes"
   else
