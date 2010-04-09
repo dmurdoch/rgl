@@ -28,7 +28,23 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   outvb[,1:nv] <- vb  
   vcnt <- nv
   em    <- edgemap( nv )
-  result <- structure(list(material=mesh$material, normals=mesh$normals), class="mesh3d")
+  
+  if (!is.null(mesh$normals)) {
+    newnormals <- matrix(data=0,nrow=3,ncol=nvmax)
+    newnormals[,1:nv] <- mesh$normals
+  } else newnormals <- NULL
+  
+  if (!is.null(mesh$texcoords)) {
+    newtexcoords <- matrix(data=0,nrow=2,ncol=nvmax)
+    newtexcoords[,1:nv] <- mesh$texcoords
+  } else newtexcoords <- NULL
+  
+  if (!is.null(newnormals) || !is.null(newtexcoords)) {
+    newcount <- rep(0, nvmax)
+    newcount[1:nv] <- 1
+  }
+  
+  result <- structure(list(material=mesh$material), class="mesh3d")
   
   if (nq) {
     newnq <- nq*4
@@ -71,7 +87,26 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
         # calculate edge point
         outvb[,enext] <- outvb[,enext] + vb[,ithis] 
         outvb[,eprev] <- outvb[,eprev] + vb[,ithis] 
-
+        
+        if (!is.null(newnormals)) {
+          thisnorm <- mesh$normals[,ithis]
+          newnormals[,isurf] <- newnormals[,isurf] + thisnorm
+          newnormals[,enext] <- newnormals[,enext] + thisnorm
+          newnormals[,eprev] <- newnormals[,eprev] + thisnorm
+        }
+        
+        if (!is.null(newtexcoords)) {
+          thistexcoord <- mesh$texcoords[,ithis]
+          newtexcoords[,isurf] <- newtexcoords[,isurf] + thistexcoord
+          newtexcoords[,enext] <- newtexcoords[,enext] + thistexcoord
+          newtexcoords[,eprev] <- newtexcoords[,eprev] + thistexcoord
+        }
+        
+        if (!is.null(newnormals) || !is.null(newtexcoords)) {
+          newcount[isurf] <- newcount[isurf] + 1
+          newcount[enext] <- newcount[enext] + 1
+          newcount[eprev] <- newcount[eprev] + 1
+        }
       }
     }
     primout <- "quad"
@@ -112,6 +147,23 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
         # calculate edge point
         outvb[,enext] <- outvb[,enext] + vb[,ithis] 
         outvb[,eprev] <- outvb[,eprev] + vb[,ithis] 
+        
+        if (!is.null(newnormals)) {
+          thisnorm <- mesh$normals[,ithis]
+          newnormals[,enext] <- newnormals[,enext] + thisnorm
+          newnormals[,eprev] <- newnormals[,eprev] + thisnorm
+        }
+        
+        if (!is.null(newtexcoords)) {
+          thistexcoord <- mesh$texcoords[,ithis]
+          newtexcoords[,enext] <- newtexcoords[,enext] + thistexcoord
+          newtexcoords[,eprev] <- newtexcoords[,eprev] + thistexcoord
+        }
+        
+        if (!is.null(newnormals) || !is.null(newtexcoords)) {
+          newcount[enext] <- newcount[enext] + 1
+          newcount[eprev] <- newcount[eprev] + 1
+        }        
 
       }
       # Now central triangle
@@ -122,8 +174,21 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
     }
     primout <- c(primout, "triangle")
     result$it <- outit
-  }  
+  }
+  
+  if (!is.null(newnormals) || !is.null(newtexcoords)) 
+    newcount <- newcount[1:vcnt]
+    
+  if (!is.null(newnormals)) 
+    newnormals <- newnormals[, 1:vcnt]/rep(newcount, each=3)
+    
+  if (!is.null(newtexcoords))
+    newtexcoords <- newtexcoords[, 1:vcnt]/rep(newcount, each=2)
+    
   result$vb <- outvb[,1:vcnt]
+  result$normals <- newnormals
+  result$texcoords <- newtexcoords
+  
   result$primitivetype <- primout
   return ( result )
 }
