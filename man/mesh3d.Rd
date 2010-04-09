@@ -25,8 +25,10 @@
   3D triangle and quadrangle mesh object creation and a collection of sample objects.
 }
 \usage{
-  qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, normals = NULL)
-  tmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, normals = NULL)
+  qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, 
+         normals = NULL, texcoords = NULL)
+  tmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, 
+         normals = NULL, texcoords = NULL)
   
   cube3d(trans = identityMatrix(), ...)  
   tetrahedron3d(trans = identityMatrix(), ...)  
@@ -51,6 +53,7 @@
   \item{homogeneous}{logical indicating if homogeneous (four component) coordinates are used.}
   \item{material}{material properties for later rendering}
   \item{normals}{normals at each vertex}
+  \item{texcoords}{texture coordinates at each vertex}
   \item{trans}{transformation to apply to objects; see below for defaults}
   \item{...}{additional rendering parameters}
   \item{override}{should the parameters specified here override those stored in the object?}
@@ -85,6 +88,8 @@
   \code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
   of drawing an object into the scene; they return an object ID (or vector of IDs, for some 
   classes) invisibly.
+  
+  See \code{\link{rgl.primitive}} for a discussion of texture coordinates.
 }
 \examples{
 

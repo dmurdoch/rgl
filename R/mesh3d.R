@@ -2,25 +2,34 @@
 # triangle mesh object
 #
 
-tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL ) {
+tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL,
+                     texcoords=NULL) {
   if (homogeneous == TRUE)
     vrows <- 4
   else
     vrows <- 3
+    
+  nvertex <- length(vertices)/vrows
   if ( !is.null(normals) ) {
     normals <- xyz.coords(normals, recycle=TRUE)
-    nvertex <- length(vertices)/vrows
     x <- rep(normals$x, len=nvertex)
     y <- rep(normals$y, len=nvertex)
     z <- rep(normals$z, len=nvertex)
     normals <- rgl.vertex(x,y,z)
+  }
+  if ( !is.null(texcoords) ) {
+    texcoords <- xy.coords(texcoords, recycle=TRUE)
+    x <- rep(texcoords$x, len=nvertex)
+    y <- rep(texcoords$y, len=nvertex)
+    texcoords <- rbind(x,y)
   }
   object <- list(
     vb=matrix(vertices,nrow=vrows),
     it=matrix(indices,nrow=3),
     primitivetype="triangle",
     material=material,
-    normals=normals
+    normals=normals,
+    texcoords=texcoords
   ) 
   
   if (!homogeneous) object$vb <- rbind(object$vb, 1)
@@ -33,25 +42,33 @@ tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
 # R 3d object : quad mesh
 #
 
-qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL ) {
+qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL,
+                     texcoords=NULL) {
   if (homogeneous == TRUE)
     vrows <- 4
   else
-    vrows <- 3
+    vrows <- 3    
+  nvertex <- length(vertices)/vrows
   if ( !is.null(normals) ) {
     normals <- xyz.coords(normals, recycle=TRUE)
-    nvertex <- length(vertices)/vrows
     x <- rep(normals$x, len=nvertex)
     y <- rep(normals$y, len=nvertex)
     z <- rep(normals$z, len=nvertex)
     normals <- rgl.vertex(x,y,z)
   }
+  if ( !is.null(texcoords) ) {
+    texcoords <- xy.coords(texcoords, recycle=TRUE)
+    x <- rep(texcoords$x, len=nvertex)
+    y <- rep(texcoords$y, len=nvertex)
+    texcoords <- rbind(x,y)
+  }  
   object <- list(
     vb=matrix(vertices,nrow=vrows),
     ib=matrix(indices,nrow=4),
     primitivetype="quad",
     material=material,
-    normals=normals
+    normals=normals,
+    texcoords=texcoords
   ) 
   
   if (!homogeneous) object$vb <- rbind(object$vb, 1)
@@ -116,31 +133,29 @@ shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
     material[names(x$material)] <- x$material
   }
   result <- integer(0)
-  if ( is.null(x$normals) ) {
-    if (!is.null(x$it))
-      result <- c(triangles = do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
-                                           y = x$vb[2,x$it]/x$vb[4,x$it],
-                                           z = x$vb[3,x$it]/x$vb[4,x$it]), 
-                                      material)))
-  
-    if (!is.null(x$ib))
-      result <- c(result, quads = do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
-                                       y = x$vb[2,x$ib]/x$vb[4,x$ib],
-                                       z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
-                                  material)))
-  } else {
-    if (!is.null(x$it))
-      result <- c(triangles = do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
-                                           y = x$vb[2,x$it]/x$vb[4,x$it],
-                                           z = x$vb[3,x$it]/x$vb[4,x$it],
-                                           normals = t(x$normals[,x$it])), 
-                                      material)))
-    if (!is.null(x$ib))
-      result <- c(quads = do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
-                                       y = x$vb[2,x$ib]/x$vb[4,x$ib],
-                                       z = x$vb[3,x$ib]/x$vb[4,x$ib],
-                                       normals = t(x$normals[,x$ib])), 
-                                  material)))
+  if (!is.null(x$it)) {
+    args <- c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
+                   y = x$vb[2,x$it]/x$vb[4,x$it],
+                   z = x$vb[3,x$it]/x$vb[4,x$it]), 
+                   material)
+    if (!is.null(x$normals)) 
+      args <- c(args, list(normals = t(x$normals[,x$it])))
+    if (!is.null(x$texcoords))
+      args <- c(args, list(texcoords = t(x$texcoords[,x$it])))
+      
+    result <- c(triangles = do.call("triangles3d", args = args ))
+  }
+  if (!is.null(x$ib)) {
+    args <- c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
+                   y = x$vb[2,x$ib]/x$vb[4,x$ib],
+                   z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
+                   material)
+    if (!is.null(x$normals)) 
+      args <- c(args, list(normals = t(x$normals[,x$ib])))
+    if (!is.null(x$texcoords))
+      args <- c(args, list(texcoords = t(x$texcoords[,x$ib])))
+    
+    result <- c(result, quads = do.call("quads3d", args = args ))
   }
   invisible(result)
 }
