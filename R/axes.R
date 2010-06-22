@@ -3,8 +3,7 @@
 # strut:  a boolean indicating whether an expansion was done above
 # x, y, z:  the box above expanded by a factor of expand
 
-.getRanges <- function(expand = 1.03) {
-    ranges <- par3d('bbox')
+.getRanges <- function(expand = 1.03, ranges=par3d('bbox')) {
     ranges <- list(xlim=ranges[1:2], ylim=ranges[3:4], zlim=ranges[5:6])
 
     strut <- FALSE
