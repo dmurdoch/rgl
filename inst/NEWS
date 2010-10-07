@@ -356,3 +356,6 @@ v0.92
   - Allowed texture coordinates to be specified in mesh objects.
   - Updated gl2ps to version 1.3.5
   - Should now install using --merge-multiarch on Windows
+
+v0.92.794
+  - Added declarations for Solaris compatibility (from Brian Ripley)
