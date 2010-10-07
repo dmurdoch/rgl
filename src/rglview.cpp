@@ -14,7 +14,11 @@
 #include "fps.h"
 #include "select.h"
 #include "gl2ps.h"
+#ifdef __sun
+#include <locale.h>
+#else
 #include <locale>
+#endif
 #include "R.h"		// for error()
 
 //

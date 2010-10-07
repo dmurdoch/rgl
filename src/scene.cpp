@@ -10,6 +10,7 @@
 #include "geom.hpp"
 #include <map>
 #include <algorithm>
+#include <functional>
 #include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
