@@ -34,10 +34,10 @@ echo ${havezlib}
 
 if [ "${havezlib}" = "yes" ]; then
   echo -n "  checking for libpng..."
-  if [ -n "${PNG_PATH}" ]; then
-    echo "yes, in ${PNG_PATH}"
-    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${PNG_PATH} "
-    LIBS="$LIBS -L${PNG_PATH} -lpng "
+  if [ -e "${LOCAL_SOFT}/lib/libpng.a" ]; then
+    echo "yes, in ${LOCAL_SOFT}/lib/libpng.a"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H "
+    LIBS="$LIBS -lpng "
   elif [ -e "${R_HOME}/src/gnuwin32/bitmap/libpng/libpng.a" ]; then
     echo "yes"
     CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${R_HOME}/src/gnuwin32/bitmap/libpng "
