@@ -357,5 +357,7 @@ v0.92
   - Updated gl2ps to version 1.3.5
   - Should now install using --merge-multiarch on Windows
 
-v0.92.794
+v0.92.795
   - Added declarations for Solaris compatibility (from Brian Ripley)
+  - Fixed configure.win for bi-arch compatibility.  Windows installers should
+    set PNG_PATH to directory of libpng.a when installing.
