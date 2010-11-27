@@ -31,6 +31,8 @@ rgl.material <- function (
   fog          = TRUE,
   point_antialias = FALSE,
   line_antialias = FALSE,
+  depth_mask   = TRUE,
+  depth_test   = "less",
   ...
 ) {
   # solid or diffuse component
@@ -52,9 +54,11 @@ rgl.material <- function (
   rgl.bool(smooth)
   rgl.bool(point_antialias)
   rgl.bool(line_antialias)
+  rgl.bool(depth_mask)
   rgl.clamp(shininess,0,128)
   rgl.numeric(size)
   rgl.numeric(lwd)
+  depth_test <- rgl.enum.depthtest(depth_test)
   
   # side-dependant rendering
 
@@ -86,7 +90,8 @@ rgl.material <- function (
   idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, 
                           textype, texmipmap, texminfilter, texmagfilter, 
                           nalpha, ambient, specular, emission, texenvmap, 
-                          point_antialias, line_antialias, color ) )
+                          point_antialias, line_antialias, 
+                          depth_mask, depth_test, color) )
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, lwd, alpha ))
 
@@ -102,7 +107,7 @@ rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
 rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
 
-  idata <- rep(0, 23+3*ncolors)
+  idata <- rep(0, 25+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -123,11 +128,13 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   minfilters <- c("nearest", "linear", "nearest.mipmap.nearest", "nearest.mipmap.linear", 
                   "linear.mipmap.nearest", "linear.mipmap.linear")
   magfilters <- c("nearest", "linear")
+  depthtests <- c("never", "less", "equal", "lequal", "greater", 
+                  "notequal", "gequal", "always")
   idata <- ret$idata
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], idata[23 + 3*(1:idata[1])], maxColorValue = 255),
+  list(color = rgb(idata[23 + 3*(1:idata[1])], idata[24 + 3*(1:idata[1])], idata[25 + 3*(1:idata[1])], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=4, length=idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
@@ -147,6 +154,9 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
        lwd  = ddata[3],
        fog = idata[6] > 0,
        point_antialias = idata[22] == 1,
-       line_antialias = idata[23] == 1)
+       line_antialias = idata[23] == 1,
+       depth_mask = idata[24] == 1,
+       depth_test = depthtests[idata[25]]
+       )
                    
 }

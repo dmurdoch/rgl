@@ -27,7 +27,9 @@ Material::Material(Color bg, Color fg)
   fog(true),
   useColorArray(false),
   point_antialias(false),
-  line_antialias(false)
+  line_antialias(false),
+  depth_mask(true),
+  depth_test(1)  // "less"
 {
   alphablend = ( ( bg.getAlphaf() < 1.0f ) || ( fg.getAlphaf() < 1.0f ) ) ? true : false;
 }
@@ -42,6 +44,14 @@ void Material::setup()
 void Material::beginUse(RenderContext* renderContext)
 {
   int ncolor = colors.getLength();
+  
+  GLenum depthfunc[] = { GL_NEVER, GL_LESS, GL_EQUAL, GL_LEQUAL, GL_GREATER,
+                         GL_NOTEQUAL, GL_GEQUAL, GL_ALWAYS };
+  
+  SAVEGLERROR;
+  
+  glDepthFunc(depthfunc[depth_test]);
+  glDepthMask(depth_mask ? GL_TRUE : GL_FALSE);
   
   SAVEGLERROR;
 
@@ -163,6 +173,9 @@ void Material::endUse(RenderContext* renderContext)
   if (SaveErrnum == GL_NO_ERROR) glGetError(); /* work around bug in some glX implementations */
   #endif
   SAVEGLERROR;
+  
+  glDepthFunc(GL_LESS);
+  glDepthMask(GL_TRUE);
 }
 
 void Material::colorPerVertex(bool enable, int numVertices)

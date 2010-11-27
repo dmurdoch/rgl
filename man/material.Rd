@@ -28,6 +28,8 @@ rgl.material(
   fog          = TRUE,
   point_antialias = FALSE,
   line_antialias = FALSE,
+  depth_mask   = TRUE,
+  depth_test   = "less",
   ...
 )
 material3d(...)
@@ -106,6 +108,14 @@ material3d(...)
   \item{fog}{logical, specifying if fog effect should be applied on the corresponding shape}
   \item{point_antialias, line_antialias}{logical, specifying if points and lines 
      should be antialiased}
+  \item{depth_mask}{logical, specifying whether the object's depth
+     should be stored.}
+  \item{depth_test}{Determines which depth test is used to see if this
+     object is visible, depending on its apparent depth in the scene
+     compared to the stored depth. Possible values are \code{"never"},
+     \code{"less"} (the default), \code{"equal"}, \code{"lequal"}
+     (less than or equal), \code{"greater"}, \code{"notequal"},
+     \code{"gequal"} (greater than or equal), \code{"always"}.}
   \item{...}{Any of the arguments above; see Details below.}
 }
 \details{
@@ -147,6 +157,18 @@ save <- material3d("color")
 material3d(color="red")
 material3d("color")
 material3d(color=save)
+
+# this illustrates the effect of depth_test
+x <- c(1:3); xmid <- mean(x)
+y <- c(2,1,3); ymid <- mean(y)
+z <- 1
+open3d()
+tests <- c("never", "less", "equal", "lequal", "greater", 
+                  "notequal", "gequal", "always")
+for (i in 1:8) {
+  triangles3d(x,y,z+i, col=heat.colors(8)[i])
+  texts3d(xmid,ymid,z+i, paste(i, tests[i], sep=". "), depth_test=tests[i]) 
+}
 }
 \keyword{dynamic}
 
