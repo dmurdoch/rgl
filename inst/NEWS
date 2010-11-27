@@ -357,8 +357,10 @@ v0.92
   - Updated gl2ps to version 1.3.5
   - Should now install using --merge-multiarch on Windows
 
-v0.92.797
+v0.92.798
   - Added declarations for Solaris compatibility (from Brian Ripley)
   - Fixed configure.win for bi-arch compatibility.  Windows installers can
     set HAVE_PNG to a non-empty value, and rgl will look for 
     the libpng files in the default LOCAL_SOFT location when installing.
+  - Added depth_mask and depth_test material properties, to allow control
+    over how objects are obscured by each other.

@@ -55,3 +55,7 @@ rgl.enum (postscripttype, ps=0, eps=1, tex=2, pdf=3, svg=4, pgf=5)
 
 rgl.enum.pixelcomponent <- function(component)
 rgl.enum(component, red=0, green=1, blue=2, alpha=3, depth=4, luminance=5)
+
+rgl.enum.depthtest <- function(depthtest)
+rgl.enum(depthtest, never=0, less=1, equal=2, lequal=3, greater=4, 
+                    notequal=5, gequal=6, always= 7)

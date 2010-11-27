@@ -375,6 +375,7 @@ void Scene::render(RenderContext* renderContext)
   glClearDepth(1.0);
   glDepthFunc(GL_LESS);
   glDepthMask(GL_TRUE);
+  // mask and func will be reset by material
 
   // if ( unsortedShapes.size() )
     clearFlags  |= GL_DEPTH_BUFFER_BIT;

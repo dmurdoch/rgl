@@ -48,6 +48,8 @@ public:
   bool         useColorArray;
   bool         point_antialias;
   bool         line_antialias;
+  bool         depth_mask;
+  int	       depth_test;  // 0=GL_NEVER, 1=GL_LESS, etc.
   
   float        glVersion;
 };
