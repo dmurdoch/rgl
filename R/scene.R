@@ -423,6 +423,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   nvertex <- rgl.nvertex(vertex)
   radius  <- rgl.attr(radius, nvertex)
   nradius <- length(radius)
+  if (!nradius) stop("no radius specified")
   
   idata <- as.integer( c( nvertex, nradius ) )
    
@@ -512,6 +513,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
   ncenter <- rgl.nvertex(center)
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
+  if (!nradius) stop("no radius specified")
   
   idata   <- as.integer( c(ncenter,nradius) )
    
