@@ -32,13 +32,14 @@ rgl.open <- function() {
 
 rgl.close <- function() {
 
+  if (length(hook <- getHook("on.rgl.close"))) hook()
+  
   ret <- .C( rgl_dev_close, success=FALSE )
 
   if (! ret$success)
     stop("no device opened.")
 
 }
-
 
 ## 
 ## get current device
@@ -148,3 +149,61 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
   if (length(component) > 1) return(result)
   else return(result[,,1])
 }
+
+##
+## Sweave device
+##
+##
+
+rgl.Sweave <- function(name, width, height, options, ...) {
+
+  if (getRversion() < "2.14.0") {
+    postscript(tempfile()) # since dev.off() will be called.
+    
+    if (length(getHook("on.rgl.close"))) rgl.Sweave.off() # to close the previous chunk
+  }
+  
+  if (length(hook <- getHook("on.rgl.close"))) {
+    dev <- environment(hook)$dev
+    rgl.set(dev)
+  } else {
+    open3d(windowRect=c(0, 0, width*options$resolution, height*options$resolution))
+    dev <- rgl.cur()
+  } 
+  
+  snapshotDone <- FALSE
+  
+  stayOpen <- isTRUE(options$stayopen)
+  
+  setHook("on.rgl.close", action="replace", function(remove=TRUE) {
+    prev.dev <- rgl.cur()
+    on.exit(rgl.set(prev.dev))
+    
+    if (!snapshotDone) {
+      rgl.set(dev)
+      rgl.snapshot(filename=paste(name, "png", sep="."))
+      snapshotDone <<- TRUE
+    }
+    
+    if (remove)
+      setHook("on.rgl.close", action="replace", NULL)
+  })
+}
+
+rgl.Sweave.off <- function() {
+  if (length(hook <- getHook("on.rgl.close"))) {
+    stayOpen <- environment(hook)$stayOpen
+    if (stayOpen) hook(FALSE)
+    else rgl.close()
+  }
+}
+  
+##
+## Sweave snapshot
+## 
+##
+
+Sweave.snapshot <- function() {
+  if (length(hook <- getHook("on.rgl.close"))) hook(remove = FALSE)
+}
+
