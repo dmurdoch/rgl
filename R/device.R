@@ -175,13 +175,21 @@ rgl.Sweave <- function(name, width, height, options, ...) {
   
   stayOpen <- isTRUE(options$stayopen)
   
+  type <- options$outputtype
+  if (is.null(type)) type <- "png"
+  
   setHook("on.rgl.close", action="replace", function(remove=TRUE) {
     prev.dev <- rgl.cur()
     on.exit(rgl.set(prev.dev))
     
     if (!snapshotDone) {
       rgl.set(dev)
-      rgl.snapshot(filename=paste(name, "png", sep="."))
+      switch(type,
+        png = rgl.snapshot(filename=paste(name, "png", sep=".")),
+        pdf = rgl.postscript(filename=paste(name, "pdf", sep="."), fmt="pdf"),
+        eps = rgl.postscript(filename=paste(name, "eps", sep="."), fmt="eps"),
+        stop("Unrecognized rgl outputtype: ", type)
+      )
       snapshotDone <<- TRUE
     }
     
