@@ -29,6 +29,13 @@ public:
    **/
   
   Vertex getElementCenter(int index) { return center.get(index); }
+  
+  /**
+   * Spheres appear as spheres, so their bbox depends on scaling
+   **/
+   
+  virtual AABox& getBoundingBox(RenderContext* renderContext);
+
 
   /**
    * begin sending items 

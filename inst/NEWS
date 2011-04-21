@@ -357,7 +357,7 @@ v0.92
   - Updated gl2ps to version 1.3.5
   - Should now install using --merge-multiarch on Windows
 
-v0.92.802
+v0.92.803
   - Added declarations for Solaris compatibility (from Brian Ripley)
   - Fixed configure.win for bi-arch compatibility.  Windows installers can
     set HAVE_PNG to a non-empty value, and rgl will look for 
@@ -366,3 +366,6 @@ v0.92.802
     over how objects are obscured by each other.
   - Added Sweave support through the rgl.Sweave driver and the Sweave.snapshot
     function. 
+  - Added iterative computation of the bounding box to handle objects like
+    spheres, which need to maintain their apparent shape as the scaling
+    changes.

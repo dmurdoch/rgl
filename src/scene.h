@@ -102,6 +102,10 @@ private:
    **/
   void calcDataBBox();
   /**
+   * compute bounding-box for a changeable scene
+   **/
+  void calcDataBBox(RenderContext* renderContext);
+  /**
    * add shapes
    **/
   void addShape(Shape* shape);
@@ -156,6 +160,7 @@ private:
   AABox data_bbox;
   
   bool ignoreExtent;
+  bool bboxChanges;
 };
 
 
