@@ -42,8 +42,8 @@ device will \emph{not} be closed, and a call to \code{Sweave.snapshot()}
 will be used at the end of the chunk if it has not been called explicitly.
 
 If the chunk option \code{outputtype=pdf} or \code{outputtype=eps} is used,
-the \code{\link{rgl.postscript}} function will be used to write output in that
-format.
+the \code{\link{rgl.postscript}} function will be used to write output in the
+specified format.
 
 }
 
@@ -72,6 +72,22 @@ open \code{rgl} device windows.
 \item It is not possible to specify the output type using the \code{outputtype}
 chunk option.  Snapshots will always be saved in \file{.png} format.
 }
+
+Most of these problems are fixed in later versions of \R, including 2.13.0-patched.
+Within the \R 2.13.x series, it is recommended to use the  
+\code{figs.only=TRUE, pdf=FALSE} options (and leave the other
+graphics drivers at their default \code{FALSE} settings), which cause 
+the code in the chunk to be run only once.  
+
+}
+
+\note{
+The \code{rgl} package relies on your graphics hardware to render OpenGL scenes,
+and the default \file{.png} output copies a bitmap from the hardware device.  All 
+such devices have limitations on the size of the bitmap, but they do not 
+always signal these limitations in a way that \code{rgl} will detect.  If you find
+that images are not being produced properly, try reducing the size using 
+the \code{resolution}, \code{width} or \code{height} chunk options.
 }
 
 \value{
@@ -82,6 +98,6 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{RweaveLatex}} for a description of alternate graphics drivers
-in Sweave.
+in Sweave, and standard options that can be used in code chunks.
 }
 \keyword{ utilities }
