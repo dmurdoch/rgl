@@ -157,17 +157,23 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
 
 rgl.Sweave <- function(name, width, height, options, ...) {
 
-  if (getRversion() < "2.14.0") {
-    postscript(tempfile()) # since dev.off() will be called.
-    
+  # The 2.13.0 release called dev.off(), not rgl.Sweave.off()
+  
+  if (getRversion() == "2.13.0" && version$status == "") {
+  
+    postscript(tempfile()) # make dev.off() happy
     if (length(getHook("on.rgl.close"))) rgl.Sweave.off() # to close the previous chunk
+  
   }
   
   if (length(hook <- getHook("on.rgl.close"))) {
     dev <- environment(hook)$dev
     rgl.set(dev)
   } else {
-    open3d(windowRect=c(0, 0, width*options$resolution, height*options$resolution))
+    wr <- c(0, 0, width*options$resolution, height*options$resolution)
+    open3d(windowRect=wr)
+    if (any(wr != par3d("windowRect"))) 
+      stop("rgl window creation error.  Try reducing resolution, width or height.")
     dev <- rgl.cur()
   } 
   
