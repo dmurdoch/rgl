@@ -23,10 +23,10 @@ objects that appear to the viewer to be spheres.  Use \code{\link{ellipse3d}}
 to draw shapes that are spherical in the data scale.
 
 When the scale is not isometric, the radius is measured in an average scale.
-Note that the bounding box calculation is always done assuming an 
-isometric scale, so in this case it is inaccurate:  the extent of axes 
-with \code{scale < 1} is underestimated, and that of axes with 
-\code{scale > 1} is overestimated.
+In this case the bounding box calculation is iterative, since rescaling the
+plot changes the shape of the spheres in user-coordinate, which changes
+the bounding box.  Versions of \code{rgl} prior to 0.92.802 did not do 
+this iterative adjustment.
 
 If any coordinate or radius is \code{NA}, the sphere is not plotted.
 } 

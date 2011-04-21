@@ -10,7 +10,7 @@
 
 SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, int in_nradius, double* in_radius,
                      int in_ignoreExtent)
- : Shape(in_material, in_ignoreExtent), 
+ : Shape(in_material, in_ignoreExtent, SHAPE, true), 
    center(in_ncenter, in_center), 
    radius(in_nradius, in_radius)
 {
@@ -29,6 +29,21 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
 
 SphereSet::~SphereSet()
 {
+}
+
+AABox& SphereSet::getBoundingBox(RenderContext* renderContext)
+{
+  Vertex scale = renderContext->viewpoint->scale;
+  scale.x = 1.0/scale.x;
+  scale.y = 1.0/scale.y;
+  scale.z = 1.0/scale.z;
+  
+  boundingBox.invalidate();
+  for(int i=0;i<getElementCount();i++) {
+    boundingBox += center.get(i) + scale*radius.getRecycled(i);
+    boundingBox += center.get(i) - scale*radius.getRecycled(i);
+  }
+  return boundingBox;
 }
 
 void SphereSet::drawBegin(RenderContext* renderContext)

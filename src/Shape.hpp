@@ -16,7 +16,7 @@
 class Shape : public SceneNode
 {
 public:
-  Shape(Material& in_material,bool in_ignoreExtent,TypeID in_typeID=SHAPE);
+  Shape(Material& in_material,bool in_ignoreExtent, TypeID in_typeID=SHAPE, bool in_bboxChanges=false);
   ~Shape();
   
   /**
@@ -47,7 +47,18 @@ public:
    * obtain bounding box
    **/
   const AABox& getBoundingBox() const { return boundingBox; }
+  
+  /**
+   * does this shape change dimensions according to the way it is rendered?
+   * if so, the above is just a guess...
+   **/
+  const bool getBBoxChanges() const { return bboxChanges; }
 
+  /**
+   * this shows how the shape would be sized in the given context
+   **/
+  virtual AABox& getBoundingBox(RenderContext* renderContext) { return boundingBox; }
+  
   /**
    * obtain material
    **/
@@ -98,6 +109,11 @@ protected:
    * bounding volume of overall geometry
    **/
   AABox    boundingBox;
+  
+  /**
+   * bounding volume changes depending on the scene?
+   **/
+  bool     bboxChanges;
   
   /*
    * whether this object should be ignored in scene bounding box calculations

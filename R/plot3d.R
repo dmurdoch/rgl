@@ -75,22 +75,20 @@ decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zli
     	autoscale <- aspect
     	aspect <- c(1,1,1)
     } else autoscale <- TRUE	
-
-    ranges <- .getRanges()
     
-    result <- numeric(0)
-
+    result <- numeric(0)    
+    ranges <- .getRanges()    
     if (!missing(xlim) | !missing(ylim) | !missing(zlim)) {
         ind <- c(1,1,2,2)
         result <- c(result, strut=segments3d(xlim[ind], ylim[ind], zlim[ind]))
     }
     
+    if (autoscale) aspect3d(aspect)
+    
     if (axes) result <- c(result, axes=axes3d())
     if (box) result <- c(result, box=box3d())
     result <- c(result, title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
 	    main = main, sub = sub))
-   
-    if (autoscale) aspect3d(aspect)
     
     if (top) rgl.bringtotop()
     

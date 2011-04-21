@@ -28,6 +28,7 @@ Scene::Scene()
   nlights    = 0;
   bboxDeco   = NULL;
   ignoreExtent = false;
+  bboxChanges = false;
  
   add( new Background );
   add( new Viewpoint );
@@ -58,6 +59,7 @@ void Scene::deleteShapes()
     delete *iter;
   }
   shapes.clear();
+  bboxChanges = false;
 }
 
 void Scene::deleteLights()
@@ -105,6 +107,7 @@ void Scene::addShape(Shape* shape) {
   if (!shape->getIgnoreExtent()) {
     const AABox& bbox = shape->getBoundingBox();
     data_bbox += bbox;
+    bboxChanges |= shape->getBBoxChanges();
   }
 
   shapes.push_back(shape);
@@ -307,7 +310,7 @@ void Scene::renderZsort(RenderContext* renderContext, bool fast)
     for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
       Shape* shape = *iter;
     
-      const AABox& aabox = shape->getBoundingBox();
+      const AABox& aabox = shape->getBoundingBox(renderContext);
 
       float distance = renderContext->getDistance( aabox.getCenter() );
       distanceMap.insert( std::pair<const float,int>(-distance, index) );
@@ -400,6 +403,9 @@ void Scene::render(RenderContext* renderContext)
   setupLightModel(renderContext);
 
 
+  if (bboxChanges) 
+    calcDataBBox(renderContext);
+  
   Sphere total_bsphere;
 
   if (data_bbox.isValid()) {
@@ -610,10 +616,30 @@ void Scene::calcDataBBox()
 
   std::vector<Shape*>::const_iterator iter;
 
+  bboxChanges = false;
   for(iter = shapes.begin(); iter != shapes.end(); ++iter) {
     Shape* shape = *iter;
 
-    if (!shape->getIgnoreExtent()) data_bbox += shape->getBoundingBox();
+    if (!shape->getIgnoreExtent()) {
+      data_bbox += shape->getBoundingBox();
+      bboxChanges |= shape->getBBoxChanges();
+    }
+  }
+}
+
+void Scene::calcDataBBox(RenderContext *renderContext)
+{
+  data_bbox.invalidate();
+  std::vector<Shape*>::const_iterator iter;
+  
+  for(int i = 0; i < 10; ++i) {
+  
+    for(iter = shapes.begin(); iter != shapes.end(); ++iter) {
+      Shape* shape = *iter;
+
+      if (!shape->getIgnoreExtent()) 
+        data_bbox += shape->getBoundingBox(renderContext);
+    }
   }
 }
 

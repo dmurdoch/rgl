@@ -8,13 +8,19 @@ aspect3d <- function(x, y = NULL, z = NULL) {
 	    y <- x[2]
 	    x <- x[1]
 	}
+	save <- par3d(skipRedraw=FALSE)
+        for (i in 1:5) { # To handle spheres, repeat this 
+  	    bbox <- .getRanges()
+	    scale <- c(diff(bbox$xlim), diff(bbox$ylim), diff(bbox$zlim))
+	    scale <- ifelse(scale <= 0, 1, scale)
 
-	bbox <- .getRanges()
-	scale <- c(diff(bbox$xlim), diff(bbox$ylim), diff(bbox$zlim))
-	scale <- ifelse(scale <= 0, 1, scale)
-
-	avgscale <- sqrt(sum(scale^2)/3)
-        scale <- c(x,y,z)*avgscale/scale
+	    avgscale <- sqrt(sum(scale^2)/3)
+            scale <- c(x,y,z)*avgscale/scale
+            oldscale <- par3d(scale = scale)$scale
+            if (isTRUE(all.equal(scale, oldscale)))
+            	break
+        }
+        par3d(save)
     }
     par3d(scale = scale)
 }

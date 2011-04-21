@@ -8,8 +8,8 @@
 //   Shape
 //
 
-Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID)
-: SceneNode(in_typeID), ignoreExtent(in_ignoreExtent), material(in_material), 
+Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool in_bboxChanges)
+: SceneNode(in_typeID), bboxChanges(in_bboxChanges), ignoreExtent(in_ignoreExtent), material(in_material), 
   displayList(0), drawLevel(0), doUpdate(true), transparent(in_material.isTransparent()),
   blended(in_material.isTransparent())
   
