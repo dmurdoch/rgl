@@ -101,6 +101,8 @@ void X11WindowImpl::getWindowRect(int *left, int *top, int *right, int *bottom)
   ::Window root, child;
   int x, y;
   unsigned int width, height, border_width, depth;
+  factory->processEvents();
+  factory->flushX();
   XGetGeometry(factory->xdisplay, xwindow, &root, &x, &y, &width, &height, &border_width, &depth);
   XTranslateCoordinates(factory->xdisplay, xwindow, root, x, y, left, top, &child);
   XTranslateCoordinates(factory->xdisplay, xwindow, root, x+width, y+height, right, bottom, &child);

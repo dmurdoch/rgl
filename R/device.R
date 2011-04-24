@@ -172,7 +172,11 @@ rgl.Sweave <- function(name, width, height, options, ...) {
   } else {
     wr <- c(0, 0, width*options$resolution, height*options$resolution)
     open3d(windowRect=wr)
-    if (any(wr != par3d("windowRect"))) 
+    if (is.null(delay <- options$delay)) delay <- 0.1
+    Sys.sleep(as.numeric(delay))
+    wrnew <- par3d("windowRect")
+    if (wr[3] - wr[1] != wrnew[3] - wrnew[1] || 
+        wr[4] - wr[2] != wrnew[4] - wrnew[2])
       stop("rgl window creation error.  Try reducing resolution, width or height.")
     dev <- rgl.cur()
   } 
