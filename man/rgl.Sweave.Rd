@@ -37,14 +37,24 @@ Alternatively, the \code{Sweave.snapshot()} function
 can be called to save the image before the end of the chunk.  Only one
 snapshot will be taken per chunk.
 
-If the chunk option \code{stayopen=TRUE} is used, then the \code{rgl}
-device will \emph{not} be closed, and a call to \code{Sweave.snapshot()}
-will be used at the end of the chunk if it has not been called explicitly.
-
-If the chunk option \code{outputtype=pdf} or \code{outputtype=eps} is used,
+Several chunk options are used by the \code{rgl.Sweave} device:
+\describe{
+\item{stayopen}{(default \code{FALSE}).  If \code{TRUE} then the \code{rgl}
+device will \emph{not} be closed at the end of the chunk,
+instead a call to \code{Sweave.snapshot()}
+will be used if it has not been called explicitly.  Subsequent chunks can add
+to the scene.}
+\item{outputtype}{(default \code{png}).  The output may be specified 
+as \code{outputtype=pdf} or \code{outputtype=eps} instead, in which case
 the \code{\link{rgl.postscript}} function will be used to write output in the
-specified format.
-
+specified format.  Note that  \code{\link{rgl.postscript}} has limitations
+and does not always render scenes correctly.}
+\item{delay}{(default 0.1).  After creating the display window, \code{\link{Sys.sleep}}
+will be called to delay this many seconds, to allow the display system to 
+initialize.  This is needed in X11 systems which open the display
+asynchronously.  If the default time is too short, \code{rgl.Sweave} may
+falsely report that the window is too large to open.}
+}
 }
 
 \note{
