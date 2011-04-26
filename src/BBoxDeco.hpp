@@ -19,6 +19,7 @@ enum {
   AXIS_CUSTOM,
   AXIS_LENGTH,
   AXIS_UNIT,
+  AXIS_PRETTY,
   AXIS_NONE
 };
 
@@ -43,7 +44,7 @@ class BBoxDeco : public SceneNode
 {
 public:
   BBoxDeco(Material& in_material=defaultMaterial, AxisInfo& xaxis=defaultAxis, AxisInfo& yaxis=defaultAxis, AxisInfo& zaxis=defaultAxis, float marklen=15.0, bool marklen_fract=true,
-           float in_expand=1.0);
+           float in_expand=1.0, bool in_front=false);
   void render(RenderContext* renderContext);
   AABox getBoundingBox(const AABox& boundingBox) const;
   Vertex getMarkLength(const AABox& boundingBox) const;
@@ -53,6 +54,7 @@ private:
   float marklen_value;
   bool  marklen_fract;
   float expand;
+  bool  draw_front;
 
   static Material defaultMaterial;
   static AxisInfo defaultAxis;

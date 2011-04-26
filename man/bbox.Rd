@@ -10,8 +10,12 @@ rgl.bbox(
   xat=NULL, xlab=NULL, xunit=0, xlen=5, 
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=TRUE, expand=1, ...)
-bbox3d(xat, yat, zat, expand=1.03, nticks=5, ...)  
+  marklen=15.0, marklen.rel=TRUE, expand=1, 
+  draw_front=FALSE, ...)
+bbox3d(xat=NULL, yat=NULL, zat=NULL, 
+       xunit="pretty", yunit="pretty", zunit="pretty", 
+       expand=1.03, nticks=5,
+       draw_front=FALSE, ...)  
 }
 \arguments{
   \item{xat,yat,zat}{vector specifying the tickmark positions}
@@ -22,13 +26,16 @@ bbox3d(xat, yat, zat, expand=1.03, nticks=5, ...)
   \item{marklen.rel}{logical, if TRUE tick mark length is calculated using 1/\code{marklen} * axis length, otherwise tick mark length is \code{marklen} in coordinate space}
   \item{expand}{value specifying how much to expand the bounding box around the data}
   \item{nticks}{suggested number of ticks to use on axes}
+  \item{draw_front}{draw the front faces of the bounding box}
   \item{ ... }{Material properties (or other \code{rgl.bbox} parameters
   in the case of \code{bbox3d}). See \code{\link{rgl.material}} for details.}
 }
 \details{
-  Three different types of tick mark layouts are possible.
+  Four different types of tick mark layouts are possible.
   If \code{at} is not \code{NULL}, the ticks are set up at custom positions.
-  If \code{unit} is not zero, it defines the tick mark base.
+  If \code{unit} is numeric but not zero, it defines the tick mark base.  If
+  it is \code{"pretty"} (the default in \code{bbox3d}), ticks are set at \code{\link{pretty}}
+  locations.
   If \code{length} is not zero, it specifies the number of ticks that are automatically specified.
   The first colour specifies the bounding box, while the second one specifies the tick mark and font colour.
   

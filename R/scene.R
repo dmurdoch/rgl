@@ -141,7 +141,8 @@ rgl.bbox <- function(
   xat=NULL, xlab=NULL, xunit=0, xlen=5,
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=TRUE, expand=1, ...) {
+  marklen=15.0, marklen.rel=TRUE, expand=1, draw_front=FALSE,
+  ...) {
 
   rgl.material( ... )
 
@@ -160,10 +161,14 @@ rgl.bbox <- function(
   } else if (is.null(zlab)) {
     zlab = format(zat)
   }  else zlab=rep(zlab,length.out=length(zat))
-
+  
   xticks <- length(xat)
   yticks <- length(yat)
   zticks <- length(zat)
+
+  if (identical(xunit, "pretty")) xunit = -1;
+  if (identical(yunit, "pretty")) yunit = -1;
+  if (identical(zunit, "pretty")) zunit = -1;
 
   length(xticks)      <- 1
   length(yticks)      <- 1
@@ -172,13 +177,14 @@ rgl.bbox <- function(
   length(ylen)        <- 1
   length(zlen)        <- 1
   length(marklen.rel) <- 1
+  length(draw_front)  <- 1
   length(xunit)       <- 1
   length(yunit)       <- 1
   length(zunit)       <- 1
   length(marklen)     <- 1
   length(expand)      <- 1
 
-  idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel))
+  idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel, draw_front))
   ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
 
   ret <- .C( rgl_bbox,
