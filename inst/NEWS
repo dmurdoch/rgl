@@ -357,7 +357,7 @@ v0.92
   - Updated gl2ps to version 1.3.5
   - Should now install using --merge-multiarch on Windows
 
-v0.92.804
+v0.92.806
   - Added declarations for Solaris compatibility (from Brian Ripley)
   - Fixed configure.win for bi-arch compatibility.  Windows installers can
     set HAVE_PNG to a non-empty value, and rgl will look for 
@@ -374,3 +374,5 @@ v0.92.804
     labels.  plot3d() was modified to use this instead of manually setting axis
     locations and using box3d() to draw a box, allowing resizeable labelled
     axes.
+  - Removed some unnecessary declarations from rglmath.h that were causing
+    problems in an old version of gcc on Solaris.
