@@ -85,8 +85,7 @@ decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zli
     
     if (autoscale) aspect3d(aspect)
     
-    if (axes) result <- c(result, axes=axes3d())
-    if (box) result <- c(result, box=box3d())
+    if (axes) result <- c(result, axes=axes3d(box=box))
     result <- c(result, title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
 	    main = main, sub = sub))
     

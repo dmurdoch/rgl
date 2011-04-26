@@ -4,6 +4,8 @@
 #include "scene.h"
 #include <cstdio>
 #include <cmath>
+#include "R.h"
+#include "R_ext/Applic.h"
 
 #if 0
 // This is debugging code to track down font problems.
@@ -149,6 +151,8 @@ AxisInfo::AxisInfo(int in_nticks, double* in_ticks, char** in_texts, int in_len,
     
     if (unit > 0)
       mode = AXIS_UNIT;
+    else if (unit < 0)
+      mode = AXIS_PRETTY;
     else if (len > 0)
       mode = AXIS_LENGTH;
     else
@@ -292,9 +296,9 @@ AxisInfo BBoxDeco::defaultAxis(0,NULL,NULL,0,5);
 Material BBoxDeco::defaultMaterial( Color(0.6f,0.6f,0.6f,0.5f), Color(1.0f,1.0f,1.0f) );
 
 BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis, AxisInfo& in_zaxis, float in_marklen_value, bool in_marklen_fract,
-                   float in_expand)
+                   float in_expand, bool in_front)
 : SceneNode(BBOXDECO), material(in_material), xaxis(in_xaxis), yaxis(in_yaxis), zaxis(in_zaxis), marklen_value(in_marklen_value), marklen_fract(in_marklen_fract),
-  expand(in_expand)
+  expand(in_expand), draw_front(in_front)
 {
   material.colors.recycle(2);
 }
@@ -387,20 +391,22 @@ void BBoxDeco::render(RenderContext* renderContext)
 
       const bool front = (cos_a >= 0.0f) ? true : false;
 
-      if (!front) {
+      if (draw_front || !front) {
 
-        // draw back face
+        // draw face
 
         glNormal3f(side[i].normal.x, side[i].normal.y, side[i].normal.z);
 
         for(j=0;j<4;j++) {
 
-          // modify adjacent matrix
+	  if (!front) {
+            // modify adjacent matrix
 
-          int from = side[i].vidx[j];
-          int to   = side[i].vidx[(j+1)%4];
+            int from = side[i].vidx[j];
+            int to   = side[i].vidx[(j+1)%4];
 
-          adjacent[from][to] = 1;
+            adjacent[from][to] = 1;
+          }          
           
           // feed vertex
 
@@ -561,6 +567,33 @@ void BBoxDeco::render(RenderContext* renderContext)
               }
             }
             break;
+          case AXIS_PRETTY:
+            {
+              /* These are the defaults from the R pretty() function, except min_n is 3 */
+              double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
+              int ndiv=axis->len, min_n=3, eps_correction=0;
+              
+              high_u_fact[0] = 1.5;
+              high_u_fact[1] = 2.75;
+              axis->unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+                                     eps_correction, 0);
+              
+              for (int i=(int)lo; i<=up; i++) {
+                float value = i*axis->unit;
+		if (value >= low && value <= high) {
+                  *valueptr = value;
+
+                  char text[32];
+                  sprintf(text, "%.4g", value);
+
+                  String s (strlen(text),text);
+
+                  axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
+		}
+              }
+            }
+            break;
+            
         }
       }
     }

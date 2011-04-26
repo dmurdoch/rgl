@@ -470,13 +470,6 @@ void Scene::render(RenderContext* renderContext)
     glGetIntegerv(GL_VIEWPORT, renderContext->viewport);    
     
     //
-    // RENDER BBOX DECO
-    //
-
-    if (bboxDeco) 
-      bboxDeco->render(renderContext);  // This changes the modelview/projection/viewport
-
-    //
     // RENDER SOLID SHAPES
     //
 
@@ -489,6 +482,13 @@ void Scene::render(RenderContext* renderContext)
     // DISABLE BLENDING
     glDisable(GL_BLEND);
     
+    //
+    // RENDER BBOX DECO
+    //
+
+    if (bboxDeco) 
+      bboxDeco->render(renderContext);  // This changes the modelview/projection/viewport
+
     SAVEGLERROR;
 
     {

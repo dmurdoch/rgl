@@ -369,3 +369,8 @@ v0.92.804
   - Added iterative computation of the bounding box to handle objects like
     spheres, which need to maintain their apparent shape as the scaling
     changes.
+  - Improved the bounding box decoration in two ways:  it can now draw the
+    front faces (to surround the whole graph), and can label edges with pretty
+    labels.  plot3d() was modified to use this instead of manually setting axis
+    locations and using box3d() to draw a box, allowing resizeable labelled
+    axes.

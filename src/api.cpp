@@ -746,6 +746,7 @@ void rgl_bbox(int* successptr,
     int   ylen       =        idata[4];
     int   zlen       =        idata[5];
     int   marklen_rel =       idata[6];
+    int   front      =        idata[7];
 
     float xunit      = (float) ddata[0];
     float yunit      = (float) ddata[1];
@@ -758,7 +759,7 @@ void rgl_bbox(int* successptr,
     AxisInfo yaxis(yticks, yat, ytext, ylen, yunit);
     AxisInfo zaxis(zticks, zat, ztext, zlen, zunit);
 
-    success = as_success( device->add( new BBoxDeco(currentMaterial, xaxis, yaxis, zaxis, marklen, (bool) marklen_rel, expand ) ) );
+    success = as_success( device->add( new BBoxDeco(currentMaterial, xaxis, yaxis, zaxis, marklen, (bool) marklen_rel, expand, (bool)front ) ) );
   }
   CHECKGLERROR;
 
