@@ -560,6 +560,24 @@ void rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
   *successptr = success;
 }
 
+void rgl_planes(int* successptr, int* idata, double* normals, double* offsets)
+{
+  int success = RGL_FAIL;
+
+  Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+    int nnormal = idata[0];
+    int noffset = idata[1];
+
+    success = as_success( device->add( new PlaneSet(currentMaterial, nnormal, normals, noffset, offsets) ) );
+  }
+  CHECKGLERROR;
+
+  *successptr = success;
+}
+
 void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius)
 {
   int success = RGL_FAIL;

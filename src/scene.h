@@ -23,6 +23,7 @@
 #include "TextSet.hpp"
 #include "SpriteSet.hpp"
 #include "SphereSet.hpp"
+#include "PlaneSet.hpp"
 #include "Surface.hpp"
 #include "Viewpoint.hpp"
 #include "Background.hpp"
@@ -145,7 +146,7 @@ private:
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
   
-  void renderZsort(RenderContext* renderContext, bool fast);
+  void renderZsort(RenderContext* renderContext);
   
   void deleteAll(std::vector<SceneNode*> list);
 

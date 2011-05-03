@@ -22,15 +22,9 @@ public:
   /**
    * render shape.
    * Default Implementation: uses z-buffer and a display list 
-   * that stores everything from a call to draw().
+   * that stores everything from a call to draw().  
    **/
   virtual void render(RenderContext* renderContext);
-
-  /**
-   * render shape using z value in renderContext
-   * Implementation: does call render()
-   **/
-  virtual void renderZSort(RenderContext* renderContext);
 
   /**
    * request update of node due to content change. 
@@ -86,7 +80,14 @@ public:
   virtual Vertex getElementCenter(int index) { return boundingBox.getCenter(); }
 
   /**
-   * begin sending items 
+   * Starting to render the shape.  After this, the renderContext won't change until
+   * the next call.  This will only be called once per rendering.
+   **/
+  virtual void renderBegin(RenderContext* renderContext) { };
+
+  /**
+   * begin sending items.  This may be called multiple times, e.g. if the
+   * items are being intermixed with items from other shapes
    **/
   virtual void drawBegin(RenderContext* renderContext);
 

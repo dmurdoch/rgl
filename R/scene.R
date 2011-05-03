@@ -449,6 +449,35 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
 }
 
 ##
+## add planes
+##
+
+rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
+{
+  rgl.material(...)
+
+  normals  <- rgl.vertex(a, b, c)
+  nnormals <- rgl.nvertex(normals)
+  noffsets <- length(d)
+  
+  idata <- as.integer( c( nnormals, noffsets ) )
+   
+  ret <- .C( rgl_planes,
+    success = as.integer(FALSE),
+    idata,
+    as.numeric(normals),    
+    as.numeric(d),
+    NAOK=TRUE
+  )
+
+  if (! ret$success)
+    print("rgl_planes failed")
+    
+  invisible(ret$success)
+
+}
+
+##
 ## add texts
 ##
 

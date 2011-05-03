@@ -149,6 +149,11 @@ spheres3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
   do.call("rgl.spheres", c(list(x=x,y=y,z=z,radius=radius), .fixMaterialArgs(..., Params = save)))
 }
 
+planes3d   <- function(a,b=NULL,c=NULL,d=0,...) {
+  .check3d(); save <- material3d(); on.exit(material3d(save))
+  do.call("rgl.planes", c(list(a=a,b=b,c=c,d=d), .fixMaterialArgs(..., Params = save)))
+}
+
 sprites3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius), .fixMaterialArgs(..., Params = save)))

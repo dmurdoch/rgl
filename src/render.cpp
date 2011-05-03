@@ -44,6 +44,11 @@ void VertexArray::copy(int nvertex, double* vertices)
   }
 }
 
+void VertexArray::setVertex(int index, double* v) {
+  arrayptr[index*3+0] = (float) v[0];
+  arrayptr[index*3+1] = (float) v[1];
+  arrayptr[index*3+2] = (float) v[2];
+}
 
 void VertexArray::beginUse() {
   glEnableClientState(GL_VERTEX_ARRAY);

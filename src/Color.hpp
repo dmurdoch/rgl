@@ -39,7 +39,7 @@ public:
 // CLASS
 //   ColorArray
 // IMPLEMENTATION
-//   uses unsigned bytes as interal format for mass color datas
+//   uses unsigned bytes as internal format for mass color datas
 //   carries alpha values
 //
 

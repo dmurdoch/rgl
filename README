@@ -57,6 +57,10 @@ Windowing System (osx/carbon, unix/x11 or win32)
 OpenGL Library 
 OpenGL Utility Library (GLU)
 
+Installation on Debian:
+-----------------------
+aptitude install libgl1-mesa-dev libglu1-mesa-dev
+
 
 OPTIONS
 -------

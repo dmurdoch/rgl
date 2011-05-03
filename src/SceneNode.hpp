@@ -28,7 +28,7 @@ typedef unsigned int TypeID;
 typedef int ObjID;
 
 #define BBOXID 1
-static ObjID nextID = BBOXID + 1;
+
 
 class SceneNode
 {
@@ -36,6 +36,7 @@ public:
   inline const TypeID getTypeID() const { return typeID; }
   inline const ObjID getObjID() const { return objID; }
   virtual ~SceneNode() { };
+  static ObjID nextID;
 protected:
   SceneNode(const TypeID in_typeID) : typeID(in_typeID)
   {  objID = nextID++; };
