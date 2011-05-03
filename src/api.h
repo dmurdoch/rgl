@@ -67,6 +67,7 @@ EXPORT_SYMBOL void rgl_primitive(int* successptr, int* idata, double* vertex, do
 EXPORT_SYMBOL void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex,
                                  int* nfonts, char** family, int* style, double* cex, int* useFreeType);
 EXPORT_SYMBOL void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius);
+EXPORT_SYMBOL void rgl_planes   (int* successptr, int* idata, double* normals, double* offsets);
 EXPORT_SYMBOL void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y, 
 	                         double* normal_x, double* normal_z, double* normal_y,
 	                         double* texture_s, double* texture_t,

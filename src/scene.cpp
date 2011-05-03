@@ -21,6 +21,8 @@
 
 static int gl_light_ids[8] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7 };
 
+ObjID SceneNode::nextID = BBOXID + 1;
+
 Scene::Scene()
 {
   background = NULL;
@@ -300,61 +302,37 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
   }
 }  
 
-void Scene::renderZsort(RenderContext* renderContext, bool fast)
-{
-  if (fast) { // Fast rendering
-    std::vector<Shape*>::iterator iter;
-    std::multimap<float, int> distanceMap;
-    int index = 0;
+void Scene::renderZsort(RenderContext* renderContext)
+{  
+  std::vector<Shape*>::iterator iter;
+  std::multimap<float, ShapeItem*> distanceMap;
+  int index = 0;
 
-    for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
-      Shape* shape = *iter;
-    
-      const AABox& aabox = shape->getBoundingBox(renderContext);
-
-      float distance = renderContext->getDistance( aabox.getCenter() );
-      distanceMap.insert( std::pair<const float,int>(-distance, index) );
+  for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
+    Shape* shape = *iter;
+    shape->renderBegin(renderContext);
+    for (int j = 0; j < shape->getElementCount(); j++) {
+	ShapeItem* item = new ShapeItem(shape, j);
+	float distance = renderContext->getDistance( shape->getElementCenter(j) );
+      distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
       index++;
     }
+  }
 
-    {
-      std::multimap<float,int>::iterator iter;
-      for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
-        int index = iter->second;
-        Shape* shape = zsortShapes[index];
-        shape->renderZSort(renderContext);
+  {
+    Shape* prev = NULL;
+    std::multimap<float,ShapeItem*>::iterator iter;
+    for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
+      ShapeItem* item = iter->second;
+      Shape* shape = item->shape;
+      if (shape != prev) {
+        if (prev) prev->drawEnd(renderContext);
+        shape->drawBegin(renderContext);
+        prev = shape;
       }
+      shape->drawElement(renderContext, item->itemnum);
     }
-  } else {  // Slow, more accurate rendering
-    std::vector<Shape*>::iterator iter;
-    std::multimap<float, ShapeItem*> distanceMap;
-    int index = 0;
-
-    for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
-      Shape* shape = *iter;
-	for (int j = 0; j < shape->getElementCount(); j++) {
-	  ShapeItem* item = new ShapeItem(shape, j);
-	  float distance = renderContext->getDistance( shape->getElementCenter(j) );
-        distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
-        index++;
-	}
-    }
-
-    {
-      Shape* prev = NULL;
-      std::multimap<float,ShapeItem*>::iterator iter;
-      for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
-        ShapeItem* item = iter->second;
-        Shape* shape = item->shape;
-        if (shape != prev) {
-          if (prev) prev->drawEnd(renderContext);
-          shape->drawBegin(renderContext);
-          prev = shape;
-        }
-        shape->drawElement(renderContext, item->itemnum);
-      }
-      if (prev) prev->drawEnd(renderContext);
-    }
+    if (prev) prev->drawEnd(renderContext);
   }
 }
 
@@ -538,9 +516,7 @@ void Scene::render(RenderContext* renderContext)
     renderContext->Zrow = P.getRow(2);
     renderContext->Wrow = P.getRow(3);
     
-    bool fast = false;
-    
-    renderZsort(renderContext, fast);
+    renderZsort(renderContext);
 #endif    
     /* Reset flag(s) now that scene has been rendered */
     renderContext->viewpoint->scaleChanged = false;

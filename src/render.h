@@ -25,6 +25,7 @@ public:
   void beginUse();
   void endUse();
   Vertex& operator[](int index);
+  void setVertex(int index, double* v);
 
   Vertex getNormal(int v1, int v2, int v3);
 

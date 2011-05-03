@@ -42,6 +42,8 @@ void Shape::draw(RenderContext* renderContext)
 
 void Shape::render(RenderContext* renderContext)
 {
+  renderBegin(renderContext);
+  
   if (displayList == 0)
     displayList = glGenLists(1);
     
@@ -59,30 +61,6 @@ void Shape::render(RenderContext* renderContext)
     glCallList(displayList);
     SAVEGLERROR;
   }  
-}
-
-
-void Shape::renderZSort(RenderContext* renderContext)
-{
-  std::multimap<float,int> distanceMap;
-
-  for(int index=0;index<getElementCount();index++) {
-    float distance = renderContext->getDistance( getElementCenter(index) );
-    distanceMap.insert( std::pair<const float,int>( -distance , index ) );
-  }
-  std::multimap<float,int>::iterator iter;
-
-  drawBegin(renderContext);
-  SAVEGLERROR;
-  
-  for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++iter ) {
-    int index = iter->second;
-    drawElement(renderContext, index);
-  } 
-  SAVEGLERROR;
-  
-  drawEnd(renderContext);
-  SAVEGLERROR;
 }
 
 void Shape::invalidateDisplaylist()
