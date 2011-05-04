@@ -42,6 +42,10 @@ are handled using the default as for \code{at = NULL}.
 Multiple grids may be drawn by specifying multiple values for \code{side}
 or for the component of \code{at} that specifies the grid location.
 }
+\note{
+If the scene is resized, the grid will not be resized; use \code{\link{abclines3d}}
+to draw grid lines that will automatically resize.
+}
 \value{ A vector or matrix of object ids is returned invisibly. }
 \author{ Ben Bolker and Duncan Murdoch }
 \seealso{ \code{\link{axis3d}} }

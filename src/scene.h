@@ -24,6 +24,7 @@
 #include "SpriteSet.hpp"
 #include "SphereSet.hpp"
 #include "PlaneSet.hpp"
+#include "ABCLineSet.hpp"
 #include "Surface.hpp"
 #include "Viewpoint.hpp"
 #include "Background.hpp"

@@ -33,6 +33,8 @@ values will be recycled as necessary.
 A shape ID of the planes object is returned invisibly.
 }
 \seealso{
+\code{\link{abclines3d}}, \code{\link{rgl.abclines}} for mathematical lines.
+
 \code{\link{triangles3d}}, \code{\link{rgl.triangles}} or the corresponding
 functions for quadrilaterals may be used to draw sections of planes that
 do not adapt to the bounding box.

@@ -478,6 +478,37 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
 }
 
 ##
+## add abclines
+##
+
+rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
+{
+  rgl.material(...)
+
+  bases  <- rgl.vertex(x, y, z)
+  nbases <- rgl.nvertex(bases)
+  directions <- rgl.vertex(a, b, c)
+  ndirs <-  rgl.nvertex(directions)
+  
+  idata <- as.integer( c( nbases, ndirs ) )
+   
+  ret <- .C( rgl_abclines,
+    success = as.integer(FALSE),
+    idata,
+    as.numeric(bases),    
+    as.numeric(directions),
+    NAOK=TRUE
+  )
+
+  if (! ret$success)
+    print("rgl_abclines failed")
+    
+  invisible(ret$success)
+
+}
+
+
+##
 ## add texts
 ##
 

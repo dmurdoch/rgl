@@ -357,7 +357,7 @@ v0.92
   - Updated gl2ps to version 1.3.5
   - Should now install using --merge-multiarch on Windows
 
-v0.92.807
+v0.92.810
   - Added declarations for Solaris compatibility (from Brian Ripley)
   - Fixed configure.win for bi-arch compatibility.  Windows installers can
     set HAVE_PNG to a non-empty value, and rgl will look for 
@@ -376,5 +376,5 @@ v0.92.807
     axes.
   - Removed some unnecessary declarations from rglmath.h that were causing
     problems in an old version of gcc on Solaris.
-  - Added rgl.planes() and planes3d() to draw planes intersecting with the
-    bounding box.
+  - Added rgl.abclines(), rgl.planes(), abclines3d() and planes3d() to draw 
+    lines and planes intersecting with the bounding box.
