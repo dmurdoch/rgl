@@ -23,8 +23,10 @@ PlaneSet::PlaneSet(Material& in_material, int in_nnormal, double* in_normal, int
   ARRAY<double> alphas(12*nPlanes);
 
   material.colors.recycle(nPlanes); 
+  int nColors = material.colors.getLength();
+  
   for (int i=0; i<nPlanes; i++) {
-    Color color=material.colors.getColor(i);
+    Color color=material.colors.getColor(nColors > 1 ? i : 0);
     for (int j=0; j<12; j++) {
       colors.ptr[36*i+3*j+0] = color.getRedub();
       colors.ptr[36*i+3*j+1] = color.getGreenub();
@@ -32,10 +34,8 @@ PlaneSet::PlaneSet(Material& in_material, int in_nnormal, double* in_normal, int
       alphas.ptr[12*i+j]     = color.getAlphaf();
     }
   }
-  material.colorPerVertex(true, 12*nPlanes);  
   material.colors.set(12*nPlanes, colors.ptr, 12*nPlanes, alphas.ptr);
-  material.alphablend = true;
-
+  material.colorPerVertex(true, 12*nPlanes);  
   
   ARRAY<double> vertices(36*nPlanes),
                 normals(36*nPlanes);
@@ -116,7 +116,7 @@ void PlaneSet::updateTriangles(const AABox& sceneBBox)
     if (nhits >= 3) { 
       /* Put in order so that the normal points out the FRONT of the faces */
       Vec3 v0(x[0][0] - x[1][0] , x[0][1] - x[1][1], x[0][2] - x[1][2]),
-           v2(x[2][0] - x[1][0] , x[2][1] - x[2][1], x[2][2] - x[1][2]),
+           v2(x[2][0] - x[1][0] , x[2][1] - x[1][1], x[2][2] - x[1][2]),
            vx = v0.cross(v2);
       
       bool reverse = vx*Av > 0;
