@@ -22,20 +22,21 @@ PlaneSet::PlaneSet(Material& in_material, int in_nnormal, double* in_normal, int
   ARRAY<int> colors(36*nPlanes);
   ARRAY<double> alphas(12*nPlanes);
 
-  material.colors.recycle(nPlanes); 
-  int nColors = material.colors.getLength();
+  if (material.colors.getLength() > 1) {
+    material.colors.recycle(nPlanes); 
   
-  for (int i=0; i<nPlanes; i++) {
-    Color color=material.colors.getColor(nColors > 1 ? i : 0);
-    for (int j=0; j<12; j++) {
-      colors.ptr[36*i+3*j+0] = color.getRedub();
-      colors.ptr[36*i+3*j+1] = color.getGreenub();
-      colors.ptr[36*i+3*j+2] = color.getBlueub();
-      alphas.ptr[12*i+j]     = color.getAlphaf();
+    for (int i=0; i<nPlanes; i++) {
+      Color color=material.colors.getColor(i);
+      for (int j=0; j<12; j++) {
+        colors.ptr[36*i+3*j+0] = color.getRedub();
+        colors.ptr[36*i+3*j+1] = color.getGreenub();
+        colors.ptr[36*i+3*j+2] = color.getBlueub();
+        alphas.ptr[12*i+j]     = color.getAlphaf();
+      }
     }
+    material.colors.set(12*nPlanes, colors.ptr, 12*nPlanes, alphas.ptr);
+    material.colorPerVertex(true, 12*nPlanes);
   }
-  material.colors.set(12*nPlanes, colors.ptr, 12*nPlanes, alphas.ptr);
-  material.colorPerVertex(true, 12*nPlanes);  
   
   ARRAY<double> vertices(36*nPlanes),
                 normals(36*nPlanes);
