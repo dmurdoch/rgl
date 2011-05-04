@@ -578,6 +578,24 @@ void rgl_planes(int* successptr, int* idata, double* normals, double* offsets)
   *successptr = success;
 }
 
+void rgl_abclines(int* successptr, int* idata, double* bases, double* directions)
+{
+  int success = RGL_FAIL;
+
+  Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+    int nbases = idata[0];
+    int ndirs  = idata[1];
+
+    success = as_success( device->add( new ABCLineSet(currentMaterial, nbases, bases, ndirs, directions) ) );
+  }
+  CHECKGLERROR;
+
+  *successptr = success;
+}
+
 void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius)
 {
   int success = RGL_FAIL;
