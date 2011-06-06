@@ -357,7 +357,7 @@ v0.92
   - Updated gl2ps to version 1.3.5
   - Should now install using --merge-multiarch on Windows
 
-v0.92.810
+v0.92.828
   - Added declarations for Solaris compatibility (from Brian Ripley)
   - Fixed configure.win for bi-arch compatibility.  Windows installers can
     set HAVE_PNG to a non-empty value, and rgl will look for 
@@ -378,3 +378,5 @@ v0.92.810
     problems in an old version of gcc on Solaris.
   - Added rgl.abclines(), rgl.planes(), abclines3d() and planes3d() to draw 
     lines and planes intersecting with the bounding box.
+  - rgl.postscript() now adjusts the size of text following the cex setting.
+    The font and family settings are still ignored.

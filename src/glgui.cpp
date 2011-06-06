@@ -84,7 +84,7 @@ void GLBitmapFont::draw(const char* text, int length,
       glListBase(listBase);
       glCallLists(length, GL_UNSIGNED_BYTE, text);
     } else
-      gl2psTextOpt(text, GL2PS_FONT, GL2PS_FONTSIZE, gl2ps_centering, 0.0);
+      gl2psTextOpt(text, GL2PS_FONT, GL2PS_FONTSIZE*cex, gl2ps_centering, 0.0);
   }
 }
 
@@ -153,7 +153,7 @@ void GLFTFont::draw(const char* text, int length, double adjx, double adjy, cons
     if (rc.gl2psActive == GL2PS_NONE)
       font->Render(text);
     else
-      gl2psTextOpt(text, GL2PS_FONT, GL2PS_FONTSIZE, gl2ps_centering, 0.0);
+      gl2psTextOpt(text, GL2PS_FONT, GL2PS_FONTSIZE*cex, gl2ps_centering, 0.0);
   }
 }
 
