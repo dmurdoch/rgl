@@ -19,6 +19,9 @@ Coordinates of points through which each line passes.
   \item{a,b,c}{
 Coordinates of the direction vectors for the lines.
 }
+  \item{...}{
+Material properties.
+}
 
 }
 \details{
