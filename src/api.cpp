@@ -648,18 +648,21 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.lwd         = (float) ddata[2];
   double* alpha   = &ddata[3];
 
+  mat.alphablend  = false;
+  
   if ( strlen(pixmapfn) > 0 ) {
     mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter, envmap);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;
       mat.texture = NULL;
-    }
+    } else
+      mat.alphablend = mat.alphablend || mat.texture->hasAlpha();
   } else
     mat.texture = NULL;
 
   mat.colors.set( ncolor, colors, nalpha, alpha);
-  mat.alphablend  = mat.colors.hasAlpha();
+  mat.alphablend  = mat.alphablend || mat.colors.hasAlpha();
 
   mat.setup(); 
   CHECKGLERROR;
