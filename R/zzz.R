@@ -27,10 +27,6 @@
   if ( .Platform$OS.type == "unix" ) {
     unixos <- system("uname",intern=TRUE)
     if ( unixos == "Darwin" ) {
-    
-      # Sys.putenv was renamed to Sys.setenv in R 2.5.0
-      if ( as.numeric(R.version$minor) < 5 )
-          Sys.setenv <- Sys.putenv
           
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
       # because it would override Apple's OpenGL framework
