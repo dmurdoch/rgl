@@ -381,6 +381,7 @@ v0.92.834
   - rgl.postscript() now adjusts the size of text following the cex setting.
     The font and family settings are still ignored.
   - Transparency in material textures was not always rendered properly.
-  - In OSX, the Carbon system has been replaced by a Cocoa system.  (Code
-    contributed by Adam Strzelecki).
+  - In OSX, the Carbon system has been replaced by a Cocoa system.
+    (Code contributed by Adam Strzelecki).  For compatibility with the
+    Windows build system, the new files have been put into src/osx.
   
