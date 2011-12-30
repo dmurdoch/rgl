@@ -86,7 +86,7 @@ OSXWindowImpl::OSXWindowImpl(Window* window)
   };
 
   // Setup antialiasing based on "gl.aa" option
-  int aa = asInteger(GetOption1(install("gl.aa")));
+  int aa = asInteger(GetOption(install("gl.aa"),R_BaseEnv));
   if(aa > 0) {
     attributes[6] = NSOpenGLPFAMultisample;
     attributes[7] = NSOpenGLPFASampleBuffers;
