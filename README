@@ -138,7 +138,7 @@ has been reported to be sufficient on FC 5 or 6:
   MAC OS X OPTIONS
   ----------------
 
-  --disable-carbon
+  --disable-cocoa
     force a X11 port
 
 
@@ -169,6 +169,7 @@ Ming Chen <mchen34@uwo.ca>
 Albrecht Gebhardt <albrecht.gebhardt@uni-klu.ac.at>
 Ben Bolker <bolker@zoo.ufl.edu>
 Gabor Csardi <csardi@rmki.kfki.hu>
+Adam Strzelecki <ono@java.pl>
 
 
 WEBSITE
