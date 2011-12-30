@@ -3961,6 +3961,7 @@ fi
     if test "${ac_cv_header_png_h}"; then
       if test "${ac_cv_lib_png_png_read_update_info}"; then
 	CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
+	LIBS="${LIBS} -lpng"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: libpng header and lib found" >&5
 $as_echo "$as_me: libpng header and lib found" >&6;}
 	if test "x$enable_libpng_dynamic" != "xno"; then
