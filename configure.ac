@@ -26,8 +26,8 @@ fi
 AC_PROG_CPP
 AC_PROG_CC
 
-AC_ARG_ENABLE([carbon],
-[  --disable-carbon           os x: use X11 instead of Carbon]
+AC_ARG_ENABLE([cocoa],
+[  --disable-cocoa            use X11 instead of Mac OS X native Cocoa UI]
 )
 
 if test `uname` = "Darwin" ; then
@@ -98,9 +98,9 @@ fi
 
 ## --- Darwin ----------------------------------------------------------------
 
-if test x$darwin == "xyes" -a "x$enable_carbon" != "xno" -a x$have_64bit == "xno" ; then
-  AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
-  AGLLIBS="${LIBS} -framework AGL"
+if test x$darwin == "xyes" -a "x$enable_cocoa" != "xno" ; then
+  AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_COCOA"
+  AGLLIBS="${LIBS} -framework Cocoa"
   BUILD_AGL_TRUE=""
 else
   BUILD_AGL_TRUE="#"

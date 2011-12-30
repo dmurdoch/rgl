@@ -1,13 +1,13 @@
-#include "config.hpp"
+#include "../config.hpp"
 // ---------------------------------------------------------------------------
-#ifdef RGL_CARBON
+#ifdef RGL_COCOA
 // ---------------------------------------------------------------------------
-#include "lib.hpp"
+#include "../lib.hpp"
 // ---------------------------------------------------------------------------
 #include "osxgui.hpp"
 // ---------------------------------------------------------------------------
-#include "R.h"
-#include "assert.hpp"
+#include "../R.h"
+#include "../assert.hpp"
 // ---------------------------------------------------------------------------
 namespace lib {
 // ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ bool init()
   assert(gGUIFactory == 0);
   gGUIFactory = new gui::OSXGUIFactory();
   if (!gGUIFactory->hasEventLoop()) {
-	Rprintf("RGL: configured for Carbon/Cocoa, must run in R.app\n");
+	Rprintf("RGL: configured for Cocoa, must run in R.app\n");
 	return false;
   } else return true;
 }
@@ -47,7 +47,7 @@ void quit()
 // ---------------------------------------------------------------------------
 } // namespace lib
 // ---------------------------------------------------------------------------
-#endif // RGL_CARBON
+#endif // RGL_COCOA
 // ---------------------------------------------------------------------------
 
 

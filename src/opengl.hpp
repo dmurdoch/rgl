@@ -8,8 +8,8 @@
 #include "config.hpp"
 // ---------------------------------------------------------------------------
 #ifdef RGL_OSX
-#include <AGL/gl.h>
-#include <AGL/glu.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #endif
 // ---------------------------------------------------------------------------
 #ifdef RGL_W32

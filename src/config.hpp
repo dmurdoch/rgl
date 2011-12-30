@@ -5,8 +5,8 @@
 // ---------------------------------------------------------------------------
 #if defined(__APPLE__)
 # define RGL_OSX 1
-# if defined(RGL_USE_CARBON)
-#  define RGL_CARBON 1
+# if defined(RGL_USE_COCOA)
+#  define RGL_COCOA 1
 # else
 #  define RGL_X11 1
 # endif
