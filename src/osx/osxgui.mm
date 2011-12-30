@@ -112,10 +112,11 @@ OSXWindowImpl::OSXWindowImpl(Window* window)
   // Determine path to system font
   NSFont *font = [NSFont systemFontOfSize:12.0];
   CTFontDescriptorRef fontRef = CTFontDescriptorCreateWithNameAndSize((CFStringRef)[font fontName], [font pointSize]);
-  CFURLRef url = (CFURLRef)CTFontDescriptorCopyAttribute(fontRef, kCTFontURLAttribute);
-  fonts[0] = new GLFTFont("Lucida Grande", 0, 12, [[(NSURL *)url path] UTF8String]);
+  // kCTFontURLAttribute is present only in 10.6 API, but works in 10.5, otherwise we fallback to built-in path
+  CFURLRef url = (CFURLRef)CTFontDescriptorCopyAttribute(fontRef, CFSTR("kCTFontURLAttribute"));
+  fonts[0] = new GLFTFont("Lucida Grande", 0, 12, url ? [[(NSURL *)url path] UTF8String] : "/System/Library/Fonts/LucidaGrande.dfont");
+  if(url) CFRelease(url);
   CFRelease(fontRef);
-  CFRelease(url);
 #endif
 }
 // ---------------------------------------------------------------------------

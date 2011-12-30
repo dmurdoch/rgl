@@ -80,6 +80,7 @@ if test "x$enable_libpng" != "xno"; then
     if test "${ac_cv_header_png_h}"; then
       if test "${ac_cv_lib_png_png_read_update_info}"; then
 	CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
+	LIBS="${LIBS} -lpng"
 	AC_MSG_NOTICE([libpng header and lib found])
 	if test "x$enable_libpng_dynamic" != "xno"; then
 	  AC_MSG_NOTICE([using libpng dynamic linkage])

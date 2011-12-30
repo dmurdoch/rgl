@@ -24,12 +24,13 @@ BUILD=GCC3
 
 all: $(SHLIB) @BUILD_AGL_TRUE@ $(AGLSHLIB)
 
-$(AGLSHLIB): $(SHLIB)
+$(AGLSHLIB): $(SHLIB) osx/osxgui.mm osx/osxlib.cpp osx/osxgui.hpp
 	-mkdir Temp
-	-mv x11*.o osx*.o Temp
+	-mv x11*.o Temp
 	mkdir -p AGL
 	-mv AGL/* .
-	MAKINGAGL=TRUE $(R_HOME)/bin/R CMD SHLIB  -o $@ *.cpp *.c osx/*.mm osx/*.cpp
-	mv x11*.o osx/osx*.o AGL
+	MAKINGAGL=TRUE $(R_HOME)/bin/R CMD SHLIB  -o $@ *.cpp *.c \
+		osx/*.mm osx/*.cpp
+	mv x11*.o AGL
 	mv Temp/* .
 	rm -rf Temp
