@@ -481,8 +481,21 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
     GLX_BLUE_SIZE, 1,
     GLX_ALPHA_SIZE, 0,
     GLX_DEPTH_SIZE, 1,
+    None, None, // Space for optional AA settings
+    None, None,
     None
   };
+
+#ifdef GLX_SAMPLE_BUFFERS
+  // Setup antialiasing based on "gl.aa" option
+  int aa = asInteger(GetOption(install("gl.aa"),R_BaseEnv));
+  if(aa > 0) {
+    attribList[12] = GLX_SAMPLE_BUFFERS;
+    attribList[13] = 1;
+    attribList[14] = GLX_SAMPLES;
+    attribList[15] = aa;
+  }
+#endif
 
   xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
   if (xvisualinfo == 0) {
