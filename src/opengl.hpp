@@ -17,6 +17,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GLsdk/GL/glext.h>
+#include <GLsdk/GL/wglext.h>
 #endif
 // ---------------------------------------------------------------------------
 #ifdef RGL_X11

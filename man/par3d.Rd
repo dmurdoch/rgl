@@ -82,6 +82,11 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
 
 \section{Parameters}{
   \describe{
+    \item{\code{antialias}}{\emph{\bold{R.O}} in \code{par3d}, may be
+    set in \code{open3d}. The (requested) number of hardware
+    antialiasing planes to use (with multisample antialiasing).  The
+    OpenGL driver may not support the requested number, in which case
+    \code{par3d("antialias")} will report what was actually set. }    
     \item{\code{cex}}{real.  The default size for text.}
     \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.}
     \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}.}
@@ -161,6 +166,10 @@ on what has already been plotted, this depth might be obscured, in which case no
 \item If the point is not culled due to depth, the \code{x2} and \code{y2} values are used
 to determine the point in the image.  The \code{par3d("viewport")} values are used to translate
 from the range \code{(-1, 1)} to pixel locations, and the point is plotted.
+\item If hardware antialiasing is enabled, then the whole process is
+repeated multiple times (at least conceptually) with different
+locations in each pixel sampled to determine what is plotted there,
+and then the images are combined into what is displayed.
 }
 See ?\link{matrices} for more information on homogeneous and Euclidean coordinates.
 }

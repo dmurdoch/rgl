@@ -487,8 +487,12 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   };
 
 #ifdef GLX_SAMPLE_BUFFERS
-  // Setup antialiasing based on "gl.aa" option
-  int aa = asInteger(GetOption(install("gl.aa"),R_BaseEnv));
+  // Setup antialiasing based on "rgl.antialias" option
+  int aa;
+  SEXP rgl_aa = GetOption(install("rgl.antialias"),R_BaseEnv);
+  if (isNull(rgl_aa)) aa = RGL_ANTIALIAS;
+  else aa = asInteger(rgl_aa);
+  
   if(aa > 0) {
     attribList[12] = GLX_SAMPLE_BUFFERS;
     attribList[13] = 1;
@@ -498,6 +502,13 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
 #endif
 
   xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
+#ifdef GLX_SAMPLE_BUFFERS
+  // Try to set up visual without MSAA if it failed
+  if (xvisualinfo == 0 && aa > 0) {
+    attribList[12] = None;
+    xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
+  }
+#endif
   if (xvisualinfo == 0) {
     throw_error("no suitable visual available"); return;
   }

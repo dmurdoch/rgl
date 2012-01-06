@@ -27,6 +27,31 @@ static WNDPROC gDefWindowProc;
 static HWND    gMDIClientHandle = 0;
 static HWND    gMDIFrameHandle  = 0;
 
+// describe requirements
+static const PIXELFORMATDESCRIPTOR pfd = {
+  sizeof(PIXELFORMATDESCRIPTOR),    // size of this pfd
+  1,                                // version number
+  0
+  | PFD_DRAW_TO_WINDOW              // support window
+  | PFD_SUPPORT_OPENGL              // support OpenGL
+  | PFD_GENERIC_FORMAT              // generic format
+  | PFD_DOUBLEBUFFER                // double buffered
+  ,
+  PFD_TYPE_RGBA,                    // RGBA type
+  16,                               // 16-bit color depth
+  0, 0, 0, 0, 0, 0,                 // color bits ignored
+  1,                                // alpha buffer
+  0,                                // shift bit ignored
+  0,                                // no accumulation buffer
+  0, 0, 0, 0,                       // accum bits ignored
+  16,                               // 16-bit z-buffer
+  0,                                // no stencil buffer
+  0,                                // no auxiliary buffer
+  PFD_MAIN_PLANE,                   // main layer
+  0,                                // reserved
+  0, 0, 0                           // layer masks ignored
+};
+
 // ---------------------------------------------------------------------------
 //
 // translate keycode
@@ -85,6 +110,9 @@ private:
   bool  painting;               // window is currently busy painting
   bool  autoUpdate;             // update/refresh automatically
   bool  refreshMenu;		// need to tell Windows to update the menu
+#if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
+  PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;
+#endif
   friend class Win32GUIFactory;
 
 public:
@@ -272,31 +300,34 @@ bool Win32WindowImpl::initGL () {
   // obtain a device context for the window
   dcHandle = GetDC(windowHandle);
   if (dcHandle) {
-    // describe requirements
-    PIXELFORMATDESCRIPTOR pfd = {
-      sizeof(PIXELFORMATDESCRIPTOR),    // size of this pfd
-      1,                                // version number
-      0
-      | PFD_DRAW_TO_WINDOW              // support window
-      | PFD_SUPPORT_OPENGL              // support OpenGL
-      | PFD_GENERIC_FORMAT              // generic format
-      | PFD_DOUBLEBUFFER                // double buffered
-      ,
-      PFD_TYPE_RGBA,                    // RGBA type
-      16,                               // 16-bit color depth
-      0, 0, 0, 0, 0, 0,                 // color bits ignored
-      1,                                // alpha buffer
-      0,                                // shift bit ignored
-      0,                                // no accumulation buffer
-      0, 0, 0, 0,                       // accum bits ignored
-      16,                               // 16-bit z-buffer
-      0,                                // no stencil buffer
-      0,                                // no auxiliary buffer
-      PFD_MAIN_PLANE,                   // main layer
-      0,                                // reserved
-      0, 0, 0                           // layer masks ignored
-    };
     int  iPixelFormat;
+#ifdef WGL_ARB_pixel_format
+    // Setup antialiasing based on "rgl.antialias" option
+    int aa;
+    SEXP rgl_aa = GetOption(install("rgl.antialias"),R_BaseEnv);
+    if (isNull(rgl_aa)) aa = RGL_ANTIALIAS;
+    else aa = asInteger(rgl_aa);
+    
+    if (aa > 0) {
+      float fAttributes[] = { 0, 0 };
+      int iAttributes[] = {
+        WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+        WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+        WGL_ACCELERATION_ARB,   WGL_FULL_ACCELERATION_ARB,
+        WGL_COLOR_BITS_ARB,     24,
+        WGL_ALPHA_BITS_ARB,     8,
+        WGL_DEPTH_BITS_ARB,     16,
+        WGL_STENCIL_BITS_ARB,   0,
+        WGL_DOUBLE_BUFFER_ARB,  GL_TRUE,
+        WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
+        WGL_SAMPLES_ARB,        aa,
+        0, 0 };
+      UINT numFormats = 0;
+      if (!wglChoosePixelFormatARB || !wglChoosePixelFormatARB(dcHandle, iAttributes, fAttributes, 1, &iPixelFormat, &numFormats) || numFormats < 1) {
+        iPixelFormat = ChoosePixelFormat(dcHandle, &pfd);
+      }
+    } else
+#endif
     // get the device context's best, available pixel format match
     iPixelFormat = ChoosePixelFormat(dcHandle, &pfd);
     if (iPixelFormat != 0) {
@@ -588,14 +619,16 @@ LRESULT CALLBACK Win32WindowImpl::windowProc(HWND hwnd, UINT message, WPARAM wPa
     } else {
       windowImpl = reinterpret_cast<Win32WindowImpl*>( pCreateStruct->lpCreateParams );
     }
+    if (windowImpl) {
 #if defined (WIN64) || defined(_MSC_VER) 
-    SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)windowImpl );
-    SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR) delegateWindowProc );
+      SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)windowImpl );
+      SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR) delegateWindowProc );
 #else
-    SetWindowLong(hwnd, GWL_USERDATA, (long) windowImpl );
-    SetWindowLong(hwnd, GWL_WNDPROC, (long) delegateWindowProc );
+      SetWindowLong(hwnd, GWL_USERDATA, (long) windowImpl );
+      SetWindowLong(hwnd, GWL_WNDPROC, (long) delegateWindowProc );
 #endif
-    return windowImpl->processMessage(hwnd, message, wParam, lParam);
+      return windowImpl->processMessage(hwnd, message, wParam, lParam);
+    }
   } 
   return gDefWindowProc(hwnd, message, wParam, lParam); 
 }
@@ -631,6 +664,9 @@ ATOM Win32WindowImpl::classAtom = (ATOM) NULL;
 
 
 Win32GUIFactory::Win32GUIFactory()
+#if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
+: wglChoosePixelFormatARB(NULL)
+#endif
 {
   if (gInitValue) {
     // we must be running in pre-2.6.0 R
@@ -647,6 +683,29 @@ Win32GUIFactory::Win32GUIFactory()
     gDefWindowProc   = &DefWindowProc;
   if ( !Win32WindowImpl::registerClass() )
     lib::printMessage("error: window class registration failed");
+
+#if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
+  // wglGetProcAddress needs to be called within valid GL context, we need to create dummy window here
+  HWND windowHandle = CreateWindow(MAKEINTATOM(Win32WindowImpl::classAtom), "", WS_POPUP | WS_DISABLED, 0, 0, 10, 10, NULL, NULL, NULL, NULL);
+  if (windowHandle) {
+    HDC dcHandle = GetDC(windowHandle);
+    if (dcHandle) {
+      int iPixelFormat = ChoosePixelFormat(dcHandle, &pfd);
+      if (iPixelFormat != 0) {
+        SetPixelFormat(dcHandle, iPixelFormat, &pfd);
+        HGLRC glrcHandle = wglCreateContext(dcHandle);
+        if (glrcHandle) {
+          wglMakeCurrent(dcHandle, glrcHandle);
+          wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+          wglMakeCurrent(NULL, NULL);
+          wglDeleteContext(glrcHandle);
+        }
+      }
+      ReleaseDC(windowHandle, dcHandle);
+    }
+    DestroyWindow(windowHandle);
+  }
+#endif
 }
 // ---------------------------------------------------------------------------
 Win32GUIFactory::~Win32GUIFactory() {
@@ -656,7 +715,10 @@ Win32GUIFactory::~Win32GUIFactory() {
 
 WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
 {
-  WindowImpl* impl = new Win32WindowImpl(in_window);
+  Win32WindowImpl* impl = new Win32WindowImpl(in_window);
+#if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
+  impl->wglChoosePixelFormatARB = wglChoosePixelFormatARB;
+#endif  
 
   RECT size;
 

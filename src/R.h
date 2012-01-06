@@ -6,6 +6,9 @@
 
 #include <R.h>
 
+/* Default for antialiasing */
+#define RGL_ANTIALIAS 8
+
 /* Set this to 1 to turn on glGetError testing */
 #define USE_GLGETERROR 0
 
@@ -27,5 +30,7 @@ void checkGLerror(const char *, int);
 #define SAVEGLERROR
 #define CHECKGLERROR
 #endif
+
+
 
 #endif /* RGL_R_H */

@@ -1,4 +1,4 @@
-.Par3d <- c("FOV", "ignoreExtent",
+.Par3d <- c("antialias", "FOV", "ignoreExtent",
 	   "mouseMode", 
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
 	   "scale", "viewport", "zoom", "bbox", "windowRect",
@@ -6,6 +6,7 @@
 	   )
 	   
 .Par3d.readonly <- c( 
+	   "antialias", 
 	   "modelMatrix", "projMatrix",
 	   "viewport", "bbox", "fontname"
 	   )
