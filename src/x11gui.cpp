@@ -26,6 +26,7 @@ public:
   X11WindowImpl(Window* in_window
   , X11GUIFactory* in_factory
   , ::Window in_xwindow
+  , XVisualInfo* invisualinfo
   );
   virtual ~X11WindowImpl();
   void setTitle(const char* title);
@@ -57,14 +58,16 @@ private:
   ::Window       xwindow;
   ::GLXContext   glxctx;
   friend class X11GUIFactory;
+  XVisualInfo* xvisualinfo;
 };
 // ---------------------------------------------------------------------------
 // X11WindowImpl Implementation
 // ---------------------------------------------------------------------------
-X11WindowImpl::X11WindowImpl(Window* w, X11GUIFactory* f, ::Window in_xwindow)
+X11WindowImpl::X11WindowImpl(Window* w, X11GUIFactory* f, ::Window in_xwindow, XVisualInfo* invisualinfo)
 : WindowImpl(w)
 , factory(f)
 , xwindow(in_xwindow)
+, xvisualinfo(invisualinfo)
 {
   on_init();
 }
@@ -73,6 +76,11 @@ X11WindowImpl::~X11WindowImpl()
 {
   if (xwindow != 0)
     destroy();
+  // free XVisualInfo structure
+  if (xvisualinfo) {
+    XFree(xvisualinfo);
+    xvisualinfo = 0;
+  }    
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::setTitle(const char* title)
@@ -307,7 +315,7 @@ void X11WindowImpl::processEvent(XEvent& ev)
 // ---------------------------------------------------------------------------
 void X11WindowImpl::initGL()
 {  
-  glxctx = glXCreateContext(factory->xdisplay, factory->xvisualinfo, NULL, True);
+  glxctx = glXCreateContext(factory->xdisplay, xvisualinfo, NULL, True);
   if (!glxctx)
     factory->throw_error("unable to create GLX Context"); 
 }
@@ -442,7 +450,6 @@ static int X11SaveErr(Display *dsp, XErrorEvent *event)
 
 X11GUIFactory::X11GUIFactory(const char* displayname)
 : xdisplay(0)
-, xvisualinfo(0)
 , xfont(0)
 {
   // Open one display connection for all RGL X11 devices
@@ -470,48 +477,6 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
     throw_error("GLX extension missing on server"); return;
   }
   
-  // Choose GLX visual
-  
-  static int attribList[] =
-  {
-    GLX_RGBA,
-    GLX_DOUBLEBUFFER,
-    GLX_RED_SIZE, 1,
-    GLX_GREEN_SIZE, 1,
-    GLX_BLUE_SIZE, 1,
-    GLX_ALPHA_SIZE, 0,
-    GLX_DEPTH_SIZE, 1,
-    None, None, // Space for optional AA settings
-    None, None,
-    None
-  };
-
-#ifdef GLX_SAMPLE_BUFFERS
-  // Setup antialiasing based on "rgl.antialias" option
-  int aa;
-  SEXP rgl_aa = GetOption(install("rgl.antialias"),R_BaseEnv);
-  if (isNull(rgl_aa)) aa = RGL_ANTIALIAS;
-  else aa = asInteger(rgl_aa);
-  
-  if(aa > 0) {
-    attribList[12] = GLX_SAMPLE_BUFFERS;
-    attribList[13] = 1;
-    attribList[14] = GLX_SAMPLES;
-    attribList[15] = aa;
-  }
-#endif
-
-  xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
-#ifdef GLX_SAMPLE_BUFFERS
-  // Try to set up visual without MSAA if it failed
-  if (xvisualinfo == 0 && aa > 0) {
-    attribList[12] = None;
-    xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
-  }
-#endif
-  if (xvisualinfo == 0) {
-    throw_error("no suitable visual available"); return;
-  }
 }
 // ---------------------------------------------------------------------------
 X11GUIFactory::~X11GUIFactory()
@@ -525,12 +490,6 @@ void X11GUIFactory::disconnect()
   if (xdisplay) {
     XSync(xdisplay, False);
     processEvents();
-  }
-
-  // free XVisualInfo structure
-  if (xvisualinfo) {
-    XFree(xvisualinfo);
-    xvisualinfo = 0;
   }
 
   // free xfont
@@ -583,6 +542,50 @@ void X11GUIFactory::processEvents()
 WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 {
   X11WindowImpl* impl = NULL;
+  XVisualInfo* xvisualinfo;
+
+  // Choose GLX visual
+  
+  static int attribList[] =
+  {
+    GLX_RGBA,
+    GLX_DOUBLEBUFFER,
+    GLX_RED_SIZE, 1,
+    GLX_GREEN_SIZE, 1,
+    GLX_BLUE_SIZE, 1,
+    GLX_ALPHA_SIZE, 0,
+    GLX_DEPTH_SIZE, 1,
+    None, None, // Space for optional AA settings
+    None, None,
+    None
+  };
+
+#ifdef GLX_SAMPLE_BUFFERS
+  // Setup antialiasing based on "rgl.antialias" option
+  int aa;
+  SEXP rgl_aa = GetOption(install("rgl.antialias"),R_BaseEnv);
+  if (isNull(rgl_aa)) aa = RGL_ANTIALIAS;
+  else aa = asInteger(rgl_aa);
+  
+  if(aa > 0) {
+    attribList[12] = GLX_SAMPLE_BUFFERS;
+    attribList[13] = 1;
+    attribList[14] = GLX_SAMPLES;
+    attribList[15] = aa;
+  }
+#endif
+
+  xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
+#ifdef GLX_SAMPLE_BUFFERS
+  // Try to set up visual without MSAA if it failed
+  if (xvisualinfo == 0 && aa > 0) {
+    attribList[12] = None;
+    xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
+  }
+#endif
+  if (xvisualinfo == 0) {
+    throw_error("no suitable visual available"); 
+  }
     
   // create X11 window
 
@@ -648,7 +651,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 
   // create window implementation instance
   
-  impl = new X11WindowImpl(window, this, xwindow);
+  impl = new X11WindowImpl(window, this, xwindow, xvisualinfo);
 
   // register instance
   

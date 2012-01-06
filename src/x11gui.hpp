@@ -38,7 +38,6 @@ public:
   // display specific:
   
   Display* xdisplay;
-  XVisualInfo* xvisualinfo;
   
   ::Atom atoms[GUI_X11_ATOM_LAST];
   
