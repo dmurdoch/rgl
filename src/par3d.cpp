@@ -331,7 +331,12 @@ static SEXP Query(const char *what)
         value = mkString(buf);
         success = 1;
       } 
-    }    
+    }
+    else if (streql(what, "antialias")) {
+      value = allocVector(INTSXP, 1);
+      INTEGER(value)[0] = getAntialias();
+      success = 1;
+    }
   	
     if (! success) error(_("unknown error getting rgl parameter \"%s\""),  what);
 

@@ -1314,3 +1314,20 @@ char* getFontname()
   CHECKGLERROR;
   return result;
 }
+
+int getAntialias()
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    WindowImpl* windowImpl = device->getRGLView()->windowImpl;
+    if (windowImpl->beginGL()) {
+      int result;      
+      glGetIntegerv(GL_SAMPLES, &result);
+      windowImpl->endGL();
+      CHECKGLERROR;
+      return result;
+    }
+  }
+  return -1;
+}

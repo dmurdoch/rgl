@@ -15,6 +15,9 @@ public:
   Win32GUIFactory();
   virtual ~Win32GUIFactory();
   WindowImpl* createWindowImpl(Window* window);
+#ifndef WGL_WGLEXT_PROTOTYPES
+  PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;
+#endif
 };
 // ---------------------------------------------------------------------------
 } // namespace gui

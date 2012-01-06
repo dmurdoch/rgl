@@ -8,6 +8,7 @@
 \alias{rgl.set}
 \alias{rgl.quit}
 \alias{rgl.init}
+\alias{rgl.antialias}
 \description{
   3D real-time rendering system.
 }
@@ -36,6 +37,12 @@ rgl.init(initValue=0)     # re-initialize rgl
   changed by using \code{rgl.set()}.
   \code{rgl.quit()} shuts down the rgl subsystem and all open devices, 
   detaches the package including the shared library and additional system libraries.
+  
+  The \code{rgl.open()} function attempts to open a new RGL window.
+  If the \code{"rgl.antialias"} option is set, it will be used to
+  select the requested antialiasing.  (See \code{\link{open3d}} for
+  more description of antialiasing and an alternative way to set the
+  value.)
   
   If \code{rgl.open()} fails (e.g. because X windows is not running, or its
   \code{DISPLAY} variable is not set properly), then you can retry the initialization

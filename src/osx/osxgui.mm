@@ -85,8 +85,12 @@ OSXWindowImpl::OSXWindowImpl(Window* window)
     0, 0, 0, 0, 0, 0
   };
 
-  // Setup antialiasing based on "gl.aa" option
-  int aa = asInteger(GetOption(install("gl.aa"),R_BaseEnv));
+  // Setup antialiasing based on "rgl.antialias" option
+  SEXP rgl_aa = GetOption(install("rgl.antialias"),R_BaseEnv);
+  int aa;
+  if (isNull(rgl_aa)) aa = RGL_ANTIALIAS;
+  else aa = asInteger(rgl_aa);
+  
   if(aa > 0) {
     attributes[6] = NSOpenGLPFAMultisample;
     attributes[7] = NSOpenGLPFASampleBuffers;
@@ -98,6 +102,16 @@ OSXWindowImpl::OSXWindowImpl(Window* window)
   NSRect frame  = NSMakeRect(100, 100, 256, 256);
   NSRect bounds = NSMakeRect(0, 0, 256, 256);
   NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
+  // Try to set up pixel format without MSAA if it failed
+  if(!pixelFormat && aa > 0) {
+    attributes[6] = 0;
+    pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
+    // if(pixelFormat) warning("MSAA %dx not supported, lower or disable \"rgl.aa\"", aa);
+  }
+  if(!pixelFormat) {
+    error("no suitable pixel format available");
+    return;
+  }
   GLView *view = [[GLView alloc] initWithFrame:bounds pixelFormat:pixelFormat impl:this];
   [pixelFormat release];
   osxWindow = [[NSWindow alloc] initWithContentRect:frame

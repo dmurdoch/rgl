@@ -117,6 +117,7 @@ bool    setCex(double cex);
 int     getUseFreeType();
 bool    setUseFreeType(bool useFreeType);
 char*	getFontname();
+int	getAntialias();
 
 #ifdef __cplusplus
 }
