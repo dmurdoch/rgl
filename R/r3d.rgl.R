@@ -27,7 +27,8 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
     "emission", "shininess", "smooth", "front", "back", "size", 
     "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
-    "texminfilter", "texmagfilter", "texenvmap")
+    "texminfilter", "texmagfilter", "texenvmap",
+    "depth_mask", "depth_test")
 
 .material3d.writeOnly <- character(0)
 
