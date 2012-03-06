@@ -57,6 +57,11 @@ public:
    */
   int get_id_count(TypeID type);
   void get_ids(TypeID type, int* ids, char** types);
+  
+  /**
+   * get information about particular shapes
+   **/
+  Shape* get_shape(int id);
 
   // ---[ grouping component ]-----------------------------------------------
   

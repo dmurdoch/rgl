@@ -87,3 +87,28 @@ void TextSet::drawEnd(RenderContext* renderContext)
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);
 }
+
+int TextSet::getAttributeCount(AttribID attrib) 
+{
+  switch (attrib) {
+    case VERTICES: return textArray.size();
+  }
+  return Shape::getAttributeCount(attrib);
+}
+
+void TextSet::getAttribute(AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    if (attrib == VERTICES) {
+      while (first < n) {
+        *result++ = vertexArray[first].x;
+        *result++ = vertexArray[first].y;
+        *result++ = vertexArray[first].z;
+        first++;
+      }
+    } else
+      Shape::getAttribute(attrib, first, count, result);
+  }
+}

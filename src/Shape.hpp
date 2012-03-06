@@ -8,6 +8,13 @@
 #include "opengl.hpp"
 #include "geom.hpp"
 
+#define VERTICES 1
+#define NORMALS 2
+#define COLORS 3
+#define TEXCOORDS 4
+
+typedef unsigned int AttribID;
+
 //
 // CLASS
 //   Shape
@@ -72,6 +79,8 @@ public:
    **/
    
   virtual int getElementCount(void) = 0; 
+  virtual int getAttributeCount(AttribID attrib);
+  virtual void getAttribute(AttribID attrib, int first, int count, double* result);
   
   /**
    * location of individual items

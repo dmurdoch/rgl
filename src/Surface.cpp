@@ -244,3 +244,55 @@ void Surface::drawEnd(RenderContext* renderContext)
 
 }
 
+int Surface::getAttributeCount(AttribID attrib)
+{
+  switch (attrib) {
+    case VERTICES: return nx*nz;
+    case NORMALS: if (user_normals)
+    		    return nx*nz;
+    		  else
+    		    return 0;
+    case TEXCOORDS: if (use_texcoord) 
+    		      return nx*nz;
+    		    else
+    		      return 0;
+  }
+  return Shape::getAttributeCount(attrib);
+}
+
+void Surface::getAttribute(AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    switch (attrib) {
+      case VERTICES: {
+        while (first < n) {
+          *result++ = vertexArray[first].x;
+          *result++ = vertexArray[first].y;
+          *result++ = vertexArray[first].z;
+          first++;
+        }
+        return;
+      }        
+      case NORMALS: {
+        while (first < n) {
+          *result++ = normalArray[first].x;
+          *result++ = normalArray[first].y;
+          *result++ = normalArray[first].z;
+          first++;
+        }
+        return;
+      }
+      case TEXCOORDS: {
+        while (first < n) {
+          *result++ = texCoordArray[first].s;
+	  *result++ = texCoordArray[first].t;
+	  first++;
+	}
+	return;
+      }
+    }
+    Shape::getAttribute(attrib, first, count, result);
+  }
+}

@@ -61,12 +61,14 @@ public:
   TexCoordArray();
   ~TexCoordArray();
 
-  void alloc(int nvertex);
+  void alloc(int in_nvertex);
   void beginUse();
   void endUse();
   TexCoord& operator[](int index);
+  int size() { return nvertex; };
 
 private:
+  int nvertex;
   float* arrayptr;
 };
 

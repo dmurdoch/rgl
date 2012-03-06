@@ -85,3 +85,30 @@ void Shape::drawEnd(RenderContext* renderContext)
   }
   drawLevel--;
 }
+
+int Shape::getAttributeCount(AttribID attrib)
+{
+  if (attrib == COLORS)
+    return material.colors.getLength();
+  
+  return 0;
+}
+
+void Shape::getAttribute(AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    if (attrib == COLORS) {
+      if (first + count >= n) count = n - first;
+      while (first < n) {
+        Color color = material.colors.getColor(first);
+        *result++ = color.data[0];
+        *result++ = color.data[1];
+        *result++ = color.data[2];
+        *result++ = color.data[3];
+        first++;
+      }
+    }
+  }
+}

@@ -251,6 +251,45 @@ void rgl_ids(int* type, int* ids, char** types)
 } 
 //
 // FUNCTION
+//   rgl_attrib_count
+//
+
+void rgl_attrib_count(int* id, int* attrib, int* count)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    
+    Shape* shape = scene->get_shape(*id);
+    if (shape)
+      *count = shape->getAttributeCount(*attrib);
+    else
+      *count = 0;
+  }
+} 
+
+//
+// FUNCTION
+//   rgl_attrib_count
+//
+
+void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    
+    Shape* shape = scene->get_shape(*id);
+    if (shape)
+      shape->getAttribute(*attrib, *first, *count, result);
+  }
+} 
+
+
+//
+// FUNCTION
 //   rgl_bg   ( successPtr, idata )
 //
 // PARAMETERS
@@ -676,10 +715,26 @@ void rgl_getcolorcount(int* count)
   CHECKGLERROR;
 }
 
-void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
+void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
 {
   Material& mat = currentMaterial;
   unsigned int i,j;
+  
+  if (*id > 0) {
+    Device* device;
+    *successptr = RGL_FAIL;
+    if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+    
+      Shape* shape = scene->get_shape(*id);
+      if (shape) 
+        mat = shape->getMaterial(); /* success! successptr will be set below */
+      else
+        return;
+    } else
+      return;
+  }
   
   idata[1] = mat.lit ? 1 : 0;
   idata[2] = mat.smooth ? 1 : 0;

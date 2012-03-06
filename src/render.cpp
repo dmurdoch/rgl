@@ -100,6 +100,7 @@ void NormalArray::endUse() {
 TexCoordArray::TexCoordArray()
 {
   arrayptr = NULL;
+  nvertex = 0;
 }
 
 TexCoordArray::~TexCoordArray()
@@ -108,13 +109,15 @@ TexCoordArray::~TexCoordArray()
     delete[] arrayptr;
 }
 
-void TexCoordArray::alloc(int nvertex)
+void TexCoordArray::alloc(int in_nvertex)
 {
   if (arrayptr) {
     delete[] arrayptr;
     arrayptr = NULL;
   }
-  arrayptr = new float[2*nvertex];
+  nvertex = in_nvertex;
+  if (nvertex)
+    arrayptr = new float[2*nvertex];
 }
 
 TexCoord& TexCoordArray::operator [] (int index) {
