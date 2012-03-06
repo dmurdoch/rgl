@@ -347,9 +347,8 @@ SEXP par3d(SEXP args)
 {
     SEXP value;
 
-    int new_spec, nargs;
+    int nargs;
 
-    new_spec = 0;
     args = CADR(args);
     nargs = length(args);
     if (isNewList(args)) {
@@ -365,7 +364,6 @@ SEXP par3d(SEXP args)
 		tag = R_NilValue;
 	    val = VECTOR_ELT(args, i);
 	    if (tag != R_NilValue && CHAR(tag)[0]) {
-		new_spec = 1;
 		SET_VECTOR_ELT(value, i, Query(CHAR(tag)));
 		SET_STRING_ELT(newnames, i, tag);
 		Specify(CHAR(tag), val);
