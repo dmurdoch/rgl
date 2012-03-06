@@ -70,7 +70,7 @@ be followed by a call to \code{\link{rgl.light}} or \code{\link{light3d}}.
   rgl.ids()
   if (interactive()) {
     readline("Hit enter to change spheres")
-    rgl.pop(id = p[c("data", "box.lines")])
+    rgl.pop(id = p["data"])
     spheres3d(x, y, z, col="red", radius=1/5)
     box3d()
   }
