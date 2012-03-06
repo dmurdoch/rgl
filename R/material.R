@@ -105,8 +105,10 @@ rgl.material <- function (
 
 rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
-rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
+rgl.getmaterial <- function(ncolors = rgl.getcolorcount(), id = NULL) {
 
+  if (!length(id)) id <- 0L
+  
   idata <- rep(0, 25+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
@@ -116,6 +118,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   
   ret <- .C( rgl_getmaterial,
     success = FALSE,
+    id = as.integer(id),
     idata = as.integer(idata),
     cdata = cdata,
     ddata = as.numeric(ddata)
@@ -156,7 +159,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
        point_antialias = idata[22] == 1,
        line_antialias = idata[23] == 1,
        depth_mask = idata[24] == 1,
-       depth_test = depthtests[idata[25]]
+       depth_test = depthtests[idata[25] + 1]
        )
                    
 }

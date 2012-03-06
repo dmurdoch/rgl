@@ -72,8 +72,35 @@ void SphereSet::drawEnd(RenderContext* renderContext)
   Shape::drawEnd(renderContext);  
 }
 
-void SphereSet::render(RenderContext* renderContext) {
+void SphereSet::render(RenderContext* renderContext) 
+{
   if (renderContext->viewpoint->scaleChanged) 
     doUpdate = true;
   Shape::render(renderContext);
 }
+
+int SphereSet::getAttributeCount(AttribID attrib) 
+{
+  switch (attrib) {
+    case VERTICES: return center.size();
+  }
+  return Shape::getAttributeCount(attrib);
+}
+
+void SphereSet::getAttribute(AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    if (attrib == VERTICES) {
+      while (first < n) {
+        *result++ = center.get(first).x;
+        *result++ = center.get(first).y;
+        *result++ = center.get(first).z;
+        first++;
+      }
+    } else
+      Shape::getAttribute(attrib, first, count, result);
+  }
+}
+

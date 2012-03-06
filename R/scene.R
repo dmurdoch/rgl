@@ -75,6 +75,43 @@ rgl.ids <- function( type = "shapes" )
                                 type=rep("",count) )[2:3] )
 }
 
+rgl.attrib.count <- function( id, attrib )
+{
+  stopifnot(length(attrib) == 1)
+  if (is.character(attrib))
+    attrib <- rgl.enum.attribtype(attrib)
+  
+  result <- integer(length(id))
+  for (i in seq_along(id))
+    result[i] <- .C( rgl_attrib_count, as.integer(id[i]), as.integer(attrib), 
+                     count = integer(1))$count
+  names(result) <- names(id)
+  result
+}
+
+rgl.attrib <- function( id, attrib, first=1, 
+                        last=rgl.attrib.count(id, attrib) )
+{
+  stopifnot(length(attrib) == 1 && length(id) == 1 && length(first) == 1)
+  if (is.character(attrib))
+    attrib <- rgl.enum.attribtype(attrib)
+  ncol <- c(vertices=3, normals=3, colors=4, texcoords=2)[attrib]
+  count <- max(last - first + 1, 0)
+  if (count)
+    result <- .C (rgl_attrib, as.integer(id), as.integer(attrib), 
+                as.integer(first-1), as.integer(count), 
+                result = numeric(count*ncol))$result
+  else
+    result <- numeric(0)
+  result <- matrix(result, ncol=ncol, byrow=TRUE)
+  colnames(result) <- list(c("x", "y", "z"), # vertices
+                           c("x", "y", "z"), # normals
+                           c("r", "g", "b", "a"), # colors
+                           c("s", "t")	     # texcoords
+                           )[[attrib]]
+  result
+}
+  
 ##
 ## ===[ SECTION: environment ]================================================
 ##

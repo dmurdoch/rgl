@@ -141,6 +141,31 @@ void PrimitiveSet::draw(RenderContext* renderContext)
   SAVEGLERROR;
 }
 
+int PrimitiveSet::getAttributeCount(AttribID attrib)
+{
+  switch (attrib) {
+    case VERTICES: return nvertices;
+  }
+  return Shape::getAttributeCount(attrib);
+}
+
+void PrimitiveSet::getAttribute(AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    if (attrib == VERTICES) {
+      while (first < n) {
+        *result++ = vertexArray[first].x;
+        *result++ = vertexArray[first].y;
+        *result++ = vertexArray[first].z;
+        first++;
+      }
+    } else
+      Shape::getAttribute(attrib, first, count, result);
+  }
+}
+
 // ===[ FACE SET ]============================================================
 
 FaceSet::FaceSet(
@@ -265,4 +290,45 @@ void FaceSet::drawEnd(RenderContext* renderContext)
     normalArray.endUse();
 
   PrimitiveSet::drawEnd(renderContext);
+}
+
+
+int FaceSet::getAttributeCount(AttribID attrib)
+{
+  switch (attrib) {
+    case NORMALS: if (material.lit)
+    		    return nvertices;
+    		  else
+    		    return 0;
+    case TEXCOORDS: return texCoordArray.size();
+  }
+  return PrimitiveSet::getAttributeCount(attrib);
+}
+
+void FaceSet::getAttribute(AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    switch (attrib) {
+      case NORMALS: {
+        while (first < n) {
+          *result++ = normalArray[first].x;
+          *result++ = normalArray[first].y;
+          *result++ = normalArray[first].z;
+          first++;
+        }
+        return;
+      }
+      case TEXCOORDS: {
+        while (first < n) {
+          *result++ = texCoordArray[first].s;
+	  *result++ = texCoordArray[first].t;
+	  first++;
+	}
+	return;
+      }
+    }
+    PrimitiveSet::getAttribute(attrib, first, count, result);
+  }
 }

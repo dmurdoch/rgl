@@ -302,6 +302,19 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
   }
 }  
 
+Shape* Scene::get_shape(int id)
+{
+  std::vector<Shape*>::iterator ishape;
+
+  if (shapes.empty()) 
+    return NULL;
+  
+  ishape = std::find_if(shapes.begin(), shapes.end(), 
+                        std::bind2nd(std::ptr_fun(&sameID), id));
+  if (ishape == shapes.end()) return NULL;
+  else return *ishape;
+}
+
 void Scene::renderZsort(RenderContext* renderContext)
 {  
   std::vector<Shape*>::iterator iter;
