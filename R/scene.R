@@ -95,7 +95,7 @@ rgl.attrib <- function( id, attrib, first=1,
   stopifnot(length(attrib) == 1 && length(id) == 1 && length(first) == 1)
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
-  ncol <- c(vertices=3, normals=3, colors=4, texcoords=2)[attrib]
+  ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2)[attrib]
   count <- max(last - first + 1, 0)
   if (count)
     result <- .C (rgl_attrib, as.integer(id), as.integer(attrib), 
@@ -107,7 +107,8 @@ rgl.attrib <- function( id, attrib, first=1,
   colnames(result) <- list(c("x", "y", "z"), # vertices
                            c("x", "y", "z"), # normals
                            c("r", "g", "b", "a"), # colors
-                           c("s", "t")	     # texcoords
+                           c("s", "t"),	     # texcoords
+                           c("r", "c")
                            )[[attrib]]
   result
 }

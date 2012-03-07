@@ -256,6 +256,7 @@ int Surface::getAttributeCount(AttribID attrib)
     		      return nx*nz;
     		    else
     		      return 0;
+    case SURFACEDIM: return 1;
   }
   return Shape::getAttributeCount(attrib);
 }
@@ -291,6 +292,11 @@ void Surface::getAttribute(AttribID attrib, int first, int count, double* result
 	  first++;
 	}
 	return;
+      }
+      case SURFACEDIM: {
+        *result++ = nx;
+        *result++ = nz;
+        return;
       }
     }
     Shape::getAttribute(attrib, first, count, result);
