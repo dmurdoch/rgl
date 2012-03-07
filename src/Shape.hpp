@@ -12,6 +12,7 @@
 #define NORMALS 2
 #define COLORS 3
 #define TEXCOORDS 4
+#define SURFACEDIM 5
 
 typedef unsigned int AttribID;
 
