@@ -67,7 +67,7 @@ rgl.pop <- function( type = "shapes", id = 0)
 
 rgl.ids <- function( type = "shapes" )
 {
-  type <- rgl.enum.nodetype(type)
+  type <- c(rgl.enum.nodetype(type), 0)
   
   count <- .C( rgl_id_count, as.integer(type), count = integer(1))$count
   

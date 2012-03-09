@@ -389,4 +389,5 @@ v0.92.846
   - Bug fix for divide.mesh3d() in handling normals.
   - Functions rgl.attrib.count() and rgl.attrib() (and internal function
     rgl.getmaterial()) added to allow objects in the scene to be examined.
+  - rgl.ids() did not return all object ids as documented.
   

@@ -44,4 +44,45 @@ void Light::setup(RenderContext* renderContext)
   glEnable(id);
 }
 
+int Light::getAttributeCount(AttribID attrib)
+{
+  switch (attrib) {
+    case COLORS: return 3;
+    case VERTICES: return 1;
+  }  
+  
+  return 0;
+}
 
+void Light::getAttribute(AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    switch (attrib) {
+      case COLORS: {
+        while (first < n) {
+          Color color;
+          switch(first) {
+          case 0: color = ambient; break;
+          case 1: color = diffuse; break;
+          case 2: color = specular;break;
+          }
+          *result++ = color.data[0];
+          *result++ = color.data[1];
+          *result++ = color.data[2];
+          *result++ = color.data[3];
+          first++;
+        }
+        return;
+      }
+      case VERTICES: {
+        *result++ = position[0];
+        *result++ = position[1];
+        *result++ = position[2];
+        *result++ = position[3];
+        return;
+      }
+    }
+  }
+}

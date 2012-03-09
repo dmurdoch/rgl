@@ -62,6 +62,16 @@ public:
    * get information about particular shapes
    **/
   Shape* get_shape(int id);
+  
+  /**
+   * get information about particular lights
+   **/
+  Light* get_light(int id);
+  
+  /**
+   * get the background
+   */
+  Background* get_background() const { return background; }
 
   // ---[ grouping component ]-----------------------------------------------
   

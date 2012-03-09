@@ -100,7 +100,6 @@ void Shape::getAttribute(AttribID attrib, int first, int count, double* result)
   if (first + count < n) n = first + count;
   if (first < n) {
     if (attrib == COLORS) {
-      if (first + count >= n) count = n - first;
       while (first < n) {
         Color color = material.colors.getColor(first);
         *result++ = color.data[0];

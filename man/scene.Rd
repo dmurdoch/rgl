@@ -23,6 +23,7 @@ rgl.ids( type = "shapes" )
       \item{"bboxdeco"}{bounding box}
       \item{"viewpoint"}{viewpoint}
       \item{"material"}{material properties}
+      \item{"background"}{scene background}
       \item{"all"}{all of the above}
     }
   }
