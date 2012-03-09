@@ -226,7 +226,11 @@ void rgl_id_count(int* type, int* count)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     
-    *count = scene->get_id_count((TypeID) *type);
+    *count = 0;
+    while (*type) {
+      *count += scene->get_id_count((TypeID) *type);
+      type++;
+    }
     CHECKGLERROR;
   } else {
     *count = 0;
@@ -245,7 +249,13 @@ void rgl_ids(int* type, int* ids, char** types)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     
-    scene->get_ids((TypeID) *type, ids, types);
+    while (*type) {
+      int n = scene->get_id_count((TypeID) *type);
+      scene->get_ids((TypeID) *type, ids, types);
+      ids += n;
+      types += n;
+      type++;
+    }
     CHECKGLERROR;
   }
 } 
@@ -260,10 +270,16 @@ void rgl_attrib_count(int* id, int* attrib, int* count)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
+    Light* light;
+    Shape* shape;
+    Background *background;
     
-    Shape* shape = scene->get_shape(*id);
-    if (shape)
+    if ( (shape = scene->get_shape(*id)) )
       *count = shape->getAttributeCount(*attrib);
+    else if ( (light = scene->get_light(*id)) ) 
+      *count = light->getAttributeCount(*attrib);
+    else if ( (background = scene->get_background()) && *id == background->getObjID())
+      *count = background->getAttributeCount(*attrib);
     else
       *count = 0;
   }
@@ -280,10 +296,16 @@ void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
+    Light* light;
+    Shape* shape;
+    Background* background;
     
-    Shape* shape = scene->get_shape(*id);
-    if (shape)
+    if ( (shape = scene->get_shape(*id)) )
       shape->getAttribute(*attrib, *first, *count, result);
+    else if ( (light = scene->get_light(*id)) )
+      light->getAttribute(*attrib, *first, *count, result);
+    else if ( (background = scene->get_background()) && *id == background->getObjID())
+      background->getAttribute(*attrib, *first, *count, result);
   }
 } 
 

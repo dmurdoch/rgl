@@ -272,6 +272,10 @@ int Scene::get_id_count(TypeID type)
   switch(type) {
   case SHAPE:  return shapes.size();
   case LIGHT:  return lights.size();
+  case BBOXDECO: return bboxDeco ? 1 : 0;
+  case VIEWPOINT: return viewpoint ? 1 : 0;
+  case BACKGROUND: return background ? 1 : 0;
+
   default:     return 0;
   }
 }
@@ -298,6 +302,28 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
       types++;
     }
     return;
+  case BBOXDECO:
+    if (bboxDeco) {
+      *ids = bboxDeco->getObjID();
+      *types = R_alloc(strlen("bboxdeco")+1, 1);
+      strcpy(*types, "bboxdeco");
+    }
+    return;
+  case VIEWPOINT:
+    if (viewpoint) {
+      *ids = viewpoint->getObjID();
+      *types = R_alloc(strlen("viewpoint")+1, 1);
+      strcpy(*types, "viewpoint");
+    }
+    return;
+  case BACKGROUND:
+    if (background) {
+      *ids = background->getObjID();
+      *types = R_alloc(strlen("background")+1, 1);
+      strcpy(*types, "background");
+    }
+    return;
+    
   default:	return;
   }
 }  
@@ -313,6 +339,19 @@ Shape* Scene::get_shape(int id)
                         std::bind2nd(std::ptr_fun(&sameID), id));
   if (ishape == shapes.end()) return NULL;
   else return *ishape;
+}
+
+Light* Scene::get_light(int id)
+{
+  std::vector<Light*>::iterator ilight;
+
+  if (lights.empty()) 
+    return NULL;
+  
+  ilight = std::find_if(lights.begin(), lights.end(), 
+                        std::bind2nd(std::ptr_fun(&sameID), id));
+  if (ilight == lights.end()) return NULL;
+  else return *ilight;
 }
 
 void Scene::renderZsort(RenderContext* renderContext)

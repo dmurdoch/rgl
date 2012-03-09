@@ -22,13 +22,22 @@ enum TypeID {
 #define LIGHT 2
 #define BBOXDECO 3
 #define VIEWPOINT 4
-#define BACKGROUND 5
+#define BACKGROUND 6  // 5 was used for the material
 
 typedef unsigned int TypeID;
 typedef int ObjID;
 
 #define BBOXID 1
 
+/* Possible attributes to request */
+
+#define VERTICES 1
+#define NORMALS 2
+#define COLORS 3
+#define TEXCOORDS 4
+#define SURFACEDIM 5
+
+typedef unsigned int AttribID;
 
 class SceneNode
 {
@@ -37,6 +46,9 @@ public:
   inline const ObjID getObjID() const { return objID; }
   virtual ~SceneNode() { };
   static ObjID nextID;
+  virtual int getAttributeCount(AttribID attrib) { return 0; }
+  virtual void getAttribute(AttribID attrib, int first, int count, double* result) { return; }
+  
 protected:
   SceneNode(const TypeID in_typeID) : typeID(in_typeID)
   {  objID = nextID++; };
