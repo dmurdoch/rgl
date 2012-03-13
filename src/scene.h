@@ -72,6 +72,11 @@ public:
    * get the background
    */
   Background* get_background() const { return background; }
+  
+  /**
+   * get the bbox
+   */
+  BBoxDeco* get_bboxdeco() const { return bboxDeco; }
 
   // ---[ grouping component ]-----------------------------------------------
   

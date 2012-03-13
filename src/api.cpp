@@ -273,6 +273,7 @@ void rgl_attrib_count(int* id, int* attrib, int* count)
     Light* light;
     Shape* shape;
     Background *background;
+    BBoxDeco* bboxdeco;
     
     if ( (shape = scene->get_shape(*id)) )
       *count = shape->getAttributeCount(*attrib);
@@ -280,6 +281,8 @@ void rgl_attrib_count(int* id, int* attrib, int* count)
       *count = light->getAttributeCount(*attrib);
     else if ( (background = scene->get_background()) && *id == background->getObjID())
       *count = background->getAttributeCount(*attrib);
+    else if ( (bboxdeco = scene->get_bboxdeco()) && *id == bboxdeco->getObjID())
+      *count = bboxdeco->getAttributeCount(*attrib);
     else
       *count = 0;
   }
@@ -287,7 +290,7 @@ void rgl_attrib_count(int* id, int* attrib, int* count)
 
 //
 // FUNCTION
-//   rgl_attrib_count
+//   rgl_attrib
 //
 
 void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
@@ -299,6 +302,7 @@ void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
     Light* light;
     Shape* shape;
     Background* background;
+    BBoxDeco* bboxdeco;
     
     if ( (shape = scene->get_shape(*id)) )
       shape->getAttribute(*attrib, *first, *count, result);
@@ -306,9 +310,48 @@ void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
       light->getAttribute(*attrib, *first, *count, result);
     else if ( (background = scene->get_background()) && *id == background->getObjID())
       background->getAttribute(*attrib, *first, *count, result);
+    else if ( (bboxdeco = scene->get_bboxdeco()) && *id == bboxdeco->getObjID())
+      bboxdeco->getAttribute(*attrib, *first, *count, result);
   }
 } 
 
+//
+// FUNCTION
+//   rgl_text_attrib
+//
+
+void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    SceneNode* node = scene->get_shape(*id);
+    
+    if (!node)
+      node = scene->get_light(*id);
+    if (!node) {
+      node = scene->get_background();
+      if (*id != node->getObjID())
+        node = NULL;
+    }
+    if (!node) {
+      node = scene->get_bboxdeco();
+      if (*id != node->getObjID())
+        node = NULL;
+    }    
+    if (node)
+      for (int i=0; i < *count; i++) {
+      	String s = node->getTextAttribute(*attrib, i + *first);
+      	if (s.length) {
+      	  *result = R_alloc(s.length + 1, 1);
+	  strncpy(*result, s.text, s.length);
+	  (*result)[s.length] = '\0';
+	}
+	result++;
+      }
+  }
+} 
 
 //
 // FUNCTION
