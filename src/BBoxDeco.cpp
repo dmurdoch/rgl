@@ -374,21 +374,21 @@ Vertex BBoxDeco::getMarkLength(const AABox& boundingBox) const
 
 AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
 {
-  AABox bbox(in_bbox);
+  AABox bbox2(in_bbox);
 
-  Vertex marklen = getMarkLength(bbox);
+  Vertex marklen = getMarkLength(bbox2);
 
   Vertex v = marklen * 2;
 
-  bbox += bbox.vmin - v;
-  bbox += bbox.vmax + v;
+  bbox2 += bbox2.vmin - v;
+  bbox2 += bbox2.vmax + v;
 
-  return bbox;
+  return bbox2;
 }
 
 void BBoxDeco::render(RenderContext* renderContext)
 {
-  AABox bbox = renderContext->scene->getBoundingBox();
+  bbox = renderContext->scene->getBoundingBox();
 
   if (bbox.isValid()) {
   
@@ -672,7 +672,6 @@ void BBoxDeco::render(RenderContext* renderContext)
 
 int BBoxDeco::getAttributeCount(AttribID attrib) 
 {
-  AABox bbox = renderContext->scene->getBoundingBox();
   switch (attrib) {    
     case TEXTS:
     case VERTICES:
@@ -685,7 +684,6 @@ int BBoxDeco::getAttributeCount(AttribID attrib)
 
 void BBoxDeco::getAttribute(AttribID attrib, int first, int count, double* result)
 {
-  AABox bbox = renderContext->scene->getBoundingBox();
   int n = getAttributeCount(attrib);
 
   if (first + count < n) n = first + count;
@@ -699,7 +697,7 @@ void BBoxDeco::getAttribute(AttribID attrib, int first, int count, double* resul
      
       low = bbox.vmin.x;
       high = bbox.vmax.x;
-      thisn = xaxis,getNticks(low, high);
+      thisn = xaxis.getNticks(low, high);
       for (int j=0; j<thisn; j++) {
         if (first <= i && i < n) {
           *result++ = xaxis.getTick(low, high, j);
@@ -714,8 +712,8 @@ void BBoxDeco::getAttribute(AttribID attrib, int first, int count, double* resul
       thisn = yaxis.getNticks(low, high);
       for (int j=0; j<thisn; j++) {
         if (first <= i && i < n) {
-          *result++ = NA_REAL
-          *result++ = yaxis.getTick(low, high, j);;
+          *result++ = NA_REAL;
+          *result++ = yaxis.getTick(low, high, j);
           *result++ = NA_REAL;
         }
         i++;  

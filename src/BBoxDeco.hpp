@@ -55,6 +55,7 @@ public:
   void getAttribute(AttribID attrib, int first, int count, double* result);
   String  getTextAttribute(AttribID attrib, int index);
 private:
+  AABox bbox;
   Material material;
   AxisInfo xaxis, yaxis, zaxis;
   float marklen_value;
