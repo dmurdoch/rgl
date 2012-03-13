@@ -270,19 +270,20 @@ void rgl_attrib_count(int* id, int* attrib, int* count)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
+    AABox bbox = scene->getBoundingBox();
     Light* light;
     Shape* shape;
     Background *background;
     BBoxDeco* bboxdeco;
     
     if ( (shape = scene->get_shape(*id)) )
-      *count = shape->getAttributeCount(*attrib);
+      *count = shape->getAttributeCount(bbox, *attrib);
     else if ( (light = scene->get_light(*id)) ) 
-      *count = light->getAttributeCount(*attrib);
+      *count = light->getAttributeCount(bbox, *attrib);
     else if ( (background = scene->get_background()) && *id == background->getObjID())
-      *count = background->getAttributeCount(*attrib);
+      *count = background->getAttributeCount(bbox, *attrib);
     else if ( (bboxdeco = scene->get_bboxdeco()) && *id == bboxdeco->getObjID())
-      *count = bboxdeco->getAttributeCount(*attrib);
+      *count = bboxdeco->getAttributeCount(bbox, *attrib);
     else
       *count = 0;
   }
@@ -299,19 +300,20 @@ void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
+    AABox bbox = scene->getBoundingBox();
     Light* light;
     Shape* shape;
     Background* background;
     BBoxDeco* bboxdeco;
     
     if ( (shape = scene->get_shape(*id)) )
-      shape->getAttribute(*attrib, *first, *count, result);
+      shape->getAttribute(bbox, *attrib, *first, *count, result);
     else if ( (light = scene->get_light(*id)) )
-      light->getAttribute(*attrib, *first, *count, result);
+      light->getAttribute(bbox, *attrib, *first, *count, result);
     else if ( (background = scene->get_background()) && *id == background->getObjID())
-      background->getAttribute(*attrib, *first, *count, result);
+      background->getAttribute(bbox, *attrib, *first, *count, result);
     else if ( (bboxdeco = scene->get_bboxdeco()) && *id == bboxdeco->getObjID())
-      bboxdeco->getAttribute(*attrib, *first, *count, result);
+      bboxdeco->getAttribute(bbox, *attrib, *first, *count, result);
   }
 } 
 
@@ -326,6 +328,7 @@ void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
+    AABox bbox = scene->getBoundingBox();
     SceneNode* node = scene->get_shape(*id);
     
     if (!node)
@@ -342,7 +345,7 @@ void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result
     }    
     if (node)
       for (int i=0; i < *count; i++) {
-      	String s = node->getTextAttribute(*attrib, i + *first);
+      	String s = node->getTextAttribute(bbox, *attrib, i + *first);
       	if (s.length) {
       	  *result = R_alloc(s.length + 1, 1);
 	  strncpy(*result, s.text, s.length);

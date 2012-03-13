@@ -8,6 +8,7 @@
 
 #include "types.h"
 #include "String.hpp"
+#include "geom.hpp"
 
 /*
 enum TypeID { 
@@ -50,9 +51,11 @@ public:
   inline const ObjID getObjID() const { return objID; }
   virtual ~SceneNode() { };
   static ObjID nextID;
-  virtual int getAttributeCount(AttribID attrib) { return 0; }
-  virtual void getAttribute(AttribID attrib, int first, int count, double* result) { return; }
-  virtual String  getTextAttribute(AttribID attrib, int index) { return String(0, NULL); }
+
+  /* Some nodes depend on the bbox, so we pass it to all */
+  virtual int getAttributeCount(AABox& bbox, AttribID attrib) { return 0; }
+  virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result) { return; }
+  virtual String  getTextAttribute(AABox& bbox, AttribID attrib, int index) { return String(0, NULL); }
   
 protected:
   SceneNode(const TypeID in_typeID) : typeID(in_typeID)

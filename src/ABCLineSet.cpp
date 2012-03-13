@@ -97,3 +97,8 @@ void ABCLineSet::updateSegments(const AABox& sceneBBox)
   }
 }
 
+void ABCLineSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+{
+  updateSegments(bbox);
+  LineSet::getAttribute(bbox, attrib, first, count, result);
+}

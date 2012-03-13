@@ -35,6 +35,11 @@ public:
    * update mesh
    */
   void updateTriangles(const AABox& sceneBBox);
+  
+  /**
+   * update then get attributes 
+   */
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);  
 };
 
 #endif // PLANESET_HPP

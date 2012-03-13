@@ -23,8 +23,8 @@ public:
   void render(RenderContext* renderContext);
   
   int getElementCount(void){ return center.size(); }
-  int getAttributeCount(AttribID attrib);
-  void getAttribute(AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   
   /**
    * location of individual items

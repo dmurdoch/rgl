@@ -26,8 +26,8 @@ public:
    * overloaded
    **/
   virtual int getElementCount(void) { return nprimitives; }
-  int getAttributeCount(AttribID attrib);
-  void getAttribute(AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   
   /**
    * overloaded
@@ -146,8 +146,8 @@ public:
    **/  
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "faces", buflen); };  
   
-  int getAttributeCount(AttribID attrib);
-  void getAttribute(AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
 
 protected:
   /**

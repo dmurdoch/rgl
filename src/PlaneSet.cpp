@@ -141,3 +141,8 @@ void PlaneSet::updateTriangles(const AABox& sceneBBox)
   }
 }
 
+void PlaneSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+{
+  updateTriangles(bbox);
+  TriangleSet::getAttribute(bbox, attrib, first, count, result);
+}

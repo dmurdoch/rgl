@@ -25,9 +25,9 @@ public:
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "text", buflen); };
 
   int getElementCount(void){ return textArray.size(); }
-  int getAttributeCount(AttribID attrib);
-  void getAttribute(AttribID attrib, int first, int count, double* result);
-  String getTextAttribute(AttribID attrib, int index);
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  String getTextAttribute(AABox& bbox, AttribID attrib, int index);
     
   Vertex getElementCenter(int index) { return vertexArray[index]; }
 

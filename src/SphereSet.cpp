@@ -79,17 +79,17 @@ void SphereSet::render(RenderContext* renderContext)
   Shape::render(renderContext);
 }
 
-int SphereSet::getAttributeCount(AttribID attrib) 
+int SphereSet::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
   switch (attrib) {
     case VERTICES: return center.size();
   }
-  return Shape::getAttributeCount(attrib);
+  return Shape::getAttributeCount(bbox, attrib);
 }
 
-void SphereSet::getAttribute(AttribID attrib, int first, int count, double* result)
+void SphereSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     if (attrib == VERTICES) {
@@ -100,7 +100,7 @@ void SphereSet::getAttribute(AttribID attrib, int first, int count, double* resu
         first++;
       }
     } else
-      Shape::getAttribute(attrib, first, count, result);
+      Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }
 

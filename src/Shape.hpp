@@ -74,8 +74,8 @@ public:
   virtual int getElementCount(void) = 0; 
 
   /* overrides */
-  int getAttributeCount(AttribID attrib);
-  void getAttribute(AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   
   /**
    * location of individual items

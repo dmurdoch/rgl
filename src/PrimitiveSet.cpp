@@ -141,17 +141,17 @@ void PrimitiveSet::draw(RenderContext* renderContext)
   SAVEGLERROR;
 }
 
-int PrimitiveSet::getAttributeCount(AttribID attrib)
+int PrimitiveSet::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {
     case VERTICES: return nvertices;
   }
-  return Shape::getAttributeCount(attrib);
+  return Shape::getAttributeCount(bbox, attrib);
 }
 
-void PrimitiveSet::getAttribute(AttribID attrib, int first, int count, double* result)
+void PrimitiveSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     if (attrib == VERTICES) {
@@ -162,7 +162,7 @@ void PrimitiveSet::getAttribute(AttribID attrib, int first, int count, double* r
         first++;
       }
     } else
-      Shape::getAttribute(attrib, first, count, result);
+      Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }
 
@@ -293,7 +293,7 @@ void FaceSet::drawEnd(RenderContext* renderContext)
 }
 
 
-int FaceSet::getAttributeCount(AttribID attrib)
+int FaceSet::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {
     case NORMALS: if (material.lit)
@@ -302,12 +302,12 @@ int FaceSet::getAttributeCount(AttribID attrib)
     		    return 0;
     case TEXCOORDS: return texCoordArray.size();
   }
-  return PrimitiveSet::getAttributeCount(attrib);
+  return PrimitiveSet::getAttributeCount(bbox, attrib);
 }
 
-void FaceSet::getAttribute(AttribID attrib, int first, int count, double* result)
+void FaceSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {
@@ -329,6 +329,6 @@ void FaceSet::getAttribute(AttribID attrib, int first, int count, double* result
 	return;
       }
     }
-    PrimitiveSet::getAttribute(attrib, first, count, result);
+    PrimitiveSet::getAttribute(bbox, attrib, first, count, result);
   }
 }
