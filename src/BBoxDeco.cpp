@@ -388,7 +388,7 @@ AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
 
 void BBoxDeco::render(RenderContext* renderContext)
 {
-  bbox = renderContext->scene->getBoundingBox();
+  AABox bbox = renderContext->scene->getBoundingBox();
 
   if (bbox.isValid()) {
   
@@ -670,21 +670,26 @@ void BBoxDeco::render(RenderContext* renderContext)
 
 }
 
-int BBoxDeco::getAttributeCount(AttribID attrib) 
+int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
   switch (attrib) {    
-    case TEXTS:
+    case TEXTS: {
+      int count = ((xaxis.mode == AXIS_CUSTOM) ? xaxis.nticks : 0)
+           + ((yaxis.mode == AXIS_CUSTOM) ? yaxis.nticks : 0)
+           + ((zaxis.mode == AXIS_CUSTOM) ? zaxis.nticks : 0);
+      if (count == 0) return 0; 
+    }
     case VERTICES:
       return xaxis.getNticks(bbox.vmin.x, bbox.vmax.x)
            + yaxis.getNticks(bbox.vmin.y, bbox.vmax.y)
            + zaxis.getNticks(bbox.vmin.z, bbox.vmax.z);
   }
-  return SceneNode::getAttributeCount(attrib);
+  return SceneNode::getAttributeCount(bbox, attrib);
 }
 
-void BBoxDeco::getAttribute(AttribID attrib, int first, int count, double* result)
+void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
 
   if (first + count < n) n = first + count;
   if (first < n) {
@@ -732,40 +737,42 @@ void BBoxDeco::getAttribute(AttribID attrib, int first, int count, double* resul
       }
       return;
     }
-    SceneNode::getAttribute(attrib, first, count, result);
+    SceneNode::getAttribute(bbox, attrib, first, count, result);
   }
 }
 
-String BBoxDeco::getTextAttribute(AttribID attrib, int index)
+String BBoxDeco::getTextAttribute(AABox& bbox, AttribID attrib, int index)
 {
-  int n = getAttributeCount(attrib);
-  int i;
+  int n = getAttributeCount(bbox, attrib);
+  
   if (index < n) {
+    int count;
     switch(attrib) {
-    case TEXTS:
-      i = 0;
-      if (xaxis.mode == AXIS_CUSTOM) {
-        for (int j=0; j<xaxis.nticks; j++) {
-          if (i == index) 
-            return xaxis.textArray[j];
-          i++;  
-        }
-      }
-      if (yaxis.mode == AXIS_CUSTOM) {
-        for (int j=0; j<yaxis.nticks; j++) {
-          if (i == index) 
-            return yaxis.textArray[j];
-          i++;  
-        }
-      }
-      if (zaxis.mode == AXIS_CUSTOM) {
-        for (int j=0; j<zaxis.nticks; j++) {
-          if (i == index) 
-            return zaxis.textArray[j];
-          i++;  
-        }
+    case TEXTS: 
+      count = xaxis.getNticks(bbox.vmin.x, bbox.vmax.x);
+      if (index < count) {
+        if (xaxis.mode == AXIS_CUSTOM)
+          return xaxis.textArray[index];
+        else
+          return String(0, NULL);
+      }  
+      index -= count;
+      count = yaxis.getNticks(bbox.vmin.y, bbox.vmax.y);
+      if (index < count) {
+        if (yaxis.mode == AXIS_CUSTOM)
+          return yaxis.textArray[index];
+        else
+          return String(0, NULL);
+      }  
+      index -= count;
+      count = zaxis.getNticks(bbox.vmin.z, bbox.vmax.z);
+      if (index < count) {
+        if (zaxis.mode == AXIS_CUSTOM)
+          return zaxis.textArray[index];
+        else
+          return String(0, NULL);
       }
     }
   }
-  return SceneNode::getTextAttribute(attrib, index);
+  return String(0, NULL);
 }

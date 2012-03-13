@@ -244,7 +244,7 @@ void Surface::drawEnd(RenderContext* renderContext)
 
 }
 
-int Surface::getAttributeCount(AttribID attrib)
+int Surface::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {
     case VERTICES: return nx*nz;
@@ -258,12 +258,12 @@ int Surface::getAttributeCount(AttribID attrib)
     		      return 0;
     case SURFACEDIM: return 1;
   }
-  return Shape::getAttributeCount(attrib);
+  return Shape::getAttributeCount(bbox, attrib);
 }
 
-void Surface::getAttribute(AttribID attrib, int first, int count, double* result)
+void Surface::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {
@@ -299,6 +299,6 @@ void Surface::getAttribute(AttribID attrib, int first, int count, double* result
         return;
       }
     }
-    Shape::getAttribute(attrib, first, count, result);
+    Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }

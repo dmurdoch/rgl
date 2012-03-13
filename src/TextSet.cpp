@@ -88,7 +88,7 @@ void TextSet::drawEnd(RenderContext* renderContext)
   Shape::drawEnd(renderContext);
 }
 
-int TextSet::getAttributeCount(AttribID attrib) 
+int TextSet::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
   switch (attrib) {    
     case CEX: return fonts.size();
@@ -96,12 +96,12 @@ int TextSet::getAttributeCount(AttribID attrib)
     case VERTICES: return textArray.size();
     case ADJ: return 1;
   }
-  return Shape::getAttributeCount(attrib);
+  return Shape::getAttributeCount(bbox, attrib);
 }
 
-void TextSet::getAttribute(AttribID attrib, int first, int count, double* result)
+void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch(attrib) {
@@ -122,15 +122,15 @@ void TextSet::getAttribute(AttribID attrib, int first, int count, double* result
       *result++ = adjy;
       return;
     }
-    Shape::getAttribute(attrib, first, count, result);
+    Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }
 
-String TextSet::getTextAttribute(AttribID attrib, int index)
+String TextSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
   if (index < n && attrib == TEXTS) 
     return textArray[index];
   else
-    return Shape::getTextAttribute(attrib, index);
+    return Shape::getTextAttribute(bbox, attrib, index);
 }

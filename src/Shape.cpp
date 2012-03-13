@@ -86,7 +86,7 @@ void Shape::drawEnd(RenderContext* renderContext)
   drawLevel--;
 }
 
-int Shape::getAttributeCount(AttribID attrib)
+int Shape::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   if (attrib == COLORS)
     return material.colors.getLength();
@@ -94,9 +94,9 @@ int Shape::getAttributeCount(AttribID attrib)
   return 0;
 }
 
-void Shape::getAttribute(AttribID attrib, int first, int count, double* result)
+void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     if (attrib == COLORS) {

@@ -44,7 +44,7 @@ void Light::setup(RenderContext* renderContext)
   glEnable(id);
 }
 
-int Light::getAttributeCount(AttribID attrib)
+int Light::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {
     case COLORS: return 3;
@@ -54,9 +54,9 @@ int Light::getAttributeCount(AttribID attrib)
   return 0;
 }
 
-void Light::getAttribute(AttribID attrib, int first, int count, double* result)
+void Light::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(attrib);
+  int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {
