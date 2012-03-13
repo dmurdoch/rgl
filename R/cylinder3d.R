@@ -80,7 +80,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
                      center[i,],center[i,]+e2[i,]*radius[i]*1.5,
                      center[i,],center[i,]+e1[i,]*radius[i]*1.5), 
                  col=rep(c("red", "green", "blue"), each=2))
-      text3d(center, text=1:n)
+      text3d(center, texts=1:n)
     }
   }
   

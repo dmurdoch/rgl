@@ -90,8 +90,11 @@ void TextSet::drawEnd(RenderContext* renderContext)
 
 int TextSet::getAttributeCount(AttribID attrib) 
 {
-  switch (attrib) {
+  switch (attrib) {    
+    case CEX: return fonts.size();
+    case TEXTS:
     case VERTICES: return textArray.size();
+    case ADJ: return 1;
   }
   return Shape::getAttributeCount(attrib);
 }
@@ -101,14 +104,33 @@ void TextSet::getAttribute(AttribID attrib, int first, int count, double* result
   int n = getAttributeCount(attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
-    if (attrib == VERTICES) {
+    switch(attrib) {
+    case VERTICES:
       while (first < n) {
         *result++ = vertexArray[first].x;
         *result++ = vertexArray[first].y;
         *result++ = vertexArray[first].z;
         first++;
       }
-    } else
-      Shape::getAttribute(attrib, first, count, result);
+      return;
+    case CEX:
+      while (first < n) 
+        *result++ = fonts[first++]->cex;
+      return;
+    case ADJ:
+      *result++ = adjx;
+      *result++ = adjy;
+      return;
+    }
+    Shape::getAttribute(attrib, first, count, result);
   }
+}
+
+String TextSet::getTextAttribute(AttribID attrib, int index)
+{
+  int n = getAttributeCount(attrib);
+  if (index < n && attrib == TEXTS) 
+    return textArray[index];
+  else
+    return Shape::getTextAttribute(attrib, index);
 }

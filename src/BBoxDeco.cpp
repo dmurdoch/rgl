@@ -226,7 +226,71 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
 
 }
 
+int AxisInfo::getNticks(float low, float high) {
+  switch (mode) {
 
+    case AXIS_CUSTOM: return nticks;
+
+    case AXIS_LENGTH: return len;
+
+    case AXIS_UNIT:   return (high - low)/unit;
+
+    case AXIS_PRETTY: {
+      double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
+      int ndiv=len, min_n=3, eps_correction=0;
+      int count=0;
+
+      high_u_fact[0] = 1.5;
+      high_u_fact[1] = 2.75;
+      unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+			     eps_correction, 0);
+      
+      for (int i=(int)lo; i<=up; i++) {
+	float value = i*unit;
+	if (value >= low && value <= high) 
+	  count++;
+      }
+      return count;
+    }
+  }
+  return 0;
+}
+
+float AxisInfo::getTick(float low, float high, int index) {
+  switch (mode) {
+
+    case AXIS_CUSTOM: return ticks[index];
+
+    case AXIS_LENGTH: {
+      float delta = (len>1) ? (high-low)/(len-1) : 0;
+      return low + delta*(float)index;
+    }
+    case AXIS_UNIT: {
+      float value =  ( (float) ( (int) ( ( low+(unit-1) ) / (unit) ) ) ) * (unit);
+      return value + index*unit;
+    }
+    case AXIS_PRETTY: {
+      double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
+      int ndiv=len, min_n=3, eps_correction=0;
+      int count=0;
+
+      high_u_fact[0] = 1.5;
+      high_u_fact[1] = 2.75;
+      unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+			     eps_correction, 0);
+      
+      for (int i=(int)lo; i<=up; i++) {
+	float value = i*unit;
+	if (value >= low && value <= high) {
+	  if (count == index) return value;
+	  count++;
+	}
+      }
+    }
+  }
+  return NA_REAL;
+}
+    
 struct Side {
   int vidx[4];
   Vertex4 normal;
@@ -604,4 +668,106 @@ void BBoxDeco::render(RenderContext* renderContext)
 
   }
 
+}
+
+int BBoxDeco::getAttributeCount(AttribID attrib) 
+{
+  AABox bbox = renderContext->scene->getBoundingBox();
+  switch (attrib) {    
+    case TEXTS:
+    case VERTICES:
+      return xaxis.getNticks(bbox.vmin.x, bbox.vmax.x)
+           + yaxis.getNticks(bbox.vmin.y, bbox.vmax.y)
+           + zaxis.getNticks(bbox.vmin.z, bbox.vmax.z);
+  }
+  return SceneNode::getAttributeCount(attrib);
+}
+
+void BBoxDeco::getAttribute(AttribID attrib, int first, int count, double* result)
+{
+  AABox bbox = renderContext->scene->getBoundingBox();
+  int n = getAttributeCount(attrib);
+
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    switch(attrib) {
+    case VERTICES:  
+    
+      float low, high;
+      int i, thisn;
+      i = 0;
+     
+      low = bbox.vmin.x;
+      high = bbox.vmax.x;
+      thisn = xaxis,getNticks(low, high);
+      for (int j=0; j<thisn; j++) {
+        if (first <= i && i < n) {
+          *result++ = xaxis.getTick(low, high, j);
+          *result++ = NA_REAL;
+          *result++ = NA_REAL;
+        }
+        i++;  
+      }
+      
+      low = bbox.vmin.y;
+      high = bbox.vmax.y;
+      thisn = yaxis.getNticks(low, high);
+      for (int j=0; j<thisn; j++) {
+        if (first <= i && i < n) {
+          *result++ = NA_REAL
+          *result++ = yaxis.getTick(low, high, j);;
+          *result++ = NA_REAL;
+        }
+        i++;  
+      }
+      
+      low = bbox.vmin.z;
+      high = bbox.vmax.z;
+      thisn = zaxis.getNticks(low, high);
+      for (int j=0; j<thisn; j++) {
+        if (first <= i && i < n) {
+          *result++ = NA_REAL;
+          *result++ = NA_REAL;
+          *result++ = zaxis.getTick(low, high, j);
+        }
+        i++;  
+      }
+      return;
+    }
+    SceneNode::getAttribute(attrib, first, count, result);
+  }
+}
+
+String BBoxDeco::getTextAttribute(AttribID attrib, int index)
+{
+  int n = getAttributeCount(attrib);
+  int i;
+  if (index < n) {
+    switch(attrib) {
+    case TEXTS:
+      i = 0;
+      if (xaxis.mode == AXIS_CUSTOM) {
+        for (int j=0; j<xaxis.nticks; j++) {
+          if (i == index) 
+            return xaxis.textArray[j];
+          i++;  
+        }
+      }
+      if (yaxis.mode == AXIS_CUSTOM) {
+        for (int j=0; j<yaxis.nticks; j++) {
+          if (i == index) 
+            return yaxis.textArray[j];
+          i++;  
+        }
+      }
+      if (zaxis.mode == AXIS_CUSTOM) {
+        for (int j=0; j<zaxis.nticks; j++) {
+          if (i == index) 
+            return zaxis.textArray[j];
+          i++;  
+        }
+      }
+    }
+  }
+  return SceneNode::getTextAttribute(attrib, index);
 }

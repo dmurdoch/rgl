@@ -7,6 +7,7 @@
 //
 
 #include "types.h"
+#include "String.hpp"
 
 /*
 enum TypeID { 
@@ -36,6 +37,9 @@ typedef int ObjID;
 #define COLORS 3
 #define TEXCOORDS 4
 #define SURFACEDIM 5
+#define TEXTS 6
+#define CEX 7
+#define ADJ 8
 
 typedef unsigned int AttribID;
 
@@ -48,6 +52,7 @@ public:
   static ObjID nextID;
   virtual int getAttributeCount(AttribID attrib) { return 0; }
   virtual void getAttribute(AttribID attrib, int first, int count, double* result) { return; }
+  virtual String  getTextAttribute(AttribID attrib, int index) { return String(0, NULL); }
   
 protected:
   SceneNode(const TypeID in_typeID) : typeID(in_typeID)

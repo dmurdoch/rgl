@@ -27,7 +27,8 @@ rgl.enum.nodetype <- function (type)
 rgl.enum( type, shapes=1, lights=2, bboxdeco=3, viewpoint=4, material=5, background=6, multi = TRUE )
 
 rgl.enum.attribtype <- function (attrib)
-rgl.enum( attrib, vertices=1, normals=2, colors=3, texcoords=4, dim=5)
+rgl.enum( attrib, vertices=1, normals=2, colors=3, texcoords=4, dim=5, 
+          texts=6, cex=7, adj=8)
 
 rgl.enum.pixfmt <- function (fmt)
 rgl.enum( fmt, png=0 )

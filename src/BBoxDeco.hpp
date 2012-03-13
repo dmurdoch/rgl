@@ -30,6 +30,9 @@ struct AxisInfo {
   ~AxisInfo();
   void draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matrix4x4& modelview, 
             Vertex& marklen, String& string);
+            
+  int getNticks(float low, float high);
+  float getTick(float low, float high, int index);
 
   int    mode;
   int    nticks;
@@ -48,6 +51,9 @@ public:
   void render(RenderContext* renderContext);
   AABox getBoundingBox(const AABox& boundingBox) const;
   Vertex getMarkLength(const AABox& boundingBox) const;
+  int getAttributeCount(AttribID attrib);
+  void getAttribute(AttribID attrib, int first, int count, double* result);
+  String  getTextAttribute(AttribID attrib, int index);
 private:
   Material material;
   AxisInfo xaxis, yaxis, zaxis;

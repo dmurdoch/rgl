@@ -22,7 +22,7 @@ rgl.clear <- function( type = "shapes" )
   viewpoint <- 4 %in% type
   material  <- 5 %in% type
 
-  type <- type[!(type %in% 4:5)]
+  type <- type[!(type %in% 4:6)]
   
   idata <- as.integer(c(length(type), type))
  
@@ -95,20 +95,33 @@ rgl.attrib <- function( id, attrib, first=1,
   stopifnot(length(attrib) == 1 && length(id) == 1 && length(first) == 1)
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
-  ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2)[attrib]
+  ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
+            texts=1, cex=1, adj=2)[attrib]
   count <- max(last - first + 1, 0)
-  if (count)
-    result <- .C (rgl_attrib, as.integer(id), as.integer(attrib), 
-                as.integer(first-1), as.integer(count), 
-                result = numeric(count*ncol))$result
-  else
-    result <- numeric(0)
+  if (attrib == 6) {
+    if (count)
+      result <- .C (rgl_text_attrib, as.integer(id), as.integer(attrib), 
+                    as.integer(first-1), as.integer(count), 
+                result = character(count*ncol))$result
+    else
+      result <- character(0)
+  } else {
+    if (count)
+      result <- .C (rgl_attrib, as.integer(id), as.integer(attrib), 
+                  as.integer(first-1), as.integer(count), 
+                  result = numeric(count*ncol))$result
+    else
+      result <- numeric(0)
+  }
   result <- matrix(result, ncol=ncol, byrow=TRUE)
   colnames(result) <- list(c("x", "y", "z"), # vertices
                            c("x", "y", "z"), # normals
                            c("r", "g", "b", "a"), # colors
                            c("s", "t"),	     # texcoords
-                           c("r", "c")
+                           c("r", "c"),      # dim
+                           c("text"),	     # texts
+                           c("cex"), 	     # cex
+                           c("x", "y")	     # adj
                            )[[attrib]]
   result
 }
@@ -761,7 +774,7 @@ rgl.select3d <- function(button = c("left", "middle", "right")) {
   }
   proj <- rgl.projection();
   function(x,y=NULL,z=NULL) {
-    pixel <- rgl.user2window(x,y,z,proj=proj)
+    pixel <- rgl.user2window(x,y,z,projection=proj)
     x <- pixel[,1]
     y <- pixel[,2]
     z <- pixel[,3]

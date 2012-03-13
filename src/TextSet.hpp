@@ -27,6 +27,7 @@ public:
   int getElementCount(void){ return textArray.size(); }
   int getAttributeCount(AttribID attrib);
   void getAttribute(AttribID attrib, int first, int count, double* result);
+  String getTextAttribute(AttribID attrib, int index);
     
   Vertex getElementCenter(int index) { return vertexArray[index]; }
 

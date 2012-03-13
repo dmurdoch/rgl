@@ -18,7 +18,8 @@ A shape identifier, as returned by \code{\link{rgl.ids}}.
 }
   \item{attrib}{
 An attribute of a shape.  Currently supported: one of 
-\code{c("vertices", "normals", "colors", "texcoords", "dim")}, or unique prefixes
+\code{c("vertices", "normals", "colors", "texcoords", "dim", "texts",
+        "cex", "adj")}, or unique prefixes
 to one of those.  
 }
   \item{first, last}{
@@ -31,18 +32,24 @@ zero will be returned.
 
 The first four \code{attrib} names correspond to the usual OpenGL
 properties; \code{"dim"} is used just for surfaces, defining the rows
-and columns in the rectangular grid.
+and columns in the rectangular grid; \code{"cex"} and \code{"adj"}
+apply only to text objects.
 }
 \value{
 \code{rgl.attrib.count} returns the count of the requested attribute.  \code{rgl.attrib}
 returns the values of the attribute.  Attributes
-are generally real-valued vectors, with the following sizes:
+are mostly real-valued, with the following sizes:
 \describe{
 \item{vertices}{3 values, x, y, z}
 \item{normals}{3 values, x, y, z}
 \item{colors}{4 values, r, g, b, a}
 \item{texcoords}{2 values, s, t}
+\item{dim}{2 values, r, c}
+\item{cex}{1 value}
+\item{adj}{2 values, x, y}
 }
+The \code{"texts"} attribute is character-valued.
+
 These are returned as matrices with the row count equal to the count for the attribute,
 and the columns as listed above.
 }
