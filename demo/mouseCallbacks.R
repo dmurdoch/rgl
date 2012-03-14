@@ -77,15 +77,15 @@ mouseTrackball <- function(button = 1, dev = rgl.cur() ) {
 }
 
 mouseXAxis<- function(button = 1, dev = rgl.cur() , left=TRUE) {
-    setOneAxis(button, dev, axis=c(1,0,0), left=left) 
+    mouseOneAxis(button, dev, axis=c(1,0,0), left=left) 
 }
 
 mouseYAxis<- function(button = 1, dev = rgl.cur(), left = TRUE ) {
-    setOneAxis(button, dev, axis=c(0,1,0), left=left) 
+    mouseOneAxis(button, dev, axis=c(0,1,0), left=left) 
 }
 
 mouseZAxis<- function(button = 1, dev = rgl.cur(), left=TRUE) {
-    setOneAxis(button, dev, axis=c(0,0,1), left=left) 
+    mouseOneAxis(button, dev, axis=c(0,0,1), left=left) 
 }
 
 mouseOneAxis <- function(button = 1, dev = rgl.cur(), axis = c(1,0,0), left = TRUE ) {
