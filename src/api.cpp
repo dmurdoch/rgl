@@ -785,7 +785,7 @@ void rgl_getcolorcount(int* count)
 
 void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
 {
-  Material& mat = currentMaterial;
+  Material* mat = &currentMaterial;
   unsigned int i,j;
   
   if (*id > 0) {
@@ -804,13 +804,13 @@ void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double*
       return;
   }
   
-  idata[1] = mat.lit ? 1 : 0;
-  idata[2] = mat.smooth ? 1 : 0;
-  idata[3] = (int) mat.front;
-  idata[4] = (int) mat.back;
-  idata[5] = mat.fog ? 1 : 0;
-  if (mat.texture) {
-    mat.texture->getParameters( (Texture::Type*) (idata + 6),
+  idata[1] = mat->lit ? 1 : 0;
+  idata[2] = mat->smooth ? 1 : 0;
+  idata[3] = (int) mat->front;
+  idata[4] = (int) mat->back;
+  idata[5] = mat->fog ? 1 : 0;
+  if (mat->texture) {
+    mat->texture->getParameters( (Texture::Type*) (idata + 6),
                                (bool*) (idata + 7),
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
@@ -825,34 +825,34 @@ void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double*
     idata[20] = 0; /* mat.texture.envmap ? 1 : 0; */
     cdata[0][0] = '\0';
   }
-  idata[11] = (int) mat.ambient.getRedub();
-  idata[12] = (int) mat.ambient.getGreenub();
-  idata[13] = (int) mat.ambient.getBlueub();
-  idata[14] = (int) mat.specular.getRedub();
-  idata[15] = (int) mat.specular.getGreenub();
-  idata[16] = (int) mat.specular.getBlueub();  
-  idata[17] = (int) mat.emission.getRedub();
-  idata[18] = (int) mat.emission.getGreenub();
-  idata[19] = (int) mat.emission.getBlueub();
-  idata[21] = mat.point_antialias ? 1 : 0;
-  idata[22] = mat.line_antialias ? 1 : 0;
-  idata[23] = mat.depth_mask ? 1 : 0;
-  idata[24] = mat.depth_test;
+  idata[11] = (int) mat->ambient.getRedub();
+  idata[12] = (int) mat->ambient.getGreenub();
+  idata[13] = (int) mat->ambient.getBlueub();
+  idata[14] = (int) mat->specular.getRedub();
+  idata[15] = (int) mat->specular.getGreenub();
+  idata[16] = (int) mat->specular.getBlueub();  
+  idata[17] = (int) mat->emission.getRedub();
+  idata[18] = (int) mat->emission.getGreenub();
+  idata[19] = (int) mat->emission.getBlueub();
+  idata[21] = mat->point_antialias ? 1 : 0;
+  idata[22] = mat->line_antialias ? 1 : 0;
+  idata[23] = mat->depth_mask ? 1 : 0;
+  idata[24] = mat->depth_test;
 
-  for (i=0, j=25; (i < mat.colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
-    idata[j++] = (int) mat.colors.getColor(i).getRedub();
-    idata[j++] = (int) mat.colors.getColor(i).getGreenub();
-    idata[j++] = (int) mat.colors.getColor(i).getBlueub();
+  for (i=0, j=25; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+    idata[j++] = (int) mat->colors.getColor(i).getRedub();
+    idata[j++] = (int) mat->colors.getColor(i).getGreenub();
+    idata[j++] = (int) mat->colors.getColor(i).getBlueub();
   }
   idata[0] = i;
 
-  ddata[0] = (double) mat.shininess;
-  ddata[1] = (double) mat.size;
-  ddata[2] = (double) mat.lwd;
+  ddata[0] = (double) mat->shininess;
+  ddata[1] = (double) mat->size;
+  ddata[2] = (double) mat->lwd;
   
-  if (mat.colors.hasAlpha()) {
-    for (i=0, j=3; (i < mat.colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
-      ddata[j++] = (double) mat.colors.getColor(i).getAlphaf();
+  if (mat->colors.hasAlpha()) {
+    for (i=0, j=3; (i < mat->colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
+      ddata[j++] = (double) mat->colors.getColor(i).getAlphaf();
     idata[10] = i;
   } else 
     idata[10] = 0;
