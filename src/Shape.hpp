@@ -56,7 +56,7 @@ public:
   /**
    * obtain material
    **/
-  const Material& getMaterial() const { return material; }
+  Material* getMaterial()  { return &material; }
   
   const bool getIgnoreExtent() const { return ignoreExtent; }
 
