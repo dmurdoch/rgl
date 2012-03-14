@@ -28,7 +28,8 @@ Specify these to retrieve only those rows of the result.
 }
 \details{
 If the identifier is not found or is not a shape that has the given attribute, 
-zero will be returned.
+zero will be returned by \code{rgl.attrib.count}, and an empty matrix
+will be returned by \code{rgl.attrib}.
 
 The first four \code{attrib} names correspond to the usual OpenGL
 properties; \code{"dim"} is used just for surfaces, defining the rows
