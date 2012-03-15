@@ -114,6 +114,8 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
 	 user, but is used internally by the \code{\link{select3d}} function.}
 	 \item{\code{"zoom"}}{Mouse is used to zoom the display.}
 	 \item{\code{"fov"}}{Mouse changes the field of view of the display.}
+	 \item{\code{"user"}}{Used  when a user handler is set by 
+	 \code{\link{rgl.setMouseCallbacks}}.}
 	}
     }
     \item{\code{projMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the current
