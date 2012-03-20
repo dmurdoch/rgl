@@ -274,6 +274,7 @@ static GLint gl2psPrintPrimitives(void);
 
 static void gl2psMsg(GLint level, const char *fmt, ...)
 {
+/*  Avoid R check complaints:  GL2PS_SILENT is always set
   va_list args;
 
   if(!(gl2ps->options & GL2PS_SILENT)){
@@ -287,6 +288,8 @@ static void gl2psMsg(GLint level, const char *fmt, ...)
     va_end(args);
     fprintf(stderr, "\n");
   }
+*/
+
   /* if(level == GL2PS_ERROR) exit(1); */
 }
 
@@ -1520,7 +1523,7 @@ static GLboolean gl2psLess(GLfloat f1, GLfloat f2)
 
 static void gl2psBuildBspTree(GL2PSbsptree *tree, GL2PSlist *primitives)
 {
-  GL2PSprimitive *prim, *frontprim = NULL, *backprim = NULL;
+  GL2PSprimitive *prim=NULL /* avoid warning */, *frontprim = NULL, *backprim = NULL;
   GL2PSlist *frontlist, *backlist;
   GLint i, index;
 
