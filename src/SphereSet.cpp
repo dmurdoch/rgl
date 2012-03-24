@@ -82,6 +82,7 @@ void SphereSet::render(RenderContext* renderContext)
 int SphereSet::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
   switch (attrib) {
+    case RADII:    return radius.size();
     case VERTICES: return center.size();
   }
   return Shape::getAttributeCount(bbox, attrib);
@@ -92,15 +93,21 @@ void SphereSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count,
   int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
-    if (attrib == VERTICES) {
-      while (first < n) {
-        *result++ = center.get(first).x;
-        *result++ = center.get(first).y;
-        *result++ = center.get(first).z;
-        first++;
-      }
-    } else
-      Shape::getAttribute(bbox, attrib, first, count, result);
+    switch (attrib) {
+      case VERTICES:
+        while (first < n) {
+          *result++ = center.get(first).x;
+          *result++ = center.get(first).y;
+          *result++ = center.get(first).z;
+          first++;
+        }
+        return;
+      case RADII:
+        while (first < n) 
+          *result++ = radius.get(first++);
+        return;
+    }  
+    Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }
 

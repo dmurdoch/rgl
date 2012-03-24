@@ -41,6 +41,7 @@ typedef int ObjID;
 #define TEXTS 6
 #define CEX 7
 #define ADJ 8
+#define RADII 9
 
 typedef unsigned int AttribID;
 

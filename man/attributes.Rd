@@ -19,7 +19,7 @@ A shape identifier, as returned by \code{\link{rgl.ids}}.
   \item{attrib}{
 An attribute of a shape.  Currently supported: one of 
 \code{c("vertices", "normals", "colors", "texcoords", "dim", "texts",
-        "cex", "adj")}, or unique prefixes
+        "cex", "adj", "radii")}, or unique prefixes
 to one of those.  
 }
   \item{first, last}{
@@ -48,6 +48,7 @@ are mostly real-valued, with the following sizes:
 \item{dim}{2 values, r, c}
 \item{cex}{1 value}
 \item{adj}{2 values, x, y}
+\item{radii}{1 value}
 }
 The \code{"texts"} attribute is character-valued.
 
