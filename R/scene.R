@@ -96,7 +96,7 @@ rgl.attrib <- function( id, attrib, first=1,
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
   ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
-            texts=1, cex=1, adj=2)[attrib]
+            texts=1, cex=1, adj=2, radii=1)[attrib]
   count <- max(last - first + 1, 0)
   if (attrib == 6) {
     if (count)
@@ -121,7 +121,8 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("r", "c"),      # dim
                            c("text"),	     # texts
                            c("cex"), 	     # cex
-                           c("x", "y")	     # adj
+                           c("x", "y"),	     # adj
+                           "r"		     # radii
                            )[[attrib]]
   result
 }
