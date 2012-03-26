@@ -685,6 +685,8 @@ Win32GUIFactory::Win32GUIFactory()
     lib::printMessage("error: window class registration failed");
 
 #if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
+  HANDLE saveHandle = gHandle;
+  gHandle = NULL; /* call below fails for MDI windows */
   // wglGetProcAddress needs to be called within valid GL context, we need to create dummy window here
   HWND windowHandle = CreateWindow(MAKEINTATOM(Win32WindowImpl::classAtom), "", WS_POPUP | WS_DISABLED, 0, 0, 10, 10, NULL, NULL, NULL, NULL);
   if (windowHandle) {
@@ -705,6 +707,7 @@ Win32GUIFactory::Win32GUIFactory()
     }
     DestroyWindow(windowHandle);
   }
+  gHandle = saveHandle;
 #endif
 }
 // ---------------------------------------------------------------------------
