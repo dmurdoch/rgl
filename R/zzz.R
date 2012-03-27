@@ -66,6 +66,7 @@
 	 "rgl_getcolorcount", "rgl_dev_bringtotop", "rgl_clear",
 	 "rgl_pop", "rgl_id_count", "rgl_ids", "rgl_viewpoint",
 	 "rgl_attrib_count", "rgl_attrib", "rgl_text_attrib",
+	 "rgl_save_texture",
 	 "rgl_bg", "rgl_bbox", "rgl_light", "rgl_pixels", "rgl_planes", 
 	 "rgl_abclines", "rgl_primitive",
 	 "rgl_setMouseCallbacks", "rgl_surface", "rgl_spheres",

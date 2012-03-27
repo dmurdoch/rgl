@@ -33,6 +33,7 @@ public:
   bool hasAlpha() const { return (type == ALPHA || type == LUMINANCE_ALPHA || type == RGBA ); }
   void getParameters(Type *out_type, bool *out_mipmap, unsigned int *out_minfilter, 
                      unsigned int *out_magfilter, bool *out_envmap, int bufsize, char *out_filename) ;
+  Pixmap* getPixmap() const { return pixmap; }
 private:
   void init(RenderContext* renderContext);
   Pixmap* pixmap;

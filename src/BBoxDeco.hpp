@@ -54,6 +54,8 @@ public:
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   String  getTextAttribute(AABox& bbox, AttribID attrib, int index);
+  Material* getMaterial()  { return &material; }
+
 private:
   Material material;
   AxisInfo xaxis, yaxis, zaxis;
