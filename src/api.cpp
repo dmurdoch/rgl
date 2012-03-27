@@ -386,10 +386,8 @@ void rgl_save_texture(int* successptr, int* id, char** filename)
     }    
     if (material && material->texture) {
       Pixmap* pixmap = material->texture->getPixmap();
-      Rprintf("got material\n");
       if (pixmap) {
         const char* f = *filename;
-        Rprintf("got pixmap\n");
         *successptr = pixmap->save(pixmapFormat[PIXMAP_FILEFORMAT_PNG], f);
       }
     }
