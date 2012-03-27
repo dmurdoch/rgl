@@ -126,6 +126,17 @@ rgl.attrib <- function( id, attrib, first=1,
                            )[[attrib]]
   result
 }
+
+rgl.save.texture <- function(id, filename) 
+{
+  stopifnot(length(id) == 1, length(filename) == 1)
+  texfile <- rgl.getmaterial(id=id)$texture
+  result <- if (file.exists(texfile))
+    file.copy(texfile, filename)
+  else
+    .C(rgl_save_texture, result=0L, as.integer(id), as.character(filename))$result
+  invisible(result)
+}
   
 ##
 ## ===[ SECTION: environment ]================================================

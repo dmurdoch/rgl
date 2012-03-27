@@ -392,3 +392,6 @@ v0.92.858
   - rgl.ids() did not return all object ids as documented.
   - Updated gl2ps to version 1.3.6
   
+v0.92.861
+  - Fixed segfault on startup on Windows in MDI mode.
+  - Added rgl.save.texture() to get texture from an object.
