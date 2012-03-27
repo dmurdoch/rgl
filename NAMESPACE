@@ -10,7 +10,7 @@ export(abclines3d, addNormals, asEuclidean, asHomogeneous, aspect3d, axes3d, axi
 	rgl.primitive, rgl.projection, rgl.quads, rgl.quit, rgl.Sweave, rgl.Sweave.off,
 	rgl.select3d, rgl.set, rgl.snapshot, rgl.spheres, rgl.sprites,
 	rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
-	rgl.attrib, rgl.attrib.count, rgl.save.texture,
+	rgl.attrib, rgl.attrib.count,
 	rgl.viewpoint, rgl.window2user, rglFonts, r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, segments3d, select3d, rgl.setMouseCallbacks, shade3d, 
 	shapelist3d, snapshot3d, Sweave.snapshot,

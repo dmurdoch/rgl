@@ -54,7 +54,6 @@ EXPORT_SYMBOL void rgl_ids       (int* type, int* ids, char** types);
 EXPORT_SYMBOL void rgl_attrib_count (int* id, int* attrib, int* count);
 EXPORT_SYMBOL void rgl_attrib   (int* id, int* attrib, int* first, int* count, double* result);
 EXPORT_SYMBOL void rgl_text_attrib   (int* id, int* attrib, int* first, int* count, char** result);
-EXPORT_SYMBOL void rgl_save_texture(int* successptr, int* id, char** filename);
 
 EXPORT_SYMBOL void rgl_material (int* successptr, int* idata, char** cdata, double* ddata);
 EXPORT_SYMBOL void rgl_getcolorcount(int* count);

@@ -358,44 +358,6 @@ void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result
 
 //
 // FUNCTION
-//   rgl_save_texture
-//
-
-void rgl_save_texture(int* successptr, int* id, char** filename)
-{
-  Device* device;
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-    RGLView* rglview = device->getRGLView();
-    Scene* scene = rglview->getScene();
-    Shape* shape = scene->get_shape(*id);
-    Background* background;
-    BBoxDeco* bboxdeco;
-    Material* material = NULL;
-    
-    if (shape) 
-      material = shape->getMaterial();
-    else  {
-      background = scene->get_background();
-      if (background && *id == background->getObjID()) 
-        material = background->getMaterial();
-      else {
-        bboxdeco = scene->get_bboxdeco();
-        if (bboxdeco && *id == bboxdeco->getObjID())
-          material = bboxdeco->getMaterial();
-      }  
-    }    
-    if (material && material->texture) {
-      Pixmap* pixmap = material->texture->getPixmap();
-      if (pixmap) {
-        const char* f = *filename;
-        *successptr = pixmap->save(pixmapFormat[PIXMAP_FILEFORMAT_PNG], f);
-      }
-    }
-  }
-} 
-
-//
-// FUNCTION
 //   rgl_bg   ( successPtr, idata )
 //
 // PARAMETERS
