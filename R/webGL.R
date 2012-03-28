@@ -33,12 +33,16 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     vec <- addDP(vec)
     sprintf("vec3(%s, %s, %s)", vec[1], vec[2], vec[3])
   }
+  
   col2rgba <- function(col) as.numeric(col2rgb(col, alpha=TRUE))/255
+  
   col2vec3 <- function(col) vec2vec3(col2rgba(col))
+  
   vec2vec4 <- function(vec) {
     vec <- addDP(vec)
     sprintf("vec4(%s, %s, %s, %s)", vec[1], vec[2], vec[3], vec[4])
   }
+  
   htmlheader <- function() c(
 '	<html><head>
 	<TITLE>RGL model</TITLE>
@@ -154,9 +158,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (has_faces) 
 '	  vec3 col = ambient_plus_emission;
 	  vec3 n = normalize(vNormal);
-	  float nDotEye = dot(n, eye);
-	  if (nDotEye < 0.) 
-	    n = -n;
+	  n = -faceforward(n, n, eye);
 	  float nDotL = dot(n, lightDir);
 	  col = col + max(nDotL, 0.) * vDiffuse.rgb;
 	  col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular;
@@ -164,9 +166,24 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       else 
 '	  diffuse = vDiffuse;',
 
-      if ((has_texture && texture_format %in% c("rgb", "rgba")) || type == "text")
+      if ((has_texture && texture_format == "rgba") || type == "text")
 '	  vec4 textureColor = diffuse*texture2D(uSampler, vTexcoord);',
 
+      if (has_texture) switch(texture_format,
+         rgb = 
+'	  vec4 textureColor = diffuse*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);',
+	 alpha =
+'	  vec4 textureColor = texture2D(uSampler, vTexcoord);
+	  float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
+	  textureColor =  vec4(diffuse.rgb, diffuse.a*luminance);',
+         luminance =
+'	  vec4 textureColor = vec4(diffuse.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3.,
+                                   diffuse.a);',
+         luminance.alpha =
+'	  vec4 textureColor = texture2D(uSampler, vTexcoord);
+	  float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
+	  textureColor = vec4(diffuse.rgb*luminance, diffuse.a*textureColor.a);'),
+           
       if (has_texture)
 '	  gl_FragColor = textureColor;'
       else if (type == "text")
