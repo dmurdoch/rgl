@@ -396,5 +396,8 @@ v0.92.861
   - Fixed segfault on startup on Windows in MDI mode.
   - Added rgl.save.texture() to get texture from an object.
   
-v0.92.863
+v0.92.864
   - Removed rgl.save.texture():  textures are not saveable!
+  - Added writeWebGL() function, to allow scenes to be viewed in a web
+    browser.
+  
