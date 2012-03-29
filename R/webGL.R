@@ -101,7 +101,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	varying vec2 vTexcoord;',
 
       if (type %in% c("text", "sprites"))
-'	attribute vec2 aTextOfs;
+'	attribute vec2 aOfs;
 	void main(void) {'
       else
 '	void main(void) {
@@ -121,11 +121,16 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (has_texture || type == "text")
 '	  vTexcoord = aTexcoord;',
 
-      if (type %in% c("text", "sprites")) 
+      if (type == "text") 
 '	  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
 	  pos = pos/pos.w;
-	  gl_Position = pos + vec4(aTextOfs, 0.,0.);',
+	  gl_Position = pos + vec4(aOfs, 0.,0.);',
 	  
+      if (type == "sprites") 
+'	  vec4 pos = mvMatrix * vec4(aPos, 1.);
+	  pos = pos/pos.w + vec4(aOfs, 0., 0.);
+	  gl_Position = prMatrix*pos;',
+	  	  
 '	}
 	</script>
 ')
@@ -589,12 +594,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       texcoords <- matrix(rep(c(0,0,1,0,1,1,0,1),nv), 4*nv, 2, byrow=TRUE)
       size <- rep(rgl.attrib(id, "radii"), len=4*nv)
       oofs <- NCOL(values)
-      values <- cbind(values, (texcoords - 0.5)*size/10)
+      values <- cbind(values, (texcoords - 0.5)*size)
       nv <- nv*4
     }
 
     if (type %in% c("text", "sprites")) result <- c(result, subst(
-'	   var ofsLoc%id% = gl.getAttribLocation(prog%id%, "aTextOfs");',
+'	   var ofsLoc%id% = gl.getAttribLocation(prog%id%, "aOfs");',
           id))
     
     if (has_texture || type == "text") result <- c(result, subst(
