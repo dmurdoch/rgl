@@ -24,6 +24,8 @@ public:
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "sprites", buflen); };
   
   virtual int getElementCount(void);
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   
   /**
    * location of individual items

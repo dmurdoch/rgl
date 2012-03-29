@@ -101,3 +101,37 @@ void SpriteSet::render(RenderContext* renderContext)
 { 
   draw(renderContext);
 }
+
+int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib) 
+{
+  switch (attrib) {
+    case VERTICES: return vertex.size();
+    case RADII:    return size.size();
+  }
+  return Shape::getAttributeCount(bbox, attrib);
+}
+
+void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(bbox, attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    switch(attrib) {
+      case VERTICES:
+        while (first < n) {
+          Vertex v = vertex.get(first);
+          *result++ = v.x;
+          *result++ = v.y;
+          *result++ = v.z;
+          first++;
+        }
+        return;     
+      case RADII:
+        while (first < n) 
+          *result++ = size.get(first++);
+        return;
+    }  
+    Shape::getAttribute(bbox, attrib, first, count, result);
+  }
+}
+
