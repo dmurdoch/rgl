@@ -251,6 +251,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	var sqrt = Math.sqrt;
 	var sin = Math.sin;
 	var acos = Math.acos;
+	var tan = Math.tan;
 	var SQRT2 = Math.SQRT2;
 	var PI = Math.PI;
 	var log = Math.log;
@@ -301,7 +302,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   
   setUser <- function() c(
     subst(
-'	   var zoom = %zoom%;', zoom = par3d("zoom")),
+'	   var zoom = %zoom%;
+	   var fov = %fov%;', zoom = par3d("zoom"), fov = max(1, min(179, par3d("FOV")))),
 '	   var userMatrix = new CanvasMatrix4();
 	   userMatrix.load([',
     paste(formatC(par3d("userMatrix"), digits=7, width=1), collapse=", "),
@@ -430,32 +432,26 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     # This is based on the Frustum::enclose code from geom.cpp
     bbox <- par3d("bbox")
     scale <- par3d("scale")
-    fov <- par3d("FOV")*pi/180
     ranges <- c(bbox[2]-bbox[1], bbox[4]-bbox[3], bbox[6]-bbox[5])*scale/2
     radius <- sqrt(sum(ranges^2))*1.1 # A bit bigger to handle labels
-    if (fov > 0) {
-      s <- sin(fov/2)
-      t <- tan(fov/2)
-    } else {
-      s <- 0.5
-      t <- 1.0
-    }
-    distance <- radius/s
-    near <- distance - radius
-    far <- distance + radius
-    hlen <- t*near
     subst(
-'	     distance = %distance%;
+'	     var radius = %radius%;
+	     var s = sin(fov*PI/360);
+	     var t = tan(fov*PI/360);
+	     var distance = radius/s;
+	     var near = distance - radius;
+	     var far = distance + radius;
+	     var hlen = t*near;
 	     var aspect = width/height;
 	     prMatrix.makeIdentity();
 	     if (aspect > 1)
-	       prMatrix.frustum(-%hlen%*aspect*zoom, %hlen%*aspect*zoom, 
-	                        -%hlen%*zoom, %hlen%*zoom, %near%, %far%);
+	       prMatrix.frustum(-hlen*aspect*zoom, hlen*aspect*zoom, 
+	                        -hlen*zoom, hlen*zoom, near, far);
 	     else  
-	       prMatrix.frustum(-%hlen%*zoom, %hlen%*zoom, 
-	                        -%hlen%*zoom/aspect, %hlen%*zoom/aspect, 
-	                        %near%, %far%);',
-            distance, hlen, near, far)
+	       prMatrix.frustum(-hlen*zoom, hlen*zoom, 
+	                        -hlen*zoom/aspect, hlen*zoom/aspect, 
+	                        near, far);',
+            radius)
   }
 
   setmvMatrix <- function() {
@@ -941,7 +937,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   
   mouseHandlers <- function() {
     handlers <- par3d("mouseMode")
-    if (any(notdone <- handlers %in% c("polar", "selecting", "fov", "user"))) {
+    if (any(notdone <- handlers %in% c("polar", "selecting", "user"))) {
       warning("Mouse mode(s) '", handlers[notdone], "' not supported.  'trackball' used.")
       handlers[notdone] <- "trackball"
     }
@@ -1041,7 +1037,20 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     zoom = exp(zoom0 + (y-y0)/height);
 	     drawScene();
 	   }
-'    ))  }
+', 
+      fov = 
+'	   var y0 = 0;
+	   var fov0 = 1;
+	   var fovdown = function(x, y) {
+	     y0 = y;
+	     fov0 = fov;
+	   }
+
+	   var fovmove = function(x, y) {
+	     fov = max(1, min(179, fov0 + 180*(y-y0)/height));
+	     drawScene();
+	   }
+'))  }
         
     down <- paste(handlers, "down", sep="")
     move <- paste(handlers, "move", sep="")
