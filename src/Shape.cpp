@@ -88,9 +88,10 @@ void Shape::drawEnd(RenderContext* renderContext)
 
 int Shape::getAttributeCount(AABox& bbox, AttribID attrib)
 {
-  if (attrib == COLORS)
-    return material.colors.getLength();
-  
+  switch (attrib) { 
+    case COLORS:  return material.colors.getLength();
+    case CENTERS: return getElementCount();
+  }
   return 0;
 }
 
@@ -99,15 +100,26 @@ void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
   int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
-    if (attrib == COLORS) {
-      while (first < n) {
-        Color color = material.colors.getColor(first);
-        *result++ = color.data[0];
-        *result++ = color.data[1];
-        *result++ = color.data[2];
-        *result++ = color.data[3];
-        first++;
-      }
+    switch (attrib) {
+      case COLORS:
+        while (first < n) {
+          Color color = material.colors.getColor(first);
+          *result++ = color.data[0];
+          *result++ = color.data[1];
+          *result++ = color.data[2];
+          *result++ = color.data[3];
+          first++;
+        }
+        return;
+      case CENTERS:
+        while (first < n) {
+          Vertex center = getElementCenter(first);
+          *result++ = center.x;
+          *result++ = center.y;
+          *result++ = center.z;
+          first++;
+        }
+        return;
     }
   }
 }
