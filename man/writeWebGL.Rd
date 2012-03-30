@@ -40,7 +40,7 @@ development progresses:
 \itemize{
 \item Transparent objects are not always rendered properly (no depth sorting is done).
 \item The bounding box decorations are fixed; labels do not move as they do within \R.
-\item User-defined mouse controls are not supported; the \code{fov} control is not implemented yet.
+\item User-defined mouse controls are not supported.
 \item Missing values are not handled properly.
 \item It only handles a single light source, and the geometry of specular reflections is simpler than in \R.
 \item Polygons will only be rendered as filled; there is no support in WebGL for wireframe or point rendering.
