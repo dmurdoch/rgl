@@ -53,11 +53,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	Your browser does not support the HTML5 canvas element.</canvas>
 ')
 
-  shaders <- function(id, type) {
-    mat <- rgl.getmaterial(id = id)
-    is_lit <- mat$lit && type %in% c("triangles", "quads", "surface", "planes", 
-                                     "spheres", "sprites")
-    has_texture <- !is.null(mat$texture) && length(rgl.attrib.count(id, "texcoords"))
+  shaders <- function(id, type, flags) {
+    mat <- rgl.getmaterial(id)
+    is_lit <- flags["is_lit"]
+    has_texture <- flags["has_texture"]
+    fixed_quads <- flags["fixed_quads"]
+    
     if (has_texture)
       texture_format <- mat$textype;
 
@@ -87,7 +88,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	uniform mat4 prMatrix;
 	varying vec4 vDiffuse;',
 	
-      if (is_lit && type != "sprites") 
+      if (is_lit && !fixed_quads) 
 '	attribute vec3 aNorm;
 	uniform mat4 normMatrix;
 	varying vec3 vNormal;',
@@ -100,7 +101,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	attribute vec2 aTexcoord;
 	varying vec2 vTexcoord;',
 
-      if (type %in% c("text", "sprites"))
+      if (fixed_quads)
 '	attribute vec2 aOfs;
 	void main(void) {'
       else
@@ -115,7 +116,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       else 
 '	  vDiffuse = aCol;',
 
-      if (is_lit && type != "sprites")
+      if (is_lit && !fixed_quads)
 '	  vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);',
 
       if (has_texture || type == "text")
@@ -161,7 +162,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  halfVec = vec2vec3(normalize(lightdir + eye)),
 	  eye = vec2vec3(eye)),
 	  
-      if (is_lit && type != "sprites")
+      if (is_lit && !fixed_quads)
 '	varying vec3 vNormal;',
 
 	
@@ -169,10 +170,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  vec4 diffuse;',
 
       if (is_lit)
-        if (type != "sprites")
-'	  vec3 n = normalize(vNormal);'
+        if (fixed_quads)
+'	  vec3 n = vec3(0., 0., -1.);'
         else
-'	  vec3 n = vec3(0., 0., -1.);',
+'	  vec3 n = normalize(vNormal);',
 
       if (is_lit) 
 '	  vec3 col = ambient_plus_emission;
@@ -275,7 +276,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }
 	   try {
 	     // Try to grab the standard context. If it fails, fallback to experimental.
-	     gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+	     gl = canvas.getContext("webgl") 
+	       || canvas.getContext("experimental-webgl");
 	   }
 	   catch(e) {}
 	   if ( !gl ) {',
@@ -479,11 +481,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
      sx=1/scale[1], sy=1/scale[2], sz=1/scale[3])
   }
 
-  init <- function(id, type) {
-    is_indexed <- type %in% c("quads", "surface", "text", "sprites")
-    mat <- rgl.getmaterial(id = id)
-    is_lit <- mat$lit && (is_indexed || type %in% c("triangles", "planes", "spheres"))
-    has_texture <- !is.null(mat$texture) && length(rgl.attrib.count(id, "texcoords"))
+  init <- function(id, type, flags) {
+    is_indexed <- flags["is_indexed"]
+    mat <- rgl.getmaterial(id)
+    is_lit <- flags["is_lit"]
+    has_texture <- flags["has_texture"]
+    fixed_quads <- flags["fixed_quads"]
     
     result <- subst(
 '
@@ -598,7 +601,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       nv <- nv*4
     }
 
-    if (type %in% c("text", "sprites")) result <- c(result, subst(
+    if (fixed_quads) result <- c(result, subst(
 '	   var ofsLoc%id% = gl.getAttribLocation(prog%id%, "aOfs");',
           id))
     
@@ -626,7 +629,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     stride <- NCOL(values)
     result <- c(result, 
 '	   var v=new Float32Array([',
-      paste('	  ', strwrap(paste(formatC(as.numeric(t(values)), digits=7, width=1), collapse=", "))),
+      paste('	  ', apply(formatC(values, digits=7, width=1), 1,
+                     function(row) paste(row, collapse=", ")), ','),
 '	   ]);',
 
       if (type == "text") subst(
@@ -649,7 +653,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var colLoc%id% = gl.getAttribLocation(prog%id%, "aCol");',
                   id),
                   
-    if (is_lit && type != "sprites") subst(
+    if (is_lit && !fixed_quads) subst(
 '	   var normLoc%id% = gl.getAttribLocation(prog%id%, "aNorm");', 
         id))
 
@@ -688,12 +692,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     c(result, '')
   }
   
-  draw <- function(id, type) {
-    mat <- rgl.getmaterial(id = id)
-    is_lit <- mat$lit && type %in% c("triangles", "quads", "surface", 
-                             "planes", "spheres", "sprites")
-    is_indexed <- type %in% c("quads", "surface", "text", "sprites", "spheres")
-    has_texture <- !is.null(mat$texture) && length(rgl.attrib.count(id, "texcoords"))
+  draw <- function(id, type, flags) {
+    mat <- rgl.getmaterial(id)
+    is_lit <- flags["is_lit"]
+    is_indexed <- flags["is_indexed"]
+    has_texture <- flags["has_texture"]
+    fixed_quads <- flags["fixed_quads"]
+    is_transparent <- flags["is_transparent"]
+   
     result <- c(subst(
 '
 	     // ****** %type% object %id% *******
@@ -844,7 +850,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           id, stride, tofs))
       }
       
-      if (type %in% c("text", "sprites")) {
+      if (fixed_quads) {
         result <- c(result, subst(
 '	     gl.enableVertexAttribArray( ofsLoc%id% );
 	     gl.vertexAttribPointer(ofsLoc%id%, 2, gl.FLOAT, false, %stride%, %ofs%);',
@@ -875,7 +881,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           count <- (nx - 1)*(nz + 1)*2 - 2
         })
     
-      if (type %in% c("lines", "linestrip", "abclines")) {
+      if (flags["is_lines"]) {
         lwd <- rgl.getmaterial(id=id)$lwd
         result <- c(result,subst(
 '	     gl.lineWidth( %lwd% );',
@@ -902,24 +908,33 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     if (!length(bgid) || !length(bg <- rgl.attrib(bgid$id, "colors")))
       bg <- c(1,1,1,1)
     c(subst(
-'
-	   gl.enable(gl.DEPTH_TEST);
+'	   gl.enable(gl.DEPTH_TEST);
 	   gl.depthFunc(gl.LEQUAL);
 	   gl.clearDepth(1.0);
 	   gl.clearColor(%r%, %g%, %b%, %a%);
 	   var xOffs = yOffs = 0,  drag  = 0;
 	   drawScene();
 
-	   function drawScene(){',
+	   function drawScene(){
+	     gl.depthMask(true);
+	     gl.disable(gl.BLEND);',
         r=bg[1], g=bg[2], b=bg[3], a=bg[4]),
         
       setprMatrix(),
       setmvMatrix(),
       
       if (scene_has_faces) setnormMatrix(),
+      
 '	     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 ')
   }
+  
+  doTransparent <- '
+	     gl.depthMask(false);
+	     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
+	                          gl.ONE, gl.ONE);
+	     gl.enable(gl.BLEND);'
+	  
   drawEnd <- '
 	     gl.flush ();
 	   }
@@ -1116,6 +1131,23 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     res
   }
   
+  getFlags <- function(id, type) {
+    mat <- rgl:::rgl.getmaterial(id = id)
+    is_lit <- mat$lit && type %in% c("triangles", "quads", "surface", "planes", 
+                                     "spheres", "sprites")
+                                     
+    has_texture <- !is.null(mat$texture) && length(rgl.attrib.count(id, "texcoords"))
+    
+    is_transparent <- any(rgl.attrib(id, "colors")[,"a"] < 1)
+    
+    is_indexed <- type %in% c("quads", "surface", "text", "sprites")
+    
+    fixed_quads <- type %in% c("text", "sprites")
+    is_lines <- type %in% c("lines", "linestrip", "abclines")
+    c(is_lit=is_lit, has_texture=has_texture, is_indexed=is_indexed, fixed_quads=fixed_quads,
+         is_transparent=is_transparent, is_lines=is_lines)
+  }
+  
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
                   "surface", "text", "abclines", "planes", "spheres",
                   "sprites")
@@ -1172,13 +1204,18 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     
   ids <- ids[types %in% knowntypes]
   types <- types[types %in% knowntypes]
+  flags <- getFlags(ids[1], types[1])
+  flags <- matrix(flags, nrow=length(ids), ncol=length(flags),
+                  dimnames = list(ids, names(flags)), byrow=TRUE)
+  for (i in seq_along(ids)[-1])
+    flags[i,] <- getFlags(ids[i], types[i])
+  
   texnums <- -1
   
-  scene_has_faces <- length(intersect(c("triangles", "quads", 
-                           "surface", "planes", "spheres"), types)) > 0
+  scene_has_faces <- any(flags[,"is_lit"] & !flags[,"fixed_quads"])
   
   for (i in seq_along(ids))
-    result <- c(result, shaders(ids[i], types[i]))
+    result <- c(result, shaders(ids[i], types[i], flags[i,]))
     
   result <- c(result, scriptheader(), setUser(),
     textureSupport,
@@ -1186,13 +1223,22 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     if ("spheres" %in% types) sphereSupport())
 
   for (i in seq_along(ids)) 
-    result <- c(result, init(ids[i], types[i]))
+    result <- c(result, init(ids[i], types[i], flags[i,]))
    
   result <- c(result, scriptMiddle())
   
   for (i in seq_along(ids)) 
-    result <- c(result, draw(ids[i], types[i]))
-   
+    if (!flags[i,"is_transparent"])
+      result <- c(result, draw(ids[i], types[i], flags[i,]))
+  
+  has_transparency <- any(flags[,"is_transparent"])
+  if (has_transparency) {
+    result <- c(result, doTransparent)
+    for (i in seq_along(ids))
+      if (flags[i, "is_transparent"])
+        result <- c(result, draw(ids[i], types[i], flags[i,]))
+  }
+  
   result <- c(result, drawEnd, mouseHandlers(), scriptEnd, htmlEnd())
 
   cat(result, file=filename, sep="\n")

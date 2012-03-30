@@ -38,7 +38,7 @@ exception currently is Microsoft's Internet Explorer, though plugins are availab
 Currently \code{writeWebGL} has a number of known limitations, some of which will be gradually eliminated as
 development progresses:
 \itemize{
-\item Transparent objects are not rendered properly.
+\item Transparent objects are not always rendered properly (no depth sorting is done).
 \item The bounding box decorations are fixed; labels do not move as they do within \R.
 \item User-defined mouse controls are not supported; the \code{fov} control is not implemented yet.
 \item Missing values are not handled properly.
