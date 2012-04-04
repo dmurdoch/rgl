@@ -38,9 +38,11 @@ exception currently is Microsoft's Internet Explorer, though plugins are availab
 Currently \code{writeWebGL} has a number of known limitations, some of which will be gradually eliminated as
 development progresses:
 \itemize{
-\item Transparent objects are not always rendered properly (no depth sorting is done).
 \item The bounding box decorations are fixed; labels do not move as they do within \R.
 \item User-defined mouse controls are not supported.
+\item No automatic movement (e.g. rotation via \code{\link{spin3d}}) is supported.
+\item A complete web page is written; it would need manual editing to put more than one scene
+on a single page.
 \item Missing values are not handled properly.
 \item It only handles a single light source, and the geometry of specular reflections is simpler than in \R.
 \item Polygons will only be rendered as filled; there is no support in WebGL for wireframe or point rendering.
