@@ -476,6 +476,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     normMatrix.multRight( userMatrix );',
      sx=1/scale[1], sy=1/scale[2], sz=1/scale[3])
   }
+  
+  setprmvMatrix <-
+'	     var prmvMatrix = new CanvasMatrix4();
+	     prmvMatrix.load(mvMatrix);
+	     prmvMatrix.multRight( prMatrix );'
 
   init <- function(id, type, flags) {
     is_indexed <- flags["is_indexed"]
@@ -483,6 +488,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     is_lit <- flags["is_lit"]
     has_texture <- flags["has_texture"]
     fixed_quads <- flags["fixed_quads"]
+    depth_sort <- flags["depth_sort"]
     
     result <- subst(
 '
@@ -552,6 +558,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         }
       }
       f <- f[,-NCOL(f)]
+      frowsize <- 6
       if (nn == 0) {
         normals <- t(apply(normals, 1, function(x) x/sqrt(sum(x^2))))
         values <- cbind(values, normals)
@@ -660,11 +667,39 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         v3 <- v2 + 1
         v4 <- v3 + 1
         f <- rbind(v1, v2, v3, v1, v3, v4)
+        frowsize <- 6
+      } else if (type == "triangles") {
+        v1 <- 3*(seq_len(nv/3) - 1)
+        v2 <- v1 + 1
+        v3 <- v2 + 1
+        f <- rbind(v1, v2, v3)
+        frowsize <- 3
+      } else if (type == "spheres") {
+        f <- seq_len(nv)-1
+        frowsize <- nv # not used for depth sorting, just for display
+      }  
+        
+      if (depth_sort) {
+        result <- c(result, subst(
+'	   var centers%id% = new Float32Array([', id),
+        paste('	  ', apply(formatC(rgl.attrib(id, "centers"), digits=7, width=1), 1,
+                     function(row) paste(row, collapse=", ")), ','),
+'	   ]);')
+
+        fname <- subst("f%id%", id)
+        drawtype <- "DYNAMIC_DRAW"
+      } else {
+        fname <- "f"
+        drawtype <- "STATIC_DRAW"
       }
-      result <- c(result,
-	'	   var f=new Uint16Array([', 
-	paste('	  ', strwrap(paste(f, collapse=", "))),
-	'	   ]);')
+      
+      f <- matrix(f, ncol=frowsize, byrow=TRUE)
+      
+      result <- c(result, subst(
+'	   var %fname%=new Uint16Array([', 
+          fname),
+	paste('	  ', apply(f, 1, function(row) paste(row, collapse=", ")), ','),
+'	   ]);')
     }
     result <- c(result,
       if (type != "spheres") subst(
@@ -672,11 +707,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   gl.bindBuffer(gl.ARRAY_BUFFER, buf%id%);
 	   gl.bufferData(gl.ARRAY_BUFFER, v, gl.STATIC_DRAW);',
    		id),
-      if (is_indexed) subst(
+      if (is_indexed && type != "spheres") subst(
 '	   var ibuf%id% = gl.createBuffer();
 	   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuf%id%);
-	   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.STATIC_DRAW);',
-   		id),
+	   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, %fname%, gl.%drawtype%);',
+   		id, fname, drawtype),
       subst(
 '	   var mvMatLoc%id% = gl.getUniformLocation(prog%id%,"mvMatrix");
 	   var prMatLoc%id% = gl.getUniformLocation(prog%id%,"prMatrix");',
@@ -692,6 +727,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     mat <- rgl.getmaterial(id=id)
     is_lit <- flags["is_lit"]
     is_indexed <- flags["is_indexed"]
+    depth_sort <- flags["depth_sort"]
     has_texture <- flags["has_texture"]
     fixed_quads <- flags["fixed_quads"]
     is_transparent <- flags["is_transparent"]
@@ -764,6 +800,44 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       oofs <- stride
       stride <- stride + 8
     }
+
+    if (depth_sort) {
+      nfaces <- rgl.attrib.count(id, "centers")
+      frowsize <- switch(type,
+        surface =,
+        quads =,
+        text =,
+        sprites = 6,
+        triangles = 3)
+        
+      result <- c(result, subst(
+'	     var depths = new Float32Array(%nfaces%);
+	     var faces = new Array(%nfaces%);
+	     for(var i=0; i<%nfaces%; i++) {
+	       var z = prmvMatrix.m13*centers%id%[3*i] 
+	             + prmvMatrix.m23*centers%id%[3*i+1]
+	             + prmvMatrix.m33*centers%id%[3*i+2]
+	             + prmvMatrix.m43;
+	       var w = prmvMatrix.m14*centers%id%[3*i] 
+	             + prmvMatrix.m24*centers%id%[3*i+1]
+	             + prmvMatrix.m34*centers%id%[3*i+2]
+	             + prmvMatrix.m44;
+	       depths[i] = z/w;
+	       faces[i] = i;
+	     }
+	     var depthsort = function(i,j) depths[j] - depths[i];
+	     faces.sort(depthsort);',
+         nfaces, id),
+         if (type != "spheres") subst(
+'	     var f = new Uint16Array(f%id%.length);
+	     for (var i=0; i<%nfaces%; i++) {
+	       for (var j=0; j<%frowsize%; j++) {
+	         f[%frowsize%*i + j] = f%id%[%frowsize%*faces[i] + j];
+	       }
+	     }	     
+	     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);',
+	 nfaces, id, frowsize))
+    }
     
     if (type == "spheres") {
       scale <- par3d("scale")
@@ -790,26 +864,31 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	
         subst(
 '	     for (var i = 0; i < %scount%; i++) {
-	       var sphereMV = new CanvasMatrix4();
-	       var ofs = i*%stride% + %radofs%;
+	       var sphereMV = new CanvasMatrix4();', scount),
+	       
+	if (depth_sort) subst(
+'	       var baseofs = faces[i]*%stride%', stride=stride/4)
+        else subst(
+'	       var baseofs = i*%stride%', stride=stride/4),
+
+	subst(
+'	       var ofs = baseofs + %radofs%;	       
 	       var scale = values%id%[ofs];
 	       sphereMV.scale(%sx%*scale, %sy%*scale, %sz%*scale);
-	       
-	       ofs = i*%stride%;
-	       sphereMV.translate(values%id%[ofs], 
-	       			  values%id%[ofs+1], 
-	       			  values%id%[ofs+2]);
+	       sphereMV.translate(values%id%[baseofs], 
+	       			  values%id%[baseofs+1], 
+	       			  values%id%[baseofs+2]);
 	       sphereMV.multRight(mvMatrix);
 	       gl.uniformMatrix4fv( mvMatLoc%id%, false, new Float32Array(sphereMV.getAsArray()) );',
-	 scount, stride=stride/4, radofs=radofs/4, id, sx, sy, sz),
+	   radofs=radofs/4, stride=stride/4, id, sx, sy, sz),
 	 
 	 if (nc > 1) subst(
-'	       ofs = i*%stride% + %cofs%;       
+'	       ofs = baseofs + %cofs%;       
 	       gl.vertexAttrib4f( colLoc%id%, values%id%[ofs], 
 	       				    values%id%[ofs+1], 
 	       				    values%id%[ofs+2],
 	       				    values%id%[ofs+3] );',
-	   stride=stride/4, cofs=cofs/4, id),
+	   cofs=cofs/4, id),
 	   
          subst(
 '	       gl.drawElements(gl.TRIANGLES, %sphereCount%, gl.UNSIGNED_SHORT, 0);
@@ -852,7 +931,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     gl.vertexAttribPointer(ofsLoc%id%, 2, gl.FLOAT, false, %stride%, %ofs%);',
           id, stride, ofs=oofs))
       }
-      
+	     
       mode <- switch(type,
         points = "POINTS",
         linestrip = "LINE_STRIP",
@@ -920,6 +999,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       setmvMatrix(),
       
       if (scene_has_faces) setnormMatrix(),
+      
+      if (scene_needs_sorting) setprmvMatrix,
       
 '	     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 ')
@@ -1151,12 +1232,16 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     
     is_transparent <- any(rgl.attrib(id, "colors")[,"a"] < 1)
     
-    is_indexed <- type %in% c("quads", "surface", "text", "sprites")
+    depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
+                                                  "spheres", "sprites", "text")
+    
+    is_indexed <- depth_sort || type %in% c("quads", "surface", "text", "sprites")
     
     fixed_quads <- type %in% c("text", "sprites")
     is_lines <- type %in% c("lines", "linestrip", "abclines")
-    c(is_lit=is_lit, has_texture=has_texture, is_indexed=is_indexed, fixed_quads=fixed_quads,
-         is_transparent=is_transparent, is_lines=is_lines)
+    
+    c(is_lit=is_lit, has_texture=has_texture, is_indexed=is_indexed, depth_sort=depth_sort,
+         fixed_quads=fixed_quads, is_transparent=is_transparent, is_lines=is_lines)
   }
   
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
@@ -1224,6 +1309,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   texnums <- -1
   
   scene_has_faces <- any(flags[,"is_lit"] & !flags[,"fixed_quads"])
+  scene_needs_sorting <- any(flags[,"depth_sort"])
   
   for (i in seq_along(ids))
     result <- c(result, shaders(ids[i], types[i], flags[i,]))
