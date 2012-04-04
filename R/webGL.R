@@ -22,6 +22,22 @@ addDP <- function(value, digits=7) {
   value
 }
 
+inRows <- function(values, perrow, prefix = '	', digits=7) {
+  if (is.matrix(values)) values <- t(values)
+  values <- c(values)
+  if (is.numeric(values))
+    values <- formatC(values, digits=digits, width=1)
+  len <- length(values)
+  if (len %% perrow != 0)
+    values <- c(values, rep("PADDING", perrow - len %% perrow))
+  values <- matrix(values, ncol=perrow, byrow=TRUE)
+  
+  lines <- paste(prefix, apply(values, 1,
+                     function(row) paste(row, collapse=", ")))
+  lines[length(lines)] <- gsub(", PADDING", "", lines[length(lines)])
+  paste(lines, collapse=",\n")
+}
+  
 writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"), 
                        snapshot = TRUE, font="Arial",
                        width, height) {
@@ -262,8 +278,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	var height;
 	
 		   
-	var debug = function(msg) 
+	var debug = function(msg) {
 	   document.getElementById("debug").innerHTML = msg;
+	}
 	
 	function webGLStart() {
 	   debug("");
@@ -306,12 +323,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var fov = %fov%;', zoom = par3d("zoom"), fov = max(1, min(179, par3d("FOV")))),
 '	   var userMatrix = new CanvasMatrix4();
 	   userMatrix.load([',
-    paste(formatC(par3d("userMatrix"), digits=7, width=1), collapse=", "),
+    inRows(t(par3d("userMatrix")), perrow=4, prefix='	   '),
 '		]);')
   
   textureSupport <- 
-'	   function getPowerOfTwo(value, pow) {
-	     var pow = pow || 1;
+'	   function getPowerOfTwo(value) {
+	     var pow = 1;
 	     while(pow<value) {
 	       pow *= 2;
 	     }
@@ -414,10 +431,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     c(
 '	   // ****** sphere object ******
 	   var v=new Float32Array([',
-      paste('	  ', strwrap(paste(formatC(as.numeric(t(values)), digits=7, width=1), collapse=", "))),
+      inRows(t(values), perrow=3, '	   '),
 '	   ]);
 	   var f=new Uint16Array([', 
-      paste('	  ', strwrap(paste(x$it-1, collapse=", "))),
+      inRows(x$it-1, perrow=3, '	   '),
 '	   ]);
 	   var sphereBuf = gl.createBuffer();
 	   gl.bindBuffer(gl.ARRAY_BUFFER, sphereBuf);
@@ -632,8 +649,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     stride <- NCOL(values)
     result <- c(result, 
 '	   var v=new Float32Array([',
-      paste('	  ', apply(formatC(values, digits=7, width=1), 1,
-                     function(row) paste(row, collapse=", ")), ','),
+      inRows(values, stride, prefix='	   '),
 '	   ]);',
 
       if (type == "text") subst(
@@ -676,14 +692,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         frowsize <- 3
       } else if (type == "spheres") {
         f <- seq_len(nv)-1
-        frowsize <- nv # not used for depth sorting, just for display
+        frowsize <- 8 # not used for depth sorting, just for display
       }  
         
       if (depth_sort) {
         result <- c(result, subst(
 '	   var centers%id% = new Float32Array([', id),
-        paste('	  ', apply(formatC(rgl.attrib(id, "centers"), digits=7, width=1), 1,
-                     function(row) paste(row, collapse=", ")), ','),
+        inRows(rgl.attrib(id, "centers"), 3, prefix='	   '),
 '	   ]);')
 
         fname <- subst("f%id%", id)
@@ -693,12 +708,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         drawtype <- "STATIC_DRAW"
       }
       
-      f <- matrix(f, ncol=frowsize, byrow=TRUE)
-      
       result <- c(result, subst(
 '	   var %fname%=new Uint16Array([', 
           fname),
-	paste('	  ', apply(f, 1, function(row) paste(row, collapse=", ")), ','),
+	inRows(c(f), frowsize, prefix='	   '),
 '	   ]);')
     }
     result <- c(result,
@@ -825,7 +838,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       depths[i] = z/w;
 	       faces[i] = i;
 	     }
-	     var depthsort = function(i,j) depths[j] - depths[i];
+	     var depthsort = function(i,j) { return depths[j] - depths[i] }
 	     faces.sort(depthsort);',
          nfaces, id),
          if (type != "spheres") subst(
@@ -1109,28 +1122,28 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   
 ',           h)),
       zoom = 
-'	   var y0 = 0;
+'	   var y0zoom = 0;
 	   var zoom0 = 1;
 	   var zoomdown = function(x, y) {
-	     y0 = y;
+	     y0zoom = y;
 	     zoom0 = log(zoom);
 	   }
 
 	   var zoommove = function(x, y) {
-	     zoom = exp(zoom0 + (y-y0)/height);
+	     zoom = exp(zoom0 + (y-y0zoom)/height);
 	     drawScene();
 	   }
 ', 
       fov = 
-'	   var y0 = 0;
+'	   var y0fov = 0;
 	   var fov0 = 1;
 	   var fovdown = function(x, y) {
-	     y0 = y;
+	     y0fov = y;
 	     fov0 = fov;
 	   }
 
 	   var fovmove = function(x, y) {
-	     fov = max(1, min(179, fov0 + 180*(y-y0)/height));
+	     fov = max(1, min(179, fov0 + 180*(y-y0fov)/height));
 	     drawScene();
 	   }
 '))  }
