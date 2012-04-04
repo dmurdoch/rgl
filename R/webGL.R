@@ -54,7 +54,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 ')
 
   shaders <- function(id, type, flags) {
-    mat <- rgl.getmaterial(id)
+    mat <- rgl.getmaterial(id=id)
     is_lit <- flags["is_lit"]
     has_texture <- flags["has_texture"]
     fixed_quads <- flags["fixed_quads"]
@@ -479,7 +479,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 
   init <- function(id, type, flags) {
     is_indexed <- flags["is_indexed"]
-    mat <- rgl.getmaterial(id)
+    mat <- rgl.getmaterial(id=id)
     is_lit <- flags["is_lit"]
     has_texture <- flags["has_texture"]
     fixed_quads <- flags["fixed_quads"]
@@ -689,7 +689,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   }
   
   draw <- function(id, type, flags) {
-    mat <- rgl.getmaterial(id)
+    mat <- rgl.getmaterial(id=id)
     is_lit <- flags["is_lit"]
     is_indexed <- flags["is_indexed"]
     has_texture <- flags["has_texture"]
@@ -878,7 +878,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         })
     
       if (flags["is_lines"]) {
-        lwd <- rgl.getmaterial(id=id)$lwd
+        lwd <- mat$lwd
         result <- c(result,subst(
 '	     gl.lineWidth( %lwd% );',
           lwd))
@@ -926,10 +926,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   }
   
   doTransparent <- '
+  	     // ***** Transparent objects next ****
 	     gl.depthMask(false);
 	     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
 	                          gl.ONE, gl.ONE);
-	     gl.enable(gl.BLEND);'
+	     gl.enable(gl.BLEND);
+'
 	  
   drawEnd <- '
 	     gl.flush ();
@@ -1141,7 +1143,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   }
   
   getFlags <- function(id, type) {
-    mat <- rgl:::rgl.getmaterial(id = id)
+    mat <- rgl.getmaterial(id=id)
     is_lit <- mat$lit && type %in% c("triangles", "quads", "surface", "planes", 
                                      "spheres", "sprites")
                                      
