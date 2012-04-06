@@ -8,7 +8,10 @@ Writes the current scene to a collection of files that contain WebGL code to rep
 it in a browser.
 }
 \usage{
-writeWebGL(dir = "webGL", filename = file.path(dir, "index.html"), snapshot = TRUE, font = "Arial", width, height)
+writeWebGL(dir = "webGL", filename = file.path(dir, "index.html"), 
+           template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
+           prefix = "",
+           snapshot = TRUE, font = "Arial", width, height)
 }
 \arguments{
   \item{dir}{
@@ -16,6 +19,14 @@ writeWebGL(dir = "webGL", filename = file.path(dir, "index.html"), snapshot = TR
 }
   \item{filename}{
   The filename to use for the main file.  
+}
+  \item{template}{
+The template web page to which to write the Javascript for the scene.  See Details below.
+}
+  \item{prefix}{
+An optional prefix to use on global identifiers in the scene; use different prefixes
+for different scenes displayed on the same web page.  If not blank, it should be a legal identifier
+in Javascript and HTML.
 }
   \item{snapshot}{
   Whether to include a snapshot of the scene, to be displayed in browsers that don't support WebGL.
@@ -31,6 +42,15 @@ the \code{par3d("windowRect")} dimensions will be used.
 \details{
 This function writes out a web page containing Javascript that reconstructs the scene in WebGL.
 
+Use the \code{template} argument to give the filename of a web page that is to contain the
+code for the new scene.  It should contain a single line containing \code{paste("\%", prefix, "WebGL\%")}, e.g.
+\code{\%WebGL\%} with the default empty prefix.  That line will be replaced by the Javascript and other
+code necessary to reproduce the current scene.
+
+To put more than one scene into a web page, use different values of \code{prefix} for each.  The prefix
+will be used in identifiers in both Javascript and HTML, so it is safest to start with a letter and
+only use alphanumeric characters.
+
 WebGL is a fairly new technology for displaying 3D scenes in browsers.  Most current browsers support it
 to some extent, though it may not be enabled by default; see \url{http://get.webgl.org} for details.  A major
 exception currently is Microsoft's Internet Explorer, though plugins are available.
@@ -41,8 +61,6 @@ development progresses:
 \item The bounding box decorations are fixed; labels do not move as they do within \R.
 \item User-defined mouse controls are not supported.
 \item No automatic movement (e.g. rotation via \code{\link{spin3d}}) is supported.
-\item A complete web page is written; it would need manual editing to put more than one scene
-on a single page.
 \item Missing values are not handled properly.
 \item It only handles a single light source, and the geometry of specular reflections is simpler than in \R.
 \item Polygons will only be rendered as filled; there is no support in WebGL for wireframe or point rendering.
@@ -89,8 +107,9 @@ The output includes a binary copy of the CanvasMatrix Javascript library.  Its s
 \examples{
 \donttest{
 plot3d(rnorm(100), rnorm(100), rnorm(100), type="s", col="red")
-# This writes a copy into ocal directory 'webGL', and then displays it
-browseURL(paste("file://", writeWebGL(dir=file.path(tempdir(), "webGL"), width=500), sep=""))
+# This writes a copy into temporary directory 'webGL', and then displays it
+browseURL(paste("file://", writeWebGL(dir=file.path(tempdir(), "webGL"), 
+          width=500), sep=""))
 }
 }
 \keyword{ graphics }
