@@ -1183,6 +1183,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   canvas.onmouseup = function ( ev ){	
 	     drag = 0;
 	   }
+	   
+	   canvas.onmouseout = canvas.onmouseup;
 
 	   canvas.onmousemove = function ( ev ){
 	     if ( drag == 0 ) return;
