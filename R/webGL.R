@@ -417,10 +417,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     c(
 '	   // ****** sphere object ******
 	   var v=new Float32Array([',
-      inRows(t(values), perrow=3, '	   '),
+      inRows(values, perrow=3, '	   '),
 '	   ]);
 	   var f=new Uint16Array([', 
-      inRows(x$it-1, perrow=3, '	   '),
+      inRows(t(x$it)-1, perrow=3, '	   '),
 '	   ]);
 	   var sphereBuf = gl.createBuffer();
 	   gl.bindBuffer(gl.ARRAY_BUFFER, sphereBuf);
@@ -1146,7 +1146,24 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   }
 	
   scriptEnd <- 
-'	   canvas.onmousedown = function ( ev ){
+'	   function relMouseCoords(event){
+	     var totalOffsetX = 0;
+	     var totalOffsetY = 0;
+	     var currentElement = canvas;
+	   
+	     do{
+	       totalOffsetX += currentElement.offsetLeft;
+	       totalOffsetY += currentElement.offsetTop;
+	     }
+	     while(currentElement = currentElement.offsetParent)
+	   
+	     var canvasX = event.pageX - totalOffsetX;
+	     var canvasY = event.pageY - totalOffsetY;
+	   
+	     return {x:canvasX, y:canvasY}
+	   }
+
+	   canvas.onmousedown = function ( ev ){
 	     if (!ev.which) // Use w3c defns in preference to MS
 	       switch (ev.button) {
 	       case 0: ev.which = 1; break;
@@ -1157,11 +1174,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     drag = ev.which;
 	     var f = mousedown[drag-1];
 	     if (f) {
-	       f(ev.pageX-canvas.offsetLeft, height+canvas.offsetTop-ev.pageY); 
+	       var coords = relMouseCoords(ev);
+	       f(coords.x, height-coords.y); 
 	       ev.preventDefault();
 	     }
 	   }    
-	       
+
 	   canvas.onmouseup = function ( ev ){	
 	     drag = 0;
 	   }
@@ -1169,7 +1187,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   canvas.onmousemove = function ( ev ){
 	     if ( drag == 0 ) return;
 	     var f = mousemove[drag-1];
-	     if (f) f(ev.pageX-canvas.offsetLeft, height+canvas.offsetTop-ev.pageY);
+	     if (f) {
+	       var coords = relMouseCoords(ev);
+	       f(coords.x, height-coords.y);
+	     }
 	   }
 
 	   var wheelHandler = function(ev) {
