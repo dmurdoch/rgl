@@ -1157,7 +1157,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     drag = ev.which;
 	     var f = mousedown[drag-1];
 	     if (f) {
-	       f(ev.clientX-canvas.offsetLeft, height+canvas.offsetTop-ev.clientY); 
+	       f(ev.pageX-canvas.offsetLeft, height+canvas.offsetTop-ev.pageY); 
 	       ev.preventDefault();
 	     }
 	   }    
@@ -1169,7 +1169,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   canvas.onmousemove = function ( ev ){
 	     if ( drag == 0 ) return;
 	     var f = mousemove[drag-1];
-	     if (f) f(ev.clientX-canvas.offsetLeft, height+canvas.offsetTop-ev.clientY);
+	     if (f) f(ev.pageX-canvas.offsetLeft, height+canvas.offsetTop-ev.pageY);
 	   }
 
 	   var wheelHandler = function(ev) {
