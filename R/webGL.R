@@ -22,7 +22,7 @@ addDP <- function(value, digits=7) {
   value
 }
 
-inRows <- function(values, perrow, prefix = '	', digits=7) {
+inRows <- function(values, perrow, leadin = '	', digits=7) {
   if (is.matrix(values)) values <- t(values)
   values <- c(values)
   if (is.numeric(values))
@@ -32,13 +32,15 @@ inRows <- function(values, perrow, prefix = '	', digits=7) {
     values <- c(values, rep("PADDING", perrow - len %% perrow))
   values <- matrix(values, ncol=perrow, byrow=TRUE)
   
-  lines <- paste(prefix, apply(values, 1,
+  lines <- paste(leadin, apply(values, 1,
                      function(row) paste(row, collapse=", ")))
   lines[length(lines)] <- gsub(", PADDING", "", lines[length(lines)])
   paste(lines, collapse=",\n")
 }
   
 writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"), 
+                       template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
+                       prefix = "",
                        snapshot = TRUE, font="Arial",
                        width, height) {
  
@@ -59,15 +61,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     sprintf("vec4(%s, %s, %s, %s)", vec[1], vec[2], vec[3], vec[4])
   }
   
-  htmlheader <- function() c(
-'	<html><head>
-	<TITLE>RGL model</TITLE>
-
-	<script src="CanvasMatrix.js" type="text/javascript"></script>
-	<canvas id="textureCanvas" style="display: none;" width="256" height="256">',
-        snapshotimg,
-'	Your browser does not support the HTML5 canvas element.</canvas>
-')
+  header <- function() subst(
+'	<script src="CanvasMatrix.js" type="text/javascript"></script>
+	<canvas id="%prefix%textureCanvas" style="display: none;" width="256" height="256">
+        %snapshotimg%
+	Your browser does not support the HTML5 canvas element.</canvas>
+', prefix, snapshotimg)
 
   shaders <- function(id, type, flags) {
     mat <- rgl.getmaterial(id=id)
@@ -95,8 +94,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     }
     vertex <- c(subst(
 '	<!-- ****** %type% object %id% ****** -->
-	<script id="vshader%id%" type="x-shader/x-vertex">', 
-      type=type, id=id),
+	<script id="%prefix%vshader%id%" type="x-shader/x-vertex">', 
+      prefix, type, id),
 	
 '	attribute vec3 aPos;
 	attribute vec4 aCol;
@@ -153,12 +152,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 ')
     eye <- c(0,0,1)
     fragment <- c(subst(
-'	<script id="fshader%id%" type="x-shader/x-fragment"> 
+'	<script id="%prefix%fshader%id%" type="x-shader/x-fragment"> 
 	#ifdef GL_ES
 	precision highp float;
 	#endif
 	varying vec4 vDiffuse; // carries alpha',
-      id),
+      prefix, id),
       
       if (has_texture || type == "text") 
 '	varying vec2 vTexcoord;
@@ -235,9 +234,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     c(vertex, fragment)    
   }
 
-  scriptheader <- function() {
-          
-    c(
+  scriptheader <- function() subst(
   '
 	<script type="text/javascript"> 
 
@@ -272,38 +269,28 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	var PI = Math.PI;
 	var log = Math.log;
 	var exp = Math.exp;
-    
-	var canvas;
-	var width;
-	var height;
-	
-		   
-	var debug = function(msg) {
-	   document.getElementById("debug").innerHTML = msg;
-	}
-	
-	function webGLStart() {
-	   debug("");
-	   var gl;
-	   canvas = document.getElementById("canvas");
-	   if (!window.WebGLRenderingContext){',
-      paste(
-'	     debug("', snapshotimg2, 
-'Your browser does not support WebGL. See <a href=\\\"http://get.webgl.org\\\">http://get.webgl.org</a>");', sep=""),
-'	     return;
+
+	function %prefix%webGLStart() {
+	   var debug = function(msg) {
+	     document.getElementById("%prefix%debug").innerHTML = msg;
 	   }
+	   debug("");
+
+	   var canvas = document.getElementById("%prefix%canvas");
+	   if (!window.WebGLRenderingContext){
+	     debug("%snapshotimg2% Your browser does not support WebGL. See <a href=\\\"http://get.webgl.org\\\">http://get.webgl.org</a>");
+	     return;
+	   }
+	   var gl;
 	   try {
 	     // Try to grab the standard context. If it fails, fallback to experimental.
 	     gl = canvas.getContext("webgl") 
 	       || canvas.getContext("experimental-webgl");
 	   }
 	   catch(e) {}
-	   if ( !gl ) {',
-      paste(
-'	     debug("', snapshotimg2, 
-'Your browser appears to support WebGL, but did not create a WebGL context.  See <a href=\\\"http://get.webgl.org\\\">http://get.webgl.org</a>");', sep=""),
-      subst(
-'	     return;
+	   if ( !gl ) {
+	     debug("%snapshotimg2% Your browser appears to support WebGL, but did not create a WebGL context.  See <a href=\\\"http://get.webgl.org\\\">http://get.webgl.org</a>");
+	     return;
 	   }
 	   var width = %width%;  var height = %height%;
 	   canvas.width = width;   canvas.height = height;
@@ -314,8 +301,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var saveMat = new CanvasMatrix4();
 	   saveMat.makeIdentity();
 	   var distance;
-', width, height))
-  }
+', prefix, snapshotimg2, width, height)
   
   setUser <- function() c(
     subst(
@@ -323,10 +309,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var fov = %fov%;', zoom = par3d("zoom"), fov = max(1, min(179, par3d("FOV")))),
 '	   var userMatrix = new CanvasMatrix4();
 	   userMatrix.load([',
-    inRows(t(par3d("userMatrix")), perrow=4, prefix='	   '),
+    inRows(t(par3d("userMatrix")), perrow=4, leadin='	   '),
 '		]);')
   
-  textureSupport <- 
+  textureSupport <- subst(
 '	   function getPowerOfTwo(value) {
 	     var pow = 1;
 	     while(pow<value) {
@@ -348,7 +334,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }
 	   
 	   function loadImageToTexture(filename, texture) {   
-	     var canvas = document.getElementById("textureCanvas");
+	     var canvas = document.getElementById("%prefix%textureCanvas");
 	     var ctx = canvas.getContext("2d");
 	     var image = new Image();
 	     
@@ -366,7 +352,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     }
 	     image.src = filename;
 	   }  	   
-'
+', prefix)
 
   textSupport <- subst( 
 '	   function drawTextToCanvas(text, cex) {
@@ -379,7 +365,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 
 	     var backgroundColour = "rgba(0,0,0,0)";
 
-	     var canvas = document.getElementById("textureCanvas");
+	     var canvas = document.getElementById("%prefix%textureCanvas");
 	     var ctx = canvas.getContext("2d");
 
 	     ctx.font = textHeight+"px "+fontFamily;
@@ -416,7 +402,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	             widths:widths, textHeight:textHeight,
 	             offset:offset, skip:skip};
 	   }
-', font)
+', font, prefix)
 
   sphereCount <- 0
   sphereStride <- 0
@@ -511,9 +497,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '
 	   // ****** %type% object %id% ****** 
 	   var prog%id%  = gl.createProgram();
-	   gl.attachShader(prog%id%, getShader( gl, "vshader%id%" ));
-	   gl.attachShader(prog%id%, getShader( gl, "fshader%id%" ));
-	   gl.linkProgram(prog%id%);', type, id)
+	   gl.attachShader(prog%id%, getShader( gl, "%prefix%vshader%id%" ));
+	   gl.attachShader(prog%id%, getShader( gl, "%prefix%fshader%id%" ));
+	   gl.linkProgram(prog%id%);', type, id, prefix)
    
     nv <- rgl.attrib.count(id, "vertices")
     values <- rgl.attrib(id, "vertices")
@@ -636,20 +622,20 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (type != "sprites")
         texcoords <- rgl.attrib(id, "texcoords")
       values <- cbind(values, texcoords)
-      file.copy(mat$texture, file.path(dir, paste("texture", id, ".png", sep="")))
+      file.copy(mat$texture, file.path(dir, paste(prefix, "texture", id, ".png", sep="")))
       result <- c(result, subst(
-'	   loadImageToTexture("texture%id%.png", texture%id%);',
-        id))
+'	   loadImageToTexture("%prefix%texture%id%.png", texture%id%);',
+        prefix, id))
     }
     
     if (type == "text") result <- c(result, subst(
-'    	   handleLoadedTexture(texture%id%, document.getElementById("textureCanvas"));',
-        id))
+'    	   handleLoadedTexture(texture%id%, document.getElementById("%prefix%textureCanvas"));',
+        id, prefix))
       
     stride <- NCOL(values)
     result <- c(result, 
 '	   var v=new Float32Array([',
-      inRows(values, stride, prefix='	   '),
+      inRows(values, stride, leadin='	   '),
 '	   ]);',
 
       if (type == "text") subst(
@@ -698,7 +684,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (depth_sort) {
         result <- c(result, subst(
 '	   var centers%id% = new Float32Array([', id),
-        inRows(rgl.attrib(id, "centers"), 3, prefix='	   '),
+        inRows(rgl.attrib(id, "centers"), 3, leadin='	   '),
 '	   ]);')
 
         fname <- subst("f%id%", id)
@@ -711,7 +697,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       result <- c(result, subst(
 '	   var %fname%=new Uint16Array([', 
           fname),
-	inRows(c(f), frowsize, prefix='	   '),
+	inRows(c(f), frowsize, leadin='	   '),
 '	   ]);')
     }
     result <- c(result,
@@ -1171,7 +1157,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     drag = ev.which;
 	     var f = mousedown[drag-1];
 	     if (f) {
-	       f(ev.clientX, height-ev.clientY);
+	       f(ev.clientX-canvas.offsetLeft, height+canvas.offsetTop-ev.clientY); 
 	       ev.preventDefault();
 	     }
 	   }    
@@ -1183,7 +1169,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   canvas.onmousemove = function ( ev ){
 	     if ( drag == 0 ) return;
 	     var f = mousemove[drag-1];
-	     if (f) f(ev.clientX, height-ev.clientY);
+	     if (f) f(ev.clientX-canvas.offsetLeft, height+canvas.offsetTop-ev.clientY);
 	   }
 
 	   var wheelHandler = function(ev) {
@@ -1200,21 +1186,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	}
 	</script>'
 
-  htmlEnd <- function() c('
-	</head>
-	<body onload="webGLStart();"> 
-	<canvas id="canvas" width="1" height="1"></canvas> 
-        <p id="debug">', 
-    snapshotimg, 
-'	You must enable Javascript to view this page properly.</p>
-
-	<br>Drag mouse to rotate model. Use mouse wheel or middle button
-	to zoom it.
-	<hr>
-	<br>
-	Object written from rgl by writeWebGL.
-
-	</body></html>')
+  footer <- function() subst('
+	<canvas id="%prefix%canvas" width="1" height="1"></canvas> 
+        <p id="%prefix%debug">
+	%snapshotimg%
+	You must enable Javascript to view this page properly.</p>',
+    prefix, snapshotimg)
 
   convertBBox <- function(id) {
     verts <- rgl.attrib(id, "vertices")
@@ -1271,15 +1248,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   if (!file.info(dir)$isdir)
     stop("'", dir, "' is not a directory.")
   
-  file.copy(system.file(file.path("Javascript", "CanvasMatrix.js"), package = "rgl"), 
+  file.copy(system.file(file.path("WebGL", "CanvasMatrix.js"), package = "rgl"), 
                         file.path(dir, "CanvasMatrix.js"))
-  
-  if (snapshot) {
-    snapshot3d(file.path(dir, "snapshot.png"))
-    snapshotimg <- '<img src="snapshot.png" alt="Snapshot"/><br>'
-    snapshotimg2 <- gsub('"', '\\\\"', snapshotimg)
-  } else snapshotimg2 <- snapshotimg <- NULL
-  
+
   rect <- par3d("windowRect")
   rwidth <- rect[3] - rect[1] + 1
   rheight <- rect[4] - rect[2] + 1
@@ -1292,8 +1263,20 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   } else 
     if (missing(height))
       height <- width * rheight/rwidth
-
-  result <- htmlheader()
+  
+  if (snapshot) {
+    snapshot3d(file.path(dir, paste(prefix, "snapshot.png", sep="")))
+    snapshotimg <- subst('<img src="%prefix%snapshot.png" alt="%prefix%snapshot" width=%width%/><br>', prefix, width)
+    snapshotimg2 <- gsub('"', '\\\\\\\\"', snapshotimg)
+  } else snapshotimg2 <- snapshotimg <- NULL
+  
+  templatelines <- readLines(template)
+  target <- paste("%", prefix, "WebGL%", sep="")
+  replace <- grep( target, templatelines, fixed=TRUE)
+  if (length(replace) != 1) 
+    stop("template ", sQuote(template), " does not contain ", target)
+  
+  result <- c(templatelines[seq_len(replace-1)], header())
   
   if (NROW(bbox <- rgl.ids("bboxdeco"))) {
     save <- par3d(skipRedraw = TRUE)
@@ -1349,7 +1332,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         result <- c(result, draw(ids[i], types[i], flags[i,]))
   }
   
-  result <- c(result, drawEnd, mouseHandlers(), scriptEnd, htmlEnd())
+  result <- c(result, drawEnd, mouseHandlers(), scriptEnd, footer(),
+              templatelines[replace + seq_len(length(templatelines)-replace)])
 
   cat(result, file=filename, sep="\n")
   invisible(filename)
