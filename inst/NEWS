@@ -403,3 +403,5 @@ v0.92.879
   - Added "centers" to the attributes that can be queried, for depth sorted 
     transparent rendering.
   
+ v0.92.880
+  - Rearranged declarations for compatibility with gcc 4.7.

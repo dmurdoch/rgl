@@ -80,6 +80,16 @@ public:
 };
 
 //
+// mem copy
+//
+
+template<class A, class B>
+inline void copy(A* from, B* to, int size)
+{
+  memcpy( (void*) to, (const void*) from, size*sizeof(A) );
+	}
+
+//
 // TEMPLATE
 //   ARRAY
 //
@@ -103,16 +113,6 @@ struct ARRAY
   inline T& getRecycled(int index)
   { return ptr[index%_size]; };
 };
-
-//
-// mem copy
-//
-
-template<class A, class B>
-inline void copy(A* from, B* to, int size)
-{
-  memcpy( (void*) to, (const void*) from, size*sizeof(A) );
-}
 
 //
 // cast-copy doubles to floats
