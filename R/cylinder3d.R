@@ -49,11 +49,53 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
     e1 <- e1[rep(1:nrow(e1), len=n),] 
   } else 
     e1 <- (center[ind2,] - center[ind0,])[1:n,]
+  
+  # Fix up degenerate cases by repeating existing ones, or using arbitrary ones
+  zeros <- rowSums(e1^2) == 0
+  if (all(zeros)) {
+    e1[,1] <- 1
+    zeros <- FALSE
+  } else if (any(zeros)) {
+    e1[1,] <- e1[which(!zeros)[1],]
+    zeros[1] <- FALSE
+    if (any(zeros)) {
+      zeros <- which(zeros)
+      for (i in zeros)
+        e1[i,] <- e1[i-1,]
+    }
+  }
   if (!is.null(e2)) {
     e2 <- as.matrix(as.data.frame(xyz.coords(e2)[c("x", "y", "z")]))
     e2 <- e2[rep(1:nrow(e2), len=n),] 
   } else
     e2 <- (e1[ind2,] - e1[ind0,])[1:n,]
+    
+  # Fix up degenerate e2's similarly, then force different than e1
+  zeros <- rowSums(e2^2) == 0
+  if (all(zeros)) {
+    e2[,2] <- 1
+    zeros <- FALSE
+  } else if (any(zeros)) {
+    e2[1,] <- e2[which(!zeros)[1],]
+    zeros[1] <- FALSE
+    if (any(zeros)) {
+      zeros <- which(zeros)
+      for (i in zeros)
+        e2[i,] <- e2[i-1,]
+    }
+  }
+  parallel <- sapply(1:n, function(i) all(xprod(e1[i,], e2[i,])  == 0))
+  if (any(parallel)) {
+    # rotate in the xy plane
+    e2[parallel,] <- cbind(-e2[parallel,2], e2[parallel,1], e2[parallel,3])
+    parallel <- sapply(1:n, function(i) all(xprod(e1[i,], e2[i,])  == 0))
+    if (any(parallel)) {
+      # if any are still parallel, they must be the z axis
+      e2[parallel,1] <- 1
+      e2[parallel,3] <- 0
+    }
+  }
+  
   if (!is.null(e3)) {
     e3 <- as.matrix(as.data.frame(xyz.coords(e3)[c("x", "y", "z")]))
     e3 <- e3[rep(1:nrow(e3), len=n),] 
@@ -61,6 +103,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
     e3 <- matrix(NA_real_, n, 3)
     for (i in 1:n) e3[i,] <- xprod(e1[i,], e2[i,])
   }
+
   for (i in 1:n) {
     A <- GramSchmidt(e1[i,], e2[i,], e3[i,], order=order(missings))
     e1[i,] <- A[1,]
