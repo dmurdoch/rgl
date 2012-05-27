@@ -166,6 +166,11 @@ sprites3d   <- function(x,y=NULL,z=NULL,radius=1,shapes=NULL,userMatrix,...) {
     userMatrix <- get("r3dDefaults", globalenv())$userMatrix
     if (is.null(userMatrix)) userMatrix <- diag(4)
   }
+  save <- par3d(skipRedraw=TRUE, ignoreExtent=TRUE)
+  on.exit(par3d(save))
+  force(shapes)
+  par3d(ignoreExtent=save$ignoreExtent)
+
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius,shapes=shapes,
                                 userMatrix=userMatrix), 
           .fixMaterialArgs(..., Params = save)))
