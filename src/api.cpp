@@ -703,7 +703,7 @@ void rgl_abclines(int* successptr, int* idata, double* bases, double* directions
   *successptr = success;
 }
 
-void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius)
+void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius, int* shapes, double* userMatrix)
 {
   int success = RGL_FAIL;
 
@@ -713,9 +713,30 @@ void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius)
 
     int nvertex = idata[0];
     int nradius = idata[1];
-
+    int nshapes = idata[2];
+    int count = 0;
+    Shape** shapelist;
+    if (nshapes) {
+      shapelist = (Shape**) R_alloc(nshapes, sizeof(Shape*));
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      while (nshapes) {
+        int id = *(shapes++);
+        nshapes--;
+        Shape* shape = scene->get_shape(id); 
+        if (shape) {
+          scene->pop(SHAPE, id, false);
+          shapelist[count++] = shape; 
+        }
+      }
+      if (!count) {
+        *successptr = RGL_FAIL;
+        return;
+      }
+    } else 
+      shapelist = NULL;
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent()) ) );
+    						     device->getIgnoreExtent(), count, shapelist, userMatrix) ) );
   }
   CHECKGLERROR;
 

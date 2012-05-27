@@ -50,7 +50,7 @@ public:
   /**
    * remove specified node of given type, or last-added if id==0
    **/
-  bool pop(TypeID stackTypeID, int id);
+  bool pop(TypeID stackTypeID, int id, bool destroy = true);
   
   /**
    * get information about stacks

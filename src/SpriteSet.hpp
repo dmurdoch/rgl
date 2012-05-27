@@ -2,6 +2,7 @@
 #define SPRITE_SET_HPP
 
 #include "Shape.hpp"
+#include <vector>
 
 //
 // SPRITESET
@@ -13,7 +14,8 @@ private:
   ARRAY<float>  size;
 
 public:
-  SpriteSet(Material& in_material, int nvertex, double* vertex, int nsize, double* size, int in_ignoreExtent);
+  SpriteSet(Material& material, int nvertex, double* vertex, int nsize, double* size, 
+            int ignoreExtent, int count = 0, Shape** shapelist = NULL, double* userMatrix = NULL);
   ~SpriteSet();
 
   /**
@@ -49,8 +51,10 @@ public:
   virtual void drawEnd(RenderContext* renderContext);
   
 private:
+  GLdouble userMatrix[16];
   Matrix4x4 m;
   bool doTex;
+  std::vector<Shape*> shapes;
 
 };
 

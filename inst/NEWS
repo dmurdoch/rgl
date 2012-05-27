@@ -408,3 +408,6 @@ v0.92.879
   
  v0.92.881
   - Fixed degenerate (e.g. straight line) cases in cylinder3d
+  
+ v0.92.883
+  - Added 3d "sprites" -- shapes that maintain their initial orientation
