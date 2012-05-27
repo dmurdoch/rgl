@@ -17,8 +17,11 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
   if (!count)
     material.colorPerVertex(false);
   else {
-    for (int i=0;i<count;i++)
+    blended = false;
+    for (int i=0;i<count;i++) {
       shapes.push_back(in_shapelist[i]);
+      blended |= in_shapelist[i]->isBlended();
+    }
     for (int i=0;i<16;i++)
       userMatrix[i] = *(in_userMatrix++);
   }
