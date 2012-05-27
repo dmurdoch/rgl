@@ -77,7 +77,7 @@ EXPORT_SYMBOL void rgl_surface  (int* successptr, int* idata, double* x, double*
 	                         double* normal_x, double* normal_z, double* normal_y,
 	                         double* texture_s, double* texture_t,
 	                         int* coords, int* orientation, int* flags);
-EXPORT_SYMBOL void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius);
+EXPORT_SYMBOL void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius, int* shapes, double* userMatrix);
 
 EXPORT_SYMBOL void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
 EXPORT_SYMBOL void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);

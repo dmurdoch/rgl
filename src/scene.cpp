@@ -177,7 +177,7 @@ bool Scene::add(SceneNode* node)
 
 bool sameID(SceneNode* node, int id) { return node->getObjID() == id; }
 
-bool Scene::pop(TypeID type, int id)
+bool Scene::pop(TypeID type, int id, bool destroy)
 {
   bool success = false;
   std::vector<Shape*>::iterator ishape;
@@ -237,7 +237,8 @@ bool Scene::pop(TypeID type, int id)
       else
         unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
                                        std::bind2nd(std::ptr_fun(&sameID), id)));
-      delete shape;
+      if (destroy)
+        delete shape;
       calcDataBBox();
       success = true;
     }  
@@ -246,7 +247,8 @@ bool Scene::pop(TypeID type, int id)
     {
       Light* light = *ilight;
       lights.erase(ilight);
-      delete light;
+      if (destroy)
+        delete light;
       nlights--;
       success = true;
     }
@@ -254,7 +256,8 @@ bool Scene::pop(TypeID type, int id)
   case BBOXDECO:
     {
       if (bboxDeco) {
-        delete bboxDeco;
+        if (destroy)
+          delete bboxDeco;
         bboxDeco = NULL;
         success = true;
       }

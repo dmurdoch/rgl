@@ -160,9 +160,15 @@ abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
   do.call("rgl.abclines", c(list(x=x,y=y,z=z,a=a,b=b,c=c), .fixMaterialArgs(..., Params = save)))
 }
 
-sprites3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
+sprites3d   <- function(x,y=NULL,z=NULL,radius=1,shapes=NULL,userMatrix,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius), .fixMaterialArgs(..., Params = save)))
+  if (missing(userMatrix)) {
+    userMatrix <- get("r3dDefaults", globalenv())$userMatrix
+    if (is.null(userMatrix)) userMatrix <- diag(4)
+  }
+  do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius,shapes=shapes,
+                                userMatrix=userMatrix), 
+          .fixMaterialArgs(..., Params = save)))
 }
 
 terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z=NULL) {

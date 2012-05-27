@@ -624,7 +624,8 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
 ## add sprites
 ##
 
-rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
+rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL, 
+                         userMatrix=diag(4), ... )
 {
   rgl.material(...)
 
@@ -633,14 +634,17 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
   if (!nradius) stop("no radius specified")
+  if (length(shapes) && length(userMatrix) != 16) stop("invalid userMatrix")
   
-  idata   <- as.integer( c(ncenter,nradius) )
-   
+  idata   <- as.integer( c(ncenter,nradius,length(shapes)) )
+  
   ret <- .C( rgl_sprites,
     success = as.integer(FALSE),
     idata,
     as.numeric(center),
     as.numeric(radius),
+    as.integer(shapes),
+    as.numeric(userMatrix),
     NAOK=TRUE
   )
 
