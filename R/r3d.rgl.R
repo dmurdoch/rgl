@@ -166,10 +166,10 @@ sprites3d   <- function(x,y=NULL,z=NULL,radius=1,shapes=NULL,userMatrix,...) {
     userMatrix <- get("r3dDefaults", globalenv())$userMatrix
     if (is.null(userMatrix)) userMatrix <- diag(4)
   }
-  save <- par3d(skipRedraw=TRUE, ignoreExtent=TRUE)
-  on.exit(par3d(save))
+  savepar <- par3d(skipRedraw=TRUE, ignoreExtent=TRUE)
+  on.exit(par3d(savepar), add=TRUE)
   force(shapes)
-  par3d(ignoreExtent=save$ignoreExtent)
+  par3d(ignoreExtent=savepar$ignoreExtent)
 
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius,shapes=shapes,
                                 userMatrix=userMatrix), 
