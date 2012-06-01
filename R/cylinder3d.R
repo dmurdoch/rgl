@@ -19,7 +19,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
                        sides=8, closed=0, debug=FALSE, keepVars=FALSE) {
   center <- as.matrix(as.data.frame(xyz.coords(center)[c("x", "y", "z")]))
   n <- nrow(center)  
-  if (closed) {
+  if (closed > 0) {
     ind0 <- c(n-1-closed, n-closed, 1:n)
     ind1 <- c(n-closed, 1:n, 1+closed)
     ind2 <- c(1:n, 1+closed, 2+closed)
@@ -127,7 +127,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
     }
   }
   
-  if (closed) n <- n-closed+1
+  if (closed > 0) n <- n-closed+1
   theta <- seq(0, 2*pi, len=sides+1)[-1]
   vertices <- matrix(0, 3, sides*n)
   indices <- matrix(0, 4, sides*(n-1)) 
@@ -150,8 +150,20 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   p[,2] <- p[,2] + center[n,"y"]
   p[,3] <- p[,3] + center[n,"z"]
   vertices[,(n-1)*sides+1:sides] <- t(p)
+  # Add end cap at start
+  if (closed < 0) {
+    vertices <- cbind(vertices, center[1,])
+    triangles <- rbind(ncol(vertices), 1:sides, c(2:sides, 1))
+  }
+  # Add end cap at end
+  if (closed < -1) {
+    vertices <- cbind(vertices, center[n,])
+    triangles <- cbind(triangles, rbind(ncol(vertices), c(2:sides, 1) + (n-1)*sides, 
+                                    1:sides + (n-1)*sides))
+  }
+  
   result <- qmesh3d(vertices, indices, homogeneous=FALSE)
-  if (closed) { # Look for repeated vertices, and edit the links
+  if (closed > 0) { # Look for repeated vertices, and edit the links
     nv <- ncol(result$vb)
     for (i in 1:sides) {
       dupe <- which(apply(result$vb[,(nv-sides+1):nv,drop=FALSE], 2, 
@@ -161,7 +173,9 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
         result$ib[f] <- i
       }
     }
-  }
+  } else if (closed < 0)
+    result$it <- triangles
+    
   if (keepVars)
     attr(result, "vars") <- environment()
   result

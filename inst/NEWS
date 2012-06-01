@@ -410,4 +410,8 @@ v0.92.879
   - Fixed degenerate (e.g. straight line) cases in cylinder3d
   
  v0.92.883
-  - Added 3d "sprites" -- shapes that maintain their initial orientation
+  - Added 3d "sprites" -- shapes that maintain their initial orientation.
+  
+ v0.92.887  
+  - Added "caps" to the end of cylinder3d() objects.
+  
