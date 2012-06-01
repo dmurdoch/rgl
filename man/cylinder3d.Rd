@@ -18,8 +18,7 @@ cylinder3d(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 = NULL,
   \item{e1, e2, e3}{The Frenet coordinates to use at each point on the space curve.}
   \item{sides}{The number of sides in the polygon cross section.}
   \item{closed}{Whether to treat the first and last points of the space curve as identical,
-  and close the curve.  If \code{closed > 0}, it represents the number of points of
-  overlap in the coordinates.}
+  and close the curve, or put caps on the ends.  See the Details.}
   \item{debug}{If \code{TRUE}, plot the local Frenet coordinates at each point.}
   \item{keepVars}{If \code{TRUE}, return the local variables in attribute \code{"vars"}.}
 }
@@ -29,14 +28,25 @@ after using \code{\link{xyz.coords}} to convert it to a list.  The other argumen
 \code{radius}, \code{twist}, \code{e1}, \code{e2}, and \code{e3} are extended to the same
 length.
 
-The three optional arguments \code{e1}, \code{e2}, and \code{e3} determine the local
-coordinate system used to create the vertices at each point in \code{center}.  If missing, they
-are computed by simple numerical approximations.  \code{e1} should be the tangent coordinate, 
-giving the direction of the curve at the point.  The cross-section of the polygon will be orthogonal
-to \code{e1}.  \code{e2} defaults to an approximation to the normal or curvature vector; it is
-used as the image of the \code{y} axis of the polygon cross-section.  \code{e3} defaults
-to an approximation to the binormal vector, to which the \code{x} axis of the polygon maps.  The
-vectors are orthogonalized and normalized at each point.
+The \code{closed} argument controls how the ends of the cylinder are
+handled. If \code{closed > 0}, it represents the number of points of
+overlap in the coordinates.  \code{closed == TRUE} is the same as 
+\code{closed = 1}. Negative values indicate that caps should be put on the
+ends of the cylinder.  If \code{closed == -1}, a cap will be put on the
+end corresponding to \code{center[1,]}.  If \code{closed == -2}, caps
+will be put on both ends.
+
+The three optional arguments \code{e1}, \code{e2}, and \code{e3}
+determine the local coordinate system used to create the vertices at
+each point in \code{center}.  If missing, they are computed by simple
+numerical approximations.  \code{e1} should be the tangent coordinate,
+giving the direction of the curve at the point.  The cross-section of
+the polygon will be orthogonal to \code{e1}.  \code{e2} defaults to an
+approximation to the normal or curvature vector; it is used as the
+image of the \code{y} axis of the polygon cross-section.  \code{e3}
+defaults to an approximation to the binormal vector, to which the
+\code{x} axis of the polygon maps.  The vectors are orthogonalized and
+normalized at each point.
 }
 \value{
 A \code{\link[=mesh3d]{"mesh3d"}} object holding the cylinder, possibly with
