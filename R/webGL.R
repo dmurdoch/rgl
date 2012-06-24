@@ -73,6 +73,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     is_lit <- flags["is_lit"]
     has_texture <- flags["has_texture"]
     fixed_quads <- flags["fixed_quads"]
+    sprites_3d <- flags["sprites_3d"]
+    toplevel <- flags["toplevel"]
     
     if (has_texture)
       texture_format <- mat$textype;
@@ -92,10 +94,17 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       }
       lightdir <- lightdir/sqrt(sum(lightdir^2))
     }
-    vertex <- c(subst(
-'	<!-- ****** %type% object %id% ****** -->
-	<script id="%prefix%vshader%id%" type="x-shader/x-vertex">', 
-      prefix, type, id),
+    vertex <- subst(
+'	<!-- ****** %type% object %id% ****** -->',
+      type, id)
+    if (sprites_3d)
+      return(c(vertex, 
+'	<!-- 3d sprite, no shader -->
+'            ))
+
+    vertex <- c(vertex, subst(
+'	<script id="%prefix%vshader%id%" type="x-shader/x-vertex">', 
+      prefix, id),
 	
 '	attribute vec3 aPos;
 	attribute vec4 aCol;
@@ -119,6 +128,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (fixed_quads)
 '	attribute vec2 aOfs;
 	void main(void) {'
+      else if (!toplevel)
+'	uniform vec3 uOrig;
+	uniform float uSize;
+	uniform mat4 usermat;
+	void main(void) {'
       else
 '	void main(void) {
 	  gl_Position = prMatrix * mvMatrix * vec4(aPos, 1.);',
@@ -131,7 +145,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       else 
 '	  vDiffuse = aCol;',
 
-      if (is_lit && !fixed_quads)
+      if (is_lit && !fixed_quads && toplevel)
 '	  vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);',
 
       if (has_texture || type == "text")
@@ -146,6 +160,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	  vec4 pos = mvMatrix * vec4(aPos, 1.);
 	  pos = pos/pos.w + vec4(aOfs, 0., 0.);
 	  gl_Position = prMatrix*pos;',
+	  
+      if (!toplevel)
+'	  vNormal = normalize((vec4(aNorm, 1.)*normMatrix).xyz);	  
+	  vec4 pos = mvMatrix * vec4(uOrig, 1.);
+	  pos = pos/pos.w + vec4(uSize*(vec4(aPos, 1.)*usermat).xyz,0.);
+	  gl_Position = prMatrix * pos;',
 	  	  
 '	}
 	</script>
@@ -492,14 +512,18 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     has_texture <- flags["has_texture"]
     fixed_quads <- flags["fixed_quads"]
     depth_sort <- flags["depth_sort"]
+    sprites_3d <- flags["sprites_3d"]
+    toplevel <- flags["toplevel"]
     
     result <- subst(
 '
-	   // ****** %type% object %id% ****** 
-	   var prog%id%  = gl.createProgram();
+	   // ****** %type% object %id% ******', type, id)
+    if (!sprites_3d)
+      result <- c(result, subst(
+'	   var prog%id%  = gl.createProgram();
 	   gl.attachShader(prog%id%, getShader( gl, "%prefix%vshader%id%" ));
 	   gl.attachShader(prog%id%, getShader( gl, "%prefix%fshader%id%" ));
-	   gl.linkProgram(prog%id%);', type, id, prefix)
+	   gl.linkProgram(prog%id%);', id, prefix))
    
     nv <- rgl.attrib.count(id, "vertices")
     values <- rgl.attrib(id, "vertices")
@@ -599,17 +623,27 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     }
 
     if (type == "sprites") {
-      values <- values[rep(seq_len(nv), each=4),]
-      texcoords <- matrix(rep(c(0,0,1,0,1,1,0,1),nv), 4*nv, 2, byrow=TRUE)
-      size <- rep(rgl.attrib(id, "radii"), len=4*nv)
       oofs <- NCOL(values)
-      values <- cbind(values, (texcoords - 0.5)*size)
-      nv <- nv*4
+      if (sprites_3d) 
+        values <- cbind(values, rep(rgl.attrib(id, "radii")/2, len=nv))
+      else {
+        size <- rep(rgl.attrib(id, "radii"), len=4*nv)
+        values <- values[rep(seq_len(nv), each=4),]
+        texcoords <- matrix(rep(c(0,0,1,0,1,1,0,1),nv), 4*nv, 2, byrow=TRUE)
+        values <- cbind(values, (texcoords - 0.5)*size)
+        nv <- nv*4
+      }
     }
 
-    if (fixed_quads) result <- c(result, subst(
+    if (fixed_quads && !sprites_3d) result <- c(result, subst(
 '	   var ofsLoc%id% = gl.getAttribLocation(prog%id%, "aOfs");',
           id))
+          
+    if (!toplevel) result <- c(result, subst(
+'	   var origLoc%id% = gl.getUniformLocation(prog%id%, "uOrig");
+           var sizeLoc%id% = gl.getUniformLocation(prog%id%, "uSize");
+           var usermatLoc%id% = gl.getUniformLocation(prog%id%, "usermat");',
+	  id))
     
     if (has_texture || type == "text") result <- c(result, subst(
 '	   var texture%id% = gl.createTexture();
@@ -621,7 +655,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       tofs <- NCOL(values)
       if (type != "sprites")
         texcoords <- rgl.attrib(id, "texcoords")
-      values <- cbind(values, texcoords)
+      if (!sprites_3d)
+      	values <- cbind(values, texcoords)
       file.copy(mat$texture, file.path(dir, paste(prefix, "texture", id, ".png", sep="")))
       result <- c(result, subst(
 '	   loadImageToTexture("%prefix%texture%id%.png", texture%id%);',
@@ -633,11 +668,19 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         id, prefix))
       
     stride <- NCOL(values)
-    result <- c(result, 
+    result <- c(result,
+      if (sprites_3d) subst(
+'	   var origsize%id%=new Float32Array([', id)
+      else
 '	   var v=new Float32Array([',
       inRows(values, stride, leadin='	   '),
 '	   ]);',
 
+      if (sprites_3d) c(subst(
+'	   var userMatrix%id%=new Float32Array([', id),
+        inRows(rgl.attrib(id, "usermatrix"), 4, leadin='	   '),
+'	   ]);'),
+        
       if (type == "text") subst(
 '	   for (var i=0; i<%len%; i++) 
 	     for (var j=0; j<4; j++) {
@@ -653,17 +696,17 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   var values%id% = v;', 
                   id),
 	   
-      subst(      
+      if (!sprites_3d) subst(      
 '	   var posLoc%id% = gl.getAttribLocation(prog%id%, "aPos");
 	   var colLoc%id% = gl.getAttribLocation(prog%id%, "aCol");',
                   id),
                   
-    if (is_lit && !fixed_quads) subst(
+    if (is_lit && !fixed_quads && !sprites_3d) subst(
 '	   var normLoc%id% = gl.getAttribLocation(prog%id%, "aNorm");', 
         id))
 
     if (is_indexed) {
-      if (type %in% c("quads", "text", "sprites")) {
+      if (type %in% c("quads", "text", "sprites") && !sprites_3d) {
         v1 <- 4*(seq_len(nv/4) - 1)
         v2 <- v1 + 1
         v3 <- v2 + 1
@@ -701,21 +744,21 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   ]);')
     }
     result <- c(result,
-      if (type != "spheres") subst(
+      if (type != "spheres" && !sprites_3d) subst(
 '	   var buf%id% = gl.createBuffer();
 	   gl.bindBuffer(gl.ARRAY_BUFFER, buf%id%);
 	   gl.bufferData(gl.ARRAY_BUFFER, v, gl.STATIC_DRAW);',
    		id),
-      if (is_indexed && type != "spheres") subst(
+      if (is_indexed && type != "spheres" && !sprites_3d) subst(
 '	   var ibuf%id% = gl.createBuffer();
 	   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuf%id%);
 	   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, %fname%, gl.%drawtype%);',
    		id, fname, drawtype),
-      subst(
+      if (!sprites_3d) subst(
 '	   var mvMatLoc%id% = gl.getUniformLocation(prog%id%,"mvMatrix");
 	   var prMatLoc%id% = gl.getUniformLocation(prog%id%,"prMatrix");',
    		  id),
-      if (is_lit) subst(
+      if (is_lit && !sprites_3d) subst(
 '	   var normMatLoc%id% = gl.getUniformLocation(prog%id%,"normMatrix");',
 		  id)
    		 ) 
@@ -730,86 +773,117 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     has_texture <- flags["has_texture"]
     fixed_quads <- flags["fixed_quads"]
     is_transparent <- flags["is_transparent"]
+    sprites_3d <- flags["sprites_3d"]
+    toplevel <- flags["toplevel"]
    
-    result <- c(subst(
+    result <- subst(
 '
-	     // ****** %type% object %id% *******
-	     gl.useProgram(prog%id%);',
-       type, id),
+	     // ****** %type% object %id% *******',
+       type, id)
+  
+    if (sprites_3d) {
+      norigs <- rgl.attrib.count(id, "vertices")
+      result <- c(result, subst(
+'	     origs = origsize%id%;
+	     usermat = userMatrix%id%;
+	     for (iOrig=0; iOrig < %norigs%; iOrig++) {',
+        id, norigs))
+      spriteids <- rgl.attrib(id, "ids")
+      types <- rgl.attrib(id, "types")
+      for (i in seq_along(spriteids)) 
+        result <- c(result, draw(spriteids[i], types[i], 
+                    c(getFlags(spriteids[i], types[i]), toplevel=FALSE)))
+      result <- c(result, 
+'	     }')
+    } else {
+      result <- c(result, subst(	     
+'	     gl.useProgram(prog%id%);', id),
        
-      if (type == "spheres") 
+        if (!toplevel) subst(
+'	     gl.uniform3f(origLoc%id%, origs[4*iOrig], 
+	                                origs[4*iOrig+1],
+	                                origs[4*iOrig+2]);
+	     gl.uniform1f(sizeLoc%id%, origs[4*iOrig+3]);
+	     gl.uniformMatrix4fv(usermatLoc%id%, false, usermat);',
+	  id),
+	  
+        if (type == "spheres") 
 '	     gl.bindBuffer(gl.ARRAY_BUFFER, sphereBuf);'
-      else subst(
+        else subst(
 '	     gl.bindBuffer(gl.ARRAY_BUFFER, buf%id%);',
-       id),
+         id),
        
-      if (is_indexed && type != "spheres") subst(    
+        if (is_indexed && type != "spheres") subst(    
 '	     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuf%id%);', id)
-      else if (type == "spheres")
+        else if (type == "spheres")
 '	     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereIbuf);',
 
-      subst(
+        subst(
 '	     gl.uniformMatrix4fv( prMatLoc%id%, false, new Float32Array(prMatrix.getAsArray()) );
 	     gl.uniformMatrix4fv( mvMatLoc%id%, false, new Float32Array(mvMatrix.getAsArray()) );',
-       id))
+         id))
        
-    if (is_lit)
-      result <- c(result,
-        subst(
+      if (is_lit && toplevel)
+        result <- c(result, subst(
 '	     gl.uniformMatrix4fv( normMatLoc%id%, false, new Float32Array(normMatrix.getAsArray()) );',
           id))
           
-    result <- c(result, 
-        subst(
+      if (is_lit && !toplevel)
+        result <- c(result, subst(
+'	     gl.uniformMatrix4fv( normMatLoc%id%, false, usermat);',
+          id))
+
+      result <- c(result, subst(
 '	     gl.enableVertexAttribArray( posLoc%id% );',  id))
 
-    count <- rgl.attrib.count(id, "vertices")
-    stride <- 12 
-    nc <- rgl.attrib.count(id, "colors")
-    if (nc > 1) {
-      cofs <- stride
-      stride <- stride + 16
-    }
+      count <- rgl.attrib.count(id, "vertices")
+      stride <- 12 
+      nc <- rgl.attrib.count(id, "colors")
+      if (nc > 1) {
+        cofs <- stride
+        stride <- stride + 16
+      }
     
-    nn <- rgl.attrib.count(id, "normals")
-    if (nn == 0 && type == "surface")
-      nn <- rgl.attrib.count(id, "vertices")
-    if (nn > 0) {
-      nofs <- stride
-      stride <- stride + 12
-    }
+      nn <- rgl.attrib.count(id, "normals")
+      if (nn == 0 && type == "surface")
+        nn <- rgl.attrib.count(id, "vertices")
+      if (nn > 0) {
+        nofs <- stride
+        stride <- stride + 12
+      }
     
-    if (type == "spheres") {
-      radofs <- stride
-      stride <- stride + 4
-      scount <- count
-    }
+      if (type == "spheres") {
+        radofs <- stride
+        stride <- stride + 4
+        scount <- count
+      }
     
-    if (type == "sprites") {
-      oofs <- stride
-      stride <- stride + 8
-    }
+      if (type == "sprites" && !sprites_3d) {
+        oofs <- stride
+        stride <- stride + 8
+      }
     
-    if (has_texture || type == "text") {
-      tofs <- stride
-      stride <- stride + 8
-    }
+      if (has_texture || type == "text") {
+        tofs <- stride
+        stride <- stride + 8
+      }
     
-    if (type == "text") {
-      oofs <- stride
-      stride <- stride + 8
-    }
+      if (type == "text") {
+        oofs <- stride
+        stride <- stride + 8
+      }
 
-    if (depth_sort) {
-      nfaces <- rgl.attrib.count(id, "centers")
-      frowsize <- switch(type,
-        surface =,
-        quads =,
-        text =,
-        sprites = 6,
-        triangles = 3)
+      if (depth_sort) {
+        nfaces <- rgl.attrib.count(id, "centers")
+        frowsize <- if (sprites_3d) 1 else
+          switch(type,
+            surface =,
+            quads =,
+            text =,
+            sprites = 6,
+            triangles = 3)
         
-      result <- c(result, subst(
+        result <- c(result, subst(
 '	     var depths = new Float32Array(%nfaces%);
 	     var faces = new Array(%nfaces%);
 	     for(var i=0; i<%nfaces%; i++) {
@@ -826,8 +900,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     }
 	     var depthsort = function(i,j) { return depths[j] - depths[i] }
 	     faces.sort(depthsort);',
-         nfaces, id),
-         if (type != "spheres") subst(
+           nfaces, id),
+           if (type != "spheres") subst(
 '	     var f = new Uint16Array(f%id%.length);
 	     for (var i=0; i<%nfaces%; i++) {
 	       for (var j=0; j<%frowsize%; j++) {
@@ -835,15 +909,15 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       }
 	     }	     
 	     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);',
-	 nfaces, id, frowsize))
-    }
+	   nfaces, id, frowsize))
+      }
     
-    if (type == "spheres") {
-      scale <- par3d("scale")
-      sx <- 1/scale[1]
-      sy <- 1/scale[2]
-      sz <- 1/scale[3]
-      result <- c(result, subst(
+      if (type == "spheres") {
+        scale <- par3d("scale")
+        sx <- 1/scale[1]
+        sy <- 1/scale[2]
+        sz <- 1/scale[3]
+        result <- c(result, subst(
 '	     gl.vertexAttribPointer(posLoc%id%,  3, gl.FLOAT, false, %sphereStride%,  0);
 	     gl.enableVertexAttribArray(normLoc%id% );
 	     gl.vertexAttribPointer(normLoc%id%,  3, gl.FLOAT, false, %sphereStride%,  0);
@@ -852,25 +926,25 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     sphereNorm.scale(%sx%, %sy%, %sz%);
 	     sphereNorm.multRight(normMatrix);
 	     gl.uniformMatrix4fv( normMatLoc%id%, false, new Float32Array(sphereNorm.getAsArray()) );', 
-	  id, sphereStride, sx=1/sx, sy=1/sy, sz=1/sz),
+	    id, sphereStride, sx=1/sx, sy=1/sy, sz=1/sz),
 
-        if (nc == 1) {
-          colors <- rgl.attrib(id, "colors")
-          subst(
+          if (nc == 1) {
+            colors <- rgl.attrib(id, "colors")
+            subst(
 '	     gl.vertexAttrib4f( colLoc%id%, %r%, %g%, %b%, %a%);',
-           id, r=colors[1], g=colors[2], b=colors[3], a=colors[4])
-	},
+             id, r=colors[1], g=colors[2], b=colors[3], a=colors[4])
+	  },
 	
-        subst(
+          subst(
 '	     for (var i = 0; i < %scount%; i++) {
 	       var sphereMV = new CanvasMatrix4();', scount),
 	       
-	if (depth_sort) subst(
+	  if (depth_sort) subst(
 '	       var baseofs = faces[i]*%stride%', stride=stride/4)
-        else subst(
+          else subst(
 '	       var baseofs = i*%stride%', stride=stride/4),
 
-	subst(
+	  subst(
 '	       var ofs = baseofs + %radofs%;	       
 	       var scale = values%id%[ofs];
 	       sphereMV.scale(%sx%*scale, %sy%*scale, %sz%*scale);
@@ -879,100 +953,101 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       			  values%id%[baseofs+2]);
 	       sphereMV.multRight(mvMatrix);
 	       gl.uniformMatrix4fv( mvMatLoc%id%, false, new Float32Array(sphereMV.getAsArray()) );',
-	   radofs=radofs/4, stride=stride/4, id, sx, sy, sz),
+	     radofs=radofs/4, stride=stride/4, id, sx, sy, sz),
 	 
-	 if (nc > 1) subst(
+	   if (nc > 1) subst(
 '	       ofs = baseofs + %cofs%;       
 	       gl.vertexAttrib4f( colLoc%id%, values%id%[ofs], 
 	       				    values%id%[ofs+1], 
 	       				    values%id%[ofs+2],
 	       				    values%id%[ofs+3] );',
-	   cofs=cofs/4, id),
+	     cofs=cofs/4, id),
 	   
-         subst(
+           subst(
 '	       gl.drawElements(gl.TRIANGLES, %sphereCount%, gl.UNSIGNED_SHORT, 0);
 	     }', sphereCount))
 
-    } else {
-      if (nc == 1) {
-        colors <- rgl.attrib(id, "colors")
-        result <- c(result, subst(
+      } else {
+        if (nc == 1) {
+          colors <- rgl.attrib(id, "colors")
+          result <- c(result, subst(
 '	     gl.disableVertexAttribArray( colLoc%id% );
 	     gl.vertexAttrib4f( colLoc%id%, %r%, %g%, %b%, %a% );', 
             id, r=colors[1], g=colors[2], b=colors[3], a=colors[4]))
-      } else {
-        result <- c(result, subst(
+        } else {
+          result <- c(result, subst(
 '	     gl.enableVertexAttribArray( colLoc%id% );
 	     gl.vertexAttribPointer(colLoc%id%, 4, gl.FLOAT, false, %stride%, %cofs%);',
-          id, stride, cofs))
-      }
+            id, stride, cofs))
+        }
     
-      if (is_lit && nn > 0) {
-        result <- c(result, subst(
+        if (is_lit && nn > 0) {
+          result <- c(result, subst(
 '	     gl.enableVertexAttribArray( normLoc%id% );
 	     gl.vertexAttribPointer(normLoc%id%, 3, gl.FLOAT, false, %stride%, %nofs%);',
-          id, stride, nofs))
-      }
+            id, stride, nofs))
+        }
     
-      if (has_texture || type == "text") {
-        result <- c(result, subst(
+        if (has_texture || type == "text") {
+          result <- c(result, subst(
 '	     gl.enableVertexAttribArray( texLoc%id% );
 	     gl.vertexAttribPointer(texLoc%id%, 2, gl.FLOAT, false, %stride%, %tofs%);
 	     gl.activeTexture(gl.TEXTURE0);
 	     gl.bindTexture(gl.TEXTURE_2D, texture%id%);
 	     gl.uniform1i( sampler%id%, 0);',
-          id, stride, tofs))
-      }
+            id, stride, tofs))
+        }
       
-      if (fixed_quads) {
-        result <- c(result, subst(
+        if (fixed_quads) {
+          result <- c(result, subst(
 '	     gl.enableVertexAttribArray( ofsLoc%id% );
 	     gl.vertexAttribPointer(ofsLoc%id%, 2, gl.FLOAT, false, %stride%, %ofs%);',
-          id, stride, ofs=oofs))
-      }
+            id, stride, ofs=oofs))
+        }
 	     
-      mode <- switch(type,
-        points = "POINTS",
-        linestrip = "LINE_STRIP",
-        abclines =,
-        lines = "LINES",
-        sprites =,
-        planes =,
-        text =,
-        quads =,
-        triangles = "TRIANGLES",
-        surface = "TRIANGLE_STRIP",
-        stop("unsupported mode") )
+        mode <- switch(type,
+          points = "POINTS",
+          linestrip = "LINE_STRIP",
+          abclines =,
+          lines = "LINES",
+          sprites =,
+          planes =,
+          text =,
+          quads =,
+          triangles = "TRIANGLES",
+          surface = "TRIANGLE_STRIP",
+          stop("unsupported mode") )
       
-      switch(type,
-        sprites =,
-        text = count <- count*6,
-        quads = count <- count*6/4,
-        surface = {
-          dim <- rgl.attrib(id, "dim")
-          nx <- dim[1]
-          nz <- dim[2]
-          count <- (nx - 1)*(nz + 1)*2 - 2
-        })
+        switch(type,
+          sprites =,
+          text = count <- count*6,
+          quads = count <- count*6/4,
+          surface = {
+            dim <- rgl.attrib(id, "dim")
+            nx <- dim[1]
+            nz <- dim[2]
+            count <- (nx - 1)*(nz + 1)*2 - 2
+          })
     
-      if (flags["is_lines"]) {
-        lwd <- mat$lwd
-        result <- c(result,subst(
+        if (flags["is_lines"]) {
+          lwd <- mat$lwd
+          result <- c(result,subst(
 '	     gl.lineWidth( %lwd% );',
-          lwd))
-      }
+            lwd))
+        }
       
-      result <- c(result, subst(
+        result <- c(result, subst(
 '	     gl.vertexAttribPointer(posLoc%id%,  3, gl.FLOAT, false, %stride%,  0);',
-          id, stride),
+            id, stride),
       	
-        if (is_indexed) subst(
+          if (is_indexed) subst(
 '	     gl.drawElements(gl.%mode%, %count%, gl.UNSIGNED_SHORT, 0);',
-            mode, count)
-        else
-          subst(
+              mode, count)
+          else
+            subst(
 '	     gl.drawArrays(gl.%mode%, 0, %count%);',
-            mode, count))
+              mode, count))
+      }
     }
     result
   }
@@ -1247,14 +1322,17 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     
     depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
                                                   "spheres", "sprites", "text")
+
+    sprites_3d <- type == "sprites" && rgl.attrib.count(id, "ids")
     
-    is_indexed <- depth_sort || type %in% c("quads", "surface", "text", "sprites")
+    is_indexed <- (depth_sort || type %in% c("quads", "surface", "text", "sprites")) && !sprites_3d
     
-    fixed_quads <- type %in% c("text", "sprites")
+    fixed_quads <- type %in% c("text", "sprites") && !sprites_3d
     is_lines <- type %in% c("lines", "linestrip", "abclines")
     
     c(is_lit=is_lit, has_texture=has_texture, is_indexed=is_indexed, depth_sort=depth_sort,
-         fixed_quads=fixed_quads, is_transparent=is_transparent, is_lines=is_lines)
+         fixed_quads=fixed_quads, is_transparent=is_transparent, is_lines=is_lines,
+         sprites_3d=sprites_3d)
   }
   
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
@@ -1310,21 +1388,36 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   ids <- rgl.ids()
   types <- as.character(ids$type)
   ids <- ids$id
- 
+    
+  flags <- getFlags(ids[1], types[1])
+  flags <- matrix(flags, nrow=length(ids), ncol=length(flags),
+                  dimnames = list(ids, names(flags)), byrow=TRUE)
+  toplevel <- rep(TRUE, length(ids))
+  i <- 0
+  while (i < length(ids)) {
+    i <- i + 1
+    flags[i,] <- getFlags(ids[i], types[i])
+    if (flags[i, "sprites_3d"]) {
+      nsub <- rgl.attrib.count(ids[i], "ids")
+      ids <- c(ids, rgl.attrib(ids[i], "ids"))
+      toplevel <- c(toplevel, rep(FALSE, nsub))
+      types <- c(types, rgl.attrib(ids[i], "types"))	
+      flags <- rbind(flags, matrix(NA, nsub, NCOL(flags)))
+    }  
+  }        
+  flags <- cbind(flags, toplevel=toplevel)
+  
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
     warning("Object type(s) ", 
       paste("'", unknowntypes, "'", sep="", collapse=", "), " not handled.")
 
-    
-  ids <- ids[types %in% knowntypes]
-  types <- types[types %in% knowntypes]
-  flags <- getFlags(ids[1], types[1])
-  flags <- matrix(flags, nrow=length(ids), ncol=length(flags),
-                  dimnames = list(ids, names(flags)), byrow=TRUE)
-  for (i in seq_along(ids)[-1])
-    flags[i,] <- getFlags(ids[i], types[i])
-  
+  keep <- types %in% knowntypes
+  ids <- ids[keep]
+  flags <- flags[keep,,drop=FALSE]
+  toplevel <- toplevel[keep]
+  types <- types[keep]
+
   texnums <- -1
   
   scene_has_faces <- any(flags[,"is_lit"] & !flags[,"fixed_quads"])
@@ -1344,14 +1437,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   result <- c(result, scriptMiddle())
   
   for (i in seq_along(ids)) 
-    if (!flags[i,"is_transparent"])
+    if (toplevel[i] && !flags[i,"is_transparent"])
       result <- c(result, draw(ids[i], types[i], flags[i,]))
   
   has_transparency <- any(flags[,"is_transparent"])
   if (has_transparency) {
     result <- c(result, doTransparent)
     for (i in seq_along(ids))
-      if (flags[i, "is_transparent"])
+      if (toplevel[i] && flags[i, "is_transparent"])
         result <- c(result, draw(ids[i], types[i], flags[i,]))
   }
   

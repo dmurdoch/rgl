@@ -59,9 +59,15 @@ public:
   void get_ids(TypeID type, int* ids, char** types);
   
   /**
+   * get a SceneNode of any type
+   */
+   
+  SceneNode* get_scenenode(int id, bool recursive = false);
+  
+  /**
    * get information about particular shapes
    **/
-  Shape* get_shape(int id);
+  Shape* get_shape(int id, bool recursive = false);
   
   /**
    * get information about particular lights

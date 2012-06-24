@@ -415,3 +415,6 @@ v0.92.879
  v0.92.887  
   - Added "caps" to the end of cylinder3d() objects.
   
+ v0.92.891
+  - Added support for 3d sprites to writeWebGL.
+  
