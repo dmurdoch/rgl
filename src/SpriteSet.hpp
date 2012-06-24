@@ -28,6 +28,7 @@ public:
   virtual int getElementCount(void);
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  String getTextAttribute(AABox& bbox, AttribID attrib, int index);
   
   /**
    * location of individual items
@@ -50,9 +51,14 @@ public:
    **/
   virtual void drawEnd(RenderContext* renderContext);
   
+  /**
+   * extract individual shape
+   */
+  virtual Shape* get_shape(int id);
+  
 private:
-  GLdouble userMatrix[16];
-  Matrix4x4 m;
+  GLdouble userMatrix[16]; /* Transformation for 3D sprites */
+  Matrix4x4 m;             /* Modelview matrix cache */
   bool doTex;
   std::vector<Shape*> shapes;
 

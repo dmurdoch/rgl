@@ -1,6 +1,10 @@
 #ifndef SHAPE_HPP
 #define SHAPE_HPP
 
+#include <map>
+#include <vector>
+#include <algorithm>
+
 #include "SceneNode.hpp"
 #include "Material.hpp"
 #include "RenderContext.hpp"
@@ -104,7 +108,12 @@ public:
    * end sending items
    **/
   virtual void drawEnd(RenderContext* renderContext);
-
+  
+  /**
+   * Some shapes (currently just sprites) contain others.  Do a recursive search
+   */
+  virtual Shape* get_shape(int id) { return NULL; }
+  
   const bool isTransparent() const { return transparent; }
   
   const bool isBlended() const { return blended; }
@@ -149,5 +158,11 @@ public:
   Shape* shape;
   int itemnum;
 };
+
+/**
+ * This function is used both in Scene::get_shape and in SpriteSet::get_shape
+ */
+ 
+Shape* get_shape_from_list(std::vector<Shape*> shapes, int id, bool recursive);
 
 #endif // SHAPE_HPP

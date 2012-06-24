@@ -1,6 +1,10 @@
 #include "SpriteSet.hpp"
 
 #include "R.h"
+#include <map>
+#include <algorithm>
+#include <functional>
+#include "Shape.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -130,6 +134,12 @@ int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib)
   switch (attrib) {
     case VERTICES: return vertex.size();
     case RADII:    return size.size();
+    case IDS:	   
+    case TYPES:    return shapes.size();
+    case USERMATRIX: {
+      if (!shapes.size()) return 0;
+      else return 4;
+    }
   }
   return Shape::getAttributeCount(bbox, attrib);
 }
@@ -137,6 +147,8 @@ int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib)
 void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
   int n = getAttributeCount(bbox, attrib);
+  int ind = 0;
+
   if (first + count < n) n = first + count;
   if (first < n) {
     switch(attrib) {
@@ -153,8 +165,40 @@ void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count,
         while (first < n) 
           *result++ = size.get(first++);
         return;
+      case IDS:
+        for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
+      	  if ( first <= ind  && ind < n )  
+            *result++ = (*i)->getObjID();
+          ind++;
+        }
+        return;
+      case USERMATRIX:
+        while (first < n) {
+          *result++ = userMatrix[first];
+          *result++ = userMatrix[4 + first];
+          *result++ = userMatrix[8 + first];
+          *result++ = userMatrix[12 + first];
+          first++;
+        }
+        return;
     }  
     Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }
 
+String SpriteSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+{
+  int n = getAttributeCount(bbox, attrib);
+  if (index < n && attrib == TYPES) {
+    char* buffer = R_alloc(20, 1);    
+    shapes[index]->getShapeName(buffer, 20);
+    return String(strlen(buffer), buffer);
+  } else
+    return Shape::getTextAttribute(bbox, attrib, index);
+}
+
+
+Shape* SpriteSet::get_shape(int id)
+{
+  return get_shape_from_list(shapes, id, true);
+}

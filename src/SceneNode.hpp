@@ -43,6 +43,9 @@ typedef int ObjID;
 #define ADJ 8
 #define RADII 9
 #define CENTERS 10
+#define IDS 11
+#define USERMATRIX 12
+#define TYPES 13
 
 typedef unsigned int AttribID;
 
@@ -58,7 +61,6 @@ public:
   virtual int getAttributeCount(AABox& bbox, AttribID attrib) { return 0; }
   virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result) { return; }
   virtual String  getTextAttribute(AABox& bbox, AttribID attrib, int index) { return String(0, NULL); }
-  
 protected:
   SceneNode(const TypeID in_typeID) : typeID(in_typeID)
   {  objID = nextID++; };
@@ -66,6 +68,12 @@ private:
   const TypeID typeID;
   ObjID objID;
 };
+
+/**
+ * used in searches
+ */
+ 
+bool sameID(SceneNode* node, int id);
 
 #endif // SCENENODE_HPP
  

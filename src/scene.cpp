@@ -175,8 +175,6 @@ bool Scene::add(SceneNode* node)
   return success;
 }
 
-bool sameID(SceneNode* node, int id) { return node->getObjID() == id; }
-
 bool Scene::pop(TypeID type, int id, bool destroy)
 {
   bool success = false;
@@ -331,17 +329,27 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
   }
 }  
 
-Shape* Scene::get_shape(int id)
+SceneNode* Scene::get_scenenode(int id, bool recursive) 
 {
-  std::vector<Shape*>::iterator ishape;
-
-  if (shapes.empty()) 
-    return NULL;
+  Light* light;
+  Shape* shape;
+  Background *background;
+  BBoxDeco* bboxdeco;
   
-  ishape = std::find_if(shapes.begin(), shapes.end(), 
-                        std::bind2nd(std::ptr_fun(&sameID), id));
-  if (ishape == shapes.end()) return NULL;
-  else return *ishape;
+  if ( (shape = get_shape(id, recursive)) )
+    return shape;
+  else if ( (light = get_light(id)) ) 
+    return light;
+  else if ( (background = get_background()) && id == background->getObjID())
+    return background;
+  else if ( (bboxdeco = get_bboxdeco()) && id == bboxdeco->getObjID())
+    return bboxdeco;
+  else return NULL;
+}
+
+Shape* Scene::get_shape(int id, bool recursive)
+{
+  return get_shape_from_list(shapes, id, recursive);
 }
 
 Light* Scene::get_light(int id)
@@ -692,4 +700,9 @@ void Scene::invalidateDisplaylists()
   for (iter = shapes.begin(); iter != shapes.end(); ++iter) {
     (*iter)->invalidateDisplaylist();
   }
+}
+
+bool sameID(SceneNode* node, int id)
+{ 
+  return node->getObjID() == id; 
 }

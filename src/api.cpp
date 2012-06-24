@@ -259,6 +259,7 @@ void rgl_ids(int* type, int* ids, char** types)
     CHECKGLERROR;
   }
 } 
+
 //
 // FUNCTION
 //   rgl_attrib_count
@@ -271,19 +272,9 @@ void rgl_attrib_count(int* id, int* attrib, int* count)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    Light* light;
-    Shape* shape;
-    Background *background;
-    BBoxDeco* bboxdeco;
-    
-    if ( (shape = scene->get_shape(*id)) )
-      *count = shape->getAttributeCount(bbox, *attrib);
-    else if ( (light = scene->get_light(*id)) ) 
-      *count = light->getAttributeCount(bbox, *attrib);
-    else if ( (background = scene->get_background()) && *id == background->getObjID())
-      *count = background->getAttributeCount(bbox, *attrib);
-    else if ( (bboxdeco = scene->get_bboxdeco()) && *id == bboxdeco->getObjID())
-      *count = bboxdeco->getAttributeCount(bbox, *attrib);
+    SceneNode* scenenode = scene->get_scenenode(*id, true);
+    if ( scenenode )
+      *count = scenenode->getAttributeCount(bbox, *attrib);
     else
       *count = 0;
   }
@@ -301,19 +292,9 @@ void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    Light* light;
-    Shape* shape;
-    Background* background;
-    BBoxDeco* bboxdeco;
-    
-    if ( (shape = scene->get_shape(*id)) )
-      shape->getAttribute(bbox, *attrib, *first, *count, result);
-    else if ( (light = scene->get_light(*id)) )
-      light->getAttribute(bbox, *attrib, *first, *count, result);
-    else if ( (background = scene->get_background()) && *id == background->getObjID())
-      background->getAttribute(bbox, *attrib, *first, *count, result);
-    else if ( (bboxdeco = scene->get_bboxdeco()) && *id == bboxdeco->getObjID())
-      bboxdeco->getAttribute(bbox, *attrib, *first, *count, result);
+    SceneNode* scenenode = scene->get_scenenode(*id, true);
+    if ( scenenode )
+      scenenode->getAttribute(bbox, *attrib, *first, *count, result);
   }
 } 
 
@@ -329,23 +310,11 @@ void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    SceneNode* node = scene->get_shape(*id);
+    SceneNode* scenenode = scene->get_scenenode(*id, true);
     
-    if (!node)
-      node = scene->get_light(*id);
-    if (!node) {
-      node = scene->get_background();
-      if (*id != node->getObjID())
-        node = NULL;
-    }
-    if (!node) {
-      node = scene->get_bboxdeco();
-      if (*id != node->getObjID())
-        node = NULL;
-    }    
-    if (node)
+    if (scenenode)
       for (int i=0; i < *count; i++) {
-      	String s = node->getTextAttribute(bbox, *attrib, i + *first);
+      	String s = scenenode->getTextAttribute(bbox, *attrib, i + *first);
       	if (s.length) {
       	  *result = R_alloc(s.length + 1, 1);
 	  strncpy(*result, s.text, s.length);
@@ -816,7 +785,7 @@ void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double*
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
     
-      Shape* shape = scene->get_shape(*id);
+      Shape* shape = scene->get_shape(*id, true);
       if (shape) 
         mat = shape->getMaterial(); /* success! successptr will be set below */
       else

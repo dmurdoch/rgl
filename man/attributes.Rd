@@ -49,7 +49,9 @@ are mostly real-valued, with the following sizes:
 \item{dim}{2 values, r, c}
 \item{cex}{1 value}
 \item{adj}{2 values, x, y}
-\item{radii}{1 value}
+\item{radii}{1 value, r}
+\item{ids}{1 value, id}
+\item{usermatrix}{4 values, x, y, z, w}
 }
 The \code{"texts"} attribute is character-valued.
 

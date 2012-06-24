@@ -42,6 +42,9 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, ...)
   while \code{rgl.sprites} defaults it to an identity transformation.
   
   If any coordinate is \code{NA}, the sprite is not plotted.
+  
+  The id values of the shapes are retrieved using \code{rgl.attrib(id, "ids")};
+  the user matrix is retrieved using \code{rgl.attrib(id, "usermatrix")}.
 }
 \value{
   These functions are called for the side effect of displaying the sprites.
