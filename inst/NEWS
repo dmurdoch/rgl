@@ -418,3 +418,6 @@ v0.92.879
  v0.92.891
   - Added support for 3d sprites to writeWebGL.
   
+ v0.92.892
+  - Added declaration needed by Solaris.
+  
