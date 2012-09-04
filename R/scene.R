@@ -284,7 +284,9 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   )
 
   if (! ret$success)
-    stop("too many lights. maximum is 8 sources per scene.");
+    stop("too many lights. maximum is 8 sources per scene.")
+    
+  invisible(ret$success)
 }
 
 ##
