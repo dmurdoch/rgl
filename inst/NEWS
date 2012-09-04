@@ -421,3 +421,6 @@ v0.92.879
  v0.92.892
   - Added declaration needed by Solaris.
   
+ v0.92.893
+  - rgl.light() and light3d() did not return the light ID value. 
+  
