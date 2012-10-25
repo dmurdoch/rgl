@@ -424,3 +424,6 @@ v0.92.879
  v0.92.893
   - rgl.light() and light3d() did not return the light ID value. 
   
+ v0.93.895
+  - Added readSTL and writeSTL functions
+  
