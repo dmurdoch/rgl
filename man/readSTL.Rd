@@ -31,7 +31,7 @@ If plotting, other parameters to pass to \code{\link{triangles3d}}
 \details{
 The current implementation is limited.  For reading, it ignores normals
 and colour information.  For writing, it only outputs triangles, quads, planes, spheres,
-and surfaces, and does not write colour information.
+points and surfaces, and does not write colour information.
 }
 \value{
 \code{readSTL} invisibly returns the object id if \code{plot=TRUE}, or (visibly) 
