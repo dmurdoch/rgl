@@ -57,10 +57,24 @@ writeSTL <- function(con, ascii=FALSE) {
     }
     writeQuads(vertices[indices,])
   }
+  
+  writeSpheres <- function(id) {
+    vertices <- rgl.attrib(id, "vertices")
+    radii <- rgl.attrib(id, "radii")
+    n <- length(radii)
+    x <- subdivision3d(icosahedron3d(),3)
+    r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
+    spherev <- (t(x$vb[1:3,])/r)[c(x$it),]
+    m <- length(x$it)
+    newverts <- matrix(NA, n*m, 3)
+    for (i in seq_along(radii)) 
+      newverts[(i-1)*m + 1:m,] <- 
+        radii[i] * spherev + rep(vertices[i,], each=m)
+    writeTriangles(newverts)
+  }  
       
   knowntypes <- c("triangles", "quads",
-                  "surface", "planes", # "spheres"
-                  )
+                  "surface", "planes", "spheres")
   
   #  Execution starts here!
 
@@ -90,7 +104,8 @@ writeSTL <- function(con, ascii=FALSE) {
       planes =,
       triangles = writeTriangles(rgl.attrib(ids[i], "vertices")),
       quads = writeQuads(rgl.attrib(ids[i], "vertices")),
-      surface = writeSurface(ids[i])
+      surface = writeSurface(ids[i]),
+      spheres = writeSpheres(ids[i])
     )
   
   if (!ascii) {
