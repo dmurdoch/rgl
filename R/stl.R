@@ -1,4 +1,5 @@
-writeSTL <- function(con, ascii=FALSE) {
+writeSTL <- function(con, ascii=FALSE, pointRadius=0.01, 
+                     pointShape = octahedron3d()) {
  
   writeHeader <- function() {
     ident <- paste(filename, " produced by RGL\n")
@@ -72,9 +73,31 @@ writeSTL <- function(con, ascii=FALSE) {
         radii[i] * spherev + rep(vertices[i,], each=m)
     writeTriangles(newverts)
   }  
+  
+  avgScale <- function() {
+    bbox <- par3d("bbox")
+    ranges <- c(bbox[2]-bbox[1], bbox[4]-bbox[3], bbox[6]-bbox[5])
+    if (prod(ranges) == 0) 1
+    else exp(mean(log(ranges)))
+  }  
+    
+  writePoints <- function(id) {
+    vertices <- rgl.attrib(id, "vertices")
+    n <- nrow(vertices)
+    x <- pointShape
+    pointv <- asEuclidean(t(x$vb))[c(x$it),]
+    m <- length(x$it)
+    newverts <- matrix(NA, n*m, 3)
+    radius <- pointRadius*avgScale()
+    for (i in seq_len(n)) 
+      newverts[(i-1)*m + 1:m,] <- 
+        radius * pointv + rep(vertices[i,], each=m)
+    writeTriangles(newverts)
+  }
       
   knowntypes <- c("triangles", "quads",
-                  "surface", "planes", "spheres")
+                  "surface", "planes", "spheres",
+                  "points")
   
   #  Execution starts here!
 
@@ -105,7 +128,9 @@ writeSTL <- function(con, ascii=FALSE) {
       triangles = writeTriangles(rgl.attrib(ids[i], "vertices")),
       quads = writeQuads(rgl.attrib(ids[i], "vertices")),
       surface = writeSurface(ids[i]),
-      spheres = writeSpheres(ids[i])
+      spheres = writeSpheres(ids[i]),
+      points = writePoints(ids[i]),
+      
     )
   
   if (!ascii) {
