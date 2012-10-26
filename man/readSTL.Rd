@@ -29,9 +29,9 @@ If plotting, other parameters to pass to \code{\link{triangles3d}}
 }
 }
 \details{
-The current implementation is quite limited.  For reading, it ignores normals
-and colour information.  For writing, it only outputs triangles, quads, planes and surfaces,
-and does not write colour information.
+The current implementation is limited.  For reading, it ignores normals
+and colour information.  For writing, it only outputs triangles, quads, planes, spheres,
+and surfaces, and does not write colour information.
 }
 \value{
 \code{readSTL} invisibly returns the object id if \code{plot=TRUE}, or (visibly) 
@@ -41,7 +41,9 @@ a matrix of vertices of the triangles if not.
 data was written.
 }
 \references{
-The file format was found on Wikipedia on October 25, 2012.
+The file format was found on Wikipedia on October 25, 2012.  I learned
+about the STL file format from David Smith's blog reporting on 
+Ian Walker's \code{r2stl} function.  
 }
 \author{
 Duncan Murdoch
