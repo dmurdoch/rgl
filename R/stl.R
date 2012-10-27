@@ -1,5 +1,7 @@
 writeSTL <- function(con, ascii=FALSE, pointRadius=0.01, 
-                     pointShape = octahedron3d()) {
+                     pointShape = octahedron3d(),
+                     lineRadius = pointRadius,
+                     lineSides = 8) {
  
   writeHeader <- function() {
     ident <- paste(filename, " produced by RGL\n")
@@ -59,19 +61,29 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.01,
     writeQuads(vertices[indices,])
   }
   
+  writeMesh <- function(mesh, scale=1, offset=c(0,0,0)) {
+    vertices <- asEuclidean(t(mesh$vb))*scale 
+    vertices <- vertices + rep(offset, each=nrow(vertices))
+    nt <- length(mesh$it)/3
+    nq <- length(mesh$ib)/4
+    newverts <- matrix(NA, 3*nt+6*nq, 3)
+    if (nt) 
+      newverts[1:(3*nt),] <- vertices[c(mesh$it),]
+    if (nq)
+      newverts[3*nt+1:(6*nq),] <- vertices[c(mesh$ib[1:3,], 
+      				    mesh$ib[c(1,3,4),]),]
+    writeTriangles(newverts)
+  }
+
   writeSpheres <- function(id) {
     vertices <- rgl.attrib(id, "vertices")
     radii <- rgl.attrib(id, "radii")
     n <- length(radii)
     x <- subdivision3d(icosahedron3d(),3)
     r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
-    spherev <- (t(x$vb[1:3,])/r)[c(x$it),]
-    m <- length(x$it)
-    newverts <- matrix(NA, n*m, 3)
+    x$vb[4,] <- r
     for (i in seq_along(radii)) 
-      newverts[(i-1)*m + 1:m,] <- 
-        radii[i] * spherev + rep(vertices[i,], each=m)
-    writeTriangles(newverts)
+      writeMesh(x, radii[i], vertices[i,])
   }  
   
   avgScale <- function() {
@@ -80,24 +92,40 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.01,
     if (prod(ranges) == 0) 1
     else exp(mean(log(ranges)))
   }  
-    
+   
   writePoints <- function(id) {
     vertices <- rgl.attrib(id, "vertices")
     n <- nrow(vertices)
-    x <- pointShape
-    pointv <- asEuclidean(t(x$vb))[c(x$it),]
-    m <- length(x$it)
-    newverts <- matrix(NA, n*m, 3)
     radius <- pointRadius*avgScale()
-    for (i in seq_len(n)) 
-      newverts[(i-1)*m + 1:m,] <- 
-        radius * pointv + rep(vertices[i,], each=m)
-    writeTriangles(newverts)
+    for (i in seq_len(n))
+      writeMesh(pointShape, radius, vertices[i,])
   }
-      
+  
+  writeSegments <- function(id) {
+    vertices <- rgl.attrib(id, "vertices")
+    n <- nrow(vertices)/2
+    radius <- lineRadius*avgScale()
+    for (i in seq_len(n)) {
+      cyl <- cylinder3d(vertices[(2*i-1):(2*i),], 
+      			radius = radius,
+      			sides = lineSides,
+      			closed = -2)
+      writeMesh(cyl)
+    }
+  }
+  
+  writeLines <- function(id) {
+    vertices <- rgl.attrib(id, "vertices")
+    radius <- lineRadius*avgScale()
+    writeMesh( cylinder3d( vertices,
+     			   radius = radius,
+     			   sides = lineSides, 
+     			   closed = -2) )
+  }
+  
   knowntypes <- c("triangles", "quads",
                   "surface", "planes", "spheres",
-                  "points")
+                  "points", "lines", "linestrip")
   
   #  Execution starts here!
 
@@ -130,7 +158,8 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.01,
       surface = writeSurface(ids[i]),
       spheres = writeSpheres(ids[i]),
       points = writePoints(ids[i]),
-      
+      lines = writeSegments(ids[i]),
+      linestrip = writeLines(ids[i])
     )
   
   if (!ascii) {
