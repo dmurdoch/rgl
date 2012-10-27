@@ -6,7 +6,7 @@ Read and write STL (stereolithography) format files
 }
 \description{
 These functions read and write STL files.  This is a simple file format that
-is commonly used in 3D printing.  It does not represent lines or text,
+is commonly used in 3D printing.  It does not represent text,
 only triangles.  The \code{writeSTL} function converts some RGL object
 types to triangles.
 }
@@ -31,7 +31,8 @@ If plotting, other parameters to pass to \code{\link{triangles3d}}
 \details{
 The current implementation is limited.  For reading, it ignores normals
 and colour information.  For writing, it only outputs triangles, quads, planes, spheres,
-points and surfaces, and does not write colour information.
+points, line segments, line strips and surfaces, and does not write colour information.
+The line strips are not rendered very well at present.
 }
 \value{
 \code{readSTL} invisibly returns the object id if \code{plot=TRUE}, or (visibly) 
