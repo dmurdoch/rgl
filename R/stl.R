@@ -1,7 +1,7 @@
-writeSTL <- function(con, ascii=FALSE, pointRadius=0.01, 
-                     pointShape = octahedron3d(),
+writeSTL <- function(con, ascii=FALSE, pointRadius=0.005, 
+                     pointShape = icosahedron3d(),
                      lineRadius = pointRadius,
-                     lineSides = 8) {
+                     lineSides = 20) {
  
   writeHeader <- function() {
     ident <- paste(filename, " produced by RGL\n")
@@ -78,7 +78,8 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.01,
   writeSpheres <- function(id) {
     vertices <- rgl.attrib(id, "vertices")
     radii <- rgl.attrib(id, "radii")
-    n <- length(radii)
+    n <- nrow(vertices)
+    radii <- rep(radii, length.out=n)
     x <- subdivision3d(icosahedron3d(),3)
     r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
     x$vb[4,] <- r
@@ -116,8 +117,10 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.01,
   
   writeLines <- function(id) {
     vertices <- rgl.attrib(id, "vertices")
+    n <- nrow(vertices) - 1
     radius <- lineRadius*avgScale()
-    writeMesh( cylinder3d( vertices,
+    for (i in seq_len(n)) 
+      writeMesh( cylinder3d( vertices[i:(i+1),],
      			   radius = radius,
      			   sides = lineSides, 
      			   closed = -2) )
@@ -134,6 +137,12 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.01,
     on.exit(close(con))
   }
   filename <- summary(con)$description
+  
+  if (NROW(bbox <- rgl.ids("bboxdeco"))) {
+    save <- par3d(skipRedraw = TRUE)
+    temp <- convertBBox(bbox$id)
+    on.exit({ rgl.pop(id=temp); par3d(save) }, add=TRUE)
+  }  
   
   ids <- rgl.ids()
   types <- as.character(ids$type)

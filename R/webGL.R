@@ -37,7 +37,27 @@ inRows <- function(values, perrow, leadin = '	', digits=7) {
   lines[length(lines)] <- gsub(", PADDING", "", lines[length(lines)])
   paste(lines, collapse=",\n")
 }
+
+convertBBox <- function(id) {
+  verts <- rgl.attrib(id, "vertices")
+  text <- rgl.attrib(id, "text")
+  if (!length(text))
+    text <- rep("", NROW(verts))
   
+  if(any(missing <- text == "")) 
+    text[missing] <- apply(verts[missing,], 1, function(row) format(row[!is.na(row)]))
+    
+  res <- integer(0)
+  if (any(inds <- is.na(verts[,2]) & is.na(verts[,3]))) 
+    res <- c(res, axis3d("x", at=verts[inds, 1], labels=text[inds]))
+  if (any(inds <- is.na(verts[,1]) & is.na(verts[,3]))) 
+    res <- c(res, axis3d("y", at=verts[inds, 2], labels=text[inds]))
+  if (any(inds <- is.na(verts[,1]) & is.na(verts[,2]))) 
+    res <- c(res, axis3d("z", at=verts[inds, 3], labels=text[inds]))
+  res <- c(res, box3d())
+  res
+}
+
 writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"), 
                        template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
                        prefix = "",
@@ -1291,26 +1311,6 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	You must enable Javascript to view this page properly.</p>',
     prefix, snapshotimg)
 
-  convertBBox <- function(id) {
-    verts <- rgl.attrib(id, "vertices")
-    text <- rgl.attrib(id, "text")
-    if (!length(text))
-      text <- rep("", NROW(verts))
-    
-    if(any(missing <- text == "")) 
-      text[missing] <- apply(verts[missing,], 1, function(row) format(row[!is.na(row)]))
-      
-    res <- integer(0)
-    if (any(inds <- is.na(verts[,2]) & is.na(verts[,3]))) 
-      res <- c(res, axis3d("x", at=verts[inds, 1], labels=text[inds]))
-    if (any(inds <- is.na(verts[,1]) & is.na(verts[,3]))) 
-      res <- c(res, axis3d("y", at=verts[inds, 2], labels=text[inds]))
-    if (any(inds <- is.na(verts[,1]) & is.na(verts[,2]))) 
-      res <- c(res, axis3d("z", at=verts[inds, 3], labels=text[inds]))
-    res <- c(res, box3d())
-    res
-  }
-  
   getFlags <- function(id, type) {
     mat <- rgl.getmaterial(id=id)
     is_lit <- mat$lit && type %in% c("triangles", "quads", "surface", "planes", 

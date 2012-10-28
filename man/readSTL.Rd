@@ -12,7 +12,11 @@ types to triangles.
 }
 \usage{
 readSTL(con, ascii = FALSE, plot = TRUE, ...)
-writeSTL(con, ascii = FALSE)
+writeSTL(con, ascii = FALSE, 
+         pointRadius=0.005, 
+         pointShape = icosahedron3d(),
+         lineRadius = pointRadius,
+         lineSides = 20)
 }
 \arguments{
   \item{con}{
@@ -27,12 +31,22 @@ On reading, should the object be plotted?
   \item{\dots}{
 If plotting, other parameters to pass to \code{\link{triangles3d}}
 }
+  \item{pointRadius, lineRadius}{
+The radius of points and lines relative to the overall scale of the figure.
+}
+  \item{pointShape}{
+A mesh shape to use for points.  It is scaled by the \code{pointRadius}.
+}
+  \item{lineSides}{
+Lines are rendered as cylinders with this many sides.
+}
 }
 \details{
 The current implementation is limited.  For reading, it ignores normals
 and colour information.  For writing, it only outputs triangles, quads, planes, spheres,
 points, line segments, line strips and surfaces, and does not write colour information.
-The line strips are not rendered very well at present.
+Lines and points are rendered in an isometric scale:  if your data scales vary, they
+will look strange.
 }
 \value{
 \code{readSTL} invisibly returns the object id if \code{plot=TRUE}, or (visibly) 
