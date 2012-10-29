@@ -18,7 +18,7 @@ plot3d(x, ...)
 decorate3d(xlim, ylim, zlim, 
 	xlab = "x", ylab = "y", zlab = "z", 
 	box = TRUE, axes = TRUE, main = NULL, sub = NULL,
-	top = TRUE, aspect = FALSE, ...)
+	top = TRUE, aspect = FALSE, expand = 1.03, ...)
 }
 \arguments{
   \item{x, y, z}{vectors of points to be plotted. Any reasonable way of defining the
@@ -37,6 +37,7 @@ decorate3d(xlim, ylim, zlim,
   \item{radius}{the radius of spheres:  see Details below.}
   \item{add}{whether to add the points to an existing plot.}
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio.}
+  \item{expand}{how much to expand the box around the data, if it is drawn.}
   \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}, \code{\link{material3d}}
   or \code{decorate3d}.}
   \item{xlim, ylim, zlim}{limits to use for the coordinates.}

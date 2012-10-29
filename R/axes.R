@@ -86,12 +86,12 @@ axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
 }
 
 axes3d <- function(edges='bbox', labels=TRUE,
-                   tick=TRUE, nticks = 5, box = FALSE, ...)
+                   tick=TRUE, nticks = 5, box = FALSE, expand = 1.03, ...)
 {
     save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
     on.exit(par3d(save))
     if (identical(edges, 'bbox')) {
-        result <- do.call('bbox3d', c(list(nticks=nticks, draw_front=box), 
+        result <- do.call('bbox3d', c(list(nticks=nticks, draw_front=box, expand=expand), 
                                       .fixMaterialArgs(..., Params = list(front='lines', back='lines'))))
     } else {
         result <- numeric(0)
