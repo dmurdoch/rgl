@@ -69,7 +69,7 @@ plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade
 decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zlim, 
 	xlab = "x", ylab = "y", zlab = "z", 
 	box = TRUE, axes = TRUE, main = NULL, sub = NULL,
-	top = TRUE, aspect = FALSE, ...) {
+	top = TRUE, aspect = FALSE, expand = 1.03, ...) {
 
     if (is.logical(aspect)) {
     	autoscale <- aspect
@@ -85,7 +85,7 @@ decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zli
     
     if (autoscale) aspect3d(aspect)
     
-    if (axes) result <- c(result, axes=axes3d(box=box))
+    if (axes) result <- c(result, axes=axes3d(box=box, expand=expand))
     result <- c(result, title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
 	    main = main, sub = sub))
     
