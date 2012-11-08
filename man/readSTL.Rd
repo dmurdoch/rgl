@@ -16,7 +16,8 @@ writeSTL(con, ascii = FALSE,
          pointRadius=0.005, 
          pointShape = icosahedron3d(),
          lineRadius = pointRadius,
-         lineSides = 20)
+         lineSides = 20,
+         ids = NULL)
 }
 \arguments{
   \item{con}{
@@ -39,6 +40,10 @@ A mesh shape to use for points.  It is scaled by the \code{pointRadius}.
 }
   \item{lineSides}{
 Lines are rendered as cylinders with this many sides.
+}
+  \item{ids}{
+The identifiers (from \code{\link{rgl.ids}}) of the
+objects to write.  If \code{NULL}, try to write everything.
 }
 }
 \details{

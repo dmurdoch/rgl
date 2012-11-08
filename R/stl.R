@@ -1,7 +1,8 @@
 writeSTL <- function(con, ascii=FALSE, pointRadius=0.005, 
                      pointShape = icosahedron3d(),
                      lineRadius = pointRadius,
-                     lineSides = 20) {
+                     lineSides = 20,
+                     ids = NULL) {
  
   writeHeader <- function() {
     ident <- paste(filename, " produced by RGL\n")
@@ -138,15 +139,28 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   }
   filename <- summary(con)$description
   
-  if (NROW(bbox <- rgl.ids("bboxdeco"))) {
-    save <- par3d(skipRedraw = TRUE)
-    temp <- convertBBox(bbox$id)
-    on.exit({ rgl.pop(id=temp); par3d(save) }, add=TRUE)
-  }  
+  if (NROW(bbox <- rgl.ids("bboxdeco"))) 
+    if (is.null(ids) || bbox$id %in% ids) {
+      ids <- setdiff(ids, bbox$id)
+      save <- par3d(skipRedraw = TRUE)
+      bbox <- convertBBox(bbox$id)
+      on.exit({ rgl.pop(id=bbox); par3d(save) }, add=TRUE)
+      dobbox <- TRUE
+    } else dobbox <- FALSE 
   
-  ids <- rgl.ids()
-  types <- as.character(ids$type)
-  ids <- ids$id
+  if (is.null(ids)) {
+    ids <- rgl.ids()
+    types <- as.character(ids$type)
+    ids <- ids$id
+  } else {
+    if (dobbox) ids <- c(ids, bbox)
+    allids <- rgl.ids()
+    ind <- match(ids, allids$id)
+    keep <- !is.na(ind)
+    if (any(!keep)) warning("object(s) with id ", paste(ids[!keep], collapse=" "), " not found")
+    ids <- ids[keep]
+    types <- allids$type[ind[keep]]
+  }  
     
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
