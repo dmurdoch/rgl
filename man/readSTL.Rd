@@ -69,7 +69,7 @@ Ian Walker's \code{r2stl} function.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{writeWebGL}} for a more capable way to output RGL scenes.
+\code{\link{writePLY}} and \code{\link{writeWebGL}} for more capable ways to output RGL scenes.
 }
 \examples{
 filename <- tempfile()
