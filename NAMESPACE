@@ -17,7 +17,7 @@ export(abclines3d, addNormals, asEuclidean, asHomogeneous, aspect3d, axes3d, axi
 	spheres3d, spin3d, sprites3d, subdivision3d, surface3d, terrain3d, 
 	tetrahedron3d, text3d,
 	texts3d, title3d, tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
-	view3d, wire3d, writeSTL, writeWebGL)
+	view3d, wire3d, writePLY, writeSTL, writeWebGL)
  
  S3method(dot3d, shapelist3d)
  S3method(wire3d, shapelist3d)

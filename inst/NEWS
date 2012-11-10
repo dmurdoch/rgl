@@ -428,7 +428,8 @@ v0.92.879
   - remove debugging code from configure.win that was causing problems
     on the CRAN WinBuilder system
   
- v0.93.898
+ v0.93.903
   - Added readSTL and writeSTL functions
   - Added expand argument to decorate3d and axes3d
   - Added base argument to spin3d result
+  - Added writePLY function
