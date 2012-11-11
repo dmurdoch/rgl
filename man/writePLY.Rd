@@ -51,9 +51,16 @@ objects to write.  If \code{NULL}, try to write everything.
 
 }
 \details{
-
 The current implementation only outputs triangles, quads, planes, spheres,
 points, line segments, line strips and surfaces.
+
+The defaults for \code{pointsAsEdges} and \code{linesAsEdges} have been
+chosen because Blender (\url{http://www.blender.org}) does not import
+lines, only polygons.  If you are exporting to other software you
+may want to change them.
+
+Since the PLY format only allows one object per file, all RGL objects
+are combined into a single object when output.
 }
 \value{
 Invisibly returns the name of the connection to which the 
@@ -68,10 +75,10 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{writeWebGL}} for a more capable way to output an RGL scenes, or \code{\link{writeSTL}} for a
-simpler one.
+simpler one.   The \code{\link{writeOBJ}} function is another alternative.
 }
 \examples{
-filename <- tempfile()
+filename <- tempfile(fileext=".ply")
 open3d()
 shade3d( icosahedron3d(col="magenta") )
 writePLY(filename)

@@ -52,6 +52,9 @@ and colour information.  For writing, it only outputs triangles, quads, planes, 
 points, line segments, line strips and surfaces, and does not write colour information.
 Lines and points are rendered in an isometric scale:  if your data scales vary, they
 will look strange.
+
+Since the STL format only allows one object per file, all RGL objects
+are combined into a single object when output.
 }
 \value{
 \code{readSTL} invisibly returns the object id if \code{plot=TRUE}, or (visibly) 
@@ -69,10 +72,10 @@ Ian Walker's \code{r2stl} function.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{writePLY}} and \code{\link{writeWebGL}} for more capable ways to output RGL scenes.
+\code{\link{writeOBJ}}, \code{\link{writePLY}} and \code{\link{writeWebGL}} for more capable ways to output RGL scenes.
 }
 \examples{
-filename <- tempfile()
+filename <- tempfile(fileext=".stl")
 open3d()
 shade3d( icosahedron3d(col="magenta") )
 writeSTL(filename)
