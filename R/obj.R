@@ -7,12 +7,12 @@ writeOBJ <- function(con,
                      linesAsLines = FALSE,
                      withNormals = TRUE,
                      withTextures = TRUE,
+                     separateObjects = TRUE,
                      ids = NULL) {
  
   writeHeader <- function() {
     ident <- paste(filename, " produced by RGL")
     cat("#", ident, "\n", file=con)
-    cat("g Ungrouped\n", file=con)
   }   
     
   Vertices <- 0
@@ -51,7 +51,8 @@ writeOBJ <- function(con,
   }
   
   writeTriangles <- function(id) {
-    cat("o triangles", id, "\n", sep="", file=con)
+    if (separateObjects)
+      cat("o triangles", id, "\n", sep="", file=con)
     x <- writeData(id)
     indices <- x$vbase + seq_len(x$n)
     if (x$ntexcoords)
@@ -65,7 +66,8 @@ writeOBJ <- function(con,
   }
   
   writeQuads <- function(id) {
-    cat("o quads", id, "\n", sep="", file=con)
+    if (separateObjects)
+      cat("o quads", id, "\n", sep="", file=con)
     x <- writeData(id)
     indices <- x$vbase + seq_len(x$n)
     if (x$ntexcoords)
@@ -79,7 +81,8 @@ writeOBJ <- function(con,
   }
       
   writeSurface <- function(id) {
-    cat("o surface", id, "\n", sep="", file=con)
+    if (separateObjects)
+      cat("o surface", id, "\n", sep="", file=con)
     x <- writeData(id)
     dims <- rgl.attrib(id, "dim")
     nx <- dims[1]
@@ -158,7 +161,8 @@ writeOBJ <- function(con,
   }
 
   writeSpheres <- function(id) {
-    cat("g sphere", id, "\n", sep="", file=con) 
+    if (separateObjects)
+      cat("o sphere", id, "\n", sep="", file=con) 
     vertices <- rgl.attrib(id, "vertices")
     n <- nrow(vertices)    
     radii <- rgl.attrib(id, "radii")
@@ -167,11 +171,8 @@ writeOBJ <- function(con,
     r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
     x$vb[4,] <- r
     x$normals <- x$vb
-    for (i in seq_len(n)) {
-      cat("o sphere", id, ".", i, "\n", sep="", file=con) 
+    for (i in seq_len(n)) 
       writeMesh(x, radii[i], vertices[i,])
-    }
-    cat("g Ungrouped\n", file=con)
   }  
   
   avgScale <- function() {
@@ -182,33 +183,30 @@ writeOBJ <- function(con,
   }  
    
   writePoints <- function(id) {
-    if (pointsAsPoints) {
+    if (separateObjects)
       cat("o points", id, "\n", sep="", file=con)
+    if (pointsAsPoints) {
       x <- writeData(id)
       cat("p", x$vbase + seq_len(x$n), "\n", file=con)
     } else {
-      cat("g points", id, "\n", sep="", file=con)
       vertices <- rgl.attrib(id, "vertices")
       n <- nrow(vertices)
       radius <- pointRadius*avgScale()
       if (withNormals && is.null(pointShape$normals))
         pointShape <- addNormals(pointShape)
-      for (i in seq_len(n)) {
-        cat("o points", id, ".", i, "\n", sep="", file=con)
+      for (i in seq_len(n)) 
         writeMesh(pointShape, radius, vertices[i,])
-      }
-      cat("g Ungrouped\n", file=con)
     }
   }
   
   writeSegments <- function(id) {
-    if (linesAsLines) {
+    if (separateObjects)
       cat("o segments", id, "\n", sep="", file=con)
+    if (linesAsLines) {
       x <- writeData(id)
       indices <- x$vbase + matrix(seq_len(x$n), ncol=2, byrow=TRUE)
       cat(paste("l", indices[,1], indices[,2]), sep="\n", file=con)
     } else {
-      cat("g segments", id, "\n", sep="", file=con)
       vertices <- rgl.attrib(id, "vertices")
       n <- nrow(vertices)    
       n <- n/2
@@ -220,21 +218,19 @@ writeOBJ <- function(con,
      			   closed = -2 )
         if (withNormals)
           cyl <- addNormals(cyl)
-        cat("o segments", id, ".", i, "\n", sep="", file=con)
         writeMesh(cyl)
       }
-      cat("g Ungrouped\n", file=con)
     }
   }
   
   writeLines <- function(id) {
-    if (linesAsLines) {
+    if (separateObjects)
       cat("o lines", id, "\n", sep="", file=con)
+    if (linesAsLines) {
       x <- writeData(id)
       indices <- x$vbase + seq_len(x$n)
       cat("l", indices, "\n", file=con)
     } else {
-      cat("g lines", id, "\n", sep="", file=con)
       vertices <- rgl.attrib(id, "vertices")
       n <- nrow(vertices) - 1
       radius <- lineRadius*avgScale()
@@ -245,10 +241,8 @@ writeOBJ <- function(con,
      			   closed = -2 )
         if (withNormals) 
           cyl <- addNormals(cyl)
-        cat("o lines", id, ".", i, "\n", sep="", file=con)
         writeMesh(cyl)
       }
-      cat("g Ungrouped\n", file=con)
     }
   }
   

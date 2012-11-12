@@ -13,8 +13,9 @@ RGL doesn't support).
 writeOBJ(con, 
          pointRadius = 0.005, pointShape = icosahedron3d(), 
          lineRadius = pointRadius, lineSides = 20, 
-         pointsAsPoints = FALSE, linesAsLines = pointsAsPoints, 
+         pointsAsPoints = FALSE, linesAsLines = FALSE, 
          withNormals = TRUE, withTextures = TRUE, 
+         separateObjects = TRUE,
          ids = NULL)
 }
 \arguments{
@@ -37,8 +38,12 @@ Whether to convert points and lines to \dQuote{point} and \dQuote{line} records 
   \item{withNormals}{
 Whether to output vertex normals for smooth shading.
 }
+  \item{separateObjects}{
+Whether to mark each RGL object as a separate object in the file.
+}
   \item{withTextures}{
 Whether to output texture coordinates.
+}
   \item{ids}{
 The identifiers (from \code{\link{rgl.ids}}) of the
 objects to write.  If \code{NULL}, try to write everything.
@@ -57,10 +62,8 @@ chosen because Blender (\url{http://www.blender.org}) does not import
 points or lines, only polygons.  If you are exporting to other software you
 may want to change them.
 
-Individual RGL objects are output as separate objects in the file.  In the
-case of points or lines converted to polygons, each individual point or
-segment is a separate object, with the whole collection named as a
-group.
+Individual RGL objects are output as separate objects in the file when 
+\code{separateObjects = TRUE}, the default.
 }
 \value{
 Invisibly returns the name of the connection to which the 
@@ -78,7 +81,7 @@ Duncan Murdoch
 simpler one.  The \code{\link{writePLY}} function will output colours.
 }
 \examples{
-filename <- tempfile(fileext=".obj"))
+filename <- tempfile(fileext=".obj")
 open3d()
 shade3d( icosahedron3d() )
 writeOBJ(filename)
