@@ -54,13 +54,16 @@ objects to write.  If \code{NULL}, try to write everything.
 
 The current implementation only outputs triangles, quads, planes, spheres,
 points, line segments, line strips and surfaces.  It does not output material
-properties such as colours.
-
+properties such as colours, since the OBJ format does not support the per-vertex
+colours that RGL uses.
 
 The defaults for \code{pointsAsPoints} and \code{linesAsLines} have been
 chosen because Blender (\url{http://www.blender.org}) does not import
 points or lines, only polygons.  If you are exporting to other software you
 may want to change them.
+
+If present, texture coordinates are output by default, but the
+textures themselves are not.
 
 Individual RGL objects are output as separate objects in the file when 
 \code{separateObjects = TRUE}, the default.
