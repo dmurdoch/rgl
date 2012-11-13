@@ -67,6 +67,9 @@ textures themselves are not.
 
 Individual RGL objects are output as separate objects in the file when 
 \code{separateObjects = TRUE}, the default.
+
+The output file should be readable by Blender and Meshlab; the latter can write in
+a number of other formats, including U3D, suitable for import into a PDF document.
 }
 \value{
 Invisibly returns the name of the connection to which the 
