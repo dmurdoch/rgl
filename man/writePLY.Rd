@@ -61,6 +61,10 @@ may want to change them.
 
 Since the PLY format only allows one object per file, all RGL objects
 are combined into a single object when output.
+
+The output file is readable by Blender and Meshlab; the latter can write in
+a number of other formats, including U3D, suitable for import into a PDF document.
+
 }
 \value{
 Invisibly returns the name of the connection to which the 
