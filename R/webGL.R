@@ -547,6 +547,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
    
     nv <- rgl.attrib.count(id, "vertices")
     values <- rgl.attrib(id, "vertices")
+    if (nv > 65535)
+    	warning("Object ", id, " has ", nv, " vertices.  Some browsers support only 65535.")
     
     nc <- rgl.attrib.count(id, "colors")
     colors <- rgl.attrib(id, "colors")
