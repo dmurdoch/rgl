@@ -135,3 +135,4 @@ persp3d(x, y, z, col="white",
 }
 }
 \keyword{ dynamic }
+\keyword{ graphics }
