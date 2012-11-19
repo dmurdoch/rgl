@@ -195,14 +195,9 @@ plot3d.rglobject <- function(x, ...) {
       on.exit(par3d(save2), add=TRUE)
   
       if (!is.null(x$objects)) {
-        oldids <- sapply(x$objects, function(obj) obj$id)
-        ids <- oldids
-        for (i in seq_along(ids)) {
-          if (i > 1 && oldids[i] %in% oldids[seq_len(i-1)])
-            ids[i] <- ids[ which(oldids[i] == oldids[seq_len(i-1)])[1] ]
-          else
-            ids[i] <- plot3d(x$objects[[i]])
-        }
+        ids <- numeric(length(x$objects))
+        for (i in seq_along(ids)) 
+          ids[i] <- plot3d(x$objects[[i]])
         args$shapes <- ids
       }
       args$userMatrix <- x$usermatrix
