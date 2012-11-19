@@ -1,0 +1,81 @@
+\name{scene3d}
+\alias{scene3d}
+\alias{rglscene-class}
+\alias{rglobject-class}
+\alias{plot3d.rglscene}
+\alias{plot3d.rglobject}
+\alias{print.rglscene}
+\alias{print.rglobject}
+\title{
+Saves the current scene to a variable, and displays such variables.
+}
+\description{
+This function saves a large part of the RGL state associated with the current
+window to a variable.  
+}
+\usage{
+scene3d()
+\S3method{plot3d}{rglscene}(x, add=FALSE, ...)
+\S3method{plot3d}{rglobject}(x, ...)
+\S3method{print}{rglscene}(x, ...)
+\S3method{print}{rglobject}(x, ...)
+}
+\arguments{
+\item{x}{An object of class \code{"rglscene"}}
+\item{add}{Whether to open a new window, or add to the existing one.}
+\item{...}{Additional parameters, currently ignored.}
+}
+\details{
+The components saved are:  the \code{\link{par3d}} settings, the \code{\link{material3d}}
+settings, the \code{\link{bg3d}} settings (partially), and the objects in the scene.
+
+In most cases, calling \code{\link{plot3d}} on that variable will
+duplicate the scene.  (There are likely to be small differences, mostly internal, but
+some aspects of the scene are not currently available.)
+}
+\value{
+The \code{scene3d} function returns an object of class
+\code{"rglscene"}.  This is a list with some or all of the components
+\item{par3d}{The results returned from a \code{\link{par3d}} call.}
+\item{material}{The results returned from a \code{\link{material3d}} call.}
+\item{bg}{A list containing some of the properties of the scene background.}
+\item{bbox}{A list containing some of the properties of the scene bounding box decoration.}
+\item{objects}{A list containing the RGL objects in the scene.}  
+
+The objects in the \code{objects} component are of class
+\code{"rglobject"}.  They are lists containing some or all of the
+components
+\item{id}{The RGL identifier of the object in the original scene.}
+\item{type}{A character variable identifying the type of object.}
+\item{material}{Components of the material that differ from the scene material.}
+\item{vertices, normals, etc.}{Any of the attributes of the object retrievable by \code{\link{rgl.attrib}}.}
+\item{ignoreExtent}{A logical value indicating whether this object contributes to the bounding box.
+Currently this may differ from the object in the original scene.}
+\item{objects}{Sprites may contain other objects; they will be stored here as a list of  \code{"rglobject"}s.}
+
+The \code{plot3d} methods invisibly return a vector of RGL object ids
+that were plotted.  The \code{print} methods invisibly return the
+object that was printed.
+
+}
+\author{
+Duncan Murdoch
+}
+\seealso{
+Other functions such as \code{\link{writeWebGL}} write the scene to a file in various formats.
+}
+\examples{
+open3d()
+z <- 2 * volcano        # Exaggerate the relief
+x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
+y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
+persp3d(x, y, z, col = "green3", aspect="iso")
+
+s <- scene3d()
+# Make it bigger
+s$par3d$windowRect <- 1.5*s$par3d$windowRect
+# and draw it again
+plot3d(s)
+}
+\keyword{ graphics }
+
