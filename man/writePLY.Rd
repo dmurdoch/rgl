@@ -78,8 +78,9 @@ on November 10, 2012.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{writeWebGL}} for a more capable way to output an RGL scenes, or \code{\link{writeSTL}} for a
-simpler one.   The \code{\link{writeOBJ}} function is another alternative.
+\code{\link{scene3d}} saves a copy of a scene to an R variable;
+\code{\link{writeWebGL}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+write the scene to a file in various other formats.
 }
 \examples{
 filename <- tempfile(fileext=".ply")

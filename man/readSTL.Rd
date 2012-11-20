@@ -76,7 +76,9 @@ Ian Walker's \code{r2stl} function.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{writeOBJ}}, \code{\link{writePLY}} and \code{\link{writeWebGL}} for more capable ways to output RGL scenes.
+\code{\link{scene3d}} saves a copy of a scene to an R variable;
+\code{\link{writeWebGL}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+write the scene to a file in various other formats.
 }
 \examples{
 filename <- tempfile(fileext=".stl")

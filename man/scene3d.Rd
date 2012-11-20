@@ -31,7 +31,15 @@ settings, the \code{\link{bg3d}} settings (partially), and the objects in the sc
 
 In most cases, calling \code{\link{plot3d}} on that variable will
 duplicate the scene.  (There are likely to be small differences, mostly internal, but
-some aspects of the scene are not currently available.)
+some aspects of the scene are not currently available.) If textures are used,
+the name of the texture will be saved, rather than the contents of the 
+texture file.
+
+Other than saving the code
+to recreate a scene, saving the result of \code{scene3d} to 
+a file will allow it to be reproduced later most accurately.  In roughly decreasing order of fidelity,
+\code{\link{writeWebGL}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+write the scene to a file in formats readable by other software.
 }
 \value{
 The \code{scene3d} function returns an object of class
@@ -62,7 +70,8 @@ object that was printed.
 Duncan Murdoch
 }
 \seealso{
-Other functions such as \code{\link{writeWebGL}} write the scene to a file in various formats.
+\code{\link{writeWebGL}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+write the scene to a file in various formats.
 }
 \examples{
 open3d()
