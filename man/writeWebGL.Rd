@@ -107,6 +107,11 @@ The output includes a binary copy of the CanvasMatrix Javascript library.  Its s
  */
 }
 }
+\seealso{
+\code{\link{scene3d}} saves a copy of a scene to an R variable;
+\code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+write the scene to a file in various other formats.
+}
 \examples{
 \donttest{
 plot3d(rnorm(100), rnorm(100), rnorm(100), type="s", col="red")

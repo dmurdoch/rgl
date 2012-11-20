@@ -83,8 +83,9 @@ on November 11, 2012.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{writeWebGL}} for a more capable way to output an RGL scenes, or \code{\link{writeSTL}} for a
-simpler one.  The \code{\link{writePLY}} function will output colours.
+\code{\link{scene3d}} saves a copy of a scene to an R variable;
+\code{\link{writeWebGL}}, \code{\link{writePLY}} and \code{\link{writeSTL}}
+write the scene to a file in various other formats.
 }
 \examples{
 filename <- tempfile(fileext=".obj")
