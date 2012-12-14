@@ -43,7 +43,7 @@ persp3d(x, \dots)
   an \code{(nx-1)} by \code{(ny-1)} matrix; then add an extra row before row 1, 
   and an extra column after the last column, to convert it to \code{nx} by \code{ny}.
   (These extra colors will not be used).  For example, 
-  \code{col <- rbind(0, cbind(matrix(col, nx-1, ny-1), 0))}.
+  \code{col <- rbind(1, cbind(matrix(col, nx-1, ny-1), 1))}.
   Finally, call \code{persp3d} with material property \code{smooth = FALSE}.
   
   If the \code{x} or \code{y} argument is a matrix, then it must be of the same
