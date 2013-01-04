@@ -627,7 +627,16 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     &attrib
   );
   XSync(xdisplay, False);
-  
+
+  /* set WM_CLASS on window */
+  XClassHint *classHint = XAllocClassHint();
+  if (classHint) {
+      classHint->res_name = "rgl";
+      classHint->res_class = "R_x11";
+      XSetClassHint(xdisplay, xwindow, classHint);
+      XFree(classHint);
+  }
+
   XSetErrorHandler(old_handler);
   
   if (error_code) ConvertError(xdisplay);  /* will not return */
