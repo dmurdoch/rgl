@@ -9,7 +9,7 @@ object forming a cylindrical tube around the curve.
 }
 \usage{
 cylinder3d(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 = NULL, 
-           sides = 8, closed = 0, debug = FALSE, keepVars = FALSE)
+           sides = 8, section = NULL, closed = 0, debug = FALSE, keepVars = FALSE)
 }
 \arguments{
   \item{center}{An n by 3 matrix whose columns are the x, y and z coordinates of the space curve.}
@@ -17,12 +17,14 @@ cylinder3d(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 = NULL,
   \item{twist}{The amount by which the polygon forming the tube is twisted at each point.}
   \item{e1, e2, e3}{The Frenet coordinates to use at each point on the space curve.}
   \item{sides}{The number of sides in the polygon cross section.}
+  \item{section}{The polygon cross section as a two-column matrix, or \code{NULL}.}  
   \item{closed}{Whether to treat the first and last points of the space curve as identical,
   and close the curve, or put caps on the ends.  See the Details.}
   \item{debug}{If \code{TRUE}, plot the local Frenet coordinates at each point.}
   \item{keepVars}{If \code{TRUE}, return the local variables in attribute \code{"vars"}.}
 }
 \details{
+
 The number of points in the space curve is determined by the vector lengths in \code{center},
 after using \code{\link{xyz.coords}} to convert it to a list.  The other arguments
 \code{radius}, \code{twist}, \code{e1}, \code{e2}, and \code{e3} are extended to the same
@@ -35,6 +37,17 @@ overlap in the coordinates.  \code{closed == TRUE} is the same as
 ends of the cylinder.  If \code{closed == -1}, a cap will be put on the
 end corresponding to \code{center[1,]}.  If \code{closed == -2}, caps
 will be put on both ends.
+
+If \code{section} is \code{NULL} (the default), a regular
+\code{sides}-sided polygon is used, and \code{radius} measures the
+distance from the center of the cylinder to each vertex.  If not
+\code{NULL}, \code{sides} is ignored (and set internally to
+\code{nrow(section)}), and \code{radius} is used as a multiplier to
+the vertex coordinates.  \code{twist} specifies the rotation of the
+polygon.  Both \code{radius} and \code{twist} may be vectors, with
+values recycled to the number of rows in \code{center}, while
+\code{sides} and \code{section} are the same at every point along the
+curve.
 
 The three optional arguments \code{e1}, \code{e2}, and \code{e3}
 determine the local coordinate system used to create the vertices at

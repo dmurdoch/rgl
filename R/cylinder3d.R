@@ -16,7 +16,7 @@ GramSchmidt <- function(v1, v2, v3, order=1:3) {
 }
 
 cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL, 
-                       sides=8, closed=0, debug=FALSE, keepVars=FALSE) {
+                       sides=8, section=NULL, closed=0, debug=FALSE, keepVars=FALSE) {
   center <- as.matrix(as.data.frame(xyz.coords(center)[c("x", "y", "z")]))
   n <- nrow(center)  
   if (closed > 0) {
@@ -128,12 +128,22 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   }
   
   if (closed > 0) n <- n-closed+1
-  theta <- seq(0, 2*pi, len=sides+1)[-1]
+  
+  if (is.null(section)) {
+    theta <- seq(0, 2*pi, len=sides+1)[-1]
+    section <- cbind(cos(theta), sin(theta), 0)
+  } else 
+    sides <- nrow(section)
+    
   vertices <- matrix(0, 3, sides*n)
-  indices <- matrix(0, 4, sides*(n-1)) 
+  indices <- matrix(0, 4, sides*(n-1))
+  
+  if (ncol(section) == 2)
+    section <- cbind(section, 0)
+    
   for (i in 1:(n-1)) {
     transform <- rbind(e3[i,], e2[i,], e1[i,])
-    p <- cbind(x = cos(theta+twist[i]), y=sin(theta+twist[i]), z=0)
+    p <- rotate3d(section, twist[i], 0,0,1)
     p <- radius[i] * p %*% transform
     p[,1] <- p[,1] + center[i,"x"]
     p[,2] <- p[,2] + center[i,"y"]
@@ -144,7 +154,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
                                     c((i-1)*sides, i*sides, i*sides, (i-1)*sides)
   }
   transform <- rbind(e3[n,], e2[n,], e1[n,])
-  p <- cbind(x = cos(theta+twist[n]), y=sin(theta+twist[n]), z=0)
+  p <- rotate3d(section, twist[n], 0,0,1)
   p <- radius[n] * p %*% transform
   p[,1] <- p[,1] + center[n,"x"]
   p[,2] <- p[,2] + center[n,"y"]
