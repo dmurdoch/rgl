@@ -434,3 +434,4 @@ v0.92.879
   - Added base argument to spin3d result
   - Added writePLY and writeOBJ functions
   - Added scene3d function
+  - Added section argument to cylinder3d()
