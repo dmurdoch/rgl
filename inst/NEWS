@@ -428,10 +428,12 @@ v0.92.879
   - remove debugging code from configure.win that was causing problems
     on the CRAN WinBuilder system
   
- v0.93.910
+ v0.93.915
   - Added readSTL and writeSTL functions
   - Added expand argument to decorate3d and axes3d
   - Added base argument to spin3d result
   - Added writePLY and writeOBJ functions
   - Added scene3d function
   - Added section argument to cylinder3d()
+  - Added res_name="rgl" and res_class="R_x11" to the WM_CLASS property of X11 
+    windows.  (Contributed by Philip Johnson.)
