@@ -32,7 +32,10 @@ rgl.open <- function() {
 
 rgl.close <- function() {
 
-  if (length(hook <- getHook("on.rgl.close"))) hook()
+  if (length(hook <- getHook("on.rgl.close"))) {
+    if (is.list(hook)) hook <- hook[[1]]  # test is for compatibility with R < 3.0.0
+    h()
+  }
   
   ret <- .C( rgl_dev_close, success=FALSE )
 
@@ -163,10 +166,10 @@ rgl.Sweave <- function(name, width, height, options, ...) {
   
     postscript(tempfile()) # make dev.off() happy
     if (length(getHook("on.rgl.close"))) rgl.Sweave.off() # to close the previous chunk
-  
   }
   
   if (length(hook <- getHook("on.rgl.close"))) {
+    if (is.list(hook)) hook <- hook[[1]]  # test is for compatibility with R < 3.0.0
     dev <- environment(hook)$dev
     rgl.set(dev)
   } else {
@@ -210,6 +213,7 @@ rgl.Sweave <- function(name, width, height, options, ...) {
 
 rgl.Sweave.off <- function() {
   if (length(hook <- getHook("on.rgl.close"))) {
+    if (is.list(hook)) hook <- hook[[1]] # test is for R pre-3.0.0 compatibility
     stayOpen <- environment(hook)$stayOpen
     if (stayOpen) hook(FALSE)
     else rgl.close()
@@ -222,6 +226,9 @@ rgl.Sweave.off <- function() {
 ##
 
 Sweave.snapshot <- function() {
-  if (length(hook <- getHook("on.rgl.close"))) hook(remove = FALSE)
+  if (length(hook <- getHook("on.rgl.close"))) {
+    if (is.list(hook)) hook <- hook[[1]] # test is for R pre-3.0.0 compatibility
+    hook(remove = FALSE)
+  }
 }
 
