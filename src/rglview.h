@@ -17,7 +17,7 @@ using namespace gui;
 
 enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
                   mmSELECTING, mmZOOM, mmFOV, mmUSER};
-enum MouseSelectionID {msNONE=1, msCHANGING, msDONE};
+enum MouseSelectionID {msNONE=1, msCHANGING, msDONE, msABORT};
 
 typedef void (*userControlPtr)(void *userData, int mouseX, int mouseY);
 typedef void (*userControlEndPtr)(void *userData);

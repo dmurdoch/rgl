@@ -414,6 +414,8 @@ int X11WindowImpl::translate_key(KeySym keysym)
     {
       case XK_Return:
         return GUI_KeyReturn;
+      case XK_Escape:
+        return GUI_KeyESC;
       default:
         return 0;
     }

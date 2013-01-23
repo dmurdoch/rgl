@@ -135,13 +135,15 @@ void RGLView::paint(void) {
 // user input
 //
 
-
 void RGLView::keyPress(int key)
 {
   switch(key) {
     case GUI_KeyF1:
       flags ^= FSHOWFPS;
       windowImpl->update();
+      break;
+    case GUI_KeyESC:
+      selectState = msABORT;
       break;
   }
 }
@@ -642,6 +644,8 @@ double* RGLView::getMousePosition()
 //
 void RGLView::mouseSelectionBegin(int mouseX,int mouseY)
 {
+	if (selectState == msABORT) return;
+	
 	mousePosition[0] = (float)mouseX/(float)width;
 	mousePosition[1] = (float)(height - mouseY)/(float)height;
 	mousePosition[2] = mousePosition[0];
@@ -658,6 +662,8 @@ void RGLView::mouseSelectionUpdate(int mouseX,int mouseY)
 
 void RGLView::mouseSelectionEnd()
 {
+	if (selectState == msABORT) return;
+	
 	selectState = msDONE;
 	View::update();
 }

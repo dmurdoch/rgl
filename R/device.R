@@ -34,7 +34,7 @@ rgl.close <- function() {
 
   if (length(hook <- getHook("on.rgl.close"))) {
     if (is.list(hook)) hook <- hook[[1]]  # test is for compatibility with R < 3.0.0
-    h()
+    hook()
   }
   
   ret <- .C( rgl_dev_close, success=FALSE )

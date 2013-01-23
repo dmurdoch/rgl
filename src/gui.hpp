@@ -42,7 +42,8 @@ enum {
   GUI_KeyDown,
   GUI_KeyLeft,
   GUI_KeyRight,
-  GUI_KeyInsert
+  GUI_KeyInsert,
+  GUI_KeyESC
 };
 // ---------------------------------------------------------------------------
 //

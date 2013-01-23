@@ -42,6 +42,9 @@ being the \code{startTime} plus the time in seconds since the start
 on the CPU; if this is a problem, calls to \code{\link{Sys.sleep}}
 should be made within the function to release time to other processes.
 
+\code{play3d} will run for the specified \code{duration} (in seconds), but
+can be interrupted by pressing \code{ESC} while the rgl window has the focus.
+
 \code{movie3d} saves each frame to disk in a filename of the form \file{framesXXX.png}, where
 XXX is the frame number, starting from 0.  If \code{convert} is \code{TRUE}, it
 uses ImageMagick to convert them to a single file, by default an animated GIF.  

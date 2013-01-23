@@ -73,6 +73,8 @@ static int translate_key(int wParam)
         return GUI_KeyRight;
       case VK_INSERT:
         return GUI_KeyInsert;
+      case VK_ESCAPE:
+      	return GUI_KeyESC;
       default:
         return 0;
     }

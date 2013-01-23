@@ -34,7 +34,7 @@ variety of formats as it uses \code{\link[grDevices]{xyz.coords}}
 to interpret its parameters.
 }
 \author{ Ming Chen / Duncan Murdoch }
-\seealso{ \code{\link{locator}} }
+\seealso{ \code{\link{selectpoints3d}}, \code{\link{locator}} }
 \examples{
 
 # Allow the user to select some points, and then redraw them

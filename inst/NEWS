@@ -428,7 +428,7 @@ v0.92.879
   - remove debugging code from configure.win that was causing problems
     on the CRAN WinBuilder system
   
- v0.93.916
+ v0.93.917
   - Added readSTL and writeSTL functions
   - Added expand argument to decorate3d and axes3d
   - Added base argument to spin3d result
@@ -438,3 +438,6 @@ v0.92.879
   - Added res_name="rgl" and res_class="R_x11" to the WM_CLASS property of X11 
     windows.  (Contributed by Philip Johnson.)
   - Added code to work with R 3.0.0 setHook changes
+  - Added selectpoints3d function to select points from the scene.
+  - The rgl window now handles ESC key presses.  During selection
+    and play3d they abort the process; otherwise they are ignored.
