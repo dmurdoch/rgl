@@ -138,10 +138,11 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
     force(duration)
     force(dev)
     start <- proc.time()[3] - startTime
+    rgl.setselectstate("none")
     repeat {
        if(rgl.cur() != dev) rgl.set(dev)
        time <- proc.time()[3] - start
-       if (time > duration) return(invisible(NULL))
+       if (time > duration || rgl.selectstate()$state == msABORT) return(invisible(NULL))
        par3d(f(time, ...))
     }
 }

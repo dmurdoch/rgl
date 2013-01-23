@@ -711,6 +711,11 @@ rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
   return(matrix(ret$point, ncol(window), 3, byrow = TRUE))
 }
 
+# Selectstate values
+msNONE     <- 1
+msCHANGING <- 2
+msDONE     <- 3
+msABORT    <- 4
 
 rgl.selectstate <- function()
 {
@@ -735,18 +740,20 @@ rgl.select <- function(button = c("left", "middle", "right"))
 	oldhandler <- par3d(mouseMode = newhandler)
 	on.exit(par3d(mouseMode = oldhandler))
 	
-	# number 3 means the mouse selection is done. ?? how to change 3 to done
-	while ((result <- rgl.selectstate())$state != 3)
+	while ((result <- rgl.selectstate())$state < msDONE)
 		Sys.sleep(0.1)
 	
 	rgl.setselectstate("none")
 	
-	return(result$mouseposition)
+	if (result$state == msDONE)
+	    return(result$mouseposition)
+	else
+	    return(NULL)
 }
 
 rgl.setselectstate <- function(state = "current")
 {
-	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3)
+	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3, abort = 4)
 	idata <- as.integer(c(state))
 	
 	  ret <- .C( rgl_setselectstate, 
@@ -757,7 +764,7 @@ rgl.setselectstate <- function(state = "current")
 	  if (! ret$success)
 	    stop("rgl_setselectstate")
 
-	c("none", "middle", "done")[ret$state]
+	c("none", "middle", "done", "abort")[ret$state]
 }
 
 rgl.projection <- function()
@@ -769,6 +776,8 @@ rgl.projection <- function()
      
 rgl.select3d <- function(button = c("left", "middle", "right")) {
   rect <- rgl.select(button = button)
+  if (is.null(rect)) return(NULL)
+  
   llx <- rect[1]
   lly <- rect[2]
   urx <- rect[3]

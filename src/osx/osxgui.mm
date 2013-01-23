@@ -54,6 +54,9 @@ public:
   void on_buttonRelease(int button, int x, int y);
   void on_mouseMove(int x, int y);
   void on_wheelRotate(int wheel);
+  void on_keyDown(unichar c);
+  
+  int translate_key(unichar c);
 private:
   NSWindow *osxWindow;
 };
@@ -267,6 +270,20 @@ void OSXWindowImpl::on_wheelRotate(int wheel)
   if (window) window->wheelRotate(wheel);
 }
 // ---------------------------------------------------------------------------
+void OSXWindowImpl::on_keyDown(unichar c)
+{
+  int key = translate_key(c);
+  if (key && window) window->keyPress(key);
+}
+// ---------------------------------------------------------------------------
+int OSXWindowImpl::translate_key(unichar c)
+{
+  if (c == 27)
+    return GUI_KeyESC;
+  else
+    return 0;
+}
+  
 // GUI Factory
 // ---------------------------------------------------------------------------
 OSXGUIFactory::OSXGUIFactory()
@@ -360,6 +377,14 @@ bool OSXGUIFactory::hasEventLoop()
   if (impl) {
     CGFloat delta = [event deltaY];
     if(delta != 0.0) impl->on_wheelRotate(delta > 0.0 ? gui::GUI_WheelForward : gui::GUI_WheelBackward);
+  }
+}
+
+- (void)keyDown:(NSEvent *)event
+{
+  if (impl) {
+    unichar c = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    impl->on_keyDown(c);
   }
 }
 
