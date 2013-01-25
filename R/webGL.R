@@ -583,8 +583,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       for (j in seq_len(nx-1)-1) {
         v1 <- j + nx*(seq_len(nz) - 1)
         v2 <- v1 + 1
-        f <- cbind(f, rbind(c(v1, v2[nz]), 
-                            c(v2, v1[1]+1)))
+        f <- cbind(f, rbind(v1[-nz],
+                            v1[-1],
+                            v2[-1],
+                            v1[-nz],
+                            v2[-1],
+                            v2[-nz]))
+                            
+                            
         if (nn == 0) {
           for (i in seq_along(v1)[-1]) {
             i0 <- v1[i-1]+1
@@ -606,7 +612,6 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           }
         }
       }
-      f <- f[,-NCOL(f)]
       frowsize <- 6
       if (nn == 0) {
         normals <- t(apply(normals, 1, function(x) x/sqrt(sum(x^2))))
@@ -899,9 +904,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         nfaces <- rgl.attrib.count(id, "centers")
         frowsize <- if (sprites_3d) 1 else
           switch(type,
-            surface =,
             quads =,
             text =,
+            surface =,
             sprites = 6,
             triangles = 3)
         
@@ -1036,8 +1041,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           planes =,
           text =,
           quads =,
+          surface =,
           triangles = "TRIANGLES",
-          surface = "TRIANGLE_STRIP",
           stop("unsupported mode") )
       
         switch(type,
@@ -1048,7 +1053,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
             dim <- rgl.attrib(id, "dim")
             nx <- dim[1]
             nz <- dim[2]
-            count <- (nx - 1)*(nz + 1)*2 - 2
+            count <- (nx - 1)*(nz - 1)*6
           })
     
         if (flags["is_lines"]) {
