@@ -428,7 +428,7 @@ v0.92.879
   - remove debugging code from configure.win that was causing problems
     on the CRAN WinBuilder system
   
- v0.93.917
+ v0.93.918
   - Added readSTL and writeSTL functions
   - Added expand argument to decorate3d and axes3d
   - Added base argument to spin3d result
@@ -441,3 +441,5 @@ v0.92.879
   - Added selectpoints3d function to select points from the scene.
   - The rgl window now handles ESC key presses.  During selection
     and play3d they abort the process; otherwise they are ignored.
+  - writeWebGL did not render semi-transparent surfaces properly.
+    (Reported by Robert Esswein.)
