@@ -443,3 +443,4 @@ v0.92.879
     and play3d they abort the process; otherwise they are ignored.
   - writeWebGL did not render semi-transparent surfaces properly.
     (Reported by Robert Esswein.)
+  - Copied the R_pretty0 function from R sources to avoid warning.

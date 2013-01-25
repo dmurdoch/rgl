@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <cmath>
 #include "R.h"
-#include "R_ext/Applic.h"
+#include "pretty.h"
 
 #if 0
 // This is debugging code to track down font problems.
