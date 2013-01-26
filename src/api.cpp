@@ -42,7 +42,7 @@ extern DeviceManager* deviceManager;
 //   rgl_quit
 //
 // DESCRIPTION
-//   Gets called by .Last.lib ( R function )
+//   Gets called by .onUnload ( R function )
 //
 
 
