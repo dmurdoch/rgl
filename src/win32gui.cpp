@@ -684,7 +684,7 @@ Win32GUIFactory::Win32GUIFactory()
   } else
     gDefWindowProc   = &DefWindowProc;
   if ( !Win32WindowImpl::registerClass() )
-    lib::printMessage("error: window class registration failed");
+    error("window class registration failed");
 
 #if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
   HANDLE saveHandle = gHandle;
@@ -761,7 +761,9 @@ WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
     , reinterpret_cast<LPVOID>(impl)
     );
   }
-  assert(success);
+  if (!success)
+    error("window creation failed");
+
   return impl;
 }
 // ---------------------------------------------------------------------------
