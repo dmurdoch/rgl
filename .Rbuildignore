@@ -1,2 +1,4 @@
 ^src/Makevars$
+^src/TODO\.txt$
 ^\.Rproj\.user$
+
