@@ -466,7 +466,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
  
   // Obtain display atoms
   static char* atom_names[GUI_X11_ATOM_LAST] = {
-    "WM_DELETE_WINDOW"
+    const_cast<char*>("WM_DELETE_WINDOW")
   };
   Status s = XInternAtoms(xdisplay, atom_names, sizeof(atom_names)/sizeof(char*), True, atoms);
 
@@ -633,8 +633,8 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   /* set WM_CLASS on window */
   XClassHint *classHint = XAllocClassHint();
   if (classHint) {
-      classHint->res_name = "rgl";
-      classHint->res_class = "R_x11";
+      classHint->res_name = const_cast<char*>("rgl");
+      classHint->res_class = const_cast<char*>("R_x11");
       XSetClassHint(xdisplay, xwindow, classHint);
       XFree(classHint);
   }
