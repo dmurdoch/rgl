@@ -444,3 +444,6 @@ v0.92.879
   - writeWebGL did not render semi-transparent surfaces properly.
     (Reported by Robert Esswein.)
   - Copied the R_pretty0 function from R sources to avoid warning.
+
+v0.93.925
+  - Updated the configure file using autoconf 2.69
