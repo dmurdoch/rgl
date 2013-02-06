@@ -4407,6 +4407,11 @@ if test "${enable_ftgl+set}" = set; then :
 fi
 
 if test "x$enable_ftgl" != "xno"; then
+  if test "x$darwin" = "xyes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: Darwin, so ensuring /usr/X11/bin is on the PATH..." >&5
+$as_echo "$as_me: Darwin, so ensuring /usr/X11/bin is on the PATH..." >&6;}
+    PATH=${PATH}:/usr/X11/bin
+  fi
   # Extract the first word of "freetype-config", so it can be a program name with args.
 set dummy freetype-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
