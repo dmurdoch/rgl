@@ -2,6 +2,8 @@
 ## This file is part of RGL
 ##
 ## Process this file with autoconf to produce a configure script.
+## NB:  the files in src/build/autoconf may need updating for a new
+##      version of autoconf
 ##
 ##
 ## $Id$
