@@ -195,8 +195,8 @@ AC_ARG_ENABLE([ftgl],
 )
 if test "x$enable_ftgl" != "xno"; then
   if test "x$darwin" = "xyes"; then
-    AC_MSG_NOTICE([Darwin, so ensuring /usr/X11/bin is on the PATH...])
-    PATH=${PATH}:/usr/X11/bin
+    AC_MSG_NOTICE([Darwin, so ensuring /usr/X11/bin is at the head of the PATH...])
+    PATH=/usr/X11/bin:${PATH}
   fi
   AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
   if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
