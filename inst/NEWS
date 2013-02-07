@@ -445,5 +445,7 @@ v0.92.879
     (Reported by Robert Esswein.)
   - Copied the R_pretty0 function from R sources to avoid warning.
 
-v0.93.925
+v0.93.928
   - Updated the configure file using autoconf 2.69
+  - Forced OSX installs to put /usr/X11/bin at the head of the path
+    when looking for freetype-config
