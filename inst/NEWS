@@ -449,3 +449,7 @@ v0.93.928
   - Updated the configure file using autoconf 2.69
   - Forced OSX installs to put /usr/X11/bin at the head of the path
     when looking for freetype-config
+
+v0.93.929
+  - writeWebGL did not handle snapshot=FALSE properly.  (Reported
+    by Yihui Xie.)

@@ -1376,7 +1376,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     snapshot3d(file.path(dir, paste(prefix, "snapshot.png", sep="")))
     snapshotimg <- subst('<img src="%prefix%snapshot.png" alt="%prefix%snapshot" width=%width%/><br>', prefix, width)
     snapshotimg2 <- gsub('"', '\\\\\\\\"', snapshotimg)
-  } else snapshotimg2 <- snapshotimg <- NULL
+  } else snapshotimg2 <- snapshotimg <- ""
   
   templatelines <- readLines(template)
   target <- paste("%", prefix, "WebGL%", sep="")
