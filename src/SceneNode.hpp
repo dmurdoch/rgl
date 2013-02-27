@@ -46,6 +46,7 @@ typedef int ObjID;
 #define IDS 11
 #define USERMATRIX 12
 #define TYPES 13
+#define FLAGS 14
 
 typedef unsigned int AttribID;
 

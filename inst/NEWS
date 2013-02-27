@@ -450,6 +450,10 @@ v0.93.928
   - Forced OSX installs to put /usr/X11/bin at the head of the path
     when looking for freetype-config
 
-v0.93.929
+v0.93.930
   - writeWebGL did not handle snapshot=FALSE properly.  (Reported
     by Yihui Xie.)
+  - Now handles local (not just directional) lighting.  Based on
+    code contributed by Alexander Senger.)  
+  - writeWebGL handles lighting properly.  Based on code contributed 
+    by Alexander Senger.

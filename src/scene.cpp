@@ -437,12 +437,6 @@ void Scene::render(RenderContext* renderContext)
   
   glEnable(GL_NORMALIZE);
   
-  //
-  // SETUP LIGHTING MODEL
-  //
-
-  setupLightModel(renderContext);
-
 
   if (bboxChanges) 
     calcDataBBox(renderContext);
@@ -462,6 +456,12 @@ void Scene::render(RenderContext* renderContext)
   }
 
   SAVEGLERROR;
+
+  //
+  // SETUP LIGHTING MODEL
+  //
+
+  setupLightModel(renderContext, total_bsphere);
 
   //
   // SETUP VIEWPORT TRANSFORMATION
@@ -589,7 +589,7 @@ void Scene::render(RenderContext* renderContext)
 }
 
 
-void Scene::setupLightModel(RenderContext* rctx)
+void Scene::setupLightModel(RenderContext* rctx, const Sphere& viewSphere)
 {
   Color global_ambient(0.0f,0.0f,0.0f,1.0f);
 
@@ -605,10 +605,7 @@ void Scene::setupLightModel(RenderContext* rctx)
   // global lights
   //
 
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  rctx->viewpoint->setupOrientation(rctx);
+  rctx->viewpoint->setupTransformation(rctx, viewSphere);
 
   std::vector<Light*>::const_iterator iter;
 

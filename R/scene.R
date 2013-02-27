@@ -97,7 +97,7 @@ rgl.attrib <- function( id, attrib, first=1,
     attrib <- rgl.enum.attribtype(attrib)
   ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
             texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
-            usermatrix=4, types=1)[attrib]
+            usermatrix=4, types=1, flags=1)[attrib]
   count <- max(last - first + 1, 0)
   if (attrib %in% c(6, 13)) { # texts and types
     if (count)
@@ -114,6 +114,8 @@ rgl.attrib <- function( id, attrib, first=1,
     else
       result <- numeric(0)
   }
+  if (attrib == 14) 
+    result <- as.logical(result)
   result <- matrix(result, ncol=ncol, byrow=TRUE)
   colnames(result) <- list(c("x", "y", "z"), # vertices
                            c("x", "y", "z"), # normals
@@ -127,8 +129,12 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("x", "y", "z"), # centers
                            "id",	     # ids
                            c("x", "y", "z", "w"), # usermatrix
-                           "type"	     # types
+                           "type",	     # types
+                           "flag"	     # flags
                            )[[attrib]]
+  if (attrib == 14) 
+    rownames(result) <- c("viewpoint", "finite")
+ 
   result
 }
 
@@ -268,14 +274,38 @@ rgl.bbox <- function(
 ##
 ##
 
-rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF")
+rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF", x = NULL, y = NULL, z = NULL)
 {
   ambient  <- rgl.color(ambient)
   diffuse  <- rgl.color(diffuse)
   specular <- rgl.color(specular)
+  
+  # if a complete set of x, y, z is given, the light source is assumed to be part of the scene, theta and phi are ignored
+  # else the light source is infinitely far away and its direction is determined by theta, phi (default) 
+  if ( !is.null(x) ) {
+    if ( !missing(theta) || !missing(phi) )
+      warning("theta and phi ignored when x is present")
+    xyz <- xyz.coords(x,y,z)
+    x <- xyz$x
+    y <- xyz$y
+    z <- xyz$z
+    if (length(x) > 1) stop("a light can only be in one place at a time")
+    finite.pos <- TRUE
+  }
+  else {
+    
+    if ( !is.null(y) || !is.null(z) ) 
+      warning("y and z ignored, spherical coordinates used")
+    finite.pos <- FALSE
+    x <- 0
+    y <- 0
+    z <- 0
+    
+  }
+    
 
-  idata <- as.integer(c(viewpoint.rel, ambient, diffuse, specular))
-  ddata <- as.numeric(c(theta, phi))
+  idata <- as.integer(c(viewpoint.rel, ambient, diffuse, specular, finite.pos))
+  ddata <- as.numeric(c(theta, phi, x, y, z))
 
   ret <- .C( rgl_light,
     success = as.integer(FALSE),
