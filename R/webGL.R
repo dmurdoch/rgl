@@ -91,28 +91,38 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   shaders <- function(id, type, flags) {
     mat <- rgl.getmaterial(id=id)
     is_lit <- flags["is_lit"]
+    is_smooth <- flags["is_smooth"]
     has_texture <- flags["has_texture"]
     fixed_quads <- flags["fixed_quads"]
     sprites_3d <- flags["sprites_3d"]
     toplevel <- flags["toplevel"]
     
     if (has_texture)
-      texture_format <- mat$textype;
+      texture_format <- mat$textype
 
     if (is_lit) {
       lights <- rgl.ids("lights")
-      light <- lights$id[1]
-      if (is.na(light)) {
-        lights <- matrix(0, nrow=3, ncol=4)
-        lightdir <- c(0, 0, 1)
-      } else {
-        lights <- rgl.attrib(light, "colors")
-        lAmbient <- lights[1,]
-        lDiffuse <- lights[2,]
-        lSpecular <- lights[3,]
-        lightdir <- rgl.attrib(light, "vertices")[1:3]
+      if (is.na(lights$id[1])) {
+        # no lights
+        is_lit <- FALSE
       }
-      lightdir <- lightdir/sqrt(sum(lightdir^2))
+      else {
+        lAmbient <- list()
+        lDiffuse <- list()
+        lSpecular <- list()
+        lightxyz <- list()
+        lighttype <- matrix(NA, length(lights$id), 2)
+        colnames(lighttype) <- c("viewpoint", "finite")
+        for (i in 1:length(lights$id)) {
+            lightid <- lights$id[[i]]
+            lightcols <- rgl.attrib(lightid, "colors")
+            lAmbient[[i]] <- lightcols[1,]
+            lDiffuse[[i]] <- lightcols[2,]
+            lSpecular[[i]] <- lightcols[3,]
+            lightxyz[[i]] <- rgl.attrib(lightid, "vertices")
+            lighttype[i,] <- t(rgl.attrib(lightid, "flags"))
+        }
+      }
     }
     vertex <- subst(
 '	<!-- ****** %type% object %id% ****** -->',
@@ -130,17 +140,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	attribute vec4 aCol;
 	uniform mat4 mvMatrix;
 	uniform mat4 prMatrix;
-	varying vec4 vDiffuse;',
+	varying vec4 vCol;
+	varying vec4 vPosition;',
 	
       if (is_lit && !fixed_quads) 
 '	attribute vec3 aNorm;
 	uniform mat4 normMatrix;
 	varying vec3 vNormal;',
-	
-      if (is_lit) subst(
-'	const vec3 diffuse = %diffuse%; // light only',
-	  diffuse=vec2vec3(lDiffuse)),
-	  
+		  
       if (has_texture || type == "text")
 '	attribute vec2 aTexcoord;
 	varying vec2 vTexcoord;',
@@ -155,15 +162,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	void main(void) {'
       else
 '	void main(void) {
-	  gl_Position = prMatrix * mvMatrix * vec4(aPos, 1.);',
+	  vPosition = mvMatrix * vec4(aPos, 1.);
+	  gl_Position = prMatrix * vPosition;',
 	  
       if (type == "points") subst(
 '	  gl_PointSize = %size%;', size=addDP(mat$size)),
 
-      if (is_lit)
-'	  vDiffuse = vec4(aCol.rgb * diffuse, aCol.a);'
-      else 
-'	  vDiffuse = aCol;',
+'	  vCol = aCol;',
 
       if (is_lit && !fixed_quads && toplevel)
 '	  vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);',
@@ -190,73 +195,125 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	}
 	</script>
 ')
-    eye <- c(0,0,1)
     fragment <- c(subst(
 '	<script id="%prefix%fshader%id%" type="x-shader/x-fragment"> 
 	#ifdef GL_ES
 	precision highp float;
 	#endif
-	varying vec4 vDiffuse; // carries alpha',
+	varying vec4 vCol; // carries alpha
+	varying vec4 vPosition;',
       prefix, id),
       
       if (has_texture || type == "text") 
 '	varying vec2 vTexcoord;
 	uniform sampler2D uSampler;',
-	     
-      if (is_lit) subst(
-'	const vec3 ambient_plus_emission = %AplusE%;
-	const vec3 specular = %specular%;// light*material
-	const float shininess = %shininess%;
-	const vec3 lightDir = %lightdir%;
-	const vec3 halfVec = %halfVec%;
-	const vec3 eye = %eye%;',
-	  AplusE = vec2vec3(col2rgba(mat$ambient)*lAmbient + col2rgba(mat$emission)),
-	  specular = vec2vec3(col2rgba(mat$specular)*lSpecular), 
-	  shininess = addDP(mat$shininess),
-	  lightdir = vec2vec3(lightdir),
-	  halfVec = vec2vec3(normalize(lightdir + eye)),
-	  eye = vec2vec3(eye)),
-	  
+  
       if (is_lit && !fixed_quads)
 '	varying vec3 vNormal;',
 
-	
-'	void main(void) {
-	  vec4 diffuse;',
-
       if (is_lit)
-        if (fixed_quads)
-'	  vec3 n = vec3(0., 0., -1.);'
-        else
-'	  vec3 n = normalize(vNormal);',
+'	vec3 eye = normalize(-vPosition.xyz);',      
 
-      if (is_lit) 
-'	  vec3 col = ambient_plus_emission;
-	  n = -faceforward(n, n, eye);
-	  float nDotL = dot(n, lightDir);
-	  col = col + max(nDotL, 0.) * vDiffuse.rgb;
-	  col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular;
-	  diffuse = vec4(col, vDiffuse.a);'
-      else 
-'	  diffuse = vDiffuse;',
+   # collect lighting information   
+      if (is_lit) {
+        res <- c(subst(
+'	const vec3 emission = %emission%;',
+        emission = vec2vec3(col2rgba(mat$emission))),
+        if (!all(lighttype[,"viewpoint"]))
+'	uniform mat4 mvMatrix;')
+
+        for (idn in 1:length(lights$id)) { 
+          finite <- lighttype[idn,"finite"]
+          viewpoint <- lighttype[idn, "viewpoint"]
+          res <- c(res, subst(
+'	const vec3 ambient%idn% = %ambient%;
+	const vec3 specular%idn% = %specular%;// light*material
+	const float shininess%idn% = %shininess%;
+	vec4 colDiff%idn% = vec4(vCol.rgb * %diffuse%, vCol.a);',
+          ambient = vec2vec3(col2rgba(mat$ambient)*lAmbient[[idn]] + col2rgba(mat$emission)), #FIXME : Materialemission wird bei mehreren Lichtquellen mehrfach genutzt 
+          specular = vec2vec3(col2rgba(mat$specular)*lSpecular[[idn]]), 
+          shininess = addDP(mat$shininess),
+          diffuse = vec2vec3(lDiffuse[[idn]]),
+          idn = idn),
+     
+          {
+            lightdir <- lightxyz[[idn]]
+            if (!finite)
+              lightdir <- normalize(lightdir)
+            if (viewpoint)
+              lightdir <- vec2vec3(lightdir)
+            else
+              lightdir <- subst('(mvMatrix * %lightdir%).xyz', lightdir=vec2vec4(c(lightdir,1)))
+            # directional light
+            if (!finite) {
+              subst(
+'	const vec3 lightDir%idn% = %lightdir%;
+	vec3 halfVec%idn% = normalize(lightDir%idn% + eye);',
+              lightdir = lightdir,
+              idn = idn)
+            }
+            else { # point-light
+              subst(
+'	vec3 lightDir%idn% = normalize(%lightdir% - vPosition.xyz);
+	vec3 halfVec%idn% = normalize(lightDir%idn% + eye);',
+              lightdir = lightdir,
+              idn = idn)
+            }
+          })
+        }
+        res
+      }
+      else {
+'    vec4 colDiff = vCol;'
+      },
+  
+	
+'	void main(void) {',
+
+      if (is_lit) {
+        res <- c(
+'      vec4 lighteffect = vec4(emission, 0.);')
+        if (fixed_quads) {
+          res <- c(res,
+'	  vec3 n = vec3(0., 0., -1.);')
+        }
+        else {
+          res <- c(res,
+'	  vec3 n = normalize(vNormal);
+	  n = -faceforward(n, n, eye);')
+        }
+        for (idn in 1:length(lights$id)) {
+          res <- c(res, subst(
+'	  vec3 col%idn% = ambient%idn%;
+	  float nDotL%idn% = dot(n, lightDir%idn%);
+	  col%idn% = col%idn% + max(nDotL%idn%, 0.) * colDiff%idn%.rgb;
+	  col%idn% = col%idn% + pow(max(dot(halfVec%idn%, n), 0.), shininess%idn%) * specular%idn%;
+	  lighteffect = lighteffect + vec4(col%idn%, colDiff%idn%.a);',
+          idn = idn))
+        }
+        res
+      }
+      else { 
+'	  vec4 lighteffect = colDiff;'
+      },
 
       if ((has_texture && texture_format == "rgba") || type == "text")
-'	  vec4 textureColor = diffuse*texture2D(uSampler, vTexcoord);',
+'	  vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);',
 
       if (has_texture) switch(texture_format,
          rgb = 
-'	  vec4 textureColor = diffuse*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);',
+'	  vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);',
 	 alpha =
 '	  vec4 textureColor = texture2D(uSampler, vTexcoord);
 	  float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
-	  textureColor =  vec4(diffuse.rgb, diffuse.a*luminance);',
+	  textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);',
          luminance =
-'	  vec4 textureColor = vec4(diffuse.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3.,
-                                   diffuse.a);',
+'	  vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3.,
+                                   lighteffect.a);',
          luminance.alpha =
 '	  vec4 textureColor = texture2D(uSampler, vTexcoord);
 	  float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
-	  textureColor = vec4(diffuse.rgb*luminance, diffuse.a*textureColor.a);'),
+	  textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);'),
            
       if (has_texture)
 '	  gl_FragColor = textureColor;'
@@ -266,7 +323,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  else
 	    gl_FragColor = textureColor;'
         else
-'	  gl_FragColor = diffuse;',
+'	  gl_FragColor = lighteffect;',
 
 '	}
 	</script> 
@@ -553,9 +610,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     nc <- rgl.attrib.count(id, "colors")
     colors <- rgl.attrib(id, "colors")
     if (nc > 1) {
-      if (nc < nv) {
+      if (nc != nv) {
         rows <- rep(seq_len(nc), length.out=nv)
-        colors <- colors[rows,]
+        colors <- colors[rows,,drop=FALSE]
       }
       values <- cbind(values, colors)
     }
@@ -1323,6 +1380,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     is_lit <- mat$lit && type %in% c("triangles", "quads", "surface", "planes", 
                                      "spheres", "sprites")
                                      
+    is_smooth <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes", 
+                                     "spheres")
+                                     
     has_texture <- !is.null(mat$texture) && length(rgl.attrib.count(id, "texcoords"))
     
     is_transparent <- any(rgl.attrib(id, "colors")[,"a"] < 1)
@@ -1337,7 +1397,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     fixed_quads <- type %in% c("text", "sprites") && !sprites_3d
     is_lines <- type %in% c("lines", "linestrip", "abclines")
     
-    c(is_lit=is_lit, has_texture=has_texture, is_indexed=is_indexed, depth_sort=depth_sort,
+    c(is_lit=is_lit, is_smooth=is_smooth, has_texture=has_texture, is_indexed=is_indexed, depth_sort=depth_sort,
          fixed_quads=fixed_quads, is_transparent=is_transparent, is_lines=is_lines,
          sprites_3d=sprites_3d)
   }

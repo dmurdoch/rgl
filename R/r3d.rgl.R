@@ -85,9 +85,12 @@ bg3d        <- function(...) {
   do.call("rgl.bg", .fixMaterialArgs(..., Params = new))
 }
 
-light3d     <- function(theta=0,phi=15,...) {
+light3d     <- function(theta=0,phi=15,x=NULL, ...) {
   .check3d()
-  rgl.light(theta=theta,phi=phi,...)
+  if (is.null(x))
+    rgl.light(theta=theta,phi=phi,x=x, ...)
+  else
+    rgl.light(x=x, ...)
 }
 
 view3d      <- function(theta=0,phi=15,...) {

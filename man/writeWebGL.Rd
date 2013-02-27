@@ -62,7 +62,6 @@ development progresses:
 \item User-defined mouse controls are not supported.
 \item No automatic movement (e.g. rotation via \code{\link{spin3d}}) is supported.
 \item Missing values are not handled properly.
-\item It only handles a single light source, and the geometry of specular reflections is simpler than in \R.
 \item Polygons will only be rendered as filled; there is no support in WebGL for wireframe or point rendering.
 \item WebGL browsers generally do not support more than 65535 vertices per
 object.  \code{writeWebGL} will print a warning if this limit is exceeded, but it is up to the user

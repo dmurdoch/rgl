@@ -20,7 +20,7 @@ A shape identifier, as returned by \code{\link{rgl.ids}}.
 An attribute of a shape.  Currently supported: one of 
 \code{c("vertices", "normals", "colors", "texcoords", "dim", "texts",
         "cex", "adj", "radii", "centers",  "ids", 
-        "usermatrix", "types" )}, or unique prefixes
+        "usermatrix", "types", "flags" )}, or unique prefixes
 to one of those.  
 }
   \item{first, last}{
@@ -54,8 +54,10 @@ are mostly real-valued, with the following sizes:
 \item{ids}{1 value, id}
 \item{usermatrix}{4 values, x, y, z, w}
 \item{types}{1 value, type}
+\item{flags}{1 value, flag}
 }
-The \code{"texts"} and \code{"types"} attributes are character-valued.
+The \code{"texts"} and \code{"types"} attributes are character-valued; the flags
+attribute is logical valued, with named rows.
 
 These are returned as matrices with the row count equal to the count for the attribute,
 and the columns as listed above.

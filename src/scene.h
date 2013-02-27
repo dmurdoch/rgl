@@ -124,7 +124,7 @@ private:
   /**
    * sub-pass: setup global lighting model
    **/
-  void setupLightModel(RenderContext* renderContext);
+  void setupLightModel(RenderContext* renderContext, const Sphere& viewSphere);
   /**
    * compute bounding-box
    **/

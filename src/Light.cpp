@@ -6,24 +6,36 @@
 //   Light
 //
 
-Light::Light( PolarCoord in_position, bool in_viewpoint, Color in_ambient, Color in_diffuse, Color in_specular )
+Light::Light( PolarCoord in_position, Vertex in_finposition, 
+              bool in_viewpoint, bool in_posisfinite, 
+              Color in_ambient, Color in_diffuse, Color in_specular )
 : SceneNode(LIGHT), 
+  finposition(in_finposition),  
   ambient(in_ambient),
   diffuse(in_diffuse),
   specular(in_specular),
   id(GL_FALSE),
-  viewpoint(in_viewpoint)
+  viewpoint(in_viewpoint),
+  posisfinite(in_posisfinite)
 {
-  Vertex v(0.0f, 0.0f, 1.0f);
+  if (posisfinite) {
+    position[0] = finposition.x;
+    position[1] = finposition.y;
+    position[2] = finposition.z;
 
-  v.rotateX( -in_position.phi );
-  v.rotateY(  in_position.theta );
-
-  position[0] = v.x;
-  position[1] = v.y;
-  position[2] = v.z;
-
-  position[3] = 0.0f;
+    position[3] = 1.0f;
+  } else {
+      Vertex v(0.0f, 0.0f, 1.0f);
+    
+      v.rotateX( -in_position.phi );
+      v.rotateY(  in_position.theta );
+    
+      position[0] = v.x;
+      position[1] = v.y;
+      position[2] = v.z;
+    
+      position[3] = 0.0f;
+  }
 }
 
 void Light::setup(RenderContext* renderContext) 
@@ -40,7 +52,6 @@ void Light::setup(RenderContext* renderContext)
   glLightf(id, GL_LINEAR_ATTENUATION, 0.0f);
   glLightf(id, GL_QUADRATIC_ATTENUATION, 0.0f);
 
-
   glEnable(id);
 }
 
@@ -49,6 +60,7 @@ int Light::getAttributeCount(AABox& bbox, AttribID attrib)
   switch (attrib) {
     case COLORS: return 3;
     case VERTICES: return 1;
+    case FLAGS: return 2;
   }  
   
   return 0;
@@ -81,6 +93,11 @@ void Light::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
         *result++ = position[1];
         *result++ = position[2];
         *result++ = position[3];
+        return;
+      }
+      case FLAGS: {
+        *result++ = (double) viewpoint;
+        *result++ = (double) posisfinite;
         return;
       }
     }
