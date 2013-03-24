@@ -71,7 +71,7 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
       if ( (material.texture) && (! material.texture->is_envmap() ) ) {
         if (!user_textures) {
           texCoordArray[iy].s = ((float)ix)/((float)(nx-1));
-          texCoordArray[iy].t = 1.0f - ((float)iz)/((float)(nx-1));
+          texCoordArray[iy].t = 1.0f - ((float)iz)/((float)(nz-1));
         } else {
           texCoordArray[iy].s = in_texture_s[iy];
           texCoordArray[iy].t = in_texture_t[iy];
