@@ -457,3 +457,7 @@ v0.93.930
     code contributed by Alexander Senger.)  
   - writeWebGL handles lighting properly.  Based on code contributed 
     by Alexander Senger.
+    
+v0.93.932 
+  - calling rgl.material() before any rendering caused a crash on OSX.
+    (Reported by Dan Tenenbaum.)

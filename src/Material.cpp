@@ -29,7 +29,8 @@ Material::Material(Color bg, Color fg)
   point_antialias(false),
   line_antialias(false),
   depth_mask(true),
-  depth_test(1)  // "less"
+  depth_test(1),  // "less"
+  glVersion(-1.0)
 {
   alphablend = ( ( bg.getAlphaf() < 1.0f ) || ( fg.getAlphaf() < 1.0f ) ) ? true : false;
 }
@@ -108,6 +109,8 @@ void Material::beginUse(RenderContext* renderContext)
     SAVEGLERROR;
 
 #ifdef GL_VERSION_1_2
+    if (glVersion < 0.0) setup();
+    
     if (glVersion >= 1.2)
       glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR ); 
 #endif
