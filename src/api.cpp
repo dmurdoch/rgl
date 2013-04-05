@@ -763,7 +763,6 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.colors.set( ncolor, colors, nalpha, alpha);
   mat.alphablend  = mat.alphablend || mat.colors.hasAlpha();
 
-  mat.setup(); 
   CHECKGLERROR;
 
   *successptr = RGL_SUCCESS;
