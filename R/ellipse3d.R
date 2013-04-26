@@ -14,7 +14,8 @@ ellipse3d.default <-
   norm <- sqrt( sphere$vb[1,]^2 + sphere$vb[2,]^2 + sphere$vb[3,]^2 )
   for (i in 1:3) sphere$vb[i,] <- sphere$vb[i,]/norm
   sphere$vb[4,] <- 1
-  sphere$normals <- sphere$vb
+  if (smooth)
+    sphere$normals <- sphere$vb
   
   result <-scale3d(transform3d( sphere, chol), t,t,t)
   
