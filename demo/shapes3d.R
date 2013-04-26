@@ -55,10 +55,10 @@ ellipsoid3d <- function(rx=1,ry=1,rz=1,n=30,ctr=c(0,0,0),
                         qmesh=FALSE,
                         trans = par3d("userMatrix"),...) {
   if (missing(trans) && !rgl.cur()) trans <- diag(4)
-  degvec <- seq(0,2*pi,length=n)
+  degvec <- seq(0,pi,length=n)
   ecoord2 <- function(p) {
     c(rx*cos(p[1])*sin(p[2]),ry*sin(p[1])*sin(p[2]),rz*cos(p[2])) }
-  v <- apply(expand.grid(degvec,degvec),1,ecoord2)
+  v <- apply(expand.grid(2*degvec,degvec),1,ecoord2)
   if (qmesh) v <- rbind(v,rep(1,ncol(v))) ## homogeneous
   e <- expand.grid(1:(n-1),1:n)
   i1 <- apply(e,1,function(z)z[1]+n*(z[2]-1))
@@ -68,7 +68,7 @@ ellipsoid3d <- function(rx=1,ry=1,rz=1,n=30,ctr=c(0,0,0),
   i <- rbind(i1,i2,i4,i3)
   if (!qmesh)
     quads3d(v[1,i],v[2,i],v[3,i],...)
-  else return(rotate3d(qmesh3d(v,i,material=...),matrix=trans))
+  else return(rotate3d(qmesh3d(v,i,material=list(...)),matrix=trans))
 }
 
 ############
