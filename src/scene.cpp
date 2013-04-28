@@ -450,6 +450,8 @@ void Scene::render(RenderContext* renderContext)
     //
 
     total_bsphere = Sphere( (bboxDeco) ? bboxDeco->getBoundingBox(data_bbox) : data_bbox, viewpoint->scale );
+    if (total_bsphere.radius <= 0.0)
+      total_bsphere.radius = 1.0;
 
   } else {
     total_bsphere = Sphere( Vertex(0,0,0), 1 );
@@ -605,7 +607,9 @@ void Scene::setupLightModel(RenderContext* rctx, const Sphere& viewSphere)
   // global lights
   //
 
+  rctx->viewpoint->setupFrustum(rctx, viewSphere);
   rctx->viewpoint->setupTransformation(rctx, viewSphere);
+  SAVEGLERROR;
 
   std::vector<Light*>::const_iterator iter;
 

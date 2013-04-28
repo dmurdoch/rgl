@@ -461,3 +461,7 @@ v0.93.930
 v0.93.932 
   - calling rgl.material() before any rendering caused a crash on OSX.
     (Reported by Dan Tenenbaum.)
+
+v0.93.935
+  - in certain circumstances since 0.93.930, text would fail to appear.
+    (Reported by Karline Soetaert.)
