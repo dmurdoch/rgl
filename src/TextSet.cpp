@@ -79,7 +79,6 @@ void TextSet::drawElement(RenderContext* renderContext, int index)
       }
     }
   }
-  SAVEGLERROR;
 }
 
 void TextSet::drawEnd(RenderContext* renderContext)
