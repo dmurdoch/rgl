@@ -45,7 +45,8 @@ This function writes out a web page containing Javascript that reconstructs the 
 Use the \code{template} argument to give the filename of a web page that is to contain the
 code for the new scene.  It should contain a single line containing \code{paste("\%", prefix, "WebGL\%")}, e.g.
 \code{\%WebGL\%} with the default empty prefix.  That line will be replaced by the Javascript and other
-code necessary to reproduce the current scene.
+code necessary to reproduce the current scene.  The template may also contain the string \code{"\%rglVersion\%"}
+which will be replaced with the current \pkg{rgl} version number.
 
 To put more than one scene into a web page, use different values of \code{prefix} for each.  The prefix
 will be used in identifiers in both Javascript and HTML, so it is safest to start with a letter and

@@ -1439,6 +1439,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   } else snapshotimg2 <- snapshotimg <- ""
   
   templatelines <- readLines(template)
+  templatelines <- subst(templatelines, rglVersion = packageVersion("rgl"))
+  
   target <- paste("%", prefix, "WebGL%", sep="")
   replace <- grep( target, templatelines, fixed=TRUE)
   if (length(replace) != 1) 

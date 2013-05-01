@@ -465,3 +465,6 @@ v0.93.932
 v0.93.935
   - in certain circumstances since 0.93.930, text would fail to appear.
     (Reported by Karline Soetaert.)
+    
+v0.93.936
+  - write the rgl version into the webGL file
