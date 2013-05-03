@@ -466,5 +466,7 @@ v0.93.935
   - in certain circumstances since 0.93.930, text would fail to appear.
     (Reported by Karline Soetaert.)
     
-v0.93.936
+v0.93.937
   - write the rgl version into the webGL file
+  - clean up use of CHECKGLERROR, so that setting USE_GLGETERROR to 1 in 
+    R.h will enable detailed checking

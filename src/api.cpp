@@ -52,7 +52,6 @@ void rgl_quit(int* successptr)
     delete deviceManager;
     deviceManager = 0;
   }
-  CHECKGLERROR;
 
   lib::quit();
 
@@ -86,9 +85,9 @@ void rgl_dev_close(int* successptr)
 
     device->close();
     success = RGL_SUCCESS;
+    CHECKGLERROR;
 
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -103,9 +102,9 @@ void rgl_dev_bringtotop(int* successptr, int* stay)
 
     device->bringToTop(*stay);
     success = RGL_SUCCESS;
+    CHECKGLERROR;
 
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -123,10 +122,10 @@ void rgl_dev_getcurrent(int* successptr, int* idptr)
   if (deviceManager) {
     *idptr = deviceManager->getCurrent();
     *successptr = RGL_SUCCESS;
+    if (*idptr) CHECKGLERROR;
   } else {
     *successptr = RGL_FAIL;
   }
-  CHECKGLERROR;
 }
 
 //
@@ -177,8 +176,8 @@ void rgl_clear(int* successptr, int *idata)
 
       success = as_success( device->clear( stackTypeID ) ); // viewpoint & material handled in R, background ignored
     }
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -207,9 +206,9 @@ void rgl_pop(int* successptr, int* idata)
     int id = idata[1];
  
     success = as_success( device->pop( stackTypeID, id ) );
+    CHECKGLERROR;
 
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -348,8 +347,8 @@ void rgl_bg(int* successptr, int* idata)
     int  fogtype   = idata[1];
 
     success = as_success( device->add( new Background(currentMaterial, sphere, fogtype) ) );
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -384,9 +383,8 @@ void rgl_light ( int* successptr, int* idata, double* ddata )
     Vertex finposition   = Vertex( ddata[2], ddata[3], ddata[4] );
 
     success = as_success( device->add( new Light( PolarCoord(theta, phi), finposition, (bool) viewpoint_rel, (bool) finite_pos, ambient, diffuse, specular ) ) );
-
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -412,8 +410,8 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
     if (polar) success = as_success( device->add( new Viewpoint(PolarCoord(theta, phi), fov, zoom, scale, interactive) ) );
     else       success = as_success( device->add( new Viewpoint(ddata + 7, fov, zoom, scale, interactive) ) );
 
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -430,8 +428,8 @@ void rgl_getZoom(int* successptr, double* zoom)
     Viewpoint* viewpoint = scene->getViewpoint();
     *zoom = viewpoint->getZoom();
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -448,8 +446,8 @@ void rgl_setZoom(int* successptr, double* zoom)
     viewpoint->setZoom( *zoom );
     rglview->update();
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -465,8 +463,8 @@ void rgl_getFOV(int* successptr, double* fov)
     Viewpoint* viewpoint = scene->getViewpoint();
     *fov = viewpoint->getFOV();
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -483,8 +481,8 @@ void rgl_setFOV(int* successptr, double* fov)
     viewpoint->setFOV(*fov);
     rglview->update();
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -497,8 +495,8 @@ void rgl_getIgnoreExtent(int* successptr, int* ignoreExtent)
 
     *ignoreExtent = device->getIgnoreExtent();
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -511,8 +509,8 @@ void rgl_setIgnoreExtent(int* successptr, int* ignoreExtent)
 
     device->setIgnoreExtent(*ignoreExtent);
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -525,8 +523,8 @@ void rgl_getSkipRedraw(int* successptr, int* skipRedraw)
 
     *skipRedraw = device->getSkipRedraw();
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -539,8 +537,8 @@ void rgl_setSkipRedraw(int* successptr, int* skipRedraw)
 
     device->setSkipRedraw(*skipRedraw);
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -587,8 +585,8 @@ void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals,
       if (!success)
         delete node;
     }
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -613,9 +611,8 @@ void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y,
                                                    coords, *orientation, flags,
     						   device->getIgnoreExtent()) ) );
 
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
-
   *successptr = success;
 }
 
@@ -632,8 +629,8 @@ void rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
 
     success = as_success( device->add( new SphereSet(currentMaterial, nvertex, vertex, nradius, radius,
     						     device->getIgnoreExtent()) ) );
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -650,9 +647,9 @@ void rgl_planes(int* successptr, int* idata, double* normals, double* offsets)
     int noffset = idata[1];
 
     success = as_success( device->add( new PlaneSet(currentMaterial, nnormal, normals, noffset, offsets) ) );
-  }
-  CHECKGLERROR;
+    CHECKGLERROR;
 
+  }
   *successptr = success;
 }
 
@@ -668,8 +665,8 @@ void rgl_abclines(int* successptr, int* idata, double* bases, double* directions
     int ndirs  = idata[1];
 
     success = as_success( device->add( new ABCLineSet(currentMaterial, nbases, bases, ndirs, directions) ) );
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -708,8 +705,8 @@ void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius, in
       shapelist = NULL;
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
     						     device->getIgnoreExtent(), count, shapelist, userMatrix) ) );
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -873,9 +870,9 @@ void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* ve
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
                                                    adj[0], adj[1],
     						   device->getIgnoreExtent(), fonts) ) );
-  }
-  CHECKGLERROR;
+    CHECKGLERROR;
 
+  }
   *successptr = success;
 }
 
@@ -913,8 +910,8 @@ void rgl_bbox(int* successptr,
     AxisInfo zaxis(zticks, zat, ztext, zlen, zunit);
 
     success = as_success( device->add( new BBoxDeco(currentMaterial, xaxis, yaxis, zaxis, marklen, (bool) marklen_rel, expand, (bool)front ) ) );
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -931,8 +928,8 @@ void rgl_snapshot(int* successptr, int* idata, char** cdata)
     char* filename = cdata[0];
 
     success = as_success( device->snapshot( format, filename ) );
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -946,9 +943,9 @@ void rgl_pixels(int* successptr, int* ll, int* size, int* component, float* resu
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     
     success = as_success( device->pixels( ll, size, *component, result) );
+    CHECKGLERROR;
     
   }
-  CHECKGLERROR;
   
   *successptr = success;
 }
@@ -964,18 +961,18 @@ void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, 
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
   
-  	for (int i=0; i<4; i++) viewport[i] = view[i];
-  	for (int i=0; i<columns; i++) {
-		gluProject(point[0],point[1],point[2],model,proj,viewport,
-		vertex,vertex+1,vertex+2);
-		vertex[0] /= view[2];
-		vertex[1] /= view[3];
-		point += 3;
-		vertex += 3;
-	}
-	success = RGL_SUCCESS;
+    for (int i=0; i<4; i++) viewport[i] = view[i];
+    for (int i=0; i<columns; i++) {
+	    gluProject(point[0],point[1],point[2],model,proj,viewport,
+	    vertex,vertex+1,vertex+2);
+	    vertex[0] /= view[2];
+	    vertex[1] /= view[3];
+	    point += 3;
+	    vertex += 3;
+    }
+    success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -991,18 +988,18 @@ void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, 
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
   
-    	for (int i=0; i<4; i++) viewport[i] = view[i];
-  	for (int i=0; i<columns; i++) {
-	        pixel[0] *= view[2];
-	        pixel[1] *= view[3];
-		gluUnProject(pixel[0],pixel[1],pixel[2],model,proj,viewport,
-		vertex,vertex+1,vertex+2);
-		pixel += 3;
-		vertex += 3;
-	}
-	success = RGL_SUCCESS;
+    for (int i=0; i<4; i++) viewport[i] = view[i];
+    for (int i=0; i<columns; i++) {
+	    pixel[0] *= view[2];
+	    pixel[1] *= view[3];
+	    gluUnProject(pixel[0],pixel[1],pixel[2],model,proj,viewport,
+	    vertex,vertex+1,vertex+2);
+	    pixel += 3;
+	    vertex += 3;
+    }
+    success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -1014,11 +1011,11 @@ void rgl_getMouseMode(int* successptr, int *button, int* mode)
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
   
- 	RGLView* rglview = device->getRGLView();
-  	*mode = static_cast<int>( rglview->getMouseMode(*button) );
-    	success = RGL_SUCCESS;
+    RGLView* rglview = device->getRGLView();
+    *mode = static_cast<int>( rglview->getMouseMode(*button) );
+    success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -1030,12 +1027,12 @@ void rgl_setMouseMode(int* successptr, int* button, int* mode)
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
   
- 	RGLView* rglview = device->getRGLView();
-	rglview->setMouseMode(*button, (MouseModeID)(*mode));
+    RGLView* rglview = device->getRGLView();
+    rglview->setMouseMode(*button, (MouseModeID)(*mode));
 
-    	success = RGL_SUCCESS;
+    success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -1043,25 +1040,25 @@ void rgl_setMouseMode(int* successptr, int* button, int* mode)
 
 void rgl_selectstate(int* successptr, int* selectstate, double* locations)
 {
-	int success = RGL_FAIL;
-	Device* device;
+    int success = RGL_FAIL;
+    Device* device;
 
-	if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-		RGLView* rglview = device->getRGLView();
-		
-    selectstate[0] = (int)rglview->getSelectState();
-		double* mousePosition = rglview->getMousePosition();
+	RGLView* rglview = device->getRGLView();
 
-		locations[0] = *mousePosition;
-		locations[1] = *(mousePosition+1);
-		locations[2] = *(mousePosition+2);
-		locations[3] = *(mousePosition+3);
+	selectstate[0] = (int)rglview->getSelectState();
+	double* mousePosition = rglview->getMousePosition();
 
-		success = RGL_SUCCESS;
-	}
-  CHECKGLERROR;
-  *successptr = success;
+	locations[0] = *mousePosition;
+	locations[1] = *(mousePosition+1);
+	locations[2] = *(mousePosition+2);
+	locations[3] = *(mousePosition+3);
+
+	success = RGL_SUCCESS;
+	CHECKGLERROR;
+    }
+    *successptr = success;
 
 }
 
@@ -1073,31 +1070,31 @@ void rgl_setselectstate(int* successptr, int *idata)
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     MouseSelectionID selectState = (MouseSelectionID) idata[0];
-	RGLView* rglview = device->getRGLView();
-	rglview->setSelectState(selectState);
+    RGLView* rglview = device->getRGLView();
+    rglview->setSelectState(selectState);
 
     success = RGL_SUCCESS;
+    CHECKGLERROR;
 
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
 
 void rgl_getUserMatrix(int* successptr, double* userMatrix)
 {
-	int success = RGL_FAIL;
-  	Device* device;
+    int success = RGL_FAIL;
+    Device* device;
 
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-		RGLView* rglview = device->getRGLView();
-		rglview->getUserMatrix(userMatrix);
+	RGLView* rglview = device->getRGLView();
+	rglview->getUserMatrix(userMatrix);
 
     	success = RGL_SUCCESS;
+	CHECKGLERROR;
 
-  	}
-  CHECKGLERROR;
+  }
 
   *successptr = success;
 }
@@ -1105,20 +1102,20 @@ void rgl_getUserMatrix(int* successptr, double* userMatrix)
 void rgl_setUserMatrix(int* successptr, double* userMatrix)
 {
 
-	int success = RGL_FAIL;
-  	Device* device;
+    int success = RGL_FAIL;
+    Device* device;
 
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-		RGLView* rglview = device->getRGLView();
-		rglview->setUserMatrix(userMatrix);
+	RGLView* rglview = device->getRGLView();
+	rglview->setUserMatrix(userMatrix);
 
-		success = RGL_SUCCESS;
+	success = RGL_SUCCESS;
 
-  	}
-  CHECKGLERROR;
+        CHECKGLERROR;
+    }
 
-  *successptr = success;
+    *successptr = success;
 
 }
 
@@ -1128,11 +1125,11 @@ void rgl_getPosition(double* position)
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-		RGLView* rglview = device->getRGLView();
-		rglview->getPosition(position);
+    RGLView* rglview = device->getRGLView();
+    rglview->getPosition(position);
+    CHECKGLERROR;
 
-  	}
-  CHECKGLERROR;
+  }
  	
 }
 
@@ -1142,104 +1139,104 @@ void rgl_setPosition(double* position)
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-		RGLView* rglview = device->getRGLView();
-		rglview->setPosition(position);
+    RGLView* rglview = device->getRGLView();
+    rglview->setPosition(position);
 
-  	}
-  CHECKGLERROR;
+    CHECKGLERROR;
+  }
 
 }
 
 void rgl_getScale(int* successptr, double* scale)
 {
-	int success = RGL_FAIL;
-  	Device* device = deviceManager->getAnyDevice();
+    int success = RGL_FAIL;
+    Device* device = deviceManager->getAnyDevice();
 
-  	if (device) {
+    if (device) {
 
-		RGLView* rglview = device->getRGLView();
-		rglview->getScale(scale);
+	RGLView* rglview = device->getRGLView();
+	rglview->getScale(scale);
 
-    	success = RGL_SUCCESS;
+	success = RGL_SUCCESS;
+	CHECKGLERROR;
 
-  	}
-  CHECKGLERROR;
+    }
 
-  *successptr = success;
+    *successptr = success;
 }
 
 void rgl_setScale(int* successptr, double* scale)
 {
 
-	int success = RGL_FAIL;
-  	Device* device = deviceManager->getAnyDevice();
+    int success = RGL_FAIL;
+    Device* device = deviceManager->getAnyDevice();
 
-  	if (device) {
+    if (device) {
 
-		RGLView* rglview = device->getRGLView();
-		rglview->setScale(scale);
+	RGLView* rglview = device->getRGLView();
+	rglview->setScale(scale);
 
-		success = RGL_SUCCESS;
+	success = RGL_SUCCESS;
 
-  	}
-  CHECKGLERROR;
+        CHECKGLERROR;
+    }
 
-  *successptr = success;
+    *successptr = success;
 
 }
 
 void rgl_getModelMatrix(int* successptr, double* modelMatrix)
 {
-	int success = RGL_FAIL;
-  	Device* device;
+    int success = RGL_FAIL;
+    Device* device;
 
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-		RGLView* rglview = device->getRGLView();
-		for (int i=0; i<16; i++) {
-	    		modelMatrix[i] = rglview->modelMatrix[i];
-		}
-    		success = RGL_SUCCESS;
-  	}
-  CHECKGLERROR;
+	RGLView* rglview = device->getRGLView();
+	for (int i=0; i<16; i++) {
+		modelMatrix[i] = rglview->modelMatrix[i];
+	}
+	success = RGL_SUCCESS;
+        CHECKGLERROR;  	
+    }
 
-  *successptr = success;
+    *successptr = success;
 }
 
 void rgl_getProjMatrix(int* successptr, double* projMatrix)
 {
-	int success = RGL_FAIL;
-  	Device* device;
+    int success = RGL_FAIL;
+    Device* device;
 
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-		RGLView* rglview = device->getRGLView();
-		for (int i=0; i<16; i++) {
-	    		projMatrix[i] = rglview->projMatrix[i];
-		}
-    		success = RGL_SUCCESS;
-  	}
-  CHECKGLERROR;
+	RGLView* rglview = device->getRGLView();
+	for (int i=0; i<16; i++) {
+		projMatrix[i] = rglview->projMatrix[i];
+	}
+	success = RGL_SUCCESS;
+        CHECKGLERROR;
+    }
 
-  *successptr = success;
+    *successptr = success;
 }
 
 void rgl_getViewport(int* successptr, int* viewport)
 {
-	int success = RGL_FAIL;
-  	Device* device;
+    int success = RGL_FAIL;
+    Device* device;
 
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-		RGLView* rglview = device->getRGLView();
-		for (int i=0; i<4; i++) {
-	    		viewport[i] = rglview->viewport[i];
-		}
-    		success = RGL_SUCCESS;
-  	}
-  CHECKGLERROR;
+	RGLView* rglview = device->getRGLView();
+	for (int i=0; i<4; i++) {
+		viewport[i] = rglview->viewport[i];
+	}
+	success = RGL_SUCCESS;
+        CHECKGLERROR;
+    }
 
-  *successptr = success;
+    *successptr = success;
 }
 
 void rgl_getWindowRect(int* successptr, int* rect)
@@ -1251,8 +1248,8 @@ void rgl_getWindowRect(int* successptr, int* rect)
    
      device->getWindowRect(rect, rect+1, rect+2, rect+3);
      success = RGL_SUCCESS;
+     CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -1265,8 +1262,8 @@ void rgl_setWindowRect(int* successptr, int* rect)
   
     device->setWindowRect(rect[0], rect[1], rect[2], rect[3]);
     success = RGL_SUCCESS;
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
   *successptr = success;
 }
 
@@ -1283,8 +1280,8 @@ void rgl_postscript(int* successptr, int* idata, char** cdata)
     char* filename = cdata[0];
 
     success = as_success( device->postscript( format, filename, drawText ) );
+    CHECKGLERROR;
   }
-  CHECKGLERROR;
 
   *successptr = success;
 }
@@ -1297,17 +1294,17 @@ void rgl_getBoundingbox(int* successptr, double* bboxvec)
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-	  const AABox& bbox = device->getScene()->getBoundingBox();
-	  bboxvec[0] = bbox.vmin.x;
-	  bboxvec[1] = bbox.vmax.x;
-	  bboxvec[2] = bbox.vmin.y;
-	  bboxvec[3] = bbox.vmax.y;
-	  bboxvec[4] = bbox.vmin.z;
-	  bboxvec[5] = bbox.vmax.z;
+      const AABox& bbox = device->getScene()->getBoundingBox();
+      bboxvec[0] = bbox.vmin.x;
+      bboxvec[1] = bbox.vmax.x;
+      bboxvec[2] = bbox.vmin.y;
+      bboxvec[3] = bbox.vmax.y;
+      bboxvec[4] = bbox.vmin.z;
+      bboxvec[5] = bbox.vmax.z;
 
-	  success = RGL_SUCCESS;
-	}
-  CHECKGLERROR;
+      success = RGL_SUCCESS;
+      CHECKGLERROR;
+  }
 	
   *successptr = success;
 }
@@ -1324,8 +1321,8 @@ char* getFamily()
     f = device->getRGLView()->getFontFamily();
     result = R_alloc(strlen(f)+1, 1);
     strcpy(result, f);
+    CHECKGLERROR;
   } 
-  CHECKGLERROR;
   
   return result;
 }
@@ -1424,8 +1421,8 @@ char* getFontname()
     f = device->getRGLView()->getFontname();
     result = R_alloc(strlen(f)+1, 1);
     strcpy(result, f);
+    CHECKGLERROR;
   } 
-  CHECKGLERROR;
   return result;
 }
 
