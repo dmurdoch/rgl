@@ -591,6 +591,7 @@ void RGLView::setMouseMode(int button, MouseModeID mode)
 void RGLView::setMouseCallbacks(int button, userControlPtr begin, userControlPtr update, 
                                 userControlEndPtr end, userCleanupPtr cleanup, void** user)
 {
+  if (drag) captureLost();
   int ind = button - 1;
   if (cleanupCallback[ind])
     (*cleanupCallback[ind])(userData + 3*ind);
