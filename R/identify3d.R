@@ -40,14 +40,7 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
     
     selected <- c()
     
-    mousex <- mousey <- 0
-    
-    record <- function(mousex, mousey) {
-      mousex <<- mousex
-      mousey <<- mousey
-    }
-    
-    select <- function() {
+    select <- function(mousex, mousey) {
        disp <- rgl.cur()
        if (disp != odisp) {
          rgl.set(odisp)
@@ -78,9 +71,9 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
        doquit <<- TRUE
     }
     
-    rgl.setMouseCallbacks(buttons[1], begin=record, end=select)
+    rgl.setMouseCallbacks(buttons[1], begin=select)
     if (length(buttons) > 1)
-    	rgl.setMouseCallbacks(buttons[2], end=quit)
+    	rgl.setMouseCallbacks(buttons[2], begin=quit)
     
     while(!doquit && length(selected) < n) Sys.sleep(0.2)
     selected
