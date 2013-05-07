@@ -258,14 +258,13 @@ writeOBJ <- function(con,
   }
   filename <- summary(con)$description
   
-  if (NROW(bbox <- rgl.ids("bboxdeco"))) 
-    if (is.null(ids) || bbox$id %in% ids) {
-      ids <- setdiff(ids, bbox$id)
-      save <- par3d(skipRedraw = TRUE)
-      bbox <- convertBBox(bbox$id)
-      on.exit({ rgl.pop(id=bbox); par3d(save) }, add=TRUE)
-      dobbox <- TRUE
-    } else dobbox <- FALSE 
+  if (NROW(bbox <- rgl.ids("bboxdeco")) && (is.null(ids) || bbox$id %in% ids)) {
+    ids <- setdiff(ids, bbox$id)
+    save <- par3d(skipRedraw = TRUE)
+    bbox <- convertBBox(bbox$id)
+    on.exit({ rgl.pop(id=bbox); par3d(save) }, add=TRUE)
+    dobbox <- TRUE
+  } else dobbox <- FALSE 
   
   if (is.null(ids)) {
     ids <- rgl.ids()
