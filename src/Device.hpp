@@ -42,7 +42,7 @@ public: // -- all methods are blocking until action completed
 
   // accessor method for Scene, modeled after getBoundingBox()
   // from scene.h
-  const Scene* getScene() const { return scene; }
+  Scene* getScene() const { return scene; }
 
   void bringToTop(int stay);
 

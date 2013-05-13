@@ -466,11 +466,13 @@ v0.93.935
   - in certain circumstances since 0.93.930, text would fail to appear.
     (Reported by Karline Soetaert.)
     
-v0.93.939
+v0.93.940
   - write the rgl version into the webGL file
   - cleaned up use of CHECKGLERROR, so that setting USE_GLGETERROR to 1 in 
     R.h will enable detailed checking
   - added identify3d() function
   - fixed bbox bug in writeOBJ (reported by Matthias Zeeman), writePLY
     and writeSTL.
+  - aspect3d() (called by plot3d()) caused the scene to be redrawn,
+    even if par3d("skipRedraw") was TRUE.
   

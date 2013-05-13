@@ -8,7 +8,6 @@ aspect3d <- function(x, y = NULL, z = NULL) {
 	    y <- x[2]
 	    x <- x[1]
 	}
-	save <- par3d(skipRedraw=FALSE)
         for (i in 1:5) { # To handle spheres, repeat this 
   	    bbox <- .getRanges()
 	    scale <- c(diff(bbox$xlim), diff(bbox$ylim), diff(bbox$zlim))
@@ -20,7 +19,6 @@ aspect3d <- function(x, y = NULL, z = NULL) {
             if (isTRUE(all.equal(scale, oldscale)))
             	break
         }
-        par3d(save)
     }
     par3d(scale = scale)
 }

@@ -24,7 +24,7 @@ public:
   /**
    * overload to update triangles first.
    */
-  virtual AABox& getBoundingBox(RenderContext* renderContext);
+  virtual AABox& getBoundingBox(Scene* scene);
 
   /**
    * overload to update triangles first.
