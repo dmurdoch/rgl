@@ -87,10 +87,10 @@ public:
   // ---[ grouping component ]-----------------------------------------------
   
   /**
-   * obtain scene's axis-aligned bounding box
+   * obtain scene's axis-aligned bounding box. 
    **/
-  const AABox& getBoundingBox() const { return data_bbox; }
-
+  const AABox& getBoundingBox();
+  
   // ---[ Renderable interface ]---------------------------------------------
   
   /**
@@ -129,10 +129,6 @@ private:
    * compute bounding-box
    **/
   void calcDataBBox();
-  /**
-   * compute bounding-box for a changeable scene
-   **/
-  void calcDataBBox(RenderContext* renderContext);
   /**
    * add shapes
    **/

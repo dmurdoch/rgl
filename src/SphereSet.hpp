@@ -1,6 +1,7 @@
 #ifndef SPHERESET_HPP
 #define SPHERESET_HPP
 
+#include "scene.h"
 #include "Shape.hpp"
 #include "SphereMesh.hpp"
 #include <map>
@@ -36,7 +37,7 @@ public:
    * Spheres appear as spheres, so their bbox depends on scaling
    **/
    
-  virtual AABox& getBoundingBox(RenderContext* renderContext);
+  virtual AABox& getBoundingBox(Scene* scene);
 
 
   /**

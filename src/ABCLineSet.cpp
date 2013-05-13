@@ -42,10 +42,10 @@ ABCLineSet::ABCLineSet(Material& in_material, int in_nbase, double* in_base, int
   initPrimitiveSet(2*nLines, vertices.ptr);
 }
 
-AABox& ABCLineSet::getBoundingBox(RenderContext* renderContext)
+AABox& ABCLineSet::getBoundingBox(Scene* scene)
 {
-  updateSegments(renderContext->scene->getBoundingBox());
-  return LineSet::getBoundingBox(renderContext); 
+  updateSegments(scene->getBoundingBox());
+  return LineSet::getBoundingBox(scene); 
 }
 
 void ABCLineSet::renderBegin(RenderContext* renderContext)

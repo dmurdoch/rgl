@@ -31,9 +31,9 @@ SphereSet::~SphereSet()
 {
 }
 
-AABox& SphereSet::getBoundingBox(RenderContext* renderContext)
+AABox& SphereSet::getBoundingBox(Scene* scene)
 {
-  Vertex scale = renderContext->viewpoint->scale;
+  Vertex scale = scene->getViewpoint()->scale;
   scale.x = 1.0/scale.x;
   scale.y = 1.0/scale.y;
   scale.z = 1.0/scale.z;

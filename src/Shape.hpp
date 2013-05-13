@@ -56,7 +56,7 @@ public:
   /**
    * this shows how the shape would be sized in the given context
    **/
-  virtual AABox& getBoundingBox(RenderContext* renderContext) { return boundingBox; }
+  virtual AABox& getBoundingBox(Scene* scene) { return boundingBox; }
   
   /**
    * obtain material
