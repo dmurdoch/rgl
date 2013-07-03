@@ -172,8 +172,11 @@ rotate3d.mesh3d <- function ( obj,angle,x,y,z,matrix, ... ) {
   if ( !is.null(obj$normals) ) {
     if ( missing(matrix) ) 
       obj$normals <- rotate3d(t(obj$normals), angle, x, y, z)
-    else
+    else {
+      if (nrow(matrix) == 4) matrix[4,1:3] <- 0
+      if (ncol(matrix) == 4) matrix[1:3,4] <- 0
       obj$normals <- rotate3d(t(obj$normals), angle, x, y, z, t(solve(matrix)))
+    }
     obj$normals <- t( obj$normals/sqrt(apply(obj$normals^2, 1, sum)) )
   }
   return(obj)                            
