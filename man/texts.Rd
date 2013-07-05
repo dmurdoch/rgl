@@ -9,7 +9,8 @@
   Text is always oriented towards the camera.
 }
 \usage{
-rgl.texts(x, y = NULL, z = NULL, text, adj = 0.5, justify, family = par3d("family"), font = par3d("font"), 
+rgl.texts(x, y = NULL, z = NULL, text, 
+            adj = 0.5, justify, family = par3d("family"), font = par3d("font"), 
             cex = par3d("cex"), useFreeType=par3d("useFreeType"), ...)
 text3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
 texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
