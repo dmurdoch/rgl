@@ -466,7 +466,7 @@ v0.93.935
   - in certain circumstances since 0.93.930, text would fail to appear.
     (Reported by Karline Soetaert.)
     
-v0.93.943
+v0.93.944
   - write the rgl version into the webGL file
   - cleaned up use of CHECKGLERROR, so that setting USE_GLGETERROR to 1 in 
     R.h will enable detailed checking
@@ -478,4 +478,7 @@ v0.93.943
   - addNormals.mesh3d() failed on objects when the matrices
     of triangles or quadrilaterals had zero columns.
   - rotate3d.mesh3d() did not transform normals properly
+  - the writeWebGL() function produced fragment shaders that would not
+    work in some browsers (e.g. Firefox and Chrome with the ANGLE
+    WebGL engine).
   

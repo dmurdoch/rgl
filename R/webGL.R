@@ -195,6 +195,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	}
 	</script>
 ')
+
+    # Important:  in some implementations (e.g. ANGLE) declarations that involve computing must be local (inside main()), not global
     fragment <- c(subst(
 '	<script id="%prefix%fshader%id%" type="x-shader/x-fragment"> 
 	#ifdef GL_ES
@@ -211,25 +213,28 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (is_lit && !fixed_quads)
 '	varying vec3 vNormal;',
 
+      if (is_lit && !all(lighttype[,"viewpoint"]))
+'	uniform mat4 mvMatrix;',
+
+'	void main(void) {',
+
       if (is_lit)
-'	vec3 eye = normalize(-vPosition.xyz);',      
+'	  vec3 eye = normalize(-vPosition.xyz);',      
 
    # collect lighting information   
       if (is_lit) {
-        res <- c(subst(
-'	const vec3 emission = %emission%;',
-        emission = vec2vec3(col2rgba(mat$emission))),
-        if (!all(lighttype[,"viewpoint"]))
-'	uniform mat4 mvMatrix;')
+        res <- subst(
+'	  const vec3 emission = %emission%;',
+          emission = vec2vec3(col2rgba(mat$emission)))
 
         for (idn in 1:length(lights$id)) { 
           finite <- lighttype[idn,"finite"]
           viewpoint <- lighttype[idn, "viewpoint"]
           res <- c(res, subst(
-'	const vec3 ambient%idn% = %ambient%;
-	const vec3 specular%idn% = %specular%;// light*material
-	const float shininess%idn% = %shininess%;
-	vec4 colDiff%idn% = vec4(vCol.rgb * %diffuse%, vCol.a);',
+'	  const vec3 ambient%idn% = %ambient%;
+	  const vec3 specular%idn% = %specular%;// light*material
+	  const float shininess%idn% = %shininess%;
+	  vec4 colDiff%idn% = vec4(vCol.rgb * %diffuse%, vCol.a);',
           ambient = vec2vec3(col2rgba(mat$ambient)*lAmbient[[idn]] + col2rgba(mat$emission)), #FIXME : Materialemission wird bei mehreren Lichtquellen mehrfach genutzt 
           specular = vec2vec3(col2rgba(mat$specular)*lSpecular[[idn]]), 
           shininess = addDP(mat$shininess),
@@ -247,15 +252,15 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
             # directional light
             if (!finite) {
               subst(
-'	const vec3 lightDir%idn% = %lightdir%;
-	vec3 halfVec%idn% = normalize(lightDir%idn% + eye);',
+'	  const vec3 lightDir%idn% = %lightdir%;
+	  vec3 halfVec%idn% = normalize(lightDir%idn% + eye);',
               lightdir = lightdir,
               idn = idn)
             }
             else { # point-light
               subst(
-'	vec3 lightDir%idn% = normalize(%lightdir% - vPosition.xyz);
-	vec3 halfVec%idn% = normalize(lightDir%idn% + eye);',
+'	  vec3 lightDir%idn% = normalize(%lightdir% - vPosition.xyz);
+	  vec3 halfVec%idn% = normalize(lightDir%idn% + eye);',
               lightdir = lightdir,
               idn = idn)
             }
@@ -264,11 +269,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         res
       }
       else {
-'    vec4 colDiff = vCol;'
+'      vec4 colDiff = vCol;'
       },
-  
-	
-'	void main(void) {',
 
       if (is_lit) {
         res <- c(
