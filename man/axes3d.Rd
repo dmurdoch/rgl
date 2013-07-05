@@ -11,7 +11,8 @@ These functions draw axes, boxes and text outside the range of the data.
 normally the others need not be called directly by users.
 }
 \usage{
-axes3d(edges = "bbox", labels = TRUE, tick = TRUE, nticks = 5, box=FALSE, expand = 1.03, ...)
+axes3d(edges = "bbox", labels = TRUE, tick = TRUE, nticks = 5, 
+    box=FALSE, expand = 1.03, ...)
 box3d(...) 
 title3d(main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
     zlab = NULL, line = NA, ...) 

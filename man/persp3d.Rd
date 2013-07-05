@@ -9,7 +9,9 @@
 persp3d(x, \dots)
 
 \method{persp3d}{default}(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)), z,
-    xlim = range(x, na.rm = TRUE), ylim = range(y, na.rm = TRUE), zlim = range(z, na.rm = TRUE),
+    xlim = range(x, na.rm = TRUE), 
+    ylim = range(y, na.rm = TRUE), 
+    zlim = range(z, na.rm = TRUE),
     xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, ...)
 }
 \arguments{
