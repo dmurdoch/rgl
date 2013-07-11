@@ -50,16 +50,18 @@ writeOBJ <- function(con,
          nbase=nbase)
   }
   
+  refnum <- function(n) sprintf("%d", n)
+  
   writeTriangles <- function(id) {
     if (separateObjects)
       cat("o triangles", id, "\n", sep="", file=con)
     x <- writeData(id)
-    indices <- x$vbase + seq_len(x$n)
+    indices <- refnum(x$vbase + seq_len(x$n))
     if (x$ntexcoords)
-      indices <- paste0(indices, "/", x$tbase + seq_len(x$n))
+      indices <- paste0(indices, "/", refnum(x$tbase + seq_len(x$n)))
     if (x$nnormals)
       indices <- paste0(indices, if (!x$ntexcoords) "/", 
-      			"/", x$nbase + seq_len(x$n))
+      			"/", refnum(x$nbase + seq_len(x$n)))
     indices <- matrix(indices, ncol=3, byrow=TRUE)
     cat(paste("f", indices[,1], indices[,2], indices[,3]), 
         sep="\n", file=con)
@@ -69,12 +71,12 @@ writeOBJ <- function(con,
     if (separateObjects)
       cat("o quads", id, "\n", sep="", file=con)
     x <- writeData(id)
-    indices <- x$vbase + seq_len(x$n)
+    indices <- refnum(x$vbase + seq_len(x$n))
     if (x$ntexcoords)
-      indices <- paste0(indices, "/", x$tbase + seq_len(x$n))
+      indices <- paste0(indices, "/", refnum(x$tbase + seq_len(x$n)))
     if (x$nnormals)
       indices <- paste0(indices, if (!x$ntexcoords) "/", 
-      			"/", x$nbase + seq_len(x$n))
+      			"/", refnum(x$nbase + seq_len(x$n)))
     indices <- matrix(indices, ncol=4, byrow=TRUE)
     cat(paste("f", indices[,1], indices[,2], indices[,3], indices[,4]), 
         sep="\n", file=con)
@@ -95,12 +97,12 @@ writeOBJ <- function(con,
       		c(rows[-nx],rows[-nx],
                   rows[-1]+nx,rows[-nx]+nx,
                   rows[-1],rows[-1]+nx)
-      cindices <- as.character(x$vbase + indices)
+      cindices <- refnum(x$vbase + indices)
       if (x$ntexcoords)
-        cindices <- paste0(cindices, "/", x$tbase + indices)
+        cindices <- paste0(cindices, "/", refnum(x$tbase + indices))
       if (x$nnormals)
         cindices <- paste0(cindices, if (!x$ntexcoords) "/",
-                           "/", x$nbase + indices)
+                           "/", refnum(x$nbase + indices))
       vertices <- rbind(vertices, matrix(cindices, ncol=3))
     }
     cat(paste("f", vertices[,1], vertices[,2], vertices[,3]),
@@ -135,24 +137,24 @@ writeOBJ <- function(con,
     nq <- length(mesh$ib)/4
     if (nt) {
       indices <- t(mesh$it)
-      cindices <- as.character(vbase + indices)
+      cindices <- refnum(vbase + indices)
       if (withTextures)
-        cindices <- paste0(cindices, "/", tbase + indices)
+        cindices <- paste0(cindices, "/", refnum(tbase + indices))
       if (withNormals)
         cindices <- paste0(cindices, if (!withTextures) "/",
-                           "/", nbase + indices)
+                           "/", refnum(nbase + indices))
       cindices <- matrix(cindices, ncol=3)
       cat(paste("f", cindices[,1], cindices[,2], cindices[,3]), 
           sep="\n", file=con)
     }
     if (nq) {
       indices <- t(mesh$ib)
-      cindices <- as.character(vbase + indices)
+      cindices <- refnum(vbase + indices)
       if (withTextures)
-        cindices <- paste0(cindices, "/", tbase + indices)
+        cindices <- paste0(cindices, "/", refnum(tbase + indices))
       if (withNormals)
         cindices <- paste0(cindices, if (!withTextures) "/",
-                           "/", nbase + indices)
+                           "/", refnum(nbase + indices))
       cindices <- matrix(cindices, ncol=4)
       cat(paste("f", cindices[,1], cindices[,2], 
                      cindices[,3], cindices[,4]), 
@@ -187,7 +189,7 @@ writeOBJ <- function(con,
       cat("o points", id, "\n", sep="", file=con)
     if (pointsAsPoints) {
       x <- writeData(id)
-      cat("p", x$vbase + seq_len(x$n), "\n", file=con)
+      cat("p", refnum(x$vbase + seq_len(x$n)), "\n", file=con)
     } else {
       vertices <- rgl.attrib(id, "vertices")
       n <- nrow(vertices)
@@ -204,7 +206,7 @@ writeOBJ <- function(con,
       cat("o segments", id, "\n", sep="", file=con)
     if (linesAsLines) {
       x <- writeData(id)
-      indices <- x$vbase + matrix(seq_len(x$n), ncol=2, byrow=TRUE)
+      indices <- matrix(refnum(x$vbase + seq_len(x$n)), ncol=2, byrow=TRUE)
       cat(paste("l", indices[,1], indices[,2]), sep="\n", file=con)
     } else {
       vertices <- rgl.attrib(id, "vertices")
@@ -228,7 +230,7 @@ writeOBJ <- function(con,
       cat("o lines", id, "\n", sep="", file=con)
     if (linesAsLines) {
       x <- writeData(id)
-      indices <- x$vbase + seq_len(x$n)
+      indices <- refnum(x$vbase + seq_len(x$n))
       cat("l", indices, "\n", file=con)
     } else {
       vertices <- rgl.attrib(id, "vertices")
