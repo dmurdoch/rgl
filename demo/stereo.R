@@ -127,17 +127,19 @@ anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1)) {
   image(z,col=levels(colf),breaks=min(z):(max(z)+1) - 0.5, axes=FALSE)
 }
 
-source(system.file("demo/mouseCallbacks.R", package="rgl"), echo=FALSE )
+if (!rgl.useNULL()) {
+  source(system.file("demo/mouseCallbacks.R", package="rgl"), echo=FALSE )
 
 # This version assumes the eyes diverge for the stereo view.  
 # Reverse the two arguments for the cross-eyed view.
 
-if (R.version$major >= 2 && R.version$minor >= 8.0) 
   dev.new(width=9, height=7)
 
-randomDot(rgl.cur()-1, rgl.cur())
+  randomDot(rgl.cur()-1, rgl.cur())
 
 # A red-cyan anaglyph (for 3D glasses).  Use optional args to anaglyph for other glasses.
 
-dev.new()
-anaglyph(rgl.cur()-1, rgl.cur())
+  dev.new()
+  anaglyph(rgl.cur()-1, rgl.cur())
+} else
+  cat("Can't read pixels from a NULL device\n")

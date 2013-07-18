@@ -226,7 +226,8 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  family = "sans",
 		  material = list(color="black", fog=FALSE))
 
-open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
+open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv), 
+                   useNULL = rgl.useNULL()	)
 {
     args <- list(...)
     if (!is.null(args$antialias) 
@@ -236,7 +237,7 @@ open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
     	args$antialias <- NULL
     }
     
-    rgl.open()
+    rgl.open(useNULL)
     
     if (!is.null(args$material)) {
     	params$material <- do.call(.fixMaterialArgs, c(args$material, Params=list(params$material)))

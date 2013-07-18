@@ -24,8 +24,6 @@ extern "C" {
 #define RGL_SUCCESS  1
 inline int as_success(int b) { return (b) ; }
 
-
-
 //
 // data type conversion utilities:
 // 
@@ -63,9 +61,9 @@ void rgl_quit(int* successptr)
 //   rgl_dev_open
 //
 
-void rgl_dev_open(int* successptr)
+void rgl_dev_open(int* successptr, int* useNULL)
 {
-  *successptr = as_success( deviceManager && deviceManager->openDevice() );
+  *successptr = as_success( deviceManager && deviceManager->openDevice(*useNULL) );
   CHECKGLERROR;
 }
 
@@ -117,16 +115,51 @@ void rgl_dev_bringtotop(int* successptr, int* stay)
 //   device id
 //
 
-void rgl_dev_getcurrent(int* successptr, int* idptr)
+SEXP rgl_dev_getcurrent(void)
 {
+  SEXP result;
   if (deviceManager) {
-    *idptr = deviceManager->getCurrent();
-    *successptr = RGL_SUCCESS;
-    if (*idptr) CHECKGLERROR;
-  } else {
-    *successptr = RGL_FAIL;
+    int id = deviceManager->getCurrent();
+    PROTECT(result = ScalarInteger(id));
+    if (id) {
+      PROTECT(result = namesgets(result, ScalarString(mkChar(deviceManager->getDevice(id)->getDevtype()))));
+      CHECKGLERROR;     
+      UNPROTECT(1);
+    }
+    UNPROTECT(1);
+    return result;
   }
+  return ScalarInteger(0);
 }
+
+//
+// FUNCTION
+//   rgl_dev_list
+//
+// RETURNS
+//   list of active device ids
+//
+
+SEXP rgl_dev_list(void)
+{
+  SEXP result, names;
+  if (deviceManager) {
+    int n = deviceManager->getDeviceCount();
+    PROTECT(result = allocVector(INTSXP, n));
+    deviceManager->getDeviceIds(INTEGER(result), n);
+    PROTECT(names = allocVector(STRSXP, n));
+    for (int i = 0; i < n; i++) {
+      Device* device = deviceManager->getDevice(INTEGER(result)[i]);
+      SET_STRING_ELT(names, i, mkChar(device->getDevtype()));
+    }
+    PROTECT(result = namesgets(result, names));
+    CHECKGLERROR;
+    UNPROTECT(3);
+    return result;
+  }
+  return allocVector(INTSXP, 0);
+}
+
 
 //
 // FUNCTION
@@ -1440,5 +1473,5 @@ int getAntialias()
       return result;
     }
   }
-  return -1;
+  return 1;
 }

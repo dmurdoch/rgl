@@ -26,7 +26,7 @@ class Device : public Disposable, protected IDisposeListener
 {
 public: // -- all methods are blocking until action completed
 
-  Device(int id);
+  Device(int id, bool useNULL);
   virtual ~Device();
   int  getID();
   void setName(const char* string);
@@ -58,7 +58,7 @@ public: // -- all methods are blocking until action completed
   
   void getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex, 
                 bool useFreeType);
-  
+  const char* getDevtype(void);
 
 // event handlers
 protected:
@@ -69,6 +69,7 @@ private:
   Window* window;
   RGLView* rglview;
   Scene* scene;
+  const char* devtype;
   int    id_;
 };
 

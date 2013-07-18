@@ -1,6 +1,9 @@
 #ifndef RGL_API_H
 #define RGL_API_H
 
+#include "R.h"
+#include <Rinternals.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -33,9 +36,10 @@ EXPORT_SYMBOL void rgl_quit          (int* successptr);
 
 /* device management */
 
-EXPORT_SYMBOL void rgl_dev_open      (int* successptr);
-EXPORT_SYMBOL void rgl_dev_close     (int* successptr);
-EXPORT_SYMBOL void rgl_dev_getcurrent(int* successptr, int* idptr);
+EXPORT_SYMBOL void rgl_dev_open      (int* successptr, int* useNULL);
+EXPORT_SYMBOL void rgl_dev_close      (int* successptr);
+EXPORT_SYMBOL SEXP rgl_dev_getcurrent(void);
+EXPORT_SYMBOL SEXP rgl_dev_list        (void);
 EXPORT_SYMBOL void rgl_dev_setcurrent(int* successptr, int* idata);
 EXPORT_SYMBOL void rgl_dev_bringtotop(int* successptr, int* stay);
 

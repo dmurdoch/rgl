@@ -6,11 +6,12 @@
 #include "Device.hpp"
 #include "lib.hpp"
 // ---------------------------------------------------------------------------
-Device::Device(int id) : id_(id)
+Device::Device(int id, bool useNULL) : id_(id)
 {
   scene   = new Scene();
   rglview = new RGLView(scene);
-  window  = new Window( rglview, lib::getGUIFactory() );
+  window  = new Window( rglview, lib::getGUIFactory(useNULL) );
+  devtype = lib::GUIFactoryName(useNULL);
   window->addDisposeListener(this);
 }
 // ---------------------------------------------------------------------------
@@ -47,7 +48,7 @@ bool Device::open(void)
 // ---------------------------------------------------------------------------
 void Device::close(void)
 {
-  window->close(); 
+  window->on_close(); 
 }
 // ---------------------------------------------------------------------------
 
@@ -108,11 +109,11 @@ int Device::add(SceneNode* node)
 bool Device::pop(TypeID stackTypeID, int id)
 {
   bool success;
-  if (rglview->windowImpl->beginGL()) { // Need to set context for display lists.
-    success = scene->pop(stackTypeID, id);
+  bool inGL = rglview->windowImpl->beginGL(); // May need to set context for display lists.
+  success = scene->pop(stackTypeID, id);
+  if (inGL) {
     rglview->windowImpl->endGL();
-  } else 
-    success = false;
+  }
   rglview->update();
   return success;
 }
@@ -141,4 +142,9 @@ void Device::getFonts(FontArray& outfonts, int nfonts, char** family, int* style
                       bool useFreeType)
 {
   window->getFonts(outfonts, nfonts, family, style, cex, useFreeType);
+}
+// ---------------------------------------------------------------------------
+const char * Device::getDevtype()
+{
+  return devtype;
 }

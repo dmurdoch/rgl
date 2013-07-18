@@ -14,15 +14,13 @@
 ##
 ##
 
-
-
-
-
 .onLoad <- function(lib, pkg)
 {
   # OS-specific 
   initValue <- 0  
   dll <- "rgl"
+  
+  onlyNULL <- rgl.useNULL()
   
   if ( .Platform$OS.type == "unix" ) {
     unixos <- system("uname",intern=TRUE)
@@ -39,13 +37,10 @@
     }
   } 
   
-  if ( .Platform$OS.type == "windows" ) {
+  if ( .Platform$OS.type == "windows" && !onlyNULL) {
     frame <- getWindowsHandle("Frame")    
     ## getWindowsHandle was numeric pre-2.6.0 
-    if ( is.numeric(frame) ) {
-    	if (frame ) initValue <- getWindowsHandle("Console")
-    } else
-    	if ( !is.null(frame) ) initValue <- getWindowsHandle("Console")
+    if ( !is.null(frame) ) initValue <- getWindowsHandle("Console")
   } 
   
   useDynLib <- function(dll, entries) {
@@ -61,7 +56,7 @@
   }
           
   entries <- c("rgl_init", "rgl_dev_open", "rgl_dev_close",
-	 "rgl_dev_getcurrent", "rgl_dev_setcurrent", "rgl_snapshot",
+	 "rgl_dev_getcurrent", "rgl_dev_list", "rgl_dev_setcurrent", "rgl_snapshot",
 	 "rgl_postscript", "rgl_material", "rgl_getmaterial",
 	 "rgl_getcolorcount", "rgl_dev_bringtotop", "rgl_clear",
 	 "rgl_pop", "rgl_id_count", "rgl_ids", "rgl_viewpoint",
@@ -75,7 +70,9 @@
 	 
   useDynLib(dll, entries)
  
-  if ( .Platform$OS.type == "windows" ) {
+  if (onlyNULL) {
+    rglFonts(serif = rep("serif", 4), sans = rep("sans", 4), mono = rep("mono", 4), symbol = rep("symbol", 4))
+  } else if ( .Platform$OS.type == "windows" ) {
     rglFonts(serif = rglFont(c("times.ttf", "timesbd.ttf", "timesi.ttf", "timesbi.ttf")),
              sans = rglFont(c("arial.ttf", "arialbd.ttf", "ariali.ttf", "arialbi.ttf")),
              mono = rglFont(c("cour.ttf", "courbd.ttf", "couri.ttf", "courbi.ttf")),
@@ -87,7 +84,7 @@
              symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4))
   }
 	 
-  ret <- rgl.init(initValue)
+  ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
     warning("error in rgl_init")
@@ -95,8 +92,8 @@
   
 }
 
-rgl.init <- function(initValue = 0) .Call( rgl_init, 
-    initValue )
+rgl.init <- function(initValue = 0, onlyNULL = FALSE) .Call( rgl_init, 
+    initValue, onlyNULL )
 
 ##
 ## exit-point

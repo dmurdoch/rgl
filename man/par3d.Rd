@@ -23,7 +23,8 @@
 \usage{
 par3d(\dots, no.readonly = FALSE)
 
-open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
+open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv), 
+	    useNULL = rgl.useNULL())
 
 }
 
@@ -35,6 +36,7 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
     arguments, only those parameters which can be set by a
     subsequent \code{par3d()} call are returned.}
   \item{params}{a list of graphical parameters}
+  \item{useNULL}{whether to use the null graphics device}
 }
 
 \details{
@@ -63,6 +65,11 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   of material properties as in \code{\link{r3dDefaults}}, but note
   that high level functions such as \code{\link{plot3d}} normally use
   the \code{r3dDefaults} values in preference to this setting. 
+  
+  If \code{useNULL} is \code{TRUE}, \pkg{rgl} will use a \dQuote{null}
+  device.  This device records objects as they are plotted, but 
+  displays nothing. It is intended for use with \code{\link{writeWebGL}}
+  and similar functions.
 }
 
 \value{
@@ -176,7 +183,10 @@ and then the images are combined into what is displayed.
 See ?\link{matrices} for more information on homogeneous and Euclidean coordinates.
 }
 
-\seealso{\code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
+\seealso{
+\code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
+
+\code{\link{rgl.useNULL}} for default usage of null device.
 }
 
 \references{
