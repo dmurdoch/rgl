@@ -105,7 +105,7 @@ public:
 // implementation specific
 //
 namespace lib {
-gui::GUIFactory* getGUIFactory();
+gui::GUIFactory* getGUIFactory(bool useNULLDevice);
 }
 // ---------------------------------------------------------------------------
 namespace gui {
@@ -167,7 +167,7 @@ class Window : public View, public Disposable
 {
 public:
 
-  Window(View* child=NULL, GUIFactory* factory=lib::getGUIFactory() );
+  Window(View* child=NULL, GUIFactory* factory=lib::getGUIFactory(0) );
   ~Window();
 
 // overloaded view methods:

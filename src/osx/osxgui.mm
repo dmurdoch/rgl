@@ -6,7 +6,7 @@
 - get font width
  **/
 #ifndef HAVE_FREETYPE
-#error Cocoa backend reguires FreeType font reneder
+#error Cocoa backend reguires FreeType font render
 #endif
 // ---------------------------------------------------------------------------
 #include "osxgui.hpp"

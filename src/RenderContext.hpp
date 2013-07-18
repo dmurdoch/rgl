@@ -22,6 +22,7 @@ public:
   , Zrow()
   , Wrow()
   , gl2psActive(0)
+  , NULLActive(0)
   { }
   Scene* scene;
   Rect2   rect;
@@ -38,6 +39,7 @@ public:
   Vec4 Zrow;
   Vec4 Wrow;
   int gl2psActive;
+  bool NULLActive;
 };
 
 #endif // RENDERCONTEXT_HPP

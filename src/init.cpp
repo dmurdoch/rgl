@@ -35,9 +35,10 @@ void* gHandle;
 extern "C" {
 #endif
 
-SEXP rgl_init(SEXP initValue)
+SEXP rgl_init(SEXP initValue, SEXP useNULL)
 {
   int success = 0;
+  bool useNULLDevice = asLogical(useNULL);
 
   gInitValue = 0;
   gHandle = NULL;
@@ -52,7 +53,7 @@ SEXP rgl_init(SEXP initValue)
   {
     return ScalarInteger( 0 );
   }  
-  if ( lib::init() ) {
+  if ( lib::init(useNULLDevice) ) {
     deviceManager = new DeviceManager();
     success = 1;
   }

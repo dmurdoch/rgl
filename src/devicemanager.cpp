@@ -31,9 +31,9 @@ DeviceManager::~DeviceManager()
   }
 }
 
-bool DeviceManager::openDevice() 
+bool DeviceManager::openDevice(bool useNULL) 
 {
-  Device* pDevice = new Device(newID);  
+  Device* pDevice = new Device(newID, useNULL);  
   if ( pDevice->open() ) {
     ++newID;
     pDevice->addDisposeListener(this);
@@ -62,6 +62,15 @@ Device* DeviceManager::getAnyDevice()
     pDevice = getCurrentDevice();
   }
   return pDevice;
+}
+
+Device* DeviceManager::getDevice(int id)
+{
+  for (Container::iterator i = devices.begin() ; i != devices.end() ; ++i ) {
+    if ( (*i)->getID() == id )
+      return *i;
+  }
+  return NULL;
 }
 
 bool DeviceManager::setCurrent(int id, bool silent)
@@ -93,6 +102,19 @@ int DeviceManager::getCurrent() {
     return (*current)->getID();
   else
     return 0;
+}
+
+int DeviceManager::getDeviceCount() {
+  int result = 0;
+  for (Container::iterator i = devices.begin(); i != devices.end() ; ++i, ++result);
+  return result;
+}
+
+void DeviceManager::getDeviceIds(int *buffer, int bufsize) {
+  int count = 0;
+  for (Container::iterator i = devices.begin(); i != devices.end() && count < bufsize; ++i, ++count) {
+    *(buffer++) = (*i)->getID();
+  }
 }
 
 /**

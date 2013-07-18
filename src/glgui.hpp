@@ -113,6 +113,25 @@ public:
 #endif
 };
 
+//
+// CLASS
+//   NULLFont
+//
+
+class NULLFont : public GLFont
+{
+public:
+  NULLFont(const char* in_family, int in_style, double in_cex): 
+    GLFont(in_family, in_style, in_cex, "NULL", false) {};
+
+  void draw(const char* text, int length, double adjx, double adjy, const RenderContext& rc) {};
+  void draw(const wchar_t* text, int length, double adjx, double adjy, const RenderContext& rc) {}; 
+  double width(const char* text) {return 0.0;};
+  double width(const wchar_t* text) {return 0.0;};
+  double height() {return 0.0;};
+  
+};
+
 /**
  * FontArray
  **/

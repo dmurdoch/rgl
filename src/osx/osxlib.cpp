@@ -3,6 +3,8 @@
 #ifdef RGL_COCOA
 // ---------------------------------------------------------------------------
 #include "../lib.hpp"
+#include "../NULLgui.hpp"
+
 // ---------------------------------------------------------------------------
 #include "osxgui.hpp"
 // ---------------------------------------------------------------------------
@@ -22,27 +24,46 @@ double getTime()
 }
 // ---------------------------------------------------------------------------
 gui::OSXGUIFactory* gGUIFactory = 0;
+gui::NULLGUIFactory* gNULLFactory = 0;
 // ---------------------------------------------------------------------------
-gui::GUIFactory* getGUIFactory()
+gui::GUIFactory* getGUIFactory(bool useNULLDevice)
 { 
-  return gGUIFactory;
+  if (useNULLDevice)
+    return gNULLFactory;
+  else if (gGUIFactory)
+    return gGUIFactory;
+  else
+    error("NSOpenGL device not initialized");  
 }
 // ---------------------------------------------------------------------------
-bool init()
+const char * GUIFactoryName(bool useNULLDevice)
 {
-  assert(gGUIFactory == 0);
-  gGUIFactory = new gui::OSXGUIFactory();
-  if (!gGUIFactory->hasEventLoop()) {
-	Rprintf("RGL: configured for Cocoa, must run in R.app\n");
-	return false;
-  } else return true;
+  return useNULLDevice ? "null" : "NSOpenGL";
+}
+// ---------------------------------------------------------------------------
+bool init(bool useNULLDevice)
+{
+  bool success = false;
+  gNULLFactory = new gui::NULLGUIFactory();
+  if (useNULLDevice) {
+    success = true;
+  } else {
+    gGUIFactory = new gui::OSXGUIFactory();
+    if (!gGUIFactory->hasEventLoop()) {
+	error("RGL: configured for Cocoa, must run in R.app");
+    } else 
+      success = true;
+  }
+  return success;
 }
 // ---------------------------------------------------------------------------
 void quit()
 {
-  assert(gGUIFactory);
-  delete gGUIFactory;
+  if (gGUIFactory)
+    delete gGUIFactory;
+  delete gNULLFactory;
   gGUIFactory = 0;
+  gNULLFactory = 0;
 }
 // ---------------------------------------------------------------------------
 } // namespace lib

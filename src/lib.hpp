@@ -5,7 +5,8 @@
 // ---------------------------------------------------------------------------
 namespace lib {
 // ---------------------------------------------------------------------------
-bool init();
+bool init(bool onlyNULLDevice);
+const char * GUIFactoryName(bool useNULLDevice);    
 void quit();
 void printMessage(const char* string);
 double getTime();

@@ -5,9 +5,10 @@
 //
 // $Id$
 
+#include "R.h"
 #include "lib.hpp"
 
-
+#include "NULLgui.hpp"
 //
 // ===[ GUI IMPLEMENTATION ]=================================================
 //
@@ -15,16 +16,25 @@
 #include "x11gui.hpp"
 
 gui::X11GUIFactory* gpX11GUIFactory = NULL;
-
+gui::NULLGUIFactory* gpNULLGUIFactory = NULL;
 
 namespace lib {
 
-gui::GUIFactory* getGUIFactory()
+gui::GUIFactory* getGUIFactory(bool useNULLDevice)
 {
-  return (gui::GUIFactory*) gpX11GUIFactory;
+  if (useNULLDevice)
+    return (gui::GUIFactory*) gpNULLGUIFactory;
+  else if (gpX11GUIFactory)
+    return (gui::GUIFactory*) gpX11GUIFactory;
+  else
+    error("glX device not initialized");  
+}
+// ---------------------------------------------------------------------------
+const char * GUIFactoryName(bool useNULLDevice)
+{
+  return useNULLDevice ? "null" : "glX";
 }
 }
-
 //
 // ===[ R INTEGRATION ]=======================================================
 //
@@ -65,17 +75,22 @@ static void unset_R_handler()
 //
 namespace lib {
 
-bool init()
+bool init(bool useNULLDevice)
 {
   bool success = false;
 
   // construct GUI Factory
   
-  gpX11GUIFactory = new gui::X11GUIFactory(NULL);
+  gpNULLGUIFactory = new gui::NULLGUIFactory();
  
-  if ( gpX11GUIFactory->isConnected() ) {
-    set_R_handler();
+  if (useNULLDevice) {
     success = true;
+  } else {
+    gpX11GUIFactory = new gui::X11GUIFactory(NULL);
+    if ( gpX11GUIFactory->isConnected() ) {
+      set_R_handler();
+      success = true;
+    }
   }
   return success;
 }
@@ -84,6 +99,9 @@ void quit()
 {
   unset_R_handler();
   delete gpX11GUIFactory;
+  delete gpNULLGUIFactory;
+  gpX11GUIFactory = 0;
+  gpNULLGUIFactory = 0;
 }
 
 //

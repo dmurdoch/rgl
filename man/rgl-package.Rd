@@ -9,22 +9,26 @@
 \alias{rgl.quit}
 \alias{rgl.init}
 \alias{rgl.antialias}
+\alias{rgl.dev.list}
 \description{
   3D real-time rendering system.
 }
 \usage{
 # Low level rgl.* interface
-rgl.open()     # open new device
+rgl.open(useNULL = rgl.useNULL())     # open new device
 rgl.close()    # close current device
 rgl.cur()      # returns active device ID
+rgl.dev.list() # returns all device IDs
 rgl.set(which, silent=FALSE) # set device as active
 rgl.quit()     # shutdown rgl device system
-rgl.init(initValue=0)     # re-initialize rgl
+rgl.init(initValue=0, onlyNULL=FALSE)     # re-initialize rgl
 }
 \arguments{
+  \item{useNULL}{whether to open the \dQuote{null} device}
   \item{which}{device ID}
   \item{silent}{whether to suppress update of window titles}
   \item{initValue}{value for internal use only}
+  \item{onlyNULL}{only initialize the null (no display) device}
 }
 \details{
   RGL is a 3D real-time rendering device driver system for R.
@@ -44,6 +48,11 @@ rgl.init(initValue=0)     # re-initialize rgl
   more description of antialiasing and an alternative way to set the
   value.)
   
+  If \code{useNULL} is \code{TRUE}, \pkg{rgl} will use a \dQuote{null}
+  device.  This device records objects as they are plotted, but 
+  displays nothing. It is intended for use with \code{\link{writeWebGL}}
+  and similar functions.
+  
   If \code{rgl.open()} fails (e.g. because X windows is not running, or its
   \code{DISPLAY} variable is not set properly), then you can retry the initialization
   by calling \code{rgl.init()}.  Do not do this when windows have 
@@ -58,6 +67,18 @@ rgl.init(initValue=0)     # re-initialize rgl
 
   See the first example below to display the ChangeLog.
 }
+\value{
+  \code{rgl.open}, \code{rgl.close} and \code{rgl.set} are called for their side effects
+  and return no useful value.  Similarly \code{rgl.init} and \code{rgl.quit} are not designed
+  to return useful values; in fact, users shouldn't call them at all!
+  
+  \code{rgl.cur} returns the currently active devices, or \code{0} if none is
+  active; \code{rgl.dev.list} returns a vector of all open devices.  Both functions name
+  the items according to the type of device:  \code{null} for a hidden null device, 
+  \code{wgl} for a Windows device, \code{glX} for an X windows device, and
+  \code{NSopenGL} for a Cocoa device on OSX.
+}
+  
 \examples{
 file.show(system.file("NEWS", package="rgl"))
 example(surface3d)
@@ -79,6 +100,7 @@ example(plot3d)
 \code{\link{rgl.surface}},
 \code{\link{rgl.spheres}},
 \code{\link{rgl.sprites}},
-\code{\link{rgl.snapshot}}
+\code{\link{rgl.snapshot}},
+\code{\link{rgl.useNULL}}
 }
 \keyword{dynamic}

@@ -9,15 +9,23 @@
 ## ===[ SECTION: device management ]==========================================
 ##
 
+rgl.useNULL <- function() {
+  opt <- getOption("rgl.useNULL", Sys.getenv("RGL_USE_NULL"))
+  if (is.logical(opt)) return(opt)
+  opt <- as.character(opt)
+  if (!nchar(opt)) return(FALSE)
+  opt <- pmatch(tolower(opt), c("yes", "true"), nomatch=3)
+  c(TRUE, TRUE, FALSE)[opt]
+}
 
 ##
 ## open device
 ##
 ##
 
-rgl.open <- function() {
+rgl.open <- function(useNULL = rgl.useNULL()) {
 
-  ret <- .C( rgl_dev_open, success=FALSE )
+  ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL )
 
   if (! ret$success)
     stop("rgl.open failed")
@@ -51,16 +59,19 @@ rgl.close <- function() {
 
 rgl.cur <- function() {
 
-  ret <- .C( rgl_dev_getcurrent, 
-    success=FALSE, 
-    id=as.integer(0)
-  )
+  .Call( rgl_dev_getcurrent )
 
-  if (! ret$success)
-    stop("rgl_dev_getcurrent")
+}
 
-  return(ret$id)
+## 
+## get all devices
+##
+##
 
+rgl.dev.list <- function() {
+
+  .Call( rgl_dev_list )
+  
 }
 
 
@@ -102,7 +113,7 @@ rgl.snapshot <- function( filename, fmt="png", top=TRUE )
   )
 
   if (! ret$success)
-    print("failed")
+    warning("snapshot failed")
 }
 
 ##
@@ -121,7 +132,7 @@ rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
   )
 
   if (! ret$success)
-    print("failed")
+    warning("postscript conversion failed")
 }
 
 ##
@@ -146,7 +157,7 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
       values = single(size[1]*size[2]))
  
     if (! ret$success)
-      stop("Error reading component", component[i])
+      warning("Error reading component ", component[i])
     result[,,i] <- ret$values
   }
   if (length(component) > 1) return(result)
