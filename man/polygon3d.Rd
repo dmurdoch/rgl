@@ -8,7 +8,8 @@ This function takes a description of a flat polygon in x, y and z coordinates,
 and draws it in three dimensions.
 }
 \usage{
-polygon3d(x, y = NULL, z = NULL, fill = TRUE, plot = TRUE, coords = 1:2, random = TRUE, ...)
+polygon3d(x, y = NULL, z = NULL, fill = TRUE, plot = TRUE, 
+          coords = 1:2, random = TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
