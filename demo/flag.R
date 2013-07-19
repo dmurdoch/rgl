@@ -21,5 +21,6 @@ wave <- function(time) {
 open3d()
 material3d(texture = system.file("textures","rgl2.png", package="rgl"))
 spin <- spin3d(rpm=6,axis=c(0,0,1))
-play3d(wave, 10)
+if (!rgl.useNULL())
+  play3d(wave, 10)
 
