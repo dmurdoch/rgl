@@ -26,9 +26,9 @@ minute about the specified \code{axis}.
 # Spin one object
 open3d()
 plot3d(oh3d(col="lightblue", alpha=0.5))
-play3d(spin3d(axis=c(1,0,0), rpm=20), duration=3)
+if (!rgl.useNULL())
+  play3d(spin3d(axis=c(1,0,0), rpm=20), duration=3)
 
-\donttest{
 # Show spinning sprites, and rotate the whole view
 open3d()
 spriteid <- NULL
@@ -47,7 +47,7 @@ f <- function(time) {
                      base=spin1(time)$userMatrix)$userMatrix)
     spin1(time)
 }
-play3d(f, duration=10)
-}
+if (!rgl.useNULL())
+  play3d(f, duration=10)
 }
 \keyword{ dplot }
