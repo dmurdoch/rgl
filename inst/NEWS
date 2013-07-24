@@ -482,7 +482,7 @@ v0.93.944
     work in some browsers (e.g. Firefox and Chrome with the ANGLE
     WebGL engine).
   
-v0.93.949
+v0.93.951
   - added triangulate(), polygon3d() , extrude3d() and turn3d() 
      for display of shapes based on two-dimensional polygons or curves.
   - fixed formatting of vertex reference numbers in writeOBJ() (issue

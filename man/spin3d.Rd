@@ -48,6 +48,6 @@ f <- function(time) {
     spin1(time)
 }
 if (!rgl.useNULL())
-  play3d(f, duration=10)
+  play3d(f, duration=3)
 }
 \keyword{ dplot }
