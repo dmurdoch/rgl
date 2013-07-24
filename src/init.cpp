@@ -54,7 +54,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL)
     return ScalarInteger( 0 );
   }  
   if ( lib::init(useNULLDevice) ) {
-    deviceManager = new DeviceManager();
+    deviceManager = new DeviceManager(useNULLDevice);
     success = 1;
   }
 

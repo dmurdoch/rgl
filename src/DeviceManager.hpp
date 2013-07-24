@@ -17,9 +17,9 @@
 class DeviceManager : protected IDisposeListener {
 
 public:
-  DeviceManager();	
+  DeviceManager(bool in_useNULLDevice);	
   virtual ~DeviceManager();
-  bool    openDevice(bool useNULL = false);
+  bool    openDevice(bool useNULL);
   Device* getCurrentDevice(void);
   Device* getAnyDevice(void);
   Device* getDevice(int id);
@@ -41,6 +41,7 @@ private:
   int       newID;
   Container devices;
   Iterator  current; 
+  bool	    useNULLDevice;
 };
 
 #endif // DEVICE_MANAGER_HPP
