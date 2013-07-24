@@ -10,8 +10,8 @@
 #include "assert.hpp"
 #include "lib.hpp"
 
-DeviceManager::DeviceManager() 
- : newID(1), devices(), current( devices.end() )
+DeviceManager::DeviceManager(bool in_useNULLDevice) 
+ : newID(1), devices(), current( devices.end() ), useNULLDevice(in_useNULLDevice)
 { }
 
 DeviceManager::~DeviceManager()
@@ -58,7 +58,7 @@ Device* DeviceManager::getAnyDevice()
 {
   Device* pDevice = getCurrentDevice();
   if (pDevice == NULL) {
-    openDevice();
+    openDevice(useNULLDevice);
     pDevice = getCurrentDevice();
   }
   return pDevice;

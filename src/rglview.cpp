@@ -524,11 +524,11 @@ bool RGLView::pixels( int* ll, int* size, int component, float* result )
   bool success = false;
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
                       GL_DEPTH_COMPONENT, GL_LUMINANCE};   
-  glEnable(GL_DEPTH_TEST);
-  glDepthMask(GL_TRUE);
-  
   if ( windowImpl->beginGL() ) {
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+  
     // read front buffer
 
     glPushAttrib(GL_PIXEL_MODE_BIT);
