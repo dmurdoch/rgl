@@ -400,6 +400,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var saveMat = new CanvasMatrix4();
 	   saveMat.makeIdentity();
 	   var distance;
+	   var posLoc = 0;
+	   var colLoc = 1;
 ', prefix, snapshotimg2, width, height)
   
   setUser <- function() c(
@@ -602,6 +604,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   var prog%id%  = gl.createProgram();
 	   gl.attachShader(prog%id%, getShader( gl, "%prefix%vshader%id%" ));
 	   gl.attachShader(prog%id%, getShader( gl, "%prefix%fshader%id%" ));
+	   //  Force aPos to location 0, aCol to location 1 
+	   gl.bindAttribLocation(prog%id%, 0, "aPos");
+	   gl.bindAttribLocation(prog%id%, 1, "aCol");
 	   gl.linkProgram(prog%id%);', id, prefix))
    
     nv <- rgl.attrib.count(id, "vertices")
@@ -782,12 +787,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   var values%id% = v;', 
                   id),
 	   
-      if (!sprites_3d) subst(      
-'	   var posLoc%id% = gl.getAttribLocation(prog%id%, "aPos");
-	   var colLoc%id% = gl.getAttribLocation(prog%id%, "aCol");',
-                  id),
-                  
-    if (is_lit && !fixed_quads && !sprites_3d) subst(
+      if (is_lit && !fixed_quads && !sprites_3d) subst(
 '	   var normLoc%id% = gl.getAttribLocation(prog%id%, "aNorm");', 
         id))
 
@@ -919,8 +919,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	     gl.uniformMatrix4fv( normMatLoc%id%, false, usermat);',
           id))
 
-      result <- c(result, subst(
-'	     gl.enableVertexAttribArray( posLoc%id% );',  id))
+      result <- c(result, 
+'	     gl.enableVertexAttribArray( posLoc );')
 
       count <- rgl.attrib.count(id, "vertices")
       stride <- 12 
@@ -1004,10 +1004,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         sy <- 1/scale[2]
         sz <- 1/scale[3]
         result <- c(result, subst(
-'	     gl.vertexAttribPointer(posLoc%id%,  3, gl.FLOAT, false, %sphereStride%,  0);
+'	     gl.vertexAttribPointer(posLoc,  3, gl.FLOAT, false, %sphereStride%,  0);
 	     gl.enableVertexAttribArray(normLoc%id% );
 	     gl.vertexAttribPointer(normLoc%id%,  3, gl.FLOAT, false, %sphereStride%,  0);
-	     gl.disableVertexAttribArray( colLoc%id% );
+	     gl.disableVertexAttribArray( colLoc );
 	     var sphereNorm = new CanvasMatrix4();
 	     sphereNorm.scale(%sx%, %sy%, %sz%);
 	     sphereNorm.multRight(normMatrix);
@@ -1017,8 +1017,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           if (nc == 1) {
             colors <- rgl.attrib(id, "colors")
             subst(
-'	     gl.vertexAttrib4f( colLoc%id%, %r%, %g%, %b%, %a%);',
-             id, r=colors[1], g=colors[2], b=colors[3], a=colors[4])
+'	     gl.vertexAttrib4f( colLoc, %r%, %g%, %b%, %a%);',
+	    r=colors[1], g=colors[2], b=colors[3], a=colors[4])
 	  },
 	
           subst(
@@ -1043,10 +1043,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	 
 	   if (nc > 1) subst(
 '	       ofs = baseofs + %cofs%;       
-	       gl.vertexAttrib4f( colLoc%id%, values%id%[ofs], 
-	       				    values%id%[ofs+1], 
-	       				    values%id%[ofs+2],
-	       				    values%id%[ofs+3] );',
+	       gl.vertexAttrib4f( colLoc, values%id%[ofs], 
+					  values%id%[ofs+1], 
+					  values%id%[ofs+2],
+					  values%id%[ofs+3] );',
 	     cofs=cofs/4, id),
 	   
            subst(
@@ -1057,14 +1057,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         if (nc == 1) {
           colors <- rgl.attrib(id, "colors")
           result <- c(result, subst(
-'	     gl.disableVertexAttribArray( colLoc%id% );
-	     gl.vertexAttrib4f( colLoc%id%, %r%, %g%, %b%, %a% );', 
-            id, r=colors[1], g=colors[2], b=colors[3], a=colors[4]))
+'	     gl.disableVertexAttribArray( colLoc );
+	     gl.vertexAttrib4f( colLoc, %r%, %g%, %b%, %a% );', 
+            r=colors[1], g=colors[2], b=colors[3], a=colors[4]))
         } else {
           result <- c(result, subst(
-'	     gl.enableVertexAttribArray( colLoc%id% );
-	     gl.vertexAttribPointer(colLoc%id%, 4, gl.FLOAT, false, %stride%, %cofs%);',
-            id, stride, cofs))
+'	     gl.enableVertexAttribArray( colLoc );
+	     gl.vertexAttribPointer(colLoc, 4, gl.FLOAT, false, %stride%, %cofs%);',
+            stride, cofs))
         }
     
         if (is_lit && nn > 0) {
@@ -1123,8 +1123,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         }
       
         result <- c(result, subst(
-'	     gl.vertexAttribPointer(posLoc%id%,  3, gl.FLOAT, false, %stride%,  0);',
-            id, stride),
+'	     gl.vertexAttribPointer(posLoc,  3, gl.FLOAT, false, %stride%,  0);',
+            stride),
       	
           if (is_indexed) subst(
 '	     gl.drawElements(gl.%mode%, %count%, gl.UNSIGNED_SHORT, 0);',
