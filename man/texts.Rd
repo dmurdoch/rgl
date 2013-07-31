@@ -101,6 +101,9 @@ function, and are resizable.
 Other platforms will use the default bitmapped font which is not
 resizable.  Currently MacOSX defaults to the bitmapped font, as
 our font library appears unable to read fonts properly on that platform.
+
+Bitmapped fonts have a limited number of characters supported; if any
+unsupported characters are used, an error will be thrown.
 }
 \value{
   The text drawing functions return the object ID of the text object i
