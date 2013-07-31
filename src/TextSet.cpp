@@ -46,6 +46,8 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
 
     boundingBox += vertexArray[i];
       
+    if (!fonts[i % fonts.size()])
+      error("font not available");
     if (!fonts[i % fonts.size()]->valid(textArray[i].text))
       error("text %d contains unsupported character", i+1);
   }
