@@ -33,6 +33,11 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
 
   vertexArray.alloc(in_ntexts);
 
+  fonts = in_fonts;
+#ifdef HAVE_FREETYPE  
+  blended = true;
+#endif  
+    
   for (i=0;i<in_ntexts;i++) {
 
     vertexArray[i].x = (float) in_center[i*3+0];
@@ -40,11 +45,11 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
     vertexArray[i].z = (float) in_center[i*3+2];
 
     boundingBox += vertexArray[i];
+      
+    if (!fonts[i % fonts.size()]->valid(textArray[i].text))
+      error("text %d contains unsupported character", i+1);
   }
-  fonts = in_fonts;
-#ifdef HAVE_FREETYPE  
-  blended = true;
-#endif
+
 }
 
 TextSet::~TextSet()

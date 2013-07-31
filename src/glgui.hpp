@@ -38,6 +38,7 @@ public:
   virtual double width(const char* text) = 0;
   virtual double width(const wchar_t* text) = 0;
   virtual double height() = 0;
+  virtual bool valid(const char* text) { return true; };
   // justify returns false if justification puts the text outside the viewport
   GLboolean justify(double width, double height, double adjx, double adjy, const RenderContext& rc);
   char* family;
@@ -78,6 +79,7 @@ public:
   double width(const char* text);
   double width(const wchar_t* text);
   double height();
+  bool valid(const char* text);
   
   GLuint listBase;
   GLuint firstGlyph;

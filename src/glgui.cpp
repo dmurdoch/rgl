@@ -59,15 +59,21 @@ GLBitmapFont::~GLBitmapFont() {
 
 double GLBitmapFont::width(const char* text) {
   double result = 0.0;
-  for(int i=0; text[i]; i++)
-    result += widths[(text[i]-firstGlyph)];
+  for(int i=0; text[i]; i++) {
+    char c;
+    if (text[i] >= firstGlyph && (c = text[i] - firstGlyph) < nglyph)
+      result += widths[c];
+  }
   return result;
 }
 
 double GLBitmapFont::width(const wchar_t* text) {
   double result = 0.0;
-  for(int i=0; text[i]; i++)
-    result += widths[(text[i]-firstGlyph)];
+  for(int i=0; text[i]; i++) {
+    wchar_t c;
+    if (text[i] >= firstGlyph && (c = text[i] - firstGlyph) < nglyph)
+      result += widths[c];  
+  }    
   return result;
 }
   
@@ -75,11 +81,17 @@ double GLBitmapFont::height() {
   return ascent;
 }
 
+bool GLBitmapFont::valid(const char* text) {
+  for (int i=0; text[i]; i++)
+    if (text[i] < firstGlyph || text[i] - firstGlyph >= nglyph)
+      return false;
+  return true;
+}
+
 void GLBitmapFont::draw(const char* text, int length, 
                         double adjx, double adjy, const RenderContext& rc) {
     
   if (justify(width(text), height(), adjx, adjy, rc)) {
-  
     if (rc.gl2psActive == GL2PS_NONE) {
       glListBase(listBase);
       glCallLists(length, GL_UNSIGNED_BYTE, text);
@@ -92,10 +104,11 @@ void GLBitmapFont::draw(const wchar_t* text, int length,
                         double adjx, double adjy, const RenderContext& rc) {
   
   if (justify(width(text), height(), adjx, adjy, rc)) {
-  
+    GLenum type = sizeof(wchar_t) == 4 ? GL_UNSIGNED_INT :
+                  sizeof(wchar_t) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_BYTE ;
     if (rc.gl2psActive == GL2PS_NONE) {
       glListBase(listBase);
-      glCallLists(length, GL_UNSIGNED_BYTE, text);
+      glCallLists(length, type, text);
     }
   // gl2ps doesn't support wchar_t?  Should convert?
   }
