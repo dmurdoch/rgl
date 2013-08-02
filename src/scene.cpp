@@ -3,7 +3,7 @@
 //
 // $Id$
 
-
+#include "gl2ps.h"
 #include "scene.h"
 #include "rglmath.h"
 #include "render.h"
@@ -566,7 +566,10 @@ void Scene::render(RenderContext* renderContext)
     SAVEGLERROR;
     
     // SETUP BLENDING
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    if (renderContext->gl2psActive == GL2PS_NONE) 
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    else
+      gl2psBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
     SAVEGLERROR;
     

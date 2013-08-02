@@ -1,5 +1,6 @@
 #include "BBoxDeco.hpp"
 
+#include "gl2ps.h"
 #include "glgui.hpp"
 #include "scene.h"
 #include <cstdio>
@@ -430,8 +431,10 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     if (material.line_antialias || material.isTransparent()) {
       // SETUP BLENDING
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-  
+      if (renderContext->gl2psActive == GL2PS_NONE) 
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+      else
+	gl2psBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
       // ENABLE BLENDING
       glEnable(GL_BLEND);
       
