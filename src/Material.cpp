@@ -1,5 +1,6 @@
 #include "Material.hpp"
 
+#include "gl2ps.h"
 #include "opengl.hpp"
 #include "Texture.hpp"
 #include "R.h"
@@ -135,9 +136,14 @@ void Material::beginUse(RenderContext* renderContext)
 
   SAVEGLERROR;
 
-  glPointSize( size );
-  glLineWidth( lwd );
-
+  if (renderContext->gl2psActive == GL2PS_NONE) {
+    glPointSize( size );
+    glLineWidth( lwd );
+  } else {
+    gl2psPointSize( size );
+    gl2psLineWidth( lwd );
+  }
+  
   if (texture)
     texture->beginUse(renderContext);
 

@@ -494,9 +494,11 @@ v0.93.952
   - examples and demos now check rgl.useNULL(), and don't run invisible
     animations.
     
-v0.93.954
+v0.93.956
   - writeWebGL now forces the position attribute to location 0, a
     recommended optimization strategy.  The colour attribute is
     forced to location 1.
   - we now check for invalid characters when drawing text using bitmapped
     fonts (bug 4787)
+  - gl2ps has been updated to version 1.3.8 and support for point and line
+    sizes has been added (bug 4792)
