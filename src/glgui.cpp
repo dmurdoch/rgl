@@ -61,8 +61,8 @@ double GLBitmapFont::width(const char* text) {
   double result = 0.0;
   for(int i=0; text[i]; i++) {
     char c;
-    if (text[i] >= firstGlyph && (c = text[i] - firstGlyph) < nglyph)
-      result += widths[c];
+    if ((int)(text[i]) >= (int)firstGlyph && (c = text[i] - firstGlyph) < (int)nglyph)
+      result += widths[(int)c];
   }
   return result;
 }
@@ -83,7 +83,7 @@ double GLBitmapFont::height() {
 
 bool GLBitmapFont::valid(const char* text) {
   for (int i=0; text[i]; i++)
-    if (text[i] < firstGlyph || text[i] - firstGlyph >= nglyph)
+    if ((int)text[i] < (int)firstGlyph || text[i] - firstGlyph >= (int)nglyph)
       return false;
   return true;
 }
