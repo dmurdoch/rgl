@@ -20,7 +20,6 @@
 \alias{rgl.enum.halign}
 \alias{rgl.enum.texmagfilter}
 \alias{rgl.enum.texminfilter}
-\alias{rgl.select}
 \alias{rgl.selectstate}
 \alias{rgl.setselectstate}
 \alias{edgemap}
@@ -54,7 +53,6 @@ rgl.enum.primtype(primtype)
 rgl.enum.halign(halign)
 rgl.enum.texmagfilter(magfiltertype)
 rgl.enum.texminfilter(minfiltertype)
-rgl.select(button = c("left", "middle", "right"))
 rgl.selectstate()
 rgl.setselectstate(state)
 edgemap(size)
