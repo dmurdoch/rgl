@@ -157,7 +157,7 @@ property int vertex2\n", file=con)
     x$normals <- x$vb
     for (i in seq_len(n)) {
       col <- colors[i,]
-      x$material$col <- rgb(col[1], col[2], col[3], col[4])
+      x$material$col <- rgb(col[1], col[2], col[3], col[4], maxColorValue = 255)
       writeMesh(x, radii[i], vertices[i,])
     }
   }  
@@ -187,7 +187,7 @@ property int vertex2\n", file=con)
       for (i in seq_len(n)) {
         if (withColors) {
           col <- vertices[i,4:7]
-          pointShape$material$col <- rgb(col[1], col[2], col[3], col[4])
+          pointShape$material$col <- rgb(col[1], col[2], col[3], col[4], maxColorValue = 255)
         }
         writeMesh(pointShape, radius, vertices[i,1:3])
       }
@@ -196,6 +196,10 @@ property int vertex2\n", file=con)
   
   writeSegments <- function(id) {
     vertices <- getVertices(id)
+    if (withColors) {
+      colors <- vertices[, 4:7, drop=FALSE]
+      vertices <- vertices[, 1:3, drop=FALSE]
+    }
     n <- nrow(vertices)    
     n <- n/2
     if (linesAsEdges) {
@@ -211,9 +215,9 @@ property int vertex2\n", file=con)
      			   closed = -2 )
 	if (withColors) {
           col1 <- colors[2*i-1,]
-          col1 <- rgb(col1[1], col1[2], col1[3], col1[4])
+          col1 <- rgb(col1[1], col1[2], col1[3], col1[4], maxColorValue = 255)
           col2 <- colors[2*i,]
-          col2 <- rgb(col2[1], col2[2], col2[3], col2[4])
+          col2 <- rgb(col2[1], col2[2], col2[3], col2[4], maxColorValue = 255)
         
           cyl$material$col <- c(rep(col1, lineSides),
                                 rep(col2, lineSides), col1, col2)
@@ -241,10 +245,11 @@ property int vertex2\n", file=con)
      			   sides = lineSides, 
      			   closed = -2 )
         if (withColors) {
+	  colors <- vertices[i, 4:7]
           col1 <- colors[i,]
-          col1 <- rgb(col1[1], col1[2], col1[3], col1[4])
+          col1 <- rgb(col1[1], col1[2], col1[3], col1[4], maxColorValue = 255)
           col2 <- colors[i+1,]
-          col2 <- rgb(col2[1], col2[2], col2[3], col2[4])
+          col2 <- rgb(col2[1], col2[2], col2[3], col2[4], maxColorValue = 255)
         
           cyl$material$col <- c(rep(col1, lineSides),
                                 rep(col2, lineSides), col1, col2)
