@@ -494,7 +494,7 @@ v0.93.952
   - examples and demos now check rgl.useNULL(), and don't run invisible
     animations.
     
-v0.93.958
+v0.93.959
   - writeWebGL now forces the position attribute to location 0, a
     recommended optimization strategy.  The colour attribute is
     forced to location 1.
@@ -504,4 +504,4 @@ v0.93.958
     sizes has been added (bug 4792)
   - internal functions .check3d() and rgl.select() have been exported,
     as they were used by the car package.
-  - writePLY had errors writing points and lines
+  - writePLY had errors writing points and lines.
