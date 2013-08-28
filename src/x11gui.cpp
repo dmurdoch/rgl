@@ -361,7 +361,14 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
     UNPROTECT(1);
 #endif
   }
-  return fonts[0];  
+  if (strcmp(family, fonts[0]->family)) warning("font family \"%s\" not found, using \"%s\"", 
+                                         family, fonts[0]->family);
+  else if (style != fonts[0]->style) warning("\"%s\" family only supports font %d", 
+                                        fonts[0]->family, fonts[0]->style);
+  else if (cex != fonts[0]->cex) warning("\"%s\" family only supports cex = %g",
+  					fonts[0]->family, fonts[0]->cex);
+  else if (useFreeType) warning("FreeType font not available");
+  return fonts[0];
 }
 
 GLBitmapFont* X11WindowImpl::initGLFont()
