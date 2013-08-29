@@ -30,7 +30,7 @@ mesh.
 \details{
 The extrusion is always constructed with the polygon in the xy plane at
 \code{z = 0} and another copy at \code{z = thickness}.  Use
-the transformation functions (e.g. \code{\link{rotate3d}} to 
+the transformation functions (e.g. \code{\link{rotate3d}}) to 
 obtain other orientations and placements.
 }
 \value{
