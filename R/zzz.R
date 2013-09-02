@@ -93,7 +93,7 @@
 }
 
 rgl.init <- function(initValue = 0, onlyNULL = FALSE) .Call( rgl_init, 
-    initValue, onlyNULL )
+    initValue, onlyNULL, environment(rgl.init) )
 
 ##
 ## exit-point
