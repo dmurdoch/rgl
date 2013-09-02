@@ -17,6 +17,7 @@ namespace gui {
 
 int gInitValue;
 void* gHandle;
+SEXP rglNamespace;
 
 //
 // FUNCTION
@@ -35,13 +36,14 @@ void* gHandle;
 extern "C" {
 #endif
 
-SEXP rgl_init(SEXP initValue, SEXP useNULL)
+SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
 {
   int success = 0;
   bool useNULLDevice = asLogical(useNULL);
 
   gInitValue = 0;
   gHandle = NULL;
+  rglNamespace = in_namespace;
   
   if ( isNumeric(initValue) ) {
     gInitValue =  asInteger(initValue);

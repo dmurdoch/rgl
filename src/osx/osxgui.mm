@@ -24,6 +24,7 @@
 #define EMULATE_MIDDLE_KEYMOD NSAlternateKeyMask
 // ---------------------------------------------------------------------------
 namespace gui {
+extern SEXP    rglNamespace;
 // ---------------------------------------------------------------------------
 class OSXWindowImpl : public WindowImpl
 {
@@ -180,7 +181,7 @@ GLFont* OSXWindowImpl::getFont(const char* family, int style, double cex,
 #ifdef HAVE_FREETYPE
     int len=0;
     SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"),
-                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          ScalarString(mkChar(family))), rglNamespace)),
                                           0);
     if (isString(Rfontname) && length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1));

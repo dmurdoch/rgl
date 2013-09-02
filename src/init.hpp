@@ -26,7 +26,7 @@ extern "C" {
 
 /* library service */
 
-EXPORT_SYMBOL SEXP rgl_init          (SEXP initValue, SEXP onlyNULL);
+EXPORT_SYMBOL SEXP rgl_init          (SEXP initValue, SEXP onlyNULL, SEXP in_namespace);
 
 #ifdef __cplusplus
 }

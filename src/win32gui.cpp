@@ -23,6 +23,7 @@ namespace gui {
 
 extern int     gInitValue;
 extern HANDLE  gHandle;
+extern SEXP    rglNamespace;
 static WNDPROC gDefWindowProc;
 static HWND    gMDIClientHandle = 0;
 static HWND    gMDIFrameHandle  = 0;
@@ -371,7 +372,7 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
     if (strcmp(family, "NA") && beginGL()) {  // User passes NA_character_ for default, looks like "NA" here
       
       SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("windowsFonts"), 
-                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          ScalarString(mkChar(family))), rglNamespace)),
                                           0);
       if (isString(Rfontname)) {
         const char* fontname = CHAR(STRING_ELT(Rfontname, 0)); 
@@ -437,7 +438,7 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
     char fontname_absolute[MAX_PATH+1] = "";
     int len=0;
     SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
-                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          ScalarString(mkChar(family))), rglNamespace)),
                                           0);
     if (isString(Rfontname) && length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
