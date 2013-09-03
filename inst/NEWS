@@ -508,7 +508,8 @@ v0.93.960
   - rgl now prints a warning when a requested font is unavailable and the
     default font is substituted.
     
-v0.93.962
+v0.93.963
   - font selection assumed rgl was on the search path; now it may be 
-    imported but not attached.
+    imported but not attached.  Similarly, r3dDefaults need not be on
+    the search path.
     

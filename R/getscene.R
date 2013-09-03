@@ -96,7 +96,7 @@ print.rglobject <- function(x, ...) {
 
 plot3d.rglscene <- function(x, add=FALSE, ...) {
   if (!add) {
-    params <- get("r3dDefaults", envir = .GlobalEnv)
+    params <- getr3dDefaults()
     if (!is.null(x$material)) {
       if (is.null(params$material)) params$material <- list()
       params$material[names(x$material)] <- x$material

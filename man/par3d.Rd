@@ -2,6 +2,7 @@
 \alias{par3d}
 \alias{open3d}
 \alias{r3dDefaults}
+\alias{getr3dDefaults}
 \concept{FOV}
 \concept{modelMatrix}
 \concept{mouseMode}
@@ -23,9 +24,10 @@
 \usage{
 par3d(\dots, no.readonly = FALSE)
 
-open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv), 
+open3d(\dots, params=getr3dDefaults(), 
 	    useNULL = rgl.useNULL())
-
+	    
+getr3dDefaults()
 }
 
 \arguments{
@@ -50,12 +52,13 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv),
   may only be used in queries, i.e., they do \emph{not} set anything.
 
   \code{open3d} opens a new rgl device, and sets the parameters as
-  requested.  The \code{r3dDefaults} list will be used as default
+  requested.  The \code{r3dDefaults} list returned by the 
+  \code{getr3dDefaults} function will be used as default
   values for parameters.  As installed this sets the point of view to
   'world coordinates' (i.e. x running from left to right, y from front
   to back, z from bottom to top), the \code{mouseMode} to
   \code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.
-  Users may create their own variable of that name in the global
+  Users may create their own variable named \code{r3dDefaults} in the global
   environment and it will override the installed one.  If there
   is a \code{bg} element in the list or the arguments, it should be
   a list of arguments to pass to the \code{\link{bg3d}} function to 

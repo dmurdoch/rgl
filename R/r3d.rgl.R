@@ -5,8 +5,12 @@
 
 # Node Management
 
+getr3dDefaults <- function() 
+    tryCatch(get("r3dDefaults", envir=.GlobalEnv),
+	     error = function(e) r3dDefaults)
+
 clear3d     <- function(type = c("shapes", "bboxdeco", "material"), 
-                        defaults=get("r3dDefaults", envir=.GlobalEnv)) {
+                        defaults=getr3dDefaults()) {
     .check3d()
     rgl.clear( type )
     type <- rgl.enum.nodetype(type)
@@ -166,7 +170,7 @@ abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
 sprites3d   <- function(x,y=NULL,z=NULL,radius=1,shapes=NULL,userMatrix,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   if (missing(userMatrix)) {
-    userMatrix <- get("r3dDefaults", globalenv())$userMatrix
+    userMatrix <- getr3dDefaults()$userMatrix
     if (is.null(userMatrix)) userMatrix <- diag(4)
   }
   savepar <- par3d(skipRedraw=TRUE, ignoreExtent=TRUE)
@@ -226,7 +230,7 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  family = "sans",
 		  material = list(color="black", fog=FALSE))
 
-open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv), 
+open3d <- function(..., params = getr3dDefaults(), 
                    useNULL = rgl.useNULL()	)
 {
     args <- list(...)
