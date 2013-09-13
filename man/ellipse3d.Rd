@@ -75,10 +75,10 @@ A \code{\link{mesh3d}} object representing the ellipsoid.
 # probability region for a
 # trivariate normal distribution with mean 0, unit variances and 
 # correlation 0.8.
-if (require(MASS)) {
+if (requireNamespace("MASS")) {
   Sigma <- matrix(c(10,3,0,3,2,0,0,0,1), 3,3)
   Mean <- 1:3
-  x <- mvrnorm(1000, Mean, Sigma)
+  x <- MASS::mvrnorm(1000, Mean, Sigma)
   
   open3d()
   
