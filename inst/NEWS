@@ -513,3 +513,7 @@ v0.93.963
     imported but not attached.  Similarly, r3dDefaults need not be on
     the search path.
     
+v0.93.965
+  - rgl.texts without a window failed because it queried the window
+    before opening it.
+    
