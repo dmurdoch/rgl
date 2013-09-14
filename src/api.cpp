@@ -1350,7 +1350,7 @@ char* getFamily()
   const char* f;
   char* result = NULL;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     f = device->getRGLView()->getFontFamily();
     result = R_alloc(strlen(f)+1, 1);
     strcpy(result, f);
@@ -1376,7 +1376,7 @@ int getFont()
 {
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     int result = device->getRGLView()->getFontStyle();
     CHECKGLERROR;
     return result;
@@ -1400,7 +1400,7 @@ double getCex()
 {
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     double result = device->getRGLView()->getFontCex();
     CHECKGLERROR;  
     return result;
@@ -1424,7 +1424,7 @@ int getUseFreeType()
 {
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     int result = (int) device->getRGLView()->getFontUseFreeType();
     CHECKGLERROR;  
     return result;
@@ -1450,7 +1450,7 @@ char* getFontname()
   const char* f;
   char* result = NULL;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     f = device->getRGLView()->getFontname();
     result = R_alloc(strlen(f)+1, 1);
     strcpy(result, f);
@@ -1463,7 +1463,7 @@ int getAntialias()
 {
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     WindowImpl* windowImpl = device->getRGLView()->windowImpl;
     if (windowImpl->beginGL()) {
       int result;      
