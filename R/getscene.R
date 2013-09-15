@@ -22,7 +22,7 @@ scene3d <- function() {
   getObject <- function(id, type) {
     result <- list(id=id, type=type)
     
-    if (!(type %in% c("background", "bboxdeco")))
+    if (type != "background")
       result$material <- matdiff(rgl.getmaterial(id=id))
     
     attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
@@ -214,8 +214,7 @@ plot3d.rglobject <- function(x, ...) {
 }
 
 plot3d.rglbboxdeco <- function(x, ...) {
-  # FIXME: can't read these
-  args <- list(draw_front = TRUE, front="lines", back="lines")     
+  args <- list()     
   v <- x$vertices
   t <- x$texts
   ind <- is.na(v[,2]) & is.na(v[,3])
@@ -236,5 +235,7 @@ plot3d.rglbboxdeco <- function(x, ...) {
     if (!is.null(t))
       args$zlab <- t[ind]
   }
+  args <- c(args, x$material)
+  
   do.call("bbox3d", args)
 }

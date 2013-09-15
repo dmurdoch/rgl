@@ -43,18 +43,20 @@ convertBBox <- function(id) {
   text <- rgl.attrib(id, "text")
   if (!length(text))
     text <- rep("", NROW(verts))
+  mat <- rgl.getmaterial(id)
+  mat$color <- mat$color[2] # We ignore the "box" colour
   
   if(any(missing <- text == "")) 
     text[missing] <- apply(verts[missing,], 1, function(row) format(row[!is.na(row)]))
     
   res <- integer(0)
   if (any(inds <- is.na(verts[,2]) & is.na(verts[,3]))) 
-    res <- c(res, axis3d("x", at=verts[inds, 1], labels=text[inds]))
+    res <- c(res, do.call(axis3d, c(list(edge = "x", at = verts[inds, 1], labels = text[inds]), mat)))
   if (any(inds <- is.na(verts[,1]) & is.na(verts[,3]))) 
-    res <- c(res, axis3d("y", at=verts[inds, 2], labels=text[inds]))
+    res <- c(res, do.call(axis3d, c(list(edge = "y", at = verts[inds, 2], labels = text[inds]), mat)))
   if (any(inds <- is.na(verts[,1]) & is.na(verts[,2]))) 
-    res <- c(res, axis3d("z", at=verts[inds, 3], labels=text[inds]))
-  res <- c(res, box3d())
+    res <- c(res, do.call(axis3d, c(list(edge = "z", at = verts[inds, 3], labels = text[inds]), mat)))
+  res <- c(res, do.call(box3d, mat))
   res
 }
 

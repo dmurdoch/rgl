@@ -819,8 +819,13 @@ void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double*
       Shape* shape = scene->get_shape(*id, true);
       if (shape) 
         mat = shape->getMaterial(); /* success! successptr will be set below */
-      else
-        return;
+      else {
+	BBoxDeco* bboxdeco = scene->get_bboxdeco();
+	if (bboxdeco && *id == bboxdeco->getObjID())
+	  mat = bboxdeco->getMaterial();
+	else 
+	  return;
+      }
     } else
       return;
   }
