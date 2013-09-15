@@ -22,8 +22,7 @@ scene3d <- function() {
   getObject <- function(id, type) {
     result <- list(id=id, type=type)
     
-    if (type != "background")
-      result$material <- matdiff(rgl.getmaterial(id=id))
+    result$material <- matdiff(rgl.getmaterial(id=id))
     
     attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
@@ -40,6 +39,14 @@ scene3d <- function() {
         objlist[[i]] <- getObject(result$ids[i,1], result$types[i,1])
       result$objects <- objlist
     }
+    if (type == "background") {
+      flags <- rgl.attrib(id, "flags")
+      result$sphere <- flags["sphere", 1]
+      result$fogtype <- if (flags["linear_fog", 1]) "linear"
+                        else if (flags["exp_fog", 1]) "exp"
+			else if (flags["exp2_fog", 1]) "exp2"
+			else "none"
+    }      
     class(result) <- c(paste0("rgl", type), "rglobject")
     result
   }
@@ -54,9 +61,6 @@ scene3d <- function() {
     
   obj <- rgl.ids("background")
   bg <- getObject(obj$id, "background")
-  col <- bg$colors
-  bg$color <- rgb(col[,1], col[,2], col[,3])
-  bg$colors <- NULL
   result$bg <- bg
   
   if (nrow(obj <- rgl.ids("bboxdeco")))
@@ -103,6 +107,9 @@ plot3d.rglscene <- function(x, add=FALSE, ...) {
     }
     if (!is.null(x$bg)) {
       if (is.null(params$bg)) params$bg <- list()
+      params$bg[names(params$material)] <- params$material
+      params$bg[names(x$bg$material)] <- x$bg$material
+      x$bg$material <- x$bg$id <- x$bg$type <- NULL
       params$bg[names(x$bg)] <- x$bg
     }
     if (!is.null(x$par3d)) {
@@ -238,4 +245,9 @@ plot3d.rglbboxdeco <- function(x, ...) {
   args <- c(args, x$material)
   
   do.call("bbox3d", args)
+}
+
+plot3d.rglbackground <- function(x, ...) {
+  args <- c(list(sphere = x$sphere, fogtype = x$fogtype), x$material)
+  do.call("bg3d", args)
 }

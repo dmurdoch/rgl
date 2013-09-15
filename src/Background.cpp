@@ -155,4 +155,33 @@ void Background::drawElement(RenderContext* renderContext, int index)
   glPopAttrib();
 }
 
+int Background::getAttributeCount(AABox& bbox, AttribID attrib) 
+{
+  switch (attrib) {    
+    case FLAGS: return 4;
+  }
+  return Shape::getAttributeCount(bbox, attrib);
+}
+
+void Background::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(bbox, attrib);
+
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    switch(attrib) {
+    case FLAGS:
+      if (first <= 0)  
+        *result++ = (double) sphere;
+      if (first <= 1)
+	*result++ = (double) fogtype == FOG_LINEAR;
+      if (first <= 2)
+	*result++ = (double) fogtype == FOG_EXP;
+      if (first <= 3)
+	*result++ = (double) fogtype == FOG_EXP2;
+      return;
+    }
+    Shape::getAttribute(bbox, attrib, first, count, result);
+  }
+}
 
