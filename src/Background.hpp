@@ -23,6 +23,9 @@ public:
   int getElementCount(void) { return 1; }
   void drawElement(RenderContext* renderContext, int index);  
   GLbitfield getClearFlags(RenderContext* renderContext);
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+
 protected:
   bool clearColorBuffer;
   bool sphere;

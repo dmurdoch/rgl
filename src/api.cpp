@@ -823,8 +823,13 @@ void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double*
 	BBoxDeco* bboxdeco = scene->get_bboxdeco();
 	if (bboxdeco && *id == bboxdeco->getObjID())
 	  mat = bboxdeco->getMaterial();
-	else 
-	  return;
+	else {
+	  Background* background = scene->get_background();
+	  if (background && *id == background->getObjID())
+	    mat = background->getMaterial();
+	  else
+	    return;
+        }
       }
     } else
       return;

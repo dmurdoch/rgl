@@ -27,7 +27,7 @@ scene3d()
 }
 \details{
 The components saved are:  the \code{\link{par3d}} settings, the \code{\link{material3d}}
-settings, the \code{\link{bg3d}} settings (partially), and the objects in the scene.
+settings, the \code{\link{bg3d}} settings, and the objects in the scene.
 
 In most cases, calling \code{\link{plot3d}} on that variable will
 duplicate the scene.  (There are likely to be small differences, mostly internal, but

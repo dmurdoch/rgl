@@ -96,7 +96,8 @@ void Light::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
         return;
       }
       case FLAGS: {
-        *result++ = (double) viewpoint;
+	if (first == 0)  
+          *result++ = (double) viewpoint;
         *result++ = (double) posisfinite;
         return;
       }

@@ -132,8 +132,11 @@ rgl.attrib <- function( id, attrib, first=1,
                            "type",	     # types
                            "flag"	     # flags
                            )[[attrib]]
-  if (attrib == 14) 
-    rownames(result) <- c("viewpoint", "finite")
+  if (attrib == 14)
+    if (id %in% rgl.ids("lights")$id)
+      rownames(result) <- c("viewpoint", "finite")[first:last]
+    else if (id %in% rgl.ids("background")$id)
+      rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
  
   result
 }
