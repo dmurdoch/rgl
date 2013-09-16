@@ -137,6 +137,8 @@ rgl.attrib <- function( id, attrib, first=1,
       rownames(result) <- c("viewpoint", "finite")[first:last]
     else if (id %in% rgl.ids("background")$id)
       rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
+    else if (id %in% rgl.ids("bboxdeco")$id)
+      rownames(result) <- "draw_front"[first:last]
  
   result
 }
