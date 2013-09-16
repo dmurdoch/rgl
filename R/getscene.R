@@ -46,7 +46,10 @@ scene3d <- function() {
                         else if (flags["exp_fog", 1]) "exp"
 			else if (flags["exp2_fog", 1]) "exp2"
 			else "none"
-    }      
+    } else if (type == "bboxdeco") {
+      flags <- rgl.attrib(id, "flags")
+      result$draw_front <- flags["draw_front", 1]
+    }
     class(result) <- c(paste0("rgl", type), "rglobject")
     result
   }
@@ -229,19 +232,26 @@ plot3d.rglbboxdeco <- function(x, ...) {
     args$xat <- v[ind,1]
     if (!is.null(t))
       args$xlab <- t[ind]
+    else
+      args$xlab <- signif(args$xat, 4)
   }
   ind <- is.na(v[,1]) & is.na(v[,3])
   if (any(ind)) {
     args$yat <- v[ind,2]
     if (!is.null(t))
       args$ylab <- t[ind]
+    else
+      args$ylab <- signif(args$yat, 4)
   }
   ind <- is.na(v[,1]) & is.na(v[,2])
   if (any(ind)) {
     args$zat <- v[ind,3]
     if (!is.null(t))
       args$zlab <- t[ind]
+    else
+      args$zlab <- signif(args$zat, 4)
   }
+  args$draw_front <- x$draw_front
   args <- c(args, x$material)
   
   do.call("bbox3d", args)

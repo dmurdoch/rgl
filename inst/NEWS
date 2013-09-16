@@ -516,6 +516,6 @@ v0.93.963
 v0.93.969
   - rgl.texts without a window failed because it queried the window
     before opening it.
-  - the scene3d() function now records material information about the
-    bounding box, and full information about the background.
+  - the scene3d() function now records complete information about the
+    bounding box and the background.
     

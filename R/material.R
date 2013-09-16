@@ -105,9 +105,11 @@ rgl.material <- function (
 
 rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
-rgl.getmaterial <- function(ncolors = rgl.getcolorcount(), id = NULL) {
+rgl.getmaterial <- function(ncolors, id = NULL) {
 
   if (!length(id)) id <- 0L
+  if (missing(ncolors))
+    ncolors <- if (id) rgl.attrib.count(id, "colors") else rgl.getcolorcount()
   
   idata <- rep(0, 25+3*ncolors)
   idata[1] <- ncolors

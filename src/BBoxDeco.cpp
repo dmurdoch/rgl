@@ -664,13 +664,9 @@ void BBoxDeco::render(RenderContext* renderContext)
         }
       }
     }
-
     material.endUse(renderContext);
-
     glPopAttrib();
-
   }
-
 }
 
 int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 
@@ -686,6 +682,10 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
       return xaxis.getNticks(bbox.vmin.x, bbox.vmax.x)
            + yaxis.getNticks(bbox.vmin.y, bbox.vmax.y)
            + zaxis.getNticks(bbox.vmin.z, bbox.vmax.z);
+    case COLORS:
+      return material.colors.getLength();
+    case FLAGS:
+      return 1;
   }
   return SceneNode::getAttributeCount(bbox, attrib);
 }
@@ -739,6 +739,18 @@ void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
         i++;  
       }
       return;
+    case COLORS:
+      while (first < n) {
+	Color color = material.colors.getColor(first);
+	*result++ = color.data[0];
+	*result++ = color.data[1];
+	*result++ = color.data[2];
+	*result++ = color.data[3];
+	first++;
+      }
+      return;
+    case FLAGS:
+      *result++ = (double) draw_front;	
     }
     SceneNode::getAttribute(bbox, attrib, first, count, result);
   }
