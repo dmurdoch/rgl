@@ -148,8 +148,17 @@ getr3dDefaults()
 }
 
 \section{note}{
-The \code{"xAxis"}, \code{"yAxis"} and \code{"zAxis"} mouse modes rotate relative to the coordinate
-system of the data, regardless of the current orientation of the scene.
+The \code{"xAxis"}, \code{"yAxis"} and \code{"zAxis"} mouse modes rotate 
+relative to the coordinate system of the data, regardless of the current 
+orientation of the scene.
+
+When multiple parameters are set, they are set in the order given.  In some 
+cases this may lead to warnings and ignored values; for example, some font 
+families only support \code{cex = 1}, so changing both \code{cex} and 
+\code{family} needs to be done in the right order.  For example, when using the
+\code{"bitmap"} family on Windows, \code{par3d(family = "sans", cex = 2)}
+will work, but \code{par3d(cex = 2, family = "sans")} will leave \code{cex}
+at 1 (with a warning that the \code{"bitmap"} family only supports that size).
 }
 
 \section{Rendering}{
