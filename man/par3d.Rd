@@ -193,6 +193,10 @@ locations in each pixel sampled to determine what is plotted there,
 and then the images are combined into what is displayed.
 }
 See ?\link{matrices} for more information on homogeneous and Euclidean coordinates.
+
+Note that many of these calculations are done on the graphics card using single precision;
+you will likely see signs of rounding error if your scene requires more than 4 or 5 
+digit precision to distinguish values in any coordinate.  
 }
 
 \seealso{
