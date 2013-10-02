@@ -13,6 +13,9 @@
 #include "opengl.hpp"
 #include "geom.hpp"
 
+/* This definition avoids conflict with the Shape type in the igraph package */
+#define Shape rglShape
+
 //
 // CLASS
 //   Shape

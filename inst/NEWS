@@ -513,9 +513,16 @@ v0.93.963
     imported but not attached.  Similarly, r3dDefaults need not be on
     the search path.
     
-v0.93.971
+v0.93.975
   - rgl.texts without a window failed because it queried the window
     before opening it.
   - the scene3d() function now records complete information about the
     bounding box and the background.
+  - rgl declares most of its C++ objects in the global namespace.  
+    Recently this has caused clashes with the igraph package, which 
+    does the same, and which also has a Shape class.  As a temporary 
+    workaround the rgl class has been renamed to rglShape.  A full 
+    rgl namespace will eventually be added, with only the API functions 
+    left in the global namespace.
+    
     
