@@ -9,6 +9,8 @@
 #include <cstdio>
 #include "opengl.hpp"
 
+namespace rgl {
+
 class PixmapFormat;
   
 enum PixmapTypeID { INVALID=0, RGB24, RGB32, RGBA32, GRAY8 };
@@ -45,5 +47,7 @@ public:
 
 
 extern PixmapFormat* pixmapFormat[PIXMAP_FILEFORMAT_LAST];
+
+} // namespace rgl
 
 #endif /* PIXMAP_H */

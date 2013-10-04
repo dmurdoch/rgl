@@ -5,6 +5,8 @@
 #include "Texture.hpp"
 #include "RenderContext.hpp"
 
+namespace rgl {
+
 //
 // STRUCT
 //   Material
@@ -54,6 +56,6 @@ public:
   float        glVersion;
 };
 
-
+} // namespace rgl
 
 #endif // MATERIAL_HPP

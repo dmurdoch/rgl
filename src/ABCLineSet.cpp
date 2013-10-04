@@ -1,7 +1,9 @@
+#include <algorithm>
 #include "ABCLineSet.hpp"
 #include "Viewpoint.hpp"
 #include "R.h"
-#include <algorithm>
+
+using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -102,3 +104,4 @@ void ABCLineSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count
   updateSegments(bbox);
   LineSet::getAttribute(bbox, attrib, first, count, result);
 }
+

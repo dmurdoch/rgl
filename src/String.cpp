@@ -1,7 +1,7 @@
 #include "String.hpp"
+#include "types.h"
 
 using namespace std;
-#include "types.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -12,6 +12,8 @@ using namespace std;
 // CLASS
 //   StringArrayImpl
 //
+
+namespace rgl {
 
 class StringArrayImpl : public AutoDestroy
 {
@@ -51,6 +53,10 @@ public:
   unsigned int*  lengths;
   unsigned int*  starts;
 };
+
+}
+
+using namespace rgl;
 
 //
 // CLASS

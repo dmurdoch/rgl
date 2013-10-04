@@ -15,26 +15,26 @@
 
 #include "x11gui.hpp"
 
-gui::X11GUIFactory* gpX11GUIFactory = NULL;
-gui::NULLGUIFactory* gpNULLGUIFactory = NULL;
+using namespace rgl;
 
-namespace lib {
+X11GUIFactory* gpX11GUIFactory = NULL;
+NULLGUIFactory* gpNULLGUIFactory = NULL;
 
-gui::GUIFactory* getGUIFactory(bool useNULLDevice)
+GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
 {
   if (useNULLDevice)
-    return (gui::GUIFactory*) gpNULLGUIFactory;
+    return (GUIFactory*) gpNULLGUIFactory;
   else if (gpX11GUIFactory)
-    return (gui::GUIFactory*) gpX11GUIFactory;
+    return (GUIFactory*) gpX11GUIFactory;
   else
     error("glX device not initialized");  
 }
 // ---------------------------------------------------------------------------
-const char * GUIFactoryName(bool useNULLDevice)
+const char * rgl::GUIFactoryName(bool useNULLDevice)
 {
   return useNULLDevice ? "null" : "glX";
 }
-}
+
 //
 // ===[ R INTEGRATION ]=======================================================
 //
@@ -73,20 +73,19 @@ static void unset_R_handler()
 //
 // ===[ LIB INIT / QUIT ]=====================================================
 //
-namespace lib {
 
-bool init(bool useNULLDevice)
+bool rgl::init(bool useNULLDevice)
 {
   bool success = false;
 
   // construct GUI Factory
   
-  gpNULLGUIFactory = new gui::NULLGUIFactory();
+  gpNULLGUIFactory = new NULLGUIFactory();
  
   if (useNULLDevice) {
     success = true;
   } else {
-    gpX11GUIFactory = new gui::X11GUIFactory(NULL);
+    gpX11GUIFactory = new X11GUIFactory(NULL);
     if ( gpX11GUIFactory->isConnected() ) {
       set_R_handler();
       success = true;
@@ -95,7 +94,7 @@ bool init(bool useNULLDevice)
   return success;
 }
 
-void quit()
+void rgl::quit()
 {
   unset_R_handler();
   delete gpX11GUIFactory;
@@ -112,7 +111,7 @@ void quit()
 // printMessage
 //
 
-void printMessage( const char* string ) {
+void rgl::printMessage( const char* string ) {
   warning("RGL: %s\n", string);
 }
 
@@ -123,13 +122,15 @@ void printMessage( const char* string ) {
 #include <sys/time.h>
 #include <unistd.h>
 
-double getTime() {
+double rgl::getTime() {
   struct ::timeval t;
   gettimeofday(&t,NULL);
   return ( (double) t.tv_sec ) * 1000.0 + ( ( (double) t.tv_usec ) / 1000.0 ); 
 }
 
-} // namespace lib
 // ---------------------------------------------------------------------------
+
+
+
 #endif // RGL_X11
 

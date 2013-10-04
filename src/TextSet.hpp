@@ -3,16 +3,18 @@
 
 #include "Shape.hpp"
 
-//
-// TEXTSET
-//
-
 #include "render.h"
 #include "String.hpp"
 #include "glgui.hpp"
 #ifdef HAVE_FREETYPE
 #include "FTGL/ftgl.h"
 #endif
+
+namespace rgl {
+
+//
+// TEXTSET
+//
 
 class TextSet : public Shape {
 public:
@@ -45,6 +47,8 @@ private:
   double adjy;
 
 };
+
+} // namespace rgl
 
 #endif // TEXTSET_HPP
 

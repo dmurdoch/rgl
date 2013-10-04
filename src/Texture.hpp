@@ -1,7 +1,10 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 
+#include "pixmap.h"
 #include "types.h"
+
+namespace rgl {
 
 //
 // CLASS
@@ -45,5 +48,7 @@ private:
   bool    envmap;
   char*   filename;
 };
+
+} // namespace rgl
 
 #endif // TEXTURE_HPP

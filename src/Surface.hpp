@@ -7,6 +7,8 @@
 
 #include <map>
 
+namespace rgl {
+
 //
 // CLASS
 //   Surface
@@ -62,5 +64,7 @@ private:
   int nx, nz, coords[3], orientation, user_normals, user_textures;
   bool use_normal, use_texcoord; 
 };
+
+} // namespace rgl
 
 #endif // SURFACE_HPP

@@ -1,11 +1,6 @@
 #ifndef LIGHT_HPP
 #define LIGHT_HPP
 
-//
-// CLASS
-//   Light
-//
-
 #include "SceneNode.hpp"
 
 #include "rglmath.h"
@@ -13,6 +8,13 @@
 #include "RenderContext.hpp"
 
 #include "opengl.hpp"
+
+namespace rgl {
+
+//
+// CLASS
+//   Light
+//
 
 class Light : public SceneNode
 {
@@ -38,5 +40,7 @@ private:
   bool posisfinite;
   friend class Scene;
 };
+
+} // namespace rgl
 
 #endif // LIGHT_HPP

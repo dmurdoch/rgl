@@ -1,5 +1,12 @@
+
+#include <algorithm>
+#include <functional>
+
 #include "Shape.hpp"
+#include "SceneNode.hpp"
 #include "R.h"
+
+using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -123,7 +130,7 @@ void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
   }
 }
 
-Shape* get_shape_from_list(std::vector<Shape*> shapes, int id, bool recursive)
+Shape* rgl::get_shape_from_list(std::vector<Shape*> shapes, int id, bool recursive)
 {
   std::vector<Shape*>::iterator ishape;
 

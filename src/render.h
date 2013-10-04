@@ -5,6 +5,8 @@
 
 #include "types.h"
 
+namespace rgl {
+
 //
 // CLASS
 //   VertexArray
@@ -71,5 +73,7 @@ private:
   int nvertex;
   float* arrayptr;
 };
+
+} // namespace rgl
 
 #endif // RENDER_H

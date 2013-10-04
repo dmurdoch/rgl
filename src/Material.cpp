@@ -1,9 +1,10 @@
-#include "Material.hpp"
-
 #include "gl2ps.h"
+#include "Material.hpp"
 #include "opengl.hpp"
 #include "Texture.hpp"
 #include "R.h"
+
+using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
 //

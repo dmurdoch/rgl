@@ -1,12 +1,16 @@
 #ifndef RENDERCONTEXT_HPP
 #define RENDERCONTEXT_HPP
 
+namespace rgl {
 class Scene;
 class Viewpoint;
 class GLFont;
+} // namespace rgl
 
 #include "rglmath.h"
 #include "opengl.hpp"
+
+namespace rgl {
 
 class RenderContext
 {
@@ -41,5 +45,7 @@ public:
   int gl2psActive;
   bool NULLActive;
 };
+
+} // namespace rgl
 
 #endif // RENDERCONTEXT_HPP

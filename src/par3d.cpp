@@ -14,6 +14,8 @@
 #include <Rdefines.h>
 #include <Rinternals.h>
 
+using namespace rgl;
+
 extern "C" {
 EXPORT_SYMBOL SEXP par3d(SEXP args);
 }

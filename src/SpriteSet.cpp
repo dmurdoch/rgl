@@ -1,10 +1,9 @@
-#include "SpriteSet.hpp"
 
-#include "R.h"
-#include <map>
-#include <algorithm>
-#include <functional>
+#include "SpriteSet.hpp"
 #include "Shape.hpp"
+#include "R.h"
+
+using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
 //

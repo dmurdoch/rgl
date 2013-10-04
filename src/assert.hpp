@@ -10,6 +10,8 @@
  * Define the assert macro for debug output.
  *
  */
+ 
+namespace rgl {
 
 /* We should be able to include this file multiple times to allow the assert
    macro to be enabled/disabled for different parts of code.  So don't add a
@@ -41,3 +43,5 @@ void _assert (const char*, const char*, int);
 #ifdef	__cplusplus
 }
 #endif
+
+} // namespace rgl

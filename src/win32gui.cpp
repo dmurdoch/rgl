@@ -18,8 +18,7 @@
 
 #include <ctype.h>
 
-// ---------------------------------------------------------------------------
-namespace gui {
+namespace rgl {
 
 extern int     gInitValue;
 extern HANDLE  gHandle;
@@ -129,6 +128,10 @@ private:
   HDC   dcHandle;               // temporary variable setup by lock
   HGLRC glrcHandle;
 };
+
+} // namespace rgl
+
+using namespace rgl;
 // ----------------------------------------------------------------------------
 // constructor
 // ----------------------------------------------------------------------------
@@ -212,7 +215,7 @@ void Win32WindowImpl::show()
     );
     update();
   } else
-    lib::printMessage("window not bound");
+    printMessage("window not bound");
 }
 
 void Win32WindowImpl::hide()
@@ -250,7 +253,7 @@ void Win32WindowImpl::bringToTop(int stay) /* stay=0 for regular, 1 for topmost,
       , SWP_NOMOVE | SWP_NOSIZE
       );
   } else
-    lib::printMessage("window not bound");
+    printMessage("window not bound");
 }
 
 void Win32WindowImpl::update()
@@ -340,10 +343,10 @@ bool Win32WindowImpl::initGL () {
       if ( ( glrcHandle = wglCreateContext( dcHandle ) ) )
           success = true;
       else
-        lib::printMessage("wglCreateContext failed");
+        printMessage("wglCreateContext failed");
     }
     else
-      lib::printMessage("iPixelFormat == 0!");
+      printMessage("iPixelFormat == 0!");
     ReleaseDC(windowHandle,dcHandle);
   }
 
@@ -773,8 +776,6 @@ WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
 
   return impl;
 }
-// ---------------------------------------------------------------------------
-} // namespace gui
 // ---------------------------------------------------------------------------
 #endif // RGL_W32
 

@@ -11,54 +11,54 @@
 #include "assert.hpp"
 #include "R.h"
 
-// ---------------------------------------------------------------------------
-namespace lib {
+using namespace rgl;
+
 // ---------------------------------------------------------------------------
 // GUI Factory
 // ---------------------------------------------------------------------------
-gui::Win32GUIFactory* gpWin32GUIFactory = NULL;
-gui::NULLGUIFactory* gpNULLGUIFactory = NULL;
+Win32GUIFactory* gpWin32GUIFactory = NULL;
+NULLGUIFactory* gpNULLGUIFactory = NULL;
 // ---------------------------------------------------------------------------
-gui::GUIFactory* getGUIFactory(bool useNULLDevice)
+GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
 {
   if (useNULLDevice)
-    return (gui::GUIFactory*) gpNULLGUIFactory;
+    return (GUIFactory*) gpNULLGUIFactory;
   else if (gpWin32GUIFactory)
-    return (gui::GUIFactory*) gpWin32GUIFactory;
+    return (GUIFactory*) gpWin32GUIFactory;
   else
     error("wgl device not initialized");
 }
 // ---------------------------------------------------------------------------
-const char * GUIFactoryName(bool useNULLDevice)
+const char * rgl::GUIFactoryName(bool useNULLDevice)
 {
   return useNULLDevice ? "null" : "wgl";
 }
 // ---------------------------------------------------------------------------
 // printMessage
 // ---------------------------------------------------------------------------
-void printMessage( const char* string ) {
+void rgl::printMessage( const char* string ) {
   warning("RGL: %s\n", string);
 }
 // ---------------------------------------------------------------------------
 // getTime
 // ---------------------------------------------------------------------------
-double getTime() {
+double rgl::getTime() {
   return ( (double) ::GetTickCount() ) * ( 1.0 / 1000.0 );
 }
 // ---------------------------------------------------------------------------
 // init
 // ---------------------------------------------------------------------------
-bool init(bool useNULLDevice)
+bool rgl::init(bool useNULLDevice)
 {
   if (!useNULLDevice)
-    gpWin32GUIFactory = new gui::Win32GUIFactory();  
-  gpNULLGUIFactory = new gui::NULLGUIFactory();
+    gpWin32GUIFactory = new Win32GUIFactory();  
+  gpNULLGUIFactory = new NULLGUIFactory();
   return true;
 }
 // ---------------------------------------------------------------------------
 // quit
 // ---------------------------------------------------------------------------
-void quit()
+void rgl::quit()
 {
   assert(gpWin32GUIFactory != NULL && gpNULLGUIFactory != NULL);
   delete gpWin32GUIFactory;
@@ -66,8 +66,6 @@ void quit()
   gpWin32GUIFactory = NULL;
   gpNULLGUIFactory = NULL;
 }
-// ---------------------------------------------------------------------------
-} // namespace lib
 // ---------------------------------------------------------------------------
 #endif // RGL_W32
 

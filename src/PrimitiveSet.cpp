@@ -1,6 +1,8 @@
 #include "PrimitiveSet.hpp"
 #include "R.h"
 
+using namespace rgl;
+
 // ===[ PRIMITIVE SET ]=======================================================
 
 PrimitiveSet::PrimitiveSet (

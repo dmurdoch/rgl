@@ -12,6 +12,8 @@
 
 #include "types.h"
 
+namespace rgl {
+
 class Color
 {
 public:
@@ -66,6 +68,8 @@ private:
   u8* arrayptr;
   friend class Material;
 };
+
+} // namespace rgl
 
 #endif // COLOR_HPP
 

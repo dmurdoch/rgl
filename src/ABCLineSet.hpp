@@ -7,6 +7,8 @@
 #include "PrimitiveSet.hpp"
 #include <map>
 
+namespace rgl {
+
 class ABCLineSet : public LineSet {
 private:		/* Use parametrization (x,y,z) + s*(a,b,c) */
   int		nLines;
@@ -41,5 +43,7 @@ public:
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
 
 };
+
+} // namespace rgl
 
 #endif // PLANESET_HPP

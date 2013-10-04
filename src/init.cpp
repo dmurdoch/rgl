@@ -2,6 +2,9 @@
 #include "lib.hpp"
 #include "DeviceManager.hpp"
 #include "init.hpp"
+
+using namespace rgl;
+
 //
 // FUNCTION
 //   rgl_init
@@ -13,7 +16,7 @@
 
 DeviceManager* deviceManager = NULL;
 
-namespace gui {
+namespace rgl{
 
 int gInitValue;
 void* gHandle;
@@ -55,7 +58,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
   {
     return ScalarInteger( 0 );
   }  
-  if ( lib::init(useNULLDevice) ) {
+  if ( init(useNULLDevice) ) {
     deviceManager = new DeviceManager(useNULLDevice);
     success = 1;
   }
@@ -67,6 +70,6 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
 #endif
 
 // ---------------------------------------------------------------------------
-} // namespace gui
+} // namespace rgl
 // ---------------------------------------------------------------------------
 

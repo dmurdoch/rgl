@@ -4,7 +4,8 @@
 #include "scene.h"
 #include "Shape.hpp"
 #include "SphereMesh.hpp"
-#include <map>
+
+namespace rgl {
 
 class SphereSet : public Shape {
 private:
@@ -58,5 +59,7 @@ public:
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "spheres", buflen); };
 
 };
+
+} // namespace rgl
 
 #endif // SPHERESET_HPP

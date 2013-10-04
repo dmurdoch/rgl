@@ -7,6 +7,8 @@
 
 #include <map>
 
+namespace rgl {
+
 //
 // ABSTRACT CLASS
 //   PrimitiveSet
@@ -272,5 +274,7 @@ public:
    **/  
   virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "linestrip", buflen); };
 };
+
+} // namespace rgl 
 
 #endif // PRIMITIVE_SET_HPP

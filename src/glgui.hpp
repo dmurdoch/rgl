@@ -10,6 +10,8 @@
 #include <vector>
 #include "RenderContext.hpp"
 
+namespace rgl {
+
 // CLASS
 //   GLFont
 //
@@ -161,6 +163,8 @@ typedef std::vector<GLFont*> FontArray;
 # define ISSLASH(C) ((C) == '/')
 # define IS_ABSOLUTE_PATH(P) ISSLASH ((P)[0])
 #endif
+
+} // namespace rgl
 
 #endif /* GL_GUI_H */
 

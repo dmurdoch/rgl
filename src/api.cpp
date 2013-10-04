@@ -5,6 +5,8 @@
 
 #include "lib.hpp"
 
+using namespace rgl;
+
 extern "C" {
 
 #include "api.h"
@@ -30,38 +32,38 @@ inline int as_success(int b) { return (b) ; }
 inline bool as_bool(int idata) { return (idata) ? true : false; }
 
 //
-//   rgl_init moved to init.cpp
+//   rgl::rgl_init moved to init.cpp
 //
 
 extern DeviceManager* deviceManager;
 
 //
 // FUNCTION
-//   rgl_quit
+//   rgl::rgl_quit
 //
 // DESCRIPTION
 //   Gets called by .onUnload ( R function )
 //
 
 
-void rgl_quit(int* successptr)
+void rgl::rgl_quit(int* successptr)
 {
   if (deviceManager) {
     delete deviceManager;
     deviceManager = 0;
   }
 
-  lib::quit();
+  quit();
 
   *successptr = RGL_SUCCESS;
 }
 
 //
 // FUNCTION
-//   rgl_dev_open
+//   rgl::rgl_dev_open
 //
 
-void rgl_dev_open(int* successptr, int* useNULL)
+void rgl::rgl_dev_open(int* successptr, int* useNULL)
 {
   *successptr = as_success( deviceManager && deviceManager->openDevice(*useNULL) );
   CHECKGLERROR;
@@ -70,10 +72,10 @@ void rgl_dev_open(int* successptr, int* useNULL)
 
 //
 // FUNCTION
-//   rgl_dev_close
+//   rgl::rgl_dev_close
 //
 
-void rgl_dev_close(int* successptr)
+void rgl::rgl_dev_close(int* successptr)
 {
   int success = RGL_FAIL;
 
@@ -90,7 +92,7 @@ void rgl_dev_close(int* successptr)
   *successptr = success;
 }
 
-void rgl_dev_bringtotop(int* successptr, int* stay)
+void rgl::rgl_dev_bringtotop(int* successptr, int* stay)
 {
   int success = RGL_FAIL;
 
@@ -109,13 +111,13 @@ void rgl_dev_bringtotop(int* successptr, int* stay)
 
 //
 // FUNCTION
-//   rgl_dev_getcurrent
+//   rgl::rgl_dev_getcurrent
 //
 // RETURNS
 //   device id
 //
 
-SEXP rgl_dev_getcurrent(void)
+SEXP rgl::rgl_dev_getcurrent(void)
 {
   SEXP result;
   if (deviceManager) {
@@ -134,13 +136,13 @@ SEXP rgl_dev_getcurrent(void)
 
 //
 // FUNCTION
-//   rgl_dev_list
+//   rgl::rgl_dev_list
 //
 // RETURNS
 //   list of active device ids
 //
 
-SEXP rgl_dev_list(void)
+SEXP rgl::rgl_dev_list(void)
 {
   SEXP result, names;
   if (deviceManager) {
@@ -163,14 +165,14 @@ SEXP rgl_dev_list(void)
 
 //
 // FUNCTION
-//   rgl_dev_setcurrent
+//   rgl::rgl_dev_setcurrent
 //
 // PARAMETERS
 //   idata
 //     [0]  device id
 //
 
-void rgl_dev_setcurrent(int* successptr, int* idata)
+void rgl::rgl_dev_setcurrent(int* successptr, int* idata)
 {
   int id = idata[0];
   bool silent = (bool) idata[1];
@@ -187,7 +189,7 @@ static Material currentMaterial(Color(1.0f,1.0f,1.0f),Color(1.0f,0.0f,0.0f));
 
 //
 // FUNCTION
-//   rgl_clear ( successPtr, idata(type) )
+//   rgl::rgl_clear ( successPtr, idata(type) )
 //
 // PARAMETERS
 //   idata
@@ -196,7 +198,7 @@ static Material currentMaterial(Color(1.0f,1.0f,1.0f),Color(1.0f,0.0f,0.0f));
 //
 //
 
-void rgl_clear(int* successptr, int *idata)
+void rgl::rgl_clear(int* successptr, int *idata)
 {
   int success = RGL_SUCCESS;
   Device* device;
@@ -218,7 +220,7 @@ void rgl_clear(int* successptr, int *idata)
 
 //
 // FUNCTION
-//   rgl_pop  ( successPtr, idata )
+//   rgl::rgl_pop  ( successPtr, idata )
 //
 // PARAMETERS
 //   idata
@@ -228,7 +230,7 @@ void rgl_clear(int* successptr, int *idata)
 //
 
 
-void rgl_pop(int* successptr, int* idata)
+void rgl::rgl_pop(int* successptr, int* idata)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -248,10 +250,10 @@ void rgl_pop(int* successptr, int* idata)
 
 //
 // FUNCTION
-//   rgl_id_count
+//   rgl::rgl_id_count
 //
 
-void rgl_id_count(int* type, int* count)
+void rgl::rgl_id_count(int* type, int* count)
 {
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
@@ -271,10 +273,10 @@ void rgl_id_count(int* type, int* count)
 
 //
 // FUNCTION
-//   rgl_ids
+//   rgl::rgl_ids
 //
 
-void rgl_ids(int* type, int* ids, char** types)
+void rgl::rgl_ids(int* type, int* ids, char** types)
 {
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
@@ -294,10 +296,10 @@ void rgl_ids(int* type, int* ids, char** types)
 
 //
 // FUNCTION
-//   rgl_attrib_count
+//   rgl::rgl_attrib_count
 //
 
-void rgl_attrib_count(int* id, int* attrib, int* count)
+void rgl::rgl_attrib_count(int* id, int* attrib, int* count)
 {
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
@@ -314,10 +316,10 @@ void rgl_attrib_count(int* id, int* attrib, int* count)
 
 //
 // FUNCTION
-//   rgl_attrib
+//   rgl::rgl_attrib
 //
 
-void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
+void rgl::rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
 {
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
@@ -332,10 +334,10 @@ void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
 
 //
 // FUNCTION
-//   rgl_text_attrib
+//   rgl::rgl_text_attrib
 //
 
-void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result)
+void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result)
 {
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
@@ -359,7 +361,7 @@ void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result
 
 //
 // FUNCTION
-//   rgl_bg   ( successPtr, idata )
+//   rgl::rgl_bg   ( successPtr, idata )
 //
 // PARAMETERS
 //   idata
@@ -368,7 +370,7 @@ void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result
 //
 
 
-void rgl_bg(int* successptr, int* idata)
+void rgl::rgl_bg(int* successptr, int* idata)
 {
   int success = RGL_FAIL;
 
@@ -389,10 +391,10 @@ void rgl_bg(int* successptr, int* idata)
 
 //
 // FUNCTION
-//   rgl_light   ( successPtr, idata, cdata, ddata )
+//   rgl::rgl_light   ( successPtr, idata, cdata, ddata )
 //
 
-void rgl_light ( int* successptr, int* idata, double* ddata )
+void rgl::rgl_light ( int* successptr, int* idata, double* ddata )
 {
   int success = RGL_FAIL;
 
@@ -423,7 +425,7 @@ void rgl_light ( int* successptr, int* idata, double* ddata )
 }
 
 
-void rgl_viewpoint(int* successptr, int* idata, double* ddata)
+void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
 {
   int success = RGL_FAIL;
 
@@ -449,7 +451,7 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
   *successptr = success;
 }
 
-void rgl_getZoom(int* successptr, double* zoom)
+void rgl::rgl_getZoom(int* successptr, double* zoom)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -466,7 +468,7 @@ void rgl_getZoom(int* successptr, double* zoom)
   *successptr = success;
 }
 
-void rgl_setZoom(int* successptr, double* zoom)
+void rgl::rgl_setZoom(int* successptr, double* zoom)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -484,7 +486,7 @@ void rgl_setZoom(int* successptr, double* zoom)
   *successptr = success;
 }
 
-void rgl_getFOV(int* successptr, double* fov)
+void rgl::rgl_getFOV(int* successptr, double* fov)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -501,7 +503,7 @@ void rgl_getFOV(int* successptr, double* fov)
   *successptr = success;
 }
 
-void rgl_setFOV(int* successptr, double* fov)
+void rgl::rgl_setFOV(int* successptr, double* fov)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -519,7 +521,7 @@ void rgl_setFOV(int* successptr, double* fov)
   *successptr = success;
 }
 
-void rgl_getIgnoreExtent(int* successptr, int* ignoreExtent)
+void rgl::rgl_getIgnoreExtent(int* successptr, int* ignoreExtent)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -533,7 +535,7 @@ void rgl_getIgnoreExtent(int* successptr, int* ignoreExtent)
   *successptr = success;
 }
 
-void rgl_setIgnoreExtent(int* successptr, int* ignoreExtent)
+void rgl::rgl_setIgnoreExtent(int* successptr, int* ignoreExtent)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -547,7 +549,7 @@ void rgl_setIgnoreExtent(int* successptr, int* ignoreExtent)
   *successptr = success;
 }
 
-void rgl_getSkipRedraw(int* successptr, int* skipRedraw)
+void rgl::rgl_getSkipRedraw(int* successptr, int* skipRedraw)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -561,7 +563,7 @@ void rgl_getSkipRedraw(int* successptr, int* skipRedraw)
   *successptr = success;
 }
 
-void rgl_setSkipRedraw(int* successptr, int* skipRedraw)
+void rgl::rgl_setSkipRedraw(int* successptr, int* skipRedraw)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -575,7 +577,7 @@ void rgl_setSkipRedraw(int* successptr, int* skipRedraw)
   *successptr = success;
 }
 
-void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals, double* texcoords)
+void rgl::rgl_primitive(int* successptr, int* idata, double* vertex, double* normals, double* texcoords)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -624,7 +626,7 @@ void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals,
   *successptr = success;
 }
 
-void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, 
+void rgl::rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, 
 	         double* normal_x, double* normal_z, double* normal_y,
 	         double* texture_s, double* texture_t,
 	         int* coords, int* orientation, int* flags)
@@ -649,7 +651,7 @@ void rgl_surface(int* successptr, int* idata, double* x, double* z, double* y,
   *successptr = success;
 }
 
-void rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
+void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
 {
   int success = RGL_FAIL;
 
@@ -668,7 +670,7 @@ void rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
   *successptr = success;
 }
 
-void rgl_planes(int* successptr, int* idata, double* normals, double* offsets)
+void rgl::rgl_planes(int* successptr, int* idata, double* normals, double* offsets)
 {
   int success = RGL_FAIL;
 
@@ -686,7 +688,7 @@ void rgl_planes(int* successptr, int* idata, double* normals, double* offsets)
   *successptr = success;
 }
 
-void rgl_abclines(int* successptr, int* idata, double* bases, double* directions)
+void rgl::rgl_abclines(int* successptr, int* idata, double* bases, double* directions)
 {
   int success = RGL_FAIL;
 
@@ -704,7 +706,7 @@ void rgl_abclines(int* successptr, int* idata, double* bases, double* directions
   *successptr = success;
 }
 
-void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius, int* shapes, double* userMatrix)
+void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radius, int* shapes, double* userMatrix)
 {
   int success = RGL_FAIL;
 
@@ -744,7 +746,7 @@ void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius, in
   *successptr = success;
 }
 
-void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
+void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 {
   Material& mat = currentMaterial;
 
@@ -798,13 +800,13 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   *successptr = RGL_SUCCESS;
 }
 
-void rgl_getcolorcount(int* count)
+void rgl::rgl_getcolorcount(int* count)
 {
   *count = currentMaterial.colors.getLength();
   CHECKGLERROR;
 }
 
-void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
+void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
 {
   Material* mat = &currentMaterial;
   unsigned int i,j;
@@ -892,7 +894,7 @@ void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double*
   *successptr = RGL_SUCCESS;
 }
 
-void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex,
+void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex,
                int* nfonts, char** family, int* style, double* cex, 
                int* useFreeType)
 {
@@ -919,7 +921,7 @@ void rgl_texts(int* successptr, int* idata, double* adj, char** text, double* ve
   *successptr = success;
 }
 
-void rgl_bbox(int* successptr,
+void rgl::rgl_bbox(int* successptr,
               int* idata,
               double* ddata,
               double* xat, char** xtext,
@@ -959,7 +961,7 @@ void rgl_bbox(int* successptr,
   *successptr = success;
 }
 
-void rgl_snapshot(int* successptr, int* idata, char** cdata)
+void rgl::rgl_snapshot(int* successptr, int* idata, char** cdata)
 {
   int success = RGL_FAIL;
 
@@ -977,7 +979,7 @@ void rgl_snapshot(int* successptr, int* idata, char** cdata)
   *successptr = success;
 }
 
-void rgl_pixels(int* successptr, int* ll, int* size, int* component, float* result)
+void rgl::rgl_pixels(int* successptr, int* ll, int* size, int* component, float* result)
 {
   int success = RGL_FAIL;
   
@@ -993,7 +995,7 @@ void rgl_pixels(int* successptr, int* ll, int* size, int* component, float* resu
   *successptr = success;
 }
 
-void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
+void rgl::rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
 {
   int success = RGL_FAIL;
   GLdouble* vertex = pixel;
@@ -1020,7 +1022,7 @@ void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, 
   *successptr = success;
 }
 
-void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
+void rgl::rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
 {
   int success = RGL_FAIL;
   GLdouble* vertex = point;
@@ -1047,7 +1049,7 @@ void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, 
   *successptr = success;
 }
 
-void rgl_getMouseMode(int* successptr, int *button, int* mode)
+void rgl::rgl_getMouseMode(int* successptr, int *button, int* mode)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -1063,7 +1065,7 @@ void rgl_getMouseMode(int* successptr, int *button, int* mode)
   *successptr = success;
 }
 
-void rgl_setMouseMode(int* successptr, int* button, int* mode)
+void rgl::rgl_setMouseMode(int* successptr, int* button, int* mode)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -1081,7 +1083,7 @@ void rgl_setMouseMode(int* successptr, int* button, int* mode)
 }
 
 
-void rgl_selectstate(int* successptr, int* selectstate, double* locations)
+void rgl::rgl_selectstate(int* successptr, int* selectstate, double* locations)
 {
     int success = RGL_FAIL;
     Device* device;
@@ -1105,7 +1107,7 @@ void rgl_selectstate(int* successptr, int* selectstate, double* locations)
 
 }
 
-void rgl_setselectstate(int* successptr, int *idata)
+void rgl::rgl_setselectstate(int* successptr, int *idata)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -1124,7 +1126,7 @@ void rgl_setselectstate(int* successptr, int *idata)
   *successptr = success;
 }
 
-void rgl_getUserMatrix(int* successptr, double* userMatrix)
+void rgl::rgl_getUserMatrix(int* successptr, double* userMatrix)
 {
     int success = RGL_FAIL;
     Device* device;
@@ -1142,7 +1144,7 @@ void rgl_getUserMatrix(int* successptr, double* userMatrix)
   *successptr = success;
 }
 
-void rgl_setUserMatrix(int* successptr, double* userMatrix)
+void rgl::rgl_setUserMatrix(int* successptr, double* userMatrix)
 {
 
     int success = RGL_FAIL;
@@ -1162,7 +1164,7 @@ void rgl_setUserMatrix(int* successptr, double* userMatrix)
 
 }
 
-void rgl_getPosition(double* position)
+void rgl::rgl_getPosition(double* position)
 {
    Device* device;
 
@@ -1176,7 +1178,7 @@ void rgl_getPosition(double* position)
  	
 }
 
-void rgl_setPosition(double* position)
+void rgl::rgl_setPosition(double* position)
 {
   	Device* device;
 
@@ -1190,7 +1192,7 @@ void rgl_setPosition(double* position)
 
 }
 
-void rgl_getScale(int* successptr, double* scale)
+void rgl::rgl_getScale(int* successptr, double* scale)
 {
     int success = RGL_FAIL;
     Device* device = deviceManager->getAnyDevice();
@@ -1208,7 +1210,7 @@ void rgl_getScale(int* successptr, double* scale)
     *successptr = success;
 }
 
-void rgl_setScale(int* successptr, double* scale)
+void rgl::rgl_setScale(int* successptr, double* scale)
 {
 
     int success = RGL_FAIL;
@@ -1228,7 +1230,7 @@ void rgl_setScale(int* successptr, double* scale)
 
 }
 
-void rgl_getModelMatrix(int* successptr, double* modelMatrix)
+void rgl::rgl_getModelMatrix(int* successptr, double* modelMatrix)
 {
     int success = RGL_FAIL;
     Device* device;
@@ -1246,7 +1248,7 @@ void rgl_getModelMatrix(int* successptr, double* modelMatrix)
     *successptr = success;
 }
 
-void rgl_getProjMatrix(int* successptr, double* projMatrix)
+void rgl::rgl_getProjMatrix(int* successptr, double* projMatrix)
 {
     int success = RGL_FAIL;
     Device* device;
@@ -1264,7 +1266,7 @@ void rgl_getProjMatrix(int* successptr, double* projMatrix)
     *successptr = success;
 }
 
-void rgl_getViewport(int* successptr, int* viewport)
+void rgl::rgl_getViewport(int* successptr, int* viewport)
 {
     int success = RGL_FAIL;
     Device* device;
@@ -1282,7 +1284,7 @@ void rgl_getViewport(int* successptr, int* viewport)
     *successptr = success;
 }
 
-void rgl_getWindowRect(int* successptr, int* rect)
+void rgl::rgl_getWindowRect(int* successptr, int* rect)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -1296,7 +1298,7 @@ void rgl_getWindowRect(int* successptr, int* rect)
   *successptr = success;
 }
 
-void rgl_setWindowRect(int* successptr, int* rect)
+void rgl::rgl_setWindowRect(int* successptr, int* rect)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -1310,7 +1312,7 @@ void rgl_setWindowRect(int* successptr, int* rect)
   *successptr = success;
 }
 
-void rgl_postscript(int* successptr, int* idata, char** cdata)
+void rgl::rgl_postscript(int* successptr, int* idata, char** cdata)
 {
   int success = RGL_FAIL;
  
@@ -1330,7 +1332,7 @@ void rgl_postscript(int* successptr, int* idata, char** cdata)
 }
 
 
-void rgl_getBoundingbox(int* successptr, double* bboxvec)
+void rgl::rgl_getBoundingbox(int* successptr, double* bboxvec)
 {
 	int success = RGL_FAIL;
   	Device* device;
@@ -1354,7 +1356,7 @@ void rgl_getBoundingbox(int* successptr, double* bboxvec)
 
 /* font access functions.  These are only used from par3d */
 
-char* getFamily()
+char* rgl::getFamily()
 {
   Device* device;
   const char* f;
@@ -1370,7 +1372,7 @@ char* getFamily()
   return result;
 }
 
-bool setFamily(const char *family)
+bool rgl::setFamily(const char *family)
 {
   Device* device;
   
@@ -1382,7 +1384,7 @@ bool setFamily(const char *family)
     return false;
 }
 
-int getFont()
+int rgl::getFont()
 {
   Device* device;
   
@@ -1394,7 +1396,7 @@ int getFont()
     return -1;
 }
 
-bool setFont(int font)
+bool rgl::setFont(int font)
 {
   Device* device;
   
@@ -1406,7 +1408,7 @@ bool setFont(int font)
     return false;
 }
 
-double getCex()
+double rgl::getCex()
 {
   Device* device;
   
@@ -1418,7 +1420,7 @@ double getCex()
     return -1;
 }
 
-bool setCex(double cex)
+bool rgl::setCex(double cex)
 {
   Device* device;
   
@@ -1430,7 +1432,7 @@ bool setCex(double cex)
     return false;
 }
 
-int getUseFreeType()
+int rgl::getUseFreeType()
 {
   Device* device;
   
@@ -1442,7 +1444,7 @@ int getUseFreeType()
     return -1;
 }
 
-bool setUseFreeType(bool useFreeType)
+bool rgl::setUseFreeType(bool useFreeType)
 {
   Device* device;
   
@@ -1454,7 +1456,7 @@ bool setUseFreeType(bool useFreeType)
     return false;
 }
 
-char* getFontname()
+char* rgl::getFontname()
 {
   Device* device;
   const char* f;
@@ -1469,7 +1471,7 @@ char* getFontname()
   return result;
 }
 
-int getAntialias()
+int rgl::getAntialias()
 {
   Device* device;
   

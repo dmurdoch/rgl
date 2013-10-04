@@ -12,19 +12,21 @@
 // ---------------------------------------------------------------------------
 #include <X11/keysym.h>
 #include <cstdio>
+#include <Rinternals.h>
 #include "x11gui.hpp"
 #include "lib.hpp"
 #include "R.h"
-#include <Rinternals.h>
+
+namespace rgl {
 
 // ---------------------------------------------------------------------------
-namespace gui {
 extern SEXP    rglNamespace;    
 // ---------------------------------------------------------------------------
+
 class X11WindowImpl : public WindowImpl
 {
 public:
-  X11WindowImpl(Window* in_window
+  X11WindowImpl(rgl::Window* in_window
   , X11GUIFactory* in_factory
   , ::Window in_xwindow
   , XVisualInfo* invisualinfo
@@ -41,7 +43,7 @@ public:
   bool beginGL();
   void endGL();
   void swap();
-  void captureMouse(gui::View* captureview);
+  void captureMouse(View* captureview);
   void releaseMouse();
   GLFont* getFont(const char* family, int style, double cex, 
                   bool useFreeType);
@@ -61,6 +63,10 @@ private:
   friend class X11GUIFactory;
   XVisualInfo* xvisualinfo;
 };
+
+} // namespace rgl
+
+using namespace rgl;
 // ---------------------------------------------------------------------------
 // X11WindowImpl Implementation
 // ---------------------------------------------------------------------------
@@ -181,7 +187,7 @@ void X11WindowImpl::destroy()
 bool X11WindowImpl::beginGL()
 {
     if ( glXMakeCurrent(factory->xdisplay, xwindow, glxctx) == False ) {
-      lib::printMessage("ERROR: can't bind glx context to window");
+      printMessage("ERROR: can't bind glx context to window");
       return false;
     }
     else return true;
@@ -197,7 +203,7 @@ void X11WindowImpl::swap()
   glXSwapBuffers(factory->xdisplay, xwindow);
 }
 // ---------------------------------------------------------------------------
-void X11WindowImpl::captureMouse(gui::View* captureview)
+void X11WindowImpl::captureMouse(View* captureview)
 {
 }
 // ---------------------------------------------------------------------------
@@ -438,7 +444,7 @@ int X11WindowImpl::translate_key(KeySym keysym)
 // ---------------------------------------------------------------------------
 void X11GUIFactory::throw_error(const char* string)
 {
-  lib::printMessage(string);
+  printMessage(string);
   disconnect();
 }
 // ---------------------------------------------------------------------------
@@ -479,7 +485,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   Status s = XInternAtoms(xdisplay, atom_names, sizeof(atom_names)/sizeof(char*), True, atoms);
 
   if (!s)
-    lib::printMessage("some atoms not available");
+    printMessage("some atoms not available");
  
   // Query glx extension
    
@@ -691,8 +697,6 @@ void X11GUIFactory::notifyDelete(::Window xwindowid)
   // remove window from map
   windowMap.erase(xwindowid);
 }
-// ---------------------------------------------------------------------------
-} // namespace gui
 // ---------------------------------------------------------------------------
 #endif // RGL_X11_HPP
 

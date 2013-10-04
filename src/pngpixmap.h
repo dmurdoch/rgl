@@ -7,6 +7,8 @@
 //
 // $Id$
 
+namespace rgl {
+
 class PNGPixmapFormat : public PixmapFormat {
 public:
   PNGPixmapFormat()
@@ -31,10 +33,10 @@ public:
       bool success;
       success = load.process();
       if (!success)
-        lib::printMessage("pixmap png loader: process failed");
+        printMessage("pixmap png loader: process failed");
       return success;
     } else {
-      lib::printMessage("pixmap png loader: init failed");
+      printMessage("pixmap png loader: init failed");
       return false;
     }
   }
@@ -111,13 +113,13 @@ private:
     static void printError(const char* error_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Loader Error: %s", error_msg);
-      lib::printMessage(buf);
+      printMessage(buf);
     }
 
     static void printWarning(const char* warning_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Loader Warning: %s", warning_msg);
-      lib::printMessage(buf);
+      printMessage(buf);
     }
 
 
@@ -224,7 +226,7 @@ unsupported:
       sprintf(buffer,"%s%s format unsupported: %lux%lu (%d bits per channel)", 
               interlace_string, color_type_name, 
               (long unsigned int)width, (long unsigned int)height, bit_depth);
-      lib::printMessage(buffer);
+      printMessage(buffer);
       load->error = true;
       png_read_update_info(load->png_ptr,load->info_ptr);
       return;
@@ -379,13 +381,13 @@ unsupported:
     static void printError(const char* error_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Saver Error: %s", error_msg);
-      lib::printMessage(buf);
+      printMessage(buf);
     }
 
     static void printWarning(const char* warning_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Saver Warning: %s", warning_msg);
-      lib::printMessage(buf);
+      printMessage(buf);
     }
 
 
@@ -414,3 +416,4 @@ unsupported:
 
 };
 
+} // namespace rgl

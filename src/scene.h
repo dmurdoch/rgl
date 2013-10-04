@@ -6,13 +6,11 @@
 //
 // $Id$
 
-#include "types.h"
 #include <vector>
+#include "types.h"
 
 #include "SceneNode.hpp"
-
 #include "geom.hpp"
-
 #include "String.hpp"
 #include "Color.hpp"
 #include "Texture.hpp"
@@ -29,6 +27,8 @@
 #include "Viewpoint.hpp"
 #include "Background.hpp"
 #include "BBoxDeco.hpp"
+
+namespace rgl {
 
 class Scene {
 public:
@@ -187,6 +187,7 @@ private:
   bool bboxChanges;
 };
 
+} // namespace rgl
 
 #endif /* SCENE_HPP */
 

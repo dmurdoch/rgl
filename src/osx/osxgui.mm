@@ -23,7 +23,7 @@
 #define EMULATE_RIGHT_KEYMOD  NSControlKeyMask
 #define EMULATE_MIDDLE_KEYMOD NSAlternateKeyMask
 // ---------------------------------------------------------------------------
-namespace gui {
+namespace rgl {
 extern SEXP    rglNamespace;
 // ---------------------------------------------------------------------------
 class OSXWindowImpl : public WindowImpl
@@ -67,16 +67,16 @@ private:
 // interfaces
 // ---------------------------------------------------------------------------
 @interface GLView : NSOpenGLView {
-  gui::OSXWindowImpl *impl;
+  rgl::OSXWindowImpl *impl;
   NSUInteger lastModifierFlags;
 }
 
 - (id)initWithFrame:(NSRect)frame
         pixelFormat:(NSOpenGLPixelFormat *)pixelFormat
-               impl:(gui::OSXWindowImpl *)impl;
+               impl:(rgl::OSXWindowImpl *)impl;
 @end
 // ---------------------------------------------------------------------------
-namespace gui {
+namespace rgl {
 // ---------------------------------------------------------------------------
 OSXWindowImpl::OSXWindowImpl(Window* window)
   : WindowImpl(window)
@@ -313,7 +313,7 @@ bool OSXGUIFactory::hasEventLoop()
   return gInitValue != 0;
 }
 // ---------------------------------------------------------------------------
-} // namespace gui
+} // namespace rgl
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // implementation
@@ -322,7 +322,7 @@ bool OSXGUIFactory::hasEventLoop()
 
 - (id)initWithFrame:(NSRect)frame
         pixelFormat:(NSOpenGLPixelFormat *)pixelFormat
-               impl:(gui::OSXWindowImpl *)windowImpl
+               impl:(rgl::OSXWindowImpl *)windowImpl
 {
   if ((self = [super initWithFrame:frame pixelFormat:pixelFormat])) {
     impl = windowImpl;
@@ -373,18 +373,18 @@ bool OSXGUIFactory::hasEventLoop()
 - (int)buttonFromModifierFlags:(NSUInteger)modifierFlags
 {
   if((modifierFlags & EMULATE_RIGHT_KEYMOD) != 0) {
-    return gui::GUI_ButtonRight;
+    return rgl::GUI_ButtonRight;
   } else if((modifierFlags & EMULATE_MIDDLE_KEYMOD) != 0) {
-    return gui::GUI_ButtonMiddle;
+    return rgl::GUI_ButtonMiddle;
   }
-  return gui::GUI_ButtonLeft;
+  return rgl::GUI_ButtonLeft;
 }
 
 - (void)scrollWheel:(NSEvent *)event
 {
   if (impl) {
     CGFloat delta = [event deltaY];
-    if(delta != 0.0) impl->on_wheelRotate(delta > 0.0 ? gui::GUI_WheelForward : gui::GUI_WheelBackward);
+    if(delta != 0.0) impl->on_wheelRotate(delta > 0.0 ? rgl::GUI_WheelForward : rgl::GUI_WheelBackward);
   }
 }
 
@@ -425,7 +425,7 @@ bool OSXGUIFactory::hasEventLoop()
 {
   if (impl) {
     NSPoint point = [self pointForEvent:event];
-    impl->on_buttonPress(gui::GUI_ButtonRight, point.x, point.y);
+    impl->on_buttonPress(rgl::GUI_ButtonRight, point.x, point.y);
   }
 }
 
@@ -433,7 +433,7 @@ bool OSXGUIFactory::hasEventLoop()
 {
   if (impl) {
     NSPoint point = [self pointForEvent:event];
-    impl->on_buttonRelease(gui::GUI_ButtonRight, point.x, point.y);
+    impl->on_buttonRelease(rgl::GUI_ButtonRight, point.x, point.y);
   }
 }
 
@@ -449,7 +449,7 @@ bool OSXGUIFactory::hasEventLoop()
 {
   if (impl) {
     NSPoint point = [self pointForEvent:event];
-    impl->on_buttonPress(gui::GUI_ButtonMiddle, point.x, point.y);
+    impl->on_buttonPress(rgl::GUI_ButtonMiddle, point.x, point.y);
   }
 }
 
@@ -457,7 +457,7 @@ bool OSXGUIFactory::hasEventLoop()
 {
   if (impl) {
     NSPoint point = [self pointForEvent:event];
-    impl->on_buttonRelease(gui::GUI_ButtonMiddle, point.x, point.y);
+    impl->on_buttonRelease(rgl::GUI_ButtonMiddle, point.x, point.y);
   }
 }
 

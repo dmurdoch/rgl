@@ -10,6 +10,7 @@
 #include "types.h"
 #include "rglview.h"
 
+namespace rgl {
 
 //
 // class Device
@@ -72,6 +73,8 @@ private:
   const char* devtype;
   int    id_;
 };
+
+} // namespace rgl
 
 #endif // RGL_DEVICE_HPP
 

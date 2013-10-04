@@ -2,15 +2,15 @@
 #define BACKGROUND_HPP
 
 #include "Shape.hpp"
-
 #include "opengl.hpp"
+#include "SphereMesh.hpp"
+
+namespace rgl {
 
 //
 // CLASS
 //   Background
 //
-
-#include "SphereMesh.hpp"
 
 class Background : public Shape
 {
@@ -36,5 +36,7 @@ protected:
 private:
   static Material defaultMaterial;
 };
+
+} // namespace rgl
 
 #endif // BACKGROUND_HPP

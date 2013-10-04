@@ -3,6 +3,8 @@
 
 #include "render.h"
 
+namespace rgl {
+
 //
 // CLASS
 //   SphereMesh
@@ -60,6 +62,6 @@ private:
   void   setupMesh();
 };
 
-
+} // namespace rgl
 
 #endif // SPHERE_MESH_HPP

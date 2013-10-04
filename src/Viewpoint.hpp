@@ -1,11 +1,12 @@
 #ifndef VIEWPOINT_HPP
 #define VIEWPOINT_HPP
 
-#include "opengl.hpp"
 #include "SceneNode.hpp"
 
 #include "render.h"
 #include "geom.hpp"
+
+namespace rgl {
 
 class Viewpoint : public SceneNode
 {
@@ -48,5 +49,7 @@ private:
   bool        interactive;
   GLdouble    userMatrix[16], mouseMatrix[16];
 };
+
+} // namespace rgl 
 
 #endif // VIEWPOINT_HPP

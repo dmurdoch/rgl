@@ -1,6 +1,8 @@
 #ifndef STRING_HPP
 #define STRING_HPP
 
+namespace rgl {
+
 //
 // CLASS
 //   StringArray
@@ -47,6 +49,6 @@ private:
   char* textptr;
 };
 
-
+} // namespace rgl
 
 #endif // STRING_HPP

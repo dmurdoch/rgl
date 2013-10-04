@@ -18,6 +18,8 @@ using namespace std;
 #define M_PI      3.1415926535897932384626433832795
 #endif
 
+namespace rgl {
+
 namespace math {
 
   // template-based math functions with default 'double' implementation using math.h
@@ -207,5 +209,7 @@ struct PolarCoord
 
 
 typedef Vec4 Vertex4;
+
+} // namespace rgl
 
 #endif /* MATH_H */

@@ -4,6 +4,8 @@
 #include <vector>
 #include "assert.hpp"
 
+using namespace rgl;
+
 void Disposable::addDisposeListener(IDisposeListener* l)
 {
   Container::iterator pos = std::find( disposeListeners.begin(), disposeListeners.end(), l );

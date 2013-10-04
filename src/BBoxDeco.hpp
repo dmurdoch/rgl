@@ -15,6 +15,8 @@
 #include "String.hpp"
 #include "Material.hpp"
 
+namespace rgl {
+
 enum {
   AXIS_CUSTOM,
   AXIS_LENGTH,
@@ -68,5 +70,6 @@ private:
   static AxisInfo defaultAxis;
 };
 
+} // namespace rgl
 
 #endif // BBOX_DECO_HPP

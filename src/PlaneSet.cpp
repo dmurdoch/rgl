@@ -1,7 +1,9 @@
+#include <algorithm>
 #include "PlaneSet.hpp"
 #include "Viewpoint.hpp"
 #include "R.h"
-#include <algorithm>
+
+using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
 //

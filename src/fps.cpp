@@ -9,6 +9,8 @@
 
 #include <cstdio>
 
+using namespace rgl;
+
 void FPS::init(double time)
 {
   lastTime = time;

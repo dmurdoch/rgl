@@ -7,6 +7,8 @@
 
 #include <cstdio>
 
+using namespace rgl;
+
 void SELECT::render(double* position)
 {
   double llx, lly, urx, ury;
