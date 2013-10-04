@@ -17,8 +17,10 @@
 
 using namespace rgl;
 
+namespace rgl {
 X11GUIFactory* gpX11GUIFactory = NULL;
 NULLGUIFactory* gpNULLGUIFactory = NULL;
+}
 
 GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
 {

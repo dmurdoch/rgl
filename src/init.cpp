@@ -14,9 +14,10 @@ using namespace rgl;
 // GLOBAL: deviceManager pointer
 //
 
-DeviceManager* deviceManager = NULL;
 
 namespace rgl{
+
+DeviceManager* deviceManager = NULL;
 
 int gInitValue;
 void* gHandle;

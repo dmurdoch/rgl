@@ -66,7 +66,7 @@
 	 "rgl_setMouseCallbacks", "rgl_surface", "rgl_spheres",
 	 "rgl_texts", "rgl_sprites", "rgl_user2window",
 	 "rgl_window2user", "rgl_selectstate", "rgl_setselectstate",
-	 rgl_par3d="par3d", "rgl_quit")
+	 "rgl_par3d", "rgl_quit")
 	 
   useDynLib(dll, entries)
  

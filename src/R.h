@@ -12,6 +12,8 @@
 /* Set this to 1 to turn on glGetError testing */
 #define USE_GLGETERROR 0
 
+
+
 #if USE_GLGETERROR
 #define SAVEGLERROR saveGLerror(__FILE__, __LINE__);
 #define CHECKGLERROR checkGLerror(__FILE__, __LINE__);
@@ -22,10 +24,15 @@
 /* Neither one can be called with glBegin() ... glEnd() pairs.                       */
 /* They are defined in glErrors.cpp                                                  */
 
+namespace rgl {
+
 extern int SaveErrnum;
 
 void saveGLerror(const char *, int);  
 void checkGLerror(const char *, int);
+
+} // namespace rgl
+
 #else
 #define SAVEGLERROR
 #define CHECKGLERROR

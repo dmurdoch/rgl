@@ -5,7 +5,12 @@
 #include "opengl.hpp"
 #include "R.h"
 
+namespace rgl {
 int SaveErrnum = GL_NO_ERROR;
+}
+
+using namespace rgl;
+
 static const char * SaveFile;
 static int SaveLine;
 

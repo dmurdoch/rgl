@@ -14,7 +14,9 @@ using namespace rgl;
 
 #ifdef HAVE_PNG_H
 #include "pngpixmap.h"
+namespace rgl {
 PNGPixmapFormat png;
+}
 #endif
 
 // PIXMAP FORMAT TABLE
