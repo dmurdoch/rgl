@@ -7,6 +7,8 @@
 #include "PrimitiveSet.hpp"
 #include <map>
 
+namespace rgl {
+
 class PlaneSet : public TriangleSet {
 private:		/* Use parametrization ax + by + cz + d = 0 */
   int		nPlanes;
@@ -41,5 +43,7 @@ public:
    */
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);  
 };
+
+} // namespace rgl
 
 #endif // PLANESET_HPP

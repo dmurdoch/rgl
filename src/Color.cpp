@@ -5,6 +5,8 @@ using namespace std;
 #include <cstdlib>
 #include <cstring> // for memcpy
 
+using namespace rgl;
+
 //
 // COLOR UTILS
 //

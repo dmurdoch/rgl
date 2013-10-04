@@ -1,3 +1,6 @@
+
+#include <ctype.h>
+#include <Rinternals.h>
 #include "config.hpp"
 // C++ source
 // This file is part of RGL.
@@ -11,12 +14,10 @@
 
 #include "assert.hpp"
 #include "R.h"
-#include <Rinternals.h>
-
-#include <ctype.h>
 
 // ---------------------------------------------------------------------------
-namespace gui {
+
+namespace rgl {
 
 class NULLWindowImpl : public WindowImpl
 { 
@@ -45,6 +46,10 @@ public:
   void endGL() {};
   void swap() {};
 };
+
+} // namespace rgl
+
+using namespace rgl;
 // ----------------------------------------------------------------------------
 // constructor
 // ----------------------------------------------------------------------------
@@ -106,6 +111,4 @@ WindowImpl* NULLGUIFactory::createWindowImpl(Window* in_window)
   return impl;
 }
 // ---------------------------------------------------------------------------
-} // namespace gui
-
 

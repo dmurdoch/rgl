@@ -10,6 +10,8 @@
 #include "String.hpp"
 #include "geom.hpp"
 
+namespace rgl {
+
 /*
 enum TypeID { 
   SHAPE=1, 
@@ -71,10 +73,12 @@ private:
 };
 
 /**
- * used in searches
+ * used in find_if searches, so can't be a method
  */
  
 bool sameID(SceneNode* node, int id);
+
+} // namespace rgl
 
 #endif // SCENENODE_HPP
  

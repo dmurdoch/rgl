@@ -6,12 +6,12 @@
 //
 // $Id$
 // ---------------------------------------------------------------------------
-#include <cstring>
 #include "types.h"
 #include "glgui.hpp"
 #include "Disposable.hpp"
-// ---------------------------------------------------------------------------
-namespace gui {
+
+namespace rgl {
+
 // ---------------------------------------------------------------------------
 enum {
   GUI_ButtonLeft = 1,
@@ -99,16 +99,10 @@ public:
   virtual WindowImpl* createWindowImpl(Window*) = 0;
 };
 // ---------------------------------------------------------------------------
-} // namespace gui
-// ---------------------------------------------------------------------------
 //
 // implementation specific
 //
-namespace lib {
-gui::GUIFactory* getGUIFactory(bool useNULLDevice);
-}
-// ---------------------------------------------------------------------------
-namespace gui {
+rgl::GUIFactory* getGUIFactory(bool useNULLDevice);
 // ---------------------------------------------------------------------------
 //
 // ABSTRACT GUI TOOLKIT
@@ -167,7 +161,7 @@ class Window : public View, public Disposable
 {
 public:
 
-  Window(View* child=NULL, GUIFactory* factory=lib::getGUIFactory(0) );
+  Window(View* child=NULL, GUIFactory* factory=rgl::getGUIFactory(0) );
   ~Window();
 
 // overloaded view methods:
@@ -213,7 +207,8 @@ public:
   bool skipRedraw;  
 };
 // ---------------------------------------------------------------------------
-} // namespace gui
-// ---------------------------------------------------------------------------
+
+} // namespace rgl
+
 #endif // RGL_GUI_HPP 
 

@@ -3,6 +3,8 @@
 
 #include "rglmath.h"
 
+namespace rgl {
+
 //
 // CLASS
 //   AABox (axis-aligned box)
@@ -57,7 +59,6 @@ public:
   bool ortho;
 };
 
-
-
+} // namespace rgl
 
 #endif // GEOM_HPP

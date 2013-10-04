@@ -3,6 +3,8 @@
 
 #include "DeviceManager.hpp"
 
+using namespace rgl;
+
 extern DeviceManager* deviceManager;
 
 /* These defines are not in the installed version of R */

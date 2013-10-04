@@ -10,6 +10,8 @@ using namespace std;
 
 // PNG FORMAT IMPLEMENTATION
 
+using namespace rgl;
+
 #ifdef HAVE_PNG_H
 #include "pngpixmap.h"
 PNGPixmapFormat png;
@@ -17,7 +19,7 @@ PNGPixmapFormat png;
 
 // PIXMAP FORMAT TABLE
 
-PixmapFormat* pixmapFormat[PIXMAP_FILEFORMAT_LAST] =
+PixmapFormat* rgl::pixmapFormat[PIXMAP_FILEFORMAT_LAST] =
 {
   
 // PNG FORMAT
@@ -91,7 +93,7 @@ bool Pixmap::load(const char* filename)
   if (!file) {
     char buffer[256];
     sprintf(buffer, "Pixmap load: unable to open file '%s' for reading", filename);
-    lib::printMessage(buffer);
+    printMessage(buffer);
     return false;
   }
 
@@ -111,11 +113,11 @@ bool Pixmap::load(const char* filename)
   }
 
   if (!support) {
-    lib::printMessage("Pixmap load: file format unsupported");
+    printMessage("Pixmap load: file format unsupported");
   }
   
   if (!success) {
-    lib::printMessage("Pixmap load: failed");
+    printMessage("Pixmap load: failed");
   }
 
   fclose(file);
@@ -132,7 +134,7 @@ bool Pixmap::save(PixmapFormat* format, const char* filename)
   if (!file) {
     char buffer[256];
     sprintf(buffer, "Pixmap save: unable to open file '%s' for writing", filename);
-    lib::printMessage(buffer);
+    printMessage(buffer);
     return false;
   }
   

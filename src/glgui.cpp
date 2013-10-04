@@ -3,11 +3,18 @@
 //
 // $Id$
 
+#include <cstdio>
+#ifdef HAVE_FREETYPE
+#include "FTGL/ftgl.h"
+#include "R.h"
+#endif
 #include "types.h"
 #include "glgui.hpp"
 #include "gl2ps.h"
 #include "opengl.hpp"
 #include "RenderContext.hpp"
+
+using namespace rgl;
 
 //
 // CLASS
@@ -115,9 +122,6 @@ void GLBitmapFont::draw(const wchar_t* text, int length,
 }
 
 #ifdef HAVE_FREETYPE
-
-#include "FTGL/ftgl.h"
-#include "R.h"
 
 GLFTFont::GLFTFont(const char* in_family, int in_style, double in_cex, const char* in_fontname) 
 : GLFont(in_family, in_style, in_cex, in_fontname, true)

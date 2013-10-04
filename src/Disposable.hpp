@@ -3,6 +3,8 @@
 
 #include <vector>
 
+namespace rgl {
+
 // forward declaration
 class Disposable;
 
@@ -50,6 +52,8 @@ private:
   typedef std::vector<IDisposeListener*> Container;
   Container disposeListeners;
 };
+
+} // namespace rgl
 
 #endif // RGL_DISPOSABLE_HPP
 

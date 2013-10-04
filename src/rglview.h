@@ -7,13 +7,13 @@
 // $Id$
 
 
-#include "gui.hpp"
 #include "scene.h"
+#include "gui.hpp"
 #include "fps.h"
 #include "select.h"
 #include "pixmap.h"
 
-using namespace gui;
+namespace rgl {
 
 enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
                   mmSELECTING, mmZOOM, mmFOV, mmUSER};
@@ -179,5 +179,7 @@ private:
   double  mousePosition[4];
 
 };
+
+} // namespace rgl
 
 #endif /* RGLVIEW_H */

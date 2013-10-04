@@ -1,7 +1,9 @@
-using namespace std;
-#include "Texture.hpp"
 
+#include "Texture.hpp"
 #include "pixmap.h"
+
+using namespace std;
+using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -126,7 +128,7 @@ static void printGluErrorMessage(GLint error)
   char buf[256];        
   gluError = gluErrorString (error);
   sprintf(buf, "GLU Library Error : %s", (const char*) gluError);
-  lib::printMessage(buf);
+  printMessage(buf);
 }
 
 void Texture::init(RenderContext* renderContext)
@@ -217,7 +219,7 @@ void Texture::init(RenderContext* renderContext)
     if ( (width > maxSize) || (height > maxSize) ) {
       char buf[256];
       sprintf(buf, "GL Library : Maximum texture size of %dx%d exceeded.\n(Perhaps enabling mipmapping could help.)", maxSize,maxSize);
-      lib::printMessage(buf);
+      printMessage(buf);
     } else if ( (pixmap->width != width) || ( pixmap->height != height) ) {
       char* data = new char[width * height * bytesperpixel];
       int gluError = gluScaleImage(format, pixmap->width, pixmap->height, gl_type, pixmap->data, width, height, gl_type, data);

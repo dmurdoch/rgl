@@ -10,6 +10,8 @@
 
 #include <list>
 
+namespace rgl {
+
 /**
  * Manager component that is used as a front-end for multiple devices access
  * using an 'id' to set the current device.
@@ -43,6 +45,8 @@ private:
   Iterator  current; 
   bool	    useNULLDevice;
 };
+
+} // namespace rgl
 
 #endif // DEVICE_MANAGER_HPP
 

@@ -11,22 +11,23 @@
 #include "../R.h"
 #include "../assert.hpp"
 // ---------------------------------------------------------------------------
-namespace lib {
-// ---------------------------------------------------------------------------
-void printMessage(const char* message)
+
+using namespace rgl;
+
+void rgl::printMessage(const char* message)
 {
   warning("RGL: %s\n", message);
 }
 // ---------------------------------------------------------------------------
-double getTime()
+double rgl::getTime()
 {
   return 0.0;
 }
 // ---------------------------------------------------------------------------
-gui::OSXGUIFactory* gGUIFactory = 0;
-gui::NULLGUIFactory* gNULLFactory = 0;
+OSXGUIFactory* gGUIFactory = 0;
+NULLGUIFactory* gNULLFactory = 0;
 // ---------------------------------------------------------------------------
-gui::GUIFactory* getGUIFactory(bool useNULLDevice)
+GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
 { 
   if (useNULLDevice)
     return gNULLFactory;
@@ -36,19 +37,19 @@ gui::GUIFactory* getGUIFactory(bool useNULLDevice)
     error("NSOpenGL device not initialized");  
 }
 // ---------------------------------------------------------------------------
-const char * GUIFactoryName(bool useNULLDevice)
+const char * rgl::GUIFactoryName(bool useNULLDevice)
 {
   return useNULLDevice ? "null" : "NSOpenGL";
 }
 // ---------------------------------------------------------------------------
-bool init(bool useNULLDevice)
+bool rgl::init(bool useNULLDevice)
 {
   bool success = false;
-  gNULLFactory = new gui::NULLGUIFactory();
+  gNULLFactory = new NULLGUIFactory();
   if (useNULLDevice) {
     success = true;
   } else {
-    gGUIFactory = new gui::OSXGUIFactory();
+    gGUIFactory = new OSXGUIFactory();
     if (!gGUIFactory->hasEventLoop()) {
 	error("RGL: configured for Cocoa, must run in R.app");
     } else 
@@ -57,7 +58,7 @@ bool init(bool useNULLDevice)
   return success;
 }
 // ---------------------------------------------------------------------------
-void quit()
+void rgl::quit()
 {
   if (gGUIFactory)
     delete gGUIFactory;
@@ -65,8 +66,6 @@ void quit()
   gGUIFactory = 0;
   gNULLFactory = 0;
 }
-// ---------------------------------------------------------------------------
-} // namespace lib
 // ---------------------------------------------------------------------------
 #endif // RGL_COCOA
 // ---------------------------------------------------------------------------

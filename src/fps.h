@@ -8,6 +8,8 @@
 
 #include "scene.h"
 
+namespace rgl {
+
 //
 // FPS COUNTER
 //
@@ -23,6 +25,8 @@ public:
   void init(double t);
   void render(double t, RenderContext* ctx);
 };
+
+} // namespace rgl
 
 #endif // RGL_FPS_H
 

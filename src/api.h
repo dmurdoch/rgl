@@ -4,6 +4,8 @@
 #include "R.h"
 #include <Rinternals.h>
 
+namespace rgl {
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -129,6 +131,8 @@ int	getAntialias();
 #ifdef __cplusplus
 }
 #endif
+
+} // namespace rgl
 
 #endif /* RGL_API_H */
 

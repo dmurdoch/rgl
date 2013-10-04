@@ -13,6 +13,8 @@
 #include <functional>
 #include "R.h"
 
+using namespace rgl;
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
@@ -697,7 +699,7 @@ void Scene::invalidateDisplaylists()
   }
 }
 
-bool sameID(SceneNode* node, int id)
+bool rgl::sameID(SceneNode* node, int id)
 { 
   return node->getObjID() == id; 
 }

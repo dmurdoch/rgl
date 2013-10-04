@@ -8,6 +8,8 @@
 
 #include "scene.h"
 
+namespace rgl {
+
 //
 // Mouse selection rectangle
 //
@@ -18,6 +20,8 @@ public:
   inline SELECT() { };
   void render(double* position);
 };
+
+} // namespace rgl
 
 #endif // PLX_SELECT_H
 

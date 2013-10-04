@@ -1,10 +1,7 @@
 #ifndef SHAPE_HPP
 #define SHAPE_HPP
 
-#include <map>
 #include <vector>
-#include <algorithm>
-#include <functional>
 
 #include "SceneNode.hpp"
 #include "Material.hpp"
@@ -13,8 +10,7 @@
 #include "opengl.hpp"
 #include "geom.hpp"
 
-/* This definition avoids conflict with the Shape type in the igraph package */
-#define Shape rglShape
+namespace rgl {
 
 //
 // CLASS
@@ -168,5 +164,7 @@ public:
  */
  
 Shape* get_shape_from_list(std::vector<Shape*> shapes, int id, bool recursive);
+
+} // namespace rgl
 
 #endif // SHAPE_HPP

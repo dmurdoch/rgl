@@ -5,21 +5,24 @@
 
 
 
+#ifdef __sun
+#include <locale.h>
+#else
+#include <locale>
+#endif
+#include <cstdio>
 #include "rglview.h"
 #include "opengl.hpp"
-#include <cstdio>
 #include "lib.hpp"
 #include "rglmath.h"
 #include "pixmap.h"
 #include "fps.h"
 #include "select.h"
 #include "gl2ps.h"
-#ifdef __sun
-#include <locale.h>
-#else
-#include <locale>
-#endif
+
 #include "R.h"		// for error()
+
+using namespace rgl;
 
 //
 // CAMERA config
@@ -66,7 +69,7 @@ RGLView::~RGLView()
 
 void RGLView::show()
 {
-  fps.init( lib::getTime() );
+  fps.init( getTime() );
 }
 
 void RGLView::hide()
@@ -104,7 +107,7 @@ void RGLView::resize(int in_width, int in_height) {
 void RGLView::paint(void) {
 
   double last = renderContext.time;
-  double t    = lib::getTime();
+  double t    = getTime();
 
   double dt   = (last != 0.0f) ? last - t : 0.0f;
   

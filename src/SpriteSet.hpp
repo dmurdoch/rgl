@@ -1,8 +1,10 @@
 #ifndef SPRITE_SET_HPP
 #define SPRITE_SET_HPP
 
-#include "Shape.hpp"
 #include <vector>
+#include "Shape.hpp"
+
+namespace rgl {
 
 //
 // SPRITESET
@@ -63,5 +65,7 @@ private:
   std::vector<Shape*> shapes;
 
 };
+
+} // namespace rgl
 
 #endif // SPRITE_SET_HPP
