@@ -16,7 +16,7 @@ using namespace rgl;
 //   HexCharToNibble
 //
 
-u8 HexCharToNibble(char c) {
+static u8 HexCharToNibble(char c) {
   u8 nibble = 0;
 
   if ((c >= '0') && (c <= '9'))

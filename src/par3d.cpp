@@ -16,6 +16,8 @@
 
 using namespace rgl;
 
+#define par3d	rgl_par3d
+
 extern "C" {
 EXPORT_SYMBOL SEXP par3d(SEXP args);
 }
@@ -94,7 +96,10 @@ static void BoundsCheck(double x, double a, double b, const char *s)
 
 /* These modes must match the definitions of mmTRACKBALL etc in rglview.h ! */ 
 
+namespace rgl {
 const char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
+}
+
 #define mmLAST 10
 
 /* At R 2.6.0, the type of the first arg to psmatch changed to const char *.  Conditionally cast 
@@ -190,19 +195,19 @@ static void Specify(const char *what, SEXP value)
     else if (streql(what, "family")) {
       lengthCheck(what, value, 1);
       x = coerceVector(value, STRSXP);
-      if (setFamily(CHAR(STRING_ELT(x, 0)))) success = 1;
+      if (rgl_setFamily(CHAR(STRING_ELT(x, 0)))) success = 1;
     }
     else if (streql(what, "font")) {
       lengthCheck(what, value, 1);
       x=coerceVector(value, INTSXP);
       if (INTEGER(x)[0] < 1 || INTEGER(x)[0] > 5) { par_error(what); }
-      if (setFont(INTEGER(x)[0])) success = 1;
+      if (rgl_setFont(INTEGER(x)[0])) success = 1;
     }
     else if (streql(what, "cex")) {
       lengthCheck(what, value, 1);
       x=coerceVector(value, REALSXP);
       if (REAL(x)[0] <= 0) { par_error(what); }
-      if (setCex(REAL(x)[0])) success = 1;
+      if (rgl_setCex(REAL(x)[0])) success = 1;
     }
     else if (streql(what, "useFreeType")) {
       lengthCheck(what, value, 1);
@@ -211,7 +216,7 @@ static void Specify(const char *what, SEXP value)
       if (LOGICAL(x)[0])
           warning("FreeType not supported in this build");
 #endif
-      if (setUseFreeType(LOGICAL(x)[0])) success = 1;
+      if (rgl_setUseFreeType(LOGICAL(x)[0])) success = 1;
     }
     
      else warning(_("parameter \"%s\" cannot be set"), what);
@@ -300,7 +305,7 @@ static SEXP Query(const char *what)
       rgl_getWindowRect(&success, INTEGER(value));
     }
     else if (streql(what, "family")) {
-      buf = getFamily();
+      buf = rgl_getFamily();
       if (buf) {
         value = mkString(buf);
         success = 1;
@@ -308,16 +313,16 @@ static SEXP Query(const char *what)
     }
     else if (streql(what, "font")) {
       value = allocVector(INTSXP, 1);
-      INTEGER(value)[0] = getFont();
+      INTEGER(value)[0] = rgl_getFont();
       success = INTEGER(value)[0] >= 0;
     }
     else if (streql(what, "cex")) {
       value = allocVector(REALSXP, 1);
-      REAL(value)[0] = getCex();
+      REAL(value)[0] = rgl_getCex();
       success = REAL(value)[0] >= 0;
     }    
     else if (streql(what, "useFreeType")) {
-      int useFreeType = getUseFreeType();
+      int useFreeType = rgl_getUseFreeType();
       value = allocVector(LGLSXP, 1);
       if (useFreeType < 0) {
         LOGICAL(value)[0] = false;
@@ -328,7 +333,7 @@ static SEXP Query(const char *what)
       }
     }    
     else if (streql(what, "fontname")) {
-      buf = getFontname();
+      buf = rgl_getFontname();
       if (buf) {
         value = mkString(buf);
         success = 1;
@@ -336,7 +341,7 @@ static SEXP Query(const char *what)
     }
     else if (streql(what, "antialias")) {
       value = allocVector(INTSXP, 1);
-      INTEGER(value)[0] = getAntialias();
+      INTEGER(value)[0] = rgl_getAntialias();
       success = 1;
     }
   	

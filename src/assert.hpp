@@ -11,8 +11,6 @@
  *
  */
  
-namespace rgl {
-
 /* We should be able to include this file multiple times to allow the assert
    macro to be enabled/disabled for different parts of code.  So don't add a
    header guard.  */ 
@@ -31,17 +29,15 @@ extern "C" {
 
 #else /* debugging enabled */
 
-void _assert (const char*, const char*, int);
+void rgl_assert (const char*, const char*, int);
 
 /*
  * Definition of the assert macro.
  */
-#define assert(e)       ((e) ? (void)0 : _assert(#e, __FILE__, __LINE__))
+#define assert(e)       ((e) ? (void)0 : rgl_assert(#e, __FILE__, __LINE__))
 
 #endif	/* NDEBUG */
 
 #ifdef	__cplusplus
 }
 #endif
-
-} // namespace rgl

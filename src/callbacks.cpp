@@ -5,7 +5,9 @@
 
 using namespace rgl;
 
+namespace rgl {
 extern DeviceManager* deviceManager;
+}
 
 /* These defines are not in the installed version of R */
 #include "R.h"

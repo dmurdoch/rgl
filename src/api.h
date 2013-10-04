@@ -117,16 +117,16 @@ EXPORT_SYMBOL void rgl_getPosition(double* position);
 
 /* These functions are related to the API, but only accessed internally */
 
-char*   getFamily();
-bool    setFamily(const char *family);
-int     getFont();
-bool    setFont(int font);
-double  getCex();
-bool    setCex(double cex);
-int     getUseFreeType();
-bool    setUseFreeType(bool useFreeType);
-char*	getFontname();
-int	getAntialias();
+char*   rgl_getFamily();
+bool    rgl_setFamily(const char *family);
+int     rgl_getFont();
+bool    rgl_setFont(int font);
+double  rgl_getCex();
+bool    rgl_setCex(double cex);
+int     rgl_getUseFreeType();
+bool    rgl_setUseFreeType(bool useFreeType);
+char*	rgl_getFontname();
+int	rgl_getAntialias();
 
 #ifdef __cplusplus
 }

@@ -115,7 +115,7 @@ void Texture::getParameters(Type *out_type, bool *out_mipmap,
   strncpy(out_filename, filename, buflen);
 }
 
-unsigned int texsize(unsigned int s)
+static unsigned int texsize(unsigned int s)
 {
   return 1U << msb(s-1);
 }

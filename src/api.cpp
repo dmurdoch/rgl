@@ -35,7 +35,9 @@ inline bool as_bool(int idata) { return (idata) ? true : false; }
 //   rgl::rgl_init moved to init.cpp
 //
 
+namespace rgl {
 extern DeviceManager* deviceManager;
+}
 
 //
 // FUNCTION
@@ -1356,7 +1358,7 @@ void rgl::rgl_getBoundingbox(int* successptr, double* bboxvec)
 
 /* font access functions.  These are only used from par3d */
 
-char* rgl::getFamily()
+char* rgl::rgl_getFamily()
 {
   Device* device;
   const char* f;
@@ -1372,7 +1374,7 @@ char* rgl::getFamily()
   return result;
 }
 
-bool rgl::setFamily(const char *family)
+bool rgl::rgl_setFamily(const char *family)
 {
   Device* device;
   
@@ -1384,7 +1386,7 @@ bool rgl::setFamily(const char *family)
     return false;
 }
 
-int rgl::getFont()
+int rgl::rgl_getFont()
 {
   Device* device;
   
@@ -1396,7 +1398,7 @@ int rgl::getFont()
     return -1;
 }
 
-bool rgl::setFont(int font)
+bool rgl::rgl_setFont(int font)
 {
   Device* device;
   
@@ -1408,7 +1410,7 @@ bool rgl::setFont(int font)
     return false;
 }
 
-double rgl::getCex()
+double rgl::rgl_getCex()
 {
   Device* device;
   
@@ -1420,7 +1422,7 @@ double rgl::getCex()
     return -1;
 }
 
-bool rgl::setCex(double cex)
+bool rgl::rgl_setCex(double cex)
 {
   Device* device;
   
@@ -1432,7 +1434,7 @@ bool rgl::setCex(double cex)
     return false;
 }
 
-int rgl::getUseFreeType()
+int rgl::rgl_getUseFreeType()
 {
   Device* device;
   
@@ -1444,7 +1446,7 @@ int rgl::getUseFreeType()
     return -1;
 }
 
-bool rgl::setUseFreeType(bool useFreeType)
+bool rgl::rgl_setUseFreeType(bool useFreeType)
 {
   Device* device;
   
@@ -1456,7 +1458,7 @@ bool rgl::setUseFreeType(bool useFreeType)
     return false;
 }
 
-char* rgl::getFontname()
+char* rgl::rgl_getFontname()
 {
   Device* device;
   const char* f;
@@ -1471,7 +1473,7 @@ char* rgl::getFontname()
   return result;
 }
 
-int rgl::getAntialias()
+int rgl::rgl_getAntialias()
 {
   Device* device;
   
