@@ -528,5 +528,6 @@ v0.93.975
 v0.93.977
   - most rgl C++ functions and classes are now in namespace "rgl".  
     Others have prefix rgl_, with the exception of gl2ps functions,
-    which all have that prefix.
+    which all have that prefix, and FTGL functions, which generally
+    have an FT prefix.
     
