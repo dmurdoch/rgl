@@ -27,7 +27,7 @@ rgl.clear <- function( type = "shapes" )
   idata <- as.integer(c(length(type), type))
  
   ret <- .C( rgl_clear, 
-    success = as.integer(FALSE),
+    success = FALSE,
     idata
   )
   
@@ -56,7 +56,7 @@ rgl.pop <- function( type = "shapes", id = 0)
     idata <- as.integer(c(type, i))
 
     ret <- .C( rgl_pop,
-      success = as.integer(FALSE),
+      success = FALSE,
       idata
     )
 
@@ -168,7 +168,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
   ddata <- as.numeric(c(theta,phi,fov,zoom,scale,userMatrix[1:16]))
 
   ret <- .C( rgl_viewpoint,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     ddata
   )
@@ -191,7 +191,7 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
   idata   <- as.integer(c(sphere,fogtype))
 
   ret <- .C( rgl_bg, 
-    success = as.integer(FALSE),
+    success = FALSE,
     idata
   )
 
@@ -256,7 +256,7 @@ rgl.bbox <- function(
   ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
 
   ret <- .C( rgl_bbox,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     ddata,
     as.numeric(xat),
@@ -313,7 +313,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   ddata <- as.numeric(c(theta, phi, x, y, z))
 
   ret <- .C( rgl_light,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     ddata
   )
@@ -374,7 +374,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     } 
     
     ret <- .C( rgl_primitive,
-      success = as.integer(FALSE),
+      success = FALSE,
       idata,
       as.numeric(vertex),
       as.numeric(normals),
@@ -489,7 +489,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   parity <- (perm_parity(coords) + (x[2] < x[1]) + (z[2] < z[1]) ) %% 2
   
   ret <- .C( rgl_surface,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     as.numeric(x),
     as.numeric(z),
@@ -528,7 +528,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   idata <- as.integer( c( nvertex, nradius ) )
    
   ret <- .C( rgl_spheres,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     as.numeric(vertex),    
     as.numeric(radius),
@@ -557,7 +557,7 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
   idata <- as.integer( c( nnormals, noffsets ) )
    
   ret <- .C( rgl_planes,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     as.numeric(normals),    
     as.numeric(d),
@@ -587,7 +587,7 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
   idata <- as.integer( c( nbases, ndirs ) )
    
   ret <- .C( rgl_abclines,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     as.numeric(bases),    
     as.numeric(directions),
@@ -642,7 +642,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
   font <- ifelse( font < 0 | font > 4, 1, font)  
   
   ret <- .C( rgl_texts,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     as.double(adj),
     as.character(text),
@@ -680,7 +680,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   idata   <- as.integer( c(ncenter,nradius,length(shapes)) )
   
   ret <- .C( rgl_sprites,
-    success = as.integer(FALSE),
+    success = FALSE,
     idata,
     as.numeric(center),
     as.numeric(radius),
@@ -707,7 +707,7 @@ rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection())
   idata  <- as.integer(ncol(points))
   
   ret <- .C( rgl_user2window,
-  	success = as.integer(FALSE),
+  	success = FALSE,
 	idata,
 	as.double(points),
 	window=double(length(points)),
@@ -732,7 +732,7 @@ rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
   idata  <- as.integer(ncol(window))
   
   ret <- .C( rgl_window2user,
-  	success = as.integer(FALSE),
+  	success = FALSE,
 	idata,
 	point=double(length(window)),
 	window,
@@ -755,7 +755,7 @@ msABORT    <- 4
 rgl.selectstate <- function()
 {
 	ret <- .C( rgl_selectstate,
-    	success = as.integer(FALSE),
+    	success = FALSE,
     	state = as.integer(0),
     	mouseposition = double(4)
   	)
@@ -792,7 +792,7 @@ rgl.setselectstate <- function(state = "current")
 	idata <- as.integer(c(state))
 	
 	  ret <- .C( rgl_setselectstate, 
-	    success = as.integer(FALSE),
+	    success = FALSE,
 	    state = idata
 	  )
 	

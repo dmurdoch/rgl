@@ -1,0 +1,3 @@
+LIBRARY rgl.dll
+EXPORTS
+  R_init_rgl

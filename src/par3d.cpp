@@ -16,11 +16,6 @@
 
 using namespace rgl;
 
-#define par3d	rgl_par3d
-
-extern "C" {
-EXPORT_SYMBOL SEXP par3d(SEXP args);
-}
 /* par3d implementation based on R's par implementation
  *
  *  Main functions:
@@ -350,7 +345,7 @@ static SEXP Query(const char *what)
     return value;
 }
   
-SEXP par3d(SEXP args)
+SEXP rgl::rgl_par3d(SEXP args)
 {
     SEXP value;
 
