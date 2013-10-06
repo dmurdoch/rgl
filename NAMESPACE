@@ -22,7 +22,13 @@ export(.check3d,
 	texts3d, title3d, triangulate, 
 	tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
 	turn3d, view3d, wire3d, writeOBJ, writePLY, writeSTL, writeWebGL)
- 
+	
+if (.Platform$GUI == "AQUA") {
+  useDynLib(aglrgl, .registration = TRUE, .fixes = "")
+} else {
+  useDynLib(rgl, .registration = TRUE, .fixes = "")
+}
+
  S3method(dot3d, shapelist3d)
  S3method(wire3d, shapelist3d)
  S3method(shade3d, shapelist3d)  

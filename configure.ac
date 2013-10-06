@@ -28,6 +28,8 @@ fi
 AC_PROG_CPP
 AC_PROG_CC
 
+R_GCC4_VISIBILITY
+
 AC_ARG_ENABLE([cocoa],
 [  --disable-cocoa            use X11 instead of Mac OS X native Cocoa UI]
 )

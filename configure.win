@@ -88,5 +88,6 @@ sed \
 -e "s^@CXXFLAGS@^$CXXFLAGS^" \
 -e "s^@LIBS@^$LIBS^" \
 -e "s^@BUILD_AGL_TRUE@^#^" \
+-e "s^@C_VISIBILITY@^#^" \
 src/Makevars.in >src/Makevars
 
