@@ -1,7 +1,9 @@
 ## 
 ## This file is part of RGL
 ##
-## Process this file with autoconf to produce a configure script.
+## It uses some R-specific macros, so process it in two steps:
+## 1. Copy m4/R.m4 from the R source directory to rgl/aclocal.m4
+## 2. Process configure.ac with autoconf to produce a configure script.
 ## NB:  the files in src/build/autoconf may need updating for a new
 ##      version of autoconf
 ##
@@ -28,6 +30,7 @@ fi
 AC_PROG_CPP
 AC_PROG_CC
 
+AC_CONFIG_MACRO_DIR([${R_HOME}/m4])
 R_GCC4_VISIBILITY
 
 AC_ARG_ENABLE([cocoa],
