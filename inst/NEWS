@@ -525,9 +525,12 @@ v0.93.975
     rgl namespace will eventually be added, with only the API functions 
     left in the global namespace.
     
-v0.93.977
+v0.93.980
   - most rgl C++ functions and classes are now in namespace "rgl".  
     Others have prefix rgl_, with the exception of gl2ps functions,
     which all have that prefix, and FTGL functions, which generally
     have an FT prefix.
+  - entry points to the rgl DLL are now registered within the DLL,
+    and on systems that support it, all entry points other than the
+    registration function are hidden.
     
