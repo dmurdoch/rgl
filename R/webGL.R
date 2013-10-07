@@ -44,7 +44,8 @@ convertBBox <- function(id) {
   if (!length(text))
     text <- rep("", NROW(verts))
   mat <- rgl.getmaterial(id = id)
-  mat$color <- mat$color[2] # We ignore the "box" colour
+  if (length(mat$color) > 1)
+    mat$color <- mat$color[2] # We ignore the "box" colour
   
   if(any(missing <- text == "")) 
     text[missing] <- apply(verts[missing,], 1, function(row) format(row[!is.na(row)]))
