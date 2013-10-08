@@ -313,7 +313,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   ddata <- as.numeric(c(theta, phi, x, y, z))
 
   ret <- .C( rgl_light,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     ddata
   )
@@ -374,7 +374,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     } 
     
     ret <- .C( rgl_primitive,
-      success = FALSE,
+      success = as.integer(FALSE),
       idata,
       as.numeric(vertex),
       as.numeric(normals),
@@ -489,7 +489,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   parity <- (perm_parity(coords) + (x[2] < x[1]) + (z[2] < z[1]) ) %% 2
   
   ret <- .C( rgl_surface,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     as.numeric(x),
     as.numeric(z),
@@ -528,7 +528,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   idata <- as.integer( c( nvertex, nradius ) )
    
   ret <- .C( rgl_spheres,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     as.numeric(vertex),    
     as.numeric(radius),
@@ -557,7 +557,7 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
   idata <- as.integer( c( nnormals, noffsets ) )
    
   ret <- .C( rgl_planes,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     as.numeric(normals),    
     as.numeric(d),
@@ -587,7 +587,7 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
   idata <- as.integer( c( nbases, ndirs ) )
    
   ret <- .C( rgl_abclines,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     as.numeric(bases),    
     as.numeric(directions),
@@ -642,7 +642,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
   font <- ifelse( font < 0 | font > 4, 1, font)  
   
   ret <- .C( rgl_texts,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     as.double(adj),
     as.character(text),
@@ -680,7 +680,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   idata   <- as.integer( c(ncenter,nradius,length(shapes)) )
   
   ret <- .C( rgl_sprites,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     as.numeric(center),
     as.numeric(radius),
