@@ -72,6 +72,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
 
 #define FUNDEF(name, n)  {#name, (DL_FUNC) &name, n}
 
+#undef CHECK_ARGS
+
 #ifdef CHECK_ARGS
   R_NativePrimitiveArgType aI[1] = {INTSXP};  
   R_NativePrimitiveArgType aL[1] = {LGLSXP}; 
@@ -79,10 +81,12 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
   R_NativePrimitiveArgType aLI[2] = {LGLSXP, INTSXP}; 
   R_NativePrimitiveArgType aLL[2] = {LGLSXP, LGLSXP}; 
   R_NativePrimitiveArgType aIII[3] = {INTSXP, INTSXP, INTSXP};  
-  R_NativePrimitiveArgType aIIS[3] = {INTSXP, INTSXP, STRSXP};   
+  R_NativePrimitiveArgType aIIS[3] = {INTSXP, INTSXP, STRSXP}; 
+  R_NativePrimitiveArgType aIID[3] = {INTSXP, INTSXP, REALSXP};
   R_NativePrimitiveArgType aLII[3] = {LGLSXP, INTSXP, INTSXP}; 
   R_NativePrimitiveArgType aLIS[3] = {LGLSXP, INTSXP, STRSXP}; 
   R_NativePrimitiveArgType aLID[3] = {LGLSXP, INTSXP, REALSXP}; 
+  R_NativePrimitiveArgType aIIDD[4] = {INTSXP, INTSXP, REALSXP, REALSXP}; 
   R_NativePrimitiveArgType aLISD[4] = {LGLSXP, INTSXP, STRSXP, REALSXP}; 
   R_NativePrimitiveArgType aLIDD[4] = {LGLSXP, INTSXP, REALSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIIID[5] = {INTSXP, INTSXP, INTSXP, INTSXP, REALSXP}; 
@@ -92,14 +96,15 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
   R_NativePrimitiveArgType aLIISD[5] = {LGLSXP, INTSXP, INTSXP, STRSXP, REALSXP}; 
   R_NativePrimitiveArgType aLIIIF[5] = {LGLSXP, INTSXP, INTSXP, INTSXP, SINGLESXP}; 
   R_NativePrimitiveArgType aLIDDD[5] = {LGLSXP, INTSXP, REALSXP, REALSXP, REALSXP};
-  R_NativePrimitiveArgType aLIDDID[6] = {LGLSXP, INTSXP, REALSXP, REALSXP, INTSXP, REALSXP};
+  R_NativePrimitiveArgType aIIDDD[5] = {INTSXP, INTSXP, REALSXP, REALSXP, REALSXP};
+  R_NativePrimitiveArgType aIIDDID[6] = {INTSXP, INTSXP, REALSXP, REALSXP, INTSXP, REALSXP};
   R_NativePrimitiveArgType aLIDDDDI[7] = {LGLSXP, INTSXP, REALSXP, REALSXP, REALSXP, REALSXP, INTSXP};
   
   R_NativePrimitiveArgType aLIDDSDSDS[9] = {LGLSXP, INTSXP, REALSXP, REALSXP, STRSXP, REALSXP,
                                              STRSXP, REALSXP, STRSXP}; 
-  R_NativePrimitiveArgType aLIDSDISIDI[10] = {LGLSXP, INTSXP, REALSXP, STRSXP, REALSXP, INTSXP,
+  R_NativePrimitiveArgType aIIDSDISIDI[10] = {INTSXP, INTSXP, REALSXP, STRSXP, REALSXP, INTSXP,
                                              STRSXP, INTSXP, REALSXP, INTSXP}; 
-  R_NativePrimitiveArgType aLIDDDDDDDDIII[13] = {LGLSXP, INTSXP, REALSXP, REALSXP, REALSXP, REALSXP,
+  R_NativePrimitiveArgType aIIDDDDDDDDIII[13] = {INTSXP, INTSXP, REALSXP, REALSXP, REALSXP, REALSXP,
                                              REALSXP, REALSXP, REALSXP, REALSXP, INTSXP, INTSXP, INTSXP}; 
 
  static const R_CMethodDef CEntries[] = { 
@@ -122,15 +127,15 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    {"rgl_text_attrib", 		(DL_FUNC) &rgl_text_attrib, 5, aIIIIS}, 
    {"rgl_bg", 			(DL_FUNC) &rgl_bg, 2, aLI},
    {"rgl_bbox", 		(DL_FUNC) &rgl_bbox, 9, aLIDDSDSDS}, 
-   {"rgl_light",		(DL_FUNC) &rgl_light, 3, aLID},
+   {"rgl_light",		(DL_FUNC) &rgl_light, 3, aIID},
    {"rgl_pixels",		(DL_FUNC) &rgl_pixels, 5, aLIIIF},
-   {"rgl_planes",		(DL_FUNC) &rgl_planes, 4, aLIDD},
-   {"rgl_abclines",		(DL_FUNC) &rgl_abclines, 4, aLIDD},
-   {"rgl_primitive",		(DL_FUNC) &rgl_primitive, 5, aLIDDD},
-   {"rgl_surface", 		(DL_FUNC) &rgl_surface, 13, aLIDDDDDDDDIII},
-   {"rgl_spheres",		(DL_FUNC) &rgl_spheres, 4, aLIDD},
-   {"rgl_texts",		(DL_FUNC) &rgl_texts, 10, aLIDSDISIDI},
-   {"rgl_sprites",  		(DL_FUNC) &rgl_sprites, 6, aLIDDID},
+   {"rgl_planes",		(DL_FUNC) &rgl_planes, 4, aIIDD},
+   {"rgl_abclines",		(DL_FUNC) &rgl_abclines, 4, aIIDD},
+   {"rgl_primitive",		(DL_FUNC) &rgl_primitive, 5, aIIDDD},
+   {"rgl_surface", 		(DL_FUNC) &rgl_surface, 13, aIIDDDDDDDDIII},
+   {"rgl_spheres",		(DL_FUNC) &rgl_spheres, 4, aIIDD},
+   {"rgl_texts",		(DL_FUNC) &rgl_texts, 10, aIIDSDISIDI},
+   {"rgl_sprites",  		(DL_FUNC) &rgl_sprites, 6, aIIDDID},
    {"rgl_user2window",		(DL_FUNC) &rgl_user2window, 7, aLIDDDDI},
    {"rgl_window2user", 		(DL_FUNC) &rgl_window2user, 7, aLIDDDDI},
    {"rgl_selectstate", 		(DL_FUNC) &rgl_selectstate, 3, aLID},
