@@ -8,6 +8,10 @@
 
 #include "opengl.hpp"
 #include <vector>
+#ifdef HAVE_FREETYPE
+#include "FTGL/ftgl.h"
+#endif
+
 #include "RenderContext.hpp"
 
 namespace rgl {
@@ -89,10 +93,6 @@ public:
   unsigned int* widths;
   unsigned int ascent;
 };
-
-#ifdef HAVE_FREETYPE
-#include "FTGL/ftgl.h"
-#endif
 
 //
 // CLASS
