@@ -800,7 +800,7 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
 {
   bool success = false;
 
-  FILE *fp = fopen(filename, "wb");  
+  std::FILE *fp = fopen(filename, "wb");  
   char *oldlocale = setlocale(LC_NUMERIC, "C");
   
   GLint buffsize = 0, state = GL2PS_OVERFLOW;

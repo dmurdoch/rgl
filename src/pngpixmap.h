@@ -15,7 +15,7 @@ public:
   {
   }
 
-  bool checkSignature(FILE* fd)
+  bool checkSignature(std::FILE* fd)
   {
     unsigned char buf[8];
 
@@ -25,7 +25,7 @@ public:
     return !png_sig_cmp(buf, 0, 8);
   }
 
-  bool load(FILE* fd, Pixmap* pixmap)
+  bool load(std::FILE* fd, Pixmap* pixmap)
   {
     Load load(fd, pixmap);
 
@@ -41,7 +41,7 @@ public:
     }
   }
 
-  bool save(FILE* fd, Pixmap* pixmap)
+  bool save(std::FILE* fd, Pixmap* pixmap)
   {
     Save save(fd, pixmap);
 
@@ -61,7 +61,7 @@ private:
   class Load {
   public:
 
-    Load(FILE* _file, Pixmap* _pixmap)
+    Load(std::FILE* _file, Pixmap* _pixmap)
     {
       file     = _file;
       pixmap   = _pixmap;
@@ -276,7 +276,7 @@ unsupported:
 
     typedef void (PNGAPI *png_error_ptr) PNGARG((png_structp, png_const_charp));
 
-    FILE* file;
+    std::FILE* file;
     Pixmap* pixmap;
 
     png_structp png_ptr;
@@ -301,7 +301,7 @@ unsupported:
 
   class Save {
   public:
-    Save(FILE* in_file, Pixmap* in_pixmap)
+    Save(std::FILE* in_file, Pixmap* in_pixmap)
     {
       file     = in_file;
       pixmap   = in_pixmap;
@@ -406,7 +406,7 @@ unsupported:
     }
 
 
-    FILE* file;
+    std::FILE* file;
     Pixmap* pixmap;
 
     png_structp png_ptr;

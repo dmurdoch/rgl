@@ -89,7 +89,7 @@ bool Pixmap::load(const char* filename)
 {
   bool success = false;
 
-  FILE* file = NULL;
+  std::FILE* file = NULL;
 
   file = fopen(filename, "rb");
   if (!file) {
@@ -130,7 +130,7 @@ bool Pixmap::load(const char* filename)
 
 bool Pixmap::save(PixmapFormat* format, const char* filename)
 {
-  FILE* file = NULL;
+  std::FILE* file = NULL;
 
   file = fopen(filename, "wb");
   if (!file) {
