@@ -536,7 +536,9 @@ v0.93.984
   - writeWebGL() and the other write methods did not handle material
     information properly after 0.93.975.
     
-v0.93.985
+v0.93.986
   - The FTGL functions were mistakenly added to the rgl namespace
     on some OSX compiles.
+  - Changes have been made to satisfy the stringent requirements of
+    the Solaris compiler.
     
