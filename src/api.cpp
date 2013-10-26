@@ -4,21 +4,14 @@
 // $Id$
 
 #include "lib.hpp"
-
-using namespace rgl;
-
-extern "C" {
-
-#include "api.h"
-
-} // extern C
-
 #include "DeviceManager.hpp"
 #include "rglview.h"
 
 #include "lib.hpp"
 #include "R.h"
+#include "api.h"
 
+using namespace rgl;
 //
 // API Success is encoded as integer type:
 //
