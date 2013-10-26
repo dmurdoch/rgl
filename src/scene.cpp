@@ -545,6 +545,8 @@ void Scene::render(RenderContext* renderContext)
     
     {
       std::vector<Shape*>::iterator iter;
+	
+      ClipPlaneSet::num_planes = 0;	
       
       for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
         Shape* shape = *iter;
@@ -614,6 +616,19 @@ void Scene::render(RenderContext* renderContext)
     
     renderZsort(renderContext);
 #endif    
+
+    // DISABLE CLIP PLANES
+    
+    {
+      std::vector<Shape*>::iterator iter;
+	
+      for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
+        Shape* shape = *iter;
+	static_cast<ClipPlaneSet*>(shape)->enable(false);
+	SAVEGLERROR;
+      }
+    }
+
     /* Reset flag(s) now that scene has been rendered */
     renderContext->viewpoint->scaleChanged = false;
     
