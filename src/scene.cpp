@@ -87,6 +87,8 @@ bool Scene::clear(TypeID typeID)
       SAVEGLERROR;
       unsortedShapes.clear();
       SAVEGLERROR;
+      clipPlanes.clear();
+      SAVEGLERROR;
       data_bbox.invalidate();
       SAVEGLERROR;
       success = true;
@@ -118,6 +120,8 @@ void Scene::addShape(Shape* shape) {
 
   if ( shape->isBlended() ) {
     zsortShapes.push_back(shape);
+  } else if ( shape->isClipPlane() ) {
+    clipPlanes.push_back(shape);
   } else
     unsortedShapes.push_back(shape);
 }
@@ -234,8 +238,11 @@ bool Scene::pop(TypeID type, int id, bool destroy)
       if ( shape->isBlended() )
           zsortShapes.erase(std::find_if(zsortShapes.begin(), zsortShapes.end(),
                                          std::bind2nd(std::ptr_fun(&sameID), id)));
+      else if ( shape->isClipPlane() )
+	  clipPlanes.erase(std::find_if(clipPlanes.begin(), clipPlanes.end(),
+				        std::bind2nd(std::ptr_fun(&sameID), id)));
       else
-        unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
+          unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
                                        std::bind2nd(std::ptr_fun(&sameID), id)));
       if (destroy)
         delete shape;
@@ -533,6 +540,18 @@ void Scene::render(RenderContext* renderContext)
 
     // DISABLE BLENDING
     glDisable(GL_BLEND);
+    
+    // RENDER CLIP PLANES
+    
+    {
+      std::vector<Shape*>::iterator iter;
+      
+      for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
+        Shape* shape = *iter;
+	shape->render(renderContext);
+	SAVEGLERROR;
+      }
+    }
     
     //
     // RENDER BBOX DECO

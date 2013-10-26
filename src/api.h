@@ -67,6 +67,7 @@ void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double
                                  int* nfonts, char** family, int* style, double* cex, int* useFreeType);
 void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius);
 void rgl_planes   (int* successptr, int* idata, double* normals, double* offsets);
+void rgl_clipplanes(int* successptr, int* idata, double* normals, double* offsets);
 void rgl_abclines (int* successptr, int* idata, double* bases, double* directions);
 
 void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y, 
@@ -120,6 +121,7 @@ int     rgl_getUseFreeType();
 bool    rgl_setUseFreeType(bool useFreeType);
 char*	rgl_getFontname();
 int	rgl_getAntialias();
+int	rgl_getMaxClipPlanes();
 
 #ifdef __cplusplus
 }
