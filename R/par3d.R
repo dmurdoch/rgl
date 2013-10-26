@@ -2,13 +2,15 @@
 	   "mouseMode", 
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
 	   "scale", "viewport", "zoom", "bbox", "windowRect",
-           "family", "font", "cex", "useFreeType", "fontname"
+           "family", "font", "cex", "useFreeType", "fontname",
+	   "maxClipPlanes"
 	   )
 	   
 .Par3d.readonly <- c( 
 	   "antialias", 
 	   "modelMatrix", "projMatrix",
-	   "viewport", "bbox", "fontname"
+	   "viewport", "bbox", "fontname",
+	   "maxClipPlanes"
 	   )
 
 par3d <- function (..., no.readonly = FALSE)

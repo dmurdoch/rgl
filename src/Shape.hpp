@@ -118,6 +118,13 @@ public:
   
   const bool isBlended() const { return blended; }
   
+  /**
+   * Does this shape need to go at the head of the shape list, rather than the tail?
+   * (e.g. clip planes need to come first 
+   **/
+  
+  virtual bool isClipPlane() { return false; }
+  
 protected:
   /**
    * bounding volume of overall geometry

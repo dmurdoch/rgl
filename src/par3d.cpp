@@ -339,6 +339,11 @@ static SEXP Query(const char *what)
       INTEGER(value)[0] = rgl_getAntialias();
       success = 1;
     }
+    else if (streql(what, "maxClipPlanes")) {
+	value = allocVector(INTSXP, 1);
+	INTEGER(value)[0] = rgl_getMaxClipPlanes();
+	success = 1;
+    }
   	
     if (! success) error(_("unknown error getting rgl parameter \"%s\""),  what);
 

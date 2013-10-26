@@ -690,6 +690,24 @@ void rgl::rgl_planes(int* successptr, int* idata, double* normals, double* offse
   *successptr = success;
 }
 
+void rgl::rgl_clipplanes(int* successptr, int* idata, double* normals, double* offsets)
+{
+  int success = RGL_FAIL;
+
+  Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+    int nnormal = idata[0];
+    int noffset = idata[1];
+
+    success = as_success( device->add( new ClipPlaneSet(currentMaterial, nnormal, normals, noffset, offsets) ) );
+    CHECKGLERROR;
+
+  }
+  *successptr = success;
+}
+
 void rgl::rgl_abclines(int* successptr, int* idata, double* bases, double* directions)
 {
   int success = RGL_FAIL;
@@ -1489,3 +1507,14 @@ int rgl::rgl_getAntialias()
   }
   return 1;
 }
+
+int rgl::rgl_getMaxClipPlanes()
+{
+  int result;
+  glGetError();
+  glGetIntegerv(GL_MAX_CLIP_PLANES, &result);
+  if (glGetError() == GL_NO_ERROR)
+    return result;
+  else
+    return 6;
+}  

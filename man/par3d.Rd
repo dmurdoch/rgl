@@ -3,15 +3,25 @@
 \alias{open3d}
 \alias{r3dDefaults}
 \alias{getr3dDefaults}
+\concept{antialias}
+\concept{bbox}
+\concept{cex}
+\concept{family}
+\concept{font}
+\concept{fontname}
 \concept{FOV}
+\concept{ignoreExtent}
+\concept{maxClipPlanes}
 \concept{modelMatrix}
 \concept{mouseMode}
 \concept{projMatrix}
 \concept{scale}
+\concept{skipRedraw}
+\concept{useFreeType}
 \concept{userMatrix}
 \concept{viewport}
+\concept{windowRect}
 \concept{zoom}
-\concept{bbox}
 
 \title{Set or Query RGL Parameters}
 
@@ -92,7 +102,7 @@ getr3dDefaults()
 
 \section{Parameters}{
   \describe{
-    \item{\code{antialias}}{\emph{\bold{R.O}} in \code{par3d}, may be
+    \item{\code{antialias}}{\emph{\bold{R.O.}} in \code{par3d}, may be
     set in \code{open3d}. The (requested) number of hardware
     antialiasing planes to use (with multisample antialiasing).  The
     OpenGL driver may not support the requested number, in which case
@@ -109,6 +119,8 @@ getr3dDefaults()
       approximate it by specifying \code{par3d(FOV=1)}.}
     \item{\code{ignoreExtent}}{logical.  Set to \code{TRUE} so that subsequently plotted objects
       will be ignored in calculating the bounding box of the scene.}
+    \item{\code{maxClipPlanes}}{\emph{\bold{R.O.}}; an integer giving the maximum
+      number of clip planes that can be defined in the current system.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
       of the user data.}
     \item{\code{mouseMode}}{character.  A vector of 3 strings describing

@@ -22,6 +22,7 @@
 #include "SpriteSet.hpp"
 #include "SphereSet.hpp"
 #include "PlaneSet.hpp"
+#include "ClipPlane.hpp"
 #include "ABCLineSet.hpp"
 #include "Surface.hpp"
 #include "Viewpoint.hpp"
@@ -168,6 +169,7 @@ private:
 
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
+  std::vector<Shape*> clipPlanes;
   
   void renderZsort(RenderContext* renderContext);
   

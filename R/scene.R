@@ -572,6 +572,34 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
 }
 
 ##
+## add clip planes
+##
+
+rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0)
+{
+  normals  <- rgl.vertex(a, b, c)
+  nnormals <- rgl.nvertex(normals)
+  noffsets <- length(d)
+  
+  idata <- as.integer( c( nnormals, noffsets ) )
+   
+  ret <- .C( rgl_clipplanes,
+    success = as.integer(FALSE),
+    idata,
+    as.numeric(normals),    
+    as.numeric(d),
+    NAOK=TRUE
+  )
+
+  if (! ret$success)
+    print("rgl_planes failed")
+    
+  invisible(ret$success)
+
+}
+
+
+##
 ## add abclines
 ##
 
