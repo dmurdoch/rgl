@@ -680,6 +680,7 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
            + ((zaxis.mode == AXIS_CUSTOM) ? zaxis.nticks : 0);
       if (count == 0) return 0; 
     }
+    /* if non-zero, we want labels for every vertex, so fall through. */
     case VERTICES:
       return xaxis.getNticks(bbox.vmin.x, bbox.vmax.x)
            + yaxis.getNticks(bbox.vmin.y, bbox.vmax.y)
