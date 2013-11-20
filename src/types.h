@@ -76,6 +76,7 @@ private:
 class DestroyHandler
 {
 public:
+  virtual ~DestroyHandler();    
   virtual void notifyDestroy(void* userdata) = 0;
 };
 

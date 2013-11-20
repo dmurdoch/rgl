@@ -61,6 +61,9 @@ public:
   { 
     fonts.resize(1);
   }
+
+  virtual ~WindowImpl() { }
+
   inline  void unbind() { window = 0; }
   virtual void setTitle(const char* title) = 0;
   virtual void setWindowRect(int left, int top, int right, int bottom) = 0;
@@ -96,6 +99,7 @@ protected:
 class GUIFactory
 {
 public:
+  virtual ~GUIFactory() { }    
   virtual WindowImpl* createWindowImpl(Window*) = 0;
 };
 // ---------------------------------------------------------------------------
