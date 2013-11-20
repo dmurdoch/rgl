@@ -13,6 +13,7 @@ class Disposable;
  **/
 struct IDisposeListener
 {
+  virtual ~IDisposeListener() { }
   virtual void notifyDisposed(Disposable* disposing) = 0;
 };
 

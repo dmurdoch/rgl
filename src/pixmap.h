@@ -40,6 +40,7 @@ public:
 
 class PixmapFormat {
 public:
+  virtual ~PixmapFormat() { }  
   virtual bool checkSignature(std::FILE* file) = 0;
   virtual bool load(std::FILE* file, Pixmap* pixmap) = 0;
   virtual bool save(std::FILE* file, Pixmap* pixmap) = 0;

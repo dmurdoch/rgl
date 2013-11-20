@@ -33,7 +33,7 @@ public:
     memcpy(fontname, in_fontname, strlen(in_fontname) + 1);    
   };
   
-  ~GLFont()
+  virtual ~GLFont()
   {
     delete [] family;
     delete [] fontname;
@@ -53,6 +53,9 @@ public:
   char* fontname;
   bool useFreeType;
   int gl2ps_centering;
+private:
+  GLFont(const GLFont &);
+  GLFont &operator=(const GLFont &);
 };
 
 #define GL_BITMAP_FONT_FIRST_GLYPH  32

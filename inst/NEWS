@@ -545,3 +545,6 @@ v0.93.986
 v0.93.987
   - Added clipplanes3d function to implement clip planes.  (Still
     only partially implemented.)
+    
+v0.93.991
+  - Some cleanup of the declarations (submitted by Karl Millar).
