@@ -549,7 +549,9 @@ v0.93.987
 v0.93.991
   - Some cleanup of the declarations (submitted by Karl Millar).
   
-v0.93.993
+v0.93.994
   - Improved the approximation to the surface normal for degenerate
     grids in surface3d and persp3d.  (Problem found by Graham Griffiths
     using polar coordinates; all r=0 points were at the same location.)
+  - The new surface normals are now saved in memory, so rgl.attrib
+    will return them even if they were calculated by rgl.

@@ -56,7 +56,7 @@ public:
   virtual void drawEnd(RenderContext* renderContext) ;
   
 private:
-  void setNormal(int ix, int iz);
+  Vertex getNormal(int ix, int iz);
 
   VertexArray vertexArray;
   NormalArray normalArray;
