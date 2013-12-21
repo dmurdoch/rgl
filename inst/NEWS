@@ -548,3 +548,8 @@ v0.93.987
     
 v0.93.991
   - Some cleanup of the declarations (submitted by Karl Millar).
+  
+v0.93.993
+  - Improved the approximation to the surface normal for degenerate
+    grids in surface3d and persp3d.  (Problem found by Graham Griffiths
+    using polar coordinates; all r=0 points were at the same location.)
