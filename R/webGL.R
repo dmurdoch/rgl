@@ -640,9 +640,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       values <- cbind(values, radii)
     }
     
-    if (type == "surface") { # Compute both indices and constructed normals
-      if (nn == 0) 
-        normals <- matrix(0, nv, 3)
+    if (type == "surface") { # Compute indices of triangles
       dim <- rgl.attrib(id, "dim")
       nx <- dim[1]
       nz <- dim[2]
@@ -656,35 +654,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
                             v1[-nz],
                             v2[-1],
                             v2[-nz]))
-                            
-                            
-        if (nn == 0) {
-          for (i in seq_along(v1)[-1]) {
-            i0 <- v1[i-1]+1
-            i1 <- v2[i-1]+1
-            i2 <- v1[i]+1
-            i3 <- v2[i]+1
-            vec0 <- values[i0,1:3]
-            vec1 <- values[i1,1:3]
-            vec2 <- values[i2,1:3]
-            vec3 <- values[i3,1:3]
-            n1 <- xprod(vec2-vec0, vec1-vec0)
-            n1 <- n1/sqrt(sum(n1^2))
-            n2 <- xprod(vec3-vec2, vec1-vec2)
-            n2 <- n2/sqrt(sum(n2^2))
-            normals[i0,] <- normals[i0,] + n1
-            normals[i1,] <- normals[i1,] + n1 + n2
-            normals[i2,] <- normals[i2,] + n1 + n2
-            normals[i3,] <- normals[i3,] + n2
-          }
-        }
       }
       frowsize <- 6
-      if (nn == 0) {
-        normals <- t(apply(normals, 1, function(x) x/sqrt(sum(x^2))))
-        values <- cbind(values, normals)
-        nn <- nv
-      }
     }  
     
     if (type == "text") {
@@ -934,8 +905,6 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       }
     
       nn <- rgl.attrib.count(id, "normals")
-      if (nn == 0 && type == "surface")
-        nn <- rgl.attrib.count(id, "vertices")
       if (nn > 0) {
         nofs <- stride
         stride <- stride + 12
