@@ -94,32 +94,33 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
 
 void Surface::setNormal(int ix, int iz)
 {
-  Vertex n[4];
-
   int i = iz*nx + ix;
-  int num = 0;
-  
+  Vertex total(0.0f,0.0f,0.0f);  
   if (!vertexArray[i].missing()) {
-    if (ix < nx-1 && !vertexArray[i+1].missing() ) {
-      if (iz > 0 && !vertexArray[i-nx].missing() )     // right/top
-        n[num++] = vertexArray.getNormal(i, i+1, i-nx );
-      if (iz < nz-1 && !vertexArray[i+nx].missing() )  // right/bottom
-        n[num++] = vertexArray.getNormal(i, i+nx, i+1 );
+    // List the 8 surrounding vertices.  Repat the 1st one to make looping simpler. 
+    int ind[9];  
+    int xv[9] =  {    1,     1,      0,    -1,     -1,   -1,     0,      1,      1   };
+    int zv[9] =  {    0,     -1,     -1,   -1,     0,    1,      1,      1,      0   };    
+    int okay[9];  /* checks of surrounding vertices from right counterclockwise */
+    for (int j=0; j<8; j++) {
+      int xval = ix + xv[j], zval = iz + zv[j];
+      if (0 <= xval && xval < nx && 0 <= zval && zval < nz) {
+        ind[j] = i + xv[j] + zv[j]*nx; 
+        okay[j] = !vertexArray[ind[j]].missing();
+      } else {
+        okay[j] = 0;
+	ind[j] = 0;
+      }
     }
-    if (ix > 0 && !vertexArray[i-1].missing() ) { 
-      if (iz > 0 && !vertexArray[i-nx].missing() )     // left/top
-        n[num++] = vertexArray.getNormal(i, i-nx, i-1 );
-      if (iz < nz-1 && !vertexArray[i+nx].missing() )  // left/bottom
-        n[num++] = vertexArray.getNormal(i, i-1, i+nx );
-    }
+    okay[8] = okay[0];
+    ind[8] = ind[0];
+    /* Estimate normal by averaging cross-product in successive triangular sectors */
+    for (int j=0; j<8; j++) {
+      if (okay[j] && okay[j+1] ) 
+        total += vertexArray.getNormal(i, ind[j], ind[j+1] );
+    } 
+    total.normalize();
   }
-  Vertex total(0.0f,0.0f,0.0f);
-
-  for(i=0;i<num;i++)
-    total += n[i];
-
-  total.normalize();
-
   if (orientation) glNormal3f(-total.x,-total.y,-total.z);
   else glNormal3f(total.x,total.y,total.z);    
 }
