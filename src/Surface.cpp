@@ -61,6 +61,8 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
 
       vertexArray[iy] = v;
 
+      boundingBox += v;
+	
       if ( user_normals ) {
         *x = (float) in_normal_x[iy];
         *y = (float) in_normal_y[iy];
@@ -79,8 +81,6 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
           texCoordArray[iy].t = in_texture_t[iy];
         }
       }
-
-      boundingBox += v;
     }
   }
   use_normal    = user_normals || material.lit || ( material.texture && material.texture->is_envmap() );
