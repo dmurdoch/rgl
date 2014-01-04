@@ -27,7 +27,7 @@ scene3d()
 }
 \details{
 The components saved are:  the \code{\link{par3d}} settings, the \code{\link{material3d}}
-settings, the \code{\link{bg3d}} settings, and the objects in the scene.
+settings, the \code{\link{bg3d}} settings, the lights and the objects in the scene.
 
 In most cases, calling \code{\link{plot3d}} on that variable will
 duplicate the scene.  (There are likely to be small differences, mostly internal, but
@@ -48,7 +48,7 @@ The \code{scene3d} function returns an object of class
 \item{material}{The results returned from a \code{\link{material3d}} call.}
 \item{bg}{A list containing some of the properties of the scene background.}
 \item{bbox}{A list containing some of the properties of the scene bounding box decoration.}
-\item{objects}{A list containing the RGL objects in the scene.}  
+\item{objects}{A list containing the RGL lights and objects in the scene.}  
 
 The objects in the \code{objects} component are of class
 \code{"rglobject"}.  They are lists containing some or all of the
@@ -60,6 +60,8 @@ components
 \item{ignoreExtent}{A logical value indicating whether this object contributes to the bounding box.
 Currently this may differ from the object in the original scene.}
 \item{objects}{Sprites may contain other objects; they will be stored here as a list of  \code{"rglobject"}s.}
+
+Lights in the scene are stored similarly, mixed into the \code{objects} list.
 
 The \code{plot3d} methods invisibly return a vector of RGL object ids
 that were plotted.  The \code{print} methods invisibly return the
