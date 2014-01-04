@@ -22,7 +22,8 @@ scene3d <- function() {
   getObject <- function(id, type) {
     result <- list(id=id, type=type)
     
-    result$material <- matdiff(rgl.getmaterial(id=id))
+    if (type != "light")
+      result$material <- matdiff(rgl.getmaterial(id=id))
     
     attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
@@ -31,7 +32,7 @@ scene3d <- function() {
       if (rgl.attrib.count(id, a))
         result[[a]] <- rgl.attrib(id, a)
     # FIXME:  we should query the ignoreExtent field instead
-    if (!inbbox(result$vertices, scenebbox))
+    if (type != "light" && !inbbox(result$vertices, scenebbox))
       result$ignoreExtent <- TRUE
     if (!is.null(result$ids)) {
       objlist <- vector("list", nrow(result$ids))
@@ -49,6 +50,10 @@ scene3d <- function() {
     } else if (type == "bboxdeco") {
       flags <- rgl.attrib(id, "flags")
       result$draw_front <- flags["draw_front", 1]
+    } else if (type == "light") {
+      flags <- rgl.attrib(id, "flags")
+      result$viewpoint <- flags["viewpoint", 1]
+      result$finite    <- flags["finite", 1]
     }
     class(result) <- c(paste0("rgl", type), "rglobject")
     result
@@ -69,7 +74,7 @@ scene3d <- function() {
   if (nrow(obj <- rgl.ids("bboxdeco")))
     result$bbox <- getObject(obj$id, "bboxdeco")
     
-  objs <- rgl.ids()  
+  objs <- rgl.ids(c("shapes", "lights"))  
   objlist <- vector("list", nrow(objs))
   ids <- objs$id
   types <- as.character(objs$type)
@@ -120,6 +125,14 @@ plot3d.rglscene <- function(x, add=FALSE, ...) {
       params[names(x$par3d)[ind]] <- x$par3d[ind]
     }
     open3d(params = params)
+    # Some older scenes might not have a light in them, so only clear if one is there
+    for (i in seq_along(x$objects)) {
+      obj <- x$objects[[i]]
+      if (obj$type == "light") {
+        clear3d("lights")
+        break
+      }
+    }
   }
     
   results <- c()
@@ -148,6 +161,7 @@ plot3d.rglobject <- function(x, ...) {
     planes = planes3d,
     surface = surface3d,
     sprites = sprites3d,
+    light = light3d,
     NULL)
   if (is.null(fn)) {
     warning("Object type ",type," not handled.")
@@ -219,7 +233,23 @@ plot3d.rglobject <- function(x, ...) {
     mat$color <- rgb(col[,1], col[,2], col[,3])
     mat$alpha <- col[,4]
   }
-  args <- c(args, mat)
+
+  if (type == "light") {
+    if (!x$finite) {
+      args$x <- NULL
+      vx <- x$vertices[1]
+      vy <- x$vertices[2]
+      vz <- x$vertices[3]
+      args$phi <- atan2(vy, sqrt(vx^2 + vz^2))*180/pi
+      args$theta <- atan2(vx, vz)*180/pi
+    }
+    args$viewpoint.rel <- x$viewpoint
+    args$ambient <- mat$color[1]
+    args$diffuse <- mat$color[2]
+    args$specular <- mat$color[3]
+  } else 
+    args <- c(args, mat)
+  
   do.call(fn, args)
 }
 

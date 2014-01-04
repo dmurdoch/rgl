@@ -112,11 +112,9 @@ getr3dDefaults()
     \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}.}
     \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?}
     \item{\code{fontname}}{\emph{\bold{R.O.}}; the system-dependent name of the current font.}
-    \item{\code{FOV}}{real.  The field of view, from 1 to 179 degrees.  This controls
+    \item{\code{FOV}}{real.  The field of view, from 0 to 179 degrees.  This controls
       the degree of parallax in the perspective view.
-      Isometric perspective (which would
-      correspond to \code{FOV=0}) is not currently possible, but one can
-      approximate it by specifying \code{par3d(FOV=1)}.}
+      Isometric perspective corresponds to \code{FOV=0}.}
     \item{\code{ignoreExtent}}{logical.  Set to \code{TRUE} so that subsequently plotted objects
       will be ignored in calculating the bounding box of the scene.}
     \item{\code{maxClipPlanes}}{\emph{\bold{R.O.}}; an integer giving the maximum
