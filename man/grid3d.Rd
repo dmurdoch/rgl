@@ -11,7 +11,8 @@ grid3d(side, at = NULL, col = "gray", lwd = 1, lty = 1, n = 5)
   \item{side}{ Where to put the grid; see the Details section. }
   \item{at}{ How to draw the grid; see the Details section. }
   \item{col}{ The color of the grid lines. }
-  \item{lwd}{ The line width of the grid lines. }
+  \item{lwd}{ The line width of the grid lines. (Currently only
+  \code{lty = 1} is supported.)}
   \item{lty}{ The line type of the grid lines. }
   \item{n}{ Suggested number of grid lines; see the Details section. }
 }
