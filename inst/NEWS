@@ -549,7 +549,7 @@ v0.93.987
 v0.93.991
   - Some cleanup of the declarations (submitted by Karl Millar).
   
-v0.93.995
+v0.93.998
   - Improved the approximation to the surface normal for degenerate
     grids in surface3d and persp3d.  (Problem found by Graham Griffiths
     using polar coordinates; all r=0 points were at the same location.)
@@ -560,4 +560,7 @@ v0.93.995
   - An array-overrun bug in rgl.attrib() showed up in writeWebGL.  
     (Reported by Brian Ripley.)
   - scene3d() now records light settings.
+  - rgl.material() (for textures), rgl.postscript() and rgl.snapshot()
+    now call normalizePath() on filenames, so tilde expansion should
+    be done.
     
