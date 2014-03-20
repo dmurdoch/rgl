@@ -109,7 +109,7 @@ rgl.snapshot <- function( filename, fmt="png", top=TRUE )
   ret <- .C( rgl_snapshot,
     success=FALSE,
     idata,
-    as.character(filename)
+    normalizePath(filename, mustWork = FALSE)
   )
 
   if (! ret$success)
@@ -128,7 +128,7 @@ rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
   ret <- .C( rgl_postscript,
     success=FALSE,
     idata,
-    as.character(filename)
+    normalizePath(filename, mustWork = FALSE)
   )
 
   if (! ret$success)

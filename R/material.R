@@ -74,6 +74,8 @@ rgl.material <- function (
 
   if (is.null(texture))
     texture <- ""
+  else 
+    texture <- normalizePath(texture)
 
   textype <- rgl.enum.textype( textype )
   texminfilter <- rgl.enum.texminfilter( texminfilter )
