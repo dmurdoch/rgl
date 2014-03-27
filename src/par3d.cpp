@@ -386,7 +386,7 @@ SEXP rgl::rgl_par3d(SEXP args)
 	    }
 	    else {
 		SET_VECTOR_ELT(value, i, R_NilValue);
-		SET_STRING_ELT(newnames, i, R_NilValue);
+		SET_STRING_ELT(newnames, i, R_BlankString);
 	    }
 	}
 	setAttrib(value, R_NamesSymbol, newnames);
