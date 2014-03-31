@@ -28,6 +28,12 @@ rgl.quads(x, y = NULL, z = NULL, normals=NULL, texcoords=NULL, ... )
   Adds a shape node to the scene. The appearance is defined by the material properties.
   See \code{\link{rgl.material}} for details.
   
+  The names of these functions correspond to OpenGL primitives.  They
+  all take a sequence of vertices in \code{x,y,z}.  The only non-
+  obvious ones are \code{rgl.lines} which draws line segments based on
+  pairs of vertices, and \code{rgl.linestrips} which joins the
+  vertices.
+  
   For triangles and quads, the normals at each vertex may be specified
   using \code{normals}.  These may be given in any way that would be
   acceptable as a single argument to \code{\link[grDevices]{xyz.coords}}.  
@@ -42,13 +48,13 @@ rgl.quads(x, y = NULL, z = NULL, normals=NULL, texcoords=NULL, ... )
   is used to modulate the colour of the polygon.
   
   These are the lower level functions called by
-  \code{\link{points3d}}, \code{\link{lines3d}}, etc.  The two
-  principal differences between the \code{rgl.*} functions and the
-  \code{*3d} functions are that the former set all unspecified
-  material properties to defaults, whereas the latter use current
-  values as defaults; the former make persistent changes to material
-  properties with each call, whereas the latter make temporary changes
-  only for the duration of the call.
+  \code{\link{points3d}}, \code{\link{segments3d},
+  \code{\link{lines3d}}, etc.  The two principal differences between
+  the \code{rgl.*} functions and the \code{*3d} functions are that the
+  former set all unspecified material properties to defaults, whereas
+  the latter use current values as defaults; the former make
+  persistent changes to material properties with each call, whereas
+  the latter make temporary changes only for the duration of the call.
 
 }
 \value{
