@@ -30,8 +30,6 @@ Scene::Scene()
 {
   currentSubscene = &rootSubscene;
   nlights    = 0;
-  ignoreExtent = false;
-  bboxChanges = false;
  
   rootSubscene.add( new Viewpoint );
   rootSubscene.add( new Background );
@@ -60,7 +58,6 @@ void Scene::deleteShapes()
     delete *iter;
   }
   shapes.clear();
-  bboxChanges = false;
 }
 
 void Scene::deleteLights()
@@ -134,17 +131,13 @@ bool Scene::add(SceneNode* node)
       break;
     case BACKGROUND:
       {
-        if (background)
-          delete background;
-        background = (Background*) node;
+        currentSubscene->addBackground((Background*) node);
         success = true;
       }
       break;
     case BBOXDECO:
       {
-        if (bboxDeco)
-          delete bboxDeco;
-        bboxDeco = (BBoxDeco*) node;
+        currentSubscene->addBboxdeco((BBoxDeco*) node);
         success = true;
       }
       break;
@@ -240,12 +233,8 @@ bool Scene::pop(TypeID type, int id, bool destroy)
     break;
   case BBOXDECO:
     {
-      if (bboxDeco) {
-        if (destroy)
-          delete bboxDeco;
-        bboxDeco = NULL;
-        success = true;
-      }
+      currentSubscene->pop(type, id, true);
+      success = true;
     }
     break;
   default: // BACKGROUND ignored
@@ -260,12 +249,9 @@ int Scene::get_id_count(TypeID type)
   switch(type) {
   case SHAPE:  return shapes.size();
   case LIGHT:  return lights.size();
-  case BBOXDECO: return bboxDeco ? 1 : 0;
-  case VIEWPOINT: return rootSubscene.get_id_count(type);
-  case BACKGROUND: return background ? 1 : 0;
-  case SUBSCENE: return rootSubscene.get_id_count(type) + 1;
+  case SUBSCENE: return rootSubscene.get_id_count(type, true) + 1;
 
-  default:     return 0;
+  default:     return rootSubscene.get_id_count(type, true);
   }
 }
 
@@ -291,23 +277,6 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
       types++;
     }
     return;
-  case BBOXDECO:
-    if (bboxDeco) {
-      *ids = bboxDeco->getObjID();
-      *types = R_alloc(strlen("bboxdeco")+1, 1);
-      strcpy(*types, "bboxdeco");
-    }
-    return;
-  case VIEWPOINT:
-    rootSubscene.get_ids(type, ids, types);  
-    return;
-  case BACKGROUND:
-    if (background) {
-      *ids = background->getObjID();
-      *types = R_alloc(strlen("background")+1, 1);
-      strcpy(*types, "background");
-    }
-    return;
   case SUBSCENE:
     *ids++ = rootSubscene.getObjID(); 
     *types = R_alloc(strlen("subscene")+1, 1);
@@ -316,7 +285,9 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
     rootSubscene.get_ids(type, ids, types);  
     return;
     
-  default:	return;
+  default:
+    rootSubscene.get_ids(type, ids, types);  
+    return;
   }
 }  
 

@@ -83,7 +83,7 @@ public:
   /**
    * get the bbox
    */
-  BBoxDeco* get_bboxdeco() const { return currentSubscene->get_bboxDeco(); }
+  BBoxDeco* get_bboxdeco() const { return currentSubscene->get_bboxdeco(); }
   
   /**
    * get subscene
