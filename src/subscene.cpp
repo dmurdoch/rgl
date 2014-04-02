@@ -16,6 +16,9 @@ Subscene::Subscene(Subscene* in_parent, int in_where)
   viewpoint = NULL;
   bboxDeco   = NULL;
   background = NULL;
+  ignoreExtent = false;
+  bboxChanges = false;
+
 }
 
 Subscene::~Subscene() 
@@ -70,6 +73,20 @@ bool Subscene::add(SceneNode* node)
       break;
   }
   return success;
+}
+
+void Subscene::addBackground(Background* newbackground)
+{
+  if (background)
+    delete background;
+  background = newbackground;
+}
+
+void Subscene::addBboxdeco(BBoxdeco* newbboxdeco)
+{
+  if (bboxdeco)
+    delete bboxdeco;
+  bboxdeco = newbboxdeco;
 }
 
 void Subscene::addShape(Shape* shape)
@@ -209,6 +226,7 @@ bool Subscene::clear(TypeID typeID, bool recursive)
       SAVEGLERROR;
       clipPlanes.clear();
       SAVEGLERROR;
+      bboxChanges = false;      
       success = true;
       break;
     case SUBSCENE:
@@ -354,11 +372,12 @@ void Subscene::renderZsort(RenderContext* renderContext)
   glPopMatrix();
 }
 
-int Subscene::get_id_count(TypeID type)
+int Subscene::get_id_count(TypeID type, bool recursive)
 {
   int result = 0;
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    result += (*i)->get_id_count(type);
+  if (recursive)
+    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
+      result += (*i)->get_id_count(type);
   switch (TYPE) {
     case SUBSCENE: {
       result += 1;
@@ -366,12 +385,21 @@ int Subscene::get_id_count(TypeID type)
     }
     case VIEWPOINT: {    
       result += viewpoint ? 1 : 0;
+      break;
+    }
+    case BACKGROUND: {
+      result += background ? 1 : 0;
+      break;
+    }
+    case BBOXDECO: {
+      result += bboxdeco ? 1 : 0;
+      break;
     }
   }
   return result;
 }
     
-void Subscene::get_ids(TypeID type, int* ids, char** types)
+void Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
 {
   switch(type) {
   case SUBSCENE: 
@@ -391,10 +419,28 @@ void Subscene::get_ids(TypeID type, int* ids, char** types)
     }
     break;
   }
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
-    (*i)->get_ids(type, ids, types);	
-    ids += (*i)->get_id_count(type);
-    types += (*i)->get_id_count(type);
+  case BBOXDECO:
+    if (bboxDeco) {
+      *ids = bboxDeco->getObjID();
+      *types = R_alloc(strlen("bboxdeco")+1, 1);
+      strcpy(*types, "bboxdeco");
+      types++;
+    }
+    break;
+  case BACKGROUND:
+    if (background) {
+      *ids = background->getObjID();
+      *types = R_alloc(strlen("background")+1, 1);
+      strcpy(*types, "background");
+      types++;
+    }
+    break;
+  if (recursive)
+    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
+      (*i)->get_ids(type, ids, types);	
+      ids += (*i)->get_id_count(type);
+      types += (*i)->get_id_count(type);
+    }
   }
 }
 

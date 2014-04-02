@@ -49,6 +49,8 @@ public:
   virtual ~Subscene( );
 
   bool add(SceneNode* node);
+  void addBackground(Background* newbackground);
+  void addBboxdeco(BBoxDeco* newbboxdeco);
   void addShape(Shape* shape);
   void addLight(Light* light);
   void addSubscene(Subscene* subscene);
@@ -64,6 +66,12 @@ public:
   Subscene* get_subscene(int id);
 
   /**
+   * get the bbox
+   */
+  BBoxDeco* get_bboxdeco();
+  
+
+  /**
    * remove all nodes of the given type, optionally recursively.
    **/
   bool clear(TypeID stackTypeID, bool recursive);
@@ -71,8 +79,8 @@ public:
  /**
    * get information about stacks
    */
-  int get_id_count(TypeID type);
-  void get_ids(TypeID type, int* ids, char** types);
+  int get_id_count(TypeID type, bool recursive = false);
+  void get_ids(TypeID type, int* ids, char** types, bool recursive = false);
 
   virtual int getAttributeCount(AABox& bbox, AttribID attrib);
   
@@ -89,8 +97,6 @@ public:
   
   Background* get_background(); 
     
-  BBoxDeco* get_bboxdeco();
-
 private:
 
   /**
