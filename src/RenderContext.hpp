@@ -2,7 +2,7 @@
 #define RENDERCONTEXT_HPP
 
 namespace rgl {
-class Scene;
+class Subscene;
 class Viewpoint;
 class GLFont;
 } // namespace rgl
@@ -16,7 +16,7 @@ class RenderContext
 {
 public:
   RenderContext()
-  : scene(0)
+  : subscene(0)
   , rect(0,0,0,0)
   , viewpoint(0)
   , font(0)
@@ -28,7 +28,7 @@ public:
   , gl2psActive(0)
   , NULLActive(0)
   { }
-  Scene* scene;
+  Subscene* subscene;
   Rect2   rect;
   // RectSize size;
   Viewpoint* viewpoint;

@@ -260,128 +260,14 @@ void Subscene::disableClipplanes(RenderContext* renderContext)
     SAVEGLERROR;
   }
 }
-
-void Subscene::renderUnsorted(RenderContext* renderContext)
-{
-  GLdouble mat[16];
-  GLenum oldplanes = ClipPlaneSet::num_planes;
-  /* We render the subscenes in 3 passes, depending on 
-     where they fall in the rendering sequence.  Assumes matrix mode is MODELVIEW */
-     
-  glPushMatrix();  /* Save parent matrix */
  
-  E.getData(mat);
-  glMultMatrixd(mat);
-  
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    if ((*i)->where == PREPROJ)
-      (*i)->renderUnsorted(renderContext);
-      
-  P.getData(mat);
-  glMultMatrixd(mat);
-  
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    if ((*i)->where == PROJ)
-      (*i)->renderUnsorted(renderContext);
-  
-  M.getData(mat);
-  glMultMatrixd(mat);
-  
-  renderClipplanes(renderContext);
-
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    if ((*i)->where == MODEL)
-      (*i)->renderUnsorted(renderContext);
-    
-  std::vector<Shape*>::iterator iter;
-
-  for (iter = unsortedShapes.begin() ; iter != unsortedShapes.end() ; ++iter ) {
-    Shape* shape = *iter;
-    shape->render(renderContext);
-    SAVEGLERROR;
-  }
-  
-  disableClipplanes(renderContext);
-  ClipPlaneSet::num_planes = oldplanes;
-  
-  glPopMatrix();
-
-}  
-   
-void Subscene::renderZsort(RenderContext* renderContext)
-{  
-  GLdouble mat[16];
-  GLenum oldplanes = ClipPlaneSet::num_planes;
-  
-  glPushMatrix();  /* Save parent matrix */
- 
-  E.getData(mat);
-  glMultMatrixd(mat);
-  
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    if ((*i)->where == PREPROJ)
-      (*i)->renderZsort(renderContext);
-      
-  P.getData(mat);
-  glMultMatrixd(mat);
-  
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    if ((*i)->where == PROJ)
-      (*i)->renderZsort(renderContext);
-  
-  M.getData(mat);
-  glMultMatrixd(mat);
-  
-  renderClipplanes(renderContext);
-
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    if ((*i)->where == MODEL)
-      (*i)->renderZsort(renderContext);
-    
-  std::vector<Shape*>::iterator iter;
-  std::multimap<float, ShapeItem*> distanceMap;
-  int index = 0;
-
-  for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
-    Shape* shape = *iter;
-    shape->renderBegin(renderContext);
-    for (int j = 0; j < shape->getElementCount(); j++) {
-	ShapeItem* item = new ShapeItem(shape, j);
-	float distance = renderContext->getDistance( shape->getElementCenter(j) );
-      distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
-      index++;
-    }
-  }
-
-  {
-    Shape* prev = NULL;
-    std::multimap<float,ShapeItem*>::iterator iter;
-    for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
-      ShapeItem* item = iter->second;
-      Shape* shape = item->shape;
-      if (shape != prev) {
-        if (prev) prev->drawEnd(renderContext);
-        shape->drawBegin(renderContext);
-        prev = shape;
-      }
-      shape->drawElement(renderContext, item->itemnum);
-    }
-    if (prev) prev->drawEnd(renderContext);
-  }
-  
-  disableClipplanes(renderContext);
-  ClipPlaneSet::num_planes = oldplanes;
-  
-  glPopMatrix();
-}
-
 int Subscene::get_id_count(TypeID type, bool recursive)
 {
   int result = 0;
   if (recursive)
     for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
       result += (*i)->get_id_count(type);
-  switch (TYPE) {
+  switch (type) {
     case SUBSCENE: {
       result += 1;
       break;
@@ -421,10 +307,9 @@ void Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
       types++;
     }
     break;
-  }
   case BBOXDECO:
-    if (bboxDeco) {
-      *ids = bboxDeco->getObjID();
+    if (bboxdeco) {
+      *ids = bboxdeco->getObjID();
       *types = R_alloc(strlen("bboxdeco")+1, 1);
       strcpy(*types, "bboxdeco");
       types++;
@@ -447,15 +332,6 @@ void Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
   }
 }
 
-void Subscene::setMatrix(int which, const Matrix4x4& src)
-{
-  switch (which) {
-    case 1:  M = Matrix4x4(src); break;
-    case 2:  P = Matrix4x4(src); break;
-    case 3:  E = Matrix4x4(src); break;
-  }
-}
-
 Background* Subscene::get_background()
 {
   if (background) return background;
@@ -473,41 +349,12 @@ BBoxDeco* Subscene::get_bboxdeco()
 void Subscene::render(RenderContext* renderContext)
 {
 
-  renderContext->scene     = this;
-  renderContext->viewpoint = rootSubscene.getViewpoint();
+  if (background) {
+    GLbitfield clearFlags = background->getClearFlags(renderContext);
 
-
-  //
-  // CLEAR BUFFERS
-  //
-
-  GLbitfield clearFlags = 0;
-
-  SAVEGLERROR;
-
-  // Depth Buffer
-
-  glClearDepth(1.0);
-  glDepthFunc(GL_LESS);
-  glDepthMask(GL_TRUE);
-  // mask and func will be reset by material
-
-  // if ( unsortedShapes.size() )
-    clearFlags  |= GL_DEPTH_BUFFER_BIT;
-
-  // Color Buffer (optional - depends on background node)
-  
-  clearFlags |= background->getClearFlags(renderContext);
-
-  // clear
-  glClear(clearFlags);
-  // renderContext.clear(subscene);
-
-  // userMatrix and scale might change the length of normals.  If this slows us
-  // down, we should test for that instead of just enabling GL_NORMALIZE
-  
-  glEnable(GL_NORMALIZE);
-  
+    // clear
+    glClear(clearFlags);
+  }
 
   if (bboxChanges) 
     calcDataBBox();
@@ -520,7 +367,7 @@ void Subscene::render(RenderContext* renderContext)
     // GET DATA VOLUME SPHERE
     //
 
-    total_bsphere = Sphere( (bboxDeco) ? bboxDeco->getBoundingBox(data_bbox) : data_bbox, rootSubscene.viewpoint->scale );
+    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, getViewpoint()->scale );
     if (total_bsphere.radius <= 0.0)
       total_bsphere.radius = 1.0;
 
