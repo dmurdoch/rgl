@@ -1,7 +1,6 @@
 #ifndef CLIPPLANE_HPP
 #define CLIPPLANE_HPP
 
-#include "scene.h"
 #include "geom.hpp"
 #include "Shape.hpp"
 #include "PrimitiveSet.hpp"

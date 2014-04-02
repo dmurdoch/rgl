@@ -759,6 +759,87 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
   *successptr = success;
 }
 
+void rgl::rgl_newsubscene(int* successptr, int* parentid)
+{
+  int success = RGL_FAIL;
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* parent = scene->get_subscene(parentid[0]);
+    if (parent) {
+      Subscene* subscene = new Subscene( parent, 1 );
+      if (subscene && scene->add(subscene)) {
+	success = as_success( subscene->getObjID() );
+      }
+    }
+  }
+  *successptr = success;
+} 
+
+void rgl::rgl_setsubsceneid(int* successptr, int* subsceneid)
+{
+  int success = RGL_FAIL;
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* subscene = scene->get_subscene(subsceneid[0]);
+    if (subscene) {
+      scene->setCurrentSubscene(subscene);
+      success = as_success(subsceneid[0]);
+    }
+  }
+  *successptr = success;
+}  
+
+void rgl::rgl_getsubsceneid(int* successptr)
+{
+  int success = RGL_FAIL;
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* subscene = scene->getCurrentSubscene();
+    if (subscene) {
+      success = as_success(subscene->getObjID());
+    }
+  }
+  *successptr = success;
+} 
+
+void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
+{
+  int success = RGL_FAIL;
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* subscene = scene->getCurrentSubscene();
+    if (subscene) {
+      for (int i=0; i < count[0]; i++) {
+        SceneNode* node = scene->get_scenenode(ids[i], true);
+	if (node) 
+	  switch (node->getTypeID()) {
+	  case SHAPE: 
+	    subscene->addShape( static_cast<Shape*>(node) );
+	    success++;
+	    break;
+	  default:
+	    warning("id %d is not a shape; cannot add to subscene", ids[i]);
+          }
+	else 
+	  warning("id %d not found in scene", ids[i]);
+      }
+    }
+  }
+  *successptr = success;
+} 
+
 void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 {
   Material& mat = currentMaterial;
