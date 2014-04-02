@@ -121,8 +121,8 @@ public:
    * Get and set flag to ignore elements in bounding box
    **/
   
-  int getIgnoreExtent(void);
-  void setIgnoreExtent(int in_ignoreExtent);
+  int getIgnoreExtent(void) const { return currentSubscene->getIgnoreExtent(); }
+  void setIgnoreExtent(int in_ignoreExtent) const { currentSubscene->setIgnoreExtent(in_ignoreExtent); }
   
   /**
    * invalidate display lists so objects will be rendered again
@@ -138,10 +138,7 @@ private:
    * sub-pass: setup global lighting model
    **/
   void setupLightModel(RenderContext* renderContext, const Sphere& viewSphere);
-  /**
-   * compute bounding-box
-   **/
-  void calcDataBBox();
+
   /**
    * add shapes
    **/
