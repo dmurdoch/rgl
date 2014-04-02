@@ -99,9 +99,9 @@ public:
   // ---[ grouping component ]-----------------------------------------------
   
   /**
-   * obtain scene's axis-aligned bounding box. 
+   * obtain subscene's axis-aligned bounding box. 
    **/
-  const AABox& getBoundingBox();
+  const AABox& getBoundingBox() const { return currentSubscene->getBoundingBox(); }
   
   // ---[ Renderable interface ]---------------------------------------------
   

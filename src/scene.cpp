@@ -330,13 +330,6 @@ Light* Scene::get_light(int id)
   else return *ilight;
 }
 
-const AABox& Scene::getBoundingBox()
-{ 
-  if (bboxChanges) 
-      calcDataBBox();
-  return data_bbox; 
-}
-
 Subscene* Scene::get_subscene(int id)
 {
   return rootSubscene.get_subscene(id);

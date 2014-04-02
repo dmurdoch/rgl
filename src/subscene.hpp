@@ -72,6 +72,11 @@ public:
   
 
   /**
+   * obtain subscene's axis-aligned bounding box. 
+   **/
+  const AABox& getBoundingBox();
+
+/**
    * remove all nodes of the given type, optionally recursively.
    **/
   bool clear(TypeID stackTypeID, bool recursive);
