@@ -26,17 +26,18 @@ static int gl_light_ids[8] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LI
 ObjID SceneNode::nextID = BBOXID + 1;
 
 Scene::Scene()
+: rootSubscene(NULL, PREPROJ) 
 {
-  background = NULL;
-  viewpoint  = NULL;
+  currentSubscene = &rootSubscene;
   nlights    = 0;
-  bboxDeco   = NULL;
   ignoreExtent = false;
   bboxChanges = false;
  
-  add( new Background );
-  add( new Viewpoint );
-  add( new Light ); 
+  rootSubscene.add( new Viewpoint );
+  rootSubscene.add( new Background );
+  Light* light = new Light; 
+  add(light);
+  rootSubscene.addLight(light);
 }
 
 Scene::~Scene()
@@ -45,15 +46,11 @@ Scene::~Scene()
   clear(LIGHT);
   clear(BBOXDECO);
 
-  if (background)
-    delete background;
-  if (viewpoint)
-    delete viewpoint;
 }
 
 Viewpoint* Scene::getViewpoint() 
 {
-  return viewpoint;
+  return currentSubscene->getViewpoint();
 }
 
 void Scene::deleteShapes()
@@ -79,30 +76,19 @@ bool Scene::clear(TypeID typeID)
 {
   bool success = false;
 
+  rootSubscene.clear(typeID, true);
   switch(typeID) {
     case SHAPE:
       deleteShapes();
-      SAVEGLERROR;
-      zsortShapes.clear();
-      SAVEGLERROR;
-      unsortedShapes.clear();
-      SAVEGLERROR;
-      clipPlanes.clear();
-      SAVEGLERROR;
-      data_bbox.invalidate();
       SAVEGLERROR;
       success = true;
       break;
     case LIGHT:
       deleteLights();
       SAVEGLERROR;
-      nlights = 0;
       success = true;
       break;
     case BBOXDECO:
-      delete bboxDeco;
-      SAVEGLERROR;
-      bboxDeco = NULL;
       success = true;
       break;
   }
@@ -110,21 +96,22 @@ bool Scene::clear(TypeID typeID)
 }
 
 void Scene::addShape(Shape* shape) {
-  if (!shape->getIgnoreExtent()) {
-    const AABox& bbox = shape->getBoundingBox();
-    data_bbox += bbox;
-    bboxChanges |= shape->getBBoxChanges();
-  }
 
   shapes.push_back(shape);
+  
+  currentSubscene->addShape(shape);
 
-  if ( shape->isBlended() ) {
-    zsortShapes.push_back(shape);
-  } else if ( shape->isClipPlane() ) {
-    clipPlanes.push_back(shape);
-  } else
-    unsortedShapes.push_back(shape);
 }
+
+void Scene::addLight(Light* light) {
+
+  light->id = gl_light_ids[ nlights++ ];
+
+  lights.push_back( light );
+
+  currentSubscene->addLight(light);
+
+}  
 
 bool Scene::add(SceneNode* node)
 {
@@ -132,30 +119,16 @@ bool Scene::add(SceneNode* node)
   switch( node->getTypeID() )
   {
     case LIGHT:
-      if (nlights < 8) {
-
-        Light* light = (Light*) node;
-
-        light->id = gl_light_ids[ nlights++ ];
-
-        lights.push_back( light );
+      {
+        addLight((Light*) node);
 
         success = true;
       }
       break;
     case SHAPE:
       {
-        Shape* shape = (Shape*) node;
-        addShape(shape);
+        addShape((Shape*) node);
 
-        success = true;
-      }
-      break;
-    case VIEWPOINT:
-      {
-        if (viewpoint)
-          delete viewpoint;
-        viewpoint = (Viewpoint*) node;
         success = true;
       }
       break;
@@ -175,6 +148,13 @@ bool Scene::add(SceneNode* node)
         success = true;
       }
       break;
+    case SUBSCENE:
+      {
+	Subscene* subscene = static_cast<Subscene*>(node);
+	currentSubscene->addSubscene(subscene);
+	success = true;
+      }
+      break;
     default:
       break;
   }
@@ -186,6 +166,7 @@ bool Scene::pop(TypeID type, int id, bool destroy)
   bool success = false;
   std::vector<Shape*>::iterator ishape;
   std::vector<Light*>::iterator ilight;
+  std::vector<Subscene*>::iterator isubscene;
   
   switch(type) {
     case SHAPE: {
@@ -197,7 +178,12 @@ bool Scene::pop(TypeID type, int id, bool destroy)
         return false;
       break;
     }
-    case LIGHT: if (lights.empty()) return false;
+    case LIGHT: {
+      if (lights.empty()) return false;
+      break;
+    }
+    case SUBSCENE: rootSubscene.pop(type, id, destroy);
+      return true;
     default: break;
   }
   
@@ -222,7 +208,7 @@ bool Scene::pop(TypeID type, int id, bool destroy)
       break;
     case LIGHT:
       ilight = std::find_if(lights.begin(), lights.end(),
-      						std::bind2nd(std::ptr_fun(&sameID), id));
+			    std::bind2nd(std::ptr_fun(&sameID), id));
       if (ilight == lights.end()) return false;
       break;
     default:
@@ -233,17 +219,9 @@ bool Scene::pop(TypeID type, int id, bool destroy)
   switch(type) {
   case SHAPE:
     {
+      rootSubscene.pop(SHAPE, id);
       Shape* shape = *ishape;
       shapes.erase(ishape);
-      if ( shape->isBlended() )
-          zsortShapes.erase(std::find_if(zsortShapes.begin(), zsortShapes.end(),
-                                         std::bind2nd(std::ptr_fun(&sameID), id)));
-      else if ( shape->isClipPlane() )
-	  clipPlanes.erase(std::find_if(clipPlanes.begin(), clipPlanes.end(),
-				        std::bind2nd(std::ptr_fun(&sameID), id)));
-      else
-          unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
-                                       std::bind2nd(std::ptr_fun(&sameID), id)));
       if (destroy)
         delete shape;
       calcDataBBox();
@@ -270,7 +248,7 @@ bool Scene::pop(TypeID type, int id, bool destroy)
       }
     }
     break;
-  default: // VIEWPOINT,BACKGROUND ignored
+  default: // BACKGROUND ignored
     break;
   }
 
@@ -283,8 +261,9 @@ int Scene::get_id_count(TypeID type)
   case SHAPE:  return shapes.size();
   case LIGHT:  return lights.size();
   case BBOXDECO: return bboxDeco ? 1 : 0;
-  case VIEWPOINT: return viewpoint ? 1 : 0;
+  case VIEWPOINT: return rootSubscene.get_id_count(type);
   case BACKGROUND: return background ? 1 : 0;
+  case SUBSCENE: return rootSubscene.get_id_count(type) + 1;
 
   default:     return 0;
   }
@@ -320,11 +299,7 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
     }
     return;
   case VIEWPOINT:
-    if (viewpoint) {
-      *ids = viewpoint->getObjID();
-      *types = R_alloc(strlen("viewpoint")+1, 1);
-      strcpy(*types, "viewpoint");
-    }
+    rootSubscene.get_ids(type, ids, types);  
     return;
   case BACKGROUND:
     if (background) {
@@ -332,6 +307,13 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
       *types = R_alloc(strlen("background")+1, 1);
       strcpy(*types, "background");
     }
+    return;
+  case SUBSCENE:
+    *ids++ = rootSubscene.getObjID(); 
+    *types = R_alloc(strlen("subscene")+1, 1);
+    strcpy(*types, "subscene");
+    types++;
+    rootSubscene.get_ids(type, ids, types);  
     return;
     
   default:	return;
@@ -344,6 +326,7 @@ SceneNode* Scene::get_scenenode(int id, bool recursive)
   Shape* shape;
   Background *background;
   BBoxDeco* bboxdeco;
+  Subscene* subscene;
   
   if ( (shape = get_shape(id, recursive)) )
     return shape;
@@ -353,6 +336,8 @@ SceneNode* Scene::get_scenenode(int id, bool recursive)
     return background;
   else if ( (bboxdeco = get_bboxdeco()) && id == bboxdeco->getObjID())
     return bboxdeco;
+  else if ( (subscene = get_subscene(id)) )
+    return subscene;
   else return NULL;
 }
 
@@ -381,45 +366,27 @@ const AABox& Scene::getBoundingBox()
   return data_bbox; 
 }
 
-void Scene::renderZsort(RenderContext* renderContext)
-{  
-  std::vector<Shape*>::iterator iter;
-  std::multimap<float, ShapeItem*> distanceMap;
-  int index = 0;
-
-  for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
-    Shape* shape = *iter;
-    shape->renderBegin(renderContext);
-    for (int j = 0; j < shape->getElementCount(); j++) {
-	ShapeItem* item = new ShapeItem(shape, j);
-	float distance = renderContext->getDistance( shape->getElementCenter(j) );
-      distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
-      index++;
-    }
-  }
-
-  {
-    Shape* prev = NULL;
-    std::multimap<float,ShapeItem*>::iterator iter;
-    for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
-      ShapeItem* item = iter->second;
-      Shape* shape = item->shape;
-      if (shape != prev) {
-        if (prev) prev->drawEnd(renderContext);
-        shape->drawBegin(renderContext);
-        prev = shape;
-      }
-      shape->drawElement(renderContext, item->itemnum);
-    }
-    if (prev) prev->drawEnd(renderContext);
-  }
+Subscene* Scene::get_subscene(int id)
+{
+  return rootSubscene.get_subscene(id);
 }
 
+void Scene::setCurrentSubscene(Subscene* subscene)
+{
+  currentSubscene = subscene;
+}
+
+Subscene* Scene::getCurrentSubscene()
+{
+  return currentSubscene;
+}
+
+  
 void Scene::render(RenderContext* renderContext)
 {
 
   renderContext->scene     = this;
-  renderContext->viewpoint = viewpoint;
+  renderContext->viewpoint = rootSubscene.getViewpoint();
 
 
   //
@@ -446,7 +413,7 @@ void Scene::render(RenderContext* renderContext)
 
   // clear
   glClear(clearFlags);
-  // renderContext.clear(viewport);
+  // renderContext.clear(subscene);
 
   // userMatrix and scale might change the length of normals.  If this slows us
   // down, we should test for that instead of just enabling GL_NORMALIZE
@@ -465,7 +432,7 @@ void Scene::render(RenderContext* renderContext)
     // GET DATA VOLUME SPHERE
     //
 
-    total_bsphere = Sphere( (bboxDeco) ? bboxDeco->getBoundingBox(data_bbox) : data_bbox, viewpoint->scale );
+    total_bsphere = Sphere( (bboxDeco) ? bboxDeco->getBoundingBox(data_bbox) : data_bbox, rootSubscene.viewpoint->scale );
     if (total_bsphere.radius <= 0.0)
       total_bsphere.radius = 1.0;
 
@@ -486,7 +453,6 @@ void Scene::render(RenderContext* renderContext)
   //
 
   glViewport(renderContext->rect.x,renderContext->rect.y,renderContext->rect.width, renderContext->rect.height);
-
 
   //
   // SETUP BACKGROUND VIEWPOINT PROJECTION
@@ -541,20 +507,6 @@ void Scene::render(RenderContext* renderContext)
     // DISABLE BLENDING
     glDisable(GL_BLEND);
     
-    // RENDER CLIP PLANES
-    
-    {
-      std::vector<Shape*>::iterator iter;
-	
-      ClipPlaneSet::num_planes = 0;	
-      
-      for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
-        Shape* shape = *iter;
-	shape->render(renderContext);
-	SAVEGLERROR;
-      }
-    }
-    
     //
     // RENDER BBOX DECO
     //
@@ -564,15 +516,7 @@ void Scene::render(RenderContext* renderContext)
 
     SAVEGLERROR;
 
-    {
-      std::vector<Shape*>::iterator iter;
-
-      for (iter = unsortedShapes.begin() ; iter != unsortedShapes.end() ; ++iter ) {
-        Shape* shape = *iter;
-        shape->render(renderContext);
-        SAVEGLERROR;
-      }
-    }
+    rootSubscene.renderUnsorted(renderContext);
 
 // #define NO_BLEND
 
@@ -614,20 +558,8 @@ void Scene::render(RenderContext* renderContext)
     renderContext->Zrow = P.getRow(2);
     renderContext->Wrow = P.getRow(3);
     
-    renderZsort(renderContext);
+    rootSubscene.renderZsort(renderContext);
 #endif    
-
-    // DISABLE CLIP PLANES
-    
-    {
-      std::vector<Shape*>::iterator iter;
-	
-      for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
-        Shape* shape = *iter;
-	static_cast<ClipPlaneSet*>(shape)->enable(false);
-	SAVEGLERROR;
-      }
-    }
 
     /* Reset flag(s) now that scene has been rendered */
     renderContext->viewpoint->scaleChanged = false;

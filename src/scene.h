@@ -25,9 +25,9 @@
 #include "ClipPlane.hpp"
 #include "ABCLineSet.hpp"
 #include "Surface.hpp"
-#include "Viewpoint.hpp"
 #include "Background.hpp"
 #include "BBoxDeco.hpp"
+#include "Subscene.hpp"
 
 namespace rgl {
 
@@ -39,12 +39,12 @@ public:
   // ---[ client services ]---------------------------------------------------
 
   /**
-   * remove all nodes of the given type.
+   * remove all nodes of the given type.  This is always recursive through subscenes.
    **/
   bool clear(TypeID stackTypeID);
   
   /**
-   * add node to scene
+   * add node to current subscene (and possibly to scene)
    **/
   bool add(SceneNode* node);
   
@@ -78,13 +78,24 @@ public:
   /**
    * get the background
    */
-  Background* get_background() const { return background; }
+  Background* get_background() const { return currentSubscene->get_background(); }
   
   /**
    * get the bbox
    */
-  BBoxDeco* get_bboxdeco() const { return bboxDeco; }
+  BBoxDeco* get_bboxdeco() const { return currentSubscene->get_bboxDeco(); }
+  
+  /**
+   * get subscene
+   */
+  Subscene* get_subscene(int id);
 
+  /** 
+   * set/get the current subscene
+   **/
+  void setCurrentSubscene(Subscene* subscene);
+  Subscene* getCurrentSubscene();
+  
   // ---[ grouping component ]-----------------------------------------------
   
   /**
@@ -117,6 +128,7 @@ public:
    * invalidate display lists so objects will be rendered again
    **/
   void invalidateDisplaylists();
+  
 
 private:
 
@@ -134,21 +146,21 @@ private:
    * add shapes
    **/
   void addShape(Shape* shape);
+  
+  /**
+   * add light
+   **/
+  void addLight(Light* light);
+  
+
+  // --- [ Subscenes ]-------------------------------------------------------
+
+  Subscene rootSubscene;
+  Subscene* currentSubscene;
 
   // ---[ bounded slots ]----------------------------------------------------
   
-  /**
-   * bounded background
-   **/
-  Background* background;
-  /**
-   * bounded viewpoint
-   **/
-  Viewpoint* viewpoint;
-  /**
-   * bounded decorator
-   **/
-  BBoxDeco*  bboxDeco;
+
 
   // ---[ stacks ]-----------------------------------------------------------
   
@@ -158,20 +170,14 @@ private:
   int  nlights;
   
   /**
-   * list of light sources
+   * list of light sources.  The scene owns them, the subscenes display a subset.
    **/
   std::vector<Light*> lights;
 
   /**
-   * list of shapes
+   * list of shapes.  The scene owns them, the subscenes display a subset.
    **/
   std::vector<Shape*> shapes;
-
-  std::vector<Shape*> unsortedShapes;
-  std::vector<Shape*> zsortShapes;
-  std::vector<Shape*> clipPlanes;
-  
-  void renderZsort(RenderContext* renderContext);
   
   void deleteAll(std::vector<SceneNode*> list);
 
@@ -180,13 +186,7 @@ private:
   
   // ---[ grouping data ]----------------------------------------------------
   
-  /**
-   * bounding box of overall scene
-   **/
-  AABox data_bbox;
-  
-  bool ignoreExtent;
-  bool bboxChanges;
+
 };
 
 } // namespace rgl

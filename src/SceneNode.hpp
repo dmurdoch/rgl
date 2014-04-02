@@ -18,7 +18,8 @@ enum TypeID {
   LIGHT, 
   BBOXDECO, 
   VIEWPOINT, 
-  BACKGROUND 
+  BACKGROUND,
+  SUBSCENE
 };
 */
 
@@ -27,6 +28,7 @@ enum TypeID {
 #define BBOXDECO 3
 #define VIEWPOINT 4
 #define BACKGROUND 6  // 5 was used for the material
+#define SUBSCENE 7
 
 typedef unsigned int TypeID;
 typedef int ObjID;
