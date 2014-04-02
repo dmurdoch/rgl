@@ -217,7 +217,6 @@ bool Scene::pop(TypeID type, int id, bool destroy)
       shapes.erase(ishape);
       if (destroy)
         delete shape;
-      calcDataBBox();
       success = true;
     }  
     break;
@@ -371,46 +370,15 @@ void Scene::render(RenderContext* renderContext)
   // if ( unsortedShapes.size() )
     clearFlags  |= GL_DEPTH_BUFFER_BIT;
 
-  // Color Buffer (optional - depends on background node)
-  
-  clearFlags |= background->getClearFlags(renderContext);
-
   // clear
   glClear(clearFlags);
-  // renderContext.clear(subscene);
 
   // userMatrix and scale might change the length of normals.  If this slows us
   // down, we should test for that instead of just enabling GL_NORMALIZE
   
   glEnable(GL_NORMALIZE);
   
-
-  if (bboxChanges) 
-    calcDataBBox();
-  
-  Sphere total_bsphere;
-
-  if (data_bbox.isValid()) {
-    
-    // 
-    // GET DATA VOLUME SPHERE
-    //
-
-    total_bsphere = Sphere( (bboxDeco) ? bboxDeco->getBoundingBox(data_bbox) : data_bbox, rootSubscene.viewpoint->scale );
-    if (total_bsphere.radius <= 0.0)
-      total_bsphere.radius = 1.0;
-
-  } else {
-    total_bsphere = Sphere( Vertex(0,0,0), 1 );
-  }
-
   SAVEGLERROR;
-
-  //
-  // SETUP LIGHTING MODEL
-  //
-
-  setupLightModel(renderContext, total_bsphere);
 
   //
   // SETUP VIEWPORT TRANSFORMATION
@@ -418,25 +386,6 @@ void Scene::render(RenderContext* renderContext)
 
   glViewport(renderContext->rect.x,renderContext->rect.y,renderContext->rect.width, renderContext->rect.height);
 
-  //
-  // SETUP BACKGROUND VIEWPOINT PROJECTION
-  //
-  // FIXME: move to background
-  //
-
-  viewpoint->setupFrustum( renderContext, total_bsphere );
-
-  //
-  // RENDER BACKGROUND
-  //
-
-  // DISABLE Z-BUFFER TEST
-  glDisable(GL_DEPTH_TEST);
-
-  // DISABLE Z-BUFFER FOR WRITING
-  glDepthMask(GL_FALSE);
-
-  background->render(renderContext);
 
   SAVEGLERROR;
   
@@ -444,92 +393,7 @@ void Scene::render(RenderContext* renderContext)
   // RENDER MODEL
   //
 
-  if (data_bbox.isValid() ) {
-
-    //
-    // SETUP VIEWPOINT TRANSFORMATION
-    //
-
-    viewpoint->setupTransformation( renderContext, total_bsphere);
-
-    // Save matrices for projection/unprojection later
-    
-    glGetDoublev(GL_MODELVIEW_MATRIX,renderContext->modelview);
-    glGetDoublev(GL_PROJECTION_MATRIX,renderContext->projection);
-    glGetIntegerv(GL_VIEWPORT, renderContext->viewport);    
-    
-    //
-    // RENDER SOLID SHAPES
-    //
-
-    // ENABLE Z-BUFFER TEST 
-    glEnable(GL_DEPTH_TEST);
-
-    // ENABLE Z-BUFFER FOR WRITING
-    glDepthMask(GL_TRUE);
-
-    // DISABLE BLENDING
-    glDisable(GL_BLEND);
-    
-    //
-    // RENDER BBOX DECO
-    //
-
-    if (bboxDeco) 
-      bboxDeco->render(renderContext);  // This changes the modelview/projection/viewport
-
-    SAVEGLERROR;
-
-    rootSubscene.renderUnsorted(renderContext);
-
-// #define NO_BLEND
-
-#ifndef NO_BLEND
-    //
-    // RENDER BLENDED SHAPES
-    //
-    // render shapes in bounding-box sorted order according to z value
-    //
-
-    // DISABLE Z-BUFFER FOR WRITING
-    glDepthMask(GL_FALSE);
-    
-    SAVEGLERROR;
-    
-    // SETUP BLENDING
-    if (renderContext->gl2psActive == GL2PS_NONE) 
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    else
-      gl2psBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-    SAVEGLERROR;
-    
-    // ENABLE BLENDING
-    glEnable(GL_BLEND);
-
-    SAVEGLERROR;
-
-    //
-    // GET THE TRANSFORMATION
-    //
-
-    viewpoint->setupTransformation(renderContext, total_bsphere);
-
-    Matrix4x4 M(renderContext->modelview);    
-    Matrix4x4 P(renderContext->projection);
-    P = P*M;
-    
-    renderContext->Zrow = P.getRow(2);
-    renderContext->Wrow = P.getRow(3);
-    
-    rootSubscene.renderZsort(renderContext);
-#endif    
-
-    /* Reset flag(s) now that scene has been rendered */
-    renderContext->viewpoint->scaleChanged = false;
-    
-    SAVEGLERROR;
-  }
+  rootSubscene.render(renderContext);
 }
 
 
@@ -590,34 +454,6 @@ void Scene::setupLightModel(RenderContext* rctx, const Sphere& viewSphere)
   for (int i=nlights;i<8;i++)
     glDisable(gl_light_ids[i]);
 
-}
-
-void Scene::calcDataBBox()
-{
-  data_bbox.invalidate();
-
-  std::vector<Shape*>::const_iterator iter;
-
-  bboxChanges = false;
-  for(iter = shapes.begin(); iter != shapes.end(); ++iter) {
-    Shape* shape = *iter;
-
-    if (!shape->getIgnoreExtent()) {
-      data_bbox += shape->getBoundingBox(this);
-      bboxChanges |= shape->getBBoxChanges();
-    }
-  }
-}
-
-// ---------------------------------------------------------------------------
-int Scene::getIgnoreExtent(void)
-{
-  return (int)ignoreExtent;
-}
-// ---------------------------------------------------------------------------
-void Scene::setIgnoreExtent(int in_ignoreExtent)
-{
-  ignoreExtent = (bool)in_ignoreExtent;
 }
 
 // ---------------------------------------------------------------------------

@@ -5,6 +5,8 @@
 #include "ClipPlane.hpp"
 #include "Viewpoint.hpp"
 #include "Background.hpp"
+#include "BBoxDeco.hpp"
+#include "Light.hpp"
 #include <map>
 
 namespace rgl {
@@ -43,7 +45,7 @@ private:
   /**
    * bounded decorator
    **/
-  BBoxDeco*  bboxDeco;    
+  BBoxDeco*  bboxdeco;    
 public:
   Subscene(Subscene* in_parent, int in_where);
   virtual ~Subscene( );
@@ -92,17 +94,31 @@ public:
   virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   virtual String getTextAttribute(AABox& bbox, AttribID attrib, int index);
 
+  void render(RenderContext* renderContext);
+
   void renderClipplanes(RenderContext* renderContext);
   void disableClipplanes(RenderContext* renderContext);
   
   void renderUnsorted(RenderContext* renderContext);
   void renderZsort(RenderContext* renderContext);
   
+  /**
+   * Get and set flag to ignore elements in bounding box
+   **/
+  
+  int getIgnoreExtent(void) const { return (int) ignoreExtent; }
+  void setIgnoreExtent(int in_ignoreExtent);
+  
   Viewpoint* getViewpoint();
   
   Background* get_background(); 
     
 private:
+    
+  /**
+   * compute bounding-box
+   **/
+  void calcDataBBox();
 
   /**
    * bounding box of subscene
