@@ -1,4 +1,5 @@
 #include "Subscene.hpp"
+#include "gl2ps.h"
 #include "R.h"
 #include <algorithm>
 
@@ -493,7 +494,7 @@ void Subscene::render(RenderContext* renderContext)
     renderContext->Zrow = P.getRow(2);
     renderContext->Wrow = P.getRow(3);
     
-    rootSubscene.renderZsort(renderContext);
+    renderZsort(renderContext);
 #endif    
 
     /* Reset flag(s) now that scene has been rendered */
@@ -525,3 +526,97 @@ void Subscene::setIgnoreExtent(int in_ignoreExtent)
 {
   ignoreExtent = (bool)in_ignoreExtent;
 }
+
+void Subscene::setupLightModel(RenderContext* rctx, const Sphere& viewSphere)
+{
+  Color global_ambient(0.0f,0.0f,0.0f,1.0f);
+
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient.data );
+  glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE );
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
+
+#ifdef GL_VERSION_1_2
+//  glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SINGLE_COLOR );
+#endif
+
+  //
+  // global lights
+  //
+
+  rctx->viewpoint->setupFrustum(rctx, viewSphere);
+  rctx->viewpoint->setupTransformation(rctx, viewSphere);
+  SAVEGLERROR;
+
+  std::vector<Light*>::const_iterator iter;
+
+  for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
+
+    Light* light = *iter;
+
+    if (!light->viewpoint)
+      light->setup(rctx);
+  }
+
+  SAVEGLERROR;
+
+  //
+  // viewpoint lights
+  //
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  
+  //
+  // disable lights; setup will enable them
+  //
+
+  for (int i=0;i<8;i++)
+    glDisable(GL_LIGHT0 + i);  
+
+  for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
+
+    Light* light = *iter;
+
+    if (light->viewpoint)
+      light->setup(rctx);
+
+  }
+
+  SAVEGLERROR;
+
+}
+
+void Subscene::renderZsort(RenderContext* renderContext)
+{  
+  std::vector<Shape*>::iterator iter;
+  std::multimap<float, ShapeItem*> distanceMap;
+  int index = 0;
+
+  for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
+    Shape* shape = *iter;
+    shape->renderBegin(renderContext);
+    for (int j = 0; j < shape->getElementCount(); j++) {
+	ShapeItem* item = new ShapeItem(shape, j);
+	float distance = renderContext->getDistance( shape->getElementCenter(j) );
+      distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
+      index++;
+    }
+  }
+
+  {
+    Shape* prev = NULL;
+    std::multimap<float,ShapeItem*>::iterator iter;
+    for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
+      ShapeItem* item = iter->second;
+      Shape* shape = item->shape;
+      if (shape != prev) {
+        if (prev) prev->drawEnd(renderContext);
+        shape->drawBegin(renderContext);
+        prev = shape;
+      }
+      shape->drawElement(renderContext, item->itemnum);
+    }
+    if (prev) prev->drawEnd(renderContext);
+  }
+}
+
