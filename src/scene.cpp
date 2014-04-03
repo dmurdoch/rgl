@@ -21,8 +21,6 @@ using namespace rgl;
 //   Scene
 //
 
-static int gl_light_ids[8] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7 };
-
 ObjID SceneNode::nextID = BBOXID + 1;
 
 Scene::Scene()
@@ -102,7 +100,7 @@ void Scene::addShape(Shape* shape) {
 
 void Scene::addLight(Light* light) {
 
-  light->id = gl_light_ids[ nlights++ ];
+  light->id = GL_LIGHT0 + (nlights++);
 
   lights.push_back( light );
 
@@ -396,65 +394,6 @@ void Scene::render(RenderContext* renderContext)
   rootSubscene.render(renderContext);
 }
 
-
-void Scene::setupLightModel(RenderContext* rctx, const Sphere& viewSphere)
-{
-  Color global_ambient(0.0f,0.0f,0.0f,1.0f);
-
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient.data );
-  glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE );
-  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
-
-#ifdef GL_VERSION_1_2
-//  glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SINGLE_COLOR );
-#endif
-
-  //
-  // global lights
-  //
-
-  rctx->viewpoint->setupFrustum(rctx, viewSphere);
-  rctx->viewpoint->setupTransformation(rctx, viewSphere);
-  SAVEGLERROR;
-
-  std::vector<Light*>::const_iterator iter;
-
-  for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
-
-    Light* light = *iter;
-
-    if (!light->viewpoint)
-      light->setup(rctx);
-  }
-
-  SAVEGLERROR;
-
-  //
-  // viewpoint lights
-  //
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
-
-    Light* light = *iter;
-
-    if (light->viewpoint)
-      light->setup(rctx);
-
-  }
-
-  SAVEGLERROR;
-
-  //
-  // disable unused lights
-  //
-
-  for (int i=nlights;i<8;i++)
-    glDisable(gl_light_ids[i]);
-
-}
 
 // ---------------------------------------------------------------------------
 void Scene::invalidateDisplaylists()

@@ -39,6 +39,7 @@ private:
   bool viewpoint;
   bool posisfinite;
   friend class Scene;
+  friend class Subscene;
 };
 
 } // namespace rgl
