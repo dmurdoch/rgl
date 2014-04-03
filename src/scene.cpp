@@ -348,7 +348,7 @@ Subscene* Scene::getCurrentSubscene()
 void Scene::render(RenderContext* renderContext)
 {
 
-  renderContext->scene     = this;
+  renderContext->subscene  = &rootSubscene;
   renderContext->viewpoint = rootSubscene.getViewpoint();
 
 

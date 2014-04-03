@@ -17,6 +17,11 @@ namespace rgl {
 
 class Subscene : public SceneNode {
 private:
+  /**
+   * sub-pass: setup global lighting model
+   **/
+  void setupLightModel(RenderContext* renderContext, const Sphere& viewSphere);
+
   /* These lists contain pointers to lights and shapes, but don't actually manage them:  the Scene does that. */
   std::vector<Light*> lights;
   std::vector<Shape*> shapes;

@@ -446,12 +446,12 @@ void Subscene::render(RenderContext* renderContext)
     // RENDER BBOX DECO
     //
 
-    if (bboxDeco) 
-      bboxDeco->render(renderContext);  // This changes the modelview/projection/viewport
+    if (bboxdeco) 
+      bboxdeco->render(renderContext);  // This changes the modelview/projection/viewport
 
     SAVEGLERROR;
 
-    rootSubscene.renderUnsorted(renderContext);
+    renderUnsorted(renderContext);
 
 // #define NO_BLEND
 
