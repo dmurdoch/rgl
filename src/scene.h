@@ -134,10 +134,6 @@ private:
 
   // ---[ Renderable implementation ]---------------------------------------- 
 
-  /**
-   * sub-pass: setup global lighting model
-   **/
-  void setupLightModel(RenderContext* renderContext, const Sphere& viewSphere);
 
   /**
    * add shapes
