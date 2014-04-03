@@ -55,7 +55,7 @@ GLbitfield Background::getClearFlags(RenderContext* renderContext)
 
 void Background::render(RenderContext* renderContext)
 {
-  const AABox& bbox = renderContext->scene->getBoundingBox();
+  const AABox& bbox = renderContext->subscene->getBoundingBox();
 
   // setup fog
   

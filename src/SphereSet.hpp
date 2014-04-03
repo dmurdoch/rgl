@@ -38,7 +38,7 @@ public:
    * Spheres appear as spheres, so their bbox depends on scaling
    **/
    
-  virtual AABox& getBoundingBox(Scene* scene);
+  virtual AABox& getBoundingBox(Subscene* subscene);
 
 
   /**

@@ -25,7 +25,7 @@ public:
   /**
    * overload to update segments first.
    */
-  virtual AABox& getBoundingBox(Scene* scene);
+  virtual AABox& getBoundingBox(Subscene* subscene);
 
   /**
    * overload to update segments first.

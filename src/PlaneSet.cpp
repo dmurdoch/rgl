@@ -53,15 +53,15 @@ PlaneSet::PlaneSet(Material& in_material, int in_nnormal, double* in_normal, int
   initFaceSet(12*nPlanes, vertices.ptr, normals.ptr, NULL);
 }
 
-AABox& PlaneSet::getBoundingBox(Scene* scene)
+AABox& PlaneSet::getBoundingBox(Subscene* subscene)
 {
-  updateTriangles(scene->getBoundingBox());
-  return TriangleSet::getBoundingBox(scene); 
+  updateTriangles(subscene->getBoundingBox());
+  return TriangleSet::getBoundingBox(subscene); 
 }
 
 void PlaneSet::renderBegin(RenderContext* renderContext)
 {
-  updateTriangles(renderContext->scene->getBoundingBox());
+  updateTriangles(renderContext->subscene->getBoundingBox());
   invalidateDisplaylist();
   TriangleSet::renderBegin(renderContext);
 }
