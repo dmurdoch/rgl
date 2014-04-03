@@ -391,7 +391,7 @@ AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
 
 void BBoxDeco::render(RenderContext* renderContext)
 {
-  AABox bbox = renderContext->scene->getBoundingBox();
+  AABox bbox = renderContext->subscene->getBoundingBox();
 
   if (bbox.isValid()) {
   
