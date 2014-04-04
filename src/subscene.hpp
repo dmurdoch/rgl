@@ -20,7 +20,8 @@ private:
 
   void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
   void setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere);
-  void setupLights(RenderContext* rctx);
+  void disableLights(RenderContext* rctx);
+  void setupLights(RenderContext* rctx, bool viewpoint);
 
   /* These lists contain pointers to lights and shapes, but don't actually manage them:  the Scene does that. */
   std::vector<Light*> lights;

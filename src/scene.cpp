@@ -391,14 +391,10 @@ void Scene::render(RenderContext* renderContext)
   //
 
   glViewport(renderContext->rect.x,renderContext->rect.y,renderContext->rect.width, renderContext->rect.height);
-
+  glGetIntegerv(GL_VIEWPORT, renderContext->viewport);  
 
   SAVEGLERROR;
 
-  // Set up light model
-  
-  setupLightModel();
-  
   //
   // RENDER MODEL
   //
