@@ -80,7 +80,6 @@ selectpoints3d(ids["data"],
       spheres3d(x, color = "red", alpha = 0.3, radius = 0.2)
       TRUE
    })
-}
 
 # This one returns indices
 selectpoints3d(ids["data"], value = FALSE,
@@ -89,5 +88,6 @@ selectpoints3d(ids["data"], value = FALSE,
                 alpha = 0.3, radius = 0.2)
       TRUE
    })
+}
 }
 \keyword{ graphics }
