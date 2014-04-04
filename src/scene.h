@@ -8,25 +8,6 @@
 
 #include <vector>
 #include "types.h"
-
-#include "SceneNode.hpp"
-#include "geom.hpp"
-#include "String.hpp"
-#include "Color.hpp"
-#include "Texture.hpp"
-#include "Material.hpp"
-#include "Light.hpp"
-#include "Shape.hpp"
-#include "PrimitiveSet.hpp"
-#include "TextSet.hpp"
-#include "SpriteSet.hpp"
-#include "SphereSet.hpp"
-#include "PlaneSet.hpp"
-#include "ClipPlane.hpp"
-#include "ABCLineSet.hpp"
-#include "Surface.hpp"
-#include "Background.hpp"
-#include "BBoxDeco.hpp"
 #include "Subscene.hpp"
 
 namespace rgl {
