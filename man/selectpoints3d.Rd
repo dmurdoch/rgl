@@ -8,7 +8,7 @@ This function uses the \code{\link{select3d}} function to allow the user to choo
 point or region in the scene, then reports on all the vertices in or near that selection.
 }
 \usage{
-selectpoints3d(objects = rgl.ids()$id, value = TRUE, closest = TRUE, 
+selectpoints3d(objects = rgl.ids()$id, value = TRUE, closest = TRUE, % $
                multiple = FALSE, ...)
 }
 \arguments{
@@ -38,10 +38,13 @@ it might contain multiple points.  If \code{TRUE}, multiple selections
 will occur and the results will be combined into a single matrix.  
 
 If \code{multiple} is a function, it should take a single argument.
-This function will be called with the argument set to 
-the newly selected points.  It should return a logical
-value, \code{TRUE} to indicate that selection should continue,
-\code{FALSE} to indicate that it should stop.
+This function will be called with the argument set to a matrix
+containing newly added rows to the value, i.e. 
+it will contain coordinates of the newly selected points (if 
+\code{value = TRUE}), or the indices of the points (if \code{value =
+FALSE}).  It should return a logical value, \code{TRUE} to indicate
+that selection should continue, \code{FALSE} to indicate that it
+should stop.
 
 In either case, if multiple selections are being performed, the \code{ESC} key will 
 stop the process.
@@ -65,13 +68,24 @@ Duncan Murdoch
 }
 \examples{
 \donttest{
-ids <- plot3d( rnorm(20), rnorm(20), rnorm(20) )
+xyz <- cbind(rnorm(20), rnorm(20), rnorm(20))
+ids <- plot3d( xyz )
 
-# Click near a point to select it and put a sphere there
+# Click near a point to select it and put a sphere there.
+# Press ESC to quit...
 
+# This version returns coordinates
 selectpoints3d(ids["data"], 
    multiple = function(x) {
       spheres3d(x, color = "red", alpha = 0.3, radius = 0.2)
+      TRUE
+   })
+
+# This one returns indices
+selectpoints3d(ids["data"], value = FALSE,
+   multiple = function(ids) {
+      spheres3d(xyz[ids[, "index"],,drop=FALSE], color = "blue", 
+                alpha = 0.3, radius = 0.2)
       TRUE
    })
 }
