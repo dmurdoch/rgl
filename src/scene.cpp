@@ -442,7 +442,8 @@ void Scene::render(RenderContext* renderContext)
 
   // Color Buffer (optional - depends on background node)
   
-  clearFlags |= background->getClearFlags(renderContext);
+  if (background)
+    clearFlags |= background->getClearFlags(renderContext);
 
   // clear
   glClear(clearFlags);
@@ -506,7 +507,8 @@ void Scene::render(RenderContext* renderContext)
   // DISABLE Z-BUFFER FOR WRITING
   glDepthMask(GL_FALSE);
 
-  background->render(renderContext);
+  if (background)
+    background->render(renderContext);
 
   SAVEGLERROR;
   
