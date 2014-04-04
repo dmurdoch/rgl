@@ -586,6 +586,17 @@ void Subscene::setupLightModel(RenderContext* rctx, const Sphere& viewSphere)
 
 }
 
+void Subscene::renderUnsorted(RenderContext* renderContext)
+{
+  std::vector<Shape*>::iterator iter;
+
+  for (iter = unsortedShapes.begin() ; iter != unsortedShapes.end() ; ++iter ) {
+    Shape* shape = *iter;
+    shape->render(renderContext);
+    SAVEGLERROR;
+  }
+}
+    
 void Subscene::renderZsort(RenderContext* renderContext)
 {  
   std::vector<Shape*>::iterator iter;
@@ -620,3 +631,15 @@ void Subscene::renderZsort(RenderContext* renderContext)
   }
 }
 
+Viewpoint* Subscene::getViewpoint()
+{
+  if (viewpoint) return(viewpoint);
+  else return(parent->getViewpoint());
+}
+
+const AABox& Subscene::getBoundingBox()
+{ 
+  if (bboxChanges) 
+      calcDataBBox();
+  return data_bbox; 
+}
