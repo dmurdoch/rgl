@@ -357,6 +357,8 @@ Viewpoint* Subscene::getViewpoint()
 void Subscene::render(RenderContext* renderContext, int context)
 {
   if (context != where) return;
+  
+  
     
   if (background) {
     GLbitfield clearFlags = background->getClearFlags(renderContext);
@@ -388,47 +390,57 @@ void Subscene::render(RenderContext* renderContext, int context)
   SAVEGLERROR;
   
   // Render subscenes in the appropriate context
+  
+  if (subscenes.size()) {
 
-  std::vector<Subscene*>::const_iterator subscene;
-  for(subscene = subscenes.begin(); iter != subscenes.end(); ++subscene) 
-    subscene->render(renderContext, PREPROJ);
+    glPushMatrix();
+  
+    std::vector<Subscene*>::const_iterator iter;
+    for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
+      (*iter)->render(renderContext, PREPROJ);
+  
+    setupProjMatrix(renderContext, total_bsphere);
+  
+    for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
+      (*iter)->render(renderContext, PROJ);
+
+    setupModelMatrix(renderContext, total_bsphere);
+  
+    for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
+      (*iter)->render(renderContext, MODEL);
+    
+    glPopMatrix();
+    SAVEGLERROR;
+  }
+  
+  // Now render the current scene.  First we use the projection matrix...
   
   setupProjMatrix(renderContext, total_bsphere);
+  glGetDoublev(GL_MODELVIEW_MATRIX,renderContext->projection);
   
-  for(subscene = subscenes.begin(); iter != subscenes.end(); ++subscene) 
-    subscene->render(renderContext, PROJ);
+  setupLights(renderContext, true);
+  
+  // Now the model matrix
   
   setupModelMatrix(renderContext, total_bsphere);
+  glGetDoublev(GL_MODELVIEW_MATRIX,renderContext->modelview);
   
-  for(subscene = subscenes.begin(); iter != subscenes.end(); ++subscene) 
-    subscene->render(renderContext, MODEL);
+  setupLights(renderContext, false);
   
-  // Now render the current scene
+  if (background) {
+    //
+    // RENDER BACKGROUND
+    //
+
+    // DISABLE Z-BUFFER TEST
+    glDisable(GL_DEPTH_TEST);
+
+    // DISABLE Z-BUFFER FOR WRITING
+    glDepthMask(GL_FALSE);
   
-  setupLights(renderContext);
-  
-  //
-  // SETUP BACKGROUND VIEWPOINT PROJECTION
-  //
-  // FIXME: move to background
-  //
-
-  if (viewpoint)
-    viewpoint->setupFrustum( renderContext, total_bsphere );
-
-  //
-  // RENDER BACKGROUND
-  //
-
-  // DISABLE Z-BUFFER TEST
-  glDisable(GL_DEPTH_TEST);
-
-  // DISABLE Z-BUFFER FOR WRITING
-  glDepthMask(GL_FALSE);
-
-  background->render(renderContext);
-
-  SAVEGLERROR;
+    background->render(renderContext);
+    SAVEGLERROR;
+  }
   
   //
   // RENDER MODEL
@@ -440,14 +452,8 @@ void Subscene::render(RenderContext* renderContext, int context)
     // SETUP VIEWPOINT TRANSFORMATION
     //
 
-    thisviewpoint->setupTransformation( renderContext, total_bsphere);
+    // FIXME THIS SHOULD ALREADY BE DONE thisviewpoint->setupTransformation( renderContext, total_bsphere);
 
-    // Save matrices for projection/unprojection later
-    
-    glGetDoublev(GL_MODELVIEW_MATRIX,renderContext->modelview);
-    glGetDoublev(GL_PROJECTION_MATRIX,renderContext->projection);
-    glGetIntegerv(GL_VIEWPORT, renderContext->viewport);    
-    
     //
     // RENDER SOLID SHAPES
     //
@@ -557,8 +563,7 @@ void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
   SAVEGLERROR;
 }
 
-
-void Subscene::setupLights(RenderContext* rctx) 
+void Subscene::disableLights(RenderContext* rctx)
 {
     
   //
@@ -567,41 +572,21 @@ void Subscene::setupLights(RenderContext* rctx)
 
   for (int i=0;i<8;i++)
     glDisable(GL_LIGHT0 + i);  
-    
-  //
-  // global lights
-  //
+}  
+
+void Subscene::setupLights(RenderContext* rctx, bool do_viewpoint) 
+{  
   std::vector<Light*>::const_iterator iter;
 
   for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
 
     Light* light = *iter;
 
-    if (!light->viewpoint)
+    if (light->viewpoint == do_viewpoint)
       light->setup(rctx);
   }
 
   SAVEGLERROR;
-
-  //
-  // viewpoint lights
-  //
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  
-
-  for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
-
-    Light* light = *iter;
-
-    if (light->viewpoint)
-      light->setup(rctx);
-
-  }
-
-  SAVEGLERROR;
-
 }
 
 void Subscene::renderUnsorted(RenderContext* renderContext)
