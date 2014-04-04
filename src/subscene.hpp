@@ -17,10 +17,10 @@ namespace rgl {
 
 class Subscene : public SceneNode {
 private:
-  /**
-   * sub-pass: setup global lighting model
-   **/
-  void setupLightModel(RenderContext* renderContext, const Sphere& viewSphere);
+
+  void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
+  void setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere);
+  void setupLights(RenderContext* rctx);
 
   /* These lists contain pointers to lights and shapes, but don't actually manage them:  the Scene does that. */
   std::vector<Light*> lights;
@@ -99,7 +99,7 @@ public:
   virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   virtual String getTextAttribute(AABox& bbox, AttribID attrib, int index);
 
-  void render(RenderContext* renderContext);
+  void render(RenderContext* renderContext, int context);
 
   void renderClipplanes(RenderContext* renderContext);
   void disableClipplanes(RenderContext* renderContext);

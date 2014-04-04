@@ -113,8 +113,8 @@ public:
 
 private:
 
-  // ---[ Renderable implementation ]---------------------------------------- 
 
+  void setupLightModel();
 
   /**
    * add shapes

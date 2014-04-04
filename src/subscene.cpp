@@ -347,9 +347,17 @@ BBoxDeco* Subscene::get_bboxdeco()
   else return NULL;
 }
 
-void Subscene::render(RenderContext* renderContext)
+Viewpoint* Subscene::getViewpoint()
 {
+  if (viewpoint) return viewpoint;
+  else if (parent) return parent->getViewpoint();
+  else return NULL;
+}
 
+void Subscene::render(RenderContext* renderContext, int context)
+{
+  if (context != where) return;
+    
   if (background) {
     GLbitfield clearFlags = background->getClearFlags(renderContext);
 
@@ -361,6 +369,7 @@ void Subscene::render(RenderContext* renderContext)
     calcDataBBox();
   
   Sphere total_bsphere;
+  Viewpoint* thisviewpoint = getViewpoint();
 
   if (data_bbox.isValid()) {
     
@@ -368,7 +377,7 @@ void Subscene::render(RenderContext* renderContext)
     // GET DATA VOLUME SPHERE
     //
 
-    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, getViewpoint()->scale );
+    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, thisviewpoint->scale );
     if (total_bsphere.radius <= 0.0)
       total_bsphere.radius = 1.0;
 
@@ -377,26 +386,35 @@ void Subscene::render(RenderContext* renderContext)
   }
 
   SAVEGLERROR;
+  
+  // Render subscenes in the appropriate context
 
-  //
-  // SETUP LIGHTING MODEL
-  //
-
-  setupLightModel(renderContext, total_bsphere);
-
-  //
-  // SETUP VIEWPORT TRANSFORMATION
-  //
-
-  glViewport(renderContext->rect.x,renderContext->rect.y,renderContext->rect.width, renderContext->rect.height);
-
+  std::vector<Subscene*>::const_iterator subscene;
+  for(subscene = subscenes.begin(); iter != subscenes.end(); ++subscene) 
+    subscene->render(renderContext, PREPROJ);
+  
+  setupProjMatrix(renderContext, total_bsphere);
+  
+  for(subscene = subscenes.begin(); iter != subscenes.end(); ++subscene) 
+    subscene->render(renderContext, PROJ);
+  
+  setupModelMatrix(renderContext, total_bsphere);
+  
+  for(subscene = subscenes.begin(); iter != subscenes.end(); ++subscene) 
+    subscene->render(renderContext, MODEL);
+  
+  // Now render the current scene
+  
+  setupLights(renderContext);
+  
   //
   // SETUP BACKGROUND VIEWPOINT PROJECTION
   //
   // FIXME: move to background
   //
 
-  viewpoint->setupFrustum( renderContext, total_bsphere );
+  if (viewpoint)
+    viewpoint->setupFrustum( renderContext, total_bsphere );
 
   //
   // RENDER BACKGROUND
@@ -422,7 +440,7 @@ void Subscene::render(RenderContext* renderContext)
     // SETUP VIEWPOINT TRANSFORMATION
     //
 
-    viewpoint->setupTransformation( renderContext, total_bsphere);
+    thisviewpoint->setupTransformation( renderContext, total_bsphere);
 
     // Save matrices for projection/unprojection later
     
@@ -485,7 +503,7 @@ void Subscene::render(RenderContext* renderContext)
     // GET THE TRANSFORMATION
     //
 
-    viewpoint->setupTransformation(renderContext, total_bsphere);
+    thisviewpoint->setupTransformation(renderContext, total_bsphere);
 
     Matrix4x4 M(renderContext->modelview);    
     Matrix4x4 P(renderContext->projection);
@@ -527,26 +545,32 @@ void Subscene::setIgnoreExtent(int in_ignoreExtent)
   ignoreExtent = (bool)in_ignoreExtent;
 }
 
-void Subscene::setupLightModel(RenderContext* rctx, const Sphere& viewSphere)
+void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 {
-  Color global_ambient(0.0f,0.0f,0.0f,1.0f);
+  rctx->viewpoint->setupFrustum(rctx, viewSphere);
+  SAVEGLERROR;    
+}
 
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient.data );
-  glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE );
-  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
+void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
+{
+  rctx->viewpoint->setupTransformation(rctx, viewSphere);
+  SAVEGLERROR;
+}
 
-#ifdef GL_VERSION_1_2
-//  glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SINGLE_COLOR );
-#endif
 
+void Subscene::setupLights(RenderContext* rctx) 
+{
+    
+  //
+  // disable lights; setup will enable them
+  //
+
+  for (int i=0;i<8;i++)
+    glDisable(GL_LIGHT0 + i);  
+    
   //
   // global lights
   //
-
-  rctx->viewpoint->setupFrustum(rctx, viewSphere);
-  rctx->viewpoint->setupTransformation(rctx, viewSphere);
-  SAVEGLERROR;
-
   std::vector<Light*>::const_iterator iter;
 
   for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
@@ -566,12 +590,6 @@ void Subscene::setupLightModel(RenderContext* rctx, const Sphere& viewSphere)
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   
-  //
-  // disable lights; setup will enable them
-  //
-
-  for (int i=0;i<8;i++)
-    glDisable(GL_LIGHT0 + i);  
 
   for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
 
@@ -629,12 +647,6 @@ void Subscene::renderZsort(RenderContext* renderContext)
     }
     if (prev) prev->drawEnd(renderContext);
   }
-}
-
-Viewpoint* Subscene::getViewpoint()
-{
-  if (viewpoint) return(viewpoint);
-  else return(parent->getViewpoint());
 }
 
 const AABox& Subscene::getBoundingBox()
