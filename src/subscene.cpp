@@ -71,6 +71,20 @@ bool Subscene::add(SceneNode* node)
 	success = true;
       }
       break;
+    case BACKGROUND:
+      {
+        Background* background = static_cast<Background*>(node);
+        addBackground(background);
+        success = true;
+      }
+      break;
+    case BBOXDECO:
+      { 
+        BBoxDeco* bboxdeco = static_cast<BBoxDeco*>(node);
+        addBboxdeco(bboxdeco);
+        success = true;
+      }
+      break;
     default:
       break;
   }
@@ -359,14 +373,14 @@ void Subscene::render(RenderContext* renderContext)
 {
   GLdouble savemodelview[16];
   GLdouble saveprojection[16];
-  GLint saveviewport[4];
+  GLint saveviewport[4] = {0,0,0,0};
   
   if (do_viewport > EMBED_INHERIT) {
   
     //
     // SETUP VIEWPORT TRANSFORMATION
     //
-    std::copy(std::begin(renderContext->viewport), std::end(renderContext->viewport), std::begin(saveviewport));
+    for (int i=0; i<4; i++) saveviewport[i] = renderContext->viewport[i];
     setupViewport(renderContext);
     glGetIntegerv(GL_VIEWPORT, renderContext->viewport);  
   
@@ -406,7 +420,7 @@ void Subscene::render(RenderContext* renderContext)
   
   if (do_projection > EMBED_INHERIT) {
     
-    std::copy(std::begin(renderContext->projection), std::end(renderContext->projection), std::begin(saveprojection));
+    for (int i=0; i<16; i++) saveprojection[i] = renderContext->projection[i];
     setupProjMatrix(renderContext, total_bsphere);
     glGetDoublev(GL_PROJECTION_MATRIX, renderContext->projection);
   
@@ -416,7 +430,7 @@ void Subscene::render(RenderContext* renderContext)
   
   if (do_model > EMBED_INHERIT) {
    
-    std::copy(std::begin(renderContext->modelview), std::end(renderContext->modelview), std::begin(savemodelview));
+    for (int i=0; i<16; i++) savemodelview[i] = renderContext->modelview[i];
     setupModelMatrix(renderContext, total_bsphere);
     glGetDoublev(GL_MODELVIEW_MATRIX, renderContext->modelview);
   
@@ -539,6 +553,9 @@ void Subscene::render(RenderContext* renderContext)
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixd(saveprojection);
   }
+  
+  if (do_viewport > EMBED_INHERIT) 
+    glViewport(saveviewport[0], saveviewport[1], saveviewport[2], saveviewport[3]);
   
 }
 
