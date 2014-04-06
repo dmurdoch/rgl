@@ -769,7 +769,7 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid)
     Scene* scene = rglview->getScene();      
     Subscene* parent = scene->get_subscene(parentid[0]);
     if (parent) {
-      Subscene* subscene = new Subscene( parent, 1 );
+      Subscene* subscene = new Subscene( parent, EMBED_INHERIT, EMBED_INHERIT, EMBED_INHERIT );
       if (subscene && scene->add(subscene)) {
 	success = as_success( subscene->getObjID() );
       }

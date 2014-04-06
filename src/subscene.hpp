@@ -11,17 +11,20 @@
 
 namespace rgl {
 
-#define PREPROJ 1
-#define PROJ 2
-#define MODEL 3
+enum Embedding { EMBED_INHERIT=1, EMBED_MODIFY, EMBED_REPLACE };
 
 class Subscene : public SceneNode {
+  /* Subscenes do their own projection.  They can inherit, modify or replace the
+     viewport, projection and model matrices.  The root viewport always replaces them,
+     since it doesn't have anything to inherit.
+  */
 private:
 
+  void setupViewport(RenderContext* rctx);
   void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
   void setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere);
   void disableLights(RenderContext* rctx);
-  void setupLights(RenderContext* rctx, bool viewpoint);
+  void setupLights(RenderContext* rctx);
 
   /* These lists contain pointers to lights and shapes, but don't actually manage them:  the Scene does that. */
   std::vector<Light*> lights;
@@ -35,14 +38,6 @@ private:
   /* Here are the children */
   std::vector<Subscene*> subscenes;
   
-  /* Subscenes do their own projection.  The M and P matrices are model and projection
-     matrices; E embeds the subscene in its parent; "where" says where it is embedded:
-     PREPROJ = before the projection
-     PROJ    = between projection and model
-     MODEL   = after the model
-  */
-  int where;
-  Matrix4x4 E;
   Viewpoint* viewpoint;
   /**
    * bounded background
@@ -51,9 +46,19 @@ private:
   /**
    * bounded decorator
    **/
-  BBoxDeco*  bboxdeco;    
+  BBoxDeco*  bboxdeco;  
+  
+  /** 
+   * How is this subscene embedded in its parent?
+   **/
+  Embedding do_viewport, do_projection, do_model;
+  
+  /**
+   * This viewport on the (0,0) to (1,1) scale
+   **/
+  Rect2d viewport;
 public:
-  Subscene(Subscene* in_parent, int in_where);
+  Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model);
   virtual ~Subscene( );
 
   bool add(SceneNode* node);
@@ -100,7 +105,7 @@ public:
   virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   virtual String getTextAttribute(AABox& bbox, AttribID attrib, int index);
 
-  void render(RenderContext* renderContext, int context);
+  void render(RenderContext* renderContext);
 
   void renderClipplanes(RenderContext* renderContext);
   void disableClipplanes(RenderContext* renderContext);

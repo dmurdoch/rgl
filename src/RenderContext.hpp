@@ -29,7 +29,7 @@ public:
   , NULLActive(0)
   { }
   Subscene* subscene;
-  Rect2   rect;
+  Rect2   rect;  // This is the full window rectangle in pixels
   // RectSize size;
   Viewpoint* viewpoint;
   GLFont* font;
