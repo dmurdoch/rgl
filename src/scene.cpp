@@ -83,6 +83,7 @@ bool Scene::clear(TypeID typeID)
       SAVEGLERROR;
       success = true;
       break;
+    case SUBSCENE:
     case BBOXDECO:
       success = true;
       break;
@@ -127,27 +128,9 @@ bool Scene::add(SceneNode* node)
         success = true;
       }
       break;
-    case BACKGROUND:
-      {
-        currentSubscene->addBackground((Background*) node);
-        success = true;
-      }
-      break;
-    case BBOXDECO:
-      {
-        currentSubscene->addBboxdeco((BBoxDeco*) node);
-        success = true;
-      }
-      break;
-    case SUBSCENE:
-      {
-	Subscene* subscene = static_cast<Subscene*>(node);
-	currentSubscene->addSubscene(subscene);
-	success = true;
-      }
-      break;
     default:
-      break;
+      currentSubscene->add(node);
+      success = true;
   }
   return success;
 }
