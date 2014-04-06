@@ -96,6 +96,13 @@ void Viewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
   frustum.right *= zoom;
   frustum.bottom *= zoom;
   frustum.top *= zoom;
+  
+  if (frustum.ortho) {
+    glOrtho(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
+  } else {
+    glFrustum(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
+  }
+
 }
 
 void Viewpoint::setupOrientation(RenderContext* rctx) const
@@ -107,20 +114,7 @@ void Viewpoint::setupOrientation(RenderContext* rctx) const
 
 void Viewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSphere)
 {     
-  // projection
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  if (frustum.ortho) {
-    glOrtho(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
-  } else {
-    glFrustum(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
-  }
-
   // modelview
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
 
   glTranslatef( 0.0f, 0.0f, -frustum.distance );
 
