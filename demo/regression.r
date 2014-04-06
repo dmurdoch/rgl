@@ -30,7 +30,7 @@ rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zl
   f <- function(x,z) { return ( (xa+x*xb) * t(za+z*zb) ) }
   ly <- f(lx,lz)
   
-  rgl.quads(lx,ly,lz,color="red",size=5,front="lines",back="lines",lit=F)
+  rgl.quads(lx,ly,lz,color="red",size=5,front="lines",back="lines",lit=FALSE)
 }
 
 rgl.open()

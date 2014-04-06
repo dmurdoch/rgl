@@ -96,7 +96,7 @@ randomDot <- function(left, right, rightOffset=c(200, 0), n=3000, ...) {
     pt <- pt[keep,,drop=FALSE]
     cl <- cl[keep] 
   }
-  plot(pts, col = cols, pch=16, axes=F,cex=0.25+cols/n/2,xlab="",ylab="",...)
+  plot(pts, col = cols, pch=16, axes=FALSE,cex=0.25+cols/n/2,xlab="",ylab="",...)
   rug((size[1] + c(-1,1)*rightOffset[1])/2, side=1)
   rug((size[1] + c(-1,1)*rightOffset[1])/2, side=3)
   rug((size[2] + c(-1,1)*rightOffset[2])/2, side=2)
