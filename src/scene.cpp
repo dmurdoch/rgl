@@ -24,7 +24,7 @@ using namespace rgl;
 ObjID SceneNode::nextID = BBOXID + 1;
 
 Scene::Scene()
-: rootSubscene(NULL, PREPROJ) 
+: rootSubscene(NULL, EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE) 
 {
   currentSubscene = &rootSubscene;
   nlights    = 0;
@@ -387,19 +387,10 @@ void Scene::render(RenderContext* renderContext)
   SAVEGLERROR;
 
   //
-  // SETUP VIEWPORT TRANSFORMATION
-  //
-
-  glViewport(renderContext->rect.x,renderContext->rect.y,renderContext->rect.width, renderContext->rect.height);
-  glGetIntegerv(GL_VIEWPORT, renderContext->viewport);  
-
-  SAVEGLERROR;
-
-  //
   // RENDER MODEL
   //
 
-  rootSubscene.render(renderContext, PREPROJ);
+  rootSubscene.render(renderContext);
 }
 
 

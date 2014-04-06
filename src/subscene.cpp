@@ -11,8 +11,9 @@ using namespace rgl;
 //   Subscene
 //
 
-Subscene::Subscene(Subscene* in_parent, int in_where)
- : SceneNode(SUBSCENE), parent(in_parent), where(in_where)
+Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model)
+ : SceneNode(SUBSCENE), parent(in_parent), do_viewport(in_viewport), do_projection(in_projection),
+   do_model(in_model), viewport(0.,0.,1.,1.)
 {
   viewpoint = NULL;
   bboxdeco   = NULL;
@@ -354,12 +355,24 @@ Viewpoint* Subscene::getViewpoint()
   else return NULL;
 }
 
-void Subscene::render(RenderContext* renderContext, int context)
+void Subscene::render(RenderContext* renderContext)
 {
-  if (context != where) return;
+  GLdouble savemodelview[16];
+  GLdouble saveprojection[16];
+  GLint saveviewport[4];
   
+  if (do_viewport > EMBED_INHERIT) {
   
-    
+    //
+    // SETUP VIEWPORT TRANSFORMATION
+    //
+    std::copy(std::begin(renderContext->viewport), std::end(renderContext->viewport), std::begin(saveviewport));
+    setupViewport(renderContext);
+    glGetIntegerv(GL_VIEWPORT, renderContext->viewport);  
+  
+    SAVEGLERROR;
+  }
+      
   if (background) {
     GLbitfield clearFlags = background->getClearFlags(renderContext);
 
@@ -389,43 +402,27 @@ void Subscene::render(RenderContext* renderContext, int context)
 
   SAVEGLERROR;
   
-  // Render subscenes in the appropriate context
-  
-  if (subscenes.size()) {
-
-    glPushMatrix();
-  
-    std::vector<Subscene*>::const_iterator iter;
-    for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
-      (*iter)->render(renderContext, PREPROJ);
-  
-    setupProjMatrix(renderContext, total_bsphere);
-  
-    for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
-      (*iter)->render(renderContext, PROJ);
-
-    setupModelMatrix(renderContext, total_bsphere);
-  
-    for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
-      (*iter)->render(renderContext, MODEL);
-    
-    glPopMatrix();
-    SAVEGLERROR;
-  }
-  
   // Now render the current scene.  First we use the projection matrix...
   
-  setupProjMatrix(renderContext, total_bsphere);
-  glGetDoublev(GL_MODELVIEW_MATRIX,renderContext->projection);
+  if (do_projection > EMBED_INHERIT) {
+    
+    std::copy(std::begin(renderContext->projection), std::end(renderContext->projection), std::begin(saveprojection));
+    setupProjMatrix(renderContext, total_bsphere);
+    glGetDoublev(GL_PROJECTION_MATRIX, renderContext->projection);
   
-  setupLights(renderContext, true);
+  }
   
   // Now the model matrix
   
-  setupModelMatrix(renderContext, total_bsphere);
-  glGetDoublev(GL_MODELVIEW_MATRIX,renderContext->modelview);
+  if (do_model > EMBED_INHERIT) {
+   
+    std::copy(std::begin(renderContext->modelview), std::end(renderContext->modelview), std::begin(savemodelview));
+    setupModelMatrix(renderContext, total_bsphere);
+    glGetDoublev(GL_MODELVIEW_MATRIX, renderContext->modelview);
   
-  setupLights(renderContext, false);
+  }
+  
+  setupLights(renderContext);
   
   if (background) {
     //
@@ -526,6 +523,23 @@ void Subscene::render(RenderContext* renderContext, int context)
     
     SAVEGLERROR;
   }
+  
+  // Render subscenes
+    
+  std::vector<Subscene*>::const_iterator iter;
+  for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
+    (*iter)->render(renderContext);
+    
+  if (do_model > EMBED_INHERIT) {
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixd(savemodelview);
+  }
+  
+  if (do_projection > EMBED_INHERIT) {
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixd(saveprojection);
+  }
+  
 }
 
 void Subscene::calcDataBBox()
@@ -551,15 +565,43 @@ void Subscene::setIgnoreExtent(int in_ignoreExtent)
   ignoreExtent = (bool)in_ignoreExtent;
 }
 
+void Subscene::setupViewport(RenderContext* rctx)
+{
+  Rect2 rect(0,0,0,0);
+  if (do_viewport == EMBED_REPLACE) {
+    rect.x = rctx->rect.x + viewport.x*rctx->rect.width;
+    rect.y = rctx->rect.y + viewport.y*rctx->rect.height;
+    rect.width = rctx->rect.width*viewport.width;
+    rect.height = rctx->rect.width*viewport.height;
+  } else {
+    rect.x = rctx->viewport[0] + viewport.x*rctx->viewport[2];
+    rect.y = rctx->viewport[1] + viewport.y*rctx->viewport[3];
+    rect.width = rctx->viewport[2]*viewport.width;
+    rect.height = rctx->viewport[3]*viewport.height;
+  }
+  
+  glViewport(rect.x, rect.y, rect.width, rect.height);
+}
+
 void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 {
+  glMatrixMode(GL_PROJECTION);
+  if (do_projection == EMBED_REPLACE)
+    glLoadIdentity();
+    
   rctx->viewpoint->setupFrustum(rctx, viewSphere);
+    
   SAVEGLERROR;    
 }
 
 void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
 {
+  glMatrixMode(GL_MODELVIEW);
+  if (do_model == EMBED_REPLACE)
+    glLoadIdentity();
+    
   rctx->viewpoint->setupTransformation(rctx, viewSphere);
+  
   SAVEGLERROR;
 }
 
@@ -574,19 +616,43 @@ void Subscene::disableLights(RenderContext* rctx)
     glDisable(GL_LIGHT0 + i);  
 }  
 
-void Subscene::setupLights(RenderContext* rctx, bool do_viewpoint) 
+void Subscene::setupLights(RenderContext* rctx) 
 {  
+  bool anyviewpoint = false;
   std::vector<Light*>::const_iterator iter;
 
   for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
 
     Light* light = *iter;
 
-    if (light->viewpoint == do_viewpoint)
+    if (!light->viewpoint)
       light->setup(rctx);
+    else
+      anyviewpoint = true;
   }
 
   SAVEGLERROR;
+
+  if (anyviewpoint) {
+    //
+    // viewpoint lights
+    //
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
+
+      Light* light = *iter;
+
+      if (light->viewpoint)
+        light->setup(rctx);
+    }
+    glPopMatrix();
+  }
+  SAVEGLERROR;
+
 }
 
 void Subscene::renderUnsorted(RenderContext* renderContext)

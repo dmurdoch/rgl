@@ -189,6 +189,18 @@ struct Rect2
   int width, height;
 };
 
+struct Rect2d
+{
+  Rect2d(double in_x, double in_y, double in_w, double in_h)
+  : x(in_x)
+  , y(in_y)
+  , width(in_w)
+  , height(in_h) 
+  { }
+  double x, y;
+  double width, height;
+};
+
 
 //
 // CLASS
