@@ -249,6 +249,11 @@ bool Subscene::clear(TypeID typeID, bool recursive)
       bboxChanges = false;      
       success = true;
       break;
+    case LIGHT:
+      lights.clear();
+      SAVEGLERROR;
+      success = true;
+      break;
     case SUBSCENE:
       subscenes.clear();
       break;
