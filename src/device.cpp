@@ -114,7 +114,7 @@ bool Device::pop(TypeID stackTypeID, int id)
 {
   bool success;
   bool inGL = rglview->windowImpl->beginGL(); // May need to set context for display lists.
-  success = scene->pop(stackTypeID, id);
+  success = scene->pop(stackTypeID, id, true);
   if (inGL) {
     rglview->windowImpl->endGL();
   }
