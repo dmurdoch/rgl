@@ -71,7 +71,7 @@ public:
   /**
    * remove specified node of given type
    **/
-  void	 pop(TypeID type, int id, bool destroy = false);
+  void	 pop(TypeID type, int id, bool destroy);
 
   /**
    * recursive search for subscene; could return self, or NULL if not found

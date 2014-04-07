@@ -20,7 +20,7 @@ Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_proj
   background = NULL;
   ignoreExtent = false;
   bboxChanges = false;
-
+  data_bbox.invalidate();
 }
 
 Subscene::~Subscene() 
@@ -245,11 +245,17 @@ bool Subscene::clear(TypeID typeID, bool recursive)
       SAVEGLERROR;
       clipPlanes.clear();
       SAVEGLERROR;
+      data_bbox.invalidate();
       bboxChanges = false;      
       success = true;
       break;
     case SUBSCENE:
       subscenes.clear();
+      break;
+    case BBOXDECO:
+      if (bboxdeco)
+        delete bboxdeco;
+      bboxdeco = NULL;
       break;
   }
   return success;

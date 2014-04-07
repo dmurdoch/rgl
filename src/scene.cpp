@@ -193,7 +193,7 @@ bool Scene::pop(TypeID type, int id, bool destroy)
   switch(type) {
   case SHAPE:
     {
-      rootSubscene.pop(SHAPE, id);
+      rootSubscene.pop(SHAPE, id, false);
       Shape* shape = *ishape;
       shapes.erase(ishape);
       if (destroy)
@@ -203,6 +203,7 @@ bool Scene::pop(TypeID type, int id, bool destroy)
     break;
   case LIGHT:
     {
+      rootSubscene.pop(LIGHT, id, false);
       Light* light = *ilight;
       lights.erase(ilight);
       if (destroy)
@@ -213,7 +214,7 @@ bool Scene::pop(TypeID type, int id, bool destroy)
     break;
   case BBOXDECO:
     {
-      currentSubscene->pop(type, id, true);
+      currentSubscene->pop(type, id, destroy);
       success = true;
     }
     break;
