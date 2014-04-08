@@ -164,9 +164,11 @@ void Subscene::hideLight(int id, bool recursive)
   if (recursive)
     for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
       (*i)->hideLight(id, true);
-    
-  lights.erase(std::find_if(lights.begin(), lights.end(),
-                            std::bind2nd(std::ptr_fun(&sameID), id)));
+  
+  std::vector<Light*>::iterator light = std::find_if(lights.begin(), lights.end(),
+                            std::bind2nd(std::ptr_fun(&sameID), id));
+  if (light != lights.end())
+    lights.erase(light);
 }
 
 bool Subscene::popSubscene(int id)
