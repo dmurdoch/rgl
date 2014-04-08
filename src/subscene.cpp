@@ -133,47 +133,85 @@ void Subscene::addSubscene(Subscene* subscene)
   subscenes.push_back(subscene);
 }
 
-void Subscene::pop(TypeID type, int id, bool destroy)
+void Subscene::hideShape(int id, bool recursive)
 {
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-      (*i)->pop(type, id, destroy);
+  if (recursive)
+    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
+      (*i)->hideShape(id, true);
     
-  switch(type) {
-    case SHAPE: {    
-    
-      std::vector<Shape*>::iterator ishape 
-      	= std::find_if(shapes.begin(), shapes.end(), 
-              std::bind2nd(std::ptr_fun(&sameID), id));
-      if (ishape == shapes.end()) return;
+  std::vector<Shape*>::iterator ishape 
+     = std::find_if(shapes.begin(), shapes.end(), 
+       std::bind2nd(std::ptr_fun(&sameID), id));
+  if (ishape == shapes.end()) return;
         
-      Shape* shape = *ishape;
-      shapes.erase(ishape);
-      if ( shape->isBlended() )
-        zsortShapes.erase(std::find_if(zsortShapes.begin(), zsortShapes.end(),
-                                       std::bind2nd(std::ptr_fun(&sameID), id)));
-      else if ( shape->isClipPlane() )
-        clipPlanes.erase(std::find_if(clipPlanes.begin(), clipPlanes.end(),
-    		     std::bind2nd(std::ptr_fun(&sameID), id)));
-      else
-        unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
-                             std::bind2nd(std::ptr_fun(&sameID), id)));
+  Shape* shape = *ishape;
+  shapes.erase(ishape);
+  if ( shape->isBlended() )
+    zsortShapes.erase(std::find_if(zsortShapes.begin(), zsortShapes.end(),
+                                   std::bind2nd(std::ptr_fun(&sameID), id)));
+  else if ( shape->isClipPlane() )
+    clipPlanes.erase(std::find_if(clipPlanes.begin(), clipPlanes.end(),
+                     std::bind2nd(std::ptr_fun(&sameID), id)));
+  else
+    unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
+                         std::bind2nd(std::ptr_fun(&sameID), id)));
       
-      calcDataBBox();
-      break;
+  calcDataBBox();
+}
+
+void Subscene::hideLight(int id, bool recursive)
+{
+  if (recursive)
+    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
+      (*i)->hideLight(id, true);
+    
+  lights.erase(std::find_if(lights.begin(), lights.end(),
+                            std::bind2nd(std::ptr_fun(&sameID), id)));
+}
+
+bool Subscene::popSubscene(int id)
+{
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
+    if (sameID(*i, id)) {
+      delete (*i);      
+      subscenes.erase(i);
+      return true;
     }
-    case SUBSCENE: {
-      std::vector<Subscene*>::iterator isubscene
-	= std::find_if(subscenes.begin(), subscenes.end(),
-	  std::bind2nd(std::ptr_fun(&sameID), id));
-      if (isubscene == subscenes.end()) return;
-      Subscene* subscene = *isubscene;
-      subscenes.erase(isubscene);
-      if (destroy)
-	delete subscene;
-      break;
-    }
-    default: // VIEWPOINT ignored
-    break;
+    if ((*i)->popSubscene(id)) return true;
+  }
+  return false;
+}
+
+void Subscene::clearSubscenes()
+{
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
+    (*i)->clearSubscenes();
+    delete (*i);    
+  }
+  subscenes.clear();
+}
+
+bool Subscene::popBboxdecos(int id)
+{
+  if (bboxdeco && sameID(bboxdeco, id)) {
+    delete bboxdeco;
+    bboxdeco = NULL;
+    return true;
+  }
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
+    if ((*i)->popBboxdecos(id)) return true;
+  }
+  return false;
+}
+
+void Subscene::clearBboxdecos()
+{
+  if (bboxdeco) {
+    delete bboxdeco;
+    bboxdeco = NULL;
+  }
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
+    ((*i)->clearBboxdecos());
   }
 }
 
@@ -227,43 +265,6 @@ String Subscene::getTextAttribute(AABox& bbox, AttribID attrib, int index)
     return String(strlen(buffer), buffer);
   } else
     return SceneNode::getTextAttribute(bbox, attrib, index);
-}
-
-bool Subscene::clear(TypeID typeID, bool recursive)
-{
-  bool success = false;
-    
-  if (recursive) 
-    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-      (*i)->clear(typeID, true);
-
-  switch(typeID) {
-    case SHAPE:
-      zsortShapes.clear();
-      SAVEGLERROR;
-      unsortedShapes.clear();
-      SAVEGLERROR;
-      clipPlanes.clear();
-      SAVEGLERROR;
-      data_bbox.invalidate();
-      bboxChanges = false;      
-      success = true;
-      break;
-    case LIGHT:
-      lights.clear();
-      SAVEGLERROR;
-      success = true;
-      break;
-    case SUBSCENE:
-      subscenes.clear();
-      break;
-    case BBOXDECO:
-      if (bboxdeco)
-        delete bboxdeco;
-      bboxdeco = NULL;
-      break;
-  }
-  return success;
 }
 
 void Subscene::renderClipplanes(RenderContext* renderContext)

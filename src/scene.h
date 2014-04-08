@@ -32,7 +32,7 @@ public:
   /**
    * remove specified node of given type, or last-added if id==0
    **/
-  bool pop(TypeID stackTypeID, int id, bool destroy);
+  bool pop(TypeID stackTypeID, int id);
   
   /**
    * get information about stacks
@@ -75,7 +75,7 @@ public:
    * set/get the current subscene
    **/
   void setCurrentSubscene(Subscene* subscene);
-  Subscene* getCurrentSubscene();
+  Subscene* getCurrentSubscene() const { return currentSubscene; }
   
   // ---[ grouping component ]-----------------------------------------------
   
@@ -109,7 +109,8 @@ public:
    * invalidate display lists so objects will be rendered again
    **/
   void invalidateDisplaylists();
-  
+
+  Subscene rootSubscene;  
 
 private:
 
@@ -129,7 +130,6 @@ private:
 
   // --- [ Subscenes ]-------------------------------------------------------
 
-  Subscene rootSubscene;
   Subscene* currentSubscene;
 
   // ---[ bounded slots ]----------------------------------------------------

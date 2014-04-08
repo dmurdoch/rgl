@@ -53,6 +53,7 @@ void Scene::deleteShapes()
 {
   std::vector<Shape*>::iterator iter;
   for (iter = shapes.begin(); iter != shapes.end(); ++iter) {
+    rootSubscene.hideShape((*iter)->getObjID(), true);
     delete *iter;
   }
   shapes.clear();
@@ -62,6 +63,7 @@ void Scene::deleteLights()
 {
   std::vector<Light*>::iterator iter;
   for (iter = lights.begin(); iter != lights.end(); ++iter) {
+    rootSubscene.hideLight((*iter)->id, true);
     delete *iter;
   }
   lights.clear();
@@ -71,7 +73,6 @@ bool Scene::clear(TypeID typeID)
 {
   bool success = false;
 
-  rootSubscene.clear(typeID, true);
   switch(typeID) {
     case SHAPE:
       deleteShapes();
@@ -84,7 +85,13 @@ bool Scene::clear(TypeID typeID)
       success = true;
       break;
     case SUBSCENE:
+      rootSubscene.clearSubscenes();
+      SAVEGLERROR;
+      success = true;
+      break;
     case BBOXDECO:
+      rootSubscene.clearBboxdecos();
+      SAVEGLERROR;
       success = true;
       break;
   }
@@ -135,7 +142,7 @@ bool Scene::add(SceneNode* node)
   return success;
 }
 
-bool Scene::pop(TypeID type, int id, bool destroy)
+bool Scene::pop(TypeID type, int id)
 {
   bool success = false;
   std::vector<Shape*>::iterator ishape;
@@ -156,7 +163,7 @@ bool Scene::pop(TypeID type, int id, bool destroy)
       if (lights.empty()) return false;
       break;
     }
-    case SUBSCENE: rootSubscene.pop(type, id, destroy);
+    case SUBSCENE: rootSubscene.popSubscene(id);
       return true;
     default: break;
   }
@@ -169,6 +176,7 @@ bool Scene::pop(TypeID type, int id, bool destroy)
       break;
     case LIGHT:
       ilight = lights.end() - 1;
+      id = (*ilight)->getObjID();
       break;
     default:
       break;
@@ -193,28 +201,26 @@ bool Scene::pop(TypeID type, int id, bool destroy)
   switch(type) {
   case SHAPE:
     {
-      rootSubscene.pop(SHAPE, id, false);
+      rootSubscene.hideShape(id, true);
       Shape* shape = *ishape;
       shapes.erase(ishape);
-      if (destroy)
-        delete shape;
+      delete shape;
       success = true;
     }  
     break;
   case LIGHT:
     {
-      rootSubscene.pop(LIGHT, id, false);
+      rootSubscene.hideLight(id, true);
       Light* light = *ilight;
       lights.erase(ilight);
-      if (destroy)
-        delete light;
+      delete light;
       nlights--;
       success = true;
     }
     break;
   case BBOXDECO:
     {
-      currentSubscene->pop(type, id, destroy);
+      currentSubscene->popBboxdecos(id);
       success = true;
     }
     break;
@@ -319,11 +325,6 @@ Subscene* Scene::get_subscene(int id)
 void Scene::setCurrentSubscene(Subscene* subscene)
 {
   currentSubscene = subscene;
-}
-
-Subscene* Scene::getCurrentSubscene()
-{
-  return currentSubscene;
 }
 
 void Scene::setupLightModel()

@@ -741,7 +741,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
         nshapes--;
         Shape* shape = scene->get_shape(id); 
         if (shape) {
-          scene->pop(SHAPE, id, false);
+          scene->rootSubscene.hideShape(id, true);
           shapelist[count++] = shape; 
         }
       }

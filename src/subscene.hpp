@@ -69,9 +69,23 @@ public:
   void addSubscene(Subscene* subscene);
   
   /**
-   * remove specified node of given type
+   * remove subscene by id, or all of them
    **/
-  void	 pop(TypeID type, int id, bool destroy);
+  bool	 popSubscene(int id);
+  void   clearSubscenes();
+  
+  /**
+   * remove bboxdecos
+   **/
+  bool   popBboxdecos(int id);
+  void   clearBboxdecos();
+  
+  /**
+   * hide shape or light
+   **/
+   
+  void hideShape(int id, bool recursive);
+  void hideLight(int id, bool recursive);
 
   /**
    * recursive search for subscene; could return self, or NULL if not found
@@ -88,11 +102,6 @@ public:
    * obtain subscene's axis-aligned bounding box. 
    **/
   const AABox& getBoundingBox();
-
-/**
-   * remove all nodes of the given type, optionally recursively.
-   **/
-  bool clear(TypeID stackTypeID, bool recursive);
 
  /**
    * get information about stacks
