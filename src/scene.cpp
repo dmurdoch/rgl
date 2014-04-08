@@ -27,7 +27,6 @@ Scene::Scene()
 : rootSubscene(NULL, EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE) 
 {
   currentSubscene = &rootSubscene;
-  nlights    = 0;
  
   rootSubscene.add( new Viewpoint );
   rootSubscene.add( new Background );
@@ -106,8 +105,6 @@ void Scene::addShape(Shape* shape) {
 }
 
 void Scene::addLight(Light* light) {
-
-  light->id = GL_LIGHT0 + (nlights++);
 
   lights.push_back( light );
 
@@ -213,7 +210,6 @@ bool Scene::pop(TypeID type, int id)
       Light* light = *ilight;
       lights.erase(ilight);
       delete light;
-      nlights--;
       success = true;
     }
     break;

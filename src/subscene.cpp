@@ -649,13 +649,16 @@ void Subscene::disableLights(RenderContext* rctx)
 
 void Subscene::setupLights(RenderContext* rctx) 
 {  
+  int nlights = 0;
   bool anyviewpoint = false;
   std::vector<Light*>::const_iterator iter;
+  
+  disableLights(rctx);
 
   for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
 
     Light* light = *iter;
-
+    light->id = GL_LIGHT0 + (nlights++);
     if (!light->viewpoint)
       light->setup(rctx);
     else
