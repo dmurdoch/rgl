@@ -33,7 +33,6 @@ Scene::Scene()
   rootSubscene.add( new Background );
   Light* light = new Light; 
   add(light);
-  rootSubscene.addLight(light);
 }
 
 Scene::~Scene()
@@ -63,7 +62,7 @@ void Scene::deleteLights()
 {
   std::vector<Light*>::iterator iter;
   for (iter = lights.begin(); iter != lights.end(); ++iter) {
-    rootSubscene.hideLight((*iter)->id, true);
+    rootSubscene.hideLight((*iter)->getObjID(), true);
     delete *iter;
   }
   lights.clear();
