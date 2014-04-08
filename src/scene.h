@@ -139,11 +139,6 @@ private:
   // ---[ stacks ]-----------------------------------------------------------
   
   /**
-   * number of lights
-   **/
-  int  nlights;
-  
-  /**
    * list of light sources.  The scene owns them, the subscenes display a subset.
    **/
   std::vector<Light*> lights;
