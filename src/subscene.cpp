@@ -380,7 +380,7 @@ Viewpoint* Subscene::getViewpoint()
 {
   if (viewpoint) return viewpoint;
   else if (parent) return parent->getViewpoint();
-  else return NULL;
+  else error("must have a viewpoint");
 }
 
 void Subscene::render(RenderContext* renderContext)
@@ -603,7 +603,7 @@ void Subscene::setupViewport(RenderContext* rctx)
     rect.x = rctx->rect.x + viewport.x*rctx->rect.width;
     rect.y = rctx->rect.y + viewport.y*rctx->rect.height;
     rect.width = rctx->rect.width*viewport.width;
-    rect.height = rctx->rect.width*viewport.height;
+    rect.height = rctx->rect.height*viewport.height;
   } else {
     rect.x = rctx->viewport[0] + viewport.x*rctx->viewport[2];
     rect.y = rctx->viewport[1] + viewport.y*rctx->viewport[3];
