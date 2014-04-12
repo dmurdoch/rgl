@@ -363,6 +363,7 @@ void Scene::render(RenderContext* renderContext)
   // down, we should test for that instead of just enabling GL_NORMALIZE
   
   glEnable(GL_NORMALIZE);
+  setupLightModel();
   
   SAVEGLERROR;
 
