@@ -51,13 +51,6 @@ RGLView::RGLView(Scene* in_scene)
     for (int j=0; j<3; j++) 
       userData[3*i + j] = NULL;
   }
-  for (int i=0; i<4; i++) {
-    viewport[i] = i < 2 ? 0 : 1024;
-    for (int j=0;j<4;j++) {
-      modelMatrix[4*i + j] = i == j;
-      projMatrix[4*i + j] = i == j;
-    }
-  }
 }
 
 RGLView::~RGLView()
@@ -118,12 +111,6 @@ void RGLView::paint(void) {
   
   if (windowImpl->beginGL()) {
     scene->render(&renderContext);
-    
-
-
-    glGetDoublev(GL_MODELVIEW_MATRIX,modelMatrix);
-    glGetDoublev(GL_PROJECTION_MATRIX,projMatrix);
-    glGetIntegerv(GL_VIEWPORT,viewport);
 
     if (selectState == msCHANGING)
       select.render(mousePosition);

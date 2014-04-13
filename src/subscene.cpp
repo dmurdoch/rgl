@@ -21,6 +21,14 @@ Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_proj
   ignoreExtent = false;
   bboxChanges = false;
   data_bbox.invalidate();
+  
+  for (int i=0; i<4; i++) {
+    pviewport[i] = i < 2 ? 0 : 1024;
+    for (int j=0;j<4;j++) {
+      modelMatrix[4*i + j] = i == j;
+      projMatrix[4*i + j] = i == j;
+    }
+  }  
 }
 
 Subscene::~Subscene() 
@@ -551,6 +559,12 @@ void Subscene::render(RenderContext* renderContext)
     
     SAVEGLERROR;
   }
+  
+  // Save matrices and viewport
+  
+  glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+  glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
+  glGetIntegerv(GL_VIEWPORT, pviewport);
   
   // Render subscenes
     

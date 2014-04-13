@@ -132,6 +132,10 @@ public:
   Viewpoint* getViewpoint();
   
   Background* get_background(); 
+  
+  // These are set after rendering the scene
+  GLdouble modelMatrix[16], projMatrix[16];
+  GLint pviewport[4];  // viewport in pixels
     
 private:
     

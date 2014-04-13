@@ -1330,13 +1330,14 @@ void rgl::rgl_getModelMatrix(int* successptr, double* modelMatrix)
     Device* device;
 
     if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-	RGLView* rglview = device->getRGLView();
-	for (int i=0; i<16; i++) {
-		modelMatrix[i] = rglview->modelMatrix[i];
-	}
-	success = RGL_SUCCESS;
-        CHECKGLERROR;  	
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();      
+      Subscene* subscene = scene->getCurrentSubscene();      
+      for (int i=0; i<16; i++) {
+        modelMatrix[i] = subscene->modelMatrix[i];
+      }
+      success = RGL_SUCCESS;
+      CHECKGLERROR;  	
     }
 
     *successptr = success;
@@ -1349,12 +1350,14 @@ void rgl::rgl_getProjMatrix(int* successptr, double* projMatrix)
 
     if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-	RGLView* rglview = device->getRGLView();
-	for (int i=0; i<16; i++) {
-		projMatrix[i] = rglview->projMatrix[i];
-	}
-	success = RGL_SUCCESS;
-        CHECKGLERROR;
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();      
+      Subscene* subscene = scene->getCurrentSubscene();      
+      for (int i=0; i<16; i++) {
+        projMatrix[i] = subscene->projMatrix[i];
+      }	
+      success = RGL_SUCCESS;
+      CHECKGLERROR;
     }
 
     *successptr = success;
@@ -1367,12 +1370,14 @@ void rgl::rgl_getViewport(int* successptr, int* viewport)
 
     if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-	RGLView* rglview = device->getRGLView();
-	for (int i=0; i<4; i++) {
-		viewport[i] = rglview->viewport[i];
-	}
-	success = RGL_SUCCESS;
-        CHECKGLERROR;
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();      
+      Subscene* subscene = scene->getCurrentSubscene();      
+      for (int i=0; i<4; i++) {
+        viewport[i] = subscene->pviewport[i];
+      }      
+      success = RGL_SUCCESS;
+      CHECKGLERROR;
     }
 
     *successptr = success;
