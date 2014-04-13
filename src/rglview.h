@@ -73,10 +73,6 @@ public:
   void        getPosition(double* dest);
   void 	      setPosition(double* src);
 
-  // These are set after rendering the scene
-  GLdouble modelMatrix[16], projMatrix[16];
-  GLint viewport[4];
-
 protected:
 
   void setWindowImpl(WindowImpl* impl);
