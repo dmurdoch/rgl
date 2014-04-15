@@ -567,3 +567,8 @@ v0.93.999
     be supported.
   - par3d() could generate an error if an unnamed list was passed in.
     
+v0.94
+  - Added "subscenes", i.e. scenes of objects nested within the 
+    main window.
+  - Allowed the coordinates of the viewport to be set.
+  

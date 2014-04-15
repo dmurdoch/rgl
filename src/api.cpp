@@ -1363,6 +1363,49 @@ void rgl::rgl_getProjMatrix(int* successptr, double* projMatrix)
     *successptr = success;
 }
 
+void rgl::rgl_getEmbedding(int* successptr, int* embeddings)
+{
+    int success = RGL_FAIL;
+    Device* device;
+    
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      Subscene* subscene = scene->getCurrentSubscene();
+      embeddings[0] = subscene->getEmbedding(0);
+      embeddings[1] = subscene->getEmbedding(1);
+      embeddings[2] = subscene->getEmbedding(2);
+      success = RGL_SUCCESS;
+    }
+    
+    *successptr = success;
+}
+
+void rgl::rgl_setViewport(int* successptr, double* viewport)
+{
+    int success = RGL_FAIL;
+    Device* device;
+    
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      Subscene* subscene = scene->getCurrentSubscene();
+      if (subscene->getEmbedding(1) == EMBED_REPLACE) {
+	int left, top, right, bottom;
+	double x, y, width, height;
+	device->getWindowRect(&left, &top, &right, &bottom);
+	x = viewport[0]/(right - left);
+	y = viewport[1]/(bottom - top);
+	width = viewport[2]/(right - left);
+	height = viewport[3]/(bottom - top);
+	subscene->setViewport(x, y, width, height);
+	rglview->update();
+        success = RGL_SUCCESS;
+      }
+    }
+    *successptr = success;
+}	
+
 void rgl::rgl_getViewport(int* successptr, int* viewport)
 {
     int success = RGL_FAIL;

@@ -146,8 +146,9 @@ getr3dDefaults()
       updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.}
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
       display the scene.}
-    \item{\code{viewport}}{\emph{\bold{R.O.}}; real.  A vector giving the dimensions of the
-      window in pixels.}
+    \item{\code{viewport}}{real.  A vector giving the dimensions of the
+      window in pixels.  The entries are taken to be \code{c(x,y,width,height)} where
+      \code{c(x,y)} are the coordinates in pixels of the lower left corner within the window.}
     \item{\code{zoom}}{real. A positive value indicating the current
       magnification of the scene.}
       \item{\code{bbox}}{\emph{\bold{R.O.}}; real. A vector of six values indicating the current values of the
@@ -169,6 +170,10 @@ families only support \code{cex = 1}, so changing both \code{cex} and
 \code{"bitmap"} family on Windows, \code{par3d(family = "sans", cex = 2)}
 will work, but \code{par3d(cex = 2, family = "sans")} will leave \code{cex}
 at 1 (with a warning that the \code{"bitmap"} family only supports that size).
+
+Although \code{par3d("viewport")} names the entries of the reported vector,
+names are ignored when setting the viewport and entries must be specified
+in the standard order.
 }
 
 \section{Rendering}{
