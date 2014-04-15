@@ -482,12 +482,6 @@ void Subscene::render(RenderContext* renderContext)
   if (data_bbox.isValid() ) {
 
     //
-    // SETUP VIEWPOINT TRANSFORMATION
-    //
-
-    // FIXME THIS SHOULD ALREADY BE DONE thisviewpoint->setupTransformation( renderContext, total_bsphere);
-
-    //
     // RENDER SOLID SHAPES
     //
 
@@ -541,8 +535,6 @@ void Subscene::render(RenderContext* renderContext)
     //
     // GET THE TRANSFORMATION
     //
-
-    thisviewpoint->setupTransformation(renderContext, total_bsphere);
 
     Matrix4x4 M(renderContext->modelview);    
     Matrix4x4 P(renderContext->projection);
