@@ -129,6 +129,10 @@ public:
   int getIgnoreExtent(void) const { return (int) ignoreExtent; }
   void setIgnoreExtent(int in_ignoreExtent);
   
+  Embedding getEmbedding(int which);  /* 0=viewport, 1=projection, 2=model */
+  
+  void setViewport(double x, double y, double width, double height); /* Sets relative (i.e. [0,1]x[0,1]) viewport size */
+  
   Viewpoint* getViewpoint();
   
   Background* get_background(); 

@@ -754,3 +754,20 @@ const AABox& Subscene::getBoundingBox()
       calcDataBBox();
   return data_bbox; 
 }
+
+Embedding Subscene::getEmbedding(int which)
+{
+  switch(which) {
+    case 0: return do_viewport;
+    case 1: return do_projection;
+    default: return do_model;
+  }
+}
+
+void Subscene::setViewport(double x, double y, double width, double height)
+{
+  viewport.x = x;
+  viewport.y = y;
+  viewport.width = width;
+  viewport.height = height;
+}

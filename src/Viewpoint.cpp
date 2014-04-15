@@ -88,7 +88,7 @@ float Viewpoint::getFOV() const
 
 void Viewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 {
-  frustum.enclose(viewSphere.radius, fov, rctx->rect.width, rctx->rect.height);
+  frustum.enclose(viewSphere.radius, fov, rctx->viewport[2], rctx->viewport[3]);
 
   // zoom
 

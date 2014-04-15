@@ -1,4 +1,4 @@
-.Par3d <- c("antialias", "FOV", "ignoreExtent",
+.Par3d <- c("antialias", "embedding", "FOV", "ignoreExtent",
 	   "mouseMode", 
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
 	   "scale", "viewport", "zoom", "bbox", "windowRect",
@@ -7,9 +7,9 @@
 	   )
 	   
 .Par3d.readonly <- c( 
-	   "antialias", 
+	   "antialias", "embedding",
 	   "modelMatrix", "projMatrix",
-	   "viewport", "bbox", "fontname",
+	   "bbox", "fontname",
 	   "maxClipPlanes"
 	   )
 
@@ -42,7 +42,7 @@ par3d <- function (..., no.readonly = FALSE)
 	m[1:3,1:3] <- svd$u %*% t(svd$v)	
 	phi <- atan2(-m[2,3], m[3,3])
 	args$.position <- c(theta, phi)*180/pi
-    }   
+    }
     value <-
         if (single) .External(rgl_par3d, args)[[1]] 
         else .External(rgl_par3d, args)

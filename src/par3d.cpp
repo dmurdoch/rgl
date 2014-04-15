@@ -93,6 +93,8 @@ static void BoundsCheck(double x, double a, double b, const char *s)
 
 namespace rgl {
 const char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
+const char* embeddings[] = {"inherit", "modify", "replace"};
+const char* viewportlabels[] = {"x", "y", "width", "height"};
 }
 
 #define mmLAST 10
@@ -168,7 +170,12 @@ static void Specify(const char *what, SEXP value)
 	x = coerceVector(value, REALSXP);
 	
 	rgl_setScale(&success, REAL(x));
-    }    
+    }
+    else if (streql(what, "viewport")) {
+	lengthCheck(what, value, 4);
+	x = coerceVector(value, REALSXP);
+	rgl_setViewport(&success, REAL(x));
+    }
     else if (streql(what, "zoom")) {
     	lengthCheck(what, value, 1);	v = asReal(value);
 	posRealCheck(v, what);
@@ -278,9 +285,29 @@ static SEXP Query(const char *what)
         value = allocVector(REALSXP, 3);
         rgl_getScale(&success, REAL(value));
     }
+    else if (streql(what, "embedding")) {
+	PROTECT(value = allocVector(STRSXP, 3));
+	int vals[3];
+	rgl_getEmbedding(&success, vals);
+	for (i=0; i<3; i++) 
+	  SET_STRING_ELT(value, i, mkChar(embeddings[vals[i]-1]));
+	PROTECT(names = allocVector(STRSXP, 3));
+	SET_STRING_ELT(names, 0, mkChar("viewport"));
+	SET_STRING_ELT(names, 1, mkChar("projection"));
+	SET_STRING_ELT(names, 2, mkChar("model"));
+        value = namesgets(value, names);
+	UNPROTECT(2);	
+	success = 1;
+    }
     else if (streql(what, "viewport")) {
-	value = allocVector(INTSXP, 4);
+	PROTECT(value = allocVector(INTSXP, 4));
 	rgl_getViewport(&success, INTEGER(value));
+	PROTECT(names = allocVector(STRSXP, 4));
+	for (i=0; i<4; i++)
+	  SET_STRING_ELT(names, i, mkChar(viewportlabels[i]));
+	value = namesgets(value, names);
+	UNPROTECT(2);
+	success = 1;
     }
     else if (streql(what, "zoom")) {
 	value = allocVector(REALSXP, 1);
