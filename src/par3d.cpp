@@ -93,7 +93,6 @@ static void BoundsCheck(double x, double a, double b, const char *s)
 
 namespace rgl {
 const char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
-const char* embeddings[] = {"inherit", "modify", "replace"};
 const char* viewportlabels[] = {"x", "y", "width", "height"};
 }
 
@@ -284,20 +283,6 @@ static SEXP Query(const char *what)
     else if (streql(what, "scale")) {
         value = allocVector(REALSXP, 3);
         rgl_getScale(&success, REAL(value));
-    }
-    else if (streql(what, "embedding")) {
-	PROTECT(value = allocVector(STRSXP, 3));
-	int vals[3];
-	rgl_getEmbedding(&success, vals);
-	for (i=0; i<3; i++) 
-	  SET_STRING_ELT(value, i, mkChar(embeddings[vals[i]-1]));
-	PROTECT(names = allocVector(STRSXP, 3));
-	SET_STRING_ELT(names, 0, mkChar("viewport"));
-	SET_STRING_ELT(names, 1, mkChar("projection"));
-	SET_STRING_ELT(names, 2, mkChar("model"));
-        value = namesgets(value, names);
-	UNPROTECT(2);	
-	success = 1;
     }
     else if (streql(what, "viewport")) {
 	PROTECT(value = allocVector(INTSXP, 4));

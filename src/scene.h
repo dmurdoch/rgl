@@ -69,13 +69,14 @@ public:
   /**
    * get subscene
    */
-  Subscene* get_subscene(int id);
+  Subscene* getSubscene(int id);
 
   /** 
    * set/get the current subscene
    **/
   void setCurrentSubscene(Subscene* subscene);
   Subscene* getCurrentSubscene() const { return currentSubscene; }
+  const Subscene* getRootSubscene() const { return &rootSubscene; }
   
   // ---[ grouping component ]-----------------------------------------------
   

@@ -225,12 +225,12 @@ void Subscene::clearBboxdecos()
   }
 }
 
-Subscene* Subscene::get_subscene(int id)
+Subscene* Subscene::getSubscene(int id)
 {
   if (id == getObjID()) return this;
     
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end() ; ++ i ) {
-    Subscene* subscene = (*i)->get_subscene(id);
+    Subscene* subscene = (*i)->getSubscene(id);
     if (subscene) return subscene;
   }
   
