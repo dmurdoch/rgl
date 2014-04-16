@@ -84,7 +84,10 @@ void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y,
 void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius, int* shapes, double* userMatrix);
 void rgl_newsubscene (int* successptr, int* parentid);
 void rgl_setsubsceneid (int* successptr, int* viewportid);
-void rgl_getsubsceneid (int* successptr);
+void rgl_getsubsceneid (int* id); /* On input, 0 for root, 1 for current */
+void rgl_getsubsceneparent(int* id);
+void rgl_getsubscenechildcount(int* id, int* n);
+void rgl_getsubscenechildren(int* id, int* children);
 void rgl_addtosubscene (int* successptr, int* count, int* ids);
 
 void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);

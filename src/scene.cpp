@@ -289,7 +289,7 @@ SceneNode* Scene::get_scenenode(int id, bool recursive)
     return background;
   else if ( (bboxdeco = get_bboxdeco()) && id == bboxdeco->getObjID())
     return bboxdeco;
-  else if ( (subscene = get_subscene(id)) )
+  else if ( (subscene = getSubscene(id)) )
     return subscene;
   else return NULL;
 }
@@ -312,9 +312,9 @@ Light* Scene::get_light(int id)
   else return *ilight;
 }
 
-Subscene* Scene::get_subscene(int id)
+Subscene* Scene::getSubscene(int id)
 {
-  return rootSubscene.get_subscene(id);
+  return rootSubscene.getSubscene(id);
 }
 
 void Scene::setCurrentSubscene(Subscene* subscene)

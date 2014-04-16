@@ -767,7 +767,7 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid)
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();      
-    Subscene* parent = scene->get_subscene(parentid[0]);
+    Subscene* parent = scene->getSubscene(parentid[0]);
     if (parent) {
       Subscene* subscene = new Subscene( parent, EMBED_INHERIT, EMBED_INHERIT, EMBED_INHERIT );
       if (subscene && scene->add(subscene)) {
@@ -786,7 +786,7 @@ void rgl::rgl_setsubsceneid(int* successptr, int* subsceneid)
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();      
-    Subscene* subscene = scene->get_subscene(subsceneid[0]);
+    Subscene* subscene = scene->getSubscene(subsceneid[0]);
     if (subscene) {
       scene->setCurrentSubscene(subscene);
       success = as_success(subsceneid[0]);
@@ -795,21 +795,66 @@ void rgl::rgl_setsubsceneid(int* successptr, int* subsceneid)
   *successptr = success;
 }  
 
-void rgl::rgl_getsubsceneid(int* successptr)
+void rgl::rgl_getsubsceneid(int* id)
 {
-  int success = RGL_FAIL;
   Device* device;
-    
+  
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
-    Scene* scene = rglview->getScene();      
-    Subscene* subscene = scene->getCurrentSubscene();
+    Scene* scene = rglview->getScene();
+    const Subscene* subscene = (*id) == 1 ? scene->getCurrentSubscene() : scene->getRootSubscene();
+    *id = subscene->getObjID();
+  } else
+    *id = 0;
+} 
+
+void rgl::rgl_getsubsceneparent(int* id)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(*id);
+    if (!subscene) {
+      *id = NA_INTEGER;
+    } else {
+      subscene = subscene->getParent();
+      *id = subscene ? subscene->getObjID() : 0;
+    }
+  } else
+    *id = NA_INTEGER;
+}    
+
+void rgl::rgl_getsubscenechildcount(int* id, int* n)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(*id);
+    *n = subscene ? subscene->getChildCount() : 0;
+  } else
+    *n = 0;
+} 
+
+void rgl::rgl_getsubscenechildren(int* id, int* children)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    const Subscene* subscene = scene->getSubscene(*id);
     if (subscene) {
-      success = as_success(subscene->getObjID());
+      for (int i = 0; i < subscene->getChildCount(); i++) {
+        Subscene* child = subscene->getChild(i);
+        children[i] = child ? child->getObjID() : 0;
+      }
     }
   }
-  *successptr = success;
-} 
+}
 
 void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
 {
@@ -1363,22 +1408,20 @@ void rgl::rgl_getProjMatrix(int* successptr, double* projMatrix)
     *successptr = success;
 }
 
-void rgl::rgl_getEmbedding(int* successptr, int* embeddings)
+void rgl::rgl_getEmbedding(int* id, int* embeddings)
 {
-    int success = RGL_FAIL;
     Device* device;
     
     if (deviceManager && (device = deviceManager->getAnyDevice())) {
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
-      Subscene* subscene = scene->getCurrentSubscene();
-      embeddings[0] = subscene->getEmbedding(0);
-      embeddings[1] = subscene->getEmbedding(1);
-      embeddings[2] = subscene->getEmbedding(2);
-      success = RGL_SUCCESS;
+      Subscene* subscene = scene->getSubscene(*id);
+      if (subscene) {
+        embeddings[0] = subscene->getEmbedding(0);
+        embeddings[1] = subscene->getEmbedding(1);
+        embeddings[2] = subscene->getEmbedding(2);
+      }
     }
-    
-    *successptr = success;
 }
 
 void rgl::rgl_setViewport(int* successptr, double* viewport)

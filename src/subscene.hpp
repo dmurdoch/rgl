@@ -90,8 +90,19 @@ public:
   /**
    * recursive search for subscene; could return self, or NULL if not found
    **/
-  Subscene* get_subscene(int id);
+  Subscene* getSubscene(int id);
+  
+  /**
+   * get parent, or NULL for the root
+   **/  
+  Subscene* getParent() const { return parent; }
 
+  /**
+   * get children
+   **/
+  int getChildCount() const { return subscenes.size(); }
+  Subscene* getChild(int which) const { return subscenes[which]; }
+  
   /**
    * get the bbox
    */
