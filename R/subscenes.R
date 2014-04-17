@@ -32,14 +32,20 @@ subsceneInfo <- function(id, recursive = FALSE) {
   result
 }
 
-subscene3d <- function(id, embedding = c("inherit", "inherit", "inherit"),
+subscene3d <- function(id, viewport = "inherit", 
+                       projection = "inherit",
+		       model = "inherit",
                        parent = subsceneInfo()$id, copyLights = TRUE,
                        copyShapes = FALSE,
-                       viewport) {
+                       newviewport) {
   if (missing(id)) {
-    embedding <- pmatch(embedding, c("inherit", "modify", "replace"), duplicates.ok = TRUE)
-    if (any(is.na(embedding))) stop("embedding not recognized")
-    stopifnot(length(embedding) == 3L)
+    embedding <- c("inherit", "modify", "replace")
+    viewport <- pmatch(viewport, embedding)
+    projection <- pmatch(projection, embedding)
+    model <- pmatch(model, embedding)
+    stopifnot(length(viewport) == 1, length(projection) == 1, length(model) == 1,
+	      !is.na(viewport), !is.na(projection), !is.na(model))
+    embedding <- c(viewport, projection, model)
   
     id <- .C(rgl_newsubscene, id = integer(1), parent = as.integer(parent),
                embedding = as.integer(embedding))$id
@@ -58,10 +64,10 @@ subscene3d <- function(id, embedding = c("inherit", "inherit", "inherit"),
   }
   id <- .C(rgl_setsubscene, id = id)$id
   if (id) {
-    if (!missing(viewport)) {
+    if (!missing(newviewport)) {
       embedding <- subsceneInfo(id)$embeddings
       if (embedding[1] > 1)
-        par3d(viewport = viewport)
+        par3d(viewport = as.integer(newviewport))
     }
   }
   invisible(id)

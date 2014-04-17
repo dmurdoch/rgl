@@ -1438,7 +1438,7 @@ void rgl::rgl_setViewport(int* successptr, double* viewport)
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
       Subscene* subscene = scene->getCurrentSubscene();
-      if (subscene->getEmbedding(1) == EMBED_REPLACE) {
+      if (subscene->getEmbedding(0) == EMBED_REPLACE) {
 	int left, top, right, bottom;
 	double x, y, width, height;
 	device->getWindowRect(&left, &top, &right, &bottom);
