@@ -32,43 +32,51 @@ subsceneInfo <- function(id, recursive = FALSE) {
   result
 }
 
-subscene3d <- function(id, viewport = "inherit", 
+newSubscene3d <- function(viewport = "inherit", 
                        projection = "inherit",
 		       model = "inherit",
                        parent = subsceneInfo()$id, copyLights = TRUE,
                        copyShapes = FALSE,
                        newviewport) {
-  if (missing(id)) {
-    embedding <- c("inherit", "modify", "replace")
-    viewport <- pmatch(viewport, embedding)
-    projection <- pmatch(projection, embedding)
-    model <- pmatch(model, embedding)
-    stopifnot(length(viewport) == 1, length(projection) == 1, length(model) == 1,
-	      !is.na(viewport), !is.na(projection), !is.na(model))
-    embedding <- c(viewport, projection, model)
+  embedding <- c("inherit", "modify", "replace")
+  viewport <- pmatch(viewport, embedding)
+  projection <- pmatch(projection, embedding)
+  model <- pmatch(model, embedding)
+  stopifnot(length(viewport) == 1, length(projection) == 1, length(model) == 1,
+            !is.na(viewport), !is.na(projection), !is.na(model))
+  embedding <- c(viewport, projection, model)
   
-    id <- .C(rgl_newsubscene, id = integer(1), parent = as.integer(parent),
+  id <- .C(rgl_newsubscene, id = integer(1), parent = as.integer(parent),
                embedding = as.integer(embedding))$id
                
-    if (id) {
-      if (copyLights || copyShapes) {
-        .C(rgl_setsubscene, parent)
-        ids <- rgl.ids(type = c("lights", "shapes")[c(copyLights, copyShapes)])$id
-        if (length(ids)) {
-          .C(rgl_setsubscene, id)
-          .C(rgl_addtosubscene, success = integer(1), n = as.integer(length(ids)),
-  	                        ids = as.integer(ids))
-        }
-      }
-    }
-  }
-  id <- .C(rgl_setsubscene, id = id)$id
   if (id) {
+    if (copyLights || copyShapes) {
+      useSubscene3d(parent)
+      ids <- rgl.ids(type = 
+        c("lights", "shapes", "bboxdeco")[c(copyLights, copyShapes, copyShapes)])$id
+      if (length(ids)) 
+        addToSubscene3d(ids, subscene = id)
+    }
+    useSubscene3d(id)
     if (!missing(newviewport)) {
       embedding <- subsceneInfo(id)$embeddings
       if (embedding[1] > 1)
         par3d(viewport = as.integer(newviewport))
     }
-  }
+  } else
+    stop("Subscene creation failed.")
   invisible(id)
+}
+
+useSubscene3d <- function(subscene) {
+  result <- .C(rgl_setsubscene, id=as.integer(subscene))$id
+  if (!result) stop("Subscene ", subscene, " not found.")
+  invisible(subscene)
+}
+
+addToSubscene3d <- function(ids, subscene = subsceneInfo()$id) {
+  result <- .C(rgl_addtosubscene, success = as.integer(subscene), 
+     n = as.integer(length(ids)), ids = as.integer(ids))$success
+  if (!result)
+    stop("Failed to add objects to subscene ", subscene)
 }
