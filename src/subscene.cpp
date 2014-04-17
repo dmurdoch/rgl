@@ -179,17 +179,19 @@ void Subscene::hideLight(int id, bool recursive)
     lights.erase(light);
 }
 
-bool Subscene::popSubscene(int id)
+Subscene* Subscene::popSubscene(int id, Subscene* current)
 {
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
     if (sameID(*i, id)) {
+      if ((*i)->getSubscene(current->getObjID()))
+        current = (*i)->parent;
       delete (*i);      
       subscenes.erase(i);
-      return true;
-    }
-    if ((*i)->popSubscene(id)) return true;
+      return current;
+    } else
+      current = (*i)->popSubscene(id, current);
   }
-  return false;
+  return current;
 }
 
 void Subscene::clearSubscenes()
