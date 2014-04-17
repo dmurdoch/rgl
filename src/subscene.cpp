@@ -613,10 +613,10 @@ void Subscene::setupViewport(RenderContext* rctx)
     rect.width = rctx->rect.width*viewport.width;
     rect.height = rctx->rect.height*viewport.height;
   } else {
-    rect.x = rctx->viewport[0] + viewport.x*rctx->viewport[2];
-    rect.y = rctx->viewport[1] + viewport.y*rctx->viewport[3];
-    rect.width = rctx->viewport[2]*viewport.width;
-    rect.height = rctx->viewport[3]*viewport.height;
+    rect.x = parent->pviewport[0] + viewport.x*parent->pviewport[2];
+    rect.y = parent->pviewport[1] + viewport.y*parent->pviewport[3];
+    rect.width = parent->pviewport[2]*viewport.width;
+    rect.height = parent->pviewport[3]*viewport.height;
   }
   
   glViewport(rect.x, rect.y, rect.width, rect.height);

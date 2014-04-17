@@ -865,7 +865,7 @@ void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();      
-    Subscene* subscene = scene->getCurrentSubscene();
+    Subscene* subscene = scene->getSubscene(*successptr);
     if (subscene) {
       for (int i=0; i < count[0]; i++) {
         SceneNode* node = scene->get_scenenode(ids[i], true);
@@ -1438,14 +1438,25 @@ void rgl::rgl_setViewport(int* successptr, double* viewport)
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
       Subscene* subscene = scene->getCurrentSubscene();
-      if (subscene->getEmbedding(0) == EMBED_REPLACE) {
+      Embedding embedding = subscene->getEmbedding(0);
+      if (embedding > EMBED_INHERIT) {
 	int left, top, right, bottom;
 	double x, y, width, height;
-	device->getWindowRect(&left, &top, &right, &bottom);
-	x = viewport[0]/(right - left);
-	y = viewport[1]/(bottom - top);
-	width = viewport[2]/(right - left);
-	height = viewport[3]/(bottom - top);
+	if (embedding == EMBED_REPLACE) {
+	  device->getWindowRect(&left, &top, &right, &bottom);
+	  width = right - left;
+	  height = bottom - top;
+	  bottom = 0;
+	} else {
+	  left = subscene->getParent()->pviewport[0];
+	  bottom = subscene->getParent()->pviewport[1];
+	  width = subscene->getParent()->pviewport[2];
+	  height = subscene->getParent()->pviewport[3];
+	}
+	x = (viewport[0]-left)/width;
+	y = (viewport[1]-bottom)/height;
+	width = viewport[2]/width;
+	height = viewport[3]/height;
 	subscene->setViewport(x, y, width, height);
 	rglview->update();
         success = RGL_SUCCESS;
