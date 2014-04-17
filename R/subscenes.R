@@ -31,3 +31,38 @@ subsceneInfo <- function(id, recursive = FALSE) {
   result[["embeddings"]] <- embeddings
   result
 }
+
+subscene3d <- function(id, embedding = c("inherit", "inherit", "inherit"),
+                       parent = subsceneInfo()$id, copyLights = TRUE,
+                       copyShapes = FALSE,
+                       viewport) {
+  if (missing(id)) {
+    embedding <- pmatch(embedding, c("inherit", "modify", "replace"), duplicates.ok = TRUE)
+    if (any(is.na(embedding))) stop("embedding not recognized")
+    stopifnot(length(embedding) == 3L)
+  
+    id <- .C(rgl_newsubscene, id = integer(1), parent = as.integer(parent),
+               embedding = as.integer(embedding))$id
+               
+    if (id) {
+      if (copyLights || copyShapes) {
+        .C(rgl_setsubscene, parent)
+        ids <- rgl.ids(type = c("lights", "shapes")[c(copyLights, copyShapes)])$id
+        if (length(ids)) {
+          .C(rgl_setsubscene, id)
+          .C(rgl_addtosubscene, success = integer(1), n = as.integer(length(ids)),
+  	                        ids = as.integer(ids))
+        }
+      }
+    }
+  }
+  id <- .C(rgl_setsubscene, id = id)$id
+  if (id) {
+    if (!missing(viewport)) {
+      embedding <- subsceneInfo(id)$embeddings
+      if (embedding[1] > 1)
+        par3d(viewport = viewport)
+    }
+  }
+  invisible(id)
+}

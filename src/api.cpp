@@ -759,7 +759,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
   *successptr = success;
 }
 
-void rgl::rgl_newsubscene(int* successptr, int* parentid)
+void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -769,8 +769,10 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid)
     Scene* scene = rglview->getScene();      
     Subscene* parent = scene->getSubscene(parentid[0]);
     if (parent) {
-      Subscene* subscene = new Subscene( parent, EMBED_INHERIT, EMBED_INHERIT, EMBED_INHERIT );
-      if (subscene && scene->add(subscene)) {
+      Subscene* subscene = new Subscene( parent, (Embedding)embedding[0], 
+                                                 (Embedding)embedding[1], 
+                                                 (Embedding)embedding[2] );
+      if (subscene && parent->add(subscene)) {
 	success = as_success( subscene->getObjID() );
       }
     }
@@ -778,21 +780,20 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid)
   *successptr = success;
 } 
 
-void rgl::rgl_setsubsceneid(int* successptr, int* subsceneid)
+void rgl::rgl_setsubscene(int* id)
 {
-  int success = RGL_FAIL;
   Device* device;
     
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();      
-    Subscene* subscene = scene->getSubscene(subsceneid[0]);
+    Subscene* subscene = scene->getSubscene(*id);
     if (subscene) {
       scene->setCurrentSubscene(subscene);
-      success = as_success(subsceneid[0]);
-    }
-  }
-  *successptr = success;
+    } else
+      *id = 0;
+  } else
+    *id = 0;
 }  
 
 void rgl::rgl_getsubsceneid(int* id)
@@ -874,8 +875,12 @@ void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
 	    subscene->addShape( static_cast<Shape*>(node) );
 	    success++;
 	    break;
+	  case LIGHT:
+	    subscene->addLight( static_cast<Light*>(node) );
+	    success++;
+	    break;
 	  default:
-	    warning("id %d is not a shape; cannot add to subscene", ids[i]);
+	    warning("id %d is not a shape or light; cannot add to subscene", ids[i]);
           }
 	else 
 	  warning("id %d not found in scene", ids[i]);

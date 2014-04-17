@@ -24,6 +24,7 @@ rgl.ids( type = "shapes" )
       \item{"viewpoint"}{viewpoint}
       \item{"material"}{material properties}
       \item{"background"}{scene background}
+      \item{"subscene"}{subscene list}
       \item{"all"}{all of the above}
     }
   }

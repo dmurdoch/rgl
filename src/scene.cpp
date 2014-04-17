@@ -159,7 +159,8 @@ bool Scene::pop(TypeID type, int id)
       if (lights.empty()) return false;
       break;
     }
-    case SUBSCENE: rootSubscene.popSubscene(id);
+    case SUBSCENE: 
+      currentSubscene = rootSubscene.popSubscene(id, currentSubscene);
       return true;
     default: break;
   }
