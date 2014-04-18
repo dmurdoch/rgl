@@ -590,6 +590,7 @@ void Subscene::setupViewport(RenderContext* rctx)
   }
   
   glViewport(rect.x, rect.y, rect.width, rect.height);
+  glScissor(rect.x, rect.y, rect.width, rect.height);
 }
 
 void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)

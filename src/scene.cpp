@@ -401,13 +401,17 @@ void Scene::render(RenderContext* renderContext)
   // if ( unsortedShapes.size() )
     clearFlags  |= GL_DEPTH_BUFFER_BIT;
 
+  // The subscenes use the scissor test to limit where they draw, but we want to clear everything here
   // clear
-  glClear(clearFlags);
+  glDisable(GL_SCISSOR_TEST);																																																																																																																																																																															
+  glClear(clearFlags);  
+  glEnable(GL_SCISSOR_TEST);
 
   // userMatrix and scale might change the length of normals.  If this slows us
   // down, we should test for that instead of just enabling GL_NORMALIZE
   
   glEnable(GL_NORMALIZE);
+
   setupLightModel();
   
   SAVEGLERROR;
