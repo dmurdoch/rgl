@@ -128,6 +128,11 @@ private:
    **/
   void addLight(Light* light);
   
+  /**
+   * add bboxdeco
+   **/
+  void addBBoxDeco(BBoxDeco* bboxdeco);
+  
 
   // --- [ Subscenes ]-------------------------------------------------------
 
@@ -149,10 +154,16 @@ private:
    **/
   std::vector<Shape*> shapes;
   
+  /**
+   * list of bboxdecos.  Each scene has at most one of these.
+   **/
+  std::vector<BBoxDeco*> bboxdecos;
+  
   void deleteAll(std::vector<SceneNode*> list);
 
   void deleteShapes();
   void deleteLights();
+  void deleteBBoxDecos();
   
   // ---[ grouping data ]----------------------------------------------------
   

@@ -21,7 +21,7 @@ using namespace rgl;
 //   Scene
 //
 
-ObjID SceneNode::nextID = BBOXID + 1;
+ObjID SceneNode::nextID = 1;
 
 Scene::Scene()
 : rootSubscene(NULL, EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE) 
@@ -67,6 +67,16 @@ void Scene::deleteLights()
   lights.clear();
 }
 
+void Scene::deleteBBoxDecos()
+{
+  std::vector<BBoxDeco*>::iterator iter;
+  for (iter = bboxdecos.begin(); iter != bboxdecos.end(); ++iter) {
+    rootSubscene.hideBBoxDeco((*iter)->getObjID(), true);
+    delete *iter;
+  }
+  bboxdecos.clear();
+}
+
 bool Scene::clear(TypeID typeID)
 {
   bool success = false;
@@ -88,7 +98,7 @@ bool Scene::clear(TypeID typeID)
       success = true;
       break;
     case BBOXDECO:
-      rootSubscene.clearBboxdecos();
+      deleteBBoxDecos();
       SAVEGLERROR;
       success = true;
       break;
@@ -112,6 +122,14 @@ void Scene::addLight(Light* light) {
 
 }  
 
+void Scene::addBBoxDeco(BBoxDeco* bboxdeco) {
+
+  bboxdecos.push_back( bboxdeco );
+
+  currentSubscene->addBBoxDeco(bboxdeco);
+
+}
+
 bool Scene::add(SceneNode* node)
 {
   bool success = false;
@@ -131,6 +149,13 @@ bool Scene::add(SceneNode* node)
         success = true;
       }
       break;
+    case BBOXDECO:
+      {
+        addBBoxDeco((BBoxDeco*) node);
+        
+        success = true;
+      }
+      break;
     default:
       currentSubscene->add(node);
       success = true;
@@ -144,19 +169,19 @@ bool Scene::pop(TypeID type, int id)
   std::vector<Shape*>::iterator ishape;
   std::vector<Light*>::iterator ilight;
   std::vector<Subscene*>::iterator isubscene;
+  std::vector<BBoxDeco*>::iterator ibboxdeco;
   
   switch(type) {
     case SHAPE: {
-      if (id == BBOXID) {
-        type = BBOXDECO; 
-        id = 0;
-      }
-      else if (shapes.empty()) 
-        return false;
+      if (shapes.empty()) return false;
       break;
     }
     case LIGHT: {
       if (lights.empty()) return false;
+      break;
+    }
+    case BBOXDECO: {
+      if (bboxdecos.empty()) return false;
       break;
     }
     case SUBSCENE: 
@@ -175,6 +200,8 @@ bool Scene::pop(TypeID type, int id)
       ilight = lights.end() - 1;
       id = (*ilight)->getObjID();
       break;
+    case BBOXDECO:
+      ibboxdeco = bboxdecos.end() - 1;
     default:
       break;
     }
@@ -189,6 +216,11 @@ bool Scene::pop(TypeID type, int id)
       ilight = std::find_if(lights.begin(), lights.end(),
 			    std::bind2nd(std::ptr_fun(&sameID), id));
       if (ilight == lights.end()) return false;
+      break;
+    case BBOXDECO:
+      ibboxdeco = std::find_if(bboxdecos.begin(), bboxdecos.end(),
+			    std::bind2nd(std::ptr_fun(&sameID), id));
+      if (ibboxdeco == bboxdecos.end()) return false;
       break;
     default:
       return false;
@@ -216,7 +248,10 @@ bool Scene::pop(TypeID type, int id)
     break;
   case BBOXDECO:
     {
-      currentSubscene->popBboxdecos(id);
+      rootSubscene.hideBBoxDeco(id, true);
+      BBoxDeco* bboxdeco = *ibboxdeco;
+      bboxdecos.erase(ibboxdeco);
+      delete bboxdeco;
       success = true;
     }
     break;
@@ -233,6 +268,7 @@ int Scene::get_id_count(TypeID type)
   case SHAPE:  return shapes.size();
   case LIGHT:  return lights.size();
   case SUBSCENE: return rootSubscene.get_id_count(type, true) + 1;
+  case BBOXDECO: return bboxdecos.size();
 
   default:     return rootSubscene.get_id_count(type, true);
   }
@@ -257,6 +293,14 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
       *ids++ = (*i)->getObjID();
       *types = R_alloc(strlen("light")+1, 1);
       strcpy(*types, "light");
+      types++;
+    }
+    return;
+  case BBOXDECO: 
+    for (std::vector<BBoxDeco*>::iterator i = bboxdecos.begin(); i != bboxdecos.end() ; ++ i ) {
+      *ids++ = (*i)->getObjID();
+      *types = R_alloc(strlen("bboxdeco")+1, 1);
+      strcpy(*types, "bboxdeco");
       types++;
     }
     return;

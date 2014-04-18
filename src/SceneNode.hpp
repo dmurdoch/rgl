@@ -33,8 +33,6 @@ enum TypeID {
 typedef unsigned int TypeID;
 typedef int ObjID;
 
-#define BBOXID 1
-
 /* Possible attributes to request */
 
 #define VERTICES 1

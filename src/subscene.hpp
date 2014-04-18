@@ -63,7 +63,7 @@ public:
 
   bool add(SceneNode* node);
   void addBackground(Background* newbackground);
-  void addBboxdeco(BBoxDeco* newbboxdeco);
+  void addBBoxDeco(BBoxDeco* bboxdeco);
   void addShape(Shape* shape);
   void addLight(Light* light);
   void addSubscene(Subscene* subscene);
@@ -75,17 +75,12 @@ public:
   void   clearSubscenes();
   
   /**
-   * remove bboxdecos
-   **/
-  bool   popBboxdecos(int id);
-  void   clearBboxdecos();
-  
-  /**
-   * hide shape or light
+   * hide shape or light or bboxdeco
    **/
    
   void hideShape(int id, bool recursive);
   void hideLight(int id, bool recursive);
+  void hideBBoxDeco(int id, bool recursive);
 
   /**
    * recursive search for subscene; could return self, or NULL if not found

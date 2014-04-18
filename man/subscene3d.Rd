@@ -8,7 +8,8 @@ This creates a new subscene, or selects one by \code{id} value, or adds objects 
 }
 \usage{
 newSubscene3d(viewport = "inherit", projection = "inherit", model = "inherit", 
-           parent = subsceneInfo()$id, copyLights = TRUE, copyShapes = FALSE, newviewport)
+           parent = subsceneInfo()$id, 
+           copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, newviewport)
 useSubscene3d(subscene)
 addToSubscene3d(ids, subscene = subsceneInfo()$id)
 }
@@ -20,8 +21,8 @@ How should the new subscene be embedded?  Possible values are
   \item{parent}{
 The parent subscene (defaults to the current subscene).
 }
-  \item{copyLights, copyShapes}{
-Whether lights and shapes should be copied to the new subscene.
+  \item{copyLights, copyShapes, copyBBoxDeco}{
+Whether lights, shapes and bounding box decorations should be copied to the new subscene.
 }
   \item{newviewport}{
 Optionally specify the new subscenes viewport (in pixels).
