@@ -879,6 +879,10 @@ void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
 	    subscene->addLight( static_cast<Light*>(node) );
 	    success++;
 	    break;
+	  case BBOXDECO:
+	    subscene->addBBoxDeco( static_cast<BBoxDeco*>(node) );
+	    success++;
+	    break;
 	  default:
 	    warning("id %d is not a shape or light; cannot add to subscene", ids[i]);
           }

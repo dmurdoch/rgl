@@ -39,8 +39,6 @@ Subscene::~Subscene()
     delete viewpoint;
   if (background)
     delete background;
-  if (bboxdeco)
-    delete bboxdeco;
 }
 
 bool Subscene::add(SceneNode* node)
@@ -89,7 +87,7 @@ bool Subscene::add(SceneNode* node)
     case BBOXDECO:
       { 
         BBoxDeco* bboxdeco = static_cast<BBoxDeco*>(node);
-        addBboxdeco(bboxdeco);
+        addBBoxDeco(bboxdeco);
         success = true;
       }
       break;
@@ -106,10 +104,8 @@ void Subscene::addBackground(Background* newbackground)
   background = newbackground;
 }
 
-void Subscene::addBboxdeco(BBoxDeco* newbboxdeco)
+void Subscene::addBBoxDeco(BBoxDeco* newbboxdeco)
 {
-  if (bboxdeco)
-    delete bboxdeco;
   bboxdeco = newbboxdeco;
 }
 
@@ -179,6 +175,16 @@ void Subscene::hideLight(int id, bool recursive)
     lights.erase(light);
 }
 
+void Subscene::hideBBoxDeco(int id, bool recursive)
+{
+  if (recursive)
+    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
+      (*i)->hideBBoxDeco(id, true);
+  
+  if (bboxdeco && sameID(bboxdeco, id))
+    bboxdeco = NULL;
+}
+
 Subscene* Subscene::popSubscene(int id, Subscene* current)
 {
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
@@ -201,30 +207,6 @@ void Subscene::clearSubscenes()
     delete (*i);    
   }
   subscenes.clear();
-}
-
-bool Subscene::popBboxdecos(int id)
-{
-  if (bboxdeco && sameID(bboxdeco, id)) {
-    delete bboxdeco;
-    bboxdeco = NULL;
-    return true;
-  }
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
-    if ((*i)->popBboxdecos(id)) return true;
-  }
-  return false;
-}
-
-void Subscene::clearBboxdecos()
-{
-  if (bboxdeco) {
-    delete bboxdeco;
-    bboxdeco = NULL;
-  }
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
-    ((*i)->clearBboxdecos());
-  }
 }
 
 Subscene* Subscene::getSubscene(int id)
@@ -320,10 +302,6 @@ int Subscene::get_id_count(TypeID type, bool recursive)
       result += background ? 1 : 0;
       break;
     }
-    case BBOXDECO: {
-      result += bboxdeco ? 1 : 0;
-      break;
-    }
   }
   return result;
 }
@@ -344,14 +322,6 @@ void Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
       *ids = viewpoint->getObjID();
       *types = R_alloc(strlen("viewpoint")+1, 1);
       strcpy(*types, "viewpoint");
-      types++;
-    }
-    break;
-  case BBOXDECO:
-    if (bboxdeco) {
-      *ids = bboxdeco->getObjID();
-      *types = R_alloc(strlen("bboxdeco")+1, 1);
-      strcpy(*types, "bboxdeco");
       types++;
     }
     break;
