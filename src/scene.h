@@ -70,6 +70,7 @@ public:
    * get subscene
    */
   Subscene* getSubscene(int id);
+  Subscene* whichSubscene(int mouseX, int mouseY); /* coordinates are window-relative */
 
   /** 
    * set/get the current subscene

@@ -47,6 +47,7 @@ private:
   float       fov;
   float       zoom;
   bool        interactive;
+public:
   GLdouble    userMatrix[16], mouseMatrix[16];
 };
 

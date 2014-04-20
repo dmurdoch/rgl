@@ -86,6 +86,7 @@ public:
    * recursive search for subscene; could return self, or NULL if not found
    **/
   Subscene* getSubscene(int id);
+  Subscene* whichSubscene(int mouseX, int mouseY); /* coordinates are pixels within the window */
   
   /**
    * get parent, or NULL for the root
@@ -139,11 +140,15 @@ public:
   
   void setViewport(double x, double y, double width, double height); /* Sets relative (i.e. [0,1]x[0,1]) viewport size */
   
+  float getDistance(const Vertex& v) const;
+  
   Viewpoint* getViewpoint();
   
   Background* get_background(); 
   
   // These are set after rendering the scene
+  Vec4 Zrow;
+  Vec4 Wrow;
   GLdouble modelMatrix[16], projMatrix[16];
   GLint pviewport[4];  // viewport in pixels
     

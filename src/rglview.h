@@ -91,7 +91,7 @@ private:
 // DRAG USER-INPUT
 //
 
-  int drag;
+  int drag, activeSubscene;
 
 // o DRAG FEATURE: adjustDirection
 
