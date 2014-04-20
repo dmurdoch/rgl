@@ -1,6 +1,8 @@
 #include "Viewpoint.hpp"
 
+#include "subscene.hpp"
 #include "opengl.hpp"
+#include "R.h"
 
 using namespace rgl;
 
@@ -88,7 +90,7 @@ float Viewpoint::getFOV() const
 
 void Viewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 {
-  frustum.enclose(viewSphere.radius, fov, rctx->viewport[2], rctx->viewport[3]);
+  frustum.enclose(viewSphere.radius, fov, rctx->subscene->pviewport[2], rctx->subscene->pviewport[3]);
 
   // zoom
 

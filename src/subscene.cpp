@@ -13,7 +13,7 @@ using namespace rgl;
 
 Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model)
  : SceneNode(SUBSCENE), parent(in_parent), do_viewport(in_viewport), do_projection(in_projection),
-   do_model(in_model), viewport(0.,0.,1.,1.)
+   do_model(in_model), viewport(0.,0.,1.,1.),Zrow(), Wrow()
 {
   viewpoint = NULL;
   bboxdeco   = NULL;
@@ -221,6 +221,19 @@ Subscene* Subscene::getSubscene(int id)
   return NULL;
 }
 
+Subscene* Subscene::whichSubscene(int mouseX, int mouseY)
+{
+  Subscene* result = NULL;
+  Subscene* sub;
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end() ; ++ i ) {
+    result = (sub = (*i)->whichSubscene(mouseX, mouseY)) ? sub : result;
+  }  
+  if (!result && pviewport[0] <= mouseX && mouseX < pviewport[0] + pviewport[2] 
+              && pviewport[1] <= mouseY && mouseY < pviewport[1] + pviewport[3])
+    result = this;
+  return result;
+}
+
 int Subscene::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {
@@ -368,15 +381,19 @@ void Subscene::render(RenderContext* renderContext)
   GLdouble savemodelview[16];
   GLdouble saveprojection[16];
   GLint saveviewport[4] = {0,0,0,0};
+
+  Viewpoint* thisviewpoint = getViewpoint();
+  
+  renderContext->subscene = this;
   
   if (do_viewport > EMBED_INHERIT) {
   
     //
     // SETUP VIEWPORT TRANSFORMATION
     //
-    for (int i=0; i<4; i++) saveviewport[i] = renderContext->viewport[i];
+    for (int i=0; i<4; i++) saveviewport[i] = pviewport[i];
     setupViewport(renderContext);
-    glGetIntegerv(GL_VIEWPORT, renderContext->viewport);  
+    glGetIntegerv(GL_VIEWPORT, pviewport);  
   
     SAVEGLERROR;
   }
@@ -392,7 +409,6 @@ void Subscene::render(RenderContext* renderContext)
     calcDataBBox();
   
   Sphere total_bsphere;
-  Viewpoint* thisviewpoint = getViewpoint();
 
   if (data_bbox.isValid()) {
     
@@ -414,19 +430,19 @@ void Subscene::render(RenderContext* renderContext)
   
   if (do_projection > EMBED_INHERIT) {
     
-    for (int i=0; i<16; i++) saveprojection[i] = renderContext->projection[i];
+    for (int i=0; i<16; i++) saveprojection[i] = projMatrix[i];
     setupProjMatrix(renderContext, total_bsphere);
-    glGetDoublev(GL_PROJECTION_MATRIX, renderContext->projection);
+    glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
   
   }
   
   // Now the model matrix
   
-  if (do_model > EMBED_INHERIT) {
+  if (do_model > EMBED_INHERIT || viewpoint) {
    
-    for (int i=0; i<16; i++) savemodelview[i] = renderContext->modelview[i];
+    for (int i=0; i<16; i++) savemodelview[i] = modelMatrix[i];
     setupModelMatrix(renderContext, total_bsphere);
-    glGetDoublev(GL_MODELVIEW_MATRIX, renderContext->modelview);
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
   
   }
   
@@ -508,27 +524,21 @@ void Subscene::render(RenderContext* renderContext)
     // GET THE TRANSFORMATION
     //
 
-    Matrix4x4 M(renderContext->modelview);    
-    Matrix4x4 P(renderContext->projection);
+    Matrix4x4 M(modelMatrix);    
+    Matrix4x4 P(projMatrix);
     P = P*M;
     
-    renderContext->Zrow = P.getRow(2);
-    renderContext->Wrow = P.getRow(3);
+    Zrow = P.getRow(2);
+    Wrow = P.getRow(3);
     
     renderZsort(renderContext);
 #endif    
 
     /* Reset flag(s) now that scene has been rendered */
-    renderContext->viewpoint->scaleChanged = false;
+    thisviewpoint->scaleChanged = false;
     
     SAVEGLERROR;
   }
-  
-  // Save matrices and viewport
-  
-  glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
-  glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
-  glGetIntegerv(GL_VIEWPORT, pviewport);
   
   // Render subscenes
     
@@ -599,7 +609,7 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
   if (do_projection == EMBED_REPLACE)
     glLoadIdentity();
     
-  rctx->viewpoint->setupFrustum(rctx, viewSphere);
+  getViewpoint()->setupFrustum(rctx, viewSphere);
     
   SAVEGLERROR;    
 }
@@ -610,7 +620,7 @@ void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
   if (do_model == EMBED_REPLACE)
     glLoadIdentity();
     
-  rctx->viewpoint->setupTransformation(rctx, viewSphere);
+  getViewpoint()->setupTransformation(rctx, viewSphere);
   
   SAVEGLERROR;
 }
@@ -690,7 +700,7 @@ void Subscene::renderZsort(RenderContext* renderContext)
     shape->renderBegin(renderContext);
     for (int j = 0; j < shape->getElementCount(); j++) {
 	ShapeItem* item = new ShapeItem(shape, j);
-	float distance = renderContext->getDistance( shape->getElementCenter(j) );
+	float distance = getDistance( shape->getElementCenter(j) );
       distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
       index++;
     }
@@ -735,4 +745,11 @@ void Subscene::setViewport(double x, double y, double width, double height)
   viewport.y = y;
   viewport.width = width;
   viewport.height = height;
+}
+
+float Subscene::getDistance(const Vertex& v) const
+{
+  Vertex4 vec = Vertex4(v, 1.0f);
+
+  return (Zrow*vec) / (Wrow*vec);
 }

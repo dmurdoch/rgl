@@ -63,7 +63,7 @@ void SphereSet::drawElement(RenderContext* renderContext, int index)
    sphereMesh.setCenter( center.get(index) );
    sphereMesh.setRadius( radius.getRecycled(index) );
    
-   sphereMesh.update( renderContext->viewpoint->scale );
+   sphereMesh.update( renderContext->subscene->getViewpoint()->scale );
 
    sphereMesh.draw(renderContext);
 }
@@ -76,7 +76,7 @@ void SphereSet::drawEnd(RenderContext* renderContext)
 
 void SphereSet::render(RenderContext* renderContext) 
 {
-  if (renderContext->viewpoint->scaleChanged) 
+  if (renderContext->subscene->getViewpoint()->scaleChanged) 
     doUpdate = true;
   Shape::render(renderContext);
 }

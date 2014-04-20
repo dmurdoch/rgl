@@ -362,6 +362,13 @@ Subscene* Scene::getSubscene(int id)
   return rootSubscene.getSubscene(id);
 }
 
+Subscene* Scene::whichSubscene(int mouseX, int mouseY)
+{
+  Subscene* result = rootSubscene.whichSubscene(mouseX, mouseY);
+  if (!result) result = &rootSubscene;
+  return result;
+}
+
 void Scene::setCurrentSubscene(Subscene* subscene)
 {
   currentSubscene = subscene;
@@ -381,7 +388,6 @@ void Scene::render(RenderContext* renderContext)
 {
 
   renderContext->subscene  = &rootSubscene;
-  renderContext->viewpoint = rootSubscene.getViewpoint();
 
   //
   // CLEAR BUFFERS

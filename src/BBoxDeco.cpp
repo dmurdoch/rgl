@@ -422,7 +422,7 @@ void BBoxDeco::render(RenderContext* renderContext)
 
     // transform vertices: used for edge distance criterion and text justification
 
-    Matrix4x4 modelview(renderContext->modelview);
+    Matrix4x4 modelview(renderContext->subscene->modelMatrix);
 
     for(i=0;i<8;i++)
       eyev[i] = modelview * boxv[i];
