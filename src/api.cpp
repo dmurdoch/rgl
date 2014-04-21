@@ -455,7 +455,7 @@ void rgl::rgl_getZoom(int* successptr, double* zoom)
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint();
+    Viewpoint* viewpoint = scene->getViewpoint(false);
     *zoom = viewpoint->getZoom();
     success = RGL_SUCCESS;
     CHECKGLERROR;
@@ -472,7 +472,7 @@ void rgl::rgl_setZoom(int* successptr, double* zoom)
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint();
+    Viewpoint* viewpoint = scene->getViewpoint(false);
     viewpoint->setZoom( *zoom );
     rglview->update();
     success = RGL_SUCCESS;
@@ -490,7 +490,7 @@ void rgl::rgl_getFOV(int* successptr, double* fov)
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint();
+    Viewpoint* viewpoint = scene->getViewpoint(true);
     *fov = viewpoint->getFOV();
     success = RGL_SUCCESS;
     CHECKGLERROR;
@@ -507,7 +507,7 @@ void rgl::rgl_setFOV(int* successptr, double* fov)
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint();
+    Viewpoint* viewpoint = scene->getViewpoint(true);
     viewpoint->setFOV(*fov);
     rglview->update();
     success = RGL_SUCCESS;

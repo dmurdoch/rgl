@@ -146,7 +146,8 @@ public:
 // viewport relative (relative to bottom left corner of viewport)
   void translateCoords(int* mouseX, int* mouseY) const { *mouseX = *mouseX - pviewport[0]; *mouseY = *mouseY - pviewport[1]; }
   
-  Viewpoint* getViewpoint();
+  
+  Viewpoint* getViewpoint(bool projection);
   
   Background* get_background(); 
   
