@@ -92,6 +92,11 @@ private:
 //
 
   int drag, activeSubscene;
+  int vwidth, vheight;      /* width and height of active subscene */
+  
+// Translate from OS window-relative coordinates (relative to top left corner) to
+// OpenGL window relative (relative to bottom left corner)
+  void translateCoords(int* mouseX, int* mouseY) const { *mouseY = height - *mouseY; }
 
 // o DRAG FEATURE: adjustDirection
 

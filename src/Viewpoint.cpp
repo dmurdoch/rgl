@@ -105,6 +105,7 @@ void Viewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
     glFrustum(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
   }
 
+  glTranslatef( 0.0f, 0.0f, -frustum.distance );
 }
 
 void Viewpoint::setupOrientation(RenderContext* rctx) const
@@ -117,8 +118,6 @@ void Viewpoint::setupOrientation(RenderContext* rctx) const
 void Viewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSphere)
 {     
   // modelview
-
-  glTranslatef( 0.0f, 0.0f, -frustum.distance );
 
   setupOrientation(rctx);
   glScaled(scale.x, scale.y, scale.z);
