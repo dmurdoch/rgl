@@ -42,9 +42,9 @@ Scene::~Scene()
 
 }
 
-Viewpoint* Scene::getViewpoint() 
+Viewpoint* Scene::getViewpoint(bool projection) 
 {
-  return currentSubscene->getViewpoint();
+  return currentSubscene->getViewpoint(projection);
 }
 
 void Scene::deleteShapes()

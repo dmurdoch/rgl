@@ -369,10 +369,11 @@ BBoxDeco* Subscene::get_bboxdeco()
   else return NULL;
 }
 
-Viewpoint* Subscene::getViewpoint()
+Viewpoint* Subscene::getViewpoint(bool projection)
 {
-  if (viewpoint) return viewpoint;
-  else if (parent) return parent->getViewpoint();
+  if (viewpoint && ((projection && do_projection > EMBED_INHERIT)
+                  ||(!projection && do_model > EMBED_INHERIT))) return viewpoint;
+  else if (parent) return parent->getViewpoint(projection);
   else error("must have a viewpoint");
 }
 
@@ -381,8 +382,12 @@ void Subscene::render(RenderContext* renderContext)
   GLdouble savemodelview[16];
   GLdouble saveprojection[16];
   GLint saveviewport[4] = {0,0,0,0};
+  
+  /* FIXME:  the viewpoint object affects both the projection matrix and the
+             model matrix.  We need ugly code to use the right one when 
+             one is inherited and the other is not */
 
-  Viewpoint* thisviewpoint = getViewpoint();
+  Viewpoint* modelviewpoint = getViewpoint(false);
   
   renderContext->subscene = this;
   
@@ -416,7 +421,7 @@ void Subscene::render(RenderContext* renderContext)
     // GET DATA VOLUME SPHERE
     //
 
-    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, thisviewpoint->scale );
+    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, modelviewpoint->scale );
     if (total_bsphere.radius <= 0.0)
       total_bsphere.radius = 1.0;
 
@@ -535,7 +540,7 @@ void Subscene::render(RenderContext* renderContext)
 #endif    
 
     /* Reset flag(s) now that scene has been rendered */
-    thisviewpoint->scaleChanged = false;
+    modelviewpoint->scaleChanged = false;
     
     SAVEGLERROR;
   }
@@ -609,7 +614,7 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
   if (do_projection == EMBED_REPLACE)
     glLoadIdentity();
     
-  getViewpoint()->setupFrustum(rctx, viewSphere);
+  getViewpoint(true)->setupFrustum(rctx, viewSphere);
     
   SAVEGLERROR;    
 }
@@ -620,7 +625,7 @@ void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
   if (do_model == EMBED_REPLACE)
     glLoadIdentity();
     
-  getViewpoint()->setupTransformation(rctx, viewSphere);
+  getViewpoint(false)->setupTransformation(rctx, viewSphere);
   
   SAVEGLERROR;
 }

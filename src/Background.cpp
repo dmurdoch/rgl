@@ -56,7 +56,7 @@ GLbitfield Background::getClearFlags(RenderContext* renderContext)
 void Background::render(RenderContext* renderContext)
 {
   Subscene* subscene = renderContext->subscene;
-  Viewpoint* viewpoint = subscene->getViewpoint();
+  Viewpoint* viewpoint = subscene->getViewpoint(true);
   
   const AABox& bbox = subscene->getBoundingBox();
 
@@ -134,6 +134,7 @@ void Background::render(RenderContext* renderContext)
 
     glTranslatef(0.0f,0.0f,-znear);
 
+    viewpoint = subscene->getViewpoint(false);
     viewpoint->setupOrientation(renderContext);
     
 
