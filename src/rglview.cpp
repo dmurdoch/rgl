@@ -132,6 +132,14 @@ void RGLView::paint(void) {
 // user input
 //
 
+// NB:  This code has to deal with three conflicting descriptions of pixel locations.
+//      The calls to buttonPress, buttonRelease, etc. are given in OS window-relative
+//      coordinates, which count mouseX from the left, mouseY down from the top.
+//      These are translated into the OpenGL convention which counts Y up from the bottom,
+//      or subscene-relative coordinates, up from the bottom of the viewport.
+//      We use RGLView::translateCoords to go from OS window-relative to OpenGL window-relative,
+//      and Subscene::translateCoords to go from OpenGL window-relative to viewport-relative.
+
 void RGLView::keyPress(int key)
 {
   switch(key) {
@@ -150,13 +158,15 @@ void RGLView::buttonPress(int button, int mouseX, int mouseY)
     Viewpoint* viewpoint = scene->getViewpoint();
       if ( viewpoint->isInteractive() ) {
 	if (!drag) {
+	  translateCoords(&mouseX, &mouseY);
 	  Subscene* subscene = scene->whichSubscene(mouseX, mouseY);
+	  subscene->translateCoords(&mouseX, &mouseY);
 	  drag = button;
 	  activeSubscene = subscene->getObjID();
-	  width = subscene->pviewport[2];
-	  height = subscene->pviewport[3];
+	  vwidth = subscene->pviewport[2];
+	  vheight = subscene->pviewport[3];
 	  windowImpl->captureMouse(this);	  
-	  (this->*ButtonBeginFunc[button-1])(mouseX - subscene->pviewport[0], mouseY - subscene->pviewport[1]);
+	  (this->*ButtonBeginFunc[button-1])(mouseX, mouseY);
 	}
       }
 }
@@ -175,16 +185,19 @@ void RGLView::buttonRelease(int button, int mouseX, int mouseY)
 void RGLView::mouseMove(int mouseX, int mouseY)
 {
     if (drag) {
+        translateCoords(&mouseX, &mouseY);
     	Subscene* subscene = scene->getSubscene(activeSubscene);
     	if (!subscene) { /* it may have been killed */
     	  buttonRelease(drag, mouseX, mouseY);
     	  return;
     	}
-	width = subscene->pviewport[2]; /* These may have changed */
-	height = subscene->pviewport[3];    	  
+    	subscene->translateCoords(&mouseX, &mouseY);
+
+	vwidth = subscene->pviewport[2]; /* These may have changed */
+	vheight = subscene->pviewport[3];    	  
     	
-  	mouseX = clamp(mouseX - subscene->pviewport[0], 0, width-1);
-  	mouseY = clamp(mouseY - subscene->pviewport[1], 0, height-1);
+  	mouseX = clamp(mouseX, 0, vwidth-1);
+  	mouseY = clamp(mouseY, 0, vheight-1);
 
   	(this->*ButtonUpdateFunc[drag-1])(mouseX,mouseY);
     }
@@ -240,7 +253,7 @@ void RGLView::captureLost()
 //   screenToPolar
 //
 // DESCRIPTION
-//   screen space is the same as in OpenGL, starting 0,0 at left/bottom(!)
+//   screen space is the same as in OpenGL, starting 0,0 at left/bottom(!) of viewport
 //
 
 static PolarCoord screenToPolar(int width, int height, int mouseX, int mouseY) {
@@ -315,7 +328,7 @@ static Vertex screenToVector(int width, int height, int mouseX, int mouseY) {
 
 void RGLView::trackballBegin(int mouseX, int mouseY)
 {
-	rotBase = screenToVector(width,height,mouseX,height-mouseY);
+    rotBase = screenToVector(vwidth,vheight,mouseX,mouseY);
 }
 
 void RGLView::trackballUpdate(int mouseX, int mouseY)
@@ -325,7 +338,7 @@ void RGLView::trackballUpdate(int mouseX, int mouseY)
 
 	Viewpoint* viewpoint = subscene->getViewpoint();
 
-  	rotCurrent = screenToVector(width,height,mouseX,height-mouseY);
+  	rotCurrent = screenToVector(vwidth,vheight,mouseX,mouseY);
 	if (windowImpl->beginGL()) {
 	    viewpoint->updateMouseMatrix(rotBase,rotCurrent);
 	    windowImpl->endGL();
@@ -345,7 +358,7 @@ void RGLView::trackballEnd()
 
 void RGLView::oneAxisBegin(int mouseX, int mouseY)
 {
-	rotBase = screenToVector(width,height,mouseX,height/2);
+	rotBase = screenToVector(vwidth,vheight,mouseX,height/2);
 }
 
 void RGLView::oneAxisUpdate(int mouseX, int mouseY)
@@ -355,7 +368,7 @@ void RGLView::oneAxisUpdate(int mouseX, int mouseY)
 
 	Viewpoint* viewpoint = subscene->getViewpoint();
 
-  	rotCurrent = screenToVector(width,height,mouseX,height/2);
+  	rotCurrent = screenToVector(vwidth,vheight,mouseX,height/2);
 
 	if (windowImpl->beginGL()) {
 	    viewpoint->mouseOneAxis(rotBase,rotCurrent,axis[drag-1]);
@@ -374,7 +387,7 @@ void RGLView::polarBegin(int mouseX, int mouseY)
 
   	camBase = viewpoint->getPosition();
 
-	dragBase = screenToPolar(width,height,mouseX,height-mouseY);
+	dragBase = screenToPolar(vwidth,vheight,mouseX,mouseY);
 
 }
 
@@ -385,7 +398,7 @@ void RGLView::polarUpdate(int mouseX, int mouseY)
 
   Viewpoint* viewpoint = subscene->getViewpoint();
 
-  dragCurrent = screenToPolar(width,height,mouseX,height-mouseY);
+  dragCurrent = screenToPolar(vwidth,vheight,mouseX,mouseY);
 
   PolarCoord newpos = camBase - ( dragCurrent - dragBase );
 
@@ -425,7 +438,7 @@ void RGLView::adjustFOVUpdate(int mouseX, int mouseY)
 
   int dy = mouseY - fovBaseY;
 
-  float py = ((float)dy/(float)height) * 180.0f;
+  float py = -((float)dy/(float)vheight) * 180.0f;
 
   viewpoint->setFOV( viewpoint->getFOV() + py );
 
@@ -452,7 +465,7 @@ void RGLView::userBegin(int mouseX, int mouseY)
   activeButton = drag;
   if (beginCallback[ind]) {
     busy = true;
-    (*beginCallback[ind])(userData[3*ind+0], mouseX, mouseY);
+    (*beginCallback[ind])(userData[3*ind+0], mouseX, vheight-mouseY);
     busy = false;
   }
 }
@@ -463,7 +476,7 @@ void RGLView::userUpdate(int mouseX, int mouseY)
   int ind = activeButton - 1;
   if (!busy && updateCallback[ind]) {
     busy = true;
-    (*updateCallback[ind])(userData[3*ind+1], mouseX, mouseY);
+    (*updateCallback[ind])(userData[3*ind+1], mouseX, vheight-mouseY);
     busy = false;
   }
 }
@@ -498,7 +511,7 @@ void RGLView::adjustZoomUpdate(int mouseX, int mouseY)
 
   int dy = mouseY - zoomBaseY;
 
-  float zoom = clamp ( viewpoint->getZoom() * exp(-dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
+  float zoom = clamp ( viewpoint->getZoom() * exp(dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
   viewpoint->setZoom(zoom);
 
   View::update();
@@ -682,8 +695,8 @@ void RGLView::mouseSelectionBegin(int mouseX,int mouseY)
 {
 	if (selectState == msABORT) return;
 	
-	mousePosition[0] = (float)mouseX/(float)width;
-	mousePosition[1] = (float)(height - mouseY)/(float)height;
+	mousePosition[0] = (float)mouseX/(float)vwidth;
+	mousePosition[1] = (float)mouseY/(float)vheight;
 	mousePosition[2] = mousePosition[0];
 	mousePosition[3] = mousePosition[1];
 	selectState = msCHANGING;
@@ -691,8 +704,8 @@ void RGLView::mouseSelectionBegin(int mouseX,int mouseY)
 
 void RGLView::mouseSelectionUpdate(int mouseX,int mouseY)
 {
-	mousePosition[2] = (float)mouseX/(float)width;
-	mousePosition[3] = (float)(height - mouseY)/(float)height;
+	mousePosition[2] = (float)mouseX/(float)vwidth;
+	mousePosition[3] = (float)mouseY/(float)vheight;
 	View::update();
 }
 

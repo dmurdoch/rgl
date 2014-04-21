@@ -141,6 +141,10 @@ public:
   void setViewport(double x, double y, double width, double height); /* Sets relative (i.e. [0,1]x[0,1]) viewport size */
   
   float getDistance(const Vertex& v) const;
+
+// Translate from OpenGL window-relative coordinates (relative to bottom left corner of window) to
+// viewport relative (relative to bottom left corner of viewport)
+  void translateCoords(int* mouseX, int* mouseY) const { *mouseX = *mouseX - pviewport[0]; *mouseY = *mouseY - pviewport[1]; }
   
   Viewpoint* getViewpoint();
   
