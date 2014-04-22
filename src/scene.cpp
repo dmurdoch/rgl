@@ -393,7 +393,8 @@ void Scene::render(RenderContext* renderContext)
   // CLEAR BUFFERS
   //
 
-  GLbitfield clearFlags = 0;
+  GLbitfield clearFlags = GL_COLOR_BUFFER_BIT;
+  rootSubscene.get_background()->material.colors.getColor(0).useClearColor();  
 
   SAVEGLERROR;
 

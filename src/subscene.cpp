@@ -396,7 +396,8 @@ void Subscene::render(RenderContext* renderContext)
     //
     // SETUP VIEWPORT TRANSFORMATION
     //
-    for (int i=0; i<4; i++) saveviewport[i] = pviewport[i];
+    if (parent)  
+      for (int i=0; i<4; i++) saveviewport[i] = parent->pviewport[i];
     setupViewport(renderContext);
     glGetIntegerv(GL_VIEWPORT, pviewport);  
   

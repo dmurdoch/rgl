@@ -104,7 +104,11 @@ public:
    */
   BBoxDeco* get_bboxdeco();
   
-
+  /**
+   * get the background
+   */
+  Background* get_background() const { return background; }
+  
   /**
    * obtain subscene's axis-aligned bounding box. 
    **/
