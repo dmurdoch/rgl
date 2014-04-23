@@ -1442,30 +1442,32 @@ void rgl::rgl_setViewport(int* successptr, double* viewport)
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
       Subscene* subscene = scene->getCurrentSubscene();
-      Embedding embedding = subscene->getEmbedding(0);
-      if (embedding > EMBED_INHERIT) {
-	int left, top, right, bottom;
-	double x, y, width, height;
-	if (embedding == EMBED_REPLACE) {
-	  device->getWindowRect(&left, &top, &right, &bottom);
-	  width = right - left;
-	  height = bottom - top;
-	  bottom = 0;
-	  left = 0;
-	} else {
-	  left = subscene->getParent()->pviewport[0];
-	  bottom = subscene->getParent()->pviewport[1];
-	  width = subscene->getParent()->pviewport[2];
-	  height = subscene->getParent()->pviewport[3];
-	}
-	x = (viewport[0]-left)/width;
-	y = (viewport[1]-bottom)/height;
-	width = viewport[2]/width;
-	height = viewport[3]/height;
-	subscene->setViewport(x, y, width, height);
-	rglview->update();
-        success = RGL_SUCCESS;
+      Embedding embedding;
+      
+      while ((embedding = subscene->getEmbedding(0)) == EMBED_INHERIT)
+        subscene = subscene->getParent();
+
+      int left, top, right, bottom;
+      double x, y, width, height;
+      if (embedding == EMBED_REPLACE) {
+	device->getWindowRect(&left, &top, &right, &bottom);
+	width = right - left;
+	height = bottom - top;
+	bottom = 0;
+	left = 0;
+      } else {
+	left = subscene->getParent()->pviewport[0];
+	bottom = subscene->getParent()->pviewport[1];
+	width = subscene->getParent()->pviewport[2];
+	height = subscene->getParent()->pviewport[3];
       }
+      x = (viewport[0]-left)/width;
+      y = (viewport[1]-bottom)/height;
+      width = viewport[2]/width;
+      height = viewport[3]/height;
+      subscene->setViewport(x, y, width, height);
+      rglview->update();
+      success = RGL_SUCCESS;
     }
     *successptr = success;
 }	
