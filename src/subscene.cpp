@@ -277,6 +277,8 @@ String Subscene::getTextAttribute(AABox& bbox, AttribID attrib, int index)
 void Subscene::renderClipplanes(RenderContext* renderContext)
 {
   std::vector<ClipPlaneSet*>::iterator iter;
+  
+  ClipPlaneSet::num_planes = 0;
 	
   for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
     ClipPlaneSet* plane = *iter;
@@ -488,6 +490,9 @@ void Subscene::render(RenderContext* renderContext)
     // DISABLE BLENDING
     glDisable(GL_BLEND);
     
+    // CLIP PLANES
+    renderClipplanes(renderContext);
+    
     //
     // RENDER BBOX DECO
     //
@@ -542,7 +547,9 @@ void Subscene::render(RenderContext* renderContext)
 
     /* Reset flag(s) now that scene has been rendered */
     modelviewpoint->scaleChanged = false;
-    
+
+    /* Reset clipplanes */
+    disableClipplanes(renderContext);
     SAVEGLERROR;
   }
   

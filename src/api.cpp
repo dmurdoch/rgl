@@ -1451,6 +1451,7 @@ void rgl::rgl_setViewport(int* successptr, double* viewport)
 	  width = right - left;
 	  height = bottom - top;
 	  bottom = 0;
+	  left = 0;
 	} else {
 	  left = subscene->getParent()->pviewport[0];
 	  bottom = subscene->getParent()->pviewport[1];
