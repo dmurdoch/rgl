@@ -51,6 +51,6 @@ v <- v/2
 newSubscene3d(viewport = "replace", newviewport = v, copyShapes = TRUE)
 v[1:2] <- v[3:4]
 useSubscene3d(root)
-newSubscene3d(viewport = "modify", newviewport = v, copyShapes = TRUE)
+newSubscene3d(viewport = "modify", model = "replace", newviewport = v, copyShapes = TRUE)
 }
 \keyword{ graphics }
