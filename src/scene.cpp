@@ -267,7 +267,7 @@ int Scene::get_id_count(TypeID type)
   switch(type) {
   case SHAPE:  return shapes.size();
   case LIGHT:  return lights.size();
-  case SUBSCENE: return rootSubscene.get_id_count(type, true) + 1;
+  case SUBSCENE: return rootSubscene.get_id_count(type, true);
   case BBOXDECO: return bboxdecos.size();
 
   default:     return rootSubscene.get_id_count(type, true);

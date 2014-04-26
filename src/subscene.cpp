@@ -29,6 +29,8 @@ Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_proj
       projMatrix[4*i + j] = i == j;
     }
   }  
+  if (do_projection > EMBED_INHERIT || do_model > EMBED_INHERIT)
+    add(new Viewpoint);
 }
 
 Subscene::~Subscene() 
