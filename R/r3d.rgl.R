@@ -14,8 +14,11 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     .check3d()
     rgl.clear( type )
     type <- rgl.enum.nodetype(type)
-    if ( 4 %in% type ) { # viewpoint
-	do.call("par3d", defaults[c("FOV", "userMatrix")])
+    if ( 4 %in% type ) { # userviewpoint
+	do.call("par3d", defaults["FOV"])
+    }
+    if ( 8 %in% type ) { # modelviewpoint
+        do.call("par3d", defaults["userMatrix"])
     }
     if ( 5 %in% type ) { # material
         if (length(defaults$material))

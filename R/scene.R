@@ -19,8 +19,9 @@ rgl.clear <- function( type = "shapes" )
 {
   type <- rgl.enum.nodetype(type)
   
-  viewpoint <- 4 %in% type
+  userviewpoint <- 4 %in% type
   material  <- 5 %in% type
+  modelviewpoint <- 8 %in% type
 
   type <- type[!(type %in% 4:6)]
   
@@ -31,8 +32,8 @@ rgl.clear <- function( type = "shapes" )
     idata
   )
   
-  if ( viewpoint ) 
-    rgl.viewpoint()
+  if ( userviewpoint || modelviewpoint) 
+    rgl.viewpoint(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
     
   if ( material ) 
     rgl.material()
@@ -155,16 +156,18 @@ rgl.attrib <- function( id, attrib, first=1,
 ##
 
 rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scale = par3d("scale"),
-                           interactive = TRUE, userMatrix )
+                           interactive = TRUE, userMatrix, type = c("userviewpoint", "modelviewpoint") )
 {
   zoom <- rgl.clamp(zoom,0,Inf)
   phi  <- rgl.clamp(phi,-90,90)
   fov  <- rgl.clamp(fov,0,179)
+  
+  type <- match.arg(type, several.ok = TRUE)
 
   polar <- missing(userMatrix)
   if (polar) userMatrix <- diag(4)
   
-  idata <- as.integer(c(interactive,polar))
+  idata <- as.integer(c(interactive,polar, "userviewpoint" %in% type, "modelviewpoint" %in% type))
   ddata <- as.numeric(c(theta,phi,fov,zoom,scale,userMatrix[1:16]))
 
   ret <- .C( rgl_viewpoint,

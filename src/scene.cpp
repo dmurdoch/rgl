@@ -28,7 +28,8 @@ Scene::Scene()
 {
   currentSubscene = &rootSubscene;
  
-  rootSubscene.add( new Viewpoint );
+  rootSubscene.add( new UserViewpoint );
+  rootSubscene.add( new ModelViewpoint );
   rootSubscene.add( new Background );
   Light* light = new Light; 
   add(light);
@@ -42,9 +43,14 @@ Scene::~Scene()
 
 }
 
-Viewpoint* Scene::getViewpoint(bool projection) 
+UserViewpoint* Scene::getUserViewpoint() 
 {
-  return currentSubscene->getViewpoint(projection);
+  return currentSubscene->getUserViewpoint();
+}
+
+ModelViewpoint* Scene::getModelViewpoint() 
+{
+  return currentSubscene->getModelViewpoint();
 }
 
 void Scene::deleteShapes()

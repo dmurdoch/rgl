@@ -35,7 +35,7 @@ SphereSet::~SphereSet()
 
 AABox& SphereSet::getBoundingBox(Subscene* subscene)
 {
-  Vertex scale = subscene->getViewpoint(false)->scale;
+  Vertex scale = subscene->getModelViewpoint()->scale;
   scale.x = 1.0/scale.x;
   scale.y = 1.0/scale.y;
   scale.z = 1.0/scale.z;
@@ -63,7 +63,7 @@ void SphereSet::drawElement(RenderContext* renderContext, int index)
    sphereMesh.setCenter( center.get(index) );
    sphereMesh.setRadius( radius.getRecycled(index) );
    
-   sphereMesh.update( renderContext->subscene->getViewpoint(false)->scale );
+   sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
 
    sphereMesh.draw(renderContext);
 }
@@ -76,7 +76,7 @@ void SphereSet::drawEnd(RenderContext* renderContext)
 
 void SphereSet::render(RenderContext* renderContext) 
 {
-  if (renderContext->subscene->getViewpoint(false)->scaleChanged) 
+  if (renderContext->subscene->getModelViewpoint()->scaleChanged) 
     doUpdate = true;
   Shape::render(renderContext);
 }

@@ -17,18 +17,20 @@ enum TypeID {
   SHAPE=1, 
   LIGHT, 
   BBOXDECO, 
-  VIEWPOINT, 
+  USERVIEWPOINT, 
   BACKGROUND,
-  SUBSCENE
+  SUBSCENE,
+  MODELVIEWPOINT
 };
 */
 
 #define SHAPE 1
 #define LIGHT 2
 #define BBOXDECO 3
-#define VIEWPOINT 4
+#define USERVIEWPOINT 4
 #define BACKGROUND 6  // 5 was used for the material
 #define SUBSCENE 7
+#define MODELVIEWPOINT 8
 
 typedef unsigned int TypeID;
 typedef int ObjID;

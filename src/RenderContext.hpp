@@ -3,7 +3,6 @@
 
 namespace rgl {
 class Subscene;
-class Viewpoint;
 class GLFont;
 } // namespace rgl
 
