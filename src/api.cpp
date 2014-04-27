@@ -892,15 +892,54 @@ void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
 	    success++;
 	    break;
 	  default:
-	    warning("id %d is not a shape or light; cannot add to subscene", ids[i]);
+	    warning("id %d is not a shape or light or decoration; cannot add to subscene", ids[i]);
           }
 	else 
 	  warning("id %d not found in scene", ids[i]);
       }
+      rglview->update();
     }
   }
   *successptr = success;
 } 
+
+void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
+{
+  int success = RGL_FAIL;
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* subscene = scene->getSubscene(*successptr);
+    if (subscene) {
+      for (int i=0; i < count[0]; i++) {
+        SceneNode* node = scene->get_scenenode(ids[i], true);
+	if (node) 
+	  switch (node->getTypeID()) {
+	  case SHAPE: 
+	    subscene->hideShape( ids[i], false );
+	    success++;
+	    break;
+	  case LIGHT:
+	    subscene->hideLight( ids[i], false );
+	    success++;
+	    break;
+	  case BBOXDECO:
+	    subscene->hideBBoxDeco( ids[i], false );
+	    success++;
+	    break;
+	  default:
+	    warning("id %d is not a shape or light or decoration; cannot hide", ids[i]);
+          }
+	else 
+	  warning("id %d not found in scene", ids[i]);
+      }
+      rglview->update();
+    }
+  }
+  *successptr = success;
+}
 
 void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 {
