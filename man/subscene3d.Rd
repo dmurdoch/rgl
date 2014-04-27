@@ -2,6 +2,7 @@
 \alias{newSubscene3d}
 \alias{useSubscene3d}
 \alias{addToSubscene3d}
+\alias{delFromSubscene3d}
 \title{
 Create, select or modify a subscene.
 }
@@ -14,6 +15,7 @@ newSubscene3d(viewport = "inherit", projection = "inherit", model = "inherit",
            copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, newviewport)
 useSubscene3d(subscene)
 addToSubscene3d(ids, subscene = subsceneInfo()$id)
+delFromSubscene3d(ids, subscene = subsceneInfo()$id)
 }
 \arguments{
   \item{viewport, projection, model}{
@@ -36,8 +38,12 @@ Which subscene to use or modify.
 A vector of integer object ids to add to the subscene.
 }
 }
+\details{
+Note that the scene \dQuote{owns} objects; \code{addToSubscene3d} and \code{delFromSubscene3d} 
+just put their ids into or remove them from the list being displayed within a particular subscene.
+}
 \value{
-If successful, the object id of the subscene.
+If successful, each function returns the object id of the subscene.
 }
 \author{
 Duncan Murdoch and Fang He.

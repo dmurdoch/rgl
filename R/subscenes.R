@@ -80,4 +80,13 @@ addToSubscene3d <- function(ids, subscene = subsceneInfo()$id) {
      n = as.integer(length(ids)), ids = as.integer(ids))$success
   if (!result)
     stop("Failed to add objects to subscene ", subscene)
+  invisible(subscene)
+}
+
+delFromSubscene3d <- function(ids, subscene = subsceneInfo()$id) {
+  result <- .C(rgl_delfromsubscene, success = as.integer(subscene), 
+     n = as.integer(length(ids)), ids = as.integer(ids))$success
+  if (!result)
+    stop("Failed to add objects to subscene ", subscene)
+  invisible(subscene)
 }
