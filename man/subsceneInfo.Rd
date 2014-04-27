@@ -35,7 +35,7 @@ embedded in its parent.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{addSubscene3d}}
+\code{\link{newSubscene3d}}
 }
 \examples{
 example(plot3d)

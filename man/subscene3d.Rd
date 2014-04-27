@@ -1,5 +1,7 @@
 \name{subscene3d}
 \alias{newSubscene3d}
+\alias{useSubscene3d}
+\alias{addToSubscene3d}
 \title{
 Create, select or modify a subscene.
 }

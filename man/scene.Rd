@@ -21,7 +21,8 @@ rgl.ids( type = "shapes" )
       \item{"shapes"}{shape stack}
       \item{"lights"}{light stack}
       \item{"bboxdeco"}{bounding box}
-      \item{"viewpoint"}{viewpoint}
+      \item{"userviewpoint"}{user viewpoint}
+      \item{"modelviewpoint"}{model viewpoint}
       \item{"material"}{material properties}
       \item{"background"}{scene background}
       \item{"subscene"}{subscene list}

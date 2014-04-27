@@ -23,7 +23,7 @@ rgl.clear <- function( type = "shapes" )
   material  <- 5 %in% type
   modelviewpoint <- 8 %in% type
 
-  type <- type[!(type %in% 4:6)]
+  type <- type[!(type %in% c(4:6, 8))]
   
   idata <- as.integer(c(length(type), type))
  
