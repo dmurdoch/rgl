@@ -38,7 +38,8 @@ private:
   /* Here are the children */
   std::vector<Subscene*> subscenes;
   
-  Viewpoint* viewpoint;
+  UserViewpoint* userviewpoint;
+  ModelViewpoint* modelviewpoint;
   /**
    * bounded background
    **/
@@ -151,7 +152,8 @@ public:
   void translateCoords(int* mouseX, int* mouseY) const { *mouseX = *mouseX - pviewport[0]; *mouseY = *mouseY - pviewport[1]; }
   
   
-  Viewpoint* getViewpoint(bool projection);
+  UserViewpoint* getUserViewpoint();
+  ModelViewpoint* getModelViewpoint();
   
   Background* get_background(); 
   

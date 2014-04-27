@@ -56,7 +56,7 @@ GLbitfield Background::getClearFlags(RenderContext* renderContext)
 void Background::render(RenderContext* renderContext)
 {
   Subscene* subscene = renderContext->subscene;
-  Viewpoint* viewpoint = subscene->getViewpoint(true);
+  UserViewpoint* userviewpoint = subscene->getUserViewpoint();
   
   const AABox& bbox = subscene->getBoundingBox();
 
@@ -70,16 +70,16 @@ void Background::render(RenderContext* renderContext)
     switch(fogtype) {
     case FOG_LINEAR:
       glFogi(GL_FOG_MODE, GL_LINEAR);
-      glFogf(GL_FOG_START, viewpoint->frustum.znear /*bsphere.radius*2*/);
-      glFogf(GL_FOG_END,   viewpoint->frustum.zfar /*bsphere.radius*3*/ );
+      glFogf(GL_FOG_START, userviewpoint->frustum.znear /*bsphere.radius*2*/);
+      glFogf(GL_FOG_END,   userviewpoint->frustum.zfar /*bsphere.radius*3*/ );
       break;
     case FOG_EXP:
       glFogi(GL_FOG_MODE, GL_EXP);
-      glFogf(GL_FOG_DENSITY, 1.0f/viewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
+      glFogf(GL_FOG_DENSITY, 1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
       break;
     case FOG_EXP2:
       glFogi(GL_FOG_MODE, GL_EXP2);
-      glFogf(GL_FOG_DENSITY, 1.0f/viewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
+      glFogf(GL_FOG_DENSITY, 1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
       break;
     }
 
@@ -92,7 +92,7 @@ void Background::render(RenderContext* renderContext)
   
   if (sphere) {
 
-    float fov = viewpoint->getFOV();
+    float fov = userviewpoint->getFOV();
     float hlen, znear;
     
     if (fov > 0.0) {
@@ -134,8 +134,8 @@ void Background::render(RenderContext* renderContext)
 
     glTranslatef(0.0f,0.0f,-znear);
 
-    viewpoint = subscene->getViewpoint(false);
-    viewpoint->setupOrientation(renderContext);
+    ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
+    modelviewpoint->setupOrientation(renderContext);
     
 
     Shape::render(renderContext);

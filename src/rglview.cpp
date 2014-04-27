@@ -155,8 +155,8 @@ void RGLView::keyPress(int key)
 
 void RGLView::buttonPress(int button, int mouseX, int mouseY)
 {
-    Viewpoint* viewpoint = scene->getCurrentSubscene()->getViewpoint(false);
-      if ( viewpoint->isInteractive() ) {
+    ModelViewpoint* modelviewpoint = scene->getCurrentSubscene()->getModelViewpoint();
+      if ( modelviewpoint->isInteractive() ) {
 	if (!drag) {
 	  translateCoords(&mouseX, &mouseY);
 	  Subscene* subscene = scene->whichSubscene(mouseX, mouseY);
@@ -210,9 +210,9 @@ void RGLView::wheelRotate(int dir)
     subscene = scene->getSubscene(activeSubscene);
   if (!subscene)
     subscene = scene->getCurrentSubscene();
-  Viewpoint* viewpoint = subscene->getViewpoint(false);
+  UserViewpoint* userviewpoint = subscene->getUserViewpoint();
   
-  float zoom = viewpoint->getZoom();
+  float zoom = userviewpoint->getZoom();
 
 #define ZOOM_STEP  1.05f 
 #define ZOOM_PIXELLOGSTEP 0.02f
@@ -228,7 +228,7 @@ void RGLView::wheelRotate(int dir)
   }
 
   zoom = clamp( zoom , ZOOM_MIN, ZOOM_MAX);
-  viewpoint->setZoom(zoom);
+  userviewpoint->setZoom(zoom);
 
   View::update();
 }
@@ -336,11 +336,11 @@ void RGLView::trackballUpdate(int mouseX, int mouseY)
     	Subscene* subscene = scene->getSubscene(activeSubscene);
     	if (!subscene) return;
 
-	Viewpoint* viewpoint = subscene->getViewpoint(false);
+	ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 
   	rotCurrent = screenToVector(vwidth,vheight,mouseX,mouseY);
 	if (windowImpl->beginGL()) {
-	    viewpoint->updateMouseMatrix(rotBase,rotCurrent);
+	    modelviewpoint->updateMouseMatrix(rotBase,rotCurrent);
 	    windowImpl->endGL();
 
 	    View::update();
@@ -352,8 +352,8 @@ void RGLView::trackballEnd()
     Subscene* subscene = scene->getSubscene(activeSubscene);
     if (!subscene) return;
     
-    Viewpoint* viewpoint = subscene->getViewpoint(false);
-    viewpoint->mergeMouseMatrix();
+    ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
+    modelviewpoint->mergeMouseMatrix();
 }
 
 void RGLView::oneAxisBegin(int mouseX, int mouseY)
@@ -366,12 +366,12 @@ void RGLView::oneAxisUpdate(int mouseX, int mouseY)
     	Subscene* subscene = scene->getSubscene(activeSubscene);
     	if (!subscene) return;
 
-	Viewpoint* viewpoint = subscene->getViewpoint(false);
+	ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 
   	rotCurrent = screenToVector(vwidth,vheight,mouseX,height/2);
 
 	if (windowImpl->beginGL()) {
-	    viewpoint->mouseOneAxis(rotBase,rotCurrent,axis[drag-1]);
+	    modelviewpoint->mouseOneAxis(rotBase,rotCurrent,axis[drag-1]);
 	    windowImpl->endGL();
 
 	    View::update();
@@ -383,9 +383,9 @@ void RGLView::polarBegin(int mouseX, int mouseY)
     	Subscene* subscene = scene->getSubscene(activeSubscene);
     	if (!subscene) return;
 
-	Viewpoint* viewpoint = subscene->getViewpoint(true);
+	ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 
-  	camBase = viewpoint->getPosition();
+  	camBase = modelviewpoint->getPosition();
 
 	dragBase = screenToPolar(vwidth,vheight,mouseX,mouseY);
 
@@ -396,7 +396,7 @@ void RGLView::polarUpdate(int mouseX, int mouseY)
   Subscene* subscene = scene->getSubscene(activeSubscene);
   if (!subscene) return;
 
-  Viewpoint* viewpoint = subscene->getViewpoint(true);
+  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 
   dragCurrent = screenToPolar(vwidth,vheight,mouseX,mouseY);
 
@@ -404,7 +404,7 @@ void RGLView::polarUpdate(int mouseX, int mouseY)
 
   newpos.phi = clamp( newpos.phi, -90.0f, 90.0f );
   
-  viewpoint->setPosition( newpos );
+  modelviewpoint->setPosition( newpos );
   View::update();
 }
 
@@ -434,13 +434,13 @@ void RGLView::adjustFOVUpdate(int mouseX, int mouseY)
   Subscene* subscene = scene->getSubscene(activeSubscene);
   if (!subscene) return;
 
-  Viewpoint* viewpoint = subscene->getViewpoint(true);
+  UserViewpoint* userviewpoint = subscene->getUserViewpoint();
 
   int dy = mouseY - fovBaseY;
 
   float py = -((float)dy/(float)vheight) * 180.0f;
 
-  viewpoint->setFOV( viewpoint->getFOV() + py );
+  userviewpoint->setFOV( userviewpoint->getFOV() + py );
 
   View::update();
 
@@ -507,12 +507,12 @@ void RGLView::adjustZoomUpdate(int mouseX, int mouseY)
   Subscene* subscene = scene->getSubscene(activeSubscene);
   if (!subscene) return;
 
-  Viewpoint* viewpoint = subscene->getViewpoint(false);
+  UserViewpoint* userviewpoint = subscene->getUserViewpoint();
 
   int dy = mouseY - zoomBaseY;
 
-  float zoom = clamp ( viewpoint->getZoom() * exp(dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
-  viewpoint->setZoom(zoom);
+  float zoom = clamp ( userviewpoint->getZoom() * exp(dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
+  userviewpoint->setZoom(zoom);
 
   View::update();
 
@@ -725,9 +725,9 @@ void RGLView::getUserMatrix(double* dest)
   if (!subscene)
     subscene = scene->getCurrentSubscene();
 
-  Viewpoint* viewpoint = subscene->getViewpoint(false);
+  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 
-  viewpoint->getUserMatrix(dest);
+  modelviewpoint->getUserMatrix(dest);
 }
 
 void RGLView::setUserMatrix(double* src)
@@ -738,9 +738,9 @@ void RGLView::setUserMatrix(double* src)
   if (!subscene)
     subscene = scene->getCurrentSubscene();
     	   
-  Viewpoint* viewpoint = subscene->getViewpoint(false);
+  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 
-  viewpoint->setUserMatrix(src);
+  modelviewpoint->setUserMatrix(src);
 
   View::update();
 }
@@ -753,9 +753,9 @@ void RGLView::getScale(double* dest)
   if (!subscene)
     subscene = scene->getCurrentSubscene();
     
-  Viewpoint* viewpoint = subscene->getViewpoint(false);
+  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 	
-  viewpoint->getScale(dest);
+  modelviewpoint->getScale(dest);
 }
 
 void RGLView::setScale(double* src)
@@ -766,9 +766,9 @@ void RGLView::setScale(double* src)
   if (!subscene)
     subscene = scene->getCurrentSubscene();
     
-  Viewpoint* viewpoint = subscene->getViewpoint(false);
+  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 
-  viewpoint->setScale(src);
+  modelviewpoint->setScale(src);
 
   View::update();
 }
@@ -845,8 +845,8 @@ void RGLView::getPosition(double* dest)
   if (!subscene)
     subscene = scene->getCurrentSubscene();
     
-  Viewpoint* viewpoint = subscene->getViewpoint(true);
-  viewpoint->getPosition(dest);
+  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
+  modelviewpoint->getPosition(dest);
 }
 
 void RGLView::setPosition(double* src)
@@ -857,9 +857,9 @@ void RGLView::setPosition(double* src)
   if (!subscene)
     subscene = scene->getCurrentSubscene();
     
-  Viewpoint* viewpoint = subscene->getViewpoint(true);
+  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
 
-  viewpoint->setPosition(src);
+  modelviewpoint->setPosition(src);
 }
 
 

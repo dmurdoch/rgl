@@ -422,7 +422,7 @@ void rgl::rgl_light ( int* successptr, int* idata, double* ddata )
 
 void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
 {
-  int success = RGL_FAIL;
+  int success;
 
   Device* device;
 
@@ -436,9 +436,17 @@ void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
     
     int   interactive = idata[0];
     int   polar       = idata[1];
+    int   user        = idata[2];
+    int   model       = idata[3];
     
-    if (polar) success = as_success( device->add( new Viewpoint(PolarCoord(theta, phi), fov, zoom, scale, interactive) ) );
-    else       success = as_success( device->add( new Viewpoint(ddata + 7, fov, zoom, scale, interactive) ) );
+    if (model) {
+      if (polar) success = as_success( device->add( new ModelViewpoint(PolarCoord(theta, phi), scale, interactive) ) );
+      else       success = as_success( device->add( new ModelViewpoint(ddata + 7, scale, interactive) ) );
+    } else
+      success = RGL_SUCCESS;
+      
+    if (user && success)
+      success = as_success( device->add( new UserViewpoint(fov, zoom) ) );
 
     CHECKGLERROR;
   }
@@ -455,8 +463,8 @@ void rgl::rgl_getZoom(int* successptr, double* zoom)
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint(false);
-    *zoom = viewpoint->getZoom();
+    UserViewpoint* userviewpoint = scene->getUserViewpoint();
+    *zoom = userviewpoint->getZoom();
     success = RGL_SUCCESS;
     CHECKGLERROR;
   }
@@ -472,8 +480,8 @@ void rgl::rgl_setZoom(int* successptr, double* zoom)
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint(false);
-    viewpoint->setZoom( *zoom );
+    UserViewpoint* userviewpoint = scene->getUserViewpoint();
+    userviewpoint->setZoom( *zoom );
     rglview->update();
     success = RGL_SUCCESS;
     CHECKGLERROR;
@@ -490,8 +498,8 @@ void rgl::rgl_getFOV(int* successptr, double* fov)
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint(true);
-    *fov = viewpoint->getFOV();
+    UserViewpoint* userviewpoint = scene->getUserViewpoint();
+    *fov = userviewpoint->getFOV();
     success = RGL_SUCCESS;
     CHECKGLERROR;
   }
@@ -507,8 +515,8 @@ void rgl::rgl_setFOV(int* successptr, double* fov)
 
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint(true);
-    viewpoint->setFOV(*fov);
+    UserViewpoint* userviewpoint = scene->getUserViewpoint();
+    userviewpoint->setFOV(*fov);
     rglview->update();
     success = RGL_SUCCESS;
     CHECKGLERROR;

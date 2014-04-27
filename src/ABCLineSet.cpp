@@ -1,6 +1,5 @@
 #include <algorithm>
 #include "ABCLineSet.hpp"
-#include "Viewpoint.hpp"
 #include "R.h"
 
 using namespace rgl;

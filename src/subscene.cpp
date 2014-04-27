@@ -15,7 +15,8 @@ Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_proj
  : SceneNode(SUBSCENE), parent(in_parent), do_viewport(in_viewport), do_projection(in_projection),
    do_model(in_model), viewport(0.,0.,1.,1.),Zrow(), Wrow()
 {
-  viewpoint = NULL;
+  userviewpoint = NULL;
+  modelviewpoint = NULL;
   bboxdeco   = NULL;
   background = NULL;
   ignoreExtent = false;
@@ -29,16 +30,22 @@ Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_proj
       projMatrix[4*i + j] = i == j;
     }
   }  
-  if (parent && (do_projection > EMBED_INHERIT || do_model > EMBED_INHERIT))
-    add(new Viewpoint(*(parent->getViewpoint(true))));
+  if (parent) {
+    if (do_projection > EMBED_INHERIT)
+      add(new UserViewpoint(*(parent->getUserViewpoint())));
+    if (do_model > EMBED_INHERIT)
+      add(new ModelViewpoint(*(parent->getModelViewpoint())));
+  }
 }
 
 Subscene::~Subscene() 
 {
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
     delete (*i);
-  if (viewpoint)
-    delete viewpoint;
+  if (userviewpoint)
+    delete userviewpoint;
+  if (modelviewpoint)
+    delete modelviewpoint;
   if (background)
     delete background;
 }
@@ -64,11 +71,19 @@ bool Subscene::add(SceneNode* node)
 	  success = true;
       }
       break;
-    case VIEWPOINT:
+    case USERVIEWPOINT:
       {
-        if (viewpoint)
-          delete viewpoint;
-        viewpoint = (Viewpoint*) node;
+        if (userviewpoint)
+          delete userviewpoint;
+        userviewpoint = (UserViewpoint*) node;
+        success = true;
+      }
+      break;
+    case MODELVIEWPOINT:
+      {
+        if (modelviewpoint)
+          delete modelviewpoint;
+        modelviewpoint = (ModelViewpoint*) node;
         success = true;
       }
       break;
@@ -311,8 +326,12 @@ int Subscene::get_id_count(TypeID type, bool recursive)
       result += 1;
       break;
     }
-    case VIEWPOINT: {    
-      result += viewpoint ? 1 : 0;
+    case USERVIEWPOINT: {    
+      result += do_projection > EMBED_INHERIT ? 1 : 0;
+      break;
+    }
+    case MODELVIEWPOINT: {    
+      result += do_model > EMBED_INHERIT ? 1 : 0;
       break;
     }
     case BACKGROUND: {
@@ -334,11 +353,19 @@ void Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
       types++;
     }
     break;
-  case VIEWPOINT:
-    if (viewpoint) {
-      *ids = viewpoint->getObjID();
-      *types = R_alloc(strlen("viewpoint")+1, 1);
-      strcpy(*types, "viewpoint");
+  case USERVIEWPOINT:
+    if (userviewpoint) {
+      *ids = userviewpoint->getObjID();
+      *types = R_alloc(strlen("userviewpoint")+1, 1);
+      strcpy(*types, "userviewpoint");
+      types++;
+    }
+    break;
+  case MODELVIEWPOINT:
+    if (modelviewpoint) {
+      *ids = modelviewpoint->getObjID();
+      *types = R_alloc(strlen("modelviewpoint")+1, 1);
+      strcpy(*types, "modelviewpoint");
       types++;
     }
     break;
@@ -373,12 +400,20 @@ BBoxDeco* Subscene::get_bboxdeco()
   else return NULL;
 }
 
-Viewpoint* Subscene::getViewpoint(bool projection)
+UserViewpoint* Subscene::getUserViewpoint()
 {
-  if (viewpoint && ((projection && do_projection > EMBED_INHERIT)
-                  ||(!projection && do_model > EMBED_INHERIT))) return viewpoint;
-  else if (parent) return parent->getViewpoint(projection);
-  else error("must have a viewpoint");
+  if (userviewpoint && do_projection > EMBED_INHERIT)
+    return userviewpoint;
+  else if (parent) return parent->getUserViewpoint();
+  else error("must have a user viewpoint");
+}
+
+ModelViewpoint* Subscene::getModelViewpoint()
+{
+  if (modelviewpoint && do_model > EMBED_INHERIT)
+    return modelviewpoint;
+  else if (parent) return parent->getModelViewpoint();
+  else error("must have a model viewpoint");
 }
 
 void Subscene::render(RenderContext* renderContext)
@@ -391,8 +426,6 @@ void Subscene::render(RenderContext* renderContext)
              model matrix.  We need ugly code to use the right one when 
              one is inherited and the other is not */
 
-  Viewpoint* modelviewpoint = getViewpoint(false);
-  
   renderContext->subscene = this;
   
   if (do_viewport > EMBED_INHERIT) {
@@ -426,7 +459,7 @@ void Subscene::render(RenderContext* renderContext)
     // GET DATA VOLUME SPHERE
     //
 
-    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, modelviewpoint->scale );
+    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, getModelViewpoint()->scale );
     if (total_bsphere.radius <= 0.0)
       total_bsphere.radius = 1.0;
 
@@ -448,7 +481,7 @@ void Subscene::render(RenderContext* renderContext)
   
   // Now the model matrix
   
-  if (do_model > EMBED_INHERIT || viewpoint) {
+  if (do_model > EMBED_INHERIT) {
    
     for (int i=0; i<16; i++) savemodelview[i] = modelMatrix[i];
     setupModelMatrix(renderContext, total_bsphere);
@@ -548,7 +581,7 @@ void Subscene::render(RenderContext* renderContext)
 #endif    
 
     /* Reset flag(s) now that scene has been rendered */
-    modelviewpoint->scaleChanged = false;
+    getModelViewpoint()->scaleChanged = false;
 
     /* Reset clipplanes */
     disableClipplanes(renderContext);
@@ -624,7 +657,7 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
   if (do_projection == EMBED_REPLACE)
     glLoadIdentity();
     
-  getViewpoint(true)->setupFrustum(rctx, viewSphere);
+  getUserViewpoint()->setupFrustum(rctx, viewSphere);
     
   SAVEGLERROR;    
 }
@@ -635,7 +668,7 @@ void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
   if (do_model == EMBED_REPLACE)
     glLoadIdentity();
     
-  getViewpoint(false)->setupTransformation(rctx, viewSphere);
+  getModelViewpoint()->setupTransformation(rctx, viewSphere);
   
   SAVEGLERROR;
 }

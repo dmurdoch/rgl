@@ -3,7 +3,6 @@
 #include "glgui.hpp"
 #include "R.h"
 #ifdef HAVE_FREETYPE
-#include "Viewpoint.hpp"
 #include <map>
 #endif
 

@@ -9,13 +9,21 @@ using namespace rgl;
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
-//   Viewpoint
+//   UserViewpoint -- the viewer's portion of the viewpoint
+//   ModelViewpoint -- the model's portion
+//
+//   These were previously just one Viewpoint class, but subscenes mean they need to be split
 //
 
-Viewpoint::Viewpoint(PolarCoord in_position, float in_fov, float in_zoom, Vec3 in_scale, bool in_interactive) :
-    SceneNode(VIEWPOINT),
+UserViewpoint::UserViewpoint(float in_fov, float in_zoom) :
+    SceneNode(USERVIEWPOINT),
     fov(in_fov),
-    zoom(in_zoom),
+    zoom(in_zoom)
+{
+}
+
+ModelViewpoint::ModelViewpoint(PolarCoord in_position, Vec3 in_scale, bool in_interactive) :
+    SceneNode(MODELVIEWPOINT),
     interactive(in_interactive)
 {
     scale = in_scale;
@@ -24,17 +32,14 @@ Viewpoint::Viewpoint(PolarCoord in_position, float in_fov, float in_zoom, Vec3 i
     clearMouseMatrix();
 }
 
-
-PolarCoord& Viewpoint::getPosition()
+PolarCoord& ModelViewpoint::getPosition()
 {
   return position;
 }
 
-Viewpoint::Viewpoint(double* in_userMatrix, float in_fov, float in_zoom, Vec3 in_scale, bool in_interactive) :
-    SceneNode(VIEWPOINT),
+ModelViewpoint::ModelViewpoint(double* in_userMatrix, Vec3 in_scale, bool in_interactive) :
+    SceneNode(MODELVIEWPOINT),
     position( PolarCoord(0.0f, 0.0f) ),
-    fov(in_fov),
-    zoom(in_zoom),
     interactive(in_interactive)
 {
     for (int i=0; i<16; i++) {
@@ -46,7 +51,8 @@ Viewpoint::Viewpoint(double* in_userMatrix, float in_fov, float in_zoom, Vec3 in
     clearMouseMatrix();
 }
 
-void Viewpoint::setPosition(const PolarCoord& in_position)
+
+void ModelViewpoint::setPosition(const PolarCoord& in_position)
 {
     Matrix4x4 M,N;
     M.setRotate(0, in_position.phi);
@@ -56,39 +62,39 @@ void Viewpoint::setPosition(const PolarCoord& in_position)
     position = in_position;
 }
 
-void Viewpoint::clearMouseMatrix()
+void ModelViewpoint::clearMouseMatrix()
 {
     Matrix4x4 M;
     M.setIdentity();
     M.getData((double*)mouseMatrix);
 }
 
-float Viewpoint::getZoom() const
+float UserViewpoint::getZoom() const
 {
   return zoom;
 }
 
-void Viewpoint::setZoom(const float in_zoom)
+void UserViewpoint::setZoom(const float in_zoom)
 {
   zoom = in_zoom;
 }
 
-bool Viewpoint::isInteractive() const
+bool ModelViewpoint::isInteractive() const
 {
   return interactive;
 }
 
-void Viewpoint::setFOV(const float in_fov)
+void UserViewpoint::setFOV(const float in_fov)
 {
   fov = clamp(in_fov, 0.0, 179.0 );
 }
 
-float Viewpoint::getFOV() const
+float UserViewpoint::getFOV() const
 {
   return fov;
 }
 
-void Viewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
+void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 {
   frustum.enclose(viewSphere.radius, fov, rctx->subscene->pviewport[2], rctx->subscene->pviewport[3]);
 
@@ -108,14 +114,14 @@ void Viewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
   glTranslatef( 0.0f, 0.0f, -frustum.distance );
 }
 
-void Viewpoint::setupOrientation(RenderContext* rctx) const
+void ModelViewpoint::setupOrientation(RenderContext* rctx) const
 {
   glMultMatrixd(mouseMatrix);
   glMultMatrixd(userMatrix);
 
 }
 
-void Viewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSphere)
+void ModelViewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSphere)
 {     
   // modelview
 
@@ -124,7 +130,7 @@ void Viewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSpher
   glTranslatef( -viewSphere.center.x, -viewSphere.center.y, -viewSphere.center.z );
 }
 
-void Viewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
+void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
 {
 	Vec3 axis = dragStart.cross(dragCurrent);
 
@@ -139,7 +145,7 @@ void Viewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
 	glPopMatrix();
 }
 
-void Viewpoint::updateMouseMatrix(PolarCoord newpos)
+void ModelViewpoint::updateMouseMatrix(PolarCoord newpos)
 {
     Matrix4x4 M,N;
     M.setRotate(0, newpos.phi);
@@ -148,7 +154,7 @@ void Viewpoint::updateMouseMatrix(PolarCoord newpos)
     M.getData((double*)mouseMatrix);
 }
 
-void Viewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axis)
+void ModelViewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axis)
 {
     float angle = math::rad2deg(dragCurrent.x-dragStart.x);
     Matrix4x4 M((double *)userMatrix);
@@ -161,7 +167,7 @@ void Viewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axis)
     glPopMatrix();
 }
 
-void Viewpoint::mergeMouseMatrix()
+void ModelViewpoint::mergeMouseMatrix()
 {
     Matrix4x4 M((double *)userMatrix), N((double *)mouseMatrix);
     M = N * M;
@@ -170,26 +176,26 @@ void Viewpoint::mergeMouseMatrix()
     N.getData((double *)mouseMatrix);
 }
 
-void Viewpoint::getUserMatrix(double* dest)
+void ModelViewpoint::getUserMatrix(double* dest)
 {
 	for(int i=0; i<16;i++)
 		dest[i] = userMatrix[i];
 }
 
-void Viewpoint::setUserMatrix(double* src)
+void ModelViewpoint::setUserMatrix(double* src)
 {
 	for(int i=0; i<16;i++)
 		userMatrix[i] = src[i];
 }
 
-void Viewpoint::getScale(double* dest)
+void ModelViewpoint::getScale(double* dest)
 {
     dest[0] = scale.x;
     dest[1] = scale.y;
     dest[2] = scale.z;
 }
 
-void Viewpoint::setScale(double* src)
+void ModelViewpoint::setScale(double* src)
 {
     scale.x = src[0];
     scale.y = src[1];
@@ -197,19 +203,14 @@ void Viewpoint::setScale(double* src)
     scaleChanged = true;
 }
 
-void Viewpoint::getPosition(double* dest)
+void ModelViewpoint::getPosition(double* dest)
 {
     dest[0] = position.theta;
     dest[1] = position.phi;
 }
 
-void Viewpoint::setPosition(double* src)
+void ModelViewpoint::setPosition(double* src)
 {
     position.theta = src[0];
     position.phi = src[1];
-}
-
-Vertex Viewpoint::getCOP(const Sphere& viewSphere) const
-{
-  return viewSphere.center + ( position.vector() * frustum.distance * 2.0f );
 }

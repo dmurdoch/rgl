@@ -98,7 +98,8 @@ public:
   /**
    * obtain bounded viewpoint
    **/
-  Viewpoint* getViewpoint(bool projection);
+  UserViewpoint* getUserViewpoint();
+  ModelViewpoint* getModelViewpoint();
   
   /**
    * Get and set flag to ignore elements in bounding box
