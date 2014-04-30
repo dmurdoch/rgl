@@ -31,10 +31,16 @@ Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_proj
     }
   }  
   if (parent) {
-    if (do_projection > EMBED_INHERIT)
+    if (do_projection == EMBED_REPLACE)
       add(new UserViewpoint(*(parent->getUserViewpoint())));
-    if (do_model > EMBED_INHERIT)
+    else if (do_projection == EMBED_MODIFY)
+      add(new UserViewpoint(0.0, 1.0)); /* should be like an identity */
+    
+    if (do_model == EMBED_REPLACE)
       add(new ModelViewpoint(*(parent->getModelViewpoint())));
+    else if (do_model == EMBED_MODIFY)
+      add(new ModelViewpoint(PolarCoord(0.0, 0.0), Vec3(1.0, 1.0, 1.0), 
+                             parent->getModelViewpoint()->isInteractive()));
   }
 }
 
