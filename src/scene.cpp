@@ -171,101 +171,76 @@ bool Scene::add(SceneNode* node)
 
 bool Scene::pop(TypeID type, int id)
 {
-  bool success = false;
   std::vector<Shape*>::iterator ishape;
   std::vector<Light*>::iterator ilight;
   std::vector<Subscene*>::iterator isubscene;
   std::vector<BBoxDeco*>::iterator ibboxdeco;
   
-  switch(type) {
-    case SHAPE: {
-      if (shapes.empty()) return false;
-      break;
+  if (id == 0) {  
+    switch(type) {
+      case SHAPE: {
+        if (shapes.empty()) return false;
+        ishape = shapes.end() - 1;
+        id = (*ishape)->getObjID(); /* for zsort or unsort */        
+	break;
+      }
+      case LIGHT: {
+        if (lights.empty()) return false;
+        ilight = lights.end() - 1;
+        id = (*ilight)->getObjID();        
+	break;
+      }
+      case BBOXDECO: {
+        if (bboxdecos.empty()) return false;
+        ibboxdeco = bboxdecos.end() - 1;
+	id = (*ibboxdeco)->getObjID();
+        break;
+      }
+      case SUBSCENE: 
+        id = currentSubscene->getObjID();
+        break;
+      default:
+	return false;
     }
-    case LIGHT: {
-      if (lights.empty()) return false;
-      break;
-    }
-    case BBOXDECO: {
-      if (bboxdecos.empty()) return false;
-      break;
-    }
-    case SUBSCENE: 
-      currentSubscene = rootSubscene.popSubscene(id, currentSubscene);
-      return true;
-    default: break;
+  } 
+  
+  ishape = std::find_if(shapes.begin(), shapes.end(), 
+			std::bind2nd(std::ptr_fun(&sameID), id));
+  if (ishape != shapes.end()) {
+    rootSubscene.hideShape(id, true);
+    Shape* shape = *ishape;
+    shapes.erase(ishape);
+    delete shape;
+    return true;
   }
   
-  if (id == 0) {
-    switch(type) {
-    case SHAPE:  
-      ishape = shapes.end() - 1;
-      id = (*ishape)->getObjID(); /* for zsort or unsort */
-      break;
-    case LIGHT:
-      ilight = lights.end() - 1;
-      id = (*ilight)->getObjID();
-      break;
-    case BBOXDECO:
-      ibboxdeco = bboxdecos.end() - 1;
-    default:
-      break;
-    }
-  } else {
-    switch(type) {
-    case SHAPE:
-      ishape = std::find_if(shapes.begin(), shapes.end(), 
-                            std::bind2nd(std::ptr_fun(&sameID), id));
-      if (ishape == shapes.end()) return false;
-      break;
-    case LIGHT:
-      ilight = std::find_if(lights.begin(), lights.end(),
-			    std::bind2nd(std::ptr_fun(&sameID), id));
-      if (ilight == lights.end()) return false;
-      break;
-    case BBOXDECO:
-      ibboxdeco = std::find_if(bboxdecos.begin(), bboxdecos.end(),
-			    std::bind2nd(std::ptr_fun(&sameID), id));
-      if (ibboxdeco == bboxdecos.end()) return false;
-      break;
-    default:
-      return false;
-    }
+  ilight = std::find_if(lights.begin(), lights.end(),
+			std::bind2nd(std::ptr_fun(&sameID), id));
+  if (ilight != lights.end()) {
+    rootSubscene.hideLight(id, true);
+    Light* light = *ilight;
+    lights.erase(ilight);
+    delete light;
+    return true;      
+  }    
+      
+  ibboxdeco = std::find_if(bboxdecos.begin(), bboxdecos.end(),
+			   std::bind2nd(std::ptr_fun(&sameID), id));
+  if (ibboxdeco != bboxdecos.end()) {
+    rootSubscene.hideBBoxDeco(id, true);
+    BBoxDeco* bboxdeco = *ibboxdeco;
+    bboxdecos.erase(ibboxdeco);
+    delete bboxdeco;
+    return true;
   }
-
-  switch(type) {
-  case SHAPE:
-    {
-      rootSubscene.hideShape(id, true);
-      Shape* shape = *ishape;
-      shapes.erase(ishape);
-      delete shape;
-      success = true;
-    }  
-    break;
-  case LIGHT:
-    {
-      rootSubscene.hideLight(id, true);
-      Light* light = *ilight;
-      lights.erase(ilight);
-      delete light;
-      success = true;
-    }
-    break;
-  case BBOXDECO:
-    {
-      rootSubscene.hideBBoxDeco(id, true);
-      BBoxDeco* bboxdeco = *ibboxdeco;
-      bboxdecos.erase(ibboxdeco);
-      delete bboxdeco;
-      success = true;
-    }
-    break;
-  default: // BACKGROUND ignored
-    break;
+  
+  SceneNode* node = get_scenenode(id, true);
+  if (node && node->getTypeID() == SUBSCENE) {
+    currentSubscene = rootSubscene.popSubscene(id, currentSubscene);
+    return true;
   }
-
-  return success;
+  
+  return false;
 }
 
 int Scene::get_id_count(TypeID type)

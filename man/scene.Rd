@@ -34,12 +34,15 @@ rgl.ids( type = "shapes" )
   \item{...}{generic arguments passed through to RGL-specific (or other) functions}
 }
 \details{
-RGL holds two stacks. One is for shapes and the other is for lights. 
+RGL holds several lists of objects in each scene. 
+There are lists for shapes, lights, bounding box decorations, subscenes, etc.
 \code{clear3d} and \code{rgl.clear} clear the specified stack, or restore
-the defaults for the bounding box (not visible) or viewpoint.  By default
-with \code{id=0} \code{rgl.pop} removes 
-the top-most (last added) node on the shape stack.  The \code{id} argument
-may be used to specify arbitrary item(s) to remove from the specified stack.
+the defaults for the bounding box (not visible) or viewpoint. 
+With \code{id=0} \code{rgl.pop} removes 
+the last added node on the list (except for subscenes:  there it
+removes the active subscene).  The \code{id} argument
+may be used to specify arbitrary item(s) to remove; if \code{id != 0}, 
+the \code{type} argument is ignored.
 
 \code{rgl.clear} and \code{clear3d} may also be used to clear material properties
 back to their defaults.  
