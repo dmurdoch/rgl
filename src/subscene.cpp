@@ -674,7 +674,7 @@ void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
   if (do_model == EMBED_REPLACE)
     glLoadIdentity();
     
-  getModelViewpoint()->setupTransformation(rctx, viewSphere);
+  getModelViewpoint()->setupTransformation(rctx, viewSphere, getUserViewpoint()->getViewerLocation());
   
   SAVEGLERROR;
 }
@@ -719,9 +719,6 @@ void Subscene::setupLights(RenderContext* rctx)
     glPushMatrix();
     glLoadIdentity();
 
-    UserViewpoint* userviewpoint = getUserViewpoint();
-    glTranslatef( 0.0f, 0.0f, userviewpoint->frustum.distance ); /* undo frustum translation */
-      
     for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
 
       Light* light = *iter;
