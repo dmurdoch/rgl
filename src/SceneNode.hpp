@@ -31,6 +31,7 @@ enum TypeID {
 #define BACKGROUND 6  // 5 was used for the material
 #define SUBSCENE 7
 #define MODELVIEWPOINT 8
+#define MAX_TYPE 8
 
 typedef unsigned int TypeID;
 typedef int ObjID;

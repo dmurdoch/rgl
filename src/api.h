@@ -90,6 +90,7 @@ void rgl_getsubscenechildcount(int* id, int* n);
 void rgl_getsubscenechildren(int* id, int* children);
 void rgl_addtosubscene (int* successptr, int* count, int* ids);
 void rgl_delfromsubscene(int* successptr, int* count, int* ids);
+void rgl_gc(int* count, int* protect);
 
 void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
 void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
