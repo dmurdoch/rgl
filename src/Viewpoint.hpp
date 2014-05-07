@@ -20,7 +20,7 @@ public:
   PolarCoord& getPosition();
   void        setPosition(const PolarCoord& position);
   void	      clearMouseMatrix();
-  void        setupTransformation(RenderContext* rctx, const Sphere& viewvolumeSphere, Vec3 viewerLocation);
+  void        setupTransformation(RenderContext* rctx, const Sphere& viewvolumeSphere);
   void        setupOrientation(RenderContext* rctx) const;
   bool        isInteractive() const;
   void        updateMouseMatrix(Vertex dragStart,Vertex dragCurrent);

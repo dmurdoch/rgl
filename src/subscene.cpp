@@ -424,7 +424,6 @@ ModelViewpoint* Subscene::getModelViewpoint()
 
 void Subscene::render(RenderContext* renderContext)
 {
-  GLdouble savemodelview[16];
   GLdouble saveprojection[16];
   GLint saveviewport[4] = {0,0,0,0};
   
@@ -475,7 +474,8 @@ void Subscene::render(RenderContext* renderContext)
 
   SAVEGLERROR;
   
-  // Now render the current scene.  First we use the projection matrix...
+  // Now render the current scene.  First we use the projection matrix.  If we're inheriting,
+  // just use the parent.
   
   if (do_projection > EMBED_INHERIT) {
     
@@ -485,15 +485,12 @@ void Subscene::render(RenderContext* renderContext)
   
   }
   
-  // Now the model matrix
+  // Now the model matrix.  Since this depends on both the viewpoint and the model
+  // transformations, we don't bother using the parent one, we reconstruct in
+  // every subscene.
   
-  if (do_model > EMBED_INHERIT) {
-   
-    for (int i=0; i<16; i++) savemodelview[i] = modelMatrix[i];
-    setupModelMatrix(renderContext, total_bsphere);
-    glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
-  
-  }
+  setupModelViewMatrix(renderContext, total_bsphere);
+  glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
   
   setupLights(renderContext);
   
@@ -600,11 +597,6 @@ void Subscene::render(RenderContext* renderContext)
   for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
     (*iter)->render(renderContext);
     
-  if (do_model > EMBED_INHERIT) {
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixd(savemodelview);
-  }
-  
   if (do_projection > EMBED_INHERIT) {
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixd(saveprojection);
@@ -668,13 +660,31 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
   SAVEGLERROR;    
 }
 
-void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
+// The ModelView matrix has components of the user view (the translation at the start)
+// and also the model transformations.  The former comes from the userViewpoint,
+// the latter from the modelViewpoint, possibly after applying the same from the parents.
+// We always reconstruct from scratch rather than trying to use the matrix in place.
+
+void Subscene::setupModelViewMatrix(RenderContext* rctx, const Sphere& viewSphere)
 {
   glMatrixMode(GL_MODELVIEW);
-  if (do_model == EMBED_REPLACE)
-    glLoadIdentity();
+  glLoadIdentity();
+  
+  Vec3 viewerLocation = getUserViewpoint()->getViewerLocation();
+  glTranslatef( viewerLocation.x, viewerLocation.y, viewerLocation.z );
+  
+  setupModelMatrix(rctx, viewSphere);
+  
+  SAVEGLERROR;
+}
+
+void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
+{
+  if (do_model < EMBED_REPLACE && parent)
+    parent->setupModelMatrix(rctx, viewSphere);
     
-  getModelViewpoint()->setupTransformation(rctx, viewSphere, getUserViewpoint()->getViewerLocation());
+  if (do_model > EMBED_INHERIT)
+    getModelViewpoint()->setupTransformation(rctx, viewSphere);
   
   SAVEGLERROR;
 }
