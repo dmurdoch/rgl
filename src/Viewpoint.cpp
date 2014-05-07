@@ -120,10 +120,9 @@ void ModelViewpoint::setupOrientation(RenderContext* rctx) const
 
 }
 
-void ModelViewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSphere, Vec3 viewerLocation)
+void ModelViewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSphere)
 {     
   // modelview
-  glTranslatef( viewerLocation.x, viewerLocation.y, viewerLocation.z );
   setupOrientation(rctx);
   glScaled(scale.x, scale.y, scale.z);
   glTranslatef( -viewSphere.center.x, -viewSphere.center.y, -viewSphere.center.z );
