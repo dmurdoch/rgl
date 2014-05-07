@@ -422,7 +422,7 @@ void rgl::rgl_light ( int* successptr, int* idata, double* ddata )
 
 void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
 {
-  int success;
+  int success = RGL_FAIL;
 
   Device* device;
 
@@ -939,6 +939,58 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
     }
   }
   *successptr = success;
+}
+
+void rgl::rgl_gc(int* count, int* protect)
+{
+  Device* device;
+  int nprotect = *count;
+  *count = 0;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    if (scene) {
+      Subscene* root = (Subscene *)scene->getRootSubscene(); // need to discard const
+      int rootid = root->getObjID();
+      for (TypeID i = 1; i < MAX_TYPE; i++) {
+        int n = scene->get_id_count(i);
+	if (n) {
+	  int ids[n];
+	  char* types[n];
+	  scene->get_ids(i, ids, types);
+	  // First, remove the protected ones by setting them to zero.
+	  bool anyunprot = false;
+	  for (int j = 0; j < n; j++) {
+	    bool prot = (rootid == ids[j]);
+	    for (int k = 0; k < nprotect && !prot; k++) 
+	      prot = (ids[j] == protect[k]);
+	    if (prot)
+	      ids[j] = 0;
+	    else
+	      anyunprot = true;
+	  }
+	  if (!anyunprot) 
+	    continue;
+	  int m = root->get_id_count(i, true);
+	  if (m) {
+	    int ids2[m];
+	    char* types2[m];
+	    root->get_ids(i, ids2, types2, true);
+	    for (int j = 0; j < n; j++) {
+	      bool found = (ids[j] == 0);
+	      for (int k = 0; k < m && !found; k++) { 
+	        found = (ids[j] == ids2[k]);
+	      }
+	      if (!found) {
+		scene->pop(i, ids[j]);
+		(*count)++;
+	      }
+	    }
+	  }        }
+      }
+    }
+  }
 }
 
 void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)

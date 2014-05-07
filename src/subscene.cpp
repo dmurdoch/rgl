@@ -326,10 +326,22 @@ int Subscene::get_id_count(TypeID type, bool recursive)
   int result = 0;
   if (recursive)
     for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-      result += (*i)->get_id_count(type);
+      result += (*i)->get_id_count(type, recursive);
   switch (type) {
+    case SHAPE: {
+      result += shapes.size();
+      break;
+    }
+    case LIGHT: {
+      result += lights.size();
+      break;
+    }
+    case BBOXDECO: {
+      result += bboxdeco ? 1 : 0;
+      break;
+    }
     case SUBSCENE: {
-      result += 1;
+      result += subscenes.size();
       break;
     }
     case USERVIEWPOINT: {    
@@ -348,48 +360,85 @@ int Subscene::get_id_count(TypeID type, bool recursive)
   return result;
 }
     
-void Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
+int Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
 {
+  char buffer[20];
+  int count = 0;
   switch(type) {
+  case SHAPE: 
+    for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
+      *ids++ = (*i)->getObjID();
+      buffer[19] = 0;
+      (*i)->getShapeName(buffer, 20);
+      *types = R_alloc(strlen(buffer)+1, 1);
+      strcpy(*types, buffer);
+      types++;
+      count++;
+    }
+    break;
+  case LIGHT: 
+    for (std::vector<Light*>::iterator i = lights.begin(); i != lights.end() ; ++ i ) {
+      *ids++ = (*i)->getObjID();
+      *types = R_alloc(strlen("light")+1, 1);
+      strcpy(*types, "light");
+      types++;
+      count++;
+    }
+    break;
+  case BBOXDECO: 
+    if (bboxdeco) {
+      *ids++ = bboxdeco->getObjID();
+      *types = R_alloc(strlen("bboxdeco")+1, 1);
+      strcpy(*types, "bboxdeco");
+      types++;
+      count++;
+    }
+    break;
   case SUBSCENE: 
     for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
       *ids++ = (*i)->getObjID();
       *types = R_alloc(strlen("subscene")+1, 1);
       strcpy(*types, "subscene");
       types++;
+      count++;
     }
     break;
   case USERVIEWPOINT:
     if (userviewpoint) {
-      *ids = userviewpoint->getObjID();
+      *ids++ = userviewpoint->getObjID();
       *types = R_alloc(strlen("userviewpoint")+1, 1);
       strcpy(*types, "userviewpoint");
       types++;
+      count++;
     }
     break;
   case MODELVIEWPOINT:
     if (modelviewpoint) {
-      *ids = modelviewpoint->getObjID();
+      *ids++ = modelviewpoint->getObjID();
       *types = R_alloc(strlen("modelviewpoint")+1, 1);
       strcpy(*types, "modelviewpoint");
       types++;
+      count++;
     }
     break;
   case BACKGROUND:
     if (background) {
-      *ids = background->getObjID();
+      *ids++ = background->getObjID();
       *types = R_alloc(strlen("background")+1, 1);
       strcpy(*types, "background");
       types++;
+      count++;
     }
     break;
+  }
   if (recursive)
     for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
-      (*i)->get_ids(type, ids, types);	
-      ids += (*i)->get_id_count(type);
-      types += (*i)->get_id_count(type);
+      int newcount = (*i)->get_ids(type, ids, types, true);
+      ids += newcount;
+      types += newcount;
+      count += newcount;
     }
-  }
+  return count;
 }
 
 Background* Subscene::get_background()

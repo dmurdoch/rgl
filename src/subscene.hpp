@@ -120,8 +120,8 @@ public:
  /**
    * get information about stacks
    */
-  int get_id_count(TypeID type, bool recursive = false);
-  void get_ids(TypeID type, int* ids, char** types, bool recursive = false);
+  int get_id_count(TypeID type, bool recursive);
+  int get_ids(TypeID type, int* ids, char** types, bool recursive);
 
   virtual int getAttributeCount(AABox& bbox, AttribID attrib);
   

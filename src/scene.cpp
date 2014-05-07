@@ -115,7 +115,7 @@ bool Scene::clear(TypeID typeID)
 void Scene::addShape(Shape* shape) {
 
   shapes.push_back(shape);
-  
+    
   currentSubscene->addShape(shape);
 
 }
@@ -248,7 +248,7 @@ int Scene::get_id_count(TypeID type)
   switch(type) {
   case SHAPE:  return shapes.size();
   case LIGHT:  return lights.size();
-  case SUBSCENE: return rootSubscene.get_id_count(type, true);
+  case SUBSCENE: return rootSubscene.get_id_count(type, true)+1;
   case BBOXDECO: return bboxdecos.size();
 
   default:     return rootSubscene.get_id_count(type, true);
@@ -290,11 +290,11 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
     *types = R_alloc(strlen("subscene")+1, 1);
     strcpy(*types, "subscene");
     types++;
-    rootSubscene.get_ids(type, ids, types);  
+    rootSubscene.get_ids(type, ids, types, true);  
     return;
     
   default:
-    rootSubscene.get_ids(type, ids, types);  
+    rootSubscene.get_ids(type, ids, types, true);  
     return;
   }
 }  

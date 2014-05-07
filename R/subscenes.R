@@ -90,3 +90,11 @@ delFromSubscene3d <- function(ids, subscene = subsceneInfo()$id) {
     stop("Failed to add objects to subscene ", subscene)
   invisible(subscene)
 }
+
+# This destroys any objects that are in the scene but
+# not in either the protect vector or visible in a subscene
+
+gc3d <- function(protect=NULL) {
+  protect <- as.integer(protect)
+  invisible( .C(rgl_gc, n = length(protect), protect)$n )
+}
