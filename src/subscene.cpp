@@ -490,11 +490,11 @@ void Subscene::render(RenderContext* renderContext)
     if (parent)  
       for (int i=0; i<4; i++) saveviewport[i] = parent->pviewport[i];
     setupViewport(renderContext);
-    glGetIntegerv(GL_VIEWPORT, pviewport);  
-  
-    SAVEGLERROR;
+
   }
-      
+  glGetIntegerv(GL_VIEWPORT, pviewport);  
+  SAVEGLERROR;
+  
   if (background) {
     GLbitfield clearFlags = background->getClearFlags(renderContext);
 
@@ -530,9 +530,9 @@ void Subscene::render(RenderContext* renderContext)
     
     for (int i=0; i<16; i++) saveprojection[i] = projMatrix[i];
     setupProjMatrix(renderContext, total_bsphere);
-    glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
   
   }
+  glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
   
   // Now the model matrix.  Since this depends on both the viewpoint and the model
   // transformations, we don't bother using the parent one, we reconstruct in
