@@ -1003,7 +1003,15 @@ void rgl::rgl_gc(int* count, int* protect)
 		(*count)++;
 	      }
 	    }
-	  }        }
+	  } else {	    for (int j = 0; j < n; j++) {
+	      bool found = (ids[j] == 0);
+	      if (!found) {
+		scene->pop(i, ids[j]);
+		(*count)++;
+	      }
+	    }
+	  }
+        }
       }
     }
   }
