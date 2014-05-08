@@ -88,6 +88,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
   R_NativePrimitiveArgType aLID[3] = {LGLSXP, INTSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIDD[4] = {INTSXP, INTSXP, REALSXP, REALSXP}; 
   R_NativePrimitiveArgType aLISD[4] = {LGLSXP, INTSXP, STRSXP, REALSXP}; 
+  R_NativePrimitiveArgType aIISI[4] = {INTSXP, INTSXP, STRSXP, INTSXP};
   R_NativePrimitiveArgType aLIDD[4] = {LGLSXP, INTSXP, REALSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIIID[5] = {INTSXP, INTSXP, INTSXP, INTSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIIIS[5] = {INTSXP, INTSXP, INTSXP, INTSXP, STRSXP}; 
@@ -119,8 +120,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    {"rgl_dev_bringtotop", 	(DL_FUNC) &rgl_dev_bringtotop, 2, aLL},
    {"rgl_clear", 		(DL_FUNC) &rgl_clear, 2, aLI},  
    {"rgl_pop", 			(DL_FUNC) &rgl_pop, 2, aLI},  
-   {"rgl_id_count", 		(DL_FUNC) &rgl_id_count, 2, aII},  
-   {"rgl_ids", 			(DL_FUNC) &rgl_ids, 3, aIIS},  
+   {"rgl_id_count", 		(DL_FUNC) &rgl_id_count, 3, aIII},  
+   {"rgl_ids", 			(DL_FUNC) &rgl_ids, 4, aIISI},  
    {"rgl_viewpoint", 		(DL_FUNC) &rgl_viewpoint, 3, aLID},    
    {"rgl_attrib_count", 	(DL_FUNC) &rgl_attrib_count, 3, aIII}, 
    {"rgl_attrib", 		(DL_FUNC) &rgl_attrib, 5, aIIIID}, 
@@ -170,8 +171,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_dev_bringtotop, 2),
    FUNDEF(rgl_clear, 2), 
    FUNDEF(rgl_pop, 2), 
-   FUNDEF(rgl_id_count, 2), 
-   FUNDEF(rgl_ids, 3), 
+   FUNDEF(rgl_id_count, 3), 
+   FUNDEF(rgl_ids, 4), 
    FUNDEF(rgl_viewpoint, 3), 
    FUNDEF(rgl_attrib_count, 3), 
    FUNDEF(rgl_attrib, 5), 

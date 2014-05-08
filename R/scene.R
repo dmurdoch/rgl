@@ -66,14 +66,14 @@ rgl.pop <- function( type = "shapes", id = 0)
   }
 }
 
-rgl.ids <- function( type = "shapes" )
+rgl.ids <- function( type = "shapes", subscene = subsceneInfo()$id )
 {
   type <- c(rgl.enum.nodetype(type), 0)
   
-  count <- .C( rgl_id_count, as.integer(type), count = integer(1))$count
+  count <- .C( rgl_id_count, as.integer(type), count = integer(1), subscene = as.integer(subscene))$count
   
   as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
-                                type=rep("",count) )[2:3] )
+                                type=rep("",count), subscene = as.integer(subscene) )[2:3] )
 }
 
 rgl.attrib.count <- function( id, attrib )

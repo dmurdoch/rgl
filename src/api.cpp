@@ -248,22 +248,28 @@ void rgl::rgl_pop(int* successptr, int* idata)
 //   rgl::rgl_id_count
 //
 
-void rgl::rgl_id_count(int* type, int* count)
+void rgl::rgl_id_count(int* type, int* count, int* subsceneID)
 {
-  Device* device;
+  Device* device;    
+  *count = 0;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    
-    *count = 0;
-    while (*type) {
-      *count += scene->get_id_count((TypeID) *type);
-      type++;
+    Subscene* subscene;
+
+    if (!*subsceneID) {
+      while (*type) {
+        *count += scene->get_id_count((TypeID) *type);
+        type++;
+      }
+    } else if ((subscene = scene->getSubscene(*subsceneID))) {
+      while (*type) {
+        *count += subscene->get_id_count((TypeID) *type, false);
+	type++;
+      }
     }
     CHECKGLERROR;
-  } else {
-    *count = 0;
-  }
+  } 
 }  
 
 //
@@ -271,19 +277,29 @@ void rgl::rgl_id_count(int* type, int* count)
 //   rgl::rgl_ids
 //
 
-void rgl::rgl_ids(int* type, int* ids, char** types)
+void rgl::rgl_ids(int* type, int* ids, char** types, int* subsceneID)
 {
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    
-    while (*type) {
-      int n = scene->get_id_count((TypeID) *type);
-      scene->get_ids((TypeID) *type, ids, types);
-      ids += n;
-      types += n;
-      type++;
+    Subscene* subscene;
+    if (!*subsceneID) {  
+      while (*type) {
+        int n = scene->get_id_count((TypeID) *type);
+        scene->get_ids((TypeID) *type, ids, types);
+        ids += n;
+        types += n;
+        type++;
+      }
+    } else if ((subscene = scene->getSubscene(*subsceneID))) {
+      while (*type) {
+        int n = subscene->get_id_count((TypeID) *type, false);
+        subscene->get_ids((TypeID) *type, ids, types, false);
+        ids += n;
+        types += n;
+        type++;
+      }	
     }
     CHECKGLERROR;
   }
