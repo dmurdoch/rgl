@@ -10,9 +10,11 @@ getr3dDefaults <- function()
 	     error = function(e) r3dDefaults)
 
 clear3d     <- function(type = c("shapes", "bboxdeco", "material"), 
-                        defaults=getr3dDefaults()) {
+                        defaults=getr3dDefaults(),
+                        subscene = 0) {
     .check3d()
-    rgl.clear( type )
+    rgl.clear( type, subscene = subscene )
+
     type <- rgl.enum.nodetype(type)
     if ( 4 %in% type ) { # userviewpoint
 	do.call("par3d", defaults["FOV"])

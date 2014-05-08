@@ -9,11 +9,11 @@
 Clear shapes, lights, bbox
 }
 \usage{
-clear3d( type = c("shapes", "bboxdeco", "material"), defaults ) 
-rgl.clear( type = "shapes" )
+clear3d( type = c("shapes", "bboxdeco", "material"), defaults, subscene = 0 ) 
+rgl.clear( type = "shapes", subscene = 0 )
 pop3d( ... )
 rgl.pop( type = "shapes", id = 0 )  
-rgl.ids( type = "shapes", subscene = subsceneInfo()$id )
+rgl.ids( type = "shapes", subscene = NA )
 }
 \arguments{
   \item{type}{Select subtype(s):
@@ -30,9 +30,11 @@ rgl.ids( type = "shapes", subscene = subsceneInfo()$id )
     }
   }
   \item{defaults}{default values to use after clearing}
+  \item{subscene}{which subscene to work with.  \code{NA} means the current one, 
+                  \code{0} means the whole scene}  
   \item{id}{vector of ID numbers of items to remove}
   \item{...}{generic arguments passed through to RGL-specific (or other) functions}
-  \item{subscene}{which subscene to query, or \code{0} for the whole scene}
+
 }
 \details{
 RGL holds several lists of objects in each scene. 

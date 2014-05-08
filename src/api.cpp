@@ -988,27 +988,22 @@ void rgl::rgl_gc(int* count, int* protect)
 	  }
 	  if (!anyunprot) 
 	    continue;
+	  // Now look for the others in subscenes
 	  int m = root->get_id_count(i, true);
 	  if (m) {
 	    int ids2[m];
 	    char* types2[m];
 	    root->get_ids(i, ids2, types2, true);
 	    for (int j = 0; j < n; j++) {
-	      bool found = (ids[j] == 0);
-	      for (int k = 0; k < m && !found; k++) { 
-	        found = (ids[j] == ids2[k]);
-	      }
-	      if (!found) {
-		scene->pop(i, ids[j]);
-		(*count)++;
+	      for (int k = 0; k < m && ids[j] != 0; k++) { 
+	        if (ids[j] == ids2[k])
+	          ids[j] = 0;
 	      }
 	    }
-	  } else {	    for (int j = 0; j < n; j++) {
-	      bool found = (ids[j] == 0);
-	      if (!found) {
-		scene->pop(i, ids[j]);
-		(*count)++;
-	      }
+	  }	  for (int j = 0; j < n; j++) {
+	    if (ids[j] != 0) {
+	      scene->pop(i, ids[j]);
+	      (*count)++;
 	    }
 	  }
         }
