@@ -52,8 +52,8 @@ void rgl_postscript (int* successptr, int* idata, char** cdata);
 
 void rgl_clear    (int* successptr, int* idata);
 void rgl_pop      (int* successptr, int* idata);
-void rgl_id_count (int* type, int* count);
-void rgl_ids       (int* type, int* ids, char** types);
+void rgl_id_count (int* type, int* count, int* subsceneID);
+void rgl_ids       (int* type, int* ids, char** types, int* subsceneID);
 void rgl_attrib_count (int* id, int* attrib, int* count);
 void rgl_attrib   (int* id, int* attrib, int* first, int* count, double* result);
 void rgl_text_attrib   (int* id, int* attrib, int* first, int* count, char** result);
