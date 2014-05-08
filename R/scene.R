@@ -15,22 +15,34 @@
 ##
 ##
 
-rgl.clear <- function( type = "shapes" )
+rgl.clear <- function( type = "shapes", subscene = 0 )
 {
-  type <- rgl.enum.nodetype(type)
-  
-  userviewpoint <- 4 %in% type
-  material  <- 5 %in% type
-  modelviewpoint <- 8 %in% type
+  if (is.na(subscene)) 
+    subscene <- subsceneInfo()$id
 
-  type <- type[!(type %in% c(4:6, 8))]
+  typeid <- rgl.enum.nodetype(type)
   
-  idata <- as.integer(c(length(type), type))
- 
-  ret <- .C( rgl_clear, 
-    success = FALSE,
-    idata
-  )
+  userviewpoint <- 4 %in% typeid
+  material  <- 5 %in% typeid
+  modelviewpoint <- 8 %in% typeid
+
+  drop <- typeid %in% c(4:6, 8)
+  typeid <- typeid[!drop]
+  type <- names(typeid)
+  
+  if (subscene == 0) {
+    idata <- as.integer(c(length(typeid), typeid))    	
+    ret <- .C( rgl_clear, 
+      success = FALSE,
+      idata
+    )$success
+  } else {
+    sceneids <- rgl.ids(type=type, subscene = 0)$id
+    thisids <- rgl.ids(type=type, subscene = subscene)$id
+    delFromSubscene3d(ids = thisids, subscene = subscene)
+    gc3d(protect = setdiff(sceneids, thisids))
+    ret <- 1
+  }
   
   if ( userviewpoint || modelviewpoint) 
     rgl.viewpoint(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
@@ -38,8 +50,8 @@ rgl.clear <- function( type = "shapes" )
   if ( material ) 
     rgl.material()
 
-  if (! ret$success)
-    stop("rgl_clear")
+  if (! ret)
+    stop("rgl_clear failed")
 }
 
 
@@ -66,9 +78,11 @@ rgl.pop <- function( type = "shapes", id = 0)
   }
 }
 
-rgl.ids <- function( type = "shapes", subscene = subsceneInfo()$id )
+rgl.ids <- function( type = "shapes", subscene = NA )
 {
   type <- c(rgl.enum.nodetype(type), 0)
+  if (is.na(subscene)) 
+      subscene <- subsceneInfo()$id
   
   count <- .C( rgl_id_count, as.integer(type), count = integer(1), subscene = as.integer(subscene))$count
   

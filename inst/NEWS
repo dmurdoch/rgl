@@ -569,7 +569,9 @@ v0.93.999
     
 v0.94
   - Added "subscenes", i.e. scenes of objects nested within the 
-    main window.
+    main window.  This affects a lot of other functions as well,
+    which now act either on a single subscene or on the 
+    overall scene.
   - Allowed the coordinates of the viewport to be set.
   - Changed the behaviour of pop3d() and rgl.pop():  the type is
     now ignored if id is non-zero.
