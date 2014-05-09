@@ -39,8 +39,10 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
   } else {
     sceneids <- rgl.ids(type=type, subscene = 0)$id
     thisids <- rgl.ids(type=type, subscene = subscene)$id
-    delFromSubscene3d(ids = thisids, subscene = subscene)
-    gc3d(protect = setdiff(sceneids, thisids))
+    if (length(thisids)) {
+      delFromSubscene3d(ids = thisids, subscene = subscene)
+      gc3d(protect = setdiff(sceneids, thisids))
+    }
     ret <- 1
   }
   
