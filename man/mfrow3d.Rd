@@ -2,6 +2,7 @@
 \alias{mfrow3d}
 \alias{layout3d}
 \alias{next3d}
+\alias{subsceneList}
 \title{
 Set up multiple figure layouts in rgl.
 }
@@ -10,6 +11,7 @@ The \code{mfrow3d} and \code{layout3d} functions provide functionality in \pkg{r
 similar to \code{\link{par}("mfrow")} and \code{\link{layout}} in classic R graphics.
 }
 \usage{
+subsceneList(value, window = rgl.cur())
 mfrow3d(nr, nc, byrow = TRUE, parent = NA, ...)
 layout3d(mat, widths = rep.int(1, ncol(mat)), 
               heights = rep.int(1, nrow(mat)),
@@ -18,6 +20,12 @@ layout3d(mat, widths = rep.int(1, ncol(mat)),
 next3d(current = NA, clear = TRUE)
 }
 \arguments{
+  \item{value}{
+A new subscene list to set.  If missing, return the current one (or \code{NULL}).
+}
+  \item{window}{
+Which window to operate on.
+}
   \item{nr, nc}{
 Number of rows and columns of figures.
 }
@@ -61,19 +69,26 @@ Duncan Murdoch
 \code{\link{newSubscene3d}}, \code{\link{par}}, \code{\link{layout}}.
 }
 \examples{
+shapes <- list(Tetrahedron=tetrahedron3d(), Cube=cube3d(), Octahedron=octahedron3d(),
+               Icosahedron=icosahedron3d(), Dodecahedron=dodecahedron3d(),
+               Cubocathedron=cuboctahedron3d())
+col <- rainbow(6)
 open3d()
 mfrow3d(3,2)
-col <- rainbow(6)
-shade3d(tetrahedron3d(), col=col[1])
-next3d()
-shade3d(cube3d(), col=col[2])
-next3d()
-shade3d(octahedron3d(), col=col[3])
-next3d()
-shade3d(icosahedron3d(), col=col[4])
-next3d()
-shade3d(dodecahedron3d(), col=col[5])
-next3d()
-shade3d(cuboctahedron3d(), col=col[6])
+for (i in 1:6) {
+  shade3d(shapes[[i]], col=col[i])
+  if (i < 6) next3d()
+}
+
+open3d()
+mat <- matrix(1:4, 2,2)
+mat <- rbind(mat, mat+4, mat+8)
+layout3d(mat, height = rep(c(3,1), 3))
+for (i in 1:6) {
+  shade3d(shapes[[i]], col=col[i])
+  next3d()
+  text3d(0,0,0, names(shapes)[i])
+  if (i < 6) next3d()
+}
 }
 \keyword{graphics }
