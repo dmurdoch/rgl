@@ -99,24 +99,49 @@ gc3d <- function(protect=NULL) {
   invisible( .C(rgl_gc, n = length(protect), protect)$n )
 }
 
+subsceneList <- function(value, window = rgl.cur()) {
+  alllists <- .rglEnv$subsceneLists  
+  # This cleans up lists for closed windows:
+  alllists <- alllists[names(alllists) %in% rgl.dev.list()]
+  if (!missing(value)) {
+    if (is.null(alllists)) alllists <- list()
+    alllists[[as.character(window)]] <- value
+    assign("subsceneLists", alllists, envir = .rglEnv)
+  }
+  if (is.null(alllists)) return(NULL)
+  else return(alllists[[as.character(window)]])
+}
+
 next3d <- function(current = NA, clear = TRUE) {
   .check3d()
   if (is.na(current))
     current <- subsceneInfo()$id
-  subscenes <- .rglEnv$subsceneList
+  subscenes <- subsceneList()
   if (is.null(subscenes)) 
     subscenes <- current
   if (current %in% subscenes) {
     this <- which(current == subscenes)
     if (this == length(subscenes)) 
-      current <- subscenes[1]
+      this <- 1
     else 
-      current <- subscenes[this + 1]
-  } else
-    current <- subscenes[1]
+      this <- this + 1
+  } else {
+    warning("current subscene is not in the subsceneList()")
+    this <- 1
+  }  
+  repeat{
+    current <- subscenes[this]
+    result <- try(useSubscene3d(current))
+    if (inherits(result, "try-error")) {
+      subsceneList(subscenes <- subscenes[-this])
+      if (length(subscenes) == 0)
+      	stop("subsceneList() contained no valid subscenes.")
+      if (this > length(subscenes)) this <- 1
+    } else break
+  }
+      
   if (clear)
     clear3d(subscene = current)
-  useSubscene3d(current)
 }
   
 mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA, 
@@ -145,8 +170,8 @@ mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA,
         result[(j-1)*nr + i] <- newSubscene3d(newviewport = newvp, parent = parent, ...)
       }
   useSubscene3d(result[1])
-  attr(result, "prev") <- .rglEnv$subsceneList
-  assign("subsceneList", result, env = .rglEnv)
+  attr(result, "prev") <- subsceneList()
+  subsceneList(result)
   invisible(result)
 }
 
@@ -183,7 +208,7 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
     result[i] <- newSubscene3d(newviewport = newvp, parent = parent,  ...)
   }
   useSubscene3d(result[1])
-  attr(result, "prev") <- .rglEnv$subsceneList
-  assign("subsceneList", result, env = .rglEnv)
+  attr(result, "prev") <- subsceneList()
+  subsceneList(result)
   invisible(result)
 }
