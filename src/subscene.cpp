@@ -223,13 +223,16 @@ Subscene* Subscene::popSubscene(int id, Subscene* current)
   return current;
 }
 
-void Subscene::clearSubscenes()
+Subscene* Subscene::clearSubscenes(Subscene* current)
 {
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
-    (*i)->clearSubscenes();
+    current = (*i)->clearSubscenes(current);
+    if (*i == current)
+      current = (*i)->parent;
     delete (*i);    
   }
   subscenes.clear();
+  return current;
 }
 
 Subscene* Subscene::getSubscene(int id)
