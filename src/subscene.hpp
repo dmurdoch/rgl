@@ -75,7 +75,7 @@ public:
    * remove subscene by id, or all of them
    **/
   Subscene*	 popSubscene(int id, Subscene* current); /* Might update the current one if it just got popped */
-  void   clearSubscenes();
+  Subscene*      clearSubscenes(Subscene* current);      /* ditto */
   
   /**
    * hide shape or light or bboxdeco

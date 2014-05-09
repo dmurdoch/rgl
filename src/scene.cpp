@@ -99,7 +99,7 @@ bool Scene::clear(TypeID typeID)
       success = true;
       break;
     case SUBSCENE:
-      rootSubscene.clearSubscenes();
+      currentSubscene = rootSubscene.clearSubscenes(currentSubscene);
       SAVEGLERROR;
       success = true;
       break;
