@@ -1535,7 +1535,7 @@ void rgl::rgl_getProjMatrix(int* successptr, double* projMatrix)
     *successptr = success;
 }
 
-void rgl::rgl_getEmbedding(int* id, int* embeddings)
+void rgl::rgl_getEmbeddings(int* id, int* embeddings)
 {
     Device* device;
     
@@ -1547,6 +1547,30 @@ void rgl::rgl_getEmbedding(int* id, int* embeddings)
         embeddings[0] = subscene->getEmbedding(0);
         embeddings[1] = subscene->getEmbedding(1);
         embeddings[2] = subscene->getEmbedding(2);
+      }
+    }
+}
+
+void rgl::rgl_setEmbeddings(int* id, int* embeddings)
+{
+    Device* device;
+    
+    if (deviceManager && (device = deviceManager->getAnyDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      Subscene* subscene = scene->getSubscene(*id);
+      *id = RGL_FAIL;
+      if (subscene) {
+        if (!subscene->getParent() &&        // can't change the root
+            (embeddings[0] != EMBED_REPLACE
+            || embeddings[1] != EMBED_REPLACE
+            || embeddings[2] != EMBED_REPLACE))
+          return;  
+        subscene->setEmbedding(0, (Embedding)embeddings[0]);
+        subscene->setEmbedding(1, (Embedding)embeddings[1]);
+        subscene->setEmbedding(2, (Embedding)embeddings[2]);
+        rglview->update();
+        *id = RGL_SUCCESS;
       }
     }
 }

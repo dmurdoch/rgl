@@ -30,18 +30,7 @@ Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_proj
       projMatrix[4*i + j] = i == j;
     }
   }  
-  if (parent) {
-    if (do_projection == EMBED_REPLACE)
-      add(new UserViewpoint(*(parent->getUserViewpoint())));
-    else if (do_projection == EMBED_MODIFY)
-      add(new UserViewpoint(0.0, 1.0)); /* should be like an identity */
-    
-    if (do_model == EMBED_REPLACE)
-      add(new ModelViewpoint(*(parent->getModelViewpoint())));
-    else if (do_model == EMBED_MODIFY)
-      add(new ModelViewpoint(PolarCoord(0.0, 0.0), Vec3(1.0, 1.0, 1.0), 
-                             parent->getModelViewpoint()->isInteractive()));
-  }
+  newEmbedding();
 }
 
 Subscene::~Subscene() 
@@ -844,6 +833,32 @@ const AABox& Subscene::getBoundingBox()
   if (bboxChanges) 
       calcDataBBox();
   return data_bbox; 
+}
+
+void Subscene::newEmbedding()
+{
+  if (parent) {
+    if (do_projection == EMBED_REPLACE && !userviewpoint)
+      add(new UserViewpoint(*(parent->getUserViewpoint())));
+    else if (do_projection == EMBED_MODIFY && !userviewpoint)
+      add(new UserViewpoint(0.0, 1.0)); /* should be like an identity */
+    
+    if (do_model == EMBED_REPLACE && !modelviewpoint)
+      add(new ModelViewpoint(*(parent->getModelViewpoint())));
+    else if (do_model == EMBED_MODIFY && !modelviewpoint)
+      add(new ModelViewpoint(PolarCoord(0.0, 0.0), Vec3(1.0, 1.0, 1.0), 
+                             parent->getModelViewpoint()->isInteractive()));
+  }
+}
+
+void Subscene::setEmbedding(int which, Embedding value)
+{
+  switch(which) {
+    case 0: do_viewport = value; break;
+    case 1: do_projection = value; break;
+    case 2: do_model = value; 
+  }
+  newEmbedding();
 }
 
 Embedding Subscene::getEmbedding(int which)

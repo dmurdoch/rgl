@@ -27,6 +27,8 @@ private:
   
   void disableLights(RenderContext* rctx);
   void setupLights(RenderContext* rctx);
+  
+  void newEmbedding();
 
   /* These lists contain pointers to lights and shapes, but don't actually manage them:  the Scene does that. */
   std::vector<Light*> lights;
@@ -143,7 +145,8 @@ public:
   int getIgnoreExtent(void) const { return (int) ignoreExtent; }
   void setIgnoreExtent(int in_ignoreExtent);
   
-  Embedding getEmbedding(int which);  /* 0=viewport, 1=projection, 2=model */
+  void setEmbedding(int which, Embedding value);  /* which is 0=viewport, 1=projection, 2=model */
+  Embedding getEmbedding(int which);
   
   void setViewport(double x, double y, double width, double height); /* Sets relative (i.e. [0,1]x[0,1]) viewport size */
   
