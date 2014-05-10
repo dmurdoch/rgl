@@ -1,6 +1,10 @@
-subsceneInfo <- function(id, recursive = FALSE) {
-  if (missing(id)) 
-    id <- .C(rgl_getsubsceneid, id = 1L)$id
+currentSubscene3d <- function() {
+  .C(rgl_getsubsceneid, id = 1L)$id
+}
+
+subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
+  if (is.na(id)) 
+    id <- currentSubscene3d()
   else if (is.character(id) && id == "root") 
     id <- .C(rgl_getsubsceneid, id = 0L)$id
   if (!id) stop("No subscene info available.")
@@ -25,8 +29,15 @@ subsceneInfo <- function(id, recursive = FALSE) {
       result[["children"]] <- children
   }
   
-  embeddings <- .C(rgl_getEmbedding, id = id, embeddings = integer(3))$embeddings
-  embeddings <- c("inherit", "modify", "replace")[embeddings]
+  embeddingNames <- c("inherit", "modify", "replace")
+  if (!missing(embeddings)) {
+    embeddings <- pmatch(embeddings, embeddingNames, duplicates.ok = TRUE)
+    if (any(is.na(embeddings)) || length(embeddings) != 3)
+      stop("three embeddings must be specified; names chosen from ", dQuote(embeddingNames))
+    .C(rgl_setEmbeddings, id = id, embeddings = embeddings)
+  }
+  embeddings <- .C(rgl_getEmbeddings, id = id, embeddings = integer(3))$embeddings
+  embeddings <- embeddingNames[embeddings]
   names(embeddings) <- c("viewport", "projection", "model")
   result[["embeddings"]] <- embeddings
   result
@@ -115,7 +126,7 @@ subsceneList <- function(value, window = rgl.cur()) {
 next3d <- function(current = NA, clear = TRUE) {
   .check3d()
   if (is.na(current))
-    current <- subsceneInfo()$id
+    current <- currentSubscene3d()
   subscenes <- subsceneList()
   if (is.null(subscenes)) 
     subscenes <- current
@@ -149,7 +160,7 @@ mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA,
   stopifnot(nr >= 1, nc >= 1)
   .check3d()
   if (is.na(parent))
-    parent <- subsceneInfo()$id
+    parent <- currentSubscene3d()
   useSubscene3d(parent)
   result <- integer(nr*nc)
   parentvp <- par3d("viewport")
@@ -191,7 +202,7 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
 
   .check3d()
   if (is.na(parent))
-    parent <- subsceneInfo()$id
+    parent <- currentSubscene3d()
   useSubscene3d(parent)
   parentvp <- par3d("viewport")
   

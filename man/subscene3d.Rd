@@ -1,5 +1,6 @@
 \name{subscene3d}
 \alias{newSubscene3d}
+\alias{currentSubscene3d}
 \alias{useSubscene3d}
 \alias{addToSubscene3d}
 \alias{delFromSubscene3d}
@@ -14,6 +15,7 @@ This creates a new subscene, or selects one by \code{id} value, or adds objects 
 newSubscene3d(viewport = "replace", projection = "replace", model = "replace", 
            parent = subsceneInfo()$id, 
            copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, newviewport)
+currentSubscene3d()
 useSubscene3d(subscene)
 addToSubscene3d(ids, subscene = subsceneInfo()$id)
 delFromSubscene3d(ids, subscene = subsceneInfo()$id)

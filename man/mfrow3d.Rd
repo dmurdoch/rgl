@@ -83,7 +83,7 @@ for (i in 1:6) {
 open3d()
 mat <- matrix(1:4, 2,2)
 mat <- rbind(mat, mat+4, mat+8)
-layout3d(mat, height = rep(c(3,1), 3))
+layout3d(mat, height = rep(c(3,1), 3), model = "inherit")
 for (i in 1:6) {
   shade3d(shapes[[i]], col=col[i])
   next3d()
