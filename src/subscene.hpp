@@ -22,8 +22,8 @@ private:
 
   void setupViewport(RenderContext* rctx);
   void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
-  void setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere);
-  void setupModelViewMatrix(RenderContext* rctx, const Sphere& viewSphere);
+  void setupModelMatrix(Vertex center);
+  void setupModelViewMatrix(Vertex center);
   
   void disableLights(RenderContext* rctx);
   void setupLights(RenderContext* rctx);
