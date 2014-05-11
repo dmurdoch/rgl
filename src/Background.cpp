@@ -135,7 +135,7 @@ void Background::render(RenderContext* renderContext)
     glTranslatef(0.0f,0.0f,-znear);
 
     ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
-    modelviewpoint->setupOrientation(renderContext);
+    modelviewpoint->setupOrientation();
     
 
     Shape::render(renderContext);

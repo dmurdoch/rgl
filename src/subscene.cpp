@@ -530,7 +530,7 @@ void Subscene::render(RenderContext* renderContext)
   // transformations, we don't bother using the parent one, we reconstruct in
   // every subscene.
   
-  setupModelViewMatrix(renderContext, total_bsphere);
+  setupModelViewMatrix(total_bsphere.center);
   glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
   
   setupLights(renderContext);
@@ -706,26 +706,23 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 // the latter from the modelViewpoint, possibly after applying the same from the parents.
 // We always reconstruct from scratch rather than trying to use the matrix in place.
 
-void Subscene::setupModelViewMatrix(RenderContext* rctx, const Sphere& viewSphere)
+void Subscene::setupModelViewMatrix(Vertex center)
 {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  
-  Vec3 viewerLocation = getUserViewpoint()->getViewerLocation();
-  glTranslatef( viewerLocation.x, viewerLocation.y, viewerLocation.z );
-  
-  setupModelMatrix(rctx, viewSphere);
+  getUserViewpoint()->setupViewer();
+  setupModelMatrix(center);
   
   SAVEGLERROR;
 }
 
-void Subscene::setupModelMatrix(RenderContext* rctx, const Sphere& viewSphere)
+void Subscene::setupModelMatrix(Vertex center)
 {
   if (do_model < EMBED_REPLACE && parent)
-    parent->setupModelMatrix(rctx, viewSphere);
+    parent->setupModelMatrix(center);
     
   if (do_model > EMBED_INHERIT)
-    getModelViewpoint()->setupTransformation(rctx, viewSphere);
+    getModelViewpoint()->setupTransformation(center);
   
   SAVEGLERROR;
 }

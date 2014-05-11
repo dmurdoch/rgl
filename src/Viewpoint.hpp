@@ -20,8 +20,8 @@ public:
   PolarCoord& getPosition();
   void        setPosition(const PolarCoord& position);
   void	      clearMouseMatrix();
-  void        setupTransformation(RenderContext* rctx, const Sphere& viewvolumeSphere);
-  void        setupOrientation(RenderContext* rctx) const;
+  void        setupTransformation(Vertex center);
+  void        setupOrientation() const;
   bool        isInteractive() const;
   void        updateMouseMatrix(Vertex dragStart,Vertex dragCurrent);
   void	      updateMouseMatrix(PolarCoord newpos);
@@ -55,7 +55,7 @@ public:
   float       getFOV(void) const;
   void        setFOV(const float in_fov);
   void        setupFrustum(RenderContext* rctx, const Sphere& viewvolumeSphere);
-  Vec3	      getViewerLocation() { return Vec3(0., 0., -frustum.distance); };  /* viewer location is really (0,0,0) in "eye coordinates", i.e. this is post-M except for translation, pre-P */
+  void	      setupViewer();
   Frustum     frustum;
 private:
   float       fov;

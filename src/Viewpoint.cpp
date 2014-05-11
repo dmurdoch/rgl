@@ -113,19 +113,24 @@ void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 
 }
 
-void ModelViewpoint::setupOrientation(RenderContext* rctx) const
+void UserViewpoint::setupViewer()
+{
+    glTranslatef(0., 0., -frustum.distance); 
+}
+
+void ModelViewpoint::setupOrientation() const
 {
   glMultMatrixd(mouseMatrix);
   glMultMatrixd(userMatrix);
 
 }
 
-void ModelViewpoint::setupTransformation(RenderContext* rctx, const Sphere& viewSphere)
+void ModelViewpoint::setupTransformation(Vertex center)
 {     
   // modelview
-  setupOrientation(rctx);
+  setupOrientation();
   glScaled(scale.x, scale.y, scale.z);
-  glTranslatef( -viewSphere.center.x, -viewSphere.center.y, -viewSphere.center.z );
+  glTranslatef( -center.x, -center.y, -center.z );
 }
 
 void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
