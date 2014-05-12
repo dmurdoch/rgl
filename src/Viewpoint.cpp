@@ -18,7 +18,8 @@ using namespace rgl;
 UserViewpoint::UserViewpoint(float in_fov, float in_zoom) :
     SceneNode(USERVIEWPOINT),
     fov(in_fov),
-    zoom(in_zoom)
+    zoom(in_zoom),
+    viewerInScene(false)
 {
 }
 
@@ -97,6 +98,24 @@ float UserViewpoint::getFOV() const
 void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 {
   frustum.enclose(viewSphere.radius, fov, rctx->subscene->pviewport[2], rctx->subscene->pviewport[3]);
+  if (!viewerInScene) {
+    eye.x = 0.;
+    eye.y = 0.;
+    eye.z = frustum.distance;
+  } else {
+    float oldnear = frustum.znear;
+    frustum.znear -= -eye.z + frustum.distance;
+    frustum.zfar  -= -eye.z + frustum.distance;
+    if (frustum.zfar < 0) 
+      frustum.zfar = 1;	
+    if (frustum.znear < frustum.zfar/100.)  // we lose log2(100) bits of depth resolution
+      frustum.znear = frustum.zfar/100.;
+    float ratio = frustum.znear/oldnear;
+    frustum.left   = frustum.left*ratio   + eye.x;
+    frustum.right  = frustum.right*ratio  + eye.x;
+    frustum.top    = frustum.top*ratio    + eye.y;
+    frustum.bottom = frustum.bottom*ratio + eye.y;
+  }    
 
   // zoom
 
@@ -113,9 +132,20 @@ void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 
 }
 
+void UserViewpoint::setObserver(Vertex eye)
+ {
+  // We shouldn't care about the matrix mode
+  if (ISNAN(eye.x) || ISNAN(eye.y) || ISNAN(eye.z))
+    viewerInScene = false;
+  else {
+    this->eye = eye;
+    viewerInScene = true; 
+  }
+}
+
 void UserViewpoint::setupViewer()
 {
-    glTranslatef(0., 0., -frustum.distance); 
+  glTranslatef(-eye.x, -eye.y, -eye.z);
 }
 
 void ModelViewpoint::setupOrientation() const

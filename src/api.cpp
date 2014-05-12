@@ -470,6 +470,25 @@ void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
   *successptr = success;
 }
 
+void rgl::rgl_setObserver(int* successptr, double* ddata)
+{
+  int success = RGL_FAIL;
+  
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+  
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    UserViewpoint* userviewpoint = scene->getUserViewpoint();
+    userviewpoint->setObserver(Vertex(ddata[0], ddata[1], ddata[2]));
+    rglview->update();
+    success = RGL_SUCCESS;
+  }
+  
+  *successptr = success;
+}
+
 void rgl::rgl_getZoom(int* successptr, double* zoom)
 {
   int success = RGL_FAIL;
