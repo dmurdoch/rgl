@@ -275,6 +275,15 @@ void Matrix4x4::setRotate(const int axis, const float degree) {
   }
 }
 
+void Matrix4x4::transpose() {
+  for (int i = 0; i < 3; i++)
+    for (int j = i+1; j < 4; j++) {
+      float temp = val(i,j);
+      ref(i,j) = val(j,i);
+      ref(j,i) = temp;
+    }
+}
+
 void Matrix4x4::getData(double* dest)
 {
 	for(int i=0;i<16;i++)
