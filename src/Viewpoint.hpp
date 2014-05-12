@@ -55,7 +55,7 @@ public:
   float       getFOV(void) const;
   void        setFOV(const float in_fov);
   void        setupFrustum(RenderContext* rctx, const Sphere& viewvolumeSphere);
-  void	      setObserver(Vertex eye); /* applied after model */
+  Vertex      setObserver(bool automatic, Vertex eye); /* applied after model; returns previous setting */
   void	      setupViewer();
   Frustum     frustum;
 private:
