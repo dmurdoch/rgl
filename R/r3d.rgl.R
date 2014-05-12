@@ -122,15 +122,15 @@ bbox3d	    <- function(xat = NULL,
                         .fixMaterialArgs(..., Params = save)))
 }
 
-observer3d <- function(x, y=NULL, z=NULL) {
+observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
   if (missing(x))
-    eye <- c(NA, NA, NA)
+    location <- c(NA, NA, NA)
   else {
     xyz <- xyz.coords(x,y,z)
-    eye <- c(xyz$x, xyz$y, xyz$z)
-    if (length(eye) != 3) stop("a single point must be specified for the observer location") 
+    location <- c(xyz$x, xyz$y, xyz$z)
+    if (length(location) != 3) stop("a single point must be specified for the observer location") 
   }    
-  invisible(.C(rgl_setObserver, success=integer(1), ddata=as.numeric(eye), NAOK = TRUE)$success)
+  invisible(.C(rgl_setObserver, success=as.integer(auto), ddata=as.numeric(location), NAOK = TRUE)$ddata)
 }
 
 # Shapes

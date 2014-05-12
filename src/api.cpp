@@ -480,8 +480,12 @@ void rgl::rgl_setObserver(int* successptr, double* ddata)
   
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
+    bool automatic = (bool)*successptr;
     UserViewpoint* userviewpoint = scene->getUserViewpoint();
-    userviewpoint->setObserver(Vertex(ddata[0], ddata[1], ddata[2]));
+    Vertex prev = userviewpoint->setObserver(automatic, Vertex(ddata[0], ddata[1], ddata[2]));
+    ddata[0] = prev.x;
+    ddata[1] = prev.y;
+    ddata[2] = prev.z;
     rglview->update();
     success = RGL_SUCCESS;
   }
