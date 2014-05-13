@@ -120,7 +120,7 @@ getr3dDefaults()
     \item{\code{maxClipPlanes}}{\emph{\bold{R.O.}}; an integer giving the maximum
       number of clip planes that can be defined in the current system.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
-      of the user data.}
+      of the user data.  See the Note below.}
     \item{\code{mouseMode}}{character.  A vector of 3 strings describing
       what the 3 mouse buttons do. Partial matching is used.  Possible values for \code{mouseMode} are 
 	\describe{
@@ -138,6 +138,8 @@ getr3dDefaults()
 	 \code{\link{rgl.setMouseCallbacks}}.}
 	}
     }
+    \item{\code{observer}}{\emph{\bold{R.O.}}; the position of the observer relative to
+      the model.  Set by \code{\link{observer3d}}.  See the Note below.}
     \item{\code{projMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the current
       projection of the scene.}
     \item{\code{scale}}{real.  A vector of 3 values indicating the amount by which to
@@ -174,6 +176,15 @@ at 1 (with a warning that the \code{"bitmap"} family only supports that size).
 Although \code{par3d("viewport")} names the entries of the reported vector,
 names are ignored when setting the viewport and entries must be specified
 in the standard order.
+
+In versions prior to 0.94 and the introduction of the \code{observer} parameter,
+\code{modelMatrix} contained a copy of the OpenGL MODELVIEW matrix.  As of 
+version 0.94, it contains only the transformations done to the model.  To obtain
+the old matrix, use this code:
+\verb{
+ obs <- -par3d("observer")
+ oldmodelMatrix <- t(translationMatrix(obs[1], obs[2], obs[3])) %*% par3d("modelMatrix")
+}
 }
 
 \section{Rendering}{

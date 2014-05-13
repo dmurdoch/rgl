@@ -727,6 +727,16 @@ void Subscene::setupModelMatrix(Vertex center)
   SAVEGLERROR;
 }
 
+void Subscene::getModelMatrix(double* modelMatrix, Vertex center)
+{
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+  setupModelMatrix(center);
+  glGetDoublev(GL_MODELVIEW_MATRIX, (GLdouble*) modelMatrix);
+  glPopMatrix();
+}
+  
 void Subscene::disableLights(RenderContext* rctx)
 {
     

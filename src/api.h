@@ -103,6 +103,7 @@ void rgl_getUserMatrix(int* successptr, double* userMatrix);
 void rgl_setUserMatrix(int* successptr, double* userMatrix);
 void rgl_getScale(int* successptr, double* scale);
 void rgl_setScale(int* successptr, double* scale);
+void rgl_getObserver(int* successptr, double* ddata);
 void rgl_setObserver(int* successptr, double* ddata);
 void rgl_getZoom(int* successptr, double* zoom);
 void rgl_setZoom(int* successptr, double* zoom);

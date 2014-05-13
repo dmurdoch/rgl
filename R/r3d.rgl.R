@@ -130,7 +130,9 @@ observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
     location <- c(xyz$x, xyz$y, xyz$z)
     if (length(location) != 3) stop("a single point must be specified for the observer location") 
   }    
-  invisible(.C(rgl_setObserver, success=as.integer(auto), ddata=as.numeric(location), NAOK = TRUE)$ddata)
+  prev <- .C(rgl_getObserver, success=integer(1), ddata=numeric(3), NAOK = TRUE)$ddata
+  .C(rgl_setObserver, success=as.integer(auto), ddata=as.numeric(location), NAOK = TRUE)
+  invisible(prev)
 }
 
 # Shapes

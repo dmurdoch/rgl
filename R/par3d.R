@@ -1,5 +1,5 @@
 .Par3d <- c("antialias", "FOV", "ignoreExtent",
-	   "mouseMode", 
+	   "mouseMode", "observer", 
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
 	   "scale", "viewport", "zoom", "bbox", "windowRect",
            "family", "font", "cex", "useFreeType", "fontname",
@@ -7,7 +7,7 @@
 	   )
 	   
 .Par3d.readonly <- c( 
-	   "antialias",
+	   "antialias", "observer",
 	   "modelMatrix", "projMatrix",
 	   "bbox", "fontname",
 	   "maxClipPlanes"

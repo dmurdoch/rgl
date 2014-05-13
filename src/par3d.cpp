@@ -268,6 +268,10 @@ static SEXP Query(const char *what)
     	value = namesgets(value, names);
     	success = 1;
     }
+    else if (streql(what, "observer")) {
+        value = allocVector(REALSXP, 3);
+        rgl_getObserver(&success, REAL(value));
+    }
     else if (streql(what, "projMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
 	rgl_getProjMatrix(&success, REAL(value));    

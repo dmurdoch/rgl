@@ -470,6 +470,27 @@ void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
   *successptr = success;
 }
 
+void rgl::rgl_getObserver(int* successptr, double* ddata)
+{
+  int success = RGL_FAIL;
+  
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+  
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    UserViewpoint* userviewpoint = scene->getUserViewpoint();
+    Vertex res = userviewpoint->getObserver();
+    ddata[0] = res.x;
+    ddata[1] = res.y;
+    ddata[2] = res.z;
+    success = RGL_SUCCESS;
+  }
+  
+  *successptr = success;
+}
+
 void rgl::rgl_setObserver(int* successptr, double* ddata)
 {
   int success = RGL_FAIL;
@@ -482,10 +503,7 @@ void rgl::rgl_setObserver(int* successptr, double* ddata)
     Scene* scene = rglview->getScene();
     bool automatic = (bool)*successptr;
     UserViewpoint* userviewpoint = scene->getUserViewpoint();
-    Vertex prev = userviewpoint->setObserver(automatic, Vertex(ddata[0], ddata[1], ddata[2]));
-    ddata[0] = prev.x;
-    ddata[1] = prev.y;
-    ddata[2] = prev.z;
+    userviewpoint->setObserver(automatic, Vertex(ddata[0], ddata[1], ddata[2]));
     rglview->update();
     success = RGL_SUCCESS;
   }
@@ -1523,14 +1541,14 @@ void rgl::rgl_getModelMatrix(int* successptr, double* modelMatrix)
 {
     int success = RGL_FAIL;
     Device* device;
+    double bboxvec[6];
 
     if (deviceManager && (device = deviceManager->getAnyDevice())) {
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();      
-      Subscene* subscene = scene->getCurrentSubscene();      
-      for (int i=0; i<16; i++) {
-        modelMatrix[i] = subscene->modelMatrix[i];
-      }
+      Subscene* subscene = scene->getCurrentSubscene(); 
+      const AABox& bbox = scene->getBoundingBox();
+      subscene->getModelMatrix(modelMatrix, bbox.getCenter());
       success = RGL_SUCCESS;
       CHECKGLERROR;  	
     }
