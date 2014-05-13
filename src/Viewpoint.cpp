@@ -132,14 +132,16 @@ void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 
 }
 
-Vertex UserViewpoint::setObserver(bool automatic, Vertex eye)
+Vertex UserViewpoint::getObserver()
  {
-  // We shouldn't care about the matrix mode
-  Vertex prev = this->eye;
+  return this->eye;
+}
+
+void UserViewpoint::setObserver(bool automatic, Vertex eye)
+ {
   viewerInScene = !automatic;
   if (viewerInScene && !ISNAN(eye.x) &&!ISNAN(eye.y) && !ISNAN(eye.z))
     this->eye = eye;
-  return prev;
 }
 
 void UserViewpoint::setupViewer()

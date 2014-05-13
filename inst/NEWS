@@ -575,4 +575,5 @@ v0.94
   - Allowed the coordinates of the viewport to be set.
   - Changed the behaviour of pop3d() and rgl.pop():  the type is
     now ignored if id is non-zero.
+  - par3d("modelMatrix") no longer includes the observer translation
   

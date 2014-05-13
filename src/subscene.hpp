@@ -160,6 +160,8 @@ public:
   UserViewpoint* getUserViewpoint();
   ModelViewpoint* getModelViewpoint();
   
+  void getModelMatrix(double* modelMatrix, Vertex center);
+  
   Background* get_background(); 
   
   // These are set after rendering the scene
