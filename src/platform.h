@@ -11,6 +11,10 @@
 
 #include <Availability.h>
 
+#ifndef __MAC_10_9
+#define __MAC_10_9 1090
+#endif
+
 #if __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_9
   // pre-Mavericks code
 #else
