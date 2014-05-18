@@ -33,8 +33,14 @@ display to show them.  In the example below this has been suppressed.
 The coordinate conversion functions produce a matrix with columns corresponding 
 to the X, Y, and Z coordinates.
 
-\code{rgl.projection()} returns a list containing the model matrix, projection matrix
-and viewport.  See \code{\link{par3d}} for more details.
+\code{rgl.projection()} returns a list containing the following components:
+\item{model}{the modelview matrix}
+\item{projection}{the projection matrix}
+\item{viewport}{the viewport vector}
+\item{newmodel}{the \code{par3d("model")} matrix}
+\item{observer}{the \code{par3d("observer")} vector}
+
+See \code{\link{par3d}} for more details.
 }
 \author{ Ming Chen / Duncan Murdoch}
 \seealso{\code{\link{select3d}} }
