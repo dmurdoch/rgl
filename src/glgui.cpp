@@ -14,6 +14,7 @@
 #include "opengl.hpp"
 #include "RenderContext.hpp"
 #include "subscene.hpp"
+#include "platform.h"
 
 using namespace rgl;
 

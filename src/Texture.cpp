@@ -1,6 +1,7 @@
 
 #include "Texture.hpp"
 #include "pixmap.h"
+#include "platform.h"
 
 using namespace std;
 using namespace rgl;
