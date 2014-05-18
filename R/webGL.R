@@ -61,6 +61,15 @@ convertBBox <- function(id) {
   res
 }
 
+rootSubscene <- function() {
+  id <- currentSubscene3d()
+  repeat {
+    info <- subsceneInfo(id)
+    if (is.null(info$parent)) return(id)
+    else id <- info$parent
+  }
+}    
+
 writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"), 
                        template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
                        prefix = "",
@@ -154,6 +163,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (has_texture || type == "text")
 '	attribute vec2 aTexcoord;
 	varying vec2 vTexcoord;',
+	
+      if (type == "text")
+'	uniform vec2 textScale;',
 
       if (fixed_quads)
 '	attribute vec2 aOfs;
@@ -182,7 +194,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (type == "text") 
 '	  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
 	  pos = pos/pos.w;
-	  gl_Position = pos + vec4(aOfs, 0.,0.);',
+	  gl_Position = pos + vec4(aOfs*textScale, 0.,0.);',
 	  
       if (type == "sprites") 
 '	  vec4 pos = mvMatrix * vec4(aPos, 1.);
@@ -396,7 +408,6 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }
 	   var width = %width%;  var height = %height%;
 	   canvas.width = width;   canvas.height = height;
-	   gl.viewport(0, 0, width, height);
 	   var prMatrix = new CanvasMatrix4();
 	   var mvMatrix = new CanvasMatrix4();
 	   var normMatrix = new CanvasMatrix4();
@@ -407,14 +418,35 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var colLoc = 1;
 ', prefix, snapshotimg2, width, height)
   
-  setUser <- function() c(
-    subst(
-'	   var zoom = %zoom%;
-	   var fov = %fov%;', zoom = par3d("zoom"), fov = max(1, min(179, par3d("FOV")))),
-'	   var userMatrix = new CanvasMatrix4();
-	   userMatrix.load([',
+  setUser <- function() {
+    subsceneids <- rgl.ids("subscene", subscene = 0)$id
+    save <- currentSubscene3d()
+    on.exit(useSubscene3d(save))
+    result <- subst(
+'       var zoom = new Object();
+       var fov = new Object();
+       var userMatrix = new Object();
+       var activeSubscene = %root%;', root=rootSubscene())
+    
+    for (id in subsceneids) {
+      info <- subsceneInfo(id)
+      if (info$embeddings["projection"] != "inherit") {
+        useSubscene3d(id)
+        result <- c(result, subst(
+'       zoom[%id%] = %zoom%;
+       fov[%id%] = %fov%;', id, zoom = par3d("zoom"), fov = max(1, min(179, par3d("FOV")))))
+      }
+      if (info$embeddings["model"] != "inherit") {
+        useSubscene3d(id)
+        result <- c(result, subst(
+'       userMatrix[%id%] = new CanvasMatrix4();
+       userMatrix[%id%].load([', id),
     inRows(t(par3d("userMatrix")), perrow=4, leadin='	   '),
 '		]);')
+      }
+    }    
+    result
+  }
   
   textureSupport <- subst(
 '	   function getPowerOfTwo(value) {
@@ -474,8 +506,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 
 	     ctx.font = textHeight+"px "+fontFamily;
 
-             canvasX = 1;
-             var widths = [];
+	     canvasX = 1;
+	     var widths = [];
 	     for (var i = 0; i < text.length; i++)  {
 	       widths[i] = ctx.measureText(text[i]).width;
 	       canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
@@ -535,53 +567,127 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 ')
 }    
 
-  setprMatrix <- function() {
+  setViewport <- function() {
+    viewport <- par3d("viewport")*c(wfactor, hfactor)
+    subst('
+	     gl.viewport(%x%, %y%, %width%, %height%);
+	     gl.scissor(%x%, %y%, %width%, %height%);
+', x = viewport[1], y = viewport[2], width = viewport[3], height = viewport[4])
+  }
+  
+  setprMatrix <- function(subsceneid) {
+    info <- subsceneInfo(subsceneid)
+    embedding <- info$embeddings["projection"]
+    if (embedding == "replace")
+      result <-
+'	   prMatrix.makeIdentity();'
+    else
+      result <- setprMatrix(info$parent);
+    if (embedding == "inherit")
+      return(result)
+      
+    save <- currentSubscene3d()
+    on.exit(useSubscene3d(save))
+    
+    useSubscene3d(subsceneid)
+    
     # This is based on the Frustum::enclose code from geom.cpp
     bbox <- par3d("bbox")
     scale <- par3d("scale")
     ranges <- c(bbox[2]-bbox[1], bbox[4]-bbox[3], bbox[6]-bbox[5])*scale/2
     radius <- sqrt(sum(ranges^2))*1.1 # A bit bigger to handle labels
+    if (radius <= 0) radius <- 1
+    observer <- par3d("observer")
+    distance <- observer[3]
+    viewport <- par3d("viewport")
+    aspect <- viewport[3]/viewport[4]
     subst(
 '	     var radius = %radius%;
-	     var s = sin(fov*PI/360);
-	     var t = tan(fov*PI/360);
-	     var distance = radius/s;
+	     var distance = %distance%;
+	     var t = tan(fov[%id%]*PI/360);
 	     var near = distance - radius;
 	     var far = distance + radius;
 	     var hlen = t*near;
-	     var aspect = width/height;
+	     var aspect = %aspect%;
 	     prMatrix.makeIdentity();
 	     if (aspect > 1)
-	       prMatrix.frustum(-hlen*aspect*zoom, hlen*aspect*zoom, 
-	                        -hlen*zoom, hlen*zoom, near, far);
+	       prMatrix.frustum(-hlen*aspect*zoom[%id%], hlen*aspect*zoom[%id%], 
+	                        -hlen*zoom[%id%], hlen*zoom[%id%], near, far);
 	     else  
-	       prMatrix.frustum(-hlen*zoom, hlen*zoom, 
-	                        -hlen*zoom/aspect, hlen*zoom/aspect, 
+	       prMatrix.frustum(-hlen*zoom[%id%], hlen*zoom[%id%], 
+	                        -hlen*zoom[%id%]/aspect, hlen*zoom[%id%]/aspect, 
 	                        near, far);',
-            radius)
+            id = subsceneid, radius, distance, aspect)
   }
 
-  setmvMatrix <- function() {
-    scale <- par3d("scale")
-    bbox <- par3d("bbox")
-    center <- c(bbox[1]+bbox[2], bbox[3]+bbox[4], bbox[5]+bbox[6])/2
-    subst(
-'	     mvMatrix.makeIdentity();
-	     mvMatrix.translate( %cx%, %cy%, %cz% );
+  setmvMatrix <- function(subsceneid) {
+    save <- currentSubscene3d()
+    on.exit(useSubscene3d(save))
+    
+    useSubscene3d(subsceneid)
+    observer <- par3d("observer")
+    
+    c('
+         mvMatrix.makeIdentity();',
+      setmodelMatrix(subsceneid),
+      subst(
+'         mvMatrix.translate(%x%, %y%, %z%);',
+        x = -observer[1], y = -observer[2], z = -observer[3]))
+  }      
+	     
+  setmodelMatrix <- function(subsceneid) {
+    info <- subsceneInfo(subsceneid)
+    embedding <- info$embeddings["model"]
+    
+    save <- currentSubscene3d()
+    on.exit(useSubscene3d(save))
+    
+    useSubscene3d(subsceneid)
+
+    if (embedding != "inherit") {
+      scale <- par3d("scale")
+      bbox <- par3d("bbox")
+      center <- c(bbox[1]+bbox[2], bbox[3]+bbox[4], bbox[5]+bbox[6])/2
+      result <- subst(
+'	     mvMatrix.translate( %cx%, %cy%, %cz% );
 	     mvMatrix.scale( %sx%, %sy%, %sz% );   
-	     mvMatrix.multRight( userMatrix );  
-	     mvMatrix.translate(0, 0, -distance);',
+	     mvMatrix.multRight( userMatrix[%id%] );',
+     id = subsceneid,
      cx=-center[1], cy=-center[2], cz=-center[3],
      sx=scale[1],   sy=scale[2],   sz=scale[3])
+    } else result <- character(0)
+   
+    if (embedding != "replace") 
+      result <- c(result, setmodelMatrix(info$parent))
+     
+    result
   }
-
-  setnormMatrix <- function() {
-    scale <- par3d("scale")
-    subst(
-'	     normMatrix.makeIdentity();
-	     normMatrix.scale( %sx%, %sy%, %sz% );   
-	     normMatrix.multRight( userMatrix );',
-     sx=1/scale[1], sy=1/scale[2], sz=1/scale[3])
+  
+  setnormMatrix <- function(subsceneid) {
+    save <- currentSubscene3d()
+    on.exit(useSubscene3d(save))
+    
+    recurse <- function(subsceneid) {
+      info <- subsceneInfo(subsceneid)
+      embedding <- info$embeddings["model"]
+    
+      useSubscene3d(subsceneid)
+      if (embedding != "inherit") {    
+        scale <- par3d("scale")
+        result <- subst(
+'	     normMatrix.scale( %sx%, %sy%, %sz% );   
+	     normMatrix.multRight( userMatrix[%id%] );',
+         id = subsceneid,
+         sx=1/scale[1], sy=1/scale[2], sz=1/scale[3])
+      } else result <- character(0)
+    
+      if (embedding != "replace")
+        result <- c(result, recurse(info$parent))
+      result
+    }
+    c('
+         normMatrix.makeIdentity();',
+      recurse(subsceneid))
   }
   
   setprmvMatrix <-
@@ -742,7 +848,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   ]);',
 
       if (sprites_3d) c(subst(
-'	   var userMatrix%id%=new Float32Array([', id),
+'	   userMatrix[%id%] = new Float32Array([', id),
         inRows(rgl.attrib(id, "usermatrix"), 4, leadin='	   '),
 '	   ]);'),
         
@@ -750,8 +856,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   for (var i=0; i<%len%; i++) 
 	     for (var j=0; j<4; j++) {
 	         ind = %stride%*(4*i + j) + %tofs%;
-	         v[ind+2] = 2*(v[ind]-v[ind+2])*texinfo.widths[i]/width;
-	         v[ind+3] = 2*(v[ind+1]-v[ind+3])*texinfo.textHeight/height;
+	         v[ind+2] = 2*(v[ind]-v[ind+2])*texinfo.widths[i];
+	         v[ind+3] = 2*(v[ind+1]-v[ind+3])*texinfo.textHeight;
 	         v[ind] *= texinfo.widths[i]/texinfo.canvasX;
 	         v[ind+1] = 1.0-(texinfo.offset + i*texinfo.skip 
 	           - v[ind+1]*texinfo.textHeight)/texinfo.canvasY;
@@ -818,6 +924,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   var mvMatLoc%id% = gl.getUniformLocation(prog%id%,"mvMatrix");
 	   var prMatLoc%id% = gl.getUniformLocation(prog%id%,"prMatrix");',
    		  id),
+      if (type == "text") subst(
+'	   var textScaleLoc%id% = gl.getUniformLocation(prog%id%,"textScale");',
+		  id),
       if (is_lit && !sprites_3d) subst(
 '	   var normMatLoc%id% = gl.getUniformLocation(prog%id%,"normMatrix");',
 		  id)
@@ -845,7 +954,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       norigs <- rgl.attrib.count(id, "vertices")
       result <- c(result, subst(
 '	     origs = origsize%id%;
-	     usermat = userMatrix%id%;
+	     usermat = userMatrix[%id%];
 	     for (iOrig=0; iOrig < %norigs%; iOrig++) {',
         id, norigs))
       spriteids <- rgl.attrib(id, "ids")
@@ -892,6 +1001,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         result <- c(result, subst(
 '	     gl.uniformMatrix4fv( normMatLoc%id%, false, usermat);',
           id))
+	  
+      if (type == "text") {
+        viewport <- par3d("viewport")
+        result <- c(result, subst(
+'	     gl.uniform2f( textScaleLoc%id%, %x%, %y%);',
+          id, x=0.75/viewport[3], y=0.75/viewport[4]))	
+      }
 
       result <- c(result, 
 '	     gl.enableVertexAttribArray( posLoc );')
@@ -1111,31 +1227,66 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   }
     
   scriptMiddle <- function() {
-    bgid <- rgl.ids("background")
-    if (!length(bgid) || !length(bg <- rgl.attrib(bgid$id, "colors")))
-      bg <- c(1,1,1,1)
-    c(subst(
 '	   gl.enable(gl.DEPTH_TEST);
 	   gl.depthFunc(gl.LEQUAL);
 	   gl.clearDepth(1.0);
-	   gl.clearColor(%r%, %g%, %b%, %a%);
+	   gl.clearColor(1,1,1,1);
 	   var xOffs = yOffs = 0,  drag  = 0;
 	   drawScene();
 
 	   function drawScene(){
 	     gl.depthMask(true);
-	     gl.disable(gl.BLEND);',
-        r=bg[1], g=bg[2], b=bg[3], a=bg[4]),
-        
-      setprMatrix(),
-      setmvMatrix(),
+	     gl.disable(gl.BLEND);
+	     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+'
+  }
+  
+  drawSubscene <- function(subsceneid) {
+    useSubscene3d(subsceneid)  
+    subids <- which( ids %in% rgl.ids()$id )
       
-      if (scene_has_faces) setnormMatrix(),
+    subscene_has_faces <- any(flags[subids,"is_lit"] & !flags[subids,"fixed_quads"])
+    subscene_needs_sorting <- any(flags[subids,"depth_sort"])
+
+    bgid <- rgl.ids("background")$id
+    if (!length(bgid) || !length(bg <- rgl.attrib(bgid, "colors")))
+      bg <- c(1,1,1,1)
       
-      if (scene_needs_sorting) setprmvMatrix,
+    result <- c(subst('
+	     // ***** subscene %subsceneid% ****',
+	subsceneid),
+
+      setViewport(),    
       
-'	     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-')
+      if (length(bgid)) subst(
+'	     gl.clearColor(%r%, %g%, %b%, %a%);
+	     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);',
+         r=bg[1], g=bg[2], b=bg[3], a=bg[4]),
+              
+      if (length(subids)) 
+        c(setprMatrix(subsceneid),
+          setmvMatrix(subsceneid),
+      
+          if (subscene_has_faces) setnormMatrix(subsceneid),
+      
+          if (subscene_needs_sorting) setprmvMatrix)) 
+
+    for (i in subids) 
+      if (toplevel[i] && !flags[i,"is_transparent"])
+        result <- c(result, draw(ids[i], types[i], flags[i,]))
+    
+    has_transparency <- any(flags[subids,"is_transparent"])
+    if (has_transparency) {
+      result <- c(result, doTransparent)
+      for (i in subids)
+        if (toplevel[i] && flags[i, "is_transparent"])
+          result <- c(result, draw(ids[i], types[i], flags[i,]))
+    }
+    
+    subscenes <- rgl.ids(type = "subscene")$id
+    for (i in subscenes)
+      result <- c(result, drawSubscene(i))
+    result
   }
   
   doTransparent <- '
@@ -1151,14 +1302,81 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }
 '	   
   mouseHandlers <- function() {
+    save <- currentSubscene3d()
+    on.exit(useSubscene3d(save))
+    
+    x0 <- y0 <- widths <- heights <- tests <- models <- projections <- character(0)
+    
+    useid <- function(id, type="model") {
+      info <- subsceneInfo(id)
+      if (info$embeddings[type] == "inherit")
+        useid(info$parent, type)
+      else
+        id
+    }
+    
+    rects <- function(parent) {
+      useSubscene3d(parent)
+      info <- subsceneInfo(parent)      
+      for (id in rev(info$children))
+        rects(id)
+
+      viewport <- par3d("viewport")*c(wfactor, hfactor)
+      x0 <<- c(x0, subst("%id%: %x0%", id=parent, x0=viewport[1]))
+      y0 <<- c(y0, subst("%id%: %y0%", id=parent, y0=viewport[2]))
+      widths <<- c(widths, subst("%id%: %width%", id=parent, width=viewport[3]))
+      heights <<- c(heights, subst("%id%: %height%", id=parent, height=viewport[4]))
+
+      tests <<- c(tests, subst(
+'         if (%x0% <= coords.x && coords.x <= %x1% && %y0% <= coords.y && coords.y <= %y1%) return(%id%);',
+             id=parent, x0=viewport[1], y0=viewport[2], x1=viewport[1]+viewport[3],
+             y1=viewport[2]+viewport[4]))
+      models <<- c(models, subst("%id%: %model%", id=parent, model=useid(parent, "model")))
+      projections <<- c(projections, subst("%id%: %projection%", id=parent, projection=useid(parent, "projection")))
+    }
+
+    rootid <- rootSubscene()      
+    rects(rootid)
+    
+    result <- c(
+'  	   var vpx0 = {',
+  	     inRows(x0, perrow=6, "          "),
+'  	     };
+	   var vpy0 = {',  	     
+  	     inRows(y0, perrow=6, "          "),
+'  	     };
+	   var vpWidths = {',
+	inRows(widths, perrow=6, "         "),
+'  	     };
+	   var vpHeights = {',
+	inRows(heights, perrow=6, "          "),
+'  	     };
+	   var activeModel = {',
+	inRows(models, perrow=6, "         "),
+'  	     };
+	   var activeProjection = {',
+	inRows(projections, perrow=6, "         "),
+'  	     };
+',
+'  	   var whichSubscene = function(coords){',
+  	   tests, subst(
+'         return(%id%);
+       }
+',	id=rootid)
+    )
+  
     handlers <- par3d("mouseMode")
     if (any(notdone <- handlers %in% c("polar", "selecting", "user"))) {
       warning("Mouse mode(s) '", handlers[notdone], "' not supported.  'trackball' used.")
       handlers[notdone] <- "trackball"
     }
     uhandlers <- setdiff(unique(handlers), "none")
-    result <- 
-'	   var vlen = function(v) {
+    result <- c(result, 
+'       var translateCoords = function(subsceneid, coords){
+         return {x:coords.x - vpx0[subsceneid], y:coords.y - vpy0[subsceneid]};
+       }
+       
+       var vlen = function(v) {
 	     return sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])
 	   }
 	   
@@ -1169,6 +1387,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }
 
 	   var screenToVector = function(x, y) {
+	     var width = vpWidths[activeSubscene];
+	     var height = vpHeights[activeSubscene];
 	     var radius = max(width, height)/2.0;
 	     var cx = width/2.0;
 	     var cy = height/2.0;
@@ -1189,7 +1409,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }
 
 	   var rotBase;
-'
+')
     
     for (i in seq_along(uhandlers)) {
       h <- uhandlers[i]
@@ -1197,7 +1417,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         trackball = 
 '	   var trackballdown = function(x,y) {
 	     rotBase = screenToVector(x, y);
-	     saveMat.load(userMatrix);
+	     saveMat.load(userMatrix[activeModel[activeSubscene]]);
 	   }
 	   
 	   var trackballmove = function(x,y) {
@@ -1207,8 +1427,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   	       rotBase[2]*rotCurrent[2];
 	     var angle = acos( dot/vlen(rotBase)/vlen(rotCurrent) )*180./PI;
 	     var axis = xprod(rotBase, rotCurrent);
-	     userMatrix.load(saveMat);
-	     userMatrix.rotate(angle, axis[0], axis[1], axis[2]);
+	     userMatrix[activeModel[activeSubscene]].load(saveMat);
+	     userMatrix[activeModel[activeSubscene]].rotate(angle, axis[0], axis[1], axis[2]);
 	     drawScene();
 	   }
 ',
@@ -1226,16 +1446,16 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '
 	   var %h%down = function(x,y) {
 	     rotBase = screenToVector(x, height/2);
-	     saveMat.load(userMatrix);
+	     saveMat.load(userMatrix[activeModel[activeSubscene]]);
 	   }
 	   	   
 	   var %h%move = function(x,y) {
 	     var rotCurrent = screenToVector(x,height/2);
 	     var angle = (rotCurrent[0] - rotBase[0])*180/PI;
-	     userMatrix.load(saveMat);
+	     userMatrix[activeModel[activeSubscene]].load(saveMat);
 	     var rotMat = new CanvasMatrix4();
 	     rotMat.rotate(angle, %h%[0], %h%[1], %h%[2]);
-	     userMatrix.multLeft(rotMat);
+	     userMatrix[activeModel[activeSubscene]].multLeft(rotMat);
 	     drawScene();
 	   }
 	   
@@ -1245,11 +1465,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var zoom0 = 1;
 	   var zoomdown = function(x, y) {
 	     y0zoom = y;
-	     zoom0 = log(zoom);
+	     zoom0 = log(zoom[activeProjection[activeSubscene]]);
 	   }
 
 	   var zoommove = function(x, y) {
-	     zoom = exp(zoom0 + (y-y0zoom)/height);
+	     zoom[activeProjection[activeSubscene]] = exp(zoom0 + (y-y0zoom)/height);
 	     drawScene();
 	   }
 ', 
@@ -1258,11 +1478,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var fov0 = 1;
 	   var fovdown = function(x, y) {
 	     y0fov = y;
-	     fov0 = fov;
+	     fov0 = fov[activeProjection[activeSubscene]];
 	   }
 
 	   var fovmove = function(x, y) {
-	     fov = max(1, min(179, fov0 + 180*(y-y0fov)/height));
+	     fov[activeProjection[activeSubscene]] = max(1, min(179, fov0 + 180*(y-y0fov)/height));
 	     drawScene();
 	   }
 '))  }
@@ -1295,7 +1515,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   
 	     return {x:canvasX, y:canvasY}
 	   }
-
+	   
 	   canvas.onmousedown = function ( ev ){
 	     if (!ev.which) // Use w3c defns in preference to MS
 	       switch (ev.button) {
@@ -1308,7 +1528,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     var f = mousedown[drag-1];
 	     if (f) {
 	       var coords = relMouseCoords(ev);
-	       f(coords.x, height-coords.y); 
+	       coords.y = height-coords.y;
+	       activeSubscene = whichSubscene(coords);
+	       coords = translateCoords(activeSubscene, coords);
+	       f(coords.x, coords.y); 
 	       ev.preventDefault();
 	     }
 	   }    
@@ -1324,7 +1547,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     var f = mousemove[drag-1];
 	     if (f) {
 	       var coords = relMouseCoords(ev);
-	       f(coords.x, height-coords.y);
+	       coords.y = height - coords.y;
+	       coords = translateCoords(activeSubscene, coords);
+	       f(coords.x, coords.y);
 	     }
 	   }
 
@@ -1332,7 +1557,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     var del = 1.1;
 	     if (ev.shiftKey) del = 1.01;
 	     var ds = ((ev.detail || ev.wheelDelta) > 0) ? del : (1 / del);
-	     zoom *= ds;
+	     zoom[activeProjection[activeSubscene]] *= ds;
 	     drawScene();
 	     ev.preventDefault();
 	   };
@@ -1398,14 +1623,20 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   rheight <- rect[4] - rect[2] + 1
   if (missing(width)) {
     if (missing(height)) {
-      width <- rwidth
-      height <- rheight
-    } else
-      width <- height * rwidth/rheight
-  } else 
-    if (missing(height))
-      height <- width * rheight/rwidth
-  
+      wfactor <- hfactor <- 1  # width = wfactor*rwidth, height = hfactor*rheight
+    } else 
+      wfactor <- hfactor <- height/rheight
+  } else {
+    if (missing(height)) {
+      wfactor <- hfactor <- width/rwidth
+    } else {
+      wfactor <- width/rwidth;
+      hfactor <- height/rheight;
+    }
+  }
+  width <- wfactor*rwidth;
+  height <- hfactor*rheight;
+      
   if (snapshot) {
     snapshot3d(file.path(dir, paste(prefix, "snapshot.png", sep="")))
     snapshotimg <- subst('<img src="%prefix%snapshot.png" alt="%prefix%snapshot" width=%width%/><br>', prefix, width)
@@ -1428,7 +1659,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     on.exit({ rgl.pop(id=temp); par3d(save) })
   }
     
-  ids <- rgl.ids()
+  ids <- rgl.ids(subscene = 0)
   types <- as.character(ids$type)
   ids <- ids$id
     
@@ -1479,17 +1710,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
    
   result <- c(result, scriptMiddle())
   
-  for (i in seq_along(ids)) 
-    if (toplevel[i] && !flags[i,"is_transparent"])
-      result <- c(result, draw(ids[i], types[i], flags[i,]))
-  
-  has_transparency <- any(flags[,"is_transparent"])
-  if (has_transparency) {
-    result <- c(result, doTransparent)
-    for (i in seq_along(ids))
-      if (toplevel[i] && flags[i, "is_transparent"])
-        result <- c(result, draw(ids[i], types[i], flags[i,]))
-  }
+  rootid <- rootSubscene()
+  result <- c(result, drawSubscene(rootid))
   
   result <- c(result, drawEnd, mouseHandlers(), scriptEnd, footer(),
               templatelines[replace + seq_len(length(templatelines)-replace)])
