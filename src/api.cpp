@@ -1041,7 +1041,8 @@ void rgl::rgl_gc(int* count, int* protect)
 	          ids[j] = 0;
 	      }
 	    }
-	  }	  for (int j = 0; j < n; j++) {
+	  }
+	  for (int j = 0; j < n; j++) {
 	    if (ids[j] != 0) {
 	      scene->pop(i, ids[j]);
 	      (*count)++;
@@ -1541,7 +1542,6 @@ void rgl::rgl_getModelMatrix(int* successptr, double* modelMatrix)
 {
     int success = RGL_FAIL;
     Device* device;
-    double bboxvec[6];
 
     if (deviceManager && (device = deviceManager->getAnyDevice())) {
       RGLView* rglview = device->getRGLView();
