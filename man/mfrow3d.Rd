@@ -71,7 +71,7 @@ Duncan Murdoch
 \examples{
 shapes <- list(Tetrahedron=tetrahedron3d(), Cube=cube3d(), Octahedron=octahedron3d(),
                Icosahedron=icosahedron3d(), Dodecahedron=dodecahedron3d(),
-               Cubocathedron=cuboctahedron3d())
+               Cuboctahedron=cuboctahedron3d())
 col <- rainbow(6)
 open3d()
 mfrow3d(3,2)
