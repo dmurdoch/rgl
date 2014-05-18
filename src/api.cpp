@@ -10,6 +10,7 @@
 #include "lib.hpp"
 #include "R.h"
 #include "api.h"
+#include "platform.h"
 
 using namespace rgl;
 //

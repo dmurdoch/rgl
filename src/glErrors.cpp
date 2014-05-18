@@ -4,6 +4,7 @@
 
 #include "opengl.hpp"
 #include "R.h"
+#include "platform.h"
 
 namespace rgl {
 int SaveErrnum = GL_NO_ERROR;

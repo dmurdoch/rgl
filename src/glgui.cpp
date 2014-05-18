@@ -13,6 +13,7 @@
 #include "gl2ps.h"
 #include "opengl.hpp"
 #include "RenderContext.hpp"
+#include "platform.h"
 
 using namespace rgl;
 

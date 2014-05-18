@@ -541,6 +541,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     scale <- par3d("scale")
     ranges <- c(bbox[2]-bbox[1], bbox[4]-bbox[3], bbox[6]-bbox[5])*scale/2
     radius <- sqrt(sum(ranges^2))*1.1 # A bit bigger to handle labels
+    if (radius <= 0) radius <- 1
     subst(
 '	     var radius = %radius%;
 	     var s = sin(fov*PI/360);
