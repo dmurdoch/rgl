@@ -1065,15 +1065,15 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.front     = (Material::PolygonMode) idata[3];
   mat.back      = (Material::PolygonMode) idata[4];
   mat.fog       = (idata[5]) ? true : false;
-  Texture::Type textype = (Texture::Type) idata[6];
-  bool mipmap = (idata[7]) ? true : false;
-  int  minfilter = idata[8];
-  int  magfilter = idata[9];
+  mat.textype   = (Texture::Type) idata[6];
+  mat.mipmap    = (idata[7]) ? true : false;
+  mat.minfilter = idata[8];
+  mat.magfilter = idata[9];
   int    nalpha = idata[10];
   mat.ambient.set3iv( &idata[11] );
   mat.specular.set3iv( &idata[14] );
   mat.emission.set3iv( &idata[17] );
-  bool envmap = (idata[20]) ? true : false;
+  mat.envmap    = (idata[20]) ? true : false;
   mat.point_antialias = (idata[21]) ? true : false;
   mat.line_antialias = (idata[22]) ? true : false;
   mat.depth_mask = (idata[23]) ? true : false;
@@ -1091,7 +1091,7 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.alphablend  = false;
   
   if ( strlen(pixmapfn) > 0 ) {
-    mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter, envmap);
+    mat.texture = new Texture(pixmapfn, mat.textype, mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;
@@ -1160,11 +1160,11 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
                                strlen(cdata[0]),
                                cdata[0] );
   } else {
-    idata[6] = 4; /* mat.texture.type; */
-    idata[7] = 0; /* mat.texture.mipmap ? 1 : 0; */
-    idata[8] = 1; /* mat.texture.minfilter; */
-    idata[9] = 1; /* mat.texture.magfilter; */
-    idata[20] = 0; /* mat.texture.envmap ? 1 : 0; */
+    idata[6] = (int)mat->textype;
+    idata[7] = mat->mipmap ? 1 : 0; 
+    idata[8] = mat->minfilter; 
+    idata[9] = mat->magfilter; 
+    idata[20] = mat->envmap ? 1 : 0; 
     cdata[0][0] = '\0';
   }
   idata[11] = (int) mat->ambient.getRedub();
