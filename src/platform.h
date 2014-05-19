@@ -18,7 +18,9 @@
 #if __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_9
   // pre-Mavericks code
 #else
-  // Mavericks and later
+  // Mavericks and later  
+  
+#define MODERN_OPENGL
   
 #define gluProject rgl_gluProject
 #define gluUnProject rgl_gluUnProject

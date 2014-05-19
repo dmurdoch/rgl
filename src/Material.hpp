@@ -52,6 +52,11 @@ public:
   bool         line_antialias;
   bool         depth_mask;
   int	       depth_test;  // 0=GL_NEVER, 1=GL_LESS, etc.
+  Texture::Type textype;
+  bool	       mipmap;
+  unsigned int minfilter;
+  unsigned int magfilter;
+  bool         envmap;
   
   float        glVersion;
 };
