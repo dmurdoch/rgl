@@ -22,7 +22,7 @@ GLint gluProject(GLdouble  objX,  GLdouble  objY,  GLdouble  objZ,
                  const GLint *  view,  GLdouble*  winX,  GLdouble*  winY,  
                  GLdouble*  winZ) 
 {
-  int glkview[] = {view[0], view[1], view[2]};
+  int glkview[] = {view[0], view[1], view[2], view[3]};
   GLKVector3 result =
   GLKMathProject(GLKVector3Make(objX, objY, objZ),
                  GLKMatrix4Make(model[0],model[1],model[2],model[3],
@@ -46,7 +46,7 @@ GLint gluUnProject(GLdouble  winX,  GLdouble  winY,  GLdouble  winZ,
                    const GLint *  view,  GLdouble*  objX,  GLdouble*  objY,  
                    GLdouble*  objZ)
 {
-  int glkview[] = {view[0], view[1], view[2]};
+  int glkview[] = {view[0], view[1], view[2], view[3]};
   bool success;
   GLKVector3 result =
   GLKMathUnproject(GLKVector3Make(winX, winY, winZ),
