@@ -6,11 +6,10 @@
 //
 // $Id$
 
-
-using namespace std;
-
 #include <cmath>
 #include <cfloat>
+
+using namespace std;
 
 #include "types.h"
 
