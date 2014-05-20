@@ -7,7 +7,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
         lwd = material3d("lwd"),
         radius = avgscale*size/60, add = FALSE, aspect = !add, ...)
 {
-    if (!add) clear3d()
+    if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
      	
@@ -49,7 +49,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
 plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
 	add = FALSE, ...)
 {
-    if (!add) clear3d()
+    if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
     
