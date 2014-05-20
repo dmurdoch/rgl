@@ -123,7 +123,7 @@ subsceneList <- function(value, window = rgl.cur()) {
   else return(alllists[[as.character(window)]])
 }
 
-next3d <- function(current = NA, clear = TRUE) {
+next3d <- function(current = NA, clear = TRUE, reuse = TRUE) {
   .check3d()
   if (is.na(current))
     current <- currentSubscene3d()
@@ -132,7 +132,9 @@ next3d <- function(current = NA, clear = TRUE) {
     subscenes <- current
   if (current %in% subscenes) {
     this <- which(current == subscenes)
-    if (this == length(subscenes)) 
+    if (reuse && !nrow(rgl.ids(subscene = current))) {
+      # do nothing
+    } else if (this == length(subscenes)) 
       this <- 1
     else 
       this <- this + 1
@@ -155,10 +157,28 @@ next3d <- function(current = NA, clear = TRUE) {
     clear3d(subscene = current)
 }
   
+clearSubsceneList <- function(id = NA) {
+  if (is.na(id))
+    id <- currentSubscene3d()
+  thelist <- subsceneList()
+  if (id %in% thelist) {
+    parent <- subsceneInfo()$parent
+    if (is.null(parent))
+      parent <- rootSubscene3d()
+    pop3d(type="subscene", id=thelist)
+    useSubscene3d(parent)
+    subsceneList(attr(thelist, "prev"))
+    gc3d()    
+  }
+  invisible(currentSubscene3d())
+}
+
 mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA, 
                            ...) {
   stopifnot(nr >= 1, nc >= 1)
   .check3d()
+  if (missing(parent))
+    clearSubsceneList()
   if (is.na(parent))
     parent <- currentSubscene3d()
   useSubscene3d(parent)
@@ -201,6 +221,8 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
   num.cols <- dm[2L]
 
   .check3d()
+  if (missing(parent))
+    clearSubsceneList()
   if (is.na(parent))
     parent <- currentSubscene3d()
   useSubscene3d(parent)
