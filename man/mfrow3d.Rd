@@ -20,7 +20,8 @@ layout3d(mat, widths = rep.int(1, ncol(mat)),
               parent = NA, 
               ...)
 next3d(current = NA, clear = TRUE, reuse = TRUE)
-clearSubsceneList(id = NA)
+clearSubsceneList(delete = currentSubscene3d() \%in\% subsceneList(window), 
+                  window = rgl.cur())
 }
 \arguments{
   \item{value}{
@@ -55,9 +56,8 @@ Whether the newly entered subscene should be cleared upon entry.
   \item{reuse}{
 Whether to skip advancing if the current subscene has no objects in it.
 }
-  \item{id}{
-Clear the subscene list only if it contains this id.  \code{NA} indicates
-the current subscene.
+  \item{delete}{
+If \code{TRUE}, delete the subscenes in the current window.
 }
 }
 \details{
@@ -71,7 +71,7 @@ each other.  You can mix them within a single rgl window.
 In the default case where \code{parent} is missing, \code{mfrow3d} and \code{layout3d} will
 call \code{clearSubsceneList()} at the start.  
 
-\code{clearSubsceneList()} will check
+By default \code{clearSubsceneList()} checks
 whether the current subscene is in the current subscene list; if so, it will delete
 all subscenes in the list, and call \code{\link{gc3d}} to delete any objects that are no
 longer shown.  The subscene list will be set to a previous value if one was recorded,
