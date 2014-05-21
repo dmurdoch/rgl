@@ -157,19 +157,20 @@ next3d <- function(current = NA, clear = TRUE, reuse = TRUE) {
     clear3d(subscene = current)
 }
   
-clearSubsceneList <- function(id = NA) {
-  if (is.na(id))
-    id <- currentSubscene3d()
+clearSubsceneList <- function(delete = currentSubscene3d() %in% subsceneList(window),
+                              window = rgl.cur()) {
+  if (!missing(window))
+    rgl.set(window)  
   thelist <- subsceneList()
-  if (id %in% thelist) {
-    parent <- subsceneInfo()$parent
+  if (delete && length(thelist)) {
+    parent <- subsceneInfo(thelist[1])$parent
     if (is.null(parent))
       parent <- rootSubscene3d()
     pop3d(type="subscene", id=thelist)
     useSubscene3d(parent)
-    subsceneList(attr(thelist, "prev"))
-    gc3d()    
+    gc3d()
   }
+  subsceneList(attr(thelist, "prev"))
   invisible(currentSubscene3d())
 }
 
