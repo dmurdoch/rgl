@@ -10,15 +10,6 @@ scene3d <- function() {
     mat
   }
   
-  inbbox <- function(x, bbox) {
-    if (is.null(x)) return(TRUE)
-    x <- x[apply(x, 1, function(row) all(!is.na(row))),,drop=FALSE]
-    if (!nrow(x)) return(TRUE)
-    all(bbox[1] <= x[,1]) && all(x[,1] <= bbox[2]) &&
-    all(bbox[3] <= x[,2]) && all(x[,2] <= bbox[4]) &&
-    all(bbox[5] <= x[,3]) && all(x[,3] <= bbox[6])
-  }
-  
   getObject <- function(id, type) {
     result <- list(id=id, type=type)
     
@@ -32,8 +23,10 @@ scene3d <- function() {
       if (rgl.attrib.count(id, a))
         result[[a]] <- rgl.attrib(id, a)
     # FIXME:  we should query the ignoreExtent field instead
-    if (type != "light" && !inbbox(result$vertices, scenebbox))
-      result$ignoreExtent <- TRUE
+    if (!(type %in% c("light", "background", "bboxdeco"))) {
+      flags <- rgl.attrib(id, "flags")
+      result$ignoreExtent <- flags["ignoreExtent", 1]
+    }
     if (!is.null(result$ids)) {
       objlist <- vector("list", nrow(result$ids))
       for (i in seq_len(nrow(result$ids)))
@@ -59,27 +52,40 @@ scene3d <- function() {
     result
   }
 
-  scenebbox <- par3d("bbox")
+  getSubscene <- function(id) {
+    useSubscene3d(id)
       
-  result <- list()
+    result <- list(id = id, type = "subscene", par3d = par3d())
 
-  result$par3d <- par3d()
-
-  result$material <- defaultmaterial
+    result$embeddings <- subsceneInfo()$embeddings
     
-  obj <- rgl.ids("background")
-  bg <- getObject(obj$id, "background")
-  result$bg <- bg
+    objs <- rgl.ids(c("background", "bboxdeco", "shapes", "lights"))
+    result$objects <- objs$id
   
-  if (nrow(obj <- rgl.ids("bboxdeco")))
-    result$bbox <- getObject(obj$id, "bboxdeco")
-    
-  objs <- rgl.ids(c("shapes", "lights"))  
+    if (nrow(obj <- rgl.ids("subscene", subscene = id))) {
+      subscenes <- vector("list", nrow(obj))
+      ids <- obj$id
+      for (i in seq_len(nrow(obj)))
+        subscenes[[i]] <- getSubscene(ids[i])
+      result$subscenes <- subscenes
+    }
+    class(result) <- c("rglsubscene", "rglobject")
+    result
+  }
+  
+  result <- list()
+  result$material <- defaultmaterial
+  
+  result$rootSubscene <- getSubscene(rootSubscene())
+  
+  objs <- rgl.ids(c("shapes", "lights", "background", "bboxdeco"), subscene=0)  
   objlist <- vector("list", nrow(objs))
   ids <- objs$id
   types <- as.character(objs$type)
-  for (i in seq_len(nrow(objs))) 
+  for (i in seq_len(nrow(objs))) {
     objlist[[i]] <- getObject(ids[i], types[i])
+    names(objlist)[i] <- as.character(ids[i])
+  }
   result$objects <- objlist
     
   class(result) <- "rglscene"
@@ -96,7 +102,29 @@ print.rglscene <- function(x, ...) {
     cat("  objects:\tlist of", length(x$objects),"object(s):\n")
     cat("          \t", sapply(x$objects, function(obj) obj$type), "\n")
   }
+  if (!is.null(x$root)) 
+    cat("  root:\ta root subscene\n")
   invisible(x)
+}
+
+summary.rglscene <- function(object, ...) {
+  result <- list()
+  nobjs <- length(object$objects)
+  if (nobjs) result$objects <- data.frame(type=sapply(object$objects, function(obj) obj$type))
+  if (!is.null(object$rootSubscene))
+    result$subscenes <- summary(object$rootSubscene)
+  result
+}
+
+summary.rglsubscene <- function(object, ...) {
+  result <- data.frame(id = object$id, parent = NA, objects = 0)
+  result$objects <- list(object$objects)
+  if (length(object$subscenes)) {
+    children <- do.call(rbind, lapply(object$subscenes, summary))
+    children[is.na(children$parent),"parent"] <- object$id
+    result <- rbind(result, children)
+  }
+  result
 }
 
 print.rglobject <- function(x, ...) {
@@ -106,25 +134,36 @@ print.rglobject <- function(x, ...) {
   cat("\n")
 }
 
+print.rglsubscene <- function(x, ...) {
+  cat("RGL subscene containing components\n")
+  cat("  ")
+  cat(names(x), sep=", ")
+  cat("\n")
+}
+  
+
 plot3d.rglscene <- function(x, add=FALSE, ...) {
+  root <- x$rootSubscene
+  if (is.null(root)) root <- x  # Should work with pre-subscene objects
   if (!add) {
     params <- getr3dDefaults()
     if (!is.null(x$material)) {
       if (is.null(params$material)) params$material <- list()
       params$material[names(x$material)] <- x$material
     }
-    if (!is.null(x$bg)) {
+    if (!is.null(root$bg)) {
       if (is.null(params$bg)) params$bg <- list()
       params$bg[names(params$material)] <- params$material
       params$bg[names(x$bg$material)] <- x$bg$material
       x$bg$material <- x$bg$id <- x$bg$type <- NULL
       params$bg[names(x$bg)] <- x$bg
     }
-    if (!is.null(x$par3d)) {
-      ind <- !(names(x$par3d) %in% .Par3d.readonly)
-      params[names(x$par3d)[ind]] <- x$par3d[ind]
+    if (!is.null(root$par3d)) {
+      ind <- !(names(root$par3d) %in% .Par3d.readonly)
+      params[names(root$par3d)[ind]] <- root$par3d[ind]
     }
     open3d(params = params)
+    
     # Some older scenes might not have a light in them, so only clear if one is there
     for (i in seq_along(x$objects)) {
       obj <- x$objects[[i]]
@@ -133,19 +172,61 @@ plot3d.rglscene <- function(x, add=FALSE, ...) {
         break
       }
     }
-  }
-    
-  results <- c()
-  for (i in seq_along(x$objects)) {
-    obj <- x$objects[[i]]
-    results <- c(results, plot3d(obj))
-  }
+  } 
+  save <- par3d(skipRedraw = TRUE)
+  on.exit(par3d(save))
   
-  if (!is.null(obj <- x$bbox)) 
-    plot3d(obj)
-    
+  if (is.null(x$rootSubscene)) {   
+    results <- c()
+    for (i in seq_along(x$objects)) {
+      obj <- x$objects[[i]]
+      results <- c(results, plot3d(obj))
+    }
+    if (!is.null(obj <- x$bbox)) 
+      plot3d(obj)  
+  } else 
+    results <- plot3d(root, x$objects, root = TRUE, ...)
+  
   invisible(results)
-}      
+}   
+
+plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
+  if (root) {
+    if (!is.null(x$embeddings)) {
+      info <- subsceneInfo(embeddings = x$embeddings)
+      subscene <- info$id
+    } else
+      subscene <- currentSubscene3d()
+    if (!is.null(x$par3d$viewport))
+      par3d(viewport = x$par3d$viewport)
+  } else
+    subscene <- newSubscene3d(viewport = x$embeddings["viewport"],
+			    projection = x$embeddings["projection"],
+			    model = x$embeddings["model"],
+			    newviewport = x$par3d$viewport,
+			    copyLights = FALSE)
+  results <- subscene
+  objs <- x$objects
+  for (id in as.character(objs)) {
+    obj <- objects[[id]]
+    if (is.null(obj$newid)) 
+      results <- c(results, objects[[id]]$newid <- plot3d(obj, ...))
+    else
+      addToSubscene3d(obj$newid)
+  }
+  for (i in seq_along(x$subscenes)) {
+    useSubscene3d(subscene)
+    res <- plot3d(x$subscenes[[i]], objects, root=FALSE, ...)
+    results <- c(results, res$results)
+    objects <- res$objects
+  }
+  if (root)
+    return(results)
+  else
+    return(list(results=results, objects=objects))
+}
+       
+  
 
 plot3d.rglobject <- function(x, ...) {
   type <- x$type

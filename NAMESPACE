@@ -70,9 +70,14 @@ if (.Platform$GUI == "AQUA") {
  S3method(plot3d, rglobject)
  S3method(plot3d, rglbboxdeco)
  S3method(plot3d, rglbackground)
+ S3method(plot3d, rglsubscene)
  
  S3method(print, rglscene)
  S3method(print, rglobject)
+ S3method(print, rglsubscene)
+ 
+ S3method(summary, rglscene)
+ S3method(summary, rglsubscene)
  
  if(tools:::.OStype() == "windows") {
    import(utils) # only needed for getWindowsHandle
