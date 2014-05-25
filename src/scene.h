@@ -57,14 +57,14 @@ public:
   Light* get_light(int id);
   
   /**
-   * get the background
+   * get a background
    */
-  Background* get_background() const { return currentSubscene->get_background(); }
+  Background* get_background(int id);
   
   /**
    * get the bbox
    */
-  BBoxDeco* get_bboxdeco() const { return currentSubscene->get_bboxdeco(); }
+  BBoxDeco* get_bboxdeco(int id);
   
   /**
    * get subscene

@@ -1131,12 +1131,12 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
       if (shape) 
         mat = shape->getMaterial(); /* success! successptr will be set below */
       else {
-	BBoxDeco* bboxdeco = scene->get_bboxdeco();
-	if (bboxdeco && *id == bboxdeco->getObjID())
+	BBoxDeco* bboxdeco = scene->get_bboxdeco(*id);
+	if (bboxdeco)
 	  mat = bboxdeco->getMaterial();
 	else {
-	  Background* background = scene->get_background();
-	  if (background && *id == background->getObjID())
+	  Background* background = scene->get_background(*id);
+	  if (background)
 	    mat = background->getMaterial();
 	  else
 	    return;

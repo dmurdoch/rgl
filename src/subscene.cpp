@@ -440,12 +440,41 @@ Background* Subscene::get_background()
   else return NULL;
 }
 
+Background* Subscene::get_background(int id)
+{
+  Background* background = get_background();
+  if (background && background->getObjID() == id)
+    return background;
+  
+  std::vector<Subscene*>::const_iterator iter;
+  for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) {
+    background = (*iter)->get_background(id);
+    if (background) return background;
+  }
+  return NULL;
+}  
+
 BBoxDeco* Subscene::get_bboxdeco()
 {
   if (bboxdeco) return bboxdeco;
   else if (parent) return parent->get_bboxdeco();
   else return NULL;
 }
+
+BBoxDeco* Subscene::get_bboxdeco(int id)
+{
+  BBoxDeco* bboxdeco = get_bboxdeco();
+  if (bboxdeco && bboxdeco->getObjID() == id)
+    return bboxdeco;
+  
+  std::vector<Subscene*>::const_iterator iter;
+  for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) {
+    bboxdeco = (*iter)->get_bboxdeco(id);
+    if (bboxdeco) return bboxdeco;
+  }
+  return NULL;
+}  
+
 
 UserViewpoint* Subscene::getUserViewpoint()
 {
