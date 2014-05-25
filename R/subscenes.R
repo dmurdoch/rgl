@@ -165,7 +165,7 @@ clearSubsceneList <- function(delete = currentSubscene3d() %in% subsceneList(win
   if (delete && length(thelist)) {
     parent <- subsceneInfo(thelist[1])$parent
     if (is.null(parent))
-      parent <- rootSubscene3d()
+      parent <- rootSubscene()
     pop3d(type="subscene", id=thelist)
     useSubscene3d(parent)
     gc3d()
