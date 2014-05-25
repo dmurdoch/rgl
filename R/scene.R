@@ -149,7 +149,7 @@ rgl.attrib <- function( id, attrib, first=1,
                            "type",	     # types
                            "flag"	     # flags
                            )[[attrib]]
-  if (attrib == 14)
+  if (attrib == 14 && count)
     if (id %in% rgl.ids("lights", subscene = 0)$id)
       rownames(result) <- c("viewpoint", "finite")[first:last]
     else if (id %in% rgl.ids("background", subscene = 0)$id)

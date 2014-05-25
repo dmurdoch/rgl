@@ -13,7 +13,7 @@ scene3d <- function() {
   getObject <- function(id, type) {
     result <- list(id=id, type=type)
     
-    if (type != "light")
+    if (!(type %in% c("light", "clipplanes")))
       result$material <- matdiff(rgl.getmaterial(id=id))
     
     attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
@@ -22,11 +22,9 @@ scene3d <- function() {
     for (a in attribs) 
       if (rgl.attrib.count(id, a))
         result[[a]] <- rgl.attrib(id, a)
-    # FIXME:  we should query the ignoreExtent field instead
-    if (!(type %in% c("light", "background", "bboxdeco"))) {
-      flags <- rgl.attrib(id, "flags")
+    flags <- rgl.attrib(id, "flags")
+    if (length(flags) && "ignoreExtent" %in% rownames(flags)) 
       result$ignoreExtent <- flags["ignoreExtent", 1]
-    }
     if (!is.null(result$ids)) {
       objlist <- vector("list", nrow(result$ids))
       for (i in seq_len(nrow(result$ids)))
