@@ -1,4 +1,4 @@
-#include "Subscene.hpp"
+#include "subscene.hpp"
 #include "gl2ps.h"
 #include "R.h"
 #include <algorithm>
@@ -68,16 +68,12 @@ bool Subscene::add(SceneNode* node)
       break;
     case USERVIEWPOINT:
       {
-        if (userviewpoint)
-          delete userviewpoint;
         userviewpoint = (UserViewpoint*) node;
         success = true;
       }
       break;
     case MODELVIEWPOINT:
       {
-        if (modelviewpoint)
-          delete modelviewpoint;
         modelviewpoint = (ModelViewpoint*) node;
         success = true;
       }
@@ -85,6 +81,8 @@ bool Subscene::add(SceneNode* node)
     case SUBSCENE:
       {
 	Subscene* subscene = static_cast<Subscene*>(node);
+	if (subscene->getSubscene(getObjID()))
+	  error("Cannot add a subscene %d to itself or its child.", subscene->getObjID());
 	addSubscene(subscene);
 	success = true;
       }
@@ -149,12 +147,8 @@ void Subscene::addSubscene(Subscene* subscene)
   subscenes.push_back(subscene);
 }
 
-void Subscene::hideShape(int id, bool recursive)
+void Subscene::hideShape(int id)
 {
-  if (recursive)
-    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-      (*i)->hideShape(id, true);
-    
   std::vector<Shape*>::iterator ishape 
      = std::find_if(shapes.begin(), shapes.end(), 
        std::bind2nd(std::ptr_fun(&sameID), id));
@@ -175,52 +169,31 @@ void Subscene::hideShape(int id, bool recursive)
   calcDataBBox();
 }
 
-void Subscene::hideLight(int id, bool recursive)
+void Subscene::hideLight(int id)
 {
-  if (recursive)
-    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-      (*i)->hideLight(id, true);
-  
-  std::vector<Light*>::iterator light = std::find_if(lights.begin(), lights.end(),
+  std::vector<Light*>::iterator ilight = std::find_if(lights.begin(), lights.end(),
                             std::bind2nd(std::ptr_fun(&sameID), id));
-  if (light != lights.end())
-    lights.erase(light);
+  if (ilight != lights.end()) {
+    lights.erase(ilight);
+  }
 }
 
-void Subscene::hideBBoxDeco(int id, bool recursive)
+void Subscene::hideBBoxDeco(int id)
 {
-  if (recursive)
-    for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-      (*i)->hideBBoxDeco(id, true);
-  
   if (bboxdeco && sameID(bboxdeco, id))
     bboxdeco = NULL;
 }
 
-Subscene* Subscene::popSubscene(int id, Subscene* current)
+Subscene* Subscene::hideSubscene(int id, Subscene* current)
 {
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ) {
     if (sameID(*i, id)) {
       if ((*i)->getSubscene(current->getObjID()))
-        current = (*i)->parent;
-      delete (*i);      
+        current = (*i)->parent;  
       subscenes.erase(i);
       return current;
-    } else
-      current = (*i)->popSubscene(id, current);
+    } 
   }
-  return current;
-}
-
-Subscene* Subscene::clearSubscenes(Subscene* current)
-{
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
-    current = (*i)->clearSubscenes(current);
-    if (*i == current)
-      current = (*i)->parent;
-    delete (*i);    
-  }
-  subscenes.clear();
   return current;
 }
 
@@ -283,7 +256,7 @@ String Subscene::getTextAttribute(AABox& bbox, AttribID attrib, int index)
   int n = getAttributeCount(bbox, attrib);
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
-    shapes[index]->getShapeName(buffer, 20);
+    shapes[index]->getTypeName(buffer, 20);
     return String(strlen(buffer), buffer);
   } else
     return SceneNode::getTextAttribute(bbox, attrib, index);
@@ -361,7 +334,7 @@ int Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
     for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
       *ids++ = (*i)->getObjID();
       buffer[19] = 0;
-      (*i)->getShapeName(buffer, 20);
+      (*i)->getTypeName(buffer, 20);
       *types = R_alloc(strlen(buffer)+1, 1);
       strcpy(*types, buffer);
       types++;

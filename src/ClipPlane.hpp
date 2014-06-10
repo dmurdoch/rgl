@@ -26,7 +26,7 @@ public:
   /**
    * tell type.
    **/
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "clipplanes", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "clipplanes", buflen); };
   
   virtual void renderBegin(RenderContext* renderContext);
   

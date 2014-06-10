@@ -82,13 +82,17 @@ newSubscene3d <- function(viewport = "replace",
 
 useSubscene3d <- function(subscene) {
   result <- .C(rgl_setsubscene, id=as.integer(subscene))$id
-  if (!result) stop("Subscene ", subscene, " not found.")
+  if (!result) stop(gettextf("Subscene %d not found.", subscene))
   invisible(subscene)
 }
 
 addToSubscene3d <- function(ids, subscene = subsceneInfo()$id) {
+  ids <- as.integer(ids)
+  dups <- intersect(ids, rgl.ids("all", subscene)$id)
+  if (length(dups))
+    stop(gettextf("Cannot add %s, already present", paste(dups, collapse = ", ")))
   result <- .C(rgl_addtosubscene, success = as.integer(subscene), 
-     n = as.integer(length(ids)), ids = as.integer(ids))$success
+     n = as.integer(length(ids)), ids = ids)$success
   if (!result)
     stop("Failed to add objects to subscene ", subscene)
   invisible(subscene)

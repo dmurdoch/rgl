@@ -21,7 +21,7 @@ public:
   /**
    * tell type.
    **/
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "planes", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "planes", buflen); };
 
   /**
    * overload to update triangles first.

@@ -33,6 +33,8 @@ public:
   void	      setScale(double* src);
   void 	      getPosition(double* dest);
   void        setPosition(double* src);
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "modelviewpoint", buflen); };
+
   Vertex      scale;
   bool        scaleChanged;
 private:
@@ -58,6 +60,7 @@ public:
   Vertex      getObserver();
   void	      setObserver(bool automatic, Vertex eye);
   void	      setupViewer();
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "userviewpoint", buflen); };
   Frustum     frustum;
 private:
   float       fov;

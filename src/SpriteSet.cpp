@@ -190,7 +190,7 @@ String SpriteSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
   int n = getAttributeCount(bbox, attrib);
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
-    shapes[index]->getShapeName(buffer, 20);
+    shapes[index]->getTypeName(buffer, 20);
     return String(strlen(buffer), buffer);
   } else
     return Shape::getTextAttribute(bbox, attrib, index);

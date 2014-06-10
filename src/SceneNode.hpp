@@ -68,6 +68,8 @@ public:
   virtual int getAttributeCount(AABox& bbox, AttribID attrib) { return 0; }
   virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result) { return; }
   virtual String  getTextAttribute(AABox& bbox, AttribID attrib, int index) { return String(0, NULL); }
+  virtual void getTypeName(char* buffer, int buflen) = 0;
+
 protected:
   SceneNode(const TypeID in_typeID) : typeID(in_typeID)
   {  objID = nextID++; };

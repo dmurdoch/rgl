@@ -25,7 +25,7 @@ public:
    **/
   virtual void render(RenderContext* renderContext);
   
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "sprites", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "sprites", buflen); };
   
   virtual int getElementCount(void);
   int getAttributeCount(AABox& bbox, AttribID attrib);

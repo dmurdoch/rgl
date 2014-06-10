@@ -28,6 +28,7 @@ public:
 
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "light", buflen); };
 
 private:
   float position[4];

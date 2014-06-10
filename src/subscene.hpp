@@ -74,18 +74,13 @@ public:
   void addSubscene(Subscene* subscene);
   
   /**
-   * remove subscene by id, or all of them
-   **/
-  Subscene*	 popSubscene(int id, Subscene* current); /* Might update the current one if it just got popped */
-  Subscene*      clearSubscenes(Subscene* current);      /* ditto */
-  
-  /**
    * hide shape or light or bboxdeco
    **/
    
-  void hideShape(int id, bool recursive);
-  void hideLight(int id, bool recursive);
-  void hideBBoxDeco(int id, bool recursive);
+  void hideShape(int id);
+  void hideLight(int id);
+  void hideBBoxDeco(int id);
+  Subscene* hideSubscene(int id, Subscene* current);
 
   /**
    * recursive search for subscene; could return self, or NULL if not found
@@ -171,6 +166,8 @@ public:
   ModelViewpoint* getModelViewpoint();
   
   void getModelMatrix(double* modelMatrix, Vertex center);
+
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "subscene", buflen); };
   
   Background* get_background(); 
   
