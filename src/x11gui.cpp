@@ -349,7 +349,6 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
   
   if (useFreeType) {
 #ifdef HAVE_FREETYPE
-    int len=0;
     SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
                                           ScalarString(mkChar(family))), rglNamespace)),
                                           0);
