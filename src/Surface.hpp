@@ -27,7 +27,7 @@ public:
   
   /* Center of square with upper left at (ix, iz) */
   Vertex getCenter(int ix, int iz);  
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "surface", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "surface", buflen); };
   
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);

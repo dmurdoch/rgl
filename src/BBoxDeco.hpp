@@ -57,7 +57,7 @@ public:
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   String  getTextAttribute(AABox& bbox, AttribID attrib, int index);
   Material* getMaterial()  { return &material; }
-
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "bboxdeco", buflen); };
 private:
   Material material;
   AxisInfo xaxis, yaxis, zaxis;

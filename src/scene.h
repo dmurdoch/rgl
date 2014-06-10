@@ -8,7 +8,7 @@
 
 #include <vector>
 #include "types.h"
-#include "Subscene.hpp"
+#include "subscene.hpp"
 
 namespace rgl {
 
@@ -22,10 +22,10 @@ public:
   /**
    * remove all nodes of the given type.  This is always recursive through subscenes.
    **/
-  bool clear(TypeID stackTypeID);
+  bool clear(TypeID type);
   
   /**
-   * add node to current subscene (and possibly to scene)
+   * add node to current subscene
    **/
   bool add(SceneNode* node);
   
@@ -35,21 +35,27 @@ public:
   bool pop(TypeID stackTypeID, int id);
   
   /**
+   * hide specified node in all subscenes
+   **/
+  void hide(int id);
+  
+  /**
    * get information about stacks
    */
   int get_id_count(TypeID type);
   void get_ids(TypeID type, int* ids, char** types);
   
   /**
-   * get a SceneNode of any type
+   * get a SceneNode by id
    */
    
-  SceneNode* get_scenenode(int id, bool recursive = false);
+  SceneNode* get_scenenode(int id);
+  SceneNode* get_scenenode(TypeID type, int id);
   
   /**
    * get information about particular shapes
    **/
-  Shape* get_shape(int id, bool recursive = false);
+  Shape* get_shape(int id);
   
   /**
    * get information about particular lights
@@ -120,55 +126,18 @@ private:
 
   void setupLightModel();
 
-  /**
-   * add shapes
-   **/
-  void addShape(Shape* shape);
-  
-  /**
-   * add light
-   **/
-  void addLight(Light* light);
-  
-  /**
-   * add bboxdeco
-   **/
-  void addBBoxDeco(BBoxDeco* bboxdeco);
-  
-
   // --- [ Subscenes ]-------------------------------------------------------
 
   Subscene* currentSubscene;
 
-  // ---[ bounded slots ]----------------------------------------------------
-  
-
-
-  // ---[ stacks ]-----------------------------------------------------------
+  // ---[ nodes ]-----------------------------------------------------------
   
   /**
-   * list of light sources.  The scene owns them, the subscenes display a subset.
+   * list of scene nodes.  The scene owns them, the subscenes display a subset.
    **/
-  std::vector<Light*> lights;
+  std::vector<SceneNode*> nodes;
 
-  /**
-   * list of shapes.  The scene owns them, the subscenes display a subset.
-   **/
-  std::vector<Shape*> shapes;
-  
-  /**
-   * list of bboxdecos.  Each scene has at most one of these.
-   **/
-  std::vector<BBoxDeco*> bboxdecos;
-  
   void deleteAll(std::vector<SceneNode*> list);
-
-  void deleteShapes();
-  void deleteLights();
-  void deleteBBoxDecos();
-  
-  // ---[ grouping data ]----------------------------------------------------
-  
 
 };
 

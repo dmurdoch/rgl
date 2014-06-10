@@ -23,7 +23,7 @@ public:
   /**
    * overloaded
    **/
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "primitive", buflen); }
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "primitive", buflen); }
   /**
    * overloaded
    **/
@@ -146,7 +146,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "faces", buflen); };  
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "faces", buflen); };  
   
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
@@ -197,7 +197,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "points", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "points", buflen); };
 };
 
 //
@@ -214,7 +214,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "lines", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "lines", buflen); };
 };
 
 //
@@ -236,7 +236,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "triangles", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "triangles", buflen); };
 };
 
 //
@@ -256,7 +256,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "quads", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "quads", buflen); };
 };
 
 //
@@ -272,7 +272,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "linestrip", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "linestrip", buflen); };
 };
 
 } // namespace rgl 

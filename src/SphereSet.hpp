@@ -56,7 +56,7 @@ public:
    **/
   void drawEnd(RenderContext* renderContext);
 
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "spheres", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "spheres", buflen); };
 
 };
 

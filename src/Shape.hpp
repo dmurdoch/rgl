@@ -64,7 +64,7 @@ public:
   
   const bool getIgnoreExtent() const { return ignoreExtent; }
 
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "shape", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "shape", buflen); };
   
   /**
    * invalidate display list

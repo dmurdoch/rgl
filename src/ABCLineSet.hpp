@@ -20,7 +20,7 @@ public:
   /**
    * tell type.
    **/
-  virtual void getShapeName(char* buffer, int buflen) { strncpy(buffer, "abclines", buflen); };
+  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "abclines", buflen); };
 
   /**
    * overload to update segments first.

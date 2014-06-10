@@ -318,7 +318,7 @@ void rgl::rgl_attrib_count(int* id, int* attrib, int* count)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    SceneNode* scenenode = scene->get_scenenode(*id, true);
+    SceneNode* scenenode = scene->get_scenenode(*id);
     if ( scenenode )
       *count = scenenode->getAttributeCount(bbox, *attrib);
     else
@@ -338,7 +338,7 @@ void rgl::rgl_attrib(int* id, int* attrib, int* first, int* count, double* resul
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    SceneNode* scenenode = scene->get_scenenode(*id, true);
+    SceneNode* scenenode = scene->get_scenenode(*id);
     if ( scenenode )
       scenenode->getAttribute(bbox, *attrib, *first, *count, result);
   }
@@ -356,7 +356,7 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    SceneNode* scenenode = scene->get_scenenode(*id, true);
+    SceneNode* scenenode = scene->get_scenenode(*id);
     
     if (scenenode)
       for (int i=0; i < *count; i++) {
@@ -807,7 +807,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
         nshapes--;
         Shape* shape = scene->get_shape(id); 
         if (shape) {
-          scene->rootSubscene.hideShape(id, true);
+          scene->hide(id);
           shapelist[count++] = shape; 
         }
       }
@@ -838,7 +838,7 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding)
       Subscene* subscene = new Subscene( parent, (Embedding)embedding[0], 
                                                  (Embedding)embedding[1], 
                                                  (Embedding)embedding[2] );
-      if (subscene && parent->add(subscene)) {
+      if (subscene && scene->add(subscene)) {
 	success = as_success( subscene->getObjID() );
       }
     }
@@ -934,25 +934,11 @@ void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
     Subscene* subscene = scene->getSubscene(*successptr);
     if (subscene) {
       for (int i=0; i < count[0]; i++) {
-        SceneNode* node = scene->get_scenenode(ids[i], true);
-	if (node) 
-	  switch (node->getTypeID()) {
-	  case SHAPE: 
-	    subscene->addShape( static_cast<Shape*>(node) );
-	    success++;
-	    break;
-	  case LIGHT:
-	    subscene->addLight( static_cast<Light*>(node) );
-	    success++;
-	    break;
-	  case BBOXDECO:
-	    subscene->addBBoxDeco( static_cast<BBoxDeco*>(node) );
-	    success++;
-	    break;
-	  default:
-	    warning("id %d is not a shape or light or decoration; cannot add to subscene", ids[i]);
-          }
-	else 
+        SceneNode* node = scene->get_scenenode(ids[i]);
+	if (node) {
+	  subscene->add(node);
+	  success = RGL_SUCCESS;
+	} else 
 	  warning("id %d not found in scene", ids[i]);
       }
       rglview->update();
@@ -972,21 +958,23 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
     Subscene* subscene = scene->getSubscene(*successptr);
     if (subscene) {
       for (int i=0; i < count[0]; i++) {
-        SceneNode* node = scene->get_scenenode(ids[i], true);
+        SceneNode* node = scene->get_scenenode(ids[i]);
 	if (node) 
 	  switch (node->getTypeID()) {
 	  case SHAPE: 
-	    subscene->hideShape( ids[i], false );
+	    subscene->hideShape( ids[i] );
 	    success++;
 	    break;
 	  case LIGHT:
-	    subscene->hideLight( ids[i], false );
+	    subscene->hideLight( ids[i] );
 	    success++;
 	    break;
 	  case BBOXDECO:
-	    subscene->hideBBoxDeco( ids[i], false );
+	    subscene->hideBBoxDeco( ids[i] );
 	    success++;
 	    break;
+	  case SUBSCENE:
+	    scene->setCurrentSubscene( subscene->hideSubscene( ids[i], scene->getCurrentSubscene() ) );
 	  default:
 	    warning("id %d is not a shape or light or decoration; cannot hide", ids[i]);
           }
@@ -1127,7 +1115,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
     
-      Shape* shape = scene->get_shape(*id, true);
+      Shape* shape = scene->get_shape(*id);
       if (shape) 
         mat = shape->getMaterial(); /* success! successptr will be set below */
       else {
