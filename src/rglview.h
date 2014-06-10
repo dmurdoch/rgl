@@ -121,7 +121,6 @@ private:
   void adjustZoomEnd();
 
   int zoomBaseY;
-  float zoomCamBase;
 
 // o DRAG FEATURE: adjustFOV (field of view)
 
