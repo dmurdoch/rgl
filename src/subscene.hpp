@@ -80,6 +80,7 @@ public:
   void hideShape(int id);
   void hideLight(int id);
   void hideBBoxDeco(int id);
+  void hideBackground(int id);
   Subscene* hideSubscene(int id, Subscene* current);
 
   /**
