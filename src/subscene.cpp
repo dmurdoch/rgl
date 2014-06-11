@@ -37,12 +37,6 @@ Subscene::~Subscene()
 {
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
     delete (*i);
-  if (userviewpoint)
-    delete userviewpoint;
-  if (modelviewpoint)
-    delete modelviewpoint;
-  if (background)
-    delete background;
 }
 
 bool Subscene::add(SceneNode* node)
@@ -109,8 +103,6 @@ bool Subscene::add(SceneNode* node)
 
 void Subscene::addBackground(Background* newbackground)
 {
-  if (background)
-    delete background;
   background = newbackground;
 }
 
@@ -182,6 +174,12 @@ void Subscene::hideBBoxDeco(int id)
 {
   if (bboxdeco && sameID(bboxdeco, id))
     bboxdeco = NULL;
+}
+
+void Subscene::hideBackground(int id)
+{
+  if (background && sameID(background, id))
+    background = NULL;
 }
 
 Subscene* Subscene::hideSubscene(int id, Subscene* current)
