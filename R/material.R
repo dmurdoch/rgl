@@ -141,7 +141,9 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[23 + 3*(1:idata[1])], idata[24 + 3*(1:idata[1])], idata[25 + 3*(1:idata[1])], maxColorValue = 255),
+  list(color = rgb(idata[23 + 3*(seq_len(idata[1]))], 
+                   idata[24 + 3*(seq_len(idata[1]))], 
+                   idata[25 + 3*(seq_len(idata[1]))], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=4, length=idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),

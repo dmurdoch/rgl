@@ -5,6 +5,7 @@ turn3d <- function(x, y = NULL, n = 12, smooth = FALSE, ...) {
   y <- zapsmall(xy$y)
   stopifnot(all(y >= 0))
   len <- length(x)
+  inds <- seq_len(len)
   
   if (smooth) {
     nx <- -diff(y)
@@ -23,7 +24,7 @@ turn3d <- function(x, y = NULL, n = 12, smooth = FALSE, ...) {
   it <- matrix(nrow=3, ncol=0)
   
   theta <- seq(0, 2*pi, len = n + 1)[-(n + 1)]
-  for (i in 1:len) {
+  for (i in inds) {
     vb <- cbind(vb, rbind(x[i], sin(theta)*y[i], cos(theta)*y[i], 1))
     if (smooth)
       normals <- cbind(normals, rbind(nx[i], sin(theta)*ny[i], cos(theta)*ny[i], 1))

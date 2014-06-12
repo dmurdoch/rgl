@@ -125,7 +125,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         lightxyz <- list()
         lighttype <- matrix(NA, length(lights$id), 2)
         colnames(lighttype) <- c("viewpoint", "finite")
-        for (i in 1:length(lights$id)) {
+        for (i in seq_along(lights$id)) {
             lightid <- lights$id[[i]]
             lightcols <- rgl.attrib(lightid, "colors")
             lAmbient[[i]] <- lightcols[1,]
@@ -242,7 +242,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	  const vec3 emission = %emission%;',
           emission = vec2vec3(col2rgba(mat$emission)))
 
-        for (idn in 1:length(lights$id)) { 
+        for (idn in seq_along(lights$id)) { 
           finite <- lighttype[idn,"finite"]
           viewpoint <- lighttype[idn, "viewpoint"]
           res <- c(res, subst(
@@ -299,7 +299,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	  vec3 n = normalize(vNormal);
 	  n = -faceforward(n, n, eye);')
         }
-        for (idn in 1:length(lights$id)) {
+        for (idn in seq_along(lights$id)) {
           res <- c(res, subst(
 '	  vec3 col%idn% = ambient%idn%;
 	  float nDotL%idn% = dot(n, lightDir%idn%);
