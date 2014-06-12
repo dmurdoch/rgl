@@ -19,14 +19,15 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
                        sides=8, section=NULL, closed=0, debug=FALSE, keepVars=FALSE) {
   center <- as.matrix(as.data.frame(xyz.coords(center)[c("x", "y", "z")]))
   n <- nrow(center)  
+  inds <- seq_len(n)
   if (closed > 0) {
-    ind0 <- c(n-1-closed, n-closed, 1:n)
-    ind1 <- c(n-closed, 1:n, 1+closed)
-    ind2 <- c(1:n, 1+closed, 2+closed)
+    ind0 <- c(n-1-closed, n-closed, inds)
+    ind1 <- c(n-closed, inds, 1+closed)
+    ind2 <- c(inds, 1+closed, 2+closed)
   } else {
-    ind0 <- c(1, 1, 1:n)
-    ind1 <- c(1, 1:n, n)
-    ind2 <- c(1:n, n, n)
+    ind0 <- c(1, 1, inds)
+    ind1 <- c(1, inds, n)
+    ind2 <- c(inds, n, n)
   }  
   
   missings <- c(e1=is.null(e1), e2=is.null(e2), e3=is.null(e3))
@@ -35,20 +36,20 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
     usable <- apply(coord, 1, function(v) all(is.finite(v)) & (veclen(v) > 0))
     if (!any(usable) ) stop("No usable coordinate values in", deparse(substitute(coord)))
     firstgood <- min(which(usable))
-    inds <- 1:n    
+    inds <- seq_len(n)    
     if (firstgood > 1) {
       coord[inds[inds < firstgood],] <- coord[rep(firstgood,firstgood-1),]
-      usable[1:firstgood] <- TRUE
+      usable[seq_len(firstgood)] <- TRUE
     }
-    for (i in 2:n) inds[i] <- ifelse(usable[i], inds[i], inds[i-1])
+    for (i in inds[-1]) inds[i] <- ifelse(usable[i], inds[i], inds[i-1])
     coord[inds,]
   }
   
   if (!is.null(e1)) {
     e1 <- as.matrix(as.data.frame(xyz.coords(e1)[c("x", "y", "z")]))
-    e1 <- e1[rep(1:nrow(e1), len=n),] 
+    e1 <- e1[rep(seq_len(nrow(e1)), len=n),] 
   } else 
-    e1 <- (center[ind2,] - center[ind0,])[1:n,]
+    e1 <- (center[ind2,] - center[ind0,])[inds,]
   
   # Fix up degenerate cases by repeating existing ones, or using arbitrary ones
   zeros <- rowSums(e1^2) == 0
@@ -66,9 +67,9 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   }
   if (!is.null(e2)) {
     e2 <- as.matrix(as.data.frame(xyz.coords(e2)[c("x", "y", "z")]))
-    e2 <- e2[rep(1:nrow(e2), len=n),] 
+    e2 <- e2[rep(seq_len(nrow(e2)), len=n),] 
   } else
-    e2 <- (e1[ind2,] - e1[ind0,])[1:n,]
+    e2 <- (e1[ind2,] - e1[ind0,])[inds,]
     
   # Fix up degenerate e2's similarly, then force different than e1
   zeros <- rowSums(e2^2) == 0
@@ -84,11 +85,11 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
         e2[i,] <- e2[i-1,]
     }
   }
-  parallel <- sapply(1:n, function(i) all(xprod(e1[i,], e2[i,])  == 0))
+  parallel <- sapply(inds, function(i) all(xprod(e1[i,], e2[i,])  == 0))
   if (any(parallel)) {
     # rotate in the xy plane
     e2[parallel,] <- cbind(-e2[parallel,2], e2[parallel,1], e2[parallel,3])
-    parallel <- sapply(1:n, function(i) all(xprod(e1[i,], e2[i,])  == 0))
+    parallel <- sapply(inds, function(i) all(xprod(e1[i,], e2[i,])  == 0))
     if (any(parallel)) {
       # if any are still parallel, they must be the z axis
       e2[parallel,1] <- 1
@@ -98,13 +99,13 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   
   if (!is.null(e3)) {
     e3 <- as.matrix(as.data.frame(xyz.coords(e3)[c("x", "y", "z")]))
-    e3 <- e3[rep(1:nrow(e3), len=n),] 
+    e3 <- e3[rep(seq_len(nrow(e3)), len=n),] 
   } else {
     e3 <- matrix(NA_real_, n, 3)
-    for (i in 1:n) e3[i,] <- xprod(e1[i,], e2[i,])
+    for (i in inds) e3[i,] <- xprod(e1[i,], e2[i,])
   }
 
-  for (i in 1:n) {
+  for (i in inds) {
     A <- GramSchmidt(e1[i,], e2[i,], e3[i,], order=order(missings))
     e1[i,] <- A[1,]
     e2[i,] <- A[2,]
@@ -118,12 +119,12 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   twist <- rep(twist, len=n)
   
   if (debug) {
-    for (i in 1:n) {
+    for (i in inds) {
       segments3d(rbind(center[i,],center[i,]+e3[i,]*radius[i]*1.5,
                      center[i,],center[i,]+e2[i,]*radius[i]*1.5,
                      center[i,],center[i,]+e1[i,]*radius[i]*1.5), 
                  col=rep(c("red", "green", "blue"), each=2))
-      text3d(center, texts=1:n)
+      text3d(center, texts=inds)
     }
   }
   
@@ -141,15 +142,15 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   if (ncol(section) == 2)
     section <- cbind(section, 0)
     
-  for (i in 1:(n-1)) {
+  for (i in seq_len(n-1)) {
     transform <- rbind(e3[i,], e2[i,], e1[i,])
     p <- rotate3d(section, twist[i], 0,0,1)
     p <- radius[i] * p %*% transform
     p[,1] <- p[,1] + center[i,"x"]
     p[,2] <- p[,2] + center[i,"y"]
     p[,3] <- p[,3] + center[i,"z"]
-    vertices[,(i-1)*sides+1:sides] <- t(p)
-    for (j in 1:sides) 
+    vertices[,(i-1)*sides+seq_len(sides)] <- t(p)
+    for (j in seq_len(sides)) 
       indices[, (i-1)*sides + j] <- (c(0,0,1,1) + j) %% sides + 1 + 
                                     c((i-1)*sides, i*sides, i*sides, (i-1)*sides)
   }
@@ -159,23 +160,23 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   p[,1] <- p[,1] + center[n,"x"]
   p[,2] <- p[,2] + center[n,"y"]
   p[,3] <- p[,3] + center[n,"z"]
-  vertices[,(n-1)*sides+1:sides] <- t(p)
+  vertices[,(n-1)*sides+seq_len(sides)] <- t(p)
   # Add end cap at start
   if (closed < 0) {
     vertices <- cbind(vertices, center[1,])
-    triangles <- rbind(ncol(vertices), 1:sides, c(2:sides, 1))
+    triangles <- rbind(ncol(vertices), seq_len(sides), c(2:sides, 1))
   }
   # Add end cap at end
   if (closed < -1) {
     vertices <- cbind(vertices, center[n,])
     triangles <- cbind(triangles, rbind(ncol(vertices), c(2:sides, 1) + (n-1)*sides, 
-                                    1:sides + (n-1)*sides))
+                                    seq_len(sides) + (n-1)*sides))
   }
   
   result <- qmesh3d(vertices, indices, homogeneous=FALSE)
   if (closed > 0) { # Look for repeated vertices, and edit the links
     nv <- ncol(result$vb)
-    for (i in 1:sides) {
+    for (i in seq_len(sides)) {
       dupe <- which(apply(result$vb[,(nv-sides+1):nv,drop=FALSE], 2, 
                           function(x) isTRUE(all.equal(x, result$vb[,i]))))+nv-sides
       for (j in dupe) {

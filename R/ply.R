@@ -172,6 +172,7 @@ property int vertex2\n", file=con)
   writePoints <- function(id) {
     vertices <- getVertices(id)
     n <- nrow(vertices)
+    inds <- seq_len(n)    
     if (pointsAsEdges) {
       if (withNormals)
         normals <- 0*vertices
@@ -179,12 +180,12 @@ property int vertex2\n", file=con)
       Vertices <<- rbind(Vertices, cbind(vertices, 
       					 if (withColors) colors,
       					 if (withNormals) normals))
-      Edges <<- rbind(Edges, base + cbind(1:n, 1:n) - 1 )  
+      Edges <<- rbind(Edges, base + cbind(inds, inds) - 1 )  
     } else {
       radius <- pointRadius*avgScale()
       if (withNormals && is.null(pointShape$normals))
         pointShape <- addNormals(pointShape)
-      for (i in seq_len(n)) {
+      for (i in inds) {
         if (withColors) {
           col <- vertices[i,4:7]
           pointShape$material$col <- rgb(col[1], col[2], col[3], col[4], maxColorValue = 255)
@@ -200,12 +201,13 @@ property int vertex2\n", file=con)
       colors <- vertices[, 4:7, drop=FALSE]
       vertices <- vertices[, 1:3, drop=FALSE]
     }
-    n <- nrow(vertices)    
+    n <- nrow(vertices)
     n <- n/2
+    inds <- seq_len(n)
     if (linesAsEdges) {
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
-      Edges <<- rbind(Edges, base + cbind(2*(1:n) - 2, 2*(1:n) - 1) )  
+      Edges <<- rbind(Edges, base + cbind(2*inds - 2, 2*inds - 1) )  
     } else {
       radius <- lineRadius*avgScale()
       for (i in seq_len(n)) {
@@ -233,9 +235,10 @@ property int vertex2\n", file=con)
     vertices <- getVertices(id)
     if (linesAsEdges) {
       n <- nrow(vertices)    
+      inds <- seq_len(n)
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
-      Edges <<- rbind(Edges, base + cbind(1:(n-1), 2:n) - 1)  
+      Edges <<- rbind(Edges, base + cbind(inds[-n], inds[-1]) - 1)  
     } else {
       n <- nrow(vertices) - 1
       radius <- lineRadius*avgScale()
