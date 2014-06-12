@@ -491,6 +491,7 @@ void Subscene::render(RenderContext* renderContext)
     GLbitfield clearFlags = background->getClearFlags(renderContext);
 
     // clear
+    glDepthMask(GL_TRUE);
     glClear(clearFlags);
   }
 
