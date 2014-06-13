@@ -8,8 +8,8 @@ using namespace rgl;
 
 void Disposable::addDisposeListener(IDisposeListener* l)
 {
-  Container::iterator pos = std::find( disposeListeners.begin(), disposeListeners.end(), l );
-  assert( pos == disposeListeners.end() );
+  assert( std::find( disposeListeners.begin(), disposeListeners.end(), l ) 
+          == disposeListeners.end() );
   disposeListeners.push_back(l);  
 }
 

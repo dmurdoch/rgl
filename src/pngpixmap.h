@@ -281,15 +281,9 @@ unsupported:
 
     png_structp png_ptr;
     png_infop info_ptr;
-    int bufsize;
     unsigned char buffer[4096];
     bool error;
     bool finish;
-
-    int width;
-    int height;
-    int bit_depth;
-
 
   };
 

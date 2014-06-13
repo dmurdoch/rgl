@@ -45,8 +45,6 @@ private:
   float  radius;
   float  philow;
   float  phihigh;
-  float  thetalow;
-  float  thetahigh;
   
   VertexArray   vertexArray;
   NormalArray   normalArray;
@@ -54,7 +52,6 @@ private:
 
   int    segments;
   int    sections;
-  int    flags;
   Type   type;
   bool   genNormal;
   bool   genTexCoord;
