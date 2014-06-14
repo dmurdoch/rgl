@@ -93,10 +93,12 @@ static void BoundsCheck(double x, double a, double b, const char *s)
 
 namespace rgl {
 const char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
+const char* wheelModes[] = {"none", "push", "pull", "user"};
 const char* viewportlabels[] = {"x", "y", "width", "height"};
 }
 
 #define mmLAST 10
+#define wmLAST  4
 
 /* At R 2.6.0, the type of the first arg to psmatch changed to const char *.  Conditionally cast 
    to char * if we're in an old version */
@@ -105,6 +107,7 @@ const char* viewportlabels[] = {"x", "y", "width", "height"};
 #else
 #define OLDCAST
 #endif
+
 
 static void Specify(const char *what, SEXP value)
 {
@@ -131,7 +134,7 @@ static void Specify(const char *what, SEXP value)
     }    
     else if (streql(what, "mouseMode")) {
     	value = coerceVector(value, STRSXP);
-	if (length(value) > 3) par_error(what);   
+	if (length(value) > 4) par_error(what);   
         for (int i=1; i<=3 && i <= length(value); i++) {
             if (STRING_ELT(value, i-1) != NA_STRING) {
 		success = 0;
@@ -153,6 +156,26 @@ static void Specify(const char *what, SEXP value)
 		if (!success) par_error(what);
 	    }
    	}
+	if (length(value) == 4) {
+	    if (STRING_ELT(value, 3) != NA_STRING) {
+		success = 0;
+		for (int mode = 0; mode < wmLAST; mode++) {
+		    if (psmatch(OLDCAST wheelModes[mode], CHAR(STRING_ELT(value, 3)), (Rboolean)TRUE)) {
+			rgl_setWheelMode(&success, &mode);
+			break;
+		    }
+		}
+		if (!success) {
+		    for (int mode = 0; mode < wmLAST; mode++) {
+			if (psmatch(OLDCAST wheelModes[mode], CHAR(STRING_ELT(value, 3)), (Rboolean)FALSE)) {
+			    rgl_setWheelMode(&success, &mode);
+			    break;
+			}
+		    }
+		}
+		if (!success) par_error(what);
+	    }
+	}
     }
     else if (streql(what, "skipRedraw")) {
     	lengthCheck(what, value, 1);	iv = asLogical(value);
@@ -254,16 +277,21 @@ static SEXP Query(const char *what)
 	rgl_getModelMatrix(&success, REAL(value));
     }
     else if (streql(what, "mouseMode")) {
-    	PROTECT(value = allocVector(STRSXP, 3));
+    	PROTECT(value = allocVector(STRSXP, 4));
     	for (i=1; i<4; i++) {
 	    rgl_getMouseMode(&success, &i, &mode); 
 	    if (mode < 0 || mode > mmLAST) mode = 0;
 	    SET_STRING_ELT(value, i-1, mkChar(mouseModes[mode]));
     	};    
-    	PROTECT(names = allocVector(STRSXP, 3));
+	rgl_getWheelMode(&success, &mode);
+	if (mode < 0 || mode > mmLAST) mode = 0;
+	SET_STRING_ELT(value, 3, mkChar(wheelModes[mode]));
+	
+    	PROTECT(names = allocVector(STRSXP, 4));
     	SET_STRING_ELT(names, 0, mkChar("left"));
     	SET_STRING_ELT(names, 1, mkChar("right"));  
     	SET_STRING_ELT(names, 2, mkChar("middle"));
+	SET_STRING_ELT(names, 3, mkChar("wheel"));
     	UNPROTECT(2);
     	value = namesgets(value, names);
     	success = 1;

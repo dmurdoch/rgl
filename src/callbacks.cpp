@@ -37,6 +37,12 @@ static void userCleanup(void **userData)
   }
 }
 
+static void userWheel(void *wheelData, int dir)
+{
+  SEXP fn = (SEXP)wheelData;
+  eval(lang2(fn, ScalarInteger(dir)), R_GlobalEnv);
+}
+
 SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end)
 {
   Device* device;
@@ -79,3 +85,22 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end)
   return R_NilValue;
 }      
       
+SEXP rgl::rgl_setWheelCallback(SEXP rotate)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    void* wheelData;
+    userWheelPtr wheelCallback;
+      
+    if (isFunction(rotate)) {
+      wheelCallback = &userWheel;
+      wheelData = (void*)rotate;
+      R_PreserveObject(rotate);
+    } else if (rotate == R_NilValue) wheelCallback = 0;
+    else error("callback must be a function");
+    
+    rglview->setWheelCallback(wheelCallback, wheelData);
+  } else error("no rgl device is open");
+  return R_NilValue;
+}

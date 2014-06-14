@@ -121,8 +121,10 @@ getr3dDefaults()
       number of clip planes that can be defined in the current system.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
       of the user data.  See the Note below.}
-    \item{\code{mouseMode}}{character.  A vector of 3 strings describing
-      what the 3 mouse buttons do. Partial matching is used.  Possible values for \code{mouseMode} are 
+    \item{\code{mouseMode}}{character.  A vector of 4 strings describing
+      what the 3 mouse buttons and the mouse wheel do. 
+      Partial matching is used.  Possible values for the first 3 entries of \code{mouseMode} (corresponding 
+      to the mouse buttons are 
 	\describe{
 	 \item{\code{"none"}}{No action for this button.}
 	 \item{\code{"trackball"}}{Mouse acts as a virtual trackball, rotating the scene.}
@@ -137,6 +139,15 @@ getr3dDefaults()
 	 \item{\code{"user"}}{Used  when a user handler is set by 
 	 \code{\link{rgl.setMouseCallbacks}}.}
 	}
+      Possible values for the 4th entry corresponding to the mouse wheel are
+        \describe{
+	  \item{\code{"none"}}{No action.}
+	  \item{\code{"pull"}}{Pulling on the mouse wheel increases magnification, i.e. \dQuote{pulls the scene closer}.}
+	  \item{\code{"push"}}{Pulling on the mouse wheel decreases magnification, i.e. \dQuote{pushes the scene away}.}
+	  \item{\code{"user"}}{Used when a user handler is set by 
+	    \code{\link{rgl.setWheelCallback}}.}
+	}
+      A common default on Mac OSX is to convert a two finger drag on a trackpad to a mouse wheel rotation.
     }
     \item{\code{observer}}{\emph{\bold{R.O.}}; the position of the observer relative to
       the model.  Set by \code{\link{observer3d}}.  See the Note below.}

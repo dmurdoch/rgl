@@ -205,32 +205,7 @@ void RGLView::mouseMove(int mouseX, int mouseY)
 
 void RGLView::wheelRotate(int dir)
 {
-  Subscene* subscene = NULL;
-  if (activeSubscene) 
-    subscene = scene->getSubscene(activeSubscene);
-  if (!subscene)
-    subscene = scene->getCurrentSubscene();
-  UserViewpoint* userviewpoint = subscene->getUserViewpoint();
-  
-  float zoom = userviewpoint->getZoom();
-
-#define ZOOM_STEP  1.05f 
-#define ZOOM_PIXELLOGSTEP 0.02f
-  
-  switch(dir)
-  {
-    case GUI_WheelForward:
-      zoom *= ZOOM_STEP;
-      break;
-    case GUI_WheelBackward:
-      zoom /= ZOOM_STEP;
-      break;
-  }
-
-  zoom = clamp( zoom , ZOOM_MIN, ZOOM_MAX);
-  userviewpoint->setZoom(zoom);
-
-  View::update();
+  (this->*WheelRotateFunc)(dir);
 }
 
 void RGLView::captureLost()
@@ -452,6 +427,49 @@ void RGLView::adjustFOVEnd()
 {
 }
 
+void RGLView::wheelRotatePull(int dir)
+{
+  Subscene* subscene = NULL;
+  if (activeSubscene) 
+    subscene = scene->getSubscene(activeSubscene);
+  if (!subscene)
+    subscene = scene->getCurrentSubscene();
+  UserViewpoint* userviewpoint = subscene->getUserViewpoint();
+  
+  float zoom = userviewpoint->getZoom();
+
+#define ZOOM_STEP  1.05f 
+#define ZOOM_PIXELLOGSTEP 0.02f
+  
+  switch(dir)
+  {
+    case GUI_WheelForward:
+      zoom *= ZOOM_STEP;
+      break;
+    case GUI_WheelBackward:
+      zoom /= ZOOM_STEP;
+      break;
+  }
+
+  zoom = clamp( zoom , ZOOM_MIN, ZOOM_MAX);
+  userviewpoint->setZoom(zoom);
+
+  View::update();
+}
+
+void RGLView::wheelRotatePush(int dir)
+{
+  switch (dir)
+  {
+    case GUI_WheelForward:
+      wheelRotatePull(GUI_WheelBackward);
+      break;
+    case GUI_WheelBackward:
+      wheelRotatePull(GUI_WheelForward);
+      break;
+  }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // INTERACTIVE FEATURE
@@ -488,6 +506,11 @@ void RGLView::userEnd()
     (*endCallback[ind])(userData[3*ind+2]);
 }
 
+void RGLView::userWheel(int dir)
+{
+  if (wheelCallback)
+    (*wheelCallback)(wheelData, dir);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -669,6 +692,40 @@ void RGLView::getMouseCallbacks(int button, userControlPtr *begin, userControlPt
 MouseModeID RGLView::getMouseMode(int button)
 {
     return mouseMode[button-1];
+}
+
+void RGLView::setWheelMode(WheelModeID mode)
+{
+  wheelMode = mode;
+  switch (mode) {
+    case wmPULL:
+      WheelRotateFunc = &RGLView::wheelRotatePull;
+      break;
+    case wmPUSH:
+      WheelRotateFunc = &RGLView::wheelRotatePush;
+      break;
+    case wmUSER:
+      WheelRotateFunc = &RGLView::userWheel;
+      break;
+  }
+}
+
+WheelModeID RGLView::getWheelMode()
+{
+  return wheelMode;
+}
+
+void RGLView::setWheelCallback(userWheelPtr wheel, void* user)
+{
+  wheelCallback = wheel;
+  wheelData = user;
+  setWheelMode(wmUSER);  
+}
+
+void RGLView::getWheelCallback(userWheelPtr *wheel, void** user)
+{
+  *wheel = wheelCallback;
+  *user = wheelData;
 }
 
 MouseSelectionID RGLView::getSelectState()
@@ -868,6 +925,7 @@ void RGLView::setDefaultMouseFunc()
     setMouseMode(1, mmPOLAR);
     setMouseMode(2, mmFOV);
     setMouseMode(3, mmZOOM);
+    setWheelMode(wmPULL);
 }
 
 bool RGLView::postscript(int formatID, const char* filename, bool drawText)
