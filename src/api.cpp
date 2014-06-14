@@ -1379,6 +1379,38 @@ void rgl::rgl_setMouseMode(int* successptr, int* button, int* mode)
   *successptr = success;
 }
 
+void rgl::rgl_getWheelMode(int* successptr, int* mode)
+{
+  int success = RGL_FAIL;
+  Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+  
+    RGLView* rglview = device->getRGLView();
+    *mode = static_cast<int>( rglview->getWheelMode() );
+    success = RGL_SUCCESS;
+    CHECKGLERROR;
+  }
+
+  *successptr = success;
+}
+
+void rgl::rgl_setWheelMode(int* successptr, int* mode)
+{
+  int success = RGL_FAIL;
+  Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+  
+    RGLView* rglview = device->getRGLView();
+    rglview->setWheelMode((WheelModeID)(*mode));
+
+    success = RGL_SUCCESS;
+    CHECKGLERROR;
+  }
+
+  *successptr = success;
+}
 
 void rgl::rgl_selectstate(int* successptr, int* selectstate, double* locations)
 {

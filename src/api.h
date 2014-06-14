@@ -97,6 +97,9 @@ void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, 
 void rgl_locator(int* successptr, double* locations);
 void rgl_getMouseMode(int* successptr, int* button, int* mode);
 void rgl_setMouseMode(int* successptr, int* button, int* mode);
+void rgl_getWheelMode(int* successptr, int* mode);
+void rgl_setWheelMode(int* successptr, int* mode);
+
 void rgl_selectstate(int* successptr, int* selectstate, double* locations);
 void rgl_setselectstate(int* successptr, int *idata);
 void rgl_getUserMatrix(int* successptr, double* userMatrix);
@@ -125,6 +128,8 @@ void rgl_getWindowRect(int* successptr, int* rect);
 void rgl_setWindowRect(int* successptr, int* rect);
 
 SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end);
+SEXP rgl_setWheelCallback(SEXP rotate);
+
 SEXP rgl_par3d(SEXP args);
 
 /* not for users:  does not maintain consistency */

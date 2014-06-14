@@ -1,23 +1,28 @@
 \name{rgl.setMouseCallbacks}
 \alias{rgl.setMouseCallbacks}
+\alias{rgl.setWheelCallback}
 \title{ User callbacks on mouse events }
 \description{
   This function sets user callbacks on mouse events.
 }
 \usage{
 rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL)
+rgl.setWheelCallback(rotate)
 }
 \arguments{
   \item{button}{ Which button?  }
   \item{begin}{ Called when mouse down event occurs }
   \item{update}{ Called when mouse moves }
   \item{end}{ Called when mouse is released }
+  \item{rotate}{ Called when mouse wheel is rotated }
 }
 \details{
 This function sets an event handler on mouse events that occur within the current rgl window.
 The \code{begin} and \code{update} events should be functions taking two arguments; these
 will be the mouse coordinates when the event occurs.  The \code{end} event handler
-takes no arguments.  
+takes no arguments.  The \code{rotate} event takes a single argument, which will be 
+equal to \code{1} if the user pushes the wheel away by one click, and \code{2} if 
+the user pulls the wheel by one click.
 
 Alternatively, the handlers may be set to \code{NULL}, the default value, in which case
 no action will occur.
