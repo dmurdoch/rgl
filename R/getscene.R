@@ -18,7 +18,7 @@ scene3d <- function() {
     
     attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
-          "usermatrix", "types" )
+          "usermatrix", "types", "offsets" )
     for (a in attribs) 
       if (rgl.attrib.count(id, a))
         result[[a]] <- rgl.attrib(id, a)
@@ -241,6 +241,7 @@ plot3d.rglobject <- function(x, ...) {
     surface = surface3d,
     sprites = sprites3d,
     light = light3d,
+    clipplanes = clipplanes3d,
     NULL)
   if (is.null(fn)) {
     warning("Object type ",type," not handled.")
@@ -258,6 +259,7 @@ plot3d.rglobject <- function(x, ...) {
   args$cex <- x$cex
   args$adj <- x$adj
   args$radius <- x$radii
+  args$d <- x$offsets
   
   switch(type, 
     abclines = {
@@ -276,6 +278,11 @@ plot3d.rglobject <- function(x, ...) {
       args$x <- NULL
       args$normals <- NULL
     },
+    clipplanes = {
+      args$a <- args$normals
+      args$x <- NULL
+      args$normals <- NULL
+    },  
     surface = {
       dim <- x$dim
       args$y <- matrix(args$x[,2], dim[1], dim[2])

@@ -70,6 +70,32 @@ rootSubscene <- function() {
   }
 }    
 
+# This gets all the clipping planes in a particular subscene
+getClipplanes <- function(subscene) {
+  shapes <- rgl.ids(subscene=subscene)
+  shapes$id[shapes$type == "clipplanes"]
+}
+
+# This counts how many clipping planes might affect a particular object
+countClipplanes <- function(id) {
+  recurse <- function(subscene) {
+    if (id %in% rgl.ids(c("shapes", "bboxdeco"), subscene=subscene)$id)
+      result <- length(getClipplanes(subscene))
+    else
+      result <- 0
+    subscenes <- rgl.ids("subscene", subscene=subscene)$id
+    for (sub in subscenes) {
+      if (result >= bound)
+        break
+      result <- max(result, recurse(sub))
+    }
+    result
+  }
+  bound <- length(getClipplanes(0))
+  if (!bound) return(0)
+  recurse(rootSubscene())
+}  
+
 writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"), 
                        template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
                        prefix = "",
@@ -101,6 +127,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 ', prefix, snapshotimg)
 
   shaders <- function(id, type, flags) {
+    if (type == "clipplanes") return(NULL)
     mat <- rgl.getmaterial(id=id)
     is_lit <- flags["is_lit"]
     is_smooth <- flags["is_smooth"]
@@ -108,6 +135,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     fixed_quads <- flags["fixed_quads"]
     sprites_3d <- flags["sprites_3d"]
     toplevel <- flags["toplevel"]
+    clipplanes <- countClipplanes(id)
     
     if (has_texture)
       texture_format <- mat$textype
@@ -168,17 +196,19 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	uniform vec2 textScale;',
 
       if (fixed_quads)
-'	attribute vec2 aOfs;
-	void main(void) {'
+'	attribute vec2 aOfs;'
       else if (!toplevel)
 '	uniform vec3 uOrig;
 	uniform float uSize;
-	uniform mat4 usermat;
-	void main(void) {'
-      else
-'	void main(void) {
-	  vPosition = mvMatrix * vec4(aPos, 1.);
-	  gl_Position = prMatrix * vPosition;',
+	uniform mat4 usermat;',
+	
+'	void main(void) {',
+
+      if (clipplanes || (!fixed_quads && toplevel))
+'	  vPosition = mvMatrix * vec4(aPos, 1.);',
+
+      if (!fixed_quads && toplevel)
+'	  gl_Position = prMatrix * vPosition;',
 	  
       if (type == "points") subst(
 '	  gl_PointSize = %size%;', size=addDP(mat$size)),
@@ -228,10 +258,16 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (is_lit && !fixed_quads)
 '	varying vec3 vNormal;',
 
+      if (clipplanes) paste0(
+'	uniform vec4 vClipplane', seq_len(clipplanes), ';'),
+
       if (is_lit && !all(lighttype[,"viewpoint"]))
 '	uniform mat4 mvMatrix;',
 
 '	void main(void) {',
+
+      if (clipplanes) paste0(
+'	  if (dot(vPosition, vClipplane', seq_len(clipplanes), ') < 0.0) discard;'),
 
       if (is_lit)
 '	  vec3 eye = normalize(-vPosition.xyz);',      
@@ -411,6 +447,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var prMatrix = new CanvasMatrix4();
 	   var mvMatrix = new CanvasMatrix4();
 	   var normMatrix = new CanvasMatrix4();
+	   var invMatrix = new CanvasMatrix4();
 	   var saveMat = new CanvasMatrix4();
 	   saveMat.makeIdentity();
 	   var distance;
@@ -704,11 +741,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     depth_sort <- flags["depth_sort"]
     sprites_3d <- flags["sprites_3d"]
     toplevel <- flags["toplevel"]
+    is_clipplanes <- type == "clipplanes"
+    clipplanes <- countClipplanes(id)
     
     result <- subst(
 '
 	   // ****** %type% object %id% ******', type, id)
-    if (!sprites_3d)
+    if (!sprites_3d && !is_clipplanes)
       result <- c(result, subst(
 '	   var prog%id%  = gl.createProgram();
 	   gl.attachShader(prog%id%, getShader( gl, "%prefix%vshader%id%" ));
@@ -719,7 +758,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   gl.linkProgram(prog%id%);', id, prefix))
    
     nv <- rgl.attrib.count(id, "vertices")
-    values <- rgl.attrib(id, "vertices")
+    if (nv)
+      values <- rgl.attrib(id, "vertices")
+    else
+      values <- NULL
     if (nv > 65535)
     	warning("Object ", id, " has ", nv, " vertices.  Some browsers support only 65535.")
     
@@ -744,6 +786,18 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (length(radii) == 1)
         radii <- rep(radii, NROW(values))
       values <- cbind(values, radii)
+    }
+    
+    if (type == "clipplanes") {
+      offsets <- rgl.attrib(id, "offsets")
+      stopifnot(NCOL(values) == 3)
+      values <- cbind(values, offsets)
+      result <- c(result,subst(
+'	   var vClipplane%id%=new Float32Array([', id),
+      inRows(values, 4, leadin='	   '),
+'	   ]);
+')
+      return(result)
     }
     
     if (type == "surface") { # Compute indices of triangles
@@ -869,7 +923,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   
       if (is_lit && !fixed_quads && !sprites_3d) subst(
 '	   var normLoc%id% = gl.getAttribLocation(prog%id%, "aNorm");', 
-        id))
+        id),
+	
+      if (clipplanes) subst(paste0(
+'	   var clipLoc%id%p', seq_len(clipplanes), ' = gl.getUniformLocation(prog%id%, "vClipplane', seq_len(clipplanes), '");'),
+           id)
+	)	
 
     if (is_indexed) {
       if (type %in% c("quads", "text", "sprites") && !sprites_3d) {
@@ -920,7 +979,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuf%id%);
 	   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, %fname%, gl.%drawtype%);',
    		id, fname, drawtype),
-      if (!sprites_3d) subst(
+      if (!sprites_3d && !is_clipplanes) subst(
 '	   var mvMatLoc%id% = gl.getUniformLocation(prog%id%,"mvMatrix");
 	   var prMatLoc%id% = gl.getUniformLocation(prog%id%,"prMatrix");',
    		  id),
@@ -934,7 +993,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     c(result, '')
   }
   
-  draw <- function(id, type, flags) {
+  draw <- function(id, type, flags, clipplanes) {
+    if (type == "clipplanes") return(NULL)
     mat <- rgl.getmaterial(id=id)
     is_lit <- flags["is_lit"]
     is_indexed <- flags["is_indexed"]
@@ -944,7 +1004,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     is_transparent <- flags["is_transparent"]
     sprites_3d <- flags["sprites_3d"]
     toplevel <- flags["toplevel"]
-   
+    
     result <- subst(
 '
 	     // ****** %type% object %id% *******',
@@ -961,7 +1021,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       types <- rgl.attrib(id, "types")
       for (i in seq_along(spriteids)) 
         result <- c(result, draw(spriteids[i], types[i], 
-                    c(getFlags(spriteids[i], types[i]), toplevel=FALSE)))
+                    c(getFlags(spriteids[i], types[i]), toplevel=FALSE), clipplanes))
       result <- c(result, 
 '	     }')
     } else {
@@ -1223,6 +1283,19 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
               mode, count))
       }
     }
+    clipcheck <- 0
+    for (clipid in clipplanes) {
+      count <- length(rgl.attrib.count(clipid, "offsets"))
+      for (i in seq_len(count)) {
+        clipcheck <- clipcheck + 1
+	result <- c(result, subst(
+'	     v = multMV(invMatrix, vClipplane%clipid%%slice%);
+	     gl.uniform4fv(clipLoc%id%p%clipcheck%, v);',
+	       clipid, id, clipcheck, 
+	       slice = if (count > 1) subst(".slice(%first%, %stop%)", first = 1 + 4*(i-1), stop = 1 + 4*i) else ""))
+      }
+    }
+      
     result
   }
     
@@ -1232,6 +1305,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   gl.clearDepth(1.0);
 	   gl.clearColor(1,1,1,1);
 	   var xOffs = yOffs = 0,  drag  = 0;
+	   
+           function multMV(M, v) {
+	     return [M.m11*v[0] + M.m12*v[1] + M.m13*v[2] + M.m14*v[3],
+		     M.m21*v[0] + M.m22*v[1] + M.m23*v[2] + M.m24*v[3],
+		     M.m31*v[0] + M.m32*v[1] + M.m33*v[2] + M.m34*v[3],
+		     M.m41*v[0] + M.m42*v[1] + M.m43*v[2] + M.m44*v[3]];
+	   }
+	   	   
 	   drawScene();
 
 	   function drawScene(){
@@ -1271,16 +1352,22 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       
           if (subscene_needs_sorting) setprmvMatrix)) 
 
+    clipplanes <- getClipplanes(subsceneid)
+    if (length(clipplanes))
+      result <- c(result, 
+'	     invMatrix.load(mvMatrix);
+	     invMatrix.invert();')
+	     
     for (i in subids) 
       if (toplevel[i] && !flags[i,"is_transparent"])
-        result <- c(result, draw(ids[i], types[i], flags[i,]))
+        result <- c(result, draw(ids[i], types[i], flags[i,], clipplanes))
     
     has_transparency <- any(flags[subids,"is_transparent"])
     if (has_transparency) {
       result <- c(result, doTransparent)
       for (i in subids)
         if (toplevel[i] && flags[i, "is_transparent"])
-          result <- c(result, draw(ids[i], types[i], flags[i,]))
+          result <- c(result, draw(ids[i], types[i], flags[i,], clipplanes))
     }
     
     subscenes <- rgl.ids(type = "subscene")$id
@@ -1603,7 +1690,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
                   "surface", "text", "abclines", "planes", "spheres",
-                  "sprites")
+                  "sprites", "clipplanes")
   
   #  Execution starts here!
   
