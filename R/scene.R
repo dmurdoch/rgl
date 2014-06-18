@@ -114,7 +114,7 @@ rgl.attrib <- function( id, attrib, first=1,
     attrib <- rgl.enum.attribtype(attrib)
   ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
             texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
-            usermatrix=4, types=1, flags=1)[attrib]
+            usermatrix=4, types=1, flags=1, offsets=1)[attrib]
   count <- max(last - first + 1, 0)
   if (attrib %in% c(6, 13)) { # texts and types
     if (count)
@@ -147,7 +147,8 @@ rgl.attrib <- function( id, attrib, first=1,
                            "id",	     # ids
                            c("x", "y", "z", "w"), # usermatrix
                            "type",	     # types
-                           "flag"	     # flags
+                           "flag",	     # flags
+			   "offset"          # offsets
                            )[[attrib]]
   if (attrib == 14 && count)
     if (id %in% rgl.ids("lights", subscene = 0)$id)
