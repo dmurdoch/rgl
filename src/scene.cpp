@@ -24,7 +24,8 @@ using namespace rgl;
 ObjID SceneNode::nextID = 1;
 
 Scene::Scene()
-: rootSubscene(NULL, EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE) 
+: rootSubscene(NULL, EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, false),
+  doIgnoreExtent(false)
 {
   nodes.push_back( currentSubscene = &rootSubscene );
  

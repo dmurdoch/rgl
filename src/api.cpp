@@ -825,7 +825,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
   *successptr = success;
 }
 
-void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding)
+void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding, int* ignoreExtent)
 {
   int success = RGL_FAIL;
   Device* device;
@@ -837,7 +837,8 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding)
     if (parent) {
       Subscene* subscene = new Subscene( parent, (Embedding)embedding[0], 
                                                  (Embedding)embedding[1], 
-                                                 (Embedding)embedding[2] );
+                                                 (Embedding)embedding[2],
+                                                 *ignoreExtent != 0);
       if (subscene && scene->add(subscene)) {
 	success = as_success( subscene->getObjID() );
       }

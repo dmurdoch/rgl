@@ -63,7 +63,8 @@ private:
    **/
   Rect2d viewport;
 public:
-  Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model);
+  Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model,
+           bool in_ignoreExtent);
   virtual ~Subscene( );
 
   bool add(SceneNode* node);
@@ -72,6 +73,7 @@ public:
   void addShape(Shape* shape);
   void addLight(Light* light);
   void addSubscene(Subscene* subscene);
+  void addBBox(const AABox& bbox, bool changes);
   
   /**
    * hide shape or light or bboxdeco
@@ -100,6 +102,11 @@ public:
   int getChildCount() const { return subscenes.size(); }
   Subscene* getChild(int which) const { return subscenes[which]; }
   
+  /**
+   * obtain bounding box
+   **/
+  const AABox& getBoundingBox() const { return data_bbox; }
+    
   /**
    * get the bbox
    */

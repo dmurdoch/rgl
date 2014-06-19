@@ -11,15 +11,15 @@ using namespace rgl;
 //   Subscene
 //
 
-Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model)
+Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model,
+                   bool in_ignoreExtent)
  : SceneNode(SUBSCENE), parent(in_parent), do_viewport(in_viewport), do_projection(in_projection),
-   do_model(in_model), viewport(0.,0.,1.,1.),Zrow(), Wrow()
+   do_model(in_model), viewport(0.,0.,1.,1.),Zrow(), Wrow(), ignoreExtent(in_ignoreExtent)
 {
   userviewpoint = NULL;
   modelviewpoint = NULL;
   bboxdeco   = NULL;
   background = NULL;
-  ignoreExtent = false;
   bboxChanges = false;
   data_bbox.invalidate();
   
@@ -113,11 +113,8 @@ void Subscene::addBBoxDeco(BBoxDeco* newbboxdeco)
 
 void Subscene::addShape(Shape* shape)
 {
-  if (!shape->getIgnoreExtent()) {
-    const AABox& bbox = shape->getBoundingBox();
-    data_bbox += bbox;
-    bboxChanges |= shape->getBBoxChanges();
-  }
+  if (!shape->getIgnoreExtent()) 
+    addBBox(shape->getBoundingBox(), shape->getBBoxChanges());
 
   shapes.push_back(shape);
   
@@ -129,6 +126,14 @@ void Subscene::addShape(Shape* shape)
     unsortedShapes.push_back(shape);
 }
 
+void Subscene::addBBox(const AABox& bbox, bool changes)
+{
+  data_bbox += bbox;
+  bboxChanges |= changes;
+  if (parent && !ignoreExtent) 
+    parent->addBBox(bbox, changes);
+}
+  
 void Subscene::addLight(Light* light)
 {
   lights.push_back(light);
@@ -137,6 +142,8 @@ void Subscene::addLight(Light* light)
 void Subscene::addSubscene(Subscene* subscene)
 {
   subscenes.push_back(subscene);
+  if (!subscene->getIgnoreExtent()) 
+    addBBox(subscene->getBoundingBox(), subscene->bboxChanges);
 }
 
 void Subscene::hideShape(int id)
@@ -189,6 +196,7 @@ Subscene* Subscene::hideSubscene(int id, Subscene* current)
       if ((*i)->getSubscene(current->getObjID()))
         current = (*i)->parent;  
       subscenes.erase(i);
+      calcDataBBox();
       return current;
     } 
   }
@@ -652,10 +660,20 @@ void Subscene::render(RenderContext* renderContext)
 void Subscene::calcDataBBox()
 {
   data_bbox.invalidate();
-
-  std::vector<Shape*>::const_iterator iter;
-
+  
+  std::vector<Subscene*>::const_iterator subiter;
   bboxChanges = false;
+  
+  for(subiter = subscenes.begin(); subiter != subscenes.end(); ++subiter) {
+    Subscene* subscene = *subiter;
+    if (!subscene->getIgnoreExtent()) {
+      subscene->calcDataBBox();
+      data_bbox += subscene->getBoundingBox();
+      bboxChanges |= subscene->bboxChanges;
+    }
+  }
+      
+  std::vector<Shape*>::const_iterator iter;
   for(iter = shapes.begin(); iter != shapes.end(); ++iter) {
     Shape* shape = *iter;
 
