@@ -111,8 +111,8 @@ public:
    * Get and set flag to ignore elements in bounding box
    **/
   
-  int getIgnoreExtent(void) const { return currentSubscene->getIgnoreExtent(); }
-  void setIgnoreExtent(int in_ignoreExtent) const { currentSubscene->setIgnoreExtent(in_ignoreExtent); }
+  int getIgnoreExtent(void) const { return doIgnoreExtent; }
+  void setIgnoreExtent(int in_ignoreExtent) { doIgnoreExtent = in_ignoreExtent; }
   
   /**
    * invalidate display lists so objects will be rendered again
@@ -123,6 +123,9 @@ public:
 
 private:
 
+  // Whether objects created in this scene should affect the bounding box or not
+  
+  bool doIgnoreExtent;
 
   void setupLightModel();
 

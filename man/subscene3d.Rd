@@ -14,7 +14,8 @@ This creates a new subscene, or selects one by \code{id} value, or adds objects 
 \usage{
 newSubscene3d(viewport = "replace", projection = "replace", model = "replace", 
            parent = subsceneInfo()$id, 
-           copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, newviewport)
+           copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, newviewport,
+           ignoreExtent)
 currentSubscene3d()
 useSubscene3d(subscene)
 addToSubscene3d(ids, subscene = subsceneInfo()$id)
@@ -34,6 +35,10 @@ Whether lights, shapes and bounding box decorations should be copied to the new 
 }
   \item{newviewport}{
 Optionally specify the new subscenes viewport (in pixels).
+}
+  \item{ignoreExtent}{
+Whether to ignore the subscene's bounding box when calculating the parent bounding
+box.  Defaults to \code{TRUE} if \code{model} is not \code{"inherit"}.
 }
   \item{subscene}{
 Which subscene to use or modify.
@@ -90,16 +95,46 @@ If successful, each function returns the object id of the subscene, with the exc
 Duncan Murdoch and Fang He.
 }
 \seealso{
-\code{\link{subsceneInfo}}
+\code{\link{subsceneInfo}}, \code{\link{mfrow3d}} to set up multiple panes of subscenes.
 }
 \examples{
-example(plot3d)
-root <- subsceneInfo()$id
-v <- par3d("viewport")
-v <- v/2
-newSubscene3d(viewport = "replace", newviewport = v, copyShapes = TRUE)
-v[1:2] <- v[3:4]
+
+# Show the Earth with a cutout by using clipplanes in subscenes
+
+lat <- matrix(seq(90,-90, len=50)*pi/180, 50, 50, byrow=TRUE)
+long <- matrix(seq(-180, 180, len=50)*pi/180, 50, 50)
+
+r <- 6378.1 # radius of Earth in km
+x <- r*cos(lat)*cos(long)
+y <- r*cos(lat)*sin(long)
+z <- r*sin(lat)
+
+open3d()
+obj <- surface3d(x, y, z, col="white", 
+       texture=system.file("textures/worldsmall.png",package="rgl"), 
+       specular="black", axes=FALSE, box=FALSE, xlab="", ylab="", zlab="",
+       normal_x=x, normal_y=y, normal_z=z)
+       
+cols <- c(rep("chocolate4",4), rep("burlywood1", 4), "darkgoldenrod1")
+rs <- c(6350, 5639, 4928.5, 4207, 3486, 
+                         (3486+2351)/2, 2351, (2351+1216)/2, 1216)
+for (i in seq_along(rs)) 
+  obj <- c(obj, spheres3d(0,0,col = cols[i], radius = rs[i]))
+  
+root <- currentSubscene3d()
+
+newSubscene3d("inherit", "inherit", "inherit", copyShapes=TRUE, parent=root)
+clipplanes3d(1,0,0,0)
+
+newSubscene3d("inherit", "inherit", "inherit", copyShapes=TRUE, parent=root)
+clipplanes3d(0,1,0,0)
+
+newSubscene3d("inherit", "inherit", "inherit", copyShapes=TRUE, parent=root)
+clipplanes3d(0,0,1,0)
+
+# Now delete the objects from the root subscene, to reveal the clipping planes
 useSubscene3d(root)
-newSubscene3d(viewport = "modify", model = "replace", newviewport = v, copyShapes = TRUE)
+delFromSubscene3d(obj)
+
 }
 \keyword{ graphics }

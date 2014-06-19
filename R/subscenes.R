@@ -49,17 +49,21 @@ newSubscene3d <- function(viewport = "replace",
                        parent = subsceneInfo()$id, copyLights = TRUE,
                        copyShapes = FALSE,
                        copyBBoxDeco = copyShapes,
-                       newviewport) {
+                       newviewport,
+                       ignoreExtent) {
   embedding <- c("inherit", "modify", "replace")
   viewport <- pmatch(viewport, embedding)
   projection <- pmatch(projection, embedding)
   model <- pmatch(model, embedding)
+  if (missing(ignoreExtent))
+    ignoreExtent <- model != 1
   stopifnot(length(viewport) == 1, length(projection) == 1, length(model) == 1,
             !is.na(viewport), !is.na(projection), !is.na(model))
   embedding <- c(viewport, projection, model)
   
   id <- .C(rgl_newsubscene, id = integer(1), parent = as.integer(parent),
-               embedding = as.integer(embedding))$id
+               embedding = as.integer(embedding),
+               as.integer(ignoreExtent))$id
                
   if (id) {
     if (copyLights || copyShapes || copyBBoxDeco) {
