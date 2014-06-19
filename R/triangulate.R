@@ -98,6 +98,8 @@ triangulateSimple <- function(x,y, random=TRUE, plot=FALSE, partial=NA) {
 
 triangulate <- function(x, y = NULL, random=TRUE, plot=FALSE, partial=NA) {
   xy <- xy.coords(x, y)
+  x <- xy$x
+  y <- xy$y
   nesting <- nestPolys(xy)
   verts <- nesting$verts
   nextvert <- rep(NA, length(x))
@@ -237,6 +239,9 @@ nestPolys <- function(x,y = NULL) {
       
       
 extrude3d <- function(x,y = NULL, thickness=1, smooth=FALSE, ...) {
+  xy <- xy.coords(x, y)
+  x <- xy$x
+  y <- xy$y
   it <- triangulate(x, y, partial=FALSE)
   nextvert <- attr(it, "nextvert")
   n <- length(x)

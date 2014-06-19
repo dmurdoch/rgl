@@ -568,6 +568,7 @@ v0.93.999
   - par3d() could generate an error if an unnamed list was passed in.
   - material3d() lost settings for textures
   - internals are updated to be consistent with MacOS 10.9 requirements
+  - fixed a bug in triangulation code:  it failed on locator() input.
     
 v0.94
   - Added "subscenes", i.e. scenes of objects nested within the 
