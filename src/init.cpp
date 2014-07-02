@@ -209,6 +209,11 @@ void attribute_visible R_init_rgl(DllInfo *dll)
   R_registerRoutines(dll, CEntries, CallEntries, NULL, ExtEntries);
 }
 
+void attribute_visible R_init_aglrgl(DllInfo *dll) 
+{
+  R_registerRoutines(dll, CEntries, CallEntries, NULL, ExtEntries);
+}
+
 #ifdef __cplusplus
 }
 #endif

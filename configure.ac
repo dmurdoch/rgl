@@ -109,6 +109,10 @@ if test x$darwin == "xyes" -a "x$enable_cocoa" != "xno" ; then
   AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_COCOA"
   AGLLIBS="${LIBS} -framework Cocoa"
   BUILD_AGL_TRUE=""
+  if test -e /System/Library/Frameworks/GLKit.framework ; then
+    AGLCPPFLAGS="-I/System/Library/Frameworks/GLKit.framework/Headers ${AGLCPPFLAGS}"
+    AGLLIBS="-framework GLKit ${AGLLIBS}"
+  fi
 else
   BUILD_AGL_TRUE="#"
 fi
