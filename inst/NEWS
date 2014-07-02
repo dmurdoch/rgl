@@ -561,7 +561,7 @@ v0.93.995
     (Reported by Brian Ripley.)
   - scene3d() now records light settings.
   
-v0.93.999
+v0.93.1098
   - rgl.material() (for textures), rgl.postscript() and rgl.snapshot()
     now call normalizePath() on filenames, so tilde expansion should
     be supported.
@@ -569,6 +569,8 @@ v0.93.999
   - material3d() lost settings for textures
   - internals are updated to be consistent with MacOS 10.9 requirements
   - fixed a bug in triangulation code:  it failed on locator() input.
+  - The Aqua support now works again, XQuartz is only needed for command
+    line use in Mac OSX.
     
 v0.94
   - Added "subscenes", i.e. scenes of objects nested within the 
