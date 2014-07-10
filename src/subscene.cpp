@@ -11,9 +11,9 @@ using namespace rgl;
 //   Subscene
 //
 
-Subscene::Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model,
+Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_model,
                    bool in_ignoreExtent)
- : SceneNode(SUBSCENE), parent(in_parent), do_viewport(in_viewport), do_projection(in_projection),
+ : SceneNode(SUBSCENE), parent(NULL), do_viewport(in_viewport), do_projection(in_projection),
    do_model(in_model), viewport(0.,0.,1.,1.),Zrow(), Wrow(), ignoreExtent(in_ignoreExtent)
 {
   userviewpoint = NULL;
@@ -75,8 +75,9 @@ bool Subscene::add(SceneNode* node)
     case SUBSCENE:
       {
 	Subscene* subscene = static_cast<Subscene*>(node);
-	if (subscene->getSubscene(getObjID()))
-	  error("Cannot add a subscene %d to itself or its child.", subscene->getObjID());
+	if (subscene->parent)
+	  error("Subscene %d is already a child of subscene %d.", subscene->getObjID(),
+	        subscene->parent->getObjID());
 	addSubscene(subscene);
 	success = true;
       }
@@ -142,6 +143,7 @@ void Subscene::addLight(Light* light)
 void Subscene::addSubscene(Subscene* subscene)
 {
   subscenes.push_back(subscene);
+  subscene->parent = this;
   if (!subscene->getIgnoreExtent()) 
     addBBox(subscene->getBoundingBox(), subscene->bboxChanges);
 }
@@ -191,10 +193,11 @@ void Subscene::hideBackground(int id)
 
 Subscene* Subscene::hideSubscene(int id, Subscene* current)
 {
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ) {
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i) {
     if (sameID(*i, id)) {
       if ((*i)->getSubscene(current->getObjID()))
         current = (*i)->parent;  
+      (*i)->parent = NULL;
       subscenes.erase(i);
       calcDataBBox();
       return current;

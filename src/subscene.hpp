@@ -63,7 +63,7 @@ private:
    **/
   Rect2d viewport;
 public:
-  Subscene(Subscene* in_parent, Embedding in_viewport, Embedding in_projection, Embedding in_model,
+  Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_model,
            bool in_ignoreExtent);
   virtual ~Subscene( );
 
