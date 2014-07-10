@@ -28,6 +28,7 @@ ModelViewpoint::ModelViewpoint(PolarCoord in_position, Vec3 in_scale, bool in_in
     interactive(in_interactive)
 {
     scale = in_scale;
+    scaleChanged = true;    
      
     setPosition(in_position);
     clearMouseMatrix();
