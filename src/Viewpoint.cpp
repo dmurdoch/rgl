@@ -17,6 +17,7 @@ Viewpoint::Viewpoint(PolarCoord in_position, float in_fov, float in_zoom, Vec3 i
     interactive(in_interactive)
 {
     scale = in_scale;
+    scaleChanged = true;    
      
     setPosition(in_position);
     clearMouseMatrix();
