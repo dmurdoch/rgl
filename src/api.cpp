@@ -837,10 +837,10 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding, int* i
     if (parent) {
       Subscene* current = scene->getCurrentSubscene();
       scene->setCurrentSubscene(parent);	
-      Subscene* subscene = new Subscene( parent, (Embedding)embedding[0], 
-                                                 (Embedding)embedding[1], 
-                                                 (Embedding)embedding[2],
-                                                 *ignoreExtent != 0);
+      Subscene* subscene = new Subscene( (Embedding)embedding[0], 
+                                         (Embedding)embedding[1], 
+                                         (Embedding)embedding[2],
+                                         *ignoreExtent != 0);
       if (subscene && scene->add(subscene)) {
 	success = as_success( subscene->getObjID() );
       }
@@ -979,8 +979,13 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
 	    break;
 	  case SUBSCENE:
 	    scene->setCurrentSubscene( subscene->hideSubscene( ids[i], scene->getCurrentSubscene() ) );
+	    success++;
+	    break;
 	  default:
-	    warning("id %d is not a shape or light or decoration; cannot hide", ids[i]);
+	    char buffer[20];
+	    buffer[19] = 0;
+	    node->getTypeName(buffer, 20);
+	    warning("id %d is type %s; cannot hide", ids[i], buffer);
           }
 	else 
 	  warning("id %d not found in scene", ids[i]);
