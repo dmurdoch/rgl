@@ -835,6 +835,8 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding, int* i
     Scene* scene = rglview->getScene();      
     Subscene* parent = scene->getSubscene(parentid[0]);
     if (parent) {
+      Subscene* current = scene->getCurrentSubscene();
+      scene->setCurrentSubscene(parent);	
       Subscene* subscene = new Subscene( parent, (Embedding)embedding[0], 
                                                  (Embedding)embedding[1], 
                                                  (Embedding)embedding[2],
@@ -842,6 +844,7 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding, int* i
       if (subscene && scene->add(subscene)) {
 	success = as_success( subscene->getObjID() );
       }
+      scene->setCurrentSubscene(current);
     }
   }
   *successptr = success;
