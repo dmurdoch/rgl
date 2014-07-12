@@ -58,6 +58,7 @@ do not adapt to the bounding box.
 
 # Show regression plane with z as dependent variable
 
+open3d()
 x <- rnorm(100)
 y <- rnorm(100)
 z <- 0.2*x - 0.3*y + rnorm(100, sd=0.3)
