@@ -30,7 +30,6 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
       projMatrix[4*i + j] = i == j;
     }
   }  
-  newEmbedding();
 }
 
 Subscene::~Subscene() 
@@ -144,6 +143,7 @@ void Subscene::addSubscene(Subscene* subscene)
 {
   subscenes.push_back(subscene);
   subscene->parent = this;
+  subscene->newEmbedding();
   if (!subscene->getIgnoreExtent()) 
     addBBox(subscene->getBoundingBox(), subscene->bboxChanges);
 }
