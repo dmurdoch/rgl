@@ -852,6 +852,10 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
 	    scene->setCurrentSubscene( subscene->hideSubscene( ids[i], scene->getCurrentSubscene() ) );
 	    success++;
 	    break;
+	  case BACKGROUND:
+	    subscene->hideBackground( ids[i] );
+	    success++;
+	    break;
 	  default:
 	    char buffer[20];
 	    buffer[19] = 0;
