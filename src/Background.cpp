@@ -122,6 +122,8 @@ void Background::render(RenderContext* renderContext)
     }
 
     glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    
     glLoadIdentity();
     if (fov != 0.0) {
       glFrustum(-hwidth, hwidth, -hheight, hheight, znear, zfar );
@@ -130,16 +132,20 @@ void Background::render(RenderContext* renderContext)
     }
     
     glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    
     glLoadIdentity();
 
     glTranslatef(0.0f,0.0f,-znear);
 
     ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
     modelviewpoint->setupOrientation();
-    
 
     Shape::render(renderContext);
-
+    glMatrixMode(GL_MODELVIEW); /* just in case... */
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
   } 
 }
 
