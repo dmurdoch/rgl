@@ -48,7 +48,7 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end)
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
-    void* userData[3];
+    void* userData[3] = {(void*)begin, (void*)update, (void*)end};
     userControlPtr beginCallback, updateCallback;
     userControlEndPtr endCallback;
     userCleanupPtr cleanupCallback;
@@ -60,21 +60,18 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end)
                                &cleanupCallback, (void**)&userData);
     if (isFunction(begin)) {
       beginCallback = &userControl;
-      userData[0] = (void*)begin;
       R_PreserveObject(begin);
     } else if (begin == R_NilValue) beginCallback = 0;
     else error("callback must be a function");
     
     if (isFunction(update)) {
       updateCallback = &userControl;
-      userData[1] = (void*)update;
       R_PreserveObject(update);
     } else if (update == R_NilValue) updateCallback = 0;
     else error("callback must be a function");
     
     if (isFunction(end)) {
       endCallback = &userControlEnd;
-      userData[2] = (void*)end;
       R_PreserveObject(end);
     } else if (end == R_NilValue) endCallback = 0;
     else error("callback must be a function");
@@ -90,12 +87,11 @@ SEXP rgl::rgl_setWheelCallback(SEXP rotate)
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
-    void* wheelData;
+    void* wheelData = (void*)rotate;
     userWheelPtr wheelCallback;
       
     if (isFunction(rotate)) {
       wheelCallback = &userWheel;
-      wheelData = (void*)rotate;
       R_PreserveObject(rotate);
     } else if (rotate == R_NilValue) wheelCallback = 0;
     else error("callback must be a function");
