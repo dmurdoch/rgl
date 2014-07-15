@@ -13,13 +13,13 @@ This creates a new subscene, or selects one by \code{id} value, or adds objects 
 }
 \usage{
 newSubscene3d(viewport = "replace", projection = "replace", model = "replace", 
-           parent = subsceneInfo()$id, 
+           parent = currentSubscene3d(), 
            copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, newviewport,
            ignoreExtent)
-currentSubscene3d()
+currentSubscene3d(dev = rgl.cur())
 useSubscene3d(subscene)
-addToSubscene3d(ids, subscene = subsceneInfo()$id)
-delFromSubscene3d(ids, subscene = subsceneInfo()$id)
+addToSubscene3d(ids, subscene = currentSubscene3d())
+delFromSubscene3d(ids, subscene = currentSubscene3d())
 gc3d(protect = NULL)
 }
 \arguments{
@@ -39,6 +39,9 @@ Optionally specify the new subscenes viewport (in pixels).
   \item{ignoreExtent}{
 Whether to ignore the subscene's bounding box when calculating the parent bounding
 box.  Defaults to \code{TRUE} if \code{model} is not \code{"inherit"}.
+}
+  \item{dev}{
+Which rgl device to query for the current subscene.
 }
   \item{subscene}{
 Which subscene to use or modify.

@@ -84,7 +84,7 @@ void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y,
 void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius, int* shapes, double* userMatrix);
 void rgl_newsubscene (int* successptr, int* parentid, int* embedding, int* ignoreExtent);
 void rgl_setsubscene (int* id);
-void rgl_getsubsceneid (int* id); /* On input, 0 for root, 1 for current */
+void rgl_getsubsceneid (int* id, int* dev); /* On input, 0 for root, 1 for current */
 void rgl_getsubsceneparent(int* id);
 void rgl_getsubscenechildcount(int* id, int* n);
 void rgl_getsubscenechildren(int* id, int* children);
@@ -95,61 +95,20 @@ void rgl_gc(int* count, int* protect);
 void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
 void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
 void rgl_locator(int* successptr, double* locations);
-void rgl_getMouseMode(int* successptr, int* button, int* mode);
-void rgl_setMouseMode(int* successptr, int* button, int* mode);
-void rgl_getWheelMode(int* successptr, int* mode);
-void rgl_setWheelMode(int* successptr, int* mode);
 
 void rgl_selectstate(int* successptr, int* selectstate, double* locations);
 void rgl_setselectstate(int* successptr, int *idata);
-void rgl_getUserMatrix(int* successptr, double* userMatrix);
-void rgl_setUserMatrix(int* successptr, double* userMatrix);
-void rgl_getScale(int* successptr, double* scale);
-void rgl_setScale(int* successptr, double* scale);
-void rgl_getObserver(int* successptr, double* ddata);
-void rgl_setObserver(int* successptr, double* ddata);
-void rgl_getZoom(int* successptr, double* zoom);
-void rgl_setZoom(int* successptr, double* zoom);
-void rgl_getFOV(int* successptr, double* fov);
-void rgl_setFOV(int* successptr, double* fov);
-void rgl_getModelMatrix(int* successptr, double* modelMatrix);
-void rgl_getProjMatrix(int* successptr, double* projMatrix);
 void rgl_setEmbeddings(int* successptr, int* embeddings);
 void rgl_getEmbeddings(int* successptr, int* embeddings);
-void rgl_setViewport(int* successptr, double* viewport);
-void rgl_getIgnoreExtent(int* successptr, int* ignoreExtent);
-void rgl_setIgnoreExtent(int* successptr, int* ignoreExtent);
-void rgl_getSkipRedraw(int* successptr, int* skipRedraw);
-void rgl_setSkipRedraw(int* successptr, int* skipRedraw);
-void rgl_setViewport(int* successptr, double* viewport);
-void rgl_getViewport(int* successptr, int* viewport);
-void rgl_getBoundingbox(int* successptr, double* bboxvec);
-void rgl_getWindowRect(int* successptr, int* rect);
-void rgl_setWindowRect(int* successptr, int* rect);
 
 SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end);
 SEXP rgl_setWheelCallback(SEXP rotate);
 
-SEXP rgl_par3d(SEXP args);
+SEXP rgl_par3d(SEXP device, SEXP subscene, SEXP args);
 
-/* not for users:  does not maintain consistency */
-void rgl_setPosition(double* position);
-void rgl_getPosition(double* position);
-
-/* These functions are related to the API, but only accessed internally */
-
-char*   rgl_getFamily();
-bool    rgl_setFamily(const char *family);
-int     rgl_getFont();
-bool    rgl_setFont(int font);
-double  rgl_getCex();
-bool    rgl_setCex(double cex);
-int     rgl_getUseFreeType();
-bool    rgl_setUseFreeType(bool useFreeType);
-char*	rgl_getFontname();
-int	rgl_getAntialias();
-int	rgl_getMaxClipPlanes();
-
+/* These may be removed if observer is set completely by par3d */
+void rgl_getObserver(int* successptr, double* ddata);
+void rgl_setObserver(int* successptr, double* ddata);
 #ifdef __cplusplus
 }
 #endif

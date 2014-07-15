@@ -1,5 +1,5 @@
-currentSubscene3d <- function() {
-  .C(rgl_getsubsceneid, id = 1L)$id
+currentSubscene3d <- function(dev = rgl.cur()) {
+  .C(rgl_getsubsceneid, id = 1L, dev = as.integer(dev))$id
 }
 
 subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
@@ -46,7 +46,7 @@ subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
 newSubscene3d <- function(viewport = "replace", 
                        projection = "replace",
 		       model = "replace",
-                       parent = subsceneInfo()$id, copyLights = TRUE,
+                       parent = currentSubscene3d(), copyLights = TRUE,
                        copyShapes = FALSE,
                        copyBBoxDeco = copyShapes,
                        newviewport,
@@ -90,7 +90,7 @@ useSubscene3d <- function(subscene) {
   invisible(subscene)
 }
 
-addToSubscene3d <- function(ids, subscene = subsceneInfo()$id) {
+addToSubscene3d <- function(ids, subscene = currentSubscene3d()) {
   ids <- as.integer(ids)
   dups <- intersect(ids, rgl.ids("all", subscene)$id)
   if (length(dups))
@@ -102,7 +102,7 @@ addToSubscene3d <- function(ids, subscene = subsceneInfo()$id) {
   invisible(subscene)
 }
 
-delFromSubscene3d <- function(ids, subscene = subsceneInfo()$id) {
+delFromSubscene3d <- function(ids, subscene = currentSubscene3d()) {
   result <- .C(rgl_delfromsubscene, success = as.integer(subscene), 
      n = as.integer(length(ids)), ids = as.integer(ids))$success
   if (!result)

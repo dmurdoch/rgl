@@ -794,11 +794,7 @@ void RGLView::setUserMatrix(double* src)
     subscene = scene->getSubscene(activeSubscene);
   if (!subscene)
     subscene = scene->getCurrentSubscene();
-    	   
-  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
-
-  modelviewpoint->setUserMatrix(src);
-
+  subscene->setUserMatrix(src);  	   
   View::update();
 }
 
@@ -823,9 +819,7 @@ void RGLView::setScale(double* src)
   if (!subscene)
     subscene = scene->getCurrentSubscene();
     
-  ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
-
-  modelviewpoint->setScale(src);
+  subscene->setScale(src);
 
   View::update();
 }
