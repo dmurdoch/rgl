@@ -161,7 +161,14 @@ public:
   void setEmbedding(int which, Embedding value);  /* which is 0=viewport, 1=projection, 2=model */
   Embedding getEmbedding(int which);
   
+  void setUserMatrix(double* src);
+  void setScale(double* src);
   void setViewport(double x, double y, double width, double height); /* Sets relative (i.e. [0,1]x[0,1]) viewport size */
+  void setPosition(double* src);
+  
+  void getUserMatrix(double* dest);
+  void getScale(double* dest);
+  void getPosition(double* dest);
   
   float getDistance(const Vertex& v) const;
 

@@ -18,7 +18,7 @@
 rgl.clear <- function( type = "shapes", subscene = 0 )
 {
   if (is.na(subscene)) 
-    subscene <- subsceneInfo()$id
+    subscene <- currentSubscene3d()
 
   typeid <- rgl.enum.nodetype(type)
   
@@ -84,7 +84,7 @@ rgl.ids <- function( type = "shapes", subscene = NA )
 {
   type <- c(rgl.enum.nodetype(type), 0)
   if (is.na(subscene)) 
-      subscene <- subsceneInfo()$id
+      subscene <- currentSubscene3d()
   
   count <- .C( rgl_id_count, as.integer(type), count = integer(1), subscene = as.integer(subscene))$count
   

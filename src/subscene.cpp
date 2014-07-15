@@ -899,6 +899,42 @@ Embedding Subscene::getEmbedding(int which)
   }
 }
 
+void Subscene::getUserMatrix(double* dest)
+{
+  ModelViewpoint* modelviewpoint = getModelViewpoint();
+  modelviewpoint->getUserMatrix(dest);
+}
+
+void Subscene::setUserMatrix(double* src)
+{
+  ModelViewpoint* modelviewpoint = getModelViewpoint();
+  modelviewpoint->setUserMatrix(src);
+}
+
+void Subscene::getScale(double* dest)
+{
+  ModelViewpoint* modelviewpoint = getModelViewpoint();
+  modelviewpoint->getScale(dest);
+}
+
+void Subscene::setScale(double* src)
+{
+  ModelViewpoint* modelviewpoint = getModelViewpoint();
+  modelviewpoint->setScale(src);
+}
+
+void Subscene::getPosition(double* dest)
+{
+  ModelViewpoint* modelviewpoint = getModelViewpoint();
+  modelviewpoint->getPosition(dest);
+}
+
+void Subscene::setPosition(double* src)
+{
+  ModelViewpoint* modelviewpoint = getModelViewpoint();
+  modelviewpoint->setPosition(src);
+}
+
 void Subscene::setViewport(double x, double y, double width, double height)
 {
   viewport.x = x;

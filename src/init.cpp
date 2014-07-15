@@ -142,7 +142,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    {"rgl_sprites",  		(DL_FUNC) &rgl_sprites, 6, aIIDDID},
    {"rgl_newsubscene",		(DL_FUNC) &rgl_newsubscene, 4, aIIII},
    {"rgl_setsubscene",		(DL_FUNC) &rgl_setsubscene, 1, aI},
-   {"rgl_getsubsceneid",	(DL_FUNC) &rgl_getsubsceneid, 1, aI},
+   {"rgl_getsubsceneid",	(DL_FUNC) &rgl_getsubsceneid, 2, aII},
    {"rgl_getsubsceneparent",    (DL_FUNC) &rgl_getsubsceneparent, 1, aI},
    {"rgl_getsubscenechildcount",(DL_FUNC) &rgl_getsubscenechildcount, 2, aII},
    {"rgl_getsubscenechildren",  (DL_FUNC) &rgl_getsubscenechildren, 2, aII},
@@ -196,7 +196,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_sprites, 6),
    FUNDEF(rgl_newsubscene, 4),
    FUNDEF(rgl_setsubscene, 1),
-   FUNDEF(rgl_getsubsceneid, 1),
+   FUNDEF(rgl_getsubsceneid, 2),
    FUNDEF(rgl_getsubsceneparent, 1),
    FUNDEF(rgl_getsubscenechildcount, 2),
    FUNDEF(rgl_getsubscenechildren, 2),
@@ -220,6 +220,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_init, 3),
    FUNDEF(rgl_dev_getcurrent, 0),
    FUNDEF(rgl_dev_list, 0),
+   FUNDEF(rgl_par3d, 3),
    FUNDEF(rgl_setMouseCallbacks, 4),
    FUNDEF(rgl_setWheelCallback, 1),
 
@@ -227,8 +228,6 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
  };
 
  static const R_ExternalMethodDef ExtEntries[] = {
-   FUNDEF(rgl_par3d, 1),
-
    {NULL, NULL, 0}
  };
  

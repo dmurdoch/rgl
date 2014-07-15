@@ -8,7 +8,8 @@ suitable for use in animations.
 \usage{
 par3dinterp(times = NULL, userMatrix, scale, zoom, FOV, 
             method = c("spline", "linear"), 
-            extrapolate = c("oscillate", "cycle", "constant", "natural"))
+            extrapolate = c("oscillate", "cycle", "constant", "natural"),
+            dev = rgl.cur(), subscene = currentSubscene3d(dev))
 }
 \arguments{
   \item{times}{ Times at which values are recorded or a list; see below }
@@ -18,6 +19,8 @@ par3dinterp(times = NULL, userMatrix, scale, zoom, FOV,
   \item{FOV}{ Values of \code{par3d("FOV")} }
   \item{method}{ Method of interpolation }
   \item{extrapolate}{ How to extrapolate outside the time range }
+  \item{dev}{ Which rgl device to use }
+  \item{subscene}{ Which subscene to use }
 }
 \details{
 This function is intended to be used in constructing animations.  It produces

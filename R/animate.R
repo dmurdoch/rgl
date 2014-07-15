@@ -30,7 +30,11 @@ toRotmatrix <- function(x) {
 }
 
 par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
-                     extrapolate = c("oscillate","cycle","constant", "natural")) {                
+                     extrapolate = c("oscillate","cycle","constant", "natural"),
+                     dev = rgl.cur(), subscene = currentSubscene3d(dev)) {  
+    force(dev)
+    force(subscene)
+    
     if (is.list(times)) {
     	for (n in setdiff(names(times), "times")) assign(n, times[[n]])
     	if ("times" %in% names(times)) times <- times[["times"]]
@@ -107,7 +111,7 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
                 time <- (time - mintime) %% (maxtime - mintime) + mintime
         }
     	data <- sapply(fns, function(f) f(time))
-    	result <- list()
+    	result <- list(dev = dev, subscene = subscene)
     	if (!is.null(xlat)) {
     	    userMatrix <- matrix(0, 4,4)
     	    userMatrix[,4] <- data[xlat]
@@ -125,10 +129,14 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
     }
 }
 
-spin3d <- function(axis = c(0, 0, 1), rpm = 5) {
-    M <- par3d("userMatrix")
+spin3d <- function(axis = c(0, 0, 1), rpm = 5, dev = rgl.cur(), subscene = currentSubscene3d(dev)) {
+    force(axis)
+    force(rpm)    
+    force(dev)
+    force(subscene)
+    M <- par3d("userMatrix", dev = dev, subscene = subscene)
     function(time, base = M) 
-    	list(userMatrix = rotate3d(base, time*rpm*pi/30, axis[1], axis[2], axis[3]))
+    	list(userMatrix = rotate3d(base, time*rpm*pi/30, axis[1], axis[2], axis[3]), dev = dev, subscene = subscene)
 }
     
 play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
@@ -140,7 +148,7 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
     start <- proc.time()[3] - startTime
     rgl.setselectstate("none")
     repeat {
-       if(rgl.cur() != dev) rgl.set(dev)
+       if(!missing(dev) && rgl.cur() != dev) rgl.set(dev)
        time <- proc.time()[3] - start
        if (time > duration || rgl.selectstate()$state == msABORT) return(invisible(NULL))
        par3d(f(time, ...))

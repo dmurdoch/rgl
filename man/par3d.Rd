@@ -32,7 +32,8 @@
   values.
 }
 \usage{
-par3d(\dots, no.readonly = FALSE)
+par3d(\dots, no.readonly = FALSE, dev = rgl.cur(), 
+      subscene = currentSubscene3d(dev))
 
 open3d(\dots, params=getr3dDefaults(), 
 	    useNULL = rgl.useNULL())
@@ -47,6 +48,8 @@ getr3dDefaults()
   \item{no.readonly}{logical; if \code{TRUE} and there are no other
     arguments, only those parameters which can be set by a
     subsequent \code{par3d()} call are returned.}
+  \item{dev}{integer; the rgl device.}
+  \item{subscene}{integer; the subscene.}
   \item{params}{a list of graphical parameters}
   \item{useNULL}{whether to use the null graphics device}
 }
@@ -60,6 +63,11 @@ getr3dDefaults()
 
   \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
   may only be used in queries, i.e., they do \emph{not} set anything.
+  
+  By default, queries and modifications apply to the current subscene
+  on the current device; specify \code{dev} and/or \code{subscene} to 
+  change this.  Some parameters apply to the device as a whole;
+  these are marked in the list below.
 
   \code{open3d} opens a new rgl device, and sets the parameters as
   requested.  The \code{r3dDefaults} list returned by the 
@@ -106,19 +114,24 @@ getr3dDefaults()
     set in \code{open3d}. The (requested) number of hardware
     antialiasing planes to use (with multisample antialiasing).  The
     OpenGL driver may not support the requested number, in which case
-    \code{par3d("antialias")} will report what was actually set. }    
+    \code{par3d("antialias")} will report what was actually set. Applies to the whole device.}    
     \item{\code{cex}}{real.  The default size for text.}
-    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.}
-    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}.}
-    \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?}
-    \item{\code{fontname}}{\emph{\bold{R.O.}}; the system-dependent name of the current font.}
+    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.
+    Applies to the whole device.}
+    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}.
+    Applies to the whole device.}
+    \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?
+    Applies to the whole device.}
+    \item{\code{fontname}}{\emph{\bold{R.O.}}; the system-dependent name of the current font.
+    Applies to the whole device.}
     \item{\code{FOV}}{real.  The field of view, from 0 to 179 degrees.  This controls
       the degree of parallax in the perspective view.
       Isometric perspective corresponds to \code{FOV=0}.}
     \item{\code{ignoreExtent}}{logical.  Set to \code{TRUE} so that subsequently plotted objects
-      will be ignored in calculating the bounding box of the scene.}
+      will be ignored in calculating the bounding box of the scene.  Applies to the
+      whole device.}
     \item{\code{maxClipPlanes}}{\emph{\bold{R.O.}}; an integer giving the maximum
-      number of clip planes that can be defined in the current system.}
+      number of clip planes that can be defined in the current system. Applies to the whole device.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
       of the user data.  See the Note below.}
     \item{\code{mouseMode}}{character.  A vector of 4 strings describing
@@ -148,6 +161,8 @@ getr3dDefaults()
 	    \code{\link{rgl.setWheelCallback}}.}
 	}
       A common default on Mac OSX is to convert a two finger drag on a trackpad to a mouse wheel rotation.
+      
+      Applies to the whole device.
     }
     \item{\code{observer}}{\emph{\bold{R.O.}}; the position of the observer relative to
       the model.  Set by \code{\link{observer3d}}.  See the Note below.}
@@ -156,7 +171,8 @@ getr3dDefaults()
     \item{\code{scale}}{real.  A vector of 3 values indicating the amount by which to
       rescale each axis before display.  Set by \code{\link{aspect3d}}.}
     \item{\code{skipRedraw}}{whether to update the display.  Set to \code{TRUE} to suspend
-      updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.}
+      updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.
+      Applies to the whole device.}
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
       display the scene.}
     \item{\code{viewport}}{real.  A vector giving the dimensions of the
@@ -167,7 +183,7 @@ getr3dDefaults()
       \item{\code{bbox}}{\emph{\bold{R.O.}}; real. A vector of six values indicating the current values of the
       bounding box of the scene (xmin, xmax, ymin, ymax, zmin, zmax)}
     \item{\code{windowRect}}{integer.  A vector of four values indicating the left, top, right and 
-      bottom of the displayed window (in pixels).}
+      bottom of the displayed window (in pixels).  Applies to the whole device.}
   }
 }
 

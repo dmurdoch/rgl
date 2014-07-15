@@ -64,6 +64,11 @@ arbitrary order.)
 The \code{top=TRUE} default is designed to work around an OpenGL limitation:
 in some implementations, \code{\link{rgl.snapshot}} will fail if the window
 is not topmost.
+
+As of rgl version 0.94, the \code{dev} argument is not needed:  the
+function \code{f} can specify its device, as \code{\link{spin3d}} does, 
+for example.  However, if \code{dev} is specified, it will be selected
+as the current device as each update is played.
 }
 \value{
 This function is called for the side effect of its repeated calls to \code{f}.
