@@ -49,6 +49,7 @@ newSubscene3d <- function(viewport = "replace",
                        parent = currentSubscene3d(), copyLights = TRUE,
                        copyShapes = FALSE,
                        copyBBoxDeco = copyShapes,
+                       copyBackground = FALSE,
                        newviewport,
                        ignoreExtent) {
   embedding <- c("inherit", "modify", "replace")
@@ -66,10 +67,10 @@ newSubscene3d <- function(viewport = "replace",
                as.integer(ignoreExtent))$id
                
   if (id) {
-    if (copyLights || copyShapes || copyBBoxDeco) {
+    if (copyLights || copyShapes || copyBBoxDeco || copyBackground) {
       useSubscene3d(parent)
       ids <- rgl.ids(type = 
-        c("lights", "shapes", "bboxdeco")[c(copyLights, copyShapes, copyBBoxDeco)])$id
+        c("lights", "shapes", "bboxdeco", "background")[c(copyLights, copyShapes, copyBBoxDeco, copyBackground)])$id
       if (length(ids)) 
         addToSubscene3d(ids, subscene = id)
     }
