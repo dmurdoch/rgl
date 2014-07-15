@@ -14,7 +14,8 @@ This creates a new subscene, or selects one by \code{id} value, or adds objects 
 \usage{
 newSubscene3d(viewport = "replace", projection = "replace", model = "replace", 
            parent = currentSubscene3d(), 
-           copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, newviewport,
+           copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, 
+           copyBackground = FALSE, newviewport,
            ignoreExtent)
 currentSubscene3d(dev = rgl.cur())
 useSubscene3d(subscene)
@@ -30,8 +31,8 @@ How should the new subscene be embedded?  Possible values are
   \item{parent}{
 The parent subscene (defaults to the current subscene).
 }
-  \item{copyLights, copyShapes, copyBBoxDeco}{
-Whether lights, shapes and bounding box decorations should be copied to the new subscene.
+  \item{copyLights, copyShapes, copyBBoxDeco, copyBackground}{
+Whether lights, shapes, bounding box decorations and background should be copied to the new subscene.
 }
   \item{newviewport}{
 Optionally specify the new subscenes viewport (in pixels).
@@ -89,6 +90,9 @@ well as by the position of the observer (since OpenGL assumes that the observer 
 (0,0,0) after the MODELVIEW transformation).  Only those parts concerning the model are
 inherited when \code{model} specifies inheritance, the observer setting is controlled by
 \code{projection}.
+
+If \code{copyBackground} is \code{TRUE}, the background of the newly created child will
+overwrite anything displayed in the parent subscene, regardless of depth.
 }
 \value{
 If successful, each function returns the object id of the subscene, with the exception of
