@@ -57,11 +57,6 @@ is only supported with spline interpolation.
 A function is returned.  The function takes one argument, and returns a list of 
 \code{par3d} settings interpolated to that time.
 }
-\note{
-Due to a bug in R (fixed in R 2.6.0), using 
-\code{extrapolate} equal to \code{"oscillate"} 
-will sometimes fail when only two points are given.  
-}
 \author{Duncan Murdoch }
 \seealso{ \code{\link{play3d}} to play the animation. }
 \examples{

@@ -1,4 +1,4 @@
-\name{abclines}
+\name{abclines3d}
 \alias{rgl.abclines}
 \alias{abclines3d}
 \title{

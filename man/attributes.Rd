@@ -1,4 +1,4 @@
-\name{attributes}
+\name{rgl.attrib}
 \alias{rgl.attrib.count}
 \alias{rgl.attrib}
 \title{
@@ -17,10 +17,11 @@ rgl.attrib(id, attrib, first = 1,
 A shape identifier, as returned by \code{\link{rgl.ids}}.
 }
   \item{attrib}{
-An attribute of a shape.  Currently supported: one of 
-\code{c("vertices", "normals", "colors", "texcoords", "dim", "texts",
-        "cex", "adj", "radii", "centers",  "ids", 
-        "usermatrix", "types", "flags" )}, or unique prefixes
+An attribute of a shape.  Currently supported: one of \cr
+\code{c("vertices", "normals", "colors", "texcoords", "dim", "texts", \cr
+        "cex", "adj", "radii", "centers",  "ids", \cr
+        "usermatrix", "types", "flags" )}\cr
+or unique prefixes
 to one of those.  
 }
   \item{first, last}{
@@ -41,20 +42,21 @@ apply only to text objects.
 \code{rgl.attrib.count} returns the count of the requested attribute.  \code{rgl.attrib}
 returns the values of the attribute.  Attributes
 are mostly real-valued, with the following sizes:
-\describe{
-\item{vertices}{3 values, x, y, z}
-\item{normals}{3 values, x, y, z}
-\item{centers}{3 values, x, y, z}
-\item{colors}{4 values, r, g, b, a}
-\item{texcoords}{2 values, s, t}
-\item{dim}{2 values, r, c}
-\item{cex}{1 value}
-\item{adj}{2 values, x, y}
-\item{radii}{1 value, r}
-\item{ids}{1 value, id}
-\item{usermatrix}{4 values, x, y, z, w}
-\item{types}{1 value, type}
-\item{flags}{1 value, flag}
+\tabular{lll}{
+\code{"vertices"}	\tab 3 values 	\tab x, y, z \cr
+\code{"normals"}	\tab 3 values 	\tab x, y, z \cr
+\code{"centers"}	\tab 3 values 	\tab x, y, z \cr
+\code{"colors"}	\tab 4 values 	\tab r, g, b, a \cr
+\code{"texcoords"}	\tab 2 values 	\tab s, t \cr
+\code{"dim"}	\tab 2 values 	\tab r, c \cr
+\code{"cex"}	\tab 1 value 	\tab cex \cr
+\code{"adj"}	\tab 2 values 	\tab x, y \cr
+\code{"radii"}	\tab 1 value 	\tab r \cr
+\code{"ids"}	\tab 1 value	\tab id \cr
+\code{"usermatrix"}	\tab 4 values 	\tab x, y, z, w \cr
+\code{"texts"}	\tab 1 value	\tab text \cr
+\code{"types"}	\tab 1 value	\tab type \cr
+\code{"flags"}	\tab 1 value	\tab flag \cr
 }
 The \code{"texts"} and \code{"types"} attributes are character-valued; the flags
 attribute is logical valued, with named rows.
