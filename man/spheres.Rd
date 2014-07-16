@@ -1,4 +1,4 @@
-\name{spheres}
+\name{spheres3d}
 \alias{rgl.spheres}
 \alias{spheres3d}
 \title{add sphere set shape}

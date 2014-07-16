@@ -35,6 +35,10 @@ The observer always looks in the positive Z direction
 after the model rotation have been done.  The coordinates are in post-scaling
 units.
 }
+\note{
+This function is likely to change in future versions of \pkg{rgl}, to allow more 
+flexibility in the specification of the observer's location and orientation.
+}
 \value{
 Invisibly returns the previous value.
 }

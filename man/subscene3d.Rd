@@ -1,4 +1,5 @@
 \name{subscene3d}
+\alias{subscene3d}
 \alias{newSubscene3d}
 \alias{currentSubscene3d}
 \alias{useSubscene3d}

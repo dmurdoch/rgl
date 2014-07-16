@@ -61,9 +61,6 @@ getr3dDefaults()
   \code{par3d()} (no arguments) or \code{par3d(no.readonly=TRUE)} is used to
   get \emph{all} the graphical parameters (as a named list).  
 
-  \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
-  may only be used in queries, i.e., they do \emph{not} set anything.
-  
   By default, queries and modifications apply to the current subscene
   on the current device; specify \code{dev} and/or \code{subscene} to 
   change this.  Some parameters apply to the device as a whole;
@@ -109,6 +106,10 @@ getr3dDefaults()
 }
 
 \section{Parameters}{
+
+  \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
+  may only be used in queries, i.e., they do \emph{not} set anything.
+  
   \describe{
     \item{\code{antialias}}{\emph{\bold{R.O.}} in \code{par3d}, may be
     set in \code{open3d}. The (requested) number of hardware

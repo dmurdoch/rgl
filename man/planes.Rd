@@ -1,4 +1,4 @@
-\name{planes}
+\name{planes3d}
 \alias{rgl.planes}
 \alias{planes3d}
 \alias{rgl.clipplanes}
@@ -36,16 +36,17 @@ by giving multiple values for any of \code{a, b, c, d}; the other
 values will be recycled as necessary.
 
 \code{clipplanes3d} and \code{rgl.clipplanes} define clipping planes
-using the same equations.  The number of clipping planes
+using the same equations.  Clipping planes suppress the display of
+other objects (or parts of them) in the scene, based on their coordinates.
+Points (or parts of lines or surfaces) where the coordinates \code{x,y,z}
+satisfy \eqn{a x + b y + c z + d < 0} will be suppressed.
+
+The number of clipping planes
 supported by the OpenGL driver is implementation dependent; use
 \code{par3d("maxClipPlanes")} to find the limit.
 }
-\note{
-The clip plane code is experimental and currently only partially
-implemented, so is subject to change.
-}
 \value{
-A shape ID of the planes object is returned invisibly.
+A shape ID of the planes or clipplanes object is returned invisibly.
 }
 \seealso{
 \code{\link{abclines3d}}, \code{\link{rgl.abclines}} for mathematical lines.
@@ -53,6 +54,9 @@ A shape ID of the planes object is returned invisibly.
 \code{\link{triangles3d}}, \code{\link{rgl.triangles}} or the corresponding
 functions for quadrilaterals may be used to draw sections of planes that
 do not adapt to the bounding box.
+
+The example in \link{subscene3d} shows how to combine clipping planes
+to suppress complex shapes.
 }
 \examples{
 

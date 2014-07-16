@@ -63,8 +63,8 @@ objects added to the scene.
 }
 \author{ Duncan Murdoch }
 
-\seealso{\code{\link{axis}}, \code{\link{box}},
-\code{title}, \code{mtext}, \link{bbox3d}}
+\seealso{Classic graphics functions \code{\link{axis}}, \code{\link{box}},
+\code{\link{title}}, \code{\link{mtext}}, and \pkg{rgl} function \code{\link{bbox3d}}}.
 
 \examples{
   open3d()
