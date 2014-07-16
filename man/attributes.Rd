@@ -18,11 +18,11 @@ A shape identifier, as returned by \code{\link{rgl.ids}}.
 }
   \item{attrib}{
 An attribute of a shape.  Currently supported: one of \cr
-\code{c("vertices", "normals", "colors", "texcoords", "dim", "texts", \cr
-        "cex", "adj", "radii", "centers",  "ids", \cr
-        "usermatrix", "types", "flags" )}\cr
+\code{"vertices"}, \code{"normals"}, \code{"colors"}, \code{"texcoords"}, 
+\code{"dim"}, \code{"texts"}, \code{"cex"}, \code{"adj"}, \code{"radii"}, 
+\code{"centers"}, \code{"ids"}, \code{"usermatrix"}, \code{"types"}, \code{"flags"}\cr
 or unique prefixes
-to one of those.  
+to one of those. 
 }
   \item{first, last}{
 Specify these to retrieve only those rows of the result.
