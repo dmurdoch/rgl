@@ -217,7 +217,8 @@ the old matrix, use this code:
 
 \section{Rendering}{
 The parameters returned by \code{par3d} are sufficient to determine where rgl would render
-a point on the screen.  Given a column vector \code{(x,y,z)}, it performs the equivalent of 
+a point on the screen.  Given a column vector \code{(x,y,z)} in a subscene \code{s}, 
+it performs the equivalent of 
 the following operations:
 \enumerate{
 \item It converts the point to homogeneous coordinates by appending \code{w=1}, giving
@@ -229,9 +230,13 @@ of the following matrices:
   \item A matrix to rescale according to \code{par3d("scale")}.
   \item The \code{par3d("userMatrix")} as set by the user.
   \item A matrix which may be set by mouse movements.
-  \item A matrix to translate the origin to the centre of the viewing region.
+  \item If \code{s} has the \code{"model"} set to \code{"modify"}, a similar collection of
+  matrices using parameters from the parent subscene.
   }
-\item It multiplies the point by \code{M} giving \code{u = M \%*\% v}.  Using this location and information on the
+\item It multiplies the point by \code{M} giving \code{u = M \%*\% v}. 
+\item It multiplies that point by a matrix based on the observer position
+to translate the origin to the centre of the viewing region.
+\item Using this location and information on the
 normals (which have been similarly transformed), it performs lighting calculations. 
 \item It obtains the projection matrix \code{P = par3d("projMatrix")} and
 multiplies the point by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.
