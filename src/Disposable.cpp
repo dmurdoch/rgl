@@ -1,8 +1,8 @@
-#include "Disposable.hpp"
+#include "Disposable.h"
 
 #include <algorithm>
 #include <vector>
-#include "assert.hpp"
+#include "assert.h"
 
 using namespace rgl;
 

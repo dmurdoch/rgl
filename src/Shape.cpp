@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <functional>
 
-#include "Shape.hpp"
-#include "SceneNode.hpp"
+#include "Shape.h"
+#include "SceneNode.h"
 #include "R.h"
 
 using namespace rgl;
@@ -97,6 +97,7 @@ int Shape::getAttributeCount(AABox& bbox, AttribID attrib)
   switch (attrib) { 
     case COLORS:  return material.colors.getLength();
     case CENTERS: return getElementCount();
+    case FLAGS:   return 1;
   }
   return 0;
 }
@@ -125,6 +126,9 @@ void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
           *result++ = center.z;
           first++;
         }
+        return;
+      case FLAGS:
+        if (first == 0) *result++ = (double)ignoreExtent;
         return;
     }
   }

@@ -10,12 +10,17 @@ getr3dDefaults <- function()
 	     error = function(e) r3dDefaults)
 
 clear3d     <- function(type = c("shapes", "bboxdeco", "material"), 
-                        defaults=getr3dDefaults()) {
+                        defaults=getr3dDefaults(),
+                        subscene = 0) {
     .check3d()
-    rgl.clear( type )
+    rgl.clear( type, subscene = subscene )
+
     type <- rgl.enum.nodetype(type)
-    if ( 4 %in% type ) { # viewpoint
-	do.call("par3d", defaults[c("FOV", "userMatrix")])
+    if ( 4 %in% type ) { # userviewpoint
+	do.call("par3d", defaults["FOV"])
+    }
+    if ( 8 %in% type ) { # modelviewpoint
+        do.call("par3d", defaults["userMatrix"])
     }
     if ( 5 %in% type ) { # material
         if (length(defaults$material))
@@ -115,6 +120,19 @@ bbox3d	    <- function(xat = NULL,
                              xunit=xunit, yunit=yunit, zunit=zunit, expand=expand,
                              nticks=nticks, draw_front=draw_front), 
                         .fixMaterialArgs(..., Params = save)))
+}
+
+observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
+  if (missing(x))
+    location <- c(NA, NA, NA)
+  else {
+    xyz <- xyz.coords(x,y,z)
+    location <- c(xyz$x, xyz$y, xyz$z)
+    if (length(location) != 3) stop("a single point must be specified for the observer location") 
+  }    
+  prev <- .C(rgl_getObserver, success=integer(1), ddata=numeric(3), NAOK = TRUE)$ddata
+  .C(rgl_setObserver, success=as.integer(auto), ddata=as.numeric(location), NAOK = TRUE)
+  invisible(prev)
 }
 
 # Shapes

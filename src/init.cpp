@@ -2,9 +2,9 @@
 #include <R_ext/Rdynload.h>
 #include "R.h"
 
-#include "lib.hpp"
-#include "DeviceManager.hpp"
-#include "init.hpp"
+#include "lib.h"
+#include "DeviceManager.h"
+#include "init.h"
 #include "api.h"
 
 using namespace rgl;
@@ -88,6 +88,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
   R_NativePrimitiveArgType aLID[3] = {LGLSXP, INTSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIDD[4] = {INTSXP, INTSXP, REALSXP, REALSXP}; 
   R_NativePrimitiveArgType aLISD[4] = {LGLSXP, INTSXP, STRSXP, REALSXP}; 
+  R_NativePrimitiveArgType aIISI[4] = {INTSXP, INTSXP, STRSXP, INTSXP};
   R_NativePrimitiveArgType aLIDD[4] = {LGLSXP, INTSXP, REALSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIIID[5] = {INTSXP, INTSXP, INTSXP, INTSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIIIS[5] = {INTSXP, INTSXP, INTSXP, INTSXP, STRSXP}; 
@@ -119,9 +120,11 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    {"rgl_dev_bringtotop", 	(DL_FUNC) &rgl_dev_bringtotop, 2, aLL},
    {"rgl_clear", 		(DL_FUNC) &rgl_clear, 2, aLI},  
    {"rgl_pop", 			(DL_FUNC) &rgl_pop, 2, aLI},  
-   {"rgl_id_count", 		(DL_FUNC) &rgl_id_count, 2, aII},  
-   {"rgl_ids", 			(DL_FUNC) &rgl_ids, 3, aIIS},  
+   {"rgl_id_count", 		(DL_FUNC) &rgl_id_count, 3, aIII},  
+   {"rgl_ids", 			(DL_FUNC) &rgl_ids, 4, aIISI},  
    {"rgl_viewpoint", 		(DL_FUNC) &rgl_viewpoint, 3, aLID},    
+   {"rgl_getObserver", 	        (DL_FUNC) &rgl_getObserver, 2, aID},
+   {"rgl_setObserver", 	        (DL_FUNC) &rgl_setObserver, 2, aID},
    {"rgl_attrib_count", 	(DL_FUNC) &rgl_attrib_count, 3, aIII}, 
    {"rgl_attrib", 		(DL_FUNC) &rgl_attrib, 5, aIIIID}, 
    {"rgl_text_attrib", 		(DL_FUNC) &rgl_text_attrib, 5, aIIIIS}, 
@@ -137,6 +140,17 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    {"rgl_spheres",		(DL_FUNC) &rgl_spheres, 4, aIIDD},
    {"rgl_texts",		(DL_FUNC) &rgl_texts, 10, aIIDSDISIDI},
    {"rgl_sprites",  		(DL_FUNC) &rgl_sprites, 6, aIIDDID},
+   {"rgl_newsubscene",		(DL_FUNC) &rgl_newsubscene, 4, aIIII},
+   {"rgl_setsubscene",		(DL_FUNC) &rgl_setsubscene, 1, aI},
+   {"rgl_getsubsceneid",	(DL_FUNC) &rgl_getsubsceneid, 2, aII},
+   {"rgl_getsubsceneparent",    (DL_FUNC) &rgl_getsubsceneparent, 1, aI},
+   {"rgl_getsubscenechildcount",(DL_FUNC) &rgl_getsubscenechildcount, 2, aII},
+   {"rgl_getsubscenechildren",  (DL_FUNC) &rgl_getsubscenechildren, 2, aII},
+   {"rgl_gc", 			(DL_FUNC) &rgl_gc, 2, aII},
+   {"rgl_setEmbeddings",        (DL_FUNC) &rgl_setEmbeddings, 2, aII},
+   {"rgl_getEmbeddings",        (DL_FUNC) &rgl_getEmbeddings, 2, aII},
+   {"rgl_addtosubscene", 	(DL_FUNC) &rgl_addtosubscene, 3, aIII},
+   {"rgl_delfromsubscene",	(DL_FUNC) &rgl_delfromsubscene, 3, aIII},
    {"rgl_user2window",		(DL_FUNC) &rgl_user2window, 7, aLIDDDDI},
    {"rgl_window2user", 		(DL_FUNC) &rgl_window2user, 7, aLIDDDDI},
    {"rgl_selectstate", 		(DL_FUNC) &rgl_selectstate, 3, aLID},
@@ -160,9 +174,11 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_dev_bringtotop, 2),
    FUNDEF(rgl_clear, 2), 
    FUNDEF(rgl_pop, 2), 
-   FUNDEF(rgl_id_count, 2), 
-   FUNDEF(rgl_ids, 3), 
+   FUNDEF(rgl_id_count, 3), 
+   FUNDEF(rgl_ids, 4), 
    FUNDEF(rgl_viewpoint, 3), 
+   FUNDEF(rgl_getObserver, 2),
+   FUNDEF(rgl_setObserver, 2),
    FUNDEF(rgl_attrib_count, 3), 
    FUNDEF(rgl_attrib, 5), 
    FUNDEF(rgl_text_attrib, 5), 
@@ -178,6 +194,17 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_spheres, 4),
    FUNDEF(rgl_texts, 10),
    FUNDEF(rgl_sprites, 6),
+   FUNDEF(rgl_newsubscene, 4),
+   FUNDEF(rgl_setsubscene, 1),
+   FUNDEF(rgl_getsubsceneid, 2),
+   FUNDEF(rgl_getsubsceneparent, 1),
+   FUNDEF(rgl_getsubscenechildcount, 2),
+   FUNDEF(rgl_getsubscenechildren, 2),
+   FUNDEF(rgl_gc, 2),
+   FUNDEF(rgl_setEmbeddings, 2),
+   FUNDEF(rgl_getEmbeddings, 2),
+   FUNDEF(rgl_addtosubscene, 3),
+   FUNDEF(rgl_delfromsubscene, 3),
    FUNDEF(rgl_user2window, 7),
    FUNDEF(rgl_window2user, 7),
    FUNDEF(rgl_selectstate, 3),
@@ -193,14 +220,14 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_init, 3),
    FUNDEF(rgl_dev_getcurrent, 0),
    FUNDEF(rgl_dev_list, 0),
+   FUNDEF(rgl_par3d, 3),
    FUNDEF(rgl_setMouseCallbacks, 4),
+   FUNDEF(rgl_setWheelCallback, 1),
 
    {NULL, NULL, 0}
  };
 
  static const R_ExternalMethodDef ExtEntries[] = {
-   FUNDEF(rgl_par3d, 1),
-
    {NULL, NULL, 0}
  };
  

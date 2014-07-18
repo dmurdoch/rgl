@@ -43,7 +43,7 @@ triangulateSimple <- function(x,y, random=TRUE, plot=FALSE, partial=NA) {
   stopifnot(n > 2)
   
   it <- matrix(NA_integer_, nrow=3, ncol=n-2)
-  verts <- 1:n
+  verts <- seq_len(n)
   while((m <- length(verts)) > 3) {
     i1 <- 1:m
     i2 <- i1 %% m + 1
@@ -126,7 +126,7 @@ triangulate <- function(x, y = NULL, random=TRUE, plot=FALSE, partial=NA) {
       pairs <- expand.grid(seq_along(fwd1), seq_along(rev1))
       if (random)
         pairs <- pairs[sample(nrow(pairs)),]
-      for (p in 1:nrow(pairs)) {
+      for (p in seq_len(nrow(pairs))) {
         i <- fwd1[pairs[p,1]]
 	j <- rev1[pairs[p,2]]
 	seg <- cbind( c(x[i], y[i]),
@@ -147,7 +147,7 @@ triangulate <- function(x, y = NULL, random=TRUE, plot=FALSE, partial=NA) {
 	if (clear) {  # Found a segment that doesn't intersect anything, so join the two polys
 	  i <- pairs[p,1]
 	  j <- pairs[p,2]
-	  ind <- c(fwd1[1:i], rev1[j:length(rev1)], rev1[1:j])
+	  ind <- c(fwd1[seq_len(i)], rev1[j:length(rev1)], rev1[seq_len(j)])
 	  if (i < length(fwd1))
 	    ind <- c(ind, fwd1[i:length(fwd1)])
 	  verts[[fwd]] <<- fwd1 <- ind
@@ -247,7 +247,7 @@ extrude3d <- function(x,y = NULL, thickness=1, smooth=FALSE, ...) {
   n <- length(x)
   res <- tmesh3d(rbind(c(x,x), c(y,y), c(rep(thickness,n), rep(0,n)), 1),
                  cbind(it, it[c(1,3,2),]+n), ...)
-  i1 <- 1:n
+  i1 <- seq_len(n)
   i2 <- nextvert
   i3 <- i2 + n
   i4 <- i1 + n

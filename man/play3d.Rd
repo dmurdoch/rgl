@@ -53,8 +53,9 @@ to choose the file type.
 
 Alternatively, \code{convert} can be a template for a command to
 execute in the standard shell (wildcards are allowed). The template is
-converted to a command using \code{\link{sprintf}(convert, fps,
-frames, movie, type, dir, duration)}.  For example, \code{code=TRUE}
+converted to a command using \cr
+\code{\link{sprintf}(convert, fps, frames, movie, type, dir, duration)} \cr
+For example, \code{code=TRUE}
 uses the template \code{"convert -delay 1x\%d \%s*.png \%s.\%s"}. All work
 is done in the directory \code{dir}, so paths should not be needed in
 the command.  (Note that \code{\link{sprintf}} does not require all
@@ -64,6 +65,11 @@ arbitrary order.)
 The \code{top=TRUE} default is designed to work around an OpenGL limitation:
 in some implementations, \code{\link{rgl.snapshot}} will fail if the window
 is not topmost.
+
+As of rgl version 0.94, the \code{dev} argument is not needed:  the
+function \code{f} can specify its device, as \code{\link{spin3d}} does, 
+for example.  However, if \code{dev} is specified, it will be selected
+as the current device as each update is played.
 }
 \value{
 This function is called for the side effect of its repeated calls to \code{f}.

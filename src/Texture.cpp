@@ -1,7 +1,7 @@
 
-#include "Texture.hpp"
+#include "Texture.h"
 #include "pixmap.h"
-#include "config.hpp"
+#include "config.h"
 #include "platform.h"
 
 using namespace std;
@@ -85,7 +85,7 @@ bool Texture::isValid() const
 
 void Texture::getParameters(Type *out_type, bool *out_mipmap, 
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
-                            bool *out_envmap, int buflen, char *out_filename)
+                            bool *out_envmap, int buflen, char *out_filename) const
 {
   *out_type = type;
   *out_mipmap = mipmap;
@@ -123,7 +123,7 @@ static unsigned int texsize(unsigned int s)
   return 1U << msb(s-1);
 }
 
-#include "lib.hpp"
+#include "lib.h"
 
 static void printGluErrorMessage(GLint error) 
 {

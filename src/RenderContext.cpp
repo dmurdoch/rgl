@@ -1,4 +1,4 @@
-#include "RenderContext.hpp"
+#include "RenderContext.h"
 
 #include <map>
 
@@ -10,9 +10,3 @@ using namespace rgl;
 //   RenderContext
 //
 
-float RenderContext::getDistance(const Vertex& v) const
-{
-  Vertex4 vec = Vertex4(v, 1.0f);
-
-  return (Zrow*vec) / (Wrow*vec);
-}

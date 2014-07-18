@@ -1,5 +1,5 @@
 .Par3d <- c("antialias", "FOV", "ignoreExtent",
-	   "mouseMode", 
+	   "mouseMode", "observer", 
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
 	   "scale", "viewport", "zoom", "bbox", "windowRect",
            "family", "font", "cex", "useFreeType", "fontname",
@@ -7,13 +7,13 @@
 	   )
 	   
 .Par3d.readonly <- c( 
-	   "antialias", 
+	   "antialias", "observer",
 	   "modelMatrix", "projMatrix",
-	   "viewport", "bbox", "fontname",
+	   "bbox", "fontname",
 	   "maxClipPlanes"
 	   )
 
-par3d <- function (..., no.readonly = FALSE)
+par3d <- function (..., no.readonly = FALSE, dev = rgl.cur(), subscene = currentSubscene3d(dev))
 {
     single <- FALSE
     args <- list(...)
@@ -32,6 +32,20 @@ par3d <- function (..., no.readonly = FALSE)
 		    single <- TRUE
 	}
     }
+    if ("dev" %in% names(args)) {
+        if (!missing(dev) && dev != args[["dev"]]) stop("'dev' specified inconsistently")
+        dev <- args[["dev"]]
+        args[["dev"]] <- NULL
+    }
+    if ("subscene" %in% names(args)) {
+        if (!missing(subscene) && subscene != args[["subscene"]]) stop("'subscene' specified inconsistently")
+        subscene <- args[["subscene"]]
+        args[["subscene"]] <- NULL
+    }
+    dev <- as.integer(dev)
+    if (!dev) dev <- open3d()
+    subscene <- as.integer(subscene)
+     
     if ("userMatrix" %in% names(args)) {
         m <- args$userMatrix
         svd <- svd(m[1:3, 1:3])
@@ -42,10 +56,10 @@ par3d <- function (..., no.readonly = FALSE)
 	m[1:3,1:3] <- svd$u %*% t(svd$v)	
 	phi <- atan2(-m[2,3], m[3,3])
 	args$.position <- c(theta, phi)*180/pi
-    }   
+    }
     value <-
-        if (single) .External(rgl_par3d, args)[[1]] 
-        else .External(rgl_par3d, args)
+        if (single) .Call(rgl_par3d, dev, subscene, args)[[1]] 
+        else .Call(rgl_par3d, dev, subscene, args)
 
     if(!is.null(names(args))) invisible(value) else value
 }

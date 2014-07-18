@@ -6,11 +6,14 @@ This creates a function to use with \code{\link{play3d}} to
 spin an rgl scene at a fixed rate.
 }
 \usage{
-spin3d(axis = c(0, 0, 1), rpm = 5)
+spin3d(axis = c(0, 0, 1), rpm = 5,
+       dev = rgl.cur(), subscene = currentSubscene3d(dev))
 }
 \arguments{
   \item{axis}{ The desired axis of rotation }
   \item{rpm}{ The rotation speed in rotations per minute }
+  \item{dev}{ Which rgl device to use }
+  \item{subscene}{ Which subscene to use }
 }
 \value{
 A function with header \code{function(time, base=M)}, where \code{M}

@@ -64,6 +64,8 @@
              mono  = rep(system.file("fonts/FreeMono.ttf", package="rgl"), 4),
              symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4))
   }
+  
+  .rglEnv$subsceneList <- NULL
 	 
   ret <- rgl.init(initValue, onlyNULL)
   

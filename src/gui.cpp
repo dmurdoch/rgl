@@ -3,8 +3,8 @@
 //
 // $Id$
 // ---------------------------------------------------------------------------
-#include "gui.hpp"
-#include "lib.hpp"
+#include "gui.h"
+#include "lib.h"
 
 using namespace rgl;
 

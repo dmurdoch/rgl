@@ -1,5 +1,5 @@
-#include "ClipPlane.hpp"
-#include "Viewpoint.hpp"
+#include "ClipPlane.h"
+#include "Viewpoint.h"
 #include "R.h"
 #include <algorithm>
 

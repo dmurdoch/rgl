@@ -7,7 +7,7 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     ylim = range(y, na.rm = TRUE), zlim = range(z, na.rm = TRUE),
     xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, ...)
 {
-    if (!add) clear3d()
+    if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
     

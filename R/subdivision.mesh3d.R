@@ -19,13 +19,14 @@ edgeindex <- function( from, to, size, row=min(from,to), col=max(from,to) )
 
 divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   nv    <- dim(vb)[2]
+  inds <- seq_len(nv)
   nq <- if (is.null(ib)) 0 else dim(ib)[2]
   nt <- if (is.null(it)) 0 else dim(it)[2]
   primout <- c()
   nvmax <- nv + nq + ( nv*(nv+1) )/2
   outvb <- matrix(data=0,nrow=4,ncol=nvmax)  
   # copy old points
-  outvb[,1:nv] <- vb  
+  outvb[,seq_len(nv)] <- vb  
   vcnt <- nv
   em    <- edgemap( nv )
   
@@ -33,17 +34,17 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
     if (NROW(mesh$normals) == 4)
       mesh$normals <- t(asEuclidean(t(mesh$normals)))
     newnormals <- matrix(data=0,nrow=3,ncol=nvmax)
-    newnormals[,1:nv] <- mesh$normals
+    newnormals[,inds] <- mesh$normals
   } else newnormals <- NULL
   
   if (!is.null(mesh$texcoords)) {
     newtexcoords <- matrix(data=0,nrow=2,ncol=nvmax)
-    newtexcoords[,1:nv] <- mesh$texcoords
+    newtexcoords[,inds] <- mesh$texcoords
   } else newtexcoords <- NULL
   
   if (!is.null(newnormals) || !is.null(newtexcoords)) {
     newcount <- rep(0, nvmax)
-    newcount[1:nv] <- 1
+    newcount[inds] <- 1
   }
   
   result <- structure(list(material=mesh$material), class="mesh3d")
@@ -179,15 +180,15 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   }
   
   if (!is.null(newnormals) || !is.null(newtexcoords)) 
-    newcount <- newcount[1:vcnt]
+    newcount <- newcount[seq_len(vcnt)]
     
   if (!is.null(newnormals)) 
-    newnormals <- newnormals[, 1:vcnt]/rep(newcount, each=3)
+    newnormals <- newnormals[, seq_len(vcnt)]/rep(newcount, each=3)
     
   if (!is.null(newtexcoords))
-    newtexcoords <- newtexcoords[, 1:vcnt]/rep(newcount, each=2)
+    newtexcoords <- newtexcoords[, seq_len(vcnt)]/rep(newcount, each=2)
     
-  result$vb <- outvb[,1:vcnt]
+  result$vb <- outvb[,seq_len(vcnt)]
   result$normals <- newnormals
   result$texcoords <- newtexcoords
   

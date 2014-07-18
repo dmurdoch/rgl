@@ -63,7 +63,8 @@ public:
   ~Ref() { if (ptr) ptr->unref(); }
   Ref& operator = (T* in_ptr) { if (ptr) ptr->unref(); ptr = in_ptr; if (ptr) ptr->ref(); return *this; }
   T* operator -> () { return ptr; }
-  operator bool () { return (ptr) ? true : false; }
+  T const* operator -> () const { return ptr; }
+  operator bool () const { return (ptr) ? true : false; }
 private:
   T* ptr;
 };
@@ -100,7 +101,7 @@ struct ARRAY
 {
   int _size;
   T*  ptr;
-  inline int size()
+  inline int size() const
   { return _size; }
   inline ARRAY(int in_size) : _size(in_size), ptr(new T [_size])
   { }
@@ -111,7 +112,11 @@ struct ARRAY
   { delete [] ptr; }
   inline T& get(int index)
   { return ptr[index]; }
+  inline T const& get(int index) const
+  { return ptr[index]; }
   inline T& getRecycled(int index)
+  { return ptr[index%_size]; };
+  inline T const& getRecycled(int index) const
   { return ptr[index%_size]; };
 };
 

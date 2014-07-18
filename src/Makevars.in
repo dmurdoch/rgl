@@ -6,7 +6,7 @@
 # $Id$
 #-DGL_VERSION_1_2 
 
-PKG_CPPFLAGS=@CPPFLAGS@ -Iext
+PKG_CPPFLAGS=@CPPFLAGS@ -Iext -Iext/prc -DUSING_R -Iext/libharu/src -Iext/libharu/include 
 PKG_LIBS=@LIBS@
 AGLSHLIB=agl$(SHLIB)
 PKG_CXXFLAGS=@CXXFLAGS@ @C_VISIBILITY@

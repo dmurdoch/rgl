@@ -1,7 +1,7 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include "RenderContext.hpp"
+#include "RenderContext.h"
 
 #include "types.h"
 
@@ -27,15 +27,19 @@ public:
   void beginUse();
   void endUse();
   Vertex& operator[](int index);
+  Vertex const& operator[](int index) const;
   void setVertex(int index, double* v);
 
-  Vertex getNormal(int v1, int v2, int v3);
+  Vertex getNormal(int v1, int v2, int v3) const;
 
 protected:
   float* arrayptr;
 };
 
 inline Vertex& VertexArray::operator[](int index) {
+  return (Vertex&) arrayptr[index*3];
+}
+inline Vertex const& VertexArray::operator[](int index) const {
   return (Vertex&) arrayptr[index*3];
 }
 
@@ -67,7 +71,8 @@ public:
   void beginUse();
   void endUse();
   TexCoord& operator[](int index);
-  int size() { return nvertex; };
+  TexCoord const& operator[](int index) const;
+  int size() const { return nvertex; };
 
 private:
   int nvertex;

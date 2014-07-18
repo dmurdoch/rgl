@@ -1,5 +1,6 @@
-#include "Surface.hpp"
-#include "Material.hpp"
+#include <R.h>
+#include "Surface.h"
+#include "Material.h"
 
 using namespace rgl;
 

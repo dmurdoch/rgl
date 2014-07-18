@@ -15,30 +15,45 @@
 ##
 ##
 
-rgl.clear <- function( type = "shapes" )
+rgl.clear <- function( type = "shapes", subscene = 0 )
 {
-  type <- rgl.enum.nodetype(type)
-  
-  viewpoint <- 4 %in% type
-  material  <- 5 %in% type
+  if (is.na(subscene)) 
+    subscene <- currentSubscene3d()
 
-  type <- type[!(type %in% 4:6)]
+  typeid <- rgl.enum.nodetype(type)
   
-  idata <- as.integer(c(length(type), type))
- 
-  ret <- .C( rgl_clear, 
-    success = FALSE,
-    idata
-  )
+  userviewpoint <- 4 %in% typeid
+  material  <- 5 %in% typeid
+  modelviewpoint <- 8 %in% typeid
+
+  drop <- typeid %in% c(4:6, 8)
+  typeid <- typeid[!drop]
+  type <- names(typeid)
   
-  if ( viewpoint ) 
-    rgl.viewpoint()
+  if (subscene == 0) {
+    idata <- as.integer(c(length(typeid), typeid))    	
+    ret <- .C( rgl_clear, 
+      success = FALSE,
+      idata
+    )$success
+  } else {
+    sceneids <- rgl.ids(type=type, subscene = 0)$id
+    thisids <- rgl.ids(type=type, subscene = subscene)$id
+    if (length(thisids)) {
+      delFromSubscene3d(ids = thisids, subscene = subscene)
+      gc3d(protect = setdiff(sceneids, thisids))
+    }
+    ret <- 1
+  }
+  
+  if ( userviewpoint || modelviewpoint) 
+    rgl.viewpoint(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
     
   if ( material ) 
     rgl.material()
 
-  if (! ret$success)
-    stop("rgl_clear")
+  if (! ret)
+    stop("rgl_clear failed")
 }
 
 
@@ -65,14 +80,16 @@ rgl.pop <- function( type = "shapes", id = 0)
   }
 }
 
-rgl.ids <- function( type = "shapes" )
+rgl.ids <- function( type = "shapes", subscene = NA )
 {
   type <- c(rgl.enum.nodetype(type), 0)
+  if (is.na(subscene)) 
+      subscene <- currentSubscene3d()
   
-  count <- .C( rgl_id_count, as.integer(type), count = integer(1))$count
+  count <- .C( rgl_id_count, as.integer(type), count = integer(1), subscene = as.integer(subscene))$count
   
   as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
-                                type=rep("",count) )[2:3] )
+                                type=rep("",count), subscene = as.integer(subscene) )[2:3] )
 }
 
 rgl.attrib.count <- function( id, attrib )
@@ -97,7 +114,7 @@ rgl.attrib <- function( id, attrib, first=1,
     attrib <- rgl.enum.attribtype(attrib)
   ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
             texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
-            usermatrix=4, types=1, flags=1)[attrib]
+            usermatrix=4, types=1, flags=1, offsets=1)[attrib]
   count <- max(last - first + 1, 0)
   if (attrib %in% c(6, 13)) { # texts and types
     if (count)
@@ -130,15 +147,18 @@ rgl.attrib <- function( id, attrib, first=1,
                            "id",	     # ids
                            c("x", "y", "z", "w"), # usermatrix
                            "type",	     # types
-                           "flag"	     # flags
+                           "flag",	     # flags
+			   "offset"          # offsets
                            )[[attrib]]
-  if (attrib == 14)
-    if (id %in% rgl.ids("lights")$id)
+  if (attrib == 14 && count)
+    if (id %in% rgl.ids("lights", subscene = 0)$id)
       rownames(result) <- c("viewpoint", "finite")[first:last]
-    else if (id %in% rgl.ids("background")$id)
+    else if (id %in% rgl.ids("background", subscene = 0)$id)
       rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
-    else if (id %in% rgl.ids("bboxdeco")$id)
+    else if (id %in% rgl.ids("bboxdeco", subscene = 0)$id)
       rownames(result) <- "draw_front"[first:last]
+    else if (id %in% rgl.ids("shapes", subscene = 0)$id)
+      rownames(result) <- "ignoreExtent"[first:last]
  
   result
 }
@@ -155,16 +175,18 @@ rgl.attrib <- function( id, attrib, first=1,
 ##
 
 rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scale = par3d("scale"),
-                           interactive = TRUE, userMatrix )
+                           interactive = TRUE, userMatrix, type = c("userviewpoint", "modelviewpoint") )
 {
   zoom <- rgl.clamp(zoom,0,Inf)
   phi  <- rgl.clamp(phi,-90,90)
   fov  <- rgl.clamp(fov,0,179)
+  
+  type <- match.arg(type, several.ok = TRUE)
 
   polar <- missing(userMatrix)
   if (polar) userMatrix <- diag(4)
   
-  idata <- as.integer(c(interactive,polar))
+  idata <- as.integer(c(interactive,polar, "userviewpoint" %in% type, "modelviewpoint" %in% type))
   ddata <- as.numeric(c(theta,phi,fov,zoom,scale,userMatrix[1:16]))
 
   ret <- .C( rgl_viewpoint,
@@ -832,9 +854,14 @@ rgl.setselectstate <- function(state = "current")
 
 rgl.projection <- function()
 {
-    list(model = par3d("modelMatrix"),
+    obs <- -par3d("observer") 
+    newmodel <- par3d("modelMatrix")
+    oldmodelMatrix <- t(translationMatrix(obs[1], obs[2], obs[3])) %*% newmodel
+    list(model = oldmodelMatrix,
     	 proj = par3d("projMatrix"),
-    	 view = par3d("viewport"))
+    	 view = par3d("viewport"),
+    	 observer = -obs,
+    	 newmodel = newmodel)
 }   
      
 rgl.select3d <- function(button = c("left", "middle", "right")) {

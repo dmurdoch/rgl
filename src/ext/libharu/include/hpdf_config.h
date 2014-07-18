@@ -1,0 +1,10 @@
+/*
+#define LIBHPDF_HAVE_NOZLIB
+#define LIBHPDF_HAVE_NOPNGLIB
+#define LIBHPDF_DEBUG
+#define LIBHPDF_DEBUG_TRACE
+*/
+
+#ifndef HAVE_PNG_H
+#define LIBHPDF_HAVE_NOPNGLIB
+#endif

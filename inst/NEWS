@@ -572,3 +572,17 @@ v0.93.1098
   - The Aqua support now works again, XQuartz is only needed for command
     line use in Mac OSX.
     
+v0.94
+  - Added "subscenes", i.e. scenes of objects nested within the 
+    main window.  This affects a lot of other functions as well,
+    which now act either on a single subscene or on the 
+    overall scene.
+  - Allowed the coordinates of the viewport to be set.
+  - Changed the behaviour of pop3d() and rgl.pop():  the type is
+    now ignored if id is non-zero.
+  - par3d("modelMatrix") no longer includes the observer translation
+  - Added configurable mouse wheel actions via par3d() or 
+    rgl.setWheelCallback().
+  - The par3d(), par3dinterp(), and spin3d() functions now
+    have arguments dev and subscene to specify where they apply.
+  

@@ -5,7 +5,7 @@
 
 #include "fps.h"
 
-#include "glgui.hpp"
+#include "glgui.h"
 
 #include <cstdio>
 

@@ -3,11 +3,11 @@
 //
 // $Id$
 
-#include "lib.hpp"
-#include "DeviceManager.hpp"
+#include "lib.h"
+#include "DeviceManager.h"
 #include "rglview.h"
 
-#include "lib.hpp"
+#include "lib.h"
 #include "R.h"
 #include "api.h"
 #include "platform.h"
@@ -31,6 +31,8 @@ inline bool as_bool(int idata) { return (idata) ? true : false; }
 
 namespace rgl {
 extern DeviceManager* deviceManager;
+extern void getObserver(double* ddata, Subscene* subscene);
+extern void setObserver(bool automatic, double* ddata, RGLView* rglview, Subscene* subscene);
 }
 
 //
@@ -249,22 +251,28 @@ void rgl::rgl_pop(int* successptr, int* idata)
 //   rgl::rgl_id_count
 //
 
-void rgl::rgl_id_count(int* type, int* count)
+void rgl::rgl_id_count(int* type, int* count, int* subsceneID)
 {
-  Device* device;
+  Device* device;    
+  *count = 0;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    
-    *count = 0;
-    while (*type) {
-      *count += scene->get_id_count((TypeID) *type);
-      type++;
+    Subscene* subscene;
+
+    if (!*subsceneID) {
+      while (*type) {
+        *count += scene->get_id_count((TypeID) *type);
+        type++;
+      }
+    } else if ((subscene = scene->getSubscene(*subsceneID))) {
+      while (*type) {
+        *count += subscene->get_id_count((TypeID) *type, false);
+	type++;
+      }
     }
     CHECKGLERROR;
-  } else {
-    *count = 0;
-  }
+  } 
 }  
 
 //
@@ -272,19 +280,29 @@ void rgl::rgl_id_count(int* type, int* count)
 //   rgl::rgl_ids
 //
 
-void rgl::rgl_ids(int* type, int* ids, char** types)
+void rgl::rgl_ids(int* type, int* ids, char** types, int* subsceneID)
 {
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    
-    while (*type) {
-      int n = scene->get_id_count((TypeID) *type);
-      scene->get_ids((TypeID) *type, ids, types);
-      ids += n;
-      types += n;
-      type++;
+    Subscene* subscene;
+    if (!*subsceneID) {  
+      while (*type) {
+        int n = scene->get_id_count((TypeID) *type);
+        scene->get_ids((TypeID) *type, ids, types);
+        ids += n;
+        types += n;
+        type++;
+      }
+    } else if ((subscene = scene->getSubscene(*subsceneID))) {
+      while (*type) {
+        int n = subscene->get_id_count((TypeID) *type, false);
+        subscene->get_ids((TypeID) *type, ids, types, false);
+        ids += n;
+        types += n;
+        type++;
+      }	
     }
     CHECKGLERROR;
   }
@@ -302,7 +320,7 @@ void rgl::rgl_attrib_count(int* id, int* attrib, int* count)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    SceneNode* scenenode = scene->get_scenenode(*id, true);
+    SceneNode* scenenode = scene->get_scenenode(*id);
     if ( scenenode )
       *count = scenenode->getAttributeCount(bbox, *attrib);
     else
@@ -322,7 +340,7 @@ void rgl::rgl_attrib(int* id, int* attrib, int* first, int* count, double* resul
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    SceneNode* scenenode = scene->get_scenenode(*id, true);
+    SceneNode* scenenode = scene->get_scenenode(*id);
     if ( scenenode )
       scenenode->getAttribute(bbox, *attrib, *first, *count, result);
   }
@@ -340,7 +358,7 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     AABox bbox = scene->getBoundingBox();
-    SceneNode* scenenode = scene->get_scenenode(*id, true);
+    SceneNode* scenenode = scene->get_scenenode(*id);
     
     if (scenenode)
       for (int i=0; i < *count; i++) {
@@ -437,9 +455,17 @@ void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
     
     int   interactive = idata[0];
     int   polar       = idata[1];
+    int   user        = idata[2];
+    int   model       = idata[3];
     
-    if (polar) success = as_success( device->add( new Viewpoint(PolarCoord(theta, phi), fov, zoom, scale, interactive) ) );
-    else       success = as_success( device->add( new Viewpoint(ddata + 7, fov, zoom, scale, interactive) ) );
+    if (model) {
+      if (polar) success = as_success( device->add( new ModelViewpoint(PolarCoord(theta, phi), scale, interactive) ) );
+      else       success = as_success( device->add( new ModelViewpoint(ddata + 7, scale, interactive) ) );
+    } else
+      success = RGL_SUCCESS;
+      
+    if (user && success)
+      success = as_success( device->add( new UserViewpoint(fov, zoom) ) );
 
     CHECKGLERROR;
   }
@@ -447,129 +473,39 @@ void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
   *successptr = success;
 }
 
-void rgl::rgl_getZoom(int* successptr, double* zoom)
+void rgl::rgl_getObserver(int* successptr, double* ddata)
 {
   int success = RGL_FAIL;
+  
   Device* device;
-
+  
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
+  
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint();
-    *zoom = viewpoint->getZoom();
+    Subscene* subscene = scene->getCurrentSubscene();
+    getObserver(ddata, subscene);
     success = RGL_SUCCESS;
-    CHECKGLERROR;
   }
+  
   *successptr = success;
 }
 
-void rgl::rgl_setZoom(int* successptr, double* zoom)
+void rgl::rgl_setObserver(int* successptr, double* ddata)
 {
   int success = RGL_FAIL;
+  
   Device* device;
-
+  
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
+  
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint();
-    viewpoint->setZoom( *zoom );
-    rglview->update();
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
+    bool automatic = (bool)*successptr;
+    Subscene* subscene = scene->getCurrentSubscene();
+    setObserver(automatic, ddata, rglview, subscene);
   }
-  *successptr = success;
-}
-
-void rgl::rgl_getFOV(int* successptr, double* fov)
-{
-  int success = RGL_FAIL;
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-    RGLView* rglview = device->getRGLView();
-    Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint();
-    *fov = viewpoint->getFOV();
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-  *successptr = success;
-}
-
-void rgl::rgl_setFOV(int* successptr, double* fov)
-{
-  int success = RGL_FAIL;
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-    RGLView* rglview = device->getRGLView();
-    Scene* scene = rglview->getScene();
-    Viewpoint* viewpoint = scene->getViewpoint();
-    viewpoint->setFOV(*fov);
-    rglview->update();
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-  *successptr = success;
-}
-
-void rgl::rgl_getIgnoreExtent(int* successptr, int* ignoreExtent)
-{
-  int success = RGL_FAIL;
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-    *ignoreExtent = device->getIgnoreExtent();
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-  *successptr = success;
-}
-
-void rgl::rgl_setIgnoreExtent(int* successptr, int* ignoreExtent)
-{
-  int success = RGL_FAIL;
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-    device->setIgnoreExtent(*ignoreExtent);
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-  *successptr = success;
-}
-
-void rgl::rgl_getSkipRedraw(int* successptr, int* skipRedraw)
-{
-  int success = RGL_FAIL;
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-    *skipRedraw = device->getSkipRedraw();
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-  *successptr = success;
-}
-
-void rgl::rgl_setSkipRedraw(int* successptr, int* skipRedraw)
-{
-  int success = RGL_FAIL;
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-    device->setSkipRedraw(*skipRedraw);
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
+  
   *successptr = success;
 }
 
@@ -742,7 +678,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
         nshapes--;
         Shape* shape = scene->get_shape(id); 
         if (shape) {
-          scene->pop(SHAPE, id, false);
+          scene->hide(id);
           shapelist[count++] = shape; 
         }
       }
@@ -758,6 +694,237 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
   }
 
   *successptr = success;
+}
+
+void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding, int* ignoreExtent)
+{
+  int success = RGL_FAIL;
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* parent = scene->getSubscene(parentid[0]);
+    if (parent) {
+      Subscene* current = scene->getCurrentSubscene();
+      scene->setCurrentSubscene(parent);	
+      Subscene* subscene = new Subscene( (Embedding)embedding[0], 
+                                         (Embedding)embedding[1], 
+                                         (Embedding)embedding[2],
+                                         *ignoreExtent != 0);
+      if (subscene && scene->add(subscene)) {
+	success = as_success( subscene->getObjID() );
+      }
+      scene->setCurrentSubscene(current);
+    }
+  }
+  *successptr = success;
+} 
+
+void rgl::rgl_setsubscene(int* id)
+{
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* subscene = scene->getSubscene(*id);
+    if (subscene) {
+      scene->setCurrentSubscene(subscene);
+    } else
+      *id = 0;
+  } else
+    *id = 0;
+}  
+
+void rgl::rgl_getsubsceneid(int* id, int* dev)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getDevice(*dev))) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    const Subscene* subscene = (*id) == 1 ? scene->getCurrentSubscene() : scene->getRootSubscene();
+    *id = subscene->getObjID();
+  } else
+    *id = 0;
+} 
+
+void rgl::rgl_getsubsceneparent(int* id)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(*id);
+    if (!subscene) {
+      *id = NA_INTEGER;
+    } else {
+      subscene = subscene->getParent();
+      *id = subscene ? subscene->getObjID() : 0;
+    }
+  } else
+    *id = NA_INTEGER;
+}    
+
+void rgl::rgl_getsubscenechildcount(int* id, int* n)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(*id);
+    *n = subscene ? subscene->getChildCount() : 0;
+  } else
+    *n = 0;
+} 
+
+void rgl::rgl_getsubscenechildren(int* id, int* children)
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    const Subscene* subscene = scene->getSubscene(*id);
+    if (subscene) {
+      for (int i = 0; i < subscene->getChildCount(); i++) {
+        Subscene* child = subscene->getChild(i);
+        children[i] = child ? child->getObjID() : 0;
+      }
+    }
+  }
+}
+
+void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
+{
+  int success = RGL_FAIL;
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* subscene = scene->getSubscene(*successptr);
+    if (subscene) {
+      for (int i=0; i < count[0]; i++) {
+        SceneNode* node = scene->get_scenenode(ids[i]);
+	if (node) {
+	  subscene->add(node);
+	  success = RGL_SUCCESS;
+	} else 
+	  warning("id %d not found in scene", ids[i]);
+      }
+      rglview->update();
+    }
+  }
+  *successptr = success;
+} 
+
+void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
+{
+  int success = RGL_FAIL;
+  Device* device;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();      
+    Subscene* subscene = scene->getSubscene(*successptr);
+    if (subscene) {
+      for (int i=0; i < count[0]; i++) {
+        SceneNode* node = scene->get_scenenode(ids[i]);
+	if (node) 
+	  switch (node->getTypeID()) {
+	  case SHAPE: 
+	    subscene->hideShape( ids[i] );
+	    success++;
+	    break;
+	  case LIGHT:
+	    subscene->hideLight( ids[i] );
+	    success++;
+	    break;
+	  case BBOXDECO:
+	    subscene->hideBBoxDeco( ids[i] );
+	    success++;
+	    break;
+	  case SUBSCENE:
+	    scene->setCurrentSubscene( subscene->hideSubscene( ids[i], scene->getCurrentSubscene() ) );
+	    success++;
+	    break;
+	  case BACKGROUND:
+	    subscene->hideBackground( ids[i] );
+	    success++;
+	    break;
+	  default:
+	    char buffer[20];
+	    buffer[19] = 0;
+	    node->getTypeName(buffer, 20);
+	    warning("id %d is type %s; cannot hide", ids[i], buffer);
+          }
+	else 
+	  warning("id %d not found in scene", ids[i]);
+      }
+      rglview->update();
+    }
+  }
+  *successptr = success;
+}
+
+void rgl::rgl_gc(int* count, int* protect)
+{
+  Device* device;
+  int nprotect = *count;
+  *count = 0;
+    
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    if (scene) {
+      Subscene* root = (Subscene *)scene->getRootSubscene(); // need to discard const
+      int rootid = root->getObjID();
+      for (TypeID i = 1; i < MAX_TYPE; i++) {
+        int n = scene->get_id_count(i);
+	if (n) {
+	  int ids[n];
+	  char* types[n];
+	  scene->get_ids(i, ids, types);
+	  // First, remove the protected ones by setting them to zero.
+	  bool anyunprot = false;
+	  for (int j = 0; j < n; j++) {
+	    bool prot = (rootid == ids[j]);
+	    for (int k = 0; k < nprotect && !prot; k++) 
+	      prot = (ids[j] == protect[k]);
+	    if (prot)
+	      ids[j] = 0;
+	    else
+	      anyunprot = true;
+	  }
+	  if (!anyunprot) 
+	    continue;
+	  // Now look for the others in subscenes
+	  int m = root->get_id_count(i, true);
+	  if (m) {
+	    int ids2[m];
+	    char* types2[m];
+	    root->get_ids(i, ids2, types2, true);
+	    for (int j = 0; j < n; j++) {
+	      for (int k = 0; k < m && ids[j] != 0; k++) { 
+	        if (ids[j] == ids2[k])
+	          ids[j] = 0;
+	      }
+	    }
+	  }
+	  for (int j = 0; j < n; j++) {
+	    if (ids[j] != 0) {
+	      scene->pop(i, ids[j]);
+	      (*count)++;
+	    }
+	  }
+        }
+      }
+    }
+  }
 }
 
 void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
@@ -832,16 +999,16 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
     
-      Shape* shape = scene->get_shape(*id, true);
+      Shape* shape = scene->get_shape(*id);
       if (shape) 
         mat = shape->getMaterial(); /* success! successptr will be set below */
       else {
-	BBoxDeco* bboxdeco = scene->get_bboxdeco();
-	if (bboxdeco && *id == bboxdeco->getObjID())
+	BBoxDeco* bboxdeco = scene->get_bboxdeco(*id);
+	if (bboxdeco)
 	  mat = bboxdeco->getMaterial();
 	else {
-	  Background* background = scene->get_background();
-	  if (background && *id == background->getObjID())
+	  Background* background = scene->get_background(*id);
+	  if (background)
 	    mat = background->getMaterial();
 	  else
 	    return;
@@ -1063,40 +1230,6 @@ void rgl::rgl_window2user(int* successptr, int* idata, double* point, double* pi
   *successptr = success;
 }
 
-void rgl::rgl_getMouseMode(int* successptr, int *button, int* mode)
-{
-  int success = RGL_FAIL;
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-  
-    RGLView* rglview = device->getRGLView();
-    *mode = static_cast<int>( rglview->getMouseMode(*button) );
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-
-  *successptr = success;
-}
-
-void rgl::rgl_setMouseMode(int* successptr, int* button, int* mode)
-{
-  int success = RGL_FAIL;
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-  
-    RGLView* rglview = device->getRGLView();
-    rglview->setMouseMode(*button, (MouseModeID)(*mode));
-
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-
-  *successptr = success;
-}
-
-
 void rgl::rgl_selectstate(int* successptr, int* selectstate, double* locations)
 {
     int success = RGL_FAIL;
@@ -1140,190 +1273,44 @@ void rgl::rgl_setselectstate(int* successptr, int *idata)
   *successptr = success;
 }
 
-void rgl::rgl_getUserMatrix(int* successptr, double* userMatrix)
+void rgl::rgl_getEmbeddings(int* id, int* embeddings)
 {
-    int success = RGL_FAIL;
     Device* device;
-
+    
     if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-	RGLView* rglview = device->getRGLView();
-	rglview->getUserMatrix(userMatrix);
-
-    	success = RGL_SUCCESS;
-	CHECKGLERROR;
-
-  }
-
-  *successptr = success;
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      Subscene* subscene = scene->getSubscene(*id);
+      if (subscene) {
+        embeddings[0] = subscene->getEmbedding(0);
+        embeddings[1] = subscene->getEmbedding(1);
+        embeddings[2] = subscene->getEmbedding(2);
+      }
+    }
 }
 
-void rgl::rgl_setUserMatrix(int* successptr, double* userMatrix)
+void rgl::rgl_setEmbeddings(int* id, int* embeddings)
 {
-
-    int success = RGL_FAIL;
     Device* device;
-
+    
     if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-	RGLView* rglview = device->getRGLView();
-	rglview->setUserMatrix(userMatrix);
-
-	success = RGL_SUCCESS;
-
-        CHECKGLERROR;
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      Subscene* subscene = scene->getSubscene(*id);
+      *id = RGL_FAIL;
+      if (subscene) {
+        if (!subscene->getParent() &&        // can't change the root
+            (embeddings[0] != EMBED_REPLACE
+            || embeddings[1] != EMBED_REPLACE
+            || embeddings[2] != EMBED_REPLACE))
+          return;  
+        subscene->setEmbedding(0, (Embedding)embeddings[0]);
+        subscene->setEmbedding(1, (Embedding)embeddings[1]);
+        subscene->setEmbedding(2, (Embedding)embeddings[2]);
+        rglview->update();
+        *id = RGL_SUCCESS;
+      }
     }
-
-    *successptr = success;
-
-}
-
-void rgl::rgl_getPosition(double* position)
-{
-   Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-    RGLView* rglview = device->getRGLView();
-    rglview->getPosition(position);
-    CHECKGLERROR;
-
-  }
- 	
-}
-
-void rgl::rgl_setPosition(double* position)
-{
-  	Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-    RGLView* rglview = device->getRGLView();
-    rglview->setPosition(position);
-
-    CHECKGLERROR;
-  }
-
-}
-
-void rgl::rgl_getScale(int* successptr, double* scale)
-{
-    int success = RGL_FAIL;
-    Device* device = deviceManager->getAnyDevice();
-
-    if (device) {
-
-	RGLView* rglview = device->getRGLView();
-	rglview->getScale(scale);
-
-	success = RGL_SUCCESS;
-	CHECKGLERROR;
-
-    }
-
-    *successptr = success;
-}
-
-void rgl::rgl_setScale(int* successptr, double* scale)
-{
-
-    int success = RGL_FAIL;
-    Device* device = deviceManager->getAnyDevice();
-
-    if (device) {
-
-	RGLView* rglview = device->getRGLView();
-	rglview->setScale(scale);
-
-	success = RGL_SUCCESS;
-
-        CHECKGLERROR;
-    }
-
-    *successptr = success;
-
-}
-
-void rgl::rgl_getModelMatrix(int* successptr, double* modelMatrix)
-{
-    int success = RGL_FAIL;
-    Device* device;
-
-    if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-	RGLView* rglview = device->getRGLView();
-	for (int i=0; i<16; i++) {
-		modelMatrix[i] = rglview->modelMatrix[i];
-	}
-	success = RGL_SUCCESS;
-        CHECKGLERROR;  	
-    }
-
-    *successptr = success;
-}
-
-void rgl::rgl_getProjMatrix(int* successptr, double* projMatrix)
-{
-    int success = RGL_FAIL;
-    Device* device;
-
-    if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-	RGLView* rglview = device->getRGLView();
-	for (int i=0; i<16; i++) {
-		projMatrix[i] = rglview->projMatrix[i];
-	}
-	success = RGL_SUCCESS;
-        CHECKGLERROR;
-    }
-
-    *successptr = success;
-}
-
-void rgl::rgl_getViewport(int* successptr, int* viewport)
-{
-    int success = RGL_FAIL;
-    Device* device;
-
-    if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-	RGLView* rglview = device->getRGLView();
-	for (int i=0; i<4; i++) {
-		viewport[i] = rglview->viewport[i];
-	}
-	success = RGL_SUCCESS;
-        CHECKGLERROR;
-    }
-
-    *successptr = success;
-}
-
-void rgl::rgl_getWindowRect(int* successptr, int* rect)
-{
-  int success = RGL_FAIL;
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-   
-     device->getWindowRect(rect, rect+1, rect+2, rect+3);
-     success = RGL_SUCCESS;
-     CHECKGLERROR;
-  }
-  *successptr = success;
-}
-
-void rgl::rgl_setWindowRect(int* successptr, int* rect)
-{
-  int success = RGL_FAIL;
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-  
-    device->setWindowRect(rect[0], rect[1], rect[2], rect[3]);
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-  *successptr = success;
 }
 
 void rgl::rgl_postscript(int* successptr, int* idata, char** cdata)
@@ -1344,171 +1331,3 @@ void rgl::rgl_postscript(int* successptr, int* idata, char** cdata)
 
   *successptr = success;
 }
-
-
-void rgl::rgl_getBoundingbox(int* successptr, double* bboxvec)
-{
-	int success = RGL_FAIL;
-  	Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-      const AABox& bbox = device->getScene()->getBoundingBox();
-      bboxvec[0] = bbox.vmin.x;
-      bboxvec[1] = bbox.vmax.x;
-      bboxvec[2] = bbox.vmin.y;
-      bboxvec[3] = bbox.vmax.y;
-      bboxvec[4] = bbox.vmin.z;
-      bboxvec[5] = bbox.vmax.z;
-
-      success = RGL_SUCCESS;
-      CHECKGLERROR;
-  }
-	
-  *successptr = success;
-}
-
-/* font access functions.  These are only used from par3d */
-
-char* rgl::rgl_getFamily()
-{
-  Device* device;
-  const char* f;
-  char* result = NULL;
-  
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-    f = device->getRGLView()->getFontFamily();
-    result = R_alloc(strlen(f)+1, 1);
-    strcpy(result, f);
-    CHECKGLERROR;
-  } 
-  
-  return result;
-}
-
-bool rgl::rgl_setFamily(const char *family)
-{
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-    device->getRGLView()->setFontFamily(family);
-    CHECKGLERROR;
-    return true;
-  } else
-    return false;
-}
-
-int rgl::rgl_getFont()
-{
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-    int result = device->getRGLView()->getFontStyle();
-    CHECKGLERROR;
-    return result;
-  } else
-    return -1;
-}
-
-bool rgl::rgl_setFont(int font)
-{
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-    device->getRGLView()->setFontStyle(font);
-    CHECKGLERROR;
-    return true;
-  } else
-    return false;
-}
-
-double rgl::rgl_getCex()
-{
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-    double result = device->getRGLView()->getFontCex();
-    CHECKGLERROR;  
-    return result;
-  } else
-    return -1;
-}
-
-bool rgl::rgl_setCex(double cex)
-{
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-    device->getRGLView()->setFontCex(cex);
-    CHECKGLERROR;
-    return true;
-  } else
-    return false;
-}
-
-int rgl::rgl_getUseFreeType()
-{
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-    int result = (int) device->getRGLView()->getFontUseFreeType();
-    CHECKGLERROR;  
-    return result;
-  } else
-    return -1;
-}
-
-bool rgl::rgl_setUseFreeType(bool useFreeType)
-{
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-    device->getRGLView()->setFontUseFreeType(useFreeType);
-    CHECKGLERROR;
-    return true;
-  } else
-    return false;
-}
-
-char* rgl::rgl_getFontname()
-{
-  Device* device;
-  const char* f;
-  char* result = NULL;
-  
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-    f = device->getRGLView()->getFontname();
-    result = R_alloc(strlen(f)+1, 1);
-    strcpy(result, f);
-    CHECKGLERROR;
-  } 
-  return result;
-}
-
-int rgl::rgl_getAntialias()
-{
-  Device* device;
-  
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-    WindowImpl* windowImpl = device->getRGLView()->windowImpl;
-    if (windowImpl->beginGL()) {
-      int result;      
-      glGetIntegerv(GL_SAMPLES, &result);
-      windowImpl->endGL();
-      CHECKGLERROR;
-      return result;
-    }
-  }
-  return 1;
-}
-
-int rgl::rgl_getMaxClipPlanes()
-{
-  int result;
-  glGetError();
-  glGetIntegerv(GL_MAX_CLIP_PLANES, &result);
-  if (glGetError() == GL_NO_ERROR)
-    return result;
-  else
-    return 6;
-}  

@@ -1,4 +1,4 @@
-#include "Light.hpp"
+#include "Light.h"
 
 using namespace rgl;
 
@@ -94,6 +94,7 @@ void Light::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
         *result++ = position[0];
         *result++ = position[1];
         *result++ = position[2];
+        *result++ = position[3];
         return;
       }
       case FLAGS: {

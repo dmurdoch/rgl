@@ -100,8 +100,8 @@ struct Vec3
   void normalize();
   Vec3 cross(Vec3 op2) const;
   float angle(const Vec3& op2) const;
-  float operator * (Vec3 op2);
-  Vec3 operator * (float value);
+  float operator * (Vec3 op2) const;
+  Vec3 operator * (float value) const;
   Vec3 operator+(Vec3 op2) const;
   Vec3 operator-(Vec3 op2) const;
   Vec3 scale(const Vec3& op2) const;
@@ -153,10 +153,13 @@ public:
   Vec3 operator*(const Vec3 op2) const;
   Vec4 operator*(const Vec4& op2) const;
   Matrix4x4 operator*(const Matrix4x4& op2) const;
-  Vec4 getRow(int row);
+  Matrix4x4 inverse() const;
+  Vec4 getRow(int row) const;
   void setIdentity(void);
   void setRotate(const int axis, const float degree);
-  void getData(double* dest);
+  void setTranslate(const Vertex& vec);
+  void getData(double* dest) const;
+  void transpose();
 private:
   inline float  val(int row, int column) const { return data[4*column+row]; }
   inline float& ref(int row, int column) { return data[4*column+row]; }
@@ -187,6 +190,18 @@ struct Rect2
   { }
   int x, y;
   int width, height;
+};
+
+struct Rect2d
+{
+  Rect2d(double in_x, double in_y, double in_w, double in_h)
+  : x(in_x)
+  , y(in_y)
+  , width(in_w)
+  , height(in_h) 
+  { }
+  double x, y;
+  double width, height;
 };
 
 

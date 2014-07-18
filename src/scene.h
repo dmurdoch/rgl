@@ -1,5 +1,5 @@
-#ifndef SCENE_HPP
-#define SCENE_HPP
+#ifndef SCENE_H
+#define SCENE_H
 
 // C++ header file
 // This file is part of RGL
@@ -8,26 +8,7 @@
 
 #include <vector>
 #include "types.h"
-
-#include "SceneNode.hpp"
-#include "geom.hpp"
-#include "String.hpp"
-#include "Color.hpp"
-#include "Texture.hpp"
-#include "Material.hpp"
-#include "Light.hpp"
-#include "Shape.hpp"
-#include "PrimitiveSet.hpp"
-#include "TextSet.hpp"
-#include "SpriteSet.hpp"
-#include "SphereSet.hpp"
-#include "PlaneSet.hpp"
-#include "ClipPlane.hpp"
-#include "ABCLineSet.hpp"
-#include "Surface.hpp"
-#include "Viewpoint.hpp"
-#include "Background.hpp"
-#include "BBoxDeco.hpp"
+#include "subscene.h"
 
 namespace rgl {
 
@@ -39,19 +20,24 @@ public:
   // ---[ client services ]---------------------------------------------------
 
   /**
-   * remove all nodes of the given type.
+   * remove all nodes of the given type.  This is always recursive through subscenes.
    **/
-  bool clear(TypeID stackTypeID);
+  bool clear(TypeID type);
   
   /**
-   * add node to scene
+   * add node to current subscene
    **/
   bool add(SceneNode* node);
   
   /**
    * remove specified node of given type, or last-added if id==0
    **/
-  bool pop(TypeID stackTypeID, int id, bool destroy = true);
+  bool pop(TypeID stackTypeID, int id);
+  
+  /**
+   * hide specified node in all subscenes
+   **/
+  void hide(int id);
   
   /**
    * get information about stacks
@@ -60,15 +46,16 @@ public:
   void get_ids(TypeID type, int* ids, char** types);
   
   /**
-   * get a SceneNode of any type
+   * get a SceneNode by id
    */
    
-  SceneNode* get_scenenode(int id, bool recursive = false);
+  SceneNode* get_scenenode(int id);
+  SceneNode* get_scenenode(TypeID type, int id);
   
   /**
    * get information about particular shapes
    **/
-  Shape* get_shape(int id, bool recursive = false);
+  Shape* get_shape(int id);
   
   /**
    * get information about particular lights
@@ -76,21 +63,34 @@ public:
   Light* get_light(int id);
   
   /**
-   * get the background
+   * get a background
    */
-  Background* get_background() const { return background; }
+  Background* get_background(int id);
   
   /**
    * get the bbox
    */
-  BBoxDeco* get_bboxdeco() const { return bboxDeco; }
+  BBoxDeco* get_bboxdeco(int id);
+  
+  /**
+   * get subscene
+   */
+  Subscene* getSubscene(int id);
+  Subscene* whichSubscene(int mouseX, int mouseY); /* coordinates are window-relative */
 
+  /** 
+   * set/get the current subscene
+   **/
+  void setCurrentSubscene(Subscene* subscene);
+  Subscene* getCurrentSubscene() const { return currentSubscene; }
+  const Subscene* getRootSubscene() const { return &rootSubscene; }
+  
   // ---[ grouping component ]-----------------------------------------------
   
   /**
-   * obtain scene's axis-aligned bounding box. 
+   * obtain subscene's axis-aligned bounding box. 
    **/
-  const AABox& getBoundingBox();
+  const AABox& getBoundingBox() const { return currentSubscene->getBoundingBox(); }
   
   // ---[ Renderable interface ]---------------------------------------------
   
@@ -104,92 +104,55 @@ public:
   /**
    * obtain bounded viewpoint
    **/
-  Viewpoint* getViewpoint();
+  UserViewpoint* getUserViewpoint();
+  ModelViewpoint* getModelViewpoint();
   
   /**
    * Get and set flag to ignore elements in bounding box
    **/
   
-  int getIgnoreExtent(void);
-  void setIgnoreExtent(int in_ignoreExtent);
+  int getIgnoreExtent(void) const { return doIgnoreExtent; }
+  void setIgnoreExtent(int in_ignoreExtent) { doIgnoreExtent = in_ignoreExtent; }
   
   /**
    * invalidate display lists so objects will be rendered again
    **/
   void invalidateDisplaylists();
 
+  // ---[ write PRC file ]---------------------------------------------
+  
+  /**
+   * write PRC file
+   **/
+  vector<std::string> writePRC(const char* const basename, const RenderContext* const renderContext,
+                  const bool writepdf, const bool writeprc, const bool writevws, const bool writejs);
+
+  Subscene rootSubscene;  
+
 private:
 
-  // ---[ Renderable implementation ]---------------------------------------- 
+  // Whether objects created in this scene should affect the bounding box or not
+  
+  bool doIgnoreExtent;
 
-  /**
-   * sub-pass: setup global lighting model
-   **/
-  void setupLightModel(RenderContext* renderContext, const Sphere& viewSphere);
-  /**
-   * compute bounding-box
-   **/
-  void calcDataBBox();
-  /**
-   * add shapes
-   **/
-  void addShape(Shape* shape);
+  void setupLightModel();
 
-  // ---[ bounded slots ]----------------------------------------------------
+  // --- [ Subscenes ]-------------------------------------------------------
+
+  Subscene* currentSubscene;
+
+  // ---[ nodes ]-----------------------------------------------------------
   
   /**
-   * bounded background
+   * list of scene nodes.  The scene owns them, the subscenes display a subset.
    **/
-  Background* background;
-  /**
-   * bounded viewpoint
-   **/
-  Viewpoint* viewpoint;
-  /**
-   * bounded decorator
-   **/
-  BBoxDeco*  bboxDeco;
+  std::vector<SceneNode*> nodes;
 
-  // ---[ stacks ]-----------------------------------------------------------
-  
-  /**
-   * number of lights
-   **/
-  int  nlights;
-  
-  /**
-   * list of light sources
-   **/
-  std::vector<Light*> lights;
-
-  /**
-   * list of shapes
-   **/
-  std::vector<Shape*> shapes;
-
-  std::vector<Shape*> unsortedShapes;
-  std::vector<Shape*> zsortShapes;
-  std::vector<Shape*> clipPlanes;
-  
-  void renderZsort(RenderContext* renderContext);
-  
   void deleteAll(std::vector<SceneNode*> list);
 
-  void deleteShapes();
-  void deleteLights();
-  
-  // ---[ grouping data ]----------------------------------------------------
-  
-  /**
-   * bounding box of overall scene
-   **/
-  AABox data_bbox;
-  
-  bool ignoreExtent;
-  bool bboxChanges;
 };
 
 } // namespace rgl
 
-#endif /* SCENE_HPP */
+#endif /* SCENE_H */
 

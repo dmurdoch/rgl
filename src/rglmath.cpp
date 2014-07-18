@@ -42,7 +42,7 @@ float Vec3::angle(const Vec3& that) const
 
 }
 
-Vec3 Vec3::operator * (float s)
+Vec3 Vec3::operator * (float s) const
 {
   Vec3 v;
 
@@ -53,7 +53,7 @@ Vec3 Vec3::operator * (float s)
   return v;
 }
 
-float Vec3::operator * (Vec3 v)
+float Vec3::operator * (Vec3 v) const
 {
   return (x*v.x + y*v.y + z*v.z);
 }
@@ -228,7 +228,126 @@ Matrix4x4 Matrix4x4::operator * (const Matrix4x4& op2) const {
   return r;
 }
 
-Vec4 Matrix4x4::getRow(int row) {
+Matrix4x4 Matrix4x4::inverse() const {
+
+//
+// From Mesa-2.2\src\glu\project.c
+//
+
+//
+// Invert matrix m.  This algorithm contributed by Stephane Rehel
+// <rehel@worldnet.fr>
+//
+
+/* Here's some shorthand converting standard (row,column) to index. */
+#define m11 data[ 0+0]
+#define m12 data[ 4+0]
+#define m13 data[ 8+0]
+#define m14 data[12+0]
+#define m21 data[ 0+1]
+#define m22 data[ 4+1]
+#define m23 data[ 8+1]
+#define m24 data[12+1]
+#define m31 data[ 0+2]
+#define m32 data[ 4+2]
+#define m33 data[ 8+2]
+#define m34 data[12+2]
+#define m41 data[ 0+3]
+#define m42 data[ 4+3]
+#define m43 data[ 8+3]
+#define m44 data[12+3]
+
+	register double det;
+	double tmp[16]; 
+
+	/* Inverse = adjoint / det. (See linear algebra texts.)*/
+
+	tmp[0]= m22 * m33 - m23 * m32;
+	tmp[1]= m23 * m31 - m21 * m33;
+	tmp[2]= m21 * m32 - m22 * m31;
+
+	/* Compute determinant as early as possible using these cofactors. */
+	det= m11 * tmp[0] + m12 * tmp[1] + m13 * tmp[2];
+
+	/* Run singularity test. */
+	if (det == 0.0) {
+		Rprintf("invert_matrix: Warning: Singular matrix.\n");
+                for (size_t i=0;i<16;i++)
+                  tmp[i]=0.;
+	}
+	else {
+		double d12, d13, d23, d24, d34, d41;
+		register double im11, im12, im13, im14;
+
+		det= 1. / det;
+
+		/* Compute rest of inverse. */
+		tmp[0] *= det;
+		tmp[1] *= det;
+		tmp[2] *= det;
+		tmp[3]  = 0.;
+
+		im11= m11 * det;
+		im12= m12 * det;
+		im13= m13 * det;
+		im14= m14 * det;
+		tmp[4] = im13 * m32 - im12 * m33;
+		tmp[5] = im11 * m33 - im13 * m31;
+		tmp[6] = im12 * m31 - im11 * m32;
+		tmp[7] = 0.;
+
+		/* Pre-compute 2x2 dets for first two rows when computing */
+		/* cofactors of last two rows. */
+		d12 = im11*m22 - m21*im12;
+		d13 = im11*m23 - m21*im13;
+		d23 = im12*m23 - m22*im13;
+		d24 = im12*m24 - m22*im14;
+		d34 = im13*m24 - m23*im14;
+		d41 = im14*m21 - m24*im11;
+
+		tmp[8] =  d23;
+		tmp[9] = -d13;
+		tmp[10] = d12;
+		tmp[11] = 0.;
+
+		tmp[12] = -(m32 * d34 - m33 * d24 + m34 * d23);
+		tmp[13] =  (m31 * d34 + m33 * d41 + m34 * d13);
+		tmp[14] = -(m31 * d24 + m32 * d41 + m34 * d12);
+		tmp[15] =  1.;
+
+	}
+// Rprintf("mat\n");
+// Rprintf("%f %f %f %f\n", m11, m12, m13, m14);
+// Rprintf("%f %f %f %f\n", m21, m22, m23, m24);
+// Rprintf("%f %f %f %f\n", m31, m32, m33, m34);
+// Rprintf("%f %f %f %f\n", m41, m42, m43, m44);
+// 
+// Rprintf("invmat\n");
+// Rprintf("%f %f %f %f\n", tmp[0+0], tmp[4+0], tmp[8+0], tmp[12+0]);
+// Rprintf("%f %f %f %f\n", tmp[0+1], tmp[4+1], tmp[8+1], tmp[12+1]);
+// Rprintf("%f %f %f %f\n", tmp[0+2], tmp[4+2], tmp[8+2], tmp[12+2]);
+// Rprintf("%f %f %f %f\n", tmp[0+3], tmp[4+3], tmp[8+3], tmp[12+3]);
+#undef m11
+#undef m12
+#undef m13
+#undef m14
+#undef m21
+#undef m22
+#undef m23
+#undef m24
+#undef m31
+#undef m32
+#undef m33
+#undef m34
+#undef m41
+#undef m42
+#undef m43
+#undef m44
+
+  return Matrix4x4(tmp);
+}
+
+Vec4 Matrix4x4::getRow(int row) const {
   Vec4 r;
   
   r.x = val(row, 0);
@@ -273,6 +392,22 @@ void Matrix4x4::setRotate(const int axis, const float degree) {
       ref(1,1) = c;
       break;
   }
+}
+
+void Matrix4x4::setTranslate(const Vertex& vec) {
+  setIdentity();
+  ref(0,3) = vec.x;
+  ref(1,3) = vec.y;
+  ref(2,3) = vec.z;
+}
+
+void Matrix4x4::transpose() {
+  for (int i = 0; i < 3; i++)
+    for (int j = i+1; j < 4; j++) {
+      float temp = val(i,j);
+      ref(i,j) = val(j,i);
+      ref(j,i) = temp;
+    }
 }
 
 void Matrix4x4::getData(double* dest)

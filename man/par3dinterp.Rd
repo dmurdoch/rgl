@@ -8,7 +8,8 @@ suitable for use in animations.
 \usage{
 par3dinterp(times = NULL, userMatrix, scale, zoom, FOV, 
             method = c("spline", "linear"), 
-            extrapolate = c("oscillate", "cycle", "constant", "natural"))
+            extrapolate = c("oscillate", "cycle", "constant", "natural"),
+            dev = rgl.cur(), subscene = currentSubscene3d(dev))
 }
 \arguments{
   \item{times}{ Times at which values are recorded or a list; see below }
@@ -18,6 +19,8 @@ par3dinterp(times = NULL, userMatrix, scale, zoom, FOV,
   \item{FOV}{ Values of \code{par3d("FOV")} }
   \item{method}{ Method of interpolation }
   \item{extrapolate}{ How to extrapolate outside the time range }
+  \item{dev}{ Which rgl device to use }
+  \item{subscene}{ Which subscene to use }
 }
 \details{
 This function is intended to be used in constructing animations.  It produces
@@ -53,11 +56,6 @@ is only supported with spline interpolation.
 \value{
 A function is returned.  The function takes one argument, and returns a list of 
 \code{par3d} settings interpolated to that time.
-}
-\note{
-Due to a bug in R (fixed in R 2.6.0), using 
-\code{extrapolate} equal to \code{"oscillate"} 
-will sometimes fail when only two points are given.  
 }
 \author{Duncan Murdoch }
 \seealso{ \code{\link{play3d}} to play the animation. }

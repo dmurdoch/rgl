@@ -33,8 +33,10 @@
     \item{Computation:}{Generic subdivision of 3d objects.}
   }
   
-  At present, there are two main practical differences between the r3d functions
-  and the \code{rgl.*} functions is that the r3d functions call
+  At present, the main practical differences between the r3d functions
+  and the \code{rgl.*} functions are as follows. 
+  
+  The r3d functions call
   \code{\link{open3d}} if there is no device open, and the
   \code{rgl.*} functions call \code{\link{rgl.open}}. By default
   \code{\link{open3d}} sets the initial orientation of the coordinate
@@ -56,24 +58,24 @@
 }
 
 \seealso{
-\code{\link{points3d}}
-\code{\link{lines3d}}
-\code{\link{segments3d}}
-\code{\link{triangles3d}}
-\code{\link{quads3d}}
-\code{\link{text3d}}
-\code{\link{spheres3d}}
-\code{\link{sprites3d}}
-\code{\link{terrain3d}}
-\code{\link{select3d}}
-\code{\link{dot3d}}
-\code{\link{wire3d}}
-\code{\link{shade3d}}
-\code{\link{transform3d}}
-\code{\link{rotate3d}}
-\code{\link{subdivision3d}}
-\code{\link{mesh3d}}
-\code{\link{cube3d}}
+\code{\link{points3d}},
+\code{\link{lines3d}},
+\code{\link{segments3d}},
+\code{\link{triangles3d}},
+\code{\link{quads3d}},
+\code{\link{text3d}},
+\code{\link{spheres3d}},
+\code{\link{sprites3d}},
+\code{\link{terrain3d}},
+\code{\link{select3d}},
+\code{\link{dot3d}},
+\code{\link{wire3d}},
+\code{\link{shade3d}},
+\code{\link{transform3d}},
+\code{\link{rotate3d}},
+\code{\link{subdivision3d}},
+\code{\link{mesh3d}},
+\code{\link{cube3d}},
 \code{\link{rgl}}
 }
 \examples{

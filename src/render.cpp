@@ -1,6 +1,6 @@
 #include "render.h"
 
-#include "opengl.hpp"
+#include "opengl.h"
 
 using namespace rgl;
 
@@ -61,15 +61,15 @@ void VertexArray::endUse() {
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
+Vertex VertexArray::getNormal(int iv1, int iv2, int iv3) const
 {
   Vertex normal;
 
-  Vertex& v1 = (*this)[iv1];
-  Vertex& v2 = (*this)[iv2];
-  Vertex& v3 = (*this)[iv3];
+  Vertex const& v1 = (*this)[iv1];
+  Vertex const& v2 = (*this)[iv2];
+  Vertex const& v3 = (*this)[iv3];
 
-  Vertex a(v3-v2), b(v1-v2);
+  const Vertex a(v3-v2), b(v1-v2);
 
   normal = a.cross(b);
 
@@ -126,6 +126,9 @@ TexCoord& TexCoordArray::operator [] (int index) {
   return (TexCoord&) arrayptr[index*2];
 }
 
+TexCoord const& TexCoordArray::operator [] (int index) const {
+  return (TexCoord const&) arrayptr[index*2];
+}
 void TexCoordArray::beginUse() {
   if (arrayptr) {
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);

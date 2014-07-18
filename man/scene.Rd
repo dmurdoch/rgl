@@ -9,11 +9,11 @@
 Clear shapes, lights, bbox
 }
 \usage{
-clear3d( type = c("shapes", "bboxdeco", "material"), defaults ) 
-rgl.clear( type = "shapes" )
+clear3d( type = c("shapes", "bboxdeco", "material"), defaults, subscene = 0 ) 
+rgl.clear( type = "shapes", subscene = 0 )
 pop3d( ... )
 rgl.pop( type = "shapes", id = 0 )  
-rgl.ids( type = "shapes" )
+rgl.ids( type = "shapes", subscene = NA )
 }
 \arguments{
   \item{type}{Select subtype(s):
@@ -21,23 +21,31 @@ rgl.ids( type = "shapes" )
       \item{"shapes"}{shape stack}
       \item{"lights"}{light stack}
       \item{"bboxdeco"}{bounding box}
-      \item{"viewpoint"}{viewpoint}
+      \item{"userviewpoint"}{user viewpoint}
+      \item{"modelviewpoint"}{model viewpoint}
       \item{"material"}{material properties}
       \item{"background"}{scene background}
+      \item{"subscene"}{subscene list}
       \item{"all"}{all of the above}
     }
   }
   \item{defaults}{default values to use after clearing}
+  \item{subscene}{which subscene to work with.  \code{NA} means the current one, 
+                  \code{0} means the whole scene}  
   \item{id}{vector of ID numbers of items to remove}
   \item{...}{generic arguments passed through to RGL-specific (or other) functions}
+
 }
 \details{
-RGL holds two stacks. One is for shapes and the other is for lights. 
+RGL holds several lists of objects in each scene. 
+There are lists for shapes, lights, bounding box decorations, subscenes, etc.
 \code{clear3d} and \code{rgl.clear} clear the specified stack, or restore
-the defaults for the bounding box (not visible) or viewpoint.  By default
-with \code{id=0} \code{rgl.pop} removes 
-the top-most (last added) node on the shape stack.  The \code{id} argument
-may be used to specify arbitrary item(s) to remove from the specified stack.
+the defaults for the bounding box (not visible) or viewpoint. 
+With \code{id=0} \code{rgl.pop} removes 
+the last added node on the list (except for subscenes:  there it
+removes the active subscene).  The \code{id} argument
+may be used to specify arbitrary item(s) to remove; if \code{id != 0}, 
+the \code{type} argument is ignored.
 
 \code{rgl.clear} and \code{clear3d} may also be used to clear material properties
 back to their defaults.  
@@ -46,11 +54,9 @@ back to their defaults.
 \code{\link{r3dDefaults}}.  Only the \code{materials} component of this argument
 is currently used by \code{clear3d}.
 
-\code{rgl.ids} returns a dataframe containing the IDs in the currently active
+\code{rgl.ids} returns a dataframe containing the IDs in the currently active subscene
+by default, or a specified subscene, or if \code{subscene = 0}, in the whole
 rgl window, along with an indicator of their type.
-
-For convenience, \code{type="shapes"} and 
-\code{id=1} signifies the bounding box.
 
 Note that clearing the light stack leaves the scene in darkness; it should normally
 be followed by a call to \code{\link{rgl.light}} or \code{\link{light3d}}.

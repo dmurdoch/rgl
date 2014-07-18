@@ -1,4 +1,4 @@
-#include "PrimitiveSet.hpp"
+#include "PrimitiveSet.h"
 
 using namespace rgl;
 

@@ -8,7 +8,7 @@
 
 
 #include "scene.h"
-#include "gui.hpp"
+#include "gui.h"
 #include "fps.h"
 #include "select.h"
 #include "pixmap.h"
@@ -19,9 +19,12 @@ enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR,
                   mmSELECTING, mmZOOM, mmFOV, mmUSER};
 enum MouseSelectionID {msNONE=1, msCHANGING, msDONE, msABORT};
 
+enum WheelModeID {wmPUSH = 1, wmPULL, wmUSER};
+
 typedef void (*userControlPtr)(void *userData, int mouseX, int mouseY);
 typedef void (*userControlEndPtr)(void *userData);
 typedef void (*userCleanupPtr)(void **userData);
+typedef void (*userWheelPtr)(void *userData, int dir);
 
 class RGLView : public View
 {
@@ -50,6 +53,11 @@ public:
                                             userControlEndPtr end, userCleanupPtr cleanup, void** user);
   void        getMouseCallbacks(int button, userControlPtr *begin, userControlPtr *update, 
                                             userControlEndPtr *end, userCleanupPtr *cleanup, void** user);
+  WheelModeID getWheelMode();
+  void        setWheelMode(WheelModeID mode);
+  void        setWheelCallback(userWheelPtr wheel, void* user);
+  void        getWheelCallback(userWheelPtr *wheel, void** user);
+  
   MouseSelectionID getSelectState();
   void        setSelectState(MouseSelectionID state);
   double*     getMousePosition();
@@ -73,29 +81,33 @@ public:
   void        getPosition(double* dest);
   void 	      setPosition(double* src);
 
-  // These are set after rendering the scene
-  GLdouble modelMatrix[16], projMatrix[16];
-  GLint viewport[4];
-
 protected:
 
   void setWindowImpl(WindowImpl* impl);
 
 
 private:
-	typedef void (RGLView::*viewControlPtr)(int mouseX,int mouseY);
-	typedef void (RGLView::*viewControlEndPtr)();
+  typedef void (RGLView::*viewControlPtr)(int mouseX,int mouseY);
+  typedef void (RGLView::*viewControlEndPtr)();
+  typedef void (RGLView::*viewWheelPtr)(int dir);
+    
 
-	viewControlPtr	ButtonBeginFunc[3], ButtonUpdateFunc[3];
-	viewControlEndPtr ButtonEndFunc[3];
+  viewControlPtr ButtonBeginFunc[3], ButtonUpdateFunc[3];
+  viewControlEndPtr ButtonEndFunc[3];
+  viewWheelPtr WheelRotateFunc;
 
-	void setDefaultMouseFunc();
+  void setDefaultMouseFunc();
 
 //
 // DRAG USER-INPUT
 //
 
-  int drag;
+  int drag, activeSubscene;
+  int vwidth, vheight;      /* width and height of active subscene */
+  
+// Translate from OS window-relative coordinates (relative to top left corner) to
+// OpenGL window relative (relative to bottom left corner)
+  void translateCoords(int* mouseX, int* mouseY) const { *mouseY = height - *mouseY; }
 
 // o DRAG FEATURE: adjustDirection
 
@@ -110,6 +122,9 @@ private:
   void oneAxisBegin(int mouseX, int mouseY);
   void oneAxisUpdate(int mouseX, int mouseY);  
 
+  void wheelRotatePull(int dir);
+  void wheelRotatePush(int dir);
+  
   PolarCoord camBase, dragBase, dragCurrent;
   Vertex rotBase, rotCurrent, axis[3];
 
@@ -136,6 +151,8 @@ private:
   void userUpdate(int mouseX, int mouseY);
   void userEnd();
   
+  void userWheel(int dir);
+  
   void* userData[9];
   userControlPtr beginCallback[3], updateCallback[3];
   userControlEndPtr endCallback[3];
@@ -143,7 +160,8 @@ private:
   int activeButton;
   bool busy;
   
-  
+  void* wheelData;
+  userWheelPtr wheelCallback;
 
 // o DRAG FEATURE: mouseSelection
   void mouseSelectionBegin(int mouseX,int mouseY);
@@ -177,6 +195,7 @@ private:
   MouseSelectionID selectState;
   double  mousePosition[4];
 
+  WheelModeID wheelMode;
 };
 
 } // namespace rgl

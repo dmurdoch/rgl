@@ -3,7 +3,7 @@
 
 /* These are some platform-specific definitions, currently to support MacOSX */
 
-#include "opengl.hpp"
+#include "opengl.h"
 
 /*  MacOSX */
 

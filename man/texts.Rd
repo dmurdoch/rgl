@@ -1,4 +1,4 @@
-\name{texts}
+\name{text3d}
 \alias{rgl.texts}
 \alias{text3d}
 \alias{texts3d}
@@ -60,7 +60,9 @@ device may be set using \code{\link{par3d}}, or for future devices
 using \code{\link{r3dDefaults}}.
 
 The \code{family} specification is the same as for standard graphics, i.e.
-families \code{c("serif", "sans", "mono", "symbol")} are normally
+families \cr
+\code{c("serif", "sans", "mono", "symbol")} \cr
+are normally
 available, but users may add additional families.  \code{font} numbers
 are restricted to the range 1 to 4 for standard, bold, italic and bold italic
 respectively; with font 5 recoded as family \code{"symbol"} font 1.  

@@ -32,7 +32,8 @@
   values.
 }
 \usage{
-par3d(\dots, no.readonly = FALSE)
+par3d(\dots, no.readonly = FALSE, dev = rgl.cur(), 
+      subscene = currentSubscene3d(dev))
 
 open3d(\dots, params=getr3dDefaults(), 
 	    useNULL = rgl.useNULL())
@@ -47,6 +48,8 @@ getr3dDefaults()
   \item{no.readonly}{logical; if \code{TRUE} and there are no other
     arguments, only those parameters which can be set by a
     subsequent \code{par3d()} call are returned.}
+  \item{dev}{integer; the rgl device.}
+  \item{subscene}{integer; the subscene.}
   \item{params}{a list of graphical parameters}
   \item{useNULL}{whether to use the null graphics device}
 }
@@ -58,8 +61,10 @@ getr3dDefaults()
   \code{par3d()} (no arguments) or \code{par3d(no.readonly=TRUE)} is used to
   get \emph{all} the graphical parameters (as a named list).  
 
-  \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
-  may only be used in queries, i.e., they do \emph{not} set anything.
+  By default, queries and modifications apply to the current subscene
+  on the current device; specify \code{dev} and/or \code{subscene} to 
+  change this.  Some parameters apply to the device as a whole;
+  these are marked in the list below.
 
   \code{open3d} opens a new rgl device, and sets the parameters as
   requested.  The \code{r3dDefaults} list returned by the 
@@ -101,28 +106,39 @@ getr3dDefaults()
 }
 
 \section{Parameters}{
+
+  \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
+  may only be used in queries, i.e., they do \emph{not} set anything.
+  
   \describe{
     \item{\code{antialias}}{\emph{\bold{R.O.}} in \code{par3d}, may be
     set in \code{open3d}. The (requested) number of hardware
     antialiasing planes to use (with multisample antialiasing).  The
     OpenGL driver may not support the requested number, in which case
-    \code{par3d("antialias")} will report what was actually set. }    
+    \code{par3d("antialias")} will report what was actually set. Applies to the whole device.}    
     \item{\code{cex}}{real.  The default size for text.}
-    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.}
-    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}.}
-    \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?}
-    \item{\code{fontname}}{\emph{\bold{R.O.}}; the system-dependent name of the current font.}
+    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.
+    Applies to the whole device.}
+    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}.
+    Applies to the whole device.}
+    \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?
+    Applies to the whole device.}
+    \item{\code{fontname}}{\emph{\bold{R.O.}}; the system-dependent name of the current font.
+    Applies to the whole device.}
     \item{\code{FOV}}{real.  The field of view, from 0 to 179 degrees.  This controls
       the degree of parallax in the perspective view.
       Isometric perspective corresponds to \code{FOV=0}.}
     \item{\code{ignoreExtent}}{logical.  Set to \code{TRUE} so that subsequently plotted objects
-      will be ignored in calculating the bounding box of the scene.}
+      will be ignored in calculating the bounding box of the scene.  Applies to the
+      whole device.}
     \item{\code{maxClipPlanes}}{\emph{\bold{R.O.}}; an integer giving the maximum
-      number of clip planes that can be defined in the current system.}
+      number of clip planes that can be defined in the current system. Applies to the whole device.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
-      of the user data.}
-    \item{\code{mouseMode}}{character.  A vector of 3 strings describing
-      what the 3 mouse buttons do. Partial matching is used.  Possible values for \code{mouseMode} are 
+      of the user data.  See the Note below.}
+    \item{\code{mouseMode}}{character.  A vector of 4 strings describing
+      what the 3 mouse buttons and the mouse wheel do. 
+      Partial matching is used.  Possible values for the first 3 entries of \code{mouseMode} (corresponding 
+      to the mouse buttons are 
 	\describe{
 	 \item{\code{"none"}}{No action for this button.}
 	 \item{\code{"trackball"}}{Mouse acts as a virtual trackball, rotating the scene.}
@@ -137,23 +153,38 @@ getr3dDefaults()
 	 \item{\code{"user"}}{Used  when a user handler is set by 
 	 \code{\link{rgl.setMouseCallbacks}}.}
 	}
+      Possible values for the 4th entry corresponding to the mouse wheel are
+        \describe{
+	  \item{\code{"none"}}{No action.}
+	  \item{\code{"pull"}}{Pulling on the mouse wheel increases magnification, i.e. \dQuote{pulls the scene closer}.}
+	  \item{\code{"push"}}{Pulling on the mouse wheel decreases magnification, i.e. \dQuote{pushes the scene away}.}
+	  \item{\code{"user"}}{Used when a user handler is set by 
+	    \code{\link{rgl.setWheelCallback}}.}
+	}
+      A common default on Mac OSX is to convert a two finger drag on a trackpad to a mouse wheel rotation.
+      
+      Applies to the whole device.
     }
+    \item{\code{observer}}{\emph{\bold{R.O.}}; the position of the observer relative to
+      the model.  Set by \code{\link{observer3d}}.  See the Note below.}
     \item{\code{projMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the current
       projection of the scene.}
     \item{\code{scale}}{real.  A vector of 3 values indicating the amount by which to
       rescale each axis before display.  Set by \code{\link{aspect3d}}.}
     \item{\code{skipRedraw}}{whether to update the display.  Set to \code{TRUE} to suspend
-      updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.}
+      updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.
+      Applies to the whole device.}
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
       display the scene.}
-    \item{\code{viewport}}{\emph{\bold{R.O.}}; real.  A vector giving the dimensions of the
-      window in pixels.}
+    \item{\code{viewport}}{real.  A vector giving the dimensions of the
+      window in pixels.  The entries are taken to be \code{c(x,y,width,height)} where
+      \code{c(x,y)} are the coordinates in pixels of the lower left corner within the window.}
     \item{\code{zoom}}{real. A positive value indicating the current
       magnification of the scene.}
       \item{\code{bbox}}{\emph{\bold{R.O.}}; real. A vector of six values indicating the current values of the
       bounding box of the scene (xmin, xmax, ymin, ymax, zmin, zmax)}
     \item{\code{windowRect}}{integer.  A vector of four values indicating the left, top, right and 
-      bottom of the displayed window (in pixels).}
+      bottom of the displayed window (in pixels).  Applies to the whole device.}
   }
 }
 
@@ -169,11 +200,25 @@ families only support \code{cex = 1}, so changing both \code{cex} and
 \code{"bitmap"} family on Windows, \code{par3d(family = "sans", cex = 2)}
 will work, but \code{par3d(cex = 2, family = "sans")} will leave \code{cex}
 at 1 (with a warning that the \code{"bitmap"} family only supports that size).
+
+Although \code{par3d("viewport")} names the entries of the reported vector,
+names are ignored when setting the viewport and entries must be specified
+in the standard order.
+
+In versions prior to 0.94 and the introduction of the \code{observer} parameter,
+\code{modelMatrix} contained a copy of the OpenGL MODELVIEW matrix.  As of 
+version 0.94, it contains only the transformations done to the model.  To obtain
+the old matrix, use this code:
+\verb{
+ obs <- -par3d("observer")
+ oldmodelMatrix <- t(translationMatrix(obs[1], obs[2], obs[3])) %*% par3d("modelMatrix")
+}
 }
 
 \section{Rendering}{
 The parameters returned by \code{par3d} are sufficient to determine where rgl would render
-a point on the screen.  Given a column vector \code{(x,y,z)}, it performs the equivalent of 
+a point on the screen.  Given a column vector \code{(x,y,z)} in a subscene \code{s}, 
+it performs the equivalent of 
 the following operations:
 \enumerate{
 \item It converts the point to homogeneous coordinates by appending \code{w=1}, giving
@@ -185,9 +230,13 @@ of the following matrices:
   \item A matrix to rescale according to \code{par3d("scale")}.
   \item The \code{par3d("userMatrix")} as set by the user.
   \item A matrix which may be set by mouse movements.
-  \item A matrix to translate the origin to the centre of the viewing region.
+  \item If \code{s} has the \code{"model"} set to \code{"modify"}, a similar collection of
+  matrices using parameters from the parent subscene.
   }
-\item It multiplies the point by \code{M} giving \code{u = M \%*\% v}.  Using this location and information on the
+\item It multiplies the point by \code{M} giving \code{u = M \%*\% v}. 
+\item It multiplies that point by a matrix based on the observer position
+to translate the origin to the centre of the viewing region.
+\item Using this location and information on the
 normals (which have been similarly transformed), it performs lighting calculations. 
 \item It obtains the projection matrix \code{P = par3d("projMatrix")} and
 multiplies the point by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.

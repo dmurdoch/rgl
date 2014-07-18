@@ -1,6 +1,5 @@
 #include <algorithm>
-#include "ABCLineSet.hpp"
-#include "Viewpoint.hpp"
+#include "ABCLineSet.h"
 #include "R.h"
 
 using namespace rgl;
@@ -44,15 +43,15 @@ ABCLineSet::ABCLineSet(Material& in_material, int in_nbase, double* in_base, int
   initPrimitiveSet(2*nLines, vertices.ptr);
 }
 
-AABox& ABCLineSet::getBoundingBox(Scene* scene)
+AABox& ABCLineSet::getBoundingBox(Subscene* subscene)
 {
-  updateSegments(scene->getBoundingBox());
-  return LineSet::getBoundingBox(scene); 
+  updateSegments(subscene->getBoundingBox());
+  return LineSet::getBoundingBox(subscene); 
 }
 
 void ABCLineSet::renderBegin(RenderContext* renderContext)
 {
-  updateSegments(renderContext->scene->getBoundingBox());
+  updateSegments(renderContext->subscene->getBoundingBox());
   invalidateDisplaylist();
   LineSet::renderBegin(renderContext);
 }

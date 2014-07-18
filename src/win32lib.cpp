@@ -1,14 +1,14 @@
-#include "config.hpp"
+#include "config.h"
 #ifdef RGL_W32
 // ---------------------------------------------------------------------------
 // W32 Library Implementation
 // $Id$
 // ---------------------------------------------------------------------------
-#include "lib.hpp"
-#include "win32gui.hpp"
-#include "NULLgui.hpp"
+#include "lib.h"
+#include "win32gui.h"
+#include "NULLgui.h"
 #include <windows.h>
-#include "assert.hpp"
+#include "assert.h"
 #include "R.h"
 
 using namespace rgl;

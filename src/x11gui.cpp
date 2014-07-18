@@ -1,4 +1,4 @@
-#include "config.hpp"
+#include "config.h"
 #ifdef RGL_X11
 // ---------------------------------------------------------------------------
 // C++ source
@@ -13,8 +13,8 @@
 #include <X11/keysym.h>
 #include <cstdio>
 #include <Rinternals.h>
-#include "x11gui.hpp"
-#include "lib.hpp"
+#include "x11gui.h"
+#include "lib.h"
 #include "R.h"
 
 namespace rgl {
@@ -697,5 +697,5 @@ void X11GUIFactory::notifyDelete(::Window xwindowid)
   windowMap.erase(xwindowid);
 }
 // ---------------------------------------------------------------------------
-#endif // RGL_X11_HPP
+#endif // RGL_X11_H
 
