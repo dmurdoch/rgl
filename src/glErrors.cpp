@@ -2,7 +2,7 @@
 // This file is part of RGL.
 //
 
-#include "opengl.hpp"
+#include "opengl.h"
 #include "R.h"
 #include "platform.h"
 

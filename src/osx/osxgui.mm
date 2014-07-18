@@ -1,4 +1,4 @@
-#include "../config.hpp"
+#include "../config.h"
 // ---------------------------------------------------------------------------
 #ifdef RGL_COCOA
 /**
@@ -9,12 +9,12 @@
 #error Cocoa backend reguires FreeType font render
 #endif
 // ---------------------------------------------------------------------------
-#include "osxgui.hpp"
-#include "../lib.hpp"
+#include "osxgui.h"
+#include "../lib.h"
 // ---------------------------------------------------------------------------
 #include <AppKit/AppKit.h>
-#include "../opengl.hpp"
-#include "../assert.hpp"
+#include "../opengl.h"
+#include "../assert.h"
 #include "../R.h"
 #include <Rinternals.h>
 // ---------------------------------------------------------------------------

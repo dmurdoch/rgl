@@ -1,4 +1,4 @@
-#include "geom.hpp"
+#include "geom.h"
 #include "R.h"
 
 using namespace rgl;

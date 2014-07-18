@@ -1,5 +1,5 @@
-#include "SphereSet.hpp"
-#include "Viewpoint.hpp"
+#include "SphereSet.h"
+#include "Viewpoint.h"
 #include "R.h"
 
 using namespace rgl;

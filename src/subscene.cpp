@@ -1,4 +1,4 @@
-#include "subscene.hpp"
+#include "subscene.h"
 #include "gl2ps.h"
 #include "R.h"
 #include <algorithm>

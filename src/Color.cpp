@@ -1,4 +1,4 @@
-#include "Color.hpp"
+#include "Color.h"
 #include "types.h"
 
 using namespace std;
@@ -113,7 +113,7 @@ void Color::set3iv(int* color)
 
 // TODO: move to rendergl.cpp
 
-#include "opengl.hpp"
+#include "opengl.h"
 
 void Color::useClearColor() const
 {

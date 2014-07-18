@@ -7,7 +7,7 @@
 #include "scene.h"
 #include "rglmath.h"
 #include "render.h"
-#include "geom.hpp"
+#include "geom.h"
 #include <map>
 #include <algorithm>
 #include <functional>

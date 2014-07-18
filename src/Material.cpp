@@ -1,7 +1,7 @@
 #include "gl2ps.h"
-#include "Material.hpp"
-#include "opengl.hpp"
-#include "Texture.hpp"
+#include "Material.h"
+#include "opengl.h"
+#include "Texture.h"
 #include "R.h"
 
 using namespace rgl;

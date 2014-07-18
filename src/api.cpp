@@ -3,11 +3,11 @@
 //
 // $Id$
 
-#include "lib.hpp"
-#include "DeviceManager.hpp"
+#include "lib.h"
+#include "DeviceManager.h"
 #include "rglview.h"
 
-#include "lib.hpp"
+#include "lib.h"
 #include "R.h"
 #include "api.h"
 #include "platform.h"

@@ -1,5 +1,5 @@
-#ifndef SCENE_HPP
-#define SCENE_HPP
+#ifndef SCENE_H
+#define SCENE_H
 
 // C++ header file
 // This file is part of RGL
@@ -8,7 +8,7 @@
 
 #include <vector>
 #include "types.h"
-#include "subscene.hpp"
+#include "subscene.h"
 
 namespace rgl {
 
@@ -146,5 +146,5 @@ private:
 
 } // namespace rgl
 
-#endif /* SCENE_HPP */
+#endif /* SCENE_H */
 

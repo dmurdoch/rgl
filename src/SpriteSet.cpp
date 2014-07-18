@@ -1,6 +1,6 @@
 
-#include "SpriteSet.hpp"
-#include "Shape.hpp"
+#include "SpriteSet.h"
+#include "Shape.h"
 #include "R.h"
 
 using namespace rgl;

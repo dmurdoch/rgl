@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <functional>
 
-#include "Shape.hpp"
-#include "SceneNode.hpp"
+#include "Shape.h"
+#include "SceneNode.h"
 #include "R.h"
 
 using namespace rgl;

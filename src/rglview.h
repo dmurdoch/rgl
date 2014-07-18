@@ -8,7 +8,7 @@
 
 
 #include "scene.h"
-#include "gui.hpp"
+#include "gui.h"
 #include "fps.h"
 #include "select.h"
 #include "pixmap.h"

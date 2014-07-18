@@ -5,10 +5,10 @@
 
 #include <algorithm>
 #include <cstdio>
-#include "DeviceManager.hpp"
+#include "DeviceManager.h"
 #include "types.h"
-#include "assert.hpp"
-#include "lib.hpp"
+#include "assert.h"
+#include "lib.h"
 
 using namespace rgl;
 
