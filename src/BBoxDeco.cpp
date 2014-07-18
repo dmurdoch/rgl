@@ -1,7 +1,7 @@
-#include "BBoxDeco.hpp"
+#include "BBoxDeco.h"
 
 #include "gl2ps.h"
-#include "glgui.hpp"
+#include "glgui.h"
 #include "scene.h"
 #include <cstdio>
 #include <cmath>

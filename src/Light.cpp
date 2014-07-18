@@ -1,4 +1,4 @@
-#include "Light.hpp"
+#include "Light.h"
 
 using namespace rgl;
 

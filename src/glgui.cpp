@@ -9,11 +9,11 @@
 #include "R.h"
 #endif
 #include "types.h"
-#include "glgui.hpp"
+#include "glgui.h"
 #include "gl2ps.h"
-#include "opengl.hpp"
-#include "RenderContext.hpp"
-#include "subscene.hpp"
+#include "opengl.h"
+#include "RenderContext.h"
+#include "subscene.h"
 #include "platform.h"
 
 using namespace rgl;

@@ -4,7 +4,7 @@
 #include "R.h"
 #include "Rversion.h"
 
-#include "DeviceManager.hpp"
+#include "DeviceManager.h"
 #include "rglview.h"
 
 #include "api.h"

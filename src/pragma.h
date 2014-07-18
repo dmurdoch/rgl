@@ -1,5 +1,5 @@
-#ifndef RGL_PRAGMA_HPP
-#define RGL_PRAGMA_HPP
+#ifndef RGL_PRAGMA_H
+#define RGL_PRAGMA_H
 
 /**
  * compiler- and platform-specific pragma's
@@ -49,4 +49,4 @@
 
 #endif
 
-#endif // RGL_PRAGMA_HPP
+#endif // RGL_PRAGMA_H

@@ -6,7 +6,7 @@
 #include "pixmap.h"
 using namespace std;
 
-#include "lib.hpp"
+#include "lib.h"
 
 // PNG FORMAT IMPLEMENTATION
 

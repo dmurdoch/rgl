@@ -1,5 +1,5 @@
-#include "Background.hpp"
-#include "Viewpoint.hpp"
+#include "Background.h"
+#include "Viewpoint.h"
 #include "scene.h"
 #include "rglmath.h"
 

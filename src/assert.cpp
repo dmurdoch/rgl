@@ -1,5 +1,5 @@
 #include "R.h"
-#include "assert.hpp"
+#include "assert.h"
 
 void rgl_assert (const char* assertion, const char* file, int line)
 {

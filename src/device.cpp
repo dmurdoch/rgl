@@ -4,8 +4,8 @@
 // $Id$
 // ---------------------------------------------------------------------------
 #include <cstring>
-#include "Device.hpp"
-#include "lib.hpp"
+#include "Device.h"
+#include "lib.h"
 
 using namespace rgl;
 

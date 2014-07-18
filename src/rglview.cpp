@@ -12,8 +12,8 @@
 #endif
 #include <cstdio>
 #include "rglview.h"
-#include "opengl.hpp"
-#include "lib.hpp"
+#include "opengl.h"
+#include "lib.h"
 #include "rglmath.h"
 #include "pixmap.h"
 #include "fps.h"

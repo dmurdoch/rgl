@@ -1,7 +1,7 @@
 #include "api.h"
 #include "rglview.h"
 
-#include "DeviceManager.hpp"
+#include "DeviceManager.h"
 
 using namespace rgl;
 

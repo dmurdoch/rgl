@@ -1,6 +1,6 @@
-#include "SphereMesh.hpp"
+#include "SphereMesh.h"
 
-#include "opengl.hpp"
+#include "opengl.h"
 
 using namespace rgl;
 

@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "ABCLineSet.hpp"
+#include "ABCLineSet.h"
 #include "R.h"
 
 using namespace rgl;

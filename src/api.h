@@ -3,12 +3,12 @@
 
 #include "R.h"
 #include <Rinternals.h>
-#include "ABCLineSet.hpp"
-#include "PlaneSet.hpp"
-#include "SphereSet.hpp"
-#include "SpriteSet.hpp"
-#include "Surface.hpp"
-#include "TextSet.hpp"
+#include "ABCLineSet.h"
+#include "PlaneSet.h"
+#include "SphereSet.h"
+#include "SpriteSet.h"
+#include "Surface.h"
+#include "TextSet.h"
 
 
 namespace rgl {

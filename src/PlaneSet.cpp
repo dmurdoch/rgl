@@ -1,6 +1,6 @@
 #include <algorithm>
-#include "PlaneSet.hpp"
-#include "Viewpoint.hpp"
+#include "PlaneSet.h"
+#include "Viewpoint.h"
 #include "R.h"
 
 using namespace rgl;

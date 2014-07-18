@@ -2,9 +2,9 @@
 #include <R_ext/Rdynload.h>
 #include "R.h"
 
-#include "lib.hpp"
-#include "DeviceManager.hpp"
-#include "init.hpp"
+#include "lib.h"
+#include "DeviceManager.h"
+#include "init.h"
 #include "api.h"
 
 using namespace rgl;

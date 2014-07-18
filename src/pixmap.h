@@ -7,7 +7,7 @@
 // $Id$
 
 #include <cstdio>
-#include "opengl.hpp"
+#include "opengl.h"
 
 namespace rgl {
 
