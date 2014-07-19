@@ -13,9 +13,9 @@
 #else
   // Mavericks and later
   
-#include <GLKMathUtils.h> 
-#include <GLKVector3.h>
-#include <GLKMatrix4.h>
+#include <GLKit/GLKMathUtils.h> 
+#include <GLKit/GLKVector3.h>
+#include <GLKit/GLKMatrix4.h>
   
 GLint gluProject(GLdouble  objX,  GLdouble  objY,  GLdouble  objZ,  
                  const GLdouble *  model,  const GLdouble *  proj,  
