@@ -585,4 +585,5 @@ v0.94
     rgl.setWheelCallback().
   - The par3d(), par3dinterp(), and spin3d() functions now
     have arguments dev and subscene to specify where they apply.
-  
+  - Included a copy of the source to CanvasMatrix.js (used by
+    writeWebGL()) at the request of the Debian administrators.
