@@ -81,7 +81,7 @@ Duncan Murdoch.
 \note{
 The output includes a binary copy of the CanvasMatrix Javascript library.  Its source (including 
 the copyright notice and license for free use) is included in the file named by
-\code{system.file("WebGL/CanvasMatrix.src.js", package = "rgl")}.}
+\code{system.file("WebGL/CanvasMatrix.src.js", package = "rgl")}.
 }
 \seealso{
 \code{\link{scene3d}} saves a copy of a scene to an R variable;
