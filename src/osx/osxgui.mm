@@ -48,7 +48,6 @@ public:
                   bool useFreeType);
 
   // events received from GL Cocoa class
-  void on_dealloc();
   void on_windowWillClose();
   void on_paint();
   void on_resize(int width, int height);
@@ -244,16 +243,8 @@ void OSXWindowImpl::bringToTop(int stay)
   [osxWindow makeKeyAndOrderFront:nil];
 }
 // ---------------------------------------------------------------------------
-void OSXWindowImpl::on_dealloc()
-{
-  // Rprintf("on_dealloc on this=%p\n", this);
-  if (window) window->notifyDestroy();
-  delete this;
-}
-// ---------------------------------------------------------------------------
 void OSXWindowImpl::on_windowWillClose()
 {
-  // Rprintf("on_windowWillClose on OSXWindowImpl %p\n", this);
   if (window) window->notifyDestroy();
   delete this;
 }
@@ -340,16 +331,8 @@ bool OSXGUIFactory::hasEventLoop()
   return self;
 }
 
-- (void)dealloc
-{
-  // Rprintf("dealloc on self=%p impl=%p\n", self, impl);
-  if (impl) impl->on_dealloc();
-  [super dealloc];
-}
-
 - (void)windowWillClose:(NSNotification *)notification
 {
-  // Rprintf("windowWillClose on self=%p impl=%p\n", self, impl);
   if (impl) impl->on_windowWillClose();
   impl = NULL;
 }
