@@ -6,7 +6,7 @@ subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
   if (is.na(id)) 
     id <- currentSubscene3d()
   else if (is.character(id) && id == "root") 
-    id <- .C(rgl_getsubsceneid, id = 0L)$id
+    id <- .C(rgl_getsubsceneid, id = 0L, dev = as.integer(rgl.cur()))$id
   if (!id) stop("No subscene info available.")
   id <- as.integer(id)
   result <- list(id = id)
