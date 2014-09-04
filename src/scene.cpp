@@ -27,6 +27,7 @@ Scene::Scene()
 : rootSubscene(EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, false),
   doIgnoreExtent(false)
 {
+  nodes.reserve(6);
   nodes.push_back( currentSubscene = &rootSubscene );
  
   add( new UserViewpoint );
