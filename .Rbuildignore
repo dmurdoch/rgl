@@ -2,3 +2,4 @@
 ^src/TODO\.txt$
 ^\.Rproj\.user$
 
+^.*\.Rproj$
