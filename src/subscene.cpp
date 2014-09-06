@@ -2,6 +2,7 @@
 #include "gl2ps.h"
 #include "R.h"
 #include <algorithm>
+#include <functional>
 
 using namespace rgl;
 

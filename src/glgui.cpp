@@ -64,7 +64,7 @@ GLboolean GLFont::justify(double width, double height, double adjx, double adjy,
 GLBitmapFont::~GLBitmapFont() {
     delete [] widths;
     if (nglyph) glDeleteLists(listBase+GL_BITMAP_FONT_FIRST_GLYPH, nglyph);
-};
+}
 
 double GLBitmapFont::width(const char* text) {
   double result = 0.0;

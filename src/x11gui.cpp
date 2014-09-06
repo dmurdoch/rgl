@@ -216,7 +216,7 @@ void X11WindowImpl::processEvent(XEvent& ev)
   char   keybuffer[8];
   KeySym keysym;
   XComposeStatus compose;
-  int    count, keycode;
+  int    keycode;
   ::Window root, child;
   int    rootx, rooty, winx, winy;
   unsigned int  mask;
@@ -263,14 +263,14 @@ void X11WindowImpl::processEvent(XEvent& ev)
       }
       break;
     case KeyPress:
-      count = XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
+      XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
       keycode = translate_key(keysym);
       if (keycode)
         if (window)
           window->keyPress(keycode);
       break;
     case KeyRelease:
-      count = XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
+      XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
       keycode = translate_key(keysym);
       if (keycode)
         if (window)
