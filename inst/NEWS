@@ -589,3 +589,4 @@ v0.94
     writeWebGL()) at the request of the Debian administrators.
   - The NULL device was not removed from the device list when
     it was closed.  (Reported by Henrik Bengtsson.)
+  - Some of the animations have been sped up at the request of CRAN
