@@ -210,6 +210,17 @@ Subscene* Subscene::hideSubscene(int id, Subscene* current)
   return current;
 }
 
+void Subscene::hideViewpoint(int id)
+{
+  if (userviewpoint && sameID(userviewpoint, id)) {
+    if (parent)            /* the root needs a viewpoint */
+      userviewpoint = NULL;
+  } else if (modelviewpoint && sameID(modelviewpoint, id)) {
+    if (parent)            /* the root needs a viewpoint */
+      modelviewpoint = NULL;
+  } 
+}
+
 Subscene* Subscene::getSubscene(int id)
 {
   if (id == getObjID()) return this;

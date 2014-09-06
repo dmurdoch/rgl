@@ -84,6 +84,7 @@ public:
   void hideBBoxDeco(int id);
   void hideBackground(int id);
   Subscene* hideSubscene(int id, Subscene* current);
+  void hideViewpoint(int id);
 
   /**
    * recursive search for subscene; could return self, or NULL if not found

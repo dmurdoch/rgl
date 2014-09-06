@@ -858,6 +858,11 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
 	    subscene->hideBackground( ids[i] );
 	    success++;
 	    break;
+	  case USERVIEWPOINT:
+	  case MODELVIEWPOINT:
+	    subscene->hideViewpoint( ids[i] );
+	    success++;
+	    break;
 	  default:
 	    char buffer[20];
 	    buffer[19] = 0;
