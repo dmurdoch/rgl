@@ -131,6 +131,10 @@ void Scene::hide(int id)
             break;
           case BACKGROUND: subscene->hideBackground(id);
             break;
+          case USERVIEWPOINT:
+          case MODELVIEWPOINT:
+            subscene->hideViewpoint(id);
+            break;
           default: error("hiding type %d not implemented", type);
         }
       }
