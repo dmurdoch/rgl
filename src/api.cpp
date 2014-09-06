@@ -290,9 +290,11 @@ void rgl::rgl_ids(int* type, int* ids, char** types, int* subsceneID)
     if (!*subsceneID) {  
       while (*type) {
         int n = scene->get_id_count((TypeID) *type);
-        scene->get_ids((TypeID) *type, ids, types);
-        ids += n;
-        types += n;
+        if (n) {
+          scene->get_ids((TypeID) *type, ids, types);
+          ids += n;
+          types += n;
+        }
         type++;
       }
     } else if ((subscene = scene->getSubscene(*subsceneID))) {
@@ -886,9 +888,9 @@ void rgl::rgl_gc(int* count, int* protect)
       for (TypeID i = 1; i < MAX_TYPE; i++) {
         int n = scene->get_id_count(i);
 	if (n) {
-	  int ids[n];
-	  char* types[n];
-	  scene->get_ids(i, ids, types);
+	  std::vector<int> ids(n);
+	  std::vector<char*> types(n);
+	  scene->get_ids(i, &ids[0], &types[0]);
 	  // First, remove the protected ones by setting them to zero.
 	  bool anyunprot = false;
 	  for (int j = 0; j < n; j++) {
@@ -905,9 +907,9 @@ void rgl::rgl_gc(int* count, int* protect)
 	  // Now look for the others in subscenes
 	  int m = root->get_id_count(i, true);
 	  if (m) {
-	    int ids2[m];
-	    char* types2[m];
-	    root->get_ids(i, ids2, types2, true);
+	    std::vector<int> ids2(m);
+	    std::vector<char*> types2(m);
+	    root->get_ids(i, &ids2[0], &types2[0], true);
 	    for (int j = 0; j < n; j++) {
 	      for (int k = 0; k < m && ids[j] != 0; k++) { 
 	        if (ids[j] == ids2[k])

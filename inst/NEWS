@@ -587,3 +587,5 @@ v0.94
     have arguments dev and subscene to specify where they apply.
   - Included a copy of the source to CanvasMatrix.js (used by
     writeWebGL()) at the request of the Debian administrators.
+  - The NULL device was not removed from the device list when
+    it was closed.  (Reported by Henrik Bengtsson.)
