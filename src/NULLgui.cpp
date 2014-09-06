@@ -23,7 +23,7 @@ class NULLWindowImpl : public WindowImpl
 { 
 public:
   NULLWindowImpl(Window* in_window);
-  ~NULLWindowImpl() {};
+  ~NULLWindowImpl();
   void setTitle(const char* title) {};
   void setWindowRect(int left, int top, int right, int bottom);
   void getWindowRect(int *left, int *top, int *right, int *bottom);
@@ -31,7 +31,7 @@ public:
   void hide() {};
   void bringToTop(int stay) {};
   void update() {};
-  void destroy() {};
+  void destroy() { if (window) window->notifyDestroy(); };
   void captureMouse(View* pView) {};
   void releaseMouse() {};
   GLFont* getFont(const char* family, int style, double cex, 
@@ -58,6 +58,12 @@ NULLWindowImpl::NULLWindowImpl(Window* in_window)
 {
   setWindowRect(0, 0, 256, 256);
   fonts[0] = new NULLFont("sans", 1, 1.0);
+}
+
+NULLWindowImpl::~NULLWindowImpl()
+{
+  if (window) 
+    window->notifyDestroy(); 
 }
 
 void NULLWindowImpl::setWindowRect(int left, int top, int right, int bottom)
