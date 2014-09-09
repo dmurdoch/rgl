@@ -65,6 +65,7 @@ export(.check3d,
  S3method(plot3d, rglbboxdeco)
  S3method(plot3d, rglbackground)
  S3method(plot3d, rglsubscene)
+ S3method(plot3d, "function")
  
  S3method(print, rglscene)
  S3method(print, rglobject)
