@@ -93,3 +93,59 @@ decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zli
     
     invisible(result)
 }
+
+plot3d.function <- function(x, xlim = c(0,1), ylim = c(0,1), zlim = NULL, 
+    slim = NULL, tlim = NULL, n = 101,
+    xvals = seq.int(min(xlim), max(xlim), length.out = n[1]), 
+    yvals = seq.int(min(ylim), max(ylim), length.out = n[2]), 
+    svals = seq.int(min(slim), max(slim), length.out = n[1]), 
+    tvals = seq.int(min(tlim), max(tlim), length.out = n[2]),
+    xlab = "x", ylab = "y", zlab = "z", col = "gray",
+    otherargs = list(), ...) {
+    f <- x
+    n <- rep(n, length.out = 2)
+    parametric <- !is.null(slim) || !is.null(tlim)
+    if (!parametric) {
+	nx <- length(xvals)
+	ny <- length(yvals)
+	xvals <- matrix(xvals, nx, ny)
+	yvals <- matrix(yvals, nx, ny, byrow = TRUE)
+	zvals <- do.call(f, c(list(c(xvals), c(yvals)), otherargs))
+	dim(zvals) <- dim(xvals)
+    } else {
+	if (is.null(slim)) slim <- c(0,1)
+	if (is.null(tlim)) tlim <- c(0,1)
+	ns <- length(svals)
+	nt <- length(tvals)
+	svals <- matrix(svals, ns, nt)
+	tvals <- matrix(tvals, ns, nt, byrow = TRUE)
+
+	allvals <- do.call(f, c(list(c(svals), c(tvals)), otherargs))
+	xvals <- matrix(allvals[,1], ns, nt)
+	yvals <- matrix(allvals[,2], ns, nt)
+	zvals <- matrix(allvals[,3], ns, nt)
+    }
+    truncate <- function(vals, range) {
+	vals[vals < min(range) | vals > max(range)] <- NA
+	vals
+    }
+    if (!parametric || !missing(xlim)) 
+	xvals <- truncate(xvals, xlim)
+    if (!parametric || !missing(ylim))
+	yvals <- truncate(yvals, ylim)
+    if (!is.null(zlim))
+	zvals <- truncate(zvals, zlim)
+	
+    if (is.function(col)) {
+	zmin <- min(zvals, na.rm = TRUE)
+	zscale <- 1/(max(zvals, na.rm = TRUE) - zmin)
+	colfn <- colorRamp(col(100))
+	colrgba <- colfn(c((zvals - zmin)*zscale))
+	colrgba[is.na(colrgba)] <- 0
+	col <- rgb(colrgba, maxColorValue = 255)
+	dim(col) <- dim(zvals)
+    }
+	
+    persp3d(xvals, yvals, zvals, col = col, 
+    	    xlab = xlab, ylab = ylab, zlab = zlab, ...)
+}

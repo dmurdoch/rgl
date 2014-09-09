@@ -100,18 +100,7 @@ material3d(col="black")
 persp3d(x, y, z, col = "green3", aspect="iso",
       axes = FALSE, box = FALSE)
 
-# (4) A cylindrical plot
-
-z <- matrix(seq(0, 1, len=50), 50, 50)
-theta <- t(z)
-r <- 1 + exp( -pmin( (z - theta)^2, (z - theta - 1)^2, (z - theta + 1)^2 )/0.01 )
-x <- r*cos(theta*2*pi)
-y <- r*sin(theta*2*pi)
-
-open3d()
-persp3d(x, y, z, col="red")
-
-# (5) A globe
+# (4) A globe
 
 lat <- matrix(seq(90,-90, len=50)*pi/180, 50, 50, byrow=TRUE)
 long <- matrix(seq(-180, 180, len=50)*pi/180, 50, 50)
