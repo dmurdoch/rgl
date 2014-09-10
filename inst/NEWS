@@ -592,5 +592,5 @@ v0.94
   - Some of the animations have been sped up at the request of CRAN
 
 0.94.1132
-  - Added function method for plot3d(), to allow surfaces to be
-    plotted just by specifying the function.
+  - Added function methods for persp3d() and plot3d(), to allow
+    surfaces to be plotted just by specifying the function.
