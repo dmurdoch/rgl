@@ -46,3 +46,74 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
                           xlab = xlab, ylab = ylab, zlab = zlab, aspect = aspect, ...))
     invisible(result)
 }
+
+persp3d.function <- function(x, xlim = c(0,1), ylim = c(0,1), zlim = NULL, 
+			    slim = NULL, tlim = NULL, n = 101,
+			    xvals = seq.int(min(xlim), max(xlim), length.out = n[1]), 
+			    yvals = seq.int(min(ylim), max(ylim), length.out = n[2]), 
+			    svals = seq.int(min(slim), max(slim), length.out = n[1]), 
+			    tvals = seq.int(min(tlim), max(tlim), length.out = n[2]),
+			    xlab = "x", ylab = "y", zlab = "z", col = "gray",
+			    otherargs = list(), 
+			    normal = NULL, texture = NULL, ...) {
+	f <- x
+	n <- rep(n, length.out = 2)
+	parametric <- !is.null(slim) || !is.null(tlim)
+	if (!parametric) {
+		n1 <- length(xvals)
+		n2 <- length(yvals)
+		xvals <- matrix(xvals, n1, n2)
+		yvals <- matrix(yvals, n1, n2, byrow = TRUE)
+		args <- c(list(c(xvals), c(yvals)), otherargs)
+		zvals <- do.call(f, args)
+		dim(zvals) <- dim(xvals)
+	} else {
+		if (is.null(slim)) slim <- c(0,1)
+		if (is.null(tlim)) tlim <- c(0,1)
+		n1 <- length(svals)
+		n2 <- length(tvals)
+		svals <- matrix(svals, n1, n2)
+		tvals <- matrix(tvals, n1, n2, byrow = TRUE)
+		
+		args <- c(list(c(svals), c(tvals)), otherargs)
+		allvals <- do.call(f, args)
+		xvals <- matrix(allvals[,1], n1, n2)
+		yvals <- matrix(allvals[,2], n1, n2)
+		zvals <- matrix(allvals[,3], n1, n2)
+	}
+	truncate <- function(vals, range) {
+		vals[vals < min(range) | vals > max(range)] <- NA
+		vals
+	}
+	if (!parametric || !missing(xlim)) 
+		xvals <- truncate(xvals, xlim)
+	if (!parametric || !missing(ylim))
+		yvals <- truncate(yvals, ylim)
+	if (!is.null(zlim))
+		zvals <- truncate(zvals, zlim)
+	
+	if (is.function(col)) {
+		zmin <- min(zvals, na.rm = TRUE)
+		zscale <- 1/(max(zvals, na.rm = TRUE) - zmin)
+		colfn <- colorRamp(col(100))
+		colrgba <- colfn(c((zvals - zmin)*zscale))
+		colrgba[is.na(colrgba)] <- 0
+		col <- rgb(colrgba, maxColorValue = 255)
+		dim(col) <- dim(zvals)
+	}
+	if (is.function(normal)) 
+		normal <- do.call(normal, args)	
+	if (is.function(texture))
+		texture <- do.call(texture, args)
+	
+	args <- list(xvals, yvals, zvals, col = col, 
+		xlab = xlab, ylab = ylab, zlab = zlab, ...)	
+	if (is.matrix(normal)) 
+		args <- c(args, list(normal_x = matrix(normal[,1], n1, n2),
+				     normal_y = matrix(normal[,2], n1, n2),
+				     normal_z = matrix(normal[,3], n1, n2)))	
+	if (is.matrix(texture))
+		args <- c(args, list(texture_s = matrix(texture_s[,1], n1, n2),
+				     texture_t = matrix(texture_t[,2], n1, n2)))
+	do.call(persp3d, args)
+}

@@ -77,6 +77,7 @@ if not).
 \seealso{
   \code{\link{plot.default}},  
   \code{\link{open3d}}, \code{\link{par3d}}.
+  There is a \code{\link{plot3d.function}} method for plotting surfaces.
 }
 \examples{
   open3d()
