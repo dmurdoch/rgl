@@ -113,7 +113,7 @@ persp3d.function <- function(x, xlim = c(0,1), ylim = c(0,1), zlim = NULL,
 				     normal_y = matrix(normal[,2], n1, n2),
 				     normal_z = matrix(normal[,3], n1, n2)))	
 	if (is.matrix(texture))
-		args <- c(args, list(texture_s = matrix(texture_s[,1], n1, n2),
-				     texture_t = matrix(texture_t[,2], n1, n2)))
+		args <- c(args, list(texture_s = matrix(texture[,1], n1, n2),
+				     texture_t = matrix(texture[,2], n1, n2)))
 	do.call(persp3d, args)
 }
