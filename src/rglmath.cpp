@@ -175,10 +175,22 @@ Matrix4x4::Matrix4x4(const Matrix4x4& src)
     data[i] = src.data[i];
 }
 
-Matrix4x4::Matrix4x4(const double* from)
-{
+Matrix4x4::Matrix4x4(const double* from) {
+  loadData(from);
+}
+
+void Matrix4x4::loadData(const double* from) {
   for(int i=0;i<16;i++)
     data[i] = (float) from[i];
+}
+
+void Matrix4x4::loadData(const float* from) {
+  for(int i=0;i<16;i++)
+    data[i] = from[i];
+}
+
+void Matrix4x4::loadData(const Matrix4x4& from) {
+  loadData(from.data);
 }
 
 Vec3 Matrix4x4::operator * (const Vec3 v) const {
@@ -290,6 +302,26 @@ void Matrix4x4::getData(double* dest)
     	dest[i] = data[i];
 }
 
+Matrix4x4 Matrix4x4::scaleMatrix(double sx, double sy, double sz)
+{
+  Matrix4x4 result;
+  result.setIdentity();
+  result.ref(0,0) = sx;
+  result.ref(1,1) = sy;
+  result.ref(2,2) = sz;
+  return result;
+}
+
+Matrix4x4 Matrix4x4::translationMatrix(double x, double y, double z)
+{
+  Matrix4x4 result;
+  result.setIdentity();
+  result.ref(0,3) = x;
+  result.ref(1,3) = y;
+  result.ref(2,3) = z;
+  return result;
+}
+
 Vertex PolarCoord::vector() const { 
   float t = math::deg2rad(theta);
   float p = math::deg2rad(phi);
@@ -299,3 +331,4 @@ Vertex PolarCoord::vector() const {
     math::cos(p) * math::cos(t)
   );
 }
+

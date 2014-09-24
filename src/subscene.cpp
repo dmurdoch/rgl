@@ -15,7 +15,8 @@ using namespace rgl;
 Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_model,
                    bool in_ignoreExtent)
  : SceneNode(SUBSCENE), parent(NULL), do_viewport(in_viewport), do_projection(in_projection),
-   do_model(in_model), viewport(0.,0.,1.,1.),Zrow(), Wrow(), ignoreExtent(in_ignoreExtent)
+   do_model(in_model), viewport(0.,0.,1.,1.),Zrow(), Wrow(),
+   pviewport(0,0,1024,1024), ignoreExtent(in_ignoreExtent)
 {
   userviewpoint = NULL;
   modelviewpoint = NULL;
@@ -23,14 +24,8 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
   background = NULL;
   bboxChanges = false;
   data_bbox.invalidate();
-  
-  for (int i=0; i<4; i++) {
-    pviewport[i] = i < 2 ? 0 : 1024;
-    for (int j=0;j<4;j++) {
-      modelMatrix[4*i + j] = i == j;
-      projMatrix[4*i + j] = i == j;
-    }
-  }  
+  modelMatrix.setIdentity();
+  projMatrix.setIdentity(); 
 }
 
 Subscene::~Subscene() 
@@ -241,8 +236,8 @@ Subscene* Subscene::whichSubscene(int mouseX, int mouseY)
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end() ; ++ i ) {
     result = (sub = (*i)->whichSubscene(mouseX, mouseY)) ? sub : result;
   }  
-  if (!result && pviewport[0] <= mouseX && mouseX < pviewport[0] + pviewport[2] 
-              && pviewport[1] <= mouseY && mouseY < pviewport[1] + pviewport[3])
+  if (!result && pviewport.x <= mouseX && mouseX < pviewport.x + pviewport.width 
+              && pviewport.y <= mouseY && mouseY < pviewport.y + pviewport.height)
     result = this;
   return result;
 }
@@ -493,7 +488,7 @@ ModelViewpoint* Subscene::getModelViewpoint()
 void Subscene::render(RenderContext* renderContext)
 {
   GLdouble saveprojection[16];
-  GLint saveviewport[4] = {0,0,0,0};
+  Rect2 saveviewport(0,0,0,0);
   
   /* FIXME:  the viewpoint object affects both the projection matrix and the
              model matrix.  We need ugly code to use the right one when 
@@ -507,11 +502,10 @@ void Subscene::render(RenderContext* renderContext)
     // SETUP VIEWPORT TRANSFORMATION
     //
     if (parent)  
-      for (int i=0; i<4; i++) saveviewport[i] = parent->pviewport[i];
+      saveviewport = parent->pviewport;
     setupViewport(renderContext);
 
   }
-  glGetIntegerv(GL_VIEWPORT, pviewport);  
   SAVEGLERROR;
   
   if (background) {
@@ -547,19 +541,15 @@ void Subscene::render(RenderContext* renderContext)
   // just use the parent.
   
   if (do_projection > EMBED_INHERIT) {
-    
-    for (int i=0; i<16; i++) saveprojection[i] = projMatrix[i];
+    projMatrix.getData(saveprojection);
     setupProjMatrix(renderContext, total_bsphere);
-  
   }
-  glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
   
   // Now the model matrix.  Since this depends on both the viewpoint and the model
   // transformations, we don't bother using the parent one, we reconstruct in
   // every subscene.
   
-  setupModelViewMatrix(total_bsphere.center);
-  glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+  setupModelViewMatrix(renderContext, total_bsphere.center);
   
   setupLights(renderContext);
   
@@ -671,9 +661,9 @@ void Subscene::render(RenderContext* renderContext)
     glLoadMatrixd(saveprojection);
   }
   
-  if (do_viewport > EMBED_INHERIT) 
-    glViewport(saveviewport[0], saveviewport[1], saveviewport[2], saveviewport[3]);
-  
+  if (do_viewport > EMBED_INHERIT)  {
+    glViewport(saveviewport.x, saveviewport.y, saveviewport.width, saveviewport.height);
+  }
 }
 
 void Subscene::calcDataBBox()
@@ -718,12 +708,12 @@ void Subscene::setupViewport(RenderContext* rctx)
     rect.width = rctx->rect.width*viewport.width;
     rect.height = rctx->rect.height*viewport.height;
   } else {
-    rect.x = parent->pviewport[0] + viewport.x*parent->pviewport[2];
-    rect.y = parent->pviewport[1] + viewport.y*parent->pviewport[3];
-    rect.width = parent->pviewport[2]*viewport.width;
-    rect.height = parent->pviewport[3]*viewport.height;
+    rect.x = parent->pviewport.x + viewport.x*parent->pviewport.width;
+    rect.y = parent->pviewport.y + viewport.y*parent->pviewport.height;
+    rect.width = parent->pviewport.width*viewport.width;
+    rect.height = parent->pviewport.height*viewport.height;
   }
-  
+  pviewport = rect;
   glViewport(rect.x, rect.y, rect.width, rect.height);
   glScissor(rect.x, rect.y, rect.width, rect.height);
 }
@@ -731,9 +721,10 @@ void Subscene::setupViewport(RenderContext* rctx)
 void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 {
   glMatrixMode(GL_PROJECTION);
-  if (do_projection == EMBED_REPLACE)
+  if (do_projection == EMBED_REPLACE) {
     glLoadIdentity();
-    
+    projMatrix.setIdentity();
+  }    
   getUserViewpoint()->setupFrustum(rctx, viewSphere);
     
   SAVEGLERROR;    
@@ -744,37 +735,28 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 // the latter from the modelViewpoint, possibly after applying the same from the parents.
 // We always reconstruct from scratch rather than trying to use the matrix in place.
 
-void Subscene::setupModelViewMatrix(Vertex center)
+void Subscene::setupModelViewMatrix(RenderContext* rctx, Vertex center)
 {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  getUserViewpoint()->setupViewer();
-  setupModelMatrix(center);
+  modelMatrix.setIdentity();
+  getUserViewpoint()->setupViewer(rctx);
+  setupModelMatrix(rctx, center);
   
   SAVEGLERROR;
 }
 
-void Subscene::setupModelMatrix(Vertex center)
+void Subscene::setupModelMatrix(RenderContext* rctx, Vertex center)
 {
   if (do_model < EMBED_REPLACE && parent)
-    parent->setupModelMatrix(center);
+    parent->setupModelMatrix(rctx, center);
     
   if (do_model > EMBED_INHERIT)
-    getModelViewpoint()->setupTransformation(center);
+    getModelViewpoint()->setupTransformation(rctx, center);
   
   SAVEGLERROR;
 }
 
-void Subscene::getModelMatrix(double* modelMatrix, Vertex center)
-{
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-  glLoadIdentity();
-  setupModelMatrix(center);
-  glGetDoublev(GL_MODELVIEW_MATRIX, (GLdouble*) modelMatrix);
-  glPopMatrix();
-}
-  
 void Subscene::disableLights(RenderContext* rctx)
 {
     

@@ -98,7 +98,7 @@ float UserViewpoint::getFOV() const
 
 void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
 {
-  frustum.enclose(viewSphere.radius, fov, rctx->subscene->pviewport[2], rctx->subscene->pviewport[3]);
+  frustum.enclose(viewSphere.radius, fov, rctx->subscene->pviewport.width, rctx->subscene->pviewport.height);
   if (!viewerInScene) {
     eye.x = 0.;
     eye.y = 0.;
@@ -130,7 +130,7 @@ void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
   } else {
     glFrustum(frustum.left, frustum.right, frustum.bottom, frustum.top, frustum.znear, frustum.zfar);  
   }
-
+  rctx->subscene->projMatrix.loadData(rctx->subscene->projMatrix*frustum.getMatrix());
 }
 
 Vertex UserViewpoint::getObserver()
@@ -145,24 +145,27 @@ void UserViewpoint::setObserver(bool automatic, Vertex eye)
     this->eye = eye;
 }
 
-void UserViewpoint::setupViewer()
+void UserViewpoint::setupViewer(RenderContext* rctx)
 {
   glTranslatef(-eye.x, -eye.y, -eye.z);
+  rctx->subscene->modelMatrix = rctx->subscene->modelMatrix * Matrix4x4::translationMatrix(-eye.x, -eye.y, -eye.z);
 }
 
-void ModelViewpoint::setupOrientation() const
+void ModelViewpoint::setupOrientation(RenderContext* rctx) const
 {
   glMultMatrixd(mouseMatrix);
   glMultMatrixd(userMatrix);
-
+  rctx->subscene->modelMatrix = rctx->subscene->modelMatrix * mouseMatrix * userMatrix;
 }
 
-void ModelViewpoint::setupTransformation(Vertex center)
+void ModelViewpoint::setupTransformation(RenderContext* rctx, Vertex center)
 {     
   // modelview
-  setupOrientation();
+  setupOrientation(rctx);
   glScaled(scale.x, scale.y, scale.z);
   glTranslatef( -center.x, -center.y, -center.z );
+  rctx->subscene->modelMatrix = rctx->subscene->modelMatrix * Matrix4x4::scaleMatrix(scale.x, scale.y, scale.z)
+                      * Matrix4x4::translationMatrix(-center.x, -center.y, -center.z);
 }
 
 void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)

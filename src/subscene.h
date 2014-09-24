@@ -22,8 +22,8 @@ private:
 
   void setupViewport(RenderContext* rctx);
   void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
-  void setupModelMatrix(Vertex center);
-  void setupModelViewMatrix(Vertex center);
+  void setupModelMatrix(RenderContext* rctx, Vertex center);
+  void setupModelViewMatrix(RenderContext* rctx, Vertex center);
   
   void disableLights(RenderContext* rctx);
   void setupLights(RenderContext* rctx);
@@ -175,13 +175,11 @@ public:
 
 // Translate from OpenGL window-relative coordinates (relative to bottom left corner of window) to
 // viewport relative (relative to bottom left corner of viewport)
-  void translateCoords(int* mouseX, int* mouseY) const { *mouseX = *mouseX - pviewport[0]; *mouseY = *mouseY - pviewport[1]; }
+  void translateCoords(int* mouseX, int* mouseY) const { *mouseX = *mouseX - pviewport.x; *mouseY = *mouseY - pviewport.y; }
   
   
   UserViewpoint* getUserViewpoint();
   ModelViewpoint* getModelViewpoint();
-  
-  void getModelMatrix(double* modelMatrix, Vertex center);
 
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "subscene", buflen); };
   
@@ -190,8 +188,8 @@ public:
   // These are set after rendering the scene
   Vec4 Zrow;
   Vec4 Wrow;
-  GLdouble modelMatrix[16], projMatrix[16];
-  GLint pviewport[4];  // viewport in pixels
+  Matrix4x4 modelMatrix, projMatrix;
+  Rect2 pviewport;  // viewport in pixels
     
 private:
     

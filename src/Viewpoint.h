@@ -20,8 +20,8 @@ public:
   PolarCoord& getPosition();
   void        setPosition(const PolarCoord& position);
   void	      clearMouseMatrix();
-  void        setupTransformation(Vertex center);
-  void        setupOrientation() const;
+  void        setupTransformation(RenderContext* rctx, Vertex center);
+  void        setupOrientation(RenderContext* rctx) const;
   bool        isInteractive() const;
   void        updateMouseMatrix(Vertex dragStart,Vertex dragCurrent);
   void	      updateMouseMatrix(PolarCoord newpos);
@@ -59,7 +59,7 @@ public:
   void        setupFrustum(RenderContext* rctx, const Sphere& viewvolumeSphere);
   Vertex      getObserver();
   void	      setObserver(bool automatic, Vertex eye);
-  void	      setupViewer();
+  void	      setupViewer(RenderContext* rctx);
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "userviewpoint", buflen); };
   Frustum     frustum;
 private:

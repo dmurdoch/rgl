@@ -157,7 +157,12 @@ public:
   void setIdentity(void);
   void setRotate(const int axis, const float degree);
   void getData(double* dest);
+  void loadData(const double* from);
+  void loadData(const float* from);
+  void loadData(const Matrix4x4& from);
   void transpose();
+  static Matrix4x4 scaleMatrix(double sx, double sy, double sz); 
+  static Matrix4x4 translationMatrix(double x, double y, double z);
 private:
   inline float  val(int row, int column) const { return data[4*column+row]; }
   inline float& ref(int row, int column) { return data[4*column+row]; }

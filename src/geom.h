@@ -55,6 +55,7 @@ class Frustum {
 public:
   Frustum() : ortho(false) {};
   void enclose(float sphere_radius, float fovangle, int win_width, int win_height);
+  Matrix4x4 getMatrix();
   float left, right, bottom, top, znear, zfar, distance;
   bool ortho;
 };

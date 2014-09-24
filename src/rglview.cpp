@@ -163,8 +163,8 @@ void RGLView::buttonPress(int button, int mouseX, int mouseY)
 	  subscene->translateCoords(&mouseX, &mouseY);
 	  drag = button;
 	  activeSubscene = subscene->getObjID();
-	  vwidth = subscene->pviewport[2];
-	  vheight = subscene->pviewport[3];
+	  vwidth = subscene->pviewport.width;
+	  vheight = subscene->pviewport.height;
 	  windowImpl->captureMouse(this);	  
 	  (this->*ButtonBeginFunc[button-1])(mouseX, mouseY);
 	}
@@ -193,8 +193,8 @@ void RGLView::mouseMove(int mouseX, int mouseY)
     	}
     	subscene->translateCoords(&mouseX, &mouseY);
 
-	vwidth = subscene->pviewport[2]; /* These may have changed */
-	vheight = subscene->pviewport[3];    	  
+	vwidth = subscene->pviewport.width; /* These may have changed */
+	vheight = subscene->pviewport.height;    	  
     	
   	mouseX = clamp(mouseX, 0, vwidth-1);
   	mouseY = clamp(mouseY, 0, vheight-1);
@@ -980,4 +980,3 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
 
   return success;
 }
-

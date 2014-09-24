@@ -30,19 +30,21 @@ public:
   void show() {};
   void hide() {};
   void bringToTop(int stay) {};
-  void update() {};
+  void update() { if (window) window->paint(); };
   void destroy() { if (window) window->notifyDestroy(); };
   void captureMouse(View* pView) {};
   void releaseMouse() {};
   GLFont* getFont(const char* family, int style, double cex, 
                   bool useFreeType);
+  int getAntialias() { return 1; }
+  int getMaxClipPlanes() { return INT_MAX; }
 
 private:
   int rect[4];
   friend class NULLGUIFactory;
 
 public:
-  bool beginGL() { return 0; };
+  bool beginGL() { return true; };
   void endGL() {};
   void swap() {};
 };

@@ -167,21 +167,6 @@ static void setScale(double* scale, RGLView* rglview, Subscene* subscene)
   CHECKGLERROR;
 }
 
-static void getModelMatrix(double* modelMatrix, Subscene* subscene)
-{ 
-      const AABox& bbox = subscene->getBoundingBox();
-      subscene->getModelMatrix(modelMatrix, bbox.getCenter());
-      CHECKGLERROR;  	
-}
-
-static void getProjMatrix(double* projMatrix, Subscene* subscene)
-{     
-      for (int i=0; i<16; i++) {
-        projMatrix[i] = subscene->projMatrix[i];
-      }	
-      CHECKGLERROR;
-}
-
 static void setViewport(double* viewport, Device* device, RGLView* rglview, Subscene* subscene)
 {
   Embedding embedding;
@@ -198,10 +183,10 @@ static void setViewport(double* viewport, Device* device, RGLView* rglview, Subs
     bottom = 0;
     left = 0;
   } else {
-    left = subscene->getParent()->pviewport[0];
-    bottom = subscene->getParent()->pviewport[1];
-    width = subscene->getParent()->pviewport[2];
-    height = subscene->getParent()->pviewport[3];
+    left = subscene->getParent()->pviewport.x;
+    bottom = subscene->getParent()->pviewport.y;
+    width = subscene->getParent()->pviewport.width;
+    height = subscene->getParent()->pviewport.height;
   }
   x = (viewport[0]-left)/width;
   y = (viewport[1]-bottom)/height;
@@ -213,9 +198,10 @@ static void setViewport(double* viewport, Device* device, RGLView* rglview, Subs
 
 static void getViewport(int* viewport, Subscene* subscene)
 {      
-      for (int i=0; i<4; i++) {
-        viewport[i] = subscene->pviewport[i];
-      }      
+      viewport[0] = subscene->pviewport.x;
+      viewport[1] = subscene->pviewport.y;
+      viewport[2] = subscene->pviewport.width;
+      viewport[3] = subscene->pviewport.height;
       CHECKGLERROR;
 }
 
@@ -318,26 +304,12 @@ static char* getFontname(RGLView* rglview)
 
 static int getAntialias(RGLView* rglview)
 {
-    WindowImpl* windowImpl = rglview->windowImpl;
-    if (windowImpl->beginGL()) {
-      int result;      
-      glGetIntegerv(GL_SAMPLES, &result);
-      windowImpl->endGL();
-      CHECKGLERROR;
-      return result;
-    }
-  return 1;
+    return rglview->windowImpl->getAntialias();
 }
 
-static int getMaxClipPlanes()
+static int getMaxClipPlanes(RGLView* rglview)
 {
-  int result;
-  glGetError();
-  glGetIntegerv(GL_MAX_CLIP_PLANES, &result);
-  if (glGetError() == GL_NO_ERROR)
-    return result;
-  else
-    return 6;
+  return rglview->windowImpl->getMaxClipPlanes();
 }  
 
 
@@ -599,7 +571,7 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     }    
     else if (streql(what, "modelMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
-	getModelMatrix(REAL(value), sub);
+	sub->modelMatrix.getData(REAL(value));
     }
     else if (streql(what, "mouseMode")) {
     	PROTECT(value = allocVector(STRSXP, 4));
@@ -626,7 +598,7 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     }
     else if (streql(what, "projMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
-	getProjMatrix(REAL(value), sub);    
+	sub->projMatrix.getData(REAL(value));    
     }
     else if (streql(what, "skipRedraw")) {
     	value = allocVector(LGLSXP, 1);
@@ -703,7 +675,7 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     }
     else if (streql(what, "maxClipPlanes")) {
 	value = allocVector(INTSXP, 1);
-	INTEGER(value)[0] = getMaxClipPlanes();
+	INTEGER(value)[0] = getMaxClipPlanes(rglview);
     }
   	
     if (! success) error(_("unknown error getting rgl parameter \"%s\""),  what);
