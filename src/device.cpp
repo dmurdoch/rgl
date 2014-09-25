@@ -14,6 +14,7 @@ Device::Device(int id, bool useNULL) : id_(id)
 {
   scene   = new Scene();
   rglview = new RGLView(scene);
+  rglview->setNULLActive(useNULL);
   window  = new Window( rglview, getGUIFactory(useNULL) );
   devtype = GUIFactoryName(useNULL);
   window->addDisposeListener(this);

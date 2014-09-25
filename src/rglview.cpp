@@ -980,3 +980,8 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
 
   return success;
 }
+
+void RGLView::setNULLActive(bool nullActive)
+{
+  renderContext.NULLActive = nullActive;
+}
