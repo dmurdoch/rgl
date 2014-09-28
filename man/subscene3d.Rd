@@ -36,7 +36,7 @@ The parent subscene (defaults to the current subscene).
 Whether lights, shapes, bounding box decorations and background should be copied to the new subscene.
 }
   \item{newviewport}{
-Optionally specify the new subscenes viewport (in pixels).
+Optionally specify the new subscene's viewport (in pixels).
 }
   \item{ignoreExtent}{
 Whether to ignore the subscene's bounding box when calculating the parent bounding
@@ -58,7 +58,7 @@ Object ids to protect from this garbage collection.
 \details{
 The rgl package allows multiple windows to be open; each one corresponds to a \dQuote{scene}.
 Within each scene there are one or more \dQuote{subscenes}.  Each subscene corresponds
-to a rectangular region in the window, and may have it's own projection and transformation.
+to a rectangular region in the window, and may have its own projection and transformation.
 
 There is always a current subscene:  most graphic operations make changes there, e.g. by adding
 an object to it.
