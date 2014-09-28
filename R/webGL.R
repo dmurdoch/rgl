@@ -236,8 +236,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (!toplevel)
 '	  vNormal = normalize((vec4(aNorm, 1.)*normMatrix).xyz);	  
 	  vec4 pos = mvMatrix * vec4(uOrig, 1.);
-	  pos = pos/pos.w + vec4(uSize*(vec4(aPos, 1.)*usermat).xyz,0.);
-	  gl_Position = prMatrix * pos;',
+	  vPosition = pos/pos.w + vec4(uSize*(vec4(aPos, 1.)*usermat).xyz,0.);
+	  gl_Position = prMatrix * vPosition;',
 	  	  
 '	}
 	</script>
