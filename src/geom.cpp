@@ -38,8 +38,10 @@ void AABox::operator += (const Vertex& v)
 
 void AABox::operator += (const AABox& aabox)
 {
-  *this += aabox.vmin;
-  *this += aabox.vmax;
+  if (aabox.isValid()) {
+    *this += aabox.vmin;
+    *this += aabox.vmax;
+  }
 }
 
 void AABox::operator += (const Sphere& sphere)

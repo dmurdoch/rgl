@@ -505,7 +505,9 @@ void Subscene::render(RenderContext* renderContext)
       saveviewport = parent->pviewport;
     setupViewport(renderContext);
 
-  }
+  } else
+    pviewport = parent->pviewport;
+    
   SAVEGLERROR;
   
   if (background) {
@@ -543,7 +545,8 @@ void Subscene::render(RenderContext* renderContext)
   if (do_projection > EMBED_INHERIT) {
     projMatrix.getData(saveprojection);
     setupProjMatrix(renderContext, total_bsphere);
-  }
+  } else
+    projMatrix = parent->projMatrix;
   
   // Now the model matrix.  Since this depends on both the viewpoint and the model
   // transformations, we don't bother using the parent one, we reconstruct in
@@ -753,6 +756,8 @@ void Subscene::setupModelMatrix(RenderContext* rctx, Vertex center)
     
   if (do_model > EMBED_INHERIT)
     getModelViewpoint()->setupTransformation(rctx, center);
+  else
+    modelMatrix = parent->modelMatrix;
   
   SAVEGLERROR;
 }
