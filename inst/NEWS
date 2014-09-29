@@ -591,7 +591,7 @@ v0.94
     it was closed.  (Reported by Henrik Bengtsson.)
   - Some of the animations have been sped up at the request of CRAN
 
-0.94.1141
+0.94.1143
   - Added function methods for persp3d() and plot3d(), to allow
     surfaces to be plotted just by specifying the function.
   - Fixed a bug introduced in 0.94 that made user callbacks crash R.

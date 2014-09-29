@@ -751,13 +751,14 @@ void Subscene::setupModelViewMatrix(RenderContext* rctx, Vertex center)
 
 void Subscene::setupModelMatrix(RenderContext* rctx, Vertex center)
 {
+  /* The recursive call below will set the active subscene
+     modelMatrix, not the inherited one. */
+     
   if (do_model < EMBED_REPLACE && parent)
     parent->setupModelMatrix(rctx, center);
     
   if (do_model > EMBED_INHERIT)
     getModelViewpoint()->setupTransformation(rctx, center);
-  else
-    modelMatrix = parent->modelMatrix;
   
   SAVEGLERROR;
 }
