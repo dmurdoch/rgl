@@ -213,12 +213,14 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
   idata   <- as.integer(c(sphere,fogtype))
 
   ret <- .C( rgl_bg, 
-    success = FALSE,
+    success = as.integer(FALSE),
     idata
   )
 
   if (! ret$success)
     stop("rgl_bg")
+    
+  return(ret$success)
 }
 
 
