@@ -220,7 +220,7 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
   if (! ret$success)
     stop("rgl_bg")
     
-  return(ret$success)
+  invisible(ret$success)
 }
 
 
