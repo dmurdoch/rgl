@@ -37,7 +37,7 @@ bbox3d(xat=NULL, yat=NULL, zat=NULL,
   it is \code{"pretty"} (the default in \code{bbox3d}), ticks are set at \code{\link{pretty}}
   locations.
   If \code{length} is not zero, it specifies the number of ticks that are automatically specified.
-  The first colour specifies the bounding box, while the second one specifies the tick mark and font colour.
+  The first color specifies the bounding box, while the second one specifies the tick mark and font color.
   
   \code{bbox3d} defaults to \code{\link{pretty}} locations for the axis labels and a slightly larger
   box, whereas \code{rgl.bbox} covers the exact range.

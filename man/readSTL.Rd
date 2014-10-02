@@ -48,8 +48,8 @@ objects to write.  If \code{NULL}, try to write everything.
 }
 \details{
 The current implementation is limited.  For reading, it ignores normals
-and colour information.  For writing, it only outputs triangles, quads, planes, spheres,
-points, line segments, line strips and surfaces, and does not write colour information.
+and color information.  For writing, it only outputs triangles, quads, planes, spheres,
+points, line segments, line strips and surfaces, and does not write color information.
 Lines and points are rendered in an isometric scale:  if your data scales vary, they
 will look strange.
 

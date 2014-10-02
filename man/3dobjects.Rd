@@ -30,8 +30,8 @@ filled triangles or quadrilaterals to the plots.  They correspond to the OpenGL 
 \code{GL_POINTS, GL_LINE_STRIP, GL_LINES, GL_TRIANGLES} and \code{GL_QUADS} respectively.  
 
 Points are taken in pairs by \code{segments3d}, triplets as the vertices
-of the triangles, and quadruplets for the quadrilaterals.  Colours are applied vertex by vertex; 
-if different at each end of a line segment, or each vertex of a polygon, the colours
+of the triangles, and quadruplets for the quadrilaterals.  Colors are applied vertex by vertex; 
+if different at each end of a line segment, or each vertex of a polygon, the colors
 are blended over the extent of the object.  Quadrilaterals must be entirely 
 in one plane and convex, or the results are undefined.
 

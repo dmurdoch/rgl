@@ -59,7 +59,7 @@ surface.  Only used if
 The axis labels.
 }
   \item{col}{
-The colour to use for the plot.  See the details below.
+The color to use for the plot.  See the details below.
 }
   \item{otherargs}{
 Additional arguments to pass to the function.
@@ -99,14 +99,14 @@ surface is plotted.  Values of \code{s}
 \code{f(s,t)} must return a 3-column matrix, giving x, y and z 
 coordinates of points on the surface.  
 
-The colour of the surface may be specified as the name of a
-colour, or a vector or matrix of colour names. In this case
-the colours will be recycled across the points on the grid
+The color of the surface may be specified as the name of a
+color, or a vector or matrix of color names. In this case
+the colors will be recycled across the points on the grid
 of values.
 
 Alternatively, a function may be given:  it should be a function
 like \code{\link{rainbow}} that takes an integer argument and
-returns a vector of colours.  In this case the colours are mapped
+returns a vector of colors.  In this case the colors are mapped
 to z values.
 
 The \code{normal} argument allows specification of a function

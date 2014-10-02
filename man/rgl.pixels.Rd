@@ -16,7 +16,7 @@ rgl.pixels(component = c("red", "green", "blue"), viewport=par3d("viewport"), to
 \details{
 The possible components are \code{"red"}, \code{"green"}, \code{"blue"}, 
 \code{"alpha"}, \code{"depth"}, and \code{"luminance"} (the sum of the three
-colours).  All are scaled from 0 to 1.
+colors).  All are scaled from 0 to 1.
 
 Note that the luminance is kept below 1 by truncating the sum; this is the 
 definition used for the \code{GL_LUMINANCE} component in OpenGL.

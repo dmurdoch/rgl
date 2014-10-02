@@ -39,7 +39,7 @@ Lines are rendered as cylinders with this many sides.
 Whether to convert points and lines to \dQuote{Edge} records in the PLY output.
 }
   \item{withColors}{
-Whether to output vertex colour information.
+Whether to output vertex color information.
 }
   \item{withNormals}{
 Whether to output vertex normals for smooth shading.

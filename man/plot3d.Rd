@@ -31,7 +31,7 @@ decorate3d(xlim, ylim, zlim,
   from \code{z=0}, and 'n' for nothing.  For the \code{mesh3d} method, one of 
   'shade', 'wire', or 'dots'.  Partial matching is used.
   }
-  \item{col}{the colour to be used for plotted items.}
+  \item{col}{the color to be used for plotted items.}
   \item{size}{the size for plotted points.}
   \item{lwd}{the line width for plotted items.}
   \item{radius}{the radius of spheres:  see Details below.}

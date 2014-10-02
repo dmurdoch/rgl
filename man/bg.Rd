@@ -36,10 +36,13 @@ rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"),
 If sphere is set to \code{TRUE}, an environmental sphere enclosing the whole scene is drawn.
 
 If not, but the material properties include a bitmap as a texture, the bitmap is drawn in the 
-background of the scene.  (The bitmap colors modify the general colour setting.)
+background of the scene.  (The bitmap colors modify the general color setting.)
 
 If neither a sphere nor a bitmap background is drawn, the background is filled with a 
 solid color.
+}
+\note{
+The \code{\link{writeWebGL}} function only supports solid color backgrounds.
 }
 \examples{
   open3d()

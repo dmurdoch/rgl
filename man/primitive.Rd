@@ -45,7 +45,7 @@ rgl.quads(x, y = NULL, z = NULL, normals=NULL, texcoords=NULL, ... )
   \code{\link[grDevices]{xy.coords}}, and are interpreted in terms
   of the bitmap specified as the material texture, with \code{(0,0)} 
   at the lower left, \code{(1,1)} at the upper right.  The texture
-  is used to modulate the colour of the polygon.
+  is used to modulate the color of the polygon.
   
   These are the lower level functions called by
   \code{\link{points3d}}, \code{\link{segments3d}},
