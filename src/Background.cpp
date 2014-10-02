@@ -14,7 +14,8 @@ using namespace rgl;
 Material Background::defaultMaterial( Color(0.3f,0.3f,0.3f), Color(1.0f,0.0f,0.0f) );
 
 Background::Background(Material& in_material, bool in_sphere, int in_fogtype)
-: Shape(in_material, true, BACKGROUND), sphere(in_sphere), fogtype(in_fogtype)
+: Shape(in_material, true, BACKGROUND), sphere(in_sphere), fogtype(in_fogtype),
+  quad(NULL)
 {
   clearColorBuffer = true;
 
@@ -38,8 +39,20 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype)
     sphereMesh.setRadius( 1.0f );
     sphereMesh.update();
   }
-  else
+  else if (material.texture) {
+    double vertices[12] = { -1, -1, 1,
+                             1, -1, 1,
+                             1,  1, 1,
+                            -1,  1, 1 };
+    double texcoords[8] = { 0, 0, 
+                            1, 0,
+                            1, 1,
+                            0, 1 };
+    material.colorPerVertex(false);
     material.colors.recycle(1);
+    quad = new QuadSet(material, 4, vertices, NULL, texcoords, true, 0, 1);
+  } else
+    material.colors.recycle(1);    
 }
 
 GLbitfield Background::getClearFlags(RenderContext* renderContext)
@@ -146,7 +159,23 @@ void Background::render(RenderContext* renderContext)
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
-  } 
+  } else if (quad) {
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    
+    quad->draw(renderContext);
+    
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+  }
+    
 }
 
 void Background::drawElement(RenderContext* renderContext, int index)

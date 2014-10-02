@@ -3,6 +3,7 @@
 
 #include "Shape.h"
 #include "opengl.h"
+#include "PrimitiveSet.h"
 #include "SphereMesh.h"
 
 namespace rgl {
@@ -19,6 +20,7 @@ public:
     FOG_NONE=1, FOG_LINEAR, FOG_EXP, FOG_EXP2
   };
   Background( Material& in_material = defaultMaterial, bool sphere=false, int fogtype=FOG_NONE);
+  ~Background() { if (quad) delete quad; };
   void render(RenderContext* renderContext);
   int getElementCount(void) { return 1; }
   void drawElement(RenderContext* renderContext, int index);  
@@ -33,6 +35,7 @@ protected:
   bool sphere;
   int  fogtype;
   SphereMesh sphereMesh;
+  QuadSet* quad;
 //  GLuint displayList;
   friend class Scene;
 private:
