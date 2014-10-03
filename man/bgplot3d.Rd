@@ -48,6 +48,7 @@ It's best to size your window first, then draw the background at that size.
 \code{\link{bg3d}} for other background options.
 }
 \examples{
+\donttest{  
 x <- rnorm(100)
 y <- rnorm(100)
 z <- rnorm(100)
@@ -59,12 +60,12 @@ parent <- currentSubscene3d()
 mfrow3d(2,2)
 plot3d(x,y,z)
 next3d(reuse = FALSE)
-par3d(c("windowRect", "viewport"))   # Just for debugging
 bgplot3d(plot(y,z))
 next3d(reuse = FALSE)
 bgplot3d(plot(x,z))
 next3d(reuse = FALSE)
 legend3d("center", c("2D Points", "3D Points"), pch=c(1, 16))
 useSubscene3d(parent)
+}
 }
 \keyword{ graphics }
