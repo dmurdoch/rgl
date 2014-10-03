@@ -601,6 +601,6 @@ v0.94
   - Fixed a bug introduced in 0.94 with writing 3D sprite objects.
   - Fixed a bug computing the bounding box of an embedded subscene.
     
-0.94.1144
+0.94.1150
   - Allowed background of window to show bitmap;  added bgplot3d()
     and legend3d() functions.

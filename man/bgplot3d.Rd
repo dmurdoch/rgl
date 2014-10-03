@@ -52,10 +52,9 @@ x <- rnorm(100)
 y <- rnorm(100)
 z <- rnorm(100)
 open3d()
-rect <- par3d("windowRect")
-# Needs to be bigger
-rect[3:4] <- rect[3:4] + 100
-par3d(windowRect = rect)
+# Needs to be a bigger window than the default
+par3d(windowRect = c(100,100,612,612))
+Sys.sleep(0.1) # Allow sluggish window managers to catch up
 parent <- currentSubscene3d()
 mfrow3d(2,2)
 plot3d(x,y,z)
