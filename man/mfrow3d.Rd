@@ -20,7 +20,7 @@ layout3d(mat, widths = rep.int(1, ncol(mat)),
               parent = NA, 
               ...)
 next3d(current = NA, clear = TRUE, reuse = TRUE)
-clearSubsceneList(delete = currentSubscene3d() \%in\% subsceneList(window), 
+clearSubsceneList(delete = currentSubscene3d() \%in\% subsceneList(), 
                   window = rgl.cur())
 }
 \arguments{
