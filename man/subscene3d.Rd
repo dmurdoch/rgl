@@ -103,7 +103,9 @@ If successful, each function returns the object id of the subscene, with the exc
 Duncan Murdoch and Fang He.
 }
 \seealso{
-\code{\link{subsceneInfo}}, \code{\link{mfrow3d}} to set up multiple panes of subscenes.
+\code{\link{subsceneInfo}} for information about a subscene, 
+\code{\link{mfrow3d}} and \code{\link{layout3d}} to set up 
+multiple panes of subscenes.
 }
 \examples{
 
@@ -143,6 +145,5 @@ clipplanes3d(0,0,1,0)
 # Now delete the objects from the root subscene, to reveal the clipping planes
 useSubscene3d(root)
 delFromSubscene3d(obj)
-
 }
 \keyword{ graphics }
