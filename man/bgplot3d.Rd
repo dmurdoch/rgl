@@ -59,6 +59,7 @@ parent <- currentSubscene3d()
 mfrow3d(2,2)
 plot3d(x,y,z)
 next3d(reuse = FALSE)
+par3d()   # Just for debugging
 bgplot3d(plot(y,z))
 next3d(reuse = FALSE)
 bgplot3d(plot(x,z))
