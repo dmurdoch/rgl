@@ -37,8 +37,6 @@ to the X, Y, and Z coordinates.
 \item{model}{the modelview matrix}
 \item{projection}{the projection matrix}
 \item{viewport}{the viewport vector}
-\item{newmodel}{the \code{par3d("model")} matrix}
-\item{observer}{the \code{par3d("observer")} vector}
 
 See \code{\link{par3d}} for more details.
 }

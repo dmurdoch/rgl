@@ -205,14 +205,8 @@ Although \code{par3d("viewport")} names the entries of the reported vector,
 names are ignored when setting the viewport and entries must be specified
 in the standard order.
 
-In versions prior to 0.94 and the introduction of the \code{observer} parameter,
-\code{modelMatrix} contained a copy of the OpenGL MODELVIEW matrix.  As of 
-version 0.94, it contains only the transformations done to the model.  To obtain
-the old matrix, use this code:
-\verb{
- obs <- -par3d("observer")
- oldmodelMatrix <- t(translationMatrix(obs[1], obs[2], obs[3])) %*% par3d("modelMatrix")
-}
+In \pkg{rgl} versions 0.94.x the \code{modelMatrix} entry had a changed meaning; 
+before and after that it contains a copy of the OpenGL MODELVIEW matrix. 
 }
 
 \section{Rendering}{

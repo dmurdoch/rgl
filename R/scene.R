@@ -856,14 +856,9 @@ rgl.setselectstate <- function(state = "current")
 
 rgl.projection <- function()
 {
-    obs <- -par3d("observer") 
-    newmodel <- par3d("modelMatrix")
-    oldmodelMatrix <- t(translationMatrix(obs[1], obs[2], obs[3])) %*% newmodel
-    list(model = oldmodelMatrix,
+    list(model = par3d("modelMatrix"),
     	 proj = par3d("projMatrix"),
-    	 view = par3d("viewport"),
-    	 observer = -obs,
-    	 newmodel = newmodel)
+    	 view = par3d("viewport"))
 }   
      
 rgl.select3d <- function(button = c("left", "middle", "right")) {
@@ -885,7 +880,7 @@ rgl.select3d <- function(button = c("left", "middle", "right")) {
   	lly <- ury
   	ury <- temp
   }
-  proj <- rgl.projection();
+  proj <- rgl.projection()
   function(x,y=NULL,z=NULL) {
     pixel <- rgl.user2window(x,y,z,projection=proj)
     x <- pixel[,1]
