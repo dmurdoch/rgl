@@ -111,7 +111,7 @@ void RGLView::paint(void) {
   
   if (windowImpl->beginGL()) {
     scene->render(&renderContext);
-
+    glViewport(0,0, width, height);
     if (selectState == msCHANGING)
       select.render(mousePosition);
     if (flags & FSHOWFPS && selectState == msNONE)
