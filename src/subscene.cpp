@@ -485,14 +485,10 @@ ModelViewpoint* Subscene::getModelViewpoint()
   else error("must have a model viewpoint");
 }
 
-void Subscene::render(RenderContext* renderContext)
+void Subscene::update(RenderContext* renderContext)
 {
   GLdouble saveprojection[16];
   Rect2 saveviewport(0,0,0,0);
-  
-  /* FIXME:  the viewpoint object affects both the projection matrix and the
-             model matrix.  We need ugly code to use the right one when 
-             one is inherited and the other is not */
 
   renderContext->subscene = this;
   
@@ -507,16 +503,6 @@ void Subscene::render(RenderContext* renderContext)
 
   } else
     pviewport = parent->pviewport;
-    
-  SAVEGLERROR;
-  
-  if (background) {
-    GLbitfield clearFlags = background->getClearFlags(renderContext);
-
-    // clear
-    glDepthMask(GL_TRUE);
-    glClear(clearFlags);
-  }
 
   if (bboxChanges) 
     calcDataBBox();
@@ -536,10 +522,8 @@ void Subscene::render(RenderContext* renderContext)
   } else {
     total_bsphere = Sphere( Vertex(0,0,0), 1 );
   }
-
-  SAVEGLERROR;
   
-  // Now render the current scene.  First we use the projection matrix.  If we're inheriting,
+  // Now get the matrices.  First we compute the projection matrix.  If we're inheriting,
   // just use the parent.
   
   if (do_projection > EMBED_INHERIT) {
@@ -553,6 +537,44 @@ void Subscene::render(RenderContext* renderContext)
   // every subscene.
   
   setupModelViewMatrix(renderContext, total_bsphere.center);
+    
+  // update subscenes
+    
+  std::vector<Subscene*>::const_iterator iter;
+  for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
+    (*iter)->update(renderContext);
+    
+}
+
+void Subscene::render(RenderContext* renderContext)
+{
+  renderContext->subscene = this;
+  
+  glViewport(pviewport.x, pviewport.y, pviewport.width, pviewport.height);
+  glScissor(pviewport.x, pviewport.y, pviewport.width, pviewport.height);
+  SAVEGLERROR;
+  
+  if (background) {
+    GLbitfield clearFlags = background->getClearFlags(renderContext);
+
+    // clear
+    glDepthMask(GL_TRUE);
+    glClear(clearFlags);
+  }
+  SAVEGLERROR;
+  
+  // Now render the current scene.  First we set the projection matrix, then the modelview matrix.
+  
+  double mat[16];
+  projMatrix.getData(mat);
+  glMatrixMode(GL_PROJECTION);
+  glLoadMatrixd(mat);  
+  SAVEGLERROR; 
+  
+  modelMatrix.getData(mat);
+  glMatrixMode(GL_MODELVIEW);  
+  glLoadMatrixd(mat);
+  SAVEGLERROR;
   
   setupLights(renderContext);
   
@@ -658,15 +680,6 @@ void Subscene::render(RenderContext* renderContext)
   std::vector<Subscene*>::const_iterator iter;
   for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
     (*iter)->render(renderContext);
-    
-  if (do_projection > EMBED_INHERIT) {
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixd(saveprojection);
-  }
-  
-  if (do_viewport > EMBED_INHERIT)  {
-    glViewport(saveviewport.x, saveviewport.y, saveviewport.width, saveviewport.height);
-  }
 }
 
 void Subscene::calcDataBBox()
@@ -717,20 +730,14 @@ void Subscene::setupViewport(RenderContext* rctx)
     rect.height = parent->pviewport.height*viewport.height;
   }
   pviewport = rect;
-  glViewport(rect.x, rect.y, rect.width, rect.height);
-  glScissor(rect.x, rect.y, rect.width, rect.height);
 }
 
 void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 {
-  glMatrixMode(GL_PROJECTION);
-  if (do_projection == EMBED_REPLACE) {
-    glLoadIdentity();
+  if (do_projection == EMBED_REPLACE) 
     projMatrix.setIdentity();
-  }    
-  getUserViewpoint()->setupFrustum(rctx, viewSphere);
-    
-  SAVEGLERROR;    
+
+  getUserViewpoint()->setupFrustum(rctx, viewSphere);   
 }
 
 // The ModelView matrix has components of the user view (the translation at the start)
@@ -740,13 +747,9 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 
 void Subscene::setupModelViewMatrix(RenderContext* rctx, Vertex center)
 {
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
   modelMatrix.setIdentity();
   getUserViewpoint()->setupViewer(rctx);
   setupModelMatrix(rctx, center);
-  
-  SAVEGLERROR;
 }
 
 void Subscene::setupModelMatrix(RenderContext* rctx, Vertex center)
@@ -760,7 +763,6 @@ void Subscene::setupModelMatrix(RenderContext* rctx, Vertex center)
   if (do_model > EMBED_INHERIT)
     getModelViewpoint()->setupTransformation(rctx, center);
   
-  SAVEGLERROR;
 }
 
 void Subscene::disableLights(RenderContext* rctx)

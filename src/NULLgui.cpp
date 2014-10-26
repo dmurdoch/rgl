@@ -44,7 +44,7 @@ private:
   friend class NULLGUIFactory;
 
 public:
-  bool beginGL() { return true; };
+  bool beginGL() { return false; };
   void endGL() {};
   void swap() {};
 };

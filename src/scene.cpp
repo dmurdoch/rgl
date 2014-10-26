@@ -226,10 +226,13 @@ void Scene::setupLightModel()
   SAVEGLERROR;  
 }
   
+void Scene::update(RenderContext* renderContext)
+{
+  rootSubscene.update(renderContext);
+}
+
 void Scene::render(RenderContext* renderContext)
 {
-
-  renderContext->subscene  = &rootSubscene;
 
   //
   // CLEAR BUFFERS

@@ -144,6 +144,10 @@ public:
   virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   virtual String getTextAttribute(AABox& bbox, AttribID attrib, int index);
 
+  /* Update matrices etc. in preparation for rendering */
+  void update(RenderContext* renderContext);
+  
+  /* Do the OpenGL rendering */
   void render(RenderContext* renderContext);
 
   void renderClipplanes(RenderContext* renderContext);

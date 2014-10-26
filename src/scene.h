@@ -95,8 +95,13 @@ public:
   // ---[ Renderable interface ]---------------------------------------------
   
   /**
-   * TODO: implements Renderable
-   **/
+   * update matrices etc.
+   */
+  void update(RenderContext* renderContext);
+  
+  /**
+   * do OpenGL plotting
+   */
   void render(RenderContext* renderContext);
 
   // ---[ bindable component ]-----------------------------------------------

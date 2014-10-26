@@ -106,10 +106,13 @@ void RGLView::paint(void) {
   
   renderContext.time = t;
   renderContext.deltaTime = dt;
-
-  SAVEGLERROR;  
   
+  /* This doesn't do any actual plotting, but it calculates matrices etc. */
+  scene->update(&renderContext);
+
+  /* This section does the OpenGL plotting */
   if (windowImpl->beginGL()) {
+    SAVEGLERROR;  
     scene->render(&renderContext);
     glViewport(0,0, width, height);
     if (selectState == msCHANGING)
@@ -122,9 +125,6 @@ void RGLView::paint(void) {
     
     SAVEGLERROR;
   }
-
-//  if (flags & FAUTOUPDATE)
-//    windowImpl->update();
 }
 
 //////////////////////////////////////////////////////////////////////////////

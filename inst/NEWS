@@ -601,10 +601,11 @@ v0.94
   - Fixed a bug introduced in 0.94 with writing 3D sprite objects.
   - Fixed a bug computing the bounding box of an embedded subscene.
     
-0.95.1155
+0.95.1156
   - Allowed background of window to show bitmap;  added bgplot3d()
     and legend3d() functions.
   - Reverted misguided changes to par3d("modelMatrix") from 0.94.
     This affects rgl.projection() as well.
   - Fixed bug (introduced in 0.94) causing loss of rectangle showing 
     selection area.  (Reported by John Fox and others.)
+  - The NULL device now does not make any spurious OpenGL calls.
