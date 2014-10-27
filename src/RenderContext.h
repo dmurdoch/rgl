@@ -22,7 +22,6 @@ public:
   , lastTime(0.0)
   , deltaTime(0.0)
   , gl2psActive(0)
-  , NULLActive(0)
   { }
   Subscene* subscene;
   Rect2   rect;  // This is the full window rectangle in pixels
@@ -33,7 +32,6 @@ public:
   double deltaTime;
 
   int gl2psActive;
-  bool NULLActive;
 };
 
 } // namespace rgl

@@ -75,7 +75,6 @@ public:
   void        setFontUseFreeType(bool useFreeType);
   void	      setDefaultFont(const char *family, int style, double cex, bool useFreeType);
   const char* getFontname() const;
-  void	      setNULLActive(bool nullActive);
   
   /* NB:  these functions do not maintain consistency with userMatrix */
   
