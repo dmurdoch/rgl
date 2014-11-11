@@ -609,3 +609,7 @@ v0.94
   - Fixed bug (introduced in 0.94) causing loss of rectangle showing 
     selection area.  (Reported by John Fox and others.)
   - The NULL device now does not make any spurious OpenGL calls.
+  
+0.95.1158
+  - rgl.snapshot() now works with the NULL device (but produces a 
+    black snapshot).  This allows testing with RGL_USE_NULL.

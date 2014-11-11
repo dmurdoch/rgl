@@ -556,15 +556,12 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
   bool success = false;
 
   if ( (formatID < PIXMAP_FILEFORMAT_LAST) && (pixmapFormat[formatID])) { 
-    if ( windowImpl->beginGL() ) {
-
-      // alloc pixmap memory
-
-      Pixmap snapshot;
+    // alloc pixmap memory
+    Pixmap snapshot;
    
-      snapshot.init(RGB24, width, height, 8);
-
-      // read front buffer
+    snapshot.init(RGB24, width, height, 8);    
+    if ( windowImpl->beginGL() ) {
+        // read front buffer
 
       glPushAttrib(GL_PIXEL_MODE_BIT);
 
@@ -573,11 +570,13 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
       glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
 
       glPopAttrib();
-
-      success = snapshot.save( pixmapFormat[formatID], filename );
-
+  
       windowImpl->endGL();
-    }
+    } else
+      snapshot.clear();
+    
+    success = snapshot.save( pixmapFormat[formatID], filename );
+
   } else error("pixmap save format not supported in this build");
 
   return success;

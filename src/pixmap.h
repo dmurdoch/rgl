@@ -28,7 +28,7 @@ public:
   bool init(PixmapTypeID typeID, int width, int height, int bits_per_channel);
   bool load(const char* filename);
   bool save(PixmapFormat* format, const char* filename);
-
+  void clear();
   PixmapTypeID typeID;
   unsigned int width;
   unsigned int height;
