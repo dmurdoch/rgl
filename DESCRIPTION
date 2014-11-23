@@ -1,10 +1,11 @@
 Package: rgl
-Version: 0.95.1159
+Version: 0.95.1160
 Title: 3D visualization device system (OpenGL)
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 2.15.0),stats,grDevices
-Suggests: MASS
+Suggests: MASS, knitr
+VignetteEngine: knitr
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for 
     constructing representations of geometric objects (cube3d(), etc.).  Output
@@ -14,3 +15,4 @@ License: GPL
 URL: https://r-forge.r-project.org/projects/rgl/
 SystemRequirements: OpenGL, GLU Library, zlib (optional), libpng (>=1.2.9, optional), FreeType (optional)
 BugReports: https://r-forge.r-project.org/projects/rgl/
+VignetteBuilder: knitr

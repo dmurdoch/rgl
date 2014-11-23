@@ -614,6 +614,7 @@ v0.94
   - rgl.snapshot() now works with the NULL device (but produces a 
     black snapshot).  This allows testing with RGL_USE_NULL.
 
-0.95.1159
+0.95.1160
   - writeWebGL() now includes an argument "canvasMatrix", to allow
     omission of CanvasMatrix.js (in multi-figure displays)
+  - If template is NULL in writeWebGL(), no template file is used. 

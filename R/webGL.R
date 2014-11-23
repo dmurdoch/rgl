@@ -1750,16 +1750,19 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     snapshotimg2 <- gsub('"', '\\\\\\\\"', snapshotimg)
   } else snapshotimg2 <- snapshotimg <- ""
   
-  templatelines <- readLines(template)
-  templatelines <- subst(templatelines, rglVersion = packageVersion("rgl"))
+  if (!is.null(template)) {
+    templatelines <- readLines(template)
+    templatelines <- subst(templatelines, rglVersion = packageVersion("rgl"))
+
+    target <- paste("%", prefix, "WebGL%", sep="")
+    replace <- grep( target, templatelines, fixed=TRUE)
+    if (length(replace) != 1) 
+      stop("template ", sQuote(template), " does not contain ", target)
   
-  target <- paste("%", prefix, "WebGL%", sep="")
-  replace <- grep( target, templatelines, fixed=TRUE)
-  if (length(replace) != 1) 
-    stop("template ", sQuote(template), " does not contain ", target)
-  
-  result <- c(templatelines[seq_len(replace-1)], header())
-  
+    result <- c(templatelines[seq_len(replace-1)], header())
+  } else
+    result <- header()
+
   if (NROW(bbox <- rgl.ids("bboxdeco"))) {
     save <- par3d(skipRedraw = TRUE)
     temp <- convertBBox(bbox$id)
@@ -1818,8 +1821,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   result <- c(result, drawSubscene(rootid))
   
   result <- c(result, drawEnd, mouseHandlers(), scriptEnd, footer(),
-              templatelines[replace + seq_len(length(templatelines)-replace)])
-
+              if (!is.null(template)) 
+              	templatelines[replace + seq_len(length(templatelines)-replace)]
+              else
+              	subst("<script>%prefix%webGLStart();</script>", prefix = prefix)
+             )
+              	
   cat(result, file=filename, sep="\n")
   invisible(filename)
 }

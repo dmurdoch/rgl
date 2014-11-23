@@ -1,0 +1,174 @@
+---
+title: "rgl Overview"
+author: "Duncan Murdoch"
+date: "November 23, 2014"
+output:
+  html_document:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, echo=FALSE}
+source("setup.R")
+set.seed(123)
+```
+
+
+
+## Introduction
+
+The `rgl` package is used to produce interactive 3-D plots.  It contains
+high-level graphics commands modelled loosely after classic R graphics,
+but working in three dimensions.  It also contains low level structure
+inspired by the `grid` package.
+
+This document gives an overview.  See the help pages for details.
+
+## Basics and High Level Functions
+
+The `r indexfns("plot3d")` function
+plots points within an rgl window.  It is similar to the classic 
+`plot` function,
+but works in 3 dimensions.
+
+For example
+```{r plot3d, rgl=TRUE}
+plot3d(rnorm(10), rnorm(10), rnorm(10), type="s", col="red")
+```
+can be used plot some points.  Allowed types include `"p", "l", "h", "s"`,
+meaning points, lines, segments from z=0, and spheres.  There's
+a lot of flexibility in specifying the coordinates; the `xyz.coords` function
+from the `grDevices` package is used for this.
+
+You can use your mouse to manipulate the plot.  The default is that
+if you click and hold with the left mouse button, you can rotate 
+the plot by dragging it.  The right mouse button is used to resize
+it, and the middle button changes the perspective in the point of view.
+
+If you call `plot3d` again, it will overwrite the current plot.
+To open a new graphics window, use `r indexfns("open3d")`.
+ 
+The other high level function is `r indexfns("persp3d")` to draw surfaces.
+It is
+similar to the classic `persp` function, but with greater flexibility.
+First, any of `x`, `y` or `z`
+can be specified using matrices, not just `z`.  This allows parametric
+surfaces to be plotted. For example, a Mobius strip 
+parametrization is described on http://wiki.theprovingground.org/revit-api-py-parametric :
+```{r persp3d, rgl=TRUE}
+u <- seq(-pi, pi, length=30)
+v <- seq(-1, 1, length=30)
+R <- 4; T <- 0.5
+x <- outer(u, v, function(u,v) (R + v*cos(T*u))*cos(u))
+y <- outer(u, v, function(u,v) (R + v*cos(T*u))*sin(u))
+z <- outer(u, v, function(u,v) v*sin(T*u))
+persp3d(x, y, z, col = "lightblue", aspect=c(1,1,0.3))
+```
+An even simpler specification is possible:  `x` may be a function,
+in which case `persp3d` will work out the grid itself.  See 
+`?persp3d.function` for details.
+
+## Low Level Functions
+
+Just as we have `points` and `lines` in classic graphics, there are a number
+of low level functions in `rgl` to add graphical elements to the
+currently active plot.
+
+--------------
+
+----------------------------- | -----------
+`r indexfns("points3d")`:     | adds points
+`r indexfns("lines3d")`:      | adds lines
+`r indexfns("segments3d")`:   | adds line segments
+`r indexfns("triangles3d")`:  | adds triangles
+`r indexfns("quads3d")`:      | adds quadrilaterals
+`r indexfns(c("text3d", "texts3d"))`: | adds text
+`r indexfns("abclines3d")`:   | adds straight lines to plot (like `abline`)
+`r indexfns("planes3d")`:     | adds planes to plot
+`r indexfns("clipplanes3d")`: | add clipping planes to plot
+
+------------
+
+Each of the above functions takes arguments `x`, `y` and `z`, again
+using `xyz.coords` for flexibility.  They group successive entries
+as necessary.  For example, the `triangles3d` function takes each
+successive triple of points as the vertices of a triangle.
+
+You can use these functions to annotate the current graph, or to 
+construct a figure from scratch.
+
+The following low-level functions control the look of the graph:
+
+--------------
+
+------------------------------------ | -----------
+`r indexfns(c("axes3d", "axis3d"))`: | add axes to plot
+`r indexfns(c("box3d", "bbox3d"))`:               | add box around plot
+`r indexfns("title3d")`:             | add title to plot
+`r indexfns("mtext3d")`:             | add marginal text to plot
+`r indexfns("decorate3d")`:          | add multiple "decorations" (scales, etc.) to plot
+`r indexfns("aspect3d")`:            | set the aspect ratios for the plot
+`r indexfns(c("bg3d", "bgplot3d"))`: | set the background of the scene
+`r indexfns("legend3d")`:            | set a legend for the scene
+
+---------------
+
+For example, to plot three random triangles, one could use
+```{r echo=FALSE, results="hide"}
+rgl.close()
+open3d()
+```
+```{r rgl=TRUE}
+triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
+decorate3d()
+bg3d("lightgray")
+aspect3d(1,1,1)
+```
+
+Besides the `*3d` functions mentioned above, there are even lower-level
+functions 
+`r indexfns(c("rgl.points", "rgl.linestrips", "rgl.lines", "rgl.triangles",
+"rgl.quads", "rgl.texts", "rgl.abclines", "rgl.planes", "rgl.bg",
+"rgl.clipplanes", "rgl.bbox"))`.  
+You should avoid using these functions, which do not
+work well with the higher level `*3d` functions.  See the `?r3d` help
+topic for details.
+
+## Materials, lights and par3d()
+
+## Meshes:  Constructing Shapes 
+
+## Multi-figure layouts
+
+## Warning:  Work in progress!
+
+This vignette is in a very preliminary form.  Many aspects of the rgl
+package are not described yet.  There is still no documentation here for the
+following functions.  You'll have to read the online help for these:
+```{r echo=FALSE}
+setdiff(ls("package:rgl"), documentedfns)
+```
+
+## Index of functions
+
+The following functions are described in this document:<br>
+```{r echo=FALSE,results='asis'}
+documentedfns <- sort(documentedfns)
+entries <- paste0('<a href="#', documentedfns, '">', documentedfns, '</a>')
+len <- length(entries)
+rows <- len %/% 2
+ofs <- rows + len %% 2
+cat("<table><tbody>\n")
+cat(paste0('<tr><td align="left" style="width:200px;">', entries[1:rows], 
+           '</td><td align="left">', entries[ofs + 1:rows],
+           '</td></tr>'), sep='\n')
+if (ofs > rows)
+  cat(paste0('<tr><td align="left">', entries[ofs], 
+             '</td></tr>'))
+cat("</tbody></table>\n")
+```
+
+This document was produced using rgl version `r packageVersion("rgl")`.
+
