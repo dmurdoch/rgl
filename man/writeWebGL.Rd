@@ -11,7 +11,8 @@ it in a browser.
 writeWebGL(dir = "webGL", filename = file.path(dir, "index.html"), 
            template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
            prefix = "",
-           snapshot = TRUE, font = "Arial", width, height)
+           snapshot = TRUE, canvasMatrix = TRUE,
+           font = "Arial", width, height)
 }
 \arguments{
   \item{dir}{
@@ -30,6 +31,10 @@ in Javascript and HTML.
 }
   \item{snapshot}{
   Whether to include a snapshot of the scene, to be displayed in browsers that don't support WebGL.
+}
+  \item{canvasMatrix}{
+  Whether to include a reference to and copy of the \file{CanvasMatrix.js}
+file in the output.
 }
   \item{font}{
   The font to use for text.
@@ -79,9 +84,15 @@ The \code{filename} is returned.
 Duncan Murdoch.
 }
 \note{
-The output includes a binary copy of the CanvasMatrix Javascript library.  Its source (including 
+If \code{canvasMatrix} is \code{TRUE}, the output includes a binary copy of
+the CanvasMatrix Javascript library.  This
+file is necessary for the Javascript code written by \code{writeWebGL} to 
+function properly, but only one copy is needed if the output page
+contains multiple \code{writeWebGL} figures.  
+
+Its source (including 
 the copyright notice and license for free use) is included in the file named by
-\code{system.file("WebGL/CanvasMatrix.src.js", package = "rgl")}.
+\code{system.file("WebGL/CanvasMatrix.src.js", package = "rgl")}.  
 }
 \seealso{
 \code{\link{scene3d}} saves a copy of a scene to an R variable;
@@ -92,8 +103,8 @@ write the scene to a file in various other formats.
 \donttest{
 plot3d(rnorm(100), rnorm(100), rnorm(100), type="s", col="red")
 # This writes a copy into temporary directory 'webGL', and then displays it
-browseURL(paste("file://", writeWebGL(dir=file.path(tempdir(), "webGL"), 
-          width=500), sep=""))
+browseURL(paste0("file://", writeWebGL(dir=file.path(tempdir(), "webGL"), 
+          width=500)))
 }
 }
 \keyword{ graphics }

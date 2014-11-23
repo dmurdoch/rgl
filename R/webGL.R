@@ -101,7 +101,8 @@ countClipplanes <- function(id) {
 writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"), 
                        template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
                        prefix = "",
-                       snapshot = TRUE, font="Arial",
+                       snapshot = TRUE, canvasMatrix = TRUE,
+		       font="Arial",
                        width, height) {
  
   # Lots of utility functions and constants defined first; execution starts way down there...
@@ -121,12 +122,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     sprintf("vec4(%s, %s, %s, %s)", vec[1], vec[2], vec[3], vec[4])
   }
   
-  header <- function() subst(
-'	<script src="CanvasMatrix.js" type="text/javascript"></script>
-	<canvas id="%prefix%textureCanvas" style="display: none;" width="256" height="256">
+  header <- function() c(
+  	if (canvasMatrix) 
+'	<script src="CanvasMatrix.js" type="text/javascript"></script>',
+        subst(
+'	<canvas id="%prefix%textureCanvas" style="display: none;" width="256" height="256">
         %snapshotimg%
 	Your browser does not support the HTML5 canvas element.</canvas>
-', prefix, snapshotimg)
+', prefix, snapshotimg))
 
   shaders <- function(id, type, flags) {
     if (type == "clipplanes") return(NULL)
@@ -1718,8 +1721,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   if (!file.info(dir)$isdir)
     stop("'", dir, "' is not a directory.")
   
-  file.copy(system.file(file.path("WebGL", "CanvasMatrix.js"), package = "rgl"), 
-                        file.path(dir, "CanvasMatrix.js"))
+  if (canvasMatrix)
+    file.copy(system.file(file.path("WebGL", "CanvasMatrix.js"), package = "rgl"), 
+                          file.path(dir, "CanvasMatrix.js"))
 
   rect <- par3d("windowRect")
   rwidth <- rect[3] - rect[1] + 1
