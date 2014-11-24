@@ -8,8 +8,8 @@ rgl.knitr <- local({
   {
     if (before || rgl::rgl.cur() == 0 || !requireNamespace("knitr")) 
       return()
-    out_type <- knitr::opts_knit$get("rmarkdown.pandoc.to")
-    if (out_type != "html") 
+    out_type <- knitr::opts_knit$get("out.format")
+    if (!length(intersect(out_type, c("markdown", "html"))))       
       stop("The rgl.knitr hook is for HTML only.  Use knitr::hook_rgl instead.")
     
     name <- tempfile("webgl", tmpdir = ".", fileext = ".html")
