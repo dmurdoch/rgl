@@ -1,10 +1,10 @@
 Package: rgl
-Version: 0.95.1160
+Version: 0.95.1161
 Title: 3D visualization device system (OpenGL)
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 2.15.0),stats,grDevices
-Suggests: MASS, knitr
+Suggests: MASS, knitr, rmarkdown
 VignetteEngine: knitr
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for 
