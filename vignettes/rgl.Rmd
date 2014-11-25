@@ -6,7 +6,7 @@ output:
   html_document:
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{rgl Overview}
+  %\VignetteIndexEntry{rgl Overview} 
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
@@ -88,6 +88,9 @@ currently active plot.
 `r indexfns("abclines3d")`:   | adds straight lines to plot (like `abline`)
 `r indexfns("planes3d")`:     | adds planes to plot
 `r indexfns("clipplanes3d")`: | add clipping planes to plot
+`r indexfns(c("sprites3d", "particles3d"))`: | add sprites (fixed shapes or images) to plot
+`r indexfns("spheres3d")`:    | adds spheres
+`r indexfns("surface3d")`:    | a surface (as used in `persp3d`)
 
 ------------
 
@@ -131,7 +134,7 @@ Besides the `*3d` functions mentioned above, there are even lower-level
 functions 
 `r indexfns(c("rgl.points", "rgl.linestrips", "rgl.lines", "rgl.triangles",
 "rgl.quads", "rgl.texts", "rgl.abclines", "rgl.planes", "rgl.bg",
-"rgl.clipplanes", "rgl.bbox"))`.  
+"rgl.clipplanes", "rgl.bbox", "rgl.spheres", "rgl.sprites", "rgl.surface"))`.  
 You should avoid using these functions, which do not
 work well with the higher level `*3d` functions.  See the `?r3d` help
 topic for details.
@@ -177,7 +180,9 @@ There are also functions to generate new shapes:
 
 ------------------------------------ | -----------
 `r indexfns("cylinder3d")`: | generate a tube or cylinder
+`r indexfns("polygon3d")`:  | generate a flat polygon by triangulation
 `r indexfns("extrude3d")`:  | generate an "extrusion" of a polygon
+`r indexfns("ellipse3d")`:  | generate an ellipsoid in various ways
 
 ---------------
 
@@ -220,26 +225,26 @@ setdiff(ls("package:rgl"), documentedfns)
 The following functions are described in this document:<br>
 ```{r echo=FALSE, results="asis"}
 documentedfns <- sort(documentedfns)
-entries <- paste0('<a href="#', documentedfns, '">', documentedfns, '</a>')
+entries <- paste0('<a href="#', documentedfns, '">', documentedfns, '</a>&nbsp;&nbsp;')
 len <- length(entries)
 cols <- 4
 rows <- len %/% cols
 extra <- len %% cols
-ofs <- c(0, rows + (extra > 0), rows + (extra > 1), rows + (extra > 2), rows)
+ofs <- c(rows + (extra > 0), rows + (extra > 1), rows + (extra > 2))
 ofs <- cumsum(ofs)
-cat("<table><tbody>\n")
-columns <- list()
-for (i in seq_len(cols)) 
-  columns[[i]] <- paste0('<td align="left" style="width:150px;">',
-                         entries[(ofs[i]+1):(ofs[i]+rows)], '</td>')
-cat(paste('<tr>', columns[[1]], columns[[2]], columns[[3]], columns[[4]], "</tr>"), sep="\n")  
+cat("\n------------- ")
+for (i in seq_len(cols-1))
+  cat("| ------------")
+cat("\n")
+columns <- list(entries[1:rows])
+for (i in seq_len(cols-1)+1) 
+  columns[[i]] <- entries[(ofs[i-1]+1):(ofs[i-1]+rows)]
+cat(paste(columns[[1]], columns[[2]], columns[[3]], columns[[4]], sep = " | "), sep="\n")  
 if (extra) {
-  cat("<tr>")
   for (i in seq_len(extra))
-    cat('<td align="left">', entries[ofs[i+1]], '</td>')
-  cat("</tr>\n")
+    cat(entries[ofs[i]], ' | ')
 }
-cat("</tbody></table>\n")
+cat("\n\n")
 ```
 
 This document was produced using rgl version `r packageVersion("rgl")`.
