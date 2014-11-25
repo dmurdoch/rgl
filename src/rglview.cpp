@@ -94,6 +94,9 @@ void RGLView::resize(int in_width, int in_height) {
 
   renderContext.rect.width = in_width;
   renderContext.rect.height = in_height;
+  
+  update();
+
   if (drag) captureLost();
 }
 

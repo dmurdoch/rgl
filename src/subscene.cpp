@@ -488,22 +488,11 @@ ModelViewpoint* Subscene::getModelViewpoint()
 void Subscene::update(RenderContext* renderContext)
 {
   GLdouble saveprojection[16];
-  Rect2 saveviewport(0,0,0,0);
+  
 
   renderContext->subscene = this;
   
-  if (do_viewport > EMBED_INHERIT) {
-  
-    //
-    // SETUP VIEWPORT TRANSFORMATION
-    //
-    if (parent)  
-      saveviewport = parent->pviewport;
-    setupViewport(renderContext);
-
-  } else
-    pviewport = parent->pviewport;
-
+  setupViewport(renderContext);
   if (bboxChanges) 
     calcDataBBox();
   

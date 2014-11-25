@@ -2,7 +2,7 @@
 library(rgl)
 options(rgl.useNULL=TRUE)
 
-rgl.knitr <- local({
+hook_webgl <- local({
   canvasMatrix <- TRUE
   function (before, options, envir) 
   {
@@ -10,12 +10,14 @@ rgl.knitr <- local({
       return()
     out_type <- knitr::opts_knit$get("out.format")
     if (!length(intersect(out_type, c("markdown", "html"))))       
-      stop("The rgl.knitr hook is for HTML only.  Use knitr::hook_rgl instead.")
+      stop("hook_webgl is for HTML only.  Use knitr::hook_rgl instead.")
     
     name <- tempfile("webgl", tmpdir = ".", fileext = ".html")
     on.exit(unlink(name))
-    rgl::par3d(windowRect = options$dpi * c(0, 0, options$fig.width, 
-                                            options$fig.height)/2)
+    dpi <- 96 # was options$dpi
+    rgl::par3d(windowRect = dpi * c(0, 0, options$fig.width, 
+                                            options$fig.height))
+    Sys.sleep(0.1)
     prefix = gsub("[^[:alnum:]]", "_", options$label)
     prefix = sub("^([^[:alpha:]])", "_\\1", prefix)
     rgl::writeWebGL(dir = dirname(name), 
@@ -31,7 +33,7 @@ rgl.knitr <- local({
   }
 })
 
-knitr::knit_hooks$set(rgl = rgl.knitr)
+knitr::knit_hooks$set(rgl = hook_webgl)
 
 documentedfns <- c()
 indexfns <- function(fns, show = TRUE) {

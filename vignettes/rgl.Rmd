@@ -6,7 +6,7 @@ output:
   html_document:
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{rgl Overview}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
@@ -140,6 +140,70 @@ topic for details.
 
 ## Meshes:  Constructing Shapes 
 
+`rgl` includes a number of functions to construct and display 
+various solid shapes.  These generate objects of class `"shape3d"`,
+`"mesh3d"` or `"shapelist3d"`.  The details of the classes are 
+described below.  We start with functions to generate them.
+
+--------------
+
+------------------------------------ | -----------
+`r indexfns(c("tetrahedron3d", "cube3d", "octahedron3d"))`: | Platonic solids
+`r indexfns(c("dodecahedron3d", "icosahedron3d"))`:        | more Platonic solids
+`r indexfns("cuboctahedron3d")`:             | another solid
+
+---------------
+
+```{r results="hide",rgl=TRUE,fig.height=2,fig.width=8}
+open3d()
+layout3d(matrix(1:12, 2,6), heights=c(1,3))
+text3d(0,0,0,"tetrahedron3d"); next3d()
+shade3d(tetrahedron3d(col="red")); next3d()
+text3d(0,0,0,"cube3d"); next3d()
+shade3d(cube3d(col="green")); next3d()
+text3d(0,0,0,"octahedron3d"); next3d()
+shade3d(octahedron3d(col="blue")); next3d()
+text3d(0,0,0,"dodecahedron3d"); next3d()
+shade3d(dodecahedron3d(col="yellow")); next3d()
+text3d(0,0,0,"icosahedron3d"); next3d()
+shade3d(icosahedron3d(col="orange")); next3d()
+text3d(0,0,0,"cuboctahedron3d"); next3d()
+shade3d(cuboctahedron3d(col="purple"))
+```
+
+There are also functions to generate new shapes:
+
+--------------
+
+------------------------------------ | -----------
+`r indexfns("cylinder3d")`: | generate a tube or cylinder
+`r indexfns("extrude3d")`:  | generate an "extrusion" of a polygon
+
+---------------
+
+
+`"shape3d"` is the basic abstract type.  Objects of this class can be
+displayed by `r indexfns("shade3d")` (which shades faces), 
+`r indexfns("wire3d")` (which draws edges), or `r indexfns("dot3d")`
+(which draws points at each vertex.)  Note that `wire3d` and `dot3d`
+only work within R; in HTML output only `shade3d` is supported.
+
+`"mesh3d"` is a descendant type.  Objects of this type contain the following 
+fields:
+
+Field        | Meaning
+------------ | ---------------
+vb           | A 4 by n matrix of vertices in homogeneous coordinates.  Each column is a point.
+it           | (optional) A 3 by t matrix of vertex indices.  Each column is a triangle.
+ib           | (optional) A 4 by q matrix of vertex indices.  Each column is a quadrilateral.
+material     | (optional) A list of material properties.
+normals      | (optional) A matrix of the same shape as vb, containing normal vectors at each vertex.
+texcoords    | (optional) A 2 by n matrix of texture coordinates corresponding to each vertex.
+
+
+
+
+
 ## Multi-figure layouts
 
 ## Warning:  Work in progress!
@@ -154,19 +218,27 @@ setdiff(ls("package:rgl"), documentedfns)
 ## Index of functions
 
 The following functions are described in this document:<br>
-```{r echo=FALSE,results='asis'}
+```{r echo=FALSE, results="asis"}
 documentedfns <- sort(documentedfns)
 entries <- paste0('<a href="#', documentedfns, '">', documentedfns, '</a>')
 len <- length(entries)
-rows <- len %/% 2
-ofs <- rows + len %% 2
+cols <- 4
+rows <- len %/% cols
+extra <- len %% cols
+ofs <- c(0, rows + (extra > 0), rows + (extra > 1), rows + (extra > 2), rows)
+ofs <- cumsum(ofs)
 cat("<table><tbody>\n")
-cat(paste0('<tr><td align="left" style="width:200px;">', entries[1:rows], 
-           '</td><td align="left">', entries[ofs + 1:rows],
-           '</td></tr>'), sep='\n')
-if (ofs > rows)
-  cat(paste0('<tr><td align="left">', entries[ofs], 
-             '</td></tr>'))
+columns <- list()
+for (i in seq_len(cols)) 
+  columns[[i]] <- paste0('<td align="left" style="width:150px;">',
+                         entries[(ofs[i]+1):(ofs[i]+rows)], '</td>')
+cat(paste('<tr>', columns[[1]], columns[[2]], columns[[3]], columns[[4]], "</tr>"), sep="\n")  
+if (extra) {
+  cat("<tr>")
+  for (i in seq_len(extra))
+    cat('<td align="left">', entries[ofs[i+1]], '</td>')
+  cat("</tr>\n")
+}
 cat("</tbody></table>\n")
 ```
 
