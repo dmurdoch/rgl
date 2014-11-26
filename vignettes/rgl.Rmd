@@ -1,7 +1,7 @@
 ---
 title: "rgl Overview"
 author: "Duncan Murdoch"
-date: "November 23, 2014"
+date: November, 2014
 output:
   html_document:
     toc: yes
@@ -50,7 +50,7 @@ the plot by dragging it.  The right mouse button is used to resize
 it, and the middle button changes the perspective in the point of view.
 
 If you call `plot3d` again, it will overwrite the current plot.
-To open a new graphics window, use `r indexfns("open3d")`.
+To open a new graphics window, use `open3d`.
  
 The other high level function is `r indexfns("persp3d")` to draw surfaces.
 It is
@@ -157,19 +157,24 @@ various solid shapes.  These generate objects of class `"shape3d"`,
 `"mesh3d"` or `"shapelist3d"`.  The details of the classes are 
 described below.  We start with functions to generate them.
 
+### Specific solids
+
+These functions generate specific shapes.  Optional arguments allow
+attributes such as colour or transformations to be specified.
+
 --------------
 
 ------------------------------------ | -----------
 `r indexfns(c("tetrahedron3d", "cube3d", "octahedron3d"))`: | Platonic solids
 `r indexfns(c("dodecahedron3d", "icosahedron3d"))`:        | more Platonic solids
-`r indexfns("cuboctahedron3d")`:             | another solid
+`r indexfns(c("cuboctahedron3d", "oh3d"))`:             | other solids
 
 ---------------
 
-```{r results="hide",rgl=TRUE,fig.height=2,fig.width=8}
+```{r results="hide",rgl=TRUE,fig.height=2,fig.width=9}
 open3d()
-cols <- rainbow(6)
-layout3d(matrix(1:12, 2,6), heights=c(1,3))
+cols <- rainbow(7)
+layout3d(matrix(1:14, 2,7), heights=c(1,3))
 text3d(0,0,0,"tetrahedron3d"); next3d()
 shade3d(tetrahedron3d(col=cols[1])); next3d()
 text3d(0,0,0,"cube3d"); next3d()
@@ -181,10 +186,14 @@ shade3d(dodecahedron3d(col=cols[4])); next3d()
 text3d(0,0,0,"icosahedron3d"); next3d()
 shade3d(icosahedron3d(col=cols[5])); next3d()
 text3d(0,0,0,"cuboctahedron3d"); next3d()
-shade3d(cuboctahedron3d(col=cols[6]))
+shade3d(cuboctahedron3d(col=cols[6])); next3d()
+text3d(0,0,0,"oh3d"); next3d()
+shade3d(oh3d(col=cols[7]))
 ```
 
-There are also functions to generate new shapes:
+### Generating new shapes 
+
+These functions generate new shapes:
 
 --------------
 
@@ -197,6 +206,11 @@ There are also functions to generate new shapes:
 
 ---------------
 
+A related function is `r indexfns("triangulate")`, which takes a
+two dimensional polygon and divides it up into triangles using the 
+"ear-clipping" algorithm.
+
+### The underlying class structure for shapes
 
 `"shape3d"` is the basic abstract type.  Objects of this class can be
 displayed by `r indexfns("shade3d")` (which shades faces), 
@@ -216,6 +230,7 @@ material     | (optional) A list of material properties.
 normals      | (optional) A matrix of the same shape as vb, containing normal vectors at each vertex.
 texcoords    | (optional) A 2 by n matrix of texture coordinates corresponding to each vertex.
 
+### Manipulating shapes
 
 The final set of functions manipulate and modify mesh objects:
 
@@ -234,6 +249,34 @@ The final set of functions manipulate and modify mesh objects:
 
 ## Utility functions
 
+### Working with the scene
+
+`rgl` maintains internal structures for all the scenes it displays.
+The following functions allow users to find information about them
+and manipulate them.
+
+--------------
+
+------------------------------------ | -----------
+`r indexfns("open3d")`               | open a new window
+`r indexfns("rgl.close")`            | close the current window
+`r indexfns("rgl.bringtotop")`       | bring the current window to the top
+`r indexfns("rgl.cur")`              | id of the active device
+`r indexfns("rgl.dev.list")`         | ids of all active devices
+`r indexfns("rgl.set")`              | set a particular device to be active
+`r indexfns("rgl.ids")`              | ids and types of all current objects
+`r indexfns(c("rgl.attrib", "rgl.attrib.count"))`: | attributes of objects in the scene
+`r indexfns(c("pop3d", "rgl.pop"))`     | delete an object from the scene
+`r indexfns("rgl.clear")`            | delete all objects of certain classes
+
+---------------
+
+In addition to these, there are some other related functions which
+should rarely be called by users: `r indexfns(c("rgl.init", "rgl.open", "rgl.quit"))`.  
+
+
+### Working with homogeneous coordinates
+
 Most `rgl` functions work internally with "homogeneous" coordinates.
 In this system, 3-D points are represented with 4 coordinates, generally
 called (x, y, z, w).  The corresponding Euclidean point is
@@ -249,7 +292,9 @@ become linear transformations, with multiplication by a 4 by 4 matrix.
 ------------------------------------ | -----------
 `r indexfns(c("asEuclidean", "asHomogeneous"))`: | convert between homogeneous and Euclidean coordinates
 `r indexfns(c("rotate3d", "scale3d", "translate3d"))`:  | apply a transformation
+`r indexfns("transform3d")`:  | apply a general transformation
 `r indexfns(c("rotationMatrix", "scaleMatrix", "translationMatrix"))`:  | compute the transformation matrix
+`r indexfns("identityMatrix")` | return a 4 x 4 identity matrix
 
 ---------------
 
@@ -287,6 +332,7 @@ cat(paste(columns[[1]], columns[[2]], columns[[3]], columns[[4]], sep = " | "), 
 if (extra) {
   for (i in seq_len(extra))
     cat(entries[ofs[i]], ' | ')
+  cat("&nbsp;")
 }
 cat("\n\n")
 ```
