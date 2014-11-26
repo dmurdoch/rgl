@@ -17,7 +17,7 @@ Plot a function \code{z(x,y)} or a parametric function
   yvals = seq.int(min(ylim), max(ylim), length.out = n[2]), 
   svals = seq.int(min(slim), max(slim), length.out = n[1]), 
   tvals = seq.int(min(tlim), max(tlim), length.out = n[2]), 
-  xlab = "x", ylab = "y", zlab = "z", 
+  xlab, ylab, zlab, 
   col = "gray", otherargs = list(), 
   normal = NULL, texture = NULL, \dots)
 \method{plot3d}{function}(x, \ldots)
@@ -56,7 +56,7 @@ surface.  Only used if
 \code{slim} or \code{tlim} specification.
 }
   \item{xlab, ylab, zlab}{
-The axis labels.
+The axis labels.  See the details below for the defaults.
 }
   \item{col}{
 The color to use for the plot.  See the details below.
@@ -92,12 +92,15 @@ can be specified in the \code{otherargs} list.
 
 In the default form where \code{slim} and \code{tlim} are both
 \code{NULL}, it is assumed that \code{f(x,y)} returns heights,
-which will be plotted in the z coordinate.
+which will be plotted in the z coordinate.  The default axis labels
+will be taken from the argument names to \code{f()} and the
+expression passed as argument \code{x} to this function.
 
 If \code{slim} or \code{tlim} is specified, a parametric
 surface is plotted.  Values of \code{s}
 \code{f(s,t)} must return a 3-column matrix, giving x, y and z 
-coordinates of points on the surface.  
+coordinates of points on the surface.  The default axis
+labels will be the column names if those are present.
 
 The color of the surface may be specified as the name of a
 color, or a vector or matrix of color names. In this case
