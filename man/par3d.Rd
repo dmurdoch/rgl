@@ -39,6 +39,8 @@ open3d(\dots, params=getr3dDefaults(),
 	    useNULL = rgl.useNULL())
 	    
 getr3dDefaults()
+
+r3dDefaults
 }
 
 \arguments{
@@ -103,6 +105,16 @@ getr3dDefaults()
 
   Note the inconsistency: setting one parameter returns a list, but
   querying one parameter returns an object.
+  
+  The \code{r3dDefaults} variable is a list containing default
+  settings.  The \code{getr3dDefaults} function searches the user's
+  global environment for \code{r3dDefaults} and returns the 
+  one in the \pkg{rgl} namespace if it was not found there.
+  The components of the list may include any settable \code{par3d}
+  parameter, or \code{"material"}, which should include a list
+  of default \code{\link{material3d}} properties, or \code{"bg"}, 
+  which is a
+  list of defaults to pass to the \code{\link{bg3d}} function.
 }
 
 \section{Parameters}{

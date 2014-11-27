@@ -36,15 +36,15 @@ hook_webgl <- local({
 knitr::knit_hooks$set(rgl = hook_webgl)
 
 documentedfns <- c()
-indexfns <- function(fns, show = TRUE) {
+indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
   documentedfns <<- c(documentedfns, fns)
   anchors <- paste0('<a name="', fns, '">', 
-                    if (show) paste0("<code>", fns, "</code>"), 
+                    if (show) text, 
                     '</a>')
   paste(anchors, collapse=if (show) ", " else "")
 }
 
-linkfn <- function(fn, text=paste0("`", fn, "`")) {
+linkfn <- function(fn, text = paste0("`", fn, "`")) {
   paste0('<a href="#', fn, '">', text, '</a>')
 }
 
