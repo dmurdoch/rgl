@@ -44,7 +44,7 @@ indexfns <- function(fns, show = TRUE) {
   paste(anchors, collapse=if (show) ", " else "")
 }
 
-citefn <- function(fn, text=paste0("`", fn, "`")) {
+linkfn <- function(fn, text=paste0("`", fn, "`")) {
   paste0('<a href="#', fn, '">', text, '</a>')
 }
 

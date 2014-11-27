@@ -49,8 +49,8 @@ if you click and hold with the left mouse button, you can rotate
 the plot by dragging it.  The right mouse button is used to resize
 it, and the middle button changes the perspective in the point of view.
 
-If you call `r citefn("plot3d")` again, it will overwrite the current plot.
-To open a new graphics window, use `r citefn("open3d")`.
+If you call `r linkfn("plot3d")` again, it will overwrite the current plot.
+To open a new graphics window, use `r linkfn("open3d")`.
  
 The other high level function is `r indexfns("persp3d")` to draw surfaces.
 It is
@@ -78,7 +78,7 @@ persp3d(loglik,
         n = 30)
 ```
 
-## Low Level Functions
+## Adding Graphical Elements
 
 Just as we have `points` and `lines` in classic graphics, there are a number
 of low level functions in `rgl` to add graphical elements to the
@@ -98,13 +98,13 @@ currently active plot.
 `r indexfns("clipplanes3d")`: | add clipping planes to plot
 `r indexfns(c("sprites3d", "particles3d"))`: | add sprites (fixed shapes or images) to plot
 `r indexfns("spheres3d")`:    | adds spheres
-`r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r citefn("persp3d")`)
+`r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
 
 ------------
 
 Each of the above functions takes arguments `x`, `y` and `z`, again
 using `xyz.coords` for flexibility.  They group successive entries
-as necessary.  For example, the `r citefn("triangles3d")` function takes each
+as necessary.  For example, the `r linkfn("triangles3d")` function takes each
 successive triple of points as the vertices of a triangle.
 
 You can use these functions to annotate the current graph, or to 
@@ -148,7 +148,7 @@ You should avoid using these functions, which do not
 work well with the higher level `*3d` functions.  See the `?r3d` help
 topic for details.
 
-## Materials, lights and par3d()
+## Materials, Lights and par3d()
 
 ## Meshes:  Constructing Shapes 
 
@@ -218,7 +218,7 @@ two dimensional polygon and divides it up into triangles using the
 displayed by `r indexfns("shade3d")` (which shades faces), 
 `r indexfns("wire3d")` (which draws edges), or `r indexfns("dot3d")`
 (which draws points at each vertex.)  Note that `wire3d` and `dot3d`
-only work within R; in HTML output from `r citefn("writeWebGL")` only
+only work within R; in HTML output from `r linkfn("writeWebGL")` only
 `shade3d` is supported.
 
 `"mesh3d"` is a descendant type.  Objects of this type contain the following 
@@ -245,7 +245,7 @@ The final set of functions manipulate and modify mesh objects:
 
 ---------------
 
-## Multi-figure layouts
+## Multi-figure Layouts
 
 `rgl` has several functions to support displaying multiple different
 "subscenes" in the same window.  The high level functions are
@@ -276,7 +276,52 @@ There are also lower level functions.
 ---------------
 
 
-## Utility functions
+## Utility Functions
+
+
+### User interaction
+
+By default, `rgl` detects and handles mouse clicks within your scene,
+and uses these to control its appearance.  You can find out the current
+handlers using the following code:
+```{r}
+par3d("mouseMode")
+```
+The labels `c("left", "right", "middle")` refer to the buttons on
+a three button mouse, or simulations of them on other mice.  `"wheel"` 
+refers to the mouse wheel.
+
+The button actions generally correspond to click and drag operations.
+Possible actions for buttons or the wheel are as follows:
+
+-------------
+
+--------       | ---------
+`"none"`       | No action
+`"trackball"`  | The mouse acts as a virtual trackball. Clicking and dragging rotates the scene
+`"xAxis"`, `"yAxis"`, `"zAxis"`      | Like `"trackball"`, but restricted to rotation about one axis
+`"polar"`      | The mouse affects rotations by controlling polar coordinates directly
+`"selecting"`  | The mouse is being used by the `r linkfn("select3d")` function
+`"zoom"`       | The mouse zooms the display
+`"fov"`        | The mouse affects perspective by changing the field of view
+`"pull"`       | Rotating the mouse wheel towards the user "pulls the scene closer"
+`"push"`       | The same rotation "pushes the scene away"
+`"user"`       | A user action set by `r linkfn("rgl.setMouseCallbacks")` or `r linkfn("rgl.setWheelCallback")`
+
+----------------
+
+The following functions make use of the mouse for selection within a 
+scene.
+
+--------------
+
+---------------------------- | -----------
+`r indexfns("identify3d")`   | like the classic graphics `identify` function
+`r indexfns("select3d")`     | returns a function that tests whether a coordinate was selected
+
+---------------
+
+The `r indexfns("rgl.select3d")` function is an obsolete version of `select3d`.
 
 ### Working with the scene
 
@@ -329,7 +374,7 @@ become linear transformations, with multiplication by a 4 by 4 matrix.
 
 
 
-## Warning:  Work in progress!
+## Warning:  Work in Progress!
 
 This vignette is in a very preliminary form.  Many aspects of the rgl
 package are not described yet.  There is still no documentation here for the
@@ -338,7 +383,7 @@ following functions.  You'll have to read the online help for these:
 setdiff(ls("package:rgl"), documentedfns)
 ```
 
-## Index of functions
+## Index of Functions
 
 The following functions are described in this document:<br>
 ```{r echo=FALSE, results="asis"}
