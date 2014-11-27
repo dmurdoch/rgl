@@ -1,7 +1,7 @@
 ---
 title: "rgl Overview"
 author: "Duncan Murdoch"
-date: November, 2014
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   html_document:
     toc: yes
@@ -49,8 +49,8 @@ if you click and hold with the left mouse button, you can rotate
 the plot by dragging it.  The right mouse button is used to resize
 it, and the middle button changes the perspective in the point of view.
 
-If you call `plot3d` again, it will overwrite the current plot.
-To open a new graphics window, use `open3d`.
+If you call `r citefn("plot3d")` again, it will overwrite the current plot.
+To open a new graphics window, use `r citefn("open3d")`.
  
 The other high level function is `r indexfns("persp3d")` to draw surfaces.
 It is
@@ -61,7 +61,7 @@ surfaces to be plotted.
 An even simpler specification is possible:  `x` may be a function,
 in which case `persp3d` will work out the grid itself.  See 
 `?persp3d.function` for details.  For example, the `MASS` package estimates
-Gamma parameters using maximum likelihood in a `?fitdistr` example.
+Gamma parameters using maximum likelihood in a `?MASS::fitdistr` example.
 Here we show the log likelihood surface:
 ```{r persp3d, rgl=TRUE}
 library(MASS)
@@ -98,13 +98,13 @@ currently active plot.
 `r indexfns("clipplanes3d")`: | add clipping planes to plot
 `r indexfns(c("sprites3d", "particles3d"))`: | add sprites (fixed shapes or images) to plot
 `r indexfns("spheres3d")`:    | adds spheres
-`r indexfns("surface3d")`:    | a surface (as used in `persp3d`)
+`r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r citefn("persp3d")`)
 
 ------------
 
 Each of the above functions takes arguments `x`, `y` and `z`, again
 using `xyz.coords` for flexibility.  They group successive entries
-as necessary.  For example, the `triangles3d` function takes each
+as necessary.  For example, the `r citefn("triangles3d")` function takes each
 successive triple of points as the vertices of a triangle.
 
 You can use these functions to annotate the current graph, or to 
@@ -203,6 +203,8 @@ These functions generate new shapes:
 `r indexfns("extrude3d")`:  | generate an "extrusion" of a polygon
 `r indexfns("turn3d")`:     | generate a solid of rotation
 `r indexfns("ellipse3d")`:  | generate an ellipsoid in various ways
+`r indexfns(c("tmesh3d", "qmesh3d"))`:  | generate a shape from vertices and faces
+`r indexfns("shapelist3d")`: | generate a shape by combining other shapes
 
 ---------------
 
@@ -216,7 +218,8 @@ two dimensional polygon and divides it up into triangles using the
 displayed by `r indexfns("shade3d")` (which shades faces), 
 `r indexfns("wire3d")` (which draws edges), or `r indexfns("dot3d")`
 (which draws points at each vertex.)  Note that `wire3d` and `dot3d`
-only work within R; in HTML output only `shade3d` is supported.
+only work within R; in HTML output from `r citefn("writeWebGL")` only
+`shade3d` is supported.
 
 `"mesh3d"` is a descendant type.  Objects of this type contain the following 
 fields:
@@ -242,10 +245,36 @@ The final set of functions manipulate and modify mesh objects:
 
 ---------------
 
-
-
-
 ## Multi-figure layouts
+
+`rgl` has several functions to support displaying multiple different
+"subscenes" in the same window.  The high level functions are
+
+--------------
+
+------------------------------------ | -----------
+`r indexfns("mfrow3d")`:  | Multiple figures (like `par("mfrow")`)
+`r indexfns("layout3d")`: | Multiple figures (like `layout`)
+`r indexfns("next3d")`:   | Move to the next figure (like `plot.new` or `frame`)
+`r indexfns("subsceneList")`: | List all the subscenes in the current layout
+`r indexfns("clearSubsceneList")` | Clear the current list and revert to the previous one
+
+---------------
+
+There are also lower level functions.
+
+--------------
+
+------------------------------------ | -----------
+`r indexfns("newSubscene3d")`:     | Create a new subscene, with fine control over what is inherited from the parent
+`r indexfns("currentSubscene3d")`: | Report on the active subscene
+`r indexfns("subsceneInfo")`:      | Get information on current subscene
+`r indexfns("useSubscene3d")`:     | Make a different subscene active
+`r indexfns(c("addToSubscene3d", "delFromSubscene3d"))`: | Add objects to a subscene, or delete them
+`r indexfns("gc3d")`:              | Do "garbage collection":  delete objects that are not displayed in any subscene
+
+---------------
+
 
 ## Utility functions
 
@@ -267,7 +296,7 @@ and manipulate them.
 `r indexfns("rgl.ids")`              | ids and types of all current objects
 `r indexfns(c("rgl.attrib", "rgl.attrib.count"))`: | attributes of objects in the scene
 `r indexfns(c("pop3d", "rgl.pop"))`     | delete an object from the scene
-`r indexfns("rgl.clear")`            | delete all objects of certain classes
+`r indexfns(c("clear3d", "rgl.clear"))`            | delete all objects of certain classes
 
 ---------------
 
@@ -313,28 +342,7 @@ setdiff(ls("package:rgl"), documentedfns)
 
 The following functions are described in this document:<br>
 ```{r echo=FALSE, results="asis"}
-documentedfns <- sort(documentedfns)
-entries <- paste0('<a href="#', documentedfns, '">', documentedfns, '</a>&nbsp;&nbsp;')
-len <- length(entries)
-cols <- 4
-rows <- len %/% cols
-extra <- len %% cols
-ofs <- c(rows + (extra > 0), rows + (extra > 1), rows + (extra > 2))
-ofs <- cumsum(ofs)
-cat("\n------------- ")
-for (i in seq_len(cols-1))
-  cat("| ------------")
-cat("\n")
-columns <- list(entries[1:rows])
-for (i in seq_len(cols-1)+1) 
-  columns[[i]] <- entries[(ofs[i-1]+1):(ofs[i-1]+rows)]
-cat(paste(columns[[1]], columns[[2]], columns[[3]], columns[[4]], sep = " | "), sep="\n")  
-if (extra) {
-  for (i in seq_len(extra))
-    cat(entries[ofs[i]], ' | ')
-  cat("&nbsp;")
-}
-cat("\n\n")
+writeIndex(cols = 6)
 ```
 
 This document was produced using rgl version `r packageVersion("rgl")`.
