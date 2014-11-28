@@ -101,7 +101,7 @@ countClipplanes <- function(id) {
 writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"), 
                        template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
                        prefix = "",
-                       snapshot = TRUE, canvasMatrix = TRUE,
+                       snapshot = TRUE, commonParts = TRUE,
 		       font="Arial",
                        width, height) {
  
@@ -123,7 +123,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   }
   
   header <- function() c(
-  	if (canvasMatrix) 
+  	if (commonParts) 
 '	<script src="CanvasMatrix.js" type="text/javascript"></script>',
         subst(
 '	<canvas id="%prefix%textureCanvas" style="display: none;" width="256" height="256">
@@ -389,10 +389,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     c(vertex, fragment)    
   }
 
-  scriptheader <- function() subst(
+  scriptheader <- function() c(
   '
-	<script type="text/javascript"> 
-
+	<script type="text/javascript">',
+  
+  if (commonParts)
+'
 	function getShader ( gl, id ){
 	   var shaderScript = document.getElementById ( id );
 	   var str = "";
@@ -424,7 +426,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	var PI = Math.PI;
 	var log = Math.log;
 	var exp = Math.exp;
-
+',
+  subst(
+'
 	function %prefix%webGLStart() {
 	   var debug = function(msg) {
 	     document.getElementById("%prefix%debug").innerHTML = msg;
@@ -457,7 +461,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var distance;
 	   var posLoc = 0;
 	   var colLoc = 1;
-', prefix, snapshotimg2, width, height)
+', prefix, snapshotimg2, width, height))
   
   setUser <- function() {
     subsceneids <- rgl.ids("subscene", subscene = 0)$id
@@ -1721,7 +1725,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   if (!file.info(dir)$isdir)
     stop("'", dir, "' is not a directory.")
   
-  if (canvasMatrix)
+  if (commonParts)
     file.copy(system.file(file.path("WebGL", "CanvasMatrix.js"), package = "rgl"), 
                           file.path(dir, "CanvasMatrix.js"))
 

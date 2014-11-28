@@ -3,7 +3,7 @@ library(rgl)
 options(rgl.useNULL=TRUE)
 
 hook_webgl <- local({
-  canvasMatrix <- TRUE
+  commonParts <- TRUE
   function (before, options, envir) 
   {
     if (before || rgl::rgl.cur() == 0 || !requireNamespace("knitr")) 
@@ -25,8 +25,8 @@ hook_webgl <- local({
                     snapshot = !rgl.useNULL(),
                     template = NULL, 
                     prefix = prefix, 
-                    canvasMatrix = canvasMatrix)
-    canvasMatrix <<- FALSE
+                    commonParts = commonParts)
+    commonParts <<- FALSE
     res <- readLines(name)
     res <- res[!grepl("^\\s*$", res)]
     paste(gsub("^\\s+", "", res), collapse = "\n")

@@ -11,7 +11,7 @@ it in a browser.
 writeWebGL(dir = "webGL", filename = file.path(dir, "index.html"), 
            template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
            prefix = "",
-           snapshot = TRUE, canvasMatrix = TRUE,
+           snapshot = TRUE, commonParts = TRUE,
            font = "Arial", width, height)
 }
 \arguments{
@@ -32,8 +32,10 @@ in Javascript and HTML.
   \item{snapshot}{
   Whether to include a snapshot of the scene, to be displayed in browsers that don't support WebGL.
 }
-  \item{canvasMatrix}{
-  Whether to include a reference to and copy of the \file{CanvasMatrix.js}
+  \item{commonParts}{
+  Whether to include parts that would be common to several
+figures on the same page.  Currently this includes
+a reference to and copy of the \file{CanvasMatrix.js}
 file in the output.
 }
   \item{font}{
