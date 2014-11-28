@@ -586,7 +586,7 @@ void Subscene::render(RenderContext* renderContext)
   // RENDER MODEL
   //
 
-  if (data_bbox.isValid() ) {
+  // if (data_bbox.isValid() ) {
 
     //
     // RENDER SOLID SHAPES
@@ -662,7 +662,7 @@ void Subscene::render(RenderContext* renderContext)
     /* Reset clipplanes */
     disableClipplanes(renderContext);
     SAVEGLERROR;
-  }
+  // }
   
   // Render subscenes
     

@@ -614,7 +614,7 @@ v0.94
   - rgl.snapshot() now works with the NULL device (but produces a 
     black snapshot).  This allows testing with RGL_USE_NULL.
 
-0.95.1165
+0.95.1170
   - writeWebGL() now includes an argument "canvasMatrix", to allow
     omission of CanvasMatrix.js (in multi-figure displays)
   - If template is NULL in writeWebGL(), no template file is used. 
@@ -624,3 +624,4 @@ v0.94
     axis labels.
   - The package now contains a vignette giving an overview of
     the functions. 
+  - Subscenes with "ignoreExtent" set to TRUE were not plotted.
