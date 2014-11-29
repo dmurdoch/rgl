@@ -527,7 +527,10 @@ void Subscene::update(RenderContext* renderContext)
   // transformations, we don't bother using the parent one, we reconstruct in
   // every subscene.
   
-  setupModelViewMatrix(renderContext, total_bsphere.center);
+  if (do_projection > EMBED_INHERIT || do_model > EMBED_INHERIT)
+    setupModelViewMatrix(renderContext, total_bsphere.center);
+  else
+    modelMatrix = parent->modelMatrix;
     
   // update subscenes
     
