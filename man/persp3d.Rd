@@ -9,10 +9,9 @@
 persp3d(x, \dots)
 
 \method{persp3d}{default}(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)), z,
-    xlim = range(x, na.rm = TRUE), 
-    ylim = range(y, na.rm = TRUE), 
-    zlim = range(z, na.rm = TRUE),
-    xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, ...)
+    xlim = NULL, ylim = NULL, zlim = NULL,
+    xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, 
+    forceClipregion = FALSE, ...)
 }
 \arguments{
   \item{x, y}{locations of grid lines at which the values in \code{z} are
@@ -24,8 +23,8 @@ persp3d(x, \dots)
   \item{z}{a matrix containing the values to be plotted.  
     Note that \code{x} can be used instead of \code{z} for
     convenience.}
-  \item{xlim, ylim, zlim}{x-, y-  and z-limits.  The plot is produced
-    so that the rectangular volume defined by these limits is visible.}
+  \item{xlim, ylim, zlim}{x-, y-  and z-limits.  If present,
+  the plot is clipped to this region.}
   \item{xlab, ylab, zlab}{titles for the axes.  N.B. These must be
     character strings; expressions are not accepted.  Numbers will be
     coerced to character strings.}
@@ -52,6 +51,9 @@ persp3d(x, \dots)
   dimension as \code{z}, and the values in the matrix will be used for the corresponding
   coordinates. This is used to plot shapes such as spheres or cylinders
   where z is not a function of x and y.  See the fourth and fifth examples below.
+  
+  See the \dQuote{Clipping} section in \code{\link{plot3d}}
+for more details on \code{xlim, ylim, zlim} and \code{forceClipregion}.
 }
 \value{
   This function is called for the side effect of drawing the plot.  A vector 

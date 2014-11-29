@@ -10,7 +10,7 @@ Plot a function \code{z(x,y)} or a parametric function
 }
 \usage{
 \method{persp3d}{function}(x, 
-  xlim = c(0, 1), ylim = c(0, 1), zlim = NULL, 
+  xlim = c(0, 1), ylim = c(0, 1), 
   slim = NULL, tlim = NULL, 
   n = 101, 
   xvals = seq.int(min(xlim), max(xlim), length.out = n[1]), 
@@ -31,9 +31,6 @@ By default, the range of x and y values.  For a parametric
 surface, if these are not missing, they are used as limits
 on the displayed x and y values.
 }
-  \item{zlim}{
-If not \code{NULL}, limits on the displayed z values.
-  }
   \item{slim, tlim}{
 If not \code{NULL}, these give the range of s and t in the
 parametric specification of the surface.  If
@@ -97,10 +94,13 @@ will be taken from the argument names to \code{f()} and the
 expression passed as argument \code{x} to this function.
 
 If \code{slim} or \code{tlim} is specified, a parametric
-surface is plotted.  Values of \code{s}
+surface is plotted.  The function
 \code{f(s,t)} must return a 3-column matrix, giving x, y and z 
 coordinates of points on the surface.  The default axis
 labels will be the column names if those are present.
+In this case \code{xlim}, \code{ylim} and \code{zlim}
+are used to define a clipping region only if specified;
+the defaults are ignored.
 
 The color of the surface may be specified as the name of a
 color, or a vector or matrix of color names. In this case

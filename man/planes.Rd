@@ -77,7 +77,8 @@ d <- coefs["(Intercept)"]
 planes3d(a, b, c, d, alpha=0.5)
 
 open3d()
-plot3d(x,y,z, type="s", col="red", size=1)
+ids <- plot3d(x,y,z, type="s", col="red", size=1, forceClipregion = TRUE) 
+useSubscene3d(ids["clipregion"])
 clipplanes3d(a, b, c, d)
 
 }

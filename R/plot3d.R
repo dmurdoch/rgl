@@ -5,7 +5,9 @@ plot3d.default <- function(x, y = NULL, z = NULL,
         xlab = NULL, ylab = NULL, zlab = NULL, type = 'p', 
         col = material3d("color")[1], size = material3d("size"), 
         lwd = material3d("lwd"),
-        radius = avgscale*size/60, add = FALSE, aspect = !add, ...)
+        radius = avgscale*size/60, add = FALSE, aspect = !add, 
+        xlim = NULL, ylim = NULL, zlim = NULL,
+        forceClipregion = FALSE, ...)
 {
     if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
@@ -29,7 +31,9 @@ plot3d.default <- function(x, y = NULL, z = NULL,
                                diff(range(y,na.rm=TRUE)), 
                                diff(range(z,na.rm=TRUE)))^2/3))
     }
-    result <- c( data=switch(type,
+    savesubscene <- currentSubscene3d()
+    result <- setClipregion(xlim, ylim, zlim, forceClipregion)
+    result <- c(result, data=switch(type,
 		p = points3d(x, y, z, color=col, size=size, ...),
 	        s = spheres3d(x, y, z, radius=radius, color=col, ...),
 		l = lines3d(x, y, z, color=col, lwd=lwd, ...),
@@ -42,7 +46,9 @@ plot3d.default <- function(x, y = NULL, z = NULL,
                                  rep(range(y, na.rm=TRUE), c(2,2)),
                                  rep(range(z, na.rm=TRUE), c(2,2))))
 	)
-    if (!add) result <- c(result, decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, ...))
+    useSubscene3d(savesubscene)
+    if (!add) result <- c(result, decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, 
+                                             xlim=xlim, ylim=ylim, zlim=zlim, ...))
     invisible(result)
 }
 
@@ -66,32 +72,38 @@ plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade
     invisible(result)
 }
 
-decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zlim, 
-	xlab = "x", ylab = "y", zlab = "z", 
-	box = TRUE, axes = TRUE, main = NULL, sub = NULL,
-	top = TRUE, aspect = FALSE, expand = 1.03, ...) {
-
-    if (is.logical(aspect)) {
-    	autoscale <- aspect
-    	aspect <- c(1,1,1)
-    } else autoscale <- TRUE	
-    
-    result <- numeric(0)    
-    ranges <- .getRanges()    
-    if (!missing(xlim) | !missing(ylim) | !missing(zlim)) {
-        ind <- c(1,1,2,2)
-        result <- c(result, strut=segments3d(xlim[ind], ylim[ind], zlim[ind]))
-    }
-    
-    if (autoscale) aspect3d(aspect)
-    
-    if (axes) result <- c(result, axes=axes3d(box=box, expand=expand))
-    result <- c(result, title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
-	    main = main, sub = sub))
-    
-    if (top) rgl.bringtotop()
-    
-    invisible(result)
+decorate3d <- function(xlim = NULL, ylim = NULL, zlim = NULL, 
+                       xlab = "x", ylab = "y", zlab = "z", 
+                       box = TRUE, axes = TRUE, main = NULL, sub = NULL,
+                       top = TRUE, aspect = FALSE, expand = 1.03, ...) {
+  
+  if (is.logical(aspect)) {
+    autoscale <- aspect
+    aspect <- c(1,1,1)
+  } else autoscale <- TRUE	
+  
+  result <- numeric(0)    
+  if (length(c(xlim, ylim, zlim))) {
+    ranges <- .getRanges()        
+    if (is.null(xlim))
+      xlim <- ranges$xlim
+    if (is.null(ylim))
+      ylim <- ranges$ylim
+    if (is.null(zlim))
+      zlim <- ranges$zlim
+    ind <- c(1,1,2,2)
+    result <- c(result, strut=segments3d(xlim[ind], ylim[ind], zlim[ind]))
+  }
+  
+  if (autoscale) aspect3d(aspect)
+  
+  if (axes) result <- c(result, axes=axes3d(box=box, expand=expand))
+  result <- c(result, title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
+                              main = main, sub = sub))
+  
+  if (top) rgl.bringtotop()
+  
+  invisible(result)
 }
 
 plot3d.function <- function(x, ...) persp3d(x, ...)

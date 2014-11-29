@@ -12,13 +12,16 @@ plot3d(x, ...)
 \method{plot3d}{default}(x, y, z,  
 	xlab, ylab, zlab, type = "p", col,  
         size, lwd, radius,
-	add = FALSE, aspect = !add, ...)
+	add = FALSE, aspect = !add, 
+  xlim = NULL, ylim = NULL, zlim = NULL, 
+  forceClipregion = FALSE, ...)
 \method{plot3d}{mesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
 	add = FALSE, ...)	
 decorate3d(xlim, ylim, zlim, 
 	xlab = "x", ylab = "y", zlab = "z", 
 	box = TRUE, axes = TRUE, main = NULL, sub = NULL,
-	top = TRUE, aspect = FALSE, expand = 1.03, ...)
+	top = TRUE, aspect = FALSE, expand = 1.03, 
+   ...)
 }
 \arguments{
   \item{x, y, z}{vectors of points to be plotted. Any reasonable way of defining the
@@ -38,9 +41,13 @@ decorate3d(xlim, ylim, zlim,
   \item{add}{whether to add the points to an existing plot.}
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio.}
   \item{expand}{how much to expand the box around the data, if it is drawn.}
+  \item{xlim, ylim, zlim}{In \code{plot3d}, if not \code{NULL}, set clipping
+limits for the plot.  In \code{decorate3d}, these are used
+for the labels.}
+  \item{forceClipregion}{Force a clipping region to be used,
+whether or not limits are given.}
   \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}, \code{\link{material3d}}
   or \code{decorate3d}.}
-  \item{xlim, ylim, zlim}{limits to use for the coordinates.}
   \item{box, axes}{whether to draw a box and axes.}
   \item{main, sub}{main title and subtitle.}
   \item{top}{whether to bring the window to the top when done.}
@@ -70,6 +77,21 @@ to the plot display, with the default \code{size=3} giving a radius
 about 1/20 of the plot region) or \code{radius} (specifying it on the data scale
 if an isometric aspect ratio is chosen, or on an average scale
 if not). 
+}
+\section{Clipping}{
+If any of \code{xlim}, \code{ylim} or \code{zlim} are specified,
+they should be length two vectors giving lower and upper 
+clipping limits for the corresponding coordinate.  Non-finite
+limits will be ignored.
+
+If any clipping limits are given, then the data will be
+plotted in a newly created subscene within the current one;
+otherwise plotting will take place directly in the current
+subscene.  This subscene is named \code{"clipregion"}
+in the results. 
+
+Use \code{forceClipregion = TRUE} to force creation of this 
+subscene even without specifying limits. 
 }
 \author{
   Duncan Murdoch
