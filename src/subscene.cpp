@@ -118,6 +118,7 @@ void Subscene::addShape(Shape* shape)
     zsortShapes.push_back(shape);
   } else if ( shape->isClipPlane() ) {
     clipPlanes.push_back(static_cast<ClipPlaneSet*>(shape));
+    shrinkBBox();
   } else
     unsortedShapes.push_back(shape);
 }
@@ -126,8 +127,9 @@ void Subscene::addBBox(const AABox& bbox, bool changes)
 {
   data_bbox += bbox;
   bboxChanges |= changes;
+  intersectClipplanes();
   if (parent && !ignoreExtent) 
-    parent->addBBox(bbox, changes);
+    parent->addBBox(data_bbox, changes);
 }
   
 void Subscene::addLight(Light* light)
@@ -163,7 +165,7 @@ void Subscene::hideShape(int id)
     unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
                          std::bind2nd(std::ptr_fun(&sameID), id)));
       
-  calcDataBBox();
+  shrinkBBox();
 }
 
 void Subscene::hideLight(int id)
@@ -199,7 +201,7 @@ Subscene* Subscene::hideSubscene(int id, Subscene* current)
         current = (*i)->parent;  
       (*i)->parent = NULL;
       subscenes.erase(i);
-      calcDataBBox();
+      shrinkBBox();
       return current;
     } 
   }
@@ -696,8 +698,27 @@ void Subscene::calcDataBBox()
       bboxChanges |= shape->getBBoxChanges();
     }
   }
+  intersectClipplanes(); 
 }
 
+void Subscene::intersectClipplanes(void) 
+{
+  std::vector<ClipPlaneSet*>::iterator iter;
+  for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
+      ClipPlaneSet* plane = *iter;
+      plane->intersectBBox(data_bbox);
+      SAVEGLERROR;
+  }
+}
+
+/* Call this when adding a clipplane that can shrink things */
+void Subscene::shrinkBBox(void)
+{
+  if (parent) parent->shrinkBBox();
+  else {
+      calcDataBBox();
+  }
+}
 // ---------------------------------------------------------------------------
 void Subscene::setIgnoreExtent(int in_ignoreExtent)
 {

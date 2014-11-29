@@ -625,3 +625,4 @@ v0.94
   - The package now contains a vignette giving an overview of
     the functions. 
   - Subscenes with "ignoreExtent" set to TRUE were not plotted.
+  - The bounding box calculations now take clipping planes into account.

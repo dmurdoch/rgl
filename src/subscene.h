@@ -74,6 +74,7 @@ public:
   void addLight(Light* light);
   void addSubscene(Subscene* subscene);
   void addBBox(const AABox& bbox, bool changes);
+  void intersectClipplanes(void);
   
   /**
    * hide shape or light or bboxdeco
@@ -201,7 +202,13 @@ private:
    * compute bounding-box
    **/
   void calcDataBBox();
+  
+  /**
+   * shrink bounding-box when something has been removed
+   **/
 
+  void shrinkBBox();
+  
   /**
    * bounding box of subscene
    **/

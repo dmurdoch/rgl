@@ -41,6 +41,8 @@ public:
   void enable(bool show);  // after it has been drawn, this enables it or disables it
   
   bool isClipPlane(void) { return true; }
+  
+  void intersectBBox(AABox& bbox);
 
 };
 

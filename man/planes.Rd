@@ -37,7 +37,7 @@ values will be recycled as necessary.
 
 \code{clipplanes3d} and \code{rgl.clipplanes} define clipping planes
 using the same equations.  Clipping planes suppress the display of
-other objects (or parts of them) in the scene, based on their coordinates.
+other objects (or parts of them) in the subscene, based on their coordinates.
 Points (or parts of lines or surfaces) where the coordinates \code{x,y,z}
 satisfy \eqn{a x + b y + c z + d < 0} will be suppressed.
 

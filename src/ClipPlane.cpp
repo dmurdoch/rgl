@@ -74,3 +74,49 @@ void ClipPlaneSet::enable(bool show)
     else      glDisable(firstPlane + i);
   }
 }
+
+void ClipPlaneSet::intersectBBox(AABox& bbox)
+{
+  GLdouble a, b, c, d, a1, b1, c1, d1;
+  for (int j=0; j<3; j++) /* repeat to propagate changes between coordinates */
+  for (int i=0; i<nPlanes; i++) {
+    a = normal.getRecycled(i).x;
+    b = normal.getRecycled(i).y;
+    c = normal.getRecycled(i).z;
+    d = offset.getRecycled(i);
+    b1 = -b/a;
+    c1 = -c/a;
+    d1 = -d/a;
+    if (a > 0) 
+      bbox.vmin.x = getMax(bbox.vmin.x,  b1*(b1 > 0 ? bbox.vmin.y : bbox.vmax.y)
+                                        +c1*(c1 > 0 ? bbox.vmin.z : bbox.vmax.z)
+                                        +d1);
+    else if (a < 0)
+      bbox.vmax.x = getMin(bbox.vmax.x,  b1*(b1 > 0 ? bbox.vmax.y : bbox.vmin.y)
+                                        +c1*(c1 > 0 ? bbox.vmax.z : bbox.vmin.z)
+                                        +d1);
+    a1 = -a/b;
+    c1 = -c/b;
+    d1 = -d/b;
+    if (b > 0) 
+      bbox.vmin.y = getMax(bbox.vmin.y,  a1*(a1 > 0 ? bbox.vmin.x : bbox.vmax.x)
+                                        +c1*(c1 > 0 ? bbox.vmin.z : bbox.vmax.z)
+                                        +d1);
+    else if (b < 0)
+      bbox.vmax.y = getMin(bbox.vmax.y,  a1*(a1 > 0 ? bbox.vmax.x : bbox.vmin.x)
+                                        +c1*(c1 > 0 ? bbox.vmax.z : bbox.vmin.z)
+                                        +d1);
+                                       
+    a1 = -a/c;
+    b1 = -b/c;
+    d1 = -d/c;
+    if (c > 0) 
+      bbox.vmin.z = getMax(bbox.vmin.z,  a1*(a1 > 0 ? bbox.vmin.x : bbox.vmax.x)
+                                        +b1*(b1 > 0 ? bbox.vmin.y : bbox.vmax.y)
+                                        +d1);
+    else if (c < 0)
+      bbox.vmax.z = getMin(bbox.vmax.z,  a1*(a1 > 0 ? bbox.vmax.x : bbox.vmin.x)
+                                        +b1*(b1 > 0 ? bbox.vmax.y : bbox.vmin.y)
+                                        +d1);
+  }
+}
