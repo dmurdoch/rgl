@@ -61,6 +61,21 @@ convertBBox <- function(id) {
   res
 }
 
+convertBBoxes <- function (id) {
+  result <- NULL
+  if (NROW(bboxes <- rgl.ids(type = "bboxdeco", subscene = id))) {
+    save <- currentSubscene3d()
+    on.exit(useSubscene3d(save))
+    useSubscene3d(id)
+    for (i in bboxes$id) 
+      result <- c(result, convertBBox(i))
+  }
+  children <- subsceneInfo(id)$children
+  for (i in children)
+    result <- c(result, convertBBoxes(i))
+  result
+}
+
 rootSubscene <- function() {
   id <- currentSubscene3d()
   repeat {
@@ -1767,13 +1782,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   } else
     result <- header()
 
-  if (NROW(bbox <- rgl.ids("bboxdeco", subscene = 0))) {
-    saveid <- currentSubscene3d()
-    useSubscene3d(subsceneInfo("root")$id)
+  if (NROW(rgl.ids("bboxdeco", subscene = 0))) {
     saveredraw <- par3d(skipRedraw = TRUE)
-    temp <- convertBBox(bbox$id)
-    useSubscene3d(saveid)
-    on.exit({ rgl.pop(id=temp); par3d(save) })
+    temp <- convertBBoxes(rootSubscene())
+    on.exit({ rgl.pop(id=temp); par3d(saveredraw) })
   }
     
   ids <- rgl.ids(subscene = 0)

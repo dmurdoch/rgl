@@ -62,8 +62,8 @@ An even simpler specification is possible:  `x` may be a function,
 in which case `persp3d` will work out the grid itself.  See 
 `?persp3d.function` for details.  For example, the `MASS` package estimates
 Gamma parameters using maximum likelihood in a `?MASS::fitdistr` example.
-Here we show the log likelihood surface:
-```{r persp3d, rgl=TRUE}
+Here we show the log likelihood surface. 
+```{r persp3d, rgl=TRUE, fig.height=3}
 library(MASS)
 # from the fitdistr example
 set.seed(123)
@@ -72,12 +72,22 @@ fit <- fitdistr(x, dgamma, list(shape = 1, rate = 0.1), lower = 0.001)
 loglik <- function(shape, rate) sum(dgamma(x, shape=shape, rate=rate, 
                                            log=TRUE))
 loglik <- Vectorize(loglik)
-xlim <- fit$estimate[1]+2*fit$sd[1]*c(-1,1)
-ylim <- fit$estimate[2]+2*fit$sd[2]*c(-1,1)
+xlim <- fit$estimate[1]+4*fit$sd[1]*c(-1,1)
+ylim <- fit$estimate[2]+4*fit$sd[2]*c(-1,1)
+
+open3d()
+mfrow3d(1, 2)
 persp3d(loglik, 
         xlim = xlim, ylim = ylim,
-        n = 30)
+        n = 30, col = "red")
+zlim <- fit$loglik + c(-qchisq(0.99, 2)/2, 0)
+next3d()
+persp3d(loglik, 
+        xlim = xlim, ylim = ylim, zlim = zlim,
+        n = 30, col = "red")
 ```
+ On the left, the whole surface over a range of the parameters; on the right, only the 
+parts of the surface with log likelihood values near the maximum.
 
 ## Adding Graphical Elements
 
@@ -143,23 +153,6 @@ The following low-level functions control the look of the graph:
 `r indexfns("grid3d")`:              | add a reference grid to a graph
 
 ---------------
-
-For example, the `r linkfn("persp3d")` example would be 
-more informative if the range of log-likelihoods was
-limited to values near the maximum (allowing visual
-estimation of likelihood-ratio confidence regions). 
-Currently `r linkfn("persp3d")` can do this by setting
-out of range values to `NA`, but this yields a rough edge
-in the plot.  A better result is available by adding a 
-clipping plane in a `r linkfn("newSubscene3d", "subscene")`:
-```{r rgl=TRUE}
-zlim <- fit$loglik + c(-qchisq(0.95, 2)/2, 0)
-plot3d(xlim, ylim, zlim, type = "n", 
-       xlab = "shape", ylab = "rate", zlab = "log-likelihood")
-newSubscene3d("inherit", "inherit", "inherit")
-clipplanes3d(0, 0, 1, -zlim[1])
-persp3d(loglik, xlim = xlim, ylim = ylim, n = 30, add = TRUE)
-```
 
 Besides the `*3d` functions mentioned above, there are even lower-level
 functions 
