@@ -1767,9 +1767,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   } else
     result <- header()
 
-  if (NROW(bbox <- rgl.ids("bboxdeco"))) {
-    save <- par3d(skipRedraw = TRUE)
+  if (NROW(bbox <- rgl.ids("bboxdeco", subscene = 0))) {
+    saveid <- currentSubscene3d()
+    useSubscene3d(subsceneInfo("root")$id)
+    saveredraw <- par3d(skipRedraw = TRUE)
     temp <- convertBBox(bbox$id)
+    useSubscene3d(saveid)
     on.exit({ rgl.pop(id=temp); par3d(save) })
   }
     
