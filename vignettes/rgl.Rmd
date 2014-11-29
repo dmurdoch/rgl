@@ -72,17 +72,21 @@ fit <- fitdistr(x, dgamma, list(shape = 1, rate = 0.1), lower = 0.001)
 loglik <- function(shape, rate) sum(dgamma(x, shape=shape, rate=rate, 
                                            log=TRUE))
 loglik <- Vectorize(loglik)
+xlim <- fit$estimate[1]+2*fit$sd[1]*c(-1,1)
+ylim <- fit$estimate[2]+2*fit$sd[2]*c(-1,1)
 persp3d(loglik, 
-        xlim = fit$estimate[1]+2*fit$sd[1]*c(-1,1),
-        ylim = fit$estimate[2]+2*fit$sd[2]*c(-1,1),
+        xlim = xlim, ylim = ylim,
         n = 30)
 ```
 
 ## Adding Graphical Elements
 
+### Primitive shapes
+
 Just as we have `points` and `lines` in classic graphics, there are a number
 of low level functions in `rgl` to add graphical elements to the
-currently active plot.
+currently active plot.  The "primitive" shapes are those that are 
+native to OpenGL:
 
 --------------
 
@@ -92,13 +96,6 @@ currently active plot.
 `r indexfns("segments3d")`:   | adds line segments
 `r indexfns("triangles3d")`:  | adds triangles
 `r indexfns("quads3d")`:      | adds quadrilaterals
-`r indexfns(c("text3d", "texts3d"))`: | adds text
-`r indexfns("abclines3d")`:   | adds straight lines to plot (like `abline`)
-`r indexfns("planes3d")`:     | adds planes to plot
-`r indexfns("clipplanes3d")`: | add clipping planes to plot
-`r indexfns(c("sprites3d", "particles3d"))`: | add sprites (fixed shapes or images) to plot
-`r indexfns("spheres3d")`:    | adds spheres
-`r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
 
 ------------
 
@@ -109,6 +106,26 @@ successive triple of points as the vertices of a triangle.
 
 You can use these functions to annotate the current graph, or to 
 construct a figure from scratch.
+
+### Constructed shapes
+
+`rgl` also has a number of objects which it constructs
+from the primitives.
+
+--------------
+
+----------------------------- | -----------
+`r indexfns(c("text3d", "texts3d"))`: | adds text
+`r indexfns("abclines3d")`:   | adds straight lines to plot (like `abline`)
+`r indexfns("planes3d")`:     | adds planes to plot
+`r indexfns("clipplanes3d")`: | add clipping planes to plot
+`r indexfns(c("sprites3d", "particles3d"))`: | add sprites (fixed shapes or images) to plot
+`r indexfns("spheres3d")`:    | adds spheres
+`r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
+
+--------------
+
+### Axes and other "decorations"
 
 The following low-level functions control the look of the graph:
 
@@ -127,16 +144,21 @@ The following low-level functions control the look of the graph:
 
 ---------------
 
-For example, to plot three random triangles, one could use
-```{r echo=FALSE, results="hide"}
-rgl.close()
-open3d()
-```
+For example, the `r linkfn("persp3d")` example would be 
+more informative if the range of log-likelihoods was
+limited to values near the maximum (allowing visual
+estimation of likelihood-ratio confidence regions). 
+Currently `r linkfn("persp3d")` can do this by setting
+out of range values to `NA`, but this yields a rough edge
+in the plot.  A better result is available by adding a 
+clipping plane in a `r linkfn("newSubscene3d", "subscene")`:
 ```{r rgl=TRUE}
-triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
-decorate3d()
-bg3d("lightgray")
-aspect3d(1,1,1)
+zlim <- fit$loglik + c(-qchisq(0.95, 2)/2, 0)
+plot3d(xlim, ylim, zlim, type = "n", 
+       xlab = "shape", ylab = "rate", zlab = "log-likelihood")
+newSubscene3d("inherit", "inherit", "inherit")
+clipplanes3d(0, 0, 1, -zlim[1])
+persp3d(loglik, xlim = xlim, ylim = ylim, n = 30, add = TRUE)
 ```
 
 Besides the `*3d` functions mentioned above, there are even lower-level
@@ -278,10 +300,10 @@ attributes such as colour or transformations to be specified.
 
 ---------------
 
-```{r results="hide",rgl=TRUE,fig.height=2,fig.width=9}
+```{r results="hide",rgl=TRUE}
 open3d()
 cols <- rainbow(7)
-layout3d(matrix(1:14, 2,7), heights=c(1,3))
+layout3d(matrix(1:16, 4,4), heights=c(1,3,1,3))
 text3d(0,0,0,"tetrahedron3d"); next3d()
 shade3d(tetrahedron3d(col=cols[1])); next3d()
 text3d(0,0,0,"cube3d"); next3d()
