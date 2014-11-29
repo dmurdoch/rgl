@@ -154,6 +154,18 @@ The following low-level functions control the look of the graph:
 
 ---------------
 
+For example, to plot three random triangles, one could use
+```{r echo=FALSE, results="hide"}
+rgl.close()
+open3d()
+```
+```{r rgl=TRUE}
+triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
+decorate3d()
+bg3d("lightgray")
+aspect3d(1,1,1)
+```
+
 Besides the `*3d` functions mentioned above, there are even lower-level
 functions 
 `r indexfns(c("rgl.primitive", "rgl.points", "rgl.linestrips", "rgl.lines", "rgl.triangles",
