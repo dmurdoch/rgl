@@ -43,7 +43,7 @@ within the R help system.
 
 The `r indexfns("plot3d")` function
 plots points within an rgl window.  It is similar to the classic 
-`plot` function,
+`r linkfn("plot", pkg="graphics")` function,
 but works in 3 dimensions.
 
 For example
@@ -92,17 +92,17 @@ loglik <- Vectorize(loglik)
 xlim <- fit$estimate[1]+4*fit$sd[1]*c(-1,1)
 ylim <- fit$estimate[2]+4*fit$sd[2]*c(-1,1)
 
-open3d()
 mfrow3d(1, 2)
 persp3d(loglik, 
         xlim = xlim, ylim = ylim,
-        n = 30, col = "red")
+        n = 30)
 zlim <- fit$loglik + c(-qchisq(0.99, 2)/2, 0)
 next3d()
 persp3d(loglik, 
         xlim = xlim, ylim = ylim, zlim = zlim,
-        n = 30, col = "red")
+        n = 30)
 ```
+
  On the left, the whole surface over a range of the parameters; on the right, only the 
 parts of the surface with log likelihood values near the maximum.
 
@@ -174,10 +174,6 @@ The following low-level functions control the look of the graph:
 ---------------
 
 For example, to plot three random triangles, one could use
-```{r echo=FALSE, results="hide"}
-rgl.close()
-open3d()
-```
 ```{r rgl=TRUE}
 triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
 decorate3d()

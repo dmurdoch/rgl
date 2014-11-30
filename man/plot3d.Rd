@@ -61,10 +61,6 @@ whether or not limits are given.}
 \details{
 \code{plot3d} is a partial 3D analogue of plot.default.
 
-Note that since \code{rgl} does not currently support
-clipping, all points will be plotted, and \code{xlim}, \code{ylim}, and \code{zlim}
-will only be used to increase the respective ranges.
-
 Missing values in the data are skipped, as in standard graphics.
 
 If \code{aspect} is \code{TRUE}, aspect ratios of \code{c(1,1,1)} are passed to
@@ -81,7 +77,7 @@ if not).
 \section{Clipping}{
 If any of \code{xlim}, \code{ylim} or \code{zlim} are specified,
 they should be length two vectors giving lower and upper 
-clipping limits for the corresponding coordinate.  Non-finite
+clipping limits for the corresponding coordinate.  \code{NA}
 limits will be ignored.
 
 If any clipping limits are given, then the data will be

@@ -26,6 +26,8 @@ hook_webgl <- local({
                     template = NULL, 
                     prefix = prefix, 
                     commonParts = commonParts)
+    if (!isTRUE(options$rgl.keepopen) && rgl.cur())
+      rgl.close()
     commonParts <<- FALSE
     res <- readLines(name)
     res <- res[!grepl("^\\s*$", res)]
