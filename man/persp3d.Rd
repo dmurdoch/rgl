@@ -30,7 +30,8 @@ persp3d(x, \dots)
     coerced to character strings.}
   \item{add}{whether to add the points to an existing plot.}    
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio}
-    
+  \item{forceClipregion}{Force a clipping region to be used,
+whether or not limits are given.}
   \item{\dots}{additional material parameters to be passed to \code{\link{surface3d}}
   and \code{\link{decorate3d}}.}
 }
