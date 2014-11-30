@@ -26,6 +26,19 @@ inspired by the `grid` package.
 
 This document gives an overview.  See the help pages for details.
 
+### About this document
+
+This document was written in R Markdown, using the `knitr` package
+for production.  It corresponds to rgl version 
+`r packageVersion("rgl")`.
+
+Most of the highlighted function names are HTML links.
+The internal links should work in any browser; the links to
+help topics should work if you view the vignette from
+within the R help system.
+
+
+
 ## Basics and High Level Functions
 
 The `r indexfns("plot3d")` function
@@ -41,7 +54,8 @@ with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length,
 can be used to plot three columns of the `iris` data.  
 Allowed plot types include `"p", "l", "h", "s"`,
 meaning points, lines, segments from z=0, and spheres.  There's
-a lot of flexibility in specifying the coordinates; the `xyz.coords` function
+a lot of flexibility in specifying the coordinates; the 
+`r linkfn("xyz.coords", pkg = "grDevices")` function
 from the `grDevices` package is used for this.
 
 You can use your mouse to manipulate the plot.  The default is that
@@ -54,14 +68,17 @@ To open a new graphics window, use `r linkfn("open3d")`.
  
 The other high level function is `r indexfns("persp3d")` to draw surfaces.
 It is
-similar to the classic `persp` function, but with greater flexibility.
+similar to the classic `r linkfn("persp", pkg = "graphics")`
+function, but with greater flexibility.
 First, any of `x`, `y` or `z`
 can be specified using matrices, not just `z`.  This allows parametric
 surfaces to be plotted. 
 An even simpler specification is possible:  `x` may be a function,
 in which case `persp3d` will work out the grid itself.  See 
-`?persp3d.function` for details.  For example, the `MASS` package estimates
-Gamma parameters using maximum likelihood in a `?MASS::fitdistr` example.
+`r linkfn("persp3d.function", text="?persp3d.function", pkg="rgl")`
+for details.  For example, the `MASS` package estimates
+Gamma parameters using maximum likelihood in a 
+`r linkfn("fitdistr", text="?MASS::fitdistr", pkg="MASS")` example.
 Here we show the log likelihood surface. 
 ```{r persp3d, rgl=TRUE, fig.height=3}
 library(MASS)
@@ -93,7 +110,8 @@ parts of the surface with log likelihood values near the maximum.
 
 ### Primitive shapes
 
-Just as we have `points` and `lines` in classic graphics, there are a number
+Just as we have `r linkfn("points", pkg="graphics")` and 
+`r linkfn("lines", pkg="graphics")` in classic graphics, there are a number
 of low level functions in `rgl` to add graphical elements to the
 currently active plot.  The "primitive" shapes are those that are 
 native to OpenGL:
@@ -110,7 +128,8 @@ native to OpenGL:
 ------------
 
 Each of the above functions takes arguments `x`, `y` and `z`, again
-using `xyz.coords` for flexibility.  They group successive entries
+using `r linkfn("xyz.coords", pkg="grDevices")` for flexibility.
+They group successive entries
 as necessary.  For example, the `r linkfn("triangles3d")` function takes each
 successive triple of points as the vertices of a triangle.
 
@@ -172,7 +191,8 @@ functions
 "rgl.quads", "rgl.texts", "rgl.abclines", "rgl.planes", "rgl.bg",
 "rgl.clipplanes", "rgl.bbox", "rgl.spheres", "rgl.sprites", "rgl.surface"))`.  
 You should avoid using these functions, which do not
-work well with the higher level `*3d` functions.  See the `?r3d` help
+work well with the higher level `*3d` functions.  See the 
+`r linkfn("r3d", text="?r3d", pkg="rgl")` help
 topic for details.
 
 ## Controlling the Look of the Scene
@@ -208,8 +228,9 @@ These are mainly controlled by the `r indexfns("material3d")` function,
 or by arguments to other functions that are passed to it.
 
 The material properties that can be set by calls to `material3d` are
-described in detail in the `?material3d` help page.  Here we
-give an overview.
+described in detail in the 
+`r linkfn("material3d", text="?material3d", pkg="rgl")` help page.
+Here we give an overview.
 
 --------------
 
@@ -241,7 +262,8 @@ at a lower level; users should normally avoid it.
 ### par3d:  Miscellaneous graphical parameters
 
 The `r indexfns("par3d")` function, modelled after the classic
-graphics `par` function, sets or reads a variety of different `rgl` internal
+graphics `r linkfn("par", pkg="graphics")` function, sets or reads 
+a variety of different `rgl` internal
 parameters.  Some parameters are completely read-only; others are
 fixed at the time the window is opened, and others may be changed 
 at any time.
@@ -252,7 +274,7 @@ Name        |  Changeable?     | Description
 ----------- | ----- | -----------
 antialias   | fixed | Amount of hardware antialiasing 
 cex         |       | Default size for text
-family      |       | Device-independent font family name; see `?text3d`
+family      |       | Device-independent font family name; see `r linkfn("text3d", text="?text3d", pkg="rgl")`
 font        |       | Integer font number
 useFreeType |       | Should FreeType fonts be used if available?
 fontname    | read-only | System-dependent font name set by `r indexfns("rglFonts")`
@@ -387,9 +409,9 @@ The final set of functions manipulate and modify mesh objects:
 --------------
 
 ------------------------------------ | -----------
-`r indexfns("mfrow3d")`:  | Multiple figures (like `par("mfrow")`)
-`r indexfns("layout3d")`: | Multiple figures (like `layout`)
-`r indexfns("next3d")`:   | Move to the next figure (like `plot.new` or `frame`)
+`r indexfns("mfrow3d")`:  | Multiple figures (like `r linkfn("par", text = 'par("mfrow")', pkg="graphics")`
+`r indexfns("layout3d")`: | Multiple figures (like `r linkfn("layout", pkg="graphics")`)
+`r indexfns("next3d")`:   | Move to the next figure (like `r linkfn("plot.new", pkg="graphics")` or `r linkfn("frame", pkg="graphics")`)
 `r indexfns("subsceneList")`: | List all the subscenes in the current layout
 `r indexfns("clearSubsceneList")` | Clear the current list and revert to the previous one
 
@@ -450,7 +472,7 @@ scene.
 --------------
 
 ---------------------------- | -----------
-`r indexfns("identify3d")`   | like the classic graphics `identify` function
+`r indexfns("identify3d")`   | like the classic graphics `r linkfn("identify", pkg="graphics")` function
 `r indexfns("select3d")`     | returns a function that tests whether a coordinate was selected
 `r indexfns("selectpoints3d")` | selects from specific objects
 
@@ -514,7 +536,9 @@ without any 3D information being saved:
 
 -----------------------
 
-The `knitr` package has functions `knitr::hook_rgl` and `knitr::hook_webgl` 
+The `knitr` package has functions 
+`r linkfn("hook_rgl", text="knitr::hook_rgl", pkg="knitr")` and 
+`r linkfn("hook_webgl", text="knitr::hook_webgl", pkg="knitr")` 
 for inserting snapshots or WebGL code into a document.
 
 The `r indexfns("rgl.snapshot")` function is identical to `snapshot3d`.
@@ -590,6 +614,4 @@ The following functions and constants are described in this document:<br>
 ```{r echo=FALSE, results="asis"}
 writeIndex(cols = 6)
 ```
-
-This document was produced using rgl version `r packageVersion("rgl")`.
 

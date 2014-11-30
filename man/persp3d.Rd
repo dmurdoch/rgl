@@ -3,8 +3,7 @@
 \alias{persp3d.default}
 \title{ Surface plots }
 \description{
-  This function draws plots of surfaces over the
-  x-y plane. \code{persp3d} is a generic function.}
+  This function draws plots of surfaces in 3-space. \code{persp3d} is a generic function.}
 \usage{
 persp3d(x, \dots)
 
@@ -29,8 +28,8 @@ persp3d(x, \dots)
     character strings; expressions are not accepted.  Numbers will be
     coerced to character strings.}
   \item{add}{whether to add the points to an existing plot.}    
-  \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio}
-  \item{forceClipregion}{Force a clipping region to be used,
+  \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio.}
+  \item{forceClipregion}{force a clipping region to be used,
 whether or not limits are given.}
   \item{\dots}{additional material parameters to be passed to \code{\link{surface3d}}
   and \code{\link{decorate3d}}.}
@@ -58,7 +57,7 @@ for more details on \code{xlim, ylim, zlim} and \code{forceClipregion}.
 }
 \value{
   This function is called for the side effect of drawing the plot.  A vector 
-  of shape IDs is returned.
+  of shape IDs is returned invisibly.
 }
 \author{Duncan Murdoch}
 \seealso{\code{\link{plot3d}}, \code{\link{persp}}. There is

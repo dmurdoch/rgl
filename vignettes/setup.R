@@ -39,13 +39,17 @@ documentedfns <- c()
 indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
   documentedfns <<- c(documentedfns, fns)
   anchors <- paste0('<a name="', fns, '">', 
-                    if (show) text, 
+                    if (show) linkfn(fns, text, pkg = "rgl"), 
                     '</a>')
   paste(anchors, collapse=if (show) ", " else "")
 }
 
-linkfn <- function(fn, text = paste0("`", fn, "`")) {
-  paste0('<a href="#', fn, '">', text, '</a>')
+linkfn <- function(fn, text = paste0("`", fn, "`"), pkg = NA) {
+  if (is.na(pkg))
+    paste0('<a href="#', fn, '">', text, '</a>')
+  else
+    paste0('<a href="../../', pkg, '/help/', fn, '">', text, 
+           '</a>')
 }
 
 writeIndex <- function(cols = 4) {
