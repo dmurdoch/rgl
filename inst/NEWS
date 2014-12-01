@@ -615,8 +615,8 @@ v0.94
     black snapshot).  This allows testing with RGL_USE_NULL.
 
 0.95.1182
-  - writeWebGL() now includes an argument "canvasMatrix", to allow
-    omission of CanvasMatrix.js (in multi-figure displays)
+  - writeWebGL() now includes an argument "commonParts", to allow
+    omission of common code in multi-figure displays.
   - If template is NULL in writeWebGL(), no template file is used. 
   - The NULL device did not handle changes to par3d("windowRect")
     properly.
