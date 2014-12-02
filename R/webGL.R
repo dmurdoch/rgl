@@ -932,7 +932,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (type == "text") subst(
 '	   for (var i=0; i<%len%; i++) 
 	     for (var j=0; j<4; j++) {
-	         ind = %stride%*(4*i + j) + %tofs%;
+	         var ind = %stride%*(4*i + j) + %tofs%;
 	         v[ind+2] = 2*(v[ind]-v[ind+2])*texinfo.widths[i];
 	         v[ind+3] = 2*(v[ind+1]-v[ind+3])*texinfo.textHeight;
 	         v[ind] *= texinfo.widths[i]/texinfo.canvasX;
@@ -1338,7 +1338,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   gl.depthFunc(gl.LEQUAL);
 	   gl.clearDepth(1.0);
 	   gl.clearColor(1,1,1,1);
-	   var xOffs = yOffs = 0,  drag  = 0;
+	   var xOffs = 0, yOffs = 0, drag  = 0;
 	   
            function multMV(M, v) {
 	     return [M.m11*v[0] + M.m12*v[1] + M.m13*v[2] + M.m14*v[3],
@@ -1632,8 +1632,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     do{
 	       totalOffsetX += currentElement.offsetLeft;
 	       totalOffsetY += currentElement.offsetTop;
+	       currentElement = currentElement.offsetParent;
 	     }
-	     while(currentElement = currentElement.offsetParent)
+	     while(currentElement)
 	   
 	     var canvasX = event.pageX - totalOffsetX;
 	     var canvasY = event.pageY - totalOffsetY;
