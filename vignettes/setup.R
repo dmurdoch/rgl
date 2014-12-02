@@ -58,24 +58,8 @@ writeIndex <- function(cols = 4) {
   documentedfns <- sort(documentedfns)
   entries <- paste0('<a href="#', documentedfns, '">', documentedfns, '</a>&nbsp;&nbsp;')
   len <- length(entries)
-  rows <- len %/% cols
-  extra <- len %% cols
-  ofs <- c()
-  for (i in seq_len(cols-1) - 1) 
-    ofs <- c(ofs, rows + (extra > i))
-  ofs <- cumsum(ofs)
-  cat("\n------------- ")
-  for (i in seq_len(cols-1))
-    cat("| ------------")
-  cat("\n")
-  columns <- list(entries[1:rows])
-  for (i in seq_len(cols-1)+1) 
-    columns[[i]] <- entries[(ofs[i-1]+1):(ofs[i-1]+rows)]
-  cat(do.call(paste, c(columns, sep = " | ")), sep="\n")  
-  if (extra) {
-    for (i in seq_len(extra))
-      cat(entries[ofs[i]], ' | ')
-    cat("&nbsp;")
-  }
-  cat("\n\n")
+  padding <- ((len + cols - 1) %/% cols) * cols - len
+  if (padding)
+    entries <- c(entries, rep("", length.out=padding))
+  knitr::kable(matrix(entries, ncol=cols), format="pandoc")
 }
