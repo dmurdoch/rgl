@@ -21,6 +21,8 @@ set.seed(123)
 
 ## Introduction
 
+This is `r getwd()`.
+
 The `rgl` package is used to produce interactive 3-D plots.  It contains
 high-level graphics commands modelled loosely after classic R graphics,
 but working in three dimensions.  It also contains low level structure
@@ -507,7 +509,7 @@ In addition to these, there are some other related functions which
 should rarely be called by users: `r indexfns(c("rgl.init", "rgl.open", "rgl.quit"))`.  
 
 
-### Working with homogeneous coordinates
+### Working with 3-D vectors
 
 Most `rgl` functions work internally with "homogeneous" coordinates.
 In this system, 3-D points are represented with 4 coordinates, generally
@@ -526,7 +528,9 @@ become linear transformations, with multiplication by a 4 by 4 matrix.
 `r indexfns(c("rotationMatrix", "scaleMatrix", "translationMatrix"))`:  | compute the transformation matrix
 `r indexfns("identityMatrix")` | return a 4 x 4 identity matrix
 
-
+There is also a function `r indexfns("GramSchmidt")`, mainly for internal
+use:  it does a Gram-Schmidt orthogonalization of a 3x3 matrix,
+with some specializations for its use in `r linkfn("cylinder3d")`.
 
 ## Warning:  Work in Progress!
 
@@ -542,6 +546,8 @@ setdiff(ls("package:rgl"), documentedfns)
 
 The following functions and constants are described in this document:<br>
 ```{r echo=FALSE, results="asis"}
+cat('<div class="even" style="background-color: #ffffff;">\n')
 writeIndex(cols = 5)
+cat('</div>')
 ```
 

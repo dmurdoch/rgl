@@ -88,7 +88,7 @@ The \code{filename} is returned.
 Duncan Murdoch.
 }
 \note{
-If \code{canvasMatrix} is \code{TRUE}, the output includes a binary copy of
+If \code{commonParts} is \code{TRUE}, the output includes a binary copy of
 the CanvasMatrix Javascript library.  This
 file is necessary for the Javascript code written by \code{writeWebGL} to 
 function properly, but only one copy is needed if the output page

@@ -1742,7 +1742,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     stop("'", dir, "' is not a directory.")
   
   if (commonParts)
-    file.copy(system.file(file.path("WebGL", "CanvasMatrix.js"), package = "rgl"), 
+    file.copy(system.file(file.path("doc", "CanvasMatrix.js"), package = "rgl"), 
                           file.path(dir, "CanvasMatrix.js"))
 
   rect <- par3d("windowRect")

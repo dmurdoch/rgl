@@ -614,7 +614,7 @@ v0.94
   - rgl.snapshot() now works with the NULL device (but produces a 
     black snapshot).  This allows testing with RGL_USE_NULL.
 
-0.95.1182
+0.95.1186
   - writeWebGL() now includes an argument "commonParts", to allow
     omission of common code in multi-figure displays.
   - If template is NULL in writeWebGL(), no template file is used. 
