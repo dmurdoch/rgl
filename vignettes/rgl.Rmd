@@ -12,7 +12,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r setup, echo=FALSE}
+```{r setup, echo=FALSE, results="asis"}
 source("setup.R")
 set.seed(123)
 ```
@@ -545,9 +545,9 @@ setdiff(ls("package:rgl"), documentedfns)
 ## Index of Functions
 
 The following functions and constants are described in this document:<br>
+
 ```{r echo=FALSE, results="asis"}
-cat('<div class="even" style="background-color: #ffffff;">\n')
 writeIndex(cols = 5)
-cat('</div>')
 ```
+
 
