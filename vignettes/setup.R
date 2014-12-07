@@ -61,6 +61,7 @@ cat('<style>
 table {border-style: none;}
 table th {border-style: none;}
 table td {border-style: none;}
+a[href^=".."] {text-decoration: underline;}
 </style>
 ')  
 
