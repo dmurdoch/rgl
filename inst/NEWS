@@ -630,3 +630,5 @@ v0.94
     in a subscene.
   - Added clipping regions to plot3d() and persp3d().
   - Export the GramSchmidt function (request of Remko Duursma)
+  - Added readOBJ(), with a very limited ability to read OBJ 
+    shapefiles.

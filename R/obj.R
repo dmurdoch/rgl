@@ -307,3 +307,35 @@ writeOBJ <- function(con,
   
   invisible(filename)
 }
+
+readOBJ <- function(con, ...) {
+  lines <- readLines(con)
+  instrs <- sub(" .*", "", lines)
+  vertices <- read.table(textConnection(lines[instrs == "v"]),
+                         col.names = c("instr", "x", "y", "z"),
+                         colClasses = c(instr = "character", 
+                                        x="numeric",
+                                        y="numeric",
+                                        z="numeric"))
+  tfaces <- grepl("^f\\W*\\w*\\W*\\w*\\W*\\w*$", lines)
+  if (any(ignored <- instrs == "f" & !tfaces))
+    warning("faces ignored, e.g.: ", lines[ignored][1])
+  triangles <- read.table(textConnection(lines[tfaces]),
+                      col.names = c("instr", "v1", "v2", "v3"),
+                      colClasses = "character")
+  if (length(with(triangles, grep("/", c(v1, v2, v3))))) {
+    warning("normals and/or textures ignored")
+    triangles$v1 <- sub("/.*", "", triangles$v1)
+    triangles$v2 <- sub("/.*", "", triangles$v2)
+    triangles$v3 <- sub("/.*", "", triangles$v3)    
+  }
+  triangles$v1 <- as.numeric(triangles$v1)
+  triangles$v2 <- as.numeric(triangles$v2)
+  triangles$v3 <- as.numeric(triangles$v3)
+  ignored <- unique(instrs)
+  ignored <- ignored[!(ignored %in% c("v", "f"))]
+  if (length(ignored))
+    warning("instructions ", paste0('"', ignored, '"', collapse = ", "), " ignored.")
+  tmesh3d(with(vertices, rbind(x,y,z)), with(triangles, rbind(v1,v2,v3)), 
+          homogeneous = FALSE, ...)  
+}
