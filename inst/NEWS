@@ -614,7 +614,7 @@ v0.94
   - rgl.snapshot() now works with the NULL device (but produces a 
     black snapshot).  This allows testing with RGL_USE_NULL.
 
-0.95.1186
+0.95.1191
   - writeWebGL() now includes an argument "commonParts", to allow
     omission of common code in multi-figure displays.
   - If template is NULL in writeWebGL(), no template file is used. 
@@ -632,3 +632,5 @@ v0.94
   - Export the GramSchmidt function (request of Remko Duursma)
   - Added readOBJ(), with a very limited ability to read OBJ 
     shapefiles.
+  - triangulate() now supports polygons expressed with 3
+    coordinates (though they are still assumed to be planar).

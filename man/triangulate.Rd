@@ -9,11 +9,11 @@ polygons and uses the \dQuote{ear-clipping} algorithm to triangulate it.
 Polygons with holes are supported.
 }
 \usage{
-triangulate(x, y = NULL, random = TRUE, plot = FALSE, partial = NA)
+triangulate(x, y = NULL, z = NULL, random = TRUE, plot = FALSE, partial = NA)
 }
 \arguments{
-  \item{x, y}{
-Coordinates of a two-dimensional polygon in a format supported by \code{\link{xy.coords}}.
+  \item{x, y, z}{
+Coordinates of a two-dimensional polygon in a format supported by \code{\link{xyz.coords}}.  See Details for how \code{z} is handled.
 }
   \item{random}{
 Whether to use a random or deterministic triangulation.
@@ -26,6 +26,10 @@ If the triangulation fails, should partial results be returned?
 }
 }
 \details{
+Normally \code{triangulate} looks only at the \code{x} and \code{y}
+coordinates.  However, if one of those is constant, it is replaced
+with the \code{z} coordinate if present.
+
 The algorithm works as follows.  First, it breaks the polygon into 
 pieces separated by \code{NA} values in \code{x} or \code{y}.
 Each of these pieces should be a simple, non-self-intersecting

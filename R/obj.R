@@ -342,11 +342,17 @@ readOBJ <- function(con, ...) {
     quads <- structure(as.numeric(quads), dim = dim(quads))
   } else
     qfaces <- NULL
-  others <- lines[instrs == "f" & !tfaces & !qfaces]
-  if (length(others))
-    warning("faces ignored, e.g.: ", others[1])
+  others <- strsplit(lines[instrs == "f" & !tfaces & !qfaces], " ")
+  # FIXME:  this will be really slow if there are a lot of others
+  # Should pre-allocate extra space.
+  for (i in seq_along(others)) {
+    v <- as.numeric(others[[i]][-1])
+    tri <- triangulate(t(vertices[,v]))
+    tri <- structure(v[tri], dim = dim(tri))
+    triangles <- cbind(triangles, tri)
+  }  
   ignored <- unique(instrs)
-  ignored <- ignored[!(ignored %in% c("v", "f"))]
+  ignored <- ignored[!(ignored %in% c("v", "f", "", "#"))]
   if (length(ignored))
     warning("instructions ", paste0('"', ignored, '"', collapse = ", "), " ignored.")
   result <- tmesh3d(vertices, triangles, homogeneous = FALSE, ...)

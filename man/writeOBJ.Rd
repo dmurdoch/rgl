@@ -8,7 +8,7 @@ Write Wavefront OBJ format files; read simple ones
 \code{writeOBJ} writes OBJ files.  This is a file format that
 is commonly used in 3D graphics applications.  It does not represent text,
 but does represent points, lines, polygons (and many other types that
-RGL doesn't support).  \code{readOBJ} reads a small subset
+RGL doesn't support).  \code{readOBJ} reads only some parts
 of OBJ files.
 }
 \usage{
@@ -66,7 +66,7 @@ properties such as colors, since the OBJ format does not support the per-vertex
 colors that RGL uses.  
 
 The \code{readOBJ} implementation can
-only read triangular and quadrilateral faces, and ignores 
+only read faces, and ignores 
 information about normals and textures.
 
 The defaults for \code{pointsAsPoints} and \code{linesAsLines} have been
@@ -87,7 +87,7 @@ a number of other formats, including U3D, suitable for import into a PDF documen
 \code{writeObj} invisibly returns the name of the connection to which the 
 data was written.
 
-\code{readObj} returns a triangle mesh object constructed
+\code{readObj} returns a mesh object constructed
 from the input file.
 }
 \references{
@@ -112,7 +112,9 @@ writeOBJ(filename)
 # file of Comet 67P/Churyumov-Gerasimenko, from the ESA:
 \donttest{
 open3d()
-shade3d(readOBJ(url("http://sci.esa.int/science-e/www/object/doc.cfm?fobjectid=54726"), material=list(col="gray")))
+shade3d(readOBJ(url(
+"http://sci.esa.int/science-e/www/object/doc.cfm?fobjectid=54726"
+), material=list(col="gray")))
 }
 }
 \keyword{ graphics }

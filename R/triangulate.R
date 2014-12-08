@@ -96,11 +96,20 @@ triangulateSimple <- function(x,y, random=TRUE, plot=FALSE, partial=NA) {
   it
 }
 
-triangulate <- function(x, y = NULL, random=TRUE, plot=FALSE, partial=NA) {
-  xy <- xy.coords(x, y)
-  x <- xy$x
-  y <- xy$y
-  nesting <- nestPolys(xy)
+triangulate <- function(x, y = NULL, z = NULL, random=TRUE, plot=FALSE, partial=NA) {
+  xyz <- xyz.coords(x, y, z)
+  if (xyz$xlab == "Index" && is.null(z) && (is.null(ncol(x)) || ncol(x) == 2L)) {
+    x <- xyz$y
+    y <- xyz$z
+  } else {
+    x <- xyz$x
+    y <- xyz$y
+    if (!diff(range(x))) 
+      x <- xyz$z
+    else if (!diff(range(y))) 
+      y <- xyz$z
+  } 
+  nesting <- nestPolys(x, y)
   verts <- nesting$verts
   nextvert <- rep(NA, length(x))
   
