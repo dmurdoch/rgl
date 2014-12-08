@@ -317,25 +317,40 @@ readOBJ <- function(con, ...) {
                                         x="numeric",
                                         y="numeric",
                                         z="numeric"))
-  tfaces <- grepl("^f\\W*\\w*\\W*\\w*\\W*\\w*$", lines)
-  if (any(ignored <- instrs == "f" & !tfaces))
-    warning("faces ignored, e.g.: ", lines[ignored][1])
+  vertices <- with(vertices, rbind(x, y, z))
+  tfaces <- grepl("^f\\W+\\w+\\W+\\w+\\W+\\w+$", lines)
   triangles <- read.table(textConnection(lines[tfaces]),
                       col.names = c("instr", "v1", "v2", "v3"),
                       colClasses = "character")
-  if (length(with(triangles, grep("/", c(v1, v2, v3))))) {
+  triangles <- with(triangles, rbind(v1, v2, v3))
+  if (length(grep("/", triangles))) {
     warning("normals and/or textures ignored")
-    triangles$v1 <- sub("/.*", "", triangles$v1)
-    triangles$v2 <- sub("/.*", "", triangles$v2)
-    triangles$v3 <- sub("/.*", "", triangles$v3)    
+    triangles <- sub("/.*", "", triangles)   
   }
-  triangles$v1 <- as.numeric(triangles$v1)
-  triangles$v2 <- as.numeric(triangles$v2)
-  triangles$v3 <- as.numeric(triangles$v3)
+  triangles <- structure(as.numeric(triangles),
+                         dim = dim(triangles))
+  qfaces <- grepl("^f\\W+\\w+\\W+\\w+\\W+\\w+\\W+\\w+$", lines)
+  if (any(qfaces)) {
+    quads <- read.table(textConnection(lines[qfaces]),
+                        col.names = c("instr", "v1", "v2", "v3", "v4"),
+                        colClasses = "character")
+    quads <- with(quads, rbind(v1, v2, v3, v4))
+    if (length(grep("/", quads))) {
+      warning("normals and/or textures ignored")
+      quads <- sub("/.*", "", quads)
+    }
+    quads <- structure(as.numeric(quads), dim = dim(quads))
+  } else
+    qfaces <- NULL
+  others <- lines[instrs == "f" & !tfaces & !qfaces]
+  if (length(others))
+    warning("faces ignored, e.g.: ", others[1])
   ignored <- unique(instrs)
   ignored <- ignored[!(ignored %in% c("v", "f"))]
   if (length(ignored))
     warning("instructions ", paste0('"', ignored, '"', collapse = ", "), " ignored.")
-  tmesh3d(with(vertices, rbind(x,y,z)), with(triangles, rbind(v1,v2,v3)), 
-          homogeneous = FALSE, ...)  
+  result <- tmesh3d(vertices, triangles, homogeneous = FALSE, ...)
+  if (length(qfaces)) 
+    result$ib <- quads
+  result
 }
