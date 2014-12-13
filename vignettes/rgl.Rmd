@@ -21,8 +21,6 @@ set.seed(123)
 
 ## Introduction
 
-This is `r getwd()`.
-
 The `rgl` package is used to produce interactive 3-D plots.  It contains
 high-level graphics commands modelled loosely after classic R graphics,
 but working in three dimensions.  It also contains low level structure
@@ -299,8 +297,7 @@ These functions generate specific shapes.  Optional arguments allow
 attributes such as colour or transformations to be specified.
 
 ------------------------------------ | -----------
-`r indexfns(c("tetrahedron3d", "cube3d", "octahedron3d"))`: | Platonic solids
-`r indexfns(c("dodecahedron3d", "icosahedron3d"))`:        | more Platonic solids
+`r indexfns(c("tetrahedron3d", "cube3d", "octahedron3d", "dodecahedron3d", "icosahedron3d"))`: | Platonic solids
 `r indexfns(c("cuboctahedron3d", "oh3d"))`:             | other solids
 
 ```{r results="hide",rgl=TRUE}
@@ -462,7 +459,7 @@ In order from highest fidelity to lowest, the functions are:
 `r indexfns("scene3d")`    | Save a scene to an R variable, which can be saved and reloaded
 `r indexfns("writeWebGL")` | Write HTML and Javascript to display a scene in a web browser.  (This vignette uses `writeWebGL`.)
 `r indexfns("writePLY")`   | Write PLY files (commonly used in 3D printing)
-`r indexfns("writeOBJ")`   | Write OBJ files (commonly used in 3D graphics)
+`r indexfns(c("readOBJ", "writeOBJ"))`   | Read or write OBJ files (commonly used in 3D graphics)
 `r indexfns(c("readSTL", "writeSTL"))`   | Read or write STL files (also common in 3D printing)
 `r indexfns("rgl.useNULL")`  | A helper function for setting a NULL device
 
