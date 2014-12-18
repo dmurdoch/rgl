@@ -176,6 +176,9 @@ public:
   void getScale(double* dest);
   void getPosition(double* dest);
   
+  void setMouseListeners(unsigned int n, int* ids);
+  void getMouseListeners(unsigned int max, int* ids);
+  
   float getDistance(const Vertex& v) const;
 
 // Translate from OpenGL window-relative coordinates (relative to bottom left corner of window) to
@@ -189,6 +192,13 @@ public:
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "subscene", buflen); };
   
   Background* get_background(); 
+  
+  /* This vector lists other subscenes that will be controlled
+     by mouse actions on this one.  We do it by ID rather
+     than pointer so we can detect when any are invalid.  
+     Initially only the subscene itself is in the list. */
+     
+  std::vector<int> mouseListeners;
   
   // These are set after rendering the scene
   Vec4 Zrow;

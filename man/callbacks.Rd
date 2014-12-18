@@ -26,6 +26,10 @@ the user pulls the wheel by one click.
 
 Alternatively, the handlers may be set to \code{NULL}, the default value, in which case
 no action will occur.
+
+If a subscene has multiple listeners, the user action will still only be called for the
+subscene that received the mouse event.  It should consult \code{\link{par3d}("listeners")}
+if it makes sense to take action on the whole group of subscenes.
 }
 \value{
 This function is called for the side effect of setting the mouse event handlers.

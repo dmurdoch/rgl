@@ -476,6 +476,10 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
 	    }
 	}
     }
+    else if (streql(what, "listeners")) {
+        x = coerceVector(value, INTSXP);
+        sub->setMouseListeners(length(x), INTEGER(x));
+    }
     else if (streql(what, "skipRedraw")) {
     	lengthCheck(what, value, 1);	iv = asLogical(value);
     	setSkipRedraw(&iv, dev);
@@ -599,6 +603,10 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     else if (streql(what, "projMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
 	sub->projMatrix.getData(REAL(value));    
+    }
+    else if (streql(what, "listeners")) {
+        value = allocVector(INTSXP, sub->mouseListeners.size());
+        sub->getMouseListeners(length(value), INTEGER(value));
     }
     else if (streql(what, "skipRedraw")) {
     	value = allocVector(LGLSXP, 1);

@@ -183,7 +183,7 @@ clearSubsceneList <- function(delete = currentSubscene3d() %in% subsceneList(),
   invisible(currentSubscene3d())
 }
 
-mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA, 
+mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA, sharedMouse = FALSE,
                            ...) {
   stopifnot(nr >= 1, nc >= 1)
   .check3d()
@@ -210,6 +210,9 @@ mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA,
                    parentvp[3]/nc, parentvp[4]/nr)
         result[(j-1)*nr + i] <- newSubscene3d(newviewport = newvp, parent = parent, ...)
       }
+  if (sharedMouse)
+    for (sub in result)
+      par3d(listeners = result, subscene = sub)
   useSubscene3d(result[1])
   attr(result, "prev") <- subsceneList()
   subsceneList(result)
@@ -218,7 +221,7 @@ mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA,
 
 layout3d <- function(mat, widths = rep.int(1, ncol(mat)), 
                           heights = rep.int(1, nrow(mat)),
-                          parent = NA, 
+                          parent = NA, sharedMouse = FALSE,
                           ...) {
   storage.mode(mat) <- "integer"
   mat <- as.matrix(mat)
@@ -250,6 +253,9 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
     newvp <- c(xs[cols[1]], ys[rows[1]], sum(widths[cols[1]:cols[2]]), sum(heights[rows[1]:rows[2]]))
     result[i] <- newSubscene3d(newviewport = newvp, parent = parent,  ...)
   }
+  if (sharedMouse)
+    for (sub in result)
+      par3d(listeners = result, subscene = sub)
   useSubscene3d(result[1])
   attr(result, "prev") <- subsceneList()
   subsceneList(result)

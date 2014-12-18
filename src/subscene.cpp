@@ -26,6 +26,7 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
   data_bbox.invalidate();
   modelMatrix.setIdentity();
   projMatrix.setIdentity(); 
+  mouseListeners.push_back(getObjID());
 }
 
 Subscene::~Subscene() 
@@ -960,6 +961,20 @@ void Subscene::setViewport(double x, double y, double width, double height)
   viewport.y = y;
   viewport.width = width;
   viewport.height = height;
+}
+
+void Subscene::setMouseListeners(unsigned int n, int* ids)
+{
+  mouseListeners.clear();
+  for (unsigned int i = 0; i < n; i++)
+    mouseListeners.push_back(ids[i]);
+}
+
+void Subscene::getMouseListeners(unsigned int max, int* ids)
+{
+  max = max > mouseListeners.size() ? mouseListeners.size() : max;  
+  for (unsigned int i = 0; i < max; i++)
+    ids[i] = mouseListeners[i];
 }
 
 float Subscene::getDistance(const Vertex& v) const

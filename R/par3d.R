@@ -1,4 +1,4 @@
-.Par3d <- c("antialias", "FOV", "ignoreExtent",
+.Par3d <- c("antialias", "FOV", "ignoreExtent", "listeners",
 	   "mouseMode", "observer", 
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
 	   "scale", "viewport", "zoom", "bbox", "windowRect",

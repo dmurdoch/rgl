@@ -14,10 +14,10 @@ similar to \code{\link{par}("mfrow")} and \code{\link{layout}} in classic R grap
 \usage{
 subsceneList(value, window = rgl.cur())
 
-mfrow3d(nr, nc, byrow = TRUE, parent = NA, ...)
+mfrow3d(nr, nc, byrow = TRUE, parent = NA, sharedMouse = FALSE, ...)
 layout3d(mat, widths = rep.int(1, ncol(mat)), 
               heights = rep.int(1, nrow(mat)),
-              parent = NA, 
+              parent = NA, sharedMouse = FALSE,
               ...)
 next3d(current = NA, clear = TRUE, reuse = TRUE)
 clearSubsceneList(delete = currentSubscene3d() \%in\% subsceneList(), 
@@ -42,6 +42,9 @@ Layout parameters; see \code{\link{layout}} for their interpretation.
 }
   \item{parent}{
 The parent subscene.  \code{NA} indicates the current subscene.  See Details below.
+}
+  \item{sharedMouse}{
+Whether to make all subscenes \code{\link{listeners}} to each other.
 }
   \item{\dots}{
 Additional parameters to pass to \code{\link{newSubscene3d}} as each
@@ -107,7 +110,7 @@ for (i in 1:6) {
 open3d()
 mat <- matrix(1:4, 2,2)
 mat <- rbind(mat, mat+4, mat+8)
-layout3d(mat, height = rep(c(3,1), 3), model = "inherit")
+layout3d(mat, height = rep(c(3,1), 3), sharedMouse = TRUE)
 for (i in 1:6) {
   next3d()
   shade3d(shapes[[i]], col=col[i])

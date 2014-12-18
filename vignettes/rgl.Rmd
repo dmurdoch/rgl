@@ -94,7 +94,7 @@ loglik <- Vectorize(loglik)
 xlim <- fit$estimate[1]+4*fit$sd[1]*c(-1,1)
 ylim <- fit$estimate[2]+4*fit$sd[2]*c(-1,1)
 
-mfrow3d(1, 2)
+mfrow3d(1, 2, sharedMouse = TRUE)
 persp3d(loglik, 
         xlim = xlim, ylim = ylim,
         n = 30)

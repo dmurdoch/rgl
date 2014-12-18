@@ -471,8 +471,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var prMatrix = new CanvasMatrix4();
 	   var mvMatrix = new CanvasMatrix4();
 	   var normMatrix = new CanvasMatrix4();
-	   var saveMat = new CanvasMatrix4();
-	   saveMat.makeIdentity();
+	   var saveMat = new Object();
 	   var distance;
 	   var posLoc = 0;
 	   var colLoc = 1;
@@ -1430,7 +1429,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     save <- currentSubscene3d()
     on.exit(useSubscene3d(save))
     
-    x0 <- y0 <- widths <- heights <- tests <- models <- projections <- character(0)
+    x0 <- y0 <- widths <- heights <- tests <- models <- 
+            projections <- listeners <- character(0)
     
     useid <- function(id, type="model") {
       info <- subsceneInfo(id)
@@ -1458,6 +1458,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
              y1=viewport[2]+viewport[4]))
       models <<- c(models, subst("%id%: %model%", id=parent, model=useid(parent, "model")))
       projections <<- c(projections, subst("%id%: %projection%", id=parent, projection=useid(parent, "projection")))
+      l <- par3d("listeners", subscene=parent)
+      listeners <<- c(listeners, subst("%id%: [ %ids% ]", id = parent, 
+                                       ids = paste(unique(l), collapse=",")))
     }
 
     rootid <- rootSubscene()      
@@ -1481,6 +1484,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '  	     };
 	   var activeProjection = {',
 	inRows(projections, perrow=6, "         "),
+'  	     };
+	   var listeners = {',
+        inRows(listeners, perrow=2, "         "),
 '  	     };
 ',
 '  	   var whichSubscene = function(coords){',
@@ -1542,7 +1548,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         trackball = 
 '	   var trackballdown = function(x,y) {
 	     rotBase = screenToVector(x, y);
-	     saveMat.load(userMatrix[activeModel[activeSubscene]]);
+             var l = listeners[activeModel[activeSubscene]];
+             saveMat = new Object();
+             for (var i = 0; i < l.length; i++) 
+               saveMat[l[i]] = new CanvasMatrix4(userMatrix[l[i]]);
 	   }
 	   
 	   var trackballmove = function(x,y) {
@@ -1552,9 +1561,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   	       rotBase[2]*rotCurrent[2];
 	     var angle = acos( dot/vlen(rotBase)/vlen(rotCurrent) )*180./PI;
 	     var axis = xprod(rotBase, rotCurrent);
-	     userMatrix[activeModel[activeSubscene]].load(saveMat);
-	     userMatrix[activeModel[activeSubscene]].rotate(angle, axis[0], axis[1], axis[2]);
-	     drawScene();
+             var l = listeners[activeModel[activeSubscene]];
+             for (i = 0; i < l.length; i++) {
+	       userMatrix[l[i]].load(saveMat[l[i]]);
+	       userMatrix[l[i]].rotate(angle, axis[0], axis[1], axis[2]);
+             }
+             drawScene();
 	   }
 ',
 
@@ -1571,30 +1583,41 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '
 	   var %h%down = function(x,y) {
 	     rotBase = screenToVector(x, height/2);
-	     saveMat.load(userMatrix[activeModel[activeSubscene]]);
+             var l = listeners[activeModel[activeSubscene]];
+             saveMat = new Object();
+             for (var i = 0; i < l.length; i++) 
+               saveMat[l[i]] = new CanvasMatrix4(userMatrix[l[i]]);
 	   }
 	   	   
 	   var %h%move = function(x,y) {
 	     var rotCurrent = screenToVector(x,height/2);
 	     var angle = (rotCurrent[0] - rotBase[0])*180/PI;
-	     userMatrix[activeModel[activeSubscene]].load(saveMat);
 	     var rotMat = new CanvasMatrix4();
 	     rotMat.rotate(angle, %h%[0], %h%[1], %h%[2]);
-	     userMatrix[activeModel[activeSubscene]].multLeft(rotMat);
+             var l = listeners[activeModel[activeSubscene]];
+             for (i = 0; i < l.length; i++) {
+               userMatrix[l[i]].load(saveMat[l[i]]);
+	       userMatrix[l[i]].multLeft(rotMat);
+             }
 	     drawScene();
 	   }
 	   
 ',           h)),
       zoom = 
 '	   var y0zoom = 0;
-	   var zoom0 = 1;
+	   var zoom0 = 0;
 	   var zoomdown = function(x, y) {
 	     y0zoom = y;
-	     zoom0 = log(zoom[activeProjection[activeSubscene]]);
+	     zoom0 = new Object();
+             l = listeners[activeProjection[activeSubscene]];
+             for (i = 0; i < l.length; i++)
+               zoom0[l[i]] = log(zoom[l[i]]);
 	   }
 
 	   var zoommove = function(x, y) {
-	     zoom[activeProjection[activeSubscene]] = exp(zoom0 + (y-y0zoom)/height);
+             l = listeners[activeProjection[activeSubscene]];
+             for (i = 0; i < l.length; i++)
+	       zoom[l[i]] = exp(zoom0[l[i]] + (y-y0zoom)/height);
 	     drawScene();
 	   }
 ', 
@@ -1603,11 +1626,15 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var fov0 = 1;
 	   var fovdown = function(x, y) {
 	     y0fov = y;
-	     fov0 = fov[activeProjection[activeSubscene]];
+             l = listeners[activeProjection[activeSubscene]];
+             for (i = 0; i < l.length; i++)
+               fov0 = fov[l[i]];
 	   }
 
 	   var fovmove = function(x, y) {
-	     fov[activeProjection[activeSubscene]] = max(1, min(179, fov0 + 180*(y-y0fov)/height));
+             l = listeners[activeProjection[activeSubscene]];
+             for (i = 0; i < l.length; i++)
+	       fov[l[i]] = max(1, min(179, fov0[l[i]] + 180*(y-y0fov)/height));
 	     drawScene();
 	   }
 '))  }
@@ -1683,7 +1710,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     var del = 1.1;
 	     if (ev.shiftKey) del = 1.01;
 	     var ds = ((ev.detail || ev.wheelDelta) > 0) ? del : (1 / del);
-	     zoom[activeProjection[activeSubscene]] *= ds;
+	     l = listeners[activeProjection[activeSubscene]];
+             for (i = 0; i < l.length; i++)
+               zoom[l[i]] *= ds;
 	     drawScene();
 	     ev.preventDefault();
 	   };

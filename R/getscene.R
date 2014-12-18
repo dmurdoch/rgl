@@ -203,7 +203,13 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
 			    model = x$embeddings["model"],
 			    newviewport = x$par3d$viewport,
 			    copyLights = FALSE)
+			    
+  if (!is.null(x$par3d$listeners))
+    par3d(listeners = x$par3d$listeners, subscene = subscene) 
+    
   results <- subscene
+  names(results) <- paste0("subscene", as.character(x$id))
+  
   objs <- x$objects
   for (id in as.character(objs)) {
     obj <- objects[[id]]
@@ -218,9 +224,18 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
     results <- c(results, res$results)
     objects <- res$objects
   }
-  if (root)
+  if (root) {
+    # Translate all the listener values
+    dotranslations <- function(id) {
+      info <- subsceneInfo(id = id)
+      oldlisteners <- par3d("listeners", subscene = id)
+      par3d(listeners = results[paste0("subscene", oldlisteners)], subscene = id)
+      for (child in info$children)
+        dotranslations(child)
+    }
+    dotranslations(subscene)
     return(results)
-  else
+  } else
     return(list(results=results, objects=objects))
 }
        
@@ -374,6 +389,12 @@ plot3d.rglbboxdeco <- function(x, ...) {
 }
 
 plot3d.rglbackground <- function(x, ...) {
-  args <- c(list(sphere = x$sphere, fogtype = x$fogtype), x$material)
+  mat <- x$material 
+  if (is.null(mat)) mat <- list()
+  if (!is.null(col <- x$colors)) {
+    mat$color <- rgb(col[,1], col[,2], col[,3])
+    mat$alpha <- col[,4]
+  }
+  args <- c(list(sphere = x$sphere, fogtype = x$fogtype), mat)
   do.call("bg3d", args)
 }
