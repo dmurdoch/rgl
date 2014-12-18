@@ -44,7 +44,7 @@ Layout parameters; see \code{\link{layout}} for their interpretation.
 The parent subscene.  \code{NA} indicates the current subscene.  See Details below.
 }
   \item{sharedMouse}{
-Whether to make all subscenes \code{\link{listeners}} to each other.
+Whether to make all subscenes \code{\link{par3d}("listeners")} to each other.
 }
   \item{\dots}{
 Additional parameters to pass to \code{\link{newSubscene3d}} as each
