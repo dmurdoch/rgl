@@ -9,6 +9,7 @@ echo "  configure.win32..."
 CPPFLAGS=
 CXXFLAGS="-fno-exceptions -fno-rtti"
 LIBS="-lgdi32 -lopengl32 -lglu32"
+LOCAL_SOFT=`R CMD config LOCAL_SOFT`
 
 # --- for pre 2.9.0 compatibility
 
@@ -19,7 +20,11 @@ fi
 # --- libpng -----------------------------------------------------------------
 
 echo -n "  checking for zlib..."
-if [ -e "${R_HOME}/bin${R_ARCH_BIN}/Rzlib.dll" ]; then
+if [ -e "${LOCAL_SOFT}/lib${R_ARCH_BIN}/libz.a" ]; then
+   CPPFLAGS="${CPPFLAGS} "
+   LIBS="$LIBS -lz"
+   havezlib=yes   
+elif [ -e "${R_HOME}/bin${R_ARCH_BIN}/Rzlib.dll" ]; then
    CPPFLAGS="${CPPFLAGS} -I${R_HOME}/include "
    LIBS="$LIBS -L${R_HOME}/bin${R_ARCH_BIN} -lRzlib "
    havezlib=yes
@@ -38,6 +43,10 @@ if [ "${havezlib}" = "yes" ]; then
     echo "yes"
     CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H "
     LIBS="$LIBS -lpng "
+  elif [ -e "${LOCAL_SOFT}/lib${R_ARCH_BIN}/libpng.a" ]; then
+    echo "yes"
+    CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H "
+    LIBS="-lpng $LIBS "  
   elif [ -e "${R_HOME}/src/gnuwin32/bitmap/libpng/libpng.a" ]; then
     echo "yes"
     CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${R_HOME}/src/gnuwin32/bitmap/libpng "

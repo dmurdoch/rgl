@@ -614,7 +614,7 @@ v0.94
   - rgl.snapshot() now works with the NULL device (but produces a 
     black snapshot).  This allows testing with RGL_USE_NULL.
 
-0.95.1194
+0.95.1196
   - writeWebGL() now includes an argument "commonParts", to allow
     omission of common code in multi-figure displays.
   - If template is NULL in writeWebGL(), no template file is used. 
@@ -636,3 +636,5 @@ v0.94
     coordinates (though they are still assumed to be planar).
   - par3d() now includes "listeners", a list of subscenes that
     respond to mouse actions in the current subscene.
+  - The Windows configuration file has been modified to work in 
+    R-devel (to become R 3.2.0).
