@@ -4,3 +4,4 @@
 
 ^.*\.Rproj$
 ^vignettes/CanvasMatrix.js
+^vignettes/Rplots.pdf

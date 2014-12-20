@@ -11,11 +11,16 @@ bgplot3d <- function(expression) {
   viewport <- par3d("viewport")
   width <- viewport["width"]
   height <- viewport["height"]
-  filename <- tempfile(fileext = ".png")
-  png(filename = filename, width=width, height=height)
-  value <- expression  
-  dev.off()
-  result <- bg3d(texture=filename, col="white")
-  unlink(filename)
+  if (width > 0 && height > 0) {
+    filename <- tempfile(fileext = ".png")
+    png(filename = filename, width=width, height=height)
+    value <- try(expression)  
+    dev.off()
+    result <- bg3d(texture=filename, col="white")
+    unlink(filename)
+  } else {
+    value <- NULL
+    result <- bg3d(col="white")
+  }
   invisible(structure(result, value = value))
 }

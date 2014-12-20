@@ -19,7 +19,8 @@ public:
   {
     unsigned char buf[8];
 
-    fread(buf, 1, 8, fd);
+    if (fread(buf, 1, 8, fd) < 8)
+      return false;
     fseek(fd, 0, SEEK_SET);
 
     return !png_sig_cmp(buf, 0, 8);

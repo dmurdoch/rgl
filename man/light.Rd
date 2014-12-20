@@ -55,8 +55,8 @@ bg3d("gray50")
 surface3d(x, y, z, color=col, back="lines")
 r <- max(y)-mean(y)
 lightid <- spheres3d(1,1,1,alpha=0)
-for (a in seq(-pi, pi, length.out=100)) {
-
+frame <- function(time) {
+    a <- pi*(time - 1)
     save <- par3d(skipRedraw=TRUE)
     clear3d(type = "lights")
     rgl.pop(id = lightid)
@@ -64,10 +64,11 @@ for (a in seq(-pi, pi, length.out=100)) {
     light3d(x = xyz, diffuse = "gray75", 
             specular = "gray75", viewpoint.rel = FALSE) 
     light3d(diffuse="gray10", specular="gray25")
-    lightid <- spheres3d(xyz, emission="white", radius=4)
+    lightid <<- spheres3d(xyz, emission="white", radius=4)
     par3d(save)
     Sys.sleep(0.02)
+    NULL
 }
-
+play3d(frame, duration = 2)
 }
 \keyword{dynamic}

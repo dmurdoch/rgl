@@ -340,8 +340,7 @@ readOBJ <- function(con, ...) {
       quads <- sub("/.*", "", quads)
     }
     quads <- structure(as.numeric(quads), dim = dim(quads))
-  } else
-    qfaces <- NULL
+  }
   others <- strsplit(lines[instrs == "f" & !tfaces & !qfaces], " ")
   # FIXME:  this will be really slow if there are a lot of others
   # Should pre-allocate extra space.
@@ -356,7 +355,7 @@ readOBJ <- function(con, ...) {
   if (length(ignored))
     warning("instructions ", paste0('"', ignored, '"', collapse = ", "), " ignored.")
   result <- tmesh3d(vertices, triangles, homogeneous = FALSE, ...)
-  if (length(qfaces)) 
+  if (any(qfaces)) 
     result$ib <- quads
   result
 }

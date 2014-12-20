@@ -104,11 +104,11 @@ the copyright notice and license for free use) is included in the file named by
 write the scene to a file in various other formats.
 }
 \examples{
-\donttest{
 plot3d(rnorm(100), rnorm(100), rnorm(100), type="s", col="red")
 # This writes a copy into temporary directory 'webGL', and then displays it
-browseURL(paste0("file://", writeWebGL(dir=file.path(tempdir(), "webGL"), 
-          width=500)))
-}
+filename <- writeWebGL(dir=file.path(tempdir(), "webGL"), 
+                       width=500)
+if (interactive())
+  browseURL(paste0("file://", filename))
 }
 \keyword{ graphics }
