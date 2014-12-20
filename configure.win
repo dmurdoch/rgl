@@ -42,7 +42,7 @@ if [ "${havezlib}" = "yes" ]; then
   if [ -n "${HAVE_PNG}" ]; then
     echo "yes"
     CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H "
-    LIBS="$LIBS -lpng "
+    LIBS="-lpng $LIBS "
   elif [ -e "${LOCAL_SOFT}/lib${R_ARCH_BIN}/libpng.a" ]; then
     echo "yes"
     CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H "
@@ -50,7 +50,7 @@ if [ "${havezlib}" = "yes" ]; then
   elif [ -e "${R_HOME}/src/gnuwin32/bitmap/libpng/libpng.a" ]; then
     echo "yes"
     CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${R_HOME}/src/gnuwin32/bitmap/libpng "
-    LIBS="$LIBS -L${R_HOME}/src/gnuwin32/bitmap/libpng -lpng "
+    LIBS="-L${R_HOME}/src/gnuwin32/bitmap/libpng -lpng $LIBS "
   else
     echo "no"
   fi
@@ -72,7 +72,7 @@ if [ "${havezlib}" = "yes" ]; then
       echo "  Note:  freetype may require zlib1.dll"
     fi
     CPPFLAGS="${CPPFLAGS} -Iext/ftgl -I${LIB_FREETYPE}/include -I${LIB_FREETYPE}/include/freetype2 -DHAVE_FREETYPE"
-    LIBS="$LIBS -L$R_PACKAGE_DIR/libs${R_ARCH} -lfreetype6 "
+    LIBS="-L$R_PACKAGE_DIR/libs${R_ARCH} -lfreetype6 $LIBS "
   else
     echo "no, LIB_FREETYPE undefined"
   fi
