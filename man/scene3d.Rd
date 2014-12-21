@@ -15,7 +15,7 @@ window to a variable.
 }
 \usage{
 scene3d()
-\S3method{plot3d}{rglscene}(x, add=FALSE, ...)
+\S3method{plot3d}{rglscene}(x, add = FALSE, ...)
 \S3method{plot3d}{rglobject}(x, ...)
 \S3method{print}{rglscene}(x, ...)
 \S3method{print}{rglobject}(x, ...)
@@ -80,7 +80,7 @@ open3d()
 z <- 2 * volcano        # Exaggerate the relief
 x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
 y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
-persp3d(x, y, z, col = "green3", aspect="iso")
+persp3d(x, y, z, col = "green3", aspect = "iso")
 
 s <- scene3d()
 # Make it bigger

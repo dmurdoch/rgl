@@ -12,12 +12,12 @@ normally the others need not be called directly by users.
 }
 \usage{
 axes3d(edges = "bbox", labels = TRUE, tick = TRUE, nticks = 5, 
-    box=FALSE, expand = 1.03, ...)
+	box = FALSE, expand = 1.03, ...)
 box3d(...) 
 title3d(main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
-    zlab = NULL, line = NA, ...) 
+	zlab = NULL, line = NA, ...) 
 axis3d(edge, at = NULL, labels = TRUE, tick = TRUE, line = 0, 
-    pos = NULL, nticks = 5, ...) 
+	pos = NULL, nticks = 5, ...) 
 mtext3d(text, edge, line = 0, at = NULL, pos = NA, ...) 
 }
 \arguments{
@@ -68,32 +68,32 @@ objects added to the scene.
 
 \examples{
   open3d()
-  points3d(rnorm(10),rnorm(10),rnorm(10))
+  points3d(rnorm(10), rnorm(10), rnorm(10))
 
   # First add standard axes
   axes3d()  
 
   # and one in the middle (the NA will be ignored, a number would 
   # do as well)
-  axis3d('x',pos=c(NA, 0, 0))
+  axis3d('x', pos = c(NA, 0, 0))
 
   # add titles
-  title3d('main','sub','xlab','ylab','zlab')
+  title3d('main', 'sub', 'xlab', 'ylab', 'zlab')
 
   rgl.bringtotop()
   
   open3d()
-  points3d(rnorm(10),rnorm(10),rnorm(10))
+  points3d(rnorm(10), rnorm(10), rnorm(10))
   
   # Use fixed axes
   
-  axes3d(c('x','y','z'))
+  axes3d(c('x', 'y', 'z'))
          
   # Put 4 x-axes on the plot
-  axes3d(c('x--','x-+','x+-','x++'))         
+  axes3d(c('x--', 'x-+', 'x+-', 'x++'))         
   
-  axis3d('x',pos=c(NA, 0, 0))     
-  title3d('main','sub','xlab','ylab','zlab')
+  axis3d('x', pos = c(NA, 0, 0))     
+  title3d('main', 'sub', 'xlab', 'ylab', 'zlab')
 }
 
 

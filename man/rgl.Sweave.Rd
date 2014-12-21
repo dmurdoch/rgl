@@ -26,7 +26,7 @@ The \code{rgl.Sweave} function is not normally called by the user.  The user
 specifies it as the graphics driver when opening the code chunk, e.g. by
 using
 
-\preformatted{<<fig=TRUE, pdf=FALSE, grdevice=rgl.Sweave, resolution=100>>=}
+\preformatted{<<fig = TRUE, pdf = FALSE, grdevice = rgl.Sweave, resolution = 100>>=}
 
 When the \code{rgl} device is closed at the end of the code chunk,
 \code{rgl.Sweave.off()} will be called automatically.  It
@@ -45,7 +45,7 @@ instead a call to \code{Sweave.snapshot()}
 will be used if it has not been called explicitly.  Subsequent chunks can add
 to the scene.}
 \item{outputtype}{(default \code{png}).  The output may be specified 
-as \code{outputtype=pdf} or \code{outputtype=eps} instead, in which case
+as \code{outputtype = pdf} or \code{outputtype = eps} instead, in which case
 the \code{\link{rgl.postscript}} function will be used to write output in the
 specified format.  Note that  \code{\link{rgl.postscript}} has limitations
 and does not always render scenes correctly.}
@@ -59,7 +59,7 @@ falsely report that the window is too large to open.}
 
 \note{
 We recommend turning off all other graphics drivers in a chunk that uses
-\code{grdevice=rgl.Sweave}.  The \code{rgl} functions do not write to
+\code{grdevice = rgl.Sweave}.  The \code{rgl} functions do not write to
 a standard graphics device.
 }
 

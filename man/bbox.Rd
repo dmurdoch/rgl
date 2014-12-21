@@ -7,21 +7,21 @@
 }
 \usage{
 rgl.bbox( 
-  xat=NULL, xlab=NULL, xunit=0, xlen=5, 
-  yat=NULL, ylab=NULL, yunit=0, ylen=5,
-  zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=TRUE, expand=1, 
-  draw_front=FALSE, ...)
-bbox3d(xat=NULL, yat=NULL, zat=NULL, 
-       xunit="pretty", yunit="pretty", zunit="pretty", 
-       expand=1.03, nticks=5,
-       draw_front=FALSE, ...)  
+	xat = NULL, xlab = NULL, xunit = 0, xlen = 5, 
+	yat = NULL, ylab = NULL, yunit = 0, ylen = 5,
+	zat = NULL, zlab = NULL, zunit = 0, zlen = 5,
+	marklen = 15.0, marklen.rel = TRUE, expand = 1, 
+	draw_front = FALSE, ...)
+bbox3d(xat = NULL, yat = NULL, zat = NULL, 
+	xunit = "pretty", yunit = "pretty", zunit = "pretty", 
+	expand = 1.03, nticks = 5,
+	draw_front = FALSE, ...)  
 }
 \arguments{
-  \item{xat,yat,zat}{vector specifying the tickmark positions}
-  \item{xlab,ylab,zlab}{character vector specifying the tickmark labeling}
-  \item{xunit,yunit,zunit}{value specifying the tick mark base for uniform tick mark layout}
-  \item{xlen,ylen,zlen}{value specifying the number of tickmarks}
+  \item{xat, yat, zat}{vector specifying the tickmark positions}
+  \item{xlab, ylab, zlab}{character vector specifying the tickmark labeling}
+  \item{xunit, yunit, zunit}{value specifying the tick mark base for uniform tick mark layout}
+  \item{xlen, ylen, zlen}{value specifying the number of tickmarks}
   \item{marklen}{value specifying the length of the tickmarks}
   \item{marklen.rel}{logical, if TRUE tick mark length is calculated using 1/\code{marklen} * axis length, otherwise tick mark length is \code{marklen} in coordinate space}
   \item{expand}{value specifying how much to expand the bounding box around the data}
@@ -52,13 +52,13 @@ bbox3d(xat=NULL, yat=NULL, zat=NULL,
 \examples{
   rgl.open()
   rgl.points(rnorm(100), rnorm(100), rnorm(100))
-  rgl.bbox(color=c("#333377","white"), emission="#333377", 
-           specular="#3333FF", shininess=5, alpha=0.8 )
+  rgl.bbox(color = c("#333377", "white"), emission = "#333377", 
+           specular = "#3333FF", shininess = 5, alpha = 0.8 )
   
   open3d()
   points3d(rnorm(100), rnorm(100), rnorm(100))
-  bbox3d(color=c("#333377","black"), emission="#333377", 
-         specular="#3333FF", shininess=5, alpha=0.8)
+  bbox3d(color = c("#333377", "black"), emission = "#333377", 
+         specular = "#3333FF", shininess = 5, alpha = 0.8)
 }
 \seealso{
   \code{\link{rgl.material}}, \code{\link{axes3d}} 

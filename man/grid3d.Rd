@@ -53,9 +53,9 @@ to draw grid lines that will automatically resize.
 \examples{
 x <- 1:10
 y <- 1:10
-z <- matrix(outer(x-5,y-5) + rnorm(100), 10, 10)
+z <- matrix(outer(x - 5, y - 5) + rnorm(100), 10, 10)
 open3d()
-persp3d(x, y, z, col="red", alpha=0.7, aspect=c(1,1,0.5))
+persp3d(x, y, z, col = "red", alpha = 0.7, aspect = c(1, 1, 0.5))
 grid3d(c("x", "y+", "z"))
 }
 \keyword{ dynamic }

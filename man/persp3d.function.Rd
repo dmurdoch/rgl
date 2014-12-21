@@ -5,8 +5,8 @@
 Plot a function of two variables
 }
 \description{
-Plot a function \code{z(x,y)} or a parametric function
-\code{(x(s,t), y(s,t), z(s,t))}.
+Plot a function \code{z(x, y)} or a parametric function
+\code{(x(s, t), y(s, t), z(s, t))}.
 }
 \usage{
 \method{persp3d}{function}(x, 
@@ -34,7 +34,7 @@ on the displayed x and y values.
   \item{slim, tlim}{
 If not \code{NULL}, these give the range of s and t in the
 parametric specification of the surface.  If
-only one is given, the other defaults to \code{c(0,1)}.
+only one is given, the other defaults to \code{c(0, 1)}.
 }
   \item{n}{
 A one or two element vector giving the number of 
@@ -45,7 +45,7 @@ The values at which to evaluate x and y.  Ignored for
 a parametric surface.  If used, \code{xlim} and/or \code{ylim}
 are ignored.
 }
-  \item{svals,tvals}{
+  \item{svals, tvals}{
 The values at which to evaluate s and t for a parametric
 surface.  Only used if
 \code{slim} or \code{tlim} is not \code{NULL}.  As with 
@@ -88,14 +88,14 @@ to be vectorized.  Other optional arguments to \code{f()}
 can be specified in the \code{otherargs} list.
 
 In the default form where \code{slim} and \code{tlim} are both
-\code{NULL}, it is assumed that \code{f(x,y)} returns heights,
+\code{NULL}, it is assumed that \code{f(x, y)} returns heights,
 which will be plotted in the z coordinate.  The default axis labels
 will be taken from the argument names to \code{f()} and the
 expression passed as argument \code{x} to this function.
 
 If \code{slim} or \code{tlim} is specified, a parametric
 surface is plotted.  The function
-\code{f(s,t)} must return a 3-column matrix, giving x, y and z 
+\code{f(s, t)} must return a 3-column matrix, giving x, y and z 
 coordinates of points on the surface.  The default axis
 labels will be the column names if those are present.
 In this case \code{xlim}, \code{ylim} and \code{zlim}
@@ -142,15 +142,15 @@ example below for space curves.
 # (1) The Obligatory Mathematical surface.
 #     Rotated sinc function, with colors
 
-f <- function(x,y) { 
-  r <- sqrt(x^2+y^2)
+f <- function(x, y) { 
+  r <- sqrt(x^2 + y^2)
   ifelse(r == 0, 10, 10 * sin(r)/r)
 }
 open3d()
 plot3d(f, col = colorRampPalette(c("blue", "white", "red")), 
        xlab = "X", ylab = "Y", zlab = "Sinc( r )", 
-       xlim = c(-10,10), ylim = c(-10,10),
-       aspect=c(1, 1, 0.5))
+       xlim = c(-10, 10), ylim = c(-10, 10),
+       aspect = c(1, 1, 0.5))
        
 # (2) A cylindrical plot
 
@@ -162,11 +162,11 @@ f <- function(s, t) {
 }
 
 open3d()
-plot3d(f, slim=c(0,1), tlim=c(0,1), col="red", alpha = 0.8)
+plot3d(f, slim = c(0, 1), tlim = c(0, 1), col = "red", alpha = 0.8)
 
 # Add a curve to the plot, fixing s at 0.5.
 
-plot3d(f(0.5, seq.int(0,1,length.out=100)), type="l", add=TRUE, 
+plot3d(f(0.5, seq.int(0, 1, length.out = 100)), type = "l", add = TRUE, 
        lwd = 3, depth_test = "lequal")
 }
 \keyword{ graphics }

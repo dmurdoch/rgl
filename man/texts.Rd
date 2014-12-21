@@ -11,7 +11,7 @@
 \usage{
 rgl.texts(x, y = NULL, z = NULL, text, 
             adj = 0.5, justify, family = par3d("family"), font = par3d("font"), 
-            cex = par3d("cex"), useFreeType=par3d("useFreeType"), ...)
+            cex = par3d("cex"), useFreeType = par3d("useFreeType"), ...)
 text3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
 texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
 rglFonts(...)
@@ -38,8 +38,8 @@ specifying the horizontal adjustment; options are \code{"left"}, \code{"right"},
 }
 \details{
 The \code{adj} parameter determines the position of the text relative to the 
-specified coordinate.  Use \code{adj = c(0,0)} to place the left bottom corner at
-\code{(x,y,z)}, \code{adj = c(0.5, 0.5)} to center the text there, and \code{adj = c(1,1)}
+specified coordinate.  Use \code{adj = c(0, 0)} to place the left bottom corner at
+\code{(x, y, z)}, \code{adj = c(0.5, 0.5)} to center the text there, and \code{adj = c(1, 1)}
 to put the right top corner there. The optional second coordinate for vertical 
 adjustment defaults to \code{0.5}.  Placement is done using the "advance" of
 the string and the "ascent" of the font relative to the baseline, when these metrics
@@ -117,23 +117,23 @@ invisibly.
 open3d()
 famnum <- rep(1:4, 8)
 family <- c("serif", "sans", "mono", "symbol")[famnum]
-font <- rep(rep(1:4, each=4), 2)
-cex <- rep(1:2, each=16)
-text3d(font, cex, famnum, text=paste(family, font),adj = 0.5, 
-       color="blue", family=family, font=font, cex=cex)
+font <- rep(rep(1:4, each = 4), 2)
+cex <- rep(1:2, each = 16)
+text3d(font, cex, famnum, text = paste(family, font), adj = 0.5, 
+       color = "blue", family = family, font = font, cex = cex)
 \dontrun{
 # These FreeType fonts are available from the Amaya project, and are not shipped
 # with rgl.  You would normally install them to the rgl/fonts directory
 # and use fully qualified pathnames, e.g. 
-# system.file("fonts/FreeSerif.ttf", package= "rgl")
+# system.file("fonts/FreeSerif.ttf", package = "rgl")
 
-rglFonts(serif=c("FreeSerif.ttf","FreeSerifBold.ttf","FreeSerifItalic.ttf",
+rglFonts(serif = c("FreeSerif.ttf", "FreeSerifBold.ttf", "FreeSerifItalic.ttf",
                  "FreeSerifBoldItalic.ttf"),
-         sans =c("FreeSans.ttf", "FreeSansBold.ttf", "FreeSansOblique.ttf",
+         sans  = c("FreeSans.ttf", "FreeSansBold.ttf", "FreeSansOblique.ttf",
                  "FreeSansBoldOblique.ttf"),
-         mono =c("FreeMono.ttf", "FreeMonoBold.ttf", "FreeMonoOblique.ttf",
+         mono  = c("FreeMono.ttf", "FreeMonoBold.ttf", "FreeMonoOblique.ttf",
                  "FreeMonoBoldOblique.ttf"),
-         symbol=c("ESSTIX10.TTF", "ESSTIX12.TTF", "ESSTIX9_.TTF", 
+         symbol= c("ESSTIX10.TTF", "ESSTIX12.TTF", "ESSTIX9_.TTF", 
                  "ESSTIX11.TTF"))
 } 
 }

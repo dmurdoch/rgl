@@ -84,7 +84,7 @@ if (interactive()) {
   # This one returns indices
   selectpoints3d(ids["data"], value = FALSE,
      multiple = function(ids) {
-        spheres3d(xyz[ids[, "index"],,drop=FALSE], color = "blue", 
+        spheres3d(xyz[ids[, "index"], , drop = FALSE], color = "blue", 
                   alpha = 0.3, radius = 0.2)
         TRUE
      })

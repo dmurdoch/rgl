@@ -46,7 +46,7 @@ of homogeneous coordinates; alternatively, the transpose of the result
 can be right-multiplied by a column vector.  The generic functions
 \code{scale3d}, \code{translate3d} and \code{rotate3d} apply these transformations
 to the \code{obj} argument.  The \code{transform3d} function is a synonym 
-for \code{rotate3d(obj, matrix=matrix)}.
+for \code{rotate3d(obj, matrix = matrix)}.
 
 By default, it is assumed that \code{obj} is a row vector
 (or a matrix of row vectors) which will be multiplied on the right by
@@ -63,7 +63,7 @@ to apply the matrix on the left first, followed by the one on the right.
 coordinates, \code{(u, v, w)} is transformed to \code{(x*u, y*v, z*w)}.
 
 \code{translationMatrix} translates each coordinate by the given translation, i.e.
-\code{(u,v,w)} is transformed to \code{(u+x,v+y,w+z)}.
+\code{(u, v, w)} is transformed to \code{(u + x, v + y, w + z)}.
 
 \code{rotationMatrix} can be called in three ways.  With 
 arguments \code{angle, x, y, z} it represents a rotation 
@@ -96,15 +96,15 @@ rendering.}
 
 rotationMatrix(pi/2, 1, 0, 0)
 
-# Find what happens when you rotate (2,0,0) by 45 degrees about the y axis:
+# Find what happens when you rotate (2, 0, 0) by 45 degrees about the y axis:
 
-x <- asHomogeneous(c(2,0,0))
+x <- asHomogeneous(c(2, 0, 0))
 y <- x %*% rotationMatrix(pi/4, 0, 1, 0)
 asEuclidean(y)
 
 # or more simply...
 
-rotate3d(c(2,0,0), pi/4, 0, 1, 0)
+rotate3d(c(2, 0, 0), pi/4, 0, 1, 0)
 
 }
 \keyword{ dynamic }

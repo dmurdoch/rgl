@@ -41,7 +41,7 @@ RGL holds several lists of objects in each scene.
 There are lists for shapes, lights, bounding box decorations, subscenes, etc.
 \code{clear3d} and \code{rgl.clear} clear the specified stack, or restore
 the defaults for the bounding box (not visible) or viewpoint. 
-With \code{id=0} \code{rgl.pop} removes 
+With \code{id = 0} \code{rgl.pop} removes 
 the last added node on the list (except for subscenes:  there it
 removes the active subscene).  The \code{id} argument
 may be used to specify arbitrary item(s) to remove; if \code{id != 0}, 
@@ -71,14 +71,14 @@ be followed by a call to \code{\link{rgl.light}} or \code{\link{light3d}}.
   x <- rnorm(100)
   y <- rnorm(100)
   z <- rnorm(100)
-  p <- plot3d(x, y, z, type='s')
+  p <- plot3d(x, y, z, type = 's')
   rgl.ids()
   lines3d(x, y, z)
   rgl.ids()
   if (interactive()) {
     readline("Hit enter to change spheres")
     rgl.pop(id = p["data"])
-    spheres3d(x, y, z, col="red", radius=1/5)
+    spheres3d(x, y, z, col = "red", radius = 1/5)
     box3d()
   }
 }

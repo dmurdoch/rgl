@@ -17,9 +17,9 @@ rgl.open(useNULL = rgl.useNULL())     # open new device
 rgl.close()    # close current device
 rgl.cur()      # returns active device ID
 rgl.dev.list() # returns all device IDs
-rgl.set(which, silent=FALSE) # set device as active
+rgl.set(which, silent = FALSE) # set device as active
 rgl.quit()     # shutdown rgl device system
-rgl.init(initValue=0, onlyNULL=FALSE)     # re-initialize rgl
+rgl.init(initValue = 0, onlyNULL = FALSE)     # re-initialize rgl
 }
 \arguments{
   \item{useNULL}{whether to open the \dQuote{null} device}

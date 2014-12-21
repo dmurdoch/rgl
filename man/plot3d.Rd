@@ -11,17 +11,17 @@ Draws a 3D scatterplot.
 plot3d(x, ...)
 \method{plot3d}{default}(x, y, z,  
 	xlab, ylab, zlab, type = "p", col,  
-        size, lwd, radius,
+	size, lwd, radius,
 	add = FALSE, aspect = !add, 
-  xlim = NULL, ylim = NULL, zlim = NULL, 
-  forceClipregion = FALSE, ...)
+	xlim = NULL, ylim = NULL, zlim = NULL, 
+	forceClipregion = FALSE, ...)
 \method{plot3d}{mesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
 	add = FALSE, ...)	
 decorate3d(xlim, ylim, zlim, 
 	xlab = "x", ylab = "y", zlab = "z", 
 	box = TRUE, axes = TRUE, main = NULL, sub = NULL,
 	top = TRUE, aspect = FALSE, expand = 1.03, 
-   ...)
+	...)
 }
 \arguments{
   \item{x, y, z}{vectors of points to be plotted. Any reasonable way of defining the
@@ -31,7 +31,7 @@ decorate3d(xlim, ylim, zlim,
   \item{type}{For the default method, a single character indicating the type of item to plot.  
   Supported types are: 'p' for points, 's' for spheres, 
   'l' for lines, 'h' for line segments 
-  from \code{z=0}, and 'n' for nothing.  For the \code{mesh3d} method, one of 
+  from \code{z = 0}, and 'n' for nothing.  For the \code{mesh3d} method, one of 
   'shade', 'wire', or 'dots'.  Partial matching is used.
   }
   \item{col}{the color to be used for plotted items.}
@@ -63,13 +63,13 @@ whether or not limits are given.}
 
 Missing values in the data are skipped, as in standard graphics.
 
-If \code{aspect} is \code{TRUE}, aspect ratios of \code{c(1,1,1)} are passed to
+If \code{aspect} is \code{TRUE}, aspect ratios of \code{c(1, 1, 1)} are passed to
 \code{\link{aspect3d}}.  If \code{FALSE}, no aspect adjustment is done.  In other
 cases, the value is passed to \code{\link{aspect3d}}.
 
 With \code{type = "s"}, spheres are drawn centered at the specified locations.
 The radius may be controlled by \code{size} (specifying the size relative
-to the plot display, with the default \code{size=3} giving a radius 
+to the plot display, with the default \code{size = 3} giving a radius 
 about 1/20 of the plot region) or \code{radius} (specifying it on the data scale
 if an isometric aspect ratio is chosen, or on an average scale
 if not). 
@@ -101,8 +101,8 @@ subscene even without specifying limits.
   open3d()
   x <- sort(rnorm(1000))
   y <- rnorm(1000)
-  z <- rnorm(1000) + atan2(x,y)
-  plot3d(x, y, z, col=rainbow(1000))
+  z <- rnorm(1000) + atan2(x, y)
+  plot3d(x, y, z, col = rainbow(1000))
 }
 \keyword{dynamic}
 

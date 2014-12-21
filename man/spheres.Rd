@@ -35,7 +35,7 @@ If any coordinate or radius is \code{NA}, the sphere is not plotted.
 }
 \examples{
 open3d()
-spheres3d(rnorm(10), rnorm(10), rnorm(10), radius=runif(10), color=rainbow(10))
+spheres3d(rnorm(10), rnorm(10), rnorm(10), radius = runif(10), color = rainbow(10))
 }
 \seealso{
   \code{\link{rgl.material}}, \code{\link{aspect3d}} for setting non-isometric scales

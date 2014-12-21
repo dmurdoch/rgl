@@ -27,8 +27,8 @@ remain the same, no longer corresponding to a rectangle on the screen.
   
 }
 \value{
-Returns a function \code{f(x,y,z)} which tests whether each
-of the points \code{(x,y,z)} is in the selected region, returning
+Returns a function \code{f(x, y, z)} which tests whether each
+of the points \code{(x, y, z)} is in the selected region, returning
 a logical vector.  This function accepts input in a wide
 variety of formats as it uses \code{\link[grDevices]{xyz.coords}} 
 to interpret its parameters.
@@ -45,12 +45,12 @@ if (interactive()) {
  y <- rnorm(1000)
  z <- rnorm(1000)
  open3d()
- points3d(x,y,z)
+ points3d(x, y, z)
  f <- select3d()
- keep <- f(x,y,z)
+ keep <- f(x, y, z)
  rgl.pop()
- points3d(x[keep],y[keep],z[keep],color='red')
- points3d(x[!keep],y[!keep],z[!keep])
+ points3d(x[keep], y[keep], z[keep], color = 'red')
+ points3d(x[!keep], y[!keep], z[!keep])
 }
 }
 \keyword{dynamic}

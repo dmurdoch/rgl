@@ -14,10 +14,10 @@ step drags the points (refinement step).
 }
 \usage{
   subdivision3d( x,  ...)
-  \method{subdivision3d}{mesh3d}( x, depth=1, normalize=FALSE, deform=TRUE, ... )
-  divide.mesh3d(mesh,  vb=mesh$vb, ib=mesh$ib, it=mesh$it )
+  \method{subdivision3d}{mesh3d}( x, depth = 1, normalize = FALSE, deform = TRUE, ... )
+  divide.mesh3d(mesh,  vb = mesh$vb, ib = mesh$ib, it = mesh$it )
   normalize.mesh3d(mesh)
-  deform.mesh3d(mesh,vb=mesh$vb,ib=mesh$ib,it=mesh$it )
+  deform.mesh3d(mesh, vb = mesh$vb, ib = mesh$ib, it = mesh$it )
 }
 \arguments{
   \item{x}{3d geometry mesh}
@@ -27,7 +27,7 @@ step drags the points (refinement step).
   \item{deform}{deform mesh}
   \item{it}{indices for triangular faces}
   \item{ib}{indices for quad faces}
-  \item{vb}{matrix of vertices: 4xn matrix (rows x,y,z,h) or equivalent
+  \item{vb}{matrix of vertices: 4xn matrix (rows x, y, z, h) or equivalent
     vector, where h indicates scaling of each plotted quad}
   \item{...}{other arguments (unused)}
 }
@@ -37,7 +37,7 @@ step drags the points (refinement step).
 }
 \examples{
   open3d()
-  shade3d( subdivision3d( cube3d(), depth=3 ), color="red", alpha=0.5 )
+  shade3d( subdivision3d( cube3d(), depth = 3 ), color = "red", alpha = 0.5 )
 }
 \seealso{
   \code{\link{r3d}}

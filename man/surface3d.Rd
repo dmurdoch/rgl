@@ -8,8 +8,8 @@
   defining the grid.
 }
 \usage{
-surface3d(x, y, z, ..., normal_x=NULL, normal_y=NULL, normal_z=NULL)
-terrain3d(x, y, z, ..., normal_x=NULL, normal_y=NULL, normal_z=NULL)
+surface3d(x, y, z, ..., normal_x = NULL, normal_y = NULL, normal_z = NULL)
+terrain3d(x, y, z, ..., normal_x = NULL, normal_y = NULL, normal_z = NULL)
 }
 \arguments{
   \item{ x }{
@@ -67,10 +67,10 @@ zlen <- zlim[2] - zlim[1] + 1
 
 colorlut <- terrain.colors(zlen) # height color lookup table
 
-col <- colorlut[ z-zlim[1]+1 ] # assign colors to heights for each point
+col <- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point
 
 open3d()
-surface3d(x, y, z, color=col, back="lines")
+surface3d(x, y, z, color = col, back = "lines")
 
 }
 \seealso{

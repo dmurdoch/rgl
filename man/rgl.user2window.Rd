@@ -12,7 +12,6 @@ rgl.user2window(x, y = NULL, z = NULL, projection = rgl.projection())
 rgl.window2user(x, y = NULL, z = 0, projection = rgl.projection())
 rgl.projection()
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x, y, z}{Input coordinates.  Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
@@ -45,7 +44,7 @@ See \code{\link{par3d}} for more details.
 \examples{
 open3d()
 points3d(rnorm(100), rnorm(100), rnorm(100))
-if (interactive() || !.Platform$OS=="unix") {
+if (interactive() || !.Platform$OS == "unix") {
 # Calculate a square in the middle of the display and plot it
 square <- rgl.window2user(c(0.25, 0.25, 0.75, 0.75, 0.25), 
                           c(0.25, 0.75, 0.75, 0.25, 0.25), 0.5)

@@ -8,10 +8,10 @@
 \usage{
 view3d( theta = 0, phi = 15, ...)
 rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, scale = par3d("scale"), 
-               interactive = TRUE, userMatrix, type=c("userviewpoint", "modelviewpoint") )
+               interactive = TRUE, userMatrix, type = c("userviewpoint", "modelviewpoint") )
 }
 \arguments{
-  \item{theta,phi}{polar coordinates}
+  \item{theta, phi}{polar coordinates}
   \item{...}{additional parameters to pass to \code{rgl.viewpoint}}
   \item{fov}{field-of-view angle in degrees}
   \item{zoom}{zoom factor}
@@ -53,11 +53,11 @@ sets both, but the \code{type} argument can be used to limit the effect.
 # animated round trip tour for 10 seconds
 
 rgl.open()
-shade3d(oh3d(), color="red")
+shade3d(oh3d(), color = "red")
 
 start <- proc.time()[3]
-while ((i <- 36*(proc.time()[3]-start)) < 360) {
-  rgl.viewpoint(i,i/4); 
+while ((i <- 36*(proc.time()[3] - start)) < 360) {
+  rgl.viewpoint(i, i/4); 
 }
 }
 }

@@ -26,8 +26,8 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, ...)
   Simple sprites (used when \code{shapes} is \code{NULL}) are 1 by 1 squares
   that are directed towards the viewpoint. Their primary use is for
   fast (and faked) atmospherical effects, e.g. particles and clouds
-  using alpha blended textures. Particles are Sprites using an alpha-
-  blended particle texture giving the illusion of clouds and gasses.  
+  using alpha blended textures. Particles are Sprites using an alpha-blended 
+  particle texture giving the illusion of clouds and gasses.  
   The centre of each square will be at the coordinates given by \code{x, y, z}.
   
   When \code{shapes} is not \code{NULL}, it should be a vector of
@@ -35,9 +35,9 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, ...)
   plotting functions or by \code{\link{rgl.ids}}).  These objects will
   be removed from the scene and duplicated as a sprite image in a
   constant orientation, as specified by \code{userMatrix}.  The 
-  origin \code{0,0,0} will be plotted at the coordinates given by \code{x, y, z}.
+  origin \code{0, 0, 0} will be plotted at the coordinates given by \code{x, y, z}.
   
-  The \code{userMatrix} argument is ignored for \code{shapes=NULL}.  For
+  The \code{userMatrix} argument is ignored for \code{shapes = NULL}.  For
   shapes, \code{sprites3d} defaults the matrix to \code{r3dDefaults$userMatrix}
   while \code{rgl.sprites} defaults it to an identity transformation.
   
@@ -52,12 +52,12 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, ...)
 }
 \examples{
 open3d()
-particles3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100) )
+particles3d( rnorm(100), rnorm(100), rnorm(100), color = rainbow(100) )
 # is the same as
-sprites3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100),
-  lit=FALSE, alpha=.2,
-  textype="alpha", texture=system.file("textures/particle.png", package="rgl") )
-sprites3d( rnorm(10)+6, rnorm(10), rnorm(10), shape=shade3d(tetrahedron3d(), col="red") )
+sprites3d( rnorm(100), rnorm(100), rnorm(100), color = rainbow(100),
+  lit = FALSE, alpha = .2,
+  textype = "alpha", texture = system.file("textures/particle.png", package = "rgl") )
+sprites3d( rnorm(10) + 6, rnorm(10), rnorm(10), shape = shade3d(tetrahedron3d(), col = "red") )
 }
 \seealso{
   \code{\link{rgl.material}}

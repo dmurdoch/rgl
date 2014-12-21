@@ -6,7 +6,7 @@
   Saves the screenshot as png file.
 }
 \usage{
-rgl.snapshot( filename, fmt="png", top=TRUE )
+rgl.snapshot( filename, fmt = "png", top = TRUE )
 snapshot3d( ... )
 }
 \arguments{
@@ -24,7 +24,7 @@ the example below.)
 \note{
 On some systems, the snapshot
 will include content from other windows if they cover the active rgl
-window.  Setting \code{top=TRUE} (the default) will use 
+window.  Setting \code{top = TRUE} (the default) will use 
 \code{\link{rgl.bringtotop}} before the snapshot
 to avoid this.  (See \url{http://www.opengl.org/resources/faq/technical/rasterization.htm#rast0070}
 for more details.)
@@ -39,14 +39,14 @@ for more details.)
 # create animation
 #
 
-shade3d(oh3d(), color="red")
+shade3d(oh3d(), color = "red")
 rgl.bringtotop()
-rgl.viewpoint(0,20)
+rgl.viewpoint(0, 20)
 
 setwd(tempdir())
 for (i in 1:45) {
-  rgl.viewpoint(i,20)
-  filename <- paste("pic",formatC(i,digits=1,flag="0"),".png",sep="")
+  rgl.viewpoint(i, 20)
+  filename <- paste("pic", formatC(i, digits = 1, flag = "0"), ".png", sep = "")
   rgl.snapshot(filename)
 }
 ## Now run ImageMagick command:

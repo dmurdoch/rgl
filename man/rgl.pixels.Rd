@@ -6,7 +6,7 @@ This function extracts single components of the pixel information from the
 topmost window.
 }
 \usage{
-rgl.pixels(component = c("red", "green", "blue"), viewport=par3d("viewport"), top = TRUE)
+rgl.pixels(component = c("red", "green", "blue"), viewport = par3d("viewport"), top = TRUE)
 }
 \arguments{  
   \item{component}{ Which component(s)? }
@@ -33,7 +33,7 @@ is the list of components.
 a random dot stereogram and an anaglyph. }
 \examples{
 example(surface3d)
-depth <- rgl.pixels(component="depth")
+depth <- rgl.pixels(component = "depth")
 if (length(depth) && is.matrix(depth)) # Protect against empty or single pixel windows
     contour(depth)
 }

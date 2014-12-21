@@ -88,7 +88,7 @@ the model.  The \code{par3d("projMatrix")} matrix is determined by the projectio
 The \code{model} parameter controls settings corresponding to the model.  Mouse rotations affect
 the model, as does scaling.  The \code{par3d("modelMatrix")} matrix is determined by these as
 well as by the position of the observer (since OpenGL assumes that the observer is at
-(0,0,0) after the MODELVIEW transformation).  Only those parts concerning the model are
+(0, 0, 0) after the MODELVIEW transformation).  Only those parts concerning the model are
 inherited when \code{model} specifies inheritance, the observer setting is controlled by
 \code{projection}.
 
@@ -111,8 +111,8 @@ multiple panes of subscenes.
 
 # Show the Earth with a cutout by using clipplanes in subscenes
 
-lat <- matrix(seq(90,-90, len=50)*pi/180, 50, 50, byrow=TRUE)
-long <- matrix(seq(-180, 180, len=50)*pi/180, 50, 50)
+lat <- matrix(seq(90, -90, len = 50)*pi/180, 50, 50, byrow = TRUE)
+long <- matrix(seq(-180, 180, len = 50)*pi/180, 50, 50)
 
 r <- 6378.1 # radius of Earth in km
 x <- r*cos(lat)*cos(long)
@@ -120,27 +120,27 @@ y <- r*cos(lat)*sin(long)
 z <- r*sin(lat)
 
 open3d()
-obj <- surface3d(x, y, z, col="white", 
-       texture=system.file("textures/worldsmall.png",package="rgl"), 
-       specular="black", axes=FALSE, box=FALSE, xlab="", ylab="", zlab="",
-       normal_x=x, normal_y=y, normal_z=z)
+obj <- surface3d(x, y, z, col = "white", 
+       texture = system.file("textures/worldsmall.png", package = "rgl"), 
+       specular = "black", axes = FALSE, box = FALSE, xlab = "", ylab = "", zlab = "",
+       normal_x = x, normal_y = y, normal_z = z)
        
-cols <- c(rep("chocolate4",4), rep("burlywood1", 4), "darkgoldenrod1")
+cols <- c(rep("chocolate4", 4), rep("burlywood1", 4), "darkgoldenrod1")
 rs <- c(6350, 5639, 4928.5, 4207, 3486, 
-                         (3486+2351)/2, 2351, (2351+1216)/2, 1216)
+                         (3486 + 2351)/2, 2351, (2351 + 1216)/2, 1216)
 for (i in seq_along(rs)) 
-  obj <- c(obj, spheres3d(0,0,col = cols[i], radius = rs[i]))
+  obj <- c(obj, spheres3d(0, 0, col = cols[i], radius = rs[i]))
   
 root <- currentSubscene3d()
 
-newSubscene3d("inherit", "inherit", "inherit", copyShapes=TRUE, parent=root)
-clipplanes3d(1,0,0,0)
+newSubscene3d("inherit", "inherit", "inherit", copyShapes = TRUE, parent = root)
+clipplanes3d(1, 0, 0, 0)
 
-newSubscene3d("inherit", "inherit", "inherit", copyShapes=TRUE, parent=root)
-clipplanes3d(0,1,0,0)
+newSubscene3d("inherit", "inherit", "inherit", copyShapes = TRUE, parent = root)
+clipplanes3d(0, 1, 0, 0)
 
-newSubscene3d("inherit", "inherit", "inherit", copyShapes=TRUE, parent=root)
-clipplanes3d(0,0,1,0)
+newSubscene3d("inherit", "inherit", "inherit", copyShapes = TRUE, parent = root)
+clipplanes3d(0, 0, 1, 0)
 
 # Now delete the objects from the root subscene, to reveal the clipping planes
 useSubscene3d(root)

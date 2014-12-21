@@ -8,7 +8,6 @@ of the current bounding box.
 \usage{
 aspect3d(x, y = NULL, z = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{The ratio for the x axis, or all three ratios, or \code{"iso"} }
   \item{y}{The ratio for the y axis }
@@ -35,7 +34,7 @@ The previous value of the scale is returned invisibly.
   
   open3d()
   plot3d(x, y, z)
-  aspect3d(1,1,0.5)
+  aspect3d(1, 1, 0.5)
   open3d()
   plot3d(x, y, z)
   aspect3d("iso")

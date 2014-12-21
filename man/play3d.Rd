@@ -12,11 +12,10 @@ records each frame to a file to make a movie.
 play3d(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0)
 movie3d(f, duration, dev = rgl.cur(), ..., fps = 10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
-                    convert = TRUE, clean = TRUE, verbose=TRUE,
+                    convert = TRUE, clean = TRUE, verbose = TRUE,
                     top = TRUE, type = "gif", startTime = 0) 
 
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{f}{ A function returning a list that may be passed to \code{\link{par3d}} }
   \item{duration}{ The duration of the animation }    
@@ -55,14 +54,14 @@ Alternatively, \code{convert} can be a template for a command to
 execute in the standard shell (wildcards are allowed). The template is
 converted to a command using \cr
 \code{\link{sprintf}(convert, fps, frames, movie, type, dir, duration)} \cr
-For example, \code{code=TRUE}
+For example, \code{code = TRUE}
 uses the template \code{"convert -delay 1x\%d \%s*.png \%s.\%s"}. All work
 is done in the directory \code{dir}, so paths should not be needed in
 the command.  (Note that \code{\link{sprintf}} does not require all
 arguments to be used, and supports formats that use them in an
 arbitrary order.)
 
-The \code{top=TRUE} default is designed to work around an OpenGL limitation:
+The \code{top = TRUE} default is designed to work around an OpenGL limitation:
 in some implementations, \code{\link{rgl.snapshot}} will fail if the window
 is not topmost.
 
@@ -81,15 +80,15 @@ It returns \code{NULL} invisibly.
           scene in \code{f}.}
 \examples{
 open3d()
-plot3d( cube3d(col="green") )
+plot3d( cube3d(col = "green") )
 M <- par3d("userMatrix")
 if (!rgl.useNULL())
-  play3d( par3dinterp(time=(0:2)*0.75,userMatrix=list(M,
+  play3d( par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
                                      rotate3d(M, pi/2, 1, 0, 0),
                                      rotate3d(M, pi/2, 0, 1, 0) ) ), 
-        duration=3 )
+        duration = 3 )
 \dontrun{
-movie3d( spin3d(), duration=5 )
+movie3d( spin3d(), duration = 5 )
 }
 
 }

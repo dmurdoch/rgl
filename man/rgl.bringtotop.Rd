@@ -24,7 +24,7 @@ Not currently implemented under OS/X.}
 #endif
 \examples{
 rgl.open()
-rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000))
+rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color = heat.colors(1000))
 rgl.bringtotop(stay = TRUE)    
 }
 \keyword{ dynamic }

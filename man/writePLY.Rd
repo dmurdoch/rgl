@@ -83,9 +83,9 @@ Duncan Murdoch
 write the scene to a file in various other formats.
 }
 \examples{
-filename <- tempfile(fileext=".ply")
+filename <- tempfile(fileext = ".ply")
 open3d()
-shade3d( icosahedron3d(col="magenta") )
+shade3d( icosahedron3d(col = "magenta") )
 writePLY(filename)
 }
 \keyword{ graphics }

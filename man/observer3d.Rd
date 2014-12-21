@@ -10,7 +10,7 @@ This function sets the location of the viewer.
 observer3d(x, y = NULL, z = NULL, auto = FALSE)
 }
 \arguments{
-  \item{x,y,z}{
+  \item{x, y, z}{
 The location as a 3 vector, using the usual \code{xyz.coords}
 conventions for specification.  If \code{x} is missing
 or any coordinate is \code{NA}, no change will be made to the
@@ -48,6 +48,6 @@ Duncan Murdoch
 
 \examples{
 example(surface3d)  # The volcano data
-observer3d(0,0,440) # Viewed from very close up
+observer3d(0, 0, 440) # Viewed from very close up
 }
 \keyword{ graphics }

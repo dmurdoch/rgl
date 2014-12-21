@@ -56,7 +56,7 @@ rgl.enum.texminfilter(minfiltertype)
 rgl.selectstate()
 rgl.setselectstate(state)
 edgemap(size)
-edgeindex(from,to,size,row,col)
+edgeindex(from, to, size, row, col)
 }
 \details{
   These are not to be called by the user.

@@ -60,7 +60,7 @@ A function is returned.  The function takes one argument, and returns a list of
 \author{Duncan Murdoch }
 \seealso{ \code{\link{play3d}} to play the animation. }
 \examples{
-f <- par3dinterp( zoom = c(1,2,3,1) )
+f <- par3dinterp( zoom = c(1, 2, 3, 1) )
 f(0)
 f(1)
 f(0.5)

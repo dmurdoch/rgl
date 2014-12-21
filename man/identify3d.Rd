@@ -9,8 +9,8 @@ in base graphics.
 }
 \usage{
 identify3d(x, y = NULL, z = NULL, labels = seq_along(x), n = length(x), 
-           plot = TRUE, adj = c(-0.1, 0.5), tolerance = 20, 
-           buttons = c("right", "middle"))
+	plot = TRUE, adj = c(-0.1, 0.5), tolerance = 20, 
+	buttons = c("right", "middle"))
 }
 \arguments{
   \item{x, y, z}{coordinates of points in a scatter plot.  Alternatively, any

@@ -36,7 +36,7 @@
 par3d(\dots, no.readonly = FALSE, dev = rgl.cur(), 
       subscene = currentSubscene3d(dev))
 
-open3d(\dots, params=getr3dDefaults(), 
+open3d(\dots, params = getr3dDefaults(), 
 	    useNULL = rgl.useNULL())
 	    
 getr3dDefaults()
@@ -61,7 +61,7 @@ r3dDefaults
   Parameters are queried by giving one or more character vectors to
   \code{par3d}.
 
-  \code{par3d()} (no arguments) or \code{par3d(no.readonly=TRUE)} is used to
+  \code{par3d()} (no arguments) or \code{par3d(no.readonly = TRUE)} is used to
   get \emph{all} the graphical parameters (as a named list).  
 
   By default, queries and modifications apply to the current subscene
@@ -140,7 +140,7 @@ r3dDefaults
     Applies to the whole device.}
     \item{\code{FOV}}{real.  The field of view, from 0 to 179 degrees.  This controls
       the degree of parallax in the perspective view.
-      Isometric perspective corresponds to \code{FOV=0}.}
+      Isometric perspective corresponds to \code{FOV = 0}.}
     \item{\code{ignoreExtent}}{logical.  Set to \code{TRUE} so that subsequently plotted objects
       will be ignored in calculating the bounding box of the scene.  Applies to the
       whole device.}
@@ -194,8 +194,8 @@ r3dDefaults
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
       display the scene.}
     \item{\code{viewport}}{real.  A vector giving the dimensions of the
-      window in pixels.  The entries are taken to be \code{c(x,y,width,height)} where
-      \code{c(x,y)} are the coordinates in pixels of the lower left corner within the window.}
+      window in pixels.  The entries are taken to be \code{c(x, y, width, height)} where
+      \code{c(x, y)} are the coordinates in pixels of the lower left corner within the window.}
     \item{\code{zoom}}{real. A positive value indicating the current
       magnification of the scene.}
       \item{\code{bbox}}{\emph{\bold{R.O.}}; real. A vector of six values indicating the current values of the
@@ -228,12 +228,12 @@ before and after that it contains a copy of the OpenGL MODELVIEW matrix.
 
 \section{Rendering}{
 The parameters returned by \code{par3d} are sufficient to determine where rgl would render
-a point on the screen.  Given a column vector \code{(x,y,z)} in a subscene \code{s}, 
+a point on the screen.  Given a column vector \code{(x, y, z)} in a subscene \code{s}, 
 it performs the equivalent of 
 the following operations:
 \enumerate{
-\item It converts the point to homogeneous coordinates by appending \code{w=1}, giving
-the vector \code{v = (x,y,z,1)}.
+\item It converts the point to homogeneous coordinates by appending \code{w = 1}, giving
+the vector \code{v = (x, y, z, 1)}.
 \item It calculates the \code{M = par3d("modelMatrix")} as a product from right to left
 of the following matrices:
   \itemize{  
@@ -282,8 +282,8 @@ OpenGL Architecture Review Board (1997).  OpenGL Programming Guide.  Addison-Wes
 \examples{
     r3dDefaults
     open3d()
-    shade3d(cube3d(color=rep(rainbow(6),rep(4,6))))
-    save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))
+    shade3d(cube3d(color = rep(rainbow(6), rep(4, 6))))
+    save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1, 0, 0))
     save
     par3d("userMatrix")    
     par3d(save)

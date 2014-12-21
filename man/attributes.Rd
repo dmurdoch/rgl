@@ -10,7 +10,7 @@ Retrieves information about the shapes in a scene.
 \usage{
 rgl.attrib.count(id, attrib)
 rgl.attrib(id, attrib, first = 1, 
-           last = rgl.attrib.count(id, attrib))
+	last = rgl.attrib.count(id, attrib))
 }
 \arguments{
   \item{id}{
@@ -71,8 +71,8 @@ Duncan Murdoch
 \code{\link{rgl.ids}}
 }
 \examples{
-p <- plot3d(rnorm(100), rnorm(100), rnorm(100), type="s", col="red")
+p <- plot3d(rnorm(100), rnorm(100), rnorm(100), type = "s", col = "red")
 rgl.attrib.count(p["data"], "vertices")
-rgl.attrib(p["data"], "vertices", last=10)
+rgl.attrib(p["data"], "vertices", last = 10)
 }
 \keyword{ graphics }

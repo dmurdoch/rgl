@@ -49,7 +49,7 @@ This function is called for the side effect of setting the mouse event handlers.
        start$scale <<- par3d("scale")
        start$projection <<- rgl.projection()
        start$pos <<- rgl.window2user( x/start$viewport[3], 1 - y/start$viewport[4], 0.5, 
-                                      projection=start$projection)
+                                      projection = start$projection)
    }
    
    update <- function(x, y) {
@@ -59,7 +59,7 @@ This function is called for the side effect of setting the mouse event handlers.
         par3d(userMatrix = start$userMatrix \%*\% t(mouseMatrix) )
    }
    rgl.setMouseCallbacks(button, begin, update)
-   cat("Callbacks set on button", button, "of rgl device",rgl.cur(),"\n")
+   cat("Callbacks set on button", button, "of rgl device", rgl.cur(), "\n")
  }
  pan3d(3)
 }

@@ -103,7 +103,7 @@ Duncan Murdoch
 write the scene to a file in various other formats.
 }
 \examples{
-filename <- tempfile(fileext=".obj")
+filename <- tempfile(fileext = ".obj")
 open3d()
 shade3d( icosahedron3d() )
 writeOBJ(filename)
@@ -114,7 +114,7 @@ writeOBJ(filename)
 open3d()
 shade3d(readOBJ(url(
 "http://sci.esa.int/science-e/www/object/doc.cfm?fobjectid=54726"
-), material=list(col="gray")))
+), material = list(col = "gray")))
 }
 }
 \keyword{ graphics }

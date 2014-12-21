@@ -11,7 +11,6 @@ and draws it in three dimensions.
 polygon3d(x, y = NULL, z = NULL, fill = TRUE, plot = TRUE, 
           coords = 1:2, random = TRUE, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x, y, z}{
 Vertices of the polygon in a form accepted by \code{\link{xyz.coords}}.
@@ -23,7 +22,7 @@ logical; should the polygon be filled?
 logical; should the polygon be displayed?
 }
   \item{coords}{
-Which two coordinates (\code{x=1}, \code{y=2}, \code{z=3}) describe the
+Which two coordinates (\code{x = 1}, \code{y = 2}, \code{z = 3}) describe the
 polygon.  
 }
   \item{random}{
@@ -60,14 +59,14 @@ Duncan Murdoch
 the triangulation.
 }
 \examples{
-theta <- seq(0, 4*pi, len=50)
+theta <- seq(0, 4*pi, len = 50)
 r <- theta + 1
 r <- c(r[-50], rev(theta*0.8) + 1)
 theta <- c(theta[-50], rev(theta))
 x <- r*cos(theta)
 y <- r*sin(theta)
-plot(x,y,type="n")
+plot(x, y, type = "n")
 polygon(x, y)
-polygon3d(x, y, x+y, col = "blue")
+polygon3d(x, y, x + y, col = "blue")
 }
 \keyword{ graphics }

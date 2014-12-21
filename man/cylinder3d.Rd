@@ -9,7 +9,7 @@ object forming a cylindrical tube around the curve.
 }
 \usage{
 cylinder3d(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 = NULL, 
-           sides = 8, section = NULL, closed = 0, debug = FALSE, keepVars = FALSE)
+	sides = 8, section = NULL, closed = 0, debug = FALSE, keepVars = FALSE)
 }
 \arguments{
   \item{center}{An n by 3 matrix whose columns are the x, y and z coordinates of the space curve.}
@@ -35,7 +35,7 @@ handled. If \code{closed > 0}, it represents the number of points of
 overlap in the coordinates.  \code{closed == TRUE} is the same as 
 \code{closed = 1}. Negative values indicate that caps should be put on the
 ends of the cylinder.  If \code{closed == -1}, a cap will be put on the
-end corresponding to \code{center[1,]}.  If \code{closed == -2}, caps
+end corresponding to \code{center[1, ]}.  If \code{closed == -2}, caps
 will be put on both ends.
 
 If \code{section} is \code{NULL} (the default), a regular
@@ -71,20 +71,20 @@ Duncan Murdoch
 \examples{
 # A trefoil knot
 open3d()
-theta <- seq(0, 2*pi, len=25)
+theta <- seq(0, 2*pi, len = 25)
 knot <- cylinder3d(
       center = cbind(
-        sin(theta)+2*sin(2*theta), 
+        sin(theta) + 2*sin(2*theta), 
         2*sin(3*theta), 
-        cos(theta)-2*cos(2*theta)),
+        cos(theta) - 2*cos(2*theta)),
       e1 = cbind(
-        cos(theta)+4*cos(2*theta), 
+        cos(theta) + 4*cos(2*theta), 
         6*cos(3*theta), 
-        sin(theta)+4*sin(2*theta)),
+        sin(theta) + 4*sin(2*theta)),
       radius = 0.8, 
       closed = TRUE)
                      
-shade3d(addNormals(subdivision3d(knot, depth=2)), col="green")  
+shade3d(addNormals(subdivision3d(knot, depth = 2)), col = "green")  
 }
 
 \keyword{ dynamic }

@@ -7,8 +7,8 @@
 }
 \usage{
 bg3d(...) 
-rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), 
-        back="lines", ...)
+rgl.bg( sphere = FALSE, fogtype = "none", color = c("black", "white"), 
+	back = "lines", ...)
 
 }
 \arguments{
@@ -53,17 +53,17 @@ The \code{\link{writeWebGL}} function only supports solid color backgrounds.
 
   # the holo-globe (inspired by star trek):
 
-  bg3d(sphere=TRUE, color=c("black","green"), lit=FALSE, back="lines" )
+  bg3d(sphere = TRUE, color = c("black", "green"), lit = FALSE, back = "lines" )
 
   # an environmental sphere with a nice texture.
 
-  bg3d(sphere=TRUE, texture=system.file("textures/sunsleep.png", package="rgl"), 
-         back="filled" )
+  bg3d(sphere = TRUE, texture = system.file("textures/sunsleep.png", package = "rgl"), 
+         back = "filled" )
          
   # The same texture as a fixed background
   
   open3d()
-  bg3d(texture=system.file("textures/sunsleep.png", package="rgl"), col="white")
+  bg3d(texture = system.file("textures/sunsleep.png", package = "rgl"), col = "white")
 }
 \seealso{
   \code{\link{material3d}}, \code{\link{bgplot3d}} to add a 2D plot as background.

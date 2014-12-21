@@ -7,9 +7,9 @@
   defining the grid.
 }
 \usage{
-rgl.surface(x, z, y, coords=1:3, ..., 
-            normal_x=NULL, normal_y=NULL, normal_z=NULL,
-            texture_s=NULL, texture_t=NULL)
+rgl.surface(x, z, y, coords = 1:3, ..., 
+            normal_x = NULL, normal_y = NULL, normal_z = NULL,
+            texture_s = NULL, texture_t = NULL)
 }
 \arguments{
   \item{ x }{
@@ -42,8 +42,8 @@ rgl.surface(x, z, y, coords=1:3, ...,
   
   The \code{coords} parameter can be used to change the geometric
   interpretation of \code{x}, \code{y}, and \code{z}.  The first entry 
-  of \code{coords} indicates which coordinate (\code{1=X}, 
-  \code{2=Y}, \code{3=Z}) corresponds to the \code{x} parameter.
+  of \code{coords} indicates which coordinate (\code{1 = X}, 
+  \code{2 = Y}, \code{3 = Z}) corresponds to the \code{x} parameter.
   Similarly the second entry corresponds to the \code{y} parameter,
   and the third entry to the \code{z} parameter.  In this way 
   surfaces may be defined over any coordinate plane.
@@ -89,10 +89,10 @@ ylen <- ylim[2] - ylim[1] + 1
 
 colorlut <- terrain.colors(ylen) # height color lookup table
 
-col <- colorlut[ y-ylim[1]+1 ] # assign colors to heights for each point
+col <- colorlut[ y - ylim[1] + 1 ] # assign colors to heights for each point
 
 rgl.open()
-rgl.surface(x, z, y, color=col, back="lines")
+rgl.surface(x, z, y, color = col, back = "lines")
 
 }
 \seealso{

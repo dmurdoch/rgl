@@ -15,7 +15,7 @@ for three parameters.
 \usage{
 ellipse3d(x, \dots)
 \method{ellipse3d}{default}(x, scale = c(1, 1, 1), centre = c(0, 0, 0), level = 0.95, 
-            t = sqrt(qchisq(level, 3)), which = 1:3, subdivide = 3, smooth = TRUE, ...)
+	t = sqrt(qchisq(level, 3)), which = 1:3, subdivide = 3, smooth = TRUE, ...)
 \method{ellipse3d}{lm}(x, which = 1:3, level = 0.95, t = sqrt(3 * qf(level, 
                                                 3, x$df.residual)), ...)     
 \method{ellipse3d}{glm}(x, which = 1:3, level = 0.95, t, dispersion, ...) 
@@ -76,15 +76,15 @@ A \code{\link{mesh3d}} object representing the ellipsoid.
 # trivariate normal distribution with mean 0, unit variances and 
 # correlation 0.8.
 if (requireNamespace("MASS")) {
-  Sigma <- matrix(c(10,3,0,3,2,0,0,0,1), 3,3)
+  Sigma <- matrix(c(10, 3, 0, 3, 2, 0, 0, 0, 1), 3, 3)
   Mean <- 1:3
   x <- MASS::mvrnorm(1000, Mean, Sigma)
   
   open3d()
   
-  plot3d(x, box=FALSE)
+  plot3d(x, box = FALSE)
   
-  plot3d( ellipse3d(Sigma, centre=Mean), col="green", alpha=0.5, add = TRUE)
+  plot3d( ellipse3d(Sigma, centre = Mean), col = "green", alpha = 0.5, add = TRUE)
 }  
 
 # Plot the estimate and joint 90\% confidence region for the displacement and cylinder
@@ -94,6 +94,6 @@ data(mtcars)
 fit <- lm(mpg ~ disp + cyl , mtcars)
 
 open3d()
-plot3d(ellipse3d(fit, level = 0.90), col="blue", alpha=0.5, aspect=TRUE)
+plot3d(ellipse3d(fit, level = 0.90), col = "blue", alpha = 0.5, aspect = TRUE)
 }
 \keyword{dplot}

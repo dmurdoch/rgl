@@ -35,7 +35,7 @@
 \code{\link{par3d}} for a description of scene properties and the rendering
 pipeline.}
 \examples{
-file.show(system.file("NEWS", package="rgl"))
+file.show(system.file("NEWS", package = "rgl"))
 example(surface3d)
 example(plot3d)
 }

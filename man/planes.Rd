@@ -38,7 +38,7 @@ values will be recycled as necessary.
 \code{clipplanes3d} and \code{rgl.clipplanes} define clipping planes
 using the same equations.  Clipping planes suppress the display of
 other objects (or parts of them) in the subscene, based on their coordinates.
-Points (or parts of lines or surfaces) where the coordinates \code{x,y,z}
+Points (or parts of lines or surfaces) where the coordinates \code{x, y, z}
 satisfy \eqn{a x + b y + c z + d < 0} will be suppressed.
 
 The number of clipping planes
@@ -65,19 +65,19 @@ to suppress complex shapes.
 open3d()
 x <- rnorm(100)
 y <- rnorm(100)
-z <- 0.2*x - 0.3*y + rnorm(100, sd=0.3)
+z <- 0.2*x - 0.3*y + rnorm(100, sd = 0.3)
 fit <- lm(z ~ x + y)
-plot3d(x,y,z, type="s", col="red", size=1)
+plot3d(x, y, z, type = "s", col = "red", size = 1)
 
 coefs <- coef(fit)
 a <- coefs["x"]
 b <- coefs["y"]
 c <- -1
 d <- coefs["(Intercept)"]
-planes3d(a, b, c, d, alpha=0.5)
+planes3d(a, b, c, d, alpha = 0.5)
 
 open3d()
-ids <- plot3d(x,y,z, type="s", col="red", size=1, forceClipregion = TRUE) 
+ids <- plot3d(x, y, z, type = "s", col = "red", size = 1, forceClipregion = TRUE) 
 useSubscene3d(ids["clipregion"])
 clipplanes3d(a, b, c, d)
 

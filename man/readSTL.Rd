@@ -13,7 +13,7 @@ types to triangles.
 \usage{
 readSTL(con, ascii = FALSE, plot = TRUE, ...)
 writeSTL(con, ascii = FALSE, 
-         pointRadius=0.005, 
+         pointRadius = 0.005, 
          pointShape = icosahedron3d(),
          lineRadius = pointRadius,
          lineSides = 20,
@@ -61,7 +61,7 @@ a number of other formats, including U3D, suitable for import into a PDF documen
 
 }
 \value{
-\code{readSTL} invisibly returns the object id if \code{plot=TRUE}, or (visibly) 
+\code{readSTL} invisibly returns the object id if \code{plot = TRUE}, or (visibly) 
 a matrix of vertices of the triangles if not.
 
 \code{writeSTL} invisibly returns the name of the connection to which the 
@@ -81,11 +81,11 @@ Duncan Murdoch
 write the scene to a file in various other formats.
 }
 \examples{
-filename <- tempfile(fileext=".stl")
+filename <- tempfile(fileext = ".stl")
 open3d()
-shade3d( icosahedron3d(col="magenta") )
+shade3d( icosahedron3d(col = "magenta") )
 writeSTL(filename)
 open3d()
-readSTL(filename, col="red")
+readSTL(filename, col = "red")
 }
 \keyword{ graphics }
