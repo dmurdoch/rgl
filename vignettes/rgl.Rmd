@@ -39,6 +39,10 @@ The internal links should work in any browser; the links to
 help topics should work if you view the vignette from
 within the R help system.
 
+The document includes WebGL figures.  To view these, you must have
+Javascript and WebGL enabled in your browser.  Some older browsers
+may not support this -- see http://get.webgl.org for tests
+and links to a discussion.
 
 
 ## Basics and High Level Functions
@@ -266,7 +270,8 @@ modelMatrix | read-only | The OpenGL ModelView matrix; partly set by `r indexfns
 projMatrix  | read-only | The OpenGL Projection matrix
 bbox        | read-only | Current bounding-box of the scene
 viewport    |       | Dimensions in pixels of the scene within the window
-windowRect  |           | Dimensions in pixels of the window on the whole screen 
+windowRect  |           | Dimensions in pixels of the window on the whole screen
+listeners   |           | Which subscenes respond to mouse actions in the current one
 mouseMode   |       | What the mouse buttons do.  See `r linkfn("mouseMode", '<code>"mouseMode"</code>')`
 observer    | read-only | The position of the observer; set by `r indexfns("observer3d")`
 scale       |           | Rescaling for each coordinate; see `r linkfn("aspect3d")`
