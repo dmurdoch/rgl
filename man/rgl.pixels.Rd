@@ -6,7 +6,8 @@ This function extracts single components of the pixel information from the
 topmost window.
 }
 \usage{
-rgl.pixels(component = c("red", "green", "blue"), viewport = par3d("viewport"), top = TRUE)
+rgl.pixels(component = c("red", "green", "blue"), 
+        viewport = par3d("viewport"), top = TRUE)
 }
 \arguments{  
   \item{component}{ Which component(s)? }

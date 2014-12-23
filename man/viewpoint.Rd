@@ -7,8 +7,9 @@
 }
 \usage{
 view3d( theta = 0, phi = 15, ...)
-rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, scale = par3d("scale"), 
-               interactive = TRUE, userMatrix, type = c("userviewpoint", "modelviewpoint") )
+rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, 
+        scale = par3d("scale"), interactive = TRUE, userMatrix, 
+        type = c("userviewpoint", "modelviewpoint") )
 }
 \arguments{
   \item{theta, phi}{polar coordinates}
