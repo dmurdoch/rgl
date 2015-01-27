@@ -640,6 +640,8 @@ v0.94
     R-devel (to become R 3.2.0).
 
 0.95.1202
+  - If a template file is used in writeWebGL(), the string %prefix%
+    will be replaced in it by the prefix argument.
   - writeWebGL() now outputs a Javascript global variable named
     "par3d" that includes some of the user-modifiable components
     of par3d().
