@@ -151,7 +151,7 @@ r3dDefaults
     \item{\code{listeners}}{integer.  A vector of subscene id values.  If a subscene receives
       a mouse event (see \code{mouseMode} just below), the same action will be carried out
       on all subscenes in this list.  (The subscene itself is normally listed as a listener.
-      If it is not listed, it will not respond to its own mouse events.}
+      If it is not listed, it will not respond to its own mouse events.)}
     \item{\code{mouseMode}}{character.  A vector of 4 strings describing
       what the 3 mouse buttons and the mouse wheel do. 
       Partial matching is used.  Possible values for the first 3 entries of \code{mouseMode} (corresponding 

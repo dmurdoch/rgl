@@ -77,6 +77,17 @@ development progresses:
 object.  \code{writeWebGL} will print a warning if this limit is exceeded, but it is up to the user
 to break his scene into smaller objects.  (And 65535 vertices may not be small enough!)
 }
+
+There is some experimental support for modification of the scene by other Javascript code 
+on the same web page.  Currently this is limited to the following.  There will be a global variable
+created with name \code{<prefix>par3d}, where \code{<prefix>} will be replaced by the 
+\code{prefix} argument to \code{writeWebGL}.  Currently this variable will contain properties 
+corresponding to some of the components returned by \code{\link{par3d}}, namely \code{FOV}, \code{zoom},
+\code{userMatrix} and \code{listeners}.  Each of these components should be indexed by a subscene
+number to obtain the value for that subscene; for example, use \code{userMatrix[3]} to obtain
+the user matrix for subscene 3 as a \code{CanvasMatrix4} object (defined in the \file{CanvasMatrix.js}
+library).  After modifying any of these values, user code should insert a call \code{<prefix>par3d.drawScene();}
+to update the display.
 }
 \value{
 The \code{filename} is returned.

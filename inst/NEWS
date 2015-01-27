@@ -638,3 +638,8 @@ v0.94
     respond to mouse actions in the current subscene.
   - The Windows configuration file has been modified to work in 
     R-devel (to become R 3.2.0).
+
+0.95.1202
+  - writeWebGL() now outputs a Javascript global variable named
+    "par3d" that includes some of the user-modifiable components
+    of par3d().
