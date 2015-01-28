@@ -468,6 +468,9 @@ In order from highest fidelity to lowest, the functions are:
 `r indexfns(c("readSTL", "writeSTL"))`   | Read or write STL files (also common in 3D printing)
 `r indexfns("rgl.useNULL")`  | A helper function for setting a NULL device
 
+See the help page `r linkfn("rgl.useNULL", pkg="rgl")` for instructions on how
+to use `rgl` on a "headless" system.
+
 There are also functions to save snapshots or other recordings of a scene,
 without any 3D information being saved:
 

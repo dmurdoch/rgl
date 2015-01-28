@@ -1,6 +1,5 @@
-
-library(rgl)
 options(rgl.useNULL=TRUE)
+library(rgl)
 
 hook_webgl <- local({
   commonParts <- TRUE

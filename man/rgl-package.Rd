@@ -33,7 +33,8 @@
 }
 \seealso{\link{r3d} for a description of the \code{*3d} interface;
 \code{\link{par3d}} for a description of scene properties and the rendering
-pipeline.}
+pipeline; \code{\link{rgl.useNULL}} for a description of how to 
+use \pkg{rgl} on a system with no graphics support.}
 \examples{
 file.show(system.file("NEWS", package = "rgl"))
 example(surface3d)

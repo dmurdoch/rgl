@@ -12,6 +12,14 @@ in a case-insensitive test, \code{TRUE} is returned.
 \usage{
 rgl.useNULL()
 }
+\note{
+This function is checked by the initialization code when \pkg{rgl}
+is loaded.  Thus if you want to run \pkg{rgl} on a system where there is no
+graphics support, you should run \code{options(rgl.useNULL = TRUE)}
+or set the environment variable \code{RGL_USE_NULL=TRUE} *before*
+calling \code{library(rgl)} (or other code that 
+loads \pkg{rgl}), and it will not fail in its attempt at initialization.
+}
 \value{
 A logical value indicating the current default for use of the null
 device.
