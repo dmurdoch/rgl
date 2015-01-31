@@ -103,6 +103,8 @@ void rgl_getEmbeddings(int* successptr, int* embeddings);
 
 SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end);
 SEXP rgl_setWheelCallback(SEXP rotate);
+SEXP rgl_getMouseCallbacks(SEXP button);
+SEXP rgl_getWheelCallback();
 
 SEXP rgl_par3d(SEXP device, SEXP subscene, SEXP args);
 

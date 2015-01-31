@@ -84,7 +84,40 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end)
   } else error("no rgl device is open");
   return R_NilValue;
 }      
-      
+
+SEXP rgl::rgl_getMouseCallbacks(SEXP button)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    void* userData[3] = {0, 0, 0};
+    userControlPtr beginCallback, updateCallback;
+    userControlEndPtr endCallback;
+    userCleanupPtr cleanupCallback;
+    
+    int b = asInteger(button);
+    if (b < 1 || b > 3) error("button must be 1, 2 or 3");
+    
+    rglview->getMouseCallbacks(b, &beginCallback, &updateCallback, &endCallback, 
+                               &cleanupCallback, (void**)&userData);
+    SEXP result;
+    PROTECT(result = allocVector(VECSXP, 3));
+    
+    if (beginCallback == &userControl) 
+      SET_VECTOR_ELT(result, 0, (SEXP)userData[0]);
+    
+    if (updateCallback == &userControl) 
+      SET_VECTOR_ELT(result, 1, (SEXP)userData[1]);
+    
+    if (endCallback == &userControlEnd)
+      SET_VECTOR_ELT(result, 2, (SEXP)userData[2]);
+
+    UNPROTECT(1);
+    return result;
+  } else error("no rgl device is open");
+  return R_NilValue;
+}      
+ 
 SEXP rgl::rgl_setWheelCallback(SEXP rotate)
 {
   Device* device;
@@ -104,3 +137,18 @@ SEXP rgl::rgl_setWheelCallback(SEXP rotate)
   } else error("no rgl device is open");
   return R_NilValue;
 }
+
+SEXP rgl::rgl_getWheelCallback()
+{
+  Device* device;
+  SEXP result = R_NilValue;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    void* wheelData = 0;
+    userWheelPtr wheelCallback;
+    rglview->getWheelCallback(&wheelCallback, (void**)&wheelData);
+    if (wheelCallback == &userWheel)
+      result = (SEXP)wheelData;
+  } else error("no rgl device is open");
+  return result;
+}      

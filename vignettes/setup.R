@@ -3,6 +3,7 @@ library(rgl)
 
 hook_webgl <- local({
   commonParts <- TRUE
+  reuse <- TRUE
   function (before, options, envir) 
   {
     if (before || rgl::rgl.cur() == 0 || !requireNamespace("knitr")) 
@@ -19,15 +20,17 @@ hook_webgl <- local({
     Sys.sleep(0.1)
     prefix = gsub("[^[:alnum:]]", "_", options$label)
     prefix = sub("^([^[:alpha:]])", "_\\1", prefix)
-    rgl::writeWebGL(dir = dirname(name), 
+    res <- rgl::writeWebGL(dir = dirname(name), 
                     filename = name, 
                     snapshot = !rgl.useNULL(),
                     template = NULL, 
                     prefix = prefix, 
-                    commonParts = commonParts)
+                    commonParts = commonParts,
+                    reuse = reuse)
     if (!isTRUE(options$rgl.keepopen) && rgl.cur())
       rgl.close()
     commonParts <<- FALSE
+    reuse <<- attr(res, "reuse")
     res <- readLines(name)
     res <- res[!grepl("^\\s*$", res)]
     paste(gsub("^\\s+", "", res), collapse = "\n")

@@ -11,7 +11,7 @@ it in a browser.
 writeWebGL(dir = "webGL", filename = file.path(dir, "index.html"), 
            template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
            prefix = "",
-           snapshot = TRUE, commonParts = TRUE,
+           snapshot = TRUE, commonParts = TRUE, reuse = NULL, 
            font = "Arial", width, height)
 }
 \arguments{
@@ -38,6 +38,10 @@ figures on the same page.  Currently this includes
 a reference to and copy of the \file{CanvasMatrix.js}
 file in the output.
 }
+  \item{reuse}{
+  When writing several figures on the same page, set this
+to a dataframe containing values to reuse.  See the Value section below.
+  }
   \item{font}{
   The font to use for text.
 }
@@ -90,7 +94,11 @@ library).  After modifying any of these values, user code should insert a call \
 to update the display.
 }
 \value{
-The \code{filename} is returned.
+The \code{filename} is returned.  If \code{reuse} is not \code{NULL},
+it will have an attribute called \code{"reuse"} which contains a dataframe
+with columns \code{"id"} and \code{"prefix"} identifying the prefix used
+for objects drawn in this scene.  This dataframe can be used as the \code{reuse}
+argument in subsequent calls to \code{writeWebGL}.
 }
 \references{
 \url{http://www.webgl.org}
@@ -118,7 +126,11 @@ write the scene to a file in various other formats.
 plot3d(rnorm(100), rnorm(100), rnorm(100), type = "s", col = "red")
 # This writes a copy into temporary directory 'webGL', and then displays it
 filename <- writeWebGL(dir = file.path(tempdir(), "webGL"), 
-                       width = 500)
+                       width = 500, reuse = TRUE)
+# Display the "reuse" attribute
+attr(filename, "reuse")
+
+# Display the scene in a browser
 if (interactive())
   browseURL(paste0("file://", filename))
 }

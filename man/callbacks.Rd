@@ -1,13 +1,17 @@
 \name{rgl.setMouseCallbacks}
 \alias{rgl.setMouseCallbacks}
+\alias{rgl.getMouseCallbacks}
 \alias{rgl.setWheelCallback}
+\alias{rgl.getWheelCallback}
 \title{ User callbacks on mouse events }
 \description{
-  This function sets user callbacks on mouse events.
+  Set and get user callbacks on mouse events.
 }
 \usage{
 rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL)
+rgl.getMouseCallbacks(button)
 rgl.setWheelCallback(rotate)
+rgl.getWheelCallback()
 }
 \arguments{
   \item{button}{ Which button?  }
@@ -17,7 +21,7 @@ rgl.setWheelCallback(rotate)
   \item{rotate}{ Called when mouse wheel is rotated }
 }
 \details{
-This function sets an event handler on mouse events that occur within the current rgl window.
+The set functions set event handlers on mouse events that occur within the current rgl window.
 The \code{begin} and \code{update} events should be functions taking two arguments; these
 will be the mouse coordinates when the event occurs.  The \code{end} event handler
 takes no arguments.  The \code{rotate} event takes a single argument, which will be 
@@ -30,9 +34,14 @@ no action will occur.
 If a subscene has multiple listeners, the user action will still only be called for the
 subscene that received the mouse event.  It should consult \code{\link{par3d}("listeners")}
 if it makes sense to take action on the whole group of subscenes.
+
+The get function retrieves the callbacks that are currently set.
 }
 \value{
-This function is called for the side effect of setting the mouse event handlers.
+The set functions are called for the side effect of setting the mouse event handlers.
+
+The \code{rgl.getMouseCallbacks} function returns a list containing the callback functions or \code{NULL} if no user callback is set.
+The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
 }
 \author{ Duncan Murdoch }
 \seealso{ \code{\link{par3d}} to set built-in handlers }

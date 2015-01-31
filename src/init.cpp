@@ -223,6 +223,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_par3d, 3),
    FUNDEF(rgl_setMouseCallbacks, 4),
    FUNDEF(rgl_setWheelCallback, 1),
+   FUNDEF(rgl_getMouseCallbacks, 1),
+   FUNDEF(rgl_getWheelCallback, 0),
 
    {NULL, NULL, 0}
  };

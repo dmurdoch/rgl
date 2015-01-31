@@ -1,0 +1,54 @@
+---
+title: "WebGL"
+author: "Duncan Murdoch"
+date: "January 26, 2015"
+output: html_document
+---
+
+
+```{r setup, echo=FALSE, results="asis"}
+source("setup.R")
+set.seed(123)
+```
+
+This document describes how to use embedded Javascript to 
+modify a WebGL document.
+
+For example, consider the simple plot of the iris data.  We
+insert a code chunk with label `plot3d` (which will be used below).
+```{r plot3d, rgl=TRUE}
+with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type="s", col=as.numeric(Species)))
+currentSubscene3d()
+```
+We might like a button on the web page to cause a change to the
+display, e.g. a rotation of the plot.  First we add buttons, with
+the "onclick" event set to a function described below:
+
+    <button type="button" onclick="rotate(10)">Forward</button>
+    <button type="button" onclick="rotate(-10)">Backward</button>
+
+which produces these buttons: 
+<button type="button" onclick="rotate(10)">Forward</button>
+<button type="button" onclick="rotate(-10)">Backward</button>
+
+We found the subscene number that is currently active using 
+`currentSubscene3d()` in the code chunk above.
+
+The `rotate()` function makes use of the global `<prefix>rgl`
+object.  The `knitr` WebGL support sets the prefix to the 
+code chunk label, so the global is called `plot3drgl`:
+
+    <script type="text/javascript">
+    var rotate = function(angle) {
+      plot3drgl.userMatrix[1].rotate(angle, 0,1,0);
+      plot3drgl.drawScene();
+    }
+    </script>
+    
+<script type="text/javascript">
+var rotate = function(angle) {
+  plot3drgl.userMatrix[1].rotate(angle, 0,1,0);
+  plot3drgl.drawScene();
+}
+</script>
