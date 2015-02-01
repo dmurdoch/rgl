@@ -1029,15 +1029,17 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   ]);')
 
         fname <- subst("this.f[%id%]", id)
+        var <- ""
         drawtype <- "DYNAMIC_DRAW"
       } else {
-        fname <- "var f"
+        fname <- "f"
+        var <- "var "
         drawtype <- "STATIC_DRAW"
       }
       
       result <- c(result, subst(
-'	   %fname%=new Uint16Array([', 
-          fname),
+'	   %var%%fname%=new Uint16Array([', 
+          var, fname),
 	inRows(c(f), frowsize, leadin='	   '),
 '	   ]);')
     }
@@ -2005,7 +2007,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
               if (!is.null(template)) 
               	templatelines[replace + seq_len(length(templatelines)-replace)]
               else
-              	subst("<script>%prefix%webGLStart();</script>", prefix = prefix)
+              	subst("<script>%prefix%rgl.start();</script>", prefix = prefix)
              )
               	
   cat(result, file=filename, sep="\n")
