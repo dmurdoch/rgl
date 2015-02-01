@@ -639,12 +639,12 @@ v0.94
   - The Windows configuration file has been modified to work in 
     R-devel (to become R 3.2.0).
 
-0.95.1206
+0.95.1208
   - If a template file is used in writeWebGL(), the string %prefix%
     will be replaced in it by the prefix argument.
   - writeWebGL() now outputs a Javascript global variable named
     "<prefix>rgl" of class "rglClass" that allows access to some of the
-    scene internals.
+    scene internals.  (Inspired by patch submitted by Jeff Allen.)
   - User mouse callbacks can now be retrieved within R using
     rgl.getMouseCallbacks() and rgl.getWheelCallback(), and 
     may be included in WebGL output.
