@@ -429,6 +429,30 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  this.FOV  = new Array();
 	  this.userMatrix = new Array();
 	  this.listeners = new Array();
+
+	  this.prog = new Array();
+	  this.ofsLoc = new Array();
+	  this.origLoc = new Array();
+	  this.sizeLoc = new Array();
+	  this.usermatLoc = new Array();
+	  this.vClipplane = new Array();
+	  this.texture = new Array();
+	  this.texLoc = new Array();
+	  this.sampler = new Array();
+	  this.origsize = new Array();
+	  this.values = new Array();
+	  this.normLoc = new Array();
+	  this.clipLoc = new Array();
+	  this.centers = new Array();
+	  this.f = new Array();
+	  this.buf = new Array();
+	  this.ibuf = new Array();
+	  this.mvMatLoc = new Array();
+	  this.prMatLoc = new Array();
+	  this.textScaleLoc = new Array();
+	  this.normMatLoc = new Array();
+	  this.IMVClip = new Array();
+ 
         };
 	  
 	(function() {
@@ -459,7 +483,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   subst(
 '
 	var %prefix%rgl = new rglClass();
-	function %prefix%webGLStart() {
+	%prefix%rgl.start = function() {
 	   var debug = function(msg) {
 	     document.getElementById("%prefix%debug").innerHTML = msg;
 	   }
@@ -555,7 +579,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       ctx.imageSmoothingEnabled = true;
 	       ctx.drawImage(image, 0, 0, canvasX, canvasY);
 	       handleLoadedTexture(texture, canvas);
-	       drawScene();
+	       %prefix%rgl.drawScene();
 	     }
 	     image.src = filename;
 	   }  	   
@@ -784,13 +808,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   // ****** %type% object %id% ******', type, id)
     if (!sprites_3d && !is_clipplanes)
       result <- c(result, subst(
-'	   var prog%id%  = gl.createProgram();
-	   gl.attachShader(prog%id%, %prefix%rgl.getShader( gl, "%prefix%vshader%id%" ));
-	   gl.attachShader(prog%id%, %prefix%rgl.getShader( gl, "%prefix%fshader%id%" ));
+'	   this.prog[%id%]  = gl.createProgram();
+	   gl.attachShader(this.prog[%id%], %prefix%rgl.getShader( gl, "%prefix%vshader%id%" ));
+	   gl.attachShader(this.prog[%id%], %prefix%rgl.getShader( gl, "%prefix%fshader%id%" ));
 	   //  Force aPos to location 0, aCol to location 1 
-	   gl.bindAttribLocation(prog%id%, 0, "aPos");
-	   gl.bindAttribLocation(prog%id%, 1, "aCol");
-	   gl.linkProgram(prog%id%);', prefix, id))
+	   gl.bindAttribLocation(this.prog[%id%], 0, "aPos");
+	   gl.bindAttribLocation(this.prog[%id%], 1, "aCol");
+	   gl.linkProgram(this.prog[%id%]);', prefix, id))
    
     nv <- rgl.attrib.count(id, "vertices")
     if (nv)
@@ -828,7 +852,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       stopifnot(NCOL(values) == 3)
       values <- cbind(values, offsets)
       result <- c(result,subst(
-'	   var vClipplane%id%=[', id),
+'	   this.vClipplane[%id%]=[', id),
       inRows(values, 4, leadin='	   '),
 '	   ];
 ')
@@ -876,9 +900,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   ];',
 
         subst(
-'	   var texinfo = drawTextToCanvas(texts, %cex%);	 
-	   var canvasX%id% = texinfo.canvasX;
-	   var canvasY%id% = texinfo.canvasY;',
+'	   var texinfo = drawTextToCanvas(texts, %cex%);',
 	  cex=cex[1], id))
     }
 
@@ -896,19 +918,19 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     }
 
     if (fixed_quads && !sprites_3d) result <- c(result, subst(
-'	   var ofsLoc%id% = gl.getAttribLocation(prog%id%, "aOfs");',
+'	   this.ofsLoc[%id%] = gl.getAttribLocation(this.prog[%id%], "aOfs");',
           id))
           
     if (!toplevel) result <- c(result, subst(
-'	   var origLoc%id% = gl.getUniformLocation(prog%id%, "uOrig");
-	   var sizeLoc%id% = gl.getUniformLocation(prog%id%, "uSize");
-	   var usermatLoc%id% = gl.getUniformLocation(prog%id%, "usermat");',
+'	   this.origLoc[%id%] = gl.getUniformLocation(this.prog[%id%], "uOrig");
+	   this.sizeLoc[%id%] = gl.getUniformLocation(this.prog[%id%], "uSize");
+	   this.usermatLoc[%id%] = gl.getUniformLocation(this.prog[%id%], "usermat");',
 	  id))
     
     if (has_texture || type == "text") result <- c(result, subst(
-'	   var texture%id% = gl.createTexture();
-	   var texLoc%id% = gl.getAttribLocation(prog%id%, "aTexcoord");
-	   var sampler%id% = gl.getUniformLocation(prog%id%,"uSampler");',
+'	   this.texture[%id%] = gl.createTexture();
+	   this.texLoc[%id%] = gl.getAttribLocation(this.prog[%id%], "aTexcoord");
+	   this.sampler[%id%] = gl.getUniformLocation(this.prog[%id%],"uSampler");',
 	  id))
 	  
     if (has_texture) {
@@ -919,18 +941,18 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       	values <- cbind(values, texcoords)
       file.copy(mat$texture, file.path(dir, paste(prefix, "texture", id, ".png", sep="")))
       result <- c(result, subst(
-'	   loadImageToTexture("%prefix%texture%id%.png", texture%id%);',
+'	   loadImageToTexture("%prefix%texture%id%.png", this.texture[%id%]);',
         prefix, id))
     }
     
     if (type == "text") result <- c(result, subst(
-'	   handleLoadedTexture(texture%id%, document.getElementById("%prefix%textureCanvas"));',
+'	   handleLoadedTexture(this.texture[%id%], document.getElementById("%prefix%textureCanvas"));',
         prefix, id))
       
     stride <- NCOL(values)
     result <- c(result,
       if (sprites_3d) subst(
-'	   var origsize%id%=new Float32Array([', id)
+'	   this.origsize[%id%]=new Float32Array([', id)
       else
 '	   var v=new Float32Array([',
       inRows(values, stride, leadin='	   '),
@@ -953,16 +975,18 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     }', len=length(texts), stride, tofs),
 	     
       if (type == "spheres") subst(
-'	   var values%id% = v;', 
+'	   this.values[%id%] = v;', 
                   id),
 	   
       if (is_lit && !fixed_quads && !sprites_3d) subst(
-'	   var normLoc%id% = gl.getAttribLocation(prog%id%, "aNorm");', 
+'	   this.normLoc[%id%] = gl.getAttribLocation(this.prog[%id%], "aNorm");', 
         id),
 	
-      if (clipplanes) subst(paste0(
-'	   var clipLoc%id%p', seq_len(clipplanes), ' = gl.getUniformLocation(prog%id%, "vClipplane', seq_len(clipplanes), '");'),
-           id)
+      if (clipplanes) c(subst(
+'	   this.clipLoc[%id%] = new Array();', id),
+      	subst(paste0(
+'	   this.clipLoc[%id%][', seq_len(clipplanes), '] = gl.getUniformLocation(this.prog[%id%], "vClipplane', seq_len(clipplanes), '");'),
+           id))
 	)
 	
 
@@ -987,11 +1011,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         
       if (depth_sort) {
         result <- c(result, subst(
-'	   var centers%id% = new Float32Array([', id),
+'	   this.centers[%id%] = new Float32Array([', id),
         inRows(rgl.attrib(id, "centers"), 3, leadin='	   '),
 '	   ]);')
 
-        fname <- subst("f%id%", id)
+        fname <- subst("this.f[%id%]", id)
         drawtype <- "DYNAMIC_DRAW"
       } else {
         fname <- "f"
@@ -1006,24 +1030,24 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     }
     result <- c(result,
       if (type != "spheres" && !sprites_3d) subst(
-'	   var buf%id% = gl.createBuffer();
-	   gl.bindBuffer(gl.ARRAY_BUFFER, buf%id%);
+'	   this.buf[%id%] = gl.createBuffer();
+	   gl.bindBuffer(gl.ARRAY_BUFFER, this.buf[%id%]);
 	   gl.bufferData(gl.ARRAY_BUFFER, v, gl.STATIC_DRAW);',
    		id),
       if (is_indexed && type != "spheres" && !sprites_3d) subst(
-'	   var ibuf%id% = gl.createBuffer();
-	   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuf%id%);
+'	   this.ibuf[%id%] = gl.createBuffer();
+	   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ibuf[%id%]);
 	   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, %fname%, gl.%drawtype%);',
    		id, fname, drawtype),
       if (!sprites_3d && !is_clipplanes) subst(
-'	   var mvMatLoc%id% = gl.getUniformLocation(prog%id%,"mvMatrix");
-	   var prMatLoc%id% = gl.getUniformLocation(prog%id%,"prMatrix");',
+'	   this.mvMatLoc[%id%] = gl.getUniformLocation(this.prog[%id%],"mvMatrix");
+	   this.prMatLoc[%id%] = gl.getUniformLocation(this.prog[%id%],"prMatrix");',
    		  id),
       if (type == "text") subst(
-'	   var textScaleLoc%id% = gl.getUniformLocation(prog%id%,"textScale");',
+'	   this.textScaleLoc[%id%] = gl.getUniformLocation(this.prog[%id%],"textScale");',
 		  id),
       if (is_lit && !sprites_3d) subst(
-'	   var normMatLoc%id% = gl.getUniformLocation(prog%id%,"normMatrix");',
+'	   this.normMatLoc[%id%] = gl.getUniformLocation(this.prog[%id%],"normMatrix");',
 		  id)
    		 ) 
     c(result, '')
@@ -1047,11 +1071,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   
     if (type == "clipplanes") {
       count <- rgl.attrib.count(id, "offsets")
+      result <- c(result, subst(
+'	     this.IMVClip[%id%] = new Array();', id))       	
       for (i in seq_len(count)) {
         result <- c(result, subst(
-'	     var IMVClip%id%%part% = multMV(invMatrix, vClipplane%id%%slice%);',
-	id, i, slice = if (count > 1) subst(".slice(%first%, %stop%)", first = 4*(i-1), stop = 4*i) else "",
-	part = if (count > 1) paste0("p", i) else ""))
+'	     this.IMVClip[%id%][%i%] = multMV(invMatrix, this.vClipplane[%id%]%slice%);',
+	id, i, slice = subst(".slice(%first%, %stop%)", first = 4*(i-1), stop = 4*i)))
       }
       return(result)
     }
@@ -1059,7 +1084,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     if (sprites_3d) {
       norigs <- rgl.attrib.count(id, "vertices")
       result <- c(result, subst(
-'	     origs = origsize%id%;
+'	     origs = this.origsize[%id%];
 	     usermat = %prefix%rgl.userMatrix[%id%];
 	     for (iOrig=0; iOrig < %norigs%; iOrig++) {',
         prefix, id, norigs))
@@ -1072,30 +1097,30 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	     }')
     } else {
       result <- c(result, subst(	     
-'	     gl.useProgram(prog%id%);', id),
+'	     gl.useProgram(this.prog[%id%]);', id),
        
         if (!toplevel) subst(
-'	     gl.uniform3f(origLoc%id%, origs[4*iOrig], 
+'	     gl.uniform3f(this.origLoc[%id%], origs[4*iOrig], 
 	                                origs[4*iOrig+1],
 	                                origs[4*iOrig+2]);
-	     gl.uniform1f(sizeLoc%id%, origs[4*iOrig+3]);
-	     gl.uniformMatrix4fv(usermatLoc%id%, false, usermat);',
+	     gl.uniform1f(this.sizeLoc[%id%], origs[4*iOrig+3]);
+	     gl.uniformMatrix4fv(this.usermatLoc[%id%], false, usermat);',
 	  id),
 	  
         if (type == "spheres") 
 '	     gl.bindBuffer(gl.ARRAY_BUFFER, sphereBuf);'
         else subst(
-'	     gl.bindBuffer(gl.ARRAY_BUFFER, buf%id%);',
+'	     gl.bindBuffer(gl.ARRAY_BUFFER, this.buf[%id%]);',
          id),
        
         if (is_indexed && type != "spheres") subst(    
-'	     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuf%id%);', id)
+'	     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ibuf[%id%]);', id)
         else if (type == "spheres")
 '	     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereIbuf);',
 
         subst(
-'	     gl.uniformMatrix4fv( prMatLoc%id%, false, new Float32Array(prMatrix.getAsArray()) );
-	     gl.uniformMatrix4fv( mvMatLoc%id%, false, new Float32Array(mvMatrix.getAsArray()) );',
+'	     gl.uniformMatrix4fv( this.prMatLoc[%id%], false, new Float32Array(prMatrix.getAsArray()) );
+	     gl.uniformMatrix4fv( this.mvMatLoc[%id%], false, new Float32Array(mvMatrix.getAsArray()) );',
          id))
          
       clipcheck <- 0
@@ -1104,27 +1129,26 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         for (i in seq_len(count)) {
           clipcheck <- clipcheck + 1
   	  result <- c(result, subst(
-'	     gl.uniform4fv(clipLoc%id%p%clipcheck%, IMVClip%clipid%%part%);',
+'	     gl.uniform4fv(this.clipLoc[%id%][%clipcheck%], this.IMVClip[%clipid%][%i%]);',
 	       clipid, id, clipcheck, i, 
-	       slice = if (count > 1) subst(".slice(%first%, %stop%)", first = 4*(i-1), stop = 4*i) else "",
-	       part = if (count > 1) paste0("p", i) else ""))
+	       slice = subst(".slice(%first%, %stop%)", first = 4*(i-1), stop = 4*i)))
         }
       }
              
       if (is_lit && toplevel)
         result <- c(result, subst(
-'	     gl.uniformMatrix4fv( normMatLoc%id%, false, new Float32Array(normMatrix.getAsArray()) );',
+'	     gl.uniformMatrix4fv( this.normMatLoc[%id%], false, new Float32Array(normMatrix.getAsArray()) );',
           id))
           
       if (is_lit && !toplevel)
         result <- c(result, subst(
-'	     gl.uniformMatrix4fv( normMatLoc%id%, false, usermat);',
+'	     gl.uniformMatrix4fv( this.normMatLoc[%id%], false, usermat);',
           id))
 	  
       if (type == "text") {
         viewport <- par3d("viewport")
         result <- c(result, subst(
-'	     gl.uniform2f( textScaleLoc%id%, %x%, %y%);',
+'	     gl.uniform2f( this.textScaleLoc[%id%], %x%, %y%);',
           id, x=0.75/viewport[3], y=0.75/viewport[4]))	
       }
 
@@ -1180,13 +1204,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	     var depths = new Float32Array(%nfaces%);
 	     var faces = new Array(%nfaces%);
 	     for(var i=0; i<%nfaces%; i++) {
-	       var z = prmvMatrix.m13*centers%id%[3*i] 
-	             + prmvMatrix.m23*centers%id%[3*i+1]
-	             + prmvMatrix.m33*centers%id%[3*i+2]
+	       var z = prmvMatrix.m13*this.centers[%id%][3*i] 
+	             + prmvMatrix.m23*this.centers[%id%][3*i+1]
+	             + prmvMatrix.m33*this.centers[%id%][3*i+2]
 	             + prmvMatrix.m43;
-	       var w = prmvMatrix.m14*centers%id%[3*i] 
-	             + prmvMatrix.m24*centers%id%[3*i+1]
-	             + prmvMatrix.m34*centers%id%[3*i+2]
+	       var w = prmvMatrix.m14*this.centers[%id%][3*i] 
+	             + prmvMatrix.m24*this.centers[%id%][3*i+1]
+	             + prmvMatrix.m34*this.centers[%id%][3*i+2]
 	             + prmvMatrix.m44;
 	       depths[i] = z/w;
 	       faces[i] = i;
@@ -1195,10 +1219,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     faces.sort(depthsort);',
            nfaces, id),
            if (type != "spheres") subst(
-'	     var f = new Uint16Array(f%id%.length);
+'	     var f = new Uint16Array(this.f[%id%].length);
 	     for (var i=0; i<%nfaces%; i++) {
 	       for (var j=0; j<%frowsize%; j++) {
-	         f[%frowsize%*i + j] = f%id%[%frowsize%*faces[i] + j];
+	         f[%frowsize%*i + j] = this.f[%id%][%frowsize%*faces[i] + j];
 	       }
 	     }	     
 	     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);',
@@ -1212,13 +1236,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         sz <- 1/scale[3]
         result <- c(result, subst(
 '	     gl.vertexAttribPointer(posLoc,  3, gl.FLOAT, false, %sphereStride%,  0);
-	     gl.enableVertexAttribArray(normLoc%id% );
-	     gl.vertexAttribPointer(normLoc%id%,  3, gl.FLOAT, false, %sphereStride%,  0);
+	     gl.enableVertexAttribArray(this.normLoc[%id%] );
+	     gl.vertexAttribPointer(this.normLoc[%id%],  3, gl.FLOAT, false, %sphereStride%,  0);
 	     gl.disableVertexAttribArray( colLoc );
 	     var sphereNorm = new CanvasMatrix4();
 	     sphereNorm.scale(%sx%, %sy%, %sz%);
 	     sphereNorm.multRight(normMatrix);
-	     gl.uniformMatrix4fv( normMatLoc%id%, false, new Float32Array(sphereNorm.getAsArray()) );', 
+	     gl.uniformMatrix4fv( this.normMatLoc[%id%], false, new Float32Array(sphereNorm.getAsArray()) );', 
 	    id, sphereStride, sx=1/sx, sy=1/sy, sz=1/sz),
 
           if (nc == 1) {
@@ -1239,21 +1263,21 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 
 	  subst(
 '	       var ofs = baseofs + %radofs%;	       
-	       var scale = values%id%[ofs];
+	       var scale = this.values[%id%][ofs];
 	       sphereMV.scale(%sx%*scale, %sy%*scale, %sz%*scale);
-	       sphereMV.translate(values%id%[baseofs], 
-	       			  values%id%[baseofs+1], 
-	       			  values%id%[baseofs+2]);
+	       sphereMV.translate(this.values[%id%][baseofs], 
+	       			  this.values[%id%][baseofs+1], 
+	       			  this.values[%id%][baseofs+2]);
 	       sphereMV.multRight(mvMatrix);
-	       gl.uniformMatrix4fv( mvMatLoc%id%, false, new Float32Array(sphereMV.getAsArray()) );',
+	       gl.uniformMatrix4fv( this.mvMatLoc[%id%], false, new Float32Array(sphereMV.getAsArray()) );',
 	     radofs=radofs/4, stride=stride/4, id, sx, sy, sz),
 	 
 	   if (nc > 1) subst(
 '	       ofs = baseofs + %cofs%;       
-	       gl.vertexAttrib4f( colLoc, values%id%[ofs], 
-					  values%id%[ofs+1], 
-					  values%id%[ofs+2],
-					  values%id%[ofs+3] );',
+	       gl.vertexAttrib4f( colLoc, this.values[%id%][ofs], 
+					  this.values[%id%][ofs+1], 
+					  this.values[%id%][ofs+2],
+					  this.values[%id%][ofs+3] );',
 	     cofs=cofs/4, id),
 	   
            subst(
@@ -1276,25 +1300,25 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     
         if (is_lit && nn > 0) {
           result <- c(result, subst(
-'	     gl.enableVertexAttribArray( normLoc%id% );
-	     gl.vertexAttribPointer(normLoc%id%, 3, gl.FLOAT, false, %stride%, %nofs%);',
+'	     gl.enableVertexAttribArray( this.normLoc[%id%] );
+	     gl.vertexAttribPointer(this.normLoc[%id%], 3, gl.FLOAT, false, %stride%, %nofs%);',
             id, stride, nofs))
         }
     
         if (has_texture || type == "text") {
           result <- c(result, subst(
-'	     gl.enableVertexAttribArray( texLoc%id% );
-	     gl.vertexAttribPointer(texLoc%id%, 2, gl.FLOAT, false, %stride%, %tofs%);
+'	     gl.enableVertexAttribArray( this.texLoc[%id%] );
+	     gl.vertexAttribPointer(this.texLoc[%id%], 2, gl.FLOAT, false, %stride%, %tofs%);
 	     gl.activeTexture(gl.TEXTURE0);
-	     gl.bindTexture(gl.TEXTURE_2D, texture%id%);
-	     gl.uniform1i( sampler%id%, 0);',
+	     gl.bindTexture(gl.TEXTURE_2D, this.texture[%id%]);
+	     gl.uniform1i( this.sampler[%id%], 0);',
             id, stride, tofs))
         }
       
         if (fixed_quads) {
           result <- c(result, subst(
-'	     gl.enableVertexAttribArray( ofsLoc%id% );
-	     gl.vertexAttribPointer(ofsLoc%id%, 2, gl.FLOAT, false, %stride%, %ofs%);',
+'	     gl.enableVertexAttribArray( this.ofsLoc[%id%] );
+	     gl.vertexAttribPointer(this.ofsLoc[%id%], 2, gl.FLOAT, false, %stride%, %ofs%);',
             id, stride, ofs=oofs))
         }
 	     
@@ -1359,9 +1383,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 		     M.m41*v[0] + M.m42*v[1] + M.m43*v[2] + M.m44*v[3]];
 	   }
 	   	   
-	   drawScene();
-
-	   function drawScene(){
+	   this.drawScene = function() {
 	     gl.depthMask(true);
 	     gl.disable(gl.BLEND);
 	     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -1437,7 +1459,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   drawEnd <- subst('
 	     gl.flush ();
 	   }
-	   %prefix%rgl.drawScene = drawScene;
+	   this.drawScene();
 ', prefix)	   
   mouseHandlers <- function() {
     save <- currentSubscene3d()
@@ -1606,7 +1628,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       %prefix%rgl.userMatrix[l[i]].load(saveMat[l[i]]);
 	       %prefix%rgl.userMatrix[l[i]].rotate(angle, axis[0], axis[1], axis[2]);
 	     }
-	     drawScene();
+	     %prefix%rgl.drawScene();
 	   }
 	   var trackballend = 0;
 ', prefix),
@@ -1640,7 +1662,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       %prefix%rgl.userMatrix[l[i]].load(saveMat[l[i]]);
 	       %prefix%rgl.userMatrix[l[i]].multLeft(rotMat);
 	     }
-	     drawScene();
+	     %prefix%rgl.drawScene();
 	   }
 	   
 	   var %h%end = 0;
@@ -1661,7 +1683,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     l = %prefix%rgl.listeners[activeProjection[activeSubscene]];
 	     for (i = 0; i < l.length; i++)
 	       %prefix%rgl.zoom[l[i]] = exp(zoom0[l[i]] + (y-y0zoom)/height);
-	     drawScene();
+	     %prefix%rgl.drawScene();
 	   }
 	   
 	   var zoomend = 0;
@@ -1681,7 +1703,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     l = %prefix%rgl.listeners[activeProjection[activeSubscene]];
 	     for (i = 0; i < l.length; i++)
 	       %prefix%rgl.FOV[l[i]] = max(1, min(179, fov0[l[i]] + 180*(y-y0fov)/height));
-	     drawScene();
+	     %prefix%rgl.drawScene();
 	   }
 	   
 	   var fovend = 0;
@@ -1769,7 +1791,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     l = %prefix%rgl.listeners[activeProjection[activeSubscene]];
 	     for (i = 0; i < l.length; i++)
 	       %prefix%rgl.zoom[l[i]] *= ds;
-	     drawScene();
+	     %prefix%rgl.drawScene();
 	     ev.preventDefault();
 	   };
 	   canvas.addEventListener("DOMMouseScroll", wheelHandler, false);
