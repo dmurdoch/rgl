@@ -461,9 +461,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  this.drawFns = new Array();
 	  this.clipFns = new Array();
 
-          this.prmvMatrix = null;
+	  this.prmvMatrix = null;
 	  this.origs = null;
-        };
+	};
 	  
 	(function() {
 	  this.getShader = function( gl, id ){
@@ -1089,10 +1089,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       count <- rgl.attrib.count(id, "offsets")
       result <- c(result, subst(
 '	     this.IMVClip[id] = new Array();', id))       	
-      for (i in seq_len(count)) {
+      for (i in seq_len(count) - 1) {
         result <- c(result, subst(
 '	     this.IMVClip[id][%i%] = this.multMV(this.invMatrix, this.vClipplane[id]%slice%);',
-	id, i, slice = subst(".slice(%first%, %stop%)", first = 4*(i-1), stop = 4*i)))
+	id, i, slice = subst(".slice(%first%, %stop%)", first = 4*i, stop = 4*(i+1))))
       }
       result <- c(result, subst(
 '       }
@@ -1106,10 +1106,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	    else if (count > 1)
       	    	subst(
 '	     for (var i=0; i<%count%; i++)   
-	       gl.uniform4fv(this.clipLoc[objid][count + %ofs%], this.IMVClip[id][%i%]);
+	       gl.uniform4fv(this.clipLoc[objid][count + i], this.IMVClip[id][i]);
 	     return(count + %count%);
-       }', id, ofs = i-1, i, count, 
-	       slice = subst(".slice(%first%, %stop%)", first = 4*(i-1), stop = 4*i)))
+       }', id, count))
       return(result)
     }
 
