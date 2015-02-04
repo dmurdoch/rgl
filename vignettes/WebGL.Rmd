@@ -52,3 +52,72 @@ var rotate = function(angle) {
   plot3drgl.drawScene();
 }
 </script>
+
+We can also change the contents of the plot using a button.
+For example, we can redo the previous plot, but with the
+three species as separate "spheres" objects:
+```{r toggle, rgl=TRUE}
+with(subset(iris, Species == "setosa"), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  col=as.numeric(Species),
+                  radius = 0.211))
+with(subset(iris, Species == "versicolor"), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+               col=as.numeric(Species),
+     	       radius = 0.211))
+with(subset(iris, Species == "virginica"), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+               col=as.numeric(Species),
+     	       radius = 0.211))
+aspect3d(1,1,1)
+decorate3d()
+currentSubscene3d()
+rgl.ids()
+```
+Now we can add buttons to turn the species on and off:
+
+<button type="button" onclick="toggle(1)">Setosa</button>
+<button type="button" onclick="toggle(2)">Versicolor</button>
+<button type="button" onclick="toggle(3)">Virginica</button>
+<script type="text/javascript">
+var toggle = function(species) {
+  id = species + 24;
+  var objects = togglergl.opaque[19];
+  var i = objects.indexOf(id);
+  if (i == -1)
+    objects.push(id);
+  else
+    objects.splice(i, 1);
+  togglergl.opaque[19] = objects;
+  togglergl.drawScene();
+}
+</script>
+
+This used the following code:
+```
+<button type="button" onclick="toggle(1)">Setosa</button>
+<button type="button" onclick="toggle(2)">Versicolor</button>
+<button type="button" onclick="toggle(3)">Virginica</button>
+<script type="text/javascript">
+var toggle = function(species) {
+  id = species + 24;
+  var objects = togglergl.opaque[19];
+  var i = objects.indexOf(id);
+  if (i == -1)
+    objects.push(id);
+  else
+    objects.splice(i, 1);
+  togglergl.opaque[19] = objects;
+  togglergl.drawScene();
+}
+</script>
+```
+We used the following here:
+
+- Our code chunk had label `toggle`, so we use the `togglergl` global.
+- The magic number 24 is chosen because the spheres for each species
+are 25, 26, and 27, as `rgl.ids` showed above. 
+- The magic number 19 is the subscene number.
+- `togglergl.opaque[19]` gives an array that lists all the opaque
+objects in subscene 19.  Also available are `togglergl.transparent[19]`
+and `togglergl.subscenes[19]`.
