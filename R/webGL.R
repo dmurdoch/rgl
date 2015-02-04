@@ -435,6 +435,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  this.userMatrix = new Array();
 	  this.viewport = new Array();
 	  this.listeners = new Array();
+	  this.clipplanes = new Array();
+	  this.opaque = new Array();
+	  this.transparent = new Array();
+	  this.subscenes = new Array();
 
 	  this.prog = new Array();
 	  this.ofsLoc = new Array();
@@ -545,20 +549,36 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (info$embeddings["projection"] != "inherit") {
         useSubscene3d(id)
         result <- c(result, subst(
-'       this.zoom[%id%] = %zoom%;
-       this.FOV[%id%] = %fov%;', id, zoom = par3d("zoom"), fov = max(1, min(179, par3d("FOV")))))
+'	   this.zoom[%id%] = %zoom%;
+	   this.FOV[%id%] = %fov%;', id, zoom = par3d("zoom"), fov = max(1, min(179, par3d("FOV")))))
       }
       viewport <- par3d("viewport")*c(wfactor, hfactor)
-      result <- c(result, subst('
-       this.viewport[%id%] = [%v1%, %v2%, %v3%, %v4%];',
+      result <- c(result, subst(
+'	   this.viewport[%id%] = [%v1%, %v2%, %v3%, %v4%];',
       	  id, v1 = viewport[1], v2 = viewport[2], v3 = viewport[3], v4 = viewport[4]))
       if (info$embeddings["model"] != "inherit") {
         result <- c(result, subst(
-'       this.userMatrix[%id%] = new CanvasMatrix4();
-       this.userMatrix[%id%].load([', id),
+'	   this.userMatrix[%id%] = new CanvasMatrix4();
+	   this.userMatrix[%id%].load([', id),
     inRows(t(par3d("userMatrix")), perrow=4, leadin='	   '),
 '		]);')
       }
+      
+      clipplanes <- getClipplanes(id)
+      subids <- which( ids %in% rgl.ids()$id )
+      opaque <- ids[subids[flags[subids,"toplevel"] & !flags[subids,"is_transparent"] & types[subids] != "clipplanes"]]
+      transparent <- ids[subids[flags[subids,"toplevel"] & flags[subids,"is_transparent"] & types[subids] != "clipplanes"]]
+      subscenes <- as.integer(info$children)
+      
+      result <- c(result, subst(
+'	   this.clipplanes[%id%] = [%clipplanes%];
+	   this.opaque[%id%] = [%opaque%];
+	   this.transparent[%id%] = [%transparent%];
+	   this.subscenes[%id%] = [%subscenes%];
+',      id, clipplanes = paste(clipplanes, collapse=","),
+	opaque = paste(opaque, collapse=","),
+	transparent = paste(transparent, collapse=","),
+	subscenes = paste(subscenes, collapse=",")))
     }    
     result
   }
@@ -685,8 +705,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   setViewport <- function() 
 '	     this.vp = this.viewport[id];
 	     gl.viewport(this.vp[0], this.vp[1], this.vp[2], this.vp[3]);
-	     gl.scissor(this.vp[0], this.vp[1], this.vp[2], this.vp[3]);
-'  
+	     gl.scissor(this.vp[0], this.vp[1], this.vp[2], this.vp[3]);'
+	     
   setprMatrix <- function(subsceneid) {
     info <- subsceneInfo(subsceneid)
     embedding <- info$embeddings["projection"]
@@ -1439,50 +1459,33 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       
           if (subscene_has_faces) setnormMatrix(subsceneid),
       
-          if (subscene_needs_sorting) setprmvMatrix)) 
+          if (subscene_needs_sorting) setprmvMatrix), 
 
-    clipplanes <- getClipplanes(subsceneid)
-    if (length(clipplanes)) {
-      result <- c(result, 
-'	     this.invMatrix = new CanvasMatrix4(this.mvMatrix);
-	     this.invMatrix.invert();')
-	     
-      for (i in subids)
-        if (types[i] == "clipplanes")
-          result <- c(result, subst(
-'         this.drawFns[%clipid%].call(this, %clipid%);', clipid = ids[i]))
-    }    
-    for (i in subids) 
-      if (toplevel[i] && !flags[i,"is_transparent"] && types[i] != "clipplanes")
-        result <- c(result, subst(
-'         this.drawFns[%id%].call(this, %id%, [%clip%]);',
-          id = ids[i], clip = paste(clipplanes, collapse=",")))
-    
-    has_transparency <- any(flags[subids,"is_transparent"])
-    if (has_transparency) {
-      result <- c(result, doTransparent)
-      for (i in subids)
-        if (toplevel[i] && flags[i, "is_transparent"] && types[i] != "clipplanes")
-          result <- c(result, subst(
-'         this.drawFns[%id%].call(this, %id%, [%clip%]);',
-          	id = ids[i], clip = paste(clipplanes, collapse=",")))
-    }
-    subscenes <- rgl.ids(type = "subscene")$id
-    for (i in subscenes)
-      result <- c(result, subst(
-'         this.drawFns[%i%].call(this, %i%);', i))
-    result <- c(result,
-'       }')
+'	     var clipids = this.clipplanes[id];
+	     if (clipids.length > 0) {
+	       this.invMatrix = new CanvasMatrix4(this.mvMatrix);
+	       this.invMatrix.invert();
+	       for (var i = 0; i < this.clipplanes[id].length; i++) 
+	         this.drawFns[clipids[i]].call(this, clipids[i]);
+	     }
+	     var subids = this.opaque[id];
+	     for (var i = 0; i < subids.length; i++) 
+	       this.drawFns[subids[i]].call(this, subids[i], clipids);
+	     subids = this.transparent[id];
+	     if (subids.length > 0) {
+	       gl.depthMask(false);
+	       gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
+	                          gl.ONE, gl.ONE);
+	       gl.enable(gl.BLEND);
+	       for (var i = 0; i < subids.length; i++) 
+	         this.drawFns[subids[i]].call(this, subids[i], clipids);
+	     }
+	     subids = this.subscenes[id];
+	     for (var i = 0; i < subids.length; i++)
+	       this.drawFns[subids[i]].call(this, subids[i]);
+      }')
     result
   }
-  
-  doTransparent <- '
-  	     // ***** Transparent objects next ****
-	     gl.depthMask(false);
-	     gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
-	                          gl.ONE, gl.ONE);
-	     gl.enable(gl.BLEND);
-'
 	  
   drawEnd <- '
 	   this.drawScene();
@@ -1827,7 +1830,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	</script>', prefix)
 
   footer <- function() subst('
-	<canvas id="%prefix%canvas" width="1" height="1"></canvas> 
+	<canvas id="%prefix%canvas" class="rglWebGL" width="1" height="1"></canvas> 
 	<p id="%prefix%debug">
 	%snapshotimg%
 	You must enable Javascript to view this page properly.</p>',

@@ -639,7 +639,7 @@ v0.94
   - The Windows configuration file has been modified to work in 
     R-devel (to become R 3.2.0).
 
-0.95.1212
+0.95.1213
   - If a template file is used in writeWebGL(), the string %prefix%
     will be replaced in it by the prefix argument.
   - writeWebGL() now outputs a Javascript global variable named
@@ -651,3 +651,5 @@ v0.94
   - writeWebGL() now outputs information on object ids to allow
     them to be re-used in multiple figures on the same page.
   - Started a vignette describing user interaction in WebGL.
+  - Set the class of the main "canvas" element in 
+    writeWebGL() output to "rglWebGL". 
