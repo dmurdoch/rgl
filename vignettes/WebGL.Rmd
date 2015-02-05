@@ -1,8 +1,15 @@
 ---
 title: "WebGL"
 author: "Duncan Murdoch"
-date: "January 26, 2015"
-output: html_document
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  rmarkdown::html_vignette:
+    toc: yes
+    fig_width: 5
+    fig_height: 5
+vignette: >
+  %\VignetteIndexEntry{WebGL} 
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 
@@ -11,10 +18,14 @@ source("setup.R")
 set.seed(123)
 ```
 
+## Introduction
+
 This document describes how to use embedded Javascript to 
 modify a WebGL document.
+We start with two simple examples.  The next section gives 
+reference information.
 
-For example, consider the simple plot of the iris data.  We
+Consider the simple plot of the iris data.  We
 insert a code chunk with label `plot3d` (which will be used below).
 ```{r plot3d, rgl=TRUE}
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
@@ -119,5 +130,77 @@ We used the following here:
 are 25, 26, and 27, as `rgl.ids` showed above. 
 - The magic number 19 is the subscene number.
 - `togglergl.opaque[19]` gives an array that lists all the opaque
-objects in subscene 19.  Also available are `togglergl.transparent[19]`
-and `togglergl.subscenes[19]`.
+objects in subscene 19.  Also available are `togglergl.clipplanes[19]`,
+`togglergl.transparent[19]` and `togglergl.subscenes[19]`.
+
+## Reference Information
+
+In writing the `writeWebGL()` function, I haven't tried to prevent access to 
+anything.  On the other hand, I haven't provided access to
+everything.  The parts documented here should remain relatively stable
+(unless indicated otherwise).  Users may also consult the source
+to `writeWebGL`, but should be aware that anything that isn't documented
+here is subject to change without notice.  
+
+As documented in `r linkfn("writeWebGL")`, the call
+```{r eval=FALSE}
+writeWebGL(..., prefix = "<prefix>")
+```
+will create a global object on the output page with name `<prefix>rgl`.  
+This object has a large number of properties, some of which are designed
+to be available for modification by other code on the web page. 
+
+Most of these properties are stored as Javascript `Array` objects, indexed
+by the `rgl` id of the subscene to which they apply.
+
+`r indexprop(c("FOV", "listeners", "userMatrix", "zoom"))`
+
+These correspond to the 
+`r linkfn("par3d")` properties with the same names.  
+
+- `zoom` and `FOV` are arrays of numbers. 
+- `userMatrix` is an array
+of `CanvasMatrix4` objects (documented in the file 
+`system.file("WebGL/CanvasMatrix.src.js")`.
+- Each `listeners` item is itself an array of subscene ids that "listen"
+to mouse actions, i.e. `listeners[19]` would contain all
+subscene ids that respond to mouse actions in subscene 19.
+
+`r indexprop("viewport")`
+
+This property also corresponds to the
+`r linkfn("par3d")` property, but should be considered to be 
+read-only.
+
+`r indexprop(c("clipplanes", "opaque", "transparent", "subscenes"))`
+
+Entries in these are arrays of object ids to 
+display in the current subscene.  Objects need
+to be displayed in the given order so should not
+be moved between the arrays, but
+as in the "toggle" example above, objects can be removed
+from these lists to affect whether they are displayed or 
+not.  
+
+Objects should also not be moved between 
+subscenes:  to simulate that, include the objects
+in all subscenes in the R code, then remove 
+extras in Javascript code run when the web page loads. 
+
+`r indexprop(c("drawFns", "clipFns"))`
+
+These two arrays contain the code to display 
+each object in the scene.  The functions in the
+`drawFns` array are called for each object
+each time it is displayed.  The `clipFns` functions
+are called when objects being clipped are drawn.
+
+## Index of Properties
+
+The following `rglClass` properties are described in this document:<br>
+
+```{r echo=FALSE, results="asis"}
+writeIndex(cols = 5)
+```
+
+

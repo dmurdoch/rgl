@@ -48,6 +48,14 @@ indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
   paste(anchors, collapse=if (show) ", " else "")
 }
 
+indexprop <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
+	documentedfns <<- c(documentedfns, fns)
+	anchors <- paste0('<a name="', fns, '">', 
+			  if (show) text, 
+			  '</a>')
+	paste(anchors, collapse=if (show) ", " else "")
+}
+
 linkfn <- function(fn, text = paste0("`", fn, "`"), pkg = NA) {
   if (is.na(pkg))
     paste0('<a href="#', fn, '">', text, '</a>')
