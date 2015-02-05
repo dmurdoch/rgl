@@ -1,5 +1,5 @@
 ---
-title: "WebGL"
+title: "User Interaction in WebGL"
 author: "Duncan Murdoch"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -8,7 +8,7 @@ output:
     fig_width: 5
     fig_height: 5
 vignette: >
-  %\VignetteIndexEntry{WebGL} 
+  %\VignetteIndexEntry{User Interaction in WebGL} 
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
@@ -21,7 +21,9 @@ set.seed(123)
 ## Introduction
 
 This document describes how to use embedded Javascript to 
-modify a WebGL document.
+control a WebGL display in an HTML document.  For more 
+general information, see [rgl Overview](rgl.html).
+
 We start with two simple examples.  The next section gives 
 reference information.
 
