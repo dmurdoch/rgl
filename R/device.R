@@ -102,6 +102,9 @@ rgl.set <- function(which, silent = FALSE) {
 
 rgl.snapshot <- function( filename, fmt="png", top=TRUE )
 {
+  force(filename)
+  force(fmt)
+  
   if (top) rgl.bringtotop()
   
   idata <- as.integer(rgl.enum.pixfmt(fmt))
