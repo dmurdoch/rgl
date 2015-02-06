@@ -167,11 +167,13 @@ This property also corresponds to the
 `r linkfn("par3d")` property, but should be considered to be 
 read-only.
 
-`r indexprop(c("addToSubscene", "delFromSubscene"))`
+`r indexprop(c("inSubscene", "addToSubscene", "delFromSubscene"))`
 
-These two methods each take two arguments:  `id` and `subscene`,
-which should be the `rgl` ids of an object and a subscene to 
-add it to or delete it from.
+These methods each take two arguments:  `id` and `subscene`,
+which should be the `rgl` ids of an object and a subscene.
+`inSubscene` tests whether `id` is already included in the 
+subscene, and the others 
+add it or delete it from the subscene.
 
 `r indexprop(c("drawFns", "clipFns"))`
 
