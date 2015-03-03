@@ -29,11 +29,18 @@ reference information.
 
 Consider the simple plot of the iris data.  We
 insert a code chunk with label `plot3d` (which will be used below).
-```{r plot3d, rgl=TRUE}
+```{r plot3d, rgl=TRUE, rgl.keepopen=TRUE}
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 currentSubscene3d()
 ```
+
+Here's a duplicate:
+
+```{r rgl=TRUE}
+
+```
+
 We might like a button on the web page to cause a change to the
 display, e.g. a rotation of the plot.  First we add buttons, with
 the "onclick" event set to a function described below:
