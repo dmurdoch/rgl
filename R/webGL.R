@@ -202,7 +202,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 
     vertex <- c(vertex, subst(
 '	<script id="%prefix%vshader%id%" type="x-shader/x-vertex">', 
-      prefix = getPrefix(id), id),
+      prefix, id),
 	
 '	attribute vec3 aPos;
 	attribute vec4 aCol;
@@ -747,7 +747,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       result <- setprMatrix(info$parent);
     if (embedding == "inherit")
       return(result)
-      
+    
     save <- currentSubscene3d()
     on.exit(useSubscene3d(save))
     
@@ -2010,7 +2010,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       flags[ids %in% subids, "sprite_3d"] <- TRUE
     } 
   }   
-  flags[ids %in% prefixes$ids, "reuse"] <- TRUE
+  flags[ids %in% prefixes$id, "reuse"] <- TRUE
   
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
@@ -2024,7 +2024,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 
   newids <- ids[!flags[,"reuse"]]
   prefixes <- rbind(prefixes, data.frame(id = newids, 
-                      prefix = rep(prefix, length(newids))))
+                      prefix = prefix))
 
   texnums <- -1
   
@@ -2032,23 +2032,20 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   scene_needs_sorting <- any(flags[,"depth_sort"])
   
   for (i in seq_along(ids))
-    if (!flags[i, "reuse"])
-      result <- c(result, shaders(ids[i], types[i], flags[i,]))
+    result <- c(result, shaders(ids[i], types[i], flags[i,]))
     
   result <- c(result, scriptheader(), setUser(),
     textureSupport,
-    if ("text" %in% types[!flags[,"reuse"]]) textSupport,
-    if ("spheres" %in% types[!flags[,"reuse"]]) sphereSupport())
+    if ("text" %in% types) textSupport,
+    if ("spheres" %in% types) sphereSupport())
 
   for (i in seq_along(ids)) 
-    if (!flags[i, "reuse"])
-      result <- c(result, init(ids[i], types[i], flags[i,]))
+    result <- c(result, init(ids[i], types[i], flags[i,]))
    
   result <- c(result, scriptMiddle())
   
   for (i in seq_along(ids))
-    if (!flags[i, "reuse"])
-      result <- c(result, draw(ids[i], types[i], flags[i,]))
+    result <- c(result, draw(ids[i], types[i], flags[i,]))
   
   subscenes <- rgl.ids("subscene", subscene = 0)$id
   for (i in seq_along(subscenes))
