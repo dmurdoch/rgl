@@ -716,7 +716,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     } else {
       reuse <- FALSE
       thisprefix <- prefix
-      prefixes <<- rbind(prefixes, data.frame(id = -1, prefix = thisprefix))
+      prefixes <<- rbind(prefixes, data.frame(id = -1, prefix = thisprefix, texture = ""))
       x <- subdivision3d(octahedron3d(),2)
       x$vb[4,] <- 1
       r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
@@ -1016,10 +1016,20 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         texcoords <- rgl.attrib(id, "texcoords")
       if (!sprites_3d)
       	values <- cbind(values, texcoords)
-      file.copy(mat$texture, file.path(dir, paste(prefix, "texture", id, ".png", sep="")))
+      if (mat$texture %in% prefixes$texture) {
+        i <- which(mat$texture == prefixes$texture)
+        texprefix <- prefixes$prefix[i]
+        texid <- prefixes$id[i]
+      } else {
+        texprefix <- prefix
+        texid <- id
+        i <- which(prefixes$id == id)
+        prefixes$texture[i] <<- mat$texture
+        file.copy(mat$texture, file.path(dir, paste(texprefix, "texture", texid, ".png", sep="")))
+      }  
       result <- c(result, subst(
-'	   loadImageToTexture("%prefix%texture%id%.png", this.texture[%id%]);',
-        prefix, id))
+'	   loadImageToTexture("%texprefix%texture%texid%.png", this.texture[%id%]);',
+        id, texprefix, texid))
     }
     
     if (type == "text") result <- c(result, subst(
@@ -1959,11 +1969,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
                           file.path(dir, "CanvasMatrix.js"))
 
   if (is.null(reuse) || isTRUE(reuse)) 
-    prefixes <- data.frame(id = integer(), prefix = character())
+    prefixes <- data.frame(id = integer(), prefix = character(), texture = character())
   else {
     if (!is.data.frame(reuse) || !all(c("id", "prefix") %in% names(reuse)))
       stop(dQuote("reuse"), " should be a dataframe with columns ", dQuote("id"), " and ", dQuote("prefix"))
-    prefixes <- reuse[,c("id", "prefix")]
+    prefixes <- reuse[,c("id", "prefix", "texture")]
   }
   
   rect <- par3d("windowRect")
@@ -2039,7 +2049,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 
   newids <- ids[!flags[,"reuse"]]
   prefixes <- rbind(prefixes, data.frame(id = newids, 
-                      prefix = prefix))
+                      prefix = prefix, texture = ""))
 
   texnums <- -1
   
