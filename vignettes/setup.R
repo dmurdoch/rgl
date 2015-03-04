@@ -86,3 +86,13 @@ writeIndex <- function(cols = 4) {
   print(knitr::kable(matrix(entries, ncol=cols), format="pandoc"))
   cat("</div>\n")
 }
+
+# This displays the string code as `r code` when entered
+# as `r rinline(code)`.  Due to Stephane Laurent
+rinline <- function(code, script = FALSE){
+  if (script)
+    html <- "`r CODE`"
+  else
+    html <- '<code  class="r">``` `r CODE` ```</code>'
+  sub("CODE", code, html)
+}

@@ -29,16 +29,10 @@ reference information.
 
 Consider the simple plot of the iris data.  We
 insert a code chunk with label `plot3d` (which will be used below).
-```{r plot3d, rgl=TRUE, rgl.keepopen=TRUE}
+```{r plot3d, rgl=TRUE}
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
-currentSubscene3d()
-```
-
-Here's a duplicate:
-
-```{r rgl=TRUE}
-
+subid <- currentSubscene3d()
 ```
 
 We might like a button on the web page to cause a change to the
@@ -52,8 +46,9 @@ which produces these buttons:
 <button type="button" onclick="rotate(10)">Forward</button>
 <button type="button" onclick="rotate(-10)">Backward</button>
 
-We found the subscene number that is currently active using 
-`currentSubscene3d()` in the code chunk above.
+We stored the subscene number that is currently active in
+`subid` in the code chunk above, and use it as `r rinline("subid")`
+in the script below.
 
 The `rotate()` function makes use of the global `<prefix>rgl`
 object.  The `knitr` WebGL support sets the prefix to the 
@@ -61,14 +56,15 @@ code chunk label, so the global is called `plot3drgl`:
 
     <script type="text/javascript">
     var rotate = function(angle) {
-      plot3drgl.userMatrix[1].rotate(angle, 0,1,0);
+      plot3drgl.userMatrix[`r rinline("subid",
+                           script=TRUE)`].rotate(angle, 0,1,0);
       plot3drgl.drawScene();
     }
     </script>
     
 <script type="text/javascript">
 var rotate = function(angle) {
-  plot3drgl.userMatrix[1].rotate(angle, 0,1,0);
+  plot3drgl.userMatrix[`r subid`].rotate(angle, 0,1,0);
   plot3drgl.drawScene();
 }
 </script>
@@ -77,7 +73,7 @@ We can also change the contents of the plot using a button.
 For example, we can redo the previous plot, but with the
 three species as separate "spheres" objects:
 ```{r toggle, rgl=TRUE}
-with(subset(iris, Species == "setosa"), 
+sphereid <- with(subset(iris, Species == "setosa"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   col=as.numeric(Species),
                   radius = 0.211))
@@ -91,8 +87,7 @@ with(subset(iris, Species == "virginica"),
      	       radius = 0.211))
 aspect3d(1,1,1)
 decorate3d()
-currentSubscene3d()
-rgl.ids()
+subid <- currentSubscene3d()
 ```
 Now we can add buttons to turn the species on and off:
 
@@ -101,8 +96,8 @@ Now we can add buttons to turn the species on and off:
 <button type="button" onclick="toggle(3)">Virginica</button>
 <script type="text/javascript">
 var toggle = function(species) {
-  var id = species + 24;
-  var subscene = 19;
+  var id = species + `r sphereid - 1`;
+  var subscene = `r subid`;
   if (togglergl.inSubscene(id, subscene))
     togglergl.delFromSubscene(id, subscene)
   else
@@ -118,8 +113,8 @@ This used the following code:
 <button type="button" onclick="toggle(3)">Virginica</button>
 <script type="text/javascript">
 var toggle = function(species) {
-  var id = species + 24;
-  var subscene = 19;
+  var id = species + `r rinline("sphereid - 1", script=TRUE)`;
+  var subscene = `r rinline("subid", script=TRUE)`;
   if (togglergl.inSubscene(id, subscene))
     togglergl.delFromSubscene(id, subscene)
   else
@@ -131,9 +126,8 @@ var toggle = function(species) {
 We used the following here:
 
 - Our code chunk had label `toggle`, so we use the `togglergl` global.
-- The magic number 24 is chosen because the spheres for each species
-are 25, 26, and 27, as `rgl.ids` showed above. 
-- The magic number 19 is the subscene number.
+- The id of the first set of spheres was stored in `sphereid`, 
+so the next ones will be `sphereid + 1` and `sphereid + 2`.
 
 ## Reference Information
 
@@ -160,7 +154,7 @@ by the `rgl` id of the subscene to which they apply.
 These correspond to the 
 `r linkfn("par3d")` properties with the same names.  
 
-- `zoom` and `FOV` are arrays of numbers. 
+- `FOV` and `zoom` are arrays of numbers. 
 - `userMatrix` is an array
 of `CanvasMatrix4` objects (documented in the file 
 `system.file("WebGL/CanvasMatrix.src.js")`.

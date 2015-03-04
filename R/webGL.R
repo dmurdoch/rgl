@@ -155,7 +155,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     prefixes$prefix[prefixes$id == id]
 
   shaders <- function(id, type, flags) {
-    if (type == "clipplanes") return(NULL)
+    if (type == "clipplanes" || flags["reuse"]) return(NULL)
     mat <- rgl.getmaterial(id=id)
     is_lit <- flags["is_lit"]
     is_smooth <- flags["is_smooth"]
@@ -709,27 +709,39 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   sphereStride <- 0
   
   sphereSupport <- function() {
-    x <- subdivision3d(octahedron3d(),2)
-    x$vb[4,] <- 1
-    r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
-    values <- t(x$vb[1:3,])/r
-    sphereCount <<- length(x$it)
+    # Use -1 as a fake ID of the sphere data          
+    if ((-1) %in% prefixes$id) {
+      reuse <- TRUE
+      thisprefix <- getPrefix(-1)
+    } else {
+      reuse <- FALSE
+      thisprefix <- prefix
+      prefixes <<- rbind(prefixes, data.frame(id = -1, prefix = thisprefix))
+      x <- subdivision3d(octahedron3d(),2)
+      x$vb[4,] <- 1
+      r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
+      values <- t(x$vb[1:3,])/r
+    }
+    sphereCount <<- 384 # length(x$it)
     sphereStride <<- 12
     c(
-'	   // ****** sphere object ******
-	   var v=new Float32Array([',
-      inRows(values, perrow=3, '	   '),
-'	   ]);
-	   var f=new Uint16Array([', 
-      inRows(t(x$it)-1, perrow=3, '	   '),
-'	   ]);
-	   var sphereBuf = gl.createBuffer();
+'	   // ****** sphere object ******',
+      if (!reuse) subst(
+'	   this.sphereverts = new Float32Array([
+%values%
+           ]);
+	   this.spherefaces=new Uint16Array([
+%faces%
+	   ]);', values = inRows(values, perrow=3, '	   '),
+	   faces = inRows(t(x$it)-1, perrow=3, '	   ')),
+      subst(
+'	   var sphereBuf = gl.createBuffer();
 	   gl.bindBuffer(gl.ARRAY_BUFFER, sphereBuf);
-	   gl.bufferData(gl.ARRAY_BUFFER, v, gl.STATIC_DRAW);
+	   gl.bufferData(gl.ARRAY_BUFFER, %thisprefix%rgl.sphereverts, gl.STATIC_DRAW);
 	   var sphereIbuf = gl.createBuffer();
 	   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereIbuf);
-	   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.STATIC_DRAW);
-')
+	   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, %thisprefix%rgl.spherefaces, gl.STATIC_DRAW);
+',         thisprefix))
 }    
 
   setViewport <- function() 
@@ -865,6 +877,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     sprite_3d <- flags["sprite_3d"]
     is_clipplanes <- type == "clipplanes"
     clipplanes <- countClipplanes(id)
+    thisprefix <- getPrefix(id)
     
     result <- subst(
 '
@@ -873,12 +886,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     if (!sprites_3d && !is_clipplanes)
       result <- c(result, subst(
 '	   this.prog[%id%]  = gl.createProgram();
-	   gl.attachShader(this.prog[%id%], this.getShader( gl, "%prefix%vshader%id%" ));
-	   gl.attachShader(this.prog[%id%], this.getShader( gl, "%prefix%fshader%id%" ));
+	   gl.attachShader(this.prog[%id%], this.getShader( gl, "%thisprefix%vshader%id%" ));
+	   gl.attachShader(this.prog[%id%], this.getShader( gl, "%thisprefix%fshader%id%" ));
 	   //  Force aPos to location 0, aCol to location 1 
 	   gl.bindAttribLocation(this.prog[%id%], 0, "aPos");
 	   gl.bindAttribLocation(this.prog[%id%], 1, "aCol");
-	   gl.linkProgram(this.prog[%id%]);', prefix, id))
+	   gl.linkProgram(this.prog[%id%]);', thisprefix, id))
    
     nv <- rgl.attrib.count(id, "vertices")
     if (nv)
@@ -1018,17 +1031,18 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     result <- c(result,
       if (sprites_3d) subst(
 '	   this.origsize[%id%]=new Float32Array([', id)
-      else
+      else if (!flags["reuse"])
 '	   var v=new Float32Array([',
-      inRows(values, stride, leadin='	   '),
-'	   ]);',
+      if (!flags["reuse"]) 
+        c(inRows(values, stride, leadin='	   '),
+'	   ]);'),
 
       if (sprites_3d) c(subst(
 '	   this.userMatrix[%id%] = new Float32Array([', id),
         inRows(rgl.attrib(id, "usermatrix"), 4, leadin='	   '),
 '	   ]);'),
         
-      if (type == "text") subst(
+      if (type == "text" && !flags["reuse"]) subst(
 '	   for (var i=0; i<%len%; i++) 
 	     for (var j=0; j<4; j++) {
 	         var ind = %stride%*(4*i + j) + %tofs%;
@@ -1039,7 +1053,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	           - v[ind+1]*texinfo.textHeight)/texinfo.canvasY;
 	     }', len=length(texts), stride, tofs),
 	     
-      if (type == "spheres") subst(
+      if (type == "spheres" && !flags["reuse"]) subst(
 '	   this.values[%id%] = v;', 
                   id),
 	   
@@ -1129,6 +1143,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     is_transparent <- flags["is_transparent"]
     sprites_3d <- flags["sprites_3d"]
     sprite_3d <- flags["sprite_3d"]
+    thisprefix <- getPrefix(id)
     
     result <- subst(
 '
@@ -1334,22 +1349,22 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 
 	  subst(
 '	       var ofs = baseofs + %radofs%;	       
-	       var scale = this.values[id][ofs];
+	       var scale = %thisprefix%rgl.values[id][ofs];
 	       sphereMV.scale(%sx%*scale, %sy%*scale, %sz%*scale);
-	       sphereMV.translate(this.values[id][baseofs], 
-	       			  this.values[id][baseofs+1], 
-	       			  this.values[id][baseofs+2]);
+	       sphereMV.translate(%thisprefix%rgl.values[id][baseofs], 
+	       			  %thisprefix%rgl.values[id][baseofs+1], 
+	       			  %thisprefix%rgl.values[id][baseofs+2]);
 	       sphereMV.multRight(this.mvMatrix);
 	       gl.uniformMatrix4fv( this.mvMatLoc[id], false, new Float32Array(sphereMV.getAsArray()) );',
-	     radofs=radofs/4, stride=stride/4, id, sx, sy, sz),
+	     radofs=radofs/4, stride=stride/4, id, sx, sy, sz, thisprefix),
 	 
 	   if (nc > 1) subst(
 '	       ofs = baseofs + %cofs%;       
-	       gl.vertexAttrib4f( colLoc, this.values[id][ofs], 
-					  this.values[id][ofs+1], 
-					  this.values[id][ofs+2],
-					  this.values[id][ofs+3] );',
-	     cofs=cofs/4, id),
+	       gl.vertexAttrib4f( colLoc, %thisprefix%rgl.values[id][ofs], 
+					  %thisprefix%rgl.values[id][ofs+1], 
+					  %thisprefix%rgl.values[id][ofs+2],
+					  %thisprefix%rgl.values[id][ofs+3] );',
+	     cofs=cofs/4, id, thisprefix),
 	   
            subst(
 '	       gl.drawElements(gl.TRIANGLES, %sphereCount%, gl.UNSIGNED_SHORT, 0);
