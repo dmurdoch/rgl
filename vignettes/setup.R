@@ -48,7 +48,16 @@ indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
   paste(anchors, collapse=if (show) ", " else "")
 }
 
-indexprop <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
+indexclass <- 
+indexproperties <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
+	documentedfns <<- c(documentedfns, fns)
+	anchors <- paste0('<a name="', fns, '">', 
+			  if (show) text, 
+			  '</a>')
+	paste(anchors, collapse=if (show) ", " else "")
+}
+
+indexmethods <- function(fns, text = paste0("`", fns, "()`"), show = TRUE) {
 	documentedfns <<- c(documentedfns, fns)
 	anchors <- paste0('<a name="', fns, '">', 
 			  if (show) text, 

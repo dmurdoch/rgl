@@ -129,7 +129,51 @@ We used the following here:
 - The id of the first set of spheres was stored in `sphereid`, 
 so the next ones will be `sphereid + 1` and `sphereid + 2`.
 
-## Reference Information
+## User Defined Mouse Controls
+
+`rgl` allows user defined mouse controls.  For these to work
+within WebGL, you will need to write a Javascript version as
+well as the R version.
+
+For example, the help page for `r linkfn("rgl.setMouseCallbacks")` defines
+a `pan3d` function to set a callback for panning a scene:
+```{r echo=FALSE, results = "hide"}
+ open3d(useNULL=TRUE)
+```
+
+```
+ pan3d <- function(button) {
+   start <- list()
+   
+   begin <- function(x, y) {
+       start$userMatrix <<- par3d("userMatrix")
+       start$viewport <<- par3d("viewport")
+       start$scale <<- par3d("scale")
+       start$projection <<- rgl.projection()
+       start$pos <<- rgl.window2user( x/start$viewport[3], 1 - y/start$viewport[4], 0.5, 
+                                      projection = start$projection)
+   }
+   
+   update <- function(x, y) {
+        xlat <- (rgl.window2user( x/start$viewport[3], 1 - y/start$viewport[4], 0.5,
+                                 projection = start$projection) - start$pos)*start$scale
+        mouseMatrix <- translationMatrix(xlat[1], xlat[2], xlat[3])
+        par3d(userMatrix = start$userMatrix %*% t(mouseMatrix) )
+   }
+   rgl.setMouseCallbacks(button, begin, update)
+   cat("Callbacks set on button", button, "of rgl device", rgl.cur(), "\n")
+ }
+ pan3d(3)
+```
+<script type="text/javascript">
+var start = new Object();
+var begin = function(x,y) {
+  
+}
+</script>
+TODO:  DESCRIBE HOW TO WRITE THIS IN JAVASCRIPT
+
+## Reference for `rglClass`
 
 In writing the `writeWebGL()` function, I haven't tried to prevent access to 
 anything.  On the other hand, I haven't provided access to
@@ -138,18 +182,39 @@ everything.  The parts documented here should remain relatively stable
 to `writeWebGL`, but should be aware that anything that isn't documented
 here is subject to change without notice.  
 
+`r indexclass("rglClass")`
+
 As documented in `r linkfn("writeWebGL")`, the call
 ```{r eval=FALSE}
 writeWebGL(..., prefix = "<prefix>")
 ```
-will create a global object on the output page with name `<prefix>rgl`.  
-This object has a large number of properties and methods, some of which are designed
+will create a global object on the output page with name 
+`<prefix>rgl` and Javascript class `rglClass`. 
+This class has a large number of properties and methods, some of which are designed
 to be available for use by other code on the web page. 
 
 Most of the properties are stored as Javascript `Array` objects, indexed
-by the `rgl` id of the subscene to which they apply.
+by the `rgl` id of the subscene to which they apply.  There 
+are also Javascript methods attached to the `rglClass` class.
 
-`r indexprop(c("FOV", "listeners", "userMatrix", "zoom"))`
+### Methods
+
+`r indexmethods("drawScene")`
+
+After any change that will affect the display, code should
+call `<prefix>rgl.drawScene()` to redraw the scene.
+
+`r indexmethods(c("inSubscene", "addToSubscene", "delFromSubscene"))`
+
+These methods each take two arguments:  `id` and `subscene`,
+which should be the `rgl` ids of an object and a subscene.
+`inSubscene` tests whether `id` is already included in the 
+subscene, and the others 
+add it or delete it from the subscene.
+
+### Properties
+
+`r indexproperties(c("FOV", "listeners", "userMatrix", "zoom"))`
 
 These correspond to the 
 `r linkfn("par3d")` properties with the same names.  
@@ -162,21 +227,13 @@ of `CanvasMatrix4` objects (documented in the file
 to mouse actions, i.e. `listeners[19]` would contain all
 subscene ids that respond to mouse actions in subscene 19.
 
-`r indexprop("viewport")`
+`r indexproperties("viewport")`
 
 This property also corresponds to the
 `r linkfn("par3d")` property, but should be considered to be 
 read-only.
 
-`r indexprop(c("inSubscene", "addToSubscene", "delFromSubscene"))`
-
-These methods each take two arguments:  `id` and `subscene`,
-which should be the `rgl` ids of an object and a subscene.
-`inSubscene` tests whether `id` is already included in the 
-subscene, and the others 
-add it or delete it from the subscene.
-
-`r indexprop(c("drawFns", "clipFns"))`
+`r indexproperties(c("drawFns", "clipFns"))`
 
 These two arrays contain the code to display 
 each object in the scene.  The functions in the
@@ -184,7 +241,7 @@ each object in the scene.  The functions in the
 each time it is displayed.  The `clipFns` functions
 are called when objects being clipped are drawn.
 
-## Index of Properties and Methods
+## Index of Classes, Properties and Methods
 
 The following `rglClass` properties and methods are described in this document:<br>
 
