@@ -152,7 +152,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 ', prefix, snapshotimg))
 
   getPrefix <- function(id) 
-    prefixes$prefix[prefixes$id == id]
+    prefixes$prefix[prefixes$id == id][1]
 
   shaders <- function(id, type, flags) {
     if (type == "clipplanes" || flags["reuse"]) return(NULL)
@@ -1003,34 +1003,45 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   this.sizeLoc[%id%] = gl.getUniformLocation(this.prog[%id%], "uSize");
 	   this.usermatLoc[%id%] = gl.getUniformLocation(this.prog[%id%], "usermat");',
 	  id))
+
+    if (has_texture) {
+        tofs <- NCOL(values)
+        if (type != "sprites")
+            texcoords <- rgl.attrib(id, "texcoords")
+        if (!sprites_3d)
+            values <- cbind(values, texcoords)
+        if (mat$texture %in% prefixes$texture) {
+            i <- which(mat$texture == prefixes$texture)[1]
+            texprefix <- prefixes$prefix[i]
+            texid <- prefixes$id[i]
+        } else {
+            texprefix <- prefix
+            texid <- id
+            file.copy(mat$texture, file.path(dir, paste(texprefix, "texture", texid, ".png", sep="")))
+        }
+        i <- which(prefixes$id == id & prefixes$prefix == prefix)      
+        prefixes$texture[i] <<- mat$texture
+        i <- which(mat$texture == prefixes$texture & prefix == prefixes$prefix)
+        load_texture <- length(i) < 2 # first time loaded in this scene
+        if (!load_texture)
+            texid <- prefixes$id[i[1]]
+    } else
+        load_texture <- FALSE
     
-    if (has_texture || type == "text") result <- c(result, subst(
+    if (load_texture || type == "text") result <- c(result, subst(
 '	   this.texture[%id%] = gl.createTexture();
 	   this.texLoc[%id%] = gl.getAttribLocation(this.prog[%id%], "aTexcoord");
 	   this.sampler[%id%] = gl.getUniformLocation(this.prog[%id%],"uSampler");',
 	  id))
-	  
-    if (has_texture) {
-      tofs <- NCOL(values)
-      if (type != "sprites")
-        texcoords <- rgl.attrib(id, "texcoords")
-      if (!sprites_3d)
-      	values <- cbind(values, texcoords)
-      if (mat$texture %in% prefixes$texture) {
-        i <- which(mat$texture == prefixes$texture)
-        texprefix <- prefixes$prefix[i]
-        texid <- prefixes$id[i]
-      } else {
-        texprefix <- prefix
-        texid <- id
-        i <- which(prefixes$id == id)
-        prefixes$texture[i] <<- mat$texture
-        file.copy(mat$texture, file.path(dir, paste(texprefix, "texture", texid, ".png", sep="")))
-      }  
-      result <- c(result, subst(
+
+    if (load_texture)	  
+        result <- c(result, subst(
 '	   loadImageToTexture("%texprefix%texture%texid%.png", this.texture[%id%]);',
-        id, texprefix, texid))
-    }
+          id, texprefix, texid))
+    else if (has_texture)  # just reuse the existing texture
+        result <- c(result, subst(
+'	   this.texture[%id%] = this.texture[%texid%];',
+                      id, texid))              
     
     if (type == "text") result <- c(result, subst(
 '	   handleLoadedTexture(this.texture[%id%], document.getElementById("%prefix%textureCanvas"));',
@@ -1063,7 +1074,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	           - v[ind+1]*texinfo.textHeight)/texinfo.canvasY;
 	     }', len=length(texts), stride, tofs),
 	     
-      if (type == "spheres" && !flags["reuse"]) subst(
+      if (!sprites_3d && !flags["reuse"]) subst(
 '	   this.values[%id%] = v;', 
                   id),
 	   
@@ -1122,8 +1133,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (type != "spheres" && !sprites_3d) subst(
 '	   this.buf[%id%] = gl.createBuffer();
 	   gl.bindBuffer(gl.ARRAY_BUFFER, this.buf[%id%]);
-	   gl.bufferData(gl.ARRAY_BUFFER, v, gl.STATIC_DRAW);',
-   		id),
+	   gl.bufferData(gl.ARRAY_BUFFER, %thisprefix%rgl.values[%id%], gl.STATIC_DRAW);',
+   		thisprefix, id),
       if (is_indexed && type != "spheres" && !sprites_3d) subst(
 '	   this.ibuf[%id%] = gl.createBuffer();
 	   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ibuf[%id%]);
@@ -2047,8 +2058,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   flags <- flags[keep,,drop=FALSE]
   types <- types[keep]
 
-  newids <- ids[!flags[,"reuse"]]
-  prefixes <- rbind(prefixes, data.frame(id = newids, 
+  if (length(ids))
+    prefixes <- rbind(prefixes, data.frame(id = ids, 
                       prefix = prefix, texture = ""))
 
   texnums <- -1
@@ -2084,7 +2095,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
              )
               	
   cat(result, file=filename, sep="\n")
-  if (!is.null(reuse))
+  if (!is.null(reuse)) {
+    prefixes <- prefixes[!duplicated(prefixes$id),]
     attr(filename, "reuse") <- prefixes
+  }  
   invisible(filename)
 }
