@@ -490,6 +490,17 @@ The `r indexfns("rgl.snapshot")` function is identical to `snapshot3d`.
 The functions `r indexfns(c("rgl.Sweave.off", "Sweave.snapshot"))` are 
 involved in Sweave processing and not normally called by users.
 
+### Working with WebGL scenes
+
+The `writeWebGL` function exports a scene to HTML and Javascript code.  
+These functions also write HTML and Javascript, for working with the 
+exported scene.  More details are given in the vignette 
+[User Interaction in WebGL](WebGL.html).
+
+------------------------------------ | -------------
+`r indexfns("subsetSlider")`         | insert a slider to control which objects are displayed
+`r indexfns("toggleButton")`         | insert a button to toggle some items
+
 ### Working with the scene
 
 `rgl` maintains internal structures for all the scenes it displays.

@@ -527,7 +527,15 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	    var i = this[thelist][subscene].indexOf(id);
 	    if (i > -1)
 	      this[thelist][subscene].splice(i, 1);
-	  }	      
+	  }
+	  this.setSubsceneEntries = function(ids, subscene) {
+	    this.subscenes[subscene] = [];
+	    this.clipplanes[subscene] = [];
+	    this.transparent[subscene] = [];
+	    this.opaque[subscene] = [];
+	    for (var i = 0; i < ids.length; i++)
+	      this.addToSubscene(ids[i], subscene);
+	  }
     }).call(rglClass.prototype);
 '),
   subst(
@@ -2105,4 +2113,52 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     attr(filename, "reuse") <- prefixes
   }  
   invisible(filename)
+}
+
+# This displays an HTML5 input widget to show a subset of objects.  It assigns a random id
+# and returns that invisibly.
+
+subsetSlider <- function(subsets, labels = names(subsets), 
+			    prefix = "", subscene = currentSubscene3d(), 
+			    init = 1,
+			    id = paste0(basename(tempfile("input"))), name = id
+) {
+	if (is.null(labels)) labels <- seq_along(subsets)
+	cat(subst(
+'<input type="range" min="0" max="%max%" step="1" value="%init%" id="%id%" name="%name%"
+oninput = "(function(value) {
+  var ids = [%vals%]; 
+  var labels = [%labels%];
+  %prefix%rgl.setSubsceneEntries(ids[value], %subscene%); 
+  document.getElementById(\'%id%text\').value = labels[value];
+  %prefix%rgl.drawScene();
+})(this.valueAsNumber)"></input><output id="%id%text">%label%</output>', 
+    max = length(subsets)-1, init = init-1, name, id,
+    vals = paste(paste0("[", sapply(subsets, 
+    				function(i) paste(i, collapse=",")), 
+    				"]"), collapse=","), prefix, subscene,
+    labels = paste0("'", labels, "'", collapse=","),
+    label = labels[init]
+	))
+	invisible(id)
+}
+
+toggleButton <- function(subset, label = deparse(substitute(subset)), 
+			 prefix = "", subscene = currentSubscene3d(), 
+			 id = paste0(basename(tempfile("input"))), name = id) {
+  cat(subst(
+'<button type="button" id="%id%" name="%name%" onclick = "(function(){
+  var subset = [%subset%];
+  if (%prefix%rgl.inSubscene(subset[0], %subscene%)) {
+    for (var i=0; i<subset.length; i++)
+      %prefix%rgl.delFromSubscene(subset[i], %subscene%);
+  } else {
+    for (var i=0; i<subset.length; i++)
+      %prefix%rgl.addToSubscene(subset[i], %subscene%);
+  }
+  %prefix%rgl.drawScene();
+})()">%label%</button>', 
+  name, id, subset = paste(subset, collapse=","),
+  prefix, subscene, label))
+  invisible(id)
 }

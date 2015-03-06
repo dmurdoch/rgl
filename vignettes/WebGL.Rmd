@@ -71,8 +71,9 @@ var rotate = function(angle) {
 
 We can also change the contents of the plot using a button.
 For example, we can redo the previous plot, but with the
-three species as separate "spheres" objects:
-```{r toggle, rgl=TRUE}
+three species as separate "spheres" objects and buttons to
+toggle them:
+```{r toggle, rgl = TRUE, rgl.keepopen = TRUE}
 sphereid <- with(subset(iris, Species == "setosa"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   col=as.numeric(Species),
@@ -89,45 +90,36 @@ aspect3d(1,1,1)
 decorate3d()
 subid <- currentSubscene3d()
 ```
-Now we can add buttons to turn the species on and off:
 
-<button type="button" onclick="toggle(1)">Setosa</button>
-<button type="button" onclick="toggle(2)">Versicolor</button>
-<button type="button" onclick="toggle(3)">Virginica</button>
-<script type="text/javascript">
-var toggle = function(species) {
-  var id = species + `r sphereid - 1`;
-  var subscene = `r subid`;
-  if (togglergl.inSubscene(id, subscene))
-    togglergl.delFromSubscene(id, subscene)
-  else
-    togglergl.addToSubscene(id, subscene)
-  togglergl.drawScene();
-}
-</script>
-
-This used the following code:
+```{r results="asis"}
+toggleButton(sphereid, label = "setosa", prefix = "toggle", subscene = subid)
+toggleButton(sphereid+1, label = "versicolor", prefix = "toggle", subscene = subid)
+toggleButton(sphereid+2, label = "virginica", prefix = "toggle", subscene = subid)
 ```
-<button type="button" onclick="toggle(1)">Setosa</button>
-<button type="button" onclick="toggle(2)">Versicolor</button>
-<button type="button" onclick="toggle(3)">Virginica</button>
-<script type="text/javascript">
-var toggle = function(species) {
-  var id = species + `r rinline("sphereid - 1", script=TRUE)`;
-  var subscene = `r rinline("subid", script=TRUE)`;
-  if (togglergl.inSubscene(id, subscene))
-    togglergl.delFromSubscene(id, subscene)
-  else
-    togglergl.addToSubscene(id, subscene)
-  togglergl.drawScene();
-}
-</script>
-```
-We used the following here:
 
-- Our code chunk had label `toggle`, so we use the `togglergl` global.
-- The id of the first set of spheres was stored in `sphereid`, 
-so the next ones will be `sphereid + 1` and `sphereid + 2`.
+Note that we need to use `results="asis"` for the button code.  I didn't
+use it above, but normally we would use `echo=FALSE`; then the buttons 
+will end up side-by-side:
+
+```{r results="asis", echo=FALSE}
+toggleButton(sphereid, "setosa", "toggle", subid)
+toggleButton(sphereid+1, "versicolor", "toggle", subid)
+toggleButton(sphereid+2, "virginica", "toggle", subid)
+```
+
+An alternate control to achieve the same thing is a slider. This can be
+a little tricker to implement, because the subset needs to include
+all objects, not just some of them:
+
+```{r slider, rgl=TRUE}
+```
+```{r results="asis"}
+subsetSlider(list(setosa = sphereid, 
+		  versicolor = sphereid + 1, 
+		  virginica = sphereid + 2, 
+		  all = sphereid + 0:2),
+	     prefix = "slider", subscene = subid)
+```
 
 ## User Defined Mouse Controls
 
