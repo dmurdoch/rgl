@@ -69,27 +69,22 @@ void ABCLineSet::updateSegments(const AABox& sceneBBox)
     
 //    Rprintf("bbox min=%f %f %f max=%f %f %f\n", bbox[0][0], bbox[0][1], bbox[0][2],
 //                                                bbox[1][0], bbox[1][1], bbox[1][2]);
-    int nhits = 0;
-    
+    double smin = R_NegInf, smax = R_PosInf;
     for (int i=0; i<3; i++)    // which coordinate
-      for (int j=0; j<2; j++)  // which limit
-        if (d[i] != 0) {  
-          double s = (bbox[j][i] - b[i])/d[i];
-          bool keep = true;
-          for (int k=0; k<3; k++) {
-            double intersect = b[k] + s*d[k];
-            if (k != i && (intersect <= bbox[0][k] || bbox[1][k] <= intersect)) {
-              keep = false;
-              break;
-            }  
-            x[nhits][k] = intersect;
-          }
-          if (keep) nhits++;
-  	}
-    
-    if (nhits == 2) {
-      setVertex(2*elem + 0, x[0]);
-      setVertex(2*elem + 1, x[1]);
+      if (d[i] != 0) {  
+      	double s[2];
+      	for (int j=0; j<2; j++) // which limit
+          s[j] = (bbox[j][i] - b[i])/d[i];
+      	smin = max(smin, min(s[0], s[1]));
+      	smax = min(smax, max(s[0], s[1]));
+      }
+      if (smin <= smax) {
+        for (int k=0; k<3; k++) {
+          x[0][k] = b[k] + smin*d[k];
+          x[1][k] = b[k] + smax*d[k];
+        }
+        setVertex(2*elem + 0, x[0]);
+        setVertex(2*elem + 1, x[1]);
     } else { 
       double missing[3] = {NA_REAL, NA_REAL, NA_REAL};
       setVertex(2*elem + 0, missing);
