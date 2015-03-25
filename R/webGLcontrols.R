@@ -82,16 +82,21 @@ propertySlider <- function(values, entries, properties, objids, prefixes = "",
   if (interp) values <- rbind(values[1,], values, values[nrow(values),])
   result <- c(subst(
 '<script>%prefix%rgl.%id% = function(value){
-   var values = [%vals%];', 
-     prefix, id, vals = paste(as.vector(t(values)), collapse = ",")),
+   var values = [%vals%];
+   var lvalue = Math.round((value - %minS%)/%step%);', 
+     prefix, id, vals = paste(as.vector(t(values)), collapse = ","),
+     minS, step),
      
-   if (interp) subst(
-'   var svals = [-Infinity, %svals%, Infinity];',
-     svals = paste(slider, collapse = ",")),
-   
    subst(
 '   var propvals = %prefix%rgl.%property%[%objid%];', 
-     prefix, property, objid))
+     prefix, property, objid),   
+
+   if (interp) subst(
+'   var svals = [-Infinity, %svals%, Infinity];
+   for (var i = 1; i < svals.length; i++) 
+     if (value <= svals[i]) {
+       var p = (svals[i] - value)/(svals[i] - svals[i-1]);',
+     svals = paste(slider, collapse = ",")))
      
   for (j in seq_along(entries)) {
     newprefix <- prefixes[j]
@@ -107,14 +112,9 @@ propertySlider <- function(values, entries, properties, objids, prefixes = "",
       prefix, property, objid, newprefix, newprop, newid),
     
     if (interp) subst(
-'   for (var i = 1; i < svals.length; i++) 
-     if (value <= svals[i]) {
-       var v1 = values[%multiplier%(i-1)%offset%];
+'       var v1 = values[%multiplier%(i-1)%offset%];
        var v2 = values[%multiplier%i%offset%];
-       var p = (svals[i] - value)/(svals[i] - svals[i-1]);
-       propvals[%entry%] = p*v1 + (1-p)*v2;
-       break;
-     }', entry=entries[j], multiplier, offset)
+       propvals[%entry%] = p*v1 + (1-p)*v2;', entry=entries[j], multiplier, offset)
      else subst(
 '   propvals[%entry%] = values[%multiplier%value%offset%];', 
       entry=entries[j], multiplier, offset))
@@ -123,7 +123,11 @@ propertySlider <- function(values, entries, properties, objids, prefixes = "",
     property <- newprop
     objid <- newid
   }  
-  result <- c(result, subst(
+  result <- c(result, 
+    if (interp)
+'       break;
+     }',
+    subst(
 '   %prefix%rgl.%property%[%objid%] = propvals;', prefix, property, objid))
 
   needsBinding <- unique(data.frame(prefixes, objids)[properties == "values",])
@@ -138,13 +142,13 @@ propertySlider <- function(values, entries, properties, objids, prefixes = "",
    }
    result <- c(result, subst(
 '   var labels = [%labels%];
-   document.getElementById(\'%id%text\').value = labels[value];
+   document.getElementById(\'%id%text\').value = labels[lvalue];
    %prefix%rgl.drawScene();
 }</script><input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
 oninput = "%prefix%rgl.%id%(this.valueAsNumber)"></input><output id="%id%text">%label%</output>', 
     minS, maxS, step, init, id, name,
     labels = paste0("'", labels, "'", collapse=","), prefix, property, objid,
-    label = labels[init]))
+    label = labels[round(init-minS)/step + 1]))
   cat(result, sep="\n")
   invisible(id)
 }
