@@ -123,7 +123,11 @@ subsetSlider(list(setosa = sphereid,
 
 Another function that auto-generates Javascript code is 
 `r indexfns("clipplaneSlider")`.  This function allows the user to control
-the location of a clipping plane by moving a slider.  
+the location of a clipping plane by moving a slider.  It is implemented
+using the more general `r indexfns("propertySlider")`, which 
+allows control of multiple objects in multiple scenes, but which 
+does require knowledge of the internal representation of the scene
+in its Javascript implementation.
 
 ## User Defined Mouse Controls
 
@@ -246,6 +250,50 @@ each object in the scene.  The functions in the
 `drawFns` array are called for each object
 each time it is displayed.  The `clipFns` functions
 are called when objects being clipped are drawn.
+
+`r indexproperties(c("values", "offsets"))`
+
+Most of the data about each object in a scene is contained in
+the `values` property.  This is an array, indexed by object
+id. The individual entries are numeric arrays.  Though they
+are singly-indexed, the entries are meant to be interpreted
+as matrices stored by row.  The first 3 columns are generally
+the coordinates of a vertex, and remaining columns correspond
+to other values from `r linkfn("rgl.attrib")`.  
+
+The `offsets` property gives the (0-based) offset of the first 
+column for a particular attribute in a named object.  Not all 
+columns will be present in every object; if not
+present, the corresponding `offsets` entry will be `-1`.
+The entries are
+
+Name | Meaning
+-----|--------
+vofs | Offset to 3 columns of vertex data in XYZ order
+cofs | Offset to 4 columns of colour data in RGBA order
+nofs | Offset to 3 columns of normal data
+radofs | Offset to 1 column of sphere radius data
+oofs | Offset to 2 columns of text or sprite origin data
+tofs | Offset to 2 columns of texture coordinates
+stride | Total number of columns in `values`
+
+For example, to find the blue colour entry for vertex 
+`i` in an object, one would first check if `offsets["cofs"]` was
+`-1`, indicating that no colour information was present.  If
+not, the entry could be found using
+```
+values[offsets["stride"]*(i-1) + offsets["cofs"] + 2]
+```
+This assumes `i` is specified using 1-based vertex counting
+as in R, and writes `values` and `offsets` instead of the
+fully specified `<prefix>rgl.values` and `<prefix>rgl.offsets`
+for clarity.
+
+Changes to `values` need to be pushed to the graphics system
+to be reflected in the scene; see the calls to `gl.bindBuffer` and
+`gl.bufferData` in the source to `r linkfn("propertySlider")`
+for details.
+
 
 ## Index 
 

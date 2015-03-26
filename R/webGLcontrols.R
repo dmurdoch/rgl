@@ -2,9 +2,8 @@
 # This displays an HTML5 input widget to show a subset of objects.  It assigns a random id
 # and returns that invisibly.
 
-subsetSlider <- function(subsets, labels = names(subsets), 
-			    prefix = "", subscene = currentSubscene3d(), 
-			    init = 1,
+subsetSlider <- function(subsets, subscene = currentSubscene3d(), prefix = "", 
+			    init = 1,labels = names(subsets), 
 			    id = paste0(basename(tempfile("input"))), name = id,
 			    fullset = Reduce(union, subsets)
 			 ) {
@@ -32,8 +31,8 @@ oninput = "(function(value) {
 	invisible(id)
 }
 
-toggleButton <- function(subset, label = deparse(substitute(subset)), 
-			 prefix = "", subscene = currentSubscene3d(), 
+toggleButton <- function(subset, subscene = currentSubscene3d(), prefix = "", 
+			 label = deparse(substitute(subset)), 
 			 id = paste0(basename(tempfile("input"))), name = id) {
   cat(subst(
 '<button type="button" id="%id%" name="%name%" onclick = "(function(){
@@ -52,40 +51,65 @@ toggleButton <- function(subset, label = deparse(substitute(subset)),
   invisible(id)
 }
 
-clipplaneSlider <- function(a=NULL, b=NULL, c=NULL, d=NULL, labels = signif(values[,1],3), 
-			      clipplaneid, plane = 1, ...) {
+clipplaneSlider <- function(a=NULL, b=NULL, c=NULL, d=NULL, 
+			    plane = 1, clipplaneid, prefix = "", 
+			    labels = signif(values[,1],3), 
+			      ...) {
   values <- cbind(a = a, b = b, c = c, d = d)
   col <- which(colnames(values) == letters[1:4]) - 1
-  propertySlider(values, properties = "vClipplane",
-  	         entries = 4*(plane-1) + col,
-  	         labels = labels, objids = clipplaneid, ...)
+  propertySlider(values, entries = 4*(plane-1) + col,
+  	         properties = "vClipplane", objids = clipplaneid, 
+  	         prefixes = prefix, labels = labels, ...)
 }
 
 propertySlider <- function(values, entries, properties, objids, prefixes = "",
-                           slider = seq_len(NROW(values)),
-                           minS = min(slider), maxS = max(slider), step = 1, init = minS, 
+                           param = seq_len(NROW(values)),
+                           minS = min(param), maxS = max(param), step = 1, init = minS, 
                            labels = signif(seq(minS, maxS, by = step), 2), 
                            id = paste0(basename(tempfile("input"))), name = id)  {
   values <- matrix(values, NROW(values))
   ncol <- ncol(values)
   stopifnot(length(entries) == ncol,
-            all(diff(slider) > 0))
+            all(diff(param) > 0))
+
+  sliderVals <- seq(minS, maxS, by = step)
+  interp <- length(param) != length(sliderVals) || 
+            any(param != sliderVals)
+  prefix <- prefixes[1]
+  result <- subst(
+'<script>%prefix%rgl.%id% = function(value){
+   (%setter%)(value);
+   var lvalue = Math.round((value - %minS%)/%step%);
+   var labels = [%labels%];
+   document.getElementById(\'%id%text\').value = labels[lvalue];
+}</script><input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
+oninput = "%prefix%rgl.%id%(this.valueAsNumber)"></input><output id="%id%text">%label%</output>', 
+    prefix, id, 
+    setter = propertySetter(values, entries, properties, objids, prefixes, param, interp),
+    minS, maxS, step, init, name,
+    labels = paste0("'", labels, "'", collapse=","), 
+    label = labels[round(init-minS)/step + 1])
+  cat(result, sep="\n")
+  invisible(id)
+}
+
+propertySetter <- function(values, entries, properties, objids, prefixes = "",
+                           param = seq_len(NROW(values)), interp = TRUE)  {
+  values <- matrix(values, NROW(values))
+  ncol <- ncol(values)
+  stopifnot(length(entries) == ncol,
+            all(diff(param) > 0))
   prefixes <- rep(prefixes, length.out = ncol)
   properties <- rep(properties, length.out = ncol)
   objids <- rep(objids, length.out = ncol)
   prefix <- prefixes[1]
   property <- properties[1]
   objid <- objids[1]
-  sliderVals <- seq(minS, maxS, by = step)
-  interp <- length(slider) != length(sliderVals) || 
-            any(slider != sliderVals)
   if (interp) values <- rbind(values[1,], values, values[nrow(values),])
   result <- c(subst(
-'<script>%prefix%rgl.%id% = function(value){
-   var values = [%vals%];
-   var lvalue = Math.round((value - %minS%)/%step%);', 
-     prefix, id, vals = paste(as.vector(t(values)), collapse = ","),
-     minS, step),
+'function(value){
+   var values = [%vals%];', 
+     vals = paste(as.vector(t(values)), collapse = ",")),
      
    subst(
 '   var propvals = %prefix%rgl.%property%[%objid%];', 
@@ -96,7 +120,7 @@ propertySlider <- function(values, entries, properties, objids, prefixes = "",
    for (var i = 1; i < svals.length; i++) 
      if (value <= svals[i]) {
        var p = (svals[i] - value)/(svals[i] - svals[i-1]);',
-     svals = paste(slider, collapse = ",")))
+     svals = paste(param, collapse = ",")))
      
   for (j in seq_along(entries)) {
     newprefix <- prefixes[j]
@@ -141,14 +165,7 @@ propertySlider <- function(values, entries, properties, objids, prefixes = "",
    	prefix, objid))
    }
    result <- c(result, subst(
-'   var labels = [%labels%];
-   document.getElementById(\'%id%text\').value = labels[lvalue];
-   %prefix%rgl.drawScene();
-}</script><input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
-oninput = "%prefix%rgl.%id%(this.valueAsNumber)"></input><output id="%id%text">%label%</output>', 
-    minS, maxS, step, init, id, name,
-    labels = paste0("'", labels, "'", collapse=","), prefix, property, objid,
-    label = labels[round(init-minS)/step + 1]))
-  cat(result, sep="\n")
-  invisible(id)
+'   %prefix%rgl.drawScene();
+}', prefix))
+  paste(result, collapse = "\n")
 }
