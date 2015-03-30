@@ -639,7 +639,7 @@ v0.94
   - The Windows configuration file has been modified to work in 
     R-devel (to become R 3.2.0).
 
-0.95.1232
+0.95.1233
   - If a template file is used in writeWebGL(), the string %prefix%
     will be replaced in it by the prefix argument.
   - writeWebGL() now outputs a Javascript global variable named
@@ -657,8 +657,8 @@ v0.94
   - rgl.snapshot() now evaluates the "top" argument after "filename"
     and "fmt", so windows created when those are evaluated don't
     overlay the rgl window.  (Suggestion of Keith Jewell.)
-  - Added subsetSlider(), clipplaneSlider(), propertySlider(), 
-    propertySetter() and toggleButton() functions to output 
-    HTML/Javascript controls for WebGL.
+  - Added subsetSlider(), subsetSetter(), clipplaneSlider(), 
+    propertySlider(), propertySetter() and toggleButton() functions 
+    to output HTML/Javascript controls for WebGL.
   - Fixed bug in abclines3d() that caused it to skip lines that passed
     through the corners of the bounding box.  (Reported by Sven Laur.)

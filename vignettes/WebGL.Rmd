@@ -114,7 +114,7 @@ An alternate control to achieve the same thing is `r indexfns("subsetSlider")`.
 ```{r slider, rgl=TRUE}
 ```
 ```{r results="asis"}
-subsetSlider(list(setosa = sphereid, 
+subsetSlider(subsets = list(setosa = sphereid, 
 		  versicolor = sphereid + 1, 
 		  virginica = sphereid + 2, 
 		  all = sphereid + 0:2),

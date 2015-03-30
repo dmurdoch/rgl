@@ -2,15 +2,31 @@
 # This displays an HTML5 input widget to show a subset of objects.  It assigns a random id
 # and returns that invisibly.
 
-subsetSlider <- function(subsets, subscene = currentSubscene3d(), prefix = "", 
-			    init = 1,labels = names(subsets), 
+subsetSlider <- function(setter = subsetSetter, init = 1,labels = names(subsets), 
 			    id = paste0(basename(tempfile("input"))), name = id,
-			    fullset = Reduce(union, subsets)
-			 ) {
-	if (is.null(labels)) labels <- seq_along(subsets)
-	cat(subst(
+			    ...) {
+  if (is.function(setter))
+    setter <- setter(...)
+  if (!inherits(setter, "subsetSetter"))
+    stop(dQuote(setter), " must be a subsetSetter object.")
+
+  env <- attr(setter, "env")
+  subsets <- env$subsets
+  if (is.null(labels)) labels <- seq_along(subsets)
+  cat(subst(
 '<input type="range" min="0" max="%max%" step="1" value="%init%" id="%id%" name="%name%"
-oninput = "(function(value) {
+oninput = "(%setter%)(this.valueAsNumber); 
+  document.getElementById(\'%id%text\').value = labels[value];"></input><output id="%id%text">%label%</output>', 
+    max = length(subsets)-1, init = init-1, name, id,
+    setter, labels = paste0("'", labels, "'", collapse=","),
+    label = labels[init]))
+  invisible(id)
+}
+
+subsetSetter <- function(subsets, subscene = currentSubscene3d(), prefix = "", 
+			 fullset = Reduce(union, subsets)) {
+  result <- subst(
+'function(value) {
   var ids = [%vals%]; 
   var labels = [%labels%];
   var fullset = [%fullset%];
@@ -18,17 +34,14 @@ oninput = "(function(value) {
   entries = entries.filter(function(x) { return fullset.indexOf(x) < 0 });
   entries = entries.concat(ids[value]);
   %prefix%rgl.setSubsceneEntries(entries, %subscene%); 
-  document.getElementById(\'%id%text\').value = labels[value];
   %prefix%rgl.drawScene();
-})(this.valueAsNumber)"></input><output id="%id%text">%label%</output>', 
-    max = length(subsets)-1, init = init-1, name, id,
-    vals = paste(paste0("[", sapply(subsets, 
+}', vals = paste(paste0("[", sapply(subsets, 
     				function(i) paste(i, collapse=",")), 
     				"]"), collapse=","), prefix, subscene,
-    labels = paste0("'", labels, "'", collapse=","),
-    label = labels[init], fullset = paste(fullset, collapse=",")
-	))
-	invisible(id)
+    fullset = paste(fullset, collapse=","))
+  structure(result,
+    env = environment(), class = "subsetSetter")    
+  
 }
 
 toggleButton <- function(subset, subscene = currentSubscene3d(), prefix = "", 
@@ -57,24 +70,26 @@ clipplaneSlider <- function(a=NULL, b=NULL, c=NULL, d=NULL,
 			      ...) {
   values <- cbind(a = a, b = b, c = c, d = d)
   col <- which(colnames(values) == letters[1:4]) - 1
-  propertySlider(values, entries = 4*(plane-1) + col,
+  propertySlider(values = values, entries = 4*(plane-1) + col,
   	         properties = "vClipplane", objids = clipplaneid, 
   	         prefixes = prefix, labels = labels, ...)
 }
 
-propertySlider <- function(values, entries, properties, objids, prefixes = "",
-                           param = seq_len(NROW(values)),
+propertySlider <- function(setter = propertySetter,
                            minS = min(param), maxS = max(param), step = 1, init = minS, 
                            labels = signif(seq(minS, maxS, by = step), 2), 
-                           id = paste0(basename(tempfile("input"))), name = id)  {
-  values <- matrix(values, NROW(values))
-  ncol <- ncol(values)
-  stopifnot(length(entries) == ncol,
-            all(diff(param) > 0))
-
+                           id = paste0(basename(tempfile("input"))), name = id,
+                           ...)  {
+  if (is.function(setter))
+    setter <- setter(...)
+  if (!inherits(setter, "propertySetter"))
+    stop(dQuote(setter), " must be a propertySetter object.")
+    
+  env <- attr(setter, "env")
+  param <- env$param
+  prefixes <- env$prefixes
+  
   sliderVals <- seq(minS, maxS, by = step)
-  interp <- length(param) != length(sliderVals) || 
-            any(param != sliderVals)
   prefix <- prefixes[1]
   result <- subst(
 '<script>%prefix%rgl.%id% = function(value){
@@ -85,7 +100,7 @@ propertySlider <- function(values, entries, properties, objids, prefixes = "",
 }</script><input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
 oninput = "%prefix%rgl.%id%(this.valueAsNumber)"></input><output id="%id%text">%label%</output>', 
     prefix, id, 
-    setter = propertySetter(values, entries, properties, objids, prefixes, param, interp),
+    setter = setter,
     minS, maxS, step, init, name,
     labels = paste0("'", labels, "'", collapse=","), 
     label = labels[round(init-minS)/step + 1])
@@ -167,5 +182,6 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
    result <- c(result, subst(
 '   %prefix%rgl.drawScene();
 }', prefix))
-  paste(result, collapse = "\n")
+  structure(paste(result, collapse = "\n"),
+    env = environment(), class = "propertySetter")
 }

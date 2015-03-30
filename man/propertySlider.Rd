@@ -6,28 +6,34 @@
 Write HTML/Javascript code to control a WebGL display.
 }
 \description{
-This function writes out HTML code to control WebGL displays on the same page.
+\code{propertySlider} writes out HTML code to control WebGL displays on the same page via a slider; \code{propertySetter} returns Javascript code
+to be used in HTML controls.
 }
 \usage{
-propertySlider(values, entries, properties, objids, prefixes = "",
-             param = seq_len(NROW(values)),
+propertySlider(setter = propertySetter,
              minS = min(param), maxS = max(param), step = 1, init = minS, 
 	     labels = signif(seq(minS, maxS, by = step), 2), 
-	     id = paste0(basename(tempfile("input"))), name = id) 
+	     id = paste0(basename(tempfile("input"))), name = id,
+	     ...) 
 	     
 propertySetter(values, entries, properties, objids, prefixes = "",
                param = seq_len(NROW(values)), interp = TRUE) 
 }
 \arguments{
-  \item{values}{An array of values; rows correspond to slider positions.}
-  \item{entries, properties, objids, prefixes}{Vectors describing
-  the columns of \code{values}.  See the details below.}
-  \item{param}{Parameter values corresponding to each row of \code{values}.}
+  \item{setter}{A function to write Javascript code, or its output.}
   \item{minS, maxS, step, init}{Slider values to be displayed.}
   \item{labels}{Labels to display for each slider value.}
   \item{id}{The \code{id} of the input control that will be generated.}
   \item{name}{The name of the input control that will be generated.}
-  \item{interp}{Whether to interpolate}
+  \item{...}{If \code{propertySetter} is a function, additional 
+  arguments will be passed to it.}
+  \item{values}{An array of values; rows correspond to slider positions.}
+  \item{entries, properties, objids, prefixes}{Vectors describing
+  the columns of \code{values}.  See the details below.}
+  \item{param}{Parameter values corresponding to each row of \code{values}.}
+  \item{interp}{Whether to interpolate values.  If \code{FALSE}, 
+  the Javascript function will expect non-negative integer values.}
+
 
 }
 \details{
@@ -68,7 +74,14 @@ and returns the \code{id} of the control that was generated.
 containing the Javascript source for a function to set
 the appropriate properties.   It does not assign the function 
 to a variable or include any of the HTML wrapper text that 
-\code{propertySlider} adds.
+\code{propertySlider} adds.  
+
+The character vector has class
+\code{"propertySetter"}, and an attribute named \code{"env"}
+which gives access to the local environment where it was
+created, so for example \code{attr(value, "env")$prefixes} will
+give access to the \code{prefixes} argument if \code{value}
+was produced by \code{"propertySetter"}.
 }
 \author{
 Duncan Murdoch
@@ -83,10 +96,10 @@ use of \code{propertySlider}.
 cat(propertySetter(1:4, entries = 12, properties = "values", objids = 13))
 
 # A 4-position slider
-propertySlider(1:4, entries = 12, properties = "values", objids = 13)
+propertySlider(values = 1:4, entries = 12, properties = "values", objids = 13, interp = FALSE)
 
 # A 10-position slider interpolating the 4-position slider
-propertySlider(1:4, entries = 12, properties = "values", objids = 13,
+propertySlider(values = 1:4, entries = 12, properties = "values", objids = 13,
                step = (4-1)/9)
                
 }
