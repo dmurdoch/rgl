@@ -109,7 +109,8 @@ oninput = "%prefix%rgl.%id%(this.valueAsNumber)"></input><output id="%id%text">%
 }
 
 propertySetter <- function(values, entries, properties, objids, prefixes = "",
-                           param = seq_len(NROW(values)), interp = TRUE)  {
+                           param = seq_len(NROW(values)), interp = TRUE,
+			   digits = 7)  {
   values <- matrix(values, NROW(values))
   ncol <- ncol(values)
   stopifnot(length(entries) == ncol,
@@ -121,34 +122,41 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
   property <- properties[1]
   objid <- objids[1]
   if (interp) values <- rbind(values[1,], values, values[nrow(values),])
+  get <- if (property == "userMatrix") ".getAsArray()" else ""
+  load <- if (property == "userMatrix") ".load(propvals)" else "= propvals"
   result <- c(subst(
 'function(value){
    var values = [%vals%];', 
-     vals = paste(as.vector(t(values)), collapse = ",")),
+     vals = paste(formatC(as.vector(t(values)), digits = digits, width = 1), 
+     	          collapse = ",")),
      
    subst(
-'   var propvals = %prefix%rgl.%property%[%objid%];', 
-     prefix, property, objid),   
+'   var propvals = %prefix%rgl.%property%[%objid%]%get%;',
+     prefix, property, objid, get),   
 
    if (interp) subst(
 '   var svals = [-Infinity, %svals%, Infinity];
    for (var i = 1; i < svals.length; i++) 
      if (value <= svals[i]) {
        var p = (svals[i] - value)/(svals[i] - svals[i-1]);',
-     svals = paste(param, collapse = ",")))
+     svals = paste(formatC(param, digits = digits, width = 1), collapse = ","))
+   else
+'   value = Math.round(value);')
      
   for (j in seq_along(entries)) {
     newprefix <- prefixes[j]
     newprop <- properties[j]
+    newget <- if (newprop == "userMatrix") ".getAsArray()" else ""
+    newload <- if (newprop == "userMatrix") ".load(propvals)" else "= propvals"
     newid <- objids[j]
     multiplier <- ifelse(ncol>1, paste0(ncol, "*"), "")
     offset <-     ifelse(j>1,  paste0("+", j-1), "")
     result <- c(result,
     
     if (newprefix != prefix || newprop != property || newid != objid) subst(
-'   %prefix%rgl.%property%[%objid%] = propvals;
-    propvals = %newprefix%rgl.%newprop%[%newid%];', 
-      prefix, property, objid, newprefix, newprop, newid),
+'   %prefix%rgl.%property%[%objid%]%load%;
+    propvals = %newprefix%rgl.%newprop%[%newid%]%newget%;', 
+      prefix, property, objid, load, newget, newprefix, newprop, newid),
     
     if (interp) subst(
 '       var v1 = values[%multiplier%(i-1)%offset%];
@@ -161,13 +169,16 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
     prefix <- newprefix  
     property <- newprop
     objid <- newid
+    get <- newget
+    load <- newload
   }  
   result <- c(result, 
     if (interp)
 '       break;
      }',
     subst(
-'   %prefix%rgl.%property%[%objid%] = propvals;', prefix, property, objid))
+'   %prefix%rgl.%property%[%objid%]%load%;', 
+      prefix, property, objid, load))
 
   needsBinding <- unique(data.frame(prefixes, objids)[properties == "values",])
   for (i in seq_len(nrow(needsBinding))) {
@@ -184,4 +195,35 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
 }', prefix))
   structure(paste(result, collapse = "\n"),
     env = environment(), class = "propertySetter")
+}
+
+par3dinterpSetter <- function(fn, from, to, steps, subscene = f0$subscene,
+			      omitConstant = TRUE, ...) {
+  times <- seq(from, to, length.out = steps+1)
+  fvals <- lapply(times, fn)
+  f0 <- fvals[[1]]
+  entries <- numeric(0)
+  properties <- character(0)
+  values <- NULL
+	
+  props <- c("FOV", "userMatrix", "scale", "zoom")
+  for(i in seq_along(props)) {
+    prop <- props[i]
+    if (!is.null(value <- f0[[prop]])) {
+      newvals <- sapply(fvals, function(e) as.numeric(e[[prop]]))
+      if (is.matrix(newvals)) newvals <- t(newvals)
+      rows <- NROW(newvals)
+      cols <- NCOL(newvals)
+      stopifnot(rows == length(fvals))
+      entries <- c(entries, seq_len(cols)-1)
+      properties <- c(properties, rep(prop, cols))
+      values <- cbind(values, newvals)
+    }
+  }
+  if (omitConstant) keep <- apply(values, 2, var) > 0
+  else keep <- TRUE 
+	
+  propertySetter(values = values[,keep], entries = entries[keep], 
+		 properties = properties[keep], 
+		 objids = subscene, param = times, ...)
 }

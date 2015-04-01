@@ -103,7 +103,6 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
     maxtime <- max(times)
     
     function(time) {
-        stopifnot(rgl.cur() != 0)
         if (time < mintime || time > maxtime) {
             if (extrapolate == "constant")
             	time <- ifelse(time < mintime, mintime, maxtime)
@@ -151,6 +150,7 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
        if(!missing(dev) && rgl.cur() != dev) rgl.set(dev)
        time <- proc.time()[3] - start
        if (time > duration || rgl.selectstate()$state == msABORT) return(invisible(NULL))
+       stopifnot(rgl.cur() != 0)
        par3d(f(time, ...))
     }
 }
@@ -166,6 +166,7 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
     for (i in round(startTime*fps):(duration*fps)) {
 	time <- i/fps        
 	if(rgl.cur() != dev) rgl.set(dev)
+	stopifnot(rgl.cur() != 0)
 	par3d(f(time, ...))
 	filename <- sprintf("%s%03d.png",frames,i)
 	if (verbose) {

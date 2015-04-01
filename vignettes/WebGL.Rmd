@@ -99,9 +99,9 @@ toggleButton(sphereid+1, label = "versicolor", prefix = "toggle", subscene = sub
 toggleButton(sphereid+2, label = "virginica", prefix = "toggle", subscene = subid)
 ```
 
-Note that we need to use `results="asis"` for the button code.  I didn't
-use it above, but normally we would use `echo=FALSE`; then the buttons 
-will end up side-by-side:
+Note that we need to use `results="asis"` for the button code.  
+Normally we would also use `echo=FALSE`, though I didn't do so above;
+then the buttons will end up side-by-side:
 
 ```{r results="asis", echo=FALSE}
 toggleButton(sphereid, "setosa", "toggle", subid)
@@ -111,7 +111,7 @@ toggleButton(sphereid+2, "virginica", "toggle", subid)
 
 An alternate control to achieve the same thing is `r indexfns("subsetSlider")`. 
 
-```{r slider, rgl=TRUE}
+```{r slider, rgl=TRUE, rgl.keepopen=TRUE}
 ```
 ```{r results="asis"}
 subsetSlider(subsets = list(setosa = sphereid, 
@@ -121,9 +121,41 @@ subsetSlider(subsets = list(setosa = sphereid,
 	     prefix = "slider", subscene = subid)
 ```
 
+There are several other functions to generate the Javascript
+code for controls.  `r indexfns("par3dinterpSetter")` generates
+a function that approximates the result of `r linkfn("par3dinterp")`.
+`r indexfns("propertySetter")` is a more general function to set
+the value of properties of the scene.  Both generate Javascript
+functions, but not the controls to use them; for that, use
+`r indexfns("propertySlider")` or your own custom code.
+
+For example, the following code (similar to the `r linkfn("play3d")`
+example) rotates the scene in a complex way.
+```{r userMatrix, rgl=TRUE}
+```
+```{r results="asis"}
+M <- r3dDefaults$userMatrix
+fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
+                                     rotate3d(M, pi/2, 1, 0, 0),
+                                     rotate3d(M, pi/2, 0, 1, 0) ) )
+propertySlider(setter = par3dinterpSetter(fn, 0, 1.5, steps=15, 
+					   prefix = "userMatrix", 
+					   subscene = subid),
+	       step = 0.01, prefix = "slider")
+```
+Some things to note:  The generated Javascript slider has 150 increments,
+so that motion appears smooth.  However, storing 150 `userMatrix` values
+would take up a lot of space, so we use interpolation
+in the Javascript code.  However, the Javascript code can only do 
+linear interpolation, not the more complex spline-based SO(3)
+interpolation done by `r linkfn("par3dinterp")`.  Because of this,
+we need to output 15 steps from `r linkfn("par3dinterpSetter")`
+so that the distortions of linear interpolation are not visible.  
+
 Another function that auto-generates Javascript code is 
 `r indexfns("clipplaneSlider")`.  This function allows the user to control
-the location of a clipping plane by moving a slider.  It is implemented
+the location of a clipping plane by moving a slider.  Both it 
+and `r linkfn("par3dinterpSetter")` are implemented
 using the more general `r indexfns("propertySlider")`, which 
 allows control of multiple objects in multiple scenes, but which 
 does require knowledge of the internal representation of the scene
