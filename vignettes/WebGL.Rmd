@@ -165,45 +165,10 @@ in its Javascript implementation.
 
 `rgl` allows user defined mouse controls.  For these to work
 within WebGL, you will need to write a Javascript version as
-well as the R version.
+well as the R version.  This isn't easy:  R provides a lot
+of support functions which are not easily available in Javascript.
 
-For example, the help page for `r linkfn("rgl.setMouseCallbacks")` defines
-a `pan3d` function to set a callback for panning a scene:
-```{r echo=FALSE, results = "hide"}
- open3d(useNULL=TRUE)
-```
-
-```
- pan3d <- function(button) {
-   start <- list()
-   
-   begin <- function(x, y) {
-       start$userMatrix <<- par3d("userMatrix")
-       start$viewport <<- par3d("viewport")
-       start$scale <<- par3d("scale")
-       start$projection <<- rgl.projection()
-       start$pos <<- rgl.window2user( x/start$viewport[3], 1 - y/start$viewport[4], 0.5, 
-                                      projection = start$projection)
-   }
-   
-   update <- function(x, y) {
-        xlat <- (rgl.window2user( x/start$viewport[3], 1 - y/start$viewport[4], 0.5,
-                                 projection = start$projection) - start$pos)*start$scale
-        mouseMatrix <- translationMatrix(xlat[1], xlat[2], xlat[3])
-        par3d(userMatrix = start$userMatrix %*% t(mouseMatrix) )
-   }
-   rgl.setMouseCallbacks(button, begin, update)
-   cat("Callbacks set on button", button, "of rgl device", rgl.cur(), "\n")
- }
- pan3d(3)
-```
-<script type="text/javascript">
-var start = new Object();
-var begin = function(x,y) {
-  
-}
-</script>
-TODO:  DESCRIBE HOW TO WRITE THIS IN JAVASCRIPT
+TODO:  write a simple mouse control.
 
 ## Reference for `rglClass`
 
