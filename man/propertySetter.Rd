@@ -14,7 +14,8 @@ to be used in HTML controls.
 propertySlider(setter = propertySetter,
              minS = min(param), maxS = max(param), step = 1, init = minS, 
 	     labels = signif(seq(minS, maxS, by = step), 2), 
-	     id = paste0(basename(tempfile("input"))), name = id,
+	     id = basename(tempfile("input")), name = id,
+	     outputid = paste0(id, "text"),
 	     ...) 
 	     
 propertySetter(values, entries, properties, objids, prefixes = "",
@@ -28,6 +29,8 @@ par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, ...)
   \item{labels}{Labels to display for each slider value.}
   \item{id}{The \code{id} of the input control that will be generated.}
   \item{name}{The name of the input control that will be generated.}
+  \item{outputid}{The \code{id} of the output control that
+will display the slider value, or \code{NULL} for none.}
   \item{...}{See Details below.}
   \item{values}{An array of values; rows correspond to slider positions.}
   \item{entries, properties, objids, prefixes}{Vectors describing

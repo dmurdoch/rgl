@@ -12,11 +12,13 @@ These functions write out HTML code to control WebGL displays on the same page.
 \usage{
 subsetSlider(setter = subsetSetter, 
              init = 1, labels = names(subsets), 
-             id = paste0(basename(tempfile("input"))), name = id,
+             id = basename(tempfile("input")), name = id,
+             outputid = paste0(id, "text"),
              ...)
              
 subsetSetter(subsets, subscene = currentSubscene3d(), prefix = "", 
-			 fullset = Reduce(union, subsets))
+			 fullset = Reduce(union, subsets),
+			 outputid = NULL)
              
 clipplaneSlider(a=NULL, b=NULL, c=NULL, d=NULL, 
                 plane = 1, clipplaneid, prefix = "", 
@@ -34,6 +36,8 @@ toggleButton(subset, subscene = currentSubscene3d(), prefix = "",
   numeric labels will be shown.}
   \item{id}{The \code{id} of the input control that will be generated.}
   \item{name}{The name of the input control that will be generated.}
+  \item{outputid}{The \code{id} of the output field that will be generated, or
+  \code{NULL} for no output field.}
   \item{...}{For \code{subsetSlider}, arguments to pass to \code{setter},
   if it is a function.  For \code{clipplaneSlider}, arguments to pass
   to \code{\link{propertySlider}}.}

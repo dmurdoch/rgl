@@ -3,28 +3,35 @@
 # and returns that invisibly.
 
 subsetSlider <- function(setter = subsetSetter, init = 1,labels = names(subsets), 
-			    id = paste0(basename(tempfile("input"))), name = id,
+			    id = basename(tempfile("input")), name = id,
+			    outputid = paste0(id, "text"),
 			    ...) {
   if (is.function(setter))
-    setter <- setter(...)
+    setter <- setter(outputid = outputid, ...)
   if (!inherits(setter, "subsetSetter"))
     stop(dQuote(setter), " must be a subsetSetter object.")
 
   env <- attr(setter, "env")
   subsets <- env$subsets
   if (is.null(labels)) labels <- seq_along(subsets)
+  if (is.null(outputid)) outputfield <- "" 
+  else outputfield <- subst('<output id="%outputid%" for="%id%">%label%</output>', 
+  			    outputid, id, label = labels[init])
   cat(subst(
 '<input type="range" min="0" max="%max%" step="1" value="%init%" id="%id%" name="%name%"
-oninput = "(%setter%)(this.valueAsNumber); 
-  document.getElementById(\'%id%text\').value = labels[value];"></input><output id="%id%text">%label%</output>', 
+oninput = "(%setter%)(this.valueAsNumber);">%outputfield%', 
     max = length(subsets)-1, init = init-1, name, id,
     setter, labels = paste0("'", labels, "'", collapse=","),
-    label = labels[init]))
+    outputfield))
   invisible(id)
 }
 
 subsetSetter <- function(subsets, subscene = currentSubscene3d(), prefix = "", 
-			 fullset = Reduce(union, subsets)) {
+			 fullset = Reduce(union, subsets),
+			 outputid = NULL) {
+  if (is.null(outputid)) setoutput = ""
+  else setoutput = subst('
+  document.getElementById(\'%outputid%\').value = labels[value];', outputid)
   result <- subst(
 'function(value) {
   var ids = [%vals%]; 
@@ -33,12 +40,12 @@ subsetSetter <- function(subsets, subscene = currentSubscene3d(), prefix = "",
   var entries = %prefix%rgl.getSubsceneEntries(%subscene%);
   entries = entries.filter(function(x) { return fullset.indexOf(x) < 0 });
   entries = entries.concat(ids[value]);
-  %prefix%rgl.setSubsceneEntries(entries, %subscene%); 
-  %prefix%rgl.drawScene();
+  %prefix%rgl.setSubsceneEntries(entries, %subscene%);
+  %prefix%rgl.drawScene(); %setoutput%
 }', vals = paste(paste0("[", sapply(subsets, 
     				function(i) paste(i, collapse=",")), 
     				"]"), collapse=","), prefix, subscene,
-    fullset = paste(fullset, collapse=","))
+    fullset = paste(fullset, collapse=","), setoutput)
   structure(result,
     env = environment(), class = "subsetSetter")    
   
@@ -78,7 +85,8 @@ clipplaneSlider <- function(a=NULL, b=NULL, c=NULL, d=NULL,
 propertySlider <- function(setter = propertySetter,
                            minS = min(param), maxS = max(param), step = 1, init = minS, 
                            labels = signif(seq(minS, maxS, by = step), 2), 
-                           id = paste0(basename(tempfile("input"))), name = id,
+                           id = basename(tempfile("input")), name = id,
+			   outputid = paste0(id, "text"),
                            ...)  {
   if (is.function(setter))
     setter <- setter(...)
@@ -91,19 +99,24 @@ propertySlider <- function(setter = propertySetter,
   
   sliderVals <- seq(minS, maxS, by = step)
   prefix <- prefixes[1]
+  if (is.null(outputid)) outputfield <- setoutput <- "" 
+  else {
+    outputfield <- subst('<output id="%outputid%" for="%id%">%label%</output>', 
+  			  outputid, id, label = labels[round(init-minS)/step + 1])
+    setoutput <- subst('
+  document.getElementById(\'%outputid%\').value = labels[lvalue];', outputid)
+  }
   result <- subst(
 '<script>%prefix%rgl.%id% = function(value){
    (%setter%)(value);
    var lvalue = Math.round((value - %minS%)/%step%);
-   var labels = [%labels%];
-   document.getElementById(\'%id%text\').value = labels[lvalue];
+   var labels = [%labels%]; %setoutput%
 }</script><input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
-oninput = "%prefix%rgl.%id%(this.valueAsNumber)"></input><output id="%id%text">%label%</output>', 
-    prefix, id, 
+oninput = "%prefix%rgl.%id%(this.valueAsNumber)">%outputfield%', 
+    prefix, id, setoutput, outputfield,
     setter = setter,
     minS, maxS, step, init, name,
-    labels = paste0("'", labels, "'", collapse=","), 
-    label = labels[round(init-minS)/step + 1])
+    labels = paste0("'", labels, "'", collapse=","))
   cat(result, sep="\n")
   invisible(id)
 }
