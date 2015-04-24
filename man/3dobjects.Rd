@@ -19,8 +19,10 @@ quads3d(x, y = NULL, z = NULL, ...)
   \item{x, y, z}{coordinates. Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
-  \item{ ... }{Material properties (see \code{\link{rgl.material}}), normals and 
-  texture coordinates (see \code{\link{rgl.primitive}}).}  
+  \item{ ... }{Material properties (see \code{\link{rgl.material}}).
+  For normals use \code{normals} and for
+  texture coordinates use \code{texcoords}; see \code{\link{rgl.primitive}}
+  for details.}  
 }
 \details{
 
