@@ -658,7 +658,7 @@ v0.94
     and "fmt", so windows created when those are evaluated don't
     overlay the rgl window.  (Suggestion of Keith Jewell.)
   - Added subsetSlider(), subsetSetter(), clipplaneSlider(), 
-    propertySlider(), propertySetter(), par3dinterpSetter() and 
+    propertySlider(), ageSetter(), propertySetter(), par3dinterpSetter() and 
     toggleButton() functions to output HTML/Javascript controls for WebGL.
   - Fixed bug in abclines3d() that caused it to skip lines that passed
     through the corners of the bounding box.  (Reported by Sven Laur.)

@@ -84,10 +84,14 @@ clipplaneSlider <- function(a=NULL, b=NULL, c=NULL, d=NULL,
 
 propertySlider <- function(setter = propertySetter,
                            minS = min(param), maxS = max(param), step = 1, init = minS, 
-                           labels = signif(seq(minS, maxS, by = step), 2), 
+                           labels = displayVals(sliderVals), 
                            id = basename(tempfile("input")), name = id,
 			   outputid = paste0(id, "text"),
                            ...)  {
+  displayVals <- function(x) {
+    base <- signif(mean(x), 2)
+    base + signif(x - base, 2)
+  }
   if (is.function(setter))
     setter <- setter(...)
   if (!inherits(setter, "propertySetter"))
@@ -95,23 +99,25 @@ propertySlider <- function(setter = propertySetter,
     
   env <- attr(setter, "env")
   param <- env$param
-  prefixes <- env$prefixes
+  prefix <- env$prefixes[1]
   
   sliderVals <- seq(minS, maxS, by = step)
-  prefix <- prefixes[1]
   if (is.null(outputid)) outputfield <- setoutput <- "" 
   else {
     outputfield <- subst('<output id="%outputid%" for="%id%">%label%</output>', 
   			  outputid, id, label = labels[round(init-minS)/step + 1])
     setoutput <- subst('
-  document.getElementById(\'%outputid%\').value = labels[lvalue];', outputid)
+  label = document.getElementById(\'%outputid%\');
+  if (label !== null) label.value = labels[lvalue];', outputid)
   }
   result <- subst(
 '<script>%prefix%rgl.%id% = function(value){
    (%setter%)(value);
    var lvalue = Math.round((value - %minS%)/%step%);
    var labels = [%labels%]; %setoutput%
-}</script><input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
+}
+%prefix%rgl.%id%(%init%);</script>
+<input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
 oninput = "%prefix%rgl.%id%(this.valueAsNumber)">%outputfield%', 
     prefix, id, setoutput, outputfield,
     setter = setter,
@@ -239,4 +245,127 @@ par3dinterpSetter <- function(fn, from, to, steps, subscene = f0$subscene,
   propertySetter(values = values[,keep], entries = entries[keep], 
 		 properties = properties[keep], 
 		 objids = subscene, param = times, ...)
+}
+
+ageSetter <- function(births, ages, colors = NULL, alpha = NULL, 
+		      radii = NULL, vertices = NULL, normals = NULL, 
+		      origins = NULL, texcoords = NULL, objids, prefixes = "",
+		      digits = 7, param = seq(floor(min(births)), ceiling(max(births))))  {
+  formatVec <- function(vec) {
+    vec <- t(vec)
+    result <- formatC(vec, digits = digits, width = 1)
+    result[vec == Inf] <- "Infinity"
+    result[vec == -Inf] <- "-Infinity"
+    paste(result, collapse = ",")
+  }
+  if (!is.null(colors)) colors <- t(col2rgb(colors))/255
+  lengths <- c(colors = NROW(colors), alpha = length(alpha), 
+  	       radii = length(radii), vertices = NROW(vertices),
+  	       normals = NROW(normals), origins = NROW(origins),
+  	       texcoords = NROW(texcoords))
+  lengths <- lengths[lengths > 0]
+  attribs <- names(lengths)
+  n <- unique(lengths)
+  stopifnot(length(n) == 1, n == length(ages), all(diff(ages) >= 0))
+  nobjs <- max(length(objids), length(prefixes))
+  prefixes <- rep(prefixes, length.out = nobjs)
+  objids <- rep(objids, length.out = nobjs)
+  result <- subst(
+'  function(time){
+    var ages = [-Infinity, %ages%, Infinity];
+    var births = [%births%];
+    var j = new Array(births.length);
+    var p = new Array(births.length);',
+    ages = formatVec(ages), births = formatVec(births))
+  rows <- c(1,1:n, n)
+  if ("colors" %in% attribs) 
+    result <- c(result, subst(
+'    var colors = [%values%];', values = formatVec(colors[rows,])))
+  if ("alpha" %in% attribs)
+    result <- c(result, subst(
+'    var alpha = [%values%];', values = formatVec(alpha[rows])))
+  if ("radii" %in% attribs)
+    result <- c(result, subst(
+'    var radii = [%values%];', values = formatVec(radii[rows])))
+  if ("vertices" %in% attribs) {
+    stopifnot(ncol(vertices) == 3)
+    result <- c(result, subst(
+'    var vertices = [%values%];', values = formatVec(vertices[rows,])))
+  }
+  if ("normals" %in% attribs) {
+    stopifnot(ncol(normals) == 3)
+    result <- c(result, subst(
+'    var normals = [%values%];', values = formatVec(normals[rows,])))
+  }
+  if ("origins" %in% attribs) {
+    stopifnot(ncol(origins) == 2)
+    result <- c(result, subst(
+'    var origins = [%values%];', values = formatVec(origins[rows,])))
+  }  
+  if ("texcoords" %in% attribs) {
+    stopifnot(ncol(texcoords) == 2)
+    result <- c(result, subst(
+'    var texcoords = [%values%];', values = formatVec(texcoords[rows,])))
+  }
+  result <- c(result,
+'    for (var i = 0; i < births.length; i++) {
+      var age = time - births[i];
+      for (var j0 = 1; age > ages[j0]; j0++);
+      if (ages[j0] == Infinity)
+        p[i] = 1;       
+      else if (ages[j0] > ages[j0-1])
+        p[i] = (ages[j0] - age)/(ages[j0] - ages[j0-1]);
+      else
+        p[i] = 0;
+      j[i] = j0;
+    }')
+  for (j in seq_len(nobjs)) {
+    prefix <- prefixes[j]
+    objid <- objids[j]
+    result <- c(result, subst(
+'    var propvals = %prefix%rgl.values[%objid%];
+    var stride = %prefix%rgl.offsets[%objid%]["stride"];',
+      prefix, objid))
+    for (a in attribs) {
+      ofs <- c(colors = "cofs", alpha = "cofs", radii = "radofs",
+      	       vertices = "vofs", normals = "nofs", origins = "oofs",
+      	       texcoords = "tofs")[a]
+      result <- c(result, subst(
+'    var ofs = %prefix%rgl.offsets[%objid%]["%ofs%"];
+    if (ofs >= 0) {
+      for (var i = 0; i < births.length; i++) {', 
+        prefix, objid, ofs))
+      dim <- c(colors = 3, alpha = 1, radii = 1,
+      	 vertices = 3, normals = 3, origins = 2,
+      	 texcoords = 2)[a] 
+      if (dim > 1)
+        for (d in seq_len(dim) - 1)
+      	  result <- c(result, subst(
+'        propvals[i*stride + ofs + %d1%] = p[i]*%a%[%dim%*(j[i]-1) + %d2%] + (1-p[i])*%a%[%dim%*j[i] + %d2%];',
+          dim, d1 = if (a == "alpha") 3 else d, d2 = d, a))
+      else
+      	result <- c(result, subst(
+'        propvals[i*stride + ofs%alphaofs%] = p[i]*%a%[j[i]-1] + (1-p[i])*%a%[j[i]];',
+      		a, alphaofs = if (a == "alpha") " + 3" else ""))
+      result <- c(result, subst(
+'      }
+    } else 
+        alert("\'%a%\' property not found in object %objid%");', a, objid))
+    }
+    result <- c(result, subst(
+'    %prefix%rgl.values[%objid%] = propvals;
+    if (typeof %prefix%rgl.buf[%objid%] !== "undefined") {
+      var gl = %prefix%rgl.gl;
+      gl.bindBuffer(gl.ARRAY_BUFFER, %prefix%rgl.buf[%objid%]);
+      gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);
+    }',
+      prefix, objid))
+  }
+  for (prefix in unique(prefixes))
+    result <- c(result, subst(
+'    %prefix%rgl.drawScene();', prefix))
+  result <- c(result, '  }')
+  force(param)
+  structure(paste(result, collapse = "\n"),
+  	    env = environment(), class = "propertySetter")
 }

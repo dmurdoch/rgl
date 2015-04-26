@@ -161,6 +161,24 @@ allows control of multiple objects in multiple scenes, but which
 does require knowledge of the internal representation of the scene
 in its Javascript implementation.
 
+The final function of this type is `r indexfns("ageSetter")`.
+It is used when the slider controls the "age" of the scene, 
+and attributes of vertices change with their age.  For example,
+to show a point moving along a curve, we could do the following.  
+Note that we need to specify multiple colours so that the
+colour is not fixed, and can be controlled by the slider.
+
+```{r curve, rgl=TRUE}
+time <- 0:500
+lineid <- plot3d(cos(time/20), sin(time/10), time, type="l",
+		 col = c("gray", "gray"))["data"]
+```
+```{r results="asis"}
+propertySlider( ageSetter(births = time, ages = c(0, 0, 50),
+			  colors = c("gray", "black", "red"),
+			  objids = lineid, prefixes = "curve") )
+```
+
 ## User Defined Mouse Controls
 
 `rgl` allows user defined mouse controls.  For these to work

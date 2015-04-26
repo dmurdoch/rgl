@@ -13,7 +13,7 @@ to be used in HTML controls.
 \usage{
 propertySlider(setter = propertySetter,
              minS = min(param), maxS = max(param), step = 1, init = minS, 
-	     labels = signif(seq(minS, maxS, by = step), 2), 
+	     labels = displayVals(sliderVals), 
 	     id = basename(tempfile("input")), name = id,
 	     outputid = paste0(id, "text"),
 	     ...) 
@@ -26,7 +26,8 @@ par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, ...)
 \arguments{
   \item{setter}{A function to write Javascript code, or its output.}
   \item{minS, maxS, step, init}{Slider values to be displayed.}
-  \item{labels}{Labels to display for each slider value.}
+  \item{labels}{Labels to display for each slider value.  The
+  defaults are calculated using internal variables.}
   \item{id}{The \code{id} of the input control that will be generated.}
   \item{name}{The name of the input control that will be generated.}
   \item{outputid}{The \code{id} of the output control that
@@ -107,6 +108,10 @@ Duncan Murdoch
 \seealso{
 \code{\link{writeWebGL}}.  \code{\link{clipplaneSlider}} makes
 use of \code{propertySlider}.
+
+\code{\link{ageSetter}} can be used as the \code{setter} argument
+to \code{propertySlider} to modify objects according to a linear (age)
+scale.
 }
 \examples{
 # Just the setter function
