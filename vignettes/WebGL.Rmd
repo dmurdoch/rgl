@@ -165,18 +165,24 @@ The final function of this type is `r indexfns("ageSetter")`.
 It is used when the slider controls the "age" of the scene, 
 and attributes of vertices change with their age.  For example,
 to show a point moving along a curve, we could do the following.  
-Note that we need to specify multiple colours so that the
-colour is not fixed, and can be controlled by the slider.
+Note that we need to specify multiple colours in the plot so that the
+colour is not fixed, and can be controlled by the slider.  We
+also give two `ageSetter` calls in a list; the `propertySlider`
+will control both of them simultaneously.
 
 ```{r curve, rgl=TRUE}
 time <- 0:500
-lineid <- plot3d(cos(time/20), sin(time/10), time, type="l",
-		 col = c("gray", "gray"))["data"]
+xyz <- cbind(cos(time/20), sin(time/10), time)
+lineid <- plot3d(xyz, type="l", col = c("black", "black"))["data"]
+sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
 ```
 ```{r results="asis"}
-propertySlider( ageSetter(births = time, ages = c(0, 0, 50),
-			  colors = c("gray", "black", "red"),
-			  objids = lineid, prefixes = "curve") )
+propertySlider( list(ageSetter(births = time, ages = c(0, 0, 50),
+			  colors = c("gray", "red", "gray"),
+			  objids = lineid, prefixes = "curve"),
+		     ageSetter(births = 0, ages = time,
+		     	  vertices = xyz, objids = sphereid,
+		     	  prefixes = "curve")) )
 ```
 
 ## User Defined Mouse Controls

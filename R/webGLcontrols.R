@@ -92,14 +92,22 @@ propertySlider <- function(setter = propertySetter,
     base <- signif(mean(x), 2)
     base + signif(x - base, 2)
   }
-  if (is.function(setter))
-    setter <- setter(...)
-  if (!inherits(setter, "propertySetter"))
+  if (!is.list(setter)) setters <- list(setter)
+  else setters <- setter
+  param <- numeric()
+  prefixes <- character()
+  for (i in seq_along(setters)) {
+    setter <- setters[[i]]
+    if (is.function(setter))
+      setters[i] <- setter <- setter(...)
+    if (!inherits(setter, "propertySetter"))
     stop(dQuote(setter), " must be a propertySetter object.")
     
-  env <- attr(setter, "env")
-  param <- env$param
-  prefix <- env$prefixes[1]
+    env <- attr(setter, "env")
+    param <- c(param, env$param)
+    prefixes <- c(prefixes, env$prefixes)
+  }
+  prefix <- prefixes[1]
   
   sliderVals <- seq(minS, maxS, by = step)
   if (is.null(outputid)) outputfield <- setoutput <- "" 
@@ -111,9 +119,11 @@ propertySlider <- function(setter = propertySetter,
   if (label !== null) label.value = labels[lvalue];', outputid)
   }
   result <- subst(
-'<script>%prefix%rgl.%id% = function(value){
-   (%setter%)(value);', prefix, id, setter)
-  for (p in unique(env$prefixes))
+'<script>%prefix%rgl.%id% = function(value){', prefix, id)
+  for (i in seq_along(setters))
+    result <- c(result, subst(
+'   (%setter%)(value);', setter = setters[i]))
+  for (p in unique(prefixes))
     result <- c(result, subst(
 '   %prefix%rgl.drawScene();', prefix = p))
   result <- c(result, subst(

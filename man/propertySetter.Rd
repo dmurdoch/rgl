@@ -24,7 +24,8 @@ propertySetter(values, entries, properties, objids, prefixes = "",
 par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, ...)
 }
 \arguments{
-  \item{setter}{A function to write Javascript code, or its output.}
+  \item{setter}{A function to write Javascript code, or its output, or
+   a list containing several of these.}
   \item{minS, maxS, step, init}{Slider values to be displayed.}
   \item{labels}{Labels to display for each slider value.  The
   defaults are calculated using internal variables.}
