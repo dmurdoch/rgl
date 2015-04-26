@@ -104,9 +104,9 @@ Normally we would also use `echo=FALSE`, though I didn't do so above;
 then the buttons will end up side-by-side:
 
 ```{r results="asis", echo=FALSE}
-toggleButton(sphereid, "setosa", "toggle", subid)
-toggleButton(sphereid+1, "versicolor", "toggle", subid)
-toggleButton(sphereid+2, "virginica", "toggle", subid)
+toggleButton(sphereid, label = "setosa", prefix = "toggle", subscene = subid)
+toggleButton(sphereid+1, label = "versicolor", prefix = "toggle", subscene = subid)
+toggleButton(sphereid+2, label = "virginica", prefix = "toggle", subscene = subid)
 ```
 
 An alternate control to achieve the same thing is `r indexfns("subsetSlider")`. 
@@ -141,7 +141,7 @@ fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
 propertySlider(setter = par3dinterpSetter(fn, 0, 1.5, steps=15, 
 					   prefix = "userMatrix", 
 					   subscene = subid),
-	       step = 0.01, prefix = "slider")
+	       step = 0.01)
 ```
 Some things to note:  The generated Javascript slider has 150 increments,
 so that motion appears smooth.  However, storing 150 `userMatrix` values

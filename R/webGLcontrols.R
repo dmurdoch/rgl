@@ -112,17 +112,20 @@ propertySlider <- function(setter = propertySetter,
   }
   result <- subst(
 '<script>%prefix%rgl.%id% = function(value){
-   (%setter%)(value);
-   var lvalue = Math.round((value - %minS%)/%step%);
+   (%setter%)(value);', prefix, id, setter)
+  for (p in unique(env$prefixes))
+    result <- c(result, subst(
+'   %prefix%rgl.drawScene();', prefix = p))
+  result <- c(result, subst(
+'   var lvalue = Math.round((value - %minS%)/%step%);
    var labels = [%labels%]; %setoutput%
 }
 %prefix%rgl.%id%(%init%);</script>
 <input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
 oninput = "%prefix%rgl.%id%(this.valueAsNumber)">%outputfield%', 
     prefix, id, setoutput, outputfield,
-    setter = setter,
     minS, maxS, step, init, name,
-    labels = paste0("'", labels, "'", collapse=","))
+    labels = paste0("'", labels, "'", collapse=",")))
   cat(result, sep="\n")
   invisible(id)
 }
@@ -209,9 +212,7 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
    gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);',
    	prefix, objid))
    }
-   result <- c(result, subst(
-'   %prefix%rgl.drawScene();
-}', prefix))
+   result <- c(result, '}')
   structure(paste(result, collapse = "\n"),
     env = environment(), class = "propertySetter")
 }
@@ -361,9 +362,6 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
     }',
       prefix, objid))
   }
-  for (prefix in unique(prefixes))
-    result <- c(result, subst(
-'    %prefix%rgl.drawScene();', prefix))
   result <- c(result, '  }')
   force(param)
   structure(paste(result, collapse = "\n"),
