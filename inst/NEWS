@@ -639,7 +639,7 @@ v0.94
   - The Windows configuration file has been modified to work in 
     R-devel (to become R 3.2.0).
 
-0.95.1241
+0.95.1242
   - If a template file is used in writeWebGL(), the string %prefix%
     will be replaced in it by the prefix argument.
   - writeWebGL() now outputs a Javascript global variable named
@@ -662,3 +662,6 @@ v0.94
     toggleButton() functions to output HTML/Javascript controls for WebGL.
   - Fixed bug in abclines3d() that caused it to skip lines that passed
     through the corners of the bounding box.  (Reported by Sven Laur.)
+  - Added hook_rgl() and hook_webgl() functions, based on the knitr
+    functions. 
+    

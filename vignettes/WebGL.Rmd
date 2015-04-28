@@ -182,7 +182,8 @@ propertySlider( list(ageSetter(births = time, ages = c(0, 0, 50),
 			  objids = lineid, prefixes = "curve"),
 		     ageSetter(births = 0, ages = time,
 		     	  vertices = xyz, objids = sphereid,
-		     	  prefixes = "curve")) )
+		     	  prefixes = "curve")),
+		     maxS = max(time) + 50)
 ```
 
 ## User Defined Mouse Controls

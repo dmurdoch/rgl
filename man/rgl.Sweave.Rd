@@ -80,6 +80,10 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{RweaveLatex}} for a description of alternate graphics drivers
-in Sweave, and standard options that can be used in code chunks.
+in Sweave, and standard options that can be used in code chunks.  
+
+\code{\link{hook_rgl}}
+and \code{\link{hook_webgl}} allow fixed or interactive \pkg{rgl} scenes to be embedded in \pkg{knitr} 
+documents.
 }
 \keyword{ utilities }
