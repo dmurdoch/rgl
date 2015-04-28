@@ -422,7 +422,7 @@ Possible values for `r indexfns("mouseMode", '<code>"mouseMode"</code>')` for bu
 `"fov"`        | The mouse affects perspective by changing the field of view
 `"pull"`       | Rotating the mouse wheel towards the user "pulls the scene closer"
 `"push"`       | The same rotation "pushes the scene away"
-`"user"`       | A user action set by `r indexfns(c("rgl.setMouseCallbacks", "rgl.setWheelCallback"))`
+`"user"`       | A user action set by `r indexfns(c("rgl.setMouseCallbacks", "rgl.setWheelCallback"))`.  Use `r indexfns("rgl.getMouseCallbacks")` and `r indexfns("rgl.getWheelCallback")` to retrieve
 
 The following functions make use of the mouse for selection within a 
 scene.
@@ -480,10 +480,7 @@ without any 3D information being saved:
 `r indexfns("movie3d")`    | Save a series of bitmaps to be assembled into a movie
 `r indexfns("rgl.pixels")` | Obtain pixel-level information about the scene in an R variable
 `r indexfns("rgl.Sweave")` | Driver function for inserting a snapshot into a Sweave document.
-
-The `knitr` package has functions 
-`r linkfn("hook_rgl", text="knitr::hook_rgl", pkg="knitr")` and 
-`r linkfn("hook_webgl", text="knitr::hook_webgl", pkg="knitr")` 
+`r indexfns(c("hook_rgl", "hook_webgl"))` | `knitr` hook functions 
 for inserting snapshots or WebGL code into a document.
 
 The `r indexfns("rgl.snapshot")` function is identical to `snapshot3d`.
@@ -493,13 +490,19 @@ involved in Sweave processing and not normally called by users.
 ### Working with WebGL scenes
 
 The `writeWebGL` function exports a scene to HTML and Javascript code.  
-These functions also write HTML and Javascript, for working with the 
+The functions below write HTML and Javascript for working with the 
 exported scene.  More details are given in the vignette 
 [User Interaction in WebGL](WebGL.html).
 
 ------------------------------------ | -------------
+`r indexfns("propertySlider")`       | insert a slider to make changes to a scene
+`r indexfns("clipplaneSlider")`      | insert a slider to control a clipping plane
 `r indexfns("subsetSlider")`         | insert a slider to control which objects are displayed
 `r indexfns("toggleButton")`         | insert a button to toggle some items
+`r indexfns("propertySetter")`       | function to modify properties
+`r indexfns("subsetSetter")`         | function to choose subsets
+`r indexfns("ageSetter")`            | function to "age" vertices
+`r indexfns("par3dinterpSetter")`    | function like `r linkfn("par3dinterp")`
 
 ### Working with the scene
 

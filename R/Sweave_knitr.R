@@ -97,14 +97,15 @@ hook_webgl <- local({
     }  
     name <- tempfile("webgl", tmpdir = ".", fileext = ".html")
     on.exit(unlink(name))
-    dpi <- options$dpi / options$fig.retina  # should not consider Retina displays (knitr #901)
+    retina <- options$fig.retina
+    if (is.logical(retina)) retina <- 1 
+    dpi <- options$dpi / retina  # should not consider Retina displays (knitr #901)
     par3d(windowRect = 100 + dpi * c(0, 0, options$fig.width, 
                                            options$fig.height))
     Sys.sleep(.05) # need time to respond to window size change
     
     prefix <- gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
     prefix <- sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
-
     res <- writeWebGL(dir = dirname(name), 
                     filename = name, 
                     snapshot = !rgl.useNULL(),
