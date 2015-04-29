@@ -2,84 +2,81 @@
 # This displays an HTML5 input widget to show a subset of objects.  It assigns a random id
 # and returns that invisibly.
 
-subsetSlider <- function(setter = subsetSetter, init = 1,labels = names(subsets), 
-			    id = basename(tempfile("input")), name = id,
-			    outputid = paste0(id, "text"),
-			    ...) {
-  if (is.function(setter))
-    setter <- setter(outputid = outputid, ...)
-  if (!inherits(setter, "subsetSetter"))
-    stop(dQuote(setter), " must be a subsetSetter object.")
-
-  env <- attr(setter, "env")
-  subsets <- env$subsets
-  if (is.null(labels)) labels <- seq_along(subsets)
-  if (is.null(outputid)) outputfield <- "" 
-  else outputfield <- subst('<output id="%outputid%" for="%id%">%label%</output>', 
-  			    outputid, id, label = labels[init])
-  cat(subst(
-'<input type="range" min="0" max="%max%" step="1" value="%init%" id="%id%" name="%name%"
-oninput = "(%setter%)(this.valueAsNumber);">%outputfield%', 
-    max = length(subsets)-1, init = init-1, name, id,
-    setter, labels = paste0("'", labels, "'", collapse=","),
-    outputfield))
-  invisible(id)
+subsetSlider <- function(subsets, labels = names(subsets),
+                         fullset = Reduce(union, subsets), 
+                         subscenes = currentSubscene3d(), prefixes = "", ...) {
+  propertySlider(subsetSetter(subsets, fullset = fullset,
+                              subscenes = subscenes, prefixes = prefixes),
+                 labels = labels, ...)
 }
 
-subsetSetter <- function(subsets, subscene = currentSubscene3d(), prefix = "", 
-			 fullset = Reduce(union, subsets),
-			 outputid = NULL) {
-  if (is.null(outputid)) setoutput = ""
-  else setoutput = subst('
-  document.getElementById(\'%outputid%\').value = labels[value];', outputid)
+subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = "",  
+			 fullset = Reduce(union, subsets)) {
+  nsubs <- max(length(subscenes), length(prefixes))
+  subscenes <- rep(subscenes, length.out = nsubs)
+  prefixes <- rep(prefixes, length.out = nsubs)
   result <- subst(
 'function(value) {
   var ids = [%vals%]; 
-  var labels = [%labels%];
   var fullset = [%fullset%];
-  var entries = %prefix%rgl.getSubsceneEntries(%subscene%);
-  entries = entries.filter(function(x) { return fullset.indexOf(x) < 0 });
+  var f = function(x) { return fullset.indexOf(x) < 0 };
+  value = Math.round(value);', 
+    vals = paste(paste0("[", sapply(subsets, 
+        				function(i) paste(i, collapse=",")), 
+        				"]"), collapse=","), 
+    fullset = paste(fullset, collapse=","))
+  for (i in seq_len(nsubs)) 
+    result <- c(result, subst(
+'  var entries = %prefix%rgl.getSubsceneEntries(%subscene%);
+  entries = entries.filter(f);
   entries = entries.concat(ids[value]);
-  %prefix%rgl.setSubsceneEntries(entries, %subscene%);
-  %prefix%rgl.drawScene(); %setoutput%
-}', vals = paste(paste0("[", sapply(subsets, 
-    				function(i) paste(i, collapse=",")), 
-    				"]"), collapse=","), prefix, subscene,
-    fullset = paste(fullset, collapse=","), setoutput)
-  structure(result,
-    env = environment(), class = "subsetSetter")    
-  
+  %prefix%rgl.setSubsceneEntries(entries, %subscene%);',
+      prefix = prefixes[i], subscene = subscenes[i]))
+  result <- c(result, '}')
+    
+  structure(paste(result, collapse = "\n"),
+    param = seq_along(subsets) - 1, 
+    prefixes = prefixes, class = "propertySetter")     
 }
 
-toggleButton <- function(subset, subscene = currentSubscene3d(), prefix = "", 
+toggleButton <- function(subset, subscenes = currentSubscene3d(), prefixes = "", 
 			 label = deparse(substitute(subset)), 
 			 id = paste0(basename(tempfile("input"))), name = id) {
-  cat(subst(
+  nsubs <- max(length(subscenes), length(prefixes))
+  subscenes <- rep(subscenes, length.out = nsubs)
+  prefixes <- rep(prefixes, length.out = nsubs)
+  result <- subst(
 '<button type="button" id="%id%" name="%name%" onclick = "(function(){
-  var subset = [%subset%];
-  if (%prefix%rgl.inSubscene(subset[0], %subscene%)) {
+  var subset = [%subset%];',
+    name, id, subset = paste(subset, collapse=","))
+  for (i in seq_len(nsubs)) 
+    result <- c(result, subst(
+'  if (%prefix%rgl.inSubscene(subset[0], %subscene%)) {
     for (var i=0; i<subset.length; i++)
       %prefix%rgl.delFromSubscene(subset[i], %subscene%);
   } else {
     for (var i=0; i<subset.length; i++)
       %prefix%rgl.addToSubscene(subset[i], %subscene%);
-  }
-  %prefix%rgl.drawScene();
-})()">%label%</button>', 
-  name, id, subset = paste(subset, collapse=","),
-  prefix, subscene, label))
+  }', prefix = prefixes[i], subscene = subscenes[i]))
+  prefixes <- unique(prefixes)
+  for (i in seq_along(prefixes))
+    result <- c(result, subst(
+'  %prefix%rgl.drawScene();', prefix = prefixes[i]))
+  result <- c(result, subst(
+'})()">%label%</button>', label)) 
+  cat(result, sep = "\n")
   invisible(id)
 }
 
 clipplaneSlider <- function(a=NULL, b=NULL, c=NULL, d=NULL, 
-			    plane = 1, clipplaneid, prefix = "", 
+			    plane = 1, clipplaneids, prefixes = "", 
 			    labels = signif(values[,1],3), 
 			      ...) {
   values <- cbind(a = a, b = b, c = c, d = d)
   col <- which(colnames(values) == letters[1:4]) - 1
   propertySlider(values = values, entries = 4*(plane-1) + col,
-  	         properties = "vClipplane", objids = clipplaneid, 
-  	         prefixes = prefix, labels = labels, ...)
+  	         properties = "vClipplane", objids = clipplaneids, 
+  	         prefixes = prefixes, labels = labels, ...)
 }
 
 propertySlider <- function(setter = propertySetter,
@@ -103,9 +100,8 @@ propertySlider <- function(setter = propertySetter,
     if (!inherits(setter, "propertySetter"))
     stop(dQuote(setter), " must be a propertySetter object.")
     
-    env <- attr(setter, "env")
-    param <- c(param, env$param)
-    prefixes <- c(prefixes, env$prefixes)
+    param <- c(param, attr(setter, "param"))
+    prefixes <- c(prefixes, attr(setter, "prefixes"))
   }
   prefix <- prefixes[1]
   
@@ -224,7 +220,8 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
    }
    result <- c(result, '}')
   structure(paste(result, collapse = "\n"),
-    env = environment(), class = "propertySetter")
+    param = param, prefixes = prefixes,
+    class = "propertySetter")
 }
 
 par3dinterpSetter <- function(fn, from, to, steps, subscene = f0$subscene,
@@ -373,7 +370,7 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
       prefix, objid))
   }
   result <- c(result, '  }')
-  force(param)
   structure(paste(result, collapse = "\n"),
-  	    env = environment(), class = "propertySetter")
+            param = param, prefixes = prefixes,
+  	    class = "propertySetter")
 }

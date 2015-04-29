@@ -10,53 +10,45 @@ Write HTML/Javascript code to control a WebGL display.
 These functions write out HTML code to control WebGL displays on the same page.
 }
 \usage{
-subsetSlider(setter = subsetSetter, 
-             init = 1, labels = names(subsets), 
-             id = basename(tempfile("input")), name = id,
-             outputid = paste0(id, "text"),
+subsetSlider(subsets, labels = names(subsets), 
+             fullset = Reduce(union, subsets),
+             subscenes = currentSubscene3d(), prefixes = "",
              ...)
              
-subsetSetter(subsets, subscene = currentSubscene3d(), prefix = "", 
-			 fullset = Reduce(union, subsets),
-			 outputid = NULL)
+subsetSetter(subsets, subscenes = currentSubscene3d(), prefixes = "", 
+			 fullset = Reduce(union, subsets))
              
 clipplaneSlider(a=NULL, b=NULL, c=NULL, d=NULL, 
-                plane = 1, clipplaneid, prefix = "", 
+                plane = 1, clipplaneids, prefixes = "", 
                 labels = signif(values[,1],3), ...)
              
-toggleButton(subset, subscene = currentSubscene3d(), prefix = "", 
+toggleButton(subset, subscenes = currentSubscene3d(), prefixes = "", 
              label = deparse(substitute(subset)), 
              id = paste0(basename(tempfile("input"))), name = id) 
 }
 \arguments{
-  \item{setter}{A character vector of class \code{"subsetSetter"},
-  or a function to produce one.}
-  \item{init}{The index of the initial subset to show.}
+  \item{subsets}{A list of vectors of object identifiers; the slider or setter
+  will choose among them.}
   \item{labels}{Labels to display corresponding to each subset.  If \code{NULL},
   numeric labels will be shown.}
-  \item{id}{The \code{id} of the input control that will be generated.}
-  \item{name}{The name of the input control that will be generated.}
-  \item{outputid}{The \code{id} of the output field that will be generated, or
-  \code{NULL} for no output field.}
-  \item{...}{For \code{subsetSlider}, arguments to pass to \code{setter},
-  if it is a function.  For \code{clipplaneSlider}, arguments to pass
-  to \code{\link{propertySlider}}.}
-  \item{subsets}{A list of vectors of object identifiers; the slider
-  will choose among them.}
-  \item{subscene}{The subscene to be controlled.}  
-  \item{prefix}{The prefix of the WebGL scene to be controlled.}
   \item{fullset}{Objects in the subscene which are not in \code{fullset}
   will not be touched.}
+  \item{subscenes}{The subscenes to be controlled.}  
+  \item{prefixes}{The prefixes of the WebGL scenes to be controlled.}
+  \item{id}{The \code{id} of the input control that will be generated.}
+  \item{name}{The name of the input control that will be generated.}
+  \item{...}{Arguments to pass to \code{\link{propertySlider}}.}
   \item{a,b,c,d}{The parameter values to change.  Leave as \code{NULL}
   to hold the parameter constant.}
-  \item{plane, clipplaneid}{The identifier of the particular clipplane
+  \item{plane, clipplaneids}{The identifier of the particular clipplane
   to modify.}
   \item{subset}{The subset that the button should toggle.}
   \item{label}{The button label.}
 }
 \details{
 \code{subsetSlider} and \code{clipplaneSlider} generate an HTML5 slider 
-control with a text label.  To display no text, set the labels to blanks.
+control with a text label.  To display no text, set the labels to blanks
+in the \code{...} argument.
 
 \code{subsetSetter} is a low-level function to produce the Javascript
 code used by \code{subsetSlider}.  This code will not touch objects in the
@@ -76,10 +68,10 @@ plane to corresponding values as the slider is moved.
 }
 \value{
 \code{subsetSetter} returns a length-one character vector
-of class \code{"subsetSetter"}.  
+of class \code{"propertySetter"}.  
 
 The other functions 
-use \code{\link{cat}} to write their output and return the 
+use \code{\link{cat}} to write their output and invisibly return the 
 \code{id} of the control that was generated.
 }
 \author{
@@ -87,8 +79,8 @@ Duncan Murdoch
 }
 
 \seealso{
-\code{\link{writeWebGL}}. See \code{\link{propertySlider}} for
-a lower level, more flexible function.
+\code{\link{writeWebGL}}. See \code{\link{propertySlider}} and \code{\link{propertySetter}}
+for lower level, more flexible functions.
 }
 \examples{
 subsets <- list(1:3, 1:4, 1:5)

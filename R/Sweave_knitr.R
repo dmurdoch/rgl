@@ -98,7 +98,7 @@ hook_webgl <- local({
     name <- tempfile("webgl", tmpdir = ".", fileext = ".html")
     on.exit(unlink(name))
     retina <- options$fig.retina
-    if (is.logical(retina)) retina <- 1 
+    if (!is.numeric(retina)) retina <- 1 # It might be FALSE or maybe NULL
     dpi <- options$dpi / retina  # should not consider Retina displays (knitr #901)
     par3d(windowRect = 100 + dpi * c(0, 0, options$fig.width, 
                                            options$fig.height))
@@ -133,7 +133,11 @@ hook_rgl = function(before, options, envir) {
   par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
-  knitr::in_base_dir(save_rgl(name, options$dev))
+  dir <- knitr::opts_knit$get('base_dir')
+  if (is.character(dir) && !file_test('-d', dir)) dir.create(dir, recursive = TRUE)
+  owd <- setwd(dir)
+  on.exit(setwd(owd))
+  save_rgl(name, options$dev)
 
   options$fig.num = 1L  # only one figure in total
   knitr::hook_plot_custom(before, options, envir)

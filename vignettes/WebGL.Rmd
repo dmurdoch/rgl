@@ -115,10 +115,11 @@ An alternate control to achieve the same thing is `r indexfns("subsetSlider")`.
 ```
 ```{r results="asis"}
 subsetSlider(subsets = list(setosa = sphereid, 
-		  versicolor = sphereid + 1, 
-		  virginica = sphereid + 2, 
-		  all = sphereid + 0:2),
-	     prefix = "slider", subscene = subid)
+                  versicolor = sphereid + 1, 
+                  virginica = sphereid + 2, 
+                  all = sphereid + 0:2),
+             prefixes = "slider", subscenes = subid, 
+             init = 3)
 ```
 
 There are several other functions to generate the Javascript
