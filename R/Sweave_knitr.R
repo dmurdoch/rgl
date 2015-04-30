@@ -134,11 +134,14 @@ hook_rgl = function(before, options, envir) {
   Sys.sleep(.05) # need time to respond to window size change
 
   dir <- knitr::opts_knit$get('base_dir')
-  if (is.character(dir) && !file_test('-d', dir)) dir.create(dir, recursive = TRUE)
-  owd <- setwd(dir)
-  on.exit(setwd(owd))
+  if (is.character(dir)) {
+    if (!file_test('-d', dir)) dir.create(dir, recursive = TRUE)
+    owd <- setwd(dir)
+    on.exit(setwd(owd))
+  }
   save_rgl(name, options$dev)
-
+  if (!isTRUE(options$rgl.keepopen))
+    rgl.close()
   options$fig.num = 1L  # only one figure in total
   knitr::hook_plot_custom(before, options, envir)
 }
