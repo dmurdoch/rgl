@@ -1,6 +1,6 @@
 Package: rgl
-Version: 0.95.1243
-Title: 3D visualization device system (OpenGL)
+Version: 0.95.1246
+Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 2.15.0),stats,grDevices

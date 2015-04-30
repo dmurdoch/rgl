@@ -106,7 +106,7 @@ propertySlider <- function(setter = propertySetter,
   prefix <- prefixes[1]
   
   sliderVals <- seq(minS, maxS, by = step)
-  if (is.null(outputid)) outputfield <- setoutput <- "" 
+  if (is.null(outputid) || is.null(labels)) outputfield <- setoutput <- "" 
   else {
     outputfield <- subst('<output id="%outputid%" for="%id%">%label%</output>', 
   			  outputid, id, label = labels[round(init-minS)/step + 1])

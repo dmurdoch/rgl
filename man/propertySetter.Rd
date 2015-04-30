@@ -28,7 +28,8 @@ par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, ...)
    a list containing several of these.}
   \item{minS, maxS, step, init}{Slider values to be displayed.}
   \item{labels}{Labels to display for each slider value.  The
-  defaults are calculated using internal variables.}
+  defaults are calculated using internal variables.  If \code{NULL},
+  no labels will be shown.}
   \item{id}{The \code{id} of the input control that will be generated.}
   \item{name}{The name of the input control that will be generated.}
   \item{outputid}{The \code{id} of the output control that
