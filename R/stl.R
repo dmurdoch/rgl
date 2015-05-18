@@ -156,15 +156,16 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
     allids <- rgl.ids()
     ind <- match(ids, allids$id)
     keep <- !is.na(ind)
-    if (any(!keep)) warning("object(s) with id ", paste(ids[!keep], collapse=" "), " not found")
+    if (any(!keep)) warning(gettextf("Object(s) with id %s not found", paste(ids[!keep], collapse=" ")),
+    			    domain = NA)
     ids <- ids[keep]
     types <- allids$type[ind[keep]]
   }  
     
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
-    warning("Object type(s) ", 
-      paste("'", unknowntypes, "'", sep="", collapse=", "), " not handled.")
+    warning(gettextf("Object type(s) %s not handled", 
+      paste("'", unknowntypes, "'", sep="", collapse=", ")), domain = NA)
 
   keep <- types %in% knowntypes
   ids <- ids[keep]
@@ -201,7 +202,7 @@ readSTL <- function(con, ascii=FALSE, plot=TRUE, ...) {
   readHeader <- function() {
     if (ascii) {
       ident <- readLines(con, 1)
-      if (!grepl("^solid ", ident)) stop("this does not appear to be an ASCII STL file")
+      if (!grepl("^solid ", ident)) stop("This does not appear to be an ASCII STL file")
     }
     if (!ascii) {
       seek(con, 80)

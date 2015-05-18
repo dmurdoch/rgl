@@ -11,14 +11,14 @@ rgl.enum <- function ( name, ..., multi = FALSE)
   max <- length(names)
 
   if ( any( is.na(pos) ) )
-    stop("symbolic value must be chosen from ", list(names) )
+    stop(gettextf("Symbolic value must be chosen from: %s", list(names)), domain = NA)
   else if ( (max+1) %in% pos )
     pos <- seq_along(names)
     
   id  <- unlist(choices[pos])
   
   if ( length(id) > 1 && !multi )
-    stop("multiple choices not allowed")
+    stop("Multiple choices not allowed")
  
   return( id )
 }

@@ -91,17 +91,17 @@ scene3d <- function() {
 }
 
 print.rglscene <- function(x, ...) {
-  cat("RGL scene containing:\n")
+  cat(gettext("RGL scene containing:\n"))
   if (!is.null(x$par3d))
-    cat("  par3d:\tscene information\n")
+    cat(gettext("  par3d:\tscene information\n"))
   if (!is.null(x$material))
-    cat("  material:\tdefault material properties\n")
+    cat(gettext("  material:\tdefault material properties\n"))
   if (!is.null(x$objects)) {
-    cat("  objects:\tlist of", length(x$objects),"object(s):\n")
+    cat(gettextf("  objects:\tlist of %d object(s):\n", length(x$objects)))
     cat("          \t", sapply(x$objects, function(obj) obj$type), "\n")
   }
   if (!is.null(x$root)) 
-    cat("  root:\ta root subscene\n")
+    cat(gettext("  root:\ta root subscene\n"))
   invisible(x)
 }
 
@@ -126,14 +126,14 @@ summary.rglsubscene <- function(object, ...) {
 }
 
 print.rglobject <- function(x, ...) {
-  cat("RGL object of type", x$type, "containing components\n")
+  cat(gettextf("RGL object of type %s containing components\n", x$type))
   cat("  ")
   cat(names(x), sep=", ")
   cat("\n")
 }
 
 print.rglsubscene <- function(x, ...) {
-  cat("RGL subscene containing components\n")
+  cat(gettext("RGL subscene containing components\n"))
   cat("  ")
   cat(names(x), sep=", ")
   cat("\n")
@@ -259,7 +259,8 @@ plot3d.rglobject <- function(x, ...) {
     clipplanes = clipplanes3d,
     NULL)
   if (is.null(fn)) {
-    warning("Object type ",type," not handled.")
+    warning(gettextf("Object type '%s' not handled.", type), 
+    	    domain = NA)
     return()
   }
   if (!is.null(x$ignoreExtent)) {

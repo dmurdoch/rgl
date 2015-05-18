@@ -277,15 +277,16 @@ writeOBJ <- function(con,
     allids <- rgl.ids()
     ind <- match(ids, allids$id)
     keep <- !is.na(ind)
-    if (any(!keep)) warning("object(s) with id ", paste(ids[!keep], collapse=" "), " not found")
+    if (any(!keep)) warning(gettextf("Object(s) with id %s not found", paste(ids[!keep], collapse=" ")),
+    			    domain = NA)
     ids <- ids[keep]
     types <- allids$type[ind[keep]]
   }  
     
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
-    warning("Object type(s) ", 
-      paste("'", unknowntypes, "'", sep="", collapse=", "), " not handled.")
+    warning(gettextf("Object type(s) %s not handled", 
+      paste("'", unknowntypes, "'", sep="", collapse=", ")), domain = NA)
 
   keep <- types %in% knowntypes
   ids <- ids[keep]
@@ -324,7 +325,7 @@ readOBJ <- function(con, ...) {
                       colClasses = "character")
   triangles <- with(triangles, rbind(v1, v2, v3))
   if (length(grep("/", triangles))) {
-    warning("normals and/or textures ignored")
+    warning("Normals and/or textures ignored")
     triangles <- sub("/.*", "", triangles)   
   }
   triangles <- structure(as.numeric(triangles),
@@ -336,7 +337,7 @@ readOBJ <- function(con, ...) {
                         colClasses = "character")
     quads <- with(quads, rbind(v1, v2, v3, v4))
     if (length(grep("/", quads))) {
-      warning("normals and/or textures ignored")
+      warning("Normals and/or textures ignored")
       quads <- sub("/.*", "", quads)
     }
     quads <- structure(as.numeric(quads), dim = dim(quads))
@@ -353,7 +354,8 @@ readOBJ <- function(con, ...) {
   ignored <- unique(instrs)
   ignored <- ignored[!(ignored %in% c("v", "f", "", "#"))]
   if (length(ignored))
-    warning("instructions ", paste0('"', ignored, '"', collapse = ", "), " ignored.")
+    warning(gettextf("Instructions %s ignored", paste0('"', ignored, '"', collapse = ", ")),
+    	    domain = NA)
   result <- tmesh3d(vertices, triangles, homogeneous = FALSE, ...)
   if (any(qfaces)) 
     result$ib <- quads

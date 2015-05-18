@@ -18,9 +18,10 @@
 rgl.range <- function ( x, low, high )
 {
   if (length(x) > 1)
-    stop( deparse(substitute(x)), " must be a single numeric")
+    stop( gettextf("'%s' must be a single numeric", deparse(substitute(x))), domain = NA)
   if ( ( x < low ) || ( x > high ) )
-    stop( deparse(substitute(x)), " must be a numeric in the range [ ",low, ":", high , "]")
+    stop( gettextf("'%s' must be a numeric in the range [%s, %s]", 
+    	           deparse(substitute(x)), low, high), domain = NA)
 }
 
 
@@ -33,11 +34,11 @@ rgl.range <- function ( x, low, high )
 rgl.clamp <- function(value, low, high)
 {
   if (value < low) {
-    warning( paste("value clamped to ",low) ); 
+    warning( gettextf("Value clamped to %s",low), domain = NA )
     result <- low
   }
   else if (value > high) {
-    warning( paste("value clamped to ",high) );
+    warning( gettextf("Value clamped to %s",high), domain = NA )
     result <- high
   }
   else {
@@ -59,7 +60,8 @@ rgl.clamp <- function(value, low, high)
 rgl.bool <- function ( x )
 {
   if (length(x) > 1)
-    stop( deparse(substitute(x)), " must be a single boolean value")
+    stop( gettextf("'%s' must be a single boolean value", deparse(substitute(x))),
+          domain = NA)
 }
 
 
@@ -70,7 +72,8 @@ rgl.bool <- function ( x )
 rgl.numeric <- function ( x )
 {
   if (length(x) > 1)
-    stop( deparse(substitute(x)), " must be a single numeric value")
+    stop( gettextf("'%s' must be a single numeric value", deparse(substitute(x))),
+          domain = NA)
 }
 
 
@@ -111,7 +114,8 @@ rgl.nvertex <- function (vertex)
 rgl.color <- function ( color )
 {
   if (length(color) > 1)
-    stop( deparse(substitute(color)), " must be a single color character string")
+    stop( gettextf("'%s' must be a single color character string", deparse(substitute(color))), 
+          domain = NA)
   else
     return (col2rgb(color))
 }

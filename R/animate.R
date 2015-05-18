@@ -90,7 +90,7 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
     	n <- 2*n - 1
     	extrapolate <- "cycle"
     } else if (extrapolate == "natural" && method != "spline")
-    	stop("natural extrapolation only supported for spline method")
+    	stop("'natural' extrapolation only supported for spline method")
     
     if (method == "spline") {
     	fns <- apply(data, 2, function(col) splinefun(times, col, 
@@ -170,7 +170,7 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
 	par3d(f(time, ...))
 	filename <- sprintf("%s%03d.png",frames,i)
 	if (verbose) {
-	    cat("Writing", filename, "\r")
+	    cat(gettextf("Writing '%s'\r", filename))
 	    flush.console()
 	}
         rgl.snapshot(filename=filename, fmt="png", top=top)
@@ -181,21 +181,21 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
         # Check for ImageMagick
         version <- system("convert --version", intern=TRUE)
         if (!length(grep("ImageMagick", version)))
-            stop("ImageMagick not found")    
+            stop("'ImageMagick' not found")    
         filename <- paste(movie, ".", type, sep="")
-        if (verbose) cat("Will create: ", file.path(dir, filename), "\n")
+        if (verbose) cat(gettextf("Will create: %s\n", file.path(dir, filename)))
         convert <- "convert -delay 1x%d %s*.png %s.%s"
     }
     if (is.character(convert)) {
     	convert <- sprintf(convert, fps, frames, movie, type, duration, dir)
 	if (verbose) {
-	    cat("Executing: ", convert, "\n")
+	    cat(gettextf("Executing: '%s'\n", convert))
 	    flush.console()
 	}
 	system(convert)
 	if (clean) {
 	    if (verbose)
-	    	cat("Deleting frames.\n")
+	    	cat(gettext("Deleting frames\n"))
 	    for (i in 0:(duration*fps)) {
 	    	filename <- sprintf("%s%03d.png",frames,i)
 	    	unlink(filename)

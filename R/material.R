@@ -39,7 +39,7 @@ rgl.material <- function (
 
   color     <- rgl.mcolor(color)
   if (length(color) < 1)
-    stop("there must be at least one color")
+    stop("There must be at least one color")
 
   # light properties
 
@@ -70,7 +70,7 @@ rgl.material <- function (
   rgl.bool(texmipmap)
 
   if (length(texture) > 1)
-    stop("texture should be a single character string or NULL")
+    stop("'texture' should be a single character string or NULL")
 
   if (is.null(texture))
     texture <- ""

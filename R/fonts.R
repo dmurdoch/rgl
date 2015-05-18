@@ -10,7 +10,7 @@ assign(".rglFonts", list(), envir = .rglEnv)
 # Check that the font has the correct structure and information
 checkrglFont <- function(font) {
     if (!is.character(font) || length(font) != 4)
-        stop("invalid rgl font:  must be 4 filenames")
+        stop("Invalid rgl font:  must be 4 filenames")
     font
 }
 
@@ -49,15 +49,13 @@ rglFonts <- function(...) {
     nnames <- length(fontNames)
     if (nnames == 0) {
       if (!all(sapply(fonts, is.character))) {
-        stop(gettextf("invalid arguments in '%s' (must be font names)",
-                      "rglFonts"), domain = NA)
+        stop("Invalid arguments in 'rglFonts' (must be font names)")
       } else {
         get(".rglFonts", .rglEnv)[unlist(fonts)]
       }
     } else {
       if (ndots != nnames) {
-        stop(gettextf("invalid arguments in '%s' (need named args)",
-                      "rglFonts"), domain = NA)
+        stop("Invalid arguments in 'rglFonts' (need named args)")
       }
       setrglFonts(fonts, fontNames)
     }

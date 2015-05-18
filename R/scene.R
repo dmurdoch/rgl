@@ -53,7 +53,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
     rgl.material()
 
   if (! ret)
-    stop("rgl_clear failed")
+    stop("'rgl_clear' failed")
 }
 
 
@@ -76,7 +76,7 @@ rgl.pop <- function( type = "shapes", id = 0)
     )
 
     if (! ret$success)
-      stop("pop failed for id ", i)
+      stop(gettextf("'rgl.pop' failed for id %d", i), domain = NA)
   }
 }
 
@@ -196,7 +196,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
   )
 
   if (! ret$success)
-    stop("rgl_viewpoint")
+    stop("'rgl_viewpoint' failed")
 }
 
 ##
@@ -218,7 +218,7 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
   )
 
   if (! ret$success)
-    stop("rgl_bg")
+    stop("'rgl_bg' failed")
     
   invisible(ret$success)
 }
@@ -292,7 +292,7 @@ rgl.bbox <- function(
   )
 
   if (! ret$success)
-    stop("rgl_bbox")
+    stop("'rgl_bbox' failed")
     
   invisible(1)
 
@@ -313,18 +313,18 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   # else the light source is infinitely far away and its direction is determined by theta, phi (default) 
   if ( !is.null(x) ) {
     if ( !missing(theta) || !missing(phi) )
-      warning("theta and phi ignored when x is present")
+      warning("'theta' and 'phi' ignored when 'x' is present")
     xyz <- xyz.coords(x,y,z)
     x <- xyz$x
     y <- xyz$y
     z <- xyz$z
-    if (length(x) > 1) stop("a light can only be in one place at a time")
+    if (length(x) > 1) stop("A light can only be in one place at a time")
     finite.pos <- TRUE
   }
   else {
     
     if ( !is.null(y) || !is.null(z) ) 
-      warning("y and z ignored, spherical coordinates used")
+      warning("'y' and 'z' ignored, spherical coordinates used")
     finite.pos <- FALSE
     x <- 0
     y <- 0
@@ -343,7 +343,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   )
 
   if (! ret$success)
-    stop("too many lights. maximum is 8 sources per scene.")
+    stop("Too many lights; maximum is 8 sources per scene")
     
   invisible(ret$success)
 }
@@ -374,7 +374,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     
     perelement <- c(points=1, lines=2, triangles=3, quadrangles=4, linestrips=1)[type]
     if (nvertex %% perelement) 
-      stop("illegal number of vertices")
+      stop("Illegal number of vertices")
     
     idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords) ) )
     
@@ -407,7 +407,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     );      
         
     if (! ret$success)
-      stop("rgl_primitive")
+      stop("'rgl_primitive' failed")
       
     invisible(ret$success)
   }
@@ -468,19 +468,21 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   if (is.matrix(x)) {
     nx <- nrow(x)
     flags[1] <- TRUE
-    if ( !identical( dim(x), dim(y) ) ) stop( "bad dimension for rows") 
+    if ( !identical( dim(x), dim(y) ) ) stop(gettextf("Bad dimension for %s", "rows"),
+    					     domain = NA)
   } else nx <- length(x)
   
   if (is.matrix(z)) {
     nz <- ncol(z)
     flags[2] <- TRUE
-    if ( !identical( dim(z), dim(y) ) ) stop( "bad dimension for cols")     
+    if ( !identical( dim(z), dim(y) ) ) stop(gettextf("Bad dimension for %s", "cols"),
+                                             domain = NA)     
   } else nz <- length(z)
   
   ny <- length(y)
 
   if ( nx*nz != ny)
-    stop("y length != x rows * z cols")
+    stop("'y' length != 'x' rows * 'z' cols")
 
   if ( nx < 2 )
     stop("rows < 2")
@@ -489,14 +491,15 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
     stop("cols < 2")
     
   if ( length(coords) != 3 || !identical(all.equal(sort(coords), 1:3), TRUE) )
-    stop("coords must be a permutation of 1:3")
+    stop("'coords' must be a permutation of 1:3")
   
   nulls <- c(is.null(normal_x), is.null(normal_y), is.null(normal_z))
   if (!all( nulls ) ) {
     if (any( nulls )) stop("All normals must be supplied")
     if ( !identical(dim(y), dim(normal_x)) 
       || !identical(dim(y), dim(normal_y))
-      || !identical(dim(y), dim(normal_z)) ) stop("bad dimension for normals")
+      || !identical(dim(y), dim(normal_z)) ) stop(gettextf("Bad dimension for %s", "normals"),
+      					    domain = NA)
     flags[3] <- TRUE
   }
   
@@ -504,7 +507,8 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   if (!all( nulls ) ) {
     if (any( nulls )) stop("Both texture coordinates must be supplied")
     if ( !identical(dim(y), dim(texture_s))
-      || !identical(dim(y), dim(texture_t)) ) stop("bad dimensions for textures")
+      || !identical(dim(y), dim(texture_t)) ) stop(gettextf("Bad dimension for %s", "textures"),
+      					     domain = NA)
     flags[4] <- TRUE
   }
 
@@ -530,7 +534,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   );
 
   if (! ret$success)
-    stop("rgl_surface failed")
+    stop("'rgl_surface' failed")
     
   invisible(ret$success)
 }
@@ -547,7 +551,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   nvertex <- rgl.nvertex(vertex)
   radius  <- rgl.attr(radius, nvertex)
   nradius <- length(radius)
-  if (!nradius) stop("no radius specified")
+  if (!nradius) stop("No radius specified")
   
   idata <- as.integer( c( nvertex, nradius ) )
    
@@ -560,7 +564,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   )
 
   if (! ret$success)
-    print("rgl_spheres failed")
+    stop("'rgl_spheres' failed")
     
   invisible(ret$success)
 
@@ -589,7 +593,7 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
   )
 
   if (! ret$success)
-    print("rgl_planes failed")
+    stop("'rgl_planes' failed")
     
   invisible(ret$success)
 
@@ -616,7 +620,7 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0)
   )
 
   if (! ret$success)
-    print("rgl_planes failed")
+    stop("'rgl_clipplanes' failed")
     
   invisible(ret$success)
 
@@ -647,7 +651,7 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
   )
 
   if (! ret$success)
-    print("rgl_abclines failed")
+    stop("'rgl_abclines' failed")
     
   invisible(ret$success)
 
@@ -664,14 +668,14 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
   rgl.material( ... )
 
   if (!missing(justify)) {
-     warning("justify is deprecated: please use adj instead")
+     warning("'justify' is deprecated: please use 'adj' instead")
      if (!missing(adj)) {
-        warning("adj and justify both specified: justify ignored")
+        warning("'adj' and 'justify' both specified: 'justify' ignored")
      } else adj <- switch(justify,left=0,center=0.5,right=1)
   }
   if (length(adj) == 0) adj = c(0.5, 0.5)
   if (length(adj) == 1) adj = c(adj, 0.5)
-  if (length(adj) > 2) warning("Only the first two entries of adj are used")
+  if (length(adj) > 2) warning("Only the first two entries of 'adj' are used")
   
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
@@ -708,7 +712,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
   )
   
   if (! ret$success)
-    stop("rgl_texts failed")
+    stop("'rgl_texts' failed")
 
   invisible(ret$success)
 }
@@ -726,8 +730,8 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   ncenter <- rgl.nvertex(center)
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
-  if (!nradius) stop("no radius specified")
-  if (length(shapes) && length(userMatrix) != 16) stop("invalid userMatrix")
+  if (!nradius) stop("No radius specified")
+  if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
   
   idata   <- as.integer( c(ncenter,nradius,length(shapes)) )
   
@@ -742,7 +746,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   )
 
   if (! ret$success)
-    stop("rgl_sprites failed")
+    stop("'rgl_sprites' failed")
 
   invisible(ret$success)
 }
@@ -769,7 +773,7 @@ rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection())
   )
 
   if (! ret$success)
-    stop("rgl_user2window failed")
+    stop("'rgl_user2window' failed")
   return(matrix(ret$window, ncol(points), 3, byrow = TRUE))
 }
 
@@ -794,7 +798,7 @@ rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
   )
 
   if (! ret$success)
-    stop("rgl_window2user failed")
+    stop("'rgl_window2user' failed")
   return(matrix(ret$point, ncol(window), 3, byrow = TRUE))
 }
 
@@ -813,7 +817,7 @@ rgl.selectstate <- function()
   	)
 
   	if (! ret$success)
-    	stop("rgl_selectstate")
+    	  stop("'rgl_selectstate' failed")
     return(ret)
 }
 
@@ -849,7 +853,7 @@ rgl.setselectstate <- function(state = "current")
 	  )
 	
 	  if (! ret$success)
-	    stop("rgl_setselectstate")
+	    stop("'rgl_setselectstate' failed")
 
 	c("none", "middle", "done", "abort")[ret$state]
 }

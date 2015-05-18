@@ -31,11 +31,12 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
         
     buttons <- match.arg(buttons, c("left", "right", "middle"), several.ok = TRUE)
     
-    cat("Use the", buttons[1], "button to select")
-    if (length(buttons) > 1)
-      cat(", the", buttons[2], "button to quit")
-    cat(".\n")
-    
+    if (length(buttons > 1))
+      cat(gettextf("Use the %s button to select, the %s button to quit\n", 
+      	           buttons[1], buttons[2]))
+    else
+      cat(gettextf("Use the %s button to select\n"), buttons[1])
+
     buttons <- c(left=1, right=2, middle=3)[buttons]
     
     selected <- c()
@@ -55,9 +56,9 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
        dist[winxyz[,3] < 0 | winxyz[,3] > 1] <- Inf
        sel <- which.min(dist)
        if (dist[sel] > tolerance)
-       	  cat("warning:  no point within tolerance\n")
+       	  cat(gettext("Warning:  no point within tolerance\n"))
        else if (sel %in% selected)
-          cat("warning:  nearest point already identified\n")
+          cat(gettext("Warning:  nearest point already identified\n"))
        else {
           selected <<- c(selected, sel)
           if (plot) 

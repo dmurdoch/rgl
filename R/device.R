@@ -28,7 +28,7 @@ rgl.open <- function(useNULL = rgl.useNULL()) {
   ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL )
 
   if (! ret$success)
-    stop("rgl.open failed")
+    stop("'rgl.open' failed")
 
 }
 
@@ -48,7 +48,7 @@ rgl.close <- function() {
   ret <- .C( rgl_dev_close, success=FALSE )
 
   if (! ret$success)
-    stop("no device opened.")
+    stop("No device opened")
 
 }
 
@@ -90,7 +90,7 @@ rgl.set <- function(which, silent = FALSE) {
   )
 
   if (! ret$success)
-    stop("no device opened with id", which)
+    stop(gettextf("No device opened with id %s", which), domain = NA)
 }
 
 
@@ -116,7 +116,7 @@ rgl.snapshot <- function( filename, fmt="png", top=TRUE )
   )
 
   if (! ret$success)
-    warning("snapshot failed")
+    warning("'rgl.snapshot' failed")
 }
 
 ##
@@ -135,7 +135,7 @@ rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
   )
 
   if (! ret$success)
-    warning("postscript conversion failed")
+    warning("Postscript conversion failed")
 }
 
 ##
@@ -161,7 +161,7 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
         values = single(size[1]*size[2]))
  
       if (! ret$success)
-        warning("Error reading component ", component[i])
+        warning(gettextf("Error reading component '%s'", component[i]), domain = NA)
       result[,,i] <- ret$values
     }
   if (length(component) > 1) return(result)

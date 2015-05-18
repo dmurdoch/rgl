@@ -915,7 +915,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     else
       values <- NULL
     if (nv > 65535)
-    	warning("Object ", id, " has ", nv, " vertices.  Some browsers support only 65535.")
+    	warning(gettextf("Object %s has %s vertices.  Some browsers support only 65535", id, nv),
+    		domain = NA)
     
     nc <- rgl.attrib.count(id, "colors")
     colors <- rgl.attrib(id, "colors")
@@ -1495,7 +1496,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           quads =,
           surface =,
           triangles = "TRIANGLES",
-          stop("unsupported mode") )
+          stop("Unsupported mode") )
       
         switch(type,
           sprites =,
@@ -1684,7 +1685,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   
     handlers <- par3d("mouseMode")
     if (any(notdone <- handlers %in% c("polar", "selecting"))) {
-      warning("Mouse mode(s) '", handlers[notdone], "' not supported.  'trackball' used.")
+      warning(gettextf("Mouse mode(s) %s not supported.  'trackball' used",
+      		       paste(sQuote(handlers[notdone]), collapse = ", ")),
+      	      domain = NA)
       handlers[notdone] <- "trackball"
     }
 
@@ -2027,7 +2030,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   if (!file.exists(dir))
     dir.create(dir)
   if (!file.info(dir)$isdir)
-    stop("'", dir, "' is not a directory.")
+    stop(gettextf("'%s' is not a directory", dir), domain = NA)
   
   if (commonParts)
     file.copy(system.file(file.path("doc", "CanvasMatrix.js"), package = "rgl"), 
@@ -2038,8 +2041,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     		           stringsAsFactors = FALSE)
   else {
     if (!is.data.frame(reuse) || !all(c("id", "prefix", "texture") %in% names(reuse)))
-      stop(dQuote("reuse"), " should be a dataframe with columns ", dQuote("id"), ", ", dQuote("prefix"),
-           ", ", dQuote("texture"))
+      stop("'reuse' should be a dataframe with columns 'id', 'prefix', 'texture'")
     prefixes <- reuse[,c("id", "prefix", "texture")]
     prefixes$texture <- as.character(prefixes$texture)
   }
@@ -2076,7 +2078,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     target <- paste("%", prefix, "WebGL%", sep="")
     replace <- grep( target, templatelines, fixed=TRUE)
     if (length(replace) != 1) 
-      stop("template ", sQuote(template), " does not contain ", target)
+      stop(gettextf("template '%s' does not contain '%s'", template, target),
+           domain = NA)
   
     result <- c(templatelines[seq_len(replace-1)], header())
   } else
@@ -2107,8 +2110,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
-    warning("Object type(s) ", 
-      paste("'", unknowntypes, "'", sep="", collapse=", "), " not handled.")
+    warning(gettextf("Object type(s) %s not handled", 
+      paste("'", unknowntypes, "'", sep="", collapse=", ")), domain = NA)
 
   keep <- types %in% knowntypes
   ids <- ids[keep]

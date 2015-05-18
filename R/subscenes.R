@@ -13,7 +13,7 @@ subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
   
   parent <- .C(rgl_getsubsceneparent, id = id)$id
   
-  if (is.na(parent)) stop("Subscene ", id, " not found.")
+  if (is.na(parent)) stop(gettextf("Subscene %s not found", id), domain = NA)
   if (!parent) parent <- NULL
   result[["parent"]] <- parent
   
@@ -33,7 +33,8 @@ subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
   if (!missing(embeddings)) {
     embeddings <- pmatch(embeddings, embeddingNames, duplicates.ok = TRUE)
     if (any(is.na(embeddings)) || length(embeddings) != 3)
-      stop("three embeddings must be specified; names chosen from ", dQuote(embeddingNames))
+      stop(gettextf("Three embeddings must be specified; names chosen from %s", 
+      	            paste(dQuote(embeddingNames), collapse=", ")), domain = NA)
     .C(rgl_setEmbeddings, id = id, embeddings = embeddings)
   }
   embeddings <- .C(rgl_getEmbeddings, id = id, embeddings = integer(3))$embeddings
@@ -81,13 +82,13 @@ newSubscene3d <- function(viewport = "replace",
         par3d(viewport = as.integer(newviewport))
     }
   } else
-    stop("Subscene creation failed.")
+    stop("Subscene creation failed")
   invisible(id)
 }
 
 useSubscene3d <- function(subscene) {
   result <- .C(rgl_setsubscene, id=as.integer(subscene))$id
-  if (!result) stop(gettextf("Subscene %d not found.", subscene))
+  if (!result) stop(gettextf("Subscene %d not found.", subscene), domain = NA)
   invisible(subscene)
 }
 
@@ -95,11 +96,11 @@ addToSubscene3d <- function(ids, subscene = currentSubscene3d()) {
   ids <- as.integer(ids)
   dups <- intersect(ids, rgl.ids("all", subscene)$id)
   if (length(dups))
-    stop(gettextf("Cannot add %s, already present", paste(dups, collapse = ", ")))
+    stop(gettextf("Cannot add %s, already present", paste(dups, collapse = ", ")), domain = NA)
   result <- .C(rgl_addtosubscene, success = as.integer(subscene), 
      n = as.integer(length(ids)), ids = ids)$success
   if (!result)
-    stop("Failed to add objects to subscene ", subscene)
+    stop(gettextf("Failed to add objects to subscene %s", subscene), domain = NA)
   invisible(subscene)
 }
 
@@ -107,7 +108,7 @@ delFromSubscene3d <- function(ids, subscene = currentSubscene3d()) {
   result <- .C(rgl_delfromsubscene, success = as.integer(subscene), 
      n = as.integer(length(ids)), ids = as.integer(ids))$success
   if (!result)
-    stop("Failed to delete objects from subscene ", subscene)
+    stop(gettextf("Failed to delete objects from subscene %s", subscene), domain = NA)
   invisible(subscene)
 }
 
@@ -148,7 +149,7 @@ next3d <- function(current = NA, clear = TRUE, reuse = TRUE) {
     else 
       this <- this + 1
   } else {
-    warning("current subscene is not in the subsceneList()")
+    warning("Current subscene is not in the subsceneList()")
     this <- 1
   }  
   repeat{
@@ -157,7 +158,7 @@ next3d <- function(current = NA, clear = TRUE, reuse = TRUE) {
     if (inherits(result, "try-error")) {
       subsceneList(subscenes <- subscenes[-this])
       if (length(subscenes) == 0)
-      	stop("subsceneList() contained no valid subscenes.")
+      	stop("'subsceneList()' contained no valid subscenes")
       if (this > length(subscenes)) this <- 1
     } else break
   }
@@ -227,7 +228,7 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
   mat <- as.matrix(mat)
   num.figures <- max(mat)
   if (!all(seq_len(num.figures) %in% as.integer(mat)))
-    stop(gettextf("layout matrix must contain at least one reference\nto each of the values {1 ... %d}\n", 
+    stop(gettextf("Layout matrix must contain at least one reference\nto each of the values {1 ... %d}\n", 
             num.figures), domain = NA)
   dm <- dim(mat)
   num.rows <- dm[1L]

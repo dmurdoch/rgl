@@ -98,7 +98,7 @@ propertySlider <- function(setter = propertySetter,
     if (is.function(setter))
       setters[i] <- setter <- setter(...)
     if (!inherits(setter, "propertySetter"))
-    stop(dQuote(setter), " must be a propertySetter object.")
+    stop("'setter' must be a propertySetter object")
     
     param <- c(param, attr(setter, "param"))
     prefixes <- c(prefixes, attr(setter, "prefixes"))

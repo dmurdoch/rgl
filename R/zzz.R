@@ -70,7 +70,7 @@
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
-    warning("error in rgl_init")
+    warning("Error in 'rgl_init'")
   }
   
 }

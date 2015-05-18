@@ -81,7 +81,7 @@ triangulateSimple <- function(x,y, random=TRUE, plot=FALSE, partial=NA) {
   }
   if (!good) {
     if (is.na(partial)) {
-      warning("triangulation is incomplete")
+      warning("Triangulation is incomplete")
       partial <- TRUE
     }
     if (partial)

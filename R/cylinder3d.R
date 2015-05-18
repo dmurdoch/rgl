@@ -34,7 +34,8 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   
   fixup <- function(coord) {
     usable <- apply(coord, 1, function(v) all(is.finite(v)) & (veclen(v) > 0))
-    if (!any(usable) ) stop("No usable coordinate values in", deparse(substitute(coord)))
+    if (!any(usable) ) stop(gettextf("No usable coordinate values in '%s'", 
+    				     deparse(substitute(coord))), domain = NA)
     firstgood <- min(which(usable))
     inds <- seq_len(n)    
     if (firstgood > 1) {

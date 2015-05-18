@@ -30,7 +30,7 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
                 x <- seq(0, 1, len = nrow(z))
             }
         }
-        else stop("no 'z' matrix specified")
+        else stop("No 'z' matrix specified")
     }
     else if (is.list(x)) {
         y <- x$y
@@ -38,7 +38,7 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     }
     if ( (!is.matrix(x) && any(diff(x) <= 0)) 
       || (!is.matrix(y) && any(diff(y) <= 0)))
-        stop("increasing 'x' and 'y' values expected")
+        stop("Increasing 'x' and 'y' values expected")
         
     savesubscene <- currentSubscene3d()
     result <- setClipregion(xlim, ylim, zlim, forceClipregion)

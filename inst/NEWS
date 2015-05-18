@@ -665,3 +665,5 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
+0.95.1248
+  - Made error and warning text more consistent.

@@ -39,13 +39,13 @@ rotationMatrix <- function(angle,x,y,z,matrix)
 asHomogeneous <- function(x) {
     if (is.matrix(x) && dim(x)[2] == 3) return(cbind(x,1))
     else if (length(x) == 3) return(c(x,1))
-    else stop("Object is not row vector(s)")
+    else stop("'x' is not row vector(s)")
 }
 
 asEuclidean <- function(x) {
     if (is.matrix(x) && dim(x)[2] == 4) return(x[,1:3]/x[,4])
     else if (length(x) == 4) return(c(x[1]/x[4],x[2]/x[4],x[3]/x[4]))
-    else stop("Object is not row vectors(s)")
+    else stop("'x' is not row vectors(s)")
 }
 
 # Default implementations of transformations
@@ -77,5 +77,5 @@ rotate3d.default <- function(obj,angle,x,y,z,matrix,...) {
     	return(asEuclidean(asHomogeneous(obj) %*% rotationMatrix(angle,x,y,z,matrix)))
     else if (length(obj) == 4 || (is.matrix(obj) && dim(obj)[2] == 4))
     	return(obj %*% rotationMatrix(angle,x,y,z,matrix))
-    else stop("Unsupported object for scaling")
+    else stop("Unsupported object for rotation")
 }    

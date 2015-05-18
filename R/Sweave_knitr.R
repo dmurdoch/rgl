@@ -25,7 +25,7 @@ rgl.Sweave <- function(name, width, height, options, ...) {
     wrnew <- par3d("windowRect")
     if (wr[3] - wr[1] != wrnew[3] - wrnew[1] || 
         wr[4] - wr[2] != wrnew[4] - wrnew[2])
-      stop("rgl window creation error.  Try reducing resolution, width or height.")
+      stop("rgl window creation error; try reducing resolution, width or height")
     dev <- rgl.cur()
   } 
   
@@ -46,7 +46,7 @@ rgl.Sweave <- function(name, width, height, options, ...) {
         png = rgl.snapshot(filename=paste(name, "png", sep=".")),
         pdf = rgl.postscript(filename=paste(name, "pdf", sep="."), fmt="pdf"),
         eps = rgl.postscript(filename=paste(name, "eps", sep="."), fmt="eps"),
-        stop("Unrecognized rgl outputtype: ", type)
+        stop(gettextf("Unrecognized rgl outputtype: '%s'", type), domain = NA)
       )
       snapshotDone <<- TRUE
     }
@@ -93,7 +93,7 @@ hook_webgl <- local({
                                      # We only use it in this test.
       out_type <- knitr::opts_knit$get("out.format")
       if (!length(intersect(out_type, c("markdown", "html"))))       
-        stop("hook_webgl is for HTML only.  Use hook_rgl instead.")
+        stop("'hook_webgl' is for HTML only.  Use 'hook_rgl' instead.")
     }  
     name <- tempfile("webgl", tmpdir = ".", fileext = ".html")
     on.exit(unlink(name))
@@ -127,7 +127,7 @@ hook_rgl = function(before, options, envir) {
   # after a chunk has been evaluated
   if (before || rgl.cur() == 0) return()  # no active device
   if (!requireNamespace("knitr")) 
-    stop("hook_rgl requires the 'knitr' package.")
+    stop("'hook_rgl' requires the 'knitr' package.")
 
   name <- knitr::fig_path('', options)
   par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
