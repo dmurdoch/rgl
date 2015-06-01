@@ -7,7 +7,7 @@ Hook functions to use with \pkg{knitr}
 \description{
 These functions allow \pkg{rgl} graphics to be embedded in \pkg{knitr}
 documents, either as bitmaps (\code{hook_rgl} with format \code{"png"}),
-fixed vector graphics (\code{hook_rgl} with format \code{"eps"} or
+fixed vector graphics (\code{hook_rgl} with format \code{"eps"}, \code{"pdf"} or
 \code{"postscript"}), or interactive WebGL graphics (\code{hook_webgl}).
 }
 \usage{
@@ -17,6 +17,25 @@ hook_webgl(before, options, envir)
 \arguments{
   \item{before, options, envir}{
 Standard \pkg{knitr} hook function arguments.
+}
+}
+\details{
+The following chunk options are supported:
+\itemize{
+  \item \code{rgl.keepopen}:  no longer used.  Ignored
+  with a warning.
+  
+  \item \code{rgl.newwindow} (default \code{FALSE}):  Whether to open a new window for the display.
+  
+  \item \code{rgl.margin} (default 100):  number of pixels by which to indent the
+  WebGL window.
+  
+  \item \code{dpi}, \code{fig.retina}, \code{fig.width}, \code{fig.height}:  standard \pkg{knitr} chunk
+  options used to set the size of the output.
+  
+  \item \code{dev}:  used by \code{hook_rgl} to set 
+  the output format.  May be \code{"eps"}, \code{"postscript"},
+  \code{"pdf"} or \code{"png"} (default:  \code{"png"}).
 }
 }
 \value{

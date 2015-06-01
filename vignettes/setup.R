@@ -1,8 +1,6 @@
 options(rgl.useNULL=TRUE)
 library(rgl)
 
-knitr::knit_hooks$set(rgl = hook_webgl)
-
 if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.13.1"))
   warning("These vignettes assume pandoc version 1.13.1; older versions may give poor formatting.")
 

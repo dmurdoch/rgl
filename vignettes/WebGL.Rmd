@@ -29,7 +29,7 @@ reference information.
 
 Consider the simple plot of the iris data.  We
 insert a code chunk with label `plot3d` (which will be used below).
-```{r plot3d, rgl=TRUE}
+```{r plot3d, webgl=TRUE}
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 subid <- currentSubscene3d()
@@ -75,7 +75,7 @@ We can also change the contents of the plot using `r indexfns("toggleButton")`.
 For example, we can redo the previous plot, but with the
 three species as separate "spheres" objects and buttons to
 toggle them:
-```{r toggle, rgl = TRUE, rgl.keepopen = TRUE}
+```{r toggle, webgl = TRUE, rgl.newwindow = TRUE}
 sphereid <- with(subset(iris, Species == "setosa"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   col=as.numeric(Species),
@@ -111,7 +111,7 @@ toggleButton(sphereid+2, label = "virginica", prefix = "toggle", subscene = subi
 
 An alternate control to achieve the same thing is `r indexfns("subsetSlider")`. 
 
-```{r slider, rgl=TRUE, rgl.keepopen=TRUE}
+```{r slider, webgl=TRUE}
 ```
 ```{r results="asis"}
 subsetSlider(subsets = list(setosa = sphereid, 
@@ -132,7 +132,7 @@ functions, but not the controls to use them; for that, use
 
 For example, the following code (similar to the `r linkfn("play3d")`
 example) rotates the scene in a complex way.
-```{r userMatrix, rgl=TRUE}
+```{r userMatrix, webgl=TRUE}
 ```
 ```{r results="asis"}
 M <- r3dDefaults$userMatrix
@@ -171,7 +171,7 @@ colour is not fixed, and can be controlled by the slider.  We
 also give two `ageSetter` calls in a list; the `propertySlider`
 will control both of them simultaneously.
 
-```{r curve, rgl=TRUE}
+```{r curve, webgl=TRUE}
 time <- 0:500
 xyz <- cbind(cos(time/20), sin(time/10), time)
 lineid <- plot3d(xyz, type="l", col = c("black", "black"))["data"]

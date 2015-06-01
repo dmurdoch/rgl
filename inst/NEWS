@@ -667,3 +667,7 @@ v0.94
     
 0.95.1248
   - Made error and warning text more consistent.
+  - Automatically installs "rgl" and "webgl" hooks if
+    knitr is loaded and they are not already present.
+  - Dropped chunk option "rgl.keepopen"; replaced it
+    with "rgl.newwindow". 

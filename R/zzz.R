@@ -73,6 +73,12 @@
     warning("Error in 'rgl_init'")
   }
   
+  if (isNamespaceLoaded("knitr")) {
+    if (is.null(knitr::knit_hooks$get("webgl")))
+  	knitr::knit_hooks$set(webgl = hook_webgl)
+    if (is.null(knitr::knit_hooks$get("rgl")))
+        knitr::knit_hooks$set(rgl = hook_rgl)
+  }
 }
 
 rgl.init <- function(initValue = 0, onlyNULL = FALSE) .Call( rgl_init, 

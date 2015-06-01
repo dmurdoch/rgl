@@ -87,8 +87,16 @@ hook_webgl <- local({
   reuse <- TRUE
   function (before, options, envir) 
   {
-    if (before || rgl.cur() == 0)
+    if (before) {
+      newwindow <- options$rgl.newwindow
+      if (!is.null(newwindow) && newwindow) 
+      	open3d()
+      if (!is.null(options$rgl.keepopen))
+      	warning("rgl.keepopen has been replaced by rgl.newwindow")
       return()
+    } else if (rgl.cur() == 0)
+      return()    
+    	
     if (requireNamespace("knitr")) { # Should we stop if there is no knitr?
                                      # We only use it in this test.
       out_type <- knitr::opts_knit$get("out.format")
@@ -100,7 +108,9 @@ hook_webgl <- local({
     retina <- options$fig.retina
     if (!is.numeric(retina)) retina <- 1 # It might be FALSE or maybe NULL
     dpi <- options$dpi / retina  # should not consider Retina displays (knitr #901)
-    par3d(windowRect = 100 + dpi * c(0, 0, options$fig.width, 
+    margin <- options$rgl.margin
+    if (is.null(margin)) margin <- 100
+    par3d(windowRect = margin + dpi * c(0, 0, options$fig.width, 
                                            options$fig.height))
     Sys.sleep(.05) # need time to respond to window size change
     
@@ -113,8 +123,6 @@ hook_webgl <- local({
                     prefix = prefix, 
                     commonParts = commonParts,
                     reuse = reuse)
-    if (!isTRUE(options$rgl.keepopen) && rgl.cur())
-      rgl.close()
     commonParts <<- FALSE
     reuse <<- attr(res, "reuse")
     res <- readLines(name)
@@ -124,13 +132,23 @@ hook_webgl <- local({
 })
 
 hook_rgl = function(before, options, envir) {
-  # after a chunk has been evaluated
-  if (before || rgl.cur() == 0) return()  # no active device
+  if (before) {
+    newwindow <- options$rgl.newwindow
+    if (!is.null(newwindow) && newwindow) 
+      open3d()
+    if (!is.null(options$rgl.keepopen))       
+      warning("rgl.keepopen has been replaced by rgl.newwindow")
+    return()
+  } else if (rgl.cur() == 0)
+    return()
+	
   if (!requireNamespace("knitr")) 
     stop("'hook_rgl' requires the 'knitr' package.")
 
   name <- knitr::fig_path('', options)
-  par3d(windowRect = 100 + options$dpi * c(0, 0, options$fig.width, options$fig.height))
+  margin <- options$rgl.margin
+  if (is.null(margin)) margin <- 100
+  par3d(windowRect = margin + options$dpi * c(0, 0, options$fig.width, options$fig.height))
   Sys.sleep(.05) # need time to respond to window size change
 
   dir <- knitr::opts_knit$get('base_dir')
@@ -151,6 +169,7 @@ save_rgl = function(name, devices) {
   # support 3 formats: eps, pdf and png (default)
   for (dev in devices) switch(
     dev,
+    eps =,
     postscript = rgl.postscript(paste0(name, '.eps'), fmt = 'eps'),
     pdf = rgl.postscript(paste0(name, '.pdf'), fmt = 'pdf'),
     rgl.snapshot(paste0(name, '.png'), fmt = 'png')
