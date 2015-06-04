@@ -8,7 +8,8 @@ export(.check3d,
 	gc3d, getr3dDefaults, GramSchmidt, grid3d, 
 	hook_rgl, hook_webgl,
 	icosahedron3d, identify3d, identityMatrix,  
-	layout3d, legend3d, light3d, lines3d, material3d, mfrow3d, movie3d, mtext3d, 
+	layout3d, legend3d, light3d, lines3d, material3d, 
+        matrixSetter, mfrow3d, movie3d, mtext3d, 
 	newSubscene3d, next3d, observer3d, octahedron3d, oh3d, open3d, 
 	par3d, par3dinterp, par3dinterpSetter, particles3d, persp3d, planes3d, 
         play3d, plot3d, points3d, 
@@ -76,6 +77,7 @@ export(.check3d,
  S3method(print, rglscene)
  S3method(print, rglobject)
  S3method(print, rglsubscene)
+ S3method(print, indexedSetter)
  
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)

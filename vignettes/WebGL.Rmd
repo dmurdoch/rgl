@@ -162,7 +162,7 @@ allows control of multiple objects in multiple scenes, but which
 does require knowledge of the internal representation of the scene
 in its Javascript implementation.
 
-The final function of this type is `r indexfns("ageSetter")`.
+Another function of this type is `r indexfns("ageSetter")`.
 It is used when the slider controls the "age" of the scene, 
 and attributes of vertices change with their age.  For example,
 to show a point moving along a curve, we could do the following.  
@@ -186,6 +186,10 @@ propertySlider( list(ageSetter(births = time, ages = c(0, 0, 50),
 		     	  prefixes = "curve")),
 		     maxS = max(time) + 50)
 ```
+
+The final function of this type is `r indexfns("matrixSetter")`, for setting
+up multiple controls to modify a matrix, typically `userMatrix`. This is used
+when complex manipulation of a matrix requires several controls.
 
 ## User Defined Mouse Controls
 

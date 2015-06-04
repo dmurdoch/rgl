@@ -2,6 +2,7 @@
 \alias{propertySlider}
 \alias{propertySetter}
 \alias{par3dinterpSetter}
+\alias{matrixSetter}
 \title{
 Write HTML/Javascript code to control a WebGL display.
 }
@@ -16,12 +17,17 @@ propertySlider(setter = propertySetter,
 	     labels = displayVals(sliderVals), 
 	     id = basename(tempfile("input")), name = id,
 	     outputid = paste0(id, "text"),
+	     index = NULL,
 	     ...) 
 	     
 propertySetter(values, entries, properties, objids, prefixes = "",
                param = seq_len(NROW(values)), interp = TRUE, digits = 7) 
                
-par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, ...)
+par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, 
+                  rename = character(), ...)
+
+matrixSetter(fns, from, to, steps, subscene = currentSubscene3d(), 
+             matrix = "userMatrix", omitConstant = TRUE, prefix = "", ...) 
 }
 \arguments{
   \item{setter}{A function to write Javascript code, or its output, or
@@ -34,6 +40,8 @@ par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, ...)
   \item{name}{The name of the input control that will be generated.}
   \item{outputid}{The \code{id} of the output control that
 will display the slider value, or \code{NULL} for none.}
+  \item{index}{The 1-based index of this slider:  it controls the
+  corresponding entry in an indexed setter such as \code{matrixSetter}.}
   \item{...}{See Details below.}
   \item{values}{An array of values; rows correspond to slider positions.}
   \item{entries, properties, objids, prefixes}{Vectors describing
@@ -47,20 +55,44 @@ will display the slider value, or \code{NULL} for none.}
   \item{subscene}{Which subscene's properties should be modified?}
   \item{omitConstant}{If \code{TRUE}, do not set values that are
   constant across the range.}
+  \item{rename}{A named character vector of names of Javascript properties
+  to modify.  See the details.}
+  \item{fns}{A list containing functions returned from 
+    \code{\link{par3dinterp}}.}
+  \item{matrix}{A character string giving the Javascript property
+    name of the matrix to modify.}
+  \item{prefix}{The prefix of the scene containing \code{matrix}.}
 }
 \details{
 The \code{...} parameters to \code{propertySlider} will be passed to
 \code{setter} if the latter is a function, otherwise ignored. 
 
-The \code{...} parameters to \code{par3dinterpSetter} will be passed
-to \code{propertySetter}.
+The \code{...} parameters to \code{par3dinterpSetter}
+will be passed to \code{propertySetter}.
+
+The \code{...} parameters to \code{matrixSetter} will be passed to the
+\code{par3dinterpSetter} functions used for each of the functions
+in \code{fns}.
 
 \code{propertySetter} is a low-level general purpose function for modifying
 properties of objects in the scene.  It is mainly for internal use.
 \code{propertySlider} uses it to generate Javascript for a slider control
-to manipulate those properties.  \code{par3dinterpSetter} uses
-it to set parameters corresponding to values produced by the result of
-\code{par3dinterp}.
+to manipulate those properties.  
+
+\code{par3dinterpSetter} uses \code{propertySetter}
+to set parameters corresponding to values produced by the result of
+\code{par3dinterp}.  Its \code{rename} argument allows translation
+of names, e.g. \code{rename = c(userMatrix = "myMatrix")} would
+cause the \code{"userMatrix"} result from \code{\link{par3dinterp}}
+to be used to modify the Javascript \code{myMatrix} property.
+
+\code{matrixSetter} is used in the situation where multiple controls
+(e.g. sliders) are used to determine the value of a matrix, typically
+\code{"userMatrix"}.  It will generate one \code{par3dinterpSetter}
+function for each of the entries in \code{fns}; these will be called
+when a \code{propertySlider} with the corresponding (1-based) index
+is changed, and the results multiplied together from right to left
+to produce a new value for whichever property is named in \code{matrix}.
 
 The rows of the \code{values} matrix correspond to different settings
 for numeric properties.  The columns are values to insert into those properties.
