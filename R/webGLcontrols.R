@@ -4,14 +4,17 @@
 
 subsetSlider <- function(subsets, labels = names(subsets),
                          fullset = Reduce(union, subsets), 
-                         subscenes = currentSubscene3d(), prefixes = "", ...) {
+                         subscenes = currentSubscene3d(), prefixes = "", 
+                         accumulate = FALSE, ...) {
   propertySlider(subsetSetter(subsets, fullset = fullset,
-                              subscenes = subscenes, prefixes = prefixes),
+                              subscenes = subscenes, prefixes = prefixes,
+                              accumulate = accumulate),
                  labels = labels, ...)
 }
 
 subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = "",  
-			 fullset = Reduce(union, subsets)) {
+			 fullset = Reduce(union, subsets),
+			 accumulate = FALSE) {
   nsubs <- max(length(subscenes), length(prefixes))
   subscenes <- rep(subscenes, length.out = nsubs)
   prefixes <- rep(prefixes, length.out = nsubs)
@@ -28,8 +31,13 @@ subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = ""
   for (i in seq_len(nsubs)) 
     result <- c(result, subst(
 '  var entries = %prefix%rgl.getSubsceneEntries(%subscene%);
-  entries = entries.filter(f);
-  entries = entries.concat(ids[value]);
+  entries = entries.filter(f);', prefix = prefixes[i], subscene = subscenes[i]),
+      if (accumulate)
+'  for (var i=0; i<=value; i++)
+    entries = entries.concat(ids[i]);'
+      else
+'  entries = entries.concat(ids[value]);',
+      subst('
   %prefix%rgl.setSubsceneEntries(entries, %subscene%);',
       prefix = prefixes[i], subscene = subscenes[i]))
   result <- c(result, '}')

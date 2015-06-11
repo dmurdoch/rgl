@@ -665,7 +665,7 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
-0.95.1250
+0.95.1251
   - Made error and warning text more consistent.
   - Automatically installs "rgl" and "webgl" hooks if
     knitr is loaded and they are not already present.
@@ -673,3 +673,4 @@ v0.94
     with "rgl.newwindow". 
   - Added matrixSetter() function to allow multiple controls to
     modify one matrix.
+  - Added "accumulate" argument to the subset WebGL controls.

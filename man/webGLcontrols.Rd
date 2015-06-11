@@ -13,10 +13,11 @@ These functions write out HTML code to control WebGL displays on the same page.
 subsetSlider(subsets, labels = names(subsets), 
              fullset = Reduce(union, subsets),
              subscenes = currentSubscene3d(), prefixes = "",
-             ...)
+             accumulate = FALSE, ...)
              
 subsetSetter(subsets, subscenes = currentSubscene3d(), prefixes = "", 
-			 fullset = Reduce(union, subsets))
+			 fullset = Reduce(union, subsets),
+                         accumulate = FALSE)
              
 clipplaneSlider(a=NULL, b=NULL, c=NULL, d=NULL, 
                 plane = 1, clipplaneids, prefixes = "", 
@@ -35,6 +36,8 @@ toggleButton(subset, subscenes = currentSubscene3d(), prefixes = "",
   will not be touched.}
   \item{subscenes}{The subscenes to be controlled.}  
   \item{prefixes}{The prefixes of the WebGL scenes to be controlled.}
+  \item{accumulate}{If \code{TRUE}, the subsets will accumulate (by union)
+  as the value increases.}
   \item{id}{The \code{id} of the input control that will be generated.}
   \item{name}{The name of the input control that will be generated.}
   \item{...}{Arguments to pass to \code{\link{propertySlider}}.}
