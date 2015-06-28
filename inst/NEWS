@@ -665,7 +665,7 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
-0.95.1251
+0.95.1252
   - Made error and warning text more consistent.
   - Automatically installs "rgl" and "webgl" hooks if
     knitr is loaded and they are not already present.
@@ -674,3 +674,8 @@ v0.94
   - Added matrixSetter() function to allow multiple controls to
     modify one matrix.
   - Added "accumulate" argument to the subset WebGL controls.
+  - The "nticks" argument to bbox3d() was never used and has
+    been removed.  Use "xlen", "ylen" or "zlen".  
+  - Setting "xlen" etc. to zero in bbox3d or rgl.bbox() now
+    (correctly) suppresses tick marks. (Reported by 
+    Philipp Angerer.)

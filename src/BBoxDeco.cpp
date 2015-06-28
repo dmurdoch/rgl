@@ -154,7 +154,7 @@ AxisInfo::AxisInfo(int in_nticks, double* in_ticks, char** in_texts, int in_len,
     
     if (unit > 0)
       mode = AXIS_UNIT;
-    else if (unit < 0)
+    else if (unit < 0 && len > 0)
       mode = AXIS_PRETTY;
     else if (len > 0)
       mode = AXIS_LENGTH;

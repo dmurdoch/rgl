@@ -113,12 +113,12 @@ bbox3d	    <- function(xat = NULL,
                         xunit = "pretty",
                         yunit = "pretty",
                         zunit = "pretty",
-		        expand = 1.03, nticks = 5, draw_front = FALSE, ...) {  
+		        expand = 1.03, draw_front = FALSE, ...) {  
   .check3d(); save <- material3d(); on.exit(material3d(save))
   ranges <- .getRanges(expand = expand)
   do.call("rgl.bbox", c(list(xat=xat, yat=yat, zat=zat, 
                              xunit=xunit, yunit=yunit, zunit=zunit, expand=expand,
-                             nticks=nticks, draw_front=draw_front), 
+                             draw_front=draw_front), 
                         .fixMaterialArgs(..., Params = save)))
 }
 

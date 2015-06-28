@@ -1122,10 +1122,10 @@ void rgl::rgl_bbox(int* successptr,
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-    int   xticks     =        idata[0];
+    int   xticks     =        idata[0]; /* these are length of xat etc. */
     int   yticks     =        idata[1];
     int   zticks     =        idata[2];
-    int   xlen       =        idata[3];
+    int   xlen       =        idata[3]; /* these are suggested tick counts */
     int   ylen       =        idata[4];
     int   zlen       =        idata[5];
     int   marklen_rel =       idata[6];

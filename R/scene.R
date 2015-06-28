@@ -238,22 +238,33 @@ rgl.bbox <- function(
 
   rgl.material( ... )
 
-  if (is.null(xat)) {
-    xticks = 0; xlab = NULL;
-  } else if (is.null(xlab)) {
-    xlab = format(xat)
-  } else xlab=rep(xlab,length.out=length(xat))
-  if (is.null(yat)) {
-    yticks = 0; ylab = NULL;
-  } else if (is.null(ylab)) {
-    ylab = format(yat)
-  } else ylab=rep(ylab,length.out=length(yat))
-  if (is.null(zat)) {
-    zticks = 0; zlab = NULL;
-  } else if (is.null(zlab)) {
-    zlab = format(zat)
-  }  else zlab=rep(zlab,length.out=length(zat))
-  
+  if (is.null(xat)) 
+    xlab <- NULL
+  else {
+    xlen <- length(xat)
+    if (is.null(xlab)) 
+      xlab <- format(xat)
+    else 
+      xlab <- rep(xlab, length.out=xlen)
+  }
+  if (is.null(yat)) 
+    ylab <- NULL
+  else {
+    ylen <- length(yat)
+    if (is.null(ylab)) 
+      ylab <- format(yat)
+    else 
+      ylab <- rep(ylab, length.out=ylen)
+  }
+  if (is.null(zat)) 
+    zlab <- NULL
+  else {
+    zlen <- length(zat)
+    if (is.null(zlab)) 
+      zlab <- format(zat)
+    else 
+      zlab <- rep(zlab,length.out=length(zat))
+  }
   xticks <- length(xat)
   yticks <- length(yat)
   zticks <- length(zat)
@@ -262,9 +273,6 @@ rgl.bbox <- function(
   if (identical(yunit, "pretty")) yunit = -1;
   if (identical(zunit, "pretty")) zunit = -1;
 
-  length(xticks)      <- 1
-  length(yticks)      <- 1
-  length(zticks)      <- 1
   length(xlen)        <- 1
   length(ylen)        <- 1
   length(zlen)        <- 1
