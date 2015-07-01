@@ -86,3 +86,9 @@ export(.check3d,
    import(utils) # only needed for getWindowsHandle
  }
  
+ importFrom(graphics, legend, par, plot, polygon)
+ importFrom(grDevices, col2rgb, colorRamp, dev.off, png, 
+ 	    postscript, xy.coords, xyz.coords)
+ importFrom(stats, approxfun, qchisq, qf, splinefun, var)
+ importFrom(utils, file_test, flush.console,
+ 	    packageVersion, read.table)
