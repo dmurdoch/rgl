@@ -133,14 +133,15 @@ shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
     material[names(x$material)] <- x$material
   }
   result <- integer(0)
+  skipRows <- 0
   if (!is.null(x$it)) {
     args <- c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
                    y = x$vb[2,x$it]/x$vb[4,x$it],
                    z = x$vb[3,x$it]/x$vb[4,x$it]), 
                    material)
-    if (!is.null(x$normals)) 
+    if (!is.null(x$normals) && is.null(args$normals)) 
       args <- c(args, list(normals = t(x$normals[,x$it])))
-    if (!is.null(x$texcoords))
+    if (!is.null(x$texcoords) && is.null(args$texcoords))
       args <- c(args, list(texcoords = t(x$texcoords[,x$it])))
       
     result <- c(triangles = do.call("triangles3d", args = args ))
@@ -150,9 +151,9 @@ shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
                    y = x$vb[2,x$ib]/x$vb[4,x$ib],
                    z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
                    material)
-    if (!is.null(x$normals)) 
+    if (!is.null(x$normals) && is.null(args$normals)) 
       args <- c(args, list(normals = t(x$normals[,x$ib])))
-    if (!is.null(x$texcoords))
+    if (!is.null(x$texcoords) && is.null(args$texcoords))
       args <- c(args, list(texcoords = t(x$texcoords[,x$ib])))
     
     result <- c(result, quads = do.call("quads3d", args = args ))

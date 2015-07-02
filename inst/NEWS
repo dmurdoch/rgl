@@ -680,3 +680,8 @@ v0.94
     (correctly) suppresses tick marks. (Reported by 
     Philipp Angerer.)
   - Dependencies and imports have been updated.
+  - Specifying "normals" or "texcoords" in both a
+    "mesh3d" object and a call to shade3d() to display
+    it caused an error; now the shade3d() specified
+    value has priority if "override" is TRUE (the default).
+    
