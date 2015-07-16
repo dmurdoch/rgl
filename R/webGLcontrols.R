@@ -236,10 +236,11 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
     prefix <- needsBinding[i, 1]
     objid <- needsBinding[i, 2]
     result <- c(result, subst(
-'   var gl = %prefix%rgl.gl; 
-   gl.bindBuffer(gl.ARRAY_BUFFER, %prefix%rgl.buf[%objid%]);
-   gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);',
-   	prefix, objid))
+'   if (typeof %prefix%rgl.buf[%objid%] !== "undefined") {
+     var gl = %prefix%rgl.gl;
+     gl.bindBuffer(gl.ARRAY_BUFFER, %prefix%rgl.buf[%objid%]);
+     gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);
+   }', prefix, objid))
    }
    result <- c(result, '}')
   structure(paste(result, collapse = "\n"),
