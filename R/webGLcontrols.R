@@ -248,6 +248,123 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
     class = "propertySetter")
 }
 
+vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
+			 param = seq_len(NROW(values)), interp = TRUE,
+			 digits = 7)  {
+  attribofs = c(x = '["vofs"]', 
+            y = '["vofs"]', 
+            z = '["vofs"]', 
+  	    r = '["cofs"]', 
+            g = '["cofs"]', 
+  	    b = '["cofs"]',
+  	    a = '["cofs"]', 
+            nx = '["nofs"]', 
+            ny = '["nofs"]', 
+            nz = '["nofs"]',
+	    radius = '["radofs"]', 
+            ox = '["oofs"]', 
+            oy = '["oofs"]', 
+            oz = '["oofs"]', 
+  	    ts = '["tofs"]', 
+            tt = '["tofs"]')
+  attribofsofs = c(x = 0, 
+  	      y = 1, 
+  	      z = 2, 
+  	      r = 0, 
+  	      g = 1, 
+  	      b = 2,
+  	      a = 3, 
+  	      nx = 0, 
+  	      ny = 1, 
+  	      nz = 2,
+  	      radius = 0, 
+  	      ox = 0, 
+  	      oy = 1, 
+  	      oz = 2, 
+  	      ts = 0, 
+  	      tt = 1)  
+  values <- matrix(values, NROW(values))
+  ncol <- ncol(values)
+  attributes <- match.arg(attributes, names(attribofs), several.ok = TRUE)
+  stopifnot(max(length(vertices), length(attributes)) == ncol,
+	    length(objid) == 1,
+	    length(prefix) == 1,
+            all(attributes %in% names(attribofs)),
+	    all(diff(param) > 0))
+  vertices <- rep(vertices, length.out = ncol)
+  attributes <- rep(attributes, length.out = ncol)
+  
+  if (!ncol) return(structure("function(value) {}", param = param, 
+			      prefixes = prefix,
+			      class = c("vertexSetter", "propertySetter")))
+	
+  if (interp) values <- rbind(values[1,], values, values[nrow(values),])
+  result <- c(subst(
+'function(value){
+  var values = [%vals%];', 
+    vals = paste(formatC(as.vector(t(values)), digits = digits, width = 1), 
+	         collapse = ",")),
+		
+    subst(
+'  var propvals = %prefix%rgl.values[%objid%];
+  var stride = %prefix%rgl.offsets[%objid%]["stride"];',
+	prefix, objid),   
+		
+    if (interp) subst(
+'  var svals = [-Infinity, %svals%, Infinity];
+  for (var i = 1; i < svals.length; i++) 
+    if (value <= svals[i]) {
+      var p = (svals[i] - value)/(svals[i] - svals[i-1]);',	svals = paste(formatC(param, digits = digits, width = 1), collapse = ","))
+    else
+'  value = Math.round(value);')
+	
+  for (j in seq_along(vertices)) {
+    multiplier <- ifelse(ncol>1, paste0(ncol, "*"), "")
+    offset <-     ifelse(j>1,  paste0("+", j-1), "")
+    entry <- ifelse(vertices[j] == 1, 'ofs',
+		    subst('%vertexm1%*stride + ofs',
+			  vertexm1 = vertices[j]-1))
+    result <- c(result,
+      subst(
+'  var ofs = %prefix%rgl.offsets[%objid%]%attribofs%;
+  if (ofs < 0)
+    alert("Attribute %attribute% not found in object %objid%");',
+        prefix, objid, attribofs = attribofs[attributes[j]], 
+        attribute = attributes[j]),
+
+      if (attribofsofs[attributes[j]] > 0)
+      	subst(
+'  ofs = ofs + %attribofsofs%;', attribofsofs = attribofsofs[attributes[j]]),
+   
+      if (interp) subst(
+'  var v1 = values[%multiplier%(i-1)%offset%];
+  var v2 = values[%multiplier%i%offset%];
+  propvals[%entry%] = p*v1 + (1-p)*v2;', 
+        entry, multiplier, offset)
+      else subst(
+'  propvals[%entry%] = values[%multiplier%value%offset%];', 
+	entry, multiplier, offset))
+
+  }  
+  result <- c(result, 
+    if (interp)
+'       break;
+  }',
+    subst(
+'  %prefix%rgl.values[%objid%] = propvals;
+  if (typeof %prefix%rgl.buf[%objid%] !== "undefined") {
+    var gl = %prefix%rgl.gl;
+    gl.bindBuffer(gl.ARRAY_BUFFER, %prefix%rgl.buf[%objid%]);
+    gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);
+  }', prefix, objid))
+
+    result <- c(result, '}')
+    structure(paste(result, collapse = "\n"),
+      param = param, prefixes = prefix,
+      class = c("vertexSetter", "propertySetter"))
+}
+
+
 par3dinterpSetter <- function(fn, from, to, steps, subscene = f0$subscene,
 			      omitConstant = TRUE, rename = character(), ...) {
   times <- seq(from, to, length.out = steps+1)

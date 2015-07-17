@@ -32,7 +32,7 @@ export(.check3d,
 	tetrahedron3d, text3d,
 	texts3d, title3d, toggleButton, triangulate, 
 	tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
-	turn3d, useSubscene3d, view3d, wire3d, writeOBJ, writePLY, writeSTL, writeWebGL)
+	turn3d, useSubscene3d, vertexSetter, view3d, wire3d, writeOBJ, writePLY, writeSTL, writeWebGL)
 
  S3method(dot3d, shapelist3d)
  S3method(wire3d, shapelist3d)

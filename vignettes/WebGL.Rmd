@@ -162,7 +162,31 @@ allows control of multiple objects in multiple scenes, but which
 does require knowledge of the internal representation of the scene
 in its Javascript implementation.
 
-Another function of this type is `r indexfns("ageSetter")`.
+
+Less general than `r linkfn("propertySetter")` is
+`r indexfns("vertexSetter")`.  This function sets attributes
+of individual vertices in a scene.  For example, to set the
+x-coordinate of the closest point in the setosa group, and modify
+its colour from black to white,
+
+```{r vertex, webgl=TRUE}
+```
+
+```{r results="asis"}
+setosa <- subset(iris, Species == "setosa")
+which <- which.min(setosa$Sepal.Width)
+init <- setosa$Sepal.Length[which]
+propertySlider(
+	vertexSetter(values = matrix(c(init,8,0,1,0,1,0,1), nrow=2),
+	             attributes=c("x", "r", "g", "b"), 
+		     vertices = which, objid = sphereid, 
+		     prefix = "vertex"), 
+	step=0.01)
+```
+	     
+
+A related function is `r indexfns("ageSetter")`, though it uses
+a very different specification of the attributes.
 It is used when the slider controls the "age" of the scene, 
 and attributes of vertices change with their age.  For example,
 to show a point moving along a curve, we could do the following.  

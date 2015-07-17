@@ -3,6 +3,7 @@
 \alias{propertySetter}
 \alias{par3dinterpSetter}
 \alias{matrixSetter}
+\alias{vertexSetter}
 \title{
 Write HTML/Javascript code to control a WebGL display.
 }
@@ -28,6 +29,10 @@ par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE,
 
 matrixSetter(fns, from, to, steps, subscene = currentSubscene3d(), 
              matrix = "userMatrix", omitConstant = TRUE, prefix = "", ...) 
+             
+vertexSetter(values, vertices = 1, attributes, objid, prefix = "",
+	     param = seq_len(NROW(values)), interp = TRUE,
+	     digits = 7)
 }
 \arguments{
   \item{setter}{A function to write Javascript code, or its output, or
@@ -62,6 +67,13 @@ will display the slider value, or \code{NULL} for none.}
   \item{matrix}{A character string giving the Javascript property
     name of the matrix to modify.}
   \item{prefix}{The prefix of the scene containing \code{matrix}.}
+  \item{vertices}{A vector of vertex numbers (1-based) within 
+  an object.}
+  \item{attributes}{A vector of attributes of a vertex, 
+  from \code{c("x", "y", "z", "r", "g", "b", "a", "nx", "ny", "nz",
+               "radius", "ox", "oy", "oz", "ts", "tt")}.  See
+               Details.}
+  \item{objid}{The object containing the vertices to be modified.}
 }
 \details{
 The \code{...} parameters to \code{propertySlider} will be passed to
@@ -78,6 +90,16 @@ in \code{fns}.
 properties of objects in the scene.  It is mainly for internal use.
 \code{propertySlider} uses it to generate Javascript for a slider control
 to manipulate those properties.  
+
+\code{vertexSetter} modifies attributes of vertices in a single
+object.  The \code{attributes} are properties of each vertex 
+in a scene; not all are applicable to all objects. In order, 
+the are: coordinates of the vertex \code{"x", "y", "z"}, color
+of the vertex \code{"r", "g", "b", "a"}, normal at the vertex
+\code{"nx", "ny", "nz"}, radius of a sphere at the vertex
+\code{"radius"}, origin within a texture \code{"ox", "oy"} and
+perhaps \code{"oz"}, texture coordinates \code{"ts", "tt"}.
+
 
 \code{par3dinterpSetter} uses \code{propertySetter}
 to set parameters corresponding to values produced by the result of

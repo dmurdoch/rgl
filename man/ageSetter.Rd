@@ -78,7 +78,7 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{propertySlider}}; more detailed control is available in
-\code{\link{propertySetter}}.
+\code{\link{vertexSetter}}.
 }
 \examples{
 propertySlider(ageSetter(births = 1:10, ages = c(-1, 0, 1), 

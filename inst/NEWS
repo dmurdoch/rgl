@@ -665,7 +665,7 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
-0.95.1253
+0.95.1257
   - Made error and warning text more consistent.
   - Automatically installs "rgl" and "webgl" hooks if
     knitr is loaded and they are not already present.
@@ -684,4 +684,5 @@ v0.94
     "mesh3d" object and a call to shade3d() to display
     it caused an error; now the shade3d() specified
     value has priority if "override" is TRUE (the default).
-    
+  - Added vertexSetter() function to allow easier access to 
+    vertex attributes.
