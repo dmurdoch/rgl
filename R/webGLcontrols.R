@@ -20,9 +20,9 @@ subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = ""
   prefixes <- rep(prefixes, length.out = nsubs)
   result <- subst(
 'function(value) {
-  var ids = [%vals%]; 
-  var fullset = [%fullset%];
-  var f = function(x) { return fullset.indexOf(x) < 0 };
+  var i, ids = [%vals%],
+      fullset = [%fullset%],
+      f = function(x) { return fullset.indexOf(x) < 0; };
   value = Math.round(value);', 
     vals = paste(paste0("[", sapply(subsets, 
         				function(i) paste(i, collapse=",")), 
@@ -33,7 +33,7 @@ subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = ""
 '  var entries = %prefix%rgl.getSubsceneEntries(%subscene%);
   entries = entries.filter(f);', prefix = prefixes[i], subscene = subscenes[i]),
       if (accumulate)
-'  for (var i=0; i<=value; i++)
+'  for (i=0; i<=value; i++)
     entries = entries.concat(ids[i]);'
       else
 '  entries = entries.concat(ids[value]);',
@@ -55,15 +55,15 @@ toggleButton <- function(subset, subscenes = currentSubscene3d(), prefixes = "",
   prefixes <- rep(prefixes, length.out = nsubs)
   result <- subst(
 '<button type="button" id="%id%" name="%name%" onclick = "(function(){
-  var subset = [%subset%];',
+  var subset = [%subset%], i;',
     name, id, subset = paste(subset, collapse=","))
   for (i in seq_len(nsubs)) 
     result <- c(result, subst(
 '  if (%prefix%rgl.inSubscene(subset[0], %subscene%)) {
-    for (var i=0; i<subset.length; i++)
+    for (i=0; i<subset.length; i++)
       %prefix%rgl.delFromSubscene(subset[i], %subscene%);
   } else {
-    for (var i=0; i<subset.length; i++)
+    for (i=0; i<subset.length; i++)
       %prefix%rgl.addToSubscene(subset[i], %subscene%);
   }', prefix = prefixes[i], subscene = subscenes[i]))
   prefixes <- unique(prefixes)
@@ -144,7 +144,7 @@ propertySlider <- function(setter = propertySetter,
   result <- c(result, subst(
 '   var lvalue = Math.round((value - %minS%)/%step%);
    var labels = [%labels%]; %setoutput%
-}
+};
 %prefix%rgl.%id%(%init%);</script>
 <input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
 oninput = "%prefix%rgl.%id%(this.valueAsNumber)">%outputfield%', 
@@ -177,16 +177,17 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
   load <- if (grepl("^userMatrix", property)) ".load(propvals)" else "= propvals"
   result <- c(subst(
 'function(value){
-   var values = [%vals%];', 
+   var values = [%vals%],', 
      vals = paste(formatC(as.vector(t(values)), digits = digits, width = 1), 
      	          collapse = ",")),
      
    subst(
-'   var propvals = %prefix%rgl.%property%[%objid%]%get%;',
+'       propvals = %prefix%rgl.%property%[%objid%]%get%;',
      prefix, property, objid, get),   
 
    if (interp) subst(
-'   var svals = [-Infinity, %svals%, Infinity];
+'   var svals = [-Infinity, %svals%, Infinity],
+        v1, v2;
    for (var i = 1; i < svals.length; i++) 
      if (value <= svals[i]) {
        var p = (svals[i] - value)/(svals[i] - svals[i-1]);',
@@ -210,8 +211,8 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
       prefix, property, objid, load, newget, newprefix, newprop, newid),
     
     if (interp) subst(
-'       var v1 = values[%multiplier%(i-1)%offset%];
-       var v2 = values[%multiplier%i%offset%];
+'       v1 = values[%multiplier%(i-1)%offset%];
+       v2 = values[%multiplier%i%offset%];
        propvals[%entry%] = p*v1 + (1-p)*v2;', entry=entries[j], multiplier, offset)
      else subst(
 '   propvals[%entry%] = values[%multiplier%value%offset%];', 
@@ -251,22 +252,22 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
 vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
 			 param = seq_len(NROW(values)), interp = TRUE,
 			 digits = 7)  {
-  attribofs = c(x = '["vofs"]', 
-            y = '["vofs"]', 
-            z = '["vofs"]', 
-  	    r = '["cofs"]', 
-            g = '["cofs"]', 
-  	    b = '["cofs"]',
-  	    a = '["cofs"]', 
-            nx = '["nofs"]', 
-            ny = '["nofs"]', 
-            nz = '["nofs"]',
-	    radius = '["radofs"]', 
-            ox = '["oofs"]', 
-            oy = '["oofs"]', 
-            oz = '["oofs"]', 
-  	    ts = '["tofs"]', 
-            tt = '["tofs"]')
+  attribofs = c(x = 'vofs', 
+            y = 'vofs', 
+            z = 'vofs', 
+  	    r = 'cofs', 
+            g = 'cofs', 
+  	    b = 'cofs',
+  	    a = 'cofs', 
+            nx = 'nofs', 
+            ny = 'nofs', 
+            nz = 'nofs',
+	    radius = 'radofs', 
+            ox = 'oofs', 
+            oy = 'oofs', 
+            oz = 'oofs', 
+  	    ts = 'tofs', 
+            tt = 'tofs')
   attribofsofs = c(x = 0, 
   	      y = 1, 
   	      z = 2, 
@@ -301,20 +302,20 @@ vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
   if (interp) values <- rbind(values[1,], values, values[nrow(values),])
   result <- c(subst(
 'function(value){
-  var values = [%vals%];', 
+  var ofs, values = [%vals%],', 
     vals = paste(formatC(as.vector(t(values)), digits = digits, width = 1), 
 	         collapse = ",")),
 		
     subst(
-'  var propvals = %prefix%rgl.values[%objid%];
-  var stride = %prefix%rgl.offsets[%objid%]["stride"];',
+'      propvals = %prefix%rgl.values[%objid%],
+      stride = %prefix%rgl.offsets[%objid%].stride;',
 	prefix, objid),   
 		
     if (interp) subst(
-'  var svals = [-Infinity, %svals%, Infinity];
+'  var p, v1, v2, svals = [-Infinity, %svals%, Infinity];
   for (var i = 1; i < svals.length; i++) 
     if (value <= svals[i]) {
-      var p = (svals[i] - value)/(svals[i] - svals[i-1]);',	svals = paste(formatC(param, digits = digits, width = 1), collapse = ","))
+      p = (svals[i] - value)/(svals[i] - svals[i-1]);',	svals = paste(formatC(param, digits = digits, width = 1), collapse = ","))
     else
 '  value = Math.round(value);')
 	
@@ -326,7 +327,7 @@ vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
 			  vertexm1 = vertices[j]-1))
     result <- c(result,
       subst(
-'  var ofs = %prefix%rgl.offsets[%objid%]%attribofs%;
+'  ofs = %prefix%rgl.offsets[%objid%].%attribofs%;
   if (ofs < 0)
     alert("Attribute %attribute% not found in object %objid%");',
         prefix, objid, attribofs = attribofs[attributes[j]], 
@@ -337,8 +338,8 @@ vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
 '  ofs = ofs + %attribofsofs%;', attribofsofs = attribofsofs[attributes[j]]),
    
       if (interp) subst(
-'  var v1 = values[%multiplier%(i-1)%offset%];
-  var v2 = values[%multiplier%i%offset%];
+'  v1 = values[%multiplier%(i-1)%offset%];
+  v2 = values[%multiplier%i%offset%];
   propvals[%entry%] = p*v1 + (1-p)*v2;', 
         entry, multiplier, offset)
       else subst(
@@ -470,10 +471,11 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
   objids <- rep(objids, length.out = nobjs)
   result <- subst(
 '  function(time){
-    var ages = [-Infinity, %ages%, Infinity];
-    var births = [%births%];
-    var j = new Array(births.length);
-    var p = new Array(births.length);',
+    var ages = [-Infinity, %ages%, Infinity],
+        births = [%births%],
+        j = new Array(births.length),
+        p = new Array(births.length),
+        i, age, j0, propvals, stride, ofs;',
     ages = formatVec(ages), births = formatVec(births))
   rows <- c(1,1:n, n)
   if ("colors" %in% attribs) 
@@ -506,9 +508,9 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
 '    var texcoords = [%values%];', values = formatVec(texcoords[rows,])))
   }
   result <- c(result,
-'    for (var i = 0; i < births.length; i++) {
-      var age = time - births[i];
-      for (var j0 = 1; age > ages[j0]; j0++);
+'    for (i = 0; i < births.length; i++) {
+      age = time - births[i];
+      for (j0 = 1; age > ages[j0]; j0++);
       if (ages[j0] == Infinity)
         p[i] = 1;       
       else if (ages[j0] > ages[j0-1])
@@ -521,17 +523,17 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
     prefix <- prefixes[j]
     objid <- objids[j]
     result <- c(result, subst(
-'    var propvals = %prefix%rgl.values[%objid%];
-    var stride = %prefix%rgl.offsets[%objid%]["stride"];',
+'    propvals = %prefix%rgl.values[%objid%];
+    stride = %prefix%rgl.offsets[%objid%].stride;',
       prefix, objid))
     for (a in attribs) {
       ofs <- c(colors = "cofs", alpha = "cofs", radii = "radofs",
       	       vertices = "vofs", normals = "nofs", origins = "oofs",
       	       texcoords = "tofs")[a]
       result <- c(result, subst(
-'    var ofs = %prefix%rgl.offsets[%objid%]["%ofs%"];
+'    ofs = %prefix%rgl.offsets[%objid%].%ofs%;
     if (ofs >= 0) {
-      for (var i = 0; i < births.length; i++) {', 
+      for (i = 0; i < births.length; i++) {', 
         prefix, objid, ofs))
       dim <- c(colors = 3, alpha = 1, radii = 1,
       	 vertices = 3, normals = 3, origins = 2,

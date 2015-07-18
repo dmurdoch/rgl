@@ -418,55 +418,55 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   
   if (commonParts) c(
 '
-	var min = Math.min;
-	var max = Math.max;
-	var sqrt = Math.sqrt;
-	var sin = Math.sin;
-	var acos = Math.acos;
-	var tan = Math.tan;
-	var SQRT2 = Math.SQRT2;
-	var PI = Math.PI;
-	var log = Math.log;
-	var exp = Math.exp;
+	var min = Math.min,
+	    max = Math.max,
+	    sqrt = Math.sqrt,
+	    sin = Math.sin,
+	    acos = Math.acos,
+	    tan = Math.tan,
+	    SQRT2 = Math.SQRT2,
+	    PI = Math.PI,
+	    log = Math.log,
+	    exp = Math.exp,
 
-	var rglClass = function() {
-	  this.zoom = new Array();
-	  this.FOV  = new Array();
+	    rglClass = function() {
+	  this.zoom = [];
+	  this.FOV  = [];
 	  this.userMatrix = new CanvasMatrix4();
-	  this.viewport = new Array();
-	  this.listeners = new Array();
-	  this.clipplanes = new Array();
-	  this.opaque = new Array();
-	  this.transparent = new Array();
-	  this.subscenes = new Array();
+	  this.viewport = [];
+	  this.listeners = [];
+	  this.clipplanes = [];
+	  this.opaque = [];
+	  this.transparent = [];
+	  this.subscenes = [];
 
-	  this.flags = new Array();
-	  this.prog = new Array();
-	  this.ofsLoc = new Array();
-	  this.origLoc = new Array();
-	  this.sizeLoc = new Array();
-	  this.usermatLoc = new Array();
-	  this.vClipplane = new Array();
-	  this.texture = new Array();
-	  this.texLoc = new Array();
-	  this.sampler = new Array();
-	  this.origsize = new Array();
-	  this.values = new Array();
-	  this.offsets = new Array();
-	  this.normLoc = new Array();
-	  this.clipLoc = new Array();
-	  this.centers = new Array();
-	  this.f = new Array();
-	  this.buf = new Array();
-	  this.ibuf = new Array();
-	  this.mvMatLoc = new Array();
-	  this.prMatLoc = new Array();
-	  this.textScaleLoc = new Array();
-	  this.normMatLoc = new Array();
-	  this.IMVClip = new Array();
+	  this.flags = [];
+	  this.prog = [];
+	  this.ofsLoc = [];
+	  this.origLoc = [];
+	  this.sizeLoc = [];
+	  this.usermatLoc = [];
+	  this.vClipplane = [];
+	  this.texture = [];
+	  this.texLoc = [];
+	  this.sampler = [];
+	  this.origsize = [];
+	  this.values = [];
+	  this.offsets = [];
+	  this.normLoc = [];
+	  this.clipLoc = [];
+	  this.centers = [];
+	  this.f = [];
+	  this.buf = [];
+	  this.ibuf = [];
+	  this.mvMatLoc = [];
+	  this.prMatLoc = [];
+	  this.textScaleLoc = [];
+	  this.normMatLoc = [];
+	  this.IMVClip = [];
 
-	  this.drawFns = new Array();
-	  this.clipFns = new Array();
+	  this.drawFns = [];
+	  this.clipFns = [];
 
 	  this.prMatrix = new CanvasMatrix4();
 	  this.mvMatrix = new CanvasMatrix4();
@@ -479,14 +479,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  
 	(function() {
 	  this.getShader = function( gl, id ){
-	    var shaderScript = document.getElementById ( id );
-	    var str = "";
-	    var k = shaderScript.firstChild;
+	    var shaderScript = document.getElementById ( id ),
+	        str = "",
+	        k = shaderScript.firstChild,
+                shader;
 	    while ( k ){
 	      if ( k.nodeType == 3 ) str += k.textContent;
 	      k = k.nextSibling;
 	    }
-	    var shader;
 	    if ( shaderScript.type == "x-shader/x-fragment" )
 	      shader = gl.createShader ( gl.FRAGMENT_SHADER );
 	    else if ( shaderScript.type == "x-shader/x-vertex" )
@@ -494,16 +494,16 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	    else return null;
 	    gl.shaderSource(shader, str);
 	    gl.compileShader(shader);
-	    if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) == 0)
+	    if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0)
 	      alert(gl.getShaderInfoLog(shader));
 	    return shader;
-	  }
+	  };
 	  this.multMV = function(M, v) {
 	     return [M.m11*v[0] + M.m12*v[1] + M.m13*v[2] + M.m14*v[3],
 		     M.m21*v[0] + M.m22*v[1] + M.m23*v[2] + M.m24*v[3],
 		     M.m31*v[0] + M.m32*v[1] + M.m33*v[2] + M.m34*v[3],
 		     M.m41*v[0] + M.m42*v[1] + M.m43*v[2] + M.m44*v[3]];
-	  }',
+	  };',
 	  paste0(
 '	  this.f_', flagnames, ' = ', 2^(seq_along(flagnames)-1), ';'),
 '	  this.whichList = function(id) {
@@ -515,22 +515,22 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	      return "transparent";
 	    else
 	      return "opaque"; 
-          }
+          };
 	  this.inSubscene = function(id, subscene) {
 	    var thelist = this.whichList(id);
 	    return this[thelist][subscene].indexOf(id) > -1;
-	  }
+	  };
           this.addToSubscene = function(id, subscene) {
             var thelist = this.whichList(id);
 	    if (this[thelist][subscene].indexOf(id) == -1)
 	      this[thelist][subscene].push(id);
-	  }
+	  };
 	  this.delFromSubscene = function(id, subscene) {
-	    var thelist = this.whichList(id);
-	    var i = this[thelist][subscene].indexOf(id);
+	    var thelist = this.whichList(id),
+	        i = this[thelist][subscene].indexOf(id);
 	    if (i > -1)
 	      this[thelist][subscene].splice(i, 1);
-	  }
+	  };
 	  this.setSubsceneEntries = function(ids, subscene) {
 	    this.subscenes[subscene] = [];
 	    this.clipplanes[subscene] = [];
@@ -538,20 +538,21 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	    this.opaque[subscene] = [];
 	    for (var i = 0; i < ids.length; i++)
 	      this.addToSubscene(ids[i], subscene);
-	  }
+	  };
 	  this.getSubsceneEntries = function(subscene) {
 	    return(this.subscenes[subscene].concat(this.clipplanes[subscene]).
                    concat(this.transparent[subscene]).concat(this.opaque[subscene]));
-	  }
+	  };
     }).call(rglClass.prototype);
 '),
   subst(
 '
 	var %prefix%rgl = new rglClass();
 	%prefix%rgl.start = function() {
+           var i, j, v, ind, texts, f, texinfo;
 	   var debug = function(msg) {
 	     document.getElementById("%prefix%debug").innerHTML = msg;
-	   }
+	   };
 	   debug("");
 
 	   var canvas = document.getElementById("%prefix%canvas");
@@ -561,22 +562,22 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }
 	   try {
 	     // Try to grab the standard context. If it fails, fallback to experimental.
-	     this.gl = canvas.getContext("webgl") 
-	       || canvas.getContext("experimental-webgl");
+	     this.gl = canvas.getContext("webgl") ||
+	               canvas.getContext("experimental-webgl");
 	   }
 	   catch(e) {}
 	   if ( !this.gl ) {
 	     debug("%snapshotimg2% Your browser appears to support WebGL, but did not create a WebGL context.  See <a href=\\\"http://get.webgl.org\\\">http://get.webgl.org</a>");
 	     return;
 	   }
-	   var gl = this.gl;
-	   var width = %width%;  var height = %height%;
+	   var gl = this.gl,
+	       width = %width%, height = %height%;
 	   canvas.width = width;   canvas.height = height;
-	   var normMatrix = new CanvasMatrix4();
-	   var saveMat = new Object();
-	   var distance;
-	   var posLoc = 0;
-	   var colLoc = 1;
+	   var normMatrix = new CanvasMatrix4(),
+	       saveMat = {},
+	       distance,
+	       posLoc = 0,
+	       colLoc = 1;
 ', prefix, snapshotimg2, width, height))
   
   setUser <- function() {
@@ -650,52 +651,53 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }
 	   
 	   function loadImageToTexture(filename, texture) {   
-	     var canvas = document.getElementById("%prefix%textureCanvas");
-	     var ctx = canvas.getContext("2d");
-	     var image = new Image();
+	     var canvas = document.getElementById("%prefix%textureCanvas"),
+	         ctx = canvas.getContext("2d"),
+	         image = new Image();
 	     
 	     image.onload = function() {
-	       var w = image.width;
-	       var h = image.height;
-	       var canvasX = getPowerOfTwo(w);
-	       var canvasY = getPowerOfTwo(h);
+	       var w = image.width,
+	           h = image.height,
+	           canvasX = getPowerOfTwo(w),
+	           canvasY = getPowerOfTwo(h);
 	       canvas.width = canvasX;
 	       canvas.height = canvasY;
 	       ctx.imageSmoothingEnabled = true;
 	       ctx.drawImage(image, 0, 0, canvasX, canvasY);
 	       handleLoadedTexture(texture, canvas);
 	       %prefix%rgl.drawScene();
-	     }
+	     };
 	     image.src = filename;
 	   }  	   
 ', prefix)
 
   textSupport <- subst( 
 '	   function drawTextToCanvas(text, cex) {
-	     var canvasX, canvasY;
-	     var textX, textY;
+	     var canvasX, canvasY,
+	         textX, textY,
 
-	     var textHeight = 20 * cex;
-	     var textColour = "white";
-	     var fontFamily = "%font%";
+	         textHeight = 20 * cex,
+	         textColour = "white",
+	         fontFamily = "%font%",
 
-	     var backgroundColour = "rgba(0,0,0,0)";
+	         backgroundColour = "rgba(0,0,0,0)",
 
-	     var canvas = document.getElementById("%prefix%textureCanvas");
-	     var ctx = canvas.getContext("2d");
+	         canvas = document.getElementById("%prefix%textureCanvas"),
+	         ctx = canvas.getContext("2d"),
+                 i;
 
 	     ctx.font = textHeight+"px "+fontFamily;
 
 	     canvasX = 1;
 	     var widths = [];
-	     for (var i = 0; i < text.length; i++)  {
+	     for (i = 0; i < text.length; i++)  {
 	       widths[i] = ctx.measureText(text[i]).width;
 	       canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
 	     }	  
 	     canvasX = getPowerOfTwo(canvasX);
 
-	     var offset = 2*textHeight; // offset to first baseline
-	     var skip = 2*textHeight;   // skip between baselines	  
+	     var offset = 2*textHeight, // offset to first baseline
+	         skip = 2*textHeight;   // skip between baselines	  
 	     canvasY = getPowerOfTwo(offset + text.length*skip);
 	     
 	     canvas.width = canvasX;
@@ -710,7 +712,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     ctx.textBaseline = "alphabetic";
 	     ctx.font = textHeight+"px "+fontFamily;
 
-	     for(var i = 0; i < text.length; i++) {
+	     for(i = 0; i < text.length; i++) {
 	       textY = i*skip + offset;
 	       ctx.fillText(text[i], 0,  textY);
 	     }
@@ -790,14 +792,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     observer <- par3d("observer")
     distance <- observer[3]
     c(result, subst(
-'	     var radius = %radius%;
-	     var distance = %distance%;
-	     var t = tan(this.FOV[%id%]*PI/360);
-	     var near = distance - radius;
-	     var far = distance + radius;
-	     var hlen = t*near;
-	     var aspect = this.vp[2]/this.vp[3];
-	     var z = this.zoom[%id%];
+'	     var radius = %radius%,
+	         distance = %distance%,
+	         t = tan(this.FOV[%id%]*PI/360),
+	         near = distance - radius,
+	         far = distance + radius,
+	         hlen = t*near,
+	         aspect = this.vp[2]/this.vp[3],
+	         z = this.zoom[%id%];
 	     if (aspect > 1) 
 	       this.prMatrix.frustum(-hlen*aspect*z, hlen*aspect*z, 
 	                        -hlen*z, hlen*z, near, far);
@@ -989,12 +991,12 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       values <- cbind(values, refs)
       nv <- nv*4
       result <- c(result, 
-'	   var texts = [',
+'	   texts = [',
       	paste('	    "', texts, '"', sep="", collapse=",\n"),
 '	   ];',
 
         subst(
-'	   var texinfo = drawTextToCanvas(texts, %cex%);',
+'	   texinfo = drawTextToCanvas(texts, %cex%);',
 	  cex=cex[1], id))
     }
 
@@ -1112,7 +1114,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (sprites_3d) subst(
 '	   this.origsize[%id%]=new Float32Array([', id)
       else if (!flags["reuse"])
-'	   var v=new Float32Array([',
+'	   v=new Float32Array([',
       if (!flags["reuse"]) 
         c(inRows(values, stride, leadin='	   '),
 '	   ]);'),
@@ -1123,14 +1125,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   ]);'),
         
       if (type == "text" && !flags["reuse"]) subst(
-'	   for (var i=0; i<%len%; i++) 
-	     for (var j=0; j<4; j++) {
-	         var ind = this.offsets[%id%]["stride"]*(4*i + j) + this.offsets[%id%]["tofs"];
+'	   for (i=0; i<%len%; i++) 
+	     for (j=0; j<4; j++) {
+	         ind = this.offsets[%id%].stride*(4*i + j) + this.offsets[%id%].tofs;
 	         v[ind+2] = 2*(v[ind]-v[ind+2])*texinfo.widths[i];
 	         v[ind+3] = 2*(v[ind+1]-v[ind+3])*texinfo.textHeight;
 	         v[ind] *= texinfo.widths[i]/texinfo.canvasX;
-	         v[ind+1] = 1.0-(texinfo.offset + i*texinfo.skip 
-	           - v[ind+1]*texinfo.textHeight)/texinfo.canvasY;
+	         v[ind+1] = 1.0-(texinfo.offset + i*texinfo.skip -
+	            v[ind+1]*texinfo.textHeight)/texinfo.canvasY;
 	     }', id, len=length(texts)),
 	     
       if (!sprites_3d && !flags["reuse"]) subst(
@@ -1145,7 +1147,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   this.normLoc[%id%] = gl.getAttribLocation(this.prog[%id%], "aNorm");', 
         id),
       if (clipplanes && !sprites_3d) c(subst(
-'	   this.clipLoc[%id%] = new Array();', id),
+'	   this.clipLoc[%id%] = [];', id),
       	subst(paste0(
 '	   this.clipLoc[%id%][', seq_len(clipplanes)-1, '] = gl.getUniformLocation(this.prog[%id%], "vClipplane', seq_len(clipplanes), '");'),
            id))
@@ -1178,17 +1180,15 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   ]);')
 
         fname <- subst("this.f[%id%]", id)
-        var <- ""
         drawtype <- "DYNAMIC_DRAW"
       } else {
         fname <- "f"
-        var <- "var "
         drawtype <- "STATIC_DRAW"
       }
       
       result <- c(result, subst(
-'	   %var%%fname%=new Uint16Array([', 
-          var, fname),
+'	   %fname%=new Uint16Array([', 
+          fname),
 	inRows(c(f), frowsize, leadin='	   '),
 '	   ]);')
     }
@@ -1232,20 +1232,21 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     result <- subst(
 '
        // ****** %type% object %id% *******
-       this.drawFns[%id%] = function(id, clipplanes) {',
+       this.drawFns[%id%] = function(id, clipplanes) {
+         var i;',
        type, id)
   
     if (type == "clipplanes") {
       count <- rgl.attrib.count(id, "offsets")
       result <- c(result, subst(
-'	     this.IMVClip[id] = new Array();', id))       	
+'	     this.IMVClip[id] = [];', id))       	
       for (i in seq_len(count) - 1) {
         result <- c(result, subst(
 '	     this.IMVClip[id][%i%] = this.multMV(this.invMatrix, this.vClipplane[id]%slice%);',
 	id, i, slice = subst(".slice(%first%, %stop%)", first = 4*i, stop = 4*(i+1))))
       }
       result <- c(result, subst(
-'       }
+'       };
        this.clipFns[%id%] = function(id, objid, count) {', id))
       count <- rgl.attrib.count(id, "offsets")
       result <- c(result, 
@@ -1255,10 +1256,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   }'
 	    else if (count > 1)
       	    	subst(
-'	     for (var i=0; i<%count%; i++)   
+'	     for (i=0; i<%count%; i++)   
 	       gl.uniform4fv(this.clipLoc[objid][count + i], this.IMVClip[id][i]);
 	     return(count + %count%);
-       }', id, count))
+       };', id, count))
       return(result)
     }
 
@@ -1306,7 +1307,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
          
       result <- c(result, 
 '	     var clipcheck = 0;
-	     for (var i=0; i < clipplanes.length; i++)
+	     for (i=0; i < clipplanes.length; i++)
 	       clipcheck = this.clipFns[clipplanes[i]].call(this, clipplanes[i], id, clipcheck);')           
       if (is_lit && !sprite_3d)
         result <- c(result, subst(
@@ -1371,7 +1372,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         result <- c(result, subst(
 '	     var depths = new Float32Array(%nfaces%);
 	     var faces = new Array(%nfaces%);
-	     for(var i=0; i<%nfaces%; i++) {
+	     for(i=0; i<%nfaces%; i++) {
 	       var z = this.prmvMatrix.m13*this.centers[id][3*i] 
 	             + this.prmvMatrix.m23*this.centers[id][3*i+1]
 	             + this.prmvMatrix.m33*this.centers[id][3*i+2]
@@ -1388,7 +1389,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
            nfaces, id),
            if (type != "spheres") subst(
 '	     var f = new Uint16Array(this.f[id].length);
-	     for (var i=0; i<%nfaces%; i++) {
+	     for (i=0; i<%nfaces%; i++) {
 	       for (var j=0; j<%frowsize%; j++) {
 	         f[%frowsize%*i + j] = this.f[id][%frowsize%*faces[i] + j];
 	       }
@@ -1421,16 +1422,16 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  },
 	
           subst(
-'	     for (var i = 0; i < %scount%; i++) {
+'	     for (i = 0; i < %scount%; i++) {
 	       var sphereMV = new CanvasMatrix4();', scount),
 	       
 	  if (depth_sort) subst(
-'	       var baseofs = faces[i]*%thisprefix%rgl.offsets[id]["stride"];', thisprefix)
+'	       var baseofs = faces[i]*%thisprefix%rgl.offsets[id].stride;', thisprefix)
           else subst(
-'	       var baseofs = i*%thisprefix%rgl.offsets[id]["stride"];', thisprefix),
+'	       var baseofs = i*%thisprefix%rgl.offsets[id].stride;', thisprefix),
 
 	  subst(
-'	       var ofs = baseofs + this.offsets[id]["radofs"];	       
+'	       var ofs = baseofs + this.offsets[id].radofs;	       
 	       var scale = this.values[id][ofs];
 	       sphereMV.scale(%sx%*scale, %sy%*scale, %sz%*scale);
 	       sphereMV.translate(this.values[id][baseofs], 
@@ -1441,7 +1442,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     sx, sy, sz),
 	 
 	   if (nc > 1) 
-'	       ofs = baseofs + this.offsets[id]["cofs"];       
+'	       ofs = baseofs + this.offsets[id].cofs;       
 	       gl.vertexAttrib4f( colLoc, this.values[id][ofs], 
 					  this.values[id][ofs+1], 
 					  this.values[id][ofs+2],
@@ -1461,19 +1462,19 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         } else {
           result <- c(result, 
 '	     gl.enableVertexAttribArray( colLoc );
-	     gl.vertexAttribPointer(colLoc, 4, gl.FLOAT, false, 4*this.offsets[id]["stride"], 4*this.offsets[id]["cofs"]);')
+	     gl.vertexAttribPointer(colLoc, 4, gl.FLOAT, false, 4*this.offsets[id].stride, 4*this.offsets[id].cofs);')
         }
     
         if (is_lit && nn > 0) {
           result <- c(result, 
 '	     gl.enableVertexAttribArray( this.normLoc[id] );
-	     gl.vertexAttribPointer(this.normLoc[id], 3, gl.FLOAT, false, 4*this.offsets[id]["stride"], 4*this.offsets[id]["nofs"]);')
+	     gl.vertexAttribPointer(this.normLoc[id], 3, gl.FLOAT, false, 4*this.offsets[id].stride, 4*this.offsets[id].nofs);')
         }
     
         if (has_texture || type == "text") {
           result <- c(result, 
 '	     gl.enableVertexAttribArray( this.texLoc[id] );
-	     gl.vertexAttribPointer(this.texLoc[id], 2, gl.FLOAT, false, 4*this.offsets[id]["stride"], 4*this.offsets[id]["tofs"]);
+	     gl.vertexAttribPointer(this.texLoc[id], 2, gl.FLOAT, false, 4*this.offsets[id].stride, 4*this.offsets[id].tofs);
 	     gl.activeTexture(gl.TEXTURE0);
 	     gl.bindTexture(gl.TEXTURE_2D, this.texture[id]);
 	     gl.uniform1i( this.sampler[id], 0);')
@@ -1482,7 +1483,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         if (fixed_quads) {
           result <- c(result, 
 '	     gl.enableVertexAttribArray( this.ofsLoc[id] );
-	     gl.vertexAttribPointer(this.ofsLoc[id], 2, gl.FLOAT, false, 4*this.offsets[id]["stride"], 4*this.offsets[id]["oofs"]);')
+	     gl.vertexAttribPointer(this.ofsLoc[id], 2, gl.FLOAT, false, 4*this.offsets[id].stride, 4*this.offsets[id].oofs);')
         }
 	     
         mode <- switch(type,
@@ -1517,7 +1518,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         }
       
         result <- c(result, 
-'	     gl.vertexAttribPointer(posLoc,  3, gl.FLOAT, false, 4*this.offsets[id]["stride"],  4*this.offsets[id]["vofs"]);',
+'	     gl.vertexAttribPointer(posLoc,  3, gl.FLOAT, false, 4*this.offsets[id].stride,  4*this.offsets[id].vofs);',
       	
           if (is_indexed) subst(
 '	     gl.drawElements(gl.%mode%, %count%, gl.UNSIGNED_SHORT, 0);',
@@ -1529,7 +1530,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       }
     }    
     result <- c(result,
-'       }')
+'       };')
     result
   }
     
@@ -1546,9 +1547,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     gl.depthMask(true);
 	     gl.disable(gl.BLEND);
 	     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	     this.drawFns[%rootid%].call(this, %rootid%)
-	     gl.flush ();
-	   }
+	     this.drawFns[%rootid%].call(this, %rootid%);
+	     gl.flush();
+	   };
 ', rootid)
   }
   
@@ -1565,7 +1566,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       
     result <- c(subst('
        // ***** subscene %subsceneid% ****
-       this.drawFns[%subsceneid%] = function(id) {',
+       this.drawFns[%subsceneid%] = function(id) {
+         var i;',
 	subsceneid),
 
       setViewport(),    
@@ -1587,11 +1589,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	     if (clipids.length > 0) {
 	       this.invMatrix = new CanvasMatrix4(this.mvMatrix);
 	       this.invMatrix.invert();
-	       for (var i = 0; i < this.clipplanes[id].length; i++) 
+	       for (i = 0; i < this.clipplanes[id].length; i++) 
 	         this.drawFns[clipids[i]].call(this, clipids[i]);
 	     }
 	     var subids = this.opaque[id];
-	     for (var i = 0; i < subids.length; i++) 
+	     for (i = 0; i < subids.length; i++) 
 	       this.drawFns[subids[i]].call(this, subids[i], clipids);
 	     subids = this.transparent[id];
 	     if (subids.length > 0) {
@@ -1599,13 +1601,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
 	                          gl.ONE, gl.ONE);
 	       gl.enable(gl.BLEND);
-	       for (var i = 0; i < subids.length; i++) 
+	       for (i = 0; i < subids.length; i++) 
 	         this.drawFns[subids[i]].call(this, subids[i], clipids);
 	     }
 	     subids = this.subscenes[id];
-	     for (var i = 0; i < subids.length; i++)
+	     for (i = 0; i < subids.length; i++)
 	       this.drawFns[subids[i]].call(this, subids[i]);
-      }')
+      };')
     result
   }
 	  
@@ -1679,7 +1681,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '  	   var whichSubscene = function(coords){',
   	   tests, subst(
 '         return(%id%);
-       }
+       };
 ',	id=rootid)
     )
   
@@ -1702,13 +1704,13 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           fn <- attr(handlerfns[[j]], "javascript")
           if (!is.null(fn)) {
             result <- c(result, subst(
-'           var %handler%%action% = %fn%', 
+'           var %handler%%action% = %fn%;', 
               handler = handlers[i], action = actions[j], fn = fn))
           } else if (!is.null(name <- attr(handlerfns[[j]], "jsName"))) {
             result <- c(result, subst(
 '           var %handler%%action% = function(x, y) {
              %javascript%(activeSubscene%args%)
-	   }', handler = handlers[i], action = actions[j], javascript = name,
+	   };', handler = handlers[i], action = actions[j], javascript = name,
                           args = if (j < 3) ", x, y" else ""))
           } else {                  
             warning("No \"javascript\" or \"jsName\" attribute found on user handler.  Default used instead.")
@@ -1720,39 +1722,39 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     result <- c(result,
 '       var translateCoords = function(subsceneid, coords){
          return {x:coords.x - vpx0[subsceneid], y:coords.y - vpy0[subsceneid]};
-       }
+       };
        
        var vlen = function(v) {
-	     return sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])
-	   }
+	     return sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+	   };
 	   
 	   var xprod = function(a, b) {
 	     return [a[1]*b[2] - a[2]*b[1],
 	             a[2]*b[0] - a[0]*b[2],
 	             a[0]*b[1] - a[1]*b[0]];
-	   }
+	   };
 
 	   var screenToVector = function(x, y) {
-	     var width = vpWidths[activeSubscene];
-	     var height = vpHeights[activeSubscene];
-	     var radius = max(width, height)/2.0;
-	     var cx = width/2.0;
-	     var cy = height/2.0;
-	     var px = (x-cx)/radius;
-	     var py = (y-cy)/radius;
-	     var plen = sqrt(px*px+py*py);
+	     var width = vpWidths[activeSubscene],
+	         height = vpHeights[activeSubscene],
+	         radius = max(width, height)/2.0,
+	         cx = width/2.0,
+	         cy = height/2.0,
+	         px = (x-cx)/radius,
+	         py = (y-cy)/radius,
+	         plen = sqrt(px*px+py*py);
 	     if (plen > 1.e-6) { 
 	       px = px/plen;
 	       py = py/plen;
 	     }
 
-	     var angle = (SQRT2 - plen)/SQRT2*PI/2;
-	     var z = sin(angle);
-	     var zlen = sqrt(1.0 - z*z);
+	     var angle = (SQRT2 - plen)/SQRT2*PI/2,
+	         z = sin(angle),
+	         zlen = sqrt(1.0 - z*z);
 	     px = px * zlen;
 	     py = py * zlen;
 	     return [px, py, z];
-	   }
+	   };
 
 	   var rotBase;
 ')
@@ -1764,25 +1766,26 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 '	   var trackballdown = function(x,y) {
 	     rotBase = screenToVector(x, y);
 	     var l = %prefix%rgl.listeners[activeModel[activeSubscene]];
-	     saveMat = new Object();
+	     saveMat = {};
 	     for (var i = 0; i < l.length; i++) 
 	       saveMat[l[i]] = new CanvasMatrix4(%prefix%rgl.userMatrix[l[i]]);
-	   }
+	   };
 	   
 	   var trackballmove = function(x,y) {
-	     var rotCurrent = screenToVector(x,y);
-	     var dot = rotBase[0]*rotCurrent[0] + 
+	     var rotCurrent = screenToVector(x,y),
+	         dot = rotBase[0]*rotCurrent[0] + 
 	   	       rotBase[1]*rotCurrent[1] + 
-	   	       rotBase[2]*rotCurrent[2];
-	     var angle = acos( dot/vlen(rotBase)/vlen(rotCurrent) )*180./PI;
-	     var axis = xprod(rotBase, rotCurrent);
-	     var l = %prefix%rgl.listeners[activeModel[activeSubscene]];
+	   	       rotBase[2]*rotCurrent[2],
+	         angle = acos( dot/vlen(rotBase)/vlen(rotCurrent) )*180.0/PI,
+	         axis = xprod(rotBase, rotCurrent),
+	         l = %prefix%rgl.listeners[activeModel[activeSubscene]], 
+                 i;
 	     for (i = 0; i < l.length; i++) {
 	       %prefix%rgl.userMatrix[l[i]].load(saveMat[l[i]]);
 	       %prefix%rgl.userMatrix[l[i]].rotate(angle, axis[0], axis[1], axis[2]);
 	     }
 	     %prefix%rgl.drawScene();
-	   }
+	   };
 	   var trackballend = 0;
 ', prefix),
 
@@ -1800,15 +1803,16 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var %h%down = function(x,y) {
 	     rotBase = screenToVector(x, height/2);
 	     var l = %prefix%rgl.listeners[activeModel[activeSubscene]];
-	     saveMat = new Object();
+	     saveMat = {};
 	     for (var i = 0; i < l.length; i++) 
 	     saveMat[l[i]] = new CanvasMatrix4(%prefix%rgl.userMatrix[l[i]]);
-	   }
+	   };
 	   	   
 	   var %h%move = function(x,y) {
-	     var rotCurrent = screenToVector(x,height/2);
-	     var angle = (rotCurrent[0] - rotBase[0])*180/PI;
-	     var rotMat = new CanvasMatrix4();
+	     var rotCurrent = screenToVector(x,height/2),
+	         angle = (rotCurrent[0] - rotBase[0])*180/PI,
+	         rotMat = new CanvasMatrix4(),
+                 i;
 	     rotMat.rotate(angle, %h%[0], %h%[1], %h%[2]);
 	     var l = %prefix%rgl.listeners[activeModel[activeSubscene]];
 	     for (i = 0; i < l.length; i++) {
@@ -1816,7 +1820,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       %prefix%rgl.userMatrix[l[i]].multLeft(rotMat);
 	     }
 	     %prefix%rgl.drawScene();
-	   }
+	   };
 	   
 	   var %h%end = 0;
 	   
@@ -1826,18 +1830,18 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var zoom0 = 0;
 	   var zoomdown = function(x, y) {
 	     y0zoom = y;
-	     zoom0 = new Object();
+	     zoom0 = {};
 	     l = %prefix%rgl.listeners[activeProjection[activeSubscene]];
-	     for (i = 0; i < l.length; i++)
+	     for (var i = 0; i < l.length; i++)
 	     zoom0[l[i]] = log(%prefix%rgl.zoom[l[i]]);
-	   }
+	   };
 
 	   var zoommove = function(x, y) {
 	     l = %prefix%rgl.listeners[activeProjection[activeSubscene]];
-	     for (i = 0; i < l.length; i++)
+	     for (var i = 0; i < l.length; i++)
 	       %prefix%rgl.zoom[l[i]] = exp(zoom0[l[i]] + (y-y0zoom)/height);
 	     %prefix%rgl.drawScene();
-	   }
+	   };
 	   
 	   var zoomend = 0;
 ',      prefix),
@@ -1846,18 +1850,18 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   var fov0 = 0;
 	   var fovdown = function(x, y) {
 	     y0fov = y;
-	     fov0 = new Object();
+	     fov0 = {};
 	     l = %prefix%rgl.listeners[activeProjection[activeSubscene]];
 	     for (i = 0; i < l.length; i++)
 	       fov0[l[i]] = %prefix%rgl.FOV[l[i]];
-	   }
+	   };
 
 	   var fovmove = function(x, y) {
 	     l = %prefix%rgl.listeners[activeProjection[activeSubscene]];
 	     for (i = 0; i < l.length; i++)
 	       %prefix%rgl.FOV[l[i]] = max(1, min(179, fov0[l[i]] + 180*(y-y0fov)/height));
 	     %prefix%rgl.drawScene();
-	   }
+	   };
 	   
 	   var fovend = 0;
 ',      prefix)))  }
@@ -1879,21 +1883,21 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	
   scriptEnd <- subst(
 '	   function relMouseCoords(event){
-	     var totalOffsetX = 0;
-	     var totalOffsetY = 0;
-	     var currentElement = canvas;
+	     var totalOffsetX = 0,
+	         totalOffsetY = 0,
+	         currentElement = canvas;
 	   
 	     do{
 	       totalOffsetX += currentElement.offsetLeft;
 	       totalOffsetY += currentElement.offsetTop;
 	       currentElement = currentElement.offsetParent;
 	     }
-	     while(currentElement)
+	     while(currentElement);
 	   
-	     var canvasX = event.pageX - totalOffsetX;
-	     var canvasY = event.pageY - totalOffsetY;
+	     var canvasX = event.pageX - totalOffsetX,
+	         canvasY = event.pageY - totalOffsetY;
 	   
-	     return {x:canvasX, y:canvasY}
+	     return {x:canvasX, y:canvasY};
 	   }
 	   
 	   canvas.onmousedown = function ( ev ){
@@ -1914,20 +1918,20 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       f(coords.x, coords.y); 
 	       ev.preventDefault();
 	     }
-	   }    
+	   };    
 
 	   canvas.onmouseup = function ( ev ){	
-	     if ( drag == 0 ) return;
+	     if ( drag === 0 ) return;
 	     var f = mouseend[drag-1];
 	     if (f) 
 	       f();
 	     drag = 0;
-	   }
+	   };
 	   
 	   canvas.onmouseout = canvas.onmouseup;
 
 	   canvas.onmousemove = function ( ev ){
-	     if ( drag == 0 ) return;
+	     if ( drag === 0 ) return;
 	     var f = mousemove[drag-1];
 	     if (f) {
 	       var coords = relMouseCoords(ev);
@@ -1935,14 +1939,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       coords = translateCoords(activeSubscene, coords);
 	       f(coords.x, coords.y);
 	     }
-	   }
+	   };
 
 	   var wheelHandler = function(ev) {
 	     var del = 1.1;
 	     if (ev.shiftKey) del = 1.01;
 	     var ds = ((ev.detail || ev.wheelDelta) > 0) ? del : (1 / del);
 	     l = %prefix%rgl.listeners[activeProjection[activeSubscene]];
-	     for (i = 0; i < l.length; i++)
+	     for (var i = 0; i < l.length; i++)
 	       %prefix%rgl.zoom[l[i]] *= ds;
 	     %prefix%rgl.drawScene();
 	     ev.preventDefault();
@@ -1950,7 +1954,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   canvas.addEventListener("DOMMouseScroll", wheelHandler, false);
 	   canvas.addEventListener("mousewheel", wheelHandler, false);
 
-	}
+	};
 	</script>', prefix)
 
   footer <- function() subst('

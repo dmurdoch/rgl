@@ -665,7 +665,7 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
-0.95.1257
+0.95.1258
   - Made error and warning text more consistent.
   - Automatically installs "rgl" and "webgl" hooks if
     knitr is loaded and they are not already present.
@@ -686,3 +686,5 @@ v0.94
     value has priority if "override" is TRUE (the default).
   - Added vertexSetter() function to allow easier access to 
     vertex attributes.
+  - Used Jeroen Ooms' js::jshints() function to clean up the
+    WebGL Javascript code.
