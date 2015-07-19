@@ -21,7 +21,7 @@ propertySlider(setter = propertySetter,
 	     index = NULL,
 	     ...) 
 	     
-propertySetter(values, entries, properties, objids, prefixes = "",
+propertySetter(values = NULL, entries, properties, objids, prefixes = "",
                param = seq_len(NROW(values)), interp = TRUE, digits = 7) 
                
 par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, 
@@ -48,12 +48,14 @@ will display the slider value, or \code{NULL} for none.}
   \item{index}{The 1-based index of this slider:  it controls the
   corresponding entry in an indexed setter such as \code{matrixSetter}.}
   \item{...}{See Details below.}
-  \item{values}{An array of values; rows correspond to slider positions.}
+  \item{values}{An array of values; rows correspond to slider positions.  Alternatively, \code{NULL}; the generated function takes a
+  single value or array of values and applies them directly.}
   \item{entries, properties, objids, prefixes}{Vectors describing
   the columns of \code{values}.  See the details below.}
   \item{param}{Parameter values corresponding to each row of \code{values}.}
   \item{interp}{Whether to interpolate values.  If \code{FALSE}, 
-  the Javascript function will expect non-negative integer values.}
+  the Javascript function will expect non-negative integer values.
+  Ignored if \code{values} is \code{NULL}.}
   \item{digits}{How many significant digits to emit in the Javascript code.}
   \item{fn}{A function returned from \code{\link{par3dinterp}}.}
   \item{from, to, steps}{Values where \code{fn} should be evaluated.}
@@ -100,6 +102,13 @@ of the vertex \code{"r", "g", "b", "a"}, normal at the vertex
 \code{"radius"}, origin within a texture \code{"ox", "oy"} and
 perhaps \code{"oz"}, texture coordinates \code{"ts", "tt"}.
 
+\code{propertySetter} and \code{vertexSetter} allow values to be 
+specified in two ways.
+The normal way when used with a slider is to interpolate between
+specified values indexed by the slider.  If \code{values = NULL},
+the value of the slider is used directly (and only one entry can
+be set).  Multiple entries can be set directly by passing
+an array of values in custom Javascript code.
 
 \code{par3dinterpSetter} uses \code{propertySetter}
 to set parameters corresponding to values produced by the result of
@@ -156,6 +165,16 @@ which gives access to the local environment where it was
 created, so for example \code{attr(value, "env")$prefixes} will
 give access to the \code{prefixes} argument if \code{value}
 was produced by \code{"propertySetter"}.
+
+\code{par3dinterpSetter} returns a \code{propertySetter} result.
+
+\code{matrixSetter} is similar to \code{propertySetter}, but
+the Javascript function takes arguments \code{value, index}, 
+and the class of the result is 
+\code{c("matrixSetter", "indexedSetter", "propertySetter")}.
+
+\code{vertexSetter} is similar to \code{propertySetter}, but
+the class of the result is \code{c("vertexSetter", "propertySetter")}.
 }
 \author{
 Duncan Murdoch

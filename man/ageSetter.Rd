@@ -63,7 +63,8 @@ chosen that is not a property of the corresponding object, a
 Javascript \code{alert()} will be generated.  
 }
 \value{
-A character vector of class \code{"propertySetter"} containing Javascript
+A character vector of class \code{c("ageSetter", "propertySetter")} 
+containing Javascript
 code defining a function suitable for use in a \code{\link{propertySlider}}.
 
 The function takes a single argument, \code{time}, and uses it to compute the

@@ -155,13 +155,18 @@ oninput = "%prefix%rgl.%id%(this.valueAsNumber)">%outputfield%',
   invisible(id)
 }
 
-propertySetter <- function(values, entries, properties, objids, prefixes = "",
+propertySetter <- function(values = NULL, entries, properties, objids, prefixes = "",
                            param = seq_len(NROW(values)), interp = TRUE,
 			   digits = 7)  {
-  values <- matrix(values, NROW(values))
-  ncol <- ncol(values)
-  stopifnot(length(entries) == ncol,
-            all(diff(param) > 0))
+  direct <- is.null(values)
+  ncol <- length(entries)
+  if (direct) 
+    interp <- FALSE
+  else {    
+    values <- matrix(values, NROW(values))
+    stopifnot(ncol(values) == ncol,
+              all(diff(param) > 0))
+  }
   prefixes <- rep(prefixes, length.out = ncol)
   if (!ncol) return(structure("function(value) {}", param = param, 
   			    prefixes = prefixes,
@@ -175,14 +180,16 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
   if (interp) values <- rbind(values[1,], values, values[nrow(values),])
   get <- if (grepl("^userMatrix", property)) ".getAsArray()" else ""
   load <- if (grepl("^userMatrix", property)) ".load(propvals)" else "= propvals"
-  result <- c(subst(
-'function(value){
-   var values = [%vals%],', 
+  result <- c(
+'function(value){',
+
+    if (!direct) subst(
+'   var values = [%vals%],', 
      vals = paste(formatC(as.vector(t(values)), digits = digits, width = 1), 
      	          collapse = ",")),
      
    subst(
-'       propvals = %prefix%rgl.%property%[%objid%]%get%;',
+'   propvals = %prefix%rgl.%property%[%objid%]%get%;',
      prefix, property, objid, get),   
 
    if (interp) subst(
@@ -192,14 +199,14 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
      if (value <= svals[i]) {
        var p = (svals[i] - value)/(svals[i] - svals[i-1]);',
      svals = paste(formatC(param, digits = digits, width = 1), collapse = ","))
-   else
+   else if (!direct)
 '   value = Math.round(value);')
      
   for (j in seq_along(entries)) {
     newprefix <- prefixes[j]
     newprop <- properties[j]
     newget <- if (grepl("^userMatrix", newprop)) ".getAsArray()" else ""
-    newload <- if (grepl("^userMatrix", newprop)) ".load(propvals)" else "= propvals"
+    newload <- if (grepl("^userMatrix", newprop)) ".load(propvals)" else " = propvals"
     newid <- objids[j]
     multiplier <- ifelse(ncol>1, paste0(ncol, "*"), "")
     offset <-     ifelse(j>1,  paste0("+", j-1), "")
@@ -207,16 +214,22 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
     
     if (newprefix != prefix || newprop != property || newid != objid) subst(
 '   %prefix%rgl.%property%[%objid%]%load%;
-    propvals = %newprefix%rgl.%newprop%[%newid%]%newget%;', 
+   propvals = %newprefix%rgl.%newprop%[%newid%]%newget%;', 
       prefix, property, objid, load, newget, newprefix, newprop, newid),
     
     if (interp) subst(
 '       v1 = values[%multiplier%(i-1)%offset%];
        v2 = values[%multiplier%i%offset%];
        propvals[%entry%] = p*v1 + (1-p)*v2;', entry=entries[j], multiplier, offset)
-     else subst(
+     else if (!direct) subst(
 '   propvals[%entry%] = values[%multiplier%value%offset%];', 
-      entry=entries[j], multiplier, offset))
+      entry = entries[j], multiplier, offset)
+     else if (ncol == 1) subst( 
+'   propvals[%entry%] = value;',
+     	entry = entries[j], jm1 = j - 1)
+     else subst( 
+'   propvals[%entry%] = value[%jm1%];',
+      entry = entries[j], jm1 = j - 1))
       
     prefix <- newprefix  
     property <- newprop
@@ -233,62 +246,52 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
       prefix, property, objid, load))
 
   needsBinding <- unique(data.frame(prefixes, objids)[properties == "values",])
+  if (nrow(needsBinding))
+    result <- c(result, 
+'   var gl;')	
   for (i in seq_len(nrow(needsBinding))) {
     prefix <- needsBinding[i, 1]
     objid <- needsBinding[i, 2]
     result <- c(result, subst(
 '   if (typeof %prefix%rgl.buf[%objid%] !== "undefined") {
-     var gl = %prefix%rgl.gl;
+     gl = %prefix%rgl.gl;
      gl.bindBuffer(gl.ARRAY_BUFFER, %prefix%rgl.buf[%objid%]);
      gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);
    }', prefix, objid))
    }
    result <- c(result, '}')
-  structure(paste(result, collapse = "\n"),
-    param = param, prefixes = prefixes,
+  result <- structure(paste(result, collapse = "\n"),
+    prefixes = prefixes,
     class = "propertySetter")
+  if (!direct)
+    attr(result, "param") <- param
+  result
 }
 
-vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
+vertexSetter <- function(values = NULL, vertices = 1, attributes, objid, prefix = "",
 			 param = seq_len(NROW(values)), interp = TRUE,
 			 digits = 7)  {
-  attribofs = c(x = 'vofs', 
-            y = 'vofs', 
-            z = 'vofs', 
-  	    r = 'cofs', 
-            g = 'cofs', 
-  	    b = 'cofs',
-  	    a = 'cofs', 
-            nx = 'nofs', 
-            ny = 'nofs', 
-            nz = 'nofs',
+  attribofs <- c(x = 'vofs', y = 'vofs', z = 'vofs', 
+  	    r = 'cofs', g = 'cofs', b = 'cofs', a = 'cofs', 
+            nx = 'nofs', ny = 'nofs', nz = 'nofs',
 	    radius = 'radofs', 
-            ox = 'oofs', 
-            oy = 'oofs', 
-            oz = 'oofs', 
-  	    ts = 'tofs', 
-            tt = 'tofs')
-  attribofsofs = c(x = 0, 
-  	      y = 1, 
-  	      z = 2, 
-  	      r = 0, 
-  	      g = 1, 
-  	      b = 2,
-  	      a = 3, 
-  	      nx = 0, 
-  	      ny = 1, 
-  	      nz = 2,
-  	      radius = 0, 
-  	      ox = 0, 
-  	      oy = 1, 
-  	      oz = 2, 
-  	      ts = 0, 
-  	      tt = 1)  
-  values <- matrix(values, NROW(values))
-  ncol <- ncol(values)
+            ox = 'oofs', oy = 'oofs', oz = 'oofs', 
+  	    ts = 'tofs', tt = 'tofs')
+  attribofsofs <- structure(c(0:2, 0:3, 0:2, 0, 0:2, 0:1),
+  			    names = names(attribofs))
+  direct <- is.null(values)
+  ncol <- max(if (is.matrix(values)) ncol(values), 
+  	      length(vertices), length(attributes))
+  if (direct) 
+    interp <- FALSE
+  else {    
+    values <- matrix(values, NROW(values))
+    stopifnot(ncol(values) == ncol,
+  		  all(diff(param) > 0))
+  }
+  
   attributes <- match.arg(attributes, names(attribofs), several.ok = TRUE)
-  stopifnot(max(length(vertices), length(attributes)) == ncol,
-	    length(objid) == 1,
+  stopifnot(length(objid) == 1,
 	    length(prefix) == 1,
             all(attributes %in% names(attribofs)),
 	    all(diff(param) > 0))
@@ -300,15 +303,19 @@ vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
 			      class = c("vertexSetter", "propertySetter")))
 	
   if (interp) values <- rbind(values[1,], values, values[nrow(values),])
-  result <- c(subst(
-'function(value){
-  var ofs, values = [%vals%],', 
+  result <- c(
+'function(value){',
+
+    if (direct)
+'  var ofs;'
+    else subst(
+'  var ofs, values = [%vals%],', 
     vals = paste(formatC(as.vector(t(values)), digits = digits, width = 1), 
 	         collapse = ",")),
 		
     subst(
-'      propvals = %prefix%rgl.values[%objid%],
-      stride = %prefix%rgl.offsets[%objid%].stride;',
+'  propvals = %prefix%rgl.values[%objid%],
+  stride = %prefix%rgl.offsets[%objid%].stride;',
 	prefix, objid),   
 		
     if (interp) subst(
@@ -316,7 +323,7 @@ vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
   for (var i = 1; i < svals.length; i++) 
     if (value <= svals[i]) {
       p = (svals[i] - value)/(svals[i] - svals[i-1]);',	svals = paste(formatC(param, digits = digits, width = 1), collapse = ","))
-    else
+    else if (!direct)
 '  value = Math.round(value);')
 	
   for (j in seq_along(vertices)) {
@@ -342,9 +349,15 @@ vertexSetter <- function(values, vertices = 1, attributes, objid, prefix = "",
   v2 = values[%multiplier%i%offset%];
   propvals[%entry%] = p*v1 + (1-p)*v2;', 
         entry, multiplier, offset)
-      else subst(
+      else if (!direct) subst(
 '  propvals[%entry%] = values[%multiplier%value%offset%];', 
-	entry, multiplier, offset))
+	entry, multiplier, offset)
+      else if (ncol == 1) subst(
+'  propvals[%entry%] = value;', 
+      	entry)
+      else subst(
+'  propvals[%entry%] = value[%jm1%];', 
+      	entry, jm1 = j - 1))
 
   }  
   result <- c(result, 
@@ -564,5 +577,5 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
   result <- c(result, '  }')
   structure(paste(result, collapse = "\n"),
             param = param, prefixes = prefixes,
-  	    class = "propertySetter")
+  	    class = c("ageSetter", "propertySetter"))
 }
