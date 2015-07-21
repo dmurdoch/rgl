@@ -52,7 +52,9 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
 
 setClipregion <- function(xlim = NULL, ylim = NULL, zlim = NULL, force = FALSE) {
   if (force || length(c(xlim, ylim, zlim))) {
+    listeners <- par3d("listeners")
     result <- c(clipregion = newSubscene3d("inherit", "inherit", "inherit"))
+    par3d(listeners = listeners)
     normals <- matrix(nrow = 0, ncol = 3)
     offsets <- c()
     if (length(xlim)) {
