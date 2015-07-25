@@ -192,17 +192,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         }
       }
     }
-    vertex <- subst(
-'	<!-- ****** %type% object %id% ****** -->',
-      type, id)
     if (sprites_3d)
-      return(c(vertex, 
-'	<!-- 3d sprite, no shader -->
-'            ))
-
-    vertex <- c(vertex, subst(
-'	<script id="%prefix%vshader%id%" type="x-shader/x-vertex">', 
-      prefix, id),
+      return(NULL)
+    vertex <- c(subst(
+'	/* ****** %type% object %id% vertex shader ****** */',
+      type, id),
 	
 '	attribute vec3 aPos;
 	attribute vec4 aCol;
@@ -265,14 +259,15 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  vPosition = pos/pos.w + vec4(uSize*(vec4(aPos, 1.)*usermat).xyz,0.);
 	  gl_Position = prMatrix * vPosition;',
 	  	  
-'	}
-	</script>
-')
+'	}')
 
     # Important:  in some implementations (e.g. ANGLE) declarations that involve computing must be local (inside main()), not global
     fragment <- c(subst(
-'	<script id="%prefix%fshader%id%" type="x-shader/x-fragment"> 
-	#ifdef GL_ES
+'	/* ****** %type% object %id% fragment shader ****** */',
+    	type, id),
+
+      subst(
+'	#ifdef GL_ES
 	precision highp float;
 	#endif
 	varying vec4 vCol; // carries alpha
@@ -406,10 +401,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         else
 '	  gl_FragColor = lighteffect;',
 
-'	}
-	</script> 
-'     )
-    c(vertex, fragment)    
+'	}'     )
+    list(vertex = vertex, fragment = fragment)    
   }
 
   scriptheader <- function() c(
@@ -428,6 +421,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	    PI = Math.PI,
 	    log = Math.log,
 	    exp = Math.exp,
+            vshader, fshader,
 
 	    rglClass = function() {
 	  this.zoom = [];
@@ -439,6 +433,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	  this.opaque = [];
 	  this.transparent = [];
 	  this.subscenes = [];
+	  this.vshaders = [];
+	  this.fshaders = [];
 
 	  this.flags = [];
 	  this.prog = [];
@@ -478,21 +474,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	};
 	  
 	(function() {
-	  this.getShader = function( gl, id ){
-	    var shaderScript = document.getElementById ( id ),
-	        str = "",
-	        k = shaderScript.firstChild,
-                shader;
-	    while ( k ){
-	      if ( k.nodeType == 3 ) str += k.textContent;
-	      k = k.nextSibling;
-	    }
-	    if ( shaderScript.type == "x-shader/x-fragment" )
-	      shader = gl.createShader ( gl.FRAGMENT_SHADER );
-	    else if ( shaderScript.type == "x-shader/x-vertex" )
-	      shader = gl.createShader(gl.VERTEX_SHADER);
-	    else return null;
-	    gl.shaderSource(shader, str);
+	  this.getShader = function( gl, shaderType, code ){
+	    var shader;
+	    shader = gl.createShader ( shaderType );
+	    gl.shaderSource(shader, code);
 	    gl.compileShader(shader);
 	    if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0)
 	      alert(gl.getShaderInfoLog(shader));
@@ -897,15 +882,31 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     clipplanes <- countClipplanes(id)
     thisprefix <- getPrefix(id)
     
+    if (!flags["reuse"]) {
+      shaders <- shaders(id, type, flags)
+      vshader <- paste(gsub("\n", "\\\\n", shaders$vertex, fixed = TRUE), 
+    		     collapse = "\\\\n")
+      fshader <- paste(gsub("\n", "\\\\n", shaders$fragment, fixed = TRUE),
+    		     collapse = "\\\\n")
+    }	
     result <- subst(
 '
 	   // ****** %type% object %id% ******
 	   this.flags[%id%] = %flags%;', type, id, flags = numericFlags(flags))
     if (!sprites_3d && !is_clipplanes)
-      result <- c(result, subst(
-'	   this.prog[%id%]  = gl.createProgram();
-	   gl.attachShader(this.prog[%id%], this.getShader( gl, "%thisprefix%vshader%id%" ));
-	   gl.attachShader(this.prog[%id%], this.getShader( gl, "%thisprefix%fshader%id%" ));
+      result <- c(result, 
+        if (flags["reuse"]) subst(
+'           this.vshaders[%id%] = %thisprefix%rgl.vshaders[%id%];
+           this.fshaders[%id%] = %thisprefix%rgl.fshaders[%id%];', 
+          thisprefix, id)
+        else subst(
+'           this.vshaders[%id%] = "%vshader%";
+           this.fshaders[%id%] = "%fshader%";', id, vshader, fshader),
+
+        subst(
+'           this.prog[%id%]  = gl.createProgram();
+	   gl.attachShader(this.prog[%id%], this.getShader( gl, gl.VERTEX_SHADER, this.vshaders[%id%] ));
+	   gl.attachShader(this.prog[%id%], this.getShader( gl, gl.FRAGMENT_SHADER, this.fshaders[%id%] ));
 	   //  Force aPos to location 0, aCol to location 1 
 	   gl.bindAttribLocation(this.prog[%id%], 0, "aPos");
 	   gl.bindAttribLocation(this.prog[%id%], 1, "aCol");
@@ -2131,9 +2132,6 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   
   scene_has_faces <- any(flags[,"is_lit"] & !flags[,"fixed_quads"])
   scene_needs_sorting <- any(flags[,"depth_sort"])
-  
-  for (i in seq_along(ids))
-    result <- c(result, shaders(ids[i], types[i], flags[i,]))
     
   result <- c(result, scriptheader(), setUser(),
     textureSupport,
