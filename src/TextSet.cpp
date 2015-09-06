@@ -98,7 +98,9 @@ void TextSet::drawEnd(RenderContext* renderContext)
 
 int TextSet::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
-  switch (attrib) {    
+  switch (attrib) {
+    case FAMILY: 
+    case FONT:
     case CEX: return fonts.size();
     case TEXTS:
     case VERTICES: return textArray.size();
@@ -125,6 +127,10 @@ void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
       while (first < n) 
         *result++ = fonts[first++]->cex;
       return;
+    case FONT:
+      while (first < n)
+      	*result++ = fonts[first++]->style;
+      return;
     case ADJ:
       *result++ = adjx;
       *result++ = adjy;
@@ -137,8 +143,14 @@ void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
 String TextSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
 {
   int n = getAttributeCount(bbox, attrib);
-  if (index < n && attrib == TEXTS) 
-    return textArray[index];
-  else
-    return Shape::getTextAttribute(bbox, attrib, index);
+  if (index < n) {
+    switch (attrib) {
+    case TEXTS: 
+      return textArray[index];
+    case FAMILY:
+      char* family = fonts[index]->family;
+      return String(strlen(family), family);
+    }
+  }
+  return Shape::getTextAttribute(bbox, attrib, index);
 }

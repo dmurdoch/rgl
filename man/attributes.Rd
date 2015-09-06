@@ -20,7 +20,8 @@ A shape identifier, as returned by \code{\link{rgl.ids}}.
 An attribute of a shape.  Currently supported: one of \cr
 \code{"vertices"}, \code{"normals"}, \code{"colors"}, \code{"texcoords"}, 
 \code{"dim"}, \code{"texts"}, \code{"cex"}, \code{"adj"}, \code{"radii"}, 
-\code{"centers"}, \code{"ids"}, \code{"usermatrix"}, \code{"types"}, \code{"flags"}\cr
+\code{"centers"}, \code{"ids"}, \code{"usermatrix"}, \code{"types"},
+\code{"flags"}, \code{"family"}, \code{"font"}\cr
 or unique prefixes
 to one of those. 
 }
@@ -35,8 +36,8 @@ will be returned by \code{rgl.attrib}.
 
 The first four \code{attrib} names correspond to the usual OpenGL
 properties; \code{"dim"} is used just for surfaces, defining the rows
-and columns in the rectangular grid; \code{"cex"} and \code{"adj"}
-apply only to text objects.
+and columns in the rectangular grid; \code{"cex"}, \code{"adj"},
+\code{"family"} and \code{"font"} apply only to text objects.
 }
 \value{
 \code{rgl.attrib.count} returns the count of the requested attribute.  \code{rgl.attrib}
@@ -57,8 +58,11 @@ are mostly real-valued, with the following sizes:
 \code{"texts"}	\tab 1 value	\tab text \cr
 \code{"types"}	\tab 1 value	\tab type \cr
 \code{"flags"}	\tab 1 value	\tab flag \cr
+\code{"family"} \tab 1 value    \tab family \cr
+\code{"font"}   \tab 1 value    \tab font \cr
 }
-The \code{"texts"} and \code{"types"} attributes are character-valued; the flags
+The \code{"texts"}, \code{"types"} and \code{"family"}
+attributes are character-valued; the flags
 attribute is logical valued, with named rows.
 
 These are returned as matrices with the row count equal to the count for the attribute,

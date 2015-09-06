@@ -53,6 +53,8 @@ typedef int ObjID;
 #define TYPES 13
 #define FLAGS 14
 #define OFFSETS 15
+#define FAMILY 16
+#define FONT 17
 
 typedef unsigned int AttribID;
 

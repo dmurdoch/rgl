@@ -665,7 +665,7 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
-0.95.1307
+0.95.1324
   - Made error and warning text more consistent.
   - Automatically installs "rgl" and "webgl" hooks if
     knitr is loaded and they are not already present.
@@ -696,3 +696,5 @@ v0.94
   - Shaders are now stored in Javascript strings, not separate
     <script> sections.
   - Shape centers are now stored by scene3d().
+  - Font family and numeric font number (style) are now returned
+    by rgl.attrib() and are stored by scene3d().
