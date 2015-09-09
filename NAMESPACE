@@ -83,7 +83,7 @@ export(.check3d,
  S3method(summary, rglsubscene)
  
  if(tools:::.OStype() == "windows") {
-   import(utils) # only needed for getWindowsHandle
+   importFrom(utils, getWindowsHandle)
  }
  
  importFrom(graphics, legend, par, plot, polygon)
