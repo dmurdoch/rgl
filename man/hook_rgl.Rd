@@ -1,6 +1,7 @@
 \name{hook_rgl}
 \alias{hook_rgl}
 \alias{hook_webgl}
+\alias{setupKnitr}
 \title{
 Hook functions to use with \pkg{knitr}
 }
@@ -11,6 +12,7 @@ fixed vector graphics (\code{hook_rgl} with format \code{"eps"}, \code{"pdf"} or
 \code{"postscript"}), or interactive WebGL graphics (\code{hook_webgl}).
 }
 \usage{
+setupKnitr()
 hook_rgl(before, options, envir)
 hook_webgl(before, options, envir)
 }
@@ -20,6 +22,10 @@ Standard \pkg{knitr} hook function arguments.
 }
 }
 \details{
+The \code{setupKnitr()} function needs to be called once
+at the start of the document to install the \pkg{knitr} hooks
+and to initialize \code{hook_webgl}.
+
 The following chunk options are supported:
 \itemize{
   \item \code{rgl.keepopen}:  no longer used.  Ignored

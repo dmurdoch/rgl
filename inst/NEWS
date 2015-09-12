@@ -665,10 +665,8 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
-0.95.1324
+0.95.1332
   - Made error and warning text more consistent.
-  - Automatically installs "rgl" and "webgl" hooks if
-    knitr is loaded and they are not already present.
   - Dropped chunk option "rgl.keepopen"; replaced it
     with "rgl.newwindow". 
   - Added matrixSetter() function to allow multiple controls to
@@ -698,3 +696,8 @@ v0.94
   - Shape centers are now stored by scene3d().
   - Font family and numeric font number (style) are now returned
     by rgl.attrib() and are stored by scene3d().
+  - Fixed a bug (reported by Dominick Samperi) that caused
+    vignettes using WebGL code in knitr to fail to initialize
+    properly.  This required adding the setupKnitr() function, 
+    which should be called at the start of each vignette.  
+    It is *not* called automatically.

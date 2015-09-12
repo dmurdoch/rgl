@@ -131,7 +131,7 @@ hook_webgl <- local({
   }
 })
 
-hook_rgl = function(before, options, envir) {
+hook_rgl <- function(before, options, envir) {
   if (before) {
     newwindow <- options$rgl.newwindow
     if (!is.null(newwindow) && newwindow) 
@@ -164,7 +164,7 @@ hook_rgl = function(before, options, envir) {
   knitr::hook_plot_custom(before, options, envir)
 }
 
-save_rgl = function(name, devices) {
+save_rgl <- function(name, devices) {
   if (!file_test('-d', dirname(name))) dir.create(dirname(name), recursive = TRUE)
   # support 3 formats: eps, pdf and png (default)
   for (dev in devices) switch(
@@ -174,4 +174,13 @@ save_rgl = function(name, devices) {
     pdf = rgl.postscript(paste0(name, '.pdf'), fmt = 'pdf'),
     rgl.snapshot(paste0(name, '.png'), fmt = 'png')
   )
+}
+
+setupKnitr <- function() {
+  if (requireNamespace("knitr")) {
+    knitr::knit_hooks$set(webgl = hook_webgl)
+    knitr::knit_hooks$set(rgl = hook_rgl)
+    environment(hook_webgl)$commonParts <- TRUE
+    environment(hook_webgl)$reuse <- TRUE
+  }
 }
