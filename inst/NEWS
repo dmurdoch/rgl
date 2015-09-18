@@ -665,7 +665,7 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
-0.95.1332
+0.95.1336
   - Made error and warning text more consistent.
   - Dropped chunk option "rgl.keepopen"; replaced it
     with "rgl.newwindow". 
@@ -701,3 +701,5 @@ v0.94
     properly.  This required adding the setupKnitr() function, 
     which should be called at the start of each vignette.  
     It is *not* called automatically.
+  - Fixed a bug (reported by Kurt Hornik) that caused rgl to
+    fail to compile when libfreetype 2.6 was linked.

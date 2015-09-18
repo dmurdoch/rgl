@@ -1,11 +1,17 @@
-#include <R_ext/Visibility.h>
-#include <R_ext/Rdynload.h>
-#include "R.h"
-
 #include "lib.h"
 #include "DeviceManager.h"
 #include "init.h"
 #include "api.h"
+
+/* libfreetype 2.6 defines a conflicting TYPEOF macro */
+
+#ifdef TYPEOF
+# undef TYPEOF
+#endif
+
+#include <R_ext/Visibility.h>
+#include <R_ext/Rdynload.h>
+#include "R.h"
 
 using namespace rgl;
 
