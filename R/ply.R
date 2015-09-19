@@ -174,12 +174,8 @@ property int vertex2\n", file=con)
     n <- nrow(vertices)
     inds <- seq_len(n)    
     if (pointsAsEdges) {
-      if (withNormals)
-        normals <- 0*vertices
       base <- nrow(Vertices)
-      Vertices <<- rbind(Vertices, cbind(vertices, 
-      					 if (withColors) colors,
-      					 if (withNormals) normals))
+      Vertices <<- rbind(Vertices, vertices)
       Edges <<- rbind(Edges, base + cbind(inds, inds) - 1 )  
     } else {
       radius <- pointRadius*avgScale()

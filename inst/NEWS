@@ -703,3 +703,4 @@ v0.94
     It is *not* called automatically.
   - Fixed a bug (reported by Kurt Hornik) that caused rgl to
     fail to compile when libfreetype 2.6 was linked.
+  - Fixed a bug in writePLY (reported by Kurt Hornik).
