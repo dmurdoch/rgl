@@ -92,6 +92,7 @@ fi
 
 # --- output Makevars --------------------------------------------------------
 
+rm src/Makevars
 sed \
 -e "s^@CPPFLAGS@^$CPPFLAGS^" \
 -e "s^@CXXFLAGS@^$CXXFLAGS^" \
