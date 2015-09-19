@@ -82,7 +82,7 @@ export(.check3d,
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)
  
- if(tools:::.OStype() == "windows") {
+ if(.Platform$OS.type == "windows") {
    importFrom(utils, getWindowsHandle)
  }
  
