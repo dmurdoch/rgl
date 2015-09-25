@@ -704,3 +704,7 @@ v0.94
   - Fixed a bug (reported by Kurt Hornik) that caused rgl to
     fail to compile when libfreetype 2.6 was linked.
   - Fixed a bug in writePLY (reported by Kurt Hornik).
+
+0.95.1352
+  - Added faceplot3d() to allow a 2d plot on a quadrilateral
+    in a scene.
