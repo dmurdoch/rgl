@@ -25,7 +25,7 @@ bgplot3d <- function(expression) {
   invisible(structure(result, value = value))
 }
 
-faceplot3d <- function(expression, 
+show2d <- function(expression, 
 		   face = "z-",
 		   line = 0,
 		   reverse = FALSE,
@@ -38,6 +38,7 @@ faceplot3d <- function(expression,
 		   lit = FALSE, 
 		   texmipmap = TRUE,
 		   texminfilter = "linear.mipmap.linear",
+		   expand = 1.03,
 		   texcoords = matrix(c(0,1,1,0,0,0,1,1), ncol=2),
 		   ...) {
 	
@@ -57,7 +58,7 @@ faceplot3d <- function(expression,
   
   calc <- c(x = is.null(x), y = is.null(y), z = is.null(z))
   
-  ranges <- .getRanges()
+  ranges <- .getRanges(expand = expand)
     switch(coord,
       x = {
       	if (is.null(x)) 

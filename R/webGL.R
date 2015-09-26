@@ -528,6 +528,45 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	    return(this.subscenes[subscene].concat(this.clipplanes[subscene]).
                    concat(this.transparent[subscene]).concat(this.opaque[subscene]));
 	  };
+          this.getPowerOfTwo = function(value) {
+	    var pow = 1;
+            while(pow<value) {
+              pow *= 2;
+            }
+            return pow;
+          };
+	  this.handleLoadedTexture = function(id, textureCanvas) {
+            var gl = this.gl;
+	    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture[id]);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
+            gl.generateMipmap(gl.TEXTURE_2D);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+            gl.bindTexture(gl.TEXTURE_2D, null);
+          };
+	  this.loadImageToTexture = function(prefix, image, id) {
+	     var canvas = document.getElementById(prefix + "textureCanvas"),
+               ctx = canvas.getContext("2d"),
+               w = image.width,
+               h = image.height,
+               canvasX = this.getPowerOfTwo(w),
+               canvasY = this.getPowerOfTwo(h),
+               gl = this.gl,
+               maxTexSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+             while (canvasX > 1 && (canvasX > maxTexSize || canvasY > maxTexSize)) {
+               canvasX /= 2;
+               canvasY /= 2;
+             }
+             canvas.width = canvasX;
+             canvas.height = canvasY;
+             ctx.imageSmoothingEnabled = true;
+             ctx.drawImage(image, 0, 0, canvasX, canvasY);
+             image.width = 0;
+             image.height = 0;
+             this.handleLoadedTexture(id, canvas);
+             this.drawScene();
+           };
     }).call(rglClass.prototype);
 '),
   subst(
@@ -614,47 +653,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     result
   }
 
-  textureSupport <- subst(
-'	   function getPowerOfTwo(value) {
-	     var pow = 1;
-	     while(pow<value) {
-	       pow *= 2;
-	     }
-	     return pow;
-	   }
-
-	   function handleLoadedTexture(texture, textureCanvas) {
-	     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-	     gl.bindTexture(gl.TEXTURE_2D, texture);
-	     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
-	     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-	     gl.generateMipmap(gl.TEXTURE_2D);
-
-	     gl.bindTexture(gl.TEXTURE_2D, null);
-	   }
-
-	   function loadImageToTexture(filename, texture) {
-	     var canvas = document.getElementById("%prefix%textureCanvas"),
-	         ctx = canvas.getContext("2d"),
-	         image = new Image();
-
-	     image.onload = function() {
-	       var w = image.width,
-	           h = image.height,
-	           canvasX = getPowerOfTwo(w),
-	           canvasY = getPowerOfTwo(h);
-	       canvas.width = canvasX;
-	       canvas.height = canvasY;
-	       ctx.imageSmoothingEnabled = true;
-	       ctx.drawImage(image, 0, 0, canvasX, canvasY);
-	       handleLoadedTexture(texture, canvas);
-	       %prefix%rgl.drawScene();
-	     };
-	     image.src = filename;
-	   }
-', prefix)
+  textureSupport <- ''
 
   textSupport <- subst(
 '	   function drawTextToCanvas(text, cex) {
@@ -679,11 +678,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	       widths[i] = ctx.measureText(text[i]).width;
 	       canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
 	     }
-	     canvasX = getPowerOfTwo(canvasX);
+	     canvasX = %prefix%rgl.getPowerOfTwo(canvasX);
 
 	     var offset = 2*textHeight, // offset to first baseline
 	         skip = 2*textHeight;   // skip between baselines
-	     canvasY = getPowerOfTwo(offset + text.length*skip);
+	     canvasY = %prefix%rgl.getPowerOfTwo(offset + text.length*skip);
 
 	     canvas.width = canvasX;
 	     canvas.height = canvasY;
@@ -1037,7 +1036,11 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         } else {
             texprefix <- prefix
             texid <- id
-            file.copy(mat$texture, file.path(dir, paste(texprefix, "texture", texid, ".png", sep="")))
+            filename <- file.path(dir, paste(texprefix, "texture", texid, ".png", sep=""))
+            file.copy(mat$texture, filename)
+            textures <<- c(textures, subst(
+'<img onload="%prefix%rgl.loadImageToTexture(\'%prefix%\', this, %id%);" alt="texture" style="visibility:hidden" src="%filename%" />',
+              filename, prefix, id))
         }
         i <- which(prefixes$id == id & prefixes$prefix == prefix)
         prefixes$texture[i] <<- mat$texture
@@ -1054,17 +1057,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	   this.sampler[%id%] = gl.getUniformLocation(this.prog[%id%],"uSampler");',
 	  id))
 
-    if (load_texture)
-        result <- c(result, subst(
-'	   loadImageToTexture("%texprefix%texture%texid%.png", this.texture[%id%]);',
-          id, texprefix, texid))
-    else if (has_texture)  # just reuse the existing texture
-        result <- c(result, subst(
+    if (has_texture && !load_texture)
+      # just reuse the existing texture
+      result <- c(result, subst(
 '	   this.texture[%id%] = this.texture[%texid%];',
                       id, texid))
 
     if (type == "text") result <- c(result, subst(
-'	   handleLoadedTexture(this.texture[%id%], document.getElementById("%prefix%textureCanvas"));',
+'	   this.handleLoadedTexture(%id%, document.getElementById("%prefix%textureCanvas"));',
         prefix, id))
 
     stride <- 3
@@ -2090,6 +2090,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   } else
     result <- header()
 
+  textures <- character()
+  
   if (NROW(rgl.ids("bboxdeco", subscene = 0))) {
     saveredraw <- par3d(skipRedraw = TRUE)
     temp <- convertBBoxes(rootSubscene())
@@ -2151,6 +2153,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     result <- c(result, drawSubscene(subscenes[i]))
 
   result <- c(result, drawEnd, mouseHandlers(), scriptEnd, footer(),
+  	      textures,
               if (!is.null(template))
               	templatelines[replace + seq_len(length(templatelines)-replace)]
               else
