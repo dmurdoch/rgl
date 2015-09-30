@@ -705,7 +705,9 @@ v0.94
     fail to compile when libfreetype 2.6 was linked.
   - Fixed a bug in writePLY (reported by Kurt Hornik).
 
-0.95.1353
+0.95.1357
   - Added show2d() to allow a 2d plot on a quadrilateral
     in a scene.
   - Fixed bug that sometimes prevented textures from displaying.
+  - rgl.bbox() (and hence bbox3d(), decorate3d(), plot3d(), etc.)
+    did not return the correct id for the bounding box decoration.

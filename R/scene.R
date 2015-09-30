@@ -305,7 +305,7 @@ rgl.bbox <- function(
   if (! ret$success)
     stop("'rgl_bbox' failed")
     
-  invisible(1)
+  invisible(ret$success)
 
 }
 
