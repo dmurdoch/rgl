@@ -3598,7 +3598,6 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether __attribute__((visibility())) is supported" >&5
 $as_echo_n "checking whether __attribute__((visibility())) is supported... " >&6; }
 if ${r_cv_visibility_attribute+:} false; then :
@@ -4167,10 +4166,10 @@ fi
 if test x$darwin == "xyes" -a "x$enable_cocoa" != "xno" ; then
   AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_COCOA"
   AGLLIBS="${LIBS} -framework Cocoa"
+  BUILD_AGL_TRUE=""
   if test -e /System/Library/Frameworks/GLKit.framework ; then
     AGLLIBS="-framework GLKit ${AGLLIBS}"
-  fi    
-  BUILD_AGL_TRUE=""
+  fi
 else
   BUILD_AGL_TRUE="#"
 fi
@@ -4391,7 +4390,7 @@ fi
     fi
     if test -e /System/Library/Frameworks/GLKit.framework ; then
       LIBS="-framework GLKit ${LIBS}"
-    fi    
+    fi
     # some X11 installations on OSX 10.5 feature -rpath which doesn't work when used in
     # conjunction with 10.4u SDK (and is redundant anyway since OS X always uses full paths)
     if test rpath`echo "${LIBS}" | sed -n 's/.*-Wl,-rpath,.*/Yes/p' 2>/dev/null` = rpathYes; then
@@ -4399,7 +4398,7 @@ fi
       AGLLIBS=`echo "${AGLLIBS}" | sed 's:-Wl,-rpath,[^ ]*::'`
     fi
     # X11 must come *after* the OpenGL stuff
-    CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
+    CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
   fi
 
 ## --- OpenGL ----------------------------------------------------------------

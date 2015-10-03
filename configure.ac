@@ -148,7 +148,7 @@ fi
       AGLLIBS=`echo "${AGLLIBS}" | sed 's:-Wl,-rpath,[[^ ]]*::'`
     fi
     # X11 must come *after* the OpenGL stuff
-    CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
+    CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
   fi
 
 ## --- OpenGL ----------------------------------------------------------------
@@ -205,8 +205,8 @@ AC_ARG_ENABLE([ftgl],
 )
 if test "x$enable_ftgl" != "xno"; then
   if test "x$darwin" = "xyes"; then
-    AC_MSG_NOTICE([Darwin, so ensuring /usr/X11/bin is at the head of the PATH...])
-    PATH=/usr/X11/bin:${PATH}
+    AC_MSG_NOTICE([Darwin, so ensuring /opt/X11/bin is at the head of the PATH...])
+    PATH=/opt/X11/bin:${PATH}
   fi
   AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
   if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
