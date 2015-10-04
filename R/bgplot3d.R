@@ -33,6 +33,7 @@ show2d <- function(expression,
 		   x = NULL, y = NULL, z = NULL, 
 		   width = 480,
 		   height = 480,
+		   filename = NULL,
 		   ignoreExtent = TRUE,
 		   color = "white", specular = "black",
 		   lit = FALSE, 
@@ -45,13 +46,15 @@ show2d <- function(expression,
   save <- par3d(ignoreExtent = ignoreExtent)
   on.exit(par3d(save))
   
-  stopifnot(width > 0, height > 0)
-  filename <- tempfile(fileext = ".png")
-  png(filename = filename, width=width, height=height,
-      antialias = "subpixel")
-  value <- try(expression)  
-  dev.off()
-  
+  if (is.null(filename)) {
+    stopifnot(width > 0, height > 0)
+    filename <- tempfile(fileext = ".png")
+    png(filename = filename, width=width, height=height,
+        antialias = "subpixel")
+    value <- try(expression)  
+    dev.off()
+  } else
+    value <- filename
   face <- c(strsplit(face, '')[[1]], '-')[1:2]
   coord <- tolower(face[1])
   lower <- face[2] == '-'
