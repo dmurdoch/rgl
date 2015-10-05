@@ -49,8 +49,7 @@ show2d <- function(expression,
   if (is.null(filename)) {
     stopifnot(width > 0, height > 0)
     filename <- tempfile(fileext = ".png")
-    png(filename = filename, width=width, height=height,
-        antialias = "subpixel")
+    png(filename = filename, width=width, height=height)
     value <- try(expression)  
     dev.off()
   } else

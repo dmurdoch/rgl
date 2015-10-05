@@ -99,7 +99,7 @@ double GLBitmapFont::height() {
 
 bool GLBitmapFont::valid(const char* text) {
   for (int i=0; text[i]; i++)
-    if ((int)text[i] < (int)firstGlyph || text[i] - firstGlyph >= (int)nglyph)
+    if ((int)text[i] < (int)firstGlyph || (int)text[i] - (int)firstGlyph >= (int)nglyph)
       return false;
   return true;
 }
