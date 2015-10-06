@@ -165,6 +165,7 @@ The following low-level functions control the look of the graph:
 `r indexfns("decorate3d")`:          | add multiple "decorations" (scales, etc.) to plot
 `r indexfns("aspect3d")`:            | set the aspect ratios for the plot
 `r indexfns(c("bg3d", "bgplot3d"))`: | set the background of the scene
+`r indexfns("show2d")`:              | show a 2D plot or image in a 3D scene
 `r indexfns("legend3d")`:            | set a legend for the scene
 `r indexfns("grid3d")`:              | add a reference grid to a graph
 
@@ -482,6 +483,7 @@ without any 3D information being saved:
 `r indexfns("rgl.pixels")` | Obtain pixel-level information about the scene in an R variable
 `r indexfns("rgl.Sweave")` | Driver function for inserting a snapshot into a Sweave document.
 `r indexfns(c("hook_rgl", "hook_webgl"))` | `knitr` hook functions for inserting images into a document.
+`r indexfns("setupKnitr")` | Function to set up `knitr` hooks
 
 The `r indexfns("rgl.snapshot")` function is identical to `snapshot3d`.
 The functions `r indexfns(c("rgl.Sweave.off", "Sweave.snapshot"))` are 
@@ -503,6 +505,8 @@ exported scene.  More details are given in the vignette
 `r indexfns("subsetSetter")`         | function to choose subsets
 `r indexfns("ageSetter")`            | function to "age" vertices
 `r indexfns("par3dinterpSetter")`    | function like `r linkfn("par3dinterp")`
+`r indexfns("vertexSetter")`         | function to modify individual vertices
+`r indexfns("matrixSetter")`         | function to modify matrices
 
 ### Working with the scene
 
