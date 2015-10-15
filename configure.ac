@@ -32,10 +32,6 @@ AC_PROG_CC
 
 R_GCC4_VISIBILITY
 
-AC_ARG_ENABLE([cocoa],
-[  --disable-cocoa            use X11 instead of Mac OS X native Cocoa UI]
-)
-
 if test `uname` = "Darwin" ; then
   darwin="yes"
   ## we want the *build* cputype and not the host one.
@@ -103,19 +99,6 @@ if test "x$enable_libpng" != "xno"; then
 
 fi
 
-## --- Darwin ----------------------------------------------------------------
-
-if test x$darwin == "xyes" -a "x$enable_cocoa" != "xno" ; then
-  AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_COCOA"
-  AGLLIBS="${LIBS} -framework Cocoa"
-  BUILD_AGL_TRUE=""
-  if test -e /System/Library/Frameworks/GLKit.framework ; then
-    AGLLIBS="-framework GLKit ${AGLLIBS}"
-  fi
-else
-  BUILD_AGL_TRUE="#"
-fi
-
 # ---[ X11 ]------------------------------------------------------------------
 
   AC_PATH_X
@@ -145,7 +128,6 @@ fi
     # conjunction with 10.4u SDK (and is redundant anyway since OS X always uses full paths)
     if test rpath`echo "${LIBS}" | sed -n 's/.*-Wl,-rpath,.*/Yes/p' 2>/dev/null` = rpathYes; then
       LIBS=`echo "${LIBS}" | sed 's:-Wl,-rpath,[[^ ]]*::'`
-      AGLLIBS=`echo "${AGLLIBS}" | sed 's:-Wl,-rpath,[[^ ]]*::'`
     fi
     # X11 must come *after* the OpenGL stuff
     CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
@@ -212,8 +194,6 @@ if test "x$enable_ftgl" != "xno"; then
   if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
     CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
     LIBS="${LIBS} `freetype-config --libs`"
-    AGLCPPFLAGS="${AGLCPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
-    AGLLIBS="${AGLLIBS} `freetype-config --libs`"
     AC_MSG_NOTICE([using Freetype and FTGL])
   fi
 else
@@ -225,9 +205,6 @@ fi
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(LIBS)
-AC_SUBST(AGLCPPFLAGS)
-AC_SUBST(AGLLIBS)
-AC_SUBST(BUILD_AGL_TRUE)
 
 AC_OUTPUT(src/Makevars)
 

@@ -713,3 +713,7 @@ v0.94
     did not return the correct id for the bounding box decoration.
   - Modified configure script to work with OS X 10.11 (suggestion of
     Brian Ripley).
+
+0.95.1372
+  - The Mac OS X native windowing system (aglrgl.so) has been 
+    dropped; it appears not to work in Yosemite and El Capitan.

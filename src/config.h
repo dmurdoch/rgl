@@ -5,11 +5,7 @@
 // ---------------------------------------------------------------------------
 #if defined(__APPLE__)
 # define RGL_OSX 1
-# if defined(RGL_USE_COCOA)
-#  define RGL_COCOA 1
-# else
-#  define RGL_X11 1
-# endif
+# define RGL_X11 1
 #else
 # if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 #  define RGL_W32 1

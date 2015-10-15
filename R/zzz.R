@@ -30,11 +30,6 @@
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
       # because it would override Apple's OpenGL framework
       Sys.setenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
-      if ( .Platform$GUI == "AQUA" && 
-            file.exists(system.file("libs",.Platform$r_arch, "aglrgl.so", lib.loc=lib, package = pkg))) {
-          initValue <- 1
-          dynlib <- "aglrgl"
-      }
     }
   } 
   dll <- library.dynam(dynlib, pkg, lib)

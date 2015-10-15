@@ -14,23 +14,5 @@ PKG_CFLAGS=@C_VISIBILITY@
 
 BUILD=GCC3
 
-## the following are used under MacOS X when this calls SHLIB
-## to make the AGL version
-@BUILD_AGL_TRUE@ ifdef MAKINGAGL
-@BUILD_AGL_TRUE@ PKG_CPPFLAGS=@AGLCPPFLAGS@ -Iext
-@BUILD_AGL_TRUE@ PKG_LIBS=@AGLLIBS@
-@BUILD_AGL_TRUE@ AGLSHLIB=
-@BUILD_AGL_TRUE@ endif
+all: $(SHLIB) 
 
-all: $(SHLIB) @BUILD_AGL_TRUE@ $(AGLSHLIB)
-
-$(AGLSHLIB): $(SHLIB) osx/osxgui.mm osx/osxlib.cpp osx/osxgui.h
-	-mkdir Temp
-	-mv x11*.o Temp
-	mkdir -p AGL
-	-mv AGL/* .
-	MAKINGAGL=TRUE $(R_HOME)/bin/R CMD SHLIB  -o $@ *.cpp *.c \
-		osx/*.mm osx/*.cpp
-	mv x11*.o AGL
-	mv Temp/* .
-	rm -rf Temp

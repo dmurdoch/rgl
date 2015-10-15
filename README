@@ -135,12 +135,6 @@ has been reported to be sufficient on FC 5 or 6:
 
 
 
-  MAC OS X OPTIONS
-  ----------------
-
-  --disable-cocoa
-    force a X11 port
-
 
   X11 WINDOWING SYSTEM OPTIONS
   ----------------------------

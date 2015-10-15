@@ -70,8 +70,7 @@ rgl.init(initValue = 0, onlyNULL = FALSE)     # re-initialize rgl
   \code{rgl.cur} returns the currently active devices, or \code{0} if none is
   active; \code{rgl.dev.list} returns a vector of all open devices.  Both functions name
   the items according to the type of device:  \code{null} for a hidden null device, 
-  \code{wgl} for a Windows device, \code{glX} for an X windows device, and
-  \code{NSopenGL} for a Cocoa device on OSX.
+  \code{wgl} for a Windows device, and \code{glX} for an X windows device.
 }
 \seealso{
 \link{r3d},

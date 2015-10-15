@@ -620,9 +620,6 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-BUILD_AGL_TRUE
-AGLLIBS
-AGLCPPFLAGS
 CXXFLAGS
 HAVE_FREETYPE_CONFIG
 XMKMF
@@ -680,7 +677,6 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_cocoa
 enable_libpng
 enable_libpng_config
 enable_libpng_dynamic
@@ -1312,8 +1308,6 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --disable-cocoa            use X11 instead of Mac OS X native Cocoa UI
-
   --disable-libpng           compile without PNG image support
 
   --disable-libpng-config    disable libpng-config test and configuration
@@ -3721,12 +3715,6 @@ esac
 
 
 
-# Check whether --enable-cocoa was given.
-if test "${enable_cocoa+set}" = set; then :
-  enableval=$enable_cocoa;
-fi
-
-
 if test `uname` = "Darwin" ; then
   darwin="yes"
   ## we want the *build* cputype and not the host one.
@@ -4161,19 +4149,6 @@ $as_echo "$as_me: libpng header and lib not found" >&6;}
 
 fi
 
-## --- Darwin ----------------------------------------------------------------
-
-if test x$darwin == "xyes" -a "x$enable_cocoa" != "xno" ; then
-  AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_COCOA"
-  AGLLIBS="${LIBS} -framework Cocoa"
-  BUILD_AGL_TRUE=""
-  if test -e /System/Library/Frameworks/GLKit.framework ; then
-    AGLLIBS="-framework GLKit ${AGLLIBS}"
-  fi
-else
-  BUILD_AGL_TRUE="#"
-fi
-
 # ---[ X11 ]------------------------------------------------------------------
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for X" >&5
@@ -4395,7 +4370,6 @@ fi
     # conjunction with 10.4u SDK (and is redundant anyway since OS X always uses full paths)
     if test rpath`echo "${LIBS}" | sed -n 's/.*-Wl,-rpath,.*/Yes/p' 2>/dev/null` = rpathYes; then
       LIBS=`echo "${LIBS}" | sed 's:-Wl,-rpath,[^ ]*::'`
-      AGLLIBS=`echo "${AGLLIBS}" | sed 's:-Wl,-rpath,[^ ]*::'`
     fi
     # X11 must come *after* the OpenGL stuff
     CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
@@ -4577,9 +4551,9 @@ fi
 
 if test "x$enable_ftgl" != "xno"; then
   if test "x$darwin" = "xyes"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: Darwin, so ensuring /usr/X11/bin is at the head of the PATH..." >&5
-$as_echo "$as_me: Darwin, so ensuring /usr/X11/bin is at the head of the PATH..." >&6;}
-    PATH=/usr/X11/bin:${PATH}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: Darwin, so ensuring /opt/X11/bin is at the head of the PATH..." >&5
+$as_echo "$as_me: Darwin, so ensuring /opt/X11/bin is at the head of the PATH..." >&6;}
+    PATH=/opt/X11/bin:${PATH}
   fi
   # Extract the first word of "freetype-config", so it can be a program name with args.
 set dummy freetype-config; ac_word=$2
@@ -4622,8 +4596,6 @@ fi
   if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
     CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
     LIBS="${LIBS} `freetype-config --libs`"
-    AGLCPPFLAGS="${AGLCPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
-    AGLLIBS="${AGLLIBS} `freetype-config --libs`"
     { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
 $as_echo "$as_me: using Freetype and FTGL" >&6;}
   fi
@@ -4633,9 +4605,6 @@ $as_echo "$as_me: compiling without FTGL support" >&6;}
 fi
 
 ## --- Output ----------------------------------------------------------------
-
-
-
 
 
 

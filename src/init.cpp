@@ -42,7 +42,7 @@ SEXP rglNamespace;
 //     [0]  multiple-document-interface console handle (MDI)
 //          or 0 (SDI)
 //     MacOSX:
-//     [0]  indicator of presence (1) or absence (0) of Carbon/Cocoa
+//     [0]  Formerly indicator of presence (1) or absence (0) of Carbon/Cocoa, now unused
 //
 
 #ifdef __cplusplus
@@ -240,11 +240,6 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
  };
  
 void attribute_visible R_init_rgl(DllInfo *dll) 
-{
-  R_registerRoutines(dll, CEntries, CallEntries, NULL, ExtEntries);
-}
-
-void attribute_visible R_init_aglrgl(DllInfo *dll) 
 {
   R_registerRoutines(dll, CEntries, CallEntries, NULL, ExtEntries);
 }
