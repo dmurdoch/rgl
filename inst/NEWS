@@ -714,6 +714,8 @@ v0.94
   - Modified configure script to work with OS X 10.11 (suggestion of
     Brian Ripley).
 
-0.95.1372
+0.95.1373
   - The Mac OS X native windowing system (aglrgl.so) has been 
     dropped; it appears not to work in Yosemite and El Capitan.
+  - A memory leak when drawing semi-transparent objects has been
+    fixed.  (Reported by Felix Kuehnl.)

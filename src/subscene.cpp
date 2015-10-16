@@ -872,6 +872,7 @@ void Subscene::renderZsort(RenderContext* renderContext)
         prev = shape;
       }
       shape->drawElement(renderContext, item->itemnum);
+      delete item;
     }
     if (prev) prev->drawEnd(renderContext);
   }
