@@ -4,7 +4,7 @@ Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 2.15.0)
-Suggests: MASS, knitr, rmarkdown
+Suggests: MASS, rglwidget (>= 0.1.1394), knitr, rmarkdown
 Imports: graphics, grDevices, stats, utils
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for 

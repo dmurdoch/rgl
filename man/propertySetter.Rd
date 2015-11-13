@@ -14,8 +14,8 @@ to be used in HTML controls.
 }
 \usage{
 propertySlider(setter = propertySetter,
-             minS = min(param), maxS = max(param), step = 1, init = minS, 
-	     labels = displayVals(sliderVals), 
+             minS, maxS, step = 1, init = minS, 
+	     labels, 
 	     id = basename(tempfile("input")), name = id,
 	     outputid = paste0(id, "text"),
 	     index = NULL,
@@ -37,7 +37,7 @@ vertexSetter(values, vertices = 1, attributes, objid, prefix = "",
 \arguments{
   \item{setter}{A function to write Javascript code, or its output, or
    a list containing several of these.}
-  \item{minS, maxS, step, init}{Slider values to be displayed.}
+  \item{minS, maxS, step, init}{Slider values to be displayed. Reasonable defaults are used if missing.}
   \item{labels}{Labels to display for each slider value.  The
   defaults are calculated using internal variables.  If \code{NULL},
   no labels will be shown.}

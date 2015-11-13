@@ -54,9 +54,10 @@ plots points within an rgl window.  It is similar to the classic
 but works in 3 dimensions.
 
 For example
-```{r plot3d, webgl=TRUE}
+```{r}
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
+rglwidget()
 ```
 can be used to plot three columns of the `iris` data.  
 Allowed plot types include `"p", "l", "h", "s"`,
@@ -109,9 +110,13 @@ persp3d(loglik,
         xlim = xlim, ylim = ylim, zlim = zlim,
         n = 30)
 ```
-
  On the left, the whole surface over a range of the parameters; on the right, only the 
 parts of the surface with log likelihood values near the maximum.
+
+Note:  this example used the `knitr` hook functions 
+(see `r linkfn("setupKnitr")`) to insert the
+scene into this vignette; the previous example used the `rglwidget`
+function from the package of the same name.
 
 ## Adding Graphical Elements
 
@@ -453,7 +458,8 @@ calls to those.  The functions are:
 See the `r linkfn("movie3d")` function for a way to output an animation
 to a file on disk.  
 Animations are not currently supported 
-in the HTML written by `r linkfn("writeWebGL")`. 
+in the HTML written by `r linkfn("writeWebGL")`, though the
+`rglwidget::playwidget` function provides equivalent functionality.
 
 ### Exporting and importing scenes
 
@@ -464,7 +470,7 @@ In order from highest fidelity to lowest, the functions are:
 
 ----------- | -------------
 `r indexfns("scene3d")`    | Save a scene to an R variable, which can be saved and reloaded
-`r indexfns("writeWebGL")` | Write HTML and Javascript to display a scene in a web browser.  (This vignette uses `writeWebGL`; see also [User Interaction in WebGL](WebGL.html).)
+`r indexfns("writeWebGL")` | Write HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
 `r indexfns("writePLY")`   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`   | Read or write OBJ files (commonly used in 3D graphics)
 `r indexfns(c("readSTL", "writeSTL"))`   | Read or write STL files (also common in 3D printing)
@@ -491,10 +497,20 @@ involved in Sweave processing and not normally called by users.
 
 ### Working with WebGL scenes
 
-The `writeWebGL` function exports a scene to HTML and Javascript code.  
-The functions below write HTML and Javascript for working with the 
-exported scene.  More details are given in the vignette 
+There are currently two schemes for exporting a scene to a web page.
+Both require the `rglwidget` package and use the same underlying
+code.
+
+The recommended approach works with the `htmlwidgets` framework
+(see http://www.htmlwidgets.org/).  In an R Markdown document
+in `knitr`, use the chunk option `webgl=TRUE`, or the 
+`rglwidget::rglwidget()` function.  More details are given in the vignette 
 [User Interaction in WebGL](WebGL.html).
+
+The older approach uses the `writeWebGL` function to export a scene 
+to HTML and Javascript code.  
+The functions below write HTML and Javascript for working with the 
+exported scene.  
 
 ------------------------------------ | -------------
 `r indexfns("propertySlider")`       | insert a slider to make changes to a scene

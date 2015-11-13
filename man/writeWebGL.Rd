@@ -30,7 +30,9 @@ for different scenes displayed on the same web page.  If not blank, it should be
 in Javascript and HTML.
 }
   \item{snapshot}{
-  Whether to include a snapshot of the scene, to be displayed in browsers that don't support WebGL.
+  Whether to include a snapshot of the scene, to be displayed in browsers that don't support WebGL, or
+a specification of the snapshot to use.  See
+details below.
 }
   \item{commonParts}{
   Whether to include parts that would be common to several
@@ -92,6 +94,16 @@ number to obtain the value for that subscene; for example, use \code{<prefix>rgl
 the user matrix for subscene 3 as a \code{CanvasMatrix4} object (defined in the \file{CanvasMatrix.js}
 library).  After modifying any of these values, user code should insert a call \code{<prefix>rgl.drawScene();}
 to update the display.
+The \code{snapshot} argument can be a logical value
+or a character value.  If logical and \code{FALSE},
+no snapshot will be included.  If \code{TRUE},
+a snapshot will be taken of the current scene
+using \code{\link{snapshot3d}} and included
+in the scene to use when WebGL errors occur.  If \code{snapshot}
+is a character string starting \code{"data:"}, it
+will be assumed to be the result of the \code{\link[knitr]{image_uri}} function.  Otherwise it will be assumed to
+be a filename, and \code{\link[knitr]{image_uri}} will be used
+to embed it in the output page.
 }
 \value{
 The \code{filename} is returned.  If \code{reuse} is not \code{NULL},
@@ -115,7 +127,7 @@ contains multiple \code{writeWebGL} figures.
 
 Its source (including 
 the copyright notice and license for free use) is included in the file named by
-\code{system.file("WebGL/CanvasMatrix.src.js", package = "rgl")}.  
+\code{system.file("htmlwidgets/lib/CanvasMatrix.src.js", package = "rglwidget")}.  
 }
 \seealso{
 \code{\link{scene3d}} saves a copy of a scene to an R variable;

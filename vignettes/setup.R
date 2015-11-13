@@ -1,55 +1,56 @@
 options(rgl.useNULL=TRUE)
 library(rgl)
-
-setupKnitr()
+library(rglwidget)
 
 if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.13.1"))
   warning("These vignettes assume pandoc version 1.13.1; older versions may give poor formatting.")
 
+setupKnitr()
+
 documentedfns <- c()
 indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
   documentedfns <<- c(documentedfns, fns)
-  anchors <- paste0('<a name="', fns, '">', 
-                    if (show) linkfn(fns, text, pkg = "rgl"), 
+  anchors <- paste0('<a name="', fns, '">',
+                    if (show) linkfn(fns, text, pkg = "rgl"),
                     '</a>')
   paste(anchors, collapse=if (show) ", " else "")
 }
 
-indexclass <- 
-indexproperties <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
-	documentedfns <<- c(documentedfns, fns)
-	anchors <- paste0('<a name="', fns, '">', 
-			  if (show) text, 
-			  '</a>')
-	paste(anchors, collapse=if (show) ", " else "")
-}
+indexclass <-
+  indexproperties <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
+    documentedfns <<- c(documentedfns, fns)
+    anchors <- paste0('<a name="', fns, '">',
+                      if (show) text,
+                      '</a>')
+    paste(anchors, collapse=if (show) ", " else "")
+  }
 
 indexmethods <- function(fns, text = paste0("`", fns, "()`"), show = TRUE) {
-	documentedfns <<- c(documentedfns, fns)
-	anchors <- paste0('<a name="', fns, '">', 
-			  if (show) text, 
-			  '</a>')
-	paste(anchors, collapse=if (show) ", " else "")
+  documentedfns <<- c(documentedfns, fns)
+  anchors <- paste0('<a name="', fns, '">',
+                    if (show) text,
+                    '</a>')
+  paste(anchors, collapse=if (show) ", " else "")
 }
 
 linkfn <- function(fn, text = paste0("`", fn, "`"), pkg = NA) {
   if (is.na(pkg))
     paste0('<a href="#', fn, '">', text, '</a>')
   else
-    paste0('<a href="../../', pkg, '/help/', fn, '">', text, 
+    paste0('<a href="../../', pkg, '/help/', fn, '">', text,
            '</a>')
 }
 
 # Write this once at the start of the document.
 
 cat('<style>
-.nostripes tr.even {background-color: white;}
-table {border-style: none;}
-table th {border-style: none;}
-table td {border-style: none;}
-a[href^=".."] {text-decoration: underline;}
-</style>
-')  
+    .nostripes tr.even {background-color: white;}
+    table {border-style: none;}
+    table th {border-style: none;}
+    table td {border-style: none;}
+    a[href^=".."] {text-decoration: underline;}
+    </style>
+    ')
 
 writeIndex <- function(cols = 4) {
   documentedfns <- sort(documentedfns)
