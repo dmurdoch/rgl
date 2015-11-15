@@ -33,24 +33,30 @@ There are two ways to embed an `rgl` scene in the document.  The
 simplest is to use the chunk option `webgl = TRUE`.  With that
 option, whatever `rgl` scene is active at the end of the chunk
 will be embedded.  See the `r linkfn("setupKnitr", pkg="rgl")` 
-help page for chunk options.  
+help page for chunk options.  This method makes use of 
+functions from the `rglwidget` package, so you will need
+to install it.
 
 The second way is to use a call to `r linkfn("rglwidget",
 pkg="rglwidget")` from the `rglwidget` package.  Each call to
-this function will insert a scene into the document.
+this function will insert a scene into the document.  It is not
+necessary to set `webgl = TRUE`.
 
 We start with two simple examples.  The next section gives 
 reference information.
 
 Consider the simple plot of the iris data.  We
-insert a code chunk with label `plot3d` (which will be used below).
+insert a code chunk and call the `r linkfn("rglwidget",pkg="rglwidget")` 
+function with optional argument `elementId`.  This allows later
+Javascript code to refer to the image.
 ```{r plot3d}
+library(rgl)
+library(rglwidget)
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 subid <- currentSubscene3d()
 rglwidget(elementId="plot3drgl")
 ```
-
 We might like a button on the web page to cause a change to the
 display, e.g. a rotation of the plot.  First we add buttons, with
 the "onclick" event set to a function described below:
@@ -64,19 +70,18 @@ which produces these buttons:
 
 We stored the subscene number that is currently active in
 `subid` in the code chunk above, and use it as `r rinline("subid")`
-in the script below.
+in the script below.  `knitr` substitutes the value
+`r subid` when it processes the document.
 
-The `rotate()` function makes use of the global `<prefix>rgl`
-object.  
-
-In this case we used `rglwidget()` to create the display,
-so we add the `document.getElementById` call to retrieve the 
-object:
+The `rotate()` function uses the Javascript function `document.getElementById` to retrieve the `<div>` component
+of the web page containing the scene.  It will have a
+component named `rglinstance` which contains information about the scene that we can modify:
 
     <script type="text/javascript">
     var rotate = function(angle) {
       var rgl = document.getElementById("plot3drgl").rglinstance;
-      rgl.getObj(`r subid`).par3d.userMatrix.rotate(angle, 0,1,0);
+      rgl.getObj(`r rinline("subid",
+                           script=TRUE)`).par3d.userMatrix.rotate(angle, 0,1,0);
       rgl.drawScene();
     };
     </script>
@@ -90,8 +95,9 @@ var rotate = function(angle) {
 </script>
 
 If we had used `webGL=TRUE` in the chunk header,
-the `knitr` WebGL support would set the prefix to the 
-code chunk label, so the global would be called `plot3drgl`:
+the `knitr` WebGL support create a global object with a name of the form `<chunkname>rgl`.  For example,  if the code chunk
+was named `plot3d`, the object
+would be called `plot3drgl`, and this code would work:
 
     <script type="text/javascript">
     var rotate = function(angle) {
@@ -178,7 +184,7 @@ M <- r3dDefaults$userMatrix
 fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
                                      rotate3d(M, pi/2, 1, 0, 0),
                                      rotate3d(M, pi/2, 0, 1, 0) ) )
-.propertySlider(setter = par3dinterpSetter(fn, 0, 1.5, steps=15, 
+propertySlider(setter = par3dinterpSetter(fn, 0, 1.5, steps=15, 
 					   prefix = "userMatrix", 
 					   subscene = subid),
 	       step = 0.01)
@@ -215,7 +221,7 @@ its colour from black to white,
 setosa <- subset(iris, Species == "setosa")
 which <- which.min(setosa$Sepal.Width)
 init <- setosa$Sepal.Length[which]
-.propertySlider(
+propertySlider(
 	.vertexSetter(values = matrix(c(init,8,0,1,0,1,0,1), nrow=2),
 	             attributes=c("x", "r", "g", "b"), 
 		     vertices = which, objid = sphereid, 
@@ -241,7 +247,7 @@ lineid <- plot3d(xyz, type="l", col = c("black", "black"))["data"]
 sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
 ```
 ```{r results="asis"}
-.propertySlider( list(ageSetter(births = time, ages = c(0, 0, 50),
+propertySlider( list(ageSetter(births = time, ages = c(0, 0, 50),
 			  colors = c("gray", "red", "gray"),
 			  objids = lineid, prefixes = "curve"),
 		     .ageSetter(births = 0, ages = time,
