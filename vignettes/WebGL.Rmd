@@ -250,7 +250,7 @@ sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
 propertySlider( list(ageSetter(births = time, ages = c(0, 0, 50),
 			  colors = c("gray", "red", "gray"),
 			  objids = lineid, prefixes = "curve"),
-		     .ageSetter(births = 0, ages = time,
+		     ageSetter(births = 0, ages = time,
 		     	  vertices = xyz, objids = sphereid,
 		     	  prefixes = "curve")),
 		     maxS = max(time) + 50)
