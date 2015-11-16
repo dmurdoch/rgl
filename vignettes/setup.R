@@ -8,10 +8,11 @@ if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.13.1"))
 setupKnitr()
 
 documentedfns <- c()
-indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
+
+indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE, pkg = NA) {
   documentedfns <<- c(documentedfns, fns)
   anchors <- paste0('<a name="', fns, '">',
-                    if (show) linkfn(fns, text, pkg = "rgl"),
+                    if (show) linkfn(fns, text, pkg = pkg),
                     '</a>')
   paste(anchors, collapse=if (show) ", " else "")
 }

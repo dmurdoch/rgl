@@ -222,7 +222,7 @@ setosa <- subset(iris, Species == "setosa")
 which <- which.min(setosa$Sepal.Width)
 init <- setosa$Sepal.Length[which]
 propertySlider(
-	.vertexSetter(values = matrix(c(init,8,0,1,0,1,0,1), nrow=2),
+	vertexSetter(values = matrix(c(init,8,0,1,0,1,0,1), nrow=2),
 	             attributes=c("x", "r", "g", "b"), 
 		     vertices = which, objid = sphereid, 
 		     prefix = "vertex"), 
@@ -233,27 +233,33 @@ propertySlider(
 A related function is `r indexfns("ageSetter")`, though it uses
 a very different specification of the attributes.
 It is used when the slider controls the "age" of the scene, 
-and attributes of vertices change with their age.  For example,
-to show a point moving along a curve, we could do the following.  
-Note that we need to specify multiple colours in the plot so that the
-colour is not fixed, and can be controlled by the slider.  We
-also give two `ageSetter` calls in a list; the `propertySlider`
-will control both of them simultaneously.
+and attributes of vertices change with their age. 
 
-```{r curve, webgl=TRUE}
+Rather than giving an example, we will illustrate
+the very similar function `r indexfns("ageControl", pkg = "rglwidget")` from the `rglwidgets` package, embedded in a 
+`r indexfns("playwidget", pkg = "rglwidget")`.  We will
+show a point moving along a curve.  In the original scene
+we need to specify multiple colours so that the
+colour is not fixed, and can be controlled by the slider.  We
+also give two `ageControl` calls in a list;
+
+```{r}
 time <- 0:500
 xyz <- cbind(cos(time/20), sin(time/10), time)
 lineid <- plot3d(xyz, type="l", col = c("black", "black"))["data"]
 sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
+rglwidget(elementId = "ageExample")
 ```
-```{r results="asis"}
-propertySlider( list(ageSetter(births = time, ages = c(0, 0, 50),
-			  colors = c("gray", "red", "gray"),
-			  objids = lineid, prefixes = "curve"),
-		     ageSetter(births = 0, ages = time,
-		     	  vertices = xyz, objids = sphereid,
-		     	  prefixes = "curve")),
-		     maxS = max(time) + 50)
+```{r}
+playwidget("ageExample", 
+  ageControl(births = time, ages = c(0, 0, 50),
+		colors = c("gray", "red", "gray"), objids = lineid),
+	ageControl(births = 0, ages = time,
+		vertices = xyz, objids = sphereid),
+  start = 0, stop = max(time) + 20, rate = 50,
+  components = c("Reverse", "Play", "Slower", "Faster",
+                 "Reset", "Slider", "Label"),
+  loop = TRUE, width = "auto")
 ```
 
 The final function of this type is `r indexfns("matrixSetter")`, for setting
@@ -270,6 +276,9 @@ of support functions which are not easily available in Javascript.
 TODO:  write a simple mouse control.
 
 ## Reference for `rglClass`
+
+NB:  This section has not been updated recently, and is 
+not current.
 
 In writing the `writeWebGL()` function, I haven't tried to prevent access to 
 anything.  On the other hand, I haven't provided access to
