@@ -30,17 +30,40 @@ source using `knitr` or `rmarkdown`.  This format mixes
 text with Markdown markup with chunks of R code.
 
 There are two ways to embed an `rgl` scene in the document.  The
-simplest is to use the chunk option `webgl = TRUE`.  With that
+older one is to use the chunk option `webgl = TRUE`.  With that
 option, whatever `rgl` scene is active at the end of the chunk
 will be embedded.  See the `r linkfn("setupKnitr", pkg="rgl")` 
-help page for chunk options.  This method makes use of 
-functions from the `rglwidget` package, so you will need
-to install it.
+help page for chunk options.  
 
 The second way is to use a call to `r linkfn("rglwidget",
 pkg="rglwidget")` from the `rglwidget` package.  Each call to
-this function will insert a scene into the document.  It is not
-necessary to set `webgl = TRUE`.
+this function will insert a scene into the document.  Do not set
+`webgl = TRUE`.  
+
+## Browser support
+
+Most browsers now support WebGL, but it may be disabled by
+default.  See http://get.webgl.org for help on a number of
+different browsers.  
+
+If you are using the internal browser in RStudio, support varies
+by version.  I believe it is enabled by default in Windows
+versions, but not in all Mac OSX versions.  You can run this
+command:
+ 
+    defaults write org.rstudio.RStudio WebKitWebGLEnabled -bool YES
+
+to enable it.  I do not have much experience with RStudio in
+Linux, but it does seem that WebGL is enabled there.
+
+
+Both methods make use of functions from the `rglwidget` package,
+so you will need to install it.  The second method is easier for
+me to maintain, so it is likely to receive more support in the 
+future, but for now both methods are supported, and there
+are examples of both in this document.
+
+## Examples
 
 We start with two simple examples.  The next section gives 
 reference information.
@@ -266,14 +289,14 @@ The final function of this type is `r indexfns("matrixSetter")`, for setting
 up multiple controls to modify a matrix, typically `userMatrix`. This is used
 when complex manipulation of a matrix requires several controls.
 
-## User Defined Mouse Controls
+## User defined mouse controls
 
 `rgl` allows user defined mouse controls.  For these to work
 within WebGL, you will need to write a Javascript version as
 well as the R version.  This isn't easy:  R provides a lot
 of support functions which are not easily available in Javascript.
 
-TODO:  write a simple mouse control.
+TODO:  give an example here.
 
 ## Reference for `rglClass`
 
