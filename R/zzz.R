@@ -65,7 +65,10 @@
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
-    warning("Error in 'rgl_init'")
+    warning("'rgl_init' failed, running with rgl.useNULL = TRUE", call. = FALSE)
+    options(rgl.useNULL = TRUE)
+    rgl.quit()
+    rgl.init(initValue, TRUE)	
   }
   
 }

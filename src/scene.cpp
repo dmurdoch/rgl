@@ -204,6 +204,13 @@ Subscene* Scene::getSubscene(int id)
   return (Subscene*)get_scenenode(SUBSCENE, id);
 }
 
+Subscene* Scene::whichSubscene(int id)
+{
+  Subscene* result = rootSubscene.whichSubscene(id);
+  if (!result) result = &rootSubscene;
+  return result;
+}
+
 Subscene* Scene::whichSubscene(int mouseX, int mouseY)
 {
   Subscene* result = rootSubscene.whichSubscene(mouseX, mouseY);

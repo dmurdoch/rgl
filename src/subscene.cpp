@@ -232,6 +232,36 @@ Subscene* Subscene::getSubscene(int id)
   return NULL;
 }
 
+Subscene* Subscene::whichSubscene(int id)
+{
+  for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
+    if ((*i)->getObjID() == id)
+      return this;
+  }
+  for (std::vector<Light*>::iterator i = lights.begin(); i != lights.end() ; ++ i ) {
+    if ((*i)->getObjID() == id)
+      return this;
+  }
+  if (bboxdeco && bboxdeco->getObjID() == id)
+    return this;
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) {
+    if ((*i)->getObjID() == id)
+      return this;
+  }
+  if (userviewpoint && userviewpoint->getObjID() == id)
+    return this;
+  if (modelviewpoint && modelviewpoint->getObjID() == id)
+    return this;
+  if (background && background->getObjID() == id)
+    return this;
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end() ; ++ i ) {
+    Subscene* result = (*i)->whichSubscene(id);
+    if (result) 
+      return result;
+  }
+  return NULL;
+}
+
 Subscene* Subscene::whichSubscene(int mouseX, int mouseY)
 {
   Subscene* result = NULL;

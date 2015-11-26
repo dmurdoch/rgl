@@ -321,7 +321,8 @@ void rgl::rgl_attrib_count(int* id, int* attrib, int* count)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    AABox bbox = scene->getBoundingBox();
+    Subscene* subscene = scene->whichSubscene(*id);
+    AABox bbox = subscene->getBoundingBox();
     SceneNode* scenenode = scene->get_scenenode(*id);
     if ( scenenode )
       *count = scenenode->getAttributeCount(bbox, *attrib);
@@ -341,7 +342,8 @@ void rgl::rgl_attrib(int* id, int* attrib, int* first, int* count, double* resul
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    AABox bbox = scene->getBoundingBox();
+    Subscene* subscene = scene->whichSubscene(*id);
+    AABox bbox = subscene->getBoundingBox();
     SceneNode* scenenode = scene->get_scenenode(*id);
     if ( scenenode )
       scenenode->getAttribute(bbox, *attrib, *first, *count, result);

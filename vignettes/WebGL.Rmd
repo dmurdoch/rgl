@@ -282,7 +282,7 @@ playwidget("ageExample",
   start = 0, stop = max(time) + 20, rate = 50,
   components = c("Reverse", "Play", "Slower", "Faster",
                  "Reset", "Slider", "Label"),
-  loop = TRUE, width = "auto")
+  loop = TRUE)
 ```
 
 The final function of this type is `r indexfns("matrixSetter")`, for setting

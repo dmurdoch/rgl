@@ -91,6 +91,7 @@ public:
    * recursive search for subscene; could return self, or NULL if not found
    **/
   Subscene* getSubscene(int id);
+  Subscene* whichSubscene(int id); /* which subscene holds this */
   Subscene* whichSubscene(int mouseX, int mouseY); /* coordinates are pixels within the window */
   
   /**
