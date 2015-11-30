@@ -143,8 +143,33 @@ void PlaneSet::updateTriangles(const AABox& sceneBBox)
   }
 }
 
+int PlaneSet::getAttributeCount(AABox& bbox, AttribID attrib)
+{
+	switch (attrib) {
+	case NORMALS: 
+	case OFFSETS: return nPlanes;
+	}
+	return TriangleSet::getAttributeCount(bbox, attrib);
+}
+
 void PlaneSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
-  updateTriangles(bbox);
-  TriangleSet::getAttribute(bbox, attrib, first, count, result);
+	int n = getAttributeCount(bbox, attrib);
+	if (first + count < n) n = first + count;
+	if (first < n) {
+		if (attrib == NORMALS) {
+			while (first < n) {
+				*result++ = normal.getRecycled(first).x;
+				*result++ = normal.getRecycled(first).y;
+				*result++ = normal.getRecycled(first).z;
+				first++;
+			}
+		} else if (attrib == OFFSETS) {
+			while (first < n) 
+				*result++ = offset.getRecycled(first++);
+		} else {
+			updateTriangles(bbox);
+			TriangleSet::getAttribute(bbox, attrib, first, count, result);
+		}
+	}
 }

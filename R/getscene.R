@@ -285,16 +285,7 @@ plot3d.rglobject <- function(x, ...) {
       args$a <- args$x[!odd,,drop=FALSE] - ends
       args$x <- ends
     },
-    planes = {
-      first <- seq_len(nrow(args$x)) %% 12 == 1
-      args$a <- args$normals[first,,drop=FALSE]
-      pt <- args$x[first,,drop=FALSE]
-      args$d <- numeric(sum(first))
-      for (i in seq_along(args$d))
-        args$d[i] <- -sum(args$a[i,]*pt[i,])
-      args$x <- NULL
-      args$normals <- NULL
-    },
+    planes =,
     clipplanes = {
       args$a <- args$normals
       args$x <- NULL

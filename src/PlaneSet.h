@@ -41,6 +41,7 @@ public:
   /**
    * update then get attributes 
    */
+  int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);  
 };
 

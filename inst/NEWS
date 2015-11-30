@@ -724,3 +724,6 @@ v0.94
   - Bounding box objects sometimes had miscalculated vertices
     in scene3d().
   - If rgl.init() fails, continue with the NULL device (with warnings).
+  - scene3d() now returns the normals and offsets of "planes"
+    objects, as with "clipplanes" objects.  It still returns the triangles from embedding the
+    planes in the most recent subscene.

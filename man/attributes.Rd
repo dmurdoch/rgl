@@ -21,7 +21,7 @@ An attribute of a shape.  Currently supported: one of \cr
 \code{"vertices"}, \code{"normals"}, \code{"colors"}, \code{"texcoords"}, 
 \code{"dim"}, \code{"texts"}, \code{"cex"}, \code{"adj"}, \code{"radii"}, 
 \code{"centers"}, \code{"ids"}, \code{"usermatrix"}, \code{"types"},
-\code{"flags"}, \code{"family"}, \code{"font"}\cr
+\code{"flags"}, \code{"offsets"}, \code{"family"}, \code{"font"}\cr
 or unique prefixes
 to one of those. 
 }
