@@ -25,7 +25,7 @@ set.seed(123)
 The `rgl` package is used to produce interactive 3-D plots.  It contains
 high-level graphics commands modelled loosely after classic R graphics,
 but working in three dimensions.  It also contains low level structure
-inspired by the `grid` package.
+inspired by (but incompatible with) the `grid` package.
 
 This document gives an overview.  See the help pages for details.
 
@@ -45,6 +45,9 @@ Javascript and WebGL enabled in your browser.  Some older browsers
 may not support this -- see http://get.webgl.org for tests
 and links to a discussion.
 
+The WebGL figures were produced using the `rglwidget`
+package, version `r packageVersion("rglwidget")`.
+
 
 ## Basics and High Level Functions
 
@@ -54,7 +57,7 @@ plots points within an rgl window.  It is similar to the classic
 but works in 3 dimensions.
 
 For example
-```{r}
+```{r echo=1}
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 rglwidget()
@@ -116,7 +119,8 @@ parts of the surface with log likelihood values near the maximum.
 Note:  this example used the `knitr` hook functions 
 (see `r linkfn("setupKnitr")`) to insert the
 scene into this vignette; the previous example used the `rglwidget`
-function from the package of the same name.
+function from the package of the same name.  We generally
+recommend the newer `r linkfn("rglwidget", pkg="rglwidget")` approach.
 
 ## Adding Graphical Elements
 
