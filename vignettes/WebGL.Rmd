@@ -274,11 +274,11 @@ sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
 rglwidget(elementId = "ageExample")
 ```
 ```{r}
-playwidget("ageExample", 
+playwidget("ageExample", list(
   ageControl(births = time, ages = c(0, 0, 50),
 		colors = c("gray", "red", "gray"), objids = lineid),
 	ageControl(births = 0, ages = time,
-		vertices = xyz, objids = sphereid),
+		vertices = xyz, objids = sphereid)),
   start = 0, stop = max(time) + 20, rate = 50,
   components = c("Reverse", "Play", "Slower", "Faster",
                  "Reset", "Slider", "Label"),
