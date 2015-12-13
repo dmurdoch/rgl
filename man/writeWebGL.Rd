@@ -135,15 +135,17 @@ the copyright notice and license for free use) is included in the file named by
 write the scene to a file in various other formats.
 }
 \examples{
-plot3d(rnorm(100), rnorm(100), rnorm(100), type = "s", col = "red")
-# This writes a copy into temporary directory 'webGL', and then displays it
-filename <- writeWebGL(dir = file.path(tempdir(), "webGL"), 
+if (require(rglwidget)) {
+  plot3d(rnorm(100), rnorm(100), rnorm(100), type = "s", col = "red")
+  # This writes a copy into temporary directory 'webGL', and then displays it
+  filename <- writeWebGL(dir = file.path(tempdir(), "webGL"), 
                        width = 500, reuse = TRUE)
-# Display the "reuse" attribute
-attr(filename, "reuse")
+  # Display the "reuse" attribute
+  attr(filename, "reuse")
 
-# Display the scene in a browser
-if (interactive())
-  browseURL(paste0("file://", filename))
+  # Display the scene in a browser
+  if (interactive())
+    browseURL(paste0("file://", filename))
+}
 }
 \keyword{ graphics }

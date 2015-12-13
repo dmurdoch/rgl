@@ -82,7 +82,7 @@ Duncan Murdoch
 \code{\link{vertexSetter}}.
 }
 \examples{
-propertySlider(ageSetter(births = 1:10, ages = c(-1, 0, 1), 
+if (require(rglwidget))
+  propertySlider(ageSetter(births = 1:10, ages = c(-1, 0, 1), 
               alpha = c(0, 1, 1), objids = 123))
 }
-
