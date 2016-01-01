@@ -81,8 +81,11 @@ bool Pixmap::init(PixmapTypeID in_typeID, int in_width, int in_height, int in_bi
   bytesperrow = ( (channels * bits_per_channel) >> 3 ) * width;
 
   data = new unsigned char [ bytesperrow * height ];
-
-  return true;
+  
+  if (data)
+    return true;
+  else
+    return false;
 }
 
 void Pixmap::clear()

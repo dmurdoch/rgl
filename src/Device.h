@@ -34,7 +34,7 @@ public: // -- all methods are blocking until action completed
   bool open(void); // -- if failed, instance is invalid and should be deleted
   void close(void); // -- when done, instance is invalid and should be deleted
   bool snapshot(int format, const char* filename);
-  bool pixels(int* ll, int* size, int component, float* result);
+  bool pixels(int* ll, int* size, int component, double* result);
   bool postscript(int format, const char* filename, bool drawText);
 
   bool clear(TypeID stackTypeID);

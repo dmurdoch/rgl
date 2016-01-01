@@ -151,6 +151,7 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
   stopifnot(length(viewport) == 4)
   ll <- as.integer(viewport[1:2])
   size <- as.integer(viewport[3:4])
+  stopifnot(all(!is.na(ll)), all(!is.na(size)))
   result <- array(NA_real_, dim=c(size[1], size[2], length(component)))
   dimnames(result) <- list(NULL, NULL, component)
   if (length(result) > 0)
@@ -158,7 +159,7 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
       ret <- .C( rgl_pixels,
         success=FALSE,
         ll, size, compnum[i],
-        values = single(size[1]*size[2]))
+        values = double(size[1]*size[2]))
  
       if (! ret$success)
         warning(gettextf("Error reading component '%s'", component[i]), domain = NA)

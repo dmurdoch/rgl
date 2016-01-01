@@ -127,7 +127,7 @@ bool Device::snapshot(int format, const char* filename)
   return rglview->snapshot( (PixmapFileFormatID) format, filename);
 }
 // ---------------------------------------------------------------------------
-bool Device::pixels(int* ll, int* size, int component, float* result)
+bool Device::pixels(int* ll, int* size, int component, double* result)
 {
   return rglview->pixels( ll, size, component, result);
 }

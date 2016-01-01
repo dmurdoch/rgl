@@ -45,7 +45,7 @@ void rgl_dev_bringtotop(int* successptr, int* stay);
 /* device services */
 
 void rgl_snapshot (int* successptr, int* idata, char** cdata);
-void rgl_pixels(int* successptr, int* ll, int* size, int* component, float* result);
+void rgl_pixels(int* successptr, int* ll, int* size, int* component, double* result);
 void rgl_postscript (int* successptr, int* idata, char** cdata);
 
 /* scene management */

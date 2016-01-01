@@ -32,7 +32,7 @@ public:
   RGLView(Scene* scene);
   ~RGLView();
   bool snapshot(PixmapFileFormatID formatID, const char* filename);
-  bool pixels(int* ll, int* size, int component, float* result);
+  bool pixels(int* ll, int* size, int component, double* result);
   bool postscript(int format, const char* filename, bool drawText);
 // event handler:
   void show(void);

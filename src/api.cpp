@@ -1169,7 +1169,7 @@ void rgl::rgl_snapshot(int* successptr, int* idata, char** cdata)
   *successptr = success;
 }
 
-void rgl::rgl_pixels(int* successptr, int* ll, int* size, int* component, float* result)
+void rgl::rgl_pixels(int* successptr, int* ll, int* size, int* component, double* result)
 {
   int success = RGL_FAIL;
   

@@ -714,7 +714,7 @@ v0.94
   - Modified configure script to work with OS X 10.11 (suggestion of
     Brian Ripley).
 
-0.95.1415
+0.95.1435
   - The Mac OS X native windowing system (aglrgl.so) has been 
     dropped; it appears not to work in Yosemite and El Capitan.
   - A memory leak when drawing semi-transparent objects has been
@@ -727,3 +727,7 @@ v0.94
   - scene3d() now returns the normals and offsets of "planes"
     objects, as with "clipplanes" objects.  It still returns the triangles from embedding the
     planes in the most recent subscene.
+    
+0.95.1436
+  - Changed rgl.pixels() to attempt to avoid segfault on
+    OSX.
