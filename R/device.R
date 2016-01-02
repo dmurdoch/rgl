@@ -150,9 +150,9 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
   compnum <- as.integer(sapply(component, rgl.enum.pixelcomponent))
   stopifnot(length(viewport) == 4)
   ll <- as.integer(viewport[1:2])
+  stopifnot(all(!is.na(ll)), all(ll >= 0))
   size <- as.integer(viewport[3:4])
-  stopifnot(all(!is.na(ll)), all(!is.na(size)), 
-  	    all(ll >= 0), all(size > 0))
+  stopifnot(all(!is.na(size), all(size >= 0)))
   result <- array(NA_real_, dim=c(size[1], size[2], length(component)))
   dimnames(result) <- list(NULL, NULL, component)
   if (length(result) > 0)
