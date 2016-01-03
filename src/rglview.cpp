@@ -11,6 +11,7 @@
 #include <locale>
 #endif
 #include <cstdio>
+#include <string.h>
 #include "rglview.h"
 #include "opengl.h"
 #include "lib.h"
@@ -617,7 +618,9 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
                       GL_DEPTH_COMPONENT, GL_LUMINANCE};   
   if ( windowImpl->beginGL() ) {
     int n = size[0]*size[1];
-    GLfloat* buffer = (GLfloat*) R_alloc(n, sizeof(GLfloat));
+    // Get output in unsigned ints, because some drivers
+    // segfault when using GLfloat.
+    GLuint* buffer = (GLuint*) R_alloc(n, sizeof(GLuint));
   	
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
@@ -627,12 +630,21 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
     glPushAttrib(GL_PIXEL_MODE_BIT);
  
     glReadBuffer(GL_FRONT);
+#ifdef GL_PACK_ROW_BYTES_APPLE
+    { const GLubyte *extensions = NULL;
+      extensions = glGetString(GL_EXTENSIONS);
+      if (strstr((const char *)extensions, "GL_APPLE_row_bytes")) {
+        glPixelStorei(GL_PACK_ROW_BYTES_APPLE, 0);
+      }
+    }
+#endif
+    glPixelStorei(GL_PACK_ROW_LENGTH, 0);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadPixels(ll[0],ll[1],size[0],size[1],format[component], GL_FLOAT, (GLvoid*) buffer);
+    glReadPixels(ll[0],ll[1],size[0],size[1],format[component], GL_UNSIGNED_INT, (GLvoid*) buffer);
 
     glPopAttrib();
     for (int i=0; i<n; i++)
-      result[i] = buffer[i];
+      result[i] = buffer[i]/4294967295.0;
 
     success = true;
 
