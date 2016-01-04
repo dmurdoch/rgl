@@ -617,7 +617,12 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
                       GL_DEPTH_COMPONENT, GL_LUMINANCE};   
   if ( windowImpl->beginGL() ) {
-    bool bycolumn = true; // FIXME: set this only for systems that need it
+    /*
+     * Some OSX systems appear to have a glReadPixels 
+     * bug causing segfaults when reading the depth component.  
+     * Read those column by column.
+     */
+    bool bycolumn = format[component] == GL_DEPTH_COMPONENT;
     int n = bycolumn ? size[1] : size[0]*size[1];
     GLfloat* buffer = (GLfloat*) R_alloc(n, sizeof(GLfloat));
   	
@@ -631,9 +636,6 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
     glReadBuffer(GL_FRONT);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
     
-    /* Some OSX systems segfault on the full read.  A 
-     * column at a time seems fine.
-     */
     if (bycolumn) {
       for(int ix=0; ix<size[0]; ++ix){
         glReadPixels(ix+ll[0],ll[1],1,size[1],format[component], GL_FLOAT, (GLvoid*) buffer);

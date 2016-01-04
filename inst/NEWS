@@ -728,6 +728,6 @@ v0.94
     objects, as with "clipplanes" objects.  It still returns the triangles from embedding the
     planes in the most recent subscene.
     
-0.95.1440
+0.95.1441
   - Changed rgl.pixels() to attempt to avoid segfault on
-    OSX.
+    OSX.  (Thanks to Greg Jefferis for testing and workaround.)
