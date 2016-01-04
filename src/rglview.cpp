@@ -617,10 +617,9 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
                       GL_DEPTH_COMPONENT, GL_LUMINANCE};   
   if ( windowImpl->beginGL() ) {
-    int n = size[0]*size[1];
-    // Get output in unsigned ints, because some drivers
-    // segfault when using GLfloat.
-    GLuint* buffer = (GLuint*) R_alloc(n, sizeof(GLuint));
+    bool bycolumn = true; // FIXME: set this only for systems that need it
+    int n = bycolumn ? size[1] : size[0]*size[1];
+    GLfloat* buffer = (GLfloat*) R_alloc(n, sizeof(GLfloat));
   	
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
@@ -630,22 +629,24 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
     glPushAttrib(GL_PIXEL_MODE_BIT);
  
     glReadBuffer(GL_FRONT);
-#ifdef GL_PACK_ROW_BYTES_APPLE
-    { const GLubyte *extensions = NULL;
-      extensions = glGetString(GL_EXTENSIONS);
-      if (strstr((const char *)extensions, "GL_APPLE_row_bytes")) {
-        glPixelStorei(GL_PACK_ROW_BYTES_APPLE, 0);
-      }
-    }
-#endif
-    glPixelStorei(GL_PACK_ROW_LENGTH, 0);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadPixels(ll[0],ll[1],size[0],size[1],format[component], GL_UNSIGNED_INT, (GLvoid*) buffer);
-
+    
+    /* Some OSX systems segfault on the full read.  A 
+     * column at a time seems fine.
+     */
+    if (bycolumn) {
+      for(int ix=0; ix<size[0]; ++ix){
+        glReadPixels(ix+ll[0],ll[1],1,size[1],format[component], GL_FLOAT, (GLvoid*) buffer);
+        for(int iy=0; iy<size[1]; ++iy) {
+          result[ix + iy*size[0]] = buffer[iy];
+        }
+      }	
+    } else {	
+      glReadPixels(ll[0],ll[1],size[0],size[1],format[component], GL_FLOAT, (GLvoid*) buffer);
+      for (int i=0; i<n; i++)
+        result[i] = buffer[i];
+    }
     glPopAttrib();
-    for (int i=0; i<n; i++)
-      result[i] = buffer[i]/4294967295.0;
-
     success = true;
 
     windowImpl->endGL();
