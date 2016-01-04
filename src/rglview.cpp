@@ -11,7 +11,6 @@
 #include <locale>
 #endif
 #include <cstdio>
-#include <string.h>
 #include "rglview.h"
 #include "opengl.h"
 #include "lib.h"
