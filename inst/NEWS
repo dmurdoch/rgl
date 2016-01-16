@@ -731,3 +731,6 @@ v0.94
 0.95.1441
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
+  - Added checks that plotting operations include
+    non-zero numbers of vertices, to prevent WebGL 
+    errors.

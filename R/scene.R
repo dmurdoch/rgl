@@ -329,6 +329,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
     x <- xyz$x
     y <- xyz$y
     z <- xyz$z
+    if (!length(x)) return()
     if (length(x) > 1) stop("A light can only be in one place at a time")
     finite.pos <- TRUE
   }
@@ -560,6 +561,8 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
 
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
+  if (!nvertex) return()
+  
   radius  <- rgl.attr(radius, nvertex)
   nradius <- length(radius)
   if (!nradius) stop("No radius specified")
@@ -592,6 +595,7 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
   noffsets <- length(d)
+  if (!nnormals || !noffsets) return();
   
   idata <- as.integer( c( nnormals, noffsets ) )
    
@@ -619,6 +623,7 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0)
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
   noffsets <- length(d)
+  if (!nnormals || !noffsets) return()
   
   idata <- as.integer( c( nnormals, noffsets ) )
    
@@ -650,6 +655,7 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
   nbases <- rgl.nvertex(bases)
   directions <- rgl.vertex(a, b, c)
   ndirs <-  rgl.nvertex(directions)
+  if (!nbases || !ndirs) return()
   
   idata <- as.integer( c( nbases, ndirs ) )
    
@@ -695,7 +701,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
       warning("No text to plot")
     return(invisible(integer(0)))
   }
-    
+  if (!nvertex) return()
   text    <- rep(text, length.out=nvertex)
   
   idata <- as.integer(nvertex)
@@ -739,6 +745,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
 
   center  <- rgl.vertex(x,y,z)
   ncenter <- rgl.nvertex(center)
+  if (!ncenter) return()
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
   if (!nradius) stop("No radius specified")
