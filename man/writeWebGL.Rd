@@ -76,7 +76,6 @@ development progresses:
 \itemize{
 \item The bounding box decorations are fixed; labels do not move as they do within \R.
 \item User-defined mouse controls are not supported.
-\item No automatic movement (e.g. rotation via \code{\link{spin3d}}) is supported.
 \item Missing values are not handled properly.
 \item Polygons will only be rendered as filled; there is no support in WebGL for wireframe or point rendering.
 \item WebGL browsers generally do not support more than 65535 vertices per
@@ -84,27 +83,11 @@ object.  \code{writeWebGL} will print a warning if this limit is exceeded, but i
 to break his scene into smaller objects.  (And 65535 vertices may not be small enough!)
 }
 
-There is some experimental support for modification of the scene by other Javascript code 
-on the same web page.  Currently this is limited to the following.  There will be a global variable
-created with name \code{<prefix>rgl}, where \code{<prefix>} will be replaced by the 
-\code{prefix} argument to \code{writeWebGL}.  Currently this variable will contain properties 
-corresponding to some of the components returned by \code{\link{par3d}}, namely \code{FOV}, \code{zoom},
-\code{userMatrix} and \code{listeners}.  Each of these components should be indexed by a subscene
-number to obtain the value for that subscene; for example, use \code{<prefix>rgl.userMatrix[3]} to obtain
-the user matrix for subscene 3 as a \code{CanvasMatrix4} object (defined in the \file{CanvasMatrix.js}
-library).  After modifying any of these values, user code should insert a call \code{<prefix>rgl.drawScene();}
-to update the display.
-The \code{snapshot} argument can be a logical value
-or a character value.  If logical and \code{FALSE},
-no snapshot will be included.  If \code{TRUE},
-a snapshot will be taken of the current scene
-using \code{\link{snapshot3d}} and included
-in the scene to use when WebGL errors occur.  If \code{snapshot}
-is a character string starting \code{"data:"}, it
-will be assumed to be the result of the \code{\link[knitr]{image_uri}} function.  Otherwise it will be assumed to
-be a filename, and \code{\link[knitr]{image_uri}} will be used
-to embed it in the output page.
 }
+\note{
+This function is deprecated in favour of the \code{rglwidget::rglwidget()} function.  
+}
+
 \value{
 The \code{filename} is returned.  If \code{reuse} is not \code{NULL},
 it will have an attribute called \code{"reuse"} which contains a dataframe

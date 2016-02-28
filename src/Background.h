@@ -27,8 +27,9 @@ public:
   GLbitfield getClearFlags(RenderContext* renderContext);
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  String  getTextAttribute(AABox& bbox, AttribID attrib, int index);
   void getTypeName(char* buffer, int buflen) { strncpy(buffer, "background", buflen); };
-  
+  SceneNode* getQuad() { return quad; };
 
 protected:
   bool clearColorBuffer;

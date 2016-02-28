@@ -2,6 +2,7 @@
 #include "Viewpoint.h"
 #include "scene.h"
 #include "rglmath.h"
+#include "R.h"
 
 using namespace rgl;
 
@@ -199,7 +200,11 @@ void Background::drawElement(RenderContext* renderContext, int index)
 int Background::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
   switch (attrib) {    
-    case FLAGS: return 4;
+  case FLAGS: return 4;
+  case TYPES:
+  case IDS: if (quad) return 1;
+            else return 0;
+         
   }
   return Shape::getAttributeCount(bbox, attrib);
 }
@@ -221,8 +226,22 @@ void Background::getAttribute(AABox& bbox, AttribID attrib, int first, int count
       if (first <= 3)
 	*result++ = (double) fogtype == FOG_EXP2;
       return;
+    case IDS:
+      if (quad)
+      	*result++ = quad->getObjID();
+      return;
     }
     Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }
 
+String Background::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+{
+  int n = getAttributeCount(bbox, attrib);
+  if (index < n && attrib == TYPES) {
+    char* buffer = R_alloc(20, 1);    
+    quad->getTypeName(buffer, 20);
+    return String(strlen(buffer), buffer);
+  } else
+    return Shape::getTextAttribute(bbox, attrib, index);
+}

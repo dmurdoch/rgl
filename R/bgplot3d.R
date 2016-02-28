@@ -16,8 +16,7 @@ bgplot3d <- function(expression) {
     png(filename = filename, width=width, height=height)
     value <- try(expression)  
     dev.off()
-    result <- bg3d(texture=filename, col="white")
-    unlink(filename)
+    result <- bg3d(texture=filename, col="white", lit = FALSE)
   } else {
     value <- NULL
     result <- bg3d(col="white")

@@ -13,7 +13,7 @@ scene3d <- function() {
   getObject <- function(id, type) {
     result <- list(id=id, type=type)
     
-    if (!(type %in% c("light", "clipplanes", "background")))
+    if (!(type %in% c("light", "clipplanes")))
       result$material <- matdiff(rgl.getmaterial(id=id))
     
     attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
