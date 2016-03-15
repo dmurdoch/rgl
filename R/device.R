@@ -131,7 +131,7 @@ rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
   ret <- .C( rgl_postscript,
     success=FALSE,
     idata,
-    normalizePath(filename, mustWork = FALSE)
+    normalizePath(filename, mustWork = FALSE, winslash = "/")
   )
 
   if (! ret$success)
