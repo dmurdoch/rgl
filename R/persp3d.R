@@ -160,6 +160,8 @@ persp3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"), ...) {
     stop("The ", sQuote("deldir"), " package is required.")
   if (!identical(sort(coords), c("x", "y", "z")))
     stop(sQuote("coords"), " should be a permutation of c('x', 'y', 'z')")
+  if (!all(coords %in% names(x$summary)))
+    stop("The 'deldir' object needs x, y, and z coordinates.")
   points <- x$summary[, coords]
   plot3d(points, type = "n", ...)
   triangs <- do.call(rbind, deldir::triang.list(x))
