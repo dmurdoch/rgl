@@ -61,7 +61,8 @@ for more details on \code{xlim, ylim, zlim} and \code{forceClipregion}.
 }
 \author{Duncan Murdoch}
 \seealso{\code{\link{plot3d}}, \code{\link{persp}}. There is
-a \code{\link{persp3d.function}} method for drawing functions.}
+a \code{\link{persp3d.function}} method for drawing functions, and \code{\link{persp3d.deldir}} can be used
+to draw surfaces defined by an irregular collection of points.}
 \examples{
 
 # (1) The Obligatory Mathematical surface.

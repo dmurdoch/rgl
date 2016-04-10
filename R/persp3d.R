@@ -154,3 +154,16 @@ persp3d.function <- function(x, xlim = c(0,1), ylim = c(0,1),
   
   do.call(persp3d, args)
 }
+
+persp3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"), ...) {
+  if (!requireNamespace("deldir"))
+    stop("The ", sQuote("deldir"), " package is required.")
+  if (!identical(sort(coords), c("x", "y", "z")))
+    stop(sQuote("coords"), " should be a permutation of c('x', 'y', 'z')")
+  points <- x$summary[, coords]
+  plot3d(points, type = "n", ...)
+  triangs <- do.call(rbind, deldir::triang.list(x))
+  col <- rep_len(col, nrow(points))
+  triangles3d(triangs[, coords], 
+  	      col = col[triangs$ptNum], ...)
+}

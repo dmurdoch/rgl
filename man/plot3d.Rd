@@ -95,7 +95,7 @@ subscene even without specifying limits.
 \seealso{
   \code{\link{plot.default}},  
   \code{\link{open3d}}, \code{\link{par3d}}.
-  There is a \code{\link{plot3d.function}} method for plotting surfaces.
+  There are  \code{\link{plot3d.function}} and \code{\link{plot3d.deldir}} methods for plotting surfaces.
 }
 \examples{
   open3d()
