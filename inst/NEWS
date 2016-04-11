@@ -732,12 +732,12 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1459
+0.95.1461
   - Gave better error when XQuartz is not found, tried for better
     test.
   - Added more information on backgrounds to scene3d() to allow
     them to be used in rglwidget().
   - Now uses forward slashes in rgl.postscript(fmt = "tex") generated code.  
     (Thanks to Uwe Ligges for the problem report.)
-  - Added persp3d.deldir() method to allow plotting of
-    surfaces defined by irregular collections of points.
+  - Added as.mesh3d() and plot3d.deldir() and persp3d.deldir() methods to 
+    allow plotting of surfaces defined by irregular collections of points.

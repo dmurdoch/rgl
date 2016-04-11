@@ -77,6 +77,37 @@ qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
   return( object )
 }
 
+as.mesh3d <- function(x, ...) UseMethod("as.mesh3d")
+
+as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"), 
+			     smooth = TRUE, normals = NULL, texcoords = NULL,
+			     ...) {
+  if (!requireNamespace("deldir"))
+    stop("The ", sQuote("deldir"), " package is required.")
+  if (!identical(sort(coords), c("x", "y", "z")))
+    stop(sQuote("coords"), " should be a permutation of c('x', 'y', 'z')")
+  if (!all(coords %in% names(x$summary)))
+    stop("The 'deldir' object needs x, y, and z coordinates.")
+  if (smooth && !is.null(normals)) {
+    warning("'smooth' ignored as 'normals' was specified.")
+    smooth <- FALSE
+  }
+  points <- t(as.matrix(x$summary[, coords]))
+  triangs <- do.call(rbind, deldir::triang.list(x))
+  if (length(col) > 1) {
+    col <- rep_len(col, ncol(points))
+    col <- col[triangs$ptNum]
+  }
+  if (!is.null(texcoords))
+    texcoords <- texcoords[triangs$ptNum, ]
+  result <- tmesh3d(points, triangs$ptNum, homogeneous = FALSE,
+  	  normals = normals, texcoords = texcoords,
+  	  material = list(col = col, ...))
+  if (smooth)
+    result <- addNormals(result)
+  result
+}
+
 # rendering support
 
 dot3d.mesh3d <- function ( x, override = TRUE, ... ) {
