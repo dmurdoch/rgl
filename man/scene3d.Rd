@@ -43,12 +43,19 @@ write the scene to a file in formats readable by other software.
 }
 \value{
 The \code{scene3d} function returns an object of class
-\code{"rglscene"}.  This is a list with some or all of the components
-\item{par3d}{The results returned from a \code{\link{par3d}} call.}
+\code{"rglscene"}.  This is a list with some or all of the components:
 \item{material}{The results returned from a \code{\link{material3d}} call.}
-\item{bg}{A list containing some of the properties of the scene background.}
-\item{bbox}{A list containing some of the properties of the scene bounding box decoration.}
-\item{objects}{A list containing the RGL lights and objects in the scene.}  
+\item{rootSubscene}{A list containing information about
+the main ("root") subscene.  This may include:
+\describe{
+\item{id}{The scene id.}
+\item{type}{"subscene"}
+\item{par3d}{The \code{\link{par3d}} settings for the
+subscene.}
+\item{embeddings}{The \code{\link{subsceneInfo}()$embeddings} for the main subscene.}
+\item{objects}{The ids for objects in the subscene.}
+\item{subscenes}{A recursive list of child subscenes.}}}
+\item{objects}{A list containing the RGL lights, background and objects in the scene.}  
 
 The objects in the \code{objects} component are of class
 \code{"rglobject"}.  They are lists containing some or all of the
