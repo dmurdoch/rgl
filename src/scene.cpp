@@ -65,8 +65,12 @@ bool Scene::clear(TypeID type)
         ++iter;
       else {
         hide(node->getObjID());
-        delete node;
-        iter = nodes.erase(iter);
+      	if (node->owner) {
+      	  ++iter;
+      	} else {
+          delete node;
+          iter = nodes.erase(iter);
+      	} 
       }
     } else
       ++iter;

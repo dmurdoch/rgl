@@ -26,6 +26,9 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
         if (length(defaults$material))
     	    do.call("material3d", defaults$material)
     }
+    if ( 6 %in% type ) { # background
+    	do.call("bg3d", as.list(defaults$bg))
+    }
 }
 
 pop3d       <- function(...) {.check3d(); rgl.pop(...)}

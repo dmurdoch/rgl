@@ -26,7 +26,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
   material  <- 5 %in% typeid
   modelviewpoint <- 8 %in% typeid
 
-  drop <- typeid %in% c(4:6, 8)
+  drop <- typeid %in% c(4:5, 8)
   typeid <- typeid[!drop]
   type <- names(typeid)
   
@@ -51,7 +51,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
     
   if ( material ) 
     rgl.material()
-
+  
   if (! ret)
     stop("'rgl_clear' failed")
 }

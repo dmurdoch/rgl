@@ -732,7 +732,7 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1461
+0.95.1463
   - Gave better error when XQuartz is not found, tried for better
     test.
   - Added more information on backgrounds to scene3d() to allow
@@ -741,3 +741,5 @@ v0.94
     (Thanks to Uwe Ligges for the problem report.)
   - Added as.mesh3d() and plot3d.deldir() and persp3d.deldir() methods to 
     allow plotting of surfaces defined by irregular collections of points.
+  - Background clearing was not handled properly.  (Thanks to Paul Morse
+    for a bug report on this.)

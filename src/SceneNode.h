@@ -65,6 +65,7 @@ public:
   inline const ObjID getObjID() const { return objID; }
   virtual ~SceneNode() { };
   static ObjID nextID;
+  SceneNode *owner;  /* don't delete this node while the owner is non-NULL */
 
   /* Some nodes depend on the bbox, so we pass it to all */
   virtual int getAttributeCount(AABox& bbox, AttribID attrib) { return 0; }
@@ -74,7 +75,9 @@ public:
 
 protected:
   SceneNode(const TypeID in_typeID) : typeID(in_typeID)
-  {  objID = nextID++; };
+  {  objID = nextID++; 
+     owner = NULL;
+  };
 private:
   const TypeID typeID;
   ObjID objID;

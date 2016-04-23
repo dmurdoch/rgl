@@ -52,9 +52,18 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype)
     material.colorPerVertex(false);
     material.colors.recycle(1);
     quad = new QuadSet(material, 4, vertices, NULL, texcoords, true, 0, 1);
+    quad->owner = this;
   } else
     material.colors.recycle(1);    
 }
+
+Background::~Background()
+{
+  if (quad) {
+    quad->owner = NULL;
+    quad = NULL;
+  }
+}	
 
 GLbitfield Background::getClearFlags(RenderContext* renderContext)
 {
