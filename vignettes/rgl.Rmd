@@ -132,6 +132,7 @@ of low level functions in `rgl` to add graphical elements to the
 currently active plot.  The "primitive" shapes are those that are 
 native to OpenGL:
 
+Function                      | Description
 ----------------------------- | -----------
 `r indexfns("points3d")`:     | adds points
 `r indexfns("lines3d")`:      | adds lines
@@ -153,6 +154,7 @@ construct a figure from scratch.
 `rgl` also has a number of objects which it constructs
 from the primitives.
 
+Function                      | Description
 ----------------------------- | -----------
 `r indexfns(c("text3d", "texts3d"))`: | adds text
 `r indexfns("abclines3d")`:   | adds straight lines to plot (like `abline`)
@@ -166,6 +168,7 @@ from the primitives.
 
 The following low-level functions control the look of the graph:
 
+Function                             | Description
 ------------------------------------ | -----------
 `r indexfns(c("axes3d", "axis3d"))`: | add axes to plot
 `r indexfns(c("box3d", "bbox3d"))`:               | add box around plot
@@ -312,6 +315,7 @@ described below.  We start with functions to generate them.
 These functions generate specific shapes.  Optional arguments allow
 attributes such as colour or transformations to be specified.
 
+Function                             | Description
 ------------------------------------ | -----------
 `r indexfns(c("tetrahedron3d", "cube3d", "octahedron3d", "dodecahedron3d", "icosahedron3d"))`: | Platonic solids
 `r indexfns(c("cuboctahedron3d", "oh3d"))`:             | other solids
@@ -340,6 +344,7 @@ shade3d(oh3d(col=cols[7]))
 
 These functions generate new shapes:
 
+Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("cylinder3d")`: | generate a tube or cylinder
 `r indexfns("polygon3d")`:  | generate a flat polygon by triangulation
@@ -348,10 +353,21 @@ These functions generate new shapes:
 `r indexfns("ellipse3d")`:  | generate an ellipsoid in various ways
 `r indexfns(c("tmesh3d", "qmesh3d"))`:  | generate a shape from vertices and faces
 `r indexfns("shapelist3d")`: | generate a shape by combining other shapes
+`as.mesh3d`:                 | a generic function; see below
 
 A related function is `r indexfns("triangulate")`, which takes a
 two dimensional polygon and divides it up into triangles using the 
 "ear-clipping" algorithm.
+
+The generic function `r indexfns("as.mesh3d")`
+is provided to allow data structures produced by
+other packages to be displayed as mesh
+structures.  Currently the following classes
+are supported:
+
+Class |  Package | Description
+----- |  ------- | -----------
+`r indexfns("deldir", pkg = "deldir")` | `deldir` | Triangulations of irregular point clouds 
 
 ### The underlying class structure for shapes
 
@@ -378,6 +394,7 @@ texcoords    | (optional) A 2 by n matrix of texture coordinates corresponding t
 
 The final set of functions manipulate and modify mesh objects:
 
+Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
@@ -387,7 +404,8 @@ The final set of functions manipulate and modify mesh objects:
 `rgl` has several functions to support displaying multiple different
 "subscenes" in the same window.  The high level functions are
 
------------------------------------- | -----------
+Function                  | Description
+------------------------- | -----------
 `r indexfns("mfrow3d")`:  | Multiple figures (like `r linkfn("par", text = 'par("mfrow")', pkg="graphics")`
 `r indexfns("layout3d")`: | Multiple figures (like `r linkfn("layout", pkg="graphics")`)
 `r indexfns("next3d")`:   | Move to the next figure (like `r linkfn("plot.new", pkg="graphics")` or `r linkfn("frame", pkg="graphics")`)
@@ -396,7 +414,8 @@ The final set of functions manipulate and modify mesh objects:
 
 There are also lower level functions.
 
------------------------------------- | -----------
+Function                           | Description
+---------------------------------- | -----------
 `r indexfns("newSubscene3d")`:     | Create a new subscene, with fine control over what is inherited from the parent
 `r indexfns("currentSubscene3d")`: | Report on the active subscene
 `r indexfns("subsceneInfo")`:      | Get information on current subscene
@@ -423,7 +442,8 @@ refers to the mouse wheel.
 The button actions generally correspond to click and drag operations.
 Possible values for `r indexfns("mouseMode", '<code>"mouseMode"</code>')` for buttons or the wheel are as follows:
 
---------       | ---------
+Mode           | Description
+-------------- | ---------
 `"none"`       | No action
 `"trackball"`  | The mouse acts as a virtual trackball. Clicking and dragging rotates the scene
 `"xAxis"`, `"yAxis"`, `"zAxis"`      | Like `"trackball"`, but restricted to rotation about one axis
@@ -438,6 +458,7 @@ Possible values for `r indexfns("mouseMode", '<code>"mouseMode"</code>')` for bu
 The following functions make use of the mouse for selection within a 
 scene.
 
+Function                     | Description
 ---------------------------- | -----------
 `r indexfns("identify3d")`   | like the classic graphics `r linkfn("identify", pkg="graphics")` function
 `r indexfns("select3d")`     | returns a function that tests whether a coordinate was selected
@@ -454,6 +475,7 @@ animations.  These are based on functions that update the
 scene according to the current real-world time, and repeated
 calls to those.  The functions are:
 
+Function               | Description
 ---------------------- | -------------
 `r indexfns("play3d")` | Repeatedly call the update function 
 `r indexfns("spin3d")` | Update the display by rotating at a constant rate
@@ -472,6 +494,7 @@ by other software, or to read them in.
 
 In order from highest fidelity to lowest, the functions are:
 
+Function    | Description
 ----------- | -------------
 `r indexfns("scene3d")`    | Save a scene to an R variable, which can be saved and reloaded
 `r indexfns("writeWebGL")` | Write HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
@@ -486,6 +509,7 @@ to use `rgl` on a "headless" system.
 There are also functions to save snapshots or other recordings of a scene,
 without any 3D information being saved:
 
+Function     | Description
 ------------ | -------------
 `r indexfns("snapshot3d")` | Save a PNG file bitmap of the scene
 `r indexfns("rgl.postscript")` | Save a Postscript, LaTeX, PDF, SVG or PGF vector rendering of the scene
@@ -516,6 +540,7 @@ to HTML and Javascript code.
 The functions below write HTML and Javascript for working with the 
 exported scene.  
 
+Function                             | Description
 ------------------------------------ | -------------
 `r indexfns("propertySlider")`       | insert a slider to make changes to a scene
 `r indexfns("clipplaneSlider")`      | insert a slider to control a clipping plane
@@ -534,6 +559,7 @@ exported scene.
 The following functions allow users to find information about them
 and manipulate them.
 
+Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("open3d")`               | open a new window
 `r indexfns("rgl.close")`            | close the current window
@@ -564,6 +590,7 @@ become linear transformations, with multiplication by a 4 by 4 matrix.
 
 `rgl` has the following functions to work with homogeneous coordinates:
 
+Function                             | Description
 ------------------------------------ | -----------
 `r indexfns(c("asEuclidean", "asHomogeneous"))`: | convert between homogeneous and Euclidean coordinates
 `r indexfns(c("rotate3d", "scale3d", "translate3d"))`:  | apply a transformation
