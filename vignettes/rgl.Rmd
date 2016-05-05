@@ -602,6 +602,32 @@ There is also a function `r indexfns("GramSchmidt")`, mainly for internal
 use:  it does a Gram-Schmidt orthogonalization of a 3x3 matrix,
 with some specializations for its use in `r linkfn("cylinder3d")`.
 
+### Working with other packages
+
+Sometimes it may be convenient to interactively
+rotate a scene to a particular view, then 
+display it in `lattice` or base graphics.
+The `r indexfns("rglToLattice")` and `r indexfns("rglToBase")` functions support this.
+
+For example, we first display the volcano data in `rgl`:
+```{r echo = 2:3}
+rgl.close()
+persp3d(volcano, col = "green")
+rglwidget()
+```
+This display is interactive, but we can reproduce the initial view using the
+`lattice` `r linkfn("wireframe", pkg = "lattice")` or base graphics `r linkfn("persp", pkg = "graphics")` functions:
+```{r}
+lattice::wireframe(volcano, col = "green", 
+		   screen = rglToLattice())
+angles <- rglToBase()
+persp(volcano, col = "green", shade = TRUE,
+      theta = angles$theta, phi = angles$phi)
+```
+
+Note that the `orientlib` package must be 
+available for these functions to work.
+
 ## Warning:  Work in Progress!
 
 This vignette is in a preliminary form.  Many aspects of the rgl
