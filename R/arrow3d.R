@@ -7,8 +7,8 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
 		     n = 3, 
 		     width = 1/3, 
 		     thickness = 0.618*width,
-		     smooth = FALSE, 
-		     spriteOrigin = NULL, ...){
+		     spriteOrigin = NULL, 
+		     plot = TRUE, ...){
  ##      p0: start point
  ##      p1: end point
  ## barblen: length of barb
@@ -18,7 +18,6 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
  ##       n: number of barbs
  ##   width: width of shaft as fraction of barb width
  ##   thickness: thickness of shaft as fraction of barb width	
- ##  smooth: should arrows be smooth?
  ##  spriteOrigin: origin if drawn as sprite
  ##     ...: args passed to lines3d for line styling
  ##
@@ -83,13 +82,12 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
    xyz <- xyz %*% t(gs)
    if (type == "extrusion") {
      thickness <- thickness*sqrt(sum((xyz[2,]-xyz[8,])^2))
-     ext <- extrude3d(xyz[,c(1,3)], thickness = thickness, smooth = smooth)
+     ext <- extrude3d(xyz[,c(1,3)], thickness = thickness)
    } else {
      mid <- xyz[1,3]
-     xyz[,3] <- xyz[,3] - mid
-     xyz <- xyz[xyz[,3] >= 0,]
-     xyz <- xyz[-nrow(xyz),]
-     ext <- turn3d(xyz[,c(1,3)], n = n, smooth = smooth)
+     xyz[,3] <- abs(xyz[,3] - mid)
+     xyz <- xyz[5:9,]
+     ext <- turn3d(xyz[,c(1,3)], n = n)
      ext$vb[2,] <- ext$vb[2,] + mid
      thickness <- 0
    }
@@ -100,15 +98,22 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
  } else
    xyz <- rgl.window2user(xyz)
  par3d(save)
- if (type == "flat")
-   id <- polygon3d(xyz, ...)
- else if (type %in% c("extrusion", "rotation"))
-   id <- shade3d(ext, ...)
- else
-   id <- segments3d(xyz, ...)
+ if (plot) {
+   if (type == "flat")
+     id <- polygon3d(xyz, ...)
+   else if (type %in% c("extrusion", "rotation"))
+     id <- shade3d(ext, ...)
+   else
+     id <- segments3d(xyz, ...)
  
- if (is.null(spriteOrigin))
-   invisible(id)
- else
-   invisible(sprites3d(spriteOrigin, shapes=id))
+   if (is.null(spriteOrigin))
+     invisible(id)
+   else
+     invisible(sprites3d(spriteOrigin, shapes=id))
+  } else {
+    if (type %in% c("extrusion", "rotation"))
+      ext
+    else
+      xyz
+  }
 }

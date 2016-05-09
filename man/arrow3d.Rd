@@ -11,7 +11,8 @@ arrow3d(p0 = c(1, 1, 1), p1 = c(0, 0, 0),
         barblen, s = 1/3, theta = pi/12, 
         type = c("extrusion", "lines", "flat", "rotation"), 
         n = 3, width = 1/3, thickness = 0.618 * width, 
-        smooth = FALSE, spriteOrigin = NULL, ...)
+        spriteOrigin = NULL, 
+        plot = TRUE, ...)
 }
 \arguments{
   \item{p0}{
@@ -43,12 +44,14 @@ Width of shaft as fraction of barb width.
   \item{thickness}{
 Thickness of shaft as fraction of barb width.
 }
-  \item{smooth}{
-Whether the solid arrows should be "smooth".
-}
   \item{spriteOrigin}{
 If arrow is to be replicated as sprites, the origins relative
 to which the sprites are drawn.
+}
+  \item{plot}{
+If \code{TRUE} (the default), plot the object;
+otherwise return the computed data that
+would be used to plot it.
 }
   \item{\dots}{
 Material properties passed to \code{\link{polygon3d}}, \code{\link{shade3d}} or \code{\link{segments3d}}.
@@ -79,14 +82,18 @@ handle), arrows will be drawn for each point
 specified, with \code{p0} and \code{p1} 
 interpreted relative to those origins.  The
 arrows will be drawn as 3D sprites which will
-maintain their orientation as the scene is rotated.
-
-
+maintain their orientation as the scene is rotated, so this is a good way to indicate
+particular locations of interest in the scene.
 }
 \value{
-Called mainly for the side effect of drawing
+If \code{plot = TRUE} (the default), this is
+called mainly for the side effect of drawing
 the arrow; invisibly returns the id(s) of 
 the objects drawn.
+
+If \code{plot = FALSE}, the data that would be
+used in the plot (not including material
+properties) is returned.
 }
 \author{
 Design based on \code{heplots::\link[heplots]{arrow3d}}, which contains modifications by Michael Friendly

@@ -229,3 +229,17 @@ translate3d.qmesh3d <- translate3d.mesh3d
 rotate3d.qmesh3d <- rotate3d.mesh3d
 scale3d.qmesh3d <- scale3d.mesh3d
 
+# for debugging
+showNormals <- function(obj, scale = 1) {
+  v <- obj$vb
+  n <- obj$normals
+  if (is.null(n)) {
+    warning("No normals found.")
+    return()
+  }
+  for (i in seq_len(ncol(n))) {
+    p0 <- v[1:3, i]/v[4, i]
+    p1 <- p0 + n[1:3, i]*scale
+    arrow3d(p0, p1, type = "lines")
+  }
+}
