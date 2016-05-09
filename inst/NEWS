@@ -732,7 +732,7 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1468
+0.95.1469
   - Gave better error when XQuartz is not found, tried for better
     test.
   - Added more information on backgrounds to scene3d() to allow
@@ -745,3 +745,5 @@ v0.94
     for a bug report on this.)
   - Added rglToLattice() and rglToBase() functions to compute Euler angles
     for the lattice wireframe(), cloud(), and base graphics persp() functions. 
+  - Added arrow3d() (based on the function of the same name in the
+    heplots package).
