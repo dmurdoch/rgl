@@ -1,10 +1,10 @@
 Package: rgl
-Version: 0.95.1470
+Version: 0.95.1474
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 3.2.0)
-Suggests: MASS, rglwidget (>= 0.1.1427), knitr, rmarkdown, deldir, orientlib, lattice
+Suggests: MASS, rglwidget (>= 0.1.1473), knitr, rmarkdown, deldir, orientlib, lattice
 Imports: graphics, grDevices, stats, utils
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for
