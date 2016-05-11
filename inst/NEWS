@@ -732,7 +732,7 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1474
+0.95.1475
   - Gave better error when XQuartz is not found, tried for better
     test.
   - Added more information on backgrounds to scene3d() to allow
@@ -747,3 +747,6 @@ v0.94
     for the lattice wireframe(), cloud(), and base graphics persp() functions. 
   - Added arrow3d() (based on the function of the same name in the
     heplots package).
+  - Added pch3d() to give an approximation
+to plotting symbols using pch=<number> in
+base graphics.

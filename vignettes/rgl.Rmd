@@ -164,6 +164,7 @@ Function                      | Description
 `r indexfns("spheres3d")`:    | adds spheres
 `r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
 `r indexfns("arrow3d")`:      | add an arrow to a scene
+`r indexfns("pch3d")`:	      | draw base-style plotting symbols
 
 ### Axes and other "decorations"
 
