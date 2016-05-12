@@ -9,7 +9,7 @@ suitable for use in animations.
 par3dinterp(times = NULL, userMatrix, scale, zoom, FOV, 
             method = c("spline", "linear"), 
             extrapolate = c("oscillate", "cycle", "constant", "natural"),
-            dev = rgl.cur(), subscene = currentSubscene3d(dev))
+            dev = rgl.cur(), subscene = par3d("listeners", dev = dev))
 }
 \arguments{
   \item{times}{ Times at which values are recorded or a list; see below }
@@ -56,6 +56,15 @@ is only supported with spline interpolation.
 \value{
 A function is returned.  The function takes one argument, and returns a list of 
 \code{par3d} settings interpolated to that time.
+}
+\note{
+Prior to rgl version 0.95.1476, the
+\code{subscene} argument defaulted to the
+current subscene, and any additional entries would
+be ignored by \code{\link{play3d}}.  The current
+default value of \code{par3d("listeners", dev = dev)} means that all subscenes that share 
+mouse responses will also share modifications
+by this function.
 }
 \author{Duncan Murdoch }
 \seealso{ \code{\link{play3d}} to play the animation. }

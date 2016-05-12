@@ -732,7 +732,7 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1475
+0.95.1476
   - Gave better error when XQuartz is not found, tried for better
     test.
   - Added more information on backgrounds to scene3d() to allow
@@ -750,3 +750,5 @@ v0.94
   - Added pch3d() to give an approximation
 to plotting symbols using pch=<number> in
 base graphics.
+  - Added support for control of multiple subscenes
+to spin3d(), par3dinterp(), play3d() and movie3d().

@@ -7,7 +7,7 @@ spin an rgl scene at a fixed rate.
 }
 \usage{
 spin3d(axis = c(0, 0, 1), rpm = 5,
-       dev = rgl.cur(), subscene = currentSubscene3d(dev))
+       dev = rgl.cur(), subscene = par3d("listeners", dev = dev))
 }
 \arguments{
   \item{axis}{ The desired axis of rotation }
@@ -22,6 +22,15 @@ is created.  This function
 calculates and returns a list containing \code{userMatrix} updated by
 spinning the base matrix for \code{time} seconds at \code{rpm} revolutions per
 minute about the specified \code{axis}.
+}
+\note{
+Prior to rgl version 0.95.1476, the
+\code{subscene} argument defaulted to the
+current subscene, and any additional entries would
+be ignored by \code{\link{play3d}}.  The current
+default value of \code{par3d("listeners", dev = dev)} means that all subscenes that share 
+mouse responses will also share modifications
+by this function.
 }
 \author{ Duncan Murdoch }
 \seealso{ \code{\link{play3d}} to play the animation }

@@ -31,7 +31,7 @@ toRotmatrix <- function(x) {
 
 par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
                      extrapolate = c("oscillate","cycle","constant", "natural"),
-                     dev = rgl.cur(), subscene = currentSubscene3d(dev)) {  
+                     dev = rgl.cur(), subscene = par3d("listeners", dev = dev)) {  
     force(dev)
     force(subscene)
     
@@ -128,7 +128,7 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
     }
 }
 
-spin3d <- function(axis = c(0, 0, 1), rpm = 5, dev = rgl.cur(), subscene = currentSubscene3d(dev)) {
+spin3d <- function(axis = c(0, 0, 1), rpm = 5, dev = rgl.cur(), subscene = par3d("listeners", dev = dev)) {
     force(axis)
     force(rpm)    
     force(dev)
@@ -151,7 +151,14 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
        time <- proc.time()[3] - start
        if (time > duration || rgl.selectstate()$state == msABORT) return(invisible(NULL))
        stopifnot(rgl.cur() != 0)
-       par3d(f(time, ...))
+       args <- f(time, ...)
+       subs <- args$subscene
+       if (is.null(subs))
+       	  subs <- currentSubscene3d(dev)
+       else
+       	  args$subscene <- NULL
+       for (s in subs)
+          par3d(args, subscene = s)
     }
 }
 
@@ -167,7 +174,14 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
 	time <- i/fps        
 	if(rgl.cur() != dev) rgl.set(dev)
 	stopifnot(rgl.cur() != 0)
-	par3d(f(time, ...))
+	args <- f(time, ...)
+	subs <- args$subscene
+	if (is.null(subs))
+	    subs <- currentSubscene3d(dev)
+	else
+	    args$subscene <- NULL
+	for (s in subs)
+	    par3d(args, subscene = s)
 	filename <- sprintf("%s%03d.png",frames,i)
 	if (verbose) {
 	    cat(gettextf("Writing '%s'\r", filename))

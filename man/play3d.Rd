@@ -69,6 +69,11 @@ As of rgl version 0.94, the \code{dev} argument is not needed:  the
 function \code{f} can specify its device, as \code{\link{spin3d}} does, 
 for example.  However, if \code{dev} is specified, it will be selected
 as the current device as each update is played.
+
+As of rgl version 0.95.1476, \code{f} can 
+include multiple values in a \code{"subscene"}
+component, and \code{par3d()} will be called
+for each of them.
 }
 \value{
 This function is called for the side effect of its repeated calls to \code{f}.
