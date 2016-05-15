@@ -72,7 +72,7 @@ property int vertex2\n", file=con)
     if (withColors) {
       colors <- rgl.attrib(id, "colors")
       if (nrow(colors) == 1)
-        colors <- colors[rep(1, nrow(vertices)),]
+        colors <- colors[rep(1, nrow(vertices)),, drop = FALSE]
     }
     if (withNormals) {
       normals <- rgl.attrib(id, "normals")
@@ -148,7 +148,7 @@ property int vertex2\n", file=con)
     n <- nrow(vertices)    
     colors <- rgl.attrib(id, "colors")
     if (nrow(colors) == 1)
-      colors <- colors[rep(1, n),]
+      colors <- colors[rep(1, n),, drop = FALSE]
     radii <- rgl.attrib(id, "radii")
     radii <- rep(radii, length.out=n)
     x <- subdivision3d(icosahedron3d(),3)
