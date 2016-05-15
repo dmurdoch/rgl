@@ -1,6 +1,6 @@
-writeASY <- function(outtype = c("pdf", "eps", "asy", "latex", "pdflatex"),
+writeASY <- function(title = "scene",
+		     outtype = c("pdf", "eps", "asy", "latex", "pdflatex"),
 		     prc = TRUE,
-	             title = "scene", 
 		     runAsy = "asy %filename%",
                      ids = NULL) {
   withColors <- TRUE
@@ -87,30 +87,6 @@ import three;', prc))
       	writePoly(vertices[c((i-1)*nx + j, i*nx + j, i*nx + j + 1, (i-1)*nx + j + 1),])
   }
   
-  writeMesh <- function(mesh, scale=1, offset=c(0,0,0)) {
-    vertices <- asEuclidean(t(mesh$vb))*scale 
-    vertices <- vertices + rep(offset, each=nrow(vertices))
-    if (withColors) {
-      colors <- mesh$material$col
-      if (!length(colors)) colors <- material3d("color")
-      colors <- rep(colors, length=nrow(vertices))
-      colors <- t(col2rgb(colors, alpha=TRUE))
-    }
-    if (withNormals) 
-      normals <- asEuclidean(t(mesh$normals))
-    base <- nrow(Vertices)
-    Vertices <<- rbind(Vertices, cbind(vertices, 
-                                       if (withColors) colors,
-                                       if (withNormals) normals))
-    
-    nt <- length(mesh$it)/3
-    nq <- length(mesh$ib)/4
-    if (nt) 
-      Triangles <<- rbind(Triangles, t(mesh$it) - 1 + base)
-    if (nq)
-      Quads <<- rbind(Quads, t(mesh$ib) - 1 + base)
-  }
-
   writeSpheres <- function(id) {
     vertices <- getVertices(id)
     n <- nrow(vertices)    
@@ -143,14 +119,17 @@ import three;', prc))
   
   writeText <- function(id) {
     vertices <- getVertices(id)
-    texts <- rgl.attrib(id, "texts")
     n <- nrow(vertices)
+    texts <- rgl.attrib(id, "texts")
+    texts <- rep(texts, length.out = n)
+    adj <- rgl.attrib(id, "adj")
+    adj <- adj[rep(seq_len(nrow(adj)), length.out = n),, drop = FALSE]
     for (i in seq_len(n)) {
       setPen(vertices[i, rgba])	
       if (all(!is.na(vertices[i, 1:3]))) 
-      	result <<- c(result, subst('draw((%x%, %y%, %z%), L = Label("%text%"));', 
+      	result <<- c(result, subst('label("%text%", position = (%x%, %y%, %z%), align = (%ax%,%ay%));', 
           x = vertices[i, 1], y = vertices[i, 2], z = vertices[i, 3],
-          text = texts[i]))
+          text = texts[i], ax = 1-2*adj[i, 1], ay = 1-2*adj[i, 2]))
     }
   }
   
