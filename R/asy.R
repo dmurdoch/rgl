@@ -2,6 +2,9 @@ writeASY <- function(title = "scene",
 		     outtype = c("pdf", "eps", "asy", "latex", "pdflatex"),
 		     prc = TRUE,
 		     runAsy = "asy %filename%",
+		     defaultFontsize = 12,
+		     width = 7, height = 7,
+		     ppi = 100,
                      ids = NULL) {
   withColors <- TRUE
   withNormals <- FALSE
@@ -12,18 +15,38 @@ writeASY <- function(title = "scene",
     outformat <- c(pdf = "pdf", eps = "eps", asy = "",
     	           latex = "eps", pdflatex = "pdf")[outtype]
     prc <- if (prc) "true" else "false"
+    userMatrix <- par3d("userMatrix")
+    defaultObserver <- (c(par3d("observer"), 1) %*% userMatrix)[1:3]
+    up <- (c(0, 1, 0, 1) %*% userMatrix)[1:3]
+    FOV <- par3d("FOV")*pi/180
+    if (FOV > 0) {
+      projection <- "perspective"
+      dist <- 0.8/tan(FOV/2)
+      defaultObserver <- defaultObserver*dist/sqrt(sum(defaultObserver^2))
+    } else 
+      projection <- "orthographic"
     result <<- c(result, subst(
 '// %title% produced by rgl', title),
       if (outtype %in% c("pdf", "eps")) subst(
 'settings.outformat = "%outformat%";', outformat),
       subst(
 'settings.prc = %prc%;
-size(5cm, 0);
-import three;', prc))
+size(%width%inches, %height%inches);
+import three;
+currentprojection = %projection%(%x%, %y%, %z%, up = (%ux%, %uy%, %uz%));
+defaultpen(fontsize(%defaultFontsize%));', 
+  prc, width, height,
+  x=defaultObserver[1], y=defaultObserver[2], z=defaultObserver[3],
+  ux = up[1], uy = up[2], uz = up[3],
+  projection,
+  defaultFontsize))
   }
   
   getVertices <- function(id) {
+    scale <- par3d("scale")
+    scale <- scale/avgScale()
     vertices <- rgl.attrib(id, "vertices")
+    vertices[,1:3] <- vertices[,1:3] %*% diag(scale)
     if (withColors) {
       colors <- rgl.attrib(id, "colors")
       if (nrow(colors) == 1)
@@ -40,13 +63,15 @@ import three;', prc))
   }
   
   rgba <- c("r", "g", "b", "a")
-  lastPen <- c(-1, -1, -1, -1)
-  setPen <- function(col) {
-    if (any(col != lastPen)) {
+  lastCol <- c(0,0,0,1)  
+  lastSize <- 0.5
+  setPen <- function(col = lastCol, size = lastSize) {
+    if (any(col != lastCol) || size != lastSize) {
       result <<- c(result, subst(
-  	'currentpen = rgb(%r%, %g%, %b%) + opacity(%a%);',
-  	r = col[1], g = col[2], b = col[3], a = col[4]))
-      lastPen <<- col
+  	'currentpen = rgb(%r%, %g%, %b%) + opacity(%a%) + linewidth(%size%);',
+  	r = col[1], g = col[2], b = col[3], a = col[4], size = size))
+      lastCol <<- col
+      lastSize <<- size
     }
   }
   	
@@ -108,6 +133,7 @@ import three;', prc))
   }  
    
   writePoints <- function(id) {
+    setPen(size = rgl.getmaterial(0, id)$size*72/ppi)
     vertices <- getVertices(id)
     n <- nrow(vertices)
     for (i in seq_len(n)) {
@@ -134,6 +160,7 @@ import three;', prc))
   }
   
   writeSegments <- function(id) {
+    setPen(size = rgl.getmaterial(0, id)$lwd*72/ppi)
     vertices <- getVertices(id)
     n <- nrow(vertices) %/% 2    
     for (i in seq_len(n)) {
@@ -149,6 +176,7 @@ import three;', prc))
   }
   
   writeLines <- function(id) {
+    setPen(size = rgl.getmaterial(0, id)$lwd*72/ppi)          
     vertices <- getVertices(id)
     n <- nrow(vertices)    
     inds <- seq_len(n)
@@ -173,9 +201,18 @@ import three;', prc))
       result <<- c(result, ');')
   }
   
+  writeBackground <- function(id) {
+    col <- rgl.attrib(id, "color")
+    result <<- c(result, subst(
+      'currentlight.background = rgb(%r%, %g%, %b%);',
+      r = col[1], g=col[2], b=col[3]
+    ))
+  }
+  
   knowntypes <- c("points", "linestrip", "lines",
   		  "text", "triangles", "quads", "surface",
-  		  "spheres", "planes", "abclines")
+  		  "spheres", "planes", "abclines",
+  		  "background")
   
   #  Execution starts here!
 
@@ -188,7 +225,7 @@ import three;', prc))
   } else dobbox <- FALSE 
   
   if (is.null(ids)) {
-    ids <- rgl.ids()
+    ids <- rgl.ids(c("shapes", "background"))
     types <- as.character(ids$type)
     ids <- ids$id
   } else {
@@ -226,10 +263,10 @@ import three;', prc))
       abclines =,
       lines = writeSegments(ids[i]),
       linestrip = writeLines(ids[i]),
-      text = writeText(ids[i])
+      text = writeText(ids[i]),
+      background = writeBackground(ids[i])
     )
   }
-  
   if (outtype %in% c("latex", "pdflatex")) {
     filename <- paste0(title, ".tex")
     result <- c("\\begin{asy}", result, "\\end{asy}")

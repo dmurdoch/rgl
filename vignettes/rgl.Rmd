@@ -500,6 +500,7 @@ Function    | Description
 ----------- | -------------
 `r indexfns("scene3d")`    | Save a scene to an R variable, which can be saved and reloaded
 `r indexfns("writeWebGL")` | Write HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
+`r indexfns("writeASY")`   | Write files for Asymptote
 `r indexfns("writePLY")`   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`   | Read or write OBJ files (commonly used in 3D graphics)
 `r indexfns(c("readSTL", "writeSTL"))`   | Read or write STL files (also common in 3D printing)

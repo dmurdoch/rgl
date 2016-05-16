@@ -113,7 +113,7 @@ the copyright notice and license for free use) is included in the file named by
 \code{system.file("htmlwidgets/lib/CanvasMatrix.src.js", package = "rglwidget")}.  
 }
 \seealso{
-\code{\link{scene3d}} saves a copy of a scene to an R variable;
+\code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{writeASY}},
 \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
 write the scene to a file in various other formats.
 }

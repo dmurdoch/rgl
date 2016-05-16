@@ -15,6 +15,9 @@ writeASY(title = "scene",
          outtype = c("pdf", "eps", "asy", "latex", "pdflatex"), 
          prc = TRUE, 
          runAsy = "asy \%filename\%", 
+         defaultFontsize = 12,
+         width = 7, height = 7,
+         ppi = 100,
          ids = NULL)
 }
 \arguments{
@@ -30,6 +33,17 @@ The base of the filename to produce.
   \item{runAsy}{
 Code to run the Asymptote program.
 }
+  \item{defaultFontsize}{
+The default fontsize for text. 
+  }
+  \item{width, height}{
+Width and height of the output image, in inches.
+  }
+  \item{ppi}{
+\dQuote{Pixels per inch} to assume when converting
+line widths and point sizes (which rgl measures in 
+pixels).
+  }
   \item{ids}{
 If not \code{NULL}, write out just these
 rgl objects.
@@ -57,6 +71,16 @@ Duncan Murdoch
 This function is currently under development and limited in the quality
 of output it produces.  Arguments will likely
 change.
+
+There are a number of differences between the interactive display in 
+Asymptote and the display in rgl.  In particular, many objects that are
+a fixed size in rgl will scale with the image in Asymptote.  Defaults
+have been chosen somewhat arbitrarily; tweaking will likely be needed.
+}
+\seealso{
+\code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{writeWebGL}},
+\code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+write the scene to a file in various other formats.
 }
 \examples{
 x <- rnorm(20)
