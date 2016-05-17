@@ -66,11 +66,20 @@ defaultpen(fontsize(%defaultFontsize%));',
   lastCol <- c(0,0,0,1)  
   lastSize <- 0.5
   setPen <- function(col = lastCol, size = lastSize) {
-    if (any(col != lastCol) || size != lastSize) {
+    if (any(col[1:3] != lastCol[1:3])) {
       result <<- c(result, subst(
-  	'currentpen = rgb(%r%, %g%, %b%) + opacity(%a%) + linewidth(%size%);',
-  	r = col[1], g = col[2], b = col[3], a = col[4], size = size))
-      lastCol <<- col
+  	'currentpen = colorless(currentpen) + rgb(%r%, %g%, %b%);', 
+  	r = col[1], g = col[2], b = col[3]))
+      lastCol[1:3] <<- col[1:3]
+    }
+    if (col[4] != lastCol[4]) {
+      result <<- c(result, subst(
+    	  'currentpen += opacity(%a%);', a = col[4]))
+      lastCol[4] <<- col[4]
+    }
+    if (size != lastSize) {
+      result <<- c(result, subst(
+    	'currentpen += linewidth(%size%);', size))
       lastSize <<- size
     }
   }
