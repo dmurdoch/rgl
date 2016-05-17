@@ -158,7 +158,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   writeSpheres <- function(id) {
     vertices <- getVertices(id)
     n <- nrow(vertices)    
-    radii <- get.attrib(id, "radii")
+    radii <- get.attrib(id, "radii")/4
     radii <- rep(radii, length.out=n)
     for (i in seq_len(n)) {
       setPen(vertices[i, rgba])
@@ -203,7 +203,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   }
   
   writeSegments <- function(id) {
-    setPen(size = getmaterial(0, id)$lwd*72/ppi)
+    setPen(size = getmaterial(id)$lwd*72/ppi)
     vertices <- getVertices(id)
     n <- nrow(vertices) %/% 2    
     for (i in seq_len(n)) {
@@ -219,7 +219,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   }
   
   writeLines <- function(id) {
-    setPen(size = getmaterial(0, id)$lwd*72/ppi)          
+    setPen(size = getmaterial(id)$lwd*72/ppi)          
     vertices <- getVertices(id)
     n <- nrow(vertices)    
     inds <- seq_len(n)
@@ -261,12 +261,14 @@ defaultpen(fontsize(%defaultFontsize%));',
 
   if (NROW(bbox <- get.ids("bboxdeco")) && (is.null(ids) || bbox$id %in% ids)) {
     ids <- setdiff(ids, bbox$id)
-    save <- par3d(skipRedraw = TRUE)
+    dev <- open3d(useNULL = TRUE)
+    points3d(matrix(get.par3d("bbox"), nrow=2))
     id <- bbox$id
-    bbox <- convertBBox(verts = get.attrib(id, "vertices"),
+    bboxids <- convertBBox(verts = get.attrib(id, "vertices"),
                         text = get.attrib(id, "text"),
                         mat = getmaterial(id))
-    on.exit({ rgl.pop(id=bbox); par3d(save) }, add=TRUE)
+    bbox <- scene3d()
+    rgl.close() # the NULL dev
     dobbox <- TRUE
   } else dobbox <- FALSE 
   
@@ -275,7 +277,6 @@ defaultpen(fontsize(%defaultFontsize%));',
     types <- as.character(ids$type)
     ids <- ids$id
   } else {
-    if (dobbox) ids <- c(ids, bbox)
     allids <- get.ids()
     ind <- match(ids, allids$id)
     keep <- !is.na(ind)
@@ -283,7 +284,13 @@ defaultpen(fontsize(%defaultFontsize%));',
     			    domain = NA)
     ids <- ids[keep]
     types <- allids$type[ind[keep]]
-  }  
+  }
+  if (dobbox) {
+    bboxofs <- max(ids) - min(bboxids) + 1
+    scene$objects[as.character(bboxids + bboxofs)] <- bbox$objects[as.character(bboxids)]
+    ids <- c(ids, bboxids + bboxofs)
+    types <- c(types, vapply(bbox$objects[as.character(bboxids)], function(x) x$type, ""))
+  }
     
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
