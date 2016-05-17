@@ -18,12 +18,12 @@ rglwidgetCheck <- function() {
     stop("This function requires the rglwidget package to be installed.")
 }
 
-convertBBox <- function(id) {
-  verts <- rgl.attrib(id, "vertices")
-  text <- rgl.attrib(id, "text")
+convertBBox <- function(id,
+  verts = rgl.attrib(id, "vertices"),
+  text = rgl.attrib(id, "text"),
+  mat = rgl.getmaterial(id = id)) {
   if (!length(text))
     text <- rep("", NROW(verts))
-  mat <- rgl.getmaterial(id = id)
   if (length(mat$color) > 1)
     mat$color <- mat$color[2] # We ignore the "box" colour
 

@@ -63,8 +63,12 @@ defaultpen(fontsize(%defaultFontsize%));',
     data.frame(id = as.numeric(ids[keep]), type = types[keep])
   }
   
-  getmaterial <- function(id) 
-    scene$objects[[as.character(id)]]$material
+  getmaterial <- function(id) {
+    result <- scene$material
+    this <- scene$objects[[as.character(id)]]$material
+    result[names(this)] <- this
+    result
+  }
   
   getVertices <- function(id) {
     scale <- get.par3d("scale")
@@ -258,7 +262,10 @@ defaultpen(fontsize(%defaultFontsize%));',
   if (NROW(bbox <- get.ids("bboxdeco")) && (is.null(ids) || bbox$id %in% ids)) {
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
-    bbox <- convertBBox(bbox$id)
+    id <- bbox$id
+    bbox <- convertBBox(verts = get.attrib(id, "vertices"),
+                        text = get.attrib(id, "text"),
+                        mat = getmaterial(id))
     on.exit({ rgl.pop(id=bbox); par3d(save) }, add=TRUE)
     dobbox <- TRUE
   } else dobbox <- FALSE 
