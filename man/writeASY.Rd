@@ -11,7 +11,8 @@ write an Asymptote program to approximate
 an rgl scene.
 }
 \usage{
-writeASY(title = "scene", 
+writeASY(scene = scene3d(),
+         title = "scene", 
          outtype = c("pdf", "eps", "asy", "latex", "pdflatex"), 
          prc = TRUE, 
          runAsy = "asy \%filename\%", 
@@ -21,6 +22,7 @@ writeASY(title = "scene",
          ids = NULL)
 }
 \arguments{
+  \item{scene}{rgl scene object}
   \item{outtype}{
 What type of file to write?  See Details.
 }
@@ -88,6 +90,6 @@ y <- rnorm(20)
 z <- rnorm(20)
 plot3d(x, y, z, type = "s", col = "red")
 setwd(tempdir())
-writeASY("interactive")  # Produces interactive.pdf
-writeASY("noninteractive", prc = FALSE) # Produces noninteractive.pdf
+writeASY(title = "interactive")  # Produces interactive.pdf
+writeASY(title = "noninteractive", prc = FALSE) # Produces noninteractive.pdf
 }

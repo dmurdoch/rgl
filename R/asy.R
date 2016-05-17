@@ -1,4 +1,5 @@
-writeASY <- function(title = "scene",
+writeASY <- function(scene = scene3d(),
+                     title = "scene",
 		     outtype = c("pdf", "eps", "asy", "latex", "pdflatex"),
 		     prc = TRUE,
 		     runAsy = "asy %filename%",
@@ -15,10 +16,10 @@ writeASY <- function(title = "scene",
     outformat <- c(pdf = "pdf", eps = "eps", asy = "",
     	           latex = "eps", pdflatex = "pdf")[outtype]
     prc <- if (prc) "true" else "false"
-    userMatrix <- par3d("userMatrix")
-    defaultObserver <- (c(par3d("observer"), 1) %*% userMatrix)[1:3]
+    userMatrix <- get.par3d("userMatrix")
+    defaultObserver <- (c(get.par3d("observer"), 1) %*% userMatrix)[1:3]
     up <- (c(0, 1, 0, 1) %*% userMatrix)[1:3]
-    FOV <- par3d("FOV")*pi/180
+    FOV <- get.par3d("FOV")*pi/180
     if (FOV > 0) {
       projection <- "perspective"
       dist <- 0.8/tan(FOV/2)
@@ -42,18 +43,41 @@ defaultpen(fontsize(%defaultFontsize%));',
   defaultFontsize))
   }
   
+  # simulate rgl.attrib
+  get.attrib <- function(id, attrib) { 
+    obj <- scene$objects[[as.character(id)]]
+    obj[[attrib]]
+  }
+  
+  # simulate rgl.ids
+  get.ids <- function(type = "shapes") {
+    ids <- names(scene$objects)
+    types <- vapply(ids, function(x) scene$objects[[x]]$type, "")
+    if (length(s <- which(type %in% "shapes"))) {
+      type <- c(type[-s], "points", "linestrip", "lines",
+                "text", "triangles", "quads", "surface",
+                "spheres", "planes", "abclines",
+                "clipplanes", "sprites")
+    }
+    keep <- types %in% type
+    data.frame(id = as.numeric(ids[keep]), type = types[keep])
+  }
+  
+  getmaterial <- function(id) 
+    scene$objects[[as.character(id)]]$material
+  
   getVertices <- function(id) {
-    scale <- par3d("scale")
+    scale <- get.par3d("scale")
     scale <- scale/avgScale()
-    vertices <- rgl.attrib(id, "vertices")
+    vertices <- get.attrib(id, "vertices")
     vertices[,1:3] <- vertices[,1:3] %*% diag(scale)
     if (withColors) {
-      colors <- rgl.attrib(id, "colors")
+      colors <- get.attrib(id, "colors")
       if (nrow(colors) == 1)
         colors <- colors[rep(1, nrow(vertices)),,drop = FALSE]
     }
     if (withNormals) {
-      normals <- rgl.attrib(id, "normals")
+      normals <- get.attrib(id, "normals")
       if (!nrow(normals))
       	normals <- 0*vertices
     }
@@ -62,6 +86,12 @@ defaultpen(fontsize(%defaultFontsize%));',
           if (withNormals) normals)
   }
   
+  get.par3d <- function(attr = NULL) {
+    par3d <- scene$rootSubscene$par3d
+    if (!is.null(attr))
+      par3d <- par3d[[attr]]
+    par3d
+  }
   rgba <- c("r", "g", "b", "a")
   lastCol <- c(0,0,0,1)  
   lastSize <- 0.5
@@ -113,7 +143,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   
   writeSurface <- function(id) {
     vertices <- getVertices(id)
-    dims <- rgl.attrib(id, "dim")
+    dims <- get.attrib(id, "dim")
     nx <- dims[1]
     nz <- dims[2]
     for (i in seq_len(nz)[-nz]) 
@@ -124,7 +154,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   writeSpheres <- function(id) {
     vertices <- getVertices(id)
     n <- nrow(vertices)    
-    radii <- rgl.attrib(id, "radii")
+    radii <- get.attrib(id, "radii")
     radii <- rep(radii, length.out=n)
     for (i in seq_len(n)) {
       setPen(vertices[i, rgba])
@@ -135,14 +165,14 @@ defaultpen(fontsize(%defaultFontsize%));',
   }  
   
   avgScale <- function() {
-    bbox <- par3d("bbox")
+    bbox <- get.par3d("bbox")
     ranges <- c(bbox[2]-bbox[1], bbox[4]-bbox[3], bbox[6]-bbox[5])
     if (prod(ranges) == 0) 1
     else exp(mean(log(ranges)))
   }  
    
   writePoints <- function(id) {
-    setPen(size = rgl.getmaterial(0, id)$size*72/ppi)
+    setPen(size = getmaterial(id)$size*72/ppi)
     vertices <- getVertices(id)
     n <- nrow(vertices)
     for (i in seq_len(n)) {
@@ -155,9 +185,9 @@ defaultpen(fontsize(%defaultFontsize%));',
   writeText <- function(id) {
     vertices <- getVertices(id)
     n <- nrow(vertices)
-    texts <- rgl.attrib(id, "texts")
+    texts <- get.attrib(id, "texts")
     texts <- rep(texts, length.out = n)
-    adj <- rgl.attrib(id, "adj")
+    adj <- get.attrib(id, "adj")
     adj <- adj[rep(seq_len(nrow(adj)), length.out = n),, drop = FALSE]
     for (i in seq_len(n)) {
       setPen(vertices[i, rgba])	
@@ -169,7 +199,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   }
   
   writeSegments <- function(id) {
-    setPen(size = rgl.getmaterial(0, id)$lwd*72/ppi)
+    setPen(size = getmaterial(0, id)$lwd*72/ppi)
     vertices <- getVertices(id)
     n <- nrow(vertices) %/% 2    
     for (i in seq_len(n)) {
@@ -185,7 +215,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   }
   
   writeLines <- function(id) {
-    setPen(size = rgl.getmaterial(0, id)$lwd*72/ppi)          
+    setPen(size = getmaterial(0, id)$lwd*72/ppi)          
     vertices <- getVertices(id)
     n <- nrow(vertices)    
     inds <- seq_len(n)
@@ -211,7 +241,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   }
   
   writeBackground <- function(id) {
-    col <- rgl.attrib(id, "color")
+    col <- get.attrib(id, "colors")
     result <<- c(result, subst(
       'currentlight.background = rgb(%r%, %g%, %b%);',
       r = col[1], g=col[2], b=col[3]
@@ -225,7 +255,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   
   #  Execution starts here!
 
-  if (NROW(bbox <- rgl.ids("bboxdeco")) && (is.null(ids) || bbox$id %in% ids)) {
+  if (NROW(bbox <- get.ids("bboxdeco")) && (is.null(ids) || bbox$id %in% ids)) {
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
     bbox <- convertBBox(bbox$id)
@@ -234,12 +264,12 @@ defaultpen(fontsize(%defaultFontsize%));',
   } else dobbox <- FALSE 
   
   if (is.null(ids)) {
-    ids <- rgl.ids(c("shapes", "background"))
+    ids <- get.ids(c("shapes", "background"))
     types <- as.character(ids$type)
     ids <- ids$id
   } else {
     if (dobbox) ids <- c(ids, bbox)
-    allids <- rgl.ids()
+    allids <- get.ids()
     ind <- match(ids, allids$id)
     keep <- !is.na(ind)
     if (any(!keep)) warning(gettextf("Object(s) with id %s not found", paste(ids[!keep], collapse=" ")), 
