@@ -33,9 +33,13 @@ writeASY <- function(scene = scene3d(),
       subst(
 'settings.prc = %prc%;
 size(%width%inches, %height%inches);
-import three;
+import graph3;
 currentprojection = %projection%(%x%, %y%, %z%, up = (%ux%, %uy%, %uz%));
-defaultpen(fontsize(%defaultFontsize%));', 
+defaultpen(fontsize(%defaultFontsize%));
+ticklabel RGLScale(real s)
+{
+  return new string(real x) {return format(s*x);};
+}', 
   prc, width, height,
   x=defaultObserver[1], y=defaultObserver[2], z=defaultObserver[3],
   ux = up[1], uy = up[2], uz = up[3],
@@ -70,11 +74,19 @@ defaultpen(fontsize(%defaultFontsize%));',
     result
   }
   
-  getVertices <- function(id) {
+  getScaling <- function() {
     scale <- get.par3d("scale")
-    scale <- scale/avgScale()
-    vertices <- get.attrib(id, "vertices")
-    vertices[,1:3] <- vertices[,1:3] %*% diag(scale)
+    scale/avgScale()  
+  }
+  
+  getCentre <- function() {
+    bbox <- get.par3d("bbox")
+    c(mean(bbox[1:2]), mean(bbox[3:4]), mean(bbox[5:6]))
+  }
+  
+  getVertices <- function(id) {
+    scale <- getScaling()
+    vertices <- scale(get.attrib(id, "vertices"), center=FALSE, scale=1/scale)
     if (withColors) {
       colors <- get.attrib(id, "colors")
       if (nrow(colors) == 1)
@@ -176,7 +188,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   }  
    
   writePoints <- function(id) {
-    setPen(size = getmaterial(id)$size*72/ppi)
+    setPen(size = getmaterial(id)$size)
     vertices <- getVertices(id)
     n <- nrow(vertices)
     for (i in seq_len(n)) {
@@ -203,7 +215,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   }
   
   writeSegments <- function(id) {
-    setPen(size = getmaterial(id)$lwd*72/ppi)
+    setPen(size = getmaterial(id)$lwd)
     vertices <- getVertices(id)
     n <- nrow(vertices) %/% 2    
     for (i in seq_len(n)) {
@@ -219,7 +231,7 @@ defaultpen(fontsize(%defaultFontsize%));',
   }
   
   writeLines <- function(id) {
-    setPen(size = getmaterial(id)$lwd*72/ppi)          
+    setPen(size = getmaterial(id)$lwd)          
     vertices <- getVertices(id)
     n <- nrow(vertices)    
     inds <- seq_len(n)
@@ -252,28 +264,87 @@ defaultpen(fontsize(%defaultFontsize%));',
     ))
   }
   
+  writeBBox <- function(id) {
+    setPen(size = getmaterial(id)$lwd)
+    bbox <- get.par3d("bbox")
+    scale <- getScaling()
+    vertices <- getVertices(id)
+    ticks <- vertices[,1]
+    ticks <- ticks[!is.na(ticks)]
+    if (length(ticks))
+    	xticks <- subst('Ticks3(1, Ticks = new real[] {%ticks%},
+    			          ticklabel = RGLScale(%scale%))',
+    			scale = 1/scale[1], ticks = paste(ticks, collapse=","))
+    else
+    	xticks <- subst('Ticks3(1, ticklabel = RGLScale(%scale%))',
+    			scale = 1/scale[1])
+    ticks <- vertices[,2]
+    ticks <- ticks[!is.na(ticks)]
+    if (length(ticks))
+    	yticks <- subst('Ticks3(1, Ticks = new real[] {%ticks%},
+    			ticklabel = RGLScale(%scale%))',
+    			scale = 1/scale[2], ticks = paste(ticks, collapse=","))
+    else
+    	yticks <- subst('Ticks3(1, ticklabel = RGLScale(%scale%))',
+    			scale = 1/scale[2])
+    ticks <- vertices[,3]
+    ticks <- ticks[!is.na(ticks)]
+    if (length(ticks))
+    	zticks <- subst('Ticks3(1, Ticks = new real[] {%ticks%},
+    			ticklabel = RGLScale(%scale%))',
+    			scale = 1/scale[3], ticks = paste(ticks, collapse=","))
+    else
+    	xticks <- subst('Ticks3(1, ticklabel = RGLScale(%scale%))',
+    			scale = 1/scale[3])
+    bbox <- bbox * rep(scale, each = 2)
+    result <<- c(result, subst(
+      'xaxis3(axis=YZEquals(y=%ymin%, z=%zmin%),
+              xmin=%xmin%, xmax=%xmax%,
+              ticks = %xticks%);
+       xaxis3(axis=YZEquals(y=%ymin%, z=%zmax%),
+              xmin=%xmin%, xmax=%xmax%);
+       xaxis3(axis=YZEquals(y=%ymax%, z=%zmin%),
+              xmin=%xmin%, xmax=%xmax%);
+       xaxis3(axis=YZEquals(y=%ymax%, z=%zmax%),
+              xmin=%xmin%, xmax=%xmax%);
+       yaxis3(axis=XZEquals(x=%xmin%, z=%zmin%),
+              ymin=%ymin%, ymax=%ymax%,
+              ticks = %yticks%);
+       yaxis3(axis=XZEquals(x=%xmin%, z=%zmax%),
+              ymin=%ymin%, ymax=%ymax%);
+       yaxis3(axis=XZEquals(x=%xmax%, z=%zmin%),
+              ymin=%ymin%, ymax=%ymax%);
+       yaxis3(axis=XZEquals(x=%xmax%, z=%zmax%),
+              ymin=%ymin%, ymax=%ymax%);
+       zaxis3(axis=XYEquals(x=%xmin%, y=%ymin%),
+              zmin=%zmin%, zmax=%zmax%,
+              ticks = %zticks%);
+       zaxis3(axis=XYEquals(x=%xmin%, y=%ymax%),
+              zmin=%zmin%, zmax=%zmax%);
+       zaxis3(axis=XYEquals(x=%xmax%, y=%ymin%),
+              zmin=%zmin%, zmax=%zmax%);
+       zaxis3(axis=XYEquals(x=%xmax%, y=%ymax%),
+              zmin=%zmin%, zmax=%zmax%);',
+              xmin = bbox[1], xmax = bbox[2], ymin=bbox[3], ymax=bbox[4],
+              zmin=bbox[5], zmax=bbox[6], 
+              xticks, yticks, zticks))
+  }
+  
   knowntypes <- c("points", "linestrip", "lines",
   		  "text", "triangles", "quads", "surface",
   		  "spheres", "planes", "abclines",
-  		  "background")
+  		  "background", "bboxdeco")
   
   #  Execution starts here!
 
-  if (NROW(bbox <- get.ids("bboxdeco")) && (is.null(ids) || bbox$id %in% ids)) {
-    ids <- setdiff(ids, bbox$id)
-    dev <- open3d(useNULL = TRUE)
-    points3d(matrix(get.par3d("bbox"), nrow=2))
-    id <- bbox$id
-    bboxids <- convertBBox(verts = get.attrib(id, "vertices"),
-                        text = get.attrib(id, "text"),
-                        mat = getmaterial(id))
-    bbox <- scene3d()
-    rgl.close() # the NULL dev
-    dobbox <- TRUE
-  } else dobbox <- FALSE 
+  # We should write an Asymptote routine to draw
+  # the axes, but it appears none of the standard ones
+  # works.
+  
+  dobbox <- FALSE 
   
   if (is.null(ids)) {
-    ids <- get.ids(c("shapes", "background"))
+    ids <- get.ids(c("shapes", "background", "bboxdeco"))
     types <- as.character(ids$type)
     ids <- ids$id
   } else {
@@ -317,7 +388,8 @@ defaultpen(fontsize(%defaultFontsize%));',
       lines = writeSegments(ids[i]),
       linestrip = writeLines(ids[i]),
       text = writeText(ids[i]),
-      background = writeBackground(ids[i])
+      background = writeBackground(ids[i]),
+      bboxdeco = writeBBox(ids[i])
     )
   }
   if (outtype %in% c("latex", "pdflatex")) {
