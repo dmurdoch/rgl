@@ -36,6 +36,15 @@ size(%width%inches, %height%inches);
 import graph3;
 currentprojection = %projection%(%x%, %y%, %z%, up = (%ux%, %uy%, %uz%));
 defaultpen(fontsize(%defaultFontsize%));
+ticklabel RGLstrings(real[] at, string[] label)
+{
+  return new string(real x) {
+    int i = search(at, x);
+    if (i < 0) return "";
+    else return label[i];
+  };
+}
+
 ticklabel RGLScale(real s)
 {
   return new string(real x) {return format(s*x);};
@@ -140,7 +149,7 @@ ticklabel RGLScale(real s)
       v <- vertices[j, 1:3]
       result <<- c(result, subst('--(%x%, %y%, %z%)', x=v[1], y=v[2], z=v[3]))
     }
-    result <<- c(result, '--cycle));')
+    result <<- c(result, '--cycle), light=currentlight);')
   }
   
   writeTriangles <- function(id) {
@@ -330,37 +339,46 @@ ticklabel RGLScale(real s)
               xticks, yticks, zticks))
   }
   
+  writeLights <- function(ids) {
+    if (!length(ids))
+      result <<- c(result, 'currentlight = nolight;')
+    else {
+      col <- array(NA, c(length(ids), 3, 3))
+      pos <- matrix(NA, nrow=length(ids), ncol=3)
+      for (i in seq_along(ids)) {
+      	col[i,,] <- get.attrib(ids[i], "colors")[1:3, 1:3]
+      	pos[i,] <- get.attrib(ids[i], "vertices")[1,]
+      }
+      cols <- paste( paste0("rgb(", col[,1,1], ",", col[,1,2], ",", col[,1,3],")"), collapse=",")
+      result <<- c(result, subst('currentlight = light(ambient=new pen[] {%cols%},', cols))
+      cols <- paste( paste0("rgb(", col[,2,1], ",", col[,2,2], ",", col[,2,3],")"), collapse=",")
+      result <<- c(result, subst('diffuse = new pen[] {%cols%},', cols))
+      cols <- paste( paste0("rgb(", col[,3,1], ",", col[,3,2], ",", col[,3,3],")"), collapse=",")
+      result <<- c(result, subst('specular = new pen[] {%cols%},', cols))
+      pos <- paste( paste0("(", pos[,1], ",", pos[,2], ",", pos[,3], ")"), collapse = ",")      
+      result <<- c(result, subst('position = new triple[] {%pos%},
+viewport = %viewpoint%);', pos, viewpoint = if (get.attrib(ids[1], "viewpoint")) "true" else "false"))
+    }
+  }    
   knowntypes <- c("points", "linestrip", "lines",
   		  "text", "triangles", "quads", "surface",
   		  "spheres", "planes", "abclines",
-  		  "background", "bboxdeco")
+  		  "background", "bboxdeco", "light")
   
   #  Execution starts here!
-
-  # We should write an Asymptote routine to draw
-  # the axes, but it appears none of the standard ones
-  # works.
   
-  dobbox <- FALSE 
-  
+  allids <- get.ids(c("shapes", "background", "bboxdeco", "light"))
   if (is.null(ids)) {
-    ids <- get.ids(c("shapes", "background", "bboxdeco"))
+    ids <- allids
     types <- as.character(ids$type)
     ids <- ids$id
   } else {
-    allids <- get.ids()
     ind <- match(ids, allids$id)
     keep <- !is.na(ind)
     if (any(!keep)) warning(gettextf("Object(s) with id %s not found", paste(ids[!keep], collapse=" ")), 
     			    domain = NA)
     ids <- ids[keep]
     types <- allids$type[ind[keep]]
-  }
-  if (dobbox) {
-    bboxofs <- max(ids) - min(bboxids) + 1
-    scene$objects[as.character(bboxids + bboxofs)] <- bbox$objects[as.character(bboxids)]
-    ids <- c(ids, bboxids + bboxofs)
-    types <- c(types, vapply(bbox$objects[as.character(bboxids)], function(x) x$type, ""))
   }
     
   unknowntypes <- setdiff(types, knowntypes)
@@ -374,6 +392,9 @@ ticklabel RGLScale(real s)
   
   result <- NULL
   writeHeader()
+  
+  # Lights are done first.
+  writeLights(ids[types == "light"])
 
   for (i in seq_along(ids)) {
     result <<- c(result, subst('// %type% object %id%', type = types[i], id = ids[i]))
@@ -389,7 +410,8 @@ ticklabel RGLScale(real s)
       linestrip = writeLines(ids[i]),
       text = writeText(ids[i]),
       background = writeBackground(ids[i]),
-      bboxdeco = writeBBox(ids[i])
+      bboxdeco = writeBBox(ids[i]),
+      light = {}
     )
   }
   if (outtype %in% c("latex", "pdflatex")) {
