@@ -15,8 +15,11 @@ GramSchmidt <- function(v1, v2, v3, order=1:3) {
   rbind(v1, v2, v3)[order(order),]
 }
 
-cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL, 
-                       sides=8, section=NULL, closed=0, debug=FALSE, keepVars=FALSE) {
+cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 = NULL, 
+                       sides = 8, section = NULL, closed = 0, 
+		       rotationMinimizing = is.null(e2) && is.null(e3),
+		       debug = FALSE, keepVars = FALSE) {
+  force(rotationMinimizing) # Need this since e2 and e3 get changed later	
   center <- as.matrix(as.data.frame(xyz.coords(center)[c("x", "y", "z")]))
   n <- nrow(center)  
   inds <- seq_len(n)
@@ -49,8 +52,21 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   if (!is.null(e1)) {
     e1 <- as.matrix(as.data.frame(xyz.coords(e1)[c("x", "y", "z")]))
     e1 <- e1[rep(seq_len(nrow(e1)), len=n),] 
-  } else 
+  } else # if (n < 5)
     e1 <- (center[ind2,] - center[ind0,])[inds,]
+  # else { # Use high order approximation from Wang et al
+  #   i <- 3:(n-2)
+  #   e1 <- rbind(-25*center[1,] + 48*center[2,] - 36*center[3,] 
+  #   	        +16*center[4,] - 3*center[5,],
+  #   	        - 3*center[1,] - 10*center[2,] + 18*center[3,]
+  #   	        - 6*center[4,] + center[5,],
+  #   	            center[i-2,] - 8*center[i-1,] 
+  #   	        + 8*center[i+1,] -   center[i+2,],
+  #   	          3*center[n,] + 10*center[n-1,] - 18*center[n-2,]
+  #   	        + 6*center[n-3,] - center[n-4,],
+  #   	         25*center[n,] - 48*center[n-1,] + 36*center[n-2,] 
+  #   	        -16*center[n-3,] + 3*center[n-4,])
+  # }
   
   # Fix up degenerate cases by repeating existing ones, or using arbitrary ones
   zeros <- rowSums(e1^2) == 0
@@ -115,6 +131,26 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   e1 <- fixup(e1)
   e2 <- fixup(e2)
   e3 <- fixup(e3)
+  
+  if (rotationMinimizing) {
+    # Keep e1 and the first entries in e2 and e3,
+    # modify the rest according to Wang et al (2008).
+    t <- e1
+    r <- e2
+    s <- e3
+    for (i in seq_len(n-1)) {
+      v1 <- center[i+1,] - center[i,]
+      c1 <- sum(v1^2)
+      rL <- r[i,] - (2/c1)*sum(v1*r[i,])*v1
+      tL <- t[i,] - (2/c1)*sum(v1*t[i,])*v1
+      v2 <- t[i+1,] - tL
+      c2 <- sum(v2^2)
+      r[i+1,] <- rL - (2/c2)*sum(v2*rL)*v2
+      s[i+1,] <- xprod(t[i+1,], r[i+1,])
+    }
+    e2 <- r
+    e3 <- s
+  }
 
   radius <- rep(radius, len=n)
   twist <- rep(twist, len=n)
@@ -129,8 +165,16 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
     }
   }
   
-  if (closed > 0) n <- n-closed+1
-  
+  if (closed > 0) {
+    n <- n - closed + 1
+    if (isTRUE(all.equal(e1[1,], e1[n,]))) {
+      # Need to match starting and ending e2 as
+      # well.
+      angle <- atan2(sum(xprod(e2[1,], e2[n,])*e1[1,]),
+    	             sum(e2[1,]*e2[n,]))
+      twist <- twist + (twist[n] - twist[1] - angle)*(seq_len(n) - 1)/(n-1)
+    }
+  }
   if (is.null(section)) {
     theta <- seq(0, 2*pi, len=sides+1)[-1]
     section <- cbind(cos(theta), sin(theta), 0)
