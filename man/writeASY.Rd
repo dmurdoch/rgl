@@ -57,6 +57,15 @@ Asymptote is both a language describing a
 that language and produce output in a variety
 of formats including EPS, PDF (interactive
 or static), etc.
+
+The interactive scene produced with \code{prc = TRUE}
+requires \code{outtype = "pdf"}, and (as of this
+writing) has a number of limitations:
+\itemize{
+\item{As far as we know, only Adobe Acrobat Reader of a sufficiently recent version can display 
+these scenes.}
+\item{Current versions ignore lighting settings.}
+}
 }
 \value{
 The filename of the output file is returned
@@ -78,6 +87,8 @@ There are a number of differences between the interactive display in
 Asymptote and the display in rgl.  In particular, many objects that are
 a fixed size in rgl will scale with the image in Asymptote.  Defaults
 have been chosen somewhat arbitrarily; tweaking will likely be needed.
+
+Material properties of surfaces are not yet implemented.
 }
 \seealso{
 \code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{writeWebGL}},
