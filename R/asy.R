@@ -422,7 +422,7 @@ viewport = %viewpoint%);', pos, viewpoint = if (get.attrib(ids[1], "viewpoint"))
   base::writeLines(result, filename) 
   if (outtype %in% c("pdf", "eps")) {
     system(subst(runAsy, filename))
-    filename <- paste0(title, outtype)
+    filename <- paste0(title, ".", outtype)
   }
   invisible(filename)
 }
