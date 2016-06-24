@@ -1,5 +1,4 @@
 \name{rgl.attrib}
-\alias{rgl.attrib.count}
 \alias{rgl.attrib}
 \title{
 Get information about shapes
@@ -8,7 +7,6 @@ Get information about shapes
 Retrieves information about the shapes in a scene.
 }
 \usage{
-rgl.attrib.count(id, attrib)
 rgl.attrib(id, attrib, first = 1, 
 	last = rgl.attrib.count(id, attrib))
 }
@@ -40,7 +38,7 @@ and columns in the rectangular grid; \code{"cex"}, \code{"adj"},
 \code{"family"} and \code{"font"} apply only to text objects.
 }
 \value{
-\code{rgl.attrib.count} returns the count of the requested attribute.  \code{rgl.attrib}
+\code{rgl.attrib}
 returns the values of the attribute.  Attributes
 are mostly real-valued, with the following sizes:
 \tabular{lll}{
@@ -62,7 +60,7 @@ are mostly real-valued, with the following sizes:
 \code{"font"}   \tab 1 value    \tab font \cr
 }
 The \code{"texts"}, \code{"types"} and \code{"family"}
-attributes are character-valued; the flags
+attributes are character-valued; the \code{"flags"}
 attribute is logical valued, with named rows.
 
 These are returned as matrices with the row count equal to the count for the attribute,
@@ -72,11 +70,10 @@ and the columns as listed above.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{rgl.ids}}
+\code{\link{rgl.ids}}, \code{\link{rgl.attrib.info}}
 }
 \examples{
 p <- plot3d(rnorm(100), rnorm(100), rnorm(100), type = "s", col = "red")
-rgl.attrib.count(p["data"], "vertices")
 rgl.attrib(p["data"], "vertices", last = 10)
 }
 \keyword{ graphics }

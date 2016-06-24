@@ -732,7 +732,7 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1488
+0.95.1491
   - Gave better error when XQuartz is not found, tried for better
     test.
   - Added more information on backgrounds to scene3d() to allow
@@ -755,3 +755,5 @@ to spin3d(), par3dinterp(), play3d() and movie3d().
   - Added experimental function writeASY() for output in Asymptote format,
     which will allow inclusion in PDF files.
   - cylinder3d() now defaults to a rotation minimizing local frame.
+  - Added rgl.attrib.info() to display information about
+object attributes.

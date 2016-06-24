@@ -571,7 +571,7 @@ Function                             | Description
 `r indexfns("rgl.dev.list")`         | ids of all active devices
 `r indexfns("rgl.set")`              | set a particular device to be active
 `r indexfns("rgl.ids")`              | ids and types of all current objects
-`r indexfns(c("rgl.attrib", "rgl.attrib.count"))`: | attributes of objects in the scene
+`r indexfns(c("rgl.attrib", "rgl.attrib.info", "rgl.attrib.count"))`: | attributes of objects in the scene
 `r indexfns(c("pop3d", "rgl.pop"))`     | delete an object from the scene
 `r indexfns(c("clear3d", "rgl.clear"))`            | delete all objects of certain classes
 `r indexfns("rgl.projection")`        | return information about the current projection

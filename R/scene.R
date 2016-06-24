@@ -106,16 +106,45 @@ rgl.attrib.count <- function( id, attrib )
   result
 }
 
+rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
+            texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
+	    usermatrix=4, types=1, flags=1, offsets=1,
+	    family=1, font=1)
+
+rgl.attrib.info <- function( id = rgl.ids("all", 0)$id, attribs = NULL, showAll = FALSE) {
+  ncol <- rgl.attrib.ncol.values
+  if (is.null(attribs))
+    attribs <- names(ncol)
+  else if (is.numeric(attribs))
+    attribs <- names(ncol)[attribs]
+  na <- length(attribs)
+  ni <- length(id)
+  if (!ni) 
+    result <- data.frame(id = numeric(0), attrib = character(0),
+    		         nrow = numeric(0), ncol = numeric(0),
+    		         stringsAsFactors = FALSE)
+  else
+    result <- data.frame(id = rep(id, each = na),
+    		         attrib = rep(attribs, ni),
+  		         nrow = 0, 
+  		         ncol = rep(ncol[attribs], ni),
+		         stringsAsFactors = FALSE)
+  for (j in seq_len(ni)) 
+    for (i in seq_len(na))
+      result$nrow[i + na*(j - 1)] <- rgl.attrib.count(id[j], result$attrib[i])
+  if (!showAll)
+    result <- result[result$nrow != 0,]
+  rownames(result) <- NULL
+  result
+}	
+
 rgl.attrib <- function( id, attrib, first=1, 
                         last=rgl.attrib.count(id, attrib) )
 {
   stopifnot(length(attrib) == 1 && length(id) == 1 && length(first) == 1)
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
-  ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
-            texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
-            usermatrix=4, types=1, flags=1, offsets=1,
-  	    family=1, font=1)[attrib]
+  ncol <- rgl.attrib.ncol.values[attrib]
   count <- max(last - first + 1, 0)
   if (attrib %in% c(6, 13, 16)) { # texts, types and family
     if (count)
