@@ -17,4 +17,4 @@ SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional)
 BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr
-Remotes:  rforge/rgl/pkg/rglwidget
+Remotes:  svn::svn://svn.r-forge.r-project.org/svnroot/rgl/pkg/rglwidget
