@@ -85,7 +85,7 @@ to break his scene into smaller objects.  (And 65535 vertices may not be small e
 
 }
 \note{
-This function is deprecated in favour of the \code{rglwidget::rglwidget()} function.  
+This function is deprecated in favour of the \code{rglwidget()} function.  
 }
 
 \value{
@@ -110,7 +110,7 @@ contains multiple \code{writeWebGL} figures.
 
 Its source (including 
 the copyright notice and license for free use) is included in the file named by
-\code{system.file("htmlwidgets/lib/CanvasMatrix.src.js", package = "rglwidget")}.  
+\code{system.file("htmlwidgets/lib/CanvasMatrix.src.js", package = "rgl")}.  
 }
 \seealso{
 \code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{writeASY}},
@@ -118,7 +118,6 @@ the copyright notice and license for free use) is included in the file named by
 write the scene to a file in various other formats.
 }
 \examples{
-if (require(rglwidget)) {
   plot3d(rnorm(100), rnorm(100), rnorm(100), type = "s", col = "red")
   # This writes a copy into temporary directory 'webGL', and then displays it
   filename <- writeWebGL(dir = file.path(tempdir(), "webGL"), 
@@ -129,6 +128,5 @@ if (require(rglwidget)) {
   # Display the scene in a browser
   if (interactive())
     browseURL(paste0("file://", filename))
-}
 }
 \keyword{ graphics }

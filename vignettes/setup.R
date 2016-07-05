@@ -1,6 +1,5 @@
 options(rgl.useNULL=TRUE)
 library(rgl)
-library(rglwidget)
 
 if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.13.1"))
   warning("These vignettes assume pandoc version 1.13.1; older versions may give poor formatting.")
@@ -9,7 +8,7 @@ setupKnitr()
 
 documentedfns <- c()
 
-indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE, pkg = NA) {
+indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE, pkg = "rgl") {
   documentedfns <<- c(documentedfns, fns)
   anchors <- paste0('<a name="', fns, '">',
                     if (show) linkfn(fns, text, pkg = pkg),

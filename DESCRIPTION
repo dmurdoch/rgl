@@ -1,11 +1,13 @@
 Package: rgl
-Version: 0.95.1494
+Version: 0.95.1500
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 3.2.0)
-Suggests: MASS, rglwidget (>= 0.1.1473), knitr, rmarkdown, deldir, orientlib, lattice
-Imports: graphics, grDevices, stats, utils
+Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d
+Imports: graphics, grDevices, stats, utils, 
+         htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20), shiny,
+         magrittr
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for
     constructing representations of geometric objects (cube3d(), etc.).  Output
@@ -17,4 +19,3 @@ SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional)
 BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr
-Remotes:  svn::svn://svn.r-forge.r-project.org/svnroot/rgl/pkg/rglwidget

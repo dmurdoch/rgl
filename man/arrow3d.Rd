@@ -14,7 +14,6 @@ arrow3d(p0 = c(1, 1, 1), p1 = c(0, 0, 0),
         spriteOrigin = NULL, 
         plot = TRUE, ...)
 }
-}
 \arguments{
   \item{p0}{
 The base of the arrow.

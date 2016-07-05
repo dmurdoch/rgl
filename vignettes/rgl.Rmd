@@ -45,9 +45,6 @@ Javascript and WebGL enabled in your browser.  Some older browsers
 may not support this -- see http://get.webgl.org for tests
 and links to a discussion.
 
-The WebGL figures were produced using the `rglwidget`
-package, version `r packageVersion("rglwidget")`.
-
 
 ## Basics and High Level Functions
 
@@ -119,8 +116,8 @@ parts of the surface with log likelihood values near the maximum.
 Note:  this example used the `knitr` hook functions 
 (see `r linkfn("setupKnitr")`) to insert the
 scene into this vignette; the previous example used the `rglwidget`
-function from the package of the same name.  We generally
-recommend the newer `r linkfn("rglwidget", pkg="rglwidget")` approach.
+function.  We generally
+recommend the newer `r linkfn("rglwidget")` approach.
 
 ## Adding Graphical Elements
 
@@ -487,7 +484,7 @@ See the `r linkfn("movie3d")` function for a way to output an animation
 to a file on disk.  
 Animations are not currently supported 
 in the HTML written by `r linkfn("writeWebGL")`, though the
-`rglwidget::playwidget` function provides equivalent functionality.
+`playwidget` function provides equivalent functionality.
 
 ### Exporting and importing scenes
 
@@ -529,13 +526,29 @@ involved in Sweave processing and not normally called by users.
 ### Working with WebGL scenes
 
 There are currently two schemes for exporting a scene to a web page.
-Both require the `rglwidget` package and use the same underlying
-code.
 
 The recommended approach works with the `htmlwidgets` framework
 (see http://www.htmlwidgets.org/).  In an R Markdown document
 in `knitr`, use the chunk option `webgl=TRUE`, or the 
-`rglwidget::rglwidget()` function.  More details are given in the vignette 
+`r indexfns("rglwidget")` function.  This approach also
+allows display of `rgl` scenes in
+[RStudio](https://www.rstudio.com).  Besides 
+`rgl` scenes, various controls for them can
+be displayed:
+
+Function                             | Description
+------------------------------------ | -------------
+`r indexfns("propertyControl")`       | set individual properties
+`r indexfns("clipplaneControl")`       |  control a clippling plane
+`r indexfns("subsetControl")`       | control which objects are displayed
+`r indexfns("ageControl")`       | "age" vertices of an object
+`r indexfns("vertexControl")`       | control properties of vertices
+`r indexfns("playwidget")`       | display and automate controls
+`r indexfns("sceneChange")`      | used in `Shiny` for large scene changes
+
+Some functions are mainly for internal use:
+`r indexfns(c("elementId2Prefix", "playwidgetOutput", "renderPlaywidget", "rglwidgetOutput", "renderRglwidget", "registerSceneChange"))`. 
+More details are given in the vignette 
 [User Interaction in WebGL](WebGL.html).
 
 The older approach uses the `writeWebGL` function to export a scene 

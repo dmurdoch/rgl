@@ -732,11 +732,9 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1491
-  - Gave better error when XQuartz is not found, tried for better
-    test.
-  - Added more information on backgrounds to scene3d() to allow
-    them to be used in rglwidget().
+0.95.1500
+  - Gave better error when XQuartz is not found, tried for better test.
+  - Added more information on backgrounds to scene3d() to allow them to be used in rglwidget().
   - Now uses forward slashes in rgl.postscript(fmt = "tex") generated code.
     (Thanks to Uwe Ligges for the problem report.)
   - Added as.mesh3d() and plot3d.deldir() and persp3d.deldir() methods to
@@ -751,9 +749,17 @@ v0.94
 to plotting symbols using pch=<number> in
 base graphics.
   - Added support for control of multiple subscenes
-to spin3d(), par3dinterp(), play3d() and movie3d().
+    to spin3d(), par3dinterp(), play3d() and movie3d().
   - Added experimental function writeASY() for output in Asymptote format,
     which will allow inclusion in PDF files.
   - cylinder3d() now defaults to a rotation minimizing local frame.
+  - Added this NEWS file
+  - Added better support for backgrounds
+  - Added support for orthographic projections (FOV = 0)
+  - Added simple Shiny demo using tabs
+  - Fixed bug in rendering unlit 3D sprites
+  - Added version dependency for jsonlite so that the
+    new faster matrix code will be used.
   - Added rgl.attrib.info() to display information about
-object attributes.
+    object attributes.
+  - Merged rglwidget code back into rgl

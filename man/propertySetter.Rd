@@ -14,7 +14,7 @@ to be used in HTML controls.
 }
 \usage{
 propertySlider(setter = propertySetter,
-             minS, maxS, step = 1, init = minS, 
+             minS = NULL, maxS = NULL, step = 1, init = NULL, 
 	     labels, 
 	     id = basename(tempfile("input")), name = id,
 	     outputid = paste0(id, "text"),
@@ -189,7 +189,6 @@ to \code{propertySlider} to modify objects according to a linear (age)
 scale.
 }
 \examples{
-if (require(rglwidget)) {
   # Just the setter function
   cat(propertySetter(1:4, entries = 12, properties = "values", objids = 13))
 
@@ -206,5 +205,4 @@ if (require(rglwidget)) {
                                      rotate3d(M, pi/2, 1, 0, 0),
                                      rotate3d(M, pi/2, 0, 1, 0) ) )
   cat(par3dinterpSetter(fn, 0, 3, steps=10))
-}
 }

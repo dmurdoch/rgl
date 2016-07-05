@@ -82,17 +82,106 @@ Sweave.snapshot <- function() {
 ##
 ##
 
-hook_webgl <- function(before, options, envir) {
-  rglwidgetCheck()
-  rglwidget::.hook_webgl(before, options, envir)
-}
+hook_webgl <- local({
+  commonParts <- TRUE
+  reuse <- TRUE
+  function (before, options, envir)
+  {
+    if (before) {
+      newwindow <- options$rgl.newwindow
+      if (!is.null(newwindow) && newwindow)
+      	open3d()
+      if (!is.null(options$rgl.keepopen))
+      	warning("rgl.keepopen has been replaced by rgl.newwindow")
+      return()
+    } else if (rgl.cur() == 0)
+      return()
+
+    if (requireNamespace("knitr")) { # Should we stop if there is no knitr?
+                                     # We only use it in this test.
+      out_type <- opts_knit$get("out.format")
+      if (!length(intersect(out_type, c("markdown", "html"))))
+        stop("'hook_webgl' is for HTML only.  Use 'hook_rgl' instead.")
+    }
+    name <- tempfile("webgl", tmpdir = ".", fileext = ".html")
+    on.exit(unlink(name))
+    retina <- options$fig.retina
+    if (!is.numeric(retina)) retina <- 1 # It might be FALSE or maybe NULL
+    dpi <- options$dpi / retina  # should not consider Retina displays (knitr #901)
+    margin <- options$rgl.margin
+    if (is.null(margin)) margin <- 100
+    par3d(windowRect = margin + dpi * c(0, 0, options$fig.width,
+                                           options$fig.height))
+    Sys.sleep(.05) # need time to respond to window size change
+
+    prefix <- gsub('[^[:alnum:]]', '_', options$label) # identifier for JS, better be alnum
+    prefix <- sub('^([^[:alpha:]])', '_\\1', prefix) # should start with letters or _
+    res <- writeWebGL(dir = dirname(name),
+                    filename = name,
+                    snapshot = !rgl.useNULL(),
+                    template = NULL,
+                    prefix = prefix,
+                    commonParts = commonParts,
+                    reuse = reuse)
+    commonParts <<- FALSE
+    reuse <<- attr(res, "reuse")
+    res <- readLines(name)
+    res = res[!grepl('^\\s*$', res)] # remove blank lines
+    paste(gsub('^\\s+', '', res), collapse = '\n') # no indentation at all (for Pandoc)
+  }
+})
 
 hook_rgl <- function(before, options, envir) {
-  rglwidgetCheck()
-  rglwidget::.hook_rgl(before, options, envir)
+  if (before) {
+    newwindow <- options$rgl.newwindow
+    if (!is.null(newwindow) && newwindow)
+      open3d()
+    if (!is.null(options$rgl.keepopen))
+      warning("rgl.keepopen has been replaced by rgl.newwindow")
+    return()
+  } else if (rgl.cur() == 0)
+    return()
+
+  name <- fig_path('', options)
+  margin <- options$rgl.margin
+  if (is.null(margin)) margin <- 100
+  par3d(windowRect = margin + options$dpi * c(0, 0, options$fig.width, options$fig.height))
+  Sys.sleep(.05) # need time to respond to window size change
+
+  dir <- knitr::opts_knit$get('base_dir')
+  if (is.character(dir)) {
+    if (!file_test('-d', dir)) dir.create(dir, recursive = TRUE)
+    owd <- setwd(dir)
+    on.exit(setwd(owd))
+  }
+  save_rgl(name, options$dev)
+  if (!isTRUE(options$rgl.keepopen))
+    rgl.close()
+  options$fig.num = 1L  # only one figure in total
+  hook_plot_custom(before, options, envir)
+}
+
+save_rgl <- function(name, devices) {
+  if (!file_test('-d', dirname(name))) dir.create(dirname(name), recursive = TRUE)
+  # support 3 formats: eps, pdf and png (default)
+  for (dev in devices) switch(
+    dev,
+    eps =,
+    postscript = rgl.postscript(paste0(name, '.eps'), fmt = 'eps'),
+    pdf = rgl.postscript(paste0(name, '.pdf'), fmt = 'pdf'),
+    rgl.snapshot(paste0(name, '.png'), fmt = 'png')
+  )
 }
 
 setupKnitr <- function() {
-  rglwidgetCheck()
-  rglwidget::.setupKnitr()
+  # R produces multiple vignettes in the same session.
+  environment(rglwidget)$reuseDF <- NULL
+
+  if (requireNamespace("knitr")) {
+    knit_hooks$set(webgl = hook_webgl)
+    knit_hooks$set(webGL = hook_webgl)
+    knit_hooks$set(rgl = hook_rgl)
+    environment(hook_webgl)$commonParts <- TRUE
+    environment(hook_webgl)$reuse <- TRUE
+  }
 }

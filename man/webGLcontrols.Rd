@@ -86,10 +86,8 @@ Duncan Murdoch
 for lower level, more flexible functions.
 }
 \examples{
-if (require(rglwidget)) {
   subsets <- list(1:3, 1:4, 1:5)
   subsetSlider(subsets = subsets)
   toggleButton(1:3)
   clipplaneSlider(d = seq(0, 1, len=20), clipplaneid = 123)
-}
 }

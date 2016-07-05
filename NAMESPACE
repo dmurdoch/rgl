@@ -99,3 +99,23 @@ export(.check3d,
  importFrom(stats, approxfun, qchisq, qf, splinefun, var)
  importFrom(utils, file_test, flush.console,
  	    packageVersion, read.table)
+ 
+# These come from rglwidget
+ 
+export(rglwidget, renderRglwidget, rglwidgetOutput,
+       playwidget, renderPlaywidget, playwidgetOutput,
+       subsetControl, propertyControl, clipplaneControl, ageControl, vertexControl,
+       elementId2Prefix, registerSceneChange, sceneChange,
+       "%>%")
+
+importFrom(htmlwidgets, createWidget, shinyRenderWidget, shinyWidgetOutput, sizingPolicy)
+importFrom(htmltools, includeScript, tags, tagList, browsable)
+importFrom(jsonlite, toJSON)
+importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_knit)
+importFrom(shiny, getDefaultReactiveDomain)
+importFrom(magrittr, "%>%")
+
+S3method(playwidget, default)
+S3method(playwidget, rglWebGL)
+S3method(playwidget, rglPlayer)
+S3method(playwidget, shiny.tag.list)
