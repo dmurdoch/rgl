@@ -47,9 +47,12 @@ plot3d.default <- function(x, y = NULL, z = NULL,
                                  rep(range(z, na.rm=TRUE), c(2,2))))
 	)
     useSubscene3d(savesubscene)
-    if (!add) result <- c(result, decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, 
-                                             xlim=xlim, ylim=ylim, zlim=zlim, ...))
-    invisible(result)
+    if (!add) {
+    	result <- c(result, decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, 
+                                       xlim=xlim, ylim=ylim, zlim=zlim, ...))
+    	highlevel(result)
+    } else 
+    	lowlevel(result)
 }
 
 plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
@@ -68,8 +71,11 @@ plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade
     	wire = wire3d(x, ...),
     	dots = dot3d(x, ...))
     
-    if (!add) result <- c(result, decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, ...))
-    invisible(result)
+    if (!add) {
+    	result <- c(result, decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, ...))
+    	highlevel(result)
+    } else 
+    	lowlevel(result)
 }
 
 decorate3d <- function(xlim = NULL, ylim = NULL, zlim = NULL, 
@@ -103,7 +109,7 @@ decorate3d <- function(xlim = NULL, ylim = NULL, zlim = NULL,
   
   if (top) rgl.bringtotop()
   
-  invisible(result)
+  lowlevel(result)
 }
 
 plot3d.function <- function(x, ...) persp3d(x, ...)

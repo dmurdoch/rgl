@@ -501,10 +501,6 @@ Function    | Description
 `r indexfns("writePLY")`   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`   | Read or write OBJ files (commonly used in 3D graphics)
 `r indexfns(c("readSTL", "writeSTL"))`   | Read or write STL files (also common in 3D printing)
-`r indexfns("rgl.useNULL")`  | A helper function for setting a NULL device
-
-See the help page `r linkfn("rgl.useNULL", pkg="rgl")` for instructions on how
-to use `rgl` on a "headless" system.
 
 There are also functions to save snapshots or other recordings of a scene,
 without any 3D information being saved:
@@ -522,6 +518,27 @@ Function     | Description
 The `r indexfns("rgl.snapshot")` function is identical to `snapshot3d`.
 The functions `r indexfns(c("rgl.Sweave.off", "Sweave.snapshot"))` are 
 involved in Sweave processing and not normally called by users.
+
+
+### Default display
+
+There are two ways in which `rgl` scenes are normally
+displayed within R.  The older one is in a dedicated
+window.  In Unix-alikes this is an X11 window;  it is
+a native window in Microsoft Windows.  On MacOS, the
+XQuartz system (see http://xquartz.org) needs to be
+installed to support this.
+
+To suppress this display, set `options(rgl.useNULL = TRUE)` before opening a new `rgl` window.  See
+the help page for the `r indexfns("rgl.useNULL")` function
+for how to set this before starting R.
+
+The newer way to display a scene is by using WebGL
+in a browser window or in the Viewer pane in RStudio.
+To select this, set `options(rgl.printRglwidget = TRUE)`.
+Each operation that would change the scene will 
+return a value which triggers a new WebGL display
+when printed.
 
 ### Working with WebGL scenes
 

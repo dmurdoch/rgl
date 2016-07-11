@@ -85,6 +85,11 @@ export(.check3d,
  S3method(print, rglobject)
  S3method(print, rglsubscene)
  S3method(print, indexedSetter)
+ S3method(print, rglLowlevel)
+ S3method(print, rglHighlevel)
+ 
+ S3method(knit_print, rglLowlevel)
+ S3method(knit_print, rglHighlevel)
  
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)
@@ -100,7 +105,7 @@ export(.check3d,
  importFrom(utils, file_test, flush.console,
  	    packageVersion, read.table)
  
-# These come from rglwidget
+# These were in rglwidget
  
 export(rglwidget, renderRglwidget, rglwidgetOutput,
        playwidget, renderPlaywidget, playwidgetOutput,

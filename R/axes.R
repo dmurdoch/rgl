@@ -82,7 +82,7 @@ axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
                        mpos[2,]+3*ticksize[2],
                        mpos[3,]+3*ticksize[3],
                        labels, ...))
-	invisible(result)
+	lowlevel(result)
 }
 
 axes3d <- function(edges='bbox', labels=TRUE,
@@ -99,7 +99,7 @@ axes3d <- function(edges='bbox', labels=TRUE,
             result <- c(result, axis3d(e,labels=labels,tick=tick,nticks=nticks, ...))
 	names(result) <- e
     }	
-    invisible(result)  
+    lowlevel(result)  
 }
 
 box3d <- function(...)
@@ -123,7 +123,7 @@ box3d <- function(...)
                rep(ranges$y,2),rep(ranges$y,c(2,2)))
         z <- c(rep(ranges$z,c(2,2)),rep(ranges$z,2),rep(rep(ranges$z,c(2,2)),2),
                rep(ranges$z,c(2,2)),rep(ranges$z,2))
-        invisible(c(result, lines=segments3d(x,y,z,...)))
+        lowlevel(c(result, lines=segments3d(x,y,z,...)))
 }
 
 mtext3d <- function(text, edge, line = 0, at = NULL, pos = NA, ...)
@@ -163,10 +163,10 @@ mtext3d <- function(text, edge, line = 0, at = NULL, pos = NA, ...)
         ticksize <- 0.05*(pos[,1]-c(mean(ranges$x),mean(ranges$y),mean(ranges$z)))
         ticksize[coord] <- 0
 
-        invisible(text3d(pos[1,]+3*ticksize[1]*line,
+        text3d(pos[1,]+3*ticksize[1]*line,
                pos[2,]+3*ticksize[2]*line,
                pos[3,]+3*ticksize[3]*line,
-               text, ...))
+               text, ...)
 }   
 
 title3d <- function (main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
@@ -195,5 +195,5 @@ title3d <- function (main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
             aline <- ifelse(is.na(line), 2, line)
             result <- c(result, zlab=mtext3d(zlab, 'z', line = aline, ...))
         }                  
-        invisible(result)
+        lowlevel(result)
 }

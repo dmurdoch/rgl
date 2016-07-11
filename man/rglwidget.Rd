@@ -1,5 +1,6 @@
 \name{rglwidget}
 \alias{rglwidget}
+\alias{rgl.printRglwidget}
 \title{
 An htmlwidget to hold an rgl scene.
 }
@@ -41,8 +42,13 @@ to pass to \code{htmlwidgets::\link{createWidget}}.}
 }
 \details{
 This produces a WebGL version of an \pkg{rgl} scene using the \pkg{htmlwidgets}
-framework.  This allows display of the scene in an \pkg{rmarkdown} document
+framework.  This allows display of the scene in the RStudio IDE, a browser, an \pkg{rmarkdown} document
 or in a \pkg{shiny} app.
+
+\code{options(rgl.printRglwidget = TRUE)} will cause
+\code{rglwidget()} to be called and displayed
+when the result of an \pkg{rgl} call that changes the
+scene is printed.
 
 In a \pkg{shiny} app, there will often be one or more
 \code{\link{playwidget}} objects in the app, taking input from
@@ -90,12 +96,9 @@ if pipes are used) that will intelligently print itself into
 HTML in a variety of contexts including the R console, within R Markdown
 documents, and within Shiny output bindings.
 
-It should also display
-in the RStudio viewer.
-
 If \code{reuse = TRUE}, a record will be kept of objects in the scene
 and they need not be included in the HTML generated for later scenes.
-This is normally useful only in \pkg{knitr} documents which can have
+This is normally useful only in \pkg{rmarkdown} documents which can have
 many \pkg{rgl} scenes; if the widget is displayed in RStudio,
 only one scene will be shown.
 }

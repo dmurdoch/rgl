@@ -110,6 +110,6 @@ pch3d <- function(x, y = NULL, z = NULL, pch = 1, bg = material3d("color")[1],
     pch <- substr(pch, start = 1, stop = 1)
     ids <- c(ids, text3d(xyz, texts = pch, cex = cex, ...))
   }
-  invisible(ids)
+  lowlevel(ids)
 }
       	    

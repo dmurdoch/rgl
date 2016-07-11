@@ -734,7 +734,10 @@ rglwidgetClass = function() {
 
     this.copyObj = function(id, reuse) {
       var obj = this.getObj(id),
-      	  prev = document.getElementById(reuse).rglinstance,
+      	  prev = document.getElementById(reuse);
+      if (prev !== null) {
+      	prev = prev.rglinstance;
+        var
       	  prevobj = prev.getObj(id),
           fields = ["flags", "type",
                     "colors", "vertices", "centers",
@@ -748,10 +751,12 @@ rglwidgetClass = function() {
                     "par3d", "userMatrix",
                     "viewpoint", "finite"],
           i;
-      for (i = 0; i < fields.length; i++) {
-        if (typeof prevobj[fields[i]] !== "undefined")
-          obj[fields[i]] = prevobj[fields[i]];
-      }
+        for (i = 0; i < fields.length; i++) {
+          if (typeof prevobj[fields[i]] !== "undefined")
+            obj[fields[i]] = prevobj[fields[i]];
+        }
+      } else
+        console.warn("copyObj failed");
     };
 
     this.planeUpdateTriangles = function(id, bbox) {
@@ -1504,6 +1509,9 @@ rglwidgetClass = function() {
         gl.disable(gl.BLEND);
 
 				var clipids = obj.clipplanes;
+				if (typeof clipids === "undefined") {
+					console.warn("bad clipids");
+				}
 				if (clipids.length > 0) {
 				  this.invMatrix = new CanvasMatrix4(this.mvMatrix);
 				  this.invMatrix.invert();

@@ -38,7 +38,7 @@ Whether to interpolate between rows of \code{values}.
 }
 }
 \details{
-Like \code{rgl::\link[rgl:propertySetter]{vertexSetter}}, this function
+Like \code{\link{vertexSetter}}, this function
 modifies attributes of vertices in a single
 object.  The \code{attributes} are properties of each vertex
 in a scene; not all are applicable to all objects. In order,
@@ -71,8 +71,8 @@ Duncan Murdoch
 
   theta <- seq(0, 6*pi, len=100)
   xyz <- cbind(sin(theta), cos(theta), theta)
-  rgl::plot3d(xyz, type="l")
-  id <- rgl::spheres3d(xyz[1,,drop=FALSE], col="red")
+  plot3d(xyz, type="l")
+  id <- spheres3d(xyz[1,,drop=FALSE], col="red")
 
   rglwidget(width=500, height=300) \%>\%
   playwidget(vertexControl(values=xyz,

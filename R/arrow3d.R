@@ -107,9 +107,9 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
      id <- segments3d(xyz, ...)
  
    if (is.null(spriteOrigin))
-     invisible(id)
+     lowlevel(id)
    else
-     invisible(sprites3d(spriteOrigin, shapes=id))
+     sprites3d(spriteOrigin, shapes=id)
   } else {
     if (type %in% c("extrusion", "rotation"))
       ext

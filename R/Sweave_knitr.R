@@ -4,14 +4,6 @@
 ##
 
 rgl.Sweave <- function(name, width, height, options, ...) {
-
-  # The 2.13.0 release called dev.off(), not rgl.Sweave.off()
-  
-  if (getRversion() == "2.13.0" && version$status == "") {
-  
-    postscript(tempfile()) # make dev.off() happy
-    if (length(getHook("on.rgl.close"))) rgl.Sweave.off() # to close the previous chunk
-  }
   
   if (length(hook <- getHook("on.rgl.close"))) {
     if (is.list(hook)) hook <- hook[[1]]  # test is for compatibility with R < 3.0.0

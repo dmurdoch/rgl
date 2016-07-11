@@ -148,7 +148,7 @@ Duncan Murdoch
 \examples{
 saveopts <- options(rgl.useNULL = TRUE)
 
-objid <- rgl::plot3d(1:10, 1:10, rnorm(10), col=c("red", "red"), type = "s")["data"]
+objid <- plot3d(1:10, 1:10, rnorm(10), col=c("red", "red"), type = "s")["data"]
 
 control <- ageControl(value=0,
              births=1:10,

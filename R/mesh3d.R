@@ -119,10 +119,10 @@ dot3d.mesh3d <- function ( x, override = TRUE, ... ) {
     material <- list(...)
     material[names(x$material)] <- x$material
   }
-  
-  do.call("points3d", args = c(list(x = x$vb[1,]/x$vb[4,], 
-                                    y = x$vb[2,]/x$vb[4,], 
-                                    z = x$vb[3,]/x$vb[4,]), 
+  ind <- unique(c(x$it, x$ib))
+  do.call("points3d", args = c(list(x = x$vb[1,ind]/x$vb[4,ind], 
+                                    y = x$vb[2,ind]/x$vb[4,ind], 
+                                    z = x$vb[3,ind]/x$vb[4,ind]), 
                                material ))
 }     
 
@@ -137,21 +137,18 @@ wire3d.mesh3d <- function ( x, override = TRUE, ... ) {
     material <- list(...)
     material[names(x$material)] <- x$material
   }
-  material["front"] <- "lines"
-  material["back"] <- "lines"
-  
-  result <- integer(0)
+  ind <- integer(0)
   if (!is.null(x$it))
-    result <- c(triangles = do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
-                                         y = x$vb[2,x$it]/x$vb[4,x$it],
-                                         z = x$vb[3,x$it]/x$vb[4,x$it]), 
-                                    material)))
+    ind <- c(rbind(x$it, x$it[1,], NA))
   if (!is.null(x$ib))
-    result <- c(result, quads = do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
-                                     y = x$vb[2,x$ib]/x$vb[4,x$ib],
-                                     z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
-                                material)))
-  invisible(result)
+    ind <- c(ind, rbind(x$ib, x$ib[1,], NA))
+  # Remove duplicate edges?
+  if (length(ind))
+    ind <- ind[-length(ind)]
+  do.call("lines3d", args =  c(list(x = x$vb[1,ind]/x$vb[4,ind], 
+                                    y = x$vb[2,ind]/x$vb[4,ind], 
+                                    z = x$vb[3,ind]/x$vb[4,ind]), 
+                               material ))
 }
 
 shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
@@ -189,7 +186,7 @@ shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
     
     result <- c(result, quads = do.call("quads3d", args = args ))
   }
-  invisible(result)
+  lowlevel(result)
 }
 
 # transformation support

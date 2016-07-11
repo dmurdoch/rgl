@@ -83,7 +83,7 @@ newSubscene3d <- function(viewport = "replace",
     }
   } else
     stop("Subscene creation failed")
-  invisible(id)
+  lowlevel(id)
 }
 
 useSubscene3d <- function(subscene) {
@@ -101,7 +101,7 @@ addToSubscene3d <- function(ids, subscene = currentSubscene3d()) {
      n = as.integer(length(ids)), ids = ids)$success
   if (!result)
     stop(gettextf("Failed to add objects to subscene %s", subscene), domain = NA)
-  invisible(subscene)
+  lowlevel(subscene)
 }
 
 delFromSubscene3d <- function(ids, subscene = currentSubscene3d()) {
@@ -109,7 +109,7 @@ delFromSubscene3d <- function(ids, subscene = currentSubscene3d()) {
      n = as.integer(length(ids)), ids = as.integer(ids))$success
   if (!result)
     stop(gettextf("Failed to delete objects from subscene %s", subscene), domain = NA)
-  invisible(subscene)
+  lowlevel(subscene)
 }
 
 # This destroys any objects that are in the scene but
@@ -217,7 +217,7 @@ mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA, sharedMouse = FALSE,
   useSubscene3d(result[1])
   attr(result, "prev") <- subsceneList()
   subsceneList(result)
-  invisible(result)
+  lowlevel(result)
 }
 
 layout3d <- function(mat, widths = rep.int(1, ncol(mat)), 
@@ -260,5 +260,5 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
   useSubscene3d(result[1])
   attr(result, "prev") <- subsceneList()
   subsceneList(result)
-  invisible(result)
+  lowlevel(result)
 }

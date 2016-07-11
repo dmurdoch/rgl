@@ -13,9 +13,11 @@ rgl.useNULL <- function() {
   opt <- getOption("rgl.useNULL", Sys.getenv("RGL_USE_NULL"))
   if (is.logical(opt)) return(opt)
   opt <- as.character(opt)
-  if (!nchar(opt)) return(FALSE)
-  opt <- pmatch(tolower(opt), c("yes", "true"), nomatch=3)
-  c(TRUE, TRUE, FALSE)[opt]
+  if (nchar(opt)) {
+    opt <- pmatch(tolower(opt), c("yes", "true"), nomatch=3)
+    return(c(TRUE, TRUE, FALSE)[opt])
+  }
+  FALSE
 }
 
 ##

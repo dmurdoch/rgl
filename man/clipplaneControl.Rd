@@ -35,9 +35,10 @@ values, to be used in an rgl widget.
 Duncan Murdoch
 }
 \examples{
+  open3d()
   saveopts <- options(rgl.useNULL = TRUE)
   xyz <- matrix(rnorm(300), ncol = 3)
-  id <- rgl::plot3d(xyz, type="s", col = "blue", zlim = c(-3,3))["clipplanes"]
+  id <- plot3d(xyz, type="s", col = "blue", zlim = c(-3,3))["clipplanes"]
   dvals <- c(3, -3)
   rglwidget(width=500, height=300) \%>\%
     playwidget(clipplaneControl(d = dvals, clipplaneids = id),

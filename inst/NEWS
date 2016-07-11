@@ -762,4 +762,11 @@ base graphics.
     new faster matrix code will be used.
   - Added rgl.attrib.info() to display information about
     object attributes.
-  - Merged rglwidget code back into rgl
+  - Merged rglwidget code back into rgl.
+  - Functions that modify the scene now return their
+    value with class "rglLowlevel" or "rglHighlevel" to 
+    indicate that a low- or high-level plotting function
+    has been called.  If the new option 
+    "rgl.printRglwidget" is TRUE, printing objects
+    of either class will trigger automatic
+    printing of the rgl scene using rglwidget().

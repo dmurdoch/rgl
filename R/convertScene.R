@@ -178,7 +178,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	    obj <- getObj(id)
 	    if (obj$type == "clipplanes") {
 	      class(obj) <- "rglobject"
-	      rgl::plot3d(obj)
+	      plot3d(obj)
 	    } else if (obj$type == "subscene")
 	      plotClipplanes(getObj(id))
 	  }

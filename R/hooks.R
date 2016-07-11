@@ -1,0 +1,40 @@
+# This file supports auto-printing of rgl scenes in
+# RStudio
+
+# Called just after a low level function has been
+# called, likely changing an existing display
+# Returns the ids that were created by the function,
+# which should be passed as the ids arg.
+
+lowlevel <- function(ids = integer()) {
+  structure(ids, class = "rglLowlevel")
+}
+
+# Called just after a high level function (plot3d
+# or persp3d) has been called, if it wasn't
+# called with add = TRUE (in which case it would be
+# treated as low level).
+# Returns the ids that were created by the function,
+# which should be passed as the ids arg.
+
+highlevel <- function(ids) {
+  structure(ids, class = "rglHighlevel")
+}
+
+print.rglHighlevel <- function(x, ...) {
+  if (getOption("rgl.printRglwidget", FALSE))
+    print(rglwidget())
+  invisible(x)
+}
+
+print.rglLowlevel <- function(x, ...) {
+  if (getOption("rgl.printRglwidget", FALSE))
+    # FIXME:  this should replace the scene, not update the history
+    print(rglwidget())	
+  invisible(x)
+}
+
+knit_print.rglLowlevel <- 
+knit_print.rglHighlevel <- function(x, ...) {
+  knit_print(rglwidget())
+}

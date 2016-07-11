@@ -44,10 +44,12 @@ function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     result <- setClipregion(xlim, ylim, zlim, forceClipregion)
     result <- c(result, surface=surface3d(x,y,z,...))
     useSubscene3d(savesubscene)
-    if (!add) 
+    if (!add) {
       result <- c(result, decorate3d(xlim = xlim, ylim = ylim, zlim = zlim, 
                           xlab = xlab, ylab = ylab, zlab = zlab, aspect = aspect, ...))
-    invisible(result)
+      highlevel(result)
+    } else
+      lowlevel(result)
 }
 
 setClipregion <- function(xlim = NULL, ylim = NULL, zlim = NULL, force = FALSE) {
@@ -77,7 +79,7 @@ setClipregion <- function(xlim = NULL, ylim = NULL, zlim = NULL, force = FALSE) 
       result <- c(result, clipplanes = clipplanes3d(normals[keep,], d = offsets[keep]))
   } else 
     result <- NULL
-  invisible(result)
+  lowlevel(result)
 }
 
 persp3d.function <- function(x, xlim = c(0,1), ylim = c(0,1), 

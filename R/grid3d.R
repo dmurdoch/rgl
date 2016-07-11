@@ -5,7 +5,7 @@ grid3d <- function (side, at = NULL, col="gray",
   on.exit(par3d(save))
 
   if (!missing(side) && length(side)>1)
-    return(invisible(sapply(side,grid3d,at=at,col=col,lwd=lwd,lty=lty,n=n)))
+    return(lowlevel(sapply(side,grid3d,at=at,col=col,lwd=lwd,lty=lty,n=n)))
   
   ranges <- .getRanges()
 
@@ -59,5 +59,5 @@ grid3d <- function (side, at = NULL, col="gray",
                z=c(rbind(mpos1[,3],mpos2[,3])),
                lwd=lwd,color=col)
   }
-  invisible(result)
+  lowlevel(result)
 }

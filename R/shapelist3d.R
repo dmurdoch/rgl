@@ -35,8 +35,11 @@ shapelist3d <- function(shapes,x=0,y=NULL,z=NULL,size=1,matrix=NULL,override=TRU
 	this$material[names(thismaterial)] <- thismaterial
 	result[[i]] <- this
     }
-    if (plot) shade3d(result)
-    invisible(result)
+    if (plot) {
+    	shade3d(result)
+        lowlevel(result)
+    } else
+    	invisible(result)
 }
 
 dot3d.shapelist3d <- function(x, override = TRUE, ...) {

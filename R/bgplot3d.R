@@ -1,10 +1,9 @@
 legend3d <- function(...) {
-  result <- bgplot3d({
+  bgplot3d({
     par(mar=c(0,0,0,0))
     plot(0,0, type="n", xlim=0:1, ylim=0:1, xaxs="i", yaxs="i", axes=FALSE, bty="n")
     legend(...)
   })
-  invisible(result)
 }
 
 bgplot3d <- function(expression) {
@@ -21,7 +20,7 @@ bgplot3d <- function(expression) {
     value <- NULL
     result <- bg3d(col="white")
   }
-  invisible(structure(result, value = value))
+  lowlevel(structure(result, value = value))
 }
 
 show2d <- function(expression, 
@@ -109,6 +108,6 @@ show2d <- function(expression,
   result <- quads3d(x, texture=filename, texcoords = texcoords,
   		  color = color, lit = lit, texmipmap = texmipmap, 
   		  texminfilter = texminfilter, ...)
-  invisible(structure(result, value = value, xyz = x, texcoords = texcoords,
-  		      filename = filename))
+  lowlevel(structure(result, value = value, xyz = x, texcoords = texcoords,
+            filename = filename))
 }

@@ -54,6 +54,8 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
   
   if (! ret)
     stop("'rgl_clear' failed")
+  
+  lowlevel()
 }
 
 
@@ -78,6 +80,7 @@ rgl.pop <- function( type = "shapes", id = 0)
     if (! ret$success)
       stop(gettextf("'rgl.pop' failed for id %d", i), domain = NA)
   }
+  lowlevel()
 }
 
 rgl.ids <- function( type = "shapes", subscene = NA )
@@ -252,7 +255,7 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
   if (! ret$success)
     stop("'rgl_bg' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 
@@ -334,7 +337,7 @@ rgl.bbox <- function(
   if (! ret$success)
     stop("'rgl_bbox' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -385,7 +388,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   if (! ret$success)
     stop("Too many lights; maximum is 8 sources per scene")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 ##
@@ -449,7 +452,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     if (! ret$success)
       stop("'rgl_primitive' failed")
       
-    invisible(ret$success)
+    lowlevel(ret$success)
   }
 }
 
@@ -576,7 +579,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   if (! ret$success)
     stop("'rgl_surface' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 ##
@@ -606,7 +609,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   if (! ret$success)
     stop("'rgl_spheres' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -635,7 +638,7 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
   if (! ret$success)
     stop("'rgl_planes' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -662,7 +665,7 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0)
   if (! ret$success)
     stop("'rgl_clipplanes' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -693,7 +696,7 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
   if (! ret$success)
     stop("'rgl_abclines' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -754,7 +757,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
   if (! ret$success)
     stop("'rgl_texts' failed")
 
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 ##
@@ -788,7 +791,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   if (! ret$success)
     stop("'rgl_sprites' failed")
 
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 ##
