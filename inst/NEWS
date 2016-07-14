@@ -732,7 +732,7 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1500
+0.95.1504
   - Gave better error when XQuartz is not found, tried for better test.
   - Added more information on backgrounds to scene3d() to allow them to be used in rglwidget().
   - Now uses forward slashes in rgl.postscript(fmt = "tex") generated code.
@@ -770,3 +770,8 @@ base graphics.
     "rgl.printRglwidget" is TRUE, printing objects
     of either class will trigger automatic
     printing of the rgl scene using rglwidget().
+  - Web browsers only support a finite number of active
+    WebGL sessions; rglwidget code now works to make more
+    careful use of this finite resource, so that large
+    numbers of rgl scenes can be present on a single
+    web page without exhausting it.

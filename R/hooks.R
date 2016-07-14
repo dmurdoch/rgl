@@ -36,5 +36,6 @@ print.rglLowlevel <- function(x, ...) {
 
 knit_print.rglLowlevel <- 
 knit_print.rglHighlevel <- function(x, ...) {
-  knit_print(rglwidget())
+  if (getOption("rgl.printRglwidget", FALSE))	
+    knit_print(rglwidget())
 }

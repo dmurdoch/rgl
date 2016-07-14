@@ -1,4 +1,6 @@
 options(rgl.useNULL=TRUE)
+options(rgl.printRglwidget=FALSE)
+
 library(rgl)
 
 if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.13.1"))

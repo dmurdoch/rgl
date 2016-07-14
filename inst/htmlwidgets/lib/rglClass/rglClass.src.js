@@ -261,6 +261,18 @@ rglwidgetClass = function() {
       return this.getObj(subscene).subscenes;
     };
 
+    this.startDrawing = function() {
+    	var value = this.drawing;
+    	this.drawing = true;
+    	return value;
+    }
+    
+    this.stopDrawing = function(saved) {
+      this.drawing = saved;
+      if (!saved && this.gl && this.gl.isContextLost())
+        this.restartCanvas();
+    }
+    
     this.getVertexShader = function(id) {
       var obj = this.getObj(id),
           flags = obj.flags,
@@ -474,13 +486,13 @@ rglwidgetClass = function() {
         shader = gl.createShader(shaderType);
         gl.shaderSource(shader, code);
         gl.compileShader(shader);
-        if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0)
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS) && !gl.isContextLost())
             alert(gl.getShaderInfoLog(shader));
         return shader;
     };
 
-    this.handleLoadedTexture = function(texture, textureCanvas) {
-      var gl = this.gl;
+    this.handleLoadedTexture = function(texture, textureCanvas) { 
+      var gl = this.gl || this.initGL();
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
       gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -503,7 +515,7 @@ rglwidgetClass = function() {
              h = image.height,
              canvasX = self.getPowerOfTwo(w),
              canvasY = self.getPowerOfTwo(h),
-             gl = self.gl,
+             gl = self.gl || self.initGL(),
              maxTexSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
          if (maxTexSize > 4096) maxTexSize = 4096;
          while (canvasX > 1 && canvasY > 1 && (canvasX > maxTexSize || canvasY > maxTexSize)) {
@@ -581,7 +593,7 @@ rglwidgetClass = function() {
      };
 
     this.setViewport = function(id) {
-       var gl = this.gl,
+       var gl = this.gl || this.initGL(),
          vp = this.getObj(id).par3d.viewport,
          x = vp.x*this.canvas.width,
          y = vp.y*this.canvas.height,
@@ -845,7 +857,7 @@ rglwidgetClass = function() {
           depth_sort = flags & this.f_depth_sort,
           sprites_3d = flags & this.f_sprites_3d,
           sprite_3d = flags & this.f_sprite_3d,
-          gl = this.gl,
+          gl = this.gl || this.initGL(),
           texinfo, drawtype, nclipplanes, f, frowsize, nrows,
           i,j,v, mat, uri, matobj;
 
@@ -884,6 +896,7 @@ rglwidgetClass = function() {
     if (!obj.vertexCount) return;
 
     if (!sprites_3d) {
+      if (gl.isContextLost()) return;
       obj.prog = gl.createProgram();
       gl.attachShader(obj.prog, this.getShader( gl.VERTEX_SHADER,
         this.getVertexShader(id) ));
@@ -897,10 +910,11 @@ rglwidgetClass = function() {
       if (!linked) {
 
         // An error occurred while linking
-        var lastError = gl.getProgramInfoLog(program);
+        var lastError = gl.getProgramInfoLog(obj.prog);
         console.warn("Error in program linking:" + lastError);
 
-        gl.deleteProgram(program);
+        gl.deleteProgram(obj.prog);
+        return;
       }
     }
 
@@ -1157,7 +1171,7 @@ rglwidgetClass = function() {
   };
 
     this.setDepthTest = function(id) {
-      var gl = this.gl,
+      var gl = this.gl || this.initGL(),
           tests = {never: gl.NEVER,
                    less:  gl.LESS,
                    equal: gl.EQUAL,
@@ -1194,7 +1208,7 @@ rglwidgetClass = function() {
           sprites_3d = flags & this.f_sprites_3d,
           sprite_3d = flags & this.f_sprite_3d,
           is_lines = flags & this.f_is_lines,
-          gl = this.gl,
+          gl = this.gl || this.initGL(),
           sphereMV, baseofs, ofs, sscale, i, count, light,
           faces;
 
@@ -1441,7 +1455,7 @@ rglwidgetClass = function() {
    };
 
     this.drawBackground = function(id, subsceneid) {
-      var gl = this.gl,
+      var gl = this.gl || this.initGL(),
           obj = this.getObj(id),
           bg, i;
 
@@ -1466,7 +1480,7 @@ rglwidgetClass = function() {
     };
 
     this.drawSubscene = function(subsceneid) {
-      var gl = this.gl,
+      var gl = this.gl || this.initGL(),
           obj = this.getObj(subsceneid),
           objects = this.scene.objects,
           subids = obj.objects,
@@ -1563,132 +1577,132 @@ rglwidgetClass = function() {
       var self = this, activeSubscene, handler,
           handlers = {}, drag = 0;
 
-    handlers.rotBase = 0;
+      handlers.rotBase = 0;
 
-    this.screenToVector = function(x, y) {
-      var viewport = this.getObj(activeSubscene).par3d.viewport,
-        width = viewport.width*this.canvas.width,
-        height = viewport.height*this.canvas.height,
-        radius = Math.max(width, height)/2.0,
-        cx = width/2.0,
-        cy = height/2.0,
-        px = (x-cx)/radius,
-        py = (y-cy)/radius,
-        plen = Math.sqrt(px*px+py*py);
-      if (plen > 1.e-6) {
-        px = px/plen;
-        py = py/plen;
-      }
-      var angle = (Math.SQRT2 - plen)/Math.SQRT2*Math.PI/2,
-        z = Math.sin(angle),
-        zlen = Math.sqrt(1.0 - z*z);
-      px = px * zlen;
-      py = py * zlen;
-      return [px, py, z];
-    };
+      this.screenToVector = function(x, y) {
+        var viewport = this.getObj(activeSubscene).par3d.viewport,
+          width = viewport.width*this.canvas.width,
+          height = viewport.height*this.canvas.height,
+          radius = Math.max(width, height)/2.0,
+          cx = width/2.0,
+          cy = height/2.0,
+          px = (x-cx)/radius,
+          py = (y-cy)/radius,
+          plen = Math.sqrt(px*px+py*py);
+        if (plen > 1.e-6) {
+          px = px/plen;
+          py = py/plen;
+        }
+        var angle = (Math.SQRT2 - plen)/Math.SQRT2*Math.PI/2,
+          z = Math.sin(angle),
+          zlen = Math.sqrt(1.0 - z*z);
+        px = px * zlen;
+        py = py * zlen;
+        return [px, py, z];
+      };
 
-    handlers.trackballdown = function(x,y) {
-      var activeSub = this.getObj(activeSubscene),
-          activeModel = this.getObj(this.useid(activeSub.id, "model")),
-        i, l = activeModel.par3d.listeners;
-      handlers.rotBase = this.screenToVector(x, y);
-      this.saveMat = [];
-      for (i = 0; i < l.length; i++) {
-        activeSub = this.getObj(l[i]);
-        activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
-      }
-    };
+      handlers.trackballdown = function(x,y) {
+        var activeSub = this.getObj(activeSubscene),
+            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+            i, l = activeModel.par3d.listeners;
+        handlers.rotBase = this.screenToVector(x, y);
+        this.saveMat = [];
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
+        }
+      };
 
-    handlers.trackballmove = function(x,y) {
-      var rotCurrent = this.screenToVector(x,y),
-          rotBase = handlers.rotBase,
-        dot = rotBase[0]*rotCurrent[0] +
-              rotBase[1]*rotCurrent[1] +
-               rotBase[2]*rotCurrent[2],
-        angle = Math.acos( dot/this.vlen(rotBase)/this.vlen(rotCurrent) )*180.0/Math.PI,
-        axis = this.xprod(rotBase, rotCurrent),
-        objects = this.scene.objects,
-        activeSub = this.getObj(activeSubscene),
-        activeModel = this.getObj(this.useid(activeSub.id, "model")),
-        l = activeModel.par3d.listeners,
-        i;
-      for (i = 0; i < l.length; i++) {
-        activeSub = this.getObj(l[i]);
-        activeSub.par3d.userMatrix.load(objects[l[i]].saveMat);
-        activeSub.par3d.userMatrix.rotate(angle, axis[0], axis[1], axis[2]);
-      }
-      this.drawScene();
-    };
-    handlers.trackballend = 0;
-
-    handlers.axisdown = function(x,y) {
-      handlers.rotBase = this.screenToVector(x, this.canvas.height/2);
-      var activeSub = this.getObj(activeSubscene),
-          activeModel = this.getObj(this.useid(activeSub.id, "model")),
-        i, l = activeModel.par3d.listeners;
-      for (i = 0; i < l.length; i++) {
-        activeSub = this.getObj(l[i]);
-        activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
-      }
-    };
-
-    handlers.axismove = function(x,y) {
-      var rotCurrent = this.screenToVector(x, this.canvas.height/2),
-          rotBase = handlers.rotBase,
-          angle = (rotCurrent[0] - rotBase[0])*180/Math.PI,
-          rotMat = new CanvasMatrix4();
-      rotMat.rotate(angle, handlers.axis[0], handlers.axis[1], handlers.axis[2]);
-      var activeSub = this.getObj(activeSubscene),
-          activeModel = this.getObj(this.useid(activeSub.id, "model")),
-        i, l = activeModel.par3d.listeners;
-      for (i = 0; i < l.length; i++) {
-        activeSub = this.getObj(l[i]);
-        activeSub.par3d.userMatrix.load(activeSub.saveMat);
-        activeSub.par3d.userMatrix.multLeft(rotMat);
-      }
-      this.drawScene();
-    };
-    handlers.axisend = 0;
-
-    handlers.y0zoom = 0;
-    handlers.zoom0 = 0;
-    handlers.zoomdown = function(x, y) {
-      var activeSub = this.getObj(activeSubscene),
-        activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
-        i, l = activeProjection.par3d.listeners;
-      handlers.y0zoom = y;
-      for (i = 0; i < l.length; i++) {
-        activeSub = this.getObj(l[i]);
-        activeSub.zoom0 = Math.log(activeSub.par3d.zoom);
-      }
-    };
-    handlers.zoommove = function(x, y) {
-      var activeSub = this.getObj(activeSubscene),
-          activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
-        i, l = activeProjection.par3d.listeners;
-      for (i = 0; i < l.length; i++) {
-        activeSub = this.getObj(l[i]);
-        activeSub.par3d.zoom = Math.exp(activeSub.zoom0 + (y-handlers.y0zoom)/this.canvas.height);
-      }
+      handlers.trackballmove = function(x,y) {
+        var rotCurrent = this.screenToVector(x,y),
+            rotBase = handlers.rotBase,
+            dot = rotBase[0]*rotCurrent[0] +
+                  rotBase[1]*rotCurrent[1] +
+                  rotBase[2]*rotCurrent[2],
+            angle = Math.acos( dot/this.vlen(rotBase)/this.vlen(rotCurrent) )*180.0/Math.PI,
+            axis = this.xprod(rotBase, rotCurrent),
+            objects = this.scene.objects,
+            activeSub = this.getObj(activeSubscene),
+            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+            l = activeModel.par3d.listeners,
+            i;
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          activeSub.par3d.userMatrix.load(objects[l[i]].saveMat);
+          activeSub.par3d.userMatrix.rotate(angle, axis[0], axis[1], axis[2]);
+        }
         this.drawScene();
       };
-    handlers.zoomend = 0;
+      handlers.trackballend = 0;
 
-    handlers.y0fov = 0;
-    handlers.fovdown = function(x, y) {
+      handlers.axisdown = function(x,y) {
+        handlers.rotBase = this.screenToVector(x, this.canvas.height/2);
+        var activeSub = this.getObj(activeSubscene),
+            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+            i, l = activeModel.par3d.listeners;
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
+        }
+      };
+
+      handlers.axismove = function(x,y) {
+        var rotCurrent = this.screenToVector(x, this.canvas.height/2),
+            rotBase = handlers.rotBase,
+            angle = (rotCurrent[0] - rotBase[0])*180/Math.PI,
+            rotMat = new CanvasMatrix4();
+        rotMat.rotate(angle, handlers.axis[0], handlers.axis[1], handlers.axis[2]);
+        var activeSub = this.getObj(activeSubscene),
+            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+            i, l = activeModel.par3d.listeners;
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          activeSub.par3d.userMatrix.load(activeSub.saveMat);
+          activeSub.par3d.userMatrix.multLeft(rotMat);
+        }
+        this.drawScene();
+      };
+      handlers.axisend = 0;
+
+      handlers.y0zoom = 0;
+      handlers.zoom0 = 0;
+      handlers.zoomdown = function(x, y) {
+        var activeSub = this.getObj(activeSubscene),
+          activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
+          i, l = activeProjection.par3d.listeners;
+        handlers.y0zoom = y;
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          activeSub.zoom0 = Math.log(activeSub.par3d.zoom);
+        }
+      };
+      handlers.zoommove = function(x, y) {
+        var activeSub = this.getObj(activeSubscene),
+            activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
+            i, l = activeProjection.par3d.listeners;
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          activeSub.par3d.zoom = Math.exp(activeSub.zoom0 + (y-handlers.y0zoom)/this.canvas.height);
+        }
+        this.drawScene();
+      };
+      handlers.zoomend = 0;
+
+      handlers.y0fov = 0;
+      handlers.fovdown = function(x, y) {
         handlers.y0fov = y;
         var activeSub = this.getObj(activeSubscene),
           activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
-        i, l = activeProjection.par3d.listeners;
+          i, l = activeProjection.par3d.listeners;
         for (i = 0; i < l.length; i++) {
           activeSub = this.getObj(l[i]);
           activeSub.fov0 = activeSub.par3d.FOV;
         }
       };
-    handlers.fovmove = function(x, y) {
-      var activeSub = this.getObj(activeSubscene),
-          activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
-        i, l = activeProjection.par3d.listeners;
+      handlers.fovmove = function(x, y) {
+        var activeSub = this.getObj(activeSubscene),
+            activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
+            i, l = activeProjection.par3d.listeners;
         for (i = 0; i < l.length; i++) {
           activeSub = this.getObj(l[i]);
           activeSub.par3d.FOV = Math.max(1, Math.min(179, activeSub.fov0 +
@@ -1696,7 +1710,7 @@ rglwidgetClass = function() {
         }
         this.drawScene();
       };
-    handlers.fovend = 0;
+      handlers.fovend = 0;
 
       this.canvas.onmousedown = function ( ev ){
         if (!ev.which) // Use w3c defns in preference to MS
@@ -1820,8 +1834,9 @@ rglwidgetClass = function() {
               y: coords.y - viewport.y*this.canvas.height};
     };
 
-    this.initSphere = function(verts) {
-      var gl = this.gl, reuse = verts.reuse, result;
+    this.initSphere = function() {
+      var verts = this.scene.sphereVerts, 
+          reuse = verts.reuse, result;
       if (typeof reuse !== "undefined") {
         var prev = document.getElementById(reuse).rglinstance.sphere;
         result = {vb: prev.vb, it: prev.it};
@@ -1831,14 +1846,19 @@ rglwidgetClass = function() {
       }
       result.sphereStride = 12;
       result.sphereCount = result.it.length;
-      result.buf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, result.buf);
-      gl.bufferData(gl.ARRAY_BUFFER, result.vb, gl.STATIC_DRAW);
-      result.ibuf = gl.createBuffer();
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, result.ibuf);
-      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, result.it, gl.STATIC_DRAW);
-
-      return result;
+      this.sphere = result;
+    };
+    
+    this.initSphereGL = function() {
+      var gl = this.gl || this.initGL(), sphere = this.sphere;
+      if (gl.isContextLost()) return;
+      sphere.buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, sphere.buf);
+      gl.bufferData(gl.ARRAY_BUFFER, sphere.vb, gl.STATIC_DRAW);
+      sphere.ibuf = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphere.ibuf);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, sphere.it, gl.STATIC_DRAW);
+      return;
     };
 
     this.initialize = function(el, x) {
@@ -1852,23 +1872,32 @@ rglwidgetClass = function() {
       this.colLoc = 1;
       if (el) {
         el.rglinstance = this;
-        this.initCanvas(el);
+        this.el = el;
+        this.webGLoptions = el.rglinstance.scene.webGLoptions;
+        this.initCanvas();
       }
     };
 
-    this.initCanvas = function(el) {
-      this.canvas = document.createElement("canvas");
-      this.resize(el);
-      while (el.firstChild) {
-        el.removeChild(el.firstChild);
+    this.restartCanvas = function() {
+      var newcanvas = document.createElement("canvas");
+      newcanvas.width = this.el.width;
+      newcanvas.height = this.el.height;
+      newcanvas.addEventListener("webglcontextrestored",
+        this.onContextRestored, false);
+      newcanvas.addEventListener("webglcontextlost",
+        this.onContextLost, false);            
+      while (this.el.firstChild) {
+        this.el.removeChild(this.el.firstChild);
       }
-      el.appendChild(this.canvas);
-      this.initGL0(el.rglinstance.scene.webGLoptions);
-      if (!this.gl)
-        return;
+      this.el.appendChild(newcanvas);
+      this.canvas = newcanvas;
+      this.gl = null;      	
+    }
+      
+    this.initCanvas = function() {
+      this.restartCanvas();
       var objs = this.scene.objects,
           self = this;
-      this.sphere = this.initSphere(this.scene.sphereVerts);
       Object.keys(objs).forEach(function(key){
         var id = parseInt(key, 10),
             obj = self.getObj(id);
@@ -1878,10 +1907,34 @@ rglwidgetClass = function() {
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });
-      Object.keys(objs).forEach(function(key){
-        self.initObj(parseInt(key, 10));
-      });
-      this.setMouseHandlers();
+      this.setMouseHandlers();      
+      this.initSphere();
+      
+      this.onContextRestored = function(event) {
+        self.initGL();
+        self.drawScene();
+        console.log("restored context for "+self.scene.rootSubscene);
+      }
+      
+      this.onContextLost = function(event) {
+        if (!self.drawing)
+          self.restartCanvas();
+        event.preventDefault();
+      }
+      
+      this.initGL0();
+      lazyLoadScene = function() {
+      	if (self.isInBrowserViewport()) {
+      	  if (!self.gl) {
+      	    self.initGL();
+      	  }
+      	  self.drawScene();
+      	}
+      }
+      window.addEventListener("DOMContentLoaded", lazyLoadScene, false);
+      window.addEventListener("load", lazyLoadScene, false);
+      window.addEventListener("resize", lazyLoadScene, false);
+      window.addEventListener("scroll", lazyLoadScene, false);
     };
 
     /* this is only used by writeWebGL; rglwidget has
@@ -1916,36 +1969,51 @@ rglwidgetClass = function() {
       return img;
     };
 
-    this.initGL0 = function(options) {
+    this.initGL0 = function() {
       if (!window.WebGLRenderingContext){
-        this.debug("Your browser does not support WebGL. See <a href=\"http://get.webgl.org\">http://get.webgl.org</a>", this.getSnapshot());
-        return;
-      }
-      try {
-        this.initGL(options);
-      }
-      catch(e) {}
-      if ( !this.gl ) {
-        this.debug("Your browser appears to support WebGL, but did not create a WebGL context.  See <a href=\"http://get.webgl.org\">http://get.webgl.org</a>",
-              this.getSnapshot());
+        alert("Your browser does not support WebGL. See http://get.webgl.org");
         return;
       }
     };
+    
+    this.isInBrowserViewport = function() {
+      var rect = this.canvas.getBoundingClientRect(),
+          windHeight = (window.innerHeight || document.documentElement.clientHeight),
+          windWidth = (window.innerWidth || document.documentElement.clientWidth);
+      return (
+      	rect.top >= -windHeight &&
+      	rect.left >= -windWidth &&
+      	rect.bottom <= 2*windHeight &&
+      	rect.right <= 2*windWidth);
+    }
 
-    this.initGL = function(options) {
-     this.gl = this.canvas.getContext("webgl", options) ||
-               this.canvas.getContext("experimental-webgl", options);
-   };
-
-    this.resize = function(el) {
-      this.canvas.width = el.width;
-      this.canvas.height = el.height;
+    this.initGL = function() {
+      var self = this;
+      if (this.gl) {
+      	if (!this.drawing && this.gl.isContextLost())
+          this.restartCanvas();
+        else
+          return this.gl;
+      }
+      // if (!this.isInBrowserViewport()) return; Return what??? At this point we know this.gl is null.
+      this.canvas.addEventListener("webglcontextrestored",
+        this.onContextRestored, false);
+      this.canvas.addEventListener("webglcontextlost",
+        this.onContextLost, false);      
+      this.gl = this.canvas.getContext("webgl", this.webGLoptions) ||
+               this.canvas.getContext("experimental-webgl", this.webGLoptions);
+      var save = this.startDrawing();
+      this.initSphereGL(); 
+      Object.keys(this.scene.objects).forEach(function(key){
+        self.initObj(parseInt(key, 10));
+        });
+      this.stopDrawing(save);
+      return this.gl;
     };
 
     this.drawScene = function() {
-      var gl = this.gl;
-      if (!gl)
-        this.alertOnce("No WebGL context.");
+      var gl = this.gl || this.initGL(),
+          save = this.startDrawing();
       gl.enable(gl.DEPTH_TEST);
       gl.depthFunc(gl.LEQUAL);
       gl.clearDepth(1.0);
@@ -1953,7 +2021,7 @@ rglwidgetClass = function() {
       gl.depthMask(true); // Must be true before clearing depth buffer
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       this.drawSubscene(this.scene.rootSubscene);
-      this.drawing = false;
+      this.stopDrawing(save);
     };
 
     this.subsetSetter = function(el, control) {
@@ -2060,7 +2128,7 @@ rglwidgetClass = function() {
         }
       }
       for (j=0; j < needsBinding.length; j++) {
-        gl = this.gl;
+        gl = this.gl || this.initGL();
         obj = this.getObj(needsBinding[j]);
         gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
         gl.bufferData(gl.ARRAY_BUFFER, obj.values, gl.STATIC_DRAW);
@@ -2142,7 +2210,7 @@ rglwidgetClass = function() {
         }
       }
       if (typeof obj.buf !== "undefined") {
-        var gl = this.gl;
+        var gl = this.gl || this.initGL();
         gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
         gl.bufferData(gl.ARRAY_BUFFER, propvals, gl.STATIC_DRAW);
       }
@@ -2216,7 +2284,7 @@ rglwidgetClass = function() {
         }
         obj.values = propvals;
         if (typeof obj.buf !== "undefined") {
-          gl = this.gl;
+          gl = this.gl || this.initGL();
           gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
           gl.bufferData(gl.ARRAY_BUFFER, obj.values, gl.STATIC_DRAW);
         }

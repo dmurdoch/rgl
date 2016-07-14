@@ -6,8 +6,8 @@ subst <- function(strings, ..., digits=7) {
     if ((n <- names[i]) == "")
       n <- as.character(sys.call()[[i+2]])
     value <- substitutions[[i]]
-    if (is.numeric(value))
-      value <- formatC(value, digits=digits, width=1)
+    if (is.numeric(value)) 
+      value <- formatC(unclass(value), digits=digits, width=1)
     strings <- gsub(paste("%", n, "%", sep=""), value, strings)
   }
   strings
@@ -58,7 +58,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   header <- function()
   	if (commonParts)
   	  c(
-        as.character(includeScript(system.file("htmlwidgets/lib/CanvasMatrix/CanvasMatrix.js", package = "rgl"))),
+        as.character(includeScript(system.file("htmlwidgets/lib/CanvasMatrix/CanvasMatrix.src.js", package = "rgl"))),
         as.character(includeScript(system.file("htmlwidgets/lib/rglClass/rglClass.src.js", package = "rgl")))
       )
 
