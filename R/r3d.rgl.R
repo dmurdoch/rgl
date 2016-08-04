@@ -93,7 +93,8 @@ material3d  <- function (...)
 bg3d        <- function(...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   new <- .fixMaterialArgs(sphere = FALSE, fogtype = "none", 
-                          color = c("black", "white"), back = "lines", Params = save)
+                          color = c("black", "white"), 
+  			  back = "lines", lit = FALSE, Params = save)
   do.call("rgl.bg", .fixMaterialArgs(..., Params = new))
 }
 

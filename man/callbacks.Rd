@@ -70,6 +70,7 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
    rgl.setMouseCallbacks(button, begin, update)
    cat("Callbacks set on button", button, "of rgl device", rgl.cur(), "\n")
  }
+ shade3d(icosahedron3d(), col = "yellow")
  pan3d(3)
 }
 \keyword{ dynamic }

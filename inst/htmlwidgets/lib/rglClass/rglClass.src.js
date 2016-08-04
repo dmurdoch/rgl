@@ -2011,6 +2011,11 @@ rglwidgetClass = function() {
       return this.gl;
     };
 
+    this.resize = function(el) {
+      this.canvas.width = el.width;
+      this.canvas.height = el.height;
+    };
+
     this.drawScene = function() {
       var gl = this.gl || this.initGL(),
           save = this.startDrawing();
