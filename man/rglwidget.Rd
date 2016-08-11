@@ -121,8 +121,10 @@ Duncan Murdoch
 save <- getOption("rgl.useNULL")
 options(rgl.useNULL=TRUE)
 example("plot3d", "rgl")
-rglwidget()
-
+widget <- rglwidget()
+if (interactive())
+  widget
+  
 \donttest{
 # Save it to a file.  This requires pandoc
 filename <- tempfile(fileext = ".html")

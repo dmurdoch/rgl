@@ -362,7 +362,7 @@ These correspond to the
 - `FOV` and `zoom` are arrays of numbers. 
 - `userMatrix` is an array
 of `CanvasMatrix4` objects (documented in the file 
-`system.file("WebGL/CanvasMatrix.src.js")`.
+`system.file("htmlwidgets/lib/CanvasMatrix/CanvasMatrix.src.js", package = "rgl")`.
 - Each `listeners` item is itself an array of subscene ids that "listen"
 to mouse actions, i.e. `listeners[19]` would contain all
 subscene ids that respond to mouse actions in subscene 19.

@@ -5,5 +5,8 @@
 ^.*\.Rproj$
 ^vignettes/CanvasMatrix.js
 ^vignettes/Rplots.pdf
+^vignettes/test
+
+^demo/examples.R
 
 ^inst/todo

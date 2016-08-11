@@ -74,10 +74,12 @@ Duncan Murdoch
   plot3d(xyz, type="l")
   id <- spheres3d(xyz[1,,drop=FALSE], col="red")
 
-  rglwidget(width=500, height=300) \%>\%
+  widget <- rglwidget(width=500, height=300) \%>\%
   playwidget(vertexControl(values=xyz,
                            attributes=c("x", "y", "z"),
                            objid = id, param=1:100),
              start = 1, stop = 100, rate=10)
+  if (interactive())
+    widget
   options(saveopts)
 }
