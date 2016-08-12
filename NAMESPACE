@@ -85,11 +85,11 @@ export(.check3d,
  S3method(print, rglobject)
  S3method(print, rglsubscene)
  S3method(print, indexedSetter)
- S3method(print, rglLowlevel)
- S3method(print, rglHighlevel)
+ S3method(print, rglId)
  
- S3method(knit_print, rglLowlevel)
- S3method(knit_print, rglHighlevel)
+ S3method(knit_print, rglId)
+ 
+ S3method(as.data.frame, rglId)
  
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)

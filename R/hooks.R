@@ -7,7 +7,7 @@
 # which should be passed as the ids arg.
 
 lowlevel <- function(ids = integer()) {
-  structure(ids, class = "rglLowlevel")
+  structure(ids, class = c("rglLowlevel", "rglId"))
 }
 
 # Called just after a high level function (plot3d
@@ -18,24 +18,21 @@ lowlevel <- function(ids = integer()) {
 # which should be passed as the ids arg.
 
 highlevel <- function(ids) {
-  structure(ids, class = "rglHighlevel")
+  structure(ids, class = c("rglHighlevel", "rglId"))
 }
 
-print.rglHighlevel <- function(x, ...) {
+print.rglId <- function(x, ...) {
   if (getOption("rgl.printRglwidget", FALSE))
+    # FIXME:  For lowlevel, this should replace the scene, not update the history
     print(rglwidget())
   invisible(x)
 }
 
-print.rglLowlevel <- function(x, ...) {
-  if (getOption("rgl.printRglwidget", FALSE))
-    # FIXME:  this should replace the scene, not update the history
-    print(rglwidget())	
-  invisible(x)
-}
-
-knit_print.rglLowlevel <- 
-knit_print.rglHighlevel <- function(x, ...) {
+knit_print.rglId <- function(x, ...) {
   if (getOption("rgl.printRglwidget", FALSE))	
     knit_print(rglwidget())
+}
+
+as.data.frame.rglId <- function(x, row.names = NULL, optional = FALSE, ...) {
+  as.data.frame.vector(x)
 }
