@@ -775,3 +775,5 @@ base graphics.
     careful use of this finite resource, so that large
     numbers of rgl scenes can be present on a single
     web page without exhausting it.
+  - The worker functions used by subdivision3d() have
+    been exported for use on their own.
