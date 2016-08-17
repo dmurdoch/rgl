@@ -398,6 +398,10 @@ Function                             | Description
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
 
+The individual steps in `r linkfn("subdivision3d")` are also available:
+`r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These
+are mainly intended for internal use.
+
 ## Multi-figure Layouts
 
 `rgl` has several functions to support displaying multiple different
@@ -567,6 +571,9 @@ Some functions are mainly for internal use:
 `r indexfns(c("elementId2Prefix", "playwidgetOutput", "renderPlaywidget", "rglwidgetOutput", "renderRglwidget", "registerSceneChange"))`. 
 More details are given in the vignette 
 [User Interaction in WebGL](WebGL.html).
+The functions `r indexfns(c("lowlevel", "highlevel"))` are also for internal use,
+marking function results for automatic
+printing.
 
 The older approach uses the `writeWebGL` function to export a scene 
 to HTML and Javascript code.  

@@ -764,8 +764,8 @@ base graphics.
     object attributes.
   - Merged rglwidget code back into rgl.
   - Functions that modify the scene now return their
-    value with class "rglLowlevel" or "rglHighlevel" to 
-    indicate that a low- or high-level plotting function
+    value with class "rglLowlevel" or "rglHighlevel" (using the new lowlevel()
+    or highlevel() functions) to indicate that a low- or high-level plotting function
     has been called.  If the new option 
     "rgl.printRglwidget" is TRUE, printing objects
     of either class will trigger automatic

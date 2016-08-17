@@ -17,14 +17,15 @@ lowlevel <- function(ids = integer()) {
 # Returns the ids that were created by the function,
 # which should be passed as the ids arg.
 
-highlevel <- function(ids) {
+highlevel <- function(ids = integer()) {
   structure(ids, class = c("rglHighlevel", "rglId"))
 }
 
-print.rglId <- function(x, ...) {
-  if (getOption("rgl.printRglwidget", FALSE))
+print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
+			...) {
+  if (rglwidget)
     # FIXME:  For lowlevel, this should replace the scene, not update the history
-    print(rglwidget())
+    print(rglwidget(...))
   invisible(x)
 }
 
