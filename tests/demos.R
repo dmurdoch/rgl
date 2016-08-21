@@ -4,5 +4,6 @@ library(rgl)
 par3d(userMatrix = diag(4))
 
 for(demo in demo(package="rgl")$results[,"Item"]) 
-  if (!(demo %in% c("rgl", "lsystem", "shinyDemo", "simpleShinyRgl")))
+  if (!(demo %in% c("rgl", "lsystem", "rglExamples", 
+  		    "shinyDemo", "simpleShinyRgl")))
     demo(demo, package="rgl", character.only=TRUE)

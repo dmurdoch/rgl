@@ -1,5 +1,6 @@
 \name{.check3d}
 \alias{.check3d}
+\alias{check3d}
 \title{
 Check for an open rgl window.
 }
@@ -18,4 +19,12 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{open3d}}
+}
+\examples{
+rgl.dev.list()
+.check3d()
+rgl.dev.list()
+.check3d()
+rgl.dev.list()
+rgl.close()
 }

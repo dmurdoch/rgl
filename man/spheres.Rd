@@ -29,6 +29,11 @@ the bounding box.  Versions of \code{rgl} prior to 0.92.802 did not do
 this iterative adjustment.
 
 If any coordinate or radius is \code{NA}, the sphere is not plotted.
+
+If a texture is used, its bitmap is wrapped around the 
+sphere, with the top edge at the maximum y coordinate, 
+and the left-right edges joined at the maximum in the
+z coordinate, centred in x.
 } 
 \value{
   A shape ID of the spheres object is returned.

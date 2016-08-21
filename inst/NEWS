@@ -732,7 +732,7 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1504
+0.95.1512
   - Gave better error when XQuartz is not found, tried for better test.
   - Added more information on backgrounds to scene3d() to allow them to be used in rglwidget().
   - Now uses forward slashes in rgl.postscript(fmt = "tex") generated code.
@@ -777,3 +777,6 @@ base graphics.
     web page without exhausting it.
   - The worker functions used by subdivision3d() have
     been exported for use on their own.
+  - The rglwidget code now supports textures on spheres.  
+    It now uses the same mesh as the one used inside R. 
+    (The lack of support was pointed out by Justin McManus.)

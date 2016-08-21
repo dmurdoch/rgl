@@ -1362,9 +1362,9 @@ rglwidgetClass = function() {
         subscene = this.getObj(subsceneid);
         var scale = subscene.par3d.scale,
             scount = count;
-        gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, this.sphere.sphereStride,  0);
+        gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.enableVertexAttribArray(obj.normLoc );
-        gl.vertexAttribPointer(obj.normLoc,  3, gl.FLOAT, false, this.sphere.sphereStride,  0);
+        gl.vertexAttribPointer(obj.normLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.disableVertexAttribArray( this.colLoc );
         var sphereNorm = new CanvasMatrix4();
         sphereNorm.scale(scale[0], scale[1], scale[2]);
@@ -1373,6 +1373,14 @@ rglwidgetClass = function() {
 
         if (nc == 1) {
           gl.vertexAttrib4fv( this.colLoc, new Float32Array(obj.onecolor));
+        }
+        
+        if (has_texture) {
+          gl.enableVertexAttribArray( obj.texLoc );
+          gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride, 4*this.sphere.vOffsets.tofs);
+          gl.activeTexture(gl.TEXTURE0);
+          gl.bindTexture(gl.TEXTURE_2D, obj.texture);
+          gl.uniform1i( obj.sampler, 0);
         }
 
         for (i = 0; i < scount; i++) {
@@ -1839,12 +1847,14 @@ rglwidgetClass = function() {
           reuse = verts.reuse, result;
       if (typeof reuse !== "undefined") {
         var prev = document.getElementById(reuse).rglinstance.sphere;
-        result = {vb: prev.vb, it: prev.it};
-      } else {
-        result = {vb: new Float32Array(this.flatten(this.transpose(verts.vb))),
-              it: new Uint16Array(this.flatten(this.transpose(verts.it)))};
-      }
-      result.sphereStride = 12;
+        result = {values: prev.values, vOffsets: prev.vOffsets, it: prev.it};
+      } else 
+        result = {values: new Float32Array(this.flatten(this.cbind(this.transpose(verts.vb),
+                    this.transpose(verts.texcoords)))),
+                  it: new Uint16Array(this.flatten(this.transpose(verts.it))),
+                  vOffsets: {vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:-1, 
+                    tofs:3, stride:5}};
+
       result.sphereCount = result.it.length;
       this.sphere = result;
     };
@@ -1854,7 +1864,7 @@ rglwidgetClass = function() {
       if (gl.isContextLost()) return;
       sphere.buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, sphere.buf);
-      gl.bufferData(gl.ARRAY_BUFFER, sphere.vb, gl.STATIC_DRAW);
+      gl.bufferData(gl.ARRAY_BUFFER, sphere.values, gl.STATIC_DRAW);
       sphere.ibuf = gl.createBuffer();
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphere.ibuf);
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, sphere.it, gl.STATIC_DRAW);

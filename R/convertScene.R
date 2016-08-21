@@ -416,12 +416,29 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	  result$sphereVerts <- list(reuse = sphereId[1])
 	} else {
 	  # Make model sphere
-	  x <- subdivision3d(octahedron3d(),2)
-	  r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
-	  x$vb <- t(t(x$vb[1:3,])/r)
-	  x$it <- x$it-1
-    result$sphereVerts <- x
-    reuseDF <- rbind(reuseDF,
+	  segments <- 16
+	  sections <- 16
+	  iy <- 0:sections
+	  fy <- iy/sections
+	  phi <- fy - 0.5
+	  ix <- 0:segments
+	  fx <- ix/segments
+	  theta <- 2*fx
+	  qx <- as.numeric(outer(phi, theta, function(phi, theta) sinpi(theta)*cospi(phi)))
+	  qy <- as.numeric(outer(phi, theta, function(phi, theta) sinpi(phi)))
+	  qz <- as.numeric(outer(phi, theta, function(phi, theta) cospi(theta)*cospi(phi)))
+	  inds <- rep(seq_len(sections), segments) + (sections + 1)*rep(seq_len(segments)-1, each = sections)
+	  x <- tmesh3d(vertices = rbind(qx, qy, qz, 1), 
+	  	       texcoords = cbind(rep(fx, each = sections+1),
+	  	       		         rep(fy, segments+1)),
+	  	       indices = cbind(rbind(inds, inds + sections + 1, 
+	  	       		             inds + sections + 2),
+	  	       		       rbind(inds, inds + sections + 2, 
+	  	       		             inds + 1)))
+	  x$it <- x$it - 1
+	  x$vb <- x$vb[1:3,]
+          result$sphereVerts <- x
+          reuseDF <- rbind(reuseDF,
                      data.frame(id = -1, elementId = elementId,
                                 texture = "", stringsAsFactors = FALSE))
 	}

@@ -1,4 +1,5 @@
 rgl           RGL Demonstration
+rglExamples   All examples displayed in HTML
 hist3d        3D histogram using basic building blocks
 bivar         Bivariate densities: kernel smoothing using rgl.surface and alpha-channel (requires MASS package)
 abundance     Animal abundance, visualization of multi-dimension data using multiple techniques
