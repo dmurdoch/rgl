@@ -47,10 +47,12 @@ if (interactive()) {
  open3d()
  points3d(x, y, z)
  f <- select3d()
- keep <- f(x, y, z)
- rgl.pop()
- points3d(x[keep], y[keep], z[keep], color = 'red')
- points3d(x[!keep], y[!keep], z[!keep])
+ if (!is.null(f)) {
+   keep <- f(x, y, z)
+   rgl.pop()
+   points3d(x[keep], y[keep], z[keep], color = 'red')
+   points3d(x[!keep], y[!keep], z[!keep])
+ }
 }
 }
 \keyword{dynamic}

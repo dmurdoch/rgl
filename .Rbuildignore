@@ -7,6 +7,6 @@
 ^vignettes/Rplots.pdf
 ^vignettes/test
 
-^demo/examples.R
+^demo/rglExamples.R
 
 ^inst/todo

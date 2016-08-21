@@ -867,6 +867,8 @@ rgl.selectstate <- function()
 
 rgl.select <- function(button = c("left", "middle", "right"))
 {
+	if (rgl.useNULL())
+	  return(NULL)
 	button <- match.arg(button)
 	
 	newhandler <- par3d("mouseMode")
