@@ -11,7 +11,7 @@ rgl id values
 \description{
 All objects in an \pkg{rgl} scene have a
 numerical id.  These ids are normally stored
-in vectors of class \code{"rglIds"}, which
+in vectors of class \code{c("rglIds", "numeric")}, which
 will also have class \code{"rglHighlevel"}
 or \code{"rglLowlevel"} depending on 
 whether a high level function like 
@@ -58,7 +58,9 @@ objects without lights would rarely make
 sense.)
 }
 \value{
-Objects of class \code{c("rglHighlevel", "rglId")} or \code{c("rglLowlevel", "rglId")}.  
+Objects of class \code{c("rglHighlevel", "rglId",
+"numeric")} or \code{c("rglLowlevel", "rglId",
+"numeric")}.  
 }
 \author{
 Duncan Murdoch

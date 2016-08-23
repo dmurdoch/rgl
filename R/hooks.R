@@ -7,7 +7,7 @@
 # which should be passed as the ids arg.
 
 lowlevel <- function(ids = integer()) {
-  structure(ids, class = c("rglLowlevel", "rglId"))
+  structure(ids, class = c("rglLowlevel", "rglId", "numeric"))
 }
 
 # Called just after a high level function (plot3d
@@ -18,7 +18,7 @@ lowlevel <- function(ids = integer()) {
 # which should be passed as the ids arg.
 
 highlevel <- function(ids = integer()) {
-  structure(ids, class = c("rglHighlevel", "rglId"))
+  structure(ids, class = c("rglHighlevel", "rglId", "numeric"))
 }
 
 print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
@@ -32,8 +32,4 @@ print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
 knit_print.rglId <- function(x, ...) {
   if (getOption("rgl.printRglwidget", FALSE))	
     knit_print(rglwidget())
-}
-
-as.data.frame.rglId <- function(x, row.names = NULL, optional = FALSE, ...) {
-  as.data.frame.vector(x)
 }

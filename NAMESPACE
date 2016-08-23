@@ -89,8 +89,6 @@ export(.check3d,
  
  S3method(knit_print, rglId)
  
- S3method(as.data.frame, rglId)
- 
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)
  
