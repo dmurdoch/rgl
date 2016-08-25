@@ -732,7 +732,7 @@ v0.94
   - Changed rgl.pixels() to attempt to avoid segfault on
     OSX.  (Thanks to Greg Jefferis for testing and workaround.)
 
-0.95.1512
+0.96.0
   - Gave better error when XQuartz is not found, tried for better test.
   - Added more information on backgrounds to scene3d() to allow them to be used in rglwidget().
   - Now uses forward slashes in rgl.postscript(fmt = "tex") generated code.
