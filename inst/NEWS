@@ -780,3 +780,7 @@ base graphics.
   - The rglwidget code now supports textures on spheres.  
     It now uses the same mesh as the one used inside R. 
     (The lack of support was pointed out by Justin McManus.)
+    
+0.96.1516
+  - Fixed bug in conversion of bounding box decorations
+    used in rglwidget().

@@ -205,7 +205,9 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	                       subscene$par3d$bbox[3:4],
 	                       subscene$par3d$bbox[5:6])
 	    if (tempID > lastID)
-	      break;
+	      break
+	    else
+	      delFromSubscene3d(tempID)
 	  }
 
 	  # plot the clipping planes as they affect the bounding box
@@ -218,6 +220,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,2])))
 	    res <- c(res, do.call(axis3d, c(list(edge = "z", at = verts[inds, 3], labels = text[inds]), mat)))
 	  res <- c(res, do.call(box3d, mat))
+	  delFromSubscene3d(c(res, tempID))
 	  res
 	}
 
