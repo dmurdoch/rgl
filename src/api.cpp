@@ -682,6 +682,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
     int nvertex = idata[0];
     int nradius = idata[1];
     int nshapes = idata[2];
+    bool fixedSize = (bool)idata[3];
     int count = 0;
     Shape** shapelist;
     if (nshapes) {
@@ -704,7 +705,8 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
     } else 
       shapelist = NULL;
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent(), count, shapelist, userMatrix) ) );
+    						     device->getIgnoreExtent(), count, shapelist, userMatrix,
+    						     fixedSize) ) );
     CHECKGLERROR;
   }
 

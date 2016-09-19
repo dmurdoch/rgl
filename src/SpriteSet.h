@@ -17,7 +17,8 @@ private:
 
 public:
   SpriteSet(Material& material, int nvertex, double* vertex, int nsize, double* size, 
-            int ignoreExtent, int count = 0, Shape** shapelist = NULL, double* userMatrix = NULL);
+            int ignoreExtent, int count = 0, Shape** shapelist = NULL, double* userMatrix = NULL,
+            bool fixedSize = false);
   ~SpriteSet();
 
   /**
@@ -61,9 +62,10 @@ public:
 private:
   GLdouble userMatrix[16]; /* Transformation for 3D sprites */
   Matrix4x4 m;             /* Modelview matrix cache */
+  Matrix4x4 p;             /* Projection matrix cache */
   bool doTex;
   std::vector<Shape*> shapes;
-
+  bool fixedSize;
 };
 
 } // namespace rgl

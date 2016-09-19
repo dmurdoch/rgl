@@ -193,7 +193,7 @@ rgl.attrib <- function( id, attrib, first=1,
     else if (id %in% rgl.ids("bboxdeco", subscene = 0)$id)
       rownames(result) <- "draw_front"[first:last]
     else if (id %in% rgl.ids("shapes", subscene = 0)$id)
-      rownames(result) <- "ignoreExtent"[first:last]
+      rownames(result) <- c("ignoreExtent", "fixedSize")[first:last]
  
   result
 }
@@ -765,7 +765,8 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
 ##
 
 rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL, 
-                         userMatrix=diag(4), ... )
+                         userMatrix=diag(4), fixedSize = FALSE, 
+			 ... )
 {
   rgl.material(...)
 
@@ -775,8 +776,8 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   nradius <- length(radius)
   if (!nradius) stop("No radius specified")
   if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
-  
-  idata   <- as.integer( c(ncenter,nradius,length(shapes)) )
+  if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
+  idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize) )
   
   ret <- .C( rgl_sprites,
     success = as.integer(FALSE),

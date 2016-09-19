@@ -784,3 +784,7 @@ base graphics.
 0.96.1516
   - Fixed bug in conversion of bounding box decorations
     used in rglwidget().
+  - Added "fixedSize" argument to rgl.sprites() and related
+    functions.  (Not implemented in rglwidget() yet.)
+  - Added plotmath3d() function, and set text3d() to
+    use it when necessary.

@@ -12,10 +12,12 @@ using namespace rgl;
 //
 
 SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, int in_nsize, double* in_size,
-                     int in_ignoreExtent, int count, Shape** in_shapelist, double* in_userMatrix)
+                     int in_ignoreExtent, int count, Shape** in_shapelist, double* in_userMatrix,
+                     bool in_fixedSize)
  : Shape(in_material, in_ignoreExtent), 
   vertex(in_nvertex, in_vertex),
-   size(in_nsize, in_size)
+   size(in_nsize, in_size),
+   fixedSize(in_fixedSize)
 { 
   if (!count)
     material.colorPerVertex(false);
@@ -29,7 +31,7 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
       userMatrix[i] = *(in_userMatrix++);
   }
   for(int i=0;i<vertex.size();i++)
-    boundingBox += Sphere( vertex.get(i), size.getRecycled(i) );
+    boundingBox += Sphere( vertex.get(i), size.getRecycled(i)/1.414 );
 }
 
 SpriteSet::~SpriteSet()
@@ -49,7 +51,7 @@ Vertex SpriteSet::getElementCenter(int index)
 
 void SpriteSet::drawBegin(RenderContext* renderContext)
 {
-  double mdata[16] = { 0 };
+  double mdata[16] = { 0 }, pdata[16] = { 0 };
   
   Shape::drawBegin(renderContext);
 
@@ -58,6 +60,19 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
   m = Matrix4x4(mdata);
 
   glPushMatrix();
+  
+  if (fixedSize) {
+    glMatrixMode(GL_PROJECTION);
+  
+    glGetDoublev(GL_PROJECTION_MATRIX, pdata);
+  
+    p = Matrix4x4(pdata);
+  
+    glPushMatrix();
+    glLoadIdentity();
+  
+    glMatrixMode(GL_MODELVIEW);
+  }
 
   if (!shapes.size()) {
     doTex = (material.texture) ? true : false;
@@ -72,12 +87,23 @@ void SpriteSet::drawElement(RenderContext* renderContext, int index)
   float   s = size.getRecycled(index);
   if (o.missing() || ISNAN(s)) return;
 
-  Vertex  v;
-  s = s * 0.5f;
-  v = m * o;
-
+  Vec3 v3;
+  Vec4 v4;
+  
   glLoadIdentity();
-  glTranslatef(v.x, v.y, v.z);
+  if (fixedSize) {
+    float winwidth  = (float) renderContext->rect.width;
+    float winheight = (float) renderContext->rect.height;
+    // The magic number 27 is chosen so that plotmath3d matches text3d.
+    float scalex = 27.0f/winwidth, scaley = 27.0f/winheight;
+    v4 =  p * (m * Vec4(o.x, o.y, o.z, 1.0f));
+    glTranslatef(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w);
+    glScalef(scalex, scaley, (scalex + scaley)/2.0f);
+  } else {
+    s = s * 0.5f;	
+    v3 = m * o;
+    glTranslatef(v3.x, v3.y, v3.z);
+  }
   
   if (shapes.size()) {
     Shape::drawEnd(renderContext);  // The shape will call drawBegin/drawEnd
@@ -116,8 +142,13 @@ void SpriteSet::drawElement(RenderContext* renderContext, int index)
   
 void SpriteSet::drawEnd(RenderContext* renderContext)
 {
+  if (fixedSize) {
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+  }
   glPopMatrix();
-
+  
   if (!shapes.size())
     material.endUse(renderContext);
   Shape::drawEnd(renderContext);
@@ -139,6 +170,7 @@ int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib)
       if (!shapes.size()) return 0;
       else return 4;
     }
+    case FLAGS:	   return 2;
   }
   return Shape::getAttributeCount(bbox, attrib);
 }
@@ -180,6 +212,10 @@ void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count,
           first++;
         }
         return;
+      case FLAGS:
+      	*result++ = (double) ignoreExtent;
+      	*result++ = (double) fixedSize;
+      	return;
     }  
     Shape::getAttribute(bbox, attrib, first, count, result);
   }

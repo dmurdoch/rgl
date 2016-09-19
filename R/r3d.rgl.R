@@ -166,7 +166,11 @@ quads3d     <- function(x,y=NULL,z=NULL,...) {
   do.call("rgl.quads", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
-text3d      <- function(x,y=NULL,z=NULL,texts,adj=0.5,justify,...) {
+text3d      <- function(x, y = NULL, z = NULL,
+			texts, adj = 0.5, justify, 
+			usePlotmath = is.language(texts), ...) {
+  if (usePlotmath) 
+    return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, ...))
   .check3d(); save <- material3d(); on.exit(material3d(save))
   new <- .fixMaterialArgs(..., Params = save)
   if (!missing(justify)) new <- c(list(justify=justify), new)

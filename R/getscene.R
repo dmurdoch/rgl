@@ -24,8 +24,12 @@ scene3d <- function() {
       if (rgl.attrib.count(id, a))
         result[[a]] <- rgl.attrib(id, a)
     flags <- rgl.attrib(id, "flags")
-    if (length(flags) && "ignoreExtent" %in% rownames(flags)) 
-      result$ignoreExtent <- flags["ignoreExtent", 1]
+    if (length(flags)) {
+    	if ("ignoreExtent" %in% rownames(flags)) 
+          result$ignoreExtent <- flags["ignoreExtent", 1]
+    	if ("fixedSize" %in% rownames(flags))
+    	  result$fixedSize <- flags["fixedSize", 1]
+    }
     if (!is.null(result$ids)) {
       objlist <- vector("list", nrow(result$ids))
       for (i in seq_len(nrow(result$ids)))

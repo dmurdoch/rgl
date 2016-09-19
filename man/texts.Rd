@@ -12,8 +12,10 @@
 rgl.texts(x, y = NULL, z = NULL, text, 
             adj = 0.5, justify, family = par3d("family"), font = par3d("font"), 
             cex = par3d("cex"), useFreeType = par3d("useFreeType"), ...)
-text3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
-texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
+text3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify,
+       usePlotmath = is.language(texts), ...) 
+texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify,
+       usePlotmath = is.language(texts), ...) 
 rglFonts(...)
 }
 \arguments{
@@ -26,12 +28,13 @@ rglFonts(...)
               specifying horizontal and vertical adjustment respectively. }.
   \item{justify}{(deprecated, please use adj instead) character string
 specifying the horizontal adjustment; options are \code{"left"}, \code{"right"},
-    \code{"center"}.
+    \code{"center"}.  Ignored if \code{usePlotmath = TRUE}.
   }
   \item{ family }{A device-independent font family name, or "" }
   \item{ font }{A numeric font number from 1 to 5 }
   \item{ cex }{A numeric character expansion value }
   \item{ useFreeType }{logical.  Should FreeType be used to draw text? (See details below.)}
+  \item{ usePlotmath }{logical.  Should \code{\link{plotmath3d}} be used for the text?}
   \item{ ... }{In \code{rgl.texts}, material properties; see \code{\link{rgl.material}} for details.
                  In \code{rglFonts}, device dependent font definitions for use with FreeType.
                  In the other functions, additional parameters to pass to \code{rgl.texts}.}  
@@ -52,6 +55,11 @@ plural to be consistent with all the other graphics primitives.  Take
 your choice!
 
 If any coordinate or text is \code{NA}, that text is not plotted.
+
+If \code{usePlotmath} is \code{TRUE}, the work will be done
+by the \code{\link{plotmath3d}} function instead of \code{rgl.texts}.  This is the default if the \code{texts}
+parameter is \dQuote{language}, e.g. the result of
+a call to \code{\link{expression}} or \code{\link{quote}}.
 }
 \section{Fonts}{
 Fonts are specified using the \code{family}, \code{font}, \code{cex}, 
@@ -107,7 +115,7 @@ Bitmapped fonts have a limited number of characters supported; if any
 unsupported characters are used, an error will be thrown.
 }
 \value{
-  The text drawing functions return the object ID of the text object i
+  The text drawing functions return the object ID of the text object (or sprites, in case of \code{usePlotmath = TRUE})
 invisibly.
 
   \code{rglFonts} returns the current set of font definitions.
@@ -137,6 +145,6 @@ rglFonts(serif = c("FreeSerif.ttf", "FreeSerifBold.ttf", "FreeSerifItalic.ttf",
 } 
 }
 \seealso{
-  \code{\link{r3d}}
+  \code{\link{r3d}}, \code{\link{plotmath3d}}
 }
 \keyword{dynamic}

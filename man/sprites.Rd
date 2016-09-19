@@ -7,9 +7,11 @@
   Adds a sprite set shape node to the scene.
 }
 \usage{
-sprites3d(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, ...)
+sprites3d(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, 
+            ...)
 particles3d(x, y = NULL, z = NULL, radius = 1, ...)
-rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, ...)
+rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, 
+            fixedSize = FALSE, ...)
 }
 \arguments{
   \item{ x, y, z }{point coordinates.  Any reasonable way of defining the
@@ -20,6 +22,8 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, ...)
     identifiers of shapes in the scene}
   \item{ userMatrix }{if \code{shape} is not \code{NULL}, the transformation matrix 
     for the shapes}
+  \item{ fixedSize }{should sprites remain at a fixed size,
+or resize with the scene?}
   \item{ ... }{material properties when \code{shape == 0}, texture mapping is supported}
 }
 \details{

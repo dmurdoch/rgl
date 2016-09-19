@@ -13,7 +13,7 @@ export(.check3d,
         matrixSetter, mfrow3d, movie3d, mtext3d, 
 	newSubscene3d, next3d, normalize.mesh3d, observer3d, octahedron3d, oh3d, open3d, 
 	par3d, par3dinterp, par3dinterpSetter, particles3d, pch3d, persp3d, planes3d, 
-        play3d, plot3d, points3d, 
+        play3d, plot3d, plotmath3d, points3d, 
 	polygon3d, pop3d, propertySetter, propertySlider,
 	qmesh3d, quads3d, readOBJ, readSTL, rgl.abclines, rgl.bbox, rgl.bg, rgl.bringtotop, rgl.clear,
 	rgl.getMouseCallbacks, rgl.getWheelCallback,
@@ -96,7 +96,8 @@ export(.check3d,
    importFrom(utils, getWindowsHandle)
  }
  
- importFrom(graphics, legend, par, plot, polygon)
+ importFrom(graphics, legend, par, plot, plot.new, polygon,
+ 	    strwidth, strheight)
  importFrom(grDevices, col2rgb, colorRamp, dev.off, png, 
  	    postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, qchisq, qf, splinefun, var)
