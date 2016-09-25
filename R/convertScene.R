@@ -129,9 +129,9 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 		result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
 								 "spheres")
 
-		result["has_texture"] <- !is.null(mat$texture)
+		result["has_texture"] <- has_texture <- !is.null(mat$texture)
 
-		result["is_transparent"] <- is_transparent <- any(obj$colors[,"a"] < 1)
+		result["is_transparent"] <- is_transparent <- has_texture || any(obj$colors[,"a"] < 1)
 
 		result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
 										    "spheres", "sprites", "text")

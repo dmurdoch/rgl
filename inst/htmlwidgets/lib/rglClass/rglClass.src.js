@@ -454,12 +454,13 @@ rglwidgetClass = function() {
                             "    vec4 lighteffect = colDiff;\n";
       }
 
-      if ((has_texture && texture_format === "rgba") || type === "text")
+      if (type === "text")
         result = result +   "    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n";
 
       if (has_texture) {
         result = result + {
             rgb:            "   vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);\n",
+            rgba:           "   vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n",
             alpha:          "   vec4 textureColor = texture2D(uSampler, vTexcoord);\n"+
                             "   float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;\n"+
                             "   textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);\n",
