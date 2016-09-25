@@ -40,9 +40,9 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
     "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap",
-    "depth_mask", "depth_test")
+    "depth_mask", "depth_test", "isTransparent")
 
-.material3d.writeOnly <- character(0)
+.material3d.readOnly <- "isTransparent"
 
 # This function expands a list of arguments by putting
 # all entries from Params (i.e. the current settings by default)
@@ -65,7 +65,9 @@ material3d  <- function (...)
 {
     args <- list(...)
     argnames <- names(args)
-    
+    bad <- intersect(.material3d.readOnly, argnames)
+    if (length(bad))
+    	stop("Cannot set ", paste(sQuote(bad), collapse = ", "))
     if (!length(args))
 	argnames <- .material3d
     else {

@@ -113,7 +113,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   if (missing(ncolors))
     ncolors <- if (id) rgl.attrib.count(id, "colors") else rgl.getcolorcount()
   
-  idata <- rep(0, 25+3*ncolors)
+  idata <- rep(0, 26+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -141,9 +141,9 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[23 + 3*(seq_len(idata[1]))], 
-                   idata[24 + 3*(seq_len(idata[1]))], 
-                   idata[25 + 3*(seq_len(idata[1]))], maxColorValue = 255),
+  list(color = rgb(idata[24 + 3*(seq_len(idata[1]))], 
+                   idata[25 + 3*(seq_len(idata[1]))], 
+                   idata[26 + 3*(seq_len(idata[1]))], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=4, length=idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
@@ -165,7 +165,8 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        point_antialias = idata[22] == 1,
        line_antialias = idata[23] == 1,
        depth_mask = idata[24] == 1,
-       depth_test = depthtests[idata[25] + 1]
+       depth_test = depthtests[idata[25] + 1],
+       isTransparent = idata[26] == 1
        )
                    
 }

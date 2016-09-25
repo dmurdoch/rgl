@@ -1074,8 +1074,9 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[22] = mat->line_antialias ? 1 : 0;
   idata[23] = mat->depth_mask ? 1 : 0;
   idata[24] = mat->depth_test;
+  idata[25] = mat->isTransparent();
 
-  for (i=0, j=25; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=26; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat->colors.getColor(i).getRedub();
     idata[j++] = (int) mat->colors.getColor(i).getGreenub();
     idata[j++] = (int) mat->colors.getColor(i).getBlueub();

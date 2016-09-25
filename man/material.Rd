@@ -116,7 +116,10 @@ material3d(...)
      \code{"less"} (the default), \code{"equal"}, \code{"lequal"}
      (less than or equal), \code{"greater"}, \code{"notequal"},
      \code{"gequal"} (greater than or equal), \code{"always"}.}
-  \item{...}{Any of the arguments above; see Details below.}
+  \item{isTransparent}{(read-only)  Is the colour
+or texture partially transparent?}
+  \item{...}{Any of the arguments above can
+  be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
 }
 \details{
   Only one side at a time can be culled.
