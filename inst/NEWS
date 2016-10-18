@@ -788,3 +788,6 @@ base graphics.
     functions.  (Not implemented in rglwidget() yet.)
   - Added plotmath3d() function, and set text3d() to
     use it when necessary.
+  - addNormals() gave an error if the mesh it was working
+    with had degenerate triangles or quads.  (Reported
+    by Rolf Turner and Graham Griffiths.)

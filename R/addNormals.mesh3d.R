@@ -15,12 +15,13 @@ addNormals.mesh3d <- function(x, ...) {
     for (i in 1:ncol(it)) {
       normal <- normalize(xprod( v[, it[1, i]] - v[, it[3, i]], 
                                  v[, it[2, i]] - v[, it[1, i]]))
-      for (j in 1:3) {
-      	if (sum(normals[1:3, it[j,i]]*normal) < 0)
-      	  normals[, it[j,i]] <- normals[, it[j,i]] + c(-normal, 1)
-      	else
-          normals[, it[j,i]] <- normals[, it[j,i]] + c(normal, 1)
-      }
+      if (!any(is.na(normal)))
+        for (j in 1:3) {
+          if (sum(normals[1:3, it[j,i]]*normal) < 0)
+      	    normals[, it[j,i]] <- normals[, it[j,i]] + c(-normal, 1)
+      	  else
+            normals[, it[j,i]] <- normals[, it[j,i]] + c(normal, 1)
+        }
     }
   }
   
@@ -29,13 +30,13 @@ addNormals.mesh3d <- function(x, ...) {
     for (i in 1:ncol(it)) {
       normal <- normalize(xprod( v[, it[1, i]] - v[, it[4, i]],
                                  v[, it[2, i]] - v[, it[1, i]]))
-      for (j in 1:4) {
-      	if (sum(normals[1:3, it[j,i]]*normal) < 0)
-      	  normals[, it[j,i]] <- normals[, it[j,i]] + c(-normal, 1)
-      	else
-          normals[, it[j,i]] <- normals[, it[j,i]] + c(normal, 1)
-      }
-
+      if (!any(is.na(normal)))
+        for (j in 1:4) {
+      	  if (sum(normals[1:3, it[j,i]]*normal) < 0)
+      	    normals[, it[j,i]] <- normals[, it[j,i]] + c(-normal, 1)
+      	  else
+            normals[, it[j,i]] <- normals[, it[j,i]] + c(normal, 1)
+        }
     }
   }
   normals <- t( t(normals)/normals[4,] )
