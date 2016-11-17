@@ -78,7 +78,7 @@ setClipregion <- function(xlim = NULL, ylim = NULL, zlim = NULL, force = FALSE) 
     if (length(offsets[keep]))
       result <- c(result, clipplanes = clipplanes3d(normals[keep,], d = offsets[keep]))
   } else 
-    result <- NULL
+    result <- integer()
   lowlevel(result)
 }
 

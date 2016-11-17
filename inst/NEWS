@@ -781,7 +781,7 @@ base graphics.
     It now uses the same mesh as the one used inside R. 
     (The lack of support was pointed out by Justin McManus.)
     
-0.96.1521
+0.96.1522
   - Fixed bug in conversion of bounding box decorations
     used in rglwidget().
   - Added "fixedSize" argument to rgl.sprites() and related
@@ -791,3 +791,5 @@ base graphics.
   - addNormals() gave an error if the mesh it was working
     with had degenerate triangles or quads.  (Reported
     by Rolf Turner and Graham Griffiths.)
+  - Auto-clipping sometimes changed result vectors into
+    lists.
