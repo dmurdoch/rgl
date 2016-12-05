@@ -39,6 +39,9 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
 
   if (length(stop) != 1 || !is.finite(stop)) stop <- NULL
 
+  if (identical(controls, NA)) 
+  	stop(dQuote("controls"), " should not be NA.")
+  	
   stopifnot(is.list(controls))
 
   if (inherits(controls, "rglControl"))

@@ -18,15 +18,20 @@ rglwidget <- local({
   if (is.null(elementId) && !inShiny())
     elementId <- paste0("rgl", sample(100000, 1))
 
+  if (!inherits(x, "rglscene"))
+    stop("First argument should be an rgl scene.")
+  
   x = convertScene(x, width, height, snapshot = snapshot,
                    elementId = elementId, reuse = reuseDF)
   if (!is.na(reuse))
     reuseDF <<- attr(x, "reuse")
 
-  if (inherits(controllers, "rglPlayer") && is.na(controllers$x$sceneId)) {
-    x$players <- controllers$elementId
-    if (!is.null(elementId))
-      controllers$x$sceneId <- elementId
+  if (inherits(controllers, "rglPlayer")) {
+    if (is.na(controllers$x$sceneId)) {
+      x$players <- controllers$elementId
+      if (!is.null(elementId))
+        controllers$x$sceneId <- elementId
+    }
   } else if (inherits(controllers, "shiny.tag.list")) {
     x$players <- character()
     for (i in seq_along(controllers)) {
