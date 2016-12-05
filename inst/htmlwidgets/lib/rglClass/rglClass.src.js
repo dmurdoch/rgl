@@ -36,6 +36,10 @@ rglwidgetClass = function() {
     };
 
     this.cbind = function(a, b) {
+      if (b.length < a.length)
+        b = this.repeatToLen(b, a.length);
+      else if (a.length < b.length)
+        a = this.repeatToLen(a, b.length);
       return a.map(function(currentValue, index, array) {
             return currentValue.concat(b[index]);
       });

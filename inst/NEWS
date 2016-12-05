@@ -781,7 +781,7 @@ base graphics.
     It now uses the same mesh as the one used inside R. 
     (The lack of support was pointed out by Justin McManus.)
     
-0.96.1522
+0.96.1523
   - Fixed bug in conversion of bounding box decorations
     used in rglwidget().
   - Added "fixedSize" argument to rgl.sprites() and related
@@ -793,3 +793,4 @@ base graphics.
     by Rolf Turner and Graham Griffiths.)
   - Auto-clipping sometimes changed result vectors into
     lists.
+  - The controllers did not recycle some values correctly.
