@@ -26,9 +26,9 @@ HTMLWidgets.widget({
        We need to make sure we respond to their initial values. */
 
     if (typeof x.players !== "undefined") {
-      x.players = [].concat(x.players);
-      for (i = 0; i < x.players.length; i++) {
-        pel = window[x.players[i]];
+      var players = [].concat(x.players);
+      for (i = 0; i < players.length; i++) {
+        pel = window[players[i]];
         if (typeof pel !== "undefined") {
           player = pel.rglPlayer;
           if (typeof player !== "undefined" && !player.initialized) {
@@ -37,7 +37,7 @@ HTMLWidgets.widget({
           } else
             draw = false;  // The player will do the drawing
         } else
-          rgl.alertOnce("Controller '" + x.players[i] + "' not found.");
+          rgl.alertOnce("Controller '" + players[i] + "' not found.");
       }
     }
     rgl.drag = 0;

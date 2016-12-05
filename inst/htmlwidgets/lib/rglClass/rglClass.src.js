@@ -2282,6 +2282,8 @@ rglwidgetClass = function() {
       for (l = 0; l < nobjs; l++) {
         objid = objids[l];
         obj = this.getObj(objid);
+        if (typeof obj.vOffsets === "undefined")
+          continue;
         propvals = obj.values;
         stride = obj.vOffsets.stride;
         for (k = 0; k < attribs.length; k++) {
