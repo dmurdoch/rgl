@@ -64,10 +64,7 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 material3d  <- function (...)
 {
     args <- list(...)
-    argnames <- names(args)
-    bad <- intersect(.material3d.readOnly, argnames)
-    if (length(bad))
-    	stop("Cannot set ", paste(sQuote(bad), collapse = ", "))
+    argnames <- setdiff(names(args), .material3d.readOnly)
     if (!length(args))
 	argnames <- .material3d
     else {

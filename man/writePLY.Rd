@@ -71,8 +71,9 @@ Invisibly returns the name of the connection to which the
 data was written.
 }
 \references{
-The file format was found at \url{http://www.mathworks.com/matlabcentral/fx_files/5459/1/content/ply.htm}
-on November 10, 2012.  
+The file format was found on \url{http://www.mathworks.com} on November 10, 2012
+at a URL that no longer exists; currently the
+format is described at \url{https://www.mathworks.com/help/vision/ug/the-ply-format.html}.
 }
 \author{
 Duncan Murdoch
