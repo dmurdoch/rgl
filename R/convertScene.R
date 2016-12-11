@@ -103,7 +103,8 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	flagnames <- c("is_lit", "is_smooth", "has_texture", "is_indexed",
 		       "depth_sort", "fixed_quads", "is_transparent",
 		       "is_lines", "sprites_3d", "sprite_3d",
-		       "is_subscene", "is_clipplanes")
+		       "is_subscene", "is_clipplanes",
+		       "fixed_size")
 
 	getFlags <- function(id) {
 
@@ -142,7 +143,8 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 
 		result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
 		result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
-		result
+	  result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
+	  result
 	}
 
 	getSubsceneFlags <- function(id) {

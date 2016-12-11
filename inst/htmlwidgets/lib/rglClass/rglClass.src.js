@@ -159,6 +159,7 @@ rglwidgetClass = function() {
     this.f_sprite_3d = 512;
     this.f_is_subscene = 1024;
     this.f_is_clipplanes = 2048;
+    this.f_fixed_size = 4096;
 
     this.whichList = function(id) {
       var obj = this.getObj(id),
@@ -287,6 +288,7 @@ rglwidgetClass = function() {
           sprites_3d = flags & this.f_sprites_3d,
           sprite_3d = flags & this.f_sprite_3d,
           nclipplanes = this.countClipplanes(),
+          fixed_size = flags & this.f_fixed_size,
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
@@ -308,7 +310,7 @@ rglwidgetClass = function() {
         result = result + " attribute vec2 aTexcoord;\n"+
                           " varying vec2 vTexcoord;\n";
 
-      if (type === "text")
+      if (fixed_size)
         result = result + "  uniform vec2 textScale;\n";
 
       if (fixed_quads)
@@ -336,15 +338,15 @@ rglwidgetClass = function() {
       if (is_lit && !fixed_quads && !sprite_3d)
         result = result + "    vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);\n";
 
-      if (has_texture || type === "text")
+      if (has_texture || type == "text")
         result = result + "    vTexcoord = aTexcoord;\n";
 
-      if (type == "text")
+      if (fixed_size)
         result = result + "    vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);\n"+
                           "   pos = pos/pos.w;\n"+
                           "   gl_Position = pos + vec4(aOfs*textScale, 0.,0.);\n";
 
-      if (type == "sprites")
+      if (type == "sprites" && !fixed_size)
         result = result + "    vec4 pos = mvMatrix * vec4(aPos, 1.);\n"+
                           "   pos = pos/pos.w + vec4(aOfs, 0., 0.);\n"+
                           "   gl_Position = prMatrix*pos;\n";
@@ -862,6 +864,7 @@ rglwidgetClass = function() {
           depth_sort = flags & this.f_depth_sort,
           sprites_3d = flags & this.f_sprites_3d,
           sprite_3d = flags & this.f_sprite_3d,
+          fixed_size = flags & this.f_fixed_size,
           gl = this.gl || this.initGL(),
           texinfo, drawtype, nclipplanes, f, frowsize, nrows,
           i,j,v, mat, uri, matobj;
@@ -989,6 +992,7 @@ rglwidgetClass = function() {
     if (typeof obj.radii !== "undefined") {
       radofs = stride;
       stride = stride + 1;
+      // FIXME:  always concat the radii?
       if (obj.radii.length === v.length) {
         v = this.cbind(v, obj.radii);
       } else if (obj.radii.length === 1) {
@@ -1003,10 +1007,11 @@ rglwidgetClass = function() {
       oofs = stride;
       stride += 2;
       vnew = new Array(4*v.length);
-      var size = obj.radii, s = size[0]/2;
+      var rescale = fixed_size ? 72 : 1,
+          size = obj.radii, s = rescale*size[0]/2;
       for (i=0; i < v.length; i++) {
         if (size.length > 1)
-          s = size[i]/2;
+          s = rescale*size[i]/2;
         vnew[4*i]  = v[i].concat([0,0,-s,-s]);
         vnew[4*i+1]= v[i].concat([1,0, s,-s]);
         vnew[4*i+2]= v[i].concat([1,1, s, s]);
@@ -1166,7 +1171,7 @@ rglwidgetClass = function() {
       obj.prMatLoc = gl.getUniformLocation(obj.prog, "prMatrix");
     }
 
-    if (type === "text") {
+    if (fixed_size) {
       obj.textScaleLoc = gl.getUniformLocation(obj.prog, "textScale");
     }
 
@@ -1213,6 +1218,7 @@ rglwidgetClass = function() {
           sprites_3d = flags & this.f_sprites_3d,
           sprite_3d = flags & this.f_sprite_3d,
           is_lines = flags & this.f_is_lines,
+          fixed_size = flags & this.f_fixed_size,
           gl = this.gl || this.initGL(),
           sphereMV, baseofs, ofs, sscale, i, count, light,
           faces;
@@ -1272,7 +1278,7 @@ rglwidgetClass = function() {
         }
         gl.uniformMatrix4fv(obj.usermatLoc, false, this.usermat);
       }
-
+      
       if (type === "spheres") {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.sphere.buf);
       } else {
@@ -1284,7 +1290,7 @@ rglwidgetClass = function() {
       } else if (type === "spheres") {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
       }
-
+      
       gl.uniformMatrix4fv( obj.prMatLoc, false, new Float32Array(this.prMatrix.getAsArray()) );
       gl.uniformMatrix4fv( obj.mvMatLoc, false, new Float32Array(this.mvMatrix.getAsArray()) );
       var clipcheck = 0,
@@ -1321,7 +1327,7 @@ rglwidgetClass = function() {
         }
       }
 
-      if (type === "text") {
+      if (fixed_size) {
         gl.uniform2f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height);
       }
 

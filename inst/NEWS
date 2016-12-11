@@ -781,11 +781,11 @@ base graphics.
     It now uses the same mesh as the one used inside R. 
     (The lack of support was pointed out by Justin McManus.)
     
-0.96.1526
+0.96.1527
   - Fixed bug in conversion of bounding box decorations
     used in rglwidget().
   - Added "fixedSize" argument to rgl.sprites() and related
-    functions.  (Not implemented in rglwidget() yet.)
+    functions.
   - Added plotmath3d() function, and set text3d() to
     use it when necessary.
   - addNormals() gave an error if the mesh it was working
