@@ -162,6 +162,7 @@ Function                      | Description
 `r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
 `r indexfns("arrow3d")`:      | add an arrow to a scene
 `r indexfns("pch3d")`:	      | draw base-style plotting symbols
+`r indexfns("plotmath3d")`:   | used by `r linkfn("text3d")` for math text
 
 ### Axes and other "decorations"
 
@@ -566,6 +567,7 @@ Function                             | Description
 `r indexfns("vertexControl")`       | control properties of vertices
 `r indexfns("playwidget")`       | display and automate controls
 `r indexfns("sceneChange")`      | used in `Shiny` for large scene changes
+`r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`    | `matgrittr` pipe 
 
 Some functions are mainly for internal use:
 `r indexfns(c("elementId2Prefix", "playwidgetOutput", "renderPlaywidget", "rglwidgetOutput", "renderRglwidget", "registerSceneChange"))`. 

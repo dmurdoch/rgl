@@ -1,5 +1,6 @@
 \name{import}
 \alias{\%>\%}
+\alias{pipe}
 \docType{import}
 \title{Imported from magrittr}
 \description{
