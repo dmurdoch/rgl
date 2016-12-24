@@ -781,7 +781,7 @@ base graphics.
     It now uses the same mesh as the one used inside R. 
     (The lack of support was pointed out by Justin McManus.)
     
-0.96.1527
+0.96.1529
   - Fixed bug in conversion of bounding box decorations
     used in rglwidget().
   - Added "fixedSize" argument to rgl.sprites() and related
@@ -797,3 +797,5 @@ base graphics.
   - Fixed bug in initialization of playwidgets.
   - material3d() now silently ignores attempts to set
     read-only properties.
+  - Added setUserShaders() for user-specified shaders
+    (currently for WebGL only).

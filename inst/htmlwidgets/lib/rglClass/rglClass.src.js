@@ -270,16 +270,17 @@ rglwidgetClass = function() {
     	var value = this.drawing;
     	this.drawing = true;
     	return value;
-    }
+    };
     
     this.stopDrawing = function(saved) {
       this.drawing = saved;
       if (!saved && this.gl && this.gl.isContextLost())
         this.restartCanvas();
-    }
+    };
     
     this.getVertexShader = function(id) {
       var obj = this.getObj(id),
+          userShader = obj.userVertexShader,
           flags = obj.flags,
           type = obj.type,
           is_lit = flags & this.f_is_lit,
@@ -292,6 +293,8 @@ rglwidgetClass = function() {
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
+      
+      if (typeof userShader !== "undefined") return userShader;
 
       result = "  /* ****** "+type+" object "+id+" vertex shader ****** */\n"+
       "  attribute vec3 aPos;\n"+
@@ -358,11 +361,13 @@ rglwidgetClass = function() {
                           "   gl_Position = prMatrix * vPosition;\n";
 
       result = result + "  }\n";
+      console.log(result);
       return result;
     };
 
     this.getFragmentShader = function(id) {
       var obj = this.getObj(id),
+          userShader = obj.userFragmentShader,
           flags = obj.flags,
           type = obj.type,
           is_lit = flags & this.f_is_lit,
@@ -374,6 +379,8 @@ rglwidgetClass = function() {
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
+      
+      if (typeof userShader !== "undefined") return userShader;
 
       if (has_texture)
         texture_format = this.getMaterial(id, "textype");
@@ -485,6 +492,7 @@ rglwidgetClass = function() {
         result = result +   "   gl_FragColor = lighteffect;\n";
 
       result = result + "  }\n";
+      console.log(result);
       return result;
     };
 
@@ -1048,8 +1056,29 @@ rglwidgetClass = function() {
       oofs = -1;
       v = this.cbind(v, obj.texcoords);
     } else {
-       tofs = -1;
+      tofs = -1;
       oofs = -1;
+    }
+    
+    if (typeof obj.userAttributes !== "undefined") {
+      obj.userAttribOffsets = {};
+      obj.userAttribLocations = {};
+      obj.userAttribSizes = {};
+      for (var attr in obj.userAttributes) {
+      	obj.userAttribLocations[attr] = gl.getAttribLocation(obj.prog, attr);
+      	if (obj.userAttribLocations[attr] >= 0) { // Attribute may not have been used
+      	  obj.userAttribOffsets[attr] = stride;
+      	  v = this.cbind(v, obj.userAttributes[attr]);
+      	  stride = v[0].length;
+      	  obj.userAttribSizes[attr] = stride - obj.userAttribOffsets[attr];
+      	}
+      }
+    }
+    
+    if (typeof obj.userUniforms !== "undefined") {
+      obj.userUniformLocations = {};
+      for (var attr in obj.userUniforms) 
+        obj.userUniformLocations[attr] = gl.getUniformLocation(obj.prog, attr);
     }
 
     if (stride !== v[0].length) {
@@ -1388,7 +1417,8 @@ rglwidgetClass = function() {
         
         if (has_texture) {
           gl.enableVertexAttribArray( obj.texLoc );
-          gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride, 4*this.sphere.vOffsets.tofs);
+          gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride, 
+                                 4*this.sphere.vOffsets.tofs);
           gl.activeTexture(gl.TEXTURE0);
           gl.bindTexture(gl.TEXTURE_2D, obj.texture);
           gl.uniform1i( obj.sampler, 0);
@@ -1450,6 +1480,37 @@ rglwidgetClass = function() {
       if (fixed_quads) {
         gl.enableVertexAttribArray( obj.ofsLoc );
         gl.vertexAttribPointer(obj.ofsLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
+      }
+      
+      if (typeof obj.userAttributes !== "undefined") {
+      	for (var attr in obj.userAttribSizes) {  // Not all attributes may have been used
+      	  gl.enableVertexAttribArray( obj.userAttribLocations[attr] );
+      	  gl.vertexAttribPointer( obj.userAttribLocations[attr], obj.userAttribSizes[attr],
+      	  			  gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.userAttribOffsets[attr]);
+      	}
+      }
+      
+      if (typeof obj.userUniforms !== "undefined") {
+      	for (var attr in obj.userUniformLocations) {
+      	  var loc = obj.userUniformLocations[attr];
+      	  if (loc !== null) {
+      	    var uniform = obj.userUniforms[attr];
+      	    if (typeof uniform.length === "undefined")
+      	      gl.uniform1f(loc, uniform);
+      	    else if (typeof uniform[0].length === "undefined") {
+      	      uniform = new Float32Array(uniform);
+      	      switch(uniform.length) {
+      	      	case 2: gl.uniform2fv(loc, uniform); break;
+      	      	case 3: gl.uniform3fv(loc, uniform); break;
+      	      	case 4: gl.uniform4fv(loc, uniform); break;
+      	      	default: console.warn("bad uniform length");
+      	      }
+      	    } else if (uniform.length == 4 && uniform[0].length == 4) 
+      	      gl.uniformMatrix4fv(loc, false, new Float32Array(uniform.getAsArray()));
+      	    else
+      	      console.warn("unsupported uniform matrix");
+      	  }
+      	}
       }
 
       var mode = this.mode4type[type];
@@ -1934,7 +1995,7 @@ rglwidgetClass = function() {
       this.onContextRestored = function(event) {
         self.initGL();
         self.drawScene();
-        console.log("restored context for "+self.scene.rootSubscene);
+        // console.log("restored context for "+self.scene.rootSubscene);
       }
       
       this.onContextLost = function(event) {
