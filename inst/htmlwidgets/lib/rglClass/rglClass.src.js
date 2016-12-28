@@ -1379,7 +1379,8 @@ rglwidgetClass = function() {
           gl = this.gl || this.initGL(),
           mat,
           sphereMV, baseofs, ofs, sscale, i, count, light,
-          faces, pass, mode, attr;
+          faces, pass, mode, pmode, attr,
+          depthsort = function(i,j) { return depths[j] - depths[i]; };
 
       if (typeof id !== "number") {
         this.alertOnce("drawObj id is "+typeof id);
@@ -1628,7 +1629,6 @@ rglwidgetClass = function() {
               depths[i] = z/w;
               faces[i] = i;
             }
-            var depthsort = function(i,j) { return depths[j] - depths[i]; };
             faces.sort(depthsort);
 
             if (type !== "spheres") {
