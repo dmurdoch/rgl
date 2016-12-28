@@ -799,3 +799,4 @@ base graphics.
     read-only properties.
   - Added setUserShaders() for user-specified shaders
     (currently for WebGL only).
+  - Added support for two-sided surfaces in WebGL.

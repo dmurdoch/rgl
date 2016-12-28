@@ -93,10 +93,10 @@ material3d(...)
   \item{front, back}{
     Determines the polygon mode for the specified side:
     \describe{
-      \item{"fill"}{filled polygon}
-      \item{"line"}{wireframed polygon}
+      \item{"filled"}{filled polygon}
+      \item{"lines"}{wireframed polygon}
       \item{"points"}{point polygon}
-      \item{"cull"}{culled (hidden) polygon}
+      \item{"culled"}{culled (hidden) polygon}
     }
   }
   \item{size}{ 
