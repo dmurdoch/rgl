@@ -569,13 +569,16 @@ Function                             | Description
 `r indexfns("sceneChange")`      | used in `Shiny` for large scene changes
 `r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`    | `matgrittr` pipe 
 
+
 Some functions are mainly for internal use:
 `r indexfns(c("elementId2Prefix", "playwidgetOutput", "renderPlaywidget", "rglwidgetOutput", "renderRglwidget", "registerSceneChange"))`. 
 More details are given in the vignette 
 [User Interaction in WebGL](WebGL.html).
 The functions `r indexfns(c("lowlevel", "highlevel"))` are also for internal use,
 marking function results for automatic
-printing.
+printing.  Finally, the experimental function
+`r indexfns("setUserShaders")` allows you to
+use hand-written shaders in WebGL.
 
 The older approach uses the `writeWebGL` function to export a scene 
 to HTML and Javascript code.  

@@ -1201,6 +1201,8 @@ rglwidgetClass = function() {
       obj.f = Array(2);
       for (pass = 0; pass < is_twosided + 1; pass++) {
       	pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
+      	if (pmode === "culled")
+      	  continue;
         if (pmode === "points") {
       	  nrows = obj.vertexCount;
       	  f = Array(nrows);
@@ -1536,8 +1538,8 @@ rglwidgetClass = function() {
                                        obj.values[ofs+2],
                                        obj.values[ofs+3] );
           }
+          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
           gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
-
         }
         return;
       } else {
@@ -1600,9 +1602,11 @@ rglwidgetClass = function() {
       }
 
       for (pass = 0; pass < is_twosided + 1; pass++) {
-      	mode = this.mode4type[type];
         pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
-      
+        if (pmode === "culled")
+          continue;
+          
+      	mode = this.mode4type[type];      
         if (depth_sort && pmode == "filled") {// Don't try depthsorting on wireframe or points
             var nfaces = obj.centers.length,
                 z, w, frowsize = obj.vertices.length/nfaces;
@@ -1641,7 +1645,7 @@ rglwidgetClass = function() {
         if (is_indexed && type !== "spheres") {
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
         } else if (type === "spheres") {
-          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
+          //  FIX ME!
         } 
       
         if (type === "sprites" || type === "text" || type === "quads") {
