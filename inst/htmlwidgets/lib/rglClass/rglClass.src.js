@@ -1199,7 +1199,6 @@ rglwidgetClass = function() {
     
     if (is_indexed) {
       obj.f = Array(2);
-      obj.frowsize = Array(2);
       for (pass = 0; pass < is_twosided + 1; pass++) {
       	pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
         if (pmode === "points") {
@@ -1207,7 +1206,6 @@ rglwidgetClass = function() {
       	  f = Array(nrows);
       	  for (i=0; i < nrows; i++)
       	    f[i] = i;
-      	  obj.frowsize[pass] = 1;
         } else if ((type === "quads" || type === "text" ||
              type === "sprites") && !sprites_3d) {
           nrows = Math.floor(obj.vertexCount/4);
@@ -1221,7 +1219,6 @@ rglwidgetClass = function() {
               f[6*i+4] = 4*i + 2;
               f[6*i+5] = 4*i + 3;
             }
-            obj.frowsize[pass] = 6;
           } else {
             f = Array(8*nrows);
             for (i=0; i < nrows; i++) {
@@ -1234,7 +1231,6 @@ rglwidgetClass = function() {
               f[8*i+6] = 4*i + 3;
               f[8*i+7] = 4*i;
             }
-            obj.frowsize[pass] = 2;
           }
         } else if (type === "triangles") {
           nrows = Math.floor(obj.vertexCount/3);
@@ -1243,7 +1239,6 @@ rglwidgetClass = function() {
             for (i=0; i < f.length; i++) {
               f[i] = i;
             }
-            obj.frowsize[pass] = 3;
           } else if (pmode === "lines") {
             f = Array(6*nrows);
       	    for (i=0; i < nrows; i++) {
@@ -1254,7 +1249,6 @@ rglwidgetClass = function() {
       	      f[6*i + 4] = 3*i + 2;  
       	      f[6*i + 5] = 3*i;      	  
       	    }
-      	    obj.frowsize[pass] = 2;
           }
         } else if (type === "spheres") {
           nrows = obj.vertexCount;
@@ -1262,7 +1256,6 @@ rglwidgetClass = function() {
           for (i=0; i < f.length; i++) {
             f[i] = i;
           }
-          obj.frowsize[pass] = 1;
         } else if (type === "surface") {
           dim = obj.dim[0];
           nx = dim[0];
@@ -1279,7 +1272,6 @@ rglwidgetClass = function() {
                        j + 1 + nx*i);
               } 
             }
-            obj.frowsize[pass] = 6;
           } else if (pmode === "lines") {
             f = [];
             for (j=0; j<nx; j++) {
@@ -1292,7 +1284,6 @@ rglwidgetClass = function() {
                          j+1 + nx*i);
               }
             }
-            obj.frowsize[pass] = 2;
           }
         }
         obj.f[pass] = new Uint16Array(f);
@@ -1492,39 +1483,6 @@ rglwidgetClass = function() {
 
       var nc = obj.colorCount;
       count = obj.vertexCount;
-      if (depth_sort) {
-            var nfaces = obj.centers.length,
-                frowsize, z, w;
-            if (sprites_3d) frowsize = 1;
-            else if (type === "triangles") frowsize = 3;
-            else frowsize = 6;
-            var depths = new Float32Array(nfaces);
-            faces = new Array(nfaces);
-            for(i=0; i<nfaces; i++) {
-              z = this.prmvMatrix.m13*obj.centers[3*i] +
-                  this.prmvMatrix.m23*obj.centers[3*i+1] +
-                  this.prmvMatrix.m33*obj.centers[3*i+2] +
-                  this.prmvMatrix.m43;
-              w = this.prmvMatrix.m14*obj.centers[3*i] +
-                  this.prmvMatrix.m24*obj.centers[3*i+1] +
-                  this.prmvMatrix.m34*obj.centers[3*i+2] +
-                  this.prmvMatrix.m44;
-              depths[i] = z/w;
-              faces[i] = i;
-            }
-            var depthsort = function(i,j) { return depths[j] - depths[i]; };
-            faces.sort(depthsort);
-
-            if (type !== "spheres") {
-              var f = new Uint16Array(obj.f[pass].length);
-              for (i=0; i<nfaces; i++) {
-                for (j=0; j<frowsize; j++) {
-                  f[frowsize*i + j] = obj.f[pass][frowsize*faces[i] + j];
-                }
-              }
-              gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);
-            }
-          }
 
       if (type === "spheres") {
         subscene = this.getObj(subsceneid);
@@ -1643,6 +1601,39 @@ rglwidgetClass = function() {
 
       for (pass = 0; pass < is_twosided + 1; pass++) {
       	mode = this.mode4type[type];
+        pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
+      
+        if (depth_sort && pmode == "filled") {// Don't try depthsorting on wireframe or points
+            var nfaces = obj.centers.length,
+                z, w, frowsize = obj.vertices.length/nfaces;
+            var depths = new Float32Array(nfaces);
+            faces = new Array(nfaces);
+            for(i=0; i<nfaces; i++) {
+              z = this.prmvMatrix.m13*obj.centers[3*i] +
+                  this.prmvMatrix.m23*obj.centers[3*i+1] +
+                  this.prmvMatrix.m33*obj.centers[3*i+2] +
+                  this.prmvMatrix.m43;
+              w = this.prmvMatrix.m14*obj.centers[3*i] +
+                  this.prmvMatrix.m24*obj.centers[3*i+1] +
+                  this.prmvMatrix.m34*obj.centers[3*i+2] +
+                  this.prmvMatrix.m44;
+              depths[i] = z/w;
+              faces[i] = i;
+            }
+            var depthsort = function(i,j) { return depths[j] - depths[i]; };
+            faces.sort(depthsort);
+
+            if (type !== "spheres") {
+              var f = new Uint16Array(obj.f[pass].length);
+              for (i=0; i<nfaces; i++) {
+                for (j=0; j<frowsize; j++) {
+                  f[frowsize*i + j] = obj.f[pass][frowsize*faces[i] + j];
+                }
+              }
+              gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
+              gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);
+            }
+          }
       	
       	if (is_twosided)
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
@@ -1658,8 +1649,6 @@ rglwidgetClass = function() {
         } else if (type === "surface") {
           count = obj.f[pass].length;
         }
-      
-        pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
       
         if (is_indexed) {
           count = obj.f[pass].length;
