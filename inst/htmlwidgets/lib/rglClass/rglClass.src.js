@@ -1200,7 +1200,9 @@ rglwidgetClass = function() {
     if (is_indexed) {
       obj.f = Array(2);
       for (pass = 0; pass < is_twosided + 1; pass++) {
-      	pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
+      	if (type === "triangles" || type === "quads" || type === "surface")
+      	  pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
+      	else pmode = "filled";
       	if (pmode === "culled")
       	  continue;
         if (pmode === "points") {
@@ -1602,7 +1604,9 @@ rglwidgetClass = function() {
       }
 
       for (pass = 0; pass < is_twosided + 1; pass++) {
-        pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
+      	if (type === "triangles" || type === "quads" || type === "surface")
+      	  pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
+      	else pmode = "filled";
         if (pmode === "culled")
           continue;
           
