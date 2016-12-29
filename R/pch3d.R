@@ -46,9 +46,9 @@ pch3d <- function(x, y = NULL, z = NULL, pch = 1, bg = material3d("color")[1],
     rbind(s1, c(NA, NA, NA), s2)
   
   if (missing(radius))
-    avgscale <- sqrt(sum(c(diff(range(xyz[1,],na.rm=TRUE)), 
-  			   diff(range(xyz[2,],na.rm=TRUE)), 
-  			   diff(range(xyz[3,],na.rm=TRUE)))^2/3))
+    avgscale <- sqrt(sum(c(diff(range(xyz[,1],na.rm=TRUE)), 
+  			   diff(range(xyz[,2],na.rm=TRUE)), 
+  			   diff(range(xyz[,3],na.rm=TRUE)))^2/3))
   
   rot <- rotate3d(r3dDefaults$userMatrix, pi/2, 1, 0, 0)
   
@@ -72,7 +72,7 @@ pch3d <- function(x, y = NULL, z = NULL, pch = 1, bg = material3d("color")[1],
   ids <- numeric()   
   if (is.numeric(pch)) {
     for (p in unique(pch)) {
-      thisxyz <- xyz[p == pch,]
+      thisxyz <- xyz[p == pch,, drop = FALSE]
       ids <- c(ids, switch(as.character(p),
         '0' =,
         '1' =,
@@ -102,7 +102,7 @@ pch3d <- function(x, y = NULL, z = NULL, pch = 1, bg = material3d("color")[1],
         '25' = outline(basic(6))))
     }
     letters <- 32 <= pch & pch <= 255
-    xyz <- xyz[letters,]
+    xyz <- xyz[letters,, drop = FALSE]
     if (nrow(xyz))
       pch <- rawToChar(as.raw(pch[letters]), multiple = TRUE)
   }

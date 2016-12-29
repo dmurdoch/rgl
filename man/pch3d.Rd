@@ -60,6 +60,8 @@ for a fixed size.
 No special handling is done for the case of 
 \code{pch = "."}.  Use \code{points3d} for 
 small dots.
+
+Multiple colours are not supported.
 }
 \value{
 A vector of object id values is returned invisibly.  Separate objects will be drawn
