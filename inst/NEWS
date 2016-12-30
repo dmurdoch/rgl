@@ -781,7 +781,7 @@ base graphics.
     It now uses the same mesh as the one used inside R. 
     (The lack of support was pointed out by Justin McManus.)
     
-0.96.1536
+0.96.1537
   - Fixed bug in conversion of bounding box decorations
     used in rglwidget().
   - Added "fixedSize" argument to rgl.sprites() and related
@@ -801,3 +801,7 @@ base graphics.
     (currently for WebGL only).
   - Added support for two-sided surfaces in WebGL.
   - Fixed some bugs in pch3d() (reported by Gina Joue).
+  - Added demo("rglExamples") to display all the examples
+    in the rgl help in a collection of web pages.
+    This showed up a number of small bugs, which have been
+    fixed.

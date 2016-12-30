@@ -106,6 +106,7 @@ for (i in 1:6) {
   next3d()   # won't advance the first time, since it is empty
   shade3d(shapes[[i]], col = col[i])
 }
+highlevel(integer()) # To trigger display as rglwidget
 
 open3d()
 mat <- matrix(1:4, 2, 2)
@@ -117,5 +118,6 @@ for (i in 1:6) {
   next3d()
   text3d(0, 0, 0, names(shapes)[i])
 }
+highlevel(integer())
 }
 \keyword{graphics }

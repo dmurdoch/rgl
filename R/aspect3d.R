@@ -21,4 +21,5 @@ aspect3d <- function(x, y = NULL, z = NULL) {
         }
     }
     par3d(scale = scale)
+    lowlevel(integer())
 }

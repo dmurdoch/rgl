@@ -1614,7 +1614,8 @@ rglwidgetClass = function() {
       	mode = this.mode4type[type];      
         if (depth_sort && pmode == "filled") {// Don't try depthsorting on wireframe or points
             var nfaces = obj.centers.length,
-                z, w, frowsize = obj.vertices.length/nfaces;
+                z, w, frowsize;
+            frowsize = Math.floor(obj.f[pass].length/nfaces);
             var depths = new Float32Array(nfaces);
             faces = new Array(nfaces);
             for(i=0; i<nfaces; i++) {

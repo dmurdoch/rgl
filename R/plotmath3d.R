@@ -13,6 +13,7 @@ plotmath3d <- function(x, y = NULL, z = NULL,
   save3d <- par3d(skipRedraw = TRUE)
   save <- options(device.ask.default = FALSE)
   on.exit({options(save); par3d(save3d)})
+  result <- integer(n)
   for (i in seq_len(n)) {
     # Open the device twice.  The first one is to measure the text...
     f <- tempfile(fileext = ".png")
@@ -40,8 +41,9 @@ plotmath3d <- function(x, y = NULL, z = NULL,
     text(0.5, 0.5, thistext, adj = adj, cex = initCex, ...)
     dev.off()
 
-    with(xyz, sprites3d(x[i], y[i], z[i], texture = f, textype = "rgba", 
+    result[i] <- with(xyz, sprites3d(x[i], y[i], z[i], texture = f, textype = "rgba", 
             col = "white", lit = FALSE, radius = cex[i]*size/initCex/20,
             fixedSize = fixedSize))
   }
+  lowlevel(result)
 }

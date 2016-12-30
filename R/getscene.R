@@ -1,5 +1,8 @@
 scene3d <- function() {
   
+  saveSubscene <- currentSubscene3d()
+  on.exit(useSubscene3d(saveSubscene))
+  
   defaultmaterial <- material3d()
   
   matdiff <- function(mat) {
@@ -190,7 +193,7 @@ plot3d.rglscene <- function(x, add=FALSE, ...) {
   } else 
     results <- plot3d(root, x$objects, root = TRUE, ...)
   
-  invisible(results)
+  highlevel(results)
 }   
 
 plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
@@ -243,8 +246,6 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
   } else
     return(list(results=results, objects=objects))
 }
-       
-  
 
 plot3d.rglobject <- function(x, ...) {
   type <- x$type

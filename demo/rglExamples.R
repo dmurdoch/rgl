@@ -1,34 +1,14 @@
-Rmdname <- tempfile(fileext = ".Rmd")
-Rmd <- file(Rmdname, open = "wt")
-writeLines(
-'---
-title: "rgl Examples"
-author: "Duncan Murdoch"
-output: 
-  html_document:
-    toc: true
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-initialWd <- getwd()
-options(rgl.useNULL = TRUE, rgl.printRglwidget = TRUE)
-library(rgl)
-```
-
-This file shows all examples from every help file
-in `rgl`.  Currently the large number of displays
-overwhelms the system so most of them lose
-interactivity (or worse); we are working on fixing that
-to make the display of large documents more resilient.
-
-', Rmd)
+dirname <- tempfile()
+dir.create(dirname)
+olddir <- setwd(dirname)
 
 library(tools)
 db <- Rd_db("rgl")
 names <- names(db)
+Rmdnames <- sub("[.]Rd$", ".Rmd", names)
+htmlnames <- sub("[.]Rd$", ".html", names)
 
-# These functions are taken from tools
+# These functions are based on similar ones from tools
 .Rd_deparse <- function (x, tag = TRUE) 
 {
     if (!tag) 
@@ -78,31 +58,67 @@ RdTags <- function (Rd)
         return(character())
     x <- .Rd_drop_comments(x)
     recurse <- function(e) {
-        if (!is.null(tag <- attr(e, "Rd_tag")) && tag %in% c("\\dontshow", 
-            "\\testonly")) 
-            attr(e, "Rd_tag") <- "Rd"
         if (is.list(e)) {
-            structure(lapply(e[is.na(match(RdTags(e), "\\dontrun"))], 
-                recurse), Rd_tag = attr(e, "Rd_tag"))
+            unlist(lapply(e[is.na(match(RdTags(e), c("\\donttest", "\\dontrun")))], 
+                recurse))
         }
         else e
     }
     .Rd_deparse(recurse(x), tag = FALSE)
 }
-
 library(rgl)
 options(rgl.useNULL = TRUE, rgl.printRglwidget = TRUE)
+prevlink <- "[Prev](index.html)"
+indexlink <- "[Index](index.html)"
+
 for (i in seq_along(db)) {
-  writeLines('
-```{r echo = FALSE}
-while (length(rgl.dev.list()))
-  rgl.close()
-setwd(initialWd)
+  Rmd <- file(Rmdnames[i], open = "wt")
+  nextlink <- if (i < length(htmlnames)) paste0("[Next](", htmlnames[i+1], ")") else ""
+  writeLines(c('---', paste0('title: ', names[i]), 
+'output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+initialWd <- getwd()
+options(rgl.useNULL = TRUE, rgl.printRglwidget = TRUE)
+library(rgl)
 options(ask = FALSE, examples.ask = FALSE, device.ask.default = FALSE)
-```', Rmd)
-  cat("\n## ", names[i], "\n\n```{r ", names[i], "}", file = Rmd)
-  writeLines(.Rd_get_example_code(db[[i]]), Rmd)
-  writeLines('```', Rmd)
+```
+'), Rmd)
+  writeLines(paste(prevlink, nextlink, indexlink), Rmd)
+  writeLines('```{r}', Rmd)
+  code <- .Rd_get_example_code(db[[i]])
+  writeLines(code, Rmd)
+  writeLines(
+'```
+```{r echo=FALSE,include=FALSE}
+setwd(initialWd)
+while(length(rgl.dev.list())) rgl.close()
+```
+', Rmd)
+  writeLines(paste(prevlink, nextlink, indexlink), Rmd)
+  close(Rmd)
+  prevlink <- paste0("[Prev](", htmlnames[i], ")")
+  rmarkdown::render(Rmdnames[i])
+  while(length(rgl.dev.list())) rgl.close()
 }
-close(Rmd)
-browseURL(rmarkdown::render(Rmdname))
+
+indexname <- "index.Rmd"
+index <- file(indexname, open = "wt")
+writeLines(
+'---
+title: "rgl Examples"
+author: "Duncan Murdoch"
+output: html_document
+---
+	
+These files show all examples from every help file
+in `rgl`.  
+
+', index)
+writeLines(paste0("[", names, "](", htmlnames, ")  "), index)
+close(index)
+
+browseURL(rmarkdown::render(indexname))
+setwd(olddir)

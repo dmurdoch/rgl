@@ -217,7 +217,7 @@ mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA, sharedMouse = FALSE,
   useSubscene3d(result[1])
   attr(result, "prev") <- subsceneList()
   subsceneList(result)
-  lowlevel(result)
+  invisible(result)
 }
 
 layout3d <- function(mat, widths = rep.int(1, ncol(mat)), 
@@ -260,5 +260,5 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
   useSubscene3d(result[1])
   attr(result, "prev") <- subsceneList()
   subsceneList(result)
-  lowlevel(result)
+  invisible(result)
 }
