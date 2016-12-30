@@ -46,7 +46,8 @@ can be interrupted by pressing \code{ESC} while the rgl window has the focus.
 
 \code{movie3d} saves each frame to disk in a filename of the form \file{framesXXX.png}, where
 XXX is the frame number, starting from 0.  If \code{convert} is \code{TRUE}, it
-uses ImageMagick to convert them to a single file, by default an animated GIF.  
+uses ImageMagick to convert them to a single file, by default an animated GIF.  The newer \command{magick} executable is tried
+first, then \command{convert} if that fails.
 The \code{type} argument will be passed to ImageMagick to use as a file extension
 to choose the file type.
 

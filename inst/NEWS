@@ -781,7 +781,7 @@ base graphics.
     It now uses the same mesh as the one used inside R. 
     (The lack of support was pointed out by Justin McManus.)
     
-0.96.1537
+0.96.1538
   - Fixed bug in conversion of bounding box decorations
     used in rglwidget().
   - Added "fixedSize" argument to rgl.sprites() and related
@@ -805,3 +805,5 @@ base graphics.
     in the rgl help in a collection of web pages.
     This showed up a number of small bugs, which have been
     fixed.
+  - movie3d() now tries the ImageMagick v7 command "magick" 
+    before trying "convert".  (Suggested by Earl F. Glynn.)

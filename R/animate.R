@@ -193,12 +193,19 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
     if (.Platform$OS.type == "windows") system <- shell
     if (is.logical(convert) && convert) {
         # Check for ImageMagick
-        version <- system("convert --version", intern=TRUE)
-        if (!length(grep("ImageMagick", version)))
+    	progname <- "magick"
+    	version <- try(system2(progname, "--version", stdout = TRUE,
+    			   stderr = TRUE), silent = TRUE)
+    	if (inherits(version, "try-error") || !length(grep("ImageMagick", version))) {
+    	  progname <- "convert"
+          version <- try(system2(progname, "--version", stdout = TRUE, 
+          		         stderr = TRUE), silent = TRUE)
+    	}
+        if (inherits(version, "try-error") || !length(grep("ImageMagick", version)))
             stop("'ImageMagick' not found")    
         filename <- paste(movie, ".", type, sep="")
         if (verbose) cat(gettextf("Will create: %s\n", file.path(dir, filename)))
-        convert <- "convert -delay 1x%d %s*.png %s.%s"
+        convert <- paste(progname, "-delay 1x%d %s*.png %s.%s")
     }
     if (is.character(convert)) {
     	convert <- sprintf(convert, fps, frames, movie, type, duration, dir)
