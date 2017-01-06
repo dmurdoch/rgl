@@ -312,6 +312,12 @@ static int getMaxClipPlanes(RGLView* rglview)
   return rglview->windowImpl->getMaxClipPlanes();
 }  
 
+static float getGlVersion()
+{
+  const char* version = (const char*)glGetString(GL_VERSION);
+  if (version) return atof(version);
+  else return R_NaReal;
+}
 
 /* par3d implementation based on R's par implementation
  *
@@ -685,6 +691,10 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
 	value = allocVector(INTSXP, 1);
 	INTEGER(value)[0] = getMaxClipPlanes(rglview);
     }
+    else if (streql(what, "glVersion")) {
+    	value = allocVector(REALSXP, 1);
+    	REAL(value)[0] = getGlVersion();
+    }    
   	
     if (! success) error(_("unknown error getting rgl parameter \"%s\""),  what);
 

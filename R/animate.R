@@ -164,7 +164,7 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
 
 movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
-                    convert = TRUE, clean = TRUE, verbose=TRUE,
+                    convert = NULL, clean = TRUE, verbose=TRUE,
                     top = TRUE, type = "gif", startTime = 0) {
     
     olddir <- setwd(dir)
@@ -191,6 +191,23 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
     }	
     cat("\n")
     if (.Platform$OS.type == "windows") system <- shell
+    if (is.null(convert) && requireNamespace("magick")) {
+    	m <- NULL
+    	for (i in round(startTime*fps):(duration*fps)) {
+          filename <- sprintf("%s%03d.png",frames,i)
+    	  frame <- magick::image_read(filename)
+    	  if (is.null(m)) m <- frame
+    	  else m <- c(m, frame)
+    	  if (clean)
+    	    unlink(filename)
+    	}
+        m <- magick::image_animate(m, fps = fps, loop = 1, dispose = "previous")
+        magick::image_write(m, paste0(movie, ".", type))
+        return(invisible(m))
+    } else if (is.null(convert)) {
+    	warning("R package 'magick' is not installed; trying external package.")
+    	convert <- TRUE
+    }
     if (is.logical(convert) && convert) {
         # Check for ImageMagick
     	progname <- "magick"
@@ -203,7 +220,7 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
     	}
         if (inherits(version, "try-error") || !length(grep("ImageMagick", version)))
             stop("'ImageMagick' not found")    
-        filename <- paste(movie, ".", type, sep="")
+        filename <- paste0(movie, ".", type)
         if (verbose) cat(gettextf("Will create: %s\n", file.path(dir, filename)))
         convert <- paste(progname, "-delay 1x%d %s*.png %s.%s")
     }
@@ -223,5 +240,6 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
 	    }
 	}
     }
+    invisible(convert)
 }
 

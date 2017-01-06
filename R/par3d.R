@@ -3,14 +3,14 @@
 	   "modelMatrix", "projMatrix", "skipRedraw", "userMatrix", 
 	   "scale", "viewport", "zoom", "bbox", "windowRect",
            "family", "font", "cex", "useFreeType", "fontname",
-	   "maxClipPlanes"
+	   "maxClipPlanes", "glVersion"
 	   )
 	   
 .Par3d.readonly <- c( 
 	   "antialias", "observer",
 	   "modelMatrix", "projMatrix",
 	   "bbox", "fontname",
-	   "maxClipPlanes"
+	   "maxClipPlanes", "glVersion"
 	   )
 
 par3d <- function (..., no.readonly = FALSE, dev = rgl.cur(), subscene = currentSubscene3d(dev))
