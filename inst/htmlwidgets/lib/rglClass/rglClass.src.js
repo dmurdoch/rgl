@@ -670,9 +670,14 @@ rglwidgetClass = function() {
            t = ortho ? 1 : Math.tan(FOV*Math.PI/360),
            near = distance - radius,
            far = distance + radius,
-           hlen = t*near,
+           hlen,
            aspect = this.vp.width/this.vp.height,
            z = subscene.par3d.zoom;
+       if (far < 0.)
+         far = 1.;
+       if (near < far/100.)
+         near = far/100.;
+       hlen = t*near;
        if (ortho) {
          if (aspect > 1)
            this.prMatrix.ortho(-hlen*aspect*z, hlen*aspect*z,
