@@ -179,6 +179,7 @@ for (i in 1:8) {
   triangles3d(x, y, z + i, col = heat.colors(8)[i])
   texts3d(xmid, ymid, z + i, paste(i, tests[i], sep = ". "), depth_test = tests[i]) 
 }
+highlevel()  # To trigger display
 }
 \keyword{dynamic}
 

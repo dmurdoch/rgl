@@ -35,8 +35,10 @@ The previous value of the scale is returned invisibly.
   open3d()
   plot3d(x, y, z)
   aspect3d(1, 1, 0.5)
+  highlevel()  # To trigger display
   open3d()
   plot3d(x, y, z)
   aspect3d("iso")
+  highlevel()
 }
 \keyword{dynamic}
