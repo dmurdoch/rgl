@@ -1,9 +1,7 @@
 ## 
 ## This file is part of RGL
 ##
-## It uses some R-specific macros, so process it in two steps:
-## 1. Copy m4/R.m4 from the R source directory to rgl/aclocal.m4
-## 2. Process configure.ac with autoconf to produce a configure script.
+## Process configure.ac with autoconf to produce a configure script.
 ## NB:  the files in src/build/autoconf may need updating for a new
 ##      version of autoconf
 ##
@@ -23,14 +21,10 @@ if test -n "${R_HOME}"; then
   CC=`${R_HOME}/bin/R CMD config CC`
   CPP=`${R_HOME}/bin/R CMD config CPP`
   CFLAGS=`${R_HOME}/bin/R CMD config CFLAGS`
-  CXX=`${R_HOME}/bin/R CMD config CXX`
-  CXXFLAGS=`${R_HOME}/bin/R CMD config CXXFLAGS`
 fi
 
 AC_PROG_CPP
 AC_PROG_CC
-
-R_GCC4_VISIBILITY
 
 if test `uname` = "Darwin" ; then
   darwin="yes"
@@ -203,7 +197,6 @@ fi
 ## --- Output ----------------------------------------------------------------
 
 AC_SUBST(CPPFLAGS)
-AC_SUBST(CXXFLAGS)
 AC_SUBST(LIBS)
 
 AC_OUTPUT(src/Makevars)

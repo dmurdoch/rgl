@@ -811,3 +811,6 @@ base graphics.
     suggested by Earl F. Glynn.)
   - par3d() reports on the version of OpenGL that it sees
     (as component "glVersion").
+
+0.97.1542
+  - Cleaned up configure script.
