@@ -242,6 +242,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
 void attribute_visible R_init_rgl(DllInfo *dll) 
 {
   R_registerRoutines(dll, CEntries, CallEntries, NULL, ExtEntries);
+  R_useDynamicSymbols(dll, FALSE);
+  R_forceSymbols(dll, TRUE);
 }
 
 #ifdef __cplusplus
