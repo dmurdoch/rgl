@@ -10,14 +10,18 @@ The \code{\link[deldir]{deldir}()} function in the \pkg{deldir} package computes
 of points.  These functions display it as a surface.
 }
 \usage{
-\method{persp3d}{deldir}(x, ...)
 \method{plot3d}{deldir}(x, ...)
+\method{persp3d}{deldir}(x, ..., add = FALSE)
 \method{as.mesh3d}{deldir}(x, col = "gray", coords = c("x", "y", "z"), 
     smooth = TRUE, normals = NULL, texcoords = NULL, ...)
 }
 \arguments{
   \item{x}{
 A \code{"deldir"} object, produced by the \code{\link[deldir]{deldir}()} function.  It must contain \code{z} values.
+}
+  \item{add}{
+Whether to add surface to existing plot (\code{add = TRUE})
+or create a new plot (\code{add = FALSE}, the default).
 }
   \item{col}{
 Colors to apply to each vertex in the triangulation.
@@ -37,7 +41,7 @@ User-specified normals at each vertex.  Requires \code{smooth = FALSE}.
 Texture coordinates at each vertex.
 }
   \item{...}{
-Additional parameters to pass to \code{\link{plot3d.mesh3d}} and \code{\link{tmesh3d}} for plotting.
+See Details below.
 }
 }
 \details{
@@ -51,6 +55,11 @@ a permutation of the column names \code{c("x", "y", "z")}
 from the \code{"deldir"} object.  The first will be used
 as the x coordinate, the second as the y coordinate, 
 and the third as the z coordinate.
+
+The \code{...} parameters in \code{plot3d.deldir} 
+are passed to \code{persp3d.deldir}; in \code{persp3d.deldir} they are
+passed to \code{as.mesh3d.deldir}; in \code{as.mesh3d.deldir} they are used as material parameters
+in a \code{\link{tmesh3d}} call.
 }
 \examples{
 x <- rnorm(200, sd = 5)

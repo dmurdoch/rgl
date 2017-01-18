@@ -157,6 +157,6 @@ persp3d.function <- function(x, xlim = c(0,1), ylim = c(0,1),
   do.call(persp3d, args)
 }
 
-persp3d.deldir <- function(x, ...) {
-  plot3d(as.mesh3d(x, ...))
+persp3d.deldir <- function(x, ..., add = FALSE) {
+  plot3d(as.mesh3d(x, ...), add = add)
 }

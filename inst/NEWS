@@ -812,6 +812,7 @@ base graphics.
   - par3d() reports on the version of OpenGL that it sees
     (as component "glVersion").
 
-0.97.1543
+0.97.1544
   - Cleaned up configure script.
   - Cleaned up dynamic entry points.
+  - Added "add = FALSE" argument to persp3d.deldir().
