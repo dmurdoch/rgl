@@ -251,7 +251,7 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
   for (i in seq_len(num.figures)) {
     rows <- range(row(mat)[mat == i])
     cols <- range(col(mat)[mat == i])
-    newvp <- c(xs[cols[1]], ys[rows[1]], sum(widths[cols[1]:cols[2]]), sum(heights[rows[1]:rows[2]]))
+    newvp <- c(xs[cols[1]], ys[rows[2]], sum(widths[cols[1]:cols[2]]), sum(heights[rows[1]:rows[2]]))
     result[i] <- newSubscene3d(newviewport = newvp, parent = parent,  ...)
   }
   if (sharedMouse)
