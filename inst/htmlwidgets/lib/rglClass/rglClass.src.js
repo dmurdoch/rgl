@@ -2271,14 +2271,14 @@ rglwidgetClass = function() {
         control.subscenes = this.scene.rootSubscene;
       var value = Math.round(control.value),
           subscenes = [].concat(control.subscenes),
+          fullset = [].concat(control.fullset),
           i, j, entries, subsceneid,
           ismissing = function(x) {
-            return control.fullset.indexOf(x) < 0;
+            return fullset.indexOf(x) < 0;
           },
           tointeger = function(x) {
             return parseInt(x, 10);
           };
-
       for (i=0; i < subscenes.length; i++) {
         subsceneid = subscenes[i];
         if (typeof this.getObj(subsceneid) === "undefined")
@@ -2546,6 +2546,7 @@ rglwidgetClass = function() {
       var
         self = this,
         components = [].concat(control.components),
+        buttonLabels = [].concat(control.buttonLabels),
 
         Tick = function() { /* "this" will be a timer */
           var i,
@@ -2606,22 +2607,26 @@ rglwidgetClass = function() {
           el.appendChild(output);
         },
 
-        addButton = function(label) {
+        addButton = function(which, label, active) {
           var button = document.createElement("input"),
               onclicks = {Reverse: function() { this.rgltimer.reverse();},
                     Play: function() { this.rgltimer.play();
-                                       this.value = this.rgltimer.enabled ? "Pause" : "Play"; },
+                                       this.value = this.rgltimer.enabled ? this.inactiveValue : this.activeValue; },
                    Slower: function() { this.rgltimer.slower(); },
                    Faster: function() { this.rgltimer.faster(); },
-                   Reset: function() { this.rgltimer.reset(); }};
+                   Reset: function() { this.rgltimer.reset(); },
+              	   Step:  function() { this.rgltimer.step(); }
+              };
           button.rgltimer = el.rgltimer;
           button.type = "button";
           button.value = label;
-          if (label === "Play")
+          button.inactiveValue = label;
+          button.activeValue = active;
+          if (which === "Play")
             button.rgltimer.PlayButton = button;
-          button.onclick = onclicks[label];
+          button.onclick = onclicks[which];
           button.className = "rgl-button";
-          button.id = el.id + "-" + label;
+          button.id = el.id + "-" + which;
           el.appendChild(button);
         };
 
@@ -2638,7 +2643,7 @@ rglwidgetClass = function() {
                                    control.step, control.precision);
               break;
             default:
-              addButton(components[i]);
+              addButton(components[i], buttonLabels[i], this.pause);
           }
         }
         el.rgltimer.Tick();
@@ -2742,19 +2747,7 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, value, rate, loop,
     var tick = function(self) {
       var now = new Date();
       self.value = self.multiplier*self.rate*(now - self.realStart)/1000 + self.startTime;
-      if (self.value > self.stopTime || self.value < self.startTime) {
-        if (!self.loop) {
-          self.reset();
-        } else {
-          var cycle = self.stopTime - self.startTime,
-              newval = (self.value - self.startTime) % cycle + self.startTime;
-          if (newval < self.startTime) {
-            newval += cycle;
-          }
-          self.realStart += (self.value - newval)*1000/self.multiplier/self.rate;
-          self.value = newval;
-        }
-      }
+      self.forceToRange();
       if (typeof self.Tick !== "undefined") {
         self.Tick(self.value);
       }
@@ -2764,6 +2757,22 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, value, rate, loop,
     this.timerId = window.setInterval(tick, 1000*this.interval, this);
     this.enabled = true;
   };
+  
+  this.forceToRange = function() {
+    if (this.value > this.stopTime || this.value < this.startTime) {
+      if (!this.loop) {
+        this.reset();
+      } else {
+        var cycle = this.stopTime - this.startTime,
+            newval = (this.value - this.startTime) % cycle + this.startTime;
+        if (newval < this.startTime) {
+          newval += cycle;
+        }
+        this.realStart += (this.value - newval)*1000/this.multiplier/this.rate;
+        this.value = newval;
+      }
+    }  	
+  }
 
   this.reset = function() {
     this.value = this.startTime;
@@ -2795,5 +2804,12 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, value, rate, loop,
       this.multiplier = newmult;
     }
   };
+  
+  this.step = function() {
+    this.value += this.rate*this.multiplier;
+    this.forceToRange();
+    if (typeof this.Tick !== "undefined")
+      this.Tick(this.value);
+  }
 
 }).call(rgltimerClass.prototype);

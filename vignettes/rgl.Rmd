@@ -566,6 +566,7 @@ Function                             | Description
 `r indexfns("ageControl")`       | "age" vertices of an object
 `r indexfns("vertexControl")`       | control properties of vertices
 `r indexfns("playwidget")`       | display and automate controls
+`r indexfns("toggleWidget")`     | display a button to toggle some items
 `r indexfns("sceneChange")`      | used in `Shiny` for large scene changes
 `r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`    | `matgrittr` pipe 
 

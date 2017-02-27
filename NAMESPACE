@@ -33,7 +33,7 @@ export(.check3d,
 	subsceneInfo, subsceneList, subsetSetter, subsetSlider, Sweave.snapshot,
 	surface3d, terrain3d, 
 	tetrahedron3d, text3d,
-	texts3d, title3d, toggleButton, triangulate, 
+	texts3d, title3d, toggleButton, toggleWidget, triangulate, 
 	tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
 	turn3d, useSubscene3d, vertexSetter, view3d, wire3d, 
         writeASY, writeOBJ, writePLY, writeSTL, writeWebGL)

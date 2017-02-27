@@ -24,6 +24,8 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
                        precision = 3,
                        elementId = NULL, respondTo = NULL,
                        reinit = NULL,
+		       buttonLabels = components,
+		       pause = "Pause",
                        ...) {
 
   sceneId <- as.character(sceneId)
@@ -63,8 +65,15 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
   if (!length(components))
     components <- character()
   else
-    components <- match.arg(components, several.ok = TRUE)
+    components <- match.arg(components, 
+    			c("Reverse", "Play", "Slower", "Faster", "Reset", "Slider", "Label", "Step"),
+    			several.ok = TRUE)
 
+  buttonLabels <- as.character(buttonLabels)
+  pause <- as.character(pause)
+  stopifnot(length(buttonLabels) == length(components),
+  	    length(pause) == 1)
+  
   if (is.null(stop) && !missing(labels) && length(labels))
     stop <- start + (length(labels) - 1)*step
 
@@ -87,6 +96,8 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
        interval = interval,
        rate = rate,
        components = components,
+       buttonLabels = buttonLabels,
+       pause = pause,
        loop = loop,
        step = step,
        labels = labels,
@@ -154,3 +165,11 @@ playwidget.shiny.tag.list <- function(sceneId, controls, elementId = NULL, ...) 
   sceneId
 }
 
+toggleWidget <- function(sceneId, ids, subscenes = NULL, label = deparse(substitute(ids)), ...) 
+  playwidget(sceneId, 
+	subsetControl(subsets = list(ids, integer()), subscenes = subscenes),
+	start = 0, stop = 1,
+	components = "Step",
+	buttonLabels = label,
+	interval = 1,
+	...)

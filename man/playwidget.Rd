@@ -23,6 +23,7 @@ playwidget(sceneId, ...)
             precision = 3,
             elementId = NULL, respondTo = NULL,
             reinit = NULL,
+            buttonLabels = components, pause = "Pause",
             ...)
 
 \S3method{playwidget}{rglWebGL}(sceneId, controls, elementId = NULL, ...)
@@ -81,6 +82,11 @@ control) to respond to.}
   \item{reinit}{
 A vector of ids that will need re-initialization before
 being drawn again.
+}
+
+  \item{buttonLabels, pause}{
+These are the labels that will be shown on the buttons if they are displayed.  \code{pause} will
+be shown on the \code{"Play"} button while playing.
 }
 
   \item{...}{The default method passes additional arguments
@@ -144,6 +150,10 @@ Duncan Murdoch
 \code{\link{subsetControl}},
 \code{\link{propertyControl}}, \code{\link{ageControl}} and
 \code{\link{vertexControl}} are possible controls to use.
+
+\code{\link{toggleWidget}} is a wrapper for 
+\code{playwidget} and \code{\link{subsetControl}}
+to insert a single button to toggle some elements in a display.
 }
 \examples{
 saveopts <- options(rgl.useNULL = TRUE)

@@ -82,7 +82,11 @@ Duncan Murdoch
 }
 
 \seealso{
-\code{\link{writeWebGL}}. See \code{\link{propertySlider}} and \code{\link{propertySetter}}
+\code{\link{playwidget}} and \code{\link{toggleWidget}}
+for a newer, preferred method of inserting controls
+into a scene.
+
+Older functions include \code{\link{writeWebGL}}. See \code{\link{propertySlider}} and \code{\link{propertySetter}}
 for lower level, more flexible functions.
 }
 \examples{

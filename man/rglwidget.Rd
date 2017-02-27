@@ -59,10 +59,10 @@ is reflected in the scene, you should list all players in the
 
 In RMarkdown or in standalone code, you can use a \pkg{magrittr}-style
 \dQuote{pipe} command to join an \code{rglwidget} with a
-\code{\link{playwidget}}.  If the \code{playwidget} comes
+\code{\link{playwidget}} or \code{\link{toggleWidget}}.  If the control widget comes
 first, it should be piped into the \code{controllers}
 argument.  If the \code{rglwidget} comes first, it
-can be piped into the first argument of \code{playwidget}.
+can be piped into the first argument of \code{playwidget} or \code{toggleWidget}.
 
 If the \code{reuse} argument is \code{FALSE} (the default in interactive
 use), earlier information will be
