@@ -820,3 +820,6 @@ base graphics.
     by Felix Carbonell.)
   - Fixed a bug in subsetControl(), and added
     toggleWidget()
+  - Renamed the "texture" argument to persp3d.function()
+    to "texcoords" for consistency with other functions, and
+    to avoid a collision with the "texture" material property.

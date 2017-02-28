@@ -19,7 +19,7 @@ Plot a function \code{z(x, y)} or a parametric function
   tvals = seq.int(min(tlim), max(tlim), length.out = n[2]), 
   xlab, ylab, zlab, 
   col = "gray", otherargs = list(), 
-  normal = NULL, texture = NULL, \dots)
+  normal = NULL, texcoords = NULL, \dots)
 \method{plot3d}{function}(x, \ldots)
 }
 \arguments{
@@ -61,7 +61,7 @@ The color to use for the plot.  See the details below.
   \item{otherargs}{
 Additional arguments to pass to the function.
 }
-  \item{normal, texture}{
+  \item{normal, texcoords}{
 Functions to set surface normals or texture coordinates.  See
 the details below.
 }
@@ -118,10 +118,10 @@ passed the same arguments as \code{f()} (incuding \code{otherargs}
 if present), and should produce a 3-column matrix containing the
 x, y and z coordinates of the normals.
 
-The \code{texture} argument is a function similar to \code{normal}, but
+The \code{texcoords} argument is a function similar to \code{normal}, but
 it produces a 2-column matrix containing texture coordinates.
 
-Both \code{normal} and \code{texture} may also contain matrices,
+Both \code{normal} and \code{texcoords} may also contain matrices,
 with 3 and 2 columns respectively, and rows corresponding to the
 points that were passed to \code{f()}.
 }

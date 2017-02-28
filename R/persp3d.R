@@ -91,7 +91,7 @@ persp3d.function <- function(x, xlim = c(0,1), ylim = c(0,1),
                              xlab = NULL, ylab = NULL, zlab = NULL, 
                              col = "gray",
                              otherargs = list(), 
-                             normal = NULL, texture = NULL, ...) {
+                             normal = NULL, texcoords = NULL, ...) {
   f <- x
   n <- rep(n, length.out = 2)
   parametric <- !is.null(slim) || !is.null(tlim)
@@ -138,8 +138,8 @@ persp3d.function <- function(x, xlim = c(0,1), ylim = c(0,1),
   }
   if (is.function(normal)) 
     normal <- do.call(normal, args)	
-  if (is.function(texture))
-    texture <- do.call(texture, args)
+  if (is.function(texcoords))
+    texcoords <- do.call(texcoords, args)
   
   args <- list(xvals, yvals, zvals, col = col, 
                xlab = xlab, ylab = ylab, zlab = zlab, ...)	
@@ -147,9 +147,9 @@ persp3d.function <- function(x, xlim = c(0,1), ylim = c(0,1),
     args <- c(args, list(normal_x = matrix(normal[,1], n1, n2),
                          normal_y = matrix(normal[,2], n1, n2),
                          normal_z = matrix(normal[,3], n1, n2)))	
-  if (is.matrix(texture))
-    args <- c(args, list(texture_s = matrix(texture[,1], n1, n2),
-                         texture_t = matrix(texture[,2], n1, n2)))
+  if (is.matrix(texcoords))
+    args <- c(args, list(texture_s = matrix(texcoords[,1], n1, n2),
+                         texture_t = matrix(texcoords[,2], n1, n2)))
   if (parametric)
     args <- c(args, list(xlim = if (!missing(xlim)) xlim, 
                          ylim = if (!missing(ylim)) ylim))
