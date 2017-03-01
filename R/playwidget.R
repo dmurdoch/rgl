@@ -141,26 +141,55 @@ playwidget.rglPlayer <- function(sceneId, controls, ...) {
                                ...)))
 }
 
+linkScene <- function(elementId, thelist) {
+  scene <- NULL
+  for (i in seq_along(thelist)) {
+    if (inherits(thelist[[i]], "rglWebGL")) {
+      scene <- c(scene, thelist[[i]]$elementId)
+      if (!is.null(elementId) && !(elementId %in% thelist[[i]]$x$players))
+        thelist[[i]]$x$players <- c(thelist[[i]]$x$players, elementId)
+    } else if (inherits(thelist[[i]], "shiny.tag")) {
+      link <- linkScene(elementId, thelist[[i]]$children)
+      scene <- c(scene, link$scene)
+      thelist[[i]]$children <- link$thelist
+    } else if (inherits(thelist[[i]], "shiny.tag.list")) {
+      link <- linkScene(elementId, thelist[[i]])
+      scene <- c(scene, link$scene)
+      thelist[[i]] <- link$thelist
+    }
+  }
+  list(scene = scene, thelist = thelist)
+}
+
+playwidget.shiny.tag <- function(sceneId, controls, elementId = NULL, ...) {
+  if (is.null(elementId) && !inShiny())
+    elementId <- paste0("rgl-play", sample(100000, 1))
+  
+  link <- linkScene(elementId, sceneId$children)
+  scene <- link$scene
+  sceneId$children <- link$thelist
+  
+  if (is.null(scene))
+    scene <- NA
+  
+  browsable(tagList(sceneId, playwidget(scene[1], controls, elementId = elementId,
+               ...)))
+}
+
 playwidget.shiny.tag.list <- function(sceneId, controls, elementId = NULL, ...) {
 
   if (is.null(elementId) && !inShiny())
     elementId <- paste0("rgl-play", sample(100000, 1))
-
-  scene <- NULL
-  for (i in seq_along(sceneId)) {
-    if (inherits(sceneId[[i]], "rglWebGL")) {
-      scene <- sceneId[[i]]$elementId
-      if (!is.null(elementId) && !(elementId %in% sceneId[[i]]$x$players))
-        sceneId[[i]]$x$players <- c(sceneId[[i]]$x$players, elementId)
-      break
-    }
-  }
-
+  
+  link <- linkScene(elementId, sceneId)
+  scene <- link$scene
+  sceneId <- link$thelist
+  
   if (is.null(scene))
     scene <- NA
 
   sceneId[[length(sceneId) + 1]] <-
-    playwidget(scene, controls, elementId = elementId,
+    playwidget(scene[1], controls, elementId = elementId,
                                ...)
   sceneId
 }

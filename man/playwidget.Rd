@@ -108,7 +108,8 @@ The buttons have the following behaviour:
 
 If \code{respondTo} is used, no \code{components} are shown, as it is assumed Shiny (or whatever control is being referenced) will provide the UI components.
 
-The \code{sceneId} component can be another \code{playwidget} or a \code{\link{rglwidget}} result.  This allows you
+The \code{sceneId} component can be another \code{playwidget}, a \code{\link{rglwidget}} result, or a result of
+\code{htmltools::\link[htmltools]{tags}} or \code{htmltools::\link[htmltools]{tagList}}.  This allows you
 to use a \pkg{magrittr}-style
 \dQuote{pipe} command to join an \code{rglwidget} with one or more \code{\link{playwidget}}s.  If a \code{playwidget} comes
 first, \code{sceneId} should be set to \code{NA}.  If
