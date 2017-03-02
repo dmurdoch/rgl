@@ -825,4 +825,4 @@ base graphics.
     to avoid a collision with the "texture" material property.
   - "shiny.tag" objects are now supported as inputs to
     playwidget(), so that rglwidget() values can be 
-    wrapped in htmltools::tags$div() to set their style.
+    wrapped in htmltools::div() to set their style.

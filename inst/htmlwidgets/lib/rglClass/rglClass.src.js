@@ -2620,8 +2620,8 @@ rglwidgetClass = function() {
           button.rgltimer = el.rgltimer;
           button.type = "button";
           button.value = label;
-          button.inactiveValue = label;
-          button.activeValue = active;
+          button.activeValue = label;
+          button.inactiveValue = active;
           if (which === "Play")
             button.rgltimer.PlayButton = button;
           button.onclick = onclicks[which];
@@ -2643,7 +2643,7 @@ rglwidgetClass = function() {
                                    control.step, control.precision);
               break;
             default:
-              addButton(components[i], buttonLabels[i], this.pause);
+              addButton(components[i], buttonLabels[i], control.pause);
           }
         }
         el.rgltimer.Tick();
