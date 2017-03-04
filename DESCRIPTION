@@ -17,6 +17,7 @@ Description: Provides medium to high level functions for 3D interactive graphics
 License: GPL
 URL: https://r-forge.r-project.org/projects/rgl/
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
-    zlib (optional), libpng (>=1.2.9, optional), FreeType (optional)
+    zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
+    pandoc (>=1.13.1, needed for vignettes)
 BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr
