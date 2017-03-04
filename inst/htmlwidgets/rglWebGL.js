@@ -18,10 +18,11 @@ HTMLWidgets.widget({
   },
 
   renderValue: function(el, x) {
-    var rgl = new rglwidgetClass(), i, pel, player,
-      draw = true;
+    var rgl = new rglwidgetClass(), i, pel, player;
+    
     rgl.initialize(el, x);
-
+    rgl.initGL();
+    
     /* We might have been called after (some of) the players were rendered.
        We need to make sure we respond to their initial values. */
 
@@ -32,17 +33,15 @@ HTMLWidgets.widget({
         if (typeof pel !== "undefined") {
           player = pel.rglPlayer;
           if (typeof player !== "undefined" && !player.initialized) {
-            rgl.Player(pel, player, false);
+            rgl.Player(pel, player);
             player.initialized = true;
-          } else
-            draw = false;  // The player will do the drawing
+          }
         } else
           rgl.alertOnce("Controller '" + players[i] + "' not found.");
       }
     }
     rgl.drag = 0;
-    if (draw)
-      rgl.drawScene();
+    rgl.drawScene();
   },
 
   resize: function(el, width, height) {

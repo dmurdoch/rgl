@@ -23,10 +23,10 @@ HTMLWidgets.widget({
          will have to apply our initial value. */
         if (typeof scene !== "undefined") {
           scene.Player(el, x);
-          instance.initialized = true;
+          x.initialized = true;
         } else {
+          x.initialized = false;
           instance.rglPlayer = x;
-          instance.initialized = false;
         }
       };
 

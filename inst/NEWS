@@ -812,7 +812,7 @@ base graphics.
   - par3d() reports on the version of OpenGL that it sees
     (as component "glVersion").
 
-0.97.1548
+0.97.1550
   - Cleaned up configure script.
   - Cleaned up dynamic entry points.
   - Added "add = FALSE" argument to persp3d.deldir().
@@ -826,3 +826,5 @@ base graphics.
   - "shiny.tag" objects are now supported as inputs to
     playwidget(), so that rglwidget() values can be 
     wrapped in htmltools::div() to set their style.
+  - Fixed bug in scene initialization that sometimes caused it
+    to ignore initial control values.
