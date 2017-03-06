@@ -74,6 +74,11 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
   stopifnot(length(buttonLabels) == length(components),
   	    length(pause) == 1)
   
+  for (i in seq_along(controls)) {
+    if (!is.null(labels)) break
+    labels <- controls[[i]]$labels
+  }
+  
   if (is.null(stop) && !missing(labels) && length(labels))
     stop <- start + (length(labels) - 1)*step
 

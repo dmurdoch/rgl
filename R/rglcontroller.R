@@ -4,12 +4,17 @@ subsetControl <- function(value = 1, subsets, subscenes = NULL,
                          accumulate = FALSE) {
   subsets <- lapply(subsets, as.integer)
   fullset <- as.integer(fullset)
+  if (length(names(subsets)))
+    labels <- names(subsets)
+  else
+    labels <- NULL
   structure(list(type = "subsetSetter",
        value = value - 1,
-       subsets = subsets,
+       subsets = unname(subsets),
        subscenes = subscenes,
        fullset = fullset,
-       accumulate = accumulate),
+       accumulate = accumulate,
+       labels = labels),
       class = "rglControl")
 }
 
