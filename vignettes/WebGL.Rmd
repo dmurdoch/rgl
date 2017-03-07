@@ -224,7 +224,6 @@ x-coordinate of the closest point in the setosa group, and modify
 its colour from black to white,
 
 ```{r}
-print(setosa)
 setosavals <- subset(iris, Species == "setosa")
 which <- which.min(setosavals$Sepal.Width)
 init <- setosavals$Sepal.Length[which]

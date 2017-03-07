@@ -79,8 +79,8 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
     if (!is.null(labels)) 
       labels <- control$labels
     if (!is.null(control$param)) {
-      start <- min(start, control$param)
-      stop <- max(stop, control$param)
+      start <- min(start, control$param[is.finite(control$param)])
+      stop <- max(stop, control$param[is.finite(control$param)])
     }
   }
 
