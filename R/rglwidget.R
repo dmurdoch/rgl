@@ -5,7 +5,7 @@ inShiny <- function() !is.null(getDefaultReactiveDomain())
 rglwidget <- local({
   reuseDF <- NULL
 
-  function(x = scene3d(), width = NULL, height = NULL,
+  function(x = scene3d(), width = figWidth(), height = figHeight(),
            controllers = NULL, snapshot = FALSE,
            elementId = NULL,
            reuse = !interactive(),

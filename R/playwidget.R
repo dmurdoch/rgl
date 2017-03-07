@@ -75,13 +75,19 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
   	    length(pause) == 1)
   
   for (i in seq_along(controls)) {
-    if (!is.null(labels)) break
-    labels <- controls[[i]]$labels
+    control <- controls[[i]]
+    if (!is.null(labels)) 
+      labels <- control$labels
+    if (!is.null(control$param)) {
+      start <- min(start, control$param)
+      stop <- max(stop, control$param)
+    }
+  }
+
+  if (is.null(stop) && !missing(labels) && length(labels)) {
+    stop <- start + (length(labels) - 1)*step
   }
   
-  if (is.null(stop) && !missing(labels) && length(labels))
-    stop <- start + (length(labels) - 1)*step
-
   if (is.null(stop)) {
     if ("Slider" %in% components) {
       warning("Cannot have slider with non-finite limits")

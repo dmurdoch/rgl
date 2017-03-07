@@ -812,7 +812,7 @@ base graphics.
   - par3d() reports on the version of OpenGL that it sees
     (as component "glVersion").
 
-0.97.1550
+0.98.0
   - Cleaned up configure script.
   - Cleaned up dynamic entry points.
   - Added "add = FALSE" argument to persp3d.deldir().
@@ -828,3 +828,5 @@ base graphics.
     wrapped in htmltools::div() to set their style.
   - Fixed bug in scene initialization that sometimes caused it
     to ignore initial control values.
+  - Added figWidth() and figHeight() functions for sizing
+    rgl plots in R Markdown documents.

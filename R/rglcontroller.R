@@ -154,6 +154,43 @@ vertexControl <- function(value = 0, values = NULL, vertices = 1, attributes, ob
       class = "rglControl")
 }
 
+par3dinterpControl <- function(fn, from, to, steps, subscene = NULL,
+			      omitConstant = TRUE, ...) {
+  rename <- character()
+  times <- seq(from, to, length.out = steps+1)
+  fvals <- lapply(times, fn)
+  f0 <- fvals[[1]]
+  entries <- numeric(0)
+  properties <- character(0)
+  values <- NULL
+	
+  props <- c("FOV", "userMatrix", "scale", "zoom")
+  for (i in seq_along(props)) {
+    prop <- props[i]
+    propname <- rename[prop]
+    if (is.na(propname))
+      propname <- prop
+    if (!is.null(value <- f0[[prop]])) {
+      newvals <- sapply(fvals, function(e) as.numeric(e[[prop]]))
+      if (is.matrix(newvals)) newvals <- t(newvals)
+      rows <- NROW(newvals)
+      cols <- NCOL(newvals)
+      stopifnot(rows == length(fvals))
+      entries <- c(entries, seq_len(cols)-1)
+      properties <- c(properties, rep(propname, cols))
+      values <- cbind(values, newvals)
+    }
+  }
+  if (omitConstant) keep <- apply(values, 2, var) > 0
+  else keep <- TRUE
+	
+  if (is.null(subscene)) subscene <- f0$subscene
+	
+  propertyControl(values = c(t(values[,keep])), entries = entries[keep],
+		 properties = properties[keep],
+		 objids = subscene, param = times, ...)
+}
+
 # This is a bridge to the old system
 # In the old system, the rglClass object was a global named
 # <prefix>rgl, and controls install methods on it.  In the

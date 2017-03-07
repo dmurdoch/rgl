@@ -2307,17 +2307,21 @@ rglwidgetClass = function() {
           nrow = values.length/ncol,
           properties = this.repeatToLen(control.properties, ncol),
           objids = this.repeatToLen(control.objids, ncol),
-          property = properties[0], objid = objids[0],
+          property, objid = objids[0],
           obj = this.getObj(objid),
           propvals, i, v1, v2, p, entry, gl, needsBinding,
           newprop, newid,
 
           getPropvals = function() {
             if (property === "userMatrix")
-              return obj.userMatrix.getAsArray();
+              return obj.par3d.userMatrix.getAsArray();
             else
               return obj[property];
           };
+          
+          putUsermatrix = function(newvals) {
+            obj.par3d.userMatrix.load(newvals);
+          }
 
       if (direct && typeof value === "undefined")
         return;
@@ -2346,7 +2350,9 @@ rglwidgetClass = function() {
         newprop = properties[j];
         newid = objids[j];
 
-        if (newprop != property || newid != objid) {
+        if (newprop !== property || newid != objid) {
+          if (property === "userMatrix")
+            putUsermatrix(propvals);
           property = newprop;
           objid = newid;
           obj = this.getObj(objid);
@@ -2362,6 +2368,9 @@ rglwidgetClass = function() {
           this.setElement(propvals, entry, value[j]);
         }
       }
+      if (property === "userMatrix")
+        putUsermatrix(propvals);
+        
       needsBinding = [];
       for (j=0; j < entries.length; j++) {
         if (properties[j] === "values" &&

@@ -99,20 +99,22 @@ rglwidget() %>%
 toggleWidget(ids = plotids["data"], label = "Data")
 ```
 
-As seen above, this has one disadvantage:  the
-sizing of the `rglwidget()` is incorrect.  The
-`r indexfns("figWidth")` and `r indexfns("figHeight")`
-functions help with this:  they obtain the width that
-`knitr` would use based on the chunk's `fig.width`
-and `fig.height` settings.  These can be used
-in the `width` and `height` arguments to `rglwidget()`.
-For example, the chunk below requests a 2 x 2 inch figure.
-It also illustrates how to put the control ahead of
+
+Normally the
+sizing of the `rglwidget()` matches the chunk's `fig.width`
+and `fig.height` settings.  Sometimes the controls
+take up too much space, and you'll want to reduce
+the size of the display.  You can use the `r indexfns("figWidth")` and `r indexfns("figHeight")`
+in the `width` and `height` arguments to `rglwidget()`
+to compute alternate heights.
+For example, the chunk below requests a regular
+size figure in the chunk header, but shrinks the `rglwidget()` using the `height` argument.
+It also swaps the order of button and scene to illustrate how to put the control ahead of
 the scene:
 
-```{r fig.width = 2, fig.height = 2}
+```{r}
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
-rglwidget(width = figWidth(), height = figHeight(), controllers = .) 
+rglwidget(controllers = ., height = 0.8*figHeight()) 
 ```
 
 ## Controls
@@ -139,7 +141,7 @@ virginica <- with(subset(iris, Species == "virginica"),
      	       radius = 0.211))
 aspect3d(1,1,1)
 axesid <- decorate3d()
-rglwidget(width = figWidth(), height = figHeight()) %>%
+rglwidget() %>%
 toggleWidget(ids = setosa) %>%
 toggleWidget(ids = versicolor) %>%
 toggleWidget(ids = virginica) %>%
@@ -156,6 +158,8 @@ the button to the web page (and can also add sliders,
 do animations, etc.), while `subsetControl()` chooses
 a subset of objects to display.
 
+### `subsetControl`
+
 For a more general example, we could use a slider to
 select several subsets of the data in the iris display.
 For example,
@@ -170,69 +174,66 @@ playwidget(start = 0, stop = 3, interval = 1,
 	   			 All = c(setosa, versicolor, virginica)
 	   			 )))
 ```
-	
-NOTE:  THE TEXT BELOW NEEDS UPDATING
-				  
-There are several other functions to generate the Javascript
-code for controls.  `r indexfns("par3dinterpSetter")` generates
-a function that approximates the result of `r linkfn("par3dinterp")`.
-`r indexfns("propertySetter")` is a more general function to set
-the value of properties of the scene.  Both generate Javascript
-functions, but not the controls to use them; for that, use
-`r indexfns("propertySlider")` or your own custom code.
+
+There are several other "control" functions.  
+
+### `par3dinterpControl`
+
+`r indexfns("par3dinterpControl")` approximates the result of `r linkfn("par3dinterp")`.
 
 For example, the following code (similar to the `r linkfn("play3d")`
 example) rotates the scene in a complex way.
-```{r userMatrix, webgl=TRUE}
+
+```{r}
+M <- r3dDefaults$userMatrix
+fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
+                                      rotate3d(M, pi/2, 1, 0, 0),
+                                      rotate3d(M, pi/2, 0, 1, 0)) )
+rglwidget() %>%
+playwidget(par3dinterpControl(fn, 0, 3, steps=15),
+ 	   step = 0.01, loop = TRUE, rate = 0.5)
 ```
-```{r results="asis"}
-# M <- r3dDefaults$userMatrix
-# fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
-#                                      rotate3d(M, pi/2, 1, 0, 0),
-#                                      rotate3d(M, pi/2, 0, 1, 0) ) )
-# propertySlider(setter = par3dinterpSetter(fn, 0, 1.5, steps=15, 
-# 					   prefix = "userMatrix", 
-# 					   subscene = subid),
-# 	       step = 0.01)
-```
-Some things to note:  The generated Javascript slider has 150 increments,
-so that motion appears smooth.  However, storing 150 `userMatrix` values
+
+Some things to note:  The generated Javascript slider has 300 increments,
+so that motion appears smooth.  However, storing 300 `userMatrix` values
 would take up a lot of space, so we use interpolation
 in the Javascript code.  However, the Javascript code can only do 
 linear interpolation, not the more complex spline-based SO(3)
 interpolation done by `r linkfn("par3dinterp")`.  Because of this,
-we need to output 15 steps from `r linkfn("par3dinterpSetter")`
+we need to output 15 steps from `r linkfn("par3dinterpControl")`
 so that the distortions of linear interpolation are not visible.  
 
-Another function that auto-generates Javascript code is 
-`r indexfns("clipplaneSlider")`.  This function allows the user to control
-the location of a clipping plane by moving a slider.  Both it 
-and `r linkfn("par3dinterpSetter")` are implemented
-using the more general `r indexfns("propertySlider")`, which 
-allows control of multiple objects in multiple scenes, but which 
-does require knowledge of the internal representation of the scene
-in its Javascript implementation.
+### `propertyControl`
 
+`r indexfns("propertyControl")` is a more general function to set
+the value of properties of the scene. Currently most
+properties are supported, but use does require knowledge
+of the internal implementation.
 
-Less general than `r linkfn("propertySetter")` is
-`r indexfns("vertexSetter")`.  This function sets attributes
+### `clipplaneControl`
+
+`r indexfns("clipplaneControl")` allows the user to control
+the location of a clipping plane by moving a slider.  
+
+### `vertexControl`
+
+Less general than `r linkfn("propertyControl")` is
+`r indexfns("vertexControl")`.  This function sets attributes
 of individual vertices in a scene.  For example, to set the
 x-coordinate of the closest point in the setosa group, and modify
 its colour from black to white,
 
-```{r vertex, webgl=TRUE}
-```
-
-```{r results="asis"}
-# setosa <- subset(iris, Species == "setosa")
-# which <- which.min(setosa$Sepal.Width)
-# init <- setosa$Sepal.Length[which]
-# propertySlider(
-# 	vertexSetter(values = matrix(c(init,8,0,1,0,1,0,1), nrow=2),
-# 	             attributes=c("x", "r", "g", "b"), 
-# 		     vertices = which, objid = 7, 
-# 		     prefix = "vertex"), 
-# 	step=0.01)
+```{r}
+print(setosa)
+setosavals <- subset(iris, Species == "setosa")
+which <- which.min(setosavals$Sepal.Width)
+init <- setosavals$Sepal.Length[which]
+rglwidget() %>%
+playwidget(
+	vertexControl(values = matrix(c(init,8,0,1,0,1,0,1), nrow=2),
+	             attributes=c("x", "red", "green", "blue"),
+		     vertices = which, objid = setosa),
+	step=0.01)
 ```
 	     
 

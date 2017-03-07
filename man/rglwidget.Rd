@@ -10,7 +10,7 @@ graphical displays in HTML documents of various types.  This function
 provides the necessities to embed an \pkg{rgl} scene in one.
 }
 \usage{
-rglwidget(x = scene3d(), width = NULL, height = NULL,
+rglwidget(x = scene3d(), width = figWidth(), height = figHeight(),
           controllers = NULL, snapshot = FALSE,
           elementId = NULL, reuse = !interactive(),
           webGLoptions = list(preserveDrawingBuffer = TRUE), ...)
