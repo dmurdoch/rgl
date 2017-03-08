@@ -2315,12 +2315,21 @@ rglwidgetClass = function() {
           getPropvals = function() {
             if (property === "userMatrix")
               return obj.par3d.userMatrix.getAsArray();
+            else if (property === "scale" || property === "FOV" || property === "zoom")
+              return [].concat(obj.par3d[property]);
             else
-              return obj[property];
+              return [].concat(obj[property]);
           };
           
-          putUsermatrix = function(newvals) {
-            obj.par3d.userMatrix.load(newvals);
+          putPropvals = function(newvals) {
+            if (newvals.length == 1)
+              newvals = newvals[0];
+            if (property === "userMatrix")
+              obj.par3d.userMatrix.load(newvals);
+            else if (property === "scale" || property === "FOV" || property === "zoom")
+              obj.par3d[property] = newvals;
+            else
+              obj[property] = newvals;
           }
 
       if (direct && typeof value === "undefined")
@@ -2343,16 +2352,14 @@ rglwidgetClass = function() {
         value = Math.round(value);
       }
 
-      propvals = getPropvals();
-
       for (j=0; j<entries.length; j++) {
         entry = entries[j];
         newprop = properties[j];
         newid = objids[j];
 
         if (newprop !== property || newid != objid) {
-          if (property === "userMatrix")
-            putUsermatrix(propvals);
+          if (typeof property !== "undefined")
+            putPropvals(propvals);
           property = newprop;
           objid = newid;
           obj = this.getObj(objid);
@@ -2368,8 +2375,7 @@ rglwidgetClass = function() {
           this.setElement(propvals, entry, value[j]);
         }
       }
-      if (property === "userMatrix")
-        putUsermatrix(propvals);
+      putPropvals(propvals);
         
       needsBinding = [];
       for (j=0; j < entries.length; j++) {

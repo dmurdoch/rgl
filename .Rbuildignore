@@ -6,5 +6,7 @@
 ^vignettes/CanvasMatrix.js
 ^vignettes/Rplots.pdf
 ^vignettes/test
+^vignettes/WebGLdebug.Rmd
+^inst/doc/WebGLdebug
 
 ^inst/todo
