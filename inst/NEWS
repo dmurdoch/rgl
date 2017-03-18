@@ -831,9 +831,8 @@ base graphics.
   - Added figWidth() and figHeight() functions for sizing
     rgl plots in R Markdown documents.
     
-0.98.2
+0.98.3
   - Record context (ioslides, shiny, etc.) in scene 
     when rglwidget() is called.
-  - Allow more than 16 scenes in html_document, ioslides_presentation.
-    slidy_presentation can handle more than 16, but won't automatically
-    display them:  extra clicking is needed.
+  - Allow more than 16 scenes in html_document, ioslides_presentation and
+    slidy_presentation.

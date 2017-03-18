@@ -2174,13 +2174,24 @@ rglwidgetClass = function() {
       window.addEventListener("resize", this.lazyLoadScene, false);
       window.addEventListener("scroll", this.lazyLoadScene, false);
       this.slide = this.getSlide();
-      if (this.scene.context.rmarkdown === "ioslides_presentation" &&
-          this.slide) {
+      if (this.slide) {
         if (typeof this.slide.rgl === "undefined")
           this.slide.rgl = [this];
         else
-          this.slide.rgl.push(this);
-        this.slide.setAttribute("slideenter", "this.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window);})");
+          this.slide.rgl.push(this);  
+        if (this.scene.context.rmarkdown === "ioslides_presentation") {
+          this.slide.setAttribute("slideenter", "this.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window);})");
+        } else if (this.scene.context.rmarkdown === "slidy_presentation") {
+          // This method would also work in ioslides, but it gets triggered
+          // something like 5 times per slide for every slide change, so
+          // you'd need a quicker function than lazyLoadScene.
+          var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
+          observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+              console.log("type="+mutation.type+" attributeName="+mutation. attributeName+" self="+self);
+              self.slide.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window); })})});
+          observer.observe(this.slide, { attributes: true, attributeFilter:["class"] });
+        }
       }
     };
 
