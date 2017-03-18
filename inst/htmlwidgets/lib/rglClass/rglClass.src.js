@@ -2127,6 +2127,7 @@ rglwidgetClass = function() {
       }
       this.el.appendChild(newcanvas);
       this.canvas = newcanvas;
+      this.setMouseHandlers(); 
       this.gl = null;      	
     };
       
@@ -2154,23 +2155,33 @@ rglwidgetClass = function() {
       
       this.onContextLost = function(event) {
         if (!self.drawing)
-          self.restartCanvas();
+          this.gl = null;
         event.preventDefault();
       };
       
       this.initGL0();
-      lazyLoadScene = function() {
+      this.lazyLoadScene = function() {
+      	if (typeof self.slide === "undefined")
+      	  self.slide = self.getSlide();
       	if (self.isInBrowserViewport()) {
-      	  if (!self.gl) {
+      	  if (!self.gl || self.gl.isContextLost())
       	    self.initGL();
-      	  }
       	  self.drawScene();
       	}
       };
-      window.addEventListener("DOMContentLoaded", lazyLoadScene, false);
-      window.addEventListener("load", lazyLoadScene, false);
-      window.addEventListener("resize", lazyLoadScene, false);
-      window.addEventListener("scroll", lazyLoadScene, false);
+      window.addEventListener("DOMContentLoaded", this.lazyLoadScene, false);
+      window.addEventListener("load", this.lazyLoadScene, false);
+      window.addEventListener("resize", this.lazyLoadScene, false);
+      window.addEventListener("scroll", this.lazyLoadScene, false);
+      this.slide = this.getSlide();
+      if (this.scene.context.rmarkdown === "ioslides_presentation" &&
+          this.slide) {
+        if (typeof this.slide.rgl === "undefined")
+          this.slide.rgl = [this];
+        else
+          this.slide.rgl.push(this);
+        this.slide.setAttribute("slideenter", "this.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window);})");
+      }
     };
 
     /* this is only used by writeWebGL; rglwidget has
@@ -2212,10 +2223,35 @@ rglwidgetClass = function() {
       }
     };
     
+    this.getSlide = function() {
+      var result = this.el;
+      while (result) {
+      	switch(this.scene.context.rmarkdown) {
+          case "ioslides_presentation": 
+            if (result.tagName === "SLIDE") return result;
+            else break;
+          case "slidy_presentation":
+            if (result.tagName === "DIV" && result.classList.contains("slide"))
+              return result;
+            else break;
+          default: return null;
+      	}
+      	result = result.parentElement;
+      }
+      return null;
+    }
+    
     this.isInBrowserViewport = function() {
       var rect = this.canvas.getBoundingClientRect(),
           windHeight = (window.innerHeight || document.documentElement.clientHeight),
           windWidth = (window.innerWidth || document.documentElement.clientWidth);
+      if (this.scene.context && this.scene.context.rmarkdown !== null) {
+      	if (this.slide)
+      	  return (this.scene.context.rmarkdown === "ioslides_presentation" &&
+      	          this.slide.classList.contains("current")) ||
+      	         (this.scene.context.rmarkdown === "slidy_presentation" &&
+      	          !this.slide.classList.contains("hidden"));
+      }
       return (
       	rect.top >= -windHeight &&
       	rect.left >= -windWidth &&

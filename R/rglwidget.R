@@ -2,6 +2,16 @@
 # need to detect it.  Thanks to Joe Cheng for suggesting this code.
 inShiny <- function() !is.null(getDefaultReactiveDomain())
 
+rmarkdownOutput <- function() {
+  if (requireNamespace("rmarkdown")) {
+    output <- rmarkdown::metadata$output
+    if (length(output))
+      if (is.character(output)) return(output[1])
+      else if (is.list(output) && length(names(output))) return(names(output)[1]) 
+  }
+  NULL
+}
+
 rglwidget <- local({
   reuseDF <- NULL
 
@@ -46,6 +56,8 @@ rglwidget <- local({
 
   x$webGLoptions <- webGLoptions
 
+  x$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
+  	
   # create widget
   attr(x, "TOJSON_ARGS") <- list(na = "string")
   result <- structure(htmlwidgets::createWidget(
