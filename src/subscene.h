@@ -150,7 +150,7 @@ public:
   void update(RenderContext* renderContext);
   
   /* Do the OpenGL rendering */
-  void render(RenderContext* renderContext);
+  void render(RenderContext* renderContext, bool opaquePass);
 
   void renderClipplanes(RenderContext* renderContext);
   void disableClipplanes(RenderContext* renderContext);

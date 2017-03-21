@@ -744,10 +744,10 @@ void rgl::rgl_setsubscene(int* id)
     
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
-    Scene* scene = rglview->getScene();      
+    Scene* scene = rglview->getScene(); 
     Subscene* subscene = scene->getSubscene(*id);
     if (subscene) {
-      scene->setCurrentSubscene(subscene);
+      *id = scene->setCurrentSubscene(subscene)->getObjID();
     } else
       *id = 0;
   } else

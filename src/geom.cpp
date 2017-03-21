@@ -192,4 +192,3 @@ Matrix4x4 Frustum::getMatrix()
   }
   return Matrix4x4(data);
 }
-   

@@ -222,9 +222,11 @@ Subscene* Scene::whichSubscene(int mouseX, int mouseY)
   return result;
 }
 
-void Scene::setCurrentSubscene(Subscene* subscene)
+Subscene* Scene::setCurrentSubscene(Subscene* subscene)
 {
+  Subscene* prev = currentSubscene;
   currentSubscene = subscene;
+  return prev;
 }
 
 void Scene::setupLightModel()
@@ -283,7 +285,8 @@ void Scene::render(RenderContext* renderContext)
   // RENDER MODEL
   //
 
-  rootSubscene.render(renderContext);
+  rootSubscene.render(renderContext, true);  // All opaque stuff
+  rootSubscene.render(renderContext, false); // non-opaque stuff
 }
 
 

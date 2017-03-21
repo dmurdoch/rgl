@@ -1365,6 +1365,28 @@ rglwidgetClass = function() {
                      surface : "TRIANGLES",
                      triangles : "TRIANGLES"};
 
+    this.depthSort = function(obj) {
+      var n = obj.centers.length, 
+          depths = new Float32Array(n),
+          result = new Array(n),
+          compare = function(i,j) { return depths[j] - depths[i]; },
+          z, w;
+      for(i=0; i<n; i++) {
+        z = this.prmvMatrix.m13*obj.centers[i][0] +
+            this.prmvMatrix.m23*obj.centers[i][1] +
+            this.prmvMatrix.m33*obj.centers[i][2] +
+            this.prmvMatrix.m43;
+        w = this.prmvMatrix.m14*obj.centers[i][0] +
+            this.prmvMatrix.m24*obj.centers[i][1] +
+            this.prmvMatrix.m34*obj.centers[i][2] +
+            this.prmvMatrix.m44;
+        depths[i] = z/w;
+        result[i] = i;
+      }
+      result.sort(compare);
+      return result;
+    };
+    
     this.drawObj = function(id, subsceneid) {
       var obj = this.getObj(id),
           subscene = this.getObj(subsceneid),
@@ -1384,8 +1406,7 @@ rglwidgetClass = function() {
           gl = this.gl || this.initGL(),
           mat,
           sphereMV, baseofs, ofs, sscale, i, count, light,
-          faces, pass, mode, pmode, attr,
-          depthsort = function(i,j) { return depths[j] - depths[i]; };
+          faces, pass, mode, pmode, attr;
 
       if (typeof id !== "number") {
         this.alertOnce("drawObj id is "+typeof id);
@@ -1497,7 +1518,7 @@ rglwidgetClass = function() {
       if (type === "spheres") {
         subscene = this.getObj(subsceneid);
         var scale = subscene.par3d.scale,
-            scount = count;
+            scount = count, indices;
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.enableVertexAttribArray(obj.normLoc );
         gl.vertexAttribPointer(obj.normLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
@@ -1520,11 +1541,14 @@ rglwidgetClass = function() {
           gl.uniform1i( obj.sampler, 0);
         }
 
+        if (depth_sort)
+          indices = this.depthSort(obj);
+          
         for (i = 0; i < scount; i++) {
           sphereMV = new CanvasMatrix4();
 
           if (depth_sort) {
-            baseofs = faces[i]*obj.vOffsets.stride;
+            baseofs = indices[i]*obj.vOffsets.stride;
           } else {
             baseofs = i*obj.vOffsets.stride;
           }
@@ -1618,36 +1642,21 @@ rglwidgetClass = function() {
           
       	mode = this.mode4type[type];      
         if (depth_sort && pmode == "filled") {// Don't try depthsorting on wireframe or points
-            var nfaces = obj.centers.length,
-                z, w, frowsize;
-            frowsize = Math.floor(obj.f[pass].length/nfaces);
-            var depths = new Float32Array(nfaces);
-            faces = new Array(nfaces);
-            for(i=0; i<nfaces; i++) {
-              z = this.prmvMatrix.m13*obj.centers[3*i] +
-                  this.prmvMatrix.m23*obj.centers[3*i+1] +
-                  this.prmvMatrix.m33*obj.centers[3*i+2] +
-                  this.prmvMatrix.m43;
-              w = this.prmvMatrix.m14*obj.centers[3*i] +
-                  this.prmvMatrix.m24*obj.centers[3*i+1] +
-                  this.prmvMatrix.m34*obj.centers[3*i+2] +
-                  this.prmvMatrix.m44;
-              depths[i] = z/w;
-              faces[i] = i;
-            }
-            faces.sort(depthsort);
+          var faces = this.depthSort(obj), 
+              nfaces = faces.length,
+              frowsize = Math.floor(obj.f[pass].length/nfaces);
 
-            if (type !== "spheres") {
-              var f = new Uint16Array(obj.f[pass].length);
-              for (i=0; i<nfaces; i++) {
-                for (j=0; j<frowsize; j++) {
-                  f[frowsize*i + j] = obj.f[pass][frowsize*faces[i] + j];
-                }
+          if (type !== "spheres") {
+            var f = new Uint16Array(obj.f[pass].length);
+            for (i=0; i<nfaces; i++) {
+              for (j=0; j<frowsize; j++) {
+                f[frowsize*i + j] = obj.f[pass][frowsize*faces[i] + j];
               }
-              gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
-              gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);
             }
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);
           }
+        }
       	
       	if (is_twosided)
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
@@ -1713,7 +1722,7 @@ rglwidgetClass = function() {
       }
     };
 
-    this.drawSubscene = function(subsceneid) {
+    this.drawSubscene = function(subsceneid, opaquePass) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(subsceneid),
           objects = this.scene.objects,
@@ -1734,7 +1743,7 @@ rglwidgetClass = function() {
 
       this.setViewport(subsceneid);
 
-      if (typeof obj.backgroundId !== "undefined")
+      if (typeof obj.backgroundId !== "undefined" && opaquePass)
           this.drawBackground(obj.backgroundId, subsceneid);
 
       if (subids.length) {
@@ -1749,12 +1758,8 @@ rglwidgetClass = function() {
           }
         }
 
-        if (subscene_needs_sorting)
+        if (subscene_needs_sorting && !opaquePass)
           this.setprmvMatrix();
-
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthMask(true);
-        gl.disable(gl.BLEND);
 
         var clipids = obj.clipplanes;
         if (typeof clipids === "undefined") {
@@ -1766,14 +1771,18 @@ rglwidgetClass = function() {
           for (i = 0; i < clipids.length; i++)
             this.drawObj(clipids[i], subsceneid);
         }
+
         subids = obj.opaque;
-        if (subids.length > 0) {
+        if (subids.length > 0 && opaquePass) {
+          gl.enable(gl.DEPTH_TEST);
+          gl.depthMask(true);
+          gl.disable(gl.BLEND);
           for (i = 0; i < subids.length; i++) {
             this.drawObj(subids[i], subsceneid);
           }
         }
         subids = obj.transparent;
-        if (subids.length > 0) {
+        if (subids.length > 0 && !opaquePass) {
           gl.depthMask(false);
           gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
                                gl.ONE, gl.ONE);
@@ -1784,7 +1793,7 @@ rglwidgetClass = function() {
         }
         subids = obj.subscenes;
         for (i = 0; i < subids.length; i++) {
-          this.drawSubscene(subids[i]);
+          this.drawSubscene(subids[i], opaquePass);
         }
       }
     };
@@ -2308,7 +2317,8 @@ rglwidgetClass = function() {
       gl.clearColor(1,1,1,1);
       gl.depthMask(true); // Must be true before clearing depth buffer
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      this.drawSubscene(this.scene.rootSubscene);
+      this.drawSubscene(this.scene.rootSubscene, true);
+      this.drawSubscene(this.scene.rootSubscene, false);
       this.stopDrawing(save);
     };
 

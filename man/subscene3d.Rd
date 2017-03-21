@@ -97,7 +97,8 @@ overwrite anything displayed in the parent subscene, regardless of depth.
 }
 \value{
 If successful, each function returns the object id of the subscene, with the exception of
-\code{gc3d}, which returns the count of objects which have been deleted.
+\code{gc3d}, which returns the count of objects which have been deleted, 
+and \code{useSubscene3d}, which returns the previously active subscene id.
 }
 \author{
 Duncan Murdoch and Fang He.

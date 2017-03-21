@@ -83,7 +83,7 @@ public:
   /** 
    * set/get the current subscene
    **/
-  void setCurrentSubscene(Subscene* subscene);
+  Subscene* setCurrentSubscene(Subscene* subscene); /* return previous one */
   Subscene* getCurrentSubscene() const { return currentSubscene; }
   const Subscene* getRootSubscene() const { return &rootSubscene; }
   

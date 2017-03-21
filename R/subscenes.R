@@ -89,7 +89,7 @@ newSubscene3d <- function(viewport = "replace",
 useSubscene3d <- function(subscene) {
   result <- .C(rgl_setsubscene, id=as.integer(subscene))$id
   if (!result) stop(gettextf("Subscene %d not found.", subscene), domain = NA)
-  invisible(subscene)
+  invisible(result)
 }
 
 addToSubscene3d <- function(ids, subscene = currentSubscene3d()) {

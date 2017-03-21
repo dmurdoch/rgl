@@ -831,8 +831,14 @@ base graphics.
   - Added figWidth() and figHeight() functions for sizing
     rgl plots in R Markdown documents.
     
-0.98.3
+0.98.4
   - Record context (ioslides, shiny, etc.) in scene 
     when rglwidget() is called.
   - Allow more than 16 scenes in html_document, ioslides_presentation and
     slidy_presentation.
+  - useSubscene3d() now returns the id of the previously active subscene,
+    to make temporary changes more convenient.
+  - The rendering order is changed:  now all opaque objects are drawn first,
+    then all transparent objects.  Previously this ordering was only done
+    within subscenes, leading to rendering errors when transparent objects
+    in one subscene were drawn before opaque objects in another.

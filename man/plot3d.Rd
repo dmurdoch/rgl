@@ -84,7 +84,14 @@ If any clipping limits are given, then the data will be
 plotted in a newly created subscene within the current one;
 otherwise plotting will take place directly in the current
 subscene.  This subscene is named \code{"clipregion"}
-in the results. 
+in the results.  This may affect the appearance of transparent
+objects if some are drawn in the \code{plot3d} call and others after, 
+as \pkg{rgl} will not attempt to depth-sort objects if they are
+in different subscenes.  It is best to draw all overlapping 
+transparent objects in the same subscene.  See the example 
+in \code{\link{planes3d}}.  It will also affect the use
+of \code{\link{clipplanes3d}}; clipping planes need to be in the 
+same subscene as the objects being clipped.
 
 Use \code{forceClipregion = TRUE} to force creation of this 
 subscene even without specifying limits. 
