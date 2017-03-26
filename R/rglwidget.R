@@ -89,7 +89,9 @@ rglwidgetOutput <- function(outputId, width = '512px', height = '512px'){
 #' Widget render function for use in Shiny
 #'
 #' @export
-renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE) {
+renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
-  shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE)
+  markRenderFunction(rglwidgetOutput,
+                     shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE),
+  		     outputArgs = outputArgs)
 }

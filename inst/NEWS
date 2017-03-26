@@ -842,3 +842,5 @@ base graphics.
     then all transparent objects.  Previously this ordering was only done
     within subscenes, leading to rendering errors when transparent objects
     in one subscene were drawn before opaque objects in another.
+  - renderRglwidget() and renderPlaywidget() now have an optional argument
+    outputArgs for use in dynamic R Markdown documents.

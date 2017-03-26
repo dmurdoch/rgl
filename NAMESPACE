@@ -119,7 +119,7 @@ importFrom(htmlwidgets, createWidget, shinyRenderWidget, shinyWidgetOutput, sizi
 importFrom(htmltools, includeScript, tags, tagList, browsable)
 importFrom(jsonlite, toJSON)
 importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
-importFrom(shiny, getDefaultReactiveDomain)
+importFrom(shiny, getDefaultReactiveDomain, markRenderFunction)
 importFrom(magrittr, "%>%")
 
 S3method(playwidget, default)
