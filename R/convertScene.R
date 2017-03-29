@@ -420,6 +420,9 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	                                      # in Javascript
 	  }
 	  setObj(cids[i], obj)
+	  if (NROW(obj$vertices) > 65535)
+	    warning(sprintf("Object %s (%s) has %d vertices.  Some browsers support only 65535.",
+	    		    cids[i], obj$type, NROW(obj$vertices)), call. = FALSE)
 	}
 
 	sphereId <- reuseDF$elementId[reuseDF$id == -1]
