@@ -1,8 +1,11 @@
 #include "SphereMesh.h"
+#include "subscene.h"
 
 #include "opengl.h"
+#include <map>
 
 using namespace rgl;
+using namespace std;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -20,7 +23,8 @@ SphereMesh::SphereMesh()
   sections( 16 ),
   type( GLOBE ),
   genNormal(false),
-  genTexCoord(false)
+  genTexCoord(false),
+  sort(false)
 {
 }
 
@@ -60,6 +64,11 @@ void SphereMesh::setCenter(const Vertex& in_center)
 void SphereMesh::setRadius(float in_radius)
 {
   radius = in_radius;
+}
+
+void SphereMesh::dosort(bool in_sort)
+{
+  sort = in_sort;
 }
 
 void SphereMesh::update()
@@ -115,6 +124,8 @@ void SphereMesh::update(const Vertex& scale)
   }
 }
 
+struct gridpt {int i; int j;};
+
 void SphereMesh::draw(RenderContext* renderContext)
 {
   vertexArray.beginUse();
@@ -125,19 +136,41 @@ void SphereMesh::draw(RenderContext* renderContext)
   if (genTexCoord)
     texCoordArray.beginUse();
 
-  for(int i=0; i<sections; i++ ) {
-
-    int curr = i * (segments+1);
-    int next = curr + (segments+1);
-
-    glBegin(GL_QUAD_STRIP);
-    for(int i=0;i<=segments;i++) {
-      glArrayElement( next + i );
-      glArrayElement( curr + i );
+  if (sort) {
+    Subscene *sub = renderContext->subscene;
+    std::multimap<float, gridpt> distanceMap;
+    std::multimap<float, gridpt>::iterator iter;
+  	
+    for (int i=0; i<sections; i++) 
+      for (int j=0; j<=segments;j++) {
+      	gridpt pt = {i, j};
+        distanceMap.insert(std::pair<const float, gridpt>(
+        		-sub->getDistance(vertexArray[i * (segments+1) + j]), pt));
+      }
+    glBegin(GL_QUADS);
+    for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
+      gridpt pt = iter->second;
+      glArrayElement(pt.i * (segments+1) + pt.j);
+      glArrayElement(pt.i * (segments+1) + pt.j + 1);
+      glArrayElement((pt.i + 1) * (segments+1) + pt.j + 1);
+      glArrayElement((pt.i + 1) * (segments+1) + pt.j);
     }
     glEnd();
-  }
+  } else {
+  
+    for(int i=0; i<sections; i++ ) {
 
+      int curr = i * (segments+1);
+      int next = curr + (segments+1);
+
+      glBegin(GL_QUAD_STRIP);
+      for(int j=0;j<=segments;j++) {
+        glArrayElement( next + j );
+        glArrayElement( curr + j );
+      }
+      glEnd();
+    }
+  }
   vertexArray.endUse();
 
   if (genNormal)

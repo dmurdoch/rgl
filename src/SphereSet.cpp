@@ -59,7 +59,7 @@ void SphereSet::drawElement(RenderContext* renderContext, int index)
    if ( center.get(index).missing() || ISNAN(radius.getRecycled(index)) ) return;
 
    material.useColor(index);
-
+   sphereMesh.dosort(material.isTransparent());
    sphereMesh.setCenter( center.get(index) );
    sphereMesh.setRadius( radius.getRecycled(index) );
    

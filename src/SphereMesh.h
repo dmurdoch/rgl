@@ -30,6 +30,7 @@ public:
   void setRadius      (float radius);
   void update();
   void update	      (const Vertex& scale);
+  void dosort	      (bool in_sort);
 
 /*
   void beginDraw(RenderContext* renderContext);
@@ -55,6 +56,7 @@ private:
   Type   type;
   bool   genNormal;
   bool   genTexCoord;
+  bool   sort;
 
   void   setupMesh();
 };

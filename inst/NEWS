@@ -831,7 +831,7 @@ base graphics.
   - Added figWidth() and figHeight() functions for sizing
     rgl plots in R Markdown documents.
     
-0.98.5
+0.98.6
   - Record context (ioslides, shiny, etc.) in scene 
     when rglwidget() is called.
   - Allow more than 16 scenes in html_document, ioslides_presentation and
@@ -845,3 +845,5 @@ base graphics.
   - renderRglwidget() and renderPlaywidget() now have an optional argument
     outputArgs for use in dynamic R Markdown documents.
   - rglwidget() now warns if an object has too many vertices
+  - transparent spheres sometimes showed rendering
+    artifacts because they were not drawn from back to front.  (Reported by Atte Tenkanen.)
