@@ -61,7 +61,14 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
 	persp <- ncol(data) + 1:3
 	data <- cbind(data, t(userMatrix[4,1:3,]))
 	rot <- ncol(data) + 1:4
-	data <- cbind(data, toQuaternions(userMatrix[1:3,1:3,]))
+	quat <- toQuaternions(userMatrix[1:3, 1:3, ])
+	# Since q and -q are the same rotation, we want to interpolate
+	# to the nearer one.
+	for (i in seq_len(nrow(quat))[-1]) {
+	    if (sum((quat[i - 1, ] - quat[i, ])^2) > sum((quat[i - 1, ] + quat[i, ])^2)) 
+		quat[i, ] <- -quat[i, ]
+	}
+	data <- cbind(data, quat)	
     } else {
         xlat <- NULL
     }
