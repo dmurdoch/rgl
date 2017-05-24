@@ -1877,6 +1877,54 @@ rglwidgetClass = function() {
         this.drawScene();
       };
       handlers.trackballend = 0;
+      
+      this.clamp = function(x, lo, hi) {
+      	return Math.max(lo, Math.min(x, hi));
+      };
+      
+      this.screenToPolar = function(x,y) {
+        var viewport = this.getObj(activeSubscene).par3d.viewport,
+          width = viewport.width*this.canvas.width,
+          height = viewport.height*this.canvas.height,
+    	  r = Math.min(width, height)/2,
+    	  dx = this.clamp(x - width/2, -r, r),
+    	  dy = this.clamp(y - height/2, -r, r);
+    	  return [Math.asin(dx/r), Math.asin(-dy/r)];
+      };
+
+      handlers.polardown = function(x,y) {
+        var activeSub = this.getObj(activeSubscene),
+            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+            i, l = activeModel.par3d.listeners;
+        handlers.dragBase = this.screenToPolar(x, y);
+        this.saveMat = [];
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix); 
+          activeSub.camBase = [-Math.atan2(activeSub.saveMat.m13, activeSub.saveMat.m11), 
+                               Math.atan2(activeSub.saveMat.m32, activeSub.saveMat.m22)];
+        }
+      };
+
+      handlers.polarmove = function(x,y) {
+        var dragCurrent = this.screenToPolar(x,y),
+            activeSub = this.getObj(activeSubscene),
+            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+            objects = this.scene.objects,
+            l = activeModel.par3d.listeners,
+            i, changepos = [];
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          for (j=0; j<2; j++)
+            changepos[j] = -(dragCurrent[j] - handlers.dragBase[j]); 
+          activeSub.par3d.userMatrix.makeIdentity();
+          activeSub.par3d.userMatrix.rotate(changepos[0]*180/Math.PI, 0,-1,0);
+          activeSub.par3d.userMatrix.multRight(objects[l[i]].saveMat);
+          activeSub.par3d.userMatrix.rotate(changepos[1]*180/Math.PI, -1,0,0);
+        }
+        this.drawScene();
+      };
+      handlers.polarend = 0;
 
       handlers.axisdown = function(x,y) {
         handlers.rotBase = this.screenToVector(x, this.canvas.height/2);
@@ -1988,7 +2036,9 @@ rglwidgetClass = function() {
           coords = self.translateCoords(activeSubscene, coords);
           f.call(self, coords.x, coords.y);
           ev.preventDefault();
-        }
+        } else 
+          console.warn("Mouse handler '" + handler + "' is not implemented.");
+        
       };
 
       this.canvas.onmouseup = function ( ev ){
