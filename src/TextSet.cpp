@@ -71,7 +71,7 @@ void TextSet::drawBegin(RenderContext* renderContext)
   material.beginUse(renderContext);
 }
 
-void TextSet::drawElement(RenderContext* renderContext, int index) 
+void TextSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
   GLFont* font;
 

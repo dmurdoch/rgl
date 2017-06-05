@@ -31,10 +31,10 @@ public:
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   String getTextAttribute(AABox& bbox, AttribID attrib, int index);
     
-  Vertex getElementCenter(int index) { return vertexArray[index]; }
+  Vertex getPrimitiveCenter(int index) { return vertexArray[index]; }
 
   void drawBegin(RenderContext* renderContext);
-  void drawElement(RenderContext* renderContext, int index);
+  void drawPrimitive(RenderContext* renderContext, int index);
   void drawEnd(RenderContext* renderContext);
 
 private:

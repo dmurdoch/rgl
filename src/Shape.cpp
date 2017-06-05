@@ -38,8 +38,8 @@ void Shape::draw(RenderContext* renderContext)
   drawBegin(renderContext);
   SAVEGLERROR;
   
-  for(int i=0;i<getElementCount();i++) 
-    drawElement(renderContext, i);
+  for(int i=0;i<getPrimitiveCount();i++) 
+    drawPrimitive(renderContext, i);
     
   SAVEGLERROR;  
   drawEnd(renderContext);
@@ -96,7 +96,7 @@ int Shape::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) { 
     case COLORS:  return material.colors.getLength();
-    case CENTERS: return getElementCount();
+    case CENTERS: return getPrimitiveCount();
     case FLAGS:   return 1;
   }
   return 0;
@@ -120,7 +120,7 @@ void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
         return;
       case CENTERS:
         while (first < n) {
-          Vertex center = getElementCenter(first);
+          Vertex center = getPrimitiveCenter(first);
           *result++ = center.x;
           *result++ = center.y;
           *result++ = center.z;

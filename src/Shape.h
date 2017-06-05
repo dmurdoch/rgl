@@ -76,16 +76,21 @@ public:
    **/
    
   virtual int getElementCount(void) = 0; 
+  
+  /**
+   * access to primitives (e.g. facets of sphere)
+   **/
+  virtual int getPrimitiveCount(void) { return getElementCount(); } 
 
   /* overrides */
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   
   /**
-   * location of individual items
+   * location of individual parts
    **/
   
-  virtual Vertex getElementCenter(int index) { return boundingBox.getCenter(); }
+  virtual Vertex getPrimitiveCenter(int index) { return boundingBox.getCenter(); }
 
   /**
    * Starting to render the shape.  After this, the renderContext won't change until
@@ -102,7 +107,7 @@ public:
   /**
    * send one item
    **/
-  virtual void drawElement(RenderContext* renderContext, int index) = 0;
+  virtual void drawPrimitive(RenderContext* renderContext, int index) = 0;
 
   /**
    * end sending items

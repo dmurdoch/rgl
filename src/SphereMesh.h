@@ -30,7 +30,6 @@ public:
   void setRadius      (float radius);
   void update();
   void update	      (const Vertex& scale);
-  void dosort	      (bool in_sort);
 
 /*
   void beginDraw(RenderContext* renderContext);
@@ -39,7 +38,15 @@ public:
 */
 
   void draw(RenderContext* renderContext);
+  
+  void drawBegin(RenderContext* renderContext);
+  void drawPrimitive(RenderContext* renderContext, int i);
+  void drawEnd(RenderContext* renderContext);
 
+  int getPrimitiveCount() { return (segments + 1)*sections; }
+  
+  Vertex getPrimitiveCenter(int i) { return vertexArray[i]; }
+  
 private:
   
   Vertex center;
@@ -56,7 +63,6 @@ private:
   Type   type;
   bool   genNormal;
   bool   genTexCoord;
-  bool   sort;
 
   void   setupMesh();
 };

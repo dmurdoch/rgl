@@ -415,10 +415,12 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	    obj$par3d$viewport$width <- obj$par3d$viewport$width/fullviewport$width
 	    obj$par3d$viewport$y <- obj$par3d$viewport$y/fullviewport$height
 	    obj$par3d$viewport$height <- obj$par3d$viewport$height/fullviewport$height
-	  } else if (obj$type == "planes" && nrow(obj$vertices) > 3) {
+	  }
+	  if (obj$type == "planes" && nrow(obj$vertices) > 3) {
 	    obj$vertices = obj$vertices[1:3,] # These will be redone
 	                                      # in Javascript
-	  }
+	  } else if (obj$type == "spheres")
+	    obj$centers <- obj$vertices
 	  setObj(cids[i], obj)
 	  if (NROW(obj$vertices) > 65535)
 	    warning(sprintf("Object %s (%s) has %d vertices.  Some browsers support only 65535.",

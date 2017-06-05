@@ -37,7 +37,7 @@ public:
    * location of individual items
    **/
   
-  virtual Vertex getElementCenter(int index);
+  virtual Vertex getPrimitiveCenter(int index);
   
   /**
    * begin sending items 
@@ -47,7 +47,7 @@ public:
   /**
    * send one item
    **/
-  virtual void drawElement(RenderContext* renderContext, int index);
+  virtual void drawPrimitive(RenderContext* renderContext, int index);
   
   /**
    * end sending items

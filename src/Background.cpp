@@ -188,7 +188,7 @@ void Background::render(RenderContext* renderContext)
     
 }
 
-void Background::drawElement(RenderContext* renderContext, int index)
+void Background::drawPrimitive(RenderContext* renderContext, int index)
 {
   glPushAttrib(GL_ENABLE_BIT);
 
@@ -199,7 +199,7 @@ void Background::drawElement(RenderContext* renderContext, int index)
   glDisable(GL_DEPTH_TEST);
   glDepthMask(GL_FALSE);
 
-  sphereMesh.draw(renderContext);
+  sphereMesh.drawPrimitive(renderContext, index);
 
   material.endUse(renderContext);
 

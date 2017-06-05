@@ -106,7 +106,7 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
 
 // ---------------------------------------------------------------------------
 
-void PrimitiveSet::drawElement(RenderContext* renderContext, int index)
+void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 {
   if (hasmissing) {
     bool skip = false;

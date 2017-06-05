@@ -23,8 +23,7 @@ SphereMesh::SphereMesh()
   sections( 16 ),
   type( GLOBE ),
   genNormal(false),
-  genTexCoord(false),
-  sort(false)
+  genTexCoord(false)
 {
 }
 
@@ -64,11 +63,6 @@ void SphereMesh::setCenter(const Vertex& in_center)
 void SphereMesh::setRadius(float in_radius)
 {
   radius = in_radius;
-}
-
-void SphereMesh::dosort(bool in_sort)
-{
-  sort = in_sort;
 }
 
 void SphereMesh::update()
@@ -136,40 +130,17 @@ void SphereMesh::draw(RenderContext* renderContext)
   if (genTexCoord)
     texCoordArray.beginUse();
 
-  if (sort) {
-    Subscene *sub = renderContext->subscene;
-    std::multimap<float, gridpt> distanceMap;
-    std::multimap<float, gridpt>::iterator iter;
-  	
-    for (int i=0; i<sections; i++) 
-      for (int j=0; j<=segments;j++) {
-      	gridpt pt = {i, j};
-        distanceMap.insert(std::pair<const float, gridpt>(
-        		-sub->getDistance(vertexArray[i * (segments+1) + j]), pt));
-      }
-    glBegin(GL_QUADS);
-    for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
-      gridpt pt = iter->second;
-      glArrayElement(pt.i * (segments+1) + pt.j);
-      glArrayElement(pt.i * (segments+1) + pt.j + 1);
-      glArrayElement((pt.i + 1) * (segments+1) + pt.j + 1);
-      glArrayElement((pt.i + 1) * (segments+1) + pt.j);
+  for(int i=0; i<sections; i++ ) {
+
+    int curr = i * (segments+1);
+    int next = curr + (segments+1);
+
+    glBegin(GL_QUAD_STRIP);
+    for(int j=0;j<=segments;j++) {
+      glArrayElement( next + j );
+      glArrayElement( curr + j );
     }
     glEnd();
-  } else {
-  
-    for(int i=0; i<sections; i++ ) {
-
-      int curr = i * (segments+1);
-      int next = curr + (segments+1);
-
-      glBegin(GL_QUAD_STRIP);
-      for(int j=0;j<=segments;j++) {
-        glArrayElement( next + j );
-        glArrayElement( curr + j );
-      }
-      glEnd();
-    }
   }
   vertexArray.endUse();
 
@@ -180,5 +151,36 @@ void SphereMesh::draw(RenderContext* renderContext)
     texCoordArray.endUse();
 }
 
+void SphereMesh::drawBegin(RenderContext* renderContext)
+{
+  vertexArray.beginUse();
+	
+  if (genNormal)
+    normalArray.beginUse();
+	
+  if (genTexCoord)
+    texCoordArray.beginUse();
+  
+  glBegin(GL_QUADS);
+}
+	
+void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
+{
+  glArrayElement(i);
+  glArrayElement(i + 1);
+  glArrayElement(i + segments + 2);
+  glArrayElement(i + segments + 1);
+}
 
-
+void SphereMesh::drawEnd(RenderContext* renderContext)
+{
+  glEnd();
+	
+  vertexArray.endUse();
+	
+  if (genNormal)
+    normalArray.endUse();
+	
+  if (genTexCoord)
+    texCoordArray.endUse();
+}

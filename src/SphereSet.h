@@ -12,6 +12,7 @@ private:
   ARRAY<Vertex> center;
   ARRAY<float>  radius;
   SphereMesh    sphereMesh;
+  int           facets, lastdrawn;
 public:
   SphereSet(Material& in_material, int nsphere, double* center, int nradius, double* radius, 
             int in_ignoreExtent);
@@ -25,6 +26,7 @@ public:
   void render(RenderContext* renderContext);
   
   int getElementCount(void){ return center.size(); }
+  int getPrimitiveCount(void);
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   
@@ -32,7 +34,7 @@ public:
    * location of individual items
    **/
   
-  Vertex getElementCenter(int index) { return center.get(index); }
+  Vertex getPrimitiveCenter(int index);
   
   /**
    * Spheres appear as spheres, so their bbox depends on scaling
@@ -49,7 +51,7 @@ public:
   /**
    * send one item
    **/
-  void drawElement(RenderContext* renderContext, int index);
+  void drawPrimitive(RenderContext* renderContext, int index);
 
   /**
    * end sending items

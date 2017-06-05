@@ -43,8 +43,8 @@ int SpriteSet::getElementCount(void)
 {
   return vertex.size();
 }
-  
-Vertex SpriteSet::getElementCenter(int index)
+	
+Vertex SpriteSet::getPrimitiveCenter(int index)
 {
   return vertex.get(index);
 }
@@ -81,7 +81,7 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
   }
 }
 
-void SpriteSet::drawElement(RenderContext* renderContext, int index)
+void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
 {
   Vertex& o = vertex.get(index);
   float   s = size.getRecycled(index);

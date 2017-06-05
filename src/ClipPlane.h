@@ -30,7 +30,7 @@ public:
   
   virtual void renderBegin(RenderContext* renderContext);
   
-  virtual void drawElement(RenderContext* renderContext, int index);
+  virtual void drawPrimitive(RenderContext* renderContext, int index);
   
   virtual int getElementCount(void) { return nPlanes; }
 

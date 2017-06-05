@@ -193,7 +193,7 @@ Vertex Surface::getCenter(int ix, int iz)
   return accu;  
 } 
 
-Vertex Surface::getElementCenter(int index) 
+Vertex Surface::getPrimitiveCenter(int index) 
 {
   return getCenter( index % (nx-1), index / (nx-1) );
 }
@@ -212,7 +212,7 @@ void Surface::drawBegin(RenderContext* renderContext)
 
 }
 
-void Surface::drawElement(RenderContext* renderContext, int index)
+void Surface::drawPrimitive(RenderContext* renderContext, int index)
 {
   int ix = index % (nx-1), iz = index / (nx-1),
       s = iz*nx + ix;

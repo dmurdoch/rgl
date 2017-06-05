@@ -34,7 +34,7 @@ public:
   /**
    * overloaded
    **/
-  virtual Vertex getElementCenter(int item) { return getCenter(item); }
+  virtual Vertex getPrimitiveCenter(int item) { return getCenter(item); }
 
   /**
    * begin sending primitives 
@@ -46,7 +46,7 @@ public:
    * send primitive
    * interface
    **/
-  virtual void drawElement(RenderContext* renderContext, int index);
+  virtual void drawPrimitive(RenderContext* renderContext, int index);
   
   /**
    * end sending primitives
@@ -268,7 +268,7 @@ class LineStripSet : public PrimitiveSet
 {
 public:
   LineStripSet(Material& material, int in_nelements, double* in_vertex, bool in_ignoreExtent, bool in_bboxChange = false);
-  void drawElement(RenderContext* renderContext, int index);
+  void drawPrimitive(RenderContext* renderContext, int index);
   /**
    * overloaded
    **/  

@@ -23,7 +23,7 @@ public:
   ~Background();
   void render(RenderContext* renderContext);
   int getElementCount(void) { return 1; }
-  void drawElement(RenderContext* renderContext, int index);  
+  void drawPrimitive(RenderContext* renderContext, int index);  
   GLbitfield getClearFlags(RenderContext* renderContext);
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);

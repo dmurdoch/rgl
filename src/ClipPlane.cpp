@@ -56,7 +56,7 @@ void ClipPlaneSet::renderBegin(RenderContext* renderContext)
   num_planes += nPlanes;
 }
 
-void ClipPlaneSet::drawElement(RenderContext* renderContext, int index)
+void ClipPlaneSet::drawPrimitive(RenderContext* renderContext, int index)
 {
   GLdouble eqn[4];
   eqn[0] = normal.getRecycled(index).x;

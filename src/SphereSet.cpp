@@ -27,6 +27,8 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
   
   for (int i=0;i<center.size();i++)
     boundingBox += Sphere( center.get(i), radius.getRecycled(i) );
+  
+  facets = sphereMesh.getPrimitiveCount();
 }
 
 SphereSet::~SphereSet()
@@ -52,24 +54,35 @@ void SphereSet::drawBegin(RenderContext* renderContext)
 {
   Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
+  lastdrawn = -1;
 }
 
-void SphereSet::drawElement(RenderContext* renderContext, int index) 
+void SphereSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
-   if ( center.get(index).missing() || ISNAN(radius.getRecycled(index)) ) return;
+   int i1 = index / facets, i2 = index % facets;
+	
+   if (i1 != lastdrawn) {
+     if ( center.get(i1).missing() || ISNAN(radius.getRecycled(i1)) ) return;
 
-   material.useColor(index);
-   sphereMesh.dosort(material.isTransparent());
-   sphereMesh.setCenter( center.get(index) );
-   sphereMesh.setRadius( radius.getRecycled(index) );
+     material.useColor(i1);
+     if (lastdrawn >= 0)
+       sphereMesh.drawEnd( renderContext );
+     
+     sphereMesh.setCenter( center.get(i1) );
+     sphereMesh.setRadius( radius.getRecycled(i1) );
    
-   sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
-
-   sphereMesh.draw(renderContext);
+     sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
+     sphereMesh.drawBegin( renderContext );
+     lastdrawn = i1;
+   }
+   sphereMesh.drawPrimitive(renderContext, i2);
 }
 
 void SphereSet::drawEnd(RenderContext* renderContext)
 {
+  if (lastdrawn >= 0)
+    sphereMesh.drawEnd( renderContext );
+  lastdrawn = -1;
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);  
 }
@@ -81,6 +94,26 @@ void SphereSet::render(RenderContext* renderContext)
   Shape::render(renderContext);
 }
 
+int SphereSet::getPrimitiveCount()
+{
+  return facets * getElementCount();
+}
+
+Vertex SphereSet::getPrimitiveCenter(int index)
+{
+  int i1 = index / facets, i2 = index % facets;
+  if (i1 != lastdrawn) {
+    if ( center.get(i1).missing() || ISNAN(radius.getRecycled(i1)) ) return center.get(i1);
+    sphereMesh.setCenter( center.get(i1) );
+    sphereMesh.setRadius( radius.getRecycled(i1) );
+    sphereMesh.update();
+    
+    lastdrawn = i1;
+  }
+  return sphereMesh.getPrimitiveCenter(i2);
+}
+		
+	
 int SphereSet::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
   switch (attrib) {
