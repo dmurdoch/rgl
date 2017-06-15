@@ -222,7 +222,7 @@ rglwidgetClass = function() {
           thesub = this.getObj(subscene),
           ids = [id],
           obj = this.getObj(id), i;
-      if (typeof obj.newIds !== "undefined") {
+      if (typeof obj != "undefined" && typeof (obj.newIds) !== "undefined") {
         ids = ids.concat(obj.newIds);
       }
       for (i = 0; i < ids.length; i++) {
@@ -240,7 +240,7 @@ rglwidgetClass = function() {
           thesub = this.getObj(subscene),
           obj = this.getObj(id),
           ids = [id], i;
-      if (typeof obj.newIds !== "undefined")
+      if (typeof obj !== "undefined" && typeof (obj.newIds) !== "undefined")
         ids = ids.concat(obj.newIds);
       for (j=0; j<ids.length;j++) {
         id = ids[j];
@@ -2387,6 +2387,8 @@ rglwidgetClass = function() {
           tointeger = function(x) {
             return parseInt(x, 10);
           };
+      if (isNaN(value))
+        value = control.value == 0;
       if (control.accumulate)
         for (i=0; i <= value; i++)
           adds = adds.concat(control.subsets[i]);

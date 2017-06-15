@@ -17,12 +17,12 @@ HTMLWidgets.widget({
 
   renderValue: function(el, x, instance) {
     var ShowValue = function(value) {
-        var scene = window[x.sceneId].rglinstance;
+        var rglinstance = window[x.sceneId].rglinstance;
         x.value = value;
       /* We might be running before the scene exists.  If so, it
          will have to apply our initial value. */
-        if (typeof scene !== "undefined") {
-          scene.Player(el, x);
+        if (typeof rglinstance !== "undefined") {
+          rglinstance.Player(el, x);
           x.initialized = true;
         } else {
           x.initialized = false;
@@ -47,6 +47,7 @@ HTMLWidgets.widget({
           control.rglOldhandler = control.onchange;
 
         control.onchange = function() {
+          var value;
           /* If we are called n>0 times while servicing a previous call, we want to finish
              the current call, then run again.  But the old handler might want to
              see every change. */
@@ -59,12 +60,16 @@ HTMLWidgets.widget({
             state = "busy";
             if (control.rglOldhandler !== null)
               control.rglOldhandler.call(this);
-            ShowValue(control.value);
+            if (control.type == "checkbox")
+              value = control.checked ? 0 : 1;
+            else
+              value = control.value;
+            ShowValue(value);
             if (state === "busy")
               state = "idle";
           } while (state !== "idle");
         };
-        ShowValue(control.value);
+        control.onchange();
       }
     }
     ShowValue(x.value);

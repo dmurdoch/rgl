@@ -7,6 +7,7 @@
 ^vignettes/Rplots.pdf
 ^vignettes/test
 ^vignettes/WebGLdebug.Rmd
+^vignettes/figure
 ^inst/doc/WebGLdebug
 
 ^inst/todo

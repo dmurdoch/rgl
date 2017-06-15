@@ -831,7 +831,7 @@ base graphics.
   - Added figWidth() and figHeight() functions for sizing
     rgl plots in R Markdown documents.
     
-0.98.9
+0.98.10
   - Record context (ioslides, shiny, etc.) in scene 
     when rglwidget() is called.
   - Allow more than 16 scenes in html_document, ioslides_presentation and
@@ -855,3 +855,4 @@ base graphics.
   - the "centers" attribute now refers to the individual facets
     of spheres, rather than the whole sphere.  Use "vertices" for
     that.
+  - The togglewidget() function didn't work properly in Shiny.

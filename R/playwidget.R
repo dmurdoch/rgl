@@ -29,7 +29,6 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
 		       buttonLabels = components,
 		       pause = "Pause",
                        ...) {
-
   sceneId <- as.character(sceneId)
 
   if (length(sceneId) != 1)
@@ -39,7 +38,7 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
     elementId <- paste0("rgl-play", sample(100000, 1))
 
   if (!is.null(respondTo))
-    components <- NULL
+    components <- buttonLabels <- NULL
 
   if (length(stop) != 1 || !is.finite(stop)) stop <- NULL
 
