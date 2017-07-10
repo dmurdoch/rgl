@@ -22,6 +22,7 @@
   dynlib <- "rgl"
   
   onlyNULL <- rgl.useNULL()
+  unixos <- "none"
   
   if ( .Platform$OS.type == "unix" ) {
     unixos <- system("uname",intern=TRUE)
@@ -36,7 +37,12 @@
       	     call. = FALSE)
     }
   }
-  dll <- library.dynam(dynlib, pkg, lib)
+  dll <- try(library.dynam(dynlib, pkg, lib))
+  if (inherits(dll, "try-error"))
+    stop(paste("\tLoading rgl's DLL failed.", 
+    	       if (unixos == "Darwin") 
+    	         "\n\tOn MacOS, rgl depends on XQuartz, which you can download from xquartz.org."),
+         call. = FALSE)
 
   routines <- getDLLRegisteredRoutines(dynlib, addNames = FALSE)
   ns <- asNamespace(pkg)
