@@ -1,4 +1,11 @@
+// To generate the help pages for this library, use
 
+// jsdoc --destination ../../../doc/rglwidgetClass --template ~/node_modules/jsdoc-baseline rglClass.src.js
+
+/**
+ * The class of an rgl widget
+ * @class
+*/
 rglwidgetClass = function() {
     this.canvas = null;
     this.userMatrix = new CanvasMatrix4();
@@ -13,6 +20,13 @@ rglwidgetClass = function() {
 };
 
 (function() {
+    /**
+     * Multiply matrix by vector
+     * @memberof rglwidgetClass
+     * @returns {number[]}
+     * @param M {number[][]} Left operand
+     * @param v {number[]} Right operand
+     */
     this.multMV = function(M, v) {
         return [ M.m11 * v[0] + M.m12 * v[1] + M.m13 * v[2] + M.m14 * v[3],
                  M.m21 * v[0] + M.m22 * v[1] + M.m23 * v[2] + M.m24 * v[3],
@@ -21,20 +35,47 @@ rglwidgetClass = function() {
                ];
     };
 
+    /**
+     * Euclidean length of a vector
+     * @memberof rglwidgetClass
+     * @returns {number}
+     * @param v {number[]}
+     */
     this.vlen = function(v) {
       return Math.sqrt(this.dotprod(v, v));
     };
 
+    /**
+     * Dot product of two vectors
+     * @instance rglwidgetClass
+     * @returns {number}
+     * @param a {number[]}
+     * @param b {number[]}
+     */
     this.dotprod = function(a, b) {
       return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
     };
 
+    /**
+     * Cross product of two vectors
+     * @memberof rglwidgetClass
+     * @returns {number[]}
+     * @param a {number[]}
+     * @param b {number[]}
+     */
     this.xprod = function(a, b) {
       return [a[1]*b[2] - a[2]*b[1],
           a[2]*b[0] - a[0]*b[2],
           a[0]*b[1] - a[1]*b[0]];
     };
 
+    /**
+     * Bind vectors or matrices by columns
+     * @memberof rglwidgetClass
+     * @returns {number[][]}
+     * @param a {number[]|number[][]}
+     * @param b {number[]|number[][]}
+     */
     this.cbind = function(a, b) {
       if (b.length < a.length)
         b = this.repeatToLen(b, a.length);
@@ -45,17 +86,39 @@ rglwidgetClass = function() {
       });
     };
 
+    /**
+     * Swap elements
+     * @memberof rglwidgetClass
+     * @returns {any[]}
+     * @param a {any[]}
+     * @param i {number} Element to swap
+     * @param j {number} Other element to swap
+     */
     this.swap = function(a, i, j) {
       var temp = a[i];
       a[i] = a[j];
       a[j] = temp;
     };
 
+    /**
+     * Flatten a matrix into a vector
+     * @memberof rglwidgetClass
+     * @returns {any[]}
+     * @param a {any[][]}
+     */
     this.flatten = function(a) {
       return [].concat.apply([], a);
     };
 
-    /* set element of 1d or 2d array as if it was flattened.  Column major, zero based! */
+    /**
+     * set element of 1d or 2d array as if it was flattened.
+     * Column major, zero based!
+     * @memberof rglwidgetClass
+     * @returns {any[]|any[][]}
+     * @param {any[]|any[][]} a - array
+     * @param {number} i - element
+     * @param {any} value
+     */
     this.setElement = function(a, i, value) {
       if (Array.isArray(a[0])) {
         var dim = a.length,
@@ -67,6 +130,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Transpose an array
+     * @memberof  rglwidgetClass
+     * @returns {any[][]}
+     * @param {any[][]} a
+     */
     this.transpose = function(a) {
       var newArray = [],
           n = a.length,
@@ -84,6 +153,12 @@ rglwidgetClass = function() {
       return newArray;
     };
 
+    /**
+     * Calculate sum of squares of a numeric vector
+     * @memberof  rglwidgetClass
+     * @returns {number}
+     * @param {number[]} x
+     */
     this.sumsq = function(x) {
       var result = 0, i;
       for (i=0; i < x.length; i++)
@@ -91,6 +166,12 @@ rglwidgetClass = function() {
       return result;
     };
 
+    /**
+     * Convert a matrix to a CanvasMatrix4
+     * @memberof rglwidgetClass
+     * @returns {CanvasMatrix4}
+     * @param {number[][]|number[]} mat
+     */
     this.toCanvasMatrix4 = function(mat) {
       if (mat instanceof CanvasMatrix4)
         return mat;
@@ -100,6 +181,12 @@ rglwidgetClass = function() {
       return result;
     };
 
+    /**
+     * Convert an R-style numeric colour string to an rgb vector
+     * @memberof rglwidgetClass
+     * @returns {number[]}
+     * @param {string} s
+     */
     this.stringToRgb = function(s) {
       s = s.replace("#", "");
       var bigint = parseInt(s, 16);
@@ -108,6 +195,13 @@ rglwidgetClass = function() {
                (bigint & 255)/255];
     };
 
+    /**
+     * Take a component-by-component product of two 3 vectors
+     * @memberof rglwidgetClass
+     * @returns {number[]}
+     * @param {number[]} x
+     * @param {number[]} y
+     */
     this.componentProduct = function(x, y) {
       if (typeof y === "undefined") {
         this.alertOnce("Bad arg to componentProduct");
@@ -118,6 +212,12 @@ rglwidgetClass = function() {
       return result;
     };
 
+    /**
+     * Get next higher power of two
+     * @memberof rglwidgetClass
+     * @returns { number }
+     * @param { number } value - input value
+     */
     this.getPowerOfTwo = function(value) {
       var pow = 1;
       while(pow<value) {
@@ -126,6 +226,12 @@ rglwidgetClass = function() {
       return pow;
     };
 
+    /**
+     * Unique entries
+     * @memberof rglwidgetClass
+     * @returns { any[] }
+     * @param { any[] } arr - An array
+     */
     this.unique = function(arr) {
       arr = [].concat(arr);
       return arr.filter(function(value, index, self) {
@@ -133,6 +239,13 @@ rglwidgetClass = function() {
       });
     };
 
+    /**
+     * Repeat an array to a desired length
+     * @memberof rglwidgetClass
+     * @returns {any[]}
+     * @param {any | any[]} arr The input array
+     * @param {number} len The desired output length
+     */
     this.repeatToLen = function(arr, len) {
       arr = [].concat(arr);
       while (arr.length < len/2)
@@ -140,6 +253,11 @@ rglwidgetClass = function() {
       return arr.concat(arr.slice(0, len - arr.length));
     };
 
+    /**
+     * Give a single alert message, not to be repeated.
+     * @memberof rglwidgetClass
+     * @param {string} msg  The message to give.
+     */
     this.alertOnce = function(msg) {
       if (typeof this.alerted !== "undefined")
         return;
@@ -163,6 +281,12 @@ rglwidgetClass = function() {
     this.f_is_points = 8192;
     this.f_is_twosided = 16384;
 
+    /**
+     * Which list does a particular id come from?
+     * @memberof rglwidgetClass
+     * @returns { string }
+     * @param {number} id The id to look up.
+     */
     this.whichList = function(id) {
       var obj = this.getObj(id),
           flags = obj.flags;
@@ -177,6 +301,12 @@ rglwidgetClass = function() {
         return "opaque";
     };
 
+    /**
+     * Get an object by id number.
+     * @memberof rglwidgetClass
+     * @returns { Object }
+     * @param {number} id
+     */
     this.getObj = function(id) {
       if (typeof id !== "number") {
         this.alertOnce("getObj id is "+typeof id);
@@ -184,6 +314,13 @@ rglwidgetClass = function() {
       return this.scene.objects[id];
     };
 
+    /**
+     * Get ids of a particular type from a subscene or the whole scene
+     * @memberof rglwidgetClass
+     * @returns { number[] }
+     * @param {string} type What type of object?
+     * @param {number} subscene  Which subscene?  If not given, find in the whole scene
+     */
     this.getIdsByType = function(type, subscene) {
       var
         result = [], i, self = this;
@@ -205,6 +342,13 @@ rglwidgetClass = function() {
       return result;
     };
 
+    /**
+     * Get a particular material property for an id
+     * @memberof rglwidgetClass
+     * @returns { any }
+     * @param {number} id  Which object?
+     * @param {string} property Which material property?
+     */
     this.getMaterial = function(id, property) {
       var obj = this.getObj(id),
           mat = obj.material[property];
@@ -213,10 +357,23 @@ rglwidgetClass = function() {
       return mat;
     };
 
+    /**
+     * Is a particular id in a subscene?
+     * @memberof rglwidgetClass
+     * @returns { boolean }
+     * @param {number} id Which id?
+     * @param {number} subscene Which subscene id?
+     */
     this.inSubscene = function(id, subscene) {
       return this.getObj(subscene).objects.indexOf(id) > -1;
     };
 
+    /**
+     * Add an id to a subscene.
+     * @memberof rglwidgetClass
+     * @param {number} id Which id?
+     * @param {number} subscene Which subscene id?
+     */
     this.addToSubscene = function(id, subscene) {
       var thelist,
           thesub = this.getObj(subscene),
@@ -235,6 +392,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Delete an id from a subscene
+     * @memberof rglwidgetClass
+     * @param { number } id - the id to add
+     * @param { number } subscene - the id of the subscene
+     */
     this.delFromSubscene = function(id, subscene) {
       var thelist,
           thesub = this.getObj(subscene),
@@ -254,32 +417,66 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Set the ids in a subscene
+     * @memberof rglwidgetClass
+     * @param { number[] } ids - the ids to set
+     * @param { number } subsceneid - the id of the subscene
+     */
     this.setSubsceneEntries = function(ids, subsceneid) {
       var sub = this.getObj(subsceneid);
       sub.objects = ids;
       this.initSubscene(subsceneid);
     };
 
+    /**
+     * Get the ids in a subscene
+     * @memberof rglwidgetClass
+     * @returns {number[]}
+     * @param { number } subscene - the id of the subscene
+     */
     this.getSubsceneEntries = function(subscene) {
       return this.getObj(subscene).objects;
     };
 
+    /**
+     * Get the ids of the subscenes within a subscene
+     * @memberof rglwidgetClass
+     * @returns { number[] }
+     * @param { number } subscene - the id of the subscene
+     */
     this.getChildSubscenes = function(subscene) {
       return this.getObj(subscene).subscenes;
     };
 
+    /**
+     * Start drawing
+     * @memberof rglwidgetClass
+     * @returns { boolean } Previous state
+     */
     this.startDrawing = function() {
     	var value = this.drawing;
     	this.drawing = true;
     	return value;
     };
-    
+
+    /**
+     * Stop drawing and check for context loss
+     * @memberof rglwidgetClass
+     * @param { boolean } saved - Previous state
+     */
     this.stopDrawing = function(saved) {
       this.drawing = saved;
       if (!saved && this.gl && this.gl.isContextLost())
         this.restartCanvas();
     };
-    
+
+    /**
+     * Generate the vertex shader for an object
+     * @memberof rglwidgetClass
+     * @returns {string}
+     * @param { number } id - Id of object
+     */
     this.getVertexShader = function(id) {
       var obj = this.getObj(id),
           userShader = obj.userVertexShader,
@@ -297,7 +494,7 @@ rglwidgetClass = function() {
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
-      
+
       if (typeof userShader !== "undefined") return userShader;
 
       result = "  /* ****** "+type+" object "+id+" vertex shader ****** */\n"+
@@ -326,7 +523,7 @@ rglwidgetClass = function() {
         result = result + "  uniform vec3 uOrig;\n"+
                           "  uniform float uSize;\n"+
                           "  uniform mat4 usermat;\n";
-                          
+
       if (is_twosided)
         result = result + "  attribute vec3 aPos1;\n"+
                           "  attribute vec3 aPos2;\n"+
@@ -381,6 +578,12 @@ rglwidgetClass = function() {
       return result;
     };
 
+    /**
+     * Generate the fragment shader for an object
+     * @memberof rglwidgetClass
+     * @returns {string}
+     * @param { number } id - Id of object
+     */
     this.getFragmentShader = function(id) {
       var obj = this.getObj(id),
           userShader = obj.userFragmentShader,
@@ -396,7 +599,7 @@ rglwidgetClass = function() {
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
-      
+
       if (typeof userShader !== "undefined") return userShader;
 
       if (has_texture)
@@ -440,8 +643,8 @@ rglwidgetClass = function() {
                             "   uniform bool finite" + i + ";\n";
         }
       }
-      
-      if (is_twosided) 
+
+      if (is_twosided)
         result = result + "   uniform bool front;\n"+
                           "   varying float normz;\n";
 
@@ -451,15 +654,15 @@ rglwidgetClass = function() {
         result = result + "    if (dot(vPosition, vClipplane"+i+") < 0.0) discard;\n";
 
       if (fixed_quads) {
-        result = result +   "    vec3 n = vec3(0., 0., 1.);\n";	
+        result = result +   "    vec3 n = vec3(0., 0., 1.);\n";
       } else if (is_lit) {
       	result = result +   "    vec3 n = normalize(vNormal);\n";
       }
-      
+
       if (is_twosided) {
       	result = result +   "    if ((normz <= 0.) != front) discard;";
       }
-      
+
       if (is_lit) {
         result = result + "    vec3 eye = normalize(-vPosition.xyz);\n"+
                           "   vec3 lightdir;\n"+
@@ -523,6 +726,13 @@ rglwidgetClass = function() {
       return result;
     };
 
+    /**
+     * Call gl functions to create and compile shader
+     * @memberof rglwidgetClass
+     * @returns {Object}
+     * @param { number } shaderType - gl code for shader type
+     * @param { string } code - code for the shader
+     */
     this.getShader = function(shaderType, code) {
         var gl = this.gl, shader;
         shader = gl.createShader(shaderType);
@@ -533,7 +743,13 @@ rglwidgetClass = function() {
         return shader;
     };
 
-    this.handleLoadedTexture = function(texture, textureCanvas) { 
+    /**
+     * Handle a texture after its image has been loaded
+     * @memberof rglwidgetClass
+     * @param { Object } texture - the gl texture object
+     * @param { Object } textureCanvas - the canvas holding the image
+     */
+    this.handleLoadedTexture = function(texture, textureCanvas) {
       var gl = this.gl || this.initGL();
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
@@ -546,6 +762,12 @@ rglwidgetClass = function() {
       gl.bindTexture(gl.TEXTURE_2D, null);
     };
 
+    /**
+     * Load an image to a texture
+     * @memberof rglwidgetClass
+     * @param { string } uri - The image location
+     * @param { Object } texture - the gl texture object
+     */
     this.loadImageToTexture = function(uri, texture) {
       var canvas = this.textureCanvas,
           ctx = canvas.getContext("2d"),
@@ -574,6 +796,15 @@ rglwidgetClass = function() {
        image.src = uri;
      };
 
+    /**
+     * Draw text to the texture canvas
+     * @memberof rglwidgetClass
+     * @returns { Object } object with text measurements
+     * @param { string } text - the text
+     * @param { number } cex - expansion
+     * @param { string } family - font family
+     * @param { number } font - font number
+     */
     this.drawTextToCanvas = function(text, cex, family, font) {
        var canvasX, canvasY,
            textY,
@@ -634,6 +865,11 @@ rglwidgetClass = function() {
                offsets:offsets};
      };
 
+    /**
+     * Set the gl viewport and scissor test
+     * @memberof rglwidgetClass
+     * @param { number } id - id of subscene
+     */
     this.setViewport = function(id) {
        var gl = this.gl || this.initGL(),
          vp = this.getObj(id).par3d.viewport,
@@ -647,6 +883,11 @@ rglwidgetClass = function() {
        gl.enable(gl.SCISSOR_TEST);
      };
 
+    /**
+     * Set the projection matrix for a subscene
+     * @memberof rglwidgetClass
+     * @param { number } id - id of subscene
+     */
     this.setprMatrix = function(id) {
        var subscene = this.getObj(id),
           embedding = subscene.embeddings.projection;
@@ -697,6 +938,11 @@ rglwidgetClass = function() {
        }
      };
 
+    /**
+     * Set the model-view matrix for a subscene
+     * @memberof rglwidgetClass
+     * @param { number } id - id of the subscene
+     */
     this.setmvMatrix = function(id) {
        var observer = this.getObj(id).par3d.observer;
        this.mvMatrix.makeIdentity();
@@ -705,6 +951,11 @@ rglwidgetClass = function() {
 
      };
 
+    /**
+     * Set the model matrix for a subscene
+     * @memberof rglwidgetClass
+     * @param { number } id - id of the subscene
+     */
     this.setmodelMatrix = function(id) {
       var subscene = this.getObj(id),
           embedding = subscene.embeddings.model;
@@ -722,6 +973,11 @@ rglwidgetClass = function() {
          this.setmodelMatrix(subscene.parent);
      };
 
+    /**
+     * Set the normals matrix for a subscene
+     * @memberof rglwidgetClass
+     * @param { number } subsceneid - id of the subscene
+     */
     this.setnormMatrix = function(subsceneid) {
        var self = this,
        recurse = function(id) {
@@ -739,19 +995,39 @@ rglwidgetClass = function() {
        recurse(subsceneid);
      };
 
+    /**
+     * Set the combined projection-model-view matrix
+     * @memberof rglwidgetClass
+     */
     this.setprmvMatrix = function() {
        this.prmvMatrix = new CanvasMatrix4( this.mvMatrix );
        this.prmvMatrix.multRight( this.prMatrix );
      };
 
+    /**
+     * Count clipping planes in a scene
+     * @memberof rglwidgetClass
+     * @returns {number}
+     */
     this.countClipplanes = function() {
       return this.countObjs("clipplanes");
     };
 
+    /**
+     * Count lights in a scene
+     * @memberof rglwidgetClass
+     * @returns { number }
+     */
     this.countLights = function() {
       return this.countObjs("light");
     };
 
+    /**
+     * Count objects of specific type in a scene
+     * @memberof rglwidgetClass
+     * @returns { number }
+     * @param { string } type - Type of object to count
+     */
     this.countObjs = function(type) {
       var self = this,
           bound = 0;
@@ -764,6 +1040,11 @@ rglwidgetClass = function() {
       return bound;
     };
 
+    /**
+     * Initialize a subscene
+     * @memberof rglwidgetClass
+     * @param { number } id - id of subscene.
+     */
     this.initSubscene = function(id) {
       var sub = this.getObj(id),
           i, obj;
@@ -791,6 +1072,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Copy object
+     * @memberof rglwidgetClass
+     * @param { number } id - id of object to copy
+     * @param { string } reuse - Document id of scene to reuse
+     */
     this.copyObj = function(id, reuse) {
       var obj = this.getObj(id),
           prev = document.getElementById(reuse);
@@ -818,6 +1105,12 @@ rglwidgetClass = function() {
         console.warn("copyObj failed");
     };
 
+    /**
+     * Update the triangles used to display a plane
+     * @memberof rglwidgetClass
+     * @param { number } id - id of the plane
+     * @param { Object } bbox - bounding box in which to display the plane
+     */
     this.planeUpdateTriangles = function(id, bbox) {
       var perms = [[0,0,1], [1,2,2], [2,1,0]],
           x, xrow, elem, A, d, nhits, i, j, k, u, v, w, intersect, which, v0, v2, vx, reverse,
@@ -893,6 +1186,11 @@ rglwidgetClass = function() {
       obj.pnormals = normals;
     };
 
+    /**
+     * Initialize object for display
+     * @memberof rglwidgetClass
+     * @param { number } id - id of object to initialize
+     */
     this.initObj = function(id) {
       var obj = this.getObj(id),
           flags = obj.flags,
@@ -944,12 +1242,12 @@ rglwidgetClass = function() {
     v = obj.vertices;
     obj.vertexCount = v.length;
     if (!obj.vertexCount) return;
-    
+
     if (is_twosided) {
       if (typeof obj.userAttributes === "undefined")
         obj.userAttributes = {};
       v1 = Array(v.length);
-      v2 = Array(v.length);  
+      v2 = Array(v.length);
       if (obj.type == "triangles" || obj.type == "quads") {
       	if (obj.type == "triangles")
       	  nrow = 3;
@@ -966,12 +1264,12 @@ rglwidgetClass = function() {
         nz = dim[1];
         for (j=0; j<nx; j++) {
           for (i=0; i<nz; i++) {
-            if (i+1 < nz && j+1 < nx) { 
+            if (i+1 < nz && j+1 < nx) {
               v2[j + nx*i] = v[j + nx*(i+1)];
               v1[j + nx*i] = v[j+1 + nx*(i+1)];
             } else if (i+1 < nz) {
               v2[j + nx*i] = v[j-1 + nx*i];
-              v1[j + nx*i] = v[j + nx*(i+1)];            	
+              v1[j + nx*i] = v[j + nx*(i+1)];
             } else {
               v2[j + nx*i] = v[j + nx*(i-1)];
               v1[j + nx*i] = v[j-1 + nx*(i-1)];
@@ -1049,7 +1347,7 @@ rglwidgetClass = function() {
     if (type === "text") {
       this.handleLoadedTexture(obj.texture, this.textureCanvas);
     }
-    
+
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew;
 
     nc = obj.colorCount = obj.colors.length;
@@ -1131,7 +1429,7 @@ rglwidgetClass = function() {
       tofs = -1;
       oofs = -1;
     }
-    
+
     if (typeof obj.userAttributes !== "undefined") {
       obj.userAttribOffsets = {};
       obj.userAttribLocations = {};
@@ -1146,10 +1444,10 @@ rglwidgetClass = function() {
       	}
       }
     }
-    
+
     if (typeof obj.userUniforms !== "undefined") {
       obj.userUniformLocations = {};
-      for (attr in obj.userUniforms) 
+      for (attr in obj.userUniforms)
         obj.userUniformLocations[attr] = gl.getUniformLocation(obj.prog, attr);
     }
 
@@ -1201,7 +1499,7 @@ rglwidgetClass = function() {
         obj.finiteLoc[i] = gl.getUniformLocation(obj.prog, "finite" + i);
       }
     }
-    
+
     if (is_indexed) {
       obj.f = Array(2);
       for (pass = 0; pass < is_twosided + 1; pass++) {
@@ -1255,8 +1553,8 @@ rglwidgetClass = function() {
       	      f[6*i + 1] = 3*i + 1;
       	      f[6*i + 2] = 3*i + 1;
       	      f[6*i + 3] = 3*i + 2;
-      	      f[6*i + 4] = 3*i + 2;  
-      	      f[6*i + 5] = 3*i;      	  
+      	      f[6*i + 4] = 3*i + 2;
+      	      f[6*i + 5] = 3*i;
       	    }
           }
         } else if (type === "spheres") {
@@ -1279,7 +1577,7 @@ rglwidgetClass = function() {
                        j + nx*i,
                        j + 1 + nx*(i+1),
                        j + 1 + nx*i);
-              } 
+              }
             }
           } else if (pmode === "lines") {
             f = [];
@@ -1303,7 +1601,7 @@ rglwidgetClass = function() {
         }
       }
     }
-    
+
     if (type !== "spheres" && !sprites_3d) {
       obj.buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
@@ -1334,12 +1632,17 @@ rglwidgetClass = function() {
     if (is_lit && !sprites_3d) {
       obj.normMatLoc = gl.getUniformLocation(obj.prog, "normMatrix");
     }
-    
+
     if (is_twosided) {
       obj.frontLoc = gl.getUniformLocation(obj.prog, "front");
     }
   };
 
+    /**
+     * Set gl depth test based on object's material
+     * @memberof rglwidgetClass
+     * @param { number } id - object to use
+     */
     this.setDepthTest = function(id) {
       var gl = this.gl || this.initGL(),
           tests = {never: gl.NEVER,
@@ -1365,8 +1668,14 @@ rglwidgetClass = function() {
                      surface : "TRIANGLES",
                      triangles : "TRIANGLES"};
 
+    /**
+     * Sort objects from back to front
+     * @memberof rglwidgetClass
+     * @returns { number[] }
+     * @param { Object } obj - object to sort
+     */
     this.depthSort = function(obj) {
-      var n = obj.centers.length, 
+      var n = obj.centers.length,
           depths = new Float32Array(n),
           result = new Array(n),
           compare = function(i,j) { return depths[j] - depths[i]; },
@@ -1386,7 +1695,13 @@ rglwidgetClass = function() {
       result.sort(compare);
       return result;
     };
-    
+
+    /**
+     * Draw an object in a subscene
+     * @memberof rglwidgetClass
+     * @param { number } id - object to draw
+     * @param { number } subsceneid - id of subscene
+     */
     this.drawObj = function(id, subsceneid) {
       var obj = this.getObj(id),
           subscene = this.getObj(subsceneid),
@@ -1463,7 +1778,7 @@ rglwidgetClass = function() {
         }
         gl.uniformMatrix4fv(obj.usermatLoc, false, this.usermat);
       }
-      
+
       if (type === "spheres") {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.sphere.buf);
       } else {
@@ -1531,10 +1846,10 @@ rglwidgetClass = function() {
         if (nc == 1) {
           gl.vertexAttrib4fv( this.colLoc, new Float32Array(obj.onecolor));
         }
-        
+
         if (has_texture) {
           gl.enableVertexAttribArray( obj.texLoc );
-          gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride, 
+          gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,
                                  4*this.sphere.vOffsets.tofs);
           gl.activeTexture(gl.TEXTURE0);
           gl.bindTexture(gl.TEXTURE_2D, obj.texture);
@@ -1543,7 +1858,7 @@ rglwidgetClass = function() {
 
         if (depth_sort)
           indices = this.depthSort(obj);
-          
+
         for (i = 0; i < scount; i++) {
           sphereMV = new CanvasMatrix4();
 
@@ -1601,7 +1916,7 @@ rglwidgetClass = function() {
         gl.enableVertexAttribArray( obj.ofsLoc );
         gl.vertexAttribPointer(obj.ofsLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
       }
-      
+
       if (typeof obj.userAttributes !== "undefined") {
       	for (attr in obj.userAttribSizes) {  // Not all attributes may have been used
       	  gl.enableVertexAttribArray( obj.userAttribLocations[attr] );
@@ -1609,7 +1924,7 @@ rglwidgetClass = function() {
       	  			  gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.userAttribOffsets[attr]);
       	}
       }
-      
+
       if (typeof obj.userUniforms !== "undefined") {
       	for (attr in obj.userUniformLocations) {
       	  var loc = obj.userUniformLocations[attr];
@@ -1625,7 +1940,7 @@ rglwidgetClass = function() {
       	      	case 4: gl.uniform4fv(loc, uniform); break;
       	      	default: console.warn("bad uniform length");
       	      }
-      	    } else if (uniform.length == 4 && uniform[0].length == 4) 
+      	    } else if (uniform.length == 4 && uniform[0].length == 4)
       	      gl.uniformMatrix4fv(loc, false, new Float32Array(uniform.getAsArray()));
       	    else
       	      console.warn("unsupported uniform matrix");
@@ -1639,10 +1954,10 @@ rglwidgetClass = function() {
       	else pmode = "filled";
         if (pmode === "culled")
           continue;
-          
-      	mode = this.mode4type[type];      
+
+      	mode = this.mode4type[type];
         if (depth_sort && pmode == "filled") {// Don't try depthsorting on wireframe or points
-          var faces = this.depthSort(obj), 
+          var faces = this.depthSort(obj),
               nfaces = faces.length,
               frowsize = Math.floor(obj.f[pass].length/nfaces);
 
@@ -1657,22 +1972,22 @@ rglwidgetClass = function() {
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);
           }
         }
-      	
+
       	if (is_twosided)
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
-      	  
+
         if (is_indexed && type !== "spheres") {
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
         } else if (type === "spheres") {
           //  FIX ME!
-        } 
-      
+        }
+
         if (type === "sprites" || type === "text" || type === "quads") {
           count = count * 6/4;
         } else if (type === "surface") {
           count = obj.f[pass].length;
         }
-      
+
         if (is_indexed) {
           count = obj.f[pass].length;
       	  if (pmode === "lines") {
@@ -1697,6 +2012,12 @@ rglwidgetClass = function() {
      }
    };
 
+    /**
+     * Draw the background for a subscene
+     * @memberof rglwidgetClass
+     * @param { number } id - id of background object
+     * @param { number } subsceneid - id of subscene
+     */
     this.drawBackground = function(id, subsceneid) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(id),
@@ -1722,6 +2043,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Draw a subscene
+     * @memberof rglwidgetClass
+     * @param { number } subsceneid - id of subscene
+     * @param { boolean } opaquePass - is this the opaque drawing pass?
+     */
     this.drawSubscene = function(subsceneid, opaquePass) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(subsceneid),
@@ -1798,6 +2125,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Compute mouse coordinates relative to current canvas
+     * @memberof rglwidgetClass
+     * @returns { Object }
+     * @param { Object } event - event object from mouse click
+     */
     this.relMouseCoords = function(event) {
       var totalOffsetX = 0,
       totalOffsetY = 0,
@@ -1816,6 +2149,10 @@ rglwidgetClass = function() {
       return {x:canvasX, y:canvasY};
     };
 
+    /**
+     * Set mouse handlers for the scene
+     * @memberof rglwidgetClass
+     */
     this.setMouseHandlers = function() {
       var self = this, activeSubscene, handler,
           handlers = {}, drag = 0;
@@ -1877,11 +2214,11 @@ rglwidgetClass = function() {
         this.drawScene();
       };
       handlers.trackballend = 0;
-      
+
       this.clamp = function(x, lo, hi) {
       	return Math.max(lo, Math.min(x, hi));
       };
-      
+
       this.screenToPolar = function(x,y) {
         var viewport = this.getObj(activeSubscene).par3d.viewport,
           width = viewport.width*this.canvas.width,
@@ -1900,8 +2237,8 @@ rglwidgetClass = function() {
         this.saveMat = [];
         for (i = 0; i < l.length; i++) {
           activeSub = this.getObj(l[i]);
-          activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix); 
-          activeSub.camBase = [-Math.atan2(activeSub.saveMat.m13, activeSub.saveMat.m11), 
+          activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
+          activeSub.camBase = [-Math.atan2(activeSub.saveMat.m13, activeSub.saveMat.m11),
                                Math.atan2(activeSub.saveMat.m32, activeSub.saveMat.m22)];
         }
       };
@@ -1916,7 +2253,7 @@ rglwidgetClass = function() {
         for (i = 0; i < l.length; i++) {
           activeSub = this.getObj(l[i]);
           for (j=0; j<2; j++)
-            changepos[j] = -(dragCurrent[j] - handlers.dragBase[j]); 
+            changepos[j] = -(dragCurrent[j] - handlers.dragBase[j]);
           activeSub.par3d.userMatrix.makeIdentity();
           activeSub.par3d.userMatrix.rotate(changepos[0]*180/Math.PI, 0,-1,0);
           activeSub.par3d.userMatrix.multRight(objects[l[i]].saveMat);
@@ -2036,9 +2373,9 @@ rglwidgetClass = function() {
           coords = self.translateCoords(activeSubscene, coords);
           f.call(self, coords.x, coords.y);
           ev.preventDefault();
-        } else 
+        } else
           console.warn("Mouse handler '" + handler + "' is not implemented.");
-        
+
       };
 
       this.canvas.onmouseup = function ( ev ){
@@ -2084,6 +2421,13 @@ rglwidgetClass = function() {
       this.canvas.addEventListener("mousewheel", handlers.wheelHandler, false);
     };
 
+    /**
+     * Find a particular subscene by inheritance
+     * @memberof rglwidgetClass
+     * @returns { number } id of subscene to use
+     * @param { number } subsceneid - child subscene
+     * @param { string } type - type of inheritance:  "projection" or "model"
+     */
     this.useid = function(subsceneid, type) {
       var sub = this.getObj(subsceneid);
       if (sub.embeddings[type] === "inherit")
@@ -2092,6 +2436,13 @@ rglwidgetClass = function() {
         return subsceneid;
     };
 
+    /**
+     * Check whether point is in viewport of subscene
+     * @memberof rglwidgetClass
+     * @returns {boolean}
+     * @param { Object } coords - screen coordinates of point
+     * @param { number } subsceneid - subscene to check
+     */
     this.inViewport = function(coords, subsceneid) {
       var viewport = this.getObj(subsceneid).par3d.viewport,
         x0 = coords.x - viewport.x*this.canvas.width,
@@ -2100,6 +2451,12 @@ rglwidgetClass = function() {
              0 <= y0 && y0 <= viewport.height*this.canvas.height;
     };
 
+    /**
+     * Find which subscene contains a point
+     * @memberof rglwidgetClass
+     * @returns { number } subscene id
+     * @param { Object } coords - coordinates of point
+     */
     this.whichSubscene = function(coords) {
       var self = this,
           recurse = function(subsceneid) {
@@ -2121,29 +2478,44 @@ rglwidgetClass = function() {
       return result;
     };
 
+    /**
+     * Translate from window coordinates to viewport coordinates
+     * @memberof rglwidgetClass
+     * @returns { Object } translated coordinates
+     * @param { number } subsceneid - which subscene to use?
+     * @param { Object } coords - point to translate
+     */
     this.translateCoords = function(subsceneid, coords) {
       var viewport = this.getObj(subsceneid).par3d.viewport;
       return {x: coords.x - viewport.x*this.canvas.width,
               y: coords.y - viewport.y*this.canvas.height};
     };
 
+    /**
+     * Initialize the sphere object
+     * @memberof rglwidgetClass
+     */
     this.initSphere = function() {
-      var verts = this.scene.sphereVerts, 
+      var verts = this.scene.sphereVerts,
           reuse = verts.reuse, result;
       if (typeof reuse !== "undefined") {
         var prev = document.getElementById(reuse).rglinstance.sphere;
         result = {values: prev.values, vOffsets: prev.vOffsets, it: prev.it};
-      } else 
+      } else
         result = {values: new Float32Array(this.flatten(this.cbind(this.transpose(verts.vb),
                     this.transpose(verts.texcoords)))),
                   it: new Uint16Array(this.flatten(this.transpose(verts.it))),
-                  vOffsets: {vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:-1, 
+                  vOffsets: {vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:-1,
                     tofs:3, stride:5}};
 
       result.sphereCount = result.it.length;
       this.sphere = result;
     };
-    
+
+    /**
+     * Do the gl part of initializing the sphere
+     * @memberof rglwidgetClass
+     */
     this.initSphereGL = function() {
       var gl = this.gl || this.initGL(), sphere = this.sphere;
       if (gl.isContextLost()) return;
@@ -2156,6 +2528,12 @@ rglwidgetClass = function() {
       return;
     };
 
+    /**
+     * Initialize the DOM object
+     * @memberof rglwidgetClass
+     * @param { Object } el - the DOM object
+     * @param { Object } x - the scene data sent by JSON from R
+     */
     this.initialize = function(el, x) {
       this.textureCanvas = document.createElement("canvas");
       this.textureCanvas.style.display = "block";
@@ -2173,6 +2551,10 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Restart the WebGL canvas
+     * @memberof rglwidgetClass
+     */
     this.restartCanvas = function() {
       var newcanvas = document.createElement("canvas");
       newcanvas.width = this.el.width;
@@ -2180,16 +2562,20 @@ rglwidgetClass = function() {
       newcanvas.addEventListener("webglcontextrestored",
         this.onContextRestored, false);
       newcanvas.addEventListener("webglcontextlost",
-        this.onContextLost, false);            
+        this.onContextLost, false);
       while (this.el.firstChild) {
         this.el.removeChild(this.el.firstChild);
       }
       this.el.appendChild(newcanvas);
       this.canvas = newcanvas;
-      this.setMouseHandlers(); 
-      this.gl = null;      	
+      this.setMouseHandlers();
+      this.gl = null;
     };
-      
+
+    /**
+     * Initialize the WebGL canvas
+     * @memberof rglwidgetClass
+     */
     this.initCanvas = function() {
       this.restartCanvas();
       var objs = this.scene.objects,
@@ -2203,21 +2589,21 @@ rglwidgetClass = function() {
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });
-      this.setMouseHandlers();      
+      this.setMouseHandlers();
       this.initSphere();
-      
+
       this.onContextRestored = function(event) {
         self.initGL();
         self.drawScene();
         // console.log("restored context for "+self.scene.rootSubscene);
       };
-      
+
       this.onContextLost = function(event) {
         if (!self.drawing)
           this.gl = null;
         event.preventDefault();
       };
-      
+
       this.initGL0();
       this.lazyLoadScene = function() {
       	if (typeof self.slide === "undefined")
@@ -2237,7 +2623,7 @@ rglwidgetClass = function() {
         if (typeof this.slide.rgl === "undefined")
           this.slide.rgl = [this];
         else
-          this.slide.rgl.push(this);  
+          this.slide.rgl.push(this);
         if (this.scene.context.rmarkdown === "ioslides_presentation") {
           this.slide.setAttribute("slideenter", "this.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window);})");
         } else if (this.scene.context.rmarkdown === "slidy_presentation") {
@@ -2254,9 +2640,11 @@ rglwidgetClass = function() {
       }
     };
 
-    /* this is only used by writeWebGL; rglwidget has
-       no debug element and does the drawing in rglwidget.js */
-
+    /**
+     * Start the writeWebGL scene. This is only used by writeWebGL; rglwidget has
+       no debug element and does the drawing in rglwidget.js.
+     * @memberof rglwidgetClass
+     */
     this.start = function() {
       if (typeof this.prefix !== "undefined") {
         this.debugelement = document.getElementById(this.prefix + "debug");
@@ -2266,6 +2654,12 @@ rglwidgetClass = function() {
       this.drawScene();
     };
 
+    /**
+     * Display a debug message
+     * @memberof rglwidgetClass
+     * @param { string } msg - The message to display
+     * @param { Object } [img] - Image to insert before message
+     */
     this.debug = function(msg, img) {
       if (typeof this.debugelement !== "undefined" && this.debugelement !== null) {
         this.debugelement.innerHTML = msg;
@@ -2276,6 +2670,11 @@ rglwidgetClass = function() {
         alert(msg);
     };
 
+    /**
+     * Get the snapshot image of this scene
+     * @memberof rglwidgetClass
+     * @returns { Object } The img DOM element
+     */
     this.getSnapshot = function() {
       var img;
       if (typeof this.scene.snapshot !== "undefined") {
@@ -2286,18 +2685,28 @@ rglwidgetClass = function() {
       return img;
     };
 
+    /**
+     * Initial test for WebGL
+     * @memberof rglwidgetClass
+     */
     this.initGL0 = function() {
       if (!window.WebGLRenderingContext){
         alert("Your browser does not support WebGL. See http://get.webgl.org");
         return;
       }
     };
-    
+
+    /**
+     * If we are in an ioslides or slidy presentation, get the
+     * DOM element of the current slide
+     * @memberof rglwidgetClass
+     * @returns { Object }
+     */
     this.getSlide = function() {
       var result = this.el;
       while (result) {
       	switch(this.scene.context.rmarkdown) {
-          case "ioslides_presentation": 
+          case "ioslides_presentation":
             if (result.tagName === "SLIDE") return result;
             else break;
           case "slidy_presentation":
@@ -2310,7 +2719,12 @@ rglwidgetClass = function() {
       }
       return null;
     }
-    
+
+    /**
+     * Is this scene visible in the browser?
+     * @memberof rglwidgetClass
+     * @returns { boolean }
+     */
     this.isInBrowserViewport = function() {
       var rect = this.canvas.getBoundingClientRect(),
           windHeight = (window.innerHeight || document.documentElement.clientHeight),
@@ -2329,6 +2743,11 @@ rglwidgetClass = function() {
       	rect.right <= 2*windWidth);
     };
 
+    /**
+     * Initialize WebGL
+     * @memberof rglwidgetClass
+     * @returns { Object } the WebGL context
+     */
     this.initGL = function() {
       var self = this;
       if (this.gl) {
@@ -2341,11 +2760,11 @@ rglwidgetClass = function() {
       this.canvas.addEventListener("webglcontextrestored",
         this.onContextRestored, false);
       this.canvas.addEventListener("webglcontextlost",
-        this.onContextLost, false);      
+        this.onContextLost, false);
       this.gl = this.canvas.getContext("webgl", this.webGLoptions) ||
                this.canvas.getContext("experimental-webgl", this.webGLoptions);
       var save = this.startDrawing();
-      this.initSphereGL(); 
+      this.initSphereGL();
       Object.keys(this.scene.objects).forEach(function(key){
         self.initObj(parseInt(key, 10));
         });
@@ -2353,11 +2772,20 @@ rglwidgetClass = function() {
       return this.gl;
     };
 
+    /**
+     * Resize the display to match element
+     * @memberof rglwidgetClass
+     * @param { Object } el - DOM element to match
+     */
     this.resize = function(el) {
       this.canvas.width = el.width;
       this.canvas.height = el.height;
     };
 
+    /**
+     * Draw the whole scene
+     * @memberof rglwidgetClass
+     */
     this.drawScene = function() {
       var gl = this.gl || this.initGL(),
           save = this.startDrawing();
@@ -2372,6 +2800,12 @@ rglwidgetClass = function() {
       this.stopDrawing(save);
     };
 
+    /**
+     * Change the displayed subset
+     * @memberof rglwidgetClass
+     * @param { Object } el - Element of the control; not used.
+     * @param { Object } control - The subset control data.
+     */
     this.subsetSetter = function(el, control) {
       if (typeof control.subscenes === "undefined" ||
           control.subscenes === null)
@@ -2379,7 +2813,7 @@ rglwidgetClass = function() {
       var value = Math.round(control.value),
           subscenes = [].concat(control.subscenes),
           fullset = [].concat(control.fullset),
-          i, j, entries, subsceneid, 
+          i, j, entries, subsceneid,
           adds = [], deletes = [],
           ismissing = function(x) {
             return fullset.indexOf(x) < 0;
@@ -2394,7 +2828,7 @@ rglwidgetClass = function() {
           adds = adds.concat(control.subsets[i]);
       else
         adds = adds.concat(control.subsets[value]);
-      deletes = fullset.filter(function(x) { return adds.indexOf(x) < 0 });  
+      deletes = fullset.filter(function(x) { return adds.indexOf(x) < 0 });
       for (i = 0; i < subscenes.length; i++) {
         subsceneid = subscenes[i];
         if (typeof this.getObj(subsceneid) === "undefined")
@@ -2406,6 +2840,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Change the requested property
+     * @memberof rglwidgetClass
+     * @param { Object } el - Element of the control; not used.
+     * @param { Object } control - The property setter control data.
+     */
     this.propertySetter = function(el, control)  {
       var value = control.value,
           values = [].concat(control.values),
@@ -2429,7 +2869,7 @@ rglwidgetClass = function() {
             else
               return [].concat(obj[property]);
           };
-          
+
           putPropvals = function(newvals) {
             if (newvals.length == 1)
               newvals = newvals[0];
@@ -2485,7 +2925,7 @@ rglwidgetClass = function() {
         }
       }
       putPropvals(propvals);
-        
+
       needsBinding = [];
       for (j=0; j < entries.length; j++) {
         if (properties[j] === "values" &&
@@ -2501,6 +2941,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Change the requested vertices
+     * @memberof rglwidgetClass
+     * @param { Object } el - Element of the control; not used.
+     * @param { Object } control - The vertext setter control data.
+     */
     this.vertexSetter = function(el, control)  {
       var svals = [].concat(control.param),
           j, k, p, propvals, stride, ofs, obj,
@@ -2582,6 +3028,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Change the requested vertex properties by age
+     * @memberof rglwidgetClass
+     * @param { Object } el - Element of the control; not used.
+     * @param { Object } control - The age setter control data.
+     */
     this.ageSetter = function(el, control) {
       var objids = [].concat(control.objids),
           nobjs = objids.length,
@@ -2659,6 +3111,12 @@ rglwidgetClass = function() {
       }
     };
 
+    /**
+     * Bridge to old style control
+     * @memberof rglwidgetClass
+     * @param { Object } el - Element of the control; not used.
+     * @param { Object } control - The bridge control data.
+     */
     this.oldBridge = function(el, control) {
       var attrname, global = window[control.prefix + "rgl"];
       if (typeof global !== "undefined")
@@ -2667,6 +3125,12 @@ rglwidgetClass = function() {
       window[control.prefix + "rgl"] = this;
     };
 
+    /**
+     * Set up a player control
+     * @memberof rglwidgetClass
+     * @param { Object } el - The player control element
+     * @param { Object } control - The player data.
+     */
     this.Player = function(el, control) {
       var
         self = this,
@@ -2758,7 +3222,7 @@ rglwidgetClass = function() {
         if (typeof control.reinit !== "undefined" && control.reinit !== null) {
           control.actions.reinit = control.reinit;
         }
-        el.rgltimer = new rgltimerClass(Tick, control.start, control.interval, control.stop, 
+        el.rgltimer = new rgltimerClass(Tick, control.start, control.interval, control.stop,
                                         control.step, control.value, control.rate, control.loop, control.actions);
         for (var i=0; i < components.length; i++) {
           switch(components[i]) {
@@ -2775,6 +3239,13 @@ rglwidgetClass = function() {
         el.rgltimer.Tick();
     };
 
+    /**
+     * Apply all registered controls
+     * @memberof rglwidgetClass
+     * @param { Object } el - DOM element of the control
+     * @param { Object } x - List of actions to apply
+     * @param { boolean } [draw=true] - Whether to redraw after applying
+     */
     this.applyControls = function(el, x, draw) {
       var self = this, reinit = x.reinit, i, control, type;
       for (i = 0; i < x.length; i++) {
@@ -2791,6 +3262,11 @@ rglwidgetClass = function() {
         self.drawScene();
     };
 
+    /**
+     * Handler for scene change
+     * @memberof rglwidgetClass
+     * @param { Object } message - What sort of scene change to do?
+     */
     this.sceneChangeHandler = function(message) {
       var self = document.getElementById(message.elementId).rglinstance,
           objs = message.objects, mat = message.material,
@@ -2845,6 +3321,24 @@ rglwidgetClass = function() {
     };
 }).call(rglwidgetClass.prototype);
 
+/**
+ * The class of an rgl timer object
+ * @class
+*/
+
+/**
+ * Construct an rgltimerClass object
+ * @constructor
+ * @param { function } Tick - action when timer fires
+ * @param { number } startTime - nominal start time in seconds
+ * @param { number } interval - seconds between updates
+ * @param { number } stopTime - nominal stop time in seconds
+ * @param { number } stepSize - nominal step size
+ * @param { number } value - current nominal time
+ * @param { number } rate - nominal units per second
+ * @param { string } loop - "none", "cycle" or "oscillate"
+ * @param { Object } actions - list of actions
+ */
 rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, rate, loop, actions) {
   this.enabled = false;
   this.timerId = 0;
@@ -2864,6 +3358,10 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
 
 (function() {
 
+  /**
+   * Start playing timer object
+   * @memberof rgltimerClass
+   */
   this.play = function() {
     if (this.enabled) {
       this.enabled = false;
@@ -2884,7 +3382,11 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
     this.timerId = window.setInterval(tick, 1000*this.interval, this);
     this.enabled = true;
   };
-  
+
+  /**
+   * Force value into legal range
+   * @memberof rgltimerClass
+   */
   this.forceToRange = function() {
     if (this.value > this.stopTime + this.stepSize/2 || this.value < this.startTime - this.stepSize/2) {
       if (!this.loop) {
@@ -2898,9 +3400,13 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
         this.realStart += (this.value - newval)*1000/this.multiplier/this.rate;
         this.value = newval;
       }
-    }  	
+    }
   }
 
+  /**
+   * Reset to start values
+   * @memberof rgltimerClass
+   */
   this.reset = function() {
     this.value = this.startTime;
     this.newmultiplier(1);
@@ -2913,25 +3419,46 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
       this.PlayButton.value = "Play";
   };
 
+  /**
+   * Increase the multiplier to play faster
+   * @memberof rgltimerClass
+   */
   this.faster = function() {
     this.newmultiplier(Math.SQRT2*this.multiplier);
   };
 
+  /**
+   * Decrease the multiplier to play slower
+   * @memberof rgltimerClass
+   */
   this.slower = function() {
     this.newmultiplier(this.multiplier/Math.SQRT2);
   };
 
+  /**
+   * Change sign of multiplier to reverse direction
+   * @memberof rgltimerClass
+   */
   this.reverse = function() {
     this.newmultiplier(-this.multiplier);
   };
 
+  /**
+   * Set multiplier for play speed
+   * @memberof rgltimerClass
+   * @param { number } newmult - new value
+   */
   this.newmultiplier = function(newmult) {
     if (newmult != this.multiplier) {
       this.realStart += 1000*(this.value - this.startTime)/this.rate*(1/this.multiplier - 1/newmult);
       this.multiplier = newmult;
     }
   };
-  
+
+  /**
+   * Take one step
+   * @memberof rgltimerClass
+   */
   this.step = function() {
     this.value += this.rate*this.multiplier;
     this.forceToRange();
