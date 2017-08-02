@@ -19,29 +19,27 @@ rglwidgetClass = function() {
     this.scene = null;
 };
 
-(function() {
+
     /**
      * Multiply matrix by vector
-     * @memberof rglwidgetClass
      * @returns {number[]}
      * @param M {number[][]} Left operand
      * @param v {number[]} Right operand
      */
-    this.multMV = function(M, v) {
+    rglwidgetClass.prototype.multMV = function(M, v) {
         return [ M.m11 * v[0] + M.m12 * v[1] + M.m13 * v[2] + M.m14 * v[3],
                  M.m21 * v[0] + M.m22 * v[1] + M.m23 * v[2] + M.m24 * v[3],
                  M.m31 * v[0] + M.m32 * v[1] + M.m33 * v[2] + M.m34 * v[3],
                  M.m41 * v[0] + M.m42 * v[1] + M.m43 * v[2] + M.m44 * v[3]
                ];
     };
-
+// (function() {
     /**
      * Euclidean length of a vector
-     * @memberof rglwidgetClass
      * @returns {number}
      * @param v {number[]}
      */
-    this.vlen = function(v) {
+    rglwidgetClass.prototype.vlen = function(v) {
       return Math.sqrt(this.dotprod(v, v));
     };
 
@@ -52,18 +50,17 @@ rglwidgetClass = function() {
      * @param a {number[]}
      * @param b {number[]}
      */
-    this.dotprod = function(a, b) {
+    rglwidgetClass.prototype.dotprod = function(a, b) {
       return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
     };
 
     /**
      * Cross product of two vectors
-     * @memberof rglwidgetClass
      * @returns {number[]}
      * @param a {number[]}
      * @param b {number[]}
      */
-    this.xprod = function(a, b) {
+    rglwidgetClass.prototype.xprod = function(a, b) {
       return [a[1]*b[2] - a[2]*b[1],
           a[2]*b[0] - a[0]*b[2],
           a[0]*b[1] - a[1]*b[0]];
@@ -71,12 +68,11 @@ rglwidgetClass = function() {
 
     /**
      * Bind vectors or matrices by columns
-     * @memberof rglwidgetClass
      * @returns {number[][]}
      * @param a {number[]|number[][]}
      * @param b {number[]|number[][]}
      */
-    this.cbind = function(a, b) {
+    rglwidgetClass.prototype.cbind = function(a, b) {
       if (b.length < a.length)
         b = this.repeatToLen(b, a.length);
       else if (a.length < b.length)
@@ -88,13 +84,12 @@ rglwidgetClass = function() {
 
     /**
      * Swap elements
-     * @memberof rglwidgetClass
      * @returns {any[]}
      * @param a {any[]}
      * @param i {number} Element to swap
      * @param j {number} Other element to swap
      */
-    this.swap = function(a, i, j) {
+    rglwidgetClass.prototype.swap = function(a, i, j) {
       var temp = a[i];
       a[i] = a[j];
       a[j] = temp;
@@ -102,24 +97,22 @@ rglwidgetClass = function() {
 
     /**
      * Flatten a matrix into a vector
-     * @memberof rglwidgetClass
      * @returns {any[]}
      * @param a {any[][]}
      */
-    this.flatten = function(a) {
+    rglwidgetClass.prototype.flatten = function(a) {
       return [].concat.apply([], a);
     };
 
     /**
      * set element of 1d or 2d array as if it was flattened.
      * Column major, zero based!
-     * @memberof rglwidgetClass
      * @returns {any[]|any[][]}
      * @param {any[]|any[][]} a - array
      * @param {number} i - element
      * @param {any} value
      */
-    this.setElement = function(a, i, value) {
+    rglwidgetClass.prototype.setElement = function(a, i, value) {
       if (Array.isArray(a[0])) {
         var dim = a.length,
             col = Math.floor(i/dim),
@@ -132,11 +125,10 @@ rglwidgetClass = function() {
 
     /**
      * Transpose an array
-     * @memberof  rglwidgetClass
      * @returns {any[][]}
      * @param {any[][]} a
      */
-    this.transpose = function(a) {
+    rglwidgetClass.prototype.transpose = function(a) {
       var newArray = [],
           n = a.length,
           m = a[0].length,
@@ -155,11 +147,10 @@ rglwidgetClass = function() {
 
     /**
      * Calculate sum of squares of a numeric vector
-     * @memberof  rglwidgetClass
      * @returns {number}
      * @param {number[]} x
      */
-    this.sumsq = function(x) {
+    rglwidgetClass.prototype.sumsq = function(x) {
       var result = 0, i;
       for (i=0; i < x.length; i++)
         result += x[i]*x[i];
@@ -168,11 +159,10 @@ rglwidgetClass = function() {
 
     /**
      * Convert a matrix to a CanvasMatrix4
-     * @memberof rglwidgetClass
      * @returns {CanvasMatrix4}
      * @param {number[][]|number[]} mat
      */
-    this.toCanvasMatrix4 = function(mat) {
+    rglwidgetClass.prototype.toCanvasMatrix4 = function(mat) {
       if (mat instanceof CanvasMatrix4)
         return mat;
       var result = new CanvasMatrix4();
@@ -183,11 +173,10 @@ rglwidgetClass = function() {
 
     /**
      * Convert an R-style numeric colour string to an rgb vector
-     * @memberof rglwidgetClass
      * @returns {number[]}
      * @param {string} s
      */
-    this.stringToRgb = function(s) {
+    rglwidgetClass.prototype.stringToRgb = function(s) {
       s = s.replace("#", "");
       var bigint = parseInt(s, 16);
       return [((bigint >> 16) & 255)/255,
@@ -197,12 +186,11 @@ rglwidgetClass = function() {
 
     /**
      * Take a component-by-component product of two 3 vectors
-     * @memberof rglwidgetClass
      * @returns {number[]}
      * @param {number[]} x
      * @param {number[]} y
      */
-    this.componentProduct = function(x, y) {
+    rglwidgetClass.prototype.componentProduct = function(x, y) {
       if (typeof y === "undefined") {
         this.alertOnce("Bad arg to componentProduct");
       }
@@ -214,11 +202,10 @@ rglwidgetClass = function() {
 
     /**
      * Get next higher power of two
-     * @memberof rglwidgetClass
      * @returns { number }
      * @param { number } value - input value
      */
-    this.getPowerOfTwo = function(value) {
+    rglwidgetClass.prototype.getPowerOfTwo = function(value) {
       var pow = 1;
       while(pow<value) {
         pow *= 2;
@@ -228,11 +215,10 @@ rglwidgetClass = function() {
 
     /**
      * Unique entries
-     * @memberof rglwidgetClass
      * @returns { any[] }
      * @param { any[] } arr - An array
      */
-    this.unique = function(arr) {
+    rglwidgetClass.prototype.unique = function(arr) {
       arr = [].concat(arr);
       return arr.filter(function(value, index, self) {
         return self.indexOf(value) === index;
@@ -241,12 +227,11 @@ rglwidgetClass = function() {
 
     /**
      * Repeat an array to a desired length
-     * @memberof rglwidgetClass
      * @returns {any[]}
      * @param {any | any[]} arr The input array
      * @param {number} len The desired output length
      */
-    this.repeatToLen = function(arr, len) {
+    rglwidgetClass.prototype.repeatToLen = function(arr, len) {
       arr = [].concat(arr);
       while (arr.length < len/2)
         arr = arr.concat(arr);
@@ -255,39 +240,37 @@ rglwidgetClass = function() {
 
     /**
      * Give a single alert message, not to be repeated.
-     * @memberof rglwidgetClass
      * @param {string} msg  The message to give.
      */
-    this.alertOnce = function(msg) {
+    rglwidgetClass.prototype.alertOnce = function(msg) {
       if (typeof this.alerted !== "undefined")
         return;
       this.alerted = true;
       alert(msg);
     };
 
-    this.f_is_lit = 1;
-    this.f_is_smooth = 2;
-    this.f_has_texture = 4;
-    this.f_is_indexed = 8;
-    this.f_depth_sort = 16;
-    this.f_fixed_quads = 32;
-    this.f_is_transparent = 64;
-    this.f_is_lines = 128;
-    this.f_sprites_3d = 256;
-    this.f_sprite_3d = 512;
-    this.f_is_subscene = 1024;
-    this.f_is_clipplanes = 2048;
-    this.f_fixed_size = 4096;
-    this.f_is_points = 8192;
-    this.f_is_twosided = 16384;
+    rglwidgetClass.prototype.f_is_lit = 1;
+    rglwidgetClass.prototype.f_is_smooth = 2;
+    rglwidgetClass.prototype.f_has_texture = 4;
+    rglwidgetClass.prototype.f_is_indexed = 8;
+    rglwidgetClass.prototype.f_depth_sort = 16;
+    rglwidgetClass.prototype.f_fixed_quads = 32;
+    rglwidgetClass.prototype.f_is_transparent = 64;
+    rglwidgetClass.prototype.f_is_lines = 128;
+    rglwidgetClass.prototype.f_sprites_3d = 256;
+    rglwidgetClass.prototype.f_sprite_3d = 512;
+    rglwidgetClass.prototype.f_is_subscene = 1024;
+    rglwidgetClass.prototype.f_is_clipplanes = 2048;
+    rglwidgetClass.prototype.f_fixed_size = 4096;
+    rglwidgetClass.prototype.f_is_points = 8192;
+    rglwidgetClass.prototype.f_is_twosided = 16384;
 
     /**
      * Which list does a particular id come from?
-     * @memberof rglwidgetClass
      * @returns { string }
      * @param {number} id The id to look up.
      */
-    this.whichList = function(id) {
+    rglwidgetClass.prototype.whichList = function(id) {
       var obj = this.getObj(id),
           flags = obj.flags;
         if (obj.type === "light")
@@ -303,11 +286,10 @@ rglwidgetClass = function() {
 
     /**
      * Get an object by id number.
-     * @memberof rglwidgetClass
      * @returns { Object }
      * @param {number} id
      */
-    this.getObj = function(id) {
+    rglwidgetClass.prototype.getObj = function(id) {
       if (typeof id !== "number") {
         this.alertOnce("getObj id is "+typeof id);
       }
@@ -316,12 +298,11 @@ rglwidgetClass = function() {
 
     /**
      * Get ids of a particular type from a subscene or the whole scene
-     * @memberof rglwidgetClass
      * @returns { number[] }
      * @param {string} type What type of object?
      * @param {number} subscene  Which subscene?  If not given, find in the whole scene
      */
-    this.getIdsByType = function(type, subscene) {
+    rglwidgetClass.prototype.getIdsByType = function(type, subscene) {
       var
         result = [], i, self = this;
       if (typeof subscene === "undefined") {
@@ -344,12 +325,11 @@ rglwidgetClass = function() {
 
     /**
      * Get a particular material property for an id
-     * @memberof rglwidgetClass
      * @returns { any }
      * @param {number} id  Which object?
      * @param {string} property Which material property?
      */
-    this.getMaterial = function(id, property) {
+    rglwidgetClass.prototype.getMaterial = function(id, property) {
       var obj = this.getObj(id),
           mat = obj.material[property];
       if (typeof mat === "undefined")
@@ -359,22 +339,20 @@ rglwidgetClass = function() {
 
     /**
      * Is a particular id in a subscene?
-     * @memberof rglwidgetClass
      * @returns { boolean }
      * @param {number} id Which id?
      * @param {number} subscene Which subscene id?
      */
-    this.inSubscene = function(id, subscene) {
+    rglwidgetClass.prototype.inSubscene = function(id, subscene) {
       return this.getObj(subscene).objects.indexOf(id) > -1;
     };
 
     /**
      * Add an id to a subscene.
-     * @memberof rglwidgetClass
      * @param {number} id Which id?
      * @param {number} subscene Which subscene id?
      */
-    this.addToSubscene = function(id, subscene) {
+    rglwidgetClass.prototype.addToSubscene = function(id, subscene) {
       var thelist,
           thesub = this.getObj(subscene),
           ids = [id],
@@ -394,11 +372,10 @@ rglwidgetClass = function() {
 
     /**
      * Delete an id from a subscene
-     * @memberof rglwidgetClass
      * @param { number } id - the id to add
      * @param { number } subscene - the id of the subscene
      */
-    this.delFromSubscene = function(id, subscene) {
+    rglwidgetClass.prototype.delFromSubscene = function(id, subscene) {
       var thelist,
           thesub = this.getObj(subscene),
           obj = this.getObj(id),
@@ -419,11 +396,10 @@ rglwidgetClass = function() {
 
     /**
      * Set the ids in a subscene
-     * @memberof rglwidgetClass
      * @param { number[] } ids - the ids to set
      * @param { number } subsceneid - the id of the subscene
      */
-    this.setSubsceneEntries = function(ids, subsceneid) {
+    rglwidgetClass.prototype.setSubsceneEntries = function(ids, subsceneid) {
       var sub = this.getObj(subsceneid);
       sub.objects = ids;
       this.initSubscene(subsceneid);
@@ -431,30 +407,27 @@ rglwidgetClass = function() {
 
     /**
      * Get the ids in a subscene
-     * @memberof rglwidgetClass
      * @returns {number[]}
      * @param { number } subscene - the id of the subscene
      */
-    this.getSubsceneEntries = function(subscene) {
+    rglwidgetClass.prototype.getSubsceneEntries = function(subscene) {
       return this.getObj(subscene).objects;
     };
 
     /**
      * Get the ids of the subscenes within a subscene
-     * @memberof rglwidgetClass
      * @returns { number[] }
      * @param { number } subscene - the id of the subscene
      */
-    this.getChildSubscenes = function(subscene) {
+    rglwidgetClass.prototype.getChildSubscenes = function(subscene) {
       return this.getObj(subscene).subscenes;
     };
 
     /**
      * Start drawing
-     * @memberof rglwidgetClass
      * @returns { boolean } Previous state
      */
-    this.startDrawing = function() {
+    rglwidgetClass.prototype.startDrawing = function() {
     	var value = this.drawing;
     	this.drawing = true;
     	return value;
@@ -462,10 +435,9 @@ rglwidgetClass = function() {
 
     /**
      * Stop drawing and check for context loss
-     * @memberof rglwidgetClass
      * @param { boolean } saved - Previous state
      */
-    this.stopDrawing = function(saved) {
+    rglwidgetClass.prototype.stopDrawing = function(saved) {
       this.drawing = saved;
       if (!saved && this.gl && this.gl.isContextLost())
         this.restartCanvas();
@@ -473,11 +445,10 @@ rglwidgetClass = function() {
 
     /**
      * Generate the vertex shader for an object
-     * @memberof rglwidgetClass
      * @returns {string}
      * @param { number } id - Id of object
      */
-    this.getVertexShader = function(id) {
+    rglwidgetClass.prototype.getVertexShader = function(id) {
       var obj = this.getObj(id),
           userShader = obj.userVertexShader,
           flags = obj.flags,
@@ -580,11 +551,10 @@ rglwidgetClass = function() {
 
     /**
      * Generate the fragment shader for an object
-     * @memberof rglwidgetClass
      * @returns {string}
      * @param { number } id - Id of object
      */
-    this.getFragmentShader = function(id) {
+    rglwidgetClass.prototype.getFragmentShader = function(id) {
       var obj = this.getObj(id),
           userShader = obj.userFragmentShader,
           flags = obj.flags,
@@ -728,12 +698,11 @@ rglwidgetClass = function() {
 
     /**
      * Call gl functions to create and compile shader
-     * @memberof rglwidgetClass
      * @returns {Object}
      * @param { number } shaderType - gl code for shader type
      * @param { string } code - code for the shader
      */
-    this.getShader = function(shaderType, code) {
+    rglwidgetClass.prototype.getShader = function(shaderType, code) {
         var gl = this.gl, shader;
         shader = gl.createShader(shaderType);
         gl.shaderSource(shader, code);
@@ -745,11 +714,10 @@ rglwidgetClass = function() {
 
     /**
      * Handle a texture after its image has been loaded
-     * @memberof rglwidgetClass
      * @param { Object } texture - the gl texture object
      * @param { Object } textureCanvas - the canvas holding the image
      */
-    this.handleLoadedTexture = function(texture, textureCanvas) {
+    rglwidgetClass.prototype.handleLoadedTexture = function(texture, textureCanvas) {
       var gl = this.gl || this.initGL();
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
@@ -764,11 +732,10 @@ rglwidgetClass = function() {
 
     /**
      * Load an image to a texture
-     * @memberof rglwidgetClass
      * @param { string } uri - The image location
      * @param { Object } texture - the gl texture object
      */
-    this.loadImageToTexture = function(uri, texture) {
+    rglwidgetClass.prototype.loadImageToTexture = function(uri, texture) {
       var canvas = this.textureCanvas,
           ctx = canvas.getContext("2d"),
           image = new Image(),
@@ -798,14 +765,13 @@ rglwidgetClass = function() {
 
     /**
      * Draw text to the texture canvas
-     * @memberof rglwidgetClass
      * @returns { Object } object with text measurements
      * @param { string } text - the text
      * @param { number } cex - expansion
      * @param { string } family - font family
      * @param { number } font - font number
      */
-    this.drawTextToCanvas = function(text, cex, family, font) {
+    rglwidgetClass.prototype.drawTextToCanvas = function(text, cex, family, font) {
        var canvasX, canvasY,
            textY,
            scaling = 20,
@@ -867,10 +833,9 @@ rglwidgetClass = function() {
 
     /**
      * Set the gl viewport and scissor test
-     * @memberof rglwidgetClass
      * @param { number } id - id of subscene
      */
-    this.setViewport = function(id) {
+    rglwidgetClass.prototype.setViewport = function(id) {
        var gl = this.gl || this.initGL(),
          vp = this.getObj(id).par3d.viewport,
          x = vp.x*this.canvas.width,
@@ -885,10 +850,9 @@ rglwidgetClass = function() {
 
     /**
      * Set the projection matrix for a subscene
-     * @memberof rglwidgetClass
      * @param { number } id - id of subscene
      */
-    this.setprMatrix = function(id) {
+    rglwidgetClass.prototype.setprMatrix = function(id) {
        var subscene = this.getObj(id),
           embedding = subscene.embeddings.projection;
        if (embedding === "replace")
@@ -940,10 +904,9 @@ rglwidgetClass = function() {
 
     /**
      * Set the model-view matrix for a subscene
-     * @memberof rglwidgetClass
      * @param { number } id - id of the subscene
      */
-    this.setmvMatrix = function(id) {
+    rglwidgetClass.prototype.setmvMatrix = function(id) {
        var observer = this.getObj(id).par3d.observer;
        this.mvMatrix.makeIdentity();
        this.setmodelMatrix(id);
@@ -953,10 +916,9 @@ rglwidgetClass = function() {
 
     /**
      * Set the model matrix for a subscene
-     * @memberof rglwidgetClass
      * @param { number } id - id of the subscene
      */
-    this.setmodelMatrix = function(id) {
+    rglwidgetClass.prototype.setmodelMatrix = function(id) {
       var subscene = this.getObj(id),
           embedding = subscene.embeddings.model;
       if (embedding !== "inherit") {
@@ -975,10 +937,9 @@ rglwidgetClass = function() {
 
     /**
      * Set the normals matrix for a subscene
-     * @memberof rglwidgetClass
      * @param { number } subsceneid - id of the subscene
      */
-    this.setnormMatrix = function(subsceneid) {
+    rglwidgetClass.prototype.setnormMatrix = function(subsceneid) {
        var self = this,
        recurse = function(id) {
          var sub = self.getObj(id),
@@ -997,38 +958,34 @@ rglwidgetClass = function() {
 
     /**
      * Set the combined projection-model-view matrix
-     * @memberof rglwidgetClass
      */
-    this.setprmvMatrix = function() {
+    rglwidgetClass.prototype.setprmvMatrix = function() {
        this.prmvMatrix = new CanvasMatrix4( this.mvMatrix );
        this.prmvMatrix.multRight( this.prMatrix );
      };
 
     /**
      * Count clipping planes in a scene
-     * @memberof rglwidgetClass
      * @returns {number}
      */
-    this.countClipplanes = function() {
+    rglwidgetClass.prototype.countClipplanes = function() {
       return this.countObjs("clipplanes");
     };
 
     /**
      * Count lights in a scene
-     * @memberof rglwidgetClass
      * @returns { number }
      */
-    this.countLights = function() {
+    rglwidgetClass.prototype.countLights = function() {
       return this.countObjs("light");
     };
 
     /**
      * Count objects of specific type in a scene
-     * @memberof rglwidgetClass
      * @returns { number }
      * @param { string } type - Type of object to count
      */
-    this.countObjs = function(type) {
+    rglwidgetClass.prototype.countObjs = function(type) {
       var self = this,
           bound = 0;
 
@@ -1042,10 +999,9 @@ rglwidgetClass = function() {
 
     /**
      * Initialize a subscene
-     * @memberof rglwidgetClass
      * @param { number } id - id of subscene.
      */
-    this.initSubscene = function(id) {
+    rglwidgetClass.prototype.initSubscene = function(id) {
       var sub = this.getObj(id),
           i, obj;
 
@@ -1074,11 +1030,10 @@ rglwidgetClass = function() {
 
     /**
      * Copy object
-     * @memberof rglwidgetClass
      * @param { number } id - id of object to copy
      * @param { string } reuse - Document id of scene to reuse
      */
-    this.copyObj = function(id, reuse) {
+    rglwidgetClass.prototype.copyObj = function(id, reuse) {
       var obj = this.getObj(id),
           prev = document.getElementById(reuse);
       if (prev !== null) {
@@ -1107,11 +1062,10 @@ rglwidgetClass = function() {
 
     /**
      * Update the triangles used to display a plane
-     * @memberof rglwidgetClass
      * @param { number } id - id of the plane
      * @param { Object } bbox - bounding box in which to display the plane
      */
-    this.planeUpdateTriangles = function(id, bbox) {
+    rglwidgetClass.prototype.planeUpdateTriangles = function(id, bbox) {
       var perms = [[0,0,1], [1,2,2], [2,1,0]],
           x, xrow, elem, A, d, nhits, i, j, k, u, v, w, intersect, which, v0, v2, vx, reverse,
           face1 = [], face2 = [], normals = [],
@@ -1188,10 +1142,9 @@ rglwidgetClass = function() {
 
     /**
      * Initialize object for display
-     * @memberof rglwidgetClass
      * @param { number } id - id of object to initialize
      */
-    this.initObj = function(id) {
+    rglwidgetClass.prototype.initObj = function(id) {
       var obj = this.getObj(id),
           flags = obj.flags,
           type = obj.type,
@@ -1640,10 +1593,9 @@ rglwidgetClass = function() {
 
     /**
      * Set gl depth test based on object's material
-     * @memberof rglwidgetClass
      * @param { number } id - object to use
      */
-    this.setDepthTest = function(id) {
+    rglwidgetClass.prototype.setDepthTest = function(id) {
       var gl = this.gl || this.initGL(),
           tests = {never: gl.NEVER,
                    less:  gl.LESS,
@@ -1657,7 +1609,7 @@ rglwidgetClass = function() {
       gl.depthFunc(test);
     };
 
-    this.mode4type = {points : "POINTS",
+    rglwidgetClass.prototype.mode4type = {points : "POINTS",
                      linestrip : "LINE_STRIP",
                      abclines : "LINES",
                      lines : "LINES",
@@ -1670,11 +1622,10 @@ rglwidgetClass = function() {
 
     /**
      * Sort objects from back to front
-     * @memberof rglwidgetClass
      * @returns { number[] }
      * @param { Object } obj - object to sort
      */
-    this.depthSort = function(obj) {
+    rglwidgetClass.prototype.depthSort = function(obj) {
       var n = obj.centers.length,
           depths = new Float32Array(n),
           result = new Array(n),
@@ -1698,11 +1649,10 @@ rglwidgetClass = function() {
 
     /**
      * Draw an object in a subscene
-     * @memberof rglwidgetClass
      * @param { number } id - object to draw
      * @param { number } subsceneid - id of subscene
      */
-    this.drawObj = function(id, subsceneid) {
+    rglwidgetClass.prototype.drawObj = function(id, subsceneid) {
       var obj = this.getObj(id),
           subscene = this.getObj(subsceneid),
           flags = obj.flags,
@@ -2014,11 +1964,10 @@ rglwidgetClass = function() {
 
     /**
      * Draw the background for a subscene
-     * @memberof rglwidgetClass
      * @param { number } id - id of background object
      * @param { number } subsceneid - id of subscene
      */
-    this.drawBackground = function(id, subsceneid) {
+    rglwidgetClass.prototype.drawBackground = function(id, subsceneid) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(id),
           bg, i;
@@ -2045,11 +1994,10 @@ rglwidgetClass = function() {
 
     /**
      * Draw a subscene
-     * @memberof rglwidgetClass
      * @param { number } subsceneid - id of subscene
      * @param { boolean } opaquePass - is this the opaque drawing pass?
      */
-    this.drawSubscene = function(subsceneid, opaquePass) {
+    rglwidgetClass.prototype.drawSubscene = function(subsceneid, opaquePass) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(subsceneid),
           objects = this.scene.objects,
@@ -2127,11 +2075,10 @@ rglwidgetClass = function() {
 
     /**
      * Compute mouse coordinates relative to current canvas
-     * @memberof rglwidgetClass
      * @returns { Object }
      * @param { Object } event - event object from mouse click
      */
-    this.relMouseCoords = function(event) {
+    rglwidgetClass.prototype.relMouseCoords = function(event) {
       var totalOffsetX = 0,
       totalOffsetY = 0,
       currentElement = this.canvas;
@@ -2151,9 +2098,8 @@ rglwidgetClass = function() {
 
     /**
      * Set mouse handlers for the scene
-     * @memberof rglwidgetClass
      */
-    this.setMouseHandlers = function() {
+    rglwidgetClass.prototype.setMouseHandlers = function() {
       var self = this, activeSubscene, handler,
           handlers = {}, drag = 0;
 
@@ -2423,12 +2369,11 @@ rglwidgetClass = function() {
 
     /**
      * Find a particular subscene by inheritance
-     * @memberof rglwidgetClass
      * @returns { number } id of subscene to use
      * @param { number } subsceneid - child subscene
      * @param { string } type - type of inheritance:  "projection" or "model"
      */
-    this.useid = function(subsceneid, type) {
+    rglwidgetClass.prototype.useid = function(subsceneid, type) {
       var sub = this.getObj(subsceneid);
       if (sub.embeddings[type] === "inherit")
         return(this.useid(sub.parent, type));
@@ -2438,12 +2383,11 @@ rglwidgetClass = function() {
 
     /**
      * Check whether point is in viewport of subscene
-     * @memberof rglwidgetClass
      * @returns {boolean}
      * @param { Object } coords - screen coordinates of point
      * @param { number } subsceneid - subscene to check
      */
-    this.inViewport = function(coords, subsceneid) {
+    rglwidgetClass.prototype.inViewport = function(coords, subsceneid) {
       var viewport = this.getObj(subsceneid).par3d.viewport,
         x0 = coords.x - viewport.x*this.canvas.width,
         y0 = coords.y - viewport.y*this.canvas.height;
@@ -2453,11 +2397,10 @@ rglwidgetClass = function() {
 
     /**
      * Find which subscene contains a point
-     * @memberof rglwidgetClass
      * @returns { number } subscene id
      * @param { Object } coords - coordinates of point
      */
-    this.whichSubscene = function(coords) {
+    rglwidgetClass.prototype.whichSubscene = function(coords) {
       var self = this,
           recurse = function(subsceneid) {
             var subscenes = self.getChildSubscenes(subsceneid), i, id;
@@ -2480,12 +2423,11 @@ rglwidgetClass = function() {
 
     /**
      * Translate from window coordinates to viewport coordinates
-     * @memberof rglwidgetClass
      * @returns { Object } translated coordinates
      * @param { number } subsceneid - which subscene to use?
      * @param { Object } coords - point to translate
      */
-    this.translateCoords = function(subsceneid, coords) {
+    rglwidgetClass.prototype.translateCoords = function(subsceneid, coords) {
       var viewport = this.getObj(subsceneid).par3d.viewport;
       return {x: coords.x - viewport.x*this.canvas.width,
               y: coords.y - viewport.y*this.canvas.height};
@@ -2493,9 +2435,8 @@ rglwidgetClass = function() {
 
     /**
      * Initialize the sphere object
-     * @memberof rglwidgetClass
      */
-    this.initSphere = function() {
+    rglwidgetClass.prototype.initSphere = function() {
       var verts = this.scene.sphereVerts,
           reuse = verts.reuse, result;
       if (typeof reuse !== "undefined") {
@@ -2514,9 +2455,8 @@ rglwidgetClass = function() {
 
     /**
      * Do the gl part of initializing the sphere
-     * @memberof rglwidgetClass
      */
-    this.initSphereGL = function() {
+    rglwidgetClass.prototype.initSphereGL = function() {
       var gl = this.gl || this.initGL(), sphere = this.sphere;
       if (gl.isContextLost()) return;
       sphere.buf = gl.createBuffer();
@@ -2530,11 +2470,10 @@ rglwidgetClass = function() {
 
     /**
      * Initialize the DOM object
-     * @memberof rglwidgetClass
      * @param { Object } el - the DOM object
      * @param { Object } x - the scene data sent by JSON from R
      */
-    this.initialize = function(el, x) {
+    rglwidgetClass.prototype.initialize = function(el, x) {
       this.textureCanvas = document.createElement("canvas");
       this.textureCanvas.style.display = "block";
       this.scene = x;
@@ -2553,9 +2492,8 @@ rglwidgetClass = function() {
 
     /**
      * Restart the WebGL canvas
-     * @memberof rglwidgetClass
      */
-    this.restartCanvas = function() {
+    rglwidgetClass.prototype.restartCanvas = function() {
       var newcanvas = document.createElement("canvas");
       newcanvas.width = this.el.width;
       newcanvas.height = this.el.height;
@@ -2574,9 +2512,8 @@ rglwidgetClass = function() {
 
     /**
      * Initialize the WebGL canvas
-     * @memberof rglwidgetClass
      */
-    this.initCanvas = function() {
+    rglwidgetClass.prototype.initCanvas = function() {
       this.restartCanvas();
       var objs = this.scene.objects,
           self = this;
@@ -2643,9 +2580,8 @@ rglwidgetClass = function() {
     /**
      * Start the writeWebGL scene. This is only used by writeWebGL; rglwidget has
        no debug element and does the drawing in rglwidget.js.
-     * @memberof rglwidgetClass
      */
-    this.start = function() {
+    rglwidgetClass.prototype.start = function() {
       if (typeof this.prefix !== "undefined") {
         this.debugelement = document.getElementById(this.prefix + "debug");
         this.debug("");
@@ -2656,11 +2592,10 @@ rglwidgetClass = function() {
 
     /**
      * Display a debug message
-     * @memberof rglwidgetClass
      * @param { string } msg - The message to display
      * @param { Object } [img] - Image to insert before message
      */
-    this.debug = function(msg, img) {
+    rglwidgetClass.prototype.debug = function(msg, img) {
       if (typeof this.debugelement !== "undefined" && this.debugelement !== null) {
         this.debugelement.innerHTML = msg;
         if (typeof img !== "undefined") {
@@ -2672,10 +2607,9 @@ rglwidgetClass = function() {
 
     /**
      * Get the snapshot image of this scene
-     * @memberof rglwidgetClass
      * @returns { Object } The img DOM element
      */
-    this.getSnapshot = function() {
+    rglwidgetClass.prototype.getSnapshot = function() {
       var img;
       if (typeof this.scene.snapshot !== "undefined") {
         img = document.createElement("img");
@@ -2687,9 +2621,8 @@ rglwidgetClass = function() {
 
     /**
      * Initial test for WebGL
-     * @memberof rglwidgetClass
      */
-    this.initGL0 = function() {
+    rglwidgetClass.prototype.initGL0 = function() {
       if (!window.WebGLRenderingContext){
         alert("Your browser does not support WebGL. See http://get.webgl.org");
         return;
@@ -2699,10 +2632,9 @@ rglwidgetClass = function() {
     /**
      * If we are in an ioslides or slidy presentation, get the
      * DOM element of the current slide
-     * @memberof rglwidgetClass
      * @returns { Object }
      */
-    this.getSlide = function() {
+    rglwidgetClass.prototype.getSlide = function() {
       var result = this.el;
       while (result) {
       	switch(this.scene.context.rmarkdown) {
@@ -2722,10 +2654,9 @@ rglwidgetClass = function() {
 
     /**
      * Is this scene visible in the browser?
-     * @memberof rglwidgetClass
      * @returns { boolean }
      */
-    this.isInBrowserViewport = function() {
+    rglwidgetClass.prototype.isInBrowserViewport = function() {
       var rect = this.canvas.getBoundingClientRect(),
           windHeight = (window.innerHeight || document.documentElement.clientHeight),
           windWidth = (window.innerWidth || document.documentElement.clientWidth);
@@ -2745,10 +2676,9 @@ rglwidgetClass = function() {
 
     /**
      * Initialize WebGL
-     * @memberof rglwidgetClass
      * @returns { Object } the WebGL context
      */
-    this.initGL = function() {
+    rglwidgetClass.prototype.initGL = function() {
       var self = this;
       if (this.gl) {
       	if (!this.drawing && this.gl.isContextLost())
@@ -2774,19 +2704,17 @@ rglwidgetClass = function() {
 
     /**
      * Resize the display to match element
-     * @memberof rglwidgetClass
      * @param { Object } el - DOM element to match
      */
-    this.resize = function(el) {
+    rglwidgetClass.prototype.resize = function(el) {
       this.canvas.width = el.width;
       this.canvas.height = el.height;
     };
 
     /**
      * Draw the whole scene
-     * @memberof rglwidgetClass
      */
-    this.drawScene = function() {
+    rglwidgetClass.prototype.drawScene = function() {
       var gl = this.gl || this.initGL(),
           save = this.startDrawing();
       gl.enable(gl.DEPTH_TEST);
@@ -2802,11 +2730,10 @@ rglwidgetClass = function() {
 
     /**
      * Change the displayed subset
-     * @memberof rglwidgetClass
      * @param { Object } el - Element of the control; not used.
      * @param { Object } control - The subset control data.
      */
-    this.subsetSetter = function(el, control) {
+    rglwidgetClass.prototype.subsetSetter = function(el, control) {
       if (typeof control.subscenes === "undefined" ||
           control.subscenes === null)
         control.subscenes = this.scene.rootSubscene;
@@ -2842,11 +2769,10 @@ rglwidgetClass = function() {
 
     /**
      * Change the requested property
-     * @memberof rglwidgetClass
      * @param { Object } el - Element of the control; not used.
      * @param { Object } control - The property setter control data.
      */
-    this.propertySetter = function(el, control)  {
+    rglwidgetClass.prototype.propertySetter = function(el, control)  {
       var value = control.value,
           values = [].concat(control.values),
           svals = [].concat(control.param),
@@ -2943,11 +2869,10 @@ rglwidgetClass = function() {
 
     /**
      * Change the requested vertices
-     * @memberof rglwidgetClass
      * @param { Object } el - Element of the control; not used.
      * @param { Object } control - The vertext setter control data.
      */
-    this.vertexSetter = function(el, control)  {
+    rglwidgetClass.prototype.vertexSetter = function(el, control)  {
       var svals = [].concat(control.param),
           j, k, p, propvals, stride, ofs, obj,
           attrib,
@@ -3030,11 +2955,10 @@ rglwidgetClass = function() {
 
     /**
      * Change the requested vertex properties by age
-     * @memberof rglwidgetClass
      * @param { Object } el - Element of the control; not used.
      * @param { Object } control - The age setter control data.
      */
-    this.ageSetter = function(el, control) {
+    rglwidgetClass.prototype.ageSetter = function(el, control) {
       var objids = [].concat(control.objids),
           nobjs = objids.length,
           time = control.value,
@@ -3113,11 +3037,10 @@ rglwidgetClass = function() {
 
     /**
      * Bridge to old style control
-     * @memberof rglwidgetClass
      * @param { Object } el - Element of the control; not used.
      * @param { Object } control - The bridge control data.
      */
-    this.oldBridge = function(el, control) {
+    rglwidgetClass.prototype.oldBridge = function(el, control) {
       var attrname, global = window[control.prefix + "rgl"];
       if (typeof global !== "undefined")
         for (attrname in global)
@@ -3127,11 +3050,10 @@ rglwidgetClass = function() {
 
     /**
      * Set up a player control
-     * @memberof rglwidgetClass
      * @param { Object } el - The player control element
      * @param { Object } control - The player data.
      */
-    this.Player = function(el, control) {
+    rglwidgetClass.prototype.Player = function(el, control) {
       var
         self = this,
         components = [].concat(control.components),
@@ -3241,12 +3163,11 @@ rglwidgetClass = function() {
 
     /**
      * Apply all registered controls
-     * @memberof rglwidgetClass
      * @param { Object } el - DOM element of the control
      * @param { Object } x - List of actions to apply
      * @param { boolean } [draw=true] - Whether to redraw after applying
      */
-    this.applyControls = function(el, x, draw) {
+    rglwidgetClass.prototype.applyControls = function(el, x, draw) {
       var self = this, reinit = x.reinit, i, control, type;
       for (i = 0; i < x.length; i++) {
         control = x[i];
@@ -3264,10 +3185,9 @@ rglwidgetClass = function() {
 
     /**
      * Handler for scene change
-     * @memberof rglwidgetClass
      * @param { Object } message - What sort of scene change to do?
      */
-    this.sceneChangeHandler = function(message) {
+    rglwidgetClass.prototype.sceneChangeHandler = function(message) {
       var self = document.getElementById(message.elementId).rglinstance,
           objs = message.objects, mat = message.material,
           root = message.rootSubscene,
@@ -3319,7 +3239,6 @@ rglwidgetClass = function() {
       if (redraw)
         self.drawScene();
     };
-}).call(rglwidgetClass.prototype);
 
 /**
  * The class of an rgl timer object
@@ -3342,27 +3261,32 @@ rglwidgetClass = function() {
 rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, rate, loop, actions) {
   this.enabled = false;
   this.timerId = 0;
-  this.startTime = startTime;         /* nominal start time in seconds */
-  this.value = value;                 /* current nominal time */
-  this.interval = interval;           /* seconds between updates */
-  this.stopTime = stopTime;           /* nominal stop time */
-  this.stepSize = stepSize;           /* nominal step size */
-  this.rate = rate;                   /* nominal units per second */
-  this.loop = loop;                   /* "none", "cycle", or "oscillate" */
-  this.realStart = undefined;         /* real world start time */
-  this.multiplier = 1;                /* multiplier for fast-forward
-                                         or reverse */
+  /** nominal start time in seconds */
+  this.startTime = startTime;   
+  /** current nominal time */      
+  this.value = value;
+  /** seconds between updates */                 
+  this.interval = interval;
+  /** nominal stop time */           
+  this.stopTime = stopTime;
+  /** nominal step size */           
+  this.stepSize = stepSize;
+  /** nominal units per second */           
+  this.rate = rate;
+  /** "none", "cycle", or "oscillate" */                   
+  this.loop = loop;
+  /** real world start time */                   
+  this.realStart = undefined;
+  /** multiplier for fast-forward or reverse */         
+  this.multiplier = 1;                
   this.actions = actions;
   this.Tick = Tick;
 };
 
-(function() {
-
   /**
    * Start playing timer object
-   * @memberof rgltimerClass
    */
-  this.play = function() {
+  rgltimerClass.prototype.play = function() {
     if (this.enabled) {
       this.enabled = false;
       window.clearInterval(this.timerId);
@@ -3385,9 +3309,8 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
 
   /**
    * Force value into legal range
-   * @memberof rgltimerClass
    */
-  this.forceToRange = function() {
+  rgltimerClass.prototype.forceToRange = function() {
     if (this.value > this.stopTime + this.stepSize/2 || this.value < this.startTime - this.stepSize/2) {
       if (!this.loop) {
         this.reset();
@@ -3405,9 +3328,8 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
 
   /**
    * Reset to start values
-   * @memberof rgltimerClass
    */
-  this.reset = function() {
+  rgltimerClass.prototype.reset = function() {
     this.value = this.startTime;
     this.newmultiplier(1);
     if (typeof this.Tick !== "undefined") {
@@ -3421,34 +3343,30 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
 
   /**
    * Increase the multiplier to play faster
-   * @memberof rgltimerClass
    */
-  this.faster = function() {
+  rgltimerClass.prototype.faster = function() {
     this.newmultiplier(Math.SQRT2*this.multiplier);
   };
 
   /**
    * Decrease the multiplier to play slower
-   * @memberof rgltimerClass
    */
-  this.slower = function() {
+  rgltimerClass.prototype.slower = function() {
     this.newmultiplier(this.multiplier/Math.SQRT2);
   };
 
   /**
    * Change sign of multiplier to reverse direction
-   * @memberof rgltimerClass
    */
-  this.reverse = function() {
+  rgltimerClass.prototype.reverse = function() {
     this.newmultiplier(-this.multiplier);
   };
 
   /**
    * Set multiplier for play speed
-   * @memberof rgltimerClass
    * @param { number } newmult - new value
    */
-  this.newmultiplier = function(newmult) {
+  rgltimerClass.prototype.newmultiplier = function(newmult) {
     if (newmult != this.multiplier) {
       this.realStart += 1000*(this.value - this.startTime)/this.rate*(1/this.multiplier - 1/newmult);
       this.multiplier = newmult;
@@ -3457,13 +3375,10 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
 
   /**
    * Take one step
-   * @memberof rgltimerClass
    */
-  this.step = function() {
+  rgltimerClass.prototype.step = function() {
     this.value += this.rate*this.multiplier;
     this.forceToRange();
     if (typeof this.Tick !== "undefined")
       this.Tick(this.value);
-  }
-
-}).call(rgltimerClass.prototype);
+  };
