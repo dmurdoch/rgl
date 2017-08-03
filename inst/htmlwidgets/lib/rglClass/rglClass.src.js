@@ -2894,7 +2894,7 @@ rglwidgetClass = function() {
         interp = control.interp,
         vertices = [].concat(control.vertices),
         attributes = [].concat(control.attributes),
-        value = control.value;
+        value = control.value, newval;
 
       ncol = Math.max(vertices.length, attributes.length);
 
@@ -2929,21 +2929,40 @@ rglwidgetClass = function() {
       obj = this.getObj(control.objid);
       propvals = obj.values;
       for (k=0; k<ncol; k++) {
+        if (direct) {
+          newval = value;
+        } else if (interp) {
+          newval = p*values[j-1][k] + (1-p)*values[j][k];
+        } else {
+          newval = values[j][k];
+        }      	
         attrib = attributes[k];
         vertex = vertices[k];
+        if (obj.type === "planes" || obj.type === "clipplanes") {
+          ofs = ["nx", "ny", "nz", "offset"].indexOf(attrib);
+          if (ofs >= 0) {
+            if (ofs < 3) {
+              if (obj.normals[vertex][ofs] != newval) {
+              	obj.normals[vertex][ofs] = newval;
+              	obj.initialized = false;
+              };
+            } else {
+              if (obj.offsets[vertex][0] != newval) {
+              	obj.offsets[vertex][0] = newval;
+              	obj.initialized = false;
+              };
+            }
+            continue;
+          }
+        }
+        // Not a plane setting...
         ofs = obj.vOffsets[ofss[attrib]];
         if (ofs < 0)
           this.alertOnce("Attribute '"+attrib+"' not found in object "+control.objid);
         else {
           stride = obj.vOffsets.stride;
           ofs = vertex*stride + ofs + pos[attrib];
-          if (direct) {
-            propvals[ofs] = value;
-          } else if (interp) {
-            propvals[ofs] = p*values[j-1][k] + (1-p)*values[j][k];
-          } else {
-            propvals[ofs] = values[j][k];
-          }
+          propvals[ofs] = newval;
         }
       }
       if (typeof obj.buf !== "undefined") {

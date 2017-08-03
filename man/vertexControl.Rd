@@ -25,7 +25,7 @@ the number of vertices in the \code{objid}.
 }
   \item{attributes}{A vector of attributes of a vertex,
   from \code{c("x", "y", "z", "red", "green", "blue", "alpha", "nx", "ny", "nz",
-               "radius", "ox", "oy", "oz", "ts", "tt")}.  See
+               "radius", "ox", "oy", "oz", "ts", "tt", "offset")}.  See
                Details.}
   \item{objid}{
 A single \pkg{rgl} object id.
@@ -47,6 +47,13 @@ of the vertex \code{"red", "green", "blue", "alpha"}, normal at the vertex
 \code{"nx", "ny", "nz"}, radius of a sphere at the vertex
 \code{"radius"}, origin within a texture \code{"ox", "oy"} and
 perhaps \code{"oz"}, texture coordinates \code{"ts", "tt"}.
+
+Planes are handled specially.  The coefficients \code{a, b, c}
+in the \code{\link{planes3d}} or \code{\link{clipplanes3d}} 
+specification are controlled 
+using \code{"nx", "ny", "nz"}, and \code{d} is handled as
+\code{"offset"}.  The \code{vertices} argument is interpreted
+as the indices of the planes when these attributes are set.
 
 If only one attribute of one vertex is specified, \code{values} may
 be given as a vector and will be treated as a one-column matrix.  Otherwise

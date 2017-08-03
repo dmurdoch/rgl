@@ -128,7 +128,8 @@ vertexControl <- function(value = 0, values = NULL, vertices = 1, attributes, ob
                                       "radii",
                                       "nx", "ny", "nz",
                                       "ox", "oy", "oz",
-                                      "ts", "tt"),
+                                      "ts", "tt",
+                          	      "offset"),
                           several.ok = TRUE)
   if (!is.null(values)) {
     ncol <- max(length(vertices), length(attributes))
