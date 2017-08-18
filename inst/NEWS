@@ -859,4 +859,6 @@ base graphics.
   - Tried to give a more helpful startup error message on MacOS.
   - Added documentation to rglwidgetClass in Javascript.
   - vertexSetter() can now set plane parameters.
+  - Modified platform.cpp so it works with __STRICT_ANSI__
+    defined.
   

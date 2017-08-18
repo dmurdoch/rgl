@@ -35,9 +35,9 @@ GLint gluProject(GLdouble  objX,  GLdouble  objY,  GLdouble  objZ,
                  		proj[12],proj[13],proj[14],proj[15]),
                  glkview                 
                  );
-  *winX = result.x;
-  *winY = result.y;
-  *winZ = result.z;
+  *winX = result.v[0];
+  *winY = result.v[1];
+  *winZ = result.v[2];
   return GLU_TRUE;
 }   
 
@@ -61,9 +61,9 @@ GLint gluUnProject(GLdouble  winX,  GLdouble  winY,  GLdouble  winZ,
                  glkview,
                  &success
                  );
-  *objX = result.x;
-  *objY = result.y;
-  *objZ = result.z;
+  *objX = result.v[0];
+  *objY = result.v[1];
+  *objZ = result.v[2];
   return success ? GLU_TRUE : GLU_FALSE;
 }               
 
