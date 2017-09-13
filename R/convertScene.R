@@ -257,7 +257,8 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	  }
 	  if (length(origIds))
 	    names(origIds) <- as.character(ids)
-	  structure(ids, origIds = origIds)
+	  if (is.null(ids)) ids
+	  else structure(ids, origIds = origIds)
 	}
 
 		knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
