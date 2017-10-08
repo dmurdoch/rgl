@@ -319,45 +319,37 @@ readOBJ <- function(con, ...) {
                                         y="numeric",
                                         z="numeric"))
   vertices <- with(vertices, rbind(x, y, z))
-  tfaces <- grepl("^f\\W+\\w+\\W+\\w+\\W+\\w+$", lines)
-  triangles <- read.table(textConnection(lines[tfaces]),
-                      col.names = c("instr", "v1", "v2", "v3"),
-                      colClasses = "character")
-  triangles <- with(triangles, rbind(v1, v2, v3))
-  if (length(grep("/", triangles))) {
-    warning("Normals and/or textures ignored")
-    triangles <- sub("/.*", "", triangles)   
-  }
-  triangles <- structure(as.numeric(triangles),
-                         dim = dim(triangles))
-  qfaces <- grepl("^f\\W+\\w+\\W+\\w+\\W+\\w+\\W+\\w+$", lines)
-  if (any(qfaces)) {
-    quads <- read.table(textConnection(lines[qfaces]),
-                        col.names = c("instr", "v1", "v2", "v3", "v4"),
-                        colClasses = "character")
-    quads <- with(quads, rbind(v1, v2, v3, v4))
-    if (length(grep("/", quads))) {
-      warning("Normals and/or textures ignored")
-      quads <- sub("/.*", "", quads)
-    }
-    quads <- structure(as.numeric(quads), dim = dim(quads))
-  }
-  others <- strsplit(lines[instrs == "f" & !tfaces & !qfaces], " ")
+  
+  # Get rid of texture and normal info
+  polys <- gsub("/[^ ]*", "", lines[instrs == "f"])
+  polys <- strsplit(polys, " ")
+
+  nverts <- sapply(polys, length) - 1
+  triangles <- do.call(rbind, polys[nverts == 3])[, -1]
+  mode(triangles) <- "numeric"
+  
+  # We build quads transposed, because we're going to stick
+  # it directly into the structure
+  quads <- do.call(cbind, polys[nverts == 4])[-1, ]
+  mode(quads) <- "numeric"
+
+  others <- which(!(nverts %in% 3:4))
+  
   # FIXME:  this will be really slow if there are a lot of others
   # Should pre-allocate extra space.
   for (i in seq_along(others)) {
-    v <- as.numeric(others[[i]][-1])
+    v <- as.numeric(polys[[others[i]]][-1])
     tri <- triangulate(t(vertices[,v]))
     tri <- structure(v[tri], dim = dim(tri))
     triangles <- cbind(triangles, tri)
-  }  
+  }
   ignored <- unique(instrs)
   ignored <- ignored[!(ignored %in% c("v", "f", "", "#"))]
   if (length(ignored))
     warning(gettextf("Instructions %s ignored", paste0('"', ignored, '"', collapse = ", ")),
     	    domain = NA)
   result <- tmesh3d(vertices, triangles, homogeneous = FALSE, ...)
-  if (any(qfaces)) 
+  if (length(quads)) 
     result$ib <- quads
   result
 }
