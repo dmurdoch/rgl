@@ -66,8 +66,8 @@ properties such as colors, since the OBJ format does not support the per-vertex
 colors that RGL uses.  
 
 The \code{readOBJ} implementation can
-only read faces, and ignores 
-information about normals and textures.
+only read faces and normals, and ignores 
+information about textures.
 
 The defaults for \code{pointsAsPoints} and \code{linesAsLines} have been
 chosen because Blender (\url{http://www.blender.org}) does not import

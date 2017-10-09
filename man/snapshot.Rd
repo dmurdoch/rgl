@@ -26,8 +26,7 @@ On some systems, the snapshot
 will include content from other windows if they cover the active rgl
 window.  Setting \code{top = TRUE} (the default) will use 
 \code{\link{rgl.bringtotop}} before the snapshot
-to avoid this.  (See \url{http://www.opengl.org/resources/faq/technical/rasterization.htm#rast0070}
-for more details.)
+to avoid this.  
 }
 \seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
 
