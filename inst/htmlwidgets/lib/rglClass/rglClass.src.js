@@ -462,6 +462,7 @@ rglwidgetClass = function() {
           fixed_size = flags & this.f_fixed_size,
           is_points = flags & this.f_is_points,
           is_twosided = flags & this.f_is_twosided,
+          is_lines = flags & this.f_is_lines,
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
@@ -500,12 +501,18 @@ rglwidgetClass = function() {
                           "  attribute vec3 aPos2;\n"+
                           "  varying float normz;\n";
 
+      if (is_lines)
+        result = result + "  attribute float aDirection;\n"+
+                          "  attribute vec3 aNext;\n"+
+                          "  uniform float uAspect;\n"+
+                          "  uniform float uLwd;\n";
+                          
       result = result + "  void main(void) {\n";
 
-      if (nclipplanes || (!fixed_quads && !sprite_3d))
+      if (nclipplanes || (!fixed_quads && !sprite_3d && !is_lines))
         result = result + "    vPosition = mvMatrix * vec4(aPos, 1.);\n";
 
-      if (!fixed_quads && !sprite_3d)
+      if (!fixed_quads && !sprite_3d && !is_lines)
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
@@ -543,6 +550,28 @@ rglwidgetClass = function() {
                           "   vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n"+
                           "   pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n"+
                           "   normz = pos1.x*pos2.y - pos1.y*pos2.x;\n";
+                          
+      if (is_lines) 
+        /* This code was inspired by Matt Deslauriers' code in https://mattdesl.svbtle.com/drawing-lines-is-hard */
+        result = result + "   vec2 aspectVec = vec2(uAspect, 1.0);\n"+
+                          "   mat4 projViewModel = prMatrix * mvMatrix;\n"+
+                          "   vec4 currentProjected = projViewModel * vec4(aPos, 1.0);\n"+
+                          "   currentProjected = currentProjected/currentProjected.w;\n"+
+                          "   vec4 nextProjected = projViewModel * vec4(aNext, 1.0);\n"+
+                          "   vec2 currentScreen = currentProjected.xy * aspectVec;\n"+
+                          "   vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;\n"+
+                          "   float len = uLwd;\n"+
+                          "   vec2 dir = vec2(0.0);\n"+
+                          "   if (currentScreen == nextScreen) {\n"+
+                          "     gl_Position = currentProjected;\n"+
+                          "   } else {\n"+
+                          "     dir = normalize(nextScreen - currentScreen);\n"+
+                          "     vec2 normal = vec2(-dir.y, dir.x);\n"+
+                          "     dir.x /= uAspect;\n"+
+                          "     normal.x /= uAspect;\n"+
+                          "     vec4 offset = vec4(len*(normal*aDirection - dir), 0.0, 0.0);\n"+
+                          "     gl_Position = currentProjected + offset;\n"+
+                          "   }\n";
 
       result = result + "  }\n";
       // console.log(result);
@@ -1150,6 +1179,7 @@ rglwidgetClass = function() {
           type = obj.type,
           is_indexed = flags & this.f_is_indexed,
           is_lit = flags & this.f_is_lit,
+          is_lines = flags & this.f_is_lines,
           has_texture = flags & this.f_has_texture,
           fixed_quads = flags & this.f_fixed_quads,
           depth_sort = flags & this.f_depth_sort,
@@ -1301,7 +1331,8 @@ rglwidgetClass = function() {
       this.handleLoadedTexture(obj.texture, this.textureCanvas);
     }
 
-    var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew;
+    var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew,
+        nextofs = -1, dirofs = -1;
 
     nc = obj.colorCount = obj.colors.length;
     if (nc > 1) {
@@ -1382,7 +1413,55 @@ rglwidgetClass = function() {
       tofs = -1;
       oofs = -1;
     }
-
+                          
+    if (is_lines) {
+      obj.dirLoc = gl.getAttribLocation(obj.prog, "aDirection");
+      obj.nextLoc = gl.getAttribLocation(obj.prog, "aNext");
+      obj.aspectLoc = gl.getUniformLocation(obj.prog, "uAspect");
+      obj.lwdLoc = gl.getUniformLocation(obj.prog, "uLwd");
+      // Expand vertices to turn each segment into a pair of triangles
+      if (type === "linestrip")
+        nrows = 6*(obj.vertexCount - 1); 
+      else
+        nrows = 3*obj.vertexCount;
+      vnew = new Array(nrows);
+      f = new Array(nrows);
+      var fnext = new Array(nrows),
+          fx = new Array(nrows), start;
+      for (i = 0; i < v.length; i++) {
+      	if (type === "linestrip")
+      	  start = 6*i;
+      	else {
+      	  if (i % 2 == 1)
+      	    continue;
+      	  start = 3*i;
+      	}
+        f[start] = f[start + 1] = f[start + 3] = i;
+        f[start + 2] = f[start + 4] = f[start + 5] = i + 1;
+        for (j = 0; j<6; j++) {
+          if (f[start + j] == i)
+            fnext[start + j] = i + 1;
+          else
+            fnext[start + j] = i;
+          // The offset normal to the line segment   
+          if (j == 1 || j == 5)
+            fx[start + j] = 1;
+          else
+            fx[start + j] = -1
+        }
+      }
+      nextofs = stride;
+      dirofs = stride + 3;
+      stride = stride + 4;
+      
+      for (i = 0; i < nrows; i++) {
+      	vnew[i] = v[f[i]].concat(v[fnext[i]].slice(0, 3)).concat(fx[i]);
+      	// console.log("New element "+i+": ",vnew[i].map(function(x) { return Math.round(1000*x); }).toString());
+      }
+      v = vnew;
+      obj.vertexCount = v.length;
+    }
+    
     if (typeof obj.userAttributes !== "undefined") {
       obj.userAttribOffsets = {};
       obj.userAttribLocations = {};
@@ -1408,7 +1487,8 @@ rglwidgetClass = function() {
       this.alertOnce("problem in stride calculation");
     }
 
-    obj.vOffsets = {vofs:0, cofs:cofs, nofs:nofs, radofs:radofs, oofs:oofs, tofs:tofs, stride:stride};
+    obj.vOffsets = {vofs:0, cofs:cofs, nofs:nofs, radofs:radofs, oofs:oofs, tofs:tofs,
+                    nextofs:nextofs, dirofs:dirofs, stride:stride};
 
     obj.values = new Float32Array(this.flatten(v));
 
@@ -1610,9 +1690,9 @@ rglwidgetClass = function() {
     };
 
     rglwidgetClass.prototype.mode4type = {points : "POINTS",
-                     linestrip : "LINE_STRIP",
+                     linestrip : "TRIANGLES",
                      abclines : "LINES",
-                     lines : "LINES",
+                     lines : "TRIANGLES",
                      sprites : "TRIANGLES",
                      planes : "TRIANGLES",
                      text : "TRIANGLES",
@@ -1947,9 +2027,14 @@ rglwidgetClass = function() {
       	    mode = "POINTS";
           }
         }
-
+                          
         if (is_lines) {
-          gl.lineWidth( this.getMaterial(id, "lwd") );
+          gl.enableVertexAttribArray(obj.dirLoc );
+          gl.vertexAttribPointer(obj.dirLoc, 1, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.dirofs);
+          gl.enableVertexAttribArray(obj.nextLoc );
+          gl.vertexAttribPointer(obj.nextLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nextofs);
+          gl.uniform1f(obj.aspectLoc, this.vp.width/this.vp.height);
+          gl.uniform1f(obj.lwdLoc, this.getMaterial(id, "lwd")/this.vp.height);
         }
 
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
@@ -2570,7 +2655,7 @@ rglwidgetClass = function() {
           var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
           observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
-              console.log("type="+mutation.type+" attributeName="+mutation. attributeName+" self="+self);
+              // console.log("type="+mutation.type+" attributeName="+mutation. attributeName+" self="+self);
               self.slide.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window); })})});
           observer.observe(this.slide, { attributes: true, attributeFilter:["class"] });
         }
