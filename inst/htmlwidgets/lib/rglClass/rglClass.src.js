@@ -264,6 +264,7 @@ rglwidgetClass = function() {
     rglwidgetClass.prototype.f_fixed_size = 4096;
     rglwidgetClass.prototype.f_is_points = 8192;
     rglwidgetClass.prototype.f_is_twosided = 16384;
+    rglwidgetClass.prototype.f_fat_lines = 32768;
 
     /**
      * Which list does a particular id come from?
@@ -462,7 +463,7 @@ rglwidgetClass = function() {
           fixed_size = flags & this.f_fixed_size,
           is_points = flags & this.f_is_points,
           is_twosided = flags & this.f_is_twosided,
-          is_lines = flags & this.f_is_lines,
+          fat_lines = flags & this.f_fat_lines,
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
@@ -501,18 +502,19 @@ rglwidgetClass = function() {
                           "  attribute vec3 aPos2;\n"+
                           "  varying float normz;\n";
 
-      if (is_lines)
-        result = result + "  attribute float aDirection;\n"+
-                          "  attribute vec3 aNext;\n"+
-                          "  uniform float uAspect;\n"+
-                          "  uniform float uLwd;\n";
-                          
+      if (fat_lines) {
+      	result = result + "  attribute float aDirection;\n"+
+                            "  attribute vec3 aNext;\n"+
+                            "  uniform float uAspect;\n"+
+                            "  uniform float uLwd;\n";
+      }
+      
       result = result + "  void main(void) {\n";
 
-      if (nclipplanes || (!fixed_quads && !sprite_3d && !is_lines))
+      if (nclipplanes || (!fixed_quads && !sprite_3d && !fat_lines))
         result = result + "    vPosition = mvMatrix * vec4(aPos, 1.);\n";
 
-      if (!fixed_quads && !sprite_3d && !is_lines)
+      if (!fixed_quads && !sprite_3d && !fat_lines)
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
@@ -551,7 +553,7 @@ rglwidgetClass = function() {
                           "   pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n"+
                           "   normz = pos1.x*pos2.y - pos1.y*pos2.x;\n";
                           
-      if (is_lines) 
+      if (fat_lines) 
         /* This code was inspired by Matt Deslauriers' code in https://mattdesl.svbtle.com/drawing-lines-is-hard */
         result = result + "   vec2 aspectVec = vec2(uAspect, 1.0);\n"+
                           "   mat4 projViewModel = prMatrix * mvMatrix;\n"+
@@ -1180,6 +1182,7 @@ rglwidgetClass = function() {
           is_indexed = flags & this.f_is_indexed,
           is_lit = flags & this.f_is_lit,
           is_lines = flags & this.f_is_lines,
+          fat_lines = flags & this.f_fat_lines,
           has_texture = flags & this.f_has_texture,
           fixed_quads = flags & this.f_fixed_quads,
           depth_sort = flags & this.f_depth_sort,
@@ -1414,7 +1417,7 @@ rglwidgetClass = function() {
       oofs = -1;
     }
                           
-    if (is_lines) {
+    if (fat_lines) {
       obj.dirLoc = gl.getAttribLocation(obj.prog, "aDirection");
       obj.nextLoc = gl.getAttribLocation(obj.prog, "aNext");
       obj.aspectLoc = gl.getUniformLocation(obj.prog, "uAspect");
@@ -1690,9 +1693,9 @@ rglwidgetClass = function() {
     };
 
     rglwidgetClass.prototype.mode4type = {points : "POINTS",
-                     linestrip : "TRIANGLES",
+                     linestrip : "LINE_STRIP",
                      abclines : "LINES",
-                     lines : "TRIANGLES",
+                     lines : "LINES",
                      sprites : "TRIANGLES",
                      planes : "TRIANGLES",
                      text : "TRIANGLES",
@@ -1745,6 +1748,7 @@ rglwidgetClass = function() {
           sprites_3d = flags & this.f_sprites_3d,
           sprite_3d = flags & this.f_sprite_3d,
           is_lines = flags & this.f_is_lines,
+          fat_lines = flags & this.f_fat_lines,
           is_points = flags & this.f_is_points,
           fixed_size = flags & this.f_fixed_size,
           is_twosided = (flags & this.f_is_twosided) > 0,
@@ -1985,7 +1989,7 @@ rglwidgetClass = function() {
         if (pmode === "culled")
           continue;
 
-      	mode = this.mode4type[type];
+      	mode = fat_lines ? "TRIANGLES" : this.mode4type[type];
         if (depth_sort && pmode == "filled") {// Don't try depthsorting on wireframe or points
           var faces = this.depthSort(obj),
               nfaces = faces.length,
@@ -2022,13 +2026,12 @@ rglwidgetClass = function() {
           count = obj.f[pass].length;
       	  if (pmode === "lines") {
       	    mode = "LINES";
-      	    is_lines = true;
           } else if (pmode === "points") {
       	    mode = "POINTS";
           }
         }
                           
-        if (is_lines) {
+        if (fat_lines) {
           gl.enableVertexAttribArray(obj.dirLoc );
           gl.vertexAttribPointer(obj.dirLoc, 1, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.dirofs);
           gl.enableVertexAttribArray(obj.nextLoc );

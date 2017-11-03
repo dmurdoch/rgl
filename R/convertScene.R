@@ -104,52 +104,53 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 		       "depth_sort", "fixed_quads", "is_transparent",
 		       "is_lines", "sprites_3d", "sprite_3d",
 		       "is_subscene", "is_clipplanes",
-		       "fixed_size", "is_points", "is_twosided")
+		       "fixed_size", "is_points", "is_twosided",
+		       "fat_lines")
 
 	getFlags <- function(id) {
 
 	  obj <- getObj(id)
 	  type <- obj$type
 
-		if (type == "subscene")
-			return(getSubsceneFlags(id))
+	  if (type == "subscene")
+	    return(getSubsceneFlags(id))
 
-		result <- structure(rep(FALSE, length(flagnames)), names = flagnames)
-		if (type == "clipplanes") {
-			result["is_clipplanes"] <- TRUE
-			return(result)
-		}
+	  result <- structure(rep(FALSE, length(flagnames)), names = flagnames)
+	  if (type == "clipplanes") {
+	    result["is_clipplanes"] <- TRUE
+	    return(result)
+	  }
 
-		if (type %in% c("light", "bboxdeco"))
-		  return(result)
+	  if (type %in% c("light", "bboxdeco"))
+	    return(result)
 
-		mat <- getMaterial(id)
-		result["is_lit"] <- mat$lit && type %in% c("triangles", "quads", "surface", "planes",
-							   "spheres", "sprites")
+          mat <- getMaterial(id)
+	  result["is_lit"] <- mat$lit && type %in% c("triangles", "quads", "surface", "planes",
+						     "spheres", "sprites")
 
-		result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
-								 "spheres")
+	  result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
+							   "spheres")
 
-		result["has_texture"] <- has_texture <- !is.null(mat$texture)
+	  result["has_texture"] <- has_texture <- !is.null(mat$texture)
 
-		result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
+	  result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
 
-		result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
+	  result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
 										    "spheres", "sprites", "text")
+	  result["sprites_3d"] <- sprites_3d <- type == "sprites" && length(obj$ids)
 
-		result["sprites_3d"] <- sprites_3d <- type == "sprites" && length(obj$ids)
+	  result["is_indexed"] <- (depth_sort ||
+				   type %in% c("quads", "surface", "text", "sprites") ||
+				   type %in% c("triangles") && length(intersect(c("points", "lines"), c(mat$front)))) && 
+			          !sprites_3d
 
-		result["is_indexed"] <- (depth_sort ||
-					 type %in% c("quads", "surface", "text", "sprites") ||
-					 type %in% c("triangles") && length(intersect(c("points", "lines"), c(mat$front)))) && 
-			                !sprites_3d
-
-		result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
-		result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
-		result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
-		result["is_twosided"] <- type %in% c("quads", "surface", "triangles") && 
-			                   length(unique(c(mat$front, mat$back))) > 1
+	  result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
+	  result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
+	  result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
+	  result["is_twosided"] <- type %in% c("quads", "surface", "triangles") && 
+			           length(unique(c(mat$front, mat$back))) > 1
 	  result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
+	  result["fat_lines"]   <- result["is_lines"] && mat$lwd != 1
 	  result
 	}
 
