@@ -867,8 +867,8 @@ base graphics.
   - As many browsers have dropped support for setting line width 
     in WebGL scenes, this has been partially redone in rglwidget() 
     code using a vertex shader.  
-    Currently lines3d() and segments3d() are supported (as
-    well as functions that use them); wire3d() rendering of
+    Currently abclines3d(), lines3d() and segments3d() are supported
+    (as well as functions that use them); wire3d() rendering of
     meshes and other methods that ask for "lines" drawing of
     polygons using the "front" or "back" material properties
-    ignore lwd settings.
+    ignore lwd settings.  Line endings and joins are rounded.

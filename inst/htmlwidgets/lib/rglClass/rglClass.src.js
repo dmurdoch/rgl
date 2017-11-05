@@ -503,8 +503,10 @@ rglwidgetClass = function() {
                           "  varying float normz;\n";
 
       if (fat_lines) {
-      	result = result + "  attribute float aDirection;\n"+
-                            "  attribute vec3 aNext;\n"+
+      	result = result +   "  attribute vec3 aNext;\n"+
+                            "  attribute vec2 aPoint;\n"+
+                            "  varying vec2 vPoint;\n"+
+                            "  varying float vLength;\n"+
                             "  uniform float uAspect;\n"+
                             "  uniform float uLwd;\n";
       }
@@ -563,17 +565,18 @@ rglwidgetClass = function() {
                           "   vec2 currentScreen = currentProjected.xy * aspectVec;\n"+
                           "   vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;\n"+
                           "   float len = uLwd;\n"+
-                          "   vec2 dir = vec2(0.0);\n"+
-                          "   if (currentScreen == nextScreen) {\n"+
-                          "     gl_Position = currentProjected;\n"+
-                          "   } else {\n"+
+                          "   vec2 dir = vec2(1.0, 0.0);\n"+
+                          "   vPoint = aPoint;\n"+
+                          "   vLength = length(nextScreen - currentScreen)/2.0;\n"+
+                          "   vLength = vLength/(vLength + len);\n"+
+                          "   if (vLength > 0.0) {\n"+
                           "     dir = normalize(nextScreen - currentScreen);\n"+
-                          "     vec2 normal = vec2(-dir.y, dir.x);\n"+
-                          "     dir.x /= uAspect;\n"+
-                          "     normal.x /= uAspect;\n"+
-                          "     vec4 offset = vec4(len*(normal*aDirection - dir), 0.0, 0.0);\n"+
-                          "     gl_Position = currentProjected + offset;\n"+
-                          "   }\n";
+                          "   }\n"+
+                          "   vec2 normal = vec2(-dir.y, dir.x);\n"+
+                          "   dir.x /= uAspect;\n"+
+                          "   normal.x /= uAspect;\n"+
+                          "   vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);\n"+
+                          "   gl_Position = currentProjected + offset;\n";
 
       result = result + "  }\n";
       // console.log(result);
@@ -595,6 +598,7 @@ rglwidgetClass = function() {
           fixed_quads = flags & this.f_fixed_quads,
           sprites_3d = flags & this.f_sprites_3d,
           is_twosided = (flags & this.f_is_twosided) > 0,
+          fat_lines = flags & this.f_fat_lines,
           nclipplanes = this.countClipplanes(), i,
           texture_format, nlights,
           result;
@@ -648,8 +652,19 @@ rglwidgetClass = function() {
       if (is_twosided)
         result = result + "   uniform bool front;\n"+
                           "   varying float normz;\n";
+                          
+      if (fat_lines)
+        result = result + "   varying vec2 vPoint;\n"+
+                          "   varying float vLength;\n";
 
       result = result + "  void main(void) {\n";
+      
+      if (fat_lines)
+        result = result + "    vec2 point = vPoint;\n"+
+                          "    point.y = point.y < 0.0 ? "+
+                          "      min(0.0, (point.y + vLength)/(1.0 - vLength)) :\n"+
+                          "      max(0.0, (point.y - vLength)/(1.0 - vLength));\n"+
+                          "    if (length(point) > 1.0) discard;\n";
 
       for (i=0; i < nclipplanes;i++)
         result = result + "    if (dot(vPosition, vClipplane"+i+") < 0.0) discard;\n";
@@ -722,6 +737,8 @@ rglwidgetClass = function() {
       } else
         result = result +   "   gl_FragColor = lighteffect;\n";
 
+      //if (fat_lines)
+      //  result = result +   "   gl_FragColor = vec4(0.0, abs(point.x), abs(point.y), 1.0);"
       result = result + "  }\n";
       // console.log(result);
       return result;
@@ -1335,7 +1352,7 @@ rglwidgetClass = function() {
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew,
-        nextofs = -1, dirofs = -1;
+        nextofs = -1, pointofs = -1;
 
     nc = obj.colorCount = obj.colors.length;
     if (nc > 1) {
@@ -1418,8 +1435,8 @@ rglwidgetClass = function() {
     }
                           
     if (fat_lines) {
-      obj.dirLoc = gl.getAttribLocation(obj.prog, "aDirection");
       obj.nextLoc = gl.getAttribLocation(obj.prog, "aNext");
+      obj.pointLoc = gl.getAttribLocation(obj.prog, "aPoint");
       obj.aspectLoc = gl.getUniformLocation(obj.prog, "uAspect");
       obj.lwdLoc = gl.getUniformLocation(obj.prog, "uLwd");
       // Expand vertices to turn each segment into a pair of triangles
@@ -1430,7 +1447,7 @@ rglwidgetClass = function() {
       vnew = new Array(nrows);
       f = new Array(nrows);
       var fnext = new Array(nrows),
-          fx = new Array(nrows), start;
+          fpt = new Array(nrows), pt, start;
       for (i = 0; i < v.length; i++) {
       	if (type === "linestrip")
       	  start = 6*i;
@@ -1446,19 +1463,24 @@ rglwidgetClass = function() {
             fnext[start + j] = i + 1;
           else
             fnext[start + j] = i;
-          // The offset normal to the line segment   
-          if (j == 1 || j == 5)
-            fx[start + j] = 1;
+          pt = new Array(2);
+          if (j == 0 || j == 2 || j == 5)
+            pt[0] = -1;
           else
-            fx[start + j] = -1
+            pt[0] = 1;
+          if (j == 0 || j == 1 || j == 3)
+            pt[1] = -1;
+          else
+            pt[1] = 1;
+          fpt[start + j] = pt;
         }
       }
       nextofs = stride;
-      dirofs = stride + 3;
-      stride = stride + 4;
+      pointofs = stride + 3;
+      stride = stride + 5;
       
       for (i = 0; i < nrows; i++) {
-      	vnew[i] = v[f[i]].concat(v[fnext[i]].slice(0, 3)).concat(fx[i]);
+      	vnew[i] = v[f[i]].concat(v[fnext[i]].slice(0, 3)).concat(fpt[i]);
       	// console.log("New element "+i+": ",vnew[i].map(function(x) { return Math.round(1000*x); }).toString());
       }
       v = vnew;
@@ -1491,7 +1513,7 @@ rglwidgetClass = function() {
     }
 
     obj.vOffsets = {vofs:0, cofs:cofs, nofs:nofs, radofs:radofs, oofs:oofs, tofs:tofs,
-                    nextofs:nextofs, dirofs:dirofs, stride:stride};
+                    nextofs:nextofs, pointofs:pointofs, stride:stride};
 
     obj.values = new Float32Array(this.flatten(v));
 
@@ -2032,8 +2054,8 @@ rglwidgetClass = function() {
         }
                           
         if (fat_lines) {
-          gl.enableVertexAttribArray(obj.dirLoc );
-          gl.vertexAttribPointer(obj.dirLoc, 1, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.dirofs);
+          gl.enableVertexAttribArray(obj.pointLoc);
+          gl.vertexAttribPointer(obj.pointLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.pointofs);
           gl.enableVertexAttribArray(obj.nextLoc );
           gl.vertexAttribPointer(obj.nextLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nextofs);
           gl.uniform1f(obj.aspectLoc, this.vp.width/this.vp.height);
