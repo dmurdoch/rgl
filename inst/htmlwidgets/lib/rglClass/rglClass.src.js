@@ -100,8 +100,17 @@ rglwidgetClass = function() {
      * @returns {any[]}
      * @param a {any[][]}
      */
-    rglwidgetClass.prototype.flatten = function(a) {
-      return [].concat.apply([], a);
+    rglwidgetClass.prototype.flatten = function(arr, result) {
+      if (typeof result === "undefined") result = [];
+      for (var i = 0, length = arr.length; i < length; i++) {
+        const value = arr[i];
+        if (Array.isArray(value)) {
+          this.flatten(value, result);
+        } else {
+          result.push(value);
+        }
+      }
+      return result;
     };
 
     /**
@@ -1651,7 +1660,16 @@ rglwidgetClass = function() {
             }
           }
         }
-        obj.f[pass] = new Uint16Array(f);
+        if (obj.vertexCount > 65535) {
+          if (this.index_uint) {
+            obj.f[pass] = new Uint32Array(f);
+            obj.index_uint = true;
+          } else
+            this.alertOnce("Object has "+obj.vertexCount+" vertices, not supported in this browser.")
+        } else {
+          obj.f[pass] = new Uint16Array(f);
+          obj.index_uint = false;
+        }
         if (depth_sort) {
           drawtype = "DYNAMIC_DRAW";
         } else {
@@ -2018,7 +2036,7 @@ rglwidgetClass = function() {
               frowsize = Math.floor(obj.f[pass].length/nfaces);
 
           if (type !== "spheres") {
-            var f = new Uint16Array(obj.f[pass].length);
+            var f = obj.index_uint ? new Uint32Array(obj.f[pass].length) : new Uint16Array(obj.f[pass].length);
             for (i=0; i<nfaces; i++) {
               for (j=0; j<frowsize; j++) {
                 f[frowsize*i + j] = obj.f[pass][frowsize*faces[i] + j];
@@ -2065,7 +2083,7 @@ rglwidgetClass = function() {
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
 
         if (is_indexed) {
-          gl.drawElements(gl[mode], count, gl.UNSIGNED_SHORT, 0);
+          gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
         } else {
           gl.drawArrays(gl[mode], 0, count);
         }
@@ -2803,6 +2821,7 @@ rglwidgetClass = function() {
         this.onContextLost, false);
       this.gl = this.canvas.getContext("webgl", this.webGLoptions) ||
                this.canvas.getContext("experimental-webgl", this.webGLoptions);
+      this.index_uint = this.gl.getExtension("OES_element_index_uint");
       var save = this.startDrawing();
       this.initSphereGL();
       Object.keys(this.scene.objects).forEach(function(key){

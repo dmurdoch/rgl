@@ -872,3 +872,5 @@ base graphics.
     meshes and other methods that ask for "lines" drawing of
     polygons using the "front" or "back" material properties
     ignore lwd settings.  Line endings and joins are rounded.
+  - The 65535 vertex limit has been removed (at least in browsers
+    that support big indices).
