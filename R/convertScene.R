@@ -141,7 +141,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 
 	  result["is_indexed"] <- (depth_sort ||
 				   type %in% c("quads", "surface", "text", "sprites") ||
-				   type %in% c("triangles") && length(intersect(c("points", "lines"), c(mat$front)))) && 
+				   type %in% c("triangles") && length(intersect(c("points", "lines"), c(mat$front, mat$back)))) && 
 			          !sprites_3d
 
 	  result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
@@ -150,7 +150,8 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	  result["is_twosided"] <- type %in% c("quads", "surface", "triangles") && 
 			           length(unique(c(mat$front, mat$back))) > 1
 	  result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
-	  result["fat_lines"]   <- result["is_lines"] && mat$lwd != 1
+	  result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
+	  					    "lines" %in% unlist(mat[c("front", "back")]))
 	  result
 	}
 

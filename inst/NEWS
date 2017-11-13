@@ -831,7 +831,7 @@ base graphics.
   - Added figWidth() and figHeight() functions for sizing
     rgl plots in R Markdown documents.
     
-0.98.17
+0.98.18
   - Record context (ioslides, shiny, etc.) in scene 
     when rglwidget() is called.
   - Allow more than 16 scenes in html_document, ioslides_presentation and
@@ -865,12 +865,8 @@ base graphics.
   - Fixed bug where textures or normals caused readOBJ() to fail;
     added support for reading normals.  Textures are still ignored.
   - As many browsers have dropped support for setting line width 
-    in WebGL scenes, this has been partially redone in rglwidget() 
+    in WebGL scenes, this has been redone in rglwidget() 
     code using a vertex shader.  
-    Currently abclines3d(), lines3d() and segments3d() are supported
-    (as well as functions that use them); wire3d() rendering of
-    meshes and other methods that ask for "lines" drawing of
-    polygons using the "front" or "back" material properties
-    ignore lwd settings.  Line endings and joins are rounded.
+    Line endings and joins are rounded, not squared as in OpenGL.
   - The 65535 vertex limit has been removed (at least in browsers
     that support big indices).

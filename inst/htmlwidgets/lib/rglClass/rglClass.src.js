@@ -522,10 +522,10 @@ rglwidgetClass = function() {
       
       result = result + "  void main(void) {\n";
 
-      if (nclipplanes || (!fixed_quads && !sprite_3d && !fat_lines))
+      if (nclipplanes || (!fixed_quads && !sprite_3d))
         result = result + "    vPosition = mvMatrix * vec4(aPos, 1.);\n";
 
-      if (!fixed_quads && !sprite_3d && !fat_lines)
+      if (!fixed_quads && !sprite_3d)
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
@@ -685,7 +685,7 @@ rglwidgetClass = function() {
       }
 
       if (is_twosided) {
-      	result = result +   "    if ((normz <= 0.) != front) discard;";
+      	result = result +   "    if ((normz <= 0.) != front) discard;\n";
       }
 
       if (is_lit) {
@@ -1217,8 +1217,8 @@ rglwidgetClass = function() {
           fixed_size = flags & this.f_fixed_size,
           is_twosided = (flags & this.f_is_twosided) > 0,
           gl = this.gl || this.initGL(),
-          texinfo, drawtype, nclipplanes, f, nrows,
-          i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
+          texinfo, drawtype, nclipplanes, f, nrows, oldrows,
+          i,j,v,v1,v2, mat, uri, matobj, pass, passes, pmode,
           dim, nx, nz, attr;
 
     if (typeof id !== "number") {
@@ -1360,7 +1360,7 @@ rglwidgetClass = function() {
       this.handleLoadedTexture(obj.texture, this.textureCanvas);
     }
 
-    var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew,
+    var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
         nextofs = -1, pointofs = -1;
 
     nc = obj.colorCount = obj.colors.length;
@@ -1443,59 +1443,6 @@ rglwidgetClass = function() {
       oofs = -1;
     }
                           
-    if (fat_lines) {
-      obj.nextLoc = gl.getAttribLocation(obj.prog, "aNext");
-      obj.pointLoc = gl.getAttribLocation(obj.prog, "aPoint");
-      obj.aspectLoc = gl.getUniformLocation(obj.prog, "uAspect");
-      obj.lwdLoc = gl.getUniformLocation(obj.prog, "uLwd");
-      // Expand vertices to turn each segment into a pair of triangles
-      if (type === "linestrip")
-        nrows = 6*(obj.vertexCount - 1); 
-      else
-        nrows = 3*obj.vertexCount;
-      vnew = new Array(nrows);
-      f = new Array(nrows);
-      var fnext = new Array(nrows),
-          fpt = new Array(nrows), pt, start;
-      for (i = 0; i < v.length; i++) {
-      	if (type === "linestrip")
-      	  start = 6*i;
-      	else {
-      	  if (i % 2 == 1)
-      	    continue;
-      	  start = 3*i;
-      	}
-        f[start] = f[start + 1] = f[start + 3] = i;
-        f[start + 2] = f[start + 4] = f[start + 5] = i + 1;
-        for (j = 0; j<6; j++) {
-          if (f[start + j] == i)
-            fnext[start + j] = i + 1;
-          else
-            fnext[start + j] = i;
-          pt = new Array(2);
-          if (j == 0 || j == 2 || j == 5)
-            pt[0] = -1;
-          else
-            pt[0] = 1;
-          if (j == 0 || j == 1 || j == 3)
-            pt[1] = -1;
-          else
-            pt[1] = 1;
-          fpt[start + j] = pt;
-        }
-      }
-      nextofs = stride;
-      pointofs = stride + 3;
-      stride = stride + 5;
-      
-      for (i = 0; i < nrows; i++) {
-      	vnew[i] = v[f[i]].concat(v[fnext[i]].slice(0, 3)).concat(fpt[i]);
-      	// console.log("New element "+i+": ",vnew[i].map(function(x) { return Math.round(1000*x); }).toString());
-      }
-      v = vnew;
-      obj.vertexCount = v.length;
-    }
-    
     if (typeof obj.userAttributes !== "undefined") {
       obj.userAttribOffsets = {};
       obj.userAttribLocations = {};
@@ -1516,15 +1463,6 @@ rglwidgetClass = function() {
       for (attr in obj.userUniforms)
         obj.userUniformLocations[attr] = gl.getUniformLocation(obj.prog, attr);
     }
-
-    if (stride !== v[0].length) {
-      this.alertOnce("problem in stride calculation");
-    }
-
-    obj.vOffsets = {vofs:0, cofs:cofs, nofs:nofs, radofs:radofs, oofs:oofs, tofs:tofs,
-                    nextofs:nextofs, pointofs:pointofs, stride:stride};
-
-    obj.values = new Float32Array(this.flatten(v));
 
     if (sprites_3d) {
       obj.userMatrix = new CanvasMatrix4(obj.userMatrix);
@@ -1566,13 +1504,20 @@ rglwidgetClass = function() {
         obj.finiteLoc[i] = gl.getUniformLocation(obj.prog, "finite" + i);
       }
     }
-
+    
+    obj.passes = is_twosided + 1;
+    obj.pmode = new Array(obj.passes);
+    for (pass = 0; pass < obj.passes; pass++) {
+      if (type === "triangles" || type === "quads" || type === "surface")
+      	pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
+      else pmode = "filled";
+      obj.pmode[pass] = pmode;
+    }
+    
     if (is_indexed) {
-      obj.f = Array(2);
-      for (pass = 0; pass < is_twosided + 1; pass++) {
-      	if (type === "triangles" || type === "quads" || type === "surface")
-      	  pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
-      	else pmode = "filled";
+      obj.f = new Array(obj.passes);
+      for (pass = 0; pass < obj.passes; pass++) {
+        pmode = obj.pmode[pass];
       	if (pmode === "culled")
       	  continue;
         if (pmode === "points") {
@@ -1660,16 +1605,7 @@ rglwidgetClass = function() {
             }
           }
         }
-        if (obj.vertexCount > 65535) {
-          if (this.index_uint) {
-            obj.f[pass] = new Uint32Array(f);
-            obj.index_uint = true;
-          } else
-            this.alertOnce("Object has "+obj.vertexCount+" vertices, not supported in this browser.")
-        } else {
-          obj.f[pass] = new Uint16Array(f);
-          obj.index_uint = false;
-        }
+        obj.f[pass] = f;
         if (depth_sort) {
           drawtype = "DYNAMIC_DRAW";
         } else {
@@ -1677,6 +1613,133 @@ rglwidgetClass = function() {
         }
       }
     }
+    
+    if (fat_lines) {
+      obj.nextLoc = gl.getAttribLocation(obj.prog, "aNext");
+      obj.pointLoc = gl.getAttribLocation(obj.prog, "aPoint");
+      obj.aspectLoc = gl.getUniformLocation(obj.prog, "uAspect");
+      obj.lwdLoc = gl.getUniformLocation(obj.prog, "uLwd");
+      // Expand vertices to turn each segment into a pair of triangles
+      if (is_indexed) {
+      	for (pass = 0; pass < obj.passes; pass++) {
+      	  if (obj.pmode[pass] === "lines") {
+      	    oldrows = obj.f[pass].length;
+      	    break;
+      	  }
+      	}
+      } else
+        oldrows = obj.vertexCount;
+      if (type === "linestrip")
+        nrows = 4*(oldrows - 1); 
+      else
+        nrows = 2*oldrows;
+      vnew = new Array(nrows);
+      f = new Array(nrows);
+      fnew = new Array(1.5*nrows);
+      var fnext = new Array(nrows),
+          fpt = new Array(nrows), 
+          pt, start, gap = type === "linestrip" ? 3 : 1;
+      
+      // We're going to turn each pair of vertices into 4 new ones, with the "next" and "pt" attributes
+      // added.
+      // We do this by copying the originals in the first pass, adding the new attributes, then in a 
+      // second pass add new vertices at the end.
+      
+      for (i = 0; i < v.length; i++) 
+        vnew[i] = v[i].concat([0,0,0,0,0]); 
+
+      nextofs = stride;
+      pointofs = stride + 3;
+      stride = stride + 5;
+      
+      if (typeof obj.f === "undefined") {
+        obj.f = new Array(2);
+        for (pass = 0; pass < obj.passes; pass++) {
+          f = new Array(v.length);
+          for (i=0; i<v.length; i++)
+            f[i] = i;
+        }
+        is_indexed = true;
+        obj.flags |= this.f_is_indexed;
+      }
+        
+      for (pass = 0; pass < obj.passes; pass++)
+      	if (type === "lines" || type === "linestrip" || obj.pmode[pass] == "lines") {
+          f = obj.f[pass];
+          break;
+        }
+            
+      // Now add the extras
+      last = v.length - 1;
+      ind = 0;
+      for (i = 0; i < f.length - 1; i++) {
+      	if (type !== "linestrip" && i % 2 == 1)
+      	  continue;
+      	k = ++last;
+      	vnew[k] = vnew[f[i]].slice();
+      	for (j=0; j<3; j++)
+      	  vnew[k][nextofs + j] = vnew[f[i+1]][j];
+      	vnew[k][pointofs] = -1;
+      	vnew[k][pointofs+1] = -1;
+      	fnew[ind] = k;
+      	last++;
+      	vnew[last] = vnew[k].slice();
+      	vnew[last][pointofs] = 1;
+      	fnew[ind+1] = last;
+      	last++;
+      	k = last;
+      	vnew[k] = vnew[f[i+1]].slice();
+      	for (j=0; j<3; j++)
+      	  vnew[k][nextofs + j] = vnew[f[i]][j];
+      	vnew[k][pointofs] = -1;
+      	vnew[k][pointofs+1] = 1;
+      	fnew[ind+2] = k;
+      	fnew[ind+3] = fnew[ind+1];
+      	last++;
+      	vnew[last] = vnew[k].slice();
+      	vnew[last][pointofs] = 1;
+      	fnew[ind+4] = last;
+      	fnew[ind+5] = fnew[ind+2];
+      	ind += 6;
+      }
+      vnew.length = last+1;
+      v = vnew;
+      obj.vertexCount = v.length;
+      
+      for (pass = 0; pass < obj.passes; pass++)
+      	if (type === "lines" || type === "linestrip" || obj.pmode[pass] == "lines") {
+          obj.f[pass] = fnew;
+        }
+      
+      if (depth_sort) 
+        drawtype = "DYNAMIC_DRAW";
+      else
+        drawtype = "STATIC_DRAW";
+    }
+    
+    if (is_indexed) {
+      for (pass = 0; pass < obj.passes; pass++) {
+        if (obj.vertexCount > 65535) {
+          if (this.index_uint) {
+            obj.f[pass] = new Uint32Array(obj.f[pass]);
+            obj.index_uint = true;
+          } else
+            this.alertOnce("Object has "+obj.vertexCount+" vertices, not supported in this browser.")
+        } else {
+          obj.f[pass] = new Uint16Array(obj.f[pass]);
+          obj.index_uint = false;
+        }
+      }
+    }
+    
+    if (stride !== v[0].length) {
+      this.alertOnce("problem in stride calculation");
+    }
+
+    obj.vOffsets = {vofs:0, cofs:cofs, nofs:nofs, radofs:radofs, oofs:oofs, tofs:tofs,
+                    nextofs:nextofs, pointofs:pointofs, stride:stride};
+
+    obj.values = new Float32Array(this.flatten(v));
 
     if (type !== "spheres" && !sprites_3d) {
       obj.buf = gl.createBuffer();
@@ -1685,7 +1748,7 @@ rglwidgetClass = function() {
     }
 
     if (is_indexed && type !== "spheres" && !sprites_3d) {
-      obj.ibuf = Array(is_twosided + 1);
+      obj.ibuf = Array(obj.passes);
       obj.ibuf[0] = gl.createBuffer();
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[0]);
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[0], gl[drawtype]);
@@ -2022,14 +2085,12 @@ rglwidgetClass = function() {
       	}
       }
 
-      for (pass = 0; pass < is_twosided + 1; pass++) {
-      	if (type === "triangles" || type === "quads" || type === "surface")
-      	  pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
-      	else pmode = "filled";
+      for (pass = 0; pass < obj.passes; pass++) {
+      	pmode = obj.pmode[pass];
         if (pmode === "culled")
           continue;
 
-      	mode = fat_lines ? "TRIANGLES" : this.mode4type[type];
+      	mode = fat_lines && (is_lines || pmode == "lines") ? "TRIANGLES" : this.mode4type[type];
         if (depth_sort && pmode == "filled") {// Don't try depthsorting on wireframe or points
           var faces = this.depthSort(obj),
               nfaces = faces.length,
@@ -2064,14 +2125,14 @@ rglwidgetClass = function() {
 
         if (is_indexed) {
           count = obj.f[pass].length;
-      	  if (pmode === "lines") {
+      	  if (pmode === "lines" && !fat_lines) {
       	    mode = "LINES";
           } else if (pmode === "points") {
       	    mode = "POINTS";
           }
         }
                           
-        if (fat_lines) {
+        if (pmode === "lines" && fat_lines) {
           gl.enableVertexAttribArray(obj.pointLoc);
           gl.vertexAttribPointer(obj.pointLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.pointofs);
           gl.enableVertexAttribArray(obj.nextLoc );
