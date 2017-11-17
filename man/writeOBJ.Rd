@@ -2,7 +2,7 @@
 \alias{writeOBJ}
 \alias{readOBJ}
 \title{
-Write Wavefront OBJ format files; read simple ones
+Read and write Wavefront OBJ format files
 }
 \description{
 \code{writeOBJ} writes OBJ files.  This is a file format that
@@ -66,8 +66,12 @@ properties such as colors, since the OBJ format does not support the per-vertex
 colors that RGL uses.  
 
 The \code{readOBJ} implementation can
-only read faces and normals, and ignores 
-information about textures.
+read faces, normals, and textures coordinates, but ignores
+material properties (including the specification of the texture
+file to use).  To read a file that uses a single texture,
+specify it in the \code{material} argument, e.g.
+\code{readOBJ("model.OBJ", material = list(color = "white", texture = "texture.png"))}.  There is no support for files that use
+multiple textures.
 
 The defaults for \code{pointsAsPoints} and \code{linesAsLines} have been
 chosen because Blender (\url{http://www.blender.org}) does not import
@@ -115,6 +119,17 @@ open3d()
 shade3d(readOBJ(url(
 "http://sci.esa.int/science-e/www/object/doc.cfm?fobjectid=54726"
 ), material = list(col = "gray")))
+}
+
+# Textures are used in a realistic hand image available from
+# https://free3d.com/3d-model/freerealsichand-85561.html
+# Thanks to Monte Shaffer for pointing this out.
+# Decompress the files into the current directory, convert
+# hand_mapNew.jpg to hand_mapNew.png, then use
+\dontrun{
+open3d()
+shade3d(readOBJ("hand.OBJ", material = list(color = "white", 
+shininess = 1, texture = "hand_mapNew.png"))
 }
 }
 \keyword{ graphics }

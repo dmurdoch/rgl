@@ -831,7 +831,7 @@ base graphics.
   - Added figWidth() and figHeight() functions for sizing
     rgl plots in R Markdown documents.
     
-0.98.18
+0.98.19
   - Record context (ioslides, shiny, etc.) in scene 
     when rglwidget() is called.
   - Allow more than 16 scenes in html_document, ioslides_presentation and
@@ -863,7 +863,7 @@ base graphics.
     defined.
   - Fixed addition of attribute to NULL
   - Fixed bug where textures or normals caused readOBJ() to fail;
-    added support for reading normals.  Textures are still ignored.
+    added support for reading normals and texture coordinates.
   - As many browsers have dropped support for setting line width 
     in WebGL scenes, this has been redone in rglwidget() 
     code using a vertex shader.  

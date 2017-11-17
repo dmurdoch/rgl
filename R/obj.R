@@ -320,16 +320,36 @@ readOBJ <- function(con, ...) {
                                         z="numeric"))
   vertices <- with(vertices, rbind(x, y, z))
   
-  vn <- read.table(textConnection(lines[instrs == "vn"]),
+  subset <- lines[instrs == "vn"]
+  if (length(subset)) {
+    fields <- count.fields(textConnection(subset))
+    if (!all(fields == 4))
+      stop("Normals must have 4 fields")
+    vn <- read.table(textConnection(subset),
   			    col.names = c("instr", "x", "y", "z"),
   			    colClasses = c(instr = "character", 
   			    	       x="numeric",
   			    	       y="numeric",
   			    	       z="numeric"))
-  if (nrow(vn))
     vn <- rbind(t(vn[,2:4]), 1)
-  else
+  } else
     vn <- matrix(numeric(), nrow = 4, ncol = 0)
+  
+  subset <- lines[instrs == "vt"]
+  if (length(subset)) {
+    fields <- count.fields(textConnection(subset))
+    if (length(unique(fields)) != 1)
+      stop("Textures must have consistent field count") 
+    fields <- fields[1]
+    colClasses <- c("character", rep("numeric", fields - 1))
+    vt <- read.table(textConnection(subset),
+  		            colClasses = colClasses)
+    if (fields == 2)
+      vt <- cbind(vt, 0)
+    vt <- t(vt[, 2:3])
+  } else
+    vt <- matrix(numeric(), nrow = 2, ncol = 0)
+  
   # Get rid of texture and normal info
   polys <- gsub("/[^ ]*", "", lines[instrs == "f"])
   polys <- strsplit(polys, " ")
@@ -340,19 +360,74 @@ readOBJ <- function(con, ...) {
   normals <- strsplit(normals, " ")
   normals <- lapply(normals, function(normal) as.numeric(normal[nchar(normal) > 0]))
 
+  textures <- gsub("(^| *)([^/ ]*/?){0,1}", "\\1", lines[instrs == "f"])
+  textures <- gsub("/[^ ]*", "", textures)
+  textures <- strsplit(textures, " ")
+  textures <- lapply(textures, function(texture) as.numeric(texture[nchar(texture) > 0]))
+  
   nverts <- sapply(polys, length)
   nnorms <- sapply(normals, length) 
+  ntexts <- sapply(textures, length)
+  
   hasnormals <- nnorms == nverts
-  if (any(hasnormals)) {
+  hastextures <- ntexts == nverts
+  if (any(hasnormals) || any(hastextures)) {
     # OBJ format allows different normals to be associated
     # with a single vertex in different polygons.  rgl 
-    # doesn't, so we average where that happened
-    vnormals <- matrix(0, nrow = 4, ncol = ncol(vertices))
-    vertex2norm <- norm2vertex <- numeric()
+    # doesn't, so may need to replicate some vertices.
+    # This could be slow...
+  	
+    vlinks <- vector("list", ncol(vertices))
     for (i in seq_along(polys)) {
-      nvec <- as.numeric(normals[[i]])
+      nvec <- tvec <- NA
+      if (hasnormals[i])
+        nvec <- as.numeric(normals[[i]])
+      if (hastextures[i])
+      	tvec <- as.numeric(textures[[i]])
       vvec <- as.numeric(polys[[i]])
-      vnormals[,vvec] <- vnormals[,vvec] + vn[,nvec]
+      for (j in seq_along(vvec))
+        vlinks[[vvec[j]]] <- rbind(vlinks[[vvec[j]]], c(nvec[j], tvec[j], i, j))
+    }
+    total <- 0
+    for (i in seq_along(vlinks)) {
+      # Sort by texture 
+      vlinks[[i]] <- vlinks[[i]][order(vlinks[[i]][,2]),]
+      total <- total + max(1, length(unique(vlinks[[i]][,2])))
+    }
+    last <- ncol(vertices)
+    vertices <- cbind(vertices, matrix(NA_real_, 3, total - ncol(vertices)))
+    vnormals <- matrix(0, 4, total)
+    vtexcoords <- matrix(NA_real_, 2, total)
+    for (i in seq_along(vlinks)) {
+      links <- vlinks[[i]]
+      if (nrow(links)) {
+      	# Average the normals at this vertex by
+      	# summing the homogeneous coordinates
+      	for (j in seq_len(nrow(links)))
+          if (!is.na(links[j,1]))
+      	    vnormals[,i] <- vnormals[,i] + vn[,links[1,1]]
+        # A given vertex may have more than one texture
+        # coordinate; rgl doesn't allow this, so we
+        # duplicate vertices where that happened
+        if (!is.na(links[1,2]))
+      	  vtexcoords[,i] <- vt[,links[1,2]]
+        same <- duplicated(links[,2])
+        duped <- FALSE
+        for (j in seq_len(nrow(links))[-1]) {
+          if (!same[j]) {
+            last <- last + 1          
+            vertices[,last] <- vertices[,i]
+            vnormals[,last] <- vnormals[,i]
+            duped <- TRUE
+          }
+          # Update the polygon and texture links to the new copy
+          if (duped) {
+            polys[[links[j, 3]]][links[j, 4]] <- last
+            if (!is.na(links[j, 2]))
+              vtexcoords[,last] <- vt[,links[j, 2]]
+          }
+        }
+      }
     }
   }
 
@@ -375,7 +450,7 @@ readOBJ <- function(con, ...) {
     triangles <- cbind(triangles, tri)
   }
   ignored <- unique(instrs)
-  ignored <- ignored[!(ignored %in% c("v", "vn", "f", "", "#"))]
+  ignored <- ignored[!(ignored %in% c("v", "vn", "vt", "f", "", "#"))]
   if (length(ignored))
     warning(gettextf("Instructions %s ignored", paste0('"', ignored, '"', collapse = ", ")),
     	    domain = NA)
@@ -383,7 +458,9 @@ readOBJ <- function(con, ...) {
   if (length(quads)) 
     result$ib <- quads
   if (any(hasnormals))
-    result$normals <- vnormals[1:3,]/vnormals[4,]
+    result$normals <- vnormals[1:3,]/rep(vnormals[4,], each=3)
+  if (any(hastextures))
+    result$texcoords <- vtexcoords
   
   result
 }
