@@ -1519,8 +1519,8 @@ rglwidgetClass = function() {
       for (pass = 0; pass < obj.passes; pass++) {
         pmode = obj.pmode[pass];
       	if (pmode === "culled")
-      	  continue;
-        if (pmode === "points") {
+      	  f = Array();
+        else if (pmode === "points") {
       	  nrows = obj.vertexCount;
       	  f = Array(nrows);
       	  for (i=0; i < nrows; i++)
