@@ -38,7 +38,7 @@ Whether to interpolate between rows of \code{values}.
 }
 }
 \details{
-Like \code{\link{vertexSetter}}, this function
+This function
 modifies attributes of vertices in a single
 object.  The \code{attributes} are properties of each vertex
 in a scene; not all are applicable to all objects. In order,

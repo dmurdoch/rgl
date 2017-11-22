@@ -870,3 +870,5 @@ base graphics.
     Line endings and joins are rounded, not squared as in OpenGL.
   - The 65535 vertex limit has been removed (at least in browsers
     that support big indices).
+  - The requirement that colours being controlled by an ageControl or vertexControl
+    be duplicated in the original has been removed.

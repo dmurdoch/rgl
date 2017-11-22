@@ -8,6 +8,5 @@
 ^vignettes/test
 ^vignettes/WebGLdebug.Rmd
 ^vignettes/figure
-^inst/doc/
-
+^inst/doc/rglwidgetClass
 ^inst/todo

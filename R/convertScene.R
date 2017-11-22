@@ -100,7 +100,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
       result$snapshot <<- snapshotimg
 	}
 
-	flagnames <- c("is_lit", "is_smooth", "has_texture", "is_indexed",
+	flagnames <- c("is_lit", "is_smooth", "has_texture",
 		       "depth_sort", "fixed_quads", "is_transparent",
 		       "is_lines", "sprites_3d", "sprite_3d",
 		       "is_subscene", "is_clipplanes",
@@ -138,11 +138,6 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	  result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
 										    "spheres", "sprites", "text")
 	  result["sprites_3d"] <- sprites_3d <- type == "sprites" && length(obj$ids)
-
-	  result["is_indexed"] <- (depth_sort ||
-				   type %in% c("quads", "surface", "text", "sprites") ||
-				   type %in% c("triangles") && length(intersect(c("points", "lines"), c(mat$front, mat$back)))) && 
-			          !sprites_3d
 
 	  result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
 	  result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")

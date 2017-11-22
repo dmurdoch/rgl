@@ -244,17 +244,15 @@ It is used when the slider controls the "age" of the scene,
 and attributes of vertices change with their age. 
 
 To illustrate we will
-show a point moving along a curve.  In the original scene
-we need to specify multiple colours so that the
-colour is not fixed, and can be controlled by the slider.  We
-also give two `ageControl` calls in a list; the first
+show a point moving along a curve. We
+give two `ageControl` calls in a list; the first
 one controls the colour of the trail, the second controls
 the position of the point:
 
 ```{r}
 time <- 0:500
 xyz <- cbind(cos(time/20), sin(time/10), time)
-lineid <- plot3d(xyz, type="l", col = c("black", "black"))["data"]
+lineid <- plot3d(xyz, type="l", col = "black")["data"]
 sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
 rglwidget() %>%
 playwidget(list(

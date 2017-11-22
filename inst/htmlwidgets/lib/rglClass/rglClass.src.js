@@ -101,9 +101,10 @@ rglwidgetClass = function() {
      * @param a {any[][]}
      */
     rglwidgetClass.prototype.flatten = function(arr, result) {
+      var value;
       if (typeof result === "undefined") result = [];
       for (var i = 0, length = arr.length; i < length; i++) {
-        const value = arr[i];
+        value = arr[i];
         if (Array.isArray(value)) {
           this.flatten(value, result);
         } else {
@@ -261,19 +262,18 @@ rglwidgetClass = function() {
     rglwidgetClass.prototype.f_is_lit = 1;
     rglwidgetClass.prototype.f_is_smooth = 2;
     rglwidgetClass.prototype.f_has_texture = 4;
-    rglwidgetClass.prototype.f_is_indexed = 8;
-    rglwidgetClass.prototype.f_depth_sort = 16;
-    rglwidgetClass.prototype.f_fixed_quads = 32;
-    rglwidgetClass.prototype.f_is_transparent = 64;
-    rglwidgetClass.prototype.f_is_lines = 128;
-    rglwidgetClass.prototype.f_sprites_3d = 256;
-    rglwidgetClass.prototype.f_sprite_3d = 512;
-    rglwidgetClass.prototype.f_is_subscene = 1024;
-    rglwidgetClass.prototype.f_is_clipplanes = 2048;
-    rglwidgetClass.prototype.f_fixed_size = 4096;
-    rglwidgetClass.prototype.f_is_points = 8192;
-    rglwidgetClass.prototype.f_is_twosided = 16384;
-    rglwidgetClass.prototype.f_fat_lines = 32768;
+    rglwidgetClass.prototype.f_depth_sort = 8;
+    rglwidgetClass.prototype.f_fixed_quads = 16;
+    rglwidgetClass.prototype.f_is_transparent = 32;
+    rglwidgetClass.prototype.f_is_lines = 64;
+    rglwidgetClass.prototype.f_sprites_3d = 128;
+    rglwidgetClass.prototype.f_sprite_3d = 256;
+    rglwidgetClass.prototype.f_is_subscene = 512;
+    rglwidgetClass.prototype.f_is_clipplanes = 1024;
+    rglwidgetClass.prototype.f_fixed_size = 2048;
+    rglwidgetClass.prototype.f_is_points = 4096;
+    rglwidgetClass.prototype.f_is_twosided = 8192;
+    rglwidgetClass.prototype.f_fat_lines = 16384;
 
     /**
      * Which list does a particular id come from?
@@ -935,10 +935,10 @@ rglwidgetClass = function() {
            hlen,
            aspect = this.vp.width/this.vp.height,
            z = subscene.par3d.zoom;
-       if (far < 0.)
-         far = 1.;
-       if (near < far/100.)
-         near = far/100.;
+       if (far < 0.0)
+         far = 1.0;
+       if (near < far/100.0)
+         near = far/100.0;
        hlen = t*near;
        if (ortho) {
          if (aspect > 1)
@@ -1205,7 +1205,6 @@ rglwidgetClass = function() {
       var obj = this.getObj(id),
           flags = obj.flags,
           type = obj.type,
-          is_indexed = flags & this.f_is_indexed,
           is_lit = flags & this.f_is_lit,
           is_lines = flags & this.f_is_lines,
           fat_lines = flags & this.f_fat_lines,
@@ -1361,8 +1360,10 @@ rglwidgetClass = function() {
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
-        nextofs = -1, pointofs = -1;
+        nextofs = -1, pointofs = -1, alias;
 
+    obj.alias = undefined;
+    
     nc = obj.colorCount = obj.colors.length;
     if (nc > 1) {
       cofs = stride;
@@ -1391,6 +1392,12 @@ rglwidgetClass = function() {
       }
     } else
       radofs = -1;
+      
+    // Add default indices
+    f = Array(v.length);
+    for (i = 0; i < v.length; i++)
+      f[i] = i;
+    obj.f = [f,f];
 
     if (type == "sprites" && !sprites_3d) {
       tofs = stride;
@@ -1398,41 +1405,61 @@ rglwidgetClass = function() {
       oofs = stride;
       stride += 2;
       vnew = new Array(4*v.length);
+      fnew = new Array(4*v.length);
+      alias = new Array(v.length);
       var rescale = fixed_size ? 72 : 1,
           size = obj.radii, s = rescale*size[0]/2;
+      last = v.length;
+      f = obj.f[0];
       for (i=0; i < v.length; i++) {
         if (size.length > 1)
           s = rescale*size[i]/2;
-        vnew[4*i]  = v[i].concat([0,0,-s,-s]);
-        vnew[4*i+1]= v[i].concat([1,0, s,-s]);
-        vnew[4*i+2]= v[i].concat([1,1, s, s]);
-        vnew[4*i+3]= v[i].concat([0,1,-s, s]);
+        vnew[i]  = v[i].concat([0,0,-s,-s]);
+        fnew[4*i] = f[i];
+        vnew[last]= v[i].concat([1,0, s,-s]);
+        fnew[4*i+1] = last++;
+        vnew[last]= v[i].concat([1,1, s, s]);
+        fnew[4*i+2] = last++;
+        vnew[last]= v[i].concat([0,1,-s, s]);
+        fnew[4*i+3] = last++;
+        alias[i] = [last-3, last-2, last-1];
       }
       v = vnew;
       obj.vertexCount = v.length;
+      obj.f = [fnew, fnew];
     } else if (type === "text") {
       tofs = stride;
       stride += 2;
       oofs = stride;
       stride += 2;
       vnew = new Array(4*v.length);
+      f = obj.f[0];
+      fnew = new Array(4*f.length);
+      alias = new Array(v.length);
+      last = v.length;
       for (i=0; i < v.length; i++) {
-        vnew[4*i]  = v[i].concat([0,-0.5]).concat(obj.adj[0]);
-        vnew[4*i+1]= v[i].concat([1,-0.5]).concat(obj.adj[0]);
-        vnew[4*i+2]= v[i].concat([1, 1.5]).concat(obj.adj[0]);
-        vnew[4*i+3]= v[i].concat([0, 1.5]).concat(obj.adj[0]);
+        vnew[i]  = v[i].concat([0,-0.5]).concat(obj.adj[0]);
+        fnew[4*i] = f[i];
+        vnew[last] = v[i].concat([1,-0.5]).concat(obj.adj[0]);
+        fnew[4*i+1] = last++;
+        vnew[last] = v[i].concat([1, 1.5]).concat(obj.adj[0]);
+        fnew[4*i+2] = last++;
+        vnew[last] = v[i].concat([0, 1.5]).concat(obj.adj[0]);
+        fnew[4*i+3] = last++;
+        alias[i] = [last-3, last-2, last-1];
         for (j=0; j < 4; j++) {
-          v1 = vnew[4*i+j];
+          v1 = vnew[fnew[4*i+j]];
           v1[tofs+2] = 2*(v1[tofs]-v1[tofs+2])*texinfo.widths[i];
           v1[tofs+3] = 2*(v1[tofs+1]-v1[tofs+3])*texinfo.textHeights[i];
           v1[tofs] *= texinfo.widths[i]/texinfo.canvasX;
           v1[tofs+1] = 1.0-(texinfo.offsets[i] -
               v1[tofs+1]*texinfo.textHeights[i])/texinfo.canvasY;
-          vnew[4*i+j] = v1;
+          vnew[fnew[4*i+j]] = v1;
         }
       }
       v = vnew;
       obj.vertexCount = v.length;
+      obj.f = [fnew, fnew];
     } else if (typeof obj.texcoords !== "undefined") {
       tofs = stride;
       stride += 2;
@@ -1442,6 +1469,8 @@ rglwidgetClass = function() {
       tofs = -1;
       oofs = -1;
     }
+    
+    obj.alias = alias;
                           
     if (typeof obj.userAttributes !== "undefined") {
       obj.userAttribOffsets = {};
@@ -1514,127 +1543,120 @@ rglwidgetClass = function() {
       obj.pmode[pass] = pmode;
     }
     
-    if (is_indexed) {
-      obj.f = new Array(obj.passes);
+ 
+      obj.f.length = obj.passes;
       for (pass = 0; pass < obj.passes; pass++) {
+      	f = fnew = obj.f[pass];
         pmode = obj.pmode[pass];
       	if (pmode === "culled")
-      	  f = Array();
+      	  f = [];
         else if (pmode === "points") {
-      	  nrows = obj.vertexCount;
-      	  f = Array(nrows);
-      	  for (i=0; i < nrows; i++)
-      	    f[i] = i;
+          // stay with default
         } else if ((type === "quads" || type === "text" ||
              type === "sprites") && !sprites_3d) {
           nrows = Math.floor(obj.vertexCount/4);
           if (pmode === "filled") {
-            f = Array(6*nrows);
+            fnew = Array(6*nrows);
             for (i=0; i < nrows; i++) {
-              f[6*i] = 4*i;
-              f[6*i+1] = 4*i + 1;
-              f[6*i+2] = 4*i + 2;
-              f[6*i+3] = 4*i;
-              f[6*i+4] = 4*i + 2;
-              f[6*i+5] = 4*i + 3;
+              fnew[6*i] = f[4*i];
+              fnew[6*i+1] = f[4*i + 1];
+              fnew[6*i+2] = f[4*i + 2];
+              fnew[6*i+3] = f[4*i];
+              fnew[6*i+4] = f[4*i + 2];
+              fnew[6*i+5] = f[4*i + 3];
             }
           } else {
-            f = Array(8*nrows);
+            fnew = Array(8*nrows);
             for (i=0; i < nrows; i++) {
-              f[8*i] = 4*i;
-              f[8*i+1] = 4*i + 1;
-              f[8*i+2] = 4*i + 1;
-              f[8*i+3] = 4*i + 2;
-              f[8*i+4] = 4*i + 2;
-              f[8*i+5] = 4*i + 3;
-              f[8*i+6] = 4*i + 3;
-              f[8*i+7] = 4*i;
+              fnew[8*i] = f[4*i];
+              fnew[8*i+1] = f[4*i + 1];
+              fnew[8*i+2] = f[4*i + 1];
+              fnew[8*i+3] = f[4*i + 2];
+              fnew[8*i+4] = f[4*i + 2];
+              fnew[8*i+5] = f[4*i + 3];
+              fnew[8*i+6] = f[4*i + 3];
+              fnew[8*i+7] = f[4*i];
             }
           }
         } else if (type === "triangles") {
           nrows = Math.floor(obj.vertexCount/3);
           if (pmode === "filled") {
-            f = Array(3*nrows);
-            for (i=0; i < f.length; i++) {
-              f[i] = i;
+            fnew = Array(3*nrows);
+            for (i=0; i < fnew.length; i++) {
+              fnew[i] = f[i];
             }
           } else if (pmode === "lines") {
-            f = Array(6*nrows);
+            fnew = Array(6*nrows);
       	    for (i=0; i < nrows; i++) {
-      	      f[6*i] = 3*i;
-      	      f[6*i + 1] = 3*i + 1;
-      	      f[6*i + 2] = 3*i + 1;
-      	      f[6*i + 3] = 3*i + 2;
-      	      f[6*i + 4] = 3*i + 2;
-      	      f[6*i + 5] = 3*i;
+      	      fnew[6*i] = f[3*i];
+      	      fnew[6*i + 1] = f[3*i + 1];
+      	      fnew[6*i + 2] = f[3*i + 1];
+      	      fnew[6*i + 3] = f[3*i + 2];
+      	      fnew[6*i + 4] = f[3*i + 2];
+      	      fnew[6*i + 5] = f[3*i];
       	    }
           }
         } else if (type === "spheres") {
-          nrows = obj.vertexCount;
-          f = Array(nrows);
-          for (i=0; i < f.length; i++) {
-            f[i] = i;
-          }
+          // default
         } else if (type === "surface") {
           dim = obj.dim[0];
           nx = dim[0];
           nz = dim[1];
           if (pmode === "filled") {
-            f = [];
+            fnew = [];
             for (j=0; j<nx-1; j++) {
               for (i=0; i<nz-1; i++) {
-                f.push(j + nx*i,
-                       j + nx*(i+1),
-                       j + 1 + nx*(i+1),
-                       j + nx*i,
-                       j + 1 + nx*(i+1),
-                       j + 1 + nx*i);
+                fnew.push(f[j + nx*i],
+                       f[j + nx*(i+1)],
+                       f[j + 1 + nx*(i+1)],
+                       f[j + nx*i],
+                       f[j + 1 + nx*(i+1)],
+                       f[j + 1 + nx*i]);
               }
             }
           } else if (pmode === "lines") {
-            f = [];
+            fnew = [];
             for (j=0; j<nx; j++) {
               for (i=0; i<nz; i++) {
                 if (i+1 < nz)
-                  f.push(j + nx*i,
-                         j + nx*(i+1));
+                  fnew.push(f[j + nx*i],
+                         f[j + nx*(i+1)]);
                 if (j+1 < nx)
-                  f.push(j + nx*i,
-                         j+1 + nx*i);
+                  fnew.push(f[j + nx*i],
+                         f[j+1 + nx*i]);
               }
             }
           }
         }
-        obj.f[pass] = f;
+        obj.f[pass] = fnew;
         if (depth_sort) {
           drawtype = "DYNAMIC_DRAW";
         } else {
           drawtype = "STATIC_DRAW";
         }
       }
-    }
+    
     
     if (fat_lines) {
+      alias = undefined;
       obj.nextLoc = gl.getAttribLocation(obj.prog, "aNext");
       obj.pointLoc = gl.getAttribLocation(obj.prog, "aPoint");
       obj.aspectLoc = gl.getUniformLocation(obj.prog, "uAspect");
       obj.lwdLoc = gl.getUniformLocation(obj.prog, "uLwd");
       // Expand vertices to turn each segment into a pair of triangles
-      if (is_indexed) {
+        
       	for (pass = 0; pass < obj.passes; pass++) {
-      	  if (obj.pmode[pass] === "lines") {
-      	    oldrows = obj.f[pass].length;
+      	  f = obj.f[pass];	
+          oldrows = f.length;
+      	  if (obj.pmode[pass] === "lines") 
       	    break;
-      	  }
       	}
-      } else
-        oldrows = obj.vertexCount;
+
       if (type === "linestrip")
         nrows = 4*(oldrows - 1); 
       else
         nrows = 2*oldrows;
       vnew = new Array(nrows);
-      f = new Array(nrows);
       fnew = new Array(1.5*nrows);
       var fnext = new Array(nrows),
           fpt = new Array(nrows), 
@@ -1645,23 +1667,13 @@ rglwidgetClass = function() {
       // We do this by copying the originals in the first pass, adding the new attributes, then in a 
       // second pass add new vertices at the end.
       
-      for (i = 0; i < v.length; i++) 
+      for (i = 0; i < v.length; i++) {
         vnew[i] = v[i].concat([0,0,0,0,0]); 
+      }
 
       nextofs = stride;
       pointofs = stride + 3;
       stride = stride + 5;
-      
-      if (typeof obj.f === "undefined") {
-        obj.f = new Array(2);
-        for (pass = 0; pass < obj.passes; pass++) {
-          f = new Array(v.length);
-          for (i=0; i<v.length; i++)
-            f[i] = i;
-        }
-        is_indexed = true;
-        obj.flags |= this.f_is_indexed;
-      }
         
       for (pass = 0; pass < obj.passes; pass++)
       	if (type === "lines" || type === "linestrip" || obj.pmode[pass] == "lines") {
@@ -1672,6 +1684,9 @@ rglwidgetClass = function() {
       // Now add the extras
       last = v.length - 1;
       ind = 0;
+      alias = new Array(f.length);
+      for (i = 0; i < f.length; i++)
+        alias[i] = [];
       for (i = 0; i < f.length - 1; i++) {
       	if (type !== "linestrip" && i % 2 == 1)
       	  continue;
@@ -1686,6 +1701,7 @@ rglwidgetClass = function() {
       	vnew[last] = vnew[k].slice();
       	vnew[last][pointofs] = 1;
       	fnew[ind+1] = last;
+      	alias[f[i]].push(last-1, last);
       	last++;
       	k = last;
       	vnew[k] = vnew[f[i+1]].slice();
@@ -1701,10 +1717,21 @@ rglwidgetClass = function() {
       	fnew[ind+4] = last;
       	fnew[ind+5] = fnew[ind+2];
       	ind += 6;
+      	alias[f[i+1]].push(last-1, last);
       }
       vnew.length = last+1;
       v = vnew;
       obj.vertexCount = v.length;
+      if (typeof alias !== "undefined" && typeof obj.alias !== "undefined") {  // Already have aliases from previous section?
+        var oldalias = obj.alias, newalias = Array(length(obj.alias));
+        for (i = 0; i < newalias.length; i++) {
+          newalias[i] = oldalias[i].slice();
+          for (j = 0; j < oldalias[i].length; j++)
+            Array.prototype.push.apply(newalias[i], alias[oldalias[j]]); // pushes each element 
+        }
+        obj.alias = newalias;
+      } else
+        obj.alias = alias;
       
       for (pass = 0; pass < obj.passes; pass++)
       	if (type === "lines" || type === "linestrip" || obj.pmode[pass] == "lines") {
@@ -1717,20 +1744,18 @@ rglwidgetClass = function() {
         drawtype = "STATIC_DRAW";
     }
     
-    if (is_indexed) {
       for (pass = 0; pass < obj.passes; pass++) {
         if (obj.vertexCount > 65535) {
           if (this.index_uint) {
             obj.f[pass] = new Uint32Array(obj.f[pass]);
             obj.index_uint = true;
           } else
-            this.alertOnce("Object has "+obj.vertexCount+" vertices, not supported in this browser.")
+            this.alertOnce("Object has "+obj.vertexCount+" vertices, not supported in this browser.");
         } else {
           obj.f[pass] = new Uint16Array(obj.f[pass]);
           obj.index_uint = false;
         }
       }
-    }
     
     if (stride !== v[0].length) {
       this.alertOnce("problem in stride calculation");
@@ -1745,9 +1770,6 @@ rglwidgetClass = function() {
       obj.buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
       gl.bufferData(gl.ARRAY_BUFFER, obj.values, gl.STATIC_DRAW); //
-    }
-
-    if (is_indexed && type !== "spheres" && !sprites_3d) {
       obj.ibuf = Array(obj.passes);
       obj.ibuf[0] = gl.createBuffer();
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[0]);
@@ -1843,7 +1865,6 @@ rglwidgetClass = function() {
           subscene = this.getObj(subsceneid),
           flags = obj.flags,
           type = obj.type,
-          is_indexed = flags & this.f_is_indexed,
           is_lit = flags & this.f_is_lit,
           has_texture = flags & this.f_has_texture,
           fixed_quads = flags & this.f_fixed_quads,
@@ -1858,7 +1879,7 @@ rglwidgetClass = function() {
           gl = this.gl || this.initGL(),
           mat,
           sphereMV, baseofs, ofs, sscale, i, count, light,
-          faces, pass, mode, pmode, attr;
+          pass, mode, pmode, attr;
 
       if (typeof id !== "number") {
         this.alertOnce("drawObj id is "+typeof id);
@@ -2111,11 +2132,8 @@ rglwidgetClass = function() {
       	if (is_twosided)
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
 
-        if (is_indexed && type !== "spheres") {
+        if (type !== "spheres") 
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
-        } else if (type === "spheres") {
-          //  FIX ME!
-        }
 
         if (type === "sprites" || type === "text" || type === "quads") {
           count = count * 6/4;
@@ -2123,16 +2141,14 @@ rglwidgetClass = function() {
           count = obj.f[pass].length;
         }
 
-        if (is_indexed) {
           count = obj.f[pass].length;
-      	  if (pmode === "lines" && !fat_lines) {
+      	  if ((is_lines || pmode === "lines") && !fat_lines) {
       	    mode = "LINES";
           } else if (pmode === "points") {
       	    mode = "POINTS";
           }
-        }
                           
-        if (pmode === "lines" && fat_lines) {
+        if ((is_lines || pmode === "lines") && fat_lines) {
           gl.enableVertexAttribArray(obj.pointLoc);
           gl.vertexAttribPointer(obj.pointLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.pointofs);
           gl.enableVertexAttribArray(obj.nextLoc );
@@ -2143,11 +2159,7 @@ rglwidgetClass = function() {
 
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
 
-        if (is_indexed) {
-          gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
-        } else {
-          gl.drawArrays(gl[mode], 0, count);
-        }
+        gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
      }
    };
 
@@ -2760,7 +2772,7 @@ rglwidgetClass = function() {
           observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
               // console.log("type="+mutation.type+" attributeName="+mutation. attributeName+" self="+self);
-              self.slide.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window); })})});
+              self.slide.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window); });});});
           observer.observe(this.slide, { attributes: true, attributeFilter:["class"] });
         }
       }
@@ -2824,22 +2836,24 @@ rglwidgetClass = function() {
      * @returns { Object }
      */
     rglwidgetClass.prototype.getSlide = function() {
-      var result = this.el;
-      while (result) {
+      var result = this.el, done = false;
+      while (result && !done) {
       	switch(this.scene.context.rmarkdown) {
           case "ioslides_presentation":
             if (result.tagName === "SLIDE") return result;
-            else break;
+            else done = true;
+            break;
           case "slidy_presentation":
             if (result.tagName === "DIV" && result.classList.contains("slide"))
               return result;
-            else break;
+            else done = true;
+            break;
           default: return null;
       	}
       	result = result.parentElement;
       }
       return null;
-    }
+    };
 
     /**
      * Is this scene visible in the browser?
@@ -2939,13 +2953,13 @@ rglwidgetClass = function() {
             return parseInt(x, 10);
           };
       if (isNaN(value))
-        value = control.value == 0;
+        value = control.value = 0;
       if (control.accumulate)
         for (i=0; i <= value; i++)
           adds = adds.concat(control.subsets[i]);
       else
         adds = adds.concat(control.subsets[value]);
-      deletes = fullset.filter(function(x) { return adds.indexOf(x) < 0 });
+      deletes = fullset.filter(function(x) { return adds.indexOf(x) < 0; });
       for (i = 0; i < subscenes.length; i++) {
         subsceneid = subscenes[i];
         if (typeof this.getObj(subsceneid) === "undefined")
@@ -2995,7 +3009,7 @@ rglwidgetClass = function() {
               obj.par3d[property] = newvals;
             else
               obj[property] = newvals;
-          }
+          };
 
       if (direct && typeof value === "undefined")
         return;
@@ -3064,7 +3078,7 @@ rglwidgetClass = function() {
      */
     rglwidgetClass.prototype.vertexSetter = function(el, control)  {
       var svals = [].concat(control.param),
-          j, k, p, propvals, stride, ofs, obj,
+          j, k, p, a, propvals, stride, ofs, obj, entry,
           attrib,
           ofss    = {x:"vofs", y:"vofs", z:"vofs",
                      red:"cofs", green:"cofs", blue:"cofs",
@@ -3084,7 +3098,7 @@ rglwidgetClass = function() {
         interp = control.interp,
         vertices = [].concat(control.vertices),
         attributes = [].concat(control.attributes),
-        value = control.value, newval;
+        value = control.value, newval, aliases, alias;
 
       ncol = Math.max(vertices.length, attributes.length);
 
@@ -3117,7 +3131,33 @@ rglwidgetClass = function() {
       }
 
       obj = this.getObj(control.objid);
+      // First, make sure color attributes vary in original
+      if (typeof obj.vOffsets !== "undefined") {
+      	varies = true;
+        for (k = 0; k < ncol; k++) {
+          attrib = attributes[k];
+          if (typeof attrib !== "undefined") {
+            ofs = obj.vOffsets[ofss[attrib]];
+            if (ofs < 0) {
+              switch(attrib) {
+              	case "alpha":
+              	case "red":
+              	case "green":
+              	case "blue":
+              	  obj.colors = [obj.colors[0], obj.colors[0]];
+              	  break;
+              }
+              varies = false;
+            }
+          }
+        }
+        if (!varies)
+          this.initObj(control.objid);
+      }
       propvals = obj.values;
+      aliases = obj.alias;
+      if (typeof aliases === "undefined")
+        aliases = [];
       for (k=0; k<ncol; k++) {
         if (direct) {
           newval = value;
@@ -3128,19 +3168,20 @@ rglwidgetClass = function() {
         }      	
         attrib = attributes[k];
         vertex = vertices[k];
+        alias = aliases[vertex];
         if (obj.type === "planes" || obj.type === "clipplanes") {
           ofs = ["nx", "ny", "nz", "offset"].indexOf(attrib);
           if (ofs >= 0) {
             if (ofs < 3) {
-              if (obj.normals[vertex][ofs] != newval) {
+              if (obj.normals[vertex][ofs] != newval) {  // Assume no aliases here...
               	obj.normals[vertex][ofs] = newval;
               	obj.initialized = false;
-              };
+              }
             } else {
               if (obj.offsets[vertex][0] != newval) {
               	obj.offsets[vertex][0] = newval;
               	obj.initialized = false;
-              };
+              }
             }
             continue;
           }
@@ -3151,8 +3192,12 @@ rglwidgetClass = function() {
           this.alertOnce("Attribute '"+attrib+"' not found in object "+control.objid);
         else {
           stride = obj.vOffsets.stride;
-          ofs = vertex*stride + ofs + pos[attrib];
-          propvals[ofs] = newval;
+          ofs = ofs + pos[attrib];
+          entry = vertex*stride + ofs;
+          propvals[entry] = newval;
+          if (typeof alias !== "undefined")
+            for (a = 0; a < alias.length; a++)
+              propvals[alias[a]*stride + ofs] = newval;
         }
       }
       if (typeof obj.buf !== "undefined") {
@@ -3177,7 +3222,7 @@ rglwidgetClass = function() {
           j = Array(steps),
           p = Array(steps),
           i, k, age, j0, propvals, stride, ofs, objid, obj,
-          attrib, dim,
+          attrib, dim, varies, alias, aliases, a, d,
           attribs = ["colors", "alpha", "radii", "vertices",
                      "normals", "origins", "texcoords",
                      "x", "y", "z",
@@ -3210,11 +3255,42 @@ rglwidgetClass = function() {
           j[i] = j0;
         }
       }
+      // First, make sure color attributes vary in original
+      for (l = 0; l < nobjs; l++) {
+      	objid = objids[l];
+      	obj = this.getObj(objid);
+      	varies = true;
+        if (typeof obj.vOffsets === "undefined")
+          continue;
+        for (k = 0; k < attribs.length; k++) {
+          attrib = control[attribs[k]];
+          if (typeof attrib !== "undefined") {
+            ofs = obj.vOffsets[ofss[k]];
+            if (ofs < 0) {
+              switch(attribs[k]) {
+              	case "colors":
+              	case "alpha":
+              	case "red":
+              	case "green":
+              	case "blue":
+              	  obj.colors = [obj.colors[0], obj.colors[0]];
+              	  break;
+              }
+              varies = false;
+            }
+          }
+        }
+        if (!varies)
+          this.initObj(objid);
+      }
       for (l = 0; l < nobjs; l++) {
         objid = objids[l];
         obj = this.getObj(objid);
         if (typeof obj.vOffsets === "undefined")
           continue;
+        aliases = obj.alias;
+        if (typeof aliases === "undefined")
+          aliases = [];
         propvals = obj.values;
         stride = obj.vOffsets.stride;
         for (k = 0; k < attribs.length; k++) {
@@ -3225,9 +3301,13 @@ rglwidgetClass = function() {
               dim = dims[k];
               ofs = ofs + pos[k];
               for (i = 0; i < steps; i++) {
+              	alias = aliases[i];
                 if (births[i] !== null) {
                   for (d=0; d < dim; d++) {
                     propvals[i*stride + ofs + d] = p[i]*attrib[dim*(j[i]-1) + d] + (1-p[i])*attrib[dim*j[i] + d];
+                    if (typeof alias !== "undefined")
+                      for (a=0; a < alias.length; a++)
+                        propvals[alias[a]*stride + ofs + d] = propvals[i*stride + ofs + d];
                   }
                 }
               }
@@ -3533,7 +3613,7 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
         this.value = newval;
       }
     }
-  }
+  };
 
   /**
    * Reset to start values
