@@ -608,6 +608,7 @@ rglwidgetClass = function() {
           sprites_3d = flags & this.f_sprites_3d,
           is_twosided = (flags & this.f_is_twosided) > 0,
           fat_lines = flags & this.f_fat_lines,
+          is_transparent = flags & this.f_is_transparent,
           nclipplanes = this.countClipplanes(), i,
           texture_format, nlights,
           result;
@@ -668,12 +669,17 @@ rglwidgetClass = function() {
 
       result = result + "  void main(void) {\n";
       
-      if (fat_lines)
+      if (fat_lines) {
         result = result + "    vec2 point = vPoint;\n"+
-                          "    point.y = point.y < 0.0 ? "+
-                          "      min(0.0, (point.y + vLength)/(1.0 - vLength)) :\n"+
-                          "      max(0.0, (point.y - vLength)/(1.0 - vLength));\n"+
+                          "    bool neg = point.y < 0.0;\n"+
+                          "    point.y = neg ? "+
+                          "      (point.y + vLength)/(1.0 - vLength) :\n"+
+                          "     -(point.y - vLength)/(1.0 - vLength);\n";
+        if (is_transparent && type == "linestrip")
+          result = result+"    if (neg && length(point) <= 1.0) discard;\n";
+        result = result + "    point.y = min(point.y, 0.0);\n"+
                           "    if (length(point) > 1.0) discard;\n";
+      }
 
       for (i=0; i < nclipplanes;i++)
         result = result + "    if (dot(vPosition, vClipplane"+i+") < 0.0) discard;\n";
@@ -1651,8 +1657,8 @@ rglwidgetClass = function() {
       	  if (obj.pmode[pass] === "lines") 
       	    break;
       	}
-
-      if (type === "linestrip")
+      
+      if (type === "linestrip") 
         nrows = 4*(oldrows - 1); 
       else
         nrows = 2*oldrows;
@@ -1666,7 +1672,7 @@ rglwidgetClass = function() {
       // added.
       // We do this by copying the originals in the first pass, adding the new attributes, then in a 
       // second pass add new vertices at the end.
-      
+
       for (i = 0; i < v.length; i++) {
         vnew[i] = v[i].concat([0,0,0,0,0]); 
       }
@@ -1674,12 +1680,6 @@ rglwidgetClass = function() {
       nextofs = stride;
       pointofs = stride + 3;
       stride = stride + 5;
-        
-      for (pass = 0; pass < obj.passes; pass++)
-      	if (type === "lines" || type === "linestrip" || obj.pmode[pass] == "lines") {
-          f = obj.f[pass];
-          break;
-        }
             
       // Now add the extras
       last = v.length - 1;
