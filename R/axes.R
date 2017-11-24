@@ -91,8 +91,13 @@ axes3d <- function(edges='bbox', labels=TRUE,
     save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
     on.exit(par3d(save))
     if (identical(edges, 'bbox')) {
-        result <- do.call('bbox3d', c(list(nticks=nticks, draw_front=box, expand=expand), 
-                                      .fixMaterialArgs(..., Params = list(front='lines', back='lines'))))
+    	bboxargs <- names(formals(rgl.bbox))
+    	bboxargs <- intersect(bboxargs, names(list(...)))
+    	otherargs <- setdiff(names(list(...)), bboxargs)
+    	bboxargs <- list(...)[bboxargs]
+    	otherargs <- list(...)[otherargs]
+        result <- do.call('bbox3d', c(list(draw_front=box, expand=expand), bboxargs, 
+                          do.call('.fixMaterialArgs', c(otherargs, list(Params = list(front='lines', back='lines'))))))
     } else {
         result <- numeric(0)
     	for (e in edges)

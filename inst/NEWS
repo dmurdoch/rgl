@@ -872,3 +872,4 @@ base graphics.
     that support big indices).
   - The requirement that colours being controlled by an ageControl or vertexControl
     be duplicated in the original has been removed.
+  - axes3d("bbox") didn't send parameters to bbox3d(). 

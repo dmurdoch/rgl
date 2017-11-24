@@ -1723,7 +1723,7 @@ rglwidgetClass = function() {
       v = vnew;
       obj.vertexCount = v.length;
       if (typeof alias !== "undefined" && typeof obj.alias !== "undefined") {  // Already have aliases from previous section?
-        var oldalias = obj.alias, newalias = Array(length(obj.alias));
+        var oldalias = obj.alias, newalias = Array(obj.alias.length);
         for (i = 0; i < newalias.length; i++) {
           newalias[i] = oldalias[i].slice();
           for (j = 0; j < oldalias[i].length; j++)

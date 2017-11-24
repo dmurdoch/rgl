@@ -205,25 +205,32 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	    text[missing] <- apply(verts[missing,], 1, function(row) format(row[!is.na(row)]))
 
 	  res <- numeric(0)
+	  bbox <- subscene$par3d$bbox
 	  repeat { # Need to make sure the ids here don't clash with those in the scene
-	    tempID <- points3d(subscene$par3d$bbox[1:2],
-	                       subscene$par3d$bbox[3:4],
-	                       subscene$par3d$bbox[5:6])
+	    tempID <- points3d(bbox[1:2],
+	                       bbox[3:4],
+	                       bbox[5:6])
 	    if (tempID > lastID)
 	      break
 	    else
 	      delFromSubscene3d(tempID)
 	  }
 
+	  intersect <- function(limits, points)
+	    which(limits[1] <= points & points <= limits[2])
+	  	
 	  # plot the clipping planes as they affect the bounding box
 	  plotClipplanes(subscene)
+	  
+	  textmat <- mat
+	  mat$front <- mat$back <- "fill"
 
-	  if (any(inds <- is.na(verts[,2]) & is.na(verts[,3])))
-	    res <- c(res, do.call(axis3d, c(list(edge = "x", at = verts[inds, 1], labels = text[inds]), mat)))
-	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,3])))
-	    res <- c(res, do.call(axis3d, c(list(edge = "y", at = verts[inds, 2], labels = text[inds]), mat)))
-	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,2])))
-	    res <- c(res, do.call(axis3d, c(list(edge = "z", at = verts[inds, 3], labels = text[inds]), mat)))
+	  if (any(inds <- is.na(verts[,2]) & is.na(verts[,3])) && length(keep <- intersect(bbox[1:2], verts[inds, 1])))
+	    res <- c(res, do.call(axis3d, c(list(edge = "x", at = verts[inds, 1][keep], labels = text[inds][keep]), mat)))
+	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,3])) && length(keep <- intersect(bbox[3:4], verts[inds, 2])))
+	    res <- c(res, do.call(axis3d, c(list(edge = "y", at = verts[inds, 2][keep], labels = text[inds][keep]), mat)))
+	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,2])) && length(keep <- intersect(bbox[5:6], verts[inds, 3])))
+	    res <- c(res, do.call(axis3d, c(list(edge = "z", at = verts[inds, 3][keep], labels = text[inds][keep]), mat)))
 	  res <- c(res, do.call(box3d, mat))
 	  delFromSubscene3d(c(res, tempID))
 	  res

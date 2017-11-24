@@ -104,7 +104,7 @@ export(.check3d,
  importFrom(grDevices, col2rgb, colorRamp, dev.off, png, 
  	    postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, qchisq, qf, splinefun, var)
- importFrom(utils, file_test, flush.console,
+ importFrom(utils, count.fields, file_test, flush.console,
  	    packageVersion, read.table)
  
 # These were in rglwidget
