@@ -100,7 +100,8 @@ x <- rnorm(20)
 y <- rnorm(20)
 z <- rnorm(20)
 plot3d(x, y, z, type = "s", col = "red")
-setwd(tempdir())
+olddir <- setwd(tempdir())
 writeASY(title = "interactive")  # Produces interactive.pdf
 writeASY(title = "noninteractive", prc = FALSE) # Produces noninteractive.pdf
+setwd(olddir)
 }

@@ -42,14 +42,16 @@ shade3d(oh3d(), color = "red")
 rgl.bringtotop()
 rgl.viewpoint(0, 20)
 
-setwd(tempdir())
+olddir <- setwd(tempdir())
 for (i in 1:45) {
   rgl.viewpoint(i, 20)
   filename <- paste("pic", formatC(i, digits = 1, flag = "0"), ".png", sep = "")
   rgl.snapshot(filename)
 }
-## Now run ImageMagick command:
-##    convert -delay 10 *.png -loop 0 pic.gif
+## Now run ImageMagick in tempdir().  Use 'convert' instead of 'magick'
+## if you have an older version of ImageMagick:
+##    magick -delay 10 *.png -loop 0 pic.gif
+setwd(olddir)
 }
 
 }

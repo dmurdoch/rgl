@@ -831,7 +831,7 @@ base graphics.
   - Added figWidth() and figHeight() functions for sizing
     rgl plots in R Markdown documents.
     
-0.98.21
+0.98.22
   - Record context (ioslides, shiny, etc.) in scene 
     when rglwidget() is called.
   - Allow more than 16 scenes in html_document, ioslides_presentation and
@@ -872,4 +872,6 @@ base graphics.
     that support big indices).
   - The requirement that colours being controlled by an ageControl or vertexControl
     be duplicated in the original has been removed.
-  - axes3d("bbox") didn't send parameters to bbox3d(). 
+  - axes3d("bbox") didn't send parameters to bbox3d().
+  - Fixed examples for snapshot3d() and writeASY() so that they don't
+    change the working directory.
