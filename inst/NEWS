@@ -875,3 +875,7 @@ base graphics.
   - axes3d("bbox") didn't send parameters to bbox3d().
   - Fixed examples for snapshot3d() and writeASY() so that they don't
     change the working directory.
+    
+0.99.1
+  - Christophe Geuzaine's GL2PS library (used by rgl.postscript())
+    updated to version 1.4.0.
