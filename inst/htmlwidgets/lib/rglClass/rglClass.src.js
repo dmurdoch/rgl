@@ -2141,12 +2141,12 @@ rglwidgetClass = function() {
           count = obj.f[pass].length;
         }
 
-          count = obj.f[pass].length;
-      	  if ((is_lines || pmode === "lines") && !fat_lines) {
-      	    mode = "LINES";
-          } else if (pmode === "points") {
-      	    mode = "POINTS";
-          }
+        count = obj.f[pass].length;
+      	if (!is_lines && pmode === "lines" && !fat_lines) {
+          mode = "LINES";
+        } else if (pmode === "points") {
+          mode = "POINTS";
+        }
                           
         if ((is_lines || pmode === "lines") && fat_lines) {
           gl.enableVertexAttribArray(obj.pointLoc);
