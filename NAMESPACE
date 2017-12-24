@@ -25,7 +25,7 @@ export(.check3d,
 	rgl.select, rgl.select3d, rgl.set, rgl.snapshot, rgl.spheres, rgl.sprites,
 	rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
 	rgl.attrib, rgl.attrib.count, rgl.attrib.info, rgl.dev.list, rgl.useNULL,
-        rglToLattice, rglToBase,
+        rglShared, rglToLattice, rglToBase,
 	rgl.viewpoint, rgl.window2user, rglFonts, r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, scene3d, segments3d, select3d, selectpoints3d,
 	rgl.setMouseCallbacks, rgl.setWheelCallback, setupKnitr, 
@@ -106,6 +106,7 @@ export(.check3d,
  importFrom(stats, approxfun, qchisq, qf, splinefun, var)
  importFrom(utils, count.fields, file_test, flush.console,
  	    packageVersion, read.table)
+ importFrom(crosstalk, crosstalkLibs, SharedData, is.SharedData)
  
 # These were in rglwidget
  

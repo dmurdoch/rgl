@@ -133,7 +133,8 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 
 	  result["has_texture"] <- has_texture <- !is.null(mat$texture)
 
-	  result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
+	  result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1) ||
+	  	                                        id %in% shared
 
 	  result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
 										    "spheres", "sprites", "text")
@@ -319,8 +320,10 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	}
 	width <- wfactor*rwidth;
 	height <- hfactor*rheight;
+	
+	shared <- x$crosstalk$id
 
-  result <- NULL
+        result <- NULL
 
 	initResult()
 

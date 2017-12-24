@@ -1248,7 +1248,7 @@ rglwidgetClass = function() {
       return;
     }
 
-    if (type == "background" && typeof obj.ids !== "undefined") {
+    if (type === "background" && typeof obj.ids !== "undefined") {
       obj.quad = this.flatten([].concat(obj.ids));
       return;
     }
@@ -1366,18 +1366,38 @@ rglwidgetClass = function() {
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
-        nextofs = -1, pointofs = -1, alias;
+        nextofs = -1, pointofs = -1, alias, colors, key, selection, filter;
 
     obj.alias = undefined;
     
-    nc = obj.colorCount = obj.colors.length;
+    colors = obj.colors;
+    if (typeof this.scene.crosstalk !== "undefined") {
+      j = this.scene.crosstalk.id.indexOf(id);
+      if (j >= 0) {
+        key = this.scene.crosstalk.key[j];	
+        colors = colors.slice(0); 
+        for (i = 0; i < v.length; i++)
+          colors[i] = obj.colors[i % obj.colors.length].slice(0);
+        if ( (selection = this.scene.crosstalk.selection) 
+             && selection.length)
+          for (i = 0; i < v.length; i++) 
+            if (!selection.includes(key[i]))
+              colors[i][3] = colors[i][3]/10;   /* mostly transparent if not selected */
+        if ( (filter = this.scene.crosstalk.filter) )
+          for (i = 0; i < v.length; i++) 
+            if (!filter.includes(key[i]))
+              colors[i][3] = 0;   /* completely hidden if filtered */
+      }  
+    }
+    
+    nc = obj.colorCount = colors.length;
     if (nc > 1) {
       cofs = stride;
       stride = stride + 4;
-      v = this.cbind(v, obj.colors);
+      v = this.cbind(v, colors);
     } else {
       cofs = -1;
-      obj.onecolor = this.flatten(obj.colors);
+      obj.onecolor = this.flatten(colors);
     }
 
     if (typeof obj.normals !== "undefined") {
@@ -2273,6 +2293,23 @@ rglwidgetClass = function() {
         }
       }
     };
+    
+    rglwidgetClass.prototype.selection = function(event, handle, filter) {
+      if (typeof this.scene.crosstalk !== "undefined") {
+      	var i, id, obj, handles;
+      	id = handle._extraInfo.rglId;
+      	obj = this.getObj(id);
+      	if (typeof obj !== "undefined")
+      	  obj.initialized = false;
+      	if (filter)
+      	  this.scene.crosstalk.filter = event.value;
+      	else
+          this.scene.crosstalk.selection = event.value;
+        this.drawScene();
+      }
+    };
+    
+    rglwidgetClass.prototype.clearBrush = function() {};
 
     /**
      * Compute mouse coordinates relative to current canvas
@@ -2648,7 +2685,7 @@ rglwidgetClass = function() {
                     this.transpose(verts.texcoords)))),
                   it: new Uint16Array(this.flatten(this.transpose(verts.it))),
                   vOffsets: {vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:-1,
-                    tofs:3, stride:5}};
+                    tofs:3, nextofs:-1, pointofs:-1, stride:5}};
 
       result.sphereCount = result.it.length;
       this.sphere = result;

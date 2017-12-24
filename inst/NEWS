@@ -879,3 +879,6 @@ base graphics.
 0.99.1
   - Christophe Geuzaine's GL2PS library (used by rgl.postscript())
     updated to version 1.4.0.
+  - Added support for communication with other widgets
+    using the crosstalk package.  (Currently displays
+    selections and filter results.)

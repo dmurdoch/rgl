@@ -569,6 +569,7 @@ Function                             | Description
 `r indexfns("toggleWidget")`     | display a button to toggle some items
 `r indexfns("sceneChange")`      | used in `Shiny` for large scene changes
 `r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`    | `matgrittr` pipe 
+`r indexfns("rglShared")`        | share data using `crosstalk` package
 
 
 Some functions are mainly for internal use:

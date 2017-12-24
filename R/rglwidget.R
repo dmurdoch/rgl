@@ -12,6 +12,21 @@ rmarkdownOutput <- function() {
   NULL
 }
 
+rglShared <- function(id, key = NULL, group = NULL) {
+  data <- as.data.frame(rgl.attrib(id, "vertices"))
+  attr(data, "rglId") <- as.integer(id)
+  n <- nrow(data)
+  if (!n)
+    stop("No vertices in object ", id)
+  if (!is.null(key) && (n != length(key) || anyDuplicated(key)))
+    stop("'key' must have exactly one unique value for each vertex")
+  result <- if (is.null(group))
+    SharedData$new(data, key)
+  else
+    SharedData$new(data, key, group)
+  structure(result, class = c("rglShared", class(result)))
+}
+
 rglwidget <- local({
   reuseDF <- NULL
 
@@ -19,7 +34,10 @@ rglwidget <- local({
            controllers = NULL, snapshot = FALSE,
            elementId = NULL,
            reuse = !interactive(),
-           webGLoptions = list(preserveDrawingBuffer = TRUE), ...) {
+           webGLoptions = list(preserveDrawingBuffer = TRUE), 
+  	   shared = NULL, ...) {
+  force(shared) # It might plot something...
+  	
   if (is.na(reuse))
     reuseDF <- NULL # local change only
   else if (!reuse)
@@ -31,6 +49,24 @@ rglwidget <- local({
   if (!inherits(x, "rglscene"))
     stop("First argument should be an rgl scene.")
   
+  dependencies <- NULL
+  if (!is.list(shared))
+    shared <- list(shared)
+  if (length(shared)) {
+    x$crosstalk <- list(key = vector("list", length(shared)),
+    		        group = character(length(shared)),
+    		        id = integer(length(shared)))
+    dependencies <- crosstalkLibs()
+  }
+  for (i in seq_along(shared)) {
+    s <- shared[[i]]
+    if (is.SharedData(s) && inherits(s, "rglShared")) {
+      x$crosstalk$key[[i]] <- s$key()
+      x$crosstalk$group[i] <- s$groupName()
+      x$crosstalk$id[i] <- attr(s$origData(), "rglId")
+    } else if (!is.null(s))
+      stop("'shared' must be an object produced by rglShared() or a list of these")
+  }
   x = convertScene(x, width, height, snapshot = snapshot,
                    elementId = elementId, reuse = reuseDF)
   if (!is.na(reuse))
@@ -57,7 +93,7 @@ rglwidget <- local({
   x$webGLoptions <- webGLoptions
 
   x$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
-  	
+ 
   # create widget
   attr(x, "TOJSON_ARGS") <- list(na = "string")
   result <- structure(htmlwidgets::createWidget(
@@ -67,6 +103,7 @@ rglwidget <- local({
     height = height,
     package = 'rgl',
     elementId = elementId,
+    dependencies = dependencies,
     ...
   ), rglReuse = attr(x, "reuse"))
   if (inherits(controllers, "shiny.tag.list")) {

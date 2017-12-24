@@ -272,6 +272,49 @@ The final function of this type is the not-yet-implemented `matrixControl`, for 
 up multiple controls to modify a matrix, typically `userMatrix`. This is used
 when complex manipulation of a matrix requires several controls.
 
+## Integration with `crosstalk`
+
+The [`crosstalk`](https://rstudio.github.io/crosstalk) package allows
+widgets to communicate with each other.  Currently it supports selection
+and filtering of observations.
+
+`rgl` can receive and display these messages.  An `rgl` display
+may have several subscenes, each displaying different datasets.  Each object in the 
+scene is potentially a shared dataset in the `crosstalk` sense.
+
+The linking depends on the `r indexfns("rglShared")` function.  Calling `rglShared(id)`,
+where `id` is the `rgl` id value for an object in the current scene,
+creates a shared data object containing the coordinates of the vertices of 
+the `rgl` object.  This object is passed to `r linkfn("rglwidget")` in the `shared` 
+argument.  It can also be passed to other widgets that accept shared data,
+linking the two displays.
+
+If a shared data object has been created in some other way, it can be linked to
+a particular `rgl` `id` value by copying its `key` and `group` properties
+as shown in the example below.
+
+```{r}
+library(crosstalk)
+sd <- SharedData$new(mtcars)
+ids <- plot3d(sd$origData())
+# Copy the key and group from existing shared data
+rglsd <- rglShared(ids["data"], key = sd$key(), group = sd$groupName())
+htmltools::tagList(rglwidget(shared = rglsd),
+		   filter_checkbox("cylinderselector", 
+		   		   "Cylinders", sd, ~ cyl, inline = TRUE))
+```
+
+If multiple objects in the `rgl` scene need to be considered
+as shared data, you can pass the results of several `rglShared()`
+calls in a list  `rglwidget(shared = <list>)`.  The key
+values will be assumed to be shared across datasets; if this is
+not wanted, use a prefix or some other means to make sure they
+differ between objects.
+
+If the same `rgl` id is used in more than one `rglShared()` object,
+it will respond to messages from all of them.  This may lead to
+undesirable behaviour as one message cancels the previous one.
+
 ## Low level controls
 
 We repeat the initial plot from this document:

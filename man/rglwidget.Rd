@@ -13,7 +13,8 @@ provides the necessities to embed an \pkg{rgl} scene in one.
 rglwidget(x = scene3d(), width = figWidth(), height = figHeight(),
           controllers = NULL, snapshot = FALSE,
           elementId = NULL, reuse = !interactive(),
-          webGLoptions = list(preserveDrawingBuffer = TRUE), ...)
+          webGLoptions = list(preserveDrawingBuffer = TRUE), 
+          shared = NULL, ...)
 }
 \arguments{
   \item{x}{
@@ -37,6 +38,7 @@ the Details below.
 }
   \item{webGLoptions}{A list of options to pass
   to WebGL when the drawing context is created.  See the Details below.}
+  \item{shared}{An object produced by \code{\link{rglShared}}, or a list of such objects.}
   \item{...}{Additional arguments
 to pass to \code{htmlwidgets::\link{createWidget}}.}
 }
@@ -101,6 +103,10 @@ and they need not be included in the HTML generated for later scenes.
 This is normally useful only in \pkg{rmarkdown} documents which can have
 many \pkg{rgl} scenes; if the widget is displayed in RStudio,
 only one scene will be shown.
+
+If objects are passed in the \code{shared} argument,
+then the widget will respond to selection and filtering 
+applied to those as shared datasets.  See \code{\link{rglShared}} for more details and an example.
 }
 \section{Appearance}{
 The appearance of the display is set by the stylesheet
