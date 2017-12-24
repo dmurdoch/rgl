@@ -259,6 +259,7 @@ static GLint gl2psPrintPrimitives(void);
 
 static void gl2psMsg(GLint level, const char *fmt, ...)
 {
+/*  Avoid R check complaints:  GL2PS_SILENT is always set
   va_list args;
 
   if(!(gl2ps->options & GL2PS_SILENT)){
@@ -272,6 +273,7 @@ static void gl2psMsg(GLint level, const char *fmt, ...)
     va_end(args);
     fprintf(stderr, "\n");
   }
+*/
   /* if(level == GL2PS_ERROR) exit(1); */
 }
 
