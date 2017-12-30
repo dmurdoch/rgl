@@ -72,9 +72,10 @@ rglwidget <- local({
   if (!is.na(reuse))
     reuseDF <<- attr(x, "reuse")
 
-  if (inherits(controllers, "shiny.tag")) {
+  if (inherits(controllers, "shiny.tag") || 
+      (inherits(controllers, "htmlwidget") && !inherits(controllers, "rglPlayer")))
     controllers <- tagList(controllers)
-  }
+
   if (inherits(controllers, "rglPlayer")) {
     if (is.na(controllers$x$sceneId)) {
       x$players <- controllers$elementId
