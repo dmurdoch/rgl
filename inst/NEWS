@@ -876,9 +876,11 @@ base graphics.
   - Fixed examples for snapshot3d() and writeASY() so that they don't
     change the working directory.
     
-0.99.1
+0.99.3
   - Christophe Geuzaine's GL2PS library (used by rgl.postscript())
     updated to version 1.4.0.
   - Added support for communication with other widgets
-    using the crosstalk package.  (Currently displays
-    selections and filter results.)
+    using the crosstalk package. See ?rglShared and the
+    WebGL vignette for details.
+  - Added the rglMouse() function to allow the mouse
+    mode to be changed in a WebGL display.

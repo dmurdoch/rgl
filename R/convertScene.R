@@ -105,7 +105,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
            "is_lines", "sprites_3d", "sprite_3d",
            "is_subscene", "is_clipplanes",
            "fixed_size", "is_points", "is_twosided",
-           "fat_lines")
+           "fat_lines", "is_brush")
   
   getFlags <- function(id) {
     
@@ -133,8 +133,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     
     result["has_texture"] <- has_texture <- !is.null(mat$texture)
     
-    result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1) ||
-      id %in% shared
+    result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
     
     result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
                         "spheres", "sprites", "text")
@@ -148,6 +147,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
                   "lines" %in% unlist(mat[c("front", "back")]))
+    result["is_brush"] <- id == brushId
     result
   }
   
@@ -217,6 +217,8 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
         delFromSubscene3d(tempID)
     }
     
+    lastID <<- tempID
+    
     intersect <- function(limits, points)
       which(limits[1] <= points & points <= limits[2])
     
@@ -266,6 +268,22 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     else structure(ids, origIds = origIds)
   }
   
+  createBrush <- function() {
+    repeat { # Need to make sure the id doesn't clash with those in the scene
+      tempID <- lines3d(x = c(0, 1, 1, 0, 0),
+      		        y = c(0, 0, 1, 1, 0), 
+      		        z = rep(-.999, 5), 
+      		        depth_test = "always",
+      		        lit = FALSE,
+      		        alpha = 0.5)
+      if (tempID > lastID)
+        break
+      else
+        delFromSubscene3d(tempID)
+    } 
+    lastID <<- tempID
+  }
+  
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
       "surface", "text", "abclines", "planes", "spheres",
       "sprites", "clipplanes", "light", "background", "bboxdeco",
@@ -298,6 +316,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     } else if (!missing(x))
       warning("Will take snapshot of current scene which may differ from x.")
   }
+  
   if (is.list(x$rootSubscene))
     rect <- x$rootSubscene$par3d$windowRect
   else
@@ -331,8 +350,9 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
   result$height <- height
   
   types <- vapply(result$objects, function(x) x$type, character(1))
+  lastID <- max(vapply(result$objects, function(x) x$id, numeric(1)))
+  
   if (any(types == "bboxdeco")) {
-    lastID <- max(vapply(result$objects, function(x) x$id, numeric(1)))
     saveNULL <- options(rgl.useNULL = TRUE)
     dev <- rgl.cur()
     open3d()
@@ -354,6 +374,21 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
       rgl.set(dev)
     options(saveNULL)
   }
+  
+  if (length(shared)) {
+    saveNULL <- options(rgl.useNULL = TRUE)
+    dev <- rgl.cur()
+    open3d()
+    result$brushId <- brushId <- createBrush()
+    brush <- as.character(result$brushId)
+    scene <- scene3d()
+    result$objects[[brush]] <- scene$objects[[brush]]
+    rgl.close()
+    if (dev)
+      rgl.set(dev)
+    options(saveNULL)
+  } else
+    brushId <- NA
   
   ids <- vapply(result$objects, function(x) x$id, numeric(1))
   flags <- vapply(result$objects, function(obj) numericFlags(getFlags(obj$id)),

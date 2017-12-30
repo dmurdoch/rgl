@@ -272,13 +272,35 @@ The final function of this type is the not-yet-implemented `matrixControl`, for 
 up multiple controls to modify a matrix, typically `userMatrix`. This is used
 when complex manipulation of a matrix requires several controls.
 
+### `rglMouse`
+
+While not exactly a control in the sense of the other
+functions in this section, the `r indexfns("rglMouse")`
+function is used to add an HTML control to a display
+to allow the user to select the mouse mode.  
+
+For example, the display below initially allows selection
+of particular points, but the mouse mode may be changed
+to let the user rotate the display for a another 
+view of the scene.
+
+```{r}
+ ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type="s", col=as.numeric(Species)))
+ par3d(mouseMode = "selecting")
+ rglwidget(shared = rglShared(ids["data"])) %>% rglMouse()
+```
+
+The `rglShared()` call used here is described in the next
+section.
+
 ## Integration with `crosstalk`
 
 The [`crosstalk`](https://rstudio.github.io/crosstalk) package allows
 widgets to communicate with each other.  Currently it supports selection
 and filtering of observations.
 
-`rgl` can receive and display these messages.  An `rgl` display
+`rgl` can send, receive and display these messages.  An `rgl` display
 may have several subscenes, each displaying different datasets.  Each object in the 
 scene is potentially a shared dataset in the `crosstalk` sense.
 
@@ -306,7 +328,7 @@ htmltools::tagList(rglwidget(shared = rglsd),
 
 If multiple objects in the `rgl` scene need to be considered
 as shared data, you can pass the results of several `rglShared()`
-calls in a list  `rglwidget(shared = <list>)`.  The key
+calls in a list, i.e.  `rglwidget(shared = <list>)`.  The key
 values will be assumed to be shared across datasets; if this is
 not wanted, use a prefix or some other means to make sure they
 differ between objects.

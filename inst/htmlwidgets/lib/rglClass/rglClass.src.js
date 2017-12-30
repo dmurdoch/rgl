@@ -17,6 +17,9 @@ rglwidgetClass = function() {
     this.origs = null;
     this.gl = null;
     this.scene = null;
+    this.select = {state: "inactive", subscene: null, region: {p1: {x:0, y:0}, p2: {x:0, y:0}}};
+    this.crosstalk = {id: [], key: [], selection: [], filter: [],
+    	              sel_handle: [], fil_handle: []};
 };
 
 
@@ -33,6 +36,21 @@ rglwidgetClass = function() {
                  M.m41 * v[0] + M.m42 * v[1] + M.m43 * v[2] + M.m44 * v[3]
                ];
     };
+    
+        /**
+     * Multiply row vector by Matrix
+     * @returns {number[]}
+     * @param v {number[]} left operand
+     * @param M {number[][]} right operand
+     */
+    rglwidgetClass.prototype.multVM = function(v, M) {
+        return [ M.m11 * v[0] + M.m21 * v[1] + M.m31 * v[2] + M.m41 * v[3],
+                 M.m12 * v[0] + M.m22 * v[1] + M.m32 * v[2] + M.m42 * v[3],
+                 M.m13 * v[0] + M.m23 * v[1] + M.m33 * v[2] + M.m43 * v[3],
+                 M.m14 * v[0] + M.m24 * v[1] + M.m34 * v[2] + M.m44 * v[3]
+               ];
+    };
+    
 // (function() {
     /**
      * Euclidean length of a vector
@@ -274,6 +292,7 @@ rglwidgetClass = function() {
     rglwidgetClass.prototype.f_is_points = 4096;
     rglwidgetClass.prototype.f_is_twosided = 8192;
     rglwidgetClass.prototype.f_fat_lines = 16384;
+    rglwidgetClass.prototype.f_is_brush = 32768;
 
     /**
      * Which list does a particular id come from?
@@ -370,6 +389,7 @@ rglwidgetClass = function() {
       if (typeof obj != "undefined" && typeof (obj.newIds) !== "undefined") {
         ids = ids.concat(obj.newIds);
       }
+      thesub.objects = [].concat(thesub.objects);
       for (i = 0; i < ids.length; i++) {
         id = ids[i];
         if (thesub.objects.indexOf(id) == -1) {
@@ -392,6 +412,7 @@ rglwidgetClass = function() {
           ids = [id], i;
       if (typeof obj !== "undefined" && typeof (obj.newIds) !== "undefined")
         ids = ids.concat(obj.newIds);
+      thesub.objects = [].concat(thesub.objects); // It might be a scalar
       for (j=0; j<ids.length;j++) {
         id = ids[j];
         i = thesub.objects.indexOf(id);
@@ -473,6 +494,7 @@ rglwidgetClass = function() {
           is_points = flags & this.f_is_points,
           is_twosided = flags & this.f_is_twosided,
           fat_lines = flags & this.f_fat_lines,
+          is_brush = flags & this.f_is_brush,
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
@@ -487,7 +509,7 @@ rglwidgetClass = function() {
       " varying vec4 vCol;\n"+
       " varying vec4 vPosition;\n";
 
-      if ((is_lit && !fixed_quads) || sprite_3d)
+      if ((is_lit && !fixed_quads && !is_brush) || sprite_3d)
         result = result + "  attribute vec3 aNorm;\n"+
                           " uniform mat4 normMatrix;\n"+
                           " varying vec3 vNormal;\n";
@@ -522,10 +544,10 @@ rglwidgetClass = function() {
       
       result = result + "  void main(void) {\n";
 
-      if (nclipplanes || (!fixed_quads && !sprite_3d))
+      if ((nclipplanes || (!fixed_quads && !sprite_3d)) && !is_brush)
         result = result + "    vPosition = mvMatrix * vec4(aPos, 1.);\n";
 
-      if (!fixed_quads && !sprite_3d)
+      if (!fixed_quads && !sprite_3d && !is_brush)
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
@@ -535,7 +557,7 @@ rglwidgetClass = function() {
 
       result = result + "    vCol = aCol;\n";
 
-      if (is_lit && !fixed_quads && !sprite_3d)
+      if (is_lit && !fixed_quads && !sprite_3d && !is_brush)
         result = result + "    vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);\n";
 
       if (has_texture || type == "text")
@@ -587,7 +609,11 @@ rglwidgetClass = function() {
                           "   vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);\n"+
                           "   gl_Position = currentProjected + offset;\n";
 
+      if (is_brush)
+        result = result + "   gl_Position = vec4(aPos, 1.);\n"
+        
       result = result + "  }\n";
+
       // console.log(result);
       return result;
     };
@@ -755,6 +781,7 @@ rglwidgetClass = function() {
       //if (fat_lines)
       //  result = result +   "   gl_FragColor = vec4(0.0, abs(point.x), abs(point.y), 1.0);"
       result = result + "  }\n";
+
       // console.log(result);
       return result;
     };
@@ -1216,11 +1243,13 @@ rglwidgetClass = function() {
           fat_lines = flags & this.f_fat_lines,
           has_texture = flags & this.f_has_texture,
           fixed_quads = flags & this.f_fixed_quads,
+          is_transparent = flags & this.f_is_transparent,
           depth_sort = flags & this.f_depth_sort,
           sprites_3d = flags & this.f_sprites_3d,
           sprite_3d = flags & this.f_sprite_3d,
           fixed_size = flags & this.f_fixed_size,
           is_twosided = (flags & this.f_is_twosided) > 0,
+          is_brush = flags & this.f_is_brush,
           gl = this.gl || this.initGL(),
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
           i,j,v,v1,v2, mat, uri, matobj, pass, passes, pmode,
@@ -1252,6 +1281,19 @@ rglwidgetClass = function() {
       obj.quad = this.flatten([].concat(obj.ids));
       return;
     }
+    
+    if (!is_transparent &&
+    	typeof obj.mixedSelection !== "undefined" &&
+    	obj.mixedSelection) {
+      is_transparent = true;
+      depth_sort = ["triangles", "quads", "surface",
+                    "spheres", "sprites", "text"].indexOf(type) >= 0;
+    }
+    
+    obj.is_transparent = is_transparent;  /* This can change at run-time from the flags */
+    
+    if (is_brush)
+      this.initSelection(id);
 
     if (typeof obj.vertices === "undefined")
       obj.vertices = [];
@@ -1371,24 +1413,23 @@ rglwidgetClass = function() {
     obj.alias = undefined;
     
     colors = obj.colors;
-    if (typeof this.scene.crosstalk !== "undefined") {
-      j = this.scene.crosstalk.id.indexOf(id);
-      if (j >= 0) {
-        key = this.scene.crosstalk.key[j];	
-        colors = colors.slice(0); 
-        for (i = 0; i < v.length; i++)
-          colors[i] = obj.colors[i % obj.colors.length].slice(0);
-        if ( (selection = this.scene.crosstalk.selection) 
-             && selection.length)
-          for (i = 0; i < v.length; i++) 
-            if (!selection.includes(key[i]))
-              colors[i][3] = colors[i][3]/10;   /* mostly transparent if not selected */
-        if ( (filter = this.scene.crosstalk.filter) )
-          for (i = 0; i < v.length; i++) 
-            if (!filter.includes(key[i]))
-              colors[i][3] = 0;   /* completely hidden if filtered */
-      }  
-    }
+
+    j = this.scene.crosstalk.id.indexOf(id);
+    if (j >= 0) {
+      key = this.scene.crosstalk.key[j];	
+      colors = colors.slice(0); 
+      for (i = 0; i < v.length; i++)
+        colors[i] = obj.colors[i % obj.colors.length].slice(0);
+      if ( (selection = this.scene.crosstalk.selection) 
+           && selection.length)
+        for (i = 0; i < v.length; i++) 
+          if (!selection.includes(key[i]))
+            colors[i][3] = colors[i][3]/10;   /* mostly transparent if not selected */
+      if ( (filter = this.scene.crosstalk.filter) )
+        for (i = 0; i < v.length; i++) 
+          if (!filter.includes(key[i]))
+            colors[i][3] = 0;   /* completely hidden if filtered */
+    }  
     
     nc = obj.colorCount = colors.length;
     if (nc > 1) {
@@ -1888,6 +1929,7 @@ rglwidgetClass = function() {
           is_lit = flags & this.f_is_lit,
           has_texture = flags & this.f_has_texture,
           fixed_quads = flags & this.f_fixed_quads,
+          is_transparent = flags & this.f_is_transparent,
           depth_sort = flags & this.f_depth_sort,
           sprites_3d = flags & this.f_sprites_3d,
           sprite_3d = flags & this.f_sprite_3d,
@@ -1926,6 +1968,14 @@ rglwidgetClass = function() {
 
       if (type === "light" || type === "bboxdeco" || !obj.vertexCount)
         return;
+    
+      if (!is_transparent &&
+      	  typeof obj.mixedSelection !== "undefined" &&
+    	  obj.mixedSelection) {
+        is_transparent = true;
+        depth_sort = ["triangles", "quads", "surface",
+                      "spheres", "sprites", "text"].indexOf(type) >= 0;
+      }        
 
       this.setDepthTest(id);
 
@@ -2220,27 +2270,28 @@ rglwidgetClass = function() {
      */
     rglwidgetClass.prototype.drawSubscene = function(subsceneid, opaquePass) {
       var gl = this.gl || this.initGL(),
-          obj = this.getObj(subsceneid),
+          sub = this.getObj(subsceneid),
           objects = this.scene.objects,
-          subids = obj.objects,
+          subids = sub.objects,
           subscene_has_faces = false,
           subscene_needs_sorting = false,
-          flags, i;
-      if (obj.par3d.skipRedraw)
+          flags, i, obj;
+      if (sub.par3d.skipRedraw)
         return;
       for (i=0; i < subids.length; i++) {
-        flags = objects[subids[i]].flags;
+      	obj = objects[subids[i]];
+        flags = obj.flags;
         if (typeof flags !== "undefined") {
           subscene_has_faces |= (flags & this.f_is_lit)
                            & !(flags & this.f_fixed_quads);
-          subscene_needs_sorting |= (flags & this.f_depth_sort);
+          subscene_needs_sorting |= (flags & this.f_depth_sort) || obj.is_transparent;
         }
       }
 
       this.setViewport(subsceneid);
 
-      if (typeof obj.backgroundId !== "undefined" && opaquePass)
-          this.drawBackground(obj.backgroundId, subsceneid);
+      if (typeof sub.backgroundId !== "undefined" && opaquePass)
+          this.drawBackground(sub.backgroundId, subsceneid);
 
       if (subids.length) {
         this.setprMatrix(subsceneid);
@@ -2248,16 +2299,16 @@ rglwidgetClass = function() {
 
         if (subscene_has_faces) {
           this.setnormMatrix(subsceneid);
-          if ((obj.flags & this.f_sprites_3d) &&
-              typeof obj.spriteNormmat === "undefined") {
-            obj.spriteNormmat = new CanvasMatrix4(this.normMatrix);
+          if ((sub.flags & this.f_sprites_3d) &&
+              typeof sub.spriteNormmat === "undefined") {
+            sub.spriteNormmat = new CanvasMatrix4(this.normMatrix);
           }
         }
 
         if (subscene_needs_sorting && !opaquePass)
           this.setprmvMatrix();
 
-        var clipids = obj.clipplanes;
+        var clipids = sub.clipplanes;
         if (typeof clipids === "undefined") {
           console.warn("bad clipids");
         }
@@ -2268,48 +2319,122 @@ rglwidgetClass = function() {
             this.drawObj(clipids[i], subsceneid);
         }
 
-        subids = obj.opaque;
-        if (subids.length > 0 && opaquePass) {
+        subids = sub.opaque.concat(sub.transparent);
+        if (opaquePass) {
           gl.enable(gl.DEPTH_TEST);
           gl.depthMask(true);
           gl.disable(gl.BLEND);
           for (i = 0; i < subids.length; i++) {
-            this.drawObj(subids[i], subsceneid);
+            if (!this.getObj(subids[i]).is_transparent)	
+              this.drawObj(subids[i], subsceneid);
           }
-        }
-        subids = obj.transparent;
-        if (subids.length > 0 && !opaquePass) {
+        } else {
           gl.depthMask(false);
           gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
                                gl.ONE, gl.ONE);
           gl.enable(gl.BLEND);
           for (i = 0; i < subids.length; i++) {
-            this.drawObj(subids[i], subsceneid);
+            if (this.getObj(subids[i]).is_transparent)
+              this.drawObj(subids[i], subsceneid);
           }
         }
-        subids = obj.subscenes;
+        subids = sub.subscenes;
         for (i = 0; i < subids.length; i++) {
           this.drawSubscene(subids[i], opaquePass);
         }
       }
     };
     
+    rglwidgetClass.prototype.selectionChanged = function() {
+      var i, j, k, id, subid = this.select.subscene, subscene,
+          objids, obj,
+          p1 = this.select.region.p1, p2 = this.select.region.p2,
+          filter, selection = [], handle, keys, xmin, x, xmax, ymin, y, ymax, z, v,
+          someSelected, someSkipped;
+      if (!subid)
+        return;
+      subscene = this.getObj(subid);
+      objids = subscene.objects;
+      filter = this.scene.crosstalk.filter || [];
+      this.setmvMatrix(subid);
+      this.setprMatrix(subid);
+      this.setprmvMatrix();
+      xmin = Math.min(p1.x, p2.x);
+      xmax = Math.max(p1.x, p2.x);
+      ymin = Math.min(p1.y, p2.y);
+      ymax = Math.max(p1.y, p2.y);
+      for (i = 0; i < objids.length; i++) {
+      	id = objids[i];
+      	j = this.scene.crosstalk.id.indexOf(id);
+      	if (j >= 0) {
+      	  keys = this.scene.crosstalk.key[j];
+      	  obj = this.getObj(id);
+      	  someSelected = false;
+      	  someSkipped = false;
+      	  for (k = 0; k < keys.length; k++) {
+      	    if (filter.length && filter.indexOf(keys[k]) < 0) {
+      	      someSkipped = true;
+      	      continue;
+      	    }
+      	    v = [].concat(obj.vertices[k]).concat(1.);
+            v = this.multVM(v, this.prmvMatrix);
+            x = v[0]/v[3];
+            y = v[1]/v[3];
+            z = v[2]/v[3];
+            if (xmin <= x && x <= xmax && ymin <= y && y <= ymax && -1. <= z && z <= 1.) {
+              selection.push(keys[k]);
+              someSelected = true;
+            } else
+              someSkipped = true;
+      	  }
+      	  obj.mixedSelection = someSelected && someSkipped;
+      	  /* Who should we notify?  Only shared data in the current subscene, or everyone? */
+      	  
+      	  handle = this.scene.crosstalk.sel_handle[j];
+      	  handle._extraInfo.subsceneId = this.select.subscene;
+      	  handle.set(selection);
+      	}
+      }
+    }
+    
     rglwidgetClass.prototype.selection = function(event, handle, filter) {
-      if (typeof this.scene.crosstalk !== "undefined") {
-      	var i, id, obj, handles;
-      	id = handle._extraInfo.rglId;
+      	var i, j, id, ids, obj, handles, keys, selection, someSelected, someSkipped;
+      	id = handle._extraInfo.sharedId;
       	obj = this.getObj(id);
       	if (typeof obj !== "undefined")
       	  obj.initialized = false;
-      	if (filter)
-      	  this.scene.crosstalk.filter = event.value;
-      	else
-          this.scene.crosstalk.selection = event.value;
+      	if (filter) {
+      	  this.scene.crosstalk.filter = selection = event.value;
+      	  selection = selection.concat(this.scene.crosstalk.selection);
+      	} else {  
+          this.scene.crosstalk.selection = selection = event.value;
+          selection = selection.concat(this.scene.crosstalk.filter);
+      	}
+        ids = this.scene.crosstalk.id;
+        for (i = 0; i < ids.length ; i++) {
+          obj = this.getObj(ids[i]);
+          keys = this.scene.crosstalk.key[i];
+          someSelected = false;
+          someSkipped = false;
+          if (selection.length)
+            for (j = 0; j < keys.length && !(someSelected && someSkipped); j++) {
+              if (selection.indexOf(keys[j]) >= 0)
+                someSelected = true;
+              else
+                someSkipped = true;
+            }
+          obj.mixedSelection = someSelected && someSkipped;
+        }
         this.drawScene();
-      }
     };
     
-    rglwidgetClass.prototype.clearBrush = function() {};
+    rglwidgetClass.prototype.clearBrush = function(except) {
+      if (this.select.subscene != except) {
+        this.select.state = "inactive";
+        this.delFromSubscene(this.scene.brushId, this.select.subscene);
+      }
+      this.drawScene();
+    };
 
     /**
      * Compute mouse coordinates relative to current canvas
@@ -2523,6 +2648,42 @@ rglwidgetClass = function() {
         this.drawScene();
       };
       handlers.fovend = 0;
+      
+      handlers.selectingdown = function(x, y) {
+      	if (this.select.state === "changing")
+      	  handlers.selectingup.call(self);
+      	var viewport = this.getObj(activeSubscene).par3d.viewport,
+      	  width = viewport.width*this.canvas.width,
+      	  height = viewport.height*this.canvas.height, 
+          p = {x: 2.*x/width - 1., y: 2.*y/height - 1.};
+      	this.select.region = {p1: p, p2: p};
+      	if (this.select.subscene && this.select.subscene != activeSubscene)
+      	  this.delFromSubscene(this.scene.brushId, this.select.subscene);
+      	this.select.subscene = activeSubscene;
+      	this.addToSubscene(this.scene.brushId, activeSubscene);
+      	this.select.state = "changing";
+      	if (typeof this.scene.brushId !== "undefined")
+      	  this.getObj(this.scene.brushId).initialized = false;
+      	this.selectionChanged();
+      	this.drawScene();
+      }
+      
+      handlers.selectingmove = function(x, y) {
+      	var viewport = this.getObj(activeSubscene).par3d.viewport,
+      	  width = viewport.width*this.canvas.width,
+      	  height = viewport.height*this.canvas.height;
+      	if (this.select.state === "inactive") 
+      	  return;
+      	this.select.region.p2 = {x: 2.*x/width - 1., y: 2.*y/height - 1.};
+      	if (typeof this.scene.brushId !== "undefined")
+      	  this.getObj(this.scene.brushId).initialized = false;
+      	this.selectionChanged();
+      	this.drawScene();
+      }
+      
+      handlers.selectingup = function() {
+      	this.select.state = "inactive";
+      };
 
       this.canvas.onmousedown = function ( ev ){
         if (!ev.which) // Use w3c defns in preference to MS
@@ -2565,8 +2726,10 @@ rglwidgetClass = function() {
       this.canvas.onmouseup = function ( ev ){
         if ( drag === 0 ) return;
         var f = handlers[handler + "up"];
-        if (f)
-          f();
+        if (f) {
+          f.call(self);
+          ev.preventDefault();
+        }
         drag = 0;
       };
 
@@ -2690,6 +2853,25 @@ rglwidgetClass = function() {
       result.sphereCount = result.it.length;
       this.sphere = result;
     };
+    
+    /**
+     * Set the vertices in the selection box object
+     */
+    rglwidgetClass.prototype.initSelection = function(id) {
+      if (typeof this.select.region === "undefined")
+        return;
+      var obj = this.getObj(id),
+          width = this.canvas.width,
+          height = this.canvas.height, 
+          p1 = this.select.region.p1,
+          p2 = this.select.region.p2;
+          
+      obj.vertices = [[p1.x, p1.y, 0.],
+                      [p2.x, p1.y, 0.],
+                      [p2.x, p2.y, 0.],
+                      [p1.x, p2.y, 0.],
+                      [p1.x, p1.y, 0.]];
+    }
 
     /**
      * Do the gl part of initializing the sphere
@@ -2770,7 +2952,6 @@ rglwidgetClass = function() {
       this.onContextRestored = function(event) {
         self.initGL();
         self.drawScene();
-        // console.log("restored context for "+self.scene.rootSubscene);
       };
 
       this.onContextLost = function(event) {
@@ -2808,7 +2989,6 @@ rglwidgetClass = function() {
           var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
           observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
-              // console.log("type="+mutation.type+" attributeName="+mutation. attributeName+" self="+self);
               self.slide.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window); });});});
           observer.observe(this.slide, { attributes: true, attributeFilter:["class"] });
         }
@@ -3564,6 +3744,14 @@ rglwidgetClass = function() {
       }
       if (redraw)
         self.drawScene();
+    };
+    
+    rglwidgetClass.prototype.setMouseMode = function(mode, button, subscene) {
+      var sub = this.getObj(subscene),
+          which = ["left", "right", "middle"][button - 1];
+      if (sub.par3d.mouseMode[which] === "selecting")
+        this.clearBrush(null);
+      sub.par3d.mouseMode[which] = mode;
     };
 
 /**

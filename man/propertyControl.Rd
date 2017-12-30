@@ -59,5 +59,6 @@ Duncan Murdoch
 \seealso{
 \code{\link[rgl]{subsetSetter}} for a way to embed a pure Javascript
 control, and \code{\link{playwidget}} for a way to use these
-in animations (including Shiny).
+in animations (including Shiny), \code{\link{rglShared}}
+for linking using the \pkg{crosstalk} package.
 }

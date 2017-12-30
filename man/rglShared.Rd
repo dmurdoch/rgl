@@ -55,7 +55,7 @@ Duncan Murdoch
   ids <- plot3d(x, y, z, col = rainbow(1000))
   sharedData <- rglShared(ids["data"])
   if (interactive()) {
-    browsable(tagList(
+    htmltools::browsable(htmltools::tagList(
       rglwidget(shared = sharedData, width = 400, height = 300), 
       crosstalk::filter_slider("x", "x", sharedData, ~x, width = 400)))
   } 

@@ -17,8 +17,7 @@ HTMLWidgets.widget({
         rgl = new rglwidgetClass(),
         onchangeselection = function(e) {
           for (var i = 0; i < rgl.scene.crosstalk.sel_handle.length; i++)
-            if (e.sender != rgl.scene.crosstalk.sel_handle[i])
-      	      rgl.clearBrush(i);
+            rgl.clearBrush(except = e.sender._extraInfo.subsceneId);
           rgl.selection(e, this, false);
         },
         onchangefilter = function(e) {
@@ -29,18 +28,16 @@ HTMLWidgets.widget({
       renderValue: function(x) {
         var i, pel, player, group;
         if (firstRun) {
-          if (typeof x.crosstalk != "undefined") {
-            x.crosstalk.group = groups = [].concat(x.crosstalk.group);
-            x.crosstalk.id = [].concat(x.crosstalk.id);
-            x.crosstalk.key = [].concat(x.crosstalk.key);
-            x.crosstalk.sel_handle = new Array(groups.length);
-            x.crosstalk.fil_handle = new Array(groups.length);
-            for (i = 0; i < groups.length; i++) {
-              x.crosstalk.sel_handle[i] = new crosstalk.SelectionHandle(groups[i], {rglId: x.crosstalk.id[i]});
-              x.crosstalk.sel_handle[i].on("change", onchangeselection);
-              x.crosstalk.fil_handle[i] = new crosstalk.FilterHandle(groups[i], {rglId: x.crosstalk.id[i]});
-              x.crosstalk.fil_handle[i].on("change", onchangefilter);
-            }
+          x.crosstalk.group = groups = [].concat(x.crosstalk.group);
+          x.crosstalk.id = [].concat(x.crosstalk.id);
+          x.crosstalk.key = [].concat(x.crosstalk.key);
+          x.crosstalk.sel_handle = new Array(groups.length);
+          x.crosstalk.fil_handle = new Array(groups.length);
+          for (i = 0; i < groups.length; i++) {
+            x.crosstalk.sel_handle[i] = new crosstalk.SelectionHandle(groups[i], {sharedId: x.crosstalk.id[i], subsceneId: null});
+            x.crosstalk.sel_handle[i].on("change", onchangeselection);
+            x.crosstalk.fil_handle[i] = new crosstalk.FilterHandle(groups[i], {sharedId: x.crosstalk.id[i], subsceneId: null});
+            x.crosstalk.fil_handle[i].on("change", onchangefilter);
           }
           rgl.initialize(el, x);
           rgl.initGL();

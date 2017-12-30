@@ -25,7 +25,7 @@ export(.check3d,
 	rgl.select, rgl.select3d, rgl.set, rgl.snapshot, rgl.spheres, rgl.sprites,
 	rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
 	rgl.attrib, rgl.attrib.count, rgl.attrib.info, rgl.dev.list, rgl.useNULL,
-        rglShared, rglToLattice, rglToBase,
+        rglMouse, rglShared, rglToLattice, rglToBase,
 	rgl.viewpoint, rgl.window2user, rglFonts, r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, scene3d, segments3d, select3d, selectpoints3d,
 	rgl.setMouseCallbacks, rgl.setWheelCallback, setupKnitr, 
@@ -117,7 +117,8 @@ export(rglwidget, renderRglwidget, rglwidgetOutput,
        "%>%")
 
 importFrom(htmlwidgets, createWidget, shinyRenderWidget, shinyWidgetOutput, sizingPolicy)
-importFrom(htmltools, includeScript, tags, tagList, browsable)
+importFrom(htmltools, HTML, includeScript, tags, tagAppendAttributes,
+	   tagList, browsable)
 importFrom(jsonlite, toJSON)
 importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
 importFrom(shiny, getDefaultReactiveDomain, markRenderFunction)
