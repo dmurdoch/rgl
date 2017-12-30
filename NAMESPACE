@@ -118,7 +118,7 @@ export(rglwidget, renderRglwidget, rglwidgetOutput,
 
 importFrom(htmlwidgets, createWidget, shinyRenderWidget, shinyWidgetOutput, sizingPolicy)
 importFrom(htmltools, HTML, includeScript, tags, tagAppendAttributes,
-	   tagList, browsable)
+	   tagHasAttribute, tagList, browsable)
 importFrom(jsonlite, toJSON)
 importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
 importFrom(shiny, getDefaultReactiveDomain, markRenderFunction)

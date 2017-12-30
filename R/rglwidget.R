@@ -72,6 +72,9 @@ rglwidget <- local({
   if (!is.na(reuse))
     reuseDF <<- attr(x, "reuse")
 
+  if (inherits(controllers, "shiny.tag")) {
+    controllers <- tagList(controllers)
+  }
   if (inherits(controllers, "rglPlayer")) {
     if (is.na(controllers$x$sceneId)) {
       x$players <- controllers$elementId
@@ -81,11 +84,13 @@ rglwidget <- local({
   } else if (inherits(controllers, "shiny.tag.list")) {
     x$players <- character()
     for (i in seq_along(controllers)) {
-      if (inherits(controllers[[i]], "rglPlayer") && is.na(controllers[[i]]$x$sceneId)) {
-        x$players <- c(x$players, controllers[[i]]$elementId)
+      tag <- controllers[[i]]
+      if (inherits(tag, "rglPlayer") && is.na(tag$x$sceneId)) {
+        x$players <- c(x$players, tag$elementId)
         if (!is.null(elementId))
           controllers[[i]]$x$sceneId <- elementId
-      }
+      } else if (inherits(tag, "shiny.tag") && !tagHasAttribute(tag, "rglSceneId"))
+      	controllers[[i]] <- tagAppendAttributes(tag, rglSceneId = elementId)
     }
   } else if (!is.null(controllers))
     x$players <- controllers
@@ -108,7 +113,7 @@ rglwidget <- local({
   ), rglReuse = attr(x, "reuse"))
   if (inherits(controllers, "shiny.tag.list")) {
     controllers[[length(controllers) + 1]] <- result
-    controllers
+    browsable(controllers)
   } else if (inherits(controllers, "rglPlayer")) {
     browsable(tagList(controllers, result))
   } else

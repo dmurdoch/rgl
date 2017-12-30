@@ -17,7 +17,8 @@ rglMouse(sceneId,
          button = 1, 
          dev = rgl.cur(), 
          subscene = currentSubscene3d(dev), 
-         default = par3d("mouseMode", dev = dev, subscene = subscene)[button])
+         default = par3d("mouseMode", dev = dev, subscene = subscene)[button],
+         ...)
 }
 \arguments{
   \item{sceneId}{
@@ -42,17 +43,26 @@ Which subscene is being modified.
   \item{default}{
 What is the default entry to show in the control.
 }
+  \item{...}{
+Additional arguments to pass to \code{htmltools::tags$select()}, e.g. \code{id} or \code{class}.
+}
 }
 \details{
 A result of an \code{\link{rglwidget}} call can be passed
 as the \code{sceneId} argument.  This allows the widget
-to be \dQuote{piped} into the \code{rglMouse} call,
-but piping is not a requirement.
+to be \dQuote{piped} into the \code{rglMouse} call.
+The widget will appear first, the selector next in
+a \code{\link[htmltools]{tagList}}.
 
-If the \code{sceneId} is an rgl widget, the function will return both the widget and the selector
-in a \code{\link[htmltools]{tagList}}.  To place the
-selector in a different location, extract the \code{elementId} from the widget and use it as the \code{sceneId}
-argument instead, as in the second example below.
+If the \code{sceneId} is a character string, it should be
+the \code{elementId} of a separately constructed
+\code{\link{rglwidget}} result.
+
+Finally, the \code{sceneId} can be omitted.  In this case
+the \code{rglMouse} result needs to be passed into an
+\code{\link{rglwidget}} call as part of the
+\code{controllers} argument.  This will place the selector before the
+widget on the resulting display.
 }
 \value{
 A browsable value to put in a web page.
@@ -72,6 +82,6 @@ if (interactive())
   rglwidget(shared = share, width = 300, height = 300) \%>\% rglMouse()
   
 # This puts the selector above the widget.
-w <- rglwidget(shared = share, width = 300, height = 300)
-htmltools::browsable(htmltools::tagList(rglMouse(w$elementId), w))
+if (interactive())
+  rglMouse() \%>\% rglwidget(shared = share, width = 300, height = 300, controllers = .) 
 }

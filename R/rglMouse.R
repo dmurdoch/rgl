@@ -7,11 +7,8 @@ rglMouse <- function(sceneId,
 	             button = 1, 
 		     dev = rgl.cur(), 
 		     subscene = currentSubscene3d(dev),
-	             default = par3d("mouseMode", dev = dev, subscene = subscene)[button]) {
-  if (inherits(sceneId, "rglWebGL"))
-    widget <- sceneId$elementId
-  else
-    widget <- as.character(sceneId)
+	             default = par3d("mouseMode", dev = dev, subscene = subscene)[button],
+		     ...) {
   stopifnot(length(choices) == length(labels))
   stopifnot(length(button == 1) && button %in% 1:3)
   options <- mapply(function(x, y) tags$option(x, value = y), labels, choices,
@@ -20,11 +17,34 @@ rglMouse <- function(sceneId,
     options[[i]] <- tags$option(labels[i], value = choices[i])
   default <- which(choices == default)
   options[[default]] <- tagAppendAttributes(options[[default]], selected = NA)
-  changecode <- subst('document.getElementById("%widget%").rglinstance.setMouseMode(this.value, button = %button%, subscene = %subscene%)', 
-  		    widget = widget, button = button, subscene = subscene)
-  result <- tags$select(tagList(options), onchange = HTML(changecode))
-  if (inherits(sceneId, "rglWebGL"))
-    browsable(tagList(sceneId, result))
-  else
+  changecode <- 'document.getElementById(this.attributes.rglSceneId.value).rglinstance.
+                   setMouseMode(this.value, 
+                                button = parseInt(this.attributes.rglButton.value), 
+                                subscene = parseInt(this.attributes.rglSubscene.value))' 
+  result <- tags$select(tagList(options), 
+  		        onchange = HTML(changecode), 
+  		        rglButton = button,
+  		        rglSubscene = subscene,
+  		        ...)
+  
+  if (!missing(sceneId)) {
+    if (inherits(sceneId, "rglWebGL"))
+      result <- tagAppendAttributes(result, rglSceneId = sceneId$elementId)
+    else if (inherits(sceneId, "shiny.tag.list")) {
+      for (i in rev(seq_along(sceneId))) {
+      	tag <- sceneId[[i]]
+      	if (inherits(tag, "rglWebGL")) {
+      	  result <- tagAppendAttributes(result, rglSceneId = tag$elementId)
+      	  break;
+      	}
+      }
+    } else
+      result <- tagAppendAttributes(result, rglSceneId = sceneId)
+  } else
+    sceneId <- ""
+  
+  if (is.character(sceneId))
     browsable(result)
+  else
+    browsable(tagList(sceneId, result))
 }
