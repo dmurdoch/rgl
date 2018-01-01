@@ -18,8 +18,6 @@ rglwidgetClass = function() {
     this.gl = null;
     this.scene = null;
     this.select = {state: "inactive", subscene: null, region: {p1: {x:0, y:0}, p2: {x:0, y:0}}};
-    this.crosstalk = {id: [], key: [], selection: [], filter: [],
-    	              sel_handle: [], fil_handle: []};
 };
 
 
