@@ -35,7 +35,7 @@ rglwidgetClass = function() {
                ];
     };
     
-        /**
+    /**
      * Multiply row vector by Matrix
      * @returns {number[]}
      * @param v {number[]} left operand
@@ -49,7 +49,6 @@ rglwidgetClass = function() {
                ];
     };
     
-// (function() {
     /**
      * Euclidean length of a vector
      * @returns {number}
@@ -251,6 +250,17 @@ rglwidgetClass = function() {
       });
     };
 
+    /**
+     * Shallow compare of arrays
+     * @returns { boolean }
+     * @param { any[] } a - An array
+     * @param { any[] } b - Another array
+     */
+    rglwidgetClass.prototype.equalArrays = function(a, b) {
+      return a === b || (a.length === b.length
+                      && a.every(function(v, i) {return v === b[i]}));
+    };
+    
     /**
      * Repeat an array to a desired length
      * @returns {any[]}
@@ -2343,6 +2353,9 @@ rglwidgetClass = function() {
       }
     };
     
+    /**
+     * Respond to brush change
+     */
     rglwidgetClass.prototype.selectionChanged = function() {
       var i, j, k, id, subid = this.select.subscene, subscene,
           objids, obj,
@@ -2395,6 +2408,12 @@ rglwidgetClass = function() {
       }
     }
     
+    /**
+     * Respond to selection or filter change from crosstalk
+     * @param { Object } event - crosstalk event
+     * @param { Object } handle - shared data handle
+     * @param { boolean } filter - filter or selection?
+     */
     rglwidgetClass.prototype.selection = function(event, handle, filter) {
       	var i, j, id, ids, obj, handles, keys, selection, someSelected, someSkipped;
       	id = handle._extraInfo.sharedId;
@@ -2426,6 +2445,10 @@ rglwidgetClass = function() {
         this.drawScene();
     };
     
+    /**
+     * Clear the selection brush
+     * @param { number } except - Subscene that should ignore this request
+     */
     rglwidgetClass.prototype.clearBrush = function(except) {
       if (this.select.subscene != except) {
         this.select.state = "inactive";
@@ -3744,6 +3767,12 @@ rglwidgetClass = function() {
         self.drawScene();
     };
     
+    /**
+     * Set mouse mode for a subscene
+     * @param { string } mode - name of mode
+     * @param { number } button - button number (1 to 3)
+     * @param { number } subscene - subscene id number
+     */
     rglwidgetClass.prototype.setMouseMode = function(mode, button, subscene) {
       var sub = this.getObj(subscene),
           which = ["left", "right", "middle"][button - 1];
