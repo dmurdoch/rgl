@@ -876,7 +876,7 @@ base graphics.
   - Fixed examples for snapshot3d() and writeASY() so that they don't
     change the working directory.
     
-0.99.4
+0.99.5
   - Christophe Geuzaine's GL2PS library (used by rgl.postscript())
     updated to version 1.4.0.
   - Added support for communication with other widgets
@@ -884,3 +884,5 @@ base graphics.
     WebGL vignette for details.
   - Added the rglMouse() function to allow the mouse
     mode to be changed in a WebGL display.
+  - Fixed a bug causing the rglwidget() to fail to work
+    in a flexdashboard display.
