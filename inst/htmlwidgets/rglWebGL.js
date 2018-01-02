@@ -17,11 +17,11 @@ HTMLWidgets.widget({
         rgl = new rglwidgetClass(),
         onchangeselection = function(e) {
           for (var i = 0; i < rgl.scene.crosstalk.sel_handle.length; i++)
-            rgl.clearBrush(except = e.sender._extraInfo.subsceneId);
-          rgl.selection(e, this, false);
+            rgl.clearBrush(except = e.rglSubsceneId);
+          rgl.selection(e, false);
         },
         onchangefilter = function(e) {
-          rgl.selection(e, this, true);
+          rgl.selection(e, true);
         };
     
     return { 
@@ -33,10 +33,11 @@ HTMLWidgets.widget({
           x.crosstalk.key = [].concat(x.crosstalk.key);
           x.crosstalk.sel_handle = new Array(groups.length);
           x.crosstalk.fil_handle = new Array(groups.length);
+          x.crosstalk.selection = [];
           for (i = 0; i < groups.length; i++) {
-            x.crosstalk.sel_handle[i] = new crosstalk.SelectionHandle(groups[i], {sharedId: x.crosstalk.id[i], subsceneId: null});
+            x.crosstalk.sel_handle[i] = new crosstalk.SelectionHandle(groups[i], {sharedId: x.crosstalk.id[i]});
             x.crosstalk.sel_handle[i].on("change", onchangeselection);
-            x.crosstalk.fil_handle[i] = new crosstalk.FilterHandle(groups[i], {sharedId: x.crosstalk.id[i], subsceneId: null});
+            x.crosstalk.fil_handle[i] = new crosstalk.FilterHandle(groups[i], {sharedId: x.crosstalk.id[i]});
             x.crosstalk.fil_handle[i].on("change", onchangefilter);
           }
           rgl.initialize(el, x);

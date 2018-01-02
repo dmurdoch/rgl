@@ -18,6 +18,7 @@ rglMouse(sceneId,
          dev = rgl.cur(), 
          subscene = currentSubscene3d(dev), 
          default = par3d("mouseMode", dev = dev, subscene = subscene)[button],
+         stayActive = FALSE,
          ...)
 }
 \arguments{
@@ -43,6 +44,10 @@ Which subscene is being modified.
   \item{default}{
 What is the default entry to show in the control.
 }
+  \item{stayActive}{
+Whether a selection brush should stay active if the
+mouse mode is changed.
+}
   \item{...}{
 Additional arguments to pass to \code{htmltools::tags$select()}, e.g. \code{id} or \code{class}.
 }
@@ -63,6 +68,11 @@ the \code{rglMouse} result needs to be passed into an
 \code{\link{rglwidget}} call as part of the
 \code{controllers} argument.  This will place the selector before the
 widget on the resulting display.
+
+If the mouse mode is changed while brushing the scene, 
+by default the brush will be removed (and so the selection
+will be cleared too).  If this is not desired, set
+\code{stayActive = TRUE}.
 }
 \value{
 A browsable value to put in a web page.

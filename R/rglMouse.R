@@ -8,6 +8,7 @@ rglMouse <- function(sceneId,
 		     dev = rgl.cur(), 
 		     subscene = currentSubscene3d(dev),
 	             default = par3d("mouseMode", dev = dev, subscene = subscene)[button],
+		     stayActive = FALSE,
 		     ...) {
   stopifnot(length(choices) == length(labels))
   stopifnot(length(button == 1) && button %in% 1:3)
@@ -20,11 +21,13 @@ rglMouse <- function(sceneId,
   changecode <- 'document.getElementById(this.attributes.rglSceneId.value).rglinstance.
                    setMouseMode(this.value, 
                                 button = parseInt(this.attributes.rglButton.value), 
-                                subscene = parseInt(this.attributes.rglSubscene.value))' 
+                                subscene = parseInt(this.attributes.rglSubscene.value),
+                                stayActive = parseInt(this.attributes.rglStayActive.value))' 
   result <- tags$select(tagList(options), 
   		        onchange = HTML(changecode), 
   		        rglButton = button,
   		        rglSubscene = subscene,
+  		        rglStayActive = as.numeric(stayActive),
   		        ...)
   
   if (!missing(sceneId)) {
