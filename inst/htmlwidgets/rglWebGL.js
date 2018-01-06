@@ -13,8 +13,7 @@ HTMLWidgets.widget({
   factory: function(el, width, height) {
     el.width = width;
     el.height = height;
-    var firstRun = true,
-        rgl = new rglwidgetClass(),
+    var rgl = new rglwidgetClass(),
         onchangeselection = function(e) {
           for (var i = 0; i < rgl.scene.crosstalk.sel_handle.length; i++)
             rgl.clearBrush(except = e.rglSubsceneId);
@@ -27,42 +26,40 @@ HTMLWidgets.widget({
     return { 
       renderValue: function(x) {
         var i, pel, player, group;
-        if (firstRun) {
-          x.crosstalk.group = groups = [].concat(x.crosstalk.group);
-          x.crosstalk.id = [].concat(x.crosstalk.id);
-          x.crosstalk.key = [].concat(x.crosstalk.key);
-          x.crosstalk.sel_handle = new Array(groups.length);
-          x.crosstalk.fil_handle = new Array(groups.length);
-          x.crosstalk.selection = [];
-          for (i = 0; i < groups.length; i++) {
-            x.crosstalk.sel_handle[i] = new crosstalk.SelectionHandle(groups[i], {sharedId: x.crosstalk.id[i]});
-            x.crosstalk.sel_handle[i].on("change", onchangeselection);
-            x.crosstalk.fil_handle[i] = new crosstalk.FilterHandle(groups[i], {sharedId: x.crosstalk.id[i]});
-            x.crosstalk.fil_handle[i].on("change", onchangefilter);
-          }
-          rgl.initialize(el, x);
-          rgl.initGL();
-    
-    /* We might have been called after (some of) the players were rendered.
-       We need to make sure we respond to their initial values. */
-
-          if (typeof x.players !== "undefined") {
-            var players = [].concat(x.players);
-            for (i = 0; i < players.length; i++) {
-              pel = window[players[i]];
-              if (typeof pel !== "undefined") {
-                player = pel.rglPlayer;
-                if (typeof player !== "undefined" && !player.initialized) {
-                  rgl.Player(pel, player);
-                  player.initialized = true;
-                }
-              } else
-               rgl.alertOnce("Controller '" + players[i] + "' not found.");
-            }
-          }
-          rgl.drag = 0;
-          firstRun = false;
+      
+        x.crosstalk.group = groups = [].concat(x.crosstalk.group);
+        x.crosstalk.id = [].concat(x.crosstalk.id);
+        x.crosstalk.key = [].concat(x.crosstalk.key);
+        x.crosstalk.sel_handle = new Array(groups.length);
+        x.crosstalk.fil_handle = new Array(groups.length);
+        x.crosstalk.selection = [];
+        for (i = 0; i < groups.length; i++) {
+          x.crosstalk.sel_handle[i] = new crosstalk.SelectionHandle(groups[i], {sharedId: x.crosstalk.id[i]});
+          x.crosstalk.sel_handle[i].on("change", onchangeselection);
+          x.crosstalk.fil_handle[i] = new crosstalk.FilterHandle(groups[i], {sharedId: x.crosstalk.id[i]});
+          x.crosstalk.fil_handle[i].on("change", onchangefilter);
         }
+        rgl.initialize(el, x);
+        rgl.initGL();
+  
+  /* We might have been called after (some of) the players were rendered.
+     We need to make sure we respond to their initial values. */
+
+        if (typeof x.players !== "undefined") {
+          var players = [].concat(x.players);
+          for (i = 0; i < players.length; i++) {
+            pel = window[players[i]];
+            if (typeof pel !== "undefined") {
+              player = pel.rglPlayer;
+              if (typeof player !== "undefined" && !player.initialized) {
+                rgl.Player(pel, player);
+                player.initialized = true;
+              }
+            } else
+             rgl.alertOnce("Controller '" + players[i] + "' not found.");
+          }
+        }
+        rgl.drag = 0;
         rgl.drawScene();
       },
 
