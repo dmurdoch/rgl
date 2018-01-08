@@ -12,9 +12,21 @@ rmarkdownOutput <- function() {
   NULL
 }
 
-rglShared <- function(id, key = NULL, group = NULL) {
+rglShared <- function(id, key = NULL, group = NULL,
+		      deselectedFade = 0.1, 
+		      deselectedColor = NULL,
+		      selectedColor = NULL,
+		      selectedIgnoreNone = TRUE,
+		      filteredFade = 0,
+		      filteredColor = NULL) {
   data <- as.data.frame(rgl.attrib(id, "vertices"))
   attr(data, "rglId") <- as.integer(id)
+  attr(data, "rglOptions") <- list(deselectedFade = deselectedFade,
+  				   deselectedColor = if (!is.null(deselectedColor)) as.numeric(col2rgb(deselectedColor, alpha = TRUE)/255),
+  				   selectedColor =   if (!is.null(selectedColor)) as.numeric(col2rgb(selectedColor, alpha = TRUE)/255), 
+  				   selectedIgnoreNone = selectedIgnoreNone,
+  				   filteredFade = filteredFade,
+  				   filteredColor =   if (!is.null(filteredColor)) as.numeric(col2rgb(filteredColor, alpha = TRUE)/255))
   n <- nrow(data)
   if (!n)
     stop("No vertices in object ", id)
@@ -55,7 +67,8 @@ rglwidget <- local({
   if (length(shared)) {
     x$crosstalk <- list(key = vector("list", length(shared)),
     		        group = character(length(shared)),
-    		        id = integer(length(shared)))
+    		        id = integer(length(shared)),
+    		        options = vector("list", length(shared)))
     dependencies <- crosstalkLibs()
   }
   for (i in seq_along(shared)) {
@@ -64,6 +77,7 @@ rglwidget <- local({
       x$crosstalk$key[[i]] <- s$key()
       x$crosstalk$group[i] <- s$groupName()
       x$crosstalk$id[i] <- attr(s$origData(), "rglId")
+      x$crosstalk$options[[i]] <- attr(s$origData(), "rglOptions")
     } else if (!is.null(s))
       stop("'shared' must be an object produced by rglShared() or a list of these")
   }

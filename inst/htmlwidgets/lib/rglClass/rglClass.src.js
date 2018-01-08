@@ -1421,19 +1421,28 @@ rglwidgetClass = function() {
 
     j = this.scene.crosstalk.id.indexOf(id);
     if (j >= 0) {
-      key = this.scene.crosstalk.key[j];	
+      key = this.scene.crosstalk.key[j];
+      options = this.scene.crosstalk.options[j];
       colors = colors.slice(0); 
       for (i = 0; i < v.length; i++)
         colors[i] = obj.colors[i % obj.colors.length].slice(0);
       if ( (selection = this.scene.crosstalk.selection) 
-           && selection.length)
-        for (i = 0; i < v.length; i++) 
-          if (!selection.includes(key[i]))
-            colors[i][3] = colors[i][3]/10;   /* mostly transparent if not selected */
+           && (selection.length || !options.selectedIgnoreNone) )
+        for (i = 0; i < v.length; i++) {
+          if (!selection.includes(key[i])) {
+            if (options.deselectedColor)
+              colors[i] = options.deselectedColor.slice(0);
+            colors[i][3] = colors[i][3]*options.deselectedFade;   /* default: mostly transparent if not selected */
+          } else if (options.selectedColor)
+            colors[i] = options.selectedColor.slice(0);
+        }
       if ( (filter = this.scene.crosstalk.filter) )
         for (i = 0; i < v.length; i++) 
-          if (!filter.includes(key[i]))
-            colors[i][3] = 0;   /* completely hidden if filtered */
+          if (!filter.includes(key[i])) {
+            if (options.filteredColor)
+              colors[i] = options.filteredColor.slice(0);
+            colors[i][3] = colors[i][3]*options.filteredFade;   /* default: completely hidden if filtered */
+          }
     }  
     
     nc = obj.colorCount = colors.length;
@@ -2435,7 +2444,6 @@ rglwidgetClass = function() {
               ||(selection.length && selection.indexOf(keys[j]) < 0))
                 someHidden = true;
           }
-          console.log("object "+ids[i]+" someHidden="+someHidden)
           obj.someHidden = someHidden;
         }
         this.drawScene();
