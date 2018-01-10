@@ -61,7 +61,6 @@ rglwidget <- local({
   if (!inherits(x, "rglscene"))
     stop("First argument should be an rgl scene.")
   
-  dependencies <- NULL
   if (!is.list(shared))
     shared <- list(shared)
   if (length(shared)) {
@@ -70,7 +69,14 @@ rglwidget <- local({
     		        id = integer(length(shared)),
     		        options = vector("list", length(shared)))
     dependencies <- crosstalkLibs()
+  } else {
+    x$crosstalk <- list(key = list(), 
+    		        group = character(),
+    		        id = integer(),
+    		        options = list())
+    dependencies <- NULL    
   }
+  	
   for (i in seq_along(shared)) {
     s <- shared[[i]]
     if (is.SharedData(s) && inherits(s, "rglShared")) {
@@ -112,8 +118,6 @@ rglwidget <- local({
 
   x$webGLoptions <- webGLoptions
 
-  x$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
- 
   # create widget
   attr(x, "TOJSON_ARGS") <- list(na = "string")
   result <- structure(htmlwidgets::createWidget(

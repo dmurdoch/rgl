@@ -108,6 +108,10 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   scene <- convertScene(width = width, height = height,
                         elementId = elementId, reuse = reuse,
                         snapshot = snapshot)
+  scene$crosstalk <- list(key = list(), 
+  		    group = character(),
+  		    id = integer(),
+  		    options = list())
   if (is.null(width)) width <- scene$width
   if (is.null(height)) height <- scene$height
 

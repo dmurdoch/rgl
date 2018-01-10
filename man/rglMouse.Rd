@@ -81,17 +81,17 @@ A browsable value to put in a web page.
 Duncan Murdoch
 }
 \examples{
-open3d()
-xyz <- matrix(rnorm(300), ncol = 3)
-id <- plot3d(xyz, col = "red", type = "s")["data"]
-par3d(mouseMode = "selecting")
-share <- rglShared(id)
+if (interactive()) {
+  open3d()
+  xyz <- matrix(rnorm(300), ncol = 3)
+  id <- plot3d(xyz, col = "red", type = "s")["data"]
+  par3d(mouseMode = "selecting")
+  share <- rglShared(id)
 
 # This puts the selector below the widget.
-if (interactive())
   rglwidget(shared = share, width = 300, height = 300) \%>\% rglMouse()
   
 # This puts the selector above the widget.
-if (interactive())
   rglMouse() \%>\% rglwidget(shared = share, width = 300, height = 300, controllers = .) 
+}
 }

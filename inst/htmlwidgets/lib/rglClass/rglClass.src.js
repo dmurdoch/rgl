@@ -2,6 +2,12 @@
 
 // jsdoc --destination ../../../doc/rglwidgetClass --template ~/node_modules/jsdoc-baseline rglClass.src.js
 
+// To validate, use
+
+// setwd(".../inst/htmlwidgets/lib/rglClass")
+// hints <- js::jshint(readLines("rglClass.src.js"))
+// hints[, c("line", "reason")]
+
 /**
  * The class of an rgl widget
  * @class
@@ -259,8 +265,8 @@ rglwidgetClass = function() {
      */
     rglwidgetClass.prototype.equalArrays = function(a, b) {
       return a === b || (a && b &&
-                      a.length === b.length
-                      && a.every(function(v, i) {return v === b[i]}));
+                      a.length === b.length &&
+                      a.every(function(v, i) {return v === b[i];}));
     };
     
     /**
@@ -620,7 +626,7 @@ rglwidgetClass = function() {
                           "   gl_Position = currentProjected + offset;\n";
 
       if (is_brush)
-        result = result + "   gl_Position = vec4(aPos, 1.);\n"
+        result = result + "   gl_Position = vec4(aPos, 1.);\n";
         
       result = result + "  }\n";
 
@@ -831,6 +837,15 @@ rglwidgetClass = function() {
     };
 
     /**
+     * Get maximum dimension of texture in current browser.
+     * @returns {number}
+     */
+    rglwidgetClass.prototype.getMaxTexSize = function() {
+      var gl = this.gl || this.initGL();	
+      return Math.min(4096, gl.getParameter(gl.MAX_TEXTURE_SIZE));
+    };
+    
+    /**
      * Load an image to a texture
      * @param { string } uri - The image location
      * @param { Object } texture - the gl texture object
@@ -847,8 +862,7 @@ rglwidgetClass = function() {
              canvasX = self.getPowerOfTwo(w),
              canvasY = self.getPowerOfTwo(h),
              gl = self.gl || self.initGL(),
-             maxTexSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-         if (maxTexSize > 4096) maxTexSize = 4096;
+             maxTexSize = self.getMaxTexSize();
          while (canvasX > 1 && canvasY > 1 && (canvasX > maxTexSize || canvasY > maxTexSize)) {
            canvasX /= 2;
            canvasY /= 2;
@@ -880,8 +894,10 @@ rglwidgetClass = function() {
            backgroundColour = "rgba(0,0,0,0)",
            canvas = this.textureCanvas,
            ctx = canvas.getContext("2d"),
-           i, textHeights = [], widths = [], offset = 0, offsets = [],
-           fontStrings = [],
+           i, textHeight = 0, textHeights = [], width, widths = [], 
+           offsetx, offsety = 0, line, lines = [], offsetsx = [],
+           offsetsy = [], lineoffsetsy = [], fontStrings = [],
+           maxTexSize = this.getMaxTexSize(),
            getFontString = function(i) {
              textHeights[i] = scaling*cex[i];
              var fontString = textHeights[i] + "px",
@@ -903,14 +919,32 @@ rglwidgetClass = function() {
        font = this.repeatToLen(font, text.length);
 
        canvasX = 1;
+       line = -1;
+       offsetx = maxTexSize;
        for (i = 0; i < text.length; i++)  {
          ctx.font = fontStrings[i] = getFontString(i);
-         widths[i] = ctx.measureText(text[i]).width;
-         offset = offsets[i] = offset + 2*textHeights[i];
-         canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
+         width = widths[i] = ctx.measureText(text[i]).width;
+         if (offsetx + width > maxTexSize) {
+           line += 1;
+           offsety = lineoffsetsy[line] = offsety + 2*textHeight;
+           if (offsety > maxTexSize)
+             console.error("Too many strings for texture.");
+           textHeight = 0;
+           offsetx = 0;
+         }
+         textHeight = Math.max(textHeight, textHeights[i]);
+         offsetsx[i] = offsetx;
+         offsetx += width;
+         canvasX = Math.max(canvasX, offsetx);
+         lines[i] = line;
        }
+       offsety = lineoffsetsy[line] = offsety + 2*textHeight;
+       for (i = 0; i < text.length; i++) {
+       	 offsetsy[i] = lineoffsetsy[lines[i]];
+       }
+       
        canvasX = this.getPowerOfTwo(canvasX);
-       canvasY = this.getPowerOfTwo(offset);
+       canvasY = this.getPowerOfTwo(offsety);
 
        canvas.width = canvasX;
        canvas.height = canvasY;
@@ -920,15 +954,14 @@ rglwidgetClass = function() {
 
        ctx.textBaseline = "alphabetic";
        for(i = 0; i < text.length; i++) {
-         textY = offsets[i];
          ctx.font = fontStrings[i];
          ctx.fillStyle = textColour;
          ctx.textAlign = "left";
-         ctx.fillText(text[i], 0,  textY);
+         ctx.fillText(text[i], offsetsx[i],  offsetsy[i]);
        }
        return {canvasX:canvasX, canvasY:canvasY,
                widths:widths, textHeights:textHeights,
-               offsets:offsets};
+               offsetsx:offsetsx, offsetsy:offsetsy};
      };
 
     /**
@@ -1386,7 +1419,8 @@ rglwidgetClass = function() {
     }
 
     if (has_texture || type == "text") {
-      obj.texture = gl.createTexture();
+      if (!obj.texture)
+        obj.texture = gl.createTexture();
       obj.texLoc = gl.getAttribLocation(obj.prog, "aTexcoord");
       obj.sampler = gl.getUniformLocation(obj.prog, "uSampler");
     }
@@ -1426,8 +1460,8 @@ rglwidgetClass = function() {
       colors = colors.slice(0); 
       for (i = 0; i < v.length; i++)
         colors[i] = obj.colors[i % obj.colors.length].slice(0);
-      if ( (selection = this.scene.crosstalk.selection) 
-           && (selection.length || !options.selectedIgnoreNone) )
+      if ( (selection = this.scene.crosstalk.selection) &&
+           (selection.length || !options.selectedIgnoreNone) )
         for (i = 0; i < v.length; i++) {
           if (!selection.includes(key[i])) {
             if (options.deselectedColor)
@@ -1532,8 +1566,8 @@ rglwidgetClass = function() {
           v1 = vnew[fnew[4*i+j]];
           v1[tofs+2] = 2*(v1[tofs]-v1[tofs+2])*texinfo.widths[i];
           v1[tofs+3] = 2*(v1[tofs+1]-v1[tofs+3])*texinfo.textHeights[i];
-          v1[tofs] *= texinfo.widths[i]/texinfo.canvasX;
-          v1[tofs+1] = 1.0-(texinfo.offsets[i] -
+          v1[tofs] = (texinfo.offsetsx[i] + v1[tofs]*texinfo.widths[i])/texinfo.canvasX;
+          v1[tofs+1] = 1.0-(texinfo.offsetsy[i] -
               v1[tofs+1]*texinfo.textHeights[i])/texinfo.canvasY;
           vnew[fnew[4*i+j]] = v1;
         }
@@ -2392,12 +2426,12 @@ rglwidgetClass = function() {
       	      someHidden = true;
       	      continue;
       	    }
-      	    v = [].concat(obj.vertices[k]).concat(1.);
+      	    v = [].concat(obj.vertices[k]).concat(1.0);
             v = this.multVM(v, this.prmvMatrix);
             x = v[0]/v[3];
             y = v[1]/v[3];
             z = v[2]/v[3];
-            if (xmin <= x && x <= xmax && ymin <= y && y <= ymax && -1. <= z && z <= 1.) {
+            if (xmin <= x && x <= xmax && ymin <= y && y <= ymax && -1.0 <= z && z <= 1.0) {
               selection.push(keys[k]);
             } else
               someHidden = true;
@@ -2411,7 +2445,7 @@ rglwidgetClass = function() {
       	  }
       	}
       }
-    }
+    };
     
     /**
      * Respond to selection or filter change from crosstalk
@@ -2420,7 +2454,7 @@ rglwidgetClass = function() {
      */
     rglwidgetClass.prototype.selection = function(event, filter) {
       	var i, j, ids, obj, keys, crosstalk = this.scene.crosstalk,
-      	    filter, selection, someHidden;
+      	    selection, someHidden;
 
       	// Record the message and find out if this event makes some objects have mixed values:
       	
@@ -2440,8 +2474,8 @@ rglwidgetClass = function() {
           keys = crosstalk.key[i];
           someHidden = false;
           for (j = 0; j < keys.length && !someHidden; j++) {
-            if ((filter && filter.indexOf(keys[j]) < 0)
-              ||(selection.length && selection.indexOf(keys[j]) < 0))
+            if ((filter && filter.indexOf(keys[j]) < 0) ||
+                (selection.length && selection.indexOf(keys[j]) < 0))
                 someHidden = true;
           }
           obj.someHidden = someHidden;
@@ -2678,7 +2712,7 @@ rglwidgetClass = function() {
       	var viewport = this.getObj(activeSubscene).par3d.viewport,
       	  width = viewport.width*this.canvas.width,
       	  height = viewport.height*this.canvas.height, 
-          p = {x: 2.*x/width - 1., y: 2.*y/height - 1.};
+          p = {x: 2.0*x/width - 1.0, y: 2.0*y/height - 1.0};
       	this.select.region = {p1: p, p2: p};
       	if (this.select.subscene && this.select.subscene != activeSubscene)
       	  this.delFromSubscene(this.scene.brushId, this.select.subscene);
@@ -2688,7 +2722,7 @@ rglwidgetClass = function() {
       	if (typeof this.scene.brushId !== "undefined")
       	  this.getObj(this.scene.brushId).initialized = false;
       	this.drawScene();
-      }
+      };
       
       handlers.selectingmove = function(x, y) {
       	var viewport = this.getObj(activeSubscene).par3d.viewport,
@@ -2696,13 +2730,13 @@ rglwidgetClass = function() {
       	  height = viewport.height*this.canvas.height;
       	if (this.select.state === "inactive") 
       	  return;
-      	this.select.region.p2 = {x: 2.*x/width - 1., y: 2.*y/height - 1.};
+      	this.select.region.p2 = {x: 2.0*x/width - 1.0, y: 2.0*y/height - 1.0};
       	if (typeof this.scene.brushId !== "undefined")
       	  this.getObj(this.scene.brushId).initialized = false;
       	this.drawScene();
-      }
+      };
       
-      handlers.selectingend = 0
+      handlers.selectingend = 0;
 
       this.canvas.onmousedown = function ( ev ){
         if (!ev.which) // Use w3c defns in preference to MS
@@ -2885,12 +2919,12 @@ rglwidgetClass = function() {
           p1 = this.select.region.p1,
           p2 = this.select.region.p2;
           
-      obj.vertices = [[p1.x, p1.y, 0.],
-                      [p2.x, p1.y, 0.],
-                      [p2.x, p2.y, 0.],
-                      [p1.x, p2.y, 0.],
-                      [p1.x, p1.y, 0.]];
-    }
+      obj.vertices = [[p1.x, p1.y, 0.0],
+                      [p2.x, p1.y, 0.0],
+                      [p2.x, p2.y, 0.0],
+                      [p1.x, p2.y, 0.0],
+                      [p1.x, p1.y, 0.0]];
+    };
 
     /**
      * Do the gl part of initializing the sphere
@@ -2999,18 +3033,19 @@ rglwidgetClass = function() {
           this.slide.rgl = [this];
         else
           this.slide.rgl.push(this);
-        if (this.scene.context.rmarkdown === "ioslides_presentation") {
-          this.slide.setAttribute("slideenter", "this.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window);})");
-        } else if (this.scene.context.rmarkdown === "slidy_presentation") {
-          // This method would also work in ioslides, but it gets triggered
-          // something like 5 times per slide for every slide change, so
-          // you'd need a quicker function than lazyLoadScene.
-          var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
-          observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-              self.slide.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window); });});});
-          observer.observe(this.slide, { attributes: true, attributeFilter:["class"] });
-        }
+        if (this.scene.context.rmarkdown) 
+          if (this.scene.context.rmarkdown === "ioslides_presentation") {
+            this.slide.setAttribute("slideenter", "this.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window);})");
+          } else if (this.scene.context.rmarkdown === "slidy_presentation") {
+            // This method would also work in ioslides, but it gets triggered
+            // something like 5 times per slide for every slide change, so
+            // you'd need a quicker function than lazyLoadScene.
+            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
+            observer = new MutationObserver(function(mutations) {
+              mutations.forEach(function(mutation) {
+                self.slide.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window); });});});
+            observer.observe(this.slide, { attributes: true, attributeFilter:["class"] });
+          }
       }
     };
 
@@ -3073,7 +3108,7 @@ rglwidgetClass = function() {
      */
     rglwidgetClass.prototype.getSlide = function() {
       var result = this.el, done = false;
-      while (result && !done) {
+      while (result && !done && this.scene.context.rmarkdown) {
       	switch(this.scene.context.rmarkdown) {
           case "ioslides_presentation":
             if (result.tagName === "SLIDE") return result;

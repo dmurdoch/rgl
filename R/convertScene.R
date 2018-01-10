@@ -498,6 +498,9 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
          data.frame(id = -1, elementId = elementId,
               texture = "", stringsAsFactors = FALSE))
   }
+  
+  result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
+  
   structure(result, reuse = reuseDF)
 }
 
