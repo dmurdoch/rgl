@@ -147,7 +147,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
                   "lines" %in% unlist(mat[c("front", "back")]))
-    result["is_brush"] <- id == brushId
+    result["is_brush"] <- !is.na(brushId) && id == brushId
     result
   }
   
