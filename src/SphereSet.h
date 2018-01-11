@@ -13,6 +13,7 @@ private:
   ARRAY<float>  radius;
   SphereMesh    sphereMesh;
   int           facets, lastdrawn;
+  bool          lastendcap; 
 public:
   SphereSet(Material& in_material, int nsphere, double* center, int nradius, double* radius, 
             int in_ignoreExtent);

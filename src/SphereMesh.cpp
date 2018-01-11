@@ -44,7 +44,7 @@ void SphereMesh::setupMesh()
 {
   // setup arrays
 
-  int nvertex = (sections+1) * (segments+1);
+  nvertex = (sections+1) * (segments+1);
 
   vertexArray.alloc(nvertex);
 
@@ -118,8 +118,6 @@ void SphereMesh::update(const Vertex& scale)
   }
 }
 
-struct gridpt {int i; int j;};
-
 void SphereMesh::draw(RenderContext* renderContext)
 {
   vertexArray.beginUse();
@@ -151,7 +149,7 @@ void SphereMesh::draw(RenderContext* renderContext)
     texCoordArray.endUse();
 }
 
-void SphereMesh::drawBegin(RenderContext* renderContext)
+void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
 {
   vertexArray.beginUse();
 	
@@ -161,15 +159,36 @@ void SphereMesh::drawBegin(RenderContext* renderContext)
   if (genTexCoord)
     texCoordArray.beginUse();
   
-  glBegin(GL_QUADS);
+  if (endcap)
+    glBegin(GL_TRIANGLES);
+  else
+    glBegin(GL_QUADS);
 }
 	
 void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
 {
-  glArrayElement(i);
-  glArrayElement(i + 1);
-  glArrayElement(i + segments + 2);
-  glArrayElement(i + segments + 1);
+  int ll = (segments + 1)*(i/segments) + i % segments;
+
+  if (i < segments) {
+    glArrayElement(ll);
+    glArrayElement(ll + segments + 2);
+    glArrayElement(ll + segments + 1);
+  } else if (i < segments*(sections - 1)) {
+    glArrayElement(ll);
+    glArrayElement(ll + 1);
+    glArrayElement(ll + segments + 2);
+    glArrayElement(ll + segments + 1);
+  } else {
+    glArrayElement(ll);
+    glArrayElement(ll + 1);
+    glArrayElement(ll + segments + 1);
+  }
+}
+
+Vertex SphereMesh::getPrimitiveCenter(int i) 
+{
+  int ll = (segments + 1)*(i/segments) + i % segments;
+  return vertexArray[ll];
 }
 
 void SphereMesh::drawEnd(RenderContext* renderContext)

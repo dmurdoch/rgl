@@ -8,7 +8,7 @@ output:
     fig_width: 5
     fig_height: 5
 vignette: >
-  %\VignetteIndexEntry{User Interaction in WebGL} 
+  %\VignetteIndexEntry{Legacy WebGL Methods} 
   %\VignetteEngine{knitr::rmarkdown}
 ---
 

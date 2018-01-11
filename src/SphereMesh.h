@@ -39,13 +39,13 @@ public:
 
   void draw(RenderContext* renderContext);
   
-  void drawBegin(RenderContext* renderContext);
+  void drawBegin(RenderContext* renderContext, bool endcap);
   void drawPrimitive(RenderContext* renderContext, int i);
   void drawEnd(RenderContext* renderContext);
 
-  int getPrimitiveCount() { return (segments + 1)*sections; }
-  
-  Vertex getPrimitiveCenter(int i) { return vertexArray[i]; }
+  int getPrimitiveCount() { return segments*sections; }
+  int getSegments() { return segments; }
+  Vertex getPrimitiveCenter(int i);
   
 private:
   
@@ -60,6 +60,7 @@ private:
 
   int    segments;
   int    sections;
+  int    nvertex;
   Type   type;
   bool   genNormal;
   bool   genTexCoord;

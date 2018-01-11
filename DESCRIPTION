@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.99.8
+Version: 0.99.9
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
@@ -18,6 +18,6 @@ License: GPL
 URL: https://r-forge.r-project.org/projects/rgl/
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
-    pandoc (>=1.13.1, needed for vignettes)
+    pandoc (>=1.14, needed for vignettes)
 BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr

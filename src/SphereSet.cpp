@@ -14,7 +14,8 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
                      int in_ignoreExtent)
  : Shape(in_material, in_ignoreExtent, SHAPE, true), 
    center(in_ncenter, in_center), 
-   radius(in_nradius, in_radius)
+   radius(in_nradius, in_radius),
+   lastendcap(true)
 {
   material.colorPerVertex(false);
 
@@ -60,6 +61,8 @@ void SphereSet::drawBegin(RenderContext* renderContext)
 void SphereSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
    int i1 = index / facets, i2 = index % facets;
+   bool endcap = i2 < sphereMesh.getSegments() 
+   	      || i2 >= facets - sphereMesh.getSegments();
 	
    if (i1 != lastdrawn) {
      if ( center.get(i1).missing() || ISNAN(radius.getRecycled(i1)) ) return;
@@ -72,8 +75,13 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
      sphereMesh.setRadius( radius.getRecycled(i1) );
    
      sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
-     sphereMesh.drawBegin( renderContext );
+     sphereMesh.drawBegin( renderContext, endcap);
      lastdrawn = i1;
+     lastendcap = endcap;
+   } else if (endcap != lastendcap) {
+     sphereMesh.drawEnd( renderContext );
+     sphereMesh.drawBegin( renderContext, endcap);
+     lastendcap = endcap;
    }
    sphereMesh.drawPrimitive(renderContext, i2);
 }
