@@ -374,9 +374,7 @@ Class |  Package | Description
 `"shape3d"` is the basic abstract type.  Objects of this class can be
 displayed by `r indexfns("shade3d")` (which shades faces), 
 `r indexfns("wire3d")` (which draws edges), or `r indexfns("dot3d")`
-(which draws points at each vertex.)  Note that `wire3d` and `dot3d`
-only work within R; in HTML output from `r linkfn("writeWebGL")` only
-`shade3d` is supported.
+(which draws points at each vertex.)  
 
 `"mesh3d"` is a descendant type.  Objects of this type contain the following 
 fields:
@@ -488,7 +486,7 @@ Function               | Description
 See the `r linkfn("movie3d")` function for a way to output an animation
 to a file on disk.  
 Animations are not currently supported 
-in the HTML written by `r linkfn("writeWebGL")`, though the
+in the HTML written by `r linkfn("rglwidget")`, though the
 `playwidget` function provides equivalent functionality.
 
 ### Exporting and importing scenes
@@ -501,7 +499,8 @@ In order from highest fidelity to lowest, the functions are:
 Function    | Description
 ----------- | -------------
 `r indexfns("scene3d")`    | Save a scene to an R variable, which can be saved and reloaded
-`r indexfns("writeWebGL")` | Write HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
+`r indexfns("rglwidget")` | Prints as HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
+`r indexfns("writeWebGL")` | Deprecated.
 `r indexfns("writeASY")`   | Write files for Asymptote
 `r indexfns("writePLY")`   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`   | Read or write OBJ files (commonly used in 3D graphics)
@@ -556,7 +555,8 @@ in `knitr`, use the chunk option `webgl=TRUE`, or the
 allows display of `rgl` scenes in
 [RStudio](https://www.rstudio.com).  Besides 
 `rgl` scenes, various controls for them can
-be displayed:
+be displayed, and there are a few utility functions
+that can be useful:
 
 Function                             | Description
 ------------------------------------ | -------------
@@ -565,10 +565,12 @@ Function                             | Description
 `r indexfns("subsetControl")`       | control which objects are displayed
 `r indexfns("ageControl")`       | "age" vertices of an object
 `r indexfns("vertexControl")`       | control properties of vertices
+`r indexfns("par3dinterpControl")`  | WebGL control like `r linkfn("par3dinterp")`
 `r indexfns("playwidget")`       | display and automate controls
 `r indexfns("toggleWidget")`     | display a button to toggle some items
 `r indexfns("sceneChange")`      | used in `Shiny` for large scene changes
-`r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`    | `matgrittr` pipe 
+`r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`    | `matgrittr` pipe
+`r indexfns(c("figHeight", "figWidth"))`     | Dimensions of figures in R Markdown document
 `r indexfns("rglShared")`        | share data using `crosstalk` package
 `r indexfns("rglMouse")`         | change mouse mode in rgl scene
 
