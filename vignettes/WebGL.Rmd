@@ -321,9 +321,11 @@ sd <- SharedData$new(mtcars)
 ids <- plot3d(sd$origData())
 # Copy the key and group from existing shared data
 rglsd <- rglShared(ids["data"], key = sd$key(), group = sd$groupName())
-htmltools::tagList(rglwidget(shared = rglsd),
+htmltools::tagList(rglwidget(shared = rglsd, elementId = "crosstalkdemo"),
 		   filter_checkbox("cylinderselector", 
-		   		   "Cylinders", sd, ~ cyl, inline = TRUE))
+		   		   "Cylinders", sd, ~ cyl, inline = TRUE),
+		   "Mouse mode: ",
+		   rglMouse("crosstalkdemo"))
 ```
 
 If multiple objects in the `rgl` scene need to be considered

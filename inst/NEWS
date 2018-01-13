@@ -893,3 +893,6 @@ base graphics.
     1.14, as 1.13.1 is no longer sufficient.
   - Sphere rendering within R sometimes showed strange
     artifacts.
+    
+0.99.9.1
+  - Minor fixups to the vignettes.
