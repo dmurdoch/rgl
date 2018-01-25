@@ -1,9 +1,5 @@
 \name{playwidget}
 \alias{playwidget}
-\alias{playwidget.default}
-\alias{playwidget.rglWebGL}
-\alias{playwidget.rglPlayer}
-\alias{playwidget.shiny.tag.list}
 \title{
 Add a widget to play animations.
 }
@@ -12,9 +8,7 @@ This is a widget that can be put in a web page to allow
 animations with or without Shiny.
 }
 \usage{
-playwidget(sceneId, ...)
-
-\S3method{playwidget}{default}(sceneId, controls,
+playwidget(sceneId, controls,
             start = 0, stop = Inf, interval = 0.05, rate = 1,
             components = c("Reverse", "Play", "Slower", "Faster",
                            "Reset", "Slider", "Label"),
@@ -24,13 +18,9 @@ playwidget(sceneId, ...)
             elementId = NULL, respondTo = NULL,
             reinit = NULL,
             buttonLabels = components, pause = "Pause",
+            height = 40,
             ...)
 
-\S3method{playwidget}{rglWebGL}(sceneId, controls, elementId = NULL, ...)
-
-\S3method{playwidget}{rglPlayer}(sceneId, controls, ...)
-
-\S3method{playwidget}{shiny.tag.list}(sceneId, controls, elementId = NULL, ...)
 }
 \arguments{
   \item{sceneId}{
@@ -88,8 +78,10 @@ being drawn again.
 These are the labels that will be shown on the buttons if they are displayed.  \code{pause} will
 be shown on the \code{"Play"} button while playing.
 }
-
-  \item{...}{The default method passes additional arguments
+  \item{height}{
+The height of the widget in pixels.  In a pipe, this is a relative height.
+  }
+  \item{...}{Additional arguments to pass to
 to \code{htmlwidgets::\link{createWidget}}.}
 }
 \details{

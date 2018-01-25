@@ -324,13 +324,13 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
   
   rwidth <- rect[3] - rect[1] + 1
   rheight <- rect[4] - rect[2] + 1
-  if (is.null(width)) {
-    if (is.null(height)) {
+  if (!length(width)) {
+    if (!length(height)) {
       wfactor <- hfactor <- 1  # width = wfactor*rwidth, height = hfactor*rheight
     } else
       wfactor <- hfactor <- height/rheight
   } else {
-    if (is.null(height)) {
+    if (!length(height)) {
       wfactor <- hfactor <- width/rwidth
     } else {
       wfactor <- width/rwidth;

@@ -894,5 +894,8 @@ base graphics.
   - Sphere rendering within R sometimes showed strange
     artifacts.
     
-0.99.9.1
+0.99.10
   - Minor fixups to the vignettes.
+  - Now uses the manipulateWidget::combineWidgets function
+    when putting multiple objects into a pipe.
+  - Now accepts fixed CSS units in width and height for rglwidgets.

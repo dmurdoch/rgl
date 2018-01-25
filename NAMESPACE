@@ -1,13 +1,13 @@
 export(.check3d, 
         abclines3d, addNormals, addToSubscene3d, 
-        arrow3d, as.mesh3d,
+        arrow3d, as.mesh3d, asRow,
         ageSetter, asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
         bbox3d, bg3d, bgplot3d, 
 	clear3d, clearSubsceneList, clipplanes3d, clipplaneSlider, cube3d, cuboctahedron3d, 
         currentSubscene3d, cylinder3d,
         decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, ellipse3d, extrude3d,
         figWidth, figHeight,
-	gc3d, getr3dDefaults, GramSchmidt, grid3d, 
+	gc3d, getr3dDefaults, getWidgetId, GramSchmidt, grid3d, 
 	highlevel, hook_rgl, hook_webgl,
 	icosahedron3d, identify3d, identityMatrix,  
 	layout3d, legend3d, light3d, lines3d, lowlevel, material3d, 
@@ -123,9 +123,5 @@ importFrom(jsonlite, toJSON)
 importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
 importFrom(shiny, getDefaultReactiveDomain, markRenderFunction)
 importFrom(magrittr, "%>%")
+importFrom(manipulateWidget, combineWidgets)
 
-S3method(playwidget, default)
-S3method(playwidget, rglWebGL)
-S3method(playwidget, rglPlayer)
-S3method(playwidget, shiny.tag.list)
-S3method(playwidget, shiny.tag)

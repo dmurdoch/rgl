@@ -99,22 +99,12 @@ rglwidget() %>%
 toggleWidget(ids = plotids["data"], label = "Data")
 ```
 
-
-Normally the
-sizing of the `rglwidget()` matches the chunk's `fig.width`
-and `fig.height` settings.  Sometimes the controls
-take up too much space, and you'll want to reduce
-the size of the display.  You can use the `r indexfns("figWidth")` and `r indexfns("figHeight")`
-in the `width` and `height` arguments to `rglwidget()`
-to compute alternate heights.
-For example, the chunk below requests a regular
-size figure in the chunk header, but shrinks the `rglwidget()` using the `height` argument.
-It also swaps the order of button and scene to illustrate how to put the control ahead of
-the scene:
+You can swap the order of button and scene; use the `magrittr` dot 
+to pass the `toggleWidget` to `rglwidget` in the `controllers` argument:
 
 ```{r}
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
-rglwidget(controllers = ., height = 0.8*figHeight()) 
+rglwidget(controllers = .) 
 ```
 
 ## Controls
@@ -142,15 +132,16 @@ virginica <- with(subset(iris, Species == "virginica"),
 aspect3d(1,1,1)
 axesid <- decorate3d()
 rglwidget() %>%
-toggleWidget(ids = setosa) %>%
+toggleWidget(NA, ids = setosa) %>%
 toggleWidget(ids = versicolor) %>%
 toggleWidget(ids = virginica) %>%
-toggleWidget(ids = axesid)
+toggleWidget(ids = axesid) %>% 
+asRow(last = 4)
 ```
 
 Since we skipped the `label` argument, the buttons are
 labelled with the name of the variable
-passed as `ids`.
+passed as `ids`.  The `asRow` function is discussed `r linkfn("asRow", "below")`.
 
 `toggleWidget()` is actually a convenient wrapper for
 two functions:  `r indexfns("playwidget")` and `r indexfns("subsetControl")`.  `playwidget()` adds
@@ -229,11 +220,12 @@ which <- which.min(setosavals$Sepal.Width)
 init <- setosavals$Sepal.Length[which]
 rglwidget() %>%
 playwidget(
-  vertexControl(values = matrix(c(init,   0,      0,       0, 
-                                       8,    1,      1,       1), nrow = 2, byrow = TRUE),
-                       attributes = c("x", "red", "green", "blue"),
-		     vertices = which, objid = setosa),
-	step=0.01)
+  vertexControl(values = matrix(c(init,   0,   0,   0, 
+                                     8,   1,   1,   1), 
+                                nrow = 2, byrow = TRUE),
+                attributes = c("x", "red", "green", "blue"),
+                vertices = which, objid = setosa),
+	step = 0.01)
 ```
 
 ### `ageControl`	     
@@ -266,12 +258,6 @@ playwidget(list(
   loop = TRUE)
 ```
 
-### `matrixControl`
-
-The final function of this type is the not-yet-implemented `matrixControl`, for setting
-up multiple controls to modify a matrix, typically `userMatrix`. This is used
-when complex manipulation of a matrix requires several controls.
-
 ### `rglMouse`
 
 While not exactly a control in the sense of the other
@@ -285,14 +271,54 @@ to let the user rotate the display for a another
 view of the scene.
 
 ```{r}
- ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
- par3d(mouseMode = "selecting")
- rglwidget(shared = rglShared(ids["data"])) %>% rglMouse()
+par3d(mouseMode = "selecting")
+rglwidget(shared = rglShared(ids["data"])) %>% 
+rglMouse()
 ```
 
-The `rglShared()` call used here is described in the next
-section.
+The `rglShared()` call used here is described `r linkfn("rglShared", "below")`.
+
+## Layout of the display
+
+Many `rgl` displays will contain several elements:  one or more
+`rgl` scenes and controls.  Internally `rgl` uses
+the `combineWidgets` function from the
+[`manipulateWidget`](https://github.com/rte-antares-rpackage/manipulateWidget)
+package.  
+
+NB:  at the time of writing, some unreleased bug fixes
+are recommended.  To install the version of `manipulateWidget` used
+in this vignette, use
+```{r eval = FALSE}
+devtools::install_github("dmurdoch/manipulateWidget@forRGL")
+```
+
+The `rgl` package provides 3 convenience functions for arranging
+displays.  We have already met the first:  the `magrittr` pipe, `%>%`.
+When the display is constructed as a
+single object using pipes, the objects in the pipeline
+will be arranged in a single column.   
+
+The second convenience function is  `r indexfns("asRow")`.  This takes
+as input a list of objects or a `combineWidgets` object (perhaps 
+the result of a pipe), and rearranges (some of) them into a 
+horizontal row.  As in the `r linkfn("toggleWidget", "toggleWidget example")`, 
+the `last` argument can be used to limit the actions of `asRow` to the
+specified number of components.  (If `last = 0`, all objects are stacked:  this can be useful if some of them are not from the `rgl`
+package, so piping doesn't work for them.)
+
+Finally, `r indexfns("getElementId")` can be used to extract the 
+HTML element ID from an HTML widget.  This is useful when combining
+widgets that are not all elements of the same pipe, as in the
+`crosstalk` example below.
+
+If these convenience functions are not sufficient, you can call
+`r linkfn("combineWidgets", text = "manipulateWidget::combineWidgets", pkg = "manipulateWidget")` or
+other functions from `manipulateWidget` for more flexibility in
+the display arrangements.
+
 
 ## Integration with `crosstalk`
 
@@ -318,14 +344,14 @@ as shown in the example below.
 ```{r}
 library(crosstalk)
 sd <- SharedData$new(mtcars)
-ids <- plot3d(sd$origData())
+ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
 # Copy the key and group from existing shared data
 rglsd <- rglShared(ids["data"], key = sd$key(), group = sd$groupName())
-htmltools::tagList(rglwidget(shared = rglsd, elementId = "crosstalkdemo"),
-		   filter_checkbox("cylinderselector", 
-		   		   "Cylinders", sd, ~ cyl, inline = TRUE),
-		   "Mouse mode: ",
-		   rglMouse("crosstalkdemo"))
+rglwidget(shared = rglsd) %>%
+asRow("Mouse mode: ", rglMouse(getWidgetId(.)), 
+      "Subset: ", filter_checkbox("cylinderselector", 
+		                "Cylinders", sd, ~ cyl, inline = TRUE),
+      last = 4, colsize = c(1,2,1,2), height = 60)
 ```
 
 If multiple objects in the `rgl` scene need to be considered
@@ -364,7 +390,7 @@ which produces these buttons:
 We stored the subscene number that is currently active in
 `subid` in the code chunk above, and use it as `r rinline("subid")`
 in the script below.  `knitr` substitutes the value
-`r subid` when it processes the document.
+when it processes the document.
 
 The `rotate()` function uses the Javascript function `document.getElementById` to retrieve the `<div>` component
 of the web page containing the scene.  It will have a

@@ -9,6 +9,7 @@ rglMouse <- function(sceneId,
 		     subscene = currentSubscene3d(dev),
 	             default = par3d("mouseMode", dev = dev, subscene = subscene)[button],
 		     stayActive = FALSE,
+		     height = 40,
 		     ...) {
   stopifnot(length(choices) == length(labels))
   stopifnot(length(button == 1) && button %in% 1:3)
@@ -31,23 +32,17 @@ rglMouse <- function(sceneId,
   		        ...)
   
   if (!missing(sceneId)) {
-    if (inherits(sceneId, "rglWebGL"))
-      result <- tagAppendAttributes(result, rglSceneId = sceneId$elementId)
-    else if (inherits(sceneId, "shiny.tag.list")) {
-      for (i in rev(seq_along(sceneId))) {
-      	tag <- sceneId[[i]]
-      	if (inherits(tag, "rglWebGL")) {
-      	  result <- tagAppendAttributes(result, rglSceneId = tag$elementId)
-      	  break;
-      	}
-      }
-    } else
-      result <- tagAppendAttributes(result, rglSceneId = sceneId)
+    upstream <- processUpstream(sceneId)
+    if (!is.null(upstream$prevRglWidget))
+      result <- tagAppendAttributes(result, rglSceneId = upstream$prevRglWidget)
   } else
-    sceneId <- ""
+    upstream <- list()
   
-  if (is.character(sceneId))
-    browsable(result)
+  if (is.list(upstream$objects))
+    do.call(combineWidgets, c(upstream$objects, 
+                              list(result, 
+                                   rowsize = c(upstream$rowsizes, height), 
+                                   ncol = 1)))
   else
-    browsable(tagList(sceneId, result))
+    browsable(result)
 }

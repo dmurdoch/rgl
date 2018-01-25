@@ -3606,7 +3606,7 @@ rglwidgetClass = function() {
      */
     rglwidgetClass.prototype.oldBridge = function(el, control) {
       var attrname, global = window[control.prefix + "rgl"];
-      if (typeof global !== "undefined")
+      if (global)
         for (attrname in global)
           this[attrname] = global[attrname];
       window[control.prefix + "rgl"] = this;

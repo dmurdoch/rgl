@@ -550,8 +550,10 @@ There are currently two schemes for exporting a scene to a web page.
 
 The recommended approach works with the `htmlwidgets` framework
 (see http://www.htmlwidgets.org/).  In an R Markdown document
-in `knitr`, use the chunk option `webgl=TRUE`, or the 
-`r indexfns("rglwidget")` function.  This approach also
+in `knitr`, use the 
+`r indexfns("rglwidget")` function.  (You can also use
+chunk option `webgl=TRUE`; we recommend the explicit use of
+`rglwidget`.)  This approach also
 allows display of `rgl` scenes in
 [RStudio](https://www.rstudio.com).  Besides 
 `rgl` scenes, various controls for them can
@@ -573,6 +575,8 @@ Function                             | Description
 `r indexfns(c("figHeight", "figWidth"))`     | Dimensions of figures in R Markdown document
 `r indexfns("rglShared")`        | share data using `crosstalk` package
 `r indexfns("rglMouse")`         | change mouse mode in rgl scene
+`r indexfns("asRow")`            | arrange multiple objects in an HTML display
+`r indexfns("getWidgetId")`      | get the `elementId` from a widget
 
 
 Some functions are mainly for internal use:

@@ -48,15 +48,14 @@ HTMLWidgets.widget({
         if (typeof x.players !== "undefined") {
           var players = [].concat(x.players);
           for (i = 0; i < players.length; i++) {
-            pel = window[players[i]];
-            if (typeof pel !== "undefined") {
+            pel = document.getElementById(players[i]);
+            if (pel) {
               player = pel.rglPlayer;
-              if (typeof player !== "undefined" && !player.initialized) {
+              if (player && !player.initialized) {
                 rgl.Player(pel, player);
                 player.initialized = true;
               }
-            } else
-             rgl.alertOnce("Controller '" + players[i] + "' not found.");
+            }
           }
         }
         rgl.drag = 0;

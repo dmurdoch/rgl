@@ -19,6 +19,7 @@ rglMouse(sceneId,
          subscene = currentSubscene3d(dev), 
          default = par3d("mouseMode", dev = dev, subscene = subscene)[button],
          stayActive = FALSE,
+         height = 40,
          ...)
 }
 \arguments{
@@ -47,6 +48,9 @@ What is the default entry to show in the control.
   \item{stayActive}{
 Whether a selection brush should stay active if the
 mouse mode is changed.
+}
+  \item{height}{
+The (relative) height of the item in the output display.
 }
   \item{...}{
 Additional arguments to pass to \code{htmltools::tags$select()}, e.g. \code{id} or \code{class}.

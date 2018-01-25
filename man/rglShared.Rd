@@ -102,11 +102,9 @@ Duncan Murdoch
                            deselectedFade = 0,
                            selectedIgnoreNone = FALSE) 
   if (interactive()) 
-    htmltools::browsable(htmltools::tagList(
-      rglwidget(shared = list(sharedData, sharedLabel), 
-                width = 400, height = 300) 
-      \%>\% rglMouse(), 
-      crosstalk::filter_slider("x", "x", sharedData, ~x, width = 400)))
+    crosstalk::filter_slider("x", "x", sharedData, ~x) \%>\%
+    rglwidget(shared = list(sharedData, sharedLabel), controller = .) \%>\% 
+    rglMouse()
       
   options(save)
   }

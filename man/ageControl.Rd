@@ -58,7 +58,7 @@ Duncan Murdoch
   xyz <- cbind(sin(theta), cos(theta), sin(theta/2))
   lineid <- plot3d(xyz, type="l", alpha = 0, lwd = 5, col = "blue")["data"]
 
-  widget <- rglwidget(width=500, height=300) \%>\%
+  widget <- rglwidget() \%>\%
   playwidget(ageControl(births = theta,
                         ages = c(-4*pi, -4*pi, 1-4*pi, 0, 0, 1),
                         objids = lineid,

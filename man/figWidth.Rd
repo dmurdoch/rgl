@@ -14,14 +14,9 @@ translation.
 figWidth()
 figHeight()
 }
-\details{
-It is currently 
-necessary to use \code{figWidth()} and \code{figHeight()}
-when \code{\link{rglwidget}} is used within a \code{\link{\%>\%}}-style pipe as in the example below.
-}
 \value{
 When used in an R Markdown document, these functions
-return the requested current dimensions of figures in pixels.  Outside such a document, no useful value
+return the requested current dimensions of figures in pixels.  Outside such a document, \code{NULL}
 is returned.
 }
 \author{
