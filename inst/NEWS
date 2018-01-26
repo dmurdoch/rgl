@@ -899,3 +899,4 @@ base graphics.
   - Now uses the manipulateWidget::combineWidgets function
     when putting multiple objects into a pipe.
   - Now accepts fixed CSS units in width and height for rglwidgets.
+  - playwidget() is no longer an S3 generic function.

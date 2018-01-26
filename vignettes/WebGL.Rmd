@@ -309,7 +309,7 @@ the `last` argument can be used to limit the actions of `asRow` to the
 specified number of components.  (If `last = 0`, all objects are stacked:  this can be useful if some of them are not from the `rgl`
 package, so piping doesn't work for them.)
 
-Finally, `r indexfns("getElementId")` can be used to extract the 
+Finally, `r indexfns("getWidgetId")` can be used to extract the 
 HTML element ID from an HTML widget.  This is useful when combining
 widgets that are not all elements of the same pipe, as in the
 `crosstalk` example below.
