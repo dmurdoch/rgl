@@ -131,7 +131,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
                  "spheres")
     
-    result["has_texture"] <- has_texture <- !is.null(mat$texture)
+    result["has_texture"] <- has_texture <- !is.null(mat$texture) && !is.null(obj$texcoords)
     
     result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
     
@@ -437,14 +437,18 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     obj$flags <- nflags[i]
     if (obj$type != "subscene") {
       texturefile <- ""
-      if (!is.null(obj$material) && !is.null(texture <- obj$material$texture)) {
+      if (!is.null(obj$material) && "texture" %in% names(obj$material))
+        texture <- obj$material$texture
+      else
+        texture <- result$material$texture
+      if (!is.null(texture) && nchar(texture)) {
         if (length(prev <- which(texture == reuseDF$texture))) {
           prev <- prev[1]
           if (reuseDF$elementId[prev] != elementId)
             obj$material$uriElementId <- reuseDF$elementId[prev]
           obj$material$uriId <- reuseDF$id[prev]
         } else {
-          texturefile <- obj$material$texture
+          texturefile <- texture
           obj$material$uri <- image_uri(texturefile)
         }
         obj$material$texture <- NULL
