@@ -259,10 +259,7 @@ int Surface::getAttributeCount(AABox& bbox, AttribID attrib)
     		    return nx*nz;
     		  else
     		    return 0;
-    case TEXCOORDS: if (use_texcoord) 
-    		      return nx*nz;
-    		    else
-    		      return 0;
+    case TEXCOORDS: return texCoordArray.size();
     case SURFACEDIM: return 1;
   }
   return Shape::getAttributeCount(bbox, attrib);
