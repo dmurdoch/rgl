@@ -894,7 +894,7 @@ base graphics.
   - Sphere rendering within R sometimes showed strange
     artifacts.
     
-0.99.11
+0.99.12
   - Minor fixups to the vignettes.
   - Now uses the manipulateWidget::combineWidgets function
     when putting multiple objects into a pipe.

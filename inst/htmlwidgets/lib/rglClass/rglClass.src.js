@@ -2967,7 +2967,8 @@ rglwidgetClass = function() {
      * Restart the WebGL canvas
      */
     rglwidgetClass.prototype.restartCanvas = function() {
-      var newcanvas = document.createElement("canvas");
+      var newcanvas = document.createElement("canvas"),
+          self = this;
       newcanvas.width = this.el.width;
       newcanvas.height = this.el.height;
       newcanvas.addEventListener("webglcontextrestored",
@@ -2980,6 +2981,10 @@ rglwidgetClass = function() {
       this.el.appendChild(newcanvas);
       this.canvas = newcanvas;
       this.setMouseHandlers();
+      if (this.gl) 
+        Object.keys(this.scene.objects).forEach(function(key){
+          self.getObj(parseInt(key, 10)).texture = undefined; 
+          });
       this.gl = null;
     };
 
@@ -3112,12 +3117,10 @@ rglwidgetClass = function() {
       	switch(this.scene.context.rmarkdown) {
           case "ioslides_presentation":
             if (result.tagName === "SLIDE") return result;
-            else done = true;
             break;
           case "slidy_presentation":
             if (result.tagName === "DIV" && result.classList.contains("slide"))
               return result;
-            else done = true;
             break;
           default: return null;
       	}
