@@ -25,7 +25,7 @@ HTMLWidgets.widget({
     
     return { 
       renderValue: function(x) {
-        var i, pel, player, group;
+        var i, pel, player, groups;
       
         x.crosstalk.group = groups = [].concat(x.crosstalk.group);
         x.crosstalk.id = [].concat(x.crosstalk.id);

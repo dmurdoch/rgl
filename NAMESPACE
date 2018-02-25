@@ -3,13 +3,14 @@ export(.check3d,
         arrow3d, as.mesh3d, asRow,
         ageSetter, asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
         bbox3d, bg3d, bgplot3d, 
-	clear3d, clearSubsceneList, clipplanes3d, clipplaneSlider, cube3d, cuboctahedron3d, 
+	clear3d, clearSubsceneList, clipplanes3d, clipplaneSlider, 
+	      crosstalkPatch, cube3d, cuboctahedron3d, 
         currentSubscene3d, cylinder3d,
         decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, ellipse3d, extrude3d,
         figWidth, figHeight,
 	gc3d, getr3dDefaults, getWidgetId, GramSchmidt, grid3d, 
 	highlevel, hook_rgl, hook_webgl,
-	icosahedron3d, identify3d, identityMatrix,  
+	icosahedron3d, identify3d, identityMatrix,
 	layout3d, legend3d, light3d, lines3d, lowlevel, material3d, 
         matrixSetter, mfrow3d, movie3d, mtext3d, 
 	newSubscene3d, next3d, normalize.mesh3d, observer3d, octahedron3d, oh3d, open3d, 
@@ -118,7 +119,7 @@ export(rglwidget, renderRglwidget, rglwidgetOutput,
 
 importFrom(htmlwidgets, createWidget, shinyRenderWidget, shinyWidgetOutput, sizingPolicy)
 importFrom(htmltools, HTML, includeScript, tags, tagAppendAttributes,
-	   tagHasAttribute, tagList, browsable)
+	   tagHasAttribute, tagList, browsable, resolveDependencies)
 importFrom(jsonlite, toJSON)
 importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
 importFrom(shiny, getDefaultReactiveDomain, markRenderFunction)
