@@ -129,7 +129,7 @@ shade3d(readOBJ(url(
 \dontrun{
 open3d()
 shade3d(readOBJ("hand.OBJ", material = list(color = "white", 
-shininess = 1, texture = "hand_mapNew.png"))
+shininess = 1, texture = "hand_mapNew.png")))
 }
 }
 \keyword{ graphics }

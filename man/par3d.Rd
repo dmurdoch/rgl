@@ -132,7 +132,7 @@ r3dDefaults
     \item{\code{cex}}{real.  The default size for text.}
     \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.
     Applies to the whole device.}
-    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}.
+    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}).
     Applies to the whole device.}
     \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?
     Applies to the whole device.}
@@ -155,7 +155,7 @@ r3dDefaults
     \item{\code{mouseMode}}{character.  A vector of 4 strings describing
       what the 3 mouse buttons and the mouse wheel do. 
       Partial matching is used.  Possible values for the first 3 entries of \code{mouseMode} (corresponding 
-      to the mouse buttons are 
+      to the mouse buttons) are 
 	\describe{
 	 \item{\code{"none"}}{No action for this button.}
 	 \item{\code{"trackball"}}{Mouse acts as a virtual trackball, rotating the scene.}
