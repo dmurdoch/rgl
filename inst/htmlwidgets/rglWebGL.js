@@ -67,6 +67,9 @@ HTMLWidgets.widget({
         el.height = height;
         el.rglinstance.resize(el);
         el.rglinstance.drawScene();
+        if (rgl.scene.crosstalk.group.length && crosstalk.bind) {
+          crosstalk.bind();
+        }
       }
     };
   }
