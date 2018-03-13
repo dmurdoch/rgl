@@ -909,4 +909,6 @@ base graphics.
     is obtainable from Github as described in ?crosstalkPatch.
     Alternatively, crosstalk 1.0.0 should work with
     methods described on that help page.
+  - The configure code to detect freetype has been updated
+    to use pkg-config (code contributed by Dirk Eddelbuettel.)
     

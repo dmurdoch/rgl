@@ -184,11 +184,20 @@ if test "x$enable_ftgl" != "xno"; then
     AC_MSG_NOTICE([Darwin, so ensuring /opt/X11/bin is at the head of the PATH...])
     PATH=/opt/X11/bin:${PATH}
   fi
-  AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
-  if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
-    CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
-    LIBS="${LIBS} `freetype-config --libs`"
+  ## new pkg-config bit
+  AC_CHECK_PROG([HAVE_PKG_CONFIG],[pkg-config],[yes],[no])
+  if test "x$HAVE_PKG_CONFIG" = "xyes"; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
+    LIBS="${LIBS} `pkg-config freetype2 --libs`"
     AC_MSG_NOTICE([using Freetype and FTGL])
+  fi
+  if test "x$HAVE_PKG_CONFIG" != "xyes"; then
+    AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
+    if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
+      CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
+      LIBS="${LIBS} `freetype-config --libs`"
+      AC_MSG_NOTICE([using Freetype and FTGL])
+    fi
   fi
 else
   AC_MSG_NOTICE([compiling without FTGL support])

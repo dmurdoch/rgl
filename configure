@@ -621,6 +621,7 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 HAVE_FREETYPE_CONFIG
+HAVE_PKG_CONFIG
 XMKMF
 EGREP
 GREP
@@ -4389,7 +4390,53 @@ if test "x$enable_ftgl" != "xno"; then
 $as_echo "$as_me: Darwin, so ensuring /opt/X11/bin is at the head of the PATH..." >&6;}
     PATH=/opt/X11/bin:${PATH}
   fi
-  # Extract the first word of "freetype-config", so it can be a program name with args.
+  ## new pkg-config bit
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_HAVE_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$HAVE_PKG_CONFIG"; then
+  ac_cv_prog_HAVE_PKG_CONFIG="$HAVE_PKG_CONFIG" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_HAVE_PKG_CONFIG="yes"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_prog_HAVE_PKG_CONFIG" && ac_cv_prog_HAVE_PKG_CONFIG="no"
+fi
+fi
+HAVE_PKG_CONFIG=$ac_cv_prog_HAVE_PKG_CONFIG
+if test -n "$HAVE_PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $HAVE_PKG_CONFIG" >&5
+$as_echo "$HAVE_PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  if test "x$HAVE_PKG_CONFIG" = "xyes"; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
+    LIBS="${LIBS} `pkg-config freetype2 --libs`"
+    { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
+$as_echo "$as_me: using Freetype and FTGL" >&6;}
+  fi
+  if test "x$HAVE_PKG_CONFIG" != "xyes"; then
+    # Extract the first word of "freetype-config", so it can be a program name with args.
 set dummy freetype-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -4427,11 +4474,12 @@ $as_echo "no" >&6; }
 fi
 
 
-  if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
-    CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
-    LIBS="${LIBS} `freetype-config --libs`"
-    { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
+    if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
+      CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
+      LIBS="${LIBS} `freetype-config --libs`"
+      { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
 $as_echo "$as_me: using Freetype and FTGL" >&6;}
+    fi
   fi
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without FTGL support" >&5
