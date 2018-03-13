@@ -323,14 +323,3 @@ renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputAr
                      shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE),
   		     outputArgs = outputArgs)
 }
-
-crosstalkPatch <- function(deps) {
-  deps <- resolveDependencies(deps)
-  widgets <- sapply(deps, function(d) d$name == "htmlwidgets")
-  jquery <- sapply(deps, function(d) d$name == "jquery")
-  if (any(widgets) && any(jquery) && min(which(jquery)) < min(which(widgets))) {
-    before <- seq_along(deps) < min(which(jquery))
-    deps <- c(deps[before], deps[widgets], deps[!widgets && !before])    
-  }
-  deps
-}

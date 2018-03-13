@@ -894,7 +894,7 @@ base graphics.
   - Sphere rendering within R sometimes showed strange
     artifacts.
     
-0.99.14
+0.99.15
   - Minor fixups to the vignettes.
   - Now uses the manipulateWidget::combineWidgets function
     when putting multiple objects into a pipe.
@@ -903,12 +903,6 @@ base graphics.
   - Textures specified in global material list (e.g. by being
     used in rgl.* functions) were not handled properly.
     (Reported by Ty Tuff.)
-  - A workaround has been added for an incompatibility
-    between the manipulateWidget and crosstalk packages.
-    This requires a very recent version of crosstalk, which
-    is obtainable from Github as described in ?crosstalkPatch.
-    Alternatively, crosstalk 1.0.0 should work with
-    methods described on that help page.
   - The configure code to detect freetype has been updated
     to use pkg-config (code contributed by Dirk Eddelbuettel.)
     
