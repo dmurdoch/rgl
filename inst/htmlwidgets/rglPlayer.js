@@ -26,6 +26,8 @@ HTMLWidgets.widget({
           rglinstance.Player(el, x);
           x.initialized = true;
         } else {
+          if (x.initialized)
+            rglwidgetClass.prototype.alertOnce("rgl widget '" + x.sceneId + "' not found.");
           x.initialized = false;
           instance.rglPlayer = x;
         }
