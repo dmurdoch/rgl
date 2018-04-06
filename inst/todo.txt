@@ -1,0 +1,145 @@
+To-do:
+
+Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
+
+Investigate difference between clear3d() and rgl.close()
+when subscenes are in use -- see March 3, 2018 presentation.
+
+Think about formula interface for plot3d and persp3d.
+
+Maybe put all newly created obj fields from initObj into one
+place in object, so the original object is left unmodified?
+
+add panning mouse mode.
+
+Investigate off-screen rendering: renderbuffer or framebuffer objects,
+Xvfb, etc.
+
+Port sphere facet sorting to WebGL.
+
+Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
+getPrimitiveCenter) work for other types besides spheres.
+
+
+Make X11 optional at configure time.  This is a big job:  all OpenGL calls
+depend on X11 on Unix-alikes.
+
+Bug reported on Stackoverflow:  drawing a transparent object after plot3d with
+limits puts it in a different subscene, so it may be drawn early and mess up
+transparency. PARTLY FIXED:  transparent is always drawn after solid, but 
+maybe not in the right order.
+
+Another bug:  planes apparently draw to the Z buffer when transparent.  
+NOT FIXED:  transparent things should be drawn in back to front order, so this
+is okay.
+
+planes3d() should just store the a,b,c,d parameters, and allow
+them to be manipulated directly in Javascript.  It already did,
+but vertexSetter didn't know how to manipulate them.  Now it
+does.  DONE
+
+Draw spheres one facet at a time when they are transparent so 
+overlapping spheres will be rendered properly.  This needs two
+meanings for "getElementCount" and "drawElement":  for spheres,
+each facet needs to be returned separately. DONE
+
+Add polar mouse control to WebGL. DONE
+
+Fix Javascript so that if we're in ioslides, only 
+consider us to be in the viewport if the enclosing slide has class "current".
+DONE
+
+Handle loss of context based on two flags:  has context, is visible.  Initialize with context if visible, 
+no context if not.  If we have no context, respond to
+scrolling/slide change events and get context if we become visible.  If we have a context, can ignore those events,
+but need to watch for context lost messages.
+When we get a context lost message, set to "no context".
+When we get a context restored message, treat as initial.  DONE
+
+Fix bug in setSubsceneEntries (not calling delFrom etc.)
+
+Check through rglExamples and fix errors.
+ - bg3d
+ 
+Check that the Javascript changes the JSON values as 
+well as the buffer matrix.
+
+Handle all attributes like user attributes in WebGL.
+
+Use shaders in R.  Windows might not support this...
+
+Simplify controls, widgets, etc., and document only the recommended way.  Link from ?play3d, reproducing the example
+there.  
+
+Handle background image as in example(bg3d).  Partly done.
+
+Need a toggleButton equivalent. DONE
+
+Make glVersion visible to users. DONE
+
+Use magick package in movie3d. DONE
+
+Generate .Rmd file for examples automatically. DONE.
+
+Add wireframe and dot handling of polygons using extra coordinates:  for triangles, measure distance
+from opposite edge in pixels, set extra coordinate for that vertex to (dist, 0, 0).  (Others will be
+(0, dist, 0) and (0, 0, dist)).  Then fragments for which all coordinates are greater than linewidth
+are discarded.  (For points, need two coords to have small coordinates.) May need to expand the triangle a
+bit to allow fat lines outside the range. NOT DONE, BUT
+A BETTER APPROACH WORKED.
+
+Try "magick" before "convert" in movie3d. DONE
+
+Allow user-specified shader (for testing the above!)
+in WebGL. DONE
+
+Finish fixedSize in rglwidget. DONE
+
+Handle lost context.  See:
+https://www.khronos.org/webgl/wiki/HandlingContextLost.  DONE.
+
+Possibly generate rglwidget() call just before clear
+or open operations.  WON'T DO:  it appears in the wrong place in RMarkdown documents.
+
+Need to finish and document rgl.printRglwidget settings.  DONE
+
+Add texture handling to spheres per messages
+from Justin McManus (Aug, 2016). DONE
+
+Fix bug in agecontrol: if object has 2 colours but more points, it gets messed up. DONE
+
+Work around 65K vertex limit.  Maybe all we need is the OES_element_index_uint 
+extension?  DONE
+
+Improve readOBJ to handle more files. DONE
+
+Fix alias in text and 2D sprites. DONE
+
+Fix interaction of fat lines with ageControl. DONE
+
+Allow single-color objects to be modified by ageControl.  DONE
+
+Maybe make all WebGL objects into indexed objects, to simplify the
+code a bit. DONE
+
+Fix circles in transparent linestrips (e.g. example(ageControl)).  DONE, though there are still a few artifacts.
+
+axes3d() with "bbox" doesn't send parameters to bbox3d. FIXED
+
+
+Investigate crosstalk integration:  see http://rstudio.github.io/crosstalk/authoring.html.   DONE
+
+add selection mouse mode. DONE
+
+Bug in lines3d??? example(vertexControl) shows dashed
+line in rglwidget(), probably because lines3d is acting
+like segments3d. FIXED
+
+Work out behaviour if scene is rotated while brush
+is visible.  Should it change the selection, or 
+remove the brush?  Yes, FIXED.
+
+Fix auto-sizing of widget when it is in a tagList. DONE using
+combineWidgets instead.
+
+Initialize scene based on starting slider value.    DONE

@@ -1,0 +1,26 @@
+Notes on initialization of rglClass scenes:
+
+writeWebGL and renderValue call rglClass.initialize
+
+rglClass.initialize calls rglClass.initCanvas
+
+rglClass.initCanvas creates the canvas and 
+does a bunch of other initialization:
+  copyObj - no GL stuff
+  initSubscene - no GL stuff
+  setMouseHandlers - doesn't do GL stuff itself, but
+    does set up calls to drawScene
+  initGL0 - tests for WebGL support, then calls initGL.
+  initSphere - sets up sphere and does GL stuff
+  initObj - sets up a lot of things and does GL stuff
+
+rglClass.initGL0 checks for existence of WebGL, then calls rglClass.initGL.
+
+rglClass.initGL gets the context.
+
+
+
+Scene object initialization:
+
+initObj sets initialized
+
