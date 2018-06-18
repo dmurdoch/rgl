@@ -664,7 +664,11 @@ rglwidgetClass = function() {
 
       result = "/* ****** "+type+" object "+id+" fragment shader ****** */\n"+
                "#ifdef GL_ES\n"+
+               "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"+
                "  precision highp float;\n"+
+               "#else\n"+
+               "  precision mediump float;\n"+
+               "#endif\n"+
                "#endif\n"+
                "  varying vec4 vCol; // carries alpha\n"+
                "  varying vec4 vPosition;\n";
