@@ -31,7 +31,7 @@ export(.check3d,
 	scale3d, scaleMatrix, scene3d, segments3d, select3d, selectpoints3d,
 	rgl.setMouseCallbacks, rgl.setWheelCallback, setupKnitr, 
         setUserShaders, shade3d, 
-	shapelist3d, show2d, snapshot3d, 
+	shapelist3d, shinyGetPar3d, shinySetPar3d, show2d, snapshot3d, 
 	spheres3d, spin3d, sprites3d, subdivision3d, 
 	subsceneInfo, subsceneList, subsetSetter, subsetSlider, Sweave.snapshot,
 	surface3d, terrain3d, 
@@ -122,7 +122,7 @@ importFrom(htmltools, HTML, includeScript, tags, tagAppendAttributes,
 	   tagHasAttribute, tagList, browsable, resolveDependencies)
 importFrom(jsonlite, toJSON)
 importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
-importFrom(shiny, getDefaultReactiveDomain, markRenderFunction)
+importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, registerInputHandler)
 importFrom(magrittr, "%>%")
 importFrom(manipulateWidget, combineWidgets)
 

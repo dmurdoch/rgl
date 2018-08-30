@@ -323,3 +323,37 @@ renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputAr
                      shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE),
   		     outputArgs = outputArgs)
 }
+
+shinySetPar3d <- function(..., session,
+                          subscene = currentSubscene3d(rgl.cur())) {
+  if (!requireNamespace("shiny"))
+    stop("function requires shiny")
+  args <- list(...)
+  argnames <- names(args)
+  badargs <- argnames[!(argnames %in% .Par3d) | argnames %in% .Par3d.readonly]
+  if (length(badargs))
+    stop("Invalid parameter(s): ", badargs)
+  for (arg in argnames) {
+    session$sendCustomMessage("shinySetPar3d", 
+                              list(subscene = subscene,
+                                   parameter = arg,
+                                   value = args[[arg]]))
+  }
+}
+
+shinyGetPar3d <- function(parameters, session,
+                          subscene = currentSubscene3d(rgl.cur()),
+                          tag = "") {
+  badargs <- parameters[!(parameters %in% .Par3d)]
+  if (length(badargs))
+    stop("invalid parameter(s): ", badargs)
+  session$sendCustomMessage("shinyGetPar3d",
+                              list(tag = tag, subscene = subscene, 
+                                   parameters = parameters))
+}
+
+convertShinyPar3d <- function(par3d, ...) {
+  if (!is.null(par3d$userMatrix))
+    par3d$userMatrix <- matrix(unlist(par3d$userMatrix), 4,4)
+  par3d
+}

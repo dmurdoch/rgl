@@ -2965,6 +2965,38 @@ rglwidgetClass = function() {
         this.webGLoptions = el.rglinstance.scene.webGLoptions;
         this.initCanvas();
       }
+      if (Shiny) {
+        var self = this;
+        Shiny.addCustomMessageHandler("shinyGetPar3d",
+          function(message) {
+            var i, param, 
+                subscene = self.getObj(message.subscene),
+                parameters = [].concat(message.parameters),
+                result = {tag: message.tag, subscene: message.subscene};
+            if (typeof subscene !== "undefined") {
+              for (i = 0; i < parameters.length; i++) {
+                param = parameters[i];
+                result[param] = subscene.par3d[param];
+              };
+            } else {
+              console.log("subscene "+message.subscene+" undefined.")
+            }
+            Shiny.setInputValue("par3d:shinyPar3d", result, {priority: "event"});
+          });
+          
+        Shiny.addCustomMessageHandler("shinySetPar3d",
+          function(message) {
+            var param = message.parameter, 
+                subscene = self.getObj(message.subscene);
+            if (typeof subscene !== "undefined") {
+              subscene.par3d[param] = message.value;
+              subscene.initialized = false;
+              self.drawScene();
+            } else {
+              console.log("subscene "+message.subscene+" undefined.")
+            }
+          })
+      }
     };
 
     /**

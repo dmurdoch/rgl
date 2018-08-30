@@ -81,6 +81,8 @@
     rgl.init(initValue, TRUE)	
   }
   
+  registerInputHandler("shinyPar3d", convertShinyPar3d)
+  
 }
 
 rgl.init <- function(initValue = 0, onlyNULL = FALSE) .Call( rgl_init, 

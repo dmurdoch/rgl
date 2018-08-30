@@ -909,5 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.99.17
+0.99.18
   - Added check for "highp" support to fragment shader in rglwidget.
+  - Added shinyGetPar3d and shinySetPar3d functions for Shiny
+    interaction.

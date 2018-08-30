@@ -1,5 +1,8 @@
 To-do:
 
+Add something like pos argument from text() to text3d; 
+incorporate plotrix::thigmophobe logic for auto-positioning.
+
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
 
 Investigate difference between clear3d() and rgl.close()
@@ -32,6 +35,8 @@ maybe not in the right order.
 Another bug:  planes apparently draw to the Z buffer when transparent.  
 NOT FIXED:  transparent things should be drawn in back to front order, so this
 is okay.
+
+Support par3d() queries and sets in Shiny. DONE
 
 planes3d() should just store the a,b,c,d parameters, and allow
 them to be manipulated directly in Javascript.  It already did,
