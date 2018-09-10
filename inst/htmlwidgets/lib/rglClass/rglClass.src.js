@@ -1187,7 +1187,8 @@ rglwidgetClass = function() {
                     "userMatrix", "ids",
                     "dim",
                     "par3d", "userMatrix",
-                    "viewpoint", "finite"],
+                    "viewpoint", "finite",
+                    "pos"],
           i;
         for (i = 0; i < fields.length; i++) {
           if (typeof prevobj[fields[i]] !== "undefined")
@@ -1276,6 +1277,15 @@ rglwidgetClass = function() {
       }
       obj.pnormals = normals;
     };
+    
+    rglwidgetClass.prototype.getAdj = function (pos, offset, text) {
+      switch(pos) {
+        case 1: return [0.5, 1 + offset];
+        case 2: return [1 + offset/text.length, 0.5];
+        case 3: return [0.5, -offset];
+        case 4: return [-offset/text.length, 0.5];
+      }
+    }
 
     /**
      * Initialize object for display
@@ -1451,7 +1461,7 @@ rglwidgetClass = function() {
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
-        nextofs = -1, pointofs = -1, alias, colors, key, selection, filter;
+        nextofs = -1, pointofs = -1, alias, colors, key, selection, filter, adj, pos, offset;
 
     obj.alias = undefined;
     
@@ -1556,14 +1566,21 @@ rglwidgetClass = function() {
       fnew = new Array(4*f.length);
       alias = new Array(v.length);
       last = v.length;
+      adj = this.flatten(obj.adj);
+      if (typeof obj.pos !== "undefined") {
+        pos = this.flatten(obj.pos);
+        offset = adj[0];
+      }
       for (i=0; i < v.length; i++) {
-        vnew[i]  = v[i].concat([0,-0.5]).concat(obj.adj[0]);
+        if (typeof pos !== "undefined")
+          adj = this.getAdj(pos[i % pos.length], offset, obj.texts[i]);
+        vnew[i]  = v[i].concat([0,-0.5]).concat(adj);
         fnew[4*i] = f[i];
-        vnew[last] = v[i].concat([1,-0.5]).concat(obj.adj[0]);
+        vnew[last] = v[i].concat([1,-0.5]).concat(adj);
         fnew[4*i+1] = last++;
-        vnew[last] = v[i].concat([1, 1.5]).concat(obj.adj[0]);
+        vnew[last] = v[i].concat([1, 1.5]).concat(adj);
         fnew[4*i+2] = last++;
-        vnew[last] = v[i].concat([0, 1.5]).concat(obj.adj[0]);
+        vnew[last] = v[i].concat([0, 1.5]).concat(adj);
         fnew[4*i+3] = last++;
         alias[i] = [last-3, last-2, last-1];
         for (j=0; j < 4; j++) {
@@ -2965,7 +2982,7 @@ rglwidgetClass = function() {
         this.webGLoptions = el.rglinstance.scene.webGLoptions;
         this.initCanvas();
       }
-      if (Shiny) {
+      if (typeof Shiny !== "undefined") {
         var self = this;
         Shiny.addCustomMessageHandler("shinyGetPar3d",
           function(message) {
