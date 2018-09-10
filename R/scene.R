@@ -112,7 +112,7 @@ rgl.attrib.count <- function( id, attrib )
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
             texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
-	    family=1, font=1)
+	    family=1, font=1, pos=1)
 
 rgl.attrib.info <- function( id = rgl.ids("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
@@ -183,7 +183,8 @@ rgl.attrib <- function( id, attrib, first=1,
                            "flag",	     # flags
 			   "offset",         # offsets
   			   "family",         # family
-  			   "font"            # font
+  			   "font",            # font
+			     "pos"              # pos
                            )[[attrib]]
   if (attrib == 14 && count)
     if (id %in% rgl.ids("lights", subscene = 0)$id)
@@ -705,23 +706,28 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
 ## add texts
 ##
 
-rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d("family"), 
-                      font=par3d("font"), cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... )
+rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0.5, 
+                      family=par3d("family"), font=par3d("font"), 
+                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... )
 {
   rgl.material( ... )
 
-  if (!missing(justify)) {
-     warning("'justify' is deprecated: please use 'adj' instead")
-     if (!missing(adj)) {
-        warning("'adj' and 'justify' both specified: 'justify' ignored")
-     } else adj <- switch(justify,left=0,center=0.5,right=1)
+  vertex  <- rgl.vertex(x,y,z)
+  nvertex <- rgl.nvertex(vertex)
+  
+  if (!is.null(pos)) {
+    npos <- length(pos)
+    stopifnot(all(pos %in% 1:4))
+    stopifnot(length(offset) == 1)
+    adj <- offset
+  } else {
+    pos <- 0
+    npos <- 1
   }
   if (length(adj) == 0) adj = c(0.5, 0.5)
   if (length(adj) == 1) adj = c(adj, 0.5)
   if (length(adj) > 2) warning("Only the first two entries of 'adj' are used")
   
-  vertex  <- rgl.vertex(x,y,z)
-  nvertex <- rgl.nvertex(vertex)
   if (!length(text)) {
     if (nvertex)
       warning("No text to plot")
@@ -751,6 +757,8 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
     as.integer(font),
     as.numeric(cex),
     as.integer(useFreeType),
+    as.integer(npos),
+    as.integer(pos),
     NAOK=TRUE
   )
   

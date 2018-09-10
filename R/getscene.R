@@ -22,7 +22,7 @@ scene3d <- function() {
     attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
           "usermatrix", "types", "offsets", "centers",
-          "family", "font")
+          "family", "font", "pos")
     for (a in attribs) 
       if (rgl.attrib.count(id, a))
         result[[a]] <- rgl.attrib(id, a)

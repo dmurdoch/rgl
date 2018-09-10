@@ -10,11 +10,12 @@
 }
 \usage{
 rgl.texts(x, y = NULL, z = NULL, text, 
-            adj = 0.5, justify, family = par3d("family"), font = par3d("font"), 
+            adj = 0.5, pos = NULL, offset = 0.5, 
+            family = par3d("family"), font = par3d("font"), 
             cex = par3d("cex"), useFreeType = par3d("useFreeType"), ...)
-text3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify,
+text3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
        usePlotmath = is.language(texts), ...) 
-texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify,
+texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
        usePlotmath = is.language(texts), ...) 
 rglFonts(...)
 }
@@ -26,10 +27,9 @@ rglFonts(...)
   \item{texts}{text character vector to draw}
   \item{adj}{ one value specifying the horizontal adjustment, or two, 
               specifying horizontal and vertical adjustment respectively. }.
-  \item{justify}{(deprecated, please use adj instead) character string
-specifying the horizontal adjustment; options are \code{"left"}, \code{"right"},
-    \code{"center"}.  Ignored if \code{usePlotmath = TRUE}.
-  }
+  \item{pos}{ a position specifier for the text.  If specified, this
+  overrides any \code{adj} value given. Values of 1, 2, 3 and 4, respectively indicate positions below, to the left of, above and to the right of the specified coordinates.}
+  \item{offset}{ when \code{pos} is specified, this value gives the offset of the label from the specified coordinate in fractions of a character width.}
   \item{ family }{A device-independent font family name, or "" }
   \item{ font }{A numeric font number from 1 to 5 }
   \item{ cex }{A numeric character expansion value }

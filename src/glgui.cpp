@@ -23,11 +23,40 @@ using namespace rgl;
 //   GLFont
 //
 
-GLboolean GLFont::justify(double width, double height, double adjx, double adjy, const RenderContext& rc) {
-  GLdouble pos[4], pos2[4];
+GLboolean GLFont::justify(double twidth, double theight, double adjx, double adjy, 
+                          int pos, const RenderContext& rc) {
+  GLdouble pos1[4], pos2[4];
   double basex = 0.0, basey = 0.0, scaling = 1.0;
   GLboolean valid;
   gl2ps_centering = GL2PS_TEXT_BL;
+  
+  if (pos) {
+    double offset = adjx, w = width("m");
+    switch(pos) {
+    case 1:
+    case 3: 
+      adjx = 0.5;
+      break;
+    case 2:
+      adjx = 1.0 + w*offset/twidth;
+      break;
+    case 4:
+      adjx = -w*offset/twidth;
+      break;
+    }
+    switch(pos) {
+    case 2:
+    case 4:
+      adjy = 0.5;
+      break;
+    case 1:
+      adjy = 1.0 + offset;
+      break;
+    case 3:
+      adjy = -offset;
+      break;
+    }
+  }
   
   if (adjx > 0) {
 
@@ -45,9 +74,9 @@ GLboolean GLFont::justify(double width, double height, double adjx, double adjy,
   }  
 
   if ((adjx != basex) || (adjy != basey)) {
-    glGetDoublev(GL_CURRENT_RASTER_POSITION, pos);    
-    pos[0] = pos[0] - scaling*width*(adjx-basex); 
-    pos[1] = pos[1] - scaling*height*(adjy-basey);
+    glGetDoublev(GL_CURRENT_RASTER_POSITION, pos1);    
+    pos1[0] = pos1[0] - scaling*twidth*(adjx-basex); 
+    pos1[1] = pos1[1] - scaling*theight*(adjy-basey);
     GLint pviewport[4] = {rc.subscene->pviewport.x, 
                           rc.subscene->pviewport.y, 
                           rc.subscene->pviewport.width, 
@@ -55,7 +84,7 @@ GLboolean GLFont::justify(double width, double height, double adjx, double adjy,
     GLdouble modelMatrix[16], projMatrix[16];
     rc.subscene->modelMatrix.getData(modelMatrix);
     rc.subscene->projMatrix.getData(projMatrix);
-    gluUnProject( pos[0], pos[1], pos[2], modelMatrix, projMatrix, pviewport, pos2, pos2 + 1, pos2 + 2);
+    gluUnProject( pos1[0], pos1[1], pos1[2], modelMatrix, projMatrix, pviewport, pos2, pos2 + 1, pos2 + 2);
     glRasterPos3dv(pos2);
   }
   
@@ -105,9 +134,10 @@ bool GLBitmapFont::valid(const char* text) {
 }
 
 void GLBitmapFont::draw(const char* text, int length, 
-                        double adjx, double adjy, const RenderContext& rc) {
-    
-  if (justify(width(text), height(), adjx, adjy, rc)) {
+                        double adjx, double adjy, 
+                        int pos, const RenderContext& rc) {
+
+  if (justify(width(text), height(), adjx, adjy, pos, rc)) {
     if (rc.gl2psActive == GL2PS_NONE) {
       glListBase(listBase);
       glCallLists(length, GL_UNSIGNED_BYTE, text);
@@ -117,9 +147,10 @@ void GLBitmapFont::draw(const char* text, int length,
 }
 
 void GLBitmapFont::draw(const wchar_t* text, int length, 
-                        double adjx, double adjy, const RenderContext& rc) {
+                        double adjx, double adjy, 
+                        int pos, const RenderContext& rc) {
   
-  if (justify(width(text), height(), adjx, adjy, rc)) {
+  if (justify(width(text), height(), adjx, adjy, pos, rc)) {
     GLenum type = sizeof(wchar_t) == 4 ? GL_UNSIGNED_INT :
                   sizeof(wchar_t) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_BYTE ;
     if (rc.gl2psActive == GL2PS_NONE) {
@@ -173,9 +204,10 @@ double GLFTFont::height() {
   return font->Ascender();
 }
 
-void GLFTFont::draw(const char* text, int length, double adjx, double adjy, const RenderContext& rc) {
+void GLFTFont::draw(const char* text, int length, double adjx, double adjy, 
+                    int pos, const RenderContext& rc) {
   
-  if ( justify( width(text), height(), adjx, adjy, rc ) ) {
+  if ( justify( width(text), height(), adjx, adjy, pos, rc ) ) {
     if (rc.gl2psActive == GL2PS_NONE)
       font->Render(text);
     else
@@ -183,8 +215,10 @@ void GLFTFont::draw(const char* text, int length, double adjx, double adjy, cons
   }
 }
 
-void GLFTFont::draw(const wchar_t* text, int length, double adjx, double adjy, const RenderContext& rc) {
-  if ( justify( width(text), height(), adjx, adjy, rc ) ) {
+void GLFTFont::draw(const wchar_t* text, int length, double adjx, double adjy, 
+                    int pos, const RenderContext& rc) {
+  
+  if ( justify( width(text), height(), adjx, adjy, pos, rc ) ) {
     if (rc.gl2psActive == GL2PS_NONE) 
       font->Render(text);
   }      

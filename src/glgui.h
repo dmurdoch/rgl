@@ -39,14 +39,18 @@ public:
     delete [] fontname;
   }
   
-  virtual void draw(const char* text, int length, double adjx, double adjy, const RenderContext& rc) = 0;
-  virtual void draw(const wchar_t* text, int length, double adjx, double adjy, const RenderContext& rc) = 0;
+  virtual void draw(const char* text, int length, double adjx, double adjy, 
+                    int pos, const RenderContext& rc) = 0;
+  virtual void draw(const wchar_t* text, int length, double adjx, double adjy, 
+                    int pos, const RenderContext& rc) = 0;
   virtual double width(const char* text) = 0;
   virtual double width(const wchar_t* text) = 0;
   virtual double height() = 0;
   virtual bool valid(const char* text) { return true; };
   // justify returns false if justification puts the text outside the viewport
-  GLboolean justify(double width, double height, double adjx, double adjy, const RenderContext& rc);
+  GLboolean justify(double width, double height, double adjx, double adjy,
+                    int pos, const RenderContext& rc);
+  
   char* family;
   int style;
   double cex;
@@ -83,8 +87,10 @@ public:
     GLFont(in_family, in_style, in_cex, in_fontname, false) {};
   ~GLBitmapFont();
 
-  void draw(const char* text, int length, double adjx, double adjy, const RenderContext& rc);
-  void draw(const wchar_t* text, int length, double adjx, double adjy, const RenderContext& rc); 
+  void draw(const char* text, int length, double adjx, double adjy, 
+            int draw, const RenderContext& rc);
+  void draw(const wchar_t* text, int length, double adjx, double adjy,
+            int draw, const RenderContext& rc); 
   double width(const char* text);
   double width(const wchar_t* text);
   double height();
@@ -109,8 +115,10 @@ public:
   
   ~GLFTFont();
 #ifdef HAVE_FREETYPE
-  void draw(const char* text, int length, double adjx, double adjy, const RenderContext& rc);
-  void draw(const wchar_t* text, int length, double adjx, double adjy, const RenderContext& rc);
+  void draw(const char* text, int length, double adjx, double adjy, 
+            int pos, const RenderContext& rc);
+  void draw(const wchar_t* text, int length, double adjx, double adjy, 
+            int pos, const RenderContext& rc);
   double width(const char* text);
   double width(const wchar_t* text);
   double height();
@@ -131,8 +139,10 @@ public:
   NULLFont(const char* in_family, int in_style, double in_cex): 
     GLFont(in_family, in_style, in_cex, "NULL", false) {};
 
-  void draw(const char* text, int length, double adjx, double adjy, const RenderContext& rc) {};
-  void draw(const wchar_t* text, int length, double adjx, double adjy, const RenderContext& rc) {}; 
+  void draw(const char* text, int length, double adjx, double adjy, 
+            int pos, const RenderContext& rc) {};
+  void draw(const wchar_t* text, int length, double adjx, double adjy, 
+            int pos, const RenderContext& rc) {}; 
   double width(const char* text) {return 0.0;};
   double width(const wchar_t* text) {return 0.0;};
   double height() {return 0.0;};

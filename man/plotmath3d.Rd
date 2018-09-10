@@ -10,6 +10,7 @@ file as a texture in a sprite.
 }
 \usage{
 plotmath3d(x, y = NULL, z = NULL, text, cex = par("cex"), adj = par("adj"), 
+           pos = NULL, offset = 0.5,
            fixedSize = TRUE, startsize = 480, initCex = 5, ...)
 }
 \arguments{
@@ -26,6 +27,7 @@ Character size expansion.
 }
   \item{adj}{ one value specifying the horizontal adjustment, or two, 
               specifying horizontal and vertical adjustment respectively. }
+  \item{pos, offset}{ alternate way to specify \code{adj}; see \code{\link{text3d}}}
   \item{fixedSize}{
 Should the resulting sprite behave like the default
 ones, and resize with the scene, or like text, and

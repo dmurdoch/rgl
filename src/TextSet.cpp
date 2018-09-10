@@ -20,8 +20,11 @@ using namespace rgl;
 
 TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, 
                  double in_adjx, double in_adjy,
-                 int in_ignoreExtent, FontArray& in_fonts)
- : Shape(in_material, in_ignoreExtent), textArray(in_ntexts, in_texts)
+                 int in_ignoreExtent, FontArray& in_fonts,
+                 int in_npos,
+                 const int* in_pos)
+ : Shape(in_material, in_ignoreExtent), textArray(in_ntexts, in_texts),
+   npos(in_npos), pos(in_pos)
 {
   int i;
 
@@ -84,7 +87,7 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
       font = fonts[index % fonts.size()];
       if (font) {
         String text = textArray[index];
-        font->draw( text.text, text.length, adjx, adjy, *renderContext );
+        font->draw( text.text, text.length, adjx, adjy, pos[index % npos], *renderContext );
       }
     }
   }
@@ -105,6 +108,7 @@ int TextSet::getAttributeCount(AABox& bbox, AttribID attrib)
     case TEXTS:
     case VERTICES: return textArray.size();
     case ADJ: return 1;
+    case POS: return pos[0] ? npos : 0;
   }
   return Shape::getAttributeCount(bbox, attrib);
 }
@@ -134,6 +138,10 @@ void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
     case ADJ:
       *result++ = adjx;
       *result++ = adjy;
+      return;
+    case POS:
+      while (first < n)
+        *result++ = pos[first++];
       return;
     }
     Shape::getAttribute(bbox, attrib, first, count, result);

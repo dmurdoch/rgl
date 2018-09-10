@@ -55,6 +55,7 @@ typedef int ObjID;
 #define OFFSETS 15
 #define FAMILY 16
 #define FONT 17
+#define POS 18
 
 typedef unsigned int AttribID;
 

@@ -1100,7 +1100,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
 
 void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex,
                int* nfonts, char** family, int* style, double* cex, 
-               int* useFreeType)
+               int* useFreeType, int* npos, int* pos)
 {
   int success = RGL_FAIL;
 
@@ -1118,7 +1118,7 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
     device->getFonts(fonts, *nfonts, family, style, cex, (bool) *useFreeType);
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
                                                    adj[0], adj[1],
-    						   device->getIgnoreExtent(), fonts) ) );
+    						   device->getIgnoreExtent(), fonts, *npos, pos) ) );
     CHECKGLERROR;
 
   }

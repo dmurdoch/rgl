@@ -1,6 +1,7 @@
 plotmath3d <- function(x, y = NULL, z = NULL,
 		       text, 
 		       cex = par("cex"), adj = par("adj"),
+		       pos = NULL, offset = 0.5,
 		       fixedSize = TRUE,
 		       startsize = 480, initCex = 5, 
 		       ...) {
@@ -9,7 +10,10 @@ plotmath3d <- function(x, y = NULL, z = NULL,
   if (is.vector(text))
     text <- rep(text, length.out = n)
   cex <- rep(cex, length.out = n)
-  adj <- c(adj, 0.5, 0.5)[1:2]
+  if (!is.null(pos))
+    pos <- rep_len(pos, n)
+  else
+    adj <- c(adj, 0.5, 0.5)[1:2]
   save3d <- par3d(skipRedraw = TRUE)
   save <- options(device.ask.default = FALSE)
   on.exit({options(save); par3d(save3d)})
@@ -26,13 +30,22 @@ plotmath3d <- function(x, y = NULL, z = NULL,
       thistext <- text[i]
     else
       thistext <- text
-    w <- strwidth(thistext, cex = initCex, ...)*(2*abs(adj[1] - 0.5) + 1)
-    h <- strheight(thistext, cex = initCex, ...)*(2*abs(adj[2] - 0.5) + 1)
+#    w <- strwidth(thistext, cex = initCex, ...)*(2*abs(adj[1] - 0.5) + 1)
+#    h <- strheight(thistext, cex = initCex, ...)*(2*abs(adj[2] - 0.5) + 1)
+    w <- strwidth(thistext, cex = initCex, ...)
+    w1 <- strwidth("m", cex = initCex, ...)
+    h <- strheight(thistext, cex = initCex, ...)
     dev.off()
-	
+
+    if (!is.null(pos)) 
+      adj <- list("1" = c(0.5, 1 + offset), 
+                  "2" = c(1 + w1*offset/w, 0.5), 
+                  "3" = c(0.5, -offset), 
+                  "4" = c(-w1*offset/w, 0.5))[[pos[i]]]
+    
     # Now make a smaller bitmap
     expand <- 1.5
-    size <- round(expand*startsize*max(w, h))
+    size <- round(expand*startsize*max(c(w, h)*(2*abs(adj - 0.5) + 1)))
     png(f, bg = "transparent", width = size, height = size)
     par(mar = c(0, 0, 0, 0), xaxs = "i", xaxt = "n", 
         yaxs = "i", yaxt = "n",
