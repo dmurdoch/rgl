@@ -24,7 +24,7 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
                  int in_npos,
                  const int* in_pos)
  : Shape(in_material, in_ignoreExtent), textArray(in_ntexts, in_texts),
-   npos(in_npos), pos(in_pos)
+   npos(in_npos)
 {
   int i;
 
@@ -56,11 +56,16 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
     if (!fonts[i % fonts.size()]->valid(textArray[i].text))
       error("text %d contains unsupported character", i+1);
   }
+  
+  pos = new int[npos];
+  for (i=0; i<npos; i++)
+    pos[i] = in_pos[i];
 
 }
 
 TextSet::~TextSet()
 {
+  delete pos;
 }
 
 void TextSet::render(RenderContext* renderContext) 

@@ -48,7 +48,7 @@ private:
   double adjy;
   
   int npos;
-  const int* pos;
+  int* pos;
 };
 
 } // namespace rgl
