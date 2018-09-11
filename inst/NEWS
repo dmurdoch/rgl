@@ -909,10 +909,12 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.99.19
+0.99.20
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
   - Updated text3d() and related functions:  dropped deprecated
     argument "justify", added "pos" and "offset" like base graphics
     text().
+  - Added thigmophobe3d() function to place labels away from
+    other points using plotrix::thigmophobe.

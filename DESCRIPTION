@@ -1,11 +1,11 @@
 Package: rgl
-Version: 0.99.19
+Version: 0.99.20
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 3.2.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
-          magick
+          magick, plotrix
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20), shiny,
          magrittr, crosstalk, manipulateWidget (>= 0.9.0)
