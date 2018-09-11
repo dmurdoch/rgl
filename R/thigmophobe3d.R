@@ -2,8 +2,8 @@ thigmophobe3d <- function(x, y = NULL, z = NULL,
                           P = par3d("projMatrix"),
                           M = par3d("modelMatrix"),
                           windowRect = par3d("windowRect")) {
-  if (!requireNamespace("plotrix")) 
-    stop("This function requires the plotrix package.")
+  if (!requireNamespace("plotrix") || packageVersion("plotrix") < "3.7-3") 
+    stop("This function requires the plotrix package, version 3.7-3 or higher.")
   
   xyz <- xyz.coords(x, y, z)
   
