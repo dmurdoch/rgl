@@ -1,7 +1,5 @@
 To-do:
 
-example(plotmath3d) doesn't display in rglwidget.
-
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
 
 Investigate difference between clear3d() and rgl.close()
@@ -30,6 +28,8 @@ Bug reported on Stackoverflow:  drawing a transparent object after plot3d with
 limits puts it in a different subscene, so it may be drawn early and mess up
 transparency. PARTLY FIXED:  transparent is always drawn after solid, but 
 maybe not in the right order.
+
+example(plotmath3d) doesn't display in rglwidget. FIXED
 
 Another bug:  planes apparently draw to the Z buffer when transparent.  
 NOT FIXED:  transparent things should be drawn in back to front order, so this

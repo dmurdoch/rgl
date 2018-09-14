@@ -130,14 +130,17 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     
     result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
                  "spheres")
+
+    result["sprites_3d"] <- sprites_3d <- type == "sprites" && length(obj$ids)
     
-    result["has_texture"] <- has_texture <- !is.null(mat$texture) && !is.null(obj$texcoords)
+    result["has_texture"] <- has_texture <- !is.null(mat$texture) &&
+                                            (!is.null(obj$texcoords) 
+                                             || (type == "sprites" && !sprites_3d))
     
     result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
     
     result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
                         "spheres", "sprites", "text")
-    result["sprites_3d"] <- sprites_3d <- type == "sprites" && length(obj$ids)
     
     result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
     result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
