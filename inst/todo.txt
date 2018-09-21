@@ -1,5 +1,9 @@
 To-do:
 
+Fix up color argument for meshes.  How about this:  material colors
+always apply to vertices.  Separate arguments for edges, triangles and quads.
+Will need a legacy argument for old behaviour.
+
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
 
 Investigate difference between clear3d() and rgl.close()
