@@ -58,7 +58,8 @@ and the third as the z coordinate.
 
 The \code{...} parameters in \code{plot3d.deldir} 
 are passed to \code{persp3d.deldir}; in \code{persp3d.deldir} they are
-passed to \code{as.mesh3d.deldir}; in \code{as.mesh3d.deldir} they are used as material parameters
+passed to both \code{as.mesh3d.deldir} and \code{persp3d.mesh3d}; 
+in \code{as.mesh3d.deldir} they are used as material parameters
 in a \code{\link{tmesh3d}} call.
 }
 \examples{

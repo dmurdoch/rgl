@@ -919,3 +919,4 @@ base graphics.
   - Added thigmophobe3d() function to place labels away from
     other points using plotrix::thigmophobe.
   - Fixed texture bug introduced in fix in 0.99.16.
+  - The persp3d.deldir method didn't display labels properly.
