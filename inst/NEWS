@@ -920,3 +920,5 @@ base graphics.
     other points using plotrix::thigmophobe.
   - Fixed texture bug introduced in fix in 0.99.16.
   - The persp3d.deldir method didn't display labels properly.
+  - When the X11 initialization failed, rgl messed up the S3
+    methods system.  (Reported by Gregory Jefferis.)
