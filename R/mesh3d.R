@@ -26,7 +26,6 @@ tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
   object <- list(
     vb=matrix(vertices,nrow=vrows),
     it=matrix(indices,nrow=3),
-    primitivetype="triangle",
     material=material,
     normals=normals,
     texcoords=texcoords
@@ -65,7 +64,6 @@ qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
   object <- list(
     vb=matrix(vertices,nrow=vrows),
     ib=matrix(indices,nrow=4),
-    primitivetype="quad",
     material=material,
     normals=normals,
     texcoords=texcoords
@@ -127,45 +125,81 @@ dot3d.mesh3d <- function ( x, override = TRUE, ... ) {
 }     
 
 dot3d.qmesh3d <- dot3d.mesh3d   # for back-compatibility
-  
-wire3d.mesh3d <- function ( x, override = TRUE, ... ) {
+
+wire3d.mesh3d <- function ( x, override = TRUE, 
+                            meshColor = c("vertices", "edges", "faces", "legacy"), ... ) {
+  argMaterial <- .getMaterialArgs(...)
   if ( override ) {
     material <- x$material
     if (is.null(material)) material <- list()    
-    material[names(list(...))] <- list(...)
+    material[names(argMaterial)] <- argMaterial
   } else {
-    material <- list(...)
+    material <- argMaterial
     material[names(x$material)] <- x$material
   }
-  material["front"] <- "lines"
-  material["back"] <- "lines"
+  meshColor <- match.arg(meshColor)
+  
+  if (meshColor != "edges") {
+    material["front"] <- "lines"
+    material["back"] <- "lines"
+  } 
   
   result <- integer(0)
-  if (!is.null(x$it))
-    result <- c(triangles = do.call("triangles3d", args = c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
-                                         y = x$vb[2,x$it]/x$vb[4,x$it],
-                                         z = x$vb[3,x$it]/x$vb[4,x$it]), 
-                                    material)))
-  if (!is.null(x$ib))
-    result <- c(result, quads = do.call("quads3d", args = c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
-                                     y = x$vb[2,x$ib]/x$vb[4,x$ib],
-                                     z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
-                                material)))
+  if (!is.null(x$it)) {
+    fn <- triangles3d
+    if (meshColor == "edges") {
+      x$it <- x$it[c(1,2,2,3,3,1),]
+      fn <- segments3d
+    }
+    args <- c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
+                   y = x$vb[2,x$it]/x$vb[4,x$it],
+                   z = x$vb[3,x$it]/x$vb[4,x$it]), 
+             material)
+    if (length(args$color) > 1 && meshColor != "legacy") 
+      args$color <- switch(meshColor,
+        vertices = rep_len(args$color, ncol(x$vb))[x$it],
+        edges    = rep(args$color, each = 2),
+        faces    = rep(args$color, each = 3))
+    result <- c(triangles = do.call(fn, args))
+  }
+  if (!is.null(x$ib)) {
+    fn <- quads3d
+    if (meshColor == "edges") {
+      x$ib <- x$ib[c(1,2,2,3,3,4,4,1),]
+      fn <- segments3d
+    }
+    args <- c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
+                   y = x$vb[2,x$ib]/x$vb[4,x$ib],
+                   z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
+            material)
+    
+    if (length(args$color) > 1 && meshColor != "legacy") 
+      args$color <- switch(meshColor,
+        vertices = rep_len(args$color, ncol(x$vb))[x$ib],
+        edges = rep(args$color, each = 2),
+        faces = rep(args$color, each = 4))
+    
+    result <- c(result, quads = do.call(fn, args))
+  }
   lowlevel(result)
 }
 
-shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
+shade3d.mesh3d <- function ( x, override = TRUE, 
+                             meshColor = c("vertices", "faces", "legacy"), ... ) {
+  argMaterial <- .getMaterialArgs(...)
   if ( override ) {
     material <- x$material
     if (is.null(material)) material <- list()    
-    material[names(list(...))] <- list(...)
+    material[names(argMaterial)] <- argMaterial
   } else {
-    material <- list(...)
+    material <- argMaterial
     material[names(x$material)] <- x$material
   }
+  meshColor <- match.arg(meshColor)
   result <- integer(0)
-  skipRows <- 0
+  ntriangles <- 0
   if (!is.null(x$it)) {
+    ntriangles <- ncol(x$it)
     args <- c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
                    y = x$vb[2,x$it]/x$vb[4,x$it],
                    z = x$vb[3,x$it]/x$vb[4,x$it]), 
@@ -174,7 +208,11 @@ shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
       args <- c(args, list(normals = t(x$normals[,x$it])))
     if (!is.null(x$texcoords) && is.null(args$texcoords))
       args <- c(args, list(texcoords = t(x$texcoords[,x$it])))
-      
+    if (length(args$color) > 1 && meshColor != "legacy") 
+      args$color <- switch(meshColor,
+        vertices = rep_len(args$color, ncol(x$vb))[x$it],
+        faces = rep(args$color, each = 3)
+      )
     result <- c(triangles = do.call("triangles3d", args = args ))
   }
   if (!is.null(x$ib)) {
@@ -186,7 +224,15 @@ shade3d.mesh3d <- function ( x, override = TRUE, ... ) {
       args <- c(args, list(normals = t(x$normals[,x$ib])))
     if (!is.null(x$texcoords) && is.null(args$texcoords))
       args <- c(args, list(texcoords = t(x$texcoords[,x$ib])))
-    
+    if (length(args$color) > 1 && meshColor != "legacy") {
+      nquads <- ncol(x$ib)
+      args$color <- switch(meshColor,
+        vertices = rep_len(args$color, ncol(x$vb))[x$ib],
+        faces = {
+          temp <- rep_len(args$color, ntriangles + nquads)
+          rep(temp[ntriangles + seq_len(nquads)], each = 4)
+        })
+    }
     result <- c(result, quads = do.call("quads3d", args = args ))
   }
   lowlevel(result)
@@ -242,4 +288,10 @@ showNormals <- function(obj, scale = 1) {
     p1 <- p0 + n[1:3, i]*scale
     arrow3d(p0, p1, type = "lines")
   }
+}
+
+print.mesh3d <- function(x, prefix = "", ...) {
+  cat(prefix, " mesh3d object with ", ncol(x$vb), " vertices, ", 
+      if (is.null(x$it)) 0 else ncol(x$it), " triangles and ",
+      if (is.null(x$ib)) 0 else ncol(x$ib), " quads.\n", sep = "")
 }

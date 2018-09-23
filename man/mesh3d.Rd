@@ -44,9 +44,9 @@
   dot3d(x, ...)   # draw dots at the vertices of an object
   \method{dot3d}{mesh3d}(x, override = TRUE, ...)
   wire3d(x, ...)  # draw a wireframe object
-  \method{wire3d}{mesh3d}(x, override = TRUE, ...)
+  \method{wire3d}{mesh3d}(x, override = TRUE, meshColor, ...)
   shade3d(x, ...) # draw a shaded object
-  \method{shade3d}{mesh3d}(x, override = TRUE, ...)
+  \method{shade3d}{mesh3d}(x, override = TRUE, meshColor, ...)
 }
 \arguments{
   \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d}), or for \code{as.mesh3d} an object
@@ -60,6 +60,8 @@
   \item{trans}{transformation to apply to objects; see below for defaults}
   \item{...}{additional rendering parameters}
   \item{override}{should the parameters specified here override those stored in the object?}
+  \item{meshColor}{how should colours be interpreted?  See details 
+  below}
 }
 \details{
   These functions create and work with \code{mesh3d} objects, which consist of a matrix
@@ -81,7 +83,30 @@ the only method defined is \code{\link{as.mesh3d.deldir}}.
   are in member \code{vb}, as a 3 or 4 by \code{n} matrix.  Meshes with triangular
   faces will contain \code{it}, a \code{3 * n} matrix giving the indices of the 
   vertices in each face.  Quad meshes will have vertex indices in \code{ib},
-  a \code{4 * n} matrix.
+  a \code{4 * n} matrix.  Individual meshes may have both types
+  of faces.
+  
+  The \code{meshColor} argument to \code{wire3d} and \code{shade3d}
+controls how material colours are interpreted.  This parameter
+was added in \pkg{rgl} version 0.100.1.  Possible values are:
+\describe{
+\item{\code{"vertices"}}{Colours are applied by vertex, in the order
+they appear in the \code{vb} matrix.}
+\item{\code{"edges"}}{Colours are applied to each edge:  first to the
+3 edges of each triangle in the \code{it} matrix, then the 4
+edges of each quad in the \code{ib} matrix.}
+\item{\code{"faces"}}{Colours are applied to each face:  first to the
+triangles in the \code{it} matrix, then to the quads in the \code{ib}
+matrix.}
+\item{\code{"legacy"}}{Colours are applied in the same way
+as in \pkg{rgl} versions earlier than 0.100.1.}
+}
+Unique partial matches of these values will be recognized.
+
+Note that the \code{shade3d} function doesn't support \code{meshColor = "edges"}, and the \code{wire3d} function will draw
+edges twice if they are common edges between two faces; which 
+copy is visible depends on the \code{\link{material3d}("depth_test")}
+setting.
 }
 \value{
 

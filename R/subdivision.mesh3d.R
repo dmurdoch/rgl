@@ -192,7 +192,6 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   result$normals <- newnormals
   result$texcoords <- newtexcoords
   
-  result$primitivetype <- primout
   return ( result )
 }
 

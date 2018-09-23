@@ -60,7 +60,18 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
    f(...)
 } 
      
-     
+# This one just gets the material args
+# If warn is TRUE, give a warning instead of ignoring extras.
+
+.getMaterialArgs <- function(..., warn = FALSE) {
+  fullyNamed <- as.list(match.call(rgl.material, 
+                           as.call(list(as.name("rgl.material"),
+                                        ...))))[-1]
+  if (warn && !all(good <- names(fullyNamed) %in% .material3d))
+    warning("Argument(s) ", paste(names(fullyNamed)[!good], collapse = ", "), " not matched.")
+  fullyNamed
+}
+
 material3d  <- function (...)
 {
     args <- list(...)

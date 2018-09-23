@@ -86,3 +86,9 @@ addNormals.shapelist3d <- function ( x, ... ) {
   structure(lapply( x, function(item) addNormals(item, ...) ),
             class = class(x))
 }
+
+print.shapelist3d <- function(x, prefix = "", ...) {
+  cat(prefix, " shapelist3d object with ", length(x), " items:\n", sep = "")
+  for (i in seq_along(x))
+    print(x[[i]], prefix = paste0(prefix, "[[", i, "]]"))
+}

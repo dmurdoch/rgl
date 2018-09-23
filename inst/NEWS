@@ -909,7 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.99.21
+0.100.1
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
@@ -922,3 +922,6 @@ base graphics.
   - The persp3d.deldir method didn't display labels properly.
   - When the X11 initialization failed, rgl messed up the S3
     methods system.  (Reported by Gregory Jefferis.)
+  - Improved support of mesh3d objects:  added print methods,
+    added meshColor argument to wire3d() and shade3d() to control how
+    colors are interpreted.
