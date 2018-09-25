@@ -47,7 +47,7 @@ cone3d <- function(base=c(0,0,0),tip=c(0,0,1),rad=1,n=30,draw.base=TRUE,qmesh=FA
   if (!qmesh)
     triangles3d(v[1,i],v[2,i],v[3,i],...)
   else
-    return(rotate3d(qmesh3d(v,i,material=...), matrix=trans))
+    return(rotate3d(qmesh3d(v,i,material=list(...)), matrix=trans))
 }     
 
 
