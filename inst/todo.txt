@@ -3,9 +3,6 @@ To-do:
 Bug in text display?  Bits of text disappear as example(arc3d)
 is rotated.
 
-Extend arc3d so that it can do the longer arc, or multiple
-turns around the center?
-
 Fix up color argument for meshes.  How about this:  material colors
 always apply to vertices.  Separate arguments for edges, triangles and quads.
 Will need a legacy argument for old behaviour.
@@ -33,6 +30,9 @@ getPrimitiveCenter) work for other types besides spheres.
 
 Make X11 optional at configure time.  This is a big job:  all OpenGL calls
 depend on X11 on Unix-alikes.
+
+Extend arc3d so that it can do the longer arc, or multiple
+turns around the center? DONE
 
 Bug reported on Stackoverflow:  drawing a transparent object after plot3d with
 limits puts it in a different subscene, so it may be drawn early and mess up

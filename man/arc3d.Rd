@@ -11,7 +11,8 @@ the starting and ending points have different radii, a segment of a
 logarithmic spiral will join them.
 }
 \usage{
-arc3d(from, to, center, radius, n, circle = 50, ...)
+arc3d(from, to, center, radius, n, circle = 50, base = 0,
+plot = TRUE, ...)
 }
 \arguments{
   \item{from}{
@@ -37,6 +38,12 @@ angle between starting and ending points as seen from the center.
 How many segments would be used if the arc went completely around
 a circle.
 }
+  \item{base}{
+See Details below.
+  }
+  \item{plot}{
+Should the arcs be plotted, or returned as a matrix?
+  }
   \item{\dots}{
 Additional parameters to pass to \code{\link{points3d}}.
 }
@@ -46,10 +53,37 @@ If any of \code{from}, \code{to} or \code{center} is an n by 3
 matrix with n > 1, multiple arcs will be drawn by recycling
 each of these parameters to the number of rows of the longest
 one.
+
+If the vector lengths of \code{from - center} and
+\code{to - center} differ, then instead of a spherical
+arc, the function will draw a segment of a logarithmic spiral joining
+the two points.
+
+By default, the arc is drawn along the shortest great 
+circle path from \code{from} to \code{to}, but the
+\code{base} parameter can be used to modify this.  
+If \code{base = 1} is used, the longer arc will be followed.
+Larger positive integer values will result in \code{base - 1}
+loops in that direction completely around the sphere.  
+Negative values will draw the curve in the same direction
+as the shortest arc, but with \code{abs(base)} full loops.
+It doesn't make much sense to ask for such loops unless
+the radii of \code{from} and \code{to} differ, because
+spherical arcs would overlap.
+Normally the \code{base} parameter is left at its default
+value of \code{0}.  
+
+When \code{base} is non-zero, the curve will be constructed in multiple
+pieces, between \code{from}, \code{to}, \code{-from} and \code{-to},
+for as many steps as necessary.  If \code{n} is specified, it
+will apply to each of these pieces.
 }
 \value{
-Called mainly for the side effect of drawing arcs.  Invisibly
-returns the object ID of the collection of arcs.
+If \code{plot = TRUE}, called mainly for the side effect of drawing arcs.  Invisibly
+returns the object ID of the collection of arcs. 
+
+If \code{plot = FALSE}, returns a 3 column matrix containing
+the points that would be drawn as the arcs.
 }
 \author{
 Duncan Murdoch
