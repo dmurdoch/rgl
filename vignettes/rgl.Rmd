@@ -155,6 +155,7 @@ Function                      | Description
 ----------------------------- | -----------
 `r indexfns(c("text3d", "texts3d"))`: | adds text
 `r indexfns("abclines3d")`:   | adds straight lines to plot (like `abline`)
+`r indexfns("arc3d")`:        | adds spherical arcs to plot
 `r indexfns("planes3d")`:     | adds planes to plot
 `r indexfns("clipplanes3d")`: | add clipping planes to plot
 `r indexfns(c("sprites3d", "particles3d"))`: | add sprites (fixed shapes or images) to plot
@@ -180,6 +181,7 @@ Function                             | Description
 `r indexfns("show2d")`:              | show a 2D plot or image in a 3D scene
 `r indexfns("legend3d")`:            | set a legend for the scene
 `r indexfns("grid3d")`:              | add a reference grid to a graph
+`r indexfns("thigmophobe3d")`:       | choose label positions to avoid overlap
 
 For example, to plot three random triangles, one could use
 ```{r webgl=TRUE, fig.width=3, fig.height=3}
@@ -412,7 +414,7 @@ Function                  | Description
 `r indexfns("layout3d")`: | Multiple figures (like `r linkfn("layout", pkg="graphics")`)
 `r indexfns("next3d")`:   | Move to the next figure (like `r linkfn("plot.new", pkg="graphics")` or `r linkfn("frame", pkg="graphics")`)
 `r indexfns("subsceneList")`: | List all the subscenes in the current layout
-`r indexfns("clearSubsceneList")` | Clear the current list and revert to the previous one
+`r indexfns("clearSubsceneList")`: | Clear the current list and revert to the previous one
 
 There are also lower level functions.
 
@@ -462,9 +464,9 @@ scene.
 
 Function                     | Description
 ---------------------------- | -----------
-`r indexfns("identify3d")`   | like the classic graphics `r linkfn("identify", pkg="graphics")` function
-`r indexfns("select3d")`     | returns a function that tests whether a coordinate was selected
-`r indexfns("selectpoints3d")` | selects from specific objects
+`r indexfns("identify3d")`:   | like the classic graphics `r linkfn("identify", pkg="graphics")` function
+`r indexfns("select3d")`:     | returns a function that tests whether a coordinate was selected
+`r indexfns("selectpoints3d")`: | selects from specific objects
 
 The `r indexfns("rgl.select3d")` function is an obsolete version of
 `select3d`, and `r indexfns("rgl.select")` is a low-level support
@@ -479,9 +481,9 @@ calls to those.  The functions are:
 
 Function               | Description
 ---------------------- | -------------
-`r indexfns("play3d")` | Repeatedly call the update function 
-`r indexfns("spin3d")` | Update the display by rotating at a constant rate
-`r indexfns("par3dinterp")` | Compute new values of some `r linkfn("par3d")` parameters by interpolation over time
+`r indexfns("play3d")`: | Repeatedly call the update function 
+`r indexfns("spin3d")`: | Update the display by rotating at a constant rate
+`r indexfns("par3dinterp")`: | Compute new values of some `r linkfn("par3d")` parameters by interpolation over time
 
 See the `r linkfn("movie3d")` function for a way to output an animation
 to a file on disk.  
@@ -498,26 +500,26 @@ In order from highest fidelity to lowest, the functions are:
 
 Function    | Description
 ----------- | -------------
-`r indexfns("scene3d")`    | Save a scene to an R variable, which can be saved and reloaded
-`r indexfns("rglwidget")` | Prints as HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
-`r indexfns("writeWebGL")` | Deprecated.
-`r indexfns("writeASY")`   | Write files for Asymptote
-`r indexfns("writePLY")`   | Write PLY files (commonly used in 3D printing)
-`r indexfns(c("readOBJ", "writeOBJ"))`   | Read or write OBJ files (commonly used in 3D graphics)
-`r indexfns(c("readSTL", "writeSTL"))`   | Read or write STL files (also common in 3D printing)
+`r indexfns("scene3d")`:    | Save a scene to an R variable, which can be saved and reloaded
+`r indexfns("rglwidget")`: | Prints as HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
+`r indexfns("writeWebGL")`: | Deprecated.
+`r indexfns("writeASY")`:   | Write files for Asymptote
+`r indexfns("writePLY")`:   | Write PLY files (commonly used in 3D printing)
+`r indexfns(c("readOBJ", "writeOBJ"))`:   | Read or write OBJ files (commonly used in 3D graphics)
+`r indexfns(c("readSTL", "writeSTL"))`:   | Read or write STL files (also common in 3D printing)
 
 There are also functions to save snapshots or other recordings of a scene,
 without any 3D information being saved:
 
 Function     | Description
 ------------ | -------------
-`r indexfns("snapshot3d")` | Save a PNG file bitmap of the scene
-`r indexfns("rgl.postscript")` | Save a Postscript, LaTeX, PDF, SVG or PGF vector rendering of the scene
-`r indexfns("movie3d")`    | Save a series of bitmaps to be assembled into a movie
-`r indexfns("rgl.pixels")` | Obtain pixel-level information about the scene in an R variable
-`r indexfns("rgl.Sweave")` | Driver function for inserting a snapshot into a Sweave document.
-`r indexfns(c("hook_rgl", "hook_webgl"))` | `knitr` hook functions for inserting images into a document.
-`r indexfns("setupKnitr")` | Function to set up `knitr` hooks
+`r indexfns("snapshot3d")`: | Save a PNG file bitmap of the scene
+`r indexfns("rgl.postscript")`: | Save a Postscript, LaTeX, PDF, SVG or PGF vector rendering of the scene
+`r indexfns("movie3d")`:    | Save a series of bitmaps to be assembled into a movie
+`r indexfns("rgl.pixels")`: | Obtain pixel-level information about the scene in an R variable
+`r indexfns("rgl.Sweave")`: | Driver function for inserting a snapshot into a Sweave document.
+`r indexfns(c("hook_rgl", "hook_webgl"))`: | `knitr` hook functions for inserting images into a document.
+`r indexfns("setupKnitr")`: | Function to set up `knitr` hooks
 
 The `r indexfns("rgl.snapshot")` function is identical to `snapshot3d`.
 The functions `r indexfns(c("rgl.Sweave.off", "Sweave.snapshot"))` are 
@@ -562,21 +564,22 @@ that can be useful:
 
 Function                             | Description
 ------------------------------------ | -------------
-`r indexfns("propertyControl")`       | set individual properties
-`r indexfns("clipplaneControl")`       |  control a clippling plane
-`r indexfns("subsetControl")`       | control which objects are displayed
-`r indexfns("ageControl")`       | "age" vertices of an object
-`r indexfns("vertexControl")`       | control properties of vertices
-`r indexfns("par3dinterpControl")`  | WebGL control like `r linkfn("par3dinterp")`
-`r indexfns("playwidget")`       | display and automate controls
-`r indexfns("toggleWidget")`     | display a button to toggle some items
-`r indexfns("sceneChange")`      | used in `Shiny` for large scene changes
-`r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`    | `matgrittr` pipe
-`r indexfns(c("figHeight", "figWidth"))`     | Dimensions of figures in R Markdown document
-`r indexfns("rglShared")`        | share data using `crosstalk` package
-`r indexfns("rglMouse")`         | change mouse mode in rgl scene
-`r indexfns("asRow")`            | arrange multiple objects in an HTML display
-`r indexfns("getWidgetId")`      | get the `elementId` from a widget
+`r indexfns("propertyControl")`:       | set individual properties
+`r indexfns("clipplaneControl")`:       |  control a clippling plane
+`r indexfns("subsetControl")`:       | control which objects are displayed
+`r indexfns("ageControl")`:       | "age" vertices of an object
+`r indexfns("vertexControl")`:       | control properties of vertices
+`r indexfns("par3dinterpControl")`:  | WebGL control like `r linkfn("par3dinterp")`
+`r indexfns("playwidget")`:       | display and automate controls
+`r indexfns("toggleWidget")`:     | display a button to toggle some items
+`r indexfns("sceneChange")`:      | used in `Shiny` for large scene changes
+`r indexfns(c("shinyGetPar3d", "shinySetPar3d"))`: | get or set `r linkfn("par3d")` values from Shiny
+`r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`:    | `magrittr` pipe
+`r indexfns(c("figHeight", "figWidth"))`:     | Dimensions of figures in R Markdown document
+`r indexfns("rglShared")`:        | share data using `crosstalk` package
+`r indexfns("rglMouse")`:         | change mouse mode in rgl scene
+`r indexfns("asRow")`:            | arrange multiple objects in an HTML display
+`r indexfns("getWidgetId")`:      | get the `elementId` from a widget
 
 
 Some functions are mainly for internal use:
@@ -596,16 +599,16 @@ exported scene.
 
 Function                             | Description
 ------------------------------------ | -------------
-`r indexfns("propertySlider")`       | insert a slider to make changes to a scene
-`r indexfns("clipplaneSlider")`      | insert a slider to control a clipping plane
-`r indexfns("subsetSlider")`         | insert a slider to control which objects are displayed
-`r indexfns("toggleButton")`         | insert a button to toggle some items
-`r indexfns("propertySetter")`       | function to modify properties
-`r indexfns("subsetSetter")`         | function to choose subsets
-`r indexfns("ageSetter")`            | function to "age" vertices
-`r indexfns("par3dinterpSetter")`    | function like `r linkfn("par3dinterp")`
-`r indexfns("vertexSetter")`         | function to modify individual vertices
-`r indexfns("matrixSetter")`         | function to modify matrices
+`r indexfns("propertySlider")`:       | insert a slider to make changes to a scene
+`r indexfns("clipplaneSlider")`:      | insert a slider to control a clipping plane
+`r indexfns("subsetSlider")`:         | insert a slider to control which objects are displayed
+`r indexfns("toggleButton")`:         | insert a button to toggle some items
+`r indexfns("propertySetter")`:       | function to modify properties
+`r indexfns("subsetSetter")`:         | function to choose subsets
+`r indexfns("ageSetter")`:            | function to "age" vertices
+`r indexfns("par3dinterpSetter")`:    | function like `r linkfn("par3dinterp")`
+`r indexfns("vertexSetter")`:         | function to modify individual vertices
+`r indexfns("matrixSetter")`:         | function to modify matrices
 
 ### Working with the scene
 
@@ -615,18 +618,18 @@ and manipulate them.
 
 Function                             | Description
 ------------------------------------ | -----------
-`r indexfns("open3d")`               | open a new window
-`r indexfns("rgl.close")`            | close the current window
-`r indexfns("rgl.bringtotop")`       | bring the current window to the top
-`r indexfns("rgl.cur")`              | id of the active device
-`r indexfns("rgl.dev.list")`         | ids of all active devices
-`r indexfns("rgl.set")`              | set a particular device to be active
-`r indexfns("rgl.ids")`              | ids and types of all current objects
+`r indexfns("open3d")`:               | open a new window
+`r indexfns("rgl.close")`:            | close the current window
+`r indexfns("rgl.bringtotop")`:       | bring the current window to the top
+`r indexfns("rgl.cur")`:              | id of the active device
+`r indexfns("rgl.dev.list")`:         | ids of all active devices
+`r indexfns("rgl.set")`:              | set a particular device to be active
+`r indexfns("rgl.ids")`:              | ids and types of all current objects
 `r indexfns(c("rgl.attrib", "rgl.attrib.info", "rgl.attrib.count"))`: | attributes of objects in the scene
-`r indexfns(c("pop3d", "rgl.pop"))`     | delete an object from the scene
-`r indexfns(c("clear3d", "rgl.clear"))`            | delete all objects of certain classes
-`r indexfns("rgl.projection")`        | return information about the current projection
-`r indexfns(c("rgl.user2window", "rgl.window2user"))` | convert between coordinates in the current projection
+`r indexfns(c("pop3d", "rgl.pop"))`:     | delete an object from the scene
+`r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
+`r indexfns("rgl.projection")`:        | return information about the current projection
+`r indexfns(c("rgl.user2window", "rgl.window2user"))`: | convert between coordinates in the current projection
 
 In addition to these, there are some other related functions which
 should rarely be called by users: `r indexfns(c("rgl.init", "rgl.open", "rgl.quit"))`.  
@@ -650,7 +653,7 @@ Function                             | Description
 `r indexfns(c("rotate3d", "scale3d", "translate3d"))`:  | apply a transformation
 `r indexfns("transform3d")`:  | apply a general transformation
 `r indexfns(c("rotationMatrix", "scaleMatrix", "translationMatrix"))`:  | compute the transformation matrix
-`r indexfns("identityMatrix")` | return a 4 x 4 identity matrix
+`r indexfns("identityMatrix")`: | return a 4 x 4 identity matrix
 
 There is also a function `r indexfns("GramSchmidt")`, mainly for internal
 use:  it does a Gram-Schmidt orthogonalization of a 3x3 matrix,
