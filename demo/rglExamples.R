@@ -71,6 +71,8 @@ options(rgl.useNULL = TRUE, rgl.printRglwidget = TRUE)
 prevlink <- "[Prev](index.html)"
 indexlink <- "[Index](index.html)"
 
+skip <- c("rgl-package", "shinyGetPar3d")
+
 for (i in seq_along(db)) {
   Rmd <- file(Rmdnames[i], open = "wt")
   nextlink <- if (i < length(htmlnames)) paste0("[Next](", htmlnames[i+1], ")") else ""
@@ -87,7 +89,13 @@ options(ask = FALSE, examples.ask = FALSE, device.ask.default = FALSE)
 ```
 '), Rmd)
   writeLines(paste(prevlink, nextlink, indexlink), Rmd)
-  writeLines('```{r}', Rmd)
+  if (file_path_sans_ext(Rmdnames[i]) %in% skip)
+    writeLines(
+'```{r eval = FALSE}
+# This example is skipped in the demo.', Rmd)
+  else
+    writeLines('```{r}', Rmd)
+  
   code <- .Rd_get_example_code(db[[i]])
   writeLines(code, Rmd)
   writeLines(
