@@ -1,5 +1,11 @@
 To-do:
 
+Bug in text display?  Bits of text disappear as example(arc3d)
+is rotated.
+
+Extend arc3d so that it can do the longer arc, or multiple
+turns around the center?
+
 Fix up color argument for meshes.  How about this:  material colors
 always apply to vertices.  Separate arguments for edges, triangles and quads.
 Will need a legacy argument for old behaviour.
