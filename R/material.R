@@ -33,6 +33,7 @@ rgl.material <- function (
   line_antialias = FALSE,
   depth_mask   = TRUE,
   depth_test   = "less",
+  polygon_offset = c(0.0, 0.0),
   ...
 ) {
   # solid or diffuse component
@@ -81,6 +82,14 @@ rgl.material <- function (
   texminfilter <- rgl.enum.texminfilter( texminfilter )
   texmagfilter <- rgl.enum.texmagfilter( texmagfilter )
   rgl.bool(texenvmap)
+  
+  # polygon offset
+  
+  stopifnot(is.numeric(polygon_offset), 
+            length(polygon_offset) <= 2, 
+            length(polygon_offset) >= 1)
+  if (length(polygon_offset) == 1)
+    polygon_offset <- c(polygon_offset, polygon_offset)
 
   # vector length
 
@@ -95,7 +104,7 @@ rgl.material <- function (
                           point_antialias, line_antialias, 
                           depth_mask, depth_test, color) )
   cdata <- as.character(c( texture ))
-  ddata <- as.numeric(c( shininess, size, lwd, alpha ))
+  ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
   ret <- .C( rgl_material,
     success = FALSE,
@@ -118,7 +127,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   idata[11] <- ncolors
   
   cdata <- paste(rep(" ", 512), collapse="")
-  ddata <- rep(0, 3+ncolors)
+  ddata <- rep(0, 5+ncolors)
   
   ret <- .C( rgl_getmaterial,
     success = FALSE,
@@ -144,7 +153,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   list(color = rgb(idata[24 + 3*(seq_len(idata[1]))], 
                    idata[25 + 3*(seq_len(idata[1]))], 
                    idata[26 + 3*(seq_len(idata[1]))], maxColorValue = 255),
-       alpha = if (idata[11]) ddata[seq(from=4, length=idata[11])] else 1,
+       alpha = if (idata[11]) ddata[seq(from=6, length=idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
        specular = rgb(idata[15], idata[16], idata[17], maxColorValue = 255),
@@ -166,7 +175,8 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        line_antialias = idata[23] == 1,
        depth_mask = idata[24] == 1,
        depth_test = depthtests[idata[25] + 1],
-       isTransparent = idata[26] == 1
+       isTransparent = idata[26] == 1,
+       polygon_offset = ddata[4:5]
        )
                    
 }

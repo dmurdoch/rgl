@@ -40,7 +40,8 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
     "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap",
-    "depth_mask", "depth_test", "isTransparent")
+    "depth_mask", "depth_test", "isTransparent",
+    "polygon_offset")
 
 .material3d.readOnly <- "isTransparent"
 

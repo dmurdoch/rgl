@@ -20,6 +20,8 @@ Material::Material(Color bg, Color fg)
   shininess(50.0f),
   size(3.0f),
   lwd(1.0f),
+  polygon_offset_factor(0.0f),
+  polygon_offset_units(0.0f),
   colors(bg,fg),
   texture(),
   front(FILL_FACE),
@@ -150,6 +152,11 @@ void Material::beginUse(RenderContext* renderContext)
     gl2psLineWidth( lwd );
   }
   
+  if (polygon_offset) {
+    glPolygonOffset(polygon_offset_factor, polygon_offset_units);
+    glEnable(GL_POLYGON_OFFSET_FILL);
+  }
+  
   if (texture)
     texture->beginUse(renderContext);
 
@@ -191,6 +198,9 @@ void Material::endUse(RenderContext* renderContext)
   
   glDepthFunc(GL_LESS);
   glDepthMask(GL_TRUE);
+  
+  if (polygon_offset)
+    glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
 void Material::colorPerVertex(bool enable, int numVertices)

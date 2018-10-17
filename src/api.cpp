@@ -980,7 +980,11 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.shininess   = (float) ddata[0];
   mat.size      = (float) ddata[1];
   mat.lwd         = (float) ddata[2];
-  double* alpha   = &ddata[3];
+  mat.polygon_offset_factor = (float) ddata[3];
+  mat.polygon_offset_units = (float) ddata[4];
+  mat.polygon_offset = ddata[3] != 0.0 || ddata[4] != 0.0;
+  
+  double* alpha   = &ddata[5];
 
   mat.alphablend  = false;
   
@@ -1086,9 +1090,11 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   ddata[0] = (double) mat->shininess;
   ddata[1] = (double) mat->size;
   ddata[2] = (double) mat->lwd;
+  ddata[3] = (double) mat->polygon_offset_factor;
+  ddata[4] = (double) mat->polygon_offset_units;
   
   if (mat->colors.hasAlpha()) {
-    for (i=0, j=3; (i < mat->colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
+    for (i=0, j=5; (i < mat->colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
       ddata[j++] = (double) mat->colors.getColor(i).getAlphaf();
     idata[10] = i;
   } else 

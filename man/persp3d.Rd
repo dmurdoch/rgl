@@ -76,8 +76,16 @@ z[is.na(z)] <- 1
 open3d()
 bg3d("white")
 material3d(col = "black")
+
+# Draw the surface twice:  the first draws the solid part, 
+# the second draws the grid.  Offset the first so it doesn't
+# obscure the first.
+
 persp3d(x, y, z, aspect = c(1, 1, 0.5), col = "lightblue",
-        xlab = "X", ylab = "Y", zlab = "Sinc( r )")
+        xlab = "X", ylab = "Y", zlab = "Sinc( r )", 
+        polygon_offset = 1)
+persp3d(x, y, z, front = "lines", back = "lines", 
+        lit = FALSE, add = TRUE)
 
 # (2) Add to existing persp plot:
 
@@ -128,6 +136,8 @@ persp3d(x, y, z, col = "white",
        specular = "black", axes = FALSE, box = FALSE, xlab = "", ylab = "", zlab = "",
        normal_x = x, normal_y = y, normal_z = z)
 }
+
+
 }
 \keyword{ dynamic }
 \keyword{ graphics }

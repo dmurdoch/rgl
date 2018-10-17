@@ -31,6 +31,8 @@ getPrimitiveCenter) work for other types besides spheres.
 Make X11 optional at configure time.  This is a big job:  all OpenGL calls
 depend on X11 on Unix-alikes.
 
+Add polygonOffset to material properties. DONE
+
 Extend arc3d so that it can do the longer arc, or multiple
 turns around the center? DONE
 

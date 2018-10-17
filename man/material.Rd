@@ -30,6 +30,7 @@ rgl.material(
   line_antialias = FALSE,
   depth_mask   = TRUE,
   depth_test   = "less",
+  polygon_offset = c(0.0, 0.0),
   ...
 )
 material3d(...)
@@ -116,6 +117,8 @@ material3d(...)
      \code{"less"} (the default), \code{"equal"}, \code{"lequal"}
      (less than or equal), \code{"greater"}, \code{"notequal"},
      \code{"gequal"} (greater than or equal), \code{"always"}.}
+  \item{polygon_offset}{If non-zero, offsets are added
+  to the recorded depth of filled polygons.  See Details below.}
   \item{...}{Any of the arguments above can
   be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
 }
@@ -130,6 +133,26 @@ but not set:
 }
   
   Only one side at a time can be culled.
+  
+  The \code{polygon_offset} property is a two element
+vector giving the \samp{factor} and \samp{units} values
+to use in a \code{glPolygonOffset()} call in OpenGL.  If
+only one value is given, it is used for both elements.
+The \samp{units} value is added to the depth of all pixels in
+a filled polygon,
+and the \samp{factor} value is multiplied by an estimate of
+the slope of the polygon and then added to the depth.  Positive values \dQuote{push} polygons back slightly for the purpose
+of depth testing, to allow points, lines or other polygons
+to be drawn on the surface without being obscured due 
+to rounding error.  Negative values pull the object forward.
+A typical value to use is \code{1} (which
+is automatically expanded to \code{c(1,1)}).
+If values are too large, objects which should be behind
+the polygon will show through, and if values are too small,
+the objects on the surface will be partially obscured. 
+Experimentation may be needed to get it right.  The first
+example in \code{?\link{persp3d}} uses this property to add 
+grid lines to a surface.
   
   \code{material3d} is an alternate interface to the material properties, modelled after
 \code{\link{par3d}}:  rather than setting defaults for parameters that are not specified, 

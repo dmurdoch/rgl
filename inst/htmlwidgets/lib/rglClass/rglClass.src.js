@@ -1308,6 +1308,7 @@ rglwidgetClass = function() {
           is_twosided = (flags & this.f_is_twosided) > 0,
           is_brush = flags & this.f_is_brush,
           gl = this.gl || this.initGL(),
+          polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
           i,j,v,v1,v2, mat, uri, matobj, pass, passes, pmode,
           dim, nx, nz, attr;
@@ -1329,6 +1330,10 @@ rglwidgetClass = function() {
       return;
     }
 
+    polygon_offset = this.getMaterial(id, "polygon_offset");
+    if (polygon_offset[0] != 0 || polygon_offset[1] != 0)
+      obj.polygon_offset = polygon_offset;
+      
     if (type === "clipplanes") {
       obj.vClipplane = this.flatten(this.cbind(obj.normals, obj.offsets));
       return;
@@ -2046,7 +2051,7 @@ rglwidgetClass = function() {
       }        
 
       this.setDepthTest(id);
-
+      
       if (sprites_3d) {
         var norigs = obj.vertices.length,
             savenorm = new CanvasMatrix4(this.normMatrix);
@@ -2063,6 +2068,12 @@ rglwidgetClass = function() {
         return;
       } else {
         gl.useProgram(obj.prog);
+      }
+
+      if (typeof obj.polygon_offset !== "undefined") {
+        gl.polygonOffset(obj.polygon_offset[0],
+                          obj.polygon_offset[1]);
+        gl.enable(gl.POLYGON_OFFSET_FILL);
       }
 
       if (sprite_3d) {
@@ -2184,6 +2195,10 @@ rglwidgetClass = function() {
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
           gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
         }
+        
+        if (typeof obj.polygon_offset !== "undefined") 
+          gl.disable(gl.POLYGON_OFFSET_FILL);
+          
         return;
       } else {
         if (obj.colorCount === 1) {
@@ -2299,6 +2314,9 @@ rglwidgetClass = function() {
 
         gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
      }
+     
+     if (typeof obj.polygon_offset !== "undefined") 
+       gl.disable(gl.POLYGON_OFFSET_FILL);
    };
 
     /**

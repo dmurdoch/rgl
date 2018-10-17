@@ -39,6 +39,8 @@ public:
   float        shininess;
   float        size;          // point size
   float        lwd;           // line width
+  float        polygon_offset_factor;
+  float        polygon_offset_units;
   ColorArray   colors;        // color or if lit, represents diffuse color
   Ref<Texture> texture;
   PolygonMode  front;
@@ -57,6 +59,7 @@ public:
   unsigned int minfilter;
   unsigned int magfilter;
   bool         envmap;
+  bool         polygon_offset;
   
   float        glVersion;
 };

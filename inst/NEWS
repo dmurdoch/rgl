@@ -909,7 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.100.5
+0.100.6
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
@@ -926,3 +926,5 @@ base graphics.
     added meshColor argument to wire3d() and shade3d() to control how
     colors are interpreted.
   - Added arc3d() function to draw spherical arcs
+  - Added "polygon_offset" material property, to allow lines to be drawn
+    on surfaces.
