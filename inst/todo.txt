@@ -23,6 +23,8 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+Add support for interp::tri.mesh and tripack::tri.mesh (like deldir).  DONE.
+
 Fix up color argument for meshes.  How about this:  material colors
 always apply to vertices.  Separate arguments for edges, triangles and quads.
 Will need a legacy argument for old behaviour. DONE

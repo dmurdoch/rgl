@@ -103,6 +103,14 @@ as in \pkg{rgl} versions earlier than 0.100.1.}
 }
 Unique partial matches of these values will be recognized.
 
+If colours are specified but \code{meshColor} is not,
+currently a warning will by default be given that their
+interpretation may have changed.  This warning can be
+suppressed by setting 
+\code{options(rgl.meshColorWarning = FALSE)}.  In some future
+release of \pkg{rgl}, the default
+will change to no warning.
+
 Note that the \code{shade3d} function doesn't support \code{meshColor = "edges"}, and the \code{wire3d} function will draw
 edges twice if they are common edges between two faces; which 
 copy is visible depends on the \code{\link{material3d}("depth_test")}

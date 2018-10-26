@@ -115,3 +115,6 @@ decorate3d <- function(xlim = NULL, ylim = NULL, zlim = NULL,
 plot3d.function <- function(x, ...) persp3d(x, ...)
 
 plot3d.deldir <- function(x, ...) persp3d(x, ...)
+
+plot3d.triSht <-
+plot3d.tri <- function(x, z, ...) persp3d(x, z, ...)

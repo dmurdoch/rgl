@@ -62,6 +62,8 @@ export(.check3d,
  S3method(plot3d, mesh3d)
  
  S3method(as.mesh3d, deldir)
+ S3method(as.mesh3d, tri)
+ S3method(as.mesh3d, triSht)
  
  S3method(translate3d, default)
  S3method(rotate3d, default)
@@ -76,6 +78,8 @@ export(.check3d,
  S3method(persp3d, default)
  S3method(persp3d, "function")
  S3method(persp3d, deldir)
+ S3method(persp3d, tri)
+ S3method(persp3d, triSht)
  
  S3method(plot3d, rglscene)
  S3method(plot3d, rglobject)
@@ -84,6 +88,8 @@ export(.check3d,
  S3method(plot3d, rglsubscene)
  S3method(plot3d, "function")
  S3method(plot3d, deldir)
+ S3method(plot3d, tri)
+ S3method(plot3d, triSht)
  
  S3method(print, rglscene)
  S3method(print, rglobject)

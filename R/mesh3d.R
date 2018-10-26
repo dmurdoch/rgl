@@ -92,10 +92,7 @@ as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"),
   }
   points <- t(as.matrix(x$summary[, coords]))
   triangs <- do.call(rbind, deldir::triang.list(x))
-  if (length(col) > 1) {
-    col <- rep_len(col, ncol(points))
-    col <- col[triangs$ptNum]
-  }
+
   if (!is.null(texcoords))
     texcoords <- texcoords[triangs$ptNum, ]
   material <- .getMaterialArgs(...)
@@ -106,6 +103,41 @@ as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"),
   if (smooth)
     result <- addNormals(result)
   result
+}
+
+as.mesh3d.triSht <-
+as.mesh3d.tri <- function(x, z, col = "gray", 
+                          coords = c("x", "y", "z"), 
+                          smooth = TRUE, normals = NULL, texcoords = NULL,
+                          ...) {
+  if (inherits(x, "tri")) 
+    triangles <- tripack::triangles
+  else if (inherits(x, "triSht")) {
+    triangles <- interp::triangles
+  }
+  if (!identical(sort(coords), c("x", "y", "z")))
+    stop(sQuote("coords"), " should be a permutation of c('x', 'y', 'z')")
+  if (!is.numeric(z) || length(z) != x$n)
+    stop("z should be a numeric vector with one entry per node of x")
+  if (smooth && !is.null(normals)) {
+    warning("'smooth' ignored as 'normals' was specified.")
+    smooth <- FALSE
+  }
+  points <- rbind(x$x, x$y, z)
+  triangs <- t(triangles(x)[, 1:3])
+  rownames(points) <- c("x", "y", "z")
+  points <- points[coords,]
+  
+  if (!is.null(texcoords))
+    texcoords <- texcoords[triangs, ]
+  material <- .getMaterialArgs(...)
+  material$color <- col
+  result <- tmesh3d(points, triangs, homogeneous = FALSE,
+                    normals = normals, texcoords = texcoords,
+                    material = material)
+  if (smooth)
+    result <- addNormals(result)
+  result  
 }
 
 # rendering support
@@ -164,7 +196,7 @@ wire3d.mesh3d <- function ( x, override = TRUE,
              material)
     if (.meshColor != "legacy") {
       if (length(unique(args$color)) > 1) {
-        if (missing(meshColor))
+        if (missing(meshColor) && getOption("rgl.meshColorWarning", TRUE))
           warning("Default coloring for meshes changed in rgl 0.100.1")
         args$color <- switch(.meshColor,
           vertices = rep_len(args$color, ncol(x$vb))[x$it],
@@ -240,7 +272,7 @@ shade3d.mesh3d <- function ( x, override = TRUE,
     if (.meshColor != "legacy") {
       
       if (length(unique(args$color)) > 1) {
-        if (missing(meshColor))
+        if (missing(meshColor) && getOption("rgl.meshColorWarning", TRUE))
           warning("Default coloring for meshes changed in rgl 0.100.1")
         args$color <- switch(.meshColor,
           vertices = rep_len(args$color, ncol(x$vb))[x$it],
