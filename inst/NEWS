@@ -909,7 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.100.7
+0.100.8
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
@@ -932,3 +932,5 @@ base graphics.
   - Added plot3d(), persp3d() and as.mesh3d() methods for
     "triSht" and "tri" classes (produced by interp and tripack
     packages.)
+  - The plot3d.mesh3d() method now has the same default
+    for "aspect" as the default method.

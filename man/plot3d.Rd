@@ -16,7 +16,7 @@ plot3d(x, ...)
 	xlim = NULL, ylim = NULL, zlim = NULL, 
 	forceClipregion = FALSE, ...)
 \method{plot3d}{mesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
-	add = FALSE, ...)	
+	add = FALSE, aspect = !add, ...)	
 decorate3d(xlim, ylim, zlim, 
 	xlab = "x", ylab = "y", zlab = "z", 
 	box = TRUE, axes = TRUE, main = NULL, sub = NULL,

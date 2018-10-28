@@ -73,6 +73,14 @@ and \code{persp3d.tri} they are
 passed to both \code{as.mesh3d} and \code{persp3d.mesh3d}; 
 in \code{as.mesh3d.triSht} and \code{as.mesh3d.tri} they are used as material parameters
 in a \code{\link{tmesh3d}} call.
+
+\code{"tri"} objects may contain constraints.  These appear
+internally as extra nodes, representing either the inside
+or outside of boundaries on the region being triangulated.
+Each of these nodes should also have a \code{z} value, but 
+triangles corresponding entirely to constraint nodes will not
+be drawn.  In this way complex, non-convex regions can
+be triangulated.  See the second example below.
 }
 \note{
 If there are duplicate points, the \code{tri.mesh()} functions
@@ -99,12 +107,18 @@ if (requireNamespace("interp", quietly = TRUE)) {
 if (requireNamespace("tripack", quietly = TRUE)) {
   if (is.null(save))
     save <- options(rgl.meshColorWarning = FALSE)
-  dxy <- tripack::tri.mesh(x, y)
+
+  # Leave a circular hole around (3, 0)
+  theta <- seq(0, 2*pi, len = 30)[-1]
+  cx <- 2*cos(theta) + 3
+  cy <- 2*sin(theta)
+  keep <- (x - 3)^2 + y^2 > 4
+  dxy2 <- tripack::tri.mesh(x[keep], y[keep])
+  dxy2 <- tripack::add.constraint(dxy2, cx, cy)
+  z <- dxy2$x^2 - dxy2$y^2
+  col <- terrain.colors(20)[1 + round(19*(z - min(z))/diff(range(z)))]
   open3d()
-  persp3d(dxy, z, col = col)
-  open3d()
-  # Do it without smoothing and with a different orientation.
-  persp3d(dxy, z, col = col, coords = c("z", "x", "y"), smooth = FALSE)
+  persp3d(dxy2, z, col = col)
 }
 options(save)
 }

@@ -56,7 +56,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
 }
 
 plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
-	add = FALSE, ...)
+	add = FALSE, aspect = !add, ...)
 {
     if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
@@ -72,7 +72,8 @@ plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade
     	dots = dot3d(x, ...))
     
     if (!add) {
-    	result <- c(result, decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, ...))
+    	result <- c(result, decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, aspect = aspect,
+    	                               ...))
     	highlevel(result)
     } else 
     	lowlevel(result)

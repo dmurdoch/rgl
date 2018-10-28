@@ -124,9 +124,15 @@ as.mesh3d.tri <- function(x, z, col = "gray",
     smooth <- FALSE
   }
   points <- rbind(x$x, x$y, z)
-  triangs <- t(triangles(x)[, 1:3])
   rownames(points) <- c("x", "y", "z")
   points <- points[coords,]
+  
+  triangs <- t(triangles(x)[, 1:3])
+  if (inherits(x, "tri") && x$nc) {
+    constraintIndex <- min(x$lc)
+    keep <- apply(triangs, 2, function(col) any(col < constraintIndex))
+    triangs <- triangs[, keep]
+  }
   
   if (!is.null(texcoords))
     texcoords <- texcoords[triangs, ]
