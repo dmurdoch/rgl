@@ -68,9 +68,10 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
   fullyNamed <- as.list(match.call(rgl.material, 
                            as.call(c(list(as.name("rgl.material"),
                                         ...), material))))[-1]
-  if (warn && !all(good <- names(fullyNamed) %in% .material3d))
+  good <- names(fullyNamed) %in% .material3d
+  if (warn && !all(good))
     warning("Argument(s) ", paste(names(fullyNamed)[!good], collapse = ", "), " not matched.")
-  fullyNamed
+  fullyNamed[good]
 }
 
 material3d  <- function (...)
