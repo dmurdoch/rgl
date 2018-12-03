@@ -32,6 +32,8 @@ Will need a legacy argument for old behaviour. DONE
 Make X11 optional at configure time.  This is a big job:  all OpenGL calls
 depend on X11 on Unix-alikes.
 
+Update GL2PS to 1.4.0. DONE
+
 Add polygonOffset to material properties. DONE
 
 Extend arc3d so that it can do the longer arc, or multiple
