@@ -324,7 +324,7 @@ rgl.bbox <- function(
   ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
 
   ret <- .C( rgl_bbox,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     ddata,
     as.numeric(xat),
