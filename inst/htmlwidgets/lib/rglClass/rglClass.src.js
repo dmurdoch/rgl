@@ -375,8 +375,10 @@ rglwidgetClass = function() {
      * @param {string} property Which material property?
      */
     rglwidgetClass.prototype.getMaterial = function(id, property) {
-      var obj = this.getObj(id),
-          mat = obj.material[property];
+      var obj = this.getObj(id), mat;
+      if (typeof obj.material === "undefined")
+        console.error("material undefined");
+      mat = obj.material[property];
       if (typeof mat === "undefined")
           mat = this.scene.material[property];
       return mat;
@@ -1330,10 +1332,6 @@ rglwidgetClass = function() {
       return;
     }
 
-    polygon_offset = this.getMaterial(id, "polygon_offset");
-    if (polygon_offset[0] != 0 || polygon_offset[1] != 0)
-      obj.polygon_offset = polygon_offset;
-      
     if (type === "clipplanes") {
       obj.vClipplane = this.flatten(this.cbind(obj.normals, obj.offsets));
       return;
@@ -1343,7 +1341,11 @@ rglwidgetClass = function() {
       obj.quad = this.flatten([].concat(obj.ids));
       return;
     }
-    
+
+    polygon_offset = this.getMaterial(id, "polygon_offset");
+    if (polygon_offset[0] != 0 || polygon_offset[1] != 0)
+      obj.polygon_offset = polygon_offset;
+
     if (is_transparent) {
       depth_sort = ["triangles", "quads", "surface",
                     "spheres", "sprites", "text"].indexOf(type) >= 0;
@@ -1638,6 +1640,8 @@ rglwidgetClass = function() {
       obj.userMatrix = new CanvasMatrix4(obj.userMatrix);
       obj.objects = this.flatten([].concat(obj.ids));
       is_lit = false;
+      for (i=0; i < obj.objects.length; i++)
+        this.initObj(obj.objects[i]);
     }
 
     if (is_lit && !fixed_quads) {
@@ -1989,7 +1993,16 @@ rglwidgetClass = function() {
       result.sort(compare);
       return result;
     };
-
+    
+    rglwidgetClass.prototype.disableArrays = function(obj, enabled) {
+      var gl = this.gl || this.initGL(),
+          objLocs = ["normLoc", "texLoc", "ofsLoc", "pointLoc", "nextLoc"],
+          thisLocs = ["posLoc", "colLoc"], i;
+      for (i = 0; i < objLocs.length; i++) 
+        if (enabled[objLocs[i]]) gl.disableVertexAttribArray(obj[objLocs[i]]);
+      for (i = 0; i < thisLocs.length; i++)
+        if (enabled[thisLocs[i]]) gl.disableVertexAttribArray(this[objLocs[i]]);
+    }
     /**
      * Draw an object in a subscene
      * @param { number } id - object to draw
@@ -2015,7 +2028,8 @@ rglwidgetClass = function() {
           gl = this.gl || this.initGL(),
           mat,
           sphereMV, baseofs, ofs, sscale, i, count, light,
-          pass, mode, pmode, attr;
+          pass, mode, pmode, attr,
+          enabled = {};
 
       if (typeof id !== "number") {
         this.alertOnce("drawObj id is "+typeof id);
@@ -2114,6 +2128,7 @@ rglwidgetClass = function() {
         gl.uniform1f( obj.shininessLoc, obj.shininess);
         for (i=0; i < subscene.lights.length; i++) {
           light = this.getObj(subscene.lights[i]);
+          if (!light.initialized) this.initObj(subscene.lights[i]);
           gl.uniform3fv( obj.ambientLoc[i], this.componentProduct(light.ambient, obj.ambient));
           gl.uniform3fv( obj.specularLoc[i], this.componentProduct(light.specular, obj.specular));
           gl.uniform3fv( obj.diffuseLoc[i], light.diffuse);
@@ -2133,6 +2148,7 @@ rglwidgetClass = function() {
       }
 
       gl.enableVertexAttribArray( this.posLoc );
+      enabled.posLoc = true;
 
       var nc = obj.colorCount;
       count = obj.vertexCount;
@@ -2143,6 +2159,7 @@ rglwidgetClass = function() {
             scount = count, indices;
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.enableVertexAttribArray(obj.normLoc );
+        enabled.normLoc = true;
         gl.vertexAttribPointer(obj.normLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.disableVertexAttribArray( this.colLoc );
         var sphereNorm = new CanvasMatrix4();
@@ -2156,6 +2173,7 @@ rglwidgetClass = function() {
 
         if (has_texture) {
           gl.enableVertexAttribArray( obj.texLoc );
+          enabled.texLoc = true;
           gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,
                                  4*this.sphere.vOffsets.tofs);
           gl.activeTexture(gl.TEXTURE0);
@@ -2196,6 +2214,7 @@ rglwidgetClass = function() {
           gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
         }
         
+        this.disableArrays(obj, enabled);
         if (typeof obj.polygon_offset !== "undefined") 
           gl.disable(gl.POLYGON_OFFSET_FILL);
           
@@ -2206,17 +2225,20 @@ rglwidgetClass = function() {
           gl.vertexAttrib4fv( this.colLoc, new Float32Array(obj.onecolor));
         } else {
           gl.enableVertexAttribArray( this.colLoc );
+          enabled.colLoc = true;
           gl.vertexAttribPointer(this.colLoc, 4, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.cofs);
         }
       }
 
       if (is_lit && obj.vOffsets.nofs > 0) {
         gl.enableVertexAttribArray( obj.normLoc );
+        enabled.normLoc = true;
         gl.vertexAttribPointer(obj.normLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nofs);
       }
 
       if (has_texture || type === "text") {
         gl.enableVertexAttribArray( obj.texLoc );
+        enabled.texLoc = true;
         gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.tofs);
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, obj.texture);
@@ -2225,6 +2247,7 @@ rglwidgetClass = function() {
 
       if (fixed_quads) {
         gl.enableVertexAttribArray( obj.ofsLoc );
+        enabled.ofsLoc = true;
         gl.vertexAttribPointer(obj.ofsLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
       }
 
@@ -2303,8 +2326,10 @@ rglwidgetClass = function() {
                           
         if ((is_lines || pmode === "lines") && fat_lines) {
           gl.enableVertexAttribArray(obj.pointLoc);
+          enabled.pointLoc = true;
           gl.vertexAttribPointer(obj.pointLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.pointofs);
           gl.enableVertexAttribArray(obj.nextLoc );
+          enabled.nextLoc = true;
           gl.vertexAttribPointer(obj.nextLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nextofs);
           gl.uniform1f(obj.aspectLoc, this.vp.width/this.vp.height);
           gl.uniform1f(obj.lwdLoc, this.getMaterial(id, "lwd")/this.vp.height);
@@ -2313,6 +2338,7 @@ rglwidgetClass = function() {
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
 
         gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
+        this.disableArrays(obj, enabled);
      }
      
      if (typeof obj.polygon_offset !== "undefined") 

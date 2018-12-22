@@ -1,5 +1,7 @@
 To-do:
 
+If you pop a 3d sprite object, R crashes.
+
 Bug in text display?  Bits of text disappear as example(arc3d)
 is rotated.
 

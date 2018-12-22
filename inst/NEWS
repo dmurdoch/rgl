@@ -909,7 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.100.8
+0.100.9
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
@@ -934,3 +934,7 @@ base graphics.
     packages.)
   - The plot3d.mesh3d() method now has the same default
     for "aspect" as the default method.
+  - Probably due to a compiler change, rgl.bbox() was 
+    returning 0/1 instead of the id of the axes.
+  - pch3d() was failing in rglwidget() for some shapes.
+    (Reported by Luca Scrucca.)
