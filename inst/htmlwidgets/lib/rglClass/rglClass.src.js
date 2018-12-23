@@ -1997,12 +1997,18 @@ rglwidgetClass = function() {
     rglwidgetClass.prototype.disableArrays = function(obj, enabled) {
       var gl = this.gl || this.initGL(),
           objLocs = ["normLoc", "texLoc", "ofsLoc", "pointLoc", "nextLoc"],
-          thisLocs = ["posLoc", "colLoc"], i;
+          thisLocs = ["posLoc", "colLoc"], i, attr;
       for (i = 0; i < objLocs.length; i++) 
         if (enabled[objLocs[i]]) gl.disableVertexAttribArray(obj[objLocs[i]]);
       for (i = 0; i < thisLocs.length; i++)
         if (enabled[thisLocs[i]]) gl.disableVertexAttribArray(this[objLocs[i]]);
+      if (typeof obj.userAttributes !== "undefined") {
+      	for (attr in obj.userAttribSizes) {  // Not all attributes may have been used
+      	  gl.disableVertexAttribArray( obj.userAttribLocations[attr] );
+      	}
+      }
     }
+    
     /**
      * Draw an object in a subscene
      * @param { number } id - object to draw
