@@ -496,7 +496,7 @@ v0.93.952
 
 v0.93.960
   - writeWebGL now forces the position attribute to location 0, a
-    recommended optimization strategy.  The colour attribute is
+    recommended optimization strategy.  The color attribute is
     forced to location 1.
   - we now check for invalid characters when drawing text using bitmapped
     fonts (bug 4787)
@@ -870,7 +870,7 @@ base graphics.
     Line endings and joins are rounded, not squared as in OpenGL.
   - The 65535 vertex limit has been removed (at least in browsers
     that support big indices).
-  - The requirement that colours being controlled by an ageControl or vertexControl
+  - The requirement that colors being controlled by an ageControl or vertexControl
     be duplicated in the original has been removed.
   - axes3d("bbox") didn't send parameters to bbox3d().
   - Fixed examples for snapshot3d() and writeASY() so that they don't
@@ -909,7 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.100.9
+0.100.10
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
@@ -938,3 +938,8 @@ base graphics.
     returning 0/1 instead of the id of the axes.
   - pch3d() was failing in rglwidget() for some shapes.
     (Reported by Luca Scrucca.)
+  - pch3d() now allows separate "color" and "bg" specifications
+    for each point.  In addition, the default for the "lit"
+    material property is now FALSE, so by default filled
+    symbols will match the requested colour regardless of 
+    lighting.

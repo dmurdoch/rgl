@@ -8,7 +8,9 @@ This function plots symbols similarly to
 what the base graphics function \code{\link{points}} does when \code{pch} is specified.
 }
 \usage{
-pch3d(x, y = NULL, z = NULL, pch = 1, bg = material3d("color")[1], cex = 1, radius, ...)
+pch3d(x, y = NULL, z = NULL, pch = 1, 
+      bg = material3d("color")[1], cex = 1, radius, 
+      color = "black", lit = FALSE, ...)
 }
 \arguments{
   \item{x, y, z}{
@@ -20,7 +22,7 @@ A vector of integers or single characters
 describing the symbols to plot.
 }
   \item{bg}{
-The fill color to use for \code{pch} from 21 
+The fill color(s) to use for \code{pch} from 21 
 to 25.
 }
   \item{cex}{
@@ -29,6 +31,13 @@ A relative size of the symbol to plot.
   \item{radius}{
 An absolute size of the symbol to plot 
 in user coordinates.
+}
+  \item{color}{ 
+The color(s) to use for symbols.
+}
+  \item{lit}{
+Whether the object responds to lighting or just shows the
+displayed color directly.
 }
   \item{\dots}{
 Other material properties.
@@ -61,12 +70,13 @@ No special handling is done for the case of
 \code{pch = "."}.  Use \code{points3d} for 
 small dots.
 
-Multiple colours are not supported.
+As of \pkg{rgl} version 0.100.10, background and foreground 
+colors can vary from symbol to symbol.
 }
 \value{
 A vector of object id values is returned invisibly.  Separate objects will be drawn
-for each different \code{pch} value from 
-0 to 25, and another holding all the character
+for each different combination of \code{pch} value from 
+0 to 25, \code{color} and  \code{bg}, and another holding all the character
 symbols.
 }
 \author{
@@ -79,7 +89,7 @@ Duncan Murdoch
 \examples{
 open3d()
 i <- 0:25; x <- i \%\% 5; y <- rep(0, 26); z <- i \%/\% 5
-pch3d(x, y, z, pch = i, bg = "green")
+pch3d(x, y, z, pch = i, bg = "gray", color = rainbow(26))
 text3d(x, y, z + 0.3, i)
 pch3d(x + 5, y, z, pch = i+65)
 text3d(x + 5, y, z + 0.3, i+65)
