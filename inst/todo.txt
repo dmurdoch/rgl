@@ -2,9 +2,6 @@ To-do:
 
 If you pop a 3d sprite object, R crashes.
 
-Bug in text display?  Bits of text disappear as example(arc3d)
-is rotated.
-
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
 
 Investigate difference between clear3d() and rgl.close()
@@ -24,6 +21,10 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Bug in text display?  Bits of text disappear as example(arc3d)
+is rotated. FIXED in example:  it's an interaction of 
+transparent polygons.
 
 Add support for interp::tri.mesh and tripack::tri.mesh (like deldir).  DONE.
 
