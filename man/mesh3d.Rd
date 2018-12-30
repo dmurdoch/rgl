@@ -44,9 +44,9 @@
   dot3d(x, ...)   # draw dots at the vertices of an object
   \method{dot3d}{mesh3d}(x, override = TRUE, ...)
   wire3d(x, ...)  # draw a wireframe object
-  \method{wire3d}{mesh3d}(x, override = TRUE, meshColor, ...)
+  \method{wire3d}{mesh3d}(x, override = TRUE, meshColor = c("vertices", "edges", "faces", "legacy"), ...)
   shade3d(x, ...) # draw a shaded object
-  \method{shade3d}{mesh3d}(x, override = TRUE, meshColor, ...)
+  \method{shade3d}{mesh3d}(x, override = TRUE, meshColor = c("vertices", "faces", "legacy"), ...)
 }
 \arguments{
   \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d}), or for \code{as.mesh3d} an object
