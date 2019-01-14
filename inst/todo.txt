@@ -3,7 +3,8 @@ To-do:
 Allow "zooming in" on a particular point.
 
 Setting par3d(mouseMode = c("none", "none", "none")) doesn't
-seem to do anything:  still have trackball in persp3Drgl example.
+seem to do anything:  still have trackball in persp3Drgl example.  There was a bug (leaving trackball in place), but
+also mouseMode applied by design to the whole device, where it should really be subscene specific.
 
 Add support for ashape3d objects from alphashape3d package.
 
