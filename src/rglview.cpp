@@ -661,6 +661,11 @@ void RGLView::setMouseMode(int button, MouseModeID mode)
 	int index = button-1;
     	mouseMode[index] = mode;
 	switch (mode) {
+	    case mmNONE:
+	      ButtonBeginFunc[index] = &RGLView::noneBegin;
+	      ButtonUpdateFunc[index] = &RGLView::noneUpdate;
+	      ButtonEndFunc[index] = &RGLView::noneEnd;
+	      break;
 	    case mmTRACKBALL:
 	    	ButtonBeginFunc[index] = &RGLView::trackballBegin;
 	    	ButtonUpdateFunc[index] = &RGLView::trackballUpdate;

@@ -1,5 +1,12 @@
 To-do:
 
+Allow "zooming in" on a particular point.
+
+Setting par3d(mouseMode = c("none", "none", "none")) doesn't
+seem to do anything:  still have trackball in persp3Drgl example.
+
+Add support for ashape3d objects from alphashape3d package.
+
 If you pop a 3d sprite object, R crashes.
 
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov

@@ -15,7 +15,7 @@
 
 namespace rgl {
 
-enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
+enum MouseModeID {mmNONE = 0, mmTRACKBALL, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
                   mmSELECTING, mmZOOM, mmFOV, mmUSER};
 enum MouseSelectionID {msNONE=1, msCHANGING, msDONE, msABORT};
 
@@ -109,6 +109,10 @@ private:
 // OpenGL window relative (relative to bottom left corner)
   void translateCoords(int* mouseX, int* mouseY) const { *mouseY = height - *mouseY; }
 
+  void noneBegin(int mouseX, int mouseY) {};
+  void noneUpdate(int mouseX, int mouseY)  {};
+  void noneEnd() {};
+  
 // o DRAG FEATURE: adjustDirection
 
   void polarBegin(int mouseX, int mouseY);
