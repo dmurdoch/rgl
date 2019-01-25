@@ -24,7 +24,7 @@ grid3d <- function (side, at = NULL, col="gray",
     at[[coord]] <- NULL
   }
   
-  result <- c()
+  result <- integer()
   
   for (cside in sides) {
     range <- ranges[[cside]]
@@ -53,8 +53,8 @@ grid3d <- function (side, at = NULL, col="gray",
       mpos1 <- temp1
       mpos2 <- temp2
     }
-      
-    result[sidenames[cside]] <- segments3d(x=c(rbind(mpos1[,1],mpos2[,1])),
+    if (nrow(mpos1) + nrow(mpos2) > 0)
+      result[sidenames[cside]] <- segments3d(x=c(rbind(mpos1[,1],mpos2[,1])),
                y=c(rbind(mpos1[,2],mpos2[,2])),
                z=c(rbind(mpos1[,3],mpos2[,3])),
                lwd=lwd,color=col)
