@@ -8,11 +8,7 @@ plot3d.ashape3d <- function(x, ...) persp3d(x, ...)
 
 reOrient <- function(vertices) {
   warned <- FALSE
-  warnOnce <- function() {
-    if (!warned)
-      warning("Surface may not be simple; smoothing may not be possible.")
-    warned <<- TRUE
-  }
+
   # Count how many other triangles touch each edge of this one, in order 2-3, 1-3, 1-2:
   edgeCounts <- function(index) {
     triangle <- vertices[,index]
@@ -46,8 +42,10 @@ reOrient <- function(vertices) {
     #         it produces.  It doesn't appear to be safe to just 
     #         delete these
     
-    if (length(shared) > 1L && any( edgeCounts(i) > 1))
-      warnOnce()
+    if (!warned && length(shared) > 1L && any( edgeCounts(i) > 1)) {
+      warning("Surface may not be simple; smoothing may not be possible.")
+      warned <- TRUE
+    }
     
     shared <- shared[shared > fixed]
     if (!length(shared)) next

@@ -380,6 +380,7 @@ Class |  Package | Description
 `r indexfns("deldir", pkg = "deldir")` | `deldir` | Delaunay triangulations of irregular point clouds 
 `r indexfns("triSht", pkg = "interp")` | `interp` | Also Delaunay triangulations
 `r indexfns("tri", pkg = "tripack")` | `tripack` | Generalized Delaunay triangulations
+`r indexfns("ashape3d", pkg = "alphashape3d")` | `alphashape3d` | Alpha-shapes
 
 ### The underlying class structure for shapes
 
