@@ -64,6 +64,7 @@ export(.check3d,
  S3method(as.mesh3d, deldir)
  S3method(as.mesh3d, tri)
  S3method(as.mesh3d, triSht)
+ # S3method(as.mesh3d, ashape3d)
  
  S3method(translate3d, default)
  S3method(rotate3d, default)
@@ -80,6 +81,8 @@ export(.check3d,
  S3method(persp3d, deldir)
  S3method(persp3d, tri)
  S3method(persp3d, triSht)
+ # S3method(persp3d, ashape3d)
+ S3method(persp3d, formula)
  
  S3method(plot3d, rglscene)
  S3method(plot3d, rglobject)
@@ -90,6 +93,9 @@ export(.check3d,
  S3method(plot3d, deldir)
  S3method(plot3d, tri)
  S3method(plot3d, triSht)
+ # S3method(plot3d, ashape3d)
+ S3method(plot3d, formula)
+ S3method(plot3d, lm)
  
  S3method(print, rglscene)
  S3method(print, rglobject)
@@ -133,4 +139,5 @@ importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print,
 importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, registerInputHandler)
 importFrom(magrittr, "%>%")
 importFrom(manipulateWidget, combineWidgets)
+importFrom(stats, coef, predict, residuals)
 

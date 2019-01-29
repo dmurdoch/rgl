@@ -165,3 +165,13 @@ persp3d.triSht <-
 persp3d.tri <- function(x, z, ..., add = FALSE) {
   plot3d(as.mesh3d(x, z, ...), add = add, ...)
 }
+
+persp3d.formula <- function(x, data=NULL, xlab = xyz$xlab, ylab = xyz$ylab, zlab = xyz$zlab, ...) {
+  if (!requireNamespace("deldir", quietly = TRUE))
+    stop("This function requires the 'deldir' package.")
+  if (!is.null(data))
+    environment(x) <- list2env(data, envir = environment(x))
+  xyz <- xyz.coords(x)
+  dxyz <- with(xyz, deldir::deldir(x, y, z = z, suppressMsge = TRUE))
+  persp3d(dxyz, xlab = xlab, ylab = ylab, zlab = zlab, ...)
+}

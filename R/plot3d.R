@@ -119,3 +119,80 @@ plot3d.deldir <- function(x, ...) persp3d(x, ...)
 
 plot3d.triSht <-
 plot3d.tri <- function(x, z, ...) persp3d(x, z, ...)
+
+plot3d.formula <- function(x, data = NULL, xlab = xyz$xlab, ylab = xyz$ylab, zlab = xyz$zlab, ...) {
+  if (!is.null(data))
+    environment(x) <- list2env(data, envir = environment(x))
+  xyz <- xyz.coords(x)
+  plot3d(xyz, xlab = xlab, ylab = ylab, zlab = zlab, ...)
+}
+
+plot3d.lm <- function(x, which = 1, 
+                      plane.col = "gray", plane.alpha = 0.5,
+                      sharedMouse = TRUE,
+                      ...) {
+  stopifnot(which %in% 1:3)
+  dots <- list(...)
+  n <- length(which)
+  result <- c()
+  if (n > 1) {
+    cols <- ceiling(sqrt(n))
+    rows <- ceiling(n/cols)
+    mfrow3d(rows, cols, sharedMouse = sharedMouse)
+  }
+  fit <- x
+  formula <- formula(fit)
+  if (!is.null(fit$call$data)) {
+    data <- eval(fit$call$data, environment(formula))
+    environment(formula) <- list2env(data, parent=environment(formula))
+  }
+  xyz <- xyz.coords(formula)
+  if (is.null(dots$xlab)) dots$xlab <- xyz$xlab
+  if (is.null(dots$ylab)) dots$ylab <- xyz$ylab
+  if (is.null(dots$zlab)) dots$zlab <- xyz$zlab
+  for (i in seq_along(which)) {
+    type <- which[i]
+    if (type == 1L) {
+      coefs <- coef(fit)
+      a <- coefs[xyz$xlab]
+      b <- coefs[xyz$ylab]
+      c <- -1
+      d <- coefs["(Intercept)"]
+      plot <- do.call("plot3d", c(list(x = xyz), dots))
+      dots1 <- dots
+      dots1$col <- plane.col
+      dots1$alpha <- plane.alpha
+      plane <- do.call("planes3d", c(list(a = a, b = b, c = c, d =d), dots1))
+    } else if (type == 2L) {
+      dots1 <- dots
+      dots1$zlab <- "Residuals"
+      xyz1 <- xyz
+      xyz1$z <- residuals(fit)
+      plot <- do.call("plot3d", c(list(x = xyz1), dots1))
+      names(plot) <- paste0(names(plot), ".", i)
+      dots1$col <- plane.col
+      dots1$alpha <- plane.alpha
+      plane <- do.call("planes3d", c(list(a = 0, b = 0, c = -1, d = 0), dots1))
+    } else if (type == 3L) {
+      coefs <- coef(fit)
+      a <- coefs[xyz$xlab]
+      b <- coefs[xyz$ylab]
+      c <- -1
+      d <- coefs["(Intercept)"]
+      xyz1 <- xyz
+      xyz1$z <- predict(fit)
+      dots1 <- dots
+      dots1$zlab <- "Predicted"
+      plot <- do.call("plot3d", c(list(x = xyz1), dots1))
+      dots1 <- dots
+      dots1$col <- plane.col
+      dots1$alpha <- plane.alpha
+      plane <- do.call("planes3d", c(list(a = a, b = b, c = c, d =d), dots1))      
+    }
+    names(plot) <- paste0(names(plot), ".", i)
+    names(plane) <- paste0("plane.", i)
+    result <- c(result, plot, plane)
+  }
+  highlevel(result)
+}
+

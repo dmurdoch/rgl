@@ -1,5 +1,7 @@
 To-do:
 
+Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
+
 Allow "zooming in" on a particular point.
 
 Setting par3d(mouseMode = c("none", "none", "none")) doesn't
@@ -15,8 +17,6 @@ Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl
 Investigate difference between clear3d() and rgl.close()
 when subscenes are in use -- see March 3, 2018 presentation.
 
-Think about formula interface for plot3d and persp3d.
-
 Maybe put all newly created obj fields from initObj into one
 place in object, so the original object is left unmodified?
 
@@ -29,6 +29,8 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Think about formula interface for plot3d and persp3d. DONE
 
 Bug in text display?  Bits of text disappear as example(arc3d)
 is rotated. FIXED in example:  it's an interaction of 

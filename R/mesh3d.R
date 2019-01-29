@@ -90,7 +90,10 @@ as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"),
     warning("'smooth' ignored as 'normals' was specified.")
     smooth <- FALSE
   }
-  points <- t(as.matrix(x$summary[, coords]))
+  pointnames <- as.numeric(rownames(x$summary))
+  points <- matrix(NA, max(pointnames), 3)
+  points[pointnames, ] <- as.matrix(x$summary[, coords])
+  points <- t(points)
   triangs <- do.call(rbind, deldir::triang.list(x))
 
   if (!is.null(texcoords))
@@ -369,10 +372,13 @@ showNormals <- function(obj, scale = 1) {
     warning("No normals found.")
     return()
   }
+  save <- par3d(skipRedraw = TRUE)
+  on.exit(par3d(save))
   for (i in seq_len(ncol(n))) {
     p0 <- v[1:3, i]/v[4, i]
     p1 <- p0 + n[1:3, i]*scale
-    arrow3d(p0, p1, type = "lines")
+    if (all(is.finite(c(p0, p1))))
+      arrow3d(p0, p1, type = "lines")
   }
 }
 

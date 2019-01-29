@@ -945,3 +945,8 @@ base graphics.
     lighting.
   - par3d(mouseMode = "none") was not implemented properly,
     so appeared to be a no-op.
+  - plot3d() methods for objects of class "formula" and "lm"
+    and a persp3d() method for objects of class "formula"
+    have been added.  (A bug in the implementation of
+    as.mesh3d.deldir() was found and fixed during the 
+    latter addition.)
