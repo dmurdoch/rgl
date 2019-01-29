@@ -8,8 +8,6 @@ Setting par3d(mouseMode = c("none", "none", "none")) doesn't
 seem to do anything:  still have trackball in persp3Drgl example.  There was a bug (leaving trackball in place), but
 also mouseMode applied by design to the whole device, where it should really be subscene specific.
 
-Add support for ashape3d objects from alphashape3d package.
-
 If you pop a 3d sprite object, R crashes.
 
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
@@ -29,6 +27,9 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Add support for ashape3d objects from alphashape3d package.
+DONE
 
 Think about formula interface for plot3d and persp3d. DONE
 

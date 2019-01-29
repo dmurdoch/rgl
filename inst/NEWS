@@ -909,7 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.100.11
+0.100.12
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
@@ -950,3 +950,5 @@ base graphics.
     have been added.  (A bug in the implementation of
     as.mesh3d.deldir() was found and fixed during the 
     latter addition.)
+  - as.mesh3d(), plot3d() and persp3d() methods for "ashape3d"
+    objects from the alphashape3d package have been added.

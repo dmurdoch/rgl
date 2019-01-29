@@ -64,7 +64,7 @@ export(.check3d,
  S3method(as.mesh3d, deldir)
  S3method(as.mesh3d, tri)
  S3method(as.mesh3d, triSht)
- # S3method(as.mesh3d, ashape3d)
+ S3method(as.mesh3d, ashape3d)
  
  S3method(translate3d, default)
  S3method(rotate3d, default)
@@ -81,7 +81,7 @@ export(.check3d,
  S3method(persp3d, deldir)
  S3method(persp3d, tri)
  S3method(persp3d, triSht)
- # S3method(persp3d, ashape3d)
+ S3method(persp3d, ashape3d)
  S3method(persp3d, formula)
  
  S3method(plot3d, rglscene)
@@ -93,7 +93,7 @@ export(.check3d,
  S3method(plot3d, deldir)
  S3method(plot3d, tri)
  S3method(plot3d, triSht)
- # S3method(plot3d, ashape3d)
+ S3method(plot3d, ashape3d)
  S3method(plot3d, formula)
  S3method(plot3d, lm)
  
