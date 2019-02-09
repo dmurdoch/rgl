@@ -148,6 +148,7 @@ private:
   std::vector<SceneNode*> nodes;
 
   void deleteAll(std::vector<SceneNode*> list);
+  void removeReferences(SceneNode* node);
 
 };
 

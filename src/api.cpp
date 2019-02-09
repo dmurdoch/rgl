@@ -717,20 +717,30 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding, int* i
 {
   int success = RGL_FAIL;
   Device* device;
-    
+//  Rprintf("rgl_newsubscene with  %d %d %d %d\n",
+//          embedding[0], embedding[1], embedding[2], embedding[3]);
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();      
+//    Rprintf("getting parent %d\n", parentid[0]);
     Subscene* parent = scene->getSubscene(parentid[0]);
     if (parent) {
       Subscene* current = scene->getCurrentSubscene();
-      scene->setCurrentSubscene(parent);	
+      scene->setCurrentSubscene(parent);
+//      Rprintf("Creating subscene\n");
       Subscene* subscene = new Subscene( (Embedding)embedding[0], 
                                          (Embedding)embedding[1], 
                                          (Embedding)embedding[2],
+                                         EMBED_REPLACE,
                                          *ignoreExtent != 0);
       if (subscene && scene->add(subscene)) {
-	success = as_success( subscene->getObjID() );
+        subscene->setMouseMode(1, parent->getMouseMode(1));
+        subscene->setMouseMode(2, parent->getMouseMode(2));
+        subscene->setMouseMode(3, parent->getMouseMode(3));
+        subscene->setWheelMode(parent->getWheelMode());
+        if (embedding[3] != EMBED_REPLACE)
+          subscene->setEmbedding(3, (Embedding)embedding[3]);
+        success = as_success( subscene->getObjID() );
       }
       scene->setCurrentSubscene(current);
     }
@@ -898,7 +908,7 @@ void rgl::rgl_gc(int* count, int* protect)
   Device* device;
   int nprotect = *count;
   *count = 0;
-    
+  
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
@@ -907,42 +917,42 @@ void rgl::rgl_gc(int* count, int* protect)
       int rootid = root->getObjID();
       for (TypeID i = 1; i < MAX_TYPE; i++) {
         int n = scene->get_id_count(i);
-	if (n) {
-	  std::vector<int> ids(n);
-	  std::vector<char*> types(n);
-	  scene->get_ids(i, &ids[0], &types[0]);
-	  // First, remove the protected ones by setting them to zero.
-	  bool anyunprot = false;
-	  for (int j = 0; j < n; j++) {
-	    bool prot = (rootid == ids[j]);
-	    for (int k = 0; k < nprotect && !prot; k++) 
-	      prot = (ids[j] == protect[k]);
-	    if (prot)
-	      ids[j] = 0;
-	    else
-	      anyunprot = true;
-	  }
-	  if (!anyunprot) 
-	    continue;
-	  // Now look for the others in subscenes
-	  int m = root->get_id_count(i, true);
-	  if (m) {
-	    std::vector<int> ids2(m);
-	    std::vector<char*> types2(m);
-	    root->get_ids(i, &ids2[0], &types2[0], true);
-	    for (int j = 0; j < n; j++) {
-	      for (int k = 0; k < m && ids[j] != 0; k++) { 
-	        if (ids[j] == ids2[k])
-	          ids[j] = 0;
-	      }
-	    }
-	  }
-	  for (int j = 0; j < n; j++) {
-	    if (ids[j] != 0) {
-	      scene->pop(i, ids[j]);
-	      (*count)++;
-	    }
-	  }
+        if (n) {
+          std::vector<int> ids(n);
+          std::vector<char*> types(n);
+          scene->get_ids(i, &ids[0], &types[0]);
+          // First, remove the protected ones by setting them to zero.
+          bool anyunprot = false;
+          for (int j = 0; j < n; j++) {
+            bool prot = (rootid == ids[j]);
+            for (int k = 0; k < nprotect && !prot; k++) 
+              prot = (ids[j] == protect[k]);
+            if (prot)
+              ids[j] = 0;
+            else
+              anyunprot = true;
+          }
+          if (!anyunprot) 
+            continue;
+          // Now look for the others in subscenes
+          int m = root->get_id_count(i, true);
+          if (m) {
+            std::vector<int> ids2(m);
+            std::vector<char*> types2(m);
+            root->get_ids(i, &ids2[0], &types2[0], true);
+            for (int j = 0; j < n; j++) {
+              for (int k = 0; k < m && ids[j] != 0; k++) { 
+                if (ids[j] == ids2[k])
+                  ids[j] = 0;
+              }
+            }
+          }
+          for (int j = 0; j < n; j++) {
+            if (ids[j] != 0) {
+              scene->pop(i, ids[j]);
+              (*count)++;
+            }
+          }
         }
       }
     }
@@ -1259,40 +1269,45 @@ void rgl::rgl_window2user(int* successptr, int* idata, double* point, double* pi
   *successptr = success;
 }
 
-void rgl::rgl_selectstate(int* successptr, int* selectstate, double* locations)
+void rgl::rgl_selectstate(int* dev, int* sub, int* successptr, int* selectstate, double* locations)
 {
-    int success = RGL_FAIL;
-    Device* device;
-
-    if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
-	RGLView* rglview = device->getRGLView();
-
-	selectstate[0] = (int)rglview->getSelectState();
-	double* mousePosition = rglview->getMousePosition();
-
-	locations[0] = *mousePosition;
-	locations[1] = *(mousePosition+1);
-	locations[2] = *(mousePosition+2);
-	locations[3] = *(mousePosition+3);
-
-	success = RGL_SUCCESS;
-	CHECKGLERROR;
-    }
-    *successptr = success;
-
+  int success = RGL_FAIL;
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getDevice(*dev))) {
+    
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(*sub);
+    
+    selectstate[0] = (int)subscene->getSelectState();
+    double* mousePosition = subscene->getMousePosition();
+    
+    locations[0] = *mousePosition;
+    locations[1] = *(mousePosition+1);
+    locations[2] = *(mousePosition+2);
+    locations[3] = *(mousePosition+3);
+    
+    success = RGL_SUCCESS;
+    CHECKGLERROR;
+  }
+  *successptr = success;
+  
 }
 
-void rgl::rgl_setselectstate(int* successptr, int *idata)
+void rgl::rgl_setselectstate(int* dev, int* sub, int* successptr, int *idata)
 {
   int success = RGL_FAIL;
   Device* device;
 
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+  if (deviceManager && (device = deviceManager->getDevice(*dev))) {
 
     MouseSelectionID selectState = (MouseSelectionID) idata[0];
     RGLView* rglview = device->getRGLView();
-    rglview->setSelectState(selectState);
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(*sub);
+    
+    subscene->setSelectState(selectState);
 
     success = RGL_SUCCESS;
     CHECKGLERROR;
@@ -1314,6 +1329,7 @@ void rgl::rgl_getEmbeddings(int* id, int* embeddings)
         embeddings[0] = subscene->getEmbedding(0);
         embeddings[1] = subscene->getEmbedding(1);
         embeddings[2] = subscene->getEmbedding(2);
+        embeddings[3] = subscene->getEmbedding(3);
       }
     }
 }
@@ -1331,11 +1347,13 @@ void rgl::rgl_setEmbeddings(int* id, int* embeddings)
         if (!subscene->getParent() &&        // can't change the root
             (embeddings[0] != EMBED_REPLACE
             || embeddings[1] != EMBED_REPLACE
-            || embeddings[2] != EMBED_REPLACE))
+            || embeddings[2] != EMBED_REPLACE
+            || embeddings[3] != EMBED_REPLACE))
           return;  
         subscene->setEmbedding(0, (Embedding)embeddings[0]);
         subscene->setEmbedding(1, (Embedding)embeddings[1]);
         subscene->setEmbedding(2, (Embedding)embeddings[2]);
+        subscene->setEmbedding(3, (Embedding)embeddings[3]);
         rglview->update();
         *id = RGL_SUCCESS;
       }

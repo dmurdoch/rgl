@@ -8,10 +8,16 @@
   Set and get user callbacks on mouse events.
 }
 \usage{
-rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL)
-rgl.getMouseCallbacks(button)
-rgl.setWheelCallback(rotate)
-rgl.getWheelCallback()
+rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL, 
+                      dev = rgl.cur(), subscene = currentSubscene3d(dev))
+rgl.getMouseCallbacks(button, 
+                      dev = rgl.cur(), subscene = currentSubscene3d(dev))
+
+rgl.setWheelCallback(rotate, 
+                      dev = rgl.cur(), subscene = currentSubscene3d(dev))
+
+rgl.getWheelCallback(dev = rgl.cur(), subscene = currentSubscene3d(dev))
+
 }
 \arguments{
   \item{button}{ Which button?  }
@@ -19,6 +25,7 @@ rgl.getWheelCallback()
   \item{update}{ Called when mouse moves }
   \item{end}{ Called when mouse is released }
   \item{rotate}{ Called when mouse wheel is rotated }
+  \item{dev, subscene}{The rgl device and subscene to work with }
 }
 \details{
 The set functions set event handlers on mouse events that occur within the current rgl window.
@@ -49,26 +56,32 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
 
 ## Not quite right --- this doesn't play well with rescaling
 
- pan3d <- function(button) {
+ pan3d <- function(button, dev = rgl.cur(), subscene = currentSubscene3d(dev)) {
    start <- list()
    
    begin <- function(x, y) {
-       start$userMatrix <<- par3d("userMatrix")
-       start$viewport <<- par3d("viewport")
-       start$scale <<- par3d("scale")
-       start$projection <<- rgl.projection()
-       start$pos <<- rgl.window2user( x/start$viewport[3], 1 - y/start$viewport[4], 0.5, 
-                                      projection = start$projection)
+     start$listeners <<- par3d("listeners", dev = dev, subscene = subscene)
+     for (sub in start$listeners) {
+       init <- par3d(c("userMatrix", "viewport", "scale"), dev = dev, subscene = sub)
+       init$projection <- rgl.projection(dev = dev, subscene = sub)
+       init$pos <- rgl.window2user( x/init$viewport[3], 1 - y/init$viewport[4], 0.5, 
+                                    projection = init$projection, dev = dev, subscene = sub)
+       start[[as.character(sub)]] <<- init
+     }
    }
    
    update <- function(x, y) {
-        xlat <- (rgl.window2user( x/start$viewport[3], 1 - y/start$viewport[4], 0.5,
-                                 projection = start$projection) - start$pos)*start$scale
+     for (sub in start$listeners) {
+       init <- start[[as.character(sub)]]
+       xlat <- (rgl.window2user( x/init$viewport[3], 1 - y/init$viewport[4], 0.5,
+                                 projection = init$projection,
+                                 dev = dev, subscene = sub) - init$pos)*init$scale
         mouseMatrix <- translationMatrix(xlat[1], xlat[2], xlat[3])
-        par3d(userMatrix = start$userMatrix \%*\% t(mouseMatrix) )
+        par3d(userMatrix = init$userMatrix \%*\% t(mouseMatrix), dev = dev, subscene = sub )
+      }
    }
-   rgl.setMouseCallbacks(button, begin, update)
-   cat("Callbacks set on button", button, "of rgl device", rgl.cur(), "\n")
+   rgl.setMouseCallbacks(button, begin, update, dev = dev, subscene = subscene)
+   cat("Callbacks set on button", button, "of rgl device", rgl.cur(), "in subscene", subscene, "\n")
  }
  shade3d(icosahedron3d(), col = "yellow")
  pan3d(3)

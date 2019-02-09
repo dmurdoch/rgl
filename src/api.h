@@ -97,15 +97,15 @@ void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, 
 void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
 void rgl_locator(int* successptr, double* locations);
 
-void rgl_selectstate(int* successptr, int* selectstate, double* locations);
-void rgl_setselectstate(int* successptr, int *idata);
+void rgl_selectstate(int* dev, int* sub, int* successptr, int* selectstate, double* locations);
+void rgl_setselectstate(int* dev, int* sub, int* successptr, int *idata);
 void rgl_setEmbeddings(int* successptr, int* embeddings);
 void rgl_getEmbeddings(int* successptr, int* embeddings);
 
-SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end);
-SEXP rgl_setWheelCallback(SEXP rotate);
-SEXP rgl_getMouseCallbacks(SEXP button);
-SEXP rgl_getWheelCallback();
+SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end, SEXP dev, SEXP sub);
+SEXP rgl_setWheelCallback(SEXP rotate, SEXP dev, SEXP sub);
+SEXP rgl_getMouseCallbacks(SEXP button, SEXP dev, SEXP sub);
+SEXP rgl_getWheelCallback(SEXP dev, SEXP sub);
 
 SEXP rgl_par3d(SEXP device, SEXP subscene, SEXP args);
 

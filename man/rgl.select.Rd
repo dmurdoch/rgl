@@ -9,11 +9,15 @@ installs a handler on a button of the mouse that will
 return the mouse coordinates of one click and drag rectangle.
 }
 \usage{
-rgl.select(button = c("left", "middle", "right"))
+rgl.select(button = c("left", "middle", "right"),
+           dev = rgl.cur(), subscene = currentSubscene3d(dev))
 }
 \arguments{
   \item{button}{
 Which button to use?
+}
+  \item{dev, subscene}{
+The rgl device and subscene to work with  
 }
 }
 \value{

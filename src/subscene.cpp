@@ -1,4 +1,5 @@
 #include "subscene.h"
+#include "rglview.h"
 #include "gl2ps.h"
 #include "R.h"
 #include <algorithm>
@@ -13,10 +14,14 @@ using namespace rgl;
 //
 
 Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_model,
+                   Embedding in_mouseHandlers,
                    bool in_ignoreExtent)
  : SceneNode(SUBSCENE), parent(NULL), do_viewport(in_viewport), do_projection(in_projection),
-   do_model(in_model), viewport(0.,0.,1.,1.),Zrow(), Wrow(),
-   pviewport(0,0,1024,1024), ignoreExtent(in_ignoreExtent)
+   do_model(in_model), do_mouseHandlers(in_mouseHandlers), 
+   viewport(0.,0.,1.,1.),Zrow(), Wrow(),
+   pviewport(0,0,1024,1024), drag(0), ignoreExtent(in_ignoreExtent),
+   selectState(msNONE), 
+   dragBase(0.0f,0.0f), dragCurrent(0.0f,0.0f)
 {
   userviewpoint = NULL;
   modelviewpoint = NULL;
@@ -26,13 +31,24 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
   data_bbox.invalidate();
   modelMatrix.setIdentity();
   projMatrix.setIdentity(); 
-  mouseListeners.push_back(getObjID());
+  mouseListeners.push_back(this);
+  for (int i=0; i<3; i++) {
+    beginCallback[i] = NULL;
+    updateCallback[i] = NULL;
+    endCallback[i] = NULL;
+    cleanupCallback[i] = NULL;
+    for (int j=0; j<3; j++) 
+      userData[3*i + j] = NULL;
+  }
 }
 
 Subscene::~Subscene() 
 {
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
     delete (*i);
+  for (int i=0; i<3; i++) 
+    if (cleanupCallback[i]) 
+      (*cleanupCallback[i])(userData + 3*i);
 }
 
 bool Subscene::add(SceneNode* node)
@@ -931,17 +947,23 @@ void Subscene::setEmbedding(int which, Embedding value)
   switch(which) {
     case 0: do_viewport = value; break;
     case 1: do_projection = value; break;
-    case 2: do_model = value; 
+    case 2: do_model = value; break;
+    case 3: do_mouseHandlers = value; break;
   }
   newEmbedding();
 }
 
+// #include <unistd.h>
 Embedding Subscene::getEmbedding(int which)
 {
+//  Rprintf("getEmbedding %d, subscene %d\n", which, getObjID());
+//  usleep(1000000);
   switch(which) {
     case 0: return do_viewport;
     case 1: return do_projection;
-    default: return do_model;
+    case 2: return do_model;
+    case 3: return do_mouseHandlers;
+  default: error("Bad embedding requested");
   }
 }
 
@@ -989,18 +1011,31 @@ void Subscene::setViewport(double x, double y, double width, double height)
   viewport.height = height;
 }
 
-void Subscene::setMouseListeners(unsigned int n, int* ids)
+void Subscene::clearMouseListeners()
 {
   mouseListeners.clear();
-  for (unsigned int i = 0; i < n; i++)
-    mouseListeners.push_back(ids[i]);
+}
+
+void Subscene::addMouseListener(Subscene* sub)
+{
+  mouseListeners.push_back(sub);
+}
+
+void Subscene::deleteMouseListener(Subscene* sub)
+{
+  for (int i=0; i < mouseListeners.size(); i++) {
+    if (sub == mouseListeners[i]) {
+      mouseListeners.erase(mouseListeners.begin() + i);
+      return;
+    }
+  }
 }
 
 void Subscene::getMouseListeners(unsigned int max, int* ids)
 {
   max = max > mouseListeners.size() ? mouseListeners.size() : max;  
   for (unsigned int i = 0; i < max; i++)
-    ids[i] = mouseListeners[i];
+    ids[i] = mouseListeners[i]->getObjID();
 }
 
 float Subscene::getDistance(const Vertex& v) const
@@ -1008,4 +1043,533 @@ float Subscene::getDistance(const Vertex& v) const
   Vertex4 vec = Vertex4(v, 1.0f);
 
   return (Zrow*vec) / (Wrow*vec);
+}
+
+viewControlPtr Subscene::getButtonBeginFunc(int which) {
+  if (getEmbedding(3) == EMBED_INHERIT)
+    return getParent()->getButtonBeginFunc(which);
+  else
+    return ButtonBeginFunc[which];
+}
+
+void Subscene::buttonBegin(int which, int mouseX, int mouseY)
+{
+  // Rprintf("Subscene %d::buttonBegin %d\n",  getObjID(), which);
+  (this->*getButtonBeginFunc(which))(mouseX, mouseY);
+}
+
+viewControlPtr Subscene::getButtonUpdateFunc(int which) 
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    return getParent()->getButtonUpdateFunc(which);
+  else
+    return ButtonUpdateFunc[which];
+}
+
+void Subscene::buttonUpdate(int which, int mouseX, int mouseY)
+{
+  (this->*getButtonUpdateFunc(which))(mouseX, mouseY);
+}
+
+viewControlEndPtr Subscene::getButtonEndFunc(int which)
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    return getParent()->getButtonEndFunc(which);
+  else
+    return ButtonEndFunc[which];  
+}
+
+void Subscene::buttonEnd(int which)
+{
+  (this->*getButtonEndFunc(which))();
+}
+
+void Subscene::setMouseMode(int button, MouseModeID mode)
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    getParent()->setMouseMode(button, mode);
+  else {
+    int index = button-1;
+    mouseMode[index] = mode;
+    switch (mode) {
+    case mmNONE:
+      ButtonBeginFunc[index] = &Subscene::noneBegin;
+      ButtonUpdateFunc[index] = &Subscene::noneUpdate;
+      ButtonEndFunc[index] = &Subscene::noneEnd;
+      break;
+    case mmTRACKBALL:
+      ButtonBeginFunc[index] = &Subscene::trackballBegin;
+      ButtonUpdateFunc[index] = &Subscene::trackballUpdate;
+      ButtonEndFunc[index] = &Subscene::trackballEnd;
+      break;
+    case mmXAXIS:
+    case mmYAXIS:
+    case mmZAXIS:
+      ButtonBeginFunc[index] = &Subscene::oneAxisBegin;
+      ButtonUpdateFunc[index] = &Subscene::oneAxisUpdate;
+      ButtonEndFunc[index] = &Subscene::trackballEnd; // No need for separate function
+      if (mode == mmXAXIS)      axis[index] = Vertex(1,0,0);
+      else if (mode == mmYAXIS) axis[index] = Vertex(0,1,0);
+      else                      axis[index] = Vertex(0,0,1);
+      break;	    	
+    case mmPOLAR:
+      ButtonBeginFunc[index] = &Subscene::polarBegin;
+      ButtonUpdateFunc[index] = &Subscene::polarUpdate;
+      ButtonEndFunc[index] = &Subscene::polarEnd;
+      break;
+    case mmSELECTING:
+      ButtonBeginFunc[index] = &Subscene::mouseSelectionBegin;
+      ButtonUpdateFunc[index] = &Subscene::mouseSelectionUpdate;
+      ButtonEndFunc[index] = &Subscene::mouseSelectionEnd;
+      break;
+    case mmZOOM:
+      ButtonBeginFunc[index] = &Subscene::adjustZoomBegin;
+      ButtonUpdateFunc[index] = &Subscene::adjustZoomUpdate;
+      ButtonEndFunc[index] = &Subscene::adjustZoomEnd;
+      break;
+    case mmFOV:
+      ButtonBeginFunc[index] = &Subscene::adjustFOVBegin;
+      ButtonUpdateFunc[index] = &Subscene::adjustFOVUpdate;
+      ButtonEndFunc[index] = &Subscene::adjustFOVEnd;
+      break;
+    case mmUSER:
+      ButtonBeginFunc[index] = &Subscene::userBegin;
+      ButtonUpdateFunc[index] = &Subscene::userUpdate;
+      ButtonEndFunc[index] = &Subscene::userEnd;
+      break;	    	
+    }
+  }
+}
+
+void Subscene::setMouseCallbacks(int button, userControlPtr begin, userControlPtr update, 
+                                 userControlEndPtr end, userCleanupPtr cleanup, void** user)
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    getParent()->setMouseCallbacks(button, begin, update, end, cleanup, user);  
+  else {
+    int ind = button - 1;
+    if (cleanupCallback[ind])
+      (*cleanupCallback[ind])(userData + 3*ind);
+    beginCallback[ind] = begin;
+    updateCallback[ind] = update;
+    endCallback[ind] = end;
+    cleanupCallback[ind] = cleanup;
+    userData[3*ind + 0] = *(user++);
+    userData[3*ind + 1] = *(user++);
+    userData[3*ind + 2] = *user;
+    setMouseMode(button, mmUSER);
+  }
+}
+
+void Subscene::getMouseCallbacks(int button, userControlPtr *begin, userControlPtr *update, 
+                                 userControlEndPtr *end, userCleanupPtr *cleanup, void** user)
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    getParent()->getMouseCallbacks(button, begin, update, end, cleanup, user); 
+  else {
+    int ind = button - 1;
+    *begin = beginCallback[ind];
+    *update = updateCallback[ind];
+    *end = endCallback[ind];
+    *cleanup = cleanupCallback[ind];
+    *(user++) = userData[3*ind + 0];
+    *(user++) = userData[3*ind + 1];
+    *(user++) = userData[3*ind + 2];
+  }
+} 
+
+MouseModeID Subscene::getMouseMode(int button)
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    return getParent()->getMouseMode(button);
+  else
+    return mouseMode[button-1];
+}
+
+void Subscene::setWheelMode(WheelModeID mode)
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    getParent()->setWheelMode(mode); 
+  else {
+    wheelMode = mode;
+    switch (mode) {
+    case wmPULL:
+      WheelRotateFunc = &Subscene::wheelRotatePull;
+      break;
+    case wmPUSH:
+      WheelRotateFunc = &Subscene::wheelRotatePush;
+      break;
+    case wmUSER:
+      WheelRotateFunc = &Subscene::userWheel;
+      break;
+    }
+  }
+}
+
+WheelModeID Subscene::getWheelMode()
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    return getParent()->getWheelMode();
+  else
+    return wheelMode;
+}
+
+void Subscene::setWheelCallback(userWheelPtr wheel, void* user)
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    getParent()->setWheelCallback(wheel, user);
+  else {
+    wheelCallback = wheel;
+    wheelData = user;
+    setWheelMode(wmUSER); 
+  }
+}
+
+void Subscene::getWheelCallback(userWheelPtr *wheel, void** user)
+{
+  if (getEmbedding(3) == EMBED_INHERIT)
+    getParent()->getWheelCallback(wheel, user);   
+  *wheel = wheelCallback;
+  *user = wheelData;
+}
+
+
+//
+// FUNCTION
+//   screenToPolar
+//
+// DESCRIPTION
+//   screen space is the same as in OpenGL, starting 0,0 at left/bottom(!) of viewport
+//
+
+static PolarCoord screenToPolar(int width, int height, int mouseX, int mouseY) {
+  
+  float cubelen, cx,cy,dx,dy,r;
+  
+  cubelen = (float) getMin(width,height);
+  r   = cubelen * 0.5f;
+  
+  cx  = ((float)width)  * 0.5f;
+  cy  = ((float)height) * 0.5f;
+  dx  = ((float)mouseX) - cx;
+  dy  = ((float)mouseY) - cy;
+  
+  //
+  // dx,dy = distance to center in pixels
+  //
+  
+  dx = clamp(dx, -r,r);
+  dy = clamp(dy, -r,r);
+  
+  //
+  // sin theta = dx / r
+  // sin phi   = dy / r
+  //
+  // phi   = arc sin ( sin theta )
+  // theta = arc sin ( sin phi   )
+  //
+  
+  return PolarCoord(
+    
+    math::rad2deg( math::asin( dx/r ) ),
+    math::rad2deg( math::asin( dy/r ) )
+    
+  );
+  
+}
+
+static Vertex screenToVector(int width, int height, int mouseX, int mouseY) {
+  
+  float radius = (float) getMax(width, height) * 0.5f;
+  
+  float cx = ((float)width) * 0.5f;
+  float cy = ((float)height) * 0.5f;
+  float x  = (((float)mouseX) - cx)/radius;
+  float y  = (((float)mouseY) - cy)/radius;
+  
+  // Make unit vector
+  
+  float len = sqrt(x*x + y*y);
+  if (len > 1.0e-6) {
+    x = x/len;
+    y = y/len;
+  }
+  // Find length to first edge
+  
+  float maxlen = math::sqrt(2.0f);
+  
+  // zero length is vertical, max length is horizontal
+  float angle = (maxlen - len)/maxlen*math::pi<float>()/2.0f;
+  
+  float z = math::sin(angle);
+  
+  // renorm to unit length
+  
+  len = math::sqrt(1.0f - z*z);
+  x = x*len;
+  y = y*len;
+  
+  return Vertex(x, y, z);
+}
+
+void Subscene::trackballBegin(int mouseX, int mouseY)
+{
+  rotBase = screenToVector(pviewport.width,pviewport.height,mouseX,mouseY);
+}
+
+void Subscene::trackballUpdate(int mouseX, int mouseY)
+{
+  rotCurrent = screenToVector(pviewport.width,pviewport.height,mouseX,mouseY);
+
+  for (unsigned int i = 0; i < mouseListeners.size(); i++) {
+    Subscene* sub = mouseListeners[i];
+    if (sub) {
+      ModelViewpoint* modelviewpoint = sub->getModelViewpoint();
+      modelviewpoint->updateMouseMatrix(rotBase,rotCurrent);
+    }
+  }
+}
+
+void Subscene::trackballEnd()
+{
+  for (unsigned int i = 0; i < mouseListeners.size(); i++) {
+    Subscene* sub = mouseListeners[i];
+    if (sub) {   
+      ModelViewpoint* modelviewpoint = sub->getModelViewpoint();
+      modelviewpoint->mergeMouseMatrix();
+    }
+  }
+}
+
+void Subscene::oneAxisBegin(int mouseX, int mouseY)
+{
+  rotBase = screenToVector(pviewport.width,pviewport.height,mouseX,pviewport.height/2);
+}
+
+void Subscene::oneAxisUpdate(int mouseX, int mouseY)
+{
+  rotCurrent = screenToVector(pviewport.width,pviewport.height,mouseX,pviewport.height/2);
+  
+  for (unsigned int i = 0; i < mouseListeners.size(); i++) {
+    Subscene* sub = mouseListeners[i];
+    if (sub) {
+      ModelViewpoint* modelviewpoint = sub->getModelViewpoint();
+      modelviewpoint->mouseOneAxis(rotBase,rotCurrent,axis[drag-1]);
+    }
+    
+  }
+}
+
+void Subscene::polarBegin(int mouseX, int mouseY)
+{
+  ModelViewpoint* modelviewpoint = getModelViewpoint();
+  
+  camBase = modelviewpoint->getPosition();
+  
+  dragBase = screenToPolar(pviewport.width,pviewport.height,mouseX,mouseY);
+  
+}
+
+void Subscene::polarUpdate(int mouseX, int mouseY)
+{
+  dragCurrent = screenToPolar(pviewport.width,pviewport.height,mouseX,mouseY);
+  
+  PolarCoord newpos = camBase - ( dragCurrent - dragBase );
+  
+  newpos.phi = clamp( newpos.phi, -90.0f, 90.0f );
+  for (unsigned int i = 0; i < mouseListeners.size(); i++) {
+    Subscene* sub = mouseListeners[i];
+    if (sub) {   
+      ModelViewpoint* modelviewpoint = sub->getModelViewpoint();
+      modelviewpoint->setPosition( newpos );
+    }
+  }
+}
+
+void Subscene::polarEnd()
+{
+  
+  //    Viewpoint* viewpoint = scene->getViewpoint();
+  //    viewpoint->mergeMouseMatrix();
+  
+}
+
+void Subscene::adjustFOVBegin(int mouseX, int mouseY)
+{
+  fovBaseY = mouseY;
+}
+
+
+void Subscene::adjustFOVUpdate(int mouseX, int mouseY)
+{
+  int dy = mouseY - fovBaseY;
+  
+  float py = -((float)dy/(float)pviewport.height) * 180.0f;
+  
+  for (unsigned int i = 0; i < mouseListeners.size(); i++) {
+    Subscene* sub = mouseListeners[i];
+    if (sub) {
+      UserViewpoint* userviewpoint = sub->getUserViewpoint();
+      userviewpoint->setFOV( userviewpoint->getFOV() + py );
+    }
+  }
+  
+  fovBaseY = mouseY;
+}
+
+
+void Subscene::adjustFOVEnd()
+{
+}
+
+void Subscene::wheelRotatePull(int dir)
+{
+  for (unsigned int i = 0; i < mouseListeners.size(); i++) {
+    Subscene* sub = mouseListeners[i];
+    if (sub) {
+      UserViewpoint* userviewpoint = sub->getUserViewpoint();
+      float zoom = userviewpoint->getZoom();
+      
+#define ZOOM_STEP  1.05f 
+#define ZOOM_PIXELLOGSTEP 0.02f
+#define ZOOM_MIN  0.0001f
+#define ZOOM_MAX  10000.0f      
+      switch(dir)
+      {
+      case GUI_WheelForward:
+        zoom *= ZOOM_STEP;
+        break;
+      case GUI_WheelBackward:
+        zoom /= ZOOM_STEP;
+        break;
+      }
+      
+      zoom = clamp( zoom , ZOOM_MIN, ZOOM_MAX);
+      userviewpoint->setZoom(zoom);
+    }
+  }
+}
+
+void Subscene::wheelRotatePush(int dir)
+{
+  switch (dir)
+  {
+  case GUI_WheelForward:
+    wheelRotatePull(GUI_WheelBackward);
+    break;
+  case GUI_WheelBackward:
+    wheelRotatePull(GUI_WheelForward);
+    break;
+  }
+}
+
+void Subscene::wheelRotate(int dir)
+{
+  (this->*WheelRotateFunc)(dir);
+}
+
+void Subscene::userBegin(int mouseX, int mouseY)
+{
+  int ind = drag - 1;
+  activeButton = drag;
+  if (beginCallback[ind]) {
+    busy = true;
+    (*beginCallback[ind])(userData[3*ind+0], mouseX, pviewport.height-mouseY);
+    busy = false;
+  }
+}
+
+
+void Subscene::userUpdate(int mouseX, int mouseY)
+{
+  int ind = activeButton - 1;
+  if (!busy && updateCallback[ind]) {
+    busy = true;
+    (*updateCallback[ind])(userData[3*ind+1], mouseX, pviewport.height-mouseY);
+    busy = false;
+  }
+}
+
+void Subscene::userEnd()
+{
+  int ind = activeButton - 1;
+  if (endCallback[ind])
+    (*endCallback[ind])(userData[3*ind+2]);
+}
+
+void Subscene::userWheel(int dir)
+{
+  if (wheelCallback)
+    (*wheelCallback)(wheelData, dir);
+}
+
+
+void Subscene::adjustZoomBegin(int mouseX, int mouseY)
+{
+  zoomBaseY = mouseY;
+}
+
+
+void Subscene::adjustZoomUpdate(int mouseX, int mouseY)
+{
+  int dy = mouseY - zoomBaseY;
+  // Rprintf("adjustZoomUpdate by %d for %d\n", dy, getObjID());
+  for (unsigned int i = 0; i < mouseListeners.size(); i++) {
+    // Rprintf("adjustZoomUpdate: mouseListeners[%d]=%d\n", i, mouseListeners[i]);
+    Subscene* sub = mouseListeners[i];
+    if (sub) {
+//      Rprintf("found it\n");
+      UserViewpoint* userviewpoint = sub->getUserViewpoint();
+      
+      float zoom = clamp ( userviewpoint->getZoom() * exp(dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
+      // Rprintf("zoom = %f for subscene %d\n", zoom, sub->getObjID());
+      userviewpoint->setZoom(zoom);
+    }
+  }
+  
+  zoomBaseY = mouseY;
+}
+
+
+void Subscene::adjustZoomEnd()
+{
+}
+
+double* Subscene::getMousePosition()
+{
+  return mousePosition;
+}
+
+MouseSelectionID Subscene::getSelectState() 
+{
+  return selectState;
+}
+
+void Subscene::setSelectState(MouseSelectionID state)
+{
+  selectState = state;
+}
+
+void Subscene::mouseSelectionBegin(int mouseX,int mouseY)
+{
+  if (selectState == msABORT) return;
+  
+  mousePosition[0] = (float)mouseX/(float)pviewport.width;
+  mousePosition[1] = (float)mouseY/(float)pviewport.height;
+  mousePosition[2] = mousePosition[0];
+  mousePosition[3] = mousePosition[1];
+  selectState = msCHANGING;
+}
+
+void Subscene::mouseSelectionUpdate(int mouseX,int mouseY)
+{
+  mousePosition[2] = (float)mouseX/(float)pviewport.width;
+  mousePosition[3] = (float)mouseY/(float)pviewport.height;
+}
+
+void Subscene::mouseSelectionEnd()
+{
+  if (selectState == msABORT) return;
+  
+  selectState = msDONE;
 }

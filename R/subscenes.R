@@ -32,22 +32,26 @@ subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
   embeddingNames <- c("inherit", "modify", "replace")
   if (!missing(embeddings)) {
     embeddings <- pmatch(embeddings, embeddingNames, duplicates.ok = TRUE)
-    if (any(is.na(embeddings)) || length(embeddings) != 3)
-      stop(gettextf("Three embeddings must be specified; names chosen from %s", 
+    if (any(is.na(embeddings)) || length(embeddings) != 4)
+      stop(gettextf("Four embeddings must be specified; names chosen from %s", 
       	            paste(dQuote(embeddingNames), collapse=", ")), domain = NA)
-    .C(rgl_setEmbeddings, id = id, embeddings = embeddings)
+    if (embeddings[4] == "modify")
+      stop("The mouseMode embedding cannot be 'modify'")
+    .C(rgl_setEmbeddings, id = id, embeddings = as.integer(embeddings))
   }
-  embeddings <- .C(rgl_getEmbeddings, id = id, embeddings = integer(3))$embeddings
+  embeddings <- .C(rgl_getEmbeddings, id = id, embeddings = integer(4))$embeddings
   embeddings <- embeddingNames[embeddings]
-  names(embeddings) <- c("viewport", "projection", "model")
+  names(embeddings) <- c("viewport", "projection", "model", "mouse")
   result[["embeddings"]] <- embeddings
   result
 }
 
 newSubscene3d <- function(viewport = "replace", 
                        projection = "replace",
-		       model = "replace",
-                       parent = currentSubscene3d(), copyLights = TRUE,
+		                   model = "replace",
+		                   mouseMode = "inherit",
+                       parent = currentSubscene3d(), 
+		                   copyLights = TRUE,
                        copyShapes = FALSE,
                        copyBBoxDeco = copyShapes,
                        copyBackground = FALSE,
@@ -57,11 +61,15 @@ newSubscene3d <- function(viewport = "replace",
   viewport <- pmatch(viewport, embedding)
   projection <- pmatch(projection, embedding)
   model <- pmatch(model, embedding)
+  mouseMode <- pmatch(mouseMode, embedding)
+  
   if (missing(ignoreExtent))
     ignoreExtent <- model != 1
-  stopifnot(length(viewport) == 1, length(projection) == 1, length(model) == 1,
+  stopifnot(length(viewport) == 1L, length(projection) == 1L, 
+            length(model) == 1L, length(mouseMode) ==1L,
+            mouseMode != 2L,
             !is.na(viewport), !is.na(projection), !is.na(model))
-  embedding <- c(viewport, projection, model)
+  embedding <- c(viewport, projection, model, mouseMode)
   
   id <- .C(rgl_newsubscene, id = integer(1), parent = as.integer(parent),
                embedding = as.integer(embedding),
@@ -201,6 +209,7 @@ mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA, sharedMouse = FALSE,
         newvp <- c(parentvp[1] + (j - 1)*parentvp[3]/nc,
                    parentvp[2] + (nr - i)*parentvp[4]/nr,
                    parentvp[3]/nc, parentvp[4]/nr)
+#        cat(sprintf("mfrow3d i=%d j=%d\n", i, j))
         result[(i-1)*nc + j] <- newSubscene3d(newviewport = newvp, parent = parent, ...)
       }
   else

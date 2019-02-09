@@ -10,13 +10,14 @@ to 3-dimensional window coordinates.
 \usage{
 rgl.user2window(x, y = NULL, z = NULL, projection = rgl.projection())
 rgl.window2user(x, y = NULL, z = 0, projection = rgl.projection())
-rgl.projection()
+rgl.projection(dev = rgl.cur(), subscene = currentSubscene3d(dev))
 }
 \arguments{
   \item{x, y, z}{Input coordinates.  Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{projection}{The rgl projection to use }
+  \item{dev, subscene}{The rgl device and subscene to work with }
 }
 \details{
 These functions convert between user coordinates and window coordinates.

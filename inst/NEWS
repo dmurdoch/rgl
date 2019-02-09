@@ -909,7 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.100.12
+0.100.13
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
@@ -952,3 +952,6 @@ base graphics.
     latter addition.)
   - as.mesh3d(), plot3d() and persp3d() methods for "ashape3d"
     objects from the alphashape3d package have been added.
+  - The mouse mode (trackball, zoom, etc.) can now be applied
+    separately to each individual subscene in a scene.
+    (By default the mode is inherited from the root subscene.)

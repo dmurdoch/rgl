@@ -18,7 +18,7 @@ mouseNone <- function(button = 1, dev = rgl.cur() ) {
     
     for (i in dev) {
         rgl.set(i, TRUE)
-        rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL)
+        rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL, dev = dev)
     }
     rgl.set(cur)
 }
@@ -71,7 +71,8 @@ mouseTrackball <- function(button = 1, dev = rgl.cur() ) {
     
     for (i in dev) {
         rgl.set(i, TRUE)
-        rgl.setMouseCallbacks(button, begin = trackballBegin, update = trackballUpdate, end = NULL)
+        rgl.setMouseCallbacks(button, begin = trackballBegin, update = trackballUpdate, end = NULL,
+                              dev = dev)
     }
     rgl.set(cur, TRUE)
 }
@@ -140,7 +141,7 @@ mouseOneAxis <- function(button = 1, dev = rgl.cur(), axis = c(1,0,0), left = TR
     
     for (i in dev) {
         rgl.set(i, TRUE)
-        rgl.setMouseCallbacks(button, begin = oneAxisBegin, update = oneAxisUpdate, end = NULL)
+        rgl.setMouseCallbacks(button, begin = oneAxisBegin, update = oneAxisUpdate, end = NULL, dev = dev)
     }
     rgl.set(cur, TRUE)
 }
@@ -197,7 +198,7 @@ mousePolar <- function(button = 1, dev = rgl.cur()) {
     
     for (i in dev) {
 	rgl.set(i, TRUE)
-	rgl.setMouseCallbacks(button, begin = polarBegin, update = polarUpdate, end = NULL)
+	rgl.setMouseCallbacks(button, begin = polarBegin, update = polarUpdate, end = NULL, dev = dev)
     }
     rgl.set(cur, TRUE)
 }
@@ -243,7 +244,7 @@ mouseBG <- function(button = 1, dev = rgl.cur(), init = "white", rate = cbind(c(
     
     for (i in dev) {
         rgl.set(i, TRUE)
-        rgl.setMouseCallbacks(button, begin = bgBegin, update = bgUpdate, end = bgEnd)
+        rgl.setMouseCallbacks(button, begin = bgBegin, update = bgUpdate, end = bgEnd, dev = dev)
     }
     rgl.set(cur, TRUE)
 }
@@ -278,7 +279,7 @@ mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, range = NULL,
     
     for (i in dev) {
         rgl.set(i, TRUE)
-        rgl.setMouseCallbacks(button, begin = interpBegin, update = interpUpdate, end = interpEnd)
+        rgl.setMouseCallbacks(button, begin = interpBegin, update = interpUpdate, end = interpEnd, dev = dev)
     }
     rgl.set(cur, TRUE)
 }

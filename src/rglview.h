@@ -15,17 +15,6 @@
 
 namespace rgl {
 
-enum MouseModeID {mmNONE = 0, mmTRACKBALL, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
-                  mmSELECTING, mmZOOM, mmFOV, mmUSER};
-enum MouseSelectionID {msNONE=1, msCHANGING, msDONE, msABORT};
-
-enum WheelModeID {wmPUSH = 1, wmPULL, wmUSER};
-
-typedef void (*userControlPtr)(void *userData, int mouseX, int mouseY);
-typedef void (*userControlEndPtr)(void *userData);
-typedef void (*userCleanupPtr)(void **userData);
-typedef void (*userWheelPtr)(void *userData, int dir);
-
 class RGLView : public View
 {
 public:
@@ -47,20 +36,6 @@ public:
   void keyPress(int code);
   Scene* getScene();
 
-  MouseModeID getMouseMode(int button);
-  void        setMouseMode(int button, MouseModeID mode);
-  void        setMouseCallbacks(int button, userControlPtr begin, userControlPtr update, 
-                                            userControlEndPtr end, userCleanupPtr cleanup, void** user);
-  void        getMouseCallbacks(int button, userControlPtr *begin, userControlPtr *update, 
-                                            userControlEndPtr *end, userCleanupPtr *cleanup, void** user);
-  WheelModeID getWheelMode();
-  void        setWheelMode(WheelModeID mode);
-  void        setWheelCallback(userWheelPtr wheel, void* user);
-  void        getWheelCallback(userWheelPtr *wheel, void** user);
-  
-  MouseSelectionID getSelectState();
-  void        setSelectState(MouseSelectionID state);
-  double*     getMousePosition();
   void        getUserMatrix(double* dest);
   void        setUserMatrix(double* src);
   void        getScale(double* dest);
@@ -81,96 +56,25 @@ public:
   void        getPosition(double* dest);
   void 	      setPosition(double* src);
 
+  void setMouseListeners(Subscene* sub, unsigned int n, int* ids);
+  
 protected:
 
   void setWindowImpl(WindowImpl* impl);
 
 
 private:
-  typedef void (RGLView::*viewControlPtr)(int mouseX,int mouseY);
-  typedef void (RGLView::*viewControlEndPtr)();
-  typedef void (RGLView::*viewWheelPtr)(int dir);
-    
-
-  viewControlPtr ButtonBeginFunc[3], ButtonUpdateFunc[3];
-  viewControlEndPtr ButtonEndFunc[3];
-  viewWheelPtr WheelRotateFunc;
-
-  void setDefaultMouseFunc();
 
 //
 // DRAG USER-INPUT
 //
 
-  int drag, activeSubscene;
-  int vwidth, vheight;      /* width and height of active subscene */
-  
+  int activeSubscene;
+
 // Translate from OS window-relative coordinates (relative to top left corner) to
 // OpenGL window relative (relative to bottom left corner)
   void translateCoords(int* mouseX, int* mouseY) const { *mouseY = height - *mouseY; }
 
-  void noneBegin(int mouseX, int mouseY) {};
-  void noneUpdate(int mouseX, int mouseY)  {};
-  void noneEnd() {};
-  
-// o DRAG FEATURE: adjustDirection
-
-  void polarBegin(int mouseX, int mouseY);
-  void polarUpdate(int mouseX, int mouseY);
-  void polarEnd();
-
-  void trackballBegin(int mouseX, int mouseY);
-  void trackballUpdate(int mouseX, int mouseY);
-  void trackballEnd();
-  
-  void oneAxisBegin(int mouseX, int mouseY);
-  void oneAxisUpdate(int mouseX, int mouseY);  
-
-  void wheelRotatePull(int dir);
-  void wheelRotatePush(int dir);
-  
-  PolarCoord camBase, dragBase, dragCurrent;
-  Vertex rotBase, rotCurrent, axis[3];
-
-
-// o DRAG FEATURE: adjustZoom
-
-  void adjustZoomBegin(int mouseX, int mouseY);
-  void adjustZoomUpdate(int mouseX, int mouseY);
-  void adjustZoomEnd();
-
-  int zoomBaseY;
-
-// o DRAG FEATURE: adjustFOV (field of view)
-
-  void adjustFOVBegin(int mouseX, int mouseY);
-  void adjustFOVUpdate(int mouseX, int mouseY);
-  void adjustFOVEnd();
-
-  int fovBaseY;
-  
-// o DRAG FEATURE: user supplied callback
-
-  void userBegin(int mouseX, int mouseY);
-  void userUpdate(int mouseX, int mouseY);
-  void userEnd();
-  
-  void userWheel(int dir);
-  
-  void* userData[9];
-  userControlPtr beginCallback[3], updateCallback[3];
-  userControlEndPtr endCallback[3];
-  userCleanupPtr cleanupCallback[3];
-  int activeButton;
-  bool busy;
-  
-  void* wheelData;
-  userWheelPtr wheelCallback;
-
-// o DRAG FEATURE: mouseSelection
-  void mouseSelectionBegin(int mouseX,int mouseY);
-  void mouseSelectionUpdate(int mouseX,int mouseY);
-  void mouseSelectionEnd();
 
 //
 // RENDER SYSTEM
@@ -194,12 +98,6 @@ private:
   };
 
   int  flags;
-
-  MouseModeID mouseMode[3];
-  MouseSelectionID selectState;
-  double  mousePosition[4];
-
-  WheelModeID wheelMode;
 };
 
 } // namespace rgl

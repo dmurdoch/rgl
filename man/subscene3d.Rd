@@ -13,11 +13,16 @@ Create, select or modify a subscene.
 This creates a new subscene, or selects one by \code{id} value, or adds objects to one.
 }
 \usage{
-newSubscene3d(viewport = "replace", projection = "replace", model = "replace", 
-           parent = currentSubscene3d(), 
-           copyLights = TRUE, copyShapes = FALSE, copyBBoxDeco = copyShapes, 
-           copyBackground = FALSE, newviewport,
-           ignoreExtent)
+newSubscene3d(viewport = "replace", 
+              projection = "replace", 
+              model = "replace",
+              mouseMode = "inherit", 
+              parent = currentSubscene3d(), 
+              copyLights = TRUE, 
+              copyShapes = FALSE, 
+              copyBBoxDeco = copyShapes, 
+              copyBackground = FALSE, newviewport,
+              ignoreExtent)
 currentSubscene3d(dev = rgl.cur())
 useSubscene3d(subscene)
 addToSubscene3d(ids, subscene = currentSubscene3d())
@@ -25,7 +30,7 @@ delFromSubscene3d(ids, subscene = currentSubscene3d())
 gc3d(protect = NULL)
 }
 \arguments{
-  \item{viewport, projection, model}{
+  \item{viewport, projection, model, mouseMode}{
 How should the new subscene be embedded?  Possible values are
 \code{c("inherit", "modify", "replace")}.  See Details below.
 }
@@ -58,7 +63,8 @@ Object ids to protect from this garbage collection.
 \details{
 The rgl package allows multiple windows to be open; each one corresponds to a \dQuote{scene}.
 Within each scene there are one or more \dQuote{subscenes}.  Each subscene corresponds
-to a rectangular region in the window, and may have its own projection and transformation.
+to a rectangular region in the window, and may have its own projection, transformation and behaviour in response to 
+the mouse.
 
 There is always a current subscene:  most graphic operations make changes there, e.g. by adding
 an object to it.
@@ -75,7 +81,22 @@ have its own value of the value, independent of its parent.  \code{"modify"} mea
 child value will be applied first, and then the parent value will be applied.  For viewport, this
 means that if the parent viewport is changed, the child will maintain its relative position.  For
 the two matrices, \code{"modify"} is unlikely to give satisfactory results, but it is available
-for possible use.
+for possible use.  
+
+The \code{mouseMode} parameter 
+can only be one of \code{c("inherit", "replace")}.  If
+it is \code{"inherit"}, the subscene will use the mouse
+controls of the parent, and any change to them will
+affect the parent and all children that inherit from it.
+This is the behaviour that was present before \pkg{rgl}
+version 0.100.13.  If it is \code{"replace"}, then
+it will receive a copy of the parent mouse controls,
+but modifications to them will affect only this 
+subscene, not the parent.  Note that this is orthogonal
+to the \code{\link{par3d}("listeners")} setting:
+if another subscene is listed as a listener, it will respond
+to mouse actions using the same mode as the one receiving
+them.
 
 The \code{viewport} parameter controls the rectangular region in which the subscene is displayed.
 It is specified using \code{newviewport} (in pixels relative to the whole window), or set to 

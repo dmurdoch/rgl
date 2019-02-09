@@ -24,7 +24,7 @@ using namespace rgl;
 ObjID SceneNode::nextID = 1;
 
 Scene::Scene()
-: rootSubscene(EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, false),
+: rootSubscene(EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, false),
   doIgnoreExtent(false)
 {
   nodes.reserve(6);
@@ -106,6 +106,7 @@ bool Scene::pop(TypeID type, int id)
     if (node == &rootSubscene) 
       return true;
     hide((*iter)->getObjID());
+    removeReferences(*iter); /* Might be in mouseListeners */
     nodes.erase(iter);
     delete node;
 
@@ -143,6 +144,16 @@ void Scene::hide(int id)
         }
       }
     }
+  }
+}
+
+void Scene::removeReferences(SceneNode* node) {
+  if (node->getTypeID() == SUBSCENE) {
+    for (std::vector<SceneNode*>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter) 
+      if ((*iter)->getTypeID() == SUBSCENE) {
+        Subscene* subscene = (Subscene*)*iter;
+        subscene->deleteMouseListener((Subscene*)node);
+      }
   }
 }
 

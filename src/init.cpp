@@ -159,8 +159,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    {"rgl_delfromsubscene",	(DL_FUNC) &rgl_delfromsubscene, 3, aIII},
    {"rgl_user2window",		(DL_FUNC) &rgl_user2window, 7, aLIDDDDI},
    {"rgl_window2user", 		(DL_FUNC) &rgl_window2user, 7, aLIDDDDI},
-   {"rgl_selectstate", 		(DL_FUNC) &rgl_selectstate, 3, aLID},
-   {"rgl_setselectstate",	(DL_FUNC) &rgl_setselectstate, 2, aLI},
+   {"rgl_selectstate", 		(DL_FUNC) &rgl_selectstate, 5, aIILID},
+   {"rgl_setselectstate",	(DL_FUNC) &rgl_setselectstate, 4, aIILI},
    {"rgl_quit",			(DL_FUNC) &rgl_quit, 1, aL},
    
    {NULL, NULL, 0}
@@ -213,8 +213,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_delfromsubscene, 3),
    FUNDEF(rgl_user2window, 7),
    FUNDEF(rgl_window2user, 7),
-   FUNDEF(rgl_selectstate, 3),
-   FUNDEF(rgl_setselectstate, 2),
+   FUNDEF(rgl_selectstate, 5),
+   FUNDEF(rgl_setselectstate, 4),
    FUNDEF(rgl_quit, 1),
    
    {NULL, NULL, 0}
@@ -227,10 +227,10 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
    FUNDEF(rgl_dev_getcurrent, 0),
    FUNDEF(rgl_dev_list, 0),
    FUNDEF(rgl_par3d, 3),
-   FUNDEF(rgl_setMouseCallbacks, 4),
-   FUNDEF(rgl_setWheelCallback, 1),
-   FUNDEF(rgl_getMouseCallbacks, 1),
-   FUNDEF(rgl_getWheelCallback, 0),
+   FUNDEF(rgl_setMouseCallbacks, 6),
+   FUNDEF(rgl_setWheelCallback, 3),
+   FUNDEF(rgl_getMouseCallbacks, 3),
+   FUNDEF(rgl_getWheelCallback, 2),
 
    {NULL, NULL, 0}
  };

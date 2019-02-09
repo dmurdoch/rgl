@@ -7,11 +7,13 @@
   select a region in an RGL scene.  
 }
 \usage{
-rgl.select3d(button = c("left", "middle", "right"))
+rgl.select3d(button = c("left", "middle", "right"),
+             dev = rgl.cur(), subscene = currentSubscene3d(dev))
 select3d(...)
 }
 \arguments{
   \item{ button }{ Which button to use for selection.}
+  \item{ dev, subscene}{ The rgl device and subscene to work with }
   \item{ ... }{ Button argument to pass to \code{rgl.select3d}}
 }
 

@@ -179,8 +179,6 @@ r3dDefaults
 	    \code{\link{rgl.setWheelCallback}}.}
 	}
       A common default on Mac OSX is to convert a two finger drag on a trackpad to a mouse wheel rotation.
-      
-      Applies to the whole device.
     }
     \item{\code{observer}}{\emph{\bold{R.O.}}; the position of the observer relative to
       the model.  Set by \code{\link{observer3d}}.  See the Note below.}
