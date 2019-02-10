@@ -13,15 +13,7 @@ persp3d(x, \dots)
     forceClipregion = FALSE, ...)
 }
 \arguments{
-  \item{x, y}{locations of grid lines at which the values in \code{z} are
-    measured.  These may be given as vectors or matrices.
-    If vectors, they must be in ascending order.   Either one or both may be matrices.
-    If \code{x} is a \code{list},
-    its components \code{x$x} and \code{x$y} are used for \code{x}
-    and \code{y}, respectively.}
-  \item{z}{a matrix containing the values to be plotted.  
-    Note that \code{x} can be used instead of \code{z} for
-    convenience.}
+  \item{x, y, z}{points to plot on surface.  See Details below.}
   \item{xlim, ylim, zlim}{x-, y-  and z-limits.  If present,
   the plot is clipped to this region.}
   \item{xlab, ylab, zlab}{titles for the axes.  N.B. These must be
@@ -35,8 +27,25 @@ whether or not limits are given.}
   and \code{\link{decorate3d}}.}
 }
 \details{
-  This is similar to \code{\link[graphics]{persp}} with user interaction.  See \code{\link{plot3d}}
-  for more general details.
+The default method plots a surface defined as a grid of \code{(x,y,z)} locations in space.  The grid may be specified in several ways:
+\itemize{
+\item{As with \code{\link[graphics]{persp}}, \code{x} and \code{y} may be given as vectors in ascending order, with \code{z} given as a matrix. There
+should be one \code{x} value for each row of \code{z} and
+one \code{y} value for each column.  The surface drawn will
+have \code{x} constant across rows and \code{y} constant
+across columns.  This is the most convenient format when
+\code{z} is a function of \code{x} and \code{y} which are
+measured on a regular grid.}
+
+\item{\code{x} and \code{y} may also be given as matrices, in which
+case they should have the same dimensions as \code{z}.  The
+surface will combine corresponding points in each matrix
+into locations \code{(x,y,z)} and draw the surface through those.  This
+allows general surfaces to be drawn, as in the example of a spherical Earth shown below.}
+
+\item{If \code{x} is a \code{list}, its components \code{x$x}, \code{x$y} and \code{x$z} are used for \code{x}, \code{y} and
+\code{z} respectively, though an explicitly specified
+\code{z} value will have priority.}}
   
   One difference from \code{\link[graphics]{persp}} is that colors are specified on each
   vertex, rather than on each facet of the surface.  To emulate the \code{\link[graphics]{persp}}
@@ -46,11 +55,6 @@ whether or not limits are given.}
   (These extra colors will not be used).  For example, 
   \code{col <- rbind(1, cbind(matrix(col, nx - 1, ny - 1), 1))}.
   Finally, call \code{persp3d} with material property \code{smooth = FALSE}.
-  
-  If the \code{x} or \code{y} argument is a matrix, then it must be of the same
-  dimension as \code{z}, and the values in the matrix will be used for the corresponding
-  coordinates. This is used to plot shapes such as spheres or cylinders
-  where z is not a function of x and y.  See the fourth and fifth examples below.
   
   See the \dQuote{Clipping} section in \code{\link{plot3d}}
 for more details on \code{xlim, ylim, zlim} and \code{forceClipregion}.
@@ -62,7 +66,10 @@ for more details on \code{xlim, ylim, zlim} and \code{forceClipregion}.
 \author{Duncan Murdoch}
 \seealso{\code{\link{plot3d}}, \code{\link{persp}}. There is
 a \code{\link{persp3d.function}} method for drawing functions, and \code{\link{persp3d.deldir}} can be used
-to draw surfaces defined by an irregular collection of points.}
+to draw surfaces defined by an irregular collection of points.  A formula method \code{\link{persp3d.formula}} draws 
+surfaces using this method.
+
+The \code{\link{surface3d}} function is used to draw the surface without the axes etc. }
 \examples{
 
 # (1) The Obligatory Mathematical surface.
