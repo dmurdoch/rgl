@@ -909,7 +909,7 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.100.13
+0.100.14
   - Added check for "highp" support to fragment shader in rglwidget.
   - Added shinyGetPar3d and shinySetPar3d functions for Shiny
     interaction.
@@ -955,3 +955,6 @@ base graphics.
   - The mouse mode (trackball, zoom, etc.) can now be applied
     separately to each individual subscene in a scene.
     (By default the mode is inherited from the root subscene.)
+  - Added par3d("userProjection"), to allow the user to supply
+    a change to the projection after all other calculations 
+    have been done.

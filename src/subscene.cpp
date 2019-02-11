@@ -792,7 +792,7 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
   if (do_projection == EMBED_REPLACE) 
     projMatrix.setIdentity();
 
-  getUserViewpoint()->setupFrustum(rctx, viewSphere);   
+  getUserViewpoint()->setupProjMatrix(rctx, viewSphere);   
 }
 
 // The ModelView matrix has components of the user view (the translation at the start)
@@ -977,6 +977,18 @@ void Subscene::setUserMatrix(double* src)
 {
   ModelViewpoint* modelviewpoint = getModelViewpoint();
   modelviewpoint->setUserMatrix(src);
+}
+
+void Subscene::getUserProjection(double* dest)
+{
+  UserViewpoint* userviewpoint = getUserViewpoint();
+  userviewpoint->getUserProjection(dest);
+}
+
+void Subscene::setUserProjection(double* src)
+{
+  UserViewpoint* userviewpoint = getUserViewpoint();
+  userviewpoint->setUserProjection(src);
 }
 
 void Subscene::getScale(double* dest)

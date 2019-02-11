@@ -21,6 +21,7 @@ UserViewpoint::UserViewpoint(float in_fov, float in_zoom) :
     zoom(in_zoom),
     viewerInScene(false)
 {
+  clearUserProjection();
 }
 
 ModelViewpoint::ModelViewpoint(PolarCoord in_position, Vec3 in_scale, bool in_interactive) :
@@ -69,6 +70,24 @@ void ModelViewpoint::clearMouseMatrix()
     Matrix4x4 M;
     M.setIdentity();
     M.getData((double*)mouseMatrix);
+}
+
+void UserViewpoint::clearUserProjection()
+{
+  userProjection.setIdentity();
+}
+
+void UserViewpoint::getUserProjection(double* dest)
+{
+  userProjection.transpose();
+  userProjection.getData(dest);
+  userProjection.transpose();
+}
+
+void UserViewpoint::setUserProjection(double* src)
+{
+  userProjection.loadData(src);
+  userProjection.transpose();
 }
 
 float UserViewpoint::getZoom() const
@@ -125,9 +144,14 @@ void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
   frustum.bottom *= zoom;
   frustum.top *= zoom;
   
-  rctx->subscene->projMatrix.loadData(rctx->subscene->projMatrix*frustum.getMatrix());
 }
 
+void UserViewpoint::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
+{
+  setupFrustum(rctx, viewSphere);
+  rctx->subscene->projMatrix.loadData(rctx->subscene->projMatrix*userProjection*frustum.getMatrix());
+}
+  
 Vertex UserViewpoint::getObserver()
  {
   return this->eye;

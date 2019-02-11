@@ -2,8 +2,6 @@ To-do:
 
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 
-Allow "zooming in" on a particular point.
-
 Setting par3d(mouseMode = c("none", "none", "none")) doesn't
 seem to do anything:  still have trackball in persp3Drgl example.  There was a bug (leaving trackball in place), but
 also mouseMode applied by design to the whole device, where it should really be subscene specific.
@@ -27,6 +25,9 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Allow "zooming in" on a particular point.  Do this by allowing modelMatrix and projMatrix to be set by the user.
+DONE by adding userProjection.
 
 Add support for ashape3d objects from alphashape3d package.
 DONE

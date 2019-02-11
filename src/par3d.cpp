@@ -139,6 +139,21 @@ static void setUserMatrix(double* userMatrix, RGLView* rglview, Subscene* subsce
   CHECKGLERROR;
 }
 
+static void getUserProjection(double* userProjection, Subscene* subscene)
+{
+  subscene->getUserProjection(userProjection);
+  
+  CHECKGLERROR;
+  
+}
+
+static void setUserProjection(double* userProjection, RGLView* rglview, Subscene* subscene)
+{
+  subscene->setUserProjection(userProjection);
+  rglview->update();
+  CHECKGLERROR;
+}
+
 static void getPosition(double* position, Subscene* subscene)
 {
   subscene->getPosition(position);
@@ -495,6 +510,11 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
     
     setUserMatrix(REAL(x), rglview, sub);
   }
+  else if (streql(what, "userProjection")) {
+    dimCheck(what, value, 4, 4);
+    x = coerceVector(value, REALSXP);
+    setUserProjection(REAL(x), rglview, sub);
+  }
   else if (streql(what, "scale")) {
     lengthCheck(what, value, 3);
     x = coerceVector(value, REALSXP);
@@ -620,6 +640,10 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   else if (streql(what, "userMatrix")) {
     value = allocMatrix(REALSXP, 4, 4);
     getUserMatrix(REAL(value), sub);
+  }
+  else if (streql(what, "userProjection")) {
+    value = allocMatrix(REALSXP, 4, 4);
+    getUserProjection(REAL(value), sub);
   }
   else if (streql(what, "scale")) {
     value = allocVector(REALSXP, 3);

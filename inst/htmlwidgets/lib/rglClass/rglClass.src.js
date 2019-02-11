@@ -1016,7 +1016,8 @@ rglwidgetClass = function() {
            far = distance + radius,
            hlen,
            aspect = this.vp.width/this.vp.height,
-           z = subscene.par3d.zoom;
+           z = subscene.par3d.zoom,
+           userProjection = subscene.par3d.userProjection;
        if (far < 0.0)
          far = 1.0;
        if (near < far/100.0)
@@ -1039,6 +1040,7 @@ rglwidgetClass = function() {
                           -hlen*z/aspect, hlen*z/aspect,
                           near, far);
        }
+       this.prMatrix.multRight(userProjection);
      };
 
     /**
@@ -1148,6 +1150,8 @@ rglwidgetClass = function() {
         return;
 
       sub.par3d.userMatrix = this.toCanvasMatrix4(sub.par3d.userMatrix);
+      sub.par3d.userProjection = this.toCanvasMatrix4(sub.par3d.userProjection);
+      sub.par3d.userProjection.transpose();
       sub.par3d.listeners = [].concat(sub.par3d.listeners);
       sub.backgroundId = undefined;
       sub.subscenes = [];

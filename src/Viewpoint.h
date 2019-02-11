@@ -57,16 +57,21 @@ public:
   float       getFOV(void) const;
   void        setFOV(const float in_fov);
   void        setupFrustum(RenderContext* rctx, const Sphere& viewvolumeSphere);
+  void        setupProjMatrix(RenderContext* rctx, const Sphere& viewvolumeSphere);
   Vertex      getObserver();
   void	      setObserver(bool automatic, Vertex eye);
   void	      setupViewer(RenderContext* rctx);
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "userviewpoint", buflen); };
   Frustum     frustum;
+  void        getUserProjection(double* dest);
+  void        setUserProjection(double* src);
+  void        clearUserProjection();
 private:
   float       fov;
   float       zoom;
   bool        viewerInScene;
   Vertex      eye;
+  Matrix4x4   userProjection;
 };
 
 

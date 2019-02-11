@@ -186,11 +186,13 @@ public:
   Embedding getEmbedding(int which);
   
   void setUserMatrix(double* src);
+  void setUserProjection(double* src);
   void setScale(double* src);
   void setViewport(double x, double y, double width, double height); /* Sets relative (i.e. [0,1]x[0,1]) viewport size */
   void setPosition(double* src);
   
   void getUserMatrix(double* dest);
+  void getUserProjection(double* dest);
   void getScale(double* dest);
   void getPosition(double* dest);
   
