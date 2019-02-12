@@ -54,18 +54,15 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
 \seealso{ \code{\link{par3d}} to set built-in handlers }
 \examples{
 
-## Not quite right --- this doesn't play well with rescaling
-
  pan3d <- function(button, dev = rgl.cur(), subscene = currentSubscene3d(dev)) {
    start <- list()
    
    begin <- function(x, y) {
-     start$listeners <<- par3d("listeners", dev = dev, subscene = subscene)
+     activeSubscene <- par3d("activeSubscene", dev = dev)
+     start$listeners <<- par3d("listeners", dev = dev, subscene = activeSubscene)
      for (sub in start$listeners) {
-       init <- par3d(c("userMatrix", "viewport", "scale"), dev = dev, subscene = sub)
-       init$projection <- rgl.projection(dev = dev, subscene = sub)
-       init$pos <- rgl.window2user( x/init$viewport[3], 1 - y/init$viewport[4], 0.5, 
-                                    projection = init$projection, dev = dev, subscene = sub)
+       init <- par3d(c("userProjection","viewport"), dev = dev, subscene = sub)
+       init$pos <- c(x/init$viewport[3], 1 - y/init$viewport[4], 0.5)
        start[[as.character(sub)]] <<- init
      }
    }
@@ -73,17 +70,15 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
    update <- function(x, y) {
      for (sub in start$listeners) {
        init <- start[[as.character(sub)]]
-       xlat <- (rgl.window2user( x/init$viewport[3], 1 - y/init$viewport[4], 0.5,
-                                 projection = init$projection,
-                                 dev = dev, subscene = sub) - init$pos)*init$scale
-        mouseMatrix <- translationMatrix(xlat[1], xlat[2], xlat[3])
-        par3d(userMatrix = init$userMatrix \%*\% t(mouseMatrix), dev = dev, subscene = sub )
+       xlat <- 2*(c(x/init$viewport[3], 1 - y/init$viewport[4], 0.5) - init$pos)
+       mouseMatrix <- translationMatrix(xlat[1], xlat[2], xlat[3])
+       par3d(userProjection = mouseMatrix \%*\% init$userProjection, dev = dev, subscene = sub )
       }
    }
    rgl.setMouseCallbacks(button, begin, update, dev = dev, subscene = subscene)
-   cat("Callbacks set on button", button, "of rgl device", rgl.cur(), "in subscene", subscene, "\n")
+   cat("Callbacks set on button", button, "of rgl device", dev, "in subscene", subscene, "\n")
  }
  shade3d(icosahedron3d(), col = "yellow")
- pan3d(3)
+ pan3d(1)
 }
 \keyword{ dynamic }

@@ -954,17 +954,25 @@ void Subscene::setEmbedding(int which, Embedding value)
 }
 
 // #include <unistd.h>
-Embedding Subscene::getEmbedding(int which)
+Embedding Subscene::getEmbedding(Embedded which)
 {
 //  Rprintf("getEmbedding %d, subscene %d\n", which, getObjID());
 //  usleep(1000000);
   switch(which) {
-    case 0: return do_viewport;
-    case 1: return do_projection;
-    case 2: return do_model;
-    case 3: return do_mouseHandlers;
-  default: error("Bad embedding requested");
+    case EM_VIEWPORT:      return do_viewport;
+    case EM_PROJECTION:    return do_projection;
+    case EM_MODEL:         return do_model;
+    case EM_MOUSEHANDLERS: return do_mouseHandlers;
+    default: error("Bad embedding requested");
   }
+}
+
+Subscene* Subscene::getMaster(Embedded which) 
+{
+  if (getEmbedding(which) == EMBED_INHERIT)
+    return getParent()->getMaster(which);
+  else
+    return this;
 }
 
 void Subscene::getUserMatrix(double* dest)
@@ -1058,10 +1066,7 @@ float Subscene::getDistance(const Vertex& v) const
 }
 
 viewControlPtr Subscene::getButtonBeginFunc(int which) {
-  if (getEmbedding(3) == EMBED_INHERIT)
-    return getParent()->getButtonBeginFunc(which);
-  else
-    return ButtonBeginFunc[which];
+  return getMaster(EM_MOUSEHANDLERS)->ButtonBeginFunc[which];
 }
 
 void Subscene::buttonBegin(int which, int mouseX, int mouseY)
@@ -1071,11 +1076,8 @@ void Subscene::buttonBegin(int which, int mouseX, int mouseY)
 }
 
 viewControlPtr Subscene::getButtonUpdateFunc(int which) 
-{
-  if (getEmbedding(3) == EMBED_INHERIT)
-    return getParent()->getButtonUpdateFunc(which);
-  else
-    return ButtonUpdateFunc[which];
+{  
+  return getMaster(EM_MOUSEHANDLERS)->ButtonUpdateFunc[which];
 }
 
 void Subscene::buttonUpdate(int which, int mouseX, int mouseY)
@@ -1085,10 +1087,7 @@ void Subscene::buttonUpdate(int which, int mouseX, int mouseY)
 
 viewControlEndPtr Subscene::getButtonEndFunc(int which)
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
-    return getParent()->getButtonEndFunc(which);
-  else
-    return ButtonEndFunc[which];  
+  return getMaster(EM_MOUSEHANDLERS)->ButtonEndFunc[which];  
 }
 
 void Subscene::buttonEnd(int which)
@@ -1098,7 +1097,7 @@ void Subscene::buttonEnd(int which)
 
 void Subscene::setMouseMode(int button, MouseModeID mode)
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
+  if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
     getParent()->setMouseMode(button, mode);
   else {
     int index = button-1;
@@ -1156,7 +1155,7 @@ void Subscene::setMouseMode(int button, MouseModeID mode)
 void Subscene::setMouseCallbacks(int button, userControlPtr begin, userControlPtr update, 
                                  userControlEndPtr end, userCleanupPtr cleanup, void** user)
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
+  if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
     getParent()->setMouseCallbacks(button, begin, update, end, cleanup, user);  
   else {
     int ind = button - 1;
@@ -1176,7 +1175,7 @@ void Subscene::setMouseCallbacks(int button, userControlPtr begin, userControlPt
 void Subscene::getMouseCallbacks(int button, userControlPtr *begin, userControlPtr *update, 
                                  userControlEndPtr *end, userCleanupPtr *cleanup, void** user)
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
+  if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
     getParent()->getMouseCallbacks(button, begin, update, end, cleanup, user); 
   else {
     int ind = button - 1;
@@ -1192,15 +1191,12 @@ void Subscene::getMouseCallbacks(int button, userControlPtr *begin, userControlP
 
 MouseModeID Subscene::getMouseMode(int button)
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
-    return getParent()->getMouseMode(button);
-  else
-    return mouseMode[button-1];
+  return getMaster(EM_MOUSEHANDLERS)->mouseMode[button-1];
 }
 
 void Subscene::setWheelMode(WheelModeID mode)
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
+  if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
     getParent()->setWheelMode(mode); 
   else {
     wheelMode = mode;
@@ -1220,15 +1216,12 @@ void Subscene::setWheelMode(WheelModeID mode)
 
 WheelModeID Subscene::getWheelMode()
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
-    return getParent()->getWheelMode();
-  else
-    return wheelMode;
+  return getMaster(EM_MOUSEHANDLERS)->wheelMode;
 }
 
 void Subscene::setWheelCallback(userWheelPtr wheel, void* user)
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
+  if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
     getParent()->setWheelCallback(wheel, user);
   else {
     wheelCallback = wheel;
@@ -1239,7 +1232,7 @@ void Subscene::setWheelCallback(userWheelPtr wheel, void* user)
 
 void Subscene::getWheelCallback(userWheelPtr *wheel, void** user)
 {
-  if (getEmbedding(3) == EMBED_INHERIT)
+  if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
     getParent()->getWheelCallback(wheel, user);   
   *wheel = wheelCallback;
   *user = wheelData;
@@ -1483,10 +1476,14 @@ void Subscene::wheelRotate(int dir)
 void Subscene::userBegin(int mouseX, int mouseY)
 {
   int ind = drag - 1;
+  Subscene* master = getMaster(EM_MOUSEHANDLERS);
+  beginCallback[ind] = master->beginCallback[ind];
+  void* userData = master->userData[3*ind+0];
+  // Rprintf("userBegin in %d with ind=%d\n", getObjID(), ind);
   activeButton = drag;
   if (beginCallback[ind]) {
     busy = true;
-    (*beginCallback[ind])(userData[3*ind+0], mouseX, pviewport.height-mouseY);
+    (*beginCallback[ind])(userData, mouseX, pviewport.height-mouseY);
     busy = false;
   }
 }
@@ -1495,9 +1492,12 @@ void Subscene::userBegin(int mouseX, int mouseY)
 void Subscene::userUpdate(int mouseX, int mouseY)
 {
   int ind = activeButton - 1;
+  Subscene* master = getMaster(EM_MOUSEHANDLERS);
+  updateCallback[ind] = master->updateCallback[ind];
+  void* userData = master->userData[3*ind+1];
   if (!busy && updateCallback[ind]) {
     busy = true;
-    (*updateCallback[ind])(userData[3*ind+1], mouseX, pviewport.height-mouseY);
+    (*updateCallback[ind])(userData, mouseX, pviewport.height-mouseY);
     busy = false;
   }
 }
@@ -1505,16 +1505,19 @@ void Subscene::userUpdate(int mouseX, int mouseY)
 void Subscene::userEnd()
 {
   int ind = activeButton - 1;
+  Subscene* master = getMaster(EM_MOUSEHANDLERS);
+  endCallback[ind] = master->endCallback[ind];
+  void* userData = master->userData[3*ind+2];
   if (endCallback[ind])
-    (*endCallback[ind])(userData[3*ind+2]);
+    (*endCallback[ind])(userData);
 }
 
 void Subscene::userWheel(int dir)
 {
+  wheelCallback = getMaster(EM_MOUSEHANDLERS)->wheelCallback;
   if (wheelCallback)
     (*wheelCallback)(wheelData, dir);
 }
-
 
 void Subscene::adjustZoomBegin(int mouseX, int mouseY)
 {

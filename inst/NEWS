@@ -956,5 +956,7 @@ base graphics.
     separately to each individual subscene in a scene.
     (By default the mode is inherited from the root subscene.)
   - Added par3d("userProjection"), to allow the user to supply
-    a change to the projection after all other calculations 
+    a change to the projection after all other display calculations 
     have been done.
+  - Added par3d("activeSubscene"), to allow mouse callback
+    functions to determine which subscene was clicked.

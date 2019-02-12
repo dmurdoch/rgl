@@ -3,6 +3,7 @@
 \alias{open3d}
 \alias{r3dDefaults}
 \alias{getr3dDefaults}
+\concept{activeSubscene}
 \concept{antialias}
 \concept{bbox}
 \concept{cex}
@@ -125,6 +126,9 @@ r3dDefaults
   may only be used in queries, i.e., they do \emph{not} set anything.
   
   \describe{
+    \item{\code{activeSubscene}}{\emph{\bold{R.O.}} integer.  Used
+    with \code{\link{rgl.setMouseCallbacks}}:  during a 
+    callback, indicates the id of the subscene that was clicked.}
     \item{\code{antialias}}{\emph{\bold{R.O.}} in \code{par3d}, may be
     set in \code{open3d}. The (requested) number of hardware
     antialiasing planes to use (with multisample antialiasing).  The

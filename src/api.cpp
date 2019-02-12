@@ -1326,10 +1326,10 @@ void rgl::rgl_getEmbeddings(int* id, int* embeddings)
       Scene* scene = rglview->getScene();
       Subscene* subscene = scene->getSubscene(*id);
       if (subscene) {
-        embeddings[0] = subscene->getEmbedding(0);
-        embeddings[1] = subscene->getEmbedding(1);
-        embeddings[2] = subscene->getEmbedding(2);
-        embeddings[3] = subscene->getEmbedding(3);
+        embeddings[0] = subscene->getEmbedding(EM_VIEWPORT);
+        embeddings[1] = subscene->getEmbedding(EM_PROJECTION);
+        embeddings[2] = subscene->getEmbedding(EM_MODEL);
+        embeddings[3] = subscene->getEmbedding(EM_MOUSEHANDLERS);
       }
     }
 }

@@ -13,6 +13,7 @@
 namespace rgl {
 
 enum Embedding { EMBED_INHERIT=1, EMBED_MODIFY, EMBED_REPLACE };
+enum Embedded  { EM_VIEWPORT = 0, EM_PROJECTION, EM_MODEL, EM_MOUSEHANDLERS};
 
 enum MouseModeID {mmNONE = 0, mmTRACKBALL, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
                   mmSELECTING, mmZOOM, mmFOV, mmUSER};
@@ -183,7 +184,8 @@ public:
   void setIgnoreExtent(int in_ignoreExtent);
   
   void setEmbedding(int which, Embedding value);  /* which is 0=viewport, 1=projection, 2=model */
-  Embedding getEmbedding(int which);
+  Embedding getEmbedding(Embedded which);
+  Subscene* getMaster(Embedded which);
   
   void setUserMatrix(double* src);
   void setUserProjection(double* src);

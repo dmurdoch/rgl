@@ -184,14 +184,11 @@ static void setScale(double* scale, RGLView* rglview, Subscene* subscene)
 
 static void setViewport(double* viewport, Device* device, RGLView* rglview, Subscene* subscene)
 {
-  Embedding embedding;
-  
-  while ((embedding = subscene->getEmbedding(0)) == EMBED_INHERIT)
-    subscene = subscene->getParent();
+  subscene = subscene->getMaster(EM_VIEWPORT);
   
   int left, top, right, bottom;
   double x, y, width, height;
-  if (embedding == EMBED_REPLACE) {
+  if (subscene->getEmbedding(EM_VIEWPORT) == EMBED_REPLACE) {
     device->getWindowRect(&left, &top, &right, &bottom);
     width = right - left;
     height = bottom - top;
@@ -332,6 +329,11 @@ static float getGlVersion()
   const char* version = (const char*)glGetString(GL_VERSION);
   if (version) return atof(version);
   else return R_NaReal;
+}
+
+static int activeSubscene(RGLView* rglview)
+{
+  return rglview->getActiveSubscene();
 }
 
 /* par3d implementation based on R's par implementation
@@ -717,7 +719,11 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   else if (streql(what, "glVersion")) {
     value = allocVector(REALSXP, 1);
     REAL(value)[0] = getGlVersion();
-  }    
+  }
+  else if (streql(what, "activeSubscene")) {
+    value = allocVector(INTSXP, 1);
+    INTEGER(value)[0] = activeSubscene(rglview);
+  }
   
   if (! success) error(_("unknown error getting rgl parameter \"%s\""),  what);
   

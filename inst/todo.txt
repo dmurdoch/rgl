@@ -1,5 +1,9 @@
 To-do:
 
+rgl.select() doesn't appear to work properly when the 
+current subscene doesn't fill the screen, e.g.
+mfrow3d(1,2); plot3d(x,y,z); rgl.select("left")
+
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 
 Setting par3d(mouseMode = c("none", "none", "none")) doesn't

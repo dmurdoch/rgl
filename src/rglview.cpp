@@ -151,17 +151,18 @@ void RGLView::buttonPress(int button, int mouseX, int mouseY)
 //  Rprintf("RGLView::buttonPress %d\n", button);
   ModelViewpoint* modelviewpoint = scene->getCurrentSubscene()->getModelViewpoint();
   if ( modelviewpoint->isInteractive() ) {
-    if (!activeSubscene) {
+ //   if (!activeSubscene) {
       translateCoords(&mouseX, &mouseY);
       Subscene* subscene = scene->whichSubscene(mouseX, mouseY);
 //      Rprintf("got subscene %d\n", subscene->getObjID());
       subscene->translateCoords(&mouseX, &mouseY);
       subscene->drag = button;
       activeSubscene = subscene->getObjID();
+//      Rprintf("activeSubscene is now %d\n", activeSubscene);
       windowImpl->captureMouse(this);	  
       subscene->buttonBegin(button-1 ,mouseX, mouseY);
       View::update();
-    }
+//    }
 //    else Rprintf("activeSubscene was %d\n", activeSubscene);
   }
 //  else Rprintf("not interactive\n");
@@ -176,9 +177,10 @@ void RGLView::buttonRelease(int button, int mouseX, int mouseY)
     windowImpl->releaseMouse();
     subscene->drag = 0;
     subscene->buttonEnd(button - 1);
-    activeSubscene = 0;
     View::update();
   }
+  // Rprintf("release happened, activeSubscene=0\n");
+  activeSubscene = 0;
 }
 
 void RGLView::mouseMove(int mouseX, int mouseY)
