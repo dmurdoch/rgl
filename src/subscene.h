@@ -20,7 +20,7 @@ enum MouseModeID {mmNONE = 0, mmTRACKBALL, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR,
 
 enum MouseSelectionID {msNONE=1, msCHANGING, msDONE, msABORT};
 
-enum WheelModeID {wmPUSH = 1, wmPULL, wmUSER};
+enum WheelModeID {wmNONE = 0, wmPUSH, wmPULL, wmUSER};
 
 typedef void (*userControlPtr)(void *userData, int mouseX, int mouseY);
 typedef void (*userControlEndPtr)(void *userData);
@@ -42,6 +42,7 @@ private:
   void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
   void setupModelMatrix(RenderContext* rctx, Vertex center);
   void setupModelViewMatrix(RenderContext* rctx, Vertex center);
+  void setDefaultMouseMode();
   
   void disableLights(RenderContext* rctx);
   void setupLights(RenderContext* rctx);
@@ -318,6 +319,7 @@ private:
   void oneAxisBegin(int mouseX, int mouseY);
   void oneAxisUpdate(int mouseX, int mouseY);  
   
+  void wheelRotateNone(int dir) {};
   void wheelRotatePull(int dir);
   void wheelRotatePush(int dir);
   

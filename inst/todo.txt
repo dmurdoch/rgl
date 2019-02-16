@@ -1,12 +1,7 @@
 To-do:
 
 
-
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
-
-Setting par3d(mouseMode = c("none", "none", "none")) doesn't
-seem to do anything:  still have trackball in persp3Drgl example.  There was a bug (leaving trackball in place), but
-also mouseMode applied by design to the whole device, where it should really be subscene specific.
 
 If you pop a 3d sprite object, R crashes.
 
@@ -27,6 +22,13 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+
+Mouse wheel operation causes crash:  example(plot3d) followed by 2 finger drag on Mac. FIXED
+
+Setting par3d(mouseMode = c("none", "none", "none")) doesn't
+seem to do anything:  still have trackball in persp3Drgl example.  There was a bug (leaving trackball in place), but
+also mouseMode applied by design to the whole device, where it should really be subscene specific. FIXED
 
 rgl.select() doesn't appear to work properly when the 
 current subscene doesn't fill the screen, e.g.

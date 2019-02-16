@@ -41,6 +41,7 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
     for (int j=0; j<3; j++) 
       userData[3*i + j] = NULL;
   }
+  setDefaultMouseMode();
 }
 
 Subscene::~Subscene() 
@@ -1101,6 +1102,14 @@ void Subscene::buttonEnd(int which)
   (this->*getButtonEndFunc(which))();
 }
 
+void Subscene::setDefaultMouseMode()
+{
+  setMouseMode(1, mmPOLAR);
+  setMouseMode(2, mmFOV);
+  setMouseMode(3, mmZOOM);
+  setWheelMode(wmNONE);
+}
+
 void Subscene::setMouseMode(int button, MouseModeID mode)
 {
   if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
@@ -1207,6 +1216,9 @@ void Subscene::setWheelMode(WheelModeID mode)
   else {
     wheelMode = mode;
     switch (mode) {
+    case wmNONE:
+      WheelRotateFunc = &Subscene::wheelRotateNone;
+      break;
     case wmPULL:
       WheelRotateFunc = &Subscene::wheelRotatePull;
       break;

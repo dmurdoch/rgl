@@ -269,7 +269,7 @@ particles3d <- function(x,y=NULL,z=NULL,radius=1,...) sprites3d(
 # r3d default settings for new windows
 
 r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
-		  mouseMode = c("trackball", "zoom", "fov"),
+		  mouseMode = c("trackball", "zoom", "fov", "pull"),
 		  FOV = 30,
 		  bg = list(color="white"),
 		  family = "sans",
