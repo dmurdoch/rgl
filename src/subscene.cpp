@@ -1,5 +1,6 @@
 #include "subscene.h"
 #include "rglview.h"
+#include "select.h"
 #include "gl2ps.h"
 #include "R.h"
 #include <algorithm>
@@ -716,6 +717,11 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   std::vector<Subscene*>::const_iterator iter;
   for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
     (*iter)->render(renderContext, opaquePass);
+  
+  if (selectState == msCHANGING) {
+    SELECT select;
+    select.render(mousePosition);
+  }
 }
 
 void Subscene::calcDataBBox()

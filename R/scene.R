@@ -920,9 +920,12 @@ rgl.setselectstate <- function(state = "current",
 
 rgl.projection <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
 {
-    list(model = par3d("modelMatrix", dev = dev, subscene = subscene),
+    result <- list(model = par3d("modelMatrix", dev = dev, subscene = subscene),
     	 proj = par3d("projMatrix", dev = dev, subscene = subscene),
     	 view = par3d("viewport", dev = dev, subscene = subscene))
+    if (subscene != subsceneInfo("root")$id)
+      result$view["x"] <- result$view["y"] <- 0
+    result
 }   
      
 rgl.select3d <- function(button = c("left", "middle", "right"), 

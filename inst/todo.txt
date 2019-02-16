@@ -1,8 +1,6 @@
 To-do:
 
-rgl.select() doesn't appear to work properly when the 
-current subscene doesn't fill the screen, e.g.
-mfrow3d(1,2); plot3d(x,y,z); rgl.select("left")
+
 
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 
@@ -29,6 +27,11 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+rgl.select() doesn't appear to work properly when the 
+current subscene doesn't fill the screen, e.g.
+mfrow3d(1,2); plot3d(x,y,z); rgl.select("left")
+FIXED
 
 Allow "zooming in" on a particular point.  Do this by allowing modelMatrix and projMatrix to be set by the user.
 DONE by adding userProjection.

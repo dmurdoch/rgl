@@ -17,7 +17,6 @@
 #include "rglmath.h"
 #include "pixmap.h"
 #include "fps.h"
-#include "select.h"
 #include "gl2ps.h"
 
 #include "R.h"		// for error()
@@ -100,15 +99,11 @@ void RGLView::paint(void) {
   if (windowImpl->beginGL()) {
     SAVEGLERROR;  
     Subscene* subscene = scene->getCurrentSubscene();
+    double position[4];
     scene->render(&renderContext);
     glViewport(0,0, width, height);
     if (subscene) {
-      MouseSelectionID selectState = subscene->getSelectState();
-      if (selectState == msCHANGING) {
-        mousePosition = subscene->getMousePosition();
-        select.render(mousePosition);
-      }
-      if (flags & FSHOWFPS && selectState == msNONE)
+      if (flags & FSHOWFPS && subscene->getSelectState() == msNONE)
         fps.render(renderContext.time, &renderContext );
     }
     glFinish();

@@ -10,7 +10,6 @@
 #include "scene.h"
 #include "gui.h"
 #include "fps.h"
-#include "select.h"
 #include "pixmap.h"
 
 namespace rgl {
@@ -85,7 +84,6 @@ private:
   
   Scene*  scene;
   FPS     fps;
-  SELECT  select;
 
 // o CONTEXT
   
