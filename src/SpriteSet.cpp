@@ -13,18 +13,19 @@ using namespace rgl;
 
 SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, int in_nsize, double* in_size,
                      int in_ignoreExtent, int count, Shape** in_shapelist, double* in_userMatrix,
-                     bool in_fixedSize)
- : Shape(in_material, in_ignoreExtent), 
+                     bool in_fixedSize, Scene *in_scene)
+ : Shape(in_material, in_ignoreExtent, SHAPE, true), 
   vertex(in_nvertex, in_vertex),
    size(in_nsize, in_size),
-   fixedSize(in_fixedSize)
+   fixedSize(in_fixedSize),
+   scene(in_scene)
 { 
   if (!count)
     material.colorPerVertex(false);
   else {
     blended = false;
     for (int i=0;i<count;i++) {
-      shapes.push_back(in_shapelist[i]);
+      shapes.push_back(in_shapelist[i]->getObjID());
       blended |= in_shapelist[i]->isBlended();
     }
     for (int i=0;i<16;i++)
@@ -111,8 +112,8 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
     glMultMatrixd(userMatrix);
     
     glScalef(s,s,s);
-    for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) 
-      (*i)->draw(renderContext);  
+    for (std::vector<int>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) 
+      scene->get_shape(*i)->draw(renderContext);  
     
     Shape::drawBegin(renderContext);
  }  else {
@@ -197,9 +198,9 @@ void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count,
           *result++ = size.get(first++);
         return;
       case IDS:
-        for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
+        for (std::vector<int>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
       	  if ( first <= ind  && ind < n )  
-            *result++ = (*i)->getObjID();
+            *result++ = *i;
           ind++;
         }
         return;
@@ -226,14 +227,18 @@ String SpriteSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
   int n = getAttributeCount(bbox, attrib);
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
-    shapes[index]->getTypeName(buffer, 20);
+    scene->get_shape(shapes[index])->getTypeName(buffer, 20);
     return String(strlen(buffer), buffer);
   } else
     return Shape::getTextAttribute(bbox, attrib, index);
 }
 
-
 Shape* SpriteSet::get_shape(int id)
 {
-  return get_shape_from_list(shapes, id, true);
+  return scene->get_shape(id);
+}
+
+void SpriteSet::remove_shape(int id)
+{
+  shapes.erase(std::remove(shapes.begin(), shapes.end(), id), shapes.end());
 }

@@ -5,6 +5,7 @@
 
 #include "gl2ps.h"
 #include "scene.h"
+#include "SpriteSet.h"
 #include "rglmath.h"
 #include "render.h"
 #include "geom.h"
@@ -106,6 +107,7 @@ bool Scene::pop(TypeID type, int id)
     if (node == &rootSubscene) 
       return true;
     hide((*iter)->getObjID());
+    // Rprintf("removing references to %d\n", id);
     removeReferences(*iter); /* Might be in mouseListeners */
     nodes.erase(iter);
     delete node;
@@ -148,12 +150,42 @@ void Scene::hide(int id)
 }
 
 void Scene::removeReferences(SceneNode* node) {
-  if (node->getTypeID() == SUBSCENE) {
-    for (std::vector<SceneNode*>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter) 
-      if ((*iter)->getTypeID() == SUBSCENE) {
-        Subscene* subscene = (Subscene*)*iter;
+  int id = node->getObjID(), type = node->getTypeID();
+  // Rprintf("node id = %d type = %u\n", id, node);
+  for (std::vector<SceneNode*>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter) {
+    int itertype = (*iter)->getTypeID();
+    // Rprintf("itertype = %u\n", itertype);
+    if (itertype == SUBSCENE) {
+      Subscene* subscene = (Subscene*)*iter;
+      switch (type) {
+      case SUBSCENE:
         subscene->deleteMouseListener((Subscene*)node);
+        setCurrentSubscene(subscene->hideSubscene(id, getCurrentSubscene() ) );
+        break;
+      case SHAPE:
+        subscene->hideShape(id);
+        break;
+      case LIGHT:
+        subscene->hideLight(id);
+        break;
+      case BACKGROUND:
+        subscene->hideBackground(id);
+        break;
+      case USERVIEWPOINT:
+      case MODELVIEWPOINT:
+        subscene->hideViewpoint(id);
+        break;
       }
+    } else if (itertype == SHAPE) {
+      char buffer[20];
+      buffer[19] = 0;
+      (*iter)->getTypeName(buffer, 20);
+      if (!strcmp(buffer, "sprites")) {
+        // Rprintf("removing from sprites\n");
+        SpriteSet* sprite = (SpriteSet*)*iter;
+        sprite->remove_shape(id);
+      }
+    }
   }
 }
 

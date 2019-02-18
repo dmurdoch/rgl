@@ -3,8 +3,6 @@ To-do:
 
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 
-If you pop a 3d sprite object, R crashes.
-
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
 
 Investigate difference between clear3d() and rgl.close()
@@ -23,6 +21,7 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+If you pop a 3d sprite object, R crashes.  FIXED
 
 Mouse wheel operation causes crash:  example(plot3d) followed by 2 finger drag on Mac. FIXED
 

@@ -171,12 +171,6 @@ public:
   int itemnum;
 };
 
-/**
- * This function is used both in Scene::get_shape and in SpriteSet::get_shape
- */
- 
-Shape* get_shape_from_list(std::vector<Shape*> shapes, int id, bool recursive);
-
 } // namespace rgl
 
 #endif // SHAPE_H

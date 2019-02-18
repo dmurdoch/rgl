@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Shape.h"
+#include "scene.h"
 
 namespace rgl {
 
@@ -18,7 +19,7 @@ private:
 public:
   SpriteSet(Material& material, int nvertex, double* vertex, int nsize, double* size, 
             int ignoreExtent, int count = 0, Shape** shapelist = NULL, double* userMatrix = NULL,
-            bool fixedSize = false);
+            bool fixedSize = false, Scene* scene = NULL);
   ~SpriteSet();
 
   /**
@@ -59,13 +60,19 @@ public:
    */
   virtual Shape* get_shape(int id);
   
+  /**
+   * delete a shape
+   */
+  void remove_shape(int id);
+  
 private:
   GLdouble userMatrix[16]; /* Transformation for 3D sprites */
   Matrix4x4 m;             /* Modelview matrix cache */
   Matrix4x4 p;             /* Projection matrix cache */
   bool doTex;
-  std::vector<Shape*> shapes;
+  std::vector<int> shapes;
   bool fixedSize;
+  Scene* scene;
 };
 
 } // namespace rgl

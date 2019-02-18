@@ -133,22 +133,3 @@ void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
     }
   }
 }
-
-Shape* rgl::get_shape_from_list(std::vector<Shape*> shapes, int id, bool recursive)
-{
-  std::vector<Shape*>::iterator ishape;
-
-  if (shapes.empty()) 
-    return NULL;
-  
-  ishape = std::find_if(shapes.begin(), shapes.end(), 
-                        std::bind2nd(std::ptr_fun(&sameID), id));
-  if (ishape != shapes.end()) return *ishape;
-  
-  if (recursive) 
-    for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
-      Shape* shape = (*i)->get_shape(id);
-      if (shape) return shape;
-    }
-  return NULL;
-}
