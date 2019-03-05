@@ -87,7 +87,6 @@ void RGLView::paint(void) {
   double t    = getTime();
   
   double dt   = (last != 0.0f) ? last - t : 0.0f;
-  double *mousePosition;
   
   renderContext.time = t;
   renderContext.deltaTime = dt;
@@ -99,7 +98,6 @@ void RGLView::paint(void) {
   if (windowImpl->beginGL()) {
     SAVEGLERROR;  
     Subscene* subscene = scene->getCurrentSubscene();
-    double position[4];
     scene->render(&renderContext);
     glViewport(0,0, width, height);
     if (subscene) {

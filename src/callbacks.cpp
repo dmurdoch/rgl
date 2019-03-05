@@ -19,13 +19,15 @@ static void userControl(void *userData, int mouseX, int mouseY)
 {
   SEXP fn = (SEXP)userData;
   // Rprintf("userControl called with mouseX=%d userData=%p\n", mouseX, userData);
-  eval(lang3(fn, ScalarInteger(mouseX), ScalarInteger(mouseY)), R_GlobalEnv);
+  eval(PROTECT(lang3(fn, PROTECT(ScalarInteger(mouseX)), PROTECT(ScalarInteger(mouseY)))), R_GlobalEnv);
+  UNPROTECT(3);
 }
 
 static void userControlEnd(void *userData)
 {
   SEXP fn = (SEXP)userData;
-  eval(lang1(fn), R_GlobalEnv);
+  eval(PROTECT(lang1(fn)), R_GlobalEnv);
+  UNPROTECT(1);
 }
 
 static void userCleanup(void **userData)
@@ -41,7 +43,8 @@ static void userCleanup(void **userData)
 static void userWheel(void *wheelData, int dir)
 {
   SEXP fn = (SEXP)wheelData;
-  eval(lang2(fn, ScalarInteger(dir)), R_GlobalEnv);
+  eval(PROTECT(lang2(fn, PROTECT(ScalarInteger(dir)))), R_GlobalEnv);
+  UNPROTECT(2);
 }
 
 SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end,

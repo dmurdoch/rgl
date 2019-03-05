@@ -593,15 +593,15 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   value = R_NilValue;
   
   if (streql(what, "FOV")) {
-    value = allocVector(REALSXP, 1);
+    PROTECT(value = allocVector(REALSXP, 1));
     getFOV(REAL(value), sub);
   }
   else if (streql(what, "ignoreExtent")) {
-    value = allocVector(LGLSXP, 1);
+    PROTECT(value = allocVector(LGLSXP, 1));
     getIgnoreExtent(LOGICAL(value), dev);
   }    
   else if (streql(what, "modelMatrix")) {
-    value = allocMatrix(REALSXP, 4, 4);
+    PROTECT(value = allocMatrix(REALSXP, 4, 4));
     sub->modelMatrix.getData(REAL(value));
   }
   else if (streql(what, "mouseMode")) {
@@ -620,35 +620,36 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     SET_STRING_ELT(names, 1, mkChar("right"));  
     SET_STRING_ELT(names, 2, mkChar("middle"));
     SET_STRING_ELT(names, 3, mkChar("wheel"));
-    UNPROTECT(2);
     value = namesgets(value, names);
+    UNPROTECT(2); /* names and old values */
+    PROTECT(value);
   }
   else if (streql(what, "observer")) {
-    value = allocVector(REALSXP, 3);
+    PROTECT(value = allocVector(REALSXP, 3));
     rgl::getObserver(REAL(value), sub);
   }
   else if (streql(what, "projMatrix")) {
-    value = allocMatrix(REALSXP, 4, 4);
+    PROTECT(value = allocMatrix(REALSXP, 4, 4));
     sub->projMatrix.getData(REAL(value));    
   }
   else if (streql(what, "listeners")) {
-    value = allocVector(INTSXP, sub->mouseListeners.size());
+    PROTECT(value = allocVector(INTSXP, sub->mouseListeners.size()));
     sub->getMouseListeners(length(value), INTEGER(value));
   }
   else if (streql(what, "skipRedraw")) {
-    value = allocVector(LGLSXP, 1);
+    PROTECT(value = allocVector(LGLSXP, 1));
     getSkipRedraw(LOGICAL(value), dev);
   }
   else if (streql(what, "userMatrix")) {
-    value = allocMatrix(REALSXP, 4, 4);
+    PROTECT(value = allocMatrix(REALSXP, 4, 4));
     getUserMatrix(REAL(value), sub);
   }
   else if (streql(what, "userProjection")) {
-    value = allocMatrix(REALSXP, 4, 4);
+    PROTECT(value = allocMatrix(REALSXP, 4, 4));
     getUserProjection(REAL(value), sub);
   }
   else if (streql(what, "scale")) {
-    value = allocVector(REALSXP, 3);
+    PROTECT(value = allocVector(REALSXP, 3));
     getScale(REAL(value), sub);
   }
   else if (streql(what, "viewport")) {
@@ -659,42 +660,44 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
       SET_STRING_ELT(names, i, mkChar(viewportlabels[i]));
     value = namesgets(value, names);
     UNPROTECT(2);
+    PROTECT(value);
   }
   else if (streql(what, "zoom")) {
-    value = allocVector(REALSXP, 1);
+    PROTECT(value = allocVector(REALSXP, 1));
     getZoom(REAL(value), sub);
   }
   else if (streql(what, "bbox")) {
-    value = allocVector(REALSXP, 6);
+    PROTECT(value = allocVector(REALSXP, 6));
     getBoundingbox(REAL(value), sub);
   }
   else if (streql(what, ".position")) {
-    value = allocVector(REALSXP, 2);
+    PROTECT(value = allocVector(REALSXP, 2));
     getPosition(REAL(value), sub);
   }
   else if (streql(what, "windowRect")) {
-    value = allocVector(INTSXP, 4);
+    PROTECT(value = allocVector(INTSXP, 4));
     getWindowRect(INTEGER(value), dev);
   }
   else if (streql(what, "family")) {
     buf = getFamily(rglview);
     if (buf) {
       value = mkString(buf);
-    } 
+    }
+    PROTECT(value);
   }
   else if (streql(what, "font")) {
-    value = allocVector(INTSXP, 1);
+    PROTECT(value = allocVector(INTSXP, 1));
     INTEGER(value)[0] = getFont(rglview);
     success = INTEGER(value)[0] >= 0;
   }
   else if (streql(what, "cex")) {
-    value = allocVector(REALSXP, 1);
+    PROTECT(value = allocVector(REALSXP, 1));
     REAL(value)[0] = getCex(rglview);
     success = REAL(value)[0] >= 0;
   }    
   else if (streql(what, "useFreeType")) {
     int useFreeType = getUseFreeType(rglview);
-    value = allocVector(LGLSXP, 1);
+    PROTECT(value = allocVector(LGLSXP, 1));
     if (useFreeType < 0) {
       LOGICAL(value)[0] = false;
       success = 0;
@@ -707,23 +710,27 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     if (buf) {
       value = mkString(buf);
     } 
+    PROTECT(value);
   }
   else if (streql(what, "antialias")) {
-    value = allocVector(INTSXP, 1);
+    PROTECT(value = allocVector(INTSXP, 1));
     INTEGER(value)[0] = getAntialias(rglview);
   }
   else if (streql(what, "maxClipPlanes")) {
-    value = allocVector(INTSXP, 1);
+    PROTECT(value = allocVector(INTSXP, 1));
     INTEGER(value)[0] = getMaxClipPlanes(rglview);
   }
   else if (streql(what, "glVersion")) {
-    value = allocVector(REALSXP, 1);
+    PROTECT(value = allocVector(REALSXP, 1));
     REAL(value)[0] = getGlVersion();
   }
   else if (streql(what, "activeSubscene")) {
-    value = allocVector(INTSXP, 1);
+    PROTECT(value = allocVector(INTSXP, 1));
     INTEGER(value)[0] = activeSubscene(rglview);
-  }
+  } else
+    PROTECT(value);
+  
+  UNPROTECT(1);
   
   if (! success) error(_("unknown error getting rgl parameter \"%s\""),  what);
   
@@ -757,7 +764,7 @@ SEXP rgl::rgl_par3d(SEXP device, SEXP subscene, SEXP args)
     int i;
     PROTECT(newnames = allocVector(STRSXP, nargs));
     PROTECT(value = allocVector(VECSXP, nargs));
-    oldnames = getAttrib(args, R_NamesSymbol);
+    PROTECT(oldnames = getAttrib(args, R_NamesSymbol));
     for (i = 0 ; i < nargs ; i++) {
       if (oldnames != R_NilValue)
         tag = STRING_ELT(oldnames, i);
@@ -784,7 +791,7 @@ SEXP rgl::rgl_par3d(SEXP device, SEXP subscene, SEXP args)
       }
     }
     setAttrib(value, R_NamesSymbol, newnames);
-    UNPROTECT(2);
+    UNPROTECT(3);
   }
   else {
     error(_("invalid parameter passed to par3d()"));

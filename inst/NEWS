@@ -894,7 +894,7 @@ base graphics.
   - Sphere rendering within R sometimes showed strange
     artifacts.
     
-0.99.16
+0.99.17
   - Minor fixups to the vignettes.
   - Now uses the manipulateWidget::combineWidgets function
     when putting multiple objects into a pipe.
@@ -909,15 +909,15 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
-0.100.16
+0.100.17
   - Added check for "highp" support to fragment shader in rglwidget.
-  - Added shinyGetPar3d and shinySetPar3d functions for Shiny
+  - Added shinyGetPar3d() and shinySetPar3d() functions for Shiny
     interaction.
   - Updated text3d() and related functions:  dropped deprecated
     argument "justify", added "pos" and "offset" like base graphics
     text().
   - Added thigmophobe3d() function to place labels away from
-    other points using plotrix::thigmophobe.
+    other points using plotrix::thigmophobe().
   - Fixed texture bug introduced in fix in 0.99.16.
   - The persp3d.deldir method didn't display labels properly.
   - When the X11 initialization failed, rgl messed up the S3
@@ -963,3 +963,4 @@ base graphics.
   - Selection functions did not work well with subscenes.
   - Deleting an object that has been added as a 3D sprite
     caused rgl to crash.
+  - A number of memory bugs found by rchk have been fixed.
