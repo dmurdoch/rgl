@@ -65,7 +65,7 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
 
 TextSet::~TextSet()
 {
-  delete pos;
+  delete [] pos;
 }
 
 void TextSet::render(RenderContext* renderContext) 
