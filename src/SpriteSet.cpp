@@ -2,6 +2,7 @@
 #include "SpriteSet.h"
 #include "Shape.h"
 #include "R.h"
+#include <algorithm>
 
 using namespace rgl;
 

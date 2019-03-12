@@ -11,17 +11,17 @@ using namespace rgl;
 //
 
 ABCLineSet::ABCLineSet(Material& in_material, int in_nbase, double* in_base, int in_ndir, double* in_dir)
- : 
-   LineSet(in_material,true, false/* true */),
-   nLines(max(in_nbase, in_ndir)),
-   base(in_nbase, in_base), 
-   direction(in_ndir, in_dir)
+  : 
+  LineSet(in_material,true, false/* true */),
+  nLines(max(in_nbase, in_ndir)),
+  base(in_nbase, in_base), 
+  direction(in_ndir, in_dir)
 {
   /* We'll set up 1 segment per line.  Each segment has 2 vertices, and each vertex
-     gets 3 color components and 1 alpha component. */
+   gets 3 color components and 1 alpha component. */
   ARRAY<int> colors(3*nLines);
   ARRAY<double> alphas(nLines);
-
+  
   if (material.colors.getLength() > 1) {
     material.colors.recycle(nLines); 
     for (int i=0; i<nLines; i++) {
@@ -59,7 +59,7 @@ void ABCLineSet::renderBegin(RenderContext* renderContext)
 void ABCLineSet::updateSegments(const AABox& sceneBBox)
 {
   double bbox[2][3] = { {sceneBBox.vmin.x, sceneBBox.vmin.y, sceneBBox.vmin.z},
-                       {sceneBBox.vmax.x, sceneBBox.vmax.y, sceneBBox.vmax.z} };
+  {sceneBBox.vmax.x, sceneBBox.vmax.y, sceneBBox.vmax.z} };
   double x[2][3];
   for (int elem = 0; elem < nLines; elem++) {
     Vertex bv = base.getRecycled(elem);
@@ -67,24 +67,25 @@ void ABCLineSet::updateSegments(const AABox& sceneBBox)
     Vertex dv = direction.getRecycled(elem);
     double d[3] = { dv.x, dv.y, dv.z };
     
-//    Rprintf("bbox min=%f %f %f max=%f %f %f\n", bbox[0][0], bbox[0][1], bbox[0][2],
-//                                                bbox[1][0], bbox[1][1], bbox[1][2]);
+    //    Rprintf("bbox min=%f %f %f max=%f %f %f\n", bbox[0][0], bbox[0][1], bbox[0][2],
+    //                                                bbox[1][0], bbox[1][1], bbox[1][2]);
     double smin = R_NegInf, smax = R_PosInf;
-    for (int i=0; i<3; i++)    // which coordinate
+    for (int i=0; i<3; i++) {   // which coordinate
       if (d[i] != 0) {  
-      	double s[2];
-      	for (int j=0; j<2; j++) // which limit
+        double s[2];
+        for (int j=0; j<2; j++) // which limit
           s[j] = (bbox[j][i] - b[i])/d[i];
-      	smin = max(smin, min(s[0], s[1]));
-      	smax = min(smax, max(s[0], s[1]));
+        smin = max(smin, min(s[0], s[1]));
+        smax = min(smax, max(s[0], s[1]));
       }
-      if (smin <= smax) {
-        for (int k=0; k<3; k++) {
-          x[0][k] = b[k] + smin*d[k];
-          x[1][k] = b[k] + smax*d[k];
-        }
-        setVertex(2*elem + 0, x[0]);
-        setVertex(2*elem + 1, x[1]);
+    }
+    if (smin <= smax) {
+      for (int k=0; k<3; k++) {
+        x[0][k] = b[k] + smin*d[k];
+        x[1][k] = b[k] + smax*d[k];
+      }
+      setVertex(2*elem + 0, x[0]);
+      setVertex(2*elem + 1, x[1]);
     } else { 
       double missing[3] = {NA_REAL, NA_REAL, NA_REAL};
       setVertex(2*elem + 0, missing);
