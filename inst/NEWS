@@ -964,3 +964,6 @@ base graphics.
   - Deleting an object that has been added as a 3D sprite
     caused rgl to crash.
   - A number of memory bugs found by rchk have been fixed.
+
+0.100.19
+  - Fix some bugs detected by valgrind

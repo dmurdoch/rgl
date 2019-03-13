@@ -901,8 +901,8 @@ void Subscene::renderZsort(RenderContext* renderContext)
     Shape* shape = *iter;
     shape->renderBegin(renderContext);
     for (int j = 0; j < shape->getPrimitiveCount(); j++) {
-	ShapeItem* item = new ShapeItem(shape, j);
-	float distance = getDistance( shape->getPrimitiveCenter(j) );
+      ShapeItem* item = new ShapeItem(shape, j);
+      float distance = getDistance( shape->getPrimitiveCenter(j) );
       distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
       index++;
     }
