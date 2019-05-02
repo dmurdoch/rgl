@@ -965,6 +965,8 @@ base graphics.
     caused rgl to crash.
   - A number of memory bugs found by rchk have been fixed.
 
-0.100.20
+0.100.19
   - Fix some bugs detected by valgrind
+  
+0.100.20
   - open3d() now signals an error if unnamed parameters are used
