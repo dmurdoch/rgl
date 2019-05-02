@@ -293,6 +293,10 @@ open3d <- function(..., params = getr3dDefaults(),
     	args$material <- NULL
     }
     
+    if (length(args) && (is.null(names(args)) 
+                      || any(nchar(names(args)) == 0)))
+      stop("open3d parameters must be named")
+    
     params[names(args)] <- args
         
     clear3d("material", defaults = params)
