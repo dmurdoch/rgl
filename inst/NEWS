@@ -973,3 +973,5 @@ base graphics.
   - toggleWidget() now makes it easier to initialize the scene with
     some objects hidden.
   - added clipTriangles3d() to allow smooth clipping of triangles
+  - Made plot3d.lm() method handle a larger variety of models, by
+    allowing for curved surfaces.

@@ -5,30 +5,56 @@ Method for plotting simple linear fit.
 }
 \description{
 This function provides several plots of the result of
-fitting a simple two-predictor linear model.
+fitting a two-predictor model.
 }
 \usage{
 \method{plot3d}{lm}(x, 
        which = 1, 
        plane.col = "gray", plane.alpha = 0.5,
-       sharedMouse = TRUE, ...)
+       sharedMouse = TRUE, 
+       use_surface3d, 
+       do_grid = TRUE,
+       grid.col = "black", 
+       grid.alpha = 1,
+       grid.steps = 5,
+       sub.steps = 4,
+       vars = get_all_vars(terms(x), x$model),
+       ...)
 }
 \arguments{
   \item{x}{
-An object of class \code{"lm"} resulting from fitting
-a two-predictor linear model.
+An object inheriting from class \code{"lm"} obtained by fitting
+a two-predictor model.
 }
   \item{which}{
 Which plot to show?  See Details below.
 }
   \item{plane.col, plane.alpha}{
-All plots draw a plane; these parameters control
-its colour and transparency respectively.
+These parameters control
+the colour and transparency of a plane or surface.
 }
   \item{sharedMouse}{
 If multiple plots are requested, should they share
 mouse controls, so that they move in sync?
 }
+  \item{use_surface3d}{
+Use the \code{\link{surface3d}} function to plot the surface
+rather than \code{\link{planes3d}}.  This allows curved
+surfaces to be shown.  The default is \code{FALSE} if the model
+looks like a simple 2 parameter linear fit, otherwise \code{TRUE}.
+  }
+  \item{do_grid}{Plot a grid.}
+  \item{grid.col, grid.alpha, grid.steps}{
+Characteristics of the grid.
+  }
+  \item{sub.steps}{If \code{use_surface3d} is \code{TRUE}, 
+use an internal grid of \code{grid.steps*sub.steps} to draw
+the surface.  \code{sub.steps > 1} allows curvature within facets.
+Similarly, if \code{do_grid} is \code{TRUE}, it allows 
+curvature within grid lines.}
+  \item{vars}{A dataframe containing the variables to plot
+in the first three columns, with the response assumed to be in
+column 1.  See the Note below.}
   \item{\dots}{
 Other parameters to pass to the default \code{\link{plot3d}} method, to control the appearance of aspects of the plot
 other than the plane.
@@ -42,22 +68,32 @@ Three plots are possible, depending on the value(s) in \code{which}:
 \item{Show the predicted values on the fitted plane.}
 }
 }
-\note{
-This function can only handle fairly simple linear models,
-the same ones handled by \code{\link{xyz.coords}}:  a single
-response variable and two predictor variables, e.g. \code{
-z ~ x + y}.
-}
 \value{
 Called for the side effect of drawing one or more plots.
 
 Invisibly returns a high-level vector of object ids.  Names of
 object ids have the plot number (in drawing order) appended.
 }
+\note{
+The default value for the \code{vars} argument will handle
+simple linear models with a response and two predictors, and
+some models with functions of those two predictors.  For 
+models that fail (e.g. models using \code{\link{poly}}), you
+can include the observed values as in the third example below.
+}
 \author{
 Duncan Murdoch
 }
 \examples{
+open3d()
 ids <- plot3d(lm(mpg ~ wt + qsec, data = mtcars), which = 1:3)
 names(ids)
+
+open3d()
+plot3d(lm(mpg ~ wt + I(wt^2) + qsec, data = mtcars))
+
+open3d()
+# Specify vars in the order:  response, pred1, pred2.
+plot3d(lm(mpg ~ poly(wt, 3) + qsec, data = mtcars), 
+       vars = mtcars[,c("mpg", "wt", "qsec")])
 }
