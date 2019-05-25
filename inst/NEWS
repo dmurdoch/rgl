@@ -972,3 +972,4 @@ base graphics.
   - open3d() now signals an error if unnamed parameters are used
   - toggleWidget() now makes it easier to initialize the scene with
     some objects hidden.
+  - added clipTriangles3d() to allow smooth clipping of triangles
