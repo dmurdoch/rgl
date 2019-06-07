@@ -968,7 +968,7 @@ base graphics.
 0.100.19
   - Fix some bugs detected by valgrind
   
-0.100.21
+0.100.22
   - open3d() now signals an error if unnamed parameters are used
   - toggleWidget() now makes it easier to initialize the scene with
     some objects hidden.

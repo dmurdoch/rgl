@@ -26,7 +26,7 @@
   
   if ( .Platform$OS.type == "unix" ) {
     unixos <- system("uname", intern=TRUE)
-    if (is.null(unixos))
+    if (!length(unixos))
       unixos <- "unknown"
     if ( unixos == "Darwin" ) {
           
