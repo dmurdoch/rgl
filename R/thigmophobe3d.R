@@ -13,6 +13,14 @@ thigmophobe3d <- function(x, y = NULL, z = NULL,
   h <- diff(windowRect[c(2,4)])
   pts2d <- cbind(w*pts2d[,1], h*pts2d[,2])
   
-  plotrix::thigmophobe(pts2d, plot.span = c(-w, w, -h, h),
-                     xlog = FALSE, ylog = FALSE)
+  if (packageVersion("plotrix") < "3.7.5")
+    plotrix::thigmophobe(pts2d, plot.span = c(-w, w, -h, h),
+                         xlog = FALSE, ylog = FALSE)  
+  else if (packageVersion("plotrix") < "3.7.6")
+    plotrix::thigmophobe(pts2d, usr = c(-w, w, -h, h),
+                         xlog = FALSE, ylog = FALSE) # This doesn't seem to matter...
+  else
+    plotrix::thigmophobe(pts2d, usr = c(-w, w, -h, h),
+                     xlog = FALSE, ylog = FALSE,
+                     pin = c(w, h)/50) # This doesn't seem to matter...
 }

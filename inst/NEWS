@@ -967,3 +967,7 @@ base graphics.
 
 0.100.19
   - Fix some bugs detected by valgrind
+  
+0.100.23
+  - Fix thigmophobe3d to try to keep up with changes in 
+    plotrix::thigmophobe.
