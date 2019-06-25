@@ -138,15 +138,11 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
     result
 }
 
-toggleWidget <- function(sceneId, ids = integer(), 
-                         hidden = integer(),
-                         subscenes = NULL, 
-                         label = deparse(substitute(ids)), 
-                         ...) 
+toggleWidget <- function(sceneId, ids, subscenes = NULL, label = deparse(substitute(ids)), ...) 
   playwidget(sceneId, 
-             subsetControl(subsets = list(ids, hidden), subscenes = subscenes),
-             start = 0, stop = 1,
-             components = "Step",
-             buttonLabels = label,
-             interval = 1,
-             ...)
+	subsetControl(subsets = list(ids, integer()), subscenes = subscenes),
+	start = 0, stop = 1,
+	components = "Step",
+	buttonLabels = label,
+	interval = 1,
+	...)
