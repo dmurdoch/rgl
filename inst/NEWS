@@ -971,3 +971,13 @@ base graphics.
 0.100.23
   - Fix thigmophobe3d to try to keep up with changes in 
     plotrix::thigmophobe.
+  
+0.100.24
+  - open3d() now signals an error if unnamed parameters are used
+  - toggleWidget() now makes it easier to initialize the scene with
+    some objects hidden.
+  - added clipTriangles3d() to allow smooth clipping of triangles
+  - Made plot3d.lm() method handle a larger variety of models, by
+    allowing for curved surfaces.
+  - Fixed the startup code so that systems that don't provide
+    uname still work.  (Suggestion of Settra Khemri.)

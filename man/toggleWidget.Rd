@@ -8,16 +8,20 @@ This function produces a button in an HTML scene
 that will toggle the display of items in the scene.
 }
 \usage{
-toggleWidget(sceneId, ids, subscenes = NULL, 
-             label = deparse(substitute(ids)), ...)
+toggleWidget(sceneId, 
+             ids = integer(), hidden = integer(),
+             subscenes = NULL, 
+             label = deparse(substitute(ids)), 
+             ...)
 }
 \arguments{
   \item{sceneId}{
 The HTML id of the rgl scene being controlled,
 or an object as in \code{\link{playwidget}}.
 }
-  \item{ids}{
-The rgl id numbers of the objects to toggle.
+  \item{ids, hidden}{
+The rgl id numbers of the objects to toggle.  Those in \code{ids}
+are initially shown; those in \code{hidden} are initially hidden.
 }
   \item{subscenes}{
 The subscenes in which to toggle the objects.
@@ -55,7 +59,9 @@ of HTML control.
 \examples{
 theplot <- plot3d(rnorm(100), rnorm(100), rnorm(100), col = "red")
 widget <- rglwidget(height = 300, width = 300) \%>\%
-  toggleWidget(theplot["data"], label = "Points")
+  toggleWidget(theplot["data"], 
+               hidden = theplot[c("xlab", "ylab", "zlab")], 
+               label = "Points")
 if (interactive())
   widget
 }

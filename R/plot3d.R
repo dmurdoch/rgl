@@ -130,6 +130,11 @@ plot3d.formula <- function(x, data = NULL, xlab = xyz$xlab, ylab = xyz$ylab, zla
 plot3d.lm <- function(x, which = 1, 
                       plane.col = "gray", plane.alpha = 0.5,
                       sharedMouse = TRUE,
+                      use_surface3d, do_grid = TRUE,
+                      grid.col = "black", grid.alpha = 1,
+                      grid.steps = 5,
+                      sub.steps = 4,
+                      vars = get_all_vars(terms(x), x$model),
                       ...) {
   stopifnot(which %in% 1:3)
   dots <- list(...)
@@ -141,56 +146,140 @@ plot3d.lm <- function(x, which = 1,
     mfrow3d(rows, cols, sharedMouse = sharedMouse)
   }
   fit <- x
-  formula <- formula(fit)
-  if (!is.null(fit$call$data)) {
-    data <- eval(fit$call$data, environment(formula))
-    environment(formula) <- list2env(data, parent=environment(formula))
+  missing_vars <- missing(vars)
+  cols <- ncol(vars)
+  if (cols < 3)
+    stop("Model has only ", cols, " variables.")
+  if (cols > 3)
+    warning("Model has ", cols, " variables; first 3 used.")
+  observed <- vars[, c(2, 3, 1)]
+  names <- colnames(observed)
+  if (is.null(dots$xlab)) dots$xlab <- names[1]
+  if (is.null(dots$ylab)) dots$ylab <- names[2]
+  if (is.null(dots$zlab)) dots$zlab <- names[3]
+
+  if (missing(use_surface3d)) 
+    use_surface3d <- !identical(class(fit), "lm") || ncol(as.matrix(model.frame(fit))) > 3
+  
+  plotGrid <- function(i, x, y, x0, y0, z) {
+    dots$color <- grid.col
+    dots$alpha <- grid.alpha
+    dots$color <- grid.col
+    dots$alpha <- grid.alpha
+    dots$front <- dots$back <- dots$polygon_offset <- 
+      dots$type <- NULL
+
+    lenx <- length(x)
+    lenx0 <- length(x0)
+    leny <- length(y)
+    leny0 <- length(y0)
+    
+    x <- c(rep(x0, each = leny + 1),
+           rep(c(x, NA), leny0))
+    y <- c(rep(c(y, NA), lenx0),
+           rep(y0, each = lenx + 1))
+    if (missing(z)) {
+      newdat <- data.frame(x, y)
+      names(newdat) <- names[1:2]
+      z <- predict(fit, newdata = newdat)
+    }
+    grid <- do.call(lines3d, c(list(x, y, z), dots))
+    names(grid) <- paste0("grid.", i)
+    grid
   }
-  xyz <- xyz.coords(formula)
-  if (is.null(dots$xlab)) dots$xlab <- xyz$xlab
-  if (is.null(dots$ylab)) dots$ylab <- xyz$ylab
-  if (is.null(dots$zlab)) dots$zlab <- xyz$zlab
+  
+  plotPoints <- function(i, points, zlab) {
+    dots$zlab <- zlab
+    plot <- do.call(plot3d, c(list(x = points), dots))
+    names(plot) <- paste0(names(plot), ".", i)
+    plot
+  }
+  
+  plotSurface <- function(i) {
+    bbox <- par3d("bbox")
+    xlim <- c(bbox[1], bbox[2])
+    x0 <- pretty(xlim, grid.steps)
+    ylim <- c(bbox[3], bbox[4])
+    y0 <- pretty(ylim, grid.steps)
+    if (sub.steps > 1) {
+      x <- rep(x0, each = sub.steps) + 
+           seq(0, diff(x0[1:2]), length.out = sub.steps + 1)[-(sub.steps + 1)]
+      y <- rep(y0, each = sub.steps) + 
+        seq(0, diff(y0[1:2]), length.out = sub.steps + 1)[-(sub.steps + 1)]
+    } else {
+      x <- x0
+      y <- y0
+    }
+    x <- c(xlim[1], x[xlim[1] < x & x < xlim[2]], xlim[2])
+    y <- c(ylim[1], y[ylim[1] < y & y < ylim[2]], ylim[2])
+    newdat <- expand.grid(x = x, y = y)
+    names(newdat) <- names[1:2]
+    z <- try(matrix(predict(fit, newdat), length(x), length(y)))
+    if (inherits(z, "try-error") && !missing_vars) {
+      stop("vars should be in order: response, pred1, pred2", call. = FALSE)
+    }
+    dots$color <- plane.col
+    dots$alpha <- plane.alpha
+    if (is.null(dots$polygon_offset)) 
+      dots$polygon_offset <- 1
+    dots$type <- NULL
+    surface <- do.call("surface3d", c(list(x, y, z), dots))
+    names(surface) <- paste0("surface.", i)
+    grid <- if (do_grid) {
+      x0 <- x0[xlim[1] <= x0 & x0 <= xlim[2]]
+      y0 <- y0[ylim[1] <= y0 & y0 <= ylim[2]]
+      plotGrid(i, x, y, x0, y0)
+    }
+    c(surface, grid)
+  }
+  plotPlane <- function(i, a, b, d) {
+    c <- -1
+    if (is.na(d))
+      d <- 0
+    dots$color <- plane.col
+    dots$alpha <- plane.alpha
+    if (is.null(dots$polygon_offset)) 
+      dots$polygon_offset <- 1
+    dots$type <- NULL
+    plane <- do.call("planes3d", c(list(a = a, b = b, c = c, d = d), dots))
+    names(plane) <- paste0("plane.", i)
+    grid <- if (do_grid) {
+      bbox <- par3d("bbox")
+      xlim <- c(bbox[1], bbox[2])
+      x0 <- pretty(xlim, grid.steps)
+      ylim <- c(bbox[3], bbox[4])
+      y0 <- pretty(ylim, grid.steps)
+      x0 <- x0[xlim[1] <= x0 & x0 <= xlim[2]]
+      y0 <- y0[ylim[1] <= y0 & y0 <= ylim[2]]
+      if (isTRUE(all.equal(c(a,b,d), c(0, 0, 0))))
+        plotGrid(i, xlim, ylim, x0, y0, z = 0)
+      else
+        plotGrid(i, xlim, ylim, x0, y0)      
+    }
+    c(plane, grid)
+  }
   for (i in seq_along(which)) {
     type <- which[i]
     if (type == 1L) {
-      coefs <- coef(fit)
-      a <- coefs[xyz$xlab]
-      b <- coefs[xyz$ylab]
-      c <- -1
-      d <- coefs["(Intercept)"]
-      plot <- do.call("plot3d", c(list(x = xyz), dots))
-      dots1 <- dots
-      dots1$col <- plane.col
-      dots1$alpha <- plane.alpha
-      plane <- do.call("planes3d", c(list(a = a, b = b, c = c, d =d), dots1))
+      plot <- plotPoints(i, observed, dots$zlab)
+      if (use_surface3d) {            
+        plane <- plotSurface(i)
+      } else {
+        coefs <- coef(fit)
+        plane <- plotPlane(i, coefs[names[1]], coefs[names[2]], coefs["(Intercept)"])
+      }
     } else if (type == 2L) {
-      dots1 <- dots
-      dots1$zlab <- "Residuals"
-      xyz1 <- xyz
-      xyz1$z <- residuals(fit)
-      plot <- do.call("plot3d", c(list(x = xyz1), dots1))
-      names(plot) <- paste0(names(plot), ".", i)
-      dots1$col <- plane.col
-      dots1$alpha <- plane.alpha
-      plane <- do.call("planes3d", c(list(a = 0, b = 0, c = -1, d = 0), dots1))
+      plot <- plotPoints(i, cbind(observed[,1:2], residuals(fit)), "Residuals")
+      plane <- plotPlane(i, 0, 0, 0)
     } else if (type == 3L) {
-      coefs <- coef(fit)
-      a <- coefs[xyz$xlab]
-      b <- coefs[xyz$ylab]
-      c <- -1
-      d <- coefs["(Intercept)"]
-      xyz1 <- xyz
-      xyz1$z <- predict(fit)
-      dots1 <- dots
-      dots1$zlab <- "Predicted"
-      plot <- do.call("plot3d", c(list(x = xyz1), dots1))
-      dots1 <- dots
-      dots1$col <- plane.col
-      dots1$alpha <- plane.alpha
-      plane <- do.call("planes3d", c(list(a = a, b = b, c = c, d =d), dots1))      
+      plot <- plotPoints(i, cbind(observed[,1:2], predict(fit)), dots$zlab)
+      if (use_surface3d) {            
+        plane <- plotSurface(i)
+      } else {
+        coefs <- coef(fit)
+        plane <- plotPlane(i, coefs[names[1]], coefs[names[2]], coefs["(Intercept)"])
+      } 
     }
-    names(plot) <- paste0(names(plot), ".", i)
-    names(plane) <- paste0("plane.", i)
     result <- c(result, plot, plane)
   }
   highlevel(result)

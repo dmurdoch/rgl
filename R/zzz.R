@@ -25,7 +25,9 @@
   unixos <- "none"
   
   if ( .Platform$OS.type == "unix" ) {
-    unixos <- system("uname",intern=TRUE)
+    unixos <- system("uname", intern=TRUE)
+    if (!length(unixos))
+      unixos <- "unknown"
     if ( unixos == "Darwin" ) {
           
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
