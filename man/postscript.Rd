@@ -27,6 +27,8 @@ GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine,
 }
 \author{ Christophe Geuzaine / Albrecht Gebhardt }
 \examples{
+# Create new files in tempdir
+savedir <- setwd(tempdir())
 
 x <- y <- seq(-10, 10, length = 20)
 z <- outer(x, y, function(x, y) x^2 + y^2)
@@ -41,6 +43,8 @@ title3d("Using ps/pdf text", col = 'red', line = 3)
 rgl.postscript("persp3db.ps", "ps")
 rgl.postscript("persp3db.pdf", "pdf")
 rgl.postscript("persp3db.tex", "tex", drawText = FALSE)
+
+setwd(savedir)
 
 \dontrun{
 
