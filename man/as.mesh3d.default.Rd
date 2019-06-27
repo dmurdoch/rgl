@@ -1,0 +1,106 @@
+\name{as.mesh3d.default}
+\alias{as.mesh3d.default}
+\title{
+Convert vertex list to mesh object
+}
+\description{
+The \code{\link{triangles3d}} and \code{\link{quads3d}} functions
+take a matrix of vertices as input, grouping them by 3's or 4's respectively
+to form the polygons to draw.  This method takes such a matrix
+as input and (optionally) merges repeated vertices, producing a \code{\link{mesh3d}}
+object as output.
+}
+\usage{
+\method{as.mesh3d}{default}(x, y = NULL, z = NULL, 
+             triangles = length(x) \%\% 3 == 0, 
+             smooth = FALSE, 
+             tolerance = sqrt(.Machine$double.eps), 
+             notEqual = NULL, 
+             merge = TRUE,
+             ...)
+}
+\arguments{
+  \item{x, y, z}{
+Coordinates. Any reasonable way of defining the coordinates is
+acceptable. See the function \code{\link{xyz.coords}} for details.
+}
+  \item{triangles}{
+Logical value indicating whether the coordinates are for triangles
+or quadrilaterals.
+}
+  \item{smooth}{
+If \code{TRUE}, \code{\link{addNormals}} will be called on the mesh
+object to make it render smoothly.
+}  
+  \item{tolerance}{
+The numerical tolerance to be used in \code{\link{all.equal}} to
+determine whether two vertices should be merged.
+}
+  \item{notEqual}{
+If not \code{NULL}, an n by n matrix of logical values, where n is the
+number of vertices as input.  \code{TRUE} entries indicate that the
+corresponding pair of vertices should not be merged even if they appear equal.
+}
+  \item{merge}{
+Should apparently equal vertices be merged?
+  }
+  \item{\dots}{
+Material properties to pass to \code{\link{tmesh3d}} or \code{\link{qmesh3d}}.
+}
+}
+\details{
+The motivation for this function is the following problem:  I was
+asked whether rgl could render a surface made up of triangles or 
+quadrilaterals to look smooth.  It can do that, but needs normals at 
+each vertex; they should be the average of the normals for each polygon 
+sharing that vertex.  Then OpenGL will interpolate the normals across 
+the polygons and give the illusion of smoothness.
+
+To do this, it needs to know which polygons share each vertex.  If the 
+surface is described as a list of triangles or quadrilaterals, that 
+means identifying vertices that are in multiple polygons, and converting 
+the representation to a \code{"\link{mesh3d}"} object (which is a matrix of vertices 
+and a matrix of vertex numbers making up triangles or quads).  Then the 
+\code{\link{addNormals}} function will add the normals.
+
+Sometimes two polygons will share vertices (within numerical 
+tolerance) without the user wanting them to be considered internal to 
+the surface, or might want one sharp edge in an otherwise smooth 
+surface.  This means I needed a way to declare that two vertices from 
+the original list of vertices in the triangles or quads are "not equal", 
+even when they test numerically equal.  That's what the \code{notEqual} matrix specifies.
+}
+\value{
+A \code{"\link{mesh3d}"} object with the same faces as in the 
+input, but with vertices that test equal to within \code{tolerance}
+merged.  
+}
+\author{
+Duncan Murdoch
+}
+\examples{
+xyz <- matrix(c(-1, -1, -1,
+                -1,  1, -1,
+                 1,  1, -1,
+                 1, -1, -1,
+                -1,  1, -1,
+                -1,  1,  1,
+                 1,  1,  1,
+                 1,  1, -1,
+                 1, -1, -1,
+                 1,  1, -1,
+                 1,  1,  1,
+                 1, -1,  1), byrow = TRUE, ncol = 3)
+mesh <- as.mesh3d(xyz, triangles = FALSE, col = "red")
+mesh$vb
+mesh$ib
+open3d()
+shade3d(mesh)
+
+# Stop vertices 2 and 5 from being merged
+notEQ <- matrix(FALSE, 12, 12)
+notEQ[2, 5] <- TRUE
+mesh <- as.mesh3d(xyz, triangles = FALSE, notEqual = notEQ)
+mesh$vb
+mesh$ib
+}

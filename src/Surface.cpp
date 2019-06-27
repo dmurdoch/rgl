@@ -261,6 +261,7 @@ int Surface::getAttributeCount(AABox& bbox, AttribID attrib)
     		    return 0;
     case TEXCOORDS: return texCoordArray.size();
     case SURFACEDIM: return 1;
+    case FLAGS: return 2; 
   }
   return Shape::getAttributeCount(bbox, attrib);
 }
@@ -292,17 +293,21 @@ void Surface::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
       case TEXCOORDS: {
         while (first < n) {
           *result++ = texCoordArray[first].s;
-	  *result++ = texCoordArray[first].t;
-	  first++;
-	}
-	return;
+          *result++ = texCoordArray[first].t;
+          first++;
+        }
+        return;
       }
       case SURFACEDIM: {
         *result++ = nx;
         *result++ = nz;
         return;
       }
-    }
+      case FLAGS:
+        *result++ = (double) ignoreExtent;
+        *result++ = (double) orientation;
+        return;
+      }
     Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }

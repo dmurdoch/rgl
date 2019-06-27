@@ -1,5 +1,17 @@
 clipTriangles3d <- function(triangles, fn, bound = 0, greater = TRUE, 
                             attributes = NULL) {
+  isMesh <- FALSE
+  if (inherits(triangles, "shape3d")) {
+    shape <- triangles
+    triangles <- as.triangles3d(triangles)
+    if (inherits(shape, "mesh3d")) {
+      isMesh <- TRUE
+      if (!is.null(attributes))
+        warning("'attributes' ignored for mesh objects")
+      attributes <- attr(triangles, "indices")
+    }
+  }
+  
   # triangles is 3m x 3:  each row is a point, triplets of rows are triangles
   stopifnot(is.numeric(triangles), 
             length(dim <- dim(triangles)) == 2, 
@@ -86,7 +98,23 @@ clipTriangles3d <- function(triangles, fn, bound = 0, greater = TRUE,
       else
         attributes[c(index1, index2a, index2b, index3),,drop = FALSE]
   }
-  result
+  if (isMesh) {
+    indices <- attr(result, "attributes")
+    result <- tmesh3d(t(result), homogeneous = FALSE, indices = matrix(seq_len(nrow(result)), nrow = 3))
+    if (!is.null(shape$normals)) result$normals <- shape$normals[, indices]
+    if (!is.null(shape$texcoords)) result$texcoords <- shape$texcoords[, indices]
+    if (!is.null(shape$material)) {
+      material <- shape$material
+      origlen <- ncol(shape$vb)
+      if (length(material$color) > 1)
+        material$color <- rep(material$color, length.out = origlen)[indices]
+      if (length(material$alpha) > 1)
+        material$alpha <- rep(material$alpha, length.out = origlen)[indices]
+      result$material <- material
+    }
+    result
+  } else
+    structure(result, class = "triangles3d")
 }
 
 # # Togliatti surface equation: f(x,y,z) = 0

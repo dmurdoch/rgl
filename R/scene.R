@@ -193,9 +193,12 @@ rgl.attrib <- function( id, attrib, first=1,
       rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
     else if (id %in% rgl.ids("bboxdeco", subscene = 0)$id)
       rownames(result) <- "draw_front"[first:last]
-    else if (id %in% rgl.ids("shapes", subscene = 0)$id)
-      rownames(result) <- c("ignoreExtent", "fixedSize")[first:last]
- 
+    else if (id %in% (ids <- rgl.ids("shapes", subscene = 0))$id) {
+      type <- ids$type[ids$id == id]
+      rownames(result) <- c("ignoreExtent", 
+                            if (type == "surface") "flipped"
+                            else "fixedSize")[first:last]
+    }
   result
 }
 

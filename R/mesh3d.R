@@ -251,6 +251,7 @@ wire3d.mesh3d <- function ( x, override = TRUE,
 shade3d.mesh3d <- function ( x, override = TRUE, 
                              meshColor = c("vertices", "faces", "legacy"), ... ) {
   argMaterial <- .getMaterialArgs(...)
+  xHasColor <- !is.null(x$material) && !is.null(x$material$color)
   if ( override ) {
     material <- x$material
     if (is.null(material)) material <- list()    
@@ -281,7 +282,7 @@ shade3d.mesh3d <- function ( x, override = TRUE,
     if (.meshColor != "legacy") {
       
       if (length(unique(args$color)) > 1) {
-        if (missing(meshColor) && getOption("rgl.meshColorWarning", TRUE))
+        if (!xHasColor && missing(meshColor) && getOption("rgl.meshColorWarning", TRUE))
           warning("Default coloring for meshes changed in rgl 0.100.1")
         args$color <- switch(.meshColor,
           vertices = rep_len(args$color, ncol(x$vb))[x$it],

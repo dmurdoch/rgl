@@ -1,6 +1,6 @@
 export(.check3d, 
         abclines3d, addNormals, addToSubscene3d, arc3d,
-        arrow3d, as.mesh3d, asRow,
+        arrow3d, as.mesh3d, as.triangles3d, asRow,
         ageSetter, asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
         bbox3d, bg3d, bgplot3d, 
 	clear3d, clearSubsceneList, clipplanes3d, clipplaneSlider, 
@@ -65,6 +65,13 @@ export(.check3d,
  S3method(as.mesh3d, tri)
  S3method(as.mesh3d, triSht)
  S3method(as.mesh3d, ashape3d)
+ S3method(as.mesh3d, rglId)
+ S3method(as.mesh3d, default)
+ 
+ S3method(as.triangles3d, mesh3d)
+ S3method(as.triangles3d, shapelist3d)
+ S3method(as.triangles3d, rglId)
+ S3method(as.triangles3d, default)
  
  S3method(translate3d, default)
  S3method(rotate3d, default)

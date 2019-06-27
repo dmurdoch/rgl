@@ -968,11 +968,12 @@ base graphics.
 0.100.19
   - Fix some bugs detected by valgrind
   
-0.100.23
+0.100.24
   - Fix thigmophobe3d to try to keep up with changes in 
     plotrix::thigmophobe.
+  - Stop ?rgl.postscript from writing files to current directory
   
-0.100.24
+0.100.25
   - open3d() now signals an error if unnamed parameters are used
   - toggleWidget() now makes it easier to initialize the scene with
     some objects hidden.
@@ -981,3 +982,11 @@ base graphics.
     allowing for curved surfaces.
   - Fixed the startup code so that systems that don't provide
     uname still work.  (Suggestion of Settra Khemri.)
+  - Added as.mesh3d.default() method to convert triangles or quads
+    to a mesh3d object.
+  - Added as.triangles3d() generic with methods to convert mesh3d,
+    shapelist3d, and matrices representing quads into matrices
+    representing triangles.
+  - Added as.triangles3d.rglId() and as.mesh3d.rglId() methods to
+    convert displayed objects to usable data.
+    

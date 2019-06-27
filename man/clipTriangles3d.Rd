@@ -12,7 +12,7 @@ clipTriangles3d(triangles, fn, bound = 0, greater = TRUE, attributes = NULL)
 }
 \arguments{
   \item{triangles}{
-A \code{3m x 3} matrix of vertices of triangles.
+A \code{3m x 3} matrix of vertices of triangles, or a \code{\link{mesh3d}} object.
 }
   \item{fn}{
 A function used to determine clipping, or a vector of \code{3m} values from such
@@ -47,6 +47,10 @@ quadrilateral made of two new triangles.
 \item If all vertices satisfy the condition, they are included
 with no modifications.
 }
+
+If the input \code{triangles} is a \code{\link{mesh3d}} object, the
+function first converts it to a matrix of triangle vertices, then 
+proceeds as before.  Other attributes of the mesh are not kept.
 }
 \value{
 A new matrix of vertices that all (approximately) satisfy the

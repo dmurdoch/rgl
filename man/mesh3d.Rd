@@ -69,8 +69,9 @@
   part of which face.  Such objects may have  triangular faces,
   planar quadrilateral faces, or both.
   
-  The \code{as.mesh3d} function is generic; currently
-the only method defined is \code{\link{as.mesh3d.deldir}}.
+  The \code{as.mesh3d} function is generic.  It converts various
+  objects (run \code{methods("as.mesh3d")} for a list) into 
+  \code{mesh3d} objects.
 
   The sample objects optionally take a matrix transformation \code{trans} as 
   an argument.  This transformation is applied to all vertices of the default shape.
