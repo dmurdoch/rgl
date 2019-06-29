@@ -1,5 +1,8 @@
 To-do:
 
+Handle replication of colors better in subdivision3d.
+
+Support meshColor argument in creating a mesh, not just shading it.
 
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 

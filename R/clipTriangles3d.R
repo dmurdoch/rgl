@@ -1,7 +1,7 @@
 clipTriangles3d <- function(triangles, fn, bound = 0, greater = TRUE, 
                             attributes = NULL) {
   isMesh <- FALSE
-  if (inherits(triangles, "shape3d")) {
+  if (inherits(triangles, "shape3d") || !is.numeric(triangles)) {
     shape <- triangles
     triangles <- as.triangles3d(triangles)
     if (inherits(shape, "mesh3d")) {
