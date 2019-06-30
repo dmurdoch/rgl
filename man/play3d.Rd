@@ -61,8 +61,8 @@ to choose the file type.
 Finally, \code{convert} can be a template for a command to
 execute in the standard shell (wildcards are allowed). The template is
 converted to a command using \cr
-\code{\link{sprintf}(convert, fps, frames, movie, type, dir, duration)} \cr
-For example, \code{code = TRUE}
+\code{\link{sprintf}(convert, fps, frames, movie, type, duration, dir)} \cr
+For example, \code{convert = TRUE}
 uses the template \code{"magick -delay 1x\%d \%s*.png \%s.\%s"}. All work
 is done in the directory \code{dir}, so paths should not be needed in
 the command.  (Note that \code{\link{sprintf}} does not require all
