@@ -1,16 +1,24 @@
-\name{as.mesh3d.default}
+\name{as.mesh3d}
+\alias{as.mesh3d}
 \alias{as.mesh3d.default}
 \title{
-Convert vertex list to mesh object
+Convert object to mesh object
 }
 \description{
-The \code{\link{triangles3d}} and \code{\link{quads3d}} functions
-take a matrix of vertices as input, grouping them by 3's or 4's respectively
-to form the polygons to draw.  This method takes such a matrix
+The \code{as.mesh3d} generic function converts various objects
+to \code{\link{mesh3d}} objects.  
+
+The default method works takes takes a matrix of vertices 
 as input and (optionally) merges repeated vertices, producing a \code{\link{mesh3d}}
-object as output.
+object as output.  It will contain either triangles or quads
+according to the \code{triangles} argument.
+
+If the generic is called without any argument, it will pass
+all rgl ids from the current scene to the 
+\code{\link{as.mesh3d.rglId}} method.
 }
 \usage{
+as.mesh3d(x, ...)
 \method{as.mesh3d}{default}(x, y = NULL, z = NULL, 
              triangles = length(x) \%\% 3 == 0, 
              smooth = FALSE, 
@@ -21,7 +29,9 @@ object as output.
 }
 \arguments{
   \item{x, y, z}{
-Coordinates. Any reasonable way of defining the coordinates is
+For the generic, \code{x} is the object to convert.
+For the default method, \code{x}, \code{y} and \code{z} are
+coordinates. Any reasonable way of defining the coordinates is
 acceptable. See the function \code{\link{xyz.coords}} for details.
 }
   \item{triangles}{
@@ -72,8 +82,8 @@ even when they test numerically equal.  That's what the \code{notEqual} matrix s
 }
 \value{
 A \code{"\link{mesh3d}"} object with the same faces as in the 
-input, but with vertices that test equal to within \code{tolerance}
-merged.  
+input, but (if \code{merge=TRUE}) with vertices that test equal to
+within \code{tolerance} merged.  
 }
 \author{
 Duncan Murdoch

@@ -371,7 +371,7 @@ two dimensional polygon and divides it up into triangles using the
 
 The generic function `r indexfns("as.mesh3d")`
 is provided to allow data structures produced by
-other packages to be displayed as mesh
+other code to be converted to mesh
 structures.  Currently the following classes
 are supported:
 
@@ -381,6 +381,13 @@ Class |  Package | Description
 `r indexfns("triSht", pkg = "interp")` | `interp` | Also Delaunay triangulations
 `r indexfns("tri", pkg = "tripack")` | `tripack` | Generalized Delaunay triangulations
 `r indexfns("ashape3d", pkg = "alphashape3d")` | `alphashape3d` | Alpha-shapes
+`r indexfns("rglId")` | `rgl` | `rgl` object identifiers
+
+The default `r indexfns("as.mesh3d.default")` method is a simple way
+to construct a mesh from a matrix of vertices; it can use
+`r indexfns("mergeVertices")` (which can also be used on its own)
+to merge repeated vertices within the matrix, allowing 
+`r linkfn("addNormals")` to be used to give a smooth appearance.
 
 ### The underlying class structure for shapes
 
@@ -409,6 +416,7 @@ Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
+`r indexfns("clipMesh3d")`: | clip mesh object using curved boundary
 
 The individual steps in `r linkfn("subdivision3d")` are also available:
 `r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These
@@ -597,7 +605,7 @@ Some functions are mainly for internal use:
 `r indexfns(c("elementId2Prefix", "playwidgetOutput", "renderPlaywidget", "rglwidgetOutput", "renderRglwidget", "registerSceneChange"))`. 
 More details are given in the vignette 
 [User Interaction in WebGL](WebGL.html).
-The functions `r indexfns(c("lowlevel", "highlevel"))` are also for internal use,
+The functions `r indexfns(c("lowlevel", "highlevel", "rglId"))` are also for internal use,
 marking function results for automatic
 printing.  Finally, the experimental function
 `r indexfns("setUserShaders")` allows you to
@@ -641,6 +649,11 @@ Function                             | Description
 `r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
 `r indexfns("rgl.projection")`:        | return information about the current projection
 `r indexfns(c("rgl.user2window", "rgl.window2user"))`: | convert between coordinates in the current projection
+
+The `r indexfns("as.triangles3d")` generic function is intended to 
+extract coordinates in a form suitable for passing to 
+`r linkfn("triangles3d")`.  Currently a method is provided for
+`r linkfn("rglId")` objects.
 
 In addition to these, there are some other related functions which
 should rarely be called by users: `r indexfns(c("rgl.init", "rgl.open", "rgl.quit"))`.  

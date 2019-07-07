@@ -1,39 +1,33 @@
 as.triangles3d <- function(obj, ...) 
   UseMethod("as.triangles3d")
 
-as.triangles3d.shapelist3d <- function(obj, ...) {
-  structure(do.call(rbind, lapply(obj, as.triangles3d, ...)),
-            class = "triangles3d")
-}
-
-as.triangles3d.mesh3d <- function(obj, ...) {
+as.triangles3d.mesh3d <- function(obj, attribute = c("vertices", "normals", "texcoords",
+                                                     "colors"),
+                                  ...) {
   indices <- NULL
   if (!is.null(obj$it)) {
     indices <- c(obj$it)
-    xyz <- t(obj$vb[1:3, indices])/obj$vb[4,indices]
-  } else
-    xyz <- NULL
+  } 
   if (!is.null(obj$ib)) {
-    newindices <- c(obj$ib[1:3,], obj$ib[c(1,3,4),])
-    xyz <- rbind(xyz, t(obj$vb[1:3, newindices])/obj$vb[4, newindices])
-    indices <- c(indices, newindices)
+    indices <- c(indices, c(obj$ib[1:3,], obj$ib[c(1,3,4),]))
   }
-  structure(xyz, class = "triangles3d", indices = indices)
-}
-
-as.triangles3d.triangles3d <- function(obj, ...)
-  obj
-
-as.triangles3d.default <- function(obj, ...) {
-  if (is.matrix(obj)) {
-    # Assume object is a quads3d object
-    nrows <- nrow(obj)
-    stopifnot(nrows %% 4 == 0)
-    nquads <- nrows/4
-    indices <- rep(4*(seq_len(nquads) - 1), each = 6) + rep(c(1, 2, 3, 1, 3, 4), nquads)
-    structure(obj[indices,], class = "triangles3d", indices = indices)
-  } else
-    stop("Do not know how to convert object of class ", paste(class(obj), collapse=","))
+  if (!is.null(indices)) 
+    switch(match.arg(attribute),
+           vertices = t(obj$vb[1:3, indices])/obj$vb[4,indices],
+           normals  = if (!is.null(obj$normals))
+             if (nrow(obj$normals) == 4)
+               t(obj$normals[1:3, indices]/obj$normals[4,indices])
+             else
+               t(obj$normals[, indices]),
+           texcoords = if (!is.null(obj$texcoords))
+             t(obj$texcoords[, indices]),
+           colors = if (!is.null(obj$material) && !is.null(obj$material$color)) {
+             col <- t(col2rgb(rep(obj$material$color, length.out = max(indices))))
+             alpha <- if (is.null(obj$material$alpha)) 1
+             else obj$material$alpha
+             alpha <- rep(alpha, length.out = max(indices))
+             cbind(col, alpha)[indices,]
+           })
 }
 
 as.triangles3d.rglId <- function(obj, 

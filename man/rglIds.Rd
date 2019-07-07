@@ -20,6 +20,7 @@ whether a high level function like
 
 }
 \usage{
+rglId(ids = integer())
 lowlevel(ids = integer())
 highlevel(ids = integer())
 \method{print}{rglId}(x, 
@@ -58,9 +59,10 @@ objects without lights would rarely make
 sense.)
 }
 \value{
-Objects of class \code{c("rglHighlevel", "rglId",
+Objects of class \code{"rglId"}, \code{c("rglHighlevel", "rglId",
 "numeric")} or \code{c("rglLowlevel", "rglId",
-"numeric")}.  
+"numeric")} for \code{rglId}, \code{lowlevel} or \code{highlevel} 
+respectively.  
 }
 \author{
 Duncan Murdoch

@@ -4,7 +4,8 @@ export(.check3d,
         ageSetter, asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
         bbox3d, bg3d, bgplot3d, 
 	clear3d, clearSubsceneList, clipplanes3d, clipplaneSlider, 
-	      clipTriangles3d, cube3d, cuboctahedron3d, 
+	      clipMesh3d, # clipTriangles3d, 
+	      cube3d, cuboctahedron3d, 
         currentSubscene3d, cylinder3d,
         decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, ellipse3d, extrude3d,
         figWidth, figHeight,
@@ -12,7 +13,7 @@ export(.check3d,
 	highlevel, hook_rgl, hook_webgl,
 	icosahedron3d, identify3d, identityMatrix,
 	layout3d, legend3d, light3d, lines3d, lowlevel, material3d, 
-        matrixSetter, mfrow3d, movie3d, mtext3d, 
+  matrixSetter, mergeVertices, mfrow3d, movie3d, mtext3d, 
 	newSubscene3d, next3d, normalize.mesh3d, observer3d, octahedron3d, oh3d, open3d, 
 	par3d, par3dinterp, par3dinterpControl, par3dinterpSetter, 
         particles3d, pch3d, persp3d, planes3d, 
@@ -26,8 +27,9 @@ export(.check3d,
 	rgl.select, rgl.select3d, rgl.set, rgl.snapshot, rgl.spheres, rgl.sprites,
 	rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
 	rgl.attrib, rgl.attrib.count, rgl.attrib.info, rgl.dev.list, rgl.useNULL,
-        rglMouse, rglShared, rglToLattice, rglToBase,
-	rgl.viewpoint, rgl.window2user, rglFonts, r3dDefaults, rotate3d, rotationMatrix,
+	rgl.viewpoint, rgl.window2user, 
+	rglFonts, rglId, rglMouse, rglShared, rglToLattice, rglToBase,
+  r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, scene3d, segments3d, select3d, selectpoints3d,
 	rgl.setMouseCallbacks, rgl.setWheelCallback, setupKnitr, 
         setUserShaders, shade3d, 
@@ -69,9 +71,7 @@ export(.check3d,
  S3method(as.mesh3d, default)
  
  S3method(as.triangles3d, mesh3d)
- S3method(as.triangles3d, shapelist3d)
  S3method(as.triangles3d, rglId)
- S3method(as.triangles3d, default)
  
  S3method(translate3d, default)
  S3method(rotate3d, default)

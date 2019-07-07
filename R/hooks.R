@@ -21,6 +21,10 @@ highlevel <- function(ids = integer()) {
   structure(ids, class = c("rglHighlevel", "rglId", "numeric"))
 }
 
+rglId <- function(ids = integer()) {
+  structure(ids, class = "rglId")
+}
+
 print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
 			...) {
   if (rglwidget)
