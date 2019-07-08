@@ -35,15 +35,20 @@ This function transforms a mesh3d object.
 
 First, all quads are converted to triangles.
 
-Next, each vertex is checked against the condition.  The test
-function \code{fn} will be passed a matrix, whose columns are 
-the specified attributes, with one row per vertex.  It should return
+Next, each vertex is checked against the condition.  If \code{fn}
+is a numeric vector, with one value per vertex, those values will be
+used in the test.
+If it is a function, it will be passed a matrix, whose columns are 
+the specified attribute(s), with one row per vertex.  It should return
 a vector of values, one per vertex, to check against the bound.
+The \code{"vertices"} and \code{"normals"} values will be converted to
+Euclidean coordinates.  \code{"index"} will be an integer from 1
+to the number of vertices.  
 
 Modifications to the triangles depend
 on how many of the vertices satisfy the condition 
 (\code{fn >= bound} or \code{fn <= bound}, depending on \code{greater})
-for inclusion:  
+for inclusion.
 \itemize{
 \item If no vertices in a triangle satisfy the condition, the triangle is omitted.
 \item If one vertex satisfies the condition, the other two vertices

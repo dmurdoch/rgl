@@ -30,6 +30,12 @@ clipMesh3d <- function(mesh, fn, bound = 0, greater = TRUE,
   if (!greater)
     values <- -values
   
+  if (length(values) != ncol(mesh$vb))
+    stop("'fn' should give one value per vertex")
+  
+  if (anyNA(values))
+    stop("'fn' should not include NA values")
+  
   # Now, set all w values to 1
   mesh$vb <- t( cbind(t(mesh$vb[1:3,])/mesh$vb[4,], 1))
   if (!is.null(mesh$normals) && nrow(mesh$normals) == 4)

@@ -117,7 +117,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
             normals = normals, texcoords = texcoords)
 }
 
-mergeVertices <- function(mesh, notEqual = NULL, attributes = "vertices",
+mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
                           tolerance = sqrt(.Machine$double.eps)) {
   nvert <- ncol(mesh$vb)
   if (!is.null(notEqual)) {
@@ -126,15 +126,15 @@ mergeVertices <- function(mesh, notEqual = NULL, attributes = "vertices",
       stop("'notEqual' should be a ", nvert, " by ", nvert, " logical matrix.")
     notEqual <- notEqual | t(notEqual) # Make it symmetric
   }
-  attributes <- match.arg(attributes, 
+  attribute <- match.arg(attribute, 
                           choices = c("vertices", "colors", "normals", "texcoords"),
                           several.ok = TRUE)
   verts <- matrix(numeric(), ncol = 0, nrow = nvert)
-  if ("vertices" %in% attributes) 
+  if ("vertices" %in% attribute) 
     verts <- cbind(mesh$vb[1,]/mesh$vb[4,],
                    mesh$vb[2,]/mesh$vb[4,],
                    mesh$vb[3,]/mesh$vb[4,])
-  if (!is.null(normals <- mesh$normals) && "normals" %in% attributes)
+  if (!is.null(normals <- mesh$normals) && "normals" %in% attribute)
     if (nrow(normals) == 3)
       verts <- cbind(verts, t(normals))
     else
@@ -143,9 +143,9 @@ mergeVertices <- function(mesh, notEqual = NULL, attributes = "vertices",
                             normals[3,]/normals[4,])
   colors <- NULL
   if (!is.null(mesh$material) && !is.null(colors <- mesh$material$color)
-      && "colors" %in% attributes)
+      && "colors" %in% attribute)
       verts <- cbind(verts, t(col2rgb(colors)))
-  if (!is.null(texcoords <- mesh$texcoords) && "texcoords" %in% attributes)
+  if (!is.null(texcoords <- mesh$texcoords) && "texcoords" %in% attribute)
     verts <- cbind(verts, t(texcoords))
   
   o <- do.call(order, as.data.frame(verts))

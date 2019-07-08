@@ -973,20 +973,19 @@ base graphics.
     plotrix::thigmophobe.
   - Stop ?rgl.postscript from writing files to current directory
   
-0.100.25
+0.100.26
   - open3d() now signals an error if unnamed parameters are used
   - toggleWidget() now makes it easier to initialize the scene with
     some objects hidden.
-  - added clipTriangles3d() to allow smooth clipping of triangles
+  - added clipMesh3d() to allow smooth clipping of mesh objects
   - Made plot3d.lm() method handle a larger variety of models, by
     allowing for curved surfaces.
   - Fixed the startup code so that systems that don't provide
     uname still work.  (Suggestion of Settra Khemri.)
   - Added as.mesh3d.default() method to convert triangles or quads
     to a mesh3d object.
-  - Added as.triangles3d() generic with methods to convert mesh3d,
-    shapelist3d, and matrices representing quads into matrices
-    representing triangles.
+  - Added as.triangles3d() generic with methods to convert mesh3d
+    objects into matrices representing triangles.
   - Added as.triangles3d.rglId() and as.mesh3d.rglId() methods to
     convert displayed objects to usable data.
     

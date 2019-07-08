@@ -14,7 +14,7 @@ This function merges identical (or similar) vertices to achieve this.
 \usage{
 mergeVertices(mesh, 
               notEqual = NULL, 
-              attributes = "vertices", 
+              attribute = "vertices", 
               tolerance = sqrt(.Machine$double.eps))
 }
 \arguments{
@@ -25,8 +25,8 @@ A \code{\link{mesh3d}} object.
 A logical matrix indicating that certain pairs should not be merged
 even if they appear identical.
 }
-  \item{attributes}{
-Which attributes should be considered in comparing vertices? 
+  \item{attribute}{
+Which attribute(s) should be considered in comparing vertices? 
 A vector chosen from \code{c("vertices", "colors", "normals", "texcoords"))}
 }
   \item{tolerance}{
