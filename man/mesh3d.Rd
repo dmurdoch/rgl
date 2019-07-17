@@ -26,9 +26,11 @@
 }
 \usage{
   qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, 
-         normals = NULL, texcoords = NULL)
+         normals = NULL, texcoords = NULL,
+         meshColor = c("vertices", "edges", "faces", "legacy"))
   tmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, 
-         normals = NULL, texcoords = NULL)
+         normals = NULL, texcoords = NULL,
+         meshColor = c("vertices", "edges", "faces", "legacy"))
   
   cube3d(trans = identityMatrix(), ...)  
   tetrahedron3d(trans = identityMatrix(), ...)  
@@ -40,11 +42,14 @@
   oh3d(trans = identityMatrix(), ...)    # an 'o' object
   
   dot3d(x, ...)   # draw dots at the vertices of an object
-  \method{dot3d}{mesh3d}(x, override = TRUE, ...)
+  \method{dot3d}{mesh3d}(x, override = TRUE, 
+                         meshColor = c("vertices", "edges", "faces", "legacy"),...)
   wire3d(x, ...)  # draw a wireframe object
-  \method{wire3d}{mesh3d}(x, override = TRUE, meshColor = c("vertices", "edges", "faces", "legacy"), ...)
+  \method{wire3d}{mesh3d}(x, override = TRUE, 
+                          meshColor = c("vertices", "edges", "faces", "legacy"), ...)
   shade3d(x, ...) # draw a shaded object
-  \method{shade3d}{mesh3d}(x, override = TRUE, meshColor = c("vertices", "faces", "legacy"), ...)
+  \method{shade3d}{mesh3d}(x, override = TRUE, 
+                           meshColor = c("vertices", "faces", "legacy"), ...)
 }
 \arguments{
   \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d}).}
@@ -80,9 +85,8 @@
   a \code{4 * n} matrix.  Individual meshes may have both types
   of faces.
   
-  The \code{meshColor} argument to \code{wire3d} and \code{shade3d}
-controls how material colours are interpreted.  This parameter
-was added in \pkg{rgl} version 0.100.1.  Possible values are:
+  The \code{meshColor} argument controls how material colours are interpreted.  This parameter
+was added in \pkg{rgl} version 0.100.1 (0.100.27 for \code{dot3d}, \code{tmesh3d} and \code{qmesh3d}).  Possible values are:
 \describe{
 \item{\code{"vertices"}}{Colours are applied by vertex, in the order
 they appear in the \code{vb} matrix.}
@@ -97,21 +101,21 @@ as in \pkg{rgl} versions earlier than 0.100.1.}
 }
 Unique partial matches of these values will be recognized.
 
-If colours are specified but \code{meshColor} is not,
-currently a warning will by default be given that their
-interpretation may have changed.  This warning can be
-suppressed by setting 
-\code{options(rgl.meshColorWarning = FALSE)}.  In some future
-release of \pkg{rgl}, the default
-will change to no warning.
+If colours are specified but \code{meshColor} is not
+and \code{options(rgl.meshColorWarning = TRUE)},
+a warning will be given that their
+interpretation may have changed.  In versions 0.100.1 to 0.100.26
+of \pkg{rgl}, the default
+was to give the warning; now the default is for no warning.
 
-Note that the \code{shade3d} function doesn't support \code{meshColor = "edges"}, and the \code{wire3d} function will draw
-edges twice if they are common edges between two faces; which 
-copy is visible depends on the \code{\link{material3d}("depth_test")}
+Note that the \code{shade3d} function doesn't support \code{meshColor = "edges"}, and \code{dot3d} and \code{wire3d} function may draw
+items more than once (\code{dot3d} for other than \code{meshColor = "vertices"}, 
+\code{wire3d} for \code{meshColor = "faces"}).  Which 
+copy is visible depends on the order of drawing and the
+\code{\link{material3d}("depth_test")}
 setting.
 }
 \value{
-
   \code{qmesh3d}, \code{cube3d}, \code{oh3d}, \code{tmesh3d},
   \code{tetrahedron3d}, \code{octahedron3d}, \code{icosahedron3d} and
   \code{dodecahedron3d} return objects of class \code{c("mesh3d",

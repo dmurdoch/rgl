@@ -1,9 +1,5 @@
 To-do:
 
-Handle replication of colors better in subdivision3d.
-
-Support meshColor argument in creating a mesh, not just shading it.
-
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
@@ -23,6 +19,10 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Support meshColor argument in creating a mesh, not just shading it.  DONE
+
+Handle replication of colors better in subdivision3d. DONE
 
 If you pop a 3d sprite object, R crashes.  FIXED
 
