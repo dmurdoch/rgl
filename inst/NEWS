@@ -988,6 +988,9 @@ base graphics.
     objects into matrices representing triangles.
   - Added as.triangles3d.rglId() and as.mesh3d.rglId() methods to
     convert displayed objects to usable data.
+    
+0.100.27
+
   - Added meshColor as an argument to tmesh3d(), qmesh3d()
     and dot3d(); changed default to no longer give warning if
     meshColor is not specified.
