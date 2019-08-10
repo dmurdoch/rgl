@@ -63,6 +63,8 @@ export(.check3d,
  
  S3method(plot3d, mesh3d)
  
+ S3method(all.equal, mesh3d)
+ 
  S3method(as.mesh3d, deldir)
  S3method(as.mesh3d, tri)
  S3method(as.mesh3d, triSht)

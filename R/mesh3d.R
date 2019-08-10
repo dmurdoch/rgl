@@ -485,3 +485,21 @@ print.mesh3d <- function(x, prefix = "", ...) {
       if (is.null(x$it)) 0 else ncol(x$it), " triangles and ",
       if (is.null(x$ib)) 0 else ncol(x$ib), " quads.\n", sep = "")
 }
+
+# Compare old and new meshes
+all.equal.mesh3d <- function(target, current, ...) {
+  mcs <- c(target$meshColor, current$meshColor)
+  target$meshColor <- NULL
+  current$meshColor <- NULL
+  result <- all.equal.list(target, current, ...)
+  if (isTRUE(result)) 
+    result <- character()
+  mctest <- is.null(mcs) ||
+            (length(mcs) == 1 && mcs == "vertices") ||
+            (length(mcs) == 2 && mcs[1] == mcs[2])
+  if (!mctest)
+    result <- c(result, "meshColor difference")
+  if (!length(result))
+    result <- TRUE
+  result
+}

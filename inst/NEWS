@@ -989,11 +989,13 @@ base graphics.
   - Added as.triangles3d.rglId() and as.mesh3d.rglId() methods to
     convert displayed objects to usable data.
     
-0.100.28
+0.100.29
 
   - Added meshColor as an argument to tmesh3d(), qmesh3d()
     and dot3d(); changed default to no longer give warning if
     meshColor is not specified.
+  - Added all.equal() method for mesh3d objects, so that
+    changes caused by the above are ignored.
   - Added tri_to_keep argument to as.mesh3d.ashape3d() for
     compatibility with conflicting method from nat package
     version 1.8.11.
