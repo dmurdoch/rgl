@@ -78,7 +78,7 @@ reOrient <- function(vertices) {
   vertices
 }
 
-as.mesh3d.ashape3d <- function(x, alpha = x$alpha[1], 
+as.mesh3d.ashape3d <- function(x, alpha = x$alpha[1], tri_to_keep = 2L,
                                col = "gray", smooth = FALSE,
                                normals = NULL, texcoords = NULL,
                                ...) {
@@ -86,7 +86,7 @@ as.mesh3d.ashape3d <- function(x, alpha = x$alpha[1],
   if (!length(whichAlpha))
     stop("'alpha = ", alpha, "' not found in ", deparse(substitute(x)))
   triangles <- x$triang
-  keep <- triangles[,8 + whichAlpha] > 1
+  keep <- triangles[,8 + whichAlpha] %in% tri_to_keep
   triangs <- t(triangles[keep, 1:3])
   points <- t(x$x)
   if (!is.null(texcoords))

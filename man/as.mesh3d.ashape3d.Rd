@@ -15,6 +15,7 @@ converts the triangular faces to an \pkg{rgl} \code{\link{tmesh3d}} object.
 \usage{
 \method{as.mesh3d}{ashape3d}(x, 
                    alpha = x$alpha[1], 
+                   tri_to_keep = 2L,
                    col = "gray", 
                    smooth = FALSE, normals = NULL,
                    texcoords = NULL, ...)
@@ -25,6 +26,11 @@ An object of class \code{"ashape3d"}.
 }
   \item{alpha}{
 Which \code{alpha} value stored in \code{x} should be converted?
+}
+  \item{tri_to_keep}{
+Which triangles to keep.  Expert use only:  see \code{triang}
+entry in \bold{Value} section of \link[alphashape3d]{ashape3d}
+for details.
 }
   \item{col}{
 The surface colour.
