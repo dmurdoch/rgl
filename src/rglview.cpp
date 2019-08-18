@@ -507,7 +507,7 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
 void RGLView::setMouseListeners(Subscene* sub, unsigned int n, int* ids)
 {
   sub->clearMouseListeners();
-  for (int i=0; i<n; i++) {
+  for (unsigned int i=0; i<n; i++) {
     Subscene* subscene = scene->getSubscene(ids[i]);
     if (subscene)
       sub->addMouseListener(subscene);

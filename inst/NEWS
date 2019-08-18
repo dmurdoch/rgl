@@ -989,7 +989,7 @@ base graphics.
   - Added as.triangles3d.rglId() and as.mesh3d.rglId() methods to
     convert displayed objects to usable data.
     
-0.100.29
+0.100.30
 
   - Added meshColor as an argument to tmesh3d(), qmesh3d()
     and dot3d(); changed default to no longer give warning if
@@ -999,3 +999,6 @@ base graphics.
   - Added tri_to_keep argument to as.mesh3d.ashape3d() for
     compatibility with conflicting method from nat package
     version 1.8.11.
+  - Removed deprecated C++ functions std::bind2nd and std::ptr_fun
+    as requested by CRAN.  Other changes to remove compile
+    warnings also made.

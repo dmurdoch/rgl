@@ -47,9 +47,13 @@
 #    pragma warning(disable:4127)
 #    pragma warning(disable:4996)
 #  endif
-#  define NOMINMAX
-#  include <windows.h>
-#  undef NOMINMAX
+#  if !defined(NOMINMAX)
+#    define NOMINMAX
+#    include <windows.h>
+#    undef NOMINMAX
+#  else
+#    include <windows.h>
+#  endif
 #  if defined(GL2PSDLL)
 #    if defined(GL2PSDLL_EXPORTS)
 #      define GL2PSDLL_API __declspec(dllexport)

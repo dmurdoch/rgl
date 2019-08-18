@@ -101,7 +101,8 @@ bool Scene::pop(TypeID type, int id)
     if (!id) return false;
   }
   iter = std::find_if(nodes.begin(), nodes.end(), 
-		      std::bind2nd(std::ptr_fun(&sameID), id));
+//		      std::bind(std::ptr_fun(&sameID), placeholders::_1, id));
+          std::bind(&sameID, placeholders::_1, id));
   if (iter != nodes.end()) {
     SceneNode* node = *iter;  
     if (node == &rootSubscene) 
