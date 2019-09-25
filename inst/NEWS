@@ -1002,3 +1002,7 @@ base graphics.
   - Removed deprecated C++ functions std::bind2nd and std::ptr_fun
     as requested by CRAN.  Other changes to remove compile
     warnings also made.
+    
+0.100.31
+
+  - Added a section on textures to the main vignette.
