@@ -132,7 +132,7 @@ virginica <- with(subset(iris, Species == "virginica"),
 aspect3d(1,1,1)
 axesid <- decorate3d()
 rglwidget() %>%
-toggleWidget(NA, ids = setosa) %>%
+toggleWidget(ids = setosa) %>%
 toggleWidget(ids = versicolor) %>%
 toggleWidget(ids = virginica) %>%
 toggleWidget(ids = axesid) %>% 
@@ -287,13 +287,6 @@ Many `rgl` displays will contain several elements:  one or more
 the `combineWidgets` function from the
 [`manipulateWidget`](https://github.com/rte-antares-rpackage/manipulateWidget)
 package.  
-
-NB:  at the time of writing, some unreleased bug fixes
-are recommended.  To install the version of `manipulateWidget` used
-in this vignette, use
-```{r eval = FALSE}
-devtools::install_github("dmurdoch/manipulateWidget@forRGL")
-```
 
 The `rgl` package provides 3 convenience functions for arranging
 displays.  We have already met the first:  the `magrittr` pipe, `%>%`.
