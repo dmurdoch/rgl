@@ -240,11 +240,11 @@ void X11WindowImpl::processEvent(XEvent& ev)
           break;
         case 4:
           if (window)
-            window->wheelRotate( GUI_WheelForward );
+            window->wheelRotate( GUI_WheelForward, ev.xbutton.x, ev.xbutton.y );
           break;
         case 5:
           if (window)
-            window->wheelRotate( GUI_WheelBackward );
+            window->wheelRotate( GUI_WheelBackward, ev.xbutton.x, ev.xbutton.y  );
           break;
       }
       break;

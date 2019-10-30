@@ -1,6 +1,9 @@
 To-do:
 
 
+It would be nice to have an "onresize" event, so bgplot3d
+could redraw itself.
+
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 
 Look into updates to more modern OpenGL, e.g. https://developer.apple.com/opengl/Migrating_to_OpenGL_Core_Profile.mov
@@ -20,6 +23,13 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+
+Resizing a cell in mfrow3d() applies the change to the
+wrong cell.  See https://r-forge.r-project.org/forum/forum.php?thread_id=33806&forum_id=757&group_id=234.
+This only happens in R, not in the rglwidget display.  FIXED
+
+Resizing happens asynchronously, causing bugs (https://stackoverflow.com/q/58546011/2554330).  FIXED
 
 Make as.mesh3d.ashape3d compatible with nat::as.mesh3d.ashape3d  DONE
 

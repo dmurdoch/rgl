@@ -129,7 +129,7 @@ void View::mouseMove(int mouseX, int mouseY)
 {
 }
 // ---------------------------------------------------------------------------
-void View::wheelRotate(int direction)
+void View::wheelRotate(int direction, int mouseX, int mouseY)
 {
 }
 // ---------------------------------------------------------------------------
@@ -270,10 +270,10 @@ void Window::keyPress(int code)
     child->keyPress(code);
 }
 // ---------------------------------------------------------------------------
-void Window::wheelRotate(int dir)
+void Window::wheelRotate(int dir, int mouseX, int mouseY)
 {
   if (child)
-    child->wheelRotate(dir);
+    child->wheelRotate(dir, mouseX, mouseY);
 }
 // ---------------------------------------------------------------------------
 void Window::on_close()

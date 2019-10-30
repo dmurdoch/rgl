@@ -30,7 +30,7 @@ public:
   void buttonPress(int button, int mouseX, int mouseY);
   void buttonRelease(int button, int mouseX, int mouseY);
   void mouseMove(int mouseX, int mouseY);
-  void wheelRotate(int dir);
+  void wheelRotate(int dir, int mouseX, int mouseY);
   void captureLost();
   void keyPress(int code);
   Scene* getScene();

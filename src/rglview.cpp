@@ -201,11 +201,14 @@ void RGLView::mouseMove(int mouseX, int mouseY)
   }
 }
 
-void RGLView::wheelRotate(int dir)
+void RGLView::wheelRotate(int dir, int mouseX, int mouseY)
 {
   Subscene* subscene = NULL;
-  if (activeSubscene) 
-    subscene = scene->getSubscene(activeSubscene);
+  ModelViewpoint* modelviewpoint = scene->getCurrentSubscene()->getModelViewpoint();
+  if ( modelviewpoint->isInteractive() ) {
+    translateCoords(&mouseX, &mouseY);
+    subscene = scene->whichSubscene(mouseX, mouseY);
+  }
   if (!subscene)
     subscene = scene->getCurrentSubscene();  
   subscene->wheelRotate(dir);

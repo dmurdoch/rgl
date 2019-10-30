@@ -229,6 +229,11 @@ in the standard order.
 
 In \pkg{rgl} versions 0.94.x the \code{modelMatrix} entry had a changed meaning; 
 before and after that it contains a copy of the OpenGL MODELVIEW matrix. 
+
+As of version 0.100.32, when changing the \code{"windowRect"} parameter, the 
+\code{"viewport"} for the root (or specified) subscene
+is changed immediately.  This fixes a bug where in earlier
+versions it would only be changed when the window was redrawn, potentially after another command making use of the value.
 }
 
 \section{Rendering}{

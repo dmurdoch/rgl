@@ -39,7 +39,7 @@ par3d <- function (..., no.readonly = FALSE, dev = rgl.cur(), subscene = current
     dev <- args[["dev"]]
     args[["dev"]] <- NULL
   }
-  if ("subscene" %in% names(args)) {
+  if (specifiedSubscene <- ("subscene" %in% names(args))) {
     if (!missing(subscene) && subscene != args[["subscene"]]) stop("'subscene' specified inconsistently")
     subscene <- args[["subscene"]]
     args[["subscene"]] <- NULL
@@ -59,9 +59,27 @@ par3d <- function (..., no.readonly = FALSE, dev = rgl.cur(), subscene = current
     phi <- atan2(-m[2,3], m[3,3])
     args$.position <- c(theta, phi)*180/pi
   }
+  if (forceViewport <- ("windowRect" %in% names(args) &&
+      !("viewport" %in% names(args)))) {
+    if (specifiedSubscene)
+      warning("Viewport for subscene ", subscene,
+              " will be adjusted; other viewports will not be.")
+    oldviewport <- .Call(rgl_par3d, dev, subscene, list("viewport","windowRect"))
+  }
   value <-
     if (single) .Call(rgl_par3d, dev, subscene, args)[[1]] 
   else .Call(rgl_par3d, dev, subscene, args)
+  
+  # The windowRect might be modified by the window manager (if
+  # too large, for example), so we need to read it after the
+  # change
+  if (forceViewport) {
+    oldsize <- oldviewport$windowRect[3:4] - oldviewport$windowRect[1:2]
+    windowRect <- .Call(rgl_par3d, dev, subscene, list("windowRect"))
+    newsize <- windowRect[3:4] - windowRect[1:2]
+    .Call(rgl_par3d, dev, subscene, 
+          list(viewport = round(oldviewport$viewport*newsize/oldsize)))
+  }
   
   if(!is.null(names(args))) invisible(value) else value
 }

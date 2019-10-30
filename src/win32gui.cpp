@@ -580,7 +580,7 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
     case WM_MOUSEWHEEL:
       {
         int dir = ( (short) HIWORD(wParam)  > 0 ) ?  GUI_WheelForward : GUI_WheelBackward;
-        ( (captureView) ? captureView : window ) -> wheelRotate(dir);
+        ( (captureView) ? captureView : window ) -> wheelRotate(dir, (short) LOWORD(lParam), (short) HIWORD(lParam) );
         break;
       }
 #endif

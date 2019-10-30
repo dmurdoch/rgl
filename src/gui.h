@@ -143,7 +143,7 @@ public:
   virtual void keyRelease(int code);
   virtual void buttonPress(int button, int mouseX, int mouseY);
   virtual void buttonRelease(int button, int mouseX, int mouseY);
-  virtual void wheelRotate(int direction);
+  virtual void wheelRotate(int direction, int mouseX, int mouseY);
   virtual void mouseMove(int mouseX, int mouseY);
   virtual void captureLost();
 
@@ -198,7 +198,7 @@ public:
   void buttonRelease(int button, int mouseX, int mouseY);
   void mouseMove(int mouseX, int mouseY);
   void keyPress(int code);
-  void wheelRotate(int dir);
+  void wheelRotate(int dir, int mouseX, int mouseY);
 
   void bringToTop(int stay);
   void setWindowRect(int left, int top, int right, int bottom);
