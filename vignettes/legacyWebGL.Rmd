@@ -154,9 +154,9 @@ subid <- currentSubscene3d()
 ```
 
 ```{r results="asis"}
-toggleButton(sphereid, label = "setosa", prefix = "toggle", subscene = subid)
-toggleButton(sphereid+1, label = "versicolor", prefix = "toggle", subscene = subid)
-toggleButton(sphereid+2, label = "virginica", prefix = "toggle", subscene = subid)
+toggleButton(sphereid, label = "setosa", prefixes = "toggle", subscenes = subid)
+toggleButton(sphereid+1, label = "versicolor", prefixes = "toggle", subscenes = subid)
+toggleButton(sphereid+2, label = "virginica", prefixes = "toggle", subscenes = subid)
 ```
 
 Note that we need to use `results="asis"` for the button code.  
@@ -165,10 +165,10 @@ then the buttons will end up side-by-side.  We also add another button
 to toggle the axes:
 
 ```{r results="asis", echo=FALSE}
-toggleButton(sphereid, label = "setosa", prefix = "toggle", subscene = subid)
-toggleButton(sphereid+1, label = "versicolor", prefix = "toggle", subscene = subid)
-toggleButton(sphereid+2, label = "virginica", prefix = "toggle", subscene = subid)
-toggleButton(axesid, label="axes", prefix = "toggle", subscene = subid)
+toggleButton(sphereid, label = "setosa", prefix = "toggle", subscenes = subid)
+toggleButton(sphereid+1, label = "versicolor", prefix = "toggle", subscenes = subid)
+toggleButton(sphereid+2, label = "virginica", prefix = "toggle", subscenes = subid)
+toggleButton(axesid, label="axes", prefix = "toggle", subscenes = subid)
 ```
 
 An alternate control to achieve the same thing is `r indexfns("subsetSlider")`.  Here we also illustrate the 
@@ -202,7 +202,7 @@ example) rotates the scene in a complex way.
 ```
 ```{r results="asis"}
 M <- r3dDefaults$userMatrix
-fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
+fn <- par3dinterp(times = (0:2)*0.75, userMatrix = list(M,
                                      rotate3d(M, pi/2, 1, 0, 0),
                                      rotate3d(M, pi/2, 0, 1, 0) ) )
 propertySlider(setter = par3dinterpSetter(fn, 0, 1.5, steps=15, 
