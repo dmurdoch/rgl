@@ -1003,10 +1003,12 @@ base graphics.
     as requested by CRAN.  Other changes to remove compile
     warnings also made.
     
-0.100.32
+0.100.33
 
   - Added a section on textures to the main vignette.
   - Fixed bug when setting windowRect:  viewport was not
     always updated.
   - Fixed bug in handling mouse wheel events:  they were
     not directed to the correct subscene.
+  - Fixed bug in configure script for systems with pkg-config 
+    but no freetype2.

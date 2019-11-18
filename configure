@@ -4429,13 +4429,12 @@ $as_echo "no" >&6; }
 fi
 
 
-  if test "x$HAVE_PKG_CONFIG" = "xyes"; then
+  if test "x$HAVE_PKG_CONFIG" = "xyes" -a "x`pkg-config freetype2 --cflags`" != "x"; then
     CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
     LIBS="${LIBS} `pkg-config freetype2 --libs`"
     { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
 $as_echo "$as_me: using Freetype and FTGL" >&6;}
-  fi
-  if test "x$HAVE_PKG_CONFIG" != "xyes"; then
+  else
     # Extract the first word of "freetype-config", so it can be a program name with args.
 set dummy freetype-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -4479,6 +4478,9 @@ fi
       LIBS="${LIBS} `freetype-config --libs`"
       { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
 $as_echo "$as_me: using Freetype and FTGL" >&6;}
+    else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without FTGL support" >&5
+$as_echo "$as_me: compiling without FTGL support" >&6;}
     fi
   fi
 else
