@@ -75,7 +75,7 @@ par3d <- function (..., no.readonly = FALSE, dev = rgl.cur(), subscene = current
   # change
   if (forceViewport) {
     oldsize <- oldviewport$windowRect[3:4] - oldviewport$windowRect[1:2]
-    windowRect <- .Call(rgl_par3d, dev, subscene, list("windowRect"))
+    windowRect <- .Call(rgl_par3d, dev, subscene, list("windowRect"))$windowRect
     newsize <- windowRect[3:4] - windowRect[1:2]
     .Call(rgl_par3d, dev, subscene, 
           list(viewport = round(oldviewport$viewport*newsize/oldsize)))
