@@ -1,9 +1,11 @@
 To-do:
 
+Support fog in rglwidget().  
 
 It would be nice to have an "onresize" event, so bgplot3d
 could redraw itself.  But this isn't going to work in WebGL,
-since it has no way to call R to redraw (other than in Shiny).
+since it has no way to call R to redraw (other than in Shiny).  Maybe have multiple copies of images, produced at 
+different sizes?
 
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 
@@ -25,6 +27,7 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+Fix problem with example(legend3d):  plot is too small.  DONE?
 
 Resizing a cell in mfrow3d() applies the change to the
 wrong cell.  See https://r-forge.r-project.org/forum/forum.php?thread_id=33806&forum_id=757&group_id=234.
