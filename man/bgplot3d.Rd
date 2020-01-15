@@ -6,7 +6,7 @@
 Add a 2D plot or a legend in the background of an RGL window.
 }
 \usage{
-bgplot3d(expression)
+bgplot3d(expression, ...)
 legend3d(...)
 }
 \arguments{
@@ -14,7 +14,7 @@ legend3d(...)
 Any plotting commands to produce a plot.
 }
   \item{...}{
-Arguments to pass to the \code{\link{legend}} function.
+Arguments to pass to the \code{\link{bg3d}} or \code{\link{legend}} function.
 }
 }
 \details{
@@ -54,7 +54,6 @@ z <- rnorm(100)
 open3d()
 # Needs to be a bigger window than the default
 par3d(windowRect = c(100, 100, 612, 612))
-Sys.sleep(0.1) # Allow sluggish window managers to catch up
 parent <- currentSubscene3d()
 mfrow3d(2, 2)
 plot3d(x, y, z)

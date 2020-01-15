@@ -104,7 +104,18 @@ material3d  <- function (...)
 
 bg3d        <- function(...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  new <- .fixMaterialArgs(sphere = FALSE, fogtype = "none", 
+  bgid <- rgl.ids("background")$id
+  if (length(bgid) && nrow(flags <- rgl.attrib(bgid[1], "flags"))) {
+    sphere <- flags["sphere", 1]
+    fogtype <- if (flags["linear_fog", 1]) "linear"
+    else if (flags["exp_fog", 1]) "exp"
+    else if (flags["exp2_fog", 1]) "exp2"
+    else "none"
+  } else {
+    sphere <- FALSE
+    fogtype <- "none"
+  }
+  new <- .fixMaterialArgs(sphere = sphere, fogtype = fogtype, 
                           color = c("black", "white"), 
   			  back = "lines", lit = FALSE, Params = save)
   do.call("rgl.bg", .fixMaterialArgs(..., Params = new))

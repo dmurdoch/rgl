@@ -1003,7 +1003,7 @@ base graphics.
     as requested by CRAN.  Other changes to remove compile
     warnings also made.
     
-0.100.33
+0.100.34
 
   - Added a section on textures to the main vignette.
   - Fixed bug when setting windowRect:  viewport was not
@@ -1012,3 +1012,5 @@ base graphics.
     not directed to the correct subscene.
   - Fixed bug in configure script for systems with pkg-config 
     but no freetype2.
+  - Fixed bug that caused bg3d() and bgplot3d() to wipe out
+    fog setting.

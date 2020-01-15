@@ -1,12 +1,19 @@
 legend3d <- function(...) {
-  bgplot3d({
+  args <- list(...)
+  idx <- which(names(args) %in% c("sphere", "fogtype"))
+  if (length(idx)) {
+    bgargs <- args[idx]
+    args <- args[-idx]
+  } else
+    bgargs <- NULL
+  do.call(bgplot3d, c(list(quote({
     par(mar=c(0,0,0,0))
     plot(0,0, type="n", xlim=0:1, ylim=0:1, xaxs="i", yaxs="i", axes=FALSE, bty="n")
-    legend(...)
-  })
+    do.call(legend, args)
+  })), bgargs))
 }
 
-bgplot3d <- function(expression) {
+bgplot3d <- function(expression, ...) {
   viewport <- par3d("viewport")
   width <- viewport["width"]
   height <- viewport["height"]
@@ -15,10 +22,10 @@ bgplot3d <- function(expression) {
     png(filename = filename, width=width, height=height)
     value <- try(expression)  
     dev.off()
-    result <- bg3d(texture=filename, col="white", lit = FALSE)
+    result <- bg3d(texture=filename, col="white", lit = FALSE, ...)
   } else {
     value <- NULL
-    result <- bg3d(col="white")
+    result <- bg3d(col="white", ...)
   }
   lowlevel(structure(result, value = value))
 }
