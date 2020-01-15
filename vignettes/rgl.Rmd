@@ -408,6 +408,10 @@ text3d(0,0,0,"oh3d"); next3d()
 shade3d(oh3d(col=cols[7]))
 ```
 
+A very large collection of polyhedra is contained in the 
+`r linkfn("Rpolyhedra-package", text = "Rpolyhedra", pkg = "Rpolyhedra")` 
+package.
+
 ### Generating new shapes 
 
 These functions generate new shapes:
