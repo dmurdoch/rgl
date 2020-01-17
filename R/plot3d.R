@@ -27,9 +27,25 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     if (is.null(zlab)) zlab <- xyz$zlab
 
     if (type == "s" && missing(radius)) {
-	avgscale <- sqrt(sum(c(diff(range(x,na.rm=TRUE)), 
-                               diff(range(y,na.rm=TRUE)), 
-                               diff(range(z,na.rm=TRUE)))^2/3))
+      xvals <- x
+      yvals <- y
+      zvals <- z
+      if (add && diff(bbox <- par3d("bbox"))[1] > 0) {
+        xvals <- c(x, bbox[1:2])
+        yvals <- c(y, bbox[3:4])
+        zvals <- c(z, bbox[5:6])
+      } 
+      if (!add) {
+        if (!is.null(xlim)) 
+          xvals <- xlim
+        if (!is.null(ylim))
+          yvals <- ylim
+        if (!is.null(zlim))
+          zvals <- zlim
+      }
+	    avgscale <- sqrt(sum(c(diff(range(xvals,na.rm=TRUE)), 
+                             diff(range(yvals,na.rm=TRUE)), 
+                             diff(range(zvals,na.rm=TRUE)))^2/3))
     }
     savesubscene <- currentSubscene3d()
     result <- setClipregion(xlim, ylim, zlim, forceClipregion)

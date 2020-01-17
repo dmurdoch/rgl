@@ -79,22 +79,39 @@ void PlaneSet::updateTriangles(const AABox& sceneBBox)
     int nhits = 0;
     int face1[12], face2[12]; /* to identify which faces of the cube we're on */
     
+    /* Find intersection of bbox edges with plane.  Problem: 
+     * there might be 3 edges all intersecting the plane 
+     * at the same place, i.e. a vertex of the bbox.  Need
+     * to fix this case.
+     */ 
     for (int i=0; i<3; i++)
       for (int j=0; j<2; j++)
         for (int k=0; k<2; k++) {
           int u=perms[0][i], v=perms[1][i], w=perms[2][i];
           if (A[w] != 0.0) {
             double intersect = -(d + A[u]*bbox[j][u] + A[v]*bbox[k][v])/A[w];
-  	  if (bbox[0][w] < intersect && intersect < bbox[1][w]) {
-  	    x[nhits][u] = bbox[j][u];
-  	    x[nhits][v] = bbox[k][v];
-  	    x[nhits][w] = intersect;
-  	    face1[nhits] = j + 2*u;
-  	    face2[nhits] = k + 2*v;
-  	    nhits++;
-  	  }
-  	}
-      }
+  	        if (bbox[0][w] <= intersect && intersect <= bbox[1][w]) {
+  	          x[nhits][u] = bbox[j][u];
+  	          x[nhits][v] = bbox[k][v];
+  	          x[nhits][w] = intersect;
+  	          /* Check for duplicate */
+  	          int dup = 0;
+  	          for (int l=0; l < nhits; l++) {
+  	            if (abs(x[l][0] - x[nhits][0]) <= 1.e-8*abs(x[l][0]) 
+                 && abs(x[l][1] - x[nhits][1]) <= 1.e-8*abs(x[l][1])
+                 && abs(x[l][2] - x[nhits][2]) <= 1.e-8*abs(x[l][2])) {
+  	              dup = 1;
+  	              break;
+  	            }
+  	          }
+  	          if (!dup) {
+  	            face1[nhits] = j + 2*u;
+  	            face2[nhits] = k + 2*v;
+  	            nhits++;
+  	          }
+  	        }
+  	      }
+        }
     
     if (nhits > 3) {
       /* Re-order the intersections so the triangles work */

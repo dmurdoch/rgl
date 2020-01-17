@@ -1003,7 +1003,7 @@ base graphics.
     as requested by CRAN.  Other changes to remove compile
     warnings also made.
     
-0.100.35
+0.100.36
 
   - Added a section on textures to the main vignette.
   - Fixed bug when setting windowRect:  viewport was not
@@ -1016,3 +1016,7 @@ base graphics.
     fog setting.
   - Fixed writeASY() to work with a more recent version of 
     Asymptote.  Use `ver244 = TRUE` for the older version.
+  - plot3d(..., type = "s", add = TRUE) chose a bad default
+    radius for the spheres -- possibly even zero.
+  - planes3d() could fail to draw the plane if it intersected a
+    vertex of the bounding box of the scene.
