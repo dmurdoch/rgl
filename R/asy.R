@@ -1,12 +1,14 @@
 writeASY <- function(scene = scene3d(),
                      title = "scene",
-		     outtype = c("pdf", "eps", "asy", "latex", "pdflatex"),
-		     prc = TRUE,
-		     runAsy = "asy %filename%",
-		     defaultFontsize = 12,
-		     width = 7, height = 7,
-		     ppi = 100,
-                     ids = NULL) {
+                     outtype = c("pdf", "eps", "asy", "latex", "pdflatex"),
+                     prc = TRUE,
+                     runAsy = "asy %filename%",
+                     defaultFontsize = 12,
+                     width = 7,
+                     height = 7,
+                     ppi = 100,
+                     ids = NULL,
+                     ver244 = FALSE) {
   withColors <- TRUE
   withNormals <- FALSE
 
@@ -349,15 +351,43 @@ ticklabel RGLScale(real s)
       	col[i,,] <- get.attrib(ids[i], "colors")[1:3, 1:3]
       	pos[i,] <- get.attrib(ids[i], "vertices")[1,]
       }
-      cols <- paste( paste0("rgb(", col[,1,1], ",", col[,1,2], ",", col[,1,3],")"), collapse=",")
-      result <<- c(result, subst('currentlight = light(ambient=new pen[] {%cols%},', cols))
-      cols <- paste( paste0("rgb(", col[,2,1], ",", col[,2,2], ",", col[,2,3],")"), collapse=",")
-      result <<- c(result, subst('diffuse = new pen[] {%cols%},', cols))
-      cols <- paste( paste0("rgb(", col[,3,1], ",", col[,3,2], ",", col[,3,3],")"), collapse=",")
-      result <<- c(result, subst('specular = new pen[] {%cols%},', cols))
-      pos <- paste( paste0("(", pos[,1], ",", pos[,2], ",", pos[,3], ")"), collapse = ",")      
-      result <<- c(result, subst('position = new triple[] {%pos%},
-viewport = %viewpoint%);', pos, viewpoint = if (get.attrib(ids[1], "viewpoint")) "true" else "false"))
+      cols <-
+        paste(paste0("rgb(", col[, 1, 1], ",", col[, 1, 2], ",", col[, 1, 3], ")"),
+              collapse = ",")
+      result <<-
+        c(result,
+          subst(
+            'currentlight = light(ambient=new pen[] {%cols%},',
+            cols
+          ))
+      cols <-
+        paste(paste0("rgb(", col[, 2, 1], ",", col[, 2, 2], ",", col[, 2, 3], ")"),
+              collapse = ",")
+      result <<-
+        c(result, subst('diffuse = new pen[] {%cols%},', cols))
+      cols <-
+        paste(paste0("rgb(", col[, 3, 1], ",", col[, 3, 2], ",", col[, 3, 3], ")"),
+              collapse = ",")
+      result <<-
+        c(result, subst('specular = new pen[] {%cols%},', cols))
+      pos <-
+        paste(paste0("(", pos[, 1], ",", pos[, 2], ",", pos[, 3], ")"), collapse = ",")
+      result <<-
+        c(result, subst('position = new triple[] {%pos%}', pos))
+      if (ver244)
+        result <<-
+        c(
+          result,
+          subst(
+            ', viewport = %viewpoint%',
+            pos,
+            viewpoint = if (get.attrib(ids[1], "viewpoint"))
+              "true"
+            else
+              "false"
+          )
+        )
+      result <<- c(result, ');')
     }
   }    
   knowntypes <- c("points", "linestrip", "lines",

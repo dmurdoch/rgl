@@ -1003,7 +1003,7 @@ base graphics.
     as requested by CRAN.  Other changes to remove compile
     warnings also made.
     
-0.100.34
+0.100.35
 
   - Added a section on textures to the main vignette.
   - Fixed bug when setting windowRect:  viewport was not
@@ -1014,3 +1014,5 @@ base graphics.
     but no freetype2.
   - Fixed bug that caused bg3d() and bgplot3d() to wipe out
     fog setting.
+  - Fixed writeASY() to work with a more recent version of 
+    Asymptote.  Use `ver244 = TRUE` for the older version.
