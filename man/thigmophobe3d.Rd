@@ -5,7 +5,7 @@ Find the direction away from the closest point in a 3d projection.
 }
 \description{
 Jim Lemon's \code{\link[plotrix]{thigmophobe}} function in the 
-\code{\link[plotrix]{plotrix}} package
+\code{\link[plotrix:plotrix-package]{plotrix}} package
 computes good directions for labels in a 2D plot.  This function
 does the same for a particular projection in a 3D plot by
 projecting down to 2D and calling his function.

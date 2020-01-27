@@ -61,7 +61,7 @@ A result of an \code{\link{rglwidget}} call can be passed
 as the \code{sceneId} argument.  This allows the widget
 to be \dQuote{piped} into the \code{rglMouse} call.
 The widget will appear first, the selector next in
-a \code{\link[htmltools]{tagList}}.
+a \code{\link[htmltools:tag]{tagList}}.
 
 If the \code{sceneId} is a character string, it should be
 the \code{elementId} of a separately constructed

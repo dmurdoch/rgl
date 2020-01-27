@@ -121,7 +121,7 @@ but you can add your own.)
 Duncan Murdoch
 }
 \seealso{
-\code{\link[rgl]{hook_webgl}} for an earlier approach to this problem. \code{\link{rglwidgetOutput}} for Shiny details.
+\code{\link{hook_webgl}} for an earlier approach to this problem. \code{\link{rglwidgetOutput}} for Shiny details.
 }
 \examples{
 save <- getOption("rgl.useNULL")

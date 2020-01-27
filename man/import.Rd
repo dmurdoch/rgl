@@ -6,7 +6,7 @@
 \description{
 This object is imported from \pkg{magrittr}. Follow the link to its documentation.
 \describe{
-  \item{magrittr}{\code{\link[magrittr:\%>\%]{\%>\%}}}
+  \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 }
 
 Pipes can be used to string together

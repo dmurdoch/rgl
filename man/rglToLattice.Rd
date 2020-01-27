@@ -22,7 +22,7 @@ A matrix in homogeneous coordinates to convert.
 \details{
 The \pkg{lattice} package can use Euler angles in
 the ZYX scheme to describe the rotation of a scene
-in its \code{\link[lattice]{wireframe}} or
+in its \code{\link[lattice:cloud]{wireframe}} or
 \code{\link[lattice]{cloud}} functions.  The
 \code{rglToLattice} function computes these angles
 based on \code{rotm}, which defaults to the current
@@ -41,7 +41,7 @@ z axis, and does an approximation otherwise.
 \value{
 \code{rglToLattice} returns a list suitable to
 be used as the \code{screen} argument to 
-\code{\link[lattice]{wireframe}}.
+\code{\link[lattice:cloud]{wireframe}}.
 
 \code{rglToBase} returns a list containing
 \code{theta} and \code{phi} components which
