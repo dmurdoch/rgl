@@ -19,11 +19,9 @@ AC_CONFIG_AUX_DIR(src/build/autoconf)
 ## pick up compiler as will be used by R CMD INSTALL/SHLIB
 if test -n "${R_HOME}"; then
   CC=`${R_HOME}/bin/R CMD config CC`
-  CPP=`${R_HOME}/bin/R CMD config CPP`
   CFLAGS=`${R_HOME}/bin/R CMD config CFLAGS`
 fi
 
-AC_PROG_CPP
 AC_PROG_CC
 
 if test `uname` = "Darwin" ; then
