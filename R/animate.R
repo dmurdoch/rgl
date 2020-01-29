@@ -57,11 +57,11 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
 	stopifnot( length(userMatrix) == 16*length(times) )
 	userMatrix <- array(userMatrix, c(4,4,length(times)))
 	xlat <- ncol(data) + 1:4
-	data <- cbind(data, t(userMatrix[,4,]))
+	data <- cbind(data, t(userMatrix[,4,, drop = TRUE]))
 	persp <- ncol(data) + 1:3
-	data <- cbind(data, t(userMatrix[4,1:3,]))
+	data <- cbind(data, t(userMatrix[4,1:3,, drop = TRUE]))
 	rot <- ncol(data) + 1:4
-	quat <- toQuaternions(userMatrix[1:3, 1:3, ])
+	quat <- toQuaternions(userMatrix[1:3, 1:3, , drop = FALSE])
 	# Since q and -q are the same rotation, we want to interpolate
 	# to the nearer one.
 	for (i in seq_len(nrow(quat))[-1]) {
@@ -111,7 +111,7 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
     
     function(time) {
         if (time < mintime || time > maxtime) {
-            if (extrapolate == "constant")
+            if (extrapolate == "constant" || mintime == maxtime)
             	time <- ifelse(time < mintime, mintime, maxtime)
             else if (extrapolate == "cycle")
                 time <- (time - mintime) %% (maxtime - mintime) + mintime

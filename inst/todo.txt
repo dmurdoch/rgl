@@ -1,5 +1,7 @@
 To-do:
 
+Move tkrgl functions into rgl?
+
 Support fog in rglwidget().  
 
 It would be nice to have an "onresize" event, so bgplot3d
