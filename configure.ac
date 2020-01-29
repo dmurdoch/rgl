@@ -22,6 +22,7 @@ if test -n "${R_HOME}"; then
   CFLAGS=`${R_HOME}/bin/R CMD config CFLAGS`
 fi
 
+AC_PROG_CPP
 AC_PROG_CC
 
 if test `uname` = "Darwin" ; then
