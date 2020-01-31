@@ -1003,7 +1003,7 @@ base graphics.
     as requested by CRAN.  Other changes to remove compile
     warnings also made.
     
-0.100.38
+0.100.39
 
   - Added a section on textures to the main vignette.
   - Fixed bug when setting windowRect:  viewport was not
@@ -1023,3 +1023,4 @@ base graphics.
   - The configure script has been updated.
   - In Shiny, controllers like rglMouse() did not automatically
     link to an rglwidget().
+  - The functions in the tkrgl package have been moved into rgl.
