@@ -1003,7 +1003,7 @@ base graphics.
     as requested by CRAN.  Other changes to remove compile
     warnings also made.
     
-0.100.37
+0.100.38
 
   - Added a section on textures to the main vignette.
   - Fixed bug when setting windowRect:  viewport was not
@@ -1021,3 +1021,5 @@ base graphics.
   - planes3d() could fail to draw the plane if it intersected a
     vertex of the bounding box of the scene.
   - The configure script has been updated.
+  - In Shiny, controllers like rglMouse() did not automatically
+    link to an rglwidget().

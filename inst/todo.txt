@@ -1,5 +1,6 @@
 To-do:
 
+
 Move tkrgl functions into rgl?
 
 Support fog in rglwidget().  
@@ -28,6 +29,9 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Bug:  when combined with other widgets, the rglwidget should get
+an elementId even in Shiny. FIXED
 
 Fix problem with example(legend3d):  plot is too small.  DONE?
 

@@ -29,7 +29,7 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
                        ...) {
 
   if (is.null(elementId) && !inShiny())
-    elementId <- paste0("rgl-play", sample(100000, 1))
+    elementId <- newElementId("rgl-play")
 
   # sceneId = NA turns into prevRglWidget = NULL
   if (is.character(sceneId) && !is.na(sceneId))

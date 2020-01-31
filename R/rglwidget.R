@@ -160,6 +160,8 @@ processUpstream <- function(upstream, elementId = NULL, playerId = NULL) {
         tag <- upstream[[i]]
         if (inherits(tag, "rglWebGL")) {
           prevRglWidget <- tag$elementId
+          if (is.null(prevRglWidget))
+            prevRglWidget <- tag$elementId <- upstream[[i]]$elementId <- newElementId("rgl")
           if (!is.null(playerId) && !(playerId %in% tag$x$players))
             upstream[[i]]$x$players <- c(tag$x$players, playerId)
         } else if (inherits(tag, "rglPlayer") && is.null(tag$x$sceneId)) {
@@ -223,6 +225,9 @@ asRow <- function(..., last = NA, height = NULL, colsize = 1) {
   orig
 }
 
+newElementId <- function(prefix)
+  paste0(prefix, sample(100000, 1))
+
 rglwidget <- local({
   reuseDF <- NULL
 
@@ -239,8 +244,8 @@ rglwidget <- local({
   else if (!reuse)
     reuseDF <<- NULL
 
-  if (is.null(elementId) && !inShiny())
-    elementId <- paste0("rgl", sample(100000, 1))
+  if (is.null(elementId) && (!inShiny() || !is.null(controllers)))
+    elementId <- newElementId("rgl")
 
   if (!inherits(x, "rglscene"))
     stop("First argument should be an rgl scene.")
