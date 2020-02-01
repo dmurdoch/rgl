@@ -40,8 +40,8 @@ x 4n} matrix; \code{scale} should be an \code{n x 3} matrix;
 An alternative form of input is to put all of the above arguments into
 a list (i.e. a list of lists, or a list of arrays/matrices/vectors),
 and pass it as the first argument.  This is the most convenient way to
-use this function with the \code{\link[tkrgl:tkrgl-package]{tkrgl}} function
-\code{\link[tkrgl]{par3dsave}}.
+use this function with the  function
+\code{\link{tkpar3dsave}}.
 
 Interpolation is by cubic spline or linear interpolation in an appropriate
 coordinate-wise fashion.  Extrapolation may oscillate

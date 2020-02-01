@@ -572,6 +572,20 @@ Animations are not currently supported
 in the HTML written by `r linkfn("rglwidget")`, though the
 `playwidget` function provides equivalent functionality.
 
+### Integration with TCL/TK
+
+There are three functions in `rgl` that support control of an `rgl`
+scene using the TCL/TK framework.
+
+Function               | Description
+---------------------- | -------------
+`r indexfns("tkspin3d")`: | Set up buttons in a window to control a scene 
+`r indexfns("tkspinControl")`: | Embed the control buttons in a separate TCL/TK frame
+`r indexfns("tkpar3dsave")`: | Create a dialog to interactively save mouse actions
+
+These functions were formerly contained (without the `tk` prefixes on 
+their names) in the `tkrgl` package.  That package is now deprecated.
+
 ### Exporting and importing scenes
 
 `rgl` contains several functions to write scenes to disk for use
@@ -773,7 +787,7 @@ available for these functions to work.
 
 ## Warning:  Work in Progress!
 
-This vignette is in a preliminary form.  Many aspects of the rgl
+This vignette is always a work in progress.  Some aspects of the `rgl`
 package are not described, or do not have examples.  There may
 even be functions that are missed completely, if the following
 list is not empty:
