@@ -1003,7 +1003,7 @@ base graphics.
     as requested by CRAN.  Other changes to remove compile
     warnings also made.
     
-0.100.39
+0.100.41
 
   - Added a section on textures to the main vignette.
   - Fixed bug when setting windowRect:  viewport was not
@@ -1024,3 +1024,7 @@ base graphics.
   - In Shiny, controllers like rglMouse() did not automatically
     link to an rglwidget().
   - The functions in the tkrgl package have been moved into rgl.
+  - Demo tests are suppressed when run with the rgl null device.
+  - The anaglyph() function in the "stereo" demo now limits the
+    number of colours shown, so it will work on devices with a 
+    high colour depth.
