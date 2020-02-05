@@ -117,14 +117,21 @@ anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1)) {
   rgl.set(right)
   rightPixels <- rgl.pixels(viewport=vp)
   rightPixels <- (rightPixels[,,1]+rightPixels[,,2]+rightPixels[,,3])/3
-  red <- round(leftPixels*leftColor[1] + rightPixels*rightColor[1], 2)
-  green <- round(leftPixels*leftColor[2] + rightPixels*rightColor[2], 2)
-  blue <- round(leftPixels*leftColor[3] + rightPixels*rightColor[3], 2)
+  red <- leftPixels*leftColor[1] + rightPixels*rightColor[1]
+  green <- leftPixels*leftColor[2] + rightPixels*rightColor[2]
+  blue <- leftPixels*leftColor[3] + rightPixels*rightColor[3]
   col <- rgb(pmin(red,1), pmin(green,1), pmin(blue,1))
   colf <- factor(col)
   z <- as.numeric(colf)
-  dim(z) <- dim(leftPixels)
-  image(z,col=levels(colf),breaks=min(z):(max(z)+1) - 0.5, axes=FALSE)
+  if (length(z)) {
+    dim(z) <- dim(leftPixels)
+    image(z,col=levels(colf),breaks=min(z):(max(z)+1) - 0.5, axes=FALSE)
+  } else {
+    cat("Unable to read pixels:\nstr(leftPixels):\n")
+    str(leftPixels)
+    cat("str(rightPixels):\n")
+    str(rightPixels)
+  }
 }
 
 if (!rgl.useNULL()) {

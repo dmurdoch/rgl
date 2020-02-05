@@ -86,10 +86,11 @@ Duncan Murdoch
 \examples{
 if (requireNamespace("alphashape3d", quietly = TRUE)) {
   set.seed(123)
-  xyz <- rbind(cbind(runif(1000), runif(1000), runif(1000)),
-               cbind(runif(125, 1, 1.5), 
-                     runif(125, 0.25, 0.75), 
-                     runif(125, 0.25, 0.75)))
+  n <- 400    # 1000 gives a nicer result, but takes longer
+  xyz <- rbind(cbind(runif(n), runif(n), runif(n)),
+               cbind(runif(n/8, 1, 1.5), 
+                     runif(n/8, 0.25, 0.75), 
+                     runif(n/8, 0.25, 0.75)))
   ash <- suppressMessages(alphashape3d::ashape3d(xyz, alpha = 0.2))
   m <- as.mesh3d(ash, smooth = TRUE)
   open3d()
