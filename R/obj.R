@@ -391,7 +391,7 @@ readOBJ <- function(con, ...) {
     total <- 0
     for (i in seq_along(vlinks)) {
       # Sort by texture 
-      vlinks[[i]] <- vlinks[[i]][order(vlinks[[i]][,2]),]
+      vlinks[[i]] <- vlinks[[i]][order(vlinks[[i]][,2]),,drop=FALSE]
       total <- total + max(1, length(unique(vlinks[[i]][,2])))
     }
     last <- ncol(vertices)

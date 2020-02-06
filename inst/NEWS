@@ -1031,3 +1031,7 @@ base graphics.
     repaired).
   - The tests of the demos have been moved to inst/slowTests so that
     running them is optional (and the CRAN checks will go faster).
+    
+0.100.46
+
+  - Fixed a bug in readOBJ that affected reading texture coordinates.
