@@ -238,12 +238,13 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
     Pixmap snapshot;
    
     if (snapshot.init(RGB24, width, height, 8)) {
+      paint();
       if ( windowImpl->beginGL() ) {
-        // read front buffer
+        // read back buffer
 
         glPushAttrib(GL_PIXEL_MODE_BIT);
 
-        glReadBuffer(GL_FRONT);
+        glReadBuffer(GL_BACK);
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
 
@@ -266,7 +267,8 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
 {
   bool success = false;
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
-                      GL_DEPTH_COMPONENT, GL_LUMINANCE};   
+                      GL_DEPTH_COMPONENT, GL_LUMINANCE}; 
+  paint();
   if ( windowImpl->beginGL() ) {
     /*
      * Some OSX systems appear to have a glReadPixels 
@@ -284,7 +286,7 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
 
     glPushAttrib(GL_PIXEL_MODE_BIT);
  
-    glReadBuffer(GL_FRONT);
+    glReadBuffer(GL_BACK);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
     
     if (bycolumn) {

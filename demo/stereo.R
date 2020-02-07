@@ -104,7 +104,8 @@ randomDot <- function(left, right, rightOffset=c(200, 0), n=3000, ...) {
 }
 
                                                 #red                   #cyan 
-anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1)) {
+anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1),
+                     dimens = dim(leftPixels)) {
   old <- rgl.cur()
   on.exit(rgl.set(old))  
   force(left)
@@ -113,19 +114,19 @@ anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1)) {
   rgl.set(left)
   vp <- par3d("viewport")
   leftPixels <- rgl.pixels(viewport=vp)
-  leftPixels <- (leftPixels[,,1]+leftPixels[,,2]+leftPixels[,,3])/3
+  leftPixels <- t((leftPixels[,,1]+leftPixels[,,2]+leftPixels[,,3])/3)
+  leftPixels <- leftPixels[rev(seq_len(dimens[1])), seq_len(dimens[2])]
   rgl.set(right)
   rightPixels <- rgl.pixels(viewport=vp)
-  rightPixels <- (rightPixels[,,1]+rightPixels[,,2]+rightPixels[,,3])/3
-  red <- leftPixels*leftColor[1] + rightPixels*rightColor[1]
-  green <- leftPixels*leftColor[2] + rightPixels*rightColor[2]
-  blue <- leftPixels*leftColor[3] + rightPixels*rightColor[3]
-  col <- rgb(pmin(red,1), pmin(green,1), pmin(blue,1))
-  colf <- factor(col)
-  z <- as.numeric(colf)
+  rightPixels <- t((rightPixels[,,1]+rightPixels[,,2]+rightPixels[,,3])/3)
+  rightPixels <- rightPixels[rev(seq_len(dimens[1])), seq_len(dimens[2])]
+  red <- pmin(leftPixels*leftColor[1] + rightPixels*rightColor[1], 1)
+  green <- pmin(leftPixels*leftColor[2] + rightPixels*rightColor[2], 1)
+  blue <- pmin(leftPixels*leftColor[3] + rightPixels*rightColor[3], 1)
+  z <- as.raster(array(c(red, green, blue), dim = c(dimens, 3)))
   if (length(z)) {
-    dim(z) <- dim(leftPixels)
-    image(z,col=levels(colf),breaks=min(z):(max(z)+1) - 0.5, axes=FALSE)
+    par(mar = c(0,0,0,0))
+    plot(z)
   } else {
     cat("Unable to read pixels:\nstr(leftPixels):\n")
     str(leftPixels)
@@ -141,12 +142,12 @@ if (!rgl.useNULL()) {
 # Reverse the two arguments for the cross-eyed view.
 
   dev.new(width=9, height=7)
-
   randomDot(rgl.cur()-1, rgl.cur())
 
 # A red-cyan anaglyph (for 3D glasses).  Use optional args to anaglyph for other glasses.
 
   dev.new()
   anaglyph(rgl.cur()-1, rgl.cur())
+  
 } else
   cat("Can't read pixels from a NULL device\n")

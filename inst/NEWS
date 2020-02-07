@@ -1032,6 +1032,9 @@ base graphics.
   - The tests of the demos have been moved to inst/slowTests so that
     running them is optional (and the CRAN checks will go faster).
     
-0.100.46
+0.100.47
 
   - Fixed a bug in readOBJ that affected reading texture coordinates.
+  - rgl.pixels(), rgl.snapshot() and snapshot3d() now read from the
+    back buffer, which should increase reliability.
+  - demo(stereo) now uses plot.raster() rather than image().
