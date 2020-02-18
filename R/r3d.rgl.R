@@ -1,6 +1,5 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id$
 # 
 
 # Node Management

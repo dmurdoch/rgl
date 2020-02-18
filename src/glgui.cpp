@@ -1,7 +1,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id$
 
 #include <cstdio>
 #ifdef HAVE_FREETYPE

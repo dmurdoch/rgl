@@ -3,8 +3,6 @@
 
 // C++ header file
 // This file is part of RGL
-//
-// $Id$
 
 #include <vector>
 #include "types.h"

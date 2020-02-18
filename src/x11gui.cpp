@@ -4,7 +4,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id$
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG

@@ -2,7 +2,6 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id$
 ##
 
 ##

@@ -1,6 +1,5 @@
 # demo: lsystem.r
 # author: Daniel Adler
-# $Id$
 
 #
 # geometry 

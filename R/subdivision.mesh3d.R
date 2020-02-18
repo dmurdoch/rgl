@@ -5,7 +5,6 @@
 # using addition operations and homogenous coordinates 
 # by Daniel Adler 
 #
-# $Id$
 # 
 
 edgemap <- function( size ) {

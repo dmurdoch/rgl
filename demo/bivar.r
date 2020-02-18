@@ -1,6 +1,5 @@
 # rgl demo: rgl-bivar.r
 # author: Daniel Adler
-# $Id$
 
 rgl.demo.bivar <- function()
 {

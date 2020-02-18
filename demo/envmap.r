@@ -1,6 +1,5 @@
 # RGL-Demo: environment mapping
 # Author: Daniel Adler
-# $Id$
 
 rgl.demo.envmap <- function()
 {

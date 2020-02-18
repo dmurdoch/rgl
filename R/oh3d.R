@@ -1,6 +1,5 @@
 #
 # R 3d object : o3d
-# $Id$
 #
 
 oh3d.vb <- c(   

@@ -5,7 +5,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 923 2013-01-27 10:41:11Z murdoch $
 
 #include "NULLgui.h"
 

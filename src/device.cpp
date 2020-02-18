@@ -1,7 +1,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id$
 // ---------------------------------------------------------------------------
 #include <cstring>
 #include "Device.h"

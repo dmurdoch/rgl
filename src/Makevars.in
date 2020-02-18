@@ -3,7 +3,6 @@
 # AUTO-GENERATED from Makevars.in (using configure/configure.win)
 # This file is part of the RGL project.
 #
-# $Id$
 #-DGL_VERSION_1_2 
 
 CXX_STD = CXX11

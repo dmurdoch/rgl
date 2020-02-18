@@ -4,7 +4,6 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id$
 // ---------------------------------------------------------------------------
 #include <X11/Xlib.h>
 #include <GL/glx.h>

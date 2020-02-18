@@ -6,7 +6,6 @@
 ##      version of autoconf
 ##
 ##
-## $Id$
 ##
 
 AC_PREREQ(2.50)

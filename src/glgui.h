@@ -3,8 +3,6 @@
 
 // C++ header
 // This file is part of rgl
-//
-// $Id$
 
 #include "opengl.h"
 #include <vector>
