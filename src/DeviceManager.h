@@ -29,6 +29,7 @@ public:
   int     getCurrent();
   int     getDeviceCount();
   void   getDeviceIds(int *buffer, int bufsize);
+  bool    createTestWindow();
 protected:
   /**
    * Dispose Listener implementation

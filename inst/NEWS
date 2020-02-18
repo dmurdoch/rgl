@@ -1038,3 +1038,10 @@ base graphics.
   - rgl.pixels(), rgl.snapshot() and snapshot3d() now read from the
     back buffer, which should increase reliability.
   - demo(stereo) now uses plot.raster() rather than image().
+  
+0.100.48
+
+  - Rewrote the initialization code to deal with problems
+  related to indirect GLX.
+  - Added ?rgl.init help topic to describe initialization
+  issues.

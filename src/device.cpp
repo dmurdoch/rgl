@@ -15,6 +15,14 @@ Device::Device(int id, bool useNULL) : id_(id)
   scene   = new Scene();
   rglview = new RGLView(scene);
   window  = new Window( rglview, getGUIFactory(useNULL) );
+  if (window && !window->windowImpl) {
+    delete window;
+    window = NULL;
+  }
+  if (!window) {
+    devtype = "none";
+    return;
+  } 
   devtype = GUIFactoryName(useNULL);
   window->addDisposeListener(this);
 }
@@ -46,8 +54,11 @@ void Device::update()
 // ---------------------------------------------------------------------------
 bool Device::open(void)
 {
-  window->setVisibility(true);
-  return true;
+  if (window) {
+    window->setVisibility(true);
+    return true;
+  } else 
+    return false;
 }
 // ---------------------------------------------------------------------------
 void Device::close(void)

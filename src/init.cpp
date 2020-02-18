@@ -1,3 +1,5 @@
+#include <fcntl.h>
+#include <unistd.h>
 #include "lib.h"
 #include "DeviceManager.h"
 #include "init.h"
@@ -31,6 +33,7 @@ DeviceManager* deviceManager = NULL;
 int gInitValue;
 void* gHandle;
 SEXP rglNamespace;
+bool rglDebug;
 
 //
 // FUNCTION
@@ -49,7 +52,8 @@ SEXP rglNamespace;
 extern "C" {
 #endif
 
-SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
+SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
+              SEXP debug)
 {
   int success = 0;
   bool useNULLDevice = asLogical(useNULL);
@@ -57,6 +61,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
   gInitValue = 0;
   gHandle = NULL;
   rglNamespace = in_namespace;
+  rglDebug = asLogical(debug);
   
   if ( isNumeric(initValue) ) {
     gInitValue =  asInteger(initValue);
@@ -68,11 +73,32 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
   {
     return ScalarInteger( 0 );
   }  
+  /* Some systems write useless messages to stderr.  We'll
+   * hide those
+   */
+  int stderr_copy;
+  if (!rglDebug) {
+     int devNull = 
+#ifdef windows
+        open("nul", O_WRONLY);
+#else
+        open("/dev/null", O_WRONLY);
+#endif
+     R_FlushConsole();
+     stderr_copy = dup(STDERR_FILENO);
+     dup2(devNull, STDERR_FILENO);
+  }
   if ( init(useNULLDevice) ) {
     deviceManager = new DeviceManager(useNULLDevice);
+  }
+  if ( useNULLDevice || deviceManager->createTestWindow()) {
     success = 1;
   }
-
+  /* Restore STDERR */
+  if (!rglDebug) {
+     dup2(stderr_copy, STDERR_FILENO);
+     close(stderr_copy);
+  }
   return(ScalarInteger(success));
 }
 
@@ -223,7 +249,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace)
  #endif // CHECK_ARGS
 
  static const R_CallMethodDef CallEntries[]  = {
-   FUNDEF(rgl_init, 3),
+   FUNDEF(rgl_init, 4),
    FUNDEF(rgl_dev_getcurrent, 0),
    FUNDEF(rgl_dev_list, 0),
    FUNDEF(rgl_par3d, 3),

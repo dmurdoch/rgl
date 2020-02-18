@@ -18,7 +18,7 @@ extern "C" {
 
 /* library service */
 
-SEXP rgl_init          (SEXP initValue, SEXP onlyNULL, SEXP in_namespace);
+SEXP rgl_init (SEXP initValue, SEXP onlyNULL, SEXP in_namespace, SEXP debug);
 
 #ifdef __cplusplus
 }

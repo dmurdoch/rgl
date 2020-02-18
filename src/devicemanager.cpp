@@ -60,8 +60,8 @@ Device* DeviceManager::getAnyDevice()
 {
   Device* pDevice = getCurrentDevice();
   if (pDevice == NULL) {
-    openDevice(useNULLDevice);
-    pDevice = getCurrentDevice();
+    if (openDevice(useNULLDevice))
+      pDevice = getCurrentDevice();
   }
   return pDevice;
 }
@@ -162,4 +162,13 @@ void DeviceManager::previousDevice()
   }
 }
 
+bool DeviceManager::createTestWindow()
+{
+  bool result = false;
+  Device* pDevice = new Device(newID, false);  
+  if ( pDevice->hasWindow() ) 
+    result = true;
+  delete pDevice;
+  return result;
+}
 

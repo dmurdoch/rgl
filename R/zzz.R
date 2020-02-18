@@ -77,7 +77,7 @@
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
-    warning("'rgl_init' failed, running with rgl.useNULL = TRUE", call. = FALSE)
+    warning("'rgl.init' failed, running with 'rgl.useNULL = TRUE'.", call. = FALSE)
     options(rgl.useNULL = TRUE)
     rgl.init(initValue, TRUE)	
   }
@@ -86,8 +86,9 @@
   
 }
 
-rgl.init <- function(initValue = 0, onlyNULL = FALSE) .Call( rgl_init, 
-    initValue, onlyNULL, environment(rgl.init) )
+rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.debug", FALSE)) 
+  .Call( rgl_init, 
+    initValue, onlyNULL, environment(rgl.init), debug )
 
 ##
 ## exit-point
