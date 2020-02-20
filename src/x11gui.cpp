@@ -581,6 +581,10 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     attribList[15] = aa;
   }
 #endif
+  
+/* These codes are only used in debugging, they are never displayed. */
+#define RGL_ERROR_CODE (LastExtensionError + 1000)
+
   /* clear old errors */
   while ((error_code = glGetError())) { Rprintf("cleared error %d\n", error_code); };
 
@@ -599,7 +603,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   }
 #endif
   if (xvisualinfo == 0) {
-    throw_error("no suitable visual available"); 
+    error_code = RGL_ERROR_CODE + 1;
   }
     
   // create X11 window
@@ -622,16 +626,24 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 
 
   ::Window xparent = 0;
-  if (!error_code) 
+  if (!error_code) {
     xparent = RootWindow(xdisplay, DefaultScreen(xdisplay));
-
-  if (!error_code)
+    if (!error_code & !xparent)
+      error_code = RGL_ERROR_CODE + 2;
+  }
+  
+  if (!error_code) {
     attrib.colormap = XCreateColormap(xdisplay, xparent, xvisualinfo->visual, AllocNone);
+    if (!error_code && !attrib.colormap)
+      error_code = RGL_ERROR_CODE + 3;
+  }
   attrib.border_pixel = 0;
   
   
   ::Window xwindow = 0;
-  if (!error_code)
+  if (!error_code) {
+    if (window)
+      window->resize(256, 256);  // This may be changed by window manager
     xwindow = XCreateWindow(
       xdisplay, xparent,
       0, 0, 256, 256, 0, 
@@ -641,17 +653,24 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
       valuemask,
       &attrib
     );
+    if (!error_code && !xwindow)
+      error_code = RGL_ERROR_CODE + 4;
+  }
+  
   if (!error_code)
     XSync(xdisplay, False);
 
   /* set WM_CLASS on window */
   if (!error_code) {
     XClassHint *classHint = XAllocClassHint();
-    if (!error_code && classHint) {
-      classHint->res_name = const_cast<char*>("rgl");
-      classHint->res_class = const_cast<char*>("R_x11");
-      XSetClassHint(xdisplay, xwindow, classHint);
-      XFree(classHint);
+    if (!error_code) {
+      if (classHint) {
+        classHint->res_name = const_cast<char*>("rgl");
+        classHint->res_class = const_cast<char*>("R_x11");
+        XSetClassHint(xdisplay, xwindow, classHint);
+        XFree(classHint);
+      } else
+        error_code = RGL_ERROR_CODE + 5;
     }
   }
 
@@ -671,9 +690,11 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 
   // create window implementation instance
   
-  if (xwindow && !error_code)
+  if (xwindow && !error_code) {
     impl = new X11WindowImpl(window, this, xwindow, xvisualinfo);
-  else {
+    if (!error_code && !impl)
+      error_code = RGL_ERROR_CODE + 6;
+  } else {
     impl = NULL;
   }
   

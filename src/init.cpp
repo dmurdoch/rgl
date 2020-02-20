@@ -91,9 +91,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   if ( init(useNULLDevice) ) {
     deviceManager = new DeviceManager(useNULLDevice);
   }
-  if ( useNULLDevice || deviceManager->createTestWindow()) {
-    success = 1;
-  }
+  if ( deviceManager && (useNULLDevice || deviceManager->createTestWindow()))
+       success = 1;
   /* Restore STDERR */
   if (!rglDebug) {
      dup2(stderr_copy, STDERR_FILENO);
