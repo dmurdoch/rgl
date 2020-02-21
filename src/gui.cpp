@@ -199,6 +199,8 @@ void Window::getWindowRect(int *left, int *top, int *width, int *height)
 // ---------------------------------------------------------------------------
 void Window::setWindowRect(int left, int top, int right, int bottom)
 {
+  right = getMax(right, left + 1);
+  bottom = getMax(bottom, top + 1);
   resize(right-left, bottom-top); // In case message never gets sent, e.g. Xvfb
   windowImpl->setWindowRect(left, top, right, bottom);
 }

@@ -1039,9 +1039,10 @@ base graphics.
     back buffer, which should increase reliability.
   - demo(stereo) now uses plot.raster() rather than image().
   
-0.100.49
+0.100.50
 
   - Rewrote the initialization code to deal with problems
   related to indirect GLX and Xvfb.
   - Added ?rgl.init help topic to describe initialization
   issues.
+  - Added sanity check to setting of par3d("windowRect")
