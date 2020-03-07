@@ -9,10 +9,11 @@ These functions allow Shiny apps to make relatively large changes
 to a scene, adding and removing objects from it.
 }
 \usage{
-sceneChange(elementId, x = scene3d(),
+sceneChange(elementId, x = scene3d(minimal),
             delete = NULL, add = NULL, replace = NULL,
             material = FALSE, rootSubscene = FALSE,
-            delfromSubscenes = NULL, skipRedraw = FALSE)
+            delfromSubscenes = NULL, skipRedraw = FALSE,
+            minimal = TRUE)
 registerSceneChange()
 }
 \arguments{
@@ -42,6 +43,9 @@ that are different.
   \item{skipRedraw}{
 If \code{TRUE}, stop the scene from redrawing until \code{skipRedraw=FALSE} is sent.  If \code{NA}, don't redraw this time, but don't
 change the state of the \code{skipRedraw} flag.
+}
+  \item{minimal}{
+See \code{\link{scene3d}}.
 }
 }
 \details{

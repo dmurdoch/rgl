@@ -22,16 +22,18 @@ public:
   VertexArray();
   ~VertexArray();
 
-  void alloc(int nvertex);
-  void copy(int nvertex, double* vertices);
+  void alloc(int in_nvertex);
+  void copy(int in_nvertex, double* vertices);
   void beginUse();
   void endUse();
   Vertex& operator[](int index);
   void setVertex(int index, double* v);
 
   Vertex getNormal(int v1, int v2, int v3);
+  int size() { return nvertex; }
 
 protected:
+  int nvertex;
   float* arrayptr;
 };
 

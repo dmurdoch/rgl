@@ -1,4 +1,4 @@
-scene3d <- function() {
+scene3d <- function(minimal = TRUE) {
   
   saveSubscene <- currentSubscene3d()
   on.exit(useSubscene3d(saveSubscene))
@@ -16,13 +16,19 @@ scene3d <- function() {
   getObject <- function(id, type) {
     result <- list(id=id, type=type)
     
-    if (!(type %in% c("light", "clipplanes")))
-      result$material <- matdiff(rgl.getmaterial(id=id))
+    if (!(type %in% c("light", "clipplanes"))) {
+      mat <- rgl.getmaterial(id=id)
+      lit <- mat$lit
+      result$material <- matdiff(mat)
+    } else
+      lit <- FALSE
     
-    attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
+    attribs <- c("vertices", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
           "usermatrix", "types", "offsets", "centers",
           "family", "font", "pos")
+    if (lit || !minimal || type %in% c("light", "clipplanes"))
+      attribs <- c(attribs, "normals")
     for (a in attribs) 
       if (rgl.attrib.count(id, a))
         result[[a]] <- rgl.attrib(id, a)
@@ -212,8 +218,8 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
 			    newviewport = x$par3d$viewport,
 			    copyLights = FALSE)
 			    
-  if (!is.null(x$par3d$listeners))
-    par3d(listeners = x$par3d$listeners, subscene = subscene) 
+  listeners <- list(x$par3d$listeners) # list contains old ids
+  names(listeners) <- subscene         # names are new ids
     
   results <- subscene
   names(results) <- paste0("subscene", as.character(x$id))
@@ -230,13 +236,14 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
     useSubscene3d(subscene)
     res <- plot3d(x$subscenes[[i]], objects, root=FALSE, ...)
     results <- c(results, res$results)
+    listeners <- c(listeners, res$listeners)
     objects <- res$objects
   }
   if (root) {
     # Translate all the listener values
     dotranslations <- function(id) {
       info <- subsceneInfo(id = id)
-      oldlisteners <- par3d("listeners", subscene = id)
+      oldlisteners <- listeners[[as.character(id)]]
       par3d(listeners = results[paste0("subscene", oldlisteners)], subscene = id)
       for (child in info$children)
         dotranslations(child)
@@ -244,7 +251,7 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
     dotranslations(subscene)
     return(results)
   } else
-    return(list(results=results, objects=objects))
+    return(list(results=results, objects=objects, listeners=listeners))
 }
 
 plot3d.rglobject <- function(x, ...) {

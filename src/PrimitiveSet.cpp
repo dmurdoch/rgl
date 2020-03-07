@@ -187,28 +187,10 @@ FaceSet::FaceSet(
 )
 : PrimitiveSet(in_material, in_nelements, in_vertex, in_type, in_nverticesperelement, in_ignoreExtent, in_bboxChange)
 {
-  if (material.lit) {
-    normalArray.alloc(nvertices);
-    if (in_useNormals) {
-      for(int i=0;i<nvertices;i++) {
-        normalArray[i].x = (float) in_normals[i*3+0];
-        normalArray[i].y = (float) in_normals[i*3+1];
-        normalArray[i].z = (float) in_normals[i*3+2];
-      }
-    } else {
-      for (int i=0;i<=nvertices-nverticesperelement;i+=nverticesperelement) 
-      {   
-        if (hasmissing && (vertexArray[i].missing() ||
-                           vertexArray[i+1].missing() ||
-                           vertexArray[i+2].missing()) )
-          normalArray[i] = Vertex(0.0, 0.0, 0.0);
-        else
-          normalArray[i] = vertexArray.getNormal(i,i+1,i+2);
-        for (int j=1;j<nverticesperelement;++j)    
-          normalArray[i+j] = normalArray[i];
-      }
-    }
-  }
+  if (in_useNormals)
+    initNormals(in_normals);
+  else
+    normalArray.alloc(0);
   if (in_useTexcoords) {
     texCoordArray.alloc(nvertices);
     for(int i=0;i<nvertices;i++) {
@@ -236,36 +218,40 @@ void FaceSet::initFaceSet(
 ) {
   initPrimitiveSet(in_nelements, in_vertex);
   
-  bool useNormals = (in_normals) ? true : false;
   bool useTexcoords = (in_texcoords) ? true : false;
 
-  if (material.lit) {
-    normalArray.alloc(nvertices);
-    if (useNormals) {
-      for(int i=0;i<nvertices;i++) {
-        normalArray[i].x = (float) in_normals[i*3+0];
-        normalArray[i].y = (float) in_normals[i*3+1];
-        normalArray[i].z = (float) in_normals[i*3+2];
-      }
-    } else {
-      for (int i=0;i<=nvertices-nverticesperelement;i+=nverticesperelement) 
-      {   
-        if (hasmissing && (vertexArray[i].missing() ||
-                           vertexArray[i+1].missing() ||
-                           vertexArray[i+2].missing()) )
-          normalArray[i] = Vertex(0.0, 0.0, 0.0);
-        else
-          normalArray[i] = vertexArray.getNormal(i,i+1,i+2);
-        for (int j=1;j<nverticesperelement;++j)    
-          normalArray[i+j] = normalArray[i];
-      }
-    }
-  }
+  if (in_normals)
+    initNormals(in_normals);
+
   if (useTexcoords) {
     texCoordArray.alloc(nvertices);
     for(int i=0;i<nvertices;i++) {
       texCoordArray[i].s = (float) in_texcoords[i*2+0];
       texCoordArray[i].t = (float) in_texcoords[i*2+1];      
+    }
+  }
+}
+
+void FaceSet::initNormals(double* in_normals)
+{
+  normalArray.alloc(nvertices);
+  if (in_normals) {
+    for(int i=0;i<nvertices;i++) {
+      normalArray[i].x = (float) in_normals[i*3+0];
+      normalArray[i].y = (float) in_normals[i*3+1];
+      normalArray[i].z = (float) in_normals[i*3+2];
+    }
+  } else {
+    for (int i=0;i<=nvertices-nverticesperelement;i+=nverticesperelement) 
+    {   
+      if (hasmissing && (vertexArray[i].missing() ||
+          vertexArray[i+1].missing() ||
+          vertexArray[i+2].missing()) ) {
+        normalArray[i] = Vertex(0.0, 0.0, 0.0);
+      } else
+        normalArray[i] = vertexArray.getNormal(i,i+1,i+2);
+      for (int j=1;j<nverticesperelement;++j)    
+        normalArray[i+j] = normalArray[i];
     }
   }
 }
@@ -276,9 +262,11 @@ void FaceSet::drawBegin(RenderContext* renderContext)
 {  
   PrimitiveSet::drawBegin(renderContext);
 
-  if (material.lit)
+  if (material.lit) {
+    if (normalArray.size() < nvertices)
+      initNormals(NULL);
     normalArray.beginUse();
-    
+  }
   texCoordArray.beginUse();
 }
 
@@ -298,10 +286,7 @@ void FaceSet::drawEnd(RenderContext* renderContext)
 int FaceSet::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {
-    case NORMALS: if (material.lit)
-    		    return nvertices;
-    		  else
-    		    return 0;
+    case NORMALS: return nvertices;
     case TEXCOORDS: return texCoordArray.size();
   }
   return PrimitiveSet::getAttributeCount(bbox, attrib);
@@ -314,6 +299,8 @@ void FaceSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
   if (first < n) {
     switch (attrib) {
       case NORMALS: {
+        if (normalArray.size() < n)
+          initNormals(NULL);
         while (first < n) {
           *result++ = normalArray[first].x;
           *result++ = normalArray[first].y;
@@ -325,10 +312,10 @@ void FaceSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
       case TEXCOORDS: {
         while (first < n) {
           *result++ = texCoordArray[first].s;
-	  *result++ = texCoordArray[first].t;
-	  first++;
-	}
-	return;
+	        *result++ = texCoordArray[first].t;
+	        first++;
+       	}
+	      return;
       }
     }
     PrimitiveSet::getAttribute(bbox, attrib, first, count, result);

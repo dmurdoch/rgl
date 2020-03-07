@@ -1046,3 +1046,13 @@ base graphics.
   - Added ?rgl.init help topic to describe initialization
   issues.
   - Added sanity check to setting of par3d("windowRect")
+
+0.100.51
+
+  - Fixed bug in plot3d.rglscene that caused restored subscenes to 
+    ignore the mouse.
+  - Changed rgl.attrib(id, "normals") so the normals will be returned
+    whether or not the object is lit.  (Suggestion of Tyler 
+    Morgan-Wall)
+  - The labels used in rglwidget() are now independent of set.seed(),
+    using code borrowed from Shiny for our own private RNG.

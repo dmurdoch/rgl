@@ -210,10 +210,11 @@ elementId2Prefix <- function(elementId, prefix = elementId) {
 
 # This puts together a custom message for a more extensive change
 
-sceneChange <- function(elementId, x = scene3d(),
+sceneChange <- function(elementId, x = scene3d(minimal),
                         delete = NULL, add = NULL, replace = NULL,
                         material = FALSE, rootSubscene = FALSE,
-                        delfromSubscenes = NULL, skipRedraw = FALSE) {
+                        delfromSubscenes = NULL, skipRedraw = FALSE,
+                        minimal = TRUE) {
   allSubscenes <- function() {
     result <- numeric()
     for (obj in scene$objects)

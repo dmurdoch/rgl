@@ -226,17 +226,18 @@ asRow <- function(..., last = NA, height = NULL, colsize = 1) {
 }
 
 newElementId <- function(prefix)
-  paste0(prefix, sample(100000, 1))
+  paste0(prefix, p_sample(100000, 1))
 
 rglwidget <- local({
   reuseDF <- NULL
 
-  function(x = scene3d(), width = figWidth(), height = figHeight(),
+  function(x = scene3d(minimal), width = figWidth(), height = figHeight(),
            controllers = NULL, snapshot = FALSE,
            elementId = NULL,
            reuse = !interactive(),
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
-  	   shared = NULL, ...) {
+  	       shared = NULL, 
+           minimal = TRUE, ...) {
   force(shared) # It might plot something...
   	
   if (is.na(reuse))

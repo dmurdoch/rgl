@@ -11,7 +11,8 @@ displays do not support GLSL.
 }
 \usage{
 setUserShaders(ids, vertexShader = NULL, fragmentShader = NULL, 
-               attributes = NULL, uniforms = NULL, scene = scene3d())
+               attributes = NULL, uniforms = NULL, 
+               scene = scene3d(minimal), minimal = TRUE)
 }
 \arguments{
   \item{ids}{
@@ -29,6 +30,9 @@ A named list of \dQuote{uniforms}.
 }
   \item{scene}{
 A \code{\link{scene3d}} object to modify.
+}
+  \item{minimal}{
+See \code{\link{scene3d}}.  
 }
 }
 \details{

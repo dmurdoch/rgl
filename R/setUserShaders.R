@@ -1,6 +1,7 @@
 setUserShaders <- function(ids, vertexShader = NULL, fragmentShader = NULL,
 			   attributes = NULL, uniforms = NULL,
-			   scene = scene3d()) {
+			   scene = scene3d(minimal),
+			   minimal = TRUE) {
   stopifnot(inherits(scene, "rglscene"))
   for (i in ids) {
     id <- as.character(i)

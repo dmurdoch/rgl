@@ -14,13 +14,15 @@ This function saves a large part of the RGL state associated with the current
 window to a variable.  
 }
 \usage{
-scene3d()
+scene3d(minimal = TRUE)
 \S3method{plot3d}{rglscene}(x, add = FALSE, ...)
 \S3method{plot3d}{rglobject}(x, ...)
 \S3method{print}{rglscene}(x, ...)
 \S3method{print}{rglobject}(x, ...)
 }
 \arguments{
+\item{minimal}{Should attributes be skipped if they currently have
+  no effect?  See Details.}
 \item{x}{An object of class \code{"rglscene"}}
 \item{add}{Whether to open a new window, or add to the existing one.}
 \item{...}{Additional parameters, currently ignored.}
@@ -40,6 +42,15 @@ to recreate a scene, saving the result of \code{scene3d} to
 a file will allow it to be reproduced later most accurately.  In roughly decreasing order of fidelity,
 \code{\link{writeWebGL}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
 write the scene to a file in formats readable by other software.
+
+If \code{minimal = TRUE} (the default), then attributes of objects
+will not be saved if they currently have no effect on
+the display, thereby reducing the file size.  
+Set \code{minimal = FALSE} if the scene is intended
+to be used in a context where the appearance could be changed.  
+Currently this only affects the inclusion of normals; with 
+\code{minimal = TRUE} they are
+omitted for objects when the material is not lit.
 }
 \value{
 The \code{scene3d} function returns an object of class

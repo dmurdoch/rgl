@@ -5,7 +5,7 @@ Support fog in rglwidget().
 It would be nice to have an "onresize" event, so bgplot3d
 could redraw itself.  But this isn't going to work in WebGL,
 since it has no way to call R to redraw (other than in Shiny).  Maybe have multiple copies of images, produced at 
-different sizes?
+different sizes, i.e. manually generated mipmaps?
 
 Allow grid3d to draw on an arbitrary plane (e.g. to show lm() results).
 
@@ -27,6 +27,13 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+Fix "reuse" bug in rglwidget():  reused data isn't being found. FIXED?
+
+Allow rgl.attrib() to return normals even if lit is FALSE.  (See
+https://r-forge.r-project.org/tracker/?func=detail&atid=949&aid=6661&group_id=234).  rglwidget() will need modification to
+suppress them if they are not needed. DONE
+
+plot3d(scene3d()) doesn't set up par3d("listeners") properly. FIXED
 
 Move tkrgl functions into rgl.  DONE
 

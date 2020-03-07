@@ -180,6 +180,8 @@ protected:
   /* (re-)set mesh */
   void initFaceSet(int in_nelements, double* in_vertex, double* in_normals, double* in_texcoords);
  
+  /* set up normals */
+  void initNormals(double* in_normals);
 private:
   NormalArray normalArray;
   TexCoordArray texCoordArray;

@@ -1,6 +1,7 @@
 
-convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NULL,
-                         snapshot = FALSE, elementId = NULL) {
+convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reuse = NULL,
+                         snapshot = FALSE, elementId = NULL,
+                         minimal = TRUE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -361,7 +362,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     open3d()
     ids <- convertBBoxes(result$rootSubscene)
     origIds <- attr(ids, "origIds")
-    scene <- scene3d()
+    scene <- scene3d(minimal)
     temp <- lapply(as.character(ids),
              function(id) {
                x <- scene$objects[[id]]
@@ -384,7 +385,7 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
     open3d()
     result$brushId <- brushId <- createBrush()
     brush <- as.character(result$brushId)
-    scene <- scene3d()
+    scene <- scene3d(minimal)
     result$objects[[brush]] <- scene$objects[[brush]]
     rgl.close()
     if (dev)

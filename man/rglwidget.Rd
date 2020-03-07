@@ -10,11 +10,11 @@ graphical displays in HTML documents of various types.  This function
 provides the necessities to embed an \pkg{rgl} scene in one.
 }
 \usage{
-rglwidget(x = scene3d(), width = figWidth(), height = figHeight(),
+rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           controllers = NULL, snapshot = FALSE,
           elementId = NULL, reuse = !interactive(),
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
-          shared = NULL, ...)
+          shared = NULL, minimal = TRUE, ...)
 }
 \arguments{
   \item{x}{
@@ -39,6 +39,8 @@ the Details below.
   \item{webGLoptions}{A list of options to pass
   to WebGL when the drawing context is created.  See the Details below.}
   \item{shared}{An object produced by \code{\link{rglShared}}, or a list of such objects.}
+  \item{minimal}{Should attributes be skipped if they currently have
+  no effect?  See \code{\link{scene3d}}.}
   \item{...}{Additional arguments
 to pass to \code{htmlwidgets::\link{createWidget}}.}
 }

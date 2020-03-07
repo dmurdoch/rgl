@@ -29,12 +29,15 @@ VertexArray::~VertexArray()
     delete[] arrayptr;
 }
 
-void VertexArray::alloc(int nvertex)
+void VertexArray::alloc(int in_nvertex)
 {
-  if (arrayptr)
+  if (arrayptr) {
     delete[] arrayptr;
-
-  arrayptr = new float [nvertex*3];
+    arrayptr = NULL;
+  }
+  nvertex = in_nvertex;
+  if (nvertex)
+    arrayptr = new float [nvertex*3];
 }
 
 void VertexArray::copy(int nvertex, double* vertices)
