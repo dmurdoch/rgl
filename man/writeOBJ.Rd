@@ -112,14 +112,16 @@ open3d()
 shade3d( icosahedron3d() )
 writeOBJ(filename)
 
-# The motivation for writing readObj() was to read this shape
-# file of Comet 67P/Churyumov-Gerasimenko, from the ESA:
-\donttest{
-open3d()
-shade3d(readOBJ(url(
-"http://sci.esa.int/science-e/www/object/doc.cfm?fobjectid=54726"
-), material = list(col = "gray")))
-}
+# The motivation for writing readObj() was to read a shape
+# file of Comet 67P/Churyumov-Gerasimenko, from the ESA.
+# The file no longer appears to be online, but may still be
+# available on archive.org.  Here was the original URL:
+#   cometurl <- "http://sci.esa.int/science-e/www/object/doc.cfm?fobjectid=54726"
+# This code would read and display it:
+#   open3d()
+#   shade3d(readOBJ(url(cometurl), 
+#                   material = list(col = "gray")))
+
 
 # Textures are used in a realistic hand image available from
 # https://free3d.com/3d-model/freerealsichand-85561.html
