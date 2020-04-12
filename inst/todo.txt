@@ -1,5 +1,10 @@
 To-do:
 
+legend3d or bgplot3d should look at r3dDefaults to set the
+background colour.
+
+Work on axes:  try to avoid hiding labels behind the plot, etc.
+
 Support fog in rglwidget().  
 
 It would be nice to have an "onresize" event, so bgplot3d
@@ -26,6 +31,9 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+getr3dDefaults() should be able to return values for things
+that aren't mentioned in r3dDefaults, going back to the original source. DONE
 
 Fix "reuse" bug in rglwidget():  reused data isn't being found. FIXED?
 

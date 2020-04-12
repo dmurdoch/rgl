@@ -4,9 +4,19 @@
 
 # Node Management
 
-getr3dDefaults <- function() 
-    tryCatch(get("r3dDefaults", envir=.GlobalEnv),
-	     error = function(e) r3dDefaults)
+getr3dDefaults <- function() {
+  result <- r3dDefaults
+  if (exists("r3dDefaults", envir = globalenv())) {
+    user <- get("r3dDefaults", envir=.GlobalEnv)
+    for (n in names(user)) {
+      if (is.list(result[[n]]))
+        result[[n]][names(user[[n]])] <- user[[n]]
+      else
+        result[[n]] <- user[[n]]
+    }
+  }
+  result
+}
 
 clear3d     <- function(type = c("shapes", "bboxdeco", "material"), 
                         defaults=getr3dDefaults(),
