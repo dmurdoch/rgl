@@ -1,6 +1,6 @@
 legend3d <- function(...) {
   args <- list(...)
-  idx <- which(names(args) %in% c("sphere", "fogtype"))
+  idx <- which(names(args) %in% c("sphere", "fogtype", "bg.color"))
   if (length(idx)) {
     bgargs <- args[idx]
     args <- args[-idx]
@@ -13,19 +13,21 @@ legend3d <- function(...) {
   })), bgargs))
 }
 
-bgplot3d <- function(expression, ...) {
+bgplot3d <- function(expression, bg.color = getr3dDefaults()$bg$color, 
+                     ...) {
   viewport <- par3d("viewport")
   width <- viewport["width"]
   height <- viewport["height"]
   if (width > 0 && height > 0) {
     filename <- tempfile(fileext = ".png")
-    png(filename = filename, width=width, height=height)
+    png(filename = filename, width = width, height = height,
+        bg = bg.color)
     value <- try(expression)  
     dev.off()
-    result <- bg3d(texture=filename, col="white", lit = FALSE, ...)
+    result <- bg3d(texture = filename, col = "white", lit = FALSE, ...)
   } else {
     value <- NULL
-    result <- bg3d(col="white", ...)
+    result <- bg3d(col = bg.color, ...)
   }
   lowlevel(structure(result, value = value))
 }

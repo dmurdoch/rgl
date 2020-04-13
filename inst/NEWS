@@ -1047,7 +1047,7 @@ base graphics.
   issues.
   - Added sanity check to setting of par3d("windowRect")
 
-0.100.51
+0.100.52
 
   - Fixed bug in plot3d.rglscene that caused restored subscenes to 
     ignore the mouse.
@@ -1056,3 +1056,8 @@ base graphics.
     Morgan-Wall)
   - The labels used in rglwidget() are now independent of set.seed(),
     using code borrowed from Shiny for our own private RNG.
+  - getr3dDefaults() now gets values from rgl::r3dDefaults
+    if they are not present in the user's r3dDefaults list.
+  - bgplot3d() now uses the background colour from argument
+    bg.color (defaulting to the background color from
+    getr3dDefaults()) rather than always choosing white.
