@@ -1063,3 +1063,6 @@ base graphics.
     getr3dDefaults()) rather than always choosing white.
   - next3d() no longer messes up when a user changes active
     subscenes.
+  - If a sufficient version of Pandoc is not found, the 
+    vignettes will still run, but won't execute any rgl
+    code.

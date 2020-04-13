@@ -3,8 +3,10 @@ options(rgl.printRglwidget=FALSE)
 
 library(rgl)
 
-if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.14"))
-  stop("These vignettes assume pandoc version 1.14; older versions may not work.")
+if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
+  warning("These vignettes assume pandoc version 1.14; older versions will not work.")
+  knitr::opts_chunk$set(eval = FALSE)
+}
 
 setupKnitr()
 
