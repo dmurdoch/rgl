@@ -83,6 +83,13 @@ or \code{NULL} if not.
 If \code{parent} is specified in \code{mfrow3d} or \code{layout3d} 
 (even as \code{NA}), the new subscenes will be created within 
 the parent.
+
+The \code{next3d()} function first finds out if the current
+subscene is in the current list.  If not, it moves to the
+previous list, and looks there.  Once it finds a list 
+containing the current subscene, it moves to the next entry
+in that list.  If it can't find one, it creates a length
+one list containing just the current subscene.
 }
 \value{
 \code{mfrow3d} and \code{layout3d} return a vector of subscene id values that have just been

@@ -146,20 +146,19 @@ next3d <- function(current = NA, clear = TRUE, reuse = TRUE) {
   if (is.na(current))
     current <- currentSubscene3d()
   subscenes <- subsceneList()
+  while (!is.null(subscenes) && !(current %in% subscenes))
+    subscenes <- attr(subscenes, "prev")
   if (is.null(subscenes)) 
     subscenes <- current
-  if (current %in% subscenes) {
-    this <- which(current == subscenes)
-    if (reuse && !nrow(rgl.ids(subscene = current))) {
-      # do nothing
-    } else if (this == length(subscenes)) 
-      this <- 1
-    else 
-      this <- this + 1
-  } else {
-    warning("Current subscene is not in the subsceneList()")
+  
+  this <- which(current == subscenes)
+  if (reuse && !nrow(rgl.ids(subscene = current))) {
+    # do nothing
+  } else if (this == length(subscenes)) 
     this <- 1
-  }  
+  else 
+    this <- this + 1
+  
   repeat{
     current <- subscenes[this]
     result <- try(useSubscene3d(current))

@@ -1047,7 +1047,7 @@ base graphics.
   issues.
   - Added sanity check to setting of par3d("windowRect")
 
-0.100.52
+0.100.53
 
   - Fixed bug in plot3d.rglscene that caused restored subscenes to 
     ignore the mouse.
@@ -1061,3 +1061,5 @@ base graphics.
   - bgplot3d() now uses the background colour from argument
     bg.color (defaulting to the background color from
     getr3dDefaults()) rather than always choosing white.
+  - next3d() no longer messes up when a user changes active
+    subscenes.

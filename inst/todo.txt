@@ -1,7 +1,5 @@
 To-do:
 
-BUG: after example(legend3d), things are mixed up: the
-viewport doesn't match the place where things are drawn.  
 
 Work on axes:  try to avoid hiding labels behind the plot, etc.
 
@@ -32,6 +30,8 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+After example(legend3d), things are mixed up: the
+viewport doesn't match the place where things are drawn. FIXED 
 legend3d or bgplot3d should look at r3dDefaults to set the
 background colour. DONE
 
