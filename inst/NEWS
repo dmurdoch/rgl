@@ -1047,7 +1047,7 @@ base graphics.
   issues.
   - Added sanity check to setting of par3d("windowRect")
 
-0.100.53
+0.100.54
 
   - Fixed bug in plot3d.rglscene that caused restored subscenes to 
     ignore the mouse.
@@ -1066,3 +1066,5 @@ base graphics.
   - If a sufficient version of Pandoc is not found, the 
     vignettes will still run, but won't execute any rgl
     code.
+  - The maintainer email address has been changed to 
+    murdoch.duncan@gmail.com.
