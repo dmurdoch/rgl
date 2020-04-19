@@ -1,5 +1,6 @@
 To-do:
 
+Look into updating FTGL.  Allow rotated text?
 
 Work on axes:  try to avoid hiding labels behind the plot, etc.
 
