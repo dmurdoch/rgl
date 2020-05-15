@@ -42,18 +42,18 @@ FEATURES
 PLATFORMS
 ---------
 Mac OS X
-Windows 2000/XP/Vista
+Windows 7/10
 Unix-derivatives
 
 
 BUILD TOOLS
 -----------
 R recommended tools (gcc toolchain)
-
+On Windows, Rtools40
 
 REQUIREMENTS
 ------------
-Windowing System (osx/carbon, unix/x11 or win32)
+Windowing System (unix/x11 or win32)
 OpenGL Library 
 OpenGL Utility Library (GLU)
 
@@ -64,8 +64,9 @@ aptitude install libgl1-mesa-dev libglu1-mesa-dev
 
 OPTIONS
 -------
-libpng library version 1.0.4 or newer (pixmap import/export support)
-freetype library for resizable anti-aliased fonts
+libpng library version 1.2.9 or newer (pixmap import/export support)
+freetype library (optional on Unix for resizable 
+anti-aliased fonts), required on Windows
 
 
 BUILDING/INSTALLING FROM SOURCE PACKAGE
@@ -76,22 +77,13 @@ The R build tool is the primary tool to build the RGL package.
 BUILDING ON MICROSOFT WINDOWS
 -----------------------------
 
-Libpng support:
+Install Rtools40 or newer.
 
-Make sure bitmap dll has been built as described in the 
-R Build Instructions for Windows.
+Install Freetype via
 
-These two files are needed:
+pacman -S mingw-w64-{i686,x86_64}-freetype
 
-%R_HOME%\src\gnuwin32\bitmap\libpng\libpng.a
-%R_HOME%\bin\Rzlib.dll (or %R_HOME%\src\extra\zlib\libz.a, in older R versions)
-
-Freetype support:
-
-You need to obtain a Windows build of the Freetype library, version 2.3.5 or better.
-A version is available at http://gnuwin32.sourceforge.net/packages/freetype.htm.
-Set the environment variable LIB_FREETYPE to give the full path to the
-install directory.
+Then the usual R CMD INSTALL should work.
 
 BUILDING ON UNIX-STYLE OS (MacOS X, Linux, FreeBSD, ... ) 
 ---------------------------------------------------------
@@ -168,6 +160,7 @@ Alexander Senger <senger@physik.hu-berlin.de>
 The R Core Team for some code from R.
 Dirk Eddelbuettel <edd@debian.org>
 The authors of Shiny for their private RNG code.
+Jeroen Ooms for Rtools40 help.
 
 WEBSITE
 -------

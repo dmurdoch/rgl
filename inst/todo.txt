@@ -1,6 +1,10 @@
 To-do:
 
-Look into updating FTGL.  Allow rotated text?
+Look into updating FTGL.  (We're up to date with the
+official release, which hasn't been updated for a long
+time.  There are unofficial bug fixes on Github.)  Allow
+rotated text?  This needs to use texture based fonts
+instead of the current bitmap based fonts.
 
 Work on axes:  try to avoid hiding labels behind the plot, etc.
 

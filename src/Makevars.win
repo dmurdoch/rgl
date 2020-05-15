@@ -1,0 +1,5 @@
+CXX_STD = CXX11
+
+PKG_CPPFLAGS = -Iext -Iext/ftgl -I$(MINGW_PREFIX)/include/freetype2 -DHAVE_PNG_H -DHAVE_FREETYPE
+PKG_CFLAGS = $(C_VISIBILITY)
+PKG_LIBS = -lfreetype -lpng -lz -lgdi32 -lopengl32 -lglu32
