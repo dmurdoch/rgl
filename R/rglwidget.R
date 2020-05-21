@@ -238,6 +238,7 @@ rglwidget <- local({
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
            minimal = TRUE, ...) {
+  origScene <- x
   force(shared) # It might plot something...
   	
   if (is.na(reuse))
@@ -302,7 +303,7 @@ rglwidget <- local({
     elementId = elementId,
     dependencies = dependencies,
     ...
-  ), rglReuse = attr(x, "reuse"))
+  ), rglReuse = attr(x, "reuse"), origScene = origScene)
   
   if (is.list(upstream$objects)) {
     do.call(combineWidgets, c(upstream$objects, 
