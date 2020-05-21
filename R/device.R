@@ -103,17 +103,16 @@ rgl.set <- function(which, silent = FALSE) {
 
 rgl.snapshot <- function( filename, fmt="png", top=TRUE )
 {
-  force(filename)
-  force(fmt)
-  
   if (top) rgl.bringtotop()
   
   idata <- as.integer(rgl.enum.pixfmt(fmt))
-
+  if (length(filename) != 1)
+    stop("filename is length ", length(filename))
+  filename <- normalizePath(filename, mustWork = FALSE)
   ret <- .C( rgl_snapshot,
     success=FALSE,
     idata,
-    normalizePath(filename, mustWork = FALSE)
+    filename
   )
 
   if (! ret$success)
@@ -128,7 +127,8 @@ rgl.snapshot <- function( filename, fmt="png", top=TRUE )
 rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
 {
   idata <- as.integer(c(rgl.enum.gl2ps(fmt), as.logical(drawText)))
-
+  if (length(filename) != 1)
+    stop("filename is length ", length(filename))
   ret <- .C( rgl_postscript,
     success=FALSE,
     idata,
