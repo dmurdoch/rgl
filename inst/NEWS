@@ -1068,3 +1068,9 @@ base graphics.
     code.
   - The maintainer email address has been changed to 
     murdoch.duncan@gmail.com.
+    
+0.101.2
+  - The build files have been updated to work with Rtools40
+    on Windows.
+  - rgl.snapshot and rgl.postscript could crash if a zero
+    length filename was passed to them.
