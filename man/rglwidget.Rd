@@ -26,8 +26,8 @@ The width and height of the display in pixels.
   \item{controllers}{Names of \code{\link{playwidget}} objects
 associated with this scene, or objects (typically piped in).  See Details below.
 }
-  \item{snapshot}{Control of snapshot of scene.  See
-\code{\link{writeWebGL}} for details.
+  \item{snapshot}{Control of snapshot of scene.  See Details
+  below.
 }
   \item{elementId}{The id to use on the HTML \code{div}
 component that will hold the scene.
@@ -93,6 +93,17 @@ the image, but please note that some implementations
 of WebGL contain bugs with this setting.  We have
 attempted to work around them, but may change our
 default in the future if this proves unsatisfactory.
+
+The \code{snapshot} argument can be a logical value
+or a character value.  If logical and \code{FALSE},
+no snapshot will be included.  If \code{TRUE},
+a snapshot will be taken of the current scene
+using \code{\link{snapshot3d}} and included
+in the scene to use when WebGL errors occur.  If \code{snapshot}
+is a character string starting \code{"data:"}, it
+will be assumed to be the result of the \code{\link[knitr]{image_uri}} function.  Otherwise it will be assumed to
+be a filename, and \code{\link[knitr]{image_uri}} will be used
+to embed it in the output page.
 }
 \value{
 An object of class \code{"htmlwidget"} (or \code{"shiny.tag.list"}

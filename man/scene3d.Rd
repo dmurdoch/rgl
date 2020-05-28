@@ -90,7 +90,7 @@ object that was printed.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{writeWebGL}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+\code{\link{rglwidget}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
 write the scene to a file in various formats.
 }
 \examples{

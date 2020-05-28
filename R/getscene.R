@@ -403,3 +403,7 @@ plot3d.rglbackground <- function(x, ...) {
   args <- c(list(sphere = x$sphere, fogtype = x$fogtype), mat)
   do.call("bg3d", args)
 }
+
+plot3d.rglWebGL <- function(x, ...) {
+  plot3d(attr(x, "origScene"), ...)
+}

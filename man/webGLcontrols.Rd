@@ -4,10 +4,11 @@
 \alias{clipplaneSlider}
 \alias{toggleButton}
 \title{
-Write HTML/Javascript code to control a WebGL display.
+Obsolete functions to write HTML/Javascript code to control a WebGL display.
 }
 \description{
-These functions write out HTML code to control WebGL displays on the same page.
+These functions write out HTML code to control WebGL displays on the same page.  They are deprecated; most documentation has
+now been removed.
 }
 \usage{
 subsetSlider(subsets, labels = names(subsets), 
@@ -48,27 +49,6 @@ toggleButton(subset, subscenes = currentSubscene3d(), prefixes = "",
   \item{subset}{The subset that the button should toggle.}
   \item{label}{The button label.}
 }
-\details{
-\code{subsetSlider} and \code{clipplaneSlider} generate an HTML5 slider 
-control with a text label.  To display no text, set the labels to blanks
-in the \code{...} argument.
-
-\code{subsetSetter} is a low-level function to produce the Javascript
-code used by \code{subsetSlider}.  This code will not touch objects in the
-subscene if they
-are not in \code{fullset}.  \code{fullset} defaults to the union of 
-all the object ids mentioned in \code{subsets}, so by default if an id is 
-not mentioned in one of the subsets, it will not be controlled by the slider.
-
-\code{toggleButton} generates a button that toggles the presence
-of objects within a subscene.  If the first entry in \code{subset}
-is in the subscene, all are deleted, otherwise all are added. 
-
-\code{clipplaneSlider}  allows a clipping plane to be moved to a sequence
-of positions.  Any non-\code{NULL} entries among \code{a, b, c, d} should be
-vectors; the slider will set those parameters of the selected clipping
-plane to corresponding values as the slider is moved.
-}
 \value{
 \code{subsetSetter} returns a length-one character vector
 of class \code{"propertySetter"}.  
@@ -85,13 +65,4 @@ Duncan Murdoch
 \code{\link{playwidget}} and \code{\link{toggleWidget}}
 for a newer, preferred method of inserting controls
 into a scene.
-
-Older functions include \code{\link{writeWebGL}}. See \code{\link{propertySlider}} and \code{\link{propertySetter}}
-for lower level, more flexible functions.
-}
-\examples{
-  subsets <- list(1:3, 1:4, 1:5)
-  subsetSlider(subsets = subsets)
-  toggleButton(1:3)
-  clipplaneSlider(d = seq(0, 1, len=20), clipplaneid = 123)
 }

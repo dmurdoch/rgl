@@ -32,8 +32,3 @@ print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
     print(rglwidget(...))
   invisible(x)
 }
-
-knit_print.rglId <- function(x, ...) {
-  if (getOption("rgl.printRglwidget", FALSE))	
-    knit_print(rglwidget())
-}

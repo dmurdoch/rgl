@@ -91,8 +91,7 @@ r3dDefaults
   
   If \code{useNULL} is \code{TRUE}, \pkg{rgl} will use a \dQuote{null}
   device.  This device records objects as they are plotted, but 
-  displays nothing. It is intended for use with \code{\link{writeWebGL}}
-  and similar functions.
+  displays nothing. It is intended for use with \code{\link{rglwidget}}.
 }
 
 \value{

@@ -7,13 +7,15 @@
 }
 \usage{
 rgl.snapshot( filename, fmt = "png", top = TRUE )
-snapshot3d( ... )
+snapshot3d( filename, ..., scene )
 }
 \arguments{
   \item{filename}{full path to filename.}
   \item{fmt}{image export format, currently supported: png }
   \item{top}{whether to call \code{\link{rgl.bringtotop}}}
   \item{...}{arguments to pass to \code{rgl.snapshot} }
+  \item{scene}{an optional result of \code{\link{scene3d}} 
+    or \code{\link{rglwidget}} to plot}
 }
 \details{
 Animations can be created in a loop modifying the scene and saving 

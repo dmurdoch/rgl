@@ -102,7 +102,7 @@ on November 11, 2012.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{writeWebGL}}, \code{\link{writeASY}},
+\code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{rglwidget}}, \code{\link{writeASY}},
 \code{\link{writePLY}} and \code{\link{writeSTL}}
 write the scene to a file in various other formats.
 }

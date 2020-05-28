@@ -99,7 +99,7 @@ have been chosen somewhat arbitrarily; tweaking will likely be needed.
 Material properties of surfaces are not yet implemented.
 }
 \seealso{
-\code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{writeWebGL}},
+\code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{rglwidget}},
 \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
 write the scene to a file in various other formats.
 }

@@ -6,6 +6,7 @@ subsetSlider <- function(subsets, labels = names(subsets),
                          fullset = Reduce(union, subsets), 
                          subscenes = currentSubscene3d(), prefixes = "", 
                          accumulate = FALSE, ...) {
+  .Deprecated("subsetControl")
   propertySlider(subsetSetter(subsets, fullset = fullset,
                               subscenes = subscenes, prefixes = prefixes,
                               accumulate = accumulate),
@@ -15,6 +16,7 @@ subsetSlider <- function(subsets, labels = names(subsets),
 subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = "",
 			 fullset = Reduce(union, subsets),
 			 accumulate = FALSE) {
+  .Deprecated("subsetControl")
   nsubs <- max(length(subscenes), length(prefixes))
   subscenes <- rep(subscenes, length.out = nsubs)
   prefixes <- rep(prefixes, length.out = nsubs)
@@ -51,6 +53,7 @@ subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = ""
 toggleButton <- function(subset, subscenes = currentSubscene3d(), prefixes = "",
 			 label = deparse(substitute(subset)),
 			 id = paste0(basename(tempfile("input"))), name = id) {
+  .Deprecated("toggleWidget")
   nsubs <- max(length(subscenes), length(prefixes))
   subscenes <- rep(subscenes, length.out = nsubs)
   prefixes <- rep(prefixes, length.out = nsubs)
@@ -81,6 +84,7 @@ clipplaneSlider <- function(a=NULL, b=NULL, c=NULL, d=NULL,
 			    plane = 1, clipplaneids, prefixes = "",
 			    labels = signif(values[,1],3),
 			      ...) {
+  .Deprecated("clipplaneControl")
   values <- cbind(a = a, b = b, c = c, d = d)
   col <- which(colnames(values) == letters[1:4]) - 1
   propertySlider(values = values, entries = 4*(plane-1) + col,
@@ -95,6 +99,7 @@ propertySlider <- function(setter = propertySetter,
 			   outputid = paste0(id, "text"),
 			   index = NULL,
                            ...)  {
+  .Deprecated("propertyControl")
   displayVals <- function(x) {
     base <- signif(mean(x), 2)
     base + signif(x - base, 2)
@@ -179,6 +184,7 @@ oninput = "%prefix%rgl.%id%(this.valueAsNumber)">%outputfield%',
 propertySetter <- function(values = NULL, entries, properties, objids, prefixes = "",
                            param = seq_len(NROW(values)), interp = TRUE,
 			   digits = 7)  {
+  .Deprecated("propertyControl")
   direct <- is.null(values)
   ncol <- length(entries)
   if (direct)
@@ -292,6 +298,7 @@ propertySetter <- function(values = NULL, entries, properties, objids, prefixes 
 vertexSetter <- function(values = NULL, vertices = 1, attributes, objid, prefix = "",
 			 param = seq_len(NROW(values)), interp = TRUE,
 			 digits = 7)  {
+  .Deprecated("vertexControl")
   attribofs <- c(x = 'vofs', y = 'vofs', z = 'vofs',
   	    r = 'cofs', g = 'cofs', b = 'cofs', a = 'cofs',
             nx = 'nofs', ny = 'nofs', nz = 'nofs',
@@ -402,6 +409,7 @@ vertexSetter <- function(values = NULL, vertices = 1, attributes, objid, prefix 
 
 par3dinterpSetter <- function(fn, from, to, steps, subscene = NULL,
 			      omitConstant = TRUE, rename = character(), ...) {
+  .Deprecated("par3dinterpControl")
   times <- seq(from, to, length.out = steps+1)
   fvals <- lapply(times, fn)
   f0 <- fvals[[1]]
@@ -438,6 +446,7 @@ par3dinterpSetter <- function(fn, from, to, steps, subscene = NULL,
 
 matrixSetter <- function(fns, from, to, steps, subscene = currentSubscene3d(), matrix = "userMatrix",
 			omitConstant = TRUE, prefix = "", ...) {
+  .Deprecated("par3dinterpControl")
   n <- length(fns)
   from <- rep(from, length.out = n)
   to <- rep(to, length.out = n)
@@ -486,6 +495,7 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
 		      radii = NULL, vertices = NULL, normals = NULL,
 		      origins = NULL, texcoords = NULL, objids, prefixes = "",
 		      digits = 7, param = seq(floor(min(births)), ceiling(max(births))))  {
+  .Deprecated("ageControl")
   formatVec <- function(vec) {
     vec <- t(vec)
     result <- formatC(vec, digits = digits, width = 1)
