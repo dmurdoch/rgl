@@ -364,3 +364,19 @@ convertShinyPar3d <- function(par3d, ...) {
     par3d$userMatrix <- matrix(unlist(par3d$userMatrix), 4,4)
   par3d
 }
+
+# Create the minified version of the library
+
+local({
+  debugging <- TRUE  # Set to FALSE for minification on install
+  srcfiles <- c("rglClass.src.js",
+                "utils.src.js",
+                "rglTimer.src.js")
+  text <- character()
+  for (s in srcfiles)
+    text <- c(text, readLines(file.path(system.file("htmlwidgets/lib/rglClass", package = "rgl"), s)))
+  if (!debugging && requireNamespace("js", quietly = TRUE))
+    text <- js::uglify_optimize(text)
+  writeLines(text, file.path(system.file("htmlwidgets/lib/rglClass", package = "rgl"), "rglClass.min.js"))
+})
+  

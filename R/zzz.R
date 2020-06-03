@@ -96,4 +96,3 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
   ret <- .C( rgl_quit, success=FALSE )
   
 }
-

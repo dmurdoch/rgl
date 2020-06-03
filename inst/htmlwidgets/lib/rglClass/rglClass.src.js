@@ -1,4 +1,4 @@
-// To generate the help pages for this library, use
+//// To generate the help pages for this library, use
 
 // jsdoc --destination ../../../doc/rglwidgetClass --template ~/node_modules/jsdoc-baseline rglClass.src.js
 
@@ -27,271 +27,6 @@ rglwidgetClass = function() {
     this.drawing = false;
 };
 
-
-    /**
-     * Multiply matrix by vector
-     * @returns {number[]}
-     * @param M {number[][]} Left operand
-     * @param v {number[]} Right operand
-     */
-    rglwidgetClass.prototype.multMV = function(M, v) {
-        return [ M.m11 * v[0] + M.m12 * v[1] + M.m13 * v[2] + M.m14 * v[3],
-                 M.m21 * v[0] + M.m22 * v[1] + M.m23 * v[2] + M.m24 * v[3],
-                 M.m31 * v[0] + M.m32 * v[1] + M.m33 * v[2] + M.m34 * v[3],
-                 M.m41 * v[0] + M.m42 * v[1] + M.m43 * v[2] + M.m44 * v[3]
-               ];
-    };
-    
-    /**
-     * Multiply row vector by Matrix
-     * @returns {number[]}
-     * @param v {number[]} left operand
-     * @param M {number[][]} right operand
-     */
-    rglwidgetClass.prototype.multVM = function(v, M) {
-        return [ M.m11 * v[0] + M.m21 * v[1] + M.m31 * v[2] + M.m41 * v[3],
-                 M.m12 * v[0] + M.m22 * v[1] + M.m32 * v[2] + M.m42 * v[3],
-                 M.m13 * v[0] + M.m23 * v[1] + M.m33 * v[2] + M.m43 * v[3],
-                 M.m14 * v[0] + M.m24 * v[1] + M.m34 * v[2] + M.m44 * v[3]
-               ];
-    };
-    
-    /**
-     * Euclidean length of a vector
-     * @returns {number}
-     * @param v {number[]}
-     */
-    rglwidgetClass.prototype.vlen = function(v) {
-      return Math.sqrt(this.dotprod(v, v));
-    };
-
-    /**
-     * Dot product of two vectors
-     * @instance rglwidgetClass
-     * @returns {number}
-     * @param a {number[]}
-     * @param b {number[]}
-     */
-    rglwidgetClass.prototype.dotprod = function(a, b) {
-      return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
-    };
-
-    /**
-     * Cross product of two vectors
-     * @returns {number[]}
-     * @param a {number[]}
-     * @param b {number[]}
-     */
-    rglwidgetClass.prototype.xprod = function(a, b) {
-      return [a[1]*b[2] - a[2]*b[1],
-          a[2]*b[0] - a[0]*b[2],
-          a[0]*b[1] - a[1]*b[0]];
-    };
-
-    /**
-     * Bind vectors or matrices by columns
-     * @returns {number[][]}
-     * @param a {number[]|number[][]}
-     * @param b {number[]|number[][]}
-     */
-    rglwidgetClass.prototype.cbind = function(a, b) {
-      if (b.length < a.length)
-        b = this.repeatToLen(b, a.length);
-      else if (a.length < b.length)
-        a = this.repeatToLen(a, b.length);
-      return a.map(function(currentValue, index, array) {
-            return currentValue.concat(b[index]);
-      });
-    };
-
-    /**
-     * Swap elements
-     * @returns {any[]}
-     * @param a {any[]}
-     * @param i {number} Element to swap
-     * @param j {number} Other element to swap
-     */
-    rglwidgetClass.prototype.swap = function(a, i, j) {
-      var temp = a[i];
-      a[i] = a[j];
-      a[j] = temp;
-    };
-
-    /**
-     * Flatten a matrix into a vector
-     * @returns {any[]}
-     * @param a {any[][]}
-     */
-    rglwidgetClass.prototype.flatten = function(arr, result) {
-      var value;
-      if (typeof result === "undefined") result = [];
-      for (var i = 0, length = arr.length; i < length; i++) {
-        value = arr[i];
-        if (Array.isArray(value)) {
-          this.flatten(value, result);
-        } else {
-          result.push(value);
-        }
-      }
-      return result;
-    };
-
-    /**
-     * set element of 1d or 2d array as if it was flattened.
-     * Column major, zero based!
-     * @returns {any[]|any[][]}
-     * @param {any[]|any[][]} a - array
-     * @param {number} i - element
-     * @param {any} value
-     */
-    rglwidgetClass.prototype.setElement = function(a, i, value) {
-      if (Array.isArray(a[0])) {
-        var dim = a.length,
-            col = Math.floor(i/dim),
-            row = i % dim;
-        a[row][col] = value;
-      } else {
-        a[i] = value;
-      }
-    };
-
-    /**
-     * Transpose an array
-     * @returns {any[][]}
-     * @param {any[][]} a
-     */
-    rglwidgetClass.prototype.transpose = function(a) {
-      var newArray = [],
-          n = a.length,
-          m = a[0].length,
-          i;
-      for(i = 0; i < m; i++){
-        newArray.push([]);
-      }
-
-      for(i = 0; i < n; i++){
-        for(var j = 0; j < m; j++){
-          newArray[j].push(a[i][j]);
-        }
-      }
-      return newArray;
-    };
-
-    /**
-     * Calculate sum of squares of a numeric vector
-     * @returns {number}
-     * @param {number[]} x
-     */
-    rglwidgetClass.prototype.sumsq = function(x) {
-      var result = 0, i;
-      for (i=0; i < x.length; i++)
-        result += x[i]*x[i];
-      return result;
-    };
-
-    /**
-     * Convert a matrix to a CanvasMatrix4
-     * @returns {CanvasMatrix4}
-     * @param {number[][]|number[]} mat
-     */
-    rglwidgetClass.prototype.toCanvasMatrix4 = function(mat) {
-      if (mat instanceof CanvasMatrix4)
-        return mat;
-      var result = new CanvasMatrix4();
-      mat = this.flatten(this.transpose(mat));
-      result.load(mat);
-      return result;
-    };
-
-    /**
-     * Convert an R-style numeric colour string to an rgb vector
-     * @returns {number[]}
-     * @param {string} s
-     */
-    rglwidgetClass.prototype.stringToRgb = function(s) {
-      s = s.replace("#", "");
-      var bigint = parseInt(s, 16);
-      return [((bigint >> 16) & 255)/255,
-              ((bigint >> 8) & 255)/255,
-               (bigint & 255)/255];
-    };
-
-    /**
-     * Take a component-by-component product of two 3 vectors
-     * @returns {number[]}
-     * @param {number[]} x
-     * @param {number[]} y
-     */
-    rglwidgetClass.prototype.componentProduct = function(x, y) {
-      if (typeof y === "undefined") {
-        this.alertOnce("Bad arg to componentProduct");
-      }
-      var result = new Float32Array(3), i;
-      for (i = 0; i<3; i++)
-        result[i] = x[i]*y[i];
-      return result;
-    };
-
-    /**
-     * Get next higher power of two
-     * @returns { number }
-     * @param { number } value - input value
-     */
-    rglwidgetClass.prototype.getPowerOfTwo = function(value) {
-      var pow = 1;
-      while(pow<value) {
-        pow *= 2;
-      }
-      return pow;
-    };
-
-    /**
-     * Unique entries
-     * @returns { any[] }
-     * @param { any[] } arr - An array
-     */
-    rglwidgetClass.prototype.unique = function(arr) {
-      arr = [].concat(arr);
-      return arr.filter(function(value, index, self) {
-        return self.indexOf(value) === index;
-      });
-    };
-
-    /**
-     * Shallow compare of arrays
-     * @returns { boolean }
-     * @param { any[] } a - An array
-     * @param { any[] } b - Another array
-     */
-    rglwidgetClass.prototype.equalArrays = function(a, b) {
-      return a === b || (a && b &&
-                      a.length === b.length &&
-                      a.every(function(v, i) {return v === b[i];}));
-    };
-    
-    /**
-     * Repeat an array to a desired length
-     * @returns {any[]}
-     * @param {any | any[]} arr The input array
-     * @param {number} len The desired output length
-     */
-    rglwidgetClass.prototype.repeatToLen = function(arr, len) {
-      arr = [].concat(arr);
-      while (arr.length < len/2)
-        arr = arr.concat(arr);
-      return arr.concat(arr.slice(0, len - arr.length));
-    };
-
-    /**
-     * Give a single alert message, not to be repeated.
-     * @param {string} msg  The message to give.
-     */
-    rglwidgetClass.prototype.alertOnce = function(msg) {
-      if (typeof this.alerted !== "undefined")
-        return;
-      this.alerted = true;
-      alert(msg);
-    };
 
     rglwidgetClass.prototype.f_is_lit = 1;
     rglwidgetClass.prototype.f_is_smooth = 2;
@@ -867,7 +602,6 @@ rglwidgetClass = function() {
              h = image.height,
              canvasX = self.getPowerOfTwo(w),
              canvasY = self.getPowerOfTwo(h),
-             gl = self.gl || self.initGL(),
              maxTexSize = self.getMaxTexSize();
          while (canvasX > 1 && canvasY > 1 && (canvasX > maxTexSize || canvasY > maxTexSize)) {
            canvasX /= 2;
@@ -893,7 +627,6 @@ rglwidgetClass = function() {
      */
     rglwidgetClass.prototype.drawTextToCanvas = function(text, cex, family, font) {
        var canvasX, canvasY,
-           textY,
            scaling = 20,
            textColour = "white",
 
@@ -1291,7 +1024,7 @@ rglwidgetClass = function() {
         case 3: return [0.5, -offset];
         case 4: return [-offset/text.length, 0.5];
       }
-    }
+    };
 
     /**
      * Initialize object for display
@@ -1302,7 +1035,6 @@ rglwidgetClass = function() {
           flags = obj.flags,
           type = obj.type,
           is_lit = flags & this.f_is_lit,
-          is_lines = flags & this.f_is_lines,
           fat_lines = flags & this.f_fat_lines,
           has_texture = flags & this.f_has_texture,
           fixed_quads = flags & this.f_fixed_quads,
@@ -1316,7 +1048,7 @@ rglwidgetClass = function() {
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
-          i,j,v,v1,v2, mat, uri, matobj, pass, passes, pmode,
+          i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
           dim, nx, nz, attr;
 
     if (typeof id !== "number") {
@@ -1347,7 +1079,7 @@ rglwidgetClass = function() {
     }
 
     polygon_offset = this.getMaterial(id, "polygon_offset");
-    if (polygon_offset[0] != 0 || polygon_offset[1] != 0)
+    if (polygon_offset[0] !== 0 || polygon_offset[1] !== 0)
       obj.polygon_offset = polygon_offset;
 
     if (is_transparent) {
@@ -1528,7 +1260,7 @@ rglwidgetClass = function() {
       if (obj.radii.length === v.length) {
         v = this.cbind(v, obj.radii);
       } else if (obj.radii.length === 1) {
-        v = v.map(function(row, i, arr) { return row.concat(obj.radii[0]);});
+        v = v.map(function(row) { return row.concat(obj.radii[0]);});
       }
     } else
       radofs = -1;
@@ -1807,9 +1539,6 @@ rglwidgetClass = function() {
         nrows = 2*oldrows;
       vnew = new Array(nrows);
       fnew = new Array(1.5*nrows);
-      var fnext = new Array(nrows),
-          fpt = new Array(nrows), 
-          pt, start, gap = type === "linestrip" ? 3 : 1;
       
       // We're going to turn each pair of vertices into 4 new ones, with the "next" and "pt" attributes
       // added.
@@ -1998,6 +1727,209 @@ rglwidgetClass = function() {
       return result;
     };
     
+    rglwidgetClass.prototype.getPieces = function(incontext, objid, subid, obj) {
+      var n = obj.centers.length,
+          depth,
+          result = new Array(n),
+          context = incontext.slice();
+          
+      for(i=0; i<n; i++) {
+        z = this.prmvMatrix.m13*obj.centers[i][0] +
+            this.prmvMatrix.m23*obj.centers[i][1] +
+            this.prmvMatrix.m33*obj.centers[i][2] +
+            this.prmvMatrix.m43;
+        w = this.prmvMatrix.m14*obj.centers[i][0] +
+            this.prmvMatrix.m24*obj.centers[i][1] +
+            this.prmvMatrix.m34*obj.centers[i][2] +
+            this.prmvMatrix.m44;
+        depth = z/w;
+        result[i] = {context: context, 
+                     objid: objid,
+                     subid: subid,
+                     index: i, 
+                     depth: depth};
+      }
+      return result;    
+    };
+    
+    rglwidgetClass.prototype.getSpritesPieces = function(context, subsceneid, obj, iOrig) {
+      var origMV = new CanvasMatrix4( this.mvMatrix ),
+          origPRMV = new CanvasMatrix4( this.prmvMatrix ),
+          pos = this.multVM([].concat(obj.vertices[iOrig]).concat(1.0),
+                                 origMV),
+          radius = obj.radii.length > 1 ? obj.radii[iOrig][0] : obj.radii[0][0],
+          j, result = [];
+      context = context.slice();
+      context = context.concat(iOrig);
+      this.mvMatrix = new CanvasMatrix4(obj.userMatrix).scale(radius).translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+      this.setprmvMatrix();
+      for (j = 0; j < obj.objects.length; j++)
+        result = result.concat(getObjPieces(context, subsceneid, obj.objects[j]));
+      this.mvMatrix = origMV;
+      this.prmvMatrix = origPRMV;
+      return result;
+    };
+    
+    rglwidgetClass.prototype.getSpherePieces = function(context, subsceneid, obj, i) {
+      var origMV = new CanvasMatrix4( this.mvMatrix ),
+          origPRMV = new CanvasMatrix4( this.prmvMatrix ),
+          pos = obj.vertices[i],
+          sscale = obj.radii.length > 1 ? obj.radii[i][0] : obj.radii[0][0],
+          subscene = this.getObj(subsceneid),
+          scale = subscene.par3d.scale,
+          result;
+          
+      this.mvMatrix = new CanvasMatrix4();
+      this.mvMatrix.scale(sscale/scale[0], sscale/scale[1], sscale/scale[2]);
+      this.mvMatrix.translate(pos[0], pos[1], pos[2]);
+      this.mvMatrix.multRight(origMV);
+      this.setprmvMatrix();
+      result = this.getPieces(context, obj.id, i, this.sphere);
+      this.mvMatrix = origMV;
+      this.prmvMatrix = origPRMV;
+      return result;
+    };
+    
+    rglwidgetClass.prototype.getObjPieces = function(context, subsceneid, objid) {
+      var obj = this.getObj(objid),
+          subscene = this.getObj(subsceneid),
+          flags = obj.flags,
+          type = obj.type,
+          is_transparent = flags & this.f_is_transparent,
+          sprites_3d = flags & this.f_sprites_3d,
+          i, count, 
+          result = [];
+        
+      if (type === "planes") {
+        if (obj.bbox !== subscene.par3d.bbox || !obj.initialized) {
+          this.planeUpdateTriangles(id, subscene.par3d.bbox);
+        }
+      }
+
+      if (!obj.initialized)
+        this.initObj(id);
+
+      if (type === "light" || type === "bboxdeco" || !obj.vertexCount)
+        return result;
+    
+      if (!is_transparent && obj.someHidden)
+        is_transparent = true;
+      
+      if (sprites_3d) {
+        var norigs = obj.vertices.length;
+        this.origs = obj.vertices;
+        this.usermat = new Float32Array(obj.userMatrix.getAsArray());
+        context.push(objid);
+        for (this.iOrig=0; this.iOrig < norigs; this.iOrig++) {
+          for (i=0; i < obj.objects.length; i++) {
+            result = result.concat(this.getSpritesPieces(context, subsceneid, obj, iOrig, i));
+          }
+        }
+        return result;
+      }
+
+      if (type === "spheres" && is_transparent) {
+        count = obj.vertexCount;
+        for (i = 0; i < count; i++) {
+          result = result.concat(this.getSpherePieces(context, subsceneid, obj, i));
+        }
+        return result;
+      }
+
+      if (is_transparent)
+        result = this.getPieces(context, objid, 0, obj);
+        
+      return result;
+    };
+    
+    rglwidgetClass.prototype.getSubscenePieces = function(context, subsceneid) {
+      var sub = this.getObj(subsceneid),
+          objects = this.scene.objects,
+          subids = sub.objects,
+          subscene_needs_sorting = false,
+          flags, i, obj,
+          result = [];
+      if (sub.par3d.skipRedraw)
+        return result;
+      for (i=0; i < subids.length; i++) {
+      	obj = objects[subids[i]];
+        flags = obj.flags;
+        if (typeof flags !== "undefined") {
+          obj.is_transparent = (flags & this.f_is_transparent) || obj.someHidden;
+          subscene_needs_sorting |= (flags & this.f_depth_sort) || obj.is_transparent;
+        }
+      }
+      if (!subscene_needs_sorting)
+        return result;
+
+      this.setViewport(subsceneid);
+
+      context.push(subsceneid);
+      
+      if (subids.length) {
+        this.setprMatrix(subsceneid);
+        this.setmvMatrix(subsceneid);
+        this.setprmvMatrix();
+
+        subids = sub.opaque.concat(sub.transparent);
+        for (i = 0; i < subids.length; i++) {
+          if (this.getObj(subids[i]).is_transparent)
+            result = result.concat(this.getObjPieces(context, subsceneid, subids[i]));
+        }
+        subids = sub.subscenes;
+        for (i = 0; i < subids.length; i++) {
+          result = result.concat(this.getSubscenePieces(context, subids[i]));
+        }
+      }
+      return result;
+    };
+    
+    rglwidgetClass.prototype.sortPieces = function(pieces) {
+      var compare = function(i,j) {
+        var diff = j.depth - i.depth;
+        // We want to avoid context or obj changes,
+        // so sort on those next.
+        if (diff === 0) {
+          var c1 = j.context.slice(),
+              c2 = i.context.slice();
+          diff = c1.length - c2.length; 
+          while (diff === 0 && c1.length > 0) {
+            diff = c1.pop() - c2.pop();
+          }
+          if (diff === 0)
+            diff = j.objid - i.objid;
+          if (diff === 0)
+            diff = j.subid - i.subid;
+        }
+        return diff;
+      }, result = [];
+      if (pieces.length) {
+        pieces = pieces.sort(compare);
+        var i,
+            thiscontext = pieces[0].context, 
+            thisobjid = pieces[0].objid, 
+            thissubid = pieces[0].subid,
+            indices = [];
+        for (i= 0; i < pieces.length; i++) {
+          if (pieces[i].context !== thiscontext || 
+              pieces[i].objid !== thisobjid ||
+              pieces[i].subid !== thissubid) {
+            result = result.concat({context: thiscontext, objid: thisobjid,
+                                    subid: thissubid, indices: indices});
+            thiscontext = pieces[i].context;
+            thisobjid = pieces[i].objid;
+            thissubid = pieces[i].subid;
+            indices = [];
+          }
+          indices = indices.concat(pieces[i].index);
+        }
+        result = result.concat({context: thiscontext, objid: thisobjid,
+                                subid: thissubid,
+                                indices: indices});
+      }
+      return result;
+    };
+    
     rglwidgetClass.prototype.disableArrays = function(obj, enabled) {
       var gl = this.gl || this.initGL(),
           objLocs = ["normLoc", "texLoc", "ofsLoc", "pointLoc", "nextLoc"],
@@ -2011,14 +1943,14 @@ rglwidgetClass = function() {
       	  gl.disableVertexAttribArray( obj.userAttribLocations[attr] );
       	}
       }
-    }
+    };
     
     /**
      * Draw an object in a subscene
      * @param { number } id - object to draw
      * @param { number } subsceneid - id of subscene
      */
-    rglwidgetClass.prototype.drawObj = function(id, subsceneid) {
+    rglwidgetClass.prototype.drawObj = function(id, subsceneid, piece) {
       var obj = this.getObj(id),
           subscene = this.getObj(subsceneid),
           flags = obj.flags,
@@ -2032,11 +1964,9 @@ rglwidgetClass = function() {
           sprite_3d = flags & this.f_sprite_3d,
           is_lines = flags & this.f_is_lines,
           fat_lines = flags & this.f_fat_lines,
-          is_points = flags & this.f_is_points,
           fixed_size = flags & this.f_fixed_size,
           is_twosided = (flags & this.f_is_twosided) > 0,
           gl = this.gl || this.initGL(),
-          mat,
           sphereMV, baseofs, ofs, sscale, i, count, light,
           pass, mode, pmode, attr,
           enabled = {};
@@ -2079,13 +2009,21 @@ rglwidgetClass = function() {
       if (sprites_3d) {
         var norigs = obj.vertices.length,
             savenorm = new CanvasMatrix4(this.normMatrix);
-        this.origs = obj.vertices;
+        this.origs = obj.vertices.slice();
         this.usermat = new Float32Array(obj.userMatrix.getAsArray());
-        this.radii = obj.radii;
+        this.radii = obj.radii.slice();
         this.normMatrix = subscene.spriteNormmat;
-        for (this.iOrig=0; this.iOrig < norigs; this.iOrig++) {
-          for (i=0; i < obj.objects.length; i++) {
-            this.drawObj(obj.objects[i], subsceneid);
+        if (typeof piece !== "undefined" && piece.context.length) {
+          norigs = 1;
+          this.origs = [this.origs[piece.context[0]]];
+          if (this.radii.length > 1)
+            this.radii = [this.radii[piece.context[0]]];
+          this.iOrig = 0;
+        } else {
+          for (this.iOrig=0; this.iOrig < norigs; this.iOrig++) {
+            for (i=0; i < obj.objects.length; i++) {
+              this.drawObj(obj.objects[i], subsceneid);
+            }
           }
         }
         this.normMatrix = savenorm;
@@ -2191,14 +2129,17 @@ rglwidgetClass = function() {
           gl.uniform1i( obj.sampler, 0);
         }
 
-        if (depth_sort)
-          indices = this.depthSort(obj);
+        if (depth_sort) {
+          if (typeof piece === "undefined")
+            console.error("piece not defined");
+          scount = 1;
+        }
 
         for (i = 0; i < scount; i++) {
           sphereMV = new CanvasMatrix4();
 
           if (depth_sort) {
-            baseofs = indices[i]*obj.vOffsets.stride;
+            baseofs = piece.subid*obj.vOffsets.stride;
           } else {
             baseofs = i*obj.vOffsets.stride;
           }
@@ -2221,7 +2162,18 @@ rglwidgetClass = function() {
                                        obj.values[ofs+3] );
           }
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
-          gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
+          if (depth_sort) {
+            var indices = piece.indices,
+              f = new Uint16Array(3*indices.length), j, k;
+            for (j=0; j < indices.length; j++) 
+              for (k=0; k < 3; k++)
+                f[3*j + k] = this.sphere.it[3*indices[j] + k];
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);
+            gl.drawElements(gl.TRIANGLES, 3*indices.length, gl.UNSIGNED_SHORT, 0);
+          } else {
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.sphere.it, gl.DYNAMIC_DRAW);
+            gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
+          }
         }
         
         this.disableArrays(obj, enabled);
@@ -2452,19 +2404,65 @@ rglwidgetClass = function() {
               this.drawObj(subids[i], subsceneid);
           }
         } else {
+          this.subsceneid = subsceneid;
           gl.depthMask(false);
           gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
                                gl.ONE, gl.ONE);
           gl.enable(gl.BLEND);
+//          for (i = 0; i < subids.length; i++) {
+//            if (this.getObj(subids[i]).is_transparent)
+//              this.drawObj(subids[i], subsceneid);
+//          }
+        }
+        if (opaquePass) {
+          subids = sub.subscenes;
           for (i = 0; i < subids.length; i++) {
-            if (this.getObj(subids[i]).is_transparent)
-              this.drawObj(subids[i], subsceneid);
+            this.drawSubscene(subids[i], opaquePass);
           }
         }
-        subids = sub.subscenes;
-        for (i = 0; i < subids.length; i++) {
-          this.drawSubscene(subids[i], opaquePass);
+      }
+    };
+    
+    /**
+     * Set the context for drawing transparently
+     */
+     
+    rglwidgetClass.prototype.setContext = function(context) {
+      var result = [], objid, obj, type;
+      context = context.slice();
+      context.reverse();
+      while (context.length > 0) {
+        objid = context.pop();
+        obj = this.getObj(objid);
+        type = obj.type;
+        switch (type) {
+          case "subscene":
+            this.drawSubscene(objid, false);
+            break;
+          case "sprites":
+            result = result.concat(context.pop());
+            break;
+          default:
+            console.error("bad type in setContext");
         }
+      }
+      return result;
+    };
+    
+    /**
+     * Draw the transparent pieces of a scene
+     */
+    
+    rglwidgetClass.prototype.drawPieces = function(pieces) {
+      var i, prevcontext = [], context;
+      for (i = 0; i < pieces.length; i++) {
+        context = pieces[i].context.slice();
+        if (context !== prevcontext) {
+          prevcontext = context.slice();
+          context = this.setContext(context);
+        }
+        this.drawObj(pieces[i].objid, this.subsceneid, 
+                     piece = pieces[i]);
       }
     };
     
@@ -2706,7 +2704,7 @@ rglwidgetClass = function() {
       };
       handlers.polarend = 0;
 
-      handlers.axisdown = function(x,y) {
+      handlers.axisdown = function(x) {
         handlers.rotBase = this.screenToVector(x, this.canvas.height/2);
         var activeSub = this.getObj(activeSubscene),
             activeModel = this.getObj(this.useid(activeSub.id, "model")),
@@ -2717,7 +2715,7 @@ rglwidgetClass = function() {
         }
       };
 
-      handlers.axismove = function(x,y) {
+      handlers.axismove = function(x) {
         var rotCurrent = this.screenToVector(x, this.canvas.height/2),
             rotBase = handlers.rotBase,
             angle = (rotCurrent[0] - rotBase[0])*180/Math.PI,
@@ -2970,14 +2968,28 @@ rglwidgetClass = function() {
           reuse = verts.reuse, result;
       if (typeof reuse !== "undefined") {
         var prev = document.getElementById(reuse).rglinstance.sphere;
-        result = {values: prev.values, vOffsets: prev.vOffsets, it: prev.it};
-      } else
+        result = {values: prev.values, 
+                  vOffsets: prev.vOffsets, 
+                  it: prev.it,
+                  centers: prev.centers
+        };
+      } else {
+        var n = verts.it[0].length, i, j, k,
+            centers = new Array(n);
+        for (i = 0; i < n; i++) { // faces
+          centers[i] = [0,0,0];
+          for (j = 0; j < 3; j++) // x, y, z
+            for (k = 0; k < 3; k++) // vertices
+              centers[i][j] += verts.vb[j][verts.it[k][i]]/3;
+        }
         result = {values: new Float32Array(this.flatten(this.cbind(this.transpose(verts.vb),
                     this.transpose(verts.texcoords)))),
                   it: new Uint16Array(this.flatten(this.transpose(verts.it))),
                   vOffsets: {vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:-1,
-                    tofs:3, nextofs:-1, pointofs:-1, stride:5}};
-
+                    tofs:3, nextofs:-1, pointofs:-1, stride:5},
+                  centers: centers
+                };
+      }
       result.sphereCount = result.it.length;
       this.sphere = result;
     };
@@ -2989,8 +3001,6 @@ rglwidgetClass = function() {
       if (typeof this.select.region === "undefined")
         return;
       var obj = this.getObj(id),
-          width = this.canvas.width,
-          height = this.canvas.height, 
           p1 = this.select.region.p1,
           p2 = this.select.region.p2;
           
@@ -3048,9 +3058,9 @@ rglwidgetClass = function() {
               for (i = 0; i < parameters.length; i++) {
                 param = parameters[i];
                 result[param] = subscene.par3d[param];
-              };
+              }
             } else {
-              console.log("subscene "+message.subscene+" undefined.")
+              console.log("subscene "+message.subscene+" undefined.");
             }
             Shiny.setInputValue("par3d:shinyPar3d", result, {priority: "event"});
           });
@@ -3064,9 +3074,9 @@ rglwidgetClass = function() {
               subscene.initialized = false;
               self.drawScene();
             } else {
-              console.log("subscene "+message.subscene+" undefined.")
+              console.log("subscene "+message.subscene+" undefined.");
             }
-          })
+          });
       }
     };
 
@@ -3114,7 +3124,7 @@ rglwidgetClass = function() {
       this.setMouseHandlers();
       this.initSphere();
 
-      this.onContextRestored = function(event) {
+      this.onContextRestored = function() {
         self.initGL();
         self.drawScene();
       };
@@ -3154,7 +3164,7 @@ rglwidgetClass = function() {
             // you'd need a quicker function than lazyLoadScene.
             var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
             observer = new MutationObserver(function(mutations) {
-              mutations.forEach(function(mutation) {
+              mutations.forEach(function() {
                 self.slide.rgl.forEach(function(scene) { scene.lazyLoadScene.call(window); });});});
             observer.observe(this.slide, { attributes: true, attributeFilter:["class"] });
           }
@@ -3312,7 +3322,10 @@ rglwidgetClass = function() {
         gl.depthMask(true); // Must be true before clearing depth buffer
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this.drawSubscene(this.scene.rootSubscene, true);
-        this.drawSubscene(this.scene.rootSubscene, false);
+        var pieces = this.getSubscenePieces([], this.scene.rootSubscene);
+        pieces = this.sortPieces(pieces);
+        this.drawPieces(pieces);
+        // this.drawSubscene(this.scene.rootSubscene, false);
       }
       this.stopDrawing(wasDrawing);
     };
@@ -3329,14 +3342,8 @@ rglwidgetClass = function() {
       var value = Math.round(control.value),
           subscenes = [].concat(control.subscenes),
           fullset = [].concat(control.fullset),
-          i, j, entries, subsceneid,
-          adds = [], deletes = [],
-          ismissing = function(x) {
-            return fullset.indexOf(x) < 0;
-          },
-          tointeger = function(x) {
-            return parseInt(x, 10);
-          };
+          i, j, subsceneid,
+          adds = [], deletes = [];
       if (isNaN(value))
         value = control.value = 0;
       if (control.accumulate)
@@ -3928,146 +3935,3 @@ rglwidgetClass = function() {
         this.clearBrush(null);
       sub.par3d.mouseMode[which] = mode;
     };
-
-/**
- * The class of an rgl timer object
- * @class
-*/
-
-/**
- * Construct an rgltimerClass object
- * @constructor
- * @param { function } Tick - action when timer fires
- * @param { number } startTime - nominal start time in seconds
- * @param { number } interval - seconds between updates
- * @param { number } stopTime - nominal stop time in seconds
- * @param { number } stepSize - nominal step size
- * @param { number } value - current nominal time
- * @param { number } rate - nominal units per second
- * @param { string } loop - "none", "cycle" or "oscillate"
- * @param { Object } actions - list of actions
- */
-rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, rate, loop, actions) {
-  this.enabled = false;
-  this.timerId = 0;
-  /** nominal start time in seconds */
-  this.startTime = startTime;   
-  /** current nominal time */      
-  this.value = value;
-  /** seconds between updates */                 
-  this.interval = interval;
-  /** nominal stop time */           
-  this.stopTime = stopTime;
-  /** nominal step size */           
-  this.stepSize = stepSize;
-  /** nominal units per second */           
-  this.rate = rate;
-  /** "none", "cycle", or "oscillate" */                   
-  this.loop = loop;
-  /** real world start time */                   
-  this.realStart = undefined;
-  /** multiplier for fast-forward or reverse */         
-  this.multiplier = 1;                
-  this.actions = actions;
-  this.Tick = Tick;
-};
-
-  /**
-   * Start playing timer object
-   */
-  rgltimerClass.prototype.play = function() {
-    if (this.enabled) {
-      this.enabled = false;
-      window.clearInterval(this.timerId);
-      this.timerId = 0;
-      return;
-    }
-    var tick = function(self) {
-      var now = new Date();
-      self.value = self.multiplier*self.rate*(now - self.realStart)/1000 + self.startTime;
-      self.forceToRange();
-      if (typeof self.Tick !== "undefined") {
-        self.Tick(self.value);
-      }
-
-    };
-    this.realStart = new Date() - 1000*(this.value - this.startTime)/this.rate/this.multiplier;
-    this.timerId = window.setInterval(tick, 1000*this.interval, this);
-    this.enabled = true;
-  };
-
-  /**
-   * Force value into legal range
-   */
-  rgltimerClass.prototype.forceToRange = function() {
-    if (this.value > this.stopTime + this.stepSize/2 || this.value < this.startTime - this.stepSize/2) {
-      if (!this.loop) {
-        this.reset();
-      } else {
-        var cycle = this.stopTime - this.startTime + this.stepSize,
-            newval = (this.value - this.startTime) % cycle + this.startTime;
-        if (newval < this.startTime) {
-          newval += cycle;
-        }
-        this.realStart += (this.value - newval)*1000/this.multiplier/this.rate;
-        this.value = newval;
-      }
-    }
-  };
-
-  /**
-   * Reset to start values
-   */
-  rgltimerClass.prototype.reset = function() {
-    this.value = this.startTime;
-    this.newmultiplier(1);
-    if (typeof this.Tick !== "undefined") {
-        this.Tick(this.value);
-    }
-    if (this.enabled)
-      this.play();  /* really pause... */
-    if (typeof this.PlayButton !== "undefined")
-      this.PlayButton.value = "Play";
-  };
-
-  /**
-   * Increase the multiplier to play faster
-   */
-  rgltimerClass.prototype.faster = function() {
-    this.newmultiplier(Math.SQRT2*this.multiplier);
-  };
-
-  /**
-   * Decrease the multiplier to play slower
-   */
-  rgltimerClass.prototype.slower = function() {
-    this.newmultiplier(this.multiplier/Math.SQRT2);
-  };
-
-  /**
-   * Change sign of multiplier to reverse direction
-   */
-  rgltimerClass.prototype.reverse = function() {
-    this.newmultiplier(-this.multiplier);
-  };
-
-  /**
-   * Set multiplier for play speed
-   * @param { number } newmult - new value
-   */
-  rgltimerClass.prototype.newmultiplier = function(newmult) {
-    if (newmult != this.multiplier) {
-      this.realStart += 1000*(this.value - this.startTime)/this.rate*(1/this.multiplier - 1/newmult);
-      this.multiplier = newmult;
-    }
-  };
-
-  /**
-   * Take one step
-   */
-  rgltimerClass.prototype.step = function() {
-    this.value += this.rate*this.multiplier;
-    this.forceToRange();
-    if (typeof this.Tick !== "undefined")
-      this.Tick(this.value);
-  };

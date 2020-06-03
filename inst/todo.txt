@@ -1,5 +1,8 @@
 To-do:
 
+rglwidget() doesn't respect front and back material properties 
+for spheres.
+
 Add knit_print method to rglWebGL class so rglwidget can
 print as snapshot when printing from a PDF project.
 
