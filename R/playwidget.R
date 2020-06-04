@@ -126,6 +126,7 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
     height = height,
     sizingPolicy = sizingPolicy(defaultWidth = "auto",
                                 defaultHeight = "auto"),
+    dependencies = rglDependency,
     ...
   )
   if (is.list(upstream$objects)) {

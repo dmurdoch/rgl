@@ -254,18 +254,18 @@ rglwidget <- local({
   
   if (!is.list(shared))
     shared <- list(shared)
+  dependencies <- list(rglDependency, CanvasMatrixDependency)
   if (length(shared)) {
     x$crosstalk <- list(key = vector("list", length(shared)),
     		        group = character(length(shared)),
     		        id = integer(length(shared)),
     		        options = vector("list", length(shared)))
-    dependencies <- crosstalkLibs()
+    dependencies <- c(dependencies, crosstalkLibs())
   } else {
     x$crosstalk <- list(key = list(), 
     		        group = character(),
     		        id = integer(),
     		        options = list())
-    dependencies <- NULL    
   }
   	
   for (i in seq_along(shared)) {
@@ -365,29 +365,44 @@ convertShinyPar3d <- function(par3d, ...) {
   par3d
 }
 
-# Create the minified version of the library
+# Create the local dependencies
 
-local({
-  debugging <- TRUE  # Set to FALSE for minification on install
-  srcfiles <- c("rglClass.src.js",
-                "utils.src.js",
-                "subscenes.src.js",
-                "shaders.src.js",
-                "textures.src.js",
-                "projection.src.js",
-                "mouse.src.js",
-                "init.src.js",
-                "pieces.src.js",
-                "draw.src.js",
-                "controls.src.js",
-                "selection.src.js",
-                "rglTimer.src.js")
-  
-  text <- character()
-  for (s in srcfiles)
-    text <- c(text, readLines(file.path(system.file("htmlwidgets/lib/rglClass", package = "rgl"), s)))
-  if (!debugging && requireNamespace("js", quietly = TRUE))
-    text <- js::uglify_optimize(text)
-  writeLines(text, file.path(system.file("htmlwidgets/lib/rglClass", package = "rgl"), "rglClass.min.js"))
-})
-  
+makeDependency <- function(name, src, script = NULL, stylesheet = NULL,
+                           debugging = FALSE) {
+  if (!debugging && !is.null(script) &&
+      requireNamespace("js", quietly = TRUE) &&
+      packageVersion("js") >= "1.2") {
+    newscript <- paste0(basename(src), ".min.js")
+    writeLines(js::uglify_files(file.path(system.file(src, package = "rgl"), script)),
+               file.path(system.file(src, package = "rgl"), newscript))
+    script <- newscript
+  }
+  htmlDependency(name = name, 
+                      version = packageVersion("rgl"),
+                      src = src,
+                      package = "rgl",
+                      script = script,
+                      stylesheet = stylesheet)
+}
+
+CanvasMatrixDependency <- makeDependency("CanvasMatrix4",
+                                         src = "htmlwidgets/lib/CanvasMatrix",
+                                         script = "CanvasMatrix.src.js",
+                                         debugging = FALSE)
+rglDependency <- makeDependency("rglwidgetClass", 
+                      src = "htmlwidgets/lib/rglClass",
+                      script = c("rglClass.src.js",
+                                 "utils.src.js",
+                                 "subscenes.src.js",
+                                 "shaders.src.js",
+                                 "textures.src.js",
+                                 "projection.src.js",
+                                 "mouse.src.js",
+                                 "init.src.js",
+                                 "pieces.src.js",
+                                 "draw.src.js",
+                                 "controls.src.js",
+                                 "selection.src.js",
+                                 "rglTimer.src.js"),
+                      stylesheet = "rgl.css",
+                      debugging = TRUE)
