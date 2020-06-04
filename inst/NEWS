@@ -1077,7 +1077,11 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.0
+0.102.1
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
+  - Major rewrite of the WebGL code so that transparency
+    is handled better in rglwidget().  It has also been
+    split into multiple files which are joined with 
+    "minification" on installation.

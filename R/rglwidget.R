@@ -371,7 +371,18 @@ local({
   debugging <- TRUE  # Set to FALSE for minification on install
   srcfiles <- c("rglClass.src.js",
                 "utils.src.js",
+                "subscenes.src.js",
+                "shaders.src.js",
+                "textures.src.js",
+                "projection.src.js",
+                "mouse.src.js",
+                "init.src.js",
+                "pieces.src.js",
+                "draw.src.js",
+                "controls.src.js",
+                "selection.src.js",
                 "rglTimer.src.js")
+  
   text <- character()
   for (s in srcfiles)
     text <- c(text, readLines(file.path(system.file("htmlwidgets/lib/rglClass", package = "rgl"), s)))

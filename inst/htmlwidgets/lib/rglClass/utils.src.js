@@ -263,3 +263,244 @@
       this.alerted = true;
       alert(msg);
     };
+
+    /**
+     * Which list does a particular id come from?
+     * @returns { string }
+     * @param {number} id The id to look up.
+     */
+    rglwidgetClass.prototype.whichList = function(id) {
+      var obj = this.getObj(id),
+          flags = obj.flags;
+        if (obj.type === "light")
+          return "lights";
+        if (flags & this.f_is_subscene)
+            return "subscenes";
+        if (flags & this.f_is_clipplanes)
+            return "clipplanes";
+        if (flags & this.f_is_transparent)
+            return "transparent";
+        return "opaque";
+    };
+
+    /**
+     * Get an object by id number.
+     * @returns { Object }
+     * @param {number} id
+     */
+    rglwidgetClass.prototype.getObj = function(id) {
+      if (typeof id !== "number") {
+        this.alertOnce("getObj id is "+typeof id);
+      }
+      return this.scene.objects[id];
+    };
+
+    /**
+     * Get ids of a particular type from a subscene or the whole scene
+     * @returns { number[] }
+     * @param {string} type What type of object?
+     * @param {number} subscene  Which subscene?  If not given, find in the whole scene
+     */
+    rglwidgetClass.prototype.getIdsByType = function(type, subscene) {
+      var
+        result = [], i, self = this;
+      if (typeof subscene === "undefined") {
+        Object.keys(this.scene.objects).forEach(
+          function(key) {
+            key = parseInt(key, 10);
+            if (self.getObj(key).type === type)
+              result.push(key);
+          });
+      } else {
+        ids = this.getObj(subscene).objects;
+        for (i=0; i < ids.length; i++) {
+          if (this.getObj(ids[i]).type === type) {
+            result.push(ids[i]);
+          }
+        }
+      }
+      return result;
+    };
+
+    /**
+     * Get a particular material property for an id
+     * @returns { any }
+     * @param {number} id  Which object?
+     * @param {string} property Which material property?
+     */
+    rglwidgetClass.prototype.getMaterial = function(id, property) {
+      var obj = this.getObj(id), mat;
+      if (typeof obj.material === "undefined")
+        console.error("material undefined");
+      mat = obj.material[property];
+      if (typeof mat === "undefined")
+          mat = this.scene.material[property];
+      return mat;
+    };
+    
+    rglwidgetClass.prototype.getAdj = function (pos, offset, text) {
+      switch(pos) {
+        case 1: return [0.5, 1 + offset];
+        case 2: return [1 + offset/text.length, 0.5];
+        case 3: return [0.5, -offset];
+        case 4: return [-offset/text.length, 0.5];
+      }
+    };
+
+    /**
+     * Get the snapshot image of this scene
+     * @returns { Object } The img DOM element
+     */
+    rglwidgetClass.prototype.getSnapshot = function() {
+      var img;
+      if (typeof this.scene.snapshot !== "undefined") {
+        img = document.createElement("img");
+        img.src = this.scene.snapshot;
+        img.alt = "Snapshot";
+      }
+      return img;
+    };
+
+    /**
+     * Count clipping planes in a scene
+     * @returns {number}
+     */
+    rglwidgetClass.prototype.countClipplanes = function() {
+      return this.countObjs("clipplanes");
+    };
+
+    /**
+     * Count lights in a scene
+     * @returns { number }
+     */
+    rglwidgetClass.prototype.countLights = function() {
+      return this.countObjs("light");
+    };
+
+    /**
+     * Count objects of specific type in a scene
+     * @returns { number }
+     * @param { string } type - Type of object to count
+     */
+    rglwidgetClass.prototype.countObjs = function(type) {
+      var self = this,
+          bound = 0;
+
+      Object.keys(this.scene.objects).forEach(
+        function(key) {
+          if (self.getObj(parseInt(key, 10)).type === type)
+            bound = bound + 1;
+        });
+      return bound;
+    };
+
+    /**
+     * Copy object
+     * @param { number } id - id of object to copy
+     * @param { string } reuse - Document id of scene to reuse
+     */
+    rglwidgetClass.prototype.copyObj = function(id, reuse) {
+      var obj = this.getObj(id),
+          prev = document.getElementById(reuse);
+      if (prev !== null) {
+        prev = prev.rglinstance;
+        var
+          prevobj = prev.getObj(id),
+          fields = ["flags", "type",
+                    "colors", "vertices", "centers",
+                    "normals", "offsets",
+                    "texts", "cex", "family", "font", "adj",
+                    "material",
+                    "radii",
+                    "texcoords",
+                    "userMatrix", "ids",
+                    "dim",
+                    "par3d", "userMatrix",
+                    "viewpoint", "finite",
+                    "pos"],
+          i;
+        for (i = 0; i < fields.length; i++) {
+          if (typeof prevobj[fields[i]] !== "undefined")
+            obj[fields[i]] = prevobj[fields[i]];
+        }
+      } else
+        console.warn("copyObj failed");
+    };
+
+    /**
+     * Set gl depth test based on object's material
+     * @param { number } id - object to use
+     */
+    rglwidgetClass.prototype.setDepthTest = function(id) {
+      var gl = this.gl || this.initGL(),
+          tests = {never: gl.NEVER,
+                   less:  gl.LESS,
+                   equal: gl.EQUAL,
+                   lequal:gl.LEQUAL,
+                   greater: gl.GREATER,
+                   notequal: gl.NOTEQUAL,
+                   gequal: gl.GEQUAL,
+                   always: gl.ALWAYS},
+           test = tests[this.getMaterial(id, "depth_test")];
+      gl.depthFunc(test);
+    };
+
+    /**
+     * Display a debug message
+     * @param { string } msg - The message to display
+     * @param { Object } [img] - Image to insert before message
+     */
+    rglwidgetClass.prototype.debug = function(msg, img) {
+      if (typeof this.debugelement !== "undefined" && this.debugelement !== null) {
+        this.debugelement.innerHTML = msg;
+        if (typeof img !== "undefined") {
+          this.debugelement.insertBefore(img, this.debugelement.firstChild);
+        }
+      } else if (msg !== "")
+        alert(msg);
+    };
+
+    /**
+     * If we are in an ioslides or slidy presentation, get the
+     * DOM element of the current slide
+     * @returns { Object }
+     */
+    rglwidgetClass.prototype.getSlide = function() {
+      var result = this.el, done = false;
+      while (result && !done && this.scene.context.rmarkdown) {
+      	switch(this.scene.context.rmarkdown) {
+          case "ioslides_presentation":
+            if (result.tagName === "SLIDE") return result;
+            break;
+          case "slidy_presentation":
+            if (result.tagName === "DIV" && result.classList.contains("slide"))
+              return result;
+            break;
+          default: return null;
+      	}
+      	result = result.parentElement;
+      }
+      return null;
+    };
+
+    /**
+     * Is this scene visible in the browser?
+     * @returns { boolean }
+     */
+    rglwidgetClass.prototype.isInBrowserViewport = function() {
+      var rect = this.canvas.getBoundingClientRect(),
+          windHeight = (window.innerHeight || document.documentElement.clientHeight),
+          windWidth = (window.innerWidth || document.documentElement.clientWidth);
+      if (this.scene.context && this.scene.context.rmarkdown !== null) {
+      	if (this.slide)
+      	  return (this.scene.context.rmarkdown === "ioslides_presentation" &&
+      	          this.slide.classList.contains("current")) ||
+      	         (this.scene.context.rmarkdown === "slidy_presentation" &&
+      	          !this.slide.classList.contains("hidden"));
+      }
+      return (
+      	rect.top >= -windHeight &&
+      	rect.left >= -windWidth &&
+      	rect.bottom <= 2*windHeight &&
+      	rect.right <= 2*windWidth);
+    };
