@@ -25,7 +25,7 @@ the number of vertices in the \code{objid}.
 }
   \item{attributes}{A vector of attributes of a vertex,
   from \code{c("x", "y", "z", "red", "green", "blue", "alpha", "nx", "ny", "nz",
-               "radius", "ox", "oy", "oz", "ts", "tt", "offset")}.  See
+               "radii", "ox", "oy", "oz", "ts", "tt", "offset")}.  See
                Details.}
   \item{objid}{
 A single \pkg{rgl} object id.
