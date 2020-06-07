@@ -341,6 +341,7 @@
           has_texture = flags & this.f_has_texture,
           is_transparent = flags & this.f_is_transparent,
           depth_sort = flags & this.f_depth_sort,
+          fixed_size = flags & this.f_fixed_size,
           fixed_quads = flags & this.f_fixed_quads,
           is_lines = flags & this.f_is_lines,
           fat_lines = flags & this.f_fat_lines,
@@ -387,7 +388,11 @@
       if (is_lit)
         enabled.normLoc = this.doNormals(obj);
 
-      if (has_texture)
+      if (fixed_size) {
+        gl.uniform2f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height);
+      }
+
+      if (has_texture || obj.type === "text")
         enabled.texLoc = this.doTexture(obj);
 
       if (fixed_quads) {
@@ -514,7 +519,7 @@
         }
 
         if (has_texture)
-          this.doTexture(obj);
+          enabled.texLoc = this.doTexture(obj);
 
         if (depth_sort) {
           if (typeof piece === "undefined")
@@ -680,6 +685,7 @@
         case "lines":
         case "linestrip":
         case "points":
+        case "text":
           this.drawSimple(obj, subscene, piece);
           return;
         case "planes":
@@ -745,12 +751,7 @@
         enabled.normLoc = this.doNormals(obj);
 
       if (has_texture || type === "text") {
-        gl.enableVertexAttribArray( obj.texLoc );
-        enabled.texLoc = true;
-        gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.tofs);
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, obj.texture);
-        gl.uniform1i( obj.sampler, 0);
+        enabled.texLoc = this.doTexture(obj);
       }
 
       if (fixed_quads) {
