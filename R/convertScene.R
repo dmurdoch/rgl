@@ -103,7 +103,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   
   flagnames <- c("is_lit", "is_smooth", "has_texture",
            "depth_sort", "fixed_quads", "is_transparent",
-           "is_lines", "sprites_3d", "sprite_3d",
+           "is_lines", "sprites_3d", 
            "is_subscene", "is_clipplanes",
            "fixed_size", "is_points", "is_twosided",
            "fat_lines", "is_brush")
@@ -428,12 +428,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     obj <- getObj(cids[i])
     if (obj$type == "sprites" && flags[i, "sprites_3d"]) {
       obj$objects <- NULL
-      for (j in seq_along(obj$ids)) {
-        objid <- as.character(obj$ids[j])
-        k <- which(objid == cids)
-        flags[k, "sprite_3d"] <- TRUE
-        nflags[k] <- numericFlags(flags[k,])
-      }
     }
   }
   for (i in seq_along(ids)) {

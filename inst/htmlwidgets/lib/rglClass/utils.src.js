@@ -323,13 +323,13 @@
     };
 
     /**
-     * Get a particular material property for an id
+     * Get a particular material property for an obj
      * @returns { any }
-     * @param {number} id  Which object?
+     * @param {object} obj  Which object?
      * @param {string} property Which material property?
      */
-    rglwidgetClass.prototype.getMaterial = function(id, property) {
-      var obj = this.getObj(id), mat;
+    rglwidgetClass.prototype.getObjMaterial = function(obj, property) {
+      var mat;
       if (typeof obj.material === "undefined")
         console.error("material undefined");
       mat = obj.material[property];
@@ -338,6 +338,17 @@
       return mat;
     };
     
+    /**
+     * Get a particular material property for an id
+     * @returns { any }
+     * @param {number} id  Which object?
+     * @param {string} property Which material property?
+     */
+    rglwidgetClass.prototype.getMaterial = function(id, property) {
+      var obj = this.getObj(id);
+      return this.getObjMaterial(obj, property);
+    };
+
     rglwidgetClass.prototype.getAdj = function (pos, offset, text) {
       switch(pos) {
         case 1: return [0.5, 1 + offset];
@@ -425,24 +436,6 @@
         }
       } else
         console.warn("copyObj failed");
-    };
-
-    /**
-     * Set gl depth test based on object's material
-     * @param { number } id - object to use
-     */
-    rglwidgetClass.prototype.setDepthTest = function(id) {
-      var gl = this.gl || this.initGL(),
-          tests = {never: gl.NEVER,
-                   less:  gl.LESS,
-                   equal: gl.EQUAL,
-                   lequal:gl.LEQUAL,
-                   greater: gl.GREATER,
-                   notequal: gl.NOTEQUAL,
-                   gequal: gl.GEQUAL,
-                   always: gl.ALWAYS},
-           test = tests[this.getMaterial(id, "depth_test")];
-      gl.depthFunc(test);
     };
 
     /**

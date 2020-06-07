@@ -13,7 +13,6 @@
           has_texture = flags & this.f_has_texture,
           fixed_quads = flags & this.f_fixed_quads,
           sprites_3d = flags & this.f_sprites_3d,
-          sprite_3d = flags & this.f_sprite_3d,
           nclipplanes = this.countClipplanes(),
           fixed_size = flags & this.f_fixed_size,
           is_points = flags & this.f_is_points,
@@ -34,7 +33,7 @@
       " varying vec4 vCol;\n"+
       " varying vec4 vPosition;\n";
 
-      if ((is_lit && !fixed_quads && !is_brush) || sprite_3d)
+      if (is_lit && !fixed_quads && !is_brush)
         result = result + "  attribute vec3 aNorm;\n"+
                           " uniform mat4 normMatrix;\n"+
                           " varying vec3 vNormal;\n";
@@ -48,10 +47,6 @@
 
       if (fixed_quads)
         result = result + "  attribute vec2 aOfs;\n";
-      else if (sprite_3d)
-        result = result + "  uniform vec3 uOrig;\n"+
-                          "  uniform float uSize;\n"+
-                          "  uniform mat4 usermat;\n";
 
       if (is_twosided)
         result = result + "  attribute vec3 aPos1;\n"+
@@ -69,10 +64,10 @@
       
       result = result + "  void main(void) {\n";
 
-      if ((nclipplanes || (!fixed_quads && !sprite_3d)) && !is_brush)
+      if ((nclipplanes || !fixed_quads) && !is_brush)
         result = result + "    vPosition = mvMatrix * vec4(aPos, 1.);\n";
 
-      if (!fixed_quads && !sprite_3d && !is_brush)
+      if (!fixed_quads && !is_brush)
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
@@ -82,7 +77,7 @@
 
       result = result + "    vCol = aCol;\n";
 
-      if (is_lit && !fixed_quads && !sprite_3d && !is_brush)
+      if (is_lit && !fixed_quads && !is_brush)
         result = result + "    vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);\n";
 
       if (has_texture || type == "text")
@@ -97,12 +92,6 @@
         result = result + "    vec4 pos = mvMatrix * vec4(aPos, 1.);\n"+
                           "   pos = pos/pos.w + vec4(aOfs, 0., 0.);\n"+
                           "   gl_Position = prMatrix*pos;\n";
-
-      if (sprite_3d)
-        result = result + "   vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);\n"+
-                          "   vec4 pos = mvMatrix * vec4(uOrig, 1.);\n"+
-                          "   vPosition = pos/pos.w + vec4(uSize*(vec4(aPos, 1.)*usermat).xyz,0.);\n"+
-                          "   gl_Position = prMatrix * vPosition;\n";
 
       if (is_twosided)
         result = result + "   vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n"+

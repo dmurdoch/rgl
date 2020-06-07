@@ -1,4 +1,7 @@
-    
+// These functions order the centers of displayed objects so they
+// can be drawn using the painters algorithm, necessary to support
+// transparency
+
     rglwidgetClass.prototype.getPieces = function(incontext, objid, subid, obj) {
       var n = obj.centers.length,
           depth,
@@ -74,12 +77,12 @@
         
       if (type === "planes") {
         if (obj.bbox !== subscene.par3d.bbox || !obj.initialized) {
-          this.planeUpdateTriangles(id, subscene.par3d.bbox);
+          this.planeUpdateTriangles(obj, subscene.par3d.bbox);
         }
       }
 
       if (!obj.initialized)
-        this.initObj(id);
+        this.initObj(obj.id);
 
       if (type === "light" || type === "bboxdeco" || !obj.vertexCount)
         return result;

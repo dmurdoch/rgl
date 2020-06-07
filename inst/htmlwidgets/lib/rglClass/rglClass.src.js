@@ -36,14 +36,13 @@ rglwidgetClass = function() {
     rglwidgetClass.prototype.f_is_transparent = 32;
     rglwidgetClass.prototype.f_is_lines = 64;
     rglwidgetClass.prototype.f_sprites_3d = 128;
-    rglwidgetClass.prototype.f_sprite_3d = 256;
-    rglwidgetClass.prototype.f_is_subscene = 512;
-    rglwidgetClass.prototype.f_is_clipplanes = 1024;
-    rglwidgetClass.prototype.f_fixed_size = 2048;
-    rglwidgetClass.prototype.f_is_points = 4096;
-    rglwidgetClass.prototype.f_is_twosided = 8192;
-    rglwidgetClass.prototype.f_fat_lines = 16384;
-    rglwidgetClass.prototype.f_is_brush = 32768;
+    rglwidgetClass.prototype.f_is_subscene = 256;
+    rglwidgetClass.prototype.f_is_clipplanes = 512;
+    rglwidgetClass.prototype.f_fixed_size = 1024;
+    rglwidgetClass.prototype.f_is_points = 2048;
+    rglwidgetClass.prototype.f_is_twosided = 4096;
+    rglwidgetClass.prototype.f_fat_lines = 8192;
+    rglwidgetClass.prototype.f_is_brush = 16384;
 
     /**
      * Start the writeWebGL scene. This is only used by writeWebGL; rglwidget has

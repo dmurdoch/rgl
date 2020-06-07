@@ -129,7 +129,6 @@
           is_transparent = obj.is_transparent,
           depth_sort = flags & this.f_depth_sort,
           sprites_3d = flags & this.f_sprites_3d,
-          sprite_3d = flags & this.f_sprite_3d,
           fixed_size = flags & this.f_fixed_size,
           is_twosided = (flags & this.f_is_twosided) > 0,
           is_brush = flags & this.f_is_brush,
@@ -255,12 +254,6 @@
 
     if (fixed_quads && !sprites_3d) {
       obj.ofsLoc = gl.getAttribLocation(obj.prog, "aOfs");
-    }
-
-    if (sprite_3d) {
-      obj.origLoc = gl.getUniformLocation(obj.prog, "uOrig");
-      obj.sizeLoc = gl.getUniformLocation(obj.prog, "uSize");
-      obj.usermatLoc = gl.getUniformLocation(obj.prog, "usermat");
     }
 
     if (has_texture || type == "text") {
