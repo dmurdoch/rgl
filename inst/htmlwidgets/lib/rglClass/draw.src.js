@@ -315,6 +315,7 @@
         case "text":
         case "sprites":
         case "quads":
+        case "surface":
           step = 6;
           break;
         default:
