@@ -151,6 +151,16 @@
       }
     };
     
+    rglwidgetClass.prototype.doStartScene = function() {
+      var gl = this.gl || this.initGL();
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthFunc(gl.LEQUAL);
+      gl.clearDepth(1.0);
+      gl.clearColor(1,1,1,1);
+      gl.depthMask(true); // Must be true before clearing depth buffer
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    };
+    
     /**
      * Set gl depth test based on object's material
      * @param { object } obj - object to use
@@ -332,6 +342,19 @@
       }
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, fnew, gl.DYNAMIC_DRAW);
       return fnew.length;
+    };
+    
+    rglwidgetClass.prototype.doBlending = function(blend) {
+      var gl = this.gl;
+      if (blend) {
+        gl.depthMask(false);
+        gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
+                           gl.ONE, gl.ONE);
+        gl.enable(gl.BLEND);
+      } else {
+        gl.depthMask(true);
+        gl.disable(gl.BLEND);
+      }
     };
     
     rglwidgetClass.prototype.drawSimple = function(obj, subscene, piece) {
@@ -858,34 +881,36 @@
      * @param { number } subsceneid - id of subscene
      * @param { boolean } opaquePass - is this the opaque drawing pass?
      */
-    rglwidgetClass.prototype.drawSubscene = function(subsceneid, opaquePass) {
+    rglwidgetClass.prototype.drawSubscene = function(subsceneid, context) {
       var gl = this.gl || this.initGL(),
           sub = this.getObj(subsceneid),
           objects = this.scene.objects,
+          clipids = sub.clipplanes,
           subids = sub.objects,
           subscene_has_faces = false,
           subscene_needs_sorting = false,
-          flags, i, obj;
+          flags, i, obj, result = [];
+          
       if (sub.par3d.skipRedraw)
-        return;
+        return result;
       
-      this.opaquePass = opaquePass;
-      
-      for (i=0; i < subids.length; i++) {
-      	obj = objects[subids[i]];
-        flags = obj.flags;
-        if (typeof flags !== "undefined") {
+      if (this.opaquePass) {
+        for (i=0; i < subids.length; i++) {
+      	  obj = objects[subids[i]];
+          flags = obj.flags;
+          if (typeof flags !== "undefined") {
           subscene_has_faces |= (flags & this.f_is_lit)
                            & !(flags & this.f_fixed_quads);
           obj.is_transparent = (flags & this.f_is_transparent) || obj.someHidden;
           subscene_needs_sorting |= (flags & this.f_depth_sort) || obj.is_transparent;
         }
+        }
       }
 
       this.setViewport(subsceneid);
 
-      if (typeof sub.backgroundId !== "undefined" && opaquePass)
-          this.drawBackground(sub.backgroundId, subsceneid);
+      if (typeof sub.backgroundId !== "undefined" && this.opaquePass)
+        this.drawBackground(sub.backgroundId, subsceneid);
 
       if (subids.length) {
         this.setprMatrix(subsceneid);
@@ -901,45 +926,36 @@
 
         if (subscene_needs_sorting)
           this.setprmvMatrix();
-
-        var clipids = sub.clipplanes;
-        if (typeof clipids === "undefined") {
-          console.warn("bad clipids");
-        }
+            
         if (clipids.length > 0) {
           this.invMatrix = new CanvasMatrix4(this.mvMatrix);
           this.invMatrix.invert();
           for (i = 0; i < clipids.length; i++)
             this.drawObjId(clipids[i], subsceneid);
         }
-
+        
         subids = sub.opaque.concat(sub.transparent);
-        if (opaquePass) {
-          gl.enable(gl.DEPTH_TEST);
-          gl.depthMask(true);
-          gl.disable(gl.BLEND);
+        if (this.opaquePass) {
+          context = context.slice();
+          context.push(subsceneid);
+        
+          this.doBlending(false);
+
           for (i = 0; i < subids.length; i++) {
             if (!this.getObj(subids[i]).is_transparent)	
               this.drawObjId(subids[i], subsceneid);
+            else {
+              this.subsceneid = subsceneid;
+              result = result.concat(this.getObjPieces(context, subsceneid, subids[i]));
+            }
           }
-        } else {
-          this.subsceneid = subsceneid;
-          gl.depthMask(false);
-          gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
-                               gl.ONE, gl.ONE);
-          gl.enable(gl.BLEND);
-//          for (i = 0; i < subids.length; i++) {
-//            if (this.getObj(subids[i]).is_transparent)
-//              this.drawObjId(subids[i], subsceneid);
-//          }
-        }
-        if (opaquePass) {
           subids = sub.subscenes;
           for (i = 0; i < subids.length; i++) {
-            this.drawSubscene(subids[i], opaquePass);
+            result.concat(this.drawSubscene(subids[i], context));
           }
         }
       }
+      return result;
     };
     
     /**
@@ -972,6 +988,7 @@
      */
     rglwidgetClass.prototype.drawPieces = function(pieces) {
       var i, prevcontext = [], context;
+      this.doBlending(true);
       for (i = 0; i < pieces.length; i++) {
         context = pieces[i].context.slice();
         if (context !== prevcontext) {
@@ -987,22 +1004,19 @@
      * Draw the whole scene
      */
     rglwidgetClass.prototype.drawScene = function() {
-      var gl = this.gl || this.initGL(),
-          wasDrawing = this.startDrawing();
+      var wasDrawing = this.startDrawing(),
+          pieces, context = [];
       if (!wasDrawing) {
         if (this.select.state !== "inactive")
           this.selectionChanged();
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LEQUAL);
-        gl.clearDepth(1.0);
-        gl.clearColor(1,1,1,1);
-        gl.depthMask(true); // Must be true before clearing depth buffer
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this.drawSubscene(this.scene.rootSubscene, true);
-        var pieces = this.getSubscenePieces([], this.scene.rootSubscene);
+
+        this.doStartScene();
+        this.opaquePass = true;
+        pieces = this.drawSubscene(this.scene.rootSubscene, context);
+        // var pieces = this.getSubscenePieces([], this.scene.rootSubscene);
+        this.opaquePass = false;
         pieces = this.sortPieces(pieces);
         this.drawPieces(pieces);
-        // this.drawSubscene(this.scene.rootSubscene, false);
       }
       this.stopDrawing(wasDrawing);
     };

@@ -2,11 +2,11 @@
 // can be drawn using the painters algorithm, necessary to support
 // transparency
 
-    rglwidgetClass.prototype.getPieces = function(incontext, objid, subid, obj) {
+    rglwidgetClass.prototype.getPieces = function(context, objid, subid, obj) {
       var n = obj.centers.length,
           depth,
           result = new Array(n),
-          context = incontext.slice();
+          context = context.slice();
           
       for(i=0; i<n; i++) {
         z = this.prmvMatrix.m13*obj.centers[i][0] +
@@ -114,48 +114,6 @@
       if (is_transparent)
         result = this.getPieces(context, objid, 0, obj);
         
-      return result;
-    };
-    
-    rglwidgetClass.prototype.getSubscenePieces = function(context, subsceneid) {
-      var sub = this.getObj(subsceneid),
-          objects = this.scene.objects,
-          subids = sub.objects,
-          subscene_needs_sorting = false,
-          flags, i, obj,
-          result = [];
-      if (sub.par3d.skipRedraw)
-        return result;
-      for (i=0; i < subids.length; i++) {
-      	obj = objects[subids[i]];
-        flags = obj.flags;
-        if (typeof flags !== "undefined") {
-          obj.is_transparent = (flags & this.f_is_transparent) || obj.someHidden;
-          subscene_needs_sorting |= (flags & this.f_depth_sort) || obj.is_transparent;
-        }
-      }
-      if (!subscene_needs_sorting)
-        return result;
-
-      this.setViewport(subsceneid);
-
-      context.push(subsceneid);
-      
-      if (subids.length) {
-        this.setprMatrix(subsceneid);
-        this.setmvMatrix(subsceneid);
-        this.setprmvMatrix();
-
-        subids = sub.opaque.concat(sub.transparent);
-        for (i = 0; i < subids.length; i++) {
-          if (this.getObj(subids[i]).is_transparent)
-            result = result.concat(this.getObjPieces(context, subsceneid, subids[i]));
-        }
-        subids = sub.subscenes;
-        for (i = 0; i < subids.length; i++) {
-          result = result.concat(this.getSubscenePieces(context, subids[i]));
-        }
-      }
       return result;
     };
     
