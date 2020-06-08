@@ -882,8 +882,7 @@
      * @param { boolean } opaquePass - is this the opaque drawing pass?
      */
     rglwidgetClass.prototype.drawSubscene = function(subsceneid, context) {
-      var gl = this.gl || this.initGL(),
-          sub = this.getObj(subsceneid),
+      var sub = this.getObj(subsceneid),
           objects = this.scene.objects,
           clipids = sub.clipplanes,
           subids = sub.objects,
@@ -1013,7 +1012,6 @@
         this.doStartScene();
         this.opaquePass = true;
         pieces = this.drawSubscene(this.scene.rootSubscene, context);
-        // var pieces = this.getSubscenePieces([], this.scene.rootSubscene);
         this.opaquePass = false;
         pieces = this.sortPieces(pieces);
         this.drawPieces(pieces);
