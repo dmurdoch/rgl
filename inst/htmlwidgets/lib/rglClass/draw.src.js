@@ -190,7 +190,7 @@
         gl.uniform1f( obj.shininessLoc, obj.shininess);
         for (i=0; i < subscene.lights.length; i++) {
           light = this.getObj(subscene.lights[i]);
-          if (!light.initialized) this.initObj(light);
+          if (!light.initialized) this.initObj(light.id);
           gl.uniform3fv( obj.ambientLoc[i], this.componentProduct(light.ambient, obj.ambient));
           gl.uniform3fv( obj.specularLoc[i], this.componentProduct(light.specular, obj.specular));
           gl.uniform3fv( obj.diffuseLoc[i], light.diffuse);
@@ -440,7 +440,7 @@
           enabled.nextLoc = true;
           gl.vertexAttribPointer(obj.nextLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nextofs);
           gl.uniform1f(obj.aspectLoc, this.vp.width/this.vp.height);
-          gl.uniform1f(obj.lwdLoc, this.getMaterial(id, "lwd")/this.vp.height);
+          gl.uniform1f(obj.lwdLoc, this.getMaterial(obj.id, "lwd")/this.vp.height);
         }
 
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
@@ -672,11 +672,12 @@
    
     /**
      * Draw an object in a subscene
-     * @param { number } id - object to draw
+     * @param { number } obj - object to draw
      * @param { number } subsceneid - id of subscene
      */
     rglwidgetClass.prototype.drawObj = function(obj, subscene, context) {
       switch(obj.type) {
+        case "abclines":
         case "surface":
         case "triangles":
         case "quads":
