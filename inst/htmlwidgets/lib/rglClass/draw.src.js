@@ -109,33 +109,6 @@
                      surface : "TRIANGLES",
                      triangles : "TRIANGLES"};
 
-    /**
-     * Sort objects from back to front
-     * @returns { number[] }
-     * @param { Object } obj - object to sort
-     */
-    rglwidgetClass.prototype.depthSort = function(obj) {
-      var n = obj.centers.length,
-          depths = new Float32Array(n),
-          result = new Array(n),
-          compare = function(i,j) { return depths[j] - depths[i]; },
-          z, w;
-      for(i=0; i<n; i++) {
-        z = this.prmvMatrix.m13*obj.centers[i][0] +
-            this.prmvMatrix.m23*obj.centers[i][1] +
-            this.prmvMatrix.m33*obj.centers[i][2] +
-            this.prmvMatrix.m43;
-        w = this.prmvMatrix.m14*obj.centers[i][0] +
-            this.prmvMatrix.m24*obj.centers[i][1] +
-            this.prmvMatrix.m34*obj.centers[i][2] +
-            this.prmvMatrix.m44;
-        depths[i] = z/w;
-        result[i] = i;
-      }
-      result.sort(compare);
-      return result;
-    };
-    
     rglwidgetClass.prototype.disableArrays = function(obj, enabled) {
       var gl = this.gl || this.initGL(),
           objLocs = ["normLoc", "texLoc", "ofsLoc", "pointLoc", "nextLoc"],
@@ -357,14 +330,22 @@
       }
     };
     
-    rglwidgetClass.prototype.drawSimple = function(obj, subscene, piece) {
+    /* The draw methods are called twice.  When 
+       this.opaquePass is true, they should draw opaque parts
+       of the scene, and return the list of transparent
+       pieces.  Here context is the context array on input,
+       modified when the matrices are changed.
+       When this.opaquePass is false, the context argument
+       contains a "piece", i.e. an ordered list of parts
+       of the object to draw. */
+       
+    rglwidgetClass.prototype.drawSimple = function(obj, subscene, context) {
       var 
           flags = obj.flags,
           type = obj.type,
           is_lit = flags & this.f_is_lit,
           has_texture = flags & this.f_has_texture,
           is_transparent = flags & this.f_is_transparent,
-          depth_sort = flags & this.f_depth_sort,
           fixed_size = flags & this.f_fixed_size,
           fixed_quads = flags & this.f_fixed_quads,
           is_lines = flags & this.f_is_lines,
@@ -379,13 +360,12 @@
         this.initObj(obj.id);
 
       if (!obj.vertexCount)
-        return;
+        return [];
     
-      if (!is_transparent && obj.someHidden) {
-        is_transparent = true;
-        depth_sort = ["triangles", "quads", "surface",
-                      "spheres", "sprites", "text"].indexOf(type) >= 0;
-      }        
+      is_transparent |= obj.someHidden;
+      
+      if (is_transparent && this.opaquePass)
+        return this.getPieces(context, obj.id, 0, obj);
 
       this.doDepthTest(obj);
             
@@ -440,10 +420,12 @@
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
-        if (typeof piece !== "undefined")
-          count = this.doLoadIndices(obj, pass, piece.indices);
-        else
+        if (!this.opaquePass)
+          count = this.doLoadIndices(obj, pass, context.indices);
+        else {
           count = obj.f[pass].length;
+          gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[pass], gl.STATIC_DRAW);
+        }
       	if (!is_lines && pmode === "lines" && !fat_lines) {
           mode = "LINES";
         } else if (pmode === "points") {
@@ -466,108 +448,106 @@
         gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
         this.disableArrays(obj, enabled);
       }
+      return [];
     };
    
-    rglwidgetClass.prototype.drawPlanes = function(obj, subscene) {
+    rglwidgetClass.prototype.drawPlanes = function(obj, subscene, context) {
       if (obj.bbox !== subscene.par3d.bbox || !obj.initialized) {
           this.planeUpdateTriangles(obj, subscene.par3d.bbox);
       }
-      this.drawSimple(obj, subscene, piece);
+      return this.drawSimple(obj, subscene, context);
    };
 
     /**
      * Draw spheres in a subscene
      * @param { object } obj - object to draw
      * @param { object } subscene 
-     * @param { object } piece 
+     * @param { object } context 
      */
-    rglwidgetClass.prototype.drawSpheres = function(obj, subscene, piece) {
+    rglwidgetClass.prototype.drawSpheres = function(obj, subscene, context) {
       var flags = obj.flags,
-          type = obj.type,
           is_lit = flags & this.f_is_lit,
           has_texture = flags & this.f_has_texture,
           is_transparent = flags & this.f_is_transparent,
-          depth_sort = flags & this.f_depth_sort,
           gl = this.gl || this.initGL(),
-          sphereMV, baseofs, ofs, sscale, i, j, k, count,
-          enabled = {};
+          sphereMV, baseofs, ofs, sscale, i, j, k, 
+          count, nc, scount, scale, indices, sphereNorm,
+          enabled = {}, drawing, result = [];
 
       if (!obj.initialized)
         this.initObj(obj.id);
 
-      if (!obj.vertexCount)
-        return;
-    
-      if (!is_transparent && obj.someHidden) {
-        is_transparent = true;
-        depth_sort = ["triangles", "quads", "surface",
-                      "spheres", "sprites", "text"].indexOf(type) >= 0;
-      }        
-
-      this.doDepthTest(obj);
-      
-      gl.useProgram(obj.prog);
-
-      this.doPolygonOffset(obj);
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.sphere.buf);
-      
-      gl.uniformMatrix4fv( obj.prMatLoc, false, new Float32Array(this.prMatrix.getAsArray()) );
-      gl.uniformMatrix4fv( obj.mvMatLoc, false, new Float32Array(this.mvMatrix.getAsArray()) );
-
-      this.doClipping(obj, subscene);
-
-      if (is_lit) 
-        this.doLighting(obj, subscene);
-
-      gl.enableVertexAttribArray( this.posLoc );
-      enabled.posLoc = true;
-
-      var nc = obj.colorCount;
       count = obj.vertexCount;
+      if (!count)
+        return result;
 
-        var scale = subscene.par3d.scale,
-            scount = count, indices;
+      scale = subscene.par3d.scale;        
+      sphereNorm = new CanvasMatrix4();
+      sphereNorm.scale(scale[0], scale[1], scale[2]);
+      sphereNorm.multRight(this.normMatrix);
+        
+      is_transparent |= obj.someHidden;
+
+      drawing = this.opaquePass ^ (is_transparent !== 0);
+      if (drawing) {
+        this.doDepthTest(obj);
+      
+        gl.useProgram(obj.prog);
+
+        this.doPolygonOffset(obj);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.sphere.buf);
+      
+        gl.uniformMatrix4fv( obj.prMatLoc, false, new Float32Array(this.prMatrix.getAsArray()) );
+        gl.uniformMatrix4fv( obj.mvMatLoc, false, new Float32Array(this.mvMatrix.getAsArray()) );
+
+        this.doClipping(obj, subscene);
+
+        if (is_lit) 
+          this.doLighting(obj, subscene);
+
+        gl.enableVertexAttribArray( this.posLoc );
+        enabled.posLoc = true;
+        
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.enableVertexAttribArray(obj.normLoc );
         enabled.normLoc = true;
         gl.vertexAttribPointer(obj.normLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
         gl.disableVertexAttribArray( this.colLoc );
-        var sphereNorm = new CanvasMatrix4();
-        sphereNorm.scale(scale[0], scale[1], scale[2]);
-        sphereNorm.multRight(this.normMatrix);
+
         gl.uniformMatrix4fv( obj.normMatLoc, false, new Float32Array(sphereNorm.getAsArray()) );
 
+        nc = obj.colorCount;
         if (nc == 1) {
           gl.vertexAttrib4fv( this.colLoc, new Float32Array(obj.onecolor));
         }
 
         if (has_texture)
           enabled.texLoc = this.doTexture(obj);
+      }
+      
+      scount = count;
+      if (!this.opaquePass)
+        scount = 1;
+        
+      for (i = 0; i < scount; i++) {
+        sphereMV = new CanvasMatrix4();
 
-        if (depth_sort) {
-          if (typeof piece === "undefined")
-            console.error("piece not defined");
-          scount = 1;
+        if (!this.opaquePass) {
+          baseofs = context.subid*obj.vOffsets.stride;
+        } else {
+          baseofs = i*obj.vOffsets.stride;
         }
 
-        for (i = 0; i < scount; i++) {
-          sphereMV = new CanvasMatrix4();
+        ofs = baseofs + obj.vOffsets.radofs;
+        sscale = obj.values[ofs];
 
-          if (depth_sort) {
-            baseofs = piece.subid*obj.vOffsets.stride;
-          } else {
-            baseofs = i*obj.vOffsets.stride;
-          }
-
-          ofs = baseofs + obj.vOffsets.radofs;
-          sscale = obj.values[ofs];
-
-          sphereMV.scale(sscale/scale[0], sscale/scale[1], sscale/scale[2]);
-          sphereMV.translate(obj.values[baseofs],
+        sphereMV.scale(sscale/scale[0], sscale/scale[1], sscale/scale[2]);
+        sphereMV.translate(obj.values[baseofs],
                              obj.values[baseofs+1],
                              obj.values[baseofs+2]);
-          sphereMV.multRight(this.mvMatrix);
+        sphereMV.multRight(this.mvMatrix);
+        if (drawing) {
           gl.uniformMatrix4fv( obj.mvMatLoc, false, new Float32Array(sphereMV.getAsArray()) );
 
           if (nc > 1) {
@@ -578,8 +558,8 @@
                                        obj.values[ofs+3] );
           }
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
-          if (depth_sort) {
-            indices = piece.indices;
+          if (!this.opaquePass) {
+            indices = context.indices;
             f = new Uint16Array(3*indices.length);
             for (j=0; j < indices.length; j++) 
               for (k=0; k < 3; k++)
@@ -590,10 +570,14 @@
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.sphere.it, gl.DYNAMIC_DRAW);
             gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
           }
-        }
-        
+        } else
+          result = result.concat(this.getPieces(context, obj.id, i, this.sphere));
+      }
+      if (drawing)
         this.disableArrays(obj, enabled);
-   };
+        
+      return result;
+    };
    
     /**
      * Prepare clipplanes for drawing
@@ -606,34 +590,35 @@
       for (var i=0; i < count; i++) {
         IMVClip[i] = this.multMV(this.invMatrix, obj.vClipplane.slice(4*i, 4*(i+1)));
       }
-      obj.IMVClip = IMVClip;      
-    }
+      obj.IMVClip = IMVClip;
+      return [];
+    };
    
     /**
      * Draw a sprites object in a subscene
      * @param { object } obj - object to draw
      * @param { object } subscene
-     * @param { object } piece
+     * @param { object } context
      */
-    rglwidgetClass.prototype.drawSprites = function(obj, subscene, piece) {
+    rglwidgetClass.prototype.drawSprites = function(obj, subscene, context) {
       var flags = obj.flags,
           is_transparent = flags & this.f_is_transparent,
           sprites3d = flags & this.f_sprites_3d,
           i,j,
           origMV = new CanvasMatrix4( this.mvMatrix ),
           origPRMV = null,
-          pos, radius, userMatrix;
+          pos, radius, userMatrix,
+          result = [];
 
       if (!sprites3d) {
-        this.drawSimple(obj, subscene, piece);
-        return;
+        return this.drawSimple(obj, subscene, context);
       }
       
       if (!obj.initialized)
         this.initObj(obj.id);
 
       if (!obj.vertexCount)
-        return;
+        return result;
     
       is_transparent |= obj.someHidden;
       
@@ -641,20 +626,23 @@
           savenorm = new CanvasMatrix4(this.normMatrix);
 
       this.normMatrix = subscene.spriteNormmat;
-      userMatrix = (typeof obj.userMatrix === "undefined") ? 
-                   new CanvasMatrix4() : obj.userMatrix;
+      userMatrix = obj.userMatrix;
                    
-      if (typeof piece !== "undefined")
-          norigs = 1;
+      if (this.opaquePass) {
+        context = context.slice();
+        context.push(obj.id);
+      } else
+        norigs = 1;
           
       if (this.prmvMatrix !== null)
          origPRMV = new CanvasMatrix4( this.prmvMatrix );
 
       for (iOrig=0; iOrig < norigs; iOrig++) {
-        if (typeof piece !== "undefined")
-          j = piece.subid;
-        else
+        if (this.opaquePass)
           j = iOrig;
+        else
+          j = context.subid;
+
         pos = this.multVM([].concat(obj.vertices[j]).concat(1.0),
                           origMV);
         radius = obj.radii.length > 1 ? obj.radii[j][0] : obj.radii[0][0];
@@ -662,47 +650,33 @@
         this.mvMatrix.scale(radius);
         this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
         this.setprmvMatrix();
-        if (sprites3d)
-          for (i=0; i < obj.objects.length; i++)
-            this.drawObjId(obj.objects[i], subscene.id);
+        for (i=0; i < obj.objects.length; i++)
+          if (this.opaquePass)
+            result = result.concat(this.drawObjId(obj.objects[i], subscene.id, context.concat(j)));
+          else
+            this.drawObjId(obj.objects[i], subsene.id, context);
       }
       this.normMatrix = savenorm;
       this.mvMatrix = origMV;
       if (origPRMV !== null)
         this.prmvMatrix = origPRMV;
+      return result;
     };
    
-    rglwidgetClass.prototype.drawObjId = function(id, subsceneid, piece) {
+    rglwidgetClass.prototype.drawObjId = function(id, subsceneid, context) {
       if (typeof id !== "number")
         this.alertOnce("drawObjId id is "+typeof id);
 
-     this.drawObj(this.getObj(id), this.getObj(subsceneid), piece);
-   }
+      return this.drawObj(this.getObj(id), this.getObj(subsceneid), context);
+   };
    
     /**
      * Draw an object in a subscene
      * @param { number } id - object to draw
      * @param { number } subsceneid - id of subscene
      */
-    rglwidgetClass.prototype.drawObj = function(obj, subscene, piece) {
-      var 
-          flags = obj.flags,
-          type = obj.type,
-          is_lit = flags & this.f_is_lit,
-          has_texture = flags & this.f_has_texture,
-          is_transparent = flags & this.f_is_transparent,
-          depth_sort = flags & this.f_depth_sort,
-          is_lines = flags & this.f_is_lines,
-          fat_lines = flags & this.f_fat_lines,
-          fixed_size = flags & this.f_fixed_size,
-          fixed_quads = flags & this.f_fixed_quads,
-          is_twosided = (flags & this.f_is_twosided) > 0,
-          gl = this.gl || this.initGL(),
-          i, j, count,
-          pass, mode, pmode,
-          enabled = {};
-
-      switch(type) {
+    rglwidgetClass.prototype.drawObj = function(obj, subscene, context) {
+      switch(obj.type) {
         case "surface":
         case "triangles":
         case "quads":
@@ -710,141 +684,22 @@
         case "linestrip":
         case "points":
         case "text":
-          this.drawSimple(obj, subscene, piece);
-          return;
+          return this.drawSimple(obj, subscene, context);
         case "planes":
-          this.drawPlanes(obj, subscene);
-          return;
+          return this.drawPlanes(obj, subscene, context);
         case "spheres":
-          this.drawSpheres(obj, subscene, piece);
-          return;
+          return this.drawSpheres(obj, subscene, context);
         case "clipplanes":
-          this.drawClipplanes(obj);
-          return;
+          return this.drawClipplanes(obj);
         case "sprites":
-          this.drawSprites(obj, subscene, piece);
-          return;
+          return this.drawSprites(obj, subscene, context);
         case "light":
         case "bboxdeco":
-          return;
+          return [];
       }
       
-      console.log("drawObj for type = "+type);
-
-      if (!obj.initialized)
-        this.initObj(obj.id);
-
-      if (!obj.vertexCount)
-        return;
-    
-      if (!is_transparent &&
-    	  obj.someHidden) {
-        is_transparent = true;
-        depth_sort = ["triangles", "quads", "surface",
-                      "sprites", "text"].indexOf(type) >= 0;
-      }        
-
-      this.doDepthTest(obj);
-      
-      gl.useProgram(obj.prog);
-
-      this.doPolygonOffset(obj);
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
-
-      gl.uniformMatrix4fv( obj.prMatLoc, false, new Float32Array(this.prMatrix.getAsArray()) );
-      gl.uniformMatrix4fv( obj.mvMatLoc, false, new Float32Array(this.mvMatrix.getAsArray()) );
-
-      this.doClipping(obj, subscene);
-
-      if (is_lit) 
-        this.doLighting(obj, subscene);
-
-      if (fixed_size) {
-        gl.uniform2f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height);
-      }
-
-      gl.enableVertexAttribArray( this.posLoc );
-      enabled.posLoc = true;
-
-      count = obj.vertexCount;
-
-        enabled.colLoc = this.doColors(obj);
-
-      if (is_lit)
-        enabled.normLoc = this.doNormals(obj);
-
-      if (has_texture || type === "text") {
-        enabled.texLoc = this.doTexture(obj);
-      }
-
-      if (fixed_quads) {
-        gl.enableVertexAttribArray( obj.ofsLoc );
-        enabled.ofsLoc = true;
-        gl.vertexAttribPointer(obj.ofsLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
-      }
-      
-      this.doUserAttributes(obj);
-
-      this.doUserUniforms(obj);
-
-      for (pass = 0; pass < obj.passes; pass++) {
-      	pmode = obj.pmode[pass];
-        if (pmode === "culled")
-          continue;
-
-      	mode = fat_lines && (is_lines || pmode == "lines") ? "TRIANGLES" : this.mode4type[type];
-        if (depth_sort && pmode == "filled") {// Don't try depthsorting on wireframe or points
-          var faces = this.depthSort(obj),
-              nfaces = faces.length,
-              frowsize = Math.floor(obj.f[pass].length/nfaces);
-
-            f = obj.index_uint ? new Uint32Array(obj.f[pass].length) : new Uint16Array(obj.f[pass].length);
-            for (i=0; i<nfaces; i++) {
-              for (j=0; j<frowsize; j++) {
-                f[frowsize*i + j] = obj.f[pass][frowsize*faces[i] + j];
-              }
-            }
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);
-        }
-
-      	if (is_twosided)
-      	  gl.uniform1i(obj.frontLoc, pass !== 0);
-
-          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
-
-        if (type === "sprites" || type === "text" || type === "quads") {
-          count = count * 6/4;
-        } else if (type === "surface") {
-          count = obj.f[pass].length;
-        }
-
-        count = obj.f[pass].length;
-      	if (!is_lines && pmode === "lines" && !fat_lines) {
-          mode = "LINES";
-        } else if (pmode === "points") {
-          mode = "POINTS";
-        }
-                          
-        if ((is_lines || pmode === "lines") && fat_lines) {
-          gl.enableVertexAttribArray(obj.pointLoc);
-          enabled.pointLoc = true;
-          gl.vertexAttribPointer(obj.pointLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.pointofs);
-          gl.enableVertexAttribArray(obj.nextLoc );
-          enabled.nextLoc = true;
-          gl.vertexAttribPointer(obj.nextLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nextofs);
-          gl.uniform1f(obj.aspectLoc, this.vp.width/this.vp.height);
-          gl.uniform1f(obj.lwdLoc, this.getMaterial(id, "lwd")/this.vp.height);
-        }
-
-        gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
-
-        gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
-        this.disableArrays(obj, enabled);
-     }
-     
-   };
+      console.error("drawObj for type = "+obj.type);
+    };
 
     /**
      * Draw the background for a subscene
@@ -939,19 +794,12 @@
           context.push(subsceneid);
         
           this.doBlending(false);
-
-          for (i = 0; i < subids.length; i++) {
-            if (!this.getObj(subids[i]).is_transparent)	
-              this.drawObjId(subids[i], subsceneid);
-            else {
-              this.subsceneid = subsceneid;
-              result = result.concat(this.getObjPieces(context, subsceneid, subids[i]));
-            }
-          }
+          this.subsceneid = subsceneid;
+          for (i = 0; i < subids.length; i++)
+            result = result.concat(this.drawObjId(subids[i], subsceneid, context));
           subids = sub.subscenes;
-          for (i = 0; i < subids.length; i++) {
-            result.concat(this.drawSubscene(subids[i], context));
-          }
+          for (i = 0; i < subids.length; i++)
+            result = result.concat(this.drawSubscene(subids[i], context));
         }
       }
       return result;
@@ -995,7 +843,7 @@
           context = this.setContext(context);
         }
         this.drawObjId(pieces[i].objid, this.subsceneid, 
-                     piece = pieces[i]);
+                       pieces[i]);
       }
     };
  
@@ -1004,14 +852,14 @@
      */
     rglwidgetClass.prototype.drawScene = function() {
       var wasDrawing = this.startDrawing(),
-          pieces, context = [];
+          pieces;
       if (!wasDrawing) {
         if (this.select.state !== "inactive")
           this.selectionChanged();
 
         this.doStartScene();
         this.opaquePass = true;
-        pieces = this.drawSubscene(this.scene.rootSubscene, context);
+        pieces = this.drawSubscene(this.scene.rootSubscene, []);
         this.opaquePass = false;
         pieces = this.sortPieces(pieces);
         this.drawPieces(pieces);

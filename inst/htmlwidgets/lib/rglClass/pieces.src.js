@@ -1,12 +1,14 @@
 // These functions order the centers of displayed objects so they
 // can be drawn using the painters algorithm, necessary to support
-// transparency
+// transparency.  
+
+// Note that objid is not obj.id when drawing spheres.
 
     rglwidgetClass.prototype.getPieces = function(context, objid, subid, obj) {
       var n = obj.centers.length,
           depth,
-          result = new Array(n),
-          context = context.slice();
+          result = new Array(n);
+      context = context.slice();
           
       for(i=0; i<n; i++) {
         z = this.prmvMatrix.m13*obj.centers[i][0] +
@@ -25,96 +27,6 @@
                      depth: depth};
       }
       return result;    
-    };
-    
-    rglwidgetClass.prototype.getSpritesPieces = function(context, subsceneid, obj, iOrig) {
-      var origMV = new CanvasMatrix4( this.mvMatrix ),
-          origPRMV = new CanvasMatrix4( this.prmvMatrix ),
-          pos = this.multVM([].concat(obj.vertices[iOrig]).concat(1.0),
-                                 origMV),
-          radius = obj.radii.length > 1 ? obj.radii[iOrig][0] : obj.radii[0][0],
-          j, result = [];
-      context = context.slice();
-      context = context.concat(iOrig);
-      this.mvMatrix = new CanvasMatrix4(obj.userMatrix).scale(radius).translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
-      this.setprmvMatrix();
-      for (j = 0; j < obj.objects.length; j++)
-        result = result.concat(getObjPieces(context, subsceneid, obj.objects[j]));
-      this.mvMatrix = origMV;
-      this.prmvMatrix = origPRMV;
-      return result;
-    };
-    
-    rglwidgetClass.prototype.getSpherePieces = function(context, subsceneid, obj, i) {
-      var origMV = new CanvasMatrix4( this.mvMatrix ),
-          origPRMV = new CanvasMatrix4( this.prmvMatrix ),
-          pos = obj.vertices[i],
-          sscale = obj.radii.length > 1 ? obj.radii[i][0] : obj.radii[0][0],
-          subscene = this.getObj(subsceneid),
-          scale = subscene.par3d.scale,
-          result;
-          
-      this.mvMatrix = new CanvasMatrix4();
-      this.mvMatrix.scale(sscale/scale[0], sscale/scale[1], sscale/scale[2]);
-      this.mvMatrix.translate(pos[0], pos[1], pos[2]);
-      this.mvMatrix.multRight(origMV);
-      this.setprmvMatrix();
-      result = this.getPieces(context, obj.id, i, this.sphere);
-      this.mvMatrix = origMV;
-      this.prmvMatrix = origPRMV;
-      return result;
-    };
-    
-    rglwidgetClass.prototype.getObjPieces = function(context, subsceneid, objid) {
-      var obj = this.getObj(objid),
-          subscene = this.getObj(subsceneid),
-          flags = obj.flags,
-          type = obj.type,
-          is_transparent = flags & this.f_is_transparent,
-          sprites_3d = flags & this.f_sprites_3d,
-          i, count, 
-          result = [];
-        
-      if (type === "planes") {
-        if (obj.bbox !== subscene.par3d.bbox || !obj.initialized) {
-          this.planeUpdateTriangles(obj, subscene.par3d.bbox);
-        }
-      }
-
-      if (!obj.initialized)
-        this.initObj(obj.id);
-
-      if (type === "light" || type === "bboxdeco" || !obj.vertexCount)
-        return result;
-    
-      if (!is_transparent && obj.someHidden)
-        is_transparent = true;
-      
-      if (sprites_3d) {
-        var norigs = obj.vertices.length;
-        this.origs = obj.vertices;
-        this.usermat = new Float32Array(obj.userMatrix.getAsArray());
-        context.push(objid);
-        for (this.iOrig=0; this.iOrig < norigs; this.iOrig++) {
-          for (i=0; i < obj.objects.length; i++) {
-            result = result.concat(this.getSpritesPieces(context, subsceneid, obj, iOrig, i));
-          }
-        }
-        return result;
-      }
-
-      if (type === "spheres" && is_transparent) {
-        count = obj.vertexCount;
-        for (i = 0; i < count; i++) {
-          result = result.concat(this.getSpherePieces(context, subsceneid, obj, i));
-        }
-        return result;
-      }
-
-      if (is_transparent)
-        result = this.getPieces(context, objid, 0, obj);
-        
-      return result;
     };
     
     rglwidgetClass.prototype.sortPieces = function(pieces) {
@@ -162,4 +74,3 @@
       }
       return result;
     };
-    

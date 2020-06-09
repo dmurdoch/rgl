@@ -454,7 +454,7 @@
     }
 
     if (sprites_3d) {
-      obj.userMatrix = new CanvasMatrix4(obj.userMatrix);
+      obj.userMatrix = new CanvasMatrix4(obj.usermatrix);
       obj.objects = this.flatten([].concat(obj.ids));
       is_lit = false;
       for (i=0; i < obj.objects.length; i++)
