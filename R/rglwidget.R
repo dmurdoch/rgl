@@ -369,13 +369,23 @@ convertShinyPar3d <- function(par3d, ...) {
 
 makeDependency <- function(name, src, script = NULL, stylesheet = NULL,
                            debugging = FALSE) {
-  if (!debugging && !is.null(script) &&
+  if (!is.null(script) &&
       requireNamespace("js", quietly = TRUE) &&
       packageVersion("js") >= "1.2") {
-    newscript <- paste0(basename(src), ".min.js")
-    writeLines(js::uglify_files(file.path(system.file(src, package = "rgl"), script)),
-               file.path(system.file(src, package = "rgl"), newscript))
-    script <- newscript
+    if (!debugging) {
+      newscript <- paste0(basename(src), ".min.js")
+      writeLines(js::uglify_files(file.path(system.file(src, package = "rgl"), script)),
+                 file.path(system.file(src, package = "rgl"), newscript))
+      script <- newscript
+    } else {
+      for (f in script) {
+        hints <- js::jshint(readLines(file.path(system.file(src, package = "rgl"), f)))
+        for (i in seq_len(NROW(hints)))
+          warning(f, "#", hints[i, "line"], ": ", hints[i, "reason"],
+                  call. = FALSE, immediate. = TRUE)
+        
+      }
+    }
   }
   htmlDependency(name = name, 
                       version = packageVersion("rgl"),
