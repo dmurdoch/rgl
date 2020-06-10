@@ -283,13 +283,24 @@
       var gl = this.gl,
           f = obj.f[pass],
           type = obj.type,
+          fat_lines = obj.flags & this.f_fat_lines,
           fnew, step;
       switch(type){
         case "points":
           step = 1;
           break;
+        case "abclines":
         case "lines":
-          step = 2;
+          if (fat_lines)
+            step = 6;
+          else
+            step = 2;
+          break;
+        case "linestrip":
+          if (fat_lines)
+            step = 6;
+          else
+            step = 1;
           break;
         case "planes":
         case "triangles":
@@ -302,6 +313,7 @@
           step = 6;
           break;
         default:
+          console.error("loadIndices for "+type);
           return 0;
       }
       if (obj.index_uint)
@@ -446,8 +458,8 @@
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
 
         gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
-        this.disableArrays(obj, enabled);
       }
+      this.disableArrays(obj, enabled);
       return [];
     };
    
@@ -593,7 +605,23 @@
       obj.IMVClip = IMVClip;
       return [];
     };
-   
+    
+    rglwidgetClass.prototype.drawLinestrip = function(obj, subscene, context) {
+      var origIndices, i, j;
+      if (this.opaquePass)
+        return this.drawSimple(obj, subscene, context);
+      origIndices = context.indices.slice();
+      for (i=0; i < origIndices.length; i++) {
+        j = origIndices[i];
+        if (j < obj.centers.length - 1) {
+          context.indices = [j, j+1];
+          this.drawSimple(obj, subscene, context);
+        }
+      }
+      context.indices = origIndices;
+      return [];
+    };
+          
     /**
      * Draw a sprites object in a subscene
      * @param { object } obj - object to draw
@@ -682,10 +710,11 @@
         case "triangles":
         case "quads":
         case "lines":
-        case "linestrip":
         case "points":
         case "text":
           return this.drawSimple(obj, subscene, context);
+        case "linestrip":
+          return this.drawLinestrip(obj, subscene, context);
         case "planes":
           return this.drawPlanes(obj, subscene, context);
         case "spheres":
