@@ -367,38 +367,40 @@ convertShinyPar3d <- function(par3d, ...) {
 
 # Create the local dependencies
 
-makeDependency <- function(name, src, script = NULL, stylesheet = NULL,
-                           debugging = FALSE) {
+makeDependency <- function(name, src, script = NULL, package,
+                           version = packageVersion(package),
+                           minifile = paste0(basename(src), ".min.js"),
+                           debugging = FALSE, ...) {
   if (!is.null(script) &&
       requireNamespace("js", quietly = TRUE) &&
       packageVersion("js") >= "1.2") {
-    if (!debugging) {
-      newscript <- paste0(basename(src), ".min.js")
-      writeLines(js::uglify_files(file.path(system.file(src, package = "rgl"), script)),
-                 file.path(system.file(src, package = "rgl"), newscript))
-      script <- newscript
-    } else {
+    if (debugging) {
       for (f in script) {
-        hints <- js::jshint(readLines(file.path(system.file(src, package = "rgl"), f)))
+        hints <- js::jshint(readLines(file.path(system.file(src, package = package), f)))
         for (i in seq_len(NROW(hints)))
           warning(f, "#", hints[i, "line"], ": ", hints[i, "reason"],
                   call. = FALSE, immediate. = TRUE)
-        
       }
     }
+    minified <- js::uglify_files(file.path(system.file(src, package = package), script))
+    writeLines(minified, file.path(system.file(src, package = package), minifile))
+    if (!debugging)
+      script <- minifile
   }
   htmlDependency(name = name, 
-                      version = packageVersion("rgl"),
                       src = src,
-                      package = "rgl",
+                      package = package,
+                      version = version,
                       script = script,
-                      stylesheet = stylesheet)
+                      ...)
 }
 
 CanvasMatrixDependency <- makeDependency("CanvasMatrix4",
                                          src = "htmlwidgets/lib/CanvasMatrix",
                                          script = "CanvasMatrix.src.js",
-                                         debugging = FALSE)
+                                         package = "rgl",
+                                         debugging = nchar(Sys.getenv("RGL_DEBUGGING", "")) > 0)
+
 rglDependency <- makeDependency("rglwidgetClass", 
                       src = "htmlwidgets/lib/rglClass",
                       script = c("rglClass.src.js",
@@ -415,4 +417,5 @@ rglDependency <- makeDependency("rglwidgetClass",
                                  "selection.src.js",
                                  "rglTimer.src.js"),
                       stylesheet = "rgl.css",
-                      debugging = TRUE)
+                      package = "rgl",
+                      debugging = nchar(Sys.getenv("RGL_DEBUGGING", "")) > 0)

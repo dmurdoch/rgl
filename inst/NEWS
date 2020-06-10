@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.2
+0.102.3
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1085,3 +1085,5 @@ base graphics.
     is handled better in rglwidget().  It has also been
     split into multiple files which are joined with 
     "minification" on installation.
+  - Added utility function makeDependency() to support 
+    Javascript library in source.
