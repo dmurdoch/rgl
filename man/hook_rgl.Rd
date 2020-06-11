@@ -4,16 +4,42 @@
 \alias{hook_rglchunk}
 \alias{setupKnitr}
 \title{
-Hook functions to use with \pkg{knitr}
+Displaying \pkg{rgl} scenes in \pkg{knitr} documents.
 }
 \description{
 These functions allow \pkg{rgl} graphics to be embedded in \pkg{knitr}
-documents, either as bitmaps (\code{hook_rgl} with format \code{"png"}),
+documents.
+
+The simplest method is to run \code{setupKnitr(autoprint = TRUE)}
+early in the document.  That way \pkg{rgl} commands act a lot
+like base graphics commands:  plots will be automatically inserted
+where appropriate, according to the \code{fig.keep} chunk option.
+By default (\code{fig.keep = "high"}), only high-level plots
+are kept, after low-level changes have been merged into them.
+See the \pkg{knitr} documentation 
+\url{https://yihui.org/knitr/options/#plots} for more details.
+
+Other functions allow embedding either as bitmaps (\code{hook_rgl} with format \code{"png"}),
 fixed vector graphics (\code{hook_rgl} with format \code{"eps"}, \code{"pdf"} or
 \code{"postscript"}), or interactive WebGL graphics (\code{hook_webgl}).  \code{hook_rglchunk} is not normally invoked by the 
 user; it is the hook that supports automatic creation and 
 deletion of rgl scenes.
 }
+
+\note{The \code{setupKnitr(autoprint = TRUE)} method assumes
+\emph{all} printing of \pkg{rgl} objects happens through 
+auto-printing of objects produced by the \code{\link{lowlevel}}
+or \code{\link{highlevel}} functions.  All \pkg{rgl} functions that
+produce graphics do this, but functions in other packages that
+call them may not return values appropriately.
+
+Mixing explicit calls
+to \code{\link{rglwidget}} with auto-printing is likely to lead to failure of some
+scenes to display.  To avoid this, set \code{options(rgl.printRglwidget = FALSE)} before using such explicit calls.  Similarly,
+use that option before calling the \code{\link{example}} function
+in a code chunk if the example prints \pkg{rgl} objects.
+}
+
 \usage{
 setupKnitr(autoprint = FALSE)
 hook_rgl(before, options, envir)
@@ -34,17 +60,14 @@ at the start of the document to install the \pkg{knitr} hooks.
 
 The following chunk options are supported:
 \itemize{
-  \item \code{rgl.keepopen}:  no longer used.  Ignored
-  with a warning.
-  
   \item \code{rgl.newwindow} (default \code{TRUE}):  Whether to open a new window for the chunk.
   
   \item \code{rgl.closewindows} (default \code{FALSE}): Whether
 to close windows at the end of the chunk.
-  
+
   \item \code{rgl.margin} (default 100):  number of pixels by which to indent the
   WebGL window.
-  
+
   \item \code{dpi}, \code{fig.retina}, \code{fig.width}, \code{fig.height}:  standard \pkg{knitr} chunk
   options used to set the size of the output.
   
@@ -54,6 +77,9 @@ display of plots.
   \item \code{dev}:  used by \code{hook_rgl} to set 
   the output format.  May be \code{"eps"}, \code{"postscript"},
   \code{"pdf"} or \code{"png"} (default:  \code{"png"}).
+  
+  \item \code{rgl.keepopen}:  no longer used.  Ignored
+  with a warning.
 }
 }
 \value{
@@ -61,10 +87,8 @@ A string to be embedded into the output, or \code{NULL} if called
 when no output is available.
 }
 \author{
-Originally by Yihui Xie in the \pkg{knitr} package; modified by
-Duncan Murdoch.
-}
-\seealso{
-\code{\link{rgl.Sweave}} embeds fixed images in Sweave documents.
+The \code{hook*} functions are originally by Yihui Xie in the \pkg{knitr} package; and have been modified by
+Duncan Murdoch.  Some parts of the \code{setupKnitr} function
+duplicate source code from \pkg{knitr}.
 }
 \keyword{ utilities }
