@@ -100,7 +100,6 @@ Design based on \code{heplots::\link[heplots]{arrow3d}}, which contains modifica
 to a function posted by Barry Rowlingson to R-help on 1/10/2010.  Additions by Duncan Murdoch.
 }
 \examples{
-\donttest{
 xyz <- matrix(rnorm(300), ncol = 3)
 plot3d(xyz)
 arrow3d(xyz[1,], xyz[2,], type = "extrusion", col = "red")
@@ -108,5 +107,4 @@ arrow3d(xyz[3,], xyz[4,], type = "flat",      col = "blue")
 arrow3d(xyz[5,], xyz[6,], type = "rotation",  col = "green")
 arrow3d(xyz[7,], xyz[8,], type = "lines",     col = "black")
 arrow3d(spriteOrigin = xyz[9:12,],            col = "purple")
-}
 }
