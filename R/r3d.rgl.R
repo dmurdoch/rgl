@@ -4,7 +4,7 @@
 
 # Node Management
 
-getr3dDefaults <- function() {
+getr3dDefaults <- function(class = NULL, value = NULL) {
   result <- r3dDefaults
   if (exists("r3dDefaults", envir = globalenv())) {
     user <- get("r3dDefaults", envir=.GlobalEnv)
@@ -15,6 +15,10 @@ getr3dDefaults <- function() {
         result[[n]] <- user[[n]]
     }
   }
+  if (!is.null(class))
+    result <- result[[class]]
+  if (!is.null(result) && !is.null(value))
+    result <- result[[value]]
   result
 }
 
@@ -291,9 +295,9 @@ particles3d <- function(x,y=NULL,z=NULL,radius=1,...) sprites3d(
 r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  mouseMode = c("trackball", "zoom", "fov", "pull"),
 		  FOV = 30,
-		  bg = list(color="white"),
+		  bg = list(color="white",fogtype = "none"),
 		  family = "sans",
-		  material = list(color="black", fog=FALSE))
+		  material = list(color="black", fog = TRUE))
 
 open3d <- function(..., params = getr3dDefaults(), 
                    useNULL = rgl.useNULL()	)

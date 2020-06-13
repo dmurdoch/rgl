@@ -13,7 +13,7 @@ legend3d <- function(...) {
   })), bgargs))
 }
 
-bgplot3d <- function(expression, bg.color = getr3dDefaults()$bg$color, 
+bgplot3d <- function(expression, bg.color = getr3dDefaults("bg", "color"), 
                      ...) {
   viewport <- par3d("viewport")
   width <- viewport["width"]

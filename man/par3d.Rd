@@ -41,7 +41,7 @@ par3d(\dots, no.readonly = FALSE, dev = rgl.cur(),
 open3d(\dots, params = getr3dDefaults(), 
 	    useNULL = rgl.useNULL())
 	    
-getr3dDefaults()
+getr3dDefaults(class = NULL, value = NULL)
 
 r3dDefaults
 }
@@ -57,6 +57,7 @@ r3dDefaults
   \item{subscene}{integer; the subscene.}
   \item{params}{a list of graphical parameters}
   \item{useNULL}{whether to use the null graphics device}
+  \item{class, value}{names of components to retrieve}
 }
 
 \details{

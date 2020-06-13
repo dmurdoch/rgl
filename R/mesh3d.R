@@ -194,8 +194,12 @@ dot3d.mesh3d <- function ( x, override = TRUE,
       meshColor <- x$meshColor
   }
   if (meshColor != "legacy") {
+    if (is.null(material$color)) 
+      material$color <- getr3dDefaults("material", "color")
     if (is.null(material$color))
       material$color <- material3d("color")
+    if (is.null(material$alpha))
+      material$alpha <- getr3dDefaults("material", "alpha")
     if (is.null(material$alpha))
       material$alpha <- material3d("alpha")
   }
@@ -269,8 +273,12 @@ wire3d.mesh3d <- function ( x, override = TRUE,
       meshColor <- x$meshColor
   }
   if (meshColor != "legacy") {
+    if (is.null(material$color)) 
+      material$color <- getr3dDefaults("material", "color")
     if (is.null(material$color))
       material$color <- material3d("color")
+    if (is.null(material$alpha))
+      material$alpha <- getr3dDefaults("material", "alpha")
     if (is.null(material$alpha))
       material$alpha <- material3d("alpha")
   }
@@ -359,8 +367,12 @@ shade3d.mesh3d <- function ( x, override = TRUE,
   if (!(meshColor %in% (allowedMeshColor <- eval(formals()$meshColor))))
     stop("'meshColor' must be one of: ", paste(allowedMeshColor, collapse = ", "))
   if (meshColor != "legacy") {
+    if (is.null(material$color)) 
+      material$color <- getr3dDefaults("material", "color")
     if (is.null(material$color))
       material$color <- material3d("color")
+    if (is.null(material$alpha))
+      material$alpha <- getr3dDefaults("material", "alpha")
     if (is.null(material$alpha))
       material$alpha <- material3d("alpha")
   }
