@@ -106,7 +106,7 @@ material3d(...)
   \item{lwd}{
     numeric, specifying the line width in pixels
   }
-  \item{fog}{logical, specifying if fog effect should be applied on the corresponding shape}
+  \item{fog}{logical, specifying if fog effect should be applied on the corresponding shape.  Fog type is set in \code{\link{bg3d}}.}
   \item{point_antialias, line_antialias}{logical, specifying if points and lines 
      should be antialiased}
   \item{depth_mask}{logical, specifying whether the object's depth

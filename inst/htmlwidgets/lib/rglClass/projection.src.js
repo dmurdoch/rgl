@@ -51,6 +51,7 @@
          far = 1.0;
        if (near < far/100.0)
          near = far/100.0;
+       this.frustum = {near:near, far:far};
        hlen = t*near;
        if (ortho) {
          if (aspect > 1)

@@ -19,6 +19,8 @@ rgl.bg( sphere = FALSE, fogtype = "none", color = c("black", "white"),
       \item{"exp"}{exponential fog function}
       \item{"exp2"}{squared exponential fog function}
     }
+    Fog only applies to objects with \code{\link{material3d}} 
+    property \code{fog} set to \code{TRUE}.
   }
   \item{sphere}{
   logical, if true, an environmental sphere geometry is used for the background decoration.

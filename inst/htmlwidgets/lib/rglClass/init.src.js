@@ -132,6 +132,7 @@
           fixed_size = flags & this.f_fixed_size,
           is_twosided = (flags & this.f_is_twosided) > 0,
           is_brush = flags & this.f_is_brush,
+          has_fog = flags & this.f_has_fog,
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
@@ -261,6 +262,12 @@
         obj.texture = gl.createTexture();
       obj.texLoc = gl.getAttribLocation(obj.prog, "aTexcoord");
       obj.sampler = gl.getUniformLocation(obj.prog, "uSampler");
+    }
+    
+    if (has_fog) {
+      obj.uFogMode = gl.getUniformLocation(obj.prog, "uFogMode");
+      obj.uFogColor = gl.getUniformLocation(obj.prog, "uFogColor");
+      obj.uFogParms = gl.getUniformLocation(obj.prog, "uFogParms");
     }
 
     if (has_texture) {

@@ -342,6 +342,29 @@
       }
     };
     
+    /**
+     * Set up for fog in the subscene
+     * @param { number } id - id of background object
+     */
+    rglwidgetClass.prototype.doFog = function(obj, subscene) {
+      var gl = this.gl, fogmode, color, 
+          observer = subscene.par3d.observer[2],
+          parms = [this.frustum.near - 2*observer,
+                   this.frustum.far - 2*observer];
+      switch(this.fogType){
+        case "none": fogmode = 0; break;
+        case "linear": fogmode = 1;break;
+        case "exp":  fogmode = 2; break;
+        case "exp2": fogmode = 3; break;
+        default: console.error("Unknown fogtype "+this.fogType);
+      }
+      gl.uniform1i(obj.uFogMode, fogmode);
+      color = this.fogColor;
+      gl.uniform3f(obj.uFogColor, color[0], color[1], color[2]);
+      gl.uniform2f(obj.uFogParms, parms[0], parms[1]);
+      console.log("observer="+observer+" uFogParms="+parms[0]+" "+parms[1]);
+    };
+
     /* The draw methods are called twice.  When 
        this.opaquePass is true, they should draw opaque parts
        of the scene, and return the list of transparent
@@ -363,6 +386,7 @@
           is_lines = flags & this.f_is_lines,
           fat_lines = flags & this.f_fat_lines,
           is_twosided = (flags & this.f_is_twosided) > 0,
+          has_fog = flags & this.f_has_fog,
           gl = this.gl || this.initGL(),
           count,
           pass, mode, pmode,
@@ -417,6 +441,9 @@
         gl.vertexAttribPointer(obj.ofsLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
       }
       
+      if (has_fog)
+        this.doFog(obj, subscene);
+
       this.doUserAttributes(obj);
 
       this.doUserUniforms(obj);
@@ -749,7 +776,11 @@
         gl.clearColor(bg[0], bg[1], bg[2], bg[3]);
         gl.depthMask(true);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      }
+        this.fogColor = bg;
+      } else 
+        this.fogColor = [0,0,0,0];
+  
+      this.fogType = obj.fogtype;
       if (typeof obj.quad !== "undefined") {
         this.prMatrix.makeIdentity();
         this.mvMatrix.makeIdentity();

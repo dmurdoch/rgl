@@ -106,7 +106,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
            "is_lines", "sprites_3d", 
            "is_subscene", "is_clipplanes",
            "fixed_size", "is_points", "is_twosided",
-           "fat_lines", "is_brush")
+           "fat_lines", "is_brush", "has_fog")
   
   getFlags <- function(id) {
     
@@ -152,6 +152,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
                   "lines" %in% unlist(mat[c("front", "back")]))
     result["is_brush"] <- !is.na(brushId) && id == brushId
+    result["has_fog"] <- mat$fog
     result
   }
   

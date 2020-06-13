@@ -43,6 +43,12 @@ rglwidgetClass = function() {
     rglwidgetClass.prototype.f_is_twosided = 4096;
     rglwidgetClass.prototype.f_fat_lines = 8192;
     rglwidgetClass.prototype.f_is_brush = 16384;
+    rglwidgetClass.prototype.f_has_fog = 32768;
+    
+    rglwidgetClass.prototype.fogNone = 0;
+    rglwidgetClass.prototype.fogLinear = 1;
+    rglwidgetClass.prototype.fogExp = 2;
+    rglwidgetClass.prototype.fogExp2 = 3;
 
     /**
      * Start the writeWebGL scene. This is only used by writeWebGL; rglwidget has

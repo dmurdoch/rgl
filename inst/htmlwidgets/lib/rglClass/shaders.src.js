@@ -19,6 +19,7 @@
           is_twosided = flags & this.f_is_twosided,
           fat_lines = flags & this.f_fat_lines,
           is_brush = flags & this.f_is_brush,
+          has_fog = flags & this.f_has_fog,
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
@@ -64,7 +65,7 @@
       
       result = result + "  void main(void) {\n";
 
-      if ((nclipplanes || !fixed_quads) && !is_brush)
+      if ((nclipplanes || !fixed_quads || has_fog) && !is_brush)
         result = result + "    vPosition = mvMatrix * vec4(aPos, 1.);\n";
 
       if (!fixed_quads && !is_brush)
@@ -149,6 +150,7 @@
           is_twosided = (flags & this.f_is_twosided) > 0,
           fat_lines = flags & this.f_fat_lines,
           is_transparent = flags & this.f_is_transparent,
+          has_fog = flags & this.f_has_fog,
           nclipplanes = this.countClipplanes(), i,
           texture_format, nlights,
           result;
@@ -174,6 +176,11 @@
       if (has_texture || type === "text")
         result = result + "  varying vec2 vTexcoord;\n"+
                           " uniform sampler2D uSampler;\n";
+
+      if (has_fog)
+        result = result + "  uniform int uFogMode;\n"+
+                          "  uniform vec3 uFogColor;\n"+
+                          "  uniform vec2 uFogParms;\n";
 
       if (is_lit && !fixed_quads)
         result = result + "  varying vec3 vNormal;\n";
@@ -211,7 +218,8 @@
         result = result + "   varying vec2 vPoint;\n"+
                           "   varying float vLength;\n";
 
-      result = result + "  void main(void) {\n";
+      result = result + "  void main(void) {\n"+
+                        "    vec4 fragColor;\n";
       
       if (fat_lines) {
         result = result + "    vec2 point = vPoint;\n"+
@@ -268,7 +276,7 @@
         }
 
       } else {
-        result = result +   "   vec4 colDiff = vCol;\n"+
+        result = result +   "    vec4 colDiff = vCol;\n"+
                             "    vec4 lighteffect = colDiff;\n";
       }
 
@@ -284,21 +292,40 @@
                             "   textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);\n",
             luminance:      "   vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);\n",
           "luminance.alpha":"    vec4 textureColor = texture2D(uSampler, vTexcoord);\n"+
-                            "   float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;\n"+
-                            "   textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);\n"
+                            "    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;\n"+
+                            "    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);\n"
           }[texture_format]+
-                            "   gl_FragColor = textureColor;\n";
+                            "    fragColor = textureColor;\n";
       } else if (type === "text") {
         result = result +   "    if (textureColor.a < 0.1)\n"+
-                            "     discard;\n"+
-                            "   else\n"+
-                            "     gl_FragColor = textureColor;\n";
+                            "      discard;\n"+
+                            "    else\n"+
+                            "      fragColor = textureColor;\n";
       } else
-        result = result +   "   gl_FragColor = lighteffect;\n";
+        result = result +   "    fragColor = lighteffect;\n";
 
+      if (has_fog) {
+        // uFogParms elements: x = near, y = far
+        // In Exp and Exp2: use density = 1/far
+        // fogF will be the proportion of fog
+        // Initialize it to the linear value
+        result = result +   "    float fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);\n"+  
+                            "    if (uFogMode != 0) {\n"+
+                            "      if (uFogMode == 2)\n"+
+                            "        fogF = 1.0 - exp(-fogF);\n"+
+                            "      else if (uFogMode == 3)\n"+
+                            "        fogF = 1.0 - exp(-fogF*fogF);\n"+ 
+                            "      fogF = clamp(fogF, 0.0, 1.0);\n"+
+                            "      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);\n"+
+                          //  "      if (fogF < 0.) gl_FragColor = vec4(1.0,0.0,0.0,1.0); else if (fogF < 1.0) gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);else gl_FragColor = vec4(0.0,1.0,0.0,1.0);\n"+
+                            "    } else gl_FragColor = fragColor;\n";
+        console.log(result);
+      } else
+        result = result +   "    gl_FragColor = fragColor;\n";
+ 
       //if (fat_lines)
       //  result = result +   "   gl_FragColor = vec4(0.0, abs(point.x), abs(point.y), 1.0);"
-      result = result + "  }\n";
+      result = result +     "  }\n";
 
       // console.log(result);
       return result;

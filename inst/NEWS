@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.3
+0.102.4
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1087,3 +1087,14 @@ base graphics.
     "minification" on installation.
   - Added utility function makeDependency() to support 
     Javascript library in source.
+  - WebGL code now supports fog in scenes.  The default
+    r3dDefaults now sets material$fog to TRUE, and bg$fog to
+    "none".  (In rgl, fog must be set *both* in the background
+    and in the object to display.)
+    The formula used in WebGL is slightly different than in the 
+    internal R display.) 
+  - getr3dDefaults now has two optional arguments to specify
+    what to retrieve, e.g. getr3dDefaults("material", "color")
+    to retrieve r3dDefaults$material$color, with NULL 
+    if either part is missing.
+  - A bug in the initial color of a mesh object has been fixed.
