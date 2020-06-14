@@ -82,7 +82,7 @@ fns <- local({
   do_newwindow <- function(options) {
     if (!newwindowdone) {
       newwindow <- options$rgl.newwindow
-      if (is.null(newwindow) || newwindow)
+      if (!is.null(newwindow) && newwindow)
         open3d()
       if (!is.null(options$rgl.keepopen))
         warning("rgl.keepopen has been replaced by rgl.newwindow")
@@ -238,10 +238,14 @@ fns <- local({
   fig.show <- NULL
   fig.beforecode <- NULL
   
-  setupKnitr <- function(autoprint = FALSE) {
+  setupKnitr <- function(autoprint = FALSE, 
+                         rgl.newwindow = autoprint,
+                         rgl.closewindows = autoprint) {
     # R produces multiple vignettes in the same session.
     environment(rglwidget)$reuseDF <- NULL
-    knitr::opts_chunk$set(rgl.newwindow = TRUE, rgl.chunk = TRUE)
+    knitr::opts_chunk$set(rgl.newwindow = rgl.newwindow, 
+                          rgl.closewindows = rgl.closewindows,
+                          rgl.chunk = TRUE)
 
       knit_hooks$set(webgl = hook_webgl)
       knit_hooks$set(webGL = hook_webgl)
@@ -272,8 +276,8 @@ fns <- local({
                      height = figHeight(),
                      options = options, args = args),
                 class = "rglRecordedplot")
-    } else 
-      knit_print(unclass(x), options, ...)
+    } else
+      invisible(x)
   }
   
   find_figs <- function(res, classes = c("recordedplot",

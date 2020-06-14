@@ -1,4 +1,4 @@
-\name{hook_rgl}
+\name{setupKnitr}
 \alias{hook_rgl}
 \alias{hook_webgl}
 \alias{hook_rglchunk}
@@ -41,7 +41,9 @@ in a code chunk if the example prints \pkg{rgl} objects.
 }
 
 \usage{
-setupKnitr(autoprint = FALSE)
+setupKnitr(autoprint = FALSE,
+           rgl.newwindow = autoprint,
+           rgl.closewindows = autoprint)
 hook_rgl(before, options, envir)
 hook_webgl(before, options, envir)
 hook_rglchunk(before, options, envir)
@@ -60,10 +62,10 @@ at the start of the document to install the \pkg{knitr} hooks.
 
 The following chunk options are supported:
 \itemize{
-  \item \code{rgl.newwindow} (default \code{TRUE}):  Whether to open a new window for the chunk.
+  \item \code{rgl.newwindow}:  Whether to open a new window for the chunk.  Default is set by `setupKnitr` argument.
   
-  \item \code{rgl.closewindows} (default \code{FALSE}): Whether
-to close windows at the end of the chunk.
+  \item \code{rgl.closewindows}: Whether
+to close windows at the end of the chunk.  Default is set by `setupKnitr` argument.
 
   \item \code{rgl.margin} (default 100):  number of pixels by which to indent the
   WebGL window.
