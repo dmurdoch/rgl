@@ -19,7 +19,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r setup, echo=FALSE, results="asis"}
+```{r setup, echo=FALSE, include=FALSE}
 source("setup.R")
 setupKnitr(autoprint = TRUE)
 set.seed(123)
@@ -514,7 +514,133 @@ Function                           | Description
 `r indexfns(c("addToSubscene3d", "delFromSubscene3d"))`: | Add objects to a subscene, or delete them
 `r indexfns("gc3d")`:              | Do "garbage collection":  delete objects that are not displayed in any subscene
 
+## Documents with `rgl` Scenes
 
+The `rgl` package can produce output that can be embedded
+in other documents.  The recommended way to do this has changed several
+times over the years.  We will start with the current
+recommendation, then list older methods.
+
+### The recommended method
+
+Currently the best way to embed an `rgl` scene in a document
+is to produce the document in HTML using R Markdown.  Early in
+the document, you should have code like this in one of the
+setup code chunks:
+
+````markdown
+`r ''````{r echo=FALSE, include=FALSE}
+library(rgl)
+setupKnitr(autoprint = TRUE)
+```
+````
+
+The call to `setupKnitr()` will install a number of hooks
+and set options in `knitr` so that `rgl` code is handled properly.
+The `autoprint = TRUE` argument makes `rgl` act in the document
+almost the same way it would act in the console, or the way 
+base graphics are handled by `knitr`:  If you print the value
+of high level `rgl` functions, a plot will be inserted into the
+output, but maybe only after low level modifications to it are
+complete.  For example, this code block prints both
+triangles and spheres in a single plot at the end:
+
+```{r}
+xyz <- matrix(rnorm(27), ncol = 3)
+triangles3d(xyz, col = rainbow(9))
+spheres3d(xyz, col = rainbow(9), radius = 0.1)
+```
+
+There are a few differences if you have a complicated situation:
+
+  -  The mechanism depends on the result of the `rgl` function
+  calls being automatically printed.
+  If the calls are in a loop or other code block where automatic
+  printing doesn't happen, you'll need some trickery to get 
+  things to print.  For example, this will print three plots:
+  
+```{r eval = FALSE}
+plots <- NULL
+for (i in 1:3) {
+  plot3d(rnorm(10), rnorm(10), rnorm(10))
+  plots <- htmltools::tagList(plots, rglwidget())
+  rgl.close()
+}
+plots
+```
+
+  - It also depends on the fact that `rgl` functions return
+  results using `lowlevel()` or `highlevel()` to mark which
+  kind of plot they are.  If you are using a function from
+  another package to produce the plot, you may need to insert
+  an explicit call to one of those to get it to print.  Use `lowlevel()` if the function just modifies an existing plot, 
+  `highlevel()` if it starts a new one.  For example,
+  
+```{r eval = FALSE}
+foreignHigh()   # Produces a high level plot, but doesn't return
+                # an appropriate value
+highlevel()
+foreignLow()    # Modifies the previous plot
+lowlevel()
+```  
+
+This should display the output at the end of the code chunk, when
+modifications are assumed complete.
+
+### Producing PDF output
+
+While some PDF previewers support interactive 3D graphics,
+most don't.  To produce a screenshot of an `rgl` scene in an R Markdown
+document with PDF output, simply follow the directions given
+above.  The auto-printing will detect PDF output and use
+`rgl.snapshot` to produce a PNG file to insert.  (See below
+if you want to insert a different format of graphic.)
+
+If you really need interactive output, see the 
+`r linkfn("writeASY")` function.
+
+### Manual insertion of plots
+
+You may not want to use the `setupKnitr(autoprint = TRUE)`
+method described above.  It is very new, and may still have
+bugs; you may have an older document and not want to edit it
+to work that way.
+
+In this case, you can insert plots manually.  Use setup
+code
+
+````markdown
+`r ''````{r echo=FALSE, include=FALSE}
+library(rgl)
+setupKnitr()
+```
+````
+
+and call `rglwidget()` at top level whenever you want to 
+insert a plot.
+
+There are a couple of other differences in default behaviour if
+you are not using `autoprint`:
+
+ - By default, each code chunk continues the `rgl` scene from
+earlier chunks.  You'll need an explicit `r linkfn("open3d")`
+call to get a clean window.
+
+ - Also by default, the `rgl` window is not closed at the end of
+the chunk.  This probably doesn't matter, but you may find
+you run out of memory if your scenes are really big.
+
+### Older methods
+
+The original way to insert an `rgl` scene in a document was to use
+the `r indexfns("writeWebGL")` function to write HTML code to insert in a document. 
+Later, `Sweave` and `knitr` hooks were added.  These are no longer maintained, and it is recommended that
+you update old documents to use the newer methods.  See
+the `r linkfn("writeWebGL")`, `r linkfn("rgl.Sweave")` and `r indexfns("hook_rgl")` help
+topics for details on these if you must use them.  If you are
+reading documents that suggest using those methods, let the
+author know they need updating!
+  
 ## Utility Functions
 
 
@@ -603,7 +729,7 @@ Function    | Description
 ----------- | -------------
 `r indexfns("scene3d")`:    | Save a scene to an R variable, which can be saved and reloaded
 `r indexfns("rglwidget")`: | Prints as HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
-`r indexfns("writeWebGL")`: | Deprecated.
+`r linkfn("writeWebGL")`: | Deprecated.
 `r indexfns("writeASY")`:   | Write files for Asymptote
 `r indexfns("writePLY")`:   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`:   | Read or write OBJ files (commonly used in 3D graphics)
@@ -694,7 +820,7 @@ printing.  Finally, the experimental function
 `r indexfns("setUserShaders")` allows you to
 use hand-written shaders in WebGL.
 
-The older approach uses the `writeWebGL` function to export a scene 
+The older approach uses the `r linkfn("writeWebGL")` function to export a scene 
 to HTML and Javascript code.  
 These functions write HTML and Javascript for working with the 
 exported scene:  `r indexfns("propertySlider")`,
