@@ -46,7 +46,7 @@ hints won't be given, and syntax errors will lead to an
 uninformative failure to minify.
 }
 \value{
-An object that can be included in a list of dependencies passed to \code{htmltools::\link[htmltools]{attachDependencies}}.
+An object that can be included in a list of dependencies passed to \code{htmltools::\link[htmltools:htmlDependencies]{attachDependencies}}.
 }
 \author{
 Duncan Murdoch

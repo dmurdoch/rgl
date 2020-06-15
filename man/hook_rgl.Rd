@@ -52,6 +52,8 @@ hook_rglchunk(before, options, envir)
   \item{autoprint}{If true, \code{rgl} commands
   automatically plot (with low level plots suppressed by
   the default value of the \code{fig.keep} chunk option.)}
+  \item{rgl.newwindow, rgl.closewindows}{Default values
+  for the \pkg{knitr} chunk options.}
   \item{before, options, envir}{
 Standard \pkg{knitr} hook function arguments.
 }
