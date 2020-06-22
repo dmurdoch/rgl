@@ -351,6 +351,8 @@
           observer = subscene.par3d.observer[2],
           parms = [this.frustum.near - 2*observer,
                    this.frustum.far - 2*observer];
+      if (typeof this.fogType === "undefined")
+        this.fogType = "none";
       switch(this.fogType){
         case "none": fogmode = 0; break;
         case "linear": fogmode = 1;break;
@@ -362,7 +364,7 @@
       color = this.fogColor;
       gl.uniform3f(obj.uFogColor, color[0], color[1], color[2]);
       gl.uniform2f(obj.uFogParms, parms[0], parms[1]);
-      console.log("observer="+observer+" uFogParms="+parms[0]+" "+parms[1]);
+      // console.log("observer="+observer+" uFogParms="+parms[0]+" "+parms[1]);
     };
 
     /* The draw methods are called twice.  When 

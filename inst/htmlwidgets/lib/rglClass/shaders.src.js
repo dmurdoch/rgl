@@ -319,7 +319,7 @@
                             "      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);\n"+
                           //  "      if (fogF < 0.) gl_FragColor = vec4(1.0,0.0,0.0,1.0); else if (fogF < 1.0) gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);else gl_FragColor = vec4(0.0,1.0,0.0,1.0);\n"+
                             "    } else gl_FragColor = fragColor;\n";
-        console.log(result);
+        // console.log(result);
       } else
         result = result +   "    gl_FragColor = fragColor;\n";
  
