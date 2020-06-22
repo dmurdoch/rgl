@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.5
+0.102.6
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1098,3 +1098,6 @@ base graphics.
     to retrieve r3dDefaults$material$color, with NULL 
     if either part is missing.
   - A bug in the initial color of a mesh object has been fixed.
+  - A bug in translating mouse coordinates (reported on 
+    StackOverflow by Richard Morey) when an rgl widget is
+    included in a Gitbook has been fixed. 

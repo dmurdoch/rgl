@@ -20,21 +20,8 @@
      * @param { Object } event - event object from mouse click
      */
     rglwidgetClass.prototype.relMouseCoords = function(event) {
-      var totalOffsetX = 0,
-      totalOffsetY = 0,
-      currentElement = this.canvas;
-
-      do {
-        totalOffsetX += currentElement.offsetLeft;
-        totalOffsetY += currentElement.offsetTop;
-        currentElement = currentElement.offsetParent;
-      }
-      while(currentElement);
-
-      var canvasX = event.pageX - totalOffsetX,
-          canvasY = event.pageY - totalOffsetY;
-
-      return {x:canvasX, y:canvasY};
+      var rect = this.canvas.getBoundingClientRect();
+      return {x:event.clientX-rect.left, y:event.clientY-rect.top};
     };
 
     /**

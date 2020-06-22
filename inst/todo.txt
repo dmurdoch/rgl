@@ -1,5 +1,8 @@
 To-do:
 
+sphere sorting is too slow; sort by centres only?  Or only do
+full sort for small counts?
+
 rglwidget() doesn't respect front and back material properties 
 for spheres.
 
