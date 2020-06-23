@@ -121,6 +121,8 @@ hook_webgl <- function(before, options, envir) {
     knit_print(rglwidget(), options = options)
   }
   do_closewindows(options)
+  m <- attr(res, 'knit_meta')
+  knit_meta_add(m, if (missing(options)) '' else options$label)
   res
 }
 
