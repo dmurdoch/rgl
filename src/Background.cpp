@@ -14,9 +14,10 @@ using namespace rgl;
 
 Material Background::defaultMaterial( Color(0.3f,0.3f,0.3f), Color(1.0f,0.0f,0.0f) );
 
-Background::Background(Material& in_material, bool in_sphere, int in_fogtype)
+Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
+                       double in_fogScale)
 : Shape(in_material, true, BACKGROUND), sphere(in_sphere), fogtype(in_fogtype),
-  quad(NULL)
+  fogScale(in_fogScale), quad(NULL)
 {
   clearColorBuffer = true;
 
@@ -87,22 +88,27 @@ void Background::render(RenderContext* renderContext)
   
   if ((fogtype != FOG_NONE) && (bbox.isValid() )) {
     // Sphere bsphere(bbox);
-
     glFogfv(GL_FOG_COLOR, material.colors.getColor(0).getFloatPtr() );
 
     switch(fogtype) {
     case FOG_LINEAR:
       glFogi(GL_FOG_MODE, GL_LINEAR);
       glFogf(GL_FOG_START, userviewpoint->frustum.znear /*bsphere.radius*2*/);
-      glFogf(GL_FOG_END,   userviewpoint->frustum.zfar /*bsphere.radius*3*/ );
+      // glFogf(GL_FOG_END,   userviewpoint->frustum.zfar /*bsphere.radius*3*/ );
+      // Scale fog density up by fogScale
+      glFogf(GL_FOG_END, (userviewpoint->frustum.zfar - userviewpoint->frustum.znear)/fogScale + 
+                          userviewpoint->frustum.znear);
       break;
     case FOG_EXP:
       glFogi(GL_FOG_MODE, GL_EXP);
-      glFogf(GL_FOG_DENSITY, 1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
+      // glFogf(GL_FOG_DENSITY, 1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
+      // Multiply fog density parameter by fogScale
+      glFogf(GL_FOG_DENSITY, fogScale*1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
       break;
     case FOG_EXP2:
       glFogi(GL_FOG_MODE, GL_EXP2);
-      glFogf(GL_FOG_DENSITY, 1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
+      // Multiply fog density parameter by fogScale
+      glFogf(GL_FOG_DENSITY, fogScale*1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
       break;
     }
 
@@ -210,6 +216,7 @@ int Background::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {    
   case FLAGS: return 4;
+  case FOGSCALE: return 1;
   case TYPES:
   case IDS: if (quad) return 1;
             else return 0;
@@ -235,6 +242,10 @@ void Background::getAttribute(AABox& bbox, AttribID attrib, int first, int count
       if (first <= 3)
 	*result++ = (double) fogtype == FOG_EXP2;
       return;
+    case FOGSCALE:
+      if (first <= 0)
+        *result++ = fogScale;
+        return;
     case IDS:
       if (quad)
       	*result++ = quad->getObjID();

@@ -387,7 +387,7 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
 //
 
 
-void rgl::rgl_bg(int* successptr, int* idata)
+void rgl::rgl_bg(int* successptr, int* idata, double* fogScale)
 {
   int success = RGL_FAIL;
 
@@ -397,7 +397,7 @@ void rgl::rgl_bg(int* successptr, int* idata)
 
     bool sphere    = as_bool( idata[0] );
     int  fogtype   = idata[1];
-    Background* bg = new Background(currentMaterial, sphere, fogtype);
+    Background* bg = new Background(currentMaterial, sphere, fogtype, fogScale[0]);
     success = as_success( device->add( bg ) );
     SceneNode*  quad = bg->getQuad();
     if (quad) {

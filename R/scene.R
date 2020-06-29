@@ -111,7 +111,7 @@ rgl.attrib.count <- function( id, attrib )
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
             texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
-	    family=1, font=1, pos=1)
+	    family=1, font=1, pos=1, fogscale=1)
 
 rgl.attrib.info <- function( id = rgl.ids("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
@@ -182,8 +182,9 @@ rgl.attrib <- function( id, attrib, first=1,
                            "flag",	     # flags
 			   "offset",         # offsets
   			   "family",         # family
-  			   "font",            # font
-			     "pos"              # pos
+  			   "font",           # font
+			   "pos",            # pos
+			   "fogscale"        # fogscale
                            )[[attrib]]
   if (attrib == 14 && count)
     if (id %in% rgl.ids("lights", subscene = 0)$id)
@@ -242,17 +243,22 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
 ##
 ##
 
-rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back="lines", ... )
+rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back="lines", 
+                   fogScale = 1, ... )
 {
   rgl.material( color=color, back=back, ... )
 
   fogtype <- rgl.enum.fogtype(fogtype)
 
   idata   <- as.integer(c(sphere,fogtype))
+  
+  fogScale <- as.numeric(fogScale)
+  stopifnot(length(fogScale) == 1, fogScale > 0)
 
   ret <- .C( rgl_bg, 
     success = as.integer(FALSE),
-    idata
+    idata,
+    fogScale
   )
 
   if (! ret$success)

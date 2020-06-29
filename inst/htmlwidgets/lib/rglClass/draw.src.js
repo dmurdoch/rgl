@@ -350,21 +350,27 @@
       var gl = this.gl, fogmode, color, 
           observer = subscene.par3d.observer[2],
           parms = [this.frustum.near - 2*observer,
-                   this.frustum.far - 2*observer];
+                   this.frustum.far - 2*observer,
+                   this.fogScale];
       if (typeof this.fogType === "undefined")
         this.fogType = "none";
+      if (typeof this.fogScale === "undefined")
+        parms[2] = 1;
       switch(this.fogType){
         case "none": fogmode = 0; break;
-        case "linear": fogmode = 1;break;
-        case "exp":  fogmode = 2; break;
-        case "exp2": fogmode = 3; break;
+        case "linear": 
+          fogmode = 1; break;
+        case "exp":  
+          fogmode = 2; break;
+        case "exp2": 
+          fogmode = 3;
+          break;
         default: console.error("Unknown fogtype "+this.fogType);
       }
       gl.uniform1i(obj.uFogMode, fogmode);
       color = this.fogColor;
       gl.uniform3f(obj.uFogColor, color[0], color[1], color[2]);
-      gl.uniform2f(obj.uFogParms, parms[0], parms[1]);
-      // console.log("observer="+observer+" uFogParms="+parms[0]+" "+parms[1]);
+      gl.uniform3f(obj.uFogParms, parms[0], parms[1], parms[2]);
     };
 
     /* The draw methods are called twice.  When 
@@ -783,6 +789,7 @@
         this.fogColor = [0,0,0,0];
   
       this.fogType = obj.fogtype;
+      this.fogScale = obj.fogscale;
       if (typeof obj.quad !== "undefined") {
         this.prMatrix.makeIdentity();
         this.mvMatrix.makeIdentity();

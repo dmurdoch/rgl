@@ -8,7 +8,7 @@
 \usage{
 bg3d(...) 
 rgl.bg( sphere = FALSE, fogtype = "none", color = c("black", "white"), 
-	back = "lines", ...)
+	back = "lines", fogScale = 1, ...)
 
 }
 \arguments{
@@ -32,6 +32,9 @@ rgl.bg( sphere = FALSE, fogtype = "none", color = c("black", "white"),
   \item{back}{
   Specifies the fill style of the sphere geometry. See \code{\link{material3d}} for details.
   }
+  \item{fogScale}{
+  Scaling for fog.  See Details.
+  }
   \item{ ... }{Material properties. See \code{\link{material3d}} for details.}  
 }
 \details{
@@ -42,6 +45,14 @@ background of the scene.  (The bitmap colors modify the general color setting.)
 
 If neither a sphere nor a bitmap background is drawn, the background is filled with a 
 solid color.
+
+The \code{fogScale} parameter should be a positive value
+to change the density of the fog in the plot.  For 
+\code{fogtype = "linear"} it multiplies the density of the
+fog; for the exponential fog types it multiplies the density
+parameter used in the display.  See 
+\href{https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFog.xml}{the OpenGL 2.1 reference} 
+for the formulas used in the fog calculations.
 }
 \examples{
   open3d()

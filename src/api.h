@@ -66,7 +66,7 @@ void rgl_light    (int* successptr, int* idata, double* ddata );
 
 void rgl_viewpoint(int* successptr, int* idata, double* ddata);
 
-void rgl_bg       (int* successptr, int* idata);
+void rgl_bg       (int* successptr, int* idata, double* fogScale);
 void rgl_bbox     (int* successptr, int* idata, double* ddata, double* xat, char** xtext, double* yat, char** ytext, double* zat, char** ztext);
 
 void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals, double* texcoords);

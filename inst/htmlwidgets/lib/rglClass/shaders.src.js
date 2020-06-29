@@ -180,7 +180,7 @@
       if (has_fog)
         result = result + "  uniform int uFogMode;\n"+
                           "  uniform vec3 uFogColor;\n"+
-                          "  uniform vec2 uFogParms;\n";
+                          "  uniform vec3 uFogParms;\n";
 
       if (is_lit && !fixed_quads)
         result = result + "  varying vec3 vNormal;\n";
@@ -305,12 +305,16 @@
         result = result +   "    fragColor = lighteffect;\n";
 
       if (has_fog) {
-        // uFogParms elements: x = near, y = far
-        // In Exp and Exp2: use density = 1/far
+        // uFogParms elements: x = near, y = far, z = density
+        // In Exp and Exp2: use density = density/far
         // fogF will be the proportion of fog
         // Initialize it to the linear value
-        result = result +   "    float fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);\n"+  
-                            "    if (uFogMode != 0) {\n"+
+        result = result +   "    float fogF;\n"+
+                            "    if (uFogMode > 0) {\n"+
+                            "      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);\n"+
+                            "      if (uFogMode > 1)\n"+
+                            "        fogF = (1. + fogF)/2.;\n"+
+                            "      fogF = fogF*uFogParms.z;\n"+
                             "      if (uFogMode == 2)\n"+
                             "        fogF = 1.0 - exp(-fogF);\n"+
                             "      else if (uFogMode == 3)\n"+

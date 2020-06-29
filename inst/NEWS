@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.8
+0.102.9
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1103,3 +1103,5 @@ base graphics.
     included in a Gitbook has been fixed. 
   - Modified writeASY() for compatibility with Asymptote
     2.65.  (Reported by Pavel Stříž.)
+  - Added fogScale parameter to bg3d() and rgl.bg() to
+    allow increased or decreased fog.
