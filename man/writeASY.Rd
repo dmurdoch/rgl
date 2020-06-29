@@ -20,7 +20,7 @@ writeASY(scene = scene3d(),
          width = 7, height = 7,
          ppi = 100,
          ids = NULL, 
-         ver244 = FALSE)
+         version = "2.65")
 }
 \arguments{
   \item{scene}{rgl scene object}
@@ -51,12 +51,12 @@ pixels).
 If not \code{NULL}, write out just these
 rgl objects.
 }
-  \item{ver244}{
+  \item{version}{
 Asymptote version 2.44 had a definition for its \dQuote{light()} function
-that was incompatibly changed in some later version.  (The new 
-version is seen in version 2.49, but may have arrived earlier.).  
-Setting \code{ver244 = TRUE} makes
-\code{writeASY} use the older definition.
+that was incompatibly changed in versions 2.47 and 2.50.  
+The current code has been tested with version 2.65.
+If you are using an older version, set \code{version}
+to your version number and it may work better.
 }
 }
 \details{

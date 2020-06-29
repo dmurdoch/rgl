@@ -8,11 +8,12 @@ writeASY <- function(scene = scene3d(),
                      height = 7,
                      ppi = 100,
                      ids = NULL,
-                     ver244 = FALSE) {
+                     version = "2.65") {
   withColors <- TRUE
   withNormals <- FALSE
 
   outtype <- match.arg(outtype)
+  version <- numeric_version(version)
   
   writeHeader <- function() {
     outformat <- c(pdf = "pdf", eps = "eps", asy = "",
@@ -351,15 +352,18 @@ ticklabel RGLScale(real s)
       	col[i,,] <- get.attrib(ids[i], "colors")[1:3, 1:3]
       	pos[i,] <- get.attrib(ids[i], "vertices")[1,]
       }
-      cols <-
-        paste(paste0("rgb(", col[, 1, 1], ",", col[, 1, 2], ",", col[, 1, 3], ")"),
-              collapse = ",")
-      result <<-
-        c(result,
-          subst(
-            'currentlight = light(ambient=new pen[] {%cols%},',
-            cols
-          ))
+      result <<- c(result, 'currentlight = light(')
+      if (version < "2.50") {
+        cols <-
+          paste(paste0("rgb(", col[, 1, 1], ",", col[, 1, 2], ",", col[, 1, 3], ")"),
+                collapse = ",")
+        result <<-
+          c(result,
+            subst(
+              'ambient=new pen[] {%cols%},',
+              cols
+            ))
+      }
       cols <-
         paste(paste0("rgb(", col[, 2, 1], ",", col[, 2, 2], ",", col[, 2, 3], ")"),
               collapse = ",")
@@ -374,7 +378,7 @@ ticklabel RGLScale(real s)
         paste(paste0("(", pos[, 1], ",", pos[, 2], ",", pos[, 3], ")"), collapse = ",")
       result <<-
         c(result, subst('position = new triple[] {%pos%}', pos))
-      if (ver244)
+      if (version < "2.47")
         result <<-
         c(
           result,
