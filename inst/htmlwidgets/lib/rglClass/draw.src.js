@@ -349,13 +349,17 @@
     rglwidgetClass.prototype.doFog = function(obj, subscene) {
       var gl = this.gl, fogmode, color, 
           observer = subscene.par3d.observer[2],
+          sintheta = Math.sin(subscene.par3d.FOV*Math.PI/180/2),
           parms = [this.frustum.near - 2*observer,
                    this.frustum.far - 2*observer,
-                   this.fogScale];
+                   this.fogScale,
+                   (1-sintheta)/(1+sintheta)];
       if (typeof this.fogType === "undefined")
         this.fogType = "none";
       if (typeof this.fogScale === "undefined")
         parms[2] = 1;
+      if (sintheta === 0)
+        parms[3] = 1/3;
       switch(this.fogType){
         case "none": fogmode = 0; break;
         case "linear": 
@@ -370,7 +374,7 @@
       gl.uniform1i(obj.uFogMode, fogmode);
       color = this.fogColor;
       gl.uniform3f(obj.uFogColor, color[0], color[1], color[2]);
-      gl.uniform3f(obj.uFogParms, parms[0], parms[1], parms[2]);
+      gl.uniform4f(obj.uFogParms, parms[0], parms[1], parms[2], parms[3]);
     };
 
     /* The draw methods are called twice.  When 
