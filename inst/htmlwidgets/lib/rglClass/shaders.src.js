@@ -317,6 +317,8 @@
                             "      fogF = fogF*uFogParms.z;\n"+
                             "      if (uFogMode == 2)\n"+
                             "        fogF = 1.0 - exp(-fogF);\n"+
+  // Docs are wrong: use (density*c)^2, not density*c^2
+  // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
                             "      else if (uFogMode == 3)\n"+
                             "        fogF = 1.0 - exp(-fogF*fogF);\n"+ 
                             "      fogF = clamp(fogF, 0.0, 1.0);\n"+

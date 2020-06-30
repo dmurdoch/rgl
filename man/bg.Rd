@@ -38,6 +38,8 @@ rgl.bg( sphere = FALSE, fogtype = "none", color = c("black", "white"),
   \item{ ... }{Material properties. See \code{\link{material3d}} for details.}  
 }
 \details{
+\loadmathjax
+
 If sphere is set to \code{TRUE}, an environmental sphere enclosing the whole scene is drawn.
 
 If not, but the material properties include a bitmap as a texture, the bitmap is drawn in the 
@@ -50,9 +52,34 @@ The \code{fogScale} parameter should be a positive value
 to change the density of the fog in the plot.  For 
 \code{fogtype = "linear"} it multiplies the density of the
 fog; for the exponential fog types it multiplies the density
-parameter used in the display.  See 
+parameter used in the display.  
+
+See 
 \href{https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFog.xml}{the OpenGL 2.1 reference} 
-for the formulas used in the fog calculations.
+for the formulas used in the fog calculations within \R (though the
+\code{"exp2"} formula appears to be wrong, at least on my
+system).  In WebGL displays,
+the following rules are used.  They appear to match the
+rules used in \R on my system.
+\itemize{
+\item{For \code{"linear"} fog, the near clipping plane is
+taken as \mjeqn{c=0}{c=0}, and the 
+far clipping plane is taken as \mjeqn{c=1}{c=1}.  The
+amount of fog is \mjeqn{sc}{s * c} clamped to a 0 to 1
+range, where \mjeqn{s = \texttt{fogScale}}{s = fogScale}.}
+\item{For \code{"exp"} and \code{"exp2"} fog, the observer location
+is negative at a distance depending on the field of view.
+The formula for the distance is 
+\mjdeqn{d = \frac{1 - \sin \theta}{1 + \sin \theta}}{c = [1-sin(theta)]/[1 + sin(theta)]}
+where \mjeqn{\theta = \mbox{FOV}/2}{theta = FOV/2}.
+We calculate \mjdeqn{c^\prime = d (1-c) + c}{c' = d(1-c) + c}
+so \mjeqn{c^\prime}{c'} runs from 0 at the observer to
+1 at the far clipping plane.}
+\item{For \code{"exp"} fog, the amount of fog is 
+\mjeqn{1 - \exp(-s c^\prime)}{1 - exp(-s * c')}.}
+\item{For \code{"exp2"} fog, the amount of fog is
+\mjeqn{1 - \exp[-(s c^\prime)^2]}{1 - exp[-(s * c')^2]}.}
+}
 }
 \examples{
   open3d()
