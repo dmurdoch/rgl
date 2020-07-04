@@ -186,7 +186,7 @@ rgl.attrib <- function( id, attrib, first=1,
 			   "pos",            # pos
 			   "fogscale"        # fogscale
                            )[[attrib]]
-  if (attrib == 14 && count)
+  if (attrib == 14 && count) # flags
     if (id %in% rgl.ids("lights", subscene = 0)$id)
       rownames(result) <- c("viewpoint", "finite")[first:last]
     else if (id %in% rgl.ids("background", subscene = 0)$id)
@@ -197,6 +197,7 @@ rgl.attrib <- function( id, attrib, first=1,
       type <- ids$type[ids$id == id]
       rownames(result) <- c("ignoreExtent", 
                             if (type == "surface") "flipped"
+                            else if (type == "spheres") "fastTransparency"
                             else "fixedSize")[first:last]
     }
   result
@@ -595,7 +596,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
 ## add spheres
 ##
 
-rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
+rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE, ...)
 {
   rgl.material(...)
 
@@ -612,6 +613,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
     idata,
     as.numeric(vertex),    
     as.numeric(radius),
+    as.integer(fastTransparency),
     NAOK=TRUE
   )
 

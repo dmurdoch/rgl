@@ -523,7 +523,8 @@
           gl = this.gl || this.initGL(),
           sphereMV, baseofs, ofs, sscale, i, j, k, 
           count, nc, scount, scale, indices, sphereNorm,
-          enabled = {}, drawing, result = [];
+          enabled = {}, drawing, wholeSphere, 
+          result = [];
 
       if (!obj.initialized)
         this.initObj(obj.id);
@@ -578,17 +579,22 @@
       }
       
       scount = count;
-      if (!this.opaquePass)
+      indices = context.indices;
+      wholeSphere = this.opaquePass || context.subid < 0;
+      if (!wholeSphere)
         scount = 1;
         
       for (i = 0; i < scount; i++) {
         sphereMV = new CanvasMatrix4();
 
-        if (!this.opaquePass) {
+        if (!wholeSphere) {
           baseofs = context.subid*obj.vOffsets.stride;
-        } else {
+        } else if (this.opaquePass) {
           baseofs = i*obj.vOffsets.stride;
+        } else {
+          baseofs = context.indices[i]*obj.vOffsets.stride;
         }
+        
 
         ofs = baseofs + obj.vOffsets.radofs;
         sscale = obj.values[ofs];
@@ -609,8 +615,7 @@
                                        obj.values[ofs+3] );
           }
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
-          if (!this.opaquePass) {
-            indices = context.indices;
+          if (!wholeSphere) {
             f = new Uint16Array(3*indices.length);
             for (j=0; j < indices.length; j++) 
               for (k=0; k < 3; k++)
@@ -621,8 +626,8 @@
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.sphere.it, gl.DYNAMIC_DRAW);
             gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
           }
-        } else
-          result = result.concat(this.getPieces(context, obj.id, i, this.sphere));
+        } else 
+          result = result.concat(this.getSpherePieces(context, obj.id, i, this.sphere, obj.fastTransparency));
       }
       if (drawing)
         this.disableArrays(obj, enabled);

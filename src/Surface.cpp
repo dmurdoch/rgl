@@ -304,7 +304,7 @@ void Surface::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
         return;
       }
       case FLAGS:
-        *result++ = (double) ignoreExtent;
+        if (first == 0) *result++ = (double) ignoreExtent;
         *result++ = (double) orientation;
         return;
       }

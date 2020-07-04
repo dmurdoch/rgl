@@ -29,6 +29,17 @@
       return result;    
     };
     
+    rglwidgetClass.prototype.getSpherePieces = function(context, objid, subid, obj, fastTransparency)
+    {
+      if (fastTransparency)
+        if (subid === 0) 
+          return this.getPieces(context, objid, -1, this.getObj(objid));
+        else 
+          return [];
+      else
+        return this.getPieces(context, objid, subid, obj);
+    };
+    
     rglwidgetClass.prototype.sortPieces = function(pieces) {
       var compare = function(i,j) {
         var diff = j.depth - i.depth;

@@ -7,7 +7,7 @@
 }
 \usage{
 spheres3d(x, y = NULL, z = NULL, radius = 1, ...)
-rgl.spheres(x, y = NULL, z = NULL, radius, ...)
+rgl.spheres(x, y = NULL, z = NULL, radius, fastTransparency = TRUE, ...)
 }
 \arguments{
   \item{x, y, z}{Numeric vector of point coordinates corresponding to
@@ -15,6 +15,8 @@ rgl.spheres(x, y = NULL, z = NULL, radius, ...)
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{radius}{Vector or single value defining the sphere radius/radii}
+  \item{fastTransparency}{logical value indicating whether
+fast sorting should be used for transparency.  See the Details.}
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}
 }
 \details{
@@ -34,6 +36,18 @@ If a texture is used, its bitmap is wrapped around the
 sphere, with the top edge at the maximum y coordinate, 
 and the left-right edges joined at the maximum in the
 z coordinate, centred in x.
+
+If the \code{alpha} material value of the spheres is less than 
+the default \code{1}, they need to be drawn in order from
+back to front.  When \code{fastTransparency} is \code{TRUE}, this is approximated by sorting the centers and drawing
+complete spheres in that order.  This produces acceptable
+results in most cases, but artifacts may be visible, 
+especially if the \code{radius} values vary, or they 
+intersect other transparent objects.  Setting 
+\code{fastTransparency = FALSE} will cause the sorting 
+to apply to each of the 512 facets of individual spheres.
+This is much slower, but may produce better
+output.
 } 
 \value{
   A shape ID of the spheres object is returned.

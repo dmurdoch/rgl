@@ -215,7 +215,7 @@ void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count,
         }
         return;
       case FLAGS:
-      	*result++ = (double) ignoreExtent;
+      	if (first == 0) *result++ = (double) ignoreExtent;
       	*result++ = (double) fixedSize;
       	return;
     }  

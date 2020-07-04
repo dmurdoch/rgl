@@ -597,7 +597,8 @@ void rgl::rgl_surface(int* successptr, int* idata, double* x, double* z, double*
   *successptr = success;
 }
 
-void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
+void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radius,
+                      int* fastTransparency)
 {
   int success = RGL_FAIL;
 
@@ -609,7 +610,7 @@ void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radiu
     int nradius = idata[1];
 
     success = as_success( device->add( new SphereSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent()) ) );
+    						     device->getIgnoreExtent(), *fastTransparency != 0) ) );
     CHECKGLERROR;
   }
 

@@ -14,9 +14,10 @@ private:
   SphereMesh    sphereMesh;
   int           facets, lastdrawn;
   bool          lastendcap; 
+  bool          fastTransparency;
 public:
   SphereSet(Material& in_material, int nsphere, double* center, int nradius, double* radius, 
-            int in_ignoreExtent);
+            int in_ignoreExtent, bool in_fastTransparency);
   ~SphereSet();
 
   /**
