@@ -520,6 +520,7 @@
           is_lit = flags & this.f_is_lit,
           has_texture = flags & this.f_has_texture,
           is_transparent = flags & this.f_is_transparent,
+          has_fog = flags & this.f_has_fog,
           gl = this.gl || this.initGL(),
           sphereMV, baseofs, ofs, sscale, i, j, k, 
           count, nc, scount, scale, indices, sphereNorm,
@@ -558,6 +559,13 @@
         if (is_lit) 
           this.doLighting(obj, subscene);
 
+        if (has_fog)
+          this.doFog(obj, subscene);
+
+        this.doUserAttributes(obj);
+
+        this.doUserUniforms(obj);
+ 
         gl.enableVertexAttribArray( this.posLoc );
         enabled.posLoc = true;
         
