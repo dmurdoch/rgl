@@ -42,14 +42,14 @@
   oh3d(trans = identityMatrix(), ...)    # an 'o' object
   
   dot3d(x, ...)   # draw dots at the vertices of an object
-  \method{dot3d}{mesh3d}(x, override = TRUE, 
-                         meshColor = c("vertices", "edges", "faces", "legacy"),...)
+  \method{dot3d}{mesh3d}(x, ...,
+                         front = "points", back = "points")
   wire3d(x, ...)  # draw a wireframe object
-  \method{wire3d}{mesh3d}(x, override = TRUE, 
-                          meshColor = c("vertices", "edges", "faces", "legacy"), ...)
+  \method{wire3d}{mesh3d}(x, ...,
+                          front = "lines", back = "lines")
   shade3d(x, ...) # draw a shaded object
   \method{shade3d}{mesh3d}(x, override = TRUE, 
-                           meshColor = c("vertices", "faces", "legacy"), ...)
+                           meshColor = c("vertices", "faces", "legacy"), ..., front = "filled", back = "filled")
 }
 \arguments{
   \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d}).}
@@ -60,7 +60,9 @@
   \item{normals}{normals at each vertex}
   \item{texcoords}{texture coordinates at each vertex}
   \item{trans}{transformation to apply to objects; see below for defaults}
-  \item{...}{additional rendering parameters}
+  \item{...}{additional rendering parameters, or for
+  \code{dots3d} and \code{wire3d}, parameters to pass
+  to \code{shade3d}}
   \item{override}{should the parameters specified here override those stored in the object?}
   \item{meshColor}{how should colours be interpreted?  See details 
   below}
@@ -92,7 +94,9 @@ was added in \pkg{rgl} version 0.100.1 (0.100.27 for \code{dot3d}, \code{tmesh3d
 they appear in the \code{vb} matrix.}
 \item{\code{"edges"}}{Colours are applied to each edge:  first to the
 3 edges of each triangle in the \code{it} matrix, then the 4
-edges of each quad in the \code{ib} matrix.}
+edges of each quad in the \code{ib} matrix.  This mode
+is only supported if both front and back materials are
+\code{"lines"}.}
 \item{\code{"faces"}}{Colours are applied to each face:  first to the
 triangles in the \code{it} matrix, then to the quads in the \code{ib}
 matrix.}
@@ -108,12 +112,14 @@ interpretation may have changed.  In versions 0.100.1 to 0.100.26
 of \pkg{rgl}, the default
 was to give the warning; now the default is for no warning.
 
-Note that the \code{shade3d} function doesn't support \code{meshColor = "edges"}, and \code{dot3d} and \code{wire3d} function may draw
-items more than once (\code{dot3d} for other than \code{meshColor = "vertices"}, 
-\code{wire3d} for \code{meshColor = "faces"}).  Which 
-copy is visible depends on the order of drawing and the
+Note that since version 0.102.10, \code{meshColor = 
+"edges"} is only allowed when drawing lines (the
+\code{wire3d} default), and it may draw
+edges more than once.  In general, if any rendering
+draws twice at the same location, which copy is visible 
+depends on the order of drawing and the
 \code{\link{material3d}("depth_test")}
-setting.
+setting.  
 }
 \value{
   \code{qmesh3d}, \code{cube3d}, \code{oh3d}, \code{tmesh3d},

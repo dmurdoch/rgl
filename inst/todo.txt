@@ -1,5 +1,6 @@
 To-do:
 
+
 sphere sorting is too slow; sort by centres only?  Or only do
 full sort for small counts?
 
@@ -49,6 +50,12 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+
+wire3d etc. should allow "front" and "back" material
+properties to be overridden.  Basically the three of
+them should be the same function with different defaults.
+DONE
 
 After example(legend3d), things are mixed up: the
 viewport doesn't match the place where things are drawn. FIXED 
