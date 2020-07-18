@@ -32,7 +32,7 @@
     rglwidgetClass.prototype.getSpherePieces = function(context, objid, subid, obj, fastTransparency)
     {
       if (fastTransparency)
-        if (subid === 0) 
+        if (subid === 0) // Only compute pieces once
           return this.getPieces(context, objid, -1, this.getObj(objid));
         else 
           return [];

@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.10
+0.102.11
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1110,4 +1110,4 @@ base graphics.
     when transparency is used.
   - "mesh3d"" methods for shade3d, wire3d, and dots3d
     have been rewritten to share code, allowing meshes
-    to have mixed front and back material properties.
+    to have different front and back material properties.

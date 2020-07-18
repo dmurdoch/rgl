@@ -20,6 +20,8 @@
           fat_lines = flags & this.f_fat_lines,
           is_brush = flags & this.f_is_brush,
           has_fog = flags & this.f_has_fog,
+          has_normals = typeof obj.normals !== "undefined",
+          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && (has_normals || obj.type === "spheres")),
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
@@ -34,7 +36,7 @@
       " varying vec4 vCol;\n"+
       " varying vec4 vPosition;\n";
 
-      if (is_lit && !fixed_quads && !is_brush)
+      if (needs_vnormal)
         result = result + "  attribute vec3 aNorm;\n"+
                           " uniform mat4 normMatrix;\n"+
                           " varying vec3 vNormal;\n";
@@ -50,9 +52,12 @@
         result = result + "  attribute vec2 aOfs;\n";
 
       if (is_twosided)
-        result = result + "  attribute vec3 aPos1;\n"+
-                          "  attribute vec3 aPos2;\n"+
-                          "  varying float normz;\n";
+        if (has_normals || obj.type === "spheres")
+          result = result + "  varying float normz;\n";
+        else
+          result = result + "  attribute vec3 aPos1;\n"+
+                            "  attribute vec3 aPos2;\n"+
+                            "  varying float normz;\n";
 
       if (fat_lines) {
       	result = result +   "  attribute vec3 aNext;\n"+
@@ -78,7 +83,7 @@
 
       result = result + "    vCol = aCol;\n";
 
-      if (is_lit && !fixed_quads && !is_brush)
+      if (needs_vnormal)
         result = result + "    vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);\n";
 
       if (has_texture || type == "text")
@@ -95,11 +100,14 @@
                           "   gl_Position = prMatrix*pos;\n";
 
       if (is_twosided)
-        result = result + "   vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n"+
-                          "   pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n"+
-                          "   vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n"+
-                          "   pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n"+
-                          "   normz = pos1.x*pos2.y - pos1.y*pos2.x;\n";
+        if (has_normals || obj.type === "spheres")
+          result = result + "   normz = vNormal.z;";
+        else
+          result = result + "   vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n"+
+                            "   pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n"+
+                            "   vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n"+
+                            "   pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n"+
+                            "   normz = pos1.x*pos2.y - pos1.y*pos2.x;\n";
                           
       if (fat_lines) 
         /* This code was inspired by Matt Deslauriers' code in https://mattdesl.svbtle.com/drawing-lines-is-hard */
@@ -325,7 +333,6 @@
                             "      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);\n"+
                           //  "      if (fogF < 0.) gl_FragColor = vec4(1.0,0.0,0.0,1.0); else if (fogF < 1.0) gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);else gl_FragColor = vec4(0.0,1.0,0.0,1.0);\n"+
                             "    } else gl_FragColor = fragColor;\n";
-        // console.log(result);
       } else
         result = result +   "    gl_FragColor = fragColor;\n";
  

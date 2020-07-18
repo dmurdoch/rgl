@@ -497,3 +497,13 @@
       	rect.bottom <= 2*windHeight &&
       	rect.right <= 2*windWidth);
     };
+    
+    rglwidgetClass.prototype.keydiff = function(obj1, obj2) {
+      var keys = Object.keys(obj1), i, result = [];
+      for (i=0;i<keys.length;i++) {
+        if (typeof obj1[keys[i]] !== "undefined" &&
+            typeof obj2[keys[i]] === "undefined")
+          result.push(keys[i]);
+      }
+      return result;
+    };

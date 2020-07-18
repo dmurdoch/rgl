@@ -49,7 +49,8 @@
                           front = "lines", back = "lines")
   shade3d(x, ...) # draw a shaded object
   \method{shade3d}{mesh3d}(x, override = TRUE, 
-                           meshColor = c("vertices", "faces", "legacy"), ..., front = "filled", back = "filled")
+                           meshColor = c("vertices", "edges", "faces", "legacy"), ...,
+                           front = "filled", back = "filled")
 }
 \arguments{
   \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d}).}
@@ -66,6 +67,7 @@
   \item{override}{should the parameters specified here override those stored in the object?}
   \item{meshColor}{how should colours be interpreted?  See details 
   below}
+  \item{front, back}{Material properties for rendering.}
 }
 \details{
   These functions create and work with \code{mesh3d} objects, which consist of a matrix

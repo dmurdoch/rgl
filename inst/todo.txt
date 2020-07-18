@@ -1,9 +1,6 @@
 To-do:
 
 
-sphere sorting is too slow; sort by centres only?  Or only do
-full sort for small counts?
-
 rglwidget() doesn't respect front and back material properties 
 for spheres.
 
@@ -51,6 +48,9 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+
+sphere sorting is too slow; sort by centres only?  Or only do
+full sort for small counts?  DONE
 
 wire3d etc. should allow "front" and "back" material
 properties to be overridden.  Basically the three of

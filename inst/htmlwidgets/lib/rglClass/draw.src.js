@@ -107,7 +107,9 @@
                      text : "TRIANGLES",
                      quads : "TRIANGLES",
                      surface : "TRIANGLES",
-                     triangles : "TRIANGLES"};
+                     triangles : "TRIANGLES",
+                     sphere : "TRIANGLES"
+    };
 
     rglwidgetClass.prototype.disableArrays = function(obj, enabled) {
       var gl = this.gl || this.initGL(),
@@ -220,7 +222,7 @@
     
     rglwidgetClass.prototype.doNormals = function(obj) {
       var gl = this.gl;
-      if (obj.vOffsets.nofs > 0) {
+      if (obj.vOffsets.nofs >= 0) {
         gl.enableVertexAttribArray( obj.normLoc );
         gl.vertexAttribPointer(obj.normLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nofs);
         return true;
@@ -302,6 +304,7 @@
           else
             step = 1;
           break;
+        case "sphere":
         case "planes":
         case "triangles":
           step = 3;
@@ -407,7 +410,8 @@
       if (!obj.initialized)
         this.initObj(obj.id);
 
-      if (!obj.vertexCount)
+      count = obj.vertexCount;
+      if (!count)
         return [];
     
       is_transparent |= obj.someHidden;
@@ -431,11 +435,19 @@
       if (is_lit)
         this.doLighting(obj, subscene);
 
+      if (has_fog)
+        this.doFog(obj, subscene);
+
+      this.doUserAttributes(obj);
+
+      this.doUserUniforms(obj);
+ 
       gl.enableVertexAttribArray( this.posLoc );
       enabled.posLoc = true;
+        
+      if (has_texture || obj.type === "text")
+        enabled.texLoc = this.doTexture(obj);
 
-      count = obj.vertexCount;
-      
       enabled.colLoc = this.doColors(obj);
       if (is_lit)
         enabled.normLoc = this.doNormals(obj);
@@ -443,23 +455,13 @@
       if (fixed_size) {
         gl.uniform2f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height);
       }
-
-      if (has_texture || obj.type === "text")
-        enabled.texLoc = this.doTexture(obj);
-
+      
       if (fixed_quads) {
         gl.enableVertexAttribArray( obj.ofsLoc );
         enabled.ofsLoc = true;
         gl.vertexAttribPointer(obj.ofsLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
       }
-      
-      if (has_fog)
-        this.doFog(obj, subscene);
 
-      this.doUserAttributes(obj);
-
-      this.doUserUniforms(obj);
-      
       for (pass = 0; pass < obj.passes; pass++) {
       	pmode = obj.pmode[pass];
         if (pmode === "culled")
@@ -471,7 +473,7 @@
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
-        if (!this.opaquePass)
+        if (!this.opaquePass && !(type === "sphere" && obj.fastTransparency))
           count = this.doLoadIndices(obj, pass, context.indices);
         else {
           count = obj.f[pass].length;
@@ -517,14 +519,12 @@
      */
     rglwidgetClass.prototype.drawSpheres = function(obj, subscene, context) {
       var flags = obj.flags,
-          is_lit = flags & this.f_is_lit,
-          has_texture = flags & this.f_has_texture,
           is_transparent = flags & this.f_is_transparent,
-          has_fog = flags & this.f_has_fog,
-          gl = this.gl || this.initGL(),
-          sphereMV, baseofs, ofs, sscale, i, j, k, 
+          sphereMV, baseofs, ofs, sscale, i,
           count, nc, scount, scale, indices, sphereNorm,
           enabled = {}, drawing, wholeSphere, 
+          saveNorm = new CanvasMatrix4(this.normMatrix),
+          saveMV = new CanvasMatrix4(this.mvMatrix),
           result = [];
 
       if (!obj.initialized)
@@ -537,73 +537,44 @@
       scale = subscene.par3d.scale;        
       sphereNorm = new CanvasMatrix4();
       sphereNorm.scale(scale[0], scale[1], scale[2]);
-      sphereNorm.multRight(this.normMatrix);
-        
-      is_transparent |= obj.someHidden;
+      sphereNorm.multRight(saveNorm);
+      this.normMatrix = sphereNorm;
 
+      if (this.opaquePass && !obj.fastTransparency) {
+        context = context.slice();
+        context.push(obj.id);
+      } 
+      
       drawing = this.opaquePass ^ (is_transparent !== 0);
       if (drawing) {
-        this.doDepthTest(obj);
-      
-        gl.useProgram(obj.prog);
-
-        this.doPolygonOffset(obj);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.sphere.buf);
-      
-        gl.uniformMatrix4fv( obj.prMatLoc, false, new Float32Array(this.prMatrix.getAsArray()) );
-        gl.uniformMatrix4fv( obj.mvMatLoc, false, new Float32Array(this.mvMatrix.getAsArray()) );
-
-        this.doClipping(obj, subscene);
-
-        if (is_lit) 
-          this.doLighting(obj, subscene);
-
-        if (has_fog)
-          this.doFog(obj, subscene);
-
-        this.doUserAttributes(obj);
-
-        this.doUserUniforms(obj);
- 
-        gl.enableVertexAttribArray( this.posLoc );
-        enabled.posLoc = true;
-        
-        gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
-        gl.enableVertexAttribArray(obj.normLoc );
-        enabled.normLoc = true;
-        gl.vertexAttribPointer(obj.normLoc,  3, gl.FLOAT, false, 4*this.sphere.vOffsets.stride,  0);
-        gl.disableVertexAttribArray( this.colLoc );
-
-        gl.uniformMatrix4fv( obj.normMatLoc, false, new Float32Array(sphereNorm.getAsArray()) );
-
         nc = obj.colorCount;
         if (nc == 1) {
-          gl.vertexAttrib4fv( this.colLoc, new Float32Array(obj.onecolor));
+          this.sphere.onecolor = obj.onecolor;
         }
-
-        if (has_texture)
-          enabled.texLoc = this.doTexture(obj);
       }
       
+      this.initSphereFromObj(obj);
+                
       scount = count;
       indices = context.indices;
       wholeSphere = this.opaquePass || context.subid < 0;
       if (!wholeSphere)
         scount = 1;
+      else if (!this.opaquePass)
+        scount = indices.length;
         
       for (i = 0; i < scount; i++) {
         sphereMV = new CanvasMatrix4();
-
         if (!wholeSphere) {
-          baseofs = context.subid*obj.vOffsets.stride;
+          idx = context.subid;
         } else if (this.opaquePass) {
-          baseofs = i*obj.vOffsets.stride;
+          idx = i;
         } else {
-          baseofs = context.indices[i]*obj.vOffsets.stride;
+          idx = indices[i];
         }
-        
-
+        if (typeof idx === "undefined")
+          console.error("idx is undefined");
+        baseofs = idx*obj.vOffsets.stride;
         ofs = baseofs + obj.vOffsets.radofs;
         sscale = obj.values[ofs];
 
@@ -611,38 +582,24 @@
         sphereMV.translate(obj.values[baseofs],
                              obj.values[baseofs+1],
                              obj.values[baseofs+2]);
-        sphereMV.multRight(this.mvMatrix);
+        sphereMV.multRight(saveMV);
         if (drawing) {
-          gl.uniformMatrix4fv( obj.mvMatLoc, false, new Float32Array(sphereMV.getAsArray()) );
-
+          this.mvMatrix = sphereMV;
           if (nc > 1) {
-            ofs = baseofs + obj.vOffsets.cofs;
-            gl.vertexAttrib4f( this.colLoc, obj.values[ofs],
-                                        obj.values[ofs+1],
-                                       obj.values[ofs+2],
-                                       obj.values[ofs+3] );
+            this.sphere.onecolor = this.flatten(obj.colors[idx]);
           }
-          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.sphere.ibuf);
-          if (!wholeSphere) {
-            f = new Uint16Array(3*indices.length);
-            for (j=0; j < indices.length; j++) 
-              for (k=0; k < 3; k++)
-                f[3*j + k] = this.sphere.it[3*indices[j] + k];
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, f, gl.DYNAMIC_DRAW);
-            gl.drawElements(gl.TRIANGLES, 3*indices.length, gl.UNSIGNED_SHORT, 0);
-          } else {
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.sphere.it, gl.DYNAMIC_DRAW);
-            gl.drawElements(gl.TRIANGLES, this.sphere.sphereCount, gl.UNSIGNED_SHORT, 0);
-          }
+          this.drawSimple(this.sphere, subscene, context);
         } else 
           result = result.concat(this.getSpherePieces(context, obj.id, i, this.sphere, obj.fastTransparency));
       }
       if (drawing)
         this.disableArrays(obj, enabled);
+      this.normMatrix = saveNorm;
+      this.mvMatrix = saveMV;
         
       return result;
     };
-   
+    
     /**
      * Prepare clipplanes for drawing
      * @param { object } obj - clip planes object
@@ -910,8 +867,11 @@
           case "sprites":
             result = result.concat(context.pop());
             break;
+          case "spheres":
+            this.initSphereFromObj(obj);
+            break;
           default:
-            console.error("bad type in setContext");
+            console.error("bad type '", type, "' in setContext");
         }
       }
       return result;
