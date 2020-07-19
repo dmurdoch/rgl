@@ -1,9 +1,5 @@
 To-do:
 
-
-rglwidget() doesn't respect front and back material properties 
-for spheres.
-
 Add knit_print method to rglWebGL class so rglwidget can
 print as snapshot when printing from a PDF project.
 
@@ -48,6 +44,8 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+rglwidget() doesn't respect front and back material properties 
+for spheres. FIXED
 
 sphere sorting is too slow; sort by centres only?  Or only do
 full sort for small counts?  DONE

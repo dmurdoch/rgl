@@ -533,6 +533,8 @@
       count = obj.vertexCount;
       if (!count)
         return result;
+        
+      is_transparent |= obj.someHidden;
 
       scale = subscene.par3d.scale;        
       sphereNorm = new CanvasMatrix4();
@@ -586,7 +588,7 @@
         if (drawing) {
           this.mvMatrix = sphereMV;
           if (nc > 1) {
-            this.sphere.onecolor = this.flatten(obj.colors[idx]);
+            this.sphere.onecolor = this.flatten(obj.sphereColors[idx]);
           }
           this.drawSimple(this.sphere, subscene, context);
         } else 

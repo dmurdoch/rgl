@@ -427,6 +427,8 @@
             colors[i][3] = colors[i][3]*options.filteredFade;   /* default: completely hidden if filtered */
           }
     }  
+    if (obj.type === "spheres")
+      obj.sphereColors = colors;
     
     nc = obj.colorCount = colors.length;
     if (nc > 1) {
