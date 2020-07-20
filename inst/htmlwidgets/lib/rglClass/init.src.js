@@ -30,7 +30,6 @@
                this.canvas.getContext("experimental-webgl", this.webGLoptions);
       this.index_uint = this.gl.getExtension("OES_element_index_uint");
       var save = this.startDrawing();
-      this.initSphereGL();
       Object.keys(this.scene.objects).forEach(function(key){
         self.initObj(parseInt(key, 10));
         });
@@ -83,6 +82,7 @@
         result.f = [];
         result.indices = {};
         this.sphere = result;
+        this.initSphereGL();
       }
     };
 
@@ -960,7 +960,6 @@
         self.initSubscene(parseInt(key, 10));
       });
       this.setMouseHandlers();
-      this.initSphere();
 
       this.onContextRestored = function() {
         self.initGL();
