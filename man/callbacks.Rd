@@ -79,6 +79,7 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
    cat("Callbacks set on button", button, "of rgl device", dev, "in subscene", subscene, "\n")
  }
  shade3d(icosahedron3d(), col = "yellow")
+ # This only works in the internal display...
  pan3d(1)
 }
 \keyword{ dynamic }

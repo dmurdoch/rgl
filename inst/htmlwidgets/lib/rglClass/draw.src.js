@@ -809,13 +809,13 @@
 
       this.setViewport(subsceneid);
 
+      this.setprMatrix(subsceneid);
+      this.setmvMatrix(subsceneid);
+        
       if (typeof sub.backgroundId !== "undefined" && this.opaquePass)
         this.drawBackground(sub.backgroundId, subsceneid);
 
       if (subids.length) {
-        this.setprMatrix(subsceneid);
-        this.setmvMatrix(subsceneid);
-
         if (subscene_has_faces) {
           this.setnormMatrix(subsceneid);
           if ((sub.flags & this.f_sprites_3d) &&
