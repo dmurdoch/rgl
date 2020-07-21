@@ -87,7 +87,7 @@ writeIndex <- function(names, htmlnames, cols = 4) {
 }
 
 library(rgl)
-options(rgl.useNULL = TRUE)
+saveopts <- options(rgl.useNULL = TRUE)
 prevlink <- "[Prev](index.html)"
 indexlink <- "[Index](index.html)"
 
@@ -141,6 +141,7 @@ while(length(rgl.dev.list())) rgl.close()
   prevlink <- paste0("[Prev](", htmlnames[i], ")")
   rmarkdown::render(Rmdnames[i])
   while(length(rgl.dev.list())) rgl.close()
+  environment(rglwidget)$reuseDF <- NULL
 }
 
 indexname <- "index.Rmd"
@@ -159,4 +160,5 @@ writeIndex(names, htmlnames)), index)
 close(index)
 
 browseURL(rmarkdown::render(indexname))
+options(saveopts)
 setwd(olddir)

@@ -1,5 +1,7 @@
 To-do:
 
+Put class on open3d() result so it acts like a high level plot.
+
 Add knit_print method to rglWebGL class so rglwidget can
 print as snapshot when printing from a PDF project.
 
