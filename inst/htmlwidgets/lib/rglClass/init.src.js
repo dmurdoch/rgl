@@ -251,6 +251,9 @@
 
     if (type === "bboxdeco" || type === "subscene")
       return;
+      
+    if (type === "spheres" && typeof this.sphere === "undefined")
+      this.initSphere();
 
     if (type === "light") {
       obj.ambient = new Float32Array(obj.colors[0].slice(0,3));

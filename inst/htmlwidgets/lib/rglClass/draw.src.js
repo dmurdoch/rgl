@@ -527,9 +527,6 @@
           saveMV = new CanvasMatrix4(this.mvMatrix),
           result = [];
 
-      if (typeof this.sphere === "undefined")
-        this.initSphere();
-        
       if (!obj.initialized)
         this.initObj(obj.id);
 
