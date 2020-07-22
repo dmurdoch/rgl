@@ -95,11 +95,13 @@ r <- sqrt(x^2 + y^2)
 z <- 10 * sin(r)/r
 col <- cm.colors(20)[1 + round(19*(z - min(z))/diff(range(z)))]
 save <- NULL
-if (requireNamespace("interp", quietly = TRUE)) {
+if ((haveinterp <- requireNamespace("interp", quietly = TRUE))) {
   save <- options(rgl.meshColorWarning = FALSE)
   dxy <- interp::tri.mesh(x, y)
   open3d()
   persp3d(dxy, z, col = col, meshColor = "vertices")
+}
+if (haveinterp) {
   open3d()
   # Do it without smoothing and with a different orientation.
   persp3d(dxy, z, col = col, coords = c("z", "x", "y"), smooth = FALSE)

@@ -17,7 +17,15 @@ where appropriate, according to the \code{fig.keep} chunk option.
 By default (\code{fig.keep = "high"}), only high-level plots
 are kept, after low-level changes have been merged into them.
 See the \pkg{knitr} documentation 
-\url{https://yihui.org/knitr/options/#plots} for more details.
+\url{https://yihui.org/knitr/options/#plots} for more details.  To suppress auto-printing, the \pkg{rgl} calls
+can be wrapped in \code{\link{invisible}()}.  
+Similarly to \pkg{grid} graphics (used by \pkg{lattice}
+and \pkg{ggplot2}), automatic inclusion requires the object
+to be printed:  only the last statement in a code block
+in braces is automatically printed.  Unlike those 
+packages, auto-printing is the only way to get this to
+work:  calling \code{\link{print}} explicitly doesn't
+work.
 
 Other functions allow embedding either as bitmaps (\code{hook_rgl} with format \code{"png"}),
 fixed vector graphics (\code{hook_rgl} with format \code{"eps"}, \code{"pdf"} or

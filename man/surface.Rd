@@ -68,6 +68,11 @@ rgl.surface(x, z, y, coords = 1:3, ...,
   
   \code{NA} values in the height matrix are not drawn.
 }
+\note{
+It is recommended to use \code{\link{surface3d}} instead
+of \code{rgl.surface}; use of the \code{rgl.*} functions 
+is discouraged due to their side effects.
+}
 \value{
   The object ID of the displayed surface is returned invisibly.
 }

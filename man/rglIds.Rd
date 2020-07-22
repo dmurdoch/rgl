@@ -46,14 +46,11 @@ Other arguments which will be passed to
 \details{
 These functions and classes are intended to allow
 \pkg{rgl} scenes to be automatically 
-displayed in R Markdown documents.  However,
-this is not fully in place yet, so
-explicit \code{rglwidget()} calls are
-still recommended.
+displayed in R Markdown documents.  See \code{\link{setupKnitr}} for details on enabling auto-printing.
 
 Note that \emph{all} objects in the current
 scene will be printed by default, not just
-the ids in \code{x}.  (The reason for this
+the ids in \code{x}.  (One reason for this
 is that lights are also objects; printing
 objects without lights would rarely make
 sense.)

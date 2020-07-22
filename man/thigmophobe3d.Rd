@@ -74,6 +74,7 @@ if (requireNamespace("plotrix")) {
       result
     }
     play3d(f, duration = 5)
-  }
+  } else
+    textid   # just print the static display
 }
 }

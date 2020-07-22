@@ -2,9 +2,16 @@ dirname <- tempfile()
 dir.create(dirname)
 olddir <- setwd(dirname)
 
+show <- c() # list topics to show only those
+skip <- c("rgl-package", "shinyGetPar3d", "tkpar3dsave", "tkrgl",
+          "tkspin3d", "tkspinControl") # Ones to skip
+
 library(tools)
 db <- Rd_db("rgl")
 names <- names(db)
+if (length(show))
+  names <- names[sub("[.]Rd$", "", names) %in% show]
+
 Rmdnames <- sub("[.]Rd$", ".Rmd", names)
 htmlnames <- sub("[.]Rd$", ".html", names)
 
@@ -91,10 +98,7 @@ saveopts <- options(rgl.useNULL = TRUE)
 prevlink <- "[Prev](index.html)"
 indexlink <- "[Index](index.html)"
 
-skip <- c("rgl-package", "shinyGetPar3d", "tkpar3dsave", "tkrgl",
-          "tkspin3d", "tkspinControl")
-
-for (i in seq_along(db)) {
+for (i in seq_along(names)) {
   Rmd <- file(Rmdnames[i], open = "wt")
   nextlink <- if (i < length(htmlnames)) paste0("[Next](", htmlnames[i+1], ")") else ""
   writeLines(c('---', paste0('title: ', names[i]), 
@@ -104,6 +108,7 @@ for (i in seq_along(db)) {
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 initialWd <- getwd()
+saveopts <- options()
 options(rgl.useNULL = TRUE)
 library(rgl)
 setupKnitr(autoprint = TRUE)
@@ -124,7 +129,7 @@ options(ask = FALSE, examples.ask = FALSE, device.ask.default = FALSE)
   else
     writeLines('```{r}', Rmd)
   
-  code <- .Rd_get_example_code(db[[i]])
+  code <- .Rd_get_example_code(db[[names[i]]])
   if (length(code))
     writeLines(code, Rmd)
   else
@@ -134,6 +139,8 @@ options(ask = FALSE, examples.ask = FALSE, device.ask.default = FALSE)
 ```{r echo=FALSE,include=FALSE}
 setwd(initialWd)
 while(length(rgl.dev.list())) rgl.close()
+rm(examples)
+options(saveopts)
 ```
 ', Rmd)
   writeLines(paste(prevlink, nextlink, indexlink), Rmd)

@@ -112,7 +112,7 @@ x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
 y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
 
 open3d()
-bg3d("slategray")
+invisible(bg3d("slategray")) # suppress display
 material3d(col = "black")
 persp3d(x, y, z, col = "green3", aspect = "iso",
       axes = FALSE, box = FALSE)

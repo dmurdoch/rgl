@@ -51,10 +51,11 @@ can be used as corresponding arguments in \code{\link{persp}}.
 Duncan Murdoch
 }
 \examples{
-if (requireNamespace("orientlib")) {  
-  persp3d(volcano, col = "green")
-  if (requireNamespace("lattice")) 
+persp3d(volcano, col = "green")
+if ((hasorientlib <- requireNamespace("orientlib")) && 
+    requireNamespace("lattice")) 
     lattice::wireframe(volcano, screen = rglToLattice())
+if (hasorientlib) {
   angles <- rglToBase()
   persp(volcano, col = "green", border = NA, shade = 0.5,
         theta = angles$theta, phi = angles$phi)
