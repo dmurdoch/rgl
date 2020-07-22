@@ -588,7 +588,7 @@
         if (drawing) {
           this.mvMatrix = sphereMV;
           if (nc > 1) {
-            this.sphere.onecolor = this.flatten(obj.sphereColors[idx]);
+            this.sphere.onecolor = this.flatten(obj.sphereColors[idx % obj.sphereColors.length]);
           }
           this.drawSimple(this.sphere, subscene, context);
         } else 
