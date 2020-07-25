@@ -177,7 +177,7 @@ next3d <- function(current = NA, clear = TRUE, reuse = TRUE) {
 clearSubsceneList <- function(delete = currentSubscene3d() %in% subsceneList(),
                               window = cur3d()) {
   if (!missing(window))
-    rgl.set(window)  
+    set3d(window)  
   thelist <- subsceneList()
   if (delete && length(thelist)) {
     parent <- subsceneInfo(thelist[1])$parent

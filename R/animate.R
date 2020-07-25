@@ -154,7 +154,7 @@ play3d <- function(f, duration = Inf, dev = cur3d(), ..., startTime = 0) {
     start <- proc.time()[3] - startTime
     rgl.setselectstate("none")
     repeat {
-       if(!missing(dev) && cur3d() != dev) rgl.set(dev)
+       if(!missing(dev) && cur3d() != dev) set3d(dev)
        time <- proc.time()[3] - start
        if (time > duration || rgl.selectstate()$state == msABORT) return(invisible(NULL))
        stopifnot(cur3d() != 0)
@@ -179,7 +179,7 @@ movie3d <- function(f, duration, dev = cur3d(), ..., fps=10,
 
     for (i in round(startTime*fps):(duration*fps)) {
 	time <- i/fps        
-	if(cur3d() != dev) rgl.set(dev)
+	if(cur3d() != dev) set3d(dev)
 	stopifnot(cur3d() != 0)
 	args <- f(time, ...)
 	subs <- args$subscene

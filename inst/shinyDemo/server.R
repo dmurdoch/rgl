@@ -116,14 +116,14 @@ shinyServer(function(input, output, session) {
   on.exit(options(save))
 
   session$onSessionEnded(function() {
-    rgl.set(dev)
+    set3d(dev)
     close3d()
   })
 
   path <- reactiveValues(subsets = setStartPoint())
 
   observeEvent(input$newStart, {
-    rgl.set(dev)
+    set3d(dev)
 
     deletes <- unique(unlist(path$subsets))
 

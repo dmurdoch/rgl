@@ -2,6 +2,7 @@
 \alias{open3d}
 \alias{close3d}
 \alias{cur3d}
+\alias{set3d}
 \alias{getr3dDefaults}
 \alias{r3dDefaults}
 
@@ -19,6 +20,8 @@ close3d(dev = cur3d(), silent = TRUE)
 	    
 cur3d()
 
+set3d(dev, silent = FALSE)
+
 getr3dDefaults(class = NULL, value = NULL)
 
 r3dDefaults
@@ -30,7 +33,7 @@ r3dDefaults
     parameters described in \code{\link{par3d}}.}
   \item{params}{a list of graphical parameters}
   \item{useNULL}{whether to use the null graphics device}
-  \item{dev}{which device to close}
+  \item{dev}{which device to close or use}
   \item{silent}{whether report on what was done}
   \item{class, value}{names of components to retrieve}
 }
@@ -68,6 +71,9 @@ was opened.  If
 
 The \code{cur3d} function returns the current device,
 or the value 0 if there isn't one.
+
+\code{set3d} returns the device number of the
+previously active device.
 
 The \code{close3d} function returns the new current
 device, invisibly.

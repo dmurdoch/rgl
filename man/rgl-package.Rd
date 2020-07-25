@@ -14,7 +14,7 @@
   scene management instructions, and there's no device open, it will be opened
   automatically.
   Opened devices automatically get the current device focus. The focus may be
-  changed by using \code{\link{rgl.set}()} or \code{\link{useSubscene3d}()}.
+  changed by using \code{\link{set3d}()} or \code{\link{useSubscene3d}()}.
   
   \pkg{rgl} provides medium to high level functions for 3D interactive graphics, including
   functions modelled on base graphics (\code{\link{plot3d}()}, etc.) as well as functions for 

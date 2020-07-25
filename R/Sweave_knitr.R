@@ -10,7 +10,7 @@ rgl.Sweave <- function(name, width, height, options, ...) {
     # test is for compatibility with R < 3.0.0
     if (is.list(hook)) hook <- hook[[1]]  
     dev <- environment(hook)$dev
-    rgl.set(dev)
+    set3d(dev)
   } else {
     wr <- c(0, 0, width*options$resolution, height*options$resolution)
     open3d(windowRect=wr)
@@ -32,10 +32,10 @@ rgl.Sweave <- function(name, width, height, options, ...) {
 
   setHook("on.rgl.close", action="replace", function(remove=TRUE) {
     prev.dev <- cur3d()
-    on.exit(rgl.set(prev.dev))
+    on.exit(set3d(prev.dev))
 
     if (!snapshotDone) {
-      rgl.set(dev)
+      set3d(dev)
       switch(type,
         png = rgl.snapshot(filename=paste(name, "png", sep=".")),
         pdf = rgl.postscript(filename=paste(name, "pdf", sep="."), fmt="pdf"),

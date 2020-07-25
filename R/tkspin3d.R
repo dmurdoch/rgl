@@ -8,10 +8,10 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
   slider <- tcltk::tclVar(speed)
   getZooms <- function() {
     old <- cur3d()
-    on.exit(rgl.set(old))
+    on.exit(set3d(old))
     result <- numeric(max(dev))
     for (device in dev) {
-      rgl.set(device)
+      set3d(device)
       result[device] <- par3d("zoom")
     }
     result
@@ -54,13 +54,13 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
   
   rotate <- function(){
     old <- cur3d()
-    on.exit(rgl.set(old))	
+    on.exit(set3d(old))	
     if (buttonPress) {
       if ((currentTime <- proc.time()[3]) > lastTime) {
         timeDiff <<- currentTime - lastTime
         lastTime <<- currentTime
         for (device in dev) {
-          rgl.set(device)
+          set3d(device)
           if (direction == "up")
             rotateUp()
           if (direction == "left")
@@ -132,19 +132,19 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
   
   resetAxis <- function(...){
     old <- cur3d()
-    on.exit(rgl.set(old))
+    on.exit(set3d(old))
     for (device in dev) {
-      rgl.set(device)
+      set3d(device)
       par3d(userMatrix = diag(4))
     }
   }
   
   setScale <- function(...){
     old <- cur3d()
-    on.exit(rgl.set(old))		    
+    on.exit(set3d(old))		    
     scale <- as.numeric(tcltk::tclObj(scale))
     for (device in dev) {
-      rgl.set(device)
+      set3d(device)
       par3d(zoom = 10^((scale - 100)/50)*zooms[device])
     }
   }

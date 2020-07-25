@@ -11,7 +11,7 @@ SHORT-TERM
    caption of window
    
  - contour3d ... crashes with 'z-sort' rgl
- - rgl.set should return the previous device id
+ - rgl.set should return the previous device id (DONE in set3d)
  - uv patch
  - remove 'debug' build from default 
  - bbox: non-uniform scale per axis

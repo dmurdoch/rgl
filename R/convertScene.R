@@ -376,7 +376,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     types <- vapply(result$objects, function(x) x$type, character(1))
     close3d()
     if (dev)
-      rgl.set(dev)
+      set3d(dev)
     options(saveNULL)
   }
   
@@ -390,7 +390,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     result$objects[[brush]] <- scene$objects[[brush]]
     close3d()
     if (dev)
-      rgl.set(dev)
+      set3d(dev)
     options(saveNULL)
   } else
     brushId <- NA

@@ -340,7 +340,7 @@ open3d <- function(..., params = getr3dDefaults(),
 
 close3d <- function(dev = cur3d(), silent = TRUE) {
   for (d in dev[dev != 0]) {
-    rgl.set(d, silent = silent)
+    set3d(d, silent = silent)
     rgl.close()
     if (!silent)
       message("Closed device ", d)
@@ -349,6 +349,12 @@ close3d <- function(dev = cur3d(), silent = TRUE) {
 }
 
 cur3d <- rgl.cur
+
+set3d <- function(dev, silent = FALSE) {
+  prev <- cur3d()
+  rgl.set(dev, silent = silent)
+  prev
+}
 
 .check3d <- function() {
     if (result<-cur3d()) return(result)

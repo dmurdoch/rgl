@@ -13,10 +13,10 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
     on.exit( {
       disp <- cur3d()
       if (odisp != disp) 
-        try(rgl.set(odisp), silent=TRUE)
+        try(set3d(odisp), silent=TRUE)
       if (cur3d() == odisp) 
         par3d(mouseMode = opar) 
-      try(rgl.set(disp), silent=TRUE)
+      try(set3d(disp), silent=TRUE)
     } )     
     
     xyz <- xyz.coords(x, y, z)
@@ -44,8 +44,8 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
     select <- function(mousex, mousey) {
        disp <- cur3d()
        if (disp != odisp) {
-         rgl.set(odisp)
-         on.exit(rgl.set(disp))
+         set3d(odisp)
+         on.exit(set3d(disp))
        }
        viewport <- par3d("viewport")
        winxyz <- rgl.user2window(xyz)
