@@ -59,11 +59,8 @@
                   it: prev.it,
                   centers: prev.centers,
                   vertexCount: prev.vertexCount,
-                  colorCount: 1,
-                  type: "sphere",
                   f: prev.f,
-                  indices: prev.indices
-        };
+                  indices: prev.indices};
       } else {
         var n = verts.it[0].length, i, j, k,
             centers = new Array(n);
@@ -82,11 +79,11 @@
                 };
           // Add default indices
         result.vertexCount = verts.vb[0].length;
-        result.colorCount = 1;
-        result.type = "sphere";
         result.f = [];
         result.indices = {};
       }
+      result.colorCount = 1;
+      result.type = "sphere";
       this.sphere = result;
       this.initSphereGL();
     };
