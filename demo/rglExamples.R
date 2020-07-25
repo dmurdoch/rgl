@@ -138,7 +138,7 @@ options(ask = FALSE, examples.ask = FALSE, device.ask.default = FALSE)
 '```
 ```{r echo=FALSE,include=FALSE}
 setwd(initialWd)
-while(length(rgl.dev.list())) rgl.close()
+while(length(rgl.dev.list())) close3d()
 rm(examples)
 options(saveopts)
 ```
@@ -147,7 +147,7 @@ options(saveopts)
   close(Rmd)
   prevlink <- paste0("[Prev](", htmlnames[i], ")")
   rmarkdown::render(Rmdnames[i])
-  while(length(rgl.dev.list())) rgl.close()
+  while(length(rgl.dev.list())) close3d()
   environment(rglwidget)$reuseDF <- NULL
 }
 

@@ -97,7 +97,7 @@ if (requireNamespace("misc3d")) {
   # compute isosurface
   open3d(useNULL = TRUE)
   surf <- as.mesh3d(misc3d::contour3d(voxel, maxvol=max(voxel), level=0, x=x, y=y, z=z))
-  rgl.close()
+  close3d()
   
   surf$normals <- NULL
   surf <- mergeVertices(surf)

@@ -60,7 +60,7 @@ inputPanel(
 
 renderRglwidget({
     n <- input$n
-    try(rgl.close())
+    try(close3d())
     plot3d(rnorm(n), rnorm(n), rnorm(n))
     rglwidget()
   }, outputArgs = list(width = "auto", height = "300px"))

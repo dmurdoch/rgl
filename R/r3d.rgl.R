@@ -368,6 +368,6 @@ snapshot3d <- function(filename, ..., scene) {
   saveopts <- options(rgl.useNULL = FALSE)
   on.exit(options(saveopts))
   plot3d(scene) # calls open3d internally
-  on.exit(rgl.close(), add = TRUE)
+  on.exit(close3d(), add = TRUE)
   rgl.snapshot(filename, ...)
 }

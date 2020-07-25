@@ -55,7 +55,7 @@ rgl.Sweave.off <- function() {
     if (is.list(hook)) hook <- hook[[1]] # test is for R pre-3.0.0 compatibility
     stayOpen <- environment(hook)$stayOpen
     if (stayOpen) hook(FALSE)
-    else rgl.close()
+    else close3d()
   }
 }
   
@@ -95,7 +95,7 @@ fns <- local({
       closewindows <- options$rgl.closewindows
       if (!is.null(closewindows) && closewindows)
         while (cur3d())
-          rgl.close()
+          close3d()
       newwindowdone <<- FALSE
       closewindowsdone <<- TRUE
     }

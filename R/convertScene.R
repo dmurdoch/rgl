@@ -374,7 +374,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     for (id in unique(origIds))
       result$objects[[as.character(id)]]$newIds <- as.numeric(ids[origIds == id])
     types <- vapply(result$objects, function(x) x$type, character(1))
-    rgl.close()
+    close3d()
     if (dev)
       rgl.set(dev)
     options(saveNULL)
@@ -388,7 +388,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     brush <- as.character(result$brushId)
     scene <- scene3d(minimal)
     result$objects[[brush]] <- scene$objects[[brush]]
-    rgl.close()
+    close3d()
     if (dev)
       rgl.set(dev)
     options(saveNULL)

@@ -68,7 +68,7 @@ col <- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point
 open3d(useNULL = TRUE)
 surface3d(x, y, z, color = col)
 m <- as.mesh3d()
-rgl.close()
+close3d()
 
 open3d()
 shade3d(m)

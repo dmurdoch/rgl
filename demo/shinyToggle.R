@@ -5,7 +5,7 @@ library(rgl)
 open3d(useNULL = TRUE)
 ids <- plot3d(rnorm(100), rnorm(100), rnorm(100))[1]
 scene <- scene3d()
-rgl.close()
+close3d()
 
 ui <- (fluidPage(
 	checkboxInput("chk", label = "Display", value = FALSE),

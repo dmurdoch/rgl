@@ -12,7 +12,7 @@ shinyServer(function(input, output, session) {
   scene1 <- scene3d()
   plot3d(z, y, x, col = "green")
   scene2 <- scene3d()
-  rgl.close()
+  close3d()
 
   save <- options(rgl.inShiny = TRUE)
   on.exit(options(save))

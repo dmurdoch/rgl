@@ -94,7 +94,7 @@ if (interactive()) {
       # i.e. whenever a response to the request above is
       # received.
       output$rglPlot <- renderRglwidget({
-        if (length(rgl.dev.list())) rgl.close()
+        if (length(rgl.dev.list())) close3d()
         col <- sample(colors(), 1)
         plot3d(xyz, col = col, type = "s", main = col)
         par3d(userMatrix = input$par3d$userMatrix)
