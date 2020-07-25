@@ -636,7 +636,7 @@ The original way to insert an `rgl` scene in a document was to use
 the `r indexfns("writeWebGL")` function to write HTML code to insert in a document. 
 Later, `Sweave` and `knitr` hooks were added.  These are no longer maintained, and it is recommended that
 you update old documents to use the newer methods.  See
-the `r linkfn("writeWebGL")`, `r linkfn("rgl.Sweave")` and `r indexfns("hook_rgl")` help
+the `r linkfn("writeWebGL")`, `r linkfn("rgl.Sweave")` and `r linkfn("hook_rgl")` help
 topics for details on these if you must use them.  If you are
 reading documents that suggest using those methods, let the
 author know they need updating!
@@ -835,16 +835,19 @@ Use the newer functions instead.
 
 `rgl` maintains internal structures for all the scenes it displays.
 The following functions allow users to find information about them
-and manipulate them.
+and manipulate them.  In cases where there are both `*3d`
+and `rgl.*` versions of functions, most users should use
+the `*3d` version:  the `rgl.*` functions are more primitive
+and are mainly intended for internal use.
 
 Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("open3d")`:               | open a new window
-`r indexfns("rgl.close")`:            | close the current window
+`r indexfns(c("close3d", "rgl.close"))`:              | close the current window
 `r indexfns("rgl.bringtotop")`:       | bring the current window to the top
-`r indexfns("rgl.cur")`:              | id of the active device
+`r indexfns(c("cur3d", "rgl.cur"))`:                | id of the active device
 `r indexfns("rgl.dev.list")`:         | ids of all active devices
-`r indexfns("rgl.set")`:              | set a particular device to be active
+`r indexfns(c("set3d", "rgl.set"))`:                | set a particular device to be active
 `r indexfns("rgl.ids")`:              | ids and types of all current objects
 `r indexfns(c("rgl.attrib", "rgl.attrib.info", "rgl.attrib.count"))`: | attributes of objects in the scene
 `r indexfns(c("pop3d", "rgl.pop"))`:     | delete an object from the scene
@@ -909,6 +912,14 @@ persp(volcano, col = "green", shade = TRUE,
 
 Note that the `orientlib` package must be 
 available for these functions to work.
+
+### Working with Javascript
+
+The WebGL displays created using `r linkfn("rglwidget")`
+rely on a large body of Javascript code included in this
+package.  To help in development of this code, the
+`r indexfns("makeDependency")` function was written.
+It may be useful in other packages that include Javascript.
 
 ## Warning:  Work in Progress!
 
