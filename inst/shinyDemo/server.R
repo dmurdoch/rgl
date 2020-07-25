@@ -111,7 +111,7 @@ setStartPoint <- function() {
 shinyServer(function(input, output, session) {
 
   plot3d(surface)
-  dev <- rgl.cur()
+  dev <- cur3d()
   save <- options(rgl.inShiny = TRUE)
   on.exit(options(save))
 

@@ -31,7 +31,7 @@ toRotmatrix <- function(x) {
 
 par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
                      extrapolate = c("oscillate","cycle","constant", "natural"),
-                     dev = rgl.cur(), subscene = par3d("listeners", dev = dev)) {  
+                     dev = cur3d(), subscene = par3d("listeners", dev = dev)) {  
     force(dev)
     force(subscene)
     
@@ -135,7 +135,7 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
     }
 }
 
-spin3d <- function(axis = c(0, 0, 1), rpm = 5, dev = rgl.cur(), subscene = par3d("listeners", dev = dev)) {
+spin3d <- function(axis = c(0, 0, 1), rpm = 5, dev = cur3d(), subscene = par3d("listeners", dev = dev)) {
     force(axis)
     force(rpm)    
     force(dev)
@@ -145,7 +145,7 @@ spin3d <- function(axis = c(0, 0, 1), rpm = 5, dev = rgl.cur(), subscene = par3d
     	list(userMatrix = rotate3d(base, time*rpm*pi/30, axis[1], axis[2], axis[3]), dev = dev, subscene = subscene)
 }
     
-play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
+play3d <- function(f, duration = Inf, dev = cur3d(), ..., startTime = 0) {
     # Don't want to start timing until args are known: they may be obtained
     # interactively
     force(f)  
@@ -154,10 +154,10 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
     start <- proc.time()[3] - startTime
     rgl.setselectstate("none")
     repeat {
-       if(!missing(dev) && rgl.cur() != dev) rgl.set(dev)
+       if(!missing(dev) && cur3d() != dev) rgl.set(dev)
        time <- proc.time()[3] - start
        if (time > duration || rgl.selectstate()$state == msABORT) return(invisible(NULL))
-       stopifnot(rgl.cur() != 0)
+       stopifnot(cur3d() != 0)
        args <- f(time, ...)
        subs <- args$subscene
        if (is.null(subs))
@@ -169,7 +169,7 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
     }
 }
 
-movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10, 
+movie3d <- function(f, duration, dev = cur3d(), ..., fps=10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
                     convert = NULL, clean = TRUE, verbose=TRUE,
                     top = TRUE, type = "gif", startTime = 0) {
@@ -179,8 +179,8 @@ movie3d <- function(f, duration, dev = rgl.cur(), ..., fps=10,
 
     for (i in round(startTime*fps):(duration*fps)) {
 	time <- i/fps        
-	if(rgl.cur() != dev) rgl.set(dev)
-	stopifnot(rgl.cur() != 0)
+	if(cur3d() != dev) rgl.set(dev)
+	stopifnot(cur3d() != 0)
 	args <- f(time, ...)
 	subs <- args$subscene
 	if (is.null(subs))

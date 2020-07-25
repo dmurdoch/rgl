@@ -7,7 +7,7 @@ spin an rgl scene at a fixed rate.
 }
 \usage{
 spin3d(axis = c(0, 0, 1), rpm = 5,
-       dev = rgl.cur(), subscene = par3d("listeners", dev = dev))
+       dev = cur3d(), subscene = par3d("listeners", dev = dev))
 }
 \arguments{
   \item{axis}{ The desired axis of rotation }

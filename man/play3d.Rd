@@ -9,8 +9,8 @@ reset the viewpoint.  \code{movie3d} does the same, but
 records each frame to a file to make a movie.
 }
 \usage{
-play3d(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0)
-movie3d(f, duration, dev = rgl.cur(), ..., fps = 10, 
+play3d(f, duration = Inf, dev = cur3d(), ..., startTime = 0)
+movie3d(f, duration, dev = cur3d(), ..., fps = 10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
                     convert = NULL, clean = TRUE, verbose = TRUE,
                     top = TRUE, type = "gif", startTime = 0) 

@@ -1,4 +1,4 @@
-currentSubscene3d <- function(dev = rgl.cur()) {
+currentSubscene3d <- function(dev = cur3d()) {
   .C(rgl_getsubsceneid, id = 1L, dev = as.integer(dev))$id
 }
 
@@ -6,7 +6,7 @@ subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
   if (is.na(id)) 
     id <- currentSubscene3d()
   else if (is.character(id) && id == "root") 
-    id <- .C(rgl_getsubsceneid, id = 0L, dev = as.integer(rgl.cur()))$id
+    id <- .C(rgl_getsubsceneid, id = 0L, dev = as.integer(cur3d()))$id
   if (!id) stop("No subscene info available.")
   id <- as.integer(id)
   result <- list(id = id)
@@ -128,7 +128,7 @@ gc3d <- function(protect=NULL) {
   invisible( .C(rgl_gc, n = length(protect), protect)$n )
 }
 
-subsceneList <- function(value, window = rgl.cur()) {
+subsceneList <- function(value, window = cur3d()) {
   alllists <- .rglEnv$subsceneLists  
   # This cleans up lists for closed windows:
   alllists <- alllists[names(alllists) %in% rgl.dev.list()]
@@ -175,7 +175,7 @@ next3d <- function(current = NA, clear = TRUE, reuse = TRUE) {
 }
   
 clearSubsceneList <- function(delete = currentSubscene3d() %in% subsceneList(),
-                              window = rgl.cur()) {
+                              window = cur3d()) {
   if (!missing(window))
     rgl.set(window)  
   thelist <- subsceneList()

@@ -1,5 +1,5 @@
 randomDot <- function(left, right, rightOffset=c(200, 0), n=3000, ...) {
-  old <- rgl.cur()
+  old <- cur3d()
   on.exit(rgl.set(old))  
   force(left)
   force(right)
@@ -106,7 +106,7 @@ randomDot <- function(left, right, rightOffset=c(200, 0), n=3000, ...) {
                                                 #red                   #cyan 
 anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1),
                      dimens = dim(leftPixels)) {
-  old <- rgl.cur()
+  old <- cur3d()
   on.exit(rgl.set(old))  
   force(left)
   force(right)
@@ -142,12 +142,12 @@ if (!rgl.useNULL()) {
 # Reverse the two arguments for the cross-eyed view.
 
   dev.new(width=9, height=7)
-  randomDot(rgl.cur()-1, rgl.cur())
+  randomDot(cur3d()-1, cur3d())
 
 # A red-cyan anaglyph (for 3D glasses).  Use optional args to anaglyph for other glasses.
 
   dev.new()
-  anaglyph(rgl.cur()-1, rgl.cur())
+  anaglyph(cur3d()-1, cur3d())
   
 } else
   cat("Can't read pixels from a NULL device\n")

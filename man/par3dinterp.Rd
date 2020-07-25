@@ -9,7 +9,7 @@ suitable for use in animations.
 par3dinterp(times = NULL, userMatrix, scale, zoom, FOV, 
             method = c("spline", "linear"), 
             extrapolate = c("oscillate", "cycle", "constant", "natural"),
-            dev = rgl.cur(), subscene = par3d("listeners", dev = dev))
+            dev = cur3d(), subscene = par3d("listeners", dev = dev))
 }
 \arguments{
   \item{times}{ Times at which values are recorded or a list; see below }

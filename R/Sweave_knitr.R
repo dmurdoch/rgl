@@ -20,7 +20,7 @@ rgl.Sweave <- function(name, width, height, options, ...) {
     if (wr[3] - wr[1] != wrnew[3] - wrnew[1] ||
         wr[4] - wr[2] != wrnew[4] - wrnew[2])
       stop("rgl window creation error; try reducing resolution, width or height")
-    dev <- rgl.cur()
+    dev <- cur3d()
   } 
 
   snapshotDone <- FALSE
@@ -31,7 +31,7 @@ rgl.Sweave <- function(name, width, height, options, ...) {
   if (is.null(type)) type <- "png"
 
   setHook("on.rgl.close", action="replace", function(remove=TRUE) {
-    prev.dev <- rgl.cur()
+    prev.dev <- cur3d()
     on.exit(rgl.set(prev.dev))
 
     if (!snapshotDone) {
@@ -94,7 +94,7 @@ fns <- local({
     if (!closewindowsdone) {
       closewindows <- options$rgl.closewindows
       if (!is.null(closewindows) && closewindows)
-        while (rgl.cur())
+        while (cur3d())
           rgl.close()
       newwindowdone <<- FALSE
       closewindowsdone <<- TRUE
@@ -113,7 +113,7 @@ hook_webgl <- function(before, options, envir) {
     do_newwindow(options)
     return()
   }
-  res <- if (rgl.cur() != 0) {
+  res <- if (cur3d() != 0) {
     out_type <- opts_knit$get("out.format")
     if (!length(intersect(out_type, c("markdown", "html"))))
       stop("'hook_webgl' is for HTML only. ",
@@ -131,7 +131,7 @@ hook_rgl <- function(before, options, envir) {
     do_newwindow(options)
     return()
   }
-  res <- if (rgl.cur() != 0) {
+  res <- if (cur3d() != 0) {
     name <- fig_path("", options)
     margin <- options$rgl.margin
     if (is.null(margin)) margin <- 100

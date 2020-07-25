@@ -8,7 +8,7 @@
 }
 \usage{
 rgl.select3d(button = c("left", "middle", "right"),
-             dev = rgl.cur(), subscene = currentSubscene3d(dev))
+             dev = cur3d(), subscene = currentSubscene3d(dev))
 select3d(...)
 }
 \arguments{

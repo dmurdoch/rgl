@@ -300,7 +300,7 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  material = list(color="black", fog = TRUE))
 
 open3d <- function(..., params = getr3dDefaults(), 
-                   useNULL = rgl.useNULL()	)
+                   useNULL = rgl.useNULL(), silent = FALSE	)
 {
     args <- list(...)
     if (!is.null(args$antialias) 
@@ -332,11 +332,26 @@ open3d <- function(..., params = getr3dDefaults(),
     }
  
     do.call("par3d", params)   
-    return(rgl.cur())
+    if (silent)
+      invisible(cur3d())
+    else
+      cur3d()
 }
 
+close3d <- function(dev = cur3d(), silent = TRUE) {
+  for (d in dev[dev != 0]) {
+    rgl.set(d, silent = silent)
+    rgl.close()
+    if (!silent)
+      message("Closed device ", d)
+  }
+  invisible(cur3d())
+}
+
+cur3d <- rgl.cur
+
 .check3d <- function() {
-    if (result<-rgl.cur()) return(result)
+    if (result<-cur3d()) return(result)
     else return(open3d())
 }
 

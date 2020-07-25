@@ -10,8 +10,8 @@ settings that may have been modified by user interaction in the browser.
 
 }
 \usage{
-shinyGetPar3d(parameters, session, subscene = currentSubscene3d(rgl.cur()), tag = "")
-shinySetPar3d(..., session, subscene = currentSubscene3d(rgl.cur()))
+shinyGetPar3d(parameters, session, subscene = currentSubscene3d(cur3d()), tag = "")
+shinySetPar3d(..., session, subscene = currentSubscene3d(cur3d()))
 }
 \arguments{
   \item{parameters}{

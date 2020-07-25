@@ -1,5 +1,5 @@
 
-tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
+tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
                           speed=30, scale=100, ...){
   
   if (!requireNamespace("tcltk"))
@@ -7,7 +7,7 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
   
   slider <- tcltk::tclVar(speed)
   getZooms <- function() {
-    old <- rgl.cur()
+    old <- cur3d()
     on.exit(rgl.set(old))
     result <- numeric(max(dev))
     for (device in dev) {
@@ -53,7 +53,7 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
   }	
   
   rotate <- function(){
-    old <- rgl.cur()
+    old <- cur3d()
     on.exit(rgl.set(old))	
     if (buttonPress) {
       if ((currentTime <- proc.time()[3]) > lastTime) {
@@ -131,7 +131,7 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
   
   
   resetAxis <- function(...){
-    old <- rgl.cur()
+    old <- cur3d()
     on.exit(rgl.set(old))
     for (device in dev) {
       rgl.set(device)
@@ -140,7 +140,7 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
   }
   
   setScale <- function(...){
-    old <- rgl.cur()
+    old <- cur3d()
     on.exit(rgl.set(old))		    
     scale <- as.numeric(tcltk::tclObj(scale))
     for (device in dev) {
@@ -210,7 +210,7 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
 }
 
 
-tkspin3d <- function(dev = rgl.cur(), ...){
+tkspin3d <- function(dev = cur3d(), ...){
   
   if (!requireNamespace("tcltk"))
     stop("This function requires 'tcltk'.")

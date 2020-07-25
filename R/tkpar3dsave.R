@@ -1,6 +1,6 @@
 tkpar3dsave <- function(params = c("userMatrix", "scale", "zoom", "FOV"), 
                         times = FALSE, 
-                        dev = rgl.cur(),
+                        dev = cur3d(),
                         ...) {
   
   if (!requireNamespace("tcltk"))

@@ -1,8 +1,5 @@
 \name{par3d}
 \alias{par3d}
-\alias{open3d}
-\alias{r3dDefaults}
-\alias{getr3dDefaults}
 \concept{activeSubscene}
 \concept{antialias}
 \concept{bbox}
@@ -35,15 +32,8 @@
   values.
 }
 \usage{
-par3d(\dots, no.readonly = FALSE, dev = rgl.cur(), 
+par3d(\dots, no.readonly = FALSE, dev = cur3d(), 
       subscene = currentSubscene3d(dev))
-
-open3d(\dots, params = getr3dDefaults(), 
-	    useNULL = rgl.useNULL())
-	    
-getr3dDefaults(class = NULL, value = NULL)
-
-r3dDefaults
 }
 
 \arguments{
@@ -55,9 +45,6 @@ r3dDefaults
     subsequent \code{par3d()} call are returned.}
   \item{dev}{integer; the rgl device.}
   \item{subscene}{integer; the subscene.}
-  \item{params}{a list of graphical parameters}
-  \item{useNULL}{whether to use the null graphics device}
-  \item{class, value}{names of components to retrieve}
 }
 
 \details{
@@ -72,27 +59,6 @@ r3dDefaults
   change this.  Some parameters apply to the device as a whole;
   these are marked in the list below.
 
-  \code{open3d} opens a new rgl device, and sets the parameters as
-  requested.  The \code{r3dDefaults} list returned by the 
-  \code{getr3dDefaults} function will be used as default
-  values for parameters.  As installed this sets the point of view to
-  'world coordinates' (i.e. x running from left to right, y from front
-  to back, z from bottom to top), the \code{mouseMode} to
-  \code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.
-  Users may create their own variable named \code{r3dDefaults} in the global
-  environment and it will override the installed one.  If there
-  is a \code{bg} element in the list or the arguments, it should be
-  a list of arguments to pass to the \code{\link{bg3d}} function to 
-  set the background.  
-  
-  The arguments to \code{open3d} may include \code{material}, a list
-  of material properties as in \code{\link{r3dDefaults}}, but note
-  that high level functions such as \code{\link{plot3d}} normally use
-  the \code{r3dDefaults} values in preference to this setting. 
-  
-  If \code{useNULL} is \code{TRUE}, \pkg{rgl} will use a \dQuote{null}
-  device.  This device records objects as they are plotted, but 
-  displays nothing. It is intended for use with \code{\link{rglwidget}}.
 }
 
 \value{
@@ -108,16 +74,6 @@ r3dDefaults
 
   Note the inconsistency: setting one parameter returns a list, but
   querying one parameter returns an object.
-  
-  The \code{r3dDefaults} variable is a list containing default
-  settings.  The \code{getr3dDefaults} function searches the user's
-  global environment for \code{r3dDefaults} and returns the 
-  one in the \pkg{rgl} namespace if it was not found there.
-  The components of the list may include any settable \code{par3d}
-  parameter, or \code{"material"}, which should include a list
-  of default \code{\link{material3d}} properties, or \code{"bg"}, 
-  which is a
-  list of defaults to pass to the \code{\link{bg3d}} function.
 }
 
 \section{Parameters}{
@@ -283,7 +239,8 @@ digit precision to distinguish values in any coordinate.
 \seealso{
 \code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
 
-\code{\link{rgl.useNULL}} for default usage of null device.
+\code{\link{open3d}} for how to open a new window
+with default settings for these parameters.
 }
 
 \references{
@@ -291,7 +248,6 @@ OpenGL Architecture Review Board (1997).  OpenGL Programming Guide.  Addison-Wes
 }
 
 \examples{
-    r3dDefaults
     open3d()
     shade3d(cube3d(color = rep(rainbow(6), rep(4, 6))))
     save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1, 0, 0))

@@ -12,7 +12,7 @@ The \code{mfrow3d} and \code{layout3d} functions provide functionality in \pkg{r
 similar to \code{\link{par}("mfrow")} and \code{\link{layout}} in classic R graphics.
 }
 \usage{
-subsceneList(value, window = rgl.cur())
+subsceneList(value, window = cur3d())
 
 mfrow3d(nr, nc, byrow = TRUE, parent = NA, sharedMouse = FALSE, ...)
 layout3d(mat, widths = rep.int(1, ncol(mat)), 
@@ -21,7 +21,7 @@ layout3d(mat, widths = rep.int(1, ncol(mat)),
               ...)
 next3d(current = NA, clear = TRUE, reuse = TRUE)
 clearSubsceneList(delete = currentSubscene3d() \%in\% subsceneList(), 
-                  window = rgl.cur())
+                  window = cur3d())
 }
 \arguments{
   \item{value}{

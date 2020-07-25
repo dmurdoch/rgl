@@ -1,6 +1,8 @@
 To-do:
 
-Put class on open3d() result so it acts like a high level plot.
+Create *3d functions corresponding to all remaining rgl.* functions.
+
+Put class on open3d() result so it acts like a high level plot. PROBABLY WON'T DO -- this doesn't work well.
 
 Add knit_print method to rglWebGL class so rglwidget can
 print as snapshot when printing from a PDF project.

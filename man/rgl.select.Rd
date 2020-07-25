@@ -10,7 +10,7 @@ return the mouse coordinates of one click and drag rectangle.
 }
 \usage{
 rgl.select(button = c("left", "middle", "right"),
-           dev = rgl.cur(), subscene = currentSubscene3d(dev))
+           dev = cur3d(), subscene = currentSubscene3d(dev))
 }
 \arguments{
   \item{button}{

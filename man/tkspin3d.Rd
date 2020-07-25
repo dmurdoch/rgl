@@ -6,7 +6,7 @@
   resize one or more rgl windows.
 }
 \usage{
-tkspin3d(dev = rgl.cur(), ...)
+tkspin3d(dev = cur3d(), ...)
 }
 \arguments{
   \item{dev}{A vector of one or more rgl device numbers to control }

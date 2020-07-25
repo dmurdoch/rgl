@@ -23,7 +23,7 @@ newSubscene3d(viewport = "replace",
               copyBBoxDeco = copyShapes, 
               copyBackground = FALSE, newviewport,
               ignoreExtent)
-currentSubscene3d(dev = rgl.cur())
+currentSubscene3d(dev = cur3d())
 useSubscene3d(subscene)
 addToSubscene3d(ids, subscene = currentSubscene3d())
 delFromSubscene3d(ids, subscene = currentSubscene3d())

@@ -332,7 +332,7 @@ renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputAr
 }
 
 shinySetPar3d <- function(..., session,
-                          subscene = currentSubscene3d(rgl.cur())) {
+                          subscene = currentSubscene3d(cur3d())) {
   if (!requireNamespace("shiny"))
     stop("function requires shiny")
   args <- list(...)
@@ -349,7 +349,7 @@ shinySetPar3d <- function(..., session,
 }
 
 shinyGetPar3d <- function(parameters, session,
-                          subscene = currentSubscene3d(rgl.cur()),
+                          subscene = currentSubscene3d(cur3d()),
                           tag = "") {
   badargs <- parameters[!(parameters %in% .Par3d)]
   if (length(badargs))

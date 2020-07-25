@@ -5,7 +5,7 @@
     This function may be used to embed a spin control in a TCL/TK window.
 }
 \usage{
-tkspinControl(base, dev = rgl.cur(), 
+tkspinControl(base, dev = cur3d(), 
 	continue=FALSE, speed=30, scale=100, ... )
 }
 \arguments{
@@ -22,19 +22,19 @@ tkspinControl(base, dev = rgl.cur(),
 if (interactive()) { 
     library(tcltk)
     open3d()
-    win1 <- rgl.cur()
+    win1 <- cur3d()
     plot3d(rexp(100), rexp(100), rexp(100), size=3, col='green')
     
     open3d()
-    win2 <- rgl.cur()
+    win2 <- cur3d()
     plot3d(rt(100,2), rt(100,2), rt(100, 2), size=3, col='yellow')
     
     open3d()
-    win3 <- rgl.cur()
+    win3 <- cur3d()
     plot3d(rexp(100), rexp(100), rexp(100), size=3, col='red')
         
     open3d()
-    win4 <- rgl.cur()
+    win4 <- cur3d()
     plot3d(rbinom(100,10,0.5), rbinom(100,10,0.5), rbinom(100,10,0.5), size=3, col='cyan')
     
     base <- tktoplevel()

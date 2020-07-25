@@ -359,7 +359,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   
   if (any(types == "bboxdeco")) {
     saveNULL <- options(rgl.useNULL = TRUE)
-    dev <- rgl.cur()
+    dev <- cur3d()
     open3d()
     ids <- convertBBoxes(result$rootSubscene)
     origIds <- attr(ids, "origIds")
@@ -382,7 +382,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   
   if (length(shared)) {
     saveNULL <- options(rgl.useNULL = TRUE)
-    dev <- rgl.cur()
+    dev <- cur3d()
     open3d()
     result$brushId <- brushId <- createBrush()
     brush <- as.character(result$brushId)

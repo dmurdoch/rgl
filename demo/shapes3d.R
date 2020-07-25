@@ -2,7 +2,7 @@
 cone3d <- function(base=c(0,0,0),tip=c(0,0,1),rad=1,n=30,draw.base=TRUE,qmesh=FALSE,
                    trans = par3d("userMatrix"), ...) {
   ax <- tip-base
-  if (missing(trans) && !rgl.cur()) trans <- diag(4)
+  if (missing(trans) && !cur3d()) trans <- diag(4)
   ### is there a better way?
   if (ax[1]!=0) {
     p1 <- c(-ax[2]/ax[1],1,0)
@@ -54,7 +54,7 @@ cone3d <- function(base=c(0,0,0),tip=c(0,0,1),rad=1,n=30,draw.base=TRUE,qmesh=FA
 ellipsoid3d <- function(rx=1,ry=1,rz=1,n=30,ctr=c(0,0,0),
                         qmesh=FALSE,
                         trans = par3d("userMatrix"),...) {
-  if (missing(trans) && !rgl.cur()) trans <- diag(4)
+  if (missing(trans) && !cur3d()) trans <- diag(4)
   degvec <- seq(0,pi,length=n)
   ecoord2 <- function(p) {
     c(rx*cos(p[1])*sin(p[2]),ry*sin(p[1])*sin(p[2]),rz*cos(p[2])) }

@@ -8,7 +8,7 @@ to be saved.
 }
 \usage{
 tkpar3dsave(params = c("userMatrix", "scale", "zoom", "FOV"),
-          times = FALSE, dev = rgl.cur(), ...)
+          times = FALSE, dev = cur3d(), ...)
 }
 \arguments{
   \item{params}{ Which parameters to save }

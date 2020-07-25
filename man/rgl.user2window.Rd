@@ -10,7 +10,7 @@ to 3-dimensional window coordinates.
 \usage{
 rgl.user2window(x, y = NULL, z = NULL, projection = rgl.projection())
 rgl.window2user(x, y = NULL, z = 0, projection = rgl.projection())
-rgl.projection(dev = rgl.cur(), subscene = currentSubscene3d(dev))
+rgl.projection(dev = cur3d(), subscene = currentSubscene3d(dev))
 }
 \arguments{
   \item{x, y, z}{Input coordinates.  Any reasonable way of defining the

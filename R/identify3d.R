@@ -8,13 +8,13 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
     }
     
     opar <- par3d("mouseMode")
-    odisp <- rgl.cur()
+    odisp <- cur3d()
     
     on.exit( {
-      disp <- rgl.cur()
+      disp <- cur3d()
       if (odisp != disp) 
         try(rgl.set(odisp), silent=TRUE)
-      if (rgl.cur() == odisp) 
+      if (cur3d() == odisp) 
         par3d(mouseMode = opar) 
       try(rgl.set(disp), silent=TRUE)
     } )     
@@ -42,7 +42,7 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
     selected <- c()
     
     select <- function(mousex, mousey) {
-       disp <- rgl.cur()
+       disp <- cur3d()
        if (disp != odisp) {
          rgl.set(odisp)
          on.exit(rgl.set(disp))

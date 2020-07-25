@@ -870,7 +870,7 @@ msCHANGING <- 2
 msDONE     <- 3
 msABORT    <- 4
 
-rgl.selectstate <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
+rgl.selectstate <- function(dev = cur3d(), subscene = currentSubscene3d(dev))
 {
 	ret <- .C( rgl_selectstate,
     	as.integer(dev),
@@ -887,7 +887,7 @@ rgl.selectstate <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
 
 
 rgl.select <- function(button = c("left", "middle", "right"), 
-                       dev = rgl.cur(), subscene = currentSubscene3d(dev))
+                       dev = cur3d(), subscene = currentSubscene3d(dev))
 {
 	if (rgl.useNULL())
 	  return(NULL)
@@ -910,7 +910,7 @@ rgl.select <- function(button = c("left", "middle", "right"),
 }
 
 rgl.setselectstate <- function(state = "current", 
-                               dev = rgl.cur(), subscene = currentSubscene3d(dev))
+                               dev = cur3d(), subscene = currentSubscene3d(dev))
 {
 	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3, abort = 4)
 	idata <- as.integer(c(state))
@@ -928,7 +928,7 @@ rgl.setselectstate <- function(state = "current",
 	c("none", "middle", "done", "abort")[ret$state]
 }
 
-rgl.projection <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
+rgl.projection <- function(dev = cur3d(), subscene = currentSubscene3d(dev))
 {
     list(model = par3d("modelMatrix", dev = dev, subscene = subscene),
     	 proj = par3d("projMatrix", dev = dev, subscene = subscene),
@@ -936,7 +936,7 @@ rgl.projection <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
 }   
      
 rgl.select3d <- function(button = c("left", "middle", "right"), 
-                         dev = rgl.cur(), subscene = currentSubscene3d(dev)) {
+                         dev = cur3d(), subscene = currentSubscene3d(dev)) {
   rect <- rgl.select(button = button, dev = dev, subscene = subscene)
   if (is.null(rect)) return(NULL)
   
