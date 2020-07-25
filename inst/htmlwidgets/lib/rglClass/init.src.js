@@ -57,7 +57,12 @@
         result = {values: prev.values, 
                   vOffsets: prev.vOffsets, 
                   it: prev.it,
-                  centers: prev.centers
+                  centers: prev.centers,
+                  vertexCount: prev.vertexCount,
+                  colorCount: 1,
+                  type: "sphere",
+                  f: prev.f,
+                  indices: prev.indices
         };
       } else {
         var n = verts.it[0].length, i, j, k,
@@ -81,9 +86,9 @@
         result.type = "sphere";
         result.f = [];
         result.indices = {};
-        this.sphere = result;
-        this.initSphereGL();
       }
+      this.sphere = result;
+      this.initSphereGL();
     };
 
     /**
