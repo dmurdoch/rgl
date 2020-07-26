@@ -11,7 +11,7 @@ These functions give information about the attributes of
 lower-level function more likely to be used in programming.
 }
 \usage{
-rgl.attrib.info(id = rgl.ids("all", 0)$id, attribs = NULL, showAll = FALSE)
+rgl.attrib.info(id = ids3d("all", 0)$id, attribs = NULL, showAll = FALSE)
 rgl.attrib.count(id, attrib)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -52,5 +52,5 @@ id <- points3d(rnorm(100), rnorm(100), rnorm(100), col = "green")
 rgl.attrib.info(id, showAll = TRUE)
 rgl.attrib.count(id, "vertices")
 
-merge(rgl.attrib.info(), rgl.ids("all"))
+merge(rgl.attrib.info(), ids3d("all"))
 }

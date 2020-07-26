@@ -12,7 +12,7 @@ rgl.attrib(id, attrib, first = 1,
 }
 \arguments{
   \item{id}{
-A shape identifier, as returned by \code{\link{rgl.ids}}.
+A shape identifier, as returned by \code{\link{ids3d}}.
 }
   \item{attrib}{
 An attribute of a shape.  Currently supported: one of \cr
@@ -72,7 +72,7 @@ and the columns as listed above.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{rgl.ids}}, \code{\link{rgl.attrib.info}}
+\code{\link{ids3d}}, \code{\link{rgl.attrib.info}}
 }
 \examples{
 p <- plot3d(rnorm(100), rnorm(100), rnorm(100), type = "s", col = "red")

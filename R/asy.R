@@ -65,7 +65,7 @@ ticklabel RGLScale(real s)
     obj[[attrib]]
   }
   
-  # simulate rgl.ids
+  # simulate ids3d
   get.ids <- function(type = "shapes") {
     ids <- names(scene$objects)
     types <- vapply(ids, function(x) scene$objects[[x]]$type, "")

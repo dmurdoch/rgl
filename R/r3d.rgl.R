@@ -44,8 +44,6 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     }
 }
 
-pop3d       <- function(...) {.check3d(); rgl.pop(...)}
-
 # Environment
 
 .material3d <- c("color", "alpha", "lit", "ambient", "specular",
@@ -117,7 +115,7 @@ material3d  <- function (...)
 
 bg3d        <- function(...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  bgid <- rgl.ids("background")$id
+  bgid <- ids3d("background")$id
   if (length(bgid) && nrow(flags <- rgl.attrib(bgid[1], "flags"))) {
     sphere <- flags["sphere", 1]
     fogtype <- if (flags["linear_fog", 1]) "linear"

@@ -8,7 +8,7 @@ This function uses the \code{\link{select3d}} function to allow the user to choo
 point or region in the scene, then reports on all the vertices in or near that selection.
 }
 \usage{
-selectpoints3d(objects = rgl.ids()$id, value = TRUE, closest = TRUE, % $
+selectpoints3d(objects = ids3d()$id, value = TRUE, closest = TRUE, % $
                multiple = FALSE, ...)
 }
 \arguments{

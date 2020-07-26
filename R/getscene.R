@@ -74,10 +74,10 @@ scene3d <- function(minimal = TRUE) {
 
     result$embeddings <- subsceneInfo()$embeddings
     
-    objs <- rgl.ids(c("background", "bboxdeco", "shapes", "lights"))
+    objs <- ids3d(c("background", "bboxdeco", "shapes", "lights"))
     result$objects <- objs$id
   
-    if (nrow(obj <- rgl.ids("subscene", subscene = id))) {
+    if (nrow(obj <- ids3d("subscene", subscene = id))) {
       subscenes <- vector("list", nrow(obj))
       ids <- obj$id
       for (i in seq_len(nrow(obj)))
@@ -93,7 +93,7 @@ scene3d <- function(minimal = TRUE) {
   
   result$rootSubscene <- getSubscene(rootSubscene())
   
-  objs <- rgl.ids(c("shapes", "lights", "background", "bboxdeco"), subscene=0)  
+  objs <- ids3d(c("shapes", "lights", "background", "bboxdeco"), subscene=0)  
   objlist <- vector("list", nrow(objs))
   ids <- objs$id
   types <- as.character(objs$type)

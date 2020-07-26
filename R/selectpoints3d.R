@@ -1,4 +1,4 @@
-selectpoints3d <- function(objects = rgl.ids()$id, value = TRUE, closest = TRUE, 
+selectpoints3d <- function(objects = ids3d()$id, value = TRUE, closest = TRUE, 
                            multiple = FALSE, ...) {
 
   if (value) result <- cbind(x = numeric(0), y = numeric(0), z = numeric(0))

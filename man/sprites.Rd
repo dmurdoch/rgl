@@ -36,7 +36,7 @@ or resize with the scene?}
   
   When \code{shapes} is not \code{NULL}, it should be a vector of
   identifers of objects to plot in the scene (e.g. as returned by
-  plotting functions or by \code{\link{rgl.ids}}).  These objects will
+  plotting functions or by \code{\link{ids3d}}).  These objects will
   be removed from the scene and duplicated as a sprite image in a
   constant orientation, as specified by \code{userMatrix}.  The 
   origin \code{0, 0, 0} will be plotted at the coordinates given by \code{x, y, z}.

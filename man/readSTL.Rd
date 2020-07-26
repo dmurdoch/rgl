@@ -42,7 +42,7 @@ A mesh shape to use for points.  It is scaled by the \code{pointRadius}.
 Lines are rendered as cylinders with this many sides.
 }
   \item{ids}{
-The identifiers (from \code{\link{rgl.ids}}) of the
+The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
 }
 }

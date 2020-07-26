@@ -36,7 +36,7 @@ as.triangles3d.rglId <- function(obj,
                                  subscene = NA,
                                  ...) {
   attribute <- match.arg(attribute)
-  ids <- rgl.ids(subscene = subscene)
+  ids <- ids3d(subscene = subscene)
   ids <- ids[ids$id %in% obj,]
   result <- NULL
   for (i in seq_len(nrow(ids))) {

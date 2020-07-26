@@ -139,7 +139,7 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   }
   filename <- summary(con)$description
   
-  if (NROW(bbox <- rgl.ids("bboxdeco")) && (is.null(ids) || bbox$id %in% ids)) {
+  if (NROW(bbox <- ids3d("bboxdeco")) && (is.null(ids) || bbox$id %in% ids)) {
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
     bbox <- convertBBox(bbox$id)
@@ -148,12 +148,12 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   } else dobbox <- FALSE 
   
   if (is.null(ids)) {
-    ids <- rgl.ids()
+    ids <- ids3d()
     types <- as.character(ids$type)
     ids <- ids$id
   } else {
     if (dobbox) ids <- c(ids, bbox)
-    allids <- rgl.ids()
+    allids <- ids3d()
     ind <- match(ids, allids$id)
     keep <- !is.na(ind)
     if (any(!keep)) warning(gettextf("Object(s) with id %s not found", paste(ids[!keep], collapse=" ")),

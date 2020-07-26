@@ -844,14 +844,14 @@ Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("open3d")`:               | open a new window
 `r indexfns(c("close3d", "rgl.close"))`:              | close the current window
-`r indexfns("rgl.bringtotop")`:       | bring the current window to the top
 `r indexfns(c("cur3d", "rgl.cur"))`:                | id of the active device
-`r indexfns("rgl.dev.list")`:         | ids of all active devices
 `r indexfns(c("set3d", "rgl.set"))`:                | set a particular device to be active
-`r indexfns("rgl.ids")`:              | ids and types of all current objects
-`r indexfns(c("rgl.attrib", "rgl.attrib.info", "rgl.attrib.count"))`: | attributes of objects in the scene
 `r indexfns(c("pop3d", "rgl.pop"))`:     | delete an object from the scene
 `r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
+`r indexfns(c("ids3d", "rgl.ids"))`:              | ids and types of all current objects
+`r indexfns("rgl.bringtotop")`:       | bring the current window to the top
+`r indexfns("rgl.dev.list")`:         | ids of all active devices
+`r indexfns(c("rgl.attrib", "rgl.attrib.info", "rgl.attrib.count"))`: | attributes of objects in the scene
 `r indexfns("rgl.projection")`:        | return information about the current projection
 `r indexfns(c("rgl.user2window", "rgl.window2user"))`: | convert between coordinates in the current projection
 

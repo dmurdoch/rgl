@@ -78,7 +78,7 @@ newSubscene3d <- function(viewport = "replace",
   if (id) {
     if (copyLights || copyShapes || copyBBoxDeco || copyBackground) {
       useSubscene3d(parent)
-      ids <- rgl.ids(type = 
+      ids <- ids3d(type = 
         c("lights", "shapes", "bboxdeco", "background")[c(copyLights, copyShapes, copyBBoxDeco, copyBackground)])$id
       if (length(ids)) 
         addToSubscene3d(ids, subscene = id)
@@ -102,7 +102,7 @@ useSubscene3d <- function(subscene) {
 
 addToSubscene3d <- function(ids, subscene = currentSubscene3d()) {
   ids <- as.integer(ids)
-  dups <- intersect(ids, rgl.ids("all", subscene)$id)
+  dups <- intersect(ids, ids3d("all", subscene)$id)
   if (length(dups))
     stop(gettextf("Cannot add %s, already present", paste(dups, collapse = ", ")), domain = NA)
   result <- .C(rgl_addtosubscene, success = as.integer(subscene), 
@@ -152,7 +152,7 @@ next3d <- function(current = NA, clear = TRUE, reuse = TRUE) {
     subscenes <- current
   
   this <- which(current == subscenes)
-  if (reuse && !nrow(rgl.ids(subscene = current))) {
+  if (reuse && !nrow(ids3d(subscene = current))) {
     # do nothing
   } else if (this == length(subscenes)) 
     this <- 1

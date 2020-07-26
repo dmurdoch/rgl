@@ -6,7 +6,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
                               merge = TRUE,
                               ...) {
   if (missing(x)) {
-    x <- rglId(rgl.ids()$id)
+    x <- rglId(ids3d()$id)
     return(as.mesh3d(x, ...))
   }
   xyz <- xyz.coords(x, y, z, recycle = TRUE)
@@ -63,7 +63,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
   local_t <- function(x) {
     if (!is.null(x)) t(x)
   }
-  ids <- rgl.ids(subscene = subscene)
+  ids <- ids3d(subscene = subscene)
   ids <- ids[ids$id %in% x,]
   if (!is.na(type))
     ids <- ids[ids$type %in% type,]

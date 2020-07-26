@@ -48,7 +48,7 @@ Whether to mark each RGL object as a separate object in the file.
 Whether to output texture coordinates.
 }
   \item{ids}{
-The identifiers (from \code{\link{rgl.ids}}) of the
+The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
 }
 

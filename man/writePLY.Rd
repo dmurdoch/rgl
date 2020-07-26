@@ -45,7 +45,7 @@ Whether to output vertex color information.
 Whether to output vertex normals for smooth shading.
 }
   \item{ids}{
-The identifiers (from \code{\link{rgl.ids}}) of the
+The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
 }
 
