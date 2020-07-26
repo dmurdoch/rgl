@@ -849,10 +849,16 @@ Function                             | Description
 `r indexfns(c("pop3d", "rgl.pop"))`:     | delete an object from the scene
 `r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
 `r indexfns(c("ids3d", "rgl.ids"))`:              | ids and types of all current objects
-`r indexfns("rgl.bringtotop")`:       | bring the current window to the top
-`r indexfns("rgl.dev.list")`:         | ids of all active devices
+
+These functions are mainly intended for programming, and 
+have no corresponding `*3d` counterparts:
+
+Function | Description
+------------- | -----------
+`r indexfns("rgl.bringtotop")`: | bring the current window to the top
+`r indexfns("rgl.dev.list")`:   | ids of all active devices
 `r indexfns(c("rgl.attrib", "rgl.attrib.info", "rgl.attrib.count"))`: | attributes of objects in the scene
-`r indexfns("rgl.projection")`:        | return information about the current projection
+`r indexfns("rgl.projection")`: | return information about the current projection
 `r indexfns(c("rgl.user2window", "rgl.window2user"))`: | convert between coordinates in the current projection
 
 The `r indexfns("as.triangles3d")` generic function is intended to 

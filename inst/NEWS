@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.13
+0.102.14
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1111,6 +1111,8 @@ base graphics.
   - "mesh3d"" methods for shade3d, wire3d, and dots3d
     have been rewritten to share code, allowing meshes
     to have different front and back material properties.
-  - New functions cur3d(), set3d(), close3d() have been 
+  - New functions cur3d(), set3d(), close3d() and ids3d() have been 
     added.  Generally, users should use these rather than
-    rgl.cur(), rgl.set(), and rgl.close().
+    rgl.cur(), rgl.set(), rgl.close() and rgl.ids().
+  - pop3d() has been modified slightly so that it no
+    longer opens a new window if none is already present.
