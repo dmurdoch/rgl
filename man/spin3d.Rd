@@ -52,7 +52,7 @@ f <- function(time) {
     par3d(skipRedraw = TRUE) # stops intermediate redraws
     on.exit(par3d(skipRedraw = FALSE)) # redraw at the end
 
-    rgl.pop(id = spriteid) # delete the old sprite
+    pop3d(id = spriteid) # delete the old sprite
     cubeid <- shade3d(cube3d(), col = "red")
     spriteid <<- sprites3d(0:1, 0:1, 0:1, shape = cubeid,
                    userMatrix = spin2(time, 

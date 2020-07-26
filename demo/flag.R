@@ -13,7 +13,7 @@ wave <- function(time) {
   arclen <- arclen[keep]
   
   par3d(skipRedraw = TRUE)
-  if (nrow(ids3d())) rgl.pop()
+  if (nrow(ids3d())) pop3d()
   surface3d(x,y,z, texture_s=matrix(arclen/2, length(x), 20), texture_t=z, col="white")
   c(list(skipRedraw = FALSE), spin(time))
 }

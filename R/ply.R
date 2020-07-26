@@ -277,7 +277,7 @@ property int vertex2\n", file=con)
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
     bbox <- convertBBox(bbox$id)
-    on.exit({ rgl.pop(id=bbox); par3d(save) }, add=TRUE)
+    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE)
     dobbox <- TRUE
   } else dobbox <- FALSE 
   

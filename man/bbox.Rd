@@ -49,7 +49,7 @@ This description applies to the X axis; other axes are similar:
 }
 \value{
   This function is called for the side effect of setting the bounding box decoration.
-  A shape ID is returned to allow \code{\link{rgl.pop}} to delete it.
+  A shape ID is returned to allow \code{\link{pop3d}} to delete it.
 }
 \examples{
   rgl.open()

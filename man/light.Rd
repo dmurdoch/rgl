@@ -30,11 +30,11 @@ rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF",
 }
 \value{
   This function is called for the side effect of adding a light.  A light ID is
-  returned to allow \code{\link{rgl.pop}} to remove it.
+  returned to allow \code{\link{pop3d}} to remove it.
 }
 \seealso{
   \code{\link{rgl.clear}}
-  \code{\link{rgl.pop}}
+  \code{\link{pop3d}}
 }
 \examples{
 
@@ -59,7 +59,7 @@ frame <- function(time) {
     a <- pi*(time - 1)
     save <- par3d(skipRedraw = TRUE)
     clear3d(type = "lights")
-    rgl.pop(id = lightid)
+    pop3d(id = lightid)
     xyz <- matrix(c(r*sin(a) + mean(x), r*cos(a) + mean(y), max(z)), ncol = 3)
     light3d(x = xyz, diffuse = "gray75", 
             specular = "gray75", viewpoint.rel = FALSE) 

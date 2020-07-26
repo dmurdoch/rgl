@@ -66,7 +66,7 @@ if (requireNamespace("plotrix")) {
     f <- function(time) {
       par3d(skipRedraw = TRUE)
       on.exit(par3d(skipRedraw = FALSE))
-      rgl.pop(id = textid)
+      pop3d(id = textid)
       # Need to rotate before thigmophobe3d is called
       result <- spin(time)
       par3d(userMatrix = result$userMatrix)

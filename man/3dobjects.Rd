@@ -54,7 +54,7 @@ duration of the call.
 }
 \value{
    Each function returns the integer object ID of the shape that
-   was added to the scene.  These can be passed to \code{\link{rgl.pop}}
+   was added to the scene.  These can be passed to \code{\link{pop3d}}
    to remove the object from the scene.
 }
 \author{

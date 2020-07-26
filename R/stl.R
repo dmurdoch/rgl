@@ -143,7 +143,7 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
     bbox <- convertBBox(bbox$id)
-    on.exit({ rgl.pop(id=bbox); par3d(save) }, add=TRUE)
+    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE)
     dobbox <- TRUE
   } else dobbox <- FALSE 
   
