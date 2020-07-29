@@ -375,7 +375,7 @@ snapshot3d <- function(filename, ..., scene, width, height) {
   }
   if (!missing(width) || !missing(height)) {
     saverect <- rect <- par3d("windowRect")
-    on.exit(par3d(windowRect = saverect, add = TRUE, before = TRUE))
+    on.exit(par3d(windowRect = saverect), add = TRUE, after = FALSE)
     if (!missing(width))
       rect[3] <- rect[1] + width
     if (!missing(height))
