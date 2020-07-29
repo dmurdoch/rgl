@@ -240,9 +240,25 @@ fns <- local({
   fig.show <- NULL
   fig.beforecode <- NULL
   
+  setupDone <- NULL
+  
   setupKnitr <- function(autoprint = FALSE, 
                          rgl.newwindow = autoprint,
                          rgl.closewindows = autoprint) {
+    if (!is.null(setupDone)) {
+      if (setupDone$autoprint != autoprint ||
+          setupDone$rgl.newwindow != rgl.newwindow ||
+          setupDone$rgl.closewindows != rgl.closewindows) {
+        warning("Already set autoprint = ", setupDone$autoprint,
+                          ", rgl.newwindow = ", setupDone$rgl.newwindow,
+                          ", rgl.closewindows = ", setupDone$rgl.closewindows)
+      }
+      return()
+    }
+    setupDone <<- list(autoprint = autoprint,
+                       rgl.newwindow = rgl.newwindow,
+                       rgl.closewindows = rgl.closewindows)
+  
     # R produces multiple vignettes in the same session.
     environment(rglwidget)$reuseDF <- NULL
     knitr::opts_chunk$set(rgl.newwindow = rgl.newwindow, 
@@ -346,7 +362,7 @@ fns <- local({
         scene <- obj$scene
         if (snapshot) {
           filename <- tempfile(fileext = ".png")
-          snapshot3d(filename, scene = scene)
+          snapshot3d(filename, scene = scene, width = figWidth(), height = figHeight())
           content <- include_graphics(filename)
           if (is.null(options$out.width))
             options$out.width <- with(options, paste0(out.width.px, "px"))

@@ -41,6 +41,11 @@ or \code{\link{highlevel}} functions.  All \pkg{rgl} functions that
 produce graphics do this, but functions in other packages that
 call them may not return values appropriately.
 
+If you have multiple calls to \code{setupKnitr()}, all
+should have the same arguments.  If any differ, a 
+warning will be issued, and the first set of arguments
+will be used.
+
 Mixing explicit calls
 to \code{\link{rglwidget}} with auto-printing is likely to lead to failure of some
 scenes to display.  To avoid this, set \code{options(rgl.printRglwidget = FALSE)} before using such explicit calls.  Similarly,
