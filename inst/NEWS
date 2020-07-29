@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.14
+0.102.15
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
