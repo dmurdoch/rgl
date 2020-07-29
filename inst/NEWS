@@ -1115,4 +1115,5 @@ base graphics.
     added.  Generally, users should use these rather than
     rgl.cur(), rgl.set(), rgl.close() and rgl.ids().
   - pop3d() has been modified slightly so that it no
-    longer opens a new window if none is already present.
+    longer opens a new window if none is already present
+  - snapshot3d() now has optional width and height parameters for the saved snapshot.
