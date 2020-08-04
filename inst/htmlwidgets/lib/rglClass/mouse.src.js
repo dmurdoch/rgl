@@ -1,4 +1,23 @@
     
+    rglwidgetClass.prototype.getCursor = function(mode) {
+      switch(mode) {
+        case "none": 
+          return "none";
+        case "trackball":
+        case "xAxis":
+        case "yAxis":
+        case "zAxis":
+        case "polar":
+          return "grab";
+        case "selecting":
+          return "crosshair";
+        case "fov":
+        case "zoom":
+          return "zoom-in";
+      }
+      return "dragging";
+    };
+    
     /**
      * Set mouse mode for a subscene
      * @param { string } mode - name of mode
@@ -12,6 +31,8 @@
       if (!stayActive && sub.par3d.mouseMode[which] === "selecting")
         this.clearBrush(null);
       sub.par3d.mouseMode[which] = mode;
+      if (button === 1)
+        this.canvas.style.cursor = this.getCursor(mode);
     };
 
     /**
@@ -65,6 +86,7 @@
           activeSub = this.getObj(l[i]);
           activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
         }
+        this.canvas.style.cursor = "grabbing";
       };
 
       handlers.trackballmove = function(x,y) {
@@ -115,6 +137,7 @@
           activeSub.camBase = [-Math.atan2(activeSub.saveMat.m13, activeSub.saveMat.m11),
                                Math.atan2(activeSub.saveMat.m32, activeSub.saveMat.m22)];
         }
+        this.canvas.style.cursor = "grabbing";
       };
 
       handlers.polarmove = function(x,y) {
@@ -146,6 +169,7 @@
           activeSub = this.getObj(l[i]);
           activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
         }
+        this.canvas.style.cursor = "grabbing";
       };
 
       handlers.axismove = function(x) {
@@ -177,6 +201,7 @@
           activeSub = this.getObj(l[i]);
           activeSub.zoom0 = Math.log(activeSub.par3d.zoom);
         }
+        this.canvas.style.cursor = "zoom-in";
       };
       handlers.zoommove = function(x, y) {
         var activeSub = this.getObj(activeSubscene),
@@ -200,6 +225,7 @@
           activeSub = this.getObj(l[i]);
           activeSub.fov0 = activeSub.par3d.FOV;
         }
+        this.canvas.style.cursor = "zoom-in";
       };
       handlers.fovmove = function(x, y) {
         var activeSub = this.getObj(activeSubscene),
@@ -228,6 +254,7 @@
       	if (typeof this.scene.brushId !== "undefined")
       	  this.getObj(this.scene.brushId).initialized = false;
       	this.drawScene();
+      	this.canvas.style.cursor = "crosshair";
       };
       
       handlers.selectingmove = function(x, y) {
@@ -290,18 +317,23 @@
           ev.preventDefault();
         }
         drag = 0;
+        this.onmousemove( ev );
       };
 
       this.canvas.onmouseout = this.canvas.onmouseup;
 
       this.canvas.onmousemove = function ( ev ) {
-        if ( drag === 0 ) return;
-        var f = handlers[handler + "move"];
-        if (f) {
-          var coords = self.relMouseCoords(ev);
-          coords.y = self.canvas.height - coords.y;
-          coords = self.translateCoords(activeSubscene, coords);
-          f.call(self, coords.x, coords.y);
+        var coords = self.relMouseCoords(ev), sub, f;
+        coords.y = self.canvas.height - coords.y;
+        if ( drag === 0 ) {
+          activeSubscene = self.whichSubscene(coords);             sub = self.getObj(activeSubscene);
+          this.style.cursor = self.getCursor(sub.par3d.mouseMode.left);          
+        } else {
+          f = handlers[handler + "move"];
+          if (f) {
+            coords = self.translateCoords(activeSubscene, coords);
+            f.call(self, coords.x, coords.y);
+          }
         }
       };
 

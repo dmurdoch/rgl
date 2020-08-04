@@ -2,11 +2,6 @@ To-do:
 
 Create *3d functions corresponding to all remaining rgl.* functions.
 
-Put class on open3d() result so it acts like a high level plot. PROBABLY WON'T DO -- this doesn't work well.
-
-Add knit_print method to rglWebGL class so rglwidget can
-print as snapshot when printing from a PDF project.
-
 Maybe put all newly created obj fields from initObj into one
 place in object, so the original object is left unmodified?
 
@@ -47,6 +42,11 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Put class on open3d() result so it acts like a high level plot. PROBABLY WON'T DO -- this doesn't work well.
+
+Add knit_print method to rglWebGL class so rglwidget can
+print as snapshot when printing from a PDF project. DONE
 
 rglwidget() doesn't respect front and back material properties 
 for spheres. FIXED

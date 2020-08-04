@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.15
+0.102.16
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1117,3 +1117,5 @@ base graphics.
   - pop3d() has been modified slightly so that it no
     longer opens a new window if none is already present
   - snapshot3d() now has optional width and height parameters for the saved snapshot.
+  - the cursor now reflects the mouse mode in rglwidget()
+    displays.
