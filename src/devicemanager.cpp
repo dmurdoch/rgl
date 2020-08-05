@@ -165,7 +165,7 @@ bool DeviceManager::createTestWindow()
 {
   bool result = false;
   Device* pDevice = new Device(newID, false);  
-  if ( pDevice->hasWindow() ) 
+  if ( pDevice && pDevice->hasWindow() ) 
     result = true;
   delete pDevice;
   return result;
