@@ -75,9 +75,54 @@
     options(rgl.useNULL = TRUE)
     rgl.init(initValue, TRUE)	
   }
+
+  if (!rgl.useNULL()) 
+    setGraphicsDelay(unixos = unixos)
   
   registerInputHandler("shinyPar3d", convertShinyPar3d)
   
+}
+
+# Do we need a delay opening graphics?    
+# Work around bug in MacOS Catalina:  if base plotting happens
+# too quickly after first call to quartz, R crashes.
+# This inserts a delay after the
+# first call to the graphics device.  The default is
+# no delay, unless on Catalina with no graphics device
+# currently open, when a 1 second delay will be introduced.
+# Use "RGL_SLOW_DEV = value" to change the delay from 
+# the default to "value" seconds.  
+
+setGraphicsDelay <- function(delay = Sys.getenv("RGL_SLOW_DEV", 0), 
+                             unixos = "none") {
+  if (unixos == "Darwin") {
+    version <- try(numeric_version(system("uname -r", intern = TRUE)))
+    if (missing(delay) &&
+        !inherits(version, "try-error") && 
+        !is.na(version) && 
+        version >= "19.0.0" &&
+        dev.cur() == 1 &&
+        identical(getOption("device"), grDevices::quartz))
+      delay <- Sys.getenv("RGL_SLOW_DEV", 1)
+  }
+  delay <- suppressWarnings(as.numeric(delay))
+  if (is.na(delay))
+    delay <- 1
+  if (delay > 0) {
+    olddev <- getOption("device")
+    if (is.character(olddev)) {
+      if (exists(olddev, globalenv(), mode = "function"))
+        olddev <- get(olddev, envir = globalenv(), mode = "function")
+      else if (exists(olddev, asNamespace("grDevices"), mode = "function"))
+        olddev <- get(olddev, asNamespace("grDevices"), mode = "function")
+    }
+    if (is.function(olddev))
+      options(device = function(...) {
+        olddev(...)
+        Sys.sleep(delay)
+        options(device = olddev)
+      })
+  }
 }
 
 rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.debug", FALSE)) 

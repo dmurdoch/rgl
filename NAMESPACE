@@ -31,8 +31,8 @@ export(.check3d,
 	rglFonts, rglId, rglMouse, rglShared, rglToLattice, rglToBase,
   r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, scene3d, segments3d, select3d, selectpoints3d,
-	rgl.setMouseCallbacks, rgl.setWheelCallback, set3d, setupKnitr, 
-        setUserShaders, shade3d, 
+	rgl.setMouseCallbacks, rgl.setWheelCallback, set3d, 
+	setGraphicsDelay, setupKnitr, setUserShaders, shade3d, 
 	shapelist3d, shinyGetPar3d, shinySetPar3d, show2d, snapshot3d, 
 	spheres3d, spin3d, sprites3d, subdivision3d, 
 	subsceneInfo, subsceneList, subsetSetter, subsetSlider, Sweave.snapshot,
@@ -128,7 +128,7 @@ export(.check3d,
  
  importFrom(graphics, legend, par, plot, plot.new, polygon,
  	    strwidth, strheight)
- importFrom(grDevices, col2rgb, colorRamp, dev.off, png, 
+ importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.off, png, 
  	    postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)
