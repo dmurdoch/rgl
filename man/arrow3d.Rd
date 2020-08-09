@@ -96,7 +96,7 @@ used in the plot (not including material
 properties) is returned.
 }
 \author{
-Design based on \code{heplots::\link[heplots]{arrow3d}}, which contains modifications by Michael Friendly
+Design based on \code{heplots::arrow3d}, which contains modifications by Michael Friendly
 to a function posted by Barry Rowlingson to R-help on 1/10/2010.  Additions by Duncan Murdoch.
 }
 \examples{
