@@ -1,5 +1,7 @@
 To-do:
 
+Do something like meshColor in shade3d for texture coordinates.
+
 Create *3d functions corresponding to all remaining rgl.* functions.
 
 Maybe put all newly created obj fields from initObj into one

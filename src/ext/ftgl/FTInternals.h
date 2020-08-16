@@ -69,6 +69,7 @@
         #ifdef SDL_main
             #include "SDL_opengl.h"
         #elif __APPLE_CC__
+            #define GL_SILENCE_DEPRECATION
             #include <OpenGL/gl.h>
             #include <OpenGL/glu.h>
         #else

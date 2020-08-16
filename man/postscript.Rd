@@ -23,7 +23,7 @@ See the reference for full details.
 }
 \references{
 GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine,
-\url{https://www.geuz.org/gl2ps/}, version 1.4.0.
+\url{http://www.geuz.org/gl2ps/}, version 1.4.0.
 }
 \author{ Christophe Geuzaine / Albrecht Gebhardt }
 \examples{

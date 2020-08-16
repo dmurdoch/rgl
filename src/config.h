@@ -4,6 +4,7 @@
 // Platform detection
 // ---------------------------------------------------------------------------
 #if defined(__APPLE__)
+# define GL_SILENCE_DEPRECATION
 # define RGL_OSX 1
 # define RGL_X11 1
 #else

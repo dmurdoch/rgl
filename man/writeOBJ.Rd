@@ -74,7 +74,7 @@ specify it in the \code{material} argument, e.g.
 multiple textures.
 
 The defaults for \code{pointsAsPoints} and \code{linesAsLines} have been
-chosen because Blender (\url{http://www.blender.org}) does not import
+chosen because Blender (\url{https://www.blender.org}) does not import
 points or lines, only polygons.  If you are exporting to other software you
 may want to change them.
 

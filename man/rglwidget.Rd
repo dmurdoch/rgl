@@ -86,7 +86,7 @@ To save the display to a file, use \code{htmlwidgets::\link{saveWidget}}.  This 
 
 The \code{webGLoptions} argument is a list which will
 be passed when the WebGL context is created.  See
-the WebGL 1.0 specification on \url{https://www.khronos.org/registry/webgl/specs} for possible
+the WebGL 1.0 specification on \url{https://www.khronos.org/registry/webgl/specs/} for possible
 settings.  The default in \code{rglwidget} differs
 from the WebGL default by setting \code{preserveDrawingBuffer = TRUE} in order to allow other tools to read
 the image, but please note that some implementations

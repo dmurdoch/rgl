@@ -91,7 +91,7 @@ vector is passed with a name to be used as the family name, e.g.
 limit the file size, \code{rgl} ships with just 3 font files, for 
 regular versions of the \code{serif}, \code{sans} and \code{mono} families.  
 Additional free font files are available from the Amaya project at
-\url{http://dev.w3.org/cvsweb/Amaya/fonts/}.  See the example below for
+\url{https://dev.w3.org/cvsweb/Amaya/fonts/}.  See the example below for
 how to specify a full set of fonts.
 
 Full pathnames should normally be used to specify font files.  If relative
