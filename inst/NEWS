@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.18
+0.102.19
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1124,3 +1124,5 @@ base graphics.
   - Made various improvements to reduce notes and warnings
     during install, including suppressing deprecated OpenGL
     warnings on MacOS.
+  - Texture coordinates in mesh objects now act the same
+    as colors with respect to the meshColors variable.

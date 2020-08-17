@@ -49,7 +49,8 @@
                           front = "lines", back = "lines")
   shade3d(x, ...) # draw a shaded object
   \method{shade3d}{mesh3d}(x, override = TRUE, 
-                           meshColor = c("vertices", "edges", "faces", "legacy"), ...,
+                           meshColor = c("vertices", "edges", "faces", "legacy"), 
+                           texcoords = NULL, ...,
                            front = "filled", back = "filled")
 }
 \arguments{
@@ -89,20 +90,21 @@
   a \code{4 * n} matrix.  Individual meshes may have both types
   of faces.
   
-  The \code{meshColor} argument controls how material colours are interpreted.  This parameter
-was added in \pkg{rgl} version 0.100.1 (0.100.27 for \code{dot3d}, \code{tmesh3d} and \code{qmesh3d}).  Possible values are:
+  The \code{meshColor} argument controls how material colours and textures are interpreted.  This parameter
+was added in \pkg{rgl} version 0.100.1 (0.100.27 for \code{dot3d}, \code{tmesh3d} and \code{qmesh3d}; 0.102.19
+for textures).  Possible values are:
 \describe{
-\item{\code{"vertices"}}{Colours are applied by vertex, in the order
+\item{\code{"vertices"}}{Colours and texture coordinates are applied by vertex, in the order
 they appear in the \code{vb} matrix.}
-\item{\code{"edges"}}{Colours are applied to each edge:  first to the
+\item{\code{"edges"}}{Colours and textures are applied to each edge:  first to the
 3 edges of each triangle in the \code{it} matrix, then the 4
 edges of each quad in the \code{ib} matrix.  This mode
 is only supported if both front and back materials are
 \code{"lines"}.}
-\item{\code{"faces"}}{Colours are applied to each face:  first to the
+\item{\code{"faces"}}{Colours and textures are applied to each face:  first to the
 triangles in the \code{it} matrix, then to the quads in the \code{ib}
 matrix.}
-\item{\code{"legacy"}}{Colours are applied in the same way
+\item{\code{"legacy"}}{Colours and textures are applied in the same way
 as in \pkg{rgl} versions earlier than 0.100.1.}
 }
 Unique partial matches of these values will be recognized.

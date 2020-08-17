@@ -13,7 +13,12 @@ tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
     material$meshColor <- NULL
   }
   meshColor <- match.arg(meshColor)
-  
+  if (missing(texcoords)
+      && !is.null(material)
+      && !is.null(material$texcoords)) {
+    texcoords <- material$texcoords
+    material$texcoords <- NULL
+  }
   if (homogeneous == TRUE)
     vrows <- 4
   else
@@ -63,7 +68,12 @@ qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
     material$meshColor <- NULL
   }  
   meshColor <- match.arg(meshColor)
-  
+  if (missing(texcoords)
+      && !is.null(material)
+      && !is.null(material$texcoords)) {
+    texcoords <- material$texcoords
+    material$texcoords <- NULL
+  }  
   if (homogeneous == TRUE)
     vrows <- 4
   else
@@ -187,7 +197,9 @@ allowedMeshColor <- function(meshColor, modes) {
 }
 
 shade3d.mesh3d <- function ( x, override = TRUE, 
-                             meshColor = c("vertices", "edges", "faces", "legacy"), ...,
+                             meshColor = c("vertices", "edges", "faces", "legacy"), 
+                             texcoords = NULL, 
+                             ...,
                              front = "filled", back = "filled") {
   argMaterial <- c(list(front = front, back = back), .getMaterialArgs(...))
   xHasColor <- !is.null(x$material) && !is.null(x$material$color)
@@ -200,6 +212,8 @@ shade3d.mesh3d <- function ( x, override = TRUE,
       meshColor <- match.arg(meshColor)
     else
       meshColor <- x$meshColor
+    if (is.null(texcoords) && !is.null(x$texcoords))
+      texcoords <- t(x$texcoords)
   } else {
     material <- argMaterial
     material[names(x$material)] <- x$material
@@ -207,6 +221,8 @@ shade3d.mesh3d <- function ( x, override = TRUE,
       meshColor <- match.arg(meshColor)
     else
       meshColor <- x$meshColor
+    if (!is.null(x$texcoords))
+      texcoords <- t(x$texcoords)
   }
   modes <- c(front, back)
   if (!allowedMeshColor(meshColor, modes))
@@ -230,10 +246,7 @@ shade3d.mesh3d <- function ( x, override = TRUE,
                    material)
     if (!is.null(x$normals) && is.null(args$normals)) 
       args <- c(args, list(normals = t(x$normals[,x$it])))
-    if (!is.null(x$texcoords) && is.null(args$texcoords))
-      args <- c(args, list(texcoords = t(x$texcoords[,x$it])))
     if (meshColor != "legacy") {
-      
       if (length(unique(args$color)) > 1) {
         if (!xHasColor && !hasMeshColor && getOption("rgl.meshColorWarning", FALSE))
           warning("Default coloring for meshes changed in rgl 0.100.1")
@@ -247,6 +260,14 @@ shade3d.mesh3d <- function ( x, override = TRUE,
           vertices = rep_len(args$alpha, ncol(x$vb))[x$it],
           faces = rep(args$alpha, each = 3)
         )
+      if (!is.null(texcoords)) {
+        indices <- seq_len(nrow(texcoords))
+        indices <- switch(meshColor,
+          vertices = rep_len(indices, ncol(x$vb))[x$it],
+          faces = rep(indices, each = 3)
+        )
+        args$texcoords <- texcoords[indices,]
+      }
     }
     if (meshColor == "edges") 
       fn <- segments3d
@@ -280,6 +301,17 @@ shade3d.mesh3d <- function ( x, override = TRUE,
             temp <- rep_len(args$alpha, ntriangles + nquads)
             rep(temp[ntriangles + seq_len(nquads)], each = 4)
           })
+      }
+      if (!is.null(texcoords)) {
+        nquads <- ncol(x$ib)
+        indices <- seq_len(nrow(texcoords))
+        indices <- switch(meshColor,
+                        vertices = rep_len(indices, ncol(x$vb))[x$ib],
+                        faces = {
+                          temp <- rep_len(indices, ntriangles + nquads)
+                          rep(temp[ntriangles + seq_len(nquads)], each = 4)
+                        })
+        args$texcoords <- texcoords[indices,]
       }
     }
     if (meshColor == "edges")
