@@ -191,27 +191,26 @@
       handlers.axisend = 0;
 
       handlers.y0zoom = 0;
-      handlers.zoom0 = 0;
       handlers.zoomdown = function(x, y) {
-        var activeSub = this.getObj(activeSubscene),
-          activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
+        var activeSub = self.getObj(activeSubscene),
+          activeProjection = self.getObj(self.useid(activeSub.id, "projection")),
           i, l = activeProjection.par3d.listeners;
         handlers.y0zoom = y;
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           activeSub.zoom0 = Math.log(activeSub.par3d.zoom);
         }
-        this.canvas.style.cursor = "zoom-in";
+        self.canvas.style.cursor = "zoom-in";
       };
       handlers.zoommove = function(x, y) {
-        var activeSub = this.getObj(activeSubscene),
-            activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
+        var activeSub = self.getObj(activeSubscene),
+            activeProjection = self.getObj(self.useid(activeSub.id, "projection")),
             i, l = activeProjection.par3d.listeners;
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
-          activeSub.par3d.zoom = Math.exp(activeSub.zoom0 + (y-handlers.y0zoom)/this.canvas.height);
+          activeSub = self.getObj(l[i]);
+          activeSub.par3d.zoom = Math.exp(activeSub.zoom0 + (y-handlers.y0zoom)/self.canvas.height);
         }
-        this.drawScene();
+        self.drawScene();
       };
       handlers.zoomend = 0;
 
@@ -337,10 +336,8 @@
         }
       };
 
-      handlers.wheelHandler = function(ev) {
-        var del = 1.02, i;
-        if (ev.shiftKey) del = 1.002;
-        var ds = ((ev.detail || ev.wheelDelta) > 0) ? del : (1 / del);
+      handlers.setZoom = function(ds) {
+        var i;
         if (typeof activeSubscene === "undefined")
           activeSubscene = self.scene.rootSubscene;
         var activeSub = self.getObj(activeSubscene),
@@ -352,9 +349,71 @@
           activeSub.par3d.zoom *= ds;
         }
         self.drawScene();
+      };
+      
+      handlers.wheelHandler = function(ev) {
+        var del = 1.02;
+        if (ev.shiftKey) del = 1.002;
+        var ds = ((ev.detail || ev.wheelDelta) > 0) ? del : (1 / del);
+        handlers.setZoom(ds);
         ev.preventDefault();
+      };
+      
+      handlers.get_finger_dist = function(ev) {
+        var diffX = ev.touches[0].clientX - ev.touches[1].clientX,
+            diffY = ev.touches[0].clientY - ev.touches[1].clientY;
+        return Math.sqrt(diffX * diffX + diffY * diffY); 
+      };
+      
+      handlers.touchstart = function(ev) {
+        var touch = ev.touches[0],
+          mouseEvent = new MouseEvent("mousedown",
+            {
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+        ev.preventDefault();
+        if (ev.touches.length == 2) {
+          var coords = self.relMouseCoords(touch);
+          coords.y = self.canvas.height-coords.y;
+          activeSubscene = self.whichSubscene(coords);
+          handlers.finger_dist0 = handlers.get_finger_dist(ev);
+          handlers.zoomdown(coords.x, coords.y);
+        }
+        this.dispatchEvent(mouseEvent);
+      };
+      
+      handlers.touchend = function(ev) {
+        var mouseEvent;
+        ev.preventDefault();
+        if (ev.touches.length == 1) {
+          mouseEvent = new MouseEvent("mouseup", {});
+          this.dispatchEvent(mouseEvent);
+        }
+      };
+      
+      handlers.touchmove = function(ev) {
+        var touch = ev.touches[0],
+          mouseEvent;
+        ev.preventDefault();
+        if (ev.touches.length > 1) {
+          var coords = self.relMouseCoords(touch),
+              new_dist = handlers.get_finger_dist(ev);
+          coords.y = self.canvas.height*Math.log(handlers.finger_dist0/new_dist) + handlers.y0zoom;
+          handlers.zoommove(coords.x, coords.y);
+        } else {
+          mouseEvent = new MouseEvent("mousemove",
+          {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+          this.dispatchEvent(mouseEvent);
+        }
       };
 
       this.canvas.addEventListener("DOMMouseScroll", handlers.wheelHandler, false);
       this.canvas.addEventListener("mousewheel", handlers.wheelHandler, false);
+      this.canvas.addEventListener("touchstart", handlers.touchstart, {passive: false});
+      this.canvas.addEventListener("touchend", handlers.touchend, {passive: false});
+      this.canvas.addEventListener("touchmove", handlers.touchmove, {passive: false});
     };
