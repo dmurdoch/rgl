@@ -29,21 +29,28 @@
       if (typeof userShader !== "undefined") return userShader;
 
       result = "  /* ****** "+type+" object "+id+" vertex shader ****** */\n"+
+      "#ifdef GL_ES\n"+
+      "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"+
+      "  precision highp float;\n"+
+      "#else\n"+
+      "  precision mediump float;\n"+
+      "#endif\n"+
+      "#endif\n"+
       "  attribute vec3 aPos;\n"+
       "  attribute vec4 aCol;\n"+
-      " uniform mat4 mvMatrix;\n"+
-      " uniform mat4 prMatrix;\n"+
-      " varying vec4 vCol;\n"+
-      " varying vec4 vPosition;\n";
+      "  uniform mat4 mvMatrix;\n"+
+      "  uniform mat4 prMatrix;\n"+
+      "  varying vec4 vCol;\n"+
+      "  varying vec4 vPosition;\n";
 
       if (needs_vnormal)
         result = result + "  attribute vec3 aNorm;\n"+
-                          " uniform mat4 normMatrix;\n"+
-                          " varying vec3 vNormal;\n";
+                          "  uniform mat4 normMatrix;\n"+
+                          "  varying vec3 vNormal;\n";
 
       if (has_texture || type === "text")
-        result = result + " attribute vec2 aTexcoord;\n"+
-                          " varying vec2 vTexcoord;\n";
+        result = result + "  attribute vec2 aTexcoord;\n"+
+                          "  varying vec2 vTexcoord;\n";
 
       if (fixed_size)
         result = result + "  uniform vec2 textScale;\n";
@@ -183,7 +190,7 @@
 
       if (has_texture || type === "text")
         result = result + "  varying vec2 vTexcoord;\n"+
-                          " uniform sampler2D uSampler;\n";
+                          "  uniform sampler2D uSampler;\n";
 
       if (has_fog)
         result = result + "  uniform int uFogMode;\n"+
@@ -205,26 +212,26 @@
       }
 
       if (is_lit) {
-        result = result + "   uniform vec3 emission;\n"+
-                          "   uniform float shininess;\n";
+        result = result + "  uniform vec3 emission;\n"+
+                          "  uniform float shininess;\n";
 
         for (i=0; i < nlights; i++) {
-          result = result + "   uniform vec3 ambient" + i + ";\n"+
-                            "   uniform vec3 specular" + i +"; // light*material\n"+
-                            "   uniform vec3 diffuse" + i + ";\n"+
-                            "   uniform vec3 lightDir" + i + ";\n"+
-                            "   uniform bool viewpoint" + i + ";\n"+
-                            "   uniform bool finite" + i + ";\n";
+          result = result + "  uniform vec3 ambient" + i + ";\n"+
+                            "  uniform vec3 specular" + i +"; // light*material\n"+
+                            "  uniform vec3 diffuse" + i + ";\n"+
+                            "  uniform vec3 lightDir" + i + ";\n"+
+                            "  uniform bool viewpoint" + i + ";\n"+
+                            "  uniform bool finite" + i + ";\n";
         }
       }
 
       if (is_twosided)
-        result = result + "   uniform bool front;\n"+
-                          "   varying float normz;\n";
+        result = result + "  uniform bool front;\n"+
+                          "  varying float normz;\n";
                           
       if (fat_lines)
-        result = result + "   varying vec2 vPoint;\n"+
-                          "   varying float vLength;\n";
+        result = result + "  varying vec2 vPoint;\n"+
+                          "  varying float vLength;\n";
 
       result = result + "  void main(void) {\n"+
                         "    vec4 fragColor;\n";
