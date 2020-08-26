@@ -1,6 +1,6 @@
 To-do:
 
-Do something like meshColor in shade3d for texture coordinates.
+Option to include static rgl plots even in HTML output?
 
 Create *3d functions corresponding to all remaining rgl.* functions.
 
@@ -46,6 +46,9 @@ Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make su
 getPrimitiveCenter) work for other types besides spheres.
 
 Put class on open3d() result so it acts like a high level plot. PROBABLY WON'T DO -- this doesn't work well.
+
+Do something like meshColor in shade3d for texture
+coordinates. DONE
 
 Add knit_print method to rglWebGL class so rglwidget can
 print as snapshot when printing from a PDF project. DONE

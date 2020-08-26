@@ -40,6 +40,34 @@
         return this.getPieces(context, objid, subid, obj);
     };
     
+    rglwidgetClass.prototype.mergePieces = function(pieces) {
+      var result = [];
+      if (pieces.length > 0) {
+        var i,
+          thiscontext = pieces[0].context, 
+          thisobjid = pieces[0].objid, 
+          thissubid = pieces[0].subid,
+          indices = [];
+        for (i= 0; i < pieces.length; i++) {
+          if (pieces[i].context !== thiscontext || 
+              pieces[i].objid !== thisobjid ||
+              pieces[i].subid !== thissubid) {
+            result.push({context: thiscontext, objid: thisobjid,
+                         subid: thissubid, indices: indices});
+            thiscontext = pieces[i].context;
+            thisobjid = pieces[i].objid;
+            thissubid = pieces[i].subid;
+            indices = [];
+          }
+          indices.push(pieces[i].index);
+        }
+        result.push({context: thiscontext, objid: thisobjid,
+                                subid: thissubid,
+                                indices: indices});
+      }
+      return result;
+    };
+
     rglwidgetClass.prototype.sortPieces = function(pieces) {
       var compare = function(i,j) {
         var diff = j.depth - i.depth;
@@ -59,29 +87,7 @@
         }
         return diff;
       }, result = [];
-      if (pieces.length) {
-        pieces = pieces.sort(compare);
-        var i,
-            thiscontext = pieces[0].context, 
-            thisobjid = pieces[0].objid, 
-            thissubid = pieces[0].subid,
-            indices = [];
-        for (i= 0; i < pieces.length; i++) {
-          if (pieces[i].context !== thiscontext || 
-              pieces[i].objid !== thisobjid ||
-              pieces[i].subid !== thissubid) {
-            result = result.concat({context: thiscontext, objid: thisobjid,
-                                    subid: thissubid, indices: indices});
-            thiscontext = pieces[i].context;
-            thisobjid = pieces[i].objid;
-            thissubid = pieces[i].subid;
-            indices = [];
-          }
-          indices = indices.concat(pieces[i].index);
-        }
-        result = result.concat({context: thiscontext, objid: thisobjid,
-                                subid: thissubid,
-                                indices: indices});
-      }
+      if (pieces.length) 
+        result = pieces.sort(compare);
       return result;
     };

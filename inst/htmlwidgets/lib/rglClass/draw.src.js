@@ -911,6 +911,7 @@
         pieces = this.drawSubscene(this.scene.rootSubscene, []);
         this.opaquePass = false;
         pieces = this.sortPieces(pieces);
+        pieces = this.mergePieces(pieces);
         this.drawPieces(pieces);
       }
       this.stopDrawing(wasDrawing);
