@@ -15,7 +15,7 @@ rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           elementId = NULL, reuse = !interactive(),
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
           shared = NULL, minimal = TRUE, 
-          webgl = TRUE, ...)
+          webgl = !latex, latex, ...)
 }
 \arguments{
   \item{x}{
@@ -27,7 +27,7 @@ The width and height of the display in pixels.
   \item{controllers}{Names of \code{\link{playwidget}} objects
 associated with this scene, or objects (typically piped in).  See Details below.
 }
-  \item{snapshot,webgl}{Control of mode of display of scene.
+  \item{snapshot,webgl,latex}{Control of mode of display of scene.
   See Details below.
 }
   \item{elementId}{The id to use on the HTML \code{div}
@@ -95,8 +95,15 @@ of WebGL contain bugs with this setting.  We have
 attempted to work around them, but may change our
 default in the future if this proves unsatisfactory.
 
+The default for the \code{latex} argument is \code{TRUE}
+if we detect that we are producing LaTeX/PDF output in
+\pkg{knitr}, \code{FALSE} otherwise.
+
 The \code{webgl} argument controls
-whether a dynamic plot is displayed. 
+whether a dynamic plot is displayed in HTML.  In LaTeX
+dynamic plots can't be
+displayed, so if the \code{latex} argument is \code{TRUE},
+\code{webgl} defaults to \code{FALSE}.
 
 The \code{snapshot} argument controls whether a snapshot is
 displayed:  it can be a logical value
@@ -109,7 +116,7 @@ will be assumed to be the result of the \code{\link[knitr]{image_uri}} function.
 be a filename, and \code{\link[knitr]{image_uri}} will be used
 to embed it in the output page. 
 
-If both \code{webgl = TRUE} and a snapshot are specified,
+For HTML output, if both \code{webgl = TRUE} and a snapshot are specified,
 both will be included in the output, and the snapshot will
 be shown when WebGL is unavailable.  If \code{webgl = FALSE},
 only the snapshot will be included.  It's an error to

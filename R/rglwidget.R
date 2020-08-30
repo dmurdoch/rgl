@@ -238,7 +238,11 @@ rglwidget <- local({
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
            minimal = TRUE, 
-           webgl = TRUE, ...) {
+           webgl = !latex, latex, ...) {
+  if (missing(latex))
+    latex <- isTRUE(getOption("knitr.in.progress")) &&
+             identical(opts_knit$get("rmarkdown.pandoc.to"),
+                       "latex")
   if (!webgl && is.logical(snapshot) && !snapshot)
     stop("Must specify either 'snapshot' or 'webgl' or both")
   origScene <- x
@@ -287,7 +291,7 @@ rglwidget <- local({
     height <- CSStoPixels(height)
   x = convertScene(x, width, height, snapshot = snapshot,
                    elementId = elementId, reuse = reuseDF,
-                   webgl = webgl)
+                   webgl = webgl, latex = latex)
   if (!webgl)
     return(x)
   

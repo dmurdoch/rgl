@@ -355,17 +355,18 @@ fns <- local({
         res <- fig_before_code(res)
       # Now replace the rgl figs with their code.
       figs <- which(find_figs(res, "rglRecordedplot"))
-      snapshot <- identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
+      latex <- identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
       for (f in figs) {
         obj <- res[[f]]
         options <- obj$options
         scene <- obj$scene
-        doSnapshot <- snapshot || isTRUE(options$snapshot)
+        doSnapshot <- latex || isTRUE(options$snapshot)
         content <- rglwidget(scene,
                              width = obj$width,
                              height = obj$height,
                              reuse = TRUE,
-                             webgl = !doSnapshot)
+                             webgl = !doSnapshot,
+                             latex = latex)
         fig.align <- options$fig.align
         if (length(fig.align) ==  1 && fig.align != "default")
           content <- prependContent(content,
@@ -378,7 +379,7 @@ fns <- local({
                                         right  = "margin-left:auto;margin-right:0;",
                                         ""))))
         res[[f]] <- do.call("knit_print", c(list(content, options), obj$args))
-        if (!snapshot) 
+        if (!latex) 
           class(res[[f]]) <- c(class(res[[f]]), "knit_asis_htmlwidget")
       }
     }

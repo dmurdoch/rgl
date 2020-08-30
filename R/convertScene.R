@@ -1,7 +1,8 @@
 
 convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reuse = NULL,
                          snapshot = FALSE, elementId = NULL,
-                         minimal = TRUE, webgl = TRUE) {
+                         minimal = TRUE, webgl = TRUE,
+                         latex = FALSE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -281,7 +282,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     snapshotfile <- NULL
     if (is.logical(snapshot) && snapshot) {
       snapshotfile <- tempfile(fileext = ".png")
-      on.exit(unlink(snapshotfile))
+      if (!latex)
+        on.exit(unlink(snapshotfile))
       snapshot3d(snapshotfile, scene = x, width = width, height = height)
     } else if (is.character(snapshot) && substr(snapshot, 1, 5) != "data:") {
       snapshotfile <- snapshot
@@ -291,7 +293,10 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
       snapshotimg <- image_uri(snapshotfile)
     if (!is.null(snapshotimg))
       result$snapshot <<- snapshotimg
-    browsable(img(src = snapshotimg))
+    if (latex && !is.null(snapshotfile))
+      include_graphics(snapshotfile)
+    else if (!is.null(snapshotimg))
+      browsable(img(src = snapshotimg))
   }
   
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",

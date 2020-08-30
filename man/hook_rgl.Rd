@@ -85,9 +85,11 @@ to close windows at the end of the chunk.  Default is set by `setupKnitr` argume
   \item \code{rgl.margin} (default 100):  number of pixels by which to indent the
   WebGL window.
   
-  \item \code{snapshot}: Logical value:  when autoprinting,
-  should a snapshot be used instead of the dynamic 
-  WebGL display?  Corresponds to \code{rglwidget(snapshot = TRUE, webgl = FALSE)}.
+  \item \code{snapshot}: Logical value:  when autoprinting
+  in HTML, should a snapshot be used instead of the dynamic 
+  WebGL display?  Corresponds to \code{rglwidget(snapshot = TRUE, webgl = FALSE)}.  Ignored in LaTeX, where a snapshot
+  will always be produced (unless \code{fig.keep} specifies
+  no figure at all).
 
   \item \code{dpi}, \code{fig.retina}, \code{fig.width}, \code{fig.height}:  standard \pkg{knitr} chunk
   options used to set the size of the output.
