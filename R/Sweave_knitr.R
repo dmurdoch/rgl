@@ -360,31 +360,23 @@ fns <- local({
         obj <- res[[f]]
         options <- obj$options
         scene <- obj$scene
-        if (snapshot) {
-          filename <- tempfile(fileext = ".png")
-          snapshot3d(filename, scene = scene, width = figWidth(), height = figHeight())
-          content <- include_graphics(filename)
-          if (is.null(options$out.width))
-            options$out.width <- with(options, paste0(out.width.px, "px"))
-          if (is.null(options$out.height))
-            options$out.height <- with(options, paste0(out.height.px, "px"))
-        } else {
-          content <- rglwidget(scene,
-                               width = obj$width,
-                               height = obj$height,
-                               reuse = TRUE)
-          fig.align <- options$fig.align
-          if (length(fig.align) ==  1 && fig.align != "default")
-            content <- prependContent(content,
-                                      tags$style(sprintf(
-                                        "#%s {%s}",
-                                        content$elementId,
-                                        switch(fig.align,
-                                          center = "margin:auto;",
-                                          left   = "margin-left:0;margin-right:auto;",
-                                          right  = "margin-left:auto;margin-right:0;",
-                                          ""))))
-        }
+        doSnapshot <- snapshot || isTRUE(options$snapshot)
+        content <- rglwidget(scene,
+                             width = obj$width,
+                             height = obj$height,
+                             reuse = TRUE,
+                             webgl = !doSnapshot)
+        fig.align <- options$fig.align
+        if (length(fig.align) ==  1 && fig.align != "default")
+          content <- prependContent(content,
+                                    tags$style(sprintf(
+                                      "#%s {%s}",
+                                      content$elementId,
+                                      switch(fig.align,
+                                        center = "margin:auto;",
+                                        left   = "margin-left:0;margin-right:auto;",
+                                        right  = "margin-left:auto;margin-right:0;",
+                                        ""))))
         res[[f]] <- do.call("knit_print", c(list(content, options), obj$args))
         if (!snapshot) 
           class(res[[f]]) <- c(class(res[[f]]), "knit_asis_htmlwidget")

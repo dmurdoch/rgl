@@ -7,7 +7,7 @@
 }
 \usage{
 rgl.snapshot( filename, fmt = "png", top = TRUE )
-snapshot3d( filename, ..., scene, width, height)
+snapshot3d( filename, ..., scene, width = NULL, height = NULL)
 }
 \arguments{
   \item{filename}{full path to filename.}
@@ -50,13 +50,13 @@ size.
 
 shade3d(oh3d(), color = "red")
 rgl.bringtotop()
-rgl.viewpoint(0, 20)
+view3d(0, 20)
 
 olddir <- setwd(tempdir())
 for (i in 1:45) {
-  rgl.viewpoint(i, 20)
+  view3d(i, 20)
   filename <- paste("pic", formatC(i, digits = 1, flag = "0"), ".png", sep = "")
-  rgl.snapshot(filename)
+  snapshot3d(filename)
 }
 ## Now run ImageMagick in tempdir().  Use 'convert' instead of 'magick'
 ## if you have an older version of ImageMagick:

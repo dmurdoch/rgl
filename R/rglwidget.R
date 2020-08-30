@@ -232,12 +232,15 @@ rglwidget <- local({
   reuseDF <- NULL
 
   function(x = scene3d(minimal), width = figWidth(), height = figHeight(),
-           controllers = NULL, snapshot = FALSE,
+           controllers = NULL, snapshot = !webgl,
            elementId = NULL,
            reuse = !interactive(),
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
-           minimal = TRUE, ...) {
+           minimal = TRUE, 
+           webgl = TRUE, ...) {
+  if (!webgl && is.logical(snapshot) && !snapshot)
+    stop("Must specify either 'snapshot' or 'webgl' or both")
   origScene <- x
   force(shared) # It might plot something...
   	
@@ -283,7 +286,11 @@ rglwidget <- local({
   if (!is.null(height))
     height <- CSStoPixels(height)
   x = convertScene(x, width, height, snapshot = snapshot,
-                   elementId = elementId, reuse = reuseDF)
+                   elementId = elementId, reuse = reuseDF,
+                   webgl = webgl)
+  if (!webgl)
+    return(x)
+  
   if (!is.na(reuse))
     reuseDF <<- attr(x, "reuse")
   

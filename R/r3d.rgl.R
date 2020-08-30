@@ -359,11 +359,11 @@ set3d <- function(dev, silent = FALSE) {
     else return(open3d())
 }
 
-snapshot3d <- function(filename, ..., scene, width, height) { 
+snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL) { 
   if (!missing(scene)) {
     if (inherits(scene, "rglWebGL")) {
       snapshot <- scene$x$snapshot
-      if (!is.null(snapshot) && missing(width) && missing(height))
+      if (!is.null(snapshot) && is.null(width) && is.null(height))
         return(saveURI(snapshot, filename))
       else
         scene <- attr(scene, "origScene")
@@ -373,12 +373,12 @@ snapshot3d <- function(filename, ..., scene, width, height) {
     plot3d(scene) # calls open3d internally
     on.exit(close3d(), add = TRUE)
   }
-  if (!missing(width) || !missing(height)) {
+  if (!is.null(width) || !is.null(height)) {
     saverect <- rect <- par3d("windowRect")
     on.exit(par3d(windowRect = saverect), add = TRUE, after = FALSE)
-    if (!missing(width))
+    if (!is.null(width))
       rect[3] <- rect[1] + width
-    if (!missing(height))
+    if (!is.null(height))
       rect[4] <- rect[2] + height
     par3d(windowRect = rect)
   }

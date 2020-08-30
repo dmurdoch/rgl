@@ -145,7 +145,7 @@ export(rglwidget, renderRglwidget, rglwidgetOutput,
        "%>%")
 
 importFrom(htmlwidgets, createWidget, prependContent, shinyRenderWidget, shinyWidgetOutput, sizingPolicy)
-importFrom(htmltools, css, HTML, htmlDependency, 
+importFrom(htmltools, css, HTML, htmlDependency, img,
            includeScript, tags, tagAppendAttributes,
 	   tagHasAttribute, tagList, browsable, resolveDependencies)
 importFrom(jsonlite, toJSON, base64_dec)

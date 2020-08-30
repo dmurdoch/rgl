@@ -11,10 +11,11 @@ provides the necessities to embed an \pkg{rgl} scene in one.
 }
 \usage{
 rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
-          controllers = NULL, snapshot = FALSE,
+          controllers = NULL, snapshot = !webgl,
           elementId = NULL, reuse = !interactive(),
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
-          shared = NULL, minimal = TRUE, ...)
+          shared = NULL, minimal = TRUE, 
+          webgl = TRUE, ...)
 }
 \arguments{
   \item{x}{
@@ -26,8 +27,8 @@ The width and height of the display in pixels.
   \item{controllers}{Names of \code{\link{playwidget}} objects
 associated with this scene, or objects (typically piped in).  See Details below.
 }
-  \item{snapshot}{Control of snapshot of scene.  See Details
-  below.
+  \item{snapshot,webgl}{Control of mode of display of scene.
+  See Details below.
 }
   \item{elementId}{The id to use on the HTML \code{div}
 component that will hold the scene.
@@ -94,16 +95,25 @@ of WebGL contain bugs with this setting.  We have
 attempted to work around them, but may change our
 default in the future if this proves unsatisfactory.
 
-The \code{snapshot} argument can be a logical value
+The \code{webgl} argument controls
+whether a dynamic plot is displayed. 
+
+The \code{snapshot} argument controls whether a snapshot is
+displayed:  it can be a logical value
 or a character value.  If logical and \code{FALSE},
 no snapshot will be included.  If \code{TRUE},
-a snapshot will be taken of the current scene
-using \code{\link{snapshot3d}} and included
-in the scene to use when WebGL errors occur.  If \code{snapshot}
+a snapshot will be taken of the scene \code{x}
+using \code{\link{snapshot3d}}.  If \code{snapshot}
 is a character string starting \code{"data:"}, it
 will be assumed to be the result of the \code{\link[knitr]{image_uri}} function.  Otherwise it will be assumed to
 be a filename, and \code{\link[knitr]{image_uri}} will be used
-to embed it in the output page.
+to embed it in the output page. 
+
+If both \code{webgl = TRUE} and a snapshot are specified,
+both will be included in the output, and the snapshot will
+be shown when WebGL is unavailable.  If \code{webgl = FALSE},
+only the snapshot will be included.  It's an error to
+have both \code{webgl = FALSE} and \code{snapshot = FALSE}.
 }
 \value{
 An object of class \code{"htmlwidget"} (or \code{"shiny.tag.list"}

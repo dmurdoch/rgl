@@ -1,7 +1,5 @@
 To-do:
 
-Option to include static rgl plots even in HTML output?
-
 Create *3d functions corresponding to all remaining rgl.* functions.
 
 Maybe put all newly created obj fields from initObj into one
@@ -46,6 +44,8 @@ Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make su
 getPrimitiveCenter) work for other types besides spheres.
 
 Put class on open3d() result so it acts like a high level plot. PROBABLY WON'T DO -- this doesn't work well.
+
+Option to include static rgl plots even in HTML output? DONE
 
 Do something like meshColor in shade3d for texture
 coordinates. DONE

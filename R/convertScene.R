@@ -1,7 +1,7 @@
 
 convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reuse = NULL,
                          snapshot = FALSE, elementId = NULL,
-                         minimal = TRUE) {
+                         minimal = TRUE, webgl = TRUE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -85,20 +85,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     }
     result$rootSubscene <<- recurse(result$rootSubscene)
     
-    snapshotimg <- NULL
-    snapshotfile <- NULL
-    if (is.logical(snapshot) && snapshot) {
-      snapshotfile <- tempfile(fileext = ".png")
-      on.exit(unlink(snapshotfile))
-      snapshot3d(snapshotfile)
-    } else if (is.character(snapshot) && substr(snapshot, 1, 5) != "data:") {
-      snapshotfile <- snapshot
-    } else if (is.character(snapshot))
-      snapshotimg <- snapshot
-    if (!is.null(snapshotfile))
-      snapshotimg <- image_uri(snapshotfile)
-    if (!is.null(snapshotimg))
-      result$snapshot <<- snapshotimg
+    showSnapshot()
   }
   
   flagnames <- c("is_lit", "is_smooth", "has_texture",
@@ -289,6 +276,24 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     lastID <<- tempID
   }
   
+  showSnapshot <- function() {
+    snapshotimg <- NULL
+    snapshotfile <- NULL
+    if (is.logical(snapshot) && snapshot) {
+      snapshotfile <- tempfile(fileext = ".png")
+      on.exit(unlink(snapshotfile))
+      snapshot3d(snapshotfile, scene = x, width = width, height = height)
+    } else if (is.character(snapshot) && substr(snapshot, 1, 5) != "data:") {
+      snapshotfile <- snapshot
+    } else if (is.character(snapshot))
+      snapshotimg <- snapshot
+    if (!is.null(snapshotfile))
+      snapshotimg <- image_uri(snapshotfile)
+    if (!is.null(snapshotimg))
+      result$snapshot <<- snapshotimg
+    browsable(img(src = snapshotimg))
+  }
+  
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
       "surface", "text", "abclines", "planes", "spheres",
       "sprites", "clipplanes", "light", "background", "bboxdeco",
@@ -296,7 +301,12 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   
   #  Execution starts here!
   
+  result <- NULL
+  
   # Do a few checks first
+
+  if (!webgl)
+    return(showSnapshot())
   
   if (is.null(elementId))
     elementId <- ""
@@ -312,14 +322,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     reuseDF$id         <- as.numeric(reuseDF$id)
     reuseDF$elementId  <- as.character(reuseDF$elementId)
     reuseDF$texture    <- as.character(reuseDF$texture)
-  }
-  
-  if (is.logical(snapshot) && snapshot) {
-    if (rgl.useNULL()) {
-      warning("Can't take snapshot with NULL rgl device")
-      snapshot <- FALSE
-    } else if (!missing(x))
-      warning("Will take snapshot of current scene which may differ from x.")
   }
   
   if (is.list(x$rootSubscene))
@@ -346,8 +348,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   height <- hfactor*rheight;
   
   shared <- x$crosstalk$id
-  
-  result <- NULL
   
   initResult()
   

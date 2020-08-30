@@ -8,6 +8,8 @@ if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
+# knitr::opts_chunk$set(snapshot = TRUE)  # for snapshots instead of dynamic
+
 documentedfns <- c()
 
 indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE, pkg = "rgl") {
