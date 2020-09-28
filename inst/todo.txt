@@ -1,5 +1,14 @@
 To-do:
 
+Add segments and points to mesh objects?
+
+Drop re-use of parts of other scenes?  This would simplify the
+code a lot, and probably wouldn't cost much for typical uses.
+
+Allow plot3d.lm to limit the surface to the convex hull (or a
+slightly larger region?) of the predictors, or a high density
+region in the predictors.
+
 Create *3d functions corresponding to all remaining rgl.* functions.
 
 Maybe put all newly created obj fields from initObj into one
