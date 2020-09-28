@@ -40,6 +40,8 @@ scene3d <- function(minimal = TRUE) {
     	  result$fixedSize <- flags["fixedSize", 1]
     	if ("fastTransparency" %in% rownames(flags))
     	  result$fastTransparency <- flags["fastTransparency", 1]
+    	if ("flipped" %in% rownames(flags))
+    	  result$flipped <- flags["flipped", 1]
     }
     if (!is.null(result$ids)) {
       objlist <- vector("list", nrow(result$ids))
