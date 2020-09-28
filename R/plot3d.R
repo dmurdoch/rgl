@@ -151,10 +151,21 @@ plot3d.lm <- function(x, which = 1,
                       grid.steps = 5,
                       sub.steps = 4,
                       vars = get_all_vars(terms(x), x$model),
+                      clip_to_density = 0,
                       ...) {
   stopifnot(which %in% 1:3)
   dots <- list(...)
   n <- length(which)
+  if (clip_to_density > 0) {
+    if (!requireNamespace("MASS")) {
+      warning("'clip_to_density' requires the MASS package.")
+      clip_to_density <- 0
+    }
+    if (!requireNamespace("akima")) {
+      warning("'clip_to_density' requires the akima package.")
+      clip_to_density <- 0
+    }
+  }
   result <- c()
   if (n > 1) {
     cols <- ceiling(sqrt(n))
@@ -176,6 +187,14 @@ plot3d.lm <- function(x, which = 1,
 
   if (missing(use_surface3d)) 
     use_surface3d <- !identical(class(fit), "lm") || ncol(as.matrix(model.frame(fit))) > 3
+  
+  if (clip_to_density > 0) {
+    densityVals <- MASS::kde2d(observed[,1], observed[,2])
+    densityVals$z <- with(densityVals, z/max(z))
+    density <- function(xyz) {
+      with(densityVals, akima::bilinear(x, y, z, xyz[,1], xyz[,2])$z)
+    }
+  }
   
   plotGrid <- function(i, x, y, x0, y0, z) {
     dots$color <- grid.col
@@ -200,6 +219,9 @@ plot3d.lm <- function(x, which = 1,
       z <- predict(fit, newdata = newdat)
     }
     grid <- do.call(lines3d, c(list(x, y, z), dots))
+    if (clip_to_density > 0)
+      grid <- clipObj3d(grid, density, clip_to_density,
+                        minVertices = 1000)
     names(grid) <- paste0("grid.", i)
     grid
   }
@@ -240,6 +262,9 @@ plot3d.lm <- function(x, which = 1,
       dots$polygon_offset <- 1
     dots$type <- NULL
     surface <- do.call("surface3d", c(list(x, y, z), dots))
+    if (clip_to_density > 0)
+      surface <- clipObj3d(surface, density, clip_to_density,
+                        minVertices = 1000)
     names(surface) <- paste0("surface.", i)
     grid <- if (do_grid) {
       x0 <- x0[xlim[1] <= x0 & x0 <= xlim[2]]
@@ -258,6 +283,9 @@ plot3d.lm <- function(x, which = 1,
       dots$polygon_offset <- 1
     dots$type <- NULL
     plane <- do.call("planes3d", c(list(a = a, b = b, c = c, d = d), dots))
+    if (clip_to_density > 0)
+      plane <- clipObj3d(plane, density, clip_to_density,
+                        minVertices = 1000)
     names(plane) <- paste0("plane.", i)
     grid <- if (do_grid) {
       bbox <- par3d("bbox")

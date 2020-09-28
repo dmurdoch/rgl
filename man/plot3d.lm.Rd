@@ -19,6 +19,7 @@ fitting a two-predictor model.
        grid.steps = 5,
        sub.steps = 4,
        vars = get_all_vars(terms(x), x$model),
+       clip_to_density = 0,
        ...)
 }
 \arguments{
@@ -55,6 +56,9 @@ curvature within grid lines.}
   \item{vars}{A dataframe containing the variables to plot
 in the first three columns, with the response assumed to be in
 column 1.  See the Note below.}
+  \item{clip_to_density}{
+If positive, the surface, plane or grid will be clipped to a region with sufficient data.
+  }
   \item{\dots}{
 Other parameters to pass to the default \code{\link{plot3d}} method, to control the appearance of aspects of the plot
 other than the plane.
@@ -63,10 +67,18 @@ other than the plane.
 \details{
 Three plots are possible, depending on the value(s) in \code{which}:
 \enumerate{
-\item{(default) Show the points and the fitted plane.}
+\item{(default) Show the points and the fitted plane or surface.}
 \item{Show the residuals and the plane at \code{z = 0}.}
-\item{Show the predicted values on the fitted plane.}
+\item{Show the predicted values on the fitted plane or surface.}
 }
+
+If \code{clip_to_density} is positive, then the
+surface, plane or grid will be clipped to 
+the region where a non-parametric density estimate
+(using \code{MASS::\link{kde2d}}), normalized to have a
+maximum value of 1, is greater than the given value.
+This will suppress parts of the plot that aren't 
+supported by the observed data.  
 }
 \value{
 Called for the side effect of drawing one or more plots.
@@ -80,6 +92,16 @@ simple linear models with a response and two predictors, and
 some models with functions of those two predictors.  For 
 models that fail (e.g. models using \code{\link{poly}}), you
 can include the observed values as in the third example below.
+
+If \code{clip_to_density > 0},
+\enumerate{
+\item{The clipping is
+approximate, so it may not agree perfectly between
+surfaces, planes and grids.}
+\item{This option requires the suggested packages
+\pkg{MASS} and \pkg{akima}, and will be ignored with
+a warning if either is not installed.}
+}
 }
 \author{
 Duncan Murdoch
@@ -96,4 +118,10 @@ open3d()
 # Specify vars in the order:  response, pred1, pred2.
 plot3d(lm(mpg ~ poly(wt, 3) + qsec, data = mtcars), 
        vars = mtcars[,c("mpg", "wt", "qsec")])
+       
+open3d()
+# Clip parts of the plot with few (wt, qsec) points
+plot3d(lm(mpg ~ poly(wt, 3) + qsec, data = mtcars), 
+       vars = mtcars[,c("mpg", "wt", "qsec")],
+       clip_to_density = 0.01)       
 }

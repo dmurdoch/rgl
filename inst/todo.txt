@@ -5,10 +5,6 @@ Add segments and points to mesh objects?
 Drop re-use of parts of other scenes?  This would simplify the
 code a lot, and probably wouldn't cost much for typical uses.
 
-Allow plot3d.lm to limit the surface to the convex hull (or a
-slightly larger region?) of the predictors, or a high density
-region in the predictors.
-
 Create *3d functions corresponding to all remaining rgl.* functions.
 
 Maybe put all newly created obj fields from initObj into one
@@ -51,6 +47,10 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Allow plot3d.lm to limit the surface to the convex hull (or a
+slightly larger region?) of the predictors, or a high density
+region in the predictors. DONE
 
 Put class on open3d() result so it acts like a high level plot. PROBABLY WON'T DO -- this doesn't work well.
 
