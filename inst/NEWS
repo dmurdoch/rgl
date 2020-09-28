@@ -1131,3 +1131,5 @@ base graphics.
   - Touch events are now supported in WebGL.
   - Added "snapshot" knitr option to use when autoprinting.
   - Added defaults to snapshot3d(width = NULL, height = NULL).
+  - Added as.mesh3d.rglobject method.
+  - Added clipObj3d function, add minVertices argument to clipMesh3d.

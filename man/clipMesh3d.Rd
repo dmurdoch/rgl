@@ -1,7 +1,8 @@
 \name{clipMesh3d}
 \alias{clipMesh3d}
+\alias{clipObj3d}
 \title{
-Clip mesh to general region
+Clip mesh or \pkg{rgl} object to general region
 }
 \description{
 Modifies a mesh3d object so that values of 
@@ -9,7 +10,12 @@ a function are bounded.
 }
 \usage{
 clipMesh3d(mesh, fn, bound = 0, greater = TRUE, 
-           attribute = "vertices")
+           attribute = "vertices",
+           minVertices = 0)
+clipObj3d(ids, fn, bound = 0, greater = TRUE,
+           attribute = "vertices", 
+           minVertices = 0,
+           subscenes = currentSubscene3d())
 }
 \arguments{
   \item{mesh}{
@@ -29,9 +35,19 @@ Logical; whether to keep \code{fn >= bound} or not.
 Which attribute(s) to pass to \code{fn}?  Possible values
 are \code{c("vertices", "normals", "texcoords", "index")}.
 }
+  \item{minVertices}{
+See Details below.
+  }
+  \item{ids}{
+The \pkg{rgl} id value(s) of objects to clip.
+  }
+  \item{subscenes}{
+Which subscenes should receive the modified object?
+  }
 }
 \details{
-This function transforms a mesh3d object. 
+These functions transform a mesh3d object or other
+rgl objects. 
 
 First, all quads are converted to triangles.
 
@@ -45,7 +61,7 @@ The \code{"vertices"} and \code{"normals"} values will be converted to
 Euclidean coordinates.  \code{"index"} will be an integer from 1
 to the number of vertices.  
 
-Modifications to the triangles depend
+Modifications to triangles depend
 on how many of the vertices satisfy the condition 
 (\code{fn >= bound} or \code{fn <= bound}, depending on \code{greater})
 for inclusion.
@@ -59,19 +75,41 @@ is shrunk along each edge towards each other vertex, forming a
 quadrilateral made of two new triangles.
 \item If all vertices satisfy the condition, they are included
 with no modifications.
+
+Modifications to line segments are similar:  the segment
+will be shortened if it crosses the boundary, or omitted
+if it is entirely out of bounds.  Points, spheres, text
+and sprites will just be kept or rejected.
+
+The \code{minVertices} argument is used to improve the 
+approximation to the boundary when \code{fn} is a non-linear
+function.  In that case, the interpolation described above
+can be inaccurate.  If \code{minVertices} is set to a
+positive
+number (e.g. \code{10000}), then each object is modified
+by subdivision to have at least that number of vertices, 
+so that pieces are smaller and the linear interpolation
+is more accurate.  In the \code{clipObj3d} function, 
+\code{minVertices} can be a vector, with entries corresponding
+to each of the entries in \code{ids}.
 }
 }
 \value{
-A new mesh3d object in which all vertices (approximately) satisfy the
+\code{clipMesh3d} returns new mesh3d object in which all vertices (approximately) satisfy the
 clipping condition.  Note that the order of vertices will likely
 differ from the original order, and new vertices will be added near
-the boundary.
+the boundary (and if \code{minVertices > 0}, in the 
+interior).
+
+\code{clipObj3d} is called for the side effect of modifying
+the scene.  It returns a list of new \pkg{rgl} id values
+corresponding to the \code{ids} passed as arguments.
 }
 \author{
 Duncan Murdoch
 }
 \references{
-See \url{https://stackoverflow.com/q/56242470/2554330} for the 
+See \url{https://stackoverflow.com/q/56242470/2554330} for a
 motivating example.
 }
 \examples{
@@ -111,4 +149,27 @@ if (requireNamespace("misc3d")) {
   shade3d(clipMesh3d(surf, fn, bound = 4.8^2,
                      greater = FALSE), col="red")
 }
+
+# Show the problem that minVertices solves:
+
+cube <- cube3d(col = "red")
+vecnorm <- function(vals) apply(vals, 1, function(row) sqrt(sum(row^2)))
+
+open3d()
+mfrow3d(2, 2, sharedMouse = TRUE)
+id1 <- shade3d(cube)
+# All vertices have norm sqrt(3), so this clips nothing:
+clipObj3d(id1, fn = vecnorm, bound = sqrt(2))
+next3d()
+id2 <- wire3d(cube, lit = FALSE)
+clipObj3d(id2, fn = vecnorm, bound = sqrt(2))
+
+# This subdivides the cube, and does proper clipping:
+next3d()
+id3 <- shade3d(cube)
+clipObj3d(id3, fn = vecnorm, bound = sqrt(2), minVertices = 200)
+next3d()
+id4 <- wire3d(cube, lit = FALSE)
+clipObj3d(id4, fn = vecnorm, bound = sqrt(2), minVertices = 200)
+
 }
