@@ -348,7 +348,7 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
                    indices[1,i] <- NA
                } else if (values[i] < 0) {
                  if (is.na(values[j]) || values[j] < 0)
-                   indices[1,i] <- FALSE
+                   indices[1,i] <- NA
                  else {
                    indices[2,i] <- newverts + 1
                    p <- 1 - abs(values[i])/(abs(values[i]) + values[j])
@@ -366,7 +366,7 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
                      indices[1,i] <- NA
                  }
                } else {
-                 if (values[j] < 0) {
+                 if (!is.na(values[j]) && values[j] < 0) {
                    indices[2,i] <- newverts + 1
                    indices[3,i] <- newverts + 2
                    p <- 1 - abs(values[j])/(abs(values[j]) + values[i])
