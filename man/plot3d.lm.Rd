@@ -123,5 +123,5 @@ open3d()
 # Clip parts of the plot with few (wt, qsec) points
 plot3d(lm(mpg ~ poly(wt, 3) + qsec, data = mtcars), 
        vars = mtcars[,c("mpg", "wt", "qsec")],
-       clip_to_density = 0.01)       
+       clip_to_density = 0.1)       
 }

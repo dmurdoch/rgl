@@ -158,7 +158,8 @@ subdivideLines <- function(x) {
   newverts <- nverts
   indices <- rbind(seq_len(nverts), NA, NA)
   finite <- apply(x$vertices, 1, function(row) all(is.finite(row)))
-  if (x$type == "lines") {
+  type <- x$type
+  if (type == "lines") {
     for (j in 2*seq_len(nverts %/% 2)) {
       i <- j - 1
       if (finite[i] && finite[j]) {
@@ -201,6 +202,65 @@ subdivideLines <- function(x) {
   x
 }
 
+rejoinLines3d <- function(x, tol = 1.e-6) {
+  nverts <- nrow(x$vertices)
+  indices <- seq_len(nverts)
+  finite <- apply(x$vertices, 1, function(row) all(is.finite(row)))
+  type <- x$type
+  hasattrs <- c()
+  for (attr in c("vertices", "normals", "colors")) 
+    if (!is.null(x[[attr]]) && nrow(x[[attr]]) > 1) 
+      hasattrs <- c(hasattrs, attr)
+  if (type == "lines") {
+    for (j in 2*seq_len(nverts %/% 2)[-1]) {
+      i <- j - (3:0)
+      if (all(finite[i])) {
+        attrs <- matrix(numeric(), nrow = 4, ncol = 0)
+        for (attr in hasattrs) 
+          attrs <- cbind(attrs, x[[attr]][i,])
+        diff <- attrs[4,] - attrs[1,]
+        use <- !is.na(diff) & abs(diff) > tol
+        p <- c((attrs[2,use] - attrs[1,use])/diff[use],
+               (attrs[3,use] - attrs[1,use])/diff[use])
+        if (all(!is.na(p) & p >= 0 & p <= 1)
+            && diff(range(p)) < tol) {
+          # pts 2 & 3 are equal and are exactly between
+          # pts 1 & 4.  Merge them into 3,4.
+          for (attr in hasattrs) 
+            x[[attr]][i[3],] <- x[[attr]][i[1],]
+          indices[i[1:2]] <- NA  
+        }
+      }
+    }
+  } else if (type == "linestrip") {
+    for (j in seq_len(nverts)[-(1:2)]) {
+      i <- j - (2:0)
+      if (all(finite[i])) {
+        attrs <- matrix(numeric(), nrow = 3, ncol = 0)
+        for (attr in hasattrs) 
+          attrs <- cbind(attrs, x[[attr]][i,])
+        diff <- attrs[3,] - attrs[1,]
+        use <- !is.na(diff) & abs(diff) > tol
+        p <- (attrs[2,use] - attrs[1,use])/diff[use]
+        if (all(!is.na(p) & p >= 0 & p <= 1)
+            && diff(range(p)) < tol) {
+          # pt 2 is exactly between
+          # pts 1 & 3.  Move 1 there.
+          for (attr in hasattrs) 
+            x[[attr]][i[2],] <- x[[attr]][i[1],]
+          indices[i[1]] <- NA  
+        }
+      }
+    }
+  }
+  if (anyNA(indices)) {
+    indices <- indices[!is.na(indices)]
+    for (attr in hasattrs)
+      x[[attr]] <- x[[attr]][indices,]
+  }
+  x
+}
+
 clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
                       attribute = "vertices", 
                       minVertices = 0,
@@ -227,14 +287,14 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
   }
   applyKeep <- function() {
     for (attr in c("vertices", "normals", "colors",
-                 "texcoords", "centers", "adj"))
+                   "texcoords", "centers", "adj"))
       if (!is.null(obj[[attr]]) &&
-          nrow(obj[[attr]]) == nverts)
+          nrow(obj[[attr]]) > 1) 
         obj[[attr]] <- obj[[attr]][keep,,drop = FALSE]
     for (attr in c("texts", "cex", "adj", 
                    "radii", "ids", "types", 
                    "flags", "offsets", "pos"))
-      if (length(obj[[attr]]) == nverts)
+      if (length(obj[[attr]]) > 1)
         obj[[attr]] <- obj[[attr]][keep] 
     obj
   }
@@ -265,9 +325,6 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
                                    minVertices[id])
              useSubscene3d(subscenes[1])
              newid <- shade3d(clipped, override = FALSE)
-                              # front = clipped$material$front, 
-                              # back = clipped$material$back)
-      
              for (i in seq_along(subscenes)[-1])
                addToSubscene3d(newid, subscenes[i])
              for (i in seq_along(subscenes))
@@ -293,23 +350,24 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
              values <- getValues(obj)
              keep <- getKeep(values)
              if (!all(keep)) {
-             for (j in 2*seq_len(nverts %/% 2)) {
-               i <- j - 1
-               if (is.na(values[i]) || is.na(values[j])) {
-                 keep[i] <- keep[j] <- FALSE
-               } else if (!keep[i] && !keep[j]) {# no change
-               } else if (!keep[i]) {
-                 p <- 1 - abs(values[i])/(abs(values[i]) + values[j])
-                 obj$vertices[i,] <- p*obj$vertices[i,] + (1-p)*obj$vertices[j,]
-                 keep[i] <- TRUE
-               } else if (!keep[j]) {
-                 p <- 1 - abs(values[j])/(abs(values[j]) + values[i])
-                 obj$vertices[j,] <- p*obj$vertices[j,] + (1-p)*obj$vertices[i,]
-                 keep[j] <- TRUE
+               for (j in 2*seq_len(nverts %/% 2)) {
+                 i <- j - 1
+                 if (is.na(values[i]) || is.na(values[j])) {
+                   keep[i] <- keep[j] <- FALSE
+                 } else if (!keep[i] && !keep[j]) {# no change
+                 } else if (!keep[i]) {
+                   p <- 1 - abs(values[i])/(abs(values[i]) + values[j])
+                   obj$vertices[i,] <- p*obj$vertices[i,] + (1-p)*obj$vertices[j,]
+                   keep[i] <- TRUE
+                 } else if (!keep[j]) {
+                   p <- 1 - abs(values[j])/(abs(values[j]) + values[i])
+                   obj$vertices[j,] <- p*obj$vertices[j,] + (1-p)*obj$vertices[i,]
+                   keep[j] <- TRUE
+                 }
                }
-             }
-             obj <- applyKeep()
-             newid <- plot3d(obj)
+               obj <- applyKeep()
+               obj <- rejoinLines3d(obj)
+               newid <- plot3d(obj)
              }
            },
            linestrip = {
@@ -322,81 +380,81 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
              newverts <- nverts
              values <- getValues(obj)
              if (!all(values >= 0, na.rm = TRUE)) {
-             indices <- rbind(seq_len(nverts), NA, NA)
-             for (j in seq_len(nverts)[-1]) {
-               i <- j - 1
-               # There are lots of cases to consider here.
-               # We could have a point that was already ignored
-               # to create a gap in the linestrip, a point
-               # that should be deleted because it is outside the
-               # range, or a point that should be kept.  These
-               # have value NA, negative, or non-negative respectively.
-               # The 9 cases are handled as follows (assuming we
-               # go through (i, j=i+1) pairs in sequence):
-               # i  j  disposition
-               # NA NA drop i, keep j
-               # NA  - drop i, keep j
-               # NA  + keep both
-               # -  NA drop i, keep j
-               # -   - drop i, keep j unless it is last
-               # -   + change i to NA (unless it's first, then drop it), insert interpolant, keep j
-               # +  NA keep both
-               # +   - keep i, insert interpolant then NA, move to j
-               # +   + keep both
-               if (is.na(values[i])) {
-                 if (is.na(values[j]) || values[j] < 0) 
-                   indices[1,i] <- NA
-               } else if (values[i] < 0) {
-                 if (is.na(values[j]) || values[j] < 0)
-                   indices[1,i] <- NA
-                 else {
-                   indices[2,i] <- newverts + 1
-                   p <- 1 - abs(values[i])/(abs(values[i]) + values[j])
-                   for (attr in c("vertices", "normals", "colors"))
-                     if (!is.null(obj[[attr]]) &&
-                         nrow(obj[[attr]]) > 1) {
-                       while (nrow(obj[[attr]]) < newverts + 1)
-                         obj[[attr]] <- rbind(obj[[attr]], obj[[attr]])
-                       new <- p*obj[[attr]][i,] + (1-p)*obj[[attr]][j,]
-                       obj[[attr]][newverts + 1,] <- new
+               hasattrs <- c()
+               for (attr in c("vertices", "normals", "colors"))
+                 if (!is.null(obj[[attr]]) && nrow(obj[[attr]]) > 1)
+                   hasattrs <- c(hasattrs, attr)
+                 indices <- rbind(seq_len(nverts), NA, NA)
+                 for (j in seq_len(nverts)[-1]) {
+                   i <- j - 1
+                   # There are lots of cases to consider here.
+                   # We could have a point that was already ignored
+                   # to create a gap in the linestrip, a point
+                   # that should be deleted because it is outside the
+                   # range, or a point that should be kept.  These
+                   # have value NA, negative, or non-negative respectively.
+                   # The 9 cases are handled as follows (assuming we
+                   # go through (i, j=i+1) pairs in sequence):
+                   # i  j  disposition
+                   # NA NA drop i, keep j
+                   # NA  - drop i, keep j
+                   # NA  + keep both
+                   # -  NA drop i, keep j
+                   # -   - drop i, keep j unless it is last
+                   # -   + change i to NA (unless it's first, then drop it), insert interpolant, keep j
+                   # +  NA keep both
+                   # +   - keep i, insert interpolant then NA, move to j
+                   # +   + keep both
+                   if (is.na(values[i])) {
+                     if (is.na(values[j]) || values[j] < 0) 
+                       indices[1,i] <- NA
+                   } else if (values[i] < 0) {
+                     if (is.na(values[j]) || values[j] < 0)
+                       indices[1,i] <- NA
+                     else {
+                       indices[2,i] <- newverts + 1
+                       p <- 1 - abs(values[i])/(abs(values[i]) + values[j])
+                       for (attr in hasattrs) {
+                         while (nrow(obj[[attr]]) < newverts + 1)
+                           obj[[attr]] <- rbind(obj[[attr]], obj[[attr]])
+                         new <- p*obj[[attr]][i,] + (1-p)*obj[[attr]][j,]
+                         obj[[attr]][newverts + 1,] <- new
+                       }
+                       newverts <- newverts + 1
+                       obj$vertices[i,] <- NA
+                       if (j == 2)
+                         indices[1,i] <- NA
                      }
-                   newverts <- newverts + 1
-                   obj$vertices[i,] <- NA
-                   if (j == 2)
-                     indices[1,i] <- NA
-                 }
-               } else {
-                 if (!is.na(values[j]) && values[j] < 0) {
-                   indices[2,i] <- newverts + 1
-                   indices[3,i] <- newverts + 2
-                   p <- 1 - abs(values[j])/(abs(values[j]) + values[i])
-                   obj$vertices <- rbind(obj$vertices, 
-                                         p*obj$vertices[j,] + (1-p)*obj$vertices[i,],
-                                         c(NA, NA, NA))
-                   for (attr in c("vertices", "normals", "colors"))
-                     if (!is.null(obj[[attr]]) &&
-                         nrow(obj[[attr]]) > 1) {
-                       while (nrow(obj[[attr]]) < newverts + 2)
-                         obj[[attr]] <- rbind(obj[[attr]], obj[[attr]])
-                       new <- p*obj[[attr]][j,] + (1-p)*obj[[attr]][i,]
-                       obj[[attr]][newverts+1,] <- new
-                       obj[[attr]][newverts+2,] <- NA
+                   } else {
+                     if (!is.na(values[j]) && values[j] < 0) {
+                       indices[2,i] <- newverts + 1
+                       indices[3,i] <- newverts + 2
+                       p <- 1 - abs(values[j])/(abs(values[j]) + values[i])
+                       obj$vertices <- rbind(obj$vertices, 
+                                             p*obj$vertices[j,] + (1-p)*obj$vertices[i,],
+                                             c(NA, NA, NA))
+                       for (attr in hasattrs) {
+                         while (nrow(obj[[attr]]) < newverts + 2)
+                           obj[[attr]] <- rbind(obj[[attr]], obj[[attr]])
+                         new <- p*obj[[attr]][j,] + (1-p)*obj[[attr]][i,]
+                         obj[[attr]][newverts+1,] <- new
+                         obj[[attr]][newverts+2,] <- NA
+                       }
+                       newverts <- newverts + 2
+                       if (j == nverts)
+                         indices[1,j] <- NA                   
                      }
-                   newverts <- newverts + 2
-                   if (j == nverts)
-                     indices[1,j] <- NA                   
+                   }
                  }
-               }
+                 indices <- c(indices)
+                 indices <- indices[!is.na(indices)]
+                 for (attr in hasattrs) 
+                   obj[[attr]] <- obj[[attr]][indices,,drop = FALSE]
              }
-             indices <- c(indices)
-             indices <- indices[!is.na(indices)]
-             for (attr in c("vertices", "normals", "colors")) 
-               if (!is.null(obj[[attr]]) && nrow(obj[[attr]]) > 1) 
-                  obj[[attr]] <- obj[[attr]][indices,,drop = FALSE]
-             }
+             obj <- rejoinLines3d(obj)
              newid <- plot3d(obj)
            }
-           )
+    )
     if (!is.na(newid)) {
       result[id] <- newid
       for (i in seq_along(subscenes)[-1])
