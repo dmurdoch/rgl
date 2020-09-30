@@ -76,7 +76,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   /* Some systems write useless messages to stderr.  We'll
    * hide those
    */
-  int stderr_copy;
+  int stderr_copy = STDERR_FILENO; /* suppress "maybe undefined" warning */
   if (!rglDebug) {
      int devNull = 
 #ifdef windows
