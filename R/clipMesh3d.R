@@ -202,6 +202,53 @@ subdivideLines <- function(x) {
   x
 }
 
+# Undo subdivision for triangles
+rejoinMesh3d <- function(x, tol = 1.e-6) {
+  ntriangs <- ncol(x$it)
+  if (ntriangs < 4)
+    return(x)
+  hasattrs <- intersect(names(x), c("vb","normals","texcoords"))
+  vals <- if (nrow(x$vb) == 4) asEuclidean(t(x$vb)) else t(x$vb)
+  if (!is.null(x$normals))
+    vals <- cbind(vals, if(nrow(x$normals) == 4) asEuclidean(t(x$normals)) else t(x$normals))
+  if (!is.null(x$texcoords))
+    vals <- cbind(vals, x$texcoords)
+  indices <- seq_len(ntriangs)
+  for (j in seq_len(ntriangs)[-(1:3)]) {
+    i <- j - (3:0)
+    verts <- c(x$it[,i])
+    if ( !any(is.na(indices[i]))
+      && verts[2] == verts[6]
+      && verts[3] == verts[8]
+      && verts[5] == verts[9]
+      && verts[6] == verts[11]
+      && verts[8] == verts[10]
+      && verts[9] == verts[12] 
+      && !(verts[1] %in% verts[-1]) 
+      && !(verts[4] %in% verts[-4])
+      && !(verts[7] %in% verts[-7])) {
+        v1 <- verts[c(1,4,7,2,3,5)]
+        diffs <- c(vals[v1[1],] - vals[v1[2],],
+                   vals[v1[1],] - vals[v1[3],],
+                   vals[v1[2],] - vals[v1[3],])
+        use <- !is.na(diffs) & diffs > tol
+        if (any(use)) {
+          p <- c(vals[v1[1],] - vals[v1[4],],
+                 vals[v1[1],] - vals[v1[5],],
+                 vals[v1[2],] - vals[v1[6],])[use]/diffs[use]
+          if (max(abs(p - 0.5)) < tol) {
+            # Found one!
+            indices[i[-1]] <- NA
+            x$it[,i[1]] <- c(v1[1], v1[2], v1[3])
+          }
+        }
+    }
+  }
+  indices <- indices[!is.na(indices)]
+  x$it <- x$it[,indices]
+  x
+}
+
 rejoinLines3d <- function(x, tol = 1.e-6) {
   nverts <- nrow(x$vertices)
   indices <- seq_len(nverts)
@@ -323,6 +370,13 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
              mesh <- cleanMesh3d(mesh)
              clipped <- clipMesh3d(mesh, fn, bound, greater, attribute,
                                    minVertices[id])
+             ntriangs <- ncol(clipped$it)
+             oldntriangs <- ntriangs + 1
+             while (ntriangs < oldntriangs) {
+               oldntriangs <- ntriangs
+               clipped <- cleanMesh3d(rejoinMesh3d(clipped))
+               ntriangs <- ncol(clipped$it)
+             }
              useSubscene3d(subscenes[1])
              newid <- shade3d(clipped, override = FALSE)
              for (i in seq_along(subscenes)[-1])
