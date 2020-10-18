@@ -241,10 +241,27 @@ fns <- local({
   fig.beforecode <- NULL
   
   setupDone <- NULL
+  latex <- FALSE
   
   setupKnitr <- function(autoprint = FALSE, 
                          rgl.newwindow = autoprint,
-                         rgl.closewindows = autoprint) {
+                         rgl.closewindows = autoprint,
+                         reset = FALSE) {
+    if (reset && !is.null(setupDone)) {
+      if (setupDone$autoprint) {
+        message("undoing setup")
+        options(saveopts)
+        saveopts <<- NULL
+        knit_hooks$set( evaluate = oldevalhook)
+        oldevalhook <<- NULL
+        oldopthooks <<- opts_hooks$get(c("fig.keep", "fig.show", "fig.beforecode"))
+        opts_hooks$set(fig.keep = oldopthooks[["fig.keep"]],
+                       fig.show = oldopthooks[["fig.show"]],
+                       fig.beforecode = oldopthooks[["fig.beforecode"]])
+        oldopthooks <<- NULL
+        setupDone <<- NULL
+      }
+    }
     if (!is.null(setupDone)) {
       if (setupDone$autoprint != autoprint ||
           setupDone$rgl.newwindow != rgl.newwindow ||
@@ -269,9 +286,9 @@ fns <- local({
       knit_hooks$set(webGL = hook_webgl)
       knit_hooks$set(rgl = hook_rgl)
       knit_hooks$set(rgl.chunk = hook_rglchunk)
-      
+      latex <<- identical(opts_knit$get("out.format"), "latex") || identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
       if (autoprint) {
-        saveopts <<- options(rgl.printRglwidget = TRUE, rgl.useNULL = TRUE)
+        saveopts <<- options(rgl.printRglwidget = TRUE, rgl.useNULL = !latex)
         oldevalhook <<- knit_hooks$get("evaluate")
         knit_hooks$set( evaluate = hook_evaluate)
         oldopthooks <<- opts_hooks$get(c("fig.keep", "fig.show", "fig.beforecode"))
@@ -321,7 +338,14 @@ fns <- local({
     x
   }
   
+  counter <- 0L
+  rgl_counter <- function() {
+    counter <<- counter + 1L
+    counter
+  }
+  
   hook_evaluate <- function(...) {
+    counter <<- 0L
     res <- oldevalhook(...)
     keep <- fig.keep
     keep.idx <- NULL
@@ -355,7 +379,6 @@ fns <- local({
         res <- fig_before_code(res)
       # Now replace the rgl figs with their code.
       figs <- which(find_figs(res, "rglRecordedplot"))
-      latex <- identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
       for (f in figs) {
         obj <- res[[f]]
         options <- obj$options
@@ -367,6 +390,19 @@ fns <- local({
                              reuse = TRUE,
                              webgl = !doSnapshot,
                              latex = latex)
+        if (inherits(content, "knit_image_paths")) {
+          # # We've done a snapshot, put it in the right place.
+          name <- file.path(options$fig.path, 
+                            paste0(options$label, "-rgl-", rgl_counter(), ".png"))
+          if (!file_test("-d", dirname(name)))
+            dir.create(dirname(name), recursive = TRUE)
+          file.copy(content, name, overwrite = TRUE)
+          unlink(content)
+          content <- structure(list(file = name,
+                                    extension = "png"),
+                               class = "html_screenshot")
+          
+        }
         fig.align <- options$fig.align
         if (length(fig.align) ==  1 && fig.align != "default")
           content <- prependContent(content,

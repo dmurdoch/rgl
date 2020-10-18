@@ -485,6 +485,8 @@ Function                             | Description
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
 `r indexfns("clipMesh3d")`: | clip mesh object using curved boundary
+`r indexfns("clipObj3d")`: | clip general object using curved
+boundary
 
 The individual steps in `r linkfn("subdivision3d")` are also available:
 `r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These
@@ -926,6 +928,17 @@ rely on a large body of Javascript code included in this
 package.  To help in development of this code, the
 `r indexfns("makeDependency")` function was written.
 It may be useful in other packages that include Javascript.
+
+### Other functions
+
+This section is for miscellaneous functions that don't
+fall in any of the other categories in this document.
+
+The `r indexfns("setGraphicsDelay")` function is designed
+to work around what appears to be a bug on MacOS:  if
+a standard plot window is opened too quickly after an `rgl`
+window, R can crash.  This function inserts a one second 
+delay when it appears to be needed.
 
 ## Warning:  Work in Progress!
 

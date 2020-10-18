@@ -56,7 +56,8 @@ in a code chunk if the example prints \pkg{rgl} objects.
 \usage{
 setupKnitr(autoprint = FALSE,
            rgl.newwindow = autoprint,
-           rgl.closewindows = autoprint)
+           rgl.closewindows = autoprint,
+           reset = FALSE)
 hook_rgl(before, options, envir)
 hook_webgl(before, options, envir)
 hook_rglchunk(before, options, envir)
@@ -67,6 +68,7 @@ hook_rglchunk(before, options, envir)
   the default value of the \code{fig.keep} chunk option.)}
   \item{rgl.newwindow, rgl.closewindows}{Default values
   for the \pkg{knitr} chunk options.}
+  \item{reset}{Reset the \pkg{knitr} hooks before setting them.}
   \item{before, options, envir}{
 Standard \pkg{knitr} hook function arguments.
 }
@@ -74,6 +76,8 @@ Standard \pkg{knitr} hook function arguments.
 \details{
 The \code{setupKnitr()} function needs to be called once
 at the start of the document to install the \pkg{knitr} hooks.
+If it is called twice in the same session, it will issue a 
+warning, unless \code{reset = TRUE}.
 
 The following chunk options are supported:
 \itemize{

@@ -48,6 +48,9 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+setupKnitr(autoprint=TRUE) doesn't seem to work in .Rnw file.
+FIXED
+
 Allow plot3d.lm to limit the surface to the convex hull (or a
 slightly larger region?) of the predictors, or a high density
 region in the predictors. DONE
