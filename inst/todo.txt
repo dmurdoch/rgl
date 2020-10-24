@@ -1,5 +1,10 @@
 To-do:
 
+Write function to split up intersecting transparent polygons.
+
+Add contour lines to various persp plots.  How will it work if 
+more than one of x, y, z are matrices?
+
 Add segments and points to mesh objects?
 
 Drop re-use of parts of other scenes?  This would simplify the

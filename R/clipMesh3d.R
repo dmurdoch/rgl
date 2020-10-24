@@ -212,7 +212,7 @@ rejoinMesh3d <- function(x, tol = 1.e-6) {
   if (!is.null(x$normals))
     vals <- cbind(vals, if(nrow(x$normals) == 4) asEuclidean(t(x$normals)) else t(x$normals))
   if (!is.null(x$texcoords))
-    vals <- cbind(vals, x$texcoords)
+    vals <- cbind(vals, t(x$texcoords))
   indices <- seq_len(ntriangs)
   for (j in seq_len(ntriangs)[-(1:3)]) {
     i <- j - (3:0)
