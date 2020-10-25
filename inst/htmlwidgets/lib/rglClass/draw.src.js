@@ -331,16 +331,19 @@
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, fnew, gl.DYNAMIC_DRAW);
       return fnew.length;
     };
+
+    rglwidgetClass.prototype.doMasking = function(mask) {
+      var gl = this.gl;
+      gl.depthMask(mask);
+    };
     
     rglwidgetClass.prototype.doBlending = function(blend) {
       var gl = this.gl;
       if (blend) {
-        gl.depthMask(false);
         gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
                            gl.ONE, gl.ONE);
         gl.enable(gl.BLEND);
       } else {
-        gl.depthMask(true);
         gl.disable(gl.BLEND);
       }
     };
@@ -420,6 +423,8 @@
         return this.getPieces(context, obj.id, 0, obj);
 
       this.doDepthTest(obj);
+      
+      this.doMasking(this.getObjMaterial(obj, "depth_mask"));
             
       gl.useProgram(obj.prog);
 

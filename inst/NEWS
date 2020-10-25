@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.26
+0.102.27
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1134,3 +1134,5 @@ base graphics.
   - Added as.mesh3d.rglobject method.
   - Added clipObj3d function, add minVertices argument to clipMesh3d.
   - Added clip_to_density argument to plot3d.lm() method.
+  - The "depth_mask" material property was being ignored
+    in rglwidget().

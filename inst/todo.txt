@@ -53,6 +53,8 @@ Port sphere facet sorting to WebGL.
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
 
+Material property depth_mask is ignored in rglwidget(). FIXED
+
 setupKnitr(autoprint=TRUE) doesn't seem to work in .Rnw file.
 FIXED
 
