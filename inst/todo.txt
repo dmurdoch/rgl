@@ -2,9 +2,6 @@ To-do:
 
 Write function to split up intersecting transparent polygons.
 
-Add contour lines to various persp plots.  How will it work if 
-more than one of x, y, z are matrices?
-
 Add segments and points to mesh objects?
 
 Drop re-use of parts of other scenes?  This would simplify the
@@ -52,6 +49,10 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Add contour lines to various persp plots.  How will it work if 
+more than one of x, y, z are matrices? DONE more generally 
+via contourLines3d.
 
 Material property depth_mask is ignored in rglwidget(). FIXED
 

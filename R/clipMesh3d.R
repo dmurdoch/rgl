@@ -1,18 +1,24 @@
+as.tmesh3d <- function(mesh) {
+  if (!is.null(mesh$ib)) {
+    nquads <- ncol(mesh$ib)
+    mesh$it <- cbind(mesh$it, 
+                     matrix(mesh$ib[rep(4*(seq_len(nquads) - 1), each = 6) + 
+                                      rep(c(1, 2, 3, 1, 3, 4), nquads)], nrow = 3))
+    mesh$ib <- NULL
+  }
+  mesh
+}
+
 clipMesh3d <- function(mesh, fn, bound = 0, greater = TRUE,
                        attribute = "vertices",
                        minVertices = 0) {
   stopifnot(inherits(mesh, "mesh3d"))
   # First, convert quads to triangles
-  if (!is.null(mesh$ib)) {
-    nquads <- ncol(mesh$ib)
-    mesh$it <- cbind(mesh$it, 
-                     matrix(mesh$ib[rep(4*(seq_len(nquads) - 1), each = 6) + 
-                              rep(c(1, 2, 3, 1, 3, 4), nquads)], nrow = 3))
-    mesh$ib <- NULL
-  }
+  mesh <- as.tmesh3d(mesh)
   nverts <- ncol(mesh$vb)
   oldnverts <- nverts - 1
   while (nverts < minVertices && oldnverts < nverts) {
+    oldnverts <- nverts
     mesh <- subdivision3d(mesh, deform = FALSE, normalize = TRUE)
     nverts <- ncol(mesh$vb)
   }
