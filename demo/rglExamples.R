@@ -111,7 +111,7 @@ initialWd <- getwd()
 saveopts <- options()
 options(rgl.useNULL = TRUE)
 library(rgl)
-setupKnitr(autoprint = TRUE)
+setupKnitr(autoprint = TRUE, reset = TRUE)
 example <- function(...) {
   saveopts <- options(rgl.printRglwidget = FALSE)
   on.exit(options(saveopts))
