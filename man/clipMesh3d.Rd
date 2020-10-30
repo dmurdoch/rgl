@@ -117,7 +117,7 @@ clipping condition.  Note that the order of vertices will likely
 differ from the original order, and new vertices will be added near
 the boundary (and if \code{minVertices > 0}, in the 
 interior).  If in addition \code{keepValues = TRUE},
-a component named \code{"value"} will be added to the 
+a component named \code{"values"} will be added to the 
 mesh containing the values for each vertex.
 
 If \code{plot = TRUE}, the result will be 

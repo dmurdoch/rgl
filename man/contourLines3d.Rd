@@ -21,7 +21,7 @@ contourLines3d(obj, ...)
     minVertices = 0,
     plot = TRUE, ... )
 filledContour3d(obj, ...)
-\method{filledContour3d}{rglId}(obj, ...)
+\method{filledContour3d}{rglId}(obj, plot = TRUE, replace = plot, ...)
 \method{filledContour3d}{mesh3d}(obj, fn = "z", 
     nlevels = 20, 
     levels = pretty(range(values), nlevels), 
@@ -51,10 +51,15 @@ See Details below.
 Whether to draw the lines or return them in a dataframe.
   }
   \item{\dots}{
-Additional parameters to pass to \code{\link{segments3d}}
+For the \code{"mesh3d"} methods, additional parameters to pass to \code{\link{segments3d}}
 when drawing the contour lines or to \code{\link{shade3d}}
-when drawing the filled contours.
+when drawing the filled contours.  For the \code{"rglId"}
+methods, additional parameters to pass to the \code{"mesh3d"}
+methods.
 }
+  \item{replace}{
+Whether to delete the objects that are being contoured.
+  }
   \item{color.palette}{a color palette function to 
   assign colors in the plot}
   \item{col}{the actual colors to use in the plot.}
@@ -157,9 +162,7 @@ open3d()
 id <- persp3d(x, y, z, aspect = "iso",
       axes = FALSE, box = FALSE, polygon_offset = 1)
 contourLines3d(id)     # "z" is the default function
-filledContour3d(id, polygon_offset = 1, nlevels = 10)
-# Remove the original surface
-pop3d(id = id)
+filledContour3d(id, polygon_offset = 1, nlevels = 10, replace = TRUE)
 
 # Draw longitude and latitude lines on a globe
 

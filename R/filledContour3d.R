@@ -1,9 +1,12 @@
 filledContour3d <- function(obj, ...)
   UseMethod("filledContour3d")
 
-filledContour3d.rglId <- function(obj, ...) {
+filledContour3d.rglId <- function(obj, plot = TRUE, replace = plot, ...) {
   mesh <- as.mesh3d(obj)
-  filledContour3d(mesh, ...)
+  result <- filledContour3d(mesh, plot = plot, ...)
+  if (replace)
+    pop3d(id = obj)
+  result
 }
 
 filledContour3d.mesh3d <- function(obj, fn = "z",

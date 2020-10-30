@@ -136,7 +136,7 @@ clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
       if (!greater) values <- -values
       mesh$values <- values + bound
     }
-    mesh
+    cleanMesh3d(mesh)
   }
 }
 
