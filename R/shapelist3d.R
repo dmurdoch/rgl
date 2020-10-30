@@ -47,7 +47,7 @@ dot3d.shapelist3d <- function(x, override = TRUE, ...) {
     save <- par3d(skipRedraw = TRUE)
     on.exit(par3d(save))
     
-    invisible(unlist(sapply( x, function(item) dot3d(item, override=override, ...) ) ) )
+    lowlevel(unlist(sapply( x, function(item) dot3d(item, override=override, ...) ) ) )
 }
 
 wire3d.shapelist3d <- function(x, override = TRUE, ...) {
@@ -55,7 +55,7 @@ wire3d.shapelist3d <- function(x, override = TRUE, ...) {
     save <- par3d(skipRedraw = TRUE)
     on.exit(par3d(save))
     
-    invisible(unlist(sapply( x, function(item) wire3d(item, override=override, ...) ) ) )
+    lowlevel(unlist(sapply( x, function(item) wire3d(item, override=override, ...) ) ) )
 }
 
 
@@ -64,7 +64,7 @@ shade3d.shapelist3d <- function(x, override = TRUE, ...) {
     save <- par3d(skipRedraw = TRUE)
     on.exit(par3d(save))
     
-    invisible(unlist(sapply( x, function(item) shade3d(item, override=override, ...) ) ) )
+    lowlevel(unlist(sapply( x, function(item) shade3d(item, override=override, ...) ) ) )
 }
 
 translate3d.shapelist3d <- function ( obj, x, y, z, ... ) {
