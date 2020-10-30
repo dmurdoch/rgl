@@ -350,7 +350,8 @@ scale3d.mesh3d <- function ( obj, x, y, z, ... ) {
   if ( !is.null(obj$normals) ) {
     obj$normals <- scale3d(t(obj$normals), 1/x, 1/y, 1/z)
     obj$normals <- t( obj$normals/sqrt(apply(obj$normals[,1:3]^2, 1, sum)) )
-    obj$normals[4,] <- 1
+    if (nrow(obj$normals) == 4)
+      obj$normals[4,] <- 1
   }
   return(obj)
 }
