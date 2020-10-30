@@ -5,8 +5,8 @@ contourLines3d <- function(obj, ...)
 contourLines3d.rglId <- function(obj, ...) 
   contourLines3d(as.mesh3d(obj), ...)
   
-contourLines3d.mesh3d <- function(obj, funs = "z", nlevels = 10, levels = NULL, 
-                                  funArgs = NULL, minVertices = 0, draw = TRUE, ... ) {
+contourLines3d.mesh3d <- function(obj, fn = "z", nlevels = 10, levels = NULL, 
+                                  minVertices = 0, plot = TRUE, ... ) {
   obj <- as.tmesh3d(obj)
   nverts <- ncol(obj$vb)
   oldnverts <- nverts - 1
@@ -16,27 +16,27 @@ contourLines3d.mesh3d <- function(obj, funs = "z", nlevels = 10, levels = NULL,
     nverts <- ncol(obj$vb)
   }
   verts <- asEuclidean(t(obj$vb))
-  if (is.character(funs))
-    funs <- structure(as.list(funs), names = funs)
-  else if (is.function(funs)) 
-    funs <- list(funs)
-  funnames <- names(funs)
+  if (is.null(fn))
+    fn <- obj$values
+  if (is.null(fn))
+    stop("'fn' can only be NULL if 'obj' contains values")
+  if (is.character(fn))
+    fn <- structure(as.list(fn), names = fn)
+  else if (is.function(fn) || is.numeric(fn)) 
+    fn <- list(fn)
+  funnames <- names(fn)
   if (is.null(funnames))
-    funnames <- seq_along(funs)
+    funnames <- seq_along(fn)
     
-  result <- data.frame(x = numeric(), y = numeric(), z = numeric(), fun = funnames[0], level = numeric())
+  result <- data.frame(x = numeric(), y = numeric(), z = numeric(), fn = funnames[0], level = numeric())
   
-  for (i in seq_along(funs)) {
-    fun <- funs[[i]]
-    if (is.character(fun))
-      fun <- switch(fun, 
-                    x = function(x, y, z, ...) x,
-                    y = function(x, y, z, ...) y,
-                    z = function(x, y, z, ...) z,
-                    fun)
-    values <- do.call(fun, 
-                      c(list(verts[,1], verts[,2], verts[,3]), funArgs),
-                      envir = parent.frame())
+  for (i in seq_along(fn)) {
+    if (is.numeric(fn[[i]]))
+      values <- fn[[i]]
+    else {
+      fun <- .getVertexFn(fn[[i]], parent.env())
+      values <- fun(verts)
+    }
     if (is.null(levels))
       levs <- pretty(range(values, na.rm = TRUE), nlevels)
     else
@@ -64,11 +64,11 @@ contourLines3d.mesh3d <- function(obj, funs = "z", nlevels = 10, levels = NULL,
         p2 <- (lev - values[v3])/(values[v1] - values[v3])
         i2 <- p2*verts[v1,] + (1 - p2)*verts[v3,] 
         xyz <- matrix(t(cbind(i1, i2)), ncol = 3, byrow = TRUE)
-        result <- rbind(result, data.frame(x = xyz[,1], y = xyz[,2], z = xyz[,3], fun = funnames[i], level = lev))
+        result <- rbind(result, data.frame(x = xyz[,1], y = xyz[,2], z = xyz[,3], fn = funnames[i], level = lev))
       }
     }
   }
-  if (draw)
+  if (plot)
     segments3d(result, ...)
   else
     result

@@ -2,27 +2,40 @@
 \alias{contourLines3d}
 \alias{contourLines3d.rglId}
 \alias{contourLines3d.mesh3d}
+\alias{filledContour3d}
+\alias{filledContour3d.rglId}
+\alias{filledContour3d.mesh3d}
 \title{
-Draw contour lines on a surface.
+Draw contours on a surface.
 }
 \description{
-Draws contour lines on a surface.
+\code{contourLines3d} draws contour lines on a surface;
+\code{filledContour3d} draws filled contours on it.
 }
 \usage{
 contourLines3d(obj, ...)
 \method{contourLines3d}{rglId}(obj, ...)
-\method{contourLines3d}{mesh3d}(obj, funs = "z", 
+\method{contourLines3d}{mesh3d}(obj, fn = "z", 
     nlevels = 10, 
     levels = NULL, 
-    funArgs = NULL,
     minVertices = 0,
-    draw = TRUE, ... )
+    plot = TRUE, ... )
+filledContour3d(obj, ...)
+\method{filledContour3d}{rglId}(obj, ...)
+\method{filledContour3d}{mesh3d}(obj, fn = "z", 
+    nlevels = 20, 
+    levels = pretty(range(values), nlevels), 
+    color.palette = function(n) hcl.colors(n, "YlOrRd", rev = TRUE),
+    col = color.palette(length(levels) - 1),
+    minVertices = 0,
+    plot = TRUE, 
+    keepValues = FALSE, ... )    
 }
 \arguments{
   \item{obj}{
 The object(s) on which to draw contour lines.
 }
-  \item{funs}{
+  \item{fn}{
 The function(s) to be contoured.  See Details.
   }
   \item{nlevels}{
@@ -31,39 +44,49 @@ Suggested number of contour levels if \code{levels} is not given.
   \item{levels}{
 Specified contour values.
   }
-  \item{funArgs}{
-A list of additional arguments to pass to the functions.
-  }
   \item{minVertices}{
 See Details below.  
   }
-  \item{draw}{
+  \item{plot}{
 Whether to draw the lines or return them in a dataframe.
   }
   \item{\dots}{
 Additional parameters to pass to \code{\link{segments3d}}
-when drawing the contour lines.
+when drawing the contour lines or to \code{\link{shade3d}}
+when drawing the filled contours.
 }
+  \item{color.palette}{a color palette function to 
+  assign colors in the plot}
+  \item{col}{the actual colors to use in the plot.}
+  \item{keepValues}{whether to save the function values at 
+  each vertex when \code{plot = FALSE}}
 }
 \details{
-The \code{funs} argument can be a character variable naming
-functions or a list of functions (or a list containing a
-mixture of names and functions). 
-
-The functions should have
-header \code{function(x, y, z, ...)}, where the \code{...}
-part will be filled in with the entries from \code{funArgs}.
+For \code{contourLines3d}, the \code{fn} argument can be any
+of the following:
+\itemize{
+\item{ a character vector naming
+one or more functions} 
+\item{a function}
+\item{a numeric vector with one value per vertex}
+\item{\code{NULL}, indicating that the numeric values
+are saved in \code{obj$values}}
+\item{a list containing any of the above.}
+}
+For \code{filledContour3d}, only one function can be specified.
 
 The special names \code{"x", "y", "z"} may be used in
-\code{funs} to specify functions returning one of those
+\code{fn} to specify functions returning one of those
 coordinates.  (If you have existing functions \code{x()}, \code{y()}
 or \code{z()} they will be masked by this choice; specify
-such functions by value rather than name, e.g. \code{funs = x}
-instead of \code{funs = "x"}.)
+such functions by value rather than name, e.g. \code{fn = x}
+instead of \code{fn = "x"}.)
 
-These functions should be vectorized, returning a vector of values of the
-same length as \code{x}, \code{y}, and \code{z} (which
-will always be the same length on entry.)
+Functions in \code{fn} with formal arguments \code{x},
+\code{y} and \code{z} will receive the coordinates of 
+vertices in those arguments, otherwise they will receive 
+the coordinates in a single n x 3 matrix.   They should
+be vectorized and return one value per vertex.
 
 Each of the functions will be evaluated at each vertex
 of the surface specified by \code{obj}, and contours will
@@ -72,7 +95,7 @@ If contours of a nonlinear function are needed, you may
 want to increase \code{minVertices} as described below.
 
 If \code{levels} is not specified, values will be set
-separately for each entry in \code{funs}, using 
+separately for each entry in \code{fn}, using 
 \code{pretty(range(values, na.rm = TRUE), nlevels)} where
 \code{values} are the values on the vertices.
 
@@ -93,18 +116,26 @@ some larger positive value) so that the lines of the contour are not
 obscured by the surface.
 }
 \value{
-The \code{"rglId"} method converts the given id values to
+For both \code{contourLines3d} and \code{filledContour3d}
+the \code{"rglId"} method converts the given id values to
 a mesh, and calls the \code{"mesh3d"} method.  
 
 The \code{"mesh3d"} method returns an object of class
-\code{"rglId"} corresponding to the line segments that were
-drawn if \code{draw} is \code{TRUE},
+\code{"rglId"} corresponding to what was
+drawn if \code{plot} is \code{TRUE},
 
-If \code{draw} is \code{FALSE}, it returns a dataframe containing 
-columns \code{c("x", "y", "z", "fun", "level")} giving
+If \code{plot} is \code{FALSE}, \code{contourLines3d} returns a dataframe containing 
+columns \code{c("x", "y", "z", "fn", "level")} giving
 the coordinates of the endpoints of each line segment, 
 the name (or index) of the function for this contour, and the 
-level of the contour.
+level of the contour.  
+
+If \code{plot} is \code{FALSE}, \code{filledContour3d}
+returns a \code{"\link{shapelist3d}"} object containing 
+\code{"\link{mesh3d}"} objects corresponding to each filled
+strip.  If \code{keepValues} is \code{TRUE}, each mesh
+will contain the values corresponding to each vertex
+(with linear approximations at the boundaries).
 }
 
 \author{
@@ -123,9 +154,12 @@ x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
 y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
 
 open3d()
-id <- persp3d(x, y, z, col = "green3", aspect = "iso",
+id <- persp3d(x, y, z, aspect = "iso",
       axes = FALSE, box = FALSE, polygon_offset = 1)
-contourLines3d(id)
+contourLines3d(id)     # "z" is the default function
+filledContour3d(id, polygon_offset = 1, nlevels = 10)
+# Remove the original surface
+pop3d(id = id)
 
 # Draw longitude and latitude lines on a globe
 

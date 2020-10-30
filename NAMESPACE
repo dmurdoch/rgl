@@ -8,7 +8,7 @@ export(.check3d,
 	      cube3d, cuboctahedron3d, cur3d, 
         currentSubscene3d, cylinder3d,
         decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, ellipse3d, extrude3d,
-        figWidth, figHeight,
+        figWidth, figHeight, filledContour3d,
 	gc3d, getr3dDefaults, getWidgetId, GramSchmidt, grid3d, 
 	highlevel, hook_rgl, hook_webgl,
 	icosahedron3d, identify3d, identityMatrix, ids3d,
@@ -125,6 +125,8 @@ export(.check3d,
  
  S3method(contourLines3d, rglId)
  S3method(contourLines3d, mesh3d)
+ S3method(filledContour3d, rglId)
+ S3method(filledContour3d, mesh3d)
  
  if(.Platform$OS.type == "windows") {
    importFrom(utils, getWindowsHandle)
@@ -132,7 +134,8 @@ export(.check3d,
  
  importFrom(graphics, legend, par, plot, plot.new, polygon,
  	    strwidth, strheight)
- importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.off, png, 
+ importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.off, 
+      hcl.colors, png, 
  	    postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)

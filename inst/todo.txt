@@ -1,6 +1,6 @@
 To-do:
 
-Write function to split up intersecting transparent polygons.
+should reset=TRUE be default in setupKnitr?
 
 Add segments and points to mesh objects?
 
@@ -49,6 +49,12 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Write function to split up intersecting or inconsistently overlapping transparent polygons. -- This is hard! WON'T DO
+
+Add filledContour3d function.  Fix inconsistencies:  function
+args, draw or not, arg names in filledContour3d,
+contourLines3d, clipMesh3d, clipObj3d. DONE
 
 Add contour lines to various persp plots.  How will it work if 
 more than one of x, y, z are matrices? DONE more generally 

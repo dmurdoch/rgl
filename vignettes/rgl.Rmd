@@ -475,18 +475,29 @@ ib           | (optional) A 4 by q matrix of vertex indices.  Each column is a q
 material     | (optional) A list of material properties.
 normals      | (optional) A matrix of the same shape as vb, containing normal vectors at each vertex.
 texcoords    | (optional) A 2 by n matrix of texture coordinates corresponding to each vertex.
+values       | (optional) A vector of length n holding values at each vertex
+
+
+### Contouring shapes
+
+These functions compute and plot contours of functions
+on surfaces, or clip objects along a contour of a function.
+
+Function                         | Description
+-------------------------------- | -----------
+`r indexfns("contourLines3d")`:  | draw contour lines on surface
+`r indexfns("filledContour3d")`: | fill between contours on surface
+`r indexfns("clipMesh3d")`:      | clip mesh object using curved boundary
+`r indexfns("clipObj3d")`:       | clip general object using curved boundary
 
 ### Manipulating shapes
 
-The final set of functions manipulate and modify mesh objects:
+These functions manipulate and modify mesh objects:
 
 Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
-`r indexfns("clipMesh3d")`: | clip mesh object using curved boundary
-`r indexfns("clipObj3d")`: | clip general object using curved
-boundary
 
 The individual steps in `r linkfn("subdivision3d")` are also available:
 `r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These

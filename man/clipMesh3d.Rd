@@ -10,12 +10,10 @@ a function are bounded.
 }
 \usage{
 clipMesh3d(mesh, fn, bound = 0, greater = TRUE, 
-           attribute = "vertices",
-           minVertices = 0)
+           minVertices = 0, plot = FALSE, keepValues = FALSE)
 clipObj3d(ids, fn, bound = 0, greater = TRUE,
-           attribute = "vertices", 
            minVertices = 0,
-           subscenes = currentSubscene3d())
+           replace = TRUE)
 }
 \arguments{
   \item{mesh}{
@@ -23,7 +21,7 @@ A \code{\link{mesh3d}} object.
 }
   \item{fn}{
 A function used to determine clipping, or a vector of values from such
-a function, with one value per vertex in the mesh.
+a function, with one value per vertex.
 }
   \item{bound}{
 The value(s) of \code{fn} on the clipping boundary.
@@ -31,35 +29,54 @@ The value(s) of \code{fn} on the clipping boundary.
   \item{greater}{
 Logical; whether to keep \code{fn >= bound} or not.
 }
-  \item{attribute}{
-Which attribute(s) to pass to \code{fn}?  Possible values
-are \code{c("vertices", "normals", "texcoords", "index")}.
-}
   \item{minVertices}{
 See Details below.
   }
+  \item{plot}{Logical; whether or not to plot the mesh.}
+  \item{keepValues}{Logical; whether to save the function values at 
+  each vertex when \code{plot = FALSE}.}
   \item{ids}{
 The \pkg{rgl} id value(s) of objects to clip.
   }
-  \item{subscenes}{
-Which subscenes should receive the modified object?
+  \item{replace}{
+Should the \code{ids} objects be deleted after the clipped
+ones are drawn?
   }
 }
 \details{
 These functions transform a mesh3d object or other
-rgl objects. 
+rgl objects by removing parts where \code{fn} violates
+the bound.
+
+For \code{clipMesh3d} the \code{fn} argument can be any
+of the following:
+\itemize{
+\item{a character vector naming a function (with special
+names \code{"x"}, \code{"y"}, and \code{"z"} corresponding
+to functions returning those coordinates)}
+\item{a function}
+\item{a numeric vector with one value per vertex}
+\item{\code{NULL}, indicating that the numeric values
+are saved in \code{mesh$values}}
+}
+For \code{clipObj3d} any of the above except \code{NULL}
+may be used.
+
+If \code{fn}
+is a numeric vector, with one value per vertex, those values will be
+used in the test.
+If it is a function with formal arguments \code{x},
+\code{y} and \code{z}, it will receive the coordinates of 
+vertices in those arguments, otherwise it will receive 
+the coordinates in a single n x 3 matrix.   The function
+should be vectorized and return one value per vertex, 
+to check against the bound.
+
+These operations are performed on the mesh:
 
 First, all quads are converted to triangles.
 
-Next, each vertex is checked against the condition.  If \code{fn}
-is a numeric vector, with one value per vertex, those values will be
-used in the test.
-If it is a function, it will be passed a matrix, whose columns are 
-the specified attribute(s), with one row per vertex.  It should return
-a vector of values, one per vertex, to check against the bound.
-The \code{"vertices"} and \code{"normals"} values will be converted to
-Euclidean coordinates.  \code{"index"} will be an integer from 1
-to the number of vertices.  
+Next, each vertex is checked against the condition.
 
 Modifications to triangles depend
 on how many of the vertices satisfy the condition 
@@ -75,7 +92,7 @@ is shrunk along each edge towards each other vertex, forming a
 quadrilateral made of two new triangles.
 \item If all vertices satisfy the condition, they are included
 with no modifications.
-
+}
 Modifications to line segments are similar:  the segment
 will be shortened if it crosses the boundary, or omitted
 if it is entirely out of bounds.  Points, spheres, text
@@ -93,13 +110,18 @@ is more accurate.  In the \code{clipObj3d} function,
 \code{minVertices} can be a vector, with entries corresponding
 to each of the entries in \code{ids}.
 }
-}
 \value{
+If \code{plot = FALSE},
 \code{clipMesh3d} returns new mesh3d object in which all vertices (approximately) satisfy the
 clipping condition.  Note that the order of vertices will likely
 differ from the original order, and new vertices will be added near
 the boundary (and if \code{minVertices > 0}, in the 
-interior).
+interior).  If in addition \code{keepValues = TRUE},
+a component named \code{"value"} will be added to the 
+mesh containing the values for each vertex.
+
+If \code{plot = TRUE}, the result will be 
+plotted with \code{\link{shade3d}} and its result returned.
 
 \code{clipObj3d} is called for the side effect of modifying
 the scene.  It returns a list of new \pkg{rgl} id values
@@ -111,6 +133,11 @@ Duncan Murdoch
 \references{
 See \url{https://stackoverflow.com/q/56242470/2554330} for a
 motivating example.
+}
+\seealso{
+See \code{\link{contourLines3d}} and
+\code{\link{filledContour3d}} for ways to display function 
+values without clipping.
 }
 \examples{
 if (requireNamespace("misc3d")) {
@@ -141,8 +168,8 @@ if (requireNamespace("misc3d")) {
   surf <- mergeVertices(surf)
   surf <- addNormals(surf)
   
-  fn <- function(x) {
-    rowSums(x^2)
+  fn <- function(x, y, z) {
+    x^2 + y^2 + z^2
   }
   
   open3d()
@@ -153,6 +180,9 @@ if (requireNamespace("misc3d")) {
 # Show the problem that minVertices solves:
 
 cube <- cube3d(col = "red")
+
+# This function only has one argument, so it will 
+# be passed x, y and z in columns of a matrix
 vecnorm <- function(vals) apply(vals, 1, function(row) sqrt(sum(row^2)))
 
 open3d()

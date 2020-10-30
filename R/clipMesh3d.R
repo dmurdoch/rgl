@@ -9,36 +9,45 @@ as.tmesh3d <- function(mesh) {
   mesh
 }
 
-clipMesh3d <- function(mesh, fn, bound = 0, greater = TRUE,
-                       attribute = "vertices",
-                       minVertices = 0) {
+.getVertexFn <- function(fn, envir) {
+  if (is.character(fn))
+    fn <- switch(fn, 
+                 x = function(xyz) xyz[,1],
+                 y = function(xyz) xyz[,2],
+                 z = function(xyz) xyz[,3],
+                 get(fn, envir = envir, mode = "function"))
+  # Accept functions that take x, y, z as parameters
+  if (all(c("x", "y", "z") %in% names(formals(fn)))) {
+    oldfn <- fn
+    fn <- function(xyz) oldfn(x = xyz[,1], y = xyz[,2], z = xyz[,3])
+  }
+  fn
+}
+
+clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
+                       minVertices = 0, plot = FALSE, keepValues = FALSE) {
   stopifnot(inherits(mesh, "mesh3d"))
   # First, convert quads to triangles
   mesh <- as.tmesh3d(mesh)
   nverts <- ncol(mesh$vb)
   oldnverts <- nverts - 1
-  while (nverts < minVertices && oldnverts < nverts) {
+  while (nverts < minVertices && oldnverts < nverts && !is.numeric(fn)) {
     oldnverts <- nverts
     mesh <- subdivision3d(mesh, deform = FALSE, normalize = TRUE)
     nverts <- ncol(mesh$vb)
   }
-  attribute <- match.arg(attribute, c("vertices", "normals", "texcoords", "index"), several.ok = TRUE)
-  if (is.numeric(fn))
+  if (is.null(fn))
+    fn <- mesh$values
+  if (is.null(fn))
+    stop("'fn' can only be NULL if 'mesh' contains values")
+  if (is.numeric(fn)) 
     values <- fn
   else {
-    arg <- NULL
-    for (a in attribute) 
-      arg <- cbind(arg, 
-                   switch(a,
-                          vertices = t(mesh$vb[1:3,])/mesh$vb[4,],
-                          normals = if (nrow(mesh$normals) == 4)
-                            t(mesh$normals[1:3,])/mesh$normals[4,]
-                          else
-                            t(mesh$normals),
-                          texcoords = t(mesh$texcoords),
-                          index = seq_len(ncol(mesh$vb))))
-    values <- fn(arg) - bound
+    fn <- .getVertexFn(fn, parent.frame())
+    verts <- asEuclidean(t(mesh$vb))
+    values <- fn(verts)
   }
+  values <- values - bound
   if (!greater)
     values <- -values
   
@@ -47,7 +56,7 @@ clipMesh3d <- function(mesh, fn, bound = 0, greater = TRUE,
   
   if (anyNA(values))
     stop("'fn' should not include NA values")
-  
+
   # Now, set all w values to 1
   mesh$vb <- t( cbind(t(mesh$vb[1:3,])/mesh$vb[4,], 1))
   if (!is.null(mesh$normals) && nrow(mesh$normals) == 4)
@@ -82,6 +91,7 @@ clipMesh3d <- function(mesh, fn, bound = 0, greater = TRUE,
                                         alphas*mesh$material$alpha[bad[new]])
         
       }
+      values <<- c(values, rep(0, ncol(newverts)))
       mesh$vb <<- cbind(mesh$vb, newverts)
       newVertices[names[new]] <<- newvertnums
     }
@@ -119,7 +129,15 @@ clipMesh3d <- function(mesh, fn, bound = 0, greater = TRUE,
   zeros <- which(counts == 0)
   if (length(zeros))
     mesh$it <- mesh$it[, -zeros]
-  mesh
+  if (plot)
+    shade3d(mesh)
+  else {
+    if (keepValues) {
+      if (!greater) values <- -values
+      mesh$values <- values + bound
+    }
+    mesh
+  }
 }
 
 cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE) {
@@ -155,6 +173,8 @@ cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE) {
         && !is.null(mesh$material) 
         && length(mesh$material$color) == nold)
       mesh$material$color <- mesh$material$color[oldnums]
+    if (!is.null(mesh$values))
+      mesh$values <- mesh$values[oldnums]
   }
   mesh
 }
@@ -315,23 +335,14 @@ rejoinLines3d <- function(x, tol = 1.e-6) {
 }
 
 clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
-                      attribute = "vertices", 
                       minVertices = 0,
-                      subscenes = currentSubscene3d()) {
+                      replace = TRUE) {
   getValues <- function(obj) {
-    nverts <- nrow(obj$vertices)
-    args <- matrix(numeric(), ncol = 0, nrow = nverts)
-    for (attr in attribute) {
-      if (attr == "index")
-        args <- cbind(args, seq_len(nverts))
-      else if (is.null(obj[[attr]]))
-        stop(dQuote(attr), " not present in object ", obj$id)
-      else
-        args <- cbind(args, obj[[attr]])
-    }
-    values <- rep(NA, nrow(args))
-    finite <- apply(args, 1, function(row) all(is.finite(row)))
-    values[finite] <- fn(args[finite,,drop = FALSE]) - bound
+    verts <- obj$vertices
+    nverts <- nrow(verts)
+    values <- rep(NA_real_, nverts)
+    finite <- apply(verts, 1, function(row) all(is.finite(row)))
+    values[finite] <- fn(verts[finite,]) - bound
     if (!greater) values <- -values
     values
   }
@@ -356,12 +367,10 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
     ids <- names(scene$objects)
   names <- names(ids)
   ids <- as.character(ids)
-  attribute <- match.arg(attribute, c("vertices", "normals", "texcoords", "index"), several.ok = TRUE)
-  current <- currentSubscene3d()
-  on.exit(useSubscene3d(current))
   result <- integer()
   minVertices <- rep(minVertices, length.out = length(ids))
   names(minVertices) <- ids
+  fn <- .getVertexFn(fn, parent.frame())
   for (id in ids) {
     obj <- scene$objects[[id]]
     type <- obj$type
@@ -374,7 +383,7 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
            surface= {
              mesh <- as.mesh3d(obj)
              mesh <- cleanMesh3d(mesh)
-             clipped <- clipMesh3d(mesh, fn, bound, greater, attribute,
+             clipped <- clipMesh3d(mesh, fn, bound, greater,
                                    minVertices[id])
              ntriangs <- ncol(clipped$it)
              oldntriangs <- ntriangs + 1
@@ -383,12 +392,7 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
                clipped <- cleanMesh3d(rejoinMesh3d(clipped))
                ntriangs <- ncol(clipped$it)
              }
-             useSubscene3d(subscenes[1])
              newid <- shade3d(clipped, override = FALSE)
-             for (i in seq_along(subscenes)[-1])
-               addToSubscene3d(newid, subscenes[i])
-             for (i in seq_along(subscenes))
-               delFromSubscene3d(as.numeric(id), subscenes[i])
            }, 
            points =,
            text =,
@@ -517,10 +521,8 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
     )
     if (!is.na(newid)) {
       result[id] <- newid
-      for (i in seq_along(subscenes)[-1])
-        addToSubscene3d(newid, subscenes[i])
-      for (i in seq_along(subscenes))
-        delFromSubscene3d(as.numeric(id), subscenes[i])
+      if (replace)
+        pop3d(id = id)
     } else
       result[id] <- as.integer(id)
   }

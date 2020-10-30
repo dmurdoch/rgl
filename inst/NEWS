@@ -1077,7 +1077,7 @@ base graphics.
   - rglwidget() now saves a copy of the original scene,
     so it can be reconstructed or modified later.
     
-0.102.28
+0.102.29
   - More deprecation of older writeWebGL style controls.
   - Add extra knitr hooks, so support for rgl should be
     very similar to support for standard graphics output.
@@ -1132,8 +1132,11 @@ base graphics.
   - Added "snapshot" knitr option to use when autoprinting.
   - Added defaults to snapshot3d(width = NULL, height = NULL).
   - Added as.mesh3d.rglobject method.
-  - Added clipObj3d function, add minVertices argument to clipMesh3d.
   - Added clip_to_density argument to plot3d.lm() method.
   - The "depth_mask" material property was being ignored
     in rglwidget().
-  - Added contourLines3d() function.
+  - Added clipObj3d(), contourLines3d() and filledContour3d() functions.
+  - Modified clipMesh3d() function to make it more consistent
+    with the above three functions.  The main incompatibility
+    with the version in 0.100.26 is that only vertex
+    coordinates are now passed to the clipping function.
