@@ -245,11 +245,9 @@ fns <- local({
   
   setupKnitr <- function(autoprint = FALSE, 
                          rgl.newwindow = autoprint,
-                         rgl.closewindows = autoprint,
-                         reset = FALSE) {
-    if (reset && !is.null(setupDone)) {
+                         rgl.closewindows = autoprint) {
+    if (!is.null(setupDone)) {
       if (setupDone$autoprint) {
-        message("undoing setup")
         options(saveopts)
         saveopts <<- NULL
         knit_hooks$set( evaluate = oldevalhook)
@@ -261,16 +259,6 @@ fns <- local({
         oldopthooks <<- NULL
         setupDone <<- NULL
       }
-    }
-    if (!is.null(setupDone)) {
-      if (setupDone$autoprint != autoprint ||
-          setupDone$rgl.newwindow != rgl.newwindow ||
-          setupDone$rgl.closewindows != rgl.closewindows) {
-        warning("Already set autoprint = ", setupDone$autoprint,
-                          ", rgl.newwindow = ", setupDone$rgl.newwindow,
-                          ", rgl.closewindows = ", setupDone$rgl.closewindows)
-      }
-      return()
     }
     setupDone <<- list(autoprint = autoprint,
                        rgl.newwindow = rgl.newwindow,

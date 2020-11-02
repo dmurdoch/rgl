@@ -1,6 +1,5 @@
 To-do:
 
-should reset=TRUE be default in setupKnitr?
 
 Add segments and points to mesh objects?
 
@@ -49,6 +48,8 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+should reset=TRUE be default in setupKnitr? DONE, removed argument.
 
 Write function to split up intersecting or inconsistently overlapping transparent polygons. -- This is hard! WON'T DO
 
