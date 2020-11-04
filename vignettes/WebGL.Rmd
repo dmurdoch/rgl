@@ -47,7 +47,7 @@ change in the future.
 ## Browser support
 
 Most browsers now support WebGL, but in some browsers it may be disabled by
-default.  See http://get.webgl.org for help on a number of
+default.  See https://get.webgl.org for help on a number of
 different browsers.  
 
 ## Examples
@@ -312,7 +312,7 @@ the display arrangements.
 
 ## Integration with `crosstalk`
 
-The [`crosstalk`](https://rstudio.github.io/crosstalk) package allows
+The [`crosstalk`](https://rstudio.github.io/crosstalk/) package allows
 widgets to communicate with each other.  Currently it supports selection
 and filtering of observations.
 
