@@ -49,7 +49,7 @@ within the R help system.
 
 The document includes WebGL figures.  To view these, you must have
 Javascript and WebGL enabled in your browser.  Some older browsers
-may not support this -- see http://get.webgl.org for tests
+may not support this -- see https://get.webgl.org for tests
 and links to a discussion.
 
 
