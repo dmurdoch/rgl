@@ -1,6 +1,5 @@
 To-do:
 
-
 Add segments and points to mesh objects?
 
 Drop re-use of parts of other scenes?  This would simplify the
@@ -48,6 +47,8 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Add function to merge mesh objects. DONE
 
 should reset=TRUE be default in setupKnitr? DONE, removed argument.
 

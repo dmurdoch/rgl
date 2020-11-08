@@ -12,7 +12,9 @@ if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
 
 documentedfns <- c()
 
-indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE, pkg = "rgl") {
+backticked <- function(s) paste0("`", s, "`")
+
+indexfns <- function(fns, text = backticked(fns), show = TRUE, pkg = "rgl") {
   documentedfns <<- c(documentedfns, fns)
   anchors <- paste0('<a name="', fns, '">',
                     if (show) linkfn(fns, text, pkg = pkg),
@@ -21,7 +23,7 @@ indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE, pkg = "rgl"
 }
 
 indexclass <-
-  indexproperties <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
+  indexproperties <- function(fns, text = backticked(fns), show = TRUE) {
     documentedfns <<- c(documentedfns, fns)
     anchors <- paste0('<a name="', fns, '">',
                       if (show) text,
@@ -29,7 +31,7 @@ indexclass <-
     paste(anchors, collapse=if (show) ", " else "")
   }
 
-indexmethods <- function(fns, text = paste0("`", fns, "()`"), show = TRUE) {
+indexmethods <- function(fns, text = backticked(paste0(fns, "()")), show = TRUE) {
   documentedfns <<- c(documentedfns, fns)
   anchors <- paste0('<a name="', fns, '">',
                     if (show) text,
@@ -37,7 +39,7 @@ indexmethods <- function(fns, text = paste0("`", fns, "()`"), show = TRUE) {
   paste(anchors, collapse=if (show) ", " else "")
 }
 
-linkfn <- function(fn, text = paste0("`", fn, "`"), pkg = NA) {
+linkfn <- function(fn, text = backticked(fn), pkg = NA) {
   if (is.na(pkg))
     paste0('<a href="#', fn, '">', text, '</a>')
   else

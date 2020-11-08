@@ -57,6 +57,7 @@ export(.check3d,
  S3method(translate3d, mesh3d)
  S3method(rotate3d, mesh3d)
  S3method(scale3d, mesh3d)
+ S3method(merge, mesh3d)
  
  S3method(wire3d, mesh3d)
  S3method(shade3d, mesh3d) 

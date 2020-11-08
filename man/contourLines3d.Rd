@@ -136,9 +136,8 @@ the name (or index) of the function for this contour, and the
 level of the contour.  
 
 If \code{plot} is \code{FALSE}, \code{filledContour3d}
-returns a \code{"\link{shapelist3d}"} object containing 
-\code{"\link{mesh3d}"} objects corresponding to each filled
-strip.  If \code{keepValues} is \code{TRUE}, each mesh
+returns a \code{"\link{mesh3d}"} object holding the result.
+If \code{keepValues} is \code{TRUE}, the mesh
 will contain the values corresponding to each vertex
 (with linear approximations at the boundaries).
 }
@@ -148,7 +147,8 @@ Duncan Murdoch
 }
 \seealso{
 The \pkg{misc3d} package contains the function \code{\link[misc3d]{contour3d}}
-to draw contour surfaces instead of contour lines.
+to draw contour surfaces in space instead of contour lines
+on surfaces.
 }
 \examples{
 

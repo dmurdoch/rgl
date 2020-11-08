@@ -46,7 +46,7 @@ filledContour3d.mesh3d <- function(obj, fn = "z",
     strip$material$color <- col[i]
     result[[i]] <- strip
   }
-  result <- shapelist3d(result, plot = FALSE)
+  result <- do.call(merge, result)
   if (plot)
     shade3d(result, ...)
   else
