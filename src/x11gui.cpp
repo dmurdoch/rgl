@@ -417,6 +417,13 @@ void X11WindowImpl::on_init()
 
 void X11WindowImpl::on_shutdown()
 {
+  if (glxctx)
+    for (unsigned int i=0; i < fonts.size(); i++) {
+      if (fonts[i]) {
+        delete fonts[i];
+        fonts[i] = NULL;
+      }
+    }
   shutdownGL();
 }
 // ---------------------------------------------------------------------------

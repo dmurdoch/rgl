@@ -46,6 +46,7 @@ public:
   ~StringArrayImpl()
   {
     delete [] lengths;
+    delete [] starts;
     delete [] textbuffer;
   }
   int   ntexts;

@@ -41,7 +41,9 @@ Scene::~Scene()
   clear(SHAPE);
   clear(LIGHT);
   clear(BBOXDECO);
-
+  clear(BACKGROUND);
+  clear(MODELVIEWPOINT);
+  clear(USERVIEWPOINT);
 }
 
 UserViewpoint* Scene::getUserViewpoint() 
