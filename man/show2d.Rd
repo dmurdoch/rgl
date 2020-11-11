@@ -102,7 +102,7 @@ The \code{width} and \code{height} arguments control the shape
 and resolution of the bitmap.  The defaults give a square
 bitmap, which is appropriate with the usual \code{c(1,1,1)}
 aspect ratios (see \code{aspect3d}).  Some tuning may be 
-needed to choose the resoluttion.  The plot will look best when
+needed to choose the resolution.  The plot will look best when
 displayed at its original size; shrinking it smaller tends to make
 it look faded, while expanding it bigger will make it look 
 blurry.  If \code{filename} is given, the width and height

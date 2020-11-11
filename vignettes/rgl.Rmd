@@ -807,7 +807,7 @@ that can be useful:
 Function                             | Description
 ------------------------------------ | -------------
 `r indexfns("propertyControl")`:       | set individual properties
-`r indexfns("clipplaneControl")`:       |  control a clippling plane
+`r indexfns("clipplaneControl")`:       |  control a clipping plane
 `r indexfns("subsetControl")`:       | control which objects are displayed
 `r indexfns("ageControl")`:       | "age" vertices of an object
 `r indexfns("vertexControl")`:       | control properties of vertices

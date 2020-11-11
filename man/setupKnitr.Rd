@@ -79,10 +79,10 @@ will override the first.
 
 The following chunk options are supported:
 \itemize{
-  \item \code{rgl.newwindow}:  Whether to open a new window for the chunk.  Default is set by `setupKnitr` argument.
+  \item \code{rgl.newwindow}:  Whether to open a new window for the chunk.  Default is set by \code{setupKnitr} argument.
   
   \item \code{rgl.closewindows}: Whether
-to close windows at the end of the chunk.  Default is set by `setupKnitr` argument.
+to close windows at the end of the chunk.  Default is set by \code{setupKnitr} argument.
 
   \item \code{rgl.margin} (default 100):  number of pixels by which to indent the
   WebGL window.

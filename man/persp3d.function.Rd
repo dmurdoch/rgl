@@ -114,7 +114,7 @@ to z values.
 
 The \code{normal} argument allows specification of a function
 to compute normal vectors to the surface.  This function is
-passed the same arguments as \code{f()} (incuding \code{otherargs}
+passed the same arguments as \code{f()} (including \code{otherargs}
 if present), and should produce a 3-column matrix containing the
 x, y and z coordinates of the normals.
 
