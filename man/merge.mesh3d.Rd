@@ -8,7 +8,7 @@ Attempts to merge \code{"mesh3d"} objects.  Objects need
 to be similar enough; see Details.
 }
 \usage{
-merge.mesh3d(x, y, ..., attributesMustMatch = FALSE)
+\method{merge}{mesh3d}(x, y, ..., attributesMustMatch = FALSE)
 }
 \arguments{
   \item{x, y}{

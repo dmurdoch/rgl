@@ -1141,6 +1141,7 @@ base graphics.
     with the version in 0.100.26 is that only vertex
     coordinates are now passed to the clipping function.
 
-0.103.1:
+0.103.2:
   - Add merge() method for "mesh3d" objects, and use it in
     filledContour3d().
+  - Build with R CMD build; devtools builds incorrectly.
