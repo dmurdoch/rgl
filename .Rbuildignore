@@ -13,3 +13,4 @@
 ^inst/initNotes.txt
 ^docs/
 ^[.]Renviron
+^cran-comments.md$

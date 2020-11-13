@@ -1,6 +1,9 @@
 To-do:
 
-Add segments and points to mesh objects?
+Add segments and points to mesh objects?  Maybe make mesh objects
+completely general, and pass them as objects in rglwidget()?
+If so, the design should be revised to be more like a collection
+of dataframes with attributes.
 
 Drop re-use of parts of other scenes?  This would simplify the
 code a lot, and probably wouldn't cost much for typical uses.
