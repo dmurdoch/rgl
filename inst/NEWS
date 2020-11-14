@@ -1141,7 +1141,8 @@ base graphics.
     with the version in 0.100.26 is that only vertex
     coordinates are now passed to the clipping function.
 
-0.103.3:
+0.103.4:
   - Add merge() method for "mesh3d" objects, and use it in
     filledContour3d().
-  - Fixed some memory leaks found by valgrind.
+  - Fixed some memory leaks found by valgrind, and problems seen
+    on systems with no functional Asymptote or Pandoc.

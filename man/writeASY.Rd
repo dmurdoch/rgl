@@ -97,6 +97,10 @@ a fixed size in rgl will scale with the image in Asymptote.  Defaults
 have been chosen somewhat arbitrarily; tweaking will likely be needed.
 
 Material properties of surfaces are not yet implemented.
+
+On some systems, the program  \command{asy}  used
+to process the output has bugs and may fail.  Run the example
+at your own risk!
 }
 \seealso{
 \code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{rglwidget}},
@@ -104,6 +108,9 @@ Material properties of surfaces are not yet implemented.
 write the scene to a file in various other formats.
 }
 \examples{
+\dontrun{
+# On some systems, the program  "asy"  used
+# to process the output has bugs, so this may fail.
 x <- rnorm(20)
 y <- rnorm(20)
 z <- rnorm(20)
@@ -112,4 +119,5 @@ olddir <- setwd(tempdir())
 writeASY(title = "interactive")  # Produces interactive.pdf
 writeASY(title = "noninteractive", prc = FALSE) # Produces noninteractive.pdf
 setwd(olddir)
+}
 }
