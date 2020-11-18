@@ -4,9 +4,8 @@ options(rgl.useNULL=TRUE)
 options(rgl.printRglwidget=FALSE)
 
 if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
-  warning(call. = FALSE, "These vignettes assume pandoc version 1.14; older versions will not work.")
-  knitr::opts_chunk$set(eval = FALSE)
-  knitr::knit_hooks$set('evaluate.inline', function(x,e) knitr::asis_output(deparse(substitute(x))))
+  warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
+  knitr::knit_exit()
 }
 
 # knitr::opts_chunk$set(snapshot = TRUE)  # for snapshots instead of dynamic

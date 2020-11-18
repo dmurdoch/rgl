@@ -77,7 +77,7 @@ Texture::~Texture()
   if (pixmap)
     delete pixmap;
   if (filename)
-    delete filename;
+    delete[] filename;
 }
 
 

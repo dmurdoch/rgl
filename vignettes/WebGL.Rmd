@@ -15,6 +15,7 @@ vignette: >
 
 ```{r setup, echo=FALSE, results="asis"}
 source("setup.R")
+setupKnitr(autoprint = FALSE)
 set.seed(123)
 ```
 

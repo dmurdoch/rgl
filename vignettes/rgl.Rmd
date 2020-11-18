@@ -19,7 +19,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r setup, echo=FALSE, include=FALSE}
+```{r setup, echo=FALSE, results="asis"}
 source("setup.R")
 setupKnitr(autoprint = TRUE)
 set.seed(123)
