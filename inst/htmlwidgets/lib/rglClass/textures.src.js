@@ -104,8 +104,10 @@
          ctx.font = fontStrings[i] = getFontString(i);
          width = widths[i] = ctx.measureText(text[i]).width;
          if (offsetx + width > maxTexSize) {
+           offsety = offsety + 2*textHeight;
+           if (line >= 0)
+             lineoffsetsy[line] = offsety;
            line += 1;
-           offsety = lineoffsetsy[line] = offsety + 2*textHeight;
            if (offsety > maxTexSize)
              console.error("Too many strings for texture.");
            textHeight = 0;
