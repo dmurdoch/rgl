@@ -151,7 +151,6 @@ void Texture::init(RenderContext* renderContext)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);                                                       
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magfilter);
-#endif
 
   GLint  internalFormat = 0;
   GLenum format = 0;
@@ -214,7 +213,6 @@ void Texture::init(RenderContext* renderContext)
     return;
   }
 
-#ifndef RGL_NO_OPENGL
   glPixelStorei(GL_UNPACK_ALIGNMENT, ualign);
   GLenum gl_type = GL_UNSIGNED_BYTE;
   
@@ -259,8 +257,10 @@ void Texture::init(RenderContext* renderContext)
     glEnable(GL_TEXTURE_GEN_T);
   }
 #endif
-  delete pixmap;
-  pixmap = NULL;
+  if (pixmap) {
+    delete pixmap;
+    pixmap = NULL;
+  }
 }
 
 void Texture::beginUse(RenderContext* renderContext)

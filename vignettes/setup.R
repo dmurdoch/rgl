@@ -1,5 +1,5 @@
 options(rgl.useNULL=FALSE)
-library(rgl)
+suppressPackageStartupMessages(library(rgl))
 options(rgl.useNULL=TRUE)
 options(rgl.printRglwidget=FALSE)
 

@@ -248,7 +248,7 @@ void Background::getAttribute(AABox& bbox, AttribID attrib, int first, int count
     case FOGSCALE:
       if (first <= 0)
         *result++ = fogScale;
-        return;
+      return;
     case IDS:
       if (quad)
       	*result++ = quad->getObjID();

@@ -2,6 +2,7 @@
 // This file is part of RGL.
 //
 
+#include <cstring>
 #include "pixmap.h"
 using namespace std;
 

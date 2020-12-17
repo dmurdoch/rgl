@@ -29,16 +29,17 @@ useful value.
   library during initialization.  In future \code{debug = TRUE} may
   become more verbose.
 
-\pkg{rgl} requires the OpenGL system to be installed and available
-in order to display images on screen.  If there is a problem 
+For display within an OpenGL window in R, \pkg{rgl} requires the OpenGL
+system to be installed and available.  If there is a problem 
 initializing it, you may see the message
 \verb{'rgl.init' failed, running with 'rgl.useNULL = TRUE'.}  There
 are several causes and remedies:
 \itemize{
-\item{On any system, the OpenGL libraries need to be present for \pkg{rgl} to be able to start.}
+\item{On any system, the OpenGL libraries need to be present for \pkg{rgl} to be able to start an OpenGL device.}
 \itemize{
 \item{On MacOS, you need to install Xquartz.  It is available from
-\url{https://www.xquartz.org}.}
+\url{https://www.xquartz.org}.  Note however that some recent MacOS
+systems do not support OpenGL at all.}
 \item{On Linux, you need to install Mesa 3D.  One of these commands
 may work, depending on your system:
 \verb{
@@ -51,6 +52,7 @@ may work, depending on your system:
 \item{Windows should have OpenGL installed by default.}
 }
 \item{On Unix-alike systems (MacOS and Linux, for example), \pkg{rgl}
+normally
 uses the GLX system for creating displays.  If the graphic is created
 on a remote machine, it may need to use \dQuote{Indirect GLX} (IGLX).  Due
 to security concerns, this is often disabled by default.  See
@@ -63,5 +65,10 @@ be a way to avoid IGLX, by rendering remotely and sending bitmaps
 to the local machine.  It's not a simple install...}
 \item{If you don't need to see \pkg{rgl} displays on screen, you
 can use the \dQuote{NULL device}.  See \code{\link{rgl.useNULL}}.}
+\item{If you can't build \pkg{rgl} with OpenGL support, you can
+disable it and use the NULL device.  (This may happen automatically
+during configuration, but you'll get a tested result if you
+specify it explicitly.)  See the instructions in the
+\file{README} file in the source tarball.}
 }
 }

@@ -4,10 +4,12 @@ RGL - 3D visualization device system for R using OpenGL
 INTRODUCTION
 ------------
 The RGL package is a visualization device system for R, using 
-OpenGL as the rendering backend. An rgl device at its core 
-is a real-time 3D engine written in C++. It provides an 
+OpenGL or WebGL as the rendering backend. An OpenGL rgl device 
+at its core is a real-time 3D engine written in C++. It provides an 
 interactive viewpoint navigation facility (mouse + wheel support)
-and an R programming interface.
+and an R programming interface.  WebGL, on the other hand, is
+rendered in a web browser; rgl produces the input file, and the 
+browser shows the images.
 
 
 LICENSE
@@ -18,7 +20,8 @@ See "COPYING" textfile for details.
 
 FEATURES
 --------
-- portable R Plug-in using OpenGL on MacOSX, Win32 and X11
+- portable R package using OpenGL (if available) on MacOSX, Win32 and X11
+- can produce 3D graphics in web pages using WebGL
 - R programming interface 
 - interactive viewpoint navigation
 - automatic data focus
@@ -28,7 +31,7 @@ FEATURES
   surface, spheres
 - up to 8 light sources
 - alpha-blending (transparency)
-- side-dependant fill-mode rendering (dots,wired and filled)
+- side-dependant fill-mode rendering (dots, wired and filled)
 - texture-mapping with mipmapping and environment mapping support
 - environmental effects:
   fogging, background sphere
@@ -53,12 +56,21 @@ On Windows, Rtools40
 
 REQUIREMENTS
 ------------
+For OpenGL display:
+
 Windowing System (unix/x11 or win32)
 OpenGL Library 
 OpenGL Utility Library (GLU)
 
+For WebGL display:
+
+Browser with WebGL enabled.
+
 Installation on Debian:
 -----------------------
+
+To install OpenGL support:
+
 aptitude install libgl1-mesa-dev libglu1-mesa-dev
 
 
@@ -119,6 +131,9 @@ You provide the options through the R CMD build/INSTALL command
   --disable-libpng-dynamic
     use static libpng library
     
+  --disable-opengl
+    disable all OpenGL displays; WebGL is still available
+    
 You may find that your distro doesn't have all necessary development
 libraries installed:  read the error messages for hints!  This line
 has been reported to be sufficient on FC 5 or 6:
@@ -126,11 +141,12 @@ has been reported to be sufficient on FC 5 or 6:
  yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
 
 
-
-
   X11 WINDOWING SYSTEM OPTIONS
   ----------------------------
 
+  The X11 windowing system is needed for OpenGL display in MacOS 
+  and Unix-alikes.
+  
   --x-includes=<path>
     X11 C header files include path
 
@@ -138,6 +154,20 @@ has been reported to be sufficient on FC 5 or 6:
     X11 library linkage path
 
 
+  BUILDING WITHOUT OPENGL
+  -----------------------
+  
+  As of version 0.104.1, it is possible to build the package without
+  OpenGL support.  On Unix-alikes (including MacOS), the configure option
+  --disable-opengl accomplishes this.  For example,
+  
+  R CMD INSTALL --configure-args="--disable-opengl" rgl_0.104.1.tar.gz 
+  
+  On Windows, configuration must be done manually, by editing the files
+  R/windows/noOpenGL.R and src/Makevars.win and following the commented
+  instructions in those files.
+  
+  
 FIRST DEMOS: LOADING LIBRARY AND RUNNING DEMONSTRATIONS
 -------------------------------------------------------
 

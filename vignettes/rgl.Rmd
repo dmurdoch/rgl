@@ -36,6 +36,12 @@ inspired by (but incompatible with) the `grid` package.
 
 This document gives an overview.  See the help pages for details.
 
+For installation instructions, see the `README` file in the top
+level directory of the source tarball 
+`r paste0("rgl_", packageVersion("rgl"), ".tar.gz")` (or a later
+version).
+
+
 ### About this document
 
 This document was written in R Markdown, using the `knitr` package

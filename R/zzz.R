@@ -12,8 +12,6 @@
 ## entry-point
 ##
 ##
-
-noOpenGL <- FALSE
   
 .onLoad <- function(lib, pkg)
 {
@@ -21,11 +19,6 @@ noOpenGL <- FALSE
   initValue <- 0  
   
   dynlib <- "rgl"
-  
-  if (noOpenGL)
-    packageStartupMessage(
-      "This build of rgl does not include OpenGL functions.  Use
- rglwidget() to display results, e.g. via options(rgl.printRglwidget = TRUE).")
   
   onlyNULL <- noOpenGL || rgl.useNULL()
   
@@ -137,6 +130,13 @@ setGraphicsDelay <- function(delay = Sys.getenv("RGL_SLOW_DEV", 0),
 rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.debug", FALSE)) 
   .Call( rgl_init, 
     initValue, onlyNULL, environment(rgl.init), debug )
+
+.onAttach <- function(libname, pkgname) {
+  if (noOpenGL)
+    packageStartupMessage(
+      "This build of rgl does not include OpenGL functions.  Use
+ rglwidget() to display results, e.g. via options(rgl.printRglwidget = TRUE).")
+}
 
 ##
 ## exit-point
