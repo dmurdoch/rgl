@@ -14,4 +14,3 @@
 ^docs/
 ^[.]Renviron
 ^cran-comments.md$
-^R/zzz.R$
