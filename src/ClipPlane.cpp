@@ -58,6 +58,7 @@ void ClipPlaneSet::renderBegin(RenderContext* renderContext)
 
 void ClipPlaneSet::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL   
   GLdouble eqn[4];
   eqn[0] = normal.getRecycled(index).x;
   eqn[1] = normal.getRecycled(index).y;
@@ -65,14 +66,17 @@ void ClipPlaneSet::drawPrimitive(RenderContext* renderContext, int index)
   eqn[3] = offset.getRecycled(index);
   glClipPlane(firstPlane + index, eqn);
   glEnable(firstPlane + index);
+#endif
 }
 
 void ClipPlaneSet::enable(bool show)
 {
+#ifndef RGL_NO_OPENGL  
   for (int i=0; i<nPlanes; i++) {
     if (show) glEnable(firstPlane + i);
     else      glDisable(firstPlane + i);
   }
+#endif
 }
 
 void ClipPlaneSet::intersectBBox(AABox& bbox)

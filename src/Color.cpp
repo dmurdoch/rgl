@@ -117,12 +117,16 @@ void Color::set3iv(int* color)
 
 void Color::useClearColor() const
 {
+#ifndef RGL_NO_OPENGL
   glClearColor(data[0],data[1],data[2], data[3]);
+#endif
 }
 
 void Color::useColor() const
 {
+#ifndef RGL_NO_OPENGL
   glColor4fv(data);
+#endif
 }
 
 
@@ -229,12 +233,16 @@ bool ColorArray::hasAlpha() const
 
 void ColorArray::useArray() const
 {
+#ifndef RGL_NO_OPENGL
   glColorPointer(4, GL_UNSIGNED_BYTE, 0, (const GLvoid*) arrayptr );
+#endif
 }
 
 void ColorArray::useColor(int index) const
 {
+#ifndef RGL_NO_OPENGL  
   glColor4ubv( (const GLubyte*) &arrayptr[ index * 4] );
+#endif
 }
 
 Color ColorArray::getColor(int index) const

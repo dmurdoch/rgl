@@ -22,14 +22,9 @@
   
 #define MODERN_OPENGL
   
-#define gluProject rgl_gluProject
 #define gluUnProject rgl_gluUnProject
 #define gluErrorString rgl_gluErrorString
   
-GLint gluProject(GLdouble  objX,  GLdouble  objY,  GLdouble  objZ,  
-                 const GLdouble *  model,  const GLdouble *  proj,  
-                 const GLint *  view,  GLdouble*  winX,  GLdouble*  winY,  
-                 GLdouble*  winZ);
                  
 GLint gluUnProject(GLdouble  winX,  GLdouble  winY,  GLdouble  winZ,  
                    const GLdouble *  model,  const GLdouble *  proj,  

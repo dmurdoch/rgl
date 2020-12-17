@@ -295,6 +295,7 @@ void Window::getFonts(FontArray& outfonts, int nfonts, char** family, int* style
 
 int WindowImpl::getAntialias()
 {
+#ifndef RGL_NO_OPENGL  
   if (beginGL()) {
     int result;      
     glGetIntegerv(GL_SAMPLES, &result);
@@ -302,16 +303,19 @@ int WindowImpl::getAntialias()
     CHECKGLERROR;
     return result;
   }
+#endif
   return 1;
 }
 
 int WindowImpl::getMaxClipPlanes()
 {
+#ifndef RGL_NO_OPENGL
   int result;
   glGetError();
   glGetIntegerv(GL_MAX_CLIP_PLANES, &result);
   if (glGetError() == GL_NO_ERROR)
     return result;
   else
+#endif
     return 6;
 }

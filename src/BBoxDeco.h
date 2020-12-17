@@ -63,7 +63,9 @@ private:
   AxisInfo xaxis, yaxis, zaxis;
   float marklen_value;
   bool  marklen_fract;
+#ifndef RGL_NO_OPENGL
   float expand;
+#endif
   bool  draw_front;
 
   static Material defaultMaterial;

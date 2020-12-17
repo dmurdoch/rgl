@@ -1,6 +1,8 @@
 #include "BBoxDeco.h"
 
+#ifndef RGL_NO_OPENGL
 #include "gl2ps.h"
+#endif
 #include "glgui.h"
 #include "scene.h"
 #include <cstdio>
@@ -187,7 +189,7 @@ AxisInfo::~AxisInfo()
 
 void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matrix4x4& modelview, 
                     Vertex& marklen, String& string) {
-
+#ifndef RGL_NO_OPENGL
   Vertex4 p;
   GLboolean valid;
     
@@ -201,7 +203,7 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
   glVertex3f(v.x,v.y,v.z);
   glVertex3f(p.x,p.y,p.z);
   glEnd();
-
+  
   // draw text ( 2 times ml away )
 
   p.x = v.x + 2 * dir.x * marklen.x;
@@ -227,7 +229,7 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
       renderContext->font->draw(string.text, string.length, adj, 0.5, 0, 
                                 *renderContext);
   }      
-
+#endif
 }
 
 int AxisInfo::getNticks(float low, float high) {
@@ -366,7 +368,10 @@ Material BBoxDeco::defaultMaterial( Color(0.6f,0.6f,0.6f,0.5f), Color(1.0f,1.0f,
 BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis, AxisInfo& in_zaxis, float in_marklen_value, bool in_marklen_fract,
                    float in_expand, bool in_front)
 : SceneNode(BBOXDECO), material(in_material), xaxis(in_xaxis), yaxis(in_yaxis), zaxis(in_zaxis), marklen_value(in_marklen_value), marklen_fract(in_marklen_fract),
-  expand(in_expand), draw_front(in_front)
+#ifndef RGL_NO_OPENGL
+  expand(in_expand), 
+#endif
+  draw_front(in_front)
 {
   material.colors.recycle(2);
 }
@@ -392,6 +397,7 @@ AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
 
 void BBoxDeco::render(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL  
   AABox bbox = renderContext->subscene->getBoundingBox();
 
   if (bbox.isValid()) {
@@ -670,6 +676,7 @@ void BBoxDeco::render(RenderContext* renderContext)
     material.endUse(renderContext);
     glPopAttrib();
   }
+#endif  
 }
 
 int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 

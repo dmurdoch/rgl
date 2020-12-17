@@ -69,7 +69,9 @@ private:
   GLdouble userMatrix[16]; /* Transformation for 3D sprites */
   Matrix4x4 m;             /* Modelview matrix cache */
   Matrix4x4 p;             /* Projection matrix cache */
+#ifndef RGL_NO_OPENGL  
   bool doTex;
+#endif
   std::vector<int> shapes;
   bool fixedSize;
   Scene* scene;

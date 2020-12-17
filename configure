@@ -620,6 +620,7 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+RGL_NO_OPENGL
 HAVE_FREETYPE_CONFIG
 HAVE_PKG_CONFIG
 XMKMF
@@ -678,6 +679,7 @@ enable_option_checking
 enable_libpng
 enable_libpng_config
 enable_libpng_dynamic
+enable_opengl
 with_x
 with_gl_includes
 with_gl_libs
@@ -1311,6 +1313,8 @@ Optional Features:
   --disable-libpng-config    disable libpng-config test and configuration
 
   --disable-libpng-dynamic   disable dynamic libpng linkage, force static version linkage (only with --enable-libpng-config)
+
+  --disable-opengl           compile without OpenGL support
 
   --disable-ftgl             compile without FTGL font support
 
@@ -3983,8 +3987,17 @@ $as_echo "$as_me: libpng header and lib not found" >&6;}
 
 fi
 
+# ---[ OpenGL enabled?]---------------------------------------------------------------
+
+# Check whether --enable-opengl was given.
+if test "${enable_opengl+set}" = set; then :
+  enableval=$enable_opengl;
+fi
+
+
 # ---[ X11 ]------------------------------------------------------------------
 
+if test "x$enable_opengl" != "xno"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for X" >&5
 $as_echo_n "checking for X... " >&6; }
 
@@ -4179,37 +4192,42 @@ $as_echo "libraries $x_libraries, headers $x_includes" >&6; }
 fi
 
   if test x$no_x = xyes ; then
-    as_fn_error $? "X11 not found but required, configure aborted." "$LINENO" 5
-  fi
-  if test -n "${x_includes}"; then
-    CPPFLAGS="${CPPFLAGS} -I${x_includes}"
-  fi
-  if test -n "${x_libraries}"; then
-    LIBS="${LIBS} -L${x_libraries} -lX11"
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: X11 not found, continuing without OpenGL support." >&5
+$as_echo "$as_me: WARNING: X11 not found, continuing without OpenGL support." >&2;}
+    enable_opengl=no
   else
-    LIBS="${LIBS} -lX11"
+    if test -n "${x_includes}"; then
+      CPPFLAGS="${CPPFLAGS} -I${x_includes}"
+    fi
+    if test -n "${x_libraries}"; then
+      LIBS="${LIBS} -L${x_libraries} -lX11"
+    else
+      LIBS="${LIBS} -lX11"
+    fi
+    if test $darwin = yes; then
+      CPPFLAGS="${CPPFLAGS} -DDarwin"
+      # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
+      if test -e /System/Library/Frameworks/OpenGL.framework ; then
+        CPPFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers ${CPPFLAGS} -DNO_GL_PREFIX"
+        # OSX 10.5 messes up X11; this works around it
+        LIBS="-framework OpenGL -dylib_file /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib ${LIBS}"
+      fi
+      if test -e /System/Library/Frameworks/GLKit.framework ; then
+        LIBS="-framework GLKit ${LIBS}"
+      fi
+      # some X11 installations on OSX 10.5 feature -rpath which doesn't work when used in
+      # conjunction with 10.4u SDK (and is redundant anyway since OS X always uses full paths)
+      if test rpath`echo "${LIBS}" | sed -n 's/.*-Wl,-rpath,.*/Yes/p' 2>/dev/null` = rpathYes; then
+        LIBS=`echo "${LIBS}" | sed 's:-Wl,-rpath,[^ ]*::'`
+      fi
+      # X11 must come *after* the OpenGL stuff
+      CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
+    fi
   fi
-  if test $darwin = yes; then
-    CPPFLAGS="${CPPFLAGS} -DDarwin"
-    # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
-    if test -e /System/Library/Frameworks/OpenGL.framework ; then
-      CPPFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers ${CPPFLAGS} -DNO_GL_PREFIX"
-      # OSX 10.5 messes up X11; this works around it
-      LIBS="-framework OpenGL -dylib_file /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib ${LIBS}"
-    fi
-    if test -e /System/Library/Frameworks/GLKit.framework ; then
-      LIBS="-framework GLKit ${LIBS}"
-    fi
-    # some X11 installations on OSX 10.5 feature -rpath which doesn't work when used in
-    # conjunction with 10.4u SDK (and is redundant anyway since OS X always uses full paths)
-    if test rpath`echo "${LIBS}" | sed -n 's/.*-Wl,-rpath,.*/Yes/p' 2>/dev/null` = rpathYes; then
-      LIBS=`echo "${LIBS}" | sed 's:-Wl,-rpath,[^ ]*::'`
-    fi
-    # X11 must come *after* the OpenGL stuff
-    CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
-  fi
+fi
 
-## --- OpenGL ----------------------------------------------------------------
+if test "x$enable_opengl" != "xno"; then
+  ## --- OpenGL ----------------------------------------------------------------
 
 
 # Check whether --with-gl-includes was given.
@@ -4219,8 +4237,8 @@ if test "${with_gl_includes+set}" = set; then :
 fi
 
 
-if test $darwin != yes; then
-  for ac_header in GL/gl.h GL/glu.h
+  if test $darwin != yes; then
+    for ac_header in GL/gl.h GL/glu.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -4233,19 +4251,25 @@ fi
 
 done
 
-  if test "x$ac_cv_header_GL_gl_h" = xno; then
-    as_fn_error $? "missing required header GL/gl.h" "$LINENO" 5
-  fi
-  if test "x$ac_cv_header_GL_glu_h" = xno; then
-    as_fn_error $? "missing required header GL/glu.h" "$LINENO" 5
+    if test "x$ac_cv_header_GL_gl_h" = xno; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required header GL/gl.h, continuing without OpenGL" >&5
+$as_echo "$as_me: WARNING: missing required header GL/gl.h, continuing without OpenGL" >&2;}
+      enable_opengl=no
+    fi
+    if test "x$ac_cv_header_GL_glu_h" = xno; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required header GL/glu.h, continuing without OpenGL" >&5
+$as_echo "$as_me: WARNING: missing required header GL/glu.h, continuing without OpenGL" >&2;}
+      enable_opengl=no
+    fi
   fi
 fi
 
+if test "x$enable_opengl" != "xno"; then
 
 # Check whether --with-gl-libs was given.
 if test "${with_gl_libs+set}" = set; then :
   withval=$with_gl_libs; LDFLAGS="${LDFLAGS} -L${withval}"
-L_LIB="-L${withval}"
+  L_LIB="-L${withval}"
 
 fi
 
@@ -4259,7 +4283,7 @@ else
 
 fi
 
-as_ac_Lib=`$as_echo "ac_cv_lib_$lGL''_glEnd" | $as_tr_sh`
+  as_ac_Lib=`$as_echo "ac_cv_lib_$lGL''_glEnd" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for glEnd in -l$lGL" >&5
 $as_echo_n "checking for glEnd in -l$lGL... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
@@ -4306,11 +4330,15 @@ _ACEOF
 
 fi
 
-this=`eval echo '${'$as_ac_Lib'}'`
-if test "x$this" != xyes; then
-  as_fn_error $? "missing required library ${lGL}" "$LINENO" 5
+  this=`eval echo '${'$as_ac_Lib'}'`
+  if test "x$this" != xyes; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required library ${lGL}, continuing without OpenGL" >&5
+$as_echo "$as_me: WARNING: missing required library ${lGL}, continuing without OpenGL" >&2;}
+    enable_opengl=no
+  fi
 fi
 
+if test "x$enable_opengl" != "xno"; then
 
 # Check whether --with-glu-libname was given.
 if test "${with_glu_libname+set}" = set; then :
@@ -4320,7 +4348,7 @@ else
 
 fi
 
-as_ac_Lib=`$as_echo "ac_cv_lib_$lGLU''_gluProject" | $as_tr_sh`
+  as_ac_Lib=`$as_echo "ac_cv_lib_$lGLU''_gluProject" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluProject in -l$lGLU" >&5
 $as_echo_n "checking for gluProject in -l$lGLU... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
@@ -4367,30 +4395,34 @@ _ACEOF
 
 fi
 
-this=`eval echo '${'$as_ac_Lib'}'`
-if test "x$this" != xyes; then
-  as_fn_error $? "missing required library ${lGLU}" "$LINENO" 5
+  this=`eval echo '${'$as_ac_Lib'}'`
+  if test "x$this" != xyes; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required library ${lGLU}, continuing without OpenGL" >&5
+$as_echo "$as_me: WARNING: missing required library ${lGLU}, continuing without OpenGL" >&2;}
+    enable_opengl=no
+  fi
 fi
 
-if test x$L_LIB != x; then
-  LIBS="${L_LIB} ${LIBS}"
-fi
+if test "x$enable_opengl" != "xno"; then
+  if test x$L_LIB != x; then
+    LIBS="${L_LIB} ${LIBS}"
+  fi
 
-## --- FTGL ------------------------------------------------------------------
+  ## --- FTGL ------------------------------------------------------------------
 
-# Check whether --enable-ftgl was given.
+  # Check whether --enable-ftgl was given.
 if test "${enable_ftgl+set}" = set; then :
   enableval=$enable_ftgl;
 fi
 
-if test "x$enable_ftgl" != "xno"; then
-  if test "x$darwin" = "xyes"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: Darwin, so ensuring /opt/X11/bin is at the head of the PATH..." >&5
+  if test "x$enable_ftgl" != "xno"; then
+    if test "x$darwin" = "xyes"; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: Darwin, so ensuring /opt/X11/bin is at the head of the PATH..." >&5
 $as_echo "$as_me: Darwin, so ensuring /opt/X11/bin is at the head of the PATH..." >&6;}
-    PATH=/opt/X11/bin:${PATH}
-  fi
-  ## new pkg-config bit
-  # Extract the first word of "pkg-config", so it can be a program name with args.
+      PATH=/opt/X11/bin:${PATH}
+    fi
+    ## new pkg-config bit
+    # Extract the first word of "pkg-config", so it can be a program name with args.
 set dummy pkg-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -4428,13 +4460,13 @@ $as_echo "no" >&6; }
 fi
 
 
-  if test "x$HAVE_PKG_CONFIG" = "xyes" -a "x`pkg-config freetype2 --cflags`" != "x"; then
-    CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
-    LIBS="${LIBS} `pkg-config freetype2 --libs`"
-    { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
+    if test "x$HAVE_PKG_CONFIG" = "xyes" -a "x`pkg-config freetype2 --cflags`" != "x"; then
+      CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
+      LIBS="${LIBS} `pkg-config freetype2 --libs`"
+      { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
 $as_echo "$as_me: using Freetype and FTGL" >&6;}
-  else
-    # Extract the first word of "freetype-config", so it can be a program name with args.
+    else
+      # Extract the first word of "freetype-config", so it can be a program name with args.
 set dummy freetype-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
@@ -4472,24 +4504,35 @@ $as_echo "no" >&6; }
 fi
 
 
-    if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
-      CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
-      LIBS="${LIBS} `freetype-config --libs`"
-      { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
+      if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
+        CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
+        LIBS="${LIBS} `freetype-config --libs`"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
 $as_echo "$as_me: using Freetype and FTGL" >&6;}
-    else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without FTGL support" >&5
+      else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without FTGL support" >&5
 $as_echo "$as_me: compiling without FTGL support" >&6;}
+      fi
     fi
-  fi
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without FTGL support" >&5
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without FTGL support" >&5
 $as_echo "$as_me: compiling without FTGL support" >&6;}
+  fi
+fi
+
+if test "x$enable_opengl" = "xno"; then
+  RGL_NO_OPENGL=TRUE
+  CPPFLAGS="${CPPFLAGS} -DRGL_NO_OPENGL"
+else
+  RGL_NO_OPENGL=FALSE
 fi
 
 ## --- Output ----------------------------------------------------------------
 
 
+
+
+ac_config_files="$ac_config_files R/zzz.R"
 
 
 ac_config_files="$ac_config_files src/Makevars"
@@ -5199,6 +5242,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
+    "R/zzz.R") CONFIG_FILES="$CONFIG_FILES R/zzz.R" ;;
     "src/Makevars") CONFIG_FILES="$CONFIG_FILES src/Makevars" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;

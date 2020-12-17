@@ -137,6 +137,7 @@ Vertex Surface::getNormal(int ix, int iz)
 
 void Surface::draw(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   bool missing;
   drawBegin(renderContext);
 
@@ -167,6 +168,7 @@ void Surface::draw(RenderContext* renderContext)
   }
 
   drawEnd(renderContext);
+#endif
 }
 
 Vertex Surface::getCenter(int ix, int iz)
@@ -214,6 +216,7 @@ void Surface::drawBegin(RenderContext* renderContext)
 
 void Surface::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL
   int ix = index % (nx-1), iz = index / (nx-1),
       s = iz*nx + ix;
   if (!vertexArray[s].missing() &&
@@ -233,11 +236,12 @@ void Surface::drawPrimitive(RenderContext* renderContext, int index)
     }
     glEnd();
   }
+#endif
 }  
   
 void Surface::drawEnd(RenderContext* renderContext) 
 {
-
+#ifndef RGL_NO_OPENGL
   if (use_normal)
     normalArray.endUse();
     
@@ -248,7 +252,7 @@ void Surface::drawEnd(RenderContext* renderContext)
 
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);
-
+#endif
 }
 
 int Surface::getAttributeCount(AABox& bbox, AttribID attrib)

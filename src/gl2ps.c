@@ -33,6 +33,8 @@
  * Please report all bugs and problems to <gl2ps@geuz.org>.
  */
 
+#ifndef RGL_NO_OPENGL
+
 #include "gl2ps.h"
 
 #include <math.h>
@@ -6493,3 +6495,5 @@ GL2PSDLL_API GLint gl2psForceRasterPos(GL2PSvertex *vert)
 
   return GL2PS_SUCCESS;
 }
+
+#endif

@@ -36,6 +36,8 @@
 #ifndef __GL2PS_H__
 #define __GL2PS_H__
 
+#ifndef RGL_NO_OPENGL
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -254,5 +256,7 @@ GL2PSDLL_API GLint gl2psGetFileFormat();
 #if defined(__cplusplus)
 }
 #endif
+
+#endif 
 
 #endif /* __GL2PS_H__ */

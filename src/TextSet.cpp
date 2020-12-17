@@ -81,6 +81,7 @@ void TextSet::drawBegin(RenderContext* renderContext)
 
 void TextSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
+#ifndef RGL_NO_OPENGL
   GLFont* font;
 
   if (!vertexArray[index].missing()) {
@@ -96,12 +97,15 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
       }
     }
   }
+#endif
 }
 
 void TextSet::drawEnd(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);
+#endif
 }
 
 int TextSet::getAttributeCount(AABox& bbox, AttribID attrib) 

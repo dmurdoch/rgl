@@ -15,8 +15,11 @@ using namespace rgl;
 //
 
 Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool in_bboxChanges)
-: SceneNode(in_typeID), bboxChanges(in_bboxChanges), ignoreExtent(in_ignoreExtent), material(in_material), 
-  displayList(0), drawLevel(0), doUpdate(true), transparent(in_material.isTransparent()),
+: SceneNode(in_typeID), bboxChanges(in_bboxChanges), ignoreExtent(in_ignoreExtent), material(in_material),
+#ifndef RGL_NO_OPENGL  
+  displayList(0), 
+#endif
+  drawLevel(0), doUpdate(true), transparent(in_material.isTransparent()),
   blended(in_material.isTransparent())
   
 {
@@ -24,8 +27,10 @@ Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool
 
 Shape::~Shape()
 {
+#ifndef RGL_NO_OPENGL
   if (displayList)
     glDeleteLists(displayList, 1);
+#endif
 }
 
 void Shape::update(RenderContext* renderContext)
@@ -48,6 +53,7 @@ void Shape::draw(RenderContext* renderContext)
 
 void Shape::render(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   renderBegin(renderContext);
   
   if (displayList == 0)
@@ -67,6 +73,7 @@ void Shape::render(RenderContext* renderContext)
     glCallList(displayList);
     SAVEGLERROR;
   }  
+#endif
 }
 
 void Shape::invalidateDisplaylist()

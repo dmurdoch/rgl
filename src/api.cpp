@@ -1216,60 +1216,6 @@ void rgl::rgl_pixels(int* successptr, int* ll, int* size, int* component, double
   *successptr = success;
 }
 
-void rgl::rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
-{
-  int success = RGL_FAIL;
-  GLdouble* vertex = pixel;
-  int columns = idata[0];
-  GLint viewport[4];
-
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-  
-    for (int i=0; i<4; i++) viewport[i] = view[i];
-    for (int i=0; i<columns; i++) {
-	    gluProject(point[0],point[1],point[2],model,proj,viewport,
-	    vertex,vertex+1,vertex+2);
-	    vertex[0] /= view[2];
-	    vertex[1] /= view[3];
-	    point += 3;
-	    vertex += 3;
-    }
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-
-  *successptr = success;
-}
-
-void rgl::rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
-{
-  int success = RGL_FAIL;
-  GLdouble* vertex = point;
-  int columns = idata[0];
-  GLint viewport[4];
-
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-  
-    for (int i=0; i<4; i++) viewport[i] = view[i];
-    for (int i=0; i<columns; i++) {
-	    pixel[0] *= view[2];
-	    pixel[1] *= view[3];
-	    gluUnProject(pixel[0],pixel[1],pixel[2],model,proj,viewport,
-	    vertex,vertex+1,vertex+2);
-	    pixel += 3;
-	    vertex += 3;
-    }
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-
-  *successptr = success;
-}
-
 void rgl::rgl_selectstate(int* dev, int* sub, int* successptr, int* selectstate, double* locations)
 {
   int success = RGL_FAIL;

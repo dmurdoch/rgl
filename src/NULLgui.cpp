@@ -35,7 +35,7 @@ public:
   void releaseMouse() {};
   GLFont* getFont(const char* family, int style, double cex, 
                   bool useFreeType);
-  int getAntialias() { return 1; }
+  int getAntialias() { return 8; }
   int getMaxClipPlanes() { return INT_MAX; }
 
 private:
@@ -119,3 +119,46 @@ WindowImpl* NULLGUIFactory::createWindowImpl(Window* in_window)
 }
 // ---------------------------------------------------------------------------
 
+#ifdef RGL_NO_OPENGL
+#include <sys/time.h>
+namespace rgl {
+NULLGUIFactory* gpNULLGUIFactory = NULL;
+}
+
+void rgl::printMessage( const char* string ) {
+  warning("RGL: %s\n", string);
+}
+
+GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
+{
+  if (useNULLDevice)
+    return (GUIFactory*) gpNULLGUIFactory;
+  else
+    error("OpenGL is not available in this build");  
+}
+
+const char * rgl::GUIFactoryName(bool useNULLDevice)
+{
+  return "null";
+}
+
+bool rgl::init(bool useNULLDevice)
+{
+  gpNULLGUIFactory = new NULLGUIFactory();
+  return true;
+}
+
+void rgl::quit()
+{
+  assert(gpNULLGUIFactory != NULL);
+  delete gpNULLGUIFactory;
+  gpNULLGUIFactory = NULL;
+}
+
+double rgl::getTime() {
+  struct ::timeval t;
+  gettimeofday(&t,NULL);
+  return ( (double) t.tv_sec ) * 1000.0 + ( ( (double) t.tv_usec ) / 1000.0 ); 
+}
+
+#endif

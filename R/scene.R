@@ -820,48 +820,30 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
 rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection())
 {
   xyz <- xyz.coords(x,y,z,recycle=TRUE)
-  points <- rbind(xyz$x,xyz$y,xyz$z)
-  
-  idata  <- as.integer(ncol(points))
-  
-  ret <- .C( rgl_user2window,
-  	success = FALSE,
-	idata,
-	as.double(points),
-	window=double(length(points)),
-	model=as.double(projection$model),
-	proj=as.double(projection$proj),
-	view=as.integer(projection$view)
-  )
-
-  if (! ret$success)
-    stop("'rgl_user2window' failed")
-  return(matrix(ret$window, ncol(points), 3, byrow = TRUE))
+  points <- rbind(xyz$x,xyz$y,xyz$z,1)
+  v <- asEuclidean(with(projection, t(proj %*% model %*% points)))
+  viewport <- projection$view
+  cbind( (v[,1]*0.5 + 0.5) + viewport[1]/viewport[3],
+         (v[,2]*0.5 + 0.5) + viewport[2]/viewport[4],
+         (1 + v[,3])*0.5 )
 }
 
 ##
-## convert window coordinate to user coordiante
+## convert window coordinate to user coordinate
 ## 
 
 rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
 {
   xyz <- xyz.coords(x,y,z,recycle=TRUE)
   window <- rbind(xyz$x,xyz$y,xyz$z)
-  idata  <- as.integer(ncol(window))
-  
-  ret <- .C( rgl_window2user,
-  	success = FALSE,
-	idata,
-	point=double(length(window)),
-	window,
-	model=as.double(projection$model),
-	proj=as.double(projection$proj),
-	view=as.integer(projection$view)
-  )
 
-  if (! ret$success)
-    stop("'rgl_window2user' failed")
-  return(matrix(ret$point, ncol(window), 3, byrow = TRUE))
+  viewport <- projection$view
+
+  normalized <- rbind( 2*xyz$x - 1,
+                       2*(xyz$y - viewport[2]/viewport[4]) - 1,
+                       2*xyz$z - 1,
+                       1 )
+  asEuclidean(with(projection, t(solve(proj %*% model, normalized))))
 }
 
 # Selectstate values

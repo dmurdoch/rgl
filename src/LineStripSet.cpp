@@ -17,6 +17,8 @@ LineStripSet::LineStripSet(Material& in_material, int in_nvertices, double* in_v
 
 void LineStripSet::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL
   if (index < nvertices-1) 
     glDrawArrays(type, index*nverticesperelement, 2*nverticesperelement);
+#endif
 }  

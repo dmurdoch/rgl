@@ -56,12 +56,16 @@ void VertexArray::setVertex(int index, double* v) {
 }
 
 void VertexArray::beginUse() {
+#ifndef RGL_NO_OPENGL
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, (const GLvoid*) arrayptr );
+#endif
 }
 
 void VertexArray::endUse() {
+#ifndef RGL_NO_OPENGL
   glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 }
 
 Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
@@ -88,12 +92,16 @@ Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
 //
 
 void NormalArray::beginUse() {
+#ifndef RGL_NO_OPENGL
   glEnableClientState(GL_NORMAL_ARRAY);
   glNormalPointer(GL_FLOAT, 0, (const GLvoid*) arrayptr );
+#endif
 }
 
 void NormalArray::endUse() {
+#ifndef RGL_NO_OPENGL
   glDisableClientState(GL_NORMAL_ARRAY);
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -130,13 +138,17 @@ TexCoord& TexCoordArray::operator [] (int index) {
 }
 
 void TexCoordArray::beginUse() {
+#ifndef RGL_NO_OPENGL
   if (arrayptr) {
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, (const GLvoid*) arrayptr );
   }
+#endif
 }
 
 void TexCoordArray::endUse() {
+#ifndef RGL_NO_OPENGL
   if (arrayptr)
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+#endif
 }

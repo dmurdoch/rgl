@@ -120,6 +120,7 @@ void SphereMesh::update(const Vertex& scale)
 
 void SphereMesh::draw(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
 
   if (genNormal)
@@ -147,10 +148,12 @@ void SphereMesh::draw(RenderContext* renderContext)
 
   if (genTexCoord)
     texCoordArray.endUse();
+#endif
 }
 
 void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
 {
+#ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
 	
   if (genNormal)
@@ -163,10 +166,12 @@ void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
     glBegin(GL_TRIANGLES);
   else
     glBegin(GL_QUADS);
+#endif
 }
 	
 void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
 {
+#ifndef RGL_NO_OPENGL
   int ll = (segments + 1)*(i/segments) + i % segments;
 
   if (i < segments) {
@@ -183,6 +188,7 @@ void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
     glArrayElement(ll + 1);
     glArrayElement(ll + segments + 1);
   }
+#endif
 }
 
 Vertex SphereMesh::getPrimitiveCenter(int i) 
@@ -193,6 +199,7 @@ Vertex SphereMesh::getPrimitiveCenter(int i)
 
 void SphereMesh::drawEnd(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   glEnd();
 	
   vertexArray.endUse();
@@ -202,4 +209,5 @@ void SphereMesh::drawEnd(RenderContext* renderContext)
 	
   if (genTexCoord)
     texCoordArray.endUse();
+#endif
 }

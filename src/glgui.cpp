@@ -24,6 +24,7 @@ using namespace rgl;
 
 GLboolean GLFont::justify(double twidth, double theight, double adjx, double adjy, 
                           int pos, const RenderContext& rc) {
+#ifndef RGL_NO_OPENGL
   GLdouble pos1[4], pos2[4];
   double basex = 0.0, basey = 0.0, scaling = 1.0;
   GLboolean valid;
@@ -89,6 +90,9 @@ GLboolean GLFont::justify(double twidth, double theight, double adjx, double adj
   
   glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
   return valid;
+#else
+  return 0;
+#endif
 }
 
 //
@@ -98,7 +102,9 @@ GLboolean GLFont::justify(double twidth, double theight, double adjx, double adj
 
 GLBitmapFont::~GLBitmapFont() {
     delete [] widths;
+#ifndef RGL_NO_OPENGL
     if (nglyph) glDeleteLists(listBase+GL_BITMAP_FONT_FIRST_GLYPH, nglyph);
+#endif
 }
 
 double GLBitmapFont::width(const char* text) {
@@ -135,7 +141,7 @@ bool GLBitmapFont::valid(const char* text) {
 void GLBitmapFont::draw(const char* text, int length, 
                         double adjx, double adjy, 
                         int pos, const RenderContext& rc) {
-
+#ifndef RGL_NO_OPENGL
   if (justify(width(text), height(), adjx, adjy, pos, rc)) {
     if (rc.gl2psActive == GL2PS_NONE) {
       glListBase(listBase);
@@ -143,12 +149,13 @@ void GLBitmapFont::draw(const char* text, int length,
     } else
       gl2psTextOpt(text, GL2PS_FONT, GL2PS_FONTSIZE*cex, gl2ps_centering, 0.0);
   }
+#endif
 }
 
 void GLBitmapFont::draw(const wchar_t* text, int length, 
                         double adjx, double adjy, 
                         int pos, const RenderContext& rc) {
-  
+#ifndef RGL_NO_OPENGL  
   if (justify(width(text), height(), adjx, adjy, pos, rc)) {
     GLenum type = sizeof(wchar_t) == 4 ? GL_UNSIGNED_INT :
                   sizeof(wchar_t) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_BYTE ;
@@ -158,6 +165,7 @@ void GLBitmapFont::draw(const wchar_t* text, int length,
     }
   // gl2ps doesn't support wchar_t?  Should convert?
   }
+#endif
 }
 
 #ifdef HAVE_FREETYPE

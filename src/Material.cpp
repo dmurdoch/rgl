@@ -46,13 +46,17 @@ Material::Material(Color bg, Color fg)
 
 void Material::setup()
 {
+#ifndef RGL_NO_OPENGL
   const char* version = (const char*)glGetString(GL_VERSION);
   if (version) glVersion = atof(version);
-  else glVersion = 1.0;
+  else 
+#endif
+    glVersion = 1.0;
 }
 
 void Material::beginUse(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   int ncolor = colors.getLength();
   
   GLenum depthfunc[] = { GL_NEVER, GL_LESS, GL_EQUAL, GL_LEQUAL, GL_GREATER,
@@ -165,7 +169,8 @@ void Material::beginUse(RenderContext* renderContext)
   if (!fog)
     glDisable(GL_FOG);
   
-  SAVEGLERROR;    
+  SAVEGLERROR;  
+#endif
 }
 
 void Material::useColor(int index)
@@ -176,6 +181,7 @@ void Material::useColor(int index)
 
 void Material::endUse(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   int ncolor = colors.getLength();
 
   if ( (useColorArray) && ( ncolor > 1 ) ) {
@@ -201,6 +207,7 @@ void Material::endUse(RenderContext* renderContext)
   
   if (polygon_offset)
     glDisable(GL_POLYGON_OFFSET_FILL);
+#endif
 }
 
 void Material::colorPerVertex(bool enable, int numVertices)

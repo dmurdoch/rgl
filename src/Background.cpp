@@ -79,6 +79,7 @@ GLbitfield Background::getClearFlags(RenderContext* renderContext)
 
 void Background::render(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   Subscene* subscene = renderContext->subscene;
   UserViewpoint* userviewpoint = subscene->getUserViewpoint();
   
@@ -191,11 +192,12 @@ void Background::render(RenderContext* renderContext)
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
   }
-    
+#endif    
 }
 
 void Background::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL  
   glPushAttrib(GL_ENABLE_BIT);
 
   material.beginUse(renderContext);
@@ -210,6 +212,7 @@ void Background::drawPrimitive(RenderContext* renderContext, int index)
   material.endUse(renderContext);
 
   glPopAttrib();
+#endif
 }
 
 int Background::getAttributeCount(AABox& bbox, AttribID attrib) 

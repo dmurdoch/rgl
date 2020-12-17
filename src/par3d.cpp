@@ -326,9 +326,12 @@ static int getMaxClipPlanes(RGLView* rglview)
 
 static float getGlVersion()
 {
+#ifndef RGL_NO_OPENGL
   const char* version = (const char*)glGetString(GL_VERSION);
   if (version) return atof(version);
-  else return R_NaReal;
+  else 
+#endif
+    return R_NaReal;
 }
 
 static int activeSubscene(RGLView* rglview)

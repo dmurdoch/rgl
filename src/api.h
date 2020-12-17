@@ -93,8 +93,6 @@ void rgl_addtosubscene (int* successptr, int* count, int* ids);
 void rgl_delfromsubscene(int* successptr, int* count, int* ids);
 void rgl_gc(int* count, int* protect);
 
-void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
-void rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view);
 void rgl_locator(int* successptr, double* locations);
 
 void rgl_selectstate(int* dev, int* sub, int* successptr, int* selectstate, double* locations);

@@ -20,6 +20,7 @@ void FPS::init(double time)
 
 void FPS::render(double t, RenderContext* ctx)
 {
+#ifndef RGL_NO_OPENGL
   if (lastTime + 1.0f < t ) {
     lastTime = t;
     sprintf(buffer, "FPS %d", framecnt);
@@ -39,4 +40,5 @@ void FPS::render(double t, RenderContext* ctx)
     ctx->font->draw(buffer, strlen(buffer), -1, 0.0, 0, *ctx);
 
   framecnt++;
+#endif
 }

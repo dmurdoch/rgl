@@ -184,6 +184,7 @@ void ModelViewpoint::setupTransformation(RenderContext* rctx, Vertex center)
 
 void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
 {
+#ifndef RGL_NO_OPENGL
 	Vec3 axis = dragStart.cross(dragCurrent);
 
 	float angle = dragStart.angle(dragCurrent);
@@ -195,6 +196,7 @@ void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
 	  glRotatef((GLfloat)angle, (GLfloat)axis.x, (GLfloat)axis.y, (GLfloat)axis.z);
 	glGetDoublev(GL_MODELVIEW_MATRIX,mouseMatrix);
 	glPopMatrix();
+#endif
 }
 
 void ModelViewpoint::updateMouseMatrix(PolarCoord newpos)
@@ -208,6 +210,7 @@ void ModelViewpoint::updateMouseMatrix(PolarCoord newpos)
 
 void ModelViewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axis)
 {
+#ifndef RGL_NO_OPENGL
     float angle = math::rad2deg(dragCurrent.x-dragStart.x);
     Matrix4x4 M((double *)userMatrix);
     Vec4 v = M * Vec4(axis.x, axis.y, axis.z);
@@ -217,6 +220,7 @@ void ModelViewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axi
     glRotatef((GLfloat)angle, (GLfloat)v.x/v.w, (GLfloat)v.y/v.w, (GLfloat)v.z/v.w);
     glGetDoublev(GL_MODELVIEW_MATRIX,mouseMatrix);
     glPopMatrix();
+#endif
 }
 
 void ModelViewpoint::mergeMouseMatrix()

@@ -42,6 +42,7 @@ Light::Light( PolarCoord in_position, Vertex in_finposition,
 
 void Light::setup(RenderContext* renderContext) 
 {
+#ifndef RGL_NO_OPENGL
   glLightfv(id, GL_AMBIENT,   ambient.data  );
   glLightfv(id, GL_DIFFUSE,   diffuse.data  );
   glLightfv(id, GL_SPECULAR,  specular.data );
@@ -55,6 +56,7 @@ void Light::setup(RenderContext* renderContext)
   glLightf(id, GL_QUADRATIC_ATTENUATION, 0.0f);
 
   glEnable(id);
+#endif
 }
 
 int Light::getAttributeCount(AABox& bbox, AttribID attrib)

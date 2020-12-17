@@ -1,10 +1,15 @@
 #ifndef RGL_OPENGL_H
 #define RGL_OPENGL_H
+
+#include "config.h"
+
+#ifdef RGL_NO_OPENGL
+
+#include "OpenGL/gl.h"
+
+#else
 // ---------------------------------------------------------------------------
 // Using OpenGL and GLU
-//
-// ---------------------------------------------------------------------------
-#include "config.h"
 // ---------------------------------------------------------------------------
 #ifdef RGL_OSX
 #include <OpenGL/gl.h>
@@ -23,6 +28,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
+
+#endif // RGL_NO_OPENGL
 // ---------------------------------------------------------------------------
 #endif // RGL_OPENGL_H
  

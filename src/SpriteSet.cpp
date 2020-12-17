@@ -53,6 +53,7 @@ Vertex SpriteSet::getPrimitiveCenter(int index)
 
 void SpriteSet::drawBegin(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   double mdata[16] = { 0 }, pdata[16] = { 0 };
   
   Shape::drawBegin(renderContext);
@@ -81,10 +82,12 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
     glNormal3f(0.0f,0.0f,1.0f);
     material.beginUse(renderContext);
   }
+#endif
 }
 
 void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL
   Vertex& o = vertex.get(index);
   float   s = size.getRecycled(index);
   if (o.missing() || ISNAN(s)) return;
@@ -140,10 +143,12 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
   
     glEnd();
   }
+#endif
 }
   
 void SpriteSet::drawEnd(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   if (fixedSize) {
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -154,6 +159,7 @@ void SpriteSet::drawEnd(RenderContext* renderContext)
   if (!shapes.size())
     material.endUse(renderContext);
   Shape::drawEnd(renderContext);
+#endif
 }
 
 void SpriteSet::render(RenderContext* renderContext)

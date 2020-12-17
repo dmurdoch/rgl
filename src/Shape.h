@@ -151,10 +151,12 @@ protected:
    **/
   Material material;
 private:
+#ifndef RGL_NO_OPENGL  
   /**
    * display list
    **/
   GLuint   displayList;
+#endif
   int	   drawLevel;     /* for debugging */
 protected:
   /**

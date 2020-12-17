@@ -82,6 +82,7 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 
 void PrimitiveSet::drawAll(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   if (!hasmissing)
     glDrawArrays(type, 0, nverticesperelement*nprimitives );
     // FIXME: refactor to vertexArray.draw( type, 0, nverticesperelement*nprimitives );
@@ -102,12 +103,14 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
     }
     if (!missing) glEnd();
   }              
+#endif
 }
 
 // ---------------------------------------------------------------------------
 
 void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL
   if (hasmissing) {
     bool skip = false;
     for (int j=0; j<nverticesperelement; j++) 
@@ -116,6 +119,7 @@ void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
   }
   glDrawArrays(type, index*nverticesperelement, nverticesperelement);
   // FIXME: refactor to vertexArray.draw( type, index*nverticesperelement, nverticesperelement );
+#endif
 }
 
 // ---------------------------------------------------------------------------

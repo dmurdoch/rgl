@@ -9,6 +9,8 @@
 ##
 
 rgl.useNULL <- function() {
+  if (noOpenGL)
+    return(TRUE)
   opt <- getOption("rgl.useNULL", Sys.getenv("RGL_USE_NULL"))
   if (is.logical(opt)) return(opt)
   opt <- as.character(opt)

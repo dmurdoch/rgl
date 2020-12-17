@@ -10,6 +10,7 @@ using namespace rgl;
 
 void SELECT::render(double* position)
 {
+#ifndef RGL_NO_OPENGL  
   double llx, lly, urx, ury;
   llx = *position;
   lly = *(position+1);
@@ -31,4 +32,5 @@ void SELECT::render(double* position)
   	glVertex2f(urx, ury);
   	glVertex2f(urx, lly);
   glEnd();
+#endif
 }

@@ -591,6 +591,7 @@ void Subscene::update(RenderContext* renderContext)
 
 void Subscene::render(RenderContext* renderContext, bool opaquePass)
 {
+#ifndef RGL_NO_OPENGL  
   renderContext->subscene = this;
   
   glViewport(pviewport.x, pviewport.y, pviewport.width, pviewport.height);
@@ -723,6 +724,7 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
     SELECT select;
     select.render(mousePosition);
   }
+#endif
 }
 
 void Subscene::calcDataBBox()
@@ -833,13 +835,15 @@ void Subscene::disableLights(RenderContext* rctx)
   //
   // disable lights; setup will enable them
   //
-
+#ifndef RGL_NO_OPENGL
   for (int i=0;i<8;i++)
     glDisable(GL_LIGHT0 + i);  
+#endif
 }  
 
 void Subscene::setupLights(RenderContext* rctx) 
 {  
+#ifndef RGL_NO_OPENGL
   int nlights = 0;
   bool anyviewpoint = false;
   std::vector<Light*>::const_iterator iter;
@@ -877,7 +881,7 @@ void Subscene::setupLights(RenderContext* rctx)
     glPopMatrix();
   }
   SAVEGLERROR;
-
+#endif
 }
 
 void Subscene::renderUnsorted(RenderContext* renderContext)

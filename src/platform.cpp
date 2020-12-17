@@ -17,29 +17,6 @@
 #include <GLKit/GLKVector3.h>
 #include <GLKit/GLKMatrix4.h>
   
-GLint gluProject(GLdouble  objX,  GLdouble  objY,  GLdouble  objZ,  
-                 const GLdouble *  model,  const GLdouble *  proj,  
-                 const GLint *  view,  GLdouble*  winX,  GLdouble*  winY,  
-                 GLdouble*  winZ) 
-{
-  int glkview[] = {view[0], view[1], view[2], view[3]};
-  GLKVector3 result =
-  GLKMathProject(GLKVector3Make(objX, objY, objZ),
-                 GLKMatrix4Make(model[0],model[1],model[2],model[3],
-                 		model[4],model[5],model[6],model[7],
-                 		model[8],model[9],model[10],model[11],
-                 		model[12],model[13],model[14],model[15]),
-                 GLKMatrix4Make(proj[0],proj[1],proj[2],proj[3],
-                 		proj[4],proj[5],proj[6],proj[7],
-                 		proj[8],proj[9],proj[10],proj[11],
-                 		proj[12],proj[13],proj[14],proj[15]),
-                 glkview                 
-                 );
-  *winX = result.v[0];
-  *winY = result.v[1];
-  *winZ = result.v[2];
-  return GLU_TRUE;
-}   
 
 GLint gluUnProject(GLdouble  winX,  GLdouble  winY,  GLdouble  winZ,  
                    const GLdouble *  model,  const GLdouble *  proj,  
