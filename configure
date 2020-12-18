@@ -3997,7 +3997,10 @@ fi
 
 # ---[ X11 ]------------------------------------------------------------------
 
-if test "x$enable_opengl" != "xno"; then
+if test "x$enable_opengl" = "xno"; then
+  saveCPPFLAGS="${CPPFLAGS}"
+  saveLIBS="${LIBS}"
+else
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for X" >&5
 $as_echo_n "checking for X... " >&6; }
 
@@ -4522,7 +4525,8 @@ fi
 
 if test "x$enable_opengl" = "xno"; then
   RGL_NO_OPENGL=TRUE
-  CPPFLAGS="${CPPFLAGS} -DRGL_NO_OPENGL"
+  CPPFLAGS="${saveCPPFLAGS} -DRGL_NO_OPENGL"
+  LIBS="${saveLIBS}"
 else
   RGL_NO_OPENGL=FALSE
 fi

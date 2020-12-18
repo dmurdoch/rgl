@@ -99,7 +99,10 @@ AC_ARG_ENABLE([opengl],
 
 # ---[ X11 ]------------------------------------------------------------------
 
-if test "x$enable_opengl" != "xno"; then
+if test "x$enable_opengl" = "xno"; then
+  saveCPPFLAGS="${CPPFLAGS}"
+  saveLIBS="${LIBS}"
+else
   AC_PATH_X
   if test x$no_x = xyes ; then
     AC_MSG_WARN([X11 not found, continuing without OpenGL support.])
@@ -226,7 +229,8 @@ fi
 
 if test "x$enable_opengl" = "xno"; then
   RGL_NO_OPENGL=TRUE
-  CPPFLAGS="${CPPFLAGS} -DRGL_NO_OPENGL"
+  CPPFLAGS="${saveCPPFLAGS} -DRGL_NO_OPENGL"
+  LIBS="${saveLIBS}"
 else
   RGL_NO_OPENGL=FALSE
 fi

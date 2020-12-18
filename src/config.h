@@ -1,7 +1,13 @@
 #ifndef RGL_CONFIG_H
 #define RGL_CONFIG_H
 
-#ifndef RGL_NO_OPENGL
+#ifdef RGL_NO_OPENGL
+
+#undef RGL_OSX
+#undef RGL_X11
+#undef RGL_W32
+
+#else
 
 // ---------------------------------------------------------------------------
 // Platform detection

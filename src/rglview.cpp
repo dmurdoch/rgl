@@ -231,12 +231,12 @@ void RGLView::captureLost()
 bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
 {
   bool success = false;
-#ifndef RGL_NO_OPENGL
   if ( (formatID < PIXMAP_FILEFORMAT_LAST) && (pixmapFormat[formatID])) { 
     // alloc pixmap memory
     Pixmap snapshot;
    
     if (snapshot.init(RGB24, width, height, 8)) {
+#ifndef RGL_NO_OPENGL      
       paint();
       if ( windowImpl->beginGL() ) {
         // read back buffer
@@ -251,6 +251,9 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
   
         windowImpl->endGL();
       } else
+#else
+      warning("this build does not support rgl snapshots");
+#endif
         snapshot.clear();
       
       success = snapshot.save( pixmapFormat[formatID], filename );
@@ -258,7 +261,6 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
     } else error("unable to create pixmap");
     	
   } else error("pixmap save format not supported in this build");
-#endif
   return success;
 }
 
