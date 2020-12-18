@@ -439,7 +439,7 @@ int X11WindowImpl::translate_key(KeySym keysym)
   if ( (keysym >= XK_space) && (keysym <= XK_asciitilde) )
     return (int) keysym;
   else if ((keysym >= XK_F1) && (keysym <= XK_F12))
-    return GUI_KeyF1 + keysym - XK_F1;
+    return static_cast<int>(GUI_KeyF1 + keysym - XK_F1);
   else {
     switch(keysym)
     {

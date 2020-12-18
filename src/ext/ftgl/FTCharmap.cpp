@@ -83,7 +83,7 @@ bool FTCharmap::CharMap(FT_Encoding encoding)
 
 unsigned int FTCharmap::GlyphListIndex(const unsigned int characterCode)
 {
-    return charMap.find(characterCode);
+    return static_cast<unsigned int>(charMap.find(static_cast<unsigned int>(characterCode)));
 }
 
 

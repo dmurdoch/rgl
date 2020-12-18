@@ -128,8 +128,8 @@ void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
     frustum.zfar  -= -eye.z + frustum.distance;
     if (frustum.zfar < 0) 
       frustum.zfar = 1;	
-    if (frustum.znear < frustum.zfar/100.)  // we lose log2(100) bits of depth resolution
-      frustum.znear = frustum.zfar/100.;
+    if (frustum.znear < frustum.zfar/100.f)  // we lose log2(100) bits of depth resolution
+      frustum.znear = frustum.zfar/100.f;
     float ratio = frustum.znear/oldnear;
     frustum.left   = frustum.left*ratio   + eye.x;
     frustum.right  = frustum.right*ratio  + eye.x;
@@ -253,9 +253,9 @@ void ModelViewpoint::getScale(double* dest)
 
 void ModelViewpoint::setScale(double* src)
 {
-    scale.x = src[0];
-    scale.y = src[1];
-    scale.z = src[2];
+    scale.x = static_cast<float>(src[0]);
+    scale.y = static_cast<float>(src[1]);
+    scale.z = static_cast<float>(src[2]);
     scaleChanged = true;
 }
 
@@ -267,6 +267,6 @@ void ModelViewpoint::getPosition(double* dest)
 
 void ModelViewpoint::setPosition(double* src)
 {
-    position.theta = src[0];
-    position.phi = src[1];
+    position.theta = static_cast<float>(src[0]);
+    position.phi = static_cast<float>(src[1]);
 }

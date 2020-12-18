@@ -221,8 +221,8 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
     bool  xlarge = fabs(eyedir.x) > fabs(eyedir.y);
   
     if (xlarge) {
-      adj = fabs(eyedir.y)/fabs(eyedir.x)/2.0;
-      if (eyedir.x < 0) adj = 1.0 - adj;
+      adj = fabs(eyedir.y)/fabs(eyedir.x)/2.0f;
+      if (eyedir.x < 0) adj = 1.0f - adj;
     }
   
     if (renderContext->font)
@@ -239,7 +239,7 @@ int AxisInfo::getNticks(float low, float high) {
 
     case AXIS_LENGTH: return len;
 
-    case AXIS_UNIT:   return (high - low)/unit;
+    case AXIS_UNIT:   return static_cast<int>((high - low)/unit);
 
     case AXIS_PRETTY: {
       double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
@@ -248,8 +248,8 @@ int AxisInfo::getNticks(float low, float high) {
 
       high_u_fact[0] = 1.5;
       high_u_fact[1] = 2.75;
-      unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
-			     eps_correction, 0);
+      unit = static_cast<float>(R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+			     eps_correction, 0));
       
       for (int i=(int)lo; i<=up; i++) {
 	float value = i*unit;
@@ -262,7 +262,7 @@ int AxisInfo::getNticks(float low, float high) {
   return 0;
 }
 
-float AxisInfo::getTick(float low, float high, int index) {
+double AxisInfo::getTick(float low, float high, int index) {
   switch (mode) {
 
     case AXIS_CUSTOM: return ticks[index];
@@ -282,8 +282,8 @@ float AxisInfo::getTick(float low, float high, int index) {
 
       high_u_fact[0] = 1.5;
       high_u_fact[1] = 2.75;
-      unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
-			     eps_correction, 0);
+      unit = static_cast<float>(R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+			     eps_correction, 0));
       
       for (int i=(int)lo; i<=up; i++) {
 	float value = i*unit;
@@ -619,7 +619,7 @@ void BBoxDeco::render(RenderContext* renderContext)
                 char text[32];
                 sprintf(text, "%.4g", value);
 
-                String string(strlen(text),text);
+                String string(static_cast<int>(strlen(text)),text);
 
                 axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
               }
@@ -635,7 +635,7 @@ void BBoxDeco::render(RenderContext* renderContext)
                 char text[32];
                 sprintf(text, "%.4g", value);
 
-                String s (strlen(text),text);
+                String s (static_cast<int>(strlen(text)),text);
 
                 axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
 
@@ -651,8 +651,8 @@ void BBoxDeco::render(RenderContext* renderContext)
               
               high_u_fact[0] = 1.5;
               high_u_fact[1] = 2.75;
-              axis->unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
-                                     eps_correction, 0);
+              axis->unit = static_cast<float>(R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+                                     eps_correction, 0));
               
               for (int i=(int)lo; i<=up; i++) {
                 float value = i*axis->unit;
@@ -662,7 +662,7 @@ void BBoxDeco::render(RenderContext* renderContext)
                   char text[32];
                   sprintf(text, "%.4g", value);
 
-                  String s (strlen(text),text);
+                  String s (static_cast<int>(strlen(text)),text);
 
                   axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
 		}

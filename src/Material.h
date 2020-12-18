@@ -61,7 +61,7 @@ public:
   bool         envmap;
   bool         polygon_offset;
   
-  float        glVersion;
+  double       glVersion;
 };
 
 } // namespace rgl

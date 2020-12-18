@@ -49,7 +49,7 @@ FTFace::FTFace(const char* fontFilePath, bool precomputeKerning)
         return;
     }
 
-    numGlyphs = (*ftFace)->num_glyphs;
+    numGlyphs = static_cast<int>((*ftFace)->num_glyphs);
     hasKerningTable = (FT_HAS_KERNING((*ftFace)) != 0);
 
     if(hasKerningTable && precomputeKerning)
@@ -79,7 +79,7 @@ FTFace::FTFace(const unsigned char *pBufferBytes, size_t bufferSizeInBytes,
         return;
     }
 
-    numGlyphs = (*ftFace)->num_glyphs;
+    numGlyphs = static_cast<int>((*ftFace)->num_glyphs);
     hasKerningTable = (FT_HAS_KERNING((*ftFace)) != 0);
 
     if(hasKerningTable && precomputeKerning)

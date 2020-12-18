@@ -37,7 +37,9 @@ void rgl::getObserver(double* ddata, Subscene* subscene)
 void rgl::setObserver(bool automatic, double* ddata, RGLView* rglview, Subscene* subscene)
 {
   UserViewpoint* userviewpoint = subscene->getUserViewpoint();
-  userviewpoint->setObserver(automatic, Vertex(ddata[0], ddata[1], ddata[2]));
+  userviewpoint->setObserver(automatic, Vertex(static_cast<float>(ddata[0]), 
+                                               static_cast<float>(ddata[1]), 
+                                               static_cast<float>(ddata[2])));
   rglview->update();
 }
 
@@ -54,7 +56,7 @@ static void getZoom(double* zoom, Subscene* subscene)
 static void setZoom(double* zoom, RGLView* rglview, Subscene* subscene)
 {
   UserViewpoint* userviewpoint = subscene->getUserViewpoint();
-  userviewpoint->setZoom( *zoom );
+  userviewpoint->setZoom(static_cast<float>(*zoom) );
   rglview->update();
   CHECKGLERROR;
 }
@@ -69,7 +71,7 @@ static void getFOV(double* fov, Subscene* subscene)
 static void setFOV(double* fov, RGLView* rglview, Subscene* sub)
 {
   UserViewpoint* userviewpoint = sub->getUserViewpoint();
-  userviewpoint->setFOV(*fov);
+  userviewpoint->setFOV(static_cast<float>(*fov));
   rglview->update();
   CHECKGLERROR;
 }
@@ -324,7 +326,7 @@ static int getMaxClipPlanes(RGLView* rglview)
   return rglview->windowImpl->getMaxClipPlanes();
 }  
 
-static float getGlVersion()
+static double getGlVersion()
 {
 #ifndef RGL_NO_OPENGL
   const char* version = (const char*)glGetString(GL_VERSION);

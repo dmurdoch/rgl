@@ -2403,12 +2403,12 @@ static void gl2psParseFeedbackBuffer(GLint used)
       case GL2PS_LINE_CAP_TOKEN :
         current += 2;
         used -= 2;
-        lcap = current[1];
+        lcap = (GLint)current[1];
         break;
       case GL2PS_LINE_JOIN_TOKEN :
         current += 2;
         used -= 2;
-        ljoin = current[1];
+        ljoin = (GLint)current[1];
         break;
       case GL2PS_LINE_WIDTH_TOKEN :
         current += 2;
@@ -2585,8 +2585,8 @@ static void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GL2PSimage *im)
           green = (unsigned char)(3. * dg);
           blue = (unsigned char)(3. * db);
           b = red;
-          b = (b<<2) + green;
-          b = (b<<2) + blue;
+          b = (unsigned char)(b<<2) + green;
+          b = (unsigned char)(b<<2) + blue;
           if(col < width) {
             gl2psGetRGB(im, col, row, &dr, &dg, &db);
           }
@@ -2597,14 +2597,14 @@ static void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GL2PSimage *im)
           red = (unsigned char)(3. * dr);
           green = (unsigned char)(3. * dg);
           blue = (unsigned char)(3. * db);
-          b = (b<<2) + red;
+          b = (unsigned char)(b<<2) + red;
           gl2psWriteByte(b);
           b = 0;
           icase++;
         }
         else if(icase == 2) {
           b = green;
-          b = (b<<2) + blue;
+          b = (unsigned char)(b<<2) + blue;
           if(col < width) {
             gl2psGetRGB(im, col, row, &dr, &dg, &db);
           }
@@ -2615,8 +2615,8 @@ static void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GL2PSimage *im)
           red = (unsigned char)(3. * dr);
           green = (unsigned char)(3. * dg);
           blue = (unsigned char)(3. * db);
-          b = (b<<2) + red;
-          b = (b<<2) + green;
+          b = (unsigned char)(b<<2) + red;
+          b = (unsigned char)(b<<2) + green;
           gl2psWriteByte(b);
           b = 0;
           icase++;
@@ -2633,9 +2633,9 @@ static void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GL2PSimage *im)
           red = (unsigned char)(3. * dr);
           green = (unsigned char)(3. * dg);
           blue = (unsigned char)(3. * db);
-          b = (b<<2) + red;
-          b = (b<<2) + green;
-          b = (b<<2) + blue;
+          b = (unsigned char)(b<<2) + red;
+          b = (unsigned char)(b<<2) + green;
+          b = (unsigned char)(b<<2) + blue;
           gl2psWriteByte(b);
           b = 0;
           icase = 1;
@@ -3167,39 +3167,39 @@ static void gl2psPrintPostScriptPrimitive(void *data)
   case GL2PS_TEXT :
     gl2psPrintPostScriptColor(prim->verts[0].rgba);
     gl2psPrintf("(%s) ", prim->data.text->str);
-    if(prim->data.text->angle)
+    if(prim->data.text->angle != 0.0)
       gl2psPrintf("%g ", prim->data.text->angle);
     gl2psPrintf("%g %g %d /%s ",
                 prim->verts[0].xyz[0], prim->verts[0].xyz[1],
                 prim->data.text->fontsize, prim->data.text->fontname);
     switch(prim->data.text->alignment){
     case GL2PS_TEXT_C:
-      gl2psPrintf(prim->data.text->angle ? "SCCR\n" : "SCC\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "SCCR\n" : "SCC\n");
       break;
     case GL2PS_TEXT_CL:
-      gl2psPrintf(prim->data.text->angle ? "SCLR\n" : "SCL\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "SCLR\n" : "SCL\n");
       break;
     case GL2PS_TEXT_CR:
-      gl2psPrintf(prim->data.text->angle ? "SCRR\n" : "SCR\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "SCRR\n" : "SCR\n");
       break;
     case GL2PS_TEXT_B:
-      gl2psPrintf(prim->data.text->angle ? "SBCR\n" : "SBC\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "SBCR\n" : "SBC\n");
       break;
     case GL2PS_TEXT_BR:
-      gl2psPrintf(prim->data.text->angle ? "SBRR\n" : "SBR\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "SBRR\n" : "SBR\n");
       break;
     case GL2PS_TEXT_T:
-      gl2psPrintf(prim->data.text->angle ? "STCR\n" : "STC\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "STCR\n" : "STC\n");
       break;
     case GL2PS_TEXT_TL:
-      gl2psPrintf(prim->data.text->angle ? "STLR\n" : "STL\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "STLR\n" : "STL\n");
       break;
     case GL2PS_TEXT_TR:
-      gl2psPrintf(prim->data.text->angle ? "STRR\n" : "STR\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "STRR\n" : "STR\n");
       break;
     case GL2PS_TEXT_BL:
     default:
-      gl2psPrintf(prim->data.text->angle ? "SR\n" : "S\n");
+      gl2psPrintf(prim->data.text->angle != 0.0 ? "SR\n" : "S\n");
       break;
     }
     break;
@@ -3369,7 +3369,7 @@ static void gl2psPrintTeXPrimitive(void *data)
             prim->data.text->fontsize);
     fprintf(gl2ps->stream, "\\put(%g,%g)",
             prim->verts[0].xyz[0], prim->verts[0].xyz[1]);
-    if(prim->data.text->angle)
+    if(prim->data.text->angle != 0.0)
       fprintf(gl2ps->stream, "{\\rotatebox{%g}", prim->data.text->angle);
     fprintf(gl2ps->stream, "{\\makebox(0,0)");
     switch(prim->data.text->alignment){
@@ -3405,7 +3405,7 @@ static void gl2psPrintTeXPrimitive(void *data)
     fprintf(gl2ps->stream, "\\textcolor[rgb]{%g,%g,%g}{{%s}}",
             prim->verts[0].rgba[0], prim->verts[0].rgba[1], prim->verts[0].rgba[2],
             prim->data.text->str);
-    if(prim->data.text->angle)
+    if(prim->data.text->angle != 0.0)
       fprintf(gl2ps->stream, "}");
     fprintf(gl2ps->stream, "}}\n");
     break;
@@ -5314,7 +5314,7 @@ static void gl2psPrintSVGPrimitive(void *data)
     gl2psSVGGetColorString(prim->verts[0].rgba, col);
     gl2psPrintf("<text fill=\"%s\" x=\"%g\" y=\"%g\" font-size=\"%d\" ",
                 col, xyz[0][0], xyz[0][1], prim->data.text->fontsize);
-    if(prim->data.text->angle)
+    if(prim->data.text->angle != 0.0)
       gl2psPrintf("transform=\"rotate(%g, %g, %g)\" ",
                   -prim->data.text->angle, xyz[0][0], xyz[0][1]);
     switch(prim->data.text->alignment){
@@ -5656,7 +5656,7 @@ static void gl2psPrintPGFPrimitive(void *data)
     fprintf(gl2ps->stream, "{\n\\pgftransformshift{\\pgfpoint{%fpt}{%fpt}}\n",
             prim->verts[0].xyz[0], prim->verts[0].xyz[1]);
 
-    if(prim->data.text->angle)
+    if(prim->data.text->angle != 0.0)
       fprintf(gl2ps->stream, "\\pgftransformrotate{%f}{", prim->data.text->angle);
 
     fprintf(gl2ps->stream, "\\pgfnode{rectangle}{%s}{\\fontsize{%d}{0}\\selectfont",
@@ -5669,7 +5669,7 @@ static void gl2psPrintPGFPrimitive(void *data)
 
     fprintf(gl2ps->stream, "}{}{\\pgfusepath{discard}}}");
 
-    if(prim->data.text->angle)
+    if(prim->data.text->angle != 0.0)
        fprintf(gl2ps->stream, "}");
 
     fprintf(gl2ps->stream, "\n");

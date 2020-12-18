@@ -46,7 +46,7 @@ static void StringToRGB8(const char* string, u8* colorptr) {
   
       u8 component;
 
-      component = (HexCharToNibble(c) << 4);
+      component = static_cast<u8>(HexCharToNibble(c) << 4);
       
       if ( (c = *strptr++) == '\0')
         break;

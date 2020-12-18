@@ -41,9 +41,9 @@ SphereSet::~SphereSet()
 AABox& SphereSet::getBoundingBox(Subscene* subscene)
 {
   Vertex scale = subscene->getModelViewpoint()->scale;
-  scale.x = 1.0/scale.x;
-  scale.y = 1.0/scale.y;
-  scale.z = 1.0/scale.z;
+  scale.x = 1.0f/scale.x;
+  scale.y = 1.0f/scale.y;
+  scale.z = 1.0f/scale.z;
   
   boundingBox.invalidate();
   for(int i=0;i<getElementCount();i++) {

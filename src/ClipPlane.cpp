@@ -81,7 +81,7 @@ void ClipPlaneSet::enable(bool show)
 
 void ClipPlaneSet::intersectBBox(AABox& bbox)
 {
-  GLdouble a, b, c, d, a1, b1, c1, d1;
+  GLfloat a, b, c, d, a1, b1, c1, d1;
   for (int j=0; j<3; j++) /* repeat to propagate changes between coordinates */
   for (int i=0; i<nPlanes; i++) {
     a = normal.getRecycled(i).x;

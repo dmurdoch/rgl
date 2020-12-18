@@ -135,8 +135,12 @@ void PlaneSet::updateTriangles(const AABox& sceneBBox)
     
     if (nhits >= 3) { 
       /* Put in order so that the normal points out the FRONT of the faces */
-      Vec3 v0(x[0][0] - x[1][0] , x[0][1] - x[1][1], x[0][2] - x[1][2]),
-           v2(x[2][0] - x[1][0] , x[2][1] - x[1][1], x[2][2] - x[1][2]),
+      Vec3 v0(static_cast<float>(x[0][0] - x[1][0]), 
+              static_cast<float>(x[0][1] - x[1][1]), 
+              static_cast<float>(x[0][2] - x[1][2])),
+           v2(static_cast<float>(x[2][0] - x[1][0]), 
+              static_cast<float>(x[2][1] - x[1][1]), 
+              static_cast<float>(x[2][2] - x[1][2])),
            vx = v0.cross(v2);
       
       bool reverse = vx*Av > 0;

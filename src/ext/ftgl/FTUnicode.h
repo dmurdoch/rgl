@@ -226,8 +226,8 @@ inline void FTUnicodeStringItr<T>::readUTF16()
         // complete the surrogate pair
         if (ch2 >= lowSurrogateStart && ch2 <= lowSurrogateEnd)
         {
-            ch = ((ch - highSurrogateStart) << highSurrogateShift)
-                + (ch2 - lowSurrogateStart) + lowSurrogateBase;
+            ch = static_cast<unsigned int>(((ch - highSurrogateStart) << highSurrogateShift)
+                + (ch2 - lowSurrogateStart) + lowSurrogateBase);
             ++nextPos;
         }
     }

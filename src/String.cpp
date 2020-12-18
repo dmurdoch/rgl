@@ -31,7 +31,7 @@ public:
 
     for(i=0;i<ntexts;i++) {
       starts[i] = buflen;
-      buflen += 1 + ( lengths[i] = strlen(in_texts[i]) );
+      buflen += 1 + ( lengths[i] = static_cast<int>(strlen(in_texts[i])) );
     }
     
     char* tptr = textbuffer = new char [buflen];

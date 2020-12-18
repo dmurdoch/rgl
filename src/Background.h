@@ -20,7 +20,7 @@ public:
     FOG_NONE=1, FOG_LINEAR, FOG_EXP, FOG_EXP2
   };
   Background( Material& in_material = defaultMaterial, bool sphere=false, int fogtype=FOG_NONE,
-              double in_fogScale = 1.0);
+              float in_fogScale = 1.0);
   ~Background();
   void render(RenderContext* renderContext);
   int getElementCount(void) { return 1; }
@@ -36,7 +36,7 @@ protected:
   bool clearColorBuffer;
   bool sphere;
   int  fogtype;
-  double fogScale;
+  float fogScale;
   SphereMesh sphereMesh;
   QuadSet* quad;
 //  GLuint displayList;

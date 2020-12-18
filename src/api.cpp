@@ -397,7 +397,7 @@ void rgl::rgl_bg(int* successptr, int* idata, double* fogScale)
 
     bool sphere    = as_bool( idata[0] );
     int  fogtype   = idata[1];
-    Background* bg = new Background(currentMaterial, sphere, fogtype, fogScale[0]);
+    Background* bg = new Background(currentMaterial, sphere, fogtype, static_cast<float>(fogScale[0]));
     success = as_success( device->add( bg ) );
     SceneNode*  quad = bg->getQuad();
     if (quad) {
@@ -443,7 +443,9 @@ void rgl::rgl_light ( int* successptr, int* idata, double* ddata )
 
     float theta         = (float) ddata[0];
     float phi           = (float) ddata[1];
-    Vertex finposition   = Vertex( ddata[2], ddata[3], ddata[4] );
+    Vertex finposition   = Vertex( static_cast<float>(ddata[2]), 
+                                   static_cast<float>(ddata[3]), 
+                                   static_cast<float>(ddata[4]) );
 
     success = as_success( device->add( new Light( PolarCoord(theta, phi), finposition, (bool) viewpoint_rel, (bool) finite_pos, ambient, diffuse, specular ) ) );
     CHECKGLERROR;
@@ -465,7 +467,9 @@ void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
     float phi	      = static_cast<float>( ddata[1] );
     float fov         = static_cast<float>( ddata[2] );
     float zoom        = static_cast<float>( ddata[3] );
-    Vertex scale      = Vertex( ddata[4], ddata[5], ddata[6] );
+    Vertex scale      = Vertex( static_cast<float>(ddata[4]), 
+                                static_cast<float>(ddata[5]), 
+                                static_cast<float>(ddata[6]) );
     
     int   interactive = idata[0];
     int   polar       = idata[1];
@@ -804,7 +808,7 @@ void rgl::rgl_getsubscenechildcount(int* id, int* n)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     Subscene* subscene = scene->getSubscene(*id);
-    *n = subscene ? subscene->getChildCount() : 0;
+    *n = subscene ? static_cast<int>(subscene->getChildCount()) : 0;
   } else
     *n = 0;
 } 
@@ -1066,7 +1070,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
                                (bool*) (idata + 20),
-                               strlen(cdata[0]),
+                               static_cast<int>(strlen(cdata[0])),
                                cdata[0] );
   } else {
     idata[6] = (int)mat->textype;

@@ -33,7 +33,7 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
       userMatrix[i] = *(in_userMatrix++);
   }
   for(int i=0;i<vertex.size();i++)
-    boundingBox += Sphere( vertex.get(i), size.getRecycled(i)/1.414 );
+    boundingBox += Sphere( vertex.get(i), static_cast<float>(size.getRecycled(i)/1.414) );
 }
 
 SpriteSet::~SpriteSet()
@@ -173,7 +173,7 @@ int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib)
     case VERTICES: return vertex.size();
     case RADII:    return size.size();
     case IDS:	   
-    case TYPES:    return shapes.size();
+    case TYPES:    return static_cast<int>(shapes.size());
     case USERMATRIX: {
       if (!shapes.size()) return 0;
       else return 4;
@@ -235,7 +235,7 @@ String SpriteSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     scene->get_shape(shapes[index])->getTypeName(buffer, 20);
-    return String(strlen(buffer), buffer);
+    return String(static_cast<int>(strlen(buffer)), buffer);
   } else
     return Shape::getTextAttribute(bbox, attrib, index);
 }

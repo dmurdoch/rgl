@@ -305,9 +305,9 @@ Matrix4x4 Matrix4x4::scaleMatrix(double sx, double sy, double sz)
 {
   Matrix4x4 result;
   result.setIdentity();
-  result.ref(0,0) = sx;
-  result.ref(1,1) = sy;
-  result.ref(2,2) = sz;
+  result.ref(0,0) = static_cast<float>(sx);
+  result.ref(1,1) = static_cast<float>(sy);
+  result.ref(2,2) = static_cast<float>(sz);
   return result;
 }
 
@@ -315,9 +315,9 @@ Matrix4x4 Matrix4x4::translationMatrix(double x, double y, double z)
 {
   Matrix4x4 result;
   result.setIdentity();
-  result.ref(0,3) = x;
-  result.ref(1,3) = y;
-  result.ref(2,3) = z;
+  result.ref(0,3) = static_cast<float>(x);
+  result.ref(1,3) = static_cast<float>(y);
+  result.ref(2,3) = static_cast<float>(z);
   return result;
 }
 

@@ -104,7 +104,7 @@ class FTCharToGlyphIndexMap
             }
 
             // Find position of char code in buckets
-            div_t pos = div(c, FTCharToGlyphIndexMap::BucketSize);
+            div_t pos = div(static_cast<int>(c), FTCharToGlyphIndexMap::BucketSize);
 
             if(!this->Indices[pos.quot])
             {
@@ -132,7 +132,7 @@ class FTCharToGlyphIndexMap
             }
 
             // Find position of char code in buckets
-            div_t pos = div(c, FTCharToGlyphIndexMap::BucketSize);
+            div_t pos = div(static_cast<int>(c), FTCharToGlyphIndexMap::BucketSize);
 
             // Allocate bucket if does not exist yet
             if(!this->Indices[pos.quot])

@@ -77,8 +77,8 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
           texCoordArray[iy].s = ((float)ix)/((float)(nx-1));
           texCoordArray[iy].t = 1.0f - ((float)iz)/((float)(nz-1));
         } else {
-          texCoordArray[iy].s = in_texture_s[iy];
-          texCoordArray[iy].t = in_texture_t[iy];
+          texCoordArray[iy].s = static_cast<float>(in_texture_s[iy]);
+          texCoordArray[iy].t = static_cast<float>(in_texture_t[iy]);
         }
       }
     }
@@ -191,7 +191,7 @@ Vertex Surface::getCenter(int ix, int iz)
     accu = accu + vertexArray[(iz+1)*nx + ix+1];
     num ++;
   }
-  if (num) accu = accu * (1.0/num);
+  if (num) accu = accu * (1.0f/num);
   return accu;  
 } 
 

@@ -34,7 +34,7 @@ struct AxisInfo {
             Vertex& marklen, String& string);
             
   int getNticks(float low, float high);
-  float getTick(float low, float high, int index);
+  double getTick(float low, float high, int index); /* double since it might be NA_REAL */
 
   int    mode;
   int    nticks;

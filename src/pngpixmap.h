@@ -91,7 +91,7 @@ private:
     bool process()
     {
       while ((!feof(file)) && (!error)) {
-        int size = fread(buffer,1,sizeof(buffer),file);
+        size_t size = fread(buffer,1,sizeof(buffer),file);
         if (ferror(file)) {
           printError("file read error");
           return false;

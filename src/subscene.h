@@ -121,7 +121,7 @@ public:
   /**
    * get children
    **/
-  int getChildCount() const { return subscenes.size(); }
+  size_t getChildCount() const { return subscenes.size(); }
   Subscene* getChild(int which) const { return subscenes[which]; }
   
   /**
@@ -203,7 +203,7 @@ public:
   void clearMouseListeners();
   void addMouseListener(Subscene* sub);
   void deleteMouseListener(Subscene* sub);
-  void getMouseListeners(unsigned int max, int* ids);
+  void getMouseListeners(size_t max, int* ids);
   
   float getDistance(const Vertex& v) const;
 

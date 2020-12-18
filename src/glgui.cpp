@@ -110,7 +110,7 @@ GLBitmapFont::~GLBitmapFont() {
 double GLBitmapFont::width(const char* text) {
   double result = 0.0;
   for(int i=0; text[i]; i++) {
-    char c;
+    int c;
     if ((int)(text[i]) >= (int)firstGlyph && (c = (int)(text[i]) - (int)firstGlyph) < (int)nglyph)
       result += widths[(int)c];
   }
@@ -147,7 +147,7 @@ void GLBitmapFont::draw(const char* text, int length,
       glListBase(listBase);
       glCallLists(length, GL_UNSIGNED_BYTE, text);
     } else
-      gl2psTextOpt(text, GL2PS_FONT, GL2PS_FONTSIZE*cex, gl2ps_centering, 0.0);
+      gl2psTextOpt(text, GL2PS_FONT, static_cast<GLshort>(GL2PS_FONTSIZE*cex), gl2ps_centering, 0.0);
   }
 #endif
 }
@@ -179,7 +179,7 @@ GLFTFont::GLFTFont(const char* in_family, int in_style, double in_cex, const cha
     delete font;
     font = NULL;
   } else {
-    unsigned int size = 16*cex + 0.5;
+    unsigned int size = static_cast<unsigned int>(16*cex + 0.5);
     if (size<1) { size=1; }
     if (!font->FaceSize(size)) {
       errmsg = "Cannot create Freetype font of requested size";
@@ -218,7 +218,7 @@ void GLFTFont::draw(const char* text, int length, double adjx, double adjy,
     if (rc.gl2psActive == GL2PS_NONE)
       font->Render(text);
     else
-      gl2psTextOpt(text, GL2PS_FONT, GL2PS_FONTSIZE*cex, gl2ps_centering, 0.0);
+      gl2psTextOpt(text, GL2PS_FONT, static_cast<GLshort>(GL2PS_FONTSIZE*cex), gl2ps_centering, 0.0);
   }
 }
 
