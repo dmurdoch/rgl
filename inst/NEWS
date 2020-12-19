@@ -1147,7 +1147,7 @@ base graphics.
   - Fixed some memory leaks found by valgrind, and problems seen
     on systems with no functional Asymptote or Pandoc.
 
-0.104.5:
+0.104.6:
   - Fixed bug in rglwidget() that caused it to fail to display
     text if too many strings were in the same object.
     (Reported by Yohann Demont.)
@@ -1155,3 +1155,4 @@ base graphics.
     OpenGL (to support Apple M1 machines without OpenGL,
     and others which don't have X11 or OpenGL devel
     files installed).
+  - Added explicity typecasts to suppress compile warnings.

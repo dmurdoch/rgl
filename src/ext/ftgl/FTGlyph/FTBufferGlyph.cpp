@@ -100,11 +100,11 @@ const FTPoint& FTBufferGlyphImpl::RenderImpl(const FTPoint& pen, int renderMode)
         for(unsigned int y = 0; y < bitmap.rows; y++)
         {
             // FIXME: change the loop bounds instead of doing this test
-            if(y + dy < 0 || y + dy >= buffer->Height()) continue;
+            if(static_cast<int>(y) + dy < 0 || static_cast<int>(y) + dy >= buffer->Height()) continue;
 
             for(unsigned int x = 0; x < bitmap.width; x++)
             {
-                if(x + dx < 0 || x + dx >= buffer->Width()) continue;
+                if(static_cast<int>(x) + dx < 0 || static_cast<int>(x) + dx >= buffer->Width()) continue;
 
                 unsigned char p = pixels[y * bitmap.pitch + x];
 

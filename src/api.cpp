@@ -822,7 +822,7 @@ void rgl::rgl_getsubscenechildren(int* id, int* children)
     Scene* scene = rglview->getScene();
     const Subscene* subscene = scene->getSubscene(*id);
     if (subscene) {
-      for (int i = 0; i < subscene->getChildCount(); i++) {
+      for (size_t i = 0; i < subscene->getChildCount(); i++) {
         Subscene* child = subscene->getChild(i);
         children[i] = child ? child->getObjID() : 0;
       }
