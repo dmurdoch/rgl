@@ -1699,6 +1699,73 @@ fi
   as_fn_set_status $ac_retval
 
 } # ac_fn_c_try_link
+
+# ac_fn_c_check_func LINENO FUNC VAR
+# ----------------------------------
+# Tests whether FUNC exists, setting the cache variable VAR accordingly
+ac_fn_c_check_func ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+/* Define $2 to an innocuous variant, in case <limits.h> declares $2.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $2 innocuous_$2
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $2 (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $2
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $2 ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined __stub_$2 || defined __stub___$2
+choke me
+#endif
+
+int
+main ()
+{
+return $2 ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  eval "$3=yes"
+else
+  eval "$3=no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+
+} # ac_fn_c_check_func
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -4226,6 +4293,13 @@ $as_echo "$as_me: WARNING: X11 not found, continuing without OpenGL support." >&
       # X11 must come *after* the OpenGL stuff
       CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
     fi
+    ac_fn_c_check_func "$LINENO" "XAllocClassHint" "ac_cv_func_XAllocClassHint"
+if test "x$ac_cv_func_XAllocClassHint" = xyes; then :
+
+else
+  enable_opengl=no
+fi
+
   fi
 fi
 
@@ -4338,6 +4412,14 @@ fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required library ${lGL}, continuing without OpenGL" >&5
 $as_echo "$as_me: WARNING: missing required library ${lGL}, continuing without OpenGL" >&2;}
     enable_opengl=no
+  else
+    ac_fn_c_check_func "$LINENO" "glEnd" "ac_cv_func_glEnd"
+if test "x$ac_cv_func_glEnd" = xyes; then :
+
+else
+  enable_opengl=no
+fi
+
   fi
 fi
 
@@ -4351,9 +4433,9 @@ else
 
 fi
 
-  as_ac_Lib=`$as_echo "ac_cv_lib_$lGLU''_gluProject" | $as_tr_sh`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluProject in -l$lGLU" >&5
-$as_echo_n "checking for gluProject in -l$lGLU... " >&6; }
+  as_ac_Lib=`$as_echo "ac_cv_lib_$lGLU''_gluErrorString" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluErrorString in -l$lGLU" >&5
+$as_echo_n "checking for gluErrorString in -l$lGLU... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
   $as_echo_n "(cached) " >&6
 else
@@ -4368,11 +4450,11 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char gluProject ();
+char gluErrorString ();
 int
 main ()
 {
-return gluProject ();
+return gluErrorString ();
   ;
   return 0;
 }
@@ -4403,6 +4485,14 @@ fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required library ${lGLU}, continuing without OpenGL" >&5
 $as_echo "$as_me: WARNING: missing required library ${lGLU}, continuing without OpenGL" >&2;}
     enable_opengl=no
+  else
+    ac_fn_c_check_func "$LINENO" "gluErrorString" "ac_cv_func_gluErrorString"
+if test "x$ac_cv_func_gluErrorString" = xyes; then :
+
+else
+  enable_opengl=no
+fi
+
   fi
 fi
 
@@ -4524,6 +4614,8 @@ $as_echo "$as_me: compiling without FTGL support" >&6;}
 fi
 
 if test "x$enable_opengl" = "xno"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without OpenGL support" >&5
+$as_echo "$as_me: compiling without OpenGL support" >&6;}
   RGL_NO_OPENGL=TRUE
   CPPFLAGS="${saveCPPFLAGS} -DRGL_NO_OPENGL"
   LIBS="${saveLIBS}"

@@ -135,6 +135,7 @@ else
       # X11 must come *after* the OpenGL stuff
       CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
     fi
+    AC_CHECK_FUNC(XAllocClassHint, [], [enable_opengl=no])
   fi
 fi
 
@@ -175,6 +176,8 @@ if test "x$enable_opengl" != "xno"; then
   if test "x$this" != xyes; then
     AC_WARN([missing required library ${lGL}, continuing without OpenGL])
     enable_opengl=no
+  else
+    AC_CHECK_FUNC(glEnd, [], [enable_opengl=no])
   fi
 fi
 
@@ -183,11 +186,13 @@ if test "x$enable_opengl" != "xno"; then
   [  --with-glu-libname=NAME specify GLU Library name (defaults to "GLU")],
   [lGLU=${withval}], [lGLU=GLU]
   )
-  AC_CHECK_LIB($lGLU, gluProject)
+  AC_CHECK_LIB($lGLU, gluErrorString)
   this=`eval echo '${'$as_ac_Lib'}'`
   if test "x$this" != xyes; then
     AC_WARN([missing required library ${lGLU}, continuing without OpenGL])
     enable_opengl=no
+  else
+    AC_CHECK_FUNC(gluErrorString, [], [enable_opengl=no])
   fi
 fi
 
@@ -228,6 +233,7 @@ if test "x$enable_opengl" != "xno"; then
 fi
 
 if test "x$enable_opengl" = "xno"; then
+  AC_MSG_NOTICE([compiling without OpenGL support])
   RGL_NO_OPENGL=TRUE
   CPPFLAGS="${saveCPPFLAGS} -DRGL_NO_OPENGL"
   LIBS="${saveLIBS}"

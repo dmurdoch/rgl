@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.104.4
+Version: 0.104.5
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch.duncan@gmail.com>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>

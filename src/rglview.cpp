@@ -252,7 +252,7 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
         windowImpl->endGL();
       } else
 #else
-      warning("this build does not support rgl snapshots");
+      warning("this build of rgl does not support snapshots");
 #endif
         snapshot.clear();
       
@@ -455,8 +455,8 @@ void RGLView::setPosition(double* src)
 bool RGLView::postscript(int formatID, const char* filename, bool drawText)
 {
   bool success = false;
+  std::FILE *fp = fopen(filename, "wb"); 
 #ifndef RGL_NO_OPENGL
-  std::FILE *fp = fopen(filename, "wb");  
   char *oldlocale = setlocale(LC_NUMERIC, "C");
   
   GLint buffsize = 0, state = GL2PS_OVERFLOW;
@@ -505,9 +505,10 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
     windowImpl->endGL();
   }
   setlocale(LC_NUMERIC, oldlocale);
-  
+#else
+  warning("this build of rgl does not support postscript");
+#endif  
   fclose(fp);
-#endif
   return success;
 }
 
