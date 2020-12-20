@@ -52,7 +52,7 @@ Unix-derivatives
 BUILD TOOLS
 -----------
 R recommended tools (gcc toolchain)
-On Windows, Rtools40
+On Windows, Rtools40 (or earlier versions for pre-R-4.0.0)
 
 REQUIREMENTS
 ------------
@@ -163,9 +163,8 @@ has been reported to be sufficient on FC 5 or 6:
   
   R CMD INSTALL --configure-args="--disable-opengl" rgl_0.104.1.tar.gz 
   
-  On Windows, configuration must be done manually, by editing the files
-  R/windows/noOpenGL.R and src/Makevars.win and following the commented
-  instructions in those files.
+  On Windows, configuration must be done manually, by following the
+  commented instructions in the configure.win file.
   
   
 FIRST DEMOS: LOADING LIBRARY AND RUNNING DEMONSTRATIONS

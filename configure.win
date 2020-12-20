@@ -1,2 +1,114 @@
-# This is a dummy file to suppress the warning
-# about needing manual configuration.
+
+# Set env var RGL_NO_OPENGL=TRUE to disable OpenGL
+
+if [ "${RGL_NO_OPENGL:=FALSE}" = "TRUE" ]; then
+  echo Environment variable RGL_NO_OPENGL is disabling OpenGL.
+fi
+
+r_version_4_plus=`"${R_HOME}/bin/Rscript" --vanilla -e 'cat(packageVersion(\"base\") >= \"4.0.0\")'`
+
+if [ "$r_version_4_plus" = "TRUE" ]; then
+  if [ "$RGL_NO_OPENGL" = "TRUE" ]; then
+    echo Configuring for R 4+ without OpenGL
+    CPPFLAGS="-DHAVE_PNG_H -DRGL_NO_OPENGL"
+    LIBS="-lpng -lz -lgdi32"
+  else
+    echo Configuring for R 4+ including OpenGL
+    CPPFLAGS="-Iext -Iext/ftgl -I${MINGW_PREFIX}/include/freetype2 -DHAVE_PNG_H -DHAVE_FREETYPE"
+    LIBS="-lfreetype -lpng -lz -lgdi32 -lopengl32 -lglu32"
+  fi
+else
+
+# This old part of the configure script is not really supported any more; if it
+# doesn't work, you should upgrade to R 4.0.0 or better!
+
+#
+# png pixmap support
+# test zlib and libpng libraries are available 
+#
+
+# --- win32 base configuration -----------------------------------------------
+
+  LIBS="-lgdi32"
+  if [ "$RGL_NO_OPENGL" != "TRUE" ]; then
+    echo Configuring for old R including OpenGL
+    LIBS="$LIBS -lopengl32 -lglu32"
+  else
+    echo Configuring for old R without OpenGL
+    CPPFLAGS="${CPPFLAGS} -DRGL_NO_OPENGL"
+  fi
+  LOCAL_SOFT=`R CMD config LOCAL_SOFT`
+
+# --- libpng -----------------------------------------------------------------
+
+  echo -n "  checking for zlib..."
+  if [ -e "${LOCAL_SOFT}/lib${R_ARCH_BIN}/libz.a" ]; then
+     CPPFLAGS="${CPPFLAGS} "
+     LIBS="$LIBS -lz"
+     havezlib=yes   
+  elif [ -e "${R_HOME}/bin${R_ARCH_BIN}/Rzlib.dll" ]; then
+     CPPFLAGS="${CPPFLAGS} -I${R_HOME}/include "
+     LIBS="$LIBS -L${R_HOME}/bin${R_ARCH_BIN} -lRzlib "
+     havezlib=yes
+  elif [ -e "${R_HOME}/src/extra/zlib/libz.a" ]; then
+     CPPFLAGS="${CPPFLAGS} -I${R_HOME}/src/extra/zlib "
+     LIBS="$LIBS -L${R_HOME}/src/extra/zlib -lz"
+     havezlib=yes
+  else
+     havezlib=no
+  fi
+  echo ${havezlib}
+
+  if [ "${havezlib}" = "yes" ]; then
+    echo -n "  checking for libpng..."
+    if [ -n "${HAVE_PNG}" ]; then
+      echo "yes"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H "
+      LIBS="-lpng $LIBS "
+    elif [ -e "${LOCAL_SOFT}/lib${R_ARCH_BIN}/libpng.a" ]; then
+      echo "yes"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H "
+      LIBS="-lpng $LIBS "  
+    elif [ -e "${R_HOME}/src/gnuwin32/bitmap/libpng/libpng.a" ]; then
+      echo "yes"
+      CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H -I${R_HOME}/src/gnuwin32/bitmap/libpng "
+      LIBS="-L${R_HOME}/src/gnuwin32/bitmap/libpng -lpng $LIBS "
+    else
+      echo "no"
+    fi
+  else
+    echo "  libpng requires zlib, so not installed."
+  fi
+
+# --- freetype and ftgl ------------------------------------------------------
+
+  if [ "$RGL_NO_OPENGL" != "TRUE" ] && [ "${havezlib}" = "yes" ]; then
+    echo -n "  checking for freetype..."
+    if [ -n "$LIB_FREETYPE" ]; then
+      echo "yes, LIB_FREETYPE=$LIB_FREETYPE" 
+      mkdir -p $R_PACKAGE_DIR/libs${R_ARCH}
+      cp $LIB_FREETYPE/bin${R_ARCH_BIN}/freetype6.dll $R_PACKAGE_DIR/libs${R_ARCH}
+      if [ -e "${R_HOME}/bin${R_ARCH_BIN}/Rzlib.dll" ]; then
+        cp ${R_HOME}/bin${R_ARCH_BIN}/Rzlib.dll $R_PACKAGE_DIR/libs${R_ARCH}/zlib1.dll
+      else
+        echo "  Note:  freetype may require zlib1.dll"
+      fi
+      CPPFLAGS="${CPPFLAGS} -Iext/ftgl -I${LIB_FREETYPE}/include -I${LIB_FREETYPE}/include/freetype2 -DHAVE_FREETYPE"
+      LIBS="-L$R_PACKAGE_DIR/libs${R_ARCH} -lfreetype6 $LIBS "
+    else
+      echo "no, LIB_FREETYPE undefined"
+    fi
+  fi
+fi
+
+# --- output Makevars --------------------------------------------------------
+
+rm -f src/Makevars
+sed \
+-e "s^@CPPFLAGS@^$CPPFLAGS^" \
+-e "s^@LIBS@^$LIBS^" \
+src/Makevars.in >src/Makevars
+rm -f R/noOpenGL.R
+sed \
+-e "s^@RGL_NO_OPENGL@^$RGL_NO_OPENGL^" \
+R/noOpenGL.R.in >R/noOpenGL.R

@@ -1,9 +1,9 @@
 Package: rgl
-Version: 0.104.6
+Version: 0.104.7
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch.duncan@gmail.com>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
-Depends: R (>= 4.0.0)
+Depends: R (>= 3.2.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
           js (>= 1.2), akima
@@ -19,9 +19,7 @@ Description: Provides medium to high level functions for 3D interactive graphics
 License: GPL
 URL: https://r-forge.r-project.org/projects/rgl/
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
-    zlib (optional on Unix, required on Windows), 
-    libpng (>=1.2.9, optional on Unix, required on Windows), 
-    FreeType (optional on Unix, required on Windows),
+    zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
     pandoc (>=1.14, needed for vignettes)
 BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr
