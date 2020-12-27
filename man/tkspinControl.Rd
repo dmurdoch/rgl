@@ -39,8 +39,8 @@ if (interactive()) {
     
     base <- tktoplevel()
     tkwm.title(base, "Spinners")
-    con1 <- spinControl(base, dev=c(win1,win2))
-    con2 <- spinControl(base, dev=c(win3,win4))
+    con1 <- tkspinControl(base, dev=c(win1,win2))
+    con2 <- tkspinControl(base, dev=c(win3,win4))
     tkpack(con1, con2)
 }
 }
