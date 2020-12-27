@@ -9,22 +9,6 @@
 ##
 
 #
-# rgl.range
-#
-# ensure value x is between low and high
-#
-
-rgl.range <- function ( x, low, high )
-{
-  if (length(x) > 1)
-    stop( gettextf("'%s' must be a single numeric", deparse(substitute(x))), domain = NA)
-  if ( ( x < low ) || ( x > high ) )
-    stop( gettextf("'%s' must be a numeric in the range [%s, %s]", 
-    	           deparse(substitute(x)), low, high), domain = NA)
-}
-
-
-#
 # rgl.clamp
 #
 # clamp value if lower than low or higher than high

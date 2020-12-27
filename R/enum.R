@@ -47,9 +47,6 @@ rgl.enum (fogtype, none=1, linear=2, exp=3, exp2=4)
 
 rgl.enum.primtype <- function (primtype)
 rgl.enum( primtype, points=1, lines=2, triangles=3, quadrangles=4, linestrips=5 )
-
-rgl.enum.halign <- function( halign)
-rgl.enum (halign, left=-1, center=0, right=1 )
   
 rgl.enum.texminfilter <- function (minfiltertype)
 rgl.enum (minfiltertype, nearest=0, linear=1, nearest.mipmap.nearest=2, nearest.mipmap.linear=3, linear.mipmap.nearest=4, linear.mipmap.linear=5)

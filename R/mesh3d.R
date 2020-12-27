@@ -186,8 +186,6 @@ as.mesh3d.tri <- function(x, z, col = "gray",
 dot3d.mesh3d <- function(x, ..., front = "points", back = "points")
   shade3d.mesh3d(x, ..., front = front, back = back)
 
-dot3d.qmesh3d <- dot3d.mesh3d   # for back-compatibility
-
 wire3d.mesh3d <- function(x, ..., front = "lines", back = "lines")
   shade3d.mesh3d(x, ..., front = front, back = back)
 
@@ -355,11 +353,6 @@ scale3d.mesh3d <- function ( obj, x, y, z, ... ) {
   }
   return(obj)
 }
-
-# for back-compatibility
-translate3d.qmesh3d <- translate3d.mesh3d
-rotate3d.qmesh3d <- rotate3d.mesh3d
-scale3d.qmesh3d <- scale3d.mesh3d
 
 # for debugging
 showNormals <- function(obj, scale = 1) {

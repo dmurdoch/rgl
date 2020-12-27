@@ -2,7 +2,6 @@
 \title{Internal rgl functions and data}
 \alias{rgl.bool}
 \alias{rgl.numeric}
-\alias{rgl.range}
 \alias{rgl.vertex}
 \alias{rgl.nvertex}
 \alias{rgl.color}
@@ -17,7 +16,6 @@
 \alias{rgl.enum.textype}
 \alias{rgl.enum.fogtype}
 \alias{rgl.enum.primtype}
-\alias{rgl.enum.halign}
 \alias{rgl.enum.texmagfilter}
 \alias{rgl.enum.texminfilter}
 \alias{rgl.selectstate}
@@ -35,7 +33,6 @@
 \usage{
 rgl.bool(x)
 rgl.numeric(x)
-rgl.range(x, low, high)
 rgl.vertex(x, y = NULL, z = NULL)
 rgl.nvertex(vertex)
 rgl.color(color)
@@ -50,7 +47,6 @@ rgl.enum.polymode(mode)
 rgl.enum.textype(textype)
 rgl.enum.fogtype(fogtype)
 rgl.enum.primtype(primtype)
-rgl.enum.halign(halign)
 rgl.enum.texmagfilter(magfiltertype)
 rgl.enum.texminfilter(minfiltertype)
 rgl.selectstate(dev, subscene)
