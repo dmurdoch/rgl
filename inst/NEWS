@@ -1147,7 +1147,7 @@ base graphics.
   - Fixed some memory leaks found by valgrind, and problems seen
     on systems with no functional Asymptote or Pandoc.
 
-0.104.7:
+0.104.8:
   - Fixed bug in rglwidget() that caused it to fail to display
     text if too many strings were in the same object.
     (Reported by Yohann Demont.)
@@ -1158,3 +1158,4 @@ base graphics.
   - Added explicity typecasts to suppress compile warnings.
   - Restored some of the Windows configuration from pre-0.101.2
     to allow use on older R versions.
+  - Dropped use of mathjaxr, which caused issues on Debian.
