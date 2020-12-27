@@ -7,8 +7,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
         lwd = material3d("lwd"),
         radius = avgscale*size/60, add = FALSE, aspect = !add, 
         xlim = NULL, ylim = NULL, zlim = NULL,
-        forceClipregion = FALSE, ...)
-{
+        forceClipregion = FALSE, ...) {
     if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
@@ -72,8 +71,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
 }
 
 plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
-	add = FALSE, aspect = !add, ...)
-{
+	add = FALSE, aspect = !add, ...) {
     if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
@@ -166,7 +164,7 @@ plot3d.lm <- function(x, which = 1,
       clip_to_density <- 0
     }
   }
-  result <- c()
+  result <- NULL
   if (n > 1) {
     cols <- ceiling(sqrt(n))
     rows <- ceiling(n/cols)
@@ -190,9 +188,9 @@ plot3d.lm <- function(x, which = 1,
   
   if (clip_to_density > 0) {
     densityVals <- MASS::kde2d(observed[,1], observed[,2])
-    densityVals$z <- with(densityVals, z/max(z))
+    densityVals$z <- with(densityVals, z/max(z)) # nolint
     density <- function(xyz) {
-      with(densityVals, akima::bilinear(x, y, z, xyz[,1], xyz[,2])$z)
+      with(densityVals, akima::bilinear(x, y, z, xyz[,1], xyz[,2])$z) # nolint
     }
   }
   
@@ -306,7 +304,7 @@ plot3d.lm <- function(x, which = 1,
     type <- which[i]
     if (type == 1L) {
       plot <- plotPoints(i, observed, dots$zlab)
-      if (use_surface3d) {            
+      if (use_surface3d) {
         plane <- plotSurface(i)
       } else {
         coefs <- coef(fit)
@@ -317,7 +315,7 @@ plot3d.lm <- function(x, which = 1,
       plane <- plotPlane(i, 0, 0, 0)
     } else if (type == 3L) {
       plot <- plotPoints(i, cbind(observed[,1:2], predict(fit)), dots$zlab)
-      if (use_surface3d) {            
+      if (use_surface3d) {
         plane <- plotSurface(i)
       } else {
         coefs <- coef(fit)
@@ -328,4 +326,3 @@ plot3d.lm <- function(x, which = 1,
   }
   highlevel(result)
 }
-

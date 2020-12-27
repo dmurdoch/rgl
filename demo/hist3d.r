@@ -7,8 +7,7 @@
 
 ##### Required functions 'binplot' and 'hist3d':
 
-binplot.3d<-function(x,y,z,alpha=1,topcol="#ff0000",sidecol="#aaaaaa")
-{
+binplot.3d<-function(x,y,z,alpha=1,topcol="#ff0000",sidecol="#aaaaaa") {
   save <- par3d(skipRedraw=TRUE)
   on.exit(par3d(save))
     
@@ -24,28 +23,25 @@ binplot.3d<-function(x,y,z,alpha=1,topcol="#ff0000",sidecol="#aaaaaa")
   rgl.lines(x2,z2,y2,col="#000000")
 }
 
-hist3d<-function(x,y=NULL,nclass="auto",alpha=1,col="#ff0000",scale=10)
-  {
+hist3d<-function(x,y=NULL,nclass="auto",alpha=1,col="#ff0000",scale=10) {
   save <- par3d(skipRedraw=TRUE)
   on.exit(par3d(save))
   xy <- xy.coords(x,y)
   x <- xy$x
   y <- xy$y
   n<-length(x)
-  if (nclass == "auto") { nclass<-ceiling(sqrt(nclass.Sturges(x))) }
+  if (nclass == "auto") nclass<-ceiling(sqrt(nclass.Sturges(x)))
   breaks.x <- seq(min(x),max(x),length=(nclass+1))
   breaks.y <- seq(min(y),max(y),length=(nclass+1))
   z<-matrix(0,(nclass),(nclass))
-  for (i in 1:nclass) 
-    {
-    for (j in 1:nclass) 
-      {
+  for (i in seq_len(nclass)) {
+    for (j in seq_len(nclass)) {
       z[i, j] <- (1/n)*sum(x < breaks.x[i+1] & y < breaks.y[j+1] & 
                             x >= breaks.x[i] & y >= breaks.y[j])
       binplot.3d(c(breaks.x[i],breaks.x[i+1]),c(breaks.y[j],breaks.y[j+1]),
                  scale*z[i,j],alpha=alpha,topcol=col)
-      }
     }
+  }
 }
 ################################################################################
 
@@ -65,9 +61,6 @@ rgl.bg(col="#cccccc")
 
 
 ##### QUADS FORMING BIN:
-
-# Waiting for user-input to create next scenery:
-# readline()
 
 rgl.open()
 
@@ -98,9 +91,6 @@ rgl.lines(xl,zl,yl,col="#000000")
 
 
 ##### COMPLETE HISTOGRAM:
-
-# Waiting for user-input to create next scenery:
-# readline()
 
 rgl.open()
 

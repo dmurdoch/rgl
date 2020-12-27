@@ -1,6 +1,6 @@
 
 tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
-                          speed=30, scale=100, ...){
+                          speed=30, scale=100, ...) {
   
   if (!requireNamespace("tcltk"))
     stop("This function requires 'tcltk'.")
@@ -27,32 +27,32 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
   lastTime <- proc.time()[3]
   timeDiff <- 0
   
-  rotateUp <- function(){
+  rotateUp <- function() {
     angle <- timeDiff*as.numeric(tcltk::tclObj(slider))*pi/180
     par3d(userMatrix = rotationMatrix(-angle, 1,0,0) %*% par3d("userMatrix"))
   }
   
-  rotateLeft <- function(){
+  rotateLeft <- function() {
     angle <- timeDiff*as.numeric(tcltk::tclObj(slider))*pi/180
     par3d(userMatrix = rotationMatrix(-angle, 0,1,0) %*% par3d("userMatrix"))
   }
   
-  rotateRight <- function(){
+  rotateRight <- function() {
     angle <- timeDiff*as.numeric(tcltk::tclObj(slider))*pi/180
     par3d(userMatrix = rotationMatrix(angle, 0,1,0) %*% par3d("userMatrix"))
   }
   
-  rotateSpin <- function(){
+  rotateSpin <- function() {
     angle <- timeDiff*as.numeric(tcltk::tclObj(slider))*pi/180
     par3d(userMatrix = rotationMatrix(-angle, 0,0,1) %*% par3d("userMatrix"))
   }
   
-  rotateDown <- function(){
+  rotateDown <- function() {
     angle <- timeDiff*as.numeric(tcltk::tclObj(slider))*pi/180
     par3d(userMatrix = rotationMatrix(angle, 1,0,0) %*% par3d("userMatrix"))
   }	
   
-  rotate <- function(){
+  rotate <- function() {
     old <- cur3d()
     on.exit(set3d(old))	
     if (buttonPress) {
@@ -80,42 +80,42 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
   
   # rotation button callback functions
   # note that "..." argument is necessary
-  upButtonPress <- function(...){
+  upButtonPress <- function(...) {
     buttonPress <<- TRUE
     lastTime <<- proc.time()[3]
     direction <<- "up"
     rotate()
   }
   
-  leftButtonPress <- function(...){
+  leftButtonPress <- function(...) {
     buttonPress <<- TRUE
     lastTime <<- proc.time()[3]
     direction <<- "left"
     rotate()
   }
   
-  spinButtonPress <- function(...){
+  spinButtonPress <- function(...) {
     buttonPress <<- TRUE
     lastTime <<- proc.time()[3]
     direction <<- "spin"
     rotate()
   }
   
-  rightButtonPress <- function(...){
+  rightButtonPress <- function(...) {
     buttonPress <<- TRUE
     lastTime <<- proc.time()[3]
     direction <<- "right"
     rotate()
   }
   
-  downButtonPress <- function(...){
+  downButtonPress <- function(...) {
     buttonPress <<- TRUE
     lastTime <<- proc.time()[3]
     direction <<- "down"
     rotate()
   }
   
-  onIdle <- function(...){
+  onIdle <- function(...) {
     buttonPress <<- TRUE
     rotate()
     buttonPress <<- FALSE
@@ -123,14 +123,14 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
       tcltk::tcl("after", "idle", onIdle)
   }
   
-  buttonRelease <- function(...){
+  buttonRelease <- function(...) {
     buttonPress <<- FALSE
     if (as.numeric(tcltk::tclObj(continuous)))
       tcltk::tcl("after", "idle", onIdle)
   }
   
   
-  resetAxis <- function(...){
+  resetAxis <- function(...) {
     old <- cur3d()
     on.exit(set3d(old))
     for (device in dev) {
@@ -139,7 +139,7 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
     }
   }
   
-  setScale <- function(...){
+  setScale <- function(...) {
     old <- cur3d()
     on.exit(set3d(old))		    
     scale <- as.numeric(tcltk::tclObj(scale))
@@ -210,7 +210,7 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
 }
 
 
-tkspin3d <- function(dev = cur3d(), ...){
+tkspin3d <- function(dev = cur3d(), ...) {
   
   if (!requireNamespace("tcltk"))
     stop("This function requires 'tcltk'.")

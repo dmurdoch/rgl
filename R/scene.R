@@ -14,8 +14,7 @@
 ##
 ##
 
-rgl.clear <- function( type = "shapes", subscene = 0 )
-{
+rgl.clear <- function( type = "shapes", subscene = 0 )  {
   if (is.na(subscene)) 
     subscene <- currentSubscene3d()
 
@@ -63,8 +62,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
 ##
 ##
 
-pop3d <- rgl.pop <- function( type = "shapes", id = 0)
-{
+pop3d <- rgl.pop <- function( type = "shapes", id = 0) {
   type <- rgl.enum.nodetype(type)
   save <- par3d(skipRedraw = TRUE)
   on.exit(par3d(save))
@@ -82,8 +80,7 @@ pop3d <- rgl.pop <- function( type = "shapes", id = 0)
   lowlevel()
 }
 
-ids3d <- rgl.ids <- function( type = "shapes", subscene = NA )
-{
+ids3d <- rgl.ids <- function( type = "shapes", subscene = NA ) {
   type <- c(rgl.enum.nodetype(type), 0)
   if (is.na(subscene)) 
       subscene <- currentSubscene3d()
@@ -94,8 +91,7 @@ ids3d <- rgl.ids <- function( type = "shapes", subscene = NA )
                                 type=rep("",count), subscene = as.integer(subscene) )[2:3] )
 }
 
-rgl.attrib.count <- function( id, attrib )
-{
+rgl.attrib.count <- function( id, attrib ) {
   stopifnot(length(attrib) == 1)
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
@@ -141,8 +137,7 @@ rgl.attrib.info <- function( id = ids3d("all", 0)$id, attribs = NULL, showAll = 
 }	
 
 rgl.attrib <- function( id, attrib, first=1, 
-                        last=rgl.attrib.count(id, attrib) )
-{
+                        last=rgl.attrib.count(id, attrib) ) {
   stopifnot(length(attrib) == 1 && length(id) == 1 && length(first) == 1)
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
@@ -150,14 +145,14 @@ rgl.attrib <- function( id, attrib, first=1,
   count <- max(last - first + 1, 0)
   if (attrib %in% c(6, 13, 16)) { # texts, types and family
     if (count)
-      result <- .C (rgl_text_attrib, as.integer(id), as.integer(attrib), 
+      result <- .C(rgl_text_attrib, as.integer(id), as.integer(attrib), 
                     as.integer(first-1), as.integer(count), 
                 result = character(count*ncol))$result
     else
       result <- character(0)
   } else {
     if (count)
-      result <- .C (rgl_attrib, as.integer(id), as.integer(attrib), 
+      result <- .C(rgl_attrib, as.integer(id), as.integer(attrib), 
                   as.integer(first-1), as.integer(count), 
                   result = numeric(count*ncol))$result
     else
@@ -171,8 +166,8 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("r", "g", "b", "a"), # colors
                            c("s", "t"),	     # texcoords
                            c("r", "c"),      # dim
-                           c("text"),	     # texts
-                           c("cex"), 	     # cex
+                           "text",	         # texts
+                           "cex", 	         # cex
                            c("x", "y"),	     # adj
                            "r",		     # radii
                            c("x", "y", "z"), # centers
@@ -215,8 +210,7 @@ rgl.attrib <- function( id, attrib, first=1,
 ##
 
 rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scale = par3d("scale"),
-                           interactive = TRUE, userMatrix, type = c("userviewpoint", "modelviewpoint") )
-{
+                           interactive = TRUE, userMatrix, type = c("userviewpoint", "modelviewpoint") ) {
   zoom <- rgl.clamp(zoom,0,Inf)
   phi  <- rgl.clamp(phi,-90,90)
   fov  <- rgl.clamp(fov,0,179)
@@ -245,8 +239,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
 ##
 
 rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back="lines", 
-                   fogScale = 1, ... )
-{
+                   fogScale = 1, ... ) {
   rgl.material( color=color, back=back, ... )
 
   fogtype <- rgl.enum.fogtype(fogtype)
@@ -314,9 +307,9 @@ rgl.bbox <- function(
   yticks <- length(yat)
   zticks <- length(zat)
 
-  if (identical(xunit, "pretty")) xunit = -1;
-  if (identical(yunit, "pretty")) yunit = -1;
-  if (identical(zunit, "pretty")) zunit = -1;
+  if (identical(xunit, "pretty")) xunit <- -1
+  if (identical(yunit, "pretty")) yunit <- -1
+  if (identical(zunit, "pretty")) zunit <- -1
 
   length(xlen)        <- 1
   length(ylen)        <- 1
@@ -356,8 +349,7 @@ rgl.bbox <- function(
 ##
 ##
 
-rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF", x = NULL, y = NULL, z = NULL)
-{
+rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF", x = NULL, y = NULL, z = NULL) {
   ambient  <- rgl.color(ambient)
   diffuse  <- rgl.color(diffuse)
   specular <- rgl.color(specular)
@@ -410,8 +402,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
-{
+rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
   rgl.material( ... )
 
   type <- rgl.enum.primtype(type)
@@ -457,7 +448,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
       as.numeric(normals),
       as.numeric(texcoords),
       NAOK = TRUE
-    );      
+    )
         
     if (! ret$success)
       stop("'rgl_primitive' failed")
@@ -466,28 +457,23 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
   }
 }
 
-rgl.points <- function ( x, y=NULL, z=NULL, ... )
-{
+rgl.points <- function( x, y=NULL, z=NULL, ... ) {
   rgl.primitive( "points", x, y, z, ... )
 }
 
-rgl.lines <- function (x, y=NULL, z=NULL, ... )
-{
+rgl.lines <- function(x, y=NULL, z=NULL, ... ) {
   rgl.primitive( "lines", x, y, z, ... )
 }
 
-rgl.triangles <- function (x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
-{
+rgl.triangles <- function(x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
   rgl.primitive( "triangles", x, y, z, normals, texcoords, ... )
 }
 
-rgl.quads <- function ( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
-{
+rgl.quads <- function( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
   rgl.primitive( "quadrangles", x, y, z, normals, texcoords, ... )
 }
 
-rgl.linestrips<- function ( x, y=NULL, z=NULL, ... )
-{
+rgl.linestrips<- function( x, y=NULL, z=NULL, ... ) {
   rgl.primitive( "linestrips", x, y, z, ... )
 }
 
@@ -499,7 +485,7 @@ rgl.linestrips<- function ( x, y=NULL, z=NULL, ... )
 # Utility function:
 # calculates the parity of a permutation of integers
 
-perm_parity <- function(p) {  
+perm_parity <- function(p) {
   x <- seq_along(p)
   result <- 0
   for (i in x) {
@@ -512,8 +498,7 @@ perm_parity <- function(p) {
 }
 
 rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL, normal_z=NULL,
-                         texture_s=NULL, texture_t=NULL)
-{
+                         texture_s=NULL, texture_t=NULL) {
   rgl.material(...)
   
   flags <- rep(FALSE, 4)
@@ -584,7 +569,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
     as.integer(parity),
     as.integer(flags),
     NAOK=TRUE
-  );
+  )
 
   if (! ret$success)
     stop("'rgl_surface' failed")
@@ -596,8 +581,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
 ## add spheres
 ##
 
-rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE, ...)
-{
+rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE, ...) {
   rgl.material(...)
 
   vertex  <- rgl.vertex(x,y,z)
@@ -628,8 +612,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE,
 ## add planes
 ##
 
-rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
-{
+rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
   rgl.material(...)
 
   normals  <- rgl.vertex(a, b, c)
@@ -657,8 +640,7 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
 ## add clip planes
 ##
 
-rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0)
-{
+rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
   noffsets <- length(d)
@@ -685,8 +667,7 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0)
 ## add abclines
 ##
 
-rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
-{
+rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
   rgl.material(...)
 
   bases  <- rgl.vertex(x, y, z)
@@ -718,8 +699,7 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
 
 rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0.5, 
                       family=par3d("family"), font=par3d("font"), 
-                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... )
-{
+                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... ) {
   rgl.material( ... )
 
   vertex  <- rgl.vertex(x,y,z)
@@ -734,8 +714,8 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
     pos <- 0
     npos <- 1
   }
-  if (length(adj) == 0) adj = c(0.5, 0.5)
-  if (length(adj) == 1) adj = c(adj, 0.5)
+  if (length(adj) == 0) adj <- c(0.5, 0.5)
+  if (length(adj) == 1) adj <- c(adj, 0.5)
   if (length(adj) > 2) warning("Only the first two entries of 'adj' are used")
   
   if (!length(text)) {
@@ -784,8 +764,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
 
 rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL, 
                          userMatrix=diag(4), fixedSize = FALSE, 
-			 ... )
-{
+			 ... ) {
   rgl.material(...)
 
   center  <- rgl.vertex(x,y,z)
@@ -817,11 +796,10 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
 ## convert user coordinate to window coordinate
 ## 
 
-rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection())
-{
+rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection()) {
   xyz <- xyz.coords(x,y,z,recycle=TRUE)
   points <- rbind(xyz$x,xyz$y,xyz$z,1)
-  v <- asEuclidean(with(projection, t(proj %*% model %*% points)))
+  v <- asEuclidean(with(projection, t(proj %*% model %*% points))) # nolint
   viewport <- projection$view
   cbind( (v[,1]*0.5 + 0.5) + viewport[1]/viewport[3],
          (v[,2]*0.5 + 0.5) + viewport[2]/viewport[4],
@@ -832,10 +810,8 @@ rgl.user2window <- function( x, y=NULL, z=NULL, projection = rgl.projection())
 ## convert window coordinate to user coordinate
 ## 
 
-rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
-{
+rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection()) {
   xyz <- xyz.coords(x,y,z,recycle=TRUE)
-  window <- rbind(xyz$x,xyz$y,xyz$z)
 
   viewport <- projection$view
 
@@ -843,7 +819,7 @@ rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection())
                        2*(xyz$y - viewport[2]/viewport[4]) - 1,
                        2*xyz$z - 1,
                        1 )
-  asEuclidean(with(projection, t(solve(proj %*% model, normalized))))
+  asEuclidean(with(projection, t(solve(proj %*% model, normalized)))) # nolint
 }
 
 # Selectstate values
@@ -852,8 +828,7 @@ msCHANGING <- 2
 msDONE     <- 3
 msABORT    <- 4
 
-rgl.selectstate <- function(dev = cur3d(), subscene = currentSubscene3d(dev))
-{
+rgl.selectstate <- function(dev = cur3d(), subscene = currentSubscene3d(dev)) {
 	ret <- .C( rgl_selectstate,
     	as.integer(dev),
     	as.integer(subscene),
@@ -869,8 +844,7 @@ rgl.selectstate <- function(dev = cur3d(), subscene = currentSubscene3d(dev))
 
 
 rgl.select <- function(button = c("left", "middle", "right"), 
-                       dev = cur3d(), subscene = currentSubscene3d(dev))
-{
+                       dev = cur3d(), subscene = currentSubscene3d(dev)) {
 	if (rgl.useNULL())
 	  return(NULL)
 	button <- match.arg(button)
@@ -892,9 +866,8 @@ rgl.select <- function(button = c("left", "middle", "right"),
 }
 
 rgl.setselectstate <- function(state = "current", 
-                               dev = cur3d(), subscene = currentSubscene3d(dev))
-{
-	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3, abort = 4)
+                               dev = cur3d(), subscene = currentSubscene3d(dev)) {
+	state <- rgl.enum(state, current=0, none = 1, middle = 2, done = 3, abort = 4)
 	idata <- as.integer(c(state))
 	
 	  ret <- .C( rgl_setselectstate, 
@@ -910,8 +883,7 @@ rgl.setselectstate <- function(state = "current",
 	c("none", "middle", "done", "abort")[ret$state]
 }
 
-rgl.projection <- function(dev = cur3d(), subscene = currentSubscene3d(dev))
-{
+rgl.projection <- function(dev = cur3d(), subscene = currentSubscene3d(dev)) {
     list(model = par3d("modelMatrix", dev = dev, subscene = subscene),
     	 proj = par3d("projMatrix", dev = dev, subscene = subscene),
     	 view = par3d("viewport", dev = dev, subscene = subscene))
@@ -927,12 +899,12 @@ rgl.select3d <- function(button = c("left", "middle", "right"),
   urx <- rect[3]
   ury <- rect[4]
   
-  if ( llx > urx ){
+  if ( llx > urx ) {
   	temp <- llx
   	llx <- urx
   	urx <- temp
   }
-  if ( lly > ury ){
+  if ( lly > ury ) {
   	temp <- lly
   	lly <- ury
   	ury <- temp
@@ -948,4 +920,3 @@ rgl.select3d <- function(button = c("left", "middle", "right"),
     (0 <= z) & (z <= 1)
   }
 }
-

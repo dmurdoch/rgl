@@ -23,4 +23,3 @@ material3d(texture = system.file("textures","rgl2.png", package="rgl"))
 spin <- spin3d(rpm=6,axis=c(0,0,1))
 if (!rgl.useNULL())
   play3d(wave, 10, startTime = 5)
-

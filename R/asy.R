@@ -60,7 +60,7 @@ ticklabel RGLScale(real s)
   }
   
   # simulate rgl.attrib
-  get.attrib <- function(id, attrib) { 
+  get.attrib <- function(id, attrib) {
     obj <- scene$objects[[as.character(id)]]
     obj[[attrib]]
   }
@@ -144,7 +144,7 @@ ticklabel RGLScale(real s)
   	
   writePoly <- function(vertices) {
     if (any(!is.finite(vertices)))
-      return();
+      return()
     setPen(apply(vertices[, rgba], 2, mean))
     v <- vertices[1, 1:3]
     result <<- c(result, subst('draw(surface((%x%, %y%, %z%)', x=v[1], y=v[2], z=v[3]))
@@ -246,7 +246,6 @@ ticklabel RGLScale(real s)
     setPen(size = getmaterial(id)$lwd)          
     vertices <- getVertices(id)
     n <- nrow(vertices)    
-    inds <- seq_len(n)
     open <- FALSE
     for (i in seq_len(n)) {
       if (open) {
@@ -261,7 +260,7 @@ ticklabel RGLScale(real s)
       	  setPen(vertices[i, rgba])
       	  result <<- c(result, subst('draw((%x%, %y%, %z%)',
       	    x = vertices[i, 1], y = vertices[i, 2], z = vertices[i, 3]))
-      	  open = TRUE
+      	  open <- TRUE
       	}
     }
     if (open)
@@ -445,7 +444,7 @@ ticklabel RGLScale(real s)
       text = writeText(ids[i]),
       background = writeBackground(ids[i]),
       bboxdeco = writeBBox(ids[i]),
-      light = {}
+      light = {} # nolint
     )
   }
   if (outtype %in% c("latex", "pdflatex")) {

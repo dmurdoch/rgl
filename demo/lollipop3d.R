@@ -29,7 +29,7 @@ cone3d <- function(base,tip,rad,n=30,...) {
   ecoord2 <- function(theta) {
     base+rad*(cos(theta)*p1+sin(theta)*p2)
   }
-    for (i in 1:(n-1)) {
+    for (i in seq_len(n-1)) {
       li <- ecoord2(degvec[i])
       lj <- ecoord2(degvec[i+1])
       triangles3d(c(li[1],lj[1],tip[1]),c(li[2],lj[2],tip[2]),c(li[3],lj[3],tip[3]),...)
@@ -109,13 +109,11 @@ lollipop3d <- function(data.x,data.y,data.z,surf.fun,surf.n=50,
                   col=ifelse(X[3]>X[4],col.stem[1],
                     col.stem[2]),lwd=lwd.stem)
         })
-  bbox <- par3d("bbox")
   if (axes=="box") {
     bbox3d(xat=x.ticks,xlab=x.ticklabs,
              yat=y.ticks,ylab=y.ticklabs,
              zat=z.ticks,zlab=z.ticklabs,lit=lit)
   } else if (axes=="lines") { ## set up axis lines
-    bbox <- par3d("bbox")
     axis3d(edge="x",at=x.ticks,labels=x.ticklabs,
            col=col.axes,arrow=axis.arrow)
     axis3d(edge="y",at=y.ticks,labels=y.ticklabs,
@@ -136,7 +134,7 @@ axes3d()
 set.seed(1001)
 x <- runif(30)
 y <- runif(30,max=2)
-dfun <- function(x,y) { 2*x+3*y+2*x*y+3*y^2 }
+dfun <- function(x,y)  2*x+3*y+2*x*y+3*y^2 
 z <- dfun(x,y)+rnorm(30,sd=0.5)
 ## lollipops only
 lollipop3d(x,y,z)
@@ -147,7 +145,7 @@ lollipop3d(x,y,z,dfun,col.pt="red",col.stem=c("red","blue"))
 ## lollipops plus regression fit
 
 linmodel <- lm(z~x+y)
-dfun <- function(x,y) {predict(linmodel,newdata=data.frame(x=x,y=y))}
+dfun <- function(x,y) predict(linmodel,newdata=data.frame(x=x,y=y))
 lollipop3d(x,y,z,dfun,col.pt="red",col.stem=c("red","blue"))
 
 ####

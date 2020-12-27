@@ -14,5 +14,3 @@ rgl.quit <- function() {
   unloadNamespace("rgl")
 
 }
-
-

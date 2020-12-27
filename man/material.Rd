@@ -7,8 +7,8 @@
 }
 \usage{
 rgl.material(
-  color        = c("white"),
-  alpha        = c(1.0),
+  color        = "white",
+  alpha        = 1.0,
   lit          = TRUE, 
   ambient      = "black",
   specular     = "white", 

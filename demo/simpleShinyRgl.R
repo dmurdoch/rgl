@@ -4,7 +4,7 @@ options(rgl.useNULL = TRUE)
 library(shiny)
 library(rgl)
 
-app = shinyApp(
+app <- shinyApp(
 	ui = bootstrapPage(
 		checkboxInput("rescale", "Rescale"),
 		rglwidgetOutput("rglPlot")

@@ -264,7 +264,7 @@ writeOBJ <- function(con,
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
     bbox <- convertBBox(bbox$id)
-    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE)
+    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE) # nolint
     dobbox <- TRUE
   } else dobbox <- FALSE 
   
@@ -318,7 +318,7 @@ readOBJ <- function(con, ...) {
                                         x="numeric",
                                         y="numeric",
                                         z="numeric"))
-  vertices <- with(vertices, rbind(x, y, z))
+  vertices <- with(vertices, rbind(x, y, z)) # nolint
   
   subset <- lines[instrs == "vn"]
   if (length(subset)) {
@@ -356,11 +356,11 @@ readOBJ <- function(con, ...) {
   polys <- lapply(polys, function(poly) as.numeric(poly[-1]))
   
   # Regexp suggested by Bill Dunlap -- thanks!
-  normals <- gsub("(^| *)([^/ ]*/?){0,2}", "\\1", lines[instrs == "f"])
+  normals <- gsub("(^| *)([^/ ]*/?){0,2}", "\\1", lines[instrs == "f"]) # nolint
   normals <- strsplit(normals, " ")
   normals <- lapply(normals, function(normal) as.numeric(normal[nchar(normal) > 0]))
 
-  textures <- gsub("(^| *)([^/ ]*/?){0,1}", "\\1", lines[instrs == "f"])
+  textures <- gsub("(^| *)([^/ ]*/?){0,1}", "\\1", lines[instrs == "f"]) # nolint
   textures <- gsub("/[^ ]*", "", textures)
   textures <- strsplit(textures, " ")
   textures <- lapply(textures, function(texture) as.numeric(texture[nchar(texture) > 0]))

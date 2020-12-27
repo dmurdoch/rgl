@@ -13,8 +13,7 @@
 ##
 ##
   
-.onLoad <- function(lib, pkg)
-{
+.onLoad <- function(lib, pkg) {
   # OS-specific 
   initValue <- 0  
   
@@ -54,9 +53,9 @@
       function(sym) assign(sym$name, sym, envir = ns))
       
   if ( !noOpenGL && .Platform$OS.type == "windows" && !onlyNULL) {
-    frame <- getWindowsHandle("Frame")    
+    frame <- getWindowsHandle("Frame")  # nolint 
     ## getWindowsHandle was numeric pre-2.6.0 
-    if ( !is.null(frame) ) initValue <- getWindowsHandle("Console")
+    if ( !is.null(frame) ) initValue <- getWindowsHandle("Console") # nolint
   } 
  
   if (onlyNULL) {
@@ -143,10 +142,9 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
 ##
 ##
 
-.onUnload <- function(libpath)
-{ 
+.onUnload <- function(libpath) {
   # shutdown
   
-  ret <- .C( rgl_quit, success=FALSE )
+  .C( rgl_quit, success=FALSE )
   
 }

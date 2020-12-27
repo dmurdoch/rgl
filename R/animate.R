@@ -31,7 +31,7 @@ toRotmatrix <- function(x) {
 
 par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spline", "linear"), 
                      extrapolate = c("oscillate","cycle","constant", "natural"),
-                     dev = cur3d(), subscene = par3d("listeners", dev = dev)) {  
+                     dev = cur3d(), subscene = par3d("listeners", dev = dev)) {
     force(dev)
     force(subscene)
     
@@ -197,7 +197,7 @@ movie3d <- function(f, duration, dev = cur3d(), ..., fps=10,
         rgl.snapshot(filename=filename, fmt="png", top=top)
     }	
     cat("\n")
-    if (.Platform$OS.type == "windows") system <- shell
+    if (.Platform$OS.type == "windows") system <- shell  # nolint
     if (is.null(convert) && requireNamespace("magick")) {
     	m <- NULL
     	for (i in round(startTime*fps):(duration*fps)) {
@@ -249,4 +249,3 @@ movie3d <- function(f, duration, dev = cur3d(), ..., fps=10,
     }
     invisible(convert)
 }
-

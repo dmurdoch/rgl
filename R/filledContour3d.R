@@ -21,7 +21,7 @@ filledContour3d.mesh3d <- function(obj, fn = "z",
   oldnverts <- nverts - 1
   while (nverts < minVertices && oldnverts < nverts) {
     oldnverts <- nverts
-    mesh <- subdivision3d(obj, deform = FALSE, normalize = TRUE)
+    obj <- subdivision3d(obj, deform = FALSE, normalize = TRUE)
     nverts <- ncol(obj$vb)
   }
   if (is.null(fn))

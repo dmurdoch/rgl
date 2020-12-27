@@ -2,11 +2,10 @@ persp3d <- function(x, ...) UseMethod("persp3d")
 
 
 persp3d.default <-
-function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
+function(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
     z, xlim = NULL, ylim = NULL, zlim = NULL,
     xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, 
-    forceClipregion = FALSE, ...)
-{
+    forceClipregion = FALSE, ...) {
     if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
@@ -58,7 +57,7 @@ setClipregion <- function(xlim = NULL, ylim = NULL, zlim = NULL, force = FALSE) 
     result <- c(clipregion = newSubscene3d("inherit", "inherit", "inherit"))
     par3d(listeners = listeners)
     normals <- matrix(nrow = 0, ncol = 3)
-    offsets <- c()
+    offsets <- numeric()
     if (length(xlim)) {
       normals <- rbind(normals, matrix(c(1, 0, 0,
                                          -1, 0, 0), nrow = 2, byrow = TRUE))
@@ -172,6 +171,6 @@ persp3d.formula <- function(x, data=NULL, xlab = xyz$xlab, ylab = xyz$ylab, zlab
   if (!is.null(data))
     environment(x) <- list2env(data, envir = environment(x))
   xyz <- xyz.coords(x)
-  dxyz <- with(xyz, deldir::deldir(x, y, z = z, suppressMsge = TRUE))
+  dxyz <- with(xyz, deldir::deldir(x, y, z = z, suppressMsge = TRUE)) # nolint
   persp3d(dxyz, xlab = xlab, ylab = ylab, zlab = zlab, ...)
 }

@@ -41,7 +41,7 @@ mouseTrackball <- function(button = 1, dev = cur3d() ) {
       z <- sin(angle)
       len <- sqrt(1 - z^2)
       pt <- pt * len
-      return (c(pt, z))
+      return(c(pt, z))
     }
     
     trackballBegin <- function(x, y) {
@@ -107,7 +107,7 @@ mouseOneAxis <- function(button = 1, dev = cur3d(), axis = c(1,0,0), left = TRUE
       z <- sin(angle)
       len <- sqrt(1 - z^2)
       pt <- pt * len
-      return (c(pt, z))
+      return(c(pt, z))
     }
 
     oneAxisBegin <- function(x, y) {
@@ -212,10 +212,10 @@ mouseBG <- function(button = 1, dev = cur3d(), init = "white", rate = cbind(c(1,
     if (space == "hsv")
     	init <- rgb2hsv(init*255)
 
-    lambda0 <- lambda <- NULL
+    width <- height <- lambda0 <- lambda <- NULL
     
     bgBegin <- function(x, y) {
-        lambda0 <<- c(x/width, 1-y/height)    
+        lambda0 <<- c(x/width, 1-y/height)    # nolint
         vp <- par3d("viewport")
     	width <<- vp[3]
     	height <<- vp[4]
@@ -254,12 +254,11 @@ mouseBG <- function(button = 1, dev = cur3d(), init = "white", rate = cbind(c(1,
 mouseInterp <- function(button = 1, dev = cur3d(), fn, init = 0, range = NULL, direction=c(1,0)) {
     cur <- cur3d()
     time <- init
-    x0 <- width <- height <- NULL
+    x0 <- width <- NULL
     
     interpBegin <- function(x, y) {
     	vp <- par3d("viewport")
         width <<- vp[3]
-        height <<- vp[4]
         x0 <<- sum(direction*c(x,y))
     }
         

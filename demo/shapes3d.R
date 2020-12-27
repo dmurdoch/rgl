@@ -56,8 +56,8 @@ ellipsoid3d <- function(rx=1,ry=1,rz=1,n=30,ctr=c(0,0,0),
                         trans = par3d("userMatrix"),...) {
   if (missing(trans) && !cur3d()) trans <- diag(4)
   degvec <- seq(0,pi,length=n)
-  ecoord2 <- function(p) {
-    c(rx*cos(p[1])*sin(p[2]),ry*sin(p[1])*sin(p[2]),rz*cos(p[2])) }
+  ecoord2 <- function(p)
+    c(rx*cos(p[1])*sin(p[2]),ry*sin(p[1])*sin(p[2]),rz*cos(p[2]))
   v <- apply(expand.grid(2*degvec,degvec),1,ecoord2)
   if (qmesh) v <- rbind(v,rep(1,ncol(v))) ## homogeneous
   e <- expand.grid(1:(n-1),1:n)

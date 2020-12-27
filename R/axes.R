@@ -26,9 +26,8 @@
     ranges
 }
 
-axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
-    pos = NULL, nticks = 5, ...)
-{
+axis3d <- function(edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
+    pos = NULL, nticks = 5, ...) {
         save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
         on.exit(par3d(save))
         
@@ -86,8 +85,7 @@ axis3d <- function (edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
 }
 
 axes3d <- function(edges='bbox', labels=TRUE,
-                   tick=TRUE, nticks = 5, box = FALSE, expand = 1.03, ...)
-{
+                   tick=TRUE, nticks = 5, box = FALSE, expand = 1.03, ...) {
     save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
     on.exit(par3d(save))
     if (identical(edges, 'bbox')) {
@@ -107,8 +105,7 @@ axes3d <- function(edges='bbox', labels=TRUE,
     lowlevel(result)  
 }
 
-box3d <- function(...)
-{
+box3d <- function(...) {
         save <- par3d(ignoreExtent = TRUE)        
         on.exit(par3d(save))
         
@@ -131,8 +128,7 @@ box3d <- function(...)
         lowlevel(c(result, lines=segments3d(x,y,z,...)))
 }
 
-mtext3d <- function(text, edge, line = 0, at = NULL, pos = NA, ...)
-{
+mtext3d <- function(text, edge, line = 0, at = NULL, pos = NA, ...) {
         save <- par3d(ignoreExtent = TRUE)
         on.exit(par3d(save))
 
@@ -174,9 +170,8 @@ mtext3d <- function(text, edge, line = 0, at = NULL, pos = NA, ...)
                text, ...)
 }   
 
-title3d <- function (main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
-    zlab = NULL, line = NA, ...) 
-{
+title3d <- function(main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
+    zlab = NULL, line = NA, ...) {
         save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
         on.exit(par3d(save))
 	result <- numeric(0)

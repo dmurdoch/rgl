@@ -10,7 +10,6 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
                      ids = NULL) {
  
   writeData <- function() {
-    ident <- paste(filename, " produced by RGL\n")
     cat("ply\n", file=con)
     fmt <- switch(format,
       little_endian = "binary_little_endian",
@@ -277,7 +276,7 @@ property int vertex2\n", file=con)
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
     bbox <- convertBBox(bbox$id)
-    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE)
+    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE) # nolint
     dobbox <- TRUE
   } else dobbox <- FALSE 
   

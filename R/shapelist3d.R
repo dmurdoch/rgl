@@ -67,22 +67,22 @@ shade3d.shapelist3d <- function(x, override = TRUE, ...) {
   lowlevel(unlist(sapply( x, function(item) shade3d(item, override=override, ...) ) ) )
 }
 
-translate3d.shapelist3d <- function ( obj, x, y, z, ... ) {
+translate3d.shapelist3d <- function( obj, x, y, z, ... ) {
   structure(lapply( obj, function(item) translate3d(item, x, y, z, ...) ),
             class = class(obj))
 }  
 
-rotate3d.shapelist3d <- function ( obj,angle,x,y,z,matrix, ... ) {
+rotate3d.shapelist3d <- function( obj,angle,x,y,z,matrix, ... ) {
   structure(lapply( obj, function(item) rotate3d(item, x,y,z,matrix,...) ),
             class = class(obj))
 }  
 
-scale3d.shapelist3d <- function ( obj, x, y, z, ... ) {
+scale3d.shapelist3d <- function( obj, x, y, z, ... ) {
   structure(lapply( obj, function(item) scale3d(item, x,y,z,...) ),
             class = class(obj))
 }
 
-addNormals.shapelist3d <- function ( x, ... ) {
+addNormals.shapelist3d <- function( x, ... ) {
   structure(lapply( x, function(item) addNormals(item, ...) ),
             class = class(x))
 }

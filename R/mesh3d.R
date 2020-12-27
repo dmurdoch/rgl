@@ -194,7 +194,7 @@ allowedMeshColor <- function(meshColor, modes) {
     (modes[1] == modes[2] && modes[1] == "lines")
 }
 
-shade3d.mesh3d <- function ( x, override = TRUE, 
+shade3d.mesh3d <- function( x, override = TRUE, 
                              meshColor = c("vertices", "edges", "faces", "legacy"), 
                              texcoords = NULL, 
                              ...,
@@ -323,12 +323,12 @@ shade3d.mesh3d <- function ( x, override = TRUE,
 
 # transformation support
 
-translate3d.mesh3d <- function ( obj, x, y, z, ... ) {
+translate3d.mesh3d <- function( obj, x, y, z, ... ) {
   obj$vb <- t(translate3d(t(obj$vb), x, y, z))
   return(obj)                            
 }  
 
-rotate3d.mesh3d <- function ( obj,angle,x,y,z,matrix, ... ) {
+rotate3d.mesh3d <- function( obj,angle,x,y,z,matrix, ... ) {
   obj$vb <- t(rotate3d(t(obj$vb), angle, x, y, z, matrix))
   if ( !is.null(obj$normals) ) {
     if ( missing(matrix) ) 
@@ -343,7 +343,7 @@ rotate3d.mesh3d <- function ( obj,angle,x,y,z,matrix, ... ) {
   return(obj)                            
 }  
 
-scale3d.mesh3d <- function ( obj, x, y, z, ... ) {
+scale3d.mesh3d <- function( obj, x, y, z, ... ) {
   obj$vb <- t(scale3d(t(obj$vb), x, y, z))
   if ( !is.null(obj$normals) ) {
     obj$normals <- scale3d(t(obj$normals), 1/x, 1/y, 1/z)

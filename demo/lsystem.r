@@ -18,7 +18,7 @@ rotZ.m3x3 <- function( degree ) {
         kc, -ks,   0, 
         ks,  kc,   0,
          0,   0,   1
-      ),ncol=3,byrow=T
+      ),ncol=3,byrow=TRUE
     ) 
   )
 }
@@ -32,7 +32,7 @@ rotX.m3x3 <- function( degree ) {
          1,   0,   0,
          0,  kc, -ks,
          0,  ks,  kc
-      ),ncol=3,byrow=T
+      ),ncol=3,byrow=TRUE
     )
   )
 }
@@ -46,21 +46,21 @@ rotY.m3x3 <- function( degree ) {
         kc,   0,   ks,
          0,   1,    0,
        -ks,   0,   kc
-      ),ncol=3,byrow=T
+      ),ncol=3,byrow=TRUE
     )
   )
 }
 
 rotZ <- function( v, degree ) {
-  return ( rotZ.m3x3(degree) %*% v)
+  return( rotZ.m3x3(degree) %*% v)
 }
 
 rotX <- function( v, degree ) {
-  return ( rotX.m3x3(degree) %*% v)
+  return( rotX.m3x3(degree) %*% v)
 }
 
 rotY <- function( v, degree ) {
-  return ( rotY.m3x3(degree) %*% v)
+  return( rotY.m3x3(degree) %*% v)
 }
 
 
@@ -89,7 +89,7 @@ turtle.move <- function(turtle, steps, color) {
   z <- c( from[3], to[3] )
   rgl.lines(x,y,z,col=color,size=1.5,alpha=0.5)
   turtle$pos <- to
-  return (turtle)
+  return(turtle)
 }
 
 turtle.pitch <- function(turtle, degree) {
@@ -142,7 +142,7 @@ lsystem.eval <- function( expr, turtle ) {
     turtle <- lsystem.eval( expr[[1]], turtle )
     turtle <- lsystem.eval( expr[[2]], turtle )
     turtle <- saved
-  } else if ( length(expr) == 1 ) {          
+  } else if ( length(expr) == 1 ) {
     if ( as.name(expr) == "stem" )      turtle <- turtle.move(turtle, 5, "brown")
     else if ( as.name(expr) == "short") turtle <- turtle.move(turtle, 5, "brown")
     else if ( as.name(expr) == "leaf" ) {
@@ -158,7 +158,7 @@ lsystem.eval <- function( expr, turtle ) {
     else if ( as.name(expr) == "turnright") turtle <- turtle.head(turtle,-20)
     else if ( as.name(expr) == "turn") turtle <- turtle.roll(turtle,180)
   }
-  return (turtle)
+  return(turtle)
 }
 
 
@@ -166,7 +166,7 @@ lsystem.eval <- function( expr, turtle ) {
 # example
 #
 
-simple <- function (level=0) {
+simple <- function(level=0) {
   grammar <- list(
     stem=lsystem.code(
       stem-(up-stem-leaf)-stem-(down-stem-leaf)-stem-leaf
@@ -176,7 +176,7 @@ simple <- function (level=0) {
   lsystem.plot(plant,level)
 }
 
-rgl.demo.lsystem <- function (level=0) {
+rgl.demo.lsystem <- function(level=0) {
   gen   <- list(
     stem=lsystem.code( 
       stem-left-stem-branch( turnleft-down-short-turnleft-down-stem-leaf)-right-right-stem--branch( turnright-up-short-turnright-up-short-turnright-short-stem-leaf)-left-left-left-stem-branch( turnleft-down-short-turnright-down-stem-leaf )-branch( up-turnright-short-up-turnleft-up-stem-leaf ) 
@@ -188,4 +188,3 @@ rgl.demo.lsystem <- function (level=0) {
 
 rgl.open()
 rgl.demo.lsystem(level=1)
-

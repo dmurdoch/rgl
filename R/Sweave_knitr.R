@@ -25,8 +25,6 @@ rgl.Sweave <- function(name, width, height, options, ...) {
 
   snapshotDone <- FALSE
 
-  stayOpen <- isTRUE(options$stayopen)
-
   type <- options$outputtype
   if (is.null(type)) type <- "png"
 
@@ -217,7 +215,7 @@ withPrivateSeed <- local({
       # Need to call this to make sure that the value of .Random.seed gets put
       # into R's internal RNG state. (Issue #1763)
 
-      # httpuv::getRNGState()
+      # httpuv::getRNGState() # nolint
     })
     
     expr
@@ -312,16 +310,16 @@ fns <- local({
     }, logical(1))
   
   # move plots before source code
-  fig_before_code = function(x) {
-    s = vapply(x, evaluate::is.source, logical(1))
+  fig_before_code <- function(x) {
+    s <- vapply(x, evaluate::is.source, logical(1))
     if (length(s) == 0 || !any(s)) return(x)
-    s = which(s)
-    f = which(find_figs(x))
-    f = f[f >= min(s)]  # only move those plots after the first code block
+    s <- which(s)
+    f <- which(find_figs(x))
+    f <- f[f >= min(s)]  # only move those plots after the first code block
     for (i in f) {
-      j = max(s[s < i])
-      tmp = x[i]; x[[i]] = NULL; x = append(x, tmp, j - 1)
-      s = which(vapply(x, evaluate::is.source, logical(1)))
+      j <- max(s[s < i])
+      tmp <- x[i]; x[[i]] <- NULL; x <- append(x, tmp, j - 1)
+      s <- which(vapply(x, evaluate::is.source, logical(1)))
     }
     x
   }
@@ -439,8 +437,8 @@ fns <- local({
   # These functions are closely based on code from knitr:
   
   # compare two recorded plots
-  is_low_change = function(p1, p2) {
-    p1 = p1[[1]]; p2 = p2[[1]]  # real plot info is in [[1]],
+  is_low_change <- function(p1, p2) {
+    p1 <- p1[[1]]; p2 <- p2[[1]]  # real plot info is in [[1]],
                                 # as is plotnum
     if (length(p2) < (n1 <- length(p1))) return(FALSE)  # length must increase
     identical(p1[1:n1], p2[1:n1])
@@ -452,9 +450,9 @@ fns <- local({
     i1 <- idx[1]; i2 <- idx[2]  # compare plots sequentially
     for (i in 1:(n - 1)) {
       # remove the previous plot and move its index to the next plot
-      if (is_low_change(x[[i1]], x[[i2]])) m = c(m, i1)
-      i1 = idx[i + 1]
-      i2 = idx[i + 2]
+      if (is_low_change(x[[i1]], x[[i2]])) m <- c(m, i1)
+      i1 <- idx[i + 1]
+      i2 <- idx[i + 2]
     }
     if (is.null(m)) x else x[-m]
   }

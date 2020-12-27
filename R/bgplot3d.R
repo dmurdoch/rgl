@@ -65,8 +65,6 @@ show2d <- function(expression,
   coord <- tolower(face[1])
   lower <- face[2] == '-'
   
-  calc <- c(x = is.null(x), y = is.null(y), z = is.null(z))
-  
   ranges <- .getRanges(expand = expand)
     switch(coord,
       x = {

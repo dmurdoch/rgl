@@ -15,18 +15,19 @@ rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zl
   
   esty  <- (xa+xb*x) * (za+zb*z) + ex + ez
 
-  rgl.spheres(x,esty,z,color="gray",radius=1.5,specular="green",texture=system.file("textures/bump_dust.png",package="rgl"),texmipmap=T, texminfilter="linear.mipmap.linear")
+  rgl.spheres(x,esty,z,color="gray",radius=1.5,specular="green",
+              texture=system.file("textures/bump_dust.png",package="rgl"),
+              texmipmap=TRUE, texminfilter="linear.mipmap.linear")
 
   regx  <- seq(xlim[1],xlim[2],len=100)
   regz  <- seq(zlim[1],zlim[2],len=100)
   regy  <- (xa+regx*xb) %*% t(za+regz*zb)
   
   rgl.surface(regx,regz,regy,color="blue",alpha=0.5,shininess=128)
-  # rgl.surface(regx,regz,regy,color="blue",front="lines",back="lines")
-  
+
   lx <- c(xlim[1],xlim[2],xlim[2],xlim[1])
   lz <- c(zlim[1],zlim[1],zlim[2],zlim[2])
-  f <- function(x,z) { return ( (xa+x*xb) * t(za+z*zb) ) }
+  f <- function(x,z) (xa+x*xb) * t(za+z*zb)
   ly <- f(lx,lz)
   
   rgl.quads(lx,ly,lz,color="red",size=5,front="lines",back="lines",lit=FALSE)
@@ -34,4 +35,3 @@ rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zl
 
 rgl.open()
 rgl.demo.regression()
-

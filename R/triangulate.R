@@ -15,7 +15,7 @@ intersectSegSeg <- function(seg1,seg2) {
   # do segments intersect?
   # both segments have endpoints as columns
   coeffs <- try(solve(cbind(seg1[,2]-seg1[,1], seg2[,1]-seg2[,2]), seg2[,1]-seg1[,1]), silent=TRUE)
-  if (inherits(coeffs, "try-error")) return (FALSE)
+  if (inherits(coeffs, "try-error")) return(FALSE)
   all(zapsmall(coeffs) >= 0) && all(zapsmall(1-coeffs) >= 0)
 }
   
@@ -31,7 +31,6 @@ intersectTriSeg <- function(tri, seg) {
   if (any(apply(coeffs > 0, 2, all))) return(TRUE)
   up <- coeffs[,1] < 0
   dn <- coeffs[,2] < 0  
-#  if (!any(up) || !any(dn)) return(TRUE)
   lb <- max( -coeffs[up,1]/(coeffs[up,2]-coeffs[up,1]) )
   ub <- 1 - max( -coeffs[dn,2]/(coeffs[dn,1] - coeffs[dn,2]) )
   lb <= ub
@@ -50,7 +49,6 @@ triangulateSimple <- function(x,y, random=TRUE, plot=FALSE, partial=NA) {
     i3 <- i2 %% m + 1
     theta3 <- atan2(y[verts[i3]]-y[verts[i1]], x[verts[i3]]-x[verts[i1]])
     theta2 <- atan2(y[verts[i2]]-y[verts[i1]], x[verts[i2]]-x[verts[i1]])
-    # diff <- (theta3-theta2+4*pi) %% (2*pi)
     diff <- ( (theta3-theta2)/pi + 4 ) %% 2
     convex <- which(diff < 1) 
     if (random && length(convex) > 1)
@@ -215,7 +213,7 @@ nestPolys <- function(x,y = NULL) {
   # The last one at length(verts)+1 lists polys not nested anywhere
   
   nesting <- rep(list(integer()), length(verts)+1)
-  place <- function(new, toplevel) {    
+  place <- function(new, toplevel) {
     placed <- FALSE
     contains <- integer()
     if (length(nesting[[toplevel]])) {

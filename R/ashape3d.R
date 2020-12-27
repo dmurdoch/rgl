@@ -20,7 +20,6 @@ reOrient <- function(vertices) {
   }
   polys <- ncol(vertices)
   verts <- nrow(vertices)
-  cols <- col(vertices)
   fixed <- 0L
   for (i in seq_len(polys - 1)) {
     fixed <- max(i, fixed)

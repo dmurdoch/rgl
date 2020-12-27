@@ -16,13 +16,10 @@ randomDot <- function(left, right, rightOffset=c(200, 0), n=3000, ...) {
   rightDepth <- rgl.pixels("depth")
   rightUR <- rightViewport[1:2] + rightSize - 1
 
-  ll <- pmin(leftViewport[1:2], rightViewport[1:2]+rightOffset)
   size <- pmax(leftViewport[3:4], rightViewport[3:4]+rightOffset)
   
-  pts <- matrix(c(sample(leftSize[1], n, replace=T),
-                  sample(leftSize[2], n, replace=T)), n, 2)
-  # for debugging:                
-  # pts <-matrix(c(seq(1, size[1], len=n), seq(1, size[2], len=n)), n, 2)
+  pts <- matrix(c(sample(leftSize[1], n, replace=TRUE),
+                  sample(leftSize[2], n, replace=TRUE)), n, 2)
   cols <- 1:n
   startpt <- pts
   startcols <- cols

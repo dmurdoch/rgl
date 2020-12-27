@@ -58,7 +58,7 @@ toggleButton <- function(subset, subscenes = currentSubscene3d(), prefixes = "",
   subscenes <- rep(subscenes, length.out = nsubs)
   prefixes <- rep(prefixes, length.out = nsubs)
   result <- subst(
-'<button type="button" id="%id%" name="%name%" onclick = "(function(){
+'<button type="button" id="%id%" name="%name%" onclick = "(function() {
   var subset = [%subset%], i;',
     name, id, subset = paste(subset, collapse=","))
   for (i in seq_len(nsubs))
@@ -137,7 +137,7 @@ propertySlider <- function(setter = propertySetter,
   # We don't want to respond to a change in the middle of a
   # previous response, but we don't want to lose it either.
   result <- subst(
-'<script>%prefix%rgl.%id% = function(value){
+'<script>%prefix%rgl.%id% = function(value) {
   if (typeof %prefix%rgl.drawScene === "undefined")
     return;
   var busy = (typeof %prefix%rgl.%id%.busy !== "undefined"),
@@ -208,7 +208,7 @@ propertySetter <- function(values = NULL, entries, properties, objids, prefixes 
   get <- if (grepl("^par3d\\.userMatrix", property)) ".getAsArray()" else ""
   load <- if (grepl("^par3d\\.userMatrix", property)) ".load(propvals)" else "= propvals"
   result <- c(
-'function(value){',
+'function(value) {',
 
     if (!direct) subst(
 '   var values = [%vals%],',
@@ -332,7 +332,7 @@ vertexSetter <- function(values = NULL, vertices = 1, attributes, objid, prefix 
 
   if (interp) values <- rbind(values[1,], values, values[nrow(values),])
   result <- c(
-'function(value){',
+'function(value) {',
 
     if (direct)
 '  var ofs;'
@@ -454,11 +454,9 @@ matrixSetter <- function(fns, from, to, steps, subscene = currentSubscene3d(), m
   settername <- basename(tempfile("fn", ""))
   propname <- paste0("userMatrix", settername) # Needs to match "^userMatrix" regexp
   param <- numeric()
-  prefixes <- character()
   result <- subst(
-'%prefix%rgl.%settername% = function(value, index){
+'%prefix%rgl.%settername% = function(value, index) {
      var fns = new Array();', prefix, settername)
-  product <- ''
   for (i in seq_len(n)) {
     setter <- par3dinterpSetter(fns[[i]], from[i], to[i], steps[i],
     			        omitConstant = TRUE, subscene = i-1, prefixes = prefix,
@@ -516,7 +514,7 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
   prefixes <- rep(prefixes, length.out = nobjs)
   objids <- rep(objids, length.out = nobjs)
   result <- subst(
-'  function(time){
+'  function(time) {
     var ages = [-Infinity, %ages%, Infinity],
         births = [%births%],
         j = new Array(births.length),

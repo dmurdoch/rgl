@@ -39,7 +39,7 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
 
     buttons <- c(left=1, right=2, middle=3)[buttons]
     
-    selected <- c()
+    selected <- NULL
     
     select <- function(mousex, mousey) {
        disp <- cur3d()
@@ -79,7 +79,3 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
     while(!doquit && length(selected) < n) Sys.sleep(0.2)
     selected
 }
-
-    
-    
-    

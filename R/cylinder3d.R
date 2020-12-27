@@ -25,11 +25,11 @@ cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 =
   inds <- seq_len(n)
   if (closed > 0) {
     ind0 <- c(n-1-closed, n-closed, inds)
-    ind1 <- c(n-closed, inds, 1+closed)
+    ind1 <- c(n-closed, inds, 1+closed) # nolint
     ind2 <- c(inds, 1+closed, 2+closed)
   } else {
     ind0 <- c(1, 1, inds)
-    ind1 <- c(1, inds, n)
+    ind1 <- c(1, inds, n) # nolint
     ind2 <- c(inds, n, n)
   }  
   
@@ -52,21 +52,8 @@ cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 =
   if (!is.null(e1)) {
     e1 <- as.matrix(as.data.frame(xyz.coords(e1)[c("x", "y", "z")]))
     e1 <- e1[rep(seq_len(nrow(e1)), len=n),] 
-  } else # if (n < 5)
+  } else 
     e1 <- (center[ind2,] - center[ind0,])[inds,]
-  # else { # Use high order approximation from Wang et al
-  #   i <- 3:(n-2)
-  #   e1 <- rbind(-25*center[1,] + 48*center[2,] - 36*center[3,] 
-  #   	        +16*center[4,] - 3*center[5,],
-  #   	        - 3*center[1,] - 10*center[2,] + 18*center[3,]
-  #   	        - 6*center[4,] + center[5,],
-  #   	            center[i-2,] - 8*center[i-1,] 
-  #   	        + 8*center[i+1,] -   center[i+2,],
-  #   	          3*center[n,] + 10*center[n-1,] - 18*center[n-2,]
-  #   	        + 6*center[n-3,] - center[n-4,],
-  #   	         25*center[n,] - 48*center[n-1,] + 36*center[n-2,] 
-  #   	        -16*center[n-3,] + 3*center[n-4,])
-  # }
   
   # Fix up degenerate cases by repeating existing ones, or using arbitrary ones
   zeros <- rowSums(e1^2) == 0

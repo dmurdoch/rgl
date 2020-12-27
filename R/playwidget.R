@@ -2,7 +2,7 @@
 #' Widget output function for use in Shiny
 #'
 #' @export
-playwidgetOutput <- function(outputId, width = '0px', height = '0px'){
+playwidgetOutput <- function(outputId, width = '0px', height = '0px') {
   shinyWidgetOutput(outputId, 'rglPlayer', width, height, package = 'rgl')
 }
 
@@ -10,7 +10,7 @@ playwidgetOutput <- function(outputId, width = '0px', height = '0px'){
 #'
 #' @export
 renderPlaywidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
-  if (!quoted) { expr <- substitute(expr) } # force quoted
+  if (!quoted) expr <- substitute(expr)  # force quoted
   markRenderFunction(playwidgetOutput,
                      shinyRenderWidget(expr, playwidgetOutput, env, quoted = TRUE),
   		     outputArgs = outputArgs)

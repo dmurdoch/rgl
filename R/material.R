@@ -8,9 +8,9 @@
 ## ===[ SECTION: generic appearance function ]================================
 ##
 
-rgl.material <- function (
-  color        = c("white"),
-  alpha        = c(1.0),
+rgl.material <- function(
+  color        = "white",
+  alpha        = 1.0,
   lit          = TRUE, 
   ambient      = "black",
   specular     = "white", 

@@ -208,7 +208,6 @@ mfrow3d <- function(nr, nc, byrow = TRUE, parent = NA, sharedMouse = FALSE,
         newvp <- c(parentvp[1] + (j - 1)*parentvp[3]/nc,
                    parentvp[2] + (nr - i)*parentvp[4]/nr,
                    parentvp[3]/nc, parentvp[4]/nr)
-#        cat(sprintf("mfrow3d i=%d j=%d\n", i, j))
         result[(i-1)*nc + j] <- newSubscene3d(newviewport = newvp, parent = parent, ...)
       }
   else
@@ -238,9 +237,6 @@ layout3d <- function(mat, widths = rep.int(1, ncol(mat)),
   if (!all(seq_len(num.figures) %in% as.integer(mat)))
     stop(gettextf("Layout matrix must contain at least one reference\nto each of the values {1 ... %d}\n", 
             num.figures), domain = NA)
-  dm <- dim(mat)
-  num.rows <- dm[1L]
-  num.cols <- dm[2L]
 
   .check3d()
   if (missing(parent))

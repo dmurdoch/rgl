@@ -16,7 +16,7 @@ plotmath3d <- function(x, y = NULL, z = NULL,
     adj <- c(adj, 0.5, 0.5)[1:2]
   save3d <- par3d(skipRedraw = TRUE)
   save <- options(device.ask.default = FALSE)
-  on.exit({options(save); par3d(save3d)})
+  on.exit({options(save); par3d(save3d)}) # nolint
   result <- integer(n)
   for (i in seq_len(n)) {
     # Open the device twice.  The first one is to measure the text...
@@ -30,8 +30,6 @@ plotmath3d <- function(x, y = NULL, z = NULL,
       thistext <- text[i]
     else
       thistext <- text
-#    w <- strwidth(thistext, cex = initCex, ...)*(2*abs(adj[1] - 0.5) + 1)
-#    h <- strheight(thistext, cex = initCex, ...)*(2*abs(adj[2] - 0.5) + 1)
     w <- strwidth(thistext, cex = initCex, ...)
     w1 <- strwidth("m", cex = initCex, ...)
     h <- strheight(thistext, cex = initCex, ...)

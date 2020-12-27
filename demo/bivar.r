@@ -1,9 +1,9 @@
 # rgl demo: rgl-bivar.r
 # author: Daniel Adler
 
-rgl.demo.bivar <- function()
-{
-  require(MASS);
+rgl.demo.bivar <- function() {
+  if (!requireNamespace("MASS"))
+    stop("This demo requires MASS")
   
   # parameters:
   n<-50; ngrid<-40
@@ -13,7 +13,7 @@ rgl.demo.bivar <- function()
   x<-rnorm(n); y<-rnorm(n)
   
   # estimate non-parameteric density surface via kernel smoothing
-  denobj<-kde2d(x, y, n=ngrid)
+  denobj <- MASS::kde2d(x, y, n=ngrid)
   den.z <-denobj$z
   
   # generate parametric density surface of a bivariate normal distribution
@@ -45,4 +45,3 @@ rgl.demo.bivar <- function()
 }
 
 rgl.demo.bivar()
-

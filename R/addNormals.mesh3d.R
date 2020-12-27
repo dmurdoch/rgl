@@ -12,7 +12,7 @@ addNormals.mesh3d <- function(x, ...) {
   
   if (length(x$it)) {
     it <- x$it
-    for (i in 1:ncol(it)) {
+    for (i in seq_len(ncol(it))) {
       normal <- normalize(xprod( v[, it[1, i]] - v[, it[3, i]], 
                                  v[, it[2, i]] - v[, it[1, i]]))
       if (!any(is.na(normal)))
@@ -27,7 +27,7 @@ addNormals.mesh3d <- function(x, ...) {
   
   if (length(x$ib)) {
     it <- x$ib
-    for (i in 1:ncol(it)) {
+    for (i in seq_len(ncol(it))) {
       normal <- normalize(xprod( v[, it[1, i]] - v[, it[4, i]],
                                  v[, it[2, i]] - v[, it[1, i]]))
       if (!any(is.na(normal)))

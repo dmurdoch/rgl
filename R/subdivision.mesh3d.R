@@ -16,12 +16,12 @@ edgemap <- function( size ) {
 edgeindex <- function( from, to, size, row=min(from,to), col=max(from,to) )
   return( row*size - ( row*(row+1) )/2 - (size-col) )
 
-divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
+divide.mesh3d <- function(mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   nv    <- dim(vb)[2]
   inds <- seq_len(nv)
   nq <- if (is.null(ib)) 0 else dim(ib)[2]
   nt <- if (is.null(it)) 0 else dim(it)[2]
-  primout <- c()
+  primout <- character()
   nvmax <- nv + nq + ( nv*(nv+1) )/2
   outvb <- matrix(data=0,nrow=4,ncol=nvmax)  
   # copy old points
@@ -191,19 +191,18 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   result$normals <- newnormals
   result$texcoords <- newtexcoords
   
-  return ( result )
+  return( result )
 }
 
-normalize.mesh3d <- function (mesh) {
+normalize.mesh3d <- function(mesh) {
   mesh$vb[1,] <- mesh$vb[1,]/mesh$vb[4,]
   mesh$vb[2,] <- mesh$vb[2,]/mesh$vb[4,]
   mesh$vb[3,] <- mesh$vb[3,]/mesh$vb[4,]
   mesh$vb[4,] <- 1
-  return (mesh)
+  return(mesh)
 }
 
-deform.mesh3d <- function( mesh, vb=mesh$vb, ib=mesh$ib, it=mesh$it )
-{
+deform.mesh3d <- function( mesh, vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   nv <- dim(vb)[2]
   nq <- if (is.null(ib)) 0 else dim(ib)[2]
   nt <- if (is.null(it)) 0 else dim(it)[2]
@@ -245,4 +244,3 @@ subdivision3d.mesh3d <- function(x,depth=1,normalize=FALSE,deform=TRUE,...) {
   }
   return(mesh)  
 }
-

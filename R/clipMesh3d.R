@@ -233,7 +233,6 @@ rejoinMesh3d <- function(x, tol = 1.e-6) {
   ntriangs <- ncol(x$it)
   if (ntriangs < 4)
     return(x)
-  hasattrs <- intersect(names(x), c("vb","normals","texcoords"))
   vals <- if (nrow(x$vb) == 4) asEuclidean(t(x$vb)) else t(x$vb)
   if (!is.null(x$normals))
     vals <- cbind(vals, if(nrow(x$normals) == 4) asEuclidean(t(x$normals)) else t(x$normals))
@@ -280,7 +279,7 @@ rejoinLines3d <- function(x, tol = 1.e-6) {
   indices <- seq_len(nverts)
   finite <- apply(x$vertices, 1, function(row) all(is.finite(row)))
   type <- x$type
-  hasattrs <- c()
+  hasattrs <- character()
   for (attr in c("vertices", "normals", "colors")) 
     if (!is.null(x[[attr]]) && nrow(x[[attr]]) > 1) 
       hasattrs <- c(hasattrs, attr)
@@ -444,7 +443,7 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
              newverts <- nverts
              values <- getValues(obj)
              if (!all(values >= 0, na.rm = TRUE)) {
-               hasattrs <- c()
+               hasattrs <- character()
                for (attr in c("vertices", "normals", "colors"))
                  if (!is.null(obj[[attr]]) && nrow(obj[[attr]]) > 1)
                    hasattrs <- c(hasattrs, attr)

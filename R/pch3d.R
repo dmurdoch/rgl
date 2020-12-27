@@ -37,7 +37,7 @@ pch3d <- function(x, y = NULL, z = NULL, pch = 1, bg = material3d("color")[1],
   	       },      	
   	       '5' = { # diamond
   	       	theta <- seq(0, 2*pi, length.out = 5)
-  	       	diamond <- cbind(cos(theta), sin(theta), 0)
+  	       	cbind(cos(theta), sin(theta), 0)
   	       },
   	       '6' = { # nabla
   	       	theta <- seq(3*pi/2, 2*pi + 3*pi/2, length.out = 4)
@@ -122,4 +122,3 @@ pch3d <- function(x, y = NULL, z = NULL, pch = 1, bg = material3d("color")[1],
   }
   lowlevel(ids)
 }
-      	    

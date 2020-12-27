@@ -1,4 +1,4 @@
-grid3d <- function (side, at = NULL, col="gray",
+grid3d <- function(side, at = NULL, col="gray",
                     lwd = 1, lty = 1, n = 5) {
 
   save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)

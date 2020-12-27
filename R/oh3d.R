@@ -94,4 +94,3 @@ oh3d.ib <- c(
 oh3d <- function( trans = identityMatrix(), ... ) {
   return(rotate3d(qmesh3d( oh3d.vb, oh3d.ib, material=list(...) ), matrix=trans))
 }
-

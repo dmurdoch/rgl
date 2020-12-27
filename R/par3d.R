@@ -15,8 +15,7 @@
   "activeSubscene"
 )
 
-par3d <- function (..., no.readonly = FALSE, dev = cur3d(), subscene = currentSubscene3d(dev))
-{
+par3d <- function(..., no.readonly = FALSE, dev = cur3d(), subscene = currentSubscene3d(dev)) {
   single <- FALSE
   args <- list(...)
   if (!length(args))
@@ -84,4 +83,3 @@ par3d <- function (..., no.readonly = FALSE, dev = cur3d(), subscene = currentSu
   
   if(!is.null(names(args))) invisible(value) else value
 }
-

@@ -218,7 +218,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     # plot the clipping planes as they affect the bounding box
     plotClipplanes(subscene)
     
-    textmat <- mat
     mat$front <- mat$back <- "fill"
     
     if (any(inds <- is.na(verts[,2]) & is.na(verts[,3])) && length(keep <- intersect(bbox[1:2], verts[inds, 1])))
@@ -232,7 +231,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     res
   }
   
-  convertBBoxes <- function (id) {
+  convertBBoxes <- function(id) {
     ids <- origIds <- NULL
     id <- as.character(id)
     sub <- getObj(id)
@@ -345,12 +344,12 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     if (!length(height)) {
       wfactor <- hfactor <- width/rwidth
     } else {
-      wfactor <- width/rwidth;
-      hfactor <- height/rheight;
+      wfactor <- width/rwidth
+      hfactor <- height/rheight
     }
   }
-  width <- wfactor*rwidth;
-  height <- hfactor*rheight;
+  width <- wfactor*rwidth
+  height <- hfactor*rheight
   
   shared <- x$crosstalk$id
   
@@ -416,7 +415,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
       types[i] <- "reused"
     }
   }
-  simple <- types %in% c("light")
+  simple <- types %in% "light"
   if (any(simple))
     reuseDF <- rbind(reuseDF, data.frame(id = ids[simple],
                  elementId = elementId,
@@ -470,7 +469,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
         warning("User defined mouse callbacks not supported in rglwidget", call.=FALSE)
     }
     if (obj$type == "planes" && nrow(obj$vertices) > 3) {
-      obj$vertices = obj$vertices[1:3,] # These will be redone
+      obj$vertices <- obj$vertices[1:3,] # These will be redone
       # in Javascript
     } else if (obj$type == "spheres")
       obj$centers <- obj$vertices
@@ -521,4 +520,3 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   
   structure(result, reuse = reuseDF)
 }
-

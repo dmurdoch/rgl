@@ -85,8 +85,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
   fullyNamed[good]
 }
 
-material3d  <- function (...)
-{
+material3d  <- function(...) {
     args <- list(...)
     argnames <- setdiff(names(args), .material3d.readOnly)
     if (!length(args))
@@ -151,9 +150,8 @@ bbox3d	    <- function(xat = NULL,
                         xunit = "pretty",
                         yunit = "pretty",
                         zunit = "pretty",
-		        expand = 1.03, draw_front = FALSE, ...) {  
+		        expand = 1.03, draw_front = FALSE, ...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  ranges <- .getRanges(expand = expand)
   do.call("rgl.bbox", c(list(xat=xat, yat=yat, zat=zat, 
                              xunit=xunit, yunit=yunit, zunit=zunit, expand=expand,
                              draw_front=draw_front), 
@@ -260,7 +258,10 @@ surface3d   <- terrain3d
 
 # Interaction
 
-select3d    <- function(...) {.check3d(); rgl.select3d(...)}
+select3d    <- function(...) {
+  .check3d()
+  rgl.select3d(...)
+}
 
 # 3D Generic Object Rendering Attributes
 
@@ -298,8 +299,7 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  material = list(color="black", fog = TRUE))
 
 open3d <- function(..., params = getr3dDefaults(), 
-                   useNULL = rgl.useNULL(), silent = FALSE	)
-{
+                   useNULL = rgl.useNULL(), silent = FALSE	) {
     args <- list(...)
     if (!is.null(args$antialias) 
         || !is.null(args$antialias <- r3dDefaults$antialias)) {
@@ -359,7 +359,7 @@ set3d <- function(dev, silent = FALSE) {
     else return(open3d())
 }
 
-snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL) { 
+snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL) {
   if (!missing(scene)) {
     if (inherits(scene, "rglWebGL")) {
       snapshot <- scene$x$snapshot

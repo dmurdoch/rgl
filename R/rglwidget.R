@@ -82,7 +82,7 @@ resolveHeight <- function(x, inViewer = TRUE, default = 40) {
   else
     refsize <- DEFAULT_HEIGHT
   result <- x$height
-  if (is.null(result) && !is.null(policy <- x$sizingPolicy)) { 
+  if (is.null(result) && !is.null(policy <- x$sizingPolicy)) {
     if (inViewer) {
       viewer <- policy$viewer
       if (isTRUE(viewer$fill))
@@ -139,9 +139,6 @@ getHeights <- function(objects, defaultHeight = 40) {
 
 processUpstream <- function(upstream, elementId = NULL, playerId = NULL) {
   rowsizes <- getHeights(upstream)
-  
-  prevRglWidget <- NULL
-  players <- character()
   
   if (inherits(upstream, "combineWidgets")) 
     upstream <- upstream$widgets
@@ -289,7 +286,7 @@ rglwidget <- local({
     width <- CSStoPixels(width)
   if (!is.null(height))
     height <- CSStoPixels(height)
-  x = convertScene(x, width, height, snapshot = snapshot,
+  x <- convertScene(x, width, height, snapshot = snapshot,
                    elementId = elementId, reuse = reuseDF,
                    webgl = webgl, latex = latex)
   if (!webgl)
@@ -328,7 +325,7 @@ rglwidget <- local({
 #' Widget output function for use in Shiny
 #'
 #' @export
-rglwidgetOutput <- function(outputId, width = '512px', height = '512px'){
+rglwidgetOutput <- function(outputId, width = '512px', height = '512px') {
   shinyWidgetOutput(outputId, 'rglWebGL', width, height, package = 'rgl')
 }
 
@@ -336,7 +333,7 @@ rglwidgetOutput <- function(outputId, width = '512px', height = '512px'){
 #'
 #' @export
 renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
-  if (!quoted) { expr <- substitute(expr) } # force quoted
+  if (!quoted) expr <- substitute(expr)  # force quoted
   markRenderFunction(rglwidgetOutput,
                      shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE),
   		     outputArgs = outputArgs)

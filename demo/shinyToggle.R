@@ -19,7 +19,7 @@ server <- function(input, output, session) {
 	on.exit(options(save))
 	
 	output$wdg <- renderRglwidget({
-		rglwidget(scene, controllers = c("control"))
+		rglwidget(scene, controllers = "control")
 	})
 	
 	output$control <- renderPlaywidget({

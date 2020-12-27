@@ -103,8 +103,7 @@ rgl.set <- function(which, silent = FALSE) {
 ##
 ##
 
-rgl.snapshot <- function( filename, fmt="png", top=TRUE )
-{
+rgl.snapshot <- function( filename, fmt="png", top=TRUE ) {
   if (top) rgl.bringtotop()
   
   idata <- as.integer(rgl.enum.pixfmt(fmt))
@@ -126,8 +125,7 @@ rgl.snapshot <- function( filename, fmt="png", top=TRUE )
 ##
 ##
 
-rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
-{
+rgl.postscript <- function( filename, fmt="eps", drawText=TRUE ) {
   idata <- as.integer(c(rgl.enum.gl2ps(fmt), as.logical(drawText)))
   if (length(filename) != 1)
     stop("filename is length ", length(filename))
@@ -146,8 +144,7 @@ rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
 ##
 ##
 
-rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("viewport"), top=TRUE )
-{
+rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("viewport"), top=TRUE ) {
   if (top) rgl.bringtotop()
   
   compnum <- as.integer(sapply(component, rgl.enum.pixelcomponent))

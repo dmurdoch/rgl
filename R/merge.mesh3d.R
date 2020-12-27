@@ -37,7 +37,6 @@ merge.mesh3d <- function(x, y, ..., attributesMustMatch = FALSE) {
     stopifnot(x$meshColor == y$meshColor)
 
     nx <- ncol(x$vb)
-    ny <- ncol(y$vb)
     z <- list(vb = cbind(x$vb, y$vb),
               it = if (!is.null(x$it) || !is.null(y$it)) cbind(x$it, y$it + nx),
               ib = if (!is.null(x$ib) || !is.null(y$ib)) cbind(x$ib, y$ib + nx),

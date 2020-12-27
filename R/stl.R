@@ -143,7 +143,7 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
     bbox <- convertBBox(bbox$id)
-    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE)
+    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE) # nolint
     dobbox <- TRUE
   } else dobbox <- FALSE 
   
@@ -223,7 +223,7 @@ readSTL <- function(con, ascii=FALSE, plot=TRUE, ...) {
       for (i in seq_len(n)) {
         m <- matrix(readBin(con, "double", n=12, size=4, endian="little"), 4, 3, byrow=TRUE)
         vertices[3*i + c(-2,-1,0),] <- m[2:4,]
-        count <- readBin(con, "integer", n=1, size=2, endian="little")
+        count <- readBin(con, "integer", n=1, size=2, endian="little") # nolint
       }
     }
     vertices

@@ -193,8 +193,8 @@ plot3d.rglscene <- function(x, add=FALSE, ...) {
   save <- par3d(skipRedraw = TRUE)
   on.exit(par3d(save))
   
-  if (is.null(x$rootSubscene)) {   
-    results <- c()
+  if (is.null(x$rootSubscene)) {
+    results <- NULL
     for (i in seq_along(x$objects)) {
       obj <- x$objects[[i]]
       results <- c(results, plot3d(obj))

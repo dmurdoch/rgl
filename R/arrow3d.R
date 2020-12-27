@@ -8,7 +8,7 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
 		     width = 1/3, 
 		     thickness = 0.618*width,
 		     spriteOrigin = NULL, 
-		     plot = TRUE, ...){
+		     plot = TRUE, ...) {
  ##      p0: start point
  ##      p1: end point
  ## barblen: length of barb
@@ -56,8 +56,7 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
  r <- gs[2,]
 
  ## now compute the barb end points and draw:
- pts = list()
- for(i in 1:length(phi)){
+ for(i in seq_along(phi)) {
    ptb <- rotate3d(r,phi[i],(p1-p0)[1],(p1-p0)[2],(p1-p0)[3])
    xyz <- rbind(xyz, p1, cpt + barblen*sin(theta)*ptb)
  }

@@ -1,8 +1,7 @@
 # RGL-Demo: animal abundance
 # Authors: Oleg Nenadic, Daniel Adler
 
-rgl.demo.abundance <- function()
-{
+rgl.demo.abundance <- function() {
   open3d()
   clear3d("all")               # remove all shapes, lights, bounding-box, and restore viewpoint
   
@@ -16,7 +15,6 @@ rgl.demo.abundance <- function()
   
   # Define colors for terrain
   zlim <- range(terrain)
-  zlen <- zlim[2] - zlim[1] + 1
   colorlut <- terrain.colors(82) 
   col1 <- colorlut[9*sqrt(3.6*(terrain-zlim[1])+2)]
   
@@ -44,4 +42,3 @@ rgl.demo.abundance <- function()
 
 }
 rgl.demo.abundance()
-
