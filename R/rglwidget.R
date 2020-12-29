@@ -250,7 +250,9 @@ rglwidget <- local({
   else if (!reuse)
     reuseDF <<- NULL
 
-  if (is.null(elementId) && (!inShiny() || !is.null(controllers)))
+  if (is.null(elementId) && 
+      (!inShiny() || # If in Shiny, all of the classes below need the ID
+       inherits(controllers, c("combineWidgets", "shiny.tag", "htmlwidget"))))
     elementId <- newElementId("rgl")
 
   if (!inherits(x, "rglscene"))
