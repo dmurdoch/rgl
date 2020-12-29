@@ -39,6 +39,11 @@ HTMLWidgets.widget({
           x.crosstalk.fil_handle[i] = new crosstalk.FilterHandle(groups[i], {sharedId: x.crosstalk.id[i]});
           x.crosstalk.fil_handle[i].on("change", onchangefilter);
         }
+        if (typeof Shiny !== "undefined") {
+          // Shiny calls this multiple times, so we need extra cleanup
+          // between
+          rgl.sphere = undefined;
+        }
         rgl.initialize(el, x);
         rgl.initGL();
   

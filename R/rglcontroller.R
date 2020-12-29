@@ -264,7 +264,7 @@ sceneChange <- function(elementId, x = scene3d(minimal),
 }
 
 registerSceneChange <- function() {
-  tags$script('
+  tags$script(rglDependency, '
 Shiny.addCustomMessageHandler("sceneChange",
   rglwidgetClass.prototype.sceneChangeHandler);
 ')
