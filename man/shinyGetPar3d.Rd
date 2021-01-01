@@ -1,6 +1,7 @@
 \name{shinyGetPar3d}
 \alias{shinyGetPar3d}
 \alias{shinySetPar3d}
+\alias{shinyResetBrush}
 \title{
 Communicate rgl parameters between R and Javascript in Shiny.
 }
@@ -12,6 +13,7 @@ settings that may have been modified by user interaction in the browser.
 \usage{
 shinyGetPar3d(parameters, session, subscene = currentSubscene3d(cur3d()), tag = "")
 shinySetPar3d(..., session, subscene = currentSubscene3d(cur3d()))
+shinyResetBrush(session, brush)
 }
 \arguments{
   \item{parameters}{
@@ -31,6 +33,8 @@ response.
   \item{...}{
 A number of \code{name = value} pairs to be modified.
   }
+  \item{brush}{The name of a Shiny input element corresponding to
+  the \code{shinyBrush} argument to \code{\link{rglwidget}}.}
 }
 \details{
 Requesting information from the browser is a complicated process.
@@ -68,6 +72,8 @@ will be returned by \code{shinyGetPar3d} and should be supplied to
 \url{https://shiny.rstudio.com/articles/communicating-with-js.html}
 describes the underlying mechanisms used by these two functions.
 }
+\seealso{The \code{\link{rglwidget}} argument \code{shinySelectionInput} allows information about mouse selections
+to be returned to R.}
 \author{
 Duncan Murdoch
 }

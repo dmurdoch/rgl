@@ -44,6 +44,29 @@
       var rect = this.canvas.getBoundingClientRect();
       return {x:event.clientX-rect.left, y:event.clientY-rect.top};
     };
+    
+    /**
+     * Send mouse selection to Shiny
+     */
+    rglwidgetClass.prototype.recordSelection = function(subid) {
+      var result = {};
+      if (typeof this.select !== "undefined" && 
+          typeof this.select.state !== "undefined" &&
+          this.select.state !== "inactive") {
+        result = { subscene: subid,
+                   state: this.select.state,
+                   region: this.select.region
+                 };
+        this.setmvMatrix(subid);
+        result.model = this.mvMatrix;
+        this.setprMatrix(subid);
+        result.proj = this.prMatrix;
+        this.getViewport(subid);
+        result.view = this.vp;
+      } else
+        result.state = "inactive";
+      Shiny.setInputValue(this.scene.selectionInput + ":shinyMouse3d", result);
+    }; 
 
     /**
      * Set mouse handlers for the scene
@@ -252,6 +275,8 @@
       	this.select.state = "changing";
       	if (typeof this.scene.brushId !== "undefined")
       	  this.getObj(this.scene.brushId).initialized = false;
+      	if (typeof this.scene.selectionInput !== "undefined")
+      	  self.recordSelection(activeSubscene); 
       	this.drawScene();
       	this.canvas.style.cursor = "crosshair";
       };
@@ -265,6 +290,8 @@
       	this.select.region.p2 = {x: 2.0*x/width - 1.0, y: 2.0*y/height - 1.0};
       	if (typeof this.scene.brushId !== "undefined")
       	  this.getObj(this.scene.brushId).initialized = false;
+      	if (typeof this.scene.selectionInput !== "undefined")
+      	  this.recordSelection(activeSubscene);
       	this.drawScene();
       };
       

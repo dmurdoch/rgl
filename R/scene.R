@@ -893,23 +893,32 @@ rgl.select3d <- function(button = c("left", "middle", "right"),
                          dev = cur3d(), subscene = currentSubscene3d(dev)) {
   rect <- rgl.select(button = button, dev = dev, subscene = subscene)
   if (is.null(rect)) return(NULL)
+  proj <- rgl.projection(dev = dev, subscene = subscene)
   
   llx <- rect[1]
   lly <- rect[2]
   urx <- rect[3]
   ury <- rect[4]
+
+  selectionFunction3d(proj, region = c(llx, lly, urx, ury))
+}
+
+selectionFunction3d <- function(proj, region = proj$region) {
+  llx <- region[1]
+  lly <- region[2]
+  urx <- region[3]
+  ury <- region[4]
   
   if ( llx > urx ) {
-  	temp <- llx
-  	llx <- urx
-  	urx <- temp
+    temp <- llx
+    llx <- urx
+    urx <- temp
   }
   if ( lly > ury ) {
-  	temp <- lly
-  	lly <- ury
-  	ury <- temp
+    temp <- lly
+    lly <- ury
+    ury <- temp
   }
-  proj <- rgl.projection(dev = dev, subscene = subscene)
   proj$view["x"] <- proj$view["y"] <- 0
   function(x,y=NULL,z=NULL) {
     pixel <- rgl.user2window(x,y,z,projection=proj)

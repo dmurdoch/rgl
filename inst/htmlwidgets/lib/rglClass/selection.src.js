@@ -95,6 +95,9 @@
      */
     rglwidgetClass.prototype.clearBrush = function(except) {
       if (this.select.subscene != except) {
+        this.select.region = {p1: {x:Infinity, y:Infinity}, 
+                              p2: {x:Infinity, y:Infinity}};
+        this.selectionChanged();
         this.select.state = "inactive";
         this.delFromSubscene(this.scene.brushId, this.select.subscene);
       }

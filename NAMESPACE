@@ -30,10 +30,12 @@ export(.check3d,
 	rgl.viewpoint, rgl.window2user, 
 	rglFonts, rglId, rglMouse, rglShared, rglToLattice, rglToBase,
   r3dDefaults, rotate3d, rotationMatrix,
-	scale3d, scaleMatrix, scene3d, segments3d, select3d, selectpoints3d,
+	scale3d, scaleMatrix, scene3d, segments3d, 
+	select3d, selectionFunction3d, selectpoints3d,
 	rgl.setMouseCallbacks, rgl.setWheelCallback, set3d, 
 	setGraphicsDelay, setupKnitr, setUserShaders, shade3d, 
-	shapelist3d, shinyGetPar3d, shinySetPar3d, show2d, snapshot3d, 
+	shapelist3d, shinyGetPar3d, shinySetPar3d, shinyResetBrush, 
+	show2d, snapshot3d, 
 	spheres3d, spin3d, sprites3d, subdivision3d, 
 	subsceneInfo, subsceneList, subsetSetter, subsetSlider, Sweave.snapshot,
 	surface3d, terrain3d, 
@@ -118,6 +120,7 @@ export(.check3d,
  S3method(print, rglId)
  S3method(print, mesh3d)
  S3method(print, shapelist3d)
+ S3method(print, rglMouseSelection)
  
  S3method(knit_print, rglId)
  

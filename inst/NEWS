@@ -1147,7 +1147,7 @@ base graphics.
   - Fixed some memory leaks found by valgrind, and problems seen
     on systems with no functional Asymptote or Pandoc.
 
-0.104.10:
+0.104.11:
   - Fixed bug in rglwidget() that caused it to fail to display
     text if too many strings were in the same object.
     (Reported by Yohann Demont.)
@@ -1162,3 +1162,5 @@ base graphics.
   - Fixed some small bugs, found by lintr.
   - Fixed bugs in Shiny support, and moved Shiny demo code into
     single files in demo directory.
+  - Experimental support for handling mouse selection in Shiny
+    added.

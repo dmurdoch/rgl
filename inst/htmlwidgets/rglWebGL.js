@@ -25,7 +25,8 @@ HTMLWidgets.widget({
     
     return { 
       renderValue: function(x) {
-        var i, pel, player, groups;
+        var i, pel, player, groups,
+            inShiny = (typeof Shiny !== "undefined");
       
         x.crosstalk.group = groups = [].concat(x.crosstalk.group);
         x.crosstalk.id = [].concat(x.crosstalk.id);
@@ -39,7 +40,7 @@ HTMLWidgets.widget({
           x.crosstalk.fil_handle[i] = new crosstalk.FilterHandle(groups[i], {sharedId: x.crosstalk.id[i]});
           x.crosstalk.fil_handle[i].on("change", onchangefilter);
         }
-        if (typeof Shiny !== "undefined") {
+        if (inShiny) {
           // Shiny calls this multiple times, so we need extra cleanup
           // between
           rgl.sphere = undefined;
@@ -56,7 +57,7 @@ HTMLWidgets.widget({
             pel = document.getElementById(players[i]);
             if (pel) {
               player = pel.rglPlayer;
-              if (player && !player.initialized) {
+              if (player && (!player.initialized || inShiny)) {
                 rgl.Player(pel, player);
                 player.initialized = true;
               }

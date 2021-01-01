@@ -1,18 +1,26 @@
 
     /**
-     * Set the gl viewport and scissor test
-     * @param { number } id - id of subscene
+     * Get the viewport
      */
-    rglwidgetClass.prototype.setViewport = function(id) {
-       var gl = this.gl || this.initGL(),
-         vp = this.getObj(id).par3d.viewport,
+     
+    rglwidgetClass.prototype.getViewport = function(id) {
+      var vp = this.getObj(id).par3d.viewport,
          x = vp.x*this.canvas.width,
          y = vp.y*this.canvas.height,
          width = vp.width*this.canvas.width,
          height = vp.height*this.canvas.height;
        this.vp = {x:x, y:y, width:width, height:height};
-       gl.viewport(x, y, width, height);
-       gl.scissor(x, y, width, height);
+    };
+    
+    /**
+     * Set the gl viewport and scissor test
+     * @param { number } id - id of subscene
+     */
+    rglwidgetClass.prototype.setViewport = function(id) {
+       var gl = this.gl || this.initGL();
+       this.getViewport(id);
+       gl.viewport(this.vp.x, this.vp.y, this.vp.width, this.vp.height);
+       gl.scissor(this.vp.x, this.vp.y, this.vp.width, this.vp.height);
        gl.enable(gl.SCISSOR_TEST);
      };
 

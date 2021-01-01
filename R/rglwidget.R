@@ -235,7 +235,8 @@ rglwidget <- local({
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
            minimal = TRUE, 
-           webgl = !latex, latex, ...) {
+           webgl = !latex, latex, 
+           shinyBrush = NULL, ...) {
   if (missing(latex))
     latex <- isTRUE(getOption("knitr.in.progress")) &&
              identical(opts_knit$get("rmarkdown.pandoc.to"),
@@ -255,6 +256,15 @@ rglwidget <- local({
        inherits(controllers, c("combineWidgets", "shiny.tag", "htmlwidget"))))
     elementId <- newElementId("rgl")
 
+  if (!is.null(shinyBrush)) {
+    if (!is.character(shinyBrush) || length(shinyBrush) != 1)
+      stop("'shinyBrush' must be a single character value")
+    if (!inShiny())
+      warning("'shinySelectionInput' is only used in Shiny")
+    else
+      x$selectionInput <- shinyBrush
+  }
+  
   if (!inherits(x, "rglscene"))
     stop("First argument should be an rgl scene.")
   
@@ -370,9 +380,44 @@ shinyGetPar3d <- function(parameters, session,
 }
 
 convertShinyPar3d <- function(par3d, ...) {
-  if (!is.null(par3d$userMatrix))
-    par3d$userMatrix <- matrix(unlist(par3d$userMatrix), 4,4)
+  for (parm in c("modelMatrix", "projMatrix", "userMatrix", "userProjection"))
+    if (!is.null(par3d[[parm]]))
+      par3d[[parm]] <- matrix(unlist(par3d[[parm]]), 4, 4)
+  for (parm in c("mouseMode", "observer", "scale", "viewport", "bbox", "windowRect"))
+    if (!is.null(par3d[[parm]]))
+      par3d[[parm]] <- unlist(par3d[[parm]])
   par3d
+}
+
+shinyResetBrush <- function(session, brush) {
+  session$sendCustomMessage("resetBrush", brush)
+}
+
+convertShinyMouse3d <- function(mouse3d, ...) {
+  for (parm in c("model", "proj")) 
+    if (!is.null(mouse3d[[parm]]))
+      mouse3d[[parm]] <- matrix(unlist(mouse3d[[parm]]), 4, 4)
+    
+  if (!is.null(mouse3d$view) == 4) 
+    mouse3d$view <- structure(unlist(mouse3d$view),
+                              names = c("x", "y", "width", "height"))
+  if (!is.null(mouse3d$region))
+    mouse3d$region <- structure(unlist(mouse3d$region), 
+                                names = c("x1", "y1", "x2", "y2"))
+  structure(mouse3d, class = "rglMouseSelection")
+}
+
+print.rglMouseSelection <- function(x, verbose = FALSE, ...) {
+  if (!is.null(x$region)) {
+    cat("Mouse selection:\n")
+    if (verbose) {
+      cat("p1=[", x$region[1], ",", x$region[2], 
+        "] p2=[", x$region[3], ",", x$region[4],"]\n")
+      cat("Projection data included: ", !is.null(x$model) && !is.null(x$proj) && !is.null(x$view), "\n")
+    }
+  } else
+    cat("Inactive mouse selection.\n")
+  invisible(x)
 }
 
 # Create the local dependencies

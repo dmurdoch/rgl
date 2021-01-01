@@ -15,7 +15,8 @@ rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           elementId = NULL, reuse = !interactive(),
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
           shared = NULL, minimal = TRUE, 
-          webgl = !latex, latex, ...)
+          webgl = !latex, latex, 
+          shinyBrush = NULL, ...)
 }
 \arguments{
   \item{x}{
@@ -42,6 +43,8 @@ the Details below.
   \item{shared}{An object produced by \code{\link{rglShared}}, or a list of such objects.}
   \item{minimal}{Should attributes be skipped if they currently have
   no effect?  See \code{\link{scene3d}}.}
+  \item{shinyBrush}{The name of a Shiny \code{input} element
+  to receive information about mouse selections.}
   \item{...}{Additional arguments
 to pass to \code{htmlwidgets::\link{createWidget}}.}
 }
@@ -55,12 +58,6 @@ or in a \pkg{shiny} app.
 when the result of an \pkg{rgl} call that changes the
 scene is printed.
 
-In a \pkg{shiny} app, there will often be one or more
-\code{\link{playwidget}} objects in the app, taking input from
-the user.  In order to be sure that the initial value of the user control
-is reflected in the scene, you should list all players in the
-\code{controllers} argument.  See the sample application in
-\code{system.file("shinyDemo", package = "rglwidget")} for an example.
 
 In RMarkdown or in standalone code, you can use a \pkg{magrittr}-style
 \dQuote{pipe} command to join an \code{rglwidget} with a
@@ -122,6 +119,39 @@ be shown when WebGL is unavailable.  If \code{webgl = FALSE},
 only the snapshot will be included.  It's an error to
 have both \code{webgl = FALSE} and \code{snapshot = FALSE}.
 }
+\section{Shiny specifics}{
+
+This widget is designed to work with Shiny for interactive
+displays linked to a server running R.
+
+In a Shiny app, there will often be one or more
+\code{\link{playwidget}} objects in the app, taking input from
+the user.  In order to be sure that the initial value of the user control
+is reflected in the scene, you should list all players in the
+\code{controllers} argument.  See the sample application in
+\code{system.file("shinyDemo", package = "rglwidget")} for an example.
+
+In Shiny, it is possible to find out information about mouse selections
+by specifying the name of an \code{input} item in the
+\code{shinyBrush} argument.  For example, with
+\code{shinyBrush = "brush3d"}, each change
+to the mouse selection will send data to \code{input$brush3d} in an
+object of class \code{"rglMouseSelection"} with the
+following components:
+\describe{
+\item{subscene}{The ID of the subscene where the mouse is selecting.}
+\item{state}{Either \code{"changing"} or \code{"inactive"}.}
+\item{region}{The coordinates of the corners of the selected region in the window,
+in order \code{c(x1, y1, x2, y2)}.}
+\item{model, proj, view}{The model matrix, projection matrix and viewport in effect at that location.}
+}
+This object can be used as the first argument to
+\code{\link{selectionFunction3d}} to produce a test function for
+whether a particular location is in the selected region.  If the 
+brush becomes inactive, an object containing only the \code{state}
+field will be sent, with value \code{"inactive"}.
+}
+
 \value{
 An object of class \code{"htmlwidget"} (or \code{"shiny.tag.list"}
 if pipes are used) that will intelligently print itself into

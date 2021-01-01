@@ -81,6 +81,7 @@
     setGraphicsDelay(unixos = unixos)
   
   registerInputHandler("shinyPar3d", convertShinyPar3d)
+  registerInputHandler("shinyMouse3d", convertShinyMouse3d)
   
 }
 

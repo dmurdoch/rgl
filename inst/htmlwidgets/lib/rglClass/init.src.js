@@ -920,6 +920,14 @@
               console.log("subscene "+message.subscene+" undefined.");
             }
           });
+          
+        Shiny.addCustomMessageHandler("resetBrush",
+          function(message) {
+            if (message === self.scene.selectionInput) {
+              self.clearBrush(null);
+              self.recordSelection(0);
+            }
+          });
       }
     };
     
