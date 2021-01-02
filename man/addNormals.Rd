@@ -13,14 +13,26 @@ when rendered.
 }
 \usage{
 addNormals(x, ...)
+\method{addNormals}{mesh3d}(x, angleWeighted = TRUE, ...)
 }
 \arguments{
   \item{x}{An object to which to add normals.}
-  \item{\dots}{Additional parameters which will be passed to the methods.  Currently unused.}
+  \item{\dots}{Additional parameters which will be passed to the methods.}
+  \item{angleWeighted}{See Details below.}
 }
 \details{
 Currently methods are supplied for \code{\link[=mesh3d]{"mesh3d"}} and 
 \code{\link[=shapelist3d]{"shapelist3d"}} classes.
+
+These methods work by averaging the normals on the faces incident at 
+each vertex.  By default these are weighted according to the angle 
+in the polygon at that vertex.
+If \code{angleWeighted = FALSE}, a slightly faster
+but less accurate weighting by the triangle area is used.  
+
+Prior to \pkg{rgl} version 0.104.12 an incorrect weighting was used; 
+it can be partially reproduced by using \code{angleWeighted = NA}, 
+but not all the bugs in that scheme will be kept.
 }
 \value{
 A new object of the same class as \code{x}, with normals added.
