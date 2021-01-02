@@ -401,7 +401,8 @@
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
-        nextofs = -1, pointofs = -1, alias, colors, key, selection, filter, adj, pos, offset, attr;
+        nextofs = -1, pointofs = -1, alias, colors, key, selection,
+        filter, adj, pos, offset, attr, last;
 
     obj.alias = undefined;
     

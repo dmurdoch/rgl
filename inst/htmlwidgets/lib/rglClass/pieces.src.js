@@ -7,7 +7,8 @@
     rglwidgetClass.prototype.getPieces = function(context, objid, subid, obj) {
       var n = obj.centers.length,
           depth,
-          result = new Array(n);
+          result = new Array(n),
+          z, w, i;
       context = context.slice();
           
       for(i=0; i<n; i++) {
