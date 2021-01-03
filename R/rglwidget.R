@@ -431,7 +431,25 @@ makeDependency <- function(name, src, script = NULL, package,
       packageVersion("js") >= "1.2") {
     if (debugging) {
       for (f in script) {
-        hints <- js::jshint(readLines(file.path(system.file(src, package = package), f)))
+        hints <- js::jshint(readLines(file.path(system.file(src, package = package), f)),
+                            undef = TRUE, bitwise = TRUE, eqeqeq = TRUE,
+                            latedef = TRUE, browser = TRUE, devel = TRUE,
+                            globals = list(CanvasMatrix4 = FALSE, 
+                                           WebGLFloatArray = FALSE,
+                                           rglwidgetClass = FALSE,
+                                           rgltimerClass = FALSE,
+                                           Shiny = FALSE
+                                           # Float32Array = FALSE,
+                                           # Uint16Array = FALSE,
+                                           # Uint32Array = FALSE,
+                                           # Image = FALSE,
+                                           
+                                           # MouseEvent = FALSE,
+                                           # alert = FALSE,
+                                           # document = FALSE,
+                                           # console = FALSE,
+                                           # window = FALSE
+                                           ))
         for (i in seq_len(NROW(hints)))
           warning(f, "#", hints[i, "line"], ": ", hints[i, "reason"],
                   call. = FALSE, immediate. = TRUE)

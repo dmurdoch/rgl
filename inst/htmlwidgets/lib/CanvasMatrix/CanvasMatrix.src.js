@@ -1,3 +1,6 @@
+/* globals CanvasMatrix4: true */
+/* globals WebGLFloatArray */
+/* jshint eqeqeq: false */
 /*
  * Copyright (C) 2009 Apple Inc. All Rights Reserved.
  *
@@ -568,7 +571,8 @@ CanvasMatrix4.prototype.perspective = function(fovy, aspect, zNear, zFar)
 
 CanvasMatrix4.prototype.lookat = function(eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz)
 {
-    var matrix = new CanvasMatrix4();
+    var matrix = new CanvasMatrix4(),
+        xx, xy, xz;
 
     // Make rotation matrix
 

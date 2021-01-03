@@ -94,7 +94,7 @@
      * @param { number } except - Subscene that should ignore this request
      */
     rglwidgetClass.prototype.clearBrush = function(except) {
-      if (this.select.subscene != except) {
+      if (this.select.subscene !== except) {
         this.select.region = {p1: {x:Infinity, y:Infinity}, 
                               p2: {x:Infinity, y:Infinity}};
         this.selectionChanged();

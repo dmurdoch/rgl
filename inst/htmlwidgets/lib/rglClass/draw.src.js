@@ -64,8 +64,8 @@
               for (i=0; i<nhits-2; i++) {
                 which = 0; /* initialize to suppress warning */
                 for (j=i+1; j<nhits; j++) {
-                  if (face1[i] == face1[j] || face1[i] == face2[j] ||
-                      face2[i] == face1[j] || face2[i] == face2[j] ) {
+                  if (face1[i] === face1[j] || face1[i] === face2[j] ||
+                      face2[i] === face1[j] || face2[i] === face2[j] ) {
                     which = j;
                     break;
                   }
@@ -133,7 +133,9 @@
       gl.clearDepth(1.0);
       gl.clearColor(1,1,1,1);
       gl.depthMask(true); // Must be true before clearing depth buffer
+      /* jshint bitwise: false */
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      /* jshint bitwise: true */
     };
     
     /**
@@ -272,7 +274,7 @@
       	      	case 4: gl.uniform4fv(loc, uniform); break;
       	      	default: console.warn("bad uniform length");
       	      }
-      	    } else if (uniform.length == 4 && uniform[0].length == 4)
+      	    } else if (uniform.length === 4 && uniform[0].length === 4)
       	      gl.uniformMatrix4fv(loc, false, new Float32Array(uniform.getAsArray()));
       	    else
       	      console.warn("unsupported uniform matrix");
@@ -285,7 +287,7 @@
       var gl = this.gl,
           f = obj.f[pass],
           type = obj.type,
-          fat_lines = obj.flags & this.f_fat_lines,
+          fat_lines = this.isSet(obj.flags, this.f_fat_lines),
           fnew, step;
       switch(type){
         case "points":
@@ -396,15 +398,15 @@
       var 
           flags = obj.flags,
           type = obj.type,
-          is_lit = flags & this.f_is_lit,
-          has_texture = flags & this.f_has_texture,
-          is_transparent = flags & this.f_is_transparent,
-          fixed_size = flags & this.f_fixed_size,
-          fixed_quads = flags & this.f_fixed_quads,
-          is_lines = flags & this.f_is_lines,
-          fat_lines = flags & this.f_fat_lines,
-          is_twosided = (flags & this.f_is_twosided) > 0,
-          has_fog = flags & this.f_has_fog,
+          is_lit = this.isSet(flags, this.f_is_lit),
+          has_texture = this.isSet(flags, this.f_has_texture),
+          is_transparent = this.isSet(flags, this.f_is_transparent),
+          fixed_size = this.isSet(flags, this.f_fixed_size),
+          fixed_quads = this.isSet(flags, this.f_fixed_quads),
+          is_lines = this.isSet(flags, this.f_is_lines),
+          fat_lines = this.isSet(flags, this.f_fat_lines),
+          is_twosided = this.isSet(flags, this.f_is_twosided),
+          has_fog = this.isSet(flags, this.f_has_fog),
           gl = this.gl || this.initGL(),
           count,
           pass, mode, pmode,
@@ -417,7 +419,7 @@
       if (!count)
         return [];
     
-      is_transparent |= obj.someHidden;
+      is_transparent = is_transparent || obj.someHidden;
       
       if (is_transparent && this.opaquePass)
         return this.getPieces(context, obj.id, 0, obj);
@@ -472,7 +474,7 @@
         if (pmode === "culled")
           continue;
 
-      	mode = fat_lines && (is_lines || pmode == "lines") ? "TRIANGLES" : this.mode4type[type];
+      	mode = fat_lines && (is_lines || pmode === "lines") ? "TRIANGLES" : this.mode4type[type];
 
       	if (is_twosided)
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
@@ -524,13 +526,13 @@
      */
     rglwidgetClass.prototype.drawSpheres = function(obj, subscene, context) {
       var flags = obj.flags,
-          is_transparent = flags & this.f_is_transparent,
+          is_transparent = this.isSet(flags, this.f_is_transparent),
           sphereMV, baseofs, ofs, sscale, i,
           count, nc, scount, scale, indices, sphereNorm,
           enabled = {}, drawing, wholeSphere, 
           saveNorm = new CanvasMatrix4(this.normMatrix),
           saveMV = new CanvasMatrix4(this.mvMatrix),
-          result = [];
+          result = [], idx;
 
       if (!obj.initialized)
         this.initObj(obj.id);
@@ -539,7 +541,7 @@
       if (!count)
         return result;
         
-      is_transparent |= obj.someHidden;
+      is_transparent = is_transparent || obj.someHidden;
 
       scale = subscene.par3d.scale;        
       sphereNorm = new CanvasMatrix4();
@@ -551,11 +553,10 @@
         context = context.slice();
         context.push(obj.id);
       } 
-      
-      drawing = this.opaquePass ^ (is_transparent !== 0);
+      drawing = this.opaquePass !== is_transparent;
       if (drawing) {
         nc = obj.colorCount;
-        if (nc == 1) {
+        if (nc === 1) {
           this.sphere.onecolor = obj.onecolor;
         }
       }
@@ -646,8 +647,8 @@
      */
     rglwidgetClass.prototype.drawSprites = function(obj, subscene, context) {
       var flags = obj.flags,
-          is_transparent = flags & this.f_is_transparent,
-          sprites3d = flags & this.f_sprites_3d,
+          is_transparent = this.isSet(flags, this.f_is_transparent),
+          sprites3d = this.isSet(flags, this.f_sprites_3d),
           i,j,
           origMV = new CanvasMatrix4( this.mvMatrix ),
           origPRMV = null,
@@ -664,10 +665,11 @@
       if (!obj.vertexCount)
         return result;
     
-      is_transparent |= obj.someHidden;
+      is_transparent = is_transparent || obj.someHidden;
       
       var norigs = obj.vertices.length,
-          savenorm = new CanvasMatrix4(this.normMatrix);
+          savenorm = new CanvasMatrix4(this.normMatrix),
+          iOrig;
 
       this.normMatrix = subscene.spriteNormmat;
       userMatrix = obj.userMatrix;
@@ -698,7 +700,7 @@
           if (this.opaquePass)
             result = result.concat(this.drawObjId(obj.objects[i], subscene.id, context.concat(j)));
           else
-            this.drawObjId(obj.objects[i], subsene.id, context);
+            this.drawObjId(obj.objects[i], subscene.id, context);
       }
       this.normMatrix = savenorm;
       this.mvMatrix = origMV;
@@ -764,7 +766,9 @@
         bg = obj.colors[0];
         gl.clearColor(bg[0], bg[1], bg[2], bg[3]);
         gl.depthMask(true);
+        /* jshint bitwise: false */
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        /* jshint bitwise: true */
         this.fogColor = bg;
       } else 
         this.fogColor = [0,0,0,0];
@@ -804,11 +808,15 @@
       	  obj = objects[subids[i]];
           flags = obj.flags;
           if (typeof flags !== "undefined") {
-          subscene_has_faces |= (flags & this.f_is_lit)
-                           & !(flags & this.f_fixed_quads);
-          obj.is_transparent = (flags & this.f_is_transparent) || obj.someHidden;
-          subscene_needs_sorting |= (flags & this.f_depth_sort) || obj.is_transparent;
-        }
+            subscene_has_faces = subscene_has_faces || 
+                            (this.isSet(flags, this.f_is_lit) &&
+                            !this.isSet(flags, this.f_fixed_quads));
+            obj.is_transparent = obj.someHidden || 
+              this.isSet(flags, this.f_is_transparent);
+            subscene_needs_sorting = subscene_needs_sorting || 
+              obj.is_transparent ||
+              this.isSet(flags, this.f_depth_sort);
+          }
         }
       }
 
@@ -823,7 +831,7 @@
       if (subids.length) {
         if (subscene_has_faces) {
           this.setnormMatrix(subsceneid);
-          if ((sub.flags & this.f_sprites_3d) &&
+          if (this.isSet(sub.flags, this.f_sprites_3d) &&
               typeof sub.spriteNormmat === "undefined") {
             sub.spriteNormmat = new CanvasMatrix4(this.normMatrix);
           }

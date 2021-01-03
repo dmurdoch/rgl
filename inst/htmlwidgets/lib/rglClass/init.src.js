@@ -227,23 +227,23 @@
       var obj = this.getObj(id),
           flags = obj.flags,
           type = obj.type,
-          is_lit = flags & this.f_is_lit,
-          fat_lines = flags & this.f_fat_lines,
-          has_texture = flags & this.f_has_texture,
-          fixed_quads = flags & this.f_fixed_quads,
+          is_lit = this.isSet(flags, this.f_is_lit),
+          fat_lines = this.isSet(flags, this.f_fat_lines),
+          has_texture = this.isSet(flags, this.f_has_texture),
+          fixed_quads = this.isSet(flags, this.f_fixed_quads),
           is_transparent = obj.is_transparent,
-          depth_sort = flags & this.f_depth_sort,
-          sprites_3d = flags & this.f_sprites_3d,
-          fixed_size = flags & this.f_fixed_size,
-          is_twosided = (flags & this.f_is_twosided) > 0,
-          is_brush = flags & this.f_is_brush,
-          has_fog = flags & this.f_has_fog,
+          depth_sort = this.isSet(flags, this.f_depth_sort),
+          sprites_3d = this.isSet(flags, this.f_sprites_3d),
+          fixed_size = this.isSet(flags, this.f_fixed_size),
+          is_twosided = this.isSet(flags, this.f_is_twosided),
+          is_brush = this.isSet(flags, this.f_is_brush),
+          has_fog = this.isSet(flags, this.f_has_fog),
           has_normals = typeof obj.normals !== "undefined", 
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
           i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
-          dim, nx, nz;
+          dim, nx, nz, nrow;
 
     if (typeof id !== "number") {
       this.alertOnce("initObj id is "+typeof id);
@@ -251,6 +251,8 @@
 
     obj.initialized = true;
 
+    obj.someHidden = false; // used in selection
+    
     if (type === "bboxdeco" || type === "subscene")
       return;
       
@@ -299,8 +301,8 @@
         obj.userAttributes = {};
       v1 = Array(v.length);
       v2 = Array(v.length);
-      if (obj.type == "triangles" || obj.type == "quads") {
-      	if (obj.type == "triangles")
+      if (obj.type === "triangles" || obj.type === "quads") {
+      	if (obj.type === "triangles")
       	  nrow = 3;
       	else
       	  nrow = 4;
@@ -309,7 +311,7 @@
             v1[nrow*i + j] = v[nrow*i + ((j+1) % nrow)];
             v2[nrow*i + j] = v[nrow*i + ((j+2) % nrow)];
           }
-      } else if (obj.type == "surface") {
+      } else if (obj.type === "surface") {
         dim = obj.dim[0];
         nx = dim[0];
         nz = dim[1];
@@ -366,7 +368,7 @@
       obj.ofsLoc = gl.getAttribLocation(obj.prog, "aOfs");
     }
 
-    if (has_texture || type == "text") {
+    if (has_texture || type === "text") {
       if (!obj.texture)
         obj.texture = gl.createTexture();
       obj.texLoc = gl.getAttribLocation(obj.prog, "aTexcoord");
@@ -402,7 +404,7 @@
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
         nextofs = -1, pointofs = -1, alias, colors, key, selection,
-        filter, adj, pos, offset, attr, last;
+        filter, adj, pos, offset, attr, last, options;
 
     obj.alias = undefined;
     
@@ -471,7 +473,7 @@
       f[i] = i;
     obj.f = [f,f];
 
-    if (type == "sprites" && !sprites_3d) {
+    if (type === "sprites" && !sprites_3d) {
       tofs = stride;
       stride += 2;
       oofs = stride;
@@ -753,13 +755,14 @@
       stride = stride + 5;
             
       // Now add the extras
+      var ind, k;
       last = v.length - 1;
       ind = 0;
       alias = new Array(f.length);
       for (i = 0; i < f.length; i++)
         alias[i] = [];
       for (i = 0; i < f.length - 1; i++) {
-      	if (type !== "linestrip" && i % 2 == 1)
+      	if (type !== "linestrip" && i % 2 !== 1)
       	  continue;
       	k = ++last;
       	vnew[k] = vnew[f[i]].slice();
@@ -805,7 +808,7 @@
         obj.alias = alias;
       
       for (pass = 0; pass < obj.passes; pass++)
-      	if (type === "lines" || type === "linestrip" || obj.pmode[pass] == "lines") {
+      	if (type === "lines" || type === "linestrip" || obj.pmode[pass] === "lines") {
           obj.f[pass] = fnew;
         }
       

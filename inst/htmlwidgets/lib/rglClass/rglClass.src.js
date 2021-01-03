@@ -2,11 +2,10 @@
 
 // jsdoc --destination ../../../doc/rglwidgetClass --template ~/node_modules/jsdoc-baseline rglClass.src.js
 
-// To validate, use
+// To validate, set environment variable RGL_DEBUGGING=true
+// before building.
 
-// setwd(".../inst/htmlwidgets/lib/rglClass")
-// hints <- js::jshint(readLines("rglClass.src.js"))
-// hints[, c("line", "reason")]
+/* globals rglwidgetClass: true */
 
 /**
  * The class of an rgl widget

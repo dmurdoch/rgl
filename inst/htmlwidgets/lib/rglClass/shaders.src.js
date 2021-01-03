@@ -9,17 +9,17 @@
           userShader = obj.userVertexShader,
           flags = obj.flags,
           type = obj.type,
-          is_lit = flags & this.f_is_lit,
-          has_texture = flags & this.f_has_texture,
-          fixed_quads = flags & this.f_fixed_quads,
-          sprites_3d = flags & this.f_sprites_3d,
+          is_lit = this.isSet(flags, this.f_is_lit),
+          has_texture = this.isSet(flags, this.f_has_texture),
+          fixed_quads = this.isSet(flags, this.f_fixed_quads),
+          sprites_3d = this.isSet(flags, this.f_sprites_3d),
           nclipplanes = this.countClipplanes(),
-          fixed_size = flags & this.f_fixed_size,
-          is_points = flags & this.f_is_points,
-          is_twosided = flags & this.f_is_twosided,
-          fat_lines = flags & this.f_fat_lines,
-          is_brush = flags & this.f_is_brush,
-          has_fog = flags & this.f_has_fog,
+          fixed_size = this.isSet(flags, this.f_fixed_size),
+          is_points = this.isSet(flags, this.f_is_points),
+          is_twosided = this.isSet(flags, this.f_is_twosided),
+          fat_lines = this.isSet(flags, this.f_fat_lines),
+          is_brush = this.isSet(flags, this.f_is_brush),
+          has_fog = this.isSet(flags, this.f_has_fog),
           has_normals = typeof obj.normals !== "undefined",
           needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && (has_normals || obj.type === "spheres")),
           result;
@@ -93,7 +93,7 @@
       if (needs_vnormal)
         result = result + "    vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);\n";
 
-      if (has_texture || type == "text")
+      if (has_texture || type === "text")
         result = result + "    vTexcoord = aTexcoord;\n";
 
       if (fixed_size)
@@ -101,7 +101,7 @@
                           "   pos = pos/pos.w;\n"+
                           "   gl_Position = pos + vec4(aOfs*textScale, 0.,0.);\n";
 
-      if (type == "sprites" && !fixed_size)
+      if (type === "sprites" && !fixed_size)
         result = result + "    vec4 pos = mvMatrix * vec4(aPos, 1.);\n"+
                           "   pos = pos/pos.w + vec4(aOfs, 0., 0.);\n"+
                           "   gl_Position = prMatrix*pos;\n";
@@ -158,14 +158,14 @@
           userShader = obj.userFragmentShader,
           flags = obj.flags,
           type = obj.type,
-          is_lit = flags & this.f_is_lit,
-          has_texture = flags & this.f_has_texture,
-          fixed_quads = flags & this.f_fixed_quads,
-          sprites_3d = flags & this.f_sprites_3d,
-          is_twosided = (flags & this.f_is_twosided) > 0,
-          fat_lines = flags & this.f_fat_lines,
-          is_transparent = flags & this.f_is_transparent,
-          has_fog = flags & this.f_has_fog,
+          is_lit = this.isSet(flags, this.f_is_lit),
+          has_texture = this.isSet(flags, this.f_has_texture),
+          fixed_quads = this.isSet(flags, this.f_fixed_quads),
+          sprites_3d = this.isSet(flags, this.f_sprites_3d),
+          is_twosided = this.isSet(flags, this.f_is_twosided),
+          fat_lines = this.isSet(flags, this.f_fat_lines),
+          is_transparent = this.isSet(flags, this.f_is_transparent),
+          has_fog = this.isSet(flags, this.f_has_fog),
           nclipplanes = this.countClipplanes(), i,
           texture_format, nlights,
           result;
@@ -242,7 +242,7 @@
                           "    point.y = neg ? "+
                           "      (point.y + vLength)/(1.0 - vLength) :\n"+
                           "     -(point.y - vLength)/(1.0 - vLength);\n";
-        if (is_transparent && type == "linestrip")
+        if (is_transparent && type === "linestrip")
           result = result+"    if (neg && length(point) <= 1.0) discard;\n";
         result = result + "    point.y = min(point.y, 0.0);\n"+
                           "    if (length(point) > 1.0) discard;\n";

@@ -49,7 +49,7 @@
           objids = this.repeatToLen(control.objids, ncol),
           property, objid = objids[0],
           obj = this.getObj(objid),
-          propvals, i, v1, v2, p, entry, gl, needsBinding,
+          propvals, i, j, v1, v2, p, entry, gl, needsBinding,
           newprop, newid,
 
           getPropvals = function() {
@@ -59,10 +59,10 @@
               return [].concat(obj.par3d[property]);
             else
               return [].concat(obj[property]);
-          };
+          },
 
           putPropvals = function(newvals) {
-            if (newvals.length == 1)
+            if (newvals.length === 1)
               newvals = newvals[0];
             if (property === "userMatrix")
               obj.par3d.userMatrix.load(newvals);
@@ -97,7 +97,7 @@
         newprop = properties[j];
         newid = objids[j];
 
-        if (newprop !== property || newid != objid) {
+        if (newprop !== property || newid !== objid) {
           if (typeof property !== "undefined")
             putPropvals(propvals);
           property = newprop;
@@ -140,7 +140,7 @@
     rglwidgetClass.prototype.vertexSetter = function(el, control)  {
       var svals = [].concat(control.param),
           j, k, p, a, propvals, stride, ofs, obj, entry,
-          attrib,
+          attrib, vertex, varies,
           ofss    = {x:"vofs", y:"vofs", z:"vofs",
                      red:"cofs", green:"cofs", blue:"cofs",
                      alpha:"cofs", radii:"radofs",
@@ -234,12 +234,12 @@
           ofs = ["nx", "ny", "nz", "offset"].indexOf(attrib);
           if (ofs >= 0) {
             if (ofs < 3) {
-              if (obj.normals[vertex][ofs] != newval) {  // Assume no aliases here...
+              if (obj.normals[vertex][ofs] !== newval) {  // Assume no aliases here...
               	obj.normals[vertex][ofs] = newval;
               	obj.initialized = false;
               }
             } else {
-              if (obj.offsets[vertex][0] != newval) {
+              if (obj.offsets[vertex][0] !== newval) {
               	obj.offsets[vertex][0] = newval;
               	obj.initialized = false;
               }
@@ -282,7 +282,7 @@
           steps = births.length,
           j = Array(steps),
           p = Array(steps),
-          i, k, age, j0, propvals, stride, ofs, objid, obj,
+          i, k, l, age, j0, propvals, stride, ofs, objid, obj,
           attrib, dim, varies, alias, aliases, a, d,
           attribs = ["colors", "alpha", "radii", "vertices",
                      "normals", "origins", "texcoords",
@@ -307,7 +307,7 @@
         if (births[i] !== null) {  // NA in R becomes null
           age = time - births[i];
           for (j0 = 1; age > ages[j0]; j0++);
-          if (ages[j0] == Infinity)
+          if (ages[j0] === Infinity)
             p[i] = 1;
           else if (ages[j0] > ages[j0-1])
             p[i] = (ages[j0] - age)/(ages[j0] - ages[j0-1]);
@@ -378,7 +378,7 @@
         }
         obj.values = propvals;
         if (typeof obj.buf !== "undefined") {
-          gl = this.gl || this.initGL();
+          var gl = this.gl || this.initGL();
           gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
           gl.bufferData(gl.ARRAY_BUFFER, obj.values, gl.STATIC_DRAW);
         }
@@ -416,7 +416,7 @@
               labels = this.outputLabels,
               output = this.Output,
               step;
-          if (typeof slider !== "undefined" && nominal != slider.value)
+          if (typeof slider !== "undefined" && nominal !== slider.value)
             slider.value = nominal;
           if (typeof output !== "undefined") {
             step = Math.round((nominal - output.sliderMin)/output.sliderStep);

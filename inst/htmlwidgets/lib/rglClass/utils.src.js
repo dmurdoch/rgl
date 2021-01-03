@@ -179,6 +179,7 @@
      * @returns {number[]}
      * @param {string} s
      */
+    /* jshint bitwise:false */ 
     rglwidgetClass.prototype.stringToRgb = function(s) {
       s = s.replace("#", "");
       var bigint = parseInt(s, 16);
@@ -186,7 +187,26 @@
               ((bigint >> 8) & 255)/255,
                (bigint & 255)/255];
     };
-
+    /* jshint bitwise:true */
+    /**
+     * Which list does a particular id come from?
+     * @returns { string }
+     * @param {number} id The id to look up.
+     */
+    rglwidgetClass.prototype.whichList = function(id) {
+      var obj = this.getObj(id),
+          flags = obj.flags;
+        if (obj.type === "light")
+          return "lights";
+        if (this.isSet(flags, this.f_is_subscene))
+            return "subscenes";
+        if (this.isSet(flags, this.f_is_clipplanes))
+            return "clipplanes";
+        if (this.isSet(flags, this.f_is_transparent))
+            return "transparent";
+        return "opaque";
+    };
+    
     /**
      * Take a component-by-component product of two 3 vectors
      * @returns {number[]}
@@ -265,25 +285,6 @@
     };
 
     /**
-     * Which list does a particular id come from?
-     * @returns { string }
-     * @param {number} id The id to look up.
-     */
-    rglwidgetClass.prototype.whichList = function(id) {
-      var obj = this.getObj(id),
-          flags = obj.flags;
-        if (obj.type === "light")
-          return "lights";
-        if (flags & this.f_is_subscene)
-            return "subscenes";
-        if (flags & this.f_is_clipplanes)
-            return "clipplanes";
-        if (flags & this.f_is_transparent)
-            return "transparent";
-        return "opaque";
-    };
-
-    /**
      * Get an object by id number.
      * @returns { Object }
      * @param {number} id
@@ -303,7 +304,7 @@
      */
     rglwidgetClass.prototype.getIdsByType = function(type, subscene) {
       var
-        result = [], i, self = this;
+        result = [], i, self = this, ids;
       if (typeof subscene === "undefined") {
         Object.keys(this.scene.objects).forEach(
           function(key) {
@@ -506,4 +507,10 @@
           result.push(keys[i]);
       }
       return result;
+    };
+
+    rglwidgetClass.prototype.isSet = function(flags, flag) {
+      /* jshint bitwise: false */
+      return (flags & flag) !== 0;
+      /* jshint bitwise: true */
     };

@@ -1,3 +1,4 @@
+/* globals rgltimerClass: true */
 
 /**
  * The class of an rgl timer object
@@ -126,7 +127,7 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
    * @param { number } newmult - new value
    */
   rgltimerClass.prototype.newmultiplier = function(newmult) {
-    if (newmult != this.multiplier) {
+    if (newmult !== this.multiplier) {
       this.realStart += 1000*(this.value - this.startTime)/this.rate*(1/this.multiplier - 1/newmult);
       this.multiplier = newmult;
     }

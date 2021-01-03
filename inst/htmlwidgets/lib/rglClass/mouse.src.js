@@ -169,7 +169,7 @@
             activeModel = this.getObj(this.useid(activeSub.id, "model")),
             objects = this.scene.objects,
             l = activeModel.par3d.listeners,
-            i, changepos = [];
+            i, j, changepos = [];
         for (i = 0; i < l.length; i++) {
           activeSub = this.getObj(l[i]);
           for (j=0; j<2; j++)
@@ -268,7 +268,7 @@
       	  height = viewport.height*this.canvas.height, 
           p = {x: 2.0*x/width - 1.0, y: 2.0*y/height - 1.0};
       	this.select.region = {p1: p, p2: p};
-      	if (this.select.subscene && this.select.subscene != activeSubscene)
+      	if (this.select.subscene && this.select.subscene !== activeSubscene)
       	  this.delFromSubscene(this.scene.brushId, this.select.subscene);
       	this.select.subscene = activeSubscene;
       	this.addToSubscene(this.scene.brushId, activeSubscene);
@@ -400,7 +400,7 @@
               clientY: touch.clientY
             });
         ev.preventDefault();
-        if (ev.touches.length == 2) {
+        if (ev.touches.length === 2) {
           var coords = self.relMouseCoords(touch);
           coords.y = self.canvas.height-coords.y;
           activeSubscene = self.whichSubscene(coords);
@@ -413,7 +413,7 @@
       handlers.touchend = function(ev) {
         var mouseEvent;
         ev.preventDefault();
-        if (ev.touches.length == 1) {
+        if (ev.touches.length === 1) {
           mouseEvent = new MouseEvent("mouseup", {});
           this.dispatchEvent(mouseEvent);
         }
