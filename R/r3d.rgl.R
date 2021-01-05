@@ -329,11 +329,16 @@ open3d <- function(..., params = getr3dDefaults(),
       params$bg <- NULL
     }
  
-    do.call("par3d", params)   
+    do.call("par3d", params)  
+    result <- structure(cur3d(), class = "rglOpen3d")
     if (silent)
-      invisible(cur3d())
+      invisible(result)
     else
-      cur3d()
+      result
+}
+
+print.rglOpen3d <- function(x, ...) {
+  print(unclass(x))
 }
 
 close3d <- function(dev = cur3d(), silent = TRUE) {

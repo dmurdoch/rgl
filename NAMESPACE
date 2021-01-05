@@ -118,11 +118,13 @@ export(.check3d,
  S3method(print, rglsubscene)
  S3method(print, indexedSetter)
  S3method(print, rglId)
+ S3method(print, rglOpen3d)
  S3method(print, mesh3d)
  S3method(print, shapelist3d)
  S3method(print, rglMouseSelection)
  
  S3method(knit_print, rglId)
+ S3method(knit_print, rglOpen3d)
  
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)

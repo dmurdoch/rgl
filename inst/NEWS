@@ -1167,3 +1167,5 @@ base graphics.
   - Fixed bugs in addNormals.mesh3d method, added angleWeighted
     argument, defaulting to TRUE.
   - Fixed bugs in rglwidget() displays of transparent spheres.
+  - The result of open3d() now has class "rglOpen3d",
+    and knitr will use this during auto-plotting.

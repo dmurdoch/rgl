@@ -285,6 +285,14 @@ fns <- local({
       }
   }  
   
+  knit_print.rglOpen3d <- function(x, options, ...) {
+    print(x, ...)
+    if (getOption("rgl.printRglwidget", FALSE)) {
+      plotnum <<- plotnum + 1
+    }
+    invisible(x)
+  }
+  
   knit_print.rglId <- function(x, options, ...) {
     if (getOption("rgl.printRglwidget", FALSE))	{
       scene <- scene3d()
@@ -462,7 +470,8 @@ fns <- local({
        hook_figkeep = hook_figkeep,
        hook_figshow = hook_figshow,
        hook_figbeforecode = hook_figbeforecode,
-       knit_print.rglId = knit_print.rglId)
+       knit_print.rglId = knit_print.rglId,
+       knit_print.rglOpen3d = knit_print.rglOpen3d)
 })
 
 setupKnitr <- fns[["setupKnitr"]]
@@ -471,6 +480,7 @@ hook_figkeep <- fns[["hook_figkeep"]]
 hook_figshow <- fns[["hook_figshow"]]
 hook_figbeforecode <- fns[["hook_figbeforecode"]]
 knit_print.rglId <- fns[["knit_print.rglId"]]
+knit_print.rglOpen3d <- fns[["knit_print.rglOpen3d"]]
 rm(fns)
 
 figWidth <- function() 

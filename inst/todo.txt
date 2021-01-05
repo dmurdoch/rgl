@@ -1,8 +1,5 @@
 To-do:
 
-Add a class to the result of open3d(), so that it acts
-like a highlevel() call for auto printing in knitr.
-
 Transparent 3D sprite drawing should be updated to be 
 consistent with transparent spheres.
 
@@ -56,6 +53,9 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Add a class to the result of open3d(), so that it acts
+like a highlevel() call for auto printing in knitr. DONE
 
 Transparent sphere sorting wasn't implemented properly in WebGL. FIXED
 
