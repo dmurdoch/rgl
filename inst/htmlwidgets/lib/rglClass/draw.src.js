@@ -480,9 +480,12 @@
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
-        if (!this.opaquePass && !(type === "sphere" && obj.fastTransparency))
-          count = this.doLoadIndices(obj, pass, context.indices);
-        else {
+        if (!this.opaquePass) {
+          if (type === "sphere" && obj.fastTransparency)
+            count = this.doLoadIndices(obj, pass, this.sphere.fastpieces[0].indices);
+          else
+            count = this.doLoadIndices(obj, pass, context.indices);
+        } else {
           count = obj.f[pass].length;
           gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[pass], gl.STATIC_DRAW);
         }
@@ -524,14 +527,26 @@
      * @param { object } subscene 
      * @param { object } context 
      */
+     
+    /**
+     * Drawing spheres happens in six ways:
+     * 1 opaquepass, not transparent:  transform and draw this.sphere count times
+     * 2 opaquepass, transparent, not fast: transform & collect sphere pieces count times
+     * 3 opaquepass, transparent, fast:  order the centres into separate pieces, order this.sphere once
+     * 4 not opaquepass, not transparent:  do nothing
+     * 5 not opaquepass, transparent, not fast:  transform for one sphere, draw one merged piece
+     * 6 not opaquepass, transparent, fast:  transform for one sphere, draw this.sphere in fixed order.
+     **/
+
     rglwidgetClass.prototype.drawSpheres = function(obj, subscene, context) {
       var flags = obj.flags,
           is_transparent = this.isSet(flags, this.f_is_transparent),
           sphereMV, baseofs, ofs, sscale, i,
           count, nc, scount, scale, indices, sphereNorm,
-          enabled = {}, drawing, wholeSphere, 
+          enabled = {}, drawing,
           saveNorm = new CanvasMatrix4(this.normMatrix),
           saveMV = new CanvasMatrix4(this.mvMatrix),
+          savePRMV = null,
           result = [], idx;
 
       if (!obj.initialized)
@@ -543,16 +558,23 @@
         
       is_transparent = is_transparent || obj.someHidden;
 
+      if (!this.opaquePass && !is_transparent)
+        return result;
+        
+      if (this.prmvMatrix !== null)
+        savePRMV = new CanvasMatrix4(this.prmvMatrix);
+      
       scale = subscene.par3d.scale;        
       sphereNorm = new CanvasMatrix4();
       sphereNorm.scale(scale[0], scale[1], scale[2]);
       sphereNorm.multRight(saveNorm);
       this.normMatrix = sphereNorm;
 
-      if (this.opaquePass && !obj.fastTransparency) {
+      if (this.opaquePass) {
         context = context.slice();
         context.push(obj.id);
       } 
+      
       drawing = this.opaquePass !== is_transparent;
       if (drawing) {
         nc = obj.colorCount;
@@ -562,24 +584,30 @@
       }
       
       this.initSphereFromObj(obj);
-                
-      scount = count;
-      indices = context.indices;
-      wholeSphere = this.opaquePass || context.subid < 0;
-      if (!wholeSphere)
-        scount = 1;
-      else if (!this.opaquePass)
-        scount = indices.length;
-        
+
+      if (!this.opaquePass && obj.fastTransparency && typeof this.sphere.fastpieces === "undefined") {
+        this.sphere.fastpieces = this.getPieces(context.context, obj.id, 0, this.sphere);
+        this.sphere.fastpieces = this.sortPieces(this.sphere.fastpieces);
+        this.sphere.fastpieces = this.mergePieces(this.sphere.fastpieces);
+      }
+
+      if (this.opaquePass)
+        scount = count;
+      else {
+        indices = context.indices;
+        if (obj.fastTransparency)
+          scount = indices.length;  /* Each item gives the center of a whole sphere */
+        else
+          scount = 1;               /* Each item is a fragment of the sphere, at location subid */
+      }
       for (i = 0; i < scount; i++) {
         sphereMV = new CanvasMatrix4();
-        if (!wholeSphere) {
-          idx = context.subid;
-        } else if (this.opaquePass) {
+        if (this.opaquePass)
           idx = i;
-        } else {
+        else if (obj.fastTransparency)
           idx = indices[i];
-        }
+        else
+          idx = context.subid;
         if (typeof idx === "undefined")
           console.error("idx is undefined");
         baseofs = idx*obj.vOffsets.stride;
@@ -591,19 +619,21 @@
                              obj.values[baseofs+1],
                              obj.values[baseofs+2]);
         sphereMV.multRight(saveMV);
+        this.mvMatrix = sphereMV;
+        this.setprmvMatrix();
         if (drawing) {
-          this.mvMatrix = sphereMV;
           if (nc > 1) {
             this.sphere.onecolor = this.flatten(obj.sphereColors[idx % obj.sphereColors.length]);
           }
           this.drawSimple(this.sphere, subscene, context);
         } else 
-          result = result.concat(this.getSpherePieces(context, obj.id, i, this.sphere, obj.fastTransparency));
+          result = result.concat(this.getSpherePieces(context, i, obj));
       }
       if (drawing)
         this.disableArrays(obj, enabled);
       this.normMatrix = saveNorm;
       this.mvMatrix = saveMV;
+      this.prmvMatrix = savePRMV;
         
       return result;
     };
@@ -854,6 +884,8 @@
         
           this.doBlending(false);
           this.subsceneid = subsceneid;
+          if (typeof this.sphere !== "undefined") // reset this.sphere.fastpieces; it will be recreated if needed
+            this.sphere.fastpieces = undefined;
           for (i = 0; i < subids.length; i++)
             result = result.concat(this.drawObjId(subids[i], subsceneid, context));
           subids = sub.subscenes;
@@ -883,7 +915,7 @@
             result = result.concat(context.pop());
             break;
           case "spheres":
-            this.initSphereFromObj(obj);
+            // this.initSphereFromObj(obj);  // FIXME:  not needed?
             break;
           default:
             console.error("bad type '", type, "' in setContext");

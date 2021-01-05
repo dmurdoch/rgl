@@ -1,5 +1,11 @@
 To-do:
 
+Add a class to the result of open3d(), so that it acts
+like a highlevel() call for auto printing in knitr.
+
+Transparent 3D sprite drawing should be updated to be 
+consistent with transparent spheres.
+
 Add segments and points to mesh objects?  Maybe make mesh objects
 completely general, and pass them as objects in rglwidget()?
 If so, the design should be revised to be more like a collection
@@ -50,6 +56,8 @@ Port sphere facet sorting to WebGL.
 
 Draw other nested objects (3d sprites, ...) like spheres are now drawn.  Make sure the new "primitive" functions (getPrimitiveCount, 
 getPrimitiveCenter) work for other types besides spheres.
+
+Transparent sphere sorting wasn't implemented properly in WebGL. FIXED
 
 Add function to merge mesh objects. DONE
 

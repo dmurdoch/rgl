@@ -1147,7 +1147,7 @@ base graphics.
   - Fixed some memory leaks found by valgrind, and problems seen
     on systems with no functional Asymptote or Pandoc.
 
-0.104.12:
+0.104.13:
   - Fixed bug in rglwidget() that caused it to fail to display
     text if too many strings were in the same object.
     (Reported by Yohann Demont.)
@@ -1166,3 +1166,4 @@ base graphics.
     added.
   - Fixed bugs in addNormals.mesh3d method, added angleWeighted
     argument, defaulting to TRUE.
+  - Fixed bugs in rglwidget() displays of transparent spheres.
