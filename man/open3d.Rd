@@ -96,7 +96,7 @@ device, invisibly.
 \examples{
     r3dDefaults
     open3d()
-    shade3d(cube3d(color = rep(rainbow(6), rep(4, 6))))
+    shade3d(cube3d(color = rainbow(6), meshColor = "faces"))
     cur3d()
 }
 
