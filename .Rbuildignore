@@ -15,4 +15,5 @@
 ^[.]Renviron
 ^cran-comments.md$
 ^R/noOpenGL.R$
+^src/Makevars.win$
 ^.lintr$

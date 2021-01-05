@@ -14,7 +14,7 @@ if [ "$r_version_4_plus" = "TRUE" ]; then
     LIBS="-lpng -lz -lgdi32"
   else
     echo Configuring for R 4+ including OpenGL
-    CPPFLAGS="-Iext -Iext/ftgl -I${MINGW_PREFIX}/include/freetype2 -DHAVE_PNG_H -DHAVE_FREETYPE"
+    CPPFLAGS="-Iext -Iext/ftgl -I\$(MINGW_PREFIX)/include/freetype2 -DHAVE_PNG_H -DHAVE_FREETYPE"
     LIBS="-lfreetype -lpng -lz -lgdi32 -lopengl32 -lglu32"
   fi
 else
@@ -103,11 +103,11 @@ fi
 
 # --- output Makevars --------------------------------------------------------
 
-rm -f src/Makevars
+rm -f src/Makevars.win
 sed \
 -e "s^@CPPFLAGS@^$CPPFLAGS^" \
 -e "s^@LIBS@^$LIBS^" \
-src/Makevars.in >src/Makevars
+src/Makevars.in >src/Makevars.win
 rm -f R/noOpenGL.R
 sed \
 -e "s^@RGL_NO_OPENGL@^$RGL_NO_OPENGL^" \
