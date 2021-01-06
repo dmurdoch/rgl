@@ -398,10 +398,10 @@ convertShinyMouse3d <- function(mouse3d, ...) {
     if (!is.null(mouse3d[[parm]]))
       mouse3d[[parm]] <- matrix(unlist(mouse3d[[parm]]), 4, 4)
     
-  if (!is.null(mouse3d$view) == 4) 
+  if (length(mouse3d$view) == 4) 
     mouse3d$view <- structure(unlist(mouse3d$view),
                               names = c("x", "y", "width", "height"))
-  if (!is.null(mouse3d$region))
+  if (length(mouse3d$region) == 4)
     mouse3d$region <- structure(unlist(mouse3d$region), 
                                 names = c("x1", "y1", "x2", "y2"))
   structure(mouse3d, class = "rglMouseSelection")
