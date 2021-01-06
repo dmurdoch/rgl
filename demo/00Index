@@ -16,3 +16,4 @@ simpleShinyRgl  Shiny demo with checkbox
 shinyToggle	Shiny with togglewidget
 shinyTabs  Shiny with tabs
 shinyDemo    rglwidget in Shiny:  Nelder-Mead demonstration
+shinyMouse    Mouse selection in Shiny

@@ -401,9 +401,12 @@ convertShinyMouse3d <- function(mouse3d, ...) {
   if (length(unlist(mouse3d$view)) == 4) 
     mouse3d$view <- structure(unlist(mouse3d$view),
                               names = c("x", "y", "width", "height"))
-  if (length(unlist(mouse3d$region)) == 4)
-    mouse3d$region <- structure(unlist(mouse3d$region), 
-                                names = c("x1", "y1", "x2", "y2"))
+  if (all(c("p1", "p2") %in% names(mouse3d$region)))
+    mouse3d$region <- with(mouse3d$region,
+                           c(x1 = (p1$x + 1)/2,
+                             y1 = (p1$y + 1)/2,
+                             x2 = (p2$x + 1)/2,
+                             y2 = (p2$y + 1)/2))
   structure(mouse3d, class = "rglMouseSelection")
 }
 
@@ -439,16 +442,6 @@ makeDependency <- function(name, src, script = NULL, package,
                                            rglwidgetClass = FALSE,
                                            rgltimerClass = FALSE,
                                            Shiny = FALSE
-                                           # Float32Array = FALSE,
-                                           # Uint16Array = FALSE,
-                                           # Uint32Array = FALSE,
-                                           # Image = FALSE,
-                                           
-                                           # MouseEvent = FALSE,
-                                           # alert = FALSE,
-                                           # document = FALSE,
-                                           # console = FALSE,
-                                           # window = FALSE
                                            ))
         for (i in seq_len(NROW(hints)))
           warning(f, "#", hints[i, "line"], ": ", hints[i, "reason"],

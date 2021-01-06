@@ -90,7 +90,7 @@ Duncan Murdoch
   y <- rnorm(100)
   z <- rnorm(100) + atan2(x, y)
   ids <- plot3d(x, y, z, col = rainbow(100))
-  # The data will be selected and filtered, the the axes.
+  # The data will be selected and filtered, not the axes.
   sharedData <- rglShared(ids["data"])
   
   # Also add some labels that are only displayed
