@@ -1108,7 +1108,7 @@ base graphics.
   - Added fastTransparency parameter to spheres3d() and
     rgl.spheres(), to allow them to be drawn more quickly
     when transparency is used.
-  - "mesh3d"" methods for shade3d, wire3d, and dots3d
+  - "mesh3d" methods for shade3d, wire3d, and dots3d
     have been rewritten to share code, allowing meshes
     to have different front and back material properties.
   - New functions cur3d(), set3d(), close3d() and ids3d() have been 
