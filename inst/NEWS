@@ -1155,7 +1155,7 @@ base graphics.
     OpenGL (to support Apple M1 machines without GLX,
     and others which don't have X11 or OpenGL devel
     files installed).
-  - Added explicity typecasts to suppress compile warnings.
+  - Added explicit typecasts to suppress compile warnings.
   - Restored some of the Windows configuration from pre-0.101.2
     to allow use on older R versions.
   - Dropped use of mathjaxr, which caused issues on Debian.
