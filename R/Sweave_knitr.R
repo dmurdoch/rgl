@@ -24,6 +24,9 @@ rgl.Sweave <- function(name, width, height, options, ...) {
   } 
 
   snapshotDone <- FALSE
+  
+  # stayOpen is used below in rgl.Sweave.off
+  stayOpen <- isTRUE(options$stayopen)
 
   type <- options$outputtype
   if (is.null(type)) type <- "png"

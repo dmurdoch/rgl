@@ -40,7 +40,7 @@ asHomogeneous <- function(x) {
 }
 
 asEuclidean <- function(x) {
-    if (is.matrix(x) && dim(x)[2] == 4) return(x[,1:3]/x[,4])
+    if (is.matrix(x) && dim(x)[2] == 4) return(x[, 1:3, drop = FALSE]/x[, 4])
     else if (length(x) == 4) return(c(x[1]/x[4],x[2]/x[4],x[3]/x[4]))
     else stop("'x' is not row vectors(s)")
 }
