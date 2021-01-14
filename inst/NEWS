@@ -1169,3 +1169,7 @@ base graphics.
   - Fixed bugs in rglwidget() displays of transparent spheres.
   - The result of open3d() now has class "rglOpen3d",
     and knitr will use this during auto-plotting.
+
+0.105.0:
+  - Windows builds now download Freetype from rwinlib
+    during the build.  (Contributed by Jeroen Ooms.)

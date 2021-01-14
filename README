@@ -91,11 +91,10 @@ BUILDING ON MICROSOFT WINDOWS
 
 Install Rtools40 or newer.
 
-Install Freetype via
+An Internet connection will be needed, as Freetype is
+automatically downloaded from https://github.com/rwinlib.
 
-pacman -S mingw-w64-{i686,x86_64}-freetype
 
-Then the usual R CMD INSTALL should work.
 
 BUILDING ON UNIX-STYLE OS (MacOS X, Linux, FreeBSD, ... ) 
 ---------------------------------------------------------
@@ -158,13 +157,13 @@ has been reported to be sufficient on FC 5 or 6:
   -----------------------
   
   As of version 0.104.1, it is possible to build the package without
-  OpenGL support.  On Unix-alikes (including MacOS), the configure option
-  --disable-opengl accomplishes this.  For example,
+  OpenGL support on Unix-alikes (including MacOS) with the configure option
+  --disable-opengl 
+  For example,
   
   R CMD INSTALL --configure-args="--disable-opengl" rgl_0.104.1.tar.gz 
   
-  On Windows, configuration must be done manually, by following the
-  commented instructions in the configure.win file.
+  On Windows, OpenGL support cannot currently be disabled.
   
   
 FIRST DEMOS: LOADING LIBRARY AND RUNNING DEMONSTRATIONS
@@ -189,7 +188,8 @@ Alexander Senger <senger@physik.hu-berlin.de>
 The R Core Team for some code from R.
 Dirk Eddelbuettel <edd@debian.org>
 The authors of Shiny for their private RNG code.
-Jeroen Ooms for Rtools40 help.
+Jeroen Ooms for Rtools40 and Freetype help.
+Yohann Demont for Shiny code, suggestions, and testing.
 
 WEBSITE
 -------
