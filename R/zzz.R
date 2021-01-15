@@ -28,7 +28,7 @@
       unixos <- "unknown"    
   }
   
-  if ( !noOpenGL && unixos == "Darwin" ) {
+  if ( !onlyNull && unixos == "Darwin" ) {
     
     # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
     # because it would override Apple's OpenGL framework
