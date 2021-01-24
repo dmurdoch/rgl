@@ -1,5 +1,9 @@
 To-do:
 
+Use webshot2 to save images; current version can work headless,
+but is not on CRAN, so must be installed from Github.
+Could also optionally implement snapshot3d that way?
+
 Transparent 3D sprite drawing should be updated to be 
 consistent with transparent spheres.
 
