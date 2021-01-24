@@ -1,5 +1,10 @@
 To-do:
 
+Incorporate changes for updated knitr; need to work with both
+old and new for a while.  (Partially done:  we don't know the
+version where knitr will export the necessary fns, and have
+put in 9.9.9 as a placeholder.)
+
 Use webshot2 to save images; current version can work headless,
 but is not on CRAN, so must be installed from Github.
 Could also optionally implement snapshot3d that way?
