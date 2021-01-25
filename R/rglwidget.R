@@ -357,9 +357,22 @@ shinySetPar3d <- function(..., session,
     stop("function requires shiny")
   args <- list(...)
   argnames <- names(args)
+  if (length(args) == 1 && is.null(argnames)) {
+    args <- args[[1]]
+  }
+  # We might have been passed modified shinyGetPar3d output;
+  # clean it up.
+  args[["subscene"]] <- NULL
+  args[["tag"]] <- NULL
+  argnames <- names(args)
+  
+  if (is.null(argnames) || any(argnames == ""))
+    stop("Parameters must all be named")
+  
   badargs <- argnames[!(argnames %in% .Par3d) | argnames %in% .Par3d.readonly]
   if (length(badargs))
     stop("Invalid parameter(s): ", badargs)
+  
   for (arg in argnames) {
     session$sendCustomMessage("shinySetPar3d", 
                               list(subscene = subscene,

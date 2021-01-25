@@ -31,7 +31,9 @@ An arbitrary string or value which will be sent as part of the
 response.
 }
   \item{...}{
-A number of \code{name = value} pairs to be modified.
+A number of \code{name = value} pairs to be modified, or a
+single named list of parameters.  Entries named \code{tag}
+or \code{subscene} will be ignored.
   }
   \item{brush}{The name of a Shiny input element corresponding to
   the \code{shinyBrush} argument to \code{\link{rglwidget}}.}

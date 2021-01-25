@@ -1170,6 +1170,11 @@ base graphics.
   - The result of open3d() now has class "rglOpen3d",
     and knitr will use this during auto-plotting.
 
-0.105.0:
+0.105.1:
   - Windows builds now download Freetype from rwinlib
     during the build.  (Contributed by Jeroen Ooms.)
+  - shinySetPar3d() now accepts a list, as returned in
+    input$par3d by shinyGetPar3d(), as input.  (Suggestion
+    of Yohann Demont.)
+  - Inclusion in knitr documents will now be simplified
+    in versions of knitr that incorporate its PR#1892.
