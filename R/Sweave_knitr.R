@@ -85,7 +85,8 @@ Sweave.snapshot <- function() {
 ##  Once rgl is willing to depend on a knitr release that
 ##  includes those exports, lots of code can be deleted.
 
-oldKnitrVersion <- function() packageVersion("knitr") < "9.9.9"
+oldKnitrVersion <- function() 
+  !all(c("wrap", "is_low_change") %in% getNamespaceExports("knitr"))
 
 # This is only needed for old knitr:
 globalVariables("wrap")
