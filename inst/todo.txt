@@ -1,9 +1,12 @@
 To-do:
 
+Work on ways to modify a scene in Shiny and only transmit the
+changes to the browser.
+
 Incorporate changes for updated knitr; need to work with both
 old and new for a while.  (Partially done:  we don't know the
-version where knitr will export the necessary fns, and have
-put in 9.9.9 as a placeholder.)
+version where knitr will export the necessary fns, but 
+we check for their existence now.)
 
 Use webshot2 to save images; current version can work headless,
 but is not on CRAN, so must be installed from Github.
