@@ -81,7 +81,7 @@ names(plotids)
 unclass(plotids)
 ```
 
-## Using `magrittr` pipes
+## Using `magrittr` or base pipes
 
 It can be error-prone to set the `elementId` in the
 `rglwidget()` to match the `sceneId` in the `toggleWidget()` (or `playwidget()`, described below).
@@ -90,19 +90,36 @@ together, [`magrittr`](https://CRAN.R-project.org/package=magrittr)-style pipes 
 the first argument of the control widget accepts 
 the result of `rglwidget()` (or other control widgets),
 and the `controllers` argument of `rglwidget()` accepts
-control widgets.  For example,
+control widgets.  In R 4.1.0, the new base pipe
+operator `|>` should be usable in the same way.
+
+For example,
 
 ```{r}
 rglwidget() %>%
 toggleWidget(ids = plotids["data"], label = "Data")
 ```
 
-You can swap the order of button and scene; use the `magrittr` dot 
+If you have R 4.1.0 or greater, this should do the same:
+
+```{r eval=FALSE}
+rglwidget() |>
+toggleWidget(ids = plotids["data"], label = "Data")
+```
+
+You can swap the order of button and scene; use the `magrittr` dot (or the `=>` syntax in base pipes)
 to pass the `toggleWidget` to `rglwidget` in the `controllers` argument:
 
 ```{r}
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
 rglwidget(controllers = .) 
+```
+
+or using R 4.1.0 or later,
+
+```{r eval=FALSE}
+toggleWidget(NA, ids = plotids["data"], label = "Data") |> 
+  w => rglwidget(controllers = w) 
 ```
 
 ## Controls
