@@ -119,6 +119,9 @@ To draw contours on a surface, the surface should be drawn
 with material property \code{polygon_offset = 1} (or perhaps
 some larger positive value) so that the lines of the contour are not
 obscured by the surface.
+
+In R versions prior to 3.6.0, the default \code{color.palette}
+is \code{grDevices::cm.colors}.
 }
 \value{
 For both \code{contourLines3d} and \code{filledContour3d}

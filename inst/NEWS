@@ -1170,7 +1170,7 @@ base graphics.
   - The result of open3d() now has class "rglOpen3d",
     and knitr will use this during auto-plotting.
 
-0.105.1:
+0.105.2:
   - Windows builds now download Freetype from rwinlib
     during the build.  (Contributed by Jeroen Ooms.)
   - shinySetPar3d() now accepts a list, as returned in
@@ -1178,3 +1178,8 @@ base graphics.
     of Yohann Demont.)
   - Inclusion in knitr documents will now be simplified
     in versions of knitr that incorporate its PR#1892.
+  - The default color scheme for filledContour3d changed in
+    R versions previous to 3.6.0, as hcl.colors() didn't 
+    exist in those versions.  (Reported by Daniel Baston.)
+  - Testing shows that with the above change, rgl will now
+    work in R versions from 3.3.0 up.
