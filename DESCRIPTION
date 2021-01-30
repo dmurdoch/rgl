@@ -22,3 +22,4 @@ SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     pandoc (>=1.14, needed for vignettes)
 BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr
+Remotes: rstudio/webshot2
