@@ -157,7 +157,8 @@ export(rglwidget, renderRglwidget, rglwidgetOutput,
        elementId2Prefix, registerSceneChange, sceneChange,
        "%>%")
 
-importFrom(htmlwidgets, createWidget, prependContent, shinyRenderWidget, shinyWidgetOutput, sizingPolicy)
+importFrom(htmlwidgets, createWidget, prependContent, saveWidget, 
+           shinyRenderWidget, shinyWidgetOutput, sizingPolicy)
 importFrom(htmltools, css, HTML, htmlDependency, img,
            includeScript, tags, tagAppendAttributes,
 	   tagHasAttribute, tagList, browsable, resolveDependencies)

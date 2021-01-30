@@ -1170,7 +1170,7 @@ base graphics.
   - The result of open3d() now has class "rglOpen3d",
     and knitr will use this during auto-plotting.
 
-0.105.3:
+0.105.4:
   - Windows builds now download Freetype from rwinlib
     during the build.  (Contributed by Jeroen Ooms.)
   - shinySetPar3d() now accepts a list, as returned in
@@ -1183,3 +1183,6 @@ base graphics.
     exist in those versions.  (Reported by Daniel Baston.)
   - Testing shows that with the above change, rgl will now
     work in R versions from 3.3.0 up.
+  - Added "webshot" argument to snapshot3d(), to use the
+    webshot2 package to produce snapshots even on headless
+    systems.

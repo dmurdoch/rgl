@@ -1,31 +1,48 @@
-\name{rgl.snapshot}
+\name{snapshot3d}
 \alias{rgl.snapshot}
 \alias{snapshot3d}
 \title{export screenshot}
 \description{
-  Saves the screenshot as png file.
+  Saves the screenshot to a file.
 }
 \usage{
 rgl.snapshot( filename, fmt = "png", top = TRUE )
-snapshot3d( filename, ..., scene, width = NULL, height = NULL)
+snapshot3d( filename, ..., scene, width = NULL, height = NULL,
+            webshot = rgl.useNULL())
 }
 \arguments{
   \item{filename}{full path to filename.}
-  \item{fmt}{image export format, currently supported: png }
+  \item{fmt}{image export format, currently supported: png.  Ignored if \code{webshot = TRUE}. }
   \item{top}{whether to call \code{\link{rgl.bringtotop}}}
-  \item{...}{arguments to pass to \code{rgl.snapshot} }
+  \item{...}{arguments to pass to \code{rgl.snapshot} or \code{webshot2::webshot} }
   \item{scene}{an optional result of \code{\link{scene3d}} 
     or \code{\link{rglwidget}} to plot}
   \item{width, height}{optional specifications of output
     size in pixels}
+  \item{webshot}{Use the \pkg{webshot2} package to take the 
+  snapshot}  
 }
 \details{
+\code{rgl.snapshot()} is a low-level function
+that copies the current \pkg{rgl} window from the screen.  Users
+should use \code{snapshot3d()} instead; it is more flexible,
+and (if \pkg{webshot2} is installed) can take images even if
+no window is showing, and they can be larger than the physical
+screen.
+
 Animations can be created in a loop modifying the scene and saving 
 each screenshot to a file. Various graphics programs (e.g. ImageMagick)
 can put these together into a single animation. (See \code{\link{movie3d}} or
 the example below.)
 }
 \note{
+When \code{rgl.useNULL()} is \code{TRUE}, only \code{webshot = TRUE}
+will produce a snapshot.  It requires the \pkg{webshot2}
+package, which as of this writing is not available on CRAN; to
+install it, use \code{remotes::install_github("rstudio/webshot2")}
+
+\code{rgl.snapshot} works by taking an image from the displayed
+window on-screen.
 On some systems, the snapshot
 will include content from other windows if they cover the active rgl
 window.  Setting \code{top = TRUE} (the default) will use 
@@ -37,6 +54,11 @@ There are likely limits to how large \code{width} and
 are exceeded the results are undefined.  A typical result
 is that the snapshot will still be made but at a smaller
 size.
+
+There are slight differences between the displays with
+\code{webshot = TRUE} and \code{webshot = FALSE}, as the 
+former are rendered using WebGL while the latter are rendered
+using OpenGL.  Often the \code{webshot = TRUE} displays have better quality.
 }
 \seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
 
