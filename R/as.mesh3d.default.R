@@ -20,19 +20,19 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
   nvert <- length(x)
   verts <- rbind(x, y, z)
   indices <- matrix(seq_along(x), nrow = if (triangles) 3 else 4)
-  
   if (merge) {
     if (!is.null(notEqual)) {
       dim <- dim(notEqual)
       if (length(dim) != 2 || dim[1] != nvert || dim[2] != nvert)
         stop("'notEqual' should be a ", nvert, " by ", nvert, " logical matrix.")
       notEqual <- notEqual | t(notEqual) # Make it symmetric
-    }
+    } else
+      notEqual <- matrix(FALSE, nvert, nvert)
     o <- order(x, y, z)
     i1 <- seq_len(nvert)[o]
     for (i in seq_len(nvert)[-1]) {
       if (isTRUE(all.equal(verts[,i1[i-1]], verts[,i1[i]], tolerance = tolerance))
-          && (is.null(notEqual) || !isTRUE(notEqual[i1[i-1], i1[i]]))) {
+          && (!isTRUE(notEqual[i1[i-1], i1[i]]))) {
         indices[indices == i1[i]] <- i1[i-1]
         notEqual[i1[i], ] <- notEqual[i1[i-1], ] <- notEqual[i1[i], ] | notEqual[i1[i-1], ]
         notEqual[, i1[i]] <- notEqual[, i1[i-1]] <- notEqual[i1[i], ] | notEqual[, i1[i-1]]
@@ -162,7 +162,6 @@ as.mesh3d.rglobject <- function(x, ...) {
             normals = normals, texcoords = texcoords)
 }
 
-
 mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
                           tolerance = sqrt(.Machine$double.eps)) {
   nvert <- ncol(mesh$vb)
@@ -171,7 +170,8 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
     if (length(dim) != 2 || dim[1] != nvert || dim[2] != nvert)
       stop("'notEqual' should be a ", nvert, " by ", nvert, " logical matrix.")
     notEqual <- notEqual | t(notEqual) # Make it symmetric
-  }
+  } else
+    notEqual <- matrix(FALSE, nvert, nvert)
   attribute <- match.arg(attribute, 
                           choices = c("vertices", "colors", "normals", "texcoords"),
                           several.ok = TRUE)
@@ -199,7 +199,7 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
   i1 <- seq_len(nvert)[o]
   for (i in seq_len(nvert)[-1]) {
     if (isTRUE(all.equal(verts[i1[i-1],], verts[i1[i],], tolerance = tolerance))
-        && (is.null(notEqual) || !isTRUE(notEqual[i1[i-1], i1[i]]))) {
+        && (!isTRUE(notEqual[i1[i-1], i1[i]]))) {
       notEqual[i1[i], ] <- notEqual[i1[i-1], ] <- notEqual[i1[i], ] | notEqual[i1[i-1], ]
       notEqual[, i1[i]] <- notEqual[, i1[i-1]] <- notEqual[i1[i], ] | notEqual[, i1[i-1]]
       i1[i] <- i1[i-1]
