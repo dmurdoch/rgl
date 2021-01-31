@@ -408,7 +408,7 @@ snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL,
   }
   if (resize) {
     saverect <- rect <- par3d("windowRect")
-    on.exit(par3d(windowRect = saverect), add = TRUE, after = FALSE)
+    on.exit(par3d(windowRect = saverect), add = TRUE)
     if (!is.null(width))
       rect[3] <- rect[1] + width
     if (!is.null(height))
