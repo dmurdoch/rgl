@@ -1,4 +1,15 @@
+Rather than writing ideas here, they should appear as Github
+issues.  I've started some of them.
+
 To-do:
+
+Need to rationalize the inclusion of figures in R Markdown 
+documents.  There are 5 possibilities:  as WebGL, as a link
+to a snapshot file, as a base64 image, or as WebGL plus one of 
+the image formats.  Currently the
+README.Rmd isn't showing the snapshot because it's ignoring the
+fig.path and trying to use a base64 image, which is not supported
+by Github markdown.
 
 Work on ways to modify a scene in Shiny and only transmit the
 changes to the browser.
