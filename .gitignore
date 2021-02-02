@@ -7,3 +7,4 @@ src/*.so
 src/*.dll
 config.log
 config.status
+rgl.Rproj

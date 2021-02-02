@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.105.5
+Version: 0.105.6
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch.duncan@gmail.com>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
@@ -16,10 +16,10 @@ Description: Provides medium to high level functions for 3D interactive graphics
     may be on screen using OpenGL, or to various standard 3D file formats including
     WebGL, PLY, OBJ, STL as well as 2D image formats, including PNG, Postscript, SVG, PGF.
 License: GPL
-URL: https://r-forge.r-project.org/projects/rgl/
+URL: https://github.com/dmurdoch/rgl
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
     pandoc (>=1.14, needed for vignettes)
-BugReports: https://r-forge.r-project.org/projects/rgl/
+BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Remotes: rstudio/webshot2
