@@ -22,14 +22,14 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '4.0',   vdiffr: true,  xref: true}
-          - {os: macOS-latest,   r: '4.0',   vdiffr: true,  xref: true}
+        #  - {os: windows-latest, r: '4.0',   vdiffr: true,  xref: true}
+        #  - {os: macOS-latest,   r: '4.0',   vdiffr: true,  xref: true}
           - {os: ubuntu-16.04,   r: 'devel',   rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: '3.4',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: '3.3',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        #  - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        #  - {os: ubuntu-16.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        #  - {os: ubuntu-16.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        #  - {os: ubuntu-16.04,   r: '3.4',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+        #  - {os: ubuntu-16.04,   r: '3.3',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -70,7 +70,7 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'setwd("pkg/rgl");writeLines(remotes::system_requirements("ubuntu", "16.04"))')
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
 
       - name: Install old packages
         if:  matrix.config.r == '3.4' || matrix.config.r == '3.3'
@@ -96,7 +96,6 @@ jobs:
 
       - name: Check
         run:  |
-          setwd("pkg/rgl")
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning",
                                check_dir = "check")
         shell: Rscript {0}
@@ -106,4 +105,4 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: pkg/rgl/check
+          path: check
