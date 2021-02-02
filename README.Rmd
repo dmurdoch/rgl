@@ -8,6 +8,11 @@ RGL - 3D visualization device system for R using OpenGL
 =======================================================
 
 ```{r include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-"
+)
 options(rgl.useNULL=TRUE)
 suppressPackageStartupMessages(library(rgl))
 
