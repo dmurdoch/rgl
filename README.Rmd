@@ -1,5 +1,36 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 RGL - 3D visualization device system for R using OpenGL
 =======================================================
+
+```{r include=FALSE}
+options(rgl.useNULL=TRUE)
+suppressPackageStartupMessages(library(rgl))
+
+if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
+  knitr::knit_exit()
+}
+setupKnitr(autoprint = TRUE)
+```
+
+```{r fig.height=1.5, echo = FALSE, snapshot = TRUE}
+col <- hcl.colors(5)
+mfrow3d(1,5)
+shade3d(icosahedron3d(), col = col[1])
+next3d()
+shade3d(dodecahedron3d(), col = col[2])
+next3d()
+shade3d(octahedron3d(), col = col[3])
+next3d()
+shade3d(cube3d(), col = col[4])
+next3d()
+shade3d(tetrahedron3d(), col = col[5])
+```
 
 INTRODUCTION
 ------------
@@ -15,7 +46,7 @@ browser shows the images.
 LICENSE
 -------
 The software is released under the GNU Public License. 
-See "COPYING" textfile for details.
+See "COPYING" for details.
 
 
 FEATURES
@@ -166,32 +197,34 @@ has been reported to be sufficient on FC 5 or 6:
   On Windows, OpenGL support cannot currently be disabled.
   
   
-FIRST DEMOS: LOADING LIBRARY AND RUNNING DEMONSTRATIONS
+DEMOS: LOADING AND RUNNING DEMONSTRATIONS
 -------------------------------------------------------
 
-> library(rgl)
-> demo(rgl)
-
+```
+library(rgl)
+demo(rgl)
+```
 
 CREDITS
 -------
-Daniel Adler <dadler@uni-goettingen.de>
-Duncan Murdoch <murdoch@stats.uwo.ca>
-Oleg Nenadic <onenadi@uni-goettingen.de>
-Simon Urbanek <simon.urbanek@math.uni-augsburg.de>
-Ming Chen <mchen34@uwo.ca>
-Albrecht Gebhardt <albrecht.gebhardt@uni-klu.ac.at>
-Ben Bolker <bolker@zoo.ufl.edu>
-Gabor Csardi <csardi@rmki.kfki.hu>
-Adam Strzelecki <ono@java.pl>
-Alexander Senger <senger@physik.hu-berlin.de>
-The R Core Team for some code from R.
-Dirk Eddelbuettel <edd@debian.org>
-The authors of Shiny for their private RNG code.
-Jeroen Ooms for Rtools40 and Freetype help.
-Yohann Demont for Shiny code, suggestions, and testing.
+Daniel Adler <dadler@uni-goettingen.de>  
+Duncan Murdoch <murdoch@stats.uwo.ca>  
+Oleg Nenadic <onenadi@uni-goettingen.de>  
+Simon Urbanek <simon.urbanek@math.uni-augsburg.de>  
+Ming Chen <mchen34@uwo.ca>  
+Albrecht Gebhardt <albrecht.gebhardt@uni-klu.ac.at>  
+Ben Bolker <bolker@zoo.ufl.edu>  
+Gabor Csardi <csardi@rmki.kfki.hu>  
+Adam Strzelecki <ono@java.pl>  
+Alexander Senger <senger@physik.hu-berlin.de>  
+The R Core Team for some code from R.  
+Dirk Eddelbuettel <edd@debian.org>  
+The authors of Shiny for their private RNG code.  
+Jeroen Ooms for Rtools40 and Freetype help.  
+Yohann Demont for Shiny code, suggestions, and testing.  
+Joshua Ulrich for a lot of help with the Github migration.  
 
 WEBSITE
 -------
-https://r-forge.r-project.org/projects/rgl
+https://github.com/dmurdoch/rgl
 
