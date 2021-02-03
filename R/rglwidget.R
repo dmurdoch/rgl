@@ -225,24 +225,49 @@ asRow <- function(..., last = NA, height = NULL, colsize = 1) {
 newElementId <- function(prefix)
   paste0(prefix, p_sample(100000, 1))
 
+knitrNeedsSnapshot <- function(options) {
+  if (!is.null(options$snapshot))
+    options$snapshot
+  else {
+    pandocTo <- opts_knit$get("rmarkdown.pandoc.to")
+    if (!length(pandocTo)) pandocTo <- ""
+    pandocTo %in% c("latex", "gsm")
+  }
+}
+
 rglwidget <- local({
   reuseDF <- NULL
 
   function(x = scene3d(minimal), width = figWidth(), height = figHeight(),
-           controllers = NULL, snapshot = !webgl,
+           controllers = NULL, 
            elementId = NULL,
            reuse = !interactive(),
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
            minimal = TRUE, 
-           webgl = !latex, latex, 
+           webgl,
+           snapshot,
            shinyBrush = NULL, ...) {
-  if (missing(latex))
-    latex <- isTRUE(getOption("knitr.in.progress")) &&
-             identical(opts_knit$get("rmarkdown.pandoc.to"),
-                       "latex")
-  if (!webgl && is.logical(snapshot) && !snapshot)
+    
+  snapshotFile <- NULL  
+  if (missing(snapshot)) {
+    if (missing(webgl) || webgl)
+      snapshot <- FALSE
+    else if (isTRUE(getOption("knitr.in.progress"))) 
+      snapshot <- knitrNeedsSnapshot()
+    else 
+      snapshot <- TRUE
+  } else {
+    if (is.character(snapshot)) {
+      snapshotFile <- snapshot
+      snapshot <- FALSE
+    }
+  }
+  if (missing(webgl)) webgl <- !snapshot
+      
+  if (!webgl && !snapshot && is.null(snapshotFile))
     stop("Must specify either 'snapshot' or 'webgl' or both")
+  
   origScene <- x
   force(shared) # It might plot something...
   	
@@ -298,9 +323,10 @@ rglwidget <- local({
     width <- CSStoPixels(width)
   if (!is.null(height))
     height <- CSStoPixels(height)
-  x <- convertScene(x, width, height, snapshot = snapshot,
+  x <- convertScene(x, width, height,
                    elementId = elementId, reuse = reuseDF,
-                   webgl = webgl, latex = latex)
+                   webgl = webgl, snapshot = snapshot,
+                   snapshotFile = snapshotFile)
   if (!webgl)
     return(x)
   

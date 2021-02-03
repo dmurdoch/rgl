@@ -343,13 +343,12 @@ fns <- local({
           obj <- res[[f]]
           options <- obj$options
           scene <- obj$scene
-          doSnapshot <- latex || isTRUE(options$snapshot)
+          doSnapshot <- knitrNeedsSnapshot(options)
           content <- rglwidget(scene,
                                width = obj$width,
                                height = obj$height,
                                reuse = TRUE,
-                               webgl = !doSnapshot,
-                               latex = latex)
+                               snapshot = doSnapshot)
           if (inherits(content, "knit_image_paths")) {
             # # We've done a snapshot, put it in the right place.
             name <- file.path(options$fig.path, 
