@@ -7,12 +7,12 @@ output:
     fig_height: 5
     fig_width: 5
     toc: yes
+  html_document:
+    df_print: paged
+    toc: yes
   pdf_document:
     fig_height: 5
     fig_width: 5
-    toc: yes
-  html_document:
-    df_print: paged
     toc: yes
 vignette: >
   %\VignetteIndexEntry{rgl Overview}
@@ -976,7 +976,7 @@ setdiff(ls("package:rgl"), documentedfns)
 The following functions and constants are described in this document:<br>
 
 ```{r echo=FALSE, results="asis"}
-writeIndex(cols = 5)
+writeIndex(cols = if (knitr::is_html_output()) 5 else 4)
 ```
 
 
