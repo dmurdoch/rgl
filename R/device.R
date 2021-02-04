@@ -118,6 +118,8 @@ rgl.snapshot <- function( filename, fmt="png", top=TRUE ) {
 
   if (! ret$success)
     warning("'rgl.snapshot' failed")
+  
+  invisible(filename)
 }
 
 ##

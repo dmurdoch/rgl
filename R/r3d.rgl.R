@@ -364,8 +364,11 @@ set3d <- function(dev, silent = FALSE) {
     else return(open3d())
 }
 
-snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL,
-                       webshot = rgl.useNULL()) {
+snapshot3d <- function(filename = tempfile(fileext = ".png"), 
+                       ..., scene, width = NULL, height = NULL,
+                       webshot = TRUE) {
+  force(filename)
+  
   if (webshot && !requireNamespace("webshot2", quietly = TRUE)) {
     warning("webshot = TRUE requires the webshot2 package; using rgl.snapshot() instead")
     webshot <- FALSE
@@ -431,6 +434,7 @@ snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL,
     capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
                         vwidth = width + 100, vheight = height, ...),
                    type = "message")
+    invisible(filename)
   } else
     rgl.snapshot(filename, ...)
 }

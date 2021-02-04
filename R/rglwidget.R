@@ -293,7 +293,7 @@ rglwidget <- local({
   if (!inherits(x, "rglscene"))
     stop("First argument should be an rgl scene.")
   
-  if (!is.list(shared))
+  if (!is.null(shared) && !is.list(shared))
     shared <- list(shared)
   dependencies <- list(rglDependency, CanvasMatrixDependency)
   if (length(shared)) {
