@@ -112,7 +112,7 @@ save_rgl <- function(name, devices) {
     eps = ,
     postscript = rgl.postscript(paste0(name, ".eps"), fmt = "eps"),
     pdf = rgl.postscript(paste0(name, '.pdf'), fmt = "pdf"),
-    rgl.snapshot(paste0(name, ".png"), fmt = "png")
+    snapshot3d(paste0(name, ".png"))
   )
 }
 
@@ -243,7 +243,7 @@ fns <- local({
     knit_hooks$set(rgl.chunk = hook_rglchunk)
     latex <<- identical(opts_knit$get("out.format"), "latex") || identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
     if (autoprint) {
-      saveopts <<- options(rgl.printRglwidget = TRUE, rgl.useNULL = !latex)
+      saveopts <<- options(rgl.printRglwidget = TRUE)
       if (oldKnitrVersion()) {
         oldevalhook <<- knit_hooks$get("evaluate")
         knit_hooks$set( evaluate = hook_evaluate)

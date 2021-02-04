@@ -11,11 +11,11 @@ provides the necessities to embed an \pkg{rgl} scene in one.
 }
 \usage{
 rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
-          controllers = NULL, snapshot = !webgl,
+          controllers = NULL,
           elementId = NULL, reuse = !interactive(),
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
           shared = NULL, minimal = TRUE, 
-          webgl = !latex, latex, 
+          webgl, snapshot, 
           shinyBrush = NULL, ...)
 }
 \arguments{
@@ -28,7 +28,7 @@ The width and height of the display in pixels.
   \item{controllers}{Names of \code{\link{playwidget}} objects
 associated with this scene, or objects (typically piped in).  See Details below.
 }
-  \item{snapshot,webgl,latex}{Control of mode of display of scene.
+  \item{snapshot,webgl}{Control of mode of display of scene.
   See Details below.
 }
   \item{elementId}{The id to use on the HTML \code{div}
@@ -58,7 +58,6 @@ or in a \pkg{shiny} app.
 when the result of an \pkg{rgl} call that changes the
 scene is printed.
 
-
 In RMarkdown or in standalone code, you can use a \pkg{magrittr}-style
 \dQuote{pipe} command to join an \code{rglwidget} with a
 \code{\link{playwidget}} or \code{\link{toggleWidget}}.  If the control widget comes
@@ -80,7 +79,10 @@ If \code{elementId} is \code{NULL} and we are not in a Shiny app,
 \code{elementId} is set to a random value to facilitate re-use
 of information.
 
-To save the display to a file, use \code{htmlwidgets::\link{saveWidget}}.  This requires \command{pandoc} to be installed.
+To save the display to a file, use \code{htmlwidgets::\link{saveWidget}}.
+This requires \command{pandoc} to be installed.  
+For a snapshot, you can use
+\code{htmltools::save_html(img(src=rglwidget(snapshot=TRUE)), file = ...)}.
 
 The \code{webGLoptions} argument is a list which will
 be passed when the WebGL context is created.  See
@@ -92,14 +94,11 @@ of WebGL contain bugs with this setting.  We have
 attempted to work around them, but may change our
 default in the future if this proves unsatisfactory.
 
-The default for the \code{latex} argument is \code{TRUE}
-if we detect that we are producing LaTeX/PDF output in
-\pkg{knitr}, \code{FALSE} otherwise.
-
 The \code{webgl} argument controls
 whether a dynamic plot is displayed in HTML.  In LaTeX
+and some other formats
 dynamic plots can't be
-displayed, so if the \code{latex} argument is \code{TRUE},
+displayed, so if the \code{snapshot} argument is \code{TRUE},
 \code{webgl} defaults to \code{FALSE}.
 
 The \code{snapshot} argument controls whether a snapshot is

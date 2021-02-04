@@ -93,7 +93,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     result$rootSubscene <<- recurse(result$rootSubscene)
     
     if (snapshot)
-      result$snapshot <- getSnapshot(snapshotFile)
+      result$snapshot <- getSnapshot(snapshot, snapshotFile)
   }
   
   flagnames <- c("is_lit", "is_smooth", "has_texture",

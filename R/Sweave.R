@@ -36,7 +36,7 @@ rgl.Sweave <- function(name, width, height, options, ...) {
     if (!snapshotDone) {
       set3d(dev)
       switch(type,
-             png = rgl.snapshot(filename=paste(name, "png", sep=".")),
+             png = snapshot3d(filename=paste(name, "png", sep=".")),
              pdf = rgl.postscript(filename=paste(name, "pdf", sep="."), fmt="pdf"),
              eps = rgl.postscript(filename=paste(name, "eps", sep="."), fmt="eps"),
              stop(gettextf("Unrecognized rgl outputtype: '%s'", type), domain = NA)

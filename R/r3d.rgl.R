@@ -428,8 +428,9 @@ snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL,
                          width = width,
                          height = height), 
                f1)
-    webshot2::webshot(f1, file = filename, selector = "#webshot",
-                      vwidth = width + 100, vheight = height, ...)
+    capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
+                        vwidth = width + 100, vheight = height, ...),
+                   type = "message")
   } else
     rgl.snapshot(filename, ...)
 }
