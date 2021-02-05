@@ -360,20 +360,6 @@
     };
 
     /**
-     * Get the snapshot image of this scene
-     * @returns { Object } The img DOM element
-     */
-    rglwidgetClass.prototype.getSnapshot = function() {
-      var img;
-      if (typeof this.scene.snapshot !== "undefined") {
-        img = document.createElement("img");
-        img.src = this.scene.snapshot;
-        img.alt = "Snapshot";
-      }
-      return img;
-    };
-
-    /**
      * Count clipping planes in a scene
      * @returns {number}
      */

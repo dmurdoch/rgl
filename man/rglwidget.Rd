@@ -99,24 +99,14 @@ whether a dynamic plot is displayed in HTML.  In LaTeX
 and some other formats
 dynamic plots can't be
 displayed, so if the \code{snapshot} argument is \code{TRUE},
-\code{webgl} defaults to \code{FALSE}.
+\code{webgl} must be \code{FALSE}.  (In previous versions
+of \pkg{rgl}, both \code{webgl} and \code{snapshot} could be
+\code{TRUE}; that hasn't worked for a while and is no longer
+allowed as of version 0.105.6.)
 
 The \code{snapshot} argument controls whether a snapshot is
-displayed:  it can be a logical value
-or a character value.  If logical and \code{FALSE},
-no snapshot will be included.  If \code{TRUE},
-a snapshot will be taken of the scene \code{x}
-using \code{\link{snapshot3d}}.  If \code{snapshot}
-is a character string starting \code{"data:"}, it
-will be assumed to be the result of the \code{\link[knitr]{image_uri}} function.  Otherwise it will be assumed to
-be a filename, and \code{\link[knitr]{image_uri}} will be used
-to embed it in the output page. 
+displayed:  it must be \code{!webgl} if both are specified.
 
-For HTML output, if both \code{webgl = TRUE} and a snapshot are specified,
-both will be included in the output, and the snapshot will
-be shown when WebGL is unavailable.  If \code{webgl = FALSE},
-only the snapshot will be included.  It's an error to
-have both \code{webgl = FALSE} and \code{snapshot = FALSE}.
 }
 \section{Shiny specifics}{
 

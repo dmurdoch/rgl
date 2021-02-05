@@ -1191,6 +1191,8 @@ base graphics.
     instead of failing if no filename is given.
   - Both snapshot3d() and rgl.snapshot() now return the 
     output filename invisibly.
+  - rglwidget() no longer tries to include both a snapshot and
+    a WebGL scene:  it can only do one or the other.
   - Some bugs in thigmophobe3d, mergeVertices and 
     as.mesh3d.default have been fixed.
   - Moved development home from R-forge to Github

@@ -107,8 +107,9 @@ resolveHeight <- function(x, inViewer = TRUE, default = 40) {
 getWidgetId <- function(widget) {
   if (inherits(widget, "htmlwidget"))
     widget$elementId
-  else
-    stop("object is not an html widget")
+  else {
+    NULL
+  }
 }
 
 # Get information from previous objects being piped into 
@@ -143,9 +144,15 @@ processUpstream <- function(upstream, elementId = NULL, playerId = NULL) {
   if (inherits(upstream, "combineWidgets")) 
     upstream <- upstream$widgets
 
+  if (inherits(upstream, "knit_image_paths") && length(upstream))
+    upstream <- img(src = image_uri(upstream[1]))
+  
   if (inherits(upstream, c("shiny.tag", "htmlwidget")))
     upstream <- tagList(upstream)
-        
+       
+  if (is.character(upstream) && !is.na(upstream))
+    return(list(prevRglWidget = upstream))
+  
   if (is.list(upstream)) {
     # Objects upstream of the current one may need to know about an rgl widget,
     # or this object may need to know about an upstream rgl widget.  Stop when
@@ -200,6 +207,9 @@ asRow <- function(..., last = NA, height = NULL, colsize = 1) {
     orig <- do.call(combineWidgets, c(args, list(ncol = 1, rowsize = getHeights(args))))
   }
   origlen <- length(orig$widgets)
+  for (i in seq_len(origlen))
+    if (inherits(orig$widgets[[i]], "knit_image_paths"))
+      orig$widgets[[i]] <- img(src = image_uri(orig$widgets[[i]]))
   if (is.na(last))
     last <- origlen
   else if (last > origlen)
@@ -225,7 +235,7 @@ asRow <- function(..., last = NA, height = NULL, colsize = 1) {
 newElementId <- function(prefix)
   paste0(prefix, p_sample(100000, 1))
 
-knitrNeedsSnapshot <- function(options) {
+knitrNeedsSnapshot <- function(options = knitr::opts_current$get()) {
   if (!is.null(options$snapshot))
     options$snapshot
   else {
@@ -249,24 +259,23 @@ rglwidget <- local({
            snapshot,
            shinyBrush = NULL, ...) {
     
-  snapshotFile <- NULL  
   if (missing(snapshot)) {
-    if (missing(webgl) || webgl)
-      snapshot <- FALSE
-    else if (isTRUE(getOption("knitr.in.progress"))) 
-      snapshot <- knitrNeedsSnapshot()
-    else 
-      snapshot <- TRUE
+    if (missing(webgl)) {
+      if (isTRUE(getOption("knitr.in.progress")))
+        snapshot <- knitrNeedsSnapshot()
+      else
+        snapshot <- FALSE
+    } else 
+      snapshot <- !webgl
   } else {
-    if (is.character(snapshot)) {
-      snapshotFile <- snapshot
-      snapshot <- FALSE
+    if (!is.logical(snapshot)) {
+      stop("snapshot must be TRUE or FALSE")
     }
   }
   if (missing(webgl)) webgl <- !snapshot
       
-  if (!webgl && !snapshot && is.null(snapshotFile))
-    stop("Must specify either 'snapshot' or 'webgl' or both")
+  if (webgl == snapshot || is.na(webgl) || is.na(snapshot))
+    stop("Must specify either 'snapshot' or 'webgl' but not both")
   
   origScene <- x
   force(shared) # It might plot something...
@@ -325,36 +334,42 @@ rglwidget <- local({
     height <- CSStoPixels(height)
   x <- convertScene(x, width, height,
                    elementId = elementId, reuse = reuseDF,
-                   webgl = webgl, snapshot = snapshot,
-                   snapshotFile = snapshotFile)
-  if (!webgl)
-    return(x)
-  
+                   webgl = webgl, snapshot = snapshot)
+
   if (!is.na(reuse))
     reuseDF <<- attr(x, "reuse")
   
   upstream <- processUpstream(controllers, elementId = elementId)
-  x$players <- upstream$players
-
-  x$webGLoptions <- webGLoptions
-
-  # create widget
-  attr(x, "TOJSON_ARGS") <- list(na = "string")
-  result <- structure(htmlwidgets::createWidget(
-    name = 'rglWebGL',
-    x = x,
-    width = width,
-    height = height,
-    package = 'rgl',
-    elementId = elementId,
-    dependencies = dependencies,
-    ...
-  ), rglReuse = attr(x, "reuse"), origScene = origScene)
   
+  if (webgl) {
+    x$players <- upstream$players
+
+    x$webGLoptions <- webGLoptions
+
+    # create widget
+    attr(x, "TOJSON_ARGS") <- list(na = "string")
+    result <- structure(htmlwidgets::createWidget(
+      name = 'rglWebGL',
+      x = x,
+      width = width,
+      height = height,
+      package = 'rgl',
+      elementId = elementId,
+      dependencies = dependencies,
+      ...
+    ), rglReuse = attr(x, "reuse"), origScene = origScene)
+    
+  } else {
+    if (is.list(upstream$objects)) {
+      result <- img(src = image_uri(x), width = width, height = height)
+    } else
+      result <- x
+  }
+    
   if (is.list(upstream$objects)) {
     do.call(combineWidgets, c(upstream$objects, 
                               list(result, 
-                                   rowsize = c(upstream$rowsizes, x$height), 
+                                   rowsize = c(upstream$rowsizes, height), 
                                    ncol = 1)))
   } else
     result

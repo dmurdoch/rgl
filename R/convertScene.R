@@ -1,14 +1,7 @@
-knitrWrapSnapshot <- function(snapshotFile) {
-  if (substr(snapshotFile, 1, 5) == "data:")
-    browsable(img(src = snapshotFile))
-  else
-    knitr::include_graphics(snapshotFile)
-}
-
 convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reuse = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
-                         snapshot = FALSE, snapshotFile = NULL) {
+                         snapshot = FALSE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -93,7 +86,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     result$rootSubscene <<- recurse(result$rootSubscene)
     
     if (snapshot)
-      result$snapshot <- getSnapshot(snapshot, snapshotFile)
+      result$snapshot <- getSnapshot()
   }
   
   flagnames <- c("is_lit", "is_smooth", "has_texture",
@@ -283,16 +276,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     lastID <<- tempID
   }
   
-  getSnapshot <- function(doSnapshot, snapshotFile) {
-    if (doSnapshot) {
-      if (is.null(snapshotFile)) {
-        snapshotFile <- tempfile(fileext = ".png")
-        attr(snapshotFile, "temp") <- TRUE
-      }
-      snapshot3d(snapshotFile, scene = x, width = width, height = height)
-    } 
-    knitrWrapSnapshot(snapshotFile)
-  }
+  getSnapshot <- function() 
+    knitr::include_graphics(snapshot3d(scene = x, width = width, height = height))
   
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
       "surface", "text", "abclines", "planes", "spheres",
@@ -306,7 +291,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   # Do a few checks first
 
   if (!webgl)
-    return(getSnapshot(snapshot, snapshotFile))
+    return(getSnapshot())
   
   if (is.null(elementId))
     elementId <- ""
