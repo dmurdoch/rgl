@@ -19,3 +19,5 @@
 ^windows$
 ^[.]github
 ^README.Rmd$
+^tests/test.Rmd$
+^tests/widgetTests.R$
