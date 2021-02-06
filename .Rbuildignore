@@ -18,3 +18,4 @@
 ^[.]lintr$
 ^windows$
 ^[.]github
+^README.Rmd$
