@@ -1186,7 +1186,13 @@ base graphics.
   - Added "webshot" argument to snapshot3d(), to use the
     webshot2 package (currently only available from
     Github; see ?snapshot3d for details) to produce snapshots
-    even on headless systems.
+    even on headless systems.  
+  - snapshot3d() now defaults to writing to a temporary file
+    instead of failing if no filename is given.
+  - Both snapshot3d() and rgl.snapshot() now return the 
+    output filename invisibly.
+  - rglwidget() no longer tries to include both a snapshot and
+    a WebGL scene:  it can only do one or the other.
   - Some bugs in thigmophobe3d, mergeVertices and 
     as.mesh3d.default have been fixed.
   - Moved development home from R-forge to Github

@@ -364,9 +364,17 @@ set3d <- function(dev, silent = FALSE) {
     else return(open3d())
 }
 
-snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL,
-                       webshot = rgl.useNULL()) {
-  if (webshot && !requireNamespace("webshot2", quietly = TRUE)) {
+requireWebshot2 <- function() {
+  suppressMessages(res <- requireNamespace("webshot2", quietly = TRUE))
+  res
+}
+
+snapshot3d <- function(filename = tempfile(fileext = ".png"), 
+                       ..., scene, width = NULL, height = NULL,
+                       webshot = TRUE) {
+  force(filename)
+  
+  if (webshot && !requireWebshot2()) {
     warning("webshot = TRUE requires the webshot2 package; using rgl.snapshot() instead")
     webshot <- FALSE
   }
@@ -426,10 +434,13 @@ snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL,
     saveWidget(rglwidget(scene,
                          elementId = "webshot",
                          width = width,
-                         height = height), 
+                         height = height,
+                         webgl = TRUE), 
                f1)
-    webshot2::webshot(f1, file = filename, selector = "#webshot",
-                      vwidth = width + 100, vheight = height, ...)
+    capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
+                        vwidth = width + 100, vheight = height, ...),
+                   type = "message")
+    invisible(filename)
   } else
     rgl.snapshot(filename, ...)
 }

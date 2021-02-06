@@ -31,7 +31,7 @@ rglMouse <- function(sceneId,
   		        rglStayActive = as.numeric(stayActive),
   		        ...)
   
-  if (!missing(sceneId)) {
+  if (!missing(sceneId) && !is.null(sceneId)) {
     upstream <- processUpstream(sceneId)
     if (!is.null(upstream$prevRglWidget))
       result <- tagAppendAttributes(result, rglSceneId = upstream$prevRglWidget)

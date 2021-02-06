@@ -31,11 +31,8 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
   if (is.null(elementId) && !inShiny())
     elementId <- newElementId("rgl-play")
 
-  # sceneId = NA turns into prevRglWidget = NULL
-  if (is.character(sceneId) && !is.na(sceneId))
-    upstream <- list(prevRglWidget = sceneId)
-  else
-    upstream <- processUpstream(sceneId, playerId = elementId)
+  # sceneId = NA turns into prevRglWidget = NULL      
+  upstream <- processUpstream(sceneId, playerId = elementId)
   
   if (!is.null(respondTo))
     components <- buttonLabels <- NULL

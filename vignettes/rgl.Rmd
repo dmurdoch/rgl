@@ -7,12 +7,12 @@ output:
     fig_height: 5
     fig_width: 5
     toc: yes
+  html_document:
+    df_print: paged
+    toc: yes
   pdf_document:
     fig_height: 5
     fig_width: 5
-    toc: yes
-  html_document:
-    df_print: paged
     toc: yes
 vignette: >
   %\VignetteIndexEntry{rgl Overview}
@@ -613,7 +613,7 @@ While some PDF previewers support interactive 3D graphics,
 most don't.  To produce a screenshot of an `rgl` scene in an R Markdown
 document with PDF output, simply follow the directions given
 above.  The auto-printing will detect PDF output and use
-`rgl.snapshot` to produce a PNG file to insert.  (See below
+`snapshot3d` to produce a PNG file to insert.  (See below
 if you want to insert a different format of graphic.)
 
 If you really need interactive output, see the 
@@ -774,7 +774,10 @@ Function     | Description
 `r indexfns(c("hook_rgl", "hook_webgl"))`: | `knitr` hook functions for inserting images into a document.
 `r indexfns("setupKnitr")`: | Function to set up `knitr` hooks
 
-The `r indexfns("rgl.snapshot")` function is identical to `snapshot3d`.
+The `r indexfns("rgl.snapshot")` function is a low level
+version of `snapshot3d()`; it requires that the `rgl` display
+be onscreen and copies from there.  `snapshot3d()` tries to 
+use the `webshot2` package so it will work even with no display.
 The functions `r indexfns(c("rgl.Sweave.off", "Sweave.snapshot"))` are 
 involved in Sweave processing and not normally called by users.
 
@@ -987,7 +990,7 @@ setdiff(ls("package:rgl"), documentedfns)
 The following functions and constants are described in this document:<br>
 
 ```{r echo=FALSE, results="asis"}
-writeIndex(cols = 5)
+writeIndex(cols = if (knitr::is_html_output()) 5 else 4)
 ```
 
 

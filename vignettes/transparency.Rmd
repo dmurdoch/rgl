@@ -21,6 +21,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(rgl)
+options(rgl.useNULL = TRUE)
 setupKnitr(autoprint = TRUE)
 M <- structure(c(0.997410774230957, 0.0707177817821503, -0.0130676832050085, 
 0, -0.0703366547822952, 0.99714070558548, 0.02762770652771, 0, 

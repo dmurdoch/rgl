@@ -7,11 +7,12 @@
 }
 \usage{
 rgl.snapshot( filename, fmt = "png", top = TRUE )
-snapshot3d( filename, ..., scene, width = NULL, height = NULL,
-            webshot = rgl.useNULL())
+snapshot3d( filename = tempfile(fileext = ".png"), 
+            ..., scene, width = NULL, height = NULL,
+            webshot = TRUE)
 }
 \arguments{
-  \item{filename}{full path to filename.}
+  \item{filename}{path to file for to save.}
   \item{fmt}{image export format, currently supported: png.  Ignored if \code{webshot = TRUE}. }
   \item{top}{whether to call \code{\link{rgl.bringtotop}}}
   \item{...}{arguments to pass to \code{rgl.snapshot} or \code{webshot2::webshot} }
@@ -34,6 +35,10 @@ Animations can be created in a loop modifying the scene and saving
 each screenshot to a file. Various graphics programs (e.g. ImageMagick)
 can put these together into a single animation. (See \code{\link{movie3d}} or
 the example below.)
+}
+\value{
+These functions are mainly called for the side effects.  The
+filename of the saved file is returned invisibly.
 }
 \note{
 When \code{rgl.useNULL()} is \code{TRUE}, only \code{webshot = TRUE}
@@ -63,6 +68,13 @@ using OpenGL.  Often the \code{webshot = TRUE} displays have better quality.
 \seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
 
 \examples{
+if (interactive()) {
+  saveopts <- options(rgl.useNULL = TRUE)
+  plot3d(matrix(rnorm(300), ncol = 3, dimnames = list(NULL, c("x", "y", "z"))), 
+         col = "red")
+  options(saveopts)
+  browseURL(snapshot3d())
+}
 
 \dontrun{
 

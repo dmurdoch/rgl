@@ -8,6 +8,11 @@ RGL - 3D visualization device system for R using OpenGL
 =======================================================
 
 ```{r include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README"
+)
 options(rgl.useNULL=TRUE)
 suppressPackageStartupMessages(library(rgl))
 
@@ -18,7 +23,7 @@ if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
 setupKnitr(autoprint = TRUE)
 ```
 
-```{r fig.height=1.5, echo = FALSE, snapshot = TRUE}
+```{r polyhedra, fig.height=1.5, echo = FALSE, snapshot = TRUE}
 col <- hcl.colors(5)
 mfrow3d(1,5)
 shade3d(icosahedron3d(), col = col[1])

@@ -66,6 +66,6 @@ for (i in 1:45) {
 
 }
 \seealso{
-  \code{\link{rgl.viewpoint}}, \code{\link{rgl.snapshot}}
+  \code{\link{view3d}}, \code{\link{snapshot3d}}
 }
 \keyword{dynamic}
