@@ -455,7 +455,7 @@ Class |  Package | Description
 `r indexfns("triSht", pkg = "interp")` | `interp` | Also Delaunay triangulations
 `r indexfns("tri", pkg = "tripack")` | `tripack` | Generalized Delaunay triangulations
 `r indexfns("ashape3d", pkg = "alphashape3d")` | `alphashape3d` | Alpha-shapes
-`r indexfns("rglId")` | `rgl` | `rgl` object identifiers
+`r linkfn("rglId")` | `rgl` | `rgl` object identifiers
 
 The default `r indexfns("as.mesh3d.default")` method is a simple way
 to construct a mesh from a matrix of vertices; it can use
@@ -701,9 +701,15 @@ Function                     | Description
 `r indexfns("select3d")`:     | returns a function that tests whether a coordinate was selected
 `r indexfns("selectpoints3d")`: | selects from specific objects
 
+`r indexfns("selectionFunction3d")` produces the selection
+function from information about the projection and mouse
+selection region; it is used internally in the 
+functions above.
+
 The `r indexfns("rgl.select3d")` function is an obsolete version of
 `select3d`, and `r indexfns("rgl.select")` is a low-level support
 function.
+
 
 ### Animations
 
@@ -801,7 +807,7 @@ supported.
 The recommended approach works with the `htmlwidgets` framework
 (see http://www.htmlwidgets.org/).  In an R Markdown document
 in `knitr`, use the 
-`r indexfns("rglwidget")` function.  (You can also use
+`r linkfn("rglwidget")` function.  (You can also use
 chunk option `webgl=TRUE`; we recommend the explicit use of
 `rglwidget`.)  This approach also
 allows display of `rgl` scenes in
@@ -820,8 +826,6 @@ Function                             | Description
 `r indexfns("par3dinterpControl")`:  | WebGL control like `r linkfn("par3dinterp")`
 `r indexfns("playwidget")`:       | display and automate controls
 `r indexfns("toggleWidget")`:     | display a button to toggle some items
-`r indexfns("sceneChange")`:      | used in `Shiny` for large scene changes
-`r indexfns(c("shinyGetPar3d", "shinySetPar3d"))`: | get or set `r linkfn("par3d")` values from Shiny
 `r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`:    | `magrittr` pipe
 `r indexfns(c("figHeight", "figWidth"))`:     | Dimensions of figures in R Markdown document
 `r indexfns("rglShared")`:        | share data using `crosstalk` package
@@ -829,6 +833,16 @@ Function                             | Description
 `r indexfns("asRow")`:            | arrange multiple objects in an HTML display
 `r indexfns("getWidgetId")`:      | get the `elementId` from a widget
 
+These functions work with the above scheme in Shiny apps:
+
+Function                             | Description
+------------------------------------ | -------------
+`r indexfns("sceneChange")`:      | used in `Shiny` for large scene changes
+`r indexfns(c("shinyGetPar3d", "shinySetPar3d"))`: | get or set `r linkfn("par3d")` values from Shiny
+`r indexfns("shinyResetBrush")`:  | reset the mouse brush in Shiny
+
+The `r linkfn("selectionFunction3d")` function is also likely
+to be involved in mouse interactions when using Shiny.
 
 Some functions are mainly for internal use:
 `r indexfns(c("elementId2Prefix", "playwidgetOutput", "renderPlaywidget", "rglwidgetOutput", "renderRglwidget", "registerSceneChange"))`. 
