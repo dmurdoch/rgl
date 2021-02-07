@@ -142,7 +142,6 @@ export(.check3d,
  	    strwidth, strheight)
  importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.off, png, 
  	    postscript, rgb, xy.coords, xyz.coords)
- if (getRversion() >= "3.6.0") importFrom(grDevices, hcl.colors)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)
  importFrom(utils, capture.output, count.fields, file_test, 
