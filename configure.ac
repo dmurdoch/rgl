@@ -233,9 +233,11 @@ fi
 
 if test "x$enable_opengl" = "xno"; then
   AC_MSG_NOTICE([compiling without OpenGL support])
-  RGL_OPENGL="#"
+  HIDE_IF_NO_OPENGL="#"
+  RGL_NO_OPENGL=TRUE
 else
-  RGL_OPENGL=""
+  HIDE_IF_NO_OPENGL=""
+  RGL_NO_OPENGL=FALSE
 fi
 
 ## --- Output ----------------------------------------------------------------
@@ -244,6 +246,8 @@ AC_SUBST(CPPFLAGS)
 AC_SUBST(LIBS)
 AC_SUBST(NULL_CPPFLAGS)
 AC_SUBST(NULL_LIBS)
-AC_SUBST(RGL_OPENGL)
+AC_SUBST(HIDE_IF_NO_OPENGL)
+AC_SUBST(RGL_NO_OPENGL)
+AC_CONFIG_FILES([R/noOpenGL.R])
 
 AC_OUTPUT(src/Makevars)

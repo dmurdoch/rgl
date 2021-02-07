@@ -1,4 +1,4 @@
 #! /bin/sh
 rm -f config.* src/Makevars src/Makedeps src/*.o src/*.so src/*.dll
 rm -rf autom4te.cache
-rm -rf src/NULLdir
+rm -rf src/NULLdir R/noOpenGL.R

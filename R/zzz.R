@@ -18,7 +18,7 @@
   initValue <- 0  
   
   onlyNULL <- noOpenGL || rgl.useNULL()
-  if (onlyNULL)
+  if (onlyNULL && !noOpenGL)
     dynlib <- "nullrgl"
   else
     dynlib <- "rgl"

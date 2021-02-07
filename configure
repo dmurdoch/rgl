@@ -620,7 +620,8 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-RGL_OPENGL
+RGL_NO_OPENGL
+HIDE_IF_NO_OPENGL
 NULL_LIBS
 NULL_CPPFLAGS
 HAVE_FREETYPE_CONFIG
@@ -4617,9 +4618,11 @@ fi
 if test "x$enable_opengl" = "xno"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without OpenGL support" >&5
 $as_echo "$as_me: compiling without OpenGL support" >&6;}
-  RGL_OPENGL="#"
+  HIDE_IF_NO_OPENGL="#"
+  RGL_NO_OPENGL=TRUE
 else
-  RGL_OPENGL=""
+  HIDE_IF_NO_OPENGL=""
+  RGL_NO_OPENGL=FALSE
 fi
 
 ## --- Output ----------------------------------------------------------------
@@ -4628,6 +4631,9 @@ fi
 
 
 
+
+
+ac_config_files="$ac_config_files R/noOpenGL.R"
 
 
 ac_config_files="$ac_config_files src/Makevars"
@@ -5337,6 +5343,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
+    "R/noOpenGL.R") CONFIG_FILES="$CONFIG_FILES R/noOpenGL.R" ;;
     "src/Makevars") CONFIG_FILES="$CONFIG_FILES src/Makevars" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
