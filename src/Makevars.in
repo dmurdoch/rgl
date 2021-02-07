@@ -6,9 +6,14 @@
 #-DGL_VERSION_1_2 
 
 CXX_STD = CXX11
-PKG_CPPFLAGS=@CPPFLAGS@ -Iext
-PKG_LIBS=@LIBS@
 PKG_CFLAGS=$(C_VISIBILITY)
+
+# These are only used if an OpenGL build is happening
+@RGL_OPENGL@ ifdef MAKINGRGL
+@RGL_OPENGL@   PKG_CPPFLAGS=@CPPFLAGS@ -Iext
+@RGL_OPENGL@   PKG_LIBS=@LIBS@ 
+@RGL_OPENGL@   SHLIB=
+@RGL_OPENGL@ endif
 
 all: $(SHLIB) 
 

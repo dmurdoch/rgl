@@ -1,3 +1,0 @@
-# The RGL_NO_OPENGL setting is TRUE if configured with --disable-opengl
-
-noOpenGL <- @RGL_NO_OPENGL@
