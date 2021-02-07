@@ -9,8 +9,10 @@ filledContour3d.rglId <- function(obj, plot = TRUE, replace = plot, ...) {
   result
 }
 
-if (getRversion() < "3.6.0") 
+if (getRversion() < "3.6.0") {
   hcl.colors <- function(n, ...) grDevices::cm.colors(n)
+} else
+  hcl.colors <- grDevices::hcl.colors
 
 filledContour3d.mesh3d <- function(obj, fn = "z",
     nlevels = 20,

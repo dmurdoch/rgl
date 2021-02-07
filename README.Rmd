@@ -24,6 +24,7 @@ setupKnitr(autoprint = TRUE)
 ```
 
 ```{r polyhedra, fig.height=1.5, echo = FALSE, snapshot = TRUE}
+hcl.colors <- rgl:::hcl.colors  # might be cm.colors on old R
 col <- hcl.colors(5)
 mfrow3d(1,5)
 shade3d(icosahedron3d(), col = col[1])
