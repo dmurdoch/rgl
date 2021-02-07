@@ -33,8 +33,9 @@ jobs:
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      # _R_CHECK_FORCE_SUGGESTS_: false
+      _R_CHECK_FORCE_SUGGESTS_: false
       # _R_CHECK_RD_XREFS_: false
+      _R_CHECK_AUTOCONF_: false
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RGL_USE_NULL: true
