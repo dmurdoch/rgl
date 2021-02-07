@@ -14,7 +14,6 @@
 ^docs/
 ^[.]Renviron
 ^cran-comments.md$
-^R/noOpenGL.R$
 ^[.]lintr$
 ^windows$
 ^[.]github

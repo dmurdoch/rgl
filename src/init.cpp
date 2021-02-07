@@ -260,7 +260,11 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {NULL, NULL, 0}
  };
  
+#ifdef RGL_NO_OPENGL
+void attribute_visible R_init_nullrgl(DllInfo *dll) 
+#else 
 void attribute_visible R_init_rgl(DllInfo *dll) 
+#endif
 {
   R_registerRoutines(dll, CEntries, CallEntries, NULL, ExtEntries);
   R_useDynamicSymbols(dll, FALSE);

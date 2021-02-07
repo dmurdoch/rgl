@@ -3,17 +3,44 @@
 # AUTO-GENERATED from Makevars.in (using configure or configure.win)
 # This file is part of the RGL project.
 #
-#-DGL_VERSION_1_2 
+# Makevars will be called in different circumstances:
+# 
+# When RGL_OPENGL="":
+# 
+# 1.  Trying to make $(SHLIB), which is set to rgl.so.
+# 2.  Trying to make $(SHLIB), which will be set to nullrgl.so,
+#     with MAKINGNULL set to TRUE.
+# 
+# When RGL_OPENGL="#":
+# 
+# 1.  Trying to make $(SHLIB), which is rgl.so, but we want to
+# use the NULL version of the defs.
 
 CXX_STD = CXX11
 PKG_CFLAGS=$(C_VISIBILITY)
 
-# These are only used if an OpenGL build is happening
-@RGL_OPENGL@ ifdef MAKINGRGL
-@RGL_OPENGL@   PKG_CPPFLAGS=@CPPFLAGS@ -Iext
-@RGL_OPENGL@   PKG_LIBS=@LIBS@ 
-@RGL_OPENGL@   SHLIB=
-@RGL_OPENGL@ endif
+@RGL_OPENGL@ MAKINGNULL=TRUE
 
-all: $(SHLIB) 
+ifndef MAKINGNULL
+  NULLSHLIB=null$(SHLIB)
+  PKG_CPPFLAGS=@CPPFLAGS@ -Iext
+  PKG_LIBS=@LIBS@
+else
+  PKG_CPPFLAGS=@NULL_CPPFLAGS@ -Iext
+  PKG_LIBS=@NULL_LIBS@
+  NULLSHLIB=
+endif
 
+all: $(SHLIB) @RGL_OPENGL@ $(NULLSHLIB) 
+
+.PHONY: .FORCE
+
+$(NULLSHLIB): .FORCE
+	-mkdir -p OGLdir
+	-mv *.o OGLdir
+	-mkdir -p NULLdir
+	-mv NULLdir/* .
+	MAKINGNULL=TRUE $(R_HOME)/bin/R CMD SHLIB -o $@ *.cpp *.c
+	-mv *.o NULLdir
+	-mv OGLdir/* .
+	-rm -rf OGLdir

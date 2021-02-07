@@ -620,7 +620,9 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-RGL_NO_OPENGL
+RGL_OPENGL
+NULL_LIBS
+NULL_CPPFLAGS
 HAVE_FREETYPE_CONFIG
 HAVE_PKG_CONFIG
 XMKMF
@@ -4032,26 +4034,25 @@ fi
 
     if test "${ac_cv_header_png_h}"; then
       if test "${ac_cv_lib_png_png_read_update_info}"; then
-	CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
-	LIBS="${LIBS} -lpng"
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: libpng header and lib found" >&5
+        CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
+        LIBS="${LIBS} -lpng"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: libpng header and lib found" >&5
 $as_echo "$as_me: libpng header and lib found" >&6;}
-	if test "x$enable_libpng_dynamic" != "xno"; then
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: using libpng dynamic linkage" >&5
+        if test "x$enable_libpng_dynamic" != "xno"; then
+          { $as_echo "$as_me:${as_lineno-$LINENO}: using libpng dynamic linkage" >&5
 $as_echo "$as_me: using libpng dynamic linkage" >&6;}
-	else
-	  { $as_echo "$as_me:${as_lineno-$LINENO}: using libpng static linkage" >&5
+        else
+          { $as_echo "$as_me:${as_lineno-$LINENO}: using libpng static linkage" >&5
 $as_echo "$as_me: using libpng static linkage" >&6;}
-	fi
+        fi
       else
-	LIBS=${save_LIBS}
-	CPPFLAGS=${save_CPPFLAGS}
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: libpng header and lib not found" >&5
+        LIBS=${save_LIBS}
+        CPPFLAGS=${save_CPPFLAGS}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: libpng header and lib not found" >&5
 $as_echo "$as_me: libpng header and lib not found" >&6;}
       fi
     fi
   fi
-
 fi
 
 # ---[ OpenGL enabled?]---------------------------------------------------------------
@@ -4062,12 +4063,12 @@ if test "${enable_opengl+set}" = set; then :
 fi
 
 
+NULL_CPPFLAGS="${CPPFLAGS} -DRGL_NO_OPENGL"
+NULL_LIBS="${LIBS}"
+
 # ---[ X11 ]------------------------------------------------------------------
 
-if test "x$enable_opengl" = "xno"; then
-  saveCPPFLAGS="${CPPFLAGS}"
-  saveLIBS="${LIBS}"
-else
+if test "x$enable_opengl" != "xno"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for X" >&5
 $as_echo_n "checking for X... " >&6; }
 
@@ -4616,11 +4617,9 @@ fi
 if test "x$enable_opengl" = "xno"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: compiling without OpenGL support" >&5
 $as_echo "$as_me: compiling without OpenGL support" >&6;}
-  RGL_NO_OPENGL=TRUE
-  CPPFLAGS="${saveCPPFLAGS} -DRGL_NO_OPENGL"
-  LIBS="${saveLIBS}"
+  RGL_OPENGL="#"
 else
-  RGL_NO_OPENGL=FALSE
+  RGL_OPENGL=""
 fi
 
 ## --- Output ----------------------------------------------------------------
@@ -4628,7 +4627,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files R/noOpenGL.R"
+
 
 
 ac_config_files="$ac_config_files src/Makevars"
@@ -5338,7 +5337,6 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "R/noOpenGL.R") CONFIG_FILES="$CONFIG_FILES R/noOpenGL.R" ;;
     "src/Makevars") CONFIG_FILES="$CONFIG_FILES src/Makevars" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
@@ -5788,5 +5786,4 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
-
 

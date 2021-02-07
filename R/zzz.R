@@ -17,9 +17,11 @@
   # OS-specific 
   initValue <- 0  
   
-  dynlib <- "rgl"
-  
   onlyNULL <- noOpenGL || rgl.useNULL()
+  if (onlyNULL)
+    dynlib <- "nullrgl"
+  else
+    dynlib <- "rgl"
   
   unixos <- "none"
   if (.Platform$OS.type == "unix") {
