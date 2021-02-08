@@ -18,7 +18,7 @@
 CXX_STD = CXX11
 PKG_CFLAGS=$(C_VISIBILITY)
 
-PKG_CPPFLAGS=@NULL_CPPFLAGS@ -Iext
+PKG_CPPFLAGS=@NULL_CPPFLAGS@
 PKG_LIBS=@NULL_LIBS@
 
 # These lines are only used if configure found OpenGL support
@@ -30,7 +30,6 @@ all: $(SHLIB) @HIDE_IF_NO_OPENGL@ null$(SHLIB)
 
 null$(SHLIB): $(SHLIB)
 	cp *.cpp *.c *.h NULLdir
-	ln -fs ext NULLdir/ext
 	cd NULLdir;$(R_HOME)/bin/R CMD SHLIB -o null$(SHLIB);cd ..
-	rm NULLdir/*.cpp NULLdir/*.c NULLdir/*.h NULLdir/ext
+	rm NULLdir/*.cpp NULLdir/*.c NULLdir/*.h 
 	mv NULLdir/null$(SHLIB) .
