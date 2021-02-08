@@ -4633,7 +4633,8 @@ fi
 
 
 
-ac_config_files="$ac_config_files R/noOpenGL.R"
+
+ac_config_files="$ac_config_files R/noOpenGL.R src/NULLdir/Makevars"
 
 
 ac_config_files="$ac_config_files src/Makevars"
@@ -5344,6 +5345,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "R/noOpenGL.R") CONFIG_FILES="$CONFIG_FILES R/noOpenGL.R" ;;
+    "src/NULLdir/Makevars") CONFIG_FILES="$CONFIG_FILES src/NULLdir/Makevars" ;;
     "src/Makevars") CONFIG_FILES="$CONFIG_FILES src/Makevars" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;

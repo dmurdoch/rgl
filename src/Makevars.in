@@ -3,47 +3,34 @@
 # AUTO-GENERATED from Makevars.in (using configure or configure.win)
 # This file is part of the RGL project.
 #
-# Makevars will be called in different circumstances:
+# Makevars will be called in two different circumstances:
 # 
-# When RGL_OPENGL="":
+# When HIDE_IF_NO_OPENGL="":
 # 
-# 1.  Trying to make $(SHLIB), which is set to rgl.so.
-# 2.  Trying to make $(SHLIB), which will be set to nullrgl.so,
-#     with MAKINGNULL set to TRUE.
+# Trying to make $(SHLIB)=rgl.so with full OpenGL support, then
+# making null$(SHLIB)=nullrgl.so by building it in NULLdir,
+# using the Makevars file there.
 # 
-# When RGL_OPENGL="#":
+# When HIDE_IF_NO_OPENGL="#":
 # 
-# 1.  Trying to make $(SHLIB), which is rgl.so, but we want to
-# use the NULL version of the defs.
+# Trying to make $(SHLIB)=rgl.so with no OpenGL.
 
 CXX_STD = CXX11
 PKG_CFLAGS=$(C_VISIBILITY)
 
-@HIDE_IF_NO_OPENGL@ DO_BOTH=1
-ifndef DO_BOTH
-  MAKINGNULL=TRUE
-endif
+PKG_CPPFLAGS=@NULL_CPPFLAGS@ -Iext
+PKG_LIBS=@NULL_LIBS@
 
-ifndef MAKINGNULL
-  PKG_CPPFLAGS=@CPPFLAGS@ -Iext
-  PKG_LIBS=@LIBS@
-  NULLSHLIB=null$(SHLIB)
-else
-  PKG_CPPFLAGS=@NULL_CPPFLAGS@ -Iext
-  PKG_LIBS=@NULL_LIBS@
-  NULLSHLIB=
-endif
+# These lines are only used if configure found OpenGL support
 
-all: $(SHLIB) @HIDE_IF_NO_OPENGL@ $(NULLSHLIB) 
+@HIDE_IF_NO_OPENGL@ PKG_CPPFLAGS=@CPPFLAGS@ -Iext
+@HIDE_IF_NO_OPENGL@ PKG_LIBS=@LIBS@
 
-.PHONY: .FORCE
+all: $(SHLIB) @HIDE_IF_NO_OPENGL@ null$(SHLIB) 
 
-$(NULLSHLIB): .FORCE
-	-mkdir -p OGLdir
-	-mv *.o OGLdir
-	-mkdir -p NULLdir
-	-mv NULLdir/* .
-	MAKINGNULL=TRUE $(R_HOME)/bin/R CMD SHLIB -o $@ *.cpp *.c
-	-mv *.o NULLdir
-	-mv OGLdir/* .
-	-rm -rf OGLdir
+null$(SHLIB): $(SHLIB)
+	cp *.cpp *.c *.h NULLdir
+	ln -fs ext NULLdir/ext
+	cd NULLdir;$(R_HOME)/bin/R CMD SHLIB -o null$(SHLIB);cd ..
+	rm NULLdir/*.cpp NULLdir/*.c NULLdir/*.h NULLdir/ext
+	mv NULLdir/null$(SHLIB) .
