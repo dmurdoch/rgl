@@ -26,9 +26,10 @@ PKG_LIBS=@NULL_LIBS@
 @HIDE_IF_NO_OPENGL@ PKG_CPPFLAGS=@CPPFLAGS@ -Iext
 @HIDE_IF_NO_OPENGL@ PKG_LIBS=@LIBS@
 
-all: $(SHLIB) @HIDE_IF_NO_OPENGL@ ../inst/useNULL/$(SHLIB) 
+all: $(SHLIB) @HIDE_IF_NO_OPENGL@ ../inst/useNULL$(R_ARCH)/$(SHLIB) 
 
-../inst/useNULL/$(SHLIB): $(SHLIB)
+../inst/useNULL$(R_ARCH)/$(SHLIB): $(SHLIB)
 	cp -R *.cpp *.c *.h OpenGL useNULL
 	cd useNULL;$(R_HOME)/bin/R CMD SHLIB -o $(SHLIB);rm *.cpp *.c *.h OpenGL/*; cd ..
-	mv useNULL/$(SHLIB) ../inst/useNULL
+	mkdir -p ../inst/useNULL$(R_ARCH)
+	mv useNULL/$(SHLIB) ../inst/useNULL$(R_ARCH)/
