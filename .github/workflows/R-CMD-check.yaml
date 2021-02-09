@@ -37,6 +37,7 @@ jobs:
       # _R_CHECK_RD_XREFS_: false
       # _R_CHECK_CRAN_INCOMING_: false
       # _R_CHECK_AUTOCONF_: false
+      _R_CHECK_FF_CALLS_: ''
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RGL_USE_NULL: true
