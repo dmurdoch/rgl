@@ -19,7 +19,11 @@
   
   onlyNULL <- noOpenGL || rgl.useNULL()
   
-  dir <- if (onlyNULL && !noOpenGL) "useNULL" else "libs"
+  dir <- if (onlyNULL && !noOpenGL && .Platform$OS.type != "windows") 
+           "useNULL" else "libs"
+  if (nchar(.Platform$r_arch))
+    dir <- paste0(dir, "/", .Platform$r_arch)
+  
   dynlib <- system.file(paste0(dir, "/rgl", .Platform$dynlib.ext), package = pkg, lib.loc = lib)
   
   unixos <- "none"
