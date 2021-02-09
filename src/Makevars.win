@@ -10,7 +10,9 @@ PKG_CPPFLAGS = \
 PKG_LIBS = -L$(RWINLIB)/lib$(R_ARCH) \
 	-lfreetype -lpng -lz -lgdi32 -lopengl32 -lglu32
 
-all: clean winlibs
+all: winlibs $(SHLIB)
+
+$(SHLIB): winlibs
 
 winlibs:
 	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
