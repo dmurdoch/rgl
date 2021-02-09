@@ -17,9 +17,10 @@
   # OS-specific 
   initValue <- 0  
   
-  dynlib <- "rgl"
-  
   onlyNULL <- noOpenGL || rgl.useNULL()
+  
+  dir <- if (onlyNULL && !noOpenGL) "useNULL" else "libs"
+  dynlib <- system.file(paste0(dir, "/rgl", .Platform$dynlib.ext), package = pkg, lib.loc = lib)
   
   unixos <- "none"
   if (.Platform$OS.type == "unix") {
@@ -39,7 +40,7 @@
            call. = FALSE)
   }
   
-  dll <- try(library.dynam(dynlib, pkg, lib))
+  dll <- try(dyn.load(dynlib))
   if (inherits(dll, "try-error"))
     stop(paste("\tLoading rgl's DLL failed.", 
     	       if (unixos == "Darwin") 

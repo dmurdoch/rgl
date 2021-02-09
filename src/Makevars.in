@@ -3,12 +3,32 @@
 # AUTO-GENERATED from Makevars.in (using configure or configure.win)
 # This file is part of the RGL project.
 #
-#-DGL_VERSION_1_2 
+# Makevars will be called in two different circumstances:
+# 
+# When HIDE_IF_NO_OPENGL="":
+# 
+# Trying to make $(SHLIB)=rgl.so with full OpenGL support, then
+# making it again by building it in useNULL,
+# using the Makevars file there.
+# 
+# When HIDE_IF_NO_OPENGL="#":
+# 
+# Trying to make $(SHLIB)=rgl.so with no OpenGL.
 
 CXX_STD = CXX11
-PKG_CPPFLAGS=@CPPFLAGS@ -Iext
-PKG_LIBS=@LIBS@
 PKG_CFLAGS=$(C_VISIBILITY)
 
-all: $(SHLIB) 
+PKG_CPPFLAGS=@NULL_CPPFLAGS@
+PKG_LIBS=@NULL_LIBS@
 
+# These lines are only used if configure found OpenGL support
+
+@HIDE_IF_NO_OPENGL@ PKG_CPPFLAGS=@CPPFLAGS@ -Iext
+@HIDE_IF_NO_OPENGL@ PKG_LIBS=@LIBS@
+
+all: $(SHLIB) @HIDE_IF_NO_OPENGL@ ../inst/useNULL/$(SHLIB) 
+
+../inst/useNULL/$(SHLIB): $(SHLIB)
+	cp -R *.cpp *.c *.h OpenGL useNULL
+	cd useNULL;$(R_HOME)/bin/R CMD SHLIB -o $(SHLIB);rm *.cpp *.c *.h OpenGL/*; cd ..
+	mv useNULL/$(SHLIB) ../inst/useNULL

@@ -1,1 +1,3 @@
 Makevars
+*.o
+*.so

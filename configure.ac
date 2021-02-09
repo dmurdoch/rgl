@@ -73,22 +73,21 @@ if test "x$enable_libpng" != "xno"; then
     AC_CHECK_LIB(png, png_read_update_info)
     if test "${ac_cv_header_png_h}"; then
       if test "${ac_cv_lib_png_png_read_update_info}"; then
-	CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
-	LIBS="${LIBS} -lpng"
-	AC_MSG_NOTICE([libpng header and lib found])
-	if test "x$enable_libpng_dynamic" != "xno"; then
-	  AC_MSG_NOTICE([using libpng dynamic linkage])
-	else
-	  AC_MSG_NOTICE([using libpng static linkage])
-	fi
+        CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
+        LIBS="${LIBS} -lpng"
+        AC_MSG_NOTICE([libpng header and lib found])
+        if test "x$enable_libpng_dynamic" != "xno"; then
+          AC_MSG_NOTICE([using libpng dynamic linkage])
+        else
+          AC_MSG_NOTICE([using libpng static linkage])
+        fi
       else
-	LIBS=${save_LIBS}
-	CPPFLAGS=${save_CPPFLAGS}
-	AC_MSG_NOTICE([libpng header and lib not found])
+        LIBS=${save_LIBS}
+        CPPFLAGS=${save_CPPFLAGS}
+        AC_MSG_NOTICE([libpng header and lib not found])
       fi
     fi
   fi
-
 fi
 
 # ---[ OpenGL enabled?]---------------------------------------------------------------
@@ -97,12 +96,12 @@ AC_ARG_ENABLE([opengl],
 [  --disable-opengl           compile without OpenGL support]
 )
 
+NULL_CPPFLAGS="${CPPFLAGS} -DRGL_NO_OPENGL"
+NULL_LIBS="${LIBS}"
+
 # ---[ X11 ]------------------------------------------------------------------
 
-if test "x$enable_opengl" = "xno"; then
-  saveCPPFLAGS="${CPPFLAGS}"
-  saveLIBS="${LIBS}"
-else
+if test "x$enable_opengl" != "xno"; then
   AC_PATH_X
   if test x$no_x = xyes ; then
     AC_MSG_WARN([X11 not found, continuing without OpenGL support.])
@@ -234,10 +233,10 @@ fi
 
 if test "x$enable_opengl" = "xno"; then
   AC_MSG_NOTICE([compiling without OpenGL support])
+  HIDE_IF_NO_OPENGL="#"
   RGL_NO_OPENGL=TRUE
-  CPPFLAGS="${saveCPPFLAGS} -DRGL_NO_OPENGL"
-  LIBS="${saveLIBS}"
 else
+  HIDE_IF_NO_OPENGL=""
   RGL_NO_OPENGL=FALSE
 fi
 
@@ -245,8 +244,11 @@ fi
 
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LIBS)
+AC_SUBST(NULL_CPPFLAGS)
+AC_SUBST(NULL_LIBS)
+AC_SUBST(HIDE_IF_NO_OPENGL)
 AC_SUBST(RGL_NO_OPENGL)
-AC_CONFIG_FILES([R/noOpenGL.R])
+
+AC_CONFIG_FILES([R/noOpenGL.R src/useNULL/Makevars])
 
 AC_OUTPUT(src/Makevars)
-
