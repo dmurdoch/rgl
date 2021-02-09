@@ -260,21 +260,12 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {NULL, NULL, 0}
  };
  
-/* There are two registration functions because we don't
- * know whether this DLL will be called rgl.so or nullrgl.so.
- */
-
 void attribute_visible R_init_rgl(DllInfo *dll) 
 {
   R_registerRoutines(dll, CEntries, CallEntries, NULL, ExtEntries);
   R_useDynamicSymbols(dll, FALSE);
   R_forceSymbols(dll, TRUE);
 }
- 
-void attribute_visible R_init_nullrgl(DllInfo *dll) 
-{
-  R_init_rgl(dll);
-} 
 
 #ifdef __cplusplus
 }

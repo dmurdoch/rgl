@@ -8,7 +8,7 @@
 # When HIDE_IF_NO_OPENGL="":
 # 
 # Trying to make $(SHLIB)=rgl.so with full OpenGL support, then
-# making null$(SHLIB)=nullrgl.so by building it in NULLdir,
+# making it again by building it in useNULL,
 # using the Makevars file there.
 # 
 # When HIDE_IF_NO_OPENGL="#":
@@ -26,10 +26,9 @@ PKG_LIBS=@NULL_LIBS@
 @HIDE_IF_NO_OPENGL@ PKG_CPPFLAGS=@CPPFLAGS@ -Iext
 @HIDE_IF_NO_OPENGL@ PKG_LIBS=@LIBS@
 
-all: $(SHLIB) @HIDE_IF_NO_OPENGL@ null$(SHLIB) 
+all: $(SHLIB) @HIDE_IF_NO_OPENGL@ ../inst/useNULL/$(SHLIB) 
 
-null$(SHLIB): $(SHLIB)
-	cp -R *.cpp *.c *.h OpenGL NULLdir
-	cd NULLdir;$(R_HOME)/bin/R CMD SHLIB -o null$(SHLIB);cd ..
-	rm NULLdir/*.cpp NULLdir/*.c NULLdir/*.h NULLdir/OpenGL/*
-	mv NULLdir/null$(SHLIB) .
+../inst/useNULL/$(SHLIB): $(SHLIB)
+	cp -R *.cpp *.c *.h OpenGL useNULL
+	cd useNULL;$(R_HOME)/bin/R CMD SHLIB -o $(SHLIB);rm *.cpp *.c *.h OpenGL/*; cd ..
+	mv useNULL/$(SHLIB) ../inst/useNULL

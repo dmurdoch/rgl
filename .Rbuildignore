@@ -11,6 +11,7 @@
 ^inst/doc/rglwidgetClass
 ^inst/todo
 ^inst/initNotes.txt
+^inst/useNULL/rgl.so
 ^docs/
 ^[.]Renviron
 ^cran-comments.md$
