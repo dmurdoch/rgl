@@ -1,18 +1,18 @@
-0.104.16:
+0.105.8:
 
-Fixed revdep issues in nat and plot3Drgl.  No other revdep
-problems found.
+There are two main additions in this release:
 
-0.104.15:
-
-There are fairly large changes in this update, intended to
-make it easier to install rgl:
-
- - The requirement for R 4+ has been relaxed, allowing it to
- install on older releases again.
- - The requirement for OpenGL libraries has been removed,
- allowing an install that can produce WebGL only.
- - The use of mathjaxr has been removed, since Debian had
- policy problems with it.
- 
+  - Support for R Markdown documents has been significantly 
+    improved - now (with the suggested non-CRAN webshot2 package)
+    headless machines can insert snapshots of rgl scenes.
+    
+  - Support for older or limited platforms has been improved.
+    Now systems that have broken X11 installations can be told
+    to avoid X11 more easily, as builds with no X11 at all 
+    should happen routinely (in addition to the full builds
+    on systems that support them).
+    
+Another large change is that the home of the source code has
+moved to Github from R-forge.
+  
 There are also several bug fixes and minor additions, as described in the NEWS file.

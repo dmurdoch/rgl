@@ -1195,7 +1195,7 @@ base graphics.
     a WebGL scene:  it can only do one or the other.
   - Some bugs in thigmophobe3d, mergeVertices and 
     as.mesh3d.default have been fixed.
-  - Moved development home from R-forge to Github
+  - Moved development home from R-forge to Github.
   - Now builds the non-OpenGL DLL and puts it in inst/useNULL,
     so options(rgl.useNULL=TRUE) before loading rgl will cause
     to to not use X11 at all.
