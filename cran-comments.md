@@ -1,3 +1,7 @@
+0.105.10:
+
+Remove the slower clipMesh3d example.
+
 0.105.9:
 
 Fix gl2ps.c so pedantic setting doesn't issue warning.

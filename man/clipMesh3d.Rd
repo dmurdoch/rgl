@@ -140,42 +140,6 @@ See \code{\link{contourLines3d}} and
 values without clipping.
 }
 \examples{
-if (requireNamespace("misc3d")) {
-  # Togliatti surface equation: f(x,y,z) = 0
-  # Due to Stephane Laurent
-  f <- function(x,y,z){
-    w <- 1
-    64*(x-w)*
-      (x^4-4*x^3*w-10*x^2*y^2-4*x^2*w^2+16*x*w^3-20*x*y^2*w+5*y^4+16*w^4-20*y^2*w^2) -
-      5*sqrt(5-sqrt(5))*(2*z-sqrt(5-sqrt(5))*w)*(4*(x^2+y^2-z^2)+(1+3*sqrt(5))*w^2)^2
-  }
-  # make grid
-  # The original had 220 instead of 20, this is coarse to be quicker
-  nx <- 20; ny <- 20; nz <- 20
-  x <- seq(-5, 5, length=nx)
-  y <- seq(-5, 5, length=ny)
-  z <- seq(-4, 4, length=nz)
-  g <- expand.grid(x=x, y=y, z=z)
-  # calculate voxel
-  voxel <- array(with(g, f(x,y,z)), dim = c(nx,ny,nz))
-  
-  # compute isosurface
-  open3d(useNULL = TRUE)
-  surf <- as.mesh3d(misc3d::contour3d(voxel, maxvol=max(voxel), level=0, x=x, y=y, z=z))
-  close3d()
-  
-  surf$normals <- NULL
-  surf <- mergeVertices(surf)
-  surf <- addNormals(surf)
-  
-  fn <- function(x, y, z) {
-    x^2 + y^2 + z^2
-  }
-  
-  open3d()
-  shade3d(clipMesh3d(surf, fn, bound = 4.8^2,
-                     greater = FALSE), col="red")
-}
 
 # Show the problem that minVertices solves:
 
