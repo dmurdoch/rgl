@@ -1,3 +1,7 @@
+0.105.9:
+
+Fix gl2ps.c so pedantic setting doesn't issue warning.
+
 0.105.8:
 
 There are two main additions in this release:

@@ -33,7 +33,11 @@
  * Please report all bugs and problems to <gl2ps@geuz.org>.
  */
 
-#ifndef RGL_NO_OPENGL
+#ifdef RGL_NO_OPENGL
+
+typedef int make_iso_compiler_happy;
+
+#else
 
 #include "gl2ps.h"
 
