@@ -1,3 +1,7 @@
+0.105.12:
+
+Added drat repository to DESCRIPTION to hold webshot2.
+
 0.105.11:
 
 Made the startup code more likely to fall back to no-OpenGL.

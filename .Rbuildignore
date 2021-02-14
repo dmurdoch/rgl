@@ -22,3 +22,6 @@
 ^README.Rmd$
 ^tests/test.Rmd$
 ^tests/widgetTests.R$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
