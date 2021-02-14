@@ -12,6 +12,7 @@
 ^inst/todo
 ^inst/initNotes.txt
 ^inst/useNULL/rgl.so
+^inst/notes
 ^docs/
 ^[.]Renviron
 ^cran-comments.md$

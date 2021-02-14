@@ -45,12 +45,26 @@
   }
   
   dll <- try(dyn.load(dynlib))
-  if (inherits(dll, "try-error"))
-    stop(paste("\tLoading rgl's DLL failed.", 
-    	       if (unixos == "Darwin") 
-    	         "\n\tThis build of rgl depends on XQuartz, which you can download from xquartz.org."),
+  if (inherits(dll, "try-error")) {
+    warning(paste("\tLoading rgl's DLL failed.", 
+    	       if (unixos == "Darwin" && !onlyNULL) {
+    	         paste("\n\tThis build of rgl depends on XQuartz, which failed to load.\n",
+    	           "See the discussion in https://stackoverflow.com/a/66127391/2554330")
+             }),
          call. = FALSE)
-
+    if (!onlyNULL && 
+        dir.exists(system.file("useNULL", package = pkg, lib.loc = lib))) {
+      warning("Trying without OpenGL...", call. = FALSE)
+      noOpenGL <<- TRUE
+      dir <- "useNULL"
+      if (nchar(.Platform$r_arch))
+        dir <- paste0(dir, "/", .Platform$r_arch)
+      dynlib <- system.file(paste0(dir, "/rgl", .Platform$dynlib.ext), package = pkg, lib.loc = lib)
+      dll <- try(dyn.load(dynlib))
+    }
+    if (inherits(dll, "try-error"))
+      stop("Loading failed.")
+  }
   routines <- getDLLRegisteredRoutines(dynlib, addNames = FALSE)
   ns <- asNamespace(pkg)
   for(i in 1:4)
