@@ -1170,7 +1170,7 @@ base graphics.
   - The result of open3d() now has class "rglOpen3d",
     and knitr will use this during auto-plotting.
 
-0.105.8:
+0.105.11:
   - Windows builds now download Freetype from rwinlib
     during the build.  (Contributed by Jeroen Ooms.)
   - shinySetPar3d() now accepts a list, as returned in
@@ -1199,3 +1199,5 @@ base graphics.
   - Now builds the non-OpenGL DLL and puts it in inst/useNULL,
     so options(rgl.useNULL=TRUE) before loading rgl will cause
     to to not use X11 at all.
+  - Made the startup code more resilient in case X11 isn't
+    working.

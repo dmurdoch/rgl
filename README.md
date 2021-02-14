@@ -21,7 +21,7 @@ details.
 
 ## FEATURES
 
--   portable R package using OpenGL (if available) on MacOSX, Win32 and
+-   portable R package using OpenGL (if available) on macOS, Win32 and
     X11
 -   can produce 3D graphics in web pages using WebGL
 -   R programming interface
@@ -32,17 +32,17 @@ details.
 -   high-level geometry: surface, spheres
 -   up to 8 light sources
 -   alpha-blending (transparency)
--   side-dependant fill-mode rendering (dots, wired and filled)
+-   side-dependent fill-mode rendering (dots, wired and filled)
 -   texture-mapping with mipmapping and environment mapping support
 -   environmental effects: fogging, background sphere
 -   bounding box with axis ticks marks
 -   undo operation: shapes and light-sources are managed on type stacks,
-    where the top-most objects can be pop’ed, or any item specified by
+    where the top-most objects can be popped, or any item specified by
     an identifier can be removed
 
 ## PLATFORMS
 
-Mac OS X Windows 7/10 Unix-derivatives
+macOS Windows 7/10 Unix-derivatives
 
 ## BUILD TOOLS
 
@@ -80,10 +80,10 @@ The R build tool is the primary tool to build the RGL package.
 
 Install Rtools40 or newer.
 
-An Internet connection will be needed, as Freetype is automatically
+An Internet connection will be needed, as FreeType is automatically
 downloaded from <https://github.com/rwinlib>.
 
-## BUILDING ON UNIX-STYLE OS (MacOS X, Linux, FreeBSD, … )
+## BUILDING ON UNIX-STYLE OS (macOS, Linux, FreeBSD, … )
 
 The build is controlled by an autoconf configure script. You provide the
 options through the R CMD build/INSTALL command
@@ -117,7 +117,7 @@ yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
 
 X11 WINDOWING SYSTEM OPTIONS —————————-
 
-The X11 windowing system is needed for OpenGL display in MacOS and
+The X11 windowing system is needed for OpenGL display in macOS and
 Unix-alikes.
 
 –x-includes=<path> X11 C header files include path
@@ -127,7 +127,7 @@ Unix-alikes.
 BUILDING WITHOUT OPENGL ———————–
 
 As of version 0.104.1, it is possible to build the package without
-OpenGL support on Unix-alikes (including MacOS) with the configure
+OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
 R CMD INSTALL –configure-args=“–disable-opengl” rgl\_0.104.1.tar.gz
@@ -154,7 +154,7 @@ Alexander Senger <senger@physik.hu-berlin.de>
 The R Core Team for some code from R.  
 Dirk Eddelbuettel <edd@debian.org>  
 The authors of Shiny for their private RNG code.  
-Jeroen Ooms for Rtools40 and Freetype help.  
+Jeroen Ooms for Rtools40 and FreeType help.  
 Yohann Demont for Shiny code, suggestions, and testing.  
 Joshua Ulrich for a lot of help with the Github migration.
 

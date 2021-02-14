@@ -35,7 +35,7 @@ or resize with the scene?}
   The centre of each square will be at the coordinates given by \code{x, y, z}.
   
   When \code{shapes} is not \code{NULL}, it should be a vector of
-  identifers of objects to plot in the scene (e.g. as returned by
+  identifiers of objects to plot in the scene (e.g. as returned by
   plotting functions or by \code{\link{ids3d}}).  These objects will
   be removed from the scene and duplicated as a sprite image in a
   constant orientation, as specified by \code{userMatrix}.  The 

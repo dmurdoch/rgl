@@ -1,3 +1,7 @@
+0.105.11:
+
+Made the startup code more likely to fall back to no-OpenGL.
+
 0.105.10:
 
 Remove the slower clipMesh3d example.

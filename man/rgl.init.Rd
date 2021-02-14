@@ -37,9 +37,8 @@ are several causes and remedies:
 \itemize{
 \item{On any system, the OpenGL libraries need to be present for \pkg{rgl} to be able to start an OpenGL device.}
 \itemize{
-\item{On MacOS, you need to install Xquartz.  It is available from
-\url{https://www.xquartz.org}.  Note however that some recent MacOS
-systems do not support OpenGL at all.}
+\item{On macOS, you need to install XQuartz.  It is available from
+\url{https://www.xquartz.org}.}
 \item{On Linux, you need to install Mesa 3D.  One of these commands
 may work, depending on your system:
 \verb{
@@ -51,7 +50,7 @@ may work, depending on your system:
 }
 \item{Windows should have OpenGL installed by default.}
 }
-\item{On Unix-alike systems (MacOS and Linux, for example), \pkg{rgl}
+\item{On Unix-alike systems (macOS and Linux, for example), \pkg{rgl}
 normally
 uses the GLX system for creating displays.  If the graphic is created
 on a remote machine, it may need to use \dQuote{Indirect GLX} (IGLX).  Due

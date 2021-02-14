@@ -6,7 +6,7 @@ Set a one-time slowdown on opening standard graphics
 }
 \description{
 This function is mainly for internal use, to work around  
-a bug in MacOS Catalina:  if base plotting happens
+a bug in macOS Catalina:  if base plotting happens
 too quickly after opening rgl and the first call to quartz, R crashes.
 
 This inserts a delay after the first call to open the 

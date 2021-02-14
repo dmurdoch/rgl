@@ -787,7 +787,7 @@ involved in Sweave processing and not normally called by users.
 There are two ways in which `rgl` scenes are normally
 displayed within R.  The older one is in a dedicated
 window.  In Unix-alikes this is an X11 window;  it is
-a native window in Microsoft Windows.  On MacOS, the
+a native window in Microsoft Windows.  On macOS, the
 XQuartz system (see https://www.xquartz.org) needs to be
 installed to support this.
 
@@ -970,7 +970,7 @@ This section is for miscellaneous functions that don't
 fall in any of the other categories in this document.
 
 The `r indexfns("setGraphicsDelay")` function is designed
-to work around what appears to be a bug on MacOS:  if
+to work around what appears to be a bug on macOS:  if
 a standard plot window is opened too quickly after an `rgl`
 window, R can crash.  This function inserts a one second 
 delay when it appears to be needed.
