@@ -1,3 +1,8 @@
+0.105.13:
+
+Tweak to src/Makevars.in to allow build on Solaris,
+minor changes to reduce Solaris warnings.
+
 0.105.12:
 
 Added drat repository to DESCRIPTION to hold webshot2.
