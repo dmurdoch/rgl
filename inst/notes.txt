@@ -1,0 +1,15 @@
+Notes on rglwidget processing:
+
+Use cases:
+
+At the command line through auto printing or explicit rglwidget
+call, in RStudio or not.
+
+In a knitr/rmarkdown document, through auto printing, an
+rglwidget call, or by way of a hook function.
+
+When should snapshots be converted to URIs? -- <img> links with
+file source won't display properly in RStudio, but URIs do.
+URIs don't display in Github Markdown as used in README (but
+Pandoc knows that, so it's not a big deal:  put the filename
+in the Markdown, and let Pandoc produce the HTML.)

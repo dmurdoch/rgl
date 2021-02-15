@@ -192,9 +192,9 @@ void Window::bringToTop(int stay)
   windowImpl->bringToTop(stay);
 }
 // ---------------------------------------------------------------------------
-void Window::getWindowRect(int *left, int *top, int *width, int *height)
+void Window::getWindowRect(int *in_left, int *in_top, int *in_width, int *in_height)
 {
-  windowImpl->getWindowRect(left, top, width, height);
+  windowImpl->getWindowRect(in_left, in_top, in_width, in_height);
 }
 // ---------------------------------------------------------------------------
 void Window::setWindowRect(int left, int top, int right, int bottom)

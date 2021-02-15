@@ -98,15 +98,15 @@ bool Subscene::add(SceneNode* node)
       break;
     case BACKGROUND:
       {
-        Background* background = static_cast<Background*>(node);
-        addBackground(background);
+        Background* new_background = static_cast<Background*>(node);
+        addBackground(new_background);
         success = true;
       }
       break;
     case BBOXDECO:
       { 
-        BBoxDeco* bboxdeco = static_cast<BBoxDeco*>(node);
-        addBBoxDeco(bboxdeco);
+        BBoxDeco* new_bboxdeco = static_cast<BBoxDeco*>(node);
+        addBBoxDeco(new_bboxdeco);
         success = true;
       }
       break;
@@ -486,14 +486,14 @@ Background* Subscene::get_background()
 
 Background* Subscene::get_background(int id)
 {
-  Background* background = get_background();
-  if (background && background->getObjID() == id)
-    return background;
+  Background* this_background = get_background();
+  if (this_background && this_background->getObjID() == id)
+    return this_background;
   
   std::vector<Subscene*>::const_iterator iter;
   for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) {
-    background = (*iter)->get_background(id);
-    if (background) return background;
+    this_background = (*iter)->get_background(id);
+    if (this_background) return this_background;
   }
   return NULL;
 }  
@@ -507,14 +507,14 @@ BBoxDeco* Subscene::get_bboxdeco()
 
 BBoxDeco* Subscene::get_bboxdeco(int id)
 {
-  BBoxDeco* bboxdeco = get_bboxdeco();
-  if (bboxdeco && bboxdeco->getObjID() == id)
-    return bboxdeco;
+  BBoxDeco* this_bboxdeco = get_bboxdeco();
+  if (this_bboxdeco && this_bboxdeco->getObjID() == id)
+    return this_bboxdeco;
   
   std::vector<Subscene*>::const_iterator iter;
   for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) {
-    bboxdeco = (*iter)->get_bboxdeco(id);
-    if (bboxdeco) return bboxdeco;
+    this_bboxdeco = (*iter)->get_bboxdeco(id);
+    if (this_bboxdeco) return this_bboxdeco;
   }
   return NULL;
 }  
@@ -988,50 +988,50 @@ Subscene* Subscene::getMaster(Embedded which)
 
 void Subscene::getUserMatrix(double* dest)
 {
-  ModelViewpoint* modelviewpoint = getModelViewpoint();
-  modelviewpoint->getUserMatrix(dest);
+  ModelViewpoint* this_modelviewpoint = getModelViewpoint();
+  this_modelviewpoint->getUserMatrix(dest);
 }
 
 void Subscene::setUserMatrix(double* src)
 {
-  ModelViewpoint* modelviewpoint = getModelViewpoint();
-  modelviewpoint->setUserMatrix(src);
+  ModelViewpoint* this_modelviewpoint = getModelViewpoint();
+  this_modelviewpoint->setUserMatrix(src);
 }
 
 void Subscene::getUserProjection(double* dest)
 {
-  UserViewpoint* userviewpoint = getUserViewpoint();
-  userviewpoint->getUserProjection(dest);
+  UserViewpoint* this_userviewpoint = getUserViewpoint();
+  this_userviewpoint->getUserProjection(dest);
 }
 
 void Subscene::setUserProjection(double* src)
 {
-  UserViewpoint* userviewpoint = getUserViewpoint();
-  userviewpoint->setUserProjection(src);
+  UserViewpoint* this_userviewpoint = getUserViewpoint();
+  this_userviewpoint->setUserProjection(src);
 }
 
 void Subscene::getScale(double* dest)
 {
-  ModelViewpoint* modelviewpoint = getModelViewpoint();
-  modelviewpoint->getScale(dest);
+  ModelViewpoint* this_modelviewpoint = getModelViewpoint();
+  this_modelviewpoint->getScale(dest);
 }
 
 void Subscene::setScale(double* src)
 {
-  ModelViewpoint* modelviewpoint = getModelViewpoint();
-  modelviewpoint->setScale(src);
+  ModelViewpoint* this_modelviewpoint = getModelViewpoint();
+  this_modelviewpoint->setScale(src);
 }
 
 void Subscene::getPosition(double* dest)
 {
-  ModelViewpoint* modelviewpoint = getModelViewpoint();
-  modelviewpoint->getPosition(dest);
+  ModelViewpoint* this_modelviewpoint = getModelViewpoint();
+  this_modelviewpoint->getPosition(dest);
 }
 
 void Subscene::setPosition(double* src)
 {
-  ModelViewpoint* modelviewpoint = getModelViewpoint();
-  modelviewpoint->setPosition(src);
+  ModelViewpoint* this_modelviewpoint = getModelViewpoint();
+  this_modelviewpoint->setPosition(src);
 }
 
 void Subscene::setViewport(double x, double y, double width, double height)
@@ -1351,8 +1351,8 @@ void Subscene::trackballUpdate(int mouseX, int mouseY)
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
     Subscene* sub = mouseListeners[i];
     if (sub) {
-      ModelViewpoint* modelviewpoint = sub->getModelViewpoint();
-      modelviewpoint->updateMouseMatrix(rotBase,rotCurrent);
+      ModelViewpoint* this_modelviewpoint = sub->getModelViewpoint();
+      this_modelviewpoint->updateMouseMatrix(rotBase,rotCurrent);
     }
   }
 }
@@ -1362,8 +1362,8 @@ void Subscene::trackballEnd()
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
     Subscene* sub = mouseListeners[i];
     if (sub) {   
-      ModelViewpoint* modelviewpoint = sub->getModelViewpoint();
-      modelviewpoint->mergeMouseMatrix();
+      ModelViewpoint* this_modelviewpoint = sub->getModelViewpoint();
+      this_modelviewpoint->mergeMouseMatrix();
     }
   }
 }
@@ -1380,8 +1380,8 @@ void Subscene::oneAxisUpdate(int mouseX, int mouseY)
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
     Subscene* sub = mouseListeners[i];
     if (sub) {
-      ModelViewpoint* modelviewpoint = sub->getModelViewpoint();
-      modelviewpoint->mouseOneAxis(rotBase,rotCurrent,axis[drag-1]);
+      ModelViewpoint* this_modelviewpoint = sub->getModelViewpoint();
+      this_modelviewpoint->mouseOneAxis(rotBase,rotCurrent,axis[drag-1]);
     }
     
   }
@@ -1389,9 +1389,9 @@ void Subscene::oneAxisUpdate(int mouseX, int mouseY)
 
 void Subscene::polarBegin(int mouseX, int mouseY)
 {
-  ModelViewpoint* modelviewpoint = getModelViewpoint();
+  ModelViewpoint* this_modelviewpoint = getModelViewpoint();
   
-  camBase = modelviewpoint->getPosition();
+  camBase = this_modelviewpoint->getPosition();
   
   dragBase = screenToPolar(pviewport.width,pviewport.height,mouseX,mouseY);
   
@@ -1407,8 +1407,8 @@ void Subscene::polarUpdate(int mouseX, int mouseY)
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
     Subscene* sub = mouseListeners[i];
     if (sub) {   
-      ModelViewpoint* modelviewpoint = sub->getModelViewpoint();
-      modelviewpoint->setPosition( newpos );
+      ModelViewpoint* this_modelviewpoint = sub->getModelViewpoint();
+      this_modelviewpoint->setPosition( newpos );
     }
   }
 }
@@ -1436,8 +1436,8 @@ void Subscene::adjustFOVUpdate(int mouseX, int mouseY)
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
     Subscene* sub = mouseListeners[i];
     if (sub) {
-      UserViewpoint* userviewpoint = sub->getUserViewpoint();
-      userviewpoint->setFOV( userviewpoint->getFOV() + py );
+      UserViewpoint* this_userviewpoint = sub->getUserViewpoint();
+      this_userviewpoint->setFOV( this_userviewpoint->getFOV() + py );
     }
   }
   
@@ -1454,8 +1454,8 @@ void Subscene::wheelRotatePull(int dir)
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
     Subscene* sub = mouseListeners[i];
     if (sub) {
-      UserViewpoint* userviewpoint = sub->getUserViewpoint();
-      float zoom = userviewpoint->getZoom();
+      UserViewpoint* this_userviewpoint = sub->getUserViewpoint();
+      float zoom = this_userviewpoint->getZoom();
       
 #define ZOOM_STEP  1.05f 
 #define ZOOM_PIXELLOGSTEP 0.02f
@@ -1472,7 +1472,7 @@ void Subscene::wheelRotatePull(int dir)
       }
       
       zoom = clamp( zoom , ZOOM_MIN, ZOOM_MAX);
-      userviewpoint->setZoom(zoom);
+      this_userviewpoint->setZoom(zoom);
     }
   }
 }
@@ -1500,12 +1500,12 @@ void Subscene::userBegin(int mouseX, int mouseY)
   int ind = drag - 1;
   Subscene* master = getMaster(EM_MOUSEHANDLERS);
   beginCallback[ind] = master->beginCallback[ind];
-  void* userData = master->userData[3*ind+0];
+  void* this_userData = master->userData[3*ind+0];
   // Rprintf("userBegin in %d with ind=%d\n", getObjID(), ind);
   activeButton = drag;
   if (beginCallback[ind]) {
     busy = true;
-    (*beginCallback[ind])(userData, mouseX, pviewport.height-mouseY);
+    (*beginCallback[ind])(this_userData, mouseX, pviewport.height-mouseY);
     busy = false;
   }
 }
@@ -1516,10 +1516,10 @@ void Subscene::userUpdate(int mouseX, int mouseY)
   int ind = activeButton - 1;
   Subscene* master = getMaster(EM_MOUSEHANDLERS);
   updateCallback[ind] = master->updateCallback[ind];
-  void* userData = master->userData[3*ind+1];
+  void* this_userData = master->userData[3*ind+1];
   if (!busy && updateCallback[ind]) {
     busy = true;
-    (*updateCallback[ind])(userData, mouseX, pviewport.height-mouseY);
+    (*updateCallback[ind])(this_userData, mouseX, pviewport.height-mouseY);
     busy = false;
   }
 }
@@ -1529,9 +1529,9 @@ void Subscene::userEnd()
   int ind = activeButton - 1;
   Subscene* master = getMaster(EM_MOUSEHANDLERS);
   endCallback[ind] = master->endCallback[ind];
-  void* userData = master->userData[3*ind+2];
+  void* this_userData = master->userData[3*ind+2];
   if (endCallback[ind])
-    (*endCallback[ind])(userData);
+    (*endCallback[ind])(this_userData);
 }
 
 void Subscene::userWheel(int dir)
@@ -1556,11 +1556,11 @@ void Subscene::adjustZoomUpdate(int mouseX, int mouseY)
     Subscene* sub = mouseListeners[i];
     if (sub) {
 //      Rprintf("found it\n");
-      UserViewpoint* userviewpoint = sub->getUserViewpoint();
+      UserViewpoint* this_userviewpoint = sub->getUserViewpoint();
       
-      float zoom = clamp ( userviewpoint->getZoom() * exp(dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
+      float zoom = clamp ( this_userviewpoint->getZoom() * exp(dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
       // Rprintf("zoom = %f for subscene %d\n", zoom, sub->getObjID());
-      userviewpoint->setZoom(zoom);
+      this_userviewpoint->setZoom(zoom);
     }
   }
   

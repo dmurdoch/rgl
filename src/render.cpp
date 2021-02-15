@@ -1,6 +1,7 @@
 #include "render.h"
 
 #include "opengl.h"
+#include "R.h"
 
 using namespace rgl;
 
@@ -40,9 +41,14 @@ void VertexArray::alloc(int in_nvertex)
     arrayptr = new float [nvertex*3];
 }
 
-void VertexArray::copy(int nvertex, double* vertices)
+void VertexArray::copy(int in_nvertex, double* vertices)
 {
-  for(int i=0;i<nvertex;i++) {
+  if (in_nvertex > nvertex) {
+    warning("Only %d values copied", nvertex);
+    in_nvertex = nvertex;
+  }
+    
+  for(int i=0;i<in_nvertex;i++) {
     arrayptr[i*3+0] = (float) vertices[i*3+0];
     arrayptr[i*3+1] = (float) vertices[i*3+1];
     arrayptr[i*3+2] = (float) vertices[i*3+2];
