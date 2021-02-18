@@ -1207,3 +1207,6 @@ base graphics.
 0.105.14:
   - On macOS an interaction between rgl and the quartz() device
     caused a segfault (see issue #27).
+  - Fixed error in new args to snapshot3d (reported by Tony Hirst:
+    https://github.com/dmurdoch/rgl/issues/21 .)
+
