@@ -370,7 +370,7 @@ requireWebshot2 <- function() {
 }
 
 snapshot3d <- function(filename = tempfile(fileext = ".png"), 
-                       ..., scene, width = NULL, height = NULL,
+                       fmt = "png", top = TRUE, ..., scene, width = NULL, height = NULL,
                        webshot = TRUE) {
   force(filename)
   
@@ -442,5 +442,5 @@ snapshot3d <- function(filename = tempfile(fileext = ".png"),
                    type = "message")
     invisible(filename)
   } else
-    rgl.snapshot(filename, ...)
+    rgl.snapshot(filename, fmt, top)
 }
