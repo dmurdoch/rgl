@@ -1,0 +1,107 @@
+R -d lldb
+(lldb) target create "/Library/Frameworks/R.framework/Resources/bin/exec/R"
+Current executable set to '/Library/Frameworks/R.framework/Resources/bin/exec/R' (x86_64).
+(lldb) run
+Process 38431 launched: '/Library/Frameworks/R.framework/Resources/bin/exec/R' (x86_64)
+
+R version 4.0.3 Patched (2021-01-30 r79912) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(rgl)
+> open3d()
+2021-02-22 15:35:01.537995-0500 R[38431:1177975] apple_glx_create_context: ac 0x100a87ba0 ac->context_obj 0x10789a600
+2021-02-22 15:35:01.538423-0500 R[38431:1177975] apple_glx_drawable_create: new drawable 0x106da8800
+2021-02-22 15:35:01.540614-0500 R[38431:1177975] create_surface: created a surface for drawable 0x600066 with uid 333
+2021-02-22 15:35:01.540678-0500 R[38431:1177975] surface_make_current: ac->context_obj 0x10789a600 s->surface_id 9
+2021-02-22 15:35:01.541581-0500 R[38431:1177975] surface_make_current: drawable 0x600066
+2021-02-22 15:35:01.541619-0500 R[38431:1177975] applegl_bind_context: error NO
+2021-02-22 15:35:01.550477-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.550918-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:01.551015-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.551277-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:01.551541-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.551931-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:01.551976-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.552204-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:01.552238-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.552457-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:01.557349-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.557650-0500 R[38431:1177975] surface notify updated 0
+glX 
+  1 
+> 2021-02-22 15:35:01.633620-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.634107-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:01.736658-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.737204-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:01.737284-0500 R[38431:1177975] caller is the same thread for uid 333
+2021-02-22 15:35:01.737621-0500 R[38431:1177975] surface notify updated 0
+rgl.close()
+2021-02-22 15:35:18.997169-0500 R[38431:1177975] destroy_drawable_callback: 0x106da8800 ->reference_count before -- 2
+2021-02-22 15:35:18.997229-0500 R[38431:1177975] applegl_unbind_context: error NO
+2021-02-22 15:35:18.997269-0500 R[38431:1177975] apple_glx_destroy_context: ac 0x100a87ba0 ac->context_obj 0x10789a600
+2021-02-22 15:35:19.001605-0500 R[38431:1177975] surface_notify_handler: surface destroyed 333
+2021-02-22 15:35:19.001687-0500 R[38431:1177975] destroy_drawable_callback: 0x106da8800 ->reference_count before -- 1
+2021-02-22 15:35:19.001742-0500 R[38431:1177975] surface_destroy: s->surface_id 9
+2021-02-22 15:35:19.001811-0500 R[38431:1177975] destroy_drawable: freeing 0x106da8800
+> open3d()
+2021-02-22 15:35:21.756177-0500 R[38431:1177975] apple_glx_create_context: ac 0x100bd1230 ac->context_obj 0x106f2e200
+2021-02-22 15:35:21.756488-0500 R[38431:1177975] apple_glx_drawable_create: new drawable 0x101765200
+2021-02-22 15:35:21.759018-0500 R[38431:1177975] create_surface: created a surface for drawable 0x6000c9 with uid 341
+2021-02-22 15:35:21.759104-0500 R[38431:1177975] surface_make_current: ac->context_obj 0x106f2e200 s->surface_id 13
+2021-02-22 15:35:21.760190-0500 R[38431:1177975] surface_make_current: drawable 0x6000c9
+2021-02-22 15:35:21.760234-0500 R[38431:1177975] applegl_bind_context: error NO
+2021-02-22 15:35:21.769818-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.770592-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:21.770725-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.771028-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:21.771288-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.771787-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:21.771835-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.772104-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:21.772144-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.772349-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:21.777597-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.777937-0500 R[38431:1177975] surface notify updated 0
+glX 
+  2 
+> 2021-02-22 15:35:21.837605-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.838011-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:21.959363-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.959969-0500 R[38431:1177975] surface notify updated 0
+2021-02-22 15:35:21.960031-0500 R[38431:1177975] caller is the same thread for uid 341
+2021-02-22 15:35:21.960414-0500 R[38431:1177975] surface notify updated 0
+oprgl.close()
+2021-02-22 15:35:33.861592-0500 R[38431:1177975] destroy_drawable_callback: 0x101765200 ->reference_count before -- 2
+2021-02-22 15:35:33.861651-0500 R[38431:1177975] applegl_unbind_context: error NO
+2021-02-22 15:35:33.861715-0500 R[38431:1177975] apple_glx_destroy_context: ac 0x100bd1230 ac->context_obj 0x106f2e200
+2021-02-22 15:35:33.866477-0500 R[38431:1177975] surface_notify_handler: surface destroyed 341
+2021-02-22 15:35:33.866559-0500 R[38431:1177975] destroy_drawable_callback: 0x101765200 ->reference_count before -- 1
+2021-02-22 15:35:33.866616-0500 R[38431:1177975] surface_destroy: s->surface_id 13
+2021-02-22 15:35:33.866684-0500 R[38431:1177975] destroy_drawable: freeing 0x101765200
+> quartz()
+> open3d()
+2021-02-22 15:35:43.835521-0500 R[38431:1177975] apple_glx_create_context: ac 0x1060cd9a0 ac->context_obj 0x1078e3800
+2021-02-22 15:35:43.835890-0500 R[38431:1177975] apple_glx_drawable_create: new drawable 0x101528a00
+2021-02-22 15:35:43.837913-0500 R[38431:1177975] create_surface: created a surface for drawable 0x60012c with uid 349
+2021-02-22 15:35:43.837964-0500 R[38431:1177975] surface_make_current: ac->context_obj 0x1078e3800 s->surface_id 17
+error: xp_attach_gl_context returned: 2
+2021-02-22 15:35:43.838722-0500 R[38431:1177975] applegl_bind_context: error YES
+Error in rgl.open(useNULL) : 'rgl.open' failed
+In addition: Warning message:
+In rgl.open(useNULL) : RGL: ERROR: can't bind glx context to window
+> 
