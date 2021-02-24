@@ -140,8 +140,8 @@ export(.check3d,
  
  importFrom(graphics, legend, par, plot, plot.new, polygon,
  	    strwidth, strheight)
- importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.off, png, 
- 	    postscript, rgb, xy.coords, xyz.coords)
+ importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.new, 
+ 			dev.off, png, postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)
  importFrom(utils, capture.output, count.fields, file_test, 

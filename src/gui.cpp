@@ -144,6 +144,10 @@ Window::Window(View* in_child, GUIFactory* factory)
 , title("untitled")
 {
   skipRedraw = false;  
+  
+  if (!factory){
+    return;
+  }
   windowImpl = factory->createWindowImpl(this);
   if (!windowImpl) {
     return;

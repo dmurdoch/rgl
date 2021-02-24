@@ -1204,7 +1204,13 @@ base graphics.
   - Set up a drat repository to hold the unreleased webshot2
     package.
 
-0.105.15:
+0.105.18:
   - Fixed error in new args to snapshot3d (reported by Tony Hirst:
     https://github.com/dmurdoch/rgl/issues/21 .)
-  - Improved test for presence of WebGL (suggested by Git Demont, https://github.com/dmurdoch/rgl/issues/31 ).
+  - Improved test for presence of WebGL (suggested by Git Demont, 
+    https://github.com/dmurdoch/rgl/issues/31 ).
+  - On macOS an interaction between rgl and the quartz() device
+    caused a segfault (see issue #27).
+  - Added workaround for interaction with quartz() device
+    (reported by Rich Heiberger, 
+    https://github.com/dmurdoch/rgl/issues/27).
