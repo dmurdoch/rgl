@@ -1207,3 +1207,6 @@ base graphics.
 0.105.14:
   - Fixed error in new args to snapshot3d (reported by Tony Hirst:
     https://github.com/dmurdoch/rgl/issues/21 .)
+  - Added workaround for interaction with quartz() device
+    (reported by Rich Heiberger, 
+    https://github.com/dmurdoch/rgl/issues/27).
