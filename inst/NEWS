@@ -1204,7 +1204,7 @@ base graphics.
   - Set up a drat repository to hold the unreleased webshot2
     package.
 
-0.105.18:
+0.105.19:
   - Fixed error in new args to snapshot3d (reported by Tony Hirst:
     https://github.com/dmurdoch/rgl/issues/21 .)
   - Improved test for presence of WebGL (suggested by Git Demont, 
@@ -1214,3 +1214,5 @@ base graphics.
   - Added workaround for interaction with quartz() device
     (reported by Rich Heiberger, 
     https://github.com/dmurdoch/rgl/issues/27).
+  - Add Biarch to DESCRIPTION so both architectures are built on 
+    Windows.
