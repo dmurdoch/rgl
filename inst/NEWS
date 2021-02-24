@@ -1204,6 +1204,7 @@ base graphics.
   - Set up a drat repository to hold the unreleased webshot2
     package.
 
-0.105.14:
+0.105.19:
   - Fixed error in new args to snapshot3d (reported by Tony Hirst:
     https://github.com/dmurdoch/rgl/issues/21 .)
+  - Add Biarch to DESCRIPTION so both architectures are built on Windows
