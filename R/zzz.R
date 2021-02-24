@@ -81,6 +81,14 @@
   
   .rglEnv$subsceneList <- NULL
 	 
+  # Ugly workaround for incompatibility with quartz device
+  if (!onlyNULL && interactive() &&
+      exists("quartz", getNamespace("grDevices")) &&
+      identical(grDevices::quartz, getOption("device"))) {
+    dev.new()
+    dev.off()
+  }
+  
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
