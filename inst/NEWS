@@ -1214,5 +1214,7 @@ base graphics.
   - Added workaround for interaction with quartz() device
     (reported by Rich Heiberger, 
     https://github.com/dmurdoch/rgl/issues/27).
+  - Fixed a bug affecting fat (lwd > 1) line segments in 
+    rglwidget().
   - Add Biarch to DESCRIPTION so both architectures are built on 
     Windows.
