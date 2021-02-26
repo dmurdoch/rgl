@@ -22,4 +22,5 @@ SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     pandoc (>=1.14, needed for vignettes)
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
+Biarch: true
 Additional_repositories:  https://dmurdoch.github.io/drat
