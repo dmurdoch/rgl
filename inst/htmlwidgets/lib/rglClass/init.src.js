@@ -765,7 +765,7 @@
       for (i = 0; i < f.length; i++)
         alias[i] = [];
       for (i = 0; i < f.length - 1; i++) {
-      	if (type !== "linestrip" && i % 2 !== 1)
+      	if (type !== "linestrip" && i % 2 == 1)
       	  continue;
       	k = ++last;
       	vnew[k] = vnew[f[i]].slice();
