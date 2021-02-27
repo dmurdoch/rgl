@@ -82,15 +82,15 @@
   .rglEnv$subsceneList <- NULL
 
   # Workaround for incompatibility with quartz device
-  # Only run this if we'll be using the X11 display,
-  # quartz() is the default device, and we're not on R.app.
+  # By default only run this if we'll be using the X11 display on macOS
+  # and we're not on R.app.  options("rgl.startQuartz") can 
+  # override this.
   # Then we need to start quartz() before starting rgl.
   # See https://github.com/dmurdoch/rgl/issues/27
-  if (!onlyNULL && 
-      exists("quartz", getNamespace("grDevices")) &&
-      identical(grDevices::quartz, getOption("device")) &&
-      .Platform$GUI != "AQUA") {
-    dev.new()
+  if (getOption("rgl.startQuartz", 
+         !onlyNULL && unixos == "Darwin" && .Platform$GUI != "AQUA") &&
+      exists("quartz", getNamespace("grDevices"))) {
+    grDevices::quartz()
     dev.off()
   }
   
