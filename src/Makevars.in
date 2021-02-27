@@ -28,8 +28,11 @@ PKG_LIBS=@NULL_LIBS@
 
 all: $(SHLIB) @HIDE_IF_NO_OPENGL@ ../inst/useNULL$(R_ARCH)/$(SHLIB) 
 
-../inst/useNULL$(R_ARCH)/$(SHLIB): $(SHLIB)
-	cp -Rp *.cpp *.c *.h OpenGL useNULL
-	cd useNULL;$(R_HOME)/bin/R CMD SHLIB -o $(SHLIB) *.cpp *.c;rm *.cpp *.c *.h OpenGL/*; cd ..
+../inst/useNULL$(R_ARCH)/$(SHLIB): useNULL/useNULL.so
 	mkdir -p ../inst/useNULL$(R_ARCH)
-	mv useNULL/$(SHLIB) ../inst/useNULL$(R_ARCH)/
+	mv useNULL/useNULL.so ../inst/useNULL$(R_ARCH)/$(SHLIB)
+	
+useNULL/useNULL.so: 
+	cp -Rp *.cpp *.c *.h OpenGL useNULL/
+	cd useNULL;$(R_HOME)/bin/R CMD SHLIB -o useNULL.so *.cpp *.c;rm *.cpp *.c *.h OpenGL/*; cd ..
+
