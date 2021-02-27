@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.105.17
+Version: 0.105.19
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch.duncan@gmail.com>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
@@ -22,4 +22,5 @@ SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     pandoc (>=1.14, needed for vignettes)
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
+Biarch: true
 Additional_repositories:  https://dmurdoch.github.io/drat
