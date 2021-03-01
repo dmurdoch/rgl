@@ -39,5 +39,5 @@ useNULL/useNULL.so: useNULL/x11lib.cpp $(SHLIB)
 
 useNULL/x11lib.cpp:
 	cp -Rp OpenGL useNULL && \
-	cp -p *.cpp *.c *.h useNULL/
+	cp -p *.c *.h *.cpp useNULL/
 
