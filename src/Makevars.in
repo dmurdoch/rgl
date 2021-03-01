@@ -33,8 +33,10 @@ all: $(SHLIB) @HIDE_IF_NO_OPENGL@ ../inst/useNULL$(R_ARCH)/$(SHLIB)
 	mv useNULL/useNULL.so ../inst/useNULL$(R_ARCH)/$(SHLIB) && \
 	rm useNULL/*.cpp useNULL/*.c useNULL/*.h useNULL/OpenGL/*
 	
-useNULL/useNULL.so:
-	cp -Rp *.cpp *.c *.h OpenGL useNULL/ && \
+useNULL/useNULL.so: useNULL/OpenGL/gl.h $(SHLIB)
 	cd useNULL && \
 	$(R_HOME)/bin/R CMD SHLIB -o useNULL.so *.cpp *.c
 
+useNULL/OpenGL/gl.h:
+	cp -p *.cpp *.c *.h useNULL/ && \
+	cp -Rp OpenGL useNULL
