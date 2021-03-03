@@ -4,7 +4,7 @@
      */
     rglwidgetClass.prototype.initGL0 = function() {
       if (!window.WebGLRenderingContext){
-        alert("Your browser does not support WebGL. See http://get.webgl.org");
+        this.alertOnce("Your browser does not support WebGL. See http://get.webgl.org");
         return;
       }
     };
@@ -14,7 +14,7 @@
      * @returns { Object } the WebGL context
      */
     rglwidgetClass.prototype.initGL = function() {
-      var self = this;
+      var self = this, success = false;
       if (this.gl) {
       	if (!this.drawing && this.gl.isContextLost())
           this.restartCanvas();
@@ -28,6 +28,9 @@
         this.onContextLost, false);
       this.gl = this.canvas.getContext("webgl", this.webGLoptions) ||
                this.canvas.getContext("experimental-webgl", this.webGLoptions);
+      success = !!(this.gl && this.gl instanceof WebGLRenderingContext);
+      if (!success)
+        this.alertOnce("Your browser does not support WebGL. See http://get.webgl.org"); 
       this.index_uint = this.gl.getExtension("OES_element_index_uint");
       var save = this.startDrawing();
       Object.keys(this.scene.objects).forEach(function(key){
@@ -762,7 +765,7 @@
       for (i = 0; i < f.length; i++)
         alias[i] = [];
       for (i = 0; i < f.length - 1; i++) {
-      	if (type !== "linestrip" && i % 2 !== 1)
+      	if (type !== "linestrip" && i % 2 === 1)
       	  continue;
       	k = ++last;
       	vnew[k] = vnew[f[i]].slice();

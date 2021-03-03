@@ -1170,7 +1170,7 @@ base graphics.
   - The result of open3d() now has class "rglOpen3d",
     and knitr will use this during auto-plotting.
 
-0.105.11:
+0.105.13:
   - Windows builds now download Freetype from rwinlib
     during the build.  (Contributed by Jeroen Ooms.)
   - shinySetPar3d() now accepts a list, as returned in
@@ -1201,3 +1201,21 @@ base graphics.
     to to not use X11 at all.
   - Made the startup code more resilient in case X11 isn't
     working.
+  - Set up a drat repository to hold the unreleased webshot2
+    package.
+
+0.105.21:
+  - Fixed error in new args to snapshot3d (reported by Tony Hirst:
+    https://github.com/dmurdoch/rgl/issues/21 .)
+  - Improved test for presence of WebGL (suggested by Git Demont, 
+    https://github.com/dmurdoch/rgl/issues/31 ).
+  - On macOS an interaction between rgl and the quartz() device
+    caused a segfault (see issue #27).  Added workaround.
+    (reported by Rich Heiberger, 
+    https://github.com/dmurdoch/rgl/issues/27).
+  - Fixed a bug affecting fat (lwd > 1) line segments in 
+    rglwidget().
+  - Add Biarch to DESCRIPTION so both architectures are built on 
+    Windows.
+  - A bug in the Makevars files caused builds using a 
+    parallel make to fail.
