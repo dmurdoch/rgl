@@ -88,8 +88,11 @@
   # Then we need to start quartz() before starting rgl.
   # See https://github.com/dmurdoch/rgl/issues/27
   if (getOption("rgl.startQuartz", 
-         !onlyNULL && unixos == "Darwin" && .Platform$GUI != "AQUA") &&
-      exists("quartz", getNamespace("grDevices"))) {
+         !onlyNULL && 
+         unixos == "Darwin" && 
+         .Platform$GUI != "AQUA") &&
+         interactive() && 
+         exists("quartz", getNamespace("grDevices"))) {
     grDevices::quartz()
     dev.off()
   }
