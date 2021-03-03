@@ -27,7 +27,7 @@ scene3d <- function(minimal = TRUE) {
           "texts", "cex", "adj", "radii", "ids",
           "usermatrix", "types", "offsets", "centers",
           "family", "font", "pos")
-    if (lit || !minimal || type %in% c("light", "clipplanes"))
+    if (lit || !minimal || type %in% c("light", "clipplanes", "planes"))
       attribs <- c(attribs, "normals")
     for (a in attribs) 
       if (rgl.attrib.count(id, a))
