@@ -1204,7 +1204,7 @@ base graphics.
   - Set up a drat repository to hold the unreleased webshot2
     package.
 
-0.105.21:
+0.105.22:
   - Fixed error in new args to snapshot3d (reported by Tony Hirst:
     https://github.com/dmurdoch/rgl/issues/21 .)
   - Improved test for presence of WebGL (suggested by Git Demont, 
@@ -1219,3 +1219,5 @@ base graphics.
     Windows.
   - A bug in the Makevars files caused builds using a 
     parallel make to fail.
+  - A bug in conversion of displays to WebGL prevented planes
+    from displaying properly.
