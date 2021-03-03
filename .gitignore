@@ -6,3 +6,5 @@ config.log
 config.status
 rgl.Rproj
 windows
+docs
+revdep

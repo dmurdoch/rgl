@@ -8,14 +8,16 @@
 \usage{
 rgl.snapshot( filename, fmt = "png", top = TRUE )
 snapshot3d( filename = tempfile(fileext = ".png"), 
+            fmt = "png", top = TRUE,
             ..., scene, width = NULL, height = NULL,
             webshot = TRUE)
 }
 \arguments{
   \item{filename}{path to file for to save.}
   \item{fmt}{image export format, currently supported: png.  Ignored if \code{webshot = TRUE}. }
-  \item{top}{whether to call \code{\link{rgl.bringtotop}}}
-  \item{...}{arguments to pass to \code{rgl.snapshot} or \code{webshot2::webshot} }
+  \item{top}{whether to call \code{\link{rgl.bringtotop}}.
+Ignored if \code{webshot = TRUE}.}
+  \item{...}{arguments to pass to \code{webshot2::webshot} }
   \item{scene}{an optional result of \code{\link{scene3d}} 
     or \code{\link{rglwidget}} to plot}
   \item{width, height}{optional specifications of output

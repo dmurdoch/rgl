@@ -157,11 +157,11 @@ Vertex UserViewpoint::getObserver()
   return this->eye;
 }
 
-void UserViewpoint::setObserver(bool automatic, Vertex eye)
+void UserViewpoint::setObserver(bool automatic, Vertex in_eye)
  {
   viewerInScene = !automatic;
-  if (viewerInScene && !ISNAN(eye.x) &&!ISNAN(eye.y) && !ISNAN(eye.z))
-    this->eye = eye;
+  if (viewerInScene && !ISNAN(in_eye.x) &&!ISNAN(in_eye.y) && !ISNAN(in_eye.z))
+    this->eye = in_eye;
 }
 
 void UserViewpoint::setupViewer(RenderContext* rctx)

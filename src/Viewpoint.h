@@ -59,7 +59,7 @@ public:
   void        setupFrustum(RenderContext* rctx, const Sphere& viewvolumeSphere);
   void        setupProjMatrix(RenderContext* rctx, const Sphere& viewvolumeSphere);
   Vertex      getObserver();
-  void	      setObserver(bool automatic, Vertex eye);
+  void	      setObserver(bool automatic, Vertex in_eye);
   void	      setupViewer(RenderContext* rctx);
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "userviewpoint", buflen); };
   Frustum     frustum;

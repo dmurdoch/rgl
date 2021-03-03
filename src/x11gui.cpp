@@ -350,7 +350,7 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
                                  bool useFreeType)
 {
   for (unsigned int i=0; i < fonts.size(); i++) {
-    if (fonts[i]->cex == cex && fonts[i]->style == style && !strcmp(fonts[i]->family, family)
+    if (fonts[i] && fonts[i]->cex == cex && fonts[i]->style == style && !strcmp(fonts[i]->family, family)
      && fonts[i]->useFreeType == useFreeType)
       return fonts[i];
   }
