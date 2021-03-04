@@ -78,7 +78,7 @@ normally needs re-installation whenever the macOS version changes.
 **Windows:**  
 Windows normally includes OpenGL support, but to get the appropriate
 include files etc., you will need the appropriate version of
-[Rtools](https://cran.r-project.org/bin/windows/Rtools) matched to your
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) matched to your
 R version.
 
 ## Options
