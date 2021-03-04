@@ -56,7 +56,7 @@ scene3d <- function(minimal = TRUE) {
                         else if (flags["exp_fog", 1]) "exp"
 			else if (flags["exp2_fog", 1]) "exp2"
 			else "none"
-      result$fogscale <- rgl.attrib(id, "fogscale")
+      result$fogscale <- as.numeric(rgl.attrib(id, "fogscale"))
     } else if (type == "bboxdeco") {
       flags <- rgl.attrib(id, "flags")
       result$draw_front <- flags["draw_front", 1]

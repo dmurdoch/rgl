@@ -6,4 +6,4 @@
  - Problems with rgl interacting with XQuartz have been 
    mitigated.
  - Detection of WebGL support has been improved.
- - Fixed a WebGL bug in displaying planes
+ - Fixed WebGL bugs in displaying planes and background images.

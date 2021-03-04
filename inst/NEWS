@@ -1221,3 +1221,5 @@ base graphics.
     parallel make to fail.
   - A bug in conversion of displays to WebGL prevented planes
     from displaying properly.
+  - In rglwidget(), background images could cause other parts of
+    the display to disappear.

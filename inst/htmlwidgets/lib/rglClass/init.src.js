@@ -234,7 +234,7 @@
           fat_lines = this.isSet(flags, this.f_fat_lines),
           has_texture = this.isSet(flags, this.f_has_texture),
           fixed_quads = this.isSet(flags, this.f_fixed_quads),
-          is_transparent = obj.is_transparent,
+          is_transparent = this.isSet(flags, this.f_is_transparent),
           depth_sort = this.isSet(flags, this.f_depth_sort),
           sprites_3d = this.isSet(flags, this.f_sprites_3d),
           fixed_size = this.isSet(flags, this.f_fixed_size),
@@ -255,6 +255,7 @@
     obj.initialized = true;
 
     obj.someHidden = false; // used in selection
+    obj.is_transparent = is_transparent;
     
     if (type === "bboxdeco" || type === "subscene")
       return;
