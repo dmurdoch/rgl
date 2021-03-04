@@ -1,9 +1,8 @@
 <!--
 If you want to report a bug, you are in the right place!
 
-If you need help or have a question, please ask on [StackOverflow](https://www.stackoverflow.com).
-Include tags `[r]` and `[rgl]` and you'll likely get help 
-quickly.
+If you need help or have a question, please ask on https://www.stackoverflow.com .
+Include tags `[r]` and `[rgl]` and you'll likely get help quickly.
 
 You can test whether your bug has already been fixed by running
 
