@@ -101,7 +101,7 @@ OpenGL Utility Library (GLU)
 
 **For WebGL display:**
 
-A browser with WebGL enabled.  See http://get.webgl.org.
+A browser with WebGL enabled.  See https://get.webgl.org.
 
 Installing OpenGL support
 -----------------------
