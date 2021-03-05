@@ -1,0 +1,5 @@
+url: https://github.com/dmurdoch/rgl/docs
+
+template:
+  path: inst/pkgdown/templates
+
