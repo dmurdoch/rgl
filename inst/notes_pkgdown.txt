@@ -1,0 +1,13 @@
+Notes for pkgdown branch
+
+To build website:
+
+ setwd("~/svn/MyR/rgl")
+ pkgdown::init_site()
+ pkgdown::build_site(install = FALSE) # , new_process = FALSE)
+
+If used with the rglpatch branches of pkgdown and downlit, this
+installs divs for the rgl output, but doesn't install the
+scripts to run them.  I think that should go into a template.  
+Not sure yet how to make that happen automatically.
+

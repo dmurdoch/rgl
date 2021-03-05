@@ -13,3 +13,4 @@ pkgdown_print.rglId <- function(x, visible) {
 replay_html.rgl_rendered <- function(x, ...) {
 	unclass(x)
 }
+
