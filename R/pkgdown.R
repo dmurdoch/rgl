@@ -4,13 +4,12 @@ in_pkgdown_example <- function()
 	  requireNamespace("pkgdown")
 
 pkgdown_print.rglId <- function(x, visible) {
-	rendered <- htmltools::renderTags(rglwidget())
-	result <- rendered$html
-	class(result) <- "rgl_rendered"
+	result <- htmltools::renderTags(rglwidget())
+	class(result) <- c("rgl_rendered", class(result))
 	result
 }
 
 replay_html.rgl_rendered <- function(x, ...) {
-	unclass(x)
+	structure(x$html, dependencies = x$dependencies)
 }
 
