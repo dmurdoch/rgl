@@ -110,13 +110,7 @@
   
   registerInputHandler("shinyPar3d", convertShinyPar3d)
   registerInputHandler("shinyMouse3d", convertShinyMouse3d)
-  
-  if (in_pkgdown_example()) {
-    registerS3method("replay_html", "rgl_rendered", replay_html.rgl_rendered, 
-                     envir = asNamespace("downlit"))
-    registerS3method("pkgdown_print", "rglId", pkgdown_print.rglId, 
-                     envir = asNamespace("pkgdown"))
-  }
+
 }
 
 # Do we need a delay opening graphics?    

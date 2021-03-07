@@ -134,9 +134,6 @@ export(.check3d,
  S3method(filledContour3d, rglId)
  S3method(filledContour3d, mesh3d)
  
- S3method(pkgdown_print, rglId)
- S3method(replay_html, rgl_rendered)
- 
  if(.Platform$OS.type == "windows") {
    importFrom(utils, getWindowsHandle)
  }
@@ -172,5 +169,5 @@ importFrom(magrittr, "%>%")
 importFrom(manipulateWidget, combineWidgets)
 importFrom(stats, coef, predict, residuals)
 importFrom(pkgdown, pkgdown_print)
-importFrom(downlit, replay_html)
+importFrom(downlit, replay_html, is_low_change)
 

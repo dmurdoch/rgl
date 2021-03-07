@@ -3,13 +3,38 @@ in_pkgdown_example <- function()
 	  requireNamespace("downlit") &&
 	  requireNamespace("pkgdown")
 
-pkgdown_print.rglId <- function(x, visible) {
-	result <- htmltools::renderTags(rglwidget())
-	class(result) <- c("rgl_rendered", class(result))
-	result
+pkgdown_print.rglId <- local({
+	plotnum <- 0
+	
+	function(x, visible = TRUE) {
+		scene <- scene3d()
+		if (inherits(x, "rglHighlevel"))
+			plotnum <<- plotnum + 1
+		structure(list(plotnum = plotnum,
+							     scene = scene),
+							class = c("rglRecordedplot", "otherRecordedplot"))
+	}
+})
+
+replay_html.rglRecordedplot <- function(x, ...) {
+	rendered <- htmltools::renderTags(rglwidget(x$scene))
+	structure(rendered$html, dependencies = rendered$dependencies)
 }
 
-replay_html.rgl_rendered <- function(x, ...) {
-	structure(x$html, dependencies = x$dependencies)
-}
-
+register_pkgdown_methods <- local({
+	registered <- FALSE
+	function(register = in_pkgdown_example()) {
+		if (!registered && register) {
+			registerS3method("replay_html", "rglRecordedplot", 
+											 replay_html.rglRecordedplot, 
+											 envir = asNamespace("downlit"))
+			registerS3method("is_low_change", "rglRecordedplot", 
+											 is_low_change.rglRecordedplot,
+											 envir = asNamespace("downlit"))
+			registerS3method("pkgdown_print", "rglId", 
+											 pkgdown_print.rglId, 
+											 envir = asNamespace("pkgdown"))
+			registered <<- TRUE
+		}
+	}
+})
