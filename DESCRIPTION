@@ -1,8 +1,26 @@
 Package: rgl
 Version: 0.105.22
 Title: 3D Visualization Using OpenGL
-Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch.duncan@gmail.com>, and others (see README)
-Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
+Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
+                     email = "murdoch.duncan@gmail.com"),
+              person("Daniel", "Adler", role = "aut",
+                     email = "dadler@dyncall.org"),
+              person("Oleg", "Nenadic", role = "ctb"),
+              person("Simon", "Urbanek", role = "ctb"),
+              person("Ming", "Chen", role = "ctb"),
+              person("Albrecht", "Gebhardt", role = "ctb"),
+              person("Ben", "Bolker", role = "ctb"),
+              person("Gabor", "Csardi", role = "ctb"),
+              person("Adam", "Strzelecki", role = "ctb"),
+              person("Alexander", "Senger", role = "ctb"),
+              person("The R Core Team", role = c("ctb", "cph")),
+              person("Dirk","Eddelbuettel", role = "ctb"),
+              person("The authors of Shiny", role = "cph"),
+              person("The authors of knitr", role = "cph"),
+              person("Jeroen", "Ooms", role = "ctb"),
+              person("Yohann", "Demont", role = "ctb"),
+              person("Joshua", "Ulrich", role = "ctb"),
+              person("Xavier", "Fernandez i Marin", role = "ctb"))
 Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
