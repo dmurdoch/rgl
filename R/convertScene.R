@@ -99,6 +99,10 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   getFlags <- function(id) {
     
     obj <- getObj(id)
+    if (is.null(obj)) {
+      warning("object", id, " not found.")
+      return(structure(rep(FALSE, length(flagnames)), names = flagnames))
+    }
     type <- obj$type
     
     if (type == "subscene")

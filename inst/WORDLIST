@@ -111,6 +111,7 @@ eps
 et
 fontname
 fontsize
+freetype
 gcc
 github
 gl
@@ -201,6 +202,7 @@ userMatrix
 userProjection
 usr
 vectorized
+webgl
 windowRect
 wireframed
 xmax
