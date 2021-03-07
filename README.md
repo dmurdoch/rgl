@@ -59,7 +59,7 @@ OpenGL Utility Library (GLU)
 
 **For WebGL display:**
 
-A browser with WebGL enabled. See <http://get.webgl.org>.
+A browser with WebGL enabled. See <https://get.webgl.org>.
 
 ## Installing OpenGL support
 
@@ -78,7 +78,7 @@ normally needs re-installation whenever the macOS version changes.
 **Windows:**  
 Windows normally includes OpenGL support, but to get the appropriate
 include files etc., you will need the appropriate version of
-[Rtools](https://cran.r-project.org/bin/windows/Rtools) matched to your
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) matched to your
 R version.
 
 ## Options
@@ -97,7 +97,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.105.19.tar.gz
+    R CMD INSTALL rgl_0.105.21.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -119,7 +119,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.105.19.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.105.21.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
@@ -144,7 +144,8 @@ Alexander Senger <senger@physik.hu-berlin.de>
 The R Core Team for some code from R.  
 Dirk Eddelbuettel <edd@debian.org>  
 The authors of Shiny for their private RNG code.  
-Jeroen Ooms for Rtools40 and FreeType help.  
+The authors of knitr for their graphics inclusion code. Jeroen Ooms for
+Rtools40 and FreeType help.  
 Yohann Demont for Shiny code, suggestions, and testing.  
 Joshua Ulrich for a lot of help with the Github migration.  
 Xavier Fernandez i Marin for help debugging the build.

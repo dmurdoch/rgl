@@ -1,8 +1,14 @@
+# Functions related to working in pkgdown
+
+# The exists() part of this test are only needed until
+# CRAN's version of the packages contain my suggested patches.
 in_pkgdown_example <- function() 
 	!is.null(getOption("downlit.rdname")) && 
 	  requireNamespace("downlit") &&
-	  requireNamespace("pkgdown")
-
+	  exists("is_low_change.default", asNamespace("downlit")) &&
+	  requireNamespace("pkgdown") &&
+    exists("pkgdown_print", asNamespace("pkgdown"))
+	  
 pkgdown_print.rglId <- local({
 	plotnum <- 0
 	
@@ -22,6 +28,10 @@ replay_html.rglRecordedplot <- function(x, ...) {
 	rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = FALSE))
 	structure(rendered$html, dependencies = rendered$dependencies)
 }
+
+# This is only needed until CRAN's pkgdown exports pkgdown_print,
+# then we should use pkgdown::pkgdown_print
+pkgdown_print <- NULL
 
 register_pkgdown_methods <- local({
 	registered <- FALSE

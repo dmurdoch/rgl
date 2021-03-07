@@ -168,6 +168,3 @@ importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, registerInputHan
 importFrom(magrittr, "%>%")
 importFrom(manipulateWidget, combineWidgets)
 importFrom(stats, coef, predict, residuals)
-importFrom(pkgdown, pkgdown_print)
-importFrom(downlit, replay_html, is_low_change)
-
