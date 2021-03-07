@@ -17,7 +17,9 @@ pkgdown_print.rglId <- local({
 })
 
 replay_html.rglRecordedplot <- function(x, ...) {
-	rendered <- htmltools::renderTags(rglwidget(x$scene))
+	# Needs reuse = FALSE, or a reset at the start of
+	# each example.  Currently there's no way to do that.
+	rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = FALSE))
 	structure(rendered$html, dependencies = rendered$dependencies)
 }
 
