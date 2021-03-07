@@ -1,0 +1,82 @@
+url: https://github.com/dmurdoch/rgl/docs
+authors: 
+  Duncan Murdoch:
+    href: https://github.com/dmurdoch
+  Daniel Adler:
+    href: http://neoscientists.org/~plex/
+reference:
+- title: High Level Functions
+  desc:  Generic functions for plotting points or surfaces
+- contents:
+  - plot3d
+  - persp3d
+- title: Adding to plots
+  desc: These add to an existing plot
+- contents:
+  - points3d
+  - lines3d
+  - segments3d
+  - triangles3d
+  - quads3d
+  - text3d
+  - abclines3d
+  - arc3d
+  - planes3d
+  - clipplanes3d
+  - sprites3d
+  - spheres3d
+  - surface3d
+  - arrow3d
+  - pch3d
+  - plotmath3d
+- title:  Axes and "decorations"
+  desc:  These control the look of the plot
+- contents:
+  - axes3d
+  - box3d
+  - bbox3d
+  - title3d
+  - mtext3d
+  - decorate3d
+  - aspect3d
+  - bg3d
+  - bgplot3d
+  - show2d
+  - legend3d
+  - grid3d
+  - thigmophobe3d
+  
+- title: Others
+- contents:
+  - -plot3d
+  - -persp3d
+  - -points3d
+  - -lines3d
+  - -segments3d
+  - -triangles3d
+  - -quads3d
+  - -text3d
+  - -abclines3d
+  - -arc3d
+  - -planes3d
+  - -clipplanes3d
+  - -sprites3d
+  - -spheres3d
+  - -surface3d
+  - -arrow3d
+  - -pch3d
+  - -plotmath3d
+  - -axes3d
+  - -box3d
+  - -bbox3d
+  - -title3d
+  - -mtext3d
+  - -decorate3d
+  - -aspect3d
+  - -bg3d
+  - -bgplot3d
+  - -show2d
+  - -legend3d
+  - -grid3d
+  - -thigmophobe3d
+  - matches(".")

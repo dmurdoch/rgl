@@ -30,5 +30,7 @@ print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
   if (rglwidget)
     # FIXME:  For lowlevel, this should replace the scene, not update the history
     print(rglwidget(...))
+  else if (in_pkgdown_example())
+    pkgdown_print(x)
   invisible(x)
 }

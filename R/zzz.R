@@ -110,7 +110,14 @@
   
   registerInputHandler("shinyPar3d", convertShinyPar3d)
   registerInputHandler("shinyMouse3d", convertShinyMouse3d)
-  
+
+  # handle pkgdown_print before it is in the CRAN version
+  # pkgdown 
+  pkgdown_print <<- if (requireNamespace("pkgdown") &&
+                        "pkgdown_print" %in% getNamespaceExports("pkgdown"))
+                      getExportedValue("pkgdown", "pkgdown_print")
+                    else 
+                      print
 }
 
 # Do we need a delay opening graphics?    

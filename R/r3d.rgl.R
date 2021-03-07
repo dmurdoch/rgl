@@ -300,6 +300,9 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 
 open3d <- function(..., params = getr3dDefaults(), 
                    useNULL = rgl.useNULL(), silent = FALSE	) {
+	
+	  register_pkgdown_methods()
+	
     args <- list(...)
     if (!is.null(args$antialias) 
         || !is.null(args$antialias <- r3dDefaults$antialias)) {
