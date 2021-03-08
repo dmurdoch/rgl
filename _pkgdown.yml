@@ -60,7 +60,8 @@ reference:
   - light3d
   - material3d
   - par3d
-  - r3dDefaults
+  - view3d
+  - observer3d
 - title: Complex shapes
   desc: These functions construct and display complex shapes.
 - contents:
@@ -152,40 +153,31 @@ reference:
   - writeSTL
   - rglToBase
   - rglToLattice
+  - rgl.postscript
 - title: Miscellaneous utility functions
+- subtitle: Opening, closing and changing the display
 - contents:
   - open3d
+  - r3dDefaults
   - close3d
   - .check3d
   - rgl.useNULL
   - cur3d
   - set3d
+  - rgl.bringtotop
+  - rgl.dev.list
+- subtitle: Manipulating objects in the display
+- contents:
   - pop3d
   - clear3d
   - ids3d
   - identify3d
-  - observer3d
-  - pipe
-  - GramSchmidt
   - selectpoints3d
   - selectionFunction3d
   - rgl.select
-  - triangulate
-  - rgl.bringtotop
-  - rgl.dev.list
   - rgl.attrib
   - rgl.attrib.info
   - rgl.pixels
-  - rgl.postscript
-  - rgl.primitive
-  - rgl.projection
-  - rgl.user2window
-  - rgl.setMouseCallbacks
-  - setUserShaders
-  - makeDependency
-  - setGraphicsDelay
-  - view3d
-  - rglId
 - subtitle: Working with coordinates
 - contents:
   - asEuclidean
@@ -198,6 +190,24 @@ reference:
   - scaleMatrix
   - translationMatrix
   - identityMatrix
+- subtitle: Unclassifiable miscellany
+- contents:
+  - pipe
+  - GramSchmidt
+  - triangulate
+  - rgl.primitive
+  - rgl.projection
+  - rgl.user2window
+  - rgl.setMouseCallbacks
+  - setUserShaders
+  - makeDependency
+  - setGraphicsDelay
+  - rglId
+- title: General documentation
+- contents:
+  - rgl-package
+  - r3d
+  - tkrgl
 - title: Obsolete functions
 - contents:
   - ageSetter
@@ -208,7 +218,3 @@ reference:
   - rgl.Sweave
   - subsetSlider
   - writeWebGL
-  
-  
-  
-  
