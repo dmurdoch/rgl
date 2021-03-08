@@ -9,10 +9,10 @@ in_pkgdown_example <- function()
 	  requireNamespace("pkgdown") &&
     exists("pkgdown_print", asNamespace("pkgdown"))
 	  
-pkgdown_print.rglId <- local({
+fns <- local({
 	plotnum <- 0
 	
-	function(x, visible = TRUE) {
+	pkgdown_print.rglId <- function(x, visible = TRUE) {
 		scene <- scene3d()
 		if (inherits(x, "rglHighlevel"))
 			plotnum <<- plotnum + 1
@@ -20,7 +20,19 @@ pkgdown_print.rglId <- local({
 							     scene = scene),
 							class = c("rglRecordedplot", "otherRecordedplot"))
 	}
+	
+	pkgdown_print.rglOpen3d <- function(x, visible = TRUE) {
+		plotnum <<- plotnum + 1
+		invisible(x)
+	}
+	
+	list(pkgdown_print.rglId = pkgdown_print.rglId,
+			 pkgdown_print.rglOpen3d = pkgdown_print.rglOpen3d)
 })
+
+pkgdown_print.rglId <-     fns[["pkgdown_print.rglId"]]
+pkgdown_print.rglOpen3d <- fns[["pkgdown_print.rglOpen3d"]]
+rm(fns)
 
 replay_html.rglRecordedplot <- function(x, ...) {
 	# Needs reuse = FALSE, or a reset at the start of
@@ -45,6 +57,9 @@ register_pkgdown_methods <- local({
 											 envir = asNamespace("downlit"))
 			registerS3method("pkgdown_print", "rglId", 
 											 pkgdown_print.rglId, 
+											 envir = asNamespace("pkgdown"))
+			registerS3method("pkgdown_print", "rglOpen3d", 
+											 pkgdown_print.rglOpen3d, 
 											 envir = asNamespace("pkgdown"))
 			registered <<- TRUE
 		}
