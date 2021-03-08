@@ -190,7 +190,7 @@ BUILDING WITHOUT OPENGL
 -----------------------
   
 As of version 0.104.1, it is possible to build the package without
-  OpenGL support on Unix-alikes (including macOS) with the configure option
+OpenGL support on Unix-alikes (including macOS) with the configure option
     --disable-opengl 
 For example,
   
