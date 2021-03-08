@@ -48,6 +48,18 @@ and an R programming interface.  WebGL, on the other hand, is
 rendered in a web browser; rgl produces the input file, and the 
 browser shows the images.
 
+WEBSITE
+-------
+
+An experimental website is here:
+
+ https://dmurdoch.github.io/rgl/dev
+
+The currently active development site is here:
+
+ https://github.com/dmurdoch/rgl
+
+
 INSTALLATION
 ------------
 
@@ -228,8 +240,4 @@ Jeroen Ooms for Rtools40 and FreeType help.
 Yohann Demont for Shiny code, suggestions, and testing.  
 Joshua Ulrich for a lot of help with the Github migration.  
 Xavier Fernandez i Marin for help debugging the build.
-
-WEBSITE
--------
-https://github.com/dmurdoch/rgl
 
