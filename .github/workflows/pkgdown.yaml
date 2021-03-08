@@ -17,7 +17,6 @@ jobs:
       # _R_CHECK_CRAN_INCOMING_: false
       # _R_CHECK_AUTOCONF_: false
       RSPM: ${{ matrix.config.rspm }}
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RGL_USE_NULL: true
       
     steps:
