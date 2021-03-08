@@ -48,11 +48,34 @@ and an R programming interface.  WebGL, on the other hand, is
 rendered in a web browser; rgl produces the input file, and the 
 browser shows the images.
 
+INSTALLATION
+------------
+
+Most users will want to install the latest CRAN release.
+For Windows, macOS and some Linux platforms, installation can 
+be easy, as CRAN distributes binary versions:
+
+```
+# Install latest release from CRAN
+install.packages("rgl")
+```
+
+To install the latest development version from Github, 
+you'll need to do a source install.  Those aren't easy!
+Try
+
+```
+# Install development version from Github
+remotes::install_github("dmurdoch/rgl")
+```
+
+If that fails, read the instructions below.
+
 
 LICENSE
 -------
 The software is released under the GNU Public License. 
-See "COPYING" for details.
+See [COPYING](./COPYING) for details.
 
 
 FEATURES
