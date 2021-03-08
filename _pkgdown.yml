@@ -26,7 +26,6 @@ reference:
   - segments3d
   - triangles3d
   - quads3d
-- subtitle: Constructed shapes
 - contents:
   - text3d
   - abclines3d
@@ -218,3 +217,4 @@ reference:
   - rgl.Sweave
   - subsetSlider
   - writeWebGL
+  
