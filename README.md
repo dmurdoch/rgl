@@ -14,10 +14,27 @@ navigation facility (mouse + wheel support) and an R programming
 interface. WebGL, on the other hand, is rendered in a web browser; rgl
 produces the input file, and the browser shows the images.
 
+## INSTALLATION
+
+Most users will want to install the latest CRAN release. For Windows,
+macOS and some Linux platforms, installation can be easy, as CRAN
+distributes binary versions:
+
+    # Install latest release from CRAN
+    install.packages("rgl")
+
+To install the latest development version from Github, you’ll need to do
+a source install. Those aren’t easy! Try
+
+    # Install development version from Github
+    remotes::install_github("dmurdoch/rgl")
+
+If that fails, read the instructions below.
+
 ## LICENSE
 
-The software is released under the GNU Public License. See “COPYING” for
-details.
+The software is released under the GNU Public License. See
+[COPYING](./COPYING) for details.
 
 ## FEATURES
 
@@ -97,7 +114,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.105.22.tar.gz
+    R CMD INSTALL rgl_0.106.0.1.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -119,7 +136,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.105.22.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.106.0.1.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
