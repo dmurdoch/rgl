@@ -15,11 +15,9 @@
   
 .onLoad <- function(lib, pkg) {
   in_pkgload_loadall <- function() {
-    # FIXME!  Uncomment TRUE to work with devtools::load_all
-    #         or FALSE for regular builds.  We need a real test!
-    # TRUE
-    FALSE
+    isNamespaceLoaded("pkgload") && grepl("load_all", deparse(sys.call(1)))
   }
+  
   getDir <- function(useNULL) {
     if (in_pkgload_loadall()) {
       dir <- if (useNULL) "inst/useNULL" else "src"
