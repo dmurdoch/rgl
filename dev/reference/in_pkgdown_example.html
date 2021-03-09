@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract pixel information from window — rgl.pixels • rgl</title>
+<title>Are we running in a pkgdown example? — in_pkgdown_example • rgl</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,10 @@
 
 
 
-<meta property="og:title" content="Extract pixel information from window — rgl.pixels" />
-<meta property="og:description" content="This function extracts single components of the pixel information from the 
-topmost window." />
+<meta property="og:title" content="Are we running in a pkgdown example? — in_pkgdown_example" />
+<meta property="og:description" content="This is mainly for internal use to decide whether results
+should be automatically included in a pkgdown web
+page." />
 
 
 <meta name="robots" content="noindex">
@@ -132,89 +133,27 @@ topmost window." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract pixel information from window</h1>
+    <h1>Are we running in a <span class="pkg">pkgdown</span> example?</h1>
     
-    <div class="hidden name"><code>rgl.pixels.Rd</code></div>
+    <div class="hidden name"><code>in_pkgdown_example.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function extracts single components of the pixel information from the 
-topmost window.</p>
+    <p>This is mainly for internal use to decide whether results
+should be automatically included in a <span class="pkg">pkgdown</span> web
+page.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rgl.pixels</span><span class='op'>(</span>component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"red"</span>, <span class='st'>"green"</span>, <span class='st'>"blue"</span><span class='op'>)</span>, 
-        viewport <span class='op'>=</span> <span class='fu'><a href='par3d.html'>par3d</a></span><span class='op'>(</span><span class='st'>"viewport"</span><span class='op'>)</span>, top <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>in_pkgdown_example</span><span class='op'>(</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>component</th>
-      <td><p>Which component(s)?</p></td>
-    </tr>
-    <tr>
-      <th>viewport</th>
-      <td><p>Lower left corner and size of desired region.</p></td>
-    </tr>
-    <tr>
-      <th>top</th>
-      <td><p>Whether to bring window to top before reading.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The possible components are <code>"red"</code>, <code>"green"</code>, <code>"blue"</code>, 
-<code>"alpha"</code>, <code>"depth"</code>, and <code>"luminance"</code> (the sum of the three
-colors).  All are scaled from 0 to 1.</p>
-<p>Note that the luminance is kept below 1 by truncating the sum; this is the 
-definition used for the <code>GL_LUMINANCE</code> component in OpenGL.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector, matrix or array containing the desired components.  If one component
-is requested, a vector or matrix will be returned depending on the size of
-block requested (length 1 dimensions are dropped); if more, an array, whose last dimension
-is the list of components.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Duncan Murdoch</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='snapshot3d.html'>rgl.snapshot</a></code> to write a copy to a file,
-<code><a href='https://rdrr.io/r/utils/demo.html'>demo("stereo")</a></code> for functions that make use of this to draw
-a random dot stereogram and an anaglyph.</p></div>
+    <p><code>TRUE</code> or <code>FALSE</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='va'>surface3d</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; srfc3d&gt; #
-#&gt; srfc3d&gt; # volcano example taken from "persp"
-#&gt; srfc3d&gt; #
-#&gt; srfc3d&gt; 
-#&gt; srfc3d&gt; data(volcano)
-#&gt; 
-#&gt; srfc3d&gt; z &lt;- 2 * volcano        # Exaggerate the relief
-#&gt; 
-#&gt; srfc3d&gt; x &lt;- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
-#&gt; 
-#&gt; srfc3d&gt; y &lt;- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
-#&gt; 
-#&gt; srfc3d&gt; zlim &lt;- range(z)
-#&gt; 
-#&gt; srfc3d&gt; zlen &lt;- zlim[2] - zlim[1] + 1
-#&gt; 
-#&gt; srfc3d&gt; colorlut &lt;- terrain.colors(zlen) # height color lookup table
-#&gt; 
-#&gt; srfc3d&gt; col &lt;- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point
-#&gt; 
-#&gt; srfc3d&gt; open3d()
-#&gt; null 
-#&gt;  112 
-#&gt; 
-#&gt; srfc3d&gt; surface3d(x, y, z, color = col, back = "lines")</div><div class='input'><span class='va'>depth</span> <span class='op'>&lt;-</span> <span class='fu'>rgl.pixels</span><span class='op'>(</span>component <span class='op'>=</span> <span class='st'>"depth"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Error reading component 'depth'</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>depth</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>is.matrix</a></span><span class='op'>(</span><span class='va'>depth</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Protect against empty or single pixel windows</span>
-    <span class='fu'><a href='https://rdrr.io/r/graphics/contour.html'>contour</a></span><span class='op'>(</span><span class='va'>depth</span><span class='op'>)</span>
-</div><div class='img'><img src='rgl.pixels-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>in_pkgdown_example</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in in_pkgdown_example(): could not find function "in_pkgdown_example"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

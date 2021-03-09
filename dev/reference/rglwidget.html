@@ -146,7 +146,8 @@ provides the necessities to embed an <span class="pkg">rgl</span> scene in one.<
 
     <pre class="usage"><span class='fu'>rglwidget</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='scene3d.html'>scene3d</a></span><span class='op'>(</span><span class='va'>minimal</span><span class='op'>)</span>, width <span class='op'>=</span> <span class='fu'><a href='figWidth.html'>figWidth</a></span><span class='op'>(</span><span class='op'>)</span>, height <span class='op'>=</span> <span class='fu'><a href='figWidth.html'>figHeight</a></span><span class='op'>(</span><span class='op'>)</span>,
           controllers <span class='op'>=</span> <span class='cn'>NULL</span>,
-          elementId <span class='op'>=</span> <span class='cn'>NULL</span>, reuse <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span>,
+          elementId <span class='op'>=</span> <span class='cn'>NULL</span>, 
+          reuse <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span>,
           webGLoptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>preserveDrawingBuffer <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, 
           shared <span class='op'>=</span> <span class='cn'>NULL</span>, minimal <span class='op'>=</span> <span class='cn'>TRUE</span>, 
           <span class='va'>webgl</span>, <span class='va'>snapshot</span>, 
@@ -327,7 +328,7 @@ but you can add your own.)</p>
 </div><div class='output co'>#&gt; 
 #&gt; plot3d&gt;   open3d()
 #&gt; null 
-#&gt;  117 
+#&gt;  118 
 #&gt; 
 #&gt; plot3d&gt;   x &lt;- sort(rnorm(1000))
 #&gt; 
@@ -336,7 +337,7 @@ but you can add your own.)</p>
 #&gt; plot3d&gt;   z &lt;- rnorm(1000) + atan2(x, y)
 #&gt; 
 #&gt; plot3d&gt;   plot3d(x, y, z, col = rainbow(1000))</div><div class='input'><span class='va'>widget</span> <span class='op'>&lt;-</span> <span class='fu'>rglwidget</span><span class='op'>(</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'>in_pkgdown_example</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
   <span class='va'>widget</span>
 </div><div class='output co'>#&gt; <span class='error'>Error in in_pkgdown_example(): could not find function "in_pkgdown_example"</span></div><div class='input'>  
 <span class='co'># \donttest{</span>
