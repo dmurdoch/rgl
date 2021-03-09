@@ -251,7 +251,7 @@ rglwidget <- local({
   function(x = scene3d(minimal), width = figWidth(), height = figHeight(),
            controllers = NULL, 
            elementId = NULL,
-           reuse = !interactive(),
+           reuse = !interactive() && !in_pkgdown_example(),
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
            minimal = TRUE, 

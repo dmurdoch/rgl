@@ -46,7 +46,6 @@ replay_html.rglRecordedplot <- local({
 	rdname <- ""
 	function(x, ...) {
 		if (pkgdown_rdname() != rdname) {
-			message("resetting reuseDF")
 			environment(rglwidget)$reuseDF <- NULL
 			rdname <<- pkgdown_rdname()
 		}
