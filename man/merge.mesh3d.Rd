@@ -40,6 +40,7 @@ of the arguments.
 Duncan Murdoch
 }
 \examples{
+open3d()
 # Notice that the alpha setting for the cube is dropped, because
 # the other shapes don't specify alpha.
 shade3d(merge(cube3d(col="red", alpha = 0.5),
