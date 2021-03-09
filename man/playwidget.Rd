@@ -173,7 +173,7 @@ playwidget("theplot", control, start = -5, stop = 5,
 widget <- rglwidget(height = 300, width = 300) \%>\%
 playwidget(control, start = -5, stop = 5,
            rate = 3, components = c("Play", "Slider"))
-if (interactive())
+if (interactive() || in_pkgdown_example())
   widget
 
 options(saveopts)

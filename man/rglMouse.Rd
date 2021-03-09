@@ -85,7 +85,7 @@ A browsable value to put in a web page.
 Duncan Murdoch
 }
 \examples{
-if (interactive()) {
+if (interactive() || in_pkgdown_example()) {
   open3d()
   xyz <- matrix(rnorm(300), ncol = 3)
   id <- plot3d(xyz, col = "red", type = "s")["data"]

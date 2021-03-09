@@ -44,7 +44,7 @@ Duncan Murdoch
     playwidget(clipplaneControl(d = dvals, clipplaneids = id),
                start = 0, stop = 1, step = 0.01,
                rate = 0.5)
-  if (interactive())
+  if (interactive() || in_pkgdown_example())
     widget
   options(saveopts)
 }

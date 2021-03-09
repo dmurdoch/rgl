@@ -62,6 +62,6 @@ widget <- rglwidget(height = 300, width = 300) \%>\%
   toggleWidget(theplot["data"], 
                hidden = theplot[c("xlab", "ylab", "zlab")], 
                label = "Points")
-if (interactive())
+if (interactive() || in_pkgdown_example())
   widget
 }

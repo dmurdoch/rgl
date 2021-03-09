@@ -13,12 +13,15 @@ fns <- local({
 	plotnum <- 0
 	
 	pkgdown_print.rglId <- function(x, visible = TRUE) {
-		scene <- scene3d()
 		if (inherits(x, "rglHighlevel"))
 			plotnum <<- plotnum + 1
-		structure(list(plotnum = plotnum,
-							     scene = scene),
-							class = c("rglRecordedplot", "otherRecordedplot"))
+		if (visible) {
+		  scene <- scene3d()
+		  structure(list(plotnum = plotnum,
+			  				     scene = scene),
+				  			class = c("rglRecordedplot", "otherRecordedplot"))
+		} else
+			invisible()
 	}
 	
 	pkgdown_print.rglOpen3d <- function(x, visible = TRUE) {

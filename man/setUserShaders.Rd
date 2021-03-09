@@ -141,6 +141,6 @@ fs <- "
 "
 x <- setUserShaders(id, vs, fs, attributes = list(wts=wts),
                     uniforms = list(wtrange = c(-0.01, 0.15)))
-if (interactive())
+if (interactive() || in_pkgdown_example())
   rglwidget(x)
 }

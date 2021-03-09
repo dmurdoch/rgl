@@ -86,7 +86,7 @@ Duncan Murdoch
                            attributes=c("x", "y", "z"),
                            objid = id, param=1:100),
              start = 1, stop = 100, rate=10)
-  if (interactive())
+  if (interactive() || in_pkgdown_example())
     widget
   options(saveopts)
 }

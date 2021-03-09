@@ -177,7 +177,7 @@ save <- getOption("rgl.useNULL")
 options(rgl.useNULL=TRUE)
 example("plot3d", "rgl")
 widget <- rglwidget()
-if (interactive())
+if (interactive() || in_pkgdown_example())
   widget
   
 \donttest{

@@ -67,6 +67,6 @@ asRow("Mouse mode: ", rglMouse(getWidgetId(.)),
       "Subset: ", filter_checkbox("cylinderselector", 
 		                "Cylinders", sd, ~ cyl, inline = TRUE),
       last = 4, colsize = c(1,2,1,2), height = 60)
-if (interactive())
+if (interactive() || in_pkgdown_example())
   w
 }

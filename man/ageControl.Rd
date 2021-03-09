@@ -65,7 +65,7 @@ Duncan Murdoch
                         alpha = c(0, 1, 0, 0, 1, 0)),
              start = 0, stop = 4*pi,
              step = 0.1, rate = 4)
-  if (interactive())
+  if (interactive() || in_pkgdown_example())
     widget
   options(saveopts)
 }

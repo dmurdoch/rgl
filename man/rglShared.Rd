@@ -101,7 +101,7 @@ Duncan Murdoch
                            group = sharedData$groupName(),
                            deselectedFade = 0,
                            selectedIgnoreNone = FALSE) 
-  if (interactive()) 
+  if (interactive() || in_pkgdown_example()) 
     crosstalk::filter_slider("x", "x", sharedData, ~x) \%>\%
     rglwidget(shared = list(sharedData, sharedLabel), controller = .) \%>\% 
     rglMouse()

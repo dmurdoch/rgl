@@ -68,6 +68,6 @@ Duncan Murdoch
 x <- matrix(rnorm(30), ncol = 3, dimnames = list(NULL, c("x", "y", "z")))
 p <- plot3d(x, type = "s")
 str(p)
-if (interactive())
+if (interactive() || in_pkgdown_example())
   print(p, rglwidget = TRUE)
 }
