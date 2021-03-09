@@ -202,6 +202,7 @@ reference:
   - makeDependency
   - setGraphicsDelay
   - rglId
+  - in_pkgdown_example
 - title: General documentation
 - contents:
   - rgl-package
