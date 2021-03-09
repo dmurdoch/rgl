@@ -50,7 +50,7 @@ replay_html.rglRecordedplot <- local({
 			rdname <<- pkgdown_rdname()
 		}
 		
-	  rendered <- htmltools::renderTags(rglwidget(x$scene))
+	  rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = TRUE))
 	  structure(rendered$html, dependencies = rendered$dependencies)
 	}
 })
