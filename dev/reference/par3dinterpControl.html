@@ -260,7 +260,7 @@ as <code><a href='par3dinterp.html'>par3dinterp</a></code> does within R.</p>
 #&gt; [11] NA           NA          
 #&gt; 
 #&gt; $objids
-#&gt; [1] 927
+#&gt; [1] 906
 #&gt; 
 #&gt; $param
 #&gt;  [1] 0.0 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 1.8 2.0 2.2 2.4 2.6 2.8 3.0
@@ -269,11 +269,11 @@ as <code><a href='par3dinterp.html'>par3dinterp</a></code> does within R.</p>
 #&gt; [1] TRUE
 #&gt; 
 #&gt; attr(,"class")
-#&gt; [1] "rglControl"</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> 
+#&gt; [1] "rglControl"</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'>in_pkgdown_example</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> 
   <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>500</span>, height <span class='op'>=</span> <span class='fl'>250</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='playwidget.html'>playwidget</a></span><span class='op'>(</span><span class='va'>control</span>,
        step <span class='op'>=</span> <span class='fl'>0.01</span>, loop <span class='op'>=</span> <span class='cn'>TRUE</span>, rate <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-</div></pre>
+</div><div class='output co'>#&gt; <span class='error'>Error in in_pkgdown_example(): could not find function "in_pkgdown_example"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
