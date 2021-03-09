@@ -14,8 +14,17 @@
 ##
   
 .onLoad <- function(lib, pkg) {
+  in_pkgload_loadall <- function() {
+    # FIXME!  Uncomment TRUE to work with devtools::load_all
+    #         or FALSE for regular builds.  We need a real test!
+    # TRUE
+    FALSE
+  }
   getDir <- function(useNULL) {
-    dir <- if (useNULL) "useNULL" else "libs"
+    if (in_pkgload_loadall()) {
+      dir <- if (useNULL) "inst/useNULL" else "src"
+    } else
+      dir <- if (useNULL) "useNULL" else "libs"
     if (nchar(.Platform$r_arch))
       dir <- paste0(dir, "/", .Platform$r_arch)
     dir
@@ -179,8 +188,9 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
 ##
 
 .onUnload <- function(libpath) {
+  removeInputHandler("shinyPar3d")
+  removeInputHandler("shinyMouse3d")
   # shutdown
-  
   .C( rgl_quit, success=FALSE )
   
 }
