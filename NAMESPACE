@@ -165,7 +165,8 @@ importFrom(htmltools, css, HTML, htmlDependency, img,
 importFrom(jsonlite, toJSON, base64_dec)
 importFrom(knitr, asis_output, fig_path, hook_plot_custom, image_uri, include_graphics, knit_hooks, 
            knit_meta_add, knit_print, opts_current, opts_hooks, opts_knit)
-importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, registerInputHandler)
+importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, 
+					 registerInputHandler, removeInputHandler)
 importFrom(magrittr, "%>%")
 importFrom(manipulateWidget, combineWidgets)
 importFrom(stats, coef, predict, residuals)

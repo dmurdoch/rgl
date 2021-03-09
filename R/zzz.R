@@ -14,8 +14,15 @@
 ##
   
 .onLoad <- function(lib, pkg) {
+  in_pkgload_loadall <- function() {
+    isNamespaceLoaded("pkgload") && grepl("load_all", deparse(sys.call(1)))
+  }
+  
   getDir <- function(useNULL) {
-    dir <- if (useNULL) "useNULL" else "libs"
+    if (in_pkgload_loadall()) {
+      dir <- if (useNULL) "inst/useNULL" else "src"
+    } else
+      dir <- if (useNULL) "useNULL" else "libs"
     if (nchar(.Platform$r_arch))
       dir <- paste0(dir, "/", .Platform$r_arch)
     dir
@@ -179,8 +186,9 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
 ##
 
 .onUnload <- function(libpath) {
+  removeInputHandler("shinyPar3d")
+  removeInputHandler("shinyMouse3d")
   # shutdown
-  
   .C( rgl_quit, success=FALSE )
   
 }
