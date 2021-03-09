@@ -78,6 +78,7 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
    rgl.setMouseCallbacks(button, begin, update, dev = dev, subscene = subscene)
    cat("Callbacks set on button", button, "of rgl device", dev, "in subscene", subscene, "\n")
  }
+ open3d()
  shade3d(icosahedron3d(), col = "yellow")
  # This only works in the internal display...
  pan3d(1)
