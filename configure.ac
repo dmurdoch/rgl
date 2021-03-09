@@ -117,20 +117,9 @@ if test "x$enable_opengl" != "xno"; then
     fi
     if test $darwin = yes; then
       CPPFLAGS="${CPPFLAGS} -DDarwin"
-      # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
-      if test -e /System/Library/Frameworks/OpenGL.framework ; then
-        CPPFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers ${CPPFLAGS} -DNO_GL_PREFIX"
-        # OSX 10.5 messes up X11; this works around it
-        LIBS="-framework OpenGL -dylib_file /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib ${LIBS}"
-      fi
       if test -e /System/Library/Frameworks/GLKit.framework ; then
         LIBS="-framework GLKit ${LIBS}"
       fi    
-      # some X11 installations on OSX 10.5 feature -rpath which doesn't work when used in
-      # conjunction with 10.4u SDK (and is redundant anyway since OS X always uses full paths)
-      if test rpath`echo "${LIBS}" | sed -n 's/.*-Wl,-rpath,.*/Yes/p' 2>/dev/null` = rpathYes; then
-        LIBS=`echo "${LIBS}" | sed 's:-Wl,-rpath,[[^ ]]*::'`
-      fi
       # X11 must come *after* the OpenGL stuff
       CPPFLAGS="${CPPFLAGS} -I/opt/X11/include"
     fi
