@@ -18,7 +18,7 @@ produces the input file, and the browser shows the images.
 
 An experimental website is here:
 
-<https://dmurdoch.github.io/rgl/dev>
+<https://dmurdoch.github.io/rgl/dev/>
 
 The currently active development site is here:
 
