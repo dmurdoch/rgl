@@ -1,20 +1,25 @@
 # Functions related to working in pkgdown
 
+pkgdown_rdname <- function() 
+	getOption("downlit.rdname", "")
+
 # The exists() part of this test are only needed until
 # CRAN's version of the packages contain my suggested patches.
 in_pkgdown_example <- function() 
-	!is.null(getOption("downlit.rdname")) && 
-	  requireNamespace("downlit") &&
-	  exists("is_low_change.default", asNamespace("downlit")) &&
-	  requireNamespace("pkgdown") &&
-    exists("pkgdown_print", asNamespace("pkgdown"))
-	  
+	nchar(pkgdown_rdname()) && 
+	requireNamespace("downlit") &&
+	exists("is_low_change.default", asNamespace("downlit")) &&
+	requireNamespace("pkgdown") &&
+	exists("pkgdown_print", asNamespace("pkgdown"))
+
 fns <- local({
 	plotnum <- 0
 	
 	pkgdown_print.rglId <- function(x, visible = TRUE) {
+		
 		if (inherits(x, "rglHighlevel"))
 			plotnum <<- plotnum + 1
+		
 		if (visible) {
 		  scene <- scene3d()
 		  structure(list(plotnum = plotnum,
@@ -37,12 +42,19 @@ pkgdown_print.rglId <-     fns[["pkgdown_print.rglId"]]
 pkgdown_print.rglOpen3d <- fns[["pkgdown_print.rglOpen3d"]]
 rm(fns)
 
-replay_html.rglRecordedplot <- function(x, ...) {
-	# Needs reuse = FALSE, or a reset at the start of
-	# each example.  Currently there's no way to do that.
-	rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = FALSE))
-	structure(rendered$html, dependencies = rendered$dependencies)
-}
+replay_html.rglRecordedplot <- local({
+	rdname <- ""
+	function(x, ...) {
+		if (pkgdown_rdname() != rdname) {
+			message("resetting reuseDF")
+			environment(rglwidget)$reuseDF <- NULL
+			rdname <<- pkgdown_rdname()
+		}
+		
+	  rendered <- htmltools::renderTags(rglwidget(x$scene))
+	  structure(rendered$html, dependencies = rendered$dependencies)
+	}
+})
 
 # This is only needed until CRAN's pkgdown exports pkgdown_print,
 # then we should use pkgdown::pkgdown_print
