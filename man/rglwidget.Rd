@@ -12,7 +12,8 @@ provides the necessities to embed an \pkg{rgl} scene in one.
 \usage{
 rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           controllers = NULL,
-          elementId = NULL, reuse = !interactive(),
+          elementId = NULL, 
+          reuse = !interactive() && !in_pkgdown_example(),
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
           shared = NULL, minimal = TRUE, 
           webgl, snapshot, 
