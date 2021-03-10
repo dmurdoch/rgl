@@ -8,6 +8,7 @@ authors:
     href: http://neoscientists.org/~plex/
 figures:
   fig.width: 5
+  fig.height: 5
   fig.retina: 1
 reference:
 - title: High level functions
