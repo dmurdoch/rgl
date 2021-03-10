@@ -36,7 +36,8 @@
 pipeline; \code{\link{rgl.useNULL}} for a description of how to 
 use \pkg{rgl} on a system with no graphics support.}
 \examples{
-file.show(system.file("NEWS", package = "rgl"))
+if (!in_pkgdown_example())
+  file.show(system.file("NEWS", package = "rgl"))
 example(surface3d)
 example(plot3d)
 }

@@ -182,10 +182,12 @@ if (interactive() || in_pkgdown_example())
   widget
   
 \donttest{
-# Save it to a file.  This requires pandoc
-filename <- tempfile(fileext = ".html")
-htmlwidgets::saveWidget(rglwidget(), filename)
-browseURL(filename)
+if (interactive() && !in_pkgdown_example()) {
+  # Save it to a file.  This requires pandoc
+  filename <- tempfile(fileext = ".html")
+  htmlwidgets::saveWidget(rglwidget(), filename)
+  browseURL(filename)
+}
 }
 }
 
