@@ -55,6 +55,37 @@ replay_html.rglRecordedplot <- local({
 	}
 })
 
+pkgdown_info <- local({
+	info <- NULL
+	function() {
+		if (!is.null(info))
+			return(info)
+    path <- "."
+    repeat {
+	    if (file.exists(file.path(path, "DESCRIPTION"))) {
+	    	info <<- pkgdown::as_pkgdown(path)
+	    	return(info)
+	    }
+	    newpath <- file.path(path, "..")
+	    if (normalizePath(newpath) == normalizePath(path))
+	    	return(list())
+	    path <- newpath
+    }
+  }
+})
+
+pkgdown_figure_info <- function() {
+	info <- pkgdown_info()
+	if (!is.null(info$figures)) {
+		info <- info$figures[c("fig.width", "fig.height", "fig.retina", "fig.asp", "dpi")]
+		if (is.null(info[["fig.height"]]))
+			info[["fig.height"]] <- info[["fig.width"]]*info[["fig.asp"]]
+		if (is.null(info[["fig.width"]]))
+			info[["fig.width"]] <- info[["fig.height"]]/info[["fig.asp"]]
+	}
+	info
+}
+
 # This is only needed until CRAN's pkgdown exports pkgdown_print,
 # then we should use pkgdown::pkgdown_print
 pkgdown_print <- NULL

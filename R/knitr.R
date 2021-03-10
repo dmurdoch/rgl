@@ -510,11 +510,24 @@ is_low_change.rglRecordedplot <- function(p1, p2) {
   inherits(p2, "rglRecordedplot") && p1$plotnum == p2$plotnum
 }
 
-figWidth <- function()
-  if (length(result <- with(opts_current$get(c("fig.width", "dpi", "fig.retina")),
-	     fig.width*dpi/fig.retina))) result[1] else NULL
-  
+figWidth <- function() {
+  if (in_pkgdown_example())
+    opts <- pkgdown_figure_info()
+  else
+    opts <- opts_current$get(c("fig.width", "dpi", "fig.retina"))
+  if (length(opts)) {
+    result <- with(opts, fig.width*dpi/fig.retina)
+    result[1] 
+  } else NULL
+}
 
-figHeight <- function() 
-  if (length(result <- with(opts_current$get(c("fig.height", "dpi", "fig.retina")),
-	     fig.height*dpi/fig.retina))) result[1] else NULL
+figHeight <- function() {
+  if (in_pkgdown_example())
+    opts <- pkgdown_figure_info()
+  else
+    opts <- opts_current$get(c("fig.height", "dpi", "fig.retina"))
+  if (length(opts)) {
+    result <- with(opts, fig.height*dpi/fig.retina)
+    result[1] 
+  } else NULL
+}
