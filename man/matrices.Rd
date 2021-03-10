@@ -99,7 +99,7 @@ rotationMatrix(pi/2, 1, 0, 0)
 # Find what happens when you rotate (2, 0, 0) by 45 degrees about the y axis:
 
 x <- asHomogeneous(c(2, 0, 0))
-y <- x %*% rotationMatrix(pi/4, 0, 1, 0)
+y <- x \%*\% rotationMatrix(pi/4, 0, 1, 0)
 asEuclidean(y)
 
 # or more simply...
