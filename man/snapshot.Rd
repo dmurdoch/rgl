@@ -13,7 +13,7 @@ snapshot3d( filename = tempfile(fileext = ".png"),
             webshot = TRUE)
 }
 \arguments{
-  \item{filename}{path to file for to save.}
+  \item{filename}{path to file to save.}
   \item{fmt}{image export format, currently supported: png.  Ignored if \code{webshot = TRUE}. }
   \item{top}{whether to call \code{\link{rgl.bringtotop}}.
 Ignored if \code{webshot = TRUE}.}
@@ -70,7 +70,7 @@ using OpenGL.  Often the \code{webshot = TRUE} displays have better quality.
 \seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
 
 \examples{
-if (interactive()) {
+if (interactive() && !in_pkgdown_example()) {
   saveopts <- options(rgl.useNULL = TRUE)
   plot3d(matrix(rnorm(300), ncol = 3, dimnames = list(NULL, c("x", "y", "z"))), 
          col = "red")
