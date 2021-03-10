@@ -75,13 +75,12 @@ pkgdown_info <- local({
 })
 
 pkgdown_figure_info <- function() {
-	info <- pkgdown_info()
-	if (!is.null(info$figures)) {
-		info <- info$figures[c("fig.width", "fig.height", "fig.retina", "fig.asp", "dpi")]
-		if (is.null(info[["fig.height"]]))
-			info[["fig.height"]] <- info[["fig.width"]]*info[["fig.asp"]]
-		if (is.null(info[["fig.width"]]))
-			info[["fig.width"]] <- info[["fig.height"]]/info[["fig.asp"]]
+	info <- getOption("pkgdown.figures", list())
+	if (length(info)) {
+    if (is.null(info[["fig.height"]]))
+      info[["fig.height"]] <- info[["fig.width"]]*info[["fig.asp"]]
+    else if (is.null(info[["fig.width"]]))
+      info[["fig.width"]] <- info[["fig.height"]]/info[["fig.asp"]]
 	}
 	info
 }
