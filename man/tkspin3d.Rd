@@ -15,7 +15,7 @@ to \code{\link{tkspinControl}} are passed there, while others are passed to \cod
 \author{ Ming Chen and Duncan Murdoch }
 \seealso{ \code{\link{tkspinControl}}}
 \examples{
-if (interactive()) {
+if (interactive() && !in_pkgdown_example()) {
     open3d()
     points3d(rnorm(100), rnorm(100), rnorm(100), size=3)
     axes3d()

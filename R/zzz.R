@@ -15,7 +15,8 @@
   
 .onLoad <- function(lib, pkg) {
   in_pkgload_loadall <- function() {
-    isNamespaceLoaded("pkgload") && grepl("load_all", deparse(sys.call(1)))
+    caller <- deparse(sys.call(-4))
+    isNamespaceLoaded("pkgload") && grepl("load_all", caller)
   }
   
   getDir <- function(useNULL) {

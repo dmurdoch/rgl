@@ -32,7 +32,7 @@ to the \code{\link[rgl]{par3dinterp}} function.
 \author{ Duncan Murdoch }
 \seealso{ \code{\link{par3d}}, \code{\link{par3dinterp}}}
 \examples{
-if (interactive()) {
+if (interactive() && !in_pkgdown_example()) {
 
   # Record a series of positions, and then play them back immediately
   # at evenly spaced times, in an oscillating loop

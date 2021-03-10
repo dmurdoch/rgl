@@ -138,11 +138,6 @@ reference:
   - shinySetPar3d
   - shinyResetBrush
   - rglwidgetOutput
-- subtitle: TCL/TK
-- contents:
-  - tkspin3d
-  - tkspinControl
-  - tkpar3dsave
 - subtitle: Import and export
 - contents:
   - scene3d
@@ -192,6 +187,12 @@ reference:
   - scaleMatrix
   - translationMatrix
   - identityMatrix
+- subtitle: TCL/TK
+- contents:
+  - tkrgl
+  - tkspin3d
+  - tkspinControl
+  - tkpar3dsave  
 - subtitle: Unclassifiable miscellany
 - contents:
   - pipe
@@ -210,7 +211,6 @@ reference:
 - contents:
   - rgl-package
   - r3d
-  - tkrgl
 - title: Obsolete functions
 - contents:
   - ageSetter

@@ -19,7 +19,7 @@ tkspinControl(base, dev = cur3d(),
 \author{ Ming Chen and Duncan Murdoch }
 \seealso{\code{\link{spin3d}}}
 \examples{
-if (interactive()) { 
+if (interactive() && !in_pkgdown_example()) { 
     library(tcltk)
     open3d()
     win1 <- cur3d()
