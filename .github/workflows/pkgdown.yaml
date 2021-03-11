@@ -50,7 +50,7 @@ jobs:
         run: |
           # Use install_local before install_deps
           # so alphashape3d will see rgl when it needs to.
-          remotes::install_local()
+          remotes::install_local(force = TRUE)
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
 
