@@ -236,9 +236,10 @@ rendering.</p></div>
 <span class='co'># Find what happens when you rotate (2, 0, 0) by 45 degrees about the y axis:</span>
 
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>asHomogeneous</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>x</span> 
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>x</span> <span class='op'>%*%</span> <span class='fu'>rotationMatrix</span><span class='op'>(</span><span class='va'>pi</span><span class='op'>/</span><span class='fl'>4</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
 <span class='fu'>asEuclidean</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2 0 0</div><div class='input'>
+</div><div class='output co'>#&gt;          [,1] [,2]     [,3]
+#&gt; [1,] 1.414214    0 1.414214</div><div class='input'>
 <span class='co'># or more simply...</span>
 
 <span class='fu'>rotate3d</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='va'>pi</span><span class='op'>/</span><span class='fl'>4</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>

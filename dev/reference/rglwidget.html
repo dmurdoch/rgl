@@ -328,7 +328,7 @@ but you can add your own.)</p>
 </div><div class='output co'>#&gt; 
 #&gt; plot3d&gt;   open3d()
 #&gt; null 
-#&gt;  118 
+#&gt;  119 
 #&gt; 
 #&gt; plot3d&gt;   x &lt;- sort(rnorm(1000))
 #&gt; 
@@ -341,10 +341,12 @@ but you can add your own.)</p>
   <span class='va'>widget</span>
 </div><div class='output co'>#&gt; <span class='error'>Error in in_pkgdown_example(): could not find function "in_pkgdown_example"</span></div><div class='input'>  
 <span class='co'># \donttest{</span>
-<span class='co'># Save it to a file.  This requires pandoc</span>
-<span class='va'>filename</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".html"</span><span class='op'>)</span>
-<span class='fu'>htmlwidgets</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>saveWidget</a></span><span class='op'>(</span><span class='fu'>rglwidget</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>filename</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/browseURL.html'>browseURL</a></span><span class='op'>(</span><span class='va'>filename</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># Save it to a file.  This requires pandoc</span>
+  <span class='va'>filename</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".html"</span><span class='op'>)</span>
+  <span class='fu'>htmlwidgets</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>saveWidget</a></span><span class='op'>(</span><span class='fu'>rglwidget</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>filename</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/browseURL.html'>browseURL</a></span><span class='op'>(</span><span class='va'>filename</span><span class='op'>)</span>
+<span class='op'>}</span>
 <span class='co'># }</span>
 </div></pre>
   </div>
