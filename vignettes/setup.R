@@ -42,9 +42,16 @@ indexmethods <- function(fns, text = backticked(paste0(fns, "()")), show = TRUE)
 linkfn <- function(fn, text = backticked(fn), pkg = NA) {
   if (is.na(pkg))
     paste0('<a href="#', fn, '">', text, '</a>')
-  else
-    paste0('<a href="../../', pkg, '/help/', fn, '">', text,
-           '</a>')
+  else {
+    if (requireNamespace("downlit"))
+      url <- downlit::autolink_url(paste0(pkg, "::", fn))
+    else
+      url <- NA
+    if (is.na(url))
+      url <- paste0('../../', pkg, '/help/', fn)
+
+    paste0('<a href="', url, '">', text, '</a>')
+  }
 }
 
 # Write this once at the start of the document.
