@@ -35,7 +35,7 @@ Description: Provides medium to high level functions for 3D interactive graphics
     WebGL, PLY, OBJ, STL as well as 2D image formats, including PNG, Postscript, SVG, PGF.
 License: GPL
 URL: https://github.com/dmurdoch/rgl, 
-     https://dmurdoch.github.io/rgl/dev/
+     https://dmurdoch.github.io/rgl/dev
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
     pandoc (>=1.14, needed for vignettes)
