@@ -9,7 +9,6 @@ authors:
 figures:
   fig.width: 5
   fig.height: 5
-  fig.retina: 1
 reference:
 - title: High level functions
   desc:  Generic functions for plotting points or surfaces.  
