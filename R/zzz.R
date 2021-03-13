@@ -116,8 +116,8 @@
   if (!rgl.useNULL()) 
     setGraphicsDelay(unixos = unixos)
   
-  registerInputHandler("shinyPar3d", convertShinyPar3d)
-  registerInputHandler("shinyMouse3d", convertShinyMouse3d)
+  registerInputHandler("shinyPar3d", convertShinyPar3d, force = TRUE)
+  registerInputHandler("shinyMouse3d", convertShinyMouse3d, force = TRUE)
 
   # handle pkgdown_print before it is in the CRAN version
   # pkgdown 
