@@ -49,9 +49,11 @@ replay_html.rglRecordedplot <- local({
 			environment(rglwidget)$reuseDF <- NULL
 			rdname <<- pkgdown_rdname()
 		}
-		
-	  rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = TRUE))
-	  structure(rendered$html, dependencies = rendered$dependencies)
+		settings <- pkgdown::fig_settings()
+		width <- with(settings, dpi*fig.width)
+		height <- with(settings, dpi*fig.height)
+		rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = TRUE, width = width, height = height))
+		structure(rendered$html, dependencies = rendered$dependencies)
 	}
 })
 
