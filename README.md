@@ -16,9 +16,14 @@ produces the input file, and the browser shows the images.
 
 ## WEBSITE
 
-An experimental website is here:
+An experimental `pkgdown` website is here:
 
 <https://dmurdoch.github.io/rgl/dev/>
+
+See [this
+vignette](https://dmurdoch.github.io/rgl/dev/articles/pkgdown.html) for
+details on producing your own `pkgdown` website that includes `rgl`
+graphics.
 
 The currently active development site is here:
 
