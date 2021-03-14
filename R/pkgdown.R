@@ -3,6 +3,9 @@
 pkgdown_rdname <- function() 
 	getOption("downlit.rdname", "")
 
+in_pkgdown <- function() 
+	requireNamespace("pkgdown") && pkgdown::in_pkgdown()
+
 # The exists() part of this test are only needed until
 # CRAN's version of the packages contain my suggested patches.
 in_pkgdown_example <- function() 
@@ -79,7 +82,8 @@ pkgdown_info <- local({
 # These are only needed until CRAN's pkgdown exports pkgdown_print
 # and fig_settings,
 # then we should use pkgdown::pkgdown_print and pkgdown::fig_settings
-pkgdown_print <- print
+pkgdown_print <- function(x, visible = TRUE) ""
+
 pkgdown_fig_settings <- function() list(dpi = 96, fig.width = 5, fig.height = 5)
 
 register_pkgdown_methods <- local({

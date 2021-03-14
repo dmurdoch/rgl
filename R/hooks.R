@@ -32,5 +32,7 @@ print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
     print(rglwidget(...))
   else if (in_pkgdown_example())
     pkgdown_print(x)
+  else if (in_pkgdown()) # Must not have pkgdown_print defined
+    cat("")
   invisible(x)
 }
