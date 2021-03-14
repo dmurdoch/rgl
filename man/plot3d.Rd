@@ -2,7 +2,6 @@
 \alias{plot3d}
 \alias{plot3d.default}
 \alias{plot3d.mesh3d}
-\alias{decorate3d}
 \title{3D Scatterplot}
 \description{
 Draws a 3D scatterplot.
@@ -10,18 +9,13 @@ Draws a 3D scatterplot.
 \usage{
 plot3d(x, ...)
 \method{plot3d}{default}(x, y, z,  
-	xlab, ylab, zlab, type = "p", col,  
-	size, lwd, radius,
+	xlab, ylab, zlab, type = "p", 
+	col, size, lwd, radius,
 	add = FALSE, aspect = !add, 
 	xlim = NULL, ylim = NULL, zlim = NULL, 
 	forceClipregion = FALSE, ...)
 \method{plot3d}{mesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
 	add = FALSE, aspect = !add, ...)	
-decorate3d(xlim, ylim, zlim, 
-	xlab = "x", ylab = "y", zlab = "z", 
-	box = TRUE, axes = TRUE, main = NULL, sub = NULL,
-	top = TRUE, aspect = FALSE, expand = 1.03, 
-	...)
 }
 \arguments{
   \item{x, y, z}{vectors of points to be plotted. Any reasonable way of defining the
@@ -40,23 +34,16 @@ decorate3d(xlim, ylim, zlim,
   \item{radius}{the radius of spheres:  see Details below.}
   \item{add}{whether to add the points to an existing plot.}
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio.}
-  \item{expand}{how much to expand the box around the data, if it is drawn.}
-  \item{xlim, ylim, zlim}{In \code{plot3d}, if not \code{NULL}, set clipping
-limits for the plot.  In \code{decorate3d}, these are used
-for the labels.}
+  \item{xlim, ylim, zlim}{If not \code{NULL}, set clipping
+limits for the plot.}
   \item{forceClipregion}{Force a clipping region to be used,
 whether or not limits are given.}
   \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}, \code{\link{material3d}}
-  or \code{decorate3d}.}
-  \item{box, axes}{whether to draw a box and axes.}
-  \item{main, sub}{main title and subtitle.}
-  \item{top}{whether to bring the window to the top when done.}
+  or \code{\link{decorate3d}}.}
 }
 \value{
   \code{plot3d} is called for the side effect of drawing the plot; a vector
   of object IDs is returned.
-  
-  \code{decorate3d} adds the usual decorations to a plot:  labels, axes, etc.
 }
 \details{
 \code{plot3d} is a partial 3D analogue of plot.default.
