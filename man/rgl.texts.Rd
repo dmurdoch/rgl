@@ -11,7 +11,8 @@ should normally use the high-level function \code{\link{text3d}} instead.
 \usage{
 rgl.texts(x, y = NULL, z = NULL, text, 
           adj = 0.5, pos = NULL, offset = 0.5, 
-          family = par3d("family"), font = par3d("font"), cex = par3d("cex"), useFreeType = par3d("useFreeType"), ...)
+          family = par3d("family"), font = par3d("font"), 
+          cex = par3d("cex"), useFreeType = par3d("useFreeType"), ...)
 rglFonts(...)
 }
 \arguments{
