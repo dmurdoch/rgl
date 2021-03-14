@@ -29,6 +29,7 @@ reference:
   - segments3d
   - triangles3d
   - quads3d
+- subtitle: Other shapes
 - contents:
   - text3d
   - abclines3d
@@ -41,6 +42,7 @@ reference:
   - arrow3d
   - pch3d
   - plotmath3d
+  - rgl.texts
 - subtitle:  Axes and "decorations"
 - contents:
   - axes3d
