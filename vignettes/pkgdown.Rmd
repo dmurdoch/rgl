@@ -57,7 +57,7 @@ run
 ```{r eval=FALSE}
 remotes::install_github(c("dmurdoch/downlit@rglpatch",
                           "dmurdoch/pkgdown@figures",
-                          "dmurdoch/rgl@pkgdfigs",
+                          "dmurdoch/rgl",
                           "dmurdoch/htmlwidgets@rglpatch"))
 ```
 
@@ -97,6 +97,9 @@ planes3d(a, b, c, d, alpha = 0.5)
 These are development versions of the packages, so they may
 contain bugs, either in my changes or in other unreleased 
 changes.  I don't recommend you use them in regular production
-code.
+code.  To re-install released versions of the packages, run
+```{r eval=FALSE}
+install.packages(c("downlit", "pkgdown", "htmlwidgets", "rgl"))
+```
 
 If you do use them and notice any bugs, please [report them](https://github.com/dmurdoch/rgl/issues)!

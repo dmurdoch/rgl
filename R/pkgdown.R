@@ -49,7 +49,7 @@ replay_html.rglRecordedplot <- local({
 			environment(rglwidget)$reuseDF <- NULL
 			rdname <<- pkgdown_rdname()
 		}
-		settings <- pkgdown::fig_settings()
+		settings <- pkgdown_fig_settings()
 		width <- with(settings, dpi*fig.width)
 		height <- with(settings, dpi*fig.height)
 		rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = TRUE, width = width, height = height))
@@ -76,20 +76,11 @@ pkgdown_info <- local({
   }
 })
 
-pkgdown_figure_info <- function() {
-	info <- getOption("pkgdown.figures", list())
-	if (length(info)) {
-    if (is.null(info[["fig.height"]]))
-      info[["fig.height"]] <- info[["fig.width"]]*info[["fig.asp"]]
-    else if (is.null(info[["fig.width"]]))
-      info[["fig.width"]] <- info[["fig.height"]]/info[["fig.asp"]]
-	}
-	info
-}
-
-# This is only needed until CRAN's pkgdown exports pkgdown_print,
-# then we should use pkgdown::pkgdown_print
-pkgdown_print <- NULL
+# These are only needed until CRAN's pkgdown exports pkgdown_print
+# and fig_settings,
+# then we should use pkgdown::pkgdown_print and pkgdown::fig_settings
+pkgdown_print <- print
+pkgdown_fig_settings <- function() list(dpi = 96, fig.width = 5, fig.height = 5)
 
 register_pkgdown_methods <- local({
 	registered <- FALSE

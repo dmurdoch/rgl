@@ -512,7 +512,7 @@ is_low_change.rglRecordedplot <- function(p1, p2) {
 
 figWidth <- function() {
   if (in_pkgdown_example())
-    opts <- pkgdown_figure_info()
+    opts <- pkgdown_fig_settings()
   else
     opts <- opts_current$get(c("fig.width", "dpi", "fig.retina"))
   if (length(opts)) {
@@ -523,7 +523,7 @@ figWidth <- function() {
 
 figHeight <- function() {
   if (in_pkgdown_example())
-    opts <- pkgdown_figure_info()
+    opts <- pkgdown_fig_settings()
   else
     opts <- opts_current$get(c("fig.height", "dpi", "fig.retina"))
   if (length(opts)) {
