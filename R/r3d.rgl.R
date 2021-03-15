@@ -212,9 +212,10 @@ text3d      <- function(x, y = NULL, z = NULL,
 }
 texts3d	    <- text3d
 
-spheres3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
+spheres3d   <- function(x, y = NULL, z = NULL, radius = 1, fastTransparency = TRUE, ...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.spheres", c(list(x=x,y=y,z=z,radius=radius), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.spheres", c(list(x = x, y = y, z = z, 
+  															radius = radius, fastTransparency = fastTransparency), .fixMaterialArgs(..., Params = save)))
 }
 
 planes3d   <- function(a,b=NULL,c=NULL,d=0,...) {
