@@ -1,9 +1,6 @@
 \name{scene}
-\alias{rgl.clear}
-\alias{rgl.pop}
 \alias{clear3d}
 \alias{pop3d}
-\alias{rgl.ids}
 \alias{ids3d}
 \title{Scene management}
 \description{
@@ -13,11 +10,6 @@ Clear shapes, lights, bbox
 clear3d( type = c("shapes", "bboxdeco", "material"), defaults, subscene = 0 ) 
 pop3d( type = "shapes", id = 0 )
 ids3d( type = "shapes", subscene = NA )
-
-# These are mainly intended for internal use:
-rgl.clear( type = "shapes", subscene = 0 )
-rgl.pop( type = "shapes", id = 0 )  
-rgl.ids( type = "shapes", subscene = NA )
 }
 \arguments{
   \item{type}{Select subtype(s):
@@ -62,9 +54,6 @@ rgl window, along with an indicator of their type.
 
 Note that clearing the light stack leaves the scene in darkness; it should normally
 be followed by a call to \code{\link{light3d}} or \code{\link{light3d}}.
-
-The \code{rgl.*} versions of these functions are mainly
-intended for internal use.
 }
 \seealso{
 \code{\link{rgl}},

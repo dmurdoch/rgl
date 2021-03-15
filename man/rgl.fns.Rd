@@ -4,6 +4,9 @@
 \alias{rgl.clipplanes}
 \alias{rgl.sprites}
 \alias{rgl.spheres}
+\alias{rgl.clear}
+\alias{rgl.pop}
+\alias{rgl.ids}
 \title{
 Low level functions that should not be called by users.
 }
@@ -18,6 +21,9 @@ rgl.clipplanes(a, b = NULL, c = NULL, d = 0)
 rgl.sprites(x, y = NULL, z = NULL, radius = 1, 
             shapes = NULL, userMatrix, fixedSize = FALSE, ...)
 rgl.spheres(x, y = NULL, z = NULL, radius, fastTransparency = TRUE, ...)
+rgl.clear( type = "shapes", subscene = 0 )
+rgl.pop( type = "shapes", id = 0 )  
+rgl.ids( type = "shapes", subscene = NA )
 }
 \arguments{
   \item{x, y, z}{
@@ -30,6 +36,7 @@ or normals for the planes.
   \item{d}{Plane offset.}
   \item{radius}{Size of sprites or spheres.}
   \item{fastTransparency}{Sphere drawing strategy.}
+  \item{type, id, subscene}{Selecting objects.}
   \item{...}{
 Material properties.
 }
