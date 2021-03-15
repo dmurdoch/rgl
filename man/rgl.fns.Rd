@@ -2,6 +2,7 @@
 \alias{rgl.abclines}
 \alias{rgl.planes}
 \alias{rgl.clipplanes}
+\alias{rgl.sprites}
 \title{
 Low level functions that should not be called by users.
 }
@@ -13,6 +14,8 @@ These functions provide the implementation for various
 rgl.abclines(x, y = NULL, z = NULL, a, b = NULL, c = NULL, ...)
 rgl.planes(a, b = NULL, c = NULL, d = 0, ...)
 rgl.clipplanes(a, b = NULL, c = NULL, d = 0)
+rgl.sprites(x, y = NULL, z = NULL, radius = 1, 
+            shapes = NULL, userMatrix, fixedSize = FALSE, ...)
 }
 \arguments{
   \item{x, y, z}{
@@ -23,12 +26,13 @@ Coordinates of the direction vectors for the lines,
 or normals for the planes.
 }
   \item{d}{Plane offset.}
+  \item{radius}{Size of sprite.}
   \item{...}{
 Material properties.
 }
 
 }
 \details{
-See the corresponding \code{*3d} function: \code{\link{abclines3d}}, \code{\link{planes3d}}, \code{\link{clipplanes3d}}.
+See the corresponding \code{*3d} function: \code{\link{abclines3d}}, \code{\link{planes3d}}, \code{\link{clipplanes3d}}, \code{\link{sprites3d}}.
 }
 \keyword{internal}

@@ -1,17 +1,15 @@
 \name{sprites}
 \alias{sprites3d}
 \alias{particles3d}
-\alias{rgl.sprites}
 \title{add sprite set shape}
 \description{
   Adds a sprite set shape node to the scene.
 }
 \usage{
-sprites3d(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, 
-            ...)
+sprites3d(x, y = NULL, z = NULL, radius = 1, 
+          shapes = NULL, userMatrix, 
+          fixedSize = FALSE, ...)
 particles3d(x, y = NULL, z = NULL, radius = 1, ...)
-rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix, 
-            fixedSize = FALSE, ...)
 }
 \arguments{
   \item{ x, y, z }{point coordinates.  Any reasonable way of defining the
@@ -24,14 +22,14 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1, shapes = NULL, userMatrix,
     for the shapes}
   \item{ fixedSize }{should sprites remain at a fixed size,
 or resize with the scene?}
-  \item{ ... }{material properties when \code{shape == 0}, texture mapping is supported}
+  \item{ ... }{material properties when \code{shapes = NULL}, texture mapping is supported}
 }
 \details{
   Simple sprites (used when \code{shapes} is \code{NULL}) are 1 by 1 squares
   that are directed towards the viewpoint. Their primary use is for
   fast (and faked) atmospherical effects, e.g. particles and clouds
-  using alpha blended textures. Particles are Sprites using an alpha-blended 
-  particle texture giving the illusion of clouds and gasses.  
+  using alpha blended textures. Particles are sprites using an alpha-blended 
+  particle texture giving the illusion of clouds and gases.  
   The centre of each square will be at the coordinates given by \code{x, y, z}.
   
   When \code{shapes} is not \code{NULL}, it should be a vector of
@@ -42,13 +40,13 @@ or resize with the scene?}
   origin \code{0, 0, 0} will be plotted at the coordinates given by \code{x, y, z}.
   
   The \code{userMatrix} argument is ignored for \code{shapes = NULL}.  For
-  shapes, \code{sprites3d} defaults the matrix to \code{r3dDefaults$userMatrix}
-  while \code{rgl.sprites} defaults it to an identity transformation.
+  shapes, \code{sprites3d} defaults the matrix to \code{r3dDefaults$userMatrix}.
   
   If any coordinate is \code{NA}, the sprite is not plotted.
   
-  The id values of the shapes are retrieved using \code{rgl.attrib(id, "ids")};
-  the user matrix is retrieved using \code{rgl.attrib(id, "usermatrix")}.
+  The id values of the shapes may be retrieved after plotting
+using \code{rgl.attrib(id, "ids")};
+the user matrix is retrieved using \code{rgl.attrib(id, "usermatrix")}.
 }
 \value{
   These functions are called for the side effect of displaying the sprites.

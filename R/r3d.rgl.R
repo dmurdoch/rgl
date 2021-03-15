@@ -232,7 +232,9 @@ abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
   do.call("rgl.abclines", c(list(x=x,y=y,z=z,a=a,b=b,c=c), .fixMaterialArgs(..., Params = save)))
 }
 
-sprites3d   <- function(x,y=NULL,z=NULL,radius=1,shapes=NULL,userMatrix,...) {
+sprites3d   <- function(x, y = NULL, z = NULL, radius = 1, 
+												shapes = NULL, userMatrix,
+												fixedSize = FALSE, ...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   if (missing(userMatrix)) {
     userMatrix <- getr3dDefaults()$userMatrix
@@ -244,7 +246,7 @@ sprites3d   <- function(x,y=NULL,z=NULL,radius=1,shapes=NULL,userMatrix,...) {
   par3d(ignoreExtent=savepar$ignoreExtent)
 
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius,shapes=shapes,
-                                userMatrix=userMatrix), 
+                                userMatrix=userMatrix, fixedSize = fixedSize), 
           .fixMaterialArgs(..., Params = save)))
 }
 
