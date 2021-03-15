@@ -1223,3 +1223,11 @@ base graphics.
     from displaying properly.
   - In rglwidget(), background images could cause other parts of
     the display to disappear.
+
+0.106.0
+  - Changes for pkgdown compatibility have been added.  See
+    the "Using rgl in pkgdown web sites".
+  - The help pages have been edited to continue the 
+    de-emphasization of rgl.* functions.
+  - Changes have been made for compatibility with the 
+    experimental Windows-UTF8 build of R.
