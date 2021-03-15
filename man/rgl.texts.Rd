@@ -2,7 +2,7 @@
 \alias{rgl.texts}
 \alias{rglFonts}
 \title{
-Low-level function to plot text.
+Low-level functions for plotting text.
 }
 \description{
 This is a low-level function for plotting text.  Users
