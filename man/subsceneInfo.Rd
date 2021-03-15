@@ -22,7 +22,7 @@ Whether to report on children recursively.
 }
 }
 \details{
-In rgl, each window contains a tree of \dQuote{subscenes}, each containing views of 
+In RGL, each window contains a tree of \dQuote{subscenes}, each containing views of 
 a subset of the objects defined in the window.
 
 Rendering in each subscene depends on the viewport, the projection, and the model

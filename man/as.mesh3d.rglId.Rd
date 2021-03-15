@@ -1,7 +1,7 @@
 \name{as.mesh3d.rglId}
 \alias{as.mesh3d.rglId}
 \title{
-Convert object in plot to mesh3d object
+Convert object in plot to RGL mesh object
 }
 \description{
 This method attempts to read the attributes of objects in the

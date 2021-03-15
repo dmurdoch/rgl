@@ -6,7 +6,7 @@
 \alias{rglHighlevel}
 \alias{print.rglId}
 \title{
-rgl id values
+RGL id values
 }
 \description{
 All objects in an RGL scene have a

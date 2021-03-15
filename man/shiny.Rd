@@ -4,7 +4,7 @@
 \alias{playwidgetOutput}
 \alias{renderPlaywidget}
 \title{
-Functions for integration of \code{\link{rglwidget}} into
+Functions for integration of RGL widgets into
 Shiny app
 }
 \description{

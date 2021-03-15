@@ -2,7 +2,7 @@
 \alias{subsetControl}
 \alias{propertyControl}
 \title{
-Controls to use with \code{playwidget()}
+Controls to use with playwidget()
 }
 \description{
 These are setter functions to produce actions in a Shiny app,

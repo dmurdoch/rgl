@@ -2,7 +2,7 @@
 \alias{plot3d}
 \alias{plot3d.default}
 \alias{plot3d.mesh3d}
-\title{3D Scatterplot}
+\title{3D scatterplot}
 \description{
 Draws a 3D scatterplot.
 }

@@ -2,7 +2,7 @@
 \alias{as.mesh3d.ashape3d}
 \title{
 Convert alpha-shape surface of a cloud of points to
-mesh3d object
+RGL mesh object
 }
 \description{
 The \code{\link[alphashape3d:ashape3d]{alphashape3d::ashape3d}}

@@ -5,7 +5,7 @@
 \alias{pop3d}
 \alias{rgl.ids}
 \alias{ids3d}
-\title{scene management}
+\title{Scene management}
 \description{
 Clear shapes, lights, bbox
 }

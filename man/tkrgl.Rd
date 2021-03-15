@@ -1,7 +1,7 @@
 \name{tkrgl}
 \alias{tkrgl}
 \title{
-TKRGL functions
+The former tkrgl package
 }
 \description{
 Functions from the former \pkg{tkrgl} package.
