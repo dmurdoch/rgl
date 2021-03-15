@@ -155,11 +155,11 @@ plot3d.lm <- function(x, which = 1,
   dots <- list(...)
   n <- length(which)
   if (clip_to_density > 0) {
-    if (!requireNamespace("MASS")) {
+    if (!requireNamespace("MASS", quietly = TRUE)) {
       warning("'clip_to_density' requires the MASS package.")
       clip_to_density <- 0
     }
-    if (!requireNamespace("akima")) {
+    if (!requireNamespace("akima", quietly = TRUE)) {
       warning("'clip_to_density' requires the akima package.")
       clip_to_density <- 0
     }

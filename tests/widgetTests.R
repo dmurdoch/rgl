@@ -1,6 +1,7 @@
 # Test inclusion of rgl scenes
 
-if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
+if (!requireNamespace("rmarkdown", quietly = TRUE) || 
+    !rmarkdown::pandoc_available("1.14")) {
   stop("Need R Markdown and Pandoc")
 }
 

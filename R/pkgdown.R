@@ -4,15 +4,15 @@ pkgdown_rdname <- function()
 	getOption("downlit.rdname", "")
 
 in_pkgdown <- function() 
-	requireNamespace("pkgdown") && pkgdown::in_pkgdown()
+	requireNamespace("pkgdown", quietly = TRUE) && pkgdown::in_pkgdown()
 
 # The exists() part of this test are only needed until
 # CRAN's version of the packages contain my suggested patches.
 in_pkgdown_example <- function() 
 	nchar(pkgdown_rdname()) && 
-	requireNamespace("downlit") &&
+	requireNamespace("downlit", quietly = TRUE) &&
 	exists("is_low_change.default", asNamespace("downlit")) &&
-	requireNamespace("pkgdown") &&
+	requireNamespace("pkgdown", quietly = TRUE) &&
 	exists("pkgdown_print", asNamespace("pkgdown"))
 
 fns <- local({

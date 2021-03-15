@@ -20,8 +20,8 @@
 #include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <GLsdk/GL/glext.h>
-#include <GLsdk/GL/wglext.h>
+#include <GL/glext.h>
+#include <GL/wglext.h>
 #endif
 // ---------------------------------------------------------------------------
 #ifdef RGL_X11

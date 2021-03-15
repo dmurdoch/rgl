@@ -3,7 +3,7 @@ tkpar3dsave <- function(params = c("userMatrix", "scale", "zoom", "FOV"),
                         dev = cur3d(),
                         ...) {
   
-  if (!requireNamespace("tcltk"))
+  if (!requireNamespace("tcltk", quietly = TRUE))
     stop("This function requires 'tcltk'")
   
   results <- list()

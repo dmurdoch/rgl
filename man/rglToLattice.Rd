@@ -52,8 +52,8 @@ Duncan Murdoch
 }
 \examples{
 persp3d(volcano, col = "green")
-if ((hasorientlib <- requireNamespace("orientlib")) && 
-    requireNamespace("lattice")) 
+if ((hasorientlib <- requireNamespace("orientlib", quietly = TRUE)) && 
+    requireNamespace("lattice", quietly = TRUE)) 
     lattice::wireframe(volcano, screen = rglToLattice())
 if (hasorientlib) {
   angles <- rglToBase()
