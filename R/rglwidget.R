@@ -3,7 +3,7 @@
 inShiny <- function() !is.null(getDefaultReactiveDomain())
 
 rmarkdownOutput <- function() {
-  if (requireNamespace("rmarkdown")) {
+  if (requireNamespace("rmarkdown", quietly = TRUE)) {
     output <- rmarkdown::metadata$output
     if (length(output))
       if (is.character(output)) return(output[1])
@@ -394,7 +394,7 @@ renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputAr
 
 shinySetPar3d <- function(..., session,
                           subscene = currentSubscene3d(cur3d())) {
-  if (!requireNamespace("shiny"))
+  if (!requireNamespace("shiny", quietly = TRUE))
     stop("function requires shiny")
   args <- list(...)
   argnames <- names(args)

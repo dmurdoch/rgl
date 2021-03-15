@@ -3,7 +3,8 @@ suppressPackageStartupMessages(library(rgl))
 options(rgl.useNULL=TRUE)
 options(rgl.printRglwidget=FALSE)
 
-if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
+if (!requireNamespace("rmarkdown", quietly = TRUE) || 
+    !rmarkdown::pandoc_available("1.14")) {
   warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
   knitr::knit_exit()
 }
@@ -43,7 +44,7 @@ linkfn <- function(fn, text = backticked(fn), pkg = NA) {
   if (is.na(pkg))
     paste0('<a href="#', fn, '">', text, '</a>')
   else {
-    if (requireNamespace("downlit"))
+    if (requireNamespace("downlit", quietly = TRUE))
       url <- downlit::autolink_url(paste0(pkg, "::", fn))
     else
       url <- NA

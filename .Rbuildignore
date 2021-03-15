@@ -28,3 +28,4 @@
 ^CRAN-RELEASE$
 ^revdep/
 ^\.github$
+^R/noOpenGL.R$
