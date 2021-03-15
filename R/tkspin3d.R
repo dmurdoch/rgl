@@ -2,7 +2,7 @@
 tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
                           speed=30, scale=100, ...) {
   
-  if (!requireNamespace("tcltk"))
+  if (!requireNamespace("tcltk", quietly = TRUE))
     stop("This function requires 'tcltk'.")
   
   slider <- tcltk::tclVar(speed)
@@ -212,7 +212,7 @@ tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
 
 tkspin3d <- function(dev = cur3d(), ...) {
   
-  if (!requireNamespace("tcltk"))
+  if (!requireNamespace("tcltk", quietly = TRUE))
     stop("This function requires 'tcltk'.")
   
   args <- list(...)

@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
 options(rgl.useNULL=TRUE)
 suppressPackageStartupMessages(library(rgl))
 
-if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
+if (!requireNamespace("rmarkdown", quietly = TRUE) ||
+    !rmarkdown::pandoc_available("1.14")) {
   warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
   knitr::knit_exit()
 }

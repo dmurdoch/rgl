@@ -200,7 +200,7 @@ movie3d <- function(f, duration, dev = cur3d(), ..., fps=10,
   }	
   cat("\n")
   if (.Platform$OS.type == "windows") system <- shell  # nolint
-  if (is.null(convert) && requireNamespace("magick")) {
+  if (is.null(convert) && requireNamespace("magick", quietly = TRUE)) {
     m <- NULL
     for (i in round(startTime*fps):(duration*fps)) {
       filename <- sprintf("%s%03d.png",frames,i)
