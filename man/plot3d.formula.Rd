@@ -52,6 +52,6 @@ Duncan Murdoch
 open3d()
 mfrow3d(1, 2, sharedMouse = TRUE)
 plot3d(mpg ~ wt + qsec, data = mtcars)
-if (requireNamespace("deldir"))
+if (requireNamespace("deldir", quietly = TRUE))
   persp3d(mpg ~ wt + qsec, data = mtcars)
 }

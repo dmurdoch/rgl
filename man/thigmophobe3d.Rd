@@ -50,7 +50,7 @@ Duncan Murdoch
 \code{\link{text3d}}
 }
 \examples{
-if (requireNamespace("plotrix")) {
+if (requireNamespace("plotrix", quietly = TRUE)) {
   # Simulate some data
   xyz <- matrix(rnorm(30), ncol = 3)
   

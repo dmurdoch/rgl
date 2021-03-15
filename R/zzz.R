@@ -14,6 +14,7 @@
 ##
   
 .onLoad <- function(lib, pkg) {
+
   in_pkgload_loadall <- function() {
     caller <- deparse(sys.call(-4))
     isNamespaceLoaded("pkgload") && grepl("load_all", caller)
@@ -22,10 +23,11 @@
   getDir <- function(useNULL) {
     if (in_pkgload_loadall()) {
       dir <- if (useNULL) "inst/useNULL" else "src"
-    } else
+    } else {
       dir <- if (useNULL) "useNULL" else "libs"
-    if (nchar(.Platform$r_arch))
-      dir <- paste0(dir, "/", .Platform$r_arch)
+      if (nchar(.Platform$r_arch))
+        dir <- paste0(dir, "/", .Platform$r_arch)
+    }
     dir
   }
     
@@ -121,7 +123,7 @@
 
   # handle pkgdown_print and fig_settings before they are in the CRAN version
 
-  if (requireNamespace("pkgdown")) {
+  if (requireNamespace("pkgdown", quietly = TRUE)) {
     if ("pkgdown_print" %in% getNamespaceExports("pkgdown"))
       pkgdown_print <- getExportedValue("pkgdown", "pkgdown_print")
     if ("fig_settings" %in% getNamespaceExports("pkgdown"))
