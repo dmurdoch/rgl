@@ -23,10 +23,10 @@
 \concept{windowRect}
 \concept{zoom}
 
-\title{Set or Query RGL Parameters}
+\title{Set or query RGL parameters}
 
 \description{
-  \code{par3d} can be used to set or query graphical parameters in rgl.
+  \code{par3d} can be used to set or query graphical parameters in RGL.
   Parameters can be set by specifying them as arguments to \code{par3d} in
   \code{tag = value} form, or by passing them as a list of tagged
   values.
@@ -43,7 +43,7 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
   \item{no.readonly}{logical; if \code{TRUE} and there are no other
     arguments, only those parameters which can be set by a
     subsequent \code{par3d()} call are returned.}
-  \item{dev}{integer; the rgl device.}
+  \item{dev}{integer; the RGL device.}
   \item{subscene}{integer; the subscene.}
 }
 
@@ -193,7 +193,7 @@ versions it would only be changed when the window was redrawn, potentially after
 }
 
 \section{Rendering}{
-The parameters returned by \code{par3d} are sufficient to determine where rgl would render
+The parameters returned by \code{par3d} are sufficient to determine where RGL would render
 a point on the screen.  Given a column vector \code{(x, y, z)} in a subscene \code{s}, 
 it performs the equivalent of 
 the following operations:

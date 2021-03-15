@@ -1,5 +1,5 @@
 \name{rgl.open}
-\title{3D visualization device system}
+\title{Low level window interface}
 \alias{rgl.open}
 \alias{rgl.close}
 \alias{rgl.cur}
@@ -11,13 +11,12 @@
   3D real-time rendering system.
 }
 \usage{
-# Low level rgl.* interface
 rgl.open(useNULL = rgl.useNULL())     # open new device
 rgl.close()    # close current device
 rgl.cur()      # returns active device ID
 rgl.dev.list() # returns all device IDs
 rgl.set(which, silent = FALSE) # set device as active
-rgl.quit()     # shutdown rgl device system
+rgl.quit()     # shutdown RGL device system
 }
 \arguments{
   \item{useNULL}{whether to open the \dQuote{null} device}
@@ -25,12 +24,12 @@ rgl.quit()     # shutdown rgl device system
   \item{silent}{whether to suppress update of window titles}
 }
 \details{
-  The \pkg{rgl} device design is oriented towards the R device metaphor. If you send
+  The RGL device design is oriented towards the R device metaphor. If you send
   scene management instructions, and there's no device open, it will be opened
   automatically.
   Opened devices automatically get the current device focus. The focus may be
   changed by using \code{rgl.set()}.
-  \code{rgl.quit()} shuts down the rgl subsystem and all open devices, 
+  \code{rgl.quit()} shuts down the RGL subsystem and all open devices, 
   detaches the package including the shared library and additional system libraries.
   
   The \code{rgl.open()} function attempts to open a new RGL window.
@@ -39,7 +38,7 @@ rgl.quit()     # shutdown rgl device system
   more description of antialiasing and an alternative way to set the
   value.)
   
-  If \code{useNULL} is \code{TRUE}, \pkg{rgl} will use a \dQuote{null}
+  If \code{useNULL} is \code{TRUE}, RGL will use a \dQuote{null}
   device.  This device records objects as they are plotted, but 
   displays nothing. It is intended for use with \code{\link{rglwidget}}
   and similar functions.

@@ -45,7 +45,7 @@ version).
 ### About this document
 
 This document was written in R Markdown, using the `knitr` package
-for production.  It corresponds to rgl version 
+for production.  It corresponds to `rgl` version 
 `r packageVersion("rgl")`.
 
 Most of the highlighted function names are HTML links.
@@ -62,7 +62,7 @@ and links to a discussion.
 ## Basics and High Level Functions
 
 The `r indexfns("plot3d")` function
-plots points within an rgl window.  It is similar to the classic 
+plots points within an RGL window.  It is similar to the classic 
 `r linkfn("plot", pkg="graphics")` function,
 but works in 3 dimensions.
 
@@ -832,7 +832,7 @@ Function                             | Description
 `r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`:    | `magrittr` pipe
 `r indexfns(c("figHeight", "figWidth"))`:     | Dimensions of figures in R Markdown document
 `r indexfns("rglShared")`:        | share data using `crosstalk` package
-`r indexfns("rglMouse")`:         | change mouse mode in rgl scene
+`r indexfns("rglMouse")`:         | change mouse mode in RGL scene
 `r indexfns("asRow")`:            | arrange multiple objects in an HTML display
 `r indexfns("getWidgetId")`:      | get the `elementId` from a widget
 

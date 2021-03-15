@@ -1,7 +1,7 @@
 \name{planes3d}
 \alias{planes3d}
 \alias{clipplanes3d}
-\title{add planes}
+\title{Add planes}
 \description{
 \code{planes3d} adds mathematical planes 
 to a scene.  Their intersection with the current

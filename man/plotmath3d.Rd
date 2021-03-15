@@ -1,7 +1,7 @@
 \name{plotmath3d}
 \alias{plotmath3d}
 \title{
-Generate sprites using base graphics math plotting.
+Draw text using base graphics math plotting
 }
 \description{
 To plot mathematical text, this function uses base graphics

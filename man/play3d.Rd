@@ -1,7 +1,7 @@
 \name{play3d}
 \alias{play3d}
 \alias{movie3d}
-\title{ Play animation of rgl scene }
+\title{ Play animation of RGL scene }
 \description{
 \code{play3d} calls a function repeatedly, passing it the elapsed
 time in seconds, and using the result of the function to
@@ -19,7 +19,7 @@ movie3d(f, duration, dev = cur3d(), ..., fps = 10,
 \arguments{
   \item{f}{ A function returning a list that may be passed to \code{\link{par3d}} }
   \item{duration}{ The duration of the animation }    
-  \item{dev}{ Which rgl device to select }
+  \item{dev}{ Which RGL device to select }
   \item{\dots}{ Additional parameters to pass to \code{f}. }
   \item{startTime}{ Initial time at which to start the animation }
   \item{fps}{ Number of frames per second }
@@ -42,7 +42,7 @@ on the CPU; if this is a problem, calls to \code{\link{Sys.sleep}}
 should be made within the function to release time to other processes.
 
 \code{play3d} will run for the specified \code{duration} (in seconds), but
-can be interrupted by pressing \code{ESC} while the rgl window has the focus.
+can be interrupted by pressing \code{ESC} while the RGL window has the focus.
 
 \code{movie3d} saves each frame to disk in a filename of the form \file{framesXXX.png}, where
 XXX is the frame number, starting from 0.  
@@ -73,12 +73,12 @@ The \code{top = TRUE} default is designed to work around an OpenGL limitation:
 in some implementations, \code{\link{rgl.snapshot}} will fail if the window
 is not topmost.
 
-As of rgl version 0.94, the \code{dev} argument is not needed:  the
+As of \pkg{rgl} version 0.94, the \code{dev} argument is not needed:  the
 function \code{f} can specify its device, as \code{\link{spin3d}} does, 
 for example.  However, if \code{dev} is specified, it will be selected
 as the current device as each update is played.
 
-As of rgl version 0.95.1476, \code{f} can 
+As of \pkg{rgl} version 0.95.1476, \code{f} can 
 include multiple values in a \code{"subscene"}
 component, and \code{par3d()} will be called
 for each of them.

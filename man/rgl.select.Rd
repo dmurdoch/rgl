@@ -1,7 +1,7 @@
 \name{rgl.select}
 \alias{rgl.select}
 \title{
-Switch to select mode, and return the mouse position selected.
+Switch to select mode, and return the mouse position selected
 }
 \description{
 Mostly for internal use, this function temporarily
@@ -17,7 +17,7 @@ rgl.select(button = c("left", "middle", "right"),
 Which button to use?
 }
   \item{dev, subscene}{
-The rgl device and subscene to work with  
+The RGL device and subscene to work with  
 }
 }
 \value{

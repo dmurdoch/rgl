@@ -1,7 +1,7 @@
 \name{sprites}
 \alias{sprites3d}
 \alias{particles3d}
-\title{add sprite set shape}
+\title{Add sprites}
 \description{
   Adds a sprite set shape node to the scene.
 }

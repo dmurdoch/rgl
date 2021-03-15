@@ -1,7 +1,7 @@
 \name{decorate3d}
 \alias{decorate3d}
 \title{
-Add decorations to a 3D plot.
+Add decorations to a 3D plot
 }
 \description{
 \code{decorate3d} adds the usual decorations to a plot:  labels, axes, etc.  
@@ -25,9 +25,10 @@ for the labels.}
   \item{...}{ignored.}
 }
 \value{
-The \pkg{rgl} id values for those items.
+The RGL id values for those items.
 }
 \examples{
+open3d()
 shade3d(tetrahedron3d(), col = "red")
 decorate3d(main = "A Tetrahedron")
 }

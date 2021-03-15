@@ -3,7 +3,7 @@
 \alias{addNormals.mesh3d}
 \alias{addNormals.shapelist3d}
 \title{
-Add normal vectors to objects so they render more smoothly.
+Add normal vectors to objects so they render more smoothly
 }
 \description{
 This generic function adds normals at each of the vertices

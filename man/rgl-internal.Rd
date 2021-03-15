@@ -1,5 +1,5 @@
 \name{rgl-internal}
-\title{Internal rgl functions and data}
+\title{Internal RGL functions and data}
 \alias{rgl.bool}
 \alias{rgl.numeric}
 \alias{rgl.vertex}
@@ -28,7 +28,7 @@
 \alias{oh3d.vb}
 \alias{dev3d}
 \description{
-  internal rgl functions
+Internal RGL functions
 }
 \usage{
 rgl.bool(x)

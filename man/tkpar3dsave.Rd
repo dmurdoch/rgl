@@ -3,7 +3,7 @@
 \alias{par3dsave}
 \title{ Modal dialog for saving par3d settings }
 \description{
-This function opens a TCL/TK modal dialog to allow particular views of an \code{rgl} scene
+This function opens a TCL/TK modal dialog to allow particular views of an RGL scene
 to be saved.
 }
 \usage{
@@ -13,7 +13,7 @@ tkpar3dsave(params = c("userMatrix", "scale", "zoom", "FOV"),
 \arguments{
   \item{params}{ Which parameters to save }
   \item{times}{ Should times be saved as well? }
-  \item{dev}{ Which \code{rgl} device to work with }
+  \item{dev}{ Which RGL device to work with }
   \item{...}{ Additional parameters to pass to \code{\link[tcltk:TkWidgets]{tktoplevel}}}
 }
 \details{

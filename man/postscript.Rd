@@ -1,6 +1,6 @@
 \name{rgl.postscript}
 \alias{rgl.postscript}
-\title{export screenshot}
+\title{Export vector graphics}
 \description{
   Saves the screenshot to a file in PostScript or other vector graphics format.
 }

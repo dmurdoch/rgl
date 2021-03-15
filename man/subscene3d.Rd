@@ -7,7 +7,7 @@
 \alias{delFromSubscene3d}
 \alias{gc3d}
 \title{
-Create, select or modify a subscene.
+Create, select or modify a subscene
 }
 \description{
 This creates a new subscene, or selects one by \code{id} value, or adds objects to one.
@@ -48,7 +48,7 @@ Whether to ignore the subscene's bounding box when calculating the parent boundi
 box.  Defaults to \code{TRUE} if \code{model} is not \code{"inherit"}.
 }
   \item{dev}{
-Which rgl device to query for the current subscene.
+Which RGL device to query for the current subscene.
 }
   \item{subscene}{
 Which subscene to use or modify.
@@ -61,7 +61,7 @@ Object ids to protect from this garbage collection.
 }
 }
 \details{
-The rgl package allows multiple windows to be open; each one corresponds to a \dQuote{scene}.
+The \pkg{rgl} package allows multiple windows to be open; each one corresponds to a \dQuote{scene}.
 Within each scene there are one or more \dQuote{subscenes}.  Each subscene corresponds
 to a rectangular region in the window, and may have its own projection, transformation and behaviour in response to 
 the mouse.

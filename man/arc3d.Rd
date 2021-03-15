@@ -1,7 +1,7 @@
 \name{arc3d}
 \alias{arc3d}
 \title{
-Draw arcs.
+Draw arcs
 }
 \description{
 Given starting and ending points on a sphere and the center of the

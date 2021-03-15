@@ -15,7 +15,7 @@ selectionFunction3d(proj, region = proj$region)
 }
 \arguments{
   \item{ button }{ Which button to use for selection.}
-  \item{ dev, subscene}{ The rgl device and subscene to work with }
+  \item{ dev, subscene}{ The RGL device and subscene to work with }
   \item{ ... }{ Button argument to pass to \code{rgl.select3d}}
   \item{proj}{An object returned from \code{\link{rgl.projection}}
   containing details of the current projection.}

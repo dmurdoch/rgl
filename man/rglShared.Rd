@@ -1,7 +1,7 @@
 \name{rglShared}
 \alias{rglShared}
 \title{
-Create shared data from an rgl object.
+Create shared data from an RGL object
 }
 \description{
 The \pkg{crosstalk} package provides a way for
@@ -10,7 +10,7 @@ communicate about datasets, using \dQuote{shared data} objects.  When selection 
 is performed in one view, the result is mirrored 
 in all other views.
 
-This function allows vertices of rgl objects
+This function allows vertices of RGL objects
 to be treated as shared data.
 }
 \usage{
@@ -24,7 +24,7 @@ rglShared(id, key = NULL, group = NULL,
 }
 \arguments{
   \item{id}{
-An existing rgl id.
+An existing RGL id.
 }
   \item{key}{
 Optional unique labels to apply to each vertex.
@@ -73,7 +73,7 @@ have been filtered out of the display.
 }
 \value{
 An object of class \code{"SharedData"} which 
-contains the x, y and z coordinates of the rgl object 
+contains the x, y and z coordinates of the RGL object 
 with the given \code{id}.
 }
 \references{

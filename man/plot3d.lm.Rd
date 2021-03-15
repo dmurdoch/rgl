@@ -1,7 +1,7 @@
 \name{plot3d.lm}
 \alias{plot3d.lm}
 \title{
-Method for plotting simple linear fit.
+Method for plotting simple linear fit
 }
 \description{
 This function provides several plots of the result of

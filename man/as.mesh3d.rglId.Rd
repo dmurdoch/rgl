@@ -1,7 +1,7 @@
 \name{as.mesh3d.rglId}
 \alias{as.mesh3d.rglId}
 \title{
-Convert object in plot to mesh3d object.
+Convert object in plot to mesh3d object
 }
 \description{
 This method attempts to read the attributes of objects in the
@@ -12,7 +12,7 @@ rgl display and construct a mesh3d object to approximate them.
 }
 \arguments{
   \item{x}{
-A vector of rgl identifiers of objects in the specified subscene.
+A vector of RGL identifiers of objects in the specified subscene.
 }
   \item{type}{
 A vector of names of types of shapes to convert.  Other shapes 

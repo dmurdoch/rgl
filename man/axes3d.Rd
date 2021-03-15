@@ -64,7 +64,7 @@ objects added to the scene.
 \author{ Duncan Murdoch }
 
 \seealso{Classic graphics functions \code{\link{axis}}, \code{\link{box}},
-\code{\link{title}}, \code{\link{mtext}}, and \pkg{rgl} function \code{\link{bbox3d}}.}
+\code{\link{title}}, \code{\link{mtext}}, and RGL function \code{\link{bbox3d}}.}
 
 \examples{
   open3d()

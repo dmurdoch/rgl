@@ -1,7 +1,7 @@
 \name{turn3d}
 \alias{turn3d}
 \title{
-Create a solid of rotation from a two-dimensional curve.
+Create a solid of rotation from a two-dimensional curve
 }
 \description{
 This function \dQuote{turns} the curve (as on a lathe) to form a 

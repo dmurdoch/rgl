@@ -10,7 +10,7 @@ tkspinControl(base, dev = cur3d(),
 }
 \arguments{
   \item{base}{The TCL/TK frame in which to insert this control.  }
-  \item{dev}{A vector of one or more rgl device numbers to control. }
+  \item{dev}{A vector of one or more RGL device numbers to control. }
   \item{continue}{Initial setting for continuous rotation checkbox. }
   \item{speed}{Initial setting for speed slider. }
   \item{scale}{Initial setting for scale slider. }

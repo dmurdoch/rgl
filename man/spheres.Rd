@@ -1,6 +1,6 @@
 \name{spheres3d}
 \alias{spheres3d}
-\title{add sphere set shape}
+\title{Add spheres}
 \description{
   Adds a sphere set shape node to the scene
 }
@@ -25,7 +25,7 @@ to draw shapes that are spherical in the data scale.
 When the scale is not isometric, the radius is measured in an average scale.
 In this case the bounding box calculation is iterative, since rescaling the
 plot changes the shape of the spheres in user-coordinates, which changes
-the bounding box.  Versions of \code{rgl} prior to 0.92.802 did not do 
+the bounding box.  Versions of \pkg{rgl} prior to 0.92.802 did not do 
 this iterative adjustment.
 
 If any coordinate or radius is \code{NA}, the sphere is not plotted.

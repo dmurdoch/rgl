@@ -5,9 +5,10 @@
 \alias{rgl.linestrips}
 \alias{rgl.triangles}
 \alias{rgl.quads}
-\title{add primitive set shape}
+\title{Add primitive set shape}
 \description{
-  Adds a shape node to the current scene
+Adds a shape node to the current scene.  These low-level
+functions should not normally be called by users.
 }
 \usage{
 rgl.points(x, y = NULL, z = NULL, ... )
@@ -62,15 +63,4 @@ rgl.quads(x, y = NULL, z = NULL, normals = NULL, texcoords = NULL, ... )
    was added to the scene.  These can be passed to \code{\link{pop3d}}
    to remove the object from the scene.
 }
-\examples{
-rgl.open()
-rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color = heat.colors(1000))
-}
-\seealso{
-\code{\link{rgl.material}},
-\code{\link{rgl.spheres}},
-\code{\link{rgl.texts}},
-\code{\link{rgl.surface}},
-\code{\link{rgl.sprites}}
-}
-\keyword{dynamic}
+\keyword{internal}

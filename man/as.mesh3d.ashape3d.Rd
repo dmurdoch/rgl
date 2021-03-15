@@ -2,7 +2,7 @@
 \alias{as.mesh3d.ashape3d}
 \title{
 Convert alpha-shape surface of a cloud of points to
-mesh3d object.
+mesh3d object
 }
 \description{
 The \code{\link[alphashape3d:ashape3d]{alphashape3d::ashape3d}}
@@ -10,7 +10,7 @@ function computes the
 3D \eqn{\alpha}-shape of a cloud of points. This is an approximation
 to the visual outline of the cloud.  It may include isolated
 points, line segments, and triangular faces:  this function
-converts the triangular faces to an \pkg{rgl} \code{\link{tmesh3d}} object.
+converts the triangular faces to an RGL \code{\link{tmesh3d}} object.
 }
 \usage{
 \method{as.mesh3d}{ashape3d}(x, 

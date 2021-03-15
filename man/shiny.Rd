@@ -5,10 +5,10 @@
 \alias{renderPlaywidget}
 \title{
 Functions for integration of \code{\link{rglwidget}} into
-Shiny app.
+Shiny app
 }
 \description{
-These functions allow an \pkg{rgl} scene to be embedded
+These functions allow an RGL scene to be embedded
 in a Shiny app.
 }
 \usage{

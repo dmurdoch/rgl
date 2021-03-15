@@ -2,7 +2,7 @@
 \alias{rgl.texts}
 \alias{rglFonts}
 \title{
-Low-level functions for plotting text.
+Low-level functions for plotting text
 }
 \description{
 This is a low-level function for plotting text.  Users
@@ -55,19 +55,19 @@ are restricted to the range 1 to 4 for standard, bold, italic and bold italic
 respectively; with font 5 recoded as family \code{"symbol"} font 1.  
 
 Using an unrecognized value for \code{"family"} will result in
-the system standard font as used in rgl up to version 0.76.  That font
+the system standard font as used in RGL up to version 0.76.  That font
 is not resizable and \code{font} values are ignored.
 
-If \code{useFreeType} is \code{TRUE}, then rgl will use the FreeType
+If \code{useFreeType} is \code{TRUE}, then RGL will use the FreeType
 anti-aliased fonts for drawing.  This is generally desirable, and it is the
-default if rgl was built to support FreeType.  
+default if RGL was built to support FreeType.  
 
 FreeType fonts are specified using the \code{rglFonts} function.  This function
 takes a vector of four filenames of TrueType font files which
 will be used for the four styles regular, bold, italic and bold italic.  The
 vector is passed with a name to be used as the family name, e.g.
 \code{rglFonts(sans = c("/path/to/FreeSans.ttf", ...))}.  In order to 
-limit the file size, \code{rgl} ships with just 3 font files, for 
+limit the file size, the \pkg{rgl} package ships with just 3 font files, for 
 regular versions of the \code{serif}, \code{sans} and \code{mono} families.  
 Additional free font files are available from the Amaya project at
 \url{https://dev.w3.org/cvsweb/Amaya/fonts/}.  See the example below for

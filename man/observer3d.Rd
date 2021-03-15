@@ -1,7 +1,7 @@
 \name{observer3d}
 \alias{observer3d}
 \title{
-Set the observer location.
+Set the observer location
 }
 \description{
 This function sets the location of the viewer.
@@ -18,7 +18,7 @@ location.
 }
   \item{auto}{ 
 If \code{TRUE}, the location will be set 
-automatically by \pkg{rgl} to make the whole bounding box visible.
+automatically by RGL to make the whole bounding box visible.
 }
 }
 \details{
@@ -36,7 +36,7 @@ after the model rotation have been done.  The coordinates are in post-scaling
 units.
 }
 \note{
-This function is likely to change in future versions of \pkg{rgl}, to allow more 
+This function is likely to change in future versions of RGL, to allow more 
 flexibility in the specification of the observer's location and orientation.
 }
 \value{

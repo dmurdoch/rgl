@@ -1089,7 +1089,7 @@ base graphics.
     Javascript library in source.
   - WebGL code now supports fog in scenes.  The default
     r3dDefaults now sets material$fog to TRUE, and bg$fog to
-    "none".  (In rgl, fog must be set *both* in the background
+    "none".  (In RGL, fog must be set *both* in the background
     and in the object to display.)
     The formula used in WebGL is slightly different than in the 
     internal R display.) 

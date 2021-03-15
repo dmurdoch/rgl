@@ -1,7 +1,7 @@
 \name{vertexControl}
 \alias{vertexControl}
 \title{
-Set attributes of vertices.
+Set attributes of vertices
 }
 \description{
 This is a function to produce actions in a web display.  A
@@ -28,7 +28,7 @@ the number of vertices in the \code{objid}.
                "radii", "ox", "oy", "oz", "ts", "tt", "offset")}.  See
                Details.}
   \item{objid}{
-A single \pkg{rgl} object id.
+A single RGL object id.
 }
   \item{param}{
 Parameter values corresponding to each row of \code{values}.
@@ -67,7 +67,7 @@ by finding its location in \code{param}.
 }
 \value{
 A list of class \code{"rglControl"} of cleaned up parameter
-values, to be used in an rgl widget.
+values, to be used in an RGL widget.
 }
 \author{
 Duncan Murdoch

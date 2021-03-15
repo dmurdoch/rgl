@@ -3,7 +3,7 @@
 \alias{plot3d.deldir}
 \alias{as.mesh3d.deldir}
 \title{
-Plot a Delaunay triangulation.
+Plot a Delaunay triangulation
 }
 \description{
 The \code{\link[deldir]{deldir}()} function in the \pkg{deldir} package computes a Delaunay triangulation of a set

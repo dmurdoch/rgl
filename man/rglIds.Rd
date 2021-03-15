@@ -9,7 +9,7 @@
 rgl id values
 }
 \description{
-All objects in an \pkg{rgl} scene have a
+All objects in an RGL scene have a
 numerical id.  These ids are normally stored
 in vectors of class \code{c("rglIds", "numeric")}, which
 will also have class \code{"rglHighlevel"}
@@ -35,7 +35,7 @@ A vector of object ids.
 An \code{"rglId"} object to print.
 }
   \item{rglwidget}{
-Whether to create and print an rgl widget.
+Whether to create and print an RGL widget.
 If false, nothing is printed.
 }
   \item{...}{
@@ -45,7 +45,7 @@ Other arguments which will be passed to
 }
 \details{
 These functions and classes are intended to allow
-\pkg{rgl} scenes to be automatically 
+RGL scenes to be automatically 
 displayed in R Markdown documents.  See \code{\link{setupKnitr}} for details on enabling auto-printing.
 
 Note that \emph{all} objects in the current

@@ -1,7 +1,7 @@
 \name{polygon3d}
 \alias{polygon3d}
 \title{
-Triangulate and draw a polygon in three dimensions.
+Draw a polygon in three dimensions
 }
 \description{
 This function takes a description of a flat polygon in x, y and z coordinates,

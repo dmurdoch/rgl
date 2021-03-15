@@ -25,10 +25,10 @@ rgl.getWheelCallback(dev = cur3d(), subscene = currentSubscene3d(dev))
   \item{update}{ Called when mouse moves }
   \item{end}{ Called when mouse is released }
   \item{rotate}{ Called when mouse wheel is rotated }
-  \item{dev, subscene}{The rgl device and subscene to work with }
+  \item{dev, subscene}{The RGL device and subscene to work with }
 }
 \details{
-The set functions set event handlers on mouse events that occur within the current rgl window.
+The set functions set event handlers on mouse events that occur within the current RGL window.
 The \code{begin} and \code{update} events should be functions taking two arguments; these
 will be the mouse coordinates when the event occurs.  The \code{end} event handler
 takes no arguments.  The \code{rotate} event takes a single argument, which will be 
@@ -76,7 +76,7 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
       }
    }
    rgl.setMouseCallbacks(button, begin, update, dev = dev, subscene = subscene)
-   cat("Callbacks set on button", button, "of rgl device", dev, "in subscene", subscene, "\n")
+   cat("Callbacks set on button", button, "of RGL device", dev, "in subscene", subscene, "\n")
  }
  open3d()
  shade3d(icosahedron3d(), col = "yellow")
