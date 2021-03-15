@@ -6,7 +6,7 @@ Get information about attributes of objects
 }
 \description{
 These functions give information about the attributes of
-\pkg{rgl} objects.  \code{rgl.attrib.info} is the more 
+RGL objects.  \code{rgl.attrib.info} is the more 
 \dQuote{user-friendly} function; \code{rgl.attrib.count} is a 
 lower-level function more likely to be used in programming.
 }
@@ -17,7 +17,7 @@ rgl.attrib.count(id, attrib)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{id}{
-One or more \pkg{rgl} object ids.
+One or more RGL object ids.
 }
   \item{attribs}{
 A character vector of one or more attribute names.

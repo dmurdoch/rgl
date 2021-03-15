@@ -88,7 +88,7 @@ in homogeneous coordinates.
 and produce a new object of the same class.
 }
 \author{ Duncan Murdoch }
-\seealso{\code{\link{par3d}} for a description of how rgl uses matrices in
+\seealso{\code{\link{par3d}} for a description of how RGL uses matrices in
 rendering.}
 
 \examples{

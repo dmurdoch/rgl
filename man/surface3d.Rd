@@ -1,5 +1,5 @@
 \name{surface3d}
-\title{add height-field surface shape}
+\title{Add surface}
 \alias{surface3d}
 \alias{terrain3d}
 \description{

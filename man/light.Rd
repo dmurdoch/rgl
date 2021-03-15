@@ -1,7 +1,7 @@
 \name{light}
 \alias{rgl.light}
 \alias{light3d}
-\title{add light source}
+\title{Add light source}
 \description{
   add a light source to the scene.
 }

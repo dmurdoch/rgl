@@ -4,20 +4,20 @@
 \alias{hook_rglchunk}
 \alias{setupKnitr}
 \title{
-Displaying \pkg{rgl} scenes in \pkg{knitr} documents.
+Displaying RGL scenes in \pkg{knitr} documents
 }
 \description{
-These functions allow \pkg{rgl} graphics to be embedded in \pkg{knitr}
+These functions allow RGL graphics to be embedded in \pkg{knitr}
 documents.
 
 The simplest method is to run \code{setupKnitr(autoprint = TRUE)}
-early in the document.  That way \pkg{rgl} commands act a lot
+early in the document.  That way RGL commands act a lot
 like base graphics commands:  plots will be automatically inserted
 where appropriate, according to the \code{fig.keep} chunk option.
 By default (\code{fig.keep = "high"}), only high-level plots
 are kept, after low-level changes have been merged into them.
 See the \pkg{knitr} documentation 
-\url{https://yihui.org/knitr/options/#plots} for more details.  To suppress auto-printing, the \pkg{rgl} calls
+\url{https://yihui.org/knitr/options/#plots} for more details.  To suppress auto-printing, the RGL calls
 can be wrapped in \code{\link{invisible}()}.  
 Similarly to \pkg{grid} graphics (used by \pkg{lattice}
 and \pkg{ggplot2}), automatic inclusion requires the object
@@ -31,13 +31,13 @@ Other functions allow embedding either as bitmaps (\code{hook_rgl} with format \
 fixed vector graphics (\code{hook_rgl} with format \code{"eps"}, \code{"pdf"} or
 \code{"postscript"}), or interactive WebGL graphics (\code{hook_webgl}).  \code{hook_rglchunk} is not normally invoked by the 
 user; it is the hook that supports automatic creation and 
-deletion of rgl scenes.
+deletion of RGL scenes.
 }
 
 \note{The \code{setupKnitr(autoprint = TRUE)} method assumes
-\emph{all} printing of \pkg{rgl} objects happens through 
+\emph{all} printing of RGL objects happens through 
 auto-printing of objects produced by the \code{\link{lowlevel}}
-or \code{\link{highlevel}} functions.  All \pkg{rgl} functions that
+or \code{\link{highlevel}} functions.  All RGL functions that
 produce graphics do this, but functions in other packages that
 call them may not return values appropriately.
 
@@ -50,7 +50,7 @@ Mixing explicit calls
 to \code{\link{rglwidget}} with auto-printing is likely to lead to failure of some
 scenes to display.  To avoid this, set \code{options(rgl.printRglwidget = FALSE)} before using such explicit calls.  Similarly,
 use that option before calling the \code{\link{example}} function
-in a code chunk if the example prints \pkg{rgl} objects.
+in a code chunk if the example prints RGL objects.
 }
 
 \usage{
@@ -62,7 +62,7 @@ hook_webgl(before, options, envir)
 hook_rglchunk(before, options, envir)
 }
 \arguments{
-  \item{autoprint}{If true, \code{rgl} commands
+  \item{autoprint}{If true, RGL commands
   automatically plot (with low level plots suppressed by
   the default value of the \code{fig.keep} chunk option.)}
   \item{rgl.newwindow, rgl.closewindows}{Default values

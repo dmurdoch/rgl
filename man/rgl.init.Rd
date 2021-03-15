@@ -1,8 +1,8 @@
 \name{rgl.init}
-\title{Initializing rgl}
+\title{Initializing RGL}
 \alias{rgl.init}
 \description{
-Initializing the \pkg{rgl} system.
+Initializing the RGL system.
 }
 \usage{
 rgl.init(initValue = 0, onlyNULL = FALSE, 
@@ -20,7 +20,7 @@ is called when the package is loaded.  It returns no
 useful value.
 }
 \details{
-  If \code{useNULL} is \code{TRUE}, \pkg{rgl} will use a \dQuote{null}
+  If \code{useNULL} is \code{TRUE}, RGL will use a \dQuote{null}
   device.  This device records objects as they are plotted, but 
   displays nothing. It is intended for use with \code{\link{rglwidget}}
   and similar functions.
@@ -29,13 +29,13 @@ useful value.
   library during initialization.  In future \code{debug = TRUE} may
   become more verbose.
 
-For display within an OpenGL window in R, \pkg{rgl} requires the OpenGL
+For display within an OpenGL window in R, RGL requires the OpenGL
 system to be installed and available.  If there is a problem 
 initializing it, you may see the message
 \verb{'rgl.init' failed, running with 'rgl.useNULL = TRUE'.}  There
 are several causes and remedies:
 \itemize{
-\item{On any system, the OpenGL libraries need to be present for \pkg{rgl} to be able to start an OpenGL device.}
+\item{On any system, the OpenGL libraries need to be present for RGL to be able to start an OpenGL device.}
 \itemize{
 \item{On macOS, you need to install XQuartz.  It is available from
 \url{https://www.xquartz.org}.}
@@ -50,7 +50,7 @@ may work, depending on your system:
 }
 \item{Windows should have OpenGL installed by default.}
 }
-\item{On Unix-alike systems (macOS and Linux, for example), \pkg{rgl}
+\item{On Unix-alike systems (macOS and Linux, for example), RGL
 normally
 uses the GLX system for creating displays.  If the graphic is created
 on a remote machine, it may need to use \dQuote{Indirect GLX} (IGLX).  Due
@@ -62,9 +62,10 @@ for ways to re-enable IGLX.}
 \item{The \url{https://www.virtualgl.org} project is intended to 
 be a way to avoid IGLX, by rendering remotely and sending bitmaps
 to the local machine.  It's not a simple install...}
-\item{If you don't need to see \pkg{rgl} displays on screen, you
+\item{If you don't need to see RGL displays on screen, you
 can use the \dQuote{NULL device}.  See \code{\link{rgl.useNULL}}.}
-\item{If you can't build \pkg{rgl} with OpenGL support, you can
+\item{If you can't build the \pkg{rgl} package with OpenGL
+support, you can
 disable it and use the NULL device.  (This may happen automatically
 during configuration, but you'll get a tested result if you
 specify it explicitly.)  See the instructions in the

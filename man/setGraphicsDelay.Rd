@@ -7,7 +7,7 @@ Set a one-time slowdown on opening standard graphics
 \description{
 This function is mainly for internal use, to work around  
 a bug in macOS Catalina:  if base plotting happens
-too quickly after opening rgl and the first call to quartz, R crashes.
+too quickly after opening RGL and the first call to quartz, R crashes.
 
 This inserts a delay after the first call to open the 
 graphics device.  The default is
@@ -20,7 +20,7 @@ a different default delay.
 It works by changing the value of \code{\link{options}("device")},
 so explicit calls to the device will not be affected.
 
-It is called automatically when \pkg{rgl} is loaded.  
+It is called automatically when the \pkg{rgl} package is loaded.  
 }
 \usage{
 setGraphicsDelay(delay = Sys.getenv("RGL_SLOW_DEV", 0), 

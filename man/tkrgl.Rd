@@ -1,17 +1,18 @@
 \name{tkrgl}
 \alias{tkrgl}
 \title{
-tkrgl functions
+The former tkrgl package
 }
 \description{
 Functions from the former \pkg{tkrgl} package.
 }
 \details{
 The \pkg{tkrgl} package contained functions to use TCL/TK to control
-an \pkg{rgl} scene on screen.  These functions have now been merged
-into \pkg{rgl}, with a goal of dropping the \pkg{tkrgl} package.
+an RGL scene on screen.  These functions have now been merged
+into the \pkg{rgl} package, and the \pkg{tkrgl} package has
+been archived.
 
-To avoid conflicts with \pkg{rgl} names and to indicate the TCL/TK 
+To avoid conflicts with RGL names and to indicate the TCL/TK 
 nature of these functions, they have all been prefixed with \code{tk}:
 
 \describe{

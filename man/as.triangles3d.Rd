@@ -2,7 +2,7 @@
 \alias{as.triangles3d}
 \alias{as.triangles3d.rglId}
 \title{
-Convert an object to triangles.
+Convert an object to triangles
 }
 \description{
 This generic and its methods extract or creates a matrix of coordinates
@@ -19,7 +19,7 @@ as.triangles3d(obj, ...)
   \item{obj}{
 The object to convert.
 }
-  \item{attribute}{Which attribute of an rgl object to extract?}
+  \item{attribute}{Which attribute of an RGL object to extract?}
   \item{subscene}{Which subscene is this object in?}
   \item{\dots}{
 Additional arguments used by the methods.

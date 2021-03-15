@@ -6,7 +6,7 @@
 \alias{filledContour3d.rglId}
 \alias{filledContour3d.mesh3d}
 \title{
-Draw contours on a surface.
+Draw contours on a surface
 }
 \description{
 \code{contourLines3d} draws contour lines on a surface;

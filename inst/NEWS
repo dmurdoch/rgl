@@ -1089,7 +1089,7 @@ base graphics.
     Javascript library in source.
   - WebGL code now supports fog in scenes.  The default
     r3dDefaults now sets material$fog to TRUE, and bg$fog to
-    "none".  (In rgl, fog must be set *both* in the background
+    "none".  (In RGL, fog must be set *both* in the background
     and in the object to display.)
     The formula used in WebGL is slightly different than in the 
     internal R display.) 
@@ -1223,3 +1223,11 @@ base graphics.
     from displaying properly.
   - In rglwidget(), background images could cause other parts of
     the display to disappear.
+
+0.106.0
+  - Changes for pkgdown compatibility have been added.  See
+    the "Using rgl in pkgdown web sites".
+  - The help pages have been edited to continue the 
+    de-emphasization of rgl.* functions.
+  - Changes have been made for compatibility with the 
+    experimental Windows-UTF8 build of R.

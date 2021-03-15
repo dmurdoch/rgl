@@ -1,7 +1,7 @@
 \name{rglMouse}
 \alias{rglMouse}
 \title{
-Generate HTML code to select mouse mode.
+Generate HTML code to select mouse mode
 }
 \description{
 This generates an HTML \code{select} element to 
@@ -37,7 +37,7 @@ How to label each mouse mode.
 Which mouse button is being controlled.
 }
   \item{dev}{
-The rgl device used for defaults.
+The RGL device used for defaults.
 }
   \item{subscene}{
 Which subscene is being modified.

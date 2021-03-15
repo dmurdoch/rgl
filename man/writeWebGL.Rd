@@ -1,7 +1,7 @@
 \name{writeWebGL}
 \alias{writeWebGL}
 \title{
-Write scene to HTML.
+Write scene to HTML (obsolete)
 }
 \description{
 Obsolete function to write the current scene to a collection of files that contain WebGL code to reproduce

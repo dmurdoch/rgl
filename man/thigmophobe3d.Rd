@@ -1,7 +1,7 @@
 \name{thigmophobe3d}
 \alias{thigmophobe3d}
 \title{
-Find the direction away from the closest point in a 3d projection.
+Find the direction away from the closest point in a 3d projection
 }
 \description{
 Jim Lemon's \code{\link[plotrix]{thigmophobe}} function in the 

@@ -1,7 +1,7 @@
 \name{triangulate}
 \alias{triangulate}
 \title{
-Triangulate a two-dimensional polygon.
+Triangulate a two-dimensional polygon
 }
 \description{
 This algorithm decomposes a general polygon into simple

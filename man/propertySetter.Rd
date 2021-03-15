@@ -5,7 +5,7 @@
 \alias{matrixSetter}
 \alias{vertexSetter}
 \title{
-Obsolete function to write HTML/Javascript code to control a WebGL display.
+Obsolete functions to write HTML/Javascript code to control a WebGL display
 }
 \description{ These functions write 
 out HTML code to control WebGL displays based

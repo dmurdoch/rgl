@@ -1,11 +1,11 @@
 \name{elementId2Prefix}
 \alias{elementId2Prefix}
 \title{
-Use widget with old-style controls.
+Use widget with old-style controls
 }
 \description{
 The \code{\link{rglwidget}} control is designed to work in the
-\pkg{htmlwidgets} framework.  Older \pkg{rgl} web pages that
+\pkg{htmlwidgets} framework.  Older RGL web pages that
 used \code{\link{writeWebGL}} or \pkg{knitr} used a different
 method of linking the controls to the scene.  This is a partial
 bridge between the two systems.  You should adopt the new system, not use this function.

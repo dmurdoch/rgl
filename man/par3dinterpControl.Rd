@@ -1,7 +1,7 @@
 \name{par3dinterpControl}
 \alias{par3dinterpControl}
 \title{
-Control rgl widget like par3dinterp().
+Control RGL widget like par3dinterp()
 }
 \description{
 This control works with \code{\link{playwidget}} to 

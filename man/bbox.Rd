@@ -1,7 +1,7 @@
 \name{rgl.bbox}
 \alias{rgl.bbox}
 \alias{bbox3d}
-\title{Set up Bounding Box decoration}
+\title{Set up bounding box decoration}
 \description{
   Set up the bounding box decoration.
 }

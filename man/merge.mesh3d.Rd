@@ -1,7 +1,7 @@
 \name{merge.mesh3d}
 \alias{merge.mesh3d}
 \title{
-Merge \code{"mesh3d"} objects.
+Merge RGL mesh objects
 }
 \description{
 Attempts to merge \code{"mesh3d"} objects.  Objects need

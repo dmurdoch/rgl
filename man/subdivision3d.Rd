@@ -4,7 +4,7 @@
 \alias{divide.mesh3d}
 \alias{normalize.mesh3d}
 \alias{deform.mesh3d}
-\title{generic subdivision surface method}
+\title{Subdivide a mesh}
 \description{
 The subdivision surface algorithm divides and refines (deforms) a
 given mesh recursively to certain degree (depth).

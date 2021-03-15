@@ -1,7 +1,7 @@
 \name{snapshot3d}
 \alias{rgl.snapshot}
 \alias{snapshot3d}
-\title{export screenshot}
+\title{Export screenshot}
 \description{
   Saves the screenshot to a file.
 }
@@ -27,7 +27,7 @@ Ignored if \code{webshot = TRUE}.}
 }
 \details{
 \code{rgl.snapshot()} is a low-level function
-that copies the current \pkg{rgl} window from the screen.  Users
+that copies the current RGL window from the screen.  Users
 should use \code{snapshot3d()} instead; it is more flexible,
 and (if \pkg{webshot2} is installed) can take images even if
 no window is showing, and they can be larger than the physical
@@ -51,7 +51,7 @@ install it, use \code{remotes::install_github("rstudio/webshot2")}
 \code{rgl.snapshot} works by taking an image from the displayed
 window on-screen.
 On some systems, the snapshot
-will include content from other windows if they cover the active rgl
+will include content from other windows if they cover the active RGL
 window.  Setting \code{top = TRUE} (the default) will use 
 \code{\link{rgl.bringtotop}} before the snapshot
 to avoid this.  

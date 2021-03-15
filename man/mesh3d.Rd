@@ -20,7 +20,7 @@
 \alias{dodecahedron3d}
 \alias{cuboctahedron3d}
 
-\title{3D Mesh objects}
+\title{3D mesh objects}
 \description{
   3D triangle and quadrangle mesh object creation and a collection of sample objects.
 }

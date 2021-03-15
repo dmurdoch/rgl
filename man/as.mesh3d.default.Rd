@@ -14,7 +14,7 @@ object as output.  It will contain either triangles or quads
 according to the \code{triangles} argument.
 
 If the generic is called without any argument, it will pass
-all rgl ids from the current scene to the 
+all RGL ids from the current scene to the 
 \code{\link{as.mesh3d.rglId}} method.
 }
 \usage{
@@ -60,7 +60,7 @@ Material properties to pass to \code{\link{tmesh3d}} or \code{\link{qmesh3d}}.
 }
 \details{
 The motivation for this function is the following problem:  I was
-asked whether rgl could render a surface made up of triangles or 
+asked whether RGL could render a surface made up of triangles or 
 quadrilaterals to look smooth.  It can do that, but needs normals at 
 each vertex; they should be the average of the normals for each polygon 
 sharing that vertex.  Then OpenGL will interpolate the normals across 

@@ -1,5 +1,5 @@
 ---
-title: "Using rgl in pkgdown web sites"
+title: "Using RGL in pkgdown web sites"
 author: "Duncan Murdoch"
 output:
   rmarkdown::html_vignette:
@@ -13,7 +13,7 @@ output:
   html_document:
     default
 vignette: >
-  %\VignetteIndexEntry{Using rgl in pkgdown web sites}
+  %\VignetteIndexEntry{Using RGL in pkgdown web sites}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 

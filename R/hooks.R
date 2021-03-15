@@ -1,4 +1,4 @@
-# This file supports auto-printing of rgl scenes in
+# This file supports auto-printing of RGL scenes in
 # RStudio
 
 # Called just after a low level function has been
