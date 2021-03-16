@@ -46,7 +46,6 @@ pkgdown_print.rglOpen3d <- fns[["pkgdown_print.rglOpen3d"]]
 rm(fns)
 
 pkgdown_dims <- function() {
-	browser()
 	settings <- pkgdown_fig_settings()
 	rgl <- settings$other.parameters$rgl
 	

@@ -117,7 +117,7 @@ figures:
 
 By default RGL uses these parameters as well, but allows you 
 to override any of `fig.width`, `fig.height` and `fig.asp` by
-specifying an `rgl` entry in `other.parameters`, e.g.
+specifying an `rgl` entry in `other.parameters`.  For example:
 ```
 figures:
   fig.width: 5
