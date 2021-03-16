@@ -125,9 +125,9 @@
 
   if (requireNamespace("pkgdown", quietly = TRUE)) {
     if ("pkgdown_print" %in% getNamespaceExports("pkgdown"))
-      pkgdown_print <- getExportedValue("pkgdown", "pkgdown_print")
+      pkgdown_print <<- getExportedValue("pkgdown", "pkgdown_print")
     if ("fig_settings" %in% getNamespaceExports("pkgdown"))
-      pkgdown_fig_settings <- getExportedValue("pkgdown", "fig_settings")
+      pkgdown_fig_settings <<- getExportedValue("pkgdown", "fig_settings")
   }         
 }
 

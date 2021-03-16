@@ -8,7 +8,9 @@ authors:
     href: http://neoscientists.org/~plex/
 figures:
   fig.width: 5
-  fig.asp: 1
+  other.parameters:
+    rgl:
+      fig.asp: 1
 reference:
 - title: High level functions
   desc:  Generic functions for plotting points or surfaces.  
