@@ -45,6 +45,28 @@ pkgdown_print.rglId <-     fns[["pkgdown_print.rglId"]]
 pkgdown_print.rglOpen3d <- fns[["pkgdown_print.rglOpen3d"]]
 rm(fns)
 
+pkgdown_dims <- function() {
+	browser()
+	settings <- pkgdown_fig_settings()
+	rgl <- settings$other.parameters$rgl
+	
+	settings[names(rgl)] <- rgl
+
+	numparms <- length(intersect(names(rgl), c("fig.width", "fig.height", "fig.asp")))
+	if (numparms > 0 && numparms < 3) {
+		settings <- within(settings, {
+	    if (is.null(rgl$fig.height))
+		    fig.height <- fig.width * fig.asp
+	    if (is.null(rgl$fig.width))
+	    	fig.width <- fig.height / fig.asp
+		})
+	}
+	
+	width <- with(settings, dpi*fig.width)
+	height <- with(settings, dpi*fig.height)
+	list(width = width, height = height)
+}
+
 replay_html.rglRecordedplot <- local({
 	rdname <- ""
 	function(x, ...) {
@@ -52,10 +74,9 @@ replay_html.rglRecordedplot <- local({
 			environment(rglwidget)$reuseDF <- NULL
 			rdname <<- pkgdown_rdname()
 		}
-		settings <- pkgdown_fig_settings()
-		width <- with(settings, dpi*fig.width)
-		height <- with(settings, dpi*fig.height)
-		rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = TRUE, width = width, height = height))
+		settings <- pkgdown_dims()
+		rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = TRUE, 
+																								width = settings$width, height = settings$height))
 		structure(rendered$html, dependencies = rendered$dependencies)
 	}
 })
