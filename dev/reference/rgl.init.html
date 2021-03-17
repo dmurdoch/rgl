@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Initializing rgl — rgl.init • rgl</title>
+<title>Initializing RGL — rgl.init • rgl</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Initializing rgl — rgl.init" />
-<meta property="og:description" content="Initializing the rgl system." />
+<meta property="og:title" content="Initializing RGL — rgl.init" />
+<meta property="og:description" content="Initializing the RGL system." />
 
 
 <meta name="robots" content="noindex">
@@ -104,7 +104,7 @@
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -132,13 +132,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Initializing rgl</h1>
+    <h1>Initializing RGL</h1>
     
     <div class="hidden name"><code>rgl.init.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Initializing the <span class="pkg">rgl</span> system.</p>
+    <p>Initializing the RGL system.</p>
     </div>
 
     <pre class="usage"><span class='fu'>rgl.init</span><span class='op'>(</span>initValue <span class='op'>=</span> <span class='fl'>0</span>, onlyNULL <span class='op'>=</span> <span class='cn'>FALSE</span>, 
@@ -168,19 +168,19 @@ is called when the package is loaded.  It returns no
 useful value.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If <code>useNULL</code> is <code>TRUE</code>, <span class="pkg">rgl</span> will use a &#8220;null&#8221;
+    <p>If <code>useNULL</code> is <code>TRUE</code>, RGL will use a &#8220;null&#8221;
   device.  This device records objects as they are plotted, but 
   displays nothing. It is intended for use with <code><a href='rglwidget.html'>rglwidget</a></code>
   and similar functions.</p>  
 <p>Currently <code>debug</code> only controls messages printed by the OpenGL
   library during initialization.  In future <code>debug = TRUE</code> may
   become more verbose.</p>
-<p>For display within an OpenGL window in R, <span class="pkg">rgl</span> requires the OpenGL
+<p>For display within an OpenGL window in R, RGL requires the OpenGL
 system to be installed and available.  If there is a problem 
 initializing it, you may see the message
 <code>'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</code>  There
 are several causes and remedies:</p><ul>
-<li><p>On any system, the OpenGL libraries need to be present for <span class="pkg">rgl</span> to be able to start an OpenGL device.</p><ul>
+<li><p>On any system, the OpenGL libraries need to be present for RGL to be able to start an OpenGL device.</p><ul>
 <li><p>On macOS, you need to install XQuartz.  It is available from
 <a href='https://www.xquartz.org'>https://www.xquartz.org</a>.</p></li>
 <li><p>On Linux, you need to install Mesa 3D.  One of these commands
@@ -193,7 +193,7 @@ may work, depending on your system:
   </code></p></li>
 <li><p>Windows should have OpenGL installed by default.</p></li>
 </ul></li>
-<li><p>On Unix-alike systems (macOS and Linux, for example), <span class="pkg">rgl</span>
+<li><p>On Unix-alike systems (macOS and Linux, for example), RGL
 normally
 uses the GLX system for creating displays.  If the graphic is created
 on a remote machine, it may need to use &#8220;Indirect GLX&#8221; (IGLX).  Due
@@ -205,9 +205,10 @@ for ways to re-enable IGLX.</p></li>
 <li><p>The <a href='https://www.virtualgl.org'>https://www.virtualgl.org</a> project is intended to 
 be a way to avoid IGLX, by rendering remotely and sending bitmaps
 to the local machine.  It's not a simple install...</p></li>
-<li><p>If you don't need to see <span class="pkg">rgl</span> displays on screen, you
+<li><p>If you don't need to see RGL displays on screen, you
 can use the &#8220;NULL device&#8221;.  See <code><a href='rgl.useNULL.html'>rgl.useNULL</a></code>.</p></li>
-<li><p>If you can't build <span class="pkg">rgl</span> with OpenGL support, you can
+<li><p>If you can't build the <span class="pkg">rgl</span> package with OpenGL
+support, you can
 disable it and use the NULL device.  (This may happen automatically
 during configuration, but you'll get a tested result if you
 specify it explicitly.)  See the instructions in the

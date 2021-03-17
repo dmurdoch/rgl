@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Integrating rgl with Sweave — rgl.Sweave • rgl</title>
+<title>Integrating RGL with Sweave — rgl.Sweave • rgl</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Integrating rgl with Sweave — rgl.Sweave" />
-<meta property="og:description" content="As of R 2.13.0, it is possible to include rgl graphics into
+<meta property="og:title" content="Integrating RGL with Sweave — rgl.Sweave" />
+<meta property="og:description" content="As of R 2.13.0, it is possible to include RGL graphics into
 a Sweave document.  These functions support that
 integration." />
 
@@ -106,7 +106,7 @@ integration." />
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -134,13 +134,13 @@ integration." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Integrating <code>rgl</code> with <code>Sweave</code></h1>
+    <h1>Integrating RGL with Sweave</h1>
     
     <div class="hidden name"><code>rgl.Sweave.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>As of <span style="R">R</span> 2.13.0, it is possible to include <code>rgl</code> graphics into
+    <p>As of <span style="R">R</span> 2.13.0, it is possible to include RGL graphics into
 a <a href='https://rdrr.io/r/utils/Sweave.html'>Sweave</a> document.  These functions support that
 integration.</p>
     </div>
@@ -166,7 +166,7 @@ specifies it as the graphics driver when opening the code chunk, e.g. by
 using</p>
 <pre>&lt;&lt;fig = TRUE, pdf = FALSE, grdevice = rgl.Sweave, resolution = 100&gt;&gt;=</pre>
 
-<p>When the <code>rgl</code> device is closed at the end of the code chunk,
+<p>When the RGL device is closed at the end of the code chunk,
 <code>rgl.Sweave.off()</code> will be called automatically.  It
 will save a snapshot
 of the last image (by default in <code class="file">.png</code> format) for inclusion in the 
@@ -175,7 +175,7 @@ Alternatively, the <code>Sweave.snapshot()</code> function
 can be called to save the image before the end of the chunk.  Only one
 snapshot will be taken per chunk.</p>
 <p>Several chunk options are used by the <code>rgl.Sweave</code> device:</p><dl>
-<dt>stayopen</dt><dd><p>(default <code>FALSE</code>).  If <code>TRUE</code> then the <code>rgl</code>
+<dt>stayopen</dt><dd><p>(default <code>FALSE</code>).  If <code>TRUE</code> then the RGL
 device will <em>not</em> be closed at the end of the chunk,
 instead a call to <code>Sweave.snapshot()</code>
 will be used if it has not been called explicitly.  Subsequent chunks can add
@@ -196,14 +196,14 @@ falsely report that the window is too large to open.</p></dd>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>We recommend turning off all other graphics drivers in a chunk that uses
-<code>grdevice = rgl.Sweave</code>.  The <code>rgl</code> functions do not write to
+<code>grdevice = rgl.Sweave</code>.  The RGL functions do not write to
 a standard graphics device.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The <code>rgl</code> package relies on your graphics hardware to render OpenGL scenes,
+    <p>The <span class="pkg">rgl</span> package relies on your graphics hardware to render OpenGL scenes,
 and the default <code class="file">.png</code> output copies a bitmap from the hardware device.  All 
 such devices have limitations on the size of the bitmap, but they do not 
-always signal these limitations in a way that <code>rgl</code> will detect.  If you find
+always signal these limitations in a way that RGL will detect.  If you find
 that images are not being produced properly, try reducing the size using 
 the <code>resolution</code>, <code>width</code> or <code>height</code> chunk options.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -217,7 +217,8 @@ the <code>resolution</code>, <code>width</code> or <code>height</code> chunk opt
     <div class='dont-index'><p><code><a href='https://rdrr.io/r/utils/RweaveLatex.html'>RweaveLatex</a></code> for a description of alternate graphics drivers
 in Sweave, and standard options that can be used in code chunks.</p>
 <p><code><a href='setupKnitr.html'>hook_rgl</a></code>
-and <code><a href='setupKnitr.html'>hook_webgl</a></code> allow fixed or interactive <span class="pkg">rgl</span> scenes to be embedded in <span class="pkg">knitr</span> 
+and <code><a href='setupKnitr.html'>hook_webgl</a></code> allow fixed or interactive RGL
+scenes to be embedded in <span class="pkg">knitr</span> 
 documents.</p></div>
 
   </div>

@@ -106,7 +106,7 @@
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -156,23 +156,23 @@
   automatically.
   Opened devices automatically get the current device focus. The focus may be
   changed by using <code><a href='open3d.html'>set3d</a>()</code> or <code><a href='subscene3d.html'>useSubscene3d</a>()</code>.</p>  
-<p><span class="pkg">rgl</span> provides medium to high level functions for 3D interactive graphics, including
+<p>RGL provides medium to high level functions for 3D interactive graphics, including
   functions modelled on base graphics (<code><a href='plot3d.html'>plot3d</a>()</code>, etc.) as well as functions for 
   constructing geometric objects (<code><a href='mesh3d.html'>cube3d</a>()</code>, etc.).  Output
   may be on screen using OpenGL, or to various standard 3D file formats including 
   WebGL, PLY, OBJ, STL as well as 2D image formats, including PNG, Postscript, SVG, PGF.</p>  
 <p>The <code><a href='open3d.html'>open3d</a>()</code> function attempts to open a new RGL window,
   using default settings specified by the user.</p>  
-<p><span class="pkg">rgl</span> also includes a lower level interface which is described
-  in the <a href='rgl.open.html'>rgl.open</a> help topic.  We recommend that you avoid mixing
-  <code>rgl.*</code> and <code>*3d</code> calls.</p>
+<p>RGL also includes a lower level interface which is described
+in the <a href='rgl.open.html'>rgl.open</a> help topic.  We recommend that you avoid mixing
+<code>rgl.*</code> and <code>*3d</code> calls.</p>
 <p>See the first example below to display the ChangeLog.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='r3d.html'>r3d</a> for a description of the <code>*3d</code> interface;
 <code><a href='par3d.html'>par3d</a></code> for a description of scene properties and the rendering
 pipeline; <code><a href='rgl.useNULL.html'>rgl.useNULL</a></code> for a description of how to 
-use <span class="pkg">rgl</span> on a system with no graphics support.</p></div>
+use RGL on a system with no graphics support.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
@@ -200,14 +200,14 @@ use <span class="pkg">rgl</span> on a system with no graphics support.</p></div>
 #&gt; srfc3d&gt; col &lt;- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point
 #&gt; 
 #&gt; srfc3d&gt; open3d()
-#&gt; glX 
-#&gt; 103 
+#&gt; null 
+#&gt;  108 
 #&gt; 
 #&gt; srfc3d&gt; surface3d(x, y, z, color = col, back = "lines")</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='va'>plot3d</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; plot3d&gt;   open3d()
-#&gt; glX 
-#&gt; 104 
+#&gt; null 
+#&gt;  109 
 #&gt; 
 #&gt; plot3d&gt;   x &lt;- sort(rnorm(1000))
 #&gt; 

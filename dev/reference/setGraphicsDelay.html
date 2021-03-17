@@ -42,7 +42,7 @@
 <meta property="og:title" content="Set a one-time slowdown on opening standard graphics — setGraphicsDelay" />
 <meta property="og:description" content="This function is mainly for internal use, to work around  
 a bug in macOS Catalina:  if base plotting happens
-too quickly after opening rgl and the first call to quartz, R crashes.
+too quickly after opening RGL and the first call to quartz, R crashes.
 This inserts a delay after the first call to open the 
 graphics device.  The default is
 no delay, unless on Catalina with no graphics device
@@ -52,7 +52,7 @@ Use environment variable &quot;RGL_SLOW_DEV = value&quot; to set
 a different default delay.
 It works by changing the value of options(&quot;device&quot;),
 so explicit calls to the device will not be affected.
-It is called automatically when rgl is loaded." />
+It is called automatically when the rgl package is loaded." />
 
 
 <meta name="robots" content="noindex">
@@ -116,7 +116,7 @@ It is called automatically when rgl is loaded." />
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -152,7 +152,7 @@ It is called automatically when rgl is loaded." />
     <div class="ref-description">
     <p>This function is mainly for internal use, to work around  
 a bug in macOS Catalina:  if base plotting happens
-too quickly after opening rgl and the first call to quartz, R crashes.</p>
+too quickly after opening RGL and the first call to quartz, R crashes.</p>
 <p>This inserts a delay after the first call to open the 
 graphics device.  The default is
 no delay, unless on Catalina with no graphics device
@@ -162,7 +162,7 @@ Use environment variable "RGL_SLOW_DEV = value" to set
 a different default delay.</p>
 <p>It works by changing the value of <code><a href='https://rdrr.io/r/base/options.html'>options</a>("device")</code>,
 so explicit calls to the device will not be affected.</p>
-<p>It is called automatically when <span class="pkg">rgl</span> is loaded.</p>
+<p>It is called automatically when the <span class="pkg">rgl</span> package is loaded.</p>
     </div>
 
     <pre class="usage"><span class='fu'>setGraphicsDelay</span><span class='op'>(</span>delay <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span><span class='op'>(</span><span class='st'>"RGL_SLOW_DEV"</span>, <span class='fl'>0</span><span class='op'>)</span>, 

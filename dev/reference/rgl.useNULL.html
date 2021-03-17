@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Report default use of null device. — rgl.useNULL • rgl</title>
+<title>Report default use of null device — rgl.useNULL • rgl</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Report default use of null device. — rgl.useNULL" />
+<meta property="og:title" content="Report default use of null device — rgl.useNULL" />
 <meta property="og:description" content="This function checks the &quot;rgl.useNULL&quot; option if present, or the
 RGL_USE_NULL environment variable if it is not.  If the value is
 TRUE or a string which matches &amp;#8220;yes&amp;#8221; or &amp;#8220;true&amp;#8221;
@@ -109,7 +109,7 @@ in a case-insensitive test, TRUE is returned." />
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -137,7 +137,7 @@ in a case-insensitive test, TRUE is returned." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Report default use of null device.</h1>
+    <h1>Report default use of null device</h1>
     
     <div class="hidden name"><code>rgl.useNULL.Rd</code></div>
     </div>
@@ -154,8 +154,8 @@ in a case-insensitive test, <code>TRUE</code> is returned.</p>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>This function is checked by the initialization code when <span class="pkg">rgl</span>
-is loaded.  Thus if you want to run <span class="pkg">rgl</span> on a system where there is no
+    <p>This function is checked by the initialization code when the <span class="pkg">rgl</span> package
+is loaded.  Thus if you want to run RGL on a system where there is no
 graphics support, you should run <code><a href='https://rdrr.io/r/base/options.html'>options(rgl.useNULL = TRUE)</a></code>
 or set the environment variable <code>RGL_USE_NULL=TRUE</code> *before*
 calling <code><a href='https://github.com/dmurdoch/rgl'>library(rgl)</a></code> (or other code that 
@@ -173,7 +173,7 @@ device.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>rgl.useNULL</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div></pre>
+</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

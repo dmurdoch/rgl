@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>rgl id values — rglIds • rgl</title>
+<title>RGL id values — rglIds • rgl</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="rgl id values — rglIds" />
-<meta property="og:description" content="All objects in an rgl scene have a
+<meta property="og:title" content="RGL id values — rglIds" />
+<meta property="og:description" content="All objects in an RGL scene have a
 numerical id.  These ids are normally stored
 in vectors of class c(&quot;rglIds&quot;, &quot;numeric&quot;), which
 will also have class &quot;rglHighlevel&quot;
@@ -114,7 +114,7 @@ plot3d or persp3d, or a low level function created the objects.
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -142,13 +142,13 @@ plot3d or persp3d, or a low level function created the objects.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>rgl id values</h1>
+    <h1>RGL id values</h1>
     
     <div class="hidden name"><code>rglIds.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>All objects in an <span class="pkg">rgl</span> scene have a
+    <p>All objects in an RGL scene have a
 numerical id.  These ids are normally stored
 in vectors of class <code><a href='https://rdrr.io/r/base/c.html'>c("rglIds", "numeric")</a></code>, which
 will also have class <code>"rglHighlevel"</code>
@@ -180,7 +180,7 @@ whether a high level function like
     </tr>
     <tr>
       <th>rglwidget</th>
-      <td><p>Whether to create and print an rgl widget.
+      <td><p>Whether to create and print an RGL widget.
 If false, nothing is printed.</p></td>
     </tr>
     <tr>
@@ -193,7 +193,7 @@ If false, nothing is printed.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>These functions and classes are intended to allow
-<span class="pkg">rgl</span> scenes to be automatically 
+RGL scenes to be automatically 
 displayed in R Markdown documents.  See <code><a href='setupKnitr.html'>setupKnitr</a></code> for details on enabling auto-printing.</p>
 <p>Note that <em>all</em> objects in the current
 scene will be printed by default, not just
@@ -215,10 +215,10 @@ respectively.</p>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>30</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>3</span>, dimnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span>, <span class='st'>"z"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  'rglHighlevel' Named num [1:5] 1678 1679 1680 1681 1682
+</div><div class='output co'>#&gt;  'rglHighlevel' Named num [1:5] 1616 1617 1618 1619 1620
 #&gt;  - attr(*, "names")= chr [1:5] "data" "axes" "xlab" "ylab" ...</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>p</span>, rglwidget <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in eval(substitute(expr), data, enclos = parent.frame()): object 'fig.retina' not found</span></div></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

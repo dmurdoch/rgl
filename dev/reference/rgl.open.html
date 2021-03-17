@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>3D visualization device system — rgl.open • rgl</title>
+<title>Low level window interface — rgl.open • rgl</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="3D visualization device system — rgl.open" />
+<meta property="og:title" content="Low level window interface — rgl.open" />
 <meta property="og:description" content="3D real-time rendering system." />
 
 
@@ -104,7 +104,7 @@
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -132,7 +132,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>3D visualization device system</h1>
+    <h1>Low level window interface</h1>
     
     <div class="hidden name"><code>rgl.open.Rd</code></div>
     </div>
@@ -141,13 +141,12 @@
     <p>3D real-time rendering system.</p>
     </div>
 
-    <pre class="usage"><span class='co'># Low level rgl.* interface</span>
-<span class='fu'>rgl.open</span><span class='op'>(</span>useNULL <span class='op'>=</span> <span class='fu'><a href='rgl.useNULL.html'>rgl.useNULL</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>     <span class='co'># open new device</span>
+    <pre class="usage"><span class='fu'>rgl.open</span><span class='op'>(</span>useNULL <span class='op'>=</span> <span class='fu'><a href='rgl.useNULL.html'>rgl.useNULL</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>     <span class='co'># open new device</span>
 <span class='fu'>rgl.close</span><span class='op'>(</span><span class='op'>)</span>    <span class='co'># close current device</span>
 <span class='fu'>rgl.cur</span><span class='op'>(</span><span class='op'>)</span>      <span class='co'># returns active device ID</span>
 <span class='fu'>rgl.dev.list</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># returns all device IDs</span>
 <span class='fu'>rgl.set</span><span class='op'>(</span><span class='va'>which</span>, silent <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># set device as active</span>
-<span class='fu'>rgl.quit</span><span class='op'>(</span><span class='op'>)</span>     <span class='co'># shutdown rgl device system</span></pre>
+<span class='fu'>rgl.quit</span><span class='op'>(</span><span class='op'>)</span>     <span class='co'># shutdown RGL device system</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,19 +167,19 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The <span class="pkg">rgl</span> device design is oriented towards the R device metaphor. If you send
+    <p>The RGL device design is oriented towards the R device metaphor. If you send
   scene management instructions, and there's no device open, it will be opened
   automatically.
   Opened devices automatically get the current device focus. The focus may be
   changed by using <code>rgl.set()</code>.
-  <code>rgl.quit()</code> shuts down the rgl subsystem and all open devices, 
+  <code>rgl.quit()</code> shuts down the RGL subsystem and all open devices, 
   detaches the package including the shared library and additional system libraries.</p>  
 <p>The <code>rgl.open()</code> function attempts to open a new RGL window.
   If the <code>"rgl.antialias"</code> option is set, it will be used to
   select the requested antialiasing.  (See <code><a href='open3d.html'>open3d</a></code> for
   more description of antialiasing and an alternative way to set the
   value.)</p>  
-<p>If <code>useNULL</code> is <code>TRUE</code>, <span class="pkg">rgl</span> will use a &#8220;null&#8221;
+<p>If <code>useNULL</code> is <code>TRUE</code>, RGL will use a &#8220;null&#8221;
   device.  This device records objects as they are plotted, but 
   displays nothing. It is intended for use with <code><a href='rglwidget.html'>rglwidget</a></code>
   and similar functions.</p>  
@@ -207,8 +206,8 @@
 
     <div class='dont-index'><p><a href='r3d.html'>r3d</a>,
 <code><a href='rgl.init.html'>rgl.init</a></code>,
-<code><a href='scene.html'>rgl.clear</a></code>, 
-<code><a href='scene.html'>rgl.pop</a></code>,
+<code><a href='rgl.fns.html'>rgl.clear</a></code>, 
+<code><a href='rgl.fns.html'>rgl.pop</a></code>,
 <code><a href='viewpoint.html'>rgl.viewpoint</a></code>,
 <code><a href='light.html'>rgl.light</a></code>,
 <code><a href='bg3d.html'>rgl.bg</a></code>,
@@ -217,10 +216,10 @@
 <code><a href='rgl.primitive.html'>rgl.lines</a></code>,
 <code><a href='rgl.primitive.html'>rgl.triangles</a></code>,
 <code><a href='rgl.primitive.html'>rgl.quads</a></code>,
-<code><a href='text3d.html'>rgl.texts</a></code>,
+<code><a href='rgl.texts.html'>rgl.texts</a></code>,
 <code><a href='rgl.surface.html'>rgl.surface</a></code>,
-<code><a href='spheres3d.html'>rgl.spheres</a></code>,
-<code><a href='sprites.html'>rgl.sprites</a></code>,
+<code><a href='rgl.fns.html'>rgl.spheres</a></code>,
+<code><a href='rgl.fns.html'>rgl.sprites</a></code>,
 <code><a href='snapshot3d.html'>rgl.snapshot</a></code>,
 <code><a href='rgl.useNULL.html'>rgl.useNULL</a></code></p></div>
 

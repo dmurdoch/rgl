@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Write Asymptote code for an rgl scene — writeASY • rgl</title>
+<title>Write Asymptote code for an RGL scene — writeASY • rgl</title>
 
 
 <!-- jquery -->
@@ -39,12 +39,12 @@
 
 
 
-<meta property="og:title" content="Write Asymptote code for an rgl scene — writeASY" />
+<meta property="og:title" content="Write Asymptote code for an RGL scene — writeASY" />
 <meta property="og:description" content="Asymptote is a language for 3D graphics that
 is highly integrated with LaTeX.  This is
 an experimental function to
 write an Asymptote program to approximate 
-an rgl scene." />
+an RGL scene." />
 
 
 <meta name="robots" content="noindex">
@@ -110,7 +110,7 @@ an rgl scene." />
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -138,7 +138,7 @@ an rgl scene." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Write Asymptote code for an rgl scene</h1>
+    <h1>Write Asymptote code for an RGL scene</h1>
     
     <div class="hidden name"><code>writeASY.Rd</code></div>
     </div>
@@ -148,7 +148,7 @@ an rgl scene." />
 is highly integrated with LaTeX.  This is
 an experimental function to
 write an Asymptote program to approximate 
-an rgl scene.</p>
+an RGL scene.</p>
     </div>
 
     <pre class="usage"><span class='fu'>writeASY</span><span class='op'>(</span>scene <span class='op'>=</span> <span class='fu'><a href='scene3d.html'>scene3d</a></span><span class='op'>(</span><span class='op'>)</span>,
@@ -167,7 +167,7 @@ an rgl scene.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>scene</th>
-      <td><p>rgl scene object</p></td>
+      <td><p>RGL scene object</p></td>
     </tr>
     <tr>
       <th>outtype</th>
@@ -196,13 +196,13 @@ an rgl scene.</p>
     <tr>
       <th>ppi</th>
       <td><p>&#8220;Pixels per inch&#8221; to assume when converting
-line widths and point sizes (which rgl measures in 
+line widths and point sizes (which RGL measures in 
 pixels).</p></td>
     </tr>
     <tr>
       <th>ids</th>
       <td><p>If not <code>NULL</code>, write out just these
-rgl objects.</p></td>
+RGL objects.</p></td>
     </tr>
     <tr>
       <th>version</th>
@@ -246,8 +246,8 @@ TUGBOAT: The Communications of the TeX Users Group, 29:2, 288-294.</p>
 of output it produces.  Arguments will likely
 change.</p>
 <p>There are a number of differences between the interactive display in 
-Asymptote and the display in rgl.  In particular, many objects that are
-a fixed size in rgl will scale with the image in Asymptote.  Defaults
+Asymptote and the display in RGL.  In particular, many objects that are
+a fixed size in RGL will scale with the image in Asymptote.  Defaults
 have been chosen somewhat arbitrarily; tweaking will likely be needed.</p>
 <p>Material properties of surfaces are not yet implemented.</p>
 <p>On some systems, the program  <code class='command'>asy</code>  used

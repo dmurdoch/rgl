@@ -79,6 +79,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/cylinder3d.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/decorate3d.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/elementId2Prefix.html</loc>
   </url>
   <url>
@@ -214,6 +217,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.bringtotop.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.fns.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html</loc>
   </url>
   <url>
@@ -224,6 +230,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.select.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.texts.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.useNULL.html</loc>

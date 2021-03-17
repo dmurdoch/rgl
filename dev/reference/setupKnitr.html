@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Displaying rgl scenes in knitr documents. — setupKnitr • rgl</title>
+<title>Displaying RGL scenes in knitr documents — setupKnitr • rgl</title>
 
 
 <!-- jquery -->
@@ -39,17 +39,17 @@
 
 
 
-<meta property="og:title" content="Displaying rgl scenes in knitr documents. — setupKnitr" />
-<meta property="og:description" content="These functions allow rgl graphics to be embedded in knitr
+<meta property="og:title" content="Displaying RGL scenes in knitr documents — setupKnitr" />
+<meta property="og:description" content="These functions allow RGL graphics to be embedded in knitr
 documents.
 The simplest method is to run setupKnitr(autoprint = TRUE)
-early in the document.  That way rgl commands act a lot
+early in the document.  That way RGL commands act a lot
 like base graphics commands:  plots will be automatically inserted
 where appropriate, according to the fig.keep chunk option.
 By default (fig.keep = &quot;high&quot;), only high-level plots
 are kept, after low-level changes have been merged into them.
 See the knitr documentation 
-https://yihui.org/knitr/options/#plots for more details.  To suppress auto-printing, the rgl calls
+https://yihui.org/knitr/options/#plots for more details.  To suppress auto-printing, the RGL calls
 can be wrapped in invisible().  
 Similarly to grid graphics (used by lattice
 and ggplot2), automatic inclusion requires the object
@@ -62,7 +62,7 @@ Other functions allow embedding either as bitmaps (hook_rgl with format &quot;pn
 fixed vector graphics (hook_rgl with format &quot;eps&quot;, &quot;pdf&quot; or
 &quot;postscript&quot;), or interactive WebGL graphics (hook_webgl).  hook_rglchunk is not normally invoked by the 
 user; it is the hook that supports automatic creation and 
-deletion of rgl scenes." />
+deletion of RGL scenes." />
 
 
 <meta name="robots" content="noindex">
@@ -126,7 +126,7 @@ deletion of rgl scenes." />
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
     </li>
     <li>
-      <a href="../articles/pkgdown.html">Using rgl in pkgdown web sites</a>
+      <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
     </li>
     <li>
       <a href="../articles/transparency.html">A Note on Transparency</a>
@@ -154,22 +154,22 @@ deletion of rgl scenes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Displaying <span class="pkg">rgl</span> scenes in <span class="pkg">knitr</span> documents.</h1>
+    <h1>Displaying RGL scenes in <span class="pkg">knitr</span> documents</h1>
     
     <div class="hidden name"><code>setupKnitr.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>These functions allow <span class="pkg">rgl</span> graphics to be embedded in <span class="pkg">knitr</span>
+    <p>These functions allow RGL graphics to be embedded in <span class="pkg">knitr</span>
 documents.</p>
 <p>The simplest method is to run <code>setupKnitr(autoprint = TRUE)</code>
-early in the document.  That way <span class="pkg">rgl</span> commands act a lot
+early in the document.  That way RGL commands act a lot
 like base graphics commands:  plots will be automatically inserted
 where appropriate, according to the <code>fig.keep</code> chunk option.
 By default (<code>fig.keep = "high"</code>), only high-level plots
 are kept, after low-level changes have been merged into them.
 See the <span class="pkg">knitr</span> documentation 
-<a href='https://yihui.org/knitr/options/#plots'>https://yihui.org/knitr/options/#plots</a> for more details.  To suppress auto-printing, the <span class="pkg">rgl</span> calls
+<a href='https://yihui.org/knitr/options/#plots'>https://yihui.org/knitr/options/#plots</a> for more details.  To suppress auto-printing, the RGL calls
 can be wrapped in <code><a href='https://rdrr.io/r/base/invisible.html'>invisible</a>()</code>.  
 Similarly to <span class="pkg">grid</span> graphics (used by <span class="pkg">lattice</span>
 and <span class="pkg">ggplot2</span>), automatic inclusion requires the object
@@ -182,7 +182,7 @@ work.</p>
 fixed vector graphics (<code>hook_rgl</code> with format <code>"eps"</code>, <code>"pdf"</code> or
 <code>"postscript"</code>), or interactive WebGL graphics (<code>hook_webgl</code>).  <code>hook_rglchunk</code> is not normally invoked by the 
 user; it is the hook that supports automatic creation and 
-deletion of rgl scenes.</p>
+deletion of RGL scenes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>setupKnitr</span><span class='op'>(</span>autoprint <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -197,7 +197,7 @@ deletion of rgl scenes.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>autoprint</th>
-      <td><p>If true, <code>rgl</code> commands
+      <td><p>If true, RGL commands
   automatically plot (with low level plots suppressed by
   the default value of the <code>fig.keep</code> chunk option.)</p></td>
     </tr>
@@ -215,9 +215,9 @@ deletion of rgl scenes.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The <code>setupKnitr(autoprint = TRUE)</code> method assumes
-<em>all</em> printing of <span class="pkg">rgl</span> objects happens through 
+<em>all</em> printing of RGL objects happens through 
 auto-printing of objects produced by the <code><a href='rglIds.html'>lowlevel</a></code>
-or <code><a href='rglIds.html'>highlevel</a></code> functions.  All <span class="pkg">rgl</span> functions that
+or <code><a href='rglIds.html'>highlevel</a></code> functions.  All RGL functions that
 produce graphics do this, but functions in other packages that
 call them may not return values appropriately.</p>
 <p>If you have multiple calls to <code>setupKnitr()</code>, all
@@ -228,7 +228,7 @@ will be used.</p>
 to <code><a href='rglwidget.html'>rglwidget</a></code> with auto-printing is likely to lead to failure of some
 scenes to display.  To avoid this, set <code><a href='https://rdrr.io/r/base/options.html'>options(rgl.printRglwidget = FALSE)</a></code> before using such explicit calls.  Similarly,
 use that option before calling the <code><a href='https://rdrr.io/r/utils/example.html'>example</a></code> function
-in a code chunk if the example prints <span class="pkg">rgl</span> objects.</p>
+in a code chunk if the example prints RGL objects.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The <code>setupKnitr()</code> function needs to be called once

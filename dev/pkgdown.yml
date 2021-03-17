@@ -1,12 +1,12 @@
-pandoc: 2.11.2
+pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: 50ae8cba4e05e698dbc47725b814c331d0344ff1
+pkgdown_sha: c4d27fbb8e457d1fa97264fb2764ea8d3f014996
 articles:
   WebGL: WebGL.html
   pkgdown: pkgdown.html
   rgl: rgl.html
   transparency: transparency.html
-last_built: 2021-03-15T23:47Z
+last_built: 2021-03-17T10:04Z
 urls:
   reference: https://dmurdoch.github.io/rgl/dev/reference
   article: https://dmurdoch.github.io/rgl/dev/articles
