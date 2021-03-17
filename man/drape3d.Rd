@@ -1,4 +1,4 @@
-\name{drape3d3d}
+\name{drape3d}
 \alias{drape3d}
 \title{
 Drape lines and intersections between surfaces over a scene.
