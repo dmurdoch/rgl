@@ -92,7 +92,7 @@ George Helffrich
 \examples{
 
      # Drape a line over volcano topography, then intersect it with a
-     # ball of 150 m radius
+     # ball of 125 m radius
 
      z <- 2 * volcano        # Exaggerate the relief
      x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
