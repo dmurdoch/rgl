@@ -49,7 +49,7 @@ filledContour3d.mesh3d <- function(obj, fn = "z",
     obj <- clipMesh3d(obj, NULL, bound = levels[i], keepValues = TRUE)
     strip <- clipMesh3d(obj, NULL, bound = levels[i+1], greater = FALSE, keepValues = keepValues && !plot)
     strip$material$color <- col[i]
-    result[[i]] <- strip
+    result[[i]] <- cleanMesh3d(strip, rejoin = TRUE)
   }
   result <- do.call(merge, result)
   if (plot)
