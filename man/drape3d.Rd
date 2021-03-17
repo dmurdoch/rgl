@@ -26,7 +26,7 @@ The object(s) upon which to drape lines.
 \item{ any object that, along with \code{y}, is recognized by
    \code{xy.coords} as yielding a set of (x,y) coordinate pairs }
 }
-One or more destination points.
+which describes the lines to be draped.
 }
   \item{log}{
 Logarithmic \code{x} or \code{y} data.
@@ -52,9 +52,6 @@ For the \code{"rglId"} methods, additional parameters to pass to the
 }
 }
 \details{
-If the resulting \code{x} and \code{y} values contain NA, the line segment
-ends and a new one starts with the next point.
-
 If \code{x} is a function, then it must accept a single matrix argument
 containing the \code{(x,y,z)} coordinates of each point \code{p[i]}, as shown
 in the following tableau:
@@ -66,7 +63,7 @@ in the following tableau:
 
 }
 It should return a vector \code{f(p[1]) ... f(p[n])}.  The intersection with
-the object is given by \code{f() = 0}.
+the object is defined by \code{f() = 0}.
 
 The \code{minVertices} argument is used to improve the
 approximation to the draping line when the function is non-linear.
@@ -89,6 +86,9 @@ values for the line(s) with NA separating each segment
 (for use with \code{\link{lines3d}}),
 or a data frame containing discontinuous segments
 (for use with \code{\link{segments3d}}). 
+For lines, if the resulting "x" and "y" values contain NA, the line segment
+ends and a new one starts with the next point.  Segments are defined by
+successive pairs of points and are unordered.
 }
 \author{
 George Helffrich
@@ -112,6 +112,7 @@ George Helffrich
      lines3d(list(x=segs$x,y=segs$y,z=rep(325,2)), col='red', lwd=3)
 
      ball <- function(r,o){
+         ## vectorized (x-x0)^2 + (y-y0)^2 + (z-z0)^2 - R^2 = 0
          function(x,R=r,O=o){
              apply((x-matrix(O,3,ncol(x)))^2,2,sum)-R^2
          }
@@ -124,20 +125,22 @@ George Helffrich
      # Outcrop pattern of planar rock layer on volcano topography
 
      sd <- function(az,dip,p){
-        ## For plane described by (geologically defined) strike and dip given
-        ## by strike line azimuth az and plane dip dip (degrees) through point
-        ## p (x, y, z).  Returns a function that evaluates the equation for the
+        ## For plane described by (geologically defined)
+        ## strike and dip given by strike line azimuth az
+        ## and plane dip dip (degrees) through point p (x, y, z).
+        ## Returns a function that evaluates the equation for the
         ## plane through that point given normal vector n[...] to plane.
 
         cross <- function(a,b){
            c(a[2]*b[3]-a[3]*b[2],a[3]*b[1]-a[1]*b[3],a[1]*b[2]-a[2]*b[1])
         }
-        th <- pi/180*c(az,az+90,dip); sn <- sin(th[1:2]); co <- cos(th[1:2])
+        th <- pi/180*c(az,az+90,dip)
+        sn <- sin(th[1:2]); co <- cos(th[1:2])
         nrm <- cross(c(sn[1],co[1],0),c(sn[2],co[2],-tan(th[3])))
         nrm <- nrm/sqrt(sum(nrm^2))
         function(x,n=nrm,p0=p){
            ## vectorized n[x]*(x-x0) + n[y]*(y-y0) + n[z]*(z-z0) = 0
-           n %*% ( x - matrix(p0,3,ncol(x)) )
+           n \%*\% ( x - matrix(p0,3,ncol(x)) )
         }
      }
 
@@ -159,7 +162,7 @@ George Helffrich
           z=rep(350,5)
      )
      pts <- drape3d(id, segs, plot=FALSE)
-     lines3d(pts, col='magenta', lwd=2) # draw X on topography at point
+     lines3d(pts, col='magenta', lwd=2) # X on topography at point
 
      pz <- mean(pts$z[!is.na(pts$z)])
      drape3d(id, sd(45, 10, c(p,pz)), col='yellow', lwd=2)
