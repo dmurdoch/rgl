@@ -28,6 +28,9 @@ The object(s) upon which to drape lines.
 }
 which describes the lines to be draped.
 }
+  \item{y}{
+  See \code{y}.
+}
   \item{log}{
 Logarithmic \code{x} or \code{y} data.
 See \code{xy.coords} for more information.
