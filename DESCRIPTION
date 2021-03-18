@@ -28,7 +28,7 @@ Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
           js (>= 1.2), akima, webshot2, downlit, pkgdown
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20), shiny,
-         magrittr, crosstalk, manipulateWidget (>= 0.9.0), mgcv
+         magrittr, crosstalk, manipulateWidget (>= 0.9.0)
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for
     constructing representations of geometric objects (cube3d(), etc.).  Output
