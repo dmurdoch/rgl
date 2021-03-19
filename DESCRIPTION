@@ -43,4 +43,4 @@ BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Biarch: true
 Additional_repositories:  https://dmurdoch.github.io/drat
-Remotes: dmurdoch/htmlwidgets@rglpatch, dmurdoch/downlit@rglpatch, dmurdoch/pkgdown@rglpatch
+Remotes: dmurdoch/htmlwidgets@rglpatch, dmurdoch/downlit, dmurdoch/pkgdown
