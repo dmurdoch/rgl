@@ -21,11 +21,11 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
       
       ## now TRI[,1,i] is x coord range for projected triangle i
       ## now TRI[,2,i] is y coord range for projected triangle i
-      oo <- (p[1] < TRI[1,1,] | p[1] > TRI[2,1,]) &
-        (p[2] < TRI[1,2,] | p[2] > TRI[2,2,])
+      oo <- p[1] < TRI[1,1,] | p[1] > TRI[2,1,] |
+            p[2] < TRI[1,2,] | p[2] > TRI[2,2,]
       result <- NULL
       lam <- numeric(3)
-      for(j in seq_len(ncol(obj$it))[!oo]){
+      for(j in which(!oo)){
         ## get barycentric coords of p in projected triangle
         v <- matrix(pverts[,obj$it[,j]],3,2)  ## v[i,] vertices of projected triangle i
         D <- (v[2,2]-v[3,2]) * (v[1,1]-v[3,1]) +
@@ -42,7 +42,7 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
         lam[3] <- 1-sum(lam[1:2])
         if (lam[3] < 0 || lam[3] > 1) next   ## not in this triangle
         v <- matrix(verts[obj$it[,j],], 3,3)  ## Now v is vertices of original triangle
-        result <- rbind(result, c(lam %*% v, j))
+        result <- rbind(result, c(t(v %*% lam), j))
       }
       result
     }
@@ -65,9 +65,9 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
     n <- 0
     for (j in seq_len(ncol(obj$it))) {
       v <- obj$it[,j]
-      tri[n<-n+1,] <- op(v[c(1,2)])
-      tri[n<-n+1,] <- op(v[c(2,3)])
-      tri[n<-n+1,] <- op(v[c(3,1)])
+      tri[n<-n+1,] <- v[c(1,2)]
+      tri[n<-n+1,] <- v[c(2,3)]
+      tri[n<-n+1,] <- v[c(3,1)]
     }
 
     ## add first segment point assuming not on a triangle edge
@@ -84,7 +84,7 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
       if (any(is.na(p2))) {
         ## add last segment point assuming not on triangle edge
         zi <- ztri(i-1)
-        if (!is.null(zi)) result <- rbind(result,zi)
+        if (!is.null(zi)) zs <- rbind(zs,cbind(zi, 1))
         next
       }
       if (any(is.na(p1))) {
@@ -127,19 +127,21 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
         zs <- rbind(zs, cbind(zn, 1))
       
       if (nrow(zs) > 0) {
-        o <- order(zs[,4])
+        # Order by triangle to group them, then by t
+        # within triangle 
+        o <- order(zs[,4], zs[,5])
         zs <- zs[o, , drop = FALSE]
-        ## Only keep cases that are on the same triangle
+        # Only keep cases that are on the same triangle
+        # Rounding may give us 1 or 3 intersections with a 
+        # triangle; discard singletons, use first and last
+        # for triples.
         k <- zs[,4]
         dup <- duplicated(k)
         nextdup <- c(dup[-1], FALSE)
-        prevdup <- c(FALSE, dup[-length(dup)])
         keep <- (!dup & nextdup) | # The first for a tri
-                (!prevdup & dup)   # The second
+                (dup & !nextdup)   # The last for one
         zs <- zs[keep,,drop = FALSE]
-        ## add points in order of increasing t on segment
-        o <- order(zs[,4], zs[,5])
-        result <- rbind(result, zs[o,-(4:5)])
+        result <- rbind(result, zs[,-(4:5)])
       }
     }
     if (plot)

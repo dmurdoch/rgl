@@ -1,6 +1,6 @@
 \name{drape3d}
 \alias{drape3d}
-\alias{drape3d.rglId}
+\alias{drape3d.default}
 \alias{drape3d.mesh3d}
 \title{
 Drape lines and intersections between surfaces over a scene.
@@ -14,7 +14,7 @@ may be specified as a series of line segments.
 \usage{
 drape3d(obj, ...)
 \method{drape3d}{mesh3d}(obj, x, y = NULL, z = NULL, plot = TRUE, ...)
-\method{drape3d}{rglId}(obj, ...)
+\method{drape3d}{default}(obj, ...)
 }
 \arguments{
   \item{obj}{
@@ -27,18 +27,18 @@ coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
 Should the result be plotted, or returned as a data frame?
 }
   \item{P}{
-The projection to use for draping, a 2x3 matrix.  The default drops the z coordinate.
+The projection to use for draping, a 2x3 matrix.  The default drops the z coordinate for a vertical projection.
   }
   \item{\dots}{
-For the \code{"mesh3d"} method, additional parameters to pass to \code{\link{segments3d}} or \code{\link{lines3d}} 
+For the \code{"mesh3d"} method, additional parameters to pass to \code{\link{segments3d}}
 when drawing the draped lines.
-For the \code{"rglId"} method, additional parameters to pass to the
+For the \code{"default"} method, additional parameters to pass to the
 \code{"mesh3d"} method.
 }
 }
 \value{
 If \code{plot = TRUE}, 
-it invisibly returns the object ID of the collection of lines. 
+it invisibly returns the object ID of the collection of segments. 
 
 If \code{plot = FALSE}, returns a data frame containing "x", "y" and "z"
 values for the line(s) with NA separating each segment
@@ -54,20 +54,27 @@ George Helffrich and Duncan Murdoch
 }
 
 \examples{
+#
+# volcano example taken from "persp"
+#
 
-     # Drape a line over volcano topography
+z <- 2 * volcano        # Exaggerate the relief
 
-     z <- 2 * volcano        # Exaggerate the relief
-     x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
-     y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
+x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
+y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
 
-     open3d()
-     id <- persp3d(x, y, z, aspect = "iso",
-           axes = FALSE, box = FALSE)
+zlim <- range(z)
+zlen <- zlim[2] - zlim[1] + 1
 
-     segs <- data.frame(x=range(x),y=range(y)+150,z=325)
-     drape3d(id, segs, col='yellow', lwd=3)
-     lines3d(segs, col='red', lwd=3)
+colorlut <- terrain.colors(zlen) # height color lookup table
 
-     filledContour3d(id, polygon_offset = 1, nlevels = 10, replace = TRUE)
+col <- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point
+
+open3d()
+id <- surface3d(x, y, z, color = col, polygon_offset = 1)
+
+segs <- data.frame(x=range(x)+c(100,-100),y=range(y)+c(150,-100),z=325)
+drape3d(id, segs, col='yellow', lwd=3)
+lines3d(segs, col='red', lwd=3)
+
 }
