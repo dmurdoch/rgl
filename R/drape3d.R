@@ -27,22 +27,22 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
       lam <- numeric(3)
       for(j in which(!oo)){
         ## get barycentric coords of p in projected triangle
-        v <- matrix(pverts[,obj$it[,j]],3,2)  ## v[i,] vertices of projected triangle i
-        D <- (v[2,2]-v[3,2]) * (v[1,1]-v[3,1]) +
-          (v[3,1]-v[2,1]) * (v[1,2]-v[3,2])
+        v <- pverts[,obj$it[,j]]  ## v[i,] vertices of projected triangle i
+        D <- (v[2,2]-v[2,3]) * (v[1,1]-v[1,3]) +
+          (v[1,3]-v[1,2]) * (v[2,1]-v[2,3])
         if (D == 0) next
-        l <- (v[2,2]-v[3,2]) * (p[1]  -v[3,1]) +
-          (v[3,1]-v[2,1]) * (p[2]  -v[3,2])
+        l <- (v[2,2]-v[2,3]) * (p[1]  -v[1,3]) +
+          (v[1,3]-v[1,2]) * (p[2]  -v[2,3])
         lam[1] <- l/D
         if (lam[1] < 0 || lam[1] > 1) next   ## not in this triangle
-        l <- (v[3,2]-v[1,2]) * (p[1]  -v[3,1]) +
-          (v[1,1]-v[3,1]) * (p[2]  -v[3,2])
+        l <- (v[2,3]-v[2,1]) * (p[1]  -v[1,3]) +
+          (v[1,1]-v[1,3]) * (p[2]  -v[2,3])
         lam[2] <- l/D
         if (lam[2] < 0 || lam[2] > 1) next   ## not in this triangle
         lam[3] <- 1-sum(lam[1:2])
         if (lam[3] < 0 || lam[3] > 1) next   ## not in this triangle
-        v <- matrix(verts[obj$it[,j],], 3,3)  ## Now v is vertices of original triangle
-        result <- rbind(result, c(t(v %*% lam), j))
+        v <- matrix(verts[,obj$it[,j]], 3,3)  ## Now v is vertices of original triangle
+        result <- rbind(result, c(v %*% lam, j))
       }
       result
     }
@@ -50,8 +50,8 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
     obj <- as.tmesh3d(obj)
     nverts <- ncol(obj$vb)
 
-    verts <- asEuclidean(t(obj$vb))
-    pverts <- P %*% t(verts)  # projected vertices
+    verts <- t(asEuclidean(t(obj$vb)))
+    pverts <- P %*% verts  # projected vertices
     
     result <- matrix(numeric(), ncol = 3)
 
@@ -116,8 +116,8 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
         T2<-  p21[1]*p31[2] - p21[2]*p31[1]
         t2 <- T2/D
         if (t2 < 0 || t2 > 1) next          ## not within p3 ... p4
-        v3 <- verts[tri[j,1],]
-        v43 <- verts[tri[j,2],] - v3
+        v3 <- verts[,tri[j,1]]
+        v43 <- verts[,tri[j,2]] - v3
         k <- (j+2)%/%3   # triangle number
         zs <- rbind(zs, c(v3+t2*v43, k, t1))## t1 along line seg & point value
       }
