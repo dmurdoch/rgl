@@ -54,37 +54,26 @@
      */
     rglwidgetClass.prototype.initSphere = function() {
       var verts = this.scene.sphereVerts,
-          reuse = verts.reuse, result;
-      if (typeof reuse !== "undefined") {
-        var prev = document.getElementById(reuse).rglinstance.sphere;
-        result = {values: prev.values, 
-                  vOffsets: prev.vOffsets, 
-                  it: prev.it,
-                  centers: prev.centers,
-                  vertexCount: prev.vertexCount,
-                  f: prev.f,
-                  indices: prev.indices};
-      } else {
-        var n = verts.it[0].length, i, j, k,
+          result, n = verts.it[0].length, i, j, k,
             centers = new Array(n);
-        for (i = 0; i < n; i++) { // faces
-          centers[i] = [0,0,0];
-          for (j = 0; j < 3; j++) // x, y, z
-            for (k = 0; k < 3; k++) // vertices
-              centers[i][j] += verts.vb[j][verts.it[k][i]]/3;
-        }
-        result = {values: new Float32Array(this.flatten(this.cbind(this.transpose(verts.vb),
-                    this.transpose(verts.texcoords)))),
-                  it: new Uint16Array(this.flatten(this.transpose(verts.it))),
-                  vOffsets: {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
-                    tofs:3, nextofs:-1, pointofs:-1, stride:5},
-                  centers: centers
-                };
-          // Add default indices
-        result.vertexCount = verts.vb[0].length;
-        result.f = [];
-        result.indices = {};
+      for (i = 0; i < n; i++) { // faces
+        centers[i] = [0,0,0];
+        for (j = 0; j < 3; j++) // x, y, z
+          for (k = 0; k < 3; k++) // vertices
+            centers[i][j] += verts.vb[j][verts.it[k][i]]/3;
       }
+      result = {values: new Float32Array(this.flatten(this.cbind(this.transpose(verts.vb),
+                this.transpose(verts.texcoords)))),
+                it: new Uint16Array(this.flatten(this.transpose(verts.it))),
+                vOffsets: {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
+                  tofs:3, nextofs:-1, pointofs:-1, stride:5},
+                centers: centers
+              };
+      // Add default indices
+      result.vertexCount = verts.vb[0].length;
+      result.f = [];
+      result.indices = {};
+
       result.colorCount = 1;
       result.type = "sphere";
       this.sphere = result;
@@ -971,12 +960,6 @@
       this.restartCanvas();
       var objs = this.scene.objects,
           self = this;
-      Object.keys(objs).forEach(function(key){
-        var id = parseInt(key, 10),
-            obj = self.getObj(id);
-        if (typeof obj.reuse !== "undefined")
-          self.copyObj(id, obj.reuse);
-      });
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });

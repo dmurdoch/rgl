@@ -13,7 +13,7 @@ provides the necessities to embed an RGL scene in one.
 rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           controllers = NULL,
           elementId = NULL, 
-          reuse = !interactive() && !in_pkgdown_example(),
+          reuse = FALSE,
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
           shared = NULL, minimal = TRUE, 
           webgl, snapshot, 
@@ -35,9 +35,7 @@ associated with this scene, or objects (typically piped in).  See Details below.
   \item{elementId}{The id to use on the HTML \code{div}
 component that will hold the scene.
 }
-  \item{reuse}{A logical variable indicating whether
-RGL objects from earlier scenes should be referenced. See
-the Details below.
+  \item{reuse}{Ignored.  See Details below.
 }
   \item{webGLoptions}{A list of options to pass
   to WebGL when the drawing context is created.  See the Details below.}
@@ -66,15 +64,7 @@ first, it should be piped into the \code{controllers}
 argument.  If the \code{rglwidget} comes first, it
 can be piped into the first argument of \code{playwidget} or \code{toggleWidget}.
 
-If the \code{reuse} argument is \code{FALSE} (the default in interactive
-use), earlier information will be
-cleared before drawing the new scene.  If \code{TRUE}, earlier
-data will be re-used in the current scene, so it may be smaller
-and faster to load.  In both cases information from the current
-scene (added to earlier information if \code{reuse=TRUE}) will
-be saved for possible use in a future scene.
-If \code{reuse=NA}, the saved information will neither be used
-nor updated.
+In earlier versions, the \code{reuse} argument let one output scene share data from earlier ones.  This is no longer supported.
 
 If \code{elementId} is \code{NULL} and we are not in a Shiny app,
 \code{elementId} is set to a random value to facilitate re-use
@@ -147,12 +137,6 @@ An object of class \code{"htmlwidget"} (or \code{"shiny.tag.list"}
 if pipes are used) that will intelligently print itself into
 HTML in a variety of contexts including the R console, within R Markdown
 documents, and within Shiny output bindings.
-
-If \code{reuse = TRUE}, a record will be kept of objects in the scene
-and they need not be included in the HTML generated for later scenes.
-This is normally useful only in \pkg{rmarkdown} documents which can have
-many RGL scenes; if the widget is displayed in RStudio,
-only one scene will be shown.
 
 If objects are passed in the \code{shared} argument,
 then the widget will respond to selection and filtering 

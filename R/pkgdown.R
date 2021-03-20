@@ -70,12 +70,11 @@ pkgdown_dims <- function() {
 replay_html.rglRecordedplot <- local({
 	rdname <- ""
 	function(x, ...) {
-		if (pkgdown_rdname() != rdname) {
-			environment(rglwidget)$reuseDF <- NULL
+		if (pkgdown_rdname() != rdname) 
 			rdname <<- pkgdown_rdname()
-		}
+		
 		settings <- pkgdown_dims()
-		rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = TRUE, 
+		rendered <- htmltools::renderTags(rglwidget(x$scene,
 																								width = settings$width, height = settings$height))
 		structure(rendered$html, dependencies = rendered$dependencies)
 	}
