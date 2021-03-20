@@ -45,6 +45,7 @@ pkgdown_print.rglId <-     fns[["pkgdown_print.rglId"]]
 pkgdown_print.rglOpen3d <- fns[["pkgdown_print.rglOpen3d"]]
 rm(fns)
 
+globalVariables("fig.asp")
 pkgdown_dims <- function() {
 	settings <- pkgdown_fig_settings()
 	rgl <- settings$other.parameters$rgl
