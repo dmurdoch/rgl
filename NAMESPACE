@@ -130,7 +130,7 @@ export(.check3d,
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)
  
- S3method(drape3d, rglId)
+ S3method(drape3d, default)
  S3method(drape3d, mesh3d)
 
  S3method(contourLines3d, rglId)

@@ -1,7 +1,7 @@
 drape3d <- function(obj, ...) 
   UseMethod("drape3d")
 
-drape3d.rglId <- function(obj, ...) 
+drape3d.default <- function(obj, ...) 
   drape3d(as.mesh3d(obj), ...)
   
 drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
@@ -126,7 +126,7 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
       if (!is.null(zn)) 
         zs <- rbind(zs, cbind(zn, 1))
       
-      if (nrow(zs) > 0) {
+      if (length(zs)) {
         # Order by triangle to group them, then by t
         # within triangle 
         o <- order(zs[,4], zs[,5])
@@ -138,10 +138,21 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
         k <- zs[,4]
         dup <- duplicated(k)
         nextdup <- c(dup[-1], FALSE)
-        keep <- (!dup & nextdup) | # The first for a tri
+        keep <- (!dup & nextdup) | # The first for a triangle
                 (dup & !nextdup)   # The last for one
         zs <- zs[keep,,drop = FALSE]
-        result <- rbind(result, zs[,-(4:5)])
+        # Order by t value
+        finish <- 2*seq_len(nrow(zs)/2)
+        start <- finish - 1
+        o <- order(zs[start, 5])
+        start <- start[o]
+        finish <- finish[o]
+        # Drop zero length segments
+        keep <- zs[start, 5] < zs[finish, 5]
+        start <- start[keep]
+        finish <- finish[keep]
+        both <- as.numeric(rbind(start, finish))
+        result <- rbind(result, zs[both, -(4:5), drop = FALSE])
       }
     }
     if (plot)

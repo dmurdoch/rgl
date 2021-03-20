@@ -3,17 +3,16 @@
 \alias{drape3d.default}
 \alias{drape3d.mesh3d}
 \title{
-Drape lines and intersections between surfaces over a scene.
+Drape lines over a scene.
 }
 \description{
 Project a line onto the surface in a scene so that it appears to drape itself
 onto the surface.
-The line
-may be specified as a series of line segments.
 }
 \usage{
 drape3d(obj, ...)
-\method{drape3d}{mesh3d}(obj, x, y = NULL, z = NULL, plot = TRUE, ...)
+\method{drape3d}{mesh3d}(obj, x, y = NULL, z = NULL, plot = TRUE,
+                         P = cbind(diag(2), 0), ...)
 \method{drape3d}{default}(obj, ...)
 }
 \arguments{
@@ -22,7 +21,8 @@ The object(s) upon which to drape lines.
 }
   \item{x,y,z}{Coordinates of the line segments
 to be draped.  Any reasonable way of defining the
-coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}} for details.}
+coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}} for details.
+}
   \item{plot}{
 Should the result be plotted, or returned as a data frame?
 }
@@ -36,18 +36,24 @@ For the \code{"default"} method, additional parameters to pass to the
 \code{"mesh3d"} method.
 }
 }
+\details{
+The default method converts \code{obj} to a mesh
+using \code{\link{as.mesh3d()}}, then uses the \code{"mesh3d"}
+method.
+
+The current implementation constructs the segments to drape
+across the surface using the same method as
+\code{\link{lines3d}} uses:  each successive point is
+joined to the previous one.  Use \code{NA} coordinates to
+indicate breaks in the line.
+}
 \value{
 If \code{plot = TRUE}, 
-it invisibly returns the object ID of the collection of segments. 
+plots the result and invisibly returns the object ID of the collection of segments. 
 
-If \code{plot = FALSE}, returns a data frame containing "x", "y" and "z"
-values for the line(s) with NA separating each segment
-(for use with \code{\link{lines3d}}),
-or a data frame containing discontinuous segments
-(for use with \code{\link{segments3d}}). 
-For lines, if the resulting "x" and "y" values contain NA, the line segment
-ends and a new one starts with the next point.  Segments are defined by
-successive pairs of points and are unordered.
+If \code{plot = FALSE}, returns a matrix containing "x", "y" and "z"
+values for the line(s) 
+(for use with \code{\link{segments3d}}),
 }
 \author{
 George Helffrich and Duncan Murdoch
