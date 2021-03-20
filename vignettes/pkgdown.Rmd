@@ -34,12 +34,12 @@ setupKnitr(autoprint = TRUE)
 
 [pkgdown](https://pkgdown.r-lib.org/) is an R package that
 makes it easy to build a web site for your package.  However, the current version 1.6.1 on CRAN doesn't work so well for
-packages whose examples use RGL or other packages like [leaflet](http://rstudio.github.io/leaflet) that use
-[htmlwidgets](http://htmlwidgets.org/).  This document
+packages whose examples use RGL or other packages like [leaflet](http://rstudio.github.io/leaflet/) that use
+[htmlwidgets](http://www.htmlwidgets.org).  This document
 describes current progress in supporting both of these.
 
 The main problem for [pkgdown](https://pkgdown.r-lib.org/) support
-is that RGL and other [htmlwidgets](http://htmlwidgets.org/)
+is that RGL and other [htmlwidgets](http://www.htmlwidgets.org)
 users require multiple Javascript libraries to be linked to
 each web page.  `pkgdown` 1.6.1 can't do this, but the 
 current development version on Github
