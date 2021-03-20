@@ -1232,3 +1232,5 @@ base graphics.
   - Changes have been made for compatibility with the 
     experimental Windows-UTF8 build of R.
   - Allowed infinite values for strip limits in filledContour3d.
+  - Setting material property point_antialias = TRUE now
+    gives round points in rglwidget() displays.
