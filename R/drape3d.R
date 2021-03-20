@@ -7,7 +7,6 @@ drape3d.default <- function(obj, ...)
 drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
     plot = TRUE, P = cbind(diag(2), 0), ...) 
 {
-    ids <- NULL
     
     # Takes segment number as input; returns
     # NULL if in no triangle, otherwise matrix of projected locations and triangle numbers.
@@ -46,21 +45,23 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
       }
       result
     }
+    op <- function(v)
+      v[if(v[1] > v[2]) c(2,1) else c(1,2)] ## orders pair
     
     obj <- as.tmesh3d(obj)
-    nverts <- ncol(obj$vb)
 
     verts <- t(asEuclidean(t(obj$vb)))
-    pverts <- P %*% verts  # projected vertices
     
-    result <- matrix(numeric(), ncol = 3)
-
     segs <- xyz.coords(x, y, z, recycle=TRUE)
     segs <- rbind(segs$x, segs$y, segs$z)
+    
+    if (length(dim(P)) != 2 || !all(dim(P) == c(2,3)))
+      stop("P should be a 2 x 3 matrix.")
+    
+    pverts <- P %*% verts  # projected vertices
     psegs <- P %*% segs # projected segments
     
     ## get unique point pairs making a triangle side
-    op <- function(v)v[if(v[1]>v[2])c(2,1) else c(1,2)] ## orders pair
     tri <- matrix(NA,nrow=3*ncol(obj$it),ncol=2)
     n <- 0
     for (j in seq_len(ncol(obj$it))) {
@@ -70,6 +71,8 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
       tri[n<-n+1,] <- v[c(3,1)]
     }
 
+    result <- matrix(numeric(), ncol = 3)
+    
     ## add first segment point assuming not on a triangle edge
     z1 <- ztri(1)
     if (length(z1)) 
