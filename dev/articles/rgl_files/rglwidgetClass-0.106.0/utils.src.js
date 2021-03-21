@@ -62,7 +62,7 @@
     /**
      * Bind vectors or matrices by columns
      * @returns {number[][]}
-     * @param a {number[]|number[][]}
+     * @param a {number[][]}
      * @param b {number[]|number[][]}
      */
     rglwidgetClass.prototype.cbind = function(a, b) {
@@ -390,39 +390,6 @@
             bound = bound + 1;
         });
       return bound;
-    };
-
-    /**
-     * Copy object
-     * @param { number } id - id of object to copy
-     * @param { string } reuse - Document id of scene to reuse
-     */
-    rglwidgetClass.prototype.copyObj = function(id, reuse) {
-      var obj = this.getObj(id),
-          prev = document.getElementById(reuse);
-      if (prev !== null) {
-        prev = prev.rglinstance;
-        var
-          prevobj = prev.getObj(id),
-          fields = ["flags", "type",
-                    "colors", "vertices", "centers",
-                    "normals", "offsets",
-                    "texts", "cex", "family", "font", "adj",
-                    "material",
-                    "radii",
-                    "texcoords",
-                    "userMatrix", "ids",
-                    "dim",
-                    "par3d", "userMatrix",
-                    "viewpoint", "finite",
-                    "pos"],
-          i;
-        for (i = 0; i < fields.length; i++) {
-          if (typeof prevobj[fields[i]] !== "undefined")
-            obj[fields[i]] = prevobj[fields[i]];
-        }
-      } else
-        console.warn("copyObj failed");
     };
 
     /**

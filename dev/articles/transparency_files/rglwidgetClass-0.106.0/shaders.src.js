@@ -165,6 +165,7 @@
           is_twosided = this.isSet(flags, this.f_is_twosided),
           fat_lines = this.isSet(flags, this.f_fat_lines),
           is_transparent = this.isSet(flags, this.f_is_transparent),
+          is_points = this.isSet(flags, this.f_is_points),
           has_fog = this.isSet(flags, this.f_has_fog),
           nclipplanes = this.countClipplanes(), i,
           texture_format, nlights,
@@ -246,6 +247,13 @@
           result = result+"    if (neg && length(point) <= 1.0) discard;\n";
         result = result + "    point.y = min(point.y, 0.0);\n"+
                           "    if (length(point) > 1.0) discard;\n";
+      }
+      
+      if (is_points) {
+        var round = this.getMaterial(id, "point_antialias");
+        if (round)
+          result = result + "    vec2 coord = gl_PointCoord - vec2(0.5);\n"+
+                            "    if (length(coord) > 0.5) discard;\n";
       }
 
       for (i=0; i < nclipplanes;i++)
