@@ -70,11 +70,11 @@
         b = this.repeatToLen(b, a.length);
       else if (a.length < b.length)
         a = this.repeatToLen(a, b.length);
-      if (Array.isArray(a[1]))
+      if (Array.isArray(a[0]))
         return a.map(function(currentValue, index) {
             return currentValue.concat(b[index]);
           });
-      else if (Array.isArray(b[1]))
+      else if (Array.isArray(b[0]))
         return a.map(function(currentValue, index) {
             return [a[index]].concat(b[index]); 
           });
