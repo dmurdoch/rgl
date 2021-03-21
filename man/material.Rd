@@ -107,8 +107,8 @@ material3d(...)
     numeric, specifying the line width in pixels
   }
   \item{fog}{logical, specifying if fog effect should be applied on the corresponding shape.  Fog type is set in \code{\link{bg3d}}.}
-  \item{point_antialias, line_antialias}{logical, specifying if points and lines 
-     should be antialiased}
+  \item{point_antialias, line_antialias}{logical, specifying if points should be round and lines 
+     should be antialiased, but see Note below.}
   \item{depth_mask}{logical, specifying whether the object's depth
      should be stored.}
   \item{depth_test}{Determines which depth test is used to see if this
@@ -160,9 +160,6 @@ they will be left unchanged.  \code{material3d} may also be used to query the ma
 properties; see the examples below.
 
   The current implementation does not return parameters for textures.
-  
-  If \code{point_antialias} is \code{TRUE}, points will be drawn as circles; otherwise, they
-will be drawn as squares.  Lines tend to appear heavier with \code{line_antialias == TRUE}.
 
   The \code{material} member of the \code{\link{r3dDefaults}} list may be used to 
 set default values for material properties.
@@ -179,6 +176,15 @@ When setting properties, it returns the previous values in a named list.  A name
 returned when more than one value is queried.  When a single value is queried it is returned 
 directly.
 } 
+\note{
+  If \code{point_antialias} is \code{TRUE}, points will be drawn as circles in WebGL; otherwise, they
+will be drawn as squares.  Within R, the behaviour depends
+on your graphics hardware:  for example, I see circles for 
+both settings on my laptop.
+
+Within R, lines tend to appear heavier with \code{line_antialias == TRUE}.  There's no difference at all
+in WebGL.
+}
 \seealso{
 \code{\link{rgl.primitive}},
 \code{\link{rgl.bbox}},

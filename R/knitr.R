@@ -232,7 +232,6 @@ fns <- local({
                        rgl.closewindows = rgl.closewindows)
     
     # R produces multiple vignettes in the same session.
-    environment(rglwidget)$reuseDF <- NULL
     knitr::opts_chunk$set(rgl.newwindow = rgl.newwindow, 
                           rgl.closewindows = rgl.closewindows,
                           rgl.chunk = TRUE)
@@ -347,7 +346,6 @@ fns <- local({
           content <- rglwidget(scene,
                                width = obj$width,
                                height = obj$height,
-                               reuse = TRUE,
                                snapshot = doSnapshot)
           if (inherits(content, "knit_image_paths")) {
             # # We've done a snapshot, put it in the right place.
@@ -443,7 +441,6 @@ fns <- local({
       content <- rglwidget(scene,
                            width = x$width,
                            height = x$height,
-                           reuse = TRUE,
                            webgl = !doSnapshot,
                            latex = latex)
       if (inherits(content, "knit_image_paths")) {
