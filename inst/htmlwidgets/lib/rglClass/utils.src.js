@@ -70,9 +70,18 @@
         b = this.repeatToLen(b, a.length);
       else if (a.length < b.length)
         a = this.repeatToLen(a, b.length);
-      return a.map(function(currentValue, index) {
+      if (Array.isArray(a[1]))
+        return a.map(function(currentValue, index) {
             return currentValue.concat(b[index]);
-      });
+          });
+      else if (Array.isArray(b[1]))
+        return a.map(function(currentValue, index) {
+            return [a[index]].concat(b[index]); 
+          });
+      else
+        return a.map(function(currentValue, index) {
+            return [a[index], b[index]];
+        });
     };
 
     /**
