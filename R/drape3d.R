@@ -60,6 +60,7 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
     
     pverts <- P %*% verts  # projected vertices
     psegs <- P %*% segs # projected segments
+    psegs <- cbind(psegs, c(NA, NA)) # add sentinel at the end
     
     ## get unique point pairs making a triangle side
     tri <- matrix(NA,nrow=3*ncol(obj$it),ncol=2)
@@ -72,90 +73,86 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
     }
 
     result <- matrix(numeric(), ncol = 3)
-    
-    ## add first segment point assuming not on a triangle edge
-    z1 <- ztri(1)
-    if (length(z1)) 
-      zs <- cbind(z1, 0) # Entries are triangle no, pt, t in segment
-    else
-      zs <- NULL
 
-    for (i in seq_len(ncol(segs))[-1]){
-      p1 <- psegs[,i-1]
+    p2 <- c(NA, NA)
+    for (i in seq_len(ncol(psegs))){
+      browser()
+      p1 <- p2
       p2 <- psegs[,i]
-      p21 <- p2 - p1
-      if (any(is.na(p2))) {
+      if (any(is.na(p1))) {  
+        if (any(is.na(p2)))
+          next;              # two NAs in a row
+        # At start of line
+        zi <- ztri(i)
+        if (length(zi)) 
+          zs <- cbind(zi, 0)
+        else 
+          zs <- NULL
+        next;
+      }
+      if (any(is.na(p2))) { # at end of line strip
         ## add last segment point assuming not on triangle edge
         zi <- ztri(i-1)
         if (!is.null(zi)) zs <- rbind(zs,cbind(zi, 1))
-        next
-      }
-      if (any(is.na(p1))) {
-        ## NAs break line and move to next point
-        zi <- ztri(i)
-        if (length(zi)) 
-          zs <- rbind(zs, cbind(zi, 0))
-        next
-      }
-
-      s <- matrix(c(p1,p2),2,2)  ## speedup: winnow futile intersection calcs
-      s <- t(apply(s,1,op))
-      ## triangle seg x extent is all below or above line seg x extent
-      sx <- (pverts[1,tri[,1]] < s[1,1] & pverts[1,tri[,2]] < s[1,1]) |
-        (pverts[1,tri[,1]] > s[1,2] & pverts[1,tri[,2]] > s[1,2])
-      ## triangle seg y extent is all below or above line seg y extent
-      sy <- (pverts[2,tri[,1]] < s[2,1] & pverts[2,tri[,2]] < s[2,1]) |
-        (pverts[2,tri[,1]] > s[2,2] & pverts[2,tri[,2]] > s[2,2])
-      for(j in seq_len(nrow(tri))[!sx & !sy]){     ## possible intersections
-        p3 <- pverts[,tri[j,1]]
-        p4 <- pverts[,tri[j,2]]
-        p43 <- p4-p3
-        p31 <- p3-p1
-        D <- -p21[1]*p43[2] + p21[2]*p43[1]
-        if (D == 0) next                    ## parallel line segs
-        T1<- -p31[1]*p43[2] + p31[2]*p43[1]
-        t1 <- T1/D
-        if (t1 < 0 || t1 > 1) next          ## not within p1 ... p2
-        T2<-  p21[1]*p31[2] - p21[2]*p31[1]
-        t2 <- T2/D
-        if (t2 < 0 || t2 > 1) next          ## not within p3 ... p4
-        v3 <- verts[,tri[j,1]]
-        v43 <- verts[,tri[j,2]] - v3
-        k <- (j+2)%/%3   # triangle number
-        zs <- rbind(zs, c(v3+t2*v43, k, t1))## t1 along line seg & point value
-      }
-      ## add last segment point assuming not on triangle edge
-      zn <- ztri(i)
-      if (!is.null(zn)) 
-        zs <- rbind(zs, cbind(zn, 1))
-      
-      if (length(zs)) {
-        # Order by triangle to group them, then by t
-        # within triangle 
-        o <- order(zs[,4], zs[,5])
-        zs <- zs[o, , drop = FALSE]
-        # Only keep cases that are on the same triangle
-        # Rounding may give us 1 or 3 intersections with a 
-        # triangle; discard singletons, use first and last
-        # for triples.
-        k <- zs[,4]
-        dup <- duplicated(k)
-        nextdup <- c(dup[-1], FALSE)
-        keep <- (!dup & nextdup) | # The first for a triangle
-                (dup & !nextdup)   # The last for one
-        zs <- zs[keep,,drop = FALSE]
-        # Order by t value
-        finish <- 2*seq_len(nrow(zs)/2)
-        start <- finish - 1
-        o <- order(zs[start, 5])
-        start <- start[o]
-        finish <- finish[o]
-        # Drop zero length segments
-        keep <- zs[start, 5] < zs[finish, 5]
-        start <- start[keep]
-        finish <- finish[keep]
-        both <- as.numeric(rbind(start, finish))
-        result <- rbind(result, zs[both, -(4:5), drop = FALSE])
+        
+        if (length(zs)) {
+          browser()
+          # Order by triangle to group them, then by t
+          # within triangle 
+          o <- order(zs[,4], zs[,5])
+          zs <- zs[o, , drop = FALSE]
+          # Only keep cases that are on the same triangle
+          # Rounding may give us 1 or 3 intersections with a 
+          # triangle; discard singletons, use first and last
+          # for triples.
+          k <- zs[,4]
+          dup <- duplicated(k)
+          nextdup <- c(dup[-1], FALSE)
+          keep <- (!dup & nextdup) | # The first for a triangle
+            (dup & !nextdup)   # The last for one
+          zs <- zs[keep,,drop = FALSE]
+          # Order by t value
+          finish <- 2*seq_len(nrow(zs)/2)
+          start <- finish - 1
+          o <- order(zs[start, 5])
+          start <- start[o]
+          finish <- finish[o]
+          # Drop zero length segments
+          keep <- zs[start, 5] < zs[finish, 5]
+          start <- start[keep]
+          finish <- finish[keep]
+          both <- as.numeric(rbind(start, finish))
+          result <- rbind(result, zs[both, -(4:5), drop = FALSE])
+        }
+      } else {  # in the middle of line strip
+        p21 <- p2 - p1
+        
+        s <- matrix(c(p1,p2),2,2)  ## speedup: winnow futile intersection calcs
+        s <- t(apply(s,1,op))
+        ## triangle seg x extent is all below or above line seg x extent
+        sx <- (pverts[1,tri[,1]] < s[1,1] & pverts[1,tri[,2]] < s[1,1]) |
+          (pverts[1,tri[,1]] > s[1,2] & pverts[1,tri[,2]] > s[1,2])
+        ## triangle seg y extent is all below or above line seg y extent
+        sy <- (pverts[2,tri[,1]] < s[2,1] & pverts[2,tri[,2]] < s[2,1]) |
+          (pverts[2,tri[,1]] > s[2,2] & pverts[2,tri[,2]] > s[2,2])
+        for(j in seq_len(nrow(tri))[!sx & !sy]){     ## possible intersections
+          p3 <- pverts[,tri[j,1]]
+          p4 <- pverts[,tri[j,2]]
+          p43 <- p4-p3
+          p31 <- p3-p1
+          D <- -p21[1]*p43[2] + p21[2]*p43[1]
+          if (D == 0) next                    ## parallel line segs
+          T1<- -p31[1]*p43[2] + p31[2]*p43[1]
+          t1 <- T1/D
+          if (t1 < 0 || t1 > 1) next          ## not within p1 ... p2
+          T2<-  p21[1]*p31[2] - p21[2]*p31[1]
+          t2 <- T2/D
+          if (t2 < 0 || t2 > 1) next          ## not within p3 ... p4
+          v3 <- verts[,tri[j,1]]
+          v43 <- verts[,tri[j,2]] - v3
+          k <- (j+2)%/%3   # triangle number
+          zs <- rbind(zs, c(v3+t2*v43, k, t1))## t1 along line seg & point value
+        }
       }
     }
     if (plot)
