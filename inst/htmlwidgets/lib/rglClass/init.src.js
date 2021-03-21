@@ -53,67 +53,63 @@
      * Initialize the sphere object
      */
     rglwidgetClass.prototype.initSphere = function(sections, segments) {
-       var vx = [], vy = [], vz = [], ts = [], tt = [],
-           phi = [], theta = [], it = [], centers = [],
-           i, j, k, ind, mod1, pole;
+      var v = [], phi = [], theta = [], it = [], centers = [],
+           i, j, k, ind, mod1, pole, result = {};
        
-       for (i = 0; i < sections - 1; i++) {
-         phi.push((i + 1)/sections - 0.5);
-       }
+      for (i = 0; i < sections - 1; i++) {
+        phi.push((i + 1)/sections - 0.5);
+      }
 
-       for (j = 0; j < segments; j++) {
-         theta.push(2*j/segments);
-         for (i = 0; i < sections - 1; i++) {
-           vx.push(Math.sin(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]));
-           vy.push(Math.sin(Math.PI*phi[i]));
-           vz.push(Math.cos(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]));
-           ts.push(theta[j]/2);
-           tt.push(phi[i] + 0.5);
-         }
-       }
-       pole = vx.length;
-       vx.push(0); vx.push(0);
-       vy.push(-1); vy.push(1);
-       vz.push(0); vz.push(0);
-       ts.push(0); ts.push(0);
-       tt.push(0); tt.push(1); 
-       
-       mod1 = segments*(sections - 1);
-       for (j = 0; j < segments; j++) {
-         for (i = 0; i < sections - 2; i++) {
-           ind = i + (sections - 1)*j;
-           it.push([ind % mod1, 
-                    (ind + sections - 1) % mod1,
-                    (ind + sections) % mod1]);
-           it.push([ind % mod1, 
-                    (ind + sections) % mod1,
-                    (ind + 1) % mod1]);
-         }
-         it.push([pole, 
-                  ((j + 1)*(sections - 1)) % mod1,
-                  ((j + 1)*(sections - 1) - sections + 1) % mod1]);
-         it.push([pole + 1, 
-                  ((j + 1)*(sections - 1) - 1) % mod1,
-                  ((j + 1)*(sections - 1) + sections - 2) % mod1]);
-       }
-       for (i = 0; i < it.length; i++) {
-         centers.push([0,0,0]);
-         for (k = 0; k < 3; k++) {// vertices
-           centers[i][0] += vx[it[i][k]]/3;
-           centers[i][1] += vy[it[i][k]]/3;
-           centers[i][2] += vz[it[i][k]]/3;
-         }
-       }
-       
-       var result = {values: new Float32Array(this.flatten(this.cbind(vx, this.cbind(vy, this.cbind(vz, this.cbind(ts, tt)))))),
-                     it:  new Uint16Array(this.flatten(it)),
-                     vOffsets: {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
-                  tofs:3, nextofs:-1, pointofs:-1, stride:5},
-                     centers: centers
-       };
+      for (j = 0; j < segments; j++) {
+        theta.push(2*j/segments);
+        for (i = 0; i < sections - 1; i++) {
+          /* These are [x,y,z,s,t]: */
+          v.push([Math.sin(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]),
+                  Math.sin(Math.PI*phi[i]),
+                  Math.cos(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]),                               
+                  theta[j]/2,
+                  phi[i] + 0.5]);
+        }
+      }
+      pole = v.length;
+      v.push([0, -1, 0, 0, 0]); 
+      v.push([0,  1, 0, 0, 1]);
+      result.values = new Float32Array(this.flatten(v));
+      result.vertexCount = v.length;
+      
+      mod1 = segments*(sections - 1);
+      for (j = 0; j < segments; j++) {
+        for (i = 0; i < sections - 2; i++) {
+          ind = i + (sections - 1)*j;
+          it.push([ind % mod1, 
+                   (ind + sections - 1) % mod1,
+                   (ind + sections) % mod1]);
+          it.push([ind % mod1, 
+                   (ind + sections) % mod1,
+                   (ind + 1) % mod1]);
+        }
+        it.push([pole, 
+                 ((j + 1)*(sections - 1)) % mod1,
+                 ((j + 1)*(sections - 1) - sections + 1) % mod1]);
+        it.push([pole + 1, 
+                 ((j + 1)*(sections - 1) - 1) % mod1,
+                 ((j + 1)*(sections - 1) + sections - 2) % mod1]);
+      }
+      result.it = new Uint16Array(this.flatten(it));
+      
+      for (i = 0; i < it.length; i++) {
+        centers.push([0,0,0]);
+        for (j = 0; j < 3; j++) { // x,y,z
+          for (k = 0; k < 3; k++) {// vertices
+            centers[i][j] += v[it[i][k]][j]/3;
+          }
+        }
+      }
+      result.centers = centers;
+      
+      result.vOffsets = {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
+                         tofs:3, nextofs:-1, pointofs:-1, stride:5};
 
-      // Add default indices
-      result.vertexCount = vx.length;
       result.f = [];
       result.indices = {};
 

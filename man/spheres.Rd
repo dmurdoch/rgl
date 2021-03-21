@@ -43,7 +43,7 @@ results in most cases, but artifacts may be visible,
 especially if the \code{radius} values vary, or they 
 intersect other transparent objects.  Setting 
 \code{fastTransparency = FALSE} will cause the sorting 
-to apply to each of the 512 facets of individual spheres.
+to apply to each of the 480 facets of individual spheres.
 This is much slower, but may produce better
 output.
 } 
