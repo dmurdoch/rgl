@@ -245,7 +245,6 @@ sceneChange <- function(elementId, x = scene3d(minimal),
   scene$objects[dontSend] <- NULL
   if (!length(scene$objects))
     scene$objects <- NULL
-  scene$sphereVerts <- NULL
   if (!material)
     scene$material <- NULL
   if (!rootSubscene)

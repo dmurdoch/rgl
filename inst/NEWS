@@ -1234,3 +1234,8 @@ base graphics.
   - Allowed infinite values for strip limits in filledContour3d.
   - Added drape3d(), to "drape" objects across a mesh.
     (Contributed by George Helffrich.)
+  - Setting material property point_antialias = TRUE now
+    gives round points in rglwidget() displays.
+  - The reuse argument in rglwidget() is no longer used.
+  - Sphere initialization in WebGL displays is now done
+    entirely in Javascript.

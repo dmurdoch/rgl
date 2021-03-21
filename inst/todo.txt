@@ -134,7 +134,7 @@ background colour. DONE
 getr3dDefaults() should be able to return values for things
 that aren't mentioned in r3dDefaults, going back to the original source. DONE
 
-Fix "reuse" bug in rglwidget():  reused data isn't being found. FIXED?
+Fix "reuse" bug in rglwidget():  reused data isn't being found. FIXED!
 
 Allow rgl.attrib() to return normals even if lit is FALSE.  (See
 https://r-forge.r-project.org/tracker/?func=detail&atid=949&aid=6661&group_id=234).  rglwidget() will need modification to

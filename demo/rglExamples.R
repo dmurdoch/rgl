@@ -148,7 +148,6 @@ options(saveopts)
   prevlink <- paste0("[Prev](", htmlnames[i], ")")
   rmarkdown::render(Rmdnames[i])
   while(length(rgl.dev.list())) close3d()
-  environment(rglwidget)$reuseDF <- NULL
 }
 
 indexname <- "index.Rmd"
