@@ -79,8 +79,17 @@ col <- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point
 open3d()
 id <- surface3d(x, y, z, color = col, polygon_offset = 1)
 
-segs <- data.frame(x=range(x)+c(100,-100),y=range(y)+c(150,-100),z=325)
-drape3d(id, segs, col='yellow', lwd=3)
+segs <- data.frame(x = range(x) + c(100, -100),
+                   y = range(y) + c(150, -100), z = 325)
+drape3d(id, segs, col = 'yellow', lwd = 3)
 lines3d(segs, col='red', lwd=3)
 
+p <- c(350, 205)         # (x,y) of strike & dip reading
+off <- 20*c(-1, +1)      # X-marks-the-spot offset
+segs <- data.frame(
+    x = c(p[1] + off, NA, p[1] + off),
+    y = c(p[2] + off, NA, p[2] - off),
+    z = rep(350, 5)
+    )
+drape3d(id, segs, col = "yellow", lwd = 3)
 }

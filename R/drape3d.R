@@ -76,7 +76,6 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
 
     p2 <- c(NA, NA)
     for (i in seq_len(ncol(psegs))){
-      browser()
       p1 <- p2
       p2 <- psegs[,i]
       if (any(is.na(p1))) {  
@@ -96,7 +95,6 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
         if (!is.null(zi)) zs <- rbind(zs,cbind(zi, 1))
         
         if (length(zs)) {
-          browser()
           # Order by triangle to group them, then by t
           # within triangle 
           o <- order(zs[,4], zs[,5])
