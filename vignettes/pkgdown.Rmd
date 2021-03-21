@@ -39,7 +39,7 @@ packages whose examples use RGL or other packages like [leaflet](http://rstudio.
 describes current progress in supporting both of these.
 
 The main problem for [pkgdown](https://pkgdown.r-lib.org/) support
-is that RGL and other [htmlwidgets](http://htmlwidgets.org/)
+is that RGL and other [htmlwidgets](http://www.htmlwidgets.org)
 users require multiple Javascript libraries to be linked to
 each web page.  `pkgdown` 1.6.1 can't do this, but I have
 submitted 
