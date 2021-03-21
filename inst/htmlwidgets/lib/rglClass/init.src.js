@@ -50,9 +50,9 @@
     };
 
     /**
-     * The sphere mesh object
+     * Initialize the sphere object
      */
-    rglwidgetClass.prototype.sphereVerts = function(segments, sections) {
+    rglwidgetClass.prototype.initSphere = function(sections, segments) {
        var vx = [], vy = [], vz = [], ts = [], tt = [],
            phi = [], theta = [], it = [], centers = [],
            i, j, k, ind, mod1, pole;
@@ -63,10 +63,7 @@
 
        for (j = 0; j < segments; j++) {
          theta.push(2*j/segments);
-       }
-       
-       for (j = 0; j < theta.length; j++) {
-         for (i = 0; i < phi.length; i++) {
+         for (i = 0; i < sections - 1; i++) {
            vx.push(Math.sin(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]));
            vy.push(Math.sin(Math.PI*phi[i]));
            vz.push(Math.cos(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]));
@@ -88,22 +85,13 @@
            it.push([ind % mod1, 
                     (ind + sections - 1) % mod1,
                     (ind + sections) % mod1]);
-         }
-       }
-       for (j = 0; j < segments; j++) {
-         for (i = 0; i < sections - 2; i++) {
-           ind = i + (sections - 1)*j;
            it.push([ind % mod1, 
                     (ind + sections) % mod1,
                     (ind + 1) % mod1]);
          }
-       }
-       for (j = 0; j < segments; j++) {
          it.push([pole, 
                   ((j + 1)*(sections - 1)) % mod1,
                   ((j + 1)*(sections - 1) - sections + 1) % mod1]);
-       }
-       for (j = 0; j < segments; j++) {
          it.push([pole + 1, 
                   ((j + 1)*(sections - 1) - 1) % mod1,
                   ((j + 1)*(sections - 1) + sections - 2) % mod1]);
@@ -123,33 +111,9 @@
                   tofs:3, nextofs:-1, pointofs:-1, stride:5},
                      centers: centers
        };
-       
-       return result;
-    };
-     
-    /**
-     * Initialize the sphere object
-     */
-    rglwidgetClass.prototype.initSphere = function() {
-      var verts = this.scene.sphereVerts,
-          result, n = verts.it[0].length, i, j, k,
-            centers = new Array(n);
-      for (i = 0; i < n; i++) { // faces
-        centers[i] = [0,0,0];
-        for (j = 0; j < 3; j++) // x, y, z
-          for (k = 0; k < 3; k++) // vertices
-            centers[i][j] += verts.vb[j][verts.it[k][i]]/3;
-      }
-      result = {values: new Float32Array(this.flatten(this.cbind(this.transpose(verts.vb),
-                this.transpose(verts.texcoords)))),
-                it: new Uint16Array(this.flatten(this.transpose(verts.it))),
-                vOffsets: {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
-                  tofs:3, nextofs:-1, pointofs:-1, stride:5},
-                centers: centers
-              };
-      result = this.sphereVerts(16, 16);   
+
       // Add default indices
-      result.vertexCount = verts.vb[0].length;
+      result.vertexCount = vx.length;
       result.f = [];
       result.indices = {};
 
@@ -329,7 +293,7 @@
       return;
       
     if (type === "spheres" && typeof this.sphere === "undefined")
-      this.initSphere();
+      this.initSphere(16, 16);
 
     if (type === "light") {
       obj.ambient = new Float32Array(obj.colors[0].slice(0,3));

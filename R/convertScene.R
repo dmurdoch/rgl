@@ -427,38 +427,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       obj$centers <- obj$vertices
     setObj(cids[i], obj)
   }
-  
-  # Make model sphere
-  segments <- 16
-  sections <- 16
-  # indices wrap around; write a function to do that
-  mod1 <- function(x) (x - 1) %% (segments*(sections - 1)) + 1
-  iy <- 1:(sections-1) # Leave off the poles; add them at the end
-  fy <- iy/sections
-  phi <- fy - 0.5
-  ix <- 0:(segments-1)
-  fx <- ix/segments
-  theta <- 2*fx
-  qx <- as.numeric(outer(phi, theta, function(phi, theta) sinpi(theta)*cospi(phi)))
-  qy <- as.numeric(outer(phi, theta, function(phi, theta) sinpi(phi)))
-  qz <- as.numeric(outer(phi, theta, function(phi, theta) cospi(theta)*cospi(phi)))
-  poles <- c(length(qx) + 1, length(qx) + 2) 
-  inds <- rep(seq_len(sections - 2), segments) + (sections - 1)*rep(seq_len(segments)-1, each = sections - 2) 
-  inds <- cbind(mod1(rbind(inds, inds + sections - 1, 
-                           inds + sections)),
-                mod1(rbind(inds, inds + sections, 
-                           inds + 1)),
-                rbind(poles[1], mod1(seq_len(segments)*(sections - 1) + 1),
-                      mod1(seq_len(segments)*(sections - 1) - sections + 2)),
-                rbind(poles[2], mod1(seq_len(segments)*(sections - 1)),
-                      mod1(seq_len(segments)*(sections - 1) + sections - 1)))
-  x <- tmesh3d(vertices = rbind(c(qx,0,0), c(qy,-1,1), c(qz,0,0), 1), 
-               texcoords = cbind(c(rep(fx, each = sections-1),0,0),
-                                 c(rep(fy, segments), 0,1)),
-               indices = inds)
-  x$it <- x$it - 1
-  x$vb <- x$vb[1:3,]
-  result$sphereVerts <- x
 
   result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
   
