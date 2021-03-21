@@ -11,14 +11,6 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
   # NULL if in no triangle, otherwise matrix of projected locations and triangle numbers.
   ztri <- function(i){
     p <- psegs[,i]
-    TRI <- array(NA,c(2,2,ncol(obj$it)))
-    for(j in seq_len(ncol(obj$it))){
-      v <- obj$it[,j]       ## vertices of triangle
-      TRI[,,j] <- matrix(c(range(pverts[1,v]),range(pverts[2,v])),2,2)
-    }
-    
-    ## now TRI[,1,i] is x coord range for projected triangle i
-    ## now TRI[,2,i] is y coord range for projected triangle i
     oo <- p[1] < TRI[1,1,] | p[1] > TRI[2,1,] |
       p[2] < TRI[1,2,] | p[2] > TRI[2,2,]
     result <- NULL
@@ -69,6 +61,15 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
     tri[n<-n+1,] <- v[c(2,3)]
     tri[n<-n+1,] <- v[c(3,1)]
   }
+  
+  TRI <- array(NA,c(2,2,ncol(obj$it)))
+  for(j in seq_len(ncol(obj$it))){
+    v <- obj$it[,j]       ## vertices of triangle
+    TRI[,,j] <- matrix(c(range(pverts[1,v]),range(pverts[2,v])),2,2)
+  }
+  
+  ## now TRI[,1,i] is x coord range for projected triangle i
+  ## now TRI[,2,i] is y coord range for projected triangle i
   
   result <- matrix(numeric(), ncol = 3)
   
@@ -130,8 +131,7 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
       k <- zs[,4]
       dup <- duplicated(k)
       nextdup <- c(dup[-1], FALSE)
-      keep <- (!dup & nextdup) | # The first for a triangle
-        (dup & !nextdup)   # The last for one
+      keep <- xor(dup, nextdup) # The first or last for a triangle
       zs <- zs[keep,,drop = FALSE]
       # Order by t value
       finish <- 2*seq_len(nrow(zs)/2)
