@@ -39,13 +39,12 @@ packages whose examples use RGL or other packages like [leaflet](http://rstudio.
 describes current progress in supporting both of these.
 
 The main problem for [pkgdown](https://pkgdown.r-lib.org/) support
-is that RGL and other [htmlwidgets](http://htmlwidgets.org/)
+is that RGL and other [htmlwidgets](http://www.htmlwidgets.org)
 users require multiple Javascript libraries to be linked to
-each web page.  `pkgdown` 1.6.1 can't do this, but I have
-submitted 
-[a pull request](https://github.com/r-lib/pkgdown/pull/1548)
-that adds support for additional dependent libraries.  This 
-also requires [changes to downlit](https://github.com/r-lib/downlit/pull/78), and
+each web page.  `pkgdown` 1.6.1 can't do this, but the 
+current development version on Github
+adds support for additional dependent libraries.  This 
+also requires changes to [downlit](https://downlit.r-lib.org/), and
 for other widgets, [changes to htmlwidgets](https://github.com/ramnathv/htmlwidgets/pull/404).
 
 ## Installing the changes
@@ -55,7 +54,7 @@ Installing the changes is fairly easy.  Make sure you have the
 run
 
 ```{r eval=FALSE}
-remotes::install_github(c("dmurdoch/downlit@rglpatch",
+remotes::install_github(c("r-lib/downlit",
                           "dmurdoch/pkgdown@rglpatch",
                           "dmurdoch/rgl",
                           "dmurdoch/htmlwidgets@rglpatch"))
