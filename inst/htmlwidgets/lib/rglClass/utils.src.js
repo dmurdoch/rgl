@@ -62,7 +62,7 @@
     /**
      * Bind vectors or matrices by columns
      * @returns {number[][]}
-     * @param a {number[]|number[][]}
+     * @param a {number[][]}
      * @param b {number[]|number[][]}
      */
     rglwidgetClass.prototype.cbind = function(a, b) {
