@@ -41,6 +41,7 @@ reference:
   - sprites3d
   - spheres3d
   - surface3d
+  - drape3d
   - arrow3d
   - pch3d
   - plotmath3d
