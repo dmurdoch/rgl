@@ -38,7 +38,7 @@ For the \code{"default"} method, additional parameters to pass to the
 }
 \details{
 The default method converts \code{obj} to a mesh
-using \code{\link{as.mesh3d()}}, then uses the \code{"mesh3d"}
+using \code{\link{as.mesh3d}}, then uses the \code{"mesh3d"}
 method.
 
 The current implementation constructs the segments to drape
