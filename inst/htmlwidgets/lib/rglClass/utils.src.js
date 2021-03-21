@@ -62,7 +62,7 @@
     /**
      * Bind vectors or matrices by columns
      * @returns {number[][]}
-     * @param a {number[]|number[][]}
+     * @param a {number[][]}
      * @param b {number[]|number[][]}
      */
     rglwidgetClass.prototype.cbind = function(a, b) {
@@ -70,18 +70,9 @@
         b = this.repeatToLen(b, a.length);
       else if (a.length < b.length)
         a = this.repeatToLen(a, b.length);
-      if (Array.isArray(a[0]))
-        return a.map(function(currentValue, index) {
+      return a.map(function(currentValue, index) {
             return currentValue.concat(b[index]);
-          });
-      else if (Array.isArray(b[0]))
-        return a.map(function(currentValue, index) {
-            return [a[index]].concat(b[index]); 
-          });
-      else
-        return a.map(function(currentValue, index) {
-            return [a[index], b[index]];
-        });
+      });
     };
 
     /**
