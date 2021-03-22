@@ -73,25 +73,32 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
   
   result <- matrix(numeric(), ncol = 3)
   
-  for (i in seq_len(ncol(psegs))[-1]) {
-    p1 <- psegs[,i-1]
-    p2 <- psegs[,i]
-    if (any(is.na(p1)) || any(is.na(p2)))
-      next;
-    # Add first point   
-    zi <- ztri(i-1)
-    if (length(zi)) 
-      zs <- cbind(zi, 0)
-    else 
+  p2 <- NA
+  p2tri <- NULL
+  
+  for (i in seq_len(ncol(psegs))) {
+    p1 <- p2
+    p1tri <- p2tri
+    if (!length(p1tri))
       zs <- NULL
+    else
+      zs <- cbind(p1tri, 0)  # First point
     
-    ## add last point
-    zi <- ztri(i)
-    if (!is.null(zi)) zs <- rbind(zs, cbind(zi, 1))
+    p2 <- psegs[,i]
+    if (any(is.na(p2))) {
+      p2tri <- NULL
+      next
+    } else {
+      p2tri <- ztri(i)
+      zs <- rbind(zs, cbind(p2tri, 1)) # Last point
+    }
     
+    if (any(is.na(p1)))
+      next
+
+    ## add middle points    
     p21 <- p2 - p1
-    
-    ## add middle points
+
     s <- matrix(c(p1,p2),2,2)  ## speedup: winnow futile intersection calcs
     s <- t(apply(s,1,op))
     ## triangle seg x extent is all below or above line seg x extent
@@ -100,7 +107,7 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
     ## triangle seg y extent is all below or above line seg y extent
     sy <- (pverts[2,tri[,1]] < s[2,1] & pverts[2,tri[,2]] < s[2,1]) |
       (pverts[2,tri[,1]] > s[2,2] & pverts[2,tri[,2]] > s[2,2])
-    for(j in seq_len(nrow(tri))[!sx & !sy]){     ## possible intersections
+    for(j in which(!sx & !sy)){     ## possible intersections
       p3 <- pverts[,tri[j,1]]
       p4 <- pverts[,tri[j,2]]
       p43 <- p4-p3
