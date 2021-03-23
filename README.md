@@ -180,4 +180,6 @@ The authors of knitr for their graphics inclusion code. Jeroen Ooms for
 Rtools40 and FreeType help.  
 Yohann Demont for Shiny code, suggestions, and testing.  
 Joshua Ulrich for a lot of help with the Github migration.  
-Xavier Fernandez i Marin for help debugging the build.
+Xavier Fernandez i Marin for help debugging the build.  
+George Helffrich for draping code.  
+Ivan Krylov for window\_group code in X11.
