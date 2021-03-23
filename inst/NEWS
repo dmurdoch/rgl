@@ -1239,3 +1239,5 @@ base graphics.
   - The reuse argument in rglwidget() is no longer used.
   - Sphere initialization in WebGL displays is now done
     entirely in Javascript.
+  - Set "window_group" in X11 so rgl windows are grouped,
+    based on code by Ivan Krylov.

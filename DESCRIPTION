@@ -21,7 +21,8 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
               person("Yohann", "Demont", role = "ctb"),
               person("Joshua", "Ulrich", role = "ctb"),
               person("Xavier", "Fernandez i Marin", role = "ctb"),
-              person("George", "Helffrich", role = "ctb"))
+              person("George", "Helffrich", role = "ctb"),
+              person("Ivan", "Krylov", role = "ctb"))
 Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,

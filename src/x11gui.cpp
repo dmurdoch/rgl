@@ -494,6 +494,10 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
     throw_error("GLX extension missing on server"); return;
   }
   
+  ::Window rootwin = DefaultRootWindow(xdisplay);
+  group_leader = XCreateSimpleWindow( /* never mapped or visible */
+                   xdisplay, rootwin, 0, 0, 1, 1, 0, 0, 0);
+  
 }
 // ---------------------------------------------------------------------------
 X11GUIFactory::~X11GUIFactory()
@@ -503,8 +507,11 @@ X11GUIFactory::~X11GUIFactory()
 // ---------------------------------------------------------------------------
 void X11GUIFactory::disconnect()
 {
-  // process pending XDestroyNotify events
   if (xdisplay) {
+    // close invisible group leader
+    XDestroyWindow(xdisplay, group_leader);
+    
+    // process pending XDestroyNotify events
     XSync(xdisplay, False);
     processEvents();
 
@@ -697,6 +704,19 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   if (xwindow && n && !error_code)
     XSetWMProtocols(xdisplay,xwindow,proto_atoms,n);
 
+  // Set group leader
+  
+  if (xwindow && !error_code) {
+    ::XWMHints *hints;
+    hints = XAllocWMHints();
+    if (hints) {
+      hints->window_group = group_leader;
+      hints->flags |= WindowGroupHint;
+      XSetWMHints(xdisplay, xwindow, hints);
+      XFree(hints);
+    }
+  }
+  
   // create window implementation instance
   
   if (xwindow && !error_code) {

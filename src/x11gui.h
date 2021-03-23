@@ -58,6 +58,7 @@ private:
   typedef std::map< XID , X11WindowImpl*> WindowMap;
   
   WindowMap windowMap;
+  ::Window group_leader;
 };
 // ---------------------------------------------------------------------------
 
