@@ -55,7 +55,7 @@ run
 
 ```{r eval=FALSE}
 remotes::install_github(c("r-lib/downlit",
-                          "dmurdoch/pkgdown@rglpatch",
+                          "r-lib/pkgdown",
                           "dmurdoch/rgl",
                           "dmurdoch/htmlwidgets@rglpatch"))
 ```
