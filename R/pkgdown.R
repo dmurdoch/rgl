@@ -45,6 +45,7 @@ pkgdown_print.rglId <-     fns[["pkgdown_print.rglId"]]
 pkgdown_print.rglOpen3d <- fns[["pkgdown_print.rglOpen3d"]]
 rm(fns)
 
+globalVariables("fig.asp")
 pkgdown_dims <- function() {
 	settings <- pkgdown_fig_settings()
 	rgl <- settings$other.parameters$rgl
@@ -69,12 +70,11 @@ pkgdown_dims <- function() {
 replay_html.rglRecordedplot <- local({
 	rdname <- ""
 	function(x, ...) {
-		if (pkgdown_rdname() != rdname) {
-			environment(rglwidget)$reuseDF <- NULL
+		if (pkgdown_rdname() != rdname) 
 			rdname <<- pkgdown_rdname()
-		}
+		
 		settings <- pkgdown_dims()
-		rendered <- htmltools::renderTags(rglwidget(x$scene, reuse = TRUE, 
+		rendered <- htmltools::renderTags(rglwidget(x$scene,
 																								width = settings$width, height = settings$height))
 		structure(rendered$html, dependencies = rendered$dependencies)
 	}

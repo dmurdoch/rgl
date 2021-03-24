@@ -183,6 +183,7 @@ Function                      | Description
 `r indexfns(c("sprites3d", "particles3d"))`: | add sprites (fixed shapes or images) to plot
 `r indexfns("spheres3d")`:    | adds spheres
 `r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
+`r indexfns("drape3d")`:      | drapes lines on a surface or object(s)
 `r indexfns("arrow3d")`:      | add an arrow to a scene
 `r indexfns("pch3d")`:	      | draw base-style plotting symbols
 `r indexfns("plotmath3d")`:   | used by `r linkfn("text3d")` for math text

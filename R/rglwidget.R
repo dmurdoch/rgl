@@ -246,12 +246,10 @@ knitrNeedsSnapshot <- function(options = knitr::opts_current$get()) {
 }
 
 rglwidget <- local({
-  reuseDF <- NULL
-
   function(x = scene3d(minimal), width = figWidth(), height = figHeight(),
            controllers = NULL, 
            elementId = NULL,
-           reuse = !interactive() && !in_pkgdown_example(),
+           reuse = FALSE,
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
            minimal = TRUE, 
@@ -279,11 +277,6 @@ rglwidget <- local({
   
   origScene <- x
   force(shared) # It might plot something...
-  	
-  if (is.na(reuse))
-    reuseDF <- NULL # local change only
-  else if (!reuse)
-    reuseDF <<- NULL
 
   if (is.null(elementId) && 
       (!inShiny() || # If in Shiny, all of the classes below need the ID
@@ -333,11 +326,8 @@ rglwidget <- local({
   if (!is.null(height))
     height <- CSStoPixels(height)
   x <- convertScene(x, width, height,
-                   elementId = elementId, reuse = reuseDF,
+                   elementId = elementId, 
                    webgl = webgl, snapshot = snapshot)
-
-  if (!is.na(reuse))
-    reuseDF <<- attr(x, "reuse")
   
   upstream <- processUpstream(controllers, elementId = elementId)
   
@@ -357,7 +347,7 @@ rglwidget <- local({
       elementId = elementId,
       dependencies = dependencies,
       ...
-    ), rglReuse = attr(x, "reuse"), origScene = origScene)
+    ), origScene = origScene)
     
   } else {
     if (is.list(upstream$objects)) {

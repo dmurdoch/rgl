@@ -8,7 +8,7 @@ Convert object to mesh object
 The \code{as.mesh3d} generic function converts various objects
 to \code{\link{mesh3d}} objects.  
 
-The default method works takes takes a matrix of vertices 
+The default method takes takes a matrix of vertices 
 as input and (optionally) merges repeated vertices, producing a \code{\link{mesh3d}}
 object as output.  It will contain either triangles or quads
 according to the \code{triangles} argument.
