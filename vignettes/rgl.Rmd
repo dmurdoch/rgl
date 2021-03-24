@@ -184,6 +184,7 @@ Function                      | Description
 `r indexfns("spheres3d")`:    | adds spheres
 `r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
 `r indexfns("drape3d")`:      | drapes lines on a surface or object(s)
+`r indexfns("shadow3d")`:     | projects mesh onto a surface
 `r indexfns("arrow3d")`:      | add an arrow to a scene
 `r indexfns("pch3d")`:	      | draw base-style plotting symbols
 `r indexfns("plotmath3d")`:   | used by `r linkfn("text3d")` for math text
@@ -506,6 +507,7 @@ Function                             | Description
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
 `r indexfns("merge.mesh3d", backticked("merge"))`: | merge mesh objects
+`r indexfns("facing3d")`:   | subset of mesh facing "up"     
 
 The individual steps in `r linkfn("subdivision3d")` are also available:
 `r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These
@@ -927,6 +929,7 @@ Function                             | Description
 `r indexfns("transform3d")`:  | apply a general transformation
 `r indexfns(c("rotationMatrix", "scaleMatrix", "translationMatrix"))`:  | compute the transformation matrix
 `r indexfns("identityMatrix")`: | return a 4 x 4 identity matrix
+`r indexfns("projectDown")`: | a 3D to 2D projection down a vector
 
 There is also a function `r indexfns("GramSchmidt")`, mainly for internal
 use:  it does a Gram-Schmidt orthogonalization of a 3x3 matrix,
@@ -956,6 +959,13 @@ persp(volcano, col = "green", shade = TRUE,
 
 Note that the `orientlib` package must be 
 available for these functions to work.
+
+### Creating `pkgdown` websites
+
+The ["Using RGL in pkgdown web sites"](pkgdown.html) vignette
+describes how to use `rgl` in a `pkgdown` web site.  The
+utility function `r indexfns("in_pkgdown_example")` can be used
+to detect that `pkgdown` is being used.
 
 ### Working with Javascript
 

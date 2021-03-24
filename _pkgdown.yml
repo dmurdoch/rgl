@@ -42,6 +42,7 @@ reference:
   - spheres3d
   - surface3d
   - drape3d
+  - shadow3d
   - arrow3d
   - pch3d
   - plotmath3d
@@ -96,6 +97,7 @@ reference:
   - addNormals
   - subdivision3d
   - merge.mesh3d
+  - facing3d
 - title: Multi-figure layouts
 - contents:
   - mfrow3d
@@ -212,6 +214,7 @@ reference:
   - setGraphicsDelay
   - rglId
   - in_pkgdown_example
+  - projectDown
 - title: General documentation
 - contents:
   - rgl-package
