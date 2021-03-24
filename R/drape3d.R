@@ -5,7 +5,7 @@ drape3d.default <- function(obj, ...)
   drape3d(as.mesh3d(obj), ...)
   
 drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
-    plot = TRUE, P = cbind(diag(2), 0), ...) 
+    plot = TRUE, up = c(0, 0, 1), P = projectDown(up), ...) 
 {
   # Takes segment number as input; returns
   # NULL if in no triangle, otherwise matrix of projected locations and triangle numbers.

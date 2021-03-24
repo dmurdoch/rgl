@@ -1241,3 +1241,7 @@ base graphics.
     entirely in Javascript.
   - Set "window_group" in X11 so rgl windows are grouped,
     based on code by Ivan Krylov.
+  - filledContour3d() now accepts levels in decreasing order.
+  - Added shadow3d() to project one mesh onto another.
+  - Added facing3d() to subset a mesh to parts facing 
+    in a particular direction.

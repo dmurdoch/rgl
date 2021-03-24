@@ -12,7 +12,8 @@ onto the surface.
 \usage{
 drape3d(obj, ...)
 \method{drape3d}{mesh3d}(obj, x, y = NULL, z = NULL, plot = TRUE,
-                         P = cbind(diag(2), 0), ...)
+                         up = c(0, 0, 1),
+                         P = projectDown(up), ...)
 \method{drape3d}{default}(obj, ...)
 }
 \arguments{
@@ -26,6 +27,9 @@ coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
   \item{plot}{
 Should the result be plotted, or returned as a data frame?
 }
+  \item{up}{
+The direction to consider as \dQuote{up}.
+  }
   \item{P}{
 The projection to use for draping, a 2x3 matrix.  The default drops the z coordinate for a vertical projection.
   }
@@ -58,7 +62,7 @@ values for the line(s)
 \author{
 George Helffrich and Duncan Murdoch
 }
-
+\seealso{\code{\link{shadow3d}}, \code{\link{facing3d}}}
 \examples{
 #
 # volcano example taken from "persp"
