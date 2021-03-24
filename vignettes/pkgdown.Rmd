@@ -54,8 +54,8 @@ Installing the changes is fairly easy.  Make sure you have the
 run
 
 ```{r eval=FALSE}
-remotes::install_github(c("dmurdoch/downlit",
-                          "dmurdoch/pkgdown",
+remotes::install_github(c("r-lib/downlit",
+                          "r-lib/pkgdown",
                           "dmurdoch/rgl",
                           "dmurdoch/htmlwidgets@rglpatch"))
 ```
