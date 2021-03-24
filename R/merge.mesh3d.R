@@ -22,7 +22,9 @@ merge.mesh3d <- function(x, y, ..., attributesMustMatch = FALSE) {
     m
   }
   z <- fixmesh(x)
-  ylist <- c(list(y), list(...))
+  ylist <- list(...)
+  if (!missing(y))
+    ylist <- c(list(y), ylist)
   for (i in seq_along(ylist)) {
     x <- z
     y <- fixmesh(ylist[[i]])
@@ -67,7 +69,6 @@ merge.mesh3d <- function(x, y, ..., attributesMustMatch = FALSE) {
   if (!is.null(z$material)) {
     if (length(unique(z$material$color)) == 1)
       z$material$color <- z$material$color[1]
-    z$material$alpha <- c(x$material$alpha, y$material$alpha)
     if (length(unique(z$material$alpha)) == 1)
       z$material$alpha <- z$material$alpha[1]
   }
