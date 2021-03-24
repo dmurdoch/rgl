@@ -94,6 +94,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/extrude3d.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/facing3d.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/figWidth.html</loc>
   </url>
   <url>
@@ -281,6 +284,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/setupKnitr.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/shadow3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/shapelist3d.html</loc>
