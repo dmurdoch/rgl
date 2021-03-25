@@ -25,8 +25,7 @@ Whether to plot the result.
 Which direction is \dQuote{up}?
   }
   \item{P}{
-The projection to use for draping, a 2x3 matrix.  The default
-annihilates the \code{up} vector while maintaining orientation.
+The projection to use for draping, a 4x4 matrix.  See \code{\link{drape3d}} for details on how \code{P} is used.
 }
   \item{outside}{
 Should the function compute and (possibly) plot the region

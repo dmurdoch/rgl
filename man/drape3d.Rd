@@ -31,7 +31,7 @@ Should the result be plotted, or returned as a data frame?
 The direction to consider as \dQuote{up}.
   }
   \item{P}{
-The projection to use for draping, a 2x3 matrix.  The default drops the z coordinate for a vertical projection.
+The projection to use for draping, a 4x4 matrix.
   }
   \item{\dots}{
 For the \code{"mesh3d"} method, additional parameters to pass to \code{\link{segments3d}}
@@ -50,6 +50,11 @@ across the surface using the same method as
 \code{\link{lines3d}} uses:  each successive point is
 joined to the previous one.  Use \code{NA} coordinates to
 indicate breaks in the line.
+
+The \code{P} matrix is used to project points to a plane as
+follows:  They are transformed by \code{P} in 
+homogeneous coordinates, then only first two (Euclidean)
+coordinates are kept.
 }
 \value{
 If \code{plot = TRUE}, 

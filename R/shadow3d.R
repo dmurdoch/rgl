@@ -5,11 +5,17 @@ shadow3d <- function(obj, mesh, plot = TRUE,
 										 outside = FALSE, ...) {
 	triangles <- as.triangles3d(mesh)
 	ntri <- nrow(triangles) / 3
-	projected <- P %*% t(triangles)
+	
+	P <- t(P)   # The convention in rgl is row vectors on the left
+	# but we'll be using column vectors on the right
+	
+	projected <- P %*% rbind(t(triangles), 1)
+	projected <- projected[1:2,]/rep(projected[4,], each = 2)
 	
 	fn <- function(xyz) {
 		result <- rep(-Inf, nrow(xyz))
-		r <- rbind(P %*% t(xyz), 1)
+		r <- P %*% rbind(t(xyz), 1)
+		r <- rbind(r[1:2,]/rep(r[4,], each = 2), 1)
 		for (i in 1:ntri) {
 			# For each triangle, find the barycentric parameters
 			# of each point in xyz using relation R lambda = r = (x,y,1)'
@@ -34,18 +40,24 @@ shadow3d <- function(obj, mesh, plot = TRUE,
 }
 
 projectDown <- function(up) {
+	if (length(up) == 4)
+		up <- up[1:3]/up[4]
+	else if (length(up) != 3)
+		stop("'up' vector should be length 3.")
 	P <- GramSchmidt(up, c(1, 0, 0), c(0, 1, 0))
 	if (det(P) < 0)
 		P[3,] <- -P[3,]
-	P <- P[2:3,]	
+	cbind(rbind(t(P[c(2,3,1),]), 0), c(0, 0, 0, 1))
 }
 
 facing3d <- function(obj, up = c(0, 0, 1),
 										 P = projectDown(up), 
 										 front = TRUE, strict = TRUE) {
-
 	obj <- as.tmesh3d(obj)
-	r <- P %*% t(asEuclidean(t(obj$vb)))
+	P <- t(P)   # The convention in rgl is row vectors on the left
+	# but we'll be using column vectors on the right
+	r <- P %*% obj$vb
+	r <- r[1:2,]/rep(r[4,], each = 2)
 	area <- function(i) {
 		x <- r[1,obj$it[,i]]
 		y <- r[2,obj$it[,i]]
