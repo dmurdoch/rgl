@@ -72,7 +72,7 @@ included in the display.  Low-level changes will be collected
 into a single display:
 ```{r}
 # Show regression plane with z as dependent variable
-
+library(rgl)
 open3d()
 x <- rnorm(100)
 y <- rnorm(100)
