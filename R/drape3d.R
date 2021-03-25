@@ -4,18 +4,18 @@ drape3d <- function(obj, ...)
 drape3d.default <- function(obj, ...) 
   drape3d(as.mesh3d(obj), ...)
   
-drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
+drape3d.mesh3d <- function(obj, x, y = NULL, z = NULL,
     plot = TRUE, up = c(0, 0, 1), P = projectDown(up), ...) 
 {
   # Takes segment number as input; returns
   # NULL if in no triangle, otherwise matrix of projected locations and triangle numbers.
-  ztri <- function(i){
+  ztri <- function(i) {
     p <- psegs[,i]
     oo <- p[1] < TRI[1,1,] | p[1] > TRI[2,1,] |
       p[2] < TRI[1,2,] | p[2] > TRI[2,2,]
     result <- NULL
     lam <- numeric(3)
-    for(j in which(!oo)){
+    for(j in which(!oo)) {
       ## get barycentric coords of p in projected triangle
       v <- pverts[,obj$it[,j]]  ## v[i,] vertices of projected triangle i
       D <- (v[2,2]-v[2,3]) * (v[1,1]-v[1,3]) +
@@ -41,16 +41,25 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
   
   obj <- as.tmesh3d(obj)
   
-  verts <- t(asEuclidean(t(obj$vb)))
+  verts <- obj$vb
   
   segs <- xyz.coords(x, y, z, recycle=TRUE)
-  segs <- rbind(segs$x, segs$y, segs$z)
+  segs <- rbind(segs$x, segs$y, segs$z, 1)
   
-  if (length(dim(P)) != 2 || !all(dim(P) == c(2,3)))
-    stop("P should be a 2 x 3 matrix.")
+  if (length(dim(P)) != 2 || !all(dim(P) == 4))
+    stop("P should be a homogeneous coordinate matrix.")
   
-  pverts <- P %*% verts  # projected vertices
-  psegs <- P %*% segs # projected segments
+  P <- t(P)   # The convention in rgl is row vectors on the left
+              # but we'll be using column vectors on the right
+  
+  # Project the vertices, then get 1st two Euclidean coords
+  pverts <- P %*% verts             
+  pverts <- pverts[1:2,]/rep(pverts[4,], each = 2)
+  # and switch verts to Euclidean:
+  verts <- verts[1:3,]/rep(verts[4,], each = 3)
+  
+  psegs <- P %*% segs               # projected segments
+  psegs <- psegs[1:2,]/rep(psegs[4,], each = 2)
   
   ## get unique point pairs making a triangle side
   tri <- matrix(NA,nrow=3*ncol(obj$it),ncol=2)
@@ -63,7 +72,7 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
   }
   
   TRI <- array(NA,c(2,2,ncol(obj$it)))
-  for(j in seq_len(ncol(obj$it))){
+  for(j in seq_len(ncol(obj$it))) {
     v <- obj$it[,j]       ## vertices of triangle
     TRI[,,j] <- matrix(c(range(pverts[1,v]),range(pverts[2,v])),2,2)
   }
@@ -107,7 +116,7 @@ drape3d.mesh3d <- function (obj, x, y = NULL, z = NULL,
     ## triangle seg y extent is all below or above line seg y extent
     sy <- (pverts[2,tri[,1]] < s[2,1] & pverts[2,tri[,2]] < s[2,1]) |
       (pverts[2,tri[,1]] > s[2,2] & pverts[2,tri[,2]] > s[2,2])
-    for(j in which(!sx & !sy)){     ## possible intersections
+    for(j in which(!sx & !sy)) {     ## possible intersections
       p3 <- pverts[,tri[j,1]]
       p4 <- pverts[,tri[j,2]]
       p43 <- p4-p3
