@@ -104,8 +104,8 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
       oldmat$alpha <- newmat$alpha <- NULL
       same <- all.equal(oldmat, newmat)
       if (!isTRUE(same))
-        warning(same, " Only first material used")
-      result <- oldmat
+        warning(same, "\nOnly last material used")
+      result <- newmat
       result$color <- cols
       result$alpha <- alpha
       result$meshColor <- "vertices"
@@ -115,9 +115,17 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
 
   ids <- ids3d(subscene = subscene)
   ids <- ids[ids$id %in% x,]
+  # Parts will be drawn in order ip, is, it, ib,
+  # so sort that way now
+  ordered <- c(points = 1, lines = 2, linestrip = 3,
+               triangles = 4, planes = 5, quads = 6, 
+               surface = 7)
   if (!is.na(type))
     ids <- ids[ids$type %in% type,]
-  indices <- NULL
+  ids <- ids[order(ordered[ids$type]),]
+  ip <- NULL
+  is <- NULL
+  it <- NULL
   vertices <- NULL
   normals <- NULL
   texcoords <- NULL
@@ -130,6 +138,12 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
       type <- ids[i, "type"]
       prev <- length(vertices)/3
       inds <- switch(as.character(type),
+                     points = seq_len(nvert) + prev,
+                     lines = # from segments3d
+                       matrix(1:nvert + prev, nrow = 2),
+                     linestrip = # from lines3d
+                       rbind(seq_len(nvert - 1), 
+                             seq_len(nvert - 1) + 1) + prev,
                      triangles =,
                      planes = matrix(1:nvert + prev, nrow = 3),
                      quads = {
@@ -150,11 +164,21 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
                      },
                      NULL)
       if (length(inds)) {
-        indices <- cbind(indices, inds)
+        if (type == "points") {
+          ip <- c(ip, inds)
+          normals <- rbind(normals, matrix(NA, ncol = 3, nrow = nvert))
+        } else if (type %in% c("lines", "linestrip")) {
+          is <- cbind(is, inds)
+          normals <- rbind(normals, matrix(NA, ncol = 3, nrow = nvert))
+        } else {
+          it <- cbind(it, inds)
+          normals <- rbind(normals, rgl.attrib(id, "normals"))
+        }  
         vertices <- cbind(vertices, local_t(rgl.attrib(id, "vertices")))
-        normals <- rbind(normals, rgl.attrib(id, "normals"))
         if (rgl.attrib.count(id,"texcoords"))
           texcoords <- rbind(texcoords, rgl.attrib(id, "texcoords"))
+        else
+          texcoords <- rbind(texcoords, matrix(NA, ncol = 2, nrow = nvert))
         mat <- rgl.getmaterial(nvert, id = id)
         
         material <- mergeMaterials(material, mat, nvert, type)
@@ -168,8 +192,11 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
       material$alpha <- material$alpha[1]
     meshColor <- material$meshColor
     material$meshColor <- NULL
-    colorByFaces(tmesh3d(vertices, indices, homogeneous = FALSE, material = material,
-            normals = normals, texcoords = texcoords, meshColor = meshColor))
+    colorByFaces(mesh3d(vertices = vertices, 
+                        points = ip, segments = is, triangles = it, 
+                        material = material, normals = normals, 
+                        texcoords = if (any(!is.na(texcoords))) texcoords, 
+                        meshColor = meshColor))
   }
 }
 
