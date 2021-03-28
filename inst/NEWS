@@ -1125,7 +1125,7 @@ base graphics.
     during install, including suppressing deprecated OpenGL
     warnings on MacOS.
   - Texture coordinates in mesh objects now act the same
-    as colors with respect to the meshColors variable.
+    as colors with respect to the meshColor variable.
   - Some declarations in WebGL made assumptions that were
     not valid on mobile devices.
   - Touch events are now supported in WebGL.
@@ -1245,3 +1245,4 @@ base graphics.
   - Added shadow3d() to project one mesh onto another.
   - Added facing3d() to subset a mesh to parts facing 
     in a particular direction.
+  - mergeVertices and as.mesh3d.rglId have been improved.

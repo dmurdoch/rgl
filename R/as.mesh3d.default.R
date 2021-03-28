@@ -63,6 +63,56 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
   local_t <- function(x) {
     if (!is.null(x)) t(x)
   }
+  
+  colorByFaces <- function(mesh) {
+    # See if we can use meshColor = "faces"
+    if (is.null(mesh$ip) && is.null(mesh$is) && is.null(mesh$ib)
+        && !is.null(mesh$material) && !is.null(mesh$meshColor)
+        && mesh$meshColor == "vertices") {
+      cols <- mesh$material$color
+      if (length(cols) == 1)
+        cols <- rep(cols, len = ncol(mesh$vb))
+      cols <- matrix(cols[mesh$it], nrow = 3)
+      alpha <- mesh$material$alpha
+      if (length(alpha) == 1)
+        alpha <- rep(alpha, len = ncol(mesh$vb))
+      alpha <- matrix(alpha[mesh$it], nrow = 3)
+      if (all(apply(cols, 2, function(col) length(unique(col))) == 1) &&
+          all(apply(alpha, 2, function(a) length(unique(a))) == 1)) {
+        mesh$meshColor <- "faces"
+        mesh$material$color <- cols[1,]
+        mesh$material$alpha <- alpha[1,]
+      }
+    }
+    mesh
+  }
+  
+  mergeMaterials <- function(oldmat, newmat, n, type) {
+    if (length(newmat$color) == 1)
+      newmat$color <- rep(newmat$color, len = n)
+    if (length(newmat$alpha) == 1)
+      newmat$alpha <- rep(newmat$alpha, len = n)
+    # meshColor isn't a material property, but put it here
+    # for now...
+    newmat$meshColor <- "vertices"
+    if (is.null(oldmat))
+      result <- newmat
+    else {
+      cols <- c(oldmat$color, newmat$color)
+      oldmat$color <- newmat$color <- NULL
+      alpha <- c(oldmat$alpha, newmat$alpha)
+      oldmat$alpha <- newmat$alpha <- NULL
+      same <- all.equal(oldmat, newmat)
+      if (!isTRUE(same))
+        warning(same, " Only first material used")
+      result <- oldmat
+      result$color <- cols
+      result$alpha <- alpha
+      result$meshColor <- "vertices"
+    }
+    result
+  }
+
   ids <- ids3d(subscene = subscene)
   ids <- ids[ids$id %in% x,]
   if (!is.na(type))
@@ -78,16 +128,17 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
     nvert <- NROW(verts)
     if (nvert) {
       type <- ids[i, "type"]
+      prev <- length(vertices)/3
       inds <- switch(as.character(type),
                      triangles =,
-                     planes = matrix(1:nvert, nrow = 3),
+                     planes = matrix(1:nvert + prev, nrow = 3),
                      quads = {
                        nquads <- nvert/4
-                       matrix(4*rep(seq_len(nquads) - 1, each = 6) + c(1,2,3,1,3,4), nrow = 3)
+                       matrix(4*rep(seq_len(nquads) - 1, each = 6) + c(1,2,3,1,3,4) + prev, nrow = 3)
                      },
                      surface = {
                        dim <- rgl.attrib(id, "dim")
-                       ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1)
+                       ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1) + prev
                        if (rgl.attrib(id, "flags")["flipped",])
                          rbind(c(ul-1, ul-1+dim[1]),
                                  c(ul, ul),
@@ -105,16 +156,21 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
         if (rgl.attrib.count(id,"texcoords"))
           texcoords <- rbind(texcoords, rgl.attrib(id, "texcoords"))
         mat <- rgl.getmaterial(nvert, id = id)
-        if (is.null(material))
-          material <- mat
-        else if (!isTRUE(all.equal(mat, material)))
-          warning("Only first material used")
+        
+        material <- mergeMaterials(material, mat, nvert, type)
       }
     }
   }
-  if (length(vertices))
-    tmesh3d(vertices, indices, homogeneous = FALSE, material = material,
-            normals = normals, texcoords = texcoords)
+  if (length(vertices)) {
+    if (length(unique(material$color)) == 1)
+      material$color <- material$color[1]
+    if (length(unique(material$alpha)) == 1)
+      material$alpha <- material$alpha[1]
+    meshColor <- material$meshColor
+    material$meshColor <- NULL
+    colorByFaces(tmesh3d(vertices, indices, homogeneous = FALSE, material = material,
+            normals = normals, texcoords = texcoords, meshColor = meshColor))
+  }
 }
 
 as.mesh3d.rglobject <- function(x, ...) {
@@ -164,6 +220,56 @@ as.mesh3d.rglobject <- function(x, ...) {
 
 mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
                           tolerance = sqrt(.Machine$double.eps)) {
+
+  dropNormals <- function(mesh) {
+    if (is.null(mesh$normals))
+      return(FALSE)
+    
+    normals <- mesh$normals
+    v <- with(mesh, rbind(vb[1,]/vb[4,], vb[2,]/vb[4,], vb[3,]/vb[4,]))
+    it <- mesh$it
+    if (!is.null(it))
+      for (i in seq_len(ncol(it))) {
+        normal <- xprod( v[, it[1, i]] - v[, it[3, i]], 
+                         v[, it[2, i]] - v[, it[1, i]])
+        normal <- normal/sqrt(sum(normal^2))
+        for (j in 1:3) {
+          normij <- normals[, it[j, i]]
+          normij <- normij/sqrt(sum(normij^2))
+          same <- all.equal(normal, normij, tolerance = tolerance,
+                            check.attributes = FALSE)
+          if (!isTRUE(same)) 
+            return(FALSE)
+        }
+      }
+    ib <- mesh$ib
+    if (!is.null(ib)) 
+      for (i in seq_len(ncol(ib))) {
+        norm1 <- xprod( v[, it[1, i]] - v[, it[3, i]], 
+                        v[, it[2, i]] - v[, it[1, i]])
+        norm1 <- norm1/sqrt(sum(norm1^2))
+        norm2 <- xprod( v[, it[2, i]] - v[, it[4, i]], 
+                        v[, it[3, i]] - v[, it[2, i]])
+        norm2 <- norm1/sqrt(sum(norm2^2))
+        for (j in 1:4) {
+          normij <- normals[, it[j, i]]
+          normij <- normij/sqrt(sum(normij^2))
+          same1 <- all.equal(norm1, normij, tolerance = tolerance,
+                             check.attributes = FALSE)
+          same2 <- all.equal(norm2, normij, tolerance = tolerance,
+                             check.attributes = FALSE)
+          if (!isTRUE(same1) || !isTRUE(same2)) 
+            return(FALSE)
+        }
+      }      
+    TRUE
+  }
+  
+  if (dropNormals(mesh))
+    mesh$normals <- NULL
+  
+  if (is.null(mesh$vb))
+    return(mesh)
   nvert <- ncol(mesh$vb)
   if (!is.null(notEqual)) {
     dim <- dim(notEqual)
@@ -175,6 +281,8 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
   attribute <- match.arg(attribute, 
                           choices = c("vertices", "colors", "normals", "texcoords"),
                           several.ok = TRUE)
+  
+  
   verts <- matrix(numeric(), ncol = 0, nrow = nvert)
   if ("vertices" %in% attribute) 
     verts <- cbind(mesh$vb[1,]/mesh$vb[4,],
@@ -188,14 +296,16 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
                             normals[2,]/normals[4,],
                             normals[3,]/normals[4,])
   colors <- NULL
-  if (!is.null(mesh$material) && !is.null(colors <- mesh$material$color)
-      && "colors" %in% attribute)
+  if ("colors" %in% attribute &&
+      !is.null(mesh$meshColor) && mesh$meshColor == "vertices" &&
+      !is.null(mesh$material) && !is.null(colors <- mesh$material$color))
       verts <- cbind(verts, t(col2rgb(colors)))
+  
   if (!is.null(texcoords <- mesh$texcoords) && "texcoords" %in% attribute)
     verts <- cbind(verts, t(texcoords))
   
   o <- do.call(order, as.data.frame(verts))
-  indices <- c(mesh$it, mesh$ib)
+  indices <- c(mesh$ip, mesh$is, mesh$it, mesh$ib)
   i1 <- seq_len(nvert)[o]
   for (i in seq_len(nvert)[-1]) {
     if (isTRUE(all.equal(verts[i1[i-1],], verts[i1[i],], tolerance = tolerance))
@@ -218,9 +328,13 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
   if (!is.null(colors))
     mesh$material$color <- colors[keep]
   
-  if (ntri <- length(mesh$it)) 
-    mesh$it <- matrix(indices[seq_len(ntri)], nrow = 3)
-  if (length(mesh$ib)) 
-    mesh$ib <- matrix(indices[seq_len(length(indices) - ntri) + ntri], nrow = 4)
+  if (np <- length(mesh$ip))
+    mesh$ip <- indices[seq_len(np)]
+  if (ns <- length(mesh$is))
+    mesh$is <- matrix(indices[seq_len(ns) + np])
+  if (nt <- length(mesh$it)) 
+    mesh$it <- matrix(indices[seq_len(nt) + np + ns], nrow = 3)
+  if (nq <- length(mesh$ib)) 
+    mesh$ib <- matrix(indices[seq_len(nq) + np + ns + nt], nrow = 4)
   mesh
 }

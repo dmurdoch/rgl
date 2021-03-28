@@ -84,8 +84,13 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
 tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL,
                      texcoords = NULL,
                      meshColor = c("vertices", "edges", "faces", "legacy")) {
-
-  mesh3d(vertices = vertices, triangles = indices, homogeneous = homogeneous,
+  
+  if (missing(meshColor) && !is.null(material$meshColor))
+    meshColor <- material$meshColor
+  meshColor <- match.arg(meshColor)
+  
+  vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
+  mesh3d(vertices = vertices, triangles = indices,
          material = material, normals = normals, texcoords = texcoords,
          meshColor = meshColor)
 }
@@ -97,7 +102,13 @@ tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
 qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL,
                      texcoords=NULL,
                      meshColor = c("vertices", "edges", "faces", "legacy")) {
-
+  
+  if (missing(meshColor) && !is.null(material$meshColor))
+    meshColor <- material$meshColor
+  meshColor <- match.arg(meshColor)
+  
+  vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
+  
   mesh3d(vertices = vertices, quads = indices, homogeneous = homogeneous,
          material = material, normals = normals, texcoords = texcoords,
          meshColor = meshColor)
