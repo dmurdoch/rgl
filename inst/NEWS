@@ -1246,3 +1246,6 @@ base graphics.
   - Added facing3d() to subset a mesh to parts facing 
     in a particular direction.
   - mergeVertices and as.mesh3d.rglId have been improved.
+  - Meshes may now include points and line segments as well
+    as triangles and quads.  The arguments to as.mesh3d.default 
+    have changed accordingly.

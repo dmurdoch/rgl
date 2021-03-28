@@ -32,6 +32,7 @@ the vertices.
   \item{override}{should the parameters specified here override those stored in the object?}
   \item{meshColor}{how should colours be interpreted?  See details 
   below}
+  \item{texcoords}{texture coordinates at each vertex.}
   \item{front, back}{Material properties for rendering.}
 }
 \details{

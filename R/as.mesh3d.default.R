@@ -1,10 +1,11 @@
-as.mesh3d.default <- function(x, y = NULL, z = NULL, 
-                              triangles = length(x) %% 3 == 0,   
+as.mesh3d.default <- function(x, y = NULL, z = NULL,
+                              type = c("triangles", "quads", "points"),
                               smooth = FALSE, 
                               tolerance = sqrt(.Machine$double.eps),
                               notEqual = NULL,
                               merge = TRUE,
-                              ...) {
+                              ..., 
+                              triangles) {
   if (missing(x)) {
     x <- rglId(ids3d()$id)
     return(as.mesh3d(x, ...))
@@ -13,13 +14,30 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
   x <- xyz$x
   y <- xyz$y
   z <- xyz$z
-  if (triangles) 
-    stopifnot(length(x) %% 3 == 0)
-  else
-    stopifnot(length(x) %% 4 == 0)
+  if (!missing(triangles)) {
+    warning("Argument 'triangles' is deprecated; please use 'type' instead.")
+    if (missing(type)) {
+      if (triangles)
+        type <- "triangles"
+      else
+        type <- "quads"
+    }
+  }
+  type <- match.arg(type, several.ok = TRUE)
+  pcs <- c(triangles = 3, quads = 4, points = 1)
   nvert <- length(x)
+  okay <- FALSE
+  for (i in seq_along(type)) {
+    if (nvert %% pcs[type[i]] == 0) {
+      okay <- TRUE
+      break
+    }
+  }
+  if (okay) type <- type[i]
+  else stop("Wrong number of vertices")
+    
   verts <- rbind(x, y, z)
-  indices <- matrix(seq_along(x), nrow = if (triangles) 3 else 4)
+  indices <- matrix(seq_along(x), nrow = pcs[type])
   if (merge) {
     if (!is.null(notEqual)) {
       dim <- dim(notEqual)
@@ -47,13 +65,12 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
     }
   } else
     keep <- seq_len(ncol(verts))
-  if (triangles)
-    mesh <- tmesh3d(verts[,keep], indices, homogeneous = FALSE,
-                    material = list(...)) 
-  else
-    mesh <- qmesh3d(verts[,keep], indices, homogeneous = FALSE,
-                    material = list(...))
-  if (smooth)
+
+  mesh <- mesh3d(vertices = rbind(verts[,keep, drop = FALSE], 1), points = if (type == "points") indices, 
+                  triangles = if (type == "triangles") indices,
+                  quads = if (type == "quads") indices,
+                  material = list(...))
+  if (smooth && type != "points")
     mesh <- addNormals(mesh)
   mesh
 }

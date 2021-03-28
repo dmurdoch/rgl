@@ -1,5 +1,5 @@
 mesh3d <- function( x, y = NULL, z = NULL, vertices, 
-                    homogeneous = nrow(vertices) == 4, material = NULL,
+                    homogeneous = TRUE, material = NULL,
                     normals = NULL, texcoords = NULL,
                     points = NULL, segments = NULL,
                     triangles = NULL, quads = NULL,
@@ -8,9 +8,18 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
   if (missing(vertices)) {
     xyz <- xyz.coords(x, y, z, recycle=TRUE)
     vertices <- rbind(xyz$x, xyz$y, xyz$z, 1) 
-    homogeneous <- TRUE
-  }
+  } else if (length(dim(vertices)) == 2) {
+    if (nrow(vertices) == 3)
+      vertices <- rbind(vertices, 1)
+  } else if (homogeneous)
+    vertices <- matrix(vertices, nrow = 4)
+  else
+    vertices <- rbind(matrix(vertices, nrow = 3), 1)
   
+  vrows <- nrow(vertices)
+  if (vrows != 4)
+    stop("vertices should have 3 or 4 rows.")
+
   if (missing(meshColor) 
       && !is.null(material) 
       && !is.null(material$meshColor)) {
@@ -32,19 +41,7 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
     material$texcoords <- NULL
   }
   
-  if (homogeneous == TRUE)
-    vrows <- 4
-  else
-    vrows <- 3
-  
-  if (nrow(vertices) != vrows)
-    stop("vertices should have ", vrows, " rows.")
-    
-  nvertex <- length(vertices)/vrows
-  if (vrows == 3) {
-    vertices <- rbind(vertices, 1)
-    vrows <- 4
-  }
+  nvertex <- ncol(vertices)
   
   if ( !is.null(normals) ) {
     normals <- xyz.coords(normals, recycle=TRUE)
@@ -62,7 +59,7 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
   }
   
   object <- list(
-    vb = matrix(vertices, nrow = vrows),
+    vb = vertices,
     ip = points,
     is = if (!is.null(segments)) matrix(segments, nrow = 2),
     it = if (!is.null(triangles)) matrix(triangles, nrow = 3),
@@ -88,8 +85,8 @@ tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
   if (missing(meshColor) && !is.null(material$meshColor))
     meshColor <- material$meshColor
   meshColor <- match.arg(meshColor)
-  
-  vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
+  if (is.null(dim(vertices)))
+    vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
   mesh3d(vertices = vertices, triangles = indices,
          material = material, normals = normals, texcoords = texcoords,
          meshColor = meshColor)
@@ -107,7 +104,8 @@ qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
     meshColor <- material$meshColor
   meshColor <- match.arg(meshColor)
   
-  vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
+  if (is.null(dim(vertices)))
+    vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
   
   mesh3d(vertices = vertices, quads = indices, homogeneous = homogeneous,
          material = material, normals = normals, texcoords = texcoords,
@@ -139,7 +137,7 @@ as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"),
     texcoords <- texcoords[triangs$ptNum, ]
   material <- .getMaterialArgs(...)
   material$color <- col
-  result <- mesh3d(points, triangles = triangs$ptNum, homogeneous = FALSE,
+  result <- mesh3d(vertices = points, triangles = triangs$ptNum,
   	  normals = normals, texcoords = texcoords,
   	  material = material)
   if (smooth)
@@ -180,7 +178,7 @@ as.mesh3d.tri <- function(x, z, col = "gray",
     texcoords <- texcoords[triangs, ]
   material <- .getMaterialArgs(...)
   material$color <- col
-  result <- mesh3d(points, triangles = triangs, homogeneous = FALSE,
+  result <- mesh3d(vertices = points, triangles = triangs,
                     normals = normals, texcoords = texcoords,
                     material = material)
   if (smooth)

@@ -20,12 +20,13 @@ all RGL ids from the current scene to the
 \usage{
 as.mesh3d(x, ...)
 \method{as.mesh3d}{default}(x, y = NULL, z = NULL, 
-             triangles = length(x) \%\% 3 == 0, 
+             type = c("triangles", "quads", "points"),
              smooth = FALSE, 
              tolerance = sqrt(.Machine$double.eps), 
              notEqual = NULL, 
              merge = TRUE,
-             ...)
+             ...,
+             triangles)
 }
 \arguments{
   \item{x, y, z}{
@@ -34,10 +35,10 @@ For the default method, \code{x}, \code{y} and \code{z} are
 coordinates. Any reasonable way of defining the coordinates is
 acceptable. See the function \code{\link{xyz.coords}} for details.
 }
-  \item{triangles}{
-Logical value indicating whether the coordinates are for triangles
-or quadrilaterals.
-}
+  \item{type}{
+What type of things should be in the mesh?  Tries
+this list in order until it finds one that works.
+  }
   \item{smooth}{
 If \code{TRUE}, \code{\link{addNormals}} will be called on the mesh
 object to make it render smoothly.
@@ -56,6 +57,9 @@ Should apparently equal vertices be merged?
   }
   \item{\dots}{
 Material properties to pass to \code{\link{tmesh3d}} or \code{\link{qmesh3d}}.
+}
+  \item{triangles}{
+Deprecated.  If present, \code{TRUE} indicates \code{type = "triangles"} and \code{FALSE} indicates \code{type = "quads"}.
 }
 }
 \details{

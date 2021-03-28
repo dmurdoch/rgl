@@ -9,7 +9,7 @@
 Creates meshes containing points, segments, triangles and quads.
 }
 \usage{
-  mesh3d( x, y = NULL, z = NULL, vertices, 
+  mesh3d( x, y = NULL, z = NULL, vertices, homogeneous = TRUE,
                     material = NULL,
                     normals = NULL, texcoords = NULL,
                     points = NULL, segments = NULL,
@@ -28,7 +28,11 @@ Creates meshes containing points, segments, triangles and quads.
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{vertices}{A 3 or 4 row matrix of coordinates; takes
-  precedence over \code{x, y, z}.}
+  precedence over \code{x, y, z}.  May also be given as a vector; then \code{homogeneous = TRUE} indicates it should be treated
+  as 4 rows.}
+  \item{homogeneous}{If \code{vertices} is given without 
+  dimensions, \code{TRUE} indicates 4 homogeneous coordinates
+  should be assumed.}
   \item{material}{material properties for later rendering}
   \item{normals}{normals at each vertex}
   \item{texcoords}{texture coordinates at each vertex}
@@ -39,9 +43,6 @@ Creates meshes containing points, segments, triangles and quads.
   as triangles}
   \item{quads}{4xn matrix of indices of vertices to draw as quads}
   \item{indices}{(obsolete) 3xn or 4xn matrix of vertex indices}
-    \item{homogeneous}{(obsolete)logical indicating if homogeneous (four component) coordinates are used.}
-  \item{...}{additional rendering parameters}
-  \item{override}{should the parameters specified here override those stored in the object?}
   \item{meshColor}{how should colours be interpreted?  See details in \code{\link{shade3d}}.}
   }
 \details{
@@ -80,7 +81,7 @@ Objects of class \code{c("mesh3d",
   indices <- c( 1, 2, 3, 4 )
   
   open3d()  
-  wire3d( mesh3d(vertices, quads = indices) )
+  wire3d( mesh3d(vertices = vertices, quads = indices) )
   
 }
 \seealso{
