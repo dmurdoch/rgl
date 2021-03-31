@@ -83,15 +83,15 @@ setting.
   # generate a quad mesh object
 
   vertices <- c( 
-     -1.0, -1.0, 0, 1.0,
-      1.0, -1.0, 0, 1.0,
-      1.0,  1.0, 0, 1.0,
-     -1.0,  1.0, 0, 1.0
+     -1.0, -1.0, 0,
+      1.0, -1.0, 0,
+      1.0,  1.0, 0,
+     -1.0,  1.0, 0
   )
   indices <- c( 1, 2, 3, 4 )
   
   open3d()  
-  wire3d( qmesh3d(vertices, indices) )
+  wire3d( mesh3d(vertices = vertices, quads = indices) )
   
   # render 4 meshes vertically in the current view
 

@@ -39,10 +39,28 @@ asHomogeneous <- function(x) {
     else stop("'x' is not row vector(s)")
 }
 
+asHomogeneous2 <- function(x) {
+  if (is.matrix(x)) {
+    if (nrow(x) == 4) return(x)
+    else if (nrow(x) == 3) return(rbind(x,1))
+    else stop("x should be 3 or 4 by n")
+  } else if (length(x) %% 3 == 0) return(rbind(matrix(x, nrow = 3), 1))
+  else stop("Don't know how to convert x")
+}
+
 asEuclidean <- function(x) {
     if (is.matrix(x) && dim(x)[2] == 4) return(x[, 1:3, drop = FALSE]/x[, 4])
     else if (length(x) == 4) return(c(x[1]/x[4],x[2]/x[4],x[3]/x[4]))
     else stop("'x' is not row vectors(s)")
+}
+
+asEuclidean2 <- function(x) {
+  if (is.matrix(x)) {
+    if (nrow(x) == 3) return(x)
+    else if (nrow(x) == 4) return(rbind(x[1,]/x[4,], x[2,]/x[4,], x[3,]/x[4,]))
+    else stop("x should be 3 or 4 by n")
+  } else if (length(x) %% 3 == 0) return(matrix(x, nrow = 3))
+  else stop("Don't know how to convert x")
 }
 
 # Default implementations of transformations

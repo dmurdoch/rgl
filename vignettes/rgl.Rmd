@@ -924,7 +924,10 @@ become linear transformations, with multiplication by a 4 by 4 matrix.
 
 Function                             | Description
 ------------------------------------ | -----------
-`r indexfns(c("asEuclidean", "asHomogeneous"))`: | convert between homogeneous and Euclidean coordinates
+`r indexfns(c("asEuclidean", "asHomogeneous"))`: | convert between homogeneous and Euclidean coordinates when x, y and
+z are columns
+`r indexfns(c("asEuclidean2", "asHomogeneous2"))`: | convert
+when x, y and z are rows
 `r indexfns(c("rotate3d", "scale3d", "translate3d"))`:  | apply a transformation
 `r indexfns("transform3d")`:  | apply a general transformation
 `r indexfns(c("rotationMatrix", "scaleMatrix", "translationMatrix"))`:  | compute the transformation matrix

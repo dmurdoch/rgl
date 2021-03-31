@@ -82,24 +82,67 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
   }
   
   colorByFaces <- function(mesh) {
+    constColumns <- function(m)
+      all(apply(m, 2, function(col) length(unique(col))) == 1)
+          
     # See if we can use meshColor = "faces"
-    if (is.null(mesh$ip) && is.null(mesh$is) && is.null(mesh$ib)
-        && !is.null(mesh$material) && !is.null(mesh$meshColor)
+    if (!is.null(mesh$material) && !is.null(mesh$meshColor)
         && mesh$meshColor == "vertices") {
       cols <- mesh$material$color
+      alpha <- mesh$material$alpha
+      if (length(cols) == 1 && length(alpha) == 1) {
+        mesh$meshColor <- "faces"
+        return(mesh)
+      }
       if (length(cols) == 1)
         cols <- rep(cols, len = ncol(mesh$vb))
-      cols <- matrix(cols[mesh$it], nrow = 3)
-      alpha <- mesh$material$alpha
       if (length(alpha) == 1)
         alpha <- rep(alpha, len = ncol(mesh$vb))
-      alpha <- matrix(alpha[mesh$it], nrow = 3)
-      if (all(apply(cols, 2, function(col) length(unique(col))) == 1) &&
-          all(apply(alpha, 2, function(a) length(unique(a))) == 1)) {
-        mesh$meshColor <- "faces"
-        mesh$material$color <- cols[1,]
-        mesh$material$alpha <- alpha[1,]
+      prev <- 0
+      newcols <- NULL
+      newalpha <- NULL
+      
+      if (!is.null(mesh$ip)) {
+        inds <- mesh$ip
+        newcols <- cols[inds]
+        newalpha <- alpha[inds]
       }
+      if (!is.null(mesh$is)) {
+        inds <- as.numeric(mesh$is) 
+        cols <- matrix(cols[inds], nrow = 2)
+        alpha <- matrix(alpha[inds], nrow = 2)
+        if (!constColumns(cols) || !constColumns(alpha))
+          return(mesh)
+        newcols <- c(newcols, cols[1,])
+        newalpha <- c(newalpha, alpha[1,])
+      }
+      if (!is.null(mesh$it)) {
+        inds <- as.numeric(mesh$it)
+        cols <- matrix(cols[inds], nrow = 3)
+        alpha <- matrix(alpha[inds], nrow = 3)
+        if (!constColumns(cols) || !constColumns(alpha))
+          return(mesh)
+        newcols <- c(newcols, cols[1,])
+        newalpha <- c(newalpha, alpha[1,])
+      }
+      if (!is.null(mesh$ib)) {
+        inds <- as.numeric(mesh$ib)
+        cols <- matrix(cols[inds], nrow = 3)
+        alpha <- matrix(alpha[inds], nrow = 3)
+        if (!constColumns(cols) || !constColumns(alpha))
+          return(mesh)
+        newcols <- c(newcols, cols[1,])
+        newalpha <- c(newalpha, alpha[1,])
+      }
+      mesh$meshColor <- "faces"
+      mesh$material$color <- if (length(unique(newcols)) == 1)
+                               newcols[1]
+                             else
+                               newcols
+      mesh$material$alpha <- if (length(unique(newalpha)) == 1)
+                               newalpha[1]
+                             else
+                               newalpha
     }
     mesh
   }

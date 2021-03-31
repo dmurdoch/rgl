@@ -9,7 +9,7 @@
 Creates meshes containing points, segments, triangles and quads.
 }
 \usage{
-  mesh3d( x, y = NULL, z = NULL, vertices, homogeneous = TRUE,
+  mesh3d( x, y = NULL, z = NULL, vertices,
                     material = NULL,
                     normals = NULL, texcoords = NULL,
                     points = NULL, segments = NULL,
@@ -27,22 +27,19 @@ Creates meshes containing points, segments, triangles and quads.
   \item{x, y, z}{coordinates.  Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
-  \item{vertices}{A 3 or 4 row matrix of coordinates; takes
-  precedence over \code{x, y, z}.  May also be given as a vector; then \code{homogeneous = TRUE} indicates it should be treated
-  as 4 rows.}
-  \item{homogeneous}{If \code{vertices} is given without 
-  dimensions, \code{TRUE} indicates 4 homogeneous coordinates
-  should be assumed.}
+  \item{vertices}{A 4 row matrix of homogeneous coordinates; takes
+  precedence over \code{x, y, z}.}
   \item{material}{material properties for later rendering}
   \item{normals}{normals at each vertex}
   \item{texcoords}{texture coordinates at each vertex}
   \item{points}{vector of indices of vertices to draw as points}
-  \item{segments}{2xn matrix of indices of vertices to draw as
+  \item{segments}{2 x n matrix of indices of vertices to draw as
   segments}
-  \item{triangles}{3xn matrix of indices of vertices to draw
+  \item{triangles}{3 x n matrix of indices of vertices to draw
   as triangles}
-  \item{quads}{4xn matrix of indices of vertices to draw as quads}
-  \item{indices}{(obsolete) 3xn or 4xn matrix of vertex indices}
+  \item{quads}{4 x n matrix of indices of vertices to draw as quads}
+  \item{indices}{(obsolete) 3 or 4 x n matrix of vertex indices}
+  \item{homogeneous}{(obsolete) should \code{tmesh3d} and \code{qmesh3d} vertices be assumed to be homogeneous?}
   \item{meshColor}{how should colours be interpreted?  See details in \code{\link{shade3d}}.}
   }
 \details{
@@ -61,6 +58,9 @@ Creates meshes containing points, segments, triangles and quads.
   \code{ib} for quads.
   Individual meshes may have any combination of these.
 
+The functions \code{tmesh3d} and \code{qmesh3d} are included
+for back-compatibility; they produce meshes of triangles and
+quads respectively.
 }
 \value{
 Objects of class \code{c("mesh3d",
@@ -73,10 +73,10 @@ Objects of class \code{c("mesh3d",
   # generate a quad mesh object
 
   vertices <- c( 
-     -1.0, -1.0, 0, 1.0,
-      1.0, -1.0, 0, 1.0,
-      1.0,  1.0, 0, 1.0,
-     -1.0,  1.0, 0, 1.0
+     -1.0, -1.0, 0,
+      1.0, -1.0, 0,
+      1.0,  1.0, 0,
+     -1.0,  1.0, 0
   )
   indices <- c( 1, 2, 3, 4 )
   
