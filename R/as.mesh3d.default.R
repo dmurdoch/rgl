@@ -90,7 +90,8 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
         && mesh$meshColor == "vertices") {
       cols <- mesh$material$color
       alpha <- mesh$material$alpha
-      if (length(cols) == 1 && length(alpha) == 1) {
+      texcoords <- mesh$texcoords
+      if (length(cols) == 1 && length(alpha) == 1 && is.null(texcoords)) {
         mesh$meshColor <- "faces"
         return(mesh)
       }
@@ -101,6 +102,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
       prev <- 0
       newcols <- NULL
       newalpha <- NULL
+      newtexcoords <- NULL
       
       if (!is.null(mesh$ip)) {
         inds <- mesh$ip
@@ -122,17 +124,29 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
         alpha <- matrix(alpha[inds], nrow = 3)
         if (!constColumns(cols) || !constColumns(alpha))
           return(mesh)
+        if (!is.null(texcoords)) {
+          tex1 <- matrix(texcoords[1, inds], nrow = 3)
+          tex2 <- matrix(texcoords[2, inds], nrow = 3)
+          if (!constColumns(tex1) || !constColumns(tex2))
+            return(mesh)
+        }
         newcols <- c(newcols, cols[1,])
         newalpha <- c(newalpha, alpha[1,])
+        if (!is.null(texcoords))
+          newtexcoords <- cbind(newtexcoords, rbind(tex1[1,], tex2[1,]))
       }
       if (!is.null(mesh$ib)) {
         inds <- as.numeric(mesh$ib)
         cols <- matrix(cols[inds], nrow = 3)
         alpha <- matrix(alpha[inds], nrow = 3)
-        if (!constColumns(cols) || !constColumns(alpha))
+        tex1 <- matrix(texcoords[1, inds], nrow = 3)
+        tex2 <- matrix(texcoords[2, inds], nrow = 3)
+        if (!constColumns(cols) || !constColumns(alpha) ||
+            !constColumns(tex1) || !constColumns(tex2))
           return(mesh)
         newcols <- c(newcols, cols[1,])
         newalpha <- c(newalpha, alpha[1,])
+        newtexcoords <- cbind(newtexcoords, rbind(tex1[1,], tex2[1,]))
       }
       mesh$meshColor <- "faces"
       mesh$material$color <- if (length(unique(newcols)) == 1)
@@ -143,6 +157,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
                                newalpha[1]
                              else
                                newalpha
+      mesh$texcoords <- newtexcoords
     }
     mesh
   }

@@ -211,6 +211,10 @@ shade3d.mesh3d <- function( x, override = TRUE,
     if (!is.null(x$texcoords))
       texcoords <- t(x$texcoords)
   }
+  normals <- x$normals
+  if (!is.null(normals))
+    normals <- t(normals)
+  
   modes <- c(front, back)
   if (!allowedMeshColor(meshColor, modes))
     stop("'meshColor = ", meshColor, "' not supported.")
@@ -266,6 +270,17 @@ shade3d.mesh3d <- function( x, override = TRUE,
       vals <- rep(vals, each = 2)
     vals
   }
+  getArgs <- function(inds) {
+    args <- c(list(x = vertices[as.numeric(inds),]), material)
+    if (!is.null(texcoords))
+      args$texcoords <- cbind(repfn(texcoords[,1], inds, FALSE),
+                              repfn(texcoords[,2], inds, FALSE))
+    if (!is.null(normals))
+      args$normals <- normals[as.numeric(inds),]
+    args$color <- repfn(args$color, inds, FALSE)
+    args$alpha <- repfn(args$alpha, inds, TRUE)
+    args
+  }
   
   repfn <- switch(meshColor, 
                   vertices = doVertices,
@@ -273,17 +288,12 @@ shade3d.mesh3d <- function( x, override = TRUE,
                   faces = doFaces,
                   doLegacy)  
   if (!is.null(x$ip)) {
-    args <- c(list(x = vertices[x$ip,]), material)
-    args$color <- repfn(args$color, x$ip, FALSE)
-    args$alpha <- repfn(args$alpha, x$ip, TRUE)
+    args <- getArgs(x$ip)
     result <- c(result, points = do.call(points3d, args = args ))
   }
   
   if (!is.null(x$is)) {
-    args <- c(list(x = vertices[as.numeric(x$is),]),
-              material)
-    args$color <- repfn(args$color, x$is, FALSE)
-    args$alpha <- repfn(args$alpha, x$is, TRUE)
+    args <- getArgs(x$is)
     result <- c(result, segments = do.call(segments3d, args = args ))
   }
   
@@ -293,10 +303,7 @@ shade3d.mesh3d <- function( x, override = TRUE,
       fn <- segments3d
     } else
       fn <- triangles3d
-    args <- c(list(x = vertices[as.numeric(x$it),]),
-              material)
-    args$color <- repfn(args$color, x$it, FALSE)
-    args$alpha <- repfn(args$alpha, x$it, TRUE)
+    args <- getArgs(x$it)
     result <- c(result, triangles = do.call(fn, args = args ))
   }
 
@@ -306,10 +313,7 @@ shade3d.mesh3d <- function( x, override = TRUE,
       fn <- segments3d
     } else
       fn <- quads3d
-    args <- c(list(x = vertices[as.numeric(x$ib),]),
-              material)
-    args$color <- repfn(args$color, x$ib, FALSE)
-    args$alpha <- repfn(args$alpha, x$ib, TRUE)
+    args <- getArgs(x$ib)
     result <- c(result, quads = do.call(fn, args = args ))
   }
   
