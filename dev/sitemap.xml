@@ -76,6 +76,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/contourLines3d.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/cube3d.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/cylinder3d.html</loc>
   </url>
   <url>
@@ -284,6 +287,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/setupKnitr.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/shade3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/shadow3d.html</loc>

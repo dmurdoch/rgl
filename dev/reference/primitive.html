@@ -143,11 +143,11 @@ functions should not normally be called by users." />
 functions should not normally be called by users.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='primitive.html'>rgl.points</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span> <span class='op'>)</span>
-<span class='fu'><a href='primitive.html'>rgl.lines</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span> <span class='op'>)</span>
-<span class='fu'><a href='primitive.html'>rgl.linestrips</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
-<span class='fu'><a href='primitive.html'>rgl.triangles</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, normals <span class='op'>=</span> <span class='cn'>NULL</span>, texcoords <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span> <span class='op'>)</span>
-<span class='fu'><a href='primitive.html'>rgl.quads</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, normals <span class='op'>=</span> <span class='cn'>NULL</span>, texcoords <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span> <span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rgl.points</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span> <span class='op'>)</span>
+<span class='fu'>rgl.lines</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span> <span class='op'>)</span>
+<span class='fu'>rgl.linestrips</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>rgl.triangles</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, normals <span class='op'>=</span> <span class='cn'>NULL</span>, texcoords <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span> <span class='op'>)</span>
+<span class='fu'>rgl.quads</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, normals <span class='op'>=</span> <span class='cn'>NULL</span>, texcoords <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span> <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,14 +168,14 @@ functions should not normally be called by users.</p>
     </tr>
     <tr>
       <th> ... </th>
-      <td><p>Material properties. See <code><a href='material.html'>rgl.material</a></code> for details.</p></td>
+      <td><p>Material properties. See <code><a href='rgl.material.html'>rgl.material</a></code> for details.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Adds a shape node to the scene. The appearance is defined by the material properties.
-  See <code><a href='material.html'>rgl.material</a></code> for details.</p>  
+  See <code><a href='rgl.material.html'>rgl.material</a></code> for details.</p>  
 <p>The names of these functions correspond to OpenGL primitives.  They
   all take a sequence of vertices in <code>x, y, z</code>.  The only non-obvious 
   ones are <code>rgl.lines</code> which draws line segments based on
@@ -193,8 +193,8 @@ functions should not normally be called by users.</p>
   at the lower left, <code>(1, 1)</code> at the upper right.  The texture
   is used to modulate the color of the polygon.</p>  
 <p>These are the lower level functions called by
-  <code><a href='3dobjects.html'>points3d</a></code>, <code><a href='3dobjects.html'>segments3d</a></code>,
-  <code><a href='3dobjects.html'>lines3d</a></code>, etc.  The two principal differences between
+  <code><a href='points3d.html'>points3d</a></code>, <code><a href='points3d.html'>segments3d</a></code>,
+  <code><a href='points3d.html'>lines3d</a></code>, etc.  The two principal differences between
   the <code>rgl.*</code> functions and the <code>*3d</code> functions are that the
   former set all unspecified material properties to defaults, whereas
   the latter use current values as defaults; the former make

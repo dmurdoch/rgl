@@ -151,7 +151,7 @@
 <a href="#pull-request-process" class="anchor"></a>Pull request process</h3>
 <ul>
 <li><p>Fork the package and clone onto your computer. If you haven’t done this before, we recommend using the Github web interface to fork, RStudio’s <code>New Project... | Version Control | Git</code> menu to import the repository. Then you can create branches locally, and push them to Github when you want to create a PR.</p></li>
-<li><p>Install all development dependencies with <code><a href="https://devtools.r-lib.org//reference/install_deps.html" class="external-link">devtools::install_deps(dependencies = TRUE)</a></code>, and then make sure the package passes R CMD check by running <code>Build | Check</code>. If R CMD check doesn’t pass cleanly, it’s a good idea to ask for help before continuing.</p></li>
+<li><p>Install all development dependencies with <code>devtools::install_deps(dependencies = TRUE)</code>, and then make sure the package passes R CMD check by running <code>Build | Check</code>. If R CMD check doesn’t pass cleanly, it’s a good idea to ask for help before continuing.</p></li>
 <li><p>Make your changes, commit to git, push to Github, and then create a PR on the Github web page. The title of your PR should briefly describe the change. The body of your PR should contain <code>Fixes #issue-number</code>.</p></li>
 </ul>
 </div>

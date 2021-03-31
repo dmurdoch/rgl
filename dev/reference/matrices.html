@@ -153,6 +153,8 @@ vectors between homogeneous and Euclidean coordinates.</p>
 <span class='fu'>rotationMatrix</span><span class='op'>(</span><span class='va'>angle</span>, <span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span>, <span class='va'>matrix</span><span class='op'>)</span>
 <span class='fu'>asHomogeneous</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='fu'>asEuclidean</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='fu'>asHomogeneous2</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='fu'>asEuclidean2</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
 <span class='fu'>scale3d</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span>, <span class='va'>...</span><span class='op'>)</span>
 <span class='fu'>translate3d</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -210,7 +212,19 @@ coordinates.  Finally, if a 4x4 matrix is given, it will be returned unchanged.
 (The latter behaviour is used to allow <code>transform3d</code> to act like a 
 generic function, even though it is not.)</p>
 <p>Use <code>asHomogeneous(x)</code> to convert the Euclidean vector <code>x</code> to
-homogeneous coordinates, and <code>asEuclidean(x)</code> for the reverse transformation.</p>
+homogeneous coordinates, and <code>asEuclidean(x)</code> for the reverse transformation.  These functions accept the following
+inputs:</p><ul>
+<li><p>n x 3 matrices:  columns are assumed to be Euclidean</p></li>
+<li><p>n x 4 matrices:  columns are assumed to be homogeneous</p></li>
+<li><p>vectors of length 3n:  assumed to be Euclidean vectors
+concatenated.</p></li>
+</ul><p>Outputs are n x 4 or n x 3 matrices for <code>asHomogeneous</code>
+and <code>asEuclidean</code> respectively.</p>
+<p>The functions <code>asHomogeneous2</code> and <code>asEuclidean2</code>
+act similarly, but they assume inputs are 3 x n or 4 x n
+and outputs are in similar shapes.</p>
+
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>identityMatrix</code>,
