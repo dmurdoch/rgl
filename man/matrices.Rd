@@ -10,6 +10,8 @@
 \alias{transform3d}
 \alias{asHomogeneous}
 \alias{asEuclidean}
+\alias{asHomogeneous2}
+\alias{asEuclidean2}
 \title{Work with homogeneous coordinates }
 \description{
 These functions construct 4x4 matrices for transformations
@@ -23,6 +25,8 @@ translationMatrix(x, y, z)
 rotationMatrix(angle, x, y, z, matrix)
 asHomogeneous(x)
 asEuclidean(x)
+asHomogeneous2(x)
+asEuclidean2(x)
 
 scale3d(obj, x, y, z, ...)
 translate3d(obj, x, y, z, ...)
@@ -75,7 +79,21 @@ coordinates.  Finally, if a 4x4 matrix is given, it will be returned unchanged.
 generic function, even though it is not.)
 
 Use \code{asHomogeneous(x)} to convert the Euclidean vector \code{x} to
-homogeneous coordinates, and \code{asEuclidean(x)} for the reverse transformation.
+homogeneous coordinates, and \code{asEuclidean(x)} for the reverse transformation.  These functions accept the following
+inputs:
+\itemize{
+\item n x 3 matrices:  columns are assumed to be Euclidean
+\item n x 4 matrices:  columns are assumed to be homogeneous
+\item vectors of length 3n:  assumed to be Euclidean vectors
+concatenated.
+}
+Outputs are n x 4 or n x 3 matrices for \code{asHomogeneous}
+and \code{asEuclidean} respectively.
+
+The functions \code{asHomogeneous2} and \code{asEuclidean2}
+act similarly, but they assume inputs are 3 x n or 4 x n
+and outputs are in similar shapes.
+
 
 }
 \value{

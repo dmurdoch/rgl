@@ -437,7 +437,7 @@ Function                             | Description
 `r indexfns("extrude3d")`:  | generate an "extrusion" of a polygon
 `r indexfns("turn3d")`:     | generate a solid of rotation
 `r indexfns("ellipse3d")`:  | generate an ellipsoid in various ways
-`r indexfns(c("tmesh3d", "qmesh3d"))`:  | generate a shape from vertices and faces
+`r indexfns("mesh3d")`:      | generate a shape from indexed vertices
 `r indexfns("shapelist3d")`: | generate a shape by combining other shapes
 `as.mesh3d`:                 | a generic function; see below
 
@@ -465,6 +465,9 @@ to construct a mesh from a matrix of vertices; it can use
 to merge repeated vertices within the matrix, allowing 
 `r linkfn("addNormals")` to be used to give a smooth appearance.
 
+Functions `r indexfns(c("tmesh3d","qmesh3d"))` are now obsolete;
+use `r linkfn("mesh3d")` instead.
+
 ### The underlying class structure for shapes
 
 `"shape3d"` is the basic abstract type.  Objects of this class can be
@@ -478,12 +481,15 @@ fields:
 Field        | Meaning
 ------------ | ---------------
 vb           | A 4 by n matrix of vertices in homogeneous coordinates.  Each column is a point.
+ip           | (optional) A vector of vertex indices for points.
+is           | (optional) A 2 by s matrix of vertex indices. Each column is a line segment.
 it           | (optional) A 3 by t matrix of vertex indices.  Each column is a triangle.
 ib           | (optional) A 4 by q matrix of vertex indices.  Each column is a quadrilateral.
 material     | (optional) A list of material properties.
 normals      | (optional) A matrix of the same shape as vb, containing normal vectors at each vertex.
 texcoords    | (optional) A 2 by n matrix of texture coordinates corresponding to each vertex.
 values       | (optional) A vector of length n holding values at each vertex
+meshColor    | (optional) A text value indicating how colors and texture coordinates should be interpreted.
 
 
 ### Contouring shapes
@@ -924,7 +930,8 @@ become linear transformations, with multiplication by a 4 by 4 matrix.
 
 Function                             | Description
 ------------------------------------ | -----------
-`r indexfns(c("asEuclidean", "asHomogeneous"))`: | convert between homogeneous and Euclidean coordinates
+`r indexfns(c("asEuclidean", "asHomogeneous"))`: | convert between homogeneous and Euclidean coordinates when x, y and z are columns
+`r indexfns(c("asEuclidean2", "asHomogeneous2"))`: | convert when x, y and z are rows
 `r indexfns(c("rotate3d", "scale3d", "translate3d"))`:  | apply a transformation
 `r indexfns("transform3d")`:  | apply a general transformation
 `r indexfns(c("rotationMatrix", "scaleMatrix", "translationMatrix"))`:  | compute the transformation matrix

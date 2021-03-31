@@ -27,7 +27,7 @@ step drags the points (refinement step).
   \item{deform}{deform mesh}
   \item{it}{indices for triangular faces}
   \item{ib}{indices for quad faces}
-  \item{vb}{matrix of vertices: 4xn matrix (rows x, y, z, h) or equivalent
+  \item{vb}{matrix of vertices: 4 x n matrix (rows x, y, z, h) or equivalent
     vector, where h indicates scaling of each plotted quad}
   \item{...}{other arguments (unused)}
 }

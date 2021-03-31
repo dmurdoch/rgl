@@ -3,14 +3,14 @@
 #
 
 cube3d.vb <- c(
-  -1.0, -1.0, -1.0, 1.0,
-   1.0, -1.0, -1.0, 1.0,
-  -1.0,  1.0, -1.0, 1.0,
-   1.0,  1.0, -1.0, 1.0,
-  -1.0, -1.0,  1.0, 1.0,
-   1.0, -1.0,  1.0, 1.0,
-  -1.0,  1.0,  1.0, 1.0,
-   1.0,  1.0,  1.0, 1.0
+  -1.0, -1.0, -1.0,
+   1.0, -1.0, -1.0,
+  -1.0,  1.0, -1.0,
+   1.0,  1.0, -1.0,
+  -1.0, -1.0,  1.0,
+   1.0, -1.0,  1.0,
+  -1.0,  1.0,  1.0,
+   1.0,  1.0,  1.0
 )
 
 cube3d.ib <- c(
@@ -23,7 +23,7 @@ cube3d.ib <- c(
 )
   
 cube3d <- function( trans = identityMatrix(), ... ) {
-  return( rotate3d( qmesh3d( cube3d.vb, cube3d.ib, material=list(...) ), matrix = trans) )
+  rotate3d( mesh3d( vertices = cube3d.vb, quads = cube3d.ib, material=list(...) ), matrix = trans)
 }  
 
 # 
@@ -31,10 +31,10 @@ cube3d <- function( trans = identityMatrix(), ... ) {
 #
 
 tetra3d.vb <- c(
-  -1.0, -1.0, -1.0, 1.0,
-   1.0,  1.0, -1.0, 1.0,
-   1.0, -1.0,  1.0, 1.0,
-  -1.0,  1.0,  1.0, 1.0
+  -1.0, -1.0, -1.0,
+   1.0,  1.0, -1.0,
+   1.0, -1.0,  1.0,
+  -1.0,  1.0,  1.0
 )
 
 tetra3d.it <- c(
@@ -45,7 +45,7 @@ tetra3d.it <- c(
 )
 
 tetrahedron3d <- function( trans = identityMatrix(), ... ) {
-  return( rotate3d( tmesh3d( tetra3d.vb, tetra3d.it, material=list(...) ), matrix = trans) )
+  rotate3d( mesh3d(vertices = tetra3d.vb, triangles = tetra3d.it, material=list(...) ), matrix = trans)
 }
 
 # 
@@ -53,12 +53,12 @@ tetrahedron3d <- function( trans = identityMatrix(), ... ) {
 #
 
 octa3d.vb <- c(
-  -1.0,  0.0,  0.0, 1.0,
-   1.0,  0.0,  0.0, 1.0,
-   0.0, -1.0,  0.0, 1.0,
-   0.0,  1.0,  0.0, 1.0,
-   0.0,  0.0, -1.0, 1.0,
-   0.0,  0.0,  1.0, 1.0
+  -1.0,  0.0,  0.0,
+   1.0,  0.0,  0.0,
+   0.0, -1.0,  0.0,
+   0.0,  1.0,  0.0,
+   0.0,  0.0, -1.0,
+   0.0,  0.0,  1.0
 )
 
 octa3d.it <- c(
@@ -73,7 +73,7 @@ octa3d.it <- c(
 )
 
 octahedron3d <- function( trans = identityMatrix(), ... ) {
-  return( rotate3d( tmesh3d( octa3d.vb, octa3d.it, material=list(...) ), matrix = trans) )
+  rotate3d( mesh3d( vertices = octa3d.vb, triangles = octa3d.it, material=list(...) ), matrix = trans)
 }
 
 #
@@ -82,20 +82,20 @@ octahedron3d <- function( trans = identityMatrix(), ... ) {
 
 phi <- (1+sqrt(5))/2
 ico3d.vb <- c(
-  0, 1/phi,  1, 1,        
-  0, 1/phi, -1,	1,	
-  0, -1/phi, 1,	1,	
-  0, -1/phi,-1,	1,	
-  1/phi,  1, 0,	1,	
-  1/phi, -1, 0,	1,	
- -1/phi,  1, 0,	1,	
- -1/phi, -1, 0,	1,	
-  1, 0,  1/phi,	1,	
- -1, 0,  1/phi,	1,	
-  1, 0, -1/phi,	1,	
- -1, 0, -1/phi, 1   )		
- 
- 
+  0, 1/phi,  1,       
+  0, 1/phi, -1,	
+  0, -1/phi, 1,	
+  0, -1/phi,-1,	
+  1/phi,  1, 0,	
+  1/phi, -1, 0,	
+ -1/phi,  1, 0,
+ -1/phi, -1, 0,	
+  1, 0,  1/phi,	
+ -1, 0,  1/phi,	
+  1, 0, -1/phi,	
+ -1, 0, -1/phi   
+ )		
+
  ico3d.it <- c(
   1, 3, 9, 
   1, 9, 5,
@@ -119,30 +119,30 @@ ico3d.vb <- c(
   12, 8, 10)
   
 icosahedron3d <- function( trans = identityMatrix(), ... ) {
-    return( rotate3d( tmesh3d( ico3d.vb, ico3d.it, material=list(...) ), matrix = trans) )
+    rotate3d( mesh3d( vertices = ico3d.vb, triangles = ico3d.it, material=list(...) ), matrix = trans)
 }
 
 dodec3d.vb <- c(
-  -1/phi, -1/phi, -1/phi, 1, 
-   1/phi, -1/phi, -1/phi, 1, 
-  -1/phi,  1/phi, -1/phi, 1, 
-   1/phi,  1/phi, -1/phi, 1, 
-  -1/phi, -1/phi,  1/phi, 1, 
-   1/phi, -1/phi,  1/phi, 1, 
-  -1/phi,  1/phi,  1/phi, 1, 
-   1/phi,  1/phi,  1/phi, 1, 
-   0, -1/phi^2, 1, 1,	     
-   0,  1/phi^2, 1, 1,	     
-   0, -1/phi^2,-1, 1,	     
-   0,  1/phi^2,-1, 1,	     
-   -1/phi^2, 1,	0, 1,	     
-    1/phi^2, 1,	0, 1,	     
-   -1/phi^2,-1,	0, 1,	     
-    1/phi^2,-1,	0, 1,	     
-    1, 0,-1/phi^2, 1,	     
-    1, 0, 1/phi^2, 1,	     
-   -1, 0,-1/phi^2, 1,	     
-   -1, 0, 1/phi^2, 1	     
+  -1/phi, -1/phi, -1/phi, 
+   1/phi, -1/phi, -1/phi, 
+  -1/phi,  1/phi, -1/phi, 
+   1/phi,  1/phi, -1/phi, 
+  -1/phi, -1/phi,  1/phi, 
+   1/phi, -1/phi,  1/phi, 
+  -1/phi,  1/phi,  1/phi, 
+   1/phi,  1/phi,  1/phi, 
+   0, -1/phi^2, 1,     
+   0,  1/phi^2, 1,	     
+   0, -1/phi^2,-1,	     
+   0,  1/phi^2,-1,	     
+   -1/phi^2, 1,	0,     
+    1/phi^2, 1,	0,   
+   -1/phi^2,-1,	0,    
+    1/phi^2,-1,	0,
+    1, 0,-1/phi^2,    
+    1, 0, 1/phi^2,	     
+   -1, 0,-1/phi^2,     
+   -1, 0, 1/phi^2     
 )		   
 
 dodec3d.if <- c(
@@ -161,22 +161,23 @@ dodec3d.if <- c(
   
 dodecahedron3d <- function( trans = identityMatrix(), ...) {
   m <- matrix(dodec3d.if, 5, 12)
-  return( rotate3d( tmesh3d( dodec3d.vb, c(m[c(1,2,3, 1,3,4, 1,4,5),]), material=list(...) ), matrix=trans) )
+  rotate3d( mesh3d( vertices = dodec3d.vb, triangles = c(m[c(1,2,3, 1,3,4, 1,4,5),]), material=list(...) ), matrix=trans)
 }
 
 cuboct3d.vb <- c(
- -1, -1, 0, 1,
- -1,  1, 0, 1,
-  1, -1, 0, 1,
-  1,  1, 0, 1,
- -1,  0,-1, 1,
- -1,  0, 1, 1,
-  1,  0,-1, 1,
-  1,  0, 1, 1,
-  0, -1,-1, 1,
-  0, -1, 1, 1,
-  0,  1,-1, 1,
-  0,  1, 1, 1)
+ -1, -1, 0,
+ -1,  1, 0,
+  1, -1, 0,
+  1,  1, 0,
+ -1,  0,-1,
+ -1,  0, 1,
+  1,  0,-1,
+  1,  0, 1,
+  0, -1,-1,
+  0, -1, 1,
+  0,  1,-1,
+  0,  1, 1
+)
   
 cuboct3d.ib <- c(
   1, 6, 2, 5,
@@ -197,7 +198,5 @@ cuboct3d.it <- c(
   4, 12, 8)
   
 cuboctahedron3d <- function( trans = identityMatrix(), ...) {
-  result <- rotate3d( qmesh3d( cuboct3d.vb, cuboct3d.ib, material=list(...) ), matrix = trans)
-  result$it <- matrix(cuboct3d.it, nrow=3)
-  result
+  rotate3d( mesh3d( vertices = cuboct3d.vb, triangles = cuboct3d.it, quads = cuboct3d.ib, material=list(...) ), matrix = trans)
 }  

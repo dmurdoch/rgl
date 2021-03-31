@@ -46,8 +46,11 @@ Duncan Murdoch
 objects containing a lot of duplication.
 }
 \examples{
-(mesh1 <- cube3d())
-id <- shade3d(mesh1, col = rainbow(6), meshColor = "face")
+open3d()
+(mesh1 <- cuboctahedron3d(col = rainbow(14), meshColor = "face"))
+id <- shade3d(mesh1)
 (mesh2 <- as.mesh3d(id))
+shade3d(translate3d(mesh2, 3, 0, 0))
 (mesh3 <- mergeVertices(mesh2))
+shade3d(translate3d(mesh3, 6, 0, 0))
 }
