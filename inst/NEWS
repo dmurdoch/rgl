@@ -1252,3 +1252,5 @@ base graphics.
     has been added.
   - Added asHomogeneous2 and asEuclidean2 to work directly
     with 3 x n and 4 x n matrices.
+  - Accidentally included all Javascript source files even
+    when RGL_DEBUGGING was not set.

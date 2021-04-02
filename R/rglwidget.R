@@ -502,6 +502,7 @@ makeDependency <- function(name, src, script = NULL, package,
                       package = package,
                       version = version,
                       script = script,
+                      all_files = FALSE,
                       ...)
 }
 
