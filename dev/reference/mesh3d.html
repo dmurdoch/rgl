@@ -59,23 +59,11 @@
 
 
 <!-- dependencies from examples -->
-<script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <script src="libs/rglWebGL-binding-0.106.0/rglWebGL.js"></script>
 <link href="libs/rglwidgetClass-0.106.0/rgl.css" rel="stylesheet" />
-<script src="libs/rglwidgetClass-0.106.0/rglClass.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/utils.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/subscenes.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/shaders.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/textures.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/projection.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/mouse.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/init.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/pieces.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/draw.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/controls.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/selection.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.0/rglTimer.src.js"></script>
-<script src="libs/CanvasMatrix4-0.106.0/CanvasMatrix.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.0/rglClass.min.js"></script>
+<script src="libs/CanvasMatrix4-0.106.0/CanvasMatrix.min.js"></script>
 
   
 
@@ -251,7 +239,7 @@ quads respectively.</p>
 
     <p>Objects of class <code><a href='https://rdrr.io/r/base/c.html'>c("mesh3d",
   "shape3d")</a></code>.</p>  
-<p>See <code><a href='rgl.primitive.html'>rgl.primitive</a></code> for a discussion of texture coordinates.</p>
+<p>See <code><a href='primitive.html'>rgl.primitive</a></code> for a discussion of texture coordinates.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='shade3d.html'>shade3d</a></code>, <code><a href='shapelist3d.html'>shapelist3d</a></code> for multiple shapes</p></div>
@@ -270,8 +258,8 @@ quads respectively.</p>
   
   <span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span>  
   <span class='fu'><a href='shade3d.html'>wire3d</a></span><span class='op'>(</span> <span class='fu'>mesh3d</span><span class='op'>(</span>vertices <span class='op'>=</span> <span class='va'>vertices</span>, quads <span class='op'>=</span> <span class='va'>indices</span><span class='op'>)</span> <span class='op'>)</span>
-</div><div id="rgl92478" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
-<script type="application/json" data-for="rgl92478">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0]},"rootSubscene":812,"objects":{"818":{"id":818,"type":"quads","material":{"front":"lines","back":"lines"},"vertices":[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],"colors":[[0,0,0,1]],"centers":[[0,0,0]],"normals":[[0,-0,1],[0,-0,1],[0,-0,1],[0,-0,1]],"ignoreExtent":false,"flags":32771},"816":{"id":816,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"815":{"id":815,"type":"background","material":{},"colors":[[0.298039227724075,0.298039227724075,0.298039227724075,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"817":{"id":817,"type":"background","material":{"lit":false,"back":"lines"},"colors":[[1,1,1,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"812":{"id":812,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":812,"mouseMode":{"left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,5.46410131454468],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-5.46410131454468],[0,0,0,1]],"projMatrix":[[3.73205065727234,0,0,0],[0,3.73205065727234,0,0],[0,0,-3.86370277404785,-19.6974506378174],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1,1,-1,1,0,0],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":false,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":"NA","activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[817,818,816],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script><div class='input'>  
+</div><div id="rgl64843" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
+<script type="application/json" data-for="rgl64843">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0]},"rootSubscene":941,"objects":{"947":{"id":947,"type":"quads","material":{"front":"lines","back":"lines"},"vertices":[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],"colors":[[0,0,0,1]],"centers":[[0,0,0]],"normals":[[0,-0,1],[0,-0,1],[0,-0,1],[0,-0,1]],"ignoreExtent":false,"flags":32771},"945":{"id":945,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"944":{"id":944,"type":"background","material":{},"colors":[[0.298039227724075,0.298039227724075,0.298039227724075,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"946":{"id":946,"type":"background","material":{"lit":false,"back":"lines"},"colors":[[1,1,1,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"941":{"id":941,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":941,"mouseMode":{"left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,5.46410131454468],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-5.46410131454468],[0,0,0,1]],"projMatrix":[[3.73205065727234,0,0,0],[0,3.73205065727234,0,0],[0,0,-3.86370277404785,-19.6974506378174],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1,1,-1,1,0,0],"windowRect":[680,725,936,900],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"/Library/Frameworks/R.framework/Versions/4.0/Resources/library/rgl/fonts/FreeSans.ttf","maxClipPlanes":6,"glVersion":2.1,"activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[946,947,945],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script><div class='input'>  
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

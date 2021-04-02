@@ -183,53 +183,53 @@ names.</p>
 <dt>id</dt><dd><p>The id of the object.</p></dd>
 <dt>attrib</dt><dd><p>The full name of the attribute.</p></dd>
 <dt>nrow, ncol</dt><dd><p>The size of matrix that would be returned
-by <code><a href='rgl.attrib.html'>rgl.attrib</a></code> for this attribute.</p></dd>
+by <code><a href='attributes.html'>rgl.attrib</a></code> for this attribute.</p></dd>
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Duncan Murdoch</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='rgl.attrib.html'>rgl.attrib</a></code> to obtain the attribute values.</p></div>
+    <div class='dont-index'><p><code><a href='attributes.html'>rgl.attrib</a></code> to obtain the attribute values.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='points3d.html'>points3d</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span>
+<span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='3dobjects.html'>points3d</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span>
 <span class='fu'>rgl.attrib.info</span><span class='op'>(</span><span class='va'>id</span>, showAll <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      id     attrib nrow ncol
-#&gt; 1  1613   vertices  100    3
-#&gt; 2  1613    normals    0    3
-#&gt; 3  1613     colors    1    4
-#&gt; 4  1613  texcoords    0    2
-#&gt; 5  1613        dim    0    2
-#&gt; 6  1613      texts    0    1
-#&gt; 7  1613        cex    0    1
-#&gt; 8  1613        adj    0    2
-#&gt; 9  1613      radii    0    1
-#&gt; 10 1613    centers  100    3
-#&gt; 11 1613        ids    0    1
-#&gt; 12 1613 usermatrix    0    4
-#&gt; 13 1613      types    0    1
-#&gt; 14 1613      flags    1    1
-#&gt; 15 1613    offsets    0    1
-#&gt; 16 1613     family    0    1
-#&gt; 17 1613       font    0    1
-#&gt; 18 1613        pos    0    1
-#&gt; 19 1613   fogscale    0    1</div><div class='input'><span class='fu'>rgl.attrib.count</span><span class='op'>(</span><span class='va'>id</span>, <span class='st'>"vertices"</span><span class='op'>)</span>
+#&gt; 1  1742   vertices  100    3
+#&gt; 2  1742    normals    0    3
+#&gt; 3  1742     colors    1    4
+#&gt; 4  1742  texcoords    0    2
+#&gt; 5  1742        dim    0    2
+#&gt; 6  1742      texts    0    1
+#&gt; 7  1742        cex    0    1
+#&gt; 8  1742        adj    0    2
+#&gt; 9  1742      radii    0    1
+#&gt; 10 1742    centers  100    3
+#&gt; 11 1742        ids    0    1
+#&gt; 12 1742 usermatrix    0    4
+#&gt; 13 1742      types    0    1
+#&gt; 14 1742      flags    1    1
+#&gt; 15 1742    offsets    0    1
+#&gt; 16 1742     family    0    1
+#&gt; 17 1742       font    0    1
+#&gt; 18 1742        pos    0    1
+#&gt; 19 1742   fogscale    0    1</div><div class='input'><span class='fu'>rgl.attrib.count</span><span class='op'>(</span><span class='va'>id</span>, <span class='st'>"vertices"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 100</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='fu'>rgl.attrib.info</span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'><a href='scene.html'>ids3d</a></span><span class='op'>(</span><span class='st'>"all"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      id   attrib nrow ncol       type
-#&gt; 1  1611   colors    3    4      light
-#&gt; 2  1611    flags    2    1      light
-#&gt; 3  1611 vertices    1    3      light
-#&gt; 4  1612    flags    4    1 background
-#&gt; 5  1612 fogscale    1    1 background
-#&gt; 6  1612   colors    1    4 background
-#&gt; 7  1612  centers    1    3 background
-#&gt; 8  1613   colors    1    4     points
-#&gt; 9  1613  centers  100    3     points
-#&gt; 10 1613 vertices  100    3     points
-#&gt; 11 1613    flags    1    1     points</div></pre>
+#&gt; 1  1740   colors    3    4      light
+#&gt; 2  1740    flags    2    1      light
+#&gt; 3  1740 vertices    1    3      light
+#&gt; 4  1741    flags    4    1 background
+#&gt; 5  1741 fogscale    1    1 background
+#&gt; 6  1741   colors    1    4 background
+#&gt; 7  1741  centers    1    3 background
+#&gt; 8  1742   colors    1    4     points
+#&gt; 9  1742  centers  100    3     points
+#&gt; 10 1742 vertices  100    3     points
+#&gt; 11 1742    flags    1    1     points</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
