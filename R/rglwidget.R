@@ -259,7 +259,7 @@ rglwidget <- local({
     
   if (missing(snapshot)) {
     if (missing(webgl)) {
-      if (isTRUE(getOption("knitr.in.progress")))
+      if (in_knitr())
         snapshot <- knitrNeedsSnapshot()
       else
         snapshot <- FALSE

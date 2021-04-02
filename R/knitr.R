@@ -1,3 +1,5 @@
+in_knitr <- function()
+  isTRUE(getOption("knitr.in.progress"))
 
 ##
 ## knitr hook functions
@@ -510,8 +512,10 @@ is_low_change.rglRecordedplot <- function(p1, p2) {
 figWidth <- function() {
   if (in_pkgdown_example())
     opts <- pkgdown_fig_settings()
-  else
+  else if (in_knitr())
     opts <- opts_current$get(c("fig.width", "dpi", "fig.retina"))
+  else
+    opts <- NULL
   if (length(opts)) {
     result <- with(opts, fig.width*dpi/fig.retina)
     result[1] 
@@ -521,8 +525,10 @@ figWidth <- function() {
 figHeight <- function() {
   if (in_pkgdown_example())
     opts <- pkgdown_fig_settings()
-  else
+  else if (in_knitr())
     opts <- opts_current$get(c("fig.height", "dpi", "fig.retina"))
+  else
+    opts <- NULL
   if (length(opts)) {
     result <- with(opts, fig.height*dpi/fig.retina)
     result[1] 
