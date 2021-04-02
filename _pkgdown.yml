@@ -73,14 +73,14 @@ reference:
 - title: Complex shapes
   desc: These functions construct and display complex shapes.
 - contents:
+  - mesh3d
+  - shade3d
   - tetrahedron3d
   - cylinder3d
   - polygon3d
   - extrude3d
   - turn3d
   - ellipse3d
-  - tmesh3d
-  - qmesh3d
   - shapelist3d
   - starts_with("as.mesh3d")
   - as.triangles3d
