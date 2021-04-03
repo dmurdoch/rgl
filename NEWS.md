@@ -462,81 +462,81 @@
 
 *  Fixed bug in conversion of bounding box decorations
    used in `rglwidget()`. 
-*  Added "fixedSize" argument to rgl.sprites() and related
+*  Added `fixedSize` argument to `rgl.sprites()` and related
    functions. 
-*  Added plotmath3d() function, and set `text3d()` to
+*  Added `plotmath3d()` function, and set `text3d()` to
    use it when necessary. 
-*  addNormals() gave an error if the mesh it was working
+*  `addNormals()` gave an error if the mesh it was working
    with had degenerate triangles or quads.  (Reported
    by Rolf Turner and Graham Griffiths.) 
 *  Auto-clipping sometimes changed result vectors into
    lists. 
 *  The controllers did not recycle some values correctly. 
 *  Fixed bug in initialization of `playwidget()`s. 
-*  material3d() now silently ignores attempts to set
+*  ` material3d()` now silently ignores attempts to set
    read-only properties. 
-*  Added setUserShaders() for user-specified shaders
+*  Added `setUserShaders()` for user-specified shaders
    (currently for WebGL only). 
 *  Added support for two-sided surfaces in WebGL. 
 *  Fixed some bugs in `pch3d()` (reported by Gina Joue). 
-*  Added demo("rglExamples") to display all the examples
+*  Added `demo("rglExamples")` to display all the examples
    in the `rgl` help in a collection of web pages.
    This showed up a number of small bugs, which have been
    fixed. 
-*  movie3d() now optionally tries the R "magick" package first,
-   then the external ImageMagick v7 command "magick" 
-   before trying "convert".  (The external change
+*  `movie3d()` now optionally tries the R `magick` package first,
+   then the external ImageMagick v7 command `magick`
+   before trying `convert`.  (The external change
    suggested by Earl F. Glynn.) 
-*  par3d() reports on the version of OpenGL that it sees
+*  `par3d()` reports on the version of OpenGL that it sees
    (as component "glVersion"). 
 
 # rgl  0.96.0 
 
 *  Gave better error when XQuartz is not found, tried for better test. 
-*  Added more information on backgrounds to scene3d() to allow them to be used in `rglwidget()`. 
+*  Added more information on backgrounds to `scene3d()` to allow them to be used in `rglwidget()`. 
 *  Now uses forward slashes in `rgl.postscript(fmt = "tex")` generated code.
    (Thanks to Uwe Ligges for the problem report.) 
-*  Added `as.mesh3d()` and plot3d.deldir() and `persp3d.deldir()` methods to
+*  Added `as.mesh3d()` and `plot3d.deldir()` and `persp3d.deldir()` methods to
    allow plotting of surfaces defined by irregular collections of points. 
 *  Background clearing was not handled properly.  (Thanks to Paul Morse
    for a bug report on this.) 
-*  Added rglToLattice() and rglToBase() functions to compute Euler angles
-   for the lattice wireframe(), cloud(), and base graphics persp() functions.  
-*  Added arrow3d() (based on the function of the same name in the
-   heplots package). 
+*  Added `rglToLattice()` and `rglToBase()` functions to compute Euler angles
+   for the `lattice::wireframe()`, `lattice::cloud()`, and base graphics `persp()` functions.  
+*  Added `arrow3d()` (based on the function of the same name in the
+   `heplots` package). 
 *  Added `pch3d()` to give an approximation
-to plotting symbols using pch=<number> in
+to plotting symbols using `pch=<number>` in
 base graphics. 
 *  Added support for control of multiple subscenes
-   to spin3d(), `par3dinterp()`, play3d() and movie3d(). 
+   to `spin3d()`, `par3dinterp()`, `play3d()` and `movie3d()`. 
 *  Added experimental function `writeASY()` for output in Asymptote format,
    which will allow inclusion in PDF files. 
-*  cylinder3d() now defaults to a rotation minimizing local frame. 
-*  Added this NEWS file 
-*  Added better support for backgrounds 
-*  Added support for orthographic projections (FOV = 0) 
-*  Added simple Shiny demo using tabs 
-*  Fixed bug in rendering unlit 3D sprites 
+*  `cylinder3d()` now defaults to a rotation minimizing local frame. 
+*  Added this NEWS file.
+*  Added better support for backgrounds. 
+*  Added support for orthographic projections (`FOV = 0`). 
+*  Added simple Shiny demo using tabs. 
+*  Fixed bug in rendering unlit 3D sprites. 
 *  Added version dependency for jsonlite so that the
    new faster matrix code will be used. 
-*  Added rgl.attrib.info() to display information about
+*  Added `rgl.attrib.info()` to display information about
    object attributes. 
-*  Merged rglwidget code back into rgl. 
+*  Merged `rglwidget` code back into `rgl`. 
 *  Functions that modify the scene now return their
-   value with class "rglLowlevel" or "rglHighlevel" (using the new lowlevel()
-   or highlevel() functions) to indicate that a low- or high-level plotting function
+   value with class `"rglLowlevel"` or `"rglHighlevel"` (using the new `lowlevel()`
+   or `highlevel()` functions) to indicate that a low- or high-level plotting function
    has been called.  If the new option 
-   "rgl.printRglwidget" is TRUE, printing objects
+   `"rgl.printRglwidget"` is `TRUE`, printing objects
    of either class will trigger automatic
    printing of the `rgl` scene using `rglwidget()`. 
 *  Web browsers only support a finite number of active
-   WebGL sessions; rglwidget code now works to make more
+   WebGL sessions; `rglwidget()` code now works to make more
    careful use of this finite resource, so that large
    numbers of `rgl` scenes can be present on a single
    web page without exhausting it. 
-*  The worker functions used by subdivision3d() have
+*  The worker functions used by `subdivision3d()` have
    been exported for use on their own. 
-*  The rglwidget code now supports textures on spheres.  
+*  The `rglwidget()` code now supports textures on spheres.  
    It now uses the same mesh as the one used inside R. 
    (The lack of support was pointed out by Justin McManus.) 
 
@@ -547,25 +547,25 @@ base graphics.
 
 # rgl  0.95.1435 
 
-*  The Mac OS X native windowing system (aglrgl.so) has been
+*  The Mac OS X native windowing system (`aglrgl.so`) has been
    dropped; it appears not to work in Yosemite and El Capitan. 
 *  A memory leak when drawing semi-transparent objects has been
    fixed.  (Reported by Felix Kuehnl.) 
 *  WebGL code has been moved to the `rglwidget` package (though
    the functions in `rgl` still work). 
 *  Bounding box objects sometimes had miscalculated vertices
-   in scene3d(). 
-*  If rgl.init() fails, continue with the NULL device (with warnings). 
-*  scene3d() now returns the normals and offsets of "planes"
+   in `scene3d()`. 
+*  If `rgl.init()` fails, continue with the `NULL` device (with warnings). 
+*  `scene3d()` now returns the normals and offsets of "planes"
    objects, as with "clipplanes" objects.  It still returns the triangles from embedding the
    planes in the most recent subscene. 
 
 # rgl  0.95.1367 
 
-*  Added show2d() to allow a 2d plot on a quadrilateral
+*  Added `show2d()` to allow a 2d plot on a quadrilateral
    in a scene. 
 *  Fixed bug that sometimes prevented textures from displaying. 
-*  `rgl.bbox()` (and hence `bbox3d()`, decorate3d(), `plot3d()`, etc.)
+*  `rgl.bbox()` (and hence `bbox3d()`, `decorate3d()`, `plot3d()`, etc.)
    did not return the correct id for the bounding box decoration. 
 *  Modified configure script to work with OS X 10.11 (suggestion of
    Brian Ripley). 
@@ -573,111 +573,111 @@ base graphics.
 # rgl  0.95.1336 
 
 *  Made error and warning text more consistent. 
-*  Dropped chunk option "rgl.keepopen"; replaced it
-   with "rgl.newwindow". 
-*  Added matrixSetter() function to allow multiple controls to
+*  Dropped chunk option `"rgl.keepopen"`; replaced it
+   with `"rgl.newwindow"`. 
+*  Added `matrixSetter()` function to allow multiple controls to
    modify one matrix. 
-*  Added "accumulate" argument to the subset WebGL controls. 
-*  The "nticks" argument to `bbox3d()` was never used and has
-   been removed.  Use "xlen", "ylen" or "zlen". 
-*  Setting "xlen" etc. to zero in `bbox3d()` or `rgl.bbox()` now
+*  Added `accumulate` argument to the subset WebGL controls. 
+*  The `nticks` argument to `bbox3d()` was never used and has
+   been removed.  Use `xlen`, `ylen` or `zlen`. 
+*  Setting `xlen` etc. to zero in `bbox3d()` or `rgl.bbox()` now
    (correctly) suppresses tick marks. (Reported by
    Philipp Angerer.) 
 *  Dependencies and imports have been updated. 
-*  Specifying "normals" or "texcoords" in both a
-   "mesh3d" object and a call to `shade3d()` to display
+*  Specifying `normals` or `texcoords` in both a
+   `"mesh3d"` object and a call to `shade3d()` to display
    it caused an error; now the `shade3d()` specified
-   value has priority if "override" is TRUE (the default). 
+   value has priority if `override = TRUE` (the default). 
 *  Added `vertexSetter()` function to allow easier access to
    vertex attributes. 
-*  Used Jeroen Ooms' js::jshints() function to clean up the
+*  Used Jeroen Ooms' `js::jshints()` function to clean up the
    WebGL Javascript code. 
-*  Allowed "values = NULL" in propertySetter() and `vertexSetter()`
+*  Allowed `values = NULL` in `propertySetter()` and `vertexSetter()`
    to allow code to directly set values. 
 *  When used with clipping on the bounds, `persp3d()` and `plot3d()`
    did not work properly with a shared mouse.  (Reported by
    Marian Talbert.) 
 *  Shaders are now stored in Javascript strings, not separate
    script sections. 
-*  Shape centers are now stored by scene3d(). 
+*  Shape centers are now stored by `scene3d()`. 
 *  Font family and numeric font number (style) are now returned
-   by rgl.attrib() and are stored by scene3d(). 
+   by `rgl.attrib()` and are stored by `scene3d()`. 
 *  Fixed a bug (reported by Dominick Samperi) that caused
    vignettes using WebGL code in knitr to fail to initialize
-   properly.  This required adding the setupKnitr() function,
+   properly.  This required adding the `setupKnitr()` function,
    which should be called at the start of each vignette.
    It is *not* called automatically. 
 *  Fixed a bug (reported by Kurt Hornik) that caused `rgl` to
    fail to compile when libfreetype 2.6 was linked. 
-*  Fixed a bug in writePLY (reported by Kurt Hornik). 
+*  Fixed a bug in `writePLY()` (reported by Kurt Hornik). 
 
 # rgl  0.95.1247 
 
-*  If a template file is used in writeWebGL(), the string %prefix%
+*  If a template file is used in `writeWebGL()`, the string `%prefix%`
    will be replaced in it by the prefix argument. 
-*  writeWebGL() now outputs a Javascript global variable named
+*  `writeWebGL()` now outputs a Javascript global variable named
    "<prefix>rgl" of class "rglClass" that allows access to many of the
    scene internals.  (Inspired by patch submitted by Jeff Allen.) 
 *  User mouse callbacks can now be retrieved within R using
    rgl.getMouseCallbacks() and rgl.getWheelCallback(), and
    may be included in WebGL output. 
-*  writeWebGL() now outputs information on object ids to allow
+*  `writeWebGL()` now outputs information on object ids to allow
    them to be re-used in multiple figures on the same page.
-   See the "reuse" parameter and attribute of the result. 
+   See the `reuse` parameter and attribute of the result. 
 *  Started a vignette describing user interaction in WebGL. 
 *  Set the class of the main "canvas" element in
-   writeWebGL() output to "rglWebGL". 
-*  `rgl.snapshot()` now evaluates the "top" argument after "filename"
-   and "fmt", so windows created when those are evaluated don't
+   `writeWebGL()` output to "rglWebGL". 
+*  `rgl.snapshot()` now evaluates the `top` argument after `filename`
+   and `fmt`, so windows created when those are evaluated don't
    overlay the `rgl` window.  (Suggestion of Keith Jewell.) 
-*  Added subsetSlider(), subsetSetter(), clipplaneSlider(),
-   propertySlider(), ageSetter(), propertySetter(), par3dinterpSetter() and
-   toggleButton() functions to output HTML/Javascript controls for WebGL. 
-*  Fixed bug in abclines3d() that caused it to skip lines that passed
+*  Added `subsetSlider()`, `subsetSetter()`, `clipplaneSlider()`,
+   `propertySlider()`, `ageSetter()`, `propertySetter()`, `par3dinterpSetter()` and
+   `toggleButton()` functions to output HTML/Javascript controls for WebGL. 
+*  Fixed bug in `abclines3d()` that caused it to skip lines that passed
    through the corners of the bounding box.  (Reported by Sven Laur.) 
-*  Added hook_rgl() and hook_webgl() functions, based on the knitr
+*  Added `hook_rgl()` and `hook_webgl()` functions, based on the `knitr`
    functions. 
 
 # rgl  0.95.1196 
 
-*  writeWebGL() now includes an argument "commonParts", to allow
+*  `writeWebGL()` now includes an argument `commonParts`, to allow
    omission of common code in multi-figure displays. 
-*  If template is NULL in writeWebGL(), no template file is used. 
-*  The NULL device did not handle changes to par3d("windowRect")
+*  If `template` is `NULL` in `writeWebGL()`, no template file is used. 
+*  The `NULL` device did not handle changes to `par3d("windowRect")`
    properly. 
-*  The persp.function() method is now smarter about setting default
+*  The `persp.function()` method is now smarter about setting default
    axis labels. 
 *  The package now contains a vignette giving an overview of
    the functions. 
-*  Subscenes with "ignoreExtent" set to TRUE were not plotted. 
+*  Subscenes with `ignoreExtent = TRUE` were not plotted. 
 *  The bounding box calculations now take clipping planes into account. 
-*  writeWebGL() did not display the bboxdeco properly when working
+*  `writeWebGL()` did not display the bboxdeco properly when working
    in a subscene. 
 *  Added clipping regions to `plot3d()` and `persp3d()`. 
-*  Export the GramSchmidt function (request of Remko Duursma) 
+*  Export the `GramSchmidt()` function (request of Remko Duursma) 
 *  Added `readOBJ()`, with a very limited ability to read OBJ
    shapefiles. 
-*  triangulate() now supports polygons expressed with 3
+*  `triangulate()` now supports polygons expressed with 3
    coordinates (though they are still assumed to be planar). 
-*  par3d() now includes "listeners", a list of subscenes that
+*  `par3d()` now includes `"listeners"`, a list of subscenes that
    respond to mouse actions in the current subscene. 
 *  The Windows configuration file has been modified to work in
    R-devel (to become R 3.2.0). 
 
 # rgl  0.95.1158 
 
-*  `rgl.snapshot()` now works with the NULL device (but produces a
-   black snapshot).  This allows testing with RGL_USE_NULL. 
+*  `rgl.snapshot()` now works with the `NULL` device (but produces a
+   black snapshot).  This allows testing with `RGL_USE_NULL`. 
 
 # rgl  0.95.1157 
 
 *  Allowed background of window to show bitmap;  added `bgplot3d()`
-   and legend3d() functions. 
-*  Reverted misguided changes to par3d("modelMatrix") from 0.94.
-   This affects rgl.projection() as well. 
+   and `legend3d()` functions. 
+*  Reverted misguided changes to `par3d("modelMatrix")` from 0.94.
+   This affects `rgl.projection()` as well. 
 *  Fixed bug (introduced in 0.94) causing loss of rectangle showing
    selection area.  (Reported by John Fox and others.) 
-*  The NULL device now does not make any spurious OpenGL calls. 
+*  The `NULL` device now does not make any spurious OpenGL calls. 
 
 # rgl  0.94.1143 
 
@@ -686,7 +686,7 @@ base graphics.
 *  Fixed a bug introduced in 0.94 that made user callbacks crash R.
    (Reported by Dave Hadka.) 
 *  Fixed a bug exposed in 0.94 (but really introduced in 0.93.952)
-   that caused writeWebGL() to fail when a NULL device was active. 
+   that caused `writeWebGL()` to fail when a `NULL` device was active. 
 *  Fixed a bug introduced in 0.94 with writing 3D sprite objects. 
 *  Fixed a bug computing the bounding box of an embedded subscene. 
 
@@ -697,43 +697,43 @@ base graphics.
    which now act either on a single subscene or on the
    overall scene. 
 *  Allowed the coordinates of the viewport to be set. 
-*  Changed the behaviour of pop3d() and rgl.pop():  the type is
-   now ignored if id is non-zero. 
-*  par3d("modelMatrix") no longer includes the observer translation 
-*  Added configurable mouse wheel actions via par3d() or
-   rgl.setWheelCallback(). 
-*  The par3d(), `par3dinterp()`, and spin3d() functions now
+*  Changed the behaviour of `pop3d()` and `rgl.pop()`:  the type is
+   now ignored if `id` is non-zero. 
+*  `par3d("modelMatrix")` no longer includes the observer translation 
+*  Added configurable mouse wheel actions via `par3d()` or
+   `rgl.setWheelCallback()`. 
+*  The `par3d()`, `par3dinterp()`, and `spin3d()` functions now
    have arguments dev and subscene to specify where they apply. 
-*  Included a copy of the source to CanvasMatrix.js (used by
-   writeWebGL()) at the request of the Debian administrators. 
-*  The NULL device was not removed from the device list when
+*  Included a copy of the source to `CanvasMatrix.js` (used by
+   `writeWebGL()`) at the request of the Debian administrators. 
+*  The `NULL` device was not removed from the device list when
    it was closed.  (Reported by Henrik Bengtsson.) 
-*  Some of the animations have been sped up at the request of CRAN 
+*  Some of the animations have been sped up at the request of CRAN. 
 
 # rgl  0.93.1098 
 
 *  `rgl.material()` (for textures), `rgl.postscript()` and `rgl.snapshot()`
-   now call normalizePath() on filenames, so tilde expansion should
+   now call `normalizePath()` on filenames, so tilde expansion should
    be supported. 
-*  par3d() could generate an error if an unnamed list was passed in. 
-*  material3d() lost settings for textures 
+*  `par3d()` could generate an error if an unnamed list was passed in. 
+*  ` material3d()` lost settings for textures 
 *  internals are updated to be consistent with MacOS 10.9 requirements 
-*  fixed a bug in triangulation code:  it failed on locator() input. 
+*  fixed a bug in triangulation code:  it failed on `locator()` input. 
 *  The Aqua support now works again, XQuartz is only needed for command
    line use in Mac OSX. 
 
 # rgl  0.93.995 
 
 *  Improved the approximation to the surface normal for degenerate
-   grids in surface3d and `persp3d()`.  (Problem found by Graham Griffiths
-   using polar coordinates; all r=0 points were at the same location.) 
-*  The new surface normals are now saved in memory, so rgl.attrib
+   grids in `surface3d()` and `persp3d()`.  (Problem found by Graham Griffiths
+   using polar coordinates; all `r=0` points were at the same location.) 
+*  The new surface normals are now saved in memory, so `rgl.attrib()`
    will return them even if they were calculated by `rgl`. 
 *  Bounding box calculations for surfaces with user normals were
    incorrect. 
-*  An array-overrun bug in rgl.attrib() showed up in writeWebGL.
+*  An array-overrun bug in `rgl.attrib()` showed up in `writeWebGL()`.
    (Reported by Brian Ripley.) 
-*  scene3d() now records light settings. 
+*  `scene3d()` now records light settings. 
 
 # rgl  0.93.991 
 
@@ -741,7 +741,7 @@ base graphics.
 
 # rgl  0.93.987 
 
-*  Added clipplanes3d function to implement clip planes.  (Still
+*  Added `clipplanes3d()` function to implement clip planes.  (Still
    only partially implemented.) 
 
 # rgl  0.93.986 
@@ -760,19 +760,19 @@ base graphics.
 *  entry points to the `rgl` DLL are now registered within the DLL,
    and on systems that support it, all entry points other than the
    registration function are hidden. 
-*  writeWebGL() and the other write methods did not handle material
+*  `writeWebGL()` and the other write methods did not handle material
    information properly after 0.93.975. 
 
 # rgl  0.93.975 
 
-*  rgl.texts without a window failed because it queried the window
+*  `rgl.texts()` without a window failed because it queried the window
    before opening it. 
-*  the scene3d() function now records complete information about the
+*  the `scene3d()` function now records complete information about the
    bounding box and the background. 
 *  `rgl` declares most of its C++ objects in the global namespace.
-   Recently this has caused clashes with the igraph package, which
+   Recently this has caused clashes with the `igraph` package, which
    does the same, and which also has a Shape class.  As a temporary
-   workaround the `rgl` class has been renamed to rglShape.  A full
+   workaround the `rgl` class has been renamed to `"rglShape"`.  A full
    `rgl` namespace will eventually be added, with only the API functions
    left in the global namespace. 
 
@@ -784,46 +784,46 @@ base graphics.
 
 # rgl  0.93.960 
 
-*  writeWebGL now forces the position attribute to location 0, a
+*  `writeWebGL()` now forces the position attribute to location 0, a
    recommended optimization strategy.  The color attribute is
    forced to location 1. 
 *  we now check for invalid characters when drawing text using bitmapped
    fonts (bug 4787) 
 *  gl2ps has been updated to version 1.3.8 and support for point and line
    sizes has been added (bug 4792) 
-*  internal functions .check3d() and rgl.select() have been exported,
+*  internal functions `.check3d()` and `rgl.select()` have been exported,
    as they were used by the car package. 
-*  writePLY had errors writing points and lines. 
+*  `writePLY()` had errors writing points and lines. 
 *  `rgl` now prints a warning when a requested font is unavailable and the
    default font is substituted. 
 
 # rgl  0.93.952 
 
-*  added triangulate(), polygon3d() , extrude3d() and turn3d()
+*  added `triangulate()`, `polygon3d()`, `extrude3d()` and `turn3d()`
     for display of shapes based on two-dimensional polygons or curves. 
-*  fixed formatting of vertex reference numbers in writeOBJ() (issue
+*  fixed formatting of vertex reference numbers in `writeOBJ()` (issue
    4732, reported by Alejandro Baranek). 
 *  added support for "headless" operation:  see help for new
-   function rgl.useNULL(). 
-*  added name of device to result returned from rgl.cur(); added function
-   rgl.dev.list() to list all open devices. 
-*  examples and demos now check rgl.useNULL(), and don't run invisible
+   function `rgl.useNULL()`. 
+*  added name of device to result returned from `rgl.cur()`; added function
+   `rgl.dev.list()` to list all open devices. 
+*  examples and demos now check `rgl.useNULL()`, and don't run invisible
    animations. 
 
 # rgl  0.93.944 
 
 *  write the `rgl` version into the webGL file 
-*  cleaned up use of CHECKGLERROR, so that setting USE_GLGETERROR to 1 in
+*  cleaned up use of CHECKGLERROR, so that setting `USE_GLGETERROR` to 1 in
    R.h will enable detailed checking 
-*  added identify3d() function 
-*  fixed bbox bug in writeOBJ (reported by Matthias Zeeman), writePLY
-   and writeSTL. 
-*  aspect3d() (called by `plot3d()`) caused the scene to be redrawn,
-   even if par3d("skipRedraw") was TRUE. 
-*  addNormals.mesh3d() failed on objects when the matrices
+*  added `identify3d()` function 
+*  fixed bbox bug in `writeOBJ()` (reported by Matthias Zeeman), `writePLY()`
+   and `writeSTL()`. 
+*  `aspect3d()` (called by `plot3d()`) caused the scene to be redrawn,
+   even if `par3d("skipRedraw")` was `TRUE`. 
+*  `addNormals.mesh3d()` failed on objects when the matrices
    of triangles or quadrilaterals had zero columns. 
-*  rotate3d.mesh3d() did not transform normals properly 
-*  the writeWebGL() function produced fragment shaders that would not
+*  `rotate3d.mesh3d()` did not transform normals properly 
+*  the `writeWebGL()` function produced fragment shaders that would not
    work in some browsers (e.g. Firefox and Chrome with the ANGLE
    WebGL engine). 
 
@@ -839,74 +839,92 @@ base graphics.
 
 # rgl  0.93.930 
 
-*  writeWebGL did not handle snapshot=FALSE properly.  (Reported
+*  `writeWebGL()` did not handle `snapshot=FALSE` properly.  (Reported
    by Yihui Xie.) 
 *  Now handles local (not just directional) lighting.  Based on
    code contributed by Alexander Senger.) 
-*  writeWebGL handles lighting properly.  Based on code contributed
+*  `writeWebGL()` handles lighting properly.  Based on code contributed
    by Alexander Senger. 
 
 # rgl  0.93.928 
 
 *  Updated the configure file using autoconf 2.69 
-*  Forced OSX installs to put /usr/X11/bin at the head of the path
+*  Forced OSX installs to put `/usr/X11/bin` at the head of the path
    when looking for freetype-config 
 
 # rgl  0.92.879 
 
-*  Removed rgl.save.texture():  textures are not saveable! 
-*  Added writeWebGL() function, to allow scenes to be viewed in a web
+*  Removed `rgl.save.texture()`:  textures are not saveable! 
+*  Added `writeWebGL()` function, to allow scenes to be viewed in a web
    browser. 
 *  Added "centers" to the attributes that can be queried, for depth sorted
    transparent rendering.
-v0.92.880 
+   
+# rgl 0.92.880
+
 *  Rearranged declarations for compatibility with gcc 4.7.
-v0.92.881 
-*  Fixed degenerate (e.g. straight line) cases in cylinder3d
-v0.92.883 
+
+# rgl 0.92.881 
+
+*  Fixed degenerate (e.g. straight line) cases in `cylinder3d()`.
+
+# rgl 0.92.883
+
 *  Added 3d "sprites" -- shapes that maintain their initial orientation.
-v0.92.887 
-*  Added "caps" to the end of cylinder3d() objects.
-v0.92.891 
-*  Added support for 3d sprites to writeWebGL.
-v0.92.892 
+
+# rgl 0.92.887 
+
+*  Added "caps" to the end of `cylinder3d()` objects.
+
+# rgl 0.92.891 
+
+*  Added support for 3d sprites to `writeWebGL()`.
+
+# rgl 0.92.892 
+
 *  Added declaration needed by Solaris.
-v0.92.893 
-*  rgl.light() and light3d() did not return the light ID value.
-v0.92.894 
-*  remove debugging code from configure.win that was causing problems
+
+# rgl 0.92.893 
+
+*  `rgl.light()` and `light3d()` did not return the light ID value.
+
+# rgl 0.92.894 
+
+*  remove debugging code from `configure.win` that was causing problems
    on the CRAN WinBuilder system
-v0.93 
-*  Added readSTL and writeSTL functions 
-*  Added expand argument to decorate3d and axes3d 
-*  Added base argument to spin3d result 
-*  Added writePLY and writeOBJ functions 
-*  Added scene3d function 
-*  Added section argument to cylinder3d() 
-*  Added res_name="rgl" and res_class="R_x11" to the WM_CLASS property of X11
+   
+# rgl 0.93
+
+*  Added `readSTL()` and `writeSTL()` functions 
+*  Added `expand` argument to `decorate3d()` and `axes3d()` 
+*  Added `base` argument to `spin3d()` result 
+*  Added `writePLY()` and `writeOBJ()` functions 
+*  Added `scene3d()` function 
+*  Added section argument to `cylinder3d()` 
+*  Added `res_name="rgl"` and `res_class="R_x11"` to the `WM_CLASS` property of X11
    windows.  (Contributed by Philip Johnson.) 
-*  Added code to work with R 3.0.0 setHook changes 
-*  Added selectpoints3d function to select points from the scene. 
+*  Added code to work with R 3.0.0 `setHook()` changes 
+*  Added `selectpoints3d()` function to select points from the scene. 
 *  The `rgl` window now handles ESC key presses.  During selection
-   and play3d they abort the process; otherwise they are ignored. 
-*  writeWebGL did not render semi-transparent surfaces properly.
+   and `play3d()` they abort the process; otherwise they are ignored. 
+*  `writeWebGL()` did not render semi-transparent surfaces properly.
    (Reported by Robert Esswein.) 
-*  Copied the R_pretty0 function from R sources to avoid warning. 
+*  Copied the `R_pretty0()` function from R sources to avoid warning. 
 
 # rgl  0.92.861 
 
 *  Fixed segfault on startup on Windows in MDI mode. 
-*  Added rgl.save.texture() to get texture from an object. 
+*  Added `rgl.save.texture()` to get texture from an object. 
 
 # rgl  0.92.858 
 
 *  Added declarations for Solaris compatibility (from Brian Ripley) 
-*  Fixed configure.win for bi-arch compatibility.  Windows installers can
-   set HAVE_PNG to a non-empty value, and `rgl` will look for
-   the libpng files in the default LOCAL_SOFT location when installing. 
-*  Added depth_mask and depth_test material properties, to allow control
+*  Fixed `configure.win` for bi-arch compatibility.  Windows installers can
+   set `HAVE_PNG` to a non-empty value, and `rgl` will look for
+   the libpng files in the default `LOCAL_SOFT` location when installing. 
+*  Added `"depth_mask"` and `"depth_test"` material properties, to allow control
    over how objects are obscured by each other. 
-*  Added Sweave support through the rgl.Sweave driver and the Sweave.snapshot
+*  Added `Sweave()` support through the `rgl.Sweave()` driver and the `Sweave.snapshot()`
    function. 
 *  Added iterative computation of the bounding box to handle objects like
    spheres, which need to maintain their apparent shape as the scaling
@@ -914,24 +932,24 @@ v0.93
 *  Improved the bounding box decoration in two ways:  it can now draw the
    front faces (to surround the whole graph), and can label edges with pretty
    labels.  `plot3d()` was modified to use this instead of manually setting axis
-   locations and using box3d() to draw a box, allowing resizeable labelled
+   locations and using `box3d()` to draw a box, allowing resizeable labelled
    axes. 
-*  Removed some unnecessary declarations from rglmath.h that were causing
+*  Removed some unnecessary declarations from `rglmath.h` that were causing
    problems in an old version of gcc on Solaris. 
-*  Added rgl.abclines(), rgl.planes(), abclines3d() and `planes3d()` to draw
+*  Added `rgl.abclines()`, `rgl.planes()`, `abclines3d()` and `planes3d()` to draw
    lines and planes intersecting with the bounding box. 
-*  `rgl.postscript()` now adjusts the size of text following the cex setting.
-   The font and family settings are still ignored. 
+*  `rgl.postscript()` now adjusts the size of text following the `cex` setting.
+   The `font` and `family` settings are still ignored. 
 *  Transparency in material textures was not always rendered properly. 
 *  In OSX, the Carbon system has been replaced by a Cocoa system.
    (Code contributed by Adam Strzelecki).  For compatibility with the
-   Windows build system, the new files have been put into src/osx. 
+   Windows build system, the new files have been put into `src/osx`. 
 *  Hardware antialiasing is now used if the OpenGL driver supports
-   it.  Set options(rgl.antialias=0) to disable it. 
-*  Bug fix for divide.mesh3d() in handling normals. 
-*  Functions rgl.attrib.count() and rgl.attrib() (and internal function
-   rgl.getmaterial()) added to allow objects in the scene to be examined. 
-*  rgl.ids() did not return all object ids as documented. 
+   it.  Set `options(rgl.antialias=0)` to disable it. 
+*  Bug fix for `divide.mesh3d()` in handling normals. 
+*  Functions `rgl.attrib.count()` and `rgl.attrib()` (and internal function
+   `rgl.getmaterial()`) added to allow objects in the scene to be examined. 
+*  `rgl.ids()` did not return all object ids as documented. 
 *  Updated gl2ps to version 1.3.6 
 
 # rgl  0.92 
@@ -940,21 +958,21 @@ v0.93
    (Bug #861) 
 *  Allowed texture coordinates to be specified in mesh objects. 
 *  Updated gl2ps to version 1.3.5 
-*  Should now install using --merge-multiarch on Windows 
+*  Should now install using `--merge-multiarch` on Windows 
 
 # rgl  0.91 
 
-*  Fixed bug in rgl.texts:  zero-length texts argument caused crash.
+*  Fixed bug in `rgl.texts()`:  zero-length texts argument caused crash.
    (Reported by Michael Friendly.) 
-*  Added R_ARCH* macros to configure.win for Win64 compatibility 
-*  Fixed bad declaration in rglmath.h 
+*  Added `R_ARCH*` macros to `configure.win` for Win64 compatibility 
+*  Fixed bad declaration in `rglmath.h` 
 
 # rgl  0.90 
 
-*  Added startTime argument to play3d() and movie3d(). 
-*  Fixed configure.ac as suggested by Jens Elkner. 
+*  Added `startTime` argument to `play3d()` and `movie3d()`. 
+*  Fixed `configure.ac` as suggested by Jens Elkner. 
 *  Updated declarations for libpng 1.4.0 compatibility. 
-*  An off-by-one error caused the "alpha" component of the material
+*  An off-by-one error caused the `"alpha"` component of the material
    properties to be messed up. (Bug #809) 
 
 # rgl  0.89 
@@ -964,27 +982,27 @@ v0.93
 
 # rgl  0.88 
 
-*  Add keepVars argument to cylinder3d(), for debugging or special
+*  Add `keepVars` argument to `cylinder3d()`, for debugging or special
    effects. 
-*  Add BugReports field to DESCRIPTION. 
+*  Add `BugReports` field to `DESCRIPTION`. 
 
 # rgl  0.87 
 
-*  Allowed FOV to be set to 0, for an orthogonal projection. 
+*  Allowed `FOV` to be set to 0, for an orthogonal projection. 
 *  Fixed crash when zero-length color vector was used. 
 *  Fixed crash in X11 after closing a window 
-*  Changed seq(along=...) to seq_along(...). 
-*  Fixed typo in cylinder3d. 
+*  Changed `seq(along=...)` to `seq_along(...)`. 
+*  Fixed typo in `cylinder3d()`. 
 *  Cleaned up bad links in Rd files. 
 
 # rgl  0.85 
 
-*  Added some namespace declarations to the C++, and renamed math.h, for
+*  Added some namespace declarations to the C++, and renamed `math.h`, for
    compatibility with Sun compilers (contributed by Brian Ripley). 
-*  Fixed visibility of some `shade3d()`, `wire3d()` and points3d methods. 
-*  Added addNormals generic, to add normals for smooth surface rendering. 
-*  Added cylinder3d function, to make cylindrical or "tube" plots. 
-*  Fixed material3d("color") bug introduced in 0.82. 
+*  Fixed visibility of some `shade3d()`, `wire3d()` and `points3d()` methods. 
+*  Added `addNormals()` generic, to add normals for smooth surface rendering. 
+*  Added `cylinder3d()` function, to make cylindrical or "tube" plots. 
+*  Fixed `material3d("color")` bug introduced in 0.82. 
 
 # rgl  0.84 
 
@@ -1006,7 +1024,7 @@ v0.93
 *  Fixed `rgl.pixels()` example for weird displays. 
 *  Did not assume OpenGL 1.2 was available in material properties. 
 *  Added numerous error checks. 
-*  Fixed demo(stereo) to add sync in X11:  X windows seemed to grab
+*  Fixed `demo(stereo)` to add sync in X11:  X windows seemed to grab
    images before they were redrawn. 
 *  Rearranged headers for Win64 compatibility (contributed by Alex
    Chen). 
@@ -1016,35 +1034,35 @@ v0.93
 *  rewrote internal rendering of transparent and anti-aliased shapes,
    so they will be rendered better when there are several in the same
    scene 
-*  added material properties "point_antialias", which causes points to be
-   drawn as smooth circles, and "line_antialias", which causes
+*  added material properties `"point_antialias"`, which causes points to be
+   drawn as smooth circles, and `"line_antialias"`, which causes
    lines to be antialiased. 
 *  fixed a bug in the bounding box decoration which caused axis labels
    to be plotted in the wrong place. 
 *  fixed a bug in the Windows driver which caused the standard system
    font to disappear when justified. 
-*  added material parameter lwd for line width; size now applies only
+*  added material parameter `"lwd"` for line width; `"size"` now applies only
    to points. 
 *  increased default point size to 3 pixels across. 
 *  fixed bug in `open3d()`:  "..." was being ignored. 
-*  fixed bug in `qmesh3d()`:  homogeneous=FALSE coordinates were not
+*  fixed bug in `qmesh3d()`:  `homogeneous=FALSE` coordinates were not
    handled properly. 
-*  movie3d gains a "type" argument to set the output type, and the
-   "convert" argument is more flexible. 
+*  `movie3d()` gains a "type" argument to set the output type, and the
+   `convert` argument is more flexible. 
 *  `rgl.snapshot()` gives more informative error messages when libpng is
    not available. 
-*  axis3d() now uses format() rather than as.character() to give
+*  `axis3d()` now uses `format()` rather than `as.character()` to give
    nicer looking labels. 
 *  the clipping volume calculation was incorrect when scaling was used. 
-*  use R warning() to report messages, rather than popups or REprintf. 
-*  added `rgl.pixels()` to read the generated image, and demo("stereo")
+*  use R `warning()` to report messages, rather than popups or REprintf. 
+*  added `rgl.pixels()` to read the generated image, and `demo("stereo")`
    to illustrate its use. 
-*  corrected the ?rgl example to display this file. 
+*  corrected the `?rgl` example to display this file. 
 
 # rgl  0.81 
 
 *  converted Freetype font error into warning 
-*  rglFonts was being set at install time, but it should be set at load
+*  `rglFonts()` was being set at install time, but it should be set at load
    time. 
 *  fixed configuration problems in OS X 
 *  fixed executable marker on a number of files 
@@ -1056,48 +1074,52 @@ v0.93
 
 # rgl  0.79 
 
-*  rgl.pop() could cause corruption when multiple windows were open. 
-*  added mouseCallbacks demo, to show R implementations of standard
+*  `rgl.pop()` could cause corruption when multiple windows were open. 
+*  added `mouseCallbacks()` demo, to show R implementations of standard
    mouse handlers, multiple connected windows, stereo view, etc. 
-*  added "silent" argument to rgl.set(), to allow temporary changes
+*  added "silent" argument to `rgl.set()`, to allow temporary changes
    to focus without changing window labels. 
 *  added natural spline extrapolation to `par3dinterp()`. 
 
 # rgl  0.76 
 
-*  put our own assert() macro in place to avoid crashing R. 
+*  put our own `assert()` macro in place to avoid crashing R. 
 *  rename ChangeLog file to NEWS, as per discussion on R-devel 
-*  add "windowRect" to par3d parameters to allow window size to be
+*  add `"windowRect"` to `par3d()` parameters to allow window size to be
    controlled from R.
-v0.77 
-*  par3d("windowRect") returned garbage if there was no window open. 
+   
+# rgl 0.77 
+
+*  `par3d("windowRect")` returned garbage if there was no window open. 
 *  `persp3d()` and `plot3d()` sometimes miscalculated ranges involving NAs. 
-*  select3d() and rgl.select() produced a very inefficient test function.
-v0.78 
-*  fix miscalculation of mouseMatrix that caused disappearing views. 
-*  rgl.texts() and `text3d()` can now handle font and size specifications
+*  `select3d()` and `rgl.select()` produced a very inefficient test function.
+
+# rgl 0.78 
+
+*  fix miscalculation of `mouseMatrix` that caused disappearing views. 
+*  `rgl.texts()` and `text3d()` can now handle font and size specifications
    using the FreeType library on any platform, or GDI on Windows. 
-*  adj is supported both horizontally and vertically in drawing text. 
-*  rgl.pop was very slow when given a long list of ids. 
+*  `adj` is supported both horizontally and vertically in drawing text. 
+*  `rgl.pop()` was very slow when given a long list of ids. 
 *  a workaround for OSX 10.5 OpenGL problems has been incorporated
    (thanks to mkv22@cam.ac.uk). 
 
 # rgl  0.75 
 
-*  add play3d, movie3d, `par3dinterp()`, and spin3d functions, with flag demo 
-*  rounding error could cause par3d(userMatrix) to generate NaNs and fail 
+*  add `play3d()`, `movie3d()`, `par3dinterp()`, and `spin3d()` functions, with flag demo 
+*  rounding error could cause `par3d("userMatrix")` to generate NaNs and fail 
 *  workaround for Xvfb on MacOSX problems 
 
 # rgl  0.74 
 
-*  clean up #includes 
+*  clean up `#include`s 
 *  clean up some calls for SunStudio 12 compiler 
-*  add rgl.setMouseCallbacks to allow user actions 
+*  add `rgl.setMouseCallbacks()` to allow user actions 
 
 # rgl  0.73 
 
 *  partial changes to avoid crash on MacOSX with Xvfb 
-*  change to rgl_init for R 2.6.0 compatibility 
+*  change to `rgl_init()` for R 2.6.0 compatibility 
 
 # rgl  0.72 
 
@@ -1108,16 +1130,16 @@ v0.78
 *  changes to configure script from Laszlo Kajan and Brian Ripley:  should
    now be much more portable 
 *  removed deprecated OSX font setting calls 
-*  texture properties are now returned by material3d() 
+*  texture properties are now returned by `material3d()` 
 *  allowed normals and texture coordinates to be specified in triangles, quads and surfaces 
 *  normals may be specified in qmesh objects, but (at present) subdivide removes them 
-*  material3d() now preserves the values of unspecified parameters (as documented,
+*  ` material3d()` now preserves the values of unspecified parameters (as documented,
    but not previously functioning) 
-*  clear3d() can now reset material properties to the defaults, and
+*  `clear3d()` can now reset material properties to the defaults, and
    `open3d()` does this. 
 *  minor fix for gcc 4.3 compatibility 
 *  minor fix for R 2.5+ compatibility 
-*  allowed more general surfaces to be plotted by rgl.surface, surface3d and
+*  allowed more general surfaces to be plotted by `rgl.surface()`, `surface3d()` and
    `persp3d()`, by specifying matrices for x and y coordinates 
 *  added world map texture, used in `example(persp3d)`. 
 
@@ -1135,8 +1157,8 @@ v0.78
 
 # rgl  0.69 
 
-*  `persp3d()` partially ignored add=TRUE 
-*  plot3d.qmesh3d did not return result 
+*  `persp3d()` partially ignored `add=TRUE` 
+*  `plot3d.qmesh3d()` did not return result 
 *  allow selection to use any button 
 *  allow NA in primitives, surfaces, texts, and sprites 
 *  report error in OSX if the wrong configure options were used. 
@@ -1144,17 +1166,17 @@ v0.78
 
 # rgl  0.68 
 
-*  fixed sphere drawing so spheres are spheres regardless of par3d("scale") 
-*  added type="s" to `plot3d()` to draw spheres 
+*  fixed sphere drawing so spheres are spheres regardless of `par3d("scale")` 
+*  added `type="s"` to `plot3d()` to draw spheres 
 *  fixed handling of "..." in axis related functions 
 *  added full MDI support 
 *  removed use of List and ListIterator internally 
 *  fixed handling of axes and boxes when a coordinate had zero extent 
-*  changed rgl.viewpoint default to be compatible with `r3dDefaults` 
+*  changed `rgl.viewpoint()` default to be compatible with `r3dDefaults` 
 *  added id return values to primitives and higher level functions,
-   and to rgl.pop(); added rgl.ids() to report on them. 
+   and to `rgl.pop()`; added `rgl.ids()` to report on them. 
 *  updated gl2ps to version 1.3.1, adding support for svg and pgf output formats. 
-*  added grid3d(), added nticks argument to `bbox3d()`, axis3d and axes3d. 
+*  added `grid3d()`, added `nticks` argument to `bbox3d()`, `axis3d()` and `axes3d()`. 
 
 # rgl  0.67-2 
 
@@ -1164,36 +1186,36 @@ v0.78
 
 *  added support for png files with palettes, and grayscale pngs with 1, 2 or 4 bits
    per pixel 
-*  added "ignoreExtent" option to par3d:  objects plotted when this is true
+*  added `"ignoreExtent"` option to `par3d()`:  objects plotted when this is true
    are ignored when calculating the bounding box 
-*  added axis3d, axes3d, box3d, mtext3d, title3d functions from `djmrgl` for
+*  added `axis3d()`, `axes3d()`, `box3d()`, `mtext3d()`, `title3d()` functions from `djmrgl` for
    annotating plots. 
 *  added `plot3d()` high level plot function 
-*  added material3d, which can both set and query material properties; changed
-   most *3d functions so they leave material invariant across calls. 
+*  added ` material3d()`, which can both set and query material properties; changed
+   most `*3d` functions so they leave material invariant across calls. 
 *  changed `open3d()` to set background and material defaults 
-*  added aspect3d to control the aspect ratio of the bounding box. 
-*  added xAxis, yAxis and zAxis mouse modes, set zAxis as r3d default. 
+*  added `aspect3d()` to control the aspect ratio of the bounding box. 
+*  added `xAxis`, `yAxis` and `zAxis` mouse modes, set `zAxis` as `r3d` default. 
 *  added `persp3d()` function 
 *  changed error messages to go through REprintf in X11 and OSX 
-*  fixed segfault if rgl_init failed 
-*  converted type of viewport arg in user2window and window2user calls 
-*  if the rgl_init call fails, the package will still load with a warning (but
+*  fixed segfault if `rgl_init()` failed 
+*  converted type of `viewport` arg in `user2window()` and `window2user()` calls 
+*  if the `rgl_init()` call fails, the package will still load with a warning (but
    most function calls will result in errors). 
-*  added par3d("scale") to handle aspect3d operations internally. 
-*  added ellipse3d() generic and methods for drawing confidence ellipsoids 
-*  added decorate3d() to draw all the decorations, plot3d.qmesh3d() method. 
+*  added `par3d("scale")` to handle `aspect3d()` operations internally. 
+*  added `ellipse3d()` generic and methods for drawing confidence ellipsoids 
+*  added `decorate3d()` to draw all the decorations, `plot3d.qmesh3d()` method. 
 *  changed zoom to use ratio scale over larger range 
 *  fixed bug causing jump after resize in Mac OSX (and maybe other platforms) 
-*  rgl.primitive now does sanity checks on inputs 
+*  `rgl.primitive()` now does sanity checks on inputs 
 
 # rgl  0.66 
 
-*  added "all" and "viewpoint" to rgl.clear and clear3d 
+*  added `"all"` and `"viewpoint"` to `rgl.clear()` and `clear3d()` 
 *  added static libpng build support and user customizable prefix (unix) 
-*  used xyz.coords in all functions taking x, y, z coordinates, allowing
+*  used `xyz.coords()` in all functions taking x, y, z coordinates, allowing
    matrix or dataframe arguments (among others) 
-*  added par3d(skipRedraw=TRUE) to allow drawing to be done without
+*  added `par3d(skipRedraw=TRUE)` to allow drawing to be done without
    being rendered 
 *  fixed display list memory leak when drawing shapes (e.g. spheres) 
 *  Changes for compatibility with strict enforcement of file naming rules in R 2.3.0. 
@@ -1204,17 +1226,17 @@ v0.78
 *  added generic visualization/rendering interface (R3D) 
 *  text justification from 0 to 1 
 *  added primitive type: linestrips 
-*  fixed rgl.bringtotop, added stay option (win32) 
-*  added 4x4 matrix functions from djmrgl 
-*  added rgl.user2window and rgl.window2user functions 
+*  fixed `rgl.bringtotop()`, added stay option (win32) 
+*  added 4x4 matrix functions from `djmrgl` 
+*  added `rgl.user2window()` and `rgl.window2user()` functions 
 *  added user-selectable mouse handlers 
 *  added selection mouse handler 
 *  added trackball mouse handler 
 *  added z-distance sorted rendering of alpha-blended faces 
 *  added gl2ps patch ( contributed by Albrecht Gebhard ) 
 *  added port: native Mac OS X Carbon 
-*  bugfix: rgl.close() , rgl.quit() crashed on X11 occasionally. 
-*  generalized rgl.surface() to allow surface over any coordinate plane. 
+*  bugfix: `rgl.close()`, `rgl.quit()` crashed on X11 occasionally. 
+*  generalized `rgl.surface()` to allow surface over any coordinate plane. 
 *  added `r3dDefaults` variable to allow user to set defaults 
 *  added environment texture-mapping 
 
@@ -1234,27 +1256,27 @@ v0.78
 
 # rgl  0.64-10 
 
-*  updated .C() calls using PACKAGE="rgl" 
+*  updated `.C()` calls using `PACKAGE="rgl"` 
 *  updated Maintainer.mk using correct zlib version 
-*  improved dynamic unload using library.dynam.unload() 
-*  conditional macos x darwin code in .First.lib() 
+*  improved dynamic unload using `library.dynam.unload()` 
+*  conditional macos x darwin code in `.First.lib()` 
 
 # rgl  0.64-9 
 
 *  MacOS X 'Panther' G5 fix for OpenGL library loading in .first.lib 
 *  removed lpng and zlib from source tree 
 *  support for automatic downloading of zlib and lpng on win32 
-*  added demo directory with several examples using demo(rgl) 
+*  added demo directory with several examples using `demo(rgl)` 
 
 # rgl  0.64-8 
 
-*  build bugfix : removed rgl/src/Makefile 
+*  build bugfix : removed `rgl/src/Makefile` 
 *  updated configure to check and setup LDFLAGS for OpenGLU library 
 
 # rgl  0.64-7 
 
 *  added mouse capturing 
-*  rgl.sprites 'radius' bug fixed 
+*  `rgl.sprites()` 'radius' bug fixed 
 *  memory leak bugfix: texture objects are now AutoDestroy and used through Ref's 
 *  resource management improvment: pixmaps gets free'd when they become unused
    e.g. texture objects are created. 
@@ -1264,16 +1286,16 @@ v0.78
 
 # rgl  0.64-6 
 
-*  updated build system: added setversion.sh 
+*  updated build system: added `setversion.sh` 
 *  with MinGW version 3.0.1 pixmap loading does work 
-*  project.mk , win32.mk and x11.mk in src/build changed
+*  `project.mk`, `win32.mk` and `x11.mk` in `src/build` changed
    now a single variable MODS will extend. 
 *  MinGW build system changed.
-   rgl.dll now contains an R compilant Resource information
+   `rgl.dll` now contains an R compilant Resource information
    generated by R perl script 
 *  bug fix: R 1.8.0/win32 does not detach packages when quit
-   it is safe now to call rgl_quit and lib_quit multiple times
-   win32lib.cpp: added dllmain that calls rgl_quit on process exit 
+   it is safe now to call `rgl_quit()` and `lib_quit()` multiple times
+   `win32lib.cpp`: added `dllmain` that calls `rgl_quit()` on process exit 
 *  added core support for devcpp IDE 
 
 # rgl  0.64-5 
@@ -1291,18 +1313,18 @@ v0.78
 # rgl  0.64-3 
 
 *  configure.ac: X11 library path broken, fixed 
-*  x11gui: glXChooseVisual part fixed 
-*  code cleanup: rglview.h 
-*  added: man/maintainer.Rd maintainer information 
+*  x11gui: `glXChooseVisual()` part fixed 
+*  code cleanup: `rglview.h` 
+*  added: `man/maintainer.Rd` maintainer information 
 
 # rgl  0.64-2 
 
-*  rgl.quads: enum id was broken, fixed ("quads" -> "quadrangles") 
+*  `rgl.quads()`: enum id was broken, fixed ("quads" -> "quadrangles") 
 
 # rgl  0.64 
 
 *  autoconf build system 
-*  moved textures to inst/ directory 
+*  moved textures to `inst/` directory 
 *  x11 port 
 *  win32/vc: fixed fpu control word precision to remain on 64 bit
    links with fp10.obj 
@@ -1310,8 +1332,8 @@ v0.78
 
 # rgl  0.63 
 
-*  api: added rgl_init, rgl_quit: explicit client initialization 
-*  added setup.bat: build setup for windows 
+*  api: added `rgl_init()`, `rgl_quit()`: explicit client initialization 
+*  added `setup.bat`: build setup for windows 
 *  win32 setup: mingw compiler 
 *  win32 setup: visual c++ compiler through gui environment 
 
@@ -1319,14 +1341,14 @@ v0.78
 
 *  modified sphere set 
 *  support R color strings 
-*  use system.file( <subpath>, package="rgl" ) in examples to retrieve texture files 
+*  use `system.file( <subpath>, package="rgl" )` in examples to retrieve texture files 
 *  rewrote R code :
    * clear enum types
    * vertex vector datatype (internal representation matrix) 
 
 # rgl  0.61 
 
-*  added: rgl.sprites 
+*  added: `rgl.sprites()` 
 *  added: fps counter 
 *  added: autoUpdate, modified win32 mainloop, on hide, autoUpdate disabled, on show enabled 
 *  modified material: added alpha vector 
