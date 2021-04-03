@@ -1,15 +1,29 @@
 
 # rgl  0.106.0 
 
-*  Changes for `pkgdown` compatibility have been added.  See
-   the [Using rgl in pkgdown web sites](articles/pkgdown.html) vignette. 
-*  The help pages have been edited to continue the 
-   de-emphasization of `rgl.*` functions. 
+## Major changes
+
+*  Changes for `pkgdown` compatibility have been added.  See `vignette("pkgdown")`. 
+*  Added `drape3d()`, to "drape" objects across a mesh.
+   (Contributed by George Helffrich.) 
+*  Added `shadow3d()` to project one mesh onto another. 
+*  Added `facing3d()` to subset a mesh to parts facing 
+   in a particular direction. 
+*  Meshes may now include points and line segments as well
+   as triangles and quads.  The arguments to `as.mesh3d.default()` 
+   have changed accordingly, and a new function `mesh3d()`
+   has been added. 
+*  Reformatted the `inst/NEWS` file so it is visible here.
+*  Added `asHomogeneous2()` and `asEuclidean2()` to work directly
+   with `3 x n` and `4 x n` matrices. 
+   
+## Minor changes
+
+*  The help pages have been edited to continue to 
+   de-emphasize `rgl.*` functions. 
 *  Changes have been made for compatibility with the 
    experimental Windows-UTF8 build of R. 
 *  Allowed infinite values for strip limits in `filledContour3d()`. 
-*  Added `drape3d()`, to "drape" objects across a mesh.
-   (Contributed by George Helffrich.) 
 *  Setting material property `point_antialias = TRUE` now
    gives round points in `rglwidget()` displays. 
 *  The reuse argument in `rglwidget()` is no longer used. 
@@ -18,21 +32,21 @@
 *  Set "window_group" in X11 so `rgl` windows are grouped,
    based on code by Ivan Krylov. 
 *  `filledContour3d()` now accepts levels in decreasing order. 
-*  Added `shadow3d()` to project one mesh onto another. 
-*  Added `facing3d()` to subset a mesh to parts facing 
-   in a particular direction. 
 *  `mergeVertices()` and `as.mesh3d.rglId()` have been improved. 
-*  Meshes may now include points and line segments as well
-   as triangles and quads.  The arguments to `as.mesh3d.default()` 
-   have changed accordingly, and a new function `mesh3d()`
-   has been added. 
-*  Added `asHomogeneous2()` and `asEuclidean2()` to work directly
-   with `3 x n` and `4 x n` matrices. 
+
+## Bug fixes 
+
 *  The width and height of an `rglwidget()` once again adapt
    to the viewer window in RStudio (issue #74). 
-*  Reformatted the `inst/NEWS` file so it is visible here.
 
 # rgl  0.105.22 
+
+## Minor changes
+
+*  Add `Biarch` to `DESCRIPTION` so both architectures are built on 
+   Windows. 
+
+## Bug fixes
 
 *  Fixed error in new args to `snapshot3d()` (reported by Tony Hirst:
    https://github.com/dmurdoch/rgl/issues/21 .) 
@@ -44,8 +58,6 @@
    https://github.com/dmurdoch/rgl/issues/27). 
 *  Fixed a bug affecting fat (`lwd > 1`) line segments in 
    `rglwidget()`. 
-*  Add `Biarch` to `DESCRIPTION` so both architectures are built on 
-   Windows. 
 *  A bug in the `Makevars` files caused builds using a 
    parallel make to fail. 
 *  A bug in conversion of displays to WebGL prevented planes
@@ -55,31 +67,34 @@
 
 # rgl  0.105.13 
 
+## Major changes
+
+*  Inclusion in `knitr` documents will now be simplified
+   in versions of `knitr` that incorporate its PR#1892. 
+*  Added `webshot` argument to `snapshot3d()`, to use the
+   `webshot2` package (currently only available from
+   Github; see `?snapshot3d` for details) to produce snapshots
+   even on headless systems. 
+*  Moved development home from R-forge to Github. 
+   
+## Minor changes
+
 *  Windows builds now download Freetype from `rwinlib`
    during the build.  (Contributed by Jeroen Ooms.) 
 *  `shinySetPar3d()` now accepts a list, as returned in
    `input$par3d` by `shinyGetPar3d()`, as input.  (Suggestion
    of Yohann Demont.) 
-*  Inclusion in `knitr` documents will now be simplified
-   in versions of `knitr` that incorporate its PR#1892. 
 *  The default color scheme for `filledContour3d()` changed in
    R versions previous to 3.6.0, as `hcl.colors()` didn't 
    exist in those versions.  (Reported by Daniel Baston.) 
 *  Testing shows that with the above change, `rgl` will now
    work in R versions from 3.3.0 up. 
-*  Added `webshot` argument to `snapshot3d()`, to use the
-   `webshot2` package (currently only available from
-   Github; see `?snapshot3d` for details) to produce snapshots
-   even on headless systems.   
 *  `snapshot3d()` now defaults to writing to a temporary file
    instead of failing if no filename is given. 
 *  Both `snapshot3d()` and `rgl.snapshot()` now return the 
    output filename invisibly. 
 *  `rglwidget()` no longer tries to include both a snapshot and
    a WebGL scene:  it can only do one or the other. 
-*  Some bugs in `thigmophobe3d()`, `mergeVertices()` and 
-   `as.mesh3d.default()` have been fixed. 
-*  Moved development home from R-forge to Github. 
 *  Now builds the non-OpenGL DLL and puts it in `inst/useNULL`,
    so `options(rgl.useNULL=TRUE)` before loading `rgl` will cause
    it to not use X11 at all. 
@@ -87,12 +102,16 @@
    working. 
 *  Set up a `drat` repository to hold the unreleased `webshot2`
    package. 
+   
+## Bug fixes
+
+*  Some bugs in `thigmophobe3d()`, `mergeVertices()` and 
+   `as.mesh3d.default()` have been fixed. 
 
 # rgl  0.104.16 
 
-*  Fixed bug in `rglwidget()` that caused it to fail to display
-   text if too many strings were in the same object.
-   (Reported by Yohann Demont.) 
+## Minor changes
+
 *  Added `--disable-opengl` configure option to run entirely without
    OpenGL (to support Apple M1 machines without GLX,
    and others which don't have X11 or OpenGL devel
@@ -101,26 +120,37 @@
 *  Restored some of the Windows configuration from pre-0.101.2
    to allow use on older R versions. 
 *  Dropped use of `mathjaxr`, which caused issues on Debian. 
+*  Experimental support for handling mouse selection in Shiny
+   added, along with `"shinyMouse"` demo. 
+*  The result of `open3d()` now has class `"rglOpen3d"`,
+   and `knitr` will use this during auto-plotting. 
+   
+## Bug fixes
+
+*  Fixed bug in `rglwidget()` that caused it to fail to display
+   text if too many strings were in the same object.
+   (Reported by Yohann Demont.) 
 *  Fixed some small bugs, found by `lintr`. 
 *  Fixed bugs in Shiny support, and moved Shiny demo code into
    single files in demo directory. 
-*  Experimental support for handling mouse selection in Shiny
-   added, along with `"shinyMouse"` demo. 
 *  Fixed bugs in `addNormals.mesh3d()` method, added `angleWeighted`
    argument, defaulting to `TRUE`. 
 *  Fixed bugs in `rglwidget()` displays of transparent spheres. 
-*  The result of `open3d()` now has class `"rglOpen3d"`,
-   and `knitr` will use this during auto-plotting. 
 
 # rgl  0.103.5 
 
+## Major changes
+
+*  Added `clipObj3d()`, `contourLines3d()` and `filledContour3d()` functions. 
+*  Modified `clipMesh3d()` function to make it more consistent
+   with the above three functions.  The main incompatibility
+   with the version in 0.100.26 is that only vertex
+   coordinates are now passed to the clipping function. 
+
+## Minor changes
+
 *  Add `merge()` method for `"mesh3d"` objects, and use it in
    `filledContour3d()`. 
-*  Fixed some memory leaks found by valgrind, and problems seen
-   on systems with no functional Asymptote or Pandoc. 
-
-# rgl  0.102.29 
-
 *  More deprecation of older `writeWebGL()` style controls. 
 *  Add extra `knitr` hooks, so support for `rgl` should be
    very similar to support for standard graphics output. 
@@ -140,12 +170,6 @@
    what to retrieve, e.g. `getr3dDefaults("material", "color")`
    to retrieve `r3dDefaults$material$color`, with NULL 
    if either part is missing. 
-*  A bug in the initial color of a mesh object has been fixed. 
-*  A bug in translating mouse coordinates (reported on 
-   StackOverflow by Richard Morey) when an `rgl` widget is
-   included in a Gitbook has been fixed.  
-*  Modified `writeASY()` for compatibility with Asymptote
-   2.65.  (Reported by Pavel Stříž.) 
 *  Added `fogScale` parameter to `bg3d()` and `rgl.bg()` to
    allow increased or decreased fog. 
 *  Added `fastTransparency` parameter to `spheres3d()` and
@@ -157,46 +181,49 @@
 *  New functions `cur3d()`, `set3d()`, `close3d()` and `ids3d()` have been 
    added.  Generally, users should use these rather than
    `rgl.cur()`, `rgl.set()`, `rgl.close()` and `rgl.ids()`. 
-*  `pop3d()` has been modified slightly so that it no
-   longer opens a new window if none is already present 
 *  `snapshot3d()` now has optional width and height parameters for the saved snapshot. 
 *  the cursor now reflects the mouse mode in `rglwidget()`
    displays. 
-*  added `setGraphicsDelay()` function to work around bug
-   in MacOS Catalina XQuartz. 
-*  Made various improvements to reduce notes and warnings
-   during install, including suppressing deprecated OpenGL
-   warnings on MacOS. 
 *  Texture coordinates in mesh objects now act the same
    as colors with respect to the `meshColor` variable. 
-*  Some declarations in WebGL made assumptions that were
-   not valid on mobile devices. 
 *  Touch events are now supported in WebGL. 
 *  Added `"snapshot"` knitr option to use when autoprinting. 
 *  Added defaults to `snapshot3d(width = NULL, height = NULL)`. 
 *  Added `as.mesh3d.rglobject()` method. 
 *  Added `clip_to_density` argument to `plot3d.lm()` method. 
-*  The `"depth_mask"` material property was being ignored
-   in `rglwidget()`. 
-*  Added `clipObj3d()`, `contourLines3d()` and `filledContour3d()` functions. 
-*  Modified `clipMesh3d()` function to make it more consistent
-   with the above three functions.  The main incompatibility
-   with the version in 0.100.26 is that only vertex
-   coordinates are now passed to the clipping function. 
-
-# rgl  0.101.2 
-
 *  The build files have been updated to work with Rtools40
    on Windows. 
-*  `rgl.snapshot()` and `rgl.postscript()` could crash if a zero
-   length filename was passed to them. 
 *  `rglwidget()` now saves a copy of the original scene,
    so it can be reconstructed or modified later. 
+   
+## Bug fixes
+
+*  Fixed some memory leaks found by valgrind, and problems seen
+   on systems with no functional Asymptote or Pandoc. 
+*  A bug in the initial color of a mesh object has been fixed. 
+*  A bug in translating mouse coordinates (reported on 
+   StackOverflow by Richard Morey) when an `rgl` widget is
+   included in a Gitbook has been fixed.  
+*  Modified `writeASY()` for compatibility with Asymptote
+   2.65.  (Reported by Pavel Stříž.) 
+*  `pop3d()` has been modified slightly so that it no
+   longer opens a new window if none is already present 
+*  added `setGraphicsDelay()` function to work around bug
+   in MacOS Catalina XQuartz. 
+*  Made various improvements to reduce notes and warnings
+   during install, including suppressing deprecated OpenGL
+   warnings on MacOS. 
+*  Some declarations in WebGL made assumptions that were
+   not valid on mobile devices. 
+*  The `"depth_mask"` material property was being ignored
+   in `rglwidget()`. 
+*  `rgl.snapshot()` and `rgl.postscript()` could crash if a zero
+   length filename was passed to them. 
 
 # rgl  0.100.54 
 
-*  Fixed bug in `plot3d.rglscene()` that caused restored subscenes to 
-   ignore the mouse. 
+## Minor changes
+
 *  Changed `rgl.attrib(id, "normals")` so the normals will be returned
    whether or not the object is lit.  (Suggestion of Tyler 
    Morgan-Wall) 
@@ -206,33 +233,55 @@
    if they are not present in the user's `r3dDefaults` list. 
 *  `bgplot3d()` now uses the background colour from argument
    `bg.color` (defaulting to the background color from
-   `getr3dDefaults()`) rather than always choosing white. 
+   `getr3dDefaults()`) rather than always choosing white.
+*  The maintainer email address has been changed to 
+   murdoch.duncan@gmail.com. 
+   
+## Bug fixes
+
+*  Fixed bug in `plot3d.rglscene()` that caused restored subscenes to 
+   ignore the mouse. 
 *  `next3d()` no longer messes up when a user changes active
    subscenes. 
 *  If a sufficient version of Pandoc is not found, the 
    vignettes will still run, but won't execute any `rgl`
    code. 
-*  The maintainer email address has been changed to 
-   murdoch.duncan@gmail.com. 
 
 # rgl  0.100.50 
 
-*  Rewrote the initialization code to deal with problems
- related to indirect GLX and Xvfb. 
+## Minor changes
+
 *  Added `?rgl.init` help topic to describe initialization
  issues. 
 *  Added sanity check to setting of `par3d("windowRect")`. 
 
+## Bug fixes
+
+*  Rewrote the initialization code to deal with problems
+ related to indirect GLX and Xvfb. 
+
+
 # rgl  0.100.47 
+
+## Minor changes
+
+*  `demo(stereo)` now uses `plot.raster()` rather than `image()`. 
+*  Added a section on textures to the main vignette. 
+*  The configure script has been updated. 
+*  The functions in the `tkrgl` package have been moved into `rgl`. 
+*  Demo tests are suppressed when run with the `rgl` null device. 
+*  The `anaglyph()` function in the `"stereo"` demo now prints
+   information about failed pixel reads. 
+*  Included textures have been compressed (and in some cases
+   repaired). 
+*  The tests of the demos have been moved to `inst/slowTests` so that
+   running them is optional (and the CRAN checks will go faster).
+   
+## Bug fixes
 
 *  Fixed a bug in `readOBJ()` that affected reading texture coordinates. 
 *  `rgl.pixels()`, `rgl.snapshot()` and `snapshot3d()` now read from the
    back buffer, which should increase reliability. 
-*  `demo(stereo)` now uses `plot.raster()` rather than `image()`. 
-
-# rgl  0.100.45 
-
-*  Added a section on textures to the main vignette. 
 *  Fixed bug when setting `windowRect`:  `viewport` was not
    always updated. 
 *  Fixed bug in handling mouse wheel events:  they were
@@ -247,19 +296,12 @@
    radius for the spheres -- possibly even zero. 
 *  `planes3d()` could fail to draw the plane if it intersected a
    vertex of the bounding box of the scene. 
-*  The configure script has been updated. 
 *  In Shiny, controllers like `rglMouse()` did not automatically
    link to an `rglwidget()`. 
-*  The functions in the `tkrgl` package have been moved into `rgl`. 
-*  Demo tests are suppressed when run with the `rgl` null device. 
-*  The `anaglyph()` function in the `"stereo"` demo now prints
-   information about failed pixel reads. 
-*  Included textures have been compressed (and in some cases
-   repaired). 
-*  The tests of the demos have been moved to `inst/slowTests` so that
-   running them is optional (and the CRAN checks will go faster). 
 
 # rgl  0.100.30 
+
+## Minor changes
 
 *  Added `meshColor` as an argument to `tmesh3d()`, `qmesh3d()`
    and `dot3d()`; changed default to no longer give warning if
@@ -275,22 +317,32 @@
 
 # rgl  0.100.26 
 
-*  `open3d()` now signals an error if unnamed parameters are used 
-*  `toggleWidget()` now makes it easier to initialize the scene with
-   some objects hidden. 
+## Major changes
+
 *  added `clipMesh3d()` to allow smooth clipping of mesh objects 
 *  Made `plot3d.lm()` method handle a larger variety of models, by
    allowing for curved surfaces. 
-*  Fixed the startup code so that systems that don't provide
-   `uname` still work.  (Suggestion of Settra Khemri.) 
 *  Added `as.mesh3d.default()` method to convert triangles or quads
    to a `"mesh3d"` object. 
 *  Added `as.triangles3d()` generic with methods to convert `"mesh3d"`
    objects into matrices representing triangles. 
 *  Added `as.triangles3d.rglId()` and `as.mesh3d.rglId()` methods to
    convert displayed objects to usable data. 
+   
+## Minor changes
+
+*  `open3d()` now signals an error if unnamed parameters are used 
+*  `toggleWidget()` now makes it easier to initialize the scene with
+   some objects hidden.
+   
+## Bug fixes
+
+*  Fixed the startup code so that systems that don't provide
+   `uname` still work.  (Suggestion of Settra Khemri.) 
 
 # rgl  0.100.24 
+
+## Bug fixes
 
 *  Fix `thigmophobe3d()` to try to keep up with changes in 
    `plotrix::thigmophobe()`. 
@@ -298,45 +350,24 @@
 
 # rgl  0.100.19 
 
+## Bug fixes
+
 *  Fix some bugs detected by valgrind 
 
 # rgl  0.100.18 
 
-*  Added check for "highp" support to fragment shader in `rglwidget()`.
+## Major changes
+
 *  Added `shinyGetPar3d()` and `shinySetPar3d()` functions for Shiny
    interaction. 
-*  Updated `text3d()` and related functions:  dropped deprecated
-   argument `justify`, added `pos` and `offset` like base graphics
-   `text()`. 
 *  Added `thigmophobe3d()` function to place labels away from
    other points using `plotrix::thigmophobe()`. 
-*  Fixed texture bug introduced in fix in 0.99.16. 
-*  The `persp3d.deldir()` method didn't display labels properly. 
-*  When the X11 initialization failed, `rgl` messed up the S3
-   methods system.  (Reported by Gregory Jefferis.) 
-*  Improved support of `"mesh3d"` objects:  added print methods,
-   added `meshColor` argument to `wire3d()` and `shade3d()` to control how
-   colors are interpreted, added `"rgl.meshColorWarning"`
-   option to control warnings about these changes. 
 *  Added `arc3d()` function to draw spherical arcs. 
 *  Added `"polygon_offset"` material property, to allow lines to be drawn
    on surfaces. 
 *  Added `plot3d()`, `persp3d()` and `as.mesh3d()` methods for
    `"triSht"` and `"tri"` classes (produced by `interp` and `tripack`
    packages.) 
-*  The `plot3d.mesh3d()` method now has the same default
-   for `aspect` as the default method. 
-*  Probably due to a compiler change, `rgl.bbox()` was 
-   returning 0/1 instead of the id of the axes. 
-*  `pch3d()` was failing in `rglwidget()` for some shapes.
-   (Reported by Luca Scrucca.) 
-*  `pch3d()` now allows separate `color` and `bg` specifications
-   for each point.  In addition, the default for the `"lit"`
-   material property is now `FALSE`, so by default filled
-   symbols will match the requested colour regardless of 
-   lighting. 
-*  `par3d(mouseMode = "none")` was not implemented properly,
-   so appeared to be a no-op. 
 *  `plot3d()` methods for objects of class `"formula"` and `"lm"`
    and a `persp3d()` method for objects of class `"formula"`
    have been added.  (A bug in the implementation of
@@ -352,6 +383,37 @@
    have been done. 
 *  Added `par3d("activeSubscene")`, to allow mouse callback
    functions to determine which subscene was clicked. 
+   
+## Minor changes
+
+*  Added check for "highp" support to fragment shader in `rglwidget()`.
+*  Updated `text3d()` and related functions:  dropped deprecated
+   argument `justify`, added `pos` and `offset` like base graphics
+   `text()`. 
+*  Improved support of `"mesh3d"` objects:  added print methods,
+   added `meshColor` argument to `wire3d()` and `shade3d()` to control how
+   colors are interpreted, added `"rgl.meshColorWarning"`
+   option to control warnings about these changes.
+*  The `plot3d.mesh3d()` method now has the same default
+   for `aspect` as the default method. 
+*  `pch3d()` now allows separate `color` and `bg` specifications
+   for each point.  In addition, the default for the `"lit"`
+   material property is now `FALSE`, so by default filled
+   symbols will match the requested colour regardless of 
+   lighting. 
+   
+## Bug fixes
+
+*  Fixed texture bug introduced in fix in 0.99.16. 
+*  The `persp3d.deldir()` method didn't display labels properly. 
+*  When the X11 initialization failed, `rgl` messed up the S3
+   methods system.  (Reported by Gregory Jefferis.) 
+*  Probably due to a compiler change, `rgl.bbox()` was 
+   returning 0/1 instead of the id of the axes. 
+*  `pch3d()` was failing in `rglwidget()` for some shapes.
+   (Reported by Luca Scrucca.) 
+*  `par3d(mouseMode = "none")` was not implemented properly,
+   so appeared to be a no-op. 
 *  Selection functions did not work well with subscenes. 
 *  Deleting an object that has been added as a 3D sprite
    caused `rgl` to crash. 
