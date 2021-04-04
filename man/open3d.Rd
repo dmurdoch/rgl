@@ -45,7 +45,9 @@ r3dDefaults
   values for parameters.  As installed this sets the point of view to
   'world coordinates' (i.e. x running from left to right, y from front
   to back, z from bottom to top), the \code{mouseMode} to
-  \code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.
+  \code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.  \code{useFreeType} defaults to \code{FALSE} on 
+  Windows; on other systems it indicates the availability
+  of FreeType.
   Users may create their own variable named \code{r3dDefaults} in the global
   environment and it will override the installed one.  If there
   is a \code{bg} element in the list or the arguments, it should be

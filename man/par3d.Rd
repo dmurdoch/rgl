@@ -91,9 +91,9 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
     OpenGL driver may not support the requested number, in which case
     \code{par3d("antialias")} will report what was actually set. Applies to the whole device.}    
     \item{\code{cex}}{real.  The default size for text.}
-    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.
+    \item{\code{family}}{character.  The default device independent family name; see \code{\link{rgl.texts}}.
     Applies to the whole device.}
-    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}).
+    \item{\code{font}}{integer.  The default font number (from 1 to 4; see \code{\link{rgl.texts}}).
     Applies to the whole device.}
     \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?
     Applies to the whole device.}
@@ -190,6 +190,10 @@ As of version 0.100.32, when changing the \code{"windowRect"} parameter, the
 \code{"viewport"} for the root (or specified) subscene
 is changed immediately.  This fixes a bug where in earlier
 versions it would only be changed when the window was redrawn, potentially after another command making use of the value.
+
+Default values are not described here, as several of them
+are changed by the \code{\link{r3dDefaults}} variable when
+the window is opened by \code{\link{open3d}}.
 }
 
 \section{Rendering}{
