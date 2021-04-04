@@ -1,5 +1,5 @@
 
-# rgl  0.106.0 
+# rgl  0.106.2
 
 ## Major changes
 
@@ -32,7 +32,11 @@
 *  Set "window_group" in X11 so `rgl` windows are grouped,
    based on code by Ivan Krylov. 
 *  `filledContour3d()` now accepts levels in decreasing order. 
-*  `mergeVertices()` and `as.mesh3d.rglId()` have been improved. 
+*  `mergeVertices()` and `as.mesh3d.rglId()` have been improved.
+*  `r3dDefaults$useFreeType` is now set to `FALSE` on 
+Windows, so that system fonts will be used by default.
+*  Text `family = "symbol"` has never really worked,
+   and is no longer recommended.
 
 ## Bug fixes 
 

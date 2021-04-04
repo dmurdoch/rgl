@@ -301,6 +301,9 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  family = "sans",
 		  material = list(color="black", fog = TRUE))
 
+if (.Platform$OS.type == "windows")
+	r3dDefaults$useFreeType <- FALSE
+
 open3d <- function(..., params = getr3dDefaults(), 
                    useNULL = rgl.useNULL(), silent = FALSE	) {
 	

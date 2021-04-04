@@ -26,7 +26,7 @@ rglFonts(...)
   overrides any \code{adj} value given. Values of 1, 2, 3 and 4, respectively indicate positions below, to the left of, above and to the right of the specified coordinates.}
   \item{offset}{ when \code{pos} is specified, this value gives the offset of the label from the specified coordinate in fractions of a character width.}
   \item{ family }{A device-independent font family name, or "" }
-  \item{ font }{A numeric font number from 1 to 5 }
+  \item{ font }{A numeric font number from 1 to 4 }
   \item{ cex }{A numeric character expansion value }
   \item{ useFreeType }{logical.  Should FreeType be used to draw text? (See details below.)}
   \item{ ... }{In \code{rgl.texts}, material properties; see \code{\link{rgl.material}} for details.  In \code{rglFonts}, device dependent font definitions for use with FreeType.}  
@@ -52,7 +52,9 @@ families \cr
 are normally
 available, but users may add additional families.  \code{font} numbers
 are restricted to the range 1 to 4 for standard, bold, italic and bold italic
-respectively; with font 5 recoded as family \code{"symbol"} font 1.  
+respectively.  Font 5 is recoded as family \code{"symbol"}
+font 1, but that is not supported unless specifically
+installed, so should be avoided.
 
 Using an unrecognized value for \code{"family"} will result in
 the system standard font as used in RGL up to version 0.76.  That font
@@ -60,7 +62,7 @@ is not resizable and \code{font} values are ignored.
 
 If \code{useFreeType} is \code{TRUE}, then RGL will use the FreeType
 anti-aliased fonts for drawing.  This is generally desirable, and it is the
-default if RGL was built to support FreeType.  
+default on non-Windows systems if RGL was built to support FreeType.
 
 FreeType fonts are specified using the \code{rglFonts} function.  This function
 takes a vector of four filenames of TrueType font files which
@@ -72,6 +74,12 @@ regular versions of the \code{serif}, \code{sans} and \code{mono} families.
 Additional free font files are available from the Amaya project at
 \url{https://dev.w3.org/cvsweb/Amaya/fonts/}.  See the example below for
 how to specify a full set of fonts.
+
+On Windows the system fonts are acceptable and are used
+when \code{useFreeType = FALSE} (the current default in
+\code{\link{r3dDefaults}}).  Mappings to \code{family} names
+are controlled by the \code{grDevices::windowsFonts()}
+function.
 
 Full pathnames should normally be used to specify font files.  If relative
 paths are used, they are interpreted differently by platform.  Currently
