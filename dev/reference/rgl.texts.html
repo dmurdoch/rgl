@@ -84,7 +84,7 @@ should normally use the high-level function text3d instead." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.3</span>
       </span>
     </div>
 
@@ -187,7 +187,7 @@ should normally use the high-level function <code><a href='text3d.html'>text3d</
     </tr>
     <tr>
       <th> font </th>
-      <td><p>A numeric font number from 1 to 5</p></td>
+      <td><p>A numeric font number from 1 to 4</p></td>
     </tr>
     <tr>
       <th> cex </th>
@@ -224,13 +224,15 @@ families <br />
 are normally
 available, but users may add additional families.  <code>font</code> numbers
 are restricted to the range 1 to 4 for standard, bold, italic and bold italic
-respectively; with font 5 recoded as family <code>"symbol"</code> font 1.</p>
+respectively.  Font 5 is recoded as family <code>"symbol"</code>
+font 1, but that is not supported unless specifically
+installed, so should be avoided.</p>
 <p>Using an unrecognized value for <code>"family"</code> will result in
 the system standard font as used in RGL up to version 0.76.  That font
 is not resizable and <code>font</code> values are ignored.</p>
 <p>If <code>useFreeType</code> is <code>TRUE</code>, then RGL will use the FreeType
 anti-aliased fonts for drawing.  This is generally desirable, and it is the
-default if RGL was built to support FreeType.</p>
+default on non-Windows systems if RGL was built to support FreeType.</p>
 <p>FreeType fonts are specified using the <code>rglFonts</code> function.  This function
 takes a vector of four filenames of TrueType font files which
 will be used for the four styles regular, bold, italic and bold italic.  The
@@ -241,6 +243,11 @@ regular versions of the <code>serif</code>, <code>sans</code> and <code>mono</co
 Additional free font files are available from the Amaya project at
 <a href='https://dev.w3.org/cvsweb/Amaya/fonts/'>https://dev.w3.org/cvsweb/Amaya/fonts/</a>.  See the example below for
 how to specify a full set of fonts.</p>
+<p>On Windows the system fonts are acceptable and are used
+when <code>useFreeType = FALSE</code> (the current default in
+<code><a href='open3d.html'>r3dDefaults</a></code>).  Mappings to <code>family</code> names
+are controlled by the <code><a href='https://rdrr.io/r/grDevices/windowsFonts.html'>grDevices::windowsFonts()</a></code>
+function.</p>
 <p>Full pathnames should normally be used to specify font files.  If relative
 paths are used, they are interpreted differently by platform.  Currently
 Windows fonts are looked for in the Windows fonts folder, while other
