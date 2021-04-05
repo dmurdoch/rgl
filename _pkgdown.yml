@@ -70,6 +70,7 @@ reference:
   - par3d
   - view3d
   - observer3d
+  - rglExtrafonts
 - title: Complex shapes
   desc: These functions construct and display complex shapes.
 - contents:
