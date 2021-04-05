@@ -200,39 +200,39 @@ by <code><a href='rgl.attrib.html'>rgl.attrib</a></code> for this attribute.</p>
 <span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='points3d.html'>points3d</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span>
 <span class='fu'>rgl.attrib.info</span><span class='op'>(</span><span class='va'>id</span>, showAll <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      id     attrib nrow ncol
-#&gt; 1  1601   vertices  100    3
-#&gt; 2  1601    normals    0    3
-#&gt; 3  1601     colors    1    4
-#&gt; 4  1601  texcoords    0    2
-#&gt; 5  1601        dim    0    2
-#&gt; 6  1601      texts    0    1
-#&gt; 7  1601        cex    0    1
-#&gt; 8  1601        adj    0    2
-#&gt; 9  1601      radii    0    1
-#&gt; 10 1601    centers  100    3
-#&gt; 11 1601        ids    0    1
-#&gt; 12 1601 usermatrix    0    4
-#&gt; 13 1601      types    0    1
-#&gt; 14 1601      flags    1    1
-#&gt; 15 1601    offsets    0    1
-#&gt; 16 1601     family    0    1
-#&gt; 17 1601       font    0    1
-#&gt; 18 1601        pos    0    1
-#&gt; 19 1601   fogscale    0    1</div><div class='input'><span class='fu'>rgl.attrib.count</span><span class='op'>(</span><span class='va'>id</span>, <span class='st'>"vertices"</span><span class='op'>)</span>
+#&gt; 1  1616   vertices  100    3
+#&gt; 2  1616    normals    0    3
+#&gt; 3  1616     colors    1    4
+#&gt; 4  1616  texcoords    0    2
+#&gt; 5  1616        dim    0    2
+#&gt; 6  1616      texts    0    1
+#&gt; 7  1616        cex    0    1
+#&gt; 8  1616        adj    0    2
+#&gt; 9  1616      radii    0    1
+#&gt; 10 1616    centers  100    3
+#&gt; 11 1616        ids    0    1
+#&gt; 12 1616 usermatrix    0    4
+#&gt; 13 1616      types    0    1
+#&gt; 14 1616      flags    1    1
+#&gt; 15 1616    offsets    0    1
+#&gt; 16 1616     family    0    1
+#&gt; 17 1616       font    0    1
+#&gt; 18 1616        pos    0    1
+#&gt; 19 1616   fogscale    0    1</div><div class='input'><span class='fu'>rgl.attrib.count</span><span class='op'>(</span><span class='va'>id</span>, <span class='st'>"vertices"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 100</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='fu'>rgl.attrib.info</span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'><a href='scene.html'>ids3d</a></span><span class='op'>(</span><span class='st'>"all"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      id   attrib nrow ncol       type
-#&gt; 1  1599   colors    3    4      light
-#&gt; 2  1599    flags    2    1      light
-#&gt; 3  1599 vertices    1    3      light
-#&gt; 4  1600    flags    4    1 background
-#&gt; 5  1600 fogscale    1    1 background
-#&gt; 6  1600   colors    1    4 background
-#&gt; 7  1600  centers    1    3 background
-#&gt; 8  1601   colors    1    4     points
-#&gt; 9  1601  centers  100    3     points
-#&gt; 10 1601 vertices  100    3     points
-#&gt; 11 1601    flags    1    1     points</div></pre>
+#&gt; 1  1614   colors    3    4      light
+#&gt; 2  1614    flags    2    1      light
+#&gt; 3  1614 vertices    1    3      light
+#&gt; 4  1615    flags    4    1 background
+#&gt; 5  1615 fogscale    1    1 background
+#&gt; 6  1615   colors    1    4 background
+#&gt; 7  1615  centers    1    3 background
+#&gt; 8  1616   colors    1    4     points
+#&gt; 9  1616  centers  100    3     points
+#&gt; 10 1616 vertices  100    3     points
+#&gt; 11 1616    flags    1    1     points</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
