@@ -342,6 +342,19 @@ quad.  If `col` is black (a common default), you won't see anything.
  - Modern `OpenGL` supports 1- and 3-dimensional textures;
  these are not supported in `rgl`.
  
+### Fonts
+
+`rgl` uses the same ideas as base graphics for drawing
+text:  there are font families named `"sans"`,
+`"serif"`, and `"mono"` for drawing text of those
+types.  In `rgl`, the `"symbol"` family is not supported.
+
+New font families can be defined using the low-level
+function `r indexfns("rglFonts")`, or more simply
+using the higher level function 
+`r indexfns("rglExtrafonts")`.  The latter function
+requires the `extrafont` package to be installed.
+
 ### par3d:  Miscellaneous graphical parameters
 
 The `r indexfns("par3d")` function, modelled after the classic
@@ -358,7 +371,7 @@ cex         |       | Default size for text
 family      |       | Device-independent font family name; see `r linkfn("text3d", text="?text3d", pkg="rgl")`
 font        |       | Integer font number
 useFreeType |       | Should FreeType fonts be used if available?
-fontname    | read-only | System-dependent font name set by `r indexfns("rglFonts")`
+fontname    | read-only | System-dependent font name set by `r linkfn("rglFonts")`
 FOV         |       | Field of view, in degrees.  Zero means isometric perspective
 ignoreExtent |      | Should `rgl` ignore the size of new objects when computing the bounding box?
 skipRedraw   |      | Should `rgl` suppress updates to the display? 
