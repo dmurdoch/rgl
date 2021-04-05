@@ -1,5 +1,5 @@
 
-# rgl  0.106.2
+# rgl  0.106.3
 
 ## Major changes
 
@@ -16,6 +16,8 @@
 *  Reformatted the `inst/NEWS` file so it is visible here.
 *  Added `asHomogeneous2()` and `asEuclidean2()` to work directly
    with `3 x n` and `4 x n` matrices. 
+*  Added `rglExtrafonts()` to load additional fonts for
+   use with FreeType rendering.  Requires the `extrafont` package.
    
 ## Minor changes
 

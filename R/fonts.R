@@ -37,7 +37,7 @@ printFonts <- function(fonts) {
 
 # If no arguments spec'ed, return entire font database
 # If no named arguments spec'ed, all args should be font names
-# to get info on from the database
+# to get info on them from the database
 # Else, must specify new fonts to enter into database (all
 # of which must be valid filenames and
 # all of which must be named args)

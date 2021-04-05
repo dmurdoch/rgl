@@ -87,6 +87,11 @@
              sans  = rep(system.file("fonts/FreeSans.ttf", package="rgl"), 4),
              mono  = rep(system.file("fonts/FreeMono.ttf", package="rgl"), 4),
              symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4))
+    if (requireNamespace("extrafont", quietly = TRUE))
+      suppressWarnings(
+        rglExtrafonts(sans = c("rglHelvetica", "Arial"), 
+                      serif = c("Times", "Times New Roman"), 
+                      mono = c("Courier", "Courier New")))
   }
   
   .rglEnv$subsceneList <- NULL
