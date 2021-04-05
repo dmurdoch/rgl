@@ -4,8 +4,9 @@
 Register extra fonts
 }
 \description{
-This function registers fonts from the \pkg{extrafont}
-package for use in \pkg{rgl}.
+This function uses the \href{https://github.com/wch/extrafont}{extrafont} 
+package to help register system fonts for use with
+FreeType in \pkg{rgl}.
 }
 \usage{
 rglExtrafonts(..., quiet = TRUE)
@@ -19,13 +20,14 @@ Whether to print information on progress.
 }
 }
 \details{
-The \pkg{extrafont} package collects information on
-installed fonts from the system.  When it is first
-installed, or after new fonts have been installed on your
+The \pkg{extrafont}
+package collects information on
+installed fonts from the system.  When you first
+install \pkg{extrafont}, or after new fonts have been installed on your
 system, run \code{extrafont::font_import()} to build
 its database of system fonts.  
 
-Font families can be installed in \pkg{rgl} using
+Fonts can be installed in \pkg{rgl} using
 \code{rglExtrafonts(rglname = familyname)} or \code{rglExtrafonts(familyname)}.  In this call
 \code{familyname} is a vector of family names to look
 for in the \pkg{extrafont} database using \code{extrafont::choose_font(familyname)}; the first one found
@@ -44,6 +46,11 @@ rglExtrafonts(sans = c("Helvetica", "Arial"),
               
 } 
 to attempt to set up the default fonts.
+
+Fonts found by \pkg{extrafont} can also be used in
+some other graphics devices besides \pkg{rgl}; see 
+\href{https://github.com/wch/extrafont}{the extrafont documentation}
+for details.
 }
 \note{
 Each font in a display needs a unique \pkg{rgl} name;
@@ -61,7 +68,7 @@ and the family name for the newly installed font.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{rglFonts}}
+\code{\link{text3d}}, \code{\link{rglFonts}}
 }
 \examples{
 if (requireNamespace("extrafont") && !in_pkgdown_example()) {

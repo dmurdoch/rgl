@@ -51,6 +51,7 @@ a call to \code{\link{expression}} or \code{\link{quote}}.
   The text drawing functions return the object ID of the text object (or sprites, in case of \code{usePlotmath = TRUE})
 invisibly.
 }
+\seealso{\code{\link{rglExtrafonts}} for adding fonts}
 \examples{
 open3d()
 famnum <- rep(1:3, 8)
