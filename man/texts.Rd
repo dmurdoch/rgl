@@ -51,7 +51,6 @@ a call to \code{\link{expression}} or \code{\link{quote}}.
   The text drawing functions return the object ID of the text object (or sprites, in case of \code{usePlotmath = TRUE})
 invisibly.
 }
-\seealso{\code{\link{rglExtrafonts}} for adding fonts}
 \examples{
 open3d()
 famnum <- rep(1:3, 8)
@@ -62,6 +61,6 @@ text3d(font, cex, famnum, text = paste(family, font), adj = 0.5,
        color = "blue", family = family, font = font, cex = cex)
 }
 \seealso{
-  \code{\link{r3d}}, \code{\link{rgl.texts}}, \code{\link{plotmath3d}}
+  \code{\link{r3d}}, \code{\link{rgl.texts}}, \code{\link{plotmath3d}, \code{\link{rglExtrafonts}} for adding fonts}
 }
 \keyword{dynamic}
