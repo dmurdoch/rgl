@@ -17,8 +17,8 @@ in_knitr <- function()
 oldKnitrVersion <- function() 
   !all(c("wrap", "is_low_change") %in% getNamespaceExports("knitr"))
 
-# This is only needed for old knitr:
-globalVariables("wrap")
+if (!oldKnitrVersion())
+  wrap <- getExportedValue("knitr", "wrap")
 
 fns <- local({
   newwindowdone <- FALSE
@@ -228,6 +228,12 @@ fns <- local({
         return()
       }
       counter <<- 0L
+      registerS3method("wrap", "rglRecordedplot", 
+                       wrap.rglRecordedplot, 
+                       envir = asNamespace("knitr"))
+      registerS3method("is_low_change", "rglRecordedplot",
+                       is_low_change.rglRecordedplot,
+                       envir = asNamespace("knitr"))
     }
     setupDone <<- list(autoprint = autoprint,
                        rgl.newwindow = rgl.newwindow,
@@ -275,7 +281,7 @@ fns <- local({
                      width = figWidth(),
                      height = figHeight(),
                      options = options, args = args),
-                class = "rglRecordedplot")
+                class = c("rglRecordedplot", "knit_other_plot"))
     } else
       invisible(x)
   }
@@ -443,8 +449,7 @@ fns <- local({
       content <- rglwidget(scene,
                            width = x$width,
                            height = x$height,
-                           webgl = !doSnapshot,
-                           latex = latex)
+                           webgl = !doSnapshot)
       if (inherits(content, "knit_image_paths")) {
         # # We've done a snapshot, put it in the right place.
         name <- file.path(options$fig.path,
