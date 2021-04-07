@@ -17,8 +17,8 @@ in_knitr <- function()
 oldKnitrVersion <- function() 
   !all(c("wrap", "is_low_change") %in% getNamespaceExports("knitr"))
 
-# This is only needed for old knitr:
-globalVariables("wrap")
+if (!oldKnitrVersion())
+  wrap <- getExportedValue("knitr", "wrap")
 
 fns <- local({
   newwindowdone <- FALSE
@@ -477,7 +477,7 @@ fns <- local({
       if (!latex)
         class(result) <- c(class(result), "knit_asis_htmlwidget")
       
-      knitr::wrap(result, options)
+      wrap(result, options)
     }
     
     list(
