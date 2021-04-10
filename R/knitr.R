@@ -17,7 +17,11 @@ in_knitr <- function()
 oldKnitrVersion <- function() 
   !all(c("wrap", "is_low_change") %in% getNamespaceExports("knitr"))
 
-if (!oldKnitrVersion())
+if (oldKnitrVersion()) {
+  wrap <- function(x, options = list(), ...) {
+    UseMethod('wrap', x)
+  }
+} else
   wrap <- getExportedValue("knitr", "wrap")
 
 fns <- local({
