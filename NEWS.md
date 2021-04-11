@@ -1,5 +1,5 @@
 
-# rgl  0.106.3
+# rgl  0.106.4
 
 ## Major changes
 
@@ -193,7 +193,7 @@ Windows, so that system fonts will be used by default.
 *  Texture coordinates in mesh objects now act the same
    as colors with respect to the `meshColor` variable. 
 *  Touch events are now supported in WebGL. 
-*  Added `"snapshot"` knitr option to use when autoprinting. 
+*  Added `"snapshot"` `knitr` option to use when autoprinting. 
 *  Added defaults to `snapshot3d(width = NULL, height = NULL)`. 
 *  Added `as.mesh3d.rglobject()` method. 
 *  Added `clip_to_density` argument to `plot3d.lm()` method. 
@@ -204,21 +204,21 @@ Windows, so that system fonts will be used by default.
    
 ## Bug fixes
 
-*  Fixed some memory leaks found by valgrind, and problems seen
+*  Fixed some memory leaks found by `valgrind`, and problems seen
    on systems with no functional Asymptote or Pandoc. 
 *  A bug in the initial color of a mesh object has been fixed. 
 *  A bug in translating mouse coordinates (reported on 
    StackOverflow by Richard Morey) when an `rgl` widget is
-   included in a Gitbook has been fixed.  
+   included in a `Gitbook` has been fixed.  
 *  Modified `writeASY()` for compatibility with Asymptote
    2.65.  (Reported by Pavel Stříž.) 
 *  `pop3d()` has been modified slightly so that it no
    longer opens a new window if none is already present 
 *  added `setGraphicsDelay()` function to work around bug
-   in MacOS Catalina XQuartz. 
+   in macOS Catalina XQuartz. 
 *  Made various improvements to reduce notes and warnings
    during install, including suppressing deprecated OpenGL
-   warnings on MacOS. 
+   warnings on macOS. 
 *  Some declarations in WebGL made assumptions that were
    not valid on mobile devices. 
 *  The `"depth_mask"` material property was being ignored
@@ -264,7 +264,7 @@ Windows, so that system fonts will be used by default.
 ## Bug fixes
 
 *  Rewrote the initialization code to deal with problems
- related to indirect GLX and Xvfb. 
+ related to indirect GLX and `Xvfb`. 
 
 
 # rgl  0.100.47 
@@ -358,7 +358,7 @@ Windows, so that system fonts will be used by default.
 
 ## Bug fixes
 
-*  Fix some bugs detected by valgrind 
+*  Fix some bugs detected by `valgrind` 
 
 # rgl  0.100.18 
 
@@ -379,7 +379,7 @@ Windows, so that system fonts will be used by default.
    have been added.  (A bug in the implementation of
    `as.mesh3d.deldir()` was found and fixed during the 
    latter addition.) 
-*  `as.mesh3d()`, `plot3d()` and `persp3d()` methods for "ashape3d"
+*  `as.mesh3d()`, `plot3d()` and `persp3d()` methods for `"ashape3d"`
    objects from the `alphashape3d` package have been added. 
 *  The mouse mode (trackball, zoom, etc.) can now be applied
    separately to each individual subscene in a scene.
@@ -392,7 +392,7 @@ Windows, so that system fonts will be used by default.
    
 ## Minor changes
 
-*  Added check for "highp" support to fragment shader in `rglwidget()`.
+*  Added check for `"highp"` support to fragment shader in `rglwidget()`.
 *  Updated `text3d()` and related functions:  dropped deprecated
    argument `justify`, added `pos` and `offset` like base graphics
    `text()`. 
@@ -407,7 +407,7 @@ Windows, so that system fonts will be used by default.
    material property is now `FALSE`, so by default filled
    symbols will match the requested colour regardless of 
    lighting. 
-*  Minor fixups to the vignettes. 
+*  Minor fix ups to the vignettes. 
 *  Now uses the `manipulateWidget::combineWidgets` function
    when putting multiple objects into a pipe. 
 *  Now accepts fixed CSS units in width and height for `rglwidget()`. 
@@ -433,7 +433,7 @@ Windows, so that system fonts will be used by default.
 *  Selection functions did not work well with subscenes. 
 *  Deleting an object that has been added as a 3D sprite
    caused `rgl` to crash. 
-*  A number of memory bugs found by rchk have been fixed. 
+*  A number of memory bugs found by `rchk` have been fixed. 
 *  Textures specified in global material list (e.g. by being
    used in `rgl.*` functions) were not handled properly.
    (Reported by Ty Tuff.) 
@@ -452,7 +452,7 @@ Windows, so that system fonts will be used by default.
 
 *  Christophe Geuzaine's GL2PS library (used by `rgl.postscript()`)
    updated to version 1.4.0. 
-*  The pandoc system requirement has been updated to
+*  The Pandoc system requirement has been updated to
    1.14, as 1.13.1 is no longer sufficient. 
    
 ## Bug fixes
@@ -469,10 +469,10 @@ Windows, so that system fonts will be used by default.
 
 ## Minor changes
 
-*  Record context (ioslides, shiny, etc.) in scene 
+*  Record context (`ioslides`, `shiny`, etc.) in scene 
    when `rglwidget()` is called. 
-*  Allow more than 16 scenes in html_document, ioslides_presentation and
-   slidy_presentation. 
+*  Allow more than 16 scenes in `html_document`, `ioslides_presentation` and
+   `slidy_presentation`. 
 *  `useSubscene3d()` now returns the id of the previously active subscene,
    to make temporary changes more convenient.
 *  `renderRglwidget()` and `renderPlaywidget()` now have an optional argument
@@ -482,7 +482,7 @@ Windows, so that system fonts will be used by default.
 *  the `"centers"` attribute now refers to the individual facets
    of spheres, rather than the whole sphere.  Use `"vertices"` for
    that. 
-*  Tried to give a more helpful startup error message on MacOS. 
+*  Tried to give a more helpful startup error message on macOS. 
 *  Added documentation to `rglwidgetClass` in Javascript. 
 *  `vertexSetter()` can now set plane parameters. 
 *  Modified `platform.cpp` so it works with `__STRICT_ANSI__`
@@ -567,7 +567,7 @@ Windows, so that system fonts will be used by default.
    before trying `convert`.  (The external change
    suggested by Earl F. Glynn.) 
 *  `par3d()` reports on the version of OpenGL that it sees
-   (as component "glVersion"). 
+   (as component `"glVersion"`). 
    
 ## Bug fixes
 
@@ -718,12 +718,12 @@ base graphics.
    did not work properly with a shared mouse.  (Reported by
    Marian Talbert.) 
 *  Fixed a bug (reported by Dominick Samperi) that caused
-   vignettes using WebGL code in knitr to fail to initialize
+   vignettes using WebGL code in `knitr` to fail to initialize
    properly.  This required adding the `setupKnitr()` function,
    which should be called at the start of each vignette.
    It is *not* called automatically. 
 *  Fixed a bug (reported by Kurt Hornik) that caused `rgl` to
-   fail to compile when libfreetype 2.6 was linked. 
+   fail to compile when `libfreetype` 2.6 was linked. 
 *  Fixed a bug in `writePLY()` (reported by Kurt Hornik). 
 
 # rgl  0.95.1247 
@@ -745,7 +745,7 @@ base graphics.
 *  If a template file is used in `writeWebGL()`, the string `%prefix%`
    will be replaced in it by the prefix argument. 
 *  `writeWebGL()` now outputs a Javascript global variable named
-   "<prefix>rgl" of class "rglClass" that allows access to many of the
+   `"<prefix>rgl"` of class `"rglClass"` that allows access to many of the
    scene internals.  (Inspired by patch submitted by Jeff Allen.) 
 *  User mouse callbacks can now be retrieved within R using
    `rgl.getMouseCallbacks()` and `rgl.getWheelCallback()`, and
@@ -754,8 +754,8 @@ base graphics.
    them to be re-used in multiple figures on the same page.
    See the `reuse` parameter and attribute of the result. 
 *  Started a vignette describing user interaction in WebGL. 
-*  Set the class of the main "canvas" element in
-   `writeWebGL()` output to "rglWebGL". 
+*  Set the class of the main `"canvas"` element in
+   `writeWebGL()` output to `"rglWebGL"`. 
 *  `rgl.snapshot()` now evaluates the `top` argument after `filename`
    and `fmt`, so windows created when those are evaluated don't
    overlay the `rgl` window.  (Suggestion of Keith Jewell.) 
@@ -781,7 +781,7 @@ base graphics.
    properly. 
 *  Subscenes with `ignoreExtent = TRUE` were not plotted. 
 *  The bounding box calculations now take clipping planes into account. 
-*  `writeWebGL()` did not display the bboxdeco properly when working
+*  `writeWebGL()` did not display the `bboxdeco` properly when working
    in a subscene. 
 
 # rgl  0.95.1158 
@@ -856,7 +856,7 @@ base graphics.
 *  `rgl.material()` (for textures), `rgl.postscript()` and `rgl.snapshot()`
    now call `normalizePath()` on filenames, so tilde expansion should
    be supported. 
-*  internals are updated to be consistent with MacOS 10.9 requirements 
+*  internals are updated to be consistent with macOS 10.9 requirements 
 *  Improved the approximation to the surface normal for degenerate
    grids in `surface3d()` and `persp3d()`.  (Problem found by Graham Griffiths
    using polar coordinates; all `r=0` points were at the same location.) 
@@ -987,9 +987,9 @@ base graphics.
 
 ## Minor changes
 
-*  write the `rgl` version into the webGL file 
-*  cleaned up use of CHECKGLERROR, so that setting `USE_GLGETERROR` to 1 in
-   R.h will enable detailed checking 
+*  write the `rgl` version into the WebGL file 
+*  cleaned up use of `CHECKGLERROR`, so that setting `USE_GLGETERROR` to 1 in
+   `R.h` will enable detailed checking 
 
 ## Bug fixes
 
@@ -1119,7 +1119,7 @@ base graphics.
 *  Added `res_name="rgl"` and `res_class="R_x11"` to the `WM_CLASS` property of X11
    windows.  (Contributed by Philip Johnson.) 
 *  Added code to work with R 3.0.0 `setHook()` changes 
-*  The `rgl` window now handles ESC key presses.  During selection
+*  The `rgl` window now handles `ESC` key presses.  During selection
    and `play3d()` they abort the process; otherwise they are ignored. 
 *  Copied the `R_pretty0()` function from R sources to avoid warning. 
 
@@ -1163,7 +1163,7 @@ base graphics.
 *  Improved the bounding box decoration in two ways:  it can now draw the
    front faces (to surround the whole graph), and can label edges with pretty
    labels.  `plot3d()` was modified to use this instead of manually setting axis
-   locations and using `box3d()` to draw a box, allowing resizeable labelled
+   locations and using `box3d()` to draw a box, allowing resizable labelled
    axes. 
 *  Removed some unnecessary declarations from `rglmath.h` that were causing
    problems in an old version of gcc on Solaris. 
@@ -1221,7 +1221,7 @@ base graphics.
 
 ## Bug fixes
 
-*  Fixed rounding errors and Xvfb errors in `rgl.pixels()` examples
+*  Fixed rounding errors and `Xvfb` errors in `rgl.pixels()` examples
    and demo. 
 
 # rgl  0.88 
@@ -1324,7 +1324,7 @@ base graphics.
    not available. 
 *  `axis3d()` now uses `format()` rather than `as.character()` to give
    nicer looking labels. 
-*  use R `warning()` to report messages, rather than popups or REprintf. 
+*  use R `warning()` to report messages, rather than popups or `REprintf`. 
     
 ## Bug fixes
 
@@ -1417,7 +1417,7 @@ base graphics.
 ## Bug fixes
 
 *  rounding error could cause `par3d("userMatrix")` to generate NaNs and fail 
-*  workaround for Xvfb on MacOSX problems 
+*  workaround for `Xvfb` on macOS problems 
 
 # rgl  0.74 
 
@@ -1434,7 +1434,7 @@ base graphics.
 
 ## Minor changes
 
-*  partial changes to avoid crash on MacOSX with Xvfb 
+*  partial changes to avoid crash on macOS with `Xvfb` 
 *  change to `rgl_init()` for R 2.6.0 compatibility 
 
 # rgl  0.72 
@@ -1455,7 +1455,7 @@ base graphics.
    now be much more portable 
 *  removed deprecated OSX font setting calls 
 *  texture properties are now returned by `material3d()` 
-*  normals may be specified in qmesh objects, but (at present) subdivide removes them 
+*  normals may be specified in `qmesh` objects, but (at present) `subdivision3d()` removes them 
 *  ` material3d()` now preserves the values of unspecified parameters (as documented,
    but not previously functioning) 
 *  `clear3d()` can now reset material properties to the defaults, and
@@ -1509,7 +1509,7 @@ base graphics.
 *  added `type="s"` to `plot3d()` to draw spheres 
 *  fixed handling of "..." in axis related functions 
 *  added full MDI support 
-*  removed use of List and ListIterator internally 
+*  removed use of `List` and `ListIterator` internally 
 *  fixed handling of axes and boxes when a coordinate had zero extent 
 *  changed `rgl.viewpoint()` default to be compatible with `r3dDefaults` 
 *  added id return values to primitives and higher level functions,
@@ -1536,9 +1536,9 @@ base graphics.
 *  added `aspect3d()` to control the aspect ratio of the bounding box. 
 *  added `xAxis`, `yAxis` and `zAxis` mouse modes, set `zAxis` as `r3d` default. 
 *  added `persp3d()` function 
-*  changed error messages to go through REprintf in X11 and OSX 
+*  changed error messages to go through `REprintf` in X11 and OSX 
 *  fixed segfault if `rgl_init()` failed 
-*  converted type of `viewport` arg in `user2window()` and `window2user()` calls 
+*  converted type of `viewport` argument in `user2window()` and `window2user()` calls 
 *  if the `rgl_init()` call fails, the package will still load with a warning (but
    most function calls will result in errors). 
 *  added `par3d("scale")` to handle `aspect3d()` operations internally. 
@@ -1564,7 +1564,7 @@ base graphics.
 *  simplified build system: uses 'R' build system 
 *  added generic visualization/rendering interface (R3D) 
 *  text justification from 0 to 1 
-*  added primitive type: linestrips 
+*  added primitive type: `linestrip` 
 *  fixed `rgl.bringtotop()`, added stay option (win32) 
 *  added 4x4 matrix functions from `djmrgl` 
 *  added `rgl.user2window()` and `rgl.window2user()` functions 
@@ -1585,39 +1585,39 @@ base graphics.
 
 # rgl  0.64-12 
 
-*  cran bugfix: permissions of cleanup fixed. 
+*  CRAN bugfix: permissions of cleanup fixed. 
 
 # rgl  0.64-11 
 
 *  removed several redundant semicolons, required by gcc 3.4 ansi-pedantic mode. 
-*  win32: uses R's zlib and libpng sources 
-*  win32: added virtual destructor in Win32GUIFactory (removes warning) 
+*  win32: uses R's `zlib` and `libpng` sources 
+*  win32: added virtual destructor in `Win32GUIFactory` (removes warning) 
 
 # rgl  0.64-10 
 
 *  updated `.C()` calls using `PACKAGE="rgl"` 
-*  updated Maintainer.mk using correct zlib version 
+*  updated `Maintainer.mk` using correct `zlib` version 
 *  improved dynamic unload using `library.dynam.unload()` 
-*  conditional macos x darwin code in `.First.lib()` 
+*  conditional macOS x Darwin code in `.First.lib()` 
 
 # rgl  0.64-9 
 
-*  MacOS X 'Panther' G5 fix for OpenGL library loading in .first.lib 
-*  removed lpng and zlib from source tree 
-*  support for automatic downloading of zlib and lpng on win32 
+*  macOS X 'Panther' G5 fix for OpenGL library loading in .first.lib 
+*  removed `lpng` and `zlib` from source tree 
+*  support for automatic downloading of `zlib` and `lpng` on win32 
 *  added demo directory with several examples using `demo(rgl)` 
 
 # rgl  0.64-8 
 
 *  build bugfix : removed `rgl/src/Makefile` 
-*  updated configure to check and setup LDFLAGS for OpenGLU library 
+*  updated configure to check and setup `LDFLAGS` for `OpenGLU` library 
 
 # rgl  0.64-7 
 
 *  added mouse capturing 
 *  `rgl.sprites()` 'radius' bug fixed 
-*  memory leak bugfix: texture objects are now AutoDestroy and used through Ref's 
-*  resource management improvment: pixmaps gets free'd when they become unused
+*  memory leak bugfix: texture objects are now `AutoDestroy` and used through `Ref`'s 
+*  resource management improvement: pixmaps get `free`'d when they become unused
    e.g. texture objects are created. 
 *  no limitations on pixmap sizes 
 *  mipmap support 
@@ -1630,51 +1630,51 @@ base graphics.
 *  `project.mk`, `win32.mk` and `x11.mk` in `src/build` changed
    now a single variable MODS will extend. 
 *  MinGW build system changed.
-   `rgl.dll` now contains an R compilant Resource information
-   generated by R perl script 
+   `rgl.dll` now contains an R compliant Resource information
+   generated by R `perl` script 
 *  bug fix: R 1.8.0/win32 does not detach packages when quit
    it is safe now to call `rgl_quit()` and `lib_quit()` multiple times
    `win32lib.cpp`: added `dllmain` that calls `rgl_quit()` on process exit 
-*  added core support for devcpp IDE 
+*  added core support for `devcpp` IDE 
 
 # rgl  0.64-5 
 
-*  MacOS X/X11 port 
+*  macOS X/X11 port 
 
 # rgl  0.64-4 
 
 *  manual update 
-*  aquired valid CRAN package status,
-   rcmd check runs through with 2 WARNINGS
-   (acording to latex, and codoc) 
+*  acquired valid CRAN package status,
+   `R CMD check` runs through with 2 WARNINGS
+   (according to `latex`, and `codoc`) 
 *  uploaded to cvs 
 
 # rgl  0.64-3 
 
 *  configure.ac: X11 library path broken, fixed 
-*  x11gui: `glXChooseVisual()` part fixed 
+*  `x11gui`: `glXChooseVisual()` part fixed 
 *  code cleanup: `rglview.h` 
 *  added: `man/maintainer.Rd` maintainer information 
 
 # rgl  0.64-2 
 
-*  `rgl.quads()`: enum id was broken, fixed ("quads" -> "quadrangles") 
+*  `rgl.quads()`: `enum` id was broken, fixed ("quads" -> "quadrangles") 
 
 # rgl  0.64 
 
 *  autoconf build system 
 *  moved textures to `inst/` directory 
 *  x11 port 
-*  win32/vc: fixed fpu control word precision to remain on 64 bit
-   links with fp10.obj 
+*  `win32/vc`: fixed fpu control word precision to remain on 64 bit
+   links with `fp10.obj` 
 *  changed texture mapping t coordinate for Surface node 
 
 # rgl  0.63 
 
-*  api: added `rgl_init()`, `rgl_quit()`: explicit client initialization 
+*  API: added `rgl_init()`, `rgl_quit()`: explicit client initialization 
 *  added `setup.bat`: build setup for windows 
-*  win32 setup: mingw compiler 
-*  win32 setup: visual c++ compiler through gui environment 
+*  win32 setup: MinGW compiler 
+*  win32 setup: visual c++ compiler through `gui` environment 
 
 # rgl  0.62 
 
@@ -1682,14 +1682,14 @@ base graphics.
 *  support R color strings 
 *  use `system.file( <subpath>, package="rgl" )` in examples to retrieve texture files 
 *  rewrote R code :
-   * clear enum types
+   * clear `enum` types
    * vertex vector datatype (internal representation matrix) 
 
 # rgl  0.61 
 
 *  added: `rgl.sprites()` 
 *  added: fps counter 
-*  added: autoUpdate, modified win32 mainloop, on hide, autoUpdate disabled, on show enabled 
+*  added: `autoUpdate`, modified win32 main loop, on hide, `autoUpdate` disabled, on show enabled 
 *  modified material: added alpha vector 
 
 # rgl  0.60 

@@ -4,7 +4,7 @@
 Register extra fonts
 }
 \description{
-This function uses the \href{https://github.com/wch/extrafont}{extrafont} 
+This function uses the \href{https://github.com/wch/extrafont}{\pkg{extrafont}} 
 package to help register system fonts for use with
 FreeType in \pkg{rgl}.
 }
@@ -49,7 +49,7 @@ to attempt to set up the default fonts.
 
 Fonts found by \pkg{extrafont} can also be used in
 some other graphics devices besides \pkg{rgl}; see 
-\href{https://github.com/wch/extrafont}{the extrafont documentation}
+\href{https://github.com/wch/extrafont}{the \pkg{extrafont} documentation}
 for details.
 }
 \note{
