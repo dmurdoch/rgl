@@ -1,0 +1,20 @@
+Notes for pkgdown branch
+
+To build website:
+
+ setwd("~/svn/MyR/rgl")
+ pkgdown::init_site()
+ pkgdown::build_site(install = FALSE) # , new_process = FALSE)
+
+If used with the rglpatch branches of pkgdown and downlit, this
+installs divs for the rgl output.
+
+It currently includes an after-head.html template that fixes the
+scripts needed by examples:  this is a horrible hack.  What it 
+should do is collect dependencies as the output is being
+displayed, and insert the dependencies needed in the particular
+example, not everything.  evaluate_and_highlight will need
+to be involved in this, because it will see the dependencies.
+
+It also needs to distinguish between high level and low level
+plots; this likely needs pkgdown changes to its call to evaluate_and_highlight.

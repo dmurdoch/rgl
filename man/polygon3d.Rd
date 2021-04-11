@@ -1,7 +1,7 @@
 \name{polygon3d}
 \alias{polygon3d}
 \title{
-Triangulate and draw a polygon in three dimensions.
+Draw a polygon in three dimensions
 }
 \description{
 This function takes a description of a flat polygon in x, y and z coordinates,
@@ -65,6 +65,7 @@ r <- c(r[-50], rev(theta*0.8) + 1)
 theta <- c(theta[-50], rev(theta))
 x <- r*cos(theta)
 y <- r*sin(theta)
+open3d()
 plot(x, y, type = "n")
 polygon(x, y)
 polygon3d(x, y, x + y, col = "blue")

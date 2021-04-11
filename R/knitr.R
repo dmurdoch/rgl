@@ -1,3 +1,5 @@
+in_knitr <- function()
+  isTRUE(getOption("knitr.in.progress"))
 
 ##
 ## knitr hook functions
@@ -15,8 +17,12 @@
 oldKnitrVersion <- function() 
   !all(c("wrap", "is_low_change") %in% getNamespaceExports("knitr"))
 
-# This is only needed for old knitr:
-globalVariables("wrap")
+if (oldKnitrVersion()) {
+  wrap <- function(x, options = list(), ...) {
+    UseMethod('wrap', x)
+  }
+} else
+  wrap <- getExportedValue("knitr", "wrap")
 
 fns <- local({
   newwindowdone <- FALSE
@@ -226,13 +232,18 @@ fns <- local({
         return()
       }
       counter <<- 0L
+      registerS3method("wrap", "rglRecordedplot", 
+                       wrap.rglRecordedplot, 
+                       envir = asNamespace("knitr"))
+      registerS3method("is_low_change", "rglRecordedplot",
+                       is_low_change.rglRecordedplot,
+                       envir = asNamespace("knitr"))
     }
     setupDone <<- list(autoprint = autoprint,
                        rgl.newwindow = rgl.newwindow,
                        rgl.closewindows = rgl.closewindows)
     
     # R produces multiple vignettes in the same session.
-    environment(rglwidget)$reuseDF <- NULL
     knitr::opts_chunk$set(rgl.newwindow = rgl.newwindow, 
                           rgl.closewindows = rgl.closewindows,
                           rgl.chunk = TRUE)
@@ -274,7 +285,7 @@ fns <- local({
                      width = figWidth(),
                      height = figHeight(),
                      options = options, args = args),
-                class = "rglRecordedplot")
+                class = c("rglRecordedplot", "knit_other_plot"))
     } else
       invisible(x)
   }
@@ -347,7 +358,6 @@ fns <- local({
           content <- rglwidget(scene,
                                width = obj$width,
                                height = obj$height,
-                               reuse = TRUE,
                                snapshot = doSnapshot)
           if (inherits(content, "knit_image_paths")) {
             # # We've done a snapshot, put it in the right place.
@@ -443,9 +453,7 @@ fns <- local({
       content <- rglwidget(scene,
                            width = x$width,
                            height = x$height,
-                           reuse = TRUE,
-                           webgl = !doSnapshot,
-                           latex = latex)
+                           webgl = !doSnapshot)
       if (inherits(content, "knit_image_paths")) {
         # # We've done a snapshot, put it in the right place.
         name <- file.path(options$fig.path,
@@ -510,11 +518,28 @@ is_low_change.rglRecordedplot <- function(p1, p2) {
   inherits(p2, "rglRecordedplot") && p1$plotnum == p2$plotnum
 }
 
-figWidth <- function()
-  if (length(result <- with(opts_current$get(c("fig.width", "dpi", "fig.retina")),
-	     fig.width*dpi/fig.retina))) result[1] else NULL
-  
+figWidth <- function() {
+  if (in_pkgdown_example())
+    opts <- pkgdown_fig_settings()
+  else if (in_knitr())
+    opts <- opts_current$get(c("fig.width", "dpi", "fig.retina"))
+  else
+    opts <- NULL
+  if (length(opts)) {
+    result <- with(opts, fig.width*dpi/fig.retina)
+    result[1] 
+  } else NULL
+}
 
-figHeight <- function() 
-  if (length(result <- with(opts_current$get(c("fig.height", "dpi", "fig.retina")),
-	     fig.height*dpi/fig.retina))) result[1] else NULL
+figHeight <- function() {
+  if (in_pkgdown_example())
+    opts <- pkgdown_fig_settings()
+  else if (in_knitr())
+    opts <- opts_current$get(c("fig.height", "dpi", "fig.retina"))
+  else
+    opts <- NULL
+  if (length(opts)) {
+    result <- with(opts, fig.height*dpi/fig.retina)
+    result[1] 
+  } else NULL
+}

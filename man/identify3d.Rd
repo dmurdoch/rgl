@@ -1,7 +1,7 @@
 \name{identify3d}
 \alias{identify3d}
 \title{
-Identify points in plot.
+Identify points in plot
 }
 \description{
 Identify points in a plot, similarly to the \code{\link{identify}} function

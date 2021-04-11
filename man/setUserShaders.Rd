@@ -1,11 +1,11 @@
 \name{setUserShaders}
 \alias{setUserShaders}
 \title{
-Set user-defined shaders for \pkg{rgl} objects.
+Set user-defined shaders for RGL objects.
 }
 \description{
 Sets user-defined shaders (programs written in GLSL)
-for customized display of \pkg{rgl} objects.  Currently
+for customized display of RGL objects.  Currently
 only supported in WebGL displays, as the regular
 displays do not support GLSL.
 }
@@ -141,6 +141,6 @@ fs <- "
 "
 x <- setUserShaders(id, vs, fs, attributes = list(wts=wts),
                     uniforms = list(wtrange = c(-0.01, 0.15)))
-if (interactive())
+if (interactive() || in_pkgdown_example())
   rglwidget(x)
 }

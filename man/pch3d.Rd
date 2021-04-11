@@ -1,7 +1,7 @@
 \name{pch3d}
 \alias{pch3d}
 \title{
-Plot symbols similar to base graphics.
+Plot symbols similar to base graphics
 }
 \description{
 This function plots symbols similarly to 
@@ -49,7 +49,7 @@ The list of symbols encoded by numerical
 }
 \note{
 This function is not a perfect match to how the \code{\link{points}} function works due
-to limitations in \pkg{rgl} and OpenGL.  In
+to limitations in RGL and OpenGL.  In
 particular:
 
 Symbols with numbers from 1 to 25 are drawn

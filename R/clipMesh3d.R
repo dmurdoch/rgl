@@ -47,6 +47,15 @@ clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
     verts <- asEuclidean(t(mesh$vb))
     values <- fn(verts)
   }
+  # The bound might be infinite, which messes up the arithmetic.
+  # Force it to a finite value
+  r <- range(values)
+  delta <- max(abs(r))
+  if (bound < r[1])
+    bound <- r[1] - delta
+  else if (bound > r[2])
+    bound <- r[2] + delta
+  
   values <- values - bound
   if (!greater)
     values <- -values
@@ -140,7 +149,16 @@ clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
   }
 }
 
-cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE) {
+cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE, rejoin = FALSE) {
+  if (rejoin) {
+    ntriangs <- ncol(mesh$it)
+    oldntriangs <- ntriangs + 1
+    while (ntriangs < oldntriangs) {
+      oldntriangs <- ntriangs
+      mesh <- rejoinMesh3d(mesh)
+      ntriangs <- ncol(mesh$it)
+    }    
+  }
   nold <- ncol(mesh$vb)
   keep <- TRUE
   if (onlyFinite)
@@ -384,13 +402,7 @@ clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
              mesh <- cleanMesh3d(mesh)
              clipped <- clipMesh3d(mesh, fn, bound, greater,
                                    minVertices[id])
-             ntriangs <- ncol(clipped$it)
-             oldntriangs <- ntriangs + 1
-             while (ntriangs < oldntriangs) {
-               oldntriangs <- ntriangs
-               clipped <- cleanMesh3d(rejoinMesh3d(clipped))
-               ntriangs <- ncol(clipped$it)
-             }
+             clipped <- cleanMesh3d(clipped, rejoin = TRUE)
              newid <- shade3d(clipped, override = FALSE)
            }, 
            points =,

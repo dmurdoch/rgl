@@ -5,10 +5,10 @@
 \alias{subsceneList}
 \alias{clearSubsceneList}
 \title{
-Set up multiple figure layouts in rgl.
+Set up multiple figure layouts
 }
 \description{
-The \code{mfrow3d} and \code{layout3d} functions provide functionality in \pkg{rgl}
+The \code{mfrow3d} and \code{layout3d} functions provide functionality in RGL
 similar to \code{\link{par}("mfrow")} and \code{\link{layout}} in classic R graphics.
 }
 \usage{
@@ -65,11 +65,11 @@ If \code{TRUE}, delete the subscenes in the current window.
 }
 \details{
 rgl can maintain a list of subscenes; the \code{mfrow3d} and \code{layout3d} functions create that list.
-When the list is in place, \code{next3d} causes rgl to move to the next scene in the list, or cycle
+When the list is in place, \code{next3d} causes RGL to move to the next scene in the list, or cycle
 back to the first one.
 
 Unlike the classic R graphics versions of these functions, these functions are completely compatible with
-each other.  You can mix them within a single rgl window.
+each other.  You can mix them within a single RGL window.
 
 In the default case where \code{parent} is missing, \code{mfrow3d} and \code{layout3d} will
 call \code{clearSubsceneList()} at the start.  

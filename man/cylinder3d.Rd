@@ -2,7 +2,7 @@
 \alias{cylinder3d}
 \encoding{UTF-8}
 \title{
-Create cylindrical or "tube" plots.
+Create cylindrical or "tube" plots
 }
 \description{
 This function converts a description of a space curve into a \code{\link[=mesh3d]{"mesh3d"}}

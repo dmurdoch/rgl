@@ -3,28 +3,18 @@
 \alias{mesh3d}
 \alias{qmesh3d}
 \alias{tmesh3d}
-\alias{dot3d}
-\alias{dot3d.qmesh3d} % for back compatibility
-\alias{dot3d.mesh3d}
-\alias{wire3d}
-\alias{wire3d.qmesh3d} % for back compatibility
-\alias{wire3d.mesh3d}
-\alias{shade3d}
-\alias{shade3d.qmesh3d} % for back compatibility
-\alias{shade3d.mesh3d}
-\alias{cube3d}
-\alias{oh3d}
-\alias{tetrahedron3d}
-\alias{octahedron3d}
-\alias{icosahedron3d}
-\alias{dodecahedron3d}
-\alias{cuboctahedron3d}
 
-\title{3D Mesh objects}
+\title{Construct 3D mesh objects}
 \description{
-  3D triangle and quadrangle mesh object creation and a collection of sample objects.
+Creates meshes containing points, segments, triangles and quads.
 }
 \usage{
+  mesh3d( x, y = NULL, z = NULL, vertices,
+                    material = NULL,
+                    normals = NULL, texcoords = NULL,
+                    points = NULL, segments = NULL,
+                    triangles = NULL, quads = NULL,
+                    meshColor = c("vertices", "edges", "faces", "legacy"))
   qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, 
          normals = NULL, texcoords = NULL,
          meshColor = c("vertices", "edges", "faces", "legacy"))
@@ -32,109 +22,49 @@
          normals = NULL, texcoords = NULL,
          meshColor = c("vertices", "edges", "faces", "legacy"))
   
-  cube3d(trans = identityMatrix(), ...)  
-  tetrahedron3d(trans = identityMatrix(), ...)  
-  octahedron3d(trans = identityMatrix(), ...)  
-  icosahedron3d(trans = identityMatrix(), ...)
-  dodecahedron3d(trans = identityMatrix(), ...)
-  cuboctahedron3d(trans = identityMatrix(), ...)
-  
-  oh3d(trans = identityMatrix(), ...)    # an 'o' object
-  
-  dot3d(x, ...)   # draw dots at the vertices of an object
-  \method{dot3d}{mesh3d}(x, ...,
-                         front = "points", back = "points")
-  wire3d(x, ...)  # draw a wireframe object
-  \method{wire3d}{mesh3d}(x, ...,
-                          front = "lines", back = "lines")
-  shade3d(x, ...) # draw a shaded object
-  \method{shade3d}{mesh3d}(x, override = TRUE, 
-                           meshColor = c("vertices", "edges", "faces", "legacy"), 
-                           texcoords = NULL, ...,
-                           front = "filled", back = "filled")
 }
 \arguments{
-  \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d}).}
-  \item{vertices}{3- or 4-component vector of coordinates}
-  \item{indices}{4-component vector of vertex indices}
-  \item{homogeneous}{logical indicating if homogeneous (four component) coordinates are used.}
+  \item{x, y, z}{coordinates.  Any reasonable way of defining the
+    coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
+    for details.}
+  \item{vertices}{A 4 row matrix of homogeneous coordinates; takes
+  precedence over \code{x, y, z}.}
   \item{material}{material properties for later rendering}
   \item{normals}{normals at each vertex}
   \item{texcoords}{texture coordinates at each vertex}
-  \item{trans}{transformation to apply to objects; see below for defaults}
-  \item{...}{additional rendering parameters, or for
-  \code{dots3d} and \code{wire3d}, parameters to pass
-  to \code{shade3d}}
-  \item{override}{should the parameters specified here override those stored in the object?}
-  \item{meshColor}{how should colours be interpreted?  See details 
-  below}
-  \item{front, back}{Material properties for rendering.}
-}
+  \item{points}{vector of indices of vertices to draw as points}
+  \item{segments}{2 x n matrix of indices of vertices to draw as
+  segments}
+  \item{triangles}{3 x n matrix of indices of vertices to draw
+  as triangles}
+  \item{quads}{4 x n matrix of indices of vertices to draw as quads}
+  \item{indices}{(obsolete) 3 or 4 x n matrix of vertex indices}
+  \item{homogeneous}{(obsolete) should \code{tmesh3d} and \code{qmesh3d} vertices be assumed to be homogeneous?}
+  \item{meshColor}{how should colours be interpreted?  See details in \code{\link{shade3d}}.}
+  }
 \details{
-  These functions create and work with \code{mesh3d} objects, which consist of a matrix
-  of vertex coordinates together with a matrix of indices indicating which vertex is
-  part of which face.  Such objects may have  triangular faces,
-  planar quadrilateral faces, or both.
+  These functions create \code{mesh3d} objects, which consist of a matrix
+  of vertex coordinates together with a matrices of indices indicating how the vertices should be displayed, and 
+  material properties.
 
-  The sample objects optionally take a matrix transformation \code{trans} as 
-  an argument.  This transformation is applied to all vertices of the default shape.
-  The default is an identity transformation. 
-  
   The \code{"shape3d"} class is a general class for shapes that can be plotted
   by \code{dot3d}, \code{wire3d} or \code{shade3d}.
   
   The \code{"mesh3d"} class is a class of objects that form meshes: the vertices
-  are in member \code{vb}, as a 3 or 4 by \code{n} matrix.  Meshes with triangular
-  faces will contain \code{it}, a \code{3 * n} matrix giving the indices of the 
-  vertices in each face.  Quad meshes will have vertex indices in \code{ib},
-  a \code{4 * n} matrix.  Individual meshes may have both types
-  of faces.
-  
-  The \code{meshColor} argument controls how material colours and textures are interpreted.  This parameter
-was added in \pkg{rgl} version 0.100.1 (0.100.27 for \code{dot3d}, \code{tmesh3d} and \code{qmesh3d}; 0.102.19
-for textures).  Possible values are:
-\describe{
-\item{\code{"vertices"}}{Colours and texture coordinates are applied by vertex, in the order
-they appear in the \code{vb} matrix.}
-\item{\code{"edges"}}{Colours and textures are applied to each edge:  first to the
-3 edges of each triangle in the \code{it} matrix, then the 4
-edges of each quad in the \code{ib} matrix.  This mode
-is only supported if both front and back materials are
-\code{"lines"}.}
-\item{\code{"faces"}}{Colours and textures are applied to each face:  first to the
-triangles in the \code{it} matrix, then to the quads in the \code{ib}
-matrix.}
-\item{\code{"legacy"}}{Colours and textures are applied in the same way
-as in \pkg{rgl} versions earlier than 0.100.1.}
-}
-Unique partial matches of these values will be recognized.
+  are in member \code{vb}, as a 4 by \code{n} matrix using
+  homogeneous coordinates.  Indices of these vertices are
+  contained in optional components \code{ip} for points,
+  \code{is} for line segments, \code{it} for triangles, and
+  \code{ib} for quads.
+  Individual meshes may have any combination of these.
 
-If colours are specified but \code{meshColor} is not
-and \code{options(rgl.meshColorWarning = TRUE)},
-a warning will be given that their
-interpretation may have changed.  In versions 0.100.1 to 0.100.26
-of \pkg{rgl}, the default
-was to give the warning; now the default is for no warning.
-
-Note that since version 0.102.10, \code{meshColor = 
-"edges"} is only allowed when drawing lines (the
-\code{wire3d} default), and it may draw
-edges more than once.  In general, if any rendering
-draws twice at the same location, which copy is visible 
-depends on the order of drawing and the
-\code{\link{material3d}("depth_test")}
-setting.  
+The functions \code{tmesh3d} and \code{qmesh3d} are included
+for back-compatibility; they produce meshes of triangles and
+quads respectively.
 }
 \value{
-  \code{qmesh3d}, \code{cube3d}, \code{oh3d}, \code{tmesh3d},
-  \code{tetrahedron3d}, \code{octahedron3d}, \code{icosahedron3d} and
-  \code{dodecahedron3d} return objects of class \code{c("mesh3d",
-  "shape3d")}.  The first three of these are quad meshes, the rest are
-  triangle meshes.
-  
-  \code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
-  of drawing an object into the scene; they return an object ID (or vector of IDs, for some 
-  classes) invisibly.
+Objects of class \code{c("mesh3d",
+  "shape3d")}. 
   
   See \code{\link{rgl.primitive}} for a discussion of texture coordinates.
 }
@@ -143,38 +73,18 @@ setting.
   # generate a quad mesh object
 
   vertices <- c( 
-     -1.0, -1.0, 0, 1.0,
-      1.0, -1.0, 0, 1.0,
-      1.0,  1.0, 0, 1.0,
-     -1.0,  1.0, 0, 1.0
+     -1.0, -1.0, 0,
+      1.0, -1.0, 0,
+      1.0,  1.0, 0,
+     -1.0,  1.0, 0
   )
   indices <- c( 1, 2, 3, 4 )
   
   open3d()  
-  wire3d( qmesh3d(vertices, indices) )
+  wire3d( mesh3d(vertices = vertices, quads = indices) )
   
-  # render 4 meshes vertically in the current view
-
-  open3d()  
-  bg3d("gray")
-  l0 <- oh3d(tran = par3d("userMatrix"), color = "green" )
-  shade3d( translate3d( l0, -6, 0, 0 ))
-  l1 <- subdivision3d( l0 )
-  shade3d( translate3d( l1 , -2, 0, 0 ), color = "red", override = FALSE )
-  l2 <- subdivision3d( l1 )
-  shade3d( translate3d( l2 , 2, 0, 0 ), color = "red", override = TRUE )
-  l3 <- subdivision3d( l2 )
-  shade3d( translate3d( l3 , 6, 0, 0 ), color = "red" )
-  
-  # render all of the Platonic solids
-  open3d()
-  shade3d( translate3d( tetrahedron3d(col = "red"), 0, 0, 0) )
-  shade3d( translate3d( cube3d(col = "green"), 3, 0, 0) )
-  shade3d( translate3d( octahedron3d(col = "blue"), 6, 0, 0) )
-  shade3d( translate3d( dodecahedron3d(col = "cyan"), 9, 0, 0) )
-  shade3d( translate3d( icosahedron3d(col = "magenta"), 12, 0, 0) )
 }
 \seealso{
-  \code{\link{r3d}}, \code{\link{par3d}}, \code{\link{shapelist3d}} for multiple shapes
+  \code{\link{shade3d}}, \code{\link{shapelist3d}} for multiple shapes
 }
 \keyword{dynamic}

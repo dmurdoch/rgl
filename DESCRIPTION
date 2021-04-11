@@ -1,12 +1,32 @@
 Package: rgl
-Version: 0.105.12
+Version: 0.106.3
 Title: 3D Visualization Using OpenGL
-Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch.duncan@gmail.com>, and others (see README)
-Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
+Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
+                     email = "murdoch.duncan@gmail.com"),
+              person("Daniel", "Adler", role = "aut",
+                     email = "dadler@dyncall.org"),
+              person("Oleg", "Nenadic", role = "ctb"),
+              person("Simon", "Urbanek", role = "ctb"),
+              person("Ming", "Chen", role = "ctb"),
+              person("Albrecht", "Gebhardt", role = "ctb"),
+              person("Ben", "Bolker", role = "ctb"),
+              person("Gabor", "Csardi", role = "ctb"),
+              person("Adam", "Strzelecki", role = "ctb"),
+              person("Alexander", "Senger", role = "ctb"),
+              person("The R Core Team", role = c("ctb", "cph")),
+              person("Dirk","Eddelbuettel", role = "ctb"),
+              person("The authors of Shiny", role = "cph"),
+              person("The authors of knitr", role = "cph"),
+              person("Jeroen", "Ooms", role = "ctb"),
+              person("Yohann", "Demont", role = "ctb"),
+              person("Joshua", "Ulrich", role = "ctb"),
+              person("Xavier", "Fernandez i Marin", role = "ctb"),
+              person("George", "Helffrich", role = "ctb"),
+              person("Ivan", "Krylov", role = "ctb"))
 Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
-          js (>= 1.2), akima, webshot2
+          js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20), shiny,
          magrittr, crosstalk, manipulateWidget (>= 0.9.0)
@@ -16,10 +36,13 @@ Description: Provides medium to high level functions for 3D interactive graphics
     may be on screen using OpenGL, or to various standard 3D file formats including
     WebGL, PLY, OBJ, STL as well as 2D image formats, including PNG, Postscript, SVG, PGF.
 License: GPL
-URL: https://github.com/dmurdoch/rgl
+URL: https://github.com/dmurdoch/rgl, 
+     https://dmurdoch.github.io/rgl/dev/
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
     pandoc (>=1.14, needed for vignettes)
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
+Biarch: true
 Additional_repositories:  https://dmurdoch.github.io/drat
+Remotes: dmurdoch/htmlwidgets@rglpatch, r-lib/downlit, r-lib/pkgdown

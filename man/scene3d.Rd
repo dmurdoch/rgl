@@ -7,7 +7,7 @@
 \alias{print.rglscene}
 \alias{print.rglobject}
 \title{
-Saves the current scene to a variable, and displays such variables.
+Saves the current scene to a variable, and displays such variables
 }
 \description{
 This function saves a large part of the RGL state associated with the current

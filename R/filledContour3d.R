@@ -29,10 +29,12 @@ filledContour3d.mesh3d <- function(obj, fn = "z",
     obj <- subdivision3d(obj, deform = FALSE, normalize = TRUE)
     nverts <- ncol(obj$vb)
   }
+  
   if (is.null(fn))
     fn <- obj$values
   if (is.null(fn))
     stop("'fn' can only be NULL if 'obj' contains values.")
+  
   verts <- asEuclidean(t(obj$vb))
   if (is.numeric(fn))
     values <- fn
@@ -40,16 +42,27 @@ filledContour3d.mesh3d <- function(obj, fn = "z",
     fn <- .getVertexFn(fn, parent.frame())
     values <- fn(verts)
   }
+  if (length(levels) < 2)
+    stop("Must have at least 2 levels.")
+  
+  reverse <- levels[1] > levels[2]
+  
+  if (any((levels[-length(levels)] > levels[-1]) != reverse))
+    stop("Levels must be monotone increasing or decreasing")
+  
   if (is.null(obj$material))
     obj$material <- list()
   obj$material$color <- NA
   obj$values <- values
   result <- list()
-  for (i in seq_along(col)) {
-    obj <- clipMesh3d(obj, NULL, bound = levels[i], keepValues = TRUE)
-    strip <- clipMesh3d(obj, NULL, bound = levels[i+1], greater = FALSE, keepValues = keepValues && !plot)
+  ivals <- seq_along(col)
+  if (reverse) ivals <- rev(ivals)
+  for (i in ivals) {
+    r <- range(levels[c(i, i+1)])
+    obj <- clipMesh3d(obj, NULL, bound = r[1], keepValues = TRUE)
+    strip <- clipMesh3d(obj, NULL, bound = r[2], greater = FALSE, keepValues = keepValues && !plot)
     strip$material$color <- col[i]
-    result[[i]] <- strip
+    result[[i]] <- cleanMesh3d(strip, rejoin = TRUE)
   }
   result <- do.call(merge, result)
   if (plot)

@@ -14,10 +14,42 @@ navigation facility (mouse + wheel support) and an R programming
 interface. WebGL, on the other hand, is rendered in a web browser; rgl
 produces the input file, and the browser shows the images.
 
+## WEBSITE
+
+An experimental `pkgdown` website is here:
+
+<https://dmurdoch.github.io/rgl/dev/>
+
+See [this
+vignette](https://dmurdoch.github.io/rgl/dev/articles/pkgdown.html) for
+details on producing your own `pkgdown` website that includes `rgl`
+graphics.
+
+The currently active development site is here:
+
+<https://github.com/dmurdoch/rgl>
+
+## INSTALLATION
+
+Most users will want to install the latest CRAN release. For Windows,
+macOS and some Linux platforms, installation can be easy, as CRAN
+distributes binary versions:
+
+    # Install latest release from CRAN
+    install.packages("rgl")
+
+To install the latest development version from Github, you’ll need to do
+a source install. Those aren’t easy! Try
+
+    # Install development version from Github
+    remotes::install_github("dmurdoch/rgl")
+
+If that fails, read the instructions below.
+
 ## LICENSE
 
-The software is released under the GNU Public License. See “COPYING” for
-details.
+The software is released under the GNU Public License. See
+[COPYING](./COPYING) for details.
 
 ## FEATURES
 
@@ -51,92 +83,82 @@ versions for pre-R-4.0.0)
 
 ## REQUIREMENTS
 
-For OpenGL display:
+**For OpenGL display:**
 
-Windowing System (unix/x11 or win32) OpenGL Library OpenGL Utility
-Library (GLU)
+Windowing System (unix/x11 or Windows)  
+OpenGL Library  
+OpenGL Utility Library (GLU)
 
-For WebGL display:
+**For WebGL display:**
 
-Browser with WebGL enabled.
+A browser with WebGL enabled. See <https://get.webgl.org>.
 
-## Installation on Debian:
+## Installing OpenGL support
 
-To install OpenGL support:
-
+**Debian:**  
 aptitude install libgl1-mesa-dev libglu1-mesa-dev
 
-## OPTIONS
-
-libpng library version 1.2.9 or newer (pixmap import/export support)
-freetype library (optional on Unix for resizable anti-aliased fonts),
-required on Windows
-
-## BUILDING/INSTALLING FROM SOURCE PACKAGE
-
-The R build tool is the primary tool to build the RGL package.
-
-## BUILDING ON MICROSOFT WINDOWS
-
-Install Rtools40 or newer.
-
-An Internet connection will be needed, as FreeType is automatically
-downloaded from <https://github.com/rwinlib>.
-
-## BUILDING ON UNIX-STYLE OS (macOS, Linux, FreeBSD, … )
-
-The build is controlled by an autoconf configure script. You provide the
-options through the R CMD build/INSTALL command
-
-e.g.  $ R CMD INSTALL –configure-args=“&lt;configure args…&gt;” rgl
-
-COMMON UNIX-STYLE OS OPTIONS —————————-
-
-–with-gl-includes=<path> GL C header files include path
-
-–with-gl-libraries=<path> GL library linkage path
-
-–with-gl-prefix=<libprefix> GL library prefix (e.g. Mesa)
-
-–disable-libpng disable libpng support
-
-–with-libpng-prefix=<install location> force LibPNG library install
-prefix (e.g. /usr/local)
-
-–disable-libpng-config explicitly disable libpng-config
-
-–disable-libpng-dynamic use static libpng library
-
-–disable-opengl disable all OpenGL displays; WebGL is still available
-
-You may find that your distro doesn’t have all necessary development
-libraries installed: read the error messages for hints! This line has
-been reported to be sufficient on FC 5 or 6:
-
+**Fedora:**  
 yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
 
-X11 WINDOWING SYSTEM OPTIONS —————————-
+**macOS:**  
+Install XQuartz.  
+`rgl` should work with either XQuartz 2.7.11 or 2.8.0, but it will
+probably need rebuilding if the XQuartz version changes. XQuartz
+normally needs re-installation whenever the macOS version changes.
 
-The X11 windowing system is needed for OpenGL display in macOS and
-Unix-alikes.
+**Windows:**  
+Windows normally includes OpenGL support, but to get the appropriate
+include files etc., you will need the appropriate version of
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) matched to your
+R version.
 
-–x-includes=<path> X11 C header files include path
+## Options
 
-–x-libraries=<path> X11 library linkage path
+The **libpng** library version 1.2.9 or newer is needed for pixmap
+import/export support.
 
-BUILDING WITHOUT OPENGL ———————–
+The **freetype** library is needed for resizable anti-aliased fonts. On
+Windows, it will be downloaded from <https://github.com/rwinlib> during
+the install.
+
+## BUILDING/INSTALLING
+
+Binary builds of `rgl` are available for some platforms on CRAN.
+
+For source builds, install the prerequisites as described above,
+download the tarball and at the command line run
+
+    R CMD INSTALL rgl_0.106.0.tar.gz
+
+(with the appropriate version of the tarball). The build uses an
+`autoconf` configure script; to see the options, expand the tarball and
+run `./configure --help`.
+
+Alternatively, in R run
+
+    install.packages("rgl")
+
+to install from CRAN, or
+
+    remotes::install_github("dmurdoch/rgl")
+
+to install the development version from Github.
+
+## BUILDING WITHOUT OPENGL
 
 As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-R CMD INSTALL –configure-args=“–disable-opengl” rgl\_0.104.1.tar.gz
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.106.0.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
-## DEMOS: LOADING AND RUNNING DEMONSTRATIONS
+## DOCUMENTATION and DEMOS:
 
     library(rgl)
+    browseVignettes("rgl")
     demo(rgl)
 
 ## CREDITS
@@ -154,10 +176,10 @@ Alexander Senger <senger@physik.hu-berlin.de>
 The R Core Team for some code from R.  
 Dirk Eddelbuettel <edd@debian.org>  
 The authors of Shiny for their private RNG code.  
-Jeroen Ooms for Rtools40 and FreeType help.  
+The authors of knitr for their graphics inclusion code. Jeroen Ooms for
+Rtools40 and FreeType help.  
 Yohann Demont for Shiny code, suggestions, and testing.  
-Joshua Ulrich for a lot of help with the Github migration.
-
-## WEBSITE
-
-<https://github.com/dmurdoch/rgl>
+Joshua Ulrich for a lot of help with the Github migration.  
+Xavier Fernandez i Marin for help debugging the build.  
+George Helffrich for draping code.  
+Ivan Krylov for window\_group code in X11.

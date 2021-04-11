@@ -14,10 +14,20 @@
 ##
   
 .onLoad <- function(lib, pkg) {
+
+  in_pkgload_loadall <- function() {
+    caller <- deparse(sys.call(-4))
+    isNamespaceLoaded("pkgload") && grepl("load_all", caller)
+  }
+  
   getDir <- function(useNULL) {
-    dir <- if (useNULL) "useNULL" else "libs"
-    if (nchar(.Platform$r_arch))
-      dir <- paste0(dir, "/", .Platform$r_arch)
+    if (in_pkgload_loadall()) {
+      dir <- if (useNULL) "inst/useNULL" else "src"
+    } else {
+      dir <- if (useNULL) "useNULL" else "libs"
+      if (nchar(.Platform$r_arch))
+        dir <- paste0(dir, "/", .Platform$r_arch)
+    }
     dir
   }
     
@@ -77,10 +87,31 @@
              sans  = rep(system.file("fonts/FreeSans.ttf", package="rgl"), 4),
              mono  = rep(system.file("fonts/FreeMono.ttf", package="rgl"), 4),
              symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4))
+    if (requireNamespace("extrafont", quietly = TRUE))
+      suppressWarnings(
+        rglExtrafonts(sans = c("rglHelvetica", "Arial"), 
+                      serif = c("Times", "Times New Roman"), 
+                      mono = c("Courier", "Courier New")))
   }
   
   .rglEnv$subsceneList <- NULL
-	 
+
+  # Workaround for incompatibility with quartz device
+  # By default only run this if we'll be using the X11 display on macOS
+  # and we're not on R.app.  options("rgl.startQuartz") can 
+  # override this.
+  # Then we need to start quartz() before starting rgl.
+  # See https://github.com/dmurdoch/rgl/issues/27
+  if (getOption("rgl.startQuartz", 
+         !onlyNULL && 
+         unixos == "Darwin" && 
+         .Platform$GUI != "AQUA") &&
+         interactive() && 
+         exists("quartz", getNamespace("grDevices"))) {
+    grDevices::quartz()
+    dev.off()
+  }
+  
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
@@ -92,9 +123,17 @@
   if (!rgl.useNULL()) 
     setGraphicsDelay(unixos = unixos)
   
-  registerInputHandler("shinyPar3d", convertShinyPar3d)
-  registerInputHandler("shinyMouse3d", convertShinyMouse3d)
-  
+  registerInputHandler("shinyPar3d", convertShinyPar3d, force = TRUE)
+  registerInputHandler("shinyMouse3d", convertShinyMouse3d, force = TRUE)
+
+  # handle pkgdown_print and fig_settings before they are in the CRAN version
+
+  if (requireNamespace("pkgdown", quietly = TRUE)) {
+    if ("pkgdown_print" %in% getNamespaceExports("pkgdown"))
+      pkgdown_print <<- getExportedValue("pkgdown", "pkgdown_print")
+    if ("fig_settings" %in% getNamespaceExports("pkgdown"))
+      pkgdown_fig_settings <<- getExportedValue("pkgdown", "fig_settings")
+  }         
 }
 
 # Do we need a delay opening graphics?    
@@ -156,8 +195,9 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
 ##
 
 .onUnload <- function(libpath) {
+  removeInputHandler("shinyPar3d")
+  removeInputHandler("shinyMouse3d")
   # shutdown
-  
   .C( rgl_quit, success=FALSE )
   
 }

@@ -1,21 +1,23 @@
 \name{snapshot3d}
 \alias{rgl.snapshot}
 \alias{snapshot3d}
-\title{export screenshot}
+\title{Export screenshot}
 \description{
   Saves the screenshot to a file.
 }
 \usage{
 rgl.snapshot( filename, fmt = "png", top = TRUE )
 snapshot3d( filename = tempfile(fileext = ".png"), 
+            fmt = "png", top = TRUE,
             ..., scene, width = NULL, height = NULL,
             webshot = TRUE)
 }
 \arguments{
-  \item{filename}{path to file for to save.}
+  \item{filename}{path to file to save.}
   \item{fmt}{image export format, currently supported: png.  Ignored if \code{webshot = TRUE}. }
-  \item{top}{whether to call \code{\link{rgl.bringtotop}}}
-  \item{...}{arguments to pass to \code{rgl.snapshot} or \code{webshot2::webshot} }
+  \item{top}{whether to call \code{\link{rgl.bringtotop}}.
+Ignored if \code{webshot = TRUE}.}
+  \item{...}{arguments to pass to \code{webshot2::webshot} }
   \item{scene}{an optional result of \code{\link{scene3d}} 
     or \code{\link{rglwidget}} to plot}
   \item{width, height}{optional specifications of output
@@ -25,7 +27,7 @@ snapshot3d( filename = tempfile(fileext = ".png"),
 }
 \details{
 \code{rgl.snapshot()} is a low-level function
-that copies the current \pkg{rgl} window from the screen.  Users
+that copies the current RGL window from the screen.  Users
 should use \code{snapshot3d()} instead; it is more flexible,
 and (if \pkg{webshot2} is installed) can take images even if
 no window is showing, and they can be larger than the physical
@@ -49,7 +51,7 @@ install it, use \code{remotes::install_github("rstudio/webshot2")}
 \code{rgl.snapshot} works by taking an image from the displayed
 window on-screen.
 On some systems, the snapshot
-will include content from other windows if they cover the active rgl
+will include content from other windows if they cover the active RGL
 window.  Setting \code{top = TRUE} (the default) will use 
 \code{\link{rgl.bringtotop}} before the snapshot
 to avoid this.  
@@ -68,7 +70,7 @@ using OpenGL.  Often the \code{webshot = TRUE} displays have better quality.
 \seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
 
 \examples{
-if (interactive()) {
+if (interactive() && !in_pkgdown_example()) {
   saveopts <- options(rgl.useNULL = TRUE)
   plot3d(matrix(rnorm(300), ncol = 3, dimnames = list(NULL, c("x", "y", "z"))), 
          col = "red")

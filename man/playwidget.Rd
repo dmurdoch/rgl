@@ -1,7 +1,7 @@
 \name{playwidget}
 \alias{playwidget}
 \title{
-Add a widget to play animations.
+Add a widget to play animations
 }
 \description{
 This is a widget that can be put in a web page to allow
@@ -24,7 +24,7 @@ playwidget(sceneId, controls,
 }
 \arguments{
   \item{sceneId}{
-The HTML id of the rgl scene being controlled,
+The HTML id of the RGL scene being controlled,
 or an object.  See the Details below.
 }
   \item{controls}{
@@ -173,7 +173,7 @@ playwidget("theplot", control, start = -5, stop = 5,
 widget <- rglwidget(height = 300, width = 300) \%>\%
 playwidget(control, start = -5, stop = 5,
            rate = 3, components = c("Play", "Slider"))
-if (interactive())
+if (interactive() || in_pkgdown_example())
   widget
 
 options(saveopts)

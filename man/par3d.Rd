@@ -23,10 +23,10 @@
 \concept{windowRect}
 \concept{zoom}
 
-\title{Set or Query RGL Parameters}
+\title{Set or query RGL parameters}
 
 \description{
-  \code{par3d} can be used to set or query graphical parameters in rgl.
+  \code{par3d} can be used to set or query graphical parameters in RGL.
   Parameters can be set by specifying them as arguments to \code{par3d} in
   \code{tag = value} form, or by passing them as a list of tagged
   values.
@@ -43,7 +43,7 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
   \item{no.readonly}{logical; if \code{TRUE} and there are no other
     arguments, only those parameters which can be set by a
     subsequent \code{par3d()} call are returned.}
-  \item{dev}{integer; the rgl device.}
+  \item{dev}{integer; the RGL device.}
   \item{subscene}{integer; the subscene.}
 }
 
@@ -91,9 +91,9 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
     OpenGL driver may not support the requested number, in which case
     \code{par3d("antialias")} will report what was actually set. Applies to the whole device.}    
     \item{\code{cex}}{real.  The default size for text.}
-    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.
+    \item{\code{family}}{character.  The default device independent family name; see \code{\link{rgl.texts}}.
     Applies to the whole device.}
-    \item{\code{font}}{integer.  The default font number (from 1 to 5; see \code{\link{text3d}}).
+    \item{\code{font}}{integer.  The default font number (from 1 to 4; see \code{\link{rgl.texts}}).
     Applies to the whole device.}
     \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?
     Applies to the whole device.}
@@ -190,10 +190,14 @@ As of version 0.100.32, when changing the \code{"windowRect"} parameter, the
 \code{"viewport"} for the root (or specified) subscene
 is changed immediately.  This fixes a bug where in earlier
 versions it would only be changed when the window was redrawn, potentially after another command making use of the value.
+
+Default values are not described here, as several of them
+are changed by the \code{\link{r3dDefaults}} variable when
+the window is opened by \code{\link{open3d}}.
 }
 
 \section{Rendering}{
-The parameters returned by \code{par3d} are sufficient to determine where rgl would render
+The parameters returned by \code{par3d} are sufficient to determine where RGL would render
 a point on the screen.  Given a column vector \code{(x, y, z)} in a subscene \code{s}, 
 it performs the equivalent of 
 the following operations:

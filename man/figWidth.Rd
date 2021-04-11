@@ -2,7 +2,7 @@
 \alias{figWidth}
 \alias{figHeight}
 \title{
-Get R Markdown figure dimensions in pixels.
+Get R Markdown figure dimensions in pixels
 }
 \description{
 In an R Markdown document, figure dimensions are normally

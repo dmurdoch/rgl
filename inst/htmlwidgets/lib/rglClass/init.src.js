@@ -4,7 +4,7 @@
      */
     rglwidgetClass.prototype.initGL0 = function() {
       if (!window.WebGLRenderingContext){
-        alert("Your browser does not support WebGL. See http://get.webgl.org");
+        this.alertOnce("Your browser does not support WebGL. See http://get.webgl.org");
         return;
       }
     };
@@ -14,7 +14,7 @@
      * @returns { Object } the WebGL context
      */
     rglwidgetClass.prototype.initGL = function() {
-      var self = this;
+      var self = this, success = false;
       if (this.gl) {
       	if (!this.drawing && this.gl.isContextLost())
           this.restartCanvas();
@@ -28,6 +28,9 @@
         this.onContextLost, false);
       this.gl = this.canvas.getContext("webgl", this.webGLoptions) ||
                this.canvas.getContext("experimental-webgl", this.webGLoptions);
+      success = !!(this.gl && this.gl instanceof WebGLRenderingContext);
+      if (!success)
+        this.alertOnce("Your browser does not support WebGL. See http://get.webgl.org"); 
       this.index_uint = this.gl.getExtension("OES_element_index_uint");
       var save = this.startDrawing();
       Object.keys(this.scene.objects).forEach(function(key){
@@ -49,39 +52,67 @@
     /**
      * Initialize the sphere object
      */
-    rglwidgetClass.prototype.initSphere = function() {
-      var verts = this.scene.sphereVerts,
-          reuse = verts.reuse, result;
-      if (typeof reuse !== "undefined") {
-        var prev = document.getElementById(reuse).rglinstance.sphere;
-        result = {values: prev.values, 
-                  vOffsets: prev.vOffsets, 
-                  it: prev.it,
-                  centers: prev.centers,
-                  vertexCount: prev.vertexCount,
-                  f: prev.f,
-                  indices: prev.indices};
-      } else {
-        var n = verts.it[0].length, i, j, k,
-            centers = new Array(n);
-        for (i = 0; i < n; i++) { // faces
-          centers[i] = [0,0,0];
-          for (j = 0; j < 3; j++) // x, y, z
-            for (k = 0; k < 3; k++) // vertices
-              centers[i][j] += verts.vb[j][verts.it[k][i]]/3;
-        }
-        result = {values: new Float32Array(this.flatten(this.cbind(this.transpose(verts.vb),
-                    this.transpose(verts.texcoords)))),
-                  it: new Uint16Array(this.flatten(this.transpose(verts.it))),
-                  vOffsets: {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
-                    tofs:3, nextofs:-1, pointofs:-1, stride:5},
-                  centers: centers
-                };
-          // Add default indices
-        result.vertexCount = verts.vb[0].length;
-        result.f = [];
-        result.indices = {};
+    rglwidgetClass.prototype.initSphere = function(sections, segments) {
+      var v = [], phi = [], theta = [], it = [], centers = [],
+           i, j, k, ind, mod1, pole, result = {};
+       
+      for (i = 0; i < sections - 1; i++) {
+        phi.push((i + 1)/sections - 0.5);
       }
+
+      for (j = 0; j < segments; j++) {
+        theta.push(2*j/segments);
+        for (i = 0; i < sections - 1; i++) {
+          /* These are [x,y,z,s,t]: */
+          v.push([Math.sin(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]),
+                  Math.sin(Math.PI*phi[i]),
+                  Math.cos(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]),                               
+                  theta[j]/2,
+                  phi[i] + 0.5]);
+        }
+      }
+      pole = v.length;
+      v.push([0, -1, 0, 0, 0]); 
+      v.push([0,  1, 0, 0, 1]);
+      result.values = new Float32Array(this.flatten(v));
+      result.vertexCount = v.length;
+      
+      mod1 = segments*(sections - 1);
+      for (j = 0; j < segments; j++) {
+        for (i = 0; i < sections - 2; i++) {
+          ind = i + (sections - 1)*j;
+          it.push([ind % mod1, 
+                   (ind + sections - 1) % mod1,
+                   (ind + sections) % mod1]);
+          it.push([ind % mod1, 
+                   (ind + sections) % mod1,
+                   (ind + 1) % mod1]);
+        }
+        it.push([pole, 
+                 ((j + 1)*(sections - 1)) % mod1,
+                 ((j + 1)*(sections - 1) - sections + 1) % mod1]);
+        it.push([pole + 1, 
+                 ((j + 1)*(sections - 1) - 1) % mod1,
+                 ((j + 1)*(sections - 1) + sections - 2) % mod1]);
+      }
+      result.it = new Uint16Array(this.flatten(it));
+      
+      for (i = 0; i < it.length; i++) {
+        centers.push([0,0,0]);
+        for (j = 0; j < 3; j++) { // x,y,z
+          for (k = 0; k < 3; k++) {// vertices
+            centers[i][j] += v[it[i][k]][j]/3;
+          }
+        }
+      }
+      result.centers = centers;
+      
+      result.vOffsets = {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
+                         tofs:3, nextofs:-1, pointofs:-1, stride:5};
+
+      result.f = [];
+      result.indices = {};
+
       result.colorCount = 1;
       result.type = "sphere";
       this.sphere = result;
@@ -231,7 +262,7 @@
           fat_lines = this.isSet(flags, this.f_fat_lines),
           has_texture = this.isSet(flags, this.f_has_texture),
           fixed_quads = this.isSet(flags, this.f_fixed_quads),
-          is_transparent = obj.is_transparent,
+          is_transparent = this.isSet(flags, this.f_is_transparent),
           depth_sort = this.isSet(flags, this.f_depth_sort),
           sprites_3d = this.isSet(flags, this.f_sprites_3d),
           fixed_size = this.isSet(flags, this.f_fixed_size),
@@ -252,12 +283,13 @@
     obj.initialized = true;
 
     obj.someHidden = false; // used in selection
+    obj.is_transparent = is_transparent;
     
     if (type === "bboxdeco" || type === "subscene")
       return;
       
     if (type === "spheres" && typeof this.sphere === "undefined")
-      this.initSphere();
+      this.initSphere(16, 16);
 
     if (type === "light") {
       obj.ambient = new Float32Array(obj.colors[0].slice(0,3));
@@ -762,7 +794,7 @@
       for (i = 0; i < f.length; i++)
         alias[i] = [];
       for (i = 0; i < f.length - 1; i++) {
-      	if (type !== "linestrip" && i % 2 !== 1)
+      	if (type !== "linestrip" && i % 2 === 1)
       	  continue;
       	k = ++last;
       	vnew[k] = vnew[f[i]].slice();
@@ -967,12 +999,6 @@
       this.restartCanvas();
       var objs = this.scene.objects,
           self = this;
-      Object.keys(objs).forEach(function(key){
-        var id = parseInt(key, 10),
-            obj = self.getObj(id);
-        if (typeof obj.reuse !== "undefined")
-          self.copyObj(id, obj.reuse);
-      });
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });

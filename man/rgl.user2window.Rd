@@ -2,7 +2,7 @@
 \alias{rgl.user2window}
 \alias{rgl.window2user}
 \alias{rgl.projection}
-\title{ Convert between rgl user and window coordinates }
+\title{ Convert between RGL user and window coordinates }
 \description{
 This function converts from 3-dimensional user coordinates
 to 3-dimensional window coordinates.
@@ -16,15 +16,15 @@ rgl.projection(dev = cur3d(), subscene = currentSubscene3d(dev))
   \item{x, y, z}{Input coordinates.  Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
-  \item{projection}{The rgl projection to use }
-  \item{dev, subscene}{The rgl device and subscene to work with }
+  \item{projection}{The RGL projection to use }
+  \item{dev, subscene}{The RGL device and subscene to work with }
 }
 \details{
 These functions convert between user coordinates and window coordinates.
 
 Window coordinates run from 0 to 1 in X, Y, and Z.  X runs from 0 on the
 left to 1 on the right; Y runs from 0 at the bottom to 1 at the top;
-Z runs from 0 foremost to 1 in the background.  \code{rgl} does not currently
+Z runs from 0 foremost to 1 in the background.  RGL does not currently
 display vertices plotted outside of this range, but in normal circumstances will automatically resize the
 display to show them.  In the example below this has been suppressed.
 

@@ -2,10 +2,10 @@
 \alias{ageSetter}
 \title{
 Set WebGL scene properties based on the age of components
-of objects.
+of objects
 }
 \description{
-Many \pkg{rgl} shapes contain lists of vertices with various
+Many RGL shapes contain lists of vertices with various
 attributes (available via \code{\link{rgl.attrib}}).  This function
 modifies the data for those attributes in a WebGL scene.
 }

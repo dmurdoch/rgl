@@ -1,24 +1,26 @@
 export(.check3d, 
-        abclines3d, addNormals, addToSubscene3d, arc3d,
-        arrow3d, as.mesh3d, as.triangles3d, asRow,
-        ageSetter, asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
-        bbox3d, bg3d, bgplot3d, 
+  abclines3d, addNormals, addToSubscene3d, arc3d,
+  arrow3d, as.mesh3d, as.triangles3d, asRow,
+  ageSetter, asEuclidean, asEuclidean2, asHomogeneous, asHomogeneous2,
+  aspect3d, axes3d, axis3d, box3d,
+  bbox3d, bg3d, bgplot3d, 
 	clear3d, clearSubsceneList, clipplanes3d, clipplaneSlider, 
-	      clipMesh3d, clipObj3d, close3d, contourLines3d,
-	      cube3d, cuboctahedron3d, cur3d, 
-        currentSubscene3d, cylinder3d,
-        decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, ellipse3d, extrude3d,
-        figWidth, figHeight, filledContour3d,
+	clipMesh3d, clipObj3d, close3d, contourLines3d,
+	cube3d, cuboctahedron3d, cur3d, 
+  currentSubscene3d, cylinder3d,
+  decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, drape3d, ellipse3d, extrude3d,
+	facing3d, figWidth, figHeight, filledContour3d,
 	gc3d, getr3dDefaults, getWidgetId, GramSchmidt, grid3d, 
 	highlevel, hook_rgl, hook_webgl,
 	icosahedron3d, identify3d, identityMatrix, ids3d,
+	in_pkgdown_example,
 	layout3d, legend3d, light3d, lines3d, lowlevel, makeDependency, material3d, 
-  matrixSetter, mergeVertices, mfrow3d, movie3d, mtext3d, 
+  matrixSetter, mergeVertices, mesh3d, mfrow3d, movie3d, mtext3d, 
 	newSubscene3d, next3d, normalize.mesh3d, observer3d, octahedron3d, oh3d, open3d, 
 	par3d, par3dinterp, par3dinterpControl, par3dinterpSetter, 
-        particles3d, pch3d, persp3d, planes3d, 
-        play3d, plot3d, plotmath3d, points3d, 
-	polygon3d, pop3d, propertySetter, propertySlider,
+  particles3d, pch3d, persp3d, planes3d, 
+  play3d, plot3d, plotmath3d, points3d, 
+	polygon3d, pop3d, projectDown, propertySetter, propertySlider,
 	qmesh3d, quads3d, readOBJ, readSTL, rgl.abclines, rgl.bbox, rgl.bg, rgl.bringtotop, rgl.clear,
 	rgl.getMouseCallbacks, rgl.getWheelCallback,
 	rgl.close, rgl.cur, rgl.ids, rgl.init, rgl.light, rgl.lines, rgl.linestrips,
@@ -27,13 +29,13 @@ export(.check3d,
 	rgl.select, rgl.select3d, rgl.set, rgl.snapshot, rgl.spheres, rgl.sprites,
 	rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
 	rgl.attrib, rgl.attrib.count, rgl.attrib.info, rgl.dev.list, rgl.useNULL,
-	rgl.viewpoint, rgl.window2user, 
+	rgl.viewpoint, rgl.window2user, rglExtrafonts,
 	rglFonts, rglId, rglMouse, rglShared, rglToLattice, rglToBase,
   r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, scene3d, segments3d, 
 	select3d, selectionFunction3d, selectpoints3d,
 	rgl.setMouseCallbacks, rgl.setWheelCallback, set3d, 
-	setGraphicsDelay, setupKnitr, setUserShaders, shade3d, 
+	setGraphicsDelay, setupKnitr, setUserShaders, shade3d, shadow3d,
 	shapelist3d, shinyGetPar3d, shinySetPar3d, shinyResetBrush, 
 	show2d, snapshot3d, 
 	spheres3d, spin3d, sprites3d, subdivision3d, 
@@ -45,7 +47,7 @@ export(.check3d,
 	toggleButton, toggleWidget, triangulate, 
 	tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
 	turn3d, useSubscene3d, vertexSetter, view3d, wire3d, 
-        writeASY, writeOBJ, writePLY, writeSTL, writeWebGL)
+  writeASY, writeOBJ, writePLY, writeSTL, writeWebGL)
 
  S3method(dot3d, shapelist3d)
  S3method(wire3d, shapelist3d)
@@ -129,6 +131,9 @@ export(.check3d,
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)
  
+ S3method(drape3d, default)
+ S3method(drape3d, mesh3d)
+
  S3method(contourLines3d, rglId)
  S3method(contourLines3d, mesh3d)
  S3method(filledContour3d, rglId)
@@ -140,8 +145,8 @@ export(.check3d,
  
  importFrom(graphics, legend, par, plot, plot.new, polygon,
  	    strwidth, strheight)
- importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.off, png, 
- 	    postscript, rgb, xy.coords, xyz.coords)
+ importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.new, 
+ 			dev.off, png, postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)
  importFrom(utils, capture.output, count.fields, file_test, 
@@ -164,8 +169,8 @@ importFrom(htmltools, css, HTML, htmlDependency, img,
 importFrom(jsonlite, toJSON, base64_dec)
 importFrom(knitr, asis_output, fig_path, hook_plot_custom, image_uri, include_graphics, knit_hooks, 
            knit_meta_add, knit_print, opts_current, opts_hooks, opts_knit)
-importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, registerInputHandler)
+importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, 
+					 registerInputHandler, removeInputHandler)
 importFrom(magrittr, "%>%")
 importFrom(manipulateWidget, combineWidgets)
 importFrom(stats, coef, predict, residuals)
-

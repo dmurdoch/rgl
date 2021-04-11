@@ -6,7 +6,7 @@
 \alias{plot3d.tri}
 \alias{as.mesh3d.tri}
 \title{
-Plot an interp or tripack Delaunay triangulation.
+Plot an interp or tripack Delaunay triangulation
 }
 \description{
 The \code{\link[interp]{tri.mesh}()} functions in the

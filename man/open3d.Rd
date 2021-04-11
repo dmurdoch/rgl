@@ -6,10 +6,10 @@
 \alias{getr3dDefaults}
 \alias{r3dDefaults}
 
-\title{RGL Display Functions}
+\title{Work with RGL windows}
 
 \description{
-  \code{open3d} opens a new \pkg{rgl} window; \code{cur3d} returns the device number of the current
+  \code{open3d} opens a new RGL window; \code{cur3d} returns the device number of the current
   window; \code{close3d} closes one or more windows.
 }
 \usage{
@@ -39,13 +39,15 @@ r3dDefaults
 }
 
 \details{
-  \code{open3d} opens a new rgl device, and sets the parameters as
+  \code{open3d} opens a new RGL device, and sets the parameters as
   requested.  The \code{r3dDefaults} list returned by the 
   \code{getr3dDefaults} function will be used as default
   values for parameters.  As installed this sets the point of view to
   'world coordinates' (i.e. x running from left to right, y from front
   to back, z from bottom to top), the \code{mouseMode} to
-  \code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.
+  \code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.  \code{useFreeType} defaults to \code{FALSE} on 
+  Windows; on other systems it indicates the availability
+  of FreeType.
   Users may create their own variable named \code{r3dDefaults} in the global
   environment and it will override the installed one.  If there
   is a \code{bg} element in the list or the arguments, it should be
@@ -57,7 +59,7 @@ r3dDefaults
   that high level functions such as \code{\link{plot3d}} normally use
   the \code{r3dDefaults} values in preference to this setting. 
   
-  If \code{useNULL} is \code{TRUE}, \pkg{rgl} will use a \dQuote{null}
+  If \code{useNULL} is \code{TRUE}, RGL will use a \dQuote{null}
   device.  This device records objects as they are plotted, but 
   displays nothing. It is intended for use with \code{\link{rglwidget}}.
   
@@ -81,7 +83,7 @@ device, invisibly.
   The \code{r3dDefaults} variable is a list containing default
   settings.  The \code{getr3dDefaults} function searches the user's
   global environment for \code{r3dDefaults} and returns the 
-  one in the \pkg{rgl} namespace if it was not found there.
+  one in the RGL namespace if it was not found there.
   The components of the list may include any settable \code{par3d}
   parameter, or \code{"material"}, which should include a list
   of default \code{\link{material3d}} properties, or \code{"bg"}, 

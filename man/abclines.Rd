@@ -1,5 +1,4 @@
 \name{abclines3d}
-\alias{rgl.abclines}
 \alias{abclines3d}
 \title{
 Lines intersecting the bounding box
@@ -9,7 +8,6 @@ This adds mathematical lines to a scene.  Their intersection with the current
 bounding box will be drawn.
 }
 \usage{
-rgl.abclines(x, y = NULL, z = NULL, a, b = NULL, c = NULL, ...)
 abclines3d(x, y = NULL, z = NULL, a, b = NULL, c = NULL, ...)
 }
 \arguments{
@@ -25,7 +23,7 @@ Material properties.
 
 }
 \details{
-These functions draw the segment of a line that intersects the current
+Draws the segment of a line that intersects the current
 bounding box of the scene using the parametrization
 \eqn{ (x, y, z) + (a, b, c) * s } where \eqn{s} is a real number.
 

@@ -1,7 +1,7 @@
 \name{writeWebGL}
 \alias{writeWebGL}
 \title{
-Write scene to HTML.
+Write scene to HTML (obsolete)
 }
 \description{
 Obsolete function to write the current scene to a collection of files that contain WebGL code to reproduce
@@ -41,8 +41,7 @@ a reference to and copy of the \file{CanvasMatrix.js}
 file in the output.
 }
   \item{reuse}{
-  When writing several figures on the same page, set this
-to a dataframe containing values to reuse.  See the Value section below.
+Ignored.
   }
   \item{font}{
   The font to use for text.

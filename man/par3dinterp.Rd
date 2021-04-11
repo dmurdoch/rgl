@@ -19,7 +19,7 @@ par3dinterp(times = NULL, userMatrix, scale, zoom, FOV,
   \item{FOV}{ Values of \code{par3d("FOV")} }
   \item{method}{ Method of interpolation }
   \item{extrapolate}{ How to extrapolate outside the time range }
-  \item{dev}{ Which rgl device to use }
+  \item{dev}{ Which RGL device to use }
   \item{subscene}{ Which subscene to use }
 }
 \details{
@@ -58,7 +58,7 @@ A function is returned.  The function takes one argument, and returns a list of
 \code{par3d} settings interpolated to that time.
 }
 \note{
-Prior to rgl version 0.95.1476, the
+Prior to \pkg{rgl} version 0.95.1476, the
 \code{subscene} argument defaulted to the
 current subscene, and any additional entries would
 be ignored by \code{\link{play3d}}.  The current

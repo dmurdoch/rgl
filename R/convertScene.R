@@ -1,4 +1,4 @@
-convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reuse = NULL,
+convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
                          snapshot = FALSE) {
@@ -99,6 +99,10 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   getFlags <- function(id) {
     
     obj <- getObj(id)
+    if (is.null(obj)) {
+      warning("object", id, " not found.")
+      return(structure(rep(FALSE, length(flagnames)), names = flagnames))
+    }
     type <- obj$type
     
     if (type == "subscene")
@@ -296,19 +300,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   if (is.null(elementId))
     elementId <- ""
   
-  if (is.null(reuse) || isTRUE(reuse))
-    reuseDF <- data.frame(id = numeric(), elementId = character(), texture = character(),
-              stringsAsFactors = FALSE)
-  else {
-    if (!is.data.frame(reuse) || !all(c("id", "elementId", "texture") %in% names(reuse)))
-      stop("'reuse' should be a dataframe with columns 'id', 'elementId', 'texture'")
-    reuseDF <- reuse[reuse$elementId != elementId,
-         c("id", "elementId", "texture")]
-    reuseDF$id         <- as.numeric(reuseDF$id)
-    reuseDF$elementId  <- as.character(reuseDF$elementId)
-    reuseDF$texture    <- as.character(reuseDF$texture)
-  }
-  
   if (is.list(x$rootSubscene))
     rect <- x$rootSubscene$par3d$windowRect
   else
@@ -389,18 +380,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     warning(gettextf("Object type(s) %s not handled",
          paste("'", unknowntypes, "'", sep="", collapse=", ")), domain = NA)
   
-  for (i in seq_along(ids)) {
-    if (length(preventry <- which(reuseDF$id == ids[i]) ) ) {
-      obj <- list(id = as.numeric(ids[i]), reuse = reuseDF$elementId[preventry[1]])
-      setObj(as.character(ids[i]), obj)
-      types[i] <- "reused"
-    }
-  }
-  simple <- types %in% "light"
-  if (any(simple))
-    reuseDF <- rbind(reuseDF, data.frame(id = ids[simple],
-                 elementId = elementId,
-                 texture = "", stringsAsFactors = FALSE))
   keep <- types %in% setdiff(knowntypes, c("light", "bboxdeco"))
   ids <- ids[keep]
   cids <- as.character(ids)
@@ -426,21 +405,13 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
       else
         texture <- result$material$texture
       if (!is.null(texture) && nchar(texture)) {
-        if (length(prev <- which(texture == reuseDF$texture))) {
-          prev <- prev[1]
-          if (reuseDF$elementId[prev] != elementId)
-            obj$material$uriElementId <- reuseDF$elementId[prev]
-          obj$material$uriId <- reuseDF$id[prev]
-        } else {
-          texturefile <- texture
-          obj$material$uri <- image_uri(texturefile)
-        }
+        texturefile <- texture
+        obj$material$uri <- image_uri(texturefile)
         obj$material$texture <- NULL
       }
       if (!is.null(obj$material)) # Never use material$color
         obj$material$color <- NULL
-      reuseDF <- rbind(reuseDF, data.frame(id = ids[i], elementId = elementId,
-                   texture = texturefile, stringsAsFactors = FALSE))
+      
     } else if (obj$type == "subscene") {
       obj$par3d$viewport$x <- obj$par3d$viewport$x/fullviewport$width
       obj$par3d$viewport$width <- obj$par3d$viewport$width/fullviewport$width
@@ -456,48 +427,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
       obj$centers <- obj$vertices
     setObj(cids[i], obj)
   }
-  
-  sphereId <- reuseDF$elementId[reuseDF$id == -1]
-  if (length(sphereId)) {
-    result$sphereVerts <- list(reuse = sphereId[1])
-  } else {
-    # Make model sphere
-    segments <- 16
-    sections <- 16
-    # indices wrap around; write a function to do that
-    mod1 <- function(x) (x - 1) %% (segments*(sections - 1)) + 1
-    iy <- 1:(sections-1) # Leave off the poles; add them at the end
-    fy <- iy/sections
-    phi <- fy - 0.5
-    ix <- 0:(segments-1)
-    fx <- ix/segments
-    theta <- 2*fx
-    qx <- as.numeric(outer(phi, theta, function(phi, theta) sinpi(theta)*cospi(phi)))
-    qy <- as.numeric(outer(phi, theta, function(phi, theta) sinpi(phi)))
-    qz <- as.numeric(outer(phi, theta, function(phi, theta) cospi(theta)*cospi(phi)))
-    poles <- c(length(qx) + 1, length(qx) + 2) 
-    inds <- rep(seq_len(sections - 2), segments) + (sections - 1)*rep(seq_len(segments)-1, each = sections - 2) 
-    inds <- cbind(mod1(rbind(inds, inds + sections - 1, 
-                inds + sections)),
-          mod1(rbind(inds, inds + sections, 
-                inds + 1)),
-          rbind(poles[1], mod1(seq_len(segments)*(sections - 1) + 1),
-                mod1(seq_len(segments)*(sections - 1) - sections + 2)),
-          rbind(poles[2], mod1(seq_len(segments)*(sections - 1)),
-                mod1(seq_len(segments)*(sections - 1) + sections - 1)))
-    x <- tmesh3d(vertices = rbind(c(qx,0,0), c(qy,-1,1), c(qz,0,0), 1), 
-           texcoords = cbind(c(rep(fx, each = sections-1),0,0),
-                 c(rep(fy, segments), 0,1)),
-           indices = inds)
-    x$it <- x$it - 1
-    x$vb <- x$vb[1:3,]
-    result$sphereVerts <- x
-    reuseDF <- rbind(reuseDF,
-         data.frame(id = -1, elementId = elementId,
-              texture = "", stringsAsFactors = FALSE))
-  }
-  
+
   result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
   
-  structure(result, reuse = reuseDF)
+  result
 }

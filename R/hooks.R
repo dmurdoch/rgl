@@ -1,4 +1,4 @@
-# This file supports auto-printing of rgl scenes in
+# This file supports auto-printing of RGL scenes in
 # RStudio
 
 # Called just after a low level function has been
@@ -30,5 +30,9 @@ print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
   if (rglwidget)
     # FIXME:  For lowlevel, this should replace the scene, not update the history
     print(rglwidget(...))
+  else if (in_pkgdown_example())
+    pkgdown_print(x)
+  else if (in_pkgdown()) # Must not have pkgdown_print defined
+    cat("")
   invisible(x)
 }

@@ -3,7 +3,7 @@
 \alias{shinySetPar3d}
 \alias{shinyResetBrush}
 \title{
-Communicate rgl parameters between R and Javascript in Shiny.
+Communicate RGL parameters between R and Javascript in Shiny
 }
 \description{
 These functions allow Shiny apps to read and write the \code{par3d}
@@ -81,7 +81,7 @@ Duncan Murdoch
 }
 
 \examples{
-if (interactive()) {
+if (interactive() && !in_pkgdown_example()) {
   save <- options(rgl.useNULL = TRUE)
 
   xyz <- matrix(rnorm(300), ncol = 3)

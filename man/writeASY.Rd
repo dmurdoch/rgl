@@ -1,14 +1,14 @@
 \name{writeASY}
 \alias{writeASY}
 \title{
-Write Asymptote code for an rgl scene
+Write Asymptote code for an RGL scene
 }
 \description{
 Asymptote is a language for 3D graphics that
 is highly integrated with LaTeX.  This is
 an experimental function to
 write an Asymptote program to approximate 
-an rgl scene.
+an RGL scene.
 }
 \usage{
 writeASY(scene = scene3d(),
@@ -23,7 +23,7 @@ writeASY(scene = scene3d(),
          version = "2.65")
 }
 \arguments{
-  \item{scene}{rgl scene object}
+  \item{scene}{RGL scene object}
   \item{outtype}{
 What type of file to write?  See Details.
 }
@@ -44,12 +44,12 @@ Width and height of the output image, in inches.
   }
   \item{ppi}{
 \dQuote{Pixels per inch} to assume when converting
-line widths and point sizes (which rgl measures in 
+line widths and point sizes (which RGL measures in 
 pixels).
   }
   \item{ids}{
 If not \code{NULL}, write out just these
-rgl objects.
+RGL objects.
 }
   \item{version}{
 Asymptote version 2.44 had a definition for its \dQuote{light()} function
@@ -92,8 +92,8 @@ of output it produces.  Arguments will likely
 change.
 
 There are a number of differences between the interactive display in 
-Asymptote and the display in rgl.  In particular, many objects that are
-a fixed size in rgl will scale with the image in Asymptote.  Defaults
+Asymptote and the display in RGL.  In particular, many objects that are
+a fixed size in RGL will scale with the image in Asymptote.  Defaults
 have been chosen somewhat arbitrarily; tweaking will likely be needed.
 
 Material properties of surfaces are not yet implemented.

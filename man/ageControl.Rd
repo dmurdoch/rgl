@@ -1,7 +1,7 @@
 \name{ageControl}
 \alias{ageControl}
 \title{
-Set attributes of vertices based on their age.
+Set attributes of vertices based on their age
 }
 \description{
 This is a function to produce actions in response to
@@ -45,7 +45,7 @@ vertex.
 }
 \value{
 A list of class \code{"rglControl"} of cleaned up parameter
-values, to be used in an rgl widget.
+values, to be used in an RGL widget.
 }
 \author{
 Duncan Murdoch
@@ -65,7 +65,7 @@ Duncan Murdoch
                         alpha = c(0, 1, 0, 0, 1, 0)),
              start = 0, stop = 4*pi,
              step = 0.1, rate = 4)
-  if (interactive())
+  if (interactive() || in_pkgdown_example())
     widget
   options(saveopts)
 }

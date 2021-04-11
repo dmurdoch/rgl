@@ -3,7 +3,8 @@ suppressPackageStartupMessages(library(rgl))
 options(rgl.useNULL=TRUE)
 options(rgl.printRglwidget=FALSE)
 
-if (!requireNamespace("rmarkdown") || !rmarkdown::pandoc_available("1.14")) {
+if (!requireNamespace("rmarkdown", quietly = TRUE) || 
+    !rmarkdown::pandoc_available("1.14")) {
   warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
   knitr::knit_exit()
 }
@@ -42,9 +43,16 @@ indexmethods <- function(fns, text = backticked(paste0(fns, "()")), show = TRUE)
 linkfn <- function(fn, text = backticked(fn), pkg = NA) {
   if (is.na(pkg))
     paste0('<a href="#', fn, '">', text, '</a>')
-  else
-    paste0('<a href="../../', pkg, '/help/', fn, '">', text,
-           '</a>')
+  else {
+    if (requireNamespace("downlit", quietly = TRUE))
+      url <- downlit::autolink_url(paste0(pkg, "::", fn))
+    else
+      url <- NA
+    if (is.na(url))
+      url <- paste0('../../', pkg, '/help/', fn)
+
+    paste0('<a href="', url, '">', text, '</a>')
+  }
 }
 
 # Write this once at the start of the document.

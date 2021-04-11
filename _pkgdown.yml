@@ -1,0 +1,232 @@
+url: https://dmurdoch.github.io/rgl/dev/
+development:
+  mode: devel
+authors: 
+  Duncan Murdoch:
+    href: https://github.com/dmurdoch
+  Daniel Adler:
+    href: http://neoscientists.org/~plex/
+figures:
+  fig.width: 5
+  other.parameters:
+    rgl:
+      fig.asp: 1
+reference:
+- title: High level functions
+  desc:  Generic functions for plotting points or surfaces.  
+- contents:
+  - plot3d
+  - persp3d
+- subtitle: Methods
+- contents:
+  - persp3d.function
+  - plot3d.formula
+  - plot3d.lm
+- title: Adding to plots
+  desc: These add to an existing plot.
+- subtitle: Primitive shapes
+- contents:
+  - points3d
+  - lines3d
+  - segments3d
+  - triangles3d
+  - quads3d
+- subtitle: Other shapes
+- contents:
+  - text3d
+  - abclines3d
+  - arc3d
+  - planes3d
+  - clipplanes3d
+  - sprites3d
+  - spheres3d
+  - surface3d
+  - drape3d
+  - shadow3d
+  - arrow3d
+  - pch3d
+  - plotmath3d
+  - rgl.texts
+- subtitle:  Axes and "decorations"
+- contents:
+  - axes3d
+  - box3d
+  - bbox3d
+  - title3d
+  - mtext3d
+  - decorate3d
+  - aspect3d
+  - bg3d
+  - bgplot3d
+  - show2d
+  - legend3d
+  - grid3d
+  - thigmophobe3d
+- title: Controlling the look of the scene
+  desc: These functions control the way objects appear.
+- contents:
+  - light3d
+  - material3d
+  - par3d
+  - view3d
+  - observer3d
+  - rglExtrafonts
+- title: Complex shapes
+  desc: These functions construct and display complex shapes.
+- contents:
+  - mesh3d
+  - shade3d
+  - tetrahedron3d
+  - cylinder3d
+  - polygon3d
+  - extrude3d
+  - turn3d
+  - ellipse3d
+  - shapelist3d
+  - starts_with("as.mesh3d")
+  - as.triangles3d
+  - mergeVertices
+- subtitle: Contouring
+  desc: These functions are related to showing contour lines.
+- contents:
+  - contourLines3d
+  - filledContour3d
+  - clipMesh3d
+  - clipObj3d
+- subtitle: Modifying shapes
+- contents:
+  - addNormals
+  - subdivision3d
+  - merge.mesh3d
+  - facing3d
+- title: Multi-figure layouts
+- contents:
+  - mfrow3d
+  - layout3d
+- subtitle: Functions relating to subscenes
+- contents:
+  - next3d
+  - subsceneList
+  - clearSubsceneList
+  - newSubscene3d
+  - currentSubscene3d
+  - subsceneInfo
+  - useSubscene3d
+  - addToSubscene3d
+  - delFromSubscene3d
+  - gc3d
+- title: Documents and presentations
+- contents:
+  - setupKnitr
+  - snapshot3d
+  - play3d
+  - spin3d
+  - movie3d
+  - par3dinterp
+- subtitle: WebGL displays
+- contents:
+  - propertyControl
+  - clipplaneControl
+  - subsetControl
+  - ageControl
+  - vertexControl
+  - par3dinterpControl
+  - playwidget
+  - toggleWidget
+  - figWidth
+  - figHeight
+  - rglShared
+  - rglMouse
+  - asRow
+  - getWidgetId
+- subtitle: Shiny
+- contents:
+  - sceneChange
+  - shinyGetPar3d
+  - shinySetPar3d
+  - shinyResetBrush
+  - rglwidgetOutput
+- subtitle: Import and export
+- contents:
+  - scene3d
+  - rglwidget
+  - writeASY
+  - writePLY
+  - readOBJ
+  - writeOBJ
+  - readSTL
+  - writeSTL
+  - rglToBase
+  - rglToLattice
+  - rgl.postscript
+- title: Miscellaneous utility functions
+- subtitle: Opening, closing and changing the display
+- contents:
+  - open3d
+  - r3dDefaults
+  - close3d
+  - .check3d
+  - rgl.useNULL
+  - cur3d
+  - set3d
+  - rgl.bringtotop
+  - rgl.dev.list
+- subtitle: Manipulating objects in the display
+- contents:
+  - pop3d
+  - clear3d
+  - ids3d
+  - identify3d
+  - selectpoints3d
+  - selectionFunction3d
+  - rgl.select
+  - rgl.attrib
+  - rgl.attrib.info
+  - rgl.pixels
+- subtitle: Working with coordinates
+- contents:
+  - asEuclidean
+  - asHomogeneous
+  - rotate3d
+  - scale3d
+  - translate3d
+  - transform3d
+  - rotationMatrix
+  - scaleMatrix
+  - translationMatrix
+  - identityMatrix
+- subtitle: TCL/TK
+- contents:
+  - tkrgl
+  - tkspin3d
+  - tkspinControl
+  - tkpar3dsave  
+- subtitle: Unclassifiable miscellany
+- contents:
+  - pipe
+  - GramSchmidt
+  - triangulate
+  - rgl.primitive
+  - rgl.projection
+  - rgl.user2window
+  - rgl.setMouseCallbacks
+  - setUserShaders
+  - makeDependency
+  - setGraphicsDelay
+  - rglId
+  - in_pkgdown_example
+  - projectDown
+- title: General documentation
+- contents:
+  - rgl-package
+  - r3d
+- title: Obsolete functions
+- contents:
+  - ageSetter
+  - elementId2Prefix
+  - propertySetter
+  - rgl.init
+  - rgl.surface
+  - rgl.Sweave
+  - subsetSlider
+  - writeWebGL

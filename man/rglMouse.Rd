@@ -1,7 +1,7 @@
 \name{rglMouse}
 \alias{rglMouse}
 \title{
-Generate HTML code to select mouse mode.
+Generate HTML code to select mouse mode
 }
 \description{
 This generates an HTML \code{select} element to 
@@ -37,7 +37,7 @@ How to label each mouse mode.
 Which mouse button is being controlled.
 }
   \item{dev}{
-The rgl device used for defaults.
+The RGL device used for defaults.
 }
   \item{subscene}{
 Which subscene is being modified.
@@ -85,7 +85,7 @@ A browsable value to put in a web page.
 Duncan Murdoch
 }
 \examples{
-if (interactive()) {
+if (interactive() || in_pkgdown_example()) {
   open3d()
   xyz <- matrix(rnorm(300), ncol = 3)
   id <- plot3d(xyz, col = "red", type = "s")["data"]

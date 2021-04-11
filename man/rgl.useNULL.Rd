@@ -1,7 +1,7 @@
 \name{rgl.useNULL}
 \alias{rgl.useNULL}
 \title{
-Report default use of null device.
+Report default use of null device
 }
 \description{
 This function checks the \code{"rgl.useNULL"} option if present, or the
@@ -13,8 +13,8 @@ in a case-insensitive test, \code{TRUE} is returned.
 rgl.useNULL()
 }
 \note{
-This function is checked by the initialization code when \pkg{rgl}
-is loaded.  Thus if you want to run \pkg{rgl} on a system where there is no
+This function is checked by the initialization code when the \pkg{rgl} package
+is loaded.  Thus if you want to run RGL on a system where there is no
 graphics support, you should run \code{options(rgl.useNULL = TRUE)}
 or set the environment variable \code{RGL_USE_NULL=TRUE} *before*
 calling \code{library(rgl)} (or other code that 

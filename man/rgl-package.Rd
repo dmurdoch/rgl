@@ -2,6 +2,7 @@
 \title{3D visualization device system}
 \alias{rgl-package}
 \alias{rgl}
+\alias{RGL}
 \description{
   3D real-time rendering system.
 }
@@ -16,7 +17,7 @@
   Opened devices automatically get the current device focus. The focus may be
   changed by using \code{\link{set3d}()} or \code{\link{useSubscene3d}()}.
   
-  \pkg{rgl} provides medium to high level functions for 3D interactive graphics, including
+RGL provides medium to high level functions for 3D interactive graphics, including
   functions modelled on base graphics (\code{\link{plot3d}()}, etc.) as well as functions for 
   constructing geometric objects (\code{\link{cube3d}()}, etc.).  Output
   may be on screen using OpenGL, or to various standard 3D file formats including 
@@ -25,18 +26,19 @@
   The \code{\link{open3d}()} function attempts to open a new RGL window,
   using default settings specified by the user.
   
-  \pkg{rgl} also includes a lower level interface which is described
-  in the \link{rgl.open} help topic.  We recommend that you avoid mixing
-  \code{rgl.*} and \code{*3d} calls.
+RGL also includes a lower level interface which is described
+in the \link{rgl.open} help topic.  We recommend that you avoid mixing
+\code{rgl.*} and \code{*3d} calls.
 
   See the first example below to display the ChangeLog.
 }
 \seealso{\link{r3d} for a description of the \code{*3d} interface;
 \code{\link{par3d}} for a description of scene properties and the rendering
 pipeline; \code{\link{rgl.useNULL}} for a description of how to 
-use \pkg{rgl} on a system with no graphics support.}
+use RGL on a system with no graphics support.}
 \examples{
-file.show(system.file("NEWS", package = "rgl"))
+if (!in_pkgdown_example())
+  file.show(system.file("NEWS", package = "rgl"))
 example(surface3d)
 example(plot3d)
 }

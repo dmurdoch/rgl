@@ -787,7 +787,7 @@
     rglwidgetClass.prototype.drawBackground = function(id, subsceneid) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(id),
-          bg, i;
+          bg, i, savepr, savemv;
 
       if (!obj.initialized)
         this.initObj(id);
@@ -806,13 +806,17 @@
       this.fogType = obj.fogtype;
       this.fogScale = obj.fogscale;
       if (typeof obj.quad !== "undefined") {
-        this.prMatrix.makeIdentity();
-        this.mvMatrix.makeIdentity();
+        savepr = this.prMatrix;
+        savemv = this.mvMatrix;
+        this.prMatrix = new CanvasMatrix4();
+        this.mvMatrix = new CanvasMatrix4();
         gl.disable(gl.BLEND);
         gl.disable(gl.DEPTH_TEST);
         gl.depthMask(false);
         for (i=0; i < obj.quad.length; i++)
           this.drawObjId(obj.quad[i], subsceneid);
+        this.prMatrix = savepr;
+        this.mvMatrix = savemv;
       }
     };
 

@@ -45,7 +45,7 @@ version).
 ### About this document
 
 This document was written in R Markdown, using the `knitr` package
-for production.  It corresponds to rgl version 
+for production.  It corresponds to `rgl` version 
 `r packageVersion("rgl")`.
 
 Most of the highlighted function names are HTML links.
@@ -62,7 +62,7 @@ and links to a discussion.
 ## Basics and High Level Functions
 
 The `r indexfns("plot3d")` function
-plots points within an rgl window.  It is similar to the classic 
+plots points within an RGL window.  It is similar to the classic 
 `r linkfn("plot", pkg="graphics")` function,
 but works in 3 dimensions.
 
@@ -183,6 +183,8 @@ Function                      | Description
 `r indexfns(c("sprites3d", "particles3d"))`: | add sprites (fixed shapes or images) to plot
 `r indexfns("spheres3d")`:    | adds spheres
 `r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
+`r indexfns("drape3d")`:      | drapes lines on a surface or object(s)
+`r indexfns("shadow3d")`:     | projects mesh onto a surface
 `r indexfns("arrow3d")`:      | add an arrow to a scene
 `r indexfns("pch3d")`:	      | draw base-style plotting symbols
 `r indexfns("plotmath3d")`:   | used by `r linkfn("text3d")` for math text
@@ -340,6 +342,19 @@ quad.  If `col` is black (a common default), you won't see anything.
  - Modern `OpenGL` supports 1- and 3-dimensional textures;
  these are not supported in `rgl`.
  
+### Fonts
+
+`rgl` uses the same ideas as base graphics for drawing
+text:  there are font families named `"sans"`,
+`"serif"`, and `"mono"` for drawing text of those
+types.  In `rgl`, the `"symbol"` family is not supported.
+
+New font families can be defined using the low-level
+function `r indexfns("rglFonts")`, or more simply
+using the higher level function 
+`r indexfns("rglExtrafonts")`.  The latter function
+requires the `extrafont` package to be installed.
+
 ### par3d:  Miscellaneous graphical parameters
 
 The `r indexfns("par3d")` function, modelled after the classic
@@ -356,7 +371,7 @@ cex         |       | Default size for text
 family      |       | Device-independent font family name; see `r linkfn("text3d", text="?text3d", pkg="rgl")`
 font        |       | Integer font number
 useFreeType |       | Should FreeType fonts be used if available?
-fontname    | read-only | System-dependent font name set by `r indexfns("rglFonts")`
+fontname    | read-only | System-dependent font name set by `r linkfn("rglFonts")`
 FOV         |       | Field of view, in degrees.  Zero means isometric perspective
 ignoreExtent |      | Should `rgl` ignore the size of new objects when computing the bounding box?
 skipRedraw   |      | Should `rgl` suppress updates to the display? 
@@ -435,7 +450,7 @@ Function                             | Description
 `r indexfns("extrude3d")`:  | generate an "extrusion" of a polygon
 `r indexfns("turn3d")`:     | generate a solid of rotation
 `r indexfns("ellipse3d")`:  | generate an ellipsoid in various ways
-`r indexfns(c("tmesh3d", "qmesh3d"))`:  | generate a shape from vertices and faces
+`r indexfns("mesh3d")`:      | generate a shape from indexed vertices
 `r indexfns("shapelist3d")`: | generate a shape by combining other shapes
 `as.mesh3d`:                 | a generic function; see below
 
@@ -463,6 +478,9 @@ to construct a mesh from a matrix of vertices; it can use
 to merge repeated vertices within the matrix, allowing 
 `r linkfn("addNormals")` to be used to give a smooth appearance.
 
+Functions `r indexfns(c("tmesh3d","qmesh3d"))` are now obsolete;
+use `r linkfn("mesh3d")` instead.
+
 ### The underlying class structure for shapes
 
 `"shape3d"` is the basic abstract type.  Objects of this class can be
@@ -476,12 +494,15 @@ fields:
 Field        | Meaning
 ------------ | ---------------
 vb           | A 4 by n matrix of vertices in homogeneous coordinates.  Each column is a point.
+ip           | (optional) A vector of vertex indices for points.
+is           | (optional) A 2 by s matrix of vertex indices. Each column is a line segment.
 it           | (optional) A 3 by t matrix of vertex indices.  Each column is a triangle.
 ib           | (optional) A 4 by q matrix of vertex indices.  Each column is a quadrilateral.
 material     | (optional) A list of material properties.
 normals      | (optional) A matrix of the same shape as vb, containing normal vectors at each vertex.
 texcoords    | (optional) A 2 by n matrix of texture coordinates corresponding to each vertex.
 values       | (optional) A vector of length n holding values at each vertex
+meshColor    | (optional) A text value indicating how colors and texture coordinates should be interpreted.
 
 
 ### Contouring shapes
@@ -505,6 +526,7 @@ Function                             | Description
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
 `r indexfns("merge.mesh3d", backticked("merge"))`: | merge mesh objects
+`r indexfns("facing3d")`:   | subset of mesh facing "up"     
 
 The individual steps in `r linkfn("subdivision3d")` are also available:
 `r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These
@@ -832,7 +854,7 @@ Function                             | Description
 `r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`:    | `magrittr` pipe
 `r indexfns(c("figHeight", "figWidth"))`:     | Dimensions of figures in R Markdown document
 `r indexfns("rglShared")`:        | share data using `crosstalk` package
-`r indexfns("rglMouse")`:         | change mouse mode in rgl scene
+`r indexfns("rglMouse")`:         | change mouse mode in RGL scene
 `r indexfns("asRow")`:            | arrange multiple objects in an HTML display
 `r indexfns("getWidgetId")`:      | get the `elementId` from a widget
 
@@ -921,11 +943,13 @@ become linear transformations, with multiplication by a 4 by 4 matrix.
 
 Function                             | Description
 ------------------------------------ | -----------
-`r indexfns(c("asEuclidean", "asHomogeneous"))`: | convert between homogeneous and Euclidean coordinates
+`r indexfns(c("asEuclidean", "asHomogeneous"))`: | convert between homogeneous and Euclidean coordinates when x, y and z are columns
+`r indexfns(c("asEuclidean2", "asHomogeneous2"))`: | convert when x, y and z are rows
 `r indexfns(c("rotate3d", "scale3d", "translate3d"))`:  | apply a transformation
 `r indexfns("transform3d")`:  | apply a general transformation
 `r indexfns(c("rotationMatrix", "scaleMatrix", "translationMatrix"))`:  | compute the transformation matrix
 `r indexfns("identityMatrix")`: | return a 4 x 4 identity matrix
+`r indexfns("projectDown")`: | a 3D to 2D projection down a vector
 
 There is also a function `r indexfns("GramSchmidt")`, mainly for internal
 use:  it does a Gram-Schmidt orthogonalization of a 3x3 matrix,
@@ -955,6 +979,13 @@ persp(volcano, col = "green", shade = TRUE,
 
 Note that the `orientlib` package must be 
 available for these functions to work.
+
+### Creating `pkgdown` websites
+
+The ["Using RGL in pkgdown web sites"](pkgdown.html) vignette
+describes how to use `rgl` in a `pkgdown` web site.  The
+utility function `r indexfns("in_pkgdown_example")` can be used
+to detect that `pkgdown` is being used.
 
 ### Working with Javascript
 

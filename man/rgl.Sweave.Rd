@@ -3,10 +3,10 @@
 \alias{rgl.Sweave.off}
 \alias{Sweave.snapshot}
 \title{
-Integrating \code{rgl} with \code{Sweave}
+Integrating RGL with Sweave
 }
 \description{
-As of \R 2.13.0, it is possible to include \code{rgl} graphics into
+As of \R 2.13.0, it is possible to include RGL graphics into
 a \link{Sweave} document.  These functions support that
 integration.
 }
@@ -28,7 +28,7 @@ using
 
 \preformatted{<<fig = TRUE, pdf = FALSE, grdevice = rgl.Sweave, resolution = 100>>=}
 
-When the \code{rgl} device is closed at the end of the code chunk,
+When the RGL device is closed at the end of the code chunk,
 \code{rgl.Sweave.off()} will be called automatically.  It
 will save a snapshot
 of the last image (by default in \file{.png} format) for inclusion in the 
@@ -39,7 +39,7 @@ snapshot will be taken per chunk.
 
 Several chunk options are used by the \code{rgl.Sweave} device:
 \describe{
-\item{stayopen}{(default \code{FALSE}).  If \code{TRUE} then the \code{rgl}
+\item{stayopen}{(default \code{FALSE}).  If \code{TRUE} then the RGL
 device will \emph{not} be closed at the end of the chunk,
 instead a call to \code{Sweave.snapshot()}
 will be used if it has not been called explicitly.  Subsequent chunks can add
@@ -59,15 +59,15 @@ falsely report that the window is too large to open.}
 
 \note{
 We recommend turning off all other graphics drivers in a chunk that uses
-\code{grdevice = rgl.Sweave}.  The \code{rgl} functions do not write to
+\code{grdevice = rgl.Sweave}.  The RGL functions do not write to
 a standard graphics device.
 }
 
 \note{
-The \code{rgl} package relies on your graphics hardware to render OpenGL scenes,
+The \pkg{rgl} package relies on your graphics hardware to render OpenGL scenes,
 and the default \file{.png} output copies a bitmap from the hardware device.  All 
 such devices have limitations on the size of the bitmap, but they do not 
-always signal these limitations in a way that \code{rgl} will detect.  If you find
+always signal these limitations in a way that RGL will detect.  If you find
 that images are not being produced properly, try reducing the size using 
 the \code{resolution}, \code{width} or \code{height} chunk options.
 }
@@ -83,7 +83,8 @@ Duncan Murdoch
 in Sweave, and standard options that can be used in code chunks.  
 
 \code{\link{hook_rgl}}
-and \code{\link{hook_webgl}} allow fixed or interactive \pkg{rgl} scenes to be embedded in \pkg{knitr} 
+and \code{\link{hook_webgl}} allow fixed or interactive RGL
+scenes to be embedded in \pkg{knitr} 
 documents.
 }
 \keyword{ utilities }

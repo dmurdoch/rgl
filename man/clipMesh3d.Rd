@@ -2,7 +2,7 @@
 \alias{clipMesh3d}
 \alias{clipObj3d}
 \title{
-Clip mesh or \pkg{rgl} object to general region
+Clip mesh or RGL object to general region
 }
 \description{
 Modifies a mesh3d object so that values of 
@@ -36,7 +36,7 @@ See Details below.
   \item{keepValues}{Logical; whether to save the function values at 
   each vertex when \code{plot = FALSE}.}
   \item{ids}{
-The \pkg{rgl} id value(s) of objects to clip.
+The RGL id value(s) of objects to clip.
   }
   \item{replace}{
 Should the \code{ids} objects be deleted after the clipped
@@ -45,7 +45,7 @@ ones are drawn?
 }
 \details{
 These functions transform a mesh3d object or other
-rgl objects by removing parts where \code{fn} violates
+RGL objects by removing parts where \code{fn} violates
 the bound.
 
 For \code{clipMesh3d} the \code{fn} argument can be any
@@ -124,7 +124,7 @@ If \code{plot = TRUE}, the result will be
 plotted with \code{\link{shade3d}} and its result returned.
 
 \code{clipObj3d} is called for the side effect of modifying
-the scene.  It returns a list of new \pkg{rgl} id values
+the scene.  It returns a list of new RGL id values
 corresponding to the \code{ids} passed as arguments.
 }
 \author{

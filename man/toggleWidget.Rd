@@ -1,7 +1,7 @@
 \name{toggleWidget}
 \alias{toggleWidget}
 \title{
-An HTML widget to toggle display of elements of a scene.
+An HTML widget to toggle display of elements of a scene
 }
 \description{
 This function produces a button in an HTML scene
@@ -16,11 +16,11 @@ toggleWidget(sceneId,
 }
 \arguments{
   \item{sceneId}{
-The HTML id of the rgl scene being controlled,
+The HTML id of the RGL scene being controlled,
 or an object as in \code{\link{playwidget}}.
 }
   \item{ids, hidden}{
-The rgl id numbers of the objects to toggle.  Those in \code{ids}
+The RGL id numbers of the objects to toggle.  Those in \code{ids}
 are initially shown; those in \code{hidden} are initially hidden.
 }
   \item{subscenes}{
@@ -62,6 +62,6 @@ widget <- rglwidget(height = 300, width = 300) \%>\%
   toggleWidget(theplot["data"], 
                hidden = theplot[c("xlab", "ylab", "zlab")], 
                label = "Points")
-if (interactive())
+if (interactive() || in_pkgdown_example())
   widget
 }

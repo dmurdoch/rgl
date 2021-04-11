@@ -2,7 +2,7 @@
 # author: Daniel Adler
 
 rgl.demo.bivar <- function() {
-  if (!requireNamespace("MASS"))
+  if (!requireNamespace("MASS", quietly = TRUE))
     stop("This demo requires MASS")
   
   # parameters:

@@ -2,11 +2,11 @@
 \alias{rglToLattice}
 \alias{rglToBase}
 \title{
-Convert rgl userMatrix to lattice or base angles
+Convert RGL userMatrix to lattice or base angles
 }
 \description{
 These functions take a user orientation matrix
-from an \pkg{rgl} scene and approximate the
+from an RGL scene and approximate the
 parameters to either \pkg{lattice} or base
 graphics functions.
 }
@@ -26,7 +26,7 @@ in its \code{\link[lattice:cloud]{wireframe}} or
 \code{\link[lattice]{cloud}} functions.  The
 \code{rglToLattice} function computes these angles
 based on \code{rotm}, which defaults to the current
-user matrix.  This allows \pkg{rgl} to be used
+user matrix.  This allows RGL to be used
 to interactively find a decent viewpoint and
 then reproduce it in \pkg{lattice}.
 
@@ -35,7 +35,7 @@ not use full Euler angles; it
 uses a viewpoint angle, and assume the z axis
 remains vertical.  The \code{rglToBase} function
 computes the viewpoint angle accurately if the
-\pkg{rgl} scene is displayed with a vertical
+RGL scene is displayed with a vertical
 z axis, and does an approximation otherwise.
 }
 \value{
@@ -52,8 +52,8 @@ Duncan Murdoch
 }
 \examples{
 persp3d(volcano, col = "green")
-if ((hasorientlib <- requireNamespace("orientlib")) && 
-    requireNamespace("lattice")) 
+if ((hasorientlib <- requireNamespace("orientlib", quietly = TRUE)) && 
+    requireNamespace("lattice", quietly = TRUE)) 
     lattice::wireframe(volcano, screen = rglToLattice())
 if (hasorientlib) {
   angles <- rglToBase()

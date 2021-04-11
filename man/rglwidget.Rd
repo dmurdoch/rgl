@@ -2,17 +2,18 @@
 \alias{rglwidget}
 \alias{rgl.printRglwidget}
 \title{
-An htmlwidget to hold an rgl scene.
+An htmlwidget to hold an RGL scene
 }
 \description{
 The \pkg{htmlwidgets} package provides a framework for embedding
 graphical displays in HTML documents of various types.  This function
-provides the necessities to embed an \pkg{rgl} scene in one.
+provides the necessities to embed an RGL scene in one.
 }
 \usage{
 rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           controllers = NULL,
-          elementId = NULL, reuse = !interactive(),
+          elementId = NULL, 
+          reuse = FALSE,
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
           shared = NULL, minimal = TRUE, 
           webgl, snapshot, 
@@ -20,7 +21,7 @@ rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
 }
 \arguments{
   \item{x}{
-An \pkg{rgl} scene produced by the \code{\link[rgl]{scene3d}} function.
+An RGL scene produced by the \code{\link[rgl]{scene3d}} function.
 }
   \item{width, height}{
 The width and height of the display in pixels.
@@ -34,9 +35,7 @@ associated with this scene, or objects (typically piped in).  See Details below.
   \item{elementId}{The id to use on the HTML \code{div}
 component that will hold the scene.
 }
-  \item{reuse}{A logical variable indicating whether
-rgl objects from earlier scenes should be referenced. See
-the Details below.
+  \item{reuse}{Ignored.  See Details below.
 }
   \item{webGLoptions}{A list of options to pass
   to WebGL when the drawing context is created.  See the Details below.}
@@ -49,13 +48,13 @@ the Details below.
 to pass to \code{htmlwidgets::\link{createWidget}}.}
 }
 \details{
-This produces a WebGL version of an \pkg{rgl} scene using the \pkg{htmlwidgets}
+This produces a WebGL version of an RGL scene using the \pkg{htmlwidgets}
 framework.  This allows display of the scene in the RStudio IDE, a browser, an \pkg{rmarkdown} document
 or in a \pkg{shiny} app.
 
 \code{options(rgl.printRglwidget = TRUE)} will cause
 \code{rglwidget()} to be called and displayed
-when the result of an \pkg{rgl} call that changes the
+when the result of an RGL call that changes the
 scene is printed.
 
 In RMarkdown or in standalone code, you can use a \pkg{magrittr}-style
@@ -65,15 +64,7 @@ first, it should be piped into the \code{controllers}
 argument.  If the \code{rglwidget} comes first, it
 can be piped into the first argument of \code{playwidget} or \code{toggleWidget}.
 
-If the \code{reuse} argument is \code{FALSE} (the default in interactive
-use), earlier information will be
-cleared before drawing the new scene.  If \code{TRUE}, earlier
-data will be re-used in the current scene, so it may be smaller
-and faster to load.  In both cases information from the current
-scene (added to earlier information if \code{reuse=TRUE}) will
-be saved for possible use in a future scene.
-If \code{reuse=NA}, the saved information will neither be used
-nor updated.
+In earlier versions, the \code{reuse} argument let one output scene share data from earlier ones.  This is no longer supported.
 
 If \code{elementId} is \code{NULL} and we are not in a Shiny app,
 \code{elementId} is set to a random value to facilitate re-use
@@ -100,7 +91,7 @@ and some other formats
 dynamic plots can't be
 displayed, so if the \code{snapshot} argument is \code{TRUE},
 \code{webgl} must be \code{FALSE}.  (In previous versions
-of \pkg{rgl}, both \code{webgl} and \code{snapshot} could be
+of the \pkg{rgl} package, both \code{webgl} and \code{snapshot} could be
 \code{TRUE}; that hasn't worked for a while and is no longer
 allowed as of version 0.105.6.)
 
@@ -147,12 +138,6 @@ if pipes are used) that will intelligently print itself into
 HTML in a variety of contexts including the R console, within R Markdown
 documents, and within Shiny output bindings.
 
-If \code{reuse = TRUE}, a record will be kept of objects in the scene
-and they need not be included in the HTML generated for later scenes.
-This is normally useful only in \pkg{rmarkdown} documents which can have
-many \pkg{rgl} scenes; if the widget is displayed in RStudio,
-only one scene will be shown.
-
 If objects are passed in the \code{shared} argument,
 then the widget will respond to selection and filtering 
 applied to those as shared datasets.  See \code{\link{rglShared}} for more details and an example.
@@ -177,14 +162,16 @@ save <- getOption("rgl.useNULL")
 options(rgl.useNULL=TRUE)
 example("plot3d", "rgl")
 widget <- rglwidget()
-if (interactive())
+if (interactive() || in_pkgdown_example())
   widget
   
 \donttest{
-# Save it to a file.  This requires pandoc
-filename <- tempfile(fileext = ".html")
-htmlwidgets::saveWidget(rglwidget(), filename)
-browseURL(filename)
+if (interactive() && !in_pkgdown_example()) {
+  # Save it to a file.  This requires pandoc
+  filename <- tempfile(fileext = ".html")
+  htmlwidgets::saveWidget(rglwidget(), filename)
+  browseURL(filename)
+}
 }
 }
 

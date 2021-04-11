@@ -3,7 +3,7 @@
 inShiny <- function() !is.null(getDefaultReactiveDomain())
 
 rmarkdownOutput <- function() {
-  if (requireNamespace("rmarkdown")) {
+  if (requireNamespace("rmarkdown", quietly = TRUE)) {
     output <- rmarkdown::metadata$output
     if (length(output))
       if (is.character(output)) return(output[1])
@@ -246,12 +246,10 @@ knitrNeedsSnapshot <- function(options = knitr::opts_current$get()) {
 }
 
 rglwidget <- local({
-  reuseDF <- NULL
-
   function(x = scene3d(minimal), width = figWidth(), height = figHeight(),
            controllers = NULL, 
            elementId = NULL,
-           reuse = !interactive(),
+           reuse = FALSE,
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
            minimal = TRUE, 
@@ -261,7 +259,7 @@ rglwidget <- local({
     
   if (missing(snapshot)) {
     if (missing(webgl)) {
-      if (isTRUE(getOption("knitr.in.progress")))
+      if (in_knitr())
         snapshot <- knitrNeedsSnapshot()
       else
         snapshot <- FALSE
@@ -279,11 +277,6 @@ rglwidget <- local({
   
   origScene <- x
   force(shared) # It might plot something...
-  	
-  if (is.na(reuse))
-    reuseDF <- NULL # local change only
-  else if (!reuse)
-    reuseDF <<- NULL
 
   if (is.null(elementId) && 
       (!inShiny() || # If in Shiny, all of the classes below need the ID
@@ -333,11 +326,8 @@ rglwidget <- local({
   if (!is.null(height))
     height <- CSStoPixels(height)
   x <- convertScene(x, width, height,
-                   elementId = elementId, reuse = reuseDF,
+                   elementId = elementId, 
                    webgl = webgl, snapshot = snapshot)
-
-  if (!is.na(reuse))
-    reuseDF <<- attr(x, "reuse")
   
   upstream <- processUpstream(controllers, elementId = elementId)
   
@@ -357,7 +347,7 @@ rglwidget <- local({
       elementId = elementId,
       dependencies = dependencies,
       ...
-    ), rglReuse = attr(x, "reuse"), origScene = origScene)
+    ), origScene = origScene)
     
   } else {
     if (is.list(upstream$objects)) {
@@ -394,7 +384,7 @@ renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputAr
 
 shinySetPar3d <- function(..., session,
                           subscene = currentSubscene3d(cur3d())) {
-  if (!requireNamespace("shiny"))
+  if (!requireNamespace("shiny", quietly = TRUE))
     stop("function requires shiny")
   args <- list(...)
   argnames <- names(args)
@@ -512,6 +502,7 @@ makeDependency <- function(name, src, script = NULL, package,
                       package = package,
                       version = version,
                       script = script,
+                      all_files = FALSE,
                       ...)
 }
 

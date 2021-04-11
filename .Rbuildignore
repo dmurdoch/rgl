@@ -26,3 +26,6 @@
 ^docs$
 ^pkgdown$
 ^CRAN-RELEASE$
+^revdep/
+^\.github$
+^R/noOpenGL.R$

@@ -2,7 +2,7 @@
 \alias{.check3d}
 \alias{check3d}
 \title{
-Check for an open rgl window.
+Check for an open RGL window.
 }
 \description{
 Mostly for internal use, this function returns the current device
@@ -12,7 +12,7 @@ number if one exists, or opens a new device and returns that.
 .check3d()
 }
 \value{
-The device number of an rgl device.
+The device number of an RGL device.
 }
 \author{
 Duncan Murdoch

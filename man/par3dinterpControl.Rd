@@ -1,7 +1,7 @@
 \name{par3dinterpControl}
 \alias{par3dinterpControl}
 \title{
-Control rgl widget like par3dinterp().
+Control RGL widget like par3dinterp()
 }
 \description{
 This control works with \code{\link{playwidget}} to 
@@ -39,7 +39,7 @@ fn <- par3dinterp(times = (0:2)*0.75, userMatrix = list(M,
                                       scale = c(0.5, 1, 2))
 control <- par3dinterpControl(fn, 0, 3, steps = 15)
 control      
-if (interactive()) 
+if (interactive() || in_pkgdown_example()) 
   rglwidget(width = 500, height = 250) \%>\%
   playwidget(control,
        step = 0.01, loop = TRUE, rate = 0.5)

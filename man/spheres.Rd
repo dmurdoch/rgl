@@ -1,13 +1,11 @@
 \name{spheres3d}
-\alias{rgl.spheres}
 \alias{spheres3d}
-\title{add sphere set shape}
+\title{Add spheres}
 \description{
   Adds a sphere set shape node to the scene
 }
 \usage{
-spheres3d(x, y = NULL, z = NULL, radius = 1, ...)
-rgl.spheres(x, y = NULL, z = NULL, radius, fastTransparency = TRUE, ...)
+spheres3d(x, y = NULL, z = NULL, radius = 1, fastTransparency = TRUE, ...)
 }
 \arguments{
   \item{x, y, z}{Numeric vector of point coordinates corresponding to
@@ -17,7 +15,7 @@ rgl.spheres(x, y = NULL, z = NULL, radius, fastTransparency = TRUE, ...)
   \item{radius}{Vector or single value defining the sphere radius/radii}
   \item{fastTransparency}{logical value indicating whether
 fast sorting should be used for transparency.  See the Details.}
-  \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}
+  \item{ ... }{Material properties. See \code{\link{material3d}} for details.}
 }
 \details{
 If a non-isometric aspect ratio is chosen, these functions will still draw
@@ -26,8 +24,8 @@ to draw shapes that are spherical in the data scale.
 
 When the scale is not isometric, the radius is measured in an average scale.
 In this case the bounding box calculation is iterative, since rescaling the
-plot changes the shape of the spheres in user-coordinate, which changes
-the bounding box.  Versions of \code{rgl} prior to 0.92.802 did not do 
+plot changes the shape of the spheres in user-coordinates, which changes
+the bounding box.  Versions of \pkg{rgl} prior to 0.92.802 did not do 
 this iterative adjustment.
 
 If any coordinate or radius is \code{NA}, the sphere is not plotted.
@@ -45,7 +43,7 @@ results in most cases, but artifacts may be visible,
 especially if the \code{radius} values vary, or they 
 intersect other transparent objects.  Setting 
 \code{fastTransparency = FALSE} will cause the sorting 
-to apply to each of the 512 facets of individual spheres.
+to apply to each of the 480 facets of individual spheres.
 This is much slower, but may produce better
 output.
 } 
@@ -54,9 +52,10 @@ output.
 }
 \examples{
 open3d()
-spheres3d(rnorm(10), rnorm(10), rnorm(10), radius = runif(10), color = rainbow(10))
+spheres3d(rnorm(10), rnorm(10), rnorm(10), 
+          radius = runif(10), color = rainbow(10))
 }
 \seealso{
-  \code{\link{rgl.material}}, \code{\link{aspect3d}} for setting non-isometric scales
+  \code{\link{material3d}}, \code{\link{aspect3d}} for setting non-isometric scales
 }
 \keyword{dynamic}

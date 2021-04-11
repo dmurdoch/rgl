@@ -1,7 +1,7 @@
 \name{show2d}
 \alias{show2d}
 \title{
-Draw a 2D plot on a rectangle in a 3D scene.
+Draw a 2D plot on a rectangle in a 3D scene
 }
 \description{
 This function uses a bitmap of a standard 2D graphics plot

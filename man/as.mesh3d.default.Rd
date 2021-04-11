@@ -8,24 +8,25 @@ Convert object to mesh object
 The \code{as.mesh3d} generic function converts various objects
 to \code{\link{mesh3d}} objects.  
 
-The default method works takes takes a matrix of vertices 
+The default method takes takes a matrix of vertices 
 as input and (optionally) merges repeated vertices, producing a \code{\link{mesh3d}}
 object as output.  It will contain either triangles or quads
 according to the \code{triangles} argument.
 
 If the generic is called without any argument, it will pass
-all rgl ids from the current scene to the 
+all RGL ids from the current scene to the 
 \code{\link{as.mesh3d.rglId}} method.
 }
 \usage{
 as.mesh3d(x, ...)
 \method{as.mesh3d}{default}(x, y = NULL, z = NULL, 
-             triangles = length(x) \%\% 3 == 0, 
+             type = c("triangles", "quads", "points"),
              smooth = FALSE, 
              tolerance = sqrt(.Machine$double.eps), 
              notEqual = NULL, 
              merge = TRUE,
-             ...)
+             ...,
+             triangles)
 }
 \arguments{
   \item{x, y, z}{
@@ -34,10 +35,10 @@ For the default method, \code{x}, \code{y} and \code{z} are
 coordinates. Any reasonable way of defining the coordinates is
 acceptable. See the function \code{\link{xyz.coords}} for details.
 }
-  \item{triangles}{
-Logical value indicating whether the coordinates are for triangles
-or quadrilaterals.
-}
+  \item{type}{
+What type of things should be in the mesh?  Tries
+this list in order until it finds one that works.
+  }
   \item{smooth}{
 If \code{TRUE}, \code{\link{addNormals}} will be called on the mesh
 object to make it render smoothly.
@@ -57,10 +58,13 @@ Should apparently equal vertices be merged?
   \item{\dots}{
 Material properties to pass to \code{\link{tmesh3d}} or \code{\link{qmesh3d}}.
 }
+  \item{triangles}{
+Deprecated.  If present, \code{TRUE} indicates \code{type = "triangles"} and \code{FALSE} indicates \code{type = "quads"}.
+}
 }
 \details{
 The motivation for this function is the following problem:  I was
-asked whether rgl could render a surface made up of triangles or 
+asked whether RGL could render a surface made up of triangles or 
 quadrilaterals to look smooth.  It can do that, but needs normals at 
 each vertex; they should be the average of the normals for each polygon 
 sharing that vertex.  Then OpenGL will interpolate the normals across 

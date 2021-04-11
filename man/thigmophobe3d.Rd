@@ -1,7 +1,7 @@
 \name{thigmophobe3d}
 \alias{thigmophobe3d}
 \title{
-Find the direction away from the closest point in a 3d projection.
+Find the direction away from the closest point in a 3d projection
 }
 \description{
 Jim Lemon's \code{\link[plotrix]{thigmophobe}} function in the 
@@ -50,7 +50,7 @@ Duncan Murdoch
 \code{\link{text3d}}
 }
 \examples{
-if (requireNamespace("plotrix")) {
+if (requireNamespace("plotrix", quietly = TRUE)) {
   # Simulate some data
   xyz <- matrix(rnorm(30), ncol = 3)
   

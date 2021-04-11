@@ -1,7 +1,7 @@
 \name{arrow3d}
 \alias{arrow3d}
 \title{
-Draw an arrow in a scene.
+Draw an arrow
 }
 \description{
 Draws various types of arrows in a scene.

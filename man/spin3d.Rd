@@ -3,7 +3,7 @@
 \title{ Create a function to spin a scene at a fixed rate }
 \description{
 This creates a function to use with \code{\link{play3d}} to
-spin an rgl scene at a fixed rate.
+spin an RGL scene at a fixed rate.
 }
 \usage{
 spin3d(axis = c(0, 0, 1), rpm = 5,
@@ -12,7 +12,7 @@ spin3d(axis = c(0, 0, 1), rpm = 5,
 \arguments{
   \item{axis}{ The desired axis of rotation }
   \item{rpm}{ The rotation speed in rotations per minute }
-  \item{dev}{ Which rgl device to use }
+  \item{dev}{ Which RGL device to use }
   \item{subscene}{ Which subscene to use }
 }
 \value{
@@ -24,7 +24,7 @@ spinning the base matrix for \code{time} seconds at \code{rpm} revolutions per
 minute about the specified \code{axis}.
 }
 \note{
-Prior to rgl version 0.95.1476, the
+Prior to \pkg{rgl} version 0.95.1476, the
 \code{subscene} argument defaulted to the
 current subscene, and any additional entries would
 be ignored by \code{\link{play3d}}.  The current

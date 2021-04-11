@@ -4,9 +4,9 @@
 \alias{segments3d}
 \alias{triangles3d}
 \alias{quads3d}
-\title{add primitive set shape}
+\title{Add primitive shape}
 \description{
-Adds a shape node to the current scene
+Adds a shape node to the current scene.
 }
 \usage{
 points3d(x, y = NULL, z = NULL,  ...)
@@ -19,7 +19,7 @@ quads3d(x, y = NULL, z = NULL, ...)
   \item{x, y, z}{coordinates. Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
-  \item{ ... }{Material properties (see \code{\link{rgl.material}}).
+  \item{ ... }{Material properties (see \code{\link{material3d}}).
   For normals use \code{normals} and for
   texture coordinates use \code{texcoords}; see \code{\link{rgl.primitive}}
   for details.}  
@@ -38,8 +38,7 @@ are blended over the extent of the object.  Polygons
 must be non-degenerate and quadrilaterals must be entirely 
 in one plane and convex, or the results are undefined.
 
-These functions call the lower level functions \code{\link{rgl.points}}, \code{\link{rgl.linestrips}},
-and so on, and are provided for convenience.  
+These functions call the lower level functions \code{\link{rgl.points}}, \code{\link{rgl.linestrips}}.  
 
 The appearance of the new objects are defined by the material properties.
 See \code{\link{rgl.material}} for details.

@@ -2,7 +2,7 @@
 \alias{makeDependency}
 \alias{RGL_DEBUGGING}
 \title{
-Process Javascript for HTML dependency.
+Process Javascript for HTML dependency
 }
 \description{
 A utility function to help in development of internal 
@@ -25,7 +25,7 @@ See details below.
 }
 }
 \details{
-This is a utility function used by \pkg{rgl} 
+This is a utility function used by RGL 
 to process its Javascript code used when displaying \code{\link{rglwidget}} values.  It may be helpful in other packages to use
 in their own installation.
 

@@ -1,5 +1,6 @@
-# The rgl font database is only used when rgl is configured for freetype.  
-# Usually this is not true in Windows, and the windowsFonts are used instead.
+# The rgl font database is only used when rgl is configured for FreeType.  
+# Since 0.105.13 this is always true on Windows, but since 0.106.2
+# r3dDefaults sets useFreeType to FALSE, so the windowsFonts() are used instead.
 
 # This code is closely modelled on the Quartz font database.
 
@@ -36,7 +37,7 @@ printFonts <- function(fonts) {
 
 # If no arguments spec'ed, return entire font database
 # If no named arguments spec'ed, all args should be font names
-# to get info on from the database
+# to get info on them from the database
 # Else, must specify new fonts to enter into database (all
 # of which must be valid filenames and
 # all of which must be named args)

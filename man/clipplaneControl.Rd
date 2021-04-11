@@ -1,7 +1,7 @@
 \name{clipplaneControl}
 \alias{clipplaneControl}
 \title{
-Sets attributes of a clipping plane.
+Sets attributes of a clipping plane
 }
 \description{
 This is a function to produce actions in a web display.  A
@@ -29,7 +29,7 @@ Other parameters passed to \code{\link{propertyControl}}.
 }
 \value{
 A list of class \code{"rglControl"} of cleaned up parameter
-values, to be used in an rgl widget.
+values, to be used in an RGL widget.
 }
 \author{
 Duncan Murdoch
@@ -44,7 +44,7 @@ Duncan Murdoch
     playwidget(clipplaneControl(d = dvals, clipplaneids = id),
                start = 0, stop = 1, step = 0.01,
                rate = 0.5)
-  if (interactive())
+  if (interactive() || in_pkgdown_example())
     widget
   options(saveopts)
 }

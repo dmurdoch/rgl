@@ -2,7 +2,7 @@
 \alias{asRow}
 \alias{getWidgetId}
 \title{
-Convenience functions for rgl HTML layouts
+Convenience functions for RGL HTML layouts
 }
 \description{
 The \code{asRow} function arranges objects in a row in the display;
@@ -16,7 +16,7 @@ getWidgetId(widget)
 \arguments{
   \item{\dots}{
 Either a single \code{"combineWidgets"} object produced by
-\code{asRow} or a \code{\%>\%} pipe of \pkg{rgl} objects, 
+\code{asRow} or a \code{\%>\%} pipe of RGL objects, 
 or several objects intended for rearrangement.
 }
   \item{last}{
@@ -67,6 +67,6 @@ asRow("Mouse mode: ", rglMouse(getWidgetId(.)),
       "Subset: ", filter_checkbox("cylinderselector", 
 		                "Cylinders", sd, ~ cyl, inline = TRUE),
       last = 4, colsize = c(1,2,1,2), height = 60)
-if (interactive())
+if (interactive() || in_pkgdown_example())
   w
 }

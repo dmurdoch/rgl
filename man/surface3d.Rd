@@ -1,5 +1,5 @@
 \name{surface3d}
-\title{add height-field surface shape}
+\title{Add surface}
 \alias{surface3d}
 \alias{terrain3d}
 \description{
@@ -50,12 +50,9 @@ terrain3d(x, y, z, ..., normal_x = NULL, normal_y = NULL, normal_z = NULL)
   \code{surface3d} and \code{terrain3d} are synonyms.
 }
 \examples{
-
 #
 # volcano example taken from "persp"
 #
-
-data(volcano)
 
 z <- 2 * volcano        # Exaggerate the relief
 

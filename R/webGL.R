@@ -106,7 +106,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     result <- header()
 
   scene <- convertScene(width = width, height = height,
-                        elementId = elementId, reuse = reuse,
+                        elementId = elementId, 
                         snapshot = snapshot)
   scene$crosstalk <- list(key = list(), 
   		    group = character(),
@@ -115,7 +115,6 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
   if (is.null(width)) width <- scene$width
   if (is.null(height)) height <- scene$height
 
-  reuse <- attr(scene, "reuse")
   json <- toJSON(I(scene),
                  dataframe = "columns", null = "null", na = "string",
                  auto_unbox = TRUE, digits = getOption("shiny.json.digits",
@@ -133,5 +132,5 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
              )
 
   cat(result, file=filename, sep="\n")
-  invisible(structure(filename, reuse = reuse))
+  invisible(filename)
 }

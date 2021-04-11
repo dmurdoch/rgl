@@ -1,5 +1,5 @@
 \name{rgl.surface}
-\title{add height-field surface shape}
+\title{Add surface (obsolete)}
 \alias{rgl.surface}
 \description{
   Adds a surface to the current scene. The surface is defined by 
