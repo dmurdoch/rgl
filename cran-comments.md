@@ -1,7 +1,9 @@
 0.106.6:
 
-Reverted some unnecessary changes to object internals so
-reverse dependency checks won't see differences.
+- Reverted some unnecessary changes to object internals so
+reverse dependency checks won't see differences; 
+- added compare_proxy.mesh3d method to work with new version
+of testthat.
 
 0.106.5:
 
