@@ -1,3 +1,8 @@
+0.106.6:
+
+Reverted some unnecessary changes to object internals so
+reverse dependency checks won't see differences.
+
 0.106.5:
 
 This tiny revision is mainly intended to try again, hoping

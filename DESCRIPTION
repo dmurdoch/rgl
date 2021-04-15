@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.106.5
+Version: 0.106.6
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -30,6 +30,7 @@ Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20), shiny,
          magrittr, crosstalk, manipulateWidget (>= 0.9.0)
+Enhances: waldo
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for
     constructing representations of geometric objects (cube3d(), etc.).  Output
