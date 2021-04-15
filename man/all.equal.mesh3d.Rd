@@ -27,7 +27,7 @@ compare_proxy.mesh3d(x)
 Two mesh3d objects to compare.  
 }
   \item{x}{
-A single mesh3d object to standarize.
+A single mesh3d object to standardize.
 }
   \item{\dots}{
 Additional parameters to pass to \code{\link{all.equal}}.
