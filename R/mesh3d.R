@@ -1,3 +1,9 @@
+ensureMatrix <- function(x, nrow) {
+  if (!is.matrix(x))
+    x <- matrix(x, nrow = nrow)
+  x
+}
+
 mesh3d <- function( x, y = NULL, z = NULL, vertices, 
                     material = NULL,
                     normals = NULL, texcoords = NULL,
@@ -9,6 +15,9 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
     xyz <- xyz.coords(x, y, z, recycle=TRUE)
     vertices <- rbind(xyz$x, xyz$y, xyz$z, 1) 
   } else vertices <- asHomogeneous2(vertices)
+  
+  # Remove dimnames
+  dimnames(vertices) <- NULL
 
   if (missing(meshColor) 
       && !is.null(material) 
@@ -16,6 +25,7 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
     meshColor <- material$meshColor
     material$meshColor <- NULL
   }
+  
   meshColor <- match.arg(meshColor)
   
   if (is.null(texcoords)
@@ -44,18 +54,46 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
   
   object <- list(
     vb = vertices,
-    ip = points,
-    is = if (!is.null(segments)) matrix(segments, nrow = 2),
-    it = if (!is.null(triangles)) matrix(triangles, nrow = 3),
-    ib = if (!is.null(quads)) matrix(quads, nrow = 4),
     material = .getMaterialArgs(material = material),
     normals = normals,
-    texcoords = texcoords,
-    meshColor = meshColor
+    texcoords = texcoords
   ) 
+  
+  if (!is.null(points))    object$ip <- ensureMatrix(points, 1)
+  if (!is.null(segments))  object$is <- ensureMatrix(segments, 2)
+  if (!is.null(triangles)) object$it <- ensureMatrix(triangles, 3)
+  if (!is.null(quads))     object$ib <- ensureMatrix(quads, 4)
 
+  register_compare_proxy()
+  
   class(object) <- c("mesh3d", "shape3d")
   object
+}
+
+register_compare_proxy <- local({
+  registered <- FALSE
+  function() {
+    if (!registered &&
+        isNamespaceLoaded("waldo")) {
+      registerS3method("compare_proxy", "mesh3d", 
+                       compare_proxy.mesh3d, 
+                       envir = asNamespace("waldo"))
+      registered <<- TRUE
+    }
+  }
+})
+
+compare_proxy.mesh3d <- function(x) {
+  for (n in names(x)) # Some elements are NULL, some are not there
+    if (is.null(x[[n]])) x[[n]] <- NULL
+  if (is.null(x$material) ||
+      length(x$material$color) < 2)
+    x$meshColor <- NULL  # It doesn't matter.
+  for (n in c("ip", "is", "it", "ib"))
+    if (!is.null(x[[n]]))
+      x[[n]] <- as.numeric(x[[n]])
+  x$primitivetype <- NULL # Not used since before 0.100.x
+  x[sort(names(x))]
 }
 
 #
@@ -71,6 +109,10 @@ tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
   meshColor <- match.arg(meshColor)
   if (is.null(dim(vertices)))
     vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
+  
+  # For back-compatibility:
+  colnames(indices) <- NULL   
+  
   mesh3d(vertices = vertices, triangles = indices,
          material = material, normals = normals, texcoords = texcoords,
          meshColor = meshColor)
@@ -90,6 +132,9 @@ qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
   
   if (is.null(dim(vertices)))
     vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
+  
+  # For back-compatibility
+  colnames(indices) <- NULL   
   
   mesh3d(vertices = vertices, quads = indices,
          material = material, normals = normals, texcoords = texcoords,
@@ -381,20 +426,16 @@ print.mesh3d <- function(x, prefix = "", ...) {
       ".\n", sep = "")
 }
 
+match_names <- function(x, reference) {
+  if (!is.null(x))
+    structure(x[names(reference)], class = class(x))
+}
+
 # Compare old and new meshes
 all.equal.mesh3d <- function(target, current, ...) {
-  mcs <- c(target$meshColor, current$meshColor)
-  target$meshColor <- NULL
-  current$meshColor <- NULL
-  result <- all.equal.list(target, current, ...)
-  if (isTRUE(result)) 
-    result <- character()
-  mctest <- is.null(mcs) ||
-            (length(mcs) == 1 && mcs == "vertices") ||
-            (length(mcs) == 2 && mcs[1] == mcs[2])
-  if (!mctest)
-    result <- c(result, "meshColor difference")
-  if (!length(result))
-    result <- TRUE
-  result
+  if (inherits(current, "mesh3d"))
+    all.equal(compare_proxy.mesh3d(target), 
+              compare_proxy.mesh3d(current), ...)
+  else
+    "'current' is not a mesh3d object"
 }

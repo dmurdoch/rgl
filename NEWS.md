@@ -1,5 +1,5 @@
 
-# rgl  0.106.5
+# rgl  0.106.6
 
 ## Major changes
 
@@ -39,6 +39,8 @@
 Windows, so that system fonts will be used by default.
 *  Text `family = "symbol"` has never really worked,
    and is no longer recommended.
+*  Added `compare_proxy` method in case a recent `testthat`
+   is being used.
 
 ## Bug fixes 
 

@@ -94,6 +94,8 @@
                       mono = c("Courier", "Courier New")))
   }
   
+  register_compare_proxy()
+  
   .rglEnv$subsceneList <- NULL
 
   # Workaround for incompatibility with quartz device
