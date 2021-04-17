@@ -56,7 +56,8 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
     vb = vertices,
     material = .getMaterialArgs(material = material),
     normals = normals,
-    texcoords = texcoords
+    texcoords = texcoords,
+    meshColor = meshColor
   ) 
   
   if (!is.null(points))    object$ip <- ensureMatrix(points, 1)
