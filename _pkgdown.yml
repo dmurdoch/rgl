@@ -216,6 +216,7 @@ reference:
   - rglId
   - in_pkgdown_example
   - projectDown
+  - all.equal.mesh3d
 - title: General documentation
 - contents:
   - rgl-package

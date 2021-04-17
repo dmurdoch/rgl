@@ -1,4 +1,12 @@
 
+# rgl  0.106.7
+
+## Bug fixes 
+
+* Some of the changes related to avoiding `testthat` errors
+  in other files accidentally introduced a new error 
+  in coloring meshes in `rgl`:  now fixed.
+  
 # rgl  0.106.6
 
 ## Major changes
