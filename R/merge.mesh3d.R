@@ -3,9 +3,13 @@ merge.mesh3d <- function(x, y, ..., attributesMustMatch = FALSE) {
     stopifnot(inherits(m, "mesh3d"))
     if (nrow(m$vb) == 3)
       m$vb <- rbind(m$vb, 1)
-    if (is.null(m$it))
+    if (!length(m$ip))
+      m$ip <- matrix(numeric(), nrow=1, ncol=0)
+    if (!length(m$is))
+      m$is <- matrix(numeric(), nrow=2, ncol=0)
+    if (!length(m$it))
       m$it <- matrix(numeric(), nrow=3, ncol=0)
-    if (is.null(m$ib))
+    if (!length(m$ib))
       m$ib <- matrix(numeric(), nrow=4, ncol=0)
     if (!is.null(m$normals) && nrow(m$normals) == 3)
       m$normals <- rbind(m$normals, 1)
@@ -40,8 +44,10 @@ merge.mesh3d <- function(x, y, ..., attributesMustMatch = FALSE) {
 
     nx <- ncol(x$vb)
     z <- list(vb = cbind(x$vb, y$vb),
-              it = if (!is.null(x$it) || !is.null(y$it)) cbind(x$it, y$it + nx),
-              ib = if (!is.null(x$ib) || !is.null(y$ib)) cbind(x$ib, y$ib + nx),
+              ip = if (length(x$ip) || length(y$ip)) cbind(x$ip, y$ip + nx),
+              is = if (length(x$is) || length(y$is)) cbind(x$is, y$is + nx),
+              it = if (length(x$it) || length(y$it)) cbind(x$it, y$it + nx),
+              ib = if (length(x$ib) || length(y$ib)) cbind(x$ib, y$ib + nx),
               normals = cbind(x$normals, y$normals),
               texcoords = cbind(x$texcoords, y$texcoords),
               values = c(x$values, y$values),
@@ -76,9 +82,13 @@ merge.mesh3d <- function(x, y, ..., attributesMustMatch = FALSE) {
     z$material$color <- NULL
   if (!length(z$material))
     z$material <- NULL
-  if (!ncol(z$it))
+  if (!length(z$ip))
+    z$ip <- NULL
+  if (!length(z$is))
+    z$is <- NULL
+  if (!length(z$it))
     z$it <- NULL
-  if (!ncol(z$ib))
+  if (!length(z$ib))
     z$ib <- NULL
   z
 }

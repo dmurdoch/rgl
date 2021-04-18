@@ -248,7 +248,7 @@ subdivideLines <- function(x) {
 
 # Undo subdivision for triangles
 rejoinMesh3d <- function(x, tol = 1.e-6) {
-  ntriangs <- ncol(x$it)
+  ntriangs <- length(x$it)/3
   if (ntriangs < 4)
     return(x)
   vals <- if (nrow(x$vb) == 4) asEuclidean(t(x$vb)) else t(x$vb)
