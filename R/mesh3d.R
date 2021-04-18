@@ -333,17 +333,17 @@ shade3d.mesh3d <- function( x, override = TRUE,
                   legacy = doLegacy,
                   faces = doFaces,
                   doLegacy)  
-  if (!is.null(x$ip)) {
+  if (length(x$ip)) {
     args <- getArgs(x$ip)
     result <- c(result, points = do.call(points3d, args = args ))
   }
   
-  if (!is.null(x$is)) {
+  if (length(x$is)) {
     args <- getArgs(x$is)
     result <- c(result, segments = do.call(segments3d, args = args ))
   }
   
-  if (!is.null(x$it)) {
+  if (length(x$it)) {
     if (meshColor == "edges") {
       x$it <- x$it[c(1,2,2,3,3,1),]
       fn <- segments3d
@@ -353,7 +353,7 @@ shade3d.mesh3d <- function( x, override = TRUE,
     result <- c(result, triangles = do.call(fn, args = args ))
   }
 
-  if (!is.null(x$ib)) {
+  if (length(x$ib)) {
     if (meshColor == "edges") {
       x$ib <- x$ib[c(1,2,2,3,3,4,4,1),]
       fn <- segments3d
@@ -420,10 +420,10 @@ showNormals <- function(obj, scale = 1) {
 print.mesh3d <- function(x, prefix = "", ...) {
   cat(prefix, " mesh3d object with ", ncol(x$vb), " vertices, ", 
       paste(c(
-        if (!is.null(x$ip)) paste(length(x$ip), "points"),
-        if (!is.null(x$is)) paste(ncol(x$is), "segments"),
-        if (!is.null(x$it))  paste(ncol(x$it), "triangles"),
-        if (!is.null(x$ib))  paste(ncol(x$ib), "quads")), collapse = ", "),
+        if (length(x$ip)) paste(length(x$ip), "points"),
+        if (length(x$is)) paste(ncol(x$is), "segments"),
+        if (length(x$it))  paste(ncol(x$it), "triangles"),
+        if (length(x$ib))  paste(ncol(x$ib), "quads")), collapse = ", "),
       ".\n", sep = "")
 }
 
