@@ -24,9 +24,27 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
               person("George", "Helffrich", role = "ctb"),
               person("Ivan", "Krylov", role = "ctb"))
 Depends: R (>= 3.3.0)
-Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
-          magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
-          js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont
+Suggests: 
+    MASS,
+    rmarkdown,
+    deldir,
+    orientlib,
+    lattice,
+    misc3d,
+    rstudioapi,
+    magick,
+    plotrix (>= 3.7-3),
+    tripack,
+    interp,
+    alphashape3d,
+    tcltk,
+    js (>= 1.2),
+    akima,
+    webshot2,
+    downlit,
+    pkgdown,
+    extrafont,
+    testthat (>= 3.0.0)
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20), shiny,
          magrittr, crosstalk, manipulateWidget (>= 0.9.0)
@@ -45,5 +63,6 @@ SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Biarch: true
-Additional_repositories:  https://dmurdoch.github.io/drat
+Additional_repositories: https://dmurdoch.github.io/drat
 Remotes: dmurdoch/htmlwidgets@rglpatch, r-lib/downlit, r-lib/pkgdown
+Config/testthat/edition: 3
