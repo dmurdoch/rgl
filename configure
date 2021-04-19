@@ -4320,13 +4320,13 @@ fi
 done
 
     if test "x$ac_cv_header_GL_gl_h" = xno; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required header GL/gl.h, continuing without OpenGL" >&5
-$as_echo "$as_me: WARNING: missing required header GL/gl.h, continuing without OpenGL" >&2;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required header GL/gl.h" >&5
+$as_echo "$as_me: WARNING: missing required header GL/gl.h" >&2;}
       enable_opengl=no
     fi
     if test "x$ac_cv_header_GL_glu_h" = xno; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required header GL/glu.h, continuing without OpenGL" >&5
-$as_echo "$as_me: WARNING: missing required header GL/glu.h, continuing without OpenGL" >&2;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required header GL/glu.h" >&5
+$as_echo "$as_me: WARNING: missing required header GL/glu.h" >&2;}
       enable_opengl=no
     fi
   fi
@@ -4400,8 +4400,8 @@ fi
 
   this=`eval echo '${'$as_ac_Lib'}'`
   if test "x$this" != xyes; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required library ${lGL}, continuing without OpenGL" >&5
-$as_echo "$as_me: WARNING: missing required library ${lGL}, continuing without OpenGL" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required library ${lGL}" >&5
+$as_echo "$as_me: WARNING: missing required library ${lGL}" >&2;}
     enable_opengl=no
   else
     ac_fn_c_check_func "$LINENO" "glEnd" "ac_cv_func_glEnd"
@@ -4473,8 +4473,8 @@ fi
 
   this=`eval echo '${'$as_ac_Lib'}'`
   if test "x$this" != xyes; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required library ${lGLU}, continuing without OpenGL" >&5
-$as_echo "$as_me: WARNING: missing required library ${lGLU}, continuing without OpenGL" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: missing required library ${lGLU}" >&5
+$as_echo "$as_me: WARNING: missing required library ${lGLU}" >&2;}
     enable_opengl=no
   else
     ac_fn_c_check_func "$LINENO" "gluErrorString" "ac_cv_func_gluErrorString"

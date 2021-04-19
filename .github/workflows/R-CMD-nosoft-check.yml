@@ -89,6 +89,8 @@ jobs:
           # so alphashape3d will see rgl when it needs to.
           remotes::install_local()
           remotes::install_cran("rcmdcheck")
+          # Not a hard dependency, but needed for vignettes
+          install.packages("rmarkdown")
         shell: Rscript {0}
 
       - name: Session info with hard deps

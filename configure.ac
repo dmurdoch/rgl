@@ -8,11 +8,11 @@
 ##
 ##
 
-AC_PREREQ(2.50)
+AC_PREREQ([2.69])
 
 ## ---[ VERSION ]-------------------------------------------------------------
 
-AC_INIT()
+AC_INIT
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
 ## pick up compiler as will be used by R CMD INSTALL/SHLIB
@@ -138,11 +138,11 @@ if test "x$enable_opengl" != "xno"; then
   if test $darwin != yes; then
     AC_CHECK_HEADERS(GL/gl.h GL/glu.h)
     if test "x$ac_cv_header_GL_gl_h" = xno; then
-      AC_WARN([missing required header GL/gl.h, continuing without OpenGL])
+      AC_MSG_WARN(missing required header GL/gl.h, continuing without OpenGL)
       enable_opengl=no
     fi
     if test "x$ac_cv_header_GL_glu_h" = xno; then
-      AC_WARN([missing required header GL/glu.h, continuing without OpenGL])
+      AC_MSG_WARN(missing required header GL/glu.h, continuing without OpenGL)
       enable_opengl=no
     fi
   fi
@@ -162,7 +162,7 @@ if test "x$enable_opengl" != "xno"; then
   AC_CHECK_LIB($lGL, glEnd)
   this=`eval echo '${'$as_ac_Lib'}'`
   if test "x$this" != xyes; then
-    AC_WARN([missing required library ${lGL}, continuing without OpenGL])
+    AC_MSG_WARN(missing required library ${lGL}, continuing without OpenGL)
     enable_opengl=no
   else
     AC_CHECK_FUNC(glEnd, [], [enable_opengl=no])
@@ -177,7 +177,7 @@ if test "x$enable_opengl" != "xno"; then
   AC_CHECK_LIB($lGLU, gluErrorString)
   this=`eval echo '${'$as_ac_Lib'}'`
   if test "x$this" != xyes; then
-    AC_WARN([missing required library ${lGLU}, continuing without OpenGL])
+    AC_MSG_WARN(missing required library ${lGLU}, continuing without OpenGL)
     enable_opengl=no
   else
     AC_CHECK_FUNC(gluErrorString, [], [enable_opengl=no])
@@ -240,4 +240,5 @@ AC_SUBST(RGL_NO_OPENGL)
 
 AC_CONFIG_FILES([R/noOpenGL.R src/useNULL/Makevars])
 
-AC_OUTPUT(src/Makevars)
+AC_CONFIG_FILES([src/Makevars])
+AC_OUTPUT
