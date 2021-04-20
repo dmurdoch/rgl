@@ -10,12 +10,14 @@ PKG_CPPFLAGS = \
 PKG_LIBS = -L$(RWINLIB)/lib$(R_ARCH) \
 	-lfreetype -lpng -lz -lgdi32 -lopengl32 -lglu32
 
-all: winlibs $(SHLIB)
+all: winlibs noOpenGL.R $(SHLIB)
 
 $(SHLIB): winlibs
 
 winlibs:
 	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
+	
+noOpenGL.R: noOpenGL.R.in
 	sed -e "s^@RGL_NO_OPENGL@^FALSE^" ../R/noOpenGL.R.in > ../R/noOpenGL.R
 
 clean:

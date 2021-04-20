@@ -1,6 +1,11 @@
 
 # rgl  0.106.8
 
+## Minor changes
+
+* Support for FreeType has been dropped in the experimental
+  Windows Unicode (UCRT) build.
+  
 ## Bug fixes 
 
 * Some of the changes related to avoiding `testthat` errors
