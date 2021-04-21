@@ -4,7 +4,7 @@ PKG_CPPFLAGS = -DHAVE_PNG_H -DRGL_W32 -Iext
 
 PKG_LIBS = -lpng -lz -lgdi32 -lopengl32 -lglu32
 
-all: noOpenGL.R $(SHLIB)
+all: ../R/noOpenGL.R $(SHLIB)
 
-noOpenGL.R: noOpenGL.R.in
+../R/noOpenGL.R: ../R/noOpenGL.R.in
 	sed -e "s^@RGL_NO_OPENGL@^FALSE^" ../R/noOpenGL.R.in > ../R/noOpenGL.R

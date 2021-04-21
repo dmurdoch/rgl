@@ -10,7 +10,7 @@ PKG_CPPFLAGS = \
 PKG_LIBS = -L$(RWINLIB)/lib$(R_ARCH) \
 	-lfreetype -lpng -lz -lgdi32 -lopengl32 -lglu32
 
-all: winlibs noOpenGL.R $(SHLIB)
+all: winlibs ../R/noOpenGL.R $(SHLIB)
 
 $(SHLIB): winlibs
 
