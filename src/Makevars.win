@@ -17,7 +17,7 @@ $(SHLIB): winlibs
 winlibs:
 	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
 	
-noOpenGL.R: noOpenGL.R.in
+../R/noOpenGL.R: ../R/noOpenGL.R.in
 	sed -e "s^@RGL_NO_OPENGL@^FALSE^" ../R/noOpenGL.R.in > ../R/noOpenGL.R
 
 clean:
