@@ -414,3 +414,78 @@ plot3d.rglbackground <- function(x, ...) {
 plot3d.rglWebGL <- function(x, ...) {
   plot3d(attr(x, "origScene"), ...)
 }
+
+compare_proxy.rglscene <- function(x) {
+
+	doSubscene <- function(obj) {
+		if (!is.null(obj$par3d)) {
+		  rect <- obj$par3d$windowRect
+		  if (!is.null(rect)) {
+		    rect <- rect - rect[1:2]
+		    obj$par3d$windowRect <- rect
+		  }
+		}
+		ids <<- c(ids, obj$id)
+		if (is.list(obj$subscenes))
+			obj$subscenes <- lapply(obj$subscenes, doSubscene)
+	}
+
+	ids <- c(x$rootSubscene$id,
+					 sapply(x$objects, function(obj) obj$id))
+	
+	x$rootSubscene <- doSubscene(x$rootSubscene)
+	
+	ids <- unique(ids)
+	newids <- ids - min(ids) + 1
+	names(newids) <- ids
+	
+	newid <- function(id) {
+		result <- if (is.null(id)) NULL
+	            else unname(newids[as.character(id)])
+		if (any(is.na(result)))
+			stop("id gives NA")
+		result
+	}
+	newidc <- function(id) as.character(newid(id))
+	fixvec <- function(vec) {
+		if (is.list(vec))
+			lapply(vec, fixobj)
+	  else
+	  	newid(vec)
+  }
+	fixobj <- function(obj) {
+		obj$id <- newid(obj$id)
+		obj$objects <- fixvec(obj$objects)
+		obj$ids <- fixvec(obj$ids)
+		if (!is.null(obj$par3d)) {
+			obj$par3d$listeners <- newid(obj$par3d$listeners)
+			obj$par3d$fontname <- NULL
+			obj$par3d$maxClipPlanes <- NULL
+			obj$par3d$glVersion <- NULL
+		}
+		if (!is.null(obj$material)) {
+			obj$material$texture <- NULL
+		}
+		obj$subscenes <- fixvec(obj$subscenes)
+		obj
+	}
+	x$rootSubscene <- fixobj(x$rootSubscene)
+
+	x$objects <- lapply(x$objects, fixobj)
+	names(x$objects) <- newidc(names(x$objects))
+	class(x) <- NULL
+	x
+}
+
+# Compare old and new scenes
+all.equal.rglscene <- function(target, current, ...) {
+	if (inherits(current, "rglscene")) {
+		target <- compare_proxy.rglscene(target)
+		current <- compare_proxy.rglscene(current)
+		result <- all.equal(target, 
+							          current, ...)
+		if (!isTRUE(result)) result <- waldo::compare(target, current)
+		result
+	} else
+		"'current' is not an rglscene object"
+}

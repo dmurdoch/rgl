@@ -65,4 +65,4 @@ VignetteBuilder: knitr
 Biarch: true
 Additional_repositories: https://dmurdoch.github.io/drat
 Remotes: dmurdoch/htmlwidgets@rglpatch, r-lib/downlit, r-lib/pkgdown
-Config/testthat/edition: 3
+Config/testthat/edition: 2

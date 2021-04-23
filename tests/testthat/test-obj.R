@@ -1,3 +1,4 @@
+set.seed(123)
 test_that("readOBJ works", {
 	# textured rectangular prism
 	obj_file <- "# geometric vertices
@@ -33,6 +34,9 @@ f 5/9 6/10 2/11 1/12"
 	writeLines(obj_file, filename)
 	mesh <- readOBJ(filename)
 	unlink(filename)
+	open3d()
 	shade3d(mesh)
-	expect_snapshot(unclass(scene3d()))
+	x <- scene3d()
+	expect_known_value(x, 'testdata/obj.rds')
+	close3d()
 })

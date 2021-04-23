@@ -79,6 +79,9 @@ register_compare_proxy <- local({
       registerS3method("compare_proxy", "mesh3d", 
                        compare_proxy.mesh3d, 
                        envir = asNamespace("waldo"))
+      registerS3method("compare_proxy", "rglscene",
+                       compare_proxy.rglscene,
+                       envir = asNamespace("waldo"))
       registered <<- TRUE
     }
   }
