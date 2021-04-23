@@ -2,7 +2,7 @@
 
 ## Minor changes
 
-* The NULL device can now specify par3d("useFreeType")
+* The NULL device can now specify `par3d("useFreeType")`
   and the result is saved.
 
 # rgl  0.106.8
@@ -17,8 +17,8 @@
 * Some of the changes related to avoiding `testthat` errors
   in other files accidentally introduced a new error 
   in coloring meshes in `rgl`:  now fixed.
-* readOBJ() was broken by the 0.106.x changes.
-* merge.mesh3d() failed for meshes containing points or
+* `readOBJ()` was broken by the 0.106.x changes.
+* `merge.mesh3d()` failed for meshes containing points or
   segments.
   
 # rgl  0.106.6
