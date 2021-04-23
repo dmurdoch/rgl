@@ -1,3 +1,9 @@
+# rgl  0.106.9
+
+## Minor changes
+
+* The NULL device can now specify par3d("useFreeType")
+  and the result is saved.
 
 # rgl  0.106.8
 

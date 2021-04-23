@@ -134,8 +134,8 @@ public:
 class NULLFont : public GLFont
 {
 public:
-  NULLFont(const char* in_family, int in_style, double in_cex): 
-    GLFont(in_family, in_style, in_cex, "NULL", false) {};
+  NULLFont(const char* in_family, int in_style, double in_cex, bool useFreeType): 
+    GLFont(in_family, in_style, in_cex, "NULL", useFreeType) {};
 
   void draw(const char* text, int length, double adjx, double adjy, 
             int pos, const RenderContext& rc) {};
