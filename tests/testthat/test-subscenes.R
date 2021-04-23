@@ -38,6 +38,5 @@ test_that("subscenes work", {
 	# Now delete the objects from the root subscene, to reveal the clipping planes
 	useSubscene3d(root)
 	delFromSubscene3d(obj)
-  expect_known_value(scene3d(), "testdata/subscenes.rds")
-	close3d()
+  expect_known_scene("subscenes")
 })

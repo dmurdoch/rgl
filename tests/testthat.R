@@ -1,5 +1,4 @@
 library(testthat)
 library(rgl)
-library(vdiffr)
 options(rgl.useNULL = TRUE)
 test_check("rgl")

@@ -15,8 +15,7 @@ test_that("tmesh3d works", {
 										"normals", "texcoords", "meshColor"),
 							 ignore.order = TRUE)
 	shade3d(m)
-	expect_known_value(scene3d(), file="testdata/tmesh3d.rds")
-	close3d()
+	expect_known_scene("tmesh3d")
 })
 
 test_that("qmesh3d works", {
@@ -27,8 +26,7 @@ test_that("qmesh3d works", {
 										"normals", "texcoords", "meshColor"),
 							 ignore.order = TRUE)
 	shade3d(m)
-	expect_known_value(scene3d(), file="testdata/qmesh3d.rds")
-	close3d()
+	expect_known_scene("qmesh3d")
 })
 
 test_that("shade3d, wire3d and dot3d work", {
@@ -37,20 +35,8 @@ test_that("shade3d, wire3d and dot3d work", {
 	shade3d(mesh)
 	wire3d(translate3d(mesh, 1,1,1))
 	dot3d(translate3d(mesh, 2,2,2))
-	expect_known_value(scene3d(), file="testdata/shade3detc.rds")
-	close3d()
+	expect_known_scene("shade3detc")
 })
-
-test_that("shade3d, wire3d and dot3d work", {
-	open3d()
-	mesh <- cuboctahedron3d(col = "red")
-	shade3d(mesh)
-	wire3d(translate3d(mesh, 1,1,1))
-	dot3d(translate3d(mesh, 2,2,2))
-	expect_known_value(scene3d(), file="testdata/shade3detc.rds")
-	close3d()
-})
-
 
 test_that("transformations work", {
 	open3d()
@@ -58,6 +44,5 @@ test_that("transformations work", {
 	shade3d(translate3d(mesh, 1,2,3))
   shade3d(rotate3d(mesh, 35, 1,2,3))
   shade3d(scale3d(mesh, 1,2,3))
-	expect_known_value(scene3d(), file="testdata/transformations.rds")
-	close3d()
+	expect_known_scene("transformations")
 })

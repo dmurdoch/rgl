@@ -7,6 +7,5 @@ test_that("3D sprites work", {
 						 lit = FALSE, alpha = .2,
 						 textype = "alpha", texture = system.file("textures/particle.png", package = "rgl") )
 	sprites3d( rnorm(10) + 6, rnorm(10), rnorm(10), shape = shade3d(tetrahedron3d(), col = "red") )
-	expect_known_value(scene3d(), "testdata/r3d.rds")
-	close3d()
+	expect_known_scene("r3d")
 })

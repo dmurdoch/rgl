@@ -216,6 +216,7 @@ reference:
   - rglId
   - in_pkgdown_example
   - projectDown
+  - expect_known_scene
   - all.equal.mesh3d
 - title: General documentation
 - contents:
