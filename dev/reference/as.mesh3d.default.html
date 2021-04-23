@@ -67,11 +67,11 @@ as.mesh3d.rglId method." />
 
 
 <!-- dependencies from examples -->
-<script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
-<script src="libs/rglWebGL-binding-0.106.7/rglWebGL.js"></script>
-<link href="libs/rglwidgetClass-0.106.7/rgl.css" rel="stylesheet" />
-<script src="libs/rglwidgetClass-0.106.7/rglClass.min.js"></script>
-<script src="libs/CanvasMatrix4-0.106.7/CanvasMatrix.min.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/rglWebGL-binding-0.106.9/rglWebGL.js"></script>
+<link href="libs/rglwidgetClass-0.106.9/rgl.css" rel="stylesheet" />
+<script src="libs/rglwidgetClass-0.106.9/rglClass.min.js"></script>
+<script src="libs/CanvasMatrix4-0.106.9/CanvasMatrix.min.js"></script>
 
   
 
@@ -95,7 +95,7 @@ as.mesh3d.rglId method." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.7</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
       </span>
     </div>
 
@@ -166,9 +166,9 @@ all RGL ids from the current scene to the
 <code><a href='as.mesh3d.rglId.html'>as.mesh3d.rglId</a></code> method.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as.mesh3d</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'><a href='as.mesh3d.default.html'>as.mesh3d</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 <span class='co'># S3 method for default</span>
-<span class='fu'>as.mesh3d</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, 
+<span class='fu'><a href='as.mesh3d.default.html'>as.mesh3d</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, 
              type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"triangles"</span>, <span class='st'>"quads"</span>, <span class='st'>"points"</span><span class='op'>)</span>,
              smooth <span class='op'>=</span> <span class='cn'>FALSE</span>, 
              tolerance <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>)</span>, 
@@ -264,7 +264,7 @@ within <code>tolerance</code> merged.</p>
                  <span class='fl'>1</span>,  <span class='fl'>1</span>, <span class='op'>-</span><span class='fl'>1</span>,
                  <span class='fl'>1</span>,  <span class='fl'>1</span>,  <span class='fl'>1</span>,
                  <span class='fl'>1</span>, <span class='op'>-</span><span class='fl'>1</span>,  <span class='fl'>1</span><span class='op'>)</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span>, ncol <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-<span class='va'>mesh</span> <span class='op'>&lt;-</span> <span class='fu'>as.mesh3d</span><span class='op'>(</span><span class='va'>xyz</span>, triangles <span class='op'>=</span> <span class='cn'>FALSE</span>, col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
+<span class='va'>mesh</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as.mesh3d.default.html'>as.mesh3d</a></span><span class='op'>(</span><span class='va'>xyz</span>, triangles <span class='op'>=</span> <span class='cn'>FALSE</span>, col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Argument 'triangles' is deprecated; please use 'type' instead.</span></div><div class='input'><span class='va'>mesh</span><span class='op'>$</span><span class='va'>vb</span>
 </div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
 #&gt; [1,]   -1   -1    1    1   -1    1    1
@@ -277,12 +277,12 @@ within <code>tolerance</code> merged.</p>
 #&gt; [3,]    3    6    6
 #&gt; [4,]    4    3    7</div><div class='input'><span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'><a href='shade3d.html'>shade3d</a></span><span class='op'>(</span><span class='va'>mesh</span><span class='op'>)</span>
-</div><div id="rgl3639" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
-<script type="application/json" data-for="rgl3639">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0]},"rootSubscene":140,"objects":{"146":{"id":146,"type":"quads","material":{},"vertices":[[-1,-1,-1],[-1,1,-1],[1,1,-1],[1,-1,-1],[-1,1,-1],[-1,1,1],[1,1,1],[1,1,-1],[1,-1,-1],[1,1,-1],[1,1,1],[1,-1,1]],"colors":[[1,0,0,1]],"centers":[[0,0,-1],[0,1,0],[1,0,0]],"normals":[[0,0,-1],[0,0,-1],[0,0,-1],[0,0,-1],[-0,1,0],[-0,1,0],[-0,1,0],[-0,1,0],[1,0,-0],[1,0,-0],[1,0,-0],[1,0,-0]],"ignoreExtent":false,"flags":32771},"144":{"id":144,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"143":{"id":143,"type":"background","material":{},"colors":[[0.298039227724075,0.298039227724075,0.298039227724075,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"145":{"id":145,"type":"background","material":{"lit":false,"back":"lines"},"colors":[[1,1,1,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"140":{"id":140,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":140,"mouseMode":{"left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,6.69213056564331],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-6.69213056564331],[0,0,0,1]],"projMatrix":[[3.73205089569092,0,0,0],[0,3.73205089569092,0,0],[0,0,-3.86370348930359,-24.1243553161621],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1,1,-1,1,-1,1],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":false,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":"NA","activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[145,146,144],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script><div class='input'>
+</div><div id="rgl64295" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
+<script type="application/json" data-for="rgl64295">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0]},"rootSubscene":146,"objects":{"152":{"id":152,"type":"quads","material":{},"vertices":[[-1,-1,-1],[-1,1,-1],[1,1,-1],[1,-1,-1],[-1,1,-1],[-1,1,1],[1,1,1],[1,1,-1],[1,-1,-1],[1,1,-1],[1,1,1],[1,-1,1]],"colors":[[1,0,0,1]],"centers":[[0,0,-1],[0,1,0],[1,0,0]],"normals":[[0,0,-1],[0,0,-1],[0,0,-1],[0,0,-1],[-0,1,0],[-0,1,0],[-0,1,0],[-0,1,0],[1,0,-0],[1,0,-0],[1,0,-0],[1,0,-0]],"ignoreExtent":false,"flags":32771},"150":{"id":150,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"149":{"id":149,"type":"background","material":{},"colors":[[0.298039227724075,0.298039227724075,0.298039227724075,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"151":{"id":151,"type":"background","material":{"lit":false,"back":"lines"},"colors":[[1,1,1,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"146":{"id":146,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":146,"mouseMode":{"left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,6.69213056564331],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-6.69213056564331],[0,0,0,1]],"projMatrix":[[3.73205089569092,0,0,0],[0,3.73205089569092,0,0],[0,0,-3.86370348930359,-24.1243553161621],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1,1,-1,1,-1,1],"windowRect":[80,125,336,381],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"/System/Library/Fonts/Supplemental/Arial.ttf","maxClipPlanes":6,"glVersion":2.1,"activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[151,152,150],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script><div class='input'>
 <span class='co'># Stop vertices 2 and 5 from being merged</span>
 <span class='va'>notEQ</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='cn'>FALSE</span>, <span class='fl'>12</span>, <span class='fl'>12</span><span class='op'>)</span>
 <span class='va'>notEQ</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>TRUE</span>
-<span class='va'>mesh</span> <span class='op'>&lt;-</span> <span class='fu'>as.mesh3d</span><span class='op'>(</span><span class='va'>xyz</span>, triangles <span class='op'>=</span> <span class='cn'>FALSE</span>, notEqual <span class='op'>=</span> <span class='va'>notEQ</span><span class='op'>)</span>
+<span class='va'>mesh</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as.mesh3d.default.html'>as.mesh3d</a></span><span class='op'>(</span><span class='va'>xyz</span>, triangles <span class='op'>=</span> <span class='cn'>FALSE</span>, notEqual <span class='op'>=</span> <span class='va'>notEQ</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Argument 'triangles' is deprecated; please use 'type' instead.</span></div><div class='input'><span class='va'>mesh</span><span class='op'>$</span><span class='va'>vb</span>
 </div><div class='output co'>#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
 #&gt; [1,]   -1   -1    1    1   -1   -1    1    1

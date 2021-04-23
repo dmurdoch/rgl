@@ -84,7 +84,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.7</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
       </span>
     </div>
 
@@ -215,13 +215,13 @@ to interpret its parameters.</p>
  <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span>
  <span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span>
  <span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span>
- <span class='fu'><a href='points3d.html'>points3d</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span><span class='op'>)</span>
+ <span class='fu'><a href='3dobjects.html'>points3d</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span><span class='op'>)</span>
  <span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'>select3d</span><span class='op'>(</span><span class='op'>)</span>
  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>f</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
    <span class='va'>keep</span> <span class='op'>&lt;-</span> <span class='fu'>f</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span><span class='op'>)</span>
    <span class='fu'><a href='scene.html'>pop3d</a></span><span class='op'>(</span><span class='op'>)</span>
-   <span class='fu'><a href='points3d.html'>points3d</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span><span class='va'>keep</span><span class='op'>]</span>, <span class='va'>y</span><span class='op'>[</span><span class='va'>keep</span><span class='op'>]</span>, <span class='va'>z</span><span class='op'>[</span><span class='va'>keep</span><span class='op'>]</span>, color <span class='op'>=</span> <span class='st'>'red'</span><span class='op'>)</span>
-   <span class='fu'><a href='points3d.html'>points3d</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span><span class='op'>!</span><span class='va'>keep</span><span class='op'>]</span>, <span class='va'>y</span><span class='op'>[</span><span class='op'>!</span><span class='va'>keep</span><span class='op'>]</span>, <span class='va'>z</span><span class='op'>[</span><span class='op'>!</span><span class='va'>keep</span><span class='op'>]</span><span class='op'>)</span>
+   <span class='fu'><a href='3dobjects.html'>points3d</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span><span class='va'>keep</span><span class='op'>]</span>, <span class='va'>y</span><span class='op'>[</span><span class='va'>keep</span><span class='op'>]</span>, <span class='va'>z</span><span class='op'>[</span><span class='va'>keep</span><span class='op'>]</span>, color <span class='op'>=</span> <span class='st'>'red'</span><span class='op'>)</span>
+   <span class='fu'><a href='3dobjects.html'>points3d</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span><span class='op'>!</span><span class='va'>keep</span><span class='op'>]</span>, <span class='va'>y</span><span class='op'>[</span><span class='op'>!</span><span class='va'>keep</span><span class='op'>]</span>, <span class='va'>z</span><span class='op'>[</span><span class='op'>!</span><span class='va'>keep</span><span class='op'>]</span><span class='op'>)</span>
  <span class='op'>}</span>
 <span class='op'>}</span>
 </div></pre>
