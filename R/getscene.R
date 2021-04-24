@@ -484,7 +484,10 @@ all.equal.rglscene <- function(target, current, ...) {
 		current <- compare_proxy.rglscene(current)
 		result <- all.equal(target, 
 							          current, ...)
-		if (!isTRUE(result)) result <- waldo::compare(target, current)
+		
+		if (!isTRUE(result) && isNamespaceLoaded("waldo")) 
+			result <- waldo::compare(target, current)
+		
 		result
 	} else
 		"'current' is not an rglscene object"
