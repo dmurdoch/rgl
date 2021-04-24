@@ -38,11 +38,14 @@ rglMouse <- function(sceneId,
   } else
     upstream <- list()
   
-  if (is.list(upstream$objects))
-    do.call(combineWidgets, c(upstream$objects, 
+  if (is.list(upstream$objects)) {
+  	if (requireNamespace("manipulateWidget", quietly = TRUE))
+      return(do.call(manipulateWidget::combineWidgets, c(upstream$objects, 
                               list(result, 
                                    rowsize = c(upstream$rowsizes, height), 
-                                   ncol = 1)))
-  else
-    browsable(result)
+                                   ncol = 1))))
+    else
+    	warning("Combining widgets requires the 'manipulateWidget' package.", call. = FALSE)
+  }
+  browsable(result)
 }
