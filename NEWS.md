@@ -1,7 +1,10 @@
-# rgl  0.106.9
+# rgl  0.106.10
 
 ## Minor changes
 
+* The `shiny` package has been changed from a required
+  package that is always loaded to a suggested package that
+  will only be loaded if needed.
 * The NULL device can now specify `par3d("useFreeType")`
   and the result is saved.
 

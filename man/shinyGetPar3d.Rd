@@ -81,7 +81,7 @@ Duncan Murdoch
 }
 
 \examples{
-if (interactive() && !in_pkgdown_example()) {
+if (interactive() && !in_pkgdown_example() && requireNamespace("shiny")) {
   save <- options(rgl.useNULL = TRUE)
 
   xyz <- matrix(rnorm(300), ncol = 3)

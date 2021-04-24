@@ -124,9 +124,6 @@
 
   if (!rgl.useNULL()) 
     setGraphicsDelay(unixos = unixos)
-  
-  registerInputHandler("shinyPar3d", convertShinyPar3d, force = TRUE)
-  registerInputHandler("shinyMouse3d", convertShinyMouse3d, force = TRUE)
 
   # handle pkgdown_print and fig_settings before they are in the CRAN version
 
@@ -197,8 +194,8 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
 ##
 
 .onUnload <- function(libpath) {
-  removeInputHandler("shinyPar3d")
-  removeInputHandler("shinyMouse3d")
+  unregisterShinyHandlers()
+
   # shutdown
   .C( rgl_quit, success=FALSE )
   
