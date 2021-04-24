@@ -27,10 +27,10 @@ Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
           js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont,
-          shiny
+          shiny, manipulateWidget (>= 0.9.0)
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20),
-         magrittr, crosstalk, manipulateWidget (>= 0.9.0)
+         magrittr, crosstalk
 Enhances: waldo
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for

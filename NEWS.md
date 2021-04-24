@@ -2,9 +2,10 @@
 
 ## Minor changes
 
-* The `shiny` package has been changed from a required
-  package that is always loaded to a suggested package that
-  will only be loaded if needed.
+* The `shiny` and `manipulateWidget` packages have been changed from imports
+  that are always loaded to suggested packages that
+  will only be loaded if needed.  This will reduce the 
+  "footprint" of `rgl` for users who don't use them.
 * The NULL device can now specify `par3d("useFreeType")`
   and the result is saved.
 

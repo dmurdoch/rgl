@@ -196,12 +196,17 @@ processUpstream <- function(upstream, elementId = NULL, playerId = NULL) {
 }
 
 asRow <- function(..., last = NA, height = NULL, colsize = 1) {
+	if (!requireNamespace("manipulateWidget", quietly = TRUE)) {
+		warning("asRow requires the 'manipulateWidget' package.", call. = FALSE)
+		last <- NA
+	}
   args <- list(...)
-  if (length(args) == 1 
-      && inherits(args[[1]], "combineWidgets")) {
+  if ((length(args) == 1 
+      && inherits(args[[1]], "combineWidgets"))
+  		|| !requireNamespace("manipulateWidget", quietly = TRUE)) {
     orig <- args[[1]]
   } else {
-    orig <- do.call(combineWidgets, c(args, list(ncol = 1, rowsize = getHeights(args))))
+    orig <- do.call(manipulateWidget::combineWidgets, c(args, list(ncol = 1, rowsize = getHeights(args))))
   }
   origlen <- length(orig$widgets)
   for (i in seq_len(origlen))
@@ -223,9 +228,11 @@ asRow <- function(..., last = NA, height = NULL, colsize = 1) {
   
   orig$params$rowsize <- c(origRowsizes[keep], height)
 
-  row <- do.call(combineWidgets, c(orig$widgets[inrow], list(nrow = 1, 
+  if (requireNamespace("manipulateWidget", quietly = TRUE)) {
+    row <- do.call(manipulateWidget::combineWidgets, c(orig$widgets[inrow], list(nrow = 1, 
                                                              colsize = colsize)))
-  orig$widgets <- c(orig$widgets[keep], list(row))
+    orig$widgets <- c(orig$widgets[keep], list(row))
+  }
   orig
 }
 
@@ -354,12 +361,15 @@ rglwidget <- local({
   }
     
   if (is.list(upstream$objects)) {
-    do.call(combineWidgets, c(upstream$objects, 
+  	if (requireNamespace("manipulateWidget", quietly = TRUE))
+      result <- do.call(manipulateWidget::combineWidgets, c(upstream$objects, 
                               list(result, 
                                    rowsize = c(upstream$rowsizes, height), 
                                    ncol = 1)))
-  } else
-    result
+  	else 
+  		warning("Combining widgets requires the 'manipulateWidget' package.", call. = FALSE)
+  }
+  result
 }})
 
 print.rglMouseSelection <- function(x, verbose = FALSE, ...) {
