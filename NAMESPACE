@@ -177,5 +177,4 @@ importFrom(knitr, asis_output, fig_path, hook_plot_custom, image_uri, include_gr
 importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, 
 					 registerInputHandler, removeInputHandler)
 importFrom(magrittr, "%>%")
-importFrom(manipulateWidget, combineWidgets)
 importFrom(stats, coef, predict, residuals)

@@ -45,7 +45,7 @@ loadfonts_rgl <- function(..., quiet = TRUE) {
 			do.call(rglFonts, args)
 	}
 	
-	if (!requireNamespace("extrafont"))
+	if (!requireNamespace("extrafont", quietly = TRUE))
 		stop("This function requires the extrafont package.")
 	
 	fontdata <- extrafont::fonttable()
@@ -72,7 +72,7 @@ loadfonts_rgl <- function(..., quiet = TRUE) {
 }
 
 rglExtrafonts <- function(..., quiet = TRUE) {
-	if (!requireNamespace("extrafont"))
+	if (!requireNamespace("extrafont", quietly = TRUE))
 		return()
 	
 	args <- list(...)

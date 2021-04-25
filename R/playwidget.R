@@ -3,6 +3,7 @@
 #'
 #' @export
 playwidgetOutput <- function(outputId, width = '0px', height = '0px') {
+	registerShinyHandlers()
   shinyWidgetOutput(outputId, 'rglPlayer', width, height, package = 'rgl')
 }
 
@@ -10,8 +11,9 @@ playwidgetOutput <- function(outputId, width = '0px', height = '0px') {
 #'
 #' @export
 renderPlaywidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
+	registerShinyHandlers()
   if (!quoted) expr <- substitute(expr)  # force quoted
-  markRenderFunction(playwidgetOutput,
+  shiny::markRenderFunction(playwidgetOutput,
                      shinyRenderWidget(expr, playwidgetOutput, env, quoted = TRUE),
   		     outputArgs = outputArgs)
 }
@@ -127,13 +129,16 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
     ...
   )
   if (is.list(upstream$objects)) {
-    do.call(combineWidgets, 
-            c(upstream$objects, 
-              list(combineWidgets(result, nrow = 1), 
-                   rowsize = c(upstream$rowsizes, height), 
-                   ncol = 1)))
-  } else
-    result
+  	if (requireNamespace("manipulateWidget", quietly = TRUE))
+  		result <- do.call(manipulateWidget::combineWidgets, 
+                        c(upstream$objects, 
+                         list(manipulateWidget::combineWidgets(result, nrow = 1), 
+                         rowsize = c(upstream$rowsizes, height), 
+                        ncol = 1)))
+  	else
+  		warning("Combining widgets requires the 'manipulateWidget' package.", call. = FALSE)
+  }
+  result
 }
 
 toggleWidget <- function(sceneId, ids = integer(), 
