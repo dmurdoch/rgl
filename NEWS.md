@@ -1,10 +1,12 @@
-# rgl  0.106.9
+# rgl  0.106.10
 
 ## Minor changes
 
 * The NULL device can now specify `par3d("useFreeType")`
   and the result is saved.
-
+* Code to work with pre-1.33 versions of `knitr` has now
+  been removed.
+  
 # rgl  0.106.8
 
 ## Minor changes
