@@ -1,8 +1,10 @@
 # Use the mouse to select points
 # Original version written by Yohann Demont
 
+if (!require("shiny"))
+  stop("This demo requires shiny.")
+
 library(rgl)
-library(shiny)
 
 ui <- fluidPage(
   sidebarLayout(
