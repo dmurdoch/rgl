@@ -9,12 +9,12 @@ fns <- local({
 	registered <- FALSE
 	registerShinyHandlers <- function() {
 		if (!registered) {
-			if (isNamespaceLoaded("shiny")) {
+			if (requireNamespace("shiny")) {
 			  shiny::registerInputHandler("shinyPar3d", convertShinyPar3d, force = TRUE)
 			  shiny::registerInputHandler("shinyMouse3d", convertShinyMouse3d, force = TRUE)
 			  registered <<- TRUE
 			} else
-				warning("Not in Shiny")
+				stop("Not in Shiny")
 		}
 	}
 	unregisterShinyHandlers <- function() {
