@@ -91,7 +91,8 @@ jobs:
           # Use install_local instead of install_deps
           # so alphashape3d will see rgl when it needs to.
           remotes::install_local()
-          remotes::install_deps(dependencies =  c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances"))
+          remotes::install_deps(dependencies =  c("Depends", "Imports", "LinkingTo", "Suggests"))
+          remotes::install_cran("waldo")
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
