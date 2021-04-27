@@ -1,4 +1,6 @@
-library(shiny)
+if (!require("shiny"))
+  stop("This demo requires shiny.")
+
 library(rgl)
 
 options(rgl.useNULL = TRUE)
