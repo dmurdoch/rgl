@@ -108,7 +108,7 @@ jobs:
         
       - name: Install soft dependencies
         run: |
-          remotes::install_deps(dependencies = TRUE)
+          remotes::install_deps(dependencies =  c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances"))
         shell: Rscript {0}   
         
       - name: Session info with all deps
