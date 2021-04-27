@@ -1,7 +1,9 @@
 # A simple Shiny demo written by Dieter Menne
 
 options(rgl.useNULL = TRUE)
-library(shiny)
+if (!require(shiny))
+	stop("This demo requires shiny.")
+
 library(rgl)
 
 app <- shinyApp(

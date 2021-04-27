@@ -51,8 +51,8 @@ jobs:
           # Use install_local before install_deps
           # so alphashape3d will see rgl when it needs to.
           remotes::install_local(force = TRUE)
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_github(c("r-lib/downlit", "dmurdoch/pkgdown@rglpatch"))
+          remotes::install_deps(dependencies =  c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances"))
+          remotes::install_github(c("r-lib/downlit", "r-lib/pkgdown", "dmurdoch/htmlwidgets@rglpatch"))
         shell: Rscript {0}
 
       - name: Deploy package
