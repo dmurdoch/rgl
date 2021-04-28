@@ -90,10 +90,9 @@ jobs:
         run: |
           # Install alphashape3d first; this gets CRAN
           # rgl as well, the next step will replace it.
-          remotes::install_cran("alphashape3d")
-          remotes::install_local(dependencies = "soft")
-          remotes::install_cran("waldo")
-          remotes::install_cran("rcmdcheck")
+          # Also install the others; why not?
+          install.packages(c("alphashape3d", "waldo", "rcmdcheck"))
+          install.packages(".", dependencies = TRUE, repos = NULL, type = "source")
         shell: Rscript {0}
 
       - name: Session info
