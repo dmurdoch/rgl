@@ -94,6 +94,7 @@ jobs:
           install.packages(c("alphashape3d", "waldo", "rcmdcheck"))
           install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
           install.packages(".", dependencies = TRUE, repos = NULL, type = "source")
+          update.packages(ask = FALSE, checkBuilt = TRUE)
         shell: Rscript {0}
 
       - name: Session info
