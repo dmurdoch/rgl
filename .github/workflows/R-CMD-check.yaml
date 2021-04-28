@@ -88,6 +88,8 @@ jobs:
         
       - name: Install dependencies
         run: |
+          # Be sure to get appropriate CRAN or Github versions
+          remove.packages(c("pkgdown", "downlit", "htmlwidgets")
           # First rgl plus hard deps
           remotes::install_local()
           deps <- tools::package_dependencies("rgl", which = c("Suggests", "Enhances"))$rgl
