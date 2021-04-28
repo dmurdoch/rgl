@@ -91,9 +91,15 @@ jobs:
           # Install alphashape3d first; this gets CRAN
           # rgl as well, the next step will replace it.
           # Also install the others; why not?
+          cat("\n\n.libPaths:")
+          print(.libPaths())
+          cat("\n\ngetwd():", getwd(), "\n")
           install.packages(c("alphashape3d", "waldo", "rcmdcheck"))
+          cat("\n\ngetwd():", getwd(), "\n")
           install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
+          cat("\n\ngetwd():", getwd(), "\n")
           install.packages(".", dependencies = TRUE, repos = NULL, type = "source")
+          cat("\n\ngetwd():", getwd(), "\n")
           update.packages(ask = FALSE, checkBuilt = TRUE)
         shell: Rscript {0}
 
