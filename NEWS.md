@@ -9,6 +9,15 @@
 * The NULL device can now specify `par3d("useFreeType")`
   and the result is saved.
 
+## Bug fixes
+
+* The bug workaround in 0.105.22 for issue #27 triggered a bug
+  in RStudio, resulting in two RStudio processes showing up
+  when `rgl` was loaded.  The workaround is now skipped when
+  RStudio is detected.  Use `options(startQuartz = TRUE)`
+  in RStudio before loading `rgl` to run it,
+  or `options(startQuartz = FALSE)` to suppress it.
+
 # rgl  0.106.8
 
 ## Minor changes
