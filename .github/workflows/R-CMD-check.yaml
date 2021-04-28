@@ -88,15 +88,11 @@ jobs:
         
       - name: Install dependencies
         run: |
-          # Install alphashape3d first; this gets CRAN
-          # rgl as well, the next step will replace it.
-          # Also install the others; why not, and 
-          # rmarkdown, because it's not being seen.
-          install.packages(c("alphashape3d", "waldo", "rcmdcheck", "rmarkdown"))
+          # First rgl plus hard deps
+          remotes::install_local()
+          deps <- tools::package_dependencies("rgl", which = c("Suggests", "Enhances"))$rgl
+          install.packages(deps)
           install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
-          install.packages(".", dependencies = TRUE, repos = NULL, type = "source")
-          cat("\n\n.libPaths:")
-          print(.libPaths())
           update.packages(ask = FALSE, checkBuilt = TRUE, instlib = .libPaths()[1])
         shell: Rscript {0}
 
