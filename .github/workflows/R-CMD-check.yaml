@@ -90,8 +90,9 @@ jobs:
         run: |
           # Install alphashape3d first; this gets CRAN
           # rgl as well, the next step will replace it.
-          # Also install the others; why not?
-          install.packages(c("alphashape3d", "waldo", "rcmdcheck"))
+          # Also install the others; why not, and 
+          # rmarkdown, because it's not being seen.
+          install.packages(c("alphashape3d", "waldo", "rcmdcheck", "rmarkdown"))
           install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
           install.packages(".", dependencies = TRUE, repos = NULL, type = "source")
           cat("\n\n.libPaths:")
