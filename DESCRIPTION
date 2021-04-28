@@ -27,7 +27,7 @@ Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
           js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont,
-          shiny, manipulateWidget (>= 0.9.0), rmarkdown
+          shiny, manipulateWidget (>= 0.9.0)
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20),
          magrittr, crosstalk
