@@ -91,7 +91,8 @@ jobs:
           # First rgl plus hard deps
           remotes::install_local()
           deps <- tools::package_dependencies("rgl", which = c("Suggests", "Enhances"))$rgl
-          install.packages(deps)
+          deps <- setdiff(deps, c("tcltk", "webshot2"))
+          remotes::install_cran(deps)
           install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
           update.packages(ask = FALSE, checkBuilt = TRUE, instlib = .libPaths()[1])
         shell: Rscript {0}
