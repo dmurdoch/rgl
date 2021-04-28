@@ -94,7 +94,6 @@ jobs:
           deps <- setdiff(deps, c("tcltk", "webshot2"))
           remotes::install_cran(deps)
           install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
-          update.packages(ask = FALSE, checkBuilt = TRUE, instlib = .libPaths()[1])
         shell: Rscript {0}
 
       - name: Session info

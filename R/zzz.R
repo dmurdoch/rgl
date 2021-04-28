@@ -128,8 +128,13 @@
   # handle pkgdown_print and fig_settings before they are in the CRAN version
 
   if (requireNamespace("pkgdown", quietly = TRUE)) {
-    if ("pkgdown_print" %in% getNamespaceExports("pkgdown"))
+    message("Have pkgdown, looking for pkgdown_print")
+    if ("pkgdown_print" %in% getNamespaceExports("pkgdown")) {
+      message("Have pkgdown_print, getting it.")
       pkgdown_print <<- getExportedValue("pkgdown", "pkgdown_print")
+      message("pkgdown_print:")
+      print(pkgdown_print)
+    }
     if ("fig_settings" %in% getNamespaceExports("pkgdown"))
       pkgdown_fig_settings <<- getExportedValue("pkgdown", "fig_settings")
   }         
