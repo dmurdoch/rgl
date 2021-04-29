@@ -37,6 +37,7 @@ jobs:
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RGL_USE_NULL: true
+      _R_CHECK_DEPENDS_ONLY_: true
 
     steps:
       - uses: actions/checkout@v2
@@ -55,7 +56,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages('remotes')
+          install.packages(c('remotes', 'sessioninfo', 'rcmdcheck'))
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
@@ -83,17 +84,19 @@ jobs:
           remotes::install_version("plotrix", "3.7-5")
         shell: Rscript {0}
         
-      - name: Install hard dependencies
+      - name: Install rgl & dependencies
         run: |
-          # Use install_local instead of install_deps
-          # so alphashape3d will see rgl when it needs to.
-          remotes::install_local()
-          remotes::install_cran("rcmdcheck")
-          # Not a hard dependency, but needed for vignettes
-          install.packages("rmarkdown")
+          # Be sure to get appropriate CRAN or Github versions
+          install.packages(c("pkgdown", "downlit", "htmlwidgets"))
+          # First rgl plus hard deps
+          remotes::install_local(force = TRUE)
+          deps <- tools::package_dependencies("rgl", which = c("Suggests", "Enhances"))$rgl
+          deps <- setdiff(deps, c("tcltk", "webshot2"))
+          remotes::install_cran(deps)
+          install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
         shell: Rscript {0}
 
-      - name: Session info with hard deps
+      - name: Session info
         run: |
           options(width = 100)
           pkgs <- installed.packages()[, "Package"]
@@ -105,25 +108,7 @@ jobs:
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning",
                                check_dir = "check")
         shell: Rscript {0}
-        
-      - name: Install soft dependencies
-        run: |
-          remotes::install_deps(dependencies =  c("Depends", "Imports", "LinkingTo", "Suggests", "Enhances"))
-        shell: Rscript {0}   
-        
-      - name: Session info with all deps
-        run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
-        shell: Rscript {0}        
-      
-      - name: Check with all deps
-        run:  |
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning",
-                               check_dir = "check")
-        shell: Rscript {0}
-                
+
       - name: Upload check results
         if: failure()
         uses: actions/upload-artifact@main
