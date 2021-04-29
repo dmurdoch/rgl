@@ -89,6 +89,7 @@ jobs:
       - name: Install dependencies
         run: |
           # Be sure to get appropriate CRAN or Github versions
+          install.packages(c("pkgdown", "downlit", "htmlwidgets"))
           remove.packages(c("pkgdown", "downlit", "htmlwidgets"))
           # First rgl plus hard deps
           remotes::install_local()
