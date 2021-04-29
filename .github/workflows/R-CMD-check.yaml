@@ -86,12 +86,12 @@ jobs:
           remotes::install_version("plotrix", "3.7-5")
         shell: Rscript {0}
         
-      - name: Install dependencies
+      - name: Install rgl & dependencies
         run: |
           # Be sure to get appropriate CRAN or Github versions
           install.packages(c("pkgdown", "downlit", "htmlwidgets"))
           # First rgl plus hard deps
-          remotes::install_local()
+          remotes::install_local(force = TRUE)
           deps <- tools::package_dependencies("rgl", which = c("Suggests", "Enhances"))$rgl
           deps <- setdiff(deps, c("tcltk", "webshot2"))
           remotes::install_cran(deps)
