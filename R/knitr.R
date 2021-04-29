@@ -6,24 +6,6 @@ in_knitr <- function()
 ##
 ##
 
-## Note:  Up to knitr version 1.30 (or higher?), the is_low_change
-##  and wrap() functions weren't exported as generics, so
-##  rgl had to do all sorts of messing around with knitr 
-##  internals to get things to work.  This code is used
-##  only when oldKnitrVersion() evaluates to TRUE.
-##  Once rgl is willing to depend on a knitr release that
-##  includes those exports, lots of code can be deleted.
-
-oldKnitrVersion <- function() 
-  !all(c("wrap", "is_low_change") %in% getNamespaceExports("knitr"))
-
-if (oldKnitrVersion()) {
-  wrap <- function(x, options = list(), ...) {
-    UseMethod('wrap', x)
-  }
-} else
-  wrap <- getExportedValue("knitr", "wrap")
-
 fns <- local({
   newwindowdone <- FALSE
   closewindowsdone <- FALSE
@@ -183,17 +165,6 @@ fns <- local({
   setupDone <- NULL
   latex <- FALSE
   
-  # These are only used with old knitr
-  
-  oldopthooks <- NULL
-  oldevalhook <- function(...) NULL
-  
-  fig.keep <- NULL
-  fig.show <- NULL
-  fig.beforecode <- NULL
-  
-  # end of old knitr version dependency
-  
   counter <- 0L
   rgl_counter <- function() {
     counter <<- counter + 1L
@@ -209,18 +180,9 @@ fns <- local({
         options(saveopts)
         saveopts <<- NULL
         setupDone <<- NULL
-        if (oldKnitrVersion()) {
-          knit_hooks$set( evaluate = oldevalhook)
-          oldevalhook <<- NULL
-          oldopthooks <<- opts_hooks$get(c("fig.keep", "fig.show", "fig.beforecode"))
-          opts_hooks$set(fig.keep = oldopthooks[["fig.keep"]],
-                         fig.show = oldopthooks[["fig.show"]],
-                         fig.beforecode = oldopthooks[["fig.beforecode"]])
-          oldopthooks <<- NULL
-        }
       }
     }
-    if (!oldKnitrVersion()) {
+
       if (!is.null(setupDone)) {
         if (setupDone$autoprint != autoprint ||
             setupDone$rgl.newwindow != rgl.newwindow ||
@@ -232,13 +194,7 @@ fns <- local({
         return()
       }
       counter <<- 0L
-      registerS3method("wrap", "rglRecordedplot", 
-                       wrap.rglRecordedplot, 
-                       envir = asNamespace("knitr"))
-      registerS3method("is_low_change", "rglRecordedplot",
-                       is_low_change.rglRecordedplot,
-                       envir = asNamespace("knitr"))
-    }
+
     setupDone <<- list(autoprint = autoprint,
                        rgl.newwindow = rgl.newwindow,
                        rgl.closewindows = rgl.closewindows)
@@ -253,17 +209,8 @@ fns <- local({
     knit_hooks$set(rgl = hook_rgl)
     knit_hooks$set(rgl.chunk = hook_rglchunk)
     latex <<- identical(opts_knit$get("out.format"), "latex") || identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
-    if (autoprint) {
+    if (autoprint)
       saveopts <<- options(rgl.printRglwidget = TRUE)
-      if (oldKnitrVersion()) {
-        oldevalhook <<- knit_hooks$get("evaluate")
-        knit_hooks$set( evaluate = hook_evaluate)
-        oldopthooks <<- opts_hooks$get(c("fig.keep", "fig.show", "fig.beforecode"))
-        opts_hooks$set(fig.keep = hook_figkeep,
-                       fig.show = hook_figshow,
-                       fig.beforecode = hook_figbeforecode)
-      }
-    }
   }  
   
   knit_print.rglOpen3d <- function(x, options, ...) {
@@ -289,164 +236,8 @@ fns <- local({
     } else
       invisible(x)
   }
-  
-  ## These definitions are only used with old knitr
-  {
-    find_figs <- function(res, classes = c("recordedplot",
-                                           "rglRecordedplot",
-                                           "knit_image_paths"))
-      vapply(res, function(x) {
-        cl <- class(x)
-        length(intersect(cl, classes)) > 0
-      }, logical(1))
     
-    # move plots before source code
-    fig_before_code <- function(x) {
-      s <- vapply(x, evaluate::is.source, logical(1))
-      if (length(s) == 0 || !any(s)) return(x)
-      s <- which(s)
-      f <- which(find_figs(x))
-      f <- f[f >= min(s)]  # only move those plots after the first code block
-      for (i in f) {
-        j <- max(s[s < i])
-        tmp <- x[i]; x[[i]] <- NULL; x <- append(x, tmp, j - 1)
-        s <- which(vapply(x, evaluate::is.source, logical(1)))
-      }
-      x
-    }
-    
-    hook_evaluate <- function(...) {
-      counter <<- 0L
-      res <- oldevalhook(...)
-      keep <- fig.keep
-      keep.idx <- NULL
-      if (is.logical(keep)) keep <- which(keep)
-      if (is.numeric(keep)) {
-        keep.idx <- keep
-        keep <- "index"
-      }
-      # rearrange locations of figures
-      figs <- find_figs(res)
-      if (length(figs) && any(figs)) {
-        if (keep == 'none') {
-          res <- res[!figs] # remove all
-        } else {
-          if (fig.show == 'hold') {
-            res <- c(res[!figs], res[figs]) # move to the end
-            figs <- find_figs(res)
-          }
-          if (length(figs) && sum(figs) > 1) {
-            if (keep %in% c('first', 'last')) {
-              res <- res[-(if (keep == 'last') head else tail)(which(figs), -1L)]
-            } else {
-              # keep only selected
-              if (keep == 'index') res <- res[-which(figs)[-keep.idx]]
-              # merge low-level plotting changes
-              if (keep == 'high') res <- merge_low_plot(res, figs)
-            }
-          }
-        }
-        if (isTRUE(fig.beforecode)) 
-          res <- fig_before_code(res)
-        # Now replace the rgl figs with their code.
-        figs <- which(find_figs(res, "rglRecordedplot"))
-        for (f in figs) {
-          obj <- res[[f]]
-          options <- obj$options
-          scene <- obj$scene
-          doSnapshot <- knitrNeedsSnapshot(options)
-          content <- rglwidget(scene,
-                               width = obj$width,
-                               height = obj$height,
-                               snapshot = doSnapshot)
-          if (inherits(content, "knit_image_paths")) {
-            # # We've done a snapshot, put it in the right place.
-            name <- file.path(options$fig.path, 
-                              paste0(options$label, "-rgl-", rgl_counter(), ".png"))
-            if (!file_test("-d", dirname(name)))
-              dir.create(dirname(name), recursive = TRUE)
-            file.copy(content, name, overwrite = TRUE)
-            unlink(content)
-            content <- structure(list(file = name,
-                                      extension = "png"),
-                                 class = "html_screenshot")
-            
-          }
-          fig.align <- options$fig.align
-          if (length(fig.align) ==  1 && fig.align != "default")
-            content <- prependContent(content,
-                                      tags$style(sprintf(
-                                        "#%s {%s}",
-                                        content$elementId,
-                                        switch(fig.align,
-                                               center = "margin:auto;",
-                                               left   = "margin-left:0;margin-right:auto;",
-                                               right  = "margin-left:auto;margin-right:0;",
-                                               ""))))
-          res[[f]] <- do.call("knit_print", c(list(content, options), obj$args))
-          if (!latex) 
-            class(res[[f]]) <- c(class(res[[f]]), "knit_asis_htmlwidget")
-        }
-      }
-      # Finally, clear the scenes for the next chunk
-      plotnum <<- 0
-      res
-    }
-    
-    hook_figkeep <- function(options) {
-      if (!is.null(hook <- oldopthooks$fig.keep))
-        options <- hook(options)
-      fig.keep <<- options$fig.keep
-      options$fig.keep <- "all"
-      options
-    }
-    
-    hook_figshow <- function(options) {
-      if (!is.null(hook <- oldopthooks$fig.show))
-        options <- hook(options)
-      fig.show <<- options$fig.show
-      options$fig.show <- "asis"
-      options
-    }
-    
-    hook_figbeforecode <- function(options) {
-      if (!is.null(hook <- oldopthooks$fig.beforecode))
-        options <- hook(options)
-      fig.beforecode <<- options$fig.beforecode
-      options$fig.beforecode <- FALSE
-      options
-    }
-    
-    # These functions are closely based on code from knitr:
-    
-    # compare two recorded plots
-    # Name in knitr is is_low_change; we don't want to conflict
-    # so we rename to is_low_change_rgl, but only call this
-    # in old knitr.
-    
-    is_low_change_rgl <- function(p1, p2) {
-      p1 <- p1[[1]]; p2 <- p2[[1]]  # real plot info is in [[1]],
-      # as is plotnum
-      if (length(p2) < (n1 <- length(p1))) return(FALSE)  # length must increase
-      identical(p1[1:n1], p2[1:n1])
-    }
-    
-    merge_low_plot <- function(x, idx) {
-      idx <- which(idx); n <- length(idx); m <- NULL # store indices that will be removed
-      if (n <= 1) return(x)
-      i1 <- idx[1]; i2 <- idx[2]  # compare plots sequentially
-      for (i in 1:(n - 1)) {
-        # remove the previous plot and move its index to the next plot
-        if (is_low_change_rgl(x[[i1]], x[[i2]])) m <- c(m, i1)
-        i1 <- idx[i + 1]
-        i2 <- idx[i + 2]
-      }
-      if (is.null(m)) x else x[-m]
-    }
-  }
-  ## End of old knitr specifics
-    
-    wrap.rglRecordedplot <- function(x, options = list(), ...)  {
+    sew.rglRecordedplot <- function(x, options = list(), ...)  {
       latex <- identical(opts_knit$get("out.format"), "latex") || identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
       scene <- x$scene
       doSnapshot <- latex || isTRUE(options$snapshot)
@@ -481,36 +272,20 @@ fns <- local({
       if (!latex)
         class(result) <- c(class(result), "knit_asis_htmlwidget")
       
-      wrap(result, options)
+      sew(result, options)
     }
     
     list(
-      # These are for old knitr only:
-      hook_evaluate = hook_evaluate,
-      hook_figkeep = hook_figkeep,
-      hook_figshow = hook_figshow,
-      hook_figbeforecode = hook_figbeforecode,
-      # end of old knitr specifics
-      
       setupKnitr = setupKnitr,
       knit_print.rglOpen3d = knit_print.rglOpen3d,
       knit_print.rglId = knit_print.rglId,
-      wrap.rglRecordedplot = wrap.rglRecordedplot)
-  
+      sew.rglRecordedplot = sew.rglRecordedplot)
 })
 
 setupKnitr <- fns[["setupKnitr"]]
 knit_print.rglId <- fns[["knit_print.rglId"]]
 knit_print.rglOpen3d <- fns[["knit_print.rglOpen3d"]]
-# old knitr specifics
-{
-  hook_evaluate <- fns[["hook_evaluate"]]
-  hook_figkeep <- fns[["hook_figkeep"]]
-  hook_figshow <- fns[["hook_figshow"]]
-  hook_figbeforecode <- fns[["hook_figbeforecode"]]
-}
-# End of old knitr specifics
-wrap.rglRecordedplot <- fns[["wrap.rglRecordedplot"]]
+sew.rglRecordedplot <- fns[["sew.rglRecordedplot"]]
 
 rm(fns)
 

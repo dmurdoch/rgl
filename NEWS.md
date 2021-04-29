@@ -1,4 +1,4 @@
-# rgl  0.106.12
+# rgl  0.106.13
 
 ## Minor changes
 
@@ -8,6 +8,8 @@
   "footprint" of `rgl` for users who don't use them.
 * The NULL device can now specify `par3d("useFreeType")`
   and the result is saved.
+* Code to work with pre-1.33 versions of `knitr` has now
+  been removed.
 
 ## Bug fixes
 
@@ -17,6 +19,7 @@
   RStudio is detected.  Use `options(startQuartz = TRUE)`
   in RStudio before loading `rgl` to run it,
   or `options(startQuartz = FALSE)` to suppress it.
+
 
 # rgl  0.106.8
 
