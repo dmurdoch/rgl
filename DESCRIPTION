@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.106.10
+Version: 0.106.13
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -47,4 +47,3 @@ BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Biarch: true
 Additional_repositories:  https://dmurdoch.github.io/drat
-Remotes: dmurdoch/htmlwidgets@rglpatch, r-lib/downlit, r-lib/pkgdown
