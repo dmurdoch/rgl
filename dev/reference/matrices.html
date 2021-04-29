@@ -85,7 +85,7 @@ vectors between homogeneous and Euclidean coordinates." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
       </span>
     </div>
 
@@ -248,7 +248,7 @@ rendering.</p></div>
     <pre class="examples"><div class='input'><span class='co'># A 90 degree rotation about the x axis:</span>
 
 <span class='fu'>rotationMatrix</span><span class='op'>(</span><span class='va'>pi</span><span class='op'>/</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      [,1]         [,2]          [,3] [,4]
+</div><div class='co'>#&gt;      [,1]         [,2]          [,3] [,4]
 #&gt; [1,]    1 0.000000e+00  0.000000e+00    0
 #&gt; [2,]    0 6.123234e-17 -1.000000e+00    0
 #&gt; [3,]    0 1.000000e+00  6.123234e-17    0
@@ -256,14 +256,14 @@ rendering.</p></div>
 <span class='co'># Find what happens when you rotate (2, 0, 0) by 45 degrees about the y axis:</span>
 
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>asHomogeneous</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>x</span> <span class='op'>%*%</span> <span class='fu'>rotationMatrix</span><span class='op'>(</span><span class='va'>pi</span><span class='op'>/</span><span class='fl'>4</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>x</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='fu'>rotationMatrix</span><span class='op'>(</span><span class='va'>pi</span><span class='op'>/</span><span class='fl'>4</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
 <span class='fu'>asEuclidean</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          [,1] [,2]     [,3]
+</div><div class='co'>#&gt;          [,1] [,2]     [,3]
 #&gt; [1,] 1.414214    0 1.414214</div><div class='input'>
 <span class='co'># or more simply...</span>
 
 <span class='fu'>rotate3d</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='va'>pi</span><span class='op'>/</span><span class='fl'>4</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          [,1] [,2]     [,3]
+</div><div class='co'>#&gt;          [,1] [,2]     [,3]
 #&gt; [1,] 1.414214    0 1.414214</div><div class='input'>
 </div></pre>
   </div>

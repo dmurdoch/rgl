@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
       </span>
     </div>
 
@@ -170,7 +170,7 @@ Ignored if <code>webshot = TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>arguments to pass to <code><a href='https://rdrr.io/pkg/webshot2/man/webshot.html'>webshot2::webshot</a></code></p></td>
+      <td><p>arguments to pass to <code>webshot2::webshot</code></p></td>
     </tr>
     <tr>
       <th>scene</th>
@@ -210,7 +210,7 @@ filename of the saved file is returned invisibly.</p>
     <p>When <code><a href='rgl.useNULL.html'>rgl.useNULL()</a></code> is <code>TRUE</code>, only <code>webshot = TRUE</code>
 will produce a snapshot.  It requires the <span class="pkg">webshot2</span>
 package, which as of this writing is not available on CRAN; to
-install it, use <code><a href='https://remotes.r-lib.org/reference/install_github.html'>remotes::install_github("rstudio/webshot2")</a></code></p>
+install it, use <code>remotes::install_github("rstudio/webshot2")</code></p>
 <p><code>rgl.snapshot</code> works by taking an image from the displayed
 window on-screen.
 On some systems, the snapshot

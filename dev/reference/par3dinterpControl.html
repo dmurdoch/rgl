@@ -61,7 +61,10 @@ as par3dinterp does within R." />
 
 
 <!-- dependencies from examples -->
-
+<script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
+<script src="libs/rglPlayer-binding-0.106.13/rglPlayer.js"></script>
+<link href="libs/rglwidgetClass-0.106.13/rgl.css" rel="stylesheet" />
+<script src="libs/rglwidgetClass-0.106.13/rglClass.min.js"></script>
 
   
 
@@ -85,7 +88,7 @@ as par3dinterp does within R." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
       </span>
     </div>
 
@@ -192,10 +195,10 @@ as <code><a href='par3dinterp.html'>par3dinterp</a></code> does within R.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='va'>plot3d</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
+</div><div class='co'>#&gt; 
 #&gt; plot3d&gt;   open3d()
-#&gt; glX 
-#&gt;  62 
+#&gt; null 
+#&gt;   60 
 #&gt; 
 #&gt; plot3d&gt;   x &lt;- sort(rnorm(1000))
 #&gt; 
@@ -210,7 +213,7 @@ as <code><a href='par3dinterp.html'>par3dinterp</a></code> does within R.</p>
                                       scale <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>control</span> <span class='op'>&lt;-</span> <span class='fu'>par3dinterpControl</span><span class='op'>(</span><span class='va'>fn</span>, <span class='fl'>0</span>, <span class='fl'>3</span>, steps <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span>
 <span class='va'>control</span>      
-</div><div class='output co'>#&gt; $type
+</div><div class='co'>#&gt; $type
 #&gt; [1] "propertySetter"
 #&gt; 
 #&gt; $value
@@ -266,7 +269,7 @@ as <code><a href='par3dinterp.html'>par3dinterp</a></code> does within R.</p>
 #&gt; [11] NA           NA          
 #&gt; 
 #&gt; $objids
-#&gt; [1] 998
+#&gt; [1] 864
 #&gt; 
 #&gt; $param
 #&gt;  [1] 0.0 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 1.8 2.0 2.2 2.4 2.6 2.8 3.0
@@ -276,10 +279,11 @@ as <code><a href='par3dinterp.html'>par3dinterp</a></code> does within R.</p>
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "rglControl"</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> 
-  <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>500</span>, height <span class='op'>=</span> <span class='fl'>250</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>500</span>, height <span class='op'>=</span> <span class='fl'>250</span><span class='op'>)</span> <span class='op'><a href='import.html'>%&gt;%</a></span>
   <span class='fu'><a href='playwidget.html'>playwidget</a></span><span class='op'>(</span><span class='va'>control</span>,
        step <span class='op'>=</span> <span class='fl'>0.01</span>, loop <span class='op'>=</span> <span class='cn'>TRUE</span>, rate <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-</div></pre>
+</div><div class='co'>#&gt; <span class='warning'>Warning: </span>Combining widgets requires the 'manipulateWidget' package.</div><div id="rgl-play28605" style="width:480px;height:40px;" class="rglPlayer html-widget"></div>
+<script type="application/json" data-for="rgl-play28605">{"x":{"actions":[{"type":"propertySetter","value":0,"values":[1,0,0,0,0.342020143325668,-0.939692620785909,0,0.939692620785909,0.342020143325668,0.5,null,null,0.998369041435951,0.050703068253648,0.0262384445409057,-0.00731460204482564,0.569415722160211,-0.822017172541846,-0.0566193756516804,0.820484572814402,0.568857901478376,0.534842192195471,null,null,0.98910539224113,0.105661522542142,0.102499588748425,-0.0601797380966138,0.925674267844166,-0.373504416270798,-0.134346277068413,0.363266833753431,0.921948092537001,0.637640342696072,null,null,0.990712394137505,0.0687949662607048,0.1172868480245,-0.0866843213832906,0.984106495092247,0.154984627442763,-0.104760586713955,-0.163712122136518,0.980929946804004,0.814507563070215,null,null,0.996736229447332,-0.0339197517668377,-0.0732553025192784,0.0572362288499404,0.936865474310421,0.344974052867963,0.0569289295011959,-0.348040993972243,0.935749199038215,1.07166340940865,null,null,0.828096221514596,-0.298486803738494,-0.474512672019649,0.343807556970808,0.938993750802656,0.0093327232533895,0.442778738969041,-0.170869435381339,0.880199195846854,1.3961766429234,null,null,0.345267169848214,-0.719548400865846,-0.602528572132814,0.320091605851983,0.693799361526748,-0.645123096632089,0.882231231190612,0.0298754875521824,0.469867545118214,1.73147313103932,null,null,0.0341197039486521,-0.921358025365572,-0.387214714205066,0.0487398057084367,0.3885132867595,-0.920153170592176,0.998228569588128,0.012522583830216,0.0581627694685787,1.96498529830491,null,null,0.0341197039486523,-0.921358025365572,-0.387214714205066,0.0487398057084373,0.3885132867595,-0.920153170592176,0.998228569588128,0.0125225838302158,0.0581627694685793,1.96498529830491,null,null,0.345267169848215,-0.719548400865845,-0.602528572132814,0.320091605851984,0.693799361526749,-0.645123096632088,0.882231231190611,0.0298754875521821,0.469867545118215,1.73147313103932,null,null,0.828096221514596,-0.298486803738494,-0.474512672019649,0.343807556970808,0.938993750802656,0.00933272325338992,0.44277873896904,-0.17086943538134,0.880199195846854,1.3961766429234,null,null,0.996736229447332,-0.0339197517668374,-0.0732553025192781,0.05723622884994,0.936865474310421,0.344974052867963,0.0569289295011957,-0.348040993972243,0.935749199038215,1.07166340940865,null,null,0.990712394137505,0.068794966260705,0.117286848024501,-0.0866843213832907,0.984106495092247,0.154984627442762,-0.104760586713956,-0.163712122136517,0.980929946804004,0.814507563070215,null,null,0.98910539224113,0.105661522542142,0.102499588748425,-0.0601797380966137,0.925674267844166,-0.373504416270798,-0.134346277068413,0.363266833753431,0.921948092537001,0.637640342696072,null,null,0.998369041435951,0.0507030682536479,0.0262384445409058,-0.00731460204482553,0.56941572216021,-0.822017172541847,-0.0566193756516804,0.820484572814402,0.568857901478376,0.534842192195471,null,null,1,0,0,0,0.342020143325668,-0.939692620785909,0,0.939692620785909,0.342020143325668,0.5,null,null],"entries":[0,1,2,4,5,6,8,9,10,0,null,null],"properties":["userMatrix","userMatrix","userMatrix","userMatrix","userMatrix","userMatrix","userMatrix","userMatrix","userMatrix","scale",null,null],"objids":864,"param":[0,0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2,2.2,2.4,2.6,2.8,3],"interp":true}],"start":0,"stop":3,"value":0,"interval":0.05,"rate":0.5,"components":["Reverse","Play","Slower","Faster","Reset","Slider","Label"],"buttonLabels":["Reverse","Play","Slower","Faster","Reset","Slider","Label"],"pause":"Pause","loop":true,"step":0.01,"labels":null,"precision":3,"reinit":null,"sceneId":"rgl44705","respondTo":null},"evals":[],"jsHooks":[]}</script></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

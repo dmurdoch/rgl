@@ -60,7 +60,10 @@ that will toggle the display of items in the scene." />
 
 
 <!-- dependencies from examples -->
-
+<script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
+<script src="libs/rglPlayer-binding-0.106.13/rglPlayer.js"></script>
+<link href="libs/rglwidgetClass-0.106.13/rgl.css" rel="stylesheet" />
+<script src="libs/rglwidgetClass-0.106.13/rglClass.min.js"></script>
 
   
 
@@ -84,7 +87,7 @@ that will toggle the display of items in the scene." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
       </span>
     </div>
 
@@ -206,13 +209,14 @@ of HTML control.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>theplot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
-<span class='va'>widget</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span>height <span class='op'>=</span> <span class='fl'>300</span>, width <span class='op'>=</span> <span class='fl'>300</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<span class='va'>widget</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span>height <span class='op'>=</span> <span class='fl'>300</span>, width <span class='op'>=</span> <span class='fl'>300</span><span class='op'>)</span> <span class='op'><a href='import.html'>%&gt;%</a></span>
   <span class='fu'>toggleWidget</span><span class='op'>(</span><span class='va'>theplot</span><span class='op'>[</span><span class='st'>"data"</span><span class='op'>]</span>, 
                hidden <span class='op'>=</span> <span class='va'>theplot</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"xlab"</span>, <span class='st'>"ylab"</span>, <span class='st'>"zlab"</span><span class='op'>)</span><span class='op'>]</span>, 
                label <span class='op'>=</span> <span class='st'>"Points"</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='co'>#&gt; <span class='warning'>Warning: </span>Combining widgets requires the 'manipulateWidget' package.</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
   <span class='va'>widget</span>
-</div></pre>
+</div><div id="rgl-play45461" style="width:480px;height:40px;" class="rglPlayer html-widget"></div>
+<script type="application/json" data-for="rgl-play45461">{"x":{"actions":[{"type":"subsetSetter","value":0,"subsets":[2051,[2053,2054,2055]],"subscenes":null,"fullset":[2051,2053,2054,2055],"accumulate":false,"labels":null}],"start":0,"stop":1,"value":0,"interval":1,"rate":1,"components":"Step","buttonLabels":"Points","pause":"Pause","loop":true,"step":1,"labels":null,"precision":3,"reinit":null,"sceneId":"rgl25245","respondTo":null},"evals":[],"jsHooks":[]}</script></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -103,7 +103,7 @@ deletion of RGL scenes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
       </span>
     </div>
 
@@ -229,7 +229,7 @@ warning will be issued, and the first set of arguments
 will be used.</p>
 <p>Mixing explicit calls
 to <code><a href='rglwidget.html'>rglwidget</a></code> with auto-printing is likely to lead to failure of some
-scenes to display.  To avoid this, set <code><a href='https://rdrr.io/r/base/options.html'>options(rgl.printRglwidget = FALSE)</a></code> before using such explicit calls.  Similarly,
+scenes to display.  To avoid this, set <code>options(rgl.printRglwidget = FALSE)</code> before using such explicit calls.  Similarly,
 use that option before calling the <code><a href='https://rdrr.io/r/utils/example.html'>example</a></code> function
 in a code chunk if the example prints RGL objects.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -246,7 +246,7 @@ to close windows at the end of the chunk.  Default is set by <code>setupKnitr</c
   WebGL window.</p></li>
 <li><p><code>snapshot</code>: Logical value:  when autoprinting
   in HTML, should a snapshot be used instead of the dynamic 
-  WebGL display?  Corresponds to <code><a href='rglwidget.html'>rglwidget(snapshot = TRUE, webgl = FALSE)</a></code>.  Ignored in LaTeX, where a snapshot
+  WebGL display?  Corresponds to <code>rglwidget(snapshot = TRUE, webgl = FALSE)</code>.  Ignored in LaTeX, where a snapshot
   will always be produced (unless <code>fig.keep</code> specifies
   no figure at all).</p></li>
 <li><p><code>dpi</code>, <code>fig.retina</code>, <code>fig.width</code>, <code>fig.height</code>:  standard <span class="pkg">knitr</span> chunk

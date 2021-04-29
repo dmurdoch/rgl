@@ -86,7 +86,7 @@ in a case-insensitive test, TRUE is returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
       </span>
     </div>
 
@@ -159,7 +159,7 @@ in a case-insensitive test, <code>TRUE</code> is returned.</p>
 
     <p>This function is checked by the initialization code when the <span class="pkg">rgl</span> package
 is loaded.  Thus if you want to run RGL on a system where there is no
-graphics support, you should run <code><a href='https://rdrr.io/r/base/options.html'>options(rgl.useNULL = TRUE)</a></code>
+graphics support, you should run <code>options(rgl.useNULL = TRUE)</code>
 or set the environment variable <code>RGL_USE_NULL=TRUE</code> *before*
 calling <code><a href='https://github.com/dmurdoch/rgl'>library(rgl)</a></code> (or other code that 
 loads <span class="pkg">rgl</span>), and it will not fail in its attempt at initialization.</p>
@@ -176,7 +176,7 @@ device.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>rgl.useNULL</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div></pre>
+</div><div class='co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

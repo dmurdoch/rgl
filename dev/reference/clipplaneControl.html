@@ -63,7 +63,10 @@ planes." />
 
 
 <!-- dependencies from examples -->
-
+<script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
+<script src="libs/rglPlayer-binding-0.106.13/rglPlayer.js"></script>
+<link href="libs/rglwidgetClass-0.106.13/rgl.css" rel="stylesheet" />
+<script src="libs/rglwidgetClass-0.106.13/rglClass.min.js"></script>
 
   
 
@@ -87,7 +90,7 @@ planes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
       </span>
     </div>
 
@@ -149,7 +152,7 @@ planes." />
     <div class="ref-description">
     <p>This is a function to produce actions in a web display.  A
 <code><a href='playwidget.html'>playwidget</a></code> or Shiny
-input control (e.g. a <code><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></code> control)
+input control (e.g. a <code>sliderInput</code> control)
 sets a value which controls attributes of one or more clipping
 planes.</p>
     </div>
@@ -191,13 +194,14 @@ values, to be used in an RGL widget.</p>
   <span class='va'>xyz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>300</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
   <span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span><span class='va'>xyz</span>, type<span class='op'>=</span><span class='st'>"s"</span>, col <span class='op'>=</span> <span class='st'>"blue"</span>, zlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"clipplanes"</span><span class='op'>]</span>
   <span class='va'>dvals</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='op'>-</span><span class='fl'>3</span><span class='op'>)</span>
-  <span class='va'>widget</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='va'>widget</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='import.html'>%&gt;%</a></span>
     <span class='fu'><a href='playwidget.html'>playwidget</a></span><span class='op'>(</span><span class='fu'>clipplaneControl</span><span class='op'>(</span>d <span class='op'>=</span> <span class='va'>dvals</span>, clipplaneids <span class='op'>=</span> <span class='va'>id</span><span class='op'>)</span>,
                start <span class='op'>=</span> <span class='fl'>0</span>, stop <span class='op'>=</span> <span class='fl'>1</span>, step <span class='op'>=</span> <span class='fl'>0.01</span>,
                rate <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='co'>#&gt; <span class='warning'>Warning: </span>Combining widgets requires the 'manipulateWidget' package.</div><div class='input'>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
     <span class='va'>widget</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span><span class='va'>saveopts</span><span class='op'>)</span>
+</div><div id="rgl-play847" style="width:480px;height:40px;" class="rglPlayer html-widget"></div>
+<script type="application/json" data-for="rgl-play847">{"x":{"actions":[{"type":"propertySetter","value":0,"values":[[3],[-3]],"entries":3,"properties":"vClipplane","objids":442,"param":[0,1],"interp":true}],"start":0,"stop":1,"value":0,"interval":0.05,"rate":0.5,"components":["Reverse","Play","Slower","Faster","Reset","Slider","Label"],"buttonLabels":["Reverse","Play","Slower","Faster","Reset","Slider","Label"],"pause":"Pause","loop":true,"step":0.01,"labels":null,"precision":3,"reinit":null,"sceneId":"rgl6509","respondTo":null},"evals":[],"jsHooks":[]}</script><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span><span class='va'>saveopts</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

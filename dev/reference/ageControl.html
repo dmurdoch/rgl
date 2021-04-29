@@ -64,7 +64,10 @@ Attributes of those vertices can then be changed." />
 
 
 <!-- dependencies from examples -->
-
+<script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
+<script src="libs/rglPlayer-binding-0.106.13/rglPlayer.js"></script>
+<link href="libs/rglwidgetClass-0.106.13/rgl.css" rel="stylesheet" />
+<script src="libs/rglwidgetClass-0.106.13/rglClass.min.js"></script>
 
   
 
@@ -88,7 +91,7 @@ Attributes of those vertices can then be changed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
       </span>
     </div>
 
@@ -220,16 +223,17 @@ values, to be used in an RGL widget.</p>
   <span class='va'>xyz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>theta</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>cos</a></span><span class='op'>(</span><span class='va'>theta</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>theta</span><span class='op'>/</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
   <span class='va'>lineid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span><span class='va'>xyz</span>, type<span class='op'>=</span><span class='st'>"l"</span>, alpha <span class='op'>=</span> <span class='fl'>0</span>, lwd <span class='op'>=</span> <span class='fl'>5</span>, col <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"data"</span><span class='op'>]</span>
 
-  <span class='va'>widget</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='va'>widget</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rglwidget.html'>rglwidget</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='import.html'>%&gt;%</a></span>
   <span class='fu'><a href='playwidget.html'>playwidget</a></span><span class='op'>(</span><span class='fu'>ageControl</span><span class='op'>(</span>births <span class='op'>=</span> <span class='va'>theta</span>,
                         ages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>4</span><span class='op'>*</span><span class='va'>pi</span>, <span class='op'>-</span><span class='fl'>4</span><span class='op'>*</span><span class='va'>pi</span>, <span class='fl'>1</span><span class='op'>-</span><span class='fl'>4</span><span class='op'>*</span><span class='va'>pi</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>,
                         objids <span class='op'>=</span> <span class='va'>lineid</span>,
                         alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>,
              start <span class='op'>=</span> <span class='fl'>0</span>, stop <span class='op'>=</span> <span class='fl'>4</span><span class='op'>*</span><span class='va'>pi</span>,
              step <span class='op'>=</span> <span class='fl'>0.1</span>, rate <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='co'>#&gt; <span class='warning'>Warning: </span>Combining widgets requires the 'manipulateWidget' package.</div><div class='input'>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>||</span> <span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
     <span class='va'>widget</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span><span class='va'>saveopts</span><span class='op'>)</span>
+</div><div id="rgl-play43717" style="width:480px;height:40px;" class="rglPlayer html-widget"></div>
+<script type="application/json" data-for="rgl-play43717">{"x":{"actions":[{"type":"ageSetter","objids":42,"value":0,"births":[0,0.126933036508679,0.253866073017357,0.380799109526036,0.507732146034714,0.634665182543393,0.761598219052071,0.88853125556075,1.01546429206943,1.14239732857811,1.26933036508679,1.39626340159546,1.52319643810414,1.65012947461282,1.7770625111215,1.90399554763018,2.03092858413886,2.15786162064753,2.28479465715621,2.41172769366489,2.53866073017357,2.66559376668225,2.79252680319093,2.91945983969961,3.04639287620828,3.17332591271696,3.30025894922564,3.42719198573432,3.554125022243,3.68105805875168,3.80799109526036,3.93492413176903,4.06185716827771,4.18879020478639,4.31572324129507,4.44265627780375,4.56958931431243,4.69652235082111,4.82345538732978,4.95038842383846,5.07732146034714,5.20425449685582,5.3311875333645,5.45812056987318,5.58505360638185,5.71198664289053,5.83891967939921,5.96585271590789,6.09278575241657,6.21971878892525,6.34665182543393,6.4735848619426,6.60051789845128,6.72745093495996,6.85438397146864,6.98131700797732,7.108250044486,7.23518308099468,7.36211611750335,7.48904915401203,7.61598219052071,7.74291522702939,7.86984826353807,7.99678130004675,8.12371433655542,8.2506473730641,8.37758040957278,8.50451344608146,8.63144648259014,8.75837951909882,8.8853125556075,9.01224559211617,9.13917862862485,9.26611166513353,9.39304470164221,9.51997773815089,9.64691077465957,9.77384381116824,9.90077684767692,10.0277098841856,10.1546429206943,10.281575957203,10.4085089937116,10.5354420302203,10.662375066729,10.7893081032377,10.9162411397464,11.043174176255,11.1701072127637,11.2970402492724,11.4239732857811,11.5509063222897,11.6778393587984,11.8047723953071,11.9317054318158,12.0586384683245,12.1855715048331,12.3125045413418,12.4394375778505,12.5663706143592],"ages":[null,-12.5663706143592,-12.5663706143592,-11.5663706143592,0,0,1,null],"alpha":[0,0,1,0,0,1,0,0]}],"start":0,"stop":12.5663706143592,"value":0,"interval":0.05,"rate":4,"components":["Reverse","Play","Slower","Faster","Reset","Slider","Label"],"buttonLabels":["Reverse","Play","Slower","Faster","Reset","Slider","Label"],"pause":"Pause","loop":true,"step":0.1,"labels":null,"precision":3,"reinit":null,"sceneId":"rgl46235","respondTo":null},"evals":[],"jsHooks":[]}</script><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span><span class='va'>saveopts</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
