@@ -110,7 +110,6 @@ register_pkgdown_methods <- local({
 	registered <- FALSE
 	function(register = in_pkgdown_example()) {
 		if (!registered && register) {
-			message("register_pkgdown_methods: in_pkgdown_example = ", in_pkgdown_example())
 			registerS3method("replay_html", "rglRecordedplot", 
 											 replay_html.rglRecordedplot, 
 											 envir = asNamespace("downlit"))
