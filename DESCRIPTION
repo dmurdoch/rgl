@@ -24,7 +24,7 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
               person("George", "Helffrich", role = "ctb"),
               person("Ivan", "Krylov", role = "ctb"))
 Depends: R (>= 3.3.0)
-Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d, rstudioapi,
+Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
           js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont,
           shiny, manipulateWidget (>= 0.9.0)
