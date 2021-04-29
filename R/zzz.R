@@ -105,10 +105,10 @@
   # Then we need to start quartz() before starting rgl.
   # See https://github.com/dmurdoch/rgl/issues/27
   if (getOption("rgl.startQuartz", 
-         !onlyNULL && 
-         unixos == "Darwin" && 
-         .Platform$GUI != "AQUA") &&
-         interactive() && 
+           !onlyNULL &&
+           interactive() &&
+           unixos == "Darwin" && 
+           !(.Platform$GUI %in% c("AQUA", "RStudio"))) &&
          exists("quartz", getNamespace("grDevices"))) {
     grDevices::quartz()
     dev.off()
@@ -128,8 +128,10 @@
   # handle pkgdown_print and fig_settings before they are in the CRAN version
 
   if (requireNamespace("pkgdown", quietly = TRUE)) {
-    if ("pkgdown_print" %in% getNamespaceExports("pkgdown"))
+    
+    if ("pkgdown_print" %in% getNamespaceExports("pkgdown")) {
       pkgdown_print <<- getExportedValue("pkgdown", "pkgdown_print")
+    }
     if ("fig_settings" %in% getNamespaceExports("pkgdown"))
       pkgdown_fig_settings <<- getExportedValue("pkgdown", "fig_settings")
   }         
