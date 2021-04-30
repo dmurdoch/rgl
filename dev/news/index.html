@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.14</span>
       </span>
     </div>
 
@@ -138,10 +138,18 @@
       <small>Source: <a href='https://github.com/dmurdoch/rgl/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rgl-010613" class="section level1">
-<h1 class="page-header" data-toc-text="0.106.13">
-<a href="#rgl-010613" class="anchor" aria-hidden="true"></a>rgl 0.106.13<small> Unreleased </small>
+    <div id="rgl-010614" class="section level1">
+<h1 class="page-header" data-toc-text="0.106.14">
+<a href="#rgl-010614" class="anchor" aria-hidden="true"></a>rgl 0.106.14<small> Unreleased </small>
 </h1>
+<div id="major-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#major-changes" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<ul>
+<li>Added <code><a href="../reference/expect_known_scene.html">expect_known_scene()</a></code> function to work with <code>testthat</code>.</li>
+<li>Added some <code>testthat</code> tests.</li>
+</ul>
+</div>
 <div id="minor-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#minor-changes" class="anchor" aria-hidden="true"></a>Minor changes</h2>
@@ -163,13 +171,6 @@
 <h1 class="page-header" data-toc-text="0.106.8">
 <a href="#rgl-01068" class="anchor" aria-hidden="true"></a>rgl 0.106.8<small> 2021-04-23 </small>
 </h1>
-<div id="minor-changes-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#minor-changes-1" class="anchor" aria-hidden="true"></a>Minor changes</h2>
-<ul>
-<li>Support for FreeType has been dropped in the experimental Windows Unicode (UCRT) build.</li>
-</ul>
-</div>
 <div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-1" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
@@ -186,9 +187,9 @@
 <h1 class="page-header" data-toc-text="0.106.6">
 <a href="#rgl-01066" class="anchor" aria-hidden="true"></a>rgl 0.106.6<small> 2021-04-17 </small>
 </h1>
-<div id="major-changes" class="section level2">
+<div id="major-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-1" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Changes for <code>pkgdown</code> compatibility have been added. See <code><a href="../articles/pkgdown.html">vignette("pkgdown")</a></code>.</li>
 <li>Added <code><a href="../reference/drape3d.html">drape3d()</a></code>, to “drape” objects across a mesh. (Contributed by George Helffrich.)</li>
@@ -200,9 +201,9 @@
 <li>Added <code><a href="../reference/rglExtrafonts.html">rglExtrafonts()</a></code> to load additional fonts for use with FreeType rendering. Requires the <code>extrafont</code> package.</li>
 </ul>
 </div>
-<div id="minor-changes-2" class="section level2">
+<div id="minor-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-2" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-1" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>The help pages have been edited to continue to de-emphasize <code>rgl.*</code> functions.</li>
 <li>Changes have been made for compatibility with the experimental Windows-UTF8 build of R.</li>
@@ -233,9 +234,9 @@
 <h1 class="page-header" data-toc-text="0.105.22">
 <a href="#rgl-010522" class="anchor" aria-hidden="true"></a>rgl 0.105.22<small> 2021-03-04 </small>
 </h1>
-<div id="minor-changes-3" class="section level2">
+<div id="minor-changes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-3" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-2" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Add <code>Biarch</code> to <code>DESCRIPTION</code> so both architectures are built on Windows.</li>
 </ul>
@@ -258,18 +259,18 @@
 <h1 class="page-header" data-toc-text="0.105.13">
 <a href="#rgl-010513" class="anchor" aria-hidden="true"></a>rgl 0.105.13<small> 2021-02-15 </small>
 </h1>
-<div id="major-changes-1" class="section level2">
+<div id="major-changes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-1" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-2" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Inclusion in <code>knitr</code> documents will now be simplified in versions of <code>knitr</code> that incorporate its PR<a href='https://github.com/dmurdoch/rgl/issues/1892'>#1892</a>.</li>
 <li>Added <code>webshot</code> argument to <code><a href="../reference/snapshot.html">snapshot3d()</a></code>, to use the <code>webshot2</code> package (currently only available from Github; see <code><a href="../reference/snapshot.html">?snapshot3d</a></code> for details) to produce snapshots even on headless systems.</li>
 <li>Moved development home from R-forge to Github.</li>
 </ul>
 </div>
-<div id="minor-changes-4" class="section level2">
+<div id="minor-changes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-4" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-3" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Windows builds now download Freetype from <code>rwinlib</code> during the build. (Contributed by Jeroen Ooms.)</li>
 <li>
@@ -298,9 +299,9 @@
 <h1 class="page-header" data-toc-text="0.104.16">
 <a href="#rgl-010416" class="anchor" aria-hidden="true"></a>rgl 0.104.16<small> 2021-01-10 </small>
 </h1>
-<div id="minor-changes-5" class="section level2">
+<div id="minor-changes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-5" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-4" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added <code>--disable-opengl</code> configure option to run entirely without OpenGL (to support Apple M1 machines without GLX, and others which don’t have X11 or OpenGL devel files installed).</li>
 <li>Added explicit typecasts to suppress compile warnings.</li>
@@ -326,17 +327,17 @@
 <h1 class="page-header" data-toc-text="0.103.5">
 <a href="#rgl-01035" class="anchor" aria-hidden="true"></a>rgl 0.103.5<small> 2020-11-23 </small>
 </h1>
-<div id="major-changes-2" class="section level2">
+<div id="major-changes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-2" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-3" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/clipMesh3d.html">clipObj3d()</a></code>, <code><a href="../reference/contourLines3d.html">contourLines3d()</a></code> and <code><a href="../reference/contourLines3d.html">filledContour3d()</a></code> functions.</li>
 <li>Modified <code><a href="../reference/clipMesh3d.html">clipMesh3d()</a></code> function to make it more consistent with the above three functions. The main incompatibility with the version in 0.100.26 is that only vertex coordinates are now passed to the clipping function.</li>
 </ul>
 </div>
-<div id="minor-changes-6" class="section level2">
+<div id="minor-changes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-6" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-5" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Add <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code> method for <code>"mesh3d"</code> objects, and use it in <code><a href="../reference/contourLines3d.html">filledContour3d()</a></code>.</li>
 <li>More deprecation of older <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> style controls.</li>
@@ -390,9 +391,9 @@
 <h1 class="page-header" data-toc-text="0.100.54">
 <a href="#rgl-010054" class="anchor" aria-hidden="true"></a>rgl 0.100.54<small> 2020-04-14 </small>
 </h1>
-<div id="minor-changes-7" class="section level2">
+<div id="minor-changes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-7" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-6" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Changed <code>rgl.attrib(id, "normals")</code> so the normals will be returned whether or not the object is lit. (Suggestion of Tyler Morgan-Wall)</li>
 <li>The labels used in <code><a href="../reference/rglwidget.html">rglwidget()</a></code> are now independent of <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>, using code borrowed from Shiny for our own private RNG.</li>
@@ -418,9 +419,9 @@
 <h1 class="page-header" data-toc-text="0.100.50">
 <a href="#rgl-010050" class="anchor" aria-hidden="true"></a>rgl 0.100.50<small> 2020-02-21 </small>
 </h1>
-<div id="minor-changes-8" class="section level2">
+<div id="minor-changes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-8" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-7" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added <code><a href="../reference/rgl.init.html">?rgl.init</a></code> help topic to describe initialization issues.</li>
 <li>Added sanity check to setting of <code>par3d("windowRect")</code>.</li>
@@ -438,9 +439,9 @@
 <h1 class="page-header" data-toc-text="0.100.47">
 <a href="#rgl-010047" class="anchor" aria-hidden="true"></a>rgl 0.100.47<small> 2020-02-12 </small>
 </h1>
-<div id="minor-changes-9" class="section level2">
+<div id="minor-changes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-9" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-8" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>
 <code>demo(stereo)</code> now uses <code><a href="https://rdrr.io/r/graphics/plot.raster.html" class="external-link">plot.raster()</a></code> rather than <code><a href="https://rdrr.io/r/graphics/image.html" class="external-link">image()</a></code>.</li>
@@ -477,9 +478,9 @@
 <h1 class="page-header" data-toc-text="0.100.30">
 <a href="#rgl-010030" class="anchor" aria-hidden="true"></a>rgl 0.100.30<small> 2019-08-19 </small>
 </h1>
-<div id="minor-changes-10" class="section level2">
+<div id="minor-changes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-10" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-9" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added <code>meshColor</code> as an argument to <code><a href="../reference/mesh3d.html">tmesh3d()</a></code>, <code><a href="../reference/mesh3d.html">qmesh3d()</a></code> and <code><a href="../reference/shade3d.html">dot3d()</a></code>; changed default to no longer give warning if <code>meshColor</code> is not specified.</li>
 <li>Added <code><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal()</a></code> method for <code>"mesh3d"</code> objects, so that changes caused by the above are ignored.</li>
@@ -492,9 +493,9 @@
 <h1 class="page-header" data-toc-text="0.100.26">
 <a href="#rgl-010026" class="anchor" aria-hidden="true"></a>rgl 0.100.26<small> 2019-07-08 </small>
 </h1>
-<div id="major-changes-3" class="section level2">
+<div id="major-changes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-3" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-4" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>added <code><a href="../reference/clipMesh3d.html">clipMesh3d()</a></code> to allow smooth clipping of mesh objects</li>
 <li>Made <code><a href="../reference/plot3d.lm.html">plot3d.lm()</a></code> method handle a larger variety of models, by allowing for curved surfaces.</li>
@@ -503,9 +504,9 @@
 <li>Added <code><a href="../reference/as.triangles3d.html">as.triangles3d.rglId()</a></code> and <code><a href="../reference/as.mesh3d.rglId.html">as.mesh3d.rglId()</a></code> methods to convert displayed objects to usable data.</li>
 </ul>
 </div>
-<div id="minor-changes-11" class="section level2">
+<div id="minor-changes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-11" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-10" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>
 <code><a href="../reference/open3d.html">open3d()</a></code> now signals an error if unnamed parameters are used</li>
@@ -551,9 +552,9 @@
 <h1 class="page-header" data-toc-text="0.100.18">
 <a href="#rgl-010018" class="anchor" aria-hidden="true"></a>rgl 0.100.18<small> 2019-03-08 </small>
 </h1>
-<div id="major-changes-4" class="section level2">
+<div id="major-changes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-4" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-5" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/shinyGetPar3d.html">shinyGetPar3d()</a></code> and <code><a href="../reference/shinyGetPar3d.html">shinySetPar3d()</a></code> functions for Shiny interaction.</li>
 <li>Added <code><a href="../reference/thigmophobe3d.html">thigmophobe3d()</a></code> function to place labels away from other points using <code><a href="https://rdrr.io/pkg/plotrix/man/thigmophobe.html" class="external-link">plotrix::thigmophobe()</a></code>.</li>
@@ -569,9 +570,9 @@
 <li>Added <code>par3d("activeSubscene")</code>, to allow mouse callback functions to determine which subscene was clicked.</li>
 </ul>
 </div>
-<div id="minor-changes-12" class="section level2">
+<div id="minor-changes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-12" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-11" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added check for <code>"highp"</code> support to fragment shader in <code><a href="../reference/rglwidget.html">rglwidget()</a></code>.</li>
 <li>Updated <code><a href="../reference/texts.html">text3d()</a></code> and related functions: dropped deprecated argument <code>justify</code>, added <code>pos</code> and <code>offset</code> like base graphics <code><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text()</a></code>.</li>
@@ -580,7 +581,7 @@
 <li>
 <code><a href="../reference/pch3d.html">pch3d()</a></code> now allows separate <code>color</code> and <code>bg</code> specifications for each point. In addition, the default for the <code>"lit"</code> material property is now <code>FALSE</code>, so by default filled symbols will match the requested colour regardless of lighting.</li>
 <li>Minor fix ups to the vignettes.</li>
-<li>Now uses the <code>manipulateWidget::combineWidgets</code> function when putting multiple objects into a pipe.</li>
+<li>Now uses the <code><a href="https://rdrr.io/pkg/manipulateWidget/man/combineWidgets.html" class="external-link">manipulateWidget::combineWidgets</a></code> function when putting multiple objects into a pipe.</li>
 <li>Now accepts fixed CSS units in width and height for <code><a href="../reference/rglwidget.html">rglwidget()</a></code>.</li>
 <li>
 <code><a href="../reference/playwidget.html">playwidget()</a></code> is no longer an S3 generic function.</li>
@@ -611,17 +612,17 @@
 <h1 class="page-header" data-toc-text="0.99.9">
 <a href="#rgl-0999" class="anchor" aria-hidden="true"></a>rgl 0.99.9<small> 2018-01-12 </small>
 </h1>
-<div id="major-changes-5" class="section level2">
+<div id="major-changes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-5" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-6" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added support for communication with other widgets using the <code>crosstalk</code> package. See <code><a href="../reference/rglShared.html">?rglShared</a></code> and <code><a href="../articles/WebGL.html">vignette("WebGL")</a></code> for details.</li>
 <li>Added the <code><a href="../reference/rglMouse.html">rglMouse()</a></code> function to allow the mouse mode to be changed in a WebGL display.</li>
 </ul>
 </div>
-<div id="minor-changes-13" class="section level2">
+<div id="minor-changes-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-13" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-12" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Christophe Geuzaine’s GL2PS library (used by <code><a href="../reference/postscript.html">rgl.postscript()</a></code>) updated to version 1.4.0.</li>
 <li>The Pandoc system requirement has been updated to 1.14, as 1.13.1 is no longer sufficient.</li>
@@ -642,9 +643,9 @@
 <h1 class="page-header" data-toc-text="0.98.22">
 <a href="#rgl-09822" class="anchor" aria-hidden="true"></a>rgl 0.98.22<small> 2017-12-13 </small>
 </h1>
-<div id="minor-changes-14" class="section level2">
+<div id="minor-changes-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-14" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-13" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Record context (<code>ioslides</code>, <code>shiny</code>, etc.) in scene when <code><a href="../reference/rglwidget.html">rglwidget()</a></code> is called.</li>
 <li>Allow more than 16 scenes in <code>html_document</code>, <code>ioslides_presentation</code> and <code>slidy_presentation</code>.</li>
@@ -688,9 +689,9 @@ Line endings and joins are rounded, not squared as in OpenGL.</li>
 <h1 class="page-header" data-toc-text="0.98.1">
 <a href="#rgl-0981" class="anchor" aria-hidden="true"></a>rgl 0.98.1<small> 2017-03-08 </small>
 </h1>
-<div id="minor-changes-15" class="section level2">
+<div id="minor-changes-14" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-15" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-14" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Cleaned up configure script.</li>
 <li>Cleaned up dynamic entry points.</li>
@@ -717,16 +718,16 @@ Line endings and joins are rounded, not squared as in OpenGL.</li>
 <h1 class="page-header" data-toc-text="0.97.0">
 <a href="#rgl-0970" class="anchor" aria-hidden="true"></a>rgl 0.97.0<small> 2017-01-10 </small>
 </h1>
-<div id="major-changes-6" class="section level2">
+<div id="major-changes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-6" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-7" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> function, and set <code><a href="../reference/texts.html">text3d()</a></code> to use it when necessary.</li>
 </ul>
 </div>
-<div id="minor-changes-16" class="section level2">
+<div id="minor-changes-15" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-16" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-15" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added <code>fixedSize</code> argument to <code><a href="../reference/rgl.fns.html">rgl.sprites()</a></code> and related functions.</li>
 <li>
@@ -758,9 +759,9 @@ Line endings and joins are rounded, not squared as in OpenGL.</li>
 <h1 class="page-header" data-toc-text="0.96.0">
 <a href="#rgl-0960" class="anchor" aria-hidden="true"></a>rgl 0.96.0<small> 2016-08-25 </small>
 </h1>
-<div id="major-changes-7" class="section level2">
+<div id="major-changes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-7" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-8" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/as.mesh3d.default.html">as.mesh3d()</a></code> and <code><a href="../reference/persp3d.deldir.html">plot3d.deldir()</a></code> and <code><a href="../reference/persp3d.deldir.html">persp3d.deldir()</a></code> methods to allow plotting of surfaces defined by irregular collections of points.</li>
 <li>Added <code><a href="../reference/rglToLattice.html">rglToLattice()</a></code> and <code><a href="../reference/rglToLattice.html">rglToBase()</a></code> functions to compute Euler angles for the <code><a href="https://rdrr.io/pkg/lattice/man/cloud.html" class="external-link">lattice::wireframe()</a></code>, <code><a href="https://rdrr.io/pkg/lattice/man/cloud.html" class="external-link">lattice::cloud()</a></code>, and base graphics <code><a href="https://rdrr.io/r/graphics/persp.html" class="external-link">persp()</a></code> functions.<br>
@@ -774,9 +775,9 @@ Line endings and joins are rounded, not squared as in OpenGL.</li>
 <li>Functions that modify the scene now return their value with class <code>"rglLowlevel"</code> or <code>"rglHighlevel"</code> (using the new <code><a href="../reference/rglIds.html">lowlevel()</a></code> or <code><a href="../reference/rglIds.html">highlevel()</a></code> functions) to indicate that a low- or high-level plotting function has been called. If the new option <code>"rgl.printRglwidget"</code> is <code>TRUE</code>, printing objects of either class will trigger automatic printing of the <code>rgl</code> scene using <code><a href="../reference/rglwidget.html">rglwidget()</a></code>.</li>
 </ul>
 </div>
-<div id="minor-changes-17" class="section level2">
+<div id="minor-changes-16" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-17" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-16" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Gave better error when XQuartz is not found, tried for better test.</li>
 <li>Added more information on backgrounds to <code><a href="../reference/scene3d.html">scene3d()</a></code> to allow them to be used in <code><a href="../reference/rglwidget.html">rglwidget()</a></code>.</li>
@@ -819,17 +820,17 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.95.1435">
 <a href="#rgl-0951435" class="anchor" aria-hidden="true"></a>rgl 0.95.1435<small> 2015-12-28 </small>
 </h1>
-<div id="major-changes-8" class="section level2">
+<div id="major-changes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-8" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-9" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>The Mac OS X native windowing system (<code>aglrgl.so</code>) has been dropped; it appears not to work in Yosemite and El Capitan.</li>
 <li>WebGL code has been moved to the <code>rglwidget</code> package (though the functions in <code>rgl</code> still work).</li>
 </ul>
 </div>
-<div id="minor-changes-18" class="section level2">
+<div id="minor-changes-17" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-18" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-17" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>If <code><a href="../reference/rgl.init.html">rgl.init()</a></code> fails, continue with the <code>NULL</code> device (with warnings).</li>
 <li>
@@ -849,18 +850,18 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.95.1367">
 <a href="#rgl-0951367" class="anchor" aria-hidden="true"></a>rgl 0.95.1367<small> 2015-10-06 </small>
 </h1>
-<div id="major-changes-9" class="section level2">
+<div id="major-changes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-9" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-10" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/show2d.html">show2d()</a></code> to allow a 2d plot on a quadrilateral in a scene.</li>
 <li>Added <code><a href="../reference/propertySetter.html">matrixSetter()</a></code> function to allow multiple controls to modify one matrix.</li>
 <li>Added <code><a href="../reference/propertySetter.html">vertexSetter()</a></code> function to allow easier access to vertex attributes.</li>
 </ul>
 </div>
-<div id="minor-changes-19" class="section level2">
+<div id="minor-changes-18" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-19" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-18" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Made error and warning text more consistent.</li>
 <li>Dropped chunk option <code>"rgl.keepopen"</code>; replaced it with <code>"rgl.newwindow"</code>.</li>
@@ -895,9 +896,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.95.1247">
 <a href="#rgl-0951247" class="anchor" aria-hidden="true"></a>rgl 0.95.1247<small> 2015-05-01 </small>
 </h1>
-<div id="major-changes-10" class="section level2">
+<div id="major-changes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-10" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-11" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/webGLcontrols.html">subsetSlider()</a></code>, <code><a href="../reference/webGLcontrols.html">subsetSetter()</a></code>, <code><a href="../reference/webGLcontrols.html">clipplaneSlider()</a></code>, <code><a href="../reference/propertySetter.html">propertySlider()</a></code>, <code><a href="../reference/ageSetter.html">ageSetter()</a></code>, <code><a href="../reference/propertySetter.html">propertySetter()</a></code>, <code><a href="../reference/propertySetter.html">par3dinterpSetter()</a></code> and <code><a href="../reference/webGLcontrols.html">toggleButton()</a></code> functions to output HTML/Javascript controls for WebGL.</li>
 <li>Added <code><a href="../reference/setupKnitr.html">hook_rgl()</a></code> and <code><a href="../reference/setupKnitr.html">hook_webgl()</a></code> functions, based on the <code>knitr</code> functions.</li>
@@ -906,9 +907,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <li>Added <code><a href="../reference/writeOBJ.html">readOBJ()</a></code>, with a very limited ability to read OBJ shapefiles.</li>
 </ul>
 </div>
-<div id="minor-changes-20" class="section level2">
+<div id="minor-changes-19" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-20" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-19" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>If a template file is used in <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code>, the string <code>%prefix%</code> will be replaced in it by the prefix argument.</li>
 <li>
@@ -949,9 +950,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.95.1158">
 <a href="#rgl-0951158" class="anchor" aria-hidden="true"></a>rgl 0.95.1158<small> 2014-11-12 </small>
 </h1>
-<div id="minor-changes-21" class="section level2">
+<div id="minor-changes-20" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-21" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-20" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>
 <code><a href="../reference/snapshot.html">rgl.snapshot()</a></code> now works with the <code>NULL</code> device (but produces a black snapshot). This allows testing with <code>RGL_USE_NULL</code>.</li>
@@ -962,9 +963,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.95.1157">
 <a href="#rgl-0951157" class="anchor" aria-hidden="true"></a>rgl 0.95.1157<small> 2014-10-28 </small>
 </h1>
-<div id="major-changes-11" class="section level2">
+<div id="major-changes-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-11" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-12" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Allowed background of window to show bitmap; added <code><a href="../reference/bgplot3d.html">bgplot3d()</a></code> and <code><a href="../reference/bgplot3d.html">legend3d()</a></code> functions.</li>
 </ul>
@@ -983,9 +984,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.94.1143">
 <a href="#rgl-0941143" class="anchor" aria-hidden="true"></a>rgl 0.94.1143<small> 2014-09-30 </small>
 </h1>
-<div id="major-changes-12" class="section level2">
+<div id="major-changes-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-12" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-13" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li><p>Added function methods for <code><a href="../reference/persp3d.html">persp3d()</a></code> and <code><a href="../reference/plot3d.html">plot3d()</a></code>, to allow surfaces to be plotted just by specifying the function. ## Bug fixes</p></li>
 <li><p>Fixed a bug introduced in 0.94 that made user callbacks crash R. (Reported by Dave Hadka.)</p></li>
@@ -999,17 +1000,17 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.94">
 <a href="#rgl-094" class="anchor" aria-hidden="true"></a>rgl 0.94<small> Unreleased </small>
 </h1>
-<div id="major-changes-13" class="section level2">
+<div id="major-changes-14" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-13" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-14" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added “subscenes”, i.e. scenes of objects nested within the main window. This affects a lot of other functions as well, which now act either on a single subscene or on the overall scene.</li>
 <li>Added configurable mouse wheel actions via <code><a href="../reference/par3d.html">par3d()</a></code> or <code><a href="../reference/callbacks.html">rgl.setWheelCallback()</a></code>.</li>
 </ul>
 </div>
-<div id="minor-changes-22" class="section level2">
+<div id="minor-changes-21" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-22" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-21" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Allowed the coordinates of the viewport to be set.</li>
 <li>Changed the behaviour of <code><a href="../reference/scene.html">pop3d()</a></code> and <code><a href="../reference/rgl.fns.html">rgl.pop()</a></code>: the type is now ignored if <code>id</code> is non-zero.</li>
@@ -1032,9 +1033,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.1098">
 <a href="#rgl-0931098" class="anchor" aria-hidden="true"></a>rgl 0.93.1098<small> 2014-07-02 </small>
 </h1>
-<div id="minor-changes-23" class="section level2">
+<div id="minor-changes-22" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-23" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-22" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>
 <code><a href="../reference/material.html">rgl.material()</a></code> (for textures), <code><a href="../reference/postscript.html">rgl.postscript()</a></code> and <code><a href="../reference/snapshot.html">rgl.snapshot()</a></code> now call <code><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath()</a></code> on filenames, so tilde expansion should be supported.</li>
@@ -1062,16 +1063,16 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.991">
 <a href="#rgl-093991" class="anchor" aria-hidden="true"></a>rgl 0.93.991<small> 2013-11-04 </small>
 </h1>
-<div id="major-changes-14" class="section level2">
+<div id="major-changes-15" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-14" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-15" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/planes.html">clipplanes3d()</a></code> function to implement clip planes. (Still only partially implemented.)</li>
 </ul>
 </div>
-<div id="minor-changes-24" class="section level2">
+<div id="minor-changes-23" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-24" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-23" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Some cleanup of the declarations (submitted by Karl Millar).</li>
 </ul>
@@ -1094,9 +1095,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.984">
 <a href="#rgl-093984" class="anchor" aria-hidden="true"></a>rgl 0.93.984<small> 2013-10-08 </small>
 </h1>
-<div id="minor-changes-25" class="section level2">
+<div id="minor-changes-24" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-25" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-24" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>most <code>rgl</code> C++ functions and classes are now in namespace “rgl”. Others have prefix rgl_, with the exception of gl2ps functions, which all have that prefix, and FTGL functions, which generally have an FT prefix.</li>
 <li>entry points to the <code>rgl</code> DLL are now registered within the DLL, and on systems that support it, all entry points other than the registration function are hidden.</li>
@@ -1115,9 +1116,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.975">
 <a href="#rgl-093975" class="anchor" aria-hidden="true"></a>rgl 0.93.975<small> 2013-10-02 </small>
 </h1>
-<div id="minor-changes-26" class="section level2">
+<div id="minor-changes-25" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-26" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-25" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>the <code><a href="../reference/scene3d.html">scene3d()</a></code> function now records complete information about the bounding box and the background.</li>
 <li>
@@ -1137,9 +1138,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.963">
 <a href="#rgl-093963" class="anchor" aria-hidden="true"></a>rgl 0.93.963<small> 2013-09-04 </small>
 </h1>
-<div id="minor-changes-27" class="section level2">
+<div id="minor-changes-26" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-27" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-26" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>font selection assumed <code>rgl</code> was on the search path; now it may be imported but not attached. Similarly, <code>r3dDefaults</code> need not be on the search path.</li>
 </ul>
@@ -1149,9 +1150,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.960">
 <a href="#rgl-093960" class="anchor" aria-hidden="true"></a>rgl 0.93.960<small> 2013-08-31 </small>
 </h1>
-<div id="minor-changes-28" class="section level2">
+<div id="minor-changes-27" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-28" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-27" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>
 <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> now forces the position attribute to location 0, a recommended optimization strategy. The color attribute is forced to location 1.</li>
@@ -1175,17 +1176,17 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.952">
 <a href="#rgl-093952" class="anchor" aria-hidden="true"></a>rgl 0.93.952<small> 2013-07-25 </small>
 </h1>
-<div id="major-changes-15" class="section level2">
+<div id="major-changes-16" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-15" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-16" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>added <code><a href="../reference/triangulate.html">triangulate()</a></code>, <code><a href="../reference/polygon3d.html">polygon3d()</a></code>, <code><a href="../reference/extrude3d.html">extrude3d()</a></code> and <code><a href="../reference/turn3d.html">turn3d()</a></code> for display of shapes based on two-dimensional polygons or curves.</li>
 <li>added support for “headless” operation: see help for new function <code><a href="../reference/rgl.useNULL.html">rgl.useNULL()</a></code>.</li>
 </ul>
 </div>
-<div id="minor-changes-29" class="section level2">
+<div id="minor-changes-28" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-29" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-28" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>added name of device to result returned from <code><a href="../reference/rgl.open.html">rgl.cur()</a></code>; added function <code><a href="../reference/rgl.open.html">rgl.dev.list()</a></code> to list all open devices.</li>
 <li>examples and demos now check <code><a href="../reference/rgl.useNULL.html">rgl.useNULL()</a></code>, and don’t run invisible animations.</li>
@@ -1203,16 +1204,16 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.944">
 <a href="#rgl-093944" class="anchor" aria-hidden="true"></a>rgl 0.93.944<small> Unreleased </small>
 </h1>
-<div id="major-changes-16" class="section level2">
+<div id="major-changes-17" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-16" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-17" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>added <code><a href="../reference/identify3d.html">identify3d()</a></code> function</li>
 </ul>
 </div>
-<div id="minor-changes-30" class="section level2">
+<div id="minor-changes-29" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-30" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-29" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>write the <code>rgl</code> version into the WebGL file</li>
 <li>cleaned up use of <code>CHECKGLERROR</code>, so that setting <code>USE_GLGETERROR</code> to 1 in <code>R.h</code> will enable detailed checking</li>
@@ -1261,9 +1262,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.930">
 <a href="#rgl-093930" class="anchor" aria-hidden="true"></a>rgl 0.93.930<small> Unreleased </small>
 </h1>
-<div id="minor-changes-31" class="section level2">
+<div id="minor-changes-30" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-31" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-30" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Now handles local (not just directional) lighting. Based on code contributed by Alexander Senger.)</li>
 <li>
@@ -1283,9 +1284,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93.928">
 <a href="#rgl-093928" class="anchor" aria-hidden="true"></a>rgl 0.93.928<small> 2013-02-07 </small>
 </h1>
-<div id="minor-changes-32" class="section level2">
+<div id="minor-changes-31" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-32" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-31" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Updated the configure file using autoconf 2.69</li>
 <li>Forced OSX installs to put <code>/usr/X11/bin</code> at the head of the path when looking for freetype-config</li>
@@ -1296,16 +1297,16 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92.879">
 <a href="#rgl-092879" class="anchor" aria-hidden="true"></a>rgl 0.92.879<small> 2012-04-08 </small>
 </h1>
-<div id="major-changes-17" class="section level2">
+<div id="major-changes-18" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-17" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-18" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> function, to allow scenes to be viewed in a web browser.</li>
 </ul>
 </div>
-<div id="minor-changes-33" class="section level2">
+<div id="minor-changes-32" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-33" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-32" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Removed <code>rgl.save.texture()</code>: textures are not saveable!</li>
 <li>Added “centers” to the attributes that can be queried, for depth sorted transparent rendering.</li>
@@ -1316,9 +1317,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92.880">
 <a href="#rgl-092880" class="anchor" aria-hidden="true"></a>rgl 0.92.880<small> 2012-05-08 </small>
 </h1>
-<div id="minor-changes-34" class="section level2">
+<div id="minor-changes-33" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-34" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-33" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Rearranged declarations for compatibility with gcc 4.7.</li>
 </ul>
@@ -1340,9 +1341,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92.883">
 <a href="#rgl-092883" class="anchor" aria-hidden="true"></a>rgl 0.92.883<small> Unreleased </small>
 </h1>
-<div id="major-changes-18" class="section level2">
+<div id="major-changes-19" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-18" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-19" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added 3d “sprites” – shapes that maintain their initial orientation.</li>
 </ul>
@@ -1352,9 +1353,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92.887">
 <a href="#rgl-092887" class="anchor" aria-hidden="true"></a>rgl 0.92.887<small> Unreleased </small>
 </h1>
-<div id="minor-changes-35" class="section level2">
+<div id="minor-changes-34" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-35" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-34" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added “caps” to the end of <code><a href="../reference/cylinder3d.html">cylinder3d()</a></code> objects.</li>
 </ul>
@@ -1364,9 +1365,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92.891">
 <a href="#rgl-092891" class="anchor" aria-hidden="true"></a>rgl 0.92.891<small> 2012-07-17 </small>
 </h1>
-<div id="minor-changes-36" class="section level2">
+<div id="minor-changes-35" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-36" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-35" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added support for 3d sprites to <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code>.</li>
 </ul>
@@ -1376,9 +1377,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92.892">
 <a href="#rgl-092892" class="anchor" aria-hidden="true"></a>rgl 0.92.892<small> 2012-07-19 </small>
 </h1>
-<div id="minor-changes-37" class="section level2">
+<div id="minor-changes-36" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-37" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-36" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added declaration needed by Solaris.</li>
 </ul>
@@ -1413,9 +1414,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.93">
 <a href="#rgl-093" class="anchor" aria-hidden="true"></a>rgl 0.93<small> Unreleased </small>
 </h1>
-<div id="major-changes-19" class="section level2">
+<div id="major-changes-20" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-19" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-20" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/readSTL.html">readSTL()</a></code> and <code><a href="../reference/readSTL.html">writeSTL()</a></code> functions</li>
 <li>Added <code><a href="../reference/writePLY.html">writePLY()</a></code> and <code><a href="../reference/writeOBJ.html">writeOBJ()</a></code> functions</li>
@@ -1423,9 +1424,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <li>Added <code><a href="../reference/selectpoints3d.html">selectpoints3d()</a></code> function to select points from the scene.</li>
 </ul>
 </div>
-<div id="minor-changes-38" class="section level2">
+<div id="minor-changes-37" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-38" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-37" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added <code>expand</code> argument to <code><a href="../reference/decorate3d.html">decorate3d()</a></code> and <code><a href="../reference/axes3d.html">axes3d()</a></code>
 </li>
@@ -1451,9 +1452,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92.861">
 <a href="#rgl-092861" class="anchor" aria-hidden="true"></a>rgl 0.92.861<small> 2012-03-26 </small>
 </h1>
-<div id="minor-changes-39" class="section level2">
+<div id="minor-changes-38" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-39" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-38" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added <code>rgl.save.texture()</code> to get texture from an object.</li>
 </ul>
@@ -1470,18 +1471,18 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92.858">
 <a href="#rgl-092858" class="anchor" aria-hidden="true"></a>rgl 0.92.858<small> 2012-03-20 </small>
 </h1>
-<div id="major-changes-20" class="section level2">
+<div id="major-changes-21" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-20" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-21" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="https://rdrr.io/r/utils/Sweave.html" class="external-link">Sweave()</a></code> support through the <code><a href="../reference/rgl.Sweave.html">rgl.Sweave()</a></code> driver and the <code><a href="../reference/rgl.Sweave.html">Sweave.snapshot()</a></code> function.</li>
 <li>Added <code><a href="../reference/rgl.fns.html">rgl.abclines()</a></code>, <code><a href="../reference/rgl.fns.html">rgl.planes()</a></code>, <code><a href="../reference/abclines.html">abclines3d()</a></code> and <code><a href="../reference/planes.html">planes3d()</a></code> to draw lines and planes intersecting with the bounding box.</li>
 <li>Functions <code><a href="../reference/rgl.attrib.info.html">rgl.attrib.count()</a></code> and <code><a href="../reference/attributes.html">rgl.attrib()</a></code> (and internal function <code>rgl.getmaterial()</code>) added to allow objects in the scene to be examined.</li>
 </ul>
 </div>
-<div id="minor-changes-40" class="section level2">
+<div id="minor-changes-39" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-40" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-39" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added declarations for Solaris compatibility (from Brian Ripley)</li>
 <li>Fixed <code>configure.win</code> for bi-arch compatibility. Windows installers can set <code>HAVE_PNG</code> to a non-empty value, and <code>rgl</code> will look for the libpng files in the default <code>LOCAL_SOFT</code> location when installing.</li>
@@ -1511,9 +1512,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.92">
 <a href="#rgl-092" class="anchor" aria-hidden="true"></a>rgl 0.92<small> 2010-10-07 </small>
 </h1>
-<div id="minor-changes-41" class="section level2">
+<div id="minor-changes-40" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-41" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-40" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added detection of 64 bit MacPorts compiler to configure script. (Bug <a href='https://github.com/dmurdoch/rgl/issues/861'>#861</a>)</li>
 <li>Allowed texture coordinates to be specified in mesh objects.</li>
@@ -1526,9 +1527,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.91">
 <a href="#rgl-091" class="anchor" aria-hidden="true"></a>rgl 0.91<small> 2010-04-05 </small>
 </h1>
-<div id="minor-changes-42" class="section level2">
+<div id="minor-changes-41" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-42" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-41" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added <code>R_ARCH*</code> macros to <code>configure.win</code> for Win64 compatibility</li>
 </ul>
@@ -1547,9 +1548,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.90">
 <a href="#rgl-090" class="anchor" aria-hidden="true"></a>rgl 0.90<small> 2010-02-12 </small>
 </h1>
-<div id="minor-changes-43" class="section level2">
+<div id="minor-changes-42" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-43" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-42" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added <code>startTime</code> argument to <code><a href="../reference/play3d.html">play3d()</a></code> and <code><a href="../reference/play3d.html">movie3d()</a></code>.</li>
 <li>Fixed <code>configure.ac</code> as suggested by Jens Elkner.</li>
@@ -1580,9 +1581,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.88">
 <a href="#rgl-088" class="anchor" aria-hidden="true"></a>rgl 0.88<small> Unreleased </small>
 </h1>
-<div id="minor-changes-44" class="section level2">
+<div id="minor-changes-43" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-44" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-43" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Add <code>keepVars</code> argument to <code><a href="../reference/cylinder3d.html">cylinder3d()</a></code>, for debugging or special effects.</li>
 <li>Add <code>BugReports</code> field to <code>DESCRIPTION</code>.</li>
@@ -1593,9 +1594,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.87">
 <a href="#rgl-087" class="anchor" aria-hidden="true"></a>rgl 0.87<small> 2009-09-09 </small>
 </h1>
-<div id="minor-changes-45" class="section level2">
+<div id="minor-changes-44" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-45" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-44" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Allowed <code>FOV</code> to be set to 0, for an orthogonal projection.</li>
 <li>Changed <code>seq(along=...)</code> to <code>seq_along(...)</code>.</li>
@@ -1616,17 +1617,17 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.85">
 <a href="#rgl-085" class="anchor" aria-hidden="true"></a>rgl 0.85<small> Unreleased </small>
 </h1>
-<div id="major-changes-21" class="section level2">
+<div id="major-changes-22" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-21" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-22" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added <code><a href="../reference/addNormals.html">addNormals()</a></code> generic, to add normals for smooth surface rendering.</li>
 <li>Added <code><a href="../reference/cylinder3d.html">cylinder3d()</a></code> function, to make cylindrical or “tube” plots.</li>
 </ul>
 </div>
-<div id="minor-changes-46" class="section level2">
+<div id="minor-changes-45" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-46" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-45" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Added some namespace declarations to the C++, and renamed <code>math.h</code>, for compatibility with Sun compilers (contributed by Brian Ripley).</li>
 <li>Fixed visibility of some <code><a href="../reference/shade3d.html">shade3d()</a></code>, <code><a href="../reference/shade3d.html">wire3d()</a></code> and <code><a href="../reference/3dobjects.html">points3d()</a></code> methods.</li>
@@ -1644,9 +1645,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.84">
 <a href="#rgl-084" class="anchor" aria-hidden="true"></a>rgl 0.84<small> 2009-03-15 </small>
 </h1>
-<div id="major-changes-22" class="section level2">
+<div id="major-changes-23" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-22" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-23" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>Added triangle meshes, shape lists, the Platonic solids and a cuboctahedron.</li>
 <li>Added classes <code>"mesh3d"</code> and <code>"shapelist3d"</code>; <code>"qmesh3d"</code> is only kept for back compatibility.</li>
@@ -1676,9 +1677,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.83-1">
 <a href="#rgl-083-1" class="anchor" aria-hidden="true"></a>rgl 0.83-1<small> 2009-02-19 </small>
 </h1>
-<div id="minor-changes-47" class="section level2">
+<div id="minor-changes-46" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-47" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-46" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>Don’t try to build Carbon driver in 64 bit Mac OS (contributed by Brian Ripley).</li>
 <li>Did not assume OpenGL 1.2 was available in material properties.</li>
@@ -1699,16 +1700,16 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.82">
 <a href="#rgl-082" class="anchor" aria-hidden="true"></a>rgl 0.82<small> 2009-01-30 </small>
 </h1>
-<div id="major-changes-23" class="section level2">
+<div id="major-changes-24" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-23" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-24" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>added <code><a href="../reference/rgl.pixels.html">rgl.pixels()</a></code> to read the generated image, and <code>demo("stereo")</code> to illustrate its use.</li>
 </ul>
 </div>
-<div id="minor-changes-48" class="section level2">
+<div id="minor-changes-47" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-48" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-47" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>rewrote internal rendering of transparent and anti-aliased shapes, so they will be rendered better when there are several in the same scene</li>
 <li>added material properties <code>"point_antialias"</code>, which causes points to be drawn as smooth circles, and <code>"line_antialias"</code>, which causes lines to be antialiased.</li>
@@ -1740,9 +1741,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.81">
 <a href="#rgl-081" class="anchor" aria-hidden="true"></a>rgl 0.81<small> 2008-08-05 </small>
 </h1>
-<div id="minor-changes-49" class="section level2">
+<div id="minor-changes-48" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-49" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-48" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>converted Freetype font error into warning</li>
 </ul>
@@ -1762,9 +1763,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.80">
 <a href="#rgl-080" class="anchor" aria-hidden="true"></a>rgl 0.80<small> 2008-07-21 </small>
 </h1>
-<div id="minor-changes-50" class="section level2">
+<div id="minor-changes-49" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-50" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-49" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>worked around bug(?) in Mac OSX FTGL rendering</li>
 <li>updated FTGL to 2.1.3rc5</li>
@@ -1775,9 +1776,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.79">
 <a href="#rgl-079" class="anchor" aria-hidden="true"></a>rgl 0.79<small> 2008-06-03 </small>
 </h1>
-<div id="minor-changes-51" class="section level2">
+<div id="minor-changes-50" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-51" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-50" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>added <code>mouseCallbacks()</code> demo, to show R implementations of standard mouse handlers, multiple connected windows, stereo view, etc.</li>
 <li>added “silent” argument to <code><a href="../reference/rgl.open.html">rgl.set()</a></code>, to allow temporary changes to focus without changing window labels.</li>
@@ -1797,9 +1798,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.76">
 <a href="#rgl-076" class="anchor" aria-hidden="true"></a>rgl 0.76<small> 2007-12-02 </small>
 </h1>
-<div id="minor-changes-52" class="section level2">
+<div id="minor-changes-51" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-52" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-51" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>rename ChangeLog file to NEWS, as per discussion on R-devel</li>
 <li>add <code>"windowRect"</code> to <code><a href="../reference/par3d.html">par3d()</a></code> parameters to allow window size to be controlled from R.</li>
@@ -1834,9 +1835,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.78">
 <a href="#rgl-078" class="anchor" aria-hidden="true"></a>rgl 0.78<small> Unreleased </small>
 </h1>
-<div id="minor-changes-53" class="section level2">
+<div id="minor-changes-52" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-53" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-52" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>
 <code><a href="../reference/rgl.texts.html">rgl.texts()</a></code> and <code><a href="../reference/texts.html">text3d()</a></code> can now handle font and size specifications using the FreeType library on any platform, or GDI on Windows.</li>
@@ -1859,9 +1860,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.75">
 <a href="#rgl-075" class="anchor" aria-hidden="true"></a>rgl 0.75<small> 2007-10-15 </small>
 </h1>
-<div id="major-changes-24" class="section level2">
+<div id="major-changes-25" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-24" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-25" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>add <code><a href="../reference/play3d.html">play3d()</a></code>, <code><a href="../reference/play3d.html">movie3d()</a></code>, <code><a href="../reference/par3dinterp.html">par3dinterp()</a></code>, and <code><a href="../reference/spin3d.html">spin3d()</a></code> functions, with flag demo</li>
 </ul>
@@ -1879,16 +1880,16 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.74">
 <a href="#rgl-074" class="anchor" aria-hidden="true"></a>rgl 0.74<small> 2007-08-13 </small>
 </h1>
-<div id="major-changes-25" class="section level2">
+<div id="major-changes-26" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-25" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-26" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>add <code><a href="../reference/callbacks.html">rgl.setMouseCallbacks()</a></code> to allow user actions</li>
 </ul>
 </div>
-<div id="minor-changes-54" class="section level2">
+<div id="minor-changes-53" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-54" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-53" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>clean up <code>#include</code>s</li>
 <li>clean up some calls for SunStudio 12 compiler</li>
@@ -1899,9 +1900,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.73">
 <a href="#rgl-073" class="anchor" aria-hidden="true"></a>rgl 0.73<small> 2007-07-17 </small>
 </h1>
-<div id="minor-changes-55" class="section level2">
+<div id="minor-changes-54" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-55" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-54" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>partial changes to avoid crash on macOS with <code>Xvfb</code>
 </li>
@@ -1913,9 +1914,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.72">
 <a href="#rgl-072" class="anchor" aria-hidden="true"></a>rgl 0.72<small> 2007-06-03 </small>
 </h1>
-<div id="minor-changes-56" class="section level2">
+<div id="minor-changes-55" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-56" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-55" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>declaration changes for compatibility with R 2.6.0 (from Brian Ripley)</li>
 </ul>
@@ -1925,16 +1926,16 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.71">
 <a href="#rgl-071" class="anchor" aria-hidden="true"></a>rgl 0.71<small> 2007-04-23 </small>
 </h1>
-<div id="major-changes-26" class="section level2">
+<div id="major-changes-27" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-26" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-27" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>allowed normals and texture coordinates to be specified in triangles, quads and surfaces</li>
 </ul>
 </div>
-<div id="minor-changes-57" class="section level2">
+<div id="minor-changes-56" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-57" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-56" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>changes to configure script from Laszlo Kajan and Brian Ripley: should now be much more portable</li>
 <li>removed deprecated OSX font setting calls</li>
@@ -1956,9 +1957,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.70">
 <a href="#rgl-070" class="anchor" aria-hidden="true"></a>rgl 0.70<small> 2007-01-07 </small>
 </h1>
-<div id="minor-changes-58" class="section level2">
+<div id="minor-changes-57" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-58" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-57" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>OSX now builds two libraries, one for AGL, one for X11</li>
 <li>resolve entry points at load time, not call time</li>
@@ -1982,9 +1983,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.69">
 <a href="#rgl-069" class="anchor" aria-hidden="true"></a>rgl 0.69<small> 2006-12-08 </small>
 </h1>
-<div id="minor-changes-59" class="section level2">
+<div id="minor-changes-58" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-59" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-58" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>allow selection to use any button</li>
 <li>allow NA in primitives, surfaces, texts, and sprites</li>
@@ -2008,16 +2009,16 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h1 class="page-header" data-toc-text="0.68">
 <a href="#rgl-068" class="anchor" aria-hidden="true"></a>rgl 0.68<small> 2006-09-12 </small>
 </h1>
-<div id="major-changes-27" class="section level2">
+<div id="major-changes-28" class="section level2">
 <h2 class="hasAnchor">
-<a href="#major-changes-27" class="anchor" aria-hidden="true"></a>Major changes</h2>
+<a href="#major-changes-28" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul>
 <li>added <code><a href="../reference/grid3d.html">grid3d()</a></code>, added <code>nticks</code> argument to <code><a href="../reference/bbox.html">bbox3d()</a></code>, <code><a href="../reference/axes3d.html">axis3d()</a></code> and <code><a href="../reference/axes3d.html">axes3d()</a></code>.</li>
 </ul>
 </div>
-<div id="minor-changes-60" class="section level2">
+<div id="minor-changes-59" class="section level2">
 <h2 class="hasAnchor">
-<a href="#minor-changes-60" class="anchor" aria-hidden="true"></a>Minor changes</h2>
+<a href="#minor-changes-59" class="anchor" aria-hidden="true"></a>Minor changes</h2>
 <ul>
 <li>fixed sphere drawing so spheres are spheres regardless of <code>par3d("scale")</code>
 </li>

@@ -84,7 +84,7 @@ topmost window." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.13</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.14</span>
       </span>
     </div>
 
@@ -213,7 +213,7 @@ a random dot stereogram and an anaglyph.</p></div>
 #&gt; 
 #&gt; srfc3d&gt; open3d()
 #&gt; null 
-#&gt;  112 
+#&gt;  114 
 #&gt; 
 #&gt; srfc3d&gt; surface3d(x, y, z, color = col, back = "lines")</div><div class='input'><span class='va'>depth</span> <span class='op'>&lt;-</span> <span class='fu'>rgl.pixels</span><span class='op'>(</span>component <span class='op'>=</span> <span class='st'>"depth"</span><span class='op'>)</span>
 </div><div class='co'>#&gt; <span class='warning'>Warning: </span>Error reading component 'depth'</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>depth</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>is.matrix</a></span><span class='op'>(</span><span class='va'>depth</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Protect against empty or single pixel windows</span>
