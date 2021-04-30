@@ -1,4 +1,10 @@
-# rgl  0.106.13
+# rgl  0.106.14
+
+## Major changes
+
+* Added `expect_known_scene()` function to work with 
+  `testthat`.
+* Added some `testthat` tests.
 
 ## Minor changes
 
@@ -19,15 +25,6 @@
   RStudio is detected.  Use `options(startQuartz = TRUE)`
   in RStudio before loading `rgl` to run it,
   or `options(startQuartz = FALSE)` to suppress it.
-
-
-# rgl  0.106.9
-
-## Major changes
-
-* Added `expect_known_scene()` function to work with 
-  `testthat`.
-* Added numerous `testthat` tests.
 
 # rgl  0.106.8
 
