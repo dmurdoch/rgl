@@ -33,7 +33,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages('remotes')
+          install.packages(c('remotes', 'sessioninfo'))
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
@@ -46,13 +46,25 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
-      - name: Install dependencies
+      - name: Install rgl & dependencies
         run: |
-          # Use install_local before install_deps
-          # so alphashape3d will see rgl when it needs to.
+          # First rgl plus hard deps
           remotes::install_local(force = TRUE)
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_github(c("r-lib/downlit", "dmurdoch/pkgdown@rglpatch"))
+          remotes::install_github(c("r-lib/downlit",
+                          "r-lib/pkgdown",
+                          "dmurdoch/htmlwidgets@rglpatch"))
+          deps <- tools::package_dependencies("rgl", which = c("Suggests", "Enhances"))$rgl
+          deps <- setdiff(deps, c("tcltk", "webshot2", 
+                                  "downlit", "pkgdown", "htmlwidgets"))
+          remotes::install_cran(deps)
+          install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
+        shell: Rscript {0}
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
 
       - name: Deploy package

@@ -1,3 +1,25 @@
+# rgl  0.106.13
+
+## Minor changes
+
+* The `shiny` and `manipulateWidget` packages have been changed from imports
+  that are always loaded to suggested packages that
+  will only be loaded if needed.  This will reduce the 
+  "footprint" of `rgl` for users who don't use them.
+* The NULL device can now specify `par3d("useFreeType")`
+  and the result is saved.
+* Code to work with pre-1.33 versions of `knitr` has now
+  been removed.
+
+## Bug fixes
+
+* The bug workaround in 0.105.22 for issue #27 triggered a bug
+  in RStudio, resulting in two RStudio processes showing up
+  when `rgl` was loaded.  The workaround is now skipped when
+  RStudio is detected.  Use `options(startQuartz = TRUE)`
+  in RStudio before loading `rgl` to run it,
+  or `options(startQuartz = FALSE)` to suppress it.
+
 
 # rgl  0.106.9
 

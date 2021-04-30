@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.106.9
+Version: 0.106.13
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -24,31 +24,14 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
               person("George", "Helffrich", role = "ctb"),
               person("Ivan", "Krylov", role = "ctb"))
 Depends: R (>= 3.3.0)
-Suggests: 
-    MASS,
-    rmarkdown,
-    deldir,
-    orientlib,
-    lattice,
-    misc3d,
-    rstudioapi,
-    magick,
-    plotrix (>= 3.7-3),
-    tripack,
-    interp,
-    alphashape3d,
-    tcltk,
-    js (>= 1.2),
-    akima,
-    webshot2,
-    downlit,
-    pkgdown,
-    extrafont,
-    testthat (>= 3.0.0),
-    waldo
+Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d,
+          magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
+          js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont,
+          shiny, manipulateWidget (>= 0.9.0)
 Imports: graphics, grDevices, stats, utils, 
-         htmlwidgets, htmltools, knitr, jsonlite (>= 0.9.20), shiny,
-         magrittr, crosstalk, manipulateWidget (>= 0.9.0)
+         htmlwidgets, htmltools, knitr (>= 1.33), jsonlite (>= 0.9.20),
+         magrittr, crosstalk
+Enhances: waldo
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for
     constructing representations of geometric objects (cube3d(), etc.).  Output
@@ -56,13 +39,11 @@ Description: Provides medium to high level functions for 3D interactive graphics
     WebGL, PLY, OBJ, STL as well as 2D image formats, including PNG, Postscript, SVG, PGF.
 License: GPL
 URL: https://github.com/dmurdoch/rgl, 
-     https://dmurdoch.github.io/rgl/dev/
+     https://dmurdoch.github.io/rgl
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
     pandoc (>=1.14, needed for vignettes)
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Biarch: true
-Additional_repositories: https://dmurdoch.github.io/drat
-Remotes: dmurdoch/htmlwidgets@rglpatch, r-lib/downlit, r-lib/pkgdown
-Config/testthat/edition: 3
+Additional_repositories:  https://dmurdoch.github.io/drat

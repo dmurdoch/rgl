@@ -1,5 +1,6 @@
+if (!require("shiny"))
+  stop("This demo requires shiny.")
 
-library(shiny)
 library(rgl)
 
 open3d(useNULL = TRUE)

@@ -571,7 +571,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
     lengthCheck(what, value, 1);
     x=coerceVector(value, LGLSXP);
 #ifndef HAVE_FREETYPE
-    if (LOGICAL(x)[0])
+    if (LOGICAL(x)[0] && strcmp( dev->getDevtype(), "null" ))
       warning("FreeType not supported in this build");
 #endif
     if (!setUseFreeType(LOGICAL(x)[0], rglview)) success = 0;

@@ -35,6 +35,9 @@ A single HTML widget from which to extract the HTML element ID.
   }
 }
 \details{
+Using \code{asRow} requires that the \pkg{manipulateWidget}
+package is installed.
+
 \code{asRow} produces a \code{"combineWidgets"} object which
 is a single column whose last element is another \code{"combineWidgets"} object which is a single row.
 
@@ -57,16 +60,18 @@ Duncan Murdoch
 \link{pipe} for the \code{\%>\%} operator.
 }
 \examples{
-library(crosstalk)
-sd <- SharedData$new(mtcars)
-ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
-# Copy the key and group from existing shared data
-rglsd <- rglShared(ids["data"], key = sd$key(), group = sd$groupName())
-w <- rglwidget(shared = rglsd) \%>\%
-asRow("Mouse mode: ", rglMouse(getWidgetId(.)), 
-      "Subset: ", filter_checkbox("cylinderselector", 
-		                "Cylinders", sd, ~ cyl, inline = TRUE),
-      last = 4, colsize = c(1,2,1,2), height = 60)
-if (interactive() || in_pkgdown_example())
-  w
+if (requireNamespace("manipulateWidget", quietly = TRUE)) {
+  library(crosstalk)
+  sd <- SharedData$new(mtcars)
+  ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
+  # Copy the key and group from existing shared data
+  rglsd <- rglShared(ids["data"], key = sd$key(), group = sd$groupName())
+  w <- rglwidget(shared = rglsd) \%>\%
+       asRow("Mouse mode: ", rglMouse(getWidgetId(.)), 
+             "Subset: ", filter_checkbox("cylinderselector", 
+		               "Cylinders", sd, ~ cyl, inline = TRUE),
+             last = 4, colsize = c(1,2,1,2), height = 60)
+  if (interactive() || in_pkgdown_example())
+    w
+}
 }

@@ -52,7 +52,11 @@ browser shows the images.
 WEBSITE
 -------
 
-An experimental `pkgdown` website is here:
+A `pkgdown` website is here:
+
+ https://dmurdoch.github.io/rgl/
+ 
+The unreleased development version website is here:
 
  https://dmurdoch.github.io/rgl/dev/
  

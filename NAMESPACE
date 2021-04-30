@@ -142,6 +142,9 @@ export(.check3d,
  S3method(filledContour3d, rglId)
  S3method(filledContour3d, mesh3d)
  
+ S3method(sew, rglRecordedplot)
+ S3method(is_low_change, rglRecordedplot)
+ 
  if(.Platform$OS.type == "windows") {
    importFrom(utils, getWindowsHandle)
  }
@@ -170,10 +173,8 @@ importFrom(htmltools, css, HTML, htmlDependency, img,
            includeScript, tags, tagAppendAttributes,
 	   tagHasAttribute, tagList, browsable, resolveDependencies)
 importFrom(jsonlite, toJSON, base64_dec)
-importFrom(knitr, asis_output, fig_path, hook_plot_custom, image_uri, include_graphics, knit_hooks, 
-           knit_meta_add, knit_print, opts_current, opts_hooks, opts_knit)
-importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, 
-					 registerInputHandler, removeInputHandler)
+importFrom(knitr, asis_output, fig_path, hook_plot_custom, image_uri, include_graphics, 
+					 is_low_change, knit_hooks, 
+           knit_meta_add, knit_print, opts_current, opts_hooks, opts_knit, sew)
 importFrom(magrittr, "%>%")
-importFrom(manipulateWidget, combineWidgets)
 importFrom(stats, coef, predict, residuals)

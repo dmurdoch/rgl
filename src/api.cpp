@@ -1126,10 +1126,6 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
   int success = RGL_FAIL;
 
   Device* device;
-  
-#ifndef HAVE_FREETYPE
-  if (*useFreeType) error("FreeType not supported in this build");
-#endif
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
