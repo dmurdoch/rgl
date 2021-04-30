@@ -9,7 +9,8 @@ export(.check3d,
   contourLines3d,
 	cube3d, cuboctahedron3d, cur3d, 
   currentSubscene3d, cylinder3d,
-  decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, drape3d, ellipse3d, extrude3d,
+  decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, drape3d, ellipse3d, 
+  expect_known_scene, extrude3d,
 	facing3d, figWidth, figHeight, filledContour3d,
 	gc3d, getr3dDefaults, getWidgetId, GramSchmidt, grid3d, 
 	highlevel, hook_rgl, hook_webgl,
@@ -72,6 +73,7 @@ export(.check3d,
  S3method(plot3d, mesh3d)
  
  S3method(all.equal, mesh3d)
+ S3method(all.equal, rglscene)
  
  S3method(as.mesh3d, deldir)
  S3method(as.mesh3d, tri)

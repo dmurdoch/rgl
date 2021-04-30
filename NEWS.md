@@ -1,4 +1,10 @@
-# rgl  0.106.13
+# rgl  0.106.14
+
+## Major changes
+
+* Added `expect_known_scene()` function to work with 
+  `testthat`.
+* Added some `testthat` tests.
 
 ## Minor changes
 
@@ -20,14 +26,8 @@
   in RStudio before loading `rgl` to run it,
   or `options(startQuartz = FALSE)` to suppress it.
 
-
 # rgl  0.106.8
 
-## Minor changes
-
-* Support for FreeType has been dropped in the experimental
-  Windows Unicode (UCRT) build.
-  
 ## Bug fixes 
 
 * Some of the changes related to avoiding `testthat` errors
