@@ -58,7 +58,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages(c('remotes', 'sessioninfo', 'rcmdcheck'))
+          install.packages(c('remotes', 'sessioninfo', 'rcmdcheck', 'desc'))
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
@@ -92,7 +92,7 @@ jobs:
           install.packages(c("pkgdown", "downlit", "htmlwidgets"))
           # First rgl plus hard deps
           remotes::install_local(force = TRUE)
-          deps <- tools::package_dependencies("rgl", which = c("Suggests", "Enhances"))$rgl
+          deps <- subset(desc::desc_get_deps(), type == "Suggests")$package
           deps <- setdiff(deps, c("tcltk", "webshot2"))
           remotes::install_cran(deps)
           install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
