@@ -1082,7 +1082,6 @@ viewControlPtr Subscene::getButtonBeginFunc(int which) {
 
 void Subscene::buttonBegin(int which, int mouseX, int mouseY)
 {
-  // Rprintf("Subscene %d::buttonBegin %d\n",  getObjID(), which);
   (this->*getButtonBeginFunc(which))(mouseX, mouseY);
 }
 
@@ -1093,6 +1092,10 @@ viewControlPtr Subscene::getButtonUpdateFunc(int which)
 
 void Subscene::buttonUpdate(int which, int mouseX, int mouseY)
 {
+  if (which == 3 && needsBegin != mmNONE) {
+    (this->*getButtonBeginFunc(which))(mouseX, mouseY);
+    needsBegin = mmNONE;
+  }
   (this->*getButtonUpdateFunc(which))(mouseX, mouseY);
 }
 
@@ -1112,6 +1115,8 @@ void Subscene::setDefaultMouseMode()
   setMouseMode(2, mmFOV);
   setMouseMode(3, mmZOOM);
   setWheelMode(wmNONE);
+  setMouseMode(4, mmNONE);
+  needsBegin = mmNONE;
 }
 
 void Subscene::setMouseMode(int button, MouseModeID mode)
@@ -1121,52 +1126,54 @@ void Subscene::setMouseMode(int button, MouseModeID mode)
   else {
     int index = button-1;
     mouseMode[index] = mode;
+    if (button == 4)
+      needsBegin = mode;
     switch (mode) {
-    case mmNONE:
-      ButtonBeginFunc[index] = &Subscene::noneBegin;
-      ButtonUpdateFunc[index] = &Subscene::noneUpdate;
-      ButtonEndFunc[index] = &Subscene::noneEnd;
-      break;
-    case mmTRACKBALL:
-      ButtonBeginFunc[index] = &Subscene::trackballBegin;
-      ButtonUpdateFunc[index] = &Subscene::trackballUpdate;
-      ButtonEndFunc[index] = &Subscene::trackballEnd;
-      break;
-    case mmXAXIS:
-    case mmYAXIS:
-    case mmZAXIS:
-      ButtonBeginFunc[index] = &Subscene::oneAxisBegin;
-      ButtonUpdateFunc[index] = &Subscene::oneAxisUpdate;
-      ButtonEndFunc[index] = &Subscene::trackballEnd; // No need for separate function
-      if (mode == mmXAXIS)      axis[index] = Vertex(1,0,0);
-      else if (mode == mmYAXIS) axis[index] = Vertex(0,1,0);
-      else                      axis[index] = Vertex(0,0,1);
-      break;	    	
-    case mmPOLAR:
-      ButtonBeginFunc[index] = &Subscene::polarBegin;
-      ButtonUpdateFunc[index] = &Subscene::polarUpdate;
-      ButtonEndFunc[index] = &Subscene::polarEnd;
-      break;
-    case mmSELECTING:
-      ButtonBeginFunc[index] = &Subscene::mouseSelectionBegin;
-      ButtonUpdateFunc[index] = &Subscene::mouseSelectionUpdate;
-      ButtonEndFunc[index] = &Subscene::mouseSelectionEnd;
-      break;
-    case mmZOOM:
-      ButtonBeginFunc[index] = &Subscene::adjustZoomBegin;
-      ButtonUpdateFunc[index] = &Subscene::adjustZoomUpdate;
-      ButtonEndFunc[index] = &Subscene::adjustZoomEnd;
-      break;
-    case mmFOV:
-      ButtonBeginFunc[index] = &Subscene::adjustFOVBegin;
-      ButtonUpdateFunc[index] = &Subscene::adjustFOVUpdate;
-      ButtonEndFunc[index] = &Subscene::adjustFOVEnd;
-      break;
-    case mmUSER:
-      ButtonBeginFunc[index] = &Subscene::userBegin;
-      ButtonUpdateFunc[index] = &Subscene::userUpdate;
-      ButtonEndFunc[index] = &Subscene::userEnd;
-      break;	    	
+      case mmNONE:
+        ButtonBeginFunc[index] = &Subscene::noneBegin;
+        ButtonUpdateFunc[index] = &Subscene::noneUpdate;
+        ButtonEndFunc[index] = &Subscene::noneEnd;
+        break;
+      case mmTRACKBALL:
+        ButtonBeginFunc[index] = &Subscene::trackballBegin;
+        ButtonUpdateFunc[index] = &Subscene::trackballUpdate;
+        ButtonEndFunc[index] = &Subscene::trackballEnd;
+        break;
+      case mmXAXIS:
+      case mmYAXIS:
+      case mmZAXIS:
+        ButtonBeginFunc[index] = &Subscene::oneAxisBegin;
+        ButtonUpdateFunc[index] = &Subscene::oneAxisUpdate;
+        ButtonEndFunc[index] = &Subscene::trackballEnd; // No need for separate function
+        if (mode == mmXAXIS)      axis[index] = Vertex(1,0,0);
+        else if (mode == mmYAXIS) axis[index] = Vertex(0,1,0);
+        else                      axis[index] = Vertex(0,0,1);
+        break;	    	
+      case mmPOLAR:
+        ButtonBeginFunc[index] = &Subscene::polarBegin;
+        ButtonUpdateFunc[index] = &Subscene::polarUpdate;
+        ButtonEndFunc[index] = &Subscene::polarEnd;
+        break;
+      case mmSELECTING:
+        ButtonBeginFunc[index] = &Subscene::mouseSelectionBegin;
+        ButtonUpdateFunc[index] = &Subscene::mouseSelectionUpdate;
+        ButtonEndFunc[index] = &Subscene::mouseSelectionEnd;
+        break;
+      case mmZOOM:
+        ButtonBeginFunc[index] = &Subscene::adjustZoomBegin;
+        ButtonUpdateFunc[index] = &Subscene::adjustZoomUpdate;
+        ButtonEndFunc[index] = &Subscene::adjustZoomEnd;
+        break;
+      case mmFOV:
+        ButtonBeginFunc[index] = &Subscene::adjustFOVBegin;
+        ButtonUpdateFunc[index] = &Subscene::adjustFOVUpdate;
+        ButtonEndFunc[index] = &Subscene::adjustFOVEnd;
+        break;
+      case mmUSER:
+        ButtonBeginFunc[index] = &Subscene::userBegin;
+        ButtonUpdateFunc[index] = &Subscene::userUpdate;
+        ButtonEndFunc[index] = &Subscene::userEnd;
+        break;	    	
     }
   }
 }
@@ -1347,7 +1354,6 @@ void Subscene::trackballBegin(int mouseX, int mouseY)
 void Subscene::trackballUpdate(int mouseX, int mouseY)
 {
   rotCurrent = screenToVector(pviewport.width,pviewport.height,mouseX,mouseY);
-
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
     Subscene* sub = mouseListeners[i];
     if (sub) {
@@ -1376,7 +1382,6 @@ void Subscene::oneAxisBegin(int mouseX, int mouseY)
 void Subscene::oneAxisUpdate(int mouseX, int mouseY)
 {
   rotCurrent = screenToVector(pviewport.width,pviewport.height,mouseX,pviewport.height/2);
-  
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
     Subscene* sub = mouseListeners[i];
     if (sub) {
@@ -1501,7 +1506,6 @@ void Subscene::userBegin(int mouseX, int mouseY)
   Subscene* master = getMaster(EM_MOUSEHANDLERS);
   beginCallback[ind] = master->beginCallback[ind];
   void* this_userData = master->userData[3*ind+0];
-  // Rprintf("userBegin in %d with ind=%d\n", getObjID(), ind);
   activeButton = drag;
   if (beginCallback[ind]) {
     busy = true;
@@ -1550,12 +1554,9 @@ void Subscene::adjustZoomBegin(int mouseX, int mouseY)
 void Subscene::adjustZoomUpdate(int mouseX, int mouseY)
 {
   int dy = mouseY - zoomBaseY;
-  // Rprintf("adjustZoomUpdate by %d for %d\n", dy, getObjID());
   for (unsigned int i = 0; i < mouseListeners.size(); i++) {
-    // Rprintf("adjustZoomUpdate: mouseListeners[%d]=%d\n", i, mouseListeners[i]);
     Subscene* sub = mouseListeners[i];
     if (sub) {
-//      Rprintf("found it\n");
       UserViewpoint* this_userviewpoint = sub->getUserViewpoint();
       
       float zoom = clamp ( this_userviewpoint->getZoom() * exp(dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);

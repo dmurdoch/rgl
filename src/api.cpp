@@ -743,6 +743,7 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding, int* i
         subscene->setMouseMode(2, parent->getMouseMode(2));
         subscene->setMouseMode(3, parent->getMouseMode(3));
         subscene->setWheelMode(parent->getWheelMode());
+        subscene->setMouseMode(4, parent->getMouseMode(4));
         if (embedding[3] != EMBED_REPLACE)
           subscene->setEmbedding(3, (Embedding)embedding[3]);
         success = as_success( subscene->getObjID() );

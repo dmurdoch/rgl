@@ -106,10 +106,11 @@ static void getMouseMode(int *button, int* mode, Subscene* subscene)
   CHECKGLERROR;
 }
 
-static void setMouseMode(int* button, int* mode, Subscene* subscene)
+static void setMouseMode(int* button, int* mode, RGLView* rglview, Subscene* subscene)
 {
   subscene->setMouseMode(*button, (MouseModeID)(*mode));
-  
+  if (*button == 4)
+    rglview->windowImpl->watchMouse((MouseModeID)(*mode) != mmNONE);
   CHECKGLERROR;
 }
 
@@ -456,14 +457,17 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
   }    
   else if (streql(what, "mouseMode")) {
     value = coerceVector(value, STRSXP);
-    if (length(value) > 4) par_error(what);   
-    for (int i=1; i<=3 && i <= length(value); i++) {
-      if (STRING_ELT(value, i-1) != NA_STRING) {
+    if (length(value) > 5) par_error(what);   
+    for (int i=1; i<=5 && i <= length(value); i++) {
+      int i0 = i < 4 ? i : i-1; // 5 --> 4
+      if (i == 4)
+        continue;
+      if (STRING_ELT(value, i - 1) != NA_STRING) {
         success = 0;
         /* check exact first, then partial */
         for (int mode = 0; mode < mmLAST; mode++) {
           if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)TRUE)) {
-            setMouseMode(&i, &mode, sub);
+            setMouseMode(&i0, &mode, rglview, sub);
             success = 1;
             break;
           }
@@ -471,7 +475,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
         if (!success) {
           for (int mode = 0; mode < mmLAST; mode++) {
             if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)FALSE)) {
-              setMouseMode(&i, &mode, sub);
+              setMouseMode(&i0, &mode, rglview, sub);
               success = 1;
               break;
             }
@@ -480,7 +484,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
         if (!success) par_error(what);
       }
     }
-    if (length(value) == 4) {
+    if (length(value) > 3) {
       if (STRING_ELT(value, 3) != NA_STRING) {
         success = 0;
         for (int mode = 0; mode < wmLAST; mode++) {
@@ -610,21 +614,23 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     sub->modelMatrix.getData(REAL(value));
   }
   else if (streql(what, "mouseMode")) {
-    PROTECT(value = allocVector(STRSXP, 4));
-    for (i=1; i<4; i++) {
+    PROTECT(value = allocVector(STRSXP, 5));
+    for (i=1; i<5; i++) {
+      int i0 = i < 4 ? i : (i + 1);
       getMouseMode(&i, &mode, sub); 
       if (mode < 0 || mode > mmLAST) mode = 0;
-      SET_STRING_ELT(value, i-1, mkChar(mouseModes[mode]));
+      SET_STRING_ELT(value, i0-1, mkChar(mouseModes[mode]));
     };    
     getWheelMode(&mode, sub);
     if (mode < 0 || mode > mmLAST) mode = 0;
     SET_STRING_ELT(value, 3, mkChar(wheelModes[mode]));
     
-    PROTECT(names = allocVector(STRSXP, 4));
+    PROTECT(names = allocVector(STRSXP, 5));
     SET_STRING_ELT(names, 0, mkChar("left"));
     SET_STRING_ELT(names, 1, mkChar("right"));  
     SET_STRING_ELT(names, 2, mkChar("middle"));
     SET_STRING_ELT(names, 3, mkChar("wheel"));
+    SET_STRING_ELT(names, 4, mkChar("default"));
     value = namesgets(value, names);
     UNPROTECT(2); /* names and old values */
     PROTECT(value);

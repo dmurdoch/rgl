@@ -44,6 +44,7 @@ public:
   void swap();
   void captureMouse(View* captureview);
   void releaseMouse();
+  void watchMouse(bool withoutButton);
   GLFont* getFont(const char* family, int style, double cex, 
                   bool useFreeType);
 
@@ -212,6 +213,26 @@ void X11WindowImpl::captureMouse(View* captureview)
 void X11WindowImpl::releaseMouse()
 {
 }
+// ---------------------------------------------------------------------------
+void X11WindowImpl::watchMouse(bool withoutButton)
+{
+  unsigned long valuemask=CWEventMask;
+  
+  XSetWindowAttributes attrib;
+  
+  attrib.event_mask = 
+    (withoutButton ? PointerMotionMask : ButtonMotionMask) 
+    | PointerMotionHintMask
+    | VisibilityChangeMask 
+    | ExposureMask
+    | StructureNotifyMask 
+    | ButtonPressMask 
+    | KeyPressMask
+    | KeyReleaseMask
+    | ButtonReleaseMask;
+  XChangeWindowAttributes(factory->xdisplay, xwindow, valuemask, &attrib);
+}
+
 // ---------------------------------------------------------------------------
 void X11WindowImpl::processEvent(XEvent& ev)
 {
@@ -633,7 +654,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   XSetWindowAttributes attrib;
   
   attrib.event_mask = 
-      ButtonMotionMask 
+      PointerMotionMask 
     | PointerMotionHintMask
     | VisibilityChangeMask 
     | ExposureMask
@@ -642,7 +663,6 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     | KeyPressMask
     | KeyReleaseMask
     | ButtonReleaseMask;
-
 
   ::Window xparent = 0;
   if (!error_code) {

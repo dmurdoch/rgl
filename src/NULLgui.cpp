@@ -33,6 +33,7 @@ public:
   void destroy() { if (window) window->notifyDestroy(); };
   void captureMouse(View* pView) {};
   void releaseMouse() {};
+  void watchMouse(bool withoutButton) {};
   GLFont* getFont(const char* family, int style, double cex, 
                   bool useFreeType);
   int getAntialias() { return 8; }

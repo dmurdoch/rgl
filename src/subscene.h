@@ -238,6 +238,8 @@ public:
   void buttonUpdate(int which, int mouseX, int mouseY);
   void buttonEnd(int which);
   
+  MouseModeID needsBegin;
+  
   void wheelRotate(int dir);
   
   MouseModeID getMouseMode(int button);
@@ -296,7 +298,7 @@ private:
   viewControlPtr getButtonUpdateFunc(int which);
   viewControlEndPtr getButtonEndFunc(int which);
   
-  MouseModeID mouseMode[3];
+  MouseModeID mouseMode[4];
   
   WheelModeID wheelMode;
   
