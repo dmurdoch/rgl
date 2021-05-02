@@ -27,12 +27,14 @@
      */
     rglwidgetClass.prototype.setMouseMode = function(mode, button, subscene, stayActive) {
       var sub = this.getObj(subscene),
-          which = ["left", "right", "middle"][button - 1];
+          which = ["left", "right", "middle", "default"][button - 1];
       if (!stayActive && sub.par3d.mouseMode[which] === "selecting")
         this.clearBrush(null);
       sub.par3d.mouseMode[which] = mode;
-      if (button === 1)
+      if (button === 1 || (button === 4 && mode !== "none"))
         this.canvas.style.cursor = this.getCursor(mode);
+      if (button === 4 && mode !== "none")
+        sub.needsBegin = mode;
     };
 
     /**
@@ -125,12 +127,14 @@
             activeModel = this.getObj(this.useid(activeSub.id, "model")),
             l = activeModel.par3d.listeners,
             i;
+        if (angle === 0.0)
+          return;    
         for (i = 0; i < l.length; i++) {
           activeSub = this.getObj(l[i]);
           activeSub.par3d.userMatrix.load(objects[l[i]].saveMat);
           activeSub.par3d.userMatrix.rotate(angle, axis[0], axis[1], axis[2]);
         }
-        this.drawScene();
+        self.drawScene();
       };
       handlers.trackballend = 0;
 
@@ -336,14 +340,13 @@
       };
 
       this.canvas.onmouseup = function ( ev ){
-        if ( drag === 0 ) return;
+        if ( !drag ) return;
         var f = handlers[handler + "end"];
         if (f) {
           f.call(self);
           ev.preventDefault();
         }
         drag = 0;
-        this.onmousemove( ev );
       };
 
       this.canvas.onmouseout = this.canvas.onmouseup;
@@ -351,16 +354,29 @@
       this.canvas.onmousemove = function ( ev ) {
         var coords = self.relMouseCoords(ev), sub, f;
         coords.y = self.canvas.height - coords.y;
-        if ( drag === 0 ) {
+        if ( !drag && ev.buttons === 0) {
           activeSubscene = self.whichSubscene(coords);
           sub = self.getObj(activeSubscene);
-          this.style.cursor = self.getCursor(sub.par3d.mouseMode.left);          
-        } else {
-          f = handlers[handler + "move"];
-          if (f) {
-            coords = self.translateCoords(activeSubscene, coords);
-            f.call(self, coords.x, coords.y);
+          handler = sub.par3d.mouseMode.default;
+          if (handler !== "none") {
+            if (sub.needsBegin) {
+              f = handlers[handler + "down"];
+              if (f) {
+                coords = self.translateCoords(activeSubscene, coords);
+                f.call(self, coords.x, coords.y);
+              }
+              sub.needsBegin = 0;
+            }
+            this.style.cursor = self.getCursor(sub.par3d.mouseMode.default);
+          } else {
+            this.style.cursor = self.getCursor(sub.par3d.mouseMode.left);  
+            return;
           }
+        }
+        f = handlers[handler + "move"];
+        if (f) {
+          coords = self.translateCoords(activeSubscene, coords);
+          f.call(self, coords.x, coords.y);
         }
       };
 

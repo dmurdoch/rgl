@@ -238,6 +238,7 @@
       sub.transparent = [];
       sub.opaque = [];
       sub.lights = [];
+      sub.needsBegin = true;
       for (i=0; i < sub.objects.length; i++) {
         obj = this.getObj(sub.objects[i]);
         if (typeof obj === "undefined") {
