@@ -352,7 +352,8 @@
         var coords = self.relMouseCoords(ev), sub, f;
         coords.y = self.canvas.height - coords.y;
         if ( drag === 0 ) {
-          activeSubscene = self.whichSubscene(coords);             sub = self.getObj(activeSubscene);
+          activeSubscene = self.whichSubscene(coords);
+          sub = self.getObj(activeSubscene);
           this.style.cursor = self.getCursor(sub.par3d.mouseMode.left);          
         } else {
           f = handlers[handler + "move"];

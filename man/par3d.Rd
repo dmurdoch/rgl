@@ -113,8 +113,8 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
       a mouse event (see \code{mouseMode} just below), the same action will be carried out
       on all subscenes in this list.  (The subscene itself is normally listed as a listener.
       If it is not listed, it will not respond to its own mouse events.)}
-    \item{\code{mouseMode}}{character.  A vector of 4 strings describing
-      what the 3 mouse buttons and the mouse wheel do. 
+    \item{\code{mouseMode}}{character.  A vector of 5 strings describing
+      what the mouse pointer and the mouse wheel do. 
       Partial matching is used.  Possible values for the first 3 entries of \code{mouseMode} (corresponding 
       to the mouse buttons) are 
 	\describe{
@@ -140,6 +140,10 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
 	    \code{\link{rgl.setWheelCallback}}.}
 	}
       A common default on Mac OSX is to convert a two finger drag on a trackpad to a mouse wheel rotation.
+      
+      The fifth entry is for actions to take when
+no mouse button is pressed.  Legal values are the same
+as for the mouse buttons.
     }
     \item{\code{observer}}{\emph{\bold{R.O.}}; the position of the observer relative to
       the model.  Set by \code{\link{observer3d}}.  See the Note below.}
