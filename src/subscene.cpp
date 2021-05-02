@@ -1119,6 +1119,15 @@ void Subscene::setDefaultMouseMode()
   needsBegin = mmNONE;
 }
 
+bool Subscene::mouseNeedsWatching() {
+  if (mouseMode[3] != mmNONE)
+    return true;
+  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
+    if ((*i)->mouseNeedsWatching())
+      return true;
+  return false;
+}
+
 void Subscene::setMouseMode(int button, MouseModeID mode)
 {
   if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
@@ -1610,4 +1619,9 @@ void Subscene::mouseSelectionEnd()
   if (selectState == msABORT) return;
   
   selectState = msDONE;
+}
+
+Subscene* Subscene::getRootSubscene()
+{
+  return parent ? parent->getRootSubscene() : this;
 }

@@ -110,7 +110,7 @@ static void setMouseMode(int* button, int* mode, RGLView* rglview, Subscene* sub
 {
   subscene->setMouseMode(*button, (MouseModeID)(*mode));
   if (*button == 4)
-    rglview->windowImpl->watchMouse((MouseModeID)(*mode) != mmNONE);
+    rglview->windowImpl->watchMouse(subscene->getRootSubscene()->mouseNeedsWatching());
   CHECKGLERROR;
 }
 

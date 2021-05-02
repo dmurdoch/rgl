@@ -112,7 +112,8 @@ public:
   Subscene* getSubscene(int id);
   Subscene* whichSubscene(int id); /* which subscene holds this */
   Subscene* whichSubscene(int mouseX, int mouseY); /* coordinates are pixels within the window */
-  
+  /* And here is the root */
+  Subscene* getRootSubscene();  
   /**
    * get parent, or NULL for the root
    **/  
@@ -239,6 +240,7 @@ public:
   void buttonEnd(int which);
   
   MouseModeID needsBegin;
+  bool mouseNeedsWatching();
   
   void wheelRotate(int dir);
   
