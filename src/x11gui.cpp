@@ -231,6 +231,7 @@ void X11WindowImpl::watchMouse(bool withoutButton)
     | KeyReleaseMask
     | ButtonReleaseMask;
   XChangeWindowAttributes(factory->xdisplay, xwindow, valuemask, &attrib);
+  factory->flushX();
 }
 
 // ---------------------------------------------------------------------------

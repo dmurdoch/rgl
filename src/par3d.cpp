@@ -459,7 +459,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
     value = coerceVector(value, STRSXP);
     if (length(value) > 5) par_error(what);   
     for (int i=1; i<=5 && i <= length(value); i++) {
-      int i0 = i < 4 ? i : i-1; // 5 --> 4
+      int i0 = i < 4 ? i : i-1; // i==5 --> i0=4
       if (i == 4)
         continue;
       if (STRING_ELT(value, i - 1) != NA_STRING) {

@@ -292,8 +292,8 @@ private:
    * mouse support
    */
   
-  viewControlPtr ButtonBeginFunc[3], ButtonUpdateFunc[3];
-  viewControlEndPtr ButtonEndFunc[3];
+  viewControlPtr ButtonBeginFunc[4], ButtonUpdateFunc[4];
+  viewControlEndPtr ButtonEndFunc[4];
   viewWheelPtr WheelRotateFunc;
   
   viewControlPtr getButtonBeginFunc(int which);
