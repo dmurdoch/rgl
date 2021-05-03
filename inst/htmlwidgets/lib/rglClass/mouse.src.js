@@ -351,10 +351,11 @@
 
       this.canvas.onmouseout = this.canvas.onmouseup;
 
-      this.canvas.onmousemove = function ( ev ) {
+      handlers.onmousemove = function ( ev ) {
         var coords = self.relMouseCoords(ev), sub, f;
+        console.log("mouse moved to "+ev.clientX+" "+ev.clientY);
         coords.y = self.canvas.height - coords.y;
-        if ( !drag && ev.buttons === 0) {
+        if (ev.buttons === 0) {
           activeSubscene = self.whichSubscene(coords);
           sub = self.getObj(activeSubscene);
           handler = sub.par3d.mouseMode.default;
@@ -378,6 +379,19 @@
           coords = self.translateCoords(activeSubscene, coords);
           f.call(self, coords.x, coords.y);
         }
+      };
+      
+
+      self.canvas.onmouseenter = function(ev) {
+        console.log("mouse entered at "+ev.clientX+" "+ev.clientY);
+        console.log("canvas zIndex = "+self.canvas.style.zIndex);
+        self.canvas.addEventListener("mousemove",               handlers.onmousemove);
+      };
+      
+      self.canvas.onmouseleave = function(ev) {
+        console.log("mouse left at "+ev.clientX+" "+ev.clientY);
+        self.canvas.removeEventListener("mousemove",
+          handlers.onmousemove);
       };
 
       handlers.setZoom = function(ds) {

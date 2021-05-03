@@ -1003,7 +1003,6 @@
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });
-      this.setMouseHandlers();
 
       this.onContextRestored = function() {
         self.initGL();
