@@ -33,7 +33,7 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
   modelMatrix.setIdentity();
   projMatrix.setIdentity(); 
   mouseListeners.push_back(this);
-  for (int i=0; i<3; i++) {
+  for (int i=0; i<4; i++) {
     beginCallback[i] = NULL;
     updateCallback[i] = NULL;
     endCallback[i] = NULL;
@@ -48,7 +48,7 @@ Subscene::~Subscene()
 {
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
     delete (*i);
-  for (int i=0; i<3; i++) 
+  for (int i=0; i<4; i++) 
     if (cleanupCallback[i]) 
       (*cleanupCallback[i])(userData + 3*i);
 }
@@ -1093,7 +1093,7 @@ viewControlPtr Subscene::getButtonUpdateFunc(int which)
 void Subscene::buttonUpdate(int which, int mouseX, int mouseY)
 {
   if (which == 3 && needsBegin != mmNONE) {
-    (this->*getButtonBeginFunc(which))(mouseX, mouseY);
+    buttonBegin(which, mouseX, mouseY);
     needsBegin = mmNONE;
   }
   (this->*getButtonUpdateFunc(which))(mouseX, mouseY);

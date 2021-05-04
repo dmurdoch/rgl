@@ -196,7 +196,7 @@ void RGLView::mouseMove(int mouseX, int mouseY)
       Subscene* subscene = scene->whichSubscene(mouseX, mouseY);
       if (subscene && subscene->getMouseMode(4) != mmNONE) {
         subscene->translateCoords(&mouseX, &mouseY);
-        subscene->drag = 0;
+        subscene->drag = 4;
         subscene->buttonUpdate(3, mouseX, mouseY);
         View::update();
       }

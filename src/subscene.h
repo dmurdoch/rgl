@@ -361,10 +361,10 @@ private:
   
   void userWheel(int dir);
   
-  void* userData[9];
-  userControlPtr beginCallback[3], updateCallback[3];
-  userControlEndPtr endCallback[3];
-  userCleanupPtr cleanupCallback[3];
+  void* userData[12];
+  userControlPtr beginCallback[4], updateCallback[4];
+  userControlEndPtr endCallback[4];
+  userCleanupPtr cleanupCallback[4];
   
 };
 

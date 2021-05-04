@@ -18,16 +18,20 @@ extern DeviceManager* deviceManager;
 static void userControl(void *userData, int mouseX, int mouseY)
 {
   SEXP fn = (SEXP)userData;
+  if (fn) {
   // Rprintf("userControl called with mouseX=%d userData=%p\n", mouseX, userData);
-  eval(PROTECT(lang3(fn, PROTECT(ScalarInteger(mouseX)), PROTECT(ScalarInteger(mouseY)))), R_GlobalEnv);
-  UNPROTECT(3);
+    eval(PROTECT(lang3(fn, PROTECT(ScalarInteger(mouseX)), PROTECT(ScalarInteger(mouseY)))), R_GlobalEnv);
+    UNPROTECT(3);
+  }
 }
 
 static void userControlEnd(void *userData)
 {
   SEXP fn = (SEXP)userData;
-  eval(PROTECT(lang1(fn)), R_GlobalEnv);
-  UNPROTECT(1);
+  if (fn) {
+    eval(PROTECT(lang1(fn)), R_GlobalEnv);
+    UNPROTECT(1);
+  }
 }
 
 static void userCleanup(void **userData)
@@ -51,7 +55,6 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end,
                                 SEXP dev, SEXP sub)
 {
   Device* device;
-//  Rprintf("dev=%d sub=%d\n", asInteger(dev), asInteger(sub));
   if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
     RGLView* rglview = device->getRGLView();
     void* userData[3] = {0, 0, 0};
@@ -60,7 +63,7 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end,
     userCleanupPtr cleanupCallback;
     
     int b = asInteger(button);
-    if (b < 1 || b > 3) error("button must be 1, 2 or 3");
+    if (b < 1 || b > 4) error("button must be 1, 2, or 3 (or 4 for no button)");
 
     Scene* scene = rglview->getScene();
     Subscene* subscene = scene->getSubscene(asInteger(sub));
@@ -106,7 +109,7 @@ SEXP rgl::rgl_getMouseCallbacks(SEXP button, SEXP dev, SEXP sub)
     userCleanupPtr cleanupCallback;
     
     int b = asInteger(button);
-    if (b < 1 || b > 3) error("button must be 1, 2 or 3");
+    if (b < 1 || b > 4) error("button must be 1, 2 or 3 (or 4 for no button)");
 
     Scene* scene = rglview->getScene();
     Subscene* subscene = scene->getSubscene(asInteger(sub));
