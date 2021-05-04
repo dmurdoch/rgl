@@ -1,0 +1,15 @@
+{
+  "opts": {
+    "encoding"              : "utf8",
+    "destination"           : "../../../../docs/dev/rglClass"
+  },
+  "templates": {
+    "systemName"            : "rglClass",
+    "systemSummary"         : "Javascript support for `rglwidget`",
+    "copyright"             : "rglClass copyright Duncan Murdoch",
+    "includeDate"           : true,
+    "dateFormat"            : "DD MMM YYYY",
+    "collapseSymbols"       : true,
+    "sort"                  : "source,name"
+}
+}

@@ -1,4 +1,11 @@
-
+    /**
+     * Methods related to shaders
+     * @name ___METHODS_FOR_SHADERS___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Generate the vertex shader for an object
      * @returns {string}

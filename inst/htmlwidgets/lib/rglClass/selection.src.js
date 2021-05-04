@@ -1,4 +1,11 @@
-
+    /**
+     * Methods related to selection
+     * @name ___METHODS_FOR_SELECTION___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Respond to brush change
      */

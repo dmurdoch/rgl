@@ -1,4 +1,11 @@
-
+    /**
+     * Methods related to projections
+     * @name ___METHODS_FOR_PROJECTIONS___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Get the viewport
      */

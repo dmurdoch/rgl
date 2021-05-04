@@ -11,6 +11,14 @@ figures:
   other.parameters:
     rgl:
       fig.asp: 1
+navbar:
+  structure:
+    left:  [home, intro, reference, javascript, articles, tutorials, news]
+    right: [github]
+  components:
+    javascript:
+      text: Javascript
+      href: rglClass/index.html
 reference:
 - title: High level functions
   desc:  Generic functions for plotting points or surfaces.  

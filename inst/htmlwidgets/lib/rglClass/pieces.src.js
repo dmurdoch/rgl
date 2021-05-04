@@ -1,9 +1,21 @@
-// These functions order the centers of displayed objects so they
-// can be drawn using the painters algorithm, necessary to support
-// transparency.  
+/**
+ * Methods related to drawing transparent objects
+ * @name ___METHODS_FOR_TRANSPARENCY___
+ * @memberof rglwidgetClass
+ * @kind function
+ * @instance
 
-// Note that objid is not obj.id when drawing spheres.
+ * These functions order the centers of displayed objects so they
+ * can be drawn using the painters algorithm, necessary to support
+ * transparency.  
 
+ * Note that objid is not obj.id when drawing spheres.
+ */
+
+/**
+ * Break objects into pieces
+ * @returns { array } Array of pieces
+ */
     rglwidgetClass.prototype.getPieces = function(context, objid, subid, obj) {
       var n = obj.centers.length,
           depth,
