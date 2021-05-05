@@ -8,7 +8,6 @@
 ^vignettes/test
 ^vignettes/WebGLdebug.Rmd
 ^vignettes/figure
-^inst/doc/rglwidgetClass
 ^inst/todo
 ^inst/initNotes.txt
 ^inst/useNULL/rgl.so
