@@ -33,7 +33,6 @@ jobs:
           
       - name: Build JSDoc
         run: |
-          brew install npm
           npm install -g jsdoc
           npm install -g foodoc
           cd inst/htmlwidgets/lib/rglClass
