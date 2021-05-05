@@ -10,6 +10,7 @@
     "includeDate"           : false,
     "dateFormat"            : "DD MMM YYYY",
     "collapseSymbols"       : false,
-    "sort"                  : "source,name"
+    "sort"                  : "source,name",
+    "outputSourceFiles"     : true
 }
 }
