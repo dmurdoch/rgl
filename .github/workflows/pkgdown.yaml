@@ -31,13 +31,6 @@ jobs:
         run: |
           brew install automake
           
-      - name: Build JSDoc
-        run: |
-          npm install -g jsdoc
-          npm install -g foodoc
-          cd inst/htmlwidgets/lib/rglClass
-          jsdoc --template /usr/local/lib/node_modules/foodoc/template *.src.js -R README.md -c JSDoc.json
-          
       - name: Query dependencies
         run: |
           install.packages(c('remotes', 'sessioninfo', 'rcmdcheck', 'desc'))
@@ -81,6 +74,13 @@ jobs:
           rmarkdown::render("README.Rmd", github_document(html_preview = FALSE))
         shell: Rscript {0}
         
+      - name: Build JSDoc
+        run: |
+          npm install -g jsdoc
+          npm install -g foodoc
+          cd inst/htmlwidgets/lib/rglClass
+          jsdoc --template /usr/local/lib/node_modules/foodoc/template *.src.js -R README.md -c JSDoc.json
+          
       - name: Deploy package
         run: |
           git config --local user.email "actions@github.com"
