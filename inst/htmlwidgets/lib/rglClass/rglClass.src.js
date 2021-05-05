@@ -1,6 +1,6 @@
 //// To generate the help pages for this library, use
 
-// jsdoc --template ~/node_modules/foodoc/template *.src.js -R README.md -c JSDoc.json
+// jsdoc --template /usr/local/lib/node_modules/foodoc/template *.src.js -R README.md -c JSDoc.json
 
 // To test, set environment variable RGL_DEBUGGING=true
 // before building.

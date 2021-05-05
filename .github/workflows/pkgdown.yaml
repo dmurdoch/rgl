@@ -35,9 +35,9 @@ jobs:
         run: |
           brew install npm
           npm install -g jsdoc
-          npm install foodoc
+          npm install -g foodoc
           cd inst/htmlwidgets/lib/rglClass
-          jsdoc --template ~/node_modules/foodoc/template *.src.js -R README.md -c JSDoc.json
+          jsdoc --template /usr/local/lib/node_modules/foodoc/template *.src.js -R README.md -c JSDoc.json
           
       - name: Query dependencies
         run: |
