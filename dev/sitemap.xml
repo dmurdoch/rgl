@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/ISSUE_TEMPLATE.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/SUPPORT.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/articles/WebGL.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/articles/pkgdown.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/articles/rgl.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/articles/transparency.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/authors.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/news/index.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html</loc>
@@ -121,6 +151,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/in_pkgdown_example.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/light.html</loc>
   </url>
   <url>
@@ -163,13 +196,13 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/pch3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.html</loc>
-  </url>
-  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.deldir.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.function.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.tri.html</loc>
@@ -184,10 +217,10 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/playwidget.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/plot3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/plot3d.formula.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/plot3d.formula.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/plot3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/plot3d.lm.html</loc>
@@ -389,17 +422,5 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/writeWebGL.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/articles/WebGL.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/articles/pkgdown.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/articles/rgl.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/articles/transparency.html</loc>
   </url>
 </urlset>

@@ -62,20 +62,8 @@
 <script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
 <script src="libs/rglWebGL-binding-0.106.14/rglWebGL.js"></script>
 <link href="libs/rglwidgetClass-0.106.14/rgl.css" rel="stylesheet" />
-<script src="libs/rglwidgetClass-0.106.14/rglClass.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/utils.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/subscenes.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/shaders.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/textures.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/projection.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/mouse.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/init.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/pieces.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/draw.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/controls.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/selection.src.js"></script>
-<script src="libs/rglwidgetClass-0.106.14/rglTimer.src.js"></script>
-<script src="libs/CanvasMatrix4-0.106.14/CanvasMatrix.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.14/rglClass.min.js"></script>
+<script src="libs/CanvasMatrix4-0.106.14/CanvasMatrix.min.js"></script>
 
   
 
@@ -110,6 +98,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -273,8 +264,8 @@ quads respectively.</p>
   
   <span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span>  
   <span class='fu'><a href='shade3d.html'>wire3d</a></span><span class='op'>(</span> <span class='fu'>mesh3d</span><span class='op'>(</span>vertices <span class='op'>=</span> <span class='va'>vertices</span>, quads <span class='op'>=</span> <span class='va'>indices</span><span class='op'>)</span> <span class='op'>)</span>
-</div><div id="rgl10171" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
-<script type="application/json" data-for="rgl10171">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0]},"rootSubscene":782,"objects":{"788":{"id":788,"type":"quads","material":{"front":"lines","back":"lines"},"vertices":[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],"colors":[[0,0,0,1]],"centers":[[0,0,0]],"normals":[[0,-0,1],[0,-0,1],[0,-0,1],[0,-0,1]],"ignoreExtent":false,"flags":32771},"786":{"id":786,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"785":{"id":785,"type":"background","material":{},"colors":[[0.298039227724075,0.298039227724075,0.298039227724075,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"787":{"id":787,"type":"background","material":{"lit":false,"back":"lines"},"colors":[[1,1,1,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"782":{"id":782,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":782,"mouseMode":{"left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,5.46410131454468],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-5.46410131454468],[0,0,0,1]],"projMatrix":[[3.73205065727234,0,0,0],[0,3.73205065727234,0,0],[0,0,-3.86370277404785,-19.6974506378174],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1,1,-1,1,0,0],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":"NA","activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[787,788,786],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script><div class='input'>  
+</div><div id="rgl56901" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
+<script type="application/json" data-for="rgl56901">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0]},"rootSubscene":929,"objects":{"935":{"id":935,"type":"quads","material":{"front":"lines","back":"lines"},"vertices":[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],"colors":[[0,0,0,1]],"centers":[[0,0,0]],"normals":[[0,-0,1],[0,-0,1],[0,-0,1],[0,-0,1]],"ignoreExtent":false,"flags":32771},"933":{"id":933,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"932":{"id":932,"type":"background","material":{},"colors":[[0.298039227724075,0.298039227724075,0.298039227724075,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"934":{"id":934,"type":"background","material":{"lit":false,"back":"lines"},"colors":[[1,1,1,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"929":{"id":929,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":929,"mouseMode":{"left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,5.46410131454468],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-5.46410131454468],[0,0,0,1]],"projMatrix":[[3.73205065727234,0,0,0],[0,3.73205065727234,0,0],[0,0,-3.86370277404785,-19.6974506378174],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1,1,-1,1,0,0],"windowRect":[168,124,424,380],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"/System/Library/Fonts/Supplemental/Arial.ttf","maxClipPlanes":6,"glVersion":2.1,"activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[934,935,933],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script><div class='input'>  
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
