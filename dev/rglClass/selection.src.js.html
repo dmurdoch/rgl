@@ -1,0 +1,234 @@
+<!-- start:source.tmpl.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>selection.src.js</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"DD MMM YYYY","systemName":"rglClass","systemSummary":"Javascript support for `rglwidget`","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"rglClass copyright Duncan Murdoch","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"source,name","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					rglClass
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="rgltimerClass.html">rgltimerClass</a></li>
+											<li><a href="rglwidgetClass.html">rglwidgetClass</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">source</span>
+				<h1><span class="name">selection.src.js</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">    /**
+     * Methods related to selection
+     * @name ___METHODS_FOR_SELECTION___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
+    /**
+     * Respond to brush change
+     */
+    rglwidgetClass.prototype.selectionChanged = function() {
+      var i, j, k, id, subid = this.select.subscene, subscene,
+          objids, obj,
+          p1 = this.select.region.p1, p2 = this.select.region.p2,
+          filter, selection = [], handle, keys, xmin, x, xmax, ymin, y, ymax, z, v,
+          someHidden;
+      if (!subid)
+        return;
+      subscene = this.getObj(subid);
+      objids = subscene.objects;
+      filter = this.scene.crosstalk.filter;
+      this.setmvMatrix(subid);
+      this.setprMatrix(subid);
+      this.setprmvMatrix();
+      xmin = Math.min(p1.x, p2.x);
+      xmax = Math.max(p1.x, p2.x);
+      ymin = Math.min(p1.y, p2.y);
+      ymax = Math.max(p1.y, p2.y);
+      for (i = 0; i &lt; objids.length; i++) {
+      	id = objids[i];
+      	j = this.scene.crosstalk.id.indexOf(id);
+      	if (j >= 0) {
+      	  keys = this.scene.crosstalk.key[j];
+      	  obj = this.getObj(id);
+      	  someHidden = false;
+      	  for (k = 0; k &lt; keys.length; k++) {
+      	    if (filter &amp;&amp; filter.indexOf(keys[k]) &lt; 0) {
+      	      someHidden = true;
+      	      continue;
+      	    }
+      	    v = [].concat(obj.vertices[k]).concat(1.0);
+            v = this.multVM(v, this.prmvMatrix);
+            x = v[0]/v[3];
+            y = v[1]/v[3];
+            z = v[2]/v[3];
+            if (xmin &lt;= x &amp;&amp; x &lt;= xmax &amp;&amp; ymin &lt;= y &amp;&amp; y &lt;= ymax &amp;&amp; -1.0 &lt;= z &amp;&amp; z &lt;= 1.0) {
+              selection.push(keys[k]);
+            } else
+              someHidden = true;
+      	  }
+      	  obj.someHidden = someHidden &amp;&amp; (filter || selection.length);
+      	  obj.initialized = false;
+      	  /* Who should we notify?  Only shared data in the current subscene, or everyone? */
+      	  if (!this.equalArrays(selection, this.scene.crosstalk.selection)) {
+      	    handle = this.scene.crosstalk.sel_handle[j];
+      	    handle.set(selection, {rglSubsceneId: this.select.subscene});
+      	  }
+      	}
+      }
+    };
+    
+    /**
+     * Respond to selection or filter change from crosstalk
+     * @param { Object } event - crosstalk event
+     * @param { boolean } filter - filter or selection?
+     */
+    rglwidgetClass.prototype.selection = function(event, filter) {
+      	var i, j, ids, obj, keys, crosstalk = this.scene.crosstalk,
+      	    selection, someHidden;
+
+      	// Record the message and find out if this event makes some objects have mixed values:
+      	
+      	crosstalk = this.scene.crosstalk;
+      	
+      	if (filter) {
+      	  filter = crosstalk.filter = event.value;
+      	  selection = crosstalk.selection;
+      	} else {  
+          selection = crosstalk.selection = event.value;
+          filter = crosstalk.filter;
+      	}
+        ids = crosstalk.id;
+        for (i = 0; i &lt; ids.length ; i++) {
+          obj = this.getObj(ids[i]);
+          obj.initialized = false;
+          keys = crosstalk.key[i];
+          someHidden = false;
+          for (j = 0; j &lt; keys.length &amp;&amp; !someHidden; j++) {
+            if ((filter &amp;&amp; filter.indexOf(keys[j]) &lt; 0) ||
+                (selection.length &amp;&amp; selection.indexOf(keys[j]) &lt; 0))
+                someHidden = true;
+          }
+          obj.someHidden = someHidden;
+        }
+        this.drawScene();
+    };
+    
+    /**
+     * Clear the selection brush
+     * @param { number } except - Subscene that should ignore this request
+     */
+    rglwidgetClass.prototype.clearBrush = function(except) {
+      if (this.select.subscene !== except) {
+        this.select.region = {p1: {x:Infinity, y:Infinity}, 
+                              p2: {x:Infinity, y:Infinity}};
+        this.selectionChanged();
+        this.select.state = "inactive";
+        this.delFromSubscene(this.scene.brushId, this.select.subscene);
+      }
+      this.drawScene();
+    };
+    
+    /**
+     * Set the vertices in the selection box object
+     */
+    rglwidgetClass.prototype.initSelection = function(id) {
+      if (typeof this.select.region === "undefined")
+        return;
+      var obj = this.getObj(id),
+          p1 = this.select.region.p1,
+          p2 = this.select.region.p2;
+          
+      obj.vertices = [[p1.x, p1.y, 0.0],
+                      [p2.x, p1.y, 0.0],
+                      [p2.x, p2.y, 0.0],
+                      [p1.x, p2.y, 0.0],
+                      [p1.x, p1.y, 0.0]];
+    };
+</code></pre>
+		</section>
+			</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">rglClass copyright Duncan Murdoch</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on 04 May 2021 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:source.tmpl.hbs -->
