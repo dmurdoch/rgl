@@ -70,7 +70,6 @@ jobs:
       - name: Build READMEs
         run: |
           library(rmarkdown)
-          render("README.Rmd", github_document(html_preview = FALSE))
           setwd("inst/htmlwidgets/lib/rglClass")
           render("README.Rmd", github_document(html_preview = FALSE))
         shell: Rscript {0}
