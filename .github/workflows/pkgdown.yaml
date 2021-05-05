@@ -74,6 +74,13 @@ jobs:
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
 
+      - name: Build READMEs
+        run: |
+          rmarkdown::render("README.Rmd", github_document(html_preview = FALSE))
+          setwd("inst/htmlwidgets/lib/rglClass")
+          rmarkdown::render("README.Rmd", github_document(html_preview = FALSE))
+        shell: Rscript {0}
+        
       - name: Deploy package
         run: |
           git config --local user.email "actions@github.com"
