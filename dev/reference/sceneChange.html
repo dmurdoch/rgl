@@ -84,7 +84,7 @@ to a scene, adding and removing objects from it." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.14</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.15</span>
       </span>
     </div>
 
@@ -223,20 +223,20 @@ scenes that can be much faster, but may be less flexible.  The
 Shiny demo in this package makes use of all of these approaches.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>shinyUI</span><span class='op'>(</span><span class='fu'>fluidPage</span><span class='op'>(</span>
-  <span class='fu'>registerSceneChange</span><span class='op'>(</span><span class='op'>)</span>,
-  <span class='fu'>actionButton</span><span class='op'>(</span><span class='st'>"thebutton"</span>, <span class='st'>"Change"</span><span class='op'>)</span>
-<span class='op'>)</span><span class='op'>)</span>
-
-<span class='fu'>shinyServer</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>observeEvent</span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>thebutton</span>, <span class='op'>{</span>
-    <span class='va'>session</span><span class='op'>$</span><span class='fu'>sendCustomMessage</span><span class='op'>(</span><span class='st'>"sceneChange"</span>,
-      <span class='fu'>sceneChange</span><span class='op'>(</span><span class='st'>"thewidget"</span>, delete <span class='op'>=</span> <span class='va'>deletes</span>, add <span class='op'>=</span> <span class='va'>adds</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='op'>}</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>shinyUI</span><span class='op'>(</span><span class='fu'>fluidPage</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'>registerSceneChange</span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'>actionButton</span><span class='op'>(</span><span class='st'>"thebutton"</span>, <span class='st'>"Change"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>shinyServer</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'>observeEvent</span><span class='op'>(</span><span class='va'>input</span><span class='op'>$</span><span class='va'>thebutton</span>, <span class='op'>{</span></span>
+<span class='r-in'>    <span class='va'>session</span><span class='op'>$</span><span class='fu'>sendCustomMessage</span><span class='op'>(</span><span class='st'>"sceneChange"</span>,</span>
+<span class='r-in'>      <span class='fu'>sceneChange</span><span class='op'>(</span><span class='st'>"thewidget"</span>, delete <span class='op'>=</span> <span class='va'>deletes</span>, add <span class='op'>=</span> <span class='va'>adds</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

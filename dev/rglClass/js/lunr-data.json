@@ -647,6 +647,37 @@
           "piec",
           "rglwidgetclass#getpiec"
         ],
+        "rglwidgetClass.html#getSpherePieces": [
+          "context",
+          "function",
+          "getspherepiec",
+          "obj",
+          "object",
+          "piec",
+          "rglwidgetclass#getspherepiec",
+          "sphere",
+          "subid"
+        ],
+        "rglwidgetClass.html#mergePieces": [
+          "call",
+          "drawn",
+          "function",
+          "merg",
+          "mergepiec",
+          "object",
+          "on",
+          "piec",
+          "rglwidgetclass#mergepiec"
+        ],
+        "rglwidgetClass.html#sortPieces": [
+          "array",
+          "depth",
+          "function",
+          "piec",
+          "rglwidgetclass#sortpiec",
+          "sort",
+          "sortpiec"
+        ],
         "rglwidgetClass.html#___METHODS_FOR_PROJECTIONS___": [
           "___methods_for_projections___",
           "function",
@@ -1380,6 +1411,14 @@
           "time",
           "valu"
         ],
+        "rgltimerClass.html#___METHODS_FOR_PLAYERS___": [
+          "___methods_for_players___",
+          "function",
+          "method",
+          "player",
+          "relat",
+          "rgltimerclass#___methods_for_players___"
+        ],
         "rgltimerClass.html#faster": [
           "faster",
           "function",
@@ -1409,11 +1448,9 @@
         ],
         "rgltimerClass.html#play": [
           "function",
-          "object",
           "play",
           "rgltimerclass#play",
-          "start",
-          "timer"
+          "start"
         ],
         "rgltimerClass.html#reset": [
           "function",
@@ -1447,7 +1484,7 @@
           "take"
         ]
       },
-      "length": 146
+      "length": 150
     },
     "tokenStore": {
       "root": {
@@ -2171,6 +2208,10 @@
                     },
                     "rglwidgetClass.html#___METHODS_FOR_TEXTURES___": {
                       "ref": "rglwidgetClass.html#___METHODS_FOR_TEXTURES___",
+                      "tf": 16.666666666666664
+                    },
+                    "rgltimerClass.html#___METHODS_FOR_PLAYERS___": {
+                      "ref": "rgltimerClass.html#___METHODS_FOR_PLAYERS___",
                       "tf": 16.666666666666664
                     }
                   }
@@ -3875,6 +3916,32 @@
                                             }
                                           }
                                         },
+                                        "o": {
+                                          "docs": {},
+                                          "r": {
+                                            "docs": {},
+                                            "t": {
+                                              "docs": {},
+                                              "p": {
+                                                "docs": {},
+                                                "i": {
+                                                  "docs": {},
+                                                  "e": {
+                                                    "docs": {},
+                                                    "c": {
+                                                      "docs": {
+                                                        "rglwidgetClass.html#sortPieces": {
+                                                          "ref": "rglwidgetClass.html#sortPieces",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
                                         "w": {
                                           "docs": {},
                                           "a": {
@@ -5164,6 +5231,110 @@
                                                 }
                                               }
                                             },
+                                            "s": {
+                                              "docs": {},
+                                              "p": {
+                                                "docs": {},
+                                                "h": {
+                                                  "docs": {},
+                                                  "e": {
+                                                    "docs": {},
+                                                    "r": {
+                                                      "docs": {},
+                                                      "e": {
+                                                        "docs": {},
+                                                        "p": {
+                                                          "docs": {},
+                                                          "i": {
+                                                            "docs": {},
+                                                            "e": {
+                                                              "docs": {},
+                                                              "c": {
+                                                                "docs": {
+                                                                  "rglwidgetClass.html#getSpherePieces": {
+                                                                    "ref": "rglwidgetClass.html#getSpherePieces",
+                                                                    "tf": 1150
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "h": {
+                                                "docs": {},
+                                                "a": {
+                                                  "docs": {},
+                                                  "d": {
+                                                    "docs": {
+                                                      "rglwidgetClass.html#getShader": {
+                                                        "ref": "rglwidgetClass.html#getShader",
+                                                        "tf": 1150
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "u": {
+                                                "docs": {},
+                                                "b": {
+                                                  "docs": {},
+                                                  "s": {
+                                                    "docs": {},
+                                                    "c": {
+                                                      "docs": {},
+                                                      "e": {
+                                                        "docs": {},
+                                                        "n": {
+                                                          "docs": {},
+                                                          "e": {
+                                                            "docs": {},
+                                                            "e": {
+                                                              "docs": {},
+                                                              "n": {
+                                                                "docs": {},
+                                                                "t": {
+                                                                  "docs": {},
+                                                                  "r": {
+                                                                    "docs": {},
+                                                                    "i": {
+                                                                      "docs": {
+                                                                        "rglwidgetClass.html#getSubsceneEntries": {
+                                                                          "ref": "rglwidgetClass.html#getSubsceneEntries",
+                                                                          "tf": 1150
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "l": {
+                                                "docs": {},
+                                                "i": {
+                                                  "docs": {},
+                                                  "d": {
+                                                    "docs": {
+                                                      "rglwidgetClass.html#getSlide": {
+                                                        "ref": "rglwidgetClass.html#getSlide",
+                                                        "tf": 1150
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
                                             "v": {
                                               "docs": {},
                                               "i": {
@@ -5260,78 +5431,6 @@
                                                             }
                                                           }
                                                         }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "s": {
-                                              "docs": {},
-                                              "h": {
-                                                "docs": {},
-                                                "a": {
-                                                  "docs": {},
-                                                  "d": {
-                                                    "docs": {
-                                                      "rglwidgetClass.html#getShader": {
-                                                        "ref": "rglwidgetClass.html#getShader",
-                                                        "tf": 1150
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "u": {
-                                                "docs": {},
-                                                "b": {
-                                                  "docs": {},
-                                                  "s": {
-                                                    "docs": {},
-                                                    "c": {
-                                                      "docs": {},
-                                                      "e": {
-                                                        "docs": {},
-                                                        "n": {
-                                                          "docs": {},
-                                                          "e": {
-                                                            "docs": {},
-                                                            "e": {
-                                                              "docs": {},
-                                                              "n": {
-                                                                "docs": {},
-                                                                "t": {
-                                                                  "docs": {},
-                                                                  "r": {
-                                                                    "docs": {},
-                                                                    "i": {
-                                                                      "docs": {
-                                                                        "rglwidgetClass.html#getSubsceneEntries": {
-                                                                          "ref": "rglwidgetClass.html#getSubsceneEntries",
-                                                                          "tf": 1150
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "l": {
-                                                "docs": {},
-                                                "i": {
-                                                  "docs": {},
-                                                  "d": {
-                                                    "docs": {
-                                                      "rglwidgetClass.html#getSlide": {
-                                                        "ref": "rglwidgetClass.html#getSlide",
-                                                        "tf": 1150
                                                       }
                                                     }
                                                   }
@@ -5483,6 +5582,69 @@
                                                           }
                                                         }
                                                       }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "m": {
+                                        "docs": {},
+                                        "e": {
+                                          "docs": {},
+                                          "r": {
+                                            "docs": {},
+                                            "g": {
+                                              "docs": {},
+                                              "e": {
+                                                "docs": {},
+                                                "p": {
+                                                  "docs": {},
+                                                  "i": {
+                                                    "docs": {},
+                                                    "e": {
+                                                      "docs": {},
+                                                      "c": {
+                                                        "docs": {
+                                                          "rglwidgetClass.html#mergePieces": {
+                                                            "ref": "rglwidgetClass.html#mergePieces",
+                                                            "tf": 1150
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "u": {
+                                          "docs": {},
+                                          "l": {
+                                            "docs": {},
+                                            "t": {
+                                              "docs": {},
+                                              "m": {
+                                                "docs": {},
+                                                "v": {
+                                                  "docs": {
+                                                    "rglwidgetClass.html#multMV": {
+                                                      "ref": "rglwidgetClass.html#multMV",
+                                                      "tf": 1150
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "v": {
+                                                "docs": {},
+                                                "m": {
+                                                  "docs": {
+                                                    "rglwidgetClass.html#multVM": {
+                                                      "ref": "rglwidgetClass.html#multVM",
+                                                      "tf": 1150
                                                     }
                                                   }
                                                 }
@@ -6044,40 +6206,6 @@
                                           }
                                         }
                                       },
-                                      "m": {
-                                        "docs": {},
-                                        "u": {
-                                          "docs": {},
-                                          "l": {
-                                            "docs": {},
-                                            "t": {
-                                              "docs": {},
-                                              "m": {
-                                                "docs": {},
-                                                "v": {
-                                                  "docs": {
-                                                    "rglwidgetClass.html#multMV": {
-                                                      "ref": "rglwidgetClass.html#multMV",
-                                                      "tf": 1150
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "v": {
-                                                "docs": {},
-                                                "m": {
-                                                  "docs": {
-                                                    "rglwidgetClass.html#multVM": {
-                                                      "ref": "rglwidgetClass.html#multVM",
-                                                      "tf": 1150
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
                                       "x": {
                                         "docs": {},
                                         "p": {
@@ -6367,6 +6495,86 @@
                                               "rgltimerClass.html#value": {
                                                 "ref": "rgltimerClass.html#value",
                                                 "tf": 1150
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "_": {
+                                      "docs": {},
+                                      "_": {
+                                        "docs": {},
+                                        "_": {
+                                          "docs": {},
+                                          "m": {
+                                            "docs": {},
+                                            "e": {
+                                              "docs": {},
+                                              "t": {
+                                                "docs": {},
+                                                "h": {
+                                                  "docs": {},
+                                                  "o": {
+                                                    "docs": {},
+                                                    "d": {
+                                                      "docs": {},
+                                                      "s": {
+                                                        "docs": {},
+                                                        "_": {
+                                                          "docs": {},
+                                                          "f": {
+                                                            "docs": {},
+                                                            "o": {
+                                                              "docs": {},
+                                                              "r": {
+                                                                "docs": {},
+                                                                "_": {
+                                                                  "docs": {},
+                                                                  "p": {
+                                                                    "docs": {},
+                                                                    "l": {
+                                                                      "docs": {},
+                                                                      "a": {
+                                                                        "docs": {},
+                                                                        "y": {
+                                                                          "docs": {},
+                                                                          "e": {
+                                                                            "docs": {},
+                                                                            "r": {
+                                                                              "docs": {},
+                                                                              "s": {
+                                                                                "docs": {},
+                                                                                "_": {
+                                                                                  "docs": {},
+                                                                                  "_": {
+                                                                                    "docs": {},
+                                                                                    "_": {
+                                                                                      "docs": {
+                                                                                        "rgltimerClass.html#___METHODS_FOR_PLAYERS___": {
+                                                                                          "ref": "rgltimerClass.html#___METHODS_FOR_PLAYERS___",
+                                                                                          "tf": 1150
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
                                               }
                                             }
                                           }
@@ -6750,6 +6958,17 @@
                     }
                   }
                 }
+              },
+              "i": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "rglwidgetClass.html#getSpherePieces": {
+                      "ref": "rglwidgetClass.html#getSpherePieces",
+                      "tf": 20
+                    }
+                  }
+                }
               }
             },
             "m": {
@@ -6816,7 +7035,7 @@
                     },
                     "rgltimerClass.html#play": {
                       "ref": "rgltimerClass.html#play",
-                      "tf": 12.5
+                      "tf": 25
                     },
                     "rgltimerClass.html#reset": {
                       "ref": "rgltimerClass.html#reset",
@@ -7666,6 +7885,10 @@
                       "rglwidgetClass.html#initSphereGL": {
                         "ref": "rglwidgetClass.html#initSphereGL",
                         "tf": 12.5
+                      },
+                      "rglwidgetClass.html#getSpherePieces": {
+                        "ref": "rglwidgetClass.html#getSpherePieces",
+                        "tf": 25
                       }
                     }
                   }
@@ -7801,6 +8024,37 @@
                         "rglwidgetClass.html#equalArrays": {
                           "ref": "rglwidgetClass.html#equalArrays",
                           "tf": 16.666666666666664
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "o": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "t": {
+                "docs": {
+                  "rglwidgetClass.html#sortPieces": {
+                    "ref": "rglwidgetClass.html#sortPieces",
+                    "tf": 16.666666666666664
+                  }
+                },
+                "p": {
+                  "docs": {},
+                  "i": {
+                    "docs": {},
+                    "e": {
+                      "docs": {},
+                      "c": {
+                        "docs": {
+                          "rglwidgetClass.html#sortPieces": {
+                            "ref": "rglwidgetClass.html#sortPieces",
+                            "tf": 683.3333333333334
+                          }
                         }
                       }
                     }
@@ -8623,6 +8877,14 @@
                     }
                   }
                 },
+                "n": {
+                  "docs": {
+                    "rglwidgetClass.html#mergePieces": {
+                      "ref": "rglwidgetClass.html#mergePieces",
+                      "tf": 10
+                    }
+                  }
+                },
                 "t": {
                   "docs": {},
                   "e": {
@@ -8788,6 +9050,10 @@
                     },
                     "rglwidgetClass.html#doMasking": {
                       "ref": "rglwidgetClass.html#doMasking",
+                      "tf": 16.666666666666664
+                    },
+                    "rglwidgetClass.html#sortPieces": {
+                      "ref": "rglwidgetClass.html#sortPieces",
                       "tf": 16.666666666666664
                     }
                   }
@@ -8992,6 +9258,110 @@
                   }
                 }
               },
+              "s": {
+                "docs": {},
+                "p": {
+                  "docs": {},
+                  "h": {
+                    "docs": {},
+                    "e": {
+                      "docs": {},
+                      "r": {
+                        "docs": {},
+                        "e": {
+                          "docs": {},
+                          "p": {
+                            "docs": {},
+                            "i": {
+                              "docs": {},
+                              "e": {
+                                "docs": {},
+                                "c": {
+                                  "docs": {
+                                    "rglwidgetClass.html#getSpherePieces": {
+                                      "ref": "rglwidgetClass.html#getSpherePieces",
+                                      "tf": 670
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "h": {
+                  "docs": {},
+                  "a": {
+                    "docs": {},
+                    "d": {
+                      "docs": {
+                        "rglwidgetClass.html#getShader": {
+                          "ref": "rglwidgetClass.html#getShader",
+                          "tf": 675
+                        }
+                      }
+                    }
+                  }
+                },
+                "u": {
+                  "docs": {},
+                  "b": {
+                    "docs": {},
+                    "s": {
+                      "docs": {},
+                      "c": {
+                        "docs": {},
+                        "e": {
+                          "docs": {},
+                          "n": {
+                            "docs": {},
+                            "e": {
+                              "docs": {},
+                              "e": {
+                                "docs": {},
+                                "n": {
+                                  "docs": {},
+                                  "t": {
+                                    "docs": {},
+                                    "r": {
+                                      "docs": {},
+                                      "i": {
+                                        "docs": {
+                                          "rglwidgetClass.html#getSubsceneEntries": {
+                                            "ref": "rglwidgetClass.html#getSubsceneEntries",
+                                            "tf": 683.3333333333334
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "l": {
+                  "docs": {},
+                  "i": {
+                    "docs": {},
+                    "d": {
+                      "docs": {
+                        "rglwidgetClass.html#getSlide": {
+                          "ref": "rglwidgetClass.html#getSlide",
+                          "tf": 700
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               "v": {
                 "docs": {},
                 "i": {
@@ -9088,78 +9458,6 @@
                               }
                             }
                           }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "s": {
-                "docs": {},
-                "h": {
-                  "docs": {},
-                  "a": {
-                    "docs": {},
-                    "d": {
-                      "docs": {
-                        "rglwidgetClass.html#getShader": {
-                          "ref": "rglwidgetClass.html#getShader",
-                          "tf": 675
-                        }
-                      }
-                    }
-                  }
-                },
-                "u": {
-                  "docs": {},
-                  "b": {
-                    "docs": {},
-                    "s": {
-                      "docs": {},
-                      "c": {
-                        "docs": {},
-                        "e": {
-                          "docs": {},
-                          "n": {
-                            "docs": {},
-                            "e": {
-                              "docs": {},
-                              "e": {
-                                "docs": {},
-                                "n": {
-                                  "docs": {},
-                                  "t": {
-                                    "docs": {},
-                                    "r": {
-                                      "docs": {},
-                                      "i": {
-                                        "docs": {
-                                          "rglwidgetClass.html#getSubsceneEntries": {
-                                            "ref": "rglwidgetClass.html#getSubsceneEntries",
-                                            "tf": 683.3333333333334
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "l": {
-                  "docs": {},
-                  "i": {
-                    "docs": {},
-                    "d": {
-                      "docs": {
-                        "rglwidgetClass.html#getSlide": {
-                          "ref": "rglwidgetClass.html#getSlide",
-                          "tf": 700
                         }
                       }
                     }
@@ -9537,6 +9835,10 @@
                         "rglwidgetClass.html#stopDrawing": {
                           "ref": "rglwidgetClass.html#stopDrawing",
                           "tf": 10
+                        },
+                        "rglwidgetClass.html#getSpherePieces": {
+                          "ref": "rglwidgetClass.html#getSpherePieces",
+                          "tf": 20
                         }
                       }
                     }
@@ -10105,6 +10407,10 @@
               "docs": {},
               "l": {
                 "docs": {
+                  "rglwidgetClass.html#mergePieces": {
+                    "ref": "rglwidgetClass.html#mergePieces",
+                    "tf": 10
+                  },
                   "rglwidgetClass.html#getShader": {
                     "ref": "rglwidgetClass.html#getShader",
                     "tf": 8.333333333333332
@@ -11045,6 +11351,38 @@
                                               }
                                             }
                                           }
+                                        },
+                                        "l": {
+                                          "docs": {},
+                                          "a": {
+                                            "docs": {},
+                                            "y": {
+                                              "docs": {},
+                                              "e": {
+                                                "docs": {},
+                                                "r": {
+                                                  "docs": {},
+                                                  "s": {
+                                                    "docs": {},
+                                                    "_": {
+                                                      "docs": {},
+                                                      "_": {
+                                                        "docs": {},
+                                                        "_": {
+                                                          "docs": {
+                                                            "rgltimerClass.html#___METHODS_FOR_PLAYERS___": {
+                                                              "ref": "rgltimerClass.html#___METHODS_FOR_PLAYERS___",
+                                                              "tf": 750
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
                                         }
                                       },
                                       "s": {
@@ -11546,6 +11884,18 @@
                             "ref": "rglwidgetClass.html#getPieces",
                             "tf": 110
                           },
+                          "rglwidgetClass.html#getSpherePieces": {
+                            "ref": "rglwidgetClass.html#getSpherePieces",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#mergePieces": {
+                            "ref": "rglwidgetClass.html#mergePieces",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#sortPieces": {
+                            "ref": "rglwidgetClass.html#sortPieces",
+                            "tf": 110
+                          },
                           "rglwidgetClass.html#___METHODS_FOR_PROJECTIONS___": {
                             "ref": "rglwidgetClass.html#___METHODS_FOR_PROJECTIONS___",
                             "tf": 110
@@ -11804,6 +12154,10 @@
                           },
                           "rglwidgetClass.html#xprod": {
                             "ref": "rglwidgetClass.html#xprod",
+                            "tf": 110
+                          },
+                          "rgltimerClass.html#___METHODS_FOR_PLAYERS___": {
+                            "ref": "rgltimerClass.html#___METHODS_FOR_PLAYERS___",
                             "tf": 110
                           },
                           "rgltimerClass.html#faster": {
@@ -12133,6 +12487,10 @@
                       "rglwidgetClass.html#___UTILITY_METHODS___": {
                         "ref": "rglwidgetClass.html#___UTILITY_METHODS___",
                         "tf": 25
+                      },
+                      "rgltimerClass.html#___METHODS_FOR_PLAYERS___": {
+                        "ref": "rgltimerClass.html#___METHODS_FOR_PLAYERS___",
+                        "tf": 16.666666666666664
                       }
                     }
                   }
@@ -12171,6 +12529,30 @@
                   "rglwidgetClass.html#drawSpheres": {
                     "ref": "rglwidgetClass.html#drawSpheres",
                     "tf": 0.78125
+                  },
+                  "rglwidgetClass.html#mergePieces": {
+                    "ref": "rglwidgetClass.html#mergePieces",
+                    "tf": 10
+                  }
+                },
+                "e": {
+                  "docs": {},
+                  "p": {
+                    "docs": {},
+                    "i": {
+                      "docs": {},
+                      "e": {
+                        "docs": {},
+                        "c": {
+                          "docs": {
+                            "rglwidgetClass.html#mergePieces": {
+                              "ref": "rglwidgetClass.html#mergePieces",
+                              "tf": 683.3333333333334
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -12633,6 +13015,10 @@
                     "rglwidgetClass.html#getPieces": {
                       "ref": "rglwidgetClass.html#getPieces",
                       "tf": 50
+                    },
+                    "rglwidgetClass.html#sortPieces": {
+                      "ref": "rglwidgetClass.html#sortPieces",
+                      "tf": 33.33333333333333
                     },
                     "rglwidgetClass.html#equalArrays": {
                       "ref": "rglwidgetClass.html#equalArrays",
@@ -13470,7 +13856,7 @@
                   },
                   "rgltimerClass.html#play": {
                     "ref": "rgltimerClass.html#play",
-                    "tf": 762.5
+                    "tf": 775
                   },
                   "rgltimerClass.html#slower": {
                     "ref": "rgltimerClass.html#slower",
@@ -13484,6 +13870,10 @@
                       "rglwidgetClass.html#Player": {
                         "ref": "rglwidgetClass.html#Player",
                         "tf": 695.8333333333334
+                      },
+                      "rgltimerClass.html#___METHODS_FOR_PLAYERS___": {
+                        "ref": "rgltimerClass.html#___METHODS_FOR_PLAYERS___",
+                        "tf": 16.666666666666664
                       }
                     }
                   }
@@ -13694,6 +14084,18 @@
                   "rglwidgetClass.html#getPieces": {
                     "ref": "rglwidgetClass.html#getPieces",
                     "tf": 16.666666666666664
+                  },
+                  "rglwidgetClass.html#getSpherePieces": {
+                    "ref": "rglwidgetClass.html#getSpherePieces",
+                    "tf": 25
+                  },
+                  "rglwidgetClass.html#mergePieces": {
+                    "ref": "rglwidgetClass.html#mergePieces",
+                    "tf": 43.33333333333333
+                  },
+                  "rglwidgetClass.html#sortPieces": {
+                    "ref": "rglwidgetClass.html#sortPieces",
+                    "tf": 49.99999999999999
                   }
                 }
               }
@@ -14365,6 +14767,10 @@
                   "ref": "rglwidgetClass.html#drawSprites",
                   "tf": 25
                 },
+                "rglwidgetClass.html#getSpherePieces": {
+                  "ref": "rglwidgetClass.html#getSpherePieces",
+                  "tf": 20
+                },
                 "rglwidgetClass.html#getObjMaterial": {
                   "ref": "rglwidgetClass.html#getObjMaterial",
                   "tf": 45.83333333333333
@@ -14424,6 +14830,14 @@
                         "ref": "rglwidgetClass.html#getPieces",
                         "tf": 16.666666666666664
                       },
+                      "rglwidgetClass.html#getSpherePieces": {
+                        "ref": "rglwidgetClass.html#getSpherePieces",
+                        "tf": 20
+                      },
+                      "rglwidgetClass.html#mergePieces": {
+                        "ref": "rglwidgetClass.html#mergePieces",
+                        "tf": 33.33333333333333
+                      },
                       "rglwidgetClass.html#initSelection": {
                         "ref": "rglwidgetClass.html#initSelection",
                         "tf": 10
@@ -14463,10 +14877,6 @@
                       "rgltimerClass.html": {
                         "ref": "rgltimerClass.html",
                         "tf": 16.666666666666664
-                      },
-                      "rgltimerClass.html#play": {
-                        "ref": "rgltimerClass.html#play",
-                        "tf": 12.5
                       }
                     },
                     "'": {
@@ -14527,6 +14937,10 @@
               "rglwidgetClass.html#drawSpheres": {
                 "ref": "rglwidgetClass.html#drawSpheres",
                 "tf": 2.34375
+              },
+              "rglwidgetClass.html#mergePieces": {
+                "ref": "rglwidgetClass.html#mergePieces",
+                "tf": 10
               },
               "rgltimerClass.html#step": {
                 "ref": "rgltimerClass.html#step",
@@ -15149,14 +15563,6 @@
                     "ref": "rgltimerClass.html#value",
                     "tf": 16.666666666666664
                   }
-                },
-                "r": {
-                  "docs": {
-                    "rgltimerClass.html#play": {
-                      "ref": "rgltimerClass.html#play",
-                      "tf": 12.5
-                    }
-                  }
                 }
               }
             }
@@ -15499,7 +15905,7 @@
           }
         }
       },
-      "length": 1115
+      "length": 1144
     },
     "corpusTokens": [
       "1",
@@ -15514,6 +15920,7 @@
       "___methods_for_drawing___",
       "___methods_for_initialization___",
       "___methods_for_mouse_handling___",
+      "___methods_for_players___",
       "___methods_for_projections___",
       "___methods_for_selection___",
       "___methods_for_shaders___",
@@ -15631,6 +16038,7 @@
       "drawbackground",
       "drawclipplan",
       "drawlinestrip",
+      "drawn",
       "drawobj",
       "drawobjid",
       "drawpiec",
@@ -15675,6 +16083,7 @@
       "getpoweroftwo",
       "getshad",
       "getslid",
+      "getspherepiec",
       "getsubsceneentri",
       "getvertexshad",
       "getviewport",
@@ -15731,6 +16140,7 @@
       "maximum",
       "member",
       "merg",
+      "mergepiec",
       "messag",
       "method",
       "mode",
@@ -15801,6 +16211,7 @@
       "rgl",
       "rglclass",
       "rgltimerclass",
+      "rgltimerclass#___methods_for_players___",
       "rgltimerclass#fast",
       "rgltimerclass#forcetorang",
       "rgltimerclass#interv",
@@ -15886,6 +16297,7 @@
       "rglwidgetclass#getpoweroftwo",
       "rglwidgetclass#getshad",
       "rglwidgetclass#getslid",
+      "rglwidgetclass#getspherepiec",
       "rglwidgetclass#getsubsceneentri",
       "rglwidgetclass#getvertexshad",
       "rglwidgetclass#getviewport",
@@ -15903,6 +16315,7 @@
       "rglwidgetclass#inviewport",
       "rglwidgetclass#isinbrowserviewport",
       "rglwidgetclass#loadimagetotextur",
+      "rglwidgetclass#mergepiec",
       "rglwidgetclass#multmv",
       "rglwidgetclass#multvm",
       "rglwidgetclass#oldbridg",
@@ -15928,6 +16341,7 @@
       "rglwidgetclass#setprmvmatrix",
       "rglwidgetclass#setsubsceneentri",
       "rglwidgetclass#setviewport",
+      "rglwidgetclass#sortpiec",
       "rglwidgetclass#start",
       "rglwidgetclass#startdraw",
       "rglwidgetclass#stopdraw",
@@ -15978,6 +16392,8 @@
       "slide",
       "slidi",
       "slower",
+      "sort",
+      "sortpiec",
       "specif",
       "speed",
       "sphere",
@@ -15994,6 +16410,7 @@
       "stoptim",
       "string",
       "style",
+      "subid",
       "subscen",
       "subsceneid",
       "subset",
@@ -16009,7 +16426,6 @@
       "texturecanva",
       "this.spher",
       "time",
-      "timer",
       "tocanvasmatrix4",
       "transform",
       "translat",
@@ -16696,6 +17112,36 @@
       "tags": "rglwidgetClass#getPieces getPieces",
       "summary": "",
       "description": "Break objects into pieces"
+    },
+    "rglwidgetClass.html#getSpherePieces": {
+      "id": "rglwidgetClass.html#getSpherePieces",
+      "kind": "function",
+      "title": "getSpherePieces( context, subid, obj ) → {object}",
+      "longname": "rglwidgetClass#getSpherePieces",
+      "name": "getSpherePieces",
+      "tags": "rglwidgetClass#getSpherePieces getSpherePieces",
+      "summary": "",
+      "description": "Get pieces from sphere"
+    },
+    "rglwidgetClass.html#mergePieces": {
+      "id": "rglwidgetClass.html#mergePieces",
+      "kind": "function",
+      "title": "mergePieces( pieces ) → {object}",
+      "longname": "rglwidgetClass#mergePieces",
+      "name": "mergePieces",
+      "tags": "rglwidgetClass#mergePieces mergePieces",
+      "summary": "",
+      "description": "Merge pieces that can be drawn in one call"
+    },
+    "rglwidgetClass.html#sortPieces": {
+      "id": "rglwidgetClass.html#sortPieces",
+      "kind": "function",
+      "title": "sortPieces( pieces ) → {array}",
+      "longname": "rglwidgetClass#sortPieces",
+      "name": "sortPieces",
+      "tags": "rglwidgetClass#sortPieces sortPieces",
+      "summary": "",
+      "description": "Sort pieces by depth"
     },
     "rglwidgetClass.html#___METHODS_FOR_PROJECTIONS___": {
       "id": "rglwidgetClass.html#___METHODS_FOR_PROJECTIONS___",
@@ -17448,6 +17894,16 @@
       "summary": "",
       "description": "current nominal time"
     },
+    "rgltimerClass.html#___METHODS_FOR_PLAYERS___": {
+      "id": "rgltimerClass.html#___METHODS_FOR_PLAYERS___",
+      "kind": "function",
+      "title": "___METHODS_FOR_PLAYERS___()",
+      "longname": "rgltimerClass#___METHODS_FOR_PLAYERS___",
+      "name": "___METHODS_FOR_PLAYERS___",
+      "tags": "rgltimerClass#___METHODS_FOR_PLAYERS___ ___METHODS_FOR_PLAYERS___",
+      "summary": "",
+      "description": "Methods related to players"
+    },
     "rgltimerClass.html#faster": {
       "id": "rgltimerClass.html#faster",
       "kind": "function",
@@ -17486,7 +17942,7 @@
       "name": "play",
       "tags": "rgltimerClass#play play",
       "summary": "",
-      "description": "Start playing timer object"
+      "description": "Start playing"
     },
     "rgltimerClass.html#reset": {
       "id": "rgltimerClass.html#reset",
