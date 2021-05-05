@@ -1,7 +1,7 @@
 {
   "opts": {
     "encoding"              : "utf8",
-    "destination"           : "../../../../docs/dev/rglClass"
+    "destination"           : "../../../../dev/rglClass"
   },
   "templates": {
     "systemName"            : "rglClass",
