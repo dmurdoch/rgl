@@ -1,0 +1,37 @@
+---
+title: "`rglwidget` library files"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+## INTRODUCTION
+
+These pages document the Javascript classes that
+support the `rgl` package for display in web pages.
+Most of the methods should be assumed to be internal
+and subject to change.
+
+The methods are organized by source file:
+
+```{r echo=FALSE, results='asis'}
+files <- list.files(pattern = "[.]src[.]js$")
+out <- character()
+for (f in files) {
+  lines <- readLines(f)
+  name <- grep("@name ___", lines)
+  memberof <- name + 1
+  name <- sub("^[^_]*", "", lines[name])
+  name <- sub("[^_]*$", "", name)
+  memberof <- sub("^.*@memberof ", "", lines[memberof])
+  memberof <- sub(" *$", "", memberof)
+  cleaned <- tolower(gsub("_", " ", name))
+  cat(paste0("[", f, "](", memberof, ".html#", name, "): ", cleaned, "  \n"))
+}
+```
+
+This file was produced on `r Sys.Date()` for `rgl` version `r packageVersion("rgl")`.

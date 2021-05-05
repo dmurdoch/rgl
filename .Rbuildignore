@@ -18,7 +18,8 @@
 ^[.]lintr$
 ^windows$
 ^[.]github
-^README.Rmd$
+README.Rmd$
+rglClass/README.md$
 ^tests/test.Rmd$
 ^tests/widgetTests.R$
 ^_pkgdown\.yml$
@@ -28,3 +29,4 @@
 ^revdep/
 ^\.github$
 ^R/noOpenGL.R$
+[.]JSDoc

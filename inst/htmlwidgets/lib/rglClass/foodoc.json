@@ -7,9 +7,9 @@
     "systemName"            : "rglClass",
     "systemSummary"         : "Javascript support for `rglwidget`",
     "copyright"             : "rglClass copyright Duncan Murdoch",
-    "includeDate"           : true,
+    "includeDate"           : false,
     "dateFormat"            : "DD MMM YYYY",
-    "collapseSymbols"       : true,
+    "collapseSymbols"       : false,
     "sort"                  : "source,name"
 }
 }
