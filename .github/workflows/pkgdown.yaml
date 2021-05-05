@@ -69,9 +69,10 @@ jobs:
 
       - name: Build READMEs
         run: |
-          rmarkdown::render("README.Rmd", github_document(html_preview = FALSE))
+          library(rmarkdown)
+          render("README.Rmd", github_document(html_preview = FALSE))
           setwd("inst/htmlwidgets/lib/rglClass")
-          rmarkdown::render("README.Rmd", github_document(html_preview = FALSE))
+          render("README.Rmd", github_document(html_preview = FALSE))
         shell: Rscript {0}
         
       - name: Build JSDoc
