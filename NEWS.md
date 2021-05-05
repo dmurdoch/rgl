@@ -1,4 +1,4 @@
-# rgl  0.106.14
+# rgl  0.106.15
 
 ## Major changes
 
@@ -16,6 +16,7 @@
   and the result is saved.
 * Code to work with pre-1.33 versions of `knitr` has now
   been removed.
+* Added documentation of Javascript to web page.
 
 ## Bug fixes
 
