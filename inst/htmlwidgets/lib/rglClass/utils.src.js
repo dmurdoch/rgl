@@ -1,4 +1,11 @@
-
+    /**
+     * Utility methods
+     * @name ___UTILITY_METHODS___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Multiply matrix by vector
      * @returns {number[]}

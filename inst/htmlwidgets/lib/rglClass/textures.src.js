@@ -1,4 +1,11 @@
-
+    /**
+     * Methods related to textures
+     * @name ___METHODS_FOR_TEXTURES___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Handle a texture after its image has been loaded
      * @param { Object } texture - the gl texture object

@@ -8,7 +8,6 @@
 ^vignettes/test
 ^vignettes/WebGLdebug.Rmd
 ^vignettes/figure
-^inst/doc/rglwidgetClass
 ^inst/todo
 ^inst/initNotes.txt
 ^inst/useNULL/rgl.so
@@ -19,7 +18,8 @@
 ^[.]lintr$
 ^windows$
 ^[.]github
-^README.Rmd$
+README.Rmd$
+rglClass/README.md$
 ^tests/test.Rmd$
 ^tests/widgetTests.R$
 ^_pkgdown\.yml$
@@ -29,3 +29,4 @@
 ^revdep/
 ^\.github$
 ^R/noOpenGL.R$
+[.]JSDoc

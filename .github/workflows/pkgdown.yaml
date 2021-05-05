@@ -30,7 +30,15 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install automake
-
+          
+      - name: Build JSDoc
+        run: |
+          brew install npm
+          npm install -g jsdoc
+          npm install -g foodoc
+          cd inst/htmlwidgets/lib/rglClass
+          jsdoc --template /usr/local/lib/node_modules/foodoc/template *.src.js -R README.md -c JSDoc.json
+          
       - name: Query dependencies
         run: |
           install.packages(c('remotes', 'sessioninfo', 'rcmdcheck', 'desc'))

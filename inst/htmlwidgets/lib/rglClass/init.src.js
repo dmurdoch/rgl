@@ -1,4 +1,11 @@
-
+    /**
+     * Methods related to initialization
+     * @name ___METHODS_FOR_INITIALIZATION___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Initial test for WebGL
      */

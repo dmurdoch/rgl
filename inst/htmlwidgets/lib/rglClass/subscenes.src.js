@@ -1,4 +1,12 @@
     /**
+     * Methods related to subscenes
+     * @name ___METHODS_FOR_SUBSCENES___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+
+    /**
      * Is a particular id in a subscene?
      * @returns { boolean }
      * @param {number} id Which id?
