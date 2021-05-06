@@ -240,15 +240,14 @@ fns <- local({
     sew.rglRecordedplot <- function(x, options = list(), ...)  {
       latex <- identical(opts_knit$get("out.format"), "latex") || identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
       scene <- x$scene
-      doSnapshot <- latex || isTRUE(options$snapshot)
+      doSnapshot <- knitrNeedsSnapshot(options)
       content <- rglwidget(scene,
                            width = x$width,
                            height = x$height,
                            webgl = !doSnapshot)
       if (inherits(content, "knit_image_paths")) {
         # # We've done a snapshot, put it in the right place.
-        name <- file.path(options$fig.path,
-                          paste0(options$label, "-rgl-", rgl_counter(), ".png"))
+        name <- fig_path("-rgl.png", options, rgl_counter())
         if (!file_test("-d", dirname(name)))
           dir.create(dirname(name), recursive = TRUE)
         file.copy(content, name, overwrite = TRUE)

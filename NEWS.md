@@ -1,4 +1,4 @@
-# rgl  0.106.15
+# rgl  0.106.16
 
 ## Major changes
 
@@ -26,6 +26,8 @@
   RStudio is detected.  Use `options(startQuartz = TRUE)`
   in RStudio before loading `rgl` to run it,
   or `options(startQuartz = FALSE)` to suppress it.
+* In some cases, snapshots in `rmarkdown` documents
+  were produced at the wrong size.
 
 # rgl  0.106.8
 

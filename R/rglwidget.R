@@ -241,12 +241,16 @@ newElementId <- function(prefix)
 
 knitrNeedsSnapshot <- function(options = knitr::opts_current$get()) {
   if (!is.null(options$snapshot))
-    options$snapshot
-  else {
-    pandocTo <- opts_knit$get("rmarkdown.pandoc.to")
-    if (!length(pandocTo)) pandocTo <- ""
-    pandocTo %in% c("latex", "gsm")
-  }
+    return(options$snapshot)
+  if (isFALSE(options$screenshot.force))
+    return(FALSE)
+  force <- isTRUE(options$screenshot.force)
+  fmt <- pandoc_to()
+  if (!length(fmt) || force)
+    return(TRUE)
+  html_format <- fmt %in% c("html", "html4", "html5", "revealjs", 
+                            "s5", "slideous", "slidy")
+  !html_format
 }
 
 rglwidget <- local({
