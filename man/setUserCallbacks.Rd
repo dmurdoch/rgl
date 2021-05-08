@@ -67,28 +67,26 @@ recording the changes.
 Duncan Murdoch
 }
 \examples{
-  plot3d(rnorm(10), rnorm(10), rnorm(10), type = "s")
+  id <- plot3d(rnorm(11), rnorm(11), rnorm(11), type = "s", main = "Click and move to shake things up")["data"]
   js <-
-   ' var startx, starty;
+   ' var startx, starty, id = \%id\%, index = 0, coord = 0, jump = 1;
    
-     window.rglbegin = function(x, y) { 
+     window.rglupdate = function(x, y) { 
+       var obj;
        startx = x;
        starty = y;
-       console.log("start at ("+x,","+y+")");
-     };
-     
-     window.rglupdate = function(x, y) { 
-       console.log("move from ("+startx+","+starty+") to ("+x+","+y+")");
-     };
-     
-     window.rglend = function() { 
-       console.log("end");
+       obj = this.getObj(id);
+       obj.vertices[index][coord] += jump;
+       obj.initialized = false;
+       this.drawScene();
+       index = (index + 1) \% 11;
+       coord = (coord + 1) \% 3;
+       jump = -jump;
      }; '
-     
-  scene <- setUserCallbacks("default",
-                            begin = "rglbegin",
+  js <- sub("\%id\%", id, js)  
+    
+  scene <- setUserCallbacks("left",
                             update = "rglupdate",
-                            end = "rglend",
                             javascript = js)
   rglwidget(scene)
 }
