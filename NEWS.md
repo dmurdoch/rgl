@@ -1,4 +1,4 @@
-# rgl  0.106.14
+# rgl  0.106.17
 
 ## Major changes
 
@@ -7,6 +7,8 @@
 * Added some `testthat` tests.
 * Added a 5th entry to `par3d("mouseMode")`, corresponding
   to actions to take when no button is pressed.
+* Added the `setUserCallbacks()` function to allow
+user-specified callbacks in WebGL code.
 
 ## Minor changes
 

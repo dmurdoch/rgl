@@ -300,6 +300,33 @@
       };
       
       handlers.selectingend = 0;
+      
+      handlers.userdown = function(x, y) {
+        var sub = self.getObj(activeSubscene),
+            code = sub.callbacks[drag].begin;
+        if (code) {
+          var fn = Function('"use strict";return (' + code + ')')();
+          fn.call(self, x, y);
+        }
+      };
+      
+      handlers.usermove = function(x, y) {
+        var sub = self.getObj(activeSubscene),
+            code = sub.callbacks[drag].update;
+        if (code) {
+          var fn = Function('"use strict";return (' + code + ')')();
+          fn.call(self, x, y);
+        }
+      };
+      
+      handlers.userend = function() {
+        var sub = self.getObj(activeSubscene),
+            code = sub.callbacks[drag].end;
+        if (code) {
+          var fn = Function('"use strict";return (' + code + ')')();
+          fn.call(self);
+        }
+      };
 
       self.canvas.onmousedown = function ( ev ){
         if (!ev.which) // Use w3c defns in preference to MS
@@ -356,6 +383,7 @@
         coords.y = self.canvas.height - coords.y;
         if (ev.buttons === 0) {
           activeSubscene = self.whichSubscene(coords);
+          drag = "default";
           sub = self.getObj(activeSubscene);
           handler = sub.par3d.mouseMode.default;
           if (handler !== "none") {

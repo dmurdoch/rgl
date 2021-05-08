@@ -985,6 +985,9 @@
       }
       this.el.appendChild(newcanvas);
       this.canvas = newcanvas;
+      if (this.scene.javascript) {
+        Function('"use strict";' + this.scene.javascript)();
+      }
       this.setMouseHandlers();
       if (this.gl) 
         Object.keys(this.scene.objects).forEach(function(key){
