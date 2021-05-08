@@ -352,6 +352,8 @@ print.rglOpen3d <- function(x, ...) {
 
 close3d <- function(dev = cur3d(), silent = TRUE) {
   for (d in dev[dev != 0]) {
+    devname <- paste0("dev", d)
+    rgl.callback.env[[devname]] <- NULL
     set3d(d, silent = silent)
     rgl.close()
     if (!silent)
