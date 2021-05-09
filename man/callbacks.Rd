@@ -20,7 +20,8 @@ rgl.getWheelCallback(dev = cur3d(), subscene = currentSubscene3d(dev))
 
 }
 \arguments{
-  \item{button}{ Which button? Use 4 for \dQuote{default} handler. }
+  \item{button}{ Which button? Use 1 for left, 2 for
+  right, 3 for middle, 4 for wheel, and 5 for the \dQuote{default} handler. }
   \item{begin}{ Called when mouse down event occurs }
   \item{update}{ Called when mouse moves }
   \item{end}{ Called when mouse is released }
@@ -45,7 +46,7 @@ if it makes sense to take action on the whole group of subscenes.
 The get function retrieves the callbacks that are currently set.
 
 The \dQuote{default} mouse handler may be set by
-specifying \code{button = 4}.  The \code{begin}
+specifying \code{button = 5}.  The \code{begin}
 function will be called the first time the mouse
 moves within the subscene, and the \code{update}
 function will be called repeatedly as it moves.  The

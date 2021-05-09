@@ -986,7 +986,9 @@
       this.el.appendChild(newcanvas);
       this.canvas = newcanvas;
       if (this.scene.javascript) {
+        /* jshint evil:true */
         Function('"use strict";' + this.scene.javascript)();
+        /* jshint evil:false */
       }
       this.setMouseHandlers();
       if (this.gl) 

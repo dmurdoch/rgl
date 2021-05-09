@@ -7,8 +7,10 @@
 * Added some `testthat` tests.
 * Added a 5th entry to `par3d("mouseMode")`, corresponding
   to actions to take when no button is pressed.
+* Allowed any of the mouse modes to be applied to 
+the mouse wheel.
 * Added the `setUserCallbacks()` function to allow
-user-specified callbacks in WebGL code.
+user-specified callbacks in WebGL code. 
 
 ## Minor changes
 

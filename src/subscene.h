@@ -15,12 +15,12 @@ namespace rgl {
 enum Embedding { EMBED_INHERIT=1, EMBED_MODIFY, EMBED_REPLACE };
 enum Embedded  { EM_VIEWPORT = 0, EM_PROJECTION, EM_MODEL, EM_MOUSEHANDLERS};
 
+enum ButtonID {LEFT = 1, RIGHT, MIDDLE, WHEEL, DEFAULT};
+
 enum MouseModeID {mmNONE = 0, mmTRACKBALL, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
-                  mmSELECTING, mmZOOM, mmFOV, mmUSER};
+                  mmSELECTING, mmZOOM, mmFOV, mmUSER, wmPUSH, wmPULL, wmUSER2};
 
 enum MouseSelectionID {msNONE=1, msCHANGING, msDONE, msABORT};
-
-enum WheelModeID {wmNONE = 0, wmPUSH, wmPULL, wmUSER};
 
 typedef void (*userControlPtr)(void *userData, int mouseX, int mouseY);
 typedef void (*userControlEndPtr)(void *userData);
@@ -235,9 +235,9 @@ public:
   /**
    * mouse support
    */
-  void buttonBegin(int which, int mouseX, int mouseY);
-  void buttonUpdate(int which, int mouseX, int mouseY);
-  void buttonEnd(int which);
+  void buttonBegin(int button, int mouseX, int mouseY);
+  void buttonUpdate(int button, int mouseX, int mouseY);
+  void buttonEnd(int button);
   
   MouseModeID needsBegin;
   bool mouseNeedsWatching();
@@ -246,8 +246,6 @@ public:
   
   MouseModeID getMouseMode(int button);
   void        setMouseMode(int button, MouseModeID mode);
-  WheelModeID getWheelMode();
-  void        setWheelMode(WheelModeID mode);
 
   void        setMouseCallbacks(int button, userControlPtr begin, userControlPtr update, 
                                 userControlEndPtr end, userCleanupPtr cleanup, void** user);
@@ -292,17 +290,15 @@ private:
    * mouse support
    */
   
-  viewControlPtr ButtonBeginFunc[4], ButtonUpdateFunc[4];
-  viewControlEndPtr ButtonEndFunc[4];
+  viewControlPtr ButtonBeginFunc[5], ButtonUpdateFunc[5];
+  viewControlEndPtr ButtonEndFunc[5];
   viewWheelPtr WheelRotateFunc;
   
-  viewControlPtr getButtonBeginFunc(int which);
-  viewControlPtr getButtonUpdateFunc(int which);
-  viewControlEndPtr getButtonEndFunc(int which);
+  viewControlPtr getButtonBeginFunc(int button);
+  viewControlPtr getButtonUpdateFunc(int button);
+  viewControlEndPtr getButtonEndFunc(int button);
   
-  MouseModeID mouseMode[4];
-  
-  WheelModeID wheelMode;
+  MouseModeID mouseMode[5];
   
   MouseSelectionID selectState;
   
@@ -361,10 +357,10 @@ private:
   
   void userWheel(int dir);
   
-  void* userData[12];
-  userControlPtr beginCallback[4], updateCallback[4];
-  userControlEndPtr endCallback[4];
-  userCleanupPtr cleanupCallback[4];
+  void* userData[15];
+  userControlPtr beginCallback[5], updateCallback[5];
+  userControlEndPtr endCallback[5];
+  userCleanupPtr cleanupCallback[5];
   
 };
 

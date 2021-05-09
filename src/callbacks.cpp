@@ -63,7 +63,7 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end,
     userCleanupPtr cleanupCallback;
     
     int b = asInteger(button);
-    if (b < 1 || b > 4) error("button must be 1, 2, or 3 (or 4 for no button)");
+    if (b < 1 || b > 5) error("button must be 1=left, 2=right, 3=middle, 4=wheel, or 5 for no button)");
 
     Scene* scene = rglview->getScene();
     Subscene* subscene = scene->getSubscene(asInteger(sub));
