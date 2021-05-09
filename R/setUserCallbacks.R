@@ -52,7 +52,7 @@ setUserCallbacks <- function(button = NULL, begin = NULL, update = NULL, end = N
     sub$callbacks[[button]] <- list(begin = begin, update = update,
                                     end = end, rotate = rotate)
     sub$embeddings["mouse"] <- "replace"
-  }
+  } 
   javascript <- paste(c(scene$javascript, javascript),
                       collapse = "\n")
   if (applyToScene) {
