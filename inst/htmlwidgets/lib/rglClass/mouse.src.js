@@ -300,7 +300,7 @@
       };
       
       handlers.selectingend = 0;
-      
+      /* jshint evil:true */
       handlers.userdown = function(x, y) {
         var sub = self.getObj(activeSubscene),
             code = sub.callbacks[drag].begin;
@@ -336,7 +336,7 @@
           case 4: ev.which = 2; break;
           case 2: ev.which = 3;
         }
-        drag = ["left", "middle", "right"][ev.which-1];
+        drag = ["left", "middle", "right", "wheel"][ev.which-1];
         var coords = self.relMouseCoords(ev);
         coords.y = self.canvas.height-coords.y;
         activeSubscene = self.whichSubscene(coords);
@@ -433,11 +433,61 @@
         self.drawScene();
       };
       
-      handlers.wheelHandler = function(ev) {
-        var del = 1.02;
-        if (ev.shiftKey) del = 1.002;
-        var ds = ((ev.detail || ev.wheelDelta) > 0) ? del : (1 / del);
+      handlers.pushwheel = function(ev) {
+        ev.deltaY = -ev.deltaY;
+        handlers.pullwheel(ev);
+      };
+      
+      handlers.pullwheel = function(ev) {
+        var del = 1.05;
+        if (ev.shiftKey) del = 1.005;
+        console.log("deltaY = "+ev.deltaY);
+        var ds = ev.deltaY < 0 ? del : (1 / del);
         handlers.setZoom(ds);
+      };
+      
+      handlers.user2wheel = function(ev) {
+        var sub = self.getObj(activeSubscene),
+            code = sub.callbacks.wheel.rotate;
+        if (code) {
+          var fn = Function('"use strict";return (' + code + ')')();
+          /* jshint evil:false */
+          fn.call(self, ev.deltaY < 0 ? 1 : 2);
+        }        
+      };
+        
+      handlers.wheelHandler = function(ev) {
+        var coords = self.relMouseCoords(ev);
+        coords.y = self.canvas.height - coords.y;
+        activeSubscene = self.whichSubscene(coords);
+        var sub = self.getObj(activeSubscene), f,
+            handler = sub.par3d.mouseMode.wheel,
+            evlocal;
+        switch(handler) {
+          case "none": break;
+          case "push":
+          case "pull":
+          case "user2":
+            f = handlers[handler + "wheel"];
+            if (f) {
+              evlocal = {deltaY:ev.deltaY,
+                         shiftKey:ev.shiftKey};
+              if (!evlocal.deltaY) {
+                evlocal.deltaY = ev.deltaX || ev.wheelDelta;
+              }
+              f.call(self, evlocal);
+            }
+            break;
+          default: 
+            evlocal = {which:4,
+                       clientX:self.canvas.width/2,
+                       clientY:self.canvas.height/2};
+            handlers.onmousedown(evlocal);
+            evlocal.clientX += ev.deltaX;
+            evlocal.clientY += ev.deltaY;
+            handlers.onmousemove(evlocal);
+            handlers.onmouseup(evlocal);
+        }
         ev.preventDefault();
       };
       

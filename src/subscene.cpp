@@ -33,7 +33,7 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
   modelMatrix.setIdentity();
   projMatrix.setIdentity(); 
   mouseListeners.push_back(this);
-  for (int i=0; i<4; i++) {
+  for (int i=0; i<5; i++) {
     beginCallback[i] = NULL;
     updateCallback[i] = NULL;
     endCallback[i] = NULL;
@@ -48,7 +48,7 @@ Subscene::~Subscene()
 {
   for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
     delete (*i);
-  for (int i=0; i<4; i++) 
+  for (int i=0; i<5; i++) 
     if (cleanupCallback[i]) 
       (*cleanupCallback[i])(userData + 3*i);
 }
@@ -1076,46 +1076,46 @@ float Subscene::getDistance(const Vertex& v) const
   return (Zrow*vec) / (Wrow*vec);
 }
 
-viewControlPtr Subscene::getButtonBeginFunc(int which) {
-  return getMaster(EM_MOUSEHANDLERS)->ButtonBeginFunc[which];
+viewControlPtr Subscene::getButtonBeginFunc(int button) {
+  return getMaster(EM_MOUSEHANDLERS)->ButtonBeginFunc[button - 1];
 }
 
-void Subscene::buttonBegin(int which, int mouseX, int mouseY)
+void Subscene::buttonBegin(int button, int mouseX, int mouseY)
 {
-  (this->*getButtonBeginFunc(which))(mouseX, mouseY);
+  (this->*getButtonBeginFunc(button))(mouseX, mouseY);
 }
 
-viewControlPtr Subscene::getButtonUpdateFunc(int which) 
+viewControlPtr Subscene::getButtonUpdateFunc(int button) 
 {  
-  return getMaster(EM_MOUSEHANDLERS)->ButtonUpdateFunc[which];
+  return getMaster(EM_MOUSEHANDLERS)->ButtonUpdateFunc[button - 1];
 }
 
-void Subscene::buttonUpdate(int which, int mouseX, int mouseY)
+void Subscene::buttonUpdate(int button, int mouseX, int mouseY)
 {
-  if (which == 3 && needsBegin != mmNONE) {
-    buttonBegin(which, mouseX, mouseY);
+  if (button == DEFAULT && needsBegin != mmNONE) {
+    buttonBegin(button, mouseX, mouseY);
     needsBegin = mmNONE;
   }
-  (this->*getButtonUpdateFunc(which))(mouseX, mouseY);
+  (this->*getButtonUpdateFunc(button))(mouseX, mouseY);
 }
 
-viewControlEndPtr Subscene::getButtonEndFunc(int which)
+viewControlEndPtr Subscene::getButtonEndFunc(int button)
 {
-  return getMaster(EM_MOUSEHANDLERS)->ButtonEndFunc[which];  
+  return getMaster(EM_MOUSEHANDLERS)->ButtonEndFunc[button - 1];  
 }
 
-void Subscene::buttonEnd(int which)
+void Subscene::buttonEnd(int button)
 {
-  (this->*getButtonEndFunc(which))();
+  (this->*getButtonEndFunc(button))();
 }
 
 void Subscene::setDefaultMouseMode()
 {
-  setMouseMode(1, mmPOLAR);
-  setMouseMode(2, mmFOV);
-  setMouseMode(3, mmZOOM);
-  setWheelMode(wmNONE);
-  setMouseMode(4, mmNONE);
+  setMouseMode(LEFT,   mmPOLAR);
+  setMouseMode(RIGHT,  mmFOV);
+  setMouseMode(MIDDLE, mmZOOM);
+  setMouseMode(WHEEL,  mmNONE);
+  setMouseMode(DEFAULT,mmNONE);
   needsBegin = mmNONE;
 }
 
@@ -1135,7 +1135,7 @@ void Subscene::setMouseMode(int button, MouseModeID mode)
   else {
     int index = button-1;
     mouseMode[index] = mode;
-    if (button == 4)
+    if (button == DEFAULT)
       needsBegin = mode;
     switch (mode) {
       case mmNONE:
@@ -1182,7 +1182,19 @@ void Subscene::setMouseMode(int button, MouseModeID mode)
         ButtonBeginFunc[index] = &Subscene::userBegin;
         ButtonUpdateFunc[index] = &Subscene::userUpdate;
         ButtonEndFunc[index] = &Subscene::userEnd;
-        break;	    	
+        break;
+      case wmPULL:
+        if (button == WHEEL)
+          WheelRotateFunc = &Subscene::wheelRotatePull;
+        break;
+      case wmPUSH:
+        if (button == WHEEL)
+          WheelRotateFunc = &Subscene::wheelRotatePush;
+        break;
+      case wmUSER2:
+        if (button == WHEEL)
+          WheelRotateFunc = &Subscene::userWheel;
+        break;
     }
   }
 }
@@ -1229,34 +1241,6 @@ MouseModeID Subscene::getMouseMode(int button)
   return getMaster(EM_MOUSEHANDLERS)->mouseMode[button-1];
 }
 
-void Subscene::setWheelMode(WheelModeID mode)
-{
-  if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
-    getParent()->setWheelMode(mode); 
-  else {
-    wheelMode = mode;
-    switch (mode) {
-    case wmNONE:
-      WheelRotateFunc = &Subscene::wheelRotateNone;
-      break;
-    case wmPULL:
-      WheelRotateFunc = &Subscene::wheelRotatePull;
-      break;
-    case wmPUSH:
-      WheelRotateFunc = &Subscene::wheelRotatePush;
-      break;
-    case wmUSER:
-      WheelRotateFunc = &Subscene::userWheel;
-      break;
-    }
-  }
-}
-
-WheelModeID Subscene::getWheelMode()
-{
-  return getMaster(EM_MOUSEHANDLERS)->wheelMode;
-}
-
 void Subscene::setWheelCallback(userWheelPtr wheel, void* user)
 {
   if (getEmbedding(EM_MOUSEHANDLERS) == EMBED_INHERIT)
@@ -1264,7 +1248,7 @@ void Subscene::setWheelCallback(userWheelPtr wheel, void* user)
   else {
     wheelCallback = wheel;
     wheelData = user;
-    setWheelMode(wmUSER); 
+    setMouseMode(WHEEL, wmUSER2); 
   }
 }
 
@@ -1506,7 +1490,15 @@ void Subscene::wheelRotatePush(int dir)
 
 void Subscene::wheelRotate(int dir)
 {
-  (this->*WheelRotateFunc)(dir);
+  int mode = getMouseMode(WHEEL);
+  if (mode >= wmPULL)
+    (this->*WheelRotateFunc)(dir);
+  else {
+    // Need to fake a click and release dir = 1 rotates away, dir = 2 rotates towards
+    buttonBegin(WHEEL, pviewport.width / 2, pviewport.height / 2);
+    buttonUpdate(WHEEL, pviewport.width / 2, pviewport.height / 2 + 10*(dir == 1 ? 1 : -1));
+    buttonEnd(WHEEL);
+  }
 }
 
 void Subscene::userBegin(int mouseX, int mouseY)

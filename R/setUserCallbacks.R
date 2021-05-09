@@ -26,10 +26,8 @@ replaceSubscene <- function(subscene, id, newvalue) {
   NULL
 }
 
-# FIXME:  this function should handle both R and Javascript
-#  callbacks somehow.
-
-setUserCallbacks <- function(button, begin = NULL, update = NULL, end = NULL,
+setUserCallbacks <- function(button = NULL, begin = NULL, update = NULL, end = NULL,
+                             rotate = NULL,
                              javascript = NULL,
                              subscene = scene$rootSubscene$id,
 			                       scene = scene3d(minimal = FALSE),
@@ -45,15 +43,18 @@ setUserCallbacks <- function(button, begin = NULL, update = NULL, end = NULL,
   if (is.null(sub$par3d) || is.null(sub$par3d$mouseMode) 
       || is.null(sub$embeddings)) 
     stop("Internal error:  subscene missing mouseMode or embeddings")
-  if (is.numeric(button))
-    button <- c("left", "right", "middle", "default")[button]
-  sub$par3d$mouseMode[button] <- "user"
   if (is.null(sub$callbacks))
     sub$callbacks <- list()
-  sub$callbacks[[button]] <- list(begin = begin, update = update,
-                        end = end)
-  sub$embeddings["mouse"] <- "replace"
-  javascript <- c(scene$javascript, javascript)
+  if (!is.null(button)) {
+    if (is.numeric(button))
+      button <- c("left", "right", "middle", "wheel", "default")[button]
+    sub$par3d$mouseMode[button] <- "user"
+    sub$callbacks[[button]] <- list(begin = begin, update = update,
+                                    end = end, rotate = rotate)
+    sub$embeddings["mouse"] <- "replace"
+  }
+  javascript <- paste(c(scene$javascript, javascript),
+                      collapse = "\n")
   if (applyToScene) {
     scene$rootSubscene <- replaceSubscene(scene$rootSubscene,
                                         subscene, sub)
@@ -70,22 +71,27 @@ setUserCallbacks <- function(button, begin = NULL, update = NULL, end = NULL,
     rgl.callback.env[[devname]] <- callbacks
     if (dev > 0) {
       callbacks <- sub$callbacks
-      fns <- callbacks[[button]]
-      if (!is.null(fns)) {
-        for (f in c("begin", "update", "end"))
-          if (is.character(fns[[f]])) {
-            fn <- try(match.fun(fns[[f]]), silent = TRUE)
-            if (is.function(fn))
-              fns[[f]] <- fn
-            else
-              fns[[f]] <- NULL
-          }
-        callbacks[[button]] <- fns
-        if (any(vapply(fns, is.function, TRUE)))
-          do.call(rgl.setMouseCallbacks, 
-                  c(list(button = c(left = 1, right = 2, middle = 3, default = 4)[button],
-                         dev = dev, subscene = subscene),
-                    fns))
+      if (!is.null(button)) {
+        fns <- callbacks[[button]]
+        if (!is.null(fns)) {
+          for (f in c("begin", "update", "end", "rotate"))
+            if (is.character(fns[[f]])) {
+              fn <- try(match.fun(fns[[f]]), silent = TRUE)
+              if (is.function(fn))
+                fns[[f]] <- fn
+              else
+                fns[[f]] <- NULL
+            }
+          callbacks[[button]] <- fns
+          if (button == "wheel" && is.function(fns$rotate))
+            rgl.setWheelCallback(rotate = fns$rotate, dev = dev, subscene = subscene)
+          fns$rotate <- NULL
+          if (any(vapply(fns, is.function, TRUE)))
+            do.call(rgl.setMouseCallbacks, 
+                    c(list(button = c(left = 1, right = 2, middle = 3, wheel = 4, default = 5)[button],
+                           dev = dev, subscene = subscene),
+                      fns))
+        }
       }
     }
   }

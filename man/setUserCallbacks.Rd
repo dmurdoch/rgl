@@ -7,7 +7,11 @@ Set callbacks in Javascript code
 This function sets user callbacks in \code{\link{rglwidget}} displays.
 }
 \usage{
-setUserCallbacks(button, begin = NULL, update = NULL, end = NULL, 
+setUserCallbacks(button, 
+                 begin = NULL, 
+                 update = NULL, 
+                 end = NULL, 
+                 rotate = NULL,
                  javascript = NULL, 
                  subscene = scene$rootSubscene$id,
                  scene = scene3d(minimal = FALSE),
@@ -19,7 +23,7 @@ setUserCallbacks(button, begin = NULL, update = NULL, end = NULL,
 Which button should this callback apply to? Can
 be numeric from \code{1:4}, or character from \code{"left", "right", "center", "default"}.
 }
-  \item{begin, update, end}{
+  \item{begin, update, end, rotate}{
 Functions to call when events occur.  See Details.
 }
   \item{javascript}{
@@ -63,7 +67,18 @@ function defined elsewhere, as in the Example below.
 The \code{begin} and \code{update} functions should be 
 of the form
 \code{function(x, y) { ... }}.  The \code{end} function
-will be called with no arguments.
+will be called with no arguments.  
+
+The \code{rotate} callback can only be set on the 
+mouse wheel.  It is called when the mouse 
+wheel is rotated.  It should be of the form
+\code{function(away)}, where \code{away} will be 1
+while rotating the wheel \dQuote{away} from you,
+and 2 while rotating it towards you.  If \code{rotate}
+is not set but other callbacks are set on the wheel
+\dQuote{button}, then each click of the mouse wheel
+will trigger all \code{start}, \code{update}, 
+then \code{end} calls in sequence.
 
 The \code{javascript} argument is an optional block 
 of code which will be evaluated once during the 
@@ -80,7 +95,8 @@ is \code{TRUE}.
 
 If \code{applyToDev} is \code{TRUE}, it will also 
 have the side effect of attempting to install the
-callbacks using \code{\link{rgl.setMouseCallbacks}}.
+callbacks using \code{\link{rgl.setMouseCallbacks}}
+and \code{\link{rgl.setWheelCallback}}.
 }
 \author{
 Duncan Murdoch
@@ -130,5 +146,17 @@ Duncan Murdoch
   setUserCallbacks("left",
                     update = "rglupdate",
                     javascript = js)
+                    
+  rglwheel <- function(away) {
+    cat("away = ", away, "\n")
+  }
+  js <- '
+    window.rglwheel = function(away) {
+      console.log("away = "+away);
+    };
+  '
+  setUserCallbacks("wheel",
+                   rotate = "rglwheel",
+                   javascript = js)               
   rglwidget()
 }
