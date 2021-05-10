@@ -21,7 +21,7 @@ setUserCallbacks(button,
 \arguments{
   \item{button}{
 Which button should this callback apply to? Can
-be numeric from \code{1:4}, or character from \code{"left", "right", "center", "default"}.
+be numeric from \code{1:5}, or character from \code{"left", "right", "center", "wheel", "default"}.
 }
   \item{begin, update, end, rotate}{
 Functions to call when events occur.  See Details.
@@ -124,6 +124,11 @@ Duncan Murdoch
     }
   })
   
+  # FIXME:  I SHOULDN"T NEED THESE
+  
+  rglbegin <- function(x, y) {}
+  rglend <- function() {}
+  
   # Define the Javascript function with the same name to use in WebGL
   js <-
    ' var startx, starty, id = \%id\%, index = 0, coord = 0, jump = 1;
@@ -144,7 +149,9 @@ Duncan Murdoch
     
   # Install both
   setUserCallbacks("left",
+                    begin = "rglbegin",
                     update = "rglupdate",
+                    end = "rglend",
                     javascript = js)
                     
   rglwheel <- function(away) {
