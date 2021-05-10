@@ -441,7 +441,6 @@
       handlers.pullwheel = function(ev) {
         var del = 1.05;
         if (ev.shiftKey) del = 1.005;
-        console.log("deltaY = "+ev.deltaY);
         var ds = ev.deltaY < 0 ? del : (1 / del);
         handlers.setZoom(ds);
       };

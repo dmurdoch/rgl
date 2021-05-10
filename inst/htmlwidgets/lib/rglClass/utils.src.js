@@ -467,3 +467,19 @@
       return (flags & flag) !== 0;
       /* jshint bitwise: true */
     };
+    
+    rglwidgetClass.prototype.user2window = function(p, subid) {
+      var m, v = [].concat(p);
+      
+      this.setmvMatrix(subid);
+      m = new CanvasMatrix4(this.mvMatrix);
+      v = this.multVM(v, m);
+      this.setprMatrix(subid);
+      m = new CanvasMatrix4(this.prMatrix);
+      v = this.multVM(v, m);
+      this.getViewport(subid);
+      v[0] = v[0]*0.5/v[3] + 0.5 + this.vp.x/this.vp.width;
+      v[1] = v[1]*0.5/v[3] + 0.5 + this.vp.y/this.vp.height;
+      v[2] = (1 + v[2]/v[3])*0.5;
+      return v.slice(0, 3);
+    };

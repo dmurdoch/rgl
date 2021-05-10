@@ -102,61 +102,95 @@ and \code{\link{rgl.setWheelCallback}}.
 Duncan Murdoch
 }
 \examples{
-  id <- plot3d(rnorm(11), rnorm(11), rnorm(11), type = "s", main = "Click and move")["data"]
+  verts <- cbind(rnorm(11), rnorm(11), rnorm(11))
+  idverts <- plot3d(verts, type = "s", col = "blue")["data"]
   
-  # Define the R function to use within R
-  rglupdate <- local({
-    id <- id
-    index <- 0
-    coord <- 0
-    jump <- 1
-    radius <- rgl.attrib(id, "radii")[1]
-    function(x, y) {
+  # Plot some invisible text; the Javascript will move it
+  idtext <- text3d(verts[1,,drop = FALSE], texts = 1, adj = c(0.5, -1.5), alpha = 0)
+  
+  # Define the R functions to use within R
+  fns <- local({
+    idverts <- idverts
+    idtext <- idtext
+    closest <- -1
+    update <- function(x, y) {
       save <- par3d(skipRedraw = TRUE)
       on.exit(par3d(save))
-      verts <- rgl.attrib(id, "vertices")
-      pop3d(id = id)
-      verts[index+1, coord+1] <- verts[index+1, coord+1] + jump
-      id <<- spheres3d(verts, radius = radius)
-      index <<- (index + 1) \%\% 11
-      coord <<- (coord + 1) \%\% 3
-      jump <<- -jump
+      rect <- par3d("windowRect")
+      size <- rect[3:4] - rect[1:2]
+      x <- x / size[1];
+      y <- 1 - y / size[2];
+      verts <- rgl.attrib(idverts, "vertices")
+      # Put in window coordinates
+      vw <- rgl.user2window(verts)
+      dists <- sqrt((x - vw[,1])^2 + (y - vw[,2])^2)
+      newclosest <- which.min(dists)
+      if (newclosest != closest) {
+        if (idtext > 0)
+          pop3d(id = idtext)
+        closest <<- newclosest
+        idtext <<- text3d(verts[closest,,drop = FALSE], texts = closest, adj = c(0.5, -1.5))
+      }
     }
+    end <- function() {
+      if (idtext > 0)
+        pop3d(id = idtext)
+      closest <<- -1
+      idtext <<- -1
+    }
+    list(rglupdate = update, rglend = end)
   })
+  rglupdate <- fns$rglupdate
+  rglend <- fns$rglend
   
-  # Define the Javascript function with the same name to use in WebGL
+  # Define the Javascript functions with the same names to use in WebGL
   js <-
-   ' var startx, starty, id = \%id\%, index = 0, coord = 0, jump = 1;
+   ' var idverts = \%id\%, idtext = \%idtext\%, closest = -1,
+         subid = \%subid\%;
    
      window.rglupdate = function(x, y) { 
-       var obj;
-       startx = x;
-       starty = y;
-       obj = this.getObj(id);
-       obj.vertices[index][coord] += jump;
-       obj.initialized = false;
+       var   obj = this.getObj(idverts), i, newdist, dist = Infinity, pt, newclosest;
+       x = x/this.canvas.width;
+       y = y/this.canvas.height;
+       
+       for (i = 0; i < obj.vertices.length; i++) {
+         pt = obj.vertices[i].concat(1);
+         pt = this.user2window(pt, subid);
+         pt[0] = x - pt[0];
+         pt[1] = y - pt[1];
+         pt[2] = 0;
+         newdist = this.vlen(pt);
+         if (newdist < dist) {
+           dist = newdist;
+           newclosest = i;
+         }
+       }
+
+       if (newclosest !== closest) {
+         closest = newclosest
+         var text = this.getObj(idtext);
+         text.vertices[0] = obj.vertices[closest];
+         text.colors[0][3] = 1; // alpha is here!
+         text.texts[0] = (closest + 1).toString();
+         text.initialized = false;
+         this.drawScene();
+       }
+     };
+     window.rglend = function() {
+       var text = this.getObj(idtext);
+       text.colors[0][3] = 0;
+       text.initialized = false;
        this.drawScene();
-       index = (index + 1) \% 11;
-       coord = (coord + 1) \% 3;
-       jump = -jump;
-     }; '
-  js <- sub("\%id\%", id, js)  
+     }'
+  js <- sub("\%id\%", idverts, js)  
+  js <- sub("\%subid\%", subsceneInfo()$id, js)
+  js <- sub("\%idtext\%", idtext, js)
     
   # Install both
   setUserCallbacks("left",
+                    begin = "rglupdate",
                     update = "rglupdate",
+                    end = "rglend",
                     javascript = js)
-                    
-  rglwheel <- function(away) {
-    cat("away = ", away, "\n")
-  }
-  js <- '
-    window.rglwheel = function(away) {
-      console.log("away = "+away);
-    };
-  '
-  setUserCallbacks("wheel",
-                   rotate = "rglwheel",
-                   javascript = js)               
   rglwidget()
 }
