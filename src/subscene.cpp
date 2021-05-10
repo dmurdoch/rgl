@@ -1117,6 +1117,7 @@ void Subscene::setDefaultMouseMode()
   setMouseMode(WHEEL,  mmNONE);
   setMouseMode(DEFAULT,mmNONE);
   needsBegin = mmNONE;
+  busy = false;
 }
 
 bool Subscene::mouseNeedsWatching() {
