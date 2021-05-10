@@ -21,13 +21,13 @@
     /**
      * Set mouse mode for a subscene
      * @param { string } mode - name of mode
-     * @param { number } button - button number (1 to 3)
+     * @param { number } button - button number (0 to 4)
      * @param { number } subscene - subscene id number
      * @param { number } stayActive - if truthy, don't clear brush
      */
     rglwidgetClass.prototype.setMouseMode = function(mode, button, subscene, stayActive) {
       var sub = this.getObj(subscene),
-          which = ["left", "right", "middle", "default"][button - 1];
+          which = ["none", "left", "right", "middle", "wheel"][button];
       if (!stayActive && sub.par3d.mouseMode[which] === "selecting")
         this.clearBrush(null);
       sub.par3d.mouseMode[which] = mode;
@@ -336,7 +336,7 @@
           case 4: ev.which = 2; break;
           case 2: ev.which = 3;
         }
-        drag = ["left", "middle", "right", "wheel"][ev.which-1];
+        drag = ["none", "left", "middle", "right", "wheel"][ev.which];
         var coords = self.relMouseCoords(ev);
         coords.y = self.canvas.height-coords.y;
         activeSubscene = self.whichSubscene(coords);
@@ -383,7 +383,7 @@
         coords.y = self.canvas.height - coords.y;
         if (ev.buttons === 0) {
           activeSubscene = self.whichSubscene(coords);
-          drag = "default";
+          drag = "none";
           sub = self.getObj(activeSubscene);
           handler = sub.par3d.mouseMode.default;
           if (handler !== "none") {
@@ -469,8 +469,10 @@
           case "user2":
             f = handlers[handler + "wheel"];
             if (f) {
-              evlocal = {deltaY:ev.deltaY,
-                         shiftKey:ev.shiftKey};
+              evlocal = {};
+              evlocal.deltaY = ev.deltaY;
+              evlocal.shiftKey = ev.shiftKey;
+              evlocal.preventDefault = function() { ev.preventDefault(); };
               if (!evlocal.deltaY) {
                 evlocal.deltaY = ev.deltaX || ev.wheelDelta;
               }
@@ -478,14 +480,16 @@
             }
             break;
           default: 
-            evlocal = {which:4,
-                       clientX:self.canvas.width/2,
-                       clientY:self.canvas.height/2};
-            handlers.onmousedown(evlocal);
+            evlocal = {};
+            evlocal.preventDefault = function() { ev.preventDefault(); };
+            evlocal.which = 4;
+            evlocal.clientX = self.canvas.width/2;
+            evlocal.clientY = self.canvas.height/2;
+            self.canvas.onmousedown(evlocal);
             evlocal.clientX += ev.deltaX;
             evlocal.clientY += ev.deltaY;
             handlers.onmousemove(evlocal);
-            handlers.onmouseup(evlocal);
+            self.canvas.onmouseup(evlocal);
         }
         ev.preventDefault();
       };

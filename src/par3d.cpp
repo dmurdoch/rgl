@@ -109,7 +109,7 @@ static void getMouseMode(int *button, int* mode, Subscene* subscene)
 static void setMouseMode(int* button, int* mode, RGLView* rglview, Subscene* subscene)
 {
   subscene->setMouseMode(*button, (MouseModeID)(*mode));
-  if (*button == DEFAULT)
+  if (*button == bnNOBUTTON)
     rglview->windowImpl->watchMouse(subscene->getRootSubscene()->mouseNeedsWatching());
   CHECKGLERROR;
 }
@@ -445,12 +445,12 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
   else if (streql(what, "mouseMode")) {
     value = coerceVector(value, STRSXP);
     if (length(value) > 5) par_error(what);   
-    for (int i=LEFT; i<=DEFAULT && i <= length(value); i++) {
-      if (STRING_ELT(value, i - 1) != NA_STRING) {
+    for (int i=bnNOBUTTON; i<=bnWHEEL && i <= length(value); i++) {
+      if (STRING_ELT(value, i) != NA_STRING) {
         success = 0;
         /* check exact first, then partial */
-        for (int mode = 0; mode < (i != WHEEL ? mmLAST : wmLAST) ; mode++) {
-          if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)TRUE)) {
+        for (int mode = 0; mode < (i != bnWHEEL ? mmLAST : wmLAST) ; mode++) {
+          if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i)), (Rboolean)TRUE)) {
             setMouseMode(&i, &mode, rglview, sub);
             success = 1;
             break;
@@ -458,7 +458,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
         }
         if (!success) {
           for (int mode = 0; mode < (i != 4 ? mmLAST : wmLAST) ; mode++) {
-            if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)FALSE)) {
+            if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i)), (Rboolean)FALSE)) {
               setMouseMode(&i, &mode, rglview, sub);
               success = 1;
               break;
@@ -577,18 +577,18 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   }
   else if (streql(what, "mouseMode")) {
     PROTECT(value = allocVector(STRSXP, 5));
-    for (i=1; i<=5; i++) {
+    for (i=0; i<5; i++) {
       getMouseMode(&i, &mode, sub); 
       if (mode < 0 || mode > wmLAST) mode = 0;
-      SET_STRING_ELT(value, i-1, mkChar(mouseModes[mode]));
+      SET_STRING_ELT(value, i, mkChar(mouseModes[mode]));
     }
 
     PROTECT(names = allocVector(STRSXP, 5));
-    SET_STRING_ELT(names, 0, mkChar("left"));
-    SET_STRING_ELT(names, 1, mkChar("right"));  
-    SET_STRING_ELT(names, 2, mkChar("middle"));
-    SET_STRING_ELT(names, 3, mkChar("wheel"));
-    SET_STRING_ELT(names, 4, mkChar("default"));
+    SET_STRING_ELT(names, 0, mkChar("none"));
+    SET_STRING_ELT(names, 1, mkChar("left"));
+    SET_STRING_ELT(names, 2, mkChar("right"));  
+    SET_STRING_ELT(names, 3, mkChar("middle"));
+    SET_STRING_ELT(names, 4, mkChar("wheel"));
     value = namesgets(value, names);
     UNPROTECT(2); /* names and old values */
     PROTECT(value);

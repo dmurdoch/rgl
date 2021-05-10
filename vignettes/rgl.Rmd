@@ -696,7 +696,7 @@ par3d("mouseMode")
 ```
 The labels `c("left", "right", "middle")` refer to the buttons on
 a three button mouse, or simulations of them on other mice.  `"wheel"` 
-refers to the mouse wheel, and `"default"` refers to
+refers to the mouse wheel, and `"none"` refers to
 actions that take place when the mouse is moved
 without pressing any button.
 

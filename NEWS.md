@@ -5,7 +5,7 @@
 * Added `expect_known_scene()` function to work with 
   `testthat`.
 * Added some `testthat` tests.
-* Added a 5th entry to `par3d("mouseMode")`, corresponding
+* Prepend a 5th entry to `par3d("mouseMode")`, corresponding
   to actions to take when no button is pressed.
 * Allowed any of the mouse modes to be applied to 
 the mouse wheel.

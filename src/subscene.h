@@ -15,7 +15,7 @@ namespace rgl {
 enum Embedding { EMBED_INHERIT=1, EMBED_MODIFY, EMBED_REPLACE };
 enum Embedded  { EM_VIEWPORT = 0, EM_PROJECTION, EM_MODEL, EM_MOUSEHANDLERS};
 
-enum ButtonID {LEFT = 1, RIGHT, MIDDLE, WHEEL, DEFAULT};
+enum ButtonID {bnNOBUTTON = 0, bnLEFT, bnRIGHT, bnMIDDLE, bnWHEEL};
 
 enum MouseModeID {mmNONE = 0, mmTRACKBALL, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
                   mmSELECTING, mmZOOM, mmFOV, mmUSER, wmPUSH, wmPULL, wmUSER2};

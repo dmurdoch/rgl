@@ -58,6 +58,17 @@ par3d <- function(..., no.readonly = FALSE, dev = cur3d(), subscene = currentSub
     phi <- atan2(-m[2,3], m[3,3])
     args$.position <- c(theta, phi)*180/pi
   }
+  if ("mouseMode" %in% names(args)) {
+    m <- args$mouseMode
+    if (is.null(names(m))) {
+      if (length(m) < 5) 
+        args$mouseMode <- c("none", m)
+    } else {
+      m0 <- par3d("mouseMode")
+      m0[names(m)] <- m
+      args$mouseMode <- m0
+    }
+  }
   if (forceViewport <- ("windowRect" %in% names(args) &&
       !("viewport" %in% names(args)))) {
     if (specifiedSubscene)

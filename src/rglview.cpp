@@ -194,10 +194,10 @@ void RGLView::mouseMove(int mouseX, int mouseY)
     if ( modelviewpoint->isInteractive() ) {
       translateCoords(&mouseX, &mouseY);
       Subscene* subscene = scene->whichSubscene(mouseX, mouseY);
-      if (subscene && subscene->getMouseMode(DEFAULT) != mmNONE) {
+      if (subscene && subscene->getMouseMode(bnNOBUTTON) != mmNONE) {
         subscene->translateCoords(&mouseX, &mouseY);
-        subscene->drag = DEFAULT;
-        subscene->buttonUpdate(DEFAULT, mouseX, mouseY);
+        subscene->drag = bnNOBUTTON;
+        subscene->buttonUpdate(bnNOBUTTON, mouseX, mouseY);
         View::update();
       }
     }

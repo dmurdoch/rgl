@@ -47,7 +47,7 @@ setUserCallbacks <- function(button = NULL, begin = NULL, update = NULL, end = N
     sub$callbacks <- list()
   if (!is.null(button)) {
     if (is.numeric(button))
-      button <- c("left", "right", "middle", "wheel", "default")[button]
+      button <- c("none", "left", "right", "middle", "wheel")[button + 1]
     sub$par3d$mouseMode[button] <- "user"
     sub$callbacks[[button]] <- list(begin = begin, update = update,
                                     end = end, rotate = rotate)

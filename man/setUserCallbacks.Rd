@@ -21,7 +21,7 @@ setUserCallbacks(button,
 \arguments{
   \item{button}{
 Which button should this callback apply to? Can
-be numeric from \code{1:5}, or character from \code{"left", "right", "center", "wheel", "default"}.
+be numeric from \code{0:4}, or character from \code{"none", "left", "right", "center", "wheel"}.
 }
   \item{begin, update, end, rotate}{
 Functions to call when events occur.  See Details.
