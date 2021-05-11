@@ -1,4 +1,4 @@
-# rgl  0.106.16
+# rgl  0.106.17
 
 ## Major changes
 
@@ -28,6 +28,7 @@
   or `options(startQuartz = FALSE)` to suppress it.
 * In some cases, snapshots in `rmarkdown` documents
   were produced at the wrong size.
+* Controls failed to modify sphere colors (e.g. as in `example(playwidget)`, issue #102)
 
 # rgl  0.106.8
 
