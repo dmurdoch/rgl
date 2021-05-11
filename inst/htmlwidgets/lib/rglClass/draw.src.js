@@ -695,7 +695,7 @@
         this.setprmvMatrix();
         if (drawing) {
           if (nc > 1) {
-            this.sphere.onecolor = this.flatten(obj.sphereColors[idx % obj.sphereColors.length]);
+            this.sphere.onecolor = obj.values.slice(baseofs + obj.vOffsets.cofs, baseofs + obj.vOffsets.cofs + 4);
           }
           this.drawSimple(this.sphere, subscene, context);
         } else 
