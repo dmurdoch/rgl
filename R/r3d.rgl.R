@@ -295,7 +295,7 @@ particles3d <- function(x,y=NULL,z=NULL,radius=1,...) sprites3d(
 # r3d default settings for new windows
 
 r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
-		  mouseMode = c("trackball", "zoom", "fov", "pull"),
+		  mouseMode = c("none", "trackball", "zoom", "fov", "pull"),
 		  FOV = 30,
 		  bg = list(color="white",fogtype = "none"),
 		  family = "sans",
@@ -352,6 +352,8 @@ print.rglOpen3d <- function(x, ...) {
 
 close3d <- function(dev = cur3d(), silent = TRUE) {
   for (d in dev[dev != 0]) {
+    devname <- paste0("dev", d)
+    rgl.callback.env[[devname]] <- NULL
     set3d(d, silent = silent)
     rgl.close()
     if (!silent)

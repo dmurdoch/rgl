@@ -140,26 +140,18 @@ void RGLView::keyPress(int key)
 
 void RGLView::buttonPress(int button, int mouseX, int mouseY)
 {
-//  Rprintf("RGLView::buttonPress %d\n", button);
   ModelViewpoint* modelviewpoint = scene->getCurrentSubscene()->getModelViewpoint();
   if ( modelviewpoint->isInteractive() ) {
- //   if (!activeSubscene) {
-      translateCoords(&mouseX, &mouseY);
-      Subscene* subscene = scene->whichSubscene(mouseX, mouseY);
-//      Rprintf("got subscene %d\n", subscene->getObjID());
-      subscene->translateCoords(&mouseX, &mouseY);
-      subscene->drag = button;
-      activeSubscene = subscene->getObjID();
-//      Rprintf("activeSubscene is now %d\n", activeSubscene);
-      windowImpl->captureMouse(this);	  
-      subscene->buttonBegin(button-1 ,mouseX, mouseY);
-      View::update();
-//    }
-//    else Rprintf("activeSubscene was %d\n", activeSubscene);
+    translateCoords(&mouseX, &mouseY);
+    Subscene* subscene = scene->whichSubscene(mouseX, mouseY);
+    subscene->translateCoords(&mouseX, &mouseY);
+    subscene->drag = button;
+    activeSubscene = subscene->getObjID();
+    windowImpl->captureMouse(this);	  
+    subscene->buttonBegin(button ,mouseX, mouseY);
+    View::update();
   }
-//  else Rprintf("not interactive\n");
 }
-
 
 void RGLView::buttonRelease(int button, int mouseX, int mouseY)
 {
@@ -168,7 +160,7 @@ void RGLView::buttonRelease(int button, int mouseX, int mouseY)
         && (subscene = scene->getSubscene(activeSubscene))) {
     windowImpl->releaseMouse();
     subscene->drag = 0;
-    subscene->buttonEnd(button - 1);
+    subscene->buttonEnd(button);
     View::update();
   }
   // Rprintf("release happened, activeSubscene=0\n");
@@ -192,10 +184,22 @@ void RGLView::mouseMove(int mouseX, int mouseY)
     mouseX = clamp(mouseX, 0, vwidth-1);
     mouseY = clamp(mouseY, 0, vheight-1);
     if (windowImpl->beginGL()) {
-      subscene->buttonUpdate(subscene->drag - 1, mouseX, mouseY);
+      subscene->buttonUpdate(subscene->drag, mouseX, mouseY);
       windowImpl->endGL();
       
       View::update();
+    }
+  } else {
+    ModelViewpoint* modelviewpoint = scene->getCurrentSubscene()->getModelViewpoint();
+    if ( modelviewpoint->isInteractive() ) {
+      translateCoords(&mouseX, &mouseY);
+      Subscene* subscene = scene->whichSubscene(mouseX, mouseY);
+      if (subscene && subscene->getMouseMode(bnNOBUTTON) != mmNONE) {
+        subscene->translateCoords(&mouseX, &mouseY);
+        subscene->drag = bnNOBUTTON;
+        subscene->buttonUpdate(bnNOBUTTON, mouseX, mouseY);
+        View::update();
+      }
     }
   }
 }
@@ -209,7 +213,7 @@ void RGLView::wheelRotate(int dir, int mouseX, int mouseY)
     subscene = scene->whichSubscene(mouseX, mouseY);
   }
   if (!subscene)
-    subscene = scene->getCurrentSubscene();  
+    subscene = scene->getCurrentSubscene(); 
   subscene->wheelRotate(dir);
   View::update();
 }

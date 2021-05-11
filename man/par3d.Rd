@@ -113,10 +113,12 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
       a mouse event (see \code{mouseMode} just below), the same action will be carried out
       on all subscenes in this list.  (The subscene itself is normally listed as a listener.
       If it is not listed, it will not respond to its own mouse events.)}
-    \item{\code{mouseMode}}{character.  A vector of 4 strings describing
-      what the 3 mouse buttons and the mouse wheel do. 
-      Partial matching is used.  Possible values for the first 3 entries of \code{mouseMode} (corresponding 
-      to the mouse buttons) are 
+    \item{\code{mouseMode}}{character.  A vector of 5 strings describing
+      mouse actions. The 5 entries are named
+      \code{c("none", "left", "right", "middle", "wheel")}, corresponding to actions for no button, 
+      the left, right or middle button, and the 
+      mouse wheel.
+      Partial matching to action names is used.  Possible values for the actions are:
 	\describe{
 	 \item{\code{"none"}}{No action for this button.}
 	 \item{\code{"trackball"}}{Mouse acts as a virtual trackball, rotating the scene.}
@@ -131,15 +133,22 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
 	 \item{\code{"user"}}{Used  when a user handler is set by 
 	 \code{\link{rgl.setMouseCallbacks}}.}
 	}
-      Possible values for the 4th entry corresponding to the mouse wheel are
+      Possible values for the last entry corresponding to the mouse wheel also include
         \describe{
-	  \item{\code{"none"}}{No action.}
 	  \item{\code{"pull"}}{Pulling on the mouse wheel increases magnification, i.e. \dQuote{pulls the scene closer}.}
 	  \item{\code{"push"}}{Pulling on the mouse wheel decreases magnification, i.e. \dQuote{pushes the scene away}.}
-	  \item{\code{"user"}}{Used when a user handler is set by 
+	  \item{\code{"user2"}}{Used when a user handler is set by 
 	    \code{\link{rgl.setWheelCallback}}.}
 	}
       A common default on Mac OSX is to convert a two finger drag on a trackpad to a mouse wheel rotation.
+      
+      The first entry is for actions to take when
+no mouse button is pressed.  Legal values are the same
+as for the mouse buttons.
+
+      The first entry was added after \pkg{rgl} version 0.106.8.  For back compatibility, if the vector
+      of actions is less than 5 entries, \code{"none"}
+      will be added at the start of it.
     }
     \item{\code{observer}}{\emph{\bold{R.O.}}; the position of the observer relative to
       the model.  Set by \code{\link{observer3d}}.  See the Note below.}

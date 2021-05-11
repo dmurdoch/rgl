@@ -28,18 +28,20 @@
     /**
      * Set mouse mode for a subscene
      * @param { string } mode - name of mode
-     * @param { number } button - button number (1 to 3)
+     * @param { number } button - button number (0 to 4)
      * @param { number } subscene - subscene id number
      * @param { number } stayActive - if truthy, don't clear brush
      */
     rglwidgetClass.prototype.setMouseMode = function(mode, button, subscene, stayActive) {
       var sub = this.getObj(subscene),
-          which = ["left", "right", "middle"][button - 1];
+          which = ["none", "left", "right", "middle", "wheel"][button];
       if (!stayActive && sub.par3d.mouseMode[which] === "selecting")
         this.clearBrush(null);
       sub.par3d.mouseMode[which] = mode;
-      if (button === 1)
+      if (button === 1 || (button === 0 && mode !== "none"))
         this.canvas.style.cursor = this.getCursor(mode);
+      if (button === 0 && mode !== "none")
+        sub.needsBegin = mode;
     };
 
     /**
@@ -84,10 +86,10 @@
 
       handlers.rotBase = 0;
 
-      this.screenToVector = function(x, y) {
-        var viewport = this.getObj(activeSubscene).par3d.viewport,
-          width = viewport.width*this.canvas.width,
-          height = viewport.height*this.canvas.height,
+      self.screenToVector = function(x, y) {
+        var viewport = self.getObj(activeSubscene).par3d.viewport,
+          width = viewport.width*self.canvas.width,
+          height = viewport.height*self.canvas.height,
           radius = Math.max(width, height)/2.0,
           cx = width/2.0,
           cy = height/2.0,
@@ -107,78 +109,80 @@
       };
 
       handlers.trackballdown = function(x,y) {
-        var activeSub = this.getObj(activeSubscene),
-            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+        var activeSub = self.getObj(activeSubscene),
+            activeModel = self.getObj(self.useid(activeSub.id, "model")),
             i, l = activeModel.par3d.listeners;
-        handlers.rotBase = this.screenToVector(x, y);
-        this.saveMat = [];
+        handlers.rotBase = self.screenToVector(x, y);
+        self.saveMat = [];
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
         }
-        this.canvas.style.cursor = "grabbing";
+        self.canvas.style.cursor = "grabbing";
       };
 
       handlers.trackballmove = function(x,y) {
-        var rotCurrent = this.screenToVector(x,y),
+        var rotCurrent = self.screenToVector(x,y),
             rotBase = handlers.rotBase,
             dot = rotBase[0]*rotCurrent[0] +
                   rotBase[1]*rotCurrent[1] +
                   rotBase[2]*rotCurrent[2],
-            angle = Math.acos( dot/this.vlen(rotBase)/this.vlen(rotCurrent) )*180.0/Math.PI,
-            axis = this.xprod(rotBase, rotCurrent),
-            objects = this.scene.objects,
-            activeSub = this.getObj(activeSubscene),
-            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+            angle = Math.acos( dot/self.vlen(rotBase)/self.vlen(rotCurrent) )*180.0/Math.PI,
+            axis = self.xprod(rotBase, rotCurrent),
+            objects = self.scene.objects,
+            activeSub = self.getObj(activeSubscene),
+            activeModel = self.getObj(self.useid(activeSub.id, "model")),
             l = activeModel.par3d.listeners,
             i;
+        if (angle === 0.0)
+          return;    
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           activeSub.par3d.userMatrix.load(objects[l[i]].saveMat);
           activeSub.par3d.userMatrix.rotate(angle, axis[0], axis[1], axis[2]);
         }
-        this.drawScene();
+        self.drawScene();
       };
       handlers.trackballend = 0;
 
-      this.clamp = function(x, lo, hi) {
+      self.clamp = function(x, lo, hi) {
       	return Math.max(lo, Math.min(x, hi));
       };
 
-      this.screenToPolar = function(x,y) {
-        var viewport = this.getObj(activeSubscene).par3d.viewport,
-          width = viewport.width*this.canvas.width,
-          height = viewport.height*this.canvas.height,
+      self.screenToPolar = function(x,y) {
+        var viewport = self.getObj(activeSubscene).par3d.viewport,
+          width = viewport.width*self.canvas.width,
+          height = viewport.height*self.canvas.height,
     	  r = Math.min(width, height)/2,
-    	  dx = this.clamp(x - width/2, -r, r),
-    	  dy = this.clamp(y - height/2, -r, r);
+    	  dx = self.clamp(x - width/2, -r, r),
+    	  dy = self.clamp(y - height/2, -r, r);
     	  return [Math.asin(dx/r), Math.asin(-dy/r)];
       };
 
       handlers.polardown = function(x,y) {
-        var activeSub = this.getObj(activeSubscene),
-            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+        var activeSub = self.getObj(activeSubscene),
+            activeModel = self.getObj(self.useid(activeSub.id, "model")),
             i, l = activeModel.par3d.listeners;
-        handlers.dragBase = this.screenToPolar(x, y);
-        this.saveMat = [];
+        handlers.dragBase = self.screenToPolar(x, y);
+        self.saveMat = [];
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
           activeSub.camBase = [-Math.atan2(activeSub.saveMat.m13, activeSub.saveMat.m11),
                                Math.atan2(activeSub.saveMat.m32, activeSub.saveMat.m22)];
         }
-        this.canvas.style.cursor = "grabbing";
+        self.canvas.style.cursor = "grabbing";
       };
 
       handlers.polarmove = function(x,y) {
-        var dragCurrent = this.screenToPolar(x,y),
-            activeSub = this.getObj(activeSubscene),
-            activeModel = this.getObj(this.useid(activeSub.id, "model")),
-            objects = this.scene.objects,
+        var dragCurrent = self.screenToPolar(x,y),
+            activeSub = self.getObj(activeSubscene),
+            activeModel = self.getObj(self.useid(activeSub.id, "model")),
+            objects = self.scene.objects,
             l = activeModel.par3d.listeners,
             i, j, changepos = [];
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           for (j=0; j<2; j++)
             changepos[j] = -(dragCurrent[j] - handlers.dragBase[j]);
           activeSub.par3d.userMatrix.makeIdentity();
@@ -186,37 +190,37 @@
           activeSub.par3d.userMatrix.multRight(objects[l[i]].saveMat);
           activeSub.par3d.userMatrix.rotate(changepos[1]*180/Math.PI, -1,0,0);
         }
-        this.drawScene();
+        self.drawScene();
       };
       handlers.polarend = 0;
 
       handlers.axisdown = function(x) {
-        handlers.rotBase = this.screenToVector(x, this.canvas.height/2);
-        var activeSub = this.getObj(activeSubscene),
-            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+        handlers.rotBase = self.screenToVector(x, self.canvas.height/2);
+        var activeSub = self.getObj(activeSubscene),
+            activeModel = self.getObj(self.useid(activeSub.id, "model")),
             i, l = activeModel.par3d.listeners;
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           activeSub.saveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
         }
-        this.canvas.style.cursor = "grabbing";
+        self.canvas.style.cursor = "grabbing";
       };
 
       handlers.axismove = function(x) {
-        var rotCurrent = this.screenToVector(x, this.canvas.height/2),
+        var rotCurrent = self.screenToVector(x, self.canvas.height/2),
             rotBase = handlers.rotBase,
             angle = (rotCurrent[0] - rotBase[0])*180/Math.PI,
             rotMat = new CanvasMatrix4();
         rotMat.rotate(angle, handlers.axis[0], handlers.axis[1], handlers.axis[2]);
-        var activeSub = this.getObj(activeSubscene),
-            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+        var activeSub = self.getObj(activeSubscene),
+            activeModel = self.getObj(self.useid(activeSub.id, "model")),
             i, l = activeModel.par3d.listeners;
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           activeSub.par3d.userMatrix.load(activeSub.saveMat);
           activeSub.par3d.userMatrix.multLeft(rotMat);
         }
-        this.drawScene();
+        self.drawScene();
       };
       handlers.axisend = 0;
 
@@ -247,64 +251,91 @@
       handlers.y0fov = 0;
       handlers.fovdown = function(x, y) {
         handlers.y0fov = y;
-        var activeSub = this.getObj(activeSubscene),
-          activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
+        var activeSub = self.getObj(activeSubscene),
+          activeProjection = self.getObj(self.useid(activeSub.id, "projection")),
           i, l = activeProjection.par3d.listeners;
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           activeSub.fov0 = activeSub.par3d.FOV;
         }
-        this.canvas.style.cursor = "zoom-in";
+        self.canvas.style.cursor = "zoom-in";
       };
       handlers.fovmove = function(x, y) {
-        var activeSub = this.getObj(activeSubscene),
-            activeProjection = this.getObj(this.useid(activeSub.id, "projection")),
+        var activeSub = self.getObj(activeSubscene),
+            activeProjection = self.getObj(self.useid(activeSub.id, "projection")),
             i, l = activeProjection.par3d.listeners;
         for (i = 0; i < l.length; i++) {
-          activeSub = this.getObj(l[i]);
+          activeSub = self.getObj(l[i]);
           activeSub.par3d.FOV = Math.max(1, Math.min(179, activeSub.fov0 +
-             180*(y-handlers.y0fov)/this.canvas.height));
+             180*(y-handlers.y0fov)/self.canvas.height));
         }
-        this.drawScene();
+        self.drawScene();
       };
       handlers.fovend = 0;
       
       handlers.selectingdown = function(x, y) {
-      	var viewport = this.getObj(activeSubscene).par3d.viewport,
-      	  width = viewport.width*this.canvas.width,
-      	  height = viewport.height*this.canvas.height, 
+      	var viewport = self.getObj(activeSubscene).par3d.viewport,
+      	  width = viewport.width*self.canvas.width,
+      	  height = viewport.height*self.canvas.height, 
           p = {x: 2.0*x/width - 1.0, y: 2.0*y/height - 1.0};
-      	this.select.region = {p1: p, p2: p};
-      	if (this.select.subscene && this.select.subscene !== activeSubscene)
-      	  this.delFromSubscene(this.scene.brushId, this.select.subscene);
-      	this.select.subscene = activeSubscene;
-      	this.addToSubscene(this.scene.brushId, activeSubscene);
-      	this.select.state = "changing";
-      	if (typeof this.scene.brushId !== "undefined")
-      	  this.getObj(this.scene.brushId).initialized = false;
-      	if (typeof this.scene.selectionInput !== "undefined")
+      	self.select.region = {p1: p, p2: p};
+      	if (self.select.subscene && self.select.subscene !== activeSubscene)
+      	  self.delFromSubscene(self.scene.brushId, self.select.subscene);
+      	self.select.subscene = activeSubscene;
+      	self.addToSubscene(self.scene.brushId, activeSubscene);
+      	self.select.state = "changing";
+      	if (typeof self.scene.brushId !== "undefined")
+      	  self.getObj(self.scene.brushId).initialized = false;
+      	if (typeof self.scene.selectionInput !== "undefined")
       	  self.recordSelection(activeSubscene); 
-      	this.drawScene();
-      	this.canvas.style.cursor = "crosshair";
+      	self.drawScene();
+      	self.canvas.style.cursor = "crosshair";
       };
       
       handlers.selectingmove = function(x, y) {
-      	var viewport = this.getObj(activeSubscene).par3d.viewport,
-      	  width = viewport.width*this.canvas.width,
-      	  height = viewport.height*this.canvas.height;
-      	if (this.select.state === "inactive") 
+      	var viewport = self.getObj(activeSubscene).par3d.viewport,
+      	  width = viewport.width*self.canvas.width,
+      	  height = viewport.height*self.canvas.height;
+      	if (self.select.state === "inactive") 
       	  return;
-      	this.select.region.p2 = {x: 2.0*x/width - 1.0, y: 2.0*y/height - 1.0};
-      	if (typeof this.scene.brushId !== "undefined")
-      	  this.getObj(this.scene.brushId).initialized = false;
-      	if (typeof this.scene.selectionInput !== "undefined")
-      	  this.recordSelection(activeSubscene);
-      	this.drawScene();
+      	self.select.region.p2 = {x: 2.0*x/width - 1.0, y: 2.0*y/height - 1.0};
+      	if (typeof self.scene.brushId !== "undefined")
+      	  self.getObj(self.scene.brushId).initialized = false;
+      	if (typeof self.scene.selectionInput !== "undefined")
+      	  self.recordSelection(activeSubscene);
+      	self.drawScene();
       };
       
       handlers.selectingend = 0;
+      /* jshint evil:true */
+      handlers.userdown = function(x, y) {
+        var sub = self.getObj(activeSubscene),
+            code = sub.callbacks[drag].begin;
+        if (code) {
+          var fn = Function('"use strict";return (' + code + ')')();
+          fn.call(self, x, y);
+        }
+      };
+      
+      handlers.usermove = function(x, y) {
+        var sub = self.getObj(activeSubscene),
+            code = sub.callbacks[drag].update;
+        if (code) {
+          var fn = Function('"use strict";return (' + code + ')')();
+          fn.call(self, x, y);
+        }
+      };
+      
+      handlers.userend = function() {
+        var sub = self.getObj(activeSubscene),
+            code = sub.callbacks[drag].end;
+        if (code) {
+          var fn = Function('"use strict";return (' + code + ')')();
+          fn.call(self);
+        }
+      };
 
-      this.canvas.onmousedown = function ( ev ){
+      self.canvas.onmousedown = function ( ev ){
         if (!ev.which) // Use w3c defns in preference to MS
         switch (ev.button) {
           case 0: ev.which = 1; break;
@@ -312,7 +343,7 @@
           case 4: ev.which = 2; break;
           case 2: ev.which = 3;
         }
-        drag = ["left", "middle", "right"][ev.which-1];
+        drag = ["none", "left", "middle", "right", "wheel"][ev.which];
         var coords = self.relMouseCoords(ev);
         coords.y = self.canvas.height-coords.y;
         activeSubscene = self.whichSubscene(coords);
@@ -342,32 +373,56 @@
 
       };
 
-      this.canvas.onmouseup = function ( ev ){
-        if ( drag === 0 ) return;
+      self.canvas.onmouseup = function ( ev ){
+        if ( !drag ) return;
         var f = handlers[handler + "end"];
         if (f) {
           f.call(self);
           ev.preventDefault();
         }
         drag = 0;
-        this.onmousemove( ev );
       };
 
-      this.canvas.onmouseout = this.canvas.onmouseup;
+      self.canvas.onmouseout = self.canvas.onmouseup;
 
-      this.canvas.onmousemove = function ( ev ) {
+      handlers.onmousemove = function ( ev ) {
         var coords = self.relMouseCoords(ev), sub, f;
         coords.y = self.canvas.height - coords.y;
-        if ( drag === 0 ) {
-          activeSubscene = self.whichSubscene(coords);             sub = self.getObj(activeSubscene);
-          this.style.cursor = self.getCursor(sub.par3d.mouseMode.left);          
-        } else {
-          f = handlers[handler + "move"];
-          if (f) {
-            coords = self.translateCoords(activeSubscene, coords);
-            f.call(self, coords.x, coords.y);
+        if (ev.buttons === 0) {
+          activeSubscene = self.whichSubscene(coords);
+          drag = "none";
+          sub = self.getObj(activeSubscene);
+          handler = sub.par3d.mouseMode.none;
+          if (handler !== "none") {
+            if (sub.needsBegin) {
+              f = handlers[handler + "down"];
+              if (f) {
+                coords = self.translateCoords(activeSubscene, coords);
+                f.call(self, coords.x, coords.y);
+              }
+              sub.needsBegin = 0;
+            }
+            self.canvas.style.cursor = self.getCursor(sub.par3d.mouseMode.default);
+          } else {
+            self.canvas.style.cursor = self.getCursor(sub.par3d.mouseMode.left);  
+            return;
           }
         }
+        f = handlers[handler + "move"];
+        if (f) {
+          coords = self.translateCoords(activeSubscene, coords);
+          f.call(self, coords.x, coords.y);
+        }
+      };
+      
+
+      self.canvas.onmouseenter = function() {
+        self.canvas.addEventListener("mousemove",               handlers.onmousemove);
+      };
+      
+      self.canvas.onmouseleave = function() {
+        self.canvas.removeEventListener("mousemove",
+          handlers.onmousemove);
       };
 
       handlers.setZoom = function(ds) {
@@ -385,11 +440,64 @@
         self.drawScene();
       };
       
-      handlers.wheelHandler = function(ev) {
-        var del = 1.02;
-        if (ev.shiftKey) del = 1.002;
-        var ds = ((ev.detail || ev.wheelDelta) > 0) ? del : (1 / del);
+      handlers.pushwheel = function(ev) {
+        ev.deltaY = -ev.deltaY;
+        handlers.pullwheel(ev);
+      };
+      
+      handlers.pullwheel = function(ev) {
+        var del = 1.05;
+        if (ev.shiftKey) del = 1.005;
+        var ds = ev.deltaY < 0 ? del : (1 / del);
         handlers.setZoom(ds);
+      };
+      
+      handlers.user2wheel = function(ev) {
+        var sub = self.getObj(activeSubscene),
+            code = sub.callbacks.wheel.rotate;
+        if (code) {
+          var fn = Function('"use strict";return (' + code + ')')();
+          /* jshint evil:false */
+          fn.call(self, ev.deltaY < 0 ? 1 : 2);
+        }        
+      };
+        
+      handlers.wheelHandler = function(ev) {
+        var coords = self.relMouseCoords(ev);
+        coords.y = self.canvas.height - coords.y;
+        activeSubscene = self.whichSubscene(coords);
+        var sub = self.getObj(activeSubscene), f,
+            handler = sub.par3d.mouseMode.wheel,
+            evlocal;
+        switch(handler) {
+          case "none": break;
+          case "push":
+          case "pull":
+          case "user2":
+            f = handlers[handler + "wheel"];
+            if (f) {
+              evlocal = {};
+              evlocal.deltaY = ev.deltaY;
+              evlocal.shiftKey = ev.shiftKey;
+              evlocal.preventDefault = function() { ev.preventDefault(); };
+              if (!evlocal.deltaY) {
+                evlocal.deltaY = ev.deltaX || ev.wheelDelta;
+              }
+              f.call(self, evlocal);
+            }
+            break;
+          default: 
+            evlocal = {};
+            evlocal.preventDefault = function() { ev.preventDefault(); };
+            evlocal.which = 4;
+            evlocal.clientX = self.canvas.width/2;
+            evlocal.clientY = self.canvas.height/2;
+            self.canvas.onmousedown(evlocal);
+            evlocal.clientX += ev.deltaX;
+            evlocal.clientY += ev.deltaY;
+            handlers.onmousemove(evlocal);
+            self.canvas.onmouseup(evlocal);
+        }
         ev.preventDefault();
       };
       
@@ -414,7 +522,7 @@
           handlers.finger_dist0 = handlers.get_finger_dist(ev);
           handlers.zoomdown(coords.x, coords.y);
         }
-        this.dispatchEvent(mouseEvent);
+        self.dispatchEvent(mouseEvent);
       };
       
       handlers.touchend = function(ev) {
@@ -422,7 +530,7 @@
         ev.preventDefault();
         if (ev.touches.length === 1) {
           mouseEvent = new MouseEvent("mouseup", {});
-          this.dispatchEvent(mouseEvent);
+          self.dispatchEvent(mouseEvent);
         }
       };
       
@@ -441,13 +549,13 @@
             clientX: touch.clientX,
             clientY: touch.clientY
           });
-          this.dispatchEvent(mouseEvent);
+          self.dispatchEvent(mouseEvent);
         }
       };
 
-      this.canvas.addEventListener("DOMMouseScroll", handlers.wheelHandler, false);
-      this.canvas.addEventListener("mousewheel", handlers.wheelHandler, false);
-      this.canvas.addEventListener("touchstart", handlers.touchstart, {passive: false});
-      this.canvas.addEventListener("touchend", handlers.touchend, {passive: false});
-      this.canvas.addEventListener("touchmove", handlers.touchmove, {passive: false});
+      self.canvas.addEventListener("DOMMouseScroll", handlers.wheelHandler, false);
+      self.canvas.addEventListener("mousewheel", handlers.wheelHandler, false);
+      self.canvas.addEventListener("touchstart", handlers.touchstart, {passive: false});
+      self.canvas.addEventListener("touchend", handlers.touchend, {passive: false});
+      self.canvas.addEventListener("touchmove", handlers.touchmove, {passive: false});
     };

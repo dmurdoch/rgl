@@ -37,7 +37,7 @@ public:
   
   // display specific:
   
-  Display* xdisplay;
+  ::Display* xdisplay;
   
   ::Atom atoms[GUI_X11_ATOM_LAST];
   

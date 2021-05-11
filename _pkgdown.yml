@@ -220,6 +220,7 @@ reference:
   - rgl.projection
   - rgl.user2window
   - rgl.setMouseCallbacks
+  - setUserCallbacks
   - setUserShaders
   - makeDependency
   - setGraphicsDelay

@@ -104,6 +104,23 @@ scene3d <- function(minimal = TRUE) {
     names(objlist)[i] <- as.character(ids[i])
   }
   result$objects <- objlist
+  
+  # If there are user callbacks for the mouse, they'll
+  # be recorded in rgl.callback.env
+  
+  devname <- paste0("dev", cur3d())
+  callbacks <- rgl.callback.env[[devname]]
+  if (!is.null(callbacks)) {
+    for (subname in names(callbacks)) {
+      subscene <- sub("^sub", "", subname)
+      sub <- findSubscene(result$rootSubscene, subscene)
+      if (!is.null(sub)) {
+        sub$callbacks <- callbacks[[subname]]
+        result$rootSubscene <- replaceSubscene(result$rootSubscene, subscene, sub)
+      }
+    }
+    result$javascript <- callbacks$javascript
+  }
     
   class(result) <- "rglscene"
   result

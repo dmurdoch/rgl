@@ -245,6 +245,7 @@
       sub.transparent = [];
       sub.opaque = [];
       sub.lights = [];
+      sub.needsBegin = true;
       for (i=0; i < sub.objects.length; i++) {
         obj = this.getObj(sub.objects[i]);
         if (typeof obj === "undefined") {
@@ -989,6 +990,11 @@
       }
       this.el.appendChild(newcanvas);
       this.canvas = newcanvas;
+      if (this.scene.javascript) {
+        /* jshint evil:true */
+        Function('"use strict";' + this.scene.javascript)();
+        /* jshint evil:false */
+      }
       this.setMouseHandlers();
       if (this.gl) 
         Object.keys(this.scene.objects).forEach(function(key){
@@ -1007,7 +1013,6 @@
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });
-      this.setMouseHandlers();
 
       this.onContextRestored = function() {
         self.initGL();

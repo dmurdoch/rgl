@@ -1,10 +1,16 @@
-# rgl  0.106.17
+# rgl  0.106.19
 
 ## Major changes
 
 * Added `expect_known_scene()` function to work with 
   `testthat`.
 * Added some `testthat` tests.
+* Prepend a 5th entry to `par3d("mouseMode")`, corresponding
+  to actions to take when no button is pressed.
+* Allowed any of the mouse modes to be applied to 
+the mouse wheel.
+* Added the `setUserCallbacks()` function to allow
+user-specified callbacks in WebGL code. 
 
 ## Minor changes
 
