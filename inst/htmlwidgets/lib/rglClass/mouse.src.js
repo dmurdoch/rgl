@@ -1,4 +1,11 @@
-    
+    /**
+     * Methods related to mouse handling
+     * @name ___METHODS_FOR_MOUSE_HANDLING___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     rglwidgetClass.prototype.getCursor = function(mode) {
       switch(mode) {
         case "none": 

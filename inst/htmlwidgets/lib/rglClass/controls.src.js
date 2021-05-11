@@ -1,4 +1,11 @@
-
+    /**
+     * Methods related to controls
+     * @name ___METHODS_FOR_CONTROLS___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Change the displayed subset
      * @param { Object } el - Element of the control; not used.

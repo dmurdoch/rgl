@@ -1,4 +1,11 @@
-
+    /**
+     * Methods related to drawing
+     * @name ___METHODS_FOR_DRAWING___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Start drawing
      * @returns { boolean } Previous state
@@ -110,6 +117,12 @@
                      triangles : "TRIANGLES",
                      sphere : "TRIANGLES"
     };
+    
+    /**
+     * Disable unused arrays
+     * @param { Object } obj - Object to work with
+     * @param { Array } enabled - Array indicating which are enabled
+     */
 
     rglwidgetClass.prototype.disableArrays = function(obj, enabled) {
       var gl = this.gl || this.initGL(),
@@ -125,7 +138,10 @@
       	}
       }
     };
-    
+
+    /**
+     * Start drawing the scene
+     */    
     rglwidgetClass.prototype.doStartScene = function() {
       var gl = this.gl || this.initGL();
       gl.enable(gl.DEPTH_TEST);
@@ -140,7 +156,7 @@
     
     /**
      * Set gl depth test based on object's material
-     * @param { object } obj - object to use
+     * @param { Object } obj - object to use
      */
     rglwidgetClass.prototype.doDepthTest = function(obj) {
       var gl = this.gl,
@@ -170,6 +186,11 @@
         gl.disable(gl.POLYGON_OFFSET_FILL);
     };
     
+    /**
+     * Do code for clipping
+     * @param { object } obj - Object to work with
+     * @param { object } subscene - Subscene to work with
+     */
     rglwidgetClass.prototype.doClipping = function(obj, subscene) {
       var gl = this.gl,
           clipcheck = 0,
@@ -187,6 +208,11 @@
           gl.uniform4f(obj.clipLoc[i], 0,0,0,0);
     };
     
+    /**
+     * Do code for lighting
+     * @param { object } obj - Object to work with
+     * @param { object } subscene - Subscene to work with
+     */
     rglwidgetClass.prototype.doLighting = function(obj, subscene) {
       var gl = this.gl, i, light;
         gl.uniformMatrix4fv( obj.normMatLoc, false, new Float32Array(this.normMatrix.getAsArray()) );
@@ -209,6 +235,10 @@
         }
     };
     
+    /**
+     * Do code for colors
+     * @param { object } obj - Object to work with
+     */
     rglwidgetClass.prototype.doColors = function(obj) {
       var gl = this.gl;
       if (obj.colorCount === 1) {
@@ -222,6 +252,10 @@
       }
     };
     
+    /**
+     * Do code for normals
+     * @param { object } obj - Object to work with
+     */
     rglwidgetClass.prototype.doNormals = function(obj) {
       var gl = this.gl;
       if (obj.vOffsets.nofs >= 0) {
@@ -232,6 +266,10 @@
         return false;
     };
     
+    /**
+     * Do code for textures
+     * @param { object } obj - Object to work with
+     */    
     rglwidgetClass.prototype.doTexture = function(obj) {
       var gl = this.gl, 
           is_spheres = obj.type === "spheres";
@@ -246,6 +284,10 @@
         return true;
     };
     
+    /**
+     * Do code for user attributes
+     * @param { object } obj - Object to work with
+     */    
     rglwidgetClass.prototype.doUserAttributes = function(obj) {
       if (typeof obj.userAttributes !== "undefined") {
         var gl = this.gl;
@@ -256,7 +298,11 @@
       	}
       }
     };
-    
+
+    /**
+     * Do code for user uniforms
+     * @param { object } obj - Object to work with
+     */    
     rglwidgetClass.prototype.doUserUniforms = function(obj) {
       if (typeof obj.userUniforms !== "undefined") {
         var gl = this.gl;
@@ -282,7 +328,13 @@
       	}
       }
     };
-    
+
+    /**
+     * Load indices for complex drawing
+     * @param { object } obj - Object to work with
+     * @param { numeric } pass - Which pass of drawing?
+     * @param { array } indices - Indices to draw
+     */    
     rglwidgetClass.prototype.doLoadIndices = function(obj, pass, indices) {
       var gl = this.gl,
           f = obj.f[pass],
@@ -334,11 +386,19 @@
       return fnew.length;
     };
 
+    /**
+     * Do code for depth masking
+     * @param { boolean } mask - whether to mask
+     */
     rglwidgetClass.prototype.doMasking = function(mask) {
       var gl = this.gl;
       gl.depthMask(mask);
     };
-    
+
+    /**
+     * Do code for alpha blending
+     * @param { boolean }  blend - Whether to blend.
+     */    
     rglwidgetClass.prototype.doBlending = function(blend) {
       var gl = this.gl;
       if (blend) {
@@ -352,7 +412,8 @@
     
     /**
      * Set up for fog in the subscene
-     * @param { number } id - id of background object
+     * @param { object } obj - background object
+     * @param { object } subscene - which subscene
      */
     rglwidgetClass.prototype.doFog = function(obj, subscene) {
       var gl = this.gl, fogmode, color, 
@@ -393,7 +454,13 @@
        When this.opaquePass is false, the context argument
        contains a "piece", i.e. an ordered list of parts
        of the object to draw. */
-       
+
+    /**
+     * Draw simple object
+     * @param { object } obj - Object to draw
+     * @param { object } subscene - which subscene
+     * @param { array } context - Which context are we in?
+     */       
     rglwidgetClass.prototype.drawSimple = function(obj, subscene, context) {
       var 
           flags = obj.flags,
@@ -513,7 +580,13 @@
       this.disableArrays(obj, enabled);
       return [];
     };
-   
+
+    /**
+     * Draw planes object
+     * @param { object } obj - Object to draw
+     * @param { object } subscene - which subscene
+     * @param { array } context - Which context are we in?
+     */      
     rglwidgetClass.prototype.drawPlanes = function(obj, subscene, context) {
       if (obj.bbox !== subscene.par3d.bbox || !obj.initialized) {
           this.planeUpdateTriangles(obj, subscene.par3d.bbox);
@@ -522,20 +595,19 @@
    };
 
     /**
-     * Draw spheres in a subscene
      * @param { object } obj - object to draw
      * @param { object } subscene 
-     * @param { object } context 
-     */
-     
-    /**
-     * Drawing spheres happens in six ways:
-     * 1 opaquepass, not transparent:  transform and draw this.sphere count times
-     * 2 opaquepass, transparent, not fast: transform & collect sphere pieces count times
-     * 3 opaquepass, transparent, fast:  order the centres into separate pieces, order this.sphere once
-     * 4 not opaquepass, not transparent:  do nothing
-     * 5 not opaquepass, transparent, not fast:  transform for one sphere, draw one merged piece
-     * 6 not opaquepass, transparent, fast:  transform for one sphere, draw this.sphere in fixed order.
+     * @param { array } context 
+     * @description
+     * Draw spheres in a subscene<br>
+     * 
+     * Drawing spheres happens in six ways:<br>
+     * 1 opaquepass, not transparent:  transform and draw this.sphere count times<br>
+     * 2 opaquepass, transparent, not fast: transform & collect sphere pieces count times<br>
+     * 3 opaquepass, transparent, fast:  order the centres into separate pieces, order this.sphere once<br>
+     * 4 not opaquepass, not transparent:  do nothing<br>
+     * 5 not opaquepass, transparent, not fast:  transform for one sphere, draw one merged piece<br>
+     * 6 not opaquepass, transparent, fast:  transform for one sphere, draw this.sphere in fixed order.<br>
      **/
 
     rglwidgetClass.prototype.drawSpheres = function(obj, subscene, context) {
@@ -623,7 +695,7 @@
         this.setprmvMatrix();
         if (drawing) {
           if (nc > 1) {
-            this.sphere.onecolor = this.flatten(obj.sphereColors[idx % obj.sphereColors.length]);
+            this.sphere.onecolor = obj.values.slice(baseofs + obj.vOffsets.cofs, baseofs + obj.vOffsets.cofs + 4);
           }
           this.drawSimple(this.sphere, subscene, context);
         } else 
@@ -641,7 +713,6 @@
     /**
      * Prepare clipplanes for drawing
      * @param { object } obj - clip planes object
-     * @param { object } subscene
      */
     rglwidgetClass.prototype.drawClipplanes = function(obj) {
       var count = obj.offsets.length,
@@ -652,7 +723,13 @@
       obj.IMVClip = IMVClip;
       return [];
     };
-    
+
+    /**
+     * Prepare linestrip for drawing
+     * @param { object } obj - line strip object
+     * @param { object } subscene 
+     * @param { array } context 
+     */    
     rglwidgetClass.prototype.drawLinestrip = function(obj, subscene, context) {
       var origIndices, i, j;
       if (this.opaquePass)
@@ -738,7 +815,13 @@
         this.prmvMatrix = origPRMV;
       return result;
     };
-   
+
+    /**
+     * Use ids to choose object to draw
+     * @param { numeric } id - object to draw
+     * @param { numeric } subscene
+     * @param { array } context
+     */   
     rglwidgetClass.prototype.drawObjId = function(id, subsceneid, context) {
       if (typeof id !== "number")
         this.alertOnce("drawObjId id is "+typeof id);
@@ -748,8 +831,9 @@
    
     /**
      * Draw an object in a subscene
-     * @param { number } obj - object to draw
-     * @param { number } subsceneid - id of subscene
+     * @param { object } obj - object to draw
+     * @param { object } subscene
+     * @param { array } context
      */
     rglwidgetClass.prototype.drawObj = function(obj, subscene, context) {
       switch(obj.type) {
@@ -823,7 +907,7 @@
     /**
      * Draw a subscene
      * @param { number } subsceneid - id of subscene
-     * @param { boolean } opaquePass - is this the opaque drawing pass?
+     * @param { array } context 
      */
     rglwidgetClass.prototype.drawSubscene = function(subsceneid, context) {
       var sub = this.getObj(subsceneid),
@@ -902,6 +986,7 @@
     
     /**
      * Set the context for drawing transparently
+     * @param { array } context
      */
     rglwidgetClass.prototype.setContext = function(context) {
       var result = [], objid, obj, type;
@@ -930,6 +1015,7 @@
     
     /**
      * Draw the transparent pieces of a scene
+     * @param {object} pieces
      */
     rglwidgetClass.prototype.drawPieces = function(pieces) {
       var i, prevcontext = [], context;

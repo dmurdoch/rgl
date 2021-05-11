@@ -22,6 +22,7 @@ user-specified callbacks in WebGL code.
   and the result is saved.
 * Code to work with pre-1.33 versions of `knitr` has now
   been removed.
+* Added documentation of Javascript to web page.
 
 ## Bug fixes
 
@@ -31,6 +32,9 @@ user-specified callbacks in WebGL code.
   RStudio is detected.  Use `options(startQuartz = TRUE)`
   in RStudio before loading `rgl` to run it,
   or `options(startQuartz = FALSE)` to suppress it.
+* In some cases, snapshots in `rmarkdown` documents
+  were produced at the wrong size.
+* Controls failed to modify sphere colors (e.g. as in `example(playwidget)`, issue #102)
 
 # rgl  0.106.8
 

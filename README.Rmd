@@ -24,7 +24,7 @@ if (!requireNamespace("rmarkdown", quietly = TRUE) ||
 setupKnitr(autoprint = TRUE)
 ```
 
-```{r polyhedra, fig.height=1.5, echo = FALSE, snapshot = TRUE}
+```{r polyhedra, fig.height=1.5, echo = FALSE}
 hcl.colors <- rgl:::hcl.colors  # might be cm.colors on old R
 col <- hcl.colors(5)
 mfrow3d(1,5)

@@ -1,8 +1,8 @@
 //// To generate the help pages for this library, use
 
-// jsdoc --destination ../../../doc/rglwidgetClass --template ~/node_modules/jsdoc-baseline rglClass.src.js
+// jsdoc --template /usr/local/lib/node_modules/foodoc/template *.src.js -R README.md -c JSDoc.json
 
-// To validate, set environment variable RGL_DEBUGGING=true
+// To test, set environment variable RGL_DEBUGGING=true
 // before building.
 
 /* globals rglwidgetClass: true */
@@ -50,8 +50,16 @@ rglwidgetClass = function() {
     rglwidgetClass.prototype.fogExp2 = 3;
 
     /**
+     * Methods related to obsolete approaches.
+     * @name ___OBSOLETE_METHODS___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
+    /**
      * Start the writeWebGL scene. This is only used by writeWebGL; rglwidget has
-       no debug element and does the drawing in rglwidget.js.
+       no debug element.
      */
     rglwidgetClass.prototype.start = function() {
       if (typeof this.prefix !== "undefined") {

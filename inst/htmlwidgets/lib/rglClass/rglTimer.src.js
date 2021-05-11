@@ -1,3 +1,4 @@
+
 /* globals rgltimerClass: true */
 
 /**
@@ -43,8 +44,18 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, r
   this.Tick = Tick;
 };
 
+
+    /**
+     * Methods related to players
+     * @name ___METHODS_FOR_PLAYERS___
+     * @memberof rgltimerClass
+     * @kind function
+     * @instance
+     */
+
   /**
-   * Start playing timer object
+   * Start playing
+   * @memberof rgltimerClass
    */
   rgltimerClass.prototype.play = function() {
     if (this.enabled) {

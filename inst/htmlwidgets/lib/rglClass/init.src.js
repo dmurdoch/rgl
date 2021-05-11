@@ -1,4 +1,11 @@
-
+    /**
+     * Methods related to initialization
+     * @name ___METHODS_FOR_INITIALIZATION___
+     * @memberof rglwidgetClass
+     * @kind function
+     * @instance
+     */
+     
     /**
      * Initial test for WebGL
      */
@@ -468,8 +475,6 @@
             colors[i][3] = colors[i][3]*options.filteredFade;   /* default: completely hidden if filtered */
           }
     }  
-    if (obj.type === "spheres")
-      obj.sphereColors = colors;
     
     nc = obj.colorCount = colors.length;
     if (nc > 1) {
