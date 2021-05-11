@@ -84,7 +84,7 @@ window." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.15</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
       </span>
     </div>
 
@@ -198,28 +198,26 @@ embedded in its parent.</p></dd>
     <div class='dont-index'><p><code><a href='subscene3d.html'>newSubscene3d</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='va'>plot3d</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> plot3d&gt;   open3d()</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> null </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  147 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> plot3d&gt;   x &lt;- sort(rnorm(1000))</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> plot3d&gt;   y &lt;- rnorm(1000)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> plot3d&gt;   z &lt;- rnorm(1000) + atan2(x, y)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> plot3d&gt;   plot3d(x, y, z, col = rainbow(1000))</span>
-<span class='r-in'><span class='fu'>subsceneInfo</span><span class='op'>(</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $id</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2086</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $embeddings</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   viewport projection      model      mouse </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  "replace"  "replace"  "replace"  "replace" </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-</pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='va'>plot3d</span><span class='op'>)</span>
+</div><div class='co'>#&gt; 
+#&gt; plot3d&gt;   open3d()
+#&gt; null 
+#&gt;  148 
+#&gt; 
+#&gt; plot3d&gt;   x &lt;- sort(rnorm(1000))
+#&gt; 
+#&gt; plot3d&gt;   y &lt;- rnorm(1000)
+#&gt; 
+#&gt; plot3d&gt;   z &lt;- rnorm(1000) + atan2(x, y)
+#&gt; 
+#&gt; plot3d&gt;   plot3d(x, y, z, col = rainbow(1000))</div><div class='input'><span class='fu'>subsceneInfo</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='co'>#&gt; $id
+#&gt; [1] 2139
+#&gt; 
+#&gt; $embeddings
+#&gt;   viewport projection      model      mouse 
+#&gt;  "replace"  "replace"  "replace"  "replace" 
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

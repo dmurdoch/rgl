@@ -84,7 +84,7 @@ point or region in the scene, then reports on all the vertices in or near that s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.15</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
       </span>
     </div>
 
@@ -217,29 +217,29 @@ If multiple points have the same coordinates, all indices will be returned.</p><
     <div class='dont-index'><p><code><a href='select3d.html'>select3d</a></code> to return a selection function.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>xyz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span> <span class='va'>xyz</span> <span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'>  <span class='co'># Click near a point to select it and put a sphere there.</span></span>
-<span class='r-in'>  <span class='co'># Press ESC to quit...</span></span>
-<span class='r-in'></span>
-<span class='r-in'>  <span class='co'># This version returns coordinates</span></span>
-<span class='r-in'>  <span class='fu'>selectpoints3d</span><span class='op'>(</span><span class='va'>ids</span><span class='op'>[</span><span class='st'>"data"</span><span class='op'>]</span>, </span>
-<span class='r-in'>     multiple <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'>        <span class='fu'><a href='spheres.html'>spheres3d</a></span><span class='op'>(</span><span class='va'>x</span>, color <span class='op'>=</span> <span class='st'>"red"</span>, alpha <span class='op'>=</span> <span class='fl'>0.3</span>, radius <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span></span>
-<span class='r-in'>        <span class='cn'>TRUE</span></span>
-<span class='r-in'>     <span class='op'>}</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'>  <span class='co'># This one returns indices</span></span>
-<span class='r-in'>  <span class='fu'>selectpoints3d</span><span class='op'>(</span><span class='va'>ids</span><span class='op'>[</span><span class='st'>"data"</span><span class='op'>]</span>, value <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
-<span class='r-in'>     multiple <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>ids</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'>        <span class='fu'><a href='spheres.html'>spheres3d</a></span><span class='op'>(</span><span class='va'>xyz</span><span class='op'>[</span><span class='va'>ids</span><span class='op'>[</span>, <span class='st'>"index"</span><span class='op'>]</span>, , drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>, color <span class='op'>=</span> <span class='st'>"blue"</span>, </span>
-<span class='r-in'>                  alpha <span class='op'>=</span> <span class='fl'>0.3</span>, radius <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span></span>
-<span class='r-in'>        <span class='cn'>TRUE</span></span>
-<span class='r-in'>     <span class='op'>}</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-</pre>
+    <pre class="examples"><div class='input'><span class='va'>xyz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span> <span class='va'>xyz</span> <span class='op'>)</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># Click near a point to select it and put a sphere there.</span>
+  <span class='co'># Press ESC to quit...</span>
+
+  <span class='co'># This version returns coordinates</span>
+  <span class='fu'>selectpoints3d</span><span class='op'>(</span><span class='va'>ids</span><span class='op'>[</span><span class='st'>"data"</span><span class='op'>]</span>, 
+     multiple <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='fu'><a href='spheres.html'>spheres3d</a></span><span class='op'>(</span><span class='va'>x</span>, color <span class='op'>=</span> <span class='st'>"red"</span>, alpha <span class='op'>=</span> <span class='fl'>0.3</span>, radius <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span>
+        <span class='cn'>TRUE</span>
+     <span class='op'>}</span><span class='op'>)</span>
+
+  <span class='co'># This one returns indices</span>
+  <span class='fu'>selectpoints3d</span><span class='op'>(</span><span class='va'>ids</span><span class='op'>[</span><span class='st'>"data"</span><span class='op'>]</span>, value <span class='op'>=</span> <span class='cn'>FALSE</span>,
+     multiple <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>ids</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='fu'><a href='spheres.html'>spheres3d</a></span><span class='op'>(</span><span class='va'>xyz</span><span class='op'>[</span><span class='va'>ids</span><span class='op'>[</span>, <span class='st'>"index"</span><span class='op'>]</span>, , drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>, color <span class='op'>=</span> <span class='st'>"blue"</span>, 
+                  alpha <span class='op'>=</span> <span class='fl'>0.3</span>, radius <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span>
+        <span class='cn'>TRUE</span>
+     <span class='op'>}</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

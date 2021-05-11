@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.15</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
       </span>
     </div>
 
@@ -141,14 +141,17 @@
       <small>Source: <a href='https://github.com/dmurdoch/rgl/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rgl-010615" class="section level1">
-<h1 class="page-header" data-toc-text="0.106.15">
-<a href="#rgl-010615" class="anchor" aria-hidden="true"></a>rgl 0.106.15<small> Unreleased </small></h1>
+    <div id="rgl-010619" class="section level1">
+<h1 class="page-header" data-toc-text="0.106.19">
+<a href="#rgl-010619" class="anchor" aria-hidden="true"></a>rgl 0.106.19<small> Unreleased </small></h1>
 <div id="major-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#major-changes" class="anchor" aria-hidden="true"></a>Major changes</h2>
 <ul><li>Added <code><a href="../reference/expect_known_scene.html">expect_known_scene()</a></code> function to work with <code>testthat</code>.</li>
 <li>Added some <code>testthat</code> tests.</li>
+<li>Prepend a 5th entry to <code>par3d("mouseMode")</code>, corresponding to actions to take when no button is pressed.</li>
+<li>Allowed any of the mouse modes to be applied to the mouse wheel.</li>
+<li>Added the <code><a href="../reference/setUserCallbacks.html">setUserCallbacks()</a></code> function to allow user-specified callbacks in WebGL code.</li>
 </ul></div>
 <div id="minor-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -162,6 +165,8 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul><li>The bug workaround in 0.105.22 for issue <a href='https://github.com/dmurdoch/rgl/issues/27'>#27</a> triggered a bug in RStudio, resulting in two RStudio processes showing up when <code>rgl</code> was loaded. The workaround is now skipped when RStudio is detected. Use <code>options(startQuartz = TRUE)</code> in RStudio before loading <code>rgl</code> to run it, or <code>options(startQuartz = FALSE)</code> to suppress it.</li>
+<li>In some cases, snapshots in <code>rmarkdown</code> documents were produced at the wrong size.</li>
+<li>Controls failed to modify sphere colors (e.g. as in <code>example(playwidget)</code>, issue <a href='https://github.com/dmurdoch/rgl/issues/102'>#102</a>)</li>
 </ul></div>
 </div>
     <div id="rgl-01068" class="section level1">

@@ -87,7 +87,7 @@ an RGL scene." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.15</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
       </span>
     </div>
 
@@ -266,19 +266,19 @@ at your own risk!</p>
 write the scene to a file in various other formats.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='co'># On some systems, the program  "asy"  used</span></span>
-<span class='r-in'><span class='co'># to process the output has bugs, so this may fail.</span></span>
-<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span>, type <span class='op'>=</span> <span class='st'>"s"</span>, col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>olddir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>writeASY</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"interactive"</span><span class='op'>)</span>  <span class='co'># Produces interactive.pdf</span></span>
-<span class='r-in'><span class='fu'>writeASY</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"noninteractive"</span>, prc <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Produces noninteractive.pdf</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='va'>olddir</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-</pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># On some systems, the program  "asy"  used</span>
+<span class='co'># to process the output has bugs, so this may fail.</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>
+<span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span>, type <span class='op'>=</span> <span class='st'>"s"</span>, col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
+<span class='va'>olddir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>writeASY</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"interactive"</span><span class='op'>)</span>  <span class='co'># Produces interactive.pdf</span>
+<span class='fu'>writeASY</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"noninteractive"</span>, prc <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Produces noninteractive.pdf</span>
+<span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='va'>olddir</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
