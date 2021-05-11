@@ -445,7 +445,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
   else if (streql(what, "mouseMode")) {
     value = coerceVector(value, STRSXP);
     if (length(value) > 5) par_error(what);   
-    for (int i=bnNOBUTTON; i<=bnWHEEL && i <= length(value); i++) {
+    for (int i=bnNOBUTTON; i<=bnWHEEL && i < length(value); i++) {
       if (STRING_ELT(value, i) != NA_STRING) {
         success = 0;
         /* check exact first, then partial */
