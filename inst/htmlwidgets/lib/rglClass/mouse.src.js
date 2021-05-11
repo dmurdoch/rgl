@@ -31,9 +31,9 @@
       if (!stayActive && sub.par3d.mouseMode[which] === "selecting")
         this.clearBrush(null);
       sub.par3d.mouseMode[which] = mode;
-      if (button === 1 || (button === 4 && mode !== "none"))
+      if (button === 1 || (button === 0 && mode !== "none"))
         this.canvas.style.cursor = this.getCursor(mode);
-      if (button === 4 && mode !== "none")
+      if (button === 0 && mode !== "none")
         sub.needsBegin = mode;
     };
 
@@ -385,7 +385,7 @@
           activeSubscene = self.whichSubscene(coords);
           drag = "none";
           sub = self.getObj(activeSubscene);
-          handler = sub.par3d.mouseMode.default;
+          handler = sub.par3d.mouseMode.none;
           if (handler !== "none") {
             if (sub.needsBegin) {
               f = handlers[handler + "down"];

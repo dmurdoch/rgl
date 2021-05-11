@@ -739,7 +739,7 @@ void rgl::rgl_newsubscene(int* successptr, int* parentid, int* embedding, int* i
                                          EMBED_REPLACE,
                                          *ignoreExtent != 0);
       if (subscene && scene->add(subscene)) {
-        for (int i=1; i<=5; i++)
+        for (int i=0; i<5; i++)
           subscene->setMouseMode(i, parent->getMouseMode(i));
         if (embedding[3] != EMBED_REPLACE)
           subscene->setEmbedding(3, (Embedding)embedding[3]);

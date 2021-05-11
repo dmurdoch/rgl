@@ -94,6 +94,9 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end,
     // Rprintf("setting mouse callbacks\n");
     subscene->setMouseCallbacks(b, beginCallback, updateCallback, endCallback, 
                                &userCleanup, userData);
+    if (b == bnNOBUTTON)
+      rglview->windowImpl->watchMouse(subscene->getRootSubscene()->mouseNeedsWatching());
+    
   } else error("rgl device is not open");
   return R_NilValue;
 }      

@@ -88,7 +88,7 @@ setUserCallbacks <- function(button = NULL, begin = NULL, update = NULL, end = N
           fns$rotate <- NULL
           if (any(vapply(fns, is.function, TRUE)))
             do.call(rgl.setMouseCallbacks, 
-                    c(list(button = c(left = 1, right = 2, middle = 3, wheel = 4, default = 5)[button],
+                    c(list(button = c(none = 0, left = 1, right = 2, middle = 3, wheel = 4)[button],
                            dev = dev, subscene = subscene),
                       fns))
         }
