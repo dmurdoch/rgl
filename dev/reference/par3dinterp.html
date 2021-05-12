@@ -244,41 +244,44 @@ by this function.</p>
     <div class='dont-index'><p><code><a href='play3d.html'>play3d</a></code> to play the animation.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'>par3dinterp</span><span class='op'>(</span> zoom <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span> <span class='op'>)</span>
-<span class='fu'>f</span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
-</div><div class='co'>#&gt; $dev
-#&gt; glX 
-#&gt;  61 
-#&gt; 
-#&gt; $subscene
-#&gt; [1] 976
-#&gt; 
-#&gt; $zoom
-#&gt; [1] 1
-#&gt; </div><div class='input'><span class='fu'>f</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-</div><div class='co'>#&gt; $dev
-#&gt; glX 
-#&gt;  61 
-#&gt; 
-#&gt; $subscene
-#&gt; [1] 976
-#&gt; 
-#&gt; $zoom
-#&gt; [1] 2
-#&gt; </div><div class='input'><span class='fu'>f</span><span class='op'>(</span><span class='fl'>0.5</span><span class='op'>)</span>
-</div><div class='co'>#&gt; $dev
-#&gt; glX 
-#&gt;  61 
-#&gt; 
-#&gt; $subscene
-#&gt; [1] 976
-#&gt; 
-#&gt; $zoom
-#&gt; [1] 1.245309
-#&gt; </div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='play3d.html'>play3d</a></span><span class='op'>(</span><span class='va'>f</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'>par3dinterp</span><span class='op'>(</span> zoom <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span> <span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>f</span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dev</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> glX </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  61 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $subscene</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 985</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $zoom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='fu'>f</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dev</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> glX </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  61 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $subscene</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 985</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $zoom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='fu'>f</span><span class='op'>(</span><span class='fl'>0.5</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dev</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> glX </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  61 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $subscene</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 985</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $zoom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1.245309</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'><a href='play3d.html'>play3d</a></span><span class='op'>(</span><span class='va'>f</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

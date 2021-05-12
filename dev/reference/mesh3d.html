@@ -60,10 +60,22 @@
 
 <!-- dependencies from examples -->
 <script src="libs/htmlwidgets-1.5.3.9000/htmlwidgets.js"></script>
-<script src="libs/rglWebGL-binding-0.106.18.5/rglWebGL.js"></script>
-<link href="libs/rglwidgetClass-0.106.18.5/rgl.css" rel="stylesheet" />
-<script src="libs/rglwidgetClass-0.106.18.5/rglClass.min.js"></script>
-<script src="libs/CanvasMatrix4-0.106.18.5/CanvasMatrix.min.js"></script>
+<script src="libs/rglWebGL-binding-0.106.19/rglWebGL.js"></script>
+<link href="libs/rglwidgetClass-0.106.19/rgl.css" rel="stylesheet" />
+<script src="libs/rglwidgetClass-0.106.19/rglClass.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/utils.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/subscenes.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/shaders.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/textures.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/projection.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/mouse.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/init.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/pieces.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/draw.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/controls.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/selection.src.js"></script>
+<script src="libs/rglwidgetClass-0.106.19/rglTimer.src.js"></script>
+<script src="libs/CanvasMatrix4-0.106.19/CanvasMatrix.src.js"></script>
 
   
 
@@ -251,22 +263,22 @@ quads respectively.</p>
     <div class='dont-index'><p><code><a href='shade3d.html'>shade3d</a></code>, <code><a href='shapelist3d.html'>shapelist3d</a></code> for multiple shapes</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-  <span class='co'># generate a quad mesh object</span>
-
-  <span class='va'>vertices</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span> 
-     <span class='op'>-</span><span class='fl'>1.0</span>, <span class='op'>-</span><span class='fl'>1.0</span>, <span class='fl'>0</span>,
-      <span class='fl'>1.0</span>, <span class='op'>-</span><span class='fl'>1.0</span>, <span class='fl'>0</span>,
-      <span class='fl'>1.0</span>,  <span class='fl'>1.0</span>, <span class='fl'>0</span>,
-     <span class='op'>-</span><span class='fl'>1.0</span>,  <span class='fl'>1.0</span>, <span class='fl'>0</span>
-  <span class='op'>)</span>
-  <span class='va'>indices</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span> <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span> <span class='op'>)</span>
-  
-  <span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span>  
-  <span class='fu'><a href='shade3d.html'>wire3d</a></span><span class='op'>(</span> <span class='fu'>mesh3d</span><span class='op'>(</span>vertices <span class='op'>=</span> <span class='va'>vertices</span>, quads <span class='op'>=</span> <span class='va'>indices</span><span class='op'>)</span> <span class='op'>)</span>
-</div><div id="rgl99467" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
-<script type="application/json" data-for="rgl99467">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0]},"rootSubscene":905,"objects":{"911":{"id":911,"type":"quads","material":{"front":"lines","back":"lines"},"vertices":[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],"colors":[[0,0,0,1]],"centers":[[0,0,0]],"normals":[[0,-0,1],[0,-0,1],[0,-0,1],[0,-0,1]],"ignoreExtent":false,"flags":32771},"909":{"id":909,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"908":{"id":908,"type":"background","material":{},"colors":[[0.298039227724075,0.298039227724075,0.298039227724075,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"910":{"id":910,"type":"background","material":{"lit":false,"back":"lines"},"colors":[[1,1,1,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"905":{"id":905,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":905,"mouseMode":{"none":"none","left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,5.46410131454468],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-5.46410131454468],[0,0,0,1]],"projMatrix":[[3.73205065727234,0,0,0],[0,3.73205065727234,0,0],[0,0,-3.86370277404785,-19.6974506378174],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1,1,-1,1,0,0],"windowRect":[170,124,426,380],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"/System/Library/Fonts/Supplemental/Arial.ttf","maxClipPlanes":6,"glVersion":2.1,"activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[910,911,909],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script><div class='input'>  
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'>  <span class='co'># generate a quad mesh object</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='va'>vertices</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span> </span>
+<span class='r-in'>     <span class='op'>-</span><span class='fl'>1.0</span>, <span class='op'>-</span><span class='fl'>1.0</span>, <span class='fl'>0</span>,</span>
+<span class='r-in'>      <span class='fl'>1.0</span>, <span class='op'>-</span><span class='fl'>1.0</span>, <span class='fl'>0</span>,</span>
+<span class='r-in'>      <span class='fl'>1.0</span>,  <span class='fl'>1.0</span>, <span class='fl'>0</span>,</span>
+<span class='r-in'>     <span class='op'>-</span><span class='fl'>1.0</span>,  <span class='fl'>1.0</span>, <span class='fl'>0</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>indices</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span> <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span> <span class='op'>)</span></span>
+<span class='r-in'>  </span>
+<span class='r-in'>  <span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span>  </span>
+<span class='r-in'>  <span class='fu'><a href='shade3d.html'>wire3d</a></span><span class='op'>(</span> <span class='fu'>mesh3d</span><span class='op'>(</span>vertices <span class='op'>=</span> <span class='va'>vertices</span>, quads <span class='op'>=</span> <span class='va'>indices</span><span class='op'>)</span> <span class='op'>)</span></span>
+<div id="rgl46742" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
+<script type="application/json" data-for="rgl46742">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0]},"rootSubscene":914,"objects":{"920":{"id":920,"type":"quads","material":{"front":"lines","back":"lines"},"vertices":[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],"colors":[[0,0,0,1]],"centers":[[0,0,0]],"normals":[[0,-0,1],[0,-0,1],[0,-0,1],[0,-0,1]],"ignoreExtent":false,"flags":32771},"918":{"id":918,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"917":{"id":917,"type":"background","material":{},"colors":[[0.298039227724075,0.298039227724075,0.298039227724075,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"919":{"id":919,"type":"background","material":{"lit":false,"back":"lines"},"colors":[[1,1,1,1]],"centers":[[0,0,0]],"sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"914":{"id":914,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":914,"mouseMode":{"none":"none","left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,5.46410131454468],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-5.46410131454468],[0,0,0,1]],"projMatrix":[[3.73205065727234,0,0,0],[0,3.73205065727234,0,0],[0,0,-3.86370277404785,-19.6974506378174],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1,1,-1,1,0,0],"windowRect":[101,124,357,380],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"/System/Library/Fonts/Supplemental/Arial.ttf","maxClipPlanes":6,"glVersion":2.1,"activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[919,920,918],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script><span class='r-in'>  </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
