@@ -64,6 +64,7 @@ Duncan Murdoch
 \code{\link{rglwidget}} for display of the scene in WebGL.
 }
 \examples{
+open3d()
 id <- shade3d(octahedron3d(), col = "red")
 
 # For each triangle, set weights on the 3 vertices.
