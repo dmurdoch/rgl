@@ -469,6 +469,9 @@
         var sub = self.getObj(activeSubscene), f,
             handler = sub.par3d.mouseMode.wheel,
             evlocal;
+            
+        ev.deltaY = ev.deltaY || ev.detail || ev.deltaX || ev.wheelDelta;
+                      
         switch(handler) {
           case "none": break;
           case "push":
@@ -480,9 +483,6 @@
               evlocal.deltaY = ev.deltaY;
               evlocal.shiftKey = ev.shiftKey;
               evlocal.preventDefault = function() { ev.preventDefault(); };
-              if (!evlocal.deltaY) {
-                evlocal.deltaY = ev.deltaX || ev.wheelDelta;
-              }
               f.call(self, evlocal);
             }
             break;
