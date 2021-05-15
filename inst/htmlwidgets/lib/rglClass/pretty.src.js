@@ -1,3 +1,12 @@
+/**
+ * Pretty function from R
+ * @name ___PRETTY_FROM_R___
+ * @memberof rglwidgetClass
+ * @kind function
+ * @instance
+ */
+
+
 /* This file is translated from pretty.c, which was
  taken from the R sources, r61744 of src/appl/pretty.c,
  with minimal changes */
@@ -26,10 +35,14 @@
  * @param { number } lo - lower end of interval
  * @param { number } up - upper end of interval
  * @param { number } ndiv - requested number of divisions
-  NEED THE REST OF THE PARAMS
-*/
-/* Pretty Intervals
- * ----------------
+ * @param { number } min_n - minimum divisions
+ * @param { number } shrink_sml - if too many cells, amount to shrink by
+ * @param { number } high_u_fact - bias in favour of larger units
+ * @param { number } eps_correction - correction to bounds
+ * @param { Boolean } return_bounds - whether to return bounds
+ * @description
+ * Pretty Intervals
+
  * Constructs m "pretty" values which cover the given interval	*lo <= *up
  *	m ~= *ndiv + 1	(i.e., ndiv := approximate number of INTERVALS)
  *
@@ -50,7 +63,6 @@
  * It is advisable to set it to some (smaller) integer power of 2,
  * since this enables exact floating point division.
  */
-
 rglwidgetClass.prototype.R_pretty = function(
   lo, up, ndiv, min_n, shrink_sml, high_u_fact,
   eps_correction, return_bounds) {
