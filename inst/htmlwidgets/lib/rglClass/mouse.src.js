@@ -21,6 +21,8 @@
         case "fov":
         case "zoom":
           return "zoom-in";
+        case "user":
+          return "default";
       }
       return "dragging";
     };
@@ -381,6 +383,7 @@
           ev.preventDefault();
         }
         drag = 0;
+        handlers.onmousemove( ev );
       };
 
       self.canvas.onmouseout = self.canvas.onmouseup;
@@ -402,7 +405,7 @@
               }
               sub.needsBegin = 0;
             }
-            self.canvas.style.cursor = self.getCursor(sub.par3d.mouseMode.default);
+            self.canvas.style.cursor = self.getCursor(sub.par3d.mouseMode.none);
           } else {
             self.canvas.style.cursor = self.getCursor(sub.par3d.mouseMode.left);  
             return;
