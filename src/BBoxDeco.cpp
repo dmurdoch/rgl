@@ -696,6 +696,7 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
     case COLORS:
       return material.colors.getLength();
     case FLAGS:
+    case AXES:
       return 1;
   }
   return SceneNode::getAttributeCount(bbox, attrib);
@@ -761,7 +762,13 @@ void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
       }
       return;
     case FLAGS:
-      *result++ = (double) draw_front;	
+      *result++ = (double) draw_front;
+      break;  // there could be more flags...
+    case AXES:
+      *result++ = xaxis.mode;
+      *result++ = yaxis.mode;
+      *result++ = zaxis.mode;
+      return;
     }
     SceneNode::getAttribute(bbox, attrib, first, count, result);
   }
@@ -798,6 +805,7 @@ String BBoxDeco::getTextAttribute(AABox& bbox, AttribID attrib, int index)
         else
           return String(0, NULL);
       }
+      break;
     }
   }
   return String(0, NULL);

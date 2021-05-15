@@ -26,7 +26,7 @@ scene3d <- function(minimal = TRUE) {
     attribs <- c("vertices", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
           "usermatrix", "types", "offsets", "centers",
-          "family", "font", "pos")
+          "family", "font", "pos", "axes")
     if (lit || !minimal || type %in% c("light", "clipplanes", "planes"))
       attribs <- c(attribs, "normals")
     for (a in attribs) 
