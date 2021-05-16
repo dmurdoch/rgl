@@ -220,7 +220,7 @@
           }
         }
         if (!varies)
-          this.initObj(control.objid);
+          this.initObjId(control.objid);
       }
       propvals = obj.values;
       aliases = obj.alias;
@@ -349,7 +349,7 @@
           }
         }
         if (!varies)
-          this.initObj(objid);
+          this.initObjId(objid);
       }
       for (l = 0; l < nobjs; l++) {
         objid = objids[l];
@@ -569,7 +569,7 @@
         Object.keys(objs).forEach(function(key){
           key = parseInt(key, 10);
           self.scene.objects[key] = objs[key];
-          self.initObj(key);
+          self.initObjId(key);
           var obj = self.getObj(key),
               subs = [].concat(obj.inSubscenes), k;
           allsubs = allsubs.concat(subs);

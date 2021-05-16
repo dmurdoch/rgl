@@ -11,9 +11,8 @@
      * @returns {string}
      * @param { number } id - Id of object
      */
-    rglwidgetClass.prototype.getVertexShader = function(id) {
-      var obj = this.getObj(id),
-          userShader = obj.userVertexShader,
+    rglwidgetClass.prototype.getVertexShader = function(obj) {
+      var userShader = obj.userVertexShader,
           flags = obj.flags,
           type = obj.type,
           is_lit = this.isSet(flags, this.f_is_lit),
@@ -35,7 +34,7 @@
 
       if (typeof userShader !== "undefined") return userShader;
 
-      result = "  /* ****** "+type+" object "+id+" vertex shader ****** */\n"+
+      result = "  /* ****** "+type+" object "+obj.id+" vertex shader ****** */\n"+
       "#ifdef GL_ES\n"+
       "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"+
       "  precision highp float;\n"+
@@ -91,7 +90,7 @@
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
-        var size = this.getMaterial(id, "size");
+        var size = this.getMaterial(obj, "size");
         result = result + "    gl_PointSize = "+size.toFixed(1)+";\n";
       }
 
@@ -160,9 +159,8 @@
      * @returns {string}
      * @param { number } id - Id of object
      */
-    rglwidgetClass.prototype.getFragmentShader = function(id) {
-      var obj = this.getObj(id),
-          userShader = obj.userFragmentShader,
+    rglwidgetClass.prototype.getFragmentShader = function(obj) {
+      var userShader = obj.userFragmentShader,
           flags = obj.flags,
           type = obj.type,
           is_lit = this.isSet(flags, this.f_is_lit),
@@ -183,9 +181,9 @@
       if (typeof userShader !== "undefined") return userShader;
 
       if (has_texture)
-        texture_format = this.getMaterial(id, "textype");
+        texture_format = this.getMaterial(obj, "textype");
 
-      result = "/* ****** "+type+" object "+id+" fragment shader ****** */\n"+
+      result = "/* ****** "+type+" object "+obj.id+" fragment shader ****** */\n"+
                "#ifdef GL_ES\n"+
                "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"+
                "  precision highp float;\n"+
@@ -257,7 +255,7 @@
       }
       
       if (is_points) {
-        var round = this.getMaterial(id, "point_antialias");
+        var round = this.getMaterial(obj, "point_antialias");
         if (round)
           result = result + "    vec2 coord = gl_PointCoord - vec2(0.5);\n"+
                             "    if (length(coord) > 0.5) discard;\n";

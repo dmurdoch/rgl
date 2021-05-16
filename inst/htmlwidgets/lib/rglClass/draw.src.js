@@ -168,7 +168,7 @@
                    notequal: gl.NOTEQUAL,
                    gequal: gl.GEQUAL,
                    always: gl.ALWAYS},
-           test = tests[this.getObjMaterial(obj, "depth_test")];
+           test = tests[this.getMaterial(obj, "depth_test")];
       gl.depthFunc(test);
     };    
     
@@ -220,7 +220,7 @@
         gl.uniform1f( obj.shininessLoc, obj.shininess);
         for (i=0; i < subscene.lights.length; i++) {
           light = this.getObj(subscene.lights[i]);
-          if (!light.initialized) this.initObj(light.id);
+          if (!light.initialized) this.initObj(light);
           gl.uniform3fv( obj.ambientLoc[i], this.componentProduct(light.ambient, obj.ambient));
           gl.uniform3fv( obj.specularLoc[i], this.componentProduct(light.specular, obj.specular));
           gl.uniform3fv( obj.diffuseLoc[i], light.diffuse);
@@ -480,7 +480,7 @@
           enabled = {};
 
       if (!obj.initialized)
-        this.initObj(obj.id);
+        this.initObj(obj);
 
       count = obj.vertexCount;
       if (!count)
@@ -493,7 +493,7 @@
 
       this.doDepthTest(obj);
       
-      this.doMasking(this.getObjMaterial(obj, "depth_mask"));
+      this.doMasking(this.getMaterial(obj, "depth_mask"));
             
       gl.useProgram(obj.prog);
 
@@ -570,7 +570,7 @@
           enabled.nextLoc = true;
           gl.vertexAttribPointer(obj.nextLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nextofs);
           gl.uniform1f(obj.aspectLoc, this.vp.width/this.vp.height);
-          gl.uniform1f(obj.lwdLoc, this.getMaterial(obj.id, "lwd")/this.vp.height);
+          gl.uniform1f(obj.lwdLoc, this.getMaterial(obj, "lwd")/this.vp.height);
         }
 
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
@@ -622,7 +622,7 @@
           result = [], idx;
 
       if (!obj.initialized)
-        this.initObj(obj.id);
+        this.initObj(obj);
 
       count = obj.vertexCount;
       if (!count)
@@ -655,7 +655,7 @@
         }
       }
       
-      this.initSphereFromObj(obj);
+      this.initShapeFromObj(this.sphere, obj);
 
       if (!this.opaquePass && obj.fastTransparency && typeof this.sphere.fastpieces === "undefined") {
         this.sphere.fastpieces = this.getPieces(context.context, obj.id, 0, this.sphere);
@@ -767,7 +767,7 @@
       }
       
       if (!obj.initialized)
-        this.initObj(obj.id);
+        this.initObj(obj);
 
       if (!obj.vertexCount)
         return result;
@@ -815,7 +815,87 @@
         this.prmvMatrix = origPRMV;
       return result;
     };
+    
+    /**
+     * Draw bounding box and decorations
+     * @param { Object } obj - bbox to draw
+     * @param { Object } subscene - subscene holding it
+     * @param { Object } context - context for drawing
+     */
+    rglwidgetClass.prototype.drawBBox = function(obj, subscene, context) {
+      var flags = obj.flags,
+          is_transparent = this.isSet(flags, this.f_is_transparent),
+          cubeMV,
+          scale, bbox, indices, cubeNorm,
+          enabled = {}, drawing,
+          saveNorm = new CanvasMatrix4(this.normMatrix),
+          saveMV = new CanvasMatrix4(this.mvMatrix),
+          savePRMV = null,
+          result = [], idx;
 
+      this.initBBox(obj);
+        
+      if (!obj.parts.cube) {
+        obj.part = "cube";
+        this.initObj(obj);
+        obj.part.cube = obj.initialized;
+      }
+      
+      is_transparent = is_transparent || obj.someHidden;
+
+      if (!this.opaquePass && !is_transparent)
+        return result;
+        
+      if (this.prmvMatrix !== null)
+        savePRMV = new CanvasMatrix4(this.prmvMatrix);
+      
+      bbox = subscene.par3d.bbox;        
+      cubeNorm = new CanvasMatrix4();
+      scale = [bbox[1]-bbox[0], bbox[3]-bbox[2], bbox[5]-bbox[4]];
+      cubeNorm.scale(1/scale[0], 1/scale[1],
+                     1/scale[2]);
+      cubeNorm.multRight(saveNorm);
+      this.normMatrix = cubeNorm;
+
+      if (this.opaquePass) {
+        context = context.slice();
+        context.push(obj.id);
+      } 
+      
+      drawing = this.opaquePass !== is_transparent;
+      this.cube.onecolor = obj.onecolor; 
+      this.initShapeFromObj(this.cube, obj);
+
+      if (!this.opaquePass)
+        indices = context.indices;
+
+        cubeMV = new CanvasMatrix4();
+        if (this.opaquePass)
+          idx = 0;
+        else
+          idx = context.subid;
+        if (typeof idx === "undefined")
+          console.error("idx is undefined");
+
+        cubeMV.scale(scale[0], scale[1], scale[2]);
+        cubeMV.translate(bbox[0], bbox[2], bbox[4]);
+        cubeMV.multRight(saveMV);
+        this.mvMatrix = cubeMV;
+        this.setprmvMatrix();
+        if (drawing) {
+          this.drawSimple(this.cube, subscene, context);
+        } else 
+          result = result.concat(this.getCubePieces(context, obj));
+      
+      if (drawing)
+        this.disableArrays(obj, enabled);
+      this.normMatrix = saveNorm;
+      this.mvMatrix = saveMV;
+      this.prmvMatrix = savePRMV;
+        
+      return result;
+    };
+    
     /**
      * Use ids to choose object to draw
      * @param { numeric } id - object to draw
@@ -856,8 +936,9 @@
         case "sprites":
           return this.drawSprites(obj, subscene, context);
         case "light":
-        case "bboxdeco":
           return [];
+        case "bboxdeco":
+          return this.drawBBox(obj, subscene, context);
       }
       
       console.error("drawObj for type = "+obj.type);
@@ -874,7 +955,7 @@
           bg, i, savepr, savemv;
 
       if (!obj.initialized)
-        this.initObj(id);
+        this.initObj(obj);
 
       if (obj.colors.length) {
         bg = obj.colors[0];

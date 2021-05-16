@@ -263,7 +263,8 @@ rglwidget <- local({
            minimal = TRUE, 
            webgl,
            snapshot,
-           shinyBrush = NULL, ...) {
+           shinyBrush = NULL, ...,
+           oldConvertBBox = TRUE) {
     
   if (missing(snapshot)) {
     if (missing(webgl)) {
@@ -335,7 +336,8 @@ rglwidget <- local({
     height <- CSStoPixels(height)
   x <- convertScene(x, width, height,
                    elementId = elementId, 
-                   webgl = webgl, snapshot = snapshot)
+                   webgl = webgl, snapshot = snapshot,
+                   oldConvertBBox = oldConvertBBox)
   
   upstream <- processUpstream(controllers, elementId = elementId)
   

@@ -1,7 +1,8 @@
 convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
-                         snapshot = FALSE) {
+                         snapshot = FALSE,
+                         oldConvertBBox = TRUE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -236,6 +237,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   }
   
   convertBBoxes <- function(id) {
+    if (!oldConvertBBox)
+      return(NULL)
     ids <- origIds <- NULL
     id <- as.character(id)
     sub <- getObj(id)

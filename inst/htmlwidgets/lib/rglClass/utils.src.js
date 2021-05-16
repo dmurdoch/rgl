@@ -336,7 +336,7 @@
      * @param {object} obj  Which object?
      * @param {string} property Which material property?
      */
-    rglwidgetClass.prototype.getObjMaterial = function(obj, property) {
+    rglwidgetClass.prototype.getMaterial = function(obj, property) {
       var mat;
       if (typeof obj.material === "undefined")
         console.error("material undefined");
@@ -346,15 +346,15 @@
       return mat;
     };
     
-    /**
+   /**
      * Get a particular material property for an id
      * @returns { any }
      * @param {number} id  Which object?
      * @param {string} property Which material property?
      */
-    rglwidgetClass.prototype.getMaterial = function(id, property) {
+    rglwidgetClass.prototype.getMaterialId = function(id, property) {
       var obj = this.getObj(id);
-      return this.getObjMaterial(obj, property);
+      return this.getMaterial(obj, property);
     };
 
     rglwidgetClass.prototype.getAdj = function (pos, offset, text) {
