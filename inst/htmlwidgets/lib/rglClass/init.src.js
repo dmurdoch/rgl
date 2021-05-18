@@ -318,25 +318,25 @@
       }
     };
     
-    rglwidgetClass.prototype.initBBox = function(obj, subscene) {
+    rglwidgetClass.prototype.initBBox = function(obj) {
       if (!this.cube)
         this.initCube();
-      if (!obj.parts)
-        obj.parts = {cube: false, ticks: false};
-      if (!obj.parts.cube)
-        obj.cube = {id: obj.id + 0.1,
+      obj.cube = {id: obj.id + 0.1,
                     type: "quads",
                     flags: obj.flags,
                     material: obj.material,
                     colors: [obj.colors[0]],
-                    vertices: this.cube.vertices
+                    vertices: this.cube.vertices,
+                    initialized: false
         };
-      if (!obj.parts.ticks)
-        obj.ticks = {id: obj.id + 0.2,
-                     type: "segments",
+      obj.ticks = {id: obj.id + 0.2,
+                     type: "lines",
                      flags: obj.flags,
                      material: obj.material,
-                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]])};
+                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
+                     axes: obj.axes,
+                     initialized: false
+      };
       obj.initialized = true;
     };
 
