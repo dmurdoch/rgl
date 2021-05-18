@@ -825,21 +825,16 @@
     rglwidgetClass.prototype.drawBBox = function(obj, subscene, context) {
       var flags = obj.flags,
           is_transparent = this.isSet(flags, this.f_is_transparent),
-          cubeMV,
-          scale, bbox, indices, cubeNorm,
+          bboxMV,
+          scale, bbox = [].concat(subscene.par3d.bbox), indices, bboxNorm,
           enabled = {}, drawing,
           saveNorm = new CanvasMatrix4(this.normMatrix),
           saveMV = new CanvasMatrix4(this.mvMatrix),
           savePRMV = null,
-          result = [], idx;
+          result = [], i, idx, expand, center = [], edges;
 
-      this.initBBox(obj);
-        
-      if (!obj.parts.cube) {
-        obj.part = "cube";
-        this.initObj(obj);
-        obj.part.cube = obj.initialized;
-      }
+      if (!obj.initialized)
+        this.initBBox(obj);
       
       is_transparent = is_transparent || obj.someHidden;
 
@@ -849,50 +844,168 @@
       if (this.prmvMatrix !== null)
         savePRMV = new CanvasMatrix4(this.prmvMatrix);
       
-      bbox = subscene.par3d.bbox;        
-      cubeNorm = new CanvasMatrix4();
+      for (i = 0; i < 3; i++) {
+        expand = obj.axes.expand[i];
+        center[i] = (bbox[2*i] + bbox[2*i + 1])/2;
+        bbox[2*i] = center[i] - expand*(bbox[2*i + 1] - center[i]);
+        bbox[2*i+1] = center[i] + expand*(bbox[2*i + 1] - center[i]);
+      }
+      
+      bboxNorm = new CanvasMatrix4();
       scale = [bbox[1]-bbox[0], bbox[3]-bbox[2], bbox[5]-bbox[4]];
-      cubeNorm.scale(1/scale[0], 1/scale[1],
-                     1/scale[2]);
-      cubeNorm.multRight(saveNorm);
-      this.normMatrix = cubeNorm;
+      bboxNorm.scale(1/scale[0], 1/scale[1], 1/scale[2]);
+      bboxNorm.multRight(saveNorm);
+      this.normMatrix = bboxNorm;
+
+      if (!obj.parts.cube) {
+        this.initObj(obj.cube);
+        obj.parts.cube = true;
+      }
 
       if (this.opaquePass) {
         context = context.slice();
-        context.push(obj.id);
+        context.push(obj.cube.id);
       } 
       
       drawing = this.opaquePass !== is_transparent;
-      this.cube.onecolor = obj.onecolor; 
-      this.initShapeFromObj(this.cube, obj);
+      this.cube.onecolor = obj.cube.onecolor;
+      this.initShapeFromObj(this.cube, obj.cube);
 
       if (!this.opaquePass)
         indices = context.indices;
 
-        cubeMV = new CanvasMatrix4();
-        if (this.opaquePass)
-          idx = 0;
-        else
-          idx = context.subid;
-        if (typeof idx === "undefined")
-          console.error("idx is undefined");
+      bboxMV = new CanvasMatrix4();
+      if (this.opaquePass)
+        idx = 0;
+      else
+        idx = context.subid;
+      if (typeof idx === "undefined")
+        console.error("idx is undefined");
 
-        cubeMV.scale(scale[0], scale[1], scale[2]);
-        cubeMV.translate(bbox[0], bbox[2], bbox[4]);
-        cubeMV.multRight(saveMV);
-        this.mvMatrix = cubeMV;
-        this.setprmvMatrix();
-        if (drawing) {
-          this.drawSimple(this.cube, subscene, context);
-        } else 
-          result = result.concat(this.getCubePieces(context, obj));
-      
+      bboxMV.scale(scale[0], scale[1], scale[2]);
+      bboxMV.translate(bbox[0], bbox[2], bbox[4]);
+      bboxMV.multRight(saveMV);
+      this.mvMatrix = bboxMV;
+      this.setprmvMatrix();
+      if (drawing) {
+        this.drawSimple(this.cube, subscene, context);
+      } else 
+        result = result.concat(this.getCubePieces(context, obj));
+          
+      if (!obj.parts.ticks) {
+        this.initObj(obj.ticks);
+        obj.parts.ticks = obj.ticks.initialized;
+        obj.ticks.locations = this.getTickLocations(obj, bbox);
+      }
+      if (drawing) {
+        edges = this.getTickEdges(this.prmvMatrix);
+      }
       if (drawing)
         this.disableArrays(obj, enabled);
       this.normMatrix = saveNorm;
       this.mvMatrix = saveMV;
       this.prmvMatrix = savePRMV;
         
+      return result;
+    };
+    
+    /**
+     * Choose edges for ticks
+     * @param { Matrix } prmv - projection-model-view matrix
+     */
+    rglwidgetClass.prototype.getTickEdges = function(prmv){
+      var vertices = [[0,0,0,1], [0,0,1,1],
+                      [0,1,0,1], [0,1,1,1],
+                      [1,0,0,1], [1,0,1,1],
+                      [1,1,0,1], [1,1,1,1]], 
+           dim, i, j, k, edges, hull, step, result = [], proj = [];
+      for (i = 0; i < vertices.length; i++) {
+        proj[i] = this.multVM(vertices[i], prmv);
+        proj[i][0] = proj[i][0]/proj[i][3];
+        proj[i][1] = proj[i][1]/proj[i][3];
+        proj[i][2] = i;
+      }
+      hull = this.chull(proj); // may re-order it 
+      for (i = 0; i < hull.length; i++)
+        hull[i] = hull[i][2];
+      hull.push(hull[0]);
+      for (dim = 0; dim < 3; dim++) { 
+        edges = [];
+        step = Math.pow(2, 2-dim);
+        for (i = 0; i < 4; i++) {
+          j = (dim === 0) ? i : (dim === 1) ? i + 2*(i>1) : 2*i;
+          for (k = 0; k < hull.length - 1; k++) {
+            if ((hull[k] === j && hull[k+1] === j + step) ||
+                (hull[k] === j+step && hull[k+1] === j))
+          
+              edges.push([j, j+step], [j+step, j]);
+          }
+        }
+        // Find the edge with a vertex closest
+        // to the bottom left corner
+        if (edges.length) {
+          var best, best2, val = Infinity, newval;
+          for (i = 0; i < edges.length; i++) {
+            j = edges[i][0];
+            newval = vertices[j][0] + vertices[j][1];
+            if (newval < val) {
+              best = j;
+              best2 = edges[i][1];
+              val = newval;
+            }
+          }
+          result[dim] = vertices[best].slice(0,3);
+          result[dim][dim] = undefined;
+        }
+      }
+      return result;
+    };
+    
+    /**
+     * Choose tick locations
+     * @param { Object } obj - The bboxdeco
+     * @param { Array }  bbox - The bounding box limits
+     * @param { Array }  edges - Which edges get the ticks?
+    */
+    rglwidgetClass.prototype.getTickLocations = function(obj, bbox){
+      var dim, i, limits, locations = [], result = [[],[],[]], value,
+          len, delta;
+      for (dim = 0; dim < 3; dim++) {
+        limits = bbox.slice(2*dim, 2*dim + 2);
+        switch(obj.axes.mode[dim]) {
+        case "custom":
+          for (i=0; i < obj.vertices.length; i++) {
+            value = obj.vertices[i][dim];
+            if (typeof value !== "undefined")
+              result[dim].push(value);
+          }
+          break;
+        case "fixedstep":
+          len = Math.floor((limits[1] - limits[0])/obj.axes.unit[dim]);
+          delta = obj.axes.unit[dim];
+          for (i = 0; i < len; i++)
+            result[dim].push(limits[0] + i*delta);          
+          break;
+        case "fixednum":
+          len = obj.axes.nticks[dim];
+          delta = (len > 1) ? (limits[1]-limits[0])/(len-1) : 0;
+          for (i = 0; i < len; i++)
+            result[dim].push(limits[0] + i*delta);
+          break;
+        case "pretty":
+          locations = this.R_pretty(limits[0], limits[1], 5,
+                                  2, // min_n
+                                  0.75, // shrink_sml
+                                  [1.5, 2.75], // high_u_fact
+                                  0, // eps_correction
+                                  0); // return_bounds)  
+          for (i = locations.lo; i <= locations.up; i++) {
+            value = i*locations.unit;
+            if (limits[0] < value && value < limits[1])
+              result[dim].push(value);
+          }
+        }
+      }
       return result;
     };
     

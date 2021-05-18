@@ -160,8 +160,6 @@ rgl.attrib <- function( id, attrib, first=1,
   }
   if (attrib == 14) # flags
     result <- as.logical(result)
-  else if (attrib == 20) # axes
-    result <- c("custom", "unit", "length", "pretty", "none")[result + 1]
   result <- matrix(result, ncol=ncol, byrow=TRUE)
   colnames(result) <- list(c("x", "y", "z"), # vertices
                            c("x", "y", "z"), # normals
@@ -190,7 +188,7 @@ rgl.attrib <- function( id, attrib, first=1,
     else if (id %in% ids3d("background", subscene = 0)$id)
       rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
     else if (id %in% ids3d("bboxdeco", subscene = 0)$id)
-      rownames(result) <- "draw_front"[first:last]
+      rownames(result) <- c("draw_front", "marklen_rel")[first:last]
     else if (id %in% (ids <- ids3d("shapes", subscene = 0))$id) {
       type <- ids$type[ids$id == id]
       rownames(result) <- c("ignoreExtent", 
@@ -198,6 +196,13 @@ rgl.attrib <- function( id, attrib, first=1,
                             else if (type == "spheres") "fastTransparency"
                             else "fixedSize")[first:last]
     }
+  if (attrib == 20 && count) { # axes
+    rownames(result) <- c("mode", "step", "nticks",
+                          "marklen", "expand")
+    result <- result[first:last,]
+    result <- as.data.frame(t(result))
+    result$mode <- c("custom", "fixedstep", "fixednum", "pretty", "none")[result$mode + 1]
+  }
   result
 }
 

@@ -125,7 +125,7 @@
       this.sphere = result;
       this.initShapeGL(this.sphere);
     };
-    
+
     /**
      * Initialize the cube object
      */
@@ -165,6 +165,7 @@
 
       result.colorCount = 1;
       result.type = "cube";
+      result.vertices = v;
       this.cube = result;
       this.initShapeGL(this.cube);
       
@@ -321,7 +322,22 @@
       if (!this.cube)
         this.initCube();
       if (!obj.parts)
-        obj.parts = {cube: false};
+        obj.parts = {cube: false, ticks: false};
+      if (!obj.parts.cube)
+        obj.cube = {id: obj.id + 0.1,
+                    type: "quads",
+                    flags: obj.flags,
+                    material: obj.material,
+                    colors: [obj.colors[0]],
+                    vertices: this.cube.vertices
+        };
+      if (!obj.parts.ticks)
+        obj.ticks = {id: obj.id + 0.2,
+                     type: "segments",
+                     flags: obj.flags,
+                     material: obj.material,
+                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]])};
+      obj.initialized = true;
     };
 
     /**
@@ -368,8 +384,8 @@
     if (type === "subscene")
       return;
       
-    if (type === "bboxdeco" && obj.part === "cube")
-      type = "quads";
+    if (type === "bboxdeco")
+      return this.initBBox(obj);
       
     if (type === "spheres" && typeof this.sphere === "undefined")
       this.initSphere(16, 16);

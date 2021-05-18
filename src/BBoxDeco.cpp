@@ -368,10 +368,7 @@ Material BBoxDeco::defaultMaterial( Color(0.6f,0.6f,0.6f,0.5f), Color(1.0f,1.0f,
 BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis, AxisInfo& in_zaxis, float in_marklen_value, bool in_marklen_fract,
                    float in_expand, bool in_front)
 : SceneNode(BBOXDECO), material(in_material), xaxis(in_xaxis), yaxis(in_yaxis), zaxis(in_zaxis), marklen_value(in_marklen_value), marklen_fract(in_marklen_fract),
-#ifndef RGL_NO_OPENGL
-  expand(in_expand), 
-#endif
-  draw_front(in_front)
+  expand(in_expand), draw_front(in_front)
 {
   material.colors.recycle(2);
 }
@@ -696,8 +693,9 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
     case COLORS:
       return material.colors.getLength();
     case FLAGS:
+      return 2;
     case AXES:
-      return 1;
+      return 5;
   }
   return SceneNode::getAttributeCount(bbox, attrib);
 }
@@ -763,11 +761,24 @@ void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
       return;
     case FLAGS:
       *result++ = (double) draw_front;
-      break;  // there could be more flags...
+      *result++ = (double) marklen_fract;
+      break;  // there could be more flags, so fall through...
     case AXES:
       *result++ = xaxis.mode;
       *result++ = yaxis.mode;
       *result++ = zaxis.mode;
+      *result++ = xaxis.unit;
+      *result++ = yaxis.unit;
+      *result++ = zaxis.unit;
+      *result++ = xaxis.len;
+      *result++ = yaxis.len;
+      *result++ = zaxis.len;
+      *result++ = marklen_value;
+      *result++ = marklen_value;
+      *result++ = marklen_value;
+      *result++ = expand;
+      *result++ = expand;
+      *result++ = expand;
       return;
     }
     SceneNode::getAttribute(bbox, attrib, first, count, result);
