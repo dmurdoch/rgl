@@ -323,7 +323,7 @@
         this.initCube();
       obj.cube = {id: obj.id + 0.1,
                     type: "quads",
-                    flags: obj.flags,
+                    flags: this.f_has_fog,
                     material: obj.material,
                     colors: [obj.colors[0]],
                     vertices: this.cube.vertices,
@@ -331,10 +331,24 @@
         };
       obj.ticks = {id: obj.id + 0.2,
                      type: "lines",
-                     flags: obj.flags,
+                     flags: this.f_has_fog,
                      material: obj.material,
                      colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
                      axes: obj.axes,
+                     initialized: false
+      };
+      obj.labels = {id: obj.id + 0.3,
+                     type: "text",
+                     flags: this.f_has_fog + 
+                            this.f_fixed_size + 
+                            this.f_fixed_quads,
+                     material: {lit: false},
+                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
+                     cex: [[1]],
+                     family: [["sans"]],
+                     font: [[1]],
+                     adj: [[0.5, 0.5]],
+                     ignoreExtent: true,
                      initialized: false
       };
       obj.initialized = true;

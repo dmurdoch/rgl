@@ -275,6 +275,8 @@
      */
     rglwidgetClass.prototype.repeatToLen = function(arr, len) {
       arr = [].concat(arr);
+      if (!arr.length) 
+        throw new RangeError("array is length 0");
       while (arr.length < len/2)
         arr = arr.concat(arr);
       return arr.concat(arr.slice(0, len - arr.length));
@@ -524,3 +526,14 @@
       lower.pop();
       return lower.concat(upper);
     };
+    
+    /**
+     * Round number to given precision
+     * @param { number } x
+     * @param { number } digits
+     * @returns { number } 
+     */
+    rglwidgetClass.prototype.signif = function(x, digits) { 
+      return parseFloat(x.toPrecision(digits));
+    };
+      

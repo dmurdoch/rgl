@@ -850,7 +850,7 @@
         bbox[2*i] = center[i] - expand*(bbox[2*i + 1] - center[i]);
         bbox[2*i+1] = center[i] + expand*(bbox[2*i + 1] - center[i]);
       }
-      
+      obj.bbox = bbox;
       bboxNorm = new CanvasMatrix4();
       scale = [bbox[1]-bbox[0], bbox[3]-bbox[2], bbox[5]-bbox[4]];
       bboxNorm.scale(1/scale[0], 1/scale[1], 1/scale[2]);
@@ -892,17 +892,23 @@
         result = result.concat(this.getCubePieces(context, obj));
 
       if (drawing) {
-        if (!obj.ticks.initialized)
-          obj.ticks.locations = this.getTickLocations(obj, bbox);
+        if (!obj.ticks.initialized) {
+          obj.ticks.locations = this.getTickLocations(obj);
+          this.setTickLabels(obj);
+        }
         edges = this.getTickEdges(this.prmvMatrix);
         if (!obj.ticks.edges || edges.toString() !== obj.ticks.edges.toString()) {
           obj.ticks.edges = edges;
           this.getTickVertices(obj.ticks);
-          obj.ticks.initialized = false;
+          this.placeTickLabels(obj);
+          this.setTickLabels(obj);
         }
-        if (!obj.ticks.initialized)
+        if (!obj.ticks.initialized) {
           this.initObj(obj.ticks);
+          this.initObj(obj.labels);
+        }
         this.drawSimple(obj.ticks, subscene, context);
+        this.drawSimple(obj.labels, subscene, context);
       }
       if (drawing)
         this.disableArrays(obj, enabled);
@@ -911,135 +917,6 @@
       this.prmvMatrix = savePRMV;
         
       return result;
-    };
-    
-    /**
-     * Choose edges for ticks
-     * @param { Matrix } prmv - projection-model-view matrix
-     */
-    rglwidgetClass.prototype.getTickEdges = function(prmv){
-      var vertices = [[0,0,0,1], [0,0,1,1],
-                      [0,1,0,1], [0,1,1,1],
-                      [1,0,0,1], [1,0,1,1],
-                      [1,1,0,1], [1,1,1,1]], 
-           dim, i, j, k, edges, hull, step, result = [], proj = [];
-      for (i = 0; i < vertices.length; i++) {
-        proj[i] = this.multVM(vertices[i], prmv);
-        proj[i][0] = proj[i][0]/proj[i][3];
-        proj[i][1] = proj[i][1]/proj[i][3];
-        proj[i][2] = i;
-      }
-      hull = this.chull(proj.slice());  
-      for (i = 0; i < hull.length; i++)
-        hull[i] = hull[i][2];
-      hull.push(hull[0]);
-      for (dim = 0; dim < 3; dim++) { 
-        edges = [];
-        step = Math.pow(2, 2-dim);
-        for (i = 0; i < 4; i++) {
-          j = (dim === 0) ? i : (dim === 1) ? i + 2*(i>1) : 2*i;
-          for (k = 0; k < hull.length - 1; k++) {
-            if ((hull[k] === j && hull[k+1] === j + step) ||
-                (hull[k] === j+step && hull[k+1] === j))
-          
-              edges.push([j, j+step], [j+step, j]);
-          }
-        }
-        // Find the edge with a vertex closest
-        // to the bottom left corner
-        if (edges.length) {
-          var best, best2, val = Infinity, newval;
-          for (i = 0; i < edges.length; i++) {
-            j = edges[i][0];
-            newval = proj[j][0] + proj[j][1];
-            if (newval < val) {
-              best = j;
-              best2 = edges[i][1];
-              val = newval;
-            }
-          }
-          result[dim] = vertices[best].slice(0,3);
-          result[dim][dim] = undefined;
-        }
-      }
-      return result;
-    };
-    
-    /**
-     * Choose tick locations
-     * @param { Object } obj - The bboxdeco
-     * @param { Array }  bbox - The bounding box limits
-     * @param { Array }  edges - Which edges get the ticks?
-    */
-    rglwidgetClass.prototype.getTickLocations = function(obj, bbox){
-      var dim, i, limits, locations = [], result = [[],[],[]], value,
-          len, delta, range;
-      for (dim = 0; dim < 3; dim++) {
-        limits = bbox.slice(2*dim, 2*dim + 2);
-        range = limits[1] - limits[0];
-        switch(obj.axes.mode[dim]) {
-        case "custom":
-          for (i=0; i < obj.vertices.length; i++) {
-            value = (obj.vertices[i][dim] - limits[0])/range;
-            if (typeof value !== "undefined")
-              result[dim].push(value);
-          }
-          break;
-        case "fixedstep":
-          len = Math.floor(range/obj.axes.unit[dim]);
-          delta = obj.axes.unit[dim];
-          for (i = 0; i < len; i++)
-            result[dim].push(i*delta);          
-          break;
-        case "fixednum":
-          len = obj.axes.nticks[dim];
-          delta = (len > 1) ? range/(len-1) : 0;
-          for (i = 0; i < len; i++)
-            result[dim].push(i*delta/range);
-          break;
-        case "pretty":
-          locations = this.R_pretty(limits[0], limits[1], 5,
-                                  2, // min_n
-                                  0.75, // shrink_sml
-                                  [1.5, 2.75], // high_u_fact
-                                  0, // eps_correction
-                                  0); // return_bounds)  
-          for (i = locations.lo; i <= locations.up; i++) {
-            value = (i*locations.unit - limits[0])/range;
-            if (0 < value && value < 1)
-              result[dim].push(value);
-          }
-        }
-      }
-      return result;
-    };
-    
-    /**
-     * Set tick vertices
-     * @param { Object } ticks - the tick object
-     * @param { Array }  edges - Which edges get the ticks?
-    */
-    rglwidgetClass.prototype.getTickVertices = function(ticks) {
-      var dim, i, j, vertices = [], locations, 
-          edges = ticks.edges, edge;
-      for (dim = 0; dim < 3; dim++) {
-        locations = ticks.locations[dim];
-        for (i = 0; i < locations.length; i++) 
-          if (typeof edges[dim] !== "undefined") {
-            edge = edges[dim].slice();
-            edge[dim] = locations[i];
-            vertices.push(edge);
-            edge = edge.slice();
-            for (j = 0; j < 3; j++)       
-              if ((dim < 2 && j === 1 - dim)
-                  || (dim === 2 && j === 0))
-                edge[j] += 2*(edge[j] - 0.5)/ticks.axes.marklen[dim];
-            vertices.push(edge);
-          }
-      }
-      ticks.vertices = vertices;
-      ticks.vertexCount = vertices.length;
-      ticks.values = new Float32Array(this.flatten(vertices));
     };
     
     /**
