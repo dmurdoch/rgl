@@ -14,6 +14,7 @@
 #include "RenderContext.h"
 #include "String.h"
 #include "Material.h"
+#include "TextSet.h"
 
 namespace rgl {
 
@@ -44,6 +45,15 @@ struct AxisInfo {
   float  unit;
 };
 
+struct MarginalItem {
+  MarginalItem(int in_coord, int in_edge[3], int in_floating, TextSet* in_item,
+               int in_nvertices, double* in_origvertices);
+  int coord;
+  int edge[3];
+  int floating;
+  TextSet* item;
+  VertexArray origvertices;
+};
 
 class BBoxDeco : public SceneNode 
 {
@@ -58,6 +68,7 @@ public:
   String  getTextAttribute(AABox& bbox, AttribID attrib, int index);
   Material* getMaterial()  { return &material; }
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "bboxdeco", buflen); };
+  void addToMargin(int coord, int edge[3], int floating, TextSet* item, int nvertices, double* origvertices);
 private:
   Material material;
   AxisInfo xaxis, yaxis, zaxis;
@@ -68,6 +79,8 @@ private:
 
   static Material defaultMaterial;
   static AxisInfo defaultAxis;
+  
+  std::vector<MarginalItem*> items;
 };
 
 } // namespace rgl

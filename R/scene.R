@@ -271,88 +271,6 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
 
 
 ##
-## bbox
-##
-##
-
-rgl.bbox <- function( 
-  xat=NULL, xlab=NULL, xunit=0, xlen=5,
-  yat=NULL, ylab=NULL, yunit=0, ylen=5,
-  zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=TRUE, expand=1, draw_front=FALSE,
-  ...) {
-
-  rgl.material( ... )
-
-  if (is.null(xat)) 
-    xlab <- NULL
-  else {
-    xlen <- length(xat)
-    if (is.null(xlab)) 
-      xlab <- format(xat)
-    else 
-      xlab <- rep(xlab, length.out=xlen)
-  }
-  if (is.null(yat)) 
-    ylab <- NULL
-  else {
-    ylen <- length(yat)
-    if (is.null(ylab)) 
-      ylab <- format(yat)
-    else 
-      ylab <- rep(ylab, length.out=ylen)
-  }
-  if (is.null(zat)) 
-    zlab <- NULL
-  else {
-    zlen <- length(zat)
-    if (is.null(zlab)) 
-      zlab <- format(zat)
-    else 
-      zlab <- rep(zlab,length.out=length(zat))
-  }
-  xticks <- length(xat)
-  yticks <- length(yat)
-  zticks <- length(zat)
-
-  if (identical(xunit, "pretty")) xunit <- -1
-  if (identical(yunit, "pretty")) yunit <- -1
-  if (identical(zunit, "pretty")) zunit <- -1
-
-  length(xlen)        <- 1
-  length(ylen)        <- 1
-  length(zlen)        <- 1
-  length(marklen.rel) <- 1
-  length(draw_front)  <- 1
-  length(xunit)       <- 1
-  length(yunit)       <- 1
-  length(zunit)       <- 1
-  length(marklen)     <- 1
-  length(expand)      <- 1
-
-  idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel, draw_front))
-  ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
-
-  ret <- .C( rgl_bbox,
-    success = as.integer(FALSE),
-    idata,
-    ddata,
-    as.numeric(xat),
-    as.character(xlab),
-    as.numeric(yat),
-    as.character(ylab),
-    as.numeric(zat),
-    as.character(zlab)
-  )
-
-  if (! ret$success)
-    stop("'rgl_bbox' failed")
-    
-  lowlevel(ret$success)
-
-}
-
-##
 ## set lights
 ##
 ##
@@ -707,7 +625,8 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
 
 rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0.5, 
                       family=par3d("family"), font=par3d("font"), 
-                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... ) {
+                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), 
+                      ... ) {
   rgl.material( ... )
 
   vertex  <- rgl.vertex(x,y,z)

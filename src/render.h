@@ -28,6 +28,7 @@ public:
   void endUse();
   Vertex& operator[](int index);
   void setVertex(int index, double* v);
+  void setVertex(int index, Vertex v);
 
   Vertex getNormal(int v1, int v2, int v3);
   int size() { return nvertex; }

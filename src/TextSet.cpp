@@ -171,3 +171,7 @@ String TextSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
   }
   return Shape::getTextAttribute(bbox, attrib, index);
 }
+
+void TextSet::setVertex(int index, Vec3 value) {
+  vertexArray.setVertex(index, value);  
+}

@@ -1,4 +1,4 @@
-# rgl  0.106.19
+# rgl  0.106.20
 
 ## Major changes
 
@@ -13,6 +13,13 @@ the mouse wheel.
 user-specified callbacks in WebGL code.
 * Added Javascript code for support of movable 
   axis labels in `bboxdeco` objects.
+* `mtext3d()` and related functions (`decorate3d()`,
+  `title3d()`, etc.) can now attach annotations to the
+  bounding box decoration, so they move as the scene
+  is rotated.  
+* The `mtext3d()` argument order has changed.
+* So far the `mtext3d()` changes are not supported by
+  `rglwidget()`.
 
 ## Minor changes
 

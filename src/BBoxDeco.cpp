@@ -296,6 +296,16 @@ double AxisInfo::getTick(float low, float high, int index) {
   }
   return NA_REAL;
 }
+
+MarginalItem::MarginalItem(int in_coord, int in_edge[3], int in_floating, TextSet* in_item,
+                           int nvertices, double* in_origvertices):
+  coord(in_coord), floating(in_floating), item(in_item) {
+  edge[0] = in_edge[0];
+  edge[1] = in_edge[1];
+  edge[2] = in_edge[2];
+  origvertices.alloc(nvertices);
+  origvertices.copy(nvertices, in_origvertices);
+}
     
 struct Side {
   int vidx[4];
@@ -653,7 +663,7 @@ void BBoxDeco::render(RenderContext* renderContext)
               
               for (int i=(int)lo; i<=up; i++) {
                 float value = i*axis->unit;
-		if (value >= low && value <= high) {
+		            if (value >= low && value <= high) {
                   *valueptr = value;
 
                   char text[32];
@@ -668,12 +678,64 @@ void BBoxDeco::render(RenderContext* renderContext)
             break;
             
         }
+        
+        for (std::vector<MarginalItem*>::iterator item = items.begin(); item != items.end() ; ++ item ) 
+          if (i == (*item)->coord) {
+            /* Create permutation to map at, line, pos to x, y, z */
+            int at = (*item)->coord, line, layer;
+            for (j = 0; j < 3; j++) {
+              if (edge->dir[j] != 0) {
+                line = j;
+                break;
+              }
+            }
+            layer = 2;
+            for (j = 0; j < 2; j++) {
+              if (at != j && line != j) {
+                layer = j;
+                break;
+              }
+            }
+            /* Set up translation and scaling */  
+            float scale[3], trans[3];
+            for (j = 0; j < 3; j++) {
+              if (j != i) {
+                int e = 1;
+                if ((*item)->floating && v[j] < 0)
+                  e = -1;
+                e = e*(*item)->edge[j];
+                trans[j] = e == 1 ? bbox.vmax[j] : bbox.vmin[j];
+                scale[j] = marklen[j]*e;
+              } else {
+                trans[j] = 0.0;
+                scale[j] = 1.0;
+              }
+            }
+            Vertex newvertex, oldvertex;
+            for (j = 0; j < (*item)->origvertices.size(); j++) {
+              oldvertex = (*item)->origvertices[j];
+              if (oldvertex.missing())
+                newvertex.setValue(at, (bbox.vmin[at] + bbox.vmax[at])/2.0);
+              else
+                newvertex.setValue(at, oldvertex.x*scale[at] + trans[at]);
+              newvertex.setValue(line, oldvertex.y*scale[line] + trans[line]);
+              newvertex.setValue(layer, oldvertex.z*scale[layer] + trans[layer]);
+              (*item)->item->setVertex(j, newvertex);  
+            }
+            (*item)->item->draw(renderContext);
+            glPopMatrix();
+            material.beginUse(renderContext); /* start using bbox material again */
+          }
       }
     }
     material.endUse(renderContext);
     glPopAttrib();
   }
 #endif  
+}
+
+void BBoxDeco::addToMargin(int coord, int edge[3], int floating, TextSet* item, int nvertices, double* origvertices) {
+  items.push_back(new MarginalItem(coord, edge, floating, item, nvertices, origvertices));
 }
 
 int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 

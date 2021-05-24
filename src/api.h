@@ -73,6 +73,7 @@ void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals,
 void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex,
                                  int* nfonts, char** family, int* style, double* cex, int* useFreeType,
                                  int* npos, int* pos);
+void rgl_addtomargin(int* successptr, int* bboxdeco, int* item, int* nvertices, double* origvertices, int* margin);
 void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius, int* fastTransparency);
 void rgl_planes   (int* successptr, int* idata, double* normals, double* offsets);
 void rgl_clipplanes(int* successptr, int* idata, double* normals, double* offsets);

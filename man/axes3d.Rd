@@ -15,10 +15,11 @@ axes3d(edges = "bbox", labels = TRUE, tick = TRUE, nticks = 5,
 	box = FALSE, expand = 1.03, ...)
 box3d(...) 
 title3d(main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
-	zlab = NULL, line = NA, ...) 
+	zlab = NULL, line = NA, level = NA, mode = NULL, ...) 
 axis3d(edge, at = NULL, labels = TRUE, tick = TRUE, line = 0, 
 	pos = NULL, nticks = 5, ...) 
-mtext3d(text, edge, line = 0, at = NULL, pos = NA, ...) 
+mtext3d(text, edge, at = NULL, line = 0, level = 0, 
+        mode = c("fixed", "floating", "legacy"), pos = NA, ...) 
 }
 \arguments{
   \item{edges}{ a code to describe which edge(s) of the box to use; see Details below }
@@ -31,10 +32,11 @@ mtext3d(text, edge, line = 0, at = NULL, pos = NA, ...)
   \item{main}{ the main title for the plot }
   \item{sub}{ the subtitle for the plot }
   \item{xlab, ylab, zlab}{ the axis labels for the plot }
-  \item{line}{ the ``line'' of the plot margin to draw the label on }
+  \item{line, level}{ the "line" of the plot margin to draw the label on, and "level" above or below it  }
+  \item{mode}{ which mode of axis labels?  See Details.}
   \item{edge, pos}{ the position at which to draw the axis or text }
   \item{text}{ the text to draw }
-  \item{at}{ the value of a coordinate at which to draw the axis }
+  \item{at}{ the value of a coordinate at which to draw the axis or labels. }
   \item{\dots}{ additional parameters which are passed to \code{\link{bbox3d}} or \code{\link{material3d}} }
 }
 
@@ -52,14 +54,46 @@ The labels will move so that they do not obscure the data.  Alternatively,
 a vector of arguments as described above may be used, in which case
 fixed axes are drawn using \code{axis3d}.
 
-If \code{pos} is a numeric vector of length 3, \code{edge} determines
+As of \pkg{rgl} version 0.107.x, axis drawing has changed
+significantly.  By default, annotations are now attached
+to the bounding box decoration (see \code{\link{bbox3d}}).
+
+If \code{mode = "fixed"}, they will be drawn on the
+specified edge.  If \code{mode = "floating"}, they will
+move as the axis labels move when the scene is rotated.
+If \code{mode = NULL} in \code{title3d}, the main title
+and subtitles will be fixed, while the axis labels will
+be floating.  
+
+The \code{at} parameter in \code{axis3d} is the location
+of the ticks, defaulting to \code{\link{pretty}} locations.
+In \code{mtext3d} the \code{at} parameter is the location
+on the specified axis
+at which to draw the text, defaulting to the middle of the
+bounding box.
+
+The \code{line} parameter is the line counting out
+from the box in the same direction as the axis ticks,
+and \code{level} is the line out in the orthogonal
+direction.  The ticks run from line 0 to line 1, and the
+tick labels are drawn at line 2.  Both are drawn at level 0.
+
+The final possible value for \code{mode} is
+\code{"legacy"}, which reproduces earlier \pkg{rgl}
+behaviour.  In
+this case the labels are not part of the bounding box,
+so they must be drawn last, or they could appear inside
+the box, overlapping the data.
+
+The \code{pos} parameter is only supported in legacy mode.  If it is a numeric vector of length 3, \code{edge} determines
 the direction of the axis and the tick marks, and the values of the
-other two coordinates in \code{pos} determine the position.  See the
-examples.
+other two coordinates in \code{pos} determine the position.  
+The \code{level} parameter is ignored in legacy mode.
 }
 \value{
 These functions are called for their side effects.  They return the object IDs of
-objects added to the scene.
+objects added to the scene, or the bounding box object
+to which they were attached.
 }
 \author{ Duncan Murdoch }
 

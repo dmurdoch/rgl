@@ -37,6 +37,8 @@ public:
   void drawBegin(RenderContext* renderContext);
   void drawPrimitive(RenderContext* renderContext, int index);
   void drawEnd(RenderContext* renderContext);
+  
+  void setVertex(int index, Vec3 value);
 
 private:
 

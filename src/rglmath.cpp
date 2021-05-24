@@ -75,6 +75,23 @@ void Vec3::operator += (Vec3 op2)
   z += op2.z;
 }
 
+float Vec3::operator [] (int i) const {
+  switch (i) {
+  case 0: return x;
+  case 1: return y;
+  case 2: return z;
+  default: return R_NaReal;
+  }
+}
+
+void Vec3::setValue(int i, float value) {
+  switch (i) {
+  case 0: x = value; return;
+  case 1: y = value; return;
+  case 2: z = value; return;
+  }
+}
+
 Vec3 Vec3::scale(const Vec3& op2) const
 {
   Vec3 t(*this);
@@ -157,6 +174,26 @@ Vec4 Vec4::operator + (const Vec4& v) const
 {
   return Vec4(x+v.x, y+v.y, z+v.z, w+v.w);
 }
+
+float Vec4::operator [] (int i) const {
+  switch (i) {
+    case 0: return x;
+    case 1: return y;
+    case 2: return z;
+    case 3: return w;
+    default: return R_NaReal;
+  }
+}
+
+void Vec4::setValue(int i, float value) {
+  switch (i) {
+  case 0: x = value; return;
+  case 1: y = value; return;
+  case 2: z = value; return;
+  case 3: w = value; return;
+  }
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 //

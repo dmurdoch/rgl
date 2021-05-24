@@ -1140,6 +1140,52 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
   *successptr = success;
 }
 
+void rgl::rgl_addtomargin(int* successptr, int* bboxdecoid, int* itemid,
+                          int* nvertices, double* origvertices,
+                          int* margin )
+{
+  *successptr = RGL_FAIL;
+  
+  Device* device;
+  
+  if (!deviceManager || !(device = deviceManager->getAnyDevice())) {
+    Rprintf("no device\n");
+    return;
+  }
+  
+  RGLView* rglview;
+  Scene* scene;
+
+  if (!(rglview = device->getRGLView()) || 
+      !(scene = rglview->getScene())) {
+    Rprintf("no scene\n");
+    return;
+  }
+  
+  SceneNode* bboxdeco; 
+  if (!(bboxdeco = scene->get_scenenode(*bboxdecoid)) ||
+      bboxdeco->getTypeID() != BBOXDECO) {
+    Rprintf("no bboxdeco\n");
+    return;
+  }
+    
+  TextSet* item;      
+  if (!(item = dynamic_cast< TextSet* >(scene->get_shape(*itemid)))) {
+    Rprintf("no item");
+    return;
+  }
+  
+  int coord = margin[0],
+      edge[3] = {margin[1], margin[2], margin[3]},
+      floating = margin[4];
+  
+  scene->hide(*itemid);
+  ((BBoxDeco*)bboxdeco)->addToMargin(coord, edge, floating,
+                                     item, *nvertices, origvertices);
+
+  *successptr = RGL_SUCCESS;
+}
+
 void rgl::rgl_bbox(int* successptr,
               int* idata,
               double* ddata,

@@ -61,6 +61,12 @@ void VertexArray::setVertex(int index, double* v) {
   arrayptr[index*3+2] = (float) v[2];
 }
 
+void VertexArray::setVertex(int index, Vertex v) {
+  arrayptr[index*3+0] = (float) v.x;
+  arrayptr[index*3+1] = (float) v.y;
+  arrayptr[index*3+2] = (float) v.z;
+}
+
 void VertexArray::beginUse() {
 #ifndef RGL_NO_OPENGL
   glEnableClientState(GL_VERTEX_ARRAY);

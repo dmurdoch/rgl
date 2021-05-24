@@ -108,7 +108,8 @@ struct Vec3
   void   rotateX(float degree);
   void   rotateY(float degree);
   bool   missing() const;  /* Any components missing */
-
+  float operator[](int i) const;
+  void setValue(int i, float value);
   static inline Vec3& asVec3(float* ptr) {
     return *( reinterpret_cast<Vec3*>( ptr ) );
   }
@@ -137,7 +138,8 @@ struct Vec4
   Vec4 operator * (const float value) const;
   Vec4 operator + (const Vec4& op2) const;
   bool   missing() const;  /* Any components missing */
-
+  float operator[](int i) const;
+  void setValue(int i, float value);
   static inline Vec4& asVec4(float* ptr) {
     return *( reinterpret_cast<Vec4*>( ptr ) );
   }
