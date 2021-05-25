@@ -46,13 +46,10 @@ struct AxisInfo {
 };
 
 struct MarginalItem {
-  MarginalItem(int in_coord, int in_edge[3], int in_floating, TextSet* in_item,
-               int in_nvertices, double* in_origvertices);
+  MarginalItem(int in_coord, int in_edge[3], TextSet* in_item);
   int coord;
   int edge[3];
-  int floating;
   TextSet* item;
-  VertexArray origvertices;
 };
 
 class BBoxDeco : public SceneNode 

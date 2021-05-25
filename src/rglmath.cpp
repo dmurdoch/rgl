@@ -75,21 +75,13 @@ void Vec3::operator += (Vec3 op2)
   z += op2.z;
 }
 
-float Vec3::operator [] (int i) const {
+float& Vec3::operator [] (int i) {
   switch (i) {
   case 0: return x;
   case 1: return y;
   case 2: return z;
-  default: return R_NaReal;
   }
-}
-
-void Vec3::setValue(int i, float value) {
-  switch (i) {
-  case 0: x = value; return;
-  case 1: y = value; return;
-  case 2: z = value; return;
-  }
+  error("out of bounds");
 }
 
 Vec3 Vec3::scale(const Vec3& op2) const
@@ -175,23 +167,14 @@ Vec4 Vec4::operator + (const Vec4& v) const
   return Vec4(x+v.x, y+v.y, z+v.z, w+v.w);
 }
 
-float Vec4::operator [] (int i) const {
+float& Vec4::operator [] (int i) {
   switch (i) {
     case 0: return x;
     case 1: return y;
     case 2: return z;
     case 3: return w;
-    default: return R_NaReal;
   }
-}
-
-void Vec4::setValue(int i, float value) {
-  switch (i) {
-  case 0: x = value; return;
-  case 1: y = value; return;
-  case 2: z = value; return;
-  case 3: w = value; return;
-  }
+  error("out of bounds");
 }
 
 
@@ -355,6 +338,37 @@ Matrix4x4 Matrix4x4::translationMatrix(double x, double y, double z)
   result.ref(0,3) = static_cast<float>(x);
   result.ref(1,3) = static_cast<float>(y);
   result.ref(2,3) = static_cast<float>(z);
+  return result;
+}
+
+void Matrix4x4::multRight(const Matrix4x4& M) {
+  Matrix4x4 result;
+  for (int i = 0; i < 4; i++ )
+    for (int k = 0; k < 4; k++) {
+      result.ref(i, k) = 0.0;
+      for (int j = 0; j < 4; j++)
+        result.ref(i, k) += val(i, j)*M.val(j, k);
+    }
+  loadData(result);
+}
+
+void Matrix4x4::multLeft(const Matrix4x4& M) {
+  Matrix4x4 result;
+  for (int i = 0; i < 4; i++ )
+    for (int k = 0; k < 4; k++) {
+      result.ref(i, k) = 0.0;
+      for (int j = 0; j < 4; j++)
+        result.ref(i, k) += M.val(i, j)*val(j, k);
+    }
+  loadData(result);
+}
+
+Matrix4x4 Matrix4x4::permutationMatrix(int newx, int newy, int newz) {
+  Matrix4x4 result;
+  result.ref(0, newx) = 1.0;
+  result.ref(1, newy) = 1.0;
+  result.ref(2, newz) = 1.0;
+  result.ref(3, 3) = 1.0;
   return result;
 }
 

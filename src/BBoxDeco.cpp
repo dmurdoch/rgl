@@ -297,14 +297,11 @@ double AxisInfo::getTick(float low, float high, int index) {
   return NA_REAL;
 }
 
-MarginalItem::MarginalItem(int in_coord, int in_edge[3], int in_floating, TextSet* in_item,
-                           int nvertices, double* in_origvertices):
-  coord(in_coord), floating(in_floating), item(in_item) {
+MarginalItem::MarginalItem(int in_coord, int in_edge[3], TextSet* in_item):
+  coord(in_coord), item(in_item) {
   edge[0] = in_edge[0];
   edge[1] = in_edge[1];
   edge[2] = in_edge[2];
-  origvertices.alloc(nvertices);
-  origvertices.copy(nvertices, in_origvertices);
 }
     
 struct Side {
@@ -701,7 +698,7 @@ void BBoxDeco::render(RenderContext* renderContext)
             for (j = 0; j < 3; j++) {
               if (j != i) {
                 int e = 1;
-                if ((*item)->floating && v[j] < 0)
+                if ((*item)->item->isFloating() && v[j] < 0)
                   e = -1;
                 e = e*(*item)->edge[j];
                 trans[j] = e == 1 ? bbox.vmax[j] : bbox.vmin[j];
@@ -711,19 +708,32 @@ void BBoxDeco::render(RenderContext* renderContext)
                 scale[j] = 1.0;
               }
             }
+            /* It might make more sense to do this by
+             * modifying the MODELVIEW matrix, but then
+             * it's hard to see how to handle NA as "the middle".
+             */
+            TextSet* textset = (*item)->item;
             Vertex newvertex, oldvertex;
-            for (j = 0; j < (*item)->origvertices.size(); j++) {
-              oldvertex = (*item)->origvertices[j];
+            VertexArray origvertices;
+            origvertices.alloc(textset->getElementCount());
+            for (j = 0; j < textset->getElementCount(); j++) {
+              oldvertex = textset->getVertex(j);
+              origvertices.setVertex(j, oldvertex);
               if (oldvertex.missing())
-                newvertex.setValue(at, (bbox.vmin[at] + bbox.vmax[at])/2.0);
+                newvertex[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0;
               else
-                newvertex.setValue(at, oldvertex.x*scale[at] + trans[at]);
-              newvertex.setValue(line, oldvertex.y*scale[line] + trans[line]);
-              newvertex.setValue(layer, oldvertex.z*scale[layer] + trans[layer]);
-              (*item)->item->setVertex(j, newvertex);  
+                newvertex[at] = oldvertex.x*scale[at] + trans[at];
+              newvertex[line] = oldvertex.y*scale[line] + trans[line];
+              newvertex[layer] = oldvertex.z*scale[layer] + trans[layer];
+              textset->setVertex(j, newvertex);  
             }
-            (*item)->item->draw(renderContext);
-            glPopMatrix();
+            textset->draw(renderContext);
+            /* put back the originals */
+            for (j = 0; j < origvertices.size(); j++) {
+              oldvertex = origvertices[j];
+              textset->setVertex(j, oldvertex);
+            }
+
             material.beginUse(renderContext); /* start using bbox material again */
           }
       }
@@ -735,7 +745,8 @@ void BBoxDeco::render(RenderContext* renderContext)
 }
 
 void BBoxDeco::addToMargin(int coord, int edge[3], int floating, TextSet* item, int nvertices, double* origvertices) {
-  items.push_back(new MarginalItem(coord, edge, floating, item, nvertices, origvertices));
+  item->setFloating(floating);
+  items.push_back(new MarginalItem(coord, edge, item));
 }
 
 int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 
@@ -758,6 +769,9 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
       return 2;
     case AXES:
       return 5;
+    case IDS:
+    case TYPES:
+      return items.size();
   }
   return SceneNode::getAttributeCount(bbox, attrib);
 }
@@ -765,7 +779,7 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
 void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
   int n = getAttributeCount(bbox, attrib);
-
+  int ind = 0;
   if (first + count < n) n = first + count;
   if (first < n) {
     switch(attrib) {
@@ -842,6 +856,13 @@ void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
       *result++ = expand;
       *result++ = expand;
       return;
+    case IDS:
+      for (std::vector<MarginalItem*>::iterator i = items.begin(); i != items.end() ; ++ i ) {
+        if ( first <= ind  && ind < n )  
+          *result++ = (*i)->item->getObjID();
+        ind++;
+      }
+      return;
     }
     SceneNode::getAttribute(bbox, attrib, first, count, result);
   }
@@ -877,6 +898,13 @@ String BBoxDeco::getTextAttribute(AABox& bbox, AttribID attrib, int index)
           return zaxis.textArray[index];
         else
           return String(0, NULL);
+      }
+      break;
+    case TYPES:
+      if (index < n) {
+        char* buffer = R_alloc(20, 1);    
+        items[index]->item->getTypeName(buffer, 20);
+        return String(static_cast<int>(strlen(buffer)), buffer);
       }
       break;
     }

@@ -43,6 +43,7 @@ rglwidgetClass = function() {
     rglwidgetClass.prototype.f_fat_lines = 8192;
     rglwidgetClass.prototype.f_is_brush = 16384;
     rglwidgetClass.prototype.f_has_fog = 32768;
+    rglwidgetClass.prototype.f_floating = 65536;
     
     rglwidgetClass.prototype.fogNone = 0;
     rglwidgetClass.prototype.fogLinear = 1;

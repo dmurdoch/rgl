@@ -30,6 +30,8 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
 
   material.lit = false;
   material.colorPerVertex(false);
+  
+  floating = false;
 
   adjx = in_adjx;
   adjy = in_adjy;
@@ -113,11 +115,12 @@ int TextSet::getAttributeCount(AABox& bbox, AttribID attrib)
   switch (attrib) {
     case FAMILY: 
     case FONT:
-  case CEX: return static_cast<int>(fonts.size());
+    case CEX: return static_cast<int>(fonts.size());
     case TEXTS:
     case VERTICES: return textArray.size();
     case ADJ: return 1;
     case POS: return pos[0] ? npos : 0;
+    case FLAGS: return 1;
   }
   return Shape::getAttributeCount(bbox, attrib);
 }
@@ -152,6 +155,9 @@ void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
       while (first < n)
         *result++ = pos[first++];
       return;
+    case FLAGS:
+      *result++ = (double) floating;
+      break;  // there could be more flags, so fall through...      
     }
     Shape::getAttribute(bbox, attrib, first, count, result);
   }
@@ -170,6 +176,10 @@ String TextSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
     }
   }
   return Shape::getTextAttribute(bbox, attrib, index);
+}
+
+Vertex& TextSet::getVertex(int index) {
+  return vertexArray[index];
 }
 
 void TextSet::setVertex(int index, Vec3 value) {
