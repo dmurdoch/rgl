@@ -296,13 +296,6 @@ double AxisInfo::getTick(float low, float high, int index) {
   }
   return NA_REAL;
 }
-
-MarginalItem::MarginalItem(int in_coord, int in_edge[3], TextSet* in_item):
-  coord(in_coord), item(in_item) {
-  edge[0] = in_edge[0];
-  edge[1] = in_edge[1];
-  edge[2] = in_edge[2];
-}
     
 struct Side {
   int vidx[4];
@@ -340,32 +333,34 @@ static Side side[6] = {
 };
 
 struct Edge{
-  Edge(int in_from, int in_to, Vertex4 in_dir) : from(in_from), to(in_to), dir(in_dir) { }
+  Edge(int in_from, int in_to, Vertex4 in_dir, Vertex3 in_code) : from(in_from), to(in_to), dir(in_dir), code(in_code) { }
   int from, to;
   Vertex4 dir;
+  Vertex3 code;
 };
 
 static Edge xaxisedge[4] = { 
-  Edge( 5,4, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f) ), 
-  Edge( 0,1, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f) ),
-  Edge( 6,7, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f) ),
-  Edge( 3,2, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f) )
+  Edge( 5,4, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3( 0.0f, -1.0f,  1.0f) ), 
+  Edge( 0,1, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3( 0.0f, -1.0f, -1.0f) ),
+  Edge( 6,7, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3( 0.0f,  1.0f,  1.0f) ),
+  Edge( 3,2, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3( 0.0f,  1.0f, -1.0f) )
 };
+
 static Edge yaxisedge[8] = { 
-  Edge( 5,7, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f) ),
-  Edge( 7,5, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f) ), 
-  Edge( 6,4, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f) ), 
-  Edge( 4,6, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f) ), 
-  Edge( 2,0, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f) ), 
-  Edge( 0,2, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f) ),
-  Edge( 3,1, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f) ), 
-  Edge( 1,3, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f) )
+  Edge( 5,7, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 0.0f, 1.0f) ),
+  Edge( 7,5, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3( 1.0f, 0.0f, 1.0f) ), 
+  Edge( 6,4, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f, 0.0f, 1.0f) ), 
+  Edge( 4,6, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3(-1.0f, 0.0f, 1.0f) ), 
+  Edge( 2,0, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3(-1.0f, 0.0f, -1.0f)  ), 
+  Edge( 0,2, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f, 0.0f, -1.0f)  ),
+  Edge( 3,1, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 0.0f, -1.0f)  ), 
+  Edge( 1,3, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3( 1.0f, 0.0f, -1.0f)  )
 };
 static Edge zaxisedge[4] = { 
-  Edge( 1,5, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f) ), 
-  Edge( 4,0, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f) ), 
-  Edge( 7,3, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f) ), 
-  Edge( 2,6, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f) ) 
+  Edge( 1,5, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f,-1.0f, 0.0f)  ), 
+  Edge( 4,0, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f,-1.0f, 0.0f)  ), 
+  Edge( 7,3, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 1.0f, 0.0f)  ), 
+  Edge( 2,6, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f, 1.0f, 0.0f)  ) 
 };
 
 
@@ -399,25 +394,28 @@ AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
   return bbox2;
 }
 
-void BBoxDeco::render(RenderContext* renderContext)
-{
-#ifndef RGL_NO_OPENGL  
-  AABox bbox = renderContext->subscene->getBoundingBox();
-
-  if (bbox.isValid()) {
+struct BBoxDeco::BBoxDecoImpl {
   
+  static Edge* chooseEdge(RenderContext* renderContext, BBoxDeco& bboxdeco, int coord) 
+  {
+    
+    AABox bbox = renderContext->subscene->getBoundingBox();
+    
+    if (!bbox.isValid())
+      return NULL;
+    
     Vertex center = bbox.getCenter();
-    bbox += center + (bbox.vmin - center)*expand;
-    bbox += center + (bbox.vmax - center)*expand;
-
-    // Sphere bsphere(bbox);
-
-    glPushAttrib(GL_ENABLE_BIT);
-
+    bbox += center + (bbox.vmin - center)*bboxdeco.expand;
+    bbox += center + (bbox.vmax - center)*bboxdeco.expand;
+    
+    // edge adjacent matrix
+    
+    int adjacent[8][8] = { { 0 } };
+    
     int i,j;
-
+    
     // vertex array:
-
+    
     Vertex4 boxv[8] = {
       Vertex4( bbox.vmin.x, bbox.vmin.y, bbox.vmin.z ),
       Vertex4( bbox.vmax.x, bbox.vmin.y, bbox.vmin.z ),
@@ -428,315 +426,317 @@ void BBoxDeco::render(RenderContext* renderContext)
       Vertex4( bbox.vmin.x, bbox.vmax.y, bbox.vmax.z ),
       Vertex4( bbox.vmax.x, bbox.vmax.y, bbox.vmax.z )
     };
-
+    
     Vertex4 eyev[8];
-
+    
     // transform vertices: used for edge distance criterion and text justification
-
+    
     Matrix4x4 modelview(renderContext->subscene->modelMatrix);
-
+    
     for(i=0;i<8;i++)
       eyev[i] = modelview * boxv[i];
- 
+    
+    for(i=0;i<6;i++) {
+      
+      const Vertex4 q = modelview * side[i].normal;
+      const Vertex4 view(0.0f,0.0f,1.0f,0.0f);
+      
+      float cos_a = view * q;
+      
+      const bool front = (cos_a >= 0.0f) ? true : false;
+      
+      if (bboxdeco.draw_front || !front) {
+        
+        for(j=0;j<4;j++) {
+          
+          if (!front) {
+            // modify adjacent matrix
+            
+            int from = side[i].vidx[j];
+            int to   = side[i].vidx[(j+1)%4];
+            
+            adjacent[from][to] = 1;
+          }          
+          
+        }
+        
+      }
+    }
+    
+    AxisInfo*  axis;
+    Edge*  axisedge;
+    int    nedges;
+    
+    switch(coord)
+    {
+      case 0:
+        axis     = &(bboxdeco.xaxis);       
+        axisedge = xaxisedge;
+        nedges   = 4;
+        break;
+      case 1:
+        axis     = &(bboxdeco.yaxis);
+        axisedge = yaxisedge;
+        nedges   = 8;
+        break;
+      case 2:
+      default:
+        axis     = &(bboxdeco.zaxis);
+        axisedge = zaxisedge;
+        nedges   = 4;
+        break;
+    }
+    
+    if (axis->mode == AXIS_NONE)
+      return NULL;
+    
+    // search z-nearest contours
+    
+    float d = FLT_MAX;
+    Edge* edge = NULL;
+    
+    for(j=0;j<nedges;j++) {
+      
+      int from = axisedge[j].from;
+      int to   = axisedge[j].to;
+      
+      if ((adjacent[from][to] == 1) && (adjacent[to][from] == 0)) {
+        
+        // found contour
+        
+        float dtmp = -(eyev[from].z + eyev[to].z)/2.0f;
+        
+        if (dtmp < d) {
+          
+          // found near contour
+          
+          d = dtmp;
+          edge = &axisedge[j];
+          
+        }
+        
+      } 
+      
+    }
+    return edge;
+  }
+  
+};
+
+void BBoxDeco::render(RenderContext* renderContext)
+{
+#ifndef RGL_NO_OPENGL  
+  AABox bbox = renderContext->subscene->getBoundingBox();
+  
+  if (bbox.isValid()) {
+    
+    glPushAttrib(GL_ENABLE_BIT);
+    
+    int i,j;
+    
+    // vertex array:
+    
+    Vertex4 boxv[8] = {
+      Vertex4( bbox.vmin.x, bbox.vmin.y, bbox.vmin.z ),
+      Vertex4( bbox.vmax.x, bbox.vmin.y, bbox.vmin.z ),
+      Vertex4( bbox.vmin.x, bbox.vmax.y, bbox.vmin.z ),
+      Vertex4( bbox.vmax.x, bbox.vmax.y, bbox.vmin.z ),
+      Vertex4( bbox.vmin.x, bbox.vmin.y, bbox.vmax.z ),
+      Vertex4( bbox.vmax.x, bbox.vmin.y, bbox.vmax.z ),
+      Vertex4( bbox.vmin.x, bbox.vmax.y, bbox.vmax.z ),
+      Vertex4( bbox.vmax.x, bbox.vmax.y, bbox.vmax.z )
+    };
+    
+    // 
+    // // transform vertices: used for edge distance criterion and text justification
+    // 
+    Matrix4x4 modelview(renderContext->subscene->modelMatrix);
+    
     // setup material
     
     material.beginUse(renderContext);
-
+    
     if (material.line_antialias || material.isTransparent()) {
       // SETUP BLENDING
       if (renderContext->gl2psActive == GL2PS_NONE) 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
       else
-	gl2psBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        gl2psBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
       // ENABLE BLENDING
       glEnable(GL_BLEND);
       
     }
     
-    // edge adjacent matrix
-
-    int adjacent[8][8] = { { 0 } };
-
     // draw back faces
-    // construct adjacent matrix
-
+    
     glBegin(GL_QUADS);
-
+    
     for(i=0;i<6;i++) {
-
+      
       const Vertex4 q = modelview * side[i].normal;
       const Vertex4 view(0.0f,0.0f,1.0f,0.0f);
       
       float cos_a = view * q;
-
+      
       const bool front = (cos_a >= 0.0f) ? true : false;
-
+      
       if (draw_front || !front) {
-
+        
         // draw face
-
+        
         glNormal3f(side[i].normal.x, side[i].normal.y, side[i].normal.z);
-
+        
         for(j=0;j<4;j++) {
-
-	  if (!front) {
-            // modify adjacent matrix
-
-            int from = side[i].vidx[j];
-            int to   = side[i].vidx[(j+1)%4];
-
-            adjacent[from][to] = 1;
-          }          
           
           // feed vertex
-
+          
           Vertex4& v = boxv[ side[i].vidx[j] ];
           glVertex3f(v.x, v.y, v.z);
-
+          
         }
-
+        
       }
     }
-
+    
     glEnd();
-
+    
     // setup mark length
-
+    
     Vertex marklen = getMarkLength(bbox);
-
-
+    
+    
     // draw axis and tickmarks
     // find contours
     
     glDisable(GL_LIGHTING);
-
+    
     material.useColor(1);
-
+    
     for(i=0;i<3;i++) {
-
       Vertex4 v;
       AxisInfo*  axis;
-      Edge*  axisedge;
-      int    nedges;
       float* valueptr;
       float  low, high;
-
       switch(i)
       {
         case 0:
           axis     = &xaxis;       
-          axisedge = xaxisedge;
-          nedges   = 4;
           valueptr = &v.x;
           low      = bbox.vmin.x;
           high     = bbox.vmax.x;
           break;
         case 1:
           axis     = &yaxis;
-          axisedge = yaxisedge;
-          nedges   = 8;
           valueptr = &v.y;
           low      = bbox.vmin.y;
           high     = bbox.vmax.y;
           break;
         case 2:
-	default:
+        default:
           axis     = &zaxis;
-          axisedge = zaxisedge;
-          nedges   = 4;
           valueptr = &v.z;
           low      = bbox.vmin.z;
           high     = bbox.vmax.z;
           break;
       }
-
       if (axis->mode == AXIS_NONE)
         continue;
-
-      // search z-nearest contours
       
-      float d = FLT_MAX;
-      Edge* edge = NULL;
-
-      for(j=0;j<nedges;j++) {
-  
-        int from = axisedge[j].from;
-        int to   = axisedge[j].to;
-
-        if ((adjacent[from][to] == 1) && (adjacent[to][from] == 0)) {
-
-          // found contour
-          
-          float dtmp = -(eyev[from].z + eyev[to].z)/2.0f;
-
-          if (dtmp < d) {
-  
-            // found near contour
-
-            d = dtmp;
-            edge = &axisedge[j];
-
-          }
-
-        } 
-
-      }
-
+      Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, *this, i); 
       if (edge) {
-
+        
         v = boxv[edge->from];
-
+        
         switch (axis->mode) {
-          case AXIS_CUSTOM:
-            {
-              // draw axis and tickmarks
-
-              StringArrayIterator iter(&axis->textArray);
-
-
-              for (iter.first(), j=0; (j<axis->nticks) && (!iter.isDone());j++, iter.next()) {
-
-                float value = axis->ticks[j];
-
-                // clip marks
-
-                if ((value >= low) && (value <= high)) {
-                
-                  String string = iter.getCurrent();
-                  *valueptr = value;
-                  axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
-                }
-
-              }
-            }
-            break;
-          case AXIS_LENGTH:
-            {
-              float delta = (axis->len>1) ? (high-low)/((axis->len)-1) : 0;
-
-              for(int k=0;k<axis->len;k++)
-              {
-                float value = low + delta * (float)k;
-                
-                *valueptr = value;
-
-                char text[32];
-                sprintf(text, "%.4g", value);
-
-                String string(static_cast<int>(strlen(text)),text);
-
-                axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
-              }
-            }
-            break;
-          case AXIS_UNIT:
-            {
-              float value =  ( (float) ( (int) ( ( low+(axis->unit-1) ) / (axis->unit) ) ) ) * (axis->unit);
-              while(value < high) {
-
-                *valueptr = value;
-
-                char text[32];
-                sprintf(text, "%.4g", value);
-
-                String s (static_cast<int>(strlen(text)),text);
-
-                axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
-
-                value += axis->unit;
-              }
-            }
-            break;
-          case AXIS_PRETTY:
-            {
-              /* These are the defaults from the R pretty() function, except min_n is 3 */
-              double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
-              int ndiv=axis->len, min_n=3, eps_correction=0;
-              
-              high_u_fact[0] = 1.5;
-              high_u_fact[1] = 2.75;
-              axis->unit = static_cast<float>(R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
-                                     eps_correction, 0));
-              
-              for (int i=(int)lo; i<=up; i++) {
-                float value = i*axis->unit;
-		            if (value >= low && value <= high) {
-                  *valueptr = value;
-
-                  char text[32];
-                  sprintf(text, "%.4g", value);
-
-                  String s (static_cast<int>(strlen(text)),text);
-
-                  axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
-		}
-              }
-            }
-            break;
+        case AXIS_CUSTOM:
+        {
+          // draw axis and tickmarks
+          
+          StringArrayIterator iter(&axis->textArray);
+          
+          
+          for (iter.first(), j=0; (j<axis->nticks) && (!iter.isDone());j++, iter.next()) {
             
+            float value = axis->ticks[j];
+            
+            // clip marks
+            
+            if ((value >= low) && (value <= high)) {
+              
+              String string = iter.getCurrent();
+              *valueptr = value;
+              axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
+            }
+            
+          }
+        }
+        break;
+        case AXIS_LENGTH:
+        {
+          float delta = (axis->len>1) ? (high-low)/((axis->len)-1) : 0;
+  
+          for(int k=0;k<axis->len;k++)
+          {
+            float value = low + delta * (float)k;
+  
+            *valueptr = value;
+  
+            char text[32];
+            sprintf(text, "%.4g", value);
+              
+            String string(static_cast<int>(strlen(text)),text);
+              
+            axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
+          }
+        }
+        break;
+        case AXIS_UNIT:
+        {
+          float value =  ( (float) ( (int) ( ( low+(axis->unit-1) ) / (axis->unit) ) ) ) * (axis->unit);
+          while(value < high) {
+                
+            *valueptr = value;
+                
+            char text[32];
+            sprintf(text, "%.4g", value);
+                
+            String s (static_cast<int>(strlen(text)),text);
+                
+            axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
+                
+            value += axis->unit;
+          }
+        }
+        break;
+        case AXIS_PRETTY:
+        {
+        /* These are the defaults from the R pretty() function, except min_n is 3 */
+          double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
+          int ndiv=axis->len, min_n=3, eps_correction=0;
+                
+          high_u_fact[0] = 1.5;
+          high_u_fact[1] = 2.75;
+          axis->unit = static_cast<float>(R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+                                                    eps_correction, 0));
+                
+          for (int i=(int)lo; i<=up; i++) {
+            float value = i*axis->unit;
+            if (value >= low && value <= high) {
+              *valueptr = value;
+                    
+              char text[32];
+              sprintf(text, "%.4g", value);
+                    
+              String s (static_cast<int>(strlen(text)),text);
+                    
+              axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
+            }
+          }
+        }
+        break;
         }
         
-        for (std::vector<MarginalItem*>::iterator item = items.begin(); item != items.end() ; ++ item ) 
-          if (i == (*item)->coord) {
-            /* Create permutation to map at, line, pos to x, y, z */
-            int at = (*item)->coord, line, layer;
-            for (j = 0; j < 3; j++) {
-              if (edge->dir[j] != 0) {
-                line = j;
-                break;
-              }
-            }
-            layer = 2;
-            for (j = 0; j < 2; j++) {
-              if (at != j && line != j) {
-                layer = j;
-                break;
-              }
-            }
-            /* Set up translation and scaling */  
-            float scale[3], trans[3];
-            for (j = 0; j < 3; j++) {
-              if (j != i) {
-                int e = 1;
-                if ((*item)->item->isFloating() && v[j] < 0)
-                  e = -1;
-                e = e*(*item)->edge[j];
-                trans[j] = e == 1 ? bbox.vmax[j] : bbox.vmin[j];
-                scale[j] = marklen[j]*e;
-              } else {
-                trans[j] = 0.0;
-                scale[j] = 1.0;
-              }
-            }
-            /* It might make more sense to do this by
-             * modifying the MODELVIEW matrix, but then
-             * it's hard to see how to handle NA as "the middle".
-             */
-            TextSet* textset = (*item)->item;
-            Vertex newvertex, oldvertex;
-            VertexArray origvertices;
-            origvertices.alloc(textset->getElementCount());
-            for (j = 0; j < textset->getElementCount(); j++) {
-              oldvertex = textset->getVertex(j);
-              origvertices.setVertex(j, oldvertex);
-              if (oldvertex.missing())
-                newvertex[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0;
-              else
-                newvertex[at] = oldvertex.x*scale[at] + trans[at];
-              newvertex[line] = oldvertex.y*scale[line] + trans[line];
-              newvertex[layer] = oldvertex.z*scale[layer] + trans[layer];
-              textset->setVertex(j, newvertex);  
-            }
-            textset->draw(renderContext);
-            /* put back the originals */
-            for (j = 0; j < origvertices.size(); j++) {
-              oldvertex = origvertices[j];
-              textset->setVertex(j, oldvertex);
-            }
-
-            material.beginUse(renderContext); /* start using bbox material again */
-          }
-      }
+       }
     }
     material.endUse(renderContext);
     glPopAttrib();
@@ -744,10 +744,61 @@ void BBoxDeco::render(RenderContext* renderContext)
 #endif  
 }
 
-void BBoxDeco::addToMargin(int coord, int edge[3], int floating, TextSet* item, int nvertices, double* origvertices) {
-  item->setFloating(floating);
-  items.push_back(new MarginalItem(coord, edge, item));
+void BBoxDeco::drawPrimitiveInMargin(RenderContext* renderContext, TextSet* textset, int index, int coord, int code[3], bool floating) {
+  /* Create permutation to map at, line, pos to x, y, z */
+  int at = coord, line, layer, j;
+
+  Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, *this, coord);
+
+  for (j = 0; j < 3; j++) {
+    if (edge->dir[j] != 0) {
+      line = j;
+      break;
+    }
+  }
+  layer = 2;
+  for (j = 0; j < 2; j++) {
+    if (at != j && line != j) {
+      layer = j;
+      break;
+    }
+  }
+  /* Set up translation and scaling */
+  AABox bbox = renderContext->subscene->getBoundingBox();
+  Vertex marklen = getMarkLength(bbox);
+  float scale[3], trans[3];
+  for (j = 0; j < 3; j++) {
+    if (j != coord) {
+      int e = 1;
+      if (floating && edge->code[j] < 0)
+        e = -1;
+      e = e*code[j];
+      trans[j] = e == 1 ? bbox.vmax[j] : bbox.vmin[j];
+      scale[j] = marklen[j]*e;
+    } else {
+      trans[j] = 0.0;
+      scale[j] = 1.0;
+    }
+  }
+  /* It might make more sense to do this by
+   * modifying the MODELVIEW matrix, but then
+   * it's hard to see how to handle NA as "the middle".
+   */
+  Vertex newvertex, oldvertex;
+  oldvertex = textset->getVertex(index);
+  if (oldvertex.missing())
+    newvertex[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0;
+  else
+    newvertex[at] = oldvertex.x*scale[at] + trans[at];
+  newvertex[line] = oldvertex.y*scale[line] + trans[line];
+  newvertex[layer] = oldvertex.z*scale[layer] + trans[layer];
+  textset->setVertex(index, newvertex);
+  textset->drawPrimitive(renderContext, index);
+  /* put back the original */
+  textset->setVertex(index, oldvertex);
+
 }
+
 
 int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
@@ -769,9 +820,6 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
       return 2;
     case AXES:
       return 5;
-    case IDS:
-    case TYPES:
-      return items.size();
   }
   return SceneNode::getAttributeCount(bbox, attrib);
 }
@@ -779,7 +827,7 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
 void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
 {
   int n = getAttributeCount(bbox, attrib);
-  int ind = 0;
+
   if (first + count < n) n = first + count;
   if (first < n) {
     switch(attrib) {
@@ -856,13 +904,6 @@ void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
       *result++ = expand;
       *result++ = expand;
       return;
-    case IDS:
-      for (std::vector<MarginalItem*>::iterator i = items.begin(); i != items.end() ; ++ i ) {
-        if ( first <= ind  && ind < n )  
-          *result++ = (*i)->item->getObjID();
-        ind++;
-      }
-      return;
     }
     SceneNode::getAttribute(bbox, attrib, first, count, result);
   }
@@ -898,13 +939,6 @@ String BBoxDeco::getTextAttribute(AABox& bbox, AttribID attrib, int index)
           return zaxis.textArray[index];
         else
           return String(0, NULL);
-      }
-      break;
-    case TYPES:
-      if (index < n) {
-        char* buffer = R_alloc(20, 1);    
-        items[index]->item->getTypeName(buffer, 20);
-        return String(static_cast<int>(strlen(buffer)), buffer);
       }
       break;
     }

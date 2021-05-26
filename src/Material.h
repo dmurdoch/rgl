@@ -60,6 +60,9 @@ public:
   unsigned int magfilter;
   bool         envmap;
   bool         polygon_offset;
+  int          marginCoord;
+  int          edge[3];
+  bool         floating;
   
   double       glVersion;
 };

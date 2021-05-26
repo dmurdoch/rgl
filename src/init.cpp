@@ -130,7 +130,6 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   R_NativePrimitiveArgType aLIDDD[5] = {LGLSXP, INTSXP, REALSXP, REALSXP, REALSXP};
   R_NativePrimitiveArgType aIIDDD[5] = {INTSXP, INTSXP, REALSXP, REALSXP, REALSXP};
   R_NativePrimitiveArgType aIIDDID[6] = {INTSXP, INTSXP, REALSXP, REALSXP, INTSXP, REALSXP};
-  R_NativePrimitiveArgType aIIIIDI[6] = {INTSXP, INTSXP, INTSXP, INTSXP, REALSXP, INTSXP};
   R_NativePrimitiveArgType aLIDDDDI[7] = {LGLSXP, INTSXP, REALSXP, REALSXP, REALSXP, REALSXP, INTSXP};
   
   R_NativePrimitiveArgType aLIDDSDSDS[9] = {LGLSXP, INTSXP, REALSXP, REALSXP, STRSXP, REALSXP,
@@ -171,7 +170,6 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {"rgl_surface", 		(DL_FUNC) &rgl_surface, 13, aIIDDDDDDDDIII},
    {"rgl_spheres",		(DL_FUNC) &rgl_spheres, 5, aIIDDI},
    {"rgl_texts",		(DL_FUNC) &rgl_texts, 12, aIIDSDISIDIII},
-   {"rgl_addtomargin",  (DL_FUNC) &rgl_addtomargin, aIIIIDI},
    {"rgl_sprites",  		(DL_FUNC) &rgl_sprites, 6, aIIDDID},
    {"rgl_newsubscene",		(DL_FUNC) &rgl_newsubscene, 4, aIIII},
    {"rgl_setsubscene",		(DL_FUNC) &rgl_setsubscene, 1, aI},
@@ -224,7 +222,6 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_surface, 13),
    FUNDEF(rgl_spheres, 5),
    FUNDEF(rgl_texts, 12),
-   FUNDEF(rgl_addtomargin, 6),
    FUNDEF(rgl_sprites, 6),
    FUNDEF(rgl_newsubscene, 4),
    FUNDEF(rgl_setsubscene, 1),

@@ -45,12 +45,6 @@ struct AxisInfo {
   float  unit;
 };
 
-struct MarginalItem {
-  MarginalItem(int in_coord, int in_edge[3], TextSet* in_item);
-  int coord;
-  int edge[3];
-  TextSet* item;
-};
 
 class BBoxDeco : public SceneNode 
 {
@@ -65,8 +59,9 @@ public:
   String  getTextAttribute(AABox& bbox, AttribID attrib, int index);
   Material* getMaterial()  { return &material; }
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "bboxdeco", buflen); };
-  void addToMargin(int coord, int edge[3], int floating, TextSet* item, int nvertices, double* origvertices);
+  void drawPrimitiveInMargin(RenderContext* renderContext, TextSet* textset, int index, int coord, int code[3], bool floating);
 private:
+  struct BBoxDecoImpl;
   Material material;
   AxisInfo xaxis, yaxis, zaxis;
   float marklen_value;
@@ -77,7 +72,6 @@ private:
   static Material defaultMaterial;
   static AxisInfo defaultAxis;
   
-  std::vector<MarginalItem*> items;
 };
 
 } // namespace rgl

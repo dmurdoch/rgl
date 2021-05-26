@@ -39,9 +39,14 @@ Material::Material(Color bg, Color fg)
   minfilter(1),
   magfilter(1),
   envmap(false),
+  marginCoord(-1),
+  floating(false),
   glVersion(-1.0)
 {
   alphablend = ( ( bg.getAlphaf() < 1.0f ) || ( fg.getAlphaf() < 1.0f ) ) ? true : false;
+  edge[0] = -2;
+  edge[1] = -2;
+  edge[2] = -2;
 }
 
 void Material::setup()

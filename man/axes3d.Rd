@@ -55,8 +55,11 @@ a vector of arguments as described above may be used, in which case
 fixed axes are drawn using \code{axis3d}.
 
 As of \pkg{rgl} version 0.107.x, axis drawing has changed
-significantly.  By default, annotations are now attached
-to the bounding box decoration (see \code{\link{bbox3d}}).
+significantly.  Text drawn in the margins will
+adapt to the margins (see \code{\link{bbox3d}}).  The
+\code{edge} and \code{mode} parameters will be recorded
+in the \code{margin} and \code{floating} material
+properties for the object.
 
 If \code{mode = "fixed"}, they will be drawn on the
 specified edge.  If \code{mode = "floating"}, they will

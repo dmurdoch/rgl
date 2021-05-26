@@ -138,15 +138,31 @@ box3d <- function(...) {
 parseMargin <- function(code, mode = c("legacy", "fixed", "floating")) {
   stopifnot(length(code) == 1)
   mode <- match.arg(mode)
-  default <- if (mode == "floating") "+" else "-"
-  edge <- c(strsplit(code, '')[[1]], default, default)[1:3]
-  coord <- match(toupper(edge[1]), c('X', 'Y', 'Z')) 
-  edge <- match(edge, c("-", "+"))*2 - 3 # +/- 1
-  edge[is.na(edge)] <- 0
-  # Put the sign in the appropriate entry of edge
-  if (coord == 2) edge[1] <- edge[2]
-  else if (coord == 3) edge[1:2] <- edge[2:3]
-  list(coord = coord, edge = edge, mode = mode)
+  if (!nchar(code)) 
+    list(coord = 0, edge = c(0,0,0), mode = mode)
+  else {
+    default <- if (mode == "floating") "+" else "-"
+    edge <- c(strsplit(code, '')[[1]], default, default)[1:3]
+    coord <- match(toupper(edge[1]), c('X', 'Y', 'Z')) 
+    edge <- match(edge, c("-", "+"))*2 - 3 # +/- 1
+    edge[is.na(edge)] <- 0
+    # Put the sign in the appropriate entry of edge
+    if (coord == 2) edge[1] <- edge[2]
+    else if (coord == 3) edge[1:2] <- edge[2:3]
+    list(coord = coord, edge = edge, mode = mode)
+  }
+}
+
+deparseMargin <- function(margin) {
+  if (margin$coord %in% 1:3) {
+    coord <- margin$coord
+    edge <- margin$edge[-coord]
+    edge <- c("-", ".", "+")[edge + 2]
+    paste(c("x", "y", "z")[coord], 
+          edge[1],
+          edge[2], sep = "")
+  } else
+    ""
 }
 
 mtext3d <- function(text, edge, at = NULL, line = 0,
@@ -161,15 +177,17 @@ mtext3d <- function(text, edge, at = NULL, line = 0,
   
   ranges <- .getRanges()
   mode <- match.arg(mode)
-  margin <- parseMargin(edge, mode)
-  coord <- margin$coord
-  range <- ranges[[coord]]
   
   newlen <- max(length(text),length(line),length(at))
   text <- rep(text, len = newlen)
   line <- rep(line, len = newlen)
   
-  if (margin$mode == "legacy") {
+  if (mode == "legacy") {
+    margin <- parseMargin(edge, mode)
+    coord <- margin$coord
+    if (!(coord %in% 1:3))
+      stop("Bad edge spec.")
+    range <- ranges[[coord]]
     if (is.null(at)) at <- mean(range)
     at <- rep(at, len = newlen)
     if (all(is.na(pos))) {
@@ -196,9 +214,10 @@ mtext3d <- function(text, edge, at = NULL, line = 0,
       stop("'pos' is only used with mode 'legacy'")
     if (is.null(at))
       at <- NA
-    pos[is.na(pos)] <- 0
-    rgl.addtomargin(margin, text3d(x = cbind(at, line, level),
-                                   texts = text, ...))
+    text3d(x = cbind(at, line, level),
+           texts = text, margin = edge,
+           floating = mode == "floating", 
+           ...)
   }
 }   
 
@@ -229,19 +248,19 @@ title3d <- function(main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
     result <- c(result, sub=mtext3d(sub, 'x--', line = aline, mode = amode, ...))
   }
   if (!is.null(xlab)) {
-    aline <- ifelse(is.na(line), 3, line)
+    aline <- ifelse(is.na(line), 4, line)
     alevel <- ifelse(is.na(level), 0, level)
     amode <- if (is.null(mode)) "floating" else mode 
     result <- c(result, xlab=mtext3d(xlab, 'x', line = aline, level = alevel, mode = amode, ...))
   }
   if (!is.null(ylab)) {
-    aline <- ifelse(is.na(line), 3, line)
+    aline <- ifelse(is.na(line), 4, line)
     alevel <- ifelse(is.na(level), 0, level)
     amode <- if (is.null(mode)) "floating" else mode 
     result <- c(result, ylab=mtext3d(ylab, 'y', line = aline, level = alevel, mode = amode, ...))
   }
   if (!is.null(zlab)) {
-    aline <- ifelse(is.na(line), 3, line)
+    aline <- ifelse(is.na(line), 4, line)
     alevel <- ifelse(is.na(level), 0, level)
     amode <- if (is.null(mode)) "floating" else mode 
     result <- c(result, zlab=mtext3d(zlab, 'z', line = aline, level = alevel, mode = amode, ...))

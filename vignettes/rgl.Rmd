@@ -279,7 +279,7 @@ lwd       | 1       | width of lines in pixels
 
 Other properties include 
 "texmipmap", "texmagfilter", "texminfilter", "texenvmap", "fog", 
-"point\_antialias", "line\_antialias", "depth\_mask", "depth\_test" and "polygon_offset"; 
+"point\_antialias", "line\_antialias", "depth\_mask", "depth\_test", "polygon_offset", "margin" and "floating"; 
 see `r linkfn("material3d", "the help page", pkg = "rgl")` for details.
 
 There is also an `r indexfns("rgl.material")` function that works

@@ -95,8 +95,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
            "is_lines", "sprites_3d", 
            "is_subscene", "is_clipplanes",
            "fixed_size", "is_points", "is_twosided",
-           "fat_lines", "is_brush", "has_fog",
-           "floating")
+           "fat_lines", "is_brush", "has_fog")
   
   getFlags <- function(id) {
     

@@ -40,8 +40,6 @@ public:
   
   Vertex& getVertex(int index);
   void setVertex(int index, Vec3 value);
-  void setFloating(bool in_floating) { floating = in_floating;};
-  bool isFloating() { return floating; };
 
 private:
 
@@ -54,8 +52,9 @@ private:
   
   int npos;
   int* pos;
-  
-  bool floating;
+#ifndef RGL_NO_OPENGL  
+  bool drawingMargin;
+#endif
 };
 
 } // namespace rgl

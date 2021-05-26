@@ -33,6 +33,8 @@ rgl.material <- function(
   depth_mask   = TRUE,
   depth_test   = "less",
   polygon_offset = c(0.0, 0.0),
+  margin = "",
+  floating = FALSE,
   ...
 ) {
   # solid or diffuse component
@@ -95,13 +97,17 @@ rgl.material <- function(
   ncolor <- dim(color)[2]
   nalpha <- length(alpha)
 
+  margin <- parseMargin(margin, mode = if (floating) "floating" else "fixed")
+  
   # pack data
 
   idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, 
                           textype, texmipmap, texminfilter, texmagfilter, 
                           nalpha, ambient, specular, emission, texenvmap, 
                           point_antialias, line_antialias, 
-                          depth_mask, depth_test, color) )
+                          depth_mask, depth_test, 
+                          margin$coord - 1, margin$edge, floating,
+                          color) )
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
@@ -121,7 +127,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   if (missing(ncolors))
     ncolors <- if (id) rgl.attrib.count(id, "colors") else rgl.getcolorcount()
   
-  idata <- rep(0, 26+3*ncolors)
+  idata <- rep(-1, 31+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -149,9 +155,9 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[24 + 3*(seq_len(idata[1]))], 
-                   idata[25 + 3*(seq_len(idata[1]))], 
-                   idata[26 + 3*(seq_len(idata[1]))], maxColorValue = 255),
+  list(color = rgb(idata[29 + 3*(seq_len(idata[1]))], 
+                   idata[30 + 3*(seq_len(idata[1]))], 
+                   idata[31 + 3*(seq_len(idata[1]))], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=6, length=idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
@@ -175,7 +181,9 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        depth_mask = idata[24] == 1,
        depth_test = depthtests[idata[25] + 1],
        isTransparent = idata[26] == 1,
-       polygon_offset = ddata[4:5]
+       polygon_offset = ddata[4:5],
+       margin = deparseMargin(list(coord = idata[27] + 1, edge = idata[28:30])),
+       floating = idata[31] == 1
        )
                    
 }

@@ -985,8 +985,13 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.line_antialias = (idata[22]) ? true : false;
   mat.depth_mask = (idata[23]) ? true : false;
   mat.depth_test = idata[24];
+  mat.marginCoord = idata[25];
+  mat.edge[0] = idata[26];
+  mat.edge[1] = idata[27];
+  mat.edge[2] = idata[28];
+  mat.floating = idata[29];
   
-  int* colors   = &idata[25];
+  int* colors   = &idata[30];
 
   char*  pixmapfn = cdata[0];
 
@@ -1092,8 +1097,13 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[23] = mat->depth_mask ? 1 : 0;
   idata[24] = mat->depth_test;
   idata[25] = mat->isTransparent();
+  idata[26] = mat->marginCoord;
+  idata[27] = mat->edge[0];
+  idata[28] = mat->edge[1];
+  idata[29] = mat->edge[2];
+  idata[30] = mat->floating;
 
-  for (i=0, j=26; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=31; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat->colors.getColor(i).getRedub();
     idata[j++] = (int) mat->colors.getColor(i).getGreenub();
     idata[j++] = (int) mat->colors.getColor(i).getBlueub();
@@ -1138,52 +1148,6 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
 
   }
   *successptr = success;
-}
-
-void rgl::rgl_addtomargin(int* successptr, int* bboxdecoid, int* itemid,
-                          int* nvertices, double* origvertices,
-                          int* margin )
-{
-  *successptr = RGL_FAIL;
-  
-  Device* device;
-  
-  if (!deviceManager || !(device = deviceManager->getAnyDevice())) {
-    Rprintf("no device\n");
-    return;
-  }
-  
-  RGLView* rglview;
-  Scene* scene;
-
-  if (!(rglview = device->getRGLView()) || 
-      !(scene = rglview->getScene())) {
-    Rprintf("no scene\n");
-    return;
-  }
-  
-  SceneNode* bboxdeco; 
-  if (!(bboxdeco = scene->get_scenenode(*bboxdecoid)) ||
-      bboxdeco->getTypeID() != BBOXDECO) {
-    Rprintf("no bboxdeco\n");
-    return;
-  }
-    
-  TextSet* item;      
-  if (!(item = dynamic_cast< TextSet* >(scene->get_shape(*itemid)))) {
-    Rprintf("no item");
-    return;
-  }
-  
-  int coord = margin[0],
-      edge[3] = {margin[1], margin[2], margin[3]},
-      floating = margin[4];
-  
-  scene->hide(*itemid);
-  ((BBoxDeco*)bboxdeco)->addToMargin(coord, edge, floating,
-                                     item, *nvertices, origvertices);
-
-  *successptr = RGL_SUCCESS;
 }
 
 void rgl::rgl_bbox(int* successptr,

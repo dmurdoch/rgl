@@ -2,6 +2,8 @@
 
 #include "glgui.h"
 #include "R.h"
+#include "BBoxDeco.h"
+#include "subscene.h"
 #ifdef HAVE_FREETYPE
 #include <map>
 #endif
@@ -25,13 +27,14 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
                  const int* in_pos)
  : Shape(in_material, in_ignoreExtent), textArray(in_ntexts, in_texts),
    npos(in_npos)
+#ifndef RGL_NO_OPENGL
+  , drawingMargin(false)
+#endif  
 {
   int i;
 
   material.lit = false;
   material.colorPerVertex(false);
-  
-  floating = false;
 
   adjx = in_adjx;
   adjy = in_adjy;
@@ -84,6 +87,17 @@ void TextSet::drawBegin(RenderContext* renderContext)
 void TextSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
 #ifndef RGL_NO_OPENGL
+  if (material.marginCoord >= 0 && !drawingMargin) {
+    Subscene* subscene = renderContext->subscene;
+    BBoxDeco* bboxdeco = subscene->get_bboxdeco();
+    if (bboxdeco) {
+      drawingMargin = true;
+      bboxdeco->drawPrimitiveInMargin(renderContext, this, index, material.marginCoord, material.edge, material.floating );
+      drawingMargin = false;
+    }
+    return;
+  } 
+  
   GLFont* font;
 
   if (!vertexArray[index].missing()) {
@@ -120,7 +134,6 @@ int TextSet::getAttributeCount(AABox& bbox, AttribID attrib)
     case VERTICES: return textArray.size();
     case ADJ: return 1;
     case POS: return pos[0] ? npos : 0;
-    case FLAGS: return 1;
   }
   return Shape::getAttributeCount(bbox, attrib);
 }
@@ -155,9 +168,6 @@ void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
       while (first < n)
         *result++ = pos[first++];
       return;
-    case FLAGS:
-      *result++ = (double) floating;
-      break;  // there could be more flags, so fall through...      
     }
     Shape::getAttribute(bbox, attrib, first, count, result);
   }
