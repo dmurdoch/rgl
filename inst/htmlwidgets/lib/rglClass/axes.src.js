@@ -170,7 +170,7 @@
      
     rglwidgetClass.prototype.setTickLabels = function(obj) {
       var ticks = obj.ticks, mode, locations, labels = [],
-      start = 0, nticks, dim, i, limits, range, value;
+      start = 0, nticks, dim, i, limits, range, values = [], max;
       for (dim = 0; dim < 3; dim++) {
         mode = obj.axes.mode[dim];
         nticks = obj.axes.nticks[dim]; // used on input only for custom!
@@ -180,9 +180,15 @@
           limits = obj.bbox.slice(2*dim, 2*(dim+1));
           range = limits[1] - limits[0];
           locations = ticks.locations[dim];
+          max = -Infinity
           for (i = 0; i < locations.length; i++) {
-            value = limits[0] + range*locations[i];
-            labels.push(this.signif(value, 5).toString());
+            values.push(limits[0] + range*locations[i]);
+            max = Math.max(max, Math.abs(values[i]));
+          }
+          for (i = 0; i < locations.length; i++) {
+            if (Math.abs(values[i])/max < Math.pow(10, -5))
+              values[i] = 0;
+            labels.push(this.signif(values[i], 5).toString());
           }
           obj.axes.nticks[dim] = locations.length;  
         }
