@@ -61,8 +61,6 @@
     /**
      * Choose tick locations
      * @param { Object } obj - The bboxdeco
-     * @param { Array }  bbox - The bounding box limits
-     * @param { Array }  edges - Which edges get the ticks?
     */
     rglwidgetClass.prototype.getTickLocations = function(obj){
       var dim, i, limits, locations = [], result = [[],[],[]], value,
@@ -138,7 +136,7 @@
     };
     
     /**
-     * Set tick labels
+     * Set tick label positions
      * @param { Object } obj - the bbox object
     */
     rglwidgetClass.prototype.placeTickLabels = function(obj) {
@@ -168,9 +166,13 @@
       labels.initialized = false;
     };  
      
+    /**
+     * Set tick labels
+     * @param { Object } obj - the bbox object
+     */ 
     rglwidgetClass.prototype.setTickLabels = function(obj) {
       var ticks = obj.ticks, mode, locations, labels = [],
-      start = 0, nticks, dim, i, limits, range, values = [], max;
+      start = 0, nticks, dim, i, limits, range, values, max;
       for (dim = 0; dim < 3; dim++) {
         mode = obj.axes.mode[dim];
         nticks = obj.axes.nticks[dim]; // used on input only for custom!
@@ -180,7 +182,8 @@
           limits = obj.bbox.slice(2*dim, 2*(dim+1));
           range = limits[1] - limits[0];
           locations = ticks.locations[dim];
-          max = -Infinity
+          max = -Infinity;
+          values = [];
           for (i = 0; i < locations.length; i++) {
             values.push(limits[0] + range*locations[i]);
             max = Math.max(max, Math.abs(values[i]));
@@ -195,4 +198,56 @@
         start += nticks;
       }
       obj.labels.texts = labels;
+    };
+
+    /**
+     * Set bboxdeco bbox and center vector 
+     * @param { Object } obj - the bbox object
+     */ 
+    rglwidgetClass.prototype.setBbox = function(obj, subscene) {
+      var i, expand, center = [], bbox;
+      if (!obj.initialized)
+        this.initBBox(obj);
+        
+      bbox = [].concat(subscene.par3d.bbox);
+      for (i = 0; i < 3; i++) {
+        expand = obj.axes.expand[i];
+        center[i] = (bbox[2*i] + bbox[2*i + 1])/2;
+        bbox[2*i] = center[i] - expand*(bbox[2*i + 1] - center[i]);
+        bbox[2*i+1] = center[i] + expand*(bbox[2*i + 1] - center[i]);
+      }
+      obj.bbox = bbox;
+      obj.center = center;
+    };
+
+    rglwidgetClass.prototype.setBBoxMatrices = function(obj) {
+      var saved = {normMatrix: new CanvasMatrix4(this.normMatrix),
+                   mvMatrix: new CanvasMatrix4(this.mvMatrix)},
+          bboxNorm, bboxMV, bbox = obj.bbox, scale;
+          
+      bboxNorm = new CanvasMatrix4();
+      scale = [bbox[1]-bbox[0], bbox[3]-bbox[2], bbox[5]-bbox[4]];
+      bboxNorm.scale(1/scale[0], 1/scale[1], 1/scale[2]);
+      bboxNorm.multRight(saved.normMatrix);
+      this.normMatrix = bboxNorm;
+
+      bboxMV = new CanvasMatrix4();
+      bboxMV.scale(scale[0], scale[1], scale[2]);
+      bboxMV.translate(bbox[0], bbox[2], bbox[4]);
+      bboxMV.multRight(saved.mvMatrix);
+      this.mvMatrix = bboxMV;
+      
+      if (this.prmvMatrix === null)
+        saved.prmvMatrix = null;
+      else
+        saved.prmvMatrix = new CanvasMatrix4(this.prmvMatrix);
+        
+      this.setprmvMatrix();
+      return saved;
+    };
+    
+    rglwidgetClass.prototype.restoreBBoxMatrices = function(saved) {
+      this.normMatrix = saved.normMatrix;
+      this.mvMatrix   = saved.mvMatrix;
+      this.prmvMatrix = saved.prmvMatrix;
     };

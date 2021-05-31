@@ -537,3 +537,11 @@
       return parseFloat(x.toPrecision(digits));
     };
       
+    /**
+     * Check for NA, NaN, undefined, or null
+     * @param x
+     * @returns { bool }
+     */
+    rglwidgetClass.prototype.missing = function(x) {
+      return isNaN(x) || x === null || typeof(x) === "undefined";
+    };

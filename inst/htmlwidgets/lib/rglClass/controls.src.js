@@ -20,7 +20,7 @@
           fullset = [].concat(control.fullset),
           i, j, subsceneid,
           adds = [], deletes = [];
-      if (isNaN(value))
+      if (this.missing(value))
         value = control.value = 0;
       if (control.accumulate)
         for (i=0; i <= value; i++)

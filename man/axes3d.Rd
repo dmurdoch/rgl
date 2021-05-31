@@ -45,7 +45,7 @@ The rectangular prism holding the 3D plot has 12 edges.  They are identified
 using 3 character strings.  The first character (`x', `y', or `z') selects 
 the direction of the axis.  The next two characters are each `-' or `+',
 selecting the lower or upper end of one of the other coordinates.  If only
-one or two characters are given, the remaining characters default to `-'.  
+one or two characters are given, the remaining characters normally default to `-' (but with \code{mtext3d(..., mode = "floating")} the default is `+'; see below).  
 For example \code{edge = 'x+'} draws an x-axis at the high level of y and the
 low level of z.
 
@@ -54,19 +54,30 @@ The labels will move so that they do not obscure the data.  Alternatively,
 a vector of arguments as described above may be used, in which case
 fixed axes are drawn using \code{axis3d}.
 
-As of \pkg{rgl} version 0.107.x, axis drawing has changed
-significantly.  Text drawn in the margins will
+As of \pkg{rgl} version 0.106.21, axis drawing has changed
+significantly.  Text drawn in the margins by \code{mtext3d}
+will
 adapt to the margins (see \code{\link{bbox3d}}).  The
 \code{edge} and \code{mode} parameters will be recorded
 in the \code{margin} and \code{floating} material
 properties for the object.
 
 If \code{mode = "fixed"}, they will be drawn on the
-specified edge.  If \code{mode = "floating"}, they will
+specified edge.  
+
+If \code{mode = "floating"}, they will
 move as the axis labels move when the scene is rotated.
-If \code{mode = NULL} in \code{title3d}, the main title
-and subtitles will be fixed, while the axis labels will
-be floating.  
+The signs on the edge specification are interpreted as
+agreeing with the axis ticks `+' or disagreeing `-'.
+For example, \code{"x++"} will draw text on the x axis
+in the same edge as the ticks, while \code{"x--"} will draw
+on the opposite edge.
+
+The default is \code{mode = NULL} in \code{title3d}, in which case the main title
+and subtitles will be fixed at \code{line = 2} and 
+\code{level = 2} on edges \code{"x++"} and \code{"x--"}
+respectively, while the axis labels will
+be floating at \code{line = 4} and \code{level = 1}.
 
 The \code{at} parameter in \code{axis3d} is the location
 of the ticks, defaulting to \code{\link{pretty}} locations.
@@ -78,8 +89,8 @@ bounding box.
 The \code{line} parameter is the line counting out
 from the box in the same direction as the axis ticks,
 and \code{level} is the line out in the orthogonal
-direction.  The ticks run from line 0 to line 1, and the
-tick labels are drawn at line 2.  Both are drawn at level 0.
+direction.  The ticks run from \code{line = 0} to \code{line = 1}, and the
+tick labels are drawn at \code{line = 2}.  Both are drawn at level 0.  
 
 The final possible value for \code{mode} is
 \code{"legacy"}, which reproduces earlier \pkg{rgl}
@@ -95,8 +106,7 @@ The \code{level} parameter is ignored in legacy mode.
 }
 \value{
 These functions are called for their side effects.  They return the object IDs of
-objects added to the scene, or the bounding box object
-to which they were attached.
+objects added to the scene.
 }
 \author{ Duncan Murdoch }
 

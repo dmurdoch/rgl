@@ -18,8 +18,6 @@ user-specified callbacks in WebGL code.
   bounding box decoration, so they move as the scene
   is rotated.  
 * The `mtext3d()` argument order has changed.
-* So far the `mtext3d()` changes are not supported by
-  `rglwidget()`.
 
 ## Minor changes
 

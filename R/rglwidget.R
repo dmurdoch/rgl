@@ -264,7 +264,7 @@ rglwidget <- local({
            webgl,
            snapshot,
            shinyBrush = NULL, ...,
-           oldConvertBBox = TRUE) {
+           oldConvertBBox = FALSE) {
     
   if (missing(snapshot)) {
     if (missing(webgl)) {

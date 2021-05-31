@@ -249,19 +249,19 @@ title3d <- function(main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
   }
   if (!is.null(xlab)) {
     aline <- ifelse(is.na(line), 4, line)
-    alevel <- ifelse(is.na(level), 0, level)
+    alevel <- ifelse(is.na(level), 1, level)
     amode <- if (is.null(mode)) "floating" else mode 
     result <- c(result, xlab=mtext3d(xlab, 'x', line = aline, level = alevel, mode = amode, ...))
   }
   if (!is.null(ylab)) {
     aline <- ifelse(is.na(line), 4, line)
-    alevel <- ifelse(is.na(level), 0, level)
+    alevel <- ifelse(is.na(level), 1, level)
     amode <- if (is.null(mode)) "floating" else mode 
     result <- c(result, ylab=mtext3d(ylab, 'y', line = aline, level = alevel, mode = amode, ...))
   }
   if (!is.null(zlab)) {
     aline <- ifelse(is.na(line), 4, line)
-    alevel <- ifelse(is.na(level), 0, level)
+    alevel <- ifelse(is.na(level), 1, level)
     amode <- if (is.null(mode)) "floating" else mode 
     result <- c(result, zlab=mtext3d(zlab, 'z', line = aline, level = alevel, mode = amode, ...))
   }                  
