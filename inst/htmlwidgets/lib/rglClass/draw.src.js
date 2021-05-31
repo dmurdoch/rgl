@@ -871,9 +871,13 @@
           for (i=0; i < obj.vertices.length; i++) {
             origvertices.push(obj.vertices[i]);
             obj.vertices[i] = [0,0,0];
-            if (this.missing(origvertices[i][0])) {
+            if (this.missing(origvertices[i][0]))
               obj.vertices[i][coord] = center[coord];
-            } else 
+            else if (origvertices[i][0] === "-Inf")
+              obj.vertices[i][coord] = bbox[2*coord];
+            else if (origvertices[i][0] === "Inf")
+              obj.vertices[i][coord] = bbox[2*coord + 1];
+            else
               obj.vertices[i][coord] = origvertices[i][0];
             obj.vertices[i][line] = scale[line]*origvertices[i][1] + trans[line];
             obj.vertices[i][level] = scale[level]*origvertices[i][2] + trans[level];

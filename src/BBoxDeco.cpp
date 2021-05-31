@@ -788,6 +788,10 @@ void BBoxDeco::drawPrimitiveInMargin(RenderContext* renderContext, TextSet* text
   oldvertex = textset->getVertex(index);
   if (oldvertex.missing())
     newvertex[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0;
+  else if (oldvertex.x == -INFINITY)
+    newvertex[at] = bbox.vmin[at];
+  else if (oldvertex.x == INFINITY)
+    newvertex[at] = bbox.vmax[at];
   else
     newvertex[at] = oldvertex.x*scale[at] + trans[at];
   newvertex[line] = oldvertex.y*scale[line] + trans[line];

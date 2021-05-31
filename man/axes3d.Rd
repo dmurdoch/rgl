@@ -103,6 +103,11 @@ The \code{pos} parameter is only supported in legacy mode.  If it is a numeric v
 the direction of the axis and the tick marks, and the values of the
 other two coordinates in \code{pos} determine the position.  
 The \code{level} parameter is ignored in legacy mode.
+
+For \code{mtext3d} in \code{"fixed"} or \code{"floating"} mode,
+there are 3 special values for the \code{at} parameter: it may
+be \code{-Inf}, \code{NA} or \code{+Inf}, referring 
+to the bottom, middle or top of the given axis respectively.
 }
 \value{
 These functions are called for their side effects.  They return the object IDs of

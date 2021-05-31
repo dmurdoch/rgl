@@ -543,5 +543,6 @@
      * @returns { bool }
      */
     rglwidgetClass.prototype.missing = function(x) {
-      return isNaN(x) || x === null || typeof(x) === "undefined";
+      return x !== "-Inf" && x !== "Inf" &&
+             (isNaN(x) || x === null || typeof(x) === "undefined");
     };
