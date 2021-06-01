@@ -6,6 +6,7 @@
 #include "SceneNode.h"
 #include "Material.h"
 #include "RenderContext.h"
+#include "render.h"
 
 #include "opengl.h"
 #include "geom.h"
@@ -129,6 +130,13 @@ public:
    **/
   
   virtual bool isClipPlane() { return false; }
+
+  Vertex& getVertex(int index);
+  /**
+   * set a vertex
+   **/
+  void setVertex(int index, Vec3 value);
+  void setVertex(int index, double* v) { vertexArray.setVertex(index, v); }
   
 protected:
   /**
@@ -150,7 +158,9 @@ protected:
    * material
    **/
   Material material;
-private:
+
+  VertexArray vertexArray;   
+  
 #ifndef RGL_NO_OPENGL  
   /**
    * display list

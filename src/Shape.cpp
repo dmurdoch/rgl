@@ -140,3 +140,11 @@ void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, dou
     }
   }
 }
+
+Vertex& Shape::getVertex(int index) {
+  return vertexArray[index];
+}
+
+void Shape::setVertex(int index, Vec3 value) {
+  vertexArray.setVertex(index, value);  
+}

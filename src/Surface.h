@@ -58,7 +58,6 @@ public:
 private:
   Vertex getNormal(int ix, int iz);
 
-  VertexArray vertexArray;
   NormalArray normalArray;
   TexCoordArray texCoordArray;
   int nx, nz, coords[3], orientation, user_normals, user_textures;
