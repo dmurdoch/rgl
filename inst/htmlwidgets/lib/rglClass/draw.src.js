@@ -953,7 +953,7 @@
       if (drawing) {
         if (!obj.ticks.initialized) {
           obj.ticks.locations = this.getTickLocations(obj);
-          this.setTickLabels(obj);
+          obj.ticks.edges = undefined;
         }
         edges = this.getTickEdges(this.prmvMatrix);
         if (!obj.ticks.edges || edges.toString() !== obj.ticks.edges.toString()) {

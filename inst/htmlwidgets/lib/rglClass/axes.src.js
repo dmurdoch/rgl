@@ -172,8 +172,11 @@
      */ 
     rglwidgetClass.prototype.setTickLabels = function(obj) {
       var ticks = obj.ticks, mode, locations, labels = [],
-      start = 0, nticks, dim, i, limits, range, values, max;
+      start = 0, nticks, dim, i, limits, range, values, max,
+      edges = obj.ticks.edges;
       for (dim = 0; dim < 3; dim++) {
+        if (typeof edges[dim] === "undefined") 
+          continue;
         mode = obj.axes.mode[dim];
         nticks = obj.axes.nticks[dim]; // used on input only for custom!
         if (mode === "custom") 
