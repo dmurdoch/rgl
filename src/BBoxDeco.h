@@ -14,7 +14,6 @@
 #include "RenderContext.h"
 #include "String.h"
 #include "Material.h"
-#include "TextSet.h"
 
 namespace rgl {
 
@@ -59,7 +58,7 @@ public:
   String  getTextAttribute(AABox& bbox, AttribID attrib, int index);
   Material* getMaterial()  { return &material; }
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "bboxdeco", buflen); };
-  void drawPrimitiveInMargin(RenderContext* renderContext, TextSet* textset, int index, int coord, int code[3], bool floating);
+  Vec3 marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, int coord, int code[3], bool floating);
 private:
   struct BBoxDecoImpl;
   Material material;
@@ -71,7 +70,6 @@ private:
 
   static Material defaultMaterial;
   static AxisInfo defaultAxis;
-  
 };
 
 } // namespace rgl

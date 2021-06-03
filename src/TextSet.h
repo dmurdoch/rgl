@@ -48,9 +48,6 @@ private:
   
   int npos;
   int* pos;
-#ifndef RGL_NO_OPENGL  
-  bool drawingMargin;
-#endif
 };
 
 } // namespace rgl

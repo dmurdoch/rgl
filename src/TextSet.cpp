@@ -27,9 +27,6 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
                  const int* in_pos)
  : Shape(in_material, in_ignoreExtent), textArray(in_ntexts, in_texts),
    npos(in_npos)
-#ifndef RGL_NO_OPENGL
-  , drawingMargin(false)
-#endif  
 {
   int i;
 
@@ -87,23 +84,20 @@ void TextSet::drawBegin(RenderContext* renderContext)
 void TextSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
 #ifndef RGL_NO_OPENGL
-  if (material.marginCoord >= 0 && !drawingMargin) {
+  BBoxDeco* bboxdeco = 0;
+  if (material.marginCoord >= 0) {
     Subscene* subscene = renderContext->subscene;
-    BBoxDeco* bboxdeco = subscene->get_bboxdeco();
-    if (bboxdeco) {
-      drawingMargin = true;
-      bboxdeco->drawPrimitiveInMargin(renderContext, this, index, material.marginCoord, material.edge, material.floating );
-      drawingMargin = false;
-    }
-    return;
+    bboxdeco = subscene->get_bboxdeco();
   } 
   
   GLFont* font;
-
-  if (!vertexArray[index].missing()) {
+  Vertex pt = vertexArray[index];
+  if (bboxdeco)
+    pt = bboxdeco->marginVecToDataVec(pt, renderContext, material.marginCoord, material.edge, material.floating);
+  if (!pt.missing()) {
     GLboolean valid;
     material.useColor(index);
-    glRasterPos3f( vertexArray[index].x, vertexArray[index].y, vertexArray[index].z );
+    glRasterPos3f( pt.x, pt.y, pt.z );
     glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
     if (valid) {
       font = fonts[index % fonts.size()];

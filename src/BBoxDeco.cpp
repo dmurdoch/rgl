@@ -744,7 +744,7 @@ void BBoxDeco::render(RenderContext* renderContext)
 #endif  
 }
 
-void BBoxDeco::drawPrimitiveInMargin(RenderContext* renderContext, TextSet* textset, int index, int coord, int code[3], bool floating) {
+Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, int coord, int code[3], bool floating) {
   /* Create permutation to map at, line, pos to x, y, z */
   int at = coord, line, layer, j;
 
@@ -781,26 +781,21 @@ void BBoxDeco::drawPrimitiveInMargin(RenderContext* renderContext, TextSet* text
     }
   }
   /* It might make more sense to do this by
-   * modifying the MODELVIEW matrix, but then
-   * it's hard to see how to handle NA as "the middle".
+   * modifying the MODELVIEW matrix, but 
+   * I couldn't get that right for some reason...
    */
-  Vertex newvertex, oldvertex;
-  oldvertex = textset->getVertex(index);
-  if (oldvertex.missing())
-    newvertex[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0;
-  else if (oldvertex.x == -INFINITY)
-    newvertex[at] = bbox.vmin[at];
-  else if (oldvertex.x == INFINITY)
-    newvertex[at] = bbox.vmax[at];
+  Vertex result;
+  if (marginvec.missing())
+    result[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0;
+  else if (marginvec.x == -INFINITY)
+    result[at] = bbox.vmin[at];
+  else if (marginvec.x == INFINITY)
+    result[at] = bbox.vmax[at];
   else
-    newvertex[at] = oldvertex.x*scale[at] + trans[at];
-  newvertex[line] = oldvertex.y*scale[line] + trans[line];
-  newvertex[layer] = oldvertex.z*scale[layer] + trans[layer];
-  textset->setVertex(index, newvertex);
-  textset->drawPrimitive(renderContext, index);
-  /* put back the original */
-  textset->setVertex(index, oldvertex);
-
+    result[at] = marginvec.x*scale[at] + trans[at];
+  result[line] = marginvec.y*scale[line] + trans[line];
+  result[layer] = marginvec.z*scale[layer] + trans[layer];
+  return result;
 }
 
 
