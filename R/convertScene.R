@@ -426,7 +426,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       # in Javascript
     } else if (obj$type == "spheres")
       obj$centers <- obj$vertices
-    else if (obj$type == "text" && !is.null(obj$material$margin)) {
+    if (!is.null(obj$material$margin)) {
       margin <- parseMargin(obj$material$margin, if (isTRUE(obj$material$floating)) "floating" else "fixed")
       obj$material$margin <- margin$coord - 1
       obj$material$floating <- margin$mode == "floating"

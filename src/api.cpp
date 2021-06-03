@@ -536,7 +536,7 @@ void rgl::rgl_primitive(int* successptr, int* idata, double* vertex, double* nor
 
     int   type    = idata[0];
     int   nvertex = idata[1];
-    int   ignoreExtent = device->getIgnoreExtent();
+    int   ignoreExtent = device->getIgnoreExtent() || currentMaterial.marginCoord >= 0;
     int   useNormals = idata[2];
     int   useTexcoords = idata[3];
     
@@ -594,7 +594,7 @@ void rgl::rgl_surface(int* successptr, int* idata, double* x, double* z, double*
                                                    normal_x, normal_z, normal_y,
                                                    texture_s, texture_t,
                                                    coords, *orientation, flags,
-    						   device->getIgnoreExtent()) ) );
+                          device->getIgnoreExtent() || currentMaterial.marginCoord >= 0) ) );
 
     CHECKGLERROR;
   }
@@ -614,7 +614,8 @@ void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radiu
     int nradius = idata[1];
 
     success = as_success( device->add( new SphereSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent(), *fastTransparency != 0) ) );
+    						     device->getIgnoreExtent() || currentMaterial.marginCoord >= 0,
+    						     *fastTransparency != 0) ) );
     CHECKGLERROR;
   }
 
@@ -710,7 +711,8 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
     } else 
       shapelist = NULL;
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent(), count, shapelist, userMatrix,
+                     device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
+    						     count, shapelist, userMatrix,
     						     fixedSize, scene) ) );
     CHECKGLERROR;
   }
@@ -1143,7 +1145,8 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
     device->getFonts(fonts, *nfonts, family, style, cex, (bool) *useFreeType);
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
                                                    adj[0], adj[1],
-    						   device->getIgnoreExtent(), fonts, *npos, pos) ) );
+                   device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
+    						   fonts, *npos, pos) ) );
     CHECKGLERROR;
 
   }

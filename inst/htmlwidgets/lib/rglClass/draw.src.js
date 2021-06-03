@@ -618,19 +618,23 @@
           saveNorm = new CanvasMatrix4(this.normMatrix),
           saveMV = new CanvasMatrix4(this.mvMatrix),
           savePRMV = null,
-          result = [], idx;
+          result = [], idx, margin = obj.material.margin;
+ 
+      if (typeof margin !== "undefined")
+        if (!this.marginVecToDataVec(obj, subscene))
+          return [];
 
       if (!obj.initialized)
         this.initObj(obj);
 
       count = obj.vertexCount;
-      if (!count)
-        return result;
+      if (!count) 
+        return [];
         
       is_transparent = is_transparent || obj.someHidden;
 
       if (!this.opaquePass && !is_transparent)
-        return result;
+        return [];
         
       if (this.prmvMatrix !== null)
         savePRMV = new CanvasMatrix4(this.prmvMatrix);
@@ -759,17 +763,20 @@
           origMV = new CanvasMatrix4( this.mvMatrix ),
           origPRMV = null,
           pos, radius, userMatrix,
-          result = [];
+          result = [], margin = obj.material.margin;
+ 
+      if (typeof margin !== "undefined")
+        if (!this.marginVecToDataVec(obj, subscene))
+          return [];
 
-      if (!sprites3d) {
+      if (!sprites3d) 
         return this.drawSimple(obj, subscene, context);
-      }
       
       if (!obj.initialized)
         this.initObj(obj);
 
       if (!obj.vertexCount)
-        return result;
+        return [];
     
       is_transparent = is_transparent || obj.someHidden;
       
@@ -816,79 +823,19 @@
     };
     
     /**
-     * Draw text object
+     * Draw object that might be in margin
      * @param { Object } obj - text object to draw
      * @param { Object } subscene - subscene holding it
      * @param { Object } context - context for drawing
      */
-    rglwidgetClass.prototype.drawText = function(obj, subscene, context) {
-      var scale, trans, bbox,
-          result = [], i, center = [], edges,
-          coord = obj.material.margin, edge, bboxdeco,
-          at, line, level, origvertices, saved;
+    rglwidgetClass.prototype.drawMarginal = function(obj, subscene, context) {
+      var margin = obj.material.margin;
  
-      if (typeof coord === "undefined")
-        result = this.drawSimple(obj, subscene, context);
-      else {
-        bboxdeco = this.getBBoxDeco(subscene);
-        if (typeof bboxdeco !== "undefined") {
-          this.setBbox(bboxdeco, subscene);
-          bbox = bboxdeco.bbox;
-          center = bboxdeco.center;
+      if (typeof margin !== "undefined") 
+        if (!this.marginVecToDataVec(obj, subscene))
+          return [];
           
-          edge = [].concat(obj.material.edge);
-
-          if (obj.material.floating) {
-            saved = this.setBBoxMatrices(bboxdeco);
-            edges = this.getTickEdges(this.prmvMatrix)[coord];
-            this.restoreBBoxMatrices(saved);
-            if (typeof edges !== "undefined")
-              for (i = 0; i < 3; i++) {
-                if (edges[i] < 1) edges[i] = -1;
-                edge[i] = edge[i]*edges[i];
-              } else
-                return [];
-          }
-          at = coord;
-          switch(at) {
-            case 0: line = 1;
-                    level = 2;
-                    break;
-            case 1: line = 0;
-                    level = 2;
-                    break;
-            case 2: line = 0;
-                    level = 1;
-                    break;
-          }
-          scale = [edge[0]*(bbox[1]-bbox[0])/bboxdeco.axes.marklen[0], 
-                   edge[1]*(bbox[3]-bbox[2])/bboxdeco.axes.marklen[1], 
-                   edge[2]*(bbox[5]-bbox[4])/bboxdeco.axes.marklen[2]];
-          trans = [edge[0] === 1 ? bbox[1] : bbox[0],
-                   edge[1] === 1 ? bbox[3] : bbox[2],
-                   edge[2] === 1 ? bbox[5] : bbox[4]];
-          origvertices = [];
-          for (i=0; i < obj.vertices.length; i++) {
-            origvertices.push(obj.vertices[i]);
-            obj.vertices[i] = [0,0,0];
-            if (this.missing(origvertices[i][0]))
-              obj.vertices[i][coord] = center[coord];
-            else if (origvertices[i][0] === "-Inf")
-              obj.vertices[i][coord] = bbox[2*coord];
-            else if (origvertices[i][0] === "Inf")
-              obj.vertices[i][coord] = bbox[2*coord + 1];
-            else
-              obj.vertices[i][coord] = origvertices[i][0];
-            obj.vertices[i][line] = scale[line]*origvertices[i][1] + trans[line];
-            obj.vertices[i][level] = scale[level]*origvertices[i][2] + trans[level];
-            obj.initialized = false;
-          }
-
-          result = this.drawSimple(obj, subscene, context);
-          obj.vertices = origvertices;
-        }
-      }  
-      return result;
+      return this.drawSimple(obj, subscene, context);
     };
     
     /**
@@ -1000,13 +947,13 @@
       switch(obj.type) {
         case "abclines":
         case "surface":
+          return this.drawSimple(obj, subscene, context);
+        case "points":
+        case "lines":  
         case "triangles":
         case "quads":
-        case "lines":
-        case "points":
-          return this.drawSimple(obj, subscene, context);
         case "text":
-          return this.drawText(obj, subscene, context);
+          return this.drawMarginal(obj, subscene, context);
         case "linestrip":
           return this.drawLinestrip(obj, subscene, context);
         case "planes":

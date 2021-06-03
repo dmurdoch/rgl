@@ -254,3 +254,125 @@
       this.mvMatrix   = saved.mvMatrix;
       this.prmvMatrix = saved.prmvMatrix;
     };
+    
+    rglwidgetClass.prototype.getMarginParameters = function(bboxdeco, material) {
+      // Assume we've run this.setBbox(bboxdeco, subscene);
+      var bbox = bboxdeco.bbox,
+          edge = [].concat(material.edge),
+          saved, edges, i, 
+          at = material.margin, line, level, trans, scale;
+
+      if (material.floating) {
+        saved = this.setBBoxMatrices(bboxdeco);
+        edges = this.getTickEdges(this.prmvMatrix)[at];
+        this.restoreBBoxMatrices(saved);
+        if (typeof edges !== "undefined")
+          for (i = 0; i < 3; i++) {
+            if (edges[i] < 1) edges[i] = -1;
+              edge[i] = edge[i]*edges[i];
+        } else
+          return undefined;
+      }
+      switch(at) {
+      case 0: line = 1;
+              level = 2;
+              break;
+      case 1: line = 0;
+              level = 2;
+              break;
+      case 2: line = 0;
+              level = 1;
+              break;
+      }
+      scale = [edge[0]*(bbox[1]-bbox[0])/bboxdeco.axes.marklen[0], 
+               edge[1]*(bbox[3]-bbox[2])/bboxdeco.axes.marklen[1], 
+               edge[2]*(bbox[5]-bbox[4])/bboxdeco.axes.marklen[2]];
+      trans = [edge[0] === 1 ? bbox[1] : bbox[0],
+               edge[1] === 1 ? bbox[3] : bbox[2],
+               edge[2] === 1 ? bbox[5] : bbox[4]];
+      return {at: at, line: line, level: level, trans: trans, scale: scale};        
+    };
+    
+    rglwidgetClass.prototype.fixVertex = function(orig, parms, center, bbox) {
+      var vertex = [0,0,0];
+      if (this.missing(orig[0]))
+        vertex[parms.at] = center[parms.at];
+      else if (orig[0] === "-Inf")
+        vertex[parms.at] = bbox[2*parms.at];
+      else if (orig[0] === "Inf")
+        vertex[parms.at] = bbox[2*parms.at + 1];
+      else
+        vertex[parms.at] = orig[0];
+      vertex[parms.line] = parms.scale[parms.line]*orig[1] + 
+          parms.trans[parms.line];
+      vertex[parms.level] = parms.scale[parms.level]*orig[2] + 
+          parms.trans[parms.level];
+      return vertex;
+    };
+    
+    rglwidgetClass.prototype.fixNormal = function(orig, parms) {
+      var vertex = [0,0,0];
+      vertex[parms.at] = orig[0];
+      vertex[parms.line] = orig[1]/parms.scale[parms.line];
+      vertex[parms.level] = orig[2]/parms.scale[parms.level];
+      return vertex;
+    };
+
+    rglwidgetClass.prototype.marginVecToDataVec = function(obj, subscene) {
+      var bboxdeco = this.getBBoxDeco(subscene),
+          center, bbox, parms, parmsjson,
+          orig = obj.orig, 
+          vertices = [], normals = [],
+          centers = [], i, vertex;
+      if (typeof orig === "undefined") {
+        orig = {vert: obj.vertices,
+                norm: obj.normals,
+                cent: obj.centers,
+                doNormals: typeof obj.normals !== "undefined",
+                doCenters: typeof obj.centers !== "undefined",
+                parms: ""
+               };
+        obj.orig = orig;
+      }
+
+      if (typeof bboxdeco !== "undefined") {
+        this.setBbox(bboxdeco, subscene);
+        center = bboxdeco.center;
+        bbox = bboxdeco.bbox;
+        parms = this.getMarginParameters(bboxdeco, obj.material);
+        if (typeof parms === "undefined")
+          return false;  /* axis is not currently shown */
+        
+        parmsjson = JSON.stringify(parms);
+        if (parmsjson === orig.parms)
+          return true;  /* nothing has changed */
+    
+        orig.parms = parmsjson;
+        
+        for (i=0; i < orig.vert.length; i++) {
+          vertex = this.fixVertex(orig.vert[i], parms, center, bbox);
+          vertices.push(vertex);
+        }
+        obj.vertices = vertices;
+        if (orig.doNormals) {
+          for (i=0; i < orig.norm.length; i++) {
+            vertex = this.fixNormal(orig.norm[i], parms);
+            normals.push(vertex);
+          }
+          obj.normals = normals;
+        }
+        if (orig.doCenters) {
+          for (i=0; i < orig.cent.length; i++) {
+            vertex = this.fixVertex(orig.cent[i], parms, center, bbox);
+            centers.push(vertex);
+          }
+          obj.centers = centers;
+        }
+        
+        obj.initialized = false;
+        return true;
+      } else {
+        console.warn("bboxdeco not found");
+        return false;
+      }
+    };

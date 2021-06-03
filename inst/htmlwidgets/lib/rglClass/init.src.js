@@ -481,6 +481,10 @@
 
     if (!sprites_3d) {
       if (gl.isContextLost()) return;
+      if (typeof obj.prog !== "undefined") {
+        gl.deleteProgram(obj.prog);
+        obj.prog = undefined;
+      }
       obj.prog = gl.createProgram();
       gl.attachShader(obj.prog, this.getShader( gl.VERTEX_SHADER,
         this.getVertexShader(obj) ));

@@ -88,7 +88,16 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
 void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
-  Vertex& o = vertex.get(index);
+  Vertex o;
+  BBoxDeco* bboxdeco = 0;
+  if (material.marginCoord >= 0) {
+    Subscene* subscene = renderContext->subscene;
+    bboxdeco = subscene->get_bboxdeco();
+  }  
+  if (bboxdeco) 
+    o = bboxdeco->marginVecToDataVec(vertex.get(index), renderContext, &material);
+  else
+    o = vertex.get(index);
   float   s = size.getRecycled(index);
   if (o.missing() || ISNAN(s)) return;
 

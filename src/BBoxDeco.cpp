@@ -521,6 +521,42 @@ struct BBoxDeco::BBoxDecoImpl {
     return edge;
   }
   
+  static void setMarginParameters(RenderContext* renderContext, BBoxDeco& bboxdeco, Material* material,
+                                  int *at, int* line, int* layer,
+                                  Vec3* trans, Vec3* scale) {
+    *at = material->marginCoord;
+    Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, bboxdeco, *at);
+    int j;
+    for (j = 0; j < 3; j++) {
+      if (edge->dir[j] != 0) {
+        *line = j;
+        break;
+      }
+    }
+    *layer = 2;
+    for (j = 0; j < 2; j++) {
+      if (*at != j && *line != j) {
+        *layer = j;
+        break;
+      }
+    }
+    /* Set up translation and scaling */
+    AABox bbox = renderContext->subscene->getBoundingBox();
+    Vertex marklen = bboxdeco.getMarkLength(bbox);
+    for (j = 0; j < 3; j++) {
+      if (j != *at) {
+        int e = 1;
+        if (material->floating && edge->code[j] < 0)
+          e = -1;
+        e = e*material->edge[j];
+        (*trans)[j] = e == 1 ? bbox.vmax[j] : bbox.vmin[j];
+        (*scale)[j] = marklen[j]*e;
+      } else {
+        (*trans)[j] = 0.0;
+        (*scale)[j] = 1.0;
+      }
+    }
+  };
 };
 
 void BBoxDeco::render(RenderContext* renderContext)
@@ -744,47 +780,19 @@ void BBoxDeco::render(RenderContext* renderContext)
 #endif  
 }
 
-Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, int coord, int code[3], bool floating) {
+Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, Material* material) {
   /* Create permutation to map at, line, pos to x, y, z */
-  int at = coord, line, layer, j;
-
-  Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, *this, coord);
-
-  for (j = 0; j < 3; j++) {
-    if (edge->dir[j] != 0) {
-      line = j;
-      break;
-    }
-  }
-  layer = 2;
-  for (j = 0; j < 2; j++) {
-    if (at != j && line != j) {
-      layer = j;
-      break;
-    }
-  }
-  /* Set up translation and scaling */
-  AABox bbox = renderContext->subscene->getBoundingBox();
-  Vertex marklen = getMarkLength(bbox);
-  float scale[3], trans[3];
-  for (j = 0; j < 3; j++) {
-    if (j != coord) {
-      int e = 1;
-      if (floating && edge->code[j] < 0)
-        e = -1;
-      e = e*code[j];
-      trans[j] = e == 1 ? bbox.vmax[j] : bbox.vmin[j];
-      scale[j] = marklen[j]*e;
-    } else {
-      trans[j] = 0.0;
-      scale[j] = 1.0;
-    }
-  }
+  int at, line, layer;
+  Vec3 trans, scale;
+  BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
+        &at, &line, &layer,
+        &trans, &scale); 
   /* It might make more sense to do this by
    * modifying the MODELVIEW matrix, but 
    * I couldn't get that right for some reason...
    */
   Vertex result;
+  AABox bbox = renderContext->subscene->getBoundingBox();
   if (marginvec.missing())
     result[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0;
   else if (marginvec.x == -INFINITY)
@@ -798,6 +806,18 @@ Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, 
   return result;
 }
 
+Vec3 BBoxDeco::marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderContext, Material* material) {
+  int at, line, layer;
+  Vec3 trans, scale;
+  BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
+                                    &at, &line, &layer,
+                                    &trans, &scale); 
+  Vertex result;
+  result[at] = marginvec.x/scale[at];
+  result[line] = marginvec.y/scale[line];
+  result[layer] = marginvec.z/scale[layer];
+  return result;
+}
 
 int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 
 {
