@@ -93,7 +93,7 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
   GLFont* font;
   Vertex pt = vertexArray[index];
   if (bboxdeco)
-    pt = bboxdeco->marginVecToDataVec(pt, renderContext, material.marginCoord, material.edge, material.floating);
+    pt = bboxdeco->marginVecToDataVec(pt, renderContext, &material);
   if (!pt.missing()) {
     GLboolean valid;
     material.useColor(index);

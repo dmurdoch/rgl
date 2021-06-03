@@ -58,7 +58,8 @@ public:
   String  getTextAttribute(AABox& bbox, AttribID attrib, int index);
   Material* getMaterial()  { return &material; }
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "bboxdeco", buflen); };
-  Vec3 marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, int coord, int code[3], bool floating);
+  Vec3 marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, Material* material);
+  Vec3 marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderContext, Material* material);
 private:
   struct BBoxDecoImpl;
   Material material;

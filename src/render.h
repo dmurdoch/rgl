@@ -24,6 +24,8 @@ public:
 
   void alloc(int in_nvertex);
   void copy(int in_nvertex, double* vertices);
+  void copy(int in_nvertex, float* vertices);
+  void duplicate(VertexArray source);
   void beginUse();
   void endUse();
   Vertex& operator[](int index);

@@ -116,7 +116,8 @@ protected:
   int nverticesperelement;
   int nvertices;
   int nprimitives;
-  VertexArray vertexArray;
+  VertexArray vertexArray,  /* the vertices given by the user */
+              verticesTodraw; /* the margin vertices in data coords */
   bool hasmissing; 	/* whether any vertices contain missing values */
 };
 
@@ -178,7 +179,7 @@ protected:
   /* set up normals */
   void initNormals(double* in_normals);
 private:
-  NormalArray normalArray;
+  NormalArray normalArray, normalsToDraw;
   TexCoordArray texCoordArray;
 };
 

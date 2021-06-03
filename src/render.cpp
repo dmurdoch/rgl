@@ -55,6 +55,26 @@ void VertexArray::copy(int in_nvertex, double* vertices)
   }
 }
 
+void VertexArray::copy(int in_nvertex, float* vertices)
+{
+  if (in_nvertex > nvertex) {
+    warning("Only %d values copied", nvertex);
+    in_nvertex = nvertex;
+  }
+  
+  for(int i=0;i<in_nvertex;i++) {
+    arrayptr[i*3+0] = (float) vertices[i*3+0];
+    arrayptr[i*3+1] = (float) vertices[i*3+1];
+    arrayptr[i*3+2] = (float) vertices[i*3+2];
+  }
+}
+
+void VertexArray::duplicate(VertexArray source)
+{
+  alloc(source.size());
+  copy(nvertex, source.arrayptr);
+}
+
 void VertexArray::setVertex(int index, double* v) {
   arrayptr[index*3+0] = (float) v[0];
   arrayptr[index*3+1] = (float) v[1];

@@ -1,4 +1,6 @@
 #include "PrimitiveSet.h"
+#include "BBoxDeco.h"
+#include "subscene.h"
 #include "R.h"
 
 using namespace rgl;
@@ -74,7 +76,19 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
   Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
   SAVEGLERROR;
-  vertexArray.beginUse();
+  BBoxDeco* bboxdeco = 0;
+  if (material.marginCoord >= 0) {
+    Subscene* subscene = renderContext->subscene;
+    bboxdeco = subscene->get_bboxdeco();
+  }
+  if (bboxdeco) {
+    invalidateDisplaylist();
+    verticesTodraw.alloc(vertexArray.size());
+    for (int i=0; i < vertexArray.size(); i++)
+      verticesTodraw.setVertex(i, bboxdeco->marginVecToDataVec(vertexArray[i], renderContext, &material) );
+    verticesTodraw.beginUse();
+  } else
+    vertexArray.beginUse();
   SAVEGLERROR;
 }
 
@@ -265,11 +279,23 @@ void FaceSet::initNormals(double* in_normals)
 void FaceSet::drawBegin(RenderContext* renderContext)
 {  
   PrimitiveSet::drawBegin(renderContext);
-
+  
   if (material.lit) {
     if (normalArray.size() < nvertices)
       initNormals(NULL);
-    normalArray.beginUse();
+    
+    BBoxDeco* bboxdeco = 0;
+    if (material.marginCoord >= 0) {
+      Subscene* subscene = renderContext->subscene;
+      bboxdeco = subscene->get_bboxdeco();
+    }
+    if (bboxdeco) {
+      normalsToDraw.alloc(normalArray.size());
+      for (int i=0; i < normalArray.size(); i++)
+        normalsToDraw.setVertex(i, bboxdeco->marginNormalToDataNormal(normalArray[i], renderContext, &material) );
+      normalsToDraw.beginUse();
+    } else
+      normalArray.beginUse();
   }
   texCoordArray.beginUse();
 }

@@ -13,10 +13,10 @@ the mouse wheel.
 user-specified callbacks in WebGL code.
 * Added Javascript code for support of movable 
   axis labels in `bboxdeco` objects.
-* `mtext3d()` and related functions (`decorate3d()`,
-  `title3d()`, etc.) can now attach annotations to the
-  bounding box decoration, so they move as the scene
-  is rotated.  
+* Most drawing functions can now draw in the margins
+  using new material properties `margin` and `floating`,
+  with objects that move as the bounding box changes.
+  See `?mtext3d` for details.
 * The `mtext3d()` argument order has changed.
 
 ## Minor changes
