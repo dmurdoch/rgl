@@ -734,7 +734,12 @@
      * @param { array } context 
      */    
     rglwidgetClass.prototype.drawLinestrip = function(obj, subscene, context) {
-      var origIndices, i, j;
+      var origIndices, i, j, margin = obj.material.margin;
+ 
+      if (typeof margin !== "undefined") 
+        if (!this.marginVecToDataVec(obj, subscene))
+          return [];
+          
       if (this.opaquePass)
         return this.drawSimple(obj, subscene, context);
       origIndices = context.indices.slice();

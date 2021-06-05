@@ -2,7 +2,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
                          snapshot = FALSE,
-                         oldConvertBBox = TRUE) {
+                         oldConvertBBox = FALSE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   

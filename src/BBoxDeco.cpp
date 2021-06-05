@@ -522,7 +522,7 @@ struct BBoxDeco::BBoxDecoImpl {
   }
   
   static void setMarginParameters(RenderContext* renderContext, BBoxDeco& bboxdeco, Material* material,
-                                  int *at, int* line, int* layer,
+                                  int *at, int* line, int* level,
                                   Vec3* trans, Vec3* scale) {
     *at = material->marginCoord;
     Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, bboxdeco, *at);
@@ -533,10 +533,10 @@ struct BBoxDeco::BBoxDecoImpl {
         break;
       }
     }
-    *layer = 2;
+    *level = 2;
     for (j = 0; j < 2; j++) {
       if (*at != j && *line != j) {
-        *layer = j;
+        *level = j;
         break;
       }
     }
@@ -782,10 +782,10 @@ void BBoxDeco::render(RenderContext* renderContext)
 
 Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, Material* material) {
   /* Create permutation to map at, line, pos to x, y, z */
-  int at, line, layer;
+  int at, line, level;
   Vec3 trans, scale;
   BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
-        &at, &line, &layer,
+        &at, &line, &level,
         &trans, &scale); 
   /* It might make more sense to do this by
    * modifying the MODELVIEW matrix, but 
@@ -802,20 +802,20 @@ Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, 
   else
     result[at] = marginvec.x*scale[at] + trans[at];
   result[line] = marginvec.y*scale[line] + trans[line];
-  result[layer] = marginvec.z*scale[layer] + trans[layer];
+  result[level] = marginvec.z*scale[level] + trans[level];
   return result;
 }
 
 Vec3 BBoxDeco::marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderContext, Material* material) {
-  int at, line, layer;
+  int at, line, level;
   Vec3 trans, scale;
   BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
-                                    &at, &line, &layer,
+                                    &at, &line, &level,
                                     &trans, &scale); 
   Vertex result;
   result[at] = marginvec.x/scale[at];
   result[line] = marginvec.y/scale[line];
-  result[layer] = marginvec.z/scale[layer];
+  result[level] = marginvec.z/scale[level];
   return result;
 }
 
