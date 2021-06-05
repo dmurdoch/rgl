@@ -55,6 +55,11 @@ public:
   virtual void drawEnd(RenderContext* renderContext);
   
   /**
+   * set a vertex
+   **/
+  const void setVertex(int index, double* v) { vertexArray.setVertex(index, v); }
+
+  /**
    * setup all vertices
    **/
   void initPrimitiveSet(int in_nvertices, double* in_vertices);

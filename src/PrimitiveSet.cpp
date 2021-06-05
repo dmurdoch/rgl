@@ -279,7 +279,7 @@ void FaceSet::initNormals(double* in_normals)
 void FaceSet::drawBegin(RenderContext* renderContext)
 {  
   PrimitiveSet::drawBegin(renderContext);
-  
+
   if (material.lit) {
     if (normalArray.size() < nvertices)
       initNormals(NULL);

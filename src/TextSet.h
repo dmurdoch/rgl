@@ -32,14 +32,15 @@ public:
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   String getTextAttribute(AABox& bbox, AttribID attrib, int index);
     
-  Vertex getPrimitiveCenter(int index) { return getVertex(index); }
+  Vertex getPrimitiveCenter(int index) { return vertexArray[index]; }
 
   void drawBegin(RenderContext* renderContext);
   void drawPrimitive(RenderContext* renderContext, int index);
   void drawEnd(RenderContext* renderContext);
-  
+
 private:
-  
+
+  VertexArray vertexArray;
   StringArray textArray;
   FontArray fonts;
 
