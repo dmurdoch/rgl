@@ -23,6 +23,9 @@ user-specified callbacks in WebGL code.
 * Code to work with pre-1.33 versions of `knitr` has now
   been removed.
 * Added documentation of Javascript to web page.
+* The handling of the `RGL_DEBUGGING` environment variable
+  has changed:  now it must look like `TRUE` to trigger
+  Javascript debugging mode.
 
 ## Bug fixes
 

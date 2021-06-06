@@ -432,7 +432,7 @@ CanvasMatrixDependency <- makeDependency("CanvasMatrix4",
                                          src = "htmlwidgets/lib/CanvasMatrix",
                                          script = "CanvasMatrix.src.js",
                                          package = "rgl",
-                                         debugging = nchar(Sys.getenv("RGL_DEBUGGING", "")) > 0)
+                                         debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))
 
 rglDependency <- makeDependency("rglwidgetClass", 
                       src = "htmlwidgets/lib/rglClass",
@@ -451,4 +451,4 @@ rglDependency <- makeDependency("rglwidgetClass",
                                  "rglTimer.src.js"),
                       stylesheet = "rgl.css",
                       package = "rgl",
-                      debugging = nchar(Sys.getenv("RGL_DEBUGGING", "")) > 0)
+                      debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))
