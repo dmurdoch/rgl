@@ -427,9 +427,9 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     } else if (obj$type == "spheres")
       obj$centers <- obj$vertices
     if (!is.null(obj$material$margin)) {
-      margin <- parseMargin(obj$material$margin, if (isTRUE(obj$material$floating)) "floating" else "fixed")
+      margin <- parseMargin(obj$material$margin, obj$material$floating)
       obj$material$margin <- margin$coord - 1
-      obj$material$floating <- margin$mode == "floating"
+      obj$material$floating <- margin$floating
       obj$material$edge <- margin$edge
     }
     setObj(cids[i], obj)

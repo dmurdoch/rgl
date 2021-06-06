@@ -97,7 +97,7 @@ rgl.material <- function(
   ncolor <- dim(color)[2]
   nalpha <- length(alpha)
 
-  margin <- parseMargin(margin, mode = if (floating) "floating" else "fixed")
+  margin <- parseMargin(margin, floating = floating)
   
   # pack data
 
