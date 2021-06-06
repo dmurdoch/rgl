@@ -65,6 +65,7 @@
     rglwidgetClass.prototype.getTickLocations = function(obj){
       var dim, i, limits, locations = [], result = [[],[],[]], value,
           len, delta, range, bbox = obj.bbox;
+      obj.needsAxisCallback = false;
       for (dim = 0; dim < 3; dim++) {
         limits = bbox.slice(2*dim, 2*dim + 2);
         range = limits[1] - limits[0];
@@ -100,6 +101,10 @@
             if (0 < value && value < 1)
               result[dim].push(value);
           }
+          break;
+        case "user":
+          obj.needsAxisCallback = true;
+          break;
         }
       }
       return result;
@@ -374,5 +379,26 @@
       } else {
         console.warn("bboxdeco not found");
         return false;
+      }
+    };
+
+    rglwidgetClass.prototype.doAxisCallback = function(obj, edges) {
+      var i, j, code, axis, fn;
+      for (i = 0; i < 3; i++) {
+        if (obj.axes.mode[i] === "user") {
+          axis = ["x", "y", "z"][i];
+          if (typeof obj.callbacks !== "undefined" &&
+              typeof (code = obj.callbacks[axis]) !== "undefined") {
+            if (typeof edges[i] !== "undefined")
+              for (j = 0; j < 3; j++)
+                if (typeof edges[i][j] !== "undefined")
+                  axis = axis + (edges[i][j] > 0 ? "+" : "-");
+            
+          /* jshint evil:true */
+            fn = Function('"use strict";return (' + code + ')')();
+          /* jshint evil:false */
+            fn.call(this, axis);
+          }
+        }
       }
     };

@@ -908,6 +908,8 @@
           obj.ticks.edges = undefined;
         }
         edges = this.getTickEdges(this.prmvMatrix);
+        if (obj.needsAxisCallback) 
+          this.doAxisCallback(obj, edges);
         if (!obj.ticks.edges || edges.toString() !== obj.ticks.edges.toString()) {
           obj.ticks.edges = edges;
           this.getTickVertices(obj.ticks);

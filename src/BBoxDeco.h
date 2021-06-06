@@ -22,6 +22,7 @@ enum {
   AXIS_LENGTH,
   AXIS_UNIT,
   AXIS_PRETTY,
+  AXIS_USER,
   AXIS_NONE
 };
 
@@ -44,6 +45,7 @@ struct AxisInfo {
   float  unit;
 };
 
+typedef void (*userAxisPtr)(void *userData, int axis, int edge[3]);
 
 class BBoxDeco : public SceneNode 
 {
@@ -60,6 +62,8 @@ public:
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "bboxdeco", buflen); };
   Vec3 marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, Material* material);
   Vec3 marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderContext, Material* material);
+  void setAxisCallback(userAxisPtr fn, void * user, int axis);
+  void getAxisCallback(userAxisPtr *fn, void ** user, int axis);
 private:
   struct BBoxDecoImpl;
   Material material;
@@ -68,6 +72,10 @@ private:
   bool  marklen_fract;
   float expand;
   bool  draw_front;
+  
+  bool axisBusy;
+  userAxisPtr axisCallback[3];
+  void* axisData[3];
 
   static Material defaultMaterial;
   static AxisInfo defaultAxis;

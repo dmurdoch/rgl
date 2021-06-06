@@ -206,6 +206,7 @@ Function                             | Description
 `r indexfns("legend3d")`:            | set a legend for the scene
 `r indexfns("grid3d")`:              | add a reference grid to a graph
 `r indexfns("thigmophobe3d")`:       | choose label positions to avoid overlap
+`r indexfns("setAxisCallbacks")`:    | set user-defined axis annotations
 
 For example, to plot three random triangles, one could use
 ```{r fig.width=3, fig.height=3}
@@ -223,7 +224,9 @@ functions
 You should avoid using these functions, which do not
 work well with the higher level `*3d` functions.  See the 
 `r linkfn("r3d", text="?r3d", pkg="rgl")` help
-topic for details.
+topic for details.  The functions 
+`r indexfns(c("rgl.setAxisCallback", "rgl.getAxisCallback"))`
+provide low-level support for `r linkfn("setAxisCallbacks")`.
 
 ## Controlling the Look of the Scene
 
