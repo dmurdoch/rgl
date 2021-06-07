@@ -72,6 +72,8 @@ reference:
   - legend3d
   - grid3d
   - thigmophobe3d
+  - setAxisCallbacks
+  - rgl.setAxisCallback
 - title: Controlling the look of the scene
   desc: These functions control the way objects appear.
 - contents:

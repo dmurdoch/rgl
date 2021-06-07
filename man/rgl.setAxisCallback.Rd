@@ -56,12 +56,6 @@ Duncan Murdoch
 }
 
 \examples{
-xyz <- cbind(Sys.Date() + rnorm(10, mean = 10),
-             rnorm(10), rnorm(10))
-open3d()
-# The default plots dates numerically:
-plot3d(xyz, xlab = "Date", ylab = "y", zlab = "z")
-
 datelabels <- local({
 
   id <- 0
@@ -81,13 +75,21 @@ function(margin) {
     bbox <<- par3d("bbox")
   }
 }
-
 })
 
-rgl.setAxisCallback(1, datelabels)
+# This doesn't work in WebGL displays
 
-# Repeat the data 5 days later
-points3d(xyz + rep(c(5, 0, 0), each = 10))
-# Make the plot square again
-aspect3d(1,1,1)
+if (!in_pkgdown_example()) {
+  xyz <- cbind(Sys.Date() + rnorm(10, mean = 10),
+               rnorm(10), rnorm(10))
+  open3d()
+  # The default plots dates numerically:
+  plot3d(xyz, xlab = "Date", ylab = "y", zlab = "z")
+
+  rgl.setAxisCallback(1, datelabels)
+  # Repeat the data 5 days later
+  points3d(xyz + rep(c(5, 0, 0), each = 10))
+  # Make the plot square again
+  aspect3d(1,1,1)
+}
 }

@@ -129,4 +129,5 @@ window.arrowAxis = function(margin) {} ;
 xyz <- matrix(rnorm(60), ncol = 3)
 plot3d(xyz, xlab = "x", ylab = "y", zlab = "z")
 setAxisCallbacks(1:3, "arrowAxis", javascript = js)
+rglwidget()
 }
