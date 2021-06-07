@@ -57,7 +57,6 @@
 
 
 
-
   
 
   
@@ -80,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.21</span>
       </span>
     </div>
 
@@ -141,9 +140,9 @@
       <small>Source: <a href='https://github.com/dmurdoch/rgl/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rgl-010619" class="section level1">
-<h1 class="page-header" data-toc-text="0.106.19">
-<a href="#rgl-010619" class="anchor" aria-hidden="true"></a>rgl 0.106.19<small> Unreleased </small></h1>
+    <div id="rgl-010621" class="section level1">
+<h1 class="page-header" data-toc-text="0.106.21">
+<a href="#rgl-010621" class="anchor" aria-hidden="true"></a>rgl 0.106.21<small> Unreleased </small></h1>
 <div id="major-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#major-changes" class="anchor" aria-hidden="true"></a>Major changes</h2>
@@ -151,7 +150,11 @@
 <li>Added some <code>testthat</code> tests.</li>
 <li>Prepend a 5th entry to <code>par3d("mouseMode")</code>, corresponding to actions to take when no button is pressed.</li>
 <li>Allowed any of the mouse modes to be applied to the mouse wheel.</li>
-<li>Added the <code><a href="../reference/setUserCallbacks.html">setUserCallbacks()</a></code> function to allow user-specified callbacks in WebGL code.</li>
+<li>Added the <code><a href="../reference/setUserCallbacks.html">setUserCallbacks()</a></code> function to allow user-specified mouse callbacks in WebGL code.</li>
+<li>Added Javascript code for support of movable axis labels in <code>bboxdeco</code> objects.</li>
+<li>Most drawing functions can now draw in the margins using new material properties <code>margin</code> and <code>floating</code>, with objects that move as the bounding box changes. See <code><a href="../reference/axes3d.html">?mtext3d</a></code> for details.</li>
+<li>The <code><a href="../reference/axes3d.html">mtext3d()</a></code> argument order has changed.</li>
+<li>Added the <code><a href="../reference/setAxisCallbacks.html">setAxisCallbacks()</a></code> function to allow user-specified axis drawing routines.</li>
 </ul></div>
 <div id="minor-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -160,6 +163,7 @@
 <li>The NULL device can now specify <code>par3d("useFreeType")</code> and the result is saved.</li>
 <li>Code to work with pre-1.33 versions of <code>knitr</code> has now been removed.</li>
 <li>Added documentation of Javascript to web page.</li>
+<li>The handling of the <code>RGL_DEBUGGING</code> environment variable has changed: now it must look like <code>TRUE</code> to trigger Javascript debugging mode.</li>
 </ul></div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">

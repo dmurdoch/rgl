@@ -280,6 +280,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.select.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.setAxisCallback.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.texts.html</loc>
   </url>
   <url>
@@ -320,6 +323,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/selectpoints3d.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/setAxisCallbacks.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/setGraphicsDelay.html</loc>

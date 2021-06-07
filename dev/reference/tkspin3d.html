@@ -58,7 +58,6 @@
 <![endif]-->
 
 
-
 <!-- dependencies from examples -->
 
 
@@ -84,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.21</span>
       </span>
     </div>
 
@@ -151,7 +150,7 @@
   resize one or more RGL windows.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tkspin3d</span><span class='op'>(</span>dev <span class='op'>=</span> <span class='fu'><a href='open3d.html'>cur3d</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>tkspin3d</span><span class='op'>(</span>dev <span class='op'>=</span> <span class='fu'><a href='open3d.html'>cur3d</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,14 +174,14 @@ to <code><a href='tkspinControl.html'>tkspinControl</a></code> are passed there,
     <div class='dont-index'><p><code><a href='tkspinControl.html'>tkspinControl</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'>    <span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span></span>
 <span class='r-in'>    <span class='fu'><a href='3dobjects.html'>points3d</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, size<span class='op'>=</span><span class='fl'>3</span><span class='op'>)</span></span>
 <span class='r-in'>    <span class='fu'><a href='axes3d.html'>axes3d</a></span><span class='op'>(</span><span class='op'>)</span></span>
 <span class='r-in'>    <span class='fu'><a href='axes3d.html'>box3d</a></span><span class='op'>(</span><span class='op'>)</span></span>
 <span class='r-in'>    <span class='fu'>tkspin3d</span><span class='op'>(</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

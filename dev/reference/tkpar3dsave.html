@@ -58,7 +58,6 @@ to be saved." />
 <![endif]-->
 
 
-
 <!-- dependencies from examples -->
 
 
@@ -84,7 +83,7 @@ to be saved." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.21</span>
       </span>
     </div>
 
@@ -151,8 +150,8 @@ to be saved." />
 to be saved.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tkpar3dsave</span><span class='op'>(</span>params <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"userMatrix"</span>, <span class='st'>"scale"</span>, <span class='st'>"zoom"</span>, <span class='st'>"FOV"</span><span class='op'>)</span>,
-          times <span class='op'>=</span> <span class='cn'>FALSE</span>, dev <span class='op'>=</span> <span class='fu'><a href='open3d.html'>cur3d</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>tkpar3dsave</span><span class='op'>(</span>params <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"userMatrix"</span>, <span class='st'>"scale"</span>, <span class='st'>"zoom"</span>, <span class='st'>"FOV"</span><span class='op'>)</span>,
+          times <span class='op'>=</span> <span class='cn'>FALSE</span>, dev <span class='op'>=</span> <span class='fu'><a href='open3d.html'>cur3d</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,7 +194,7 @@ to the <code><a href='par3dinterp.html'>par3dinterp</a></code> function.</p>
     <div class='dont-index'><p><code><a href='par3d.html'>par3d</a></code>, <code><a href='par3dinterp.html'>par3dinterp</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Record a series of positions, and then play them back immediately</span></span>
 <span class='r-in'>  <span class='co'># at evenly spaced times, in an oscillating loop</span></span>
@@ -206,7 +205,7 @@ to the <code><a href='par3dinterp.html'>par3dinterp</a></code> function.</p>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># play3d( par3dinterp( tkpar3dsave(times=TRUE) ) )</span></span>
 <span class='r-in'><span class='op'>}</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

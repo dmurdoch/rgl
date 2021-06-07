@@ -60,7 +60,6 @@ integration." />
 
 
 
-
   
 
   
@@ -83,7 +82,7 @@ integration." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.21</span>
       </span>
     </div>
 
@@ -151,9 +150,9 @@ a <a href='https://rdrr.io/r/utils/Sweave.html'>Sweave</a> document.  These func
 integration.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Sweave.snapshot</span><span class='op'>(</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>Sweave.snapshot</span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'>rgl.Sweave</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>width</span>, <span class='va'>height</span>, <span class='va'>options</span>, <span class='va'>...</span><span class='op'>)</span>
-<span class='fu'>rgl.Sweave.off</span><span class='op'>(</span><span class='op'>)</span></pre>
+<span class='fu'>rgl.Sweave.off</span><span class='op'>(</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,7 +169,7 @@ when it opens the device.</p></td>
     <p>The <code>rgl.Sweave</code> function is not normally called by the user.  The user
 specifies it as the graphics driver when opening the code chunk, e.g. by
 using</p>
-<pre>&lt;&lt;fig = TRUE, pdf = FALSE, grdevice = rgl.Sweave, resolution = 100&gt;&gt;=</pre>
+<pre><code>&lt;&lt;fig = TRUE, pdf = FALSE, grdevice = rgl.Sweave, resolution = 100&gt;&gt;=</code></pre>
 
 <p>When the RGL device is closed at the end of the code chunk,
 <code>rgl.Sweave.off()</code> will be called automatically.  It

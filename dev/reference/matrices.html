@@ -59,7 +59,6 @@ vectors between homogeneous and Euclidean coordinates." />
 <![endif]-->
 
 
-
 <!-- dependencies from examples -->
 
 
@@ -85,7 +84,7 @@ vectors between homogeneous and Euclidean coordinates." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.21</span>
       </span>
     </div>
 
@@ -153,7 +152,7 @@ in the homogeneous coordinate system used by OpenGL, and translate
 vectors between homogeneous and Euclidean coordinates.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>identityMatrix</span><span class='op'>(</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>identityMatrix</span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'>scaleMatrix</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span><span class='op'>)</span>
 <span class='fu'>translationMatrix</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span><span class='op'>)</span>
 <span class='fu'>rotationMatrix</span><span class='op'>(</span><span class='va'>angle</span>, <span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span>, <span class='va'>matrix</span><span class='op'>)</span>
@@ -166,7 +165,7 @@ vectors between homogeneous and Euclidean coordinates.</p>
 <span class='fu'>translate3d</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span>, <span class='va'>...</span><span class='op'>)</span>
 <span class='fu'>rotate3d</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>angle</span>, <span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span>, <span class='va'>matrix</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>transform3d</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>matrix</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>transform3d</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>matrix</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -248,7 +247,7 @@ and produce a new object of the same class.</p>
 rendering.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='co'># A 90 degree rotation about the x axis:</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># A 90 degree rotation about the x axis:</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'>rotationMatrix</span><span class='op'>(</span><span class='va'>pi</span><span class='op'>/</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1]         [,2]          [,3] [,4]</span>
@@ -271,7 +270,7 @@ rendering.</p></div>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>          [,1] [,2]     [,3]</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 1.414214    0 1.414214</span>
 <span class='r-in'></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

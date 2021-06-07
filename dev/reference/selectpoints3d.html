@@ -58,7 +58,6 @@ point or region in the scene, then reports on all the vertices in or near that s
 <![endif]-->
 
 
-
 <!-- dependencies from examples -->
 
 
@@ -84,7 +83,7 @@ point or region in the scene, then reports on all the vertices in or near that s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.19</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.21</span>
       </span>
     </div>
 
@@ -151,8 +150,8 @@ point or region in the scene, then reports on all the vertices in or near that s
 point or region in the scene, then reports on all the vertices in or near that selection.</p>
     </div>
 
-    <pre class="usage">selectpoints3d(objects = ids3d()$id, value = TRUE, closest = TRUE, &lt;!-- % $ --&gt;
-               multiple = FALSE, ...)</pre>
+    <div class="ref-usage sourceCode"><pre><code>selectpoints3d(objects = ids3d()$id, value = TRUE, closest = TRUE, &lt;!-- % $ --&gt;
+               multiple = FALSE, ...)</code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -217,7 +216,7 @@ If multiple points have the same coordinates, all indices will be returned.</p><
     <div class='dont-index'><p><code><a href='select3d.html'>select3d</a></code> to return a selection function.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>xyz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>xyz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span> <span class='va'>xyz</span> <span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
@@ -239,7 +238,7 @@ If multiple points have the same coordinates, all indices will be returned.</p><
 <span class='r-in'>        <span class='cn'>TRUE</span></span>
 <span class='r-in'>     <span class='op'>}</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
