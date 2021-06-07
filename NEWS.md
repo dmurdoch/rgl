@@ -1,4 +1,4 @@
-# rgl  0.106.21
+# rgl  0.106.22
 
 ## Major changes
 
