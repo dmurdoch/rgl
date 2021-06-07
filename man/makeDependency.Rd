@@ -75,6 +75,6 @@ makeDependency("rglwidgetClass",
                "rglTimer.src.js"),
     stylesheet = "rgl.css",
     package = "rgl",
-    debugging = nchar(Sys.getenv("RGL_DEBUGGING", "")) > 0)
+    debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE")))
 }
 }
