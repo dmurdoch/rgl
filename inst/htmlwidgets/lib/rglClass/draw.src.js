@@ -123,7 +123,6 @@
      * @param { Object } obj - Object to work with
      * @param { Array } enabled - Array indicating which are enabled
      */
-
     rglwidgetClass.prototype.disableArrays = function(obj, enabled) {
       var gl = this.gl || this.initGL(),
           objLocs = ["normLoc", "texLoc", "ofsLoc", "pointLoc", "nextLoc"],
@@ -168,7 +167,7 @@
                    notequal: gl.NOTEQUAL,
                    gequal: gl.GEQUAL,
                    always: gl.ALWAYS},
-           test = tests[this.getObjMaterial(obj, "depth_test")];
+           test = tests[this.getMaterial(obj, "depth_test")];
       gl.depthFunc(test);
     };    
     
@@ -220,7 +219,7 @@
         gl.uniform1f( obj.shininessLoc, obj.shininess);
         for (i=0; i < subscene.lights.length; i++) {
           light = this.getObj(subscene.lights[i]);
-          if (!light.initialized) this.initObj(light.id);
+          if (!light.initialized) this.initObj(light);
           gl.uniform3fv( obj.ambientLoc[i], this.componentProduct(light.ambient, obj.ambient));
           gl.uniform3fv( obj.specularLoc[i], this.componentProduct(light.specular, obj.specular));
           gl.uniform3fv( obj.diffuseLoc[i], light.diffuse);
@@ -478,9 +477,9 @@
           count,
           pass, mode, pmode,
           enabled = {};
-
+        
       if (!obj.initialized)
-        this.initObj(obj.id);
+        this.initObj(obj);
 
       count = obj.vertexCount;
       if (!count)
@@ -493,7 +492,7 @@
 
       this.doDepthTest(obj);
       
-      this.doMasking(this.getObjMaterial(obj, "depth_mask"));
+      this.doMasking(this.getMaterial(obj, "depth_mask"));
             
       gl.useProgram(obj.prog);
 
@@ -570,7 +569,7 @@
           enabled.nextLoc = true;
           gl.vertexAttribPointer(obj.nextLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.nextofs);
           gl.uniform1f(obj.aspectLoc, this.vp.width/this.vp.height);
-          gl.uniform1f(obj.lwdLoc, this.getMaterial(obj.id, "lwd")/this.vp.height);
+          gl.uniform1f(obj.lwdLoc, this.getMaterial(obj, "lwd")/this.vp.height);
         }
 
         gl.vertexAttribPointer(this.posLoc,  3, gl.FLOAT, false, 4*obj.vOffsets.stride,  4*obj.vOffsets.vofs);
@@ -619,19 +618,23 @@
           saveNorm = new CanvasMatrix4(this.normMatrix),
           saveMV = new CanvasMatrix4(this.mvMatrix),
           savePRMV = null,
-          result = [], idx;
+          result = [], idx, margin = obj.material.margin;
+ 
+      if (typeof margin !== "undefined")
+        if (!this.marginVecToDataVec(obj, subscene))
+          return [];
 
       if (!obj.initialized)
-        this.initObj(obj.id);
+        this.initObj(obj);
 
       count = obj.vertexCount;
-      if (!count)
-        return result;
+      if (!count) 
+        return [];
         
       is_transparent = is_transparent || obj.someHidden;
 
       if (!this.opaquePass && !is_transparent)
-        return result;
+        return [];
         
       if (this.prmvMatrix !== null)
         savePRMV = new CanvasMatrix4(this.prmvMatrix);
@@ -655,7 +658,7 @@
         }
       }
       
-      this.initSphereFromObj(obj);
+      this.initShapeFromObj(this.sphere, obj);
 
       if (!this.opaquePass && obj.fastTransparency && typeof this.sphere.fastpieces === "undefined") {
         this.sphere.fastpieces = this.getPieces(context.context, obj.id, 0, this.sphere);
@@ -731,7 +734,12 @@
      * @param { array } context 
      */    
     rglwidgetClass.prototype.drawLinestrip = function(obj, subscene, context) {
-      var origIndices, i, j;
+      var origIndices, i, j, margin = obj.material.margin;
+ 
+      if (typeof margin !== "undefined") 
+        if (!this.marginVecToDataVec(obj, subscene))
+          return [];
+          
       if (this.opaquePass)
         return this.drawSimple(obj, subscene, context);
       origIndices = context.indices.slice();
@@ -760,17 +768,20 @@
           origMV = new CanvasMatrix4( this.mvMatrix ),
           origPRMV = null,
           pos, radius, userMatrix,
-          result = [];
+          result = [], margin = obj.material.margin;
+ 
+      if (typeof margin !== "undefined")
+        if (!this.marginVecToDataVec(obj, subscene))
+          return [];
 
-      if (!sprites3d) {
+      if (!sprites3d) 
         return this.drawSimple(obj, subscene, context);
-      }
       
       if (!obj.initialized)
-        this.initObj(obj.id);
+        this.initObj(obj);
 
       if (!obj.vertexCount)
-        return result;
+        return [];
     
       is_transparent = is_transparent || obj.someHidden;
       
@@ -815,7 +826,111 @@
         this.prmvMatrix = origPRMV;
       return result;
     };
+    
+    /**
+     * Draw object that might be in margin
+     * @param { Object } obj - text object to draw
+     * @param { Object } subscene - subscene holding it
+     * @param { Object } context - context for drawing
+     */
+    rglwidgetClass.prototype.drawMarginal = function(obj, subscene, context) {
+      var margin = obj.material.margin;
+ 
+      if (typeof margin !== "undefined") 
+        if (!this.marginVecToDataVec(obj, subscene))
+          return [];
+          
+      return this.drawSimple(obj, subscene, context);
+    };
+    
+    /**
+     * Draw bounding box and decorations
+     * @param { Object } obj - bboxdeco to draw
+     * @param { Object } subscene - subscene holding it
+     * @param { Object } context - context for drawing
+     */
+    rglwidgetClass.prototype.drawBBox = function(obj, subscene, context) {
+      var flags = obj.flags,
+          is_transparent = this.isSet(flags, this.f_is_transparent),
+          scale, bbox, indices,
+          enabled = {}, drawing,
+          result = [], idx, center, edges,
+          saved;
 
+      if (!obj.initialized)
+        this.initBBox(obj);
+      
+      is_transparent = is_transparent || obj.someHidden;
+
+      if (!this.opaquePass && !is_transparent)
+        return result;
+      
+      this.setBbox(obj, subscene);
+      
+      saved = this.setBBoxMatrices(obj);
+      
+      bbox = obj.bbox;
+      center = obj.center;
+
+      scale = [bbox[1]-bbox[0], bbox[3]-bbox[2], bbox[5]-bbox[4]];
+
+      if (!obj.cube.initialized) {
+        this.initObj(obj.cube);
+      }
+
+      if (this.opaquePass) {
+        context = context.slice();
+        context.push(obj.cube.id);
+      } 
+      
+      drawing = this.opaquePass !== is_transparent;
+      this.cube.onecolor = obj.cube.onecolor;
+      this.initShapeFromObj(this.cube, obj.cube);
+
+      if (!this.opaquePass)
+        indices = context.indices;
+
+      if (this.opaquePass)
+        idx = 0;
+      else
+        idx = context.subid;
+      if (typeof idx === "undefined")
+        console.error("idx is undefined");
+
+      if (drawing) {
+        this.drawSimple(this.cube, subscene, context);
+      } else 
+        result = result.concat(this.getCubePieces(context, obj));
+
+      if (drawing) {
+        if (!obj.ticks.initialized) {
+          obj.ticks.locations = this.getTickLocations(obj);
+          obj.ticks.edges = undefined;
+        }
+        edges = this.getTickEdges(this.prmvMatrix);
+        if (obj.needsAxisCallback) 
+          this.doAxisCallback(obj, edges);
+        if (!obj.ticks.edges || edges.toString() !== obj.ticks.edges.toString()) {
+          obj.ticks.edges = edges;
+          this.getTickVertices(obj.ticks);
+          this.placeTickLabels(obj);
+          this.setTickLabels(obj);
+        }
+        if (!obj.ticks.initialized) {
+          this.initObj(obj.ticks);
+          this.initObj(obj.labels);
+        }
+        this.drawSimple(obj.ticks, subscene, context);
+        this.drawSimple(obj.labels, subscene, context);
+      }
+      if (drawing)
+        this.disableArrays(obj, enabled);
+
+      this.restoreBBoxMatrices(saved);
+        
+      return result;
+    };
+    
     /**
      * Use ids to choose object to draw
      * @param { numeric } id - object to draw
@@ -839,12 +954,13 @@
       switch(obj.type) {
         case "abclines":
         case "surface":
+          return this.drawSimple(obj, subscene, context);
+        case "points":
+        case "lines":  
         case "triangles":
         case "quads":
-        case "lines":
-        case "points":
         case "text":
-          return this.drawSimple(obj, subscene, context);
+          return this.drawMarginal(obj, subscene, context);
         case "linestrip":
           return this.drawLinestrip(obj, subscene, context);
         case "planes":
@@ -856,8 +972,9 @@
         case "sprites":
           return this.drawSprites(obj, subscene, context);
         case "light":
-        case "bboxdeco":
           return [];
+        case "bboxdeco":
+          return this.drawBBox(obj, subscene, context);
       }
       
       console.error("drawObj for type = "+obj.type);
@@ -874,7 +991,7 @@
           bg, i, savepr, savemv;
 
       if (!obj.initialized)
-        this.initObj(id);
+        this.initObj(obj);
 
       if (obj.colors.length) {
         bg = obj.colors[0];

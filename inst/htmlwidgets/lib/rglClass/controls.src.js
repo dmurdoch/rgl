@@ -20,7 +20,7 @@
           fullset = [].concat(control.fullset),
           i, j, subsceneid,
           adds = [], deletes = [];
-      if (isNaN(value))
+      if (this.missing(value))
         value = control.value = 0;
       if (control.accumulate)
         for (i=0; i <= value; i++)
@@ -220,7 +220,7 @@
           }
         }
         if (!varies)
-          this.initObj(control.objid);
+          this.initObjId(control.objid);
       }
       propvals = obj.values;
       aliases = obj.alias;
@@ -349,7 +349,7 @@
           }
         }
         if (!varies)
-          this.initObj(objid);
+          this.initObjId(objid);
       }
       for (l = 0; l < nobjs; l++) {
         objid = objids[l];
@@ -569,7 +569,7 @@
         Object.keys(objs).forEach(function(key){
           key = parseInt(key, 10);
           self.scene.objects[key] = objs[key];
-          self.initObj(key);
+          self.initObjId(key);
           var obj = self.getObj(key),
               subs = [].concat(obj.inSubscenes), k;
           allsubs = allsubs.concat(subs);

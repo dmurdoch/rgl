@@ -105,6 +105,9 @@ SEXP rgl_setWheelCallback(SEXP rotate, SEXP dev, SEXP sub);
 SEXP rgl_getMouseCallbacks(SEXP button, SEXP dev, SEXP sub);
 SEXP rgl_getWheelCallback(SEXP dev, SEXP sub);
 
+SEXP rgl_getAxisCallback(SEXP dev, SEXP sub, SEXP axis);
+SEXP rgl_setAxisCallback(SEXP draw, SEXP dev, SEXP sub, SEXP axis);
+
 SEXP rgl_par3d(SEXP device, SEXP subscene, SEXP args);
 
 /* These may be removed if observer is set completely by par3d */

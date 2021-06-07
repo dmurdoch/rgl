@@ -178,3 +178,69 @@ SEXP rgl::rgl_getWheelCallback(SEXP dev, SEXP sub)
   } else error("rgl device is not open");
   return result;
 }      
+
+static void userAxis(void *axisData, int axis, int edge[3])
+{
+  SEXP fn = (SEXP)axisData;
+  char margin[4] = "   ";
+  int i, j = 1;
+  margin[0] = 'x' + axis;
+  for (i = 0; i < 3 & j < 3; i++) {
+    if (edge[i] == 1)
+      margin[j++] = '+';
+    else if (edge[i] == -1)
+      margin[j++] = '-';
+  }
+  margin[j] = 0;
+  // Rprintf("margin=%s\n", margin);
+  eval(PROTECT(lang2(fn, PROTECT(ScalarString(mkChar(margin))))), R_GlobalEnv);
+  UNPROTECT(2);
+}
+
+SEXP rgl::rgl_setAxisCallback(SEXP draw, SEXP dev, SEXP sub, SEXP axis)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
+    RGLView* rglview = device->getRGLView();
+    void* axisData = 0;
+    userAxisPtr axisCallback;
+    
+    if (isFunction(draw)) {
+      axisCallback = &userAxis;
+      axisData = (void*)draw;
+      R_PreserveObject(draw);
+    } else if (draw == R_NilValue) axisCallback = 0;
+    else error("callback must be a function");
+    
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(asInteger(sub));
+    if (!subscene) error("subscene not found");
+    BBoxDeco* bboxdeco = subscene->get_bboxdeco();
+    if (!bboxdeco) error("no bbox decoration");
+    bboxdeco->setAxisCallback(axisCallback, axisData, asInteger(axis));
+    rglview->update();
+  } else error("rgl device is not open");
+  return R_NilValue;
+}
+
+SEXP rgl::rgl_getAxisCallback(SEXP dev, SEXP sub, SEXP axis)
+{
+  Device* device;
+  SEXP result = R_NilValue;
+  if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
+    RGLView* rglview = device->getRGLView();
+    void* axisData = 0;
+    userAxisPtr axisCallback;
+    
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(asInteger(sub));
+    if (!subscene) error("subscene not found");
+    BBoxDeco* bboxdeco = subscene->get_bboxdeco();
+    if (!bboxdeco) error("bboxdeco not found");
+    bboxdeco->getAxisCallback(&axisCallback, (void**)&axisData, asInteger(axis));
+    
+    if (axisCallback == &userAxis)
+      result = (SEXP)axisData;
+  } else error("rgl device is not open");
+  return result;
+}      

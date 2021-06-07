@@ -41,7 +41,7 @@
       this.index_uint = this.gl.getExtension("OES_element_index_uint");
       var save = this.startDrawing();
       Object.keys(this.scene.objects).forEach(function(key){
-        self.initObj(parseInt(key, 10));
+        self.initObjId(parseInt(key, 10));
         });
       this.stopDrawing(save);
       return this.gl;
@@ -123,105 +123,165 @@
       result.colorCount = 1;
       result.type = "sphere";
       this.sphere = result;
-      this.initSphereGL();
+      this.initShapeGL(this.sphere);
     };
 
     /**
-     * Do the gl part of initializing the sphere
+     * Initialize the cube object
      */
-    rglwidgetClass.prototype.initSphereGL = function() {
-      var gl = this.gl || this.initGL(), sphere = this.sphere;
+    rglwidgetClass.prototype.initCube = function() {
+   var v = [[0, 0, 0], [1, 0, 0], 
+            [0, 1, 0], [1, 1, 0], 
+            [0, 0, 1], [1, 0, 1],
+            [0, 1, 1], [1, 1, 1]],
+          ib = [[0, 2, 3, 1], 
+                [2, 6, 7, 3], 
+                [1, 3, 7, 5], 
+                [0, 4, 6, 2], 
+                [0, 1, 5, 4], 
+                [4, 5, 7, 6]], 
+          centers = [], i, j, k, result = {};
+       
+      result.values = new Float32Array(this.flatten(v));
+      result.vertexCount = v.length;
+      
+      result.ib = new Uint16Array(this.flatten(ib));
+      
+      for (i = 0; i < ib.length; i++) {
+        centers.push([0,0,0]);
+        for (j = 0; j < 3; j++) { // x,y,z
+          for (k = 0; k < 4; k++) {// vertices
+            centers[i][j] += v[ib[i][k]][j]/4;
+          }
+        }
+      }
+      result.centers = centers;
+      
+      result.vOffsets = {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
+                         tofs:-1, nextofs:-1, pointofs:-1, stride:3};
+
+      result.f = [];
+      result.indices = {};
+
+      result.colorCount = 1;
+      result.type = "cube";
+      result.vertices = v;
+      this.cube = result;
+      this.initShapeGL(this.cube);
+      
+    };
+    
+
+    /**
+     * Do the gl part of initializing the sphere and cube
+     */
+    rglwidgetClass.prototype.initShapeGL = function(shape) {
+      var gl = this.gl || this.initGL();
       if (gl.isContextLost()) return;
-      sphere.buf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, sphere.buf);
-      gl.bufferData(gl.ARRAY_BUFFER, sphere.values, gl.STATIC_DRAW);
-      sphere.ibuf = [gl.createBuffer(), gl.createBuffer()];
+      shape.buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, shape.buf);
+      gl.bufferData(gl.ARRAY_BUFFER, shape.values, gl.STATIC_DRAW);
+      shape.ibuf = [gl.createBuffer(), gl.createBuffer()];
       return;
     };
 
     /* Initialize common sphere object from spheres object
     */
-    rglwidgetClass.prototype.initSphereFromObj = function(obj) {
-      var i, pass, f, mode, sphere = this.sphere;
-      sphere.ofsLoc = obj.ofsLoc;
-      sphere.texLoc = obj.texLoc;
-      sphere.sampler = obj.sampler;
-      sphere.uFogMode = obj.uFogMode;
-      sphere.uFogColor = obj.uFogColor;
-      sphere.uFogParms = obj.uFogParms;
-      sphere.userAttribLocations = obj.userAttribLocations;
-      sphere.userUniformLocations = obj.userUniformLocations;
-      sphere.normLoc = obj.normLoc;
-      sphere.clipLoc = obj.clipLoc;
-      sphere.nextLoc = obj.nextLoc;
-      sphere.pointLoc = obj.pointLoc;
-      sphere.aspectLoc = obj.aspectLoc;
-      sphere.lwdLoc = obj.lwdLoc;
-      sphere.prog = obj.prog;
-      sphere.material = obj.material;
-      sphere.flags = obj.flags;
-      sphere.someHidden = obj.someHidden;
-      sphere.fastTransparency = obj.fastTransparency;
-      sphere.nlights = obj.nlights;
-      sphere.emission = obj.emission;
-      sphere.emissionLoc = obj.emissionLoc;
-      sphere.shininess = obj.shininess;
-      sphere.shininessLoc = obj.shininessLoc;
-      sphere.ambient = obj.ambient;
-      sphere.ambientLoc = obj.ambientLoc;
-      sphere.specular = obj.specular;
-      sphere.specularLoc = obj.specularLoc;
-      sphere.diffuse = obj.diffuse;
-      sphere.diffuseLoc = obj.diffuseLoc;
-      sphere.lightDir = obj.lightDir;
-      sphere.lightDirLoc = obj.lightDirLoc;
-      sphere.viewpoint = obj.viewpoint;
-      sphere.viewpointLoc = obj.viewpointLoc;
-      sphere.finite = obj.finite;
-      sphere.finiteLoc = obj.finiteLoc;
-      sphere.prMatLoc = obj.prMatLoc;
-      sphere.mvMatLoc = obj.mvMatLoc;
-      sphere.normMatLoc = obj.normMatLoc;
-      sphere.frontLoc = obj.frontLoc;
-      sphere.index_uint = false;
-      sphere.is_transparent = obj.is_transparent;
-      sphere.ignoreExtent = obj.ignoreExtent;
-      if (sphere.passes !== obj.passes ||
-          JSON.stringify(sphere.pmode) !== JSON.stringify(obj.pmode)) {
-        sphere.passes = obj.passes;
-        sphere.pmode = obj.pmode;
+    rglwidgetClass.prototype.initShapeFromObj = function(shape, obj) {
+      var i, pass, f, mode;
+       shape.ofsLoc = obj.ofsLoc;
+       shape.texLoc = obj.texLoc;
+       shape.sampler = obj.sampler;
+       shape.uFogMode = obj.uFogMode;
+       shape.uFogColor = obj.uFogColor;
+       shape.uFogParms = obj.uFogParms;
+       shape.userAttribLocations = obj.userAttribLocations;
+       shape.userUniformLocations = obj.userUniformLocations;
+       shape.normLoc = obj.normLoc;
+       shape.clipLoc = obj.clipLoc;
+       shape.nextLoc = obj.nextLoc;
+       shape.pointLoc = obj.pointLoc;
+       shape.aspectLoc = obj.aspectLoc;
+       shape.lwdLoc = obj.lwdLoc;
+       shape.prog = obj.prog;
+       shape.material = obj.material;
+       shape.flags = obj.flags;
+       shape.someHidden = obj.someHidden;
+       shape.fastTransparency = obj.fastTransparency;
+       shape.nlights = obj.nlights;
+       shape.emission = obj.emission;
+       shape.emissionLoc = obj.emissionLoc;
+       shape.shininess = obj.shininess;
+       shape.shininessLoc = obj.shininessLoc;
+       shape.ambient = obj.ambient;
+       shape.ambientLoc = obj.ambientLoc;
+       shape.specular = obj.specular;
+       shape.specularLoc = obj.specularLoc;
+       shape.diffuse = obj.diffuse;
+       shape.diffuseLoc = obj.diffuseLoc;
+       shape.lightDir = obj.lightDir;
+       shape.lightDirLoc = obj.lightDirLoc;
+       shape.viewpoint = obj.viewpoint;
+       shape.viewpointLoc = obj.viewpointLoc;
+       shape.finite = obj.finite;
+       shape.finiteLoc = obj.finiteLoc;
+       shape.prMatLoc = obj.prMatLoc;
+       shape.mvMatLoc = obj.mvMatLoc;
+       shape.normMatLoc = obj.normMatLoc;
+       shape.frontLoc = obj.frontLoc;
+       shape.index_uint = false;
+       shape.is_transparent = obj.is_transparent;
+       shape.ignoreExtent = obj.ignoreExtent;
+      if ( shape.passes !== obj.passes ||
+          JSON.stringify( shape.pmode) !== JSON.stringify(obj.pmode)) {
+        shape.passes = obj.passes;
+        shape.pmode = obj.pmode;
         for (pass = 0; pass < obj.passes; pass++) {
-          mode = sphere.pmode[pass];
-          if (typeof sphere.indices[mode] === "undefined") {
+          mode =  shape.pmode[pass];
+          if (typeof  shape.indices[mode] === "undefined") {
             f = [];
             switch (mode) {
             case "culled": break;
             case "points":
-              f.length = sphere.vertexCount;
+              f.length =  shape.vertexCount;
               for (i=0; i < f.length; i++)
                 f[i] = i;
               break;
             case "lines":
-              f.length = 2*sphere.it.length;
-      	      for (i=0; i < sphere.it.length/3; i++) {
-      	        f[6*i] = sphere.it[3*i];
-      	        f[6*i + 1] = sphere.it[3*i + 1];
-      	        f[6*i + 2] = sphere.it[3*i + 1];
-      	        f[6*i + 3] = sphere.it[3*i + 2];
-      	        f[6*i + 4] = sphere.it[3*i + 2];
-      	        f[6*i + 5] = sphere.it[3*i];
-      	      }
+              if (typeof shape.it !== "undefined") {
+                f.length = 2* shape.it.length;
+      	        for (i=0; i <  shape.it.length/3; i++) {
+      	          f[6*i] =  shape.it[3*i];
+      	          f[6*i + 1] =  shape.it[3*i + 1];
+      	          f[6*i + 2] =  shape.it[3*i + 1];
+      	          f[6*i + 3] =  shape.it[3*i + 2];
+      	          f[6*i + 4] =  shape.it[3*i + 2];
+      	          f[6*i + 5] =  shape.it[3*i];
+      	        }
+              } else {
+                f.length = 2*shape.ib.length;
+                for (i=0; i < shape.ib.length/4; i++) {
+                  f[8*i] = shape.ib[4*i];
+                  f[8*i + 1] = shape.ib[4*i + 1];
+                  f[8*i + 2] = shape.ib[4*i + 1];
+                  f[8*i + 3] = shape.ib[4*i + 2];
+                  f[8*i + 4] = shape.ib[4*i + 2];
+                  f[8*i + 5] = shape.ib[4*i + 3];
+                  f[8*i + 6] = shape.ib[4*i + 3];
+                  f[8*i + 7] = shape.ib[4*i];
+                }
+              }
       	      break;
       	    case "filled":
-      	      f = sphere.it;
+      	      f =  shape.it || shape.ib;
       	    }              
-            sphere.indices[mode] = new Uint16Array(f);
+             shape.indices[mode] = new Uint16Array(f);
           }
-          sphere.f[pass] = sphere.indices[mode];
+           shape.f[pass] =  shape.indices[mode];
         }
       }
-      // console.log("Names in spheres not in sphere:"+JSON.stringify(this.keydiff(obj, sphere)));
-      sphere.initialized = true;
+      // console.log("Names in  shapes not in  shape:"+JSON.stringify(this.keydiff(obj,  shape)));
+       shape.initialized = true;
     };
 
     /**
@@ -257,14 +317,60 @@
           sub[this.whichList(obj.id)].push(obj.id);
       }
     };
+    
+    rglwidgetClass.prototype.initBBox = function(obj) {
+      if (!this.cube)
+        this.initCube();
+      obj.cube = {id: obj.id + 0.1,
+                    type: "quads",
+                    flags: this.f_has_fog,
+                    material: obj.material,
+                    colors: [obj.colors[0]],
+                    vertices: this.cube.vertices,
+                    initialized: false
+        };
+      obj.ticks = {id: obj.id + 0.2,
+                     type: "lines",
+                     flags: this.f_has_fog,
+                     material: obj.material,
+                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
+                     axes: obj.axes,
+                     initialized: false
+      };
+      obj.labels = {id: obj.id + 0.3,
+                     type: "text",
+                     flags: this.f_has_fog + 
+                            this.f_fixed_size + 
+                            this.f_fixed_quads,
+                     material: {lit: false},
+                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
+                     cex: [[1]],
+                     family: [["sans"]],
+                     font: [[1]],
+                     adj: [[0.5, 0.5]],
+                     ignoreExtent: true,
+                     initialized: false
+      };
+      obj.initialized = true;
+    };
 
     /**
      * Initialize object for display
      * @param { number } id - id of object to initialize
      */
-    rglwidgetClass.prototype.initObj = function(id) {
-      var obj = this.getObj(id),
-          flags = obj.flags,
+    rglwidgetClass.prototype.initObjId = function(id) {
+      if (typeof id !== "number") {
+        this.alertOnce("initObj id is "+typeof id);
+      }
+      return this.initObj(this.getObj(id));
+    };
+    
+    /**
+     * Initialize object for display
+     * @param { Object } obj - object to initialize
+     */
+    rglwidgetClass.prototype.initObj = function(obj) {
+      var flags = obj.flags,
           type = obj.type,
           is_lit = this.isSet(flags, this.f_is_lit),
           fat_lines = this.isSet(flags, this.f_fat_lines),
@@ -284,17 +390,16 @@
           i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
           dim, nx, nz, nrow;
 
-    if (typeof id !== "number") {
-      this.alertOnce("initObj id is "+typeof id);
-    }
-
     obj.initialized = true;
 
     obj.someHidden = false; // used in selection
     obj.is_transparent = is_transparent;
     
-    if (type === "bboxdeco" || type === "subscene")
+    if (type === "subscene")
       return;
+      
+    if (type === "bboxdeco")
+      return this.initBBox(obj);
       
     if (type === "spheres" && typeof this.sphere === "undefined")
       this.initSphere(16, 16);
@@ -317,7 +422,7 @@
       return;
     }
 
-    polygon_offset = this.getMaterial(id, "polygon_offset");
+    polygon_offset = this.getMaterial(obj, "polygon_offset");
     if (polygon_offset[0] !== 0 || polygon_offset[1] !== 0)
       obj.polygon_offset = polygon_offset;
 
@@ -327,7 +432,7 @@
     }
     
     if (is_brush)
-      this.initSelection(id);
+      this.initSelection(obj.id);
 
     if (typeof obj.vertices === "undefined")
       obj.vertices = [];
@@ -376,11 +481,15 @@
 
     if (!sprites_3d) {
       if (gl.isContextLost()) return;
+      if (typeof obj.prog !== "undefined") {
+        gl.deleteProgram(obj.prog);
+        obj.prog = undefined;
+      }
       obj.prog = gl.createProgram();
       gl.attachShader(obj.prog, this.getShader( gl.VERTEX_SHADER,
-        this.getVertexShader(id) ));
+        this.getVertexShader(obj) ));
       gl.attachShader(obj.prog, this.getShader( gl.FRAGMENT_SHADER,
-                      this.getFragmentShader(id) ));
+                      this.getFragmentShader(obj) ));
       //  Force aPos to location 0, aCol to location 1
       gl.bindAttribLocation(obj.prog, 0, "aPos");
       gl.bindAttribLocation(obj.prog, 1, "aCol");
@@ -450,7 +559,7 @@
     
     colors = obj.colors;
 
-    j = this.scene.crosstalk.id.indexOf(id);
+    j = this.scene.crosstalk.id.indexOf(obj.id);
     if (j >= 0) {
       key = this.scene.crosstalk.key[j];
       options = this.scene.crosstalk.options[j];
@@ -617,7 +726,7 @@
       obj.objects = this.flatten([].concat(obj.ids));
       is_lit = false;
       for (i=0; i < obj.objects.length; i++)
-        this.initObj(obj.objects[i]);
+        this.initObjId(obj.objects[i]);
     }
 
     if (is_lit && !fixed_quads) {
@@ -633,14 +742,14 @@
 
     if (is_lit) {
       obj.emissionLoc = gl.getUniformLocation(obj.prog, "emission");
-      obj.emission = new Float32Array(this.stringToRgb(this.getMaterial(id, "emission")));
+      obj.emission = new Float32Array(this.stringToRgb(this.getMaterial(obj, "emission")));
       obj.shininessLoc = gl.getUniformLocation(obj.prog, "shininess");
-      obj.shininess = this.getMaterial(id, "shininess");
+      obj.shininess = this.getMaterial(obj, "shininess");
       obj.nlights = this.countLights();
       obj.ambientLoc = [];
-      obj.ambient = new Float32Array(this.stringToRgb(this.getMaterial(id, "ambient")));
+      obj.ambient = new Float32Array(this.stringToRgb(this.getMaterial(obj, "ambient")));
       obj.specularLoc = [];
-      obj.specular = new Float32Array(this.stringToRgb(this.getMaterial(id, "specular")));
+      obj.specular = new Float32Array(this.stringToRgb(this.getMaterial(obj, "specular")));
       obj.diffuseLoc = [];
       obj.lightDirLoc = [];
       obj.viewpointLoc = [];
@@ -659,7 +768,7 @@
     obj.pmode = new Array(obj.passes);
     for (pass = 0; pass < obj.passes; pass++) {
       if (type === "triangles" || type === "quads" || type === "surface" || type === "spheres")
-      	pmode = this.getMaterial(id, (pass === 0) ? "front" : "back");
+      	pmode = this.getMaterial(obj, (pass === 0) ? "front" : "back");
       else pmode = "filled";
       obj.pmode[pass] = pmode;
     }

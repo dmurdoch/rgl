@@ -24,10 +24,13 @@ public:
 
   void alloc(int in_nvertex);
   void copy(int in_nvertex, double* vertices);
+  void copy(int in_nvertex, float* vertices);
+  void duplicate(VertexArray source);
   void beginUse();
   void endUse();
   Vertex& operator[](int index);
   void setVertex(int index, double* v);
+  void setVertex(int index, Vertex v);
 
   Vertex getNormal(int v1, int v2, int v3);
   int size() { return nvertex; }

@@ -26,7 +26,7 @@ scene3d <- function(minimal = TRUE) {
     attribs <- c("vertices", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
           "usermatrix", "types", "offsets", "centers",
-          "family", "font", "pos")
+          "family", "font", "pos", "axes")
     if (lit || !minimal || type %in% c("light", "clipplanes", "planes"))
       attribs <- c(attribs, "normals")
     for (a in attribs) 
@@ -111,12 +111,18 @@ scene3d <- function(minimal = TRUE) {
   devname <- paste0("dev", cur3d())
   callbacks <- rgl.callback.env[[devname]]
   if (!is.null(callbacks)) {
-    for (subname in names(callbacks)) {
-      subscene <- sub("^sub", "", subname)
+    for (name in names(callbacks)) {
+      subscene <- sub("^sub", "", name)
       sub <- findSubscene(result$rootSubscene, subscene)
       if (!is.null(sub)) {
-        sub$callbacks <- callbacks[[subname]]
+        sub$callbacks <- callbacks[[name]]
         result$rootSubscene <- replaceSubscene(result$rootSubscene, subscene, sub)
+      }
+      bboxid <- sub("^bbox", "", name)
+      bbox <- result$objects[[bboxid]]
+      if (!is.null(bbox)) {
+        bbox$callbacks <- callbacks[[name]]
+        result$objects[[bboxid]] <- bbox
       }
     }
     result$javascript <- callbacks$javascript

@@ -263,7 +263,8 @@ rglwidget <- local({
            minimal = TRUE, 
            webgl,
            snapshot,
-           shinyBrush = NULL, ...) {
+           shinyBrush = NULL, ...,
+           oldConvertBBox = FALSE) {
     
   if (missing(snapshot)) {
     if (missing(webgl)) {
@@ -335,7 +336,8 @@ rglwidget <- local({
     height <- CSStoPixels(height)
   x <- convertScene(x, width, height,
                    elementId = elementId, 
-                   webgl = webgl, snapshot = snapshot)
+                   webgl = webgl, snapshot = snapshot,
+                   oldConvertBBox = oldConvertBBox)
   
   upstream <- processUpstream(controllers, elementId = elementId)
   
@@ -448,7 +450,9 @@ rglDependency <- makeDependency("rglwidgetClass",
                                  "draw.src.js",
                                  "controls.src.js",
                                  "selection.src.js",
-                                 "rglTimer.src.js"),
+                                 "rglTimer.src.js",
+                                 "pretty.src.js",
+                                 "axes.src.js"),
                       stylesheet = "rgl.css",
                       package = "rgl",
                       debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))

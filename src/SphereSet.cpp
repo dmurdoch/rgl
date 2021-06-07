@@ -62,12 +62,23 @@ void SphereSet::drawBegin(RenderContext* renderContext)
 
 void SphereSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
+  Vertex pt;
+  BBoxDeco* bboxdeco = 0;
+  if (material.marginCoord >= 0) {
+    Subscene* subscene = renderContext->subscene;
+    bboxdeco = subscene->get_bboxdeco();
+  }
   if (fastTransparency) {
+    if (bboxdeco) {
+      invalidateDisplaylist();
+      pt = bboxdeco->marginVecToDataVec(center.get(index), renderContext, &material);
+    } else
+      pt = center.get(index);
     
-    if ( center.get(index).missing() || ISNAN(radius.getRecycled(index)) ) return;
+    if ( pt.missing() || ISNAN(radius.getRecycled(index)) ) return;
     
     material.useColor(index);
-    sphereMesh.setCenter( center.get(index) );
+    sphereMesh.setCenter( pt );
     sphereMesh.setRadius( radius.getRecycled(index) );
     sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
     sphereMesh.draw(renderContext);
@@ -78,13 +89,18 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
    	      || i2 >= facets - sphereMesh.getSegments();
 	
    if (i1 != lastdrawn) {
-     if ( center.get(i1).missing() || ISNAN(radius.getRecycled(i1)) ) return;
+     if (bboxdeco) {
+       invalidateDisplaylist();
+       pt = bboxdeco->marginVecToDataVec(center.get(i1), renderContext, &material);
+     } else
+       pt = center.get(index);
+     if ( pt.missing() || ISNAN(radius.getRecycled(i1)) ) return;
 
      material.useColor(i1);
      if (lastdrawn >= 0)
        sphereMesh.drawEnd( renderContext );
      
-     sphereMesh.setCenter( center.get(i1) );
+     sphereMesh.setCenter( pt );
      sphereMesh.setRadius( radius.getRecycled(i1) );
    
      sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );

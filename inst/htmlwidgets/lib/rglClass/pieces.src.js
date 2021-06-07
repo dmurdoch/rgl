@@ -60,6 +60,18 @@
         return this.getPieces(context, obj.id, subid, this.sphere);
     };
     
+   /**
+     * Get pieces from cube
+     * @returns { object }
+     * @param { array } context - 
+     * @param { numeric } subid - subscene
+     * @param { object } obj - spheres object
+     */
+    rglwidgetClass.prototype.getCubePieces = function(context, obj)
+    {
+      return this.getPieces(context, obj.id, 0, this.cube);
+    };
+    
     /**
      * Merge pieces that can be drawn in one call
      * @returns { object }

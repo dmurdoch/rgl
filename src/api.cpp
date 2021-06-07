@@ -536,7 +536,7 @@ void rgl::rgl_primitive(int* successptr, int* idata, double* vertex, double* nor
 
     int   type    = idata[0];
     int   nvertex = idata[1];
-    int   ignoreExtent = device->getIgnoreExtent();
+    int   ignoreExtent = device->getIgnoreExtent() || currentMaterial.marginCoord >= 0;
     int   useNormals = idata[2];
     int   useTexcoords = idata[3];
     
@@ -594,7 +594,7 @@ void rgl::rgl_surface(int* successptr, int* idata, double* x, double* z, double*
                                                    normal_x, normal_z, normal_y,
                                                    texture_s, texture_t,
                                                    coords, *orientation, flags,
-    						   device->getIgnoreExtent()) ) );
+                          device->getIgnoreExtent() || currentMaterial.marginCoord >= 0) ) );
 
     CHECKGLERROR;
   }
@@ -614,7 +614,8 @@ void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radiu
     int nradius = idata[1];
 
     success = as_success( device->add( new SphereSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent(), *fastTransparency != 0) ) );
+    						     device->getIgnoreExtent() || currentMaterial.marginCoord >= 0,
+    						     *fastTransparency != 0) ) );
     CHECKGLERROR;
   }
 
@@ -710,7 +711,8 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
     } else 
       shapelist = NULL;
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent(), count, shapelist, userMatrix,
+                     device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
+    						     count, shapelist, userMatrix,
     						     fixedSize, scene) ) );
     CHECKGLERROR;
   }
@@ -985,8 +987,13 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.line_antialias = (idata[22]) ? true : false;
   mat.depth_mask = (idata[23]) ? true : false;
   mat.depth_test = idata[24];
+  mat.marginCoord = idata[25];
+  mat.edge[0] = idata[26];
+  mat.edge[1] = idata[27];
+  mat.edge[2] = idata[28];
+  mat.floating = idata[29];
   
-  int* colors   = &idata[25];
+  int* colors   = &idata[30];
 
   char*  pixmapfn = cdata[0];
 
@@ -1092,8 +1099,13 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[23] = mat->depth_mask ? 1 : 0;
   idata[24] = mat->depth_test;
   idata[25] = mat->isTransparent();
+  idata[26] = mat->marginCoord;
+  idata[27] = mat->edge[0];
+  idata[28] = mat->edge[1];
+  idata[29] = mat->edge[2];
+  idata[30] = mat->floating;
 
-  for (i=0, j=26; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=31; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat->colors.getColor(i).getRedub();
     idata[j++] = (int) mat->colors.getColor(i).getGreenub();
     idata[j++] = (int) mat->colors.getColor(i).getBlueub();
@@ -1133,7 +1145,8 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
     device->getFonts(fonts, *nfonts, family, style, cex, (bool) *useFreeType);
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
                                                    adj[0], adj[1],
-    						   device->getIgnoreExtent(), fonts, *npos, pos) ) );
+                   device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
+    						   fonts, *npos, pos) ) );
     CHECKGLERROR;
 
   }

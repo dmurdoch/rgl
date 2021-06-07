@@ -159,3 +159,21 @@
       else
         return subsceneid;
     };
+
+    /**
+     * Find bboxdeco for a subscene
+     * @returns { number } id of bboxdeco, or undefined if none
+     * @param { number } sub- subscene
+     */
+    rglwidgetClass.prototype.getBBoxDeco = function(sub) {
+      var objects = sub.objects, i, obj;
+      for (i = 0; i < objects.length; i++) {
+        obj = this.getObj(objects[i]);
+        if (obj.type === "bboxdeco")
+          return obj;
+      }
+      if (sub.parent) 
+        return this.getBBoxDeco(sub.parent);
+      else
+        return undefined;
+    };

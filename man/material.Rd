@@ -31,6 +31,8 @@ rgl.material(
   depth_mask   = TRUE,
   depth_test   = "less",
   polygon_offset = c(0.0, 0.0),
+  margin       = "",
+  floating     = FALSE,
   ...
 )
 material3d(...)
@@ -119,6 +121,9 @@ material3d(...)
      \code{"gequal"} (greater than or equal), \code{"always"}.}
   \item{polygon_offset}{If non-zero, offsets are added
   to the recorded depth of filled polygons.  See Details below.}
+  \item{margin, floating}{Used mainly for text to
+  draw annotations in the margins, but supported by
+  most kinds of objects:  see \code{\link{mtext3d}}.}
   \item{...}{Any of the arguments above can
   be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
 }

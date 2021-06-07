@@ -108,7 +108,7 @@ struct Vec3
   void   rotateX(float degree);
   void   rotateY(float degree);
   bool   missing() const;  /* Any components missing */
-
+  float& operator[](int i);
   static inline Vec3& asVec3(float* ptr) {
     return *( reinterpret_cast<Vec3*>( ptr ) );
   }
@@ -137,7 +137,7 @@ struct Vec4
   Vec4 operator * (const float value) const;
   Vec4 operator + (const Vec4& op2) const;
   bool   missing() const;  /* Any components missing */
-
+  float& operator[](int i);
   static inline Vec4& asVec4(float* ptr) {
     return *( reinterpret_cast<Vec4*>( ptr ) );
   }
@@ -160,8 +160,11 @@ public:
   void loadData(const float* from);
   void loadData(const Matrix4x4& from);
   void transpose();
+  void multRight(const Matrix4x4& M);
+  void multLeft(const Matrix4x4& M);
   static Matrix4x4 scaleMatrix(double sx, double sy, double sz); 
   static Matrix4x4 translationMatrix(double x, double y, double z);
+  static Matrix4x4 permutationMatrix(int newx, int newy, int newz);
 private:
   inline float  val(int row, int column) const { return data[4*column+row]; }
   inline float& ref(int row, int column) { return data[4*column+row]; }

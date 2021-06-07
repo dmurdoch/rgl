@@ -275,6 +275,8 @@
      */
     rglwidgetClass.prototype.repeatToLen = function(arr, len) {
       arr = [].concat(arr);
+      if (!arr.length) 
+        throw new RangeError("array is length 0");
       while (arr.length < len/2)
         arr = arr.concat(arr);
       return arr.concat(arr.slice(0, len - arr.length));
@@ -336,7 +338,7 @@
      * @param {object} obj  Which object?
      * @param {string} property Which material property?
      */
-    rglwidgetClass.prototype.getObjMaterial = function(obj, property) {
+    rglwidgetClass.prototype.getMaterial = function(obj, property) {
       var mat;
       if (typeof obj.material === "undefined")
         console.error("material undefined");
@@ -346,15 +348,15 @@
       return mat;
     };
     
-    /**
+   /**
      * Get a particular material property for an id
      * @returns { any }
      * @param {number} id  Which object?
      * @param {string} property Which material property?
      */
-    rglwidgetClass.prototype.getMaterial = function(id, property) {
+    rglwidgetClass.prototype.getMaterialId = function(id, property) {
       var obj = this.getObj(id);
-      return this.getObjMaterial(obj, property);
+      return this.getMaterial(obj, property);
     };
 
     rglwidgetClass.prototype.getAdj = function (pos, offset, text) {
@@ -489,4 +491,58 @@
       v[1] = v[1]*0.5/v[3] + 0.5 + this.vp.y/this.vp.height;
       v[2] = (1 + v[2]/v[3])*0.5;
       return v.slice(0, 3);
+    };
+
+    /**
+     * Andrew's convex hull algorithm. 
+     * From Wikipedia, used under Creative Commons Attribution-ShareAlike License
+     * @returns { Array } Indices of convex hull points
+     */
+    rglwidgetClass.prototype.chull = function(points) {
+      function cross(a, b, o) {
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+      }
+        
+      points.sort(function(a, b) {
+        return a[0] === b[0] ? a[1] - b[1] : a[0] - b[0];
+      });
+
+      var lower = [], upper = [];
+      for (var i = 0; i < points.length; i++) {
+        while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], points[i]) <= 0) {
+          lower.pop();
+        }
+        lower.push(points[i]);
+      }
+
+      for (i = points.length - 1; i >= 0; i--) {
+        while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], points[i]) <= 0) {
+          upper.pop();
+        }
+        upper.push(points[i]);
+      }
+
+      upper.pop();
+      lower.pop();
+      return lower.concat(upper);
+    };
+    
+    /**
+     * Round number to given precision
+     * @param { number } x
+     * @param { number } digits
+     * @returns { number } 
+     */
+    rglwidgetClass.prototype.signif = function(x, digits) { 
+      return parseFloat(x.toPrecision(digits));
+    };
+      
+    /**
+     * Check for NA, NaN, undefined, or null
+     * @param x
+     * @returns { bool }
+     */
+    rglwidgetClass.prototype.missing = function(x) {
+      return x !== "-Inf" && x !== "Inf" &&
+             (isNaN(x) || x === null || typeof(x) === "undefined");
     };

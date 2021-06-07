@@ -17,7 +17,9 @@ rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           webGLoptions = list(preserveDrawingBuffer = TRUE), 
           shared = NULL, minimal = TRUE, 
           webgl, snapshot, 
-          shinyBrush = NULL, ...)
+          shinyBrush = NULL, 
+          ...,
+          oldConvertBBox = FALSE)
 }
 \arguments{
   \item{x}{
@@ -44,6 +46,7 @@ component that will hold the scene.
   no effect?  See \code{\link{scene3d}}.}
   \item{shinyBrush}{The name of a Shiny \code{input} element
   to receive information about mouse selections.}
+  \item{oldConvertBBox}{See Details below.}
   \item{...}{Additional arguments
 to pass to \code{htmlwidgets::\link{createWidget}}.}
 }
@@ -98,6 +101,12 @@ allowed as of version 0.105.6.)
 The \code{snapshot} argument controls whether a snapshot is
 displayed:  it must be \code{!webgl} if both are specified.
 
+Prior to \pkg{rgl} 0.106.21, \code{rglwidget} converted 
+bounding box decorations into separate objects: a box, text
+for the labels, segments for the ticks.  By default it now
+generates these in Javascript, allowing axis labels to move as
+they do in the display in \R.  If you prefer the old conversion,
+set \code{oldConvertBBox = TRUE}.
 }
 \section{Shiny specifics}{
 

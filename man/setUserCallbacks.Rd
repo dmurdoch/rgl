@@ -1,10 +1,11 @@
 \name{setUserCallbacks}
 \alias{setUserCallbacks}
 \title{
-Set callbacks in Javascript code
+Set mouse callbacks in R or Javascript code
 }
 \description{
-This function sets user callbacks in \code{\link{rglwidget}} displays.
+This function sets user mouse callbacks in R or
+\code{\link{rglwidget}} displays.
 }
 \usage{
 setUserCallbacks(button, 
@@ -97,6 +98,9 @@ If \code{applyToDev} is \code{TRUE}, it will also
 have the side effect of attempting to install the
 callbacks using \code{\link{rgl.setMouseCallbacks}}
 and \code{\link{rgl.setWheelCallback}}.
+}
+\seealso{
+\code{\link{setAxisCallbacks}} for user defined axes.
 }
 \author{
 Duncan Murdoch

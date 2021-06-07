@@ -60,7 +60,8 @@ The \code{rgl.getMouseCallbacks} function returns a list containing the callback
 The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
 }
 \author{ Duncan Murdoch }
-\seealso{ \code{\link{par3d}} to set built-in handlers }
+\seealso{ \code{\link{par3d}} to set built-in handlers,
+\code{\link{setUserCallbacks}} to work with \code{\link{rglwidget}}.}
 \examples{
 
  pan3d <- function(button, dev = cur3d(), subscene = currentSubscene3d(dev)) {

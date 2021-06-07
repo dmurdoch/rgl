@@ -1,4 +1,4 @@
-# rgl  0.106.19
+# rgl  0.106.21
 
 ## Major changes
 
@@ -10,7 +10,16 @@
 * Allowed any of the mouse modes to be applied to 
 the mouse wheel.
 * Added the `setUserCallbacks()` function to allow
-user-specified callbacks in WebGL code. 
+user-specified mouse callbacks in WebGL code.
+* Added Javascript code for support of movable 
+  axis labels in `bboxdeco` objects.
+* Most drawing functions can now draw in the margins
+  using new material properties `margin` and `floating`,
+  with objects that move as the bounding box changes.
+  See `?mtext3d` for details.
+* The `mtext3d()` argument order has changed.
+* Added the `setAxisCallbacks()` function to allow
+user-specified axis drawing routines.
 
 ## Minor changes
 

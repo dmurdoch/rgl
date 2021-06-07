@@ -107,7 +107,7 @@ rgl.attrib.count <- function( id, attrib ) {
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
             texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
-	    family=1, font=1, pos=1, fogscale=1)
+	    family=1, font=1, pos=1, fogscale=1, axes=3)
 
 rgl.attrib.info <- function( id = ids3d("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
@@ -158,7 +158,7 @@ rgl.attrib <- function( id, attrib, first=1,
     else
       result <- numeric(0)
   }
-  if (attrib == 14) 
+  if (attrib == 14) # flags
     result <- as.logical(result)
   result <- matrix(result, ncol=ncol, byrow=TRUE)
   colnames(result) <- list(c("x", "y", "z"), # vertices
@@ -179,7 +179,8 @@ rgl.attrib <- function( id, attrib, first=1,
   			   "family",         # family
   			   "font",           # font
 			   "pos",            # pos
-			   "fogscale"        # fogscale
+			   "fogscale",        # fogscale
+			   c("x", "y", "z")   # axes
                            )[[attrib]]
   if (attrib == 14 && count) # flags
     if (id %in% ids3d("lights", subscene = 0)$id)
@@ -187,7 +188,7 @@ rgl.attrib <- function( id, attrib, first=1,
     else if (id %in% ids3d("background", subscene = 0)$id)
       rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
     else if (id %in% ids3d("bboxdeco", subscene = 0)$id)
-      rownames(result) <- "draw_front"[first:last]
+      rownames(result) <- c("draw_front", "marklen_rel")[first:last]
     else if (id %in% (ids <- ids3d("shapes", subscene = 0))$id) {
       type <- ids$type[ids$id == id]
       rownames(result) <- c("ignoreExtent", 
@@ -195,6 +196,13 @@ rgl.attrib <- function( id, attrib, first=1,
                             else if (type == "spheres") "fastTransparency"
                             else "fixedSize")[first:last]
     }
+  if (attrib == 20 && count) { # axes
+    rownames(result) <- c("mode", "step", "nticks",
+                          "marklen", "expand")
+    result <- result[first:last,]
+    result <- as.data.frame(t(result))
+    result$mode <- c("custom", "fixedstep", "fixednum", "pretty", "user", "none")[result$mode + 1]
+  }
   result
 }
 
@@ -699,7 +707,8 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
 
 rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0.5, 
                       family=par3d("family"), font=par3d("font"), 
-                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... ) {
+                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), 
+                      ... ) {
   rgl.material( ... )
 
   vertex  <- rgl.vertex(x,y,z)

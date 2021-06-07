@@ -1,7 +1,8 @@
 convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
-                         snapshot = FALSE) {
+                         snapshot = FALSE,
+                         oldConvertBBox = FALSE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -236,6 +237,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   }
   
   convertBBoxes <- function(id) {
+    if (!oldConvertBBox)
+      return(NULL)
     ids <- origIds <- NULL
     id <- as.character(id)
     sub <- getObj(id)
@@ -423,6 +426,12 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       # in Javascript
     } else if (obj$type == "spheres")
       obj$centers <- obj$vertices
+    if (!is.null(obj$material$margin)) {
+      margin <- parseMargin(obj$material$margin, obj$material$floating)
+      obj$material$margin <- margin$coord - 1
+      obj$material$floating <- margin$floating
+      obj$material$edge <- margin$edge
+    }
     setObj(cids[i], obj)
   }
 

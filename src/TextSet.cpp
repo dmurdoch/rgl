@@ -2,6 +2,8 @@
 
 #include "glgui.h"
 #include "R.h"
+#include "BBoxDeco.h"
+#include "subscene.h"
 #ifdef HAVE_FREETYPE
 #include <map>
 #endif
@@ -82,12 +84,20 @@ void TextSet::drawBegin(RenderContext* renderContext)
 void TextSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
 #ifndef RGL_NO_OPENGL
+  BBoxDeco* bboxdeco = 0;
+  if (material.marginCoord >= 0) {
+    Subscene* subscene = renderContext->subscene;
+    bboxdeco = subscene->get_bboxdeco();
+  } 
+  
   GLFont* font;
-
-  if (!vertexArray[index].missing()) {
+  Vertex pt = vertexArray[index];
+  if (bboxdeco)
+    pt = bboxdeco->marginVecToDataVec(pt, renderContext, &material);
+  if (!pt.missing()) {
     GLboolean valid;
     material.useColor(index);
-    glRasterPos3f( vertexArray[index].x, vertexArray[index].y, vertexArray[index].z );
+    glRasterPos3f( pt.x, pt.y, pt.z );
     glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
     if (valid) {
       font = fonts[index % fonts.size()];
@@ -113,7 +123,7 @@ int TextSet::getAttributeCount(AABox& bbox, AttribID attrib)
   switch (attrib) {
     case FAMILY: 
     case FONT:
-  case CEX: return static_cast<int>(fonts.size());
+    case CEX: return static_cast<int>(fonts.size());
     case TEXTS:
     case VERTICES: return textArray.size();
     case ADJ: return 1;
