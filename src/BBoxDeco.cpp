@@ -370,7 +370,10 @@ Material BBoxDeco::defaultMaterial( Color(0.6f,0.6f,0.6f,0.5f), Color(1.0f,1.0f,
 BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis, AxisInfo& in_zaxis, float in_marklen_value, bool in_marklen_fract,
                    float in_expand, bool in_front)
 : SceneNode(BBOXDECO), material(in_material), xaxis(in_xaxis), yaxis(in_yaxis), zaxis(in_zaxis), marklen_value(in_marklen_value), marklen_fract(in_marklen_fract),
-  expand(in_expand), draw_front(in_front), axisBusy(false)
+  expand(in_expand), draw_front(in_front)
+#ifndef RGL_NO_OPENGL  
+  , axisBusy(false)
+#endif
 {
   material.colors.recycle(2);
 }

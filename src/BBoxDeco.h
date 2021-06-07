@@ -73,7 +73,9 @@ private:
   float expand;
   bool  draw_front;
   
+#ifndef RGL_NO_OPENGL
   bool axisBusy;
+#endif
   userAxisPtr axisCallback[3];
   void* axisData[3];
 
