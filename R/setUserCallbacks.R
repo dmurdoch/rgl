@@ -42,6 +42,16 @@ replaceSubscene <- function(subscene, id, newvalue) {
   NULL
 }
 
+getfn <- function(fn, up = 2) {
+  if (is.character(fn))
+    result <- eval(parse(text = fn), envir = parent.frame(up))
+  else
+    result <- fn
+  if (!is.function(result))
+    stop(fn, " is not a function.")
+  result
+}
+
 setUserCallbacks <- function(button = NULL, begin = NULL, update = NULL, end = NULL,
                              rotate = NULL,
                              javascript = NULL,
@@ -49,6 +59,7 @@ setUserCallbacks <- function(button = NULL, begin = NULL, update = NULL, end = N
 			                       scene = scene3d(minimal = FALSE),
 			                       applyToScene = TRUE,
 			                       applyToDev = missing(scene)) {
+
   force(applyToDev)
   stopifnot(inherits(scene, "rglscene"))
   subscene <- as.character(subscene)
@@ -91,13 +102,8 @@ setUserCallbacks <- function(button = NULL, begin = NULL, update = NULL, end = N
         fns <- callbacks[[button]]
         if (!is.null(fns)) {
           for (f in c("begin", "update", "end", "rotate"))
-            if (is.character(fns[[f]])) {
-              fn <- try(match.fun(fns[[f]]), silent = TRUE)
-              if (is.function(fn))
-                fns[[f]] <- fn
-              else
-                fns[[f]] <- NULL
-            }
+            if (!is.null(fns[[f]]))
+              fns[[f]] <- getfn(fns[[f]])
           callbacks[[button]] <- fns
           if (button == "wheel" && is.function(fns$rotate))
             rgl.setWheelCallback(rotate = fns$rotate, dev = dev, subscene = subscene)
@@ -120,6 +126,7 @@ setAxisCallbacks <- function(axes, fns,
                              scene = scene3d(minimal = FALSE),
                              applyToScene = TRUE,
                              applyToDev = missing(scene)) {
+  
   force(applyToDev)
   stopifnot(inherits(scene, "rglscene"))
   subscene <- as.character(subscene)
@@ -136,6 +143,12 @@ setAxisCallbacks <- function(axes, fns,
   n <- max(length(axes), length(fns))
   axes <- rep(axes, length = n)
   fns <- rep(fns, length = n)
+  
+  # Call each function once to set things up before grabbing
+  # the scene
+  
+  for (i in seq_len(n))
+    getfn(fns[[i]])(paste0(axes[i], "--"))
   
   sub <- findSubscene(scene$rootSubscene, subscene)
   if (is.null(sub))
@@ -166,12 +179,7 @@ setAxisCallbacks <- function(axes, fns,
     if (dev > 0) {
       callbacks <- bbox$callbacks
       for (i in seq_len(n)) {
-        fn <- fns[[i]]
-        if (is.character(fn)) {
-          fn <- try(match.fun(fn), silent = TRUE)
-          if (!is.function(fn))
-            fn <- NULL
-        }
+        fn <- getfn(fns[[i]])
         rgl.setAxisCallback(match(axes[i], c("x", "y", "z")), fn, 
                             dev = dev, subscene = subscene)
       }
