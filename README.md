@@ -107,9 +107,9 @@ yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
 
 **macOS:**  
 Install XQuartz.  
-`rgl` should work with either XQuartz 2.7.11 or 2.8.0, but it will
-probably need rebuilding if the XQuartz version changes. XQuartz
-normally needs re-installation whenever the macOS version changes.
+`rgl` should work with XQuartz 2.7.11 or newer, but it will probably
+need rebuilding if the XQuartz version changes. XQuartz normally needs
+re-installation whenever the macOS version changes.
 
 **Windows:**  
 Windows normally includes OpenGL support, but to get the appropriate
@@ -133,7 +133,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.106.16.tar.gz
+    R CMD INSTALL rgl_0.106.23.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -149,13 +149,21 @@ to install from CRAN, or
 
 to install the development version from Github.
 
+Sometimes binary development versions are available for Windows and
+macOS using
+
+    install.packages("rgl", repos = "https://dmurdoch.github.io/drat",
+                     type = "binary")
+
+but these are not always kept up to date.
+
 ## BUILDING WITHOUT OPENGL
 
 As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.106.16.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.106.23.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 

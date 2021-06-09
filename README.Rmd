@@ -158,7 +158,7 @@ yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
 
 **macOS:**  
 Install XQuartz.  
-`rgl` should work with either XQuartz 2.7.11 or 2.8.0, but
+`rgl` should work with XQuartz 2.7.11 or newer, but
 it will probably need rebuilding if the XQuartz version
 changes.  XQuartz normally needs re-installation whenever the
 macOS version changes.
@@ -204,8 +204,16 @@ to install from CRAN, or
 
     remotes::install_github("dmurdoch/rgl")
     
-to install the development version from Github.
+to install the development version from Github. 
 
+Sometimes
+binary development versions are available for Windows and
+macOS using
+
+    install.packages("rgl", repos = "https://dmurdoch.github.io/drat",
+                     type = "binary")
+
+but these are not always kept up to date.
 
 BUILDING WITHOUT OPENGL
 -----------------------

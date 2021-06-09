@@ -9,3 +9,5 @@ rgl.Rproj
 docs
 revdep
 dev
+src-i386
+src-x64
