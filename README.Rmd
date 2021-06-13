@@ -68,6 +68,32 @@ The currently active development site is here:
 
  https://github.com/dmurdoch/rgl
 
+NOTE ABOUT DEVEL VERSIONS
+-------------------------
+
+  `rgl` can make use of development versions of some
+packages:  `webshot2`, `chromote`, `pkgdown`, `downlit`.  Though it doesn't require any of these, 
+they each provide some nice features:
+
+ - `webshot2` and `chromote` support good quality PNG 
+ snapshots of `rgl` scenes, even on servers that don't
+ have a graphics display.
+ - `pkgdown` and `downlit` support inclusion of `rgl`
+ graphics in automatically built websites. (There's
+ also a devel version of `htmlwidgets` for other dynamic
+ web packages like `plotly`, `leaflet`, etc.)
+ 
+Unfortunately, being development versions, these packages
+sometimes introduce bugs that break `rgl` usage.  Currently
+(June 13, 2021) the main branches of `chromote` and
+`downlit` are fine, but `webshot2` and `pkgdown` need fixes,
+and I recommend the following code to install them:
+```{r eval=FALSE}
+remotes::install_github(c("rstudio/chromote",
+                          "r-lib/downlit",
+                          "dmurdoch/webshot2@fixlockup",
+                          "dmurdoch/pkgdown@issue1689"))
+```
 
 INSTALLATION
 ------------
