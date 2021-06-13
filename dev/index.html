@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.22</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.23</span>
       </span>
     </div>
 
@@ -114,15 +114,32 @@
 <p>The currently active development site is here:</p>
 <p><a href="https://github.com/dmurdoch/rgl" class="external-link uri">https://github.com/dmurdoch/rgl</a></p>
 </div>
+<div id="note-about-devel-versions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#note-about-devel-versions" class="anchor" aria-hidden="true"></a>NOTE ABOUT DEVEL VERSIONS</h2>
+<p><code>rgl</code> can make use of development versions of some packages: <code>webshot2</code>, <code>chromote</code>, <code>pkgdown</code>, <code>downlit</code>. Though it doesn’t require any of these, they each provide some nice features:</p>
+<ul>
+<li>
+<code>webshot2</code> and <code>chromote</code> support good quality PNG snapshots of <code>rgl</code> scenes, even on servers that don’t have a graphics display.</li>
+<li>
+<code>pkgdown</code> and <code>downlit</code> support inclusion of <code>rgl</code> graphics in automatically built websites. (There’s also a devel version of <code>htmlwidgets</code> for other dynamic web packages like <code>plotly</code>, <code>leaflet</code>, etc.)</li>
+</ul>
+<p>Unfortunately, being development versions, these packages sometimes introduce bugs that break <code>rgl</code> usage. Currently (June 13, 2021) the main branches of <code>chromote</code> and <code>downlit</code> are fine, but <code>webshot2</code> and <code>pkgdown</code> need fixes, and I recommend the following code to install them:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rstudio/chromote"</span>,
+                          <span class="st">"r-lib/downlit"</span>,
+                          <span class="st">"dmurdoch/webshot2@fixlockup"</span>,
+                          <span class="st">"dmurdoch/pkgdown@issue1689"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor" aria-hidden="true"></a>INSTALLATION</h2>
 <p>Most users will want to install the latest CRAN release. For Windows, macOS and some Linux platforms, installation can be easy, as CRAN distributes binary versions:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install latest release from CRAN</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install latest release from CRAN</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
 <p>To install the latest development version from Github, you’ll need to do a source install. Those aren’t easy! Try</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install development version from Github</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install development version from Github</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
 <p>If that fails, read the instructions below.</p>
 </div>
 <div id="license" class="section level2">
@@ -178,7 +195,7 @@ aptitude install libgl1-mesa-dev libglu1-mesa-dev</p>
 <p><strong>Fedora:</strong><br>
 yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel</p>
 <p><strong>macOS:</strong><br>
-Install XQuartz.<br><code>rgl</code> should work with either XQuartz 2.7.11 or 2.8.0, but it will probably need rebuilding if the XQuartz version changes. XQuartz normally needs re-installation whenever the macOS version changes.</p>
+Install XQuartz.<br><code>rgl</code> should work with XQuartz 2.7.11 or newer, but it will probably need rebuilding if the XQuartz version changes. XQuartz normally needs re-installation whenever the macOS version changes.</p>
 <p><strong>Windows:</strong><br>
 Windows normally includes OpenGL support, but to get the appropriate include files etc., you will need the appropriate version of <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> matched to your R version.</p>
 </div>
@@ -193,27 +210,31 @@ Windows normally includes OpenGL support, but to get the appropriate include fil
 <a href="#buildinginstalling" class="anchor" aria-hidden="true"></a>BUILDING/INSTALLING</h2>
 <p>Binary builds of <code>rgl</code> are available for some platforms on CRAN.</p>
 <p>For source builds, install the prerequisites as described above, download the tarball and at the command line run</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL rgl_0.<span class="dv">106</span>.<span class="fl">16.</span>tar.gz</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL rgl_0.<span class="dv">106</span>.<span class="fl">23.</span>tar.gz</span></code></pre></div>
 <p>(with the appropriate version of the tarball). The build uses an <code>autoconf</code> configure script; to see the options, expand the tarball and run <code>./configure --help</code>.</p>
 <p>Alternatively, in R run</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
 <p>to install from CRAN, or</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
 <p>to install the development version from Github.</p>
+<p>Sometimes binary development versions are available for Windows and macOS using</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>, <span class="at">repos =</span> <span class="st">"https://dmurdoch.github.io/drat"</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type =</span> <span class="st">"binary"</span>)</span></code></pre></div>
+<p>but these are not always kept up to date.</p>
 </div>
 <div id="building-without-opengl" class="section level2">
 <h2 class="hasAnchor">
 <a href="#building-without-opengl" class="anchor" aria-hidden="true"></a>BUILDING WITHOUT OPENGL</h2>
 <p>As of version 0.104.1, it is possible to build the package without OpenGL support on Unix-alikes (including macOS) with the configure option –disable-opengl For example,</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_0.<span class="dv">106</span>.<span class="fl">16.</span>tar.gz </span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_0.<span class="dv">106</span>.<span class="fl">23.</span>tar.gz </span></code></pre></div>
 <p>On Windows, OpenGL support cannot currently be disabled.</p>
 </div>
 <div id="documentation-and-demos" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation-and-demos" class="anchor" aria-hidden="true"></a>DOCUMENTATION and DEMOS:</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgl)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">browseVignettes</span>(<span class="st">"rgl"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">demo</span>(rgl)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgl)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">browseVignettes</span>(<span class="st">"rgl"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">demo</span>(rgl)</span></code></pre></div>
 </div>
 <div id="credits" class="section level2">
 <h2 class="hasAnchor">
