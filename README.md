@@ -47,15 +47,15 @@ these, they each provide some nice features:
     `leaflet`, etc.)
 
 Unfortunately, being development versions, these packages sometimes
-introduce bugs that break `rgl` usage. Currently (June 13, 2021) the
-main branches of `chromote` and `downlit` are fine, but `webshot2` and
-`pkgdown` need fixes, and I recommend the following code to install
+introduce bugs that break `rgl` usage. Currently (June 15, 2021) the
+main branches of `webshot2`, `chromote` and `downlit` are fine, but
+`pkgdown` needs fixes, and I recommend the following code to install
 them:
 
 ``` r
-remotes::install_github(c("rstudio/chromote",
+remotes::install_github(c("rstudio/webshot2",
+                          "rstudio/chromote",
                           "r-lib/downlit",
-                          "dmurdoch/webshot2@fixlockup",
                           "dmurdoch/pkgdown@issue1689"))
 ```
 
