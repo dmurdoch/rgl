@@ -41,10 +41,10 @@ these, they each provide some nice features:
 
 -   `webshot2` and `chromote` support good quality PNG snapshots of
     `rgl` scenes, even on servers that don’t have a graphics display.
--   `pkgdown` and `downlit` support inclusion of `rgl` graphics in
-    automatically built websites. (There’s also a devel version of
-    `htmlwidgets` for other dynamic web packages like `plotly`,
-    `leaflet`, etc.)
+-   Devel versions of `pkgdown` and `downlit` support inclusion of `rgl`
+    graphics in example code in automatically built package websites.
+    (There’s also a devel version of `htmlwidgets` for other dynamic web
+    packages like `plotly`, `leaflet`, etc.)
 
 Unfortunately, being development versions, these packages sometimes
 introduce bugs that break `rgl` usage. Currently (June 15, 2021) the
