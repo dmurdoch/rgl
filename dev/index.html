@@ -124,11 +124,11 @@
 <li>
 <code>pkgdown</code> and <code>downlit</code> support inclusion of <code>rgl</code> graphics in automatically built websites. (There’s also a devel version of <code>htmlwidgets</code> for other dynamic web packages like <code>plotly</code>, <code>leaflet</code>, etc.)</li>
 </ul>
-<p>Unfortunately, being development versions, these packages sometimes introduce bugs that break <code>rgl</code> usage. Currently (June 13, 2021) the main branches of <code>chromote</code> and <code>downlit</code> are fine, but <code>webshot2</code> and <code>pkgdown</code> need fixes, and I recommend the following code to install them:</p>
+<p>Unfortunately, being development versions, these packages sometimes introduce bugs that break <code>rgl</code> usage. Currently (June 15, 2021) the main branches of <code>webshot2</code>, <code>chromote</code> and <code>downlit</code> are fine, but <code>pkgdown</code> needs fixes, and I recommend the following code to install them:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rstudio/chromote"</span>,
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rstudio/webshot2"</span>,
+                          <span class="st">"rstudio/chromote"</span>,
                           <span class="st">"r-lib/downlit"</span>,
-                          <span class="st">"dmurdoch/webshot2@fixlockup"</span>,
                           <span class="st">"dmurdoch/pkgdown@issue1689"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="installation" class="section level2">
