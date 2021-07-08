@@ -13,7 +13,8 @@ play3d(f, duration = Inf, dev = cur3d(), ..., startTime = 0)
 movie3d(f, duration, dev = cur3d(), ..., fps = 10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
                     convert = NULL, clean = TRUE, verbose = TRUE,
-                    top = !rgl.useNULL(), type = "gif", startTime = 0) 
+                    top = !rgl.useNULL(), type = "gif", startTime = 0,
+                    webshot = TRUE) 
 
 }
 \arguments{
@@ -31,6 +32,8 @@ movie3d(f, duration, dev = cur3d(), ..., fps = 10,
   \item{verbose}{ Whether to report the \code{convert} command and the output filename }
   \item{top}{ Whether to call \code{\link{rgl.bringtotop}} before each frame }
   \item{type}{ What type of movie to create.  See Details. }
+  \item{webshot}{ Whether to use the \pkg{webshot2} package
+  for snapshots of frames. See \code{\link{snapshot3d}}.}
 }
 \details{
 The function \code{f} will be called in a loop with the first argument
