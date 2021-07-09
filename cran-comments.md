@@ -1,25 +1,14 @@
-0.106.6:
-
-- Reverted some unnecessary changes to object internals so
-reverse dependency checks won't see differences; 
-- added compare_proxy.mesh3d method to work with new version
-of testthat.
-
-0.106.5:
-
-This tiny revision is mainly intended to try again, hoping
-the transient error  
-
-    URL: https://rdrr.io/pkg/tripack/man/tri.html
-      From: inst/doc/rgl.html
-      Status: 503
-      Message: Service Unavailable
-    
-doesn't occur again.  I have also changed the URL 
-https://rstudio.com back to https://www.rstudio.com/.
-
-
-0.106.4:
+0.107.1:
 
 This revision has a fairly large number of additions and
-bug fixes:  see the NEWS.md file for details.
+bug fixes.  The main additions are in the area of
+user-customization.  See the NEWS.md file for details. 
+A minor change is to move some hard dependencies to soft
+dependencies, as suggested by Brian Ripley some time ago.
+
+The main CRAN issue happens when Pandoc is unavailable.  It is
+only needed to rebuild the vignettes; they will rebuild without
+it as stubs with a warning, as the graphics inclusions need it.
+A minor issue is that webshot2, which is needed to make 
+headless snapshots, is not on CRAN.  It is available in a 
+private repository that I maintain.
