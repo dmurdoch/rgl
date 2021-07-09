@@ -35,6 +35,7 @@ user-specified axis drawing routines.
 * The handling of the `RGL_DEBUGGING` environment variable
   has changed:  now it must look like `TRUE` to trigger
   Javascript debugging mode.
+* Argument `webshot = TRUE` has been added to `movie3d` (issue #113).
 
 ## Bug fixes
 

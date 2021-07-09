@@ -172,7 +172,8 @@ play3d <- function(f, duration = Inf, dev = cur3d(), ..., startTime = 0) {
 movie3d <- function(f, duration, dev = cur3d(), ..., fps=10, 
                     movie = "movie", frames = movie, dir = tempdir(), 
                     convert = NULL, clean = TRUE, verbose=TRUE,
-                    top = !rgl.useNULL(), type = "gif", startTime = 0) {
+                    top = !rgl.useNULL(), type = "gif", startTime = 0,
+                    webshot = TRUE) {
   
   olddir <- setwd(dir)
   on.exit(setwd(olddir))
@@ -196,7 +197,7 @@ movie3d <- function(f, duration, dev = cur3d(), ..., fps=10,
     }
     if (top)
       rgl.bringtotop()
-    snapshot3d(filename=filename)
+    snapshot3d(filename = filename, webshot = webshot)
   }	
   cat("\n")
   if (.Platform$OS.type == "windows") system <- shell  # nolint
