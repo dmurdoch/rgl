@@ -805,7 +805,7 @@ void BBoxDeco::render(RenderContext* renderContext)
 
 Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, Material* material) {
   /* Create permutation to map at, line, pos to x, y, z */
-  int at, line, level;
+  int at = 0, line = 0, level = 0; /* initialize to suppress warning */
   Vec3 trans, scale;
   BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
         &at, &line, &level,
@@ -830,7 +830,7 @@ Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, 
 }
 
 Vec3 BBoxDeco::marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderContext, Material* material) {
-  int at, line, level;
+  int at=0, line=0, level=0; /* initialize to suppress warning */
   Vec3 trans, scale;
   BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
                                     &at, &line, &level,
