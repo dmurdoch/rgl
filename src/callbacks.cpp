@@ -185,7 +185,7 @@ static void userAxis(void *axisData, int axis, int edge[3])
   char margin[4] = "   ";
   int i, j = 1;
   margin[0] = 'x' + axis;
-  for (i = 0; i < 3 & j < 3; i++) {
+  for (i = 0; i < 3 && j < 3; i++) {
     if (edge[i] == 1)
       margin[j++] = '+';
     else if (edge[i] == -1)
