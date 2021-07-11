@@ -684,7 +684,7 @@ void BBoxDeco::render(RenderContext* renderContext)
       Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, *this, i); 
       
       if (axis->mode == AXIS_USER) {
-        
+        Rprintf("in BBoxDeco::render, axisBusy=%d\n", axisBusy);
         if (!axisBusy) {
           axisBusy = true;
           if (axisCallback[i]) {
@@ -699,6 +699,7 @@ void BBoxDeco::render(RenderContext* renderContext)
               e[2] = 0;
             }
             axisCallback[i](axisData[i], i, e);
+            Rprintf("  returned from axisCallback[%d]\n", i);
             axisBusy = false;
           }
         }
@@ -844,6 +845,7 @@ Vec3 BBoxDeco::marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderCon
 
 void BBoxDeco::setAxisCallback(userAxisPtr fn, void* user, int axis)
 {
+  Rprintf("in BBoxDeco::setAxisCallback\n");
   axisCallback[axis] = fn;
   axisData[axis] = user;
   switch(axis) {
