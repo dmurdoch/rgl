@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.23</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.5</span>
       </span>
     </div>
 
@@ -121,8 +121,7 @@
 <ul>
 <li>
 <code>webshot2</code> and <code>chromote</code> support good quality PNG snapshots of <code>rgl</code> scenes, even on servers that don’t have a graphics display.</li>
-<li>
-<code>pkgdown</code> and <code>downlit</code> support inclusion of <code>rgl</code> graphics in automatically built websites. (There’s also a devel version of <code>htmlwidgets</code> for other dynamic web packages like <code>plotly</code>, <code>leaflet</code>, etc.)</li>
+<li>Devel versions of <code>pkgdown</code> and <code>downlit</code> support inclusion of <code>rgl</code> graphics in example code in automatically built package websites. (There’s also a devel version of <code>htmlwidgets</code> for other dynamic web packages like <code>plotly</code>, <code>leaflet</code>, etc.)</li>
 </ul>
 <p>Unfortunately, being development versions, these packages sometimes introduce bugs that break <code>rgl</code> usage. Currently (June 15, 2021) the main branches of <code>webshot2</code>, <code>chromote</code> and <code>downlit</code> are fine, but <code>pkgdown</code> needs fixes, and I recommend the following code to install them:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -210,7 +209,7 @@ Windows normally includes OpenGL support, but to get the appropriate include fil
 <a href="#buildinginstalling" class="anchor" aria-hidden="true"></a>BUILDING/INSTALLING</h2>
 <p>Binary builds of <code>rgl</code> are available for some platforms on CRAN.</p>
 <p>For source builds, install the prerequisites as described above, download the tarball and at the command line run</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL rgl_0.<span class="dv">106</span>.<span class="fl">23.</span>tar.gz</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL rgl_0.<span class="dv">107</span>.<span class="fl">5.</span>tar.gz</span></code></pre></div>
 <p>(with the appropriate version of the tarball). The build uses an <code>autoconf</code> configure script; to see the options, expand the tarball and run <code>./configure --help</code>.</p>
 <p>Alternatively, in R run</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
@@ -226,7 +225,7 @@ Windows normally includes OpenGL support, but to get the appropriate include fil
 <h2 class="hasAnchor">
 <a href="#building-without-opengl" class="anchor" aria-hidden="true"></a>BUILDING WITHOUT OPENGL</h2>
 <p>As of version 0.104.1, it is possible to build the package without OpenGL support on Unix-alikes (including macOS) with the configure option –disable-opengl For example,</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_0.<span class="dv">106</span>.<span class="fl">23.</span>tar.gz </span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_0.<span class="dv">107</span>.<span class="fl">5.</span>tar.gz </span></code></pre></div>
 <p>On Windows, OpenGL support cannot currently be disabled.</p>
 </div>
 <div id="documentation-and-demos" class="section level2">
@@ -257,7 +256,8 @@ Yohann Demont for Shiny code, suggestions, and testing.<br>
 Joshua Ulrich for a lot of help with the Github migration.<br>
 Xavier Fernandez i Marin for help debugging the build.<br>
 George Helffrich for draping code.<br>
-Ivan Krylov for window_group code in X11.</p>
+Ivan Krylov for window_group code in X11.<br>
+Michael Sumner for as.mesh3d.default enhancement.</p>
 </div>
 </div>
   </div>

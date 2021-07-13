@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.106.23</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.5</span>
       </span>
     </div>
 
@@ -140,9 +140,9 @@
       <small>Source: <a href='https://github.com/dmurdoch/rgl/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rgl-010623" class="section level1">
-<h1 class="page-header" data-toc-text="0.106.23">
-<a href="#rgl-010623" class="anchor" aria-hidden="true"></a>rgl 0.106.23<small> Unreleased </small></h1>
+    <div id="rgl-01075" class="section level1">
+<h1 class="page-header" data-toc-text="0.107.5">
+<a href="#rgl-01075" class="anchor" aria-hidden="true"></a>rgl 0.107.5<small> Unreleased </small></h1>
 <div id="major-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#major-changes" class="anchor" aria-hidden="true"></a>Major changes</h2>
@@ -164,6 +164,10 @@
 <li>Code to work with pre-1.33 versions of <code>knitr</code> has now been removed.</li>
 <li>Added documentation of Javascript to web page.</li>
 <li>The handling of the <code>RGL_DEBUGGING</code> environment variable has changed: now it must look like <code>TRUE</code> to trigger Javascript debugging mode.</li>
+<li>Argument <code>webshot = TRUE</code> has been added to <code>movie3d</code> (issue <a href='https://github.com/dmurdoch/rgl/issues/113'>#113</a>).</li>
+<li>The assert() macro is now always defined.</li>
+<li>In Windows, the <code>WM_PAINT</code> handler should be more tolerant of code called while painting.</li>
+<li>as.mesh3d.default() can create segments. (Contributed by Michael Sumner.)</li>
 </ul></div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
