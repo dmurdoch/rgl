@@ -185,7 +185,7 @@ static void userAxis(void *axisData, int axis, int edge[3])
   char margin[4] = "   ";
   int i, j = 1;
   margin[0] = 'x' + axis;
-  for (i = 0; i < 3 & j < 3; i++) {
+  for (i = 0; i < 3 && j < 3; i++) {
     if (edge[i] == 1)
       margin[j++] = '+';
     else if (edge[i] == -1)
@@ -217,7 +217,9 @@ SEXP rgl::rgl_setAxisCallback(SEXP draw, SEXP dev, SEXP sub, SEXP axis)
     if (!subscene) error("subscene not found");
     BBoxDeco* bboxdeco = subscene->get_bboxdeco();
     if (!bboxdeco) error("no bbox decoration");
-    bboxdeco->setAxisCallback(axisCallback, axisData, asInteger(axis));
+    int a = asInteger(axis);
+    if (a < 0 || a > 2) error("axis must be 0=x, 1=y, or 2=z");
+    bboxdeco->setAxisCallback(axisCallback, axisData, a);
     rglview->update();
   } else error("rgl device is not open");
   return R_NilValue;

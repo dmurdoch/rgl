@@ -88,8 +88,11 @@ void RGLView::paint(void) {
   renderContext.time = t;
   renderContext.deltaTime = dt;
   
-  /* This doesn't do any actual plotting, but it calculates matrices etc. */
+  /* This doesn't do any actual plotting, but it calculates matrices etc.,
+  and may call user callbacks */
+  int saveRedraw = windowImpl->setSkipRedraw(1);
   scene->update(&renderContext);
+  windowImpl->setSkipRedraw(saveRedraw);
 
 #ifndef RGL_NO_OPENGL    
   /* This section does the OpenGL plotting */

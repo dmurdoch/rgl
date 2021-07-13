@@ -21,13 +21,14 @@
 extern "C" {
 #endif
 
+/*   
 #ifdef NDEBUG
-/*
- * If not debugging, assert does nothing.
- */
+ * If not debugging, standard assert does nothing; ours always
+ * does the same.
 #define assert(x)	((void)0)
 
-#else /* debugging enabled */
+#else 
+*/ 
 
 void rgl_assert (const char*, const char*, int);
 
@@ -35,8 +36,6 @@ void rgl_assert (const char*, const char*, int);
  * Definition of the assert macro.
  */
 #define assert(e)       ((e) ? (void)0 : rgl_assert(#e, __FILE__, __LINE__))
-
-#endif	/* NDEBUG */
 
 #ifdef	__cplusplus
 }

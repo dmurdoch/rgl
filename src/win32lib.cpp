@@ -59,10 +59,9 @@ bool rgl::init(bool useNULLDevice)
 // ---------------------------------------------------------------------------
 void rgl::quit()
 {
-  assert(gpWin32GUIFactory != NULL && gpNULLGUIFactory != NULL);
   delete gpWin32GUIFactory;
-  delete gpNULLGUIFactory;
   gpWin32GUIFactory = NULL;
+  delete gpNULLGUIFactory;
   gpNULLGUIFactory = NULL;
 }
 // ---------------------------------------------------------------------------

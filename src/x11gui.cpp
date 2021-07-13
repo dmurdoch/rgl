@@ -668,7 +668,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   ::Window xparent = 0;
   if (!error_code) {
     xparent = RootWindow(xdisplay, DefaultScreen(xdisplay));
-    if (!error_code & !xparent)
+    if (!error_code && !xparent)
       error_code = RGL_ERROR_CODE + 2;
   }
   

@@ -1,4 +1,4 @@
-# rgl  0.106.24
+# rgl  0.107.4
 
 ## Major changes
 
@@ -36,6 +36,9 @@ user-specified axis drawing routines.
   has changed:  now it must look like `TRUE` to trigger
   Javascript debugging mode.
 * Argument `webshot = TRUE` has been added to `movie3d` (issue #113).
+* The assert() macro is now always defined.
+* In Windows, the `WM_PAINT` handler should be more tolerant
+  of code called while painting.
 
 ## Bug fixes
 
