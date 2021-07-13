@@ -204,7 +204,7 @@ SEXP rgl::rgl_setAxisCallback(SEXP draw, SEXP dev, SEXP sub, SEXP axis)
     RGLView* rglview = device->getRGLView();
     void* axisData = 0;
     userAxisPtr axisCallback;
-    Rprintf("in rgl_setAxisCallback\n");
+    
     if (isFunction(draw)) {
       axisCallback = &userAxis;
       axisData = (void*)draw;
@@ -219,7 +219,6 @@ SEXP rgl::rgl_setAxisCallback(SEXP draw, SEXP dev, SEXP sub, SEXP axis)
     if (!bboxdeco) error("no bbox decoration");
     int a = asInteger(axis);
     if (a < 0 || a > 2) error("axis must be 0=x, 1=y, or 2=z");
-    Rprintf("  calling bboxdeco->setAxisCallback\n");
     bboxdeco->setAxisCallback(axisCallback, axisData, a);
     rglview->update();
   } else error("rgl device is not open");

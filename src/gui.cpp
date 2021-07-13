@@ -27,7 +27,7 @@ int WindowImpl::setSkipRedraw(int in_skipRedraw)
   int result = 0;
   if (window) {
     result = window->getSkipRedraw();
-    window->setSkipRedraw(in_skipRedraw);
+    window->setSkipRedraw(in_skipRedraw, 0);
   }
   return result;
 }
@@ -226,10 +226,10 @@ int Window::getSkipRedraw(void)
   return (int)skipRedraw;
 }
 // ---------------------------------------------------------------------------
-void Window::setSkipRedraw(int in_skipRedraw)
+void Window::setSkipRedraw(int in_skipRedraw, int doUpdate)
 {
   skipRedraw = (bool)in_skipRedraw;
-  if (!skipRedraw) update();
+  if (!skipRedraw && doUpdate) update();
 }
 // ---------------------------------------------------------------------------
 void Window::show(void)

@@ -178,7 +178,7 @@ public:
   void setVisibility(bool state);
   void update(void);
   int getSkipRedraw(void);
-  void setSkipRedraw(int in_skipRedraw);
+  void setSkipRedraw(int in_skipRedraw, int doUpdate = 1);
 
 /**
  * Close the window. 
