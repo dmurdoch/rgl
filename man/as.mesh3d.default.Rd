@@ -10,8 +10,8 @@ to \code{\link{mesh3d}} objects.
 
 The default method takes takes a matrix of vertices 
 as input and (optionally) merges repeated vertices, producing a \code{\link{mesh3d}}
-object as output.  It will contain either triangles or quads
-according to the \code{triangles} argument.
+object as output.  It will contain either triangles or quads or segments or points
+according to the \code{type} argument.
 
 If the generic is called without any argument, it will pass
 all RGL ids from the current scene to the 
@@ -20,7 +20,7 @@ all RGL ids from the current scene to the
 \usage{
 as.mesh3d(x, ...)
 \method{as.mesh3d}{default}(x, y = NULL, z = NULL, 
-             type = c("triangles", "quads", "points"),
+             type = c("triangles", "quads", "segments", "points"),
              smooth = FALSE, 
              tolerance = sqrt(.Machine$double.eps), 
              notEqual = NULL, 
@@ -105,7 +105,7 @@ xyz <- matrix(c(-1, -1, -1,
                  1,  1, -1,
                  1,  1,  1,
                  1, -1,  1), byrow = TRUE, ncol = 3)
-mesh <- as.mesh3d(xyz, triangles = FALSE, col = "red")
+mesh <- as.mesh3d(xyz, type = "quads", col = "red")
 mesh$vb
 mesh$ib
 open3d()
@@ -114,7 +114,7 @@ shade3d(mesh)
 # Stop vertices 2 and 5 from being merged
 notEQ <- matrix(FALSE, 12, 12)
 notEQ[2, 5] <- TRUE
-mesh <- as.mesh3d(xyz, triangles = FALSE, notEqual = notEQ)
+mesh <- as.mesh3d(xyz, type = "quads", notEqual = notEQ)
 mesh$vb
 mesh$ib
 }
