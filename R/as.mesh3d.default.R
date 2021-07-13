@@ -1,5 +1,5 @@
 as.mesh3d.default <- function(x, y = NULL, z = NULL,
-                              type = c("triangles", "quads", "points"),
+                              type = c("triangles", "quads", "segments", "points"),
                               smooth = FALSE, 
                               tolerance = sqrt(.Machine$double.eps),
                               notEqual = NULL,
@@ -24,7 +24,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
     }
   }
   type <- match.arg(type, several.ok = TRUE)
-  pcs <- c(triangles = 3, quads = 4, points = 1)
+  pcs <- c(triangles = 3, quads = 4, segments = 2, points = 1)
   nvert <- length(x)
   okay <- FALSE
   for (i in seq_along(type)) {
@@ -69,6 +69,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
   mesh <- mesh3d(vertices = rbind(verts[,keep, drop = FALSE], 1), points = if (type == "points") indices, 
                   triangles = if (type == "triangles") indices,
                   quads = if (type == "quads") indices,
+                  segments = if (type == "segments") indices,
                   material = list(...))
   if (smooth && type != "points")
     mesh <- addNormals(mesh)
