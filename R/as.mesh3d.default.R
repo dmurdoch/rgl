@@ -1,10 +1,10 @@
 as.mesh3d.default <- function(x, y = NULL, z = NULL,
-                              type = c("triangles", "quads", "points"),
-                              smooth = FALSE, 
+                              type = c("triangles", "quads", "points", "segments"),
+                              smooth = FALSE,
                               tolerance = sqrt(.Machine$double.eps),
                               notEqual = NULL,
                               merge = TRUE,
-                              ..., 
+                              ...,
                               triangles) {
   if (missing(x)) {
     x <- rglId(ids3d()$id)
@@ -24,7 +24,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
     }
   }
   type <- match.arg(type, several.ok = TRUE)
-  pcs <- c(triangles = 3, quads = 4, points = 1)
+  pcs <- c(triangles = 3, quads = 4, points = 1, segments = 2)
   nvert <- length(x)
   okay <- FALSE
   for (i in seq_along(type)) {
@@ -35,7 +35,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
   }
   if (okay) type <- type[i]
   else stop("Wrong number of vertices")
-    
+
   verts <- rbind(x, y, z)
   indices <- matrix(seq_along(x), nrow = pcs[type])
   if (merge) {
@@ -66,25 +66,26 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
   } else
     keep <- seq_len(ncol(verts))
 
-  mesh <- mesh3d(vertices = rbind(verts[,keep, drop = FALSE], 1), points = if (type == "points") indices, 
+  mesh <- mesh3d(vertices = rbind(verts[,keep, drop = FALSE], 1), points = if (type == "points") indices,
                   triangles = if (type == "triangles") indices,
                   quads = if (type == "quads") indices,
+                 segments = if(type == "segments") indices,
                   material = list(...))
   if (smooth && type != "points")
     mesh <- addNormals(mesh)
   mesh
 }
 
-as.mesh3d.rglId <- function(x, type = NA, subscene = NA, 
+as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
                             ...) {
   local_t <- function(x) {
     if (!is.null(x)) t(x)
   }
-  
+
   colorByFaces <- function(mesh) {
     constColumns <- function(m)
       all(apply(m, 2, function(col) length(unique(col))) == 1)
-          
+
     # See if we can use meshColor = "faces"
     if (!is.null(mesh$material) && !is.null(mesh$meshColor)
         && mesh$meshColor == "vertices") {
@@ -103,14 +104,14 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
       newcols <- NULL
       newalpha <- NULL
       newtexcoords <- NULL
-      
+
       if (!is.null(mesh$ip)) {
         inds <- mesh$ip
         newcols <- cols[inds]
         newalpha <- alpha[inds]
       }
       if (!is.null(mesh$is)) {
-        inds <- as.numeric(mesh$is) 
+        inds <- as.numeric(mesh$is)
         cols <- matrix(cols[inds], nrow = 2)
         alpha <- matrix(alpha[inds], nrow = 2)
         if (!constColumns(cols) || !constColumns(alpha))
@@ -161,7 +162,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
     }
     mesh
   }
-  
+
   mergeMaterials <- function(oldmat, newmat, n, type) {
     if (length(newmat$color) == 1)
       newmat$color <- rep(newmat$color, len = n)
@@ -193,7 +194,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
   # Parts will be drawn in order ip, is, it, ib,
   # so sort that way now
   ordered <- c(points = 1, lines = 2, linestrip = 3,
-               triangles = 4, planes = 5, quads = 6, 
+               triangles = 4, planes = 5, quads = 6,
                surface = 7)
   if (!is.na(type))
     ids <- ids[ids$type %in% type,]
@@ -217,7 +218,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
                      lines = # from segments3d
                        matrix(1:nvert + prev, nrow = 2),
                      linestrip = # from lines3d
-                       rbind(seq_len(nvert - 1), 
+                       rbind(seq_len(nvert - 1),
                              seq_len(nvert - 1) + 1) + prev,
                      triangles =,
                      planes = matrix(1:nvert + prev, nrow = 3),
@@ -248,14 +249,14 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
         } else {
           it <- cbind(it, inds)
           normals <- rbind(normals, rgl.attrib(id, "normals"))
-        }  
+        }
         vertices <- cbind(vertices, local_t(rgl.attrib(id, "vertices")))
         if (rgl.attrib.count(id,"texcoords"))
           texcoords <- rbind(texcoords, rgl.attrib(id, "texcoords"))
         else
           texcoords <- rbind(texcoords, matrix(NA, ncol = 2, nrow = nvert))
         mat <- rgl.getmaterial(nvert, id = id)
-        
+
         material <- mergeMaterials(material, mat, nvert, type)
       }
     }
@@ -267,10 +268,10 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
       material$alpha <- material$alpha[1]
     meshColor <- material$meshColor
     material$meshColor <- NULL
-    colorByFaces(mesh3d(vertices = vertices, 
-                        points = ip, segments = is, triangles = it, 
-                        material = material, normals = normals, 
-                        texcoords = if (any(!is.na(texcoords))) texcoords, 
+    colorByFaces(mesh3d(vertices = vertices,
+                        points = ip, segments = is, triangles = it,
+                        material = material, normals = normals,
+                        texcoords = if (any(!is.na(texcoords))) texcoords,
                         meshColor = meshColor))
   }
 }
@@ -326,13 +327,13 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
   dropNormals <- function(mesh) {
     if (is.null(mesh$normals))
       return(FALSE)
-    
+
     normals <- mesh$normals
     v <- with(mesh, rbind(vb[1,]/vb[4,], vb[2,]/vb[4,], vb[3,]/vb[4,]))
     it <- mesh$it
     if (!is.null(it))
       for (i in seq_len(ncol(it))) {
-        normal <- xprod( v[, it[1, i]] - v[, it[3, i]], 
+        normal <- xprod( v[, it[1, i]] - v[, it[3, i]],
                          v[, it[2, i]] - v[, it[1, i]])
         normal <- normal/sqrt(sum(normal^2))
         for (j in 1:3) {
@@ -340,17 +341,17 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
           normij <- normij/sqrt(sum(normij^2))
           same <- all.equal(normal, normij, tolerance = tolerance,
                             check.attributes = FALSE)
-          if (!isTRUE(same)) 
+          if (!isTRUE(same))
             return(FALSE)
         }
       }
     ib <- mesh$ib
-    if (!is.null(ib)) 
+    if (!is.null(ib))
       for (i in seq_len(ncol(ib))) {
-        norm1 <- xprod( v[, it[1, i]] - v[, it[3, i]], 
+        norm1 <- xprod( v[, it[1, i]] - v[, it[3, i]],
                         v[, it[2, i]] - v[, it[1, i]])
         norm1 <- norm1/sqrt(sum(norm1^2))
-        norm2 <- xprod( v[, it[2, i]] - v[, it[4, i]], 
+        norm2 <- xprod( v[, it[2, i]] - v[, it[4, i]],
                         v[, it[3, i]] - v[, it[2, i]])
         norm2 <- norm1/sqrt(sum(norm2^2))
         for (j in 1:4) {
@@ -360,16 +361,16 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
                              check.attributes = FALSE)
           same2 <- all.equal(norm2, normij, tolerance = tolerance,
                              check.attributes = FALSE)
-          if (!isTRUE(same1) || !isTRUE(same2)) 
+          if (!isTRUE(same1) || !isTRUE(same2))
             return(FALSE)
         }
-      }      
+      }
     TRUE
   }
-  
+
   if (dropNormals(mesh))
     mesh$normals <- NULL
-  
+
   if (is.null(mesh$vb))
     return(mesh)
   nvert <- ncol(mesh$vb)
@@ -380,13 +381,13 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
     notEqual <- notEqual | t(notEqual) # Make it symmetric
   } else
     notEqual <- matrix(FALSE, nvert, nvert)
-  attribute <- match.arg(attribute, 
+  attribute <- match.arg(attribute,
                           choices = c("vertices", "colors", "normals", "texcoords"),
                           several.ok = TRUE)
-  
-  
+
+
   verts <- matrix(numeric(), ncol = 0, nrow = nvert)
-  if ("vertices" %in% attribute) 
+  if ("vertices" %in% attribute)
     verts <- cbind(mesh$vb[1,]/mesh$vb[4,],
                    mesh$vb[2,]/mesh$vb[4,],
                    mesh$vb[3,]/mesh$vb[4,])
@@ -394,7 +395,7 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
     if (nrow(normals) == 3)
       verts <- cbind(verts, t(normals))
     else
-      verts <- cbind(verts, normals[1,]/normals[4,], 
+      verts <- cbind(verts, normals[1,]/normals[4,],
                             normals[2,]/normals[4,],
                             normals[3,]/normals[4,])
   colors <- NULL
@@ -402,10 +403,10 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
       !is.null(mesh$meshColor) && mesh$meshColor == "vertices" &&
       !is.null(mesh$material) && !is.null(colors <- mesh$material$color))
       verts <- cbind(verts, t(col2rgb(colors)))
-  
+
   if (!is.null(texcoords <- mesh$texcoords) && "texcoords" %in% attribute)
     verts <- cbind(verts, t(texcoords))
-  
+
   o <- do.call(order, as.data.frame(verts))
   indices <- c(mesh$ip, mesh$is, mesh$it, mesh$ib)
   i1 <- seq_len(nvert)[o]
@@ -429,14 +430,14 @@ mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
     mesh$texcoords <- texcoords[, keep]
   if (!is.null(colors))
     mesh$material$color <- colors[keep]
-  
+
   if (np <- length(mesh$ip))
     mesh$ip <- indices[seq_len(np)]
   if (ns <- length(mesh$is))
     mesh$is <- matrix(indices[seq_len(ns) + np])
-  if (nt <- length(mesh$it)) 
+  if (nt <- length(mesh$it))
     mesh$it <- matrix(indices[seq_len(nt) + np + ns], nrow = 3)
-  if (nq <- length(mesh$ib)) 
+  if (nq <- length(mesh$ib))
     mesh$ib <- matrix(indices[seq_len(nq) + np + ns + nt], nrow = 4)
   mesh
 }
