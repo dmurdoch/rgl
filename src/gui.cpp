@@ -22,6 +22,16 @@ void WindowImpl::getFonts(FontArray& outfonts, int nfonts, char** family, int* s
   }  
 }
 
+int WindowImpl::setSkipRedraw(int in_skipRedraw)
+{
+  int result = 0;
+  if (window) {
+    result = window->getSkipRedraw();
+    window->setSkipRedraw(in_skipRedraw);
+  }
+  return result;
+}
+
 // ---------------------------------------------------------------------------
 // View Implementation
 // ---------------------------------------------------------------------------
