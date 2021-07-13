@@ -1,4 +1,4 @@
-# rgl  0.107.4
+# rgl  0.107.5
 
 ## Major changes
 
@@ -39,6 +39,8 @@ user-specified axis drawing routines.
 * The assert() macro is now always defined.
 * In Windows, the `WM_PAINT` handler should be more tolerant
   of code called while painting.
+* as.mesh3d.default() can create segments.  (Contributed
+  by Michael Sumner.)
 
 ## Bug fixes
 
