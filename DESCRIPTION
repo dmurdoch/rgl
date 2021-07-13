@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.107.3
+Version: 0.107.4
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -27,7 +27,7 @@ Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
           js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont,
-          shiny, manipulateWidget (>= 0.9.0), testthat
+          shiny, manipulateWidget (>= 0.9.0), testthat, markdown
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr (>= 1.33), jsonlite (>= 0.9.20),
          magrittr, crosstalk
@@ -42,7 +42,8 @@ URL: https://github.com/dmurdoch/rgl,
      https://dmurdoch.github.io/rgl/
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
-    pandoc (>=1.14, needed for vignettes)
+    pandoc (>=1.14, needed for vignettes; if not present, 
+    markdown package will be used)
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Biarch: true
