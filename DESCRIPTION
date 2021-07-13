@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.107.4
+Version: 0.107.5
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -22,7 +22,8 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
               person("Joshua", "Ulrich", role = "ctb"),
               person("Xavier", "Fernandez i Marin", role = "ctb"),
               person("George", "Helffrich", role = "ctb"),
-              person("Ivan", "Krylov", role = "ctb"))
+              person("Ivan", "Krylov", role = "ctb"),
+              person("Michael", "Sumner", role = "ctb"))
 Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
