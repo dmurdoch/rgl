@@ -1,4 +1,4 @@
-# rgl  0.107.5
+# rgl  0.107.6
 
 ## Major changes
 
@@ -20,6 +20,7 @@ user-specified mouse callbacks in WebGL code.
 * The `mtext3d()` argument order has changed.
 * Added the `setAxisCallbacks()` function to allow
 user-specified axis drawing routines.
+* Exposed (and generalized) the `as.tmesh3d()` function.
 
 ## Minor changes
 

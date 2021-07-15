@@ -1,6 +1,6 @@
 export(.check3d, 
   abclines3d, addNormals, addToSubscene3d, arc3d,
-  arrow3d, as.mesh3d, as.triangles3d, asRow,
+  arrow3d, as.mesh3d, as.tmesh3d, as.triangles3d, asRow,
   ageSetter, asEuclidean, asEuclidean2, asHomogeneous, asHomogeneous2,
   aspect3d, axes3d, axis3d, box3d,
   bbox3d, bg3d, bgplot3d, 
@@ -83,6 +83,9 @@ export(.check3d,
  S3method(as.mesh3d, rglId)
  S3method(as.mesh3d, rglobject)
  S3method(as.mesh3d, default)
+ 
+ S3method(as.tmesh3d, mesh3d)
+ S3method(as.tmesh3d, default)
  
  S3method(as.triangles3d, mesh3d)
  S3method(as.triangles3d, rglId)
