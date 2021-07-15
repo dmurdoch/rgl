@@ -29,7 +29,7 @@ Ignored in the \code{mesh3d} method, passed to
 }
 }
 \details{
-The default method simply calls \code{\link{as.mesh3d(x)}}
+The default method simply calls \code{\link{as.mesh3d}(x, ...)}
 and passes the result to the \code{"mesh3d"} method.
 }
 \value{
