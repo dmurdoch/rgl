@@ -57,7 +57,7 @@ on a remote machine, it may need to use \dQuote{Indirect GLX} (IGLX).  Due
 to security concerns, this is often disabled by default.  See
 \url{https://www.x.org/wiki/Development/Security/Advisory-2014-12-09/}
 for a discussion of the security issues, and 
-\url{https://www.visitusers.org/index.php?title=Re-enabling_INdirect_glx_on_your_X_server}
+\url{https://unix.stackexchange.com/q/317954}
 for ways to re-enable IGLX.}
 \item{The \url{https://www.virtualgl.org} project is intended to 
 be a way to avoid IGLX, by rendering remotely and sending bitmaps
