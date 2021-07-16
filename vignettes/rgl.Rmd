@@ -481,6 +481,9 @@ to construct a mesh from a matrix of vertices; it can use
 to merge repeated vertices within the matrix, allowing 
 `r linkfn("addNormals")` to be used to give a smooth appearance.
 
+The `r indexfns("as.tmesh3d")` generic is a variation that
+guarantees the resulting object will have no quad entries.
+
 Functions `r indexfns(c("tmesh3d","qmesh3d"))` are now obsolete;
 use `r linkfn("mesh3d")` instead.
 

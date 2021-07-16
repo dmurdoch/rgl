@@ -1,10 +1,22 @@
-as.tmesh3d <- function(mesh) {
+as.tmesh3d <- function(x, ...)
+  UseMethod("as.tmesh3d")
+
+as.tmesh3d.default <- function(x, drop = FALSE, ...) {
+  as.tmesh3d(as.mesh3d(x, ...), drop = drop)  
+}
+
+as.tmesh3d.mesh3d <- function(x, drop = FALSE, ...) {
+  mesh <- x
   if (!is.null(mesh$ib)) {
     nquads <- ncol(mesh$ib)
     mesh$it <- cbind(mesh$it, 
                      matrix(mesh$ib[rep(4*(seq_len(nquads) - 1), each = 6) + 
                                       rep(c(1, 2, 3, 1, 3, 4), nquads)], nrow = 3))
     mesh$ib <- NULL
+  }
+  if (drop) {
+    mesh$is <- NULL
+    mesh$ip <- NULL
   }
   mesh
 }
