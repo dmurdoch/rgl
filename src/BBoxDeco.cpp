@@ -404,9 +404,6 @@ struct BBoxDeco::BBoxDecoImpl {
     
     AABox bbox = renderContext->subscene->getBoundingBox();
     
-    if (!bbox.isValid())
-      return NULL;
-    
     Vertex center = bbox.getCenter();
     bbox += center + (bbox.vmin - center)*bboxdeco.expand;
     bbox += center + (bbox.vmax - center)*bboxdeco.expand;
@@ -490,9 +487,6 @@ struct BBoxDeco::BBoxDecoImpl {
         break;
     }
     
-    if (axis->mode == AXIS_NONE)
-      return NULL;
-    
     // search z-nearest contours
     
     float d = FLT_MAX;
@@ -524,12 +518,50 @@ struct BBoxDeco::BBoxDecoImpl {
     return edge;
   }
   
+  static Edge* fixedEdge(Material* material)
+  {
+    Edge* axisedge;
+    int i,j, lim, coord = material->marginCoord;
+    bool match;
+    switch(coord) {
+      case 0: 
+        axisedge = xaxisedge;
+        lim = 4;
+        break;
+      case 1: 
+        axisedge = yaxisedge; 
+        lim = 8;
+        break;
+      case 2: 
+        axisedge = zaxisedge;
+        lim = 4;
+        break;
+    }
+    for (j = 0; j < lim; j++) {
+      match = true;
+      for (i = 0; i < 3; i++)
+        if (coord != i && axisedge[j].code[i] != material->edge[i]) {
+          match = false;
+          break;
+        }
+      if (match)
+        return &axisedge[j];
+    }
+    error("fixedEdge: material->floating=%d marginCoord=%d edge=%d %d %d\n", material->floating,
+             material->marginCoord, material->edge[0], material->edge[1], material->edge[2]);
+    return axisedge;
+  }
+  
   static void setMarginParameters(RenderContext* renderContext, BBoxDeco& bboxdeco, Material* material,
                                   int *at, int* line, int* level,
                                   Vec3* trans, Vec3* scale) {
-    *at = material->marginCoord;
-    Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, bboxdeco, *at);
+    Edge* edge;
     int j;
+    *at = material->marginCoord;
+    if (material->floating)
+      edge = BBoxDecoImpl::chooseEdge(renderContext, bboxdeco, *at);
+    else
+      edge = BBoxDecoImpl::fixedEdge(material);
     for (j = 0; j < 3; j++) {
       if (edge->dir[j] != 0) {
         *line = j;

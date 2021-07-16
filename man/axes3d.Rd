@@ -33,7 +33,10 @@ mtext3d(text, edge, at = NULL, line = 0, level = 0,
   \item{sub}{ the subtitle for the plot }
   \item{xlab, ylab, zlab}{ the axis labels for the plot }
   \item{line, level}{ the "line" of the plot margin to draw the label on, and "level" above or below it  }
-  \item{floating}{ which mode of axis labels?  See Details.}
+  \item{floating}{ which mode of axis labels? One of 
+  \code{TRUE}, \code{FALSE} or \code{NA}. (\code{NULL}
+  may also be used in \code{title3d} calls).
+  See Details for how these are handled.}
   \item{edge, pos}{ the position at which to draw the axis or text }
   \item{text}{ the text to draw }
   \item{at}{ the value of a coordinate at which to draw the axis or labels. }
@@ -73,11 +76,20 @@ For example, \code{"x++"} will draw text on the x axis
 in the same edge as the ticks, while \code{"x--"} will draw
 on the opposite edge.
 
-The default is \code{floating = NULL} in \code{title3d}, in which case the main title
-and subtitles will be fixed at \code{line = 2} and 
+The final possible value for \code{floating} in \code{mtext3d} is
+\code{NA}, which reproduces legacy \pkg{rgl}
+behaviour.  In
+this case the labels are not tied to the bounding box,
+so they should be drawn last, or they could appear inside
+the box, overlapping the data.
+
+In \code{title3d} \code{floating = NULL} (the default) 
+indicates the main title 
+and subtitle will be fixed while the axis labels will be
+floating.  The default locations for title and subtitle
+are \code{line = 2} and 
 \code{level = 2} on edges \code{"x++"} and \code{"x--"}
-respectively, while the axis labels will
-be floating at \code{line = 4} and \code{level = 1}.
+respectively.  The axis labels float at \code{line = 4} and \code{level = 1} on the same edge as the ticks.
 
 The \code{at} parameter in \code{axis3d} is the location
 of the ticks, defaulting to \code{\link{pretty}} locations.
@@ -91,13 +103,6 @@ from the box in the same direction as the axis ticks,
 and \code{level} is the line out in the orthogonal
 direction.  The ticks run from \code{line = 0} to \code{line = 1}, and the
 tick labels are drawn at \code{line = 2}.  Both are drawn at level 0.  
-
-The final possible value for \code{floating} in \code{mtext3d} is
-\code{NA}, which reproduces legacy \pkg{rgl}
-behaviour.  In
-this case the labels are not tied to the bounding box,
-so they must be drawn last, or they could appear inside
-the box, overlapping the data.
 
 The \code{pos} parameter is only supported in legacy mode.  If it is a numeric vector of length 3, \code{edge} determines
 the direction of the axis and the tick marks, and the values of the

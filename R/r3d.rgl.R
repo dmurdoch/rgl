@@ -158,6 +158,10 @@ bbox3d	    <- function(xat = NULL,
                         .fixMaterialArgs(..., Params = save)))
 }
 
+dummyBbox <- function()
+  bbox3d(xat = numeric(), yat = numeric(), zat = numeric(),
+         front = "cull", back = "cull")
+
 observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
   if (missing(x))
     location <- c(NA, NA, NA)

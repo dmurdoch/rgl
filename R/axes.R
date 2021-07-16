@@ -171,7 +171,13 @@ mtext3d <- function(text, edge, at = NULL, line = 0,
   save <- par3d(ignoreExtent = TRUE)
   on.exit(par3d(save))
   
-  if (!missing(pos) && missing(floating))
+  bboxdeco <- rgl.ids("bboxdeco")
+  if (!is.na(floating) && !nrow(bboxdeco)) {
+    dummyBbox()
+    bboxdeco <- rgl.ids("bboxdeco")
+  }
+    
+  if (!nrow(bboxdeco) || (missing(floating) && !missing(pos)))
     floating <- NA
   
   ranges <- .getRanges()
@@ -224,43 +230,39 @@ title3d <- function(main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
   save <- par3d(skipRedraw = TRUE, ignoreExtent = TRUE)
   on.exit(par3d(save))
   
-  if (!nrow(rgl.ids("bboxdeco"))) {
-    if (length(floating) == 0 || !is.na(floating))
-      warning("'floating' set to legacy value 'NA', as no bounding box decoration found.")
-    floating <- NA
+  if (length(floating)) {
+    floatingtitles <- floating
+    floatinglabels <- floating
+  } else {
+    floatingtitles <- FALSE
+    floatinglabels <- TRUE
   }
-  
   result <- numeric(0)
   if (!is.null(main)) {
     aline <- ifelse(is.na(line), 2, line)
     alevel <- ifelse(is.na(level), 2, level)
-    afloating <- ifelse(!length(floating), FALSE, floating)
     result <- c(result, 
-                main=mtext3d(main, 'x++', line = aline, level = alevel, floating = afloating, ...))
+                main=mtext3d(main, 'x++', line = aline, level = alevel, floating = floatingtitles, ...))
   }
   if (!is.null(sub)) {
     aline <- ifelse(is.na(line), 2, line)
     alevel <- ifelse(is.na(level), 2, level)
-    afloating <- ifelse(!length(floating), FALSE, floating)
-    result <- c(result, sub=mtext3d(sub, 'x--', line = aline, floating = afloating, ...))
+    result <- c(result, sub=mtext3d(sub, 'x--', line = aline, floating = floatingtitles, ...))
   }
   if (!is.null(xlab)) {
     aline <- ifelse(is.na(line), 4, line)
     alevel <- ifelse(is.na(level), 1, level)
-    afloating <- ifelse(!length(floating), TRUE, floating)
-    result <- c(result, xlab=mtext3d(xlab, 'x', line = aline, level = alevel, floating = afloating, ...))
+    result <- c(result, xlab=mtext3d(xlab, 'x', line = aline, level = alevel, floating = floatinglabels, ...))
   }
   if (!is.null(ylab)) {
     aline <- ifelse(is.na(line), 4, line)
     alevel <- ifelse(is.na(level), 1, level)
-    afloating <- ifelse(!length(floating), TRUE, floating) 
-    result <- c(result, ylab=mtext3d(ylab, 'y', line = aline, level = alevel, floating = afloating, ...))
+    result <- c(result, ylab=mtext3d(ylab, 'y', line = aline, level = alevel, floating = floatinglabels, ...))
   }
   if (!is.null(zlab)) {
     aline <- ifelse(is.na(line), 4, line)
     alevel <- ifelse(is.na(level), 1, level)
-    afloating <- ifelse(!length(floating), TRUE, floating)
-    result <- c(result, zlab=mtext3d(zlab, 'z', line = aline, level = alevel, floating = afloating, ...))
+    result <- c(result, zlab=mtext3d(zlab, 'z', line = aline, level = alevel, floating = floatinglabels, ...))
   }                  
   lowlevel(result)
 }
