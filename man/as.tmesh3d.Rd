@@ -32,6 +32,12 @@ Ignored in the \code{mesh3d} method, passed to
 The default method simply calls \code{\link{as.mesh3d}(x, ...)}
 and passes the result to the \code{"mesh3d"} method.
 }
+\note{
+Older versions of \pkg{rgl} had a \code{"tmesh3d"} class
+for meshes of triangles.  That class is no longer used:
+\code{as.tmesh3d} and \code{\link{tmesh3d}} both produce
+\code{"mesh3d"} objects.
+}
 \value{
 A \code{"mesh3d"} object containing no quads.  If \code{drop = TRUE}, it will only contain triangles.
 }
