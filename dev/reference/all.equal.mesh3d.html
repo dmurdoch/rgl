@@ -88,7 +88,7 @@ compare them." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.6</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.9</span>
       </span>
     </div>
 
@@ -164,7 +164,7 @@ compare them.</p>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for mesh3d</span>
 <span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>current</span>, <span class='va'>...</span><span class='op'>)</span>
-<span class='fu'>compare_proxy.mesh3d</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></code></pre></div>
+<span class='fu'>compare_proxy.mesh3d</span><span class='op'>(</span><span class='va'>x</span>, path <span class='op'>=</span> <span class='st'>"x"</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,6 +178,10 @@ compare them.</p>
       <td><p>A single mesh3d object to standardize.</p></td>
     </tr>
     <tr>
+      <th>path</th>
+      <td><p>The string to use in a <span class="pkg">waldo</span> display of this object.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Additional parameters to pass to <code><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></code>.</p></td>
     </tr>
@@ -187,8 +191,14 @@ compare them.</p>
 
     <p><code>all.equal.mesh3d</code> returns <code>TRUE</code>, or a character
 vector describing (some of) the differences.</p>
-<p><code>compare_proxy.mesh3d</code> returns a list containing the
-relevant components of the argument in alphabetical order.</p>
+<p><code>compare_proxy.mesh3d</code> returns a list containing two
+components:</p><dl>
+<dt>object</dt><dd><p>a copy of <code>x</code> with
+relevant components in alphabetical order.</p></dd>
+<dt>path</dt><dd><p>a modification of the path label for <code>x</code></p></dd>
+
+</dl>
+
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p><span class="pkg">waldo</span> is not an installation requirement for <span class="pkg">rgl</span>
