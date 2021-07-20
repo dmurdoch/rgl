@@ -76,18 +76,32 @@ register_compare_proxy <- local({
   function() {
     if (!registered &&
         isNamespaceLoaded("waldo")) {
-      registerS3method("compare_proxy", "mesh3d", 
-                       compare_proxy.mesh3d, 
-                       envir = asNamespace("waldo"))
-      registerS3method("compare_proxy", "rglscene",
-                       compare_proxy.rglscene,
-                       envir = asNamespace("waldo"))
+      if ("path" %in% names(formals(waldo::compare_proxy))) { # appeared after 0.2.5
+        registerS3method("compare_proxy", "mesh3d", 
+                         compare_proxy.mesh3d, 
+                         envir = asNamespace("waldo"))
+        registerS3method("compare_proxy", "rglscene",
+                         compare_proxy.rglscene,
+                         envir = asNamespace("waldo"))        
+      } else {
+        registerS3method("compare_proxy", "mesh3d", 
+                         old_compare_proxy.mesh3d, 
+                         envir = asNamespace("waldo"))
+        registerS3method("compare_proxy", "rglscene",
+                         old_compare_proxy.rglscene,
+                         envir = asNamespace("waldo")) 
+      }
       registered <<- TRUE
     }
   }
 })
 
-compare_proxy.mesh3d <- function(x) {
+compare_proxy.mesh3d <- function(x, path = "x") {
+  list(object = old_compare_proxy.mesh3d(x),
+       path = paste0("compare_proxy(", path, ")"))
+}
+
+old_compare_proxy.mesh3d <- function(x) {
   for (n in names(x)) # Some elements are NULL, some are not there
     if (is.null(x[[n]])) x[[n]] <- NULL
   if (is.null(x$material) ||

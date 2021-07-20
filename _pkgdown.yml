@@ -97,6 +97,7 @@ reference:
   - shapelist3d
   - starts_with("as.mesh3d")
   - as.triangles3d
+  - as.tmesh3d
   - mergeVertices
 - subtitle: Contouring
   desc: These functions are related to showing contour lines.

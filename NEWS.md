@@ -41,8 +41,11 @@ user-specified axis drawing routines.
 * The assert() macro is now always defined.
 * In Windows, the `WM_PAINT` handler should be more tolerant
   of code called while painting.
-* as.mesh3d.default() can create segments.  (Contributed
+* `as.mesh3d.default()` can create segments.  (Contributed
   by Michael Sumner.)
+* `compare_proxy.mesh3d()` has been modified to be
+  compatible with both current and upcoming versions of
+  `waldo`.
 
 ## Bug fixes
 

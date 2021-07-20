@@ -19,7 +19,7 @@ compare them.
 }
 \usage{
 \method{all.equal}{mesh3d}(target, current, ...)
-compare_proxy.mesh3d(x)
+compare_proxy.mesh3d(x, path = "x")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,6 +29,9 @@ Two mesh3d objects to compare.
   \item{x}{
 A single mesh3d object to standardize.
 }
+  \item{path}{
+The string to use in a \pkg{waldo} display of this object.
+}
   \item{\dots}{
 Additional parameters to pass to \code{\link{all.equal}}.
 }
@@ -37,8 +40,13 @@ Additional parameters to pass to \code{\link{all.equal}}.
 \code{all.equal.mesh3d} returns \code{TRUE}, or a character
 vector describing (some of) the differences.
 
-\code{compare_proxy.mesh3d} returns a list containing the
-relevant components of the argument in alphabetical order.
+\code{compare_proxy.mesh3d} returns a list containing two
+components:
+\describe{
+\item{object}{a copy of \code{x} with
+relevant components in alphabetical order.}
+\item{path}{a modification of the path label for \code{x}}
+}
 }
 \note{
 \pkg{waldo} is not an installation requirement for \pkg{rgl}

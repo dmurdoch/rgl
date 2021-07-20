@@ -438,7 +438,12 @@ plot3d.rglWebGL <- function(x, ...) {
   plot3d(attr(x, "origScene"), ...)
 }
 
-compare_proxy.rglscene <- function(x) {
+compare_proxy.rglscene <- function(x, path = "x") {
+  list(object = old_compare_proxy.rglscene(x),
+       path = paste0("compare_proxy(", path, ")"))
+}
+
+old_compare_proxy.rglscene <- function(x) {
 
 	doSubscene <- function(obj) {
 		if (!is.null(obj$par3d)) {
