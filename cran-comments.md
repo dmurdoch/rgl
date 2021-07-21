@@ -1,3 +1,8 @@
+
+0.107.10:
+
+Fixed segfaults that showed up in last submission.
+
 0.107.9:
 
 Fixed some missed bugs that caused trouble in BIGL and related packages.
