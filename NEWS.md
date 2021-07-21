@@ -1,4 +1,10 @@
+# rgl  0.107.11
 
+## Minor changes
+
+* `crosstalk` is now a Suggested package, rather than
+  a required one.
+  
 # rgl  0.107.10
 
 ## Major changes
