@@ -1,3 +1,11 @@
+0.107.9:
+
+Fixed some missed bugs that caused trouble in BIGL and related packages.
+
+Added support for a future release of the "waldo" package.
+
+Other minor stuff.
+
 0.107.5:
 
 This revision has a fairly large number of additions and
