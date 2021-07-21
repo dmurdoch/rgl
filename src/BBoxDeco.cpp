@@ -562,6 +562,10 @@ struct BBoxDeco::BBoxDecoImpl {
       edge = BBoxDecoImpl::chooseEdge(renderContext, bboxdeco, *at);
     else
       edge = BBoxDecoImpl::fixedEdge(material);
+    if (!edge) {
+      *at = NA_INTEGER;
+      return;
+    }
     for (j = 0; j < 3; j++) {
       if (edge->dir[j] != 0) {
         *line = j;
@@ -842,6 +846,7 @@ Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, 
   BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
         &at, &line, &level,
         &trans, &scale); 
+  if (at == NA_INTEGER) return Vertex(NA_REAL, NA_REAL, NA_REAL);
   /* It might make more sense to do this by
    * modifying the MODELVIEW matrix, but 
    * I couldn't get that right for some reason...
@@ -867,6 +872,8 @@ Vec3 BBoxDeco::marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderCon
   BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
                                     &at, &line, &level,
                                     &trans, &scale); 
+  if (at == NA_INTEGER)
+    return Vertex(NA_REAL, NA_REAL, NA_REAL);
   Vertex result;
   result[at] = marginvec.x/scale[at];
   result[line] = marginvec.y/scale[line];
