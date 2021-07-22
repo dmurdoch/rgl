@@ -62,7 +62,6 @@ modifies the data for those attributes in a WebGL scene." />
 
 
 
-
   
 
   
@@ -85,7 +84,7 @@ modifies the data for those attributes in a WebGL scene." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.106.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.107.10</span>
       </span>
     </div>
 
@@ -96,6 +95,9 @@ modifies the data for those attributes in a WebGL scene." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -151,12 +153,12 @@ attributes (available via <code><a href='attributes.html'>rgl.attrib</a></code>)
 modifies the data for those attributes in a WebGL scene.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ageSetter</span><span class='op'>(</span><span class='va'>births</span>, <span class='va'>ages</span>, 
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>ageSetter</span><span class='op'>(</span><span class='va'>births</span>, <span class='va'>ages</span>, 
          colors <span class='op'>=</span> <span class='cn'>NULL</span>, alpha <span class='op'>=</span> <span class='cn'>NULL</span>, radii <span class='op'>=</span> <span class='cn'>NULL</span>, 
          vertices <span class='op'>=</span> <span class='cn'>NULL</span>, normals <span class='op'>=</span> <span class='cn'>NULL</span>, origins <span class='op'>=</span> <span class='cn'>NULL</span>, 
          texcoords <span class='op'>=</span> <span class='cn'>NULL</span>, 
          <span class='va'>objids</span>, prefixes <span class='op'>=</span> <span class='st'>""</span>, digits <span class='op'>=</span> <span class='fl'>7</span>, 
-         param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>floor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>births</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>births</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></pre>
+         param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>floor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>births</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>births</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -213,7 +215,7 @@ chosen that is not a property of the corresponding object, a
 Javascript <code>alert()</code> will be generated.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A character vector of class <code><a href='https://rdrr.io/r/base/c.html'>c("ageSetter", "propertySetter")</a></code> 
+    <p>A character vector of class <code>c("ageSetter", "propertySetter")</code> 
 containing Javascript
 code defining a function suitable for use in a <code><a href='propertySetter.html'>propertySlider</a></code>.</p>
 <p>The function takes a single argument, <code>time</code>, and uses it to compute the

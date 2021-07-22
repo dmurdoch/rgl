@@ -59,7 +59,6 @@ FreeType in rgl." />
 <![endif]-->
 
 
-
 <!-- dependencies from examples -->
 
 
@@ -85,7 +84,7 @@ FreeType in rgl." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.106.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.107.10</span>
       </span>
     </div>
 
@@ -96,6 +95,9 @@ FreeType in rgl." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -150,7 +152,7 @@ package to help register system fonts for use with
 FreeType in <span class="pkg">rgl</span>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rglExtrafonts</span><span class='op'>(</span><span class='va'>...</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>rglExtrafonts</span><span class='op'>(</span><span class='va'>...</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,7 +178,7 @@ its database of system fonts.</p>
 <p>Fonts can be installed in <span class="pkg">rgl</span> using
 <code>rglExtrafonts(rglname = familyname)</code> or <code>rglExtrafonts(familyname)</code>.  In this call
 <code>familyname</code> is a vector of family names to look
-for in the <span class="pkg">extrafont</span> database using <code><a href='https://rdrr.io/pkg/extrafont/man/choose_font.html'>extrafont::choose_font(familyname)</a></code>; the first one found
+for in the <span class="pkg">extrafont</span> database using <code>extrafont::choose_font(familyname)</code>; the first one found
 will be registered with <span class="pkg">rgl</span>.  The optional name <code>rglname</code> will also be usable to refer to the font family.</p>
 <p>If none of the given family names is found, no change
 will be made to the registered fonts in <span class="pkg">rgl</span>.</p>
@@ -209,19 +211,20 @@ and the family name for the newly installed font.</p>
     <div class='dont-index'><p><code><a href='texts.html'>text3d</a></code>, <code><a href='rgl.texts.html'>rglFonts</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"extrafont"</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  
-  <span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span>
-  <span class='fu'><a href='texts.html'>text3d</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>, <span class='st'>"Default"</span>, family <span class='op'>=</span> <span class='st'>"sans"</span>, cex <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>  
-  
-  <span class='co'># Attempt to register new sans-serif font:</span>
-  <span class='va'>newfamily</span> <span class='op'>&lt;-</span> <span class='fu'>rglExtrafonts</span><span class='op'>(</span>newsans <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Comic Sans MS"</span>, <span class='st'>"Impact"</span>, 
-                                         <span class='st'>"Verdana"</span>, <span class='st'>"Tahoma"</span><span class='op'>)</span><span class='op'>)</span>
-  
-  <span class='fu'><a href='texts.html'>text3d</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>, <span class='va'>newfamily</span>, family <span class='op'>=</span> <span class='st'>"newsans"</span>, cex <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-  
-<span class='op'>}</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"extrafont"</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  </span>
+<span class='r-in'>  <span class='fu'><a href='open3d.html'>open3d</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='texts.html'>text3d</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>, <span class='st'>"Default"</span>, family <span class='op'>=</span> <span class='st'>"sans"</span>, cex <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>  </span>
+<span class='r-in'>  </span>
+<span class='r-in'>  <span class='co'># Attempt to register new sans-serif font:</span></span>
+<span class='r-in'>  <span class='va'>newfamily</span> <span class='op'>&lt;-</span> <span class='fu'>rglExtrafonts</span><span class='op'>(</span>newsans <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Comic Sans MS"</span>, <span class='st'>"Impact"</span>, </span>
+<span class='r-in'>                                         <span class='st'>"Verdana"</span>, <span class='st'>"Tahoma"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  </span>
+<span class='r-in'>  <span class='fu'><a href='texts.html'>text3d</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>, <span class='va'>newfamily</span>, family <span class='op'>=</span> <span class='st'>"newsans"</span>, cex <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'>  </span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required namespace: extrafont</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

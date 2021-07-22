@@ -80,7 +80,6 @@ deletion of RGL scenes." />
 
 
 
-
   
 
   
@@ -103,7 +102,7 @@ deletion of RGL scenes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.106.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.107.10</span>
       </span>
     </div>
 
@@ -114,6 +113,9 @@ deletion of RGL scenes." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -188,12 +190,12 @@ user; it is the hook that supports automatic creation and
 deletion of RGL scenes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>setupKnitr</span><span class='op'>(</span>autoprint <span class='op'>=</span> <span class='cn'>FALSE</span>,
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>setupKnitr</span><span class='op'>(</span>autoprint <span class='op'>=</span> <span class='cn'>FALSE</span>,
            rgl.newwindow <span class='op'>=</span> <span class='va'>autoprint</span>,
            rgl.closewindows <span class='op'>=</span> <span class='va'>autoprint</span><span class='op'>)</span>
 <span class='fu'>hook_rgl</span><span class='op'>(</span><span class='va'>before</span>, <span class='va'>options</span>, <span class='va'>envir</span><span class='op'>)</span>
 <span class='fu'>hook_webgl</span><span class='op'>(</span><span class='va'>before</span>, <span class='va'>options</span>, <span class='va'>envir</span><span class='op'>)</span>
-<span class='fu'>hook_rglchunk</span><span class='op'>(</span><span class='va'>before</span>, <span class='va'>options</span>, <span class='va'>envir</span><span class='op'>)</span></pre>
+<span class='fu'>hook_rglchunk</span><span class='op'>(</span><span class='va'>before</span>, <span class='va'>options</span>, <span class='va'>envir</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -229,7 +231,7 @@ warning will be issued, and the first set of arguments
 will be used.</p>
 <p>Mixing explicit calls
 to <code><a href='rglwidget.html'>rglwidget</a></code> with auto-printing is likely to lead to failure of some
-scenes to display.  To avoid this, set <code><a href='https://rdrr.io/r/base/options.html'>options(rgl.printRglwidget = FALSE)</a></code> before using such explicit calls.  Similarly,
+scenes to display.  To avoid this, set <code>options(rgl.printRglwidget = FALSE)</code> before using such explicit calls.  Similarly,
 use that option before calling the <code><a href='https://rdrr.io/r/utils/example.html'>example</a></code> function
 in a code chunk if the example prints RGL objects.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -246,7 +248,7 @@ to close windows at the end of the chunk.  Default is set by <code>setupKnitr</c
   WebGL window.</p></li>
 <li><p><code>snapshot</code>: Logical value:  when autoprinting
   in HTML, should a snapshot be used instead of the dynamic 
-  WebGL display?  Corresponds to <code><a href='rglwidget.html'>rglwidget(snapshot = TRUE, webgl = FALSE)</a></code>.  Ignored in LaTeX, where a snapshot
+  WebGL display?  Corresponds to <code>rglwidget(snapshot = TRUE, webgl = FALSE)</code>.  Ignored in LaTeX, where a snapshot
   will always be produced (unless <code>fig.keep</code> specifies
   no figure at all).</p></li>
 <li><p><code>dpi</code>, <code>fig.retina</code>, <code>fig.width</code>, <code>fig.height</code>:  standard <span class="pkg">knitr</span> chunk

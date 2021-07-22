@@ -57,7 +57,6 @@
 <![endif]-->
 
 
-
 <!-- dependencies from examples -->
 
 
@@ -83,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.106.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.107.10</span>
       </span>
     </div>
 
@@ -94,6 +93,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -146,11 +148,11 @@
     <p>Saves the screenshot to a file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='snapshot.html'>rgl.snapshot</a></span><span class='op'>(</span> <span class='va'>filename</span>, fmt <span class='op'>=</span> <span class='st'>"png"</span>, top <span class='op'>=</span> <span class='cn'>TRUE</span> <span class='op'>)</span>
-<span class='fu'><a href='snapshot.html'>snapshot3d</a></span><span class='op'>(</span> filename <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".png"</span><span class='op'>)</span>, 
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>rgl.snapshot</span><span class='op'>(</span> <span class='va'>filename</span>, fmt <span class='op'>=</span> <span class='st'>"png"</span>, top <span class='op'>=</span> <span class='cn'>TRUE</span> <span class='op'>)</span>
+<span class='fu'>snapshot3d</span><span class='op'>(</span> filename <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".png"</span><span class='op'>)</span>, 
             fmt <span class='op'>=</span> <span class='st'>"png"</span>, top <span class='op'>=</span> <span class='cn'>TRUE</span>,
             <span class='va'>...</span>, <span class='va'>scene</span>, width <span class='op'>=</span> <span class='cn'>NULL</span>, height <span class='op'>=</span> <span class='cn'>NULL</span>,
-            webshot <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+            webshot <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,9 +193,9 @@ Ignored if <code>webshot = TRUE</code>.</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code><a href='snapshot.html'>rgl.snapshot()</a></code> is a low-level function
+    <p><code>rgl.snapshot()</code> is a low-level function
 that copies the current RGL window from the screen.  Users
-should use <code><a href='snapshot.html'>snapshot3d()</a></code> instead; it is more flexible,
+should use <code>snapshot3d()</code> instead; it is more flexible,
 and (if <span class="pkg">webshot2</span> is installed) can take images even if
 no window is showing, and they can be larger than the physical
 screen.</p>
@@ -210,7 +212,7 @@ filename of the saved file is returned invisibly.</p>
     <p>When <code><a href='rgl.useNULL.html'>rgl.useNULL()</a></code> is <code>TRUE</code>, only <code>webshot = TRUE</code>
 will produce a snapshot.  It requires the <span class="pkg">webshot2</span>
 package, which as of this writing is not available on CRAN; to
-install it, use <code><a href='https://remotes.r-lib.org/reference/install_github.html'>remotes::install_github("rstudio/webshot2")</a></code></p>
+install it, use <code>remotes::install_github("rstudio/webshot2")</code></p>
 <p><code>rgl.snapshot</code> works by taking an image from the displayed
 window on-screen.
 On some systems, the snapshot
@@ -232,37 +234,37 @@ using OpenGL.  Often the <code>webshot = TRUE</code> displays have better qualit
     <div class='dont-index'><p><code><a href='play3d.html'>movie3d</a></code>, <code><a href='viewpoint.html'>rgl.viewpoint</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>saveopts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span>rgl.useNULL <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-  <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>300</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>3</span>, dimnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span>, <span class='st'>"z"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>, 
-         col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span><span class='va'>saveopts</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/browseURL.html'>browseURL</a></span><span class='op'>(</span><span class='fu'><a href='snapshot.html'>snapshot3d</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-<span class='co'>#</span>
-<span class='co'># create animation</span>
-<span class='co'>#</span>
-
-<span class='fu'><a href='shade3d.html'>shade3d</a></span><span class='op'>(</span><span class='fu'><a href='cube3d.html'>oh3d</a></span><span class='op'>(</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
-<span class='fu'><a href='rgl.bringtotop.html'>rgl.bringtotop</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='fu'><a href='viewpoint.html'>view3d</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>20</span><span class='op'>)</span>
-
-<span class='va'>olddir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>45</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='viewpoint.html'>view3d</a></span><span class='op'>(</span><span class='va'>i</span>, <span class='fl'>20</span><span class='op'>)</span>
-  <span class='va'>filename</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"pic"</span>, <span class='fu'><a href='https://rdrr.io/r/base/formatc.html'>formatC</a></span><span class='op'>(</span><span class='va'>i</span>, digits <span class='op'>=</span> <span class='fl'>1</span>, flag <span class='op'>=</span> <span class='st'>"0"</span><span class='op'>)</span>, <span class='st'>".png"</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
-  <span class='fu'><a href='snapshot.html'>snapshot3d</a></span><span class='op'>(</span><span class='va'>filename</span><span class='op'>)</span>
-<span class='op'>}</span>
-<span class='co'>## Now run ImageMagick in tempdir().  Use 'convert' instead of 'magick'</span>
-<span class='co'>## if you have an older version of ImageMagick:</span>
-<span class='co'>##    magick -delay 10 *.png -loop 0 pic.gif</span>
-<span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='va'>olddir</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='in_pkgdown_example.html'>in_pkgdown_example</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>saveopts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span>rgl.useNULL <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='plot3d.html'>plot3d</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>300</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>3</span>, dimnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span>, <span class='st'>"z"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>, </span>
+<span class='r-in'>         col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span><span class='va'>saveopts</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/utils/browseURL.html'>browseURL</a></span><span class='op'>(</span><span class='fu'>snapshot3d</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#</span></span>
+<span class='r-in'><span class='co'># create animation</span></span>
+<span class='r-in'><span class='co'>#</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='shade3d.html'>shade3d</a></span><span class='op'>(</span><span class='fu'><a href='cube3d.html'>oh3d</a></span><span class='op'>(</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='rgl.bringtotop.html'>rgl.bringtotop</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='viewpoint.html'>view3d</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>20</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>olddir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>45</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='viewpoint.html'>view3d</a></span><span class='op'>(</span><span class='va'>i</span>, <span class='fl'>20</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>filename</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"pic"</span>, <span class='fu'><a href='https://rdrr.io/r/base/formatc.html'>formatC</a></span><span class='op'>(</span><span class='va'>i</span>, digits <span class='op'>=</span> <span class='fl'>1</span>, flag <span class='op'>=</span> <span class='st'>"0"</span><span class='op'>)</span>, <span class='st'>".png"</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'>snapshot3d</span><span class='op'>(</span><span class='va'>filename</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'><span class='co'>## Now run ImageMagick in tempdir().  Use 'convert' instead of 'magick'</span></span>
+<span class='r-in'><span class='co'>## if you have an older version of ImageMagick:</span></span>
+<span class='r-in'><span class='co'>##    magick -delay 10 *.png -loop 0 pic.gif</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='va'>olddir</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

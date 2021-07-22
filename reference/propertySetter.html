@@ -61,7 +61,6 @@ playwidget and related functions instead." />
 
 
 
-
   
 
   
@@ -84,7 +83,7 @@ playwidget and related functions instead." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.106.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.107.10</span>
       </span>
     </div>
 
@@ -95,6 +94,9 @@ playwidget and related functions instead." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -150,7 +152,7 @@ using the obsolete <code>writeWebGL</code>.  Use
 <code><a href='playwidget.html'>playwidget</a></code> and related functions instead.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>propertySlider</span><span class='op'>(</span>setter <span class='op'>=</span> <span class='va'>propertySetter</span>,
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>propertySlider</span><span class='op'>(</span>setter <span class='op'>=</span> <span class='va'>propertySetter</span>,
              minS <span class='op'>=</span> <span class='cn'>NULL</span>, maxS <span class='op'>=</span> <span class='cn'>NULL</span>, step <span class='op'>=</span> <span class='fl'>1</span>, init <span class='op'>=</span> <span class='cn'>NULL</span>, 
        <span class='va'>labels</span>, 
        id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/basename.html'>basename</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='st'>"input"</span><span class='op'>)</span><span class='op'>)</span>, name <span class='op'>=</span> <span class='va'>id</span>,
@@ -169,7 +171,7 @@ using the obsolete <code>writeWebGL</code>.  Use
              
 <span class='fu'>vertexSetter</span><span class='op'>(</span><span class='va'>values</span>, vertices <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>attributes</span>, <span class='va'>objid</span>, prefix <span class='op'>=</span> <span class='st'>""</span>,
        param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>NROW</a></span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span><span class='op'>)</span>, interp <span class='op'>=</span> <span class='cn'>TRUE</span>,
-       digits <span class='op'>=</span> <span class='fl'>7</span><span class='op'>)</span></pre>
+       digits <span class='op'>=</span> <span class='fl'>7</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -279,8 +281,8 @@ will display the slider value, or <code>NULL</code> for none.</p></td>
     <tr>
       <th>attributes</th>
       <td><p>A vector of attributes of a vertex, 
-  from <code><a href='https://rdrr.io/r/base/c.html'>c("x", "y", "z", "r", "g", "b", "a", "nx", "ny", "nz",
-               "radius", "ox", "oy", "oz", "ts", "tt")</a></code>.</p></td>
+  from <code>c("x", "y", "z", "r", "g", "b", "a", "nx", "ny", "nz",
+               "radius", "ox", "oy", "oz", "ts", "tt")</code>.</p></td>
     </tr>
     <tr>
       <th>objid</th>

@@ -60,7 +60,6 @@ in a case-insensitive test, TRUE is returned." />
 <![endif]-->
 
 
-
 <!-- dependencies from examples -->
 
 
@@ -86,7 +85,7 @@ in a case-insensitive test, TRUE is returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.106.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.107.10</span>
       </span>
     </div>
 
@@ -97,6 +96,9 @@ in a case-insensitive test, TRUE is returned." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -152,14 +154,14 @@ in a case-insensitive test, TRUE is returned." />
 in a case-insensitive test, <code>TRUE</code> is returned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rgl.useNULL</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>rgl.useNULL</span><span class='op'>(</span><span class='op'>)</span></code></pre></div>
 
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function is checked by the initialization code when the <span class="pkg">rgl</span> package
 is loaded.  Thus if you want to run RGL on a system where there is no
-graphics support, you should run <code><a href='https://rdrr.io/r/base/options.html'>options(rgl.useNULL = TRUE)</a></code>
+graphics support, you should run <code>options(rgl.useNULL = TRUE)</code>
 or set the environment variable <code>RGL_USE_NULL=TRUE</code> *before*
 calling <code><a href='https://github.com/dmurdoch/rgl'>library(rgl)</a></code> (or other code that 
 loads <span class="pkg">rgl</span>), and it will not fail in its attempt at initialization.</p>
@@ -175,8 +177,9 @@ device.</p>
     <div class='dont-index'><p><code><a href='open3d.html'>open3d</a></code> and <code><a href='rgl.open.html'>rgl.open</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>rgl.useNULL</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>rgl.useNULL</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -1,402 +1,501 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/index.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/404.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/GramSchmidt.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/ISSUE_TEMPLATE.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/abclines.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/SUPPORT.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/addNormals.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/articles/WebGL.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/ageControl.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/ageSetter.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/articles/pkgdown.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/all.equal.mesh3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/articles/rgl.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/arc3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/articles/transparency.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/arrow3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/authors.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/as.mesh3d.ashape3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/index.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/as.mesh3d.default.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/news/index.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/as.mesh3d.rglId.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/3dobjects.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/as.triangles3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/GramSchmidt.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/asRow.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/abclines.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/aspect3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/addNormals.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/attributes.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/ageControl.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/axes3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/ageSetter.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/bbox.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/all.equal.mesh3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/bg.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/arc3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/bgplot3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/arrow3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/callbacks.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/as.mesh3d.ashape3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/check3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/as.mesh3d.default.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/clipMesh3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/as.mesh3d.rglId.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/clipplaneControl.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/as.tmesh3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/contourLines3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/as.triangles3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/cube3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/asRow.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/cylinder3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/aspect3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/decorate3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/attributes.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/drape3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/axes3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/elementId2Prefix.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/bbox.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/ellipse3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/bg.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/extrude3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/bgplot3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/facing3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/callbacks.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/figWidth.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/check3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/grid3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/clipMesh3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/identify3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/clipplaneControl.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/import.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/contourLines3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/in_pkgdown_example.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/cube3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/light.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/cylinder3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/makeDependency.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/decorate3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/material.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/drape3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/matrices.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/elementId2Prefix.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/merge.mesh3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/ellipse3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/mergeVertices.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/expect_known_scene.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/mesh3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/extrude3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/mfrow3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/facing3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/observer3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/figWidth.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/open3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/grid3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/par3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/identify3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/par3dinterp.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/import.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/par3dinterpControl.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/in_pkgdown_example.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/pch3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/light.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.deldir.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/makeDependency.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.function.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/material.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/persp3d.tri.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/matrices.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/planes.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/merge.mesh3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/play3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/mergeVertices.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/playwidget.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/mesh3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/plot3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/mfrow3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/plot3d.formula.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/observer3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/plot3d.lm.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/open3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/plotmath3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/par3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/polygon3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/par3dinterp.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/postscript.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/par3dinterpControl.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/primitive.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/pch3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/propertyControl.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/persp3d.deldir.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/persp3d.function.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/r3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/persp3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/readSTL.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/persp3d.tri.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl-internal.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/planes.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl-package.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/play3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.Sweave.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/playwidget.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.attrib.info.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/plot3d.formula.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.bringtotop.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/plot3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.fns.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/plot3d.lm.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/plotmath3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.open.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/polygon3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.pixels.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/postscript.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.select.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/primitive.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.texts.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/propertyControl.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.useNULL.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/propertySetter.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.user2window.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/r3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rglExtrafonts.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/readSTL.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rglIds.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl-internal.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rglMouse.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl-package.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rglShared.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.Sweave.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rglToLattice.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.attrib.info.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rglwidget.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.bringtotop.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/scene.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.fns.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/scene3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.init.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/sceneChange.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.open.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/select3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.pixels.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/selectpoints3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.select.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/setGraphicsDelay.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.setAxisCallback.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/setUserShaders.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.texts.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/setupKnitr.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.useNULL.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/shade3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rgl.user2window.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/shadow3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rglExtrafonts.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/shapelist3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rglIds.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/shiny.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rglMouse.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/shinyGetPar3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rglShared.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/show2d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rglToLattice.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/snapshot.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/rglwidget.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/spheres.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/scene.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/spin3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/scene3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/sprites.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/sceneChange.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/subdivision3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/select3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/subscene3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/selectpoints3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/subsceneInfo.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/setAxisCallbacks.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/surface.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/setGraphicsDelay.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/surface3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/setUserCallbacks.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/texts.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/setUserShaders.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/thigmophobe3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/setupKnitr.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/tkpar3dsave.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/shade3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/tkrgl.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/shadow3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/tkspin3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/shapelist3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/tkspinControl.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/shiny.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/toggleWidget.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/shinyGetPar3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/triangulate.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/show2d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/turn3d.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/snapshot.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/vertexControl.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/spheres.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/viewpoint.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/spin3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/sprites.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/writeASY.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/subdivision3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/writeOBJ.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/subscene3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/writePLY.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/subsceneInfo.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/writeWebGL.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/surface.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/articles/WebGL.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/surface3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/articles/pkgdown.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/texts.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/articles/rgl.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/thigmophobe3d.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/articles/transparency.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/reference/tkpar3dsave.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/tkrgl.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/tkspin3d.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/tkspinControl.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/toggleWidget.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/triangulate.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/turn3d.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/vertexControl.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/viewpoint.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/webGLcontrols.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/writeASY.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/writeOBJ.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/writePLY.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/reference/writeWebGL.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/axes.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/controls.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/draw.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/global.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/index.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/init.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/list_class.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/mouse.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/pieces.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/pretty.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/projection.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/rglClass.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/rglTimer.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/rgltimerClass.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/rglwidgetClass.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/selection.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/shaders.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/subscenes.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/textures.src.js.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/rglClass/utils.src.js.html</loc>
   </url>
 </urlset>

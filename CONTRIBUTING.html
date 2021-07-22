@@ -57,7 +57,6 @@
 
 
 
-
   
 
   
@@ -80,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.106.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.107.10</span>
       </span>
     </div>
 
@@ -91,6 +90,9 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -142,25 +144,25 @@
 <p>This outlines how to propose a change to <code>rgl</code>. It is based on the corresponding document from the <code>tidyverse</code> project. For detailed info about contributing to tidyverse packages, please see the <a href="https://rstd.io/tidy-contrib" class="external-link"><strong>development contributing guide</strong></a>.</p>
 <div id="fixing-typos" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fixing-typos" class="anchor"></a>Fixing typos</h2>
+<a href="#fixing-typos" class="anchor" aria-hidden="true"></a>Fixing typos</h2>
 <p>You can fix typos, spelling mistakes, or grammatical errors in the documentation directly using the GitHub web interface, as long as the changes are made in the <em>source</em> file. <code>rgl</code> puts help pages in <code>.Rd</code> files in the <code>man</code> directory (not in comments in the R source files, as many other projects do).</p>
 </div>
 <div id="bigger-changes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bigger-changes" class="anchor"></a>Bigger changes</h2>
+<a href="#bigger-changes" class="anchor" aria-hidden="true"></a>Bigger changes</h2>
 <p>If you want to make a bigger change, it’s a good idea to first file an issue and make sure we agree that it’s needed. If you’ve found a bug, please file an issue that illustrates the bug with a minimal <a href="https://www.tidyverse.org/help/#reprex" class="external-link">reprex</a> (this will also help you write a unit test, if needed).</p>
 <div id="pull-request-process" class="section level3">
 <h3 class="hasAnchor">
-<a href="#pull-request-process" class="anchor"></a>Pull request process</h3>
+<a href="#pull-request-process" class="anchor" aria-hidden="true"></a>Pull request process</h3>
 <ul>
 <li><p>Fork the package and clone onto your computer. If you haven’t done this before, we recommend using the Github web interface to fork, RStudio’s <code>New Project... | Version Control | Git</code> menu to import the repository. Then you can create branches locally, and push them to Github when you want to create a PR.</p></li>
-<li><p>Install all development dependencies with <code><a href="https://devtools.r-lib.org//reference/install_deps.html" class="external-link">devtools::install_deps(dependencies = TRUE)</a></code>, and then make sure the package passes R CMD check by running <code>Build | Check</code>. If R CMD check doesn’t pass cleanly, it’s a good idea to ask for help before continuing.</p></li>
+<li><p>Install all development dependencies with <code>devtools::install_deps(dependencies = TRUE)</code>, and then make sure the package passes R CMD check by running <code>Build | Check</code>. If R CMD check doesn’t pass cleanly, it’s a good idea to ask for help before continuing.</p></li>
 <li><p>Make your changes, commit to git, push to Github, and then create a PR on the Github web page. The title of your PR should briefly describe the change. The body of your PR should contain <code>Fixes #issue-number</code>.</p></li>
 </ul>
 </div>
 <div id="code-style" class="section level3">
 <h3 class="hasAnchor">
-<a href="#code-style" class="anchor"></a>Code style</h3>
+<a href="#code-style" class="anchor" aria-hidden="true"></a>Code style</h3>
 <ul>
 <li>
 <code>rgl</code> is an old package, with many contributors. The style is not completely consistent, but you should try to follow what you see. Please don’t change the style of existing code unless it is necessary for your change.</li>
