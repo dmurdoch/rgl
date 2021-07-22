@@ -1,3 +1,9 @@
+# rgl 0.107.11
+
+## Minor changes
+
+* Allowed for a third coordinate in `text3d()`'s `adj` 
+parameter.  (Not working yet in `plotmath3d()`.)
 
 # rgl  0.107.10
 

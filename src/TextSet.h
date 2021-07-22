@@ -19,7 +19,7 @@ namespace rgl {
 class TextSet : public Shape {
 public:
   TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, 
-          double in_adjx, double in_adjy,
+          double in_adjx, double in_adjy, double in_adjz,
           int in_ignoreExtent, FontArray& in_fonts,
           int in_npos, const int* in_pos);
   ~TextSet();
@@ -46,6 +46,7 @@ private:
 
   double adjx;
   double adjy;
+  double adjz;
   
   int npos;
   int* pos;

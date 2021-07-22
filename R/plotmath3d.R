@@ -13,7 +13,7 @@ plotmath3d <- function(x, y = NULL, z = NULL,
   if (!is.null(pos))
     pos <- rep_len(pos, n)
   else
-    adj <- c(adj, 0.5, 0.5)[1:2]
+    adj <- c(adj, 0.5, 0.5, 0)[1:3]
   save3d <- par3d(skipRedraw = TRUE)
   save <- options(device.ask.default = FALSE)
   on.exit({options(save); par3d(save3d)}) # nolint
@@ -36,21 +36,25 @@ plotmath3d <- function(x, y = NULL, z = NULL,
     dev.off()
 
     if (!is.null(pos)) 
-      adj <- list("1" = c(0.5, 1 + offset), 
-                  "2" = c(1 + w1*offset/w, 0.5), 
-                  "3" = c(0.5, -offset), 
-                  "4" = c(-w1*offset/w, 0.5))[[pos[i]]]
+      adj <- list("1" = c(0.5, 1 + offset, 0), 
+                  "2" = c(1 + w1*offset/w, 0.5, 0), 
+                  "3" = c(0.5, -offset, 0), 
+                  "4" = c(-w1*offset/w, 0.5, 0),
+                  "5" = c(0.5, 0.5, offset),
+                  "6" = c(0.5, 0.5, -offset))[[pos[i]]]
     
     # Now make a smaller bitmap
     expand <- 1.5
-    size <- round(expand*startsize*max(c(w, h)*(2*abs(adj - 0.5) + 1)))
+    size <- round(expand*startsize*max(c(w, h)*(2*abs(adj[1:2] - 0.5) + 1)))
     png(f, bg = "transparent", width = size, height = size)
     par(mar = c(0, 0, 0, 0), xaxs = "i", xaxt = "n", 
         yaxs = "i", yaxt = "n",
         usr = c(0, 1, 0, 1))
     plot.new()
-    text(0.5, 0.5, thistext, adj = adj, cex = initCex, ...)
+    text(0.5, 0.5, thistext, adj = adj[1:2], cex = initCex, ...)
     dev.off()
+
+    cat("FIXME:  need to handle z adj")
 
     result[i] <- with(xyz, sprites3d(x[i], y[i], z[i], texture = f, textype = "rgba", 
             col = "white", lit = FALSE, radius = cex[i]*size/initCex/20,

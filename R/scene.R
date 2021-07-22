@@ -105,7 +105,7 @@ rgl.attrib.count <- function( id, attrib ) {
 }
 
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
-            texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
+            texts=1, cex=1, adj=3, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
 	    family=1, font=1, pos=1, fogscale=1, axes=3)
 
@@ -716,16 +716,17 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
   
   if (!is.null(pos)) {
     npos <- length(pos)
-    stopifnot(all(pos %in% 1:4))
+    stopifnot(all(pos %in% 1:6))
     stopifnot(length(offset) == 1)
     adj <- offset
   } else {
     pos <- 0
     npos <- 1
   }
-  if (length(adj) == 0) adj <- c(0.5, 0.5)
-  if (length(adj) == 1) adj <- c(adj, 0.5)
-  if (length(adj) > 2) warning("Only the first two entries of 'adj' are used")
+  if (length(adj) == 0) adj <- c(0.5, 0.5, 0)
+  if (length(adj) == 1) adj <- c(adj, 0.5, 0)
+  if (length(adj) == 2) adj <- c(adj, 0)
+  if (length(adj) > 3) warning("Only the first three entries of 'adj' are used")
   
   if (!length(text)) {
     if (nvertex)

@@ -1144,7 +1144,7 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
     FontArray fonts;
     device->getFonts(fonts, *nfonts, family, style, cex, (bool) *useFreeType);
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
-                                                   adj[0], adj[1],
+                                                   adj[0], adj[1], adj[2],
                    device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
     						   fonts, *npos, pos) ) );
     CHECKGLERROR;

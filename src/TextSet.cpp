@@ -21,7 +21,7 @@ using namespace rgl;
 //
 
 TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, 
-                 double in_adjx, double in_adjy,
+                 double in_adjx, double in_adjy, double in_adjz,
                  int in_ignoreExtent, FontArray& in_fonts,
                  int in_npos,
                  const int* in_pos)
@@ -35,6 +35,7 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
 
   adjx = in_adjx;
   adjy = in_adjy;
+  adjz = in_adjz;
 
   // init vertex array
 
@@ -103,7 +104,8 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
       font = fonts[index % fonts.size()];
       if (font) {
         String text = textArray[index];
-        font->draw( text.text, text.length, adjx, adjy, pos[index % npos], *renderContext );
+        font->draw( text.text, text.length, adjx, adjy, adjz,
+                    pos[index % npos], *renderContext );
       }
     }
   }
@@ -157,6 +159,7 @@ void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
     case ADJ:
       *result++ = adjx;
       *result++ = adjy;
+      *result++ = adjz;
       return;
     case POS:
       while (first < n)
