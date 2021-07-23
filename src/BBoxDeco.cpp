@@ -226,7 +226,7 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
     }
   
     if (renderContext->font)
-      renderContext->font->draw(string.text, string.length, adj, 0.5, 0.0, 0, 
+      renderContext->font->draw(string.text, string.length, adj, 0.5, 0.5, 0, 
                                 *renderContext);
   }      
 #endif

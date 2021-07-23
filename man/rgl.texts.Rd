@@ -24,7 +24,7 @@ rglFonts(...)
               specifying horizontal and vertical adjustment respectively, or three, specifying adjustment in all
               three directions.}
   \item{pos}{ a position specifier for the text.  If specified, this
-  overrides any \code{adj} value given. Values of 1, 2, 3, 4, 5 and 6 respectively indicate positions below, to the left of, above, to the right of, in front of and behind the specified coordinates.}
+  overrides any \code{adj} value given. Values of 0, 1, 2, 3, 4, 5 and 6 respectively indicate positions on, below, to the left of, above, to the right of, in front of and behind the specified coordinates.}
   \item{offset}{ when \code{pos} is specified, this value gives the offset of the label from the specified coordinate in fractions of a character width.}
   \item{ family }{A device-independent font family name, or "" }
   \item{ font }{A numeric font number from 1 to 4 }
@@ -36,9 +36,8 @@ rglFonts(...)
 The \code{adj} parameter determines the position of the text relative to the 
 specified coordinate.  Use \code{adj = c(0, 0)} to place the left bottom corner at
 \code{(x, y, z)}, \code{adj = c(0.5, 0.5)} to center the text there, and \code{adj = c(1, 1)}
-to put the right top corner there. The optional second coordinate for vertical 
-adjustment defaults to \code{0.5}, while the optional third
-coordinate defaults to \code{0.0}.  Placement is done using the "advance" of
+to put the right top corner there. All coordinates default to \code{0.5}.  
+Placement is done using the "advance" of
 the string and the "ascent" of the font relative to the baseline, when these metrics
 are known.
 }

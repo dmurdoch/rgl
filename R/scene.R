@@ -168,7 +168,7 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("r", "c"),      # dim
                            "text",	         # texts
                            "cex", 	         # cex
-                           c("x", "y"),	     # adj
+                           c("x", "y", "z"), # adj
                            "r",		     # radii
                            c("x", "y", "z"), # centers
                            "id",	     # ids
@@ -716,17 +716,15 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
   
   if (!is.null(pos)) {
     npos <- length(pos)
-    stopifnot(all(pos %in% 1:6))
+    stopifnot(all(pos %in% 0:6))
     stopifnot(length(offset) == 1)
     adj <- offset
   } else {
     pos <- 0
     npos <- 1
   }
-  if (length(adj) == 0) adj <- c(0.5, 0.5, 0)
-  if (length(adj) == 1) adj <- c(adj, 0.5, 0)
-  if (length(adj) == 2) adj <- c(adj, 0)
   if (length(adj) > 3) warning("Only the first three entries of 'adj' are used")
+  adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
   
   if (!length(text)) {
     if (nvertex)
@@ -773,7 +771,8 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
 ##
 
 rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL, 
-                         userMatrix=diag(4), fixedSize = FALSE, 
+                         userMatrix=diag(4), fixedSize = FALSE,
+                         adj = 0.5, pos = NULL, offset = 0.25,
 			 ... ) {
   rgl.material(...)
 
@@ -781,10 +780,18 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   ncenter <- rgl.nvertex(center)
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
+
+  pos <- as.integer(pos)
+  npos <- length(pos)
+  if (npos) {
+    pos <- rep(pos, length.out = ncenter)
+    adj <- offset
+  }
+  adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
   if (!nradius) stop("No radius specified")
   if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
   if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
-  idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize) )
+  idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos) )
   
   ret <- .C( rgl_sprites,
     success = as.integer(FALSE),
@@ -792,7 +799,10 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
     as.numeric(center),
     as.numeric(radius),
     as.integer(shapes),
-    as.numeric(userMatrix),
+    as.numeric(t(userMatrix)),
+    as.numeric(adj),
+    pos,
+    as.numeric(offset),
     NAOK=TRUE
   )
 

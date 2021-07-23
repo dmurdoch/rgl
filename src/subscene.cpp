@@ -589,6 +589,22 @@ void Subscene::update(RenderContext* renderContext)
     
 }
 
+void Subscene::loadMatrices()
+{
+#ifndef RGL_NO_OPENGL  
+  double mat[16];
+  projMatrix.getData(mat);
+  glMatrixMode(GL_PROJECTION);
+  glLoadMatrixd(mat);  
+  SAVEGLERROR; 
+  
+  modelMatrix.getData(mat);
+  glMatrixMode(GL_MODELVIEW);  
+  glLoadMatrixd(mat);
+  SAVEGLERROR;
+#endif
+}
+
 void Subscene::render(RenderContext* renderContext, bool opaquePass)
 {
 #ifndef RGL_NO_OPENGL  
@@ -607,18 +623,9 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   }
   SAVEGLERROR;
   
-  // Now render the current scene.  First we set the projection matrix, then the modelview matrix.
+  // Now render the current scene.  First we load the projection matrix, then the modelview matrix.
   
-  double mat[16];
-  projMatrix.getData(mat);
-  glMatrixMode(GL_PROJECTION);
-  glLoadMatrixd(mat);  
-  SAVEGLERROR; 
-  
-  modelMatrix.getData(mat);
-  glMatrixMode(GL_MODELVIEW);  
-  glLoadMatrixd(mat);
-  SAVEGLERROR;
+  loadMatrices();
   
   setupLights(renderContext);
   

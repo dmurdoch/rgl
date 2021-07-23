@@ -526,13 +526,13 @@
         enabled.normLoc = this.doNormals(obj);
 
       if (fixed_size) {
-        gl.uniform2f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height);
+        gl.uniform3f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height, 1.0);
       }
       
       if (fixed_quads) {
         gl.enableVertexAttribArray( obj.ofsLoc );
         enabled.ofsLoc = true;
-        gl.vertexAttribPointer(obj.ofsLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
+        gl.vertexAttribPointer(obj.ofsLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
       }
 
       for (pass = 0; pass < obj.passes; pass++) {
@@ -787,7 +787,7 @@
       
       var norigs = obj.vertices.length,
           savenorm = new CanvasMatrix4(this.normMatrix),
-          iOrig;
+          iOrig, adj, offset;
 
       this.normMatrix = subscene.spriteNormmat;
       userMatrix = obj.userMatrix;
@@ -801,6 +801,8 @@
       if (this.prmvMatrix !== null)
          origPRMV = new CanvasMatrix4( this.prmvMatrix );
 
+      offset = obj.offset;
+        
       for (iOrig=0; iOrig < norigs; iOrig++) {
         if (this.opaquePass)
           j = iOrig;
@@ -811,6 +813,8 @@
                           origMV);
         radius = obj.radii.length > 1 ? obj.radii[j][0] : obj.radii[0][0];
         this.mvMatrix = new CanvasMatrix4(userMatrix);
+        adj = this.getAdj(obj, j, offset);
+        this.mvMatrix.translate(1 - 2*adj[0], 1 - 2*adj[1], 1 - 2*adj[2]);
         this.mvMatrix.scale(radius);
         this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
         this.setprmvMatrix();

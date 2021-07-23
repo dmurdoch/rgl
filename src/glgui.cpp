@@ -27,13 +27,14 @@ GLboolean GLFont::justify(double twidth, double theight,
                           int pos, const RenderContext& rc) {
 #ifndef RGL_NO_OPENGL
   GLdouble pos1[4], pos2[4];
-  double basex = 0.0, basey = 0.0, basez = 0.0, scaling = 1.0;
+  double basex = 0.0, basey = 0.0, basez = 0.5, scaling = 1.0;
   GLboolean valid;
   gl2ps_centering = GL2PS_TEXT_BL;
   
   if (pos) {
     double offset = adjx, w = width("m");
     switch(pos) {
+	case 0:
     case 1:
     case 3:
     case 5:
@@ -48,6 +49,7 @@ GLboolean GLFont::justify(double twidth, double theight,
       break;
     }
     switch(pos) {
+	case 0:
     case 2:
     case 4:
     case 5:
@@ -62,12 +64,15 @@ GLboolean GLFont::justify(double twidth, double theight,
       break;
     }
     switch(pos) {
+	case 0:
     case 1:
     case 2:
     case 3:
     case 4:
+	  adjz = 0.5;
+	  break;
     case 5:
-      adjz = offset;
+      adjz = 1.0 + offset;
       break;
     case 6:
       adjz = -offset;
