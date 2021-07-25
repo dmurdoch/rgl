@@ -161,7 +161,6 @@ export(.check3d,
       qchisq, qf, splinefun, terms, var)
  importFrom(utils, capture.output, count.fields, file_test, 
             flush.console, packageVersion, read.table, head, tail)
- importFrom(crosstalk, crosstalkLibs, SharedData, is.SharedData)
  
 # These were in rglwidget
  

@@ -72,7 +72,8 @@ and \code{filteredColor} are used for points that
 have been filtered out of the display.
 }
 \value{
-An object of class \code{"SharedData"} which 
+An object of class \code{"SharedData"} (from the 
+optional \pkg{crosstalk} package) which 
 contains the x, y and z coordinates of the RGL object 
 with the given \code{id}.
 }

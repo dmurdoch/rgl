@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.107.10
+Version: 0.107.11
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -28,10 +28,11 @@ Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
           js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont,
-          shiny, manipulateWidget (>= 0.9.0), testthat, markdown
+          shiny, manipulateWidget (>= 0.9.0), testthat, markdown,
+          crosstalk
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr (>= 1.33), jsonlite (>= 0.9.20),
-         magrittr, crosstalk
+         magrittr
 Enhances: waldo
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for
