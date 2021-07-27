@@ -287,6 +287,7 @@
      * @param {string} msg  The message to give.
      */
     rglwidgetClass.prototype.alertOnce = function(msg) {
+      // debugger;
       if (typeof this.alerted !== "undefined")
         return;
       this.alerted = true;
@@ -359,12 +360,26 @@
       return this.getMaterial(obj, property);
     };
 
-    rglwidgetClass.prototype.getAdj = function (pos, offset, text) {
+    rglwidgetClass.prototype.getAdj = function (obj, index, offset, text) {
+      var len, pos;
+      if (typeof obj.pos === "undefined")
+        return this.flatten(obj.adj);
+      pos = obj.pos[index % obj.pos.length];
       switch(pos) {
-        case 1: return [0.5, 1 + offset];
-        case 2: return [1 + offset/text.length, 0.5];
-        case 3: return [0.5, -offset];
-        case 4: return [-offset/text.length, 0.5];
+        case 0: return [0.5, 0.5, 0.5];
+        case 1: return [0.5, 1 + offset, 0.5];
+        case 3: return [0.5, -offset, 0.5];
+        case 5: return [0.5, 0.5, -offset];
+        case 6: return [0.5, 0.5, 1 + offset];
+        case 2: 
+        case 4: if (typeof text === "undefined")
+                  len = 1;
+                else
+                  len = text.length;
+                if (pos === 2)
+                  return [1 + offset/len, 0.5, 0.5];
+                else
+                  return [-offset/len, 0.5, 0.5];
       }
     };
 

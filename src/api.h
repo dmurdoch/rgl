@@ -82,7 +82,9 @@ void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y,
 	                         double* normal_x, double* normal_z, double* normal_y,
 	                         double* texture_s, double* texture_t,
 	                         int* coords, int* orientation, int* flags);
-void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius, int* shapes, double* userMatrix);
+void rgl_sprites  (int* successptr, int* idata, double* vertex, double* radius, 
+                   int* shapes, double* userMatrix, double* adj,
+                   int* pos, double* offset);
 void rgl_newsubscene (int* successptr, int* parentid, int* embedding, int* ignoreExtent);
 void rgl_setsubscene (int* id);
 void rgl_getsubsceneid (int* id, int* dev); /* On input, 0 for root, 1 for current */

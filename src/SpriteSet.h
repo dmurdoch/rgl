@@ -15,11 +15,14 @@ class SpriteSet : public Shape {
 private:
   ARRAY<Vertex> vertex;
   ARRAY<float>  size;
+  ARRAY<int>    pos;
+  float         offset;
 
 public:
   SpriteSet(Material& material, int nvertex, double* vertex, int nsize, double* size, 
             int ignoreExtent, int count = 0, Shape** shapelist = NULL, double* userMatrix = NULL,
-            bool fixedSize = false, Scene* scene = NULL);
+            bool fixedSize = false, Scene* scene = NULL, double* adj = NULL,
+            int npos = 0, int* pos = NULL, double offset = 0.0);
   ~SpriteSet();
 
   /**
@@ -75,6 +78,8 @@ private:
   std::vector<int> shapes;
   bool fixedSize;
   Scene* scene;
+  Vec3 adj;
+  void getAdj(int index);
 };
 
 } // namespace rgl

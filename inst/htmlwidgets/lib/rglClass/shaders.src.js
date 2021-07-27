@@ -59,10 +59,10 @@
                           "  varying vec2 vTexcoord;\n";
 
       if (fixed_size)
-        result = result + "  uniform vec2 textScale;\n";
+        result = result + "  uniform vec3 textScale;\n";
 
       if (fixed_quads)
-        result = result + "  attribute vec2 aOfs;\n";
+        result = result + "  attribute vec3 aOfs;\n";
 
       if (is_twosided)
         if (has_normals || obj.type === "spheres")
@@ -104,13 +104,13 @@
 
       if (fixed_size)
         result = result + "    vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);\n"+
-                          "   pos = pos/pos.w;\n"+
-                          "   gl_Position = pos + vec4(aOfs*textScale, 0.,0.);\n";
+                          "    pos = pos/pos.w;\n"+
+                          "    gl_Position = pos + vec4(aOfs*textScale, 0.);\n";
 
       if (type === "sprites" && !fixed_size)
         result = result + "    vec4 pos = mvMatrix * vec4(aPos, 1.);\n"+
-                          "   pos = pos/pos.w + vec4(aOfs, 0., 0.);\n"+
-                          "   gl_Position = prMatrix*pos;\n";
+                          "    pos = pos/pos.w + vec4(aOfs,  0.);\n"+
+                          "    gl_Position = prMatrix*pos;\n";
 
       if (is_twosided)
         if (has_normals || obj.type === "spheres")

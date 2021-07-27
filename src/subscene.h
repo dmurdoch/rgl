@@ -169,6 +169,9 @@ public:
   /* Update matrices etc. in preparation for rendering */
   void update(RenderContext* renderContext);
   
+  /* load the matrices into OpenGL */
+  void loadMatrices();
+  
   /* Do the OpenGL rendering */
   void render(RenderContext* renderContext, bool opaquePass);
 

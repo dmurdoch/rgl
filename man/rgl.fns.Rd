@@ -19,7 +19,8 @@ rgl.abclines(x, y = NULL, z = NULL, a, b = NULL, c = NULL, ...)
 rgl.planes(a, b = NULL, c = NULL, d = 0, ...)
 rgl.clipplanes(a, b = NULL, c = NULL, d = 0)
 rgl.sprites(x, y = NULL, z = NULL, radius = 1, 
-            shapes = NULL, userMatrix, fixedSize = FALSE, ...)
+            shapes = NULL, userMatrix, fixedSize = FALSE,
+            adj = 0.5, pos = NULL, offset = 0.25, ...)
 rgl.spheres(x, y = NULL, z = NULL, radius, fastTransparency = TRUE, ...)
 rgl.clear( type = "shapes", subscene = 0 )
 rgl.pop( type = "shapes", id = 0 )  
@@ -37,6 +38,7 @@ or normals for the planes.
   \item{radius}{Size of sprites or spheres.}
   \item{fastTransparency}{Sphere drawing strategy.}
   \item{type, id, subscene}{Selecting objects.}
+  \item{adj, pos, offset}{Positioning.}
   \item{...}{
 Material properties.
 }
