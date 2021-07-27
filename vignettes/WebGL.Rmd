@@ -285,7 +285,10 @@ of particular points, but the mouse mode may be changed
 to let the user rotate the display for a another 
 view of the scene.
 
-```{r}
+```{r eval = requireNamespace("crosstalk")}
+# This example requires the crosstalk package
+# We skip it if crosstalk is not available. 
+
 ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 par3d(mouseMode = "selecting")
@@ -349,7 +352,10 @@ If a shared data object has been created in some other way, it can be linked to
 a particular `rgl` `id` value by copying its `key` and `group` properties
 as shown in the example below.
 
-```{r}
+```{r eval=requireNamespace("crosstalk")}
+# This example requires the crosstalk package.  
+# We skip it if crosstalk is not available. 
+
 library(crosstalk)
 sd <- SharedData$new(mtcars)
 ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
