@@ -16,6 +16,8 @@ rglShared <- function(id, key = NULL, group = NULL,
 		      selectedIgnoreNone = TRUE,
 		      filteredFade = 0,
 		      filteredColor = NULL) {
+  if (!requireNamespace("crosstalk"))
+    stop("This function requires crosstalk.")
   data <- as.data.frame(rgl.attrib(id, "vertices"))
   attr(data, "rglId") <- as.integer(id)
   attr(data, "rglOptions") <- list(deselectedFade = deselectedFade,
@@ -30,9 +32,9 @@ rglShared <- function(id, key = NULL, group = NULL,
   if (!is.null(key) && (n != length(key) || anyDuplicated(key)))
     stop("'key' must have exactly one unique value for each vertex")
   result <- if (is.null(group))
-    SharedData$new(data, key)
+    crosstalk::SharedData$new(data, key)
   else
-    SharedData$new(data, key, group)
+    crosstalk::SharedData$new(data, key, group)
   structure(result, class = c("rglShared", class(result)))
 }
 
@@ -306,13 +308,15 @@ rglwidget <- local({
   
   if (!is.null(shared) && !is.list(shared))
     shared <- list(shared)
+  if (length(shared) && !requireNamespace("crosstalk", quietly = TRUE))
+    stop("'shared' requires the crosstalk package.")
   dependencies <- list(rglDependency, CanvasMatrixDependency)
-  if (length(shared)) {
+  if (length(shared) && isNamespaceLoaded("crosstalk")) {
     x$crosstalk <- list(key = vector("list", length(shared)),
     		        group = character(length(shared)),
     		        id = integer(length(shared)),
     		        options = vector("list", length(shared)))
-    dependencies <- c(dependencies, crosstalkLibs())
+    dependencies <- c(dependencies, crosstalk::crosstalkLibs())
   } else {
     x$crosstalk <- list(key = list(), 
     		        group = character(),
@@ -322,7 +326,7 @@ rglwidget <- local({
   	
   for (i in seq_along(shared)) {
     s <- shared[[i]]
-    if (is.SharedData(s) && inherits(s, "rglShared")) {
+    if (crosstalk::is.SharedData(s) && inherits(s, "rglShared")) {
       x$crosstalk$key[[i]] <- s$key()
       x$crosstalk$group[i] <- s$groupName()
       x$crosstalk$id[i] <- attr(s$origData(), "rglId")

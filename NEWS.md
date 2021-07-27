@@ -9,11 +9,13 @@ parameter.
 * Added support for `pos` values of `0` (at specified
 location), `5` (in front of it), and `6` (behind it) in
 `text3d()`, `sprites3d()` and `plotmath3d()`.
+* `crosstalk` is now a Suggested package, rather than
+a required one.
 
 ## Bug fixes
 
 * Fixed rendering of text as sprites3d() objects.
-
+  
 # rgl  0.107.10
 
 ## Major changes
