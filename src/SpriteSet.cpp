@@ -58,7 +58,8 @@ Vertex SpriteSet::getPrimitiveCenter(int index)
   return vertex.get(index);
 }
 
-
+/* These routines are for debugging
+ 
 static void printMatrix(const char* msg, double* m) {
   Rprintf("%s:\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n",
           msg, m[0], m[4], m[8], m[12],
@@ -88,6 +89,7 @@ static void printPRMatrix(const char* msg) {
 #endif
   printMatrix(msg, m);  
 }
+*/
 
 void SpriteSet::drawBegin(RenderContext* renderContext)
 {
@@ -131,7 +133,9 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
   if (o.missing() || ISNAN(s)) return;
 
   Vec3 v3;
-  Vec4 v4;
+  /* We need to modify the variable rather than the GPU's
+   * copy, because some objects refer to it
+   */
   Matrix4x4 *modelMatrix = &renderContext->subscene->modelMatrix;
   
   if (fixedSize) {
@@ -160,6 +164,7 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
                                                 (1.0 - 2.0*adj.z))*
                    Matrix4x4(userMatrix);
 
+    /* Since we modified modelMatrix, we need to reload it */
     renderContext->subscene->loadMatrices();    
     
     for (std::vector<int>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) 
@@ -168,6 +173,7 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
     Shape::drawBegin(renderContext);
  }  else {
     material.useColor(index);
+    /* Since we modified modelMatrix, we need to reload it */
     renderContext->subscene->loadMatrices();
     glBegin(GL_QUADS);
     if (doTex)
@@ -256,6 +262,7 @@ void SpriteSet::drawEnd(RenderContext* renderContext)
     renderContext->subscene->projMatrix = Matrix4x4(p);
   }
   renderContext->subscene->modelMatrix = Matrix4x4(m);
+  /* Restore the original GPU matrices */
   renderContext->subscene->loadMatrices();  
   if (!shapes.size())
     material.endUse(renderContext);
