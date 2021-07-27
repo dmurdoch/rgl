@@ -83,7 +83,7 @@ should normally use the high-level function text3d instead." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.12</span>
       </span>
     </div>
 
@@ -172,12 +172,13 @@ should normally use the high-level function <code><a href='texts.html'>text3d</a
     <tr>
       <th>adj</th>
       <td><p>one value specifying the horizontal adjustment, or two, 
-              specifying horizontal and vertical adjustment respectively.</p></td>
+              specifying horizontal and vertical adjustment respectively, or three, specifying adjustment in all
+              three directions.</p></td>
     </tr>
     <tr>
       <th>pos</th>
       <td><p>a position specifier for the text.  If specified, this
-  overrides any <code>adj</code> value given. Values of 1, 2, 3 and 4, respectively indicate positions below, to the left of, above and to the right of the specified coordinates.</p></td>
+  overrides any <code>adj</code> value given. Values of 0, 1, 2, 3, 4, 5 and 6 respectively indicate positions on, below, to the left of, above, to the right of, in front of and behind the specified coordinates.</p></td>
     </tr>
     <tr>
       <th>offset</th>
@@ -210,8 +211,8 @@ should normally use the high-level function <code><a href='texts.html'>text3d</a
     <p>The <code>adj</code> parameter determines the position of the text relative to the 
 specified coordinate.  Use <code>adj = c(0, 0)</code> to place the left bottom corner at
 <code>(x, y, z)</code>, <code>adj = c(0.5, 0.5)</code> to center the text there, and <code>adj = c(1, 1)</code>
-to put the right top corner there. The optional second coordinate for vertical 
-adjustment defaults to <code>0.5</code>.  Placement is done using the "advance" of
+to put the right top corner there. All coordinates default to <code>0.5</code>.  
+Placement is done using the "advance" of
 the string and the "ascent" of the font relative to the baseline, when these metrics
 are known.</p>
     <h2 class="hasAnchor" id="fonts"><a class="anchor" href="#fonts"></a>Fonts</h2>

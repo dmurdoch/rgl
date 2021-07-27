@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.9</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.12</span>
       </span>
     </div>
 
@@ -152,7 +152,8 @@
 <span class='fu'>rgl.planes</span><span class='op'>(</span><span class='va'>a</span>, b <span class='op'>=</span> <span class='cn'>NULL</span>, c <span class='op'>=</span> <span class='cn'>NULL</span>, d <span class='op'>=</span> <span class='fl'>0</span>, <span class='va'>...</span><span class='op'>)</span>
 <span class='fu'>rgl.clipplanes</span><span class='op'>(</span><span class='va'>a</span>, b <span class='op'>=</span> <span class='cn'>NULL</span>, c <span class='op'>=</span> <span class='cn'>NULL</span>, d <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
 <span class='fu'>rgl.sprites</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, radius <span class='op'>=</span> <span class='fl'>1</span>, 
-            shapes <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>userMatrix</span>, fixedSize <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
+            shapes <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>userMatrix</span>, fixedSize <span class='op'>=</span> <span class='cn'>FALSE</span>,
+            adj <span class='op'>=</span> <span class='fl'>0.5</span>, pos <span class='op'>=</span> <span class='cn'>NULL</span>, offset <span class='op'>=</span> <span class='fl'>0.25</span>, <span class='va'>...</span><span class='op'>)</span>
 <span class='fu'>rgl.spheres</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, z <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>radius</span>, fastTransparency <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 <span class='fu'>rgl.clear</span><span class='op'>(</span> type <span class='op'>=</span> <span class='st'>"shapes"</span>, subscene <span class='op'>=</span> <span class='fl'>0</span> <span class='op'>)</span>
 <span class='fu'>rgl.pop</span><span class='op'>(</span> type <span class='op'>=</span> <span class='st'>"shapes"</span>, id <span class='op'>=</span> <span class='fl'>0</span> <span class='op'>)</span>  
@@ -185,6 +186,10 @@ or normals for the planes.</p></td>
     <tr>
       <th>type, id, subscene</th>
       <td><p>Selecting objects.</p></td>
+    </tr>
+    <tr>
+      <th>adj, pos, offset</th>
+      <td><p>Positioning.</p></td>
     </tr>
     <tr>
       <th>...</th>
