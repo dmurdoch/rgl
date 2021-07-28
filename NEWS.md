@@ -1,4 +1,4 @@
-# rgl 0.107.12
+# rgl 0.107.13
 
 ## Minor changes
 
@@ -11,6 +11,9 @@ location), `5` (in front of it), and `6` (behind it) in
 `text3d()`, `sprites3d()` and `plotmath3d()`.
 * `crosstalk` is now a Suggested package, rather than
 a required one.
+* The `Makevars.ucrt` file has been modified with
+contributions from Tomas Kalibera to work with his winutf8
+build of R.
 
 ## Bug fixes
 

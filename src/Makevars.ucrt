@@ -1,22 +1,18 @@
-VERSION = 2.10.4
-RWINLIB = ../windows/freetype-$(VERSION)
-
 CXX_STD = CXX11
 
 PKG_CPPFLAGS = \
 	-DHAVE_PNG_H -DHAVE_FREETYPE -Iext -Iext/ftgl \
-	-I$(RWINLIB)/include -I$(RWINLIB)/include/freetype2 \
+	-I$(LOCAL_SOFT)/include/freetype2 \
 	-DRGL_W32
 
-PKG_LIBS = -L$(RWINLIB)/lib$(R_ARCH) \
-	-lfreetype -lpng -lz -lgdi32 -lopengl32 -lglu32
+PKG_LIBS = \
+	-lfreetype -lharfbuzz -lfreetype -lpng -lbz2 -lz -lgdi32 -lopengl32 -lglu32
 
 all: winlibs $(SHLIB)
 
 $(SHLIB): winlibs
 
 winlibs:
-	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
 	sed -e "s^@RGL_NO_OPENGL@^FALSE^" ../R/noOpenGL.R.in > ../R/noOpenGL.R
 
 clean:
