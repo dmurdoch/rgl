@@ -1,5 +1,12 @@
 # rgl 0.107.13
 
+## Major changes
+
+* Textures can now take a vector of filenames which
+will be used as a "mipmap".  This may be used in
+`legend3d()` to give legends that adjust to the size 
+of the display.
+
 ## Minor changes
 
 * Allowed for a third coordinate in `text3d()`'s `adj` 
@@ -14,6 +21,8 @@ a required one.
 * The `Makevars.ucrt` file has been modified with
 contributions from Tomas Kalibera to work with his winutf8
 build of R.
+* `bgplot3d()` no longer pauses for each page when running
+examples.
 
 ## Bug fixes
 

@@ -365,13 +365,13 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
     
     if (scenenode)
       for (int i=0; i < *count; i++) {
-      	String s = scenenode->getTextAttribute(bbox, *attrib, i + *first);
-      	if (s.length) {
-      	  *result = R_alloc(s.length + 1, 1);
-	  strncpy(*result, s.text, s.length);
-	  (*result)[s.length] = '\0';
-	}
-	result++;
+        String s = scenenode->getTextAttribute(bbox, *attrib, i + *first);
+        if (s.length) {
+          *result = R_alloc(s.length + 1, 1);
+          strncpy(*result, s.text, s.length);
+          (*result)[s.length] = '\0';
+        }
+        result++;
       }
   }
 } 
@@ -995,10 +995,11 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.edge[1] = idata[27];
   mat.edge[2] = idata[28];
   mat.floating = idata[29];
-  
-  int* colors   = &idata[30];
+  int nfilenames = idata[30];
+  int* colors   = &idata[31];
 
-  char*  pixmapfn = cdata[0];
+  char**  pixmapfn = 0;
+  if (nfilenames > 0) pixmapfn = cdata;
 
   mat.shininess   = (float) ddata[0];
   mat.size      = (float) ddata[1];
@@ -1011,8 +1012,8 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 
   mat.alphablend  = false;
   
-  if ( strlen(pixmapfn) > 0 ) {
-    mat.texture = new Texture(pixmapfn, mat.textype, mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
+  if ( nfilenames > 0 ) {
+    mat.texture = new Texture(nfilenames, pixmapfn, mat.textype, mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;
@@ -1036,7 +1037,7 @@ void rgl::rgl_getcolorcount(int* count)
   CHECKGLERROR;
 }
 
-void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
+void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, double* ddata)
 {
   Material* mat = &currentMaterial;
   unsigned int i,j;
@@ -1047,20 +1048,20 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
     if (deviceManager && (device = deviceManager->getCurrentDevice())) {
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
-    
+
       Shape* shape = scene->get_shape(*id);
       if (shape) 
         mat = shape->getMaterial(); /* success! successptr will be set below */
       else {
-	BBoxDeco* bboxdeco = scene->get_bboxdeco(*id);
-	if (bboxdeco)
-	  mat = bboxdeco->getMaterial();
-	else {
-	  Background* background = scene->get_background(*id);
-	  if (background)
-	    mat = background->getMaterial();
-	  else
-	    return;
+        BBoxDeco* bboxdeco = scene->get_bboxdeco(*id);
+        if (bboxdeco)
+          mat = bboxdeco->getMaterial();
+        else {
+          Background* background = scene->get_background(*id);
+          if (background)
+            mat = background->getMaterial();
+          else
+            return;
         }
       }
     } else
@@ -1074,19 +1075,18 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[5] = mat->fog ? 1 : 0;
   if (mat->texture) {
     mat->texture->getParameters( (Texture::Type*) (idata + 6),
-                               (bool*) (idata + 7),
-                               (unsigned int*) (idata + 8),
-                               (unsigned int*) (idata + 9),
-                               (bool*) (idata + 20),
-                               static_cast<int>(strlen(cdata[0])),
-                               cdata[0] );
+                                 (bool*) (idata + 7),
+                                 (unsigned int*) (idata + 8),
+                                 (unsigned int*) (idata + 9),
+                                 (bool*) (idata + 20),
+                                 (int*) (idata + 31));
   } else {
     idata[6] = (int)mat->textype;
     idata[7] = mat->mipmap ? 1 : 0; 
     idata[8] = mat->minfilter; 
     idata[9] = mat->magfilter; 
     idata[20] = mat->envmap ? 1 : 0; 
-    cdata[0][0] = '\0';
+    idata[31] = 0;
   }
   idata[11] = (int) mat->ambient.getRedub();
   idata[12] = (int) mat->ambient.getGreenub();
@@ -1107,14 +1107,14 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[28] = mat->edge[1];
   idata[29] = mat->edge[2];
   idata[30] = mat->floating;
-
-  for (i=0, j=31; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  
+  for (i=0, j=32; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat->colors.getColor(i).getRedub();
     idata[j++] = (int) mat->colors.getColor(i).getGreenub();
     idata[j++] = (int) mat->colors.getColor(i).getBlueub();
   }
   idata[0] = i;
-
+  
   ddata[0] = (double) mat->shininess;
   ddata[1] = (double) mat->size;
   ddata[2] = (double) mat->lwd;
@@ -1130,6 +1130,57 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   CHECKGLERROR;
   
   *successptr = RGL_SUCCESS;
+}
+
+void rgl::rgl_getTextureFiles(int *successptr, int *id, int *nfilenames, char** cdata)
+{
+  Material* mat = &currentMaterial;
+  
+  if (*nfilenames < 1) {
+    *successptr = RGL_SUCCESS;
+    return;
+  }
+  
+  if (*id > 0) {
+    Device* device;
+    *successptr = RGL_FAIL;
+    if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      
+      Shape* shape = scene->get_shape(*id);
+      if (shape) 
+        mat = shape->getMaterial(); /* success! successptr will be set below */
+      else {
+        BBoxDeco* bboxdeco = scene->get_bboxdeco(*id);
+        if (bboxdeco)
+          mat = bboxdeco->getMaterial();
+        else {
+          Background* background = scene->get_background(*id);
+          if (background)
+            mat = background->getMaterial();
+          else
+            return;
+        }
+      }
+    } else
+      return;
+  }
+  if (!mat->texture) {
+    *successptr = RGL_FAIL;
+    return;
+  }
+    
+  for (int i=0; i < *nfilenames; i++) {
+    String s = mat->texture->getFilename(i);
+    if (s.length) {
+      cdata[i] = R_alloc(s.length + 1, 1);
+      strncpy(cdata[i], s.text, s.length);
+      (cdata[i])[s.length] = '\0';
+    }
+  }
+  *successptr = RGL_SUCCESS;
+  return;
 }
 
 void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex,
