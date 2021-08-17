@@ -9,19 +9,29 @@
     /**
      * Handle a texture after its image has been loaded
      * @param { Object } texture - the gl texture object
+     * @param { number } i - the level in a mipmap
      * @param { Object } textureCanvas - the canvas holding the image
      */
-    rglwidgetClass.prototype.handleLoadedTexture = function(texture, textureCanvas) {
-      var gl = this.gl || this.initGL();
+    rglwidgetClass.prototype.handleLoadedTexture = function(texture, i, textureCanvas, not_min, not_max) {
+      var gl = this.gl || this.initGL(),
+          is_min = !not_min, is_max = !not_max;
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
       gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-      gl.generateMipmap(gl.TEXTURE_2D);
-
-      gl.bindTexture(gl.TEXTURE_2D, null);
+      if (is_min) {
+        if (!is_max) {
+          // Prevents s-coordinate wrapping (repeating).
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          // Prevents t-coordinate wrapping (repeating).
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        }
+      }
+      gl.texImage2D(gl.TEXTURE_2D, i, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
+      if (is_min && is_max) /* only one texture */
+        gl.generateMipmap(gl.TEXTURE_2D);
+      if (is_max)
+        gl.bindTexture(gl.TEXTURE_2D, null);
     };
 
     /**
@@ -38,19 +48,25 @@
      * @param { string } uri - The image location
      * @param { Object } texture - the gl texture object
      */
-    rglwidgetClass.prototype.loadImageToTexture = function(uri, texture) {
+    rglwidgetClass.prototype.loadImageToTexture = function(uris, texture) {
       var canvas = this.textureCanvas,
           ctx = canvas.getContext("2d"),
           image = new Image(),
-          self = this;
-
+          self = this,
+          idx = 0, minindex = Infinity;
+        
        image.onload = function() {
          var w = image.width,
              h = image.height,
              canvasX = self.getPowerOfTwo(w),
              canvasY = self.getPowerOfTwo(h),
-             maxTexSize = self.getMaxTexSize();
+             maxTexSize = self.getMaxTexSize(),
+             not_max;
+         if (idx < uris.length - 1 && 
+             (canvasX > maxTexSize || canvasY > maxTexSize))
+           return; /* Skip images that are too large. */
          while (canvasX > 1 && canvasY > 1 && (canvasX > maxTexSize || canvasY > maxTexSize)) {
+           /* This only runs if there are no more images */
            canvasX /= 2;
            canvasY /= 2;
          }
@@ -58,10 +74,26 @@
          canvas.height = canvasY;
          ctx.imageSmoothingEnabled = true;
          ctx.drawImage(image, 0, 0, canvasX, canvasY);
-         self.handleLoadedTexture(texture, canvas);
-         self.drawScene();
+         minindex = Math.min(minindex, idx);
+         not_max = uris.length > 1 &&
+                   (idx < uris.length -1);
+         self.handleLoadedTexture(texture, idx - minindex, canvas, idx > minindex,  not_max);
+         if (idx >= uris.length-1) {
+           /* We may have run out of images, but not be down to 1x1 yet */
+           while (canvasX > 1 || canvasY > 1) {
+             canvas.width = canvasX = Math.max(1, canvasX/2);
+             canvas.height = canvasY = Math.max(1, canvasY/2);
+             ctx.drawImage(image, 0, 0, canvasX, canvasY);
+             idx += 1;
+             self.handleLoadedTexture(texture, idx - minindex, canvas, true, canvasX > 1 || canvasY > 1);
+           }
+           self.drawScene();
+         } else {
+           idx += 1;
+           image.src = uris[idx];
+         }
        };
-       image.src = uri;
+       image.src = uris[0];
      };
 
     /**

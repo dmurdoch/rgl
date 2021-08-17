@@ -548,7 +548,7 @@
     }
 
     if (type === "text") {
-      this.handleLoadedTexture(obj.texture, this.textureCanvas);
+      this.handleLoadedTexture(obj.texture, 0, this.textureCanvas);
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
