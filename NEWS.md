@@ -1,4 +1,10 @@
+# rgl  0.107.14
 
+## Bug fixes
+
+* Added `--static` flag to configure script for FreeType
+  installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
+  
 # rgl  0.107.10
 
 ## Major changes
