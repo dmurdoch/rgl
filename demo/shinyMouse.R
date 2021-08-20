@@ -4,6 +4,9 @@
 if (!require("shiny"))
   stop("This demo requires shiny.")
 
+if (!requireNamespace("crosstalk"))
+  stop("This demo requires crosstalk.")
+
 library(rgl)
 
 ui <- fluidPage(

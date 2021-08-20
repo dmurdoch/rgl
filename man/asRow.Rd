@@ -60,8 +60,8 @@ Duncan Murdoch
 \link{pipe} for the \code{\%>\%} operator.
 }
 \examples{
-if (requireNamespace("manipulateWidget", quietly = TRUE)) {
-  library(crosstalk)
+if (requireNamespace("manipulateWidget", quietly = TRUE) &&
+    require("crosstalk", quietly = TRUE)) {
   sd <- SharedData$new(mtcars)
   ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
   # Copy the key and group from existing shared data

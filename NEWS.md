@@ -1,5 +1,10 @@
 # rgl  0.107.14
 
+## Minor changes
+
+* `crosstalk` is now a Suggested package, rather than
+  a required one.
+  
 ## Bug fixes
 
 * Added `--static` flag to configure script for FreeType

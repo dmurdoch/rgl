@@ -54,10 +54,13 @@ Installing the changes is fairly easy.  Make sure you have the
 run
 
 ```{r eval=FALSE}
-remotes::install_github(c("r-lib/downlit",
-                          "r-lib/pkgdown",
+remotes::install_github(c("rstudio/webshot2",
+                          "rstudio/chromote",
+                          "r-lib/downlit",
+                          "dmurdoch/pkgdown@issue1689",
                           "dmurdoch/htmlwidgets@rglpatch"))
 ```
+(Note:  this isn't the latest devel version of `pkgdown`; as of July 28, 2021 it's not working...).
 
 With these development version packages installed, you should 
 see RGL or `leaflet` output appear automatically in examples.
