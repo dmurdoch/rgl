@@ -211,7 +211,7 @@ text3d      <- function(x, y = NULL, z = NULL,
   .check3d(); save <- material3d(); on.exit(material3d(save))
   new <- .fixMaterialArgs(..., Params = save)
   do.call("rgl.texts", c(list(x = x, y = y, z = z, text = texts, 
-                              adj = adj, pos=pos,
+                              adj = adj, pos = pos,
                               offset = offset), new))
 }
 texts3d	    <- text3d
@@ -238,8 +238,9 @@ abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
 }
 
 sprites3d   <- function(x, y = NULL, z = NULL, radius = 1, 
-												shapes = NULL, userMatrix,
-												fixedSize = FALSE, ...) {
+                        shapes = NULL, userMatrix, fixedSize = FALSE,  
+                        adj = 0.5, pos = NULL, offset = 0.25,
+												...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   if (missing(userMatrix)) {
     userMatrix <- getr3dDefaults()$userMatrix
@@ -251,7 +252,8 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
   par3d(ignoreExtent=savepar$ignoreExtent)
 
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius,shapes=shapes,
-                                userMatrix=userMatrix, fixedSize = fixedSize), 
+                                userMatrix=userMatrix, fixedSize = fixedSize, 
+                                adj = adj, pos = pos, offset = offset), 
           .fixMaterialArgs(..., Params = save)))
 }
 

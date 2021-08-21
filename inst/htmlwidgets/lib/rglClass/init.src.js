@@ -347,7 +347,7 @@
                      cex: [[1]],
                      family: [["sans"]],
                      font: [[1]],
-                     adj: [[0.5, 0.5]],
+                     adj: [[0.5, 0.5, 0.5]],
                      ignoreExtent: true,
                      initialized: false
       };
@@ -553,7 +553,7 @@
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
         nextofs = -1, pointofs = -1, alias, colors, key, selection,
-        filter, adj, pos, offset, attr, last, options;
+        filter, adj, offset, attr, last, options;
 
     obj.alias = undefined;
     
@@ -624,7 +624,7 @@
       tofs = stride;
       stride += 2;
       oofs = stride;
-      stride += 2;
+      stride += 3;
       vnew = new Array(4*v.length);
       fnew = new Array(4*v.length);
       alias = new Array(v.length);
@@ -632,16 +632,34 @@
           size = obj.radii, s = rescale*size[0]/2;
       last = v.length;
       f = obj.f[0];
+      obj.adj = this.flatten(obj.adj);
+      if (typeof obj.pos !== "undefined") {
+        obj.pos = this.flatten(obj.pos);
+        offset = obj.adj[0];
+      } else
+        offset = 0;
       for (i=0; i < v.length; i++) {
+        adj = this.getAdj(obj, i, offset);
         if (size.length > 1)
           s = rescale*size[i]/2;
-        vnew[i]  = v[i].concat([0,0,-s,-s]);
+        adj[0] = 2*s*(adj[0] - 0.5);
+        adj[1] = 2*s*(adj[1] - 0.5);
+        adj[2] = 2*s*(adj[2] - 0.5);
+        vnew[i]  = v[i].concat([0,0]).concat([-s-adj[0],
+                                              -s-adj[1],
+                                              -adj[2]]);
         fnew[4*i] = f[i];
-        vnew[last]= v[i].concat([1,0, s,-s]);
+        vnew[last]= v[i].concat([1,0]).concat([s-adj[0],
+                                              -s-adj[1],
+                                              -adj[2]]);
         fnew[4*i+1] = last++;
-        vnew[last]= v[i].concat([1,1, s, s]);
+        vnew[last]= v[i].concat([1,1]).concat([s-adj[0],
+                                               s-adj[1],
+                                               -adj[2]]);
         fnew[4*i+2] = last++;
-        vnew[last]= v[i].concat([0,1,-s, s]);
+        vnew[last]= v[i].concat([0,1]).concat([-s-adj[0],
+                                                s-adj[1],
+                                                -adj[2]]);
         fnew[4*i+3] = last++;
         alias[i] = [last-3, last-2, last-1];
       }
@@ -652,7 +670,7 @@
       tofs = stride;
       stride += 2;
       oofs = stride;
-      stride += 2;
+      stride += 3;
       vnew = new Array(4*v.length);
       f = obj.f[0];
       fnew = new Array(4*f.length);
@@ -660,12 +678,12 @@
       last = v.length;
       adj = this.flatten(obj.adj);
       if (typeof obj.pos !== "undefined") {
-        pos = this.flatten(obj.pos);
+        obj.pos = this.flatten(obj.pos);
         offset = adj[0];
-      }
+      } else
+        offset = 0;
       for (i=0; i < v.length; i++) {
-        if (typeof pos !== "undefined")
-          adj = this.getAdj(pos[i % pos.length], offset, obj.texts[i]);
+        adj = this.getAdj(obj, i, offset, obj.texts[i]);
         vnew[i]  = v[i].concat([0,-0.5]).concat(adj);
         fnew[4*i] = f[i];
         vnew[last] = v[i].concat([1,-0.5]).concat(adj);
@@ -722,9 +740,17 @@
     }
 
     if (sprites_3d) {
-      obj.userMatrix = new CanvasMatrix4(obj.usermatrix);
+      obj.userMatrix = new CanvasMatrix4();
+      obj.userMatrix.load(this.flatten(obj.usermatrix));
       obj.objects = this.flatten([].concat(obj.ids));
       is_lit = false;
+      obj.adj = this.flatten(obj.adj);
+      if (typeof obj.pos !== "undefined") {
+        obj.pos = this.flatten(obj.pos);
+        obj.offset = obj.adj[0];
+      } else
+        obj.offset = 0;
+        
       for (i=0; i < obj.objects.length; i++)
         this.initObjId(obj.objects[i]);
     }

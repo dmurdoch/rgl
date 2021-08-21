@@ -215,11 +215,11 @@ void Matrix4x4::loadData(const Matrix4x4& from) {
 Vec3 Matrix4x4::operator * (const Vec3 v) const {
   Vec3 r;
   const float v_w = 1.0f;
-
-  r.x = val(0,0) * v.x + val(0,1) * v.y + val(0,2) * v.z + val(0,3) * v_w;
-  r.y = val(1,0) * v.x + val(1,1) * v.y + val(1,2) * v.z + val(1,3) * v_w;
-  r.z = val(2,0) * v.x + val(2,1) * v.y + val(2,2) * v.z + val(2,3) * v_w;
-
+  float rw;
+  rw =  val(3,0) * v.x + val(3,1) * v.y + val(3,2) * v.z + val(3,3) * v_w;
+  r.x = (val(0,0) * v.x + val(0,1) * v.y + val(0,2) * v.z + val(0,3) * v_w)/rw;
+  r.y = (val(1,0) * v.x + val(1,1) * v.y + val(1,2) * v.z + val(1,3) * v_w)/rw;
+  r.z = (val(2,0) * v.x + val(2,1) * v.y + val(2,2) * v.z + val(2,3) * v_w)/rw;
   return r;
 }
 

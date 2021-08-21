@@ -18,9 +18,10 @@ texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
     for details.}
   \item{texts}{text character vector to draw}
   \item{adj}{ one value specifying the horizontal adjustment, or two, 
-              specifying horizontal and vertical adjustment respectively. }
+              specifying horizontal and vertical adjustment respectively, or three, specifying adjustment in all
+              three directions.}
   \item{pos}{ a position specifier for the text.  If specified, this
-  overrides any \code{adj} value given. Values of 1, 2, 3 and 4, respectively indicate positions below, to the left of, above and to the right of the specified coordinates.}
+  overrides any \code{adj} value given. Values of 0, 1, 2, 3, 4, 5, 6 respectively indicate positions at, below, to the left of, above, to the right of, in front of, and behind the specified coordinates.}
   \item{offset}{ when \code{pos} is specified, this value gives the offset of the label from the specified coordinate in fractions of a character width.}
   \item{ usePlotmath }{logical.  Should \code{\link{plotmath3d}} be used for the text?}
   \item{ ... }{In the other functions, additional parameters to pass to \code{rgl.texts}.}  

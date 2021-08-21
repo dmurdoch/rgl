@@ -1,12 +1,23 @@
-# rgl  0.107.14
+# rgl  0.107.15
 
 ## Minor changes
 
+* Allowed for a third coordinate in `text3d()`'s `adj` 
+parameter.
+* Added support for `adj`, `pos` and `offset` to 
+`sprites3d()`.
+* Added support for `pos` values of `0` (at specified
+location), `5` (in front of it), and `6` (behind it) in
+`text3d()`, `sprites3d()` and `plotmath3d()`.
 * `crosstalk` is now a Suggested package, rather than
-  a required one.
-  
+a required one.
+* The `Makevars.ucrt` file has been modified with
+contributions from Tomas Kalibera to work with his winutf8
+build of R.
+
 ## Bug fixes
 
+* Fixed rendering of text as sprites3d() objects.
 * Added `--static` flag to configure script for FreeType
   installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
   
