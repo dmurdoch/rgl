@@ -4546,7 +4546,7 @@ fi
 
     if test "x$HAVE_PKG_CONFIG" = "xyes" -a "x`pkg-config freetype2 --cflags`" != "x"; then
       CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
-      LIBS="${LIBS} `pkg-config freetype2 --libs`"
+      LIBS="${LIBS} `pkg-config freetype2 --static --libs`"
       { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
 $as_echo "$as_me: using Freetype and FTGL" >&6;}
     else
@@ -4590,7 +4590,7 @@ fi
 
       if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
         CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
-        LIBS="${LIBS} `freetype-config --libs`"
+        LIBS="${LIBS} `freetype-config --static --libs`"
         { $as_echo "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5
 $as_echo "$as_me: using Freetype and FTGL" >&6;}
       else

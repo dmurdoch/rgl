@@ -1,4 +1,4 @@
-# rgl 0.107.13
+# rgl  0.107.15
 
 ## Minor changes
 
@@ -18,6 +18,8 @@ build of R.
 ## Bug fixes
 
 * Fixed rendering of text as sprites3d() objects.
+* Added `--static` flag to configure script for FreeType
+  installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
   
 # rgl  0.107.10
 
