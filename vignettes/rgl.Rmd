@@ -291,8 +291,9 @@ at a lower level; users should normally avoid it.
 ### Textures
 
 As described in the previous section, one of the material
-properties is `texture`, the name of a bitmap file (in `.png`
-format) containing an image to be displayed on the surface. 
+properties is `texture`, the name of a bitmap file in `.png`
+format (or more than one; see below) containing an image to be
+displayed on the surface. 
 This section gives more details about textures.
 
 In `OpenGL`, each vertex in a polygon may be associated with a
@@ -344,6 +345,29 @@ quad.  If `col` is black (a common default), you won't see anything.
  the interpolation within the image is done.
  - Modern `OpenGL` supports 1- and 3-dimensional textures;
  these are not supported in `rgl`.
+ 
+As mentioned above, `texture` can list more than one file.  This
+can be used to specify "mipmaps":  different versions of the
+image to use at different magnifications.  Normally OpenGL
+rescales the image, averaging nearby pixels to determine
+what to display.  However, if `texture` contains several
+filenames, these will be used in sequence as the image is 
+reduced in size.  Due to limitations in some versions of OpenGL,
+the first image *must* have both width and height being an exact
+power of two.  The next image cuts both width and height
+in half if possible.  For example, the first image could be 256x64, then
+the sequence would be 128x32, 64x16, 32x8, 16x4, 8x2, 4x1, 2x1,
+1x1.  You can stop producing images at any point in this
+sequence, and the system will interpolate the last one for 
+smaller renderings.  This system is used in the 
+`r linkfn("legend3d", pkg = "rgl")` function to make text more legible in
+smaller renderings.
+
+If `mipmap = TRUE` is used without specifying a sequence of
+images, `rgl` will compute the sequence itself:  this slows
+loading a little, but speeds later rendering.  See 
+`r linkfn("material3d", pkg = "rgl")`  for a discussion of the `texminfilter`
+and `texmaxfilter` parameters that control the interpolation.
  
 ### Fonts
 

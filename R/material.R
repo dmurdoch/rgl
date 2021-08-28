@@ -74,7 +74,7 @@ rgl.material <- function(
   if (length(texture))
     texture <- normalizePath(texture)
   texture <- as.character(texture)
-  nfilenames <- length(texture)
+  ntexturefiles <- length(texture)
 
   textype <- rgl.enum.textype( textype )
   texminfilter <- rgl.enum.texminfilter( texminfilter )
@@ -104,7 +104,7 @@ rgl.material <- function(
                           point_antialias, line_antialias, 
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
-                          nfilenames, color) )
+                          ntexturefiles, color) )
   cdata <- texture
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
