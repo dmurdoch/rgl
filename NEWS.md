@@ -27,6 +27,8 @@ examples.
 ## Bug fixes
 
 * Fixed rendering of text as sprites3d() objects.
+* Added `--static` flag to configure script for FreeType
+  installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
   
 # rgl  0.107.10
 
