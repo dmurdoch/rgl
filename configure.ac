@@ -203,13 +203,13 @@ if test "x$enable_opengl" != "xno"; then
     AC_CHECK_PROG([HAVE_PKG_CONFIG],[pkg-config],[yes],[no])
     if test "x$HAVE_PKG_CONFIG" = "xyes" -a "x`pkg-config freetype2 --cflags`" != "x"; then
       CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
-      LIBS="${LIBS} `pkg-config freetype2 --libs`"
+      LIBS="${LIBS} `pkg-config freetype2 --static --libs`"
       AC_MSG_NOTICE([using Freetype and FTGL])
     else
       AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
       if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
         CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
-        LIBS="${LIBS} `freetype-config --libs`"
+        LIBS="${LIBS} `freetype-config --static --libs`"
         AC_MSG_NOTICE([using Freetype and FTGL])
       else
         AC_MSG_NOTICE([compiling without FTGL support])
