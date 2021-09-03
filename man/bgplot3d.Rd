@@ -8,7 +8,7 @@ Add a 2D plot or a legend in the background of an RGL window.
 \usage{
 bgplot3d(expression, bg.color = getr3dDefaults("bg", "color"),
          magnify = 1, manual_mip = FALSE, 
-         texmipmap = manual_mip, texminfilter = "linear.mipmap.nearest",
+         texmipmap = manual_mip, texminfilter = "linear",
          envir = parent.frame(), ...)
 legend3d(...)
 }
@@ -28,7 +28,9 @@ Whether to evaluate the expression multiple times for
 different levels of display.  See Details below.
   }
   \item{texmipmap, texminfilter}{
-Material properties to use in the texture.
+Material properties to use in the texture.  If 
+\code{texmipmap} is \code{TRUE}, the \code{texminfilter}
+default changes to \code{"linear.mipmap.nearest"}.
   }
   \item{envir}{The parent of the environment in which
   to evaluate the expression.}
@@ -45,10 +47,11 @@ RGL subscene.
 
 If \code{manual_mip} is \code{TRUE}, this is repeated as the
 window is shrunk by dividing its width and height by 2
-and a new smaller image is saved.  This continues until a
+and a new smaller image is saved.  This continues until
 an error occurs or a 1x1 image is produced.  The sequence of images
 will be used as a \dQuote{mipmap}, in which the display will
-be chosen depending on the final display size.
+be chosen depending on the final display size. See the 
+example below for a use of this with \code{legend3d}.
 
 The \code{expression} will be executed in an environment
 containing variables \code{bgplot3d_width} and
@@ -96,7 +99,10 @@ bgplot3d(plot(y, z))
 next3d(reuse = FALSE)
 bgplot3d(plot(x, z))
 next3d(reuse = FALSE)
-legend3d("center", c("2D Points", "3D Points"), pch = c(1, 16), manual_mip = TRUE, magnify = 4)
+legend3d("center", 
+         c("2D Points", "3D Points"), 
+         pch = c(1, 16), 
+         manual_mip = TRUE, magnify = 4)
 useSubscene3d(parent)
 }
 \keyword{ graphics }

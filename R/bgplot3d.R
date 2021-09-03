@@ -23,7 +23,7 @@ legend3d <- function(...) {
 
 bgplot3d <- function(expression, bg.color = getr3dDefaults("bg", "color"), 
                      magnify = 1, manual_mip = FALSE, texmipmap = manual_mip, 
-                     texminfilter = "linear.mipmap.nearest", 
+                     texminfilter = "linear", 
                      envir = parent.frame(), ...) {
   expression <- substitute(expression)
   viewport <- par3d("viewport")
@@ -55,6 +55,9 @@ bgplot3d <- function(expression, bg.color = getr3dDefaults("bg", "color"),
     }
     if (!manual_mip)
       value <- value[[1]]
+    if (texmipmap && missing(texminfilter)) {
+      texminfilter <- "linear.mipmap.nearest"
+    }
     result <- bg3d(texture = filenames, col = "white", lit = FALSE, 
                    texmipmap = texmipmap, texminfilter = texminfilter, 
                    ...)
