@@ -1,4 +1,4 @@
-# rgl  0.107.15
+# rgl  0.107.16
 
 ## Minor changes
 
@@ -20,6 +20,8 @@ build of R.
 * Fixed rendering of text as sprites3d() objects.
 * Added `--static` flag to configure script for FreeType
   installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
+* `shade3d()`, `wire3d()` and `dots3d()` overrode
+`"front"` and `"back"` material settings in mesh objects.
   
 # rgl  0.107.10
 

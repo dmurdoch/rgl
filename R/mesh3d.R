@@ -235,11 +235,21 @@ as.mesh3d.tri <- function(x, z, col = "gray",
 
 # rendering support
 
-dot3d.mesh3d <- function(x, ..., front = "points", back = "points")
+dot3d.mesh3d <- function(x, ..., front = "points", back = "points") {
+  if (missing(front) && !is.null(x$material$front))
+    front <- x$material$front
+  if (missing(back) && !is.null(x$material$back))
+    back <- x$material$back
   shade3d.mesh3d(x, ..., front = front, back = back)
+}
 
-wire3d.mesh3d <- function(x, ..., front = "lines", back = "lines")
+wire3d.mesh3d <- function(x, ..., front = "lines", back = "lines") {
+  if (missing(front) && !is.null(x$material$front))
+    front <- x$material$front
+  if (missing(back) && !is.null(x$material$back))
+    back <- x$material$back
   shade3d.mesh3d(x, ..., front = front, back = back)
+}
 
 allowedMeshColor <- function(meshColor, modes) {
   meshColor != "edges" || 
@@ -251,6 +261,10 @@ shade3d.mesh3d <- function( x, override = TRUE,
                              texcoords = NULL, 
                              ...,
                              front = "filled", back = "filled") {
+  if (missing(front) && !is.null(x$material$front))
+    front <- x$material$front
+  if (missing(back) && !is.null(x$material$back))
+    back <- x$material$back
   argMaterial <- c(list(front = front, back = back), .getMaterialArgs(...))
   xHasColor <- !is.null(x$material) && !is.null(x$material$color)
   hasMeshColor <- !missing(meshColor)
