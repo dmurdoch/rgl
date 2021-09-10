@@ -8,7 +8,6 @@ will be used as a "mipmap".  This may be used in
 of the display.
 
 ## Minor changes
-
 * Allowed for a third coordinate in `text3d()`'s `adj` 
 parameter.
 * Added support for `adj`, `pos` and `offset` to 
@@ -29,6 +28,8 @@ examples.
 * Fixed rendering of text as sprites3d() objects.
 * Added `--static` flag to configure script for FreeType
   installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
+* `shade3d()`, `wire3d()` and `dots3d()` overrode
+`"front"` and `"back"` material settings in mesh objects.
   
 # rgl  0.107.10
 
