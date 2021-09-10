@@ -6,21 +6,51 @@
      * @instance
      */
      
+    rglwidgetClass.prototype.getTexFilter = function(filter) {
+      var gl = this.gl || this.initGL();
+      switch(filter) {
+        case "nearest": return gl.NEAREST;
+        case "linear": return gl.LINEAR;
+        case "nearest.mipmap.nearest": return gl.NEAREST_MIPMAP_NEAREST;
+        case "linear.mipmap.nearest": return gl.LINEAR_MIPMAP_NEAREST;
+        case "nearest.mipmap.linear": return gl.NEAREST_MIPMAP_LINEAR;
+        case "linear.mipmap.linear": return gl.LINEAR_MIPMAP_LINEAR;
+        default: console.error("Unknown filter: "+filter);
+      }
+    };
+     
     /**
      * Handle a texture after its image has been loaded
      * @param { Object } texture - the gl texture object
+     * @param { number } i - the level in a mipmap
      * @param { Object } textureCanvas - the canvas holding the image
      */
-    rglwidgetClass.prototype.handleLoadedTexture = function(texture, textureCanvas) {
+    rglwidgetClass.prototype.handleLoadedTexture = function(texture, i, textureCanvas, mipmap, minfilter, magfilter, generate) {
       var gl = this.gl || this.initGL();
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
       gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-      gl.generateMipmap(gl.TEXTURE_2D);
+      if (typeof mipmap === "undefined")
+        mipmap = true;
+      if (typeof generate === "undefined")
+        generate = mipmap;
+      if (i === 0) {
+        if (typeof minfilter === "undefined")
+          minfilter = mipmap ? gl.LINEAR_MIPMAP_NEAREST : gl.LINEAR;
+        if (typeof magfilter === "undefined")
+          magfilter = gl.LINEAR;
 
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, magfilter);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, minfilter);
+        if (mipmap) {
+          // Prevents s-coordinate wrapping (repeating).
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          // Prevents t-coordinate wrapping (repeating).
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        }
+      }
+      gl.texImage2D(gl.TEXTURE_2D, i, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
+      if (generate) /* only one texture */
+        gl.generateMipmap(gl.TEXTURE_2D);
       gl.bindTexture(gl.TEXTURE_2D, null);
     };
 
@@ -38,30 +68,73 @@
      * @param { string } uri - The image location
      * @param { Object } texture - the gl texture object
      */
-    rglwidgetClass.prototype.loadImageToTexture = function(uri, texture) {
+    rglwidgetClass.prototype.loadImageToTexture = function(obj) {
       var canvas = this.textureCanvas,
           ctx = canvas.getContext("2d"),
           image = new Image(),
-          self = this;
-
+          self = this,
+          minindex = Infinity,
+          texture = obj.texture,
+          mat = obj.material, uris,
+          minfilter = this.getTexFilter(this.getMaterial(obj, "texminfilter")),
+          magfilter = this.getTexFilter(this.getMaterial(obj, "texmagfilter"));
+      if (typeof mat.uris !== "undefined")
+        uris = mat.uris;
+      else if (typeof mat.uriElementId === "undefined")
+        uris = [""];
+      else
+        uris = document.getElementById(mat.uriElementId).rglinstance.getObj(mat.uriId).material.uris;
+        
        image.onload = function() {
-         var w = image.width,
-             h = image.height,
-             canvasX = self.getPowerOfTwo(w),
-             canvasY = self.getPowerOfTwo(h),
-             maxTexSize = self.getMaxTexSize();
-         while (canvasX > 1 && canvasY > 1 && (canvasX > maxTexSize || canvasY > maxTexSize)) {
-           canvasX /= 2;
-           canvasY /= 2;
+         var canvasX = image.width,
+             canvasY = image.height,
+             maxTexSize = self.getMaxTexSize(),
+             idx = this.idx,
+             texmipmap = self.getMaterial(obj, "texmipmap");
+         
+         if (texmipmap) {
+           canvasX = self.getPowerOfTwo(canvasX);
+           canvasY = self.getPowerOfTwo(canvasY);
+         } else if (idx > 0)
+           return;  /* Skip later images if not mipmapping */
+         
+         if (idx < uris.length - 1 && 
+             (canvasX > maxTexSize || canvasY > maxTexSize))
+           return; /* Skip images that are too large. */
+         while (Math.max(canvasX, canvasY) > maxTexSize && maxTexSize > 1)  {
+           /* This only runs if there are no more images */
+           canvasX = Math.max(1, canvasX/2);
+           canvasY = Math.max(1, canvasY/2);
          }
          canvas.width = canvasX;
          canvas.height = canvasY;
          ctx.imageSmoothingEnabled = true;
          ctx.drawImage(image, 0, 0, canvasX, canvasY);
-         self.handleLoadedTexture(texture, canvas);
-         self.drawScene();
+         minindex = Math.min(minindex, idx);
+         self.handleLoadedTexture(texture, idx - minindex, canvas, texmipmap,
+         minfilter, magfilter, texmipmap && uris.length === 1);
+         if (texmipmap && uris.length > 1) {
+           if (idx >= uris.length-1) {
+           /* We may have run out of images, but not be down to 1x1 yet */
+             while (canvasX > 1 || canvasY > 1) {
+               canvas.width = canvasX = Math.max(1, canvasX/2);
+               canvas.height = canvasY = Math.max(1, canvasY/2);
+               image.idx = idx + 1;
+               ctx.drawImage(image, 0, 0, canvasX, canvasY);
+               self.handleLoadedTexture(texture, idx - minindex, canvas, true, minfilter, magfilter, false);
+             }
+             self.drawScene();
+           } else {
+             idx += 1;
+             image.idx = idx;
+             image.src = uris[idx];
+           }
+         } else
+           self.drawScene();
        };
-       image.src = uri;
+       
+       image.idx = 0;
+       image.src = uris[0];
      };
 
     /**

@@ -4,9 +4,14 @@
 #include "config.h"
 #include "platform.h"
 #include "RenderContext.h"
+#include "R.h"
 
 using namespace std;
 using namespace rgl;
+
+static bool isPowerOfTwo(int x) {
+  return (x & (x - 1)) == 0;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -15,15 +20,19 @@ using namespace rgl;
 //
 
 Texture::Texture(
-  const char* in_filename
+  int nfilenames
+, char** in_filenames
 , Type in_type
 , bool in_mipmap
 , unsigned int in_minfilter
 , unsigned int in_magfilter
-, bool in_envmap)
+, bool in_envmap) :
+  pixmaps(nfilenames),
+  filenames(nfilenames, in_filenames)
 {
   texName = 0;
-  pixmap = new Pixmap();
+  for (int i=0; i<nfilenames; i++)
+    pixmaps.get(i) = new Pixmap();
   type   = in_type;
   mipmap = in_mipmap;
   envmap = in_envmap;
@@ -60,12 +69,27 @@ Texture::Texture(
     }
   }
   
-  filename = new char [1 + strlen(in_filename)];
-  memcpy(filename, in_filename, 1 + strlen(in_filename));
+  if (!filenames.size() || !pixmaps.get(0)->load(filenames[0].text) ) {
+    delete pixmaps.get(0);
+  }
   
-  if ( !pixmap->load(filename) ) {
-    delete pixmap;
-    pixmap = NULL;
+  if (pixmaps.get(0) && filenames.size() > 1) {
+    Pixmap *pixmap = pixmaps.get(0);
+    int i, width = pixmap->width, height = pixmap->height;
+    if (!isPowerOfTwo(width) || !isPowerOfTwo(height))
+      error("Initial image must have power-of-two sizes");
+    for (i = 1; i < filenames.size(); i++) {
+      pixmap = pixmaps.get(i);
+      if (!pixmap->load(filenames[i].text))
+        error("Pixmap failed to load.");
+      if (pixmap->width != getMax(width/2, 1) ||
+          pixmap->height != getMax(height/2, 1))
+        error("Pixmaps in texture must follow mipmap sizing sequence.");
+      width = pixmap->width;
+      height = pixmap->height;
+    }
+    if (i != filenames.size())
+      error("%d filenames given, %d files used.", filenames.size(), i);
   }
 }
 
@@ -76,24 +100,23 @@ Texture::~Texture()
     glDeleteTextures(1, &texName);
   }
 #endif
-  if (pixmap)
-    delete pixmap;
-  if (filename)
-    delete[] filename;
+  for (int i=0; i < pixmaps.size(); i++)
+    if (pixmaps.get(i))
+      delete pixmaps.get(i);
 }
 
 
-bool Texture::isValid() const 
+bool Texture::isValid() 
 {
-  return (pixmap) ? true : false;
+  return pixmaps.get(0) ? true : false;
 }
 
-void Texture::getParameters(Type *out_type, bool *out_mipmap, 
+void Texture::getParameters(Type *out_type, int *out_mipmap, 
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
-                            bool *out_envmap, int buflen, char *out_filename)
+                            int *out_envmap, int *out_nfilenames)
 {
   *out_type = type;
-  *out_mipmap = mipmap;
+  *out_mipmap = mipmap ? 1 : 0;
   switch(minfilter) {
       case GL_NEAREST:
         *out_minfilter = 0;
@@ -118,9 +141,18 @@ void Texture::getParameters(Type *out_type, bool *out_mipmap,
         break;
   }
   *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
-  *out_envmap = envmap;
-  strncpy(out_filename, filename, buflen);
+  *out_envmap = envmap ? 1 : 0;
+  *out_nfilenames = filenames.size();
 }
+
+String Texture::getFilename(int i)
+{
+  if (i < filenames.size())
+    return filenames[i];
+  else
+    return String(0, nullptr);
+}
+
 
 #ifndef MODERN_OPENGL
 #ifndef RGL_NO_OPENGL
@@ -147,8 +179,14 @@ void Texture::init(RenderContext* renderContext)
 #ifndef RGL_NO_OPENGL
   glGenTextures(1, &texName);
   glBindTexture(GL_TEXTURE_2D, texName);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  if (pixmaps.size() < 2) {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  } else{
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, pixmaps.size() - 1);
+  }
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);                                                       
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magfilter);
 
@@ -176,7 +214,7 @@ void Texture::init(RenderContext* renderContext)
     break;
   }
 
-  switch(pixmap->typeID)
+  switch(pixmaps.get(0)->typeID)
   {
   case GRAY8:
     ualign = 1;
@@ -219,36 +257,45 @@ void Texture::init(RenderContext* renderContext)
   GLint glTexSize;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE,  &glTexSize );        
   
-  #ifdef MODERN_OPENGL
-  glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
-  if (mipmap)
-    glGenerateMipmap(GL_TEXTURE_2D);
-  #else
-  unsigned int maxSize = static_cast<unsigned int>(glTexSize);
-  if (mipmap) {                  
-    int gluError = gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat, pixmap->width, pixmap->height, format, gl_type, pixmap->data);    
-    if (gluError)
-      printGluErrorMessage(gluError);
+  Pixmap* pixmap;
+  if (mipmap && pixmaps.size() > 1) {
+    for (int i=0; i < pixmaps.size(); i++) {
+      pixmap = pixmaps.get(i);
+      glTexImage2D(GL_TEXTURE_2D, i, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type, pixmap->data);
+    }
   } else {
-    unsigned int width  = texsize(pixmap->width);
-    unsigned int height = texsize(pixmap->height);
-    
-    if ( (width > maxSize) || (height > maxSize) ) {
-      char buf[256];
-      sprintf(buf, "GL Library : Maximum texture size of %dx%d exceeded.\n(Perhaps enabling mipmapping could help.)", maxSize,maxSize);
-      printMessage(buf);
-    } else if ( (pixmap->width != width) || ( pixmap->height != height) ) {
-      char* data = new char[width * height * bytesperpixel];
-      int gluError = gluScaleImage(format, pixmap->width, pixmap->height, gl_type, pixmap->data, width, height, gl_type, data);
+    #ifdef MODERN_OPENGL
+    pixmap = pixmaps.get(0);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
+    if (mipmap)
+      glGenerateMipmap(GL_TEXTURE_2D);
+    #else
+    unsigned int maxSize = static_cast<unsigned int>(glTexSize);
+    if (mipmap) {                  
+      int gluError = gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat, pixmap->width, pixmap->height, format, gl_type, pixmap->data);    
       if (gluError)
         printGluErrorMessage(gluError);
-      glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, gl_type , data);
-      delete[] data;
     } else {
-      glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
+      unsigned int width  = texsize(pixmap->width);
+      unsigned int height = texsize(pixmap->height);
+    
+      if ( (width > maxSize) || (height > maxSize) ) {
+        char buf[256];
+        sprintf(buf, "GL Library : Maximum texture size of %dx%d exceeded.\n(Perhaps enabling mipmapping could help.)", maxSize,maxSize);
+        printMessage(buf);
+      } else if ( (pixmap->width != width) || ( pixmap->height != height) ) {
+        char* data = new char[width * height * bytesperpixel];
+        int gluError = gluScaleImage(format, pixmap->width, pixmap->height, gl_type, pixmap->data, width, height, gl_type, data);
+        if (gluError)
+          printGluErrorMessage(gluError);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, gl_type , data);
+        delete[] data;
+      } else {
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
+      }
     }
+    #endif /* not MODERN_OPENGL */
   }
-  #endif /* not MODERN_OPENGL */
   
   if (envmap) {
     glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
@@ -257,10 +304,6 @@ void Texture::init(RenderContext* renderContext)
     glEnable(GL_TEXTURE_GEN_T);
   }
 #endif
-  if (pixmap) {
-    delete pixmap;
-    pixmap = NULL;
-  }
 }
 
 void Texture::beginUse(RenderContext* renderContext)

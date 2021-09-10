@@ -51,8 +51,11 @@
               val = newval;
             }
           }
-          result[dim] = vertices[best].slice(0,3);
-          result[dim][dim] = undefined;
+          if (typeof best !== "undefined") {
+            result[dim] = vertices[best].slice(0,3);
+            result[dim][dim] = undefined;
+          } else
+            result[dim] = undefined;
         }
       }
       return result;
