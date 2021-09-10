@@ -54,7 +54,7 @@ bgplot3d <- function(expression, bg.color = getr3dDefaults("bg", "color"),
       height <- if (height > 1) height/2 else 1
     }
     if (!manual_mip)
-      value <- value[[1]]
+      value <- values[[1]]
     if (texmipmap && missing(texminfilter)) {
       texminfilter <- "linear.mipmap.nearest"
     }

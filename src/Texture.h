@@ -36,8 +36,8 @@ public:
   void endUse(RenderContext* renderContext);
   bool is_envmap() const { return envmap; }
   bool hasAlpha() const { return (type == ALPHA || type == LUMINANCE_ALPHA || type == RGBA ); }
-  void getParameters(Type *out_type, bool *out_mipmap, unsigned int *out_minfilter, 
-                     unsigned int *out_magfilter, bool *out_envmap, int *out_nfilenames) ;
+  void getParameters(Type *out_type, int *out_mipmap, unsigned int *out_minfilter, 
+                     unsigned int *out_magfilter, int *out_envmap, int *out_nfilenames) ;
   String getFilename(int i);
   Pixmap* getPixmap(int i) { return pixmaps.get(i); }
 private:

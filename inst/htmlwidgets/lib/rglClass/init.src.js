@@ -387,7 +387,7 @@
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
-          i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
+          i,j,v,v1,v2, pass, pmode,
           dim, nx, nz, nrow;
 
     obj.initialized = true;
@@ -518,8 +518,13 @@
     }
 
     if (has_texture || type === "text") {
-      if (!obj.texture)
+      if (!obj.texture) {
         obj.texture = gl.createTexture();
+        // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
+        gl.bindTexture(gl.TEXTURE_2D, obj.texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([255,255,255, 255])); // white
+      }
       obj.texLoc = gl.getAttribLocation(obj.prog, "aTexcoord");
       obj.sampler = gl.getUniformLocation(obj.prog, "uSampler");
     }
@@ -530,22 +535,8 @@
       obj.uFogParms = gl.getUniformLocation(obj.prog, "uFogParms");
     }
 
-    if (has_texture) {
-      mat = obj.material;
-      if (typeof mat.uri !== "undefined")
-        uri = mat.uri;
-      else if (typeof mat.uriElementId === "undefined") {
-        matobj = this.getObj(mat.uriId);
-        if (typeof matobj !== "undefined") {
-          uri = matobj.material.uri;
-        } else {
-          uri = "";
-        }
-      } else
-        uri = document.getElementById(mat.uriElementId).rglinstance.getObj(mat.uriId).material.uri;
-
-      this.loadImageToTexture(uri, obj.texture);
-    }
+    if (has_texture) 
+      this.loadImageToTexture(obj);
 
     if (type === "text") {
       this.handleLoadedTexture(obj.texture, 0, this.textureCanvas);

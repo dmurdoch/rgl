@@ -1075,10 +1075,10 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, double* ddata)
   idata[5] = mat->fog ? 1 : 0;
   if (mat->texture) {
     mat->texture->getParameters( (Texture::Type*) (idata + 6),
-                                 (bool*) (idata + 7),
+                                 (int*) (idata + 7),
                                  (unsigned int*) (idata + 8),
                                  (unsigned int*) (idata + 9),
-                                 (bool*) (idata + 20),
+                                 (int*) (idata + 20),
                                  (int*) (idata + 31));
   } else {
     idata[6] = (int)mat->textype;

@@ -111,12 +111,12 @@ bool Texture::isValid()
   return pixmaps.get(0) ? true : false;
 }
 
-void Texture::getParameters(Type *out_type, bool *out_mipmap, 
+void Texture::getParameters(Type *out_type, int *out_mipmap, 
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
-                            bool *out_envmap, int *out_nfilenames)
+                            int *out_envmap, int *out_nfilenames)
 {
   *out_type = type;
-  *out_mipmap = mipmap;
+  *out_mipmap = mipmap ? 1 : 0;
   switch(minfilter) {
       case GL_NEAREST:
         *out_minfilter = 0;
@@ -141,7 +141,7 @@ void Texture::getParameters(Type *out_type, bool *out_mipmap,
         break;
   }
   *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
-  *out_envmap = envmap;
+  *out_envmap = envmap ? 1 : 0;
   *out_nfilenames = filenames.size();
 }
 
