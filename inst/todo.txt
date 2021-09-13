@@ -9,15 +9,13 @@ to a snapshot file, as a base64 image, or as WebGL plus one of
 the image formats.  Currently the
 README.Rmd isn't showing the snapshot because it's ignoring the
 fig.path and trying to use a base64 image, which is not supported
-by Github markdown.
+by Github markdown. DONE
 
 Work on ways to modify a scene in Shiny and only transmit the
 changes to the browser.
 
 Incorporate changes for updated knitr; need to work with both
-old and new for a while.  (Partially done:  we don't know the
-version where knitr will export the necessary fns, but 
-we check for their existence now.)
+old and new for a while. DONE
 
 Transparent 3D sprite drawing should be updated to be 
 consistent with transparent spheres.
@@ -25,10 +23,10 @@ consistent with transparent spheres.
 Add segments and points to mesh objects?  Maybe make mesh objects
 completely general, and pass them as objects in rglwidget()?
 If so, the design should be revised to be more like a collection
-of dataframes with attributes.
+of dataframes with attributes. DONE
 
 Drop re-use of parts of other scenes?  This would simplify the
-code a lot, and probably wouldn't cost much for typical uses.
+code a lot, and probably wouldn't cost much for typical uses. DONE
 
 Create *3d functions corresponding to all remaining rgl.* functions.
 
