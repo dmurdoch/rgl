@@ -149,7 +149,7 @@ of the object. }
 \item{For each defined light, the following are added:
 \itemize{
 \item{the product of the \code{ambient} color
-of the light and the \code{ambient} color of the object is added}
+of the light and the \code{ambient} color of the object is added.}
 \item{the \code{color} of the
 object is multiplied by the \code{diffuse} color
 of the light and by a constant depending on
