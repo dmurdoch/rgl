@@ -27,6 +27,9 @@ rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF",
   If \code{x} is non-null, \code{\link{xyz.coords}} will
   be used to form the location values, so all three coordinates
   can be specified in \code{x}.
+  
+See \code{\link{material3d}} for a discussion of how
+the components of the light affect the display of objects.
 }
 \value{
   This function is called for the side effect of adding a light.  A light ID is
