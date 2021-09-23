@@ -176,24 +176,36 @@ cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE, rejoin = FALSE)
   if (onlyFinite)
     keep <- keep & apply(mesh$vb, 2, function(col) all(is.finite(col)))
   if (allUsed)
-    keep <- keep & (seq_len(nold) %in% c(mesh$it, mesh$ib))
+    keep <- keep & (seq_len(nold) %in% c(mesh$ip, mesh$is, mesh$it, mesh$ib))
   if (!all(keep)) {
     oldnums <- which(keep)
     newnums <- rep(NA, nold)
     nnew <- sum(keep)
     newnums[oldnums] <- seq_len(nnew)
     mesh$vb <- mesh$vb[,oldnums]
+    if (!is.null(mesh$ip)) {
+      newcols <- newnums[mesh$ip]
+      dim(newcols) <- dim(mesh$ip)
+      keep <- apply(newcols, 2, function(col) !is.na(col))
+      mesh$ip <- newcols[,keep, drop = FALSE]
+    }
+    if (!is.null(mesh$is)) {
+      newcols <- newnums[mesh$is]
+      dim(newcols) <- dim(mesh$is)
+      keep <- apply(newcols, 2, function(col) all(!is.na(col)))
+      mesh$is <- newcols[,keep, drop = FALSE]
+    }
     if (!is.null(mesh$it)) {
       newcols <- newnums[mesh$it]
       dim(newcols) <- dim(mesh$it)
       keep <- apply(newcols, 2, function(col) all(!is.na(col)))
-      mesh$it <- newcols[,keep]
+      mesh$it <- newcols[,keep, drop = FALSE]
     }
     if (!is.null(mesh$ib)) {
       newcols <- newnums[mesh$ib]
       dim(newcols) <- dim(mesh$ib)
       keep <- apply(newcols, 2, function(col) all(!is.na(col)))
-      mesh$ib <- newcols[,keep]
+      mesh$ib <- newcols[,keep, drop = FALSE]
     }
     if (!is.null(mesh$normals)) 
       mesh$normals <- mesh$normals[, oldnums]
