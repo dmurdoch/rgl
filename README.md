@@ -47,16 +47,15 @@ these, they each provide some nice features:
     packages like `plotly`, `leaflet`, etc.)
 
 Unfortunately, being development versions, these packages sometimes
-introduce bugs that break `rgl` usage. Currently (June 15, 2021) the
-main branches of `webshot2`, `chromote` and `downlit` are fine, but
-`pkgdown` needs fixes, and I recommend the following code to install
-them:
+introduce bugs that break `rgl` usage. Currently (September 23, 2021)
+the main branches of all packages are fine. I recommend the following
+code to install them:
 
 ``` r
 remotes::install_github(c("rstudio/webshot2",
                           "rstudio/chromote",
                           "r-lib/downlit",
-                          "dmurdoch/pkgdown@issue1689"))
+                          "r-lib/pkgdown"))
 ```
 
 ## INSTALLATION
