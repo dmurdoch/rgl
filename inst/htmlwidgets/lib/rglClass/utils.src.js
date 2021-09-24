@@ -561,3 +561,18 @@
       return x !== "-Inf" && x !== "Inf" &&
              (isNaN(x) || x === null || typeof(x) === "undefined");
     };
+
+    /**
+     * Write matrix to log
+     * @param M
+     */
+    rglwidgetClass.prototype.logMatrix = function(M) {
+      console.log("matrix(c("+M.m11+","+M.m12+","+M.m13+","+M.m14+",\n"+
+                              M.m21+","+M.m22+","+M.m23+","+M.m24+",\n"+
+                              M.m31+","+M.m32+","+M.m33+","+M.m34+",\n"+
+                              M.m41+","+M.m42+","+M.m43+","+M.m44+"), byrow=TRUE, ncol=4)");
+    };
+    
+    rglwidgetClass.prototype.logVec3 = function(v) {
+      console.log("c("+v[0]+","+v[1]+","+v[2]+")");
+    };

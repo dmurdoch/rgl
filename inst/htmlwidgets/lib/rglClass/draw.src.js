@@ -884,7 +884,7 @@
 
       if (this.opaquePass) {
         context = context.slice();
-        context.push(obj.cube.id);
+        context.push(obj.id);
       } 
       
       drawing = this.opaquePass !== is_transparent;
@@ -1126,6 +1126,9 @@
             break;
           case "spheres":
             // this.initSphereFromObj(obj);  // FIXME:  not needed?
+            break;
+          case "bboxdeco":
+            result = result.concat(context.pop());
             break;
           default:
             console.error("bad type '", type, "' in setContext");

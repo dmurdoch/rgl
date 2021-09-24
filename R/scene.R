@@ -201,7 +201,7 @@ rgl.attrib <- function( id, attrib, first=1,
                           "marklen", "expand")
     result <- result[first:last,]
     result <- as.data.frame(t(result))
-    result$mode <- c("custom", "fixedstep", "fixednum", "pretty", "user", "none")[result$mode + 1]
+    result$mode <- c("custom", "fixednum", "fixedstep", "pretty", "user", "none")[result$mode + 1]
   }
   result
 }

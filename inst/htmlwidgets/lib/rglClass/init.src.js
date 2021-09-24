@@ -164,11 +164,10 @@
       result.indices = {};
 
       result.colorCount = 1;
-      result.type = "cube";
+      result.type = "quads";
       result.vertices = v;
       this.cube = result;
       this.initShapeGL(this.cube);
-      
     };
     
 
@@ -273,11 +272,24 @@
               }
       	      break;
       	    case "filled":
-      	      f =  shape.it || shape.ib;
+      	      if (typeof shape.it !== "undefined")
+      	        f =  shape.it;
+      	      else if (typeof shape.ib !== "undefined") {
+      	        f.length = 1.5*shape.ib.length;
+                for (i=0; i < shape.ib.length/4; i++) {
+                  f[6*i] = shape.ib[4*i];
+                  f[6*i+1] = shape.ib[4*i + 1];
+                  f[6*i+2] = shape.ib[4*i + 2];
+                  f[6*i+3] = shape.ib[4*i];
+                  f[6*i+4] = shape.ib[4*i + 2];
+                  f[6*i+5] = shape.ib[4*i + 3];
+                }      	        
+      	      }
+      	      break;
       	    }              
-             shape.indices[mode] = new Uint16Array(f);
+            shape.indices[mode] = new Uint16Array(f);
           }
-           shape.f[pass] =  shape.indices[mode];
+          shape.f[pass] =  shape.indices[mode];
         }
       }
       // console.log("Names in  shapes not in  shape:"+JSON.stringify(this.keydiff(obj,  shape)));
@@ -323,27 +335,31 @@
         this.initCube();
       obj.cube = {id: obj.id + 0.1,
                     type: "quads",
-                    flags: this.f_has_fog,
+                    flags: obj.flags,
                     material: obj.material,
                     colors: [obj.colors[0]],
                     vertices: this.cube.vertices,
                     initialized: false
         };
+      if (!obj.draw_front)
+        obj.cube.material.front = "culled";
+      this.scene.objects[obj.cube.id] = obj.cube;
       obj.ticks = {id: obj.id + 0.2,
                      type: "lines",
                      flags: this.f_has_fog,
                      material: obj.material,
-                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
+                     colors: (obj.colors.length > 1 ? [obj.colors[1]] : [obj.colors[0]]),
                      axes: obj.axes,
                      initialized: false
       };
+      this.scene.objects[obj.ticks.id] = obj.ticks;
       obj.labels = {id: obj.id + 0.3,
                      type: "text",
                      flags: this.f_has_fog + 
                             this.f_fixed_size + 
                             this.f_fixed_quads,
                      material: {lit: false},
-                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
+                     colors: (obj.colors.length > 1 ? [obj.colors[1]] : [obj.colors[0]]),
                      cex: [[1]],
                      family: [["sans"]],
                      font: [[1]],
@@ -351,6 +367,7 @@
                      ignoreExtent: true,
                      initialized: false
       };
+      this.scene.objects[obj.labels.id] = obj.labels;
       obj.initialized = true;
     };
 
