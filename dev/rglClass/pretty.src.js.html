@@ -1,0 +1,268 @@
+<!-- start:source.tmpl.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>pretty.src.js</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":false,"dateFormat":"DD MMM YYYY","systemName":"rglClass","systemSummary":"Javascript support for `rglwidget`","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"rglClass copyright Duncan Murdoch","linenums":true,"collapseSymbols":false,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"source,name","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					rglClass
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="rgltimerClass.html">rgltimerClass</a></li>
+											<li><a href="rglwidgetClass.html">rglwidgetClass</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">source</span>
+				<h1><span class="name">pretty.src.js</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+ * Pretty function from R
+ * @name ___PRETTY_FROM_R___
+ * @memberof rglwidgetClass
+ * @kind function
+ * @instance
+ */
+
+
+/* This file is translated from pretty.c, which was
+ taken from the R sources, r61744 of src/appl/pretty.c,
+ with minimal changes */
+
+/*
+ *  R : A Computer Language for Statistical Data Analysis
+ *  Copyright (C) 1995-2012  The R Core Team
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, a copy is available at
+ *  http://www.r-project.org/Licenses/
+ */
+
+/**     
+ * Construct pretty values to cover an interval
+ * @param { number } lo - lower end of interval
+ * @param { number } up - upper end of interval
+ * @param { number } ndiv - requested number of divisions
+ * @param { number } min_n - minimum divisions
+ * @param { number } shrink_sml - if too many cells, amount to shrink by
+ * @param { number } high_u_fact - bias in favour of larger units
+ * @param { number } eps_correction - correction to bounds
+ * @param { Boolean } return_bounds - whether to return bounds
+ * @description
+ * Pretty Intervals
+
+ * Constructs m "pretty" values which cover the given interval	*lo &lt;= *up
+ *	m ~= *ndiv + 1	(i.e., ndiv := approximate number of INTERVALS)
+ *
+ * It is not quite clear what should happen for	 *lo = *up;
+ * S itself behaves quite funilly, then.
+ *
+ * In my opinion, a proper 'pretty' should always ensure
+ * *lo &lt; *up, and hence *ndiv >=1 in the result.
+ * However, in S and here, we allow  *lo == *up, and *ndiv = 0.
+ * Note however, that we are NOT COMPATIBLE to S. [Martin M.]
+ *
+ * NEW (0.63.2): ns, nu are double (==> no danger of integer overflow)
+ *
+ * We determine
+ * if the interval (up - lo) is ``small'' [&lt;==>	 i_small == TRUE, below].
+ * For the ``i_small'' situation, there is a parameter  shrink_sml,
+ * the factor by which the "scale" is shrunk.		~~~~~~~~~~
+ * It is advisable to set it to some (smaller) integer power of 2,
+ * since this enables exact floating point division.
+ */
+rglwidgetClass.prototype.R_pretty = function(
+  lo, up, ndiv, min_n, shrink_sml, high_u_fact,
+  eps_correction, return_bounds) {
+  /* From version 0.65 on, we had rounding_eps := 1e-5, before, r..eps = 0
+   * 1e-7 is consistent with seq.default() */
+  var rounding_eps = 1e-7,  h = high_u_fact[0],
+                                           h5 = high_u_fact[1], 
+                                                           dx, cell, unit, base, U, ns, nu, k, i_small,
+                                                           DBL_EPSILON = Number.EPSILON,
+                                                           DBL_MIN = Number.MIN_VALUE,
+                                                           DBL_MAX = Number.MAX_VALUE;
+  
+  dx = up - lo;
+  /* cell := "scale"	here */
+  if (dx === 0 &amp;&amp; up === 0) { /*  up == lo == 0	 */
+  cell = 1;
+    i_small = true;
+  } else {
+    cell = Math.max(Math.abs(lo), Math.abs(up));
+    /* U = upper bound on cell/unit */
+    U = (1 + (h5 >= 1.5*h+0.5)) ? 1/(1+h) : 1.5/(1+h5);
+    /* added times 3, as several calculations here */
+    i_small = dx &lt; cell * U * Math.max(1,ndiv) * DBL_EPSILON *3;
+  }
+  
+  /*OLD: cell = FLT_EPSILON+ dx / *ndiv; FLT_EPSILON = 1.192e-07 */
+  if(i_small) {
+    if(cell > 10)
+      cell = 9 + cell/10;
+    cell *= shrink_sml;
+    if(min_n > 1) cell /= min_n;
+  } else {
+    cell = dx;
+    if(ndiv > 1) cell /= ndiv;
+  }
+  
+  if(cell &lt; 20*DBL_MIN) {
+    /* warning(_("Internal(pretty()): very small range.. corrected")); */
+    cell = 20*DBL_MIN;
+  } else if(cell * 10 > DBL_MAX) {
+    /* warning(_("Internal(pretty()): very large range.. corrected")); */
+    cell = 0.1*DBL_MAX;
+  }
+  base = Math.pow(10, Math.floor(Math.log10(cell))); /* base &lt;= cell &lt; 10*base */
+    
+    /* unit : from { 1,2,5,10 } * base
+     *	 such that |u - cell| is small,
+     * favoring larger (if h > 1, else smaller)  u  values;
+     * favor '5' more than '2'  if h5 > h  (default h5 = .5 + 1.5 h) */
+    unit = base;
+    if((U = 2*base)-cell &lt;  h*(cell-unit)) { unit = U;
+      if((U = 5*base)-cell &lt; h5*(cell-unit)) { unit = U;
+        if((U =10*base)-cell &lt;  h*(cell-unit)) unit = U; }}
+    /* Result: c := cell,  u := unit,  b := base
+     *	c in [	1,	      (2+ h) /(1+h) ] b ==> u=  b
+     *	c in ( (2+ h)/(1+h),  (5+2h5)/(1+h5)] b ==> u= 2b
+     *	c in ( (5+2h)/(1+h), (10+5h) /(1+h) ] b ==> u= 5b
+     *	c in ((10+5h)/(1+h),	         10 ) b ==> u=10b
+     *
+     *	===>	2/5 *(2+h)/(1+h)  &lt;=  c/u  &lt;=  (2+h)/(1+h)	*/
+    
+    ns = Math.floor(lo/unit+rounding_eps);
+    nu = Math.ceil (up/unit-rounding_eps);
+    
+    if(eps_correction &amp;&amp; (eps_correction > 1 || !i_small)) {
+      if(lo !== 0.0) lo *= (1- DBL_EPSILON); else lo = -DBL_MIN;
+      if(up !== 0.0) up *= (1+ DBL_EPSILON); else up = +DBL_MIN;
+    }
+    
+    while(ns*unit > lo + rounding_eps*unit) ns--;
+    
+    while(nu*unit &lt; up - rounding_eps*unit) nu++;
+    
+    k = Math.floor(0.5 + nu - ns);
+    if(k &lt; min_n) {
+      /* ensure that	nu - ns	 == min_n */
+      
+      k = min_n - k;
+      if(ns >= 0) {
+        nu += k/2;
+        ns -= k/2 + k%2;/* ==> nu-ns = old(nu-ns) + min_n -k = min_n */
+      } else {
+        ns -= k/2;
+        nu += k/2 + k%2;
+      }
+      ndiv = min_n;
+    } else {
+      ndiv = k;
+    }
+    if(return_bounds) { /* if()'s to ensure that result covers original range */
+      if(ns * unit &lt; lo) lo = ns * unit;
+      if(nu * unit > up) up = nu * unit;
+    } else {
+      lo = ns;
+      up = nu;
+    }
+    return {lo:lo, up:up, ndiv:ndiv, unit:unit};
+};
+</code></pre>
+		</section>
+			</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">rglClass copyright Duncan Murdoch</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:source.tmpl.hbs -->

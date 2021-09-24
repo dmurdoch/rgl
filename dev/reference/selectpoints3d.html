@@ -58,8 +58,6 @@ point or region in the scene, then reports on all the vertices in or near that s
 <![endif]-->
 
 
-<!-- dependencies from examples -->
-
 
   
 
@@ -203,9 +201,16 @@ stop the process.</p>
 selected points.  All rows in the matrix will be unique even if multiple vertices
 have the same coordinates.</p>
 <p>If <code>value</code> is <code>FALSE</code>, a 2-column matrix containing columns:</p>
+<dl>
 <dt>id</dt><dd><p>The object id containing the point.</p></dd>
+</dl>
+
+
+<dl>
 <dt>index</dt><dd><p>The index of the point within <code><a href='attributes.html'>rgl.attrib</a>(id, "vertices")</code>.
 If multiple points have the same coordinates, all indices will be returned.</p></dd>
+</dl>
+
 
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>

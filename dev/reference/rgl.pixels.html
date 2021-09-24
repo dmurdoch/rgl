@@ -58,8 +58,6 @@ topmost window." />
 <![endif]-->
 
 
-<!-- dependencies from examples -->
-
 
   
 
@@ -214,11 +212,12 @@ a random dot stereogram and an anaglyph.</p></div>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> srfc3d&gt; col &lt;- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> srfc3d&gt; open3d()</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> glX </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 119 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> null </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  119 </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> srfc3d&gt; surface3d(x, y, z, color = col, back = "lines")</span>
 <span class='r-in'><span class='va'>depth</span> <span class='op'>&lt;-</span> <span class='fu'>rgl.pixels</span><span class='op'>(</span>component <span class='op'>=</span> <span class='st'>"depth"</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Error reading component 'depth'</span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>depth</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>is.matrix</a></span><span class='op'>(</span><span class='va'>depth</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Protect against empty or single pixel windows</span></span>
 <span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/graphics/contour.html'>contour</a></span><span class='op'>(</span><span class='va'>depth</span><span class='op'>)</span></span>
 <span class='r-plt'><img src='rgl.pixels-1.png' alt='' width='480' height='297' /></span>
