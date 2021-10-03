@@ -473,6 +473,7 @@
           fat_lines = this.isSet(flags, this.f_fat_lines),
           is_twosided = this.isSet(flags, this.f_is_twosided),
           has_fog = this.isSet(flags, this.f_has_fog),
+          has_normals = typeof obj.normals !== "undefined",
           gl = this.gl || this.initGL(),
           count,
           pass, mode, pmode,
@@ -542,8 +543,12 @@
 
       	mode = fat_lines && (is_lines || pmode === "lines") ? "TRIANGLES" : this.mode4type[type];
 
-      	if (is_twosided)
+      	if (is_twosided) {
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
+      	  if (has_normals) {
+      	    gl.uniformMatrix4fv(obj.invPrMatLoc, false, new Float32Array(this.invPrMatrix.getAsArray()));
+      	  }
+      	}
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[pass]);
         if (!this.opaquePass) {
@@ -992,7 +997,7 @@
     rglwidgetClass.prototype.drawBackground = function(id, subsceneid) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(id),
-          bg, i, savepr, savemv;
+          bg, i, savepr, saveinvpr, savemv;
 
       if (!obj.initialized)
         this.initObj(obj);
@@ -1012,8 +1017,10 @@
       this.fogScale = obj.fogscale;
       if (typeof obj.quad !== "undefined") {
         savepr = this.prMatrix;
+        saveinvpr = this.invPrMatrix;
         savemv = this.mvMatrix;
         this.prMatrix = new CanvasMatrix4();
+        this.invPrMatrix = new CanvasMatrix4();
         this.mvMatrix = new CanvasMatrix4();
         gl.disable(gl.BLEND);
         gl.disable(gl.DEPTH_TEST);
@@ -1021,6 +1028,7 @@
         for (i=0; i < obj.quad.length; i++)
           this.drawObjId(obj.quad[i], subsceneid);
         this.prMatrix = savepr;
+        this.invPrMatrix = saveinvpr;
         this.mvMatrix = savemv;
       }
     };
@@ -1037,6 +1045,7 @@
           subids = sub.objects,
           subscene_has_faces = false,
           subscene_needs_sorting = false,
+          subscene_needs_invpr = false,
           flags, i, obj, result = [];
           
       if (sub.par3d.skipRedraw)
@@ -1055,6 +1064,9 @@
             subscene_needs_sorting = subscene_needs_sorting || 
               obj.is_transparent ||
               this.isSet(flags, this.f_depth_sort);
+            subscene_needs_invpr = subscene_needs_invpr ||
+              (this.isSet(flags, this.f_is_twosided) && 
+               typeof obj.normals !== "undefined");
           }
         }
       }
@@ -1062,18 +1074,19 @@
       this.setViewport(subsceneid);
 
       this.setprMatrix(subsceneid);
+      if (subscene_needs_invpr)
+        this.setInvPrMatrix();
       this.setmvMatrix(subsceneid);
+      this.setnormMatrix2();
         
       if (typeof sub.backgroundId !== "undefined" && this.opaquePass)
         this.drawBackground(sub.backgroundId, subsceneid);
 
       if (subids.length) {
-        if (subscene_has_faces) {
-          this.setnormMatrix(subsceneid);
-          if (this.isSet(sub.flags, this.f_sprites_3d) &&
-              typeof sub.spriteNormmat === "undefined") {
-            sub.spriteNormmat = new CanvasMatrix4(this.normMatrix);
-          }
+        if (subscene_has_faces &&
+            this.isSet(sub.flags, this.f_sprites_3d) &&
+            typeof sub.spriteNormmat === "undefined") {
+          sub.spriteNormmat = new CanvasMatrix4(this.normMatrix);
         }
 
         if (subscene_needs_sorting)

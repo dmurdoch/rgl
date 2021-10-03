@@ -458,45 +458,36 @@
     obj.vertexCount = v.length;
     if (!obj.vertexCount) return;
 
-    if (is_twosided) {
+    if (is_twosided && !has_normals) {
       if (typeof obj.userAttributes === "undefined")
         obj.userAttributes = {};
       v1 = Array(v.length);
       v2 = Array(v.length);
-      if (has_normals) {
-        var ortho;
-        for (i = 0; i < v.length; i++) {
-          ortho = this.getOrthoNormVecs(obj.normals[i]);
-          v1[i] = this.vsum(v[i], ortho[1]);
-          v2[i] = this.vsum(v[i], ortho[2]);
-        }
-      } else {
-        if (obj.type === "triangles" || obj.type === "quads") {
-          if (obj.type === "triangles")
-            nrow = 3;
-          else
-            nrow = 4;
-          for (i=0; i<Math.floor(v.length/nrow); i++)
-            for (j=0; j<nrow; j++) {
-              v1[nrow*i + j] = v[nrow*i + ((j+1) % nrow)];
-              v2[nrow*i + j] = v[nrow*i + ((j+2) % nrow)];
-            }
-        } else if (obj.type === "surface") {
-          dim = obj.dim[0];
-          nx = dim[0];
-          nz = dim[1];
-          for (j=0; j<nx; j++) {
-            for (i=0; i<nz; i++) {
-              if (i+1 < nz && j+1 < nx) {
-                v2[j + nx*i] = v[j + nx*(i+1)];
-                v1[j + nx*i] = v[j+1 + nx*(i+1)];
-              } else if (i+1 < nz) {
-                v2[j + nx*i] = v[j-1 + nx*i];
-                v1[j + nx*i] = v[j + nx*(i+1)];
-              } else {
-                v2[j + nx*i] = v[j + nx*(i-1)];
-                v1[j + nx*i] = v[j-1 + nx*(i-1)];
-              }
+      if (obj.type === "triangles" || obj.type === "quads") {
+      	if (obj.type === "triangles")
+      	  nrow = 3;
+      	else
+      	  nrow = 4;
+        for (i=0; i<Math.floor(v.length/nrow); i++)
+          for (j=0; j<nrow; j++) {
+            v1[nrow*i + j] = v[nrow*i + ((j+1) % nrow)];
+            v2[nrow*i + j] = v[nrow*i + ((j+2) % nrow)];
+          }
+      } else if (obj.type === "surface") {
+        dim = obj.dim[0];
+        nx = dim[0];
+        nz = dim[1];
+        for (j=0; j<nx; j++) {
+          for (i=0; i<nz; i++) {
+            if (i+1 < nz && j+1 < nx) {
+              v2[j + nx*i] = v[j + nx*(i+1)];
+              v1[j + nx*i] = v[j+1 + nx*(i+1)];
+            } else if (i+1 < nz) {
+              v2[j + nx*i] = v[j-1 + nx*i];
+              v1[j + nx*i] = v[j + nx*(i+1)];
+            } else {
+              v2[j + nx*i] = v[j + nx*(i-1)];
+              v1[j + nx*i] = v[j-1 + nx*(i-1)];
             }
           }
         }
@@ -1060,6 +1051,8 @@
 
     if (is_twosided) {
       obj.frontLoc = gl.getUniformLocation(obj.prog, "front");
+      if (has_normals)
+        obj.invPrMatLoc = gl.getUniformLocation(obj.prog, "invPrMatrix");
     }
   };
     
@@ -1073,6 +1066,7 @@
       this.textureCanvas.style.display = "block";
       this.scene = x;
       this.normMatrix = new CanvasMatrix4();
+      this.invPrMatrix = new CanvasMatrix4();
       this.saveMat = {};
       this.distance = null;
       this.posLoc = 0;

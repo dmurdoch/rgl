@@ -587,7 +587,6 @@
      * @param {vector} x
      * @param {vector} y
      */
-     
      rglwidgetClass.prototype.vsum = function(x, y) {
        var i, result = [].concat(x);
        for (i = 0; i < y.length; i++)
@@ -600,7 +599,6 @@
      * @param {number} s
      * @param {vector} x
      */
-     
      rglwidgetClass.prototype.vscale = function(x, s) {
        var i, result = [].concat(x);
        for (i = 0; i < x.length; i++)
@@ -609,27 +607,9 @@
      };
     
     /**
-     * Normalize a 3 vector
-     * @param {3 vector} v
+     * Normalize a vector
+     * @param {vector} v
      */
-    
     rglwidgetClass.prototype.normalize = function(v) {
       return this.vscale(v, 1/this.vlen(v));
-    };
-    
-    /**
-     * Normalize a vector and get two more orthornormal vectors
-     * @param {3 vector} v
-     */
-    
-    rglwidgetClass.prototype.getOrthoNormVecs = function(v) {
-      var vec1, vec2, vec3, dot;
-      vec1 = this.normalize(v);
-      do {
-        vec2 = this.normalize([Math.random(), Math.random(), Math.random()]);
-        dot = this.dotprod(vec1, vec2);
-      } while (Math.abs(dot) === 1.0);
-      vec2 = this.vsum(vec2, this.vscale(vec1, -dot));
-      vec3 = this.xprod(vec1, vec2);
-      return [vec1, vec2, vec3];
     };

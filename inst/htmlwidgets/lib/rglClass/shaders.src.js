@@ -26,7 +26,8 @@
           fat_lines = this.isSet(flags, this.f_fat_lines),
           is_brush = this.isSet(flags, this.f_is_brush),
           has_fog = this.isSet(flags, this.f_has_fog),
-          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && obj.type === "spheres"),
+          has_normals = typeof obj.normals !== "undefined",
+          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && (has_normals || obj.type === "spheres")),
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
@@ -51,7 +52,7 @@
       if (needs_vnormal)
         result = result + "  attribute vec3 aNorm;\n"+
                           "  uniform mat4 normMatrix;\n"+
-                          "  varying vec3 vNormal;\n";
+                          "  varying vec4 vNormal;\n";
 
       if (has_texture || type === "text")
         result = result + "  attribute vec2 aTexcoord;\n"+
@@ -64,8 +65,9 @@
         result = result + "  attribute vec3 aOfs;\n";
 
       if (is_twosided)
-        if (obj.type === "spheres")
-          result = result + "  varying float normz;\n";
+        if (has_normals || obj.type === "spheres")
+          result = result + "  varying float normz;\n"+
+                            "  uniform mat4 invPrMatrix;\n";
         else
           result = result + "  attribute vec3 aPos1;\n"+
                             "  attribute vec3 aPos2;\n"+
@@ -96,7 +98,7 @@
       result = result + "    vCol = aCol;\n";
 
       if (needs_vnormal)
-        result = result + "    vNormal = normalize((normMatrix * vec4(aNorm, 1.)).xyz);\n";
+        result = result + "    vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n";
 
       if (has_texture || type === "text")
         result = result + "    vTexcoord = aTexcoord;\n";
@@ -112,8 +114,9 @@
                           "    gl_Position = prMatrix*pos;\n";
 
       if (is_twosided)
-        if (obj.type === "spheres")
-          result = result + "   normz = vNormal.z;";
+        if (has_normals || obj.type === "spheres")
+          /* normz should be calculated *after* projection */
+          result = result + "    normz = (invPrMatrix*vNormal).z;\n";
         else
           result = result + "   vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n"+
                             "   pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n"+
@@ -203,7 +206,7 @@
                           "  uniform vec4 uFogParms;\n";
 
       if (is_lit && !fixed_quads)
-        result = result + "  varying vec3 vNormal;\n";
+        result = result + "  varying vec4 vNormal;\n";
 
       for (i = 0; i < nclipplanes; i++)
         result = result + "  uniform vec4 vClipplane"+i+";\n";
@@ -266,7 +269,7 @@
       if (fixed_quads) {
         result = result +   "    vec3 n = vec3(0., 0., 1.);\n";
       } else if (is_lit) {
-      	result = result +   "    vec3 n = normalize(vNormal);\n";
+      	result = result +   "    vec3 n = normalize(vNormal.xyz);\n";
       }
 
       if (is_twosided) {
