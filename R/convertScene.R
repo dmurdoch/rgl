@@ -120,12 +120,9 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     
     result["is_transparent"] <- any(obj$colors[,"a"] < 1); # More later...
     
-    if (type == "bboxdeco")
-      return(result)
-    
     mat <- getMaterial(id)
     result["is_lit"] <- mat$lit && type %in% c("triangles", "quads", "surface", "planes",
-                 "spheres", "sprites")
+                 "spheres", "sprites", "bboxdeco")
     
     result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
                  "spheres")

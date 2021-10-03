@@ -473,7 +473,8 @@
           fat_lines = this.isSet(flags, this.f_fat_lines),
           is_twosided = this.isSet(flags, this.f_is_twosided),
           has_fog = this.isSet(flags, this.f_has_fog),
-          has_normals = typeof obj.normals !== "undefined",
+          has_normals = (typeof obj.normals !== "undefined") ||
+                        obj.type === "sphere",
           gl = this.gl || this.initGL(),
           count,
           pass, mode, pmode,
@@ -700,6 +701,7 @@
                              obj.values[baseofs+2]);
         sphereMV.multRight(saveMV);
         this.mvMatrix = sphereMV;
+        this.setnormMatrix2();
         this.setprmvMatrix();
         if (drawing) {
           if (nc > 1) {
@@ -1045,7 +1047,6 @@
           subids = sub.objects,
           subscene_has_faces = false,
           subscene_needs_sorting = false,
-          subscene_needs_invpr = false,
           flags, i, obj, result = [];
           
       if (sub.par3d.skipRedraw)
@@ -1064,9 +1065,6 @@
             subscene_needs_sorting = subscene_needs_sorting || 
               obj.is_transparent ||
               this.isSet(flags, this.f_depth_sort);
-            subscene_needs_invpr = subscene_needs_invpr ||
-              (this.isSet(flags, this.f_is_twosided) && 
-               typeof obj.normals !== "undefined");
           }
         }
       }
@@ -1074,8 +1072,7 @@
       this.setViewport(subsceneid);
 
       this.setprMatrix(subsceneid);
-      if (subscene_needs_invpr)
-        this.setInvPrMatrix();
+      this.setInvPrMatrix();
       this.setmvMatrix(subsceneid);
       this.setnormMatrix2();
         

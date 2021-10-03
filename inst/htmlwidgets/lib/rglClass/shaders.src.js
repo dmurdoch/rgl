@@ -26,8 +26,9 @@
           fat_lines = this.isSet(flags, this.f_fat_lines),
           is_brush = this.isSet(flags, this.f_is_brush),
           has_fog = this.isSet(flags, this.f_has_fog),
-          has_normals = typeof obj.normals !== "undefined",
-          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && (has_normals || obj.type === "spheres")),
+          has_normals = (typeof obj.normals !== "undefined") ||
+                        obj.type === "spheres",
+          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),
           result;
 
       if (type === "clipplanes" || sprites_3d) return;
@@ -65,7 +66,7 @@
         result = result + "  attribute vec3 aOfs;\n";
 
       if (is_twosided)
-        if (has_normals || obj.type === "spheres")
+        if (has_normals)
           result = result + "  varying float normz;\n"+
                             "  uniform mat4 invPrMatrix;\n";
         else
@@ -114,7 +115,7 @@
                           "    gl_Position = prMatrix*pos;\n";
 
       if (is_twosided)
-        if (has_normals || obj.type === "spheres")
+        if (has_normals)
           /* normz should be calculated *after* projection */
           result = result + "    normz = (invPrMatrix*vNormal).z;\n";
         else

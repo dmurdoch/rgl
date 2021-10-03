@@ -595,6 +595,15 @@
      };
      
     /**
+     * difference of two vectors
+     * @param {vector} x
+     * @param {vector} y
+     */
+     rglwidgetClass.prototype.vdiff = function(x, y) {
+        return this.vsum(x, this.vscale(y, -1));
+     };
+
+    /**
      * Scale a vector
      * @param {number} s
      * @param {vector} x
