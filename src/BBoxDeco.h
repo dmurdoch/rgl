@@ -18,12 +18,12 @@
 namespace rgl {
 
 enum {
-  AXIS_CUSTOM,
-  AXIS_LENGTH,
-  AXIS_UNIT,
-  AXIS_PRETTY,
-  AXIS_USER,
-  AXIS_NONE
+  AXIS_CUSTOM,  // "custom"
+  AXIS_LENGTH,  // "fixednum"
+  AXIS_UNIT,    // "fixedstep"
+  AXIS_PRETTY,  // "pretty"
+  AXIS_USER,    // "user"
+  AXIS_NONE     // "none"
 };
 
 struct AxisInfo {

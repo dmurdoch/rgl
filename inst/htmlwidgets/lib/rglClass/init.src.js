@@ -140,13 +140,10 @@
                 [0, 4, 6, 2], 
                 [0, 1, 5, 4], 
                 [4, 5, 7, 6]], 
-          centers = [], i, j, k, result = {};
+          centers = [], i, j, k, 
+          i0, i1, i2,
+          normal, result = {};
        
-      result.values = new Float32Array(this.flatten(v));
-      result.vertexCount = v.length;
-      
-      result.ib = new Uint16Array(this.flatten(ib));
-      
       for (i = 0; i < ib.length; i++) {
         centers.push([0,0,0]);
         for (j = 0; j < 3; j++) { // x,y,z
@@ -155,20 +152,41 @@
           }
         }
       }
-      result.centers = centers;
+      result.centers = centers; 
+      result.values = new Float32Array(6*4*3*2);
+      result.vertexCount = 24;
+      result.vertices = new Array(24);
+      result.normals = new Array(24);
+      for (i=0; i < 6; i++) {
+        for (j=0; j < 4; j++) {
+          i0 = ib[i][j];
+          result.vertices[4*i + j] = v[i0];
+          i1 = ib[i][(j + 1) % 4];
+          i2 = ib[i][(j + 2) % 4];
+          if (j === 0)
+            normal = this.normalize(this.xprod(this.vdiff(v[i1], v[i0]),
+                                  this.vdiff(v[i2], v[i0])));
+          result.normals[4*i + j] = normal;
+          for (k=0; k < 3; k++) {
+            result.values[i*24 + j*6 + k] = v[i0][k];
+            result.values[i*24 + j*6 + 3 + k] = normal[k];
+          }
+        }
+        for (j=0; j<4; j++)
+          ib[i][j] = 4*i + j;
+      }
+      result.ib = new Uint16Array(this.flatten(ib));
       
-      result.vOffsets = {vofs:0, cofs:-1, nofs:0, radofs:-1, oofs:-1,
-                         tofs:-1, nextofs:-1, pointofs:-1, stride:3};
+      result.vOffsets = {vofs:0, cofs:-1, nofs:3, radofs:-1, oofs:-1,
+                         tofs:-1, nextofs:-1, pointofs:-1, stride:6};
 
       result.f = [];
       result.indices = {};
 
       result.colorCount = 1;
-      result.type = "cube";
-      result.vertices = v;
+      result.type = "quads";
       this.cube = result;
       this.initShapeGL(this.cube);
-      
     };
     
 
@@ -188,51 +206,59 @@
     /* Initialize common sphere object from spheres object
     */
     rglwidgetClass.prototype.initShapeFromObj = function(shape, obj) {
-      var i, pass, f, mode;
-       shape.ofsLoc = obj.ofsLoc;
-       shape.texLoc = obj.texLoc;
-       shape.sampler = obj.sampler;
-       shape.uFogMode = obj.uFogMode;
-       shape.uFogColor = obj.uFogColor;
-       shape.uFogParms = obj.uFogParms;
-       shape.userAttribLocations = obj.userAttribLocations;
-       shape.userUniformLocations = obj.userUniformLocations;
-       shape.normLoc = obj.normLoc;
-       shape.clipLoc = obj.clipLoc;
-       shape.nextLoc = obj.nextLoc;
-       shape.pointLoc = obj.pointLoc;
-       shape.aspectLoc = obj.aspectLoc;
-       shape.lwdLoc = obj.lwdLoc;
-       shape.prog = obj.prog;
-       shape.material = obj.material;
-       shape.flags = obj.flags;
-       shape.someHidden = obj.someHidden;
-       shape.fastTransparency = obj.fastTransparency;
-       shape.nlights = obj.nlights;
-       shape.emission = obj.emission;
-       shape.emissionLoc = obj.emissionLoc;
-       shape.shininess = obj.shininess;
-       shape.shininessLoc = obj.shininessLoc;
-       shape.ambient = obj.ambient;
-       shape.ambientLoc = obj.ambientLoc;
-       shape.specular = obj.specular;
-       shape.specularLoc = obj.specularLoc;
-       shape.diffuse = obj.diffuse;
-       shape.diffuseLoc = obj.diffuseLoc;
-       shape.lightDir = obj.lightDir;
-       shape.lightDirLoc = obj.lightDirLoc;
-       shape.viewpoint = obj.viewpoint;
-       shape.viewpointLoc = obj.viewpointLoc;
-       shape.finite = obj.finite;
-       shape.finiteLoc = obj.finiteLoc;
-       shape.prMatLoc = obj.prMatLoc;
-       shape.mvMatLoc = obj.mvMatLoc;
-       shape.normMatLoc = obj.normMatLoc;
-       shape.frontLoc = obj.frontLoc;
-       shape.index_uint = false;
-       shape.is_transparent = obj.is_transparent;
-       shape.ignoreExtent = obj.ignoreExtent;
-      if ( shape.passes !== obj.passes ||
+      var i, pass, f, mode, self = this,
+        is_back = function(i) {
+                var normal = shape.normals[i],
+                  pt = shape.vertices[i];
+                normal.push(-self.dotprod(normal, pt));
+                normal = self.multVM(normal, self.normMatrix);
+                return normal[2] < 0;
+              }; 
+      shape.ofsLoc = obj.ofsLoc;
+      shape.texLoc = obj.texLoc;
+      shape.sampler = obj.sampler;
+      shape.uFogMode = obj.uFogMode;
+      shape.uFogColor = obj.uFogColor;
+      shape.uFogParms = obj.uFogParms;
+      shape.userAttribLocations = obj.userAttribLocations;
+      shape.userUniformLocations = obj.userUniformLocations;
+      shape.normLoc = obj.normLoc;
+      shape.invPrMatLoc = obj.invPrMatLoc;
+      shape.clipLoc = obj.clipLoc;
+      shape.nextLoc = obj.nextLoc;
+      shape.pointLoc = obj.pointLoc;
+      shape.aspectLoc = obj.aspectLoc;
+      shape.lwdLoc = obj.lwdLoc;
+      shape.prog = obj.prog;
+      shape.material = obj.material;
+      shape.flags = obj.flags;
+      shape.someHidden = obj.someHidden;
+      shape.fastTransparency = obj.fastTransparency;
+      shape.nlights = obj.nlights;
+      shape.emission = obj.emission;
+      shape.emissionLoc = obj.emissionLoc;
+      shape.shininess = obj.shininess;
+      shape.shininessLoc = obj.shininessLoc;
+      shape.ambient = obj.ambient;
+      shape.ambientLoc = obj.ambientLoc;
+      shape.specular = obj.specular;
+      shape.specularLoc = obj.specularLoc;
+      shape.diffuse = obj.diffuse;
+      shape.diffuseLoc = obj.diffuseLoc;
+      shape.lightDir = obj.lightDir;
+      shape.lightDirLoc = obj.lightDirLoc;
+      shape.viewpoint = obj.viewpoint;
+      shape.viewpointLoc = obj.viewpointLoc;
+      shape.finite = obj.finite;
+      shape.finiteLoc = obj.finiteLoc;
+      shape.prMatLoc = obj.prMatLoc;
+      shape.mvMatLoc = obj.mvMatLoc;
+      shape.normMatLoc = obj.normMatLoc;
+      shape.frontLoc = obj.frontLoc;
+      shape.index_uint = false;
+      shape.is_transparent = obj.is_transparent;
+      shape.ignoreExtent = obj.ignoreExtent;
+      if (shape.passes !== obj.passes ||
           JSON.stringify( shape.pmode) !== JSON.stringify(obj.pmode)) {
         shape.passes = obj.passes;
         shape.pmode = obj.pmode;
@@ -273,11 +299,31 @@
               }
       	      break;
       	    case "filled":
-      	      f =  shape.it || shape.ib;
+      	      if (typeof shape.it !== "undefined")
+      	        f =  shape.it;
+      	      else if (typeof shape.ib !== "undefined") {
+      	        f.length = 1.5*shape.ib.length;
+                for (i=0; i < shape.ib.length/4; i++) {
+                  f[6*i] = shape.ib[4*i];
+                  f[6*i+1] = shape.ib[4*i + 1];
+                  f[6*i+2] = shape.ib[4*i + 2];
+                  f[6*i+3] = shape.ib[4*i];
+                  f[6*i+4] = shape.ib[4*i + 2];
+                  f[6*i+5] = shape.ib[4*i + 3];
+                }      	        
+      	      }
+      	      break;
       	    }              
-             shape.indices[mode] = new Uint16Array(f);
+            shape.indices[mode] = new Uint16Array(f);
           }
-           shape.f[pass] =  shape.indices[mode];
+        }
+      }       
+      for (pass = 0; pass < obj.passes; pass++) {
+        mode =  shape.pmode[pass];
+        shape.f[pass] =  shape.indices[mode];
+        if (typeof obj.draw_front !== "undefined" &&
+            !obj.draw_front) {
+          shape.f[pass] = shape.f[pass].filter(is_back);   
         }
       }
       // console.log("Names in  shapes not in  shape:"+JSON.stringify(this.keydiff(obj,  shape)));
@@ -323,27 +369,36 @@
         this.initCube();
       obj.cube = {id: obj.id + 0.1,
                     type: "quads",
-                    flags: this.f_has_fog,
+                    flags: obj.flags,
                     material: obj.material,
                     colors: [obj.colors[0]],
                     vertices: this.cube.vertices,
+                    normals: this.cube.normals,
+                    draw_front: obj.draw_front,
                     initialized: false
         };
+      if (this.getMaterial(obj.cube, "front") !==
+          this.getMaterial(obj.cube, "back"))
+        /* jshint bitwise: false */  
+        obj.cube.flags |= this.f_is_twosided;
+        /* jshint bitwise: true */
+      this.scene.objects[obj.cube.id] = obj.cube;
       obj.ticks = {id: obj.id + 0.2,
                      type: "lines",
                      flags: this.f_has_fog,
                      material: obj.material,
-                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
+                     colors: (obj.colors.length > 1 ? [obj.colors[1]] : [obj.colors[0]]),
                      axes: obj.axes,
                      initialized: false
       };
+      this.scene.objects[obj.ticks.id] = obj.ticks;
       obj.labels = {id: obj.id + 0.3,
                      type: "text",
                      flags: this.f_has_fog + 
                             this.f_fixed_size + 
                             this.f_fixed_quads,
                      material: {lit: false},
-                     colors: (obj.colors.length > 1 ? obj.colors[1] : [obj.colors[0]]),
+                     colors: (obj.colors.length > 1 ? [obj.colors[1]] : [obj.colors[0]]),
                      cex: [[1]],
                      family: [["sans"]],
                      font: [[1]],
@@ -351,6 +406,7 @@
                      ignoreExtent: true,
                      initialized: false
       };
+      this.scene.objects[obj.labels.id] = obj.labels;
       obj.initialized = true;
     };
 
@@ -383,7 +439,8 @@
           is_twosided = this.isSet(flags, this.f_is_twosided),
           is_brush = this.isSet(flags, this.f_is_brush),
           has_fog = this.isSet(flags, this.f_has_fog),
-          has_normals = typeof obj.normals !== "undefined", 
+          has_normals = (typeof obj.normals !== "undefined") ||
+                        obj.type === "spheres", 
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
@@ -586,7 +643,7 @@
       obj.onecolor = this.flatten(colors);
     }
 
-    if (has_normals) {
+    if (has_normals && obj.type !== "spheres") {
       nofs = stride;
       stride = stride + 3;
       v = this.cbind(v, typeof obj.pnormals !== "undefined" ? obj.pnormals : obj.normals);
@@ -1034,6 +1091,8 @@
 
     if (is_twosided) {
       obj.frontLoc = gl.getUniformLocation(obj.prog, "front");
+      if (has_normals)
+        obj.invPrMatLoc = gl.getUniformLocation(obj.prog, "invPrMatrix");
     }
   };
     
@@ -1047,6 +1106,7 @@
       this.textureCanvas.style.display = "block";
       this.scene = x;
       this.normMatrix = new CanvasMatrix4();
+      this.invPrMatrix = new CanvasMatrix4();
       this.saveMat = {};
       this.distance = null;
       this.posLoc = 0;

@@ -158,7 +158,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.107.17.tar.gz
+    R CMD INSTALL rgl_0.107.18.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -188,7 +188,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.107.17.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.107.18.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
@@ -219,6 +219,6 @@ Yohann Demont for Shiny code, suggestions, and testing.
 Joshua Ulrich for a lot of help with the Github migration. Xavier
 Fernandez i Marin for help debugging the build.  
 George Helffrich for draping code.  
-Ivan Krylov for window\_group code in X11.  
+Ivan Krylov for window_group code in X11.  
 Michael Sumner for as.mesh3d.default enhancement.  
 Tomas Kalibera for `winutf8` help.
