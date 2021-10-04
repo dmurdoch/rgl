@@ -125,21 +125,10 @@
      * Set the normals matrix for a subscene
      * @param { number } subsceneid - id of the subscene
      */
-    rglwidgetClass.prototype.setnormMatrix = function(subsceneid) {
-       var self = this,
-       recurse = function(id) {
-         var sub = self.getObj(id),
-             embedding = sub.embeddings.model;
-         if (embedding !== "inherit") {
-           var scale = sub.par3d.scale;
-           self.normMatrix.scale(1/scale[0], 1/scale[1], 1/scale[2]);
-           self.normMatrix.multRight(sub.par3d.userMatrix);
-         }
-         if (embedding !== "replace")
-           recurse(sub.parent);
-       };
-       self.normMatrix.makeIdentity();
-       recurse(subsceneid);
+     rglwidgetClass.prototype.setnormMatrix2 = function() {
+       this.normMatrix = new CanvasMatrix4(this.mvMatrix);
+       this.normMatrix.invert();
+       this.normMatrix.transpose();
      };
 
     /**
@@ -150,3 +139,8 @@
        this.prmvMatrix.multRight( this.prMatrix );
      };
 
+    rglwidgetClass.prototype.setInvPrMatrix = function() {
+      this.invPrMatrix = new CanvasMatrix4( this.prMatrix );
+      this.invPrMatrix.invert();
+      this.invPrMatrix.transpose();
+    };
