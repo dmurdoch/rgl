@@ -115,12 +115,14 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       return(result)
     }
     
-    if (type %in% c("light", "bboxdeco"))
+    if (type == "light")
       return(result)
+    
+    result["is_transparent"] <- any(obj$colors[,"a"] < 1); # More later...
     
     mat <- getMaterial(id)
     result["is_lit"] <- mat$lit && type %in% c("triangles", "quads", "surface", "planes",
-                 "spheres", "sprites")
+                 "spheres", "sprites", "bboxdeco")
     
     result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
                  "spheres")
@@ -131,7 +133,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                                             (!is.null(obj$texcoords) 
                                              || (type == "sprites" && !sprites_3d))
     
-    result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
+    result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || result["is_transparent"]
     
     result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
                         "spheres", "sprites", "text")
@@ -139,7 +141,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
     result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
     result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
-    result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres") && 
+    result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
       length(unique(c(mat$front, mat$back))) > 1
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
@@ -383,7 +385,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     warning(gettextf("Object type(s) %s not handled",
          paste("'", unknowntypes, "'", sep="", collapse=", ")), domain = NA)
   
-  keep <- types %in% setdiff(knowntypes, c("light", "bboxdeco"))
+  keep <- types %in% setdiff(knowntypes, c("light"))
   ids <- ids[keep]
   cids <- as.character(ids)
   nflags <- flags[keep]

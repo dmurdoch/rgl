@@ -352,9 +352,11 @@ image to use at different magnifications.  Normally OpenGL
 rescales the image, averaging nearby pixels to determine
 what to display.  However, if `texture` contains several
 filenames, these will be used in sequence as the image is 
-reduced in size.  Due to limitations in some versions of OpenGL,
+reduced in size.  Due to limitations in some versions of OpenGL
+(including WebGL, used by `r linkfn("rglwidget")`),
 the first image *must* have both width and height being an exact
-power of two.  The next image cuts both width and height
+power of two, and `rgl` will stretch it to achieve this.  The
+next image cuts both width and height
 in half if possible.  For example, the first image could be 256x64, then
 the sequence would be 128x32, 64x16, 32x8, 16x4, 8x2, 4x1, 2x1,
 1x1.  You can stop producing images at any point in this

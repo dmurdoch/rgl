@@ -86,18 +86,15 @@
         uris = document.getElementById(mat.uriElementId).rglinstance.getObj(mat.uriId).material.uris;
         
        image.onload = function() {
-         var canvasX = image.width,
-             canvasY = image.height,
+         var canvasX = self.getPowerOfTwo(image.width),
+             canvasY = self.getPowerOfTwo(image.height),
              maxTexSize = self.getMaxTexSize(),
              idx = this.idx,
              texmipmap = self.getMaterial(obj, "texmipmap");
          
-         if (texmipmap) {
-           canvasX = self.getPowerOfTwo(canvasX);
-           canvasY = self.getPowerOfTwo(canvasY);
-         } else if (idx > 0)
+         if (!texmipmap && idx > 0)
            return;  /* Skip later images if not mipmapping */
-         
+
          if (idx < uris.length - 1 && 
              (canvasX > maxTexSize || canvasY > maxTexSize))
            return; /* Skip images that are too large. */

@@ -31,7 +31,9 @@ examples.
 * Added `--static` flag to configure script for FreeType
   installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
 * `shade3d()`, `wire3d()` and `dots3d()` overrode
-`"front"` and `"back"` material settings in mesh objects.
+  `"front"` and `"back"` material settings in mesh objects.
+* rglwidget() handling of bounding box decorations had
+  several bugs.
   
 # rgl  0.107.10
 
