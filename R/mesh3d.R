@@ -13,7 +13,10 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
   
   if (missing(vertices)) {
     xyz <- xyz.coords(x, y, z, recycle=TRUE)
-    vertices <- rbind(xyz$x, xyz$y, xyz$z, 1) 
+    if (length(xyz$x) && length(xyz$y) && length(xyz$z))
+      vertices <- rbind(xyz$x, xyz$y, xyz$z, 1) 
+    else
+      vertices <- matrix(numeric(), nrow = 4)
   } else vertices <- asHomogeneous2(vertices)
   
   # Remove dimnames
