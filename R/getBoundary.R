@@ -1,11 +1,11 @@
-getBoundary <- function(mesh, sorted = FALSE) {
+getBoundary3d <- function(mesh, sorted = FALSE, simplify = TRUE) {
   if (!inherits(mesh, "mesh3d"))
     stop(deparse(substitute(mesh)), " is not a mesh3d object.")
   edges <- NULL
   if (length(mesh$it))
     edges <- cbind(edges, mesh$it[1:2,],  mesh$it[2:3,], mesh$it[c(3,1),])
   if (length(mesh$ib))
-    edges <- cbind(edges, mesh$ib[1:2,], mesh$ib[2:3,], mesh$ib[3:4,], mesh$ib[c(4,1)])
+    edges <- cbind(edges, mesh$ib[1:2,], mesh$ib[2:3,], mesh$ib[3:4,], mesh$ib[c(4,1),])
   if (ncol(edges)) {
     # undirect the edges
     uedges <- t(apply(edges, 2, sort))
@@ -24,7 +24,9 @@ getBoundary <- function(mesh, sorted = FALSE) {
       }
       edges <- edges[, order, drop = FALSE]
     }
-    result <- mesh3d(vertices = mesh$vb, segments = edges)
-    cleanMesh3d(result)
   }
+  result <- mesh3d(vertices = mesh$vb, segments = edges)
+  if (simplify)
+    result <- cleanMesh3d(result)
+  result
 }

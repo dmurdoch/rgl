@@ -556,7 +556,8 @@ Function                             | Description
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
 `r indexfns("merge.mesh3d", backticked("merge"))`: | merge mesh objects
-`r indexfns("facing3d")`:   | subset of mesh facing "up"     
+`r indexfns("facing3d")`:   | subset of mesh facing "up"
+`r indexfns("getBoundary3d")`: | get the boundary of a mesh object
 
 The individual steps in `r linkfn("subdivision3d")` are also available:
 `r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These

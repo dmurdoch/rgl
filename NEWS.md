@@ -1,4 +1,4 @@
-# rgl  0.107.17
+# rgl  0.107.19
 
 ## Major changes
 
@@ -6,6 +6,8 @@
 will be used as a "mipmap".  This may be used in
 `legend3d()` to give legends that adjust to the size 
 of the display.
+* Added `getBoundary3d()` function to extract the boundary
+edges of a mesh.
 
 ## Minor changes
 * Allowed for a third coordinate in `text3d()`'s `adj` 
