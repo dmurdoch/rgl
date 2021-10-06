@@ -62,7 +62,11 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
 ##
 ##
 
-pop3d <- rgl.pop <- function( type = "shapes", id = 0) {
+pop3d <- rgl.pop <- function( type = "shapes", id = 0, user_id = NULL) {
+  if (!is.null(user_id)) {
+    allids <- ids3d(intersect(c("shapes", "bboxdeco"), type))
+    id <- allids$id[allids$user_id %in% user_id]
+  }
   type <- rgl.enum.nodetype(type)
   save <- par3d(skipRedraw = TRUE)
   on.exit(par3d(save))
@@ -87,8 +91,18 @@ ids3d <- rgl.ids <- function( type = "shapes", subscene = NA ) {
   
   count <- .C( rgl_id_count, as.integer(type), count = integer(1), subscene = as.integer(subscene))$count
   
-  as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
+  result <- as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
                                 type=rep("",count), subscene = as.integer(subscene) )[2:3] )
+
+  if (NROW(result)) {
+    hasmaterial <- !(result$type %in% c("light", "userviewpoint", "background", "modelviewpoint", "subscene"))
+    result$user_id <- ""
+    result$user_id[hasmaterial] <- vapply(result$id[hasmaterial],
+          function(id) {
+            rgl.getmaterial(0, id = id)$user_id
+            }, "")
+  }
+  result
 }
 
 rgl.attrib.count <- function( id, attrib ) {

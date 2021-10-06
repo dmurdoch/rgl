@@ -35,6 +35,7 @@ rgl.material <- function(
   polygon_offset = c(0.0, 0.0),
   margin = "",
   floating = FALSE,
+  user_id = "",
   ...
 ) {
   # solid or diffuse component
@@ -96,6 +97,11 @@ rgl.material <- function(
 
   margin <- parseMargin(margin, floating = floating)
   
+  # user data
+  
+  user_id <- as.character(user_id)
+  rgl.string(user_id)
+
   # pack data
 
   idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, 
@@ -105,7 +111,7 @@ rgl.material <- function(
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
                           ntexturefiles, color) )
-  cdata <- texture
+  cdata <- c(user_id, texture)
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
   ret <- .C( rgl_material,
@@ -134,6 +140,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
     success = FALSE,
     id = as.integer(id),
     idata = as.integer(idata),
+    cdata = character(1),
     ddata = as.numeric(ddata)
   )
   
@@ -148,6 +155,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
                   "notequal", "gequal", "always")
   idata <- ret$idata
   ddata <- ret$ddata
+  cdata <- ret$cdata
   
   if (idata[32] > 0) {
     texture <- character(idata[32])
@@ -188,7 +196,8 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        isTransparent = idata[26] == 1,
        polygon_offset = ddata[4:5],
        margin = deparseMargin(list(coord = idata[27] + 1, edge = idata[28:30])),
-       floating = idata[31] == 1
+       floating = idata[31] == 1,
+       user_id = cdata
        )
                    
 }

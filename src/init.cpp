@@ -125,7 +125,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   R_NativePrimitiveArgType aIIIIS[5] = {INTSXP, INTSXP, INTSXP, INTSXP, STRSXP}; 
   R_NativePrimitiveArgType aLIIIS[5] = {LGLSXP, INTSXP, INTSXP, INTSXP, STRSXP}; 
   R_NativePrimitiveArgType aLIIID[5] = {LGLSXP, INTSXP, INTSXP, INTSXP, REALSXP}; 
-  R_NativePrimitiveArgType aLIISD[5] = {LGLSXP, INTSXP, INTSXP, STRSXP, REALSXP}; 
+  R_NativePrimitiveArgType aLIISD[5] = {LGLSXP, INTSXP, INTSXP, STRSXP, REALSXP};
+  R_NativePrimitiveArgType aLIIDS[5] = {LGLSXP, INTSXP, INTSXP, REALSXP, STRSXP};
   R_NativePrimitiveArgType aLIIIF[5] = {LGLSXP, INTSXP, INTSXP, INTSXP, SINGLESXP}; 
   R_NativePrimitiveArgType aLIDDD[5] = {LGLSXP, INTSXP, REALSXP, REALSXP, REALSXP};
   R_NativePrimitiveArgType aIIDDD[5] = {INTSXP, INTSXP, REALSXP, REALSXP, REALSXP};
@@ -146,7 +147,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {"rgl_snapshot", 		(DL_FUNC) &rgl_snapshot, 3, aLIS},
    {"rgl_postscript", 		(DL_FUNC) &rgl_postscript, 3, aLIS},
    {"rgl_material", 		(DL_FUNC) &rgl_material, 4, aLISD},
-   {"rgl_getmaterial", 		(DL_FUNC) &rgl_getmaterial, 4, aLIID},
+   {"rgl_getmaterial", 		(DL_FUNC) &rgl_getmaterial, 4, aLIISD},
    {"rgl_getTextureFiles", (DL_FUNC) &rgl_getTextureFiles, 4, aLIS}
    {"rgl_getcolorcount", 	(DL_FUNC) &rgl_getcolorcount, 1, aI},
    {"rgl_dev_bringtotop", 	(DL_FUNC) &rgl_dev_bringtotop, 2, aLL},
@@ -200,7 +201,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_postscript, 3),
    FUNDEF(rgl_material, 4),
    FUNDEF(rgl_getTextureFiles, 4),
-   FUNDEF(rgl_getmaterial, 4),
+   FUNDEF(rgl_getmaterial, 5),
    FUNDEF(rgl_getcolorcount, 1),
    FUNDEF(rgl_dev_bringtotop, 2),
    FUNDEF(rgl_clear, 2), 

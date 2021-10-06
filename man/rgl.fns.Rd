@@ -23,7 +23,7 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1,
             adj = 0.5, pos = NULL, offset = 0.25, ...)
 rgl.spheres(x, y = NULL, z = NULL, radius, fastTransparency = TRUE, ...)
 rgl.clear( type = "shapes", subscene = 0 )
-rgl.pop( type = "shapes", id = 0 )  
+rgl.pop( type = "shapes", id = 0, user_id = NULL )  
 rgl.ids( type = "shapes", subscene = NA )
 }
 \arguments{
@@ -39,6 +39,8 @@ or normals for the planes.
   \item{fastTransparency}{Sphere drawing strategy.}
   \item{type, id, subscene}{Selecting objects.}
   \item{adj, pos, offset}{Positioning.}
+  \item{user_id}{Select objects with material property
+  \code{user_id} in this vector.}
   \item{...}{
 Material properties.
 }

@@ -96,7 +96,7 @@ plot3d.mesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade
 decorate3d <- function(xlim = NULL, ylim = NULL, zlim = NULL, 
                        xlab = "x", ylab = "y", zlab = "z", 
                        box = TRUE, axes = TRUE, main = NULL, sub = NULL,
-                       top = TRUE, aspect = FALSE, expand = 1.03, ...) {
+                       top = TRUE, aspect = FALSE, expand = 1.03, user_id = material3d("user_id"), ...) {
   
   if (is.logical(aspect)) {
     autoscale <- aspect
@@ -113,14 +113,14 @@ decorate3d <- function(xlim = NULL, ylim = NULL, zlim = NULL,
     if (is.null(zlim))
       zlim <- ranges$zlim
     ind <- c(1,1,2,2)
-    result <- c(result, strut=segments3d(xlim[ind], ylim[ind], zlim[ind]))
+    result <- c(result, strut=segments3d(xlim[ind], ylim[ind], zlim[ind], user_id = user_id))
   }
   
   if (autoscale) aspect3d(aspect)
   
-  if (axes) result <- c(result, axes=axes3d(box=box, expand=expand))
+  if (axes) result <- c(result, axes=axes3d(box=box, expand=expand, user_id = user_id))
   result <- c(result, title3d(xlab = xlab, ylab = ylab, zlab = zlab, 
-                              main = main, sub = sub))
+                              main = main, sub = sub, user_id = user_id))
   
   if (top) rgl.bringtotop()
   

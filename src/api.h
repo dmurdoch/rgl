@@ -60,7 +60,7 @@ void rgl_text_attrib   (int* id, int* attrib, int* first, int* count, char** res
 
 void rgl_material (int* successptr, int* idata, char** cdata, double* ddata);
 void rgl_getcolorcount(int* count);
-void rgl_getmaterial (int* successptr, int *id, int* idata, double* ddata);
+void rgl_getmaterial (int* successptr, int *id, int* idata, char** cdata, double* ddata);
 void rgl_getTextureFiles(int* successptr, int *id, int* nfilenames, char** cdata);
 
 void rgl_light    (int* successptr, int* idata, double* ddata );

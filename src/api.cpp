@@ -999,7 +999,7 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   int* colors   = &idata[31];
 
   char**  pixmapfn = 0;
-  if (nfilenames > 0) pixmapfn = cdata;
+  if (nfilenames > 0) pixmapfn = cdata + 1;
 
   mat.shininess   = (float) ddata[0];
   mat.size      = (float) ddata[1];
@@ -1011,6 +1011,15 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   double* alpha   = &ddata[5];
 
   mat.alphablend  = false;
+  
+  size_t len_user_id = strlen(cdata[0]);
+  if (len_user_id) {
+    char* in_user_id = new char [len_user_id + 1];
+    strncpy(in_user_id, cdata[0], len_user_id);
+    in_user_id[len_user_id] = '\0';
+    mat.user_id = string(in_user_id);
+  } else
+    mat.user_id = string();
   
   if ( nfilenames > 0 ) {
     mat.texture = new Texture(nfilenames, pixmapfn, mat.textype, mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
@@ -1037,7 +1046,7 @@ void rgl::rgl_getcolorcount(int* count)
   CHECKGLERROR;
 }
 
-void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, double* ddata)
+void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
 {
   Material* mat = &currentMaterial;
   unsigned int i,j;
@@ -1127,6 +1136,13 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, double* ddata)
     idata[10] = i;
   } else 
     idata[10] = 0;
+  
+  /* Can't use user_id.length() here, because R has highjacked length() */
+  size_t len_user_id = strlen(mat->user_id.c_str());
+  cdata[0] = R_alloc(len_user_id + 1, 1);
+  strncpy(cdata[0], mat->user_id.c_str(), len_user_id);
+  (cdata[0])[len_user_id] = '\0';
+  
   CHECKGLERROR;
   
   *successptr = RGL_SUCCESS;

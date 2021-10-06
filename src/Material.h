@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "Texture.h"
 #include "RenderContext.h"
+#include <string>
 
 namespace rgl {
 
@@ -63,6 +64,7 @@ public:
   int          marginCoord;
   int          edge[3];
   bool         floating;
+  string       user_id;
   
   double       glVersion;
 };
