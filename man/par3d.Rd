@@ -28,7 +28,7 @@
 \description{
   \code{par3d} can be used to set or query graphical parameters in RGL.
   Parameters can be set by specifying them as arguments to \code{par3d} in
-  \code{tag = value} form, or by passing them as a list of tagged
+  \code{name = value} form, or by passing them as a list of named
   values.
 }
 \usage{
@@ -37,8 +37,8 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
 }
 
 \arguments{
-  \item{\dots}{arguments in \code{tag = value} form, or a list of tagged
-    values.  The tags must come from the graphical parameters described
+  \item{\dots}{arguments in \code{name = value} form, or a list of tagged
+    values.  The names must come from the graphical parameters described
     below.}
   \item{no.readonly}{logical; if \code{TRUE} and there are no other
     arguments, only those parameters which can be set by a

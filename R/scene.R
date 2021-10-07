@@ -62,10 +62,12 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
 ##
 ##
 
-pop3d <- rgl.pop <- function( type = "shapes", id = 0, user_id = NULL) {
-  if (!is.null(user_id)) {
+pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
+  if (!is.null(tag)) {
+    if (!missing(id))
+      stop("Only one of 'id' and 'tag' should be specified.")
     allids <- ids3d(intersect(c("shapes", "bboxdeco"), type))
-    id <- allids$id[allids$user_id %in% user_id]
+    id <- allids$id[allids$tag %in% tag]
   }
   type <- rgl.enum.nodetype(type)
   save <- par3d(skipRedraw = TRUE)
@@ -96,10 +98,10 @@ ids3d <- rgl.ids <- function( type = "shapes", subscene = NA ) {
 
   if (NROW(result)) {
     hasmaterial <- !(result$type %in% c("light", "userviewpoint", "background", "modelviewpoint", "subscene"))
-    result$user_id <- ""
-    result$user_id[hasmaterial] <- vapply(result$id[hasmaterial],
+    result$tag <- ""
+    result$tag[hasmaterial] <- vapply(result$id[hasmaterial],
           function(id) {
-            rgl.getmaterial(0, id = id)$user_id
+            rgl.getmaterial(0, id = id)$tag
             }, "")
   }
   result

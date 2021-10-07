@@ -64,7 +64,7 @@ public:
   int          marginCoord;
   int          edge[3];
   bool         floating;
-  string       user_id;
+  string       tag;
   
   double       glVersion;
 };

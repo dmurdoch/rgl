@@ -35,7 +35,7 @@ rgl.material <- function(
   polygon_offset = c(0.0, 0.0),
   margin = "",
   floating = FALSE,
-  user_id = "",
+  tag = "",
   ...
 ) {
   # solid or diffuse component
@@ -99,8 +99,8 @@ rgl.material <- function(
   
   # user data
   
-  user_id <- as.character(user_id)
-  rgl.string(user_id)
+  tag <- as.character(tag)
+  rgl.string(tag)
 
   # pack data
 
@@ -111,7 +111,7 @@ rgl.material <- function(
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
                           ntexturefiles, color) )
-  cdata <- c(user_id, texture)
+  cdata <- c(tag, texture)
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
   ret <- .C( rgl_material,
@@ -197,7 +197,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        polygon_offset = ddata[4:5],
        margin = deparseMargin(list(coord = idata[27] + 1, edge = idata[28:30])),
        floating = idata[31] == 1,
-       user_id = cdata
+       tag = cdata
        )
                    
 }

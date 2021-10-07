@@ -33,7 +33,7 @@ rgl.material(
   polygon_offset = c(0.0, 0.0),
   margin       = "",
   floating     = FALSE,
-  user_id      = "",
+  tag          = "",
   ...
 )
 material3d(...)
@@ -125,7 +125,7 @@ material3d(...)
   \item{margin, floating}{Used mainly for text to
   draw annotations in the margins, but supported by
   most kinds of objects:  see \code{\link{mtext3d}}.}
-  \item{user_id}{A length 1 string value.  These
+  \item{tag}{A length 1 string value.  These
   may be used to identify objects, or encode other meta
   data about the object.}
   \item{...}{Any of the arguments above can
