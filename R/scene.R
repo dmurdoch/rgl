@@ -966,12 +966,19 @@ selectionFunction3d <- function(proj, region = proj$region) {
   }
 }
 
-tagged3d <- function(tags = NULL, ids = NULL, subscene = 0) {
-  if ((is.null(tags) + is.null(ids)) != 1) 
+tagged3d <- function(tags = NULL, ids = NULL, full = FALSE, subscene = 0) {
+  if ((missing(tags) + missing(ids)) != 1) 
     stop("Exactly one of 'tags' and 'ids' should be specified.")
   all <- ids3d("all", subscene = subscene)
-  if (!is.null(tags))
-    all[all$tag %in% tags,]
-  else if (!is.null(ids))
-    all$tag[match(ids, all$id)]
+  if (!missing(tags))
+    all <- all[all$tag %in% tags,]
+  else
+    all <- all[match(ids, all$id),]
+  if (full)
+    all
+  else
+    if (!missing(tags))
+      all$id
+    else
+      all$tag
 }
