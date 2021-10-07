@@ -11,7 +11,8 @@ edges of a mesh.
 * Added material property `tag`, a string associated 
 with each object.  The value is reported by `ids3d()` and
 may be used to select objects in `pop3d()`, but otherwise is 
-largely ignored by `rgl`.
+largely ignored by `rgl`.  The `tagged3d()` function returns
+information on tags.
 
 ## Minor changes
 * Allowed for a third coordinate in `text3d()`'s `adj` 
