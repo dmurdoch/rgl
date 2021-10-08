@@ -11,9 +11,9 @@ a function are bounded.
 \usage{
 clipMesh3d(mesh, fn, bound = 0, greater = TRUE, 
            minVertices = 0, plot = FALSE, keepValues = FALSE)
-clipObj3d(ids, fn, bound = 0, greater = TRUE,
+clipObj3d(ids = tagged3d(tags), fn, bound = 0, greater = TRUE,
            minVertices = 0,
-           replace = TRUE)
+           replace = TRUE, tags)
 }
 \arguments{
   \item{mesh}{
@@ -37,6 +37,10 @@ See Details below.
   each vertex when \code{plot = FALSE}.}
   \item{ids}{
 The RGL id value(s) of objects to clip.
+  }
+  \item{tags}{
+  Alternate way to specify \code{ids}.  Ignored if \code{ids} is
+given.
   }
   \item{replace}{
 Should the \code{ids} objects be deleted after the clipped

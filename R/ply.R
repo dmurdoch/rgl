@@ -7,7 +7,7 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
                      linesAsEdges = pointsAsEdges,
                      withColors = TRUE,
                      withNormals = !(pointsAsEdges || linesAsEdges),
-                     ids = NULL) {
+                     ids = tagged3d(tags), tags = NULL) {
  
   writeData <- function() {
     cat("ply\n", file=con)

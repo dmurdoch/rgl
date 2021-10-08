@@ -2,7 +2,8 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
                      pointShape = icosahedron3d(),
                      lineRadius = pointRadius,
                      lineSides = 20,
-                     ids = NULL) {
+                     ids = tagged3d(tags),
+                     tags = NULL) {
  
   writeHeader <- function() {
     ident <- paste(filename, " produced by RGL\n")

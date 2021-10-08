@@ -75,7 +75,8 @@ save <- options(rgl.meshColorWarning = FALSE)
 # we need auto-printing of the plots.  This means we
 # have to repeat the test for deldir.
 
-haveDeldir <- requireNamespace("deldir", quietly = TRUE)
+haveDeldir <- checkDeldir()
+              
 if (haveDeldir) {
   dxyz <- deldir::deldir(x, y, z = z, suppressMsge = TRUE)
   persp3d(dxyz, col = col)

@@ -375,9 +375,9 @@ rejoinLines3d <- function(x, tol = 1.e-6) {
   x
 }
 
-clipObj3d <- function(ids, fn, bound = 0, greater = TRUE,
+clipObj3d <- function(ids = tagged3d(tags), fn, bound = 0, greater = TRUE,
                       minVertices = 0,
-                      replace = TRUE) {
+                      replace = TRUE, tags) {
   getValues <- function(obj) {
     verts <- obj$vertices
     nverts <- nrow(verts)

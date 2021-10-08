@@ -1,4 +1,4 @@
-# rgl  0.107.19
+# rgl  0.107.20
 
 ## Major changes
 
@@ -8,6 +8,12 @@ will be used as a "mipmap".  This may be used in
 of the display.
 * Added `getBoundary3d()` function to extract the boundary
 edges of a mesh.
+* Added material property `tag`, a string associated 
+with each object.  The value is reported by `ids3d()` and
+may be used to select objects in most functions that use ids,
+but otherwise is 
+largely ignored by `rgl`.  The `tagged3d()` function returns
+information on tags.
 
 ## Minor changes
 * Allowed for a third coordinate in `text3d()`'s `adj` 
@@ -24,6 +30,8 @@ contributions from Tomas Kalibera to work with his winutf8
 build of R.
 * `bgplot3d()` no longer pauses for each page when running
 examples.
+* `deldir` version 1.0-2 is incompatible with `rgl`.  Added
+the `checkDeldir()` function to avoid running it.
 
 ## Bug fixes
 

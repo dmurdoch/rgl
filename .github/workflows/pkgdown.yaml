@@ -51,8 +51,7 @@ jobs:
           # First rgl plus hard deps
           remotes::install_local(force = TRUE)
           remotes::install_github(c("r-lib/downlit",
-                          "r-lib/pkgdown",
-                          "dmurdoch/htmlwidgets@rglpatch"))
+                          "r-lib/pkgdown"))
           deps <- subset(desc::desc_get_deps(), type == "Suggests")$package
           deps <- setdiff(deps, c("tcltk", "webshot2", 
                                   "downlit", "pkgdown", "htmlwidgets"))

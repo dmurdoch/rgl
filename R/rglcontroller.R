@@ -18,7 +18,7 @@ subsetControl <- function(value = 1, subsets, subscenes = NULL,
       class = "rglControl")
 }
 
-propertyControl <- function(value = 0, entries, properties, objids, values = NULL,
+propertyControl <- function(value = 0, entries, properties, objids = tagged3d(tags), tags, values = NULL,
                             param = seq_len(NROW(values)) - 1, interp = TRUE) {
   objids <- as.integer(objids)
   structure(list(type = "propertySetter",
@@ -33,7 +33,7 @@ propertyControl <- function(value = 0, entries, properties, objids, values = NUL
 }
 
 clipplaneControl <- function(a=NULL, b=NULL, c=NULL, d=NULL,
-                            plane = 1, clipplaneids,
+                            plane = 1, clipplaneids = tagged3d(tag), tag,
                             ...) {
   values <- cbind(a = a, b = b, c = c, d = d)
   col <- which(colnames(values) == letters[1:4]) - 1
@@ -42,7 +42,7 @@ clipplaneControl <- function(a=NULL, b=NULL, c=NULL, d=NULL,
                   ...)
 }
 
-ageControl <- function(births, ages, objids, value = 0, colors = NULL, alpha = NULL,
+ageControl <- function(births, ages, objids = tagged3d(tags), tags, value = 0, colors = NULL, alpha = NULL,
                        radii = NULL, vertices = NULL, normals = NULL,
                        origins = NULL, texcoords = NULL,
                        x = NULL, y = NULL, z = NULL,
@@ -120,7 +120,7 @@ ageControl <- function(births, ages, objids, value = 0, colors = NULL, alpha = N
   structure(result, class = "rglControl")
 }
 
-vertexControl <- function(value = 0, values = NULL, vertices = 1, attributes, objid,
+vertexControl <- function(value = 0, values = NULL, vertices = 1, attributes, objid = tagged3d(tag), tag,
                           param = seq_len(NROW(values)) - 1, interp = TRUE) {
   attributes <- match.arg(attributes,
                           choices = c("x", "y", "z",

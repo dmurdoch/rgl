@@ -72,9 +72,10 @@ vector is passed with a name to be used as the family name, e.g.
 \code{rglFonts(sans = c("/path/to/FreeSans.ttf", ...))}.  In order to 
 limit the file size, the \pkg{rgl} package ships with just 3 font files, for 
 regular versions of the \code{serif}, \code{sans} and \code{mono} families.  
-Additional free font files are available from the Amaya project at
-\url{https://dev.w3.org/cvsweb/Amaya/fonts/}.  See the example below for
-how to specify a full set of fonts.
+Additional free font files were available in the past from the
+Amaya project, though currently the
+\code{\link{rglExtrafonts}} function provides an easier way
+to register new fonts.
 
 On Windows the system fonts are acceptable and are used
 when \code{useFreeType = FALSE} (the current default in

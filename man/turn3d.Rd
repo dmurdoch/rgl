@@ -37,6 +37,7 @@ Fang He and Duncan Murdoch
 \examples{
 x <- 1:10
 y <- rnorm(10)^2
+open3d()
 shade3d(turn3d(x, y), col = "green")
 }
 \keyword{ graphics }

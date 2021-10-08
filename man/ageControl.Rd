@@ -12,7 +12,7 @@ vertices have ages depending on the control setting.
 Attributes of those vertices can then be changed.
 }
 \usage{
-ageControl(births, ages, objids, value = 0,
+ageControl(births, ages, objids = tagged3d(tags), tags, value = 0,
            colors = NULL, alpha = NULL, radii = NULL, vertices = NULL,
            normals = NULL, origins = NULL, texcoords = NULL,
            x = NULL, y = NULL, z = NULL,
@@ -23,6 +23,10 @@ ageControl(births, ages, objids, value = 0,
   \item{ages}{Chosen ages at which the following attributes
   will apply.}
   \item{objids}{Object ids to which the changes apply.}
+  \item{tags}{
+  Alternate way to specify \code{objids}.  Ignored if \code{objids} is
+given.
+  }
   \item{value}{Initial value; typically overridden by input.}
   \item{colors, alpha, radii, vertices, normals, origins, texcoords}{
   Attributes of the vertices that can be changed.  There should be

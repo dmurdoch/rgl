@@ -1,7 +1,7 @@
 \name{ageSetter}
 \alias{ageSetter}
 \title{
-Set WebGL scene properties based on the age of components
+Obsolete function to set WebGL scene properties based on the age of components
 of objects
 }
 \description{

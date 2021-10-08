@@ -8,7 +8,8 @@ writeOBJ <- function(con,
                      withNormals = TRUE,
                      withTextures = TRUE,
                      separateObjects = TRUE,
-                     ids = NULL) {
+                     ids = tagged3d(tags),
+                     tags = NULL) {
  
   writeHeader <- function() {
     ident <- paste(filename, " produced by RGL")

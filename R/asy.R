@@ -7,7 +7,8 @@ writeASY <- function(scene = scene3d(),
                      width = 7,
                      height = 7,
                      ppi = 100,
-                     ids = NULL,
+                     ids = tagged3d(tags),
+                     tags = NULL,
                      version = "2.65") {
   withColors <- TRUE
   withNormals <- FALSE

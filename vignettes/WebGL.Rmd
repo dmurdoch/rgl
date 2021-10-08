@@ -31,19 +31,24 @@ source using `knitr` or `rmarkdown`.  This format mixes
 text with Markdown markup with chunks of R code.  There
 is a limited amount of discussion of other methods.
 
-There are two ways to embed an `rgl` scene in the document.  The recommended one is to call `r linkfn("rglwidget")` to produce a "widget" which can
-be embedded into your document by printing it.
+There are two ways to embed an `rgl` scene in the document. 
+The newest one is recommended:  call `r linkfn("setupKnitr")`
+with argument `autoprint = TRUE`
+early in the document.  This will set things up to be
+quite similar to the way standard 2D graphics are included
+by `knitr`, i.e. it will detect the fact that you've 
+drawn something, and just include it automatically.
 
-Older methods (e.g. `writeWebGL`) used before `rgl` version
+If `autoprint = FALSE` is used or no call is made to
+`setupKnitr()`, an explicit call to `r linkfn("rglwidget")` will
+produce a "widget" which can
+be embedded into your document by printing it.  This document
+uses that method.
+
+Older methods (e.g. `writeWebGL` or various hooks) that were
+used before `rgl` version
 0.102.0 are no longer supported.
 
-I have conducted experiments on a
-third method.  This is intended to be similar to the way 
-standard 2D graphics are included by `knitr`,
-i.e. it will detect the fact that you've 
-drawn something, and just include it automatically.
-At present it is not recommended, but that may
-change in the future.
 
 ## Browser support
 
@@ -58,7 +63,7 @@ insert a code chunk and call the `r linkfn("rglwidget")`
 function with optional argument `elementId`.  This allows later
 Javascript code to refer to the image.  We also 
 save the object ids from the plot, so that they
-can be manipulated later.
+can be manipulated later.  (The first example in [Controls](#controls) uses tags instead of saving the ids.)
 ```{r}
 library(rgl)
 plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
@@ -132,31 +137,33 @@ toggle them:
 ```{r}
 clear3d() # Remove the earlier display
 
-setosa <- with(subset(iris, Species == "setosa"), 
+with(subset(iris, Species == "setosa"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   col=as.numeric(Species),
-                  radius = 0.211))
-versicolor <- with(subset(iris, Species == "versicolor"), 
+                  radius = 0.211,
+                  tag = "setosa"))
+with(subset(iris, Species == "versicolor"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                col=as.numeric(Species),
-     	       radius = 0.211))
-virginica <- with(subset(iris, Species == "virginica"), 
+     	       radius = 0.211, 
+     	       tag = "versicolor"))
+with(subset(iris, Species == "virginica"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                col=as.numeric(Species),
-     	       radius = 0.211))
+     	       radius = 0.211,
+     	       tag = "virginica"))
 aspect3d(1,1,1)
-axesid <- decorate3d()
+decorate3d(tag = "axes")
 rglwidget() %>%
-toggleWidget(ids = setosa) %>%
-toggleWidget(ids = versicolor) %>%
-toggleWidget(ids = virginica) %>%
-toggleWidget(ids = axesid) %>% 
+toggleWidget(tags = "setosa") %>%
+toggleWidget(tags = "versicolor") %>%
+toggleWidget(tags = "virginica") %>%
+toggleWidget(tags = "axes") %>% 
 asRow(last = 4)
 ```
 
 Since we skipped the `label` argument, the buttons are
-labelled with the name of the variable
-passed as `ids`.  The `asRow` function is discussed `r linkfn("asRow", "below")`.
+labelled with the values of the tags.  The `asRow` function is discussed `r linkfn("asRow", "below")`.
 
 `toggleWidget()` is actually a convenient wrapper for
 two functions:  `r indexfns("playwidget")` and `r indexfns("subsetControl")`.  `playwidget()` adds
@@ -174,10 +181,10 @@ For example,
 rglwidget() %>%
 playwidget(start = 0, stop = 3, interval = 1,
 	   subsetControl(1, subsets = list(
-	   			 Setosa = setosa,
-	   			 Versicolor = versicolor,
-	   			 Virginica = virginica,
-	   			 All = c(setosa, versicolor, virginica)
+	   			 Setosa = tagged3d("setosa"),
+	   			 Versicolor = tagged3d("versicolor"),
+	   			 Virginica = tagged3d("virginica"),
+	   			 All = tagged3d(c("setosa", "versicolor", "virginica"))
 	   			 )))
 ```
 
@@ -239,7 +246,7 @@ playwidget(
                                      8,   1,   1,   1), 
                                 nrow = 2, byrow = TRUE),
                 attributes = c("x", "red", "green", "blue"),
-                vertices = which, objid = setosa),
+                vertices = which, tag = "setosa"),
 	step = 0.01)
 ```
 
