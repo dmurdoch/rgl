@@ -100,7 +100,7 @@ useSubscene3d <- function(subscene) {
   invisible(result)
 }
 
-addToSubscene3d <- function(ids, subscene = currentSubscene3d()) {
+addToSubscene3d <- function(ids = tagged3d(tags), tags, subscene = currentSubscene3d()) {
   ids <- as.integer(ids)
   dups <- intersect(ids, ids3d("all", subscene)$id)
   if (length(dups))
@@ -112,7 +112,7 @@ addToSubscene3d <- function(ids, subscene = currentSubscene3d()) {
   lowlevel(subscene)
 }
 
-delFromSubscene3d <- function(ids, subscene = currentSubscene3d()) {
+delFromSubscene3d <- function(ids = tagged3d(tags), tags, subscene = currentSubscene3d()) {
   result <- .C(rgl_delfromsubscene, success = as.integer(subscene), 
      n = as.integer(length(ids)), ids = as.integer(ids))$success
   if (!result)

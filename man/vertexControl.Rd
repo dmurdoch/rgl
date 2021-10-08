@@ -11,7 +11,8 @@ sets a value which controls attributes of a selection of vertices.
 }
 \usage{
 vertexControl(value = 0, values = NULL, vertices = 1, attributes,
-              objid, param = seq_len(NROW(values)) - 1, interp = TRUE)
+              objid = tagged3d(tag), tag,
+              param = seq_len(NROW(values)) - 1, interp = TRUE)
 }
 \arguments{
   \item{value}{The value to use for input (typically \code{input$value}
@@ -30,6 +31,9 @@ the number of vertices in the \code{objid}.
   \item{objid}{
 A single RGL object id.
 }
+  \item{tag}{
+An alternate way to specify \code{objid}.
+  }
   \item{param}{
 Parameter values corresponding to each row of \code{values}.
 }

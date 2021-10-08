@@ -9,9 +9,9 @@ that will toggle the display of items in the scene.
 }
 \usage{
 toggleWidget(sceneId, 
-             ids = integer(), hidden = integer(),
+             ids = tagged3d(tags), tags = NULL, hidden = integer(),
              subscenes = NULL, 
-             label = deparse(substitute(ids)), 
+             label, 
              ...)
 }
 \arguments{
@@ -23,11 +23,16 @@ or an object as in \code{\link{playwidget}}.
 The RGL id numbers of the objects to toggle.  Those in \code{ids}
 are initially shown; those in \code{hidden} are initially hidden.
 }
+  \item{tags}{
+  Alternate way to specify \code{ids}.  Ignored if \code{ids} is
+given.
+  }
   \item{subscenes}{
 The subscenes in which to toggle the objects.
 }
   \item{label}{
-The label to put on the button.
+The label to put on the button.  The default is set
+from the expression passed to \code{ids} or the value of \code{tags}. 
 }
   \item{\dots}{
 Additional arguments to pass to \code{\link{playwidget}}.

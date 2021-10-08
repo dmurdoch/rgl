@@ -11,7 +11,8 @@ sets a value which controls attributes of one or more clipping
 planes.
 }
 \usage{
-clipplaneControl(a = NULL, b = NULL, c = NULL, d = NULL, plane = 1, clipplaneids, ...)
+clipplaneControl(a = NULL, b = NULL, c = NULL, d = NULL, 
+                 plane = 1, clipplaneids = tagged3d(tag), tag, ...)
 }
 \arguments{
   \item{a, b, c, d}{
@@ -20,9 +21,13 @@ Parameter values for the clipping planes.
   \item{plane}{
 Which plane in the clipplane object?
 }
-  \item{clipplaneids}{
+  \item{clipplaneid}{
 The id of the clipplane object.
 }
+  \item{tag}{
+Select clipplane with matching tag.  Ignored
+if \code{clipplaneid} is specified.
+}  
   \item{\dots}{
 Other parameters passed to \code{\link{propertyControl}}.
 }

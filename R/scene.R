@@ -96,9 +96,9 @@ ids3d <- rgl.ids <- function( type = "shapes", subscene = NA ) {
   result <- as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
                                 type=rep("",count), subscene = as.integer(subscene) )[2:3] )
 
+  result$tag <- rep("", nrow(result))
   if (NROW(result)) {
     hasmaterial <- !(result$type %in% c("light", "userviewpoint", "background", "modelviewpoint", "subscene"))
-    result$tag <- ""
     result$tag[hasmaterial] <- vapply(result$id[hasmaterial],
           function(id) {
             rgl.getmaterial(0, id = id)$tag
@@ -977,8 +977,10 @@ tagged3d <- function(tags = NULL, ids = NULL, full = FALSE, subscene = 0) {
   if (full)
     all
   else
-    if (!missing(tags))
+    if (!missing(tags) && !is.null(tags)) 
       all$id
-    else
+    else if (!missing(ids) && !is.null(ids))
       all$tag
+    else
+      NULL
 }

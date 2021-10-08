@@ -17,7 +17,8 @@ writeSTL(con, ascii = FALSE,
          pointShape = icosahedron3d(),
          lineRadius = pointRadius,
          lineSides = 20,
-         ids = NULL)
+         ids = tagged3d(tags),
+         tags = NULL)
 }
 \arguments{
   \item{con}{
@@ -45,6 +46,10 @@ Lines are rendered as cylinders with this many sides.
 The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
 }
+ \item{tags}{
+Alternate way to specify \code{ids}.  Ignored if \code{ids} is
+given. 
+ }
 }
 \details{
 The current implementation is limited.  For reading, it ignores normals

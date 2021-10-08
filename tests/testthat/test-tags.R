@@ -11,6 +11,7 @@ test_that("tags work", {
 
   open3d()
   x <- points3d(1,2,3, tag = "hello2")
-  expect_equal(unclass(x), tagged3d("hello2")$id)
+  expect_equal(unclass(x), tagged3d("hello2"))
+  expect_equal(unclass(x), tagged3d("hello2", full = TRUE)$id)
   expect_equal(tagged3d(ids = x), "hello2")
 })

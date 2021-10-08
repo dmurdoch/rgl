@@ -12,7 +12,8 @@ or in an animation.
 subsetControl(value = 1, subsets, subscenes = NULL,
                          fullset = Reduce(union, subsets),
                          accumulate = FALSE)
-propertyControl(value = 0, entries, properties, objids, values = NULL,
+propertyControl(value = 0, entries, properties, 
+                objids = tagged3d(tags), tags, values = NULL,
                 param = seq_len(NROW(values)) - 1, interp = TRUE)
 }
 \arguments{
@@ -27,6 +28,10 @@ propertyControl(value = 0, entries, properties, objids, values = NULL,
   \item{accumulate}{If \code{TRUE}, the subsets will accumulate (by union)
   as the value increases.}
   \item{entries, properties, objids}{Which properties to set.}
+  \item{tags}{
+Select objects with matching tags.  Ignored
+if \code{objids} is specified.
+}
   \item{values}{Values to set.}
   \item{param}{Parameter values corresponding to the rows of \code{value}}
   \item{interp}{Whether to use linear interpolation between \code{param}

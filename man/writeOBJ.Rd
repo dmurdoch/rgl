@@ -18,7 +18,8 @@ writeOBJ(con,
          pointsAsPoints = FALSE, linesAsLines = FALSE, 
          withNormals = TRUE, withTextures = TRUE, 
          separateObjects = TRUE,
-         ids = NULL)
+         ids = tagged3d(tags),
+         tags = NULL)
 readOBJ(con, ...)
 }
 \arguments{
@@ -51,6 +52,10 @@ Whether to output texture coordinates.
 The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
 }
+  \item{tags}{
+Alternate way to specify \code{ids}.  Ignored if \code{ids} is
+given.
+  }
 
   \item{...}{
 Additional arguments (typically just \code{material}) to pass to
