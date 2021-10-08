@@ -25,8 +25,8 @@ newSubscene3d(viewport = "replace",
               ignoreExtent)
 currentSubscene3d(dev = cur3d())
 useSubscene3d(subscene)
-addToSubscene3d(ids, subscene = currentSubscene3d())
-delFromSubscene3d(ids, subscene = currentSubscene3d())
+addToSubscene3d(ids = tagged3d(tags), tags, subscene = currentSubscene3d())
+delFromSubscene3d(ids = tagged3d(tags), tags, subscene = currentSubscene3d())
 gc3d(protect = NULL)
 }
 \arguments{
@@ -56,6 +56,10 @@ Which subscene to use or modify.
   \item{ids}{
 A vector of integer object ids to add to the subscene.
 }
+  \item{tags}{
+Alternate way to specify \code{ids}.  Ignored if \code{ids} is
+given.
+  }
   \item{protect}{
 Object ids to protect from this garbage collection.
 }

@@ -62,7 +62,13 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
 ##
 ##
 
-pop3d <- rgl.pop <- function( type = "shapes", id = 0) {
+pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
+  if (!is.null(tag)) {
+    if (!missing(id))
+      stop("Only one of 'id' and 'tag' should be specified.")
+    allids <- ids3d(intersect(c("shapes", "bboxdeco"), type))
+    id <- allids$id[allids$tag %in% tag]
+  }
   type <- rgl.enum.nodetype(type)
   save <- par3d(skipRedraw = TRUE)
   on.exit(par3d(save))
@@ -87,8 +93,18 @@ ids3d <- rgl.ids <- function( type = "shapes", subscene = NA ) {
   
   count <- .C( rgl_id_count, as.integer(type), count = integer(1), subscene = as.integer(subscene))$count
   
-  as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
+  result <- as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
                                 type=rep("",count), subscene = as.integer(subscene) )[2:3] )
+
+  result$tag <- rep("", nrow(result))
+  if (NROW(result)) {
+    hasmaterial <- !(result$type %in% c("light", "userviewpoint", "background", "modelviewpoint", "subscene"))
+    result$tag[hasmaterial] <- vapply(result$id[hasmaterial],
+          function(id) {
+            rgl.getmaterial(0, id = id)$tag
+            }, "")
+  }
+  result
 }
 
 rgl.attrib.count <- function( id, attrib ) {
@@ -948,4 +964,23 @@ selectionFunction3d <- function(proj, region = proj$region) {
     (llx <= x) & (x <= urx) & (lly <= y) & (y <= ury) & 
     (0 <= z) & (z <= 1)
   }
+}
+
+tagged3d <- function(tags = NULL, ids = NULL, full = FALSE, subscene = 0) {
+  if ((missing(tags) + missing(ids)) != 1) 
+    stop("Exactly one of 'tags' and 'ids' should be specified.")
+  all <- ids3d("all", subscene = subscene)
+  if (!missing(tags))
+    all <- all[all$tag %in% tags,]
+  else
+    all <- all[match(ids, all$id),]
+  if (full)
+    all
+  else
+    if (!missing(tags) && !is.null(tags)) 
+      all$id
+    else if (!missing(ids) && !is.null(ids))
+      all$tag
+    else
+      NULL
 }

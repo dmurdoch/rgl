@@ -41,6 +41,7 @@ Material::Material(Color bg, Color fg)
   envmap(false),
   marginCoord(-1),
   floating(false),
+  tag(),
   glVersion(-1.0)
 {
   alphablend = ( ( bg.getAlphaf() < 1.0f ) || ( fg.getAlphaf() < 1.0f ) ) ? true : false;

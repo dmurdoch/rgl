@@ -11,7 +11,8 @@ decorate3d(xlim = NULL, ylim = NULL, zlim = NULL,
            xlab = "x", ylab = "y", zlab = "z", 
            box = TRUE, axes = TRUE, 
            main = NULL, sub = NULL, 
-           top = TRUE, aspect = FALSE, expand = 1.03, ...)
+           top = TRUE, aspect = FALSE, expand = 1.03, 
+           tag = material3d("tag"), ...)
 }
 \arguments{  
   \item{xlim, ylim, zlim}{These are used
@@ -22,6 +23,8 @@ for the labels.}
   \item{top}{whether to bring the window to the top when done.}
   \item{aspect}{either a logical indicating whether to adjust the aspect ratio, or a new ratio.}
   \item{expand}{how much to expand the box around the data, if it is drawn.}
+  \item{tag}{optional label for objects
+  being produced.}
   \item{...}{ignored.}
 }
 \value{

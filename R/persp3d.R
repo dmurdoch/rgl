@@ -166,8 +166,7 @@ persp3d.tri <- function(x, z, ..., add = FALSE) {
 }
 
 persp3d.formula <- function(x, data=NULL, xlab = xyz$xlab, ylab = xyz$ylab, zlab = xyz$zlab, ...) {
-  if (!requireNamespace("deldir", quietly = TRUE))
-    stop("This function requires the 'deldir' package.")
+  checkDeldir(error = TRUE)
   if (!is.null(data))
     environment(x) <- list2env(data, envir = environment(x))
   xyz <- xyz.coords(x)

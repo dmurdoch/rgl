@@ -167,8 +167,7 @@ as.mesh3d <- function(x, ...) UseMethod("as.mesh3d")
 as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"), 
 			     smooth = TRUE, normals = NULL, texcoords = NULL,
 			     ...) {
-  if (!requireNamespace("deldir", quietly = TRUE))
-    stop("The ", sQuote("deldir"), " package is required.")
+  checkDeldir(error = TRUE)
   if (!identical(sort(coords), c("x", "y", "z")))
     stop(sQuote("coords"), " should be a permutation of c('x', 'y', 'z')")
   if (!all(coords %in% names(x$summary)))

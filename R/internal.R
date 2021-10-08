@@ -56,6 +56,16 @@ rgl.numeric <- function( x ) {
           domain = NA)
 }
 
+#
+# single string
+#
+
+rgl.string <- function( x ) {
+  if (length(x) != 1)
+    stop( gettextf("'%s' must be a single character value",
+                   deparse(substitute(x))), domain = NA)
+}
+
 
 #
 # vertex data object

@@ -28,8 +28,8 @@ r3dDefaults
 }
 
 \arguments{
-  \item{\dots}{arguments in \code{tag = value} form, or a list of tagged
-    values.  The tags must come from the graphical
+  \item{\dots}{arguments in \code{name = value} form, or a list of named
+    values.  The names must come from the graphical
     parameters described in \code{\link{par3d}}.}
   \item{params}{a list of graphical parameters}
   \item{useNULL}{whether to use the null graphics device}

@@ -16,7 +16,7 @@ writePLY(con, format = c("little_endian", "big_endian", "ascii"),
          lineRadius = pointRadius, lineSides = 20, 
          pointsAsEdges = FALSE, linesAsEdges = pointsAsEdges, 
          withColors = TRUE, withNormals = !(pointsAsEdges || linesAsEdges), 
-         ids = NULL)
+         ids = tagged3d(tags), tags = NULL)
 }
 \arguments{
   \item{con}{
@@ -47,6 +47,10 @@ Whether to output vertex normals for smooth shading.
   \item{ids}{
 The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
+}
+  \item{tags}{
+Select objects with matching tags.  Ignored
+if \code{ids} is specified.
 }
 
 }

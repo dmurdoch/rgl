@@ -141,11 +141,16 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
   result
 }
 
-toggleWidget <- function(sceneId, ids = integer(), 
+toggleWidget <- function(sceneId, ids = tagged3d(tags), tags = NULL, 
                          hidden = integer(),
                          subscenes = NULL, 
-                         label = deparse(substitute(ids)), 
-                         ...) 
+                         label, 
+                         ...) {
+  if (missing(label))
+    if (missing(ids)) 
+       label <- paste(tags, collapse = ", ")
+    else 
+       label <- deparse(substitute(ids)) 
   playwidget(sceneId, 
              subsetControl(subsets = list(ids, hidden), subscenes = subscenes),
              start = 0, stop = 1,
@@ -153,3 +158,4 @@ toggleWidget <- function(sceneId, ids = integer(),
              buttonLabels = label,
              interval = 1,
              ...)
+}

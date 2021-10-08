@@ -19,7 +19,8 @@ writeASY(scene = scene3d(),
          defaultFontsize = 12,
          width = 7, height = 7,
          ppi = 100,
-         ids = NULL, 
+         ids = tagged3d(tags),
+         tags = NULL, 
          version = "2.65")
 }
 \arguments{
@@ -51,6 +52,10 @@ pixels).
 If not \code{NULL}, write out just these
 RGL objects.
 }
+  \item{tags}{
+Alternate way to specify \code{ids}.  Ignored if \code{ids} is
+given.
+  }
   \item{version}{
 Asymptote version 2.44 had a definition for its \dQuote{light()} function
 that was incompatibly changed in versions 2.47 and 2.50.  
