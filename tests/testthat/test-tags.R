@@ -4,7 +4,7 @@ test_that("tags work", {
   material3d(tag = "hello")
   expect_equal(material3d("tag"), "hello")
 
-  file <- system.file("textures/worldsmall.png",                              package = "rgl")
+  file <- normalizePath(system.file("textures/worldsmall.png",                              package = "rgl"))
   material3d(texture = file)
   expect_equal(material3d("texture"), file)
   expect_equal(material3d("tag"), "hello")

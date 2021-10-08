@@ -30,6 +30,8 @@ contributions from Tomas Kalibera to work with his winutf8
 build of R.
 * `bgplot3d()` no longer pauses for each page when running
 examples.
+* `deldir` version 1.0-2 is incompatible with `rgl`.  Added
+the `checkDeldir()` function to avoid running it.
 
 ## Bug fixes
 
