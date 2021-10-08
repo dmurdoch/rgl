@@ -165,15 +165,6 @@ persp3d.tri <- function(x, z, ..., add = FALSE) {
   plot3d(as.mesh3d(x, z, ...), add = add, ...)
 }
 
-checkDeldir <- function(error = FALSE) {
-  result <- requireNamespace("deldir", quietly = TRUE) &&
-            (packageVersion("deldir") < "1.0.2" ||
-             packageVersion("deldir") >= "1.0.4")
-  if (error && !result)
-    stop("This function requires version 1.0.4 or higher of the 'deldir' package.", call. = FALSE)
-  result
-}
-
 persp3d.formula <- function(x, data=NULL, xlab = xyz$xlab, ylab = xyz$ylab, zlab = xyz$zlab, ...) {
   checkDeldir(error = TRUE)
   if (!is.null(data))
