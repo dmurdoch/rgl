@@ -21,7 +21,7 @@ Parameter values for the clipping planes.
   \item{plane}{
 Which plane in the clipplane object?
 }
-  \item{clipplaneid}{
+  \item{clipplaneids}{
 The id of the clipplane object.
 }
   \item{tag}{
