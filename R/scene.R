@@ -426,7 +426,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
+rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, indices=NULL, ... ) {
   rgl.material( ... )
 
   type <- rgl.enum.primtype(type)
@@ -438,17 +438,29 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
 
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
+  
+  if (is.null(indices)) {
+    nindices <- 0
+    indices <- 0 # to avoid pointing out of range
+  } else {
+    nindices <- length(indices)
+    if (!all(indices > 0 & indices <= nvertex))
+      stop("indices out of range")
+  }
+  
   if (nvertex > 0) {
     
     perelement <- c(points=1, lines=2, triangles=3, quadrangles=4, linestrips=1)[type]
-    if (nvertex %% perelement) 
+    if (nindices > 0) {
+      if (nindices %% perelement)
+        stop("Illegal number of indices") 
+    } else if (nvertex %% perelement) 
       stop("Illegal number of vertices")
     
-    idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords) ) )
+    idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords), nindices, indices - 1 ) )
     
     if (is.null(normals)) normals <- 0
     else {
-    
       normals <- xyz.coords(normals, recycle=TRUE)
       x <- rep(normals$x, len=nvertex)
       y <- rep(normals$y, len=nvertex)
@@ -458,7 +470,6 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     
     if (is.null(texcoords)) texcoords <- 0
     else {
-    
       texcoords <- xy.coords(texcoords, recycle=TRUE)
       s <- rep(texcoords$x, len=nvertex)
       t <- rep(texcoords$y, len=nvertex)
@@ -467,7 +478,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     
     ret <- .C( rgl_primitive,
       success = as.integer(FALSE),
-      idata,
+      as.integer(idata),
       as.numeric(vertex),
       as.numeric(normals),
       as.numeric(texcoords),

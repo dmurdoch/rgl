@@ -1,4 +1,4 @@
-# rgl  0.107.20
+# rgl  0.107.21
 
 ## Major changes
 
@@ -14,6 +14,9 @@ may be used to select objects in most functions that use ids,
 but otherwise is 
 largely ignored by `rgl`.  The `tagged3d()` function returns
 information on tags.
+* Primitive types (points, lines, segments, triangles, quads)
+can now accept an `indices` parameter, similar to the 
+indices in `mesh3d` objects.
 
 ## Minor changes
 * Allowed for a third coordinate in `text3d()`'s `adj` 

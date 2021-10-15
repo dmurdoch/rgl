@@ -19,14 +19,22 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
 {
   type                = in_type;
   nverticesperelement = in_nverticesperelement;
+  nvertices           = 0;
+  nindices            = 0;
 }
 
 void PrimitiveSet::initPrimitiveSet(
     int in_nvertices, 
-    double* in_vertices
+    double* in_vertices,
+    int in_nindices,
+    int* in_indices
 ) {
   nvertices           = in_nvertices;
-  nprimitives         = in_nvertices / nverticesperelement;
+  nindices            = in_nindices;
+  if (nindices)
+    nprimitives       = nindices / nverticesperelement;
+  else
+    nprimitives       = nvertices / nverticesperelement;
   vertexArray.alloc(nvertices);
   hasmissing = false;
   for(int i=0;i<nvertices;i++) {
@@ -36,6 +44,13 @@ void PrimitiveSet::initPrimitiveSet(
     boundingBox += vertexArray[i];
     hasmissing |= vertexArray[i].missing();
   }
+  if (nindices) {
+    indices = new GLuint[nindices];
+    for(int i=0; i < nindices; i++) {
+      indices[i] = (GLuint)in_indices[i];
+    }
+  } else
+    indices = NULL;
 }
 
 PrimitiveSet::PrimitiveSet (
@@ -46,6 +61,7 @@ PrimitiveSet::PrimitiveSet (
     int in_type, 
     int in_nverticesperelement,
     bool in_ignoreExtent,
+    int in_nindices, int* in_indices,
     bool in_bboxChange
 
 )
@@ -55,7 +71,11 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
   type                = in_type;
   nverticesperelement = in_nverticesperelement;
   nvertices           = in_nvertices;
-  nprimitives         = in_nvertices / nverticesperelement;
+  nindices            = in_nindices;
+  if (nindices)
+    nprimitives       = nindices / nverticesperelement;
+  else
+    nprimitives       = nvertices / nverticesperelement;
   material.colorPerVertex(true, nvertices);
 
   vertexArray.alloc(nvertices);
@@ -67,6 +87,20 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
     boundingBox += vertexArray[i];
     hasmissing |= vertexArray[i].missing();
   }
+  
+  if (nindices) {
+    indices = new GLuint[nindices];
+    for(int i=0; i < nindices; i++) {
+      indices[i] = (GLuint)in_indices[i];
+    }
+  } else
+    indices = NULL;
+}
+
+PrimitiveSet::~PrimitiveSet () 
+{
+  if (nindices)
+    delete [] indices;
 }
 
 // ---------------------------------------------------------------------------
@@ -97,23 +131,28 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 void PrimitiveSet::drawAll(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
-  if (!hasmissing)
-    glDrawArrays(type, 0, nverticesperelement*nprimitives );
-    // FIXME: refactor to vertexArray.draw( type, 0, nverticesperelement*nprimitives );
-  else {
+  if (!hasmissing) {
+    if (!nindices)
+      glDrawArrays(type, 0, nverticesperelement*nprimitives );
+    else
+      glDrawElements(type, nindices, GL_UNSIGNED_INT, indices);
+  } else {
     bool missing = true;
     for (int i=0; i<nprimitives; i++) {
       bool skip = false;
-      for (int j=0; j<nverticesperelement; j++) 
-        skip |= vertexArray[nverticesperelement*i + j].missing();
+      int elt = nindices ? indices[nverticesperelement*i] :
+                                   nverticesperelement*i;
+      for (int j=0; j<nverticesperelement; j++)
+        skip |= vertexArray[elt + j].missing();
       if (missing != skip) {
         missing = !missing;
         if (missing) glEnd();
         else glBegin(type);
       }
       if (!missing) 
-        for (int j=0; j<nverticesperelement; j++)
-          glArrayElement( nverticesperelement*i + j );
+        for (int j=0; j<nverticesperelement; j++) {
+          glArrayElement( elt + j);
+        }
     }
     if (!missing) glEnd();
   }              
@@ -125,14 +164,15 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
 void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
+  int elt = nindices ? indices[index*nverticesperelement] :
+                       index*nverticesperelement;
   if (hasmissing) {
     bool skip = false;
-    for (int j=0; j<nverticesperelement; j++) 
-      skip |= vertexArray[index*nverticesperelement + j].missing();
+    for (int j=0; j<nverticesperelement; j++)
+      skip |= vertexArray[elt + j].missing();
     if (skip) return;
   }
-  glDrawArrays(type, index*nverticesperelement, nverticesperelement);
-  // FIXME: refactor to vertexArray.draw( type, index*nverticesperelement, nverticesperelement );
+  glDrawArrays(type, elt, nverticesperelement);
 #endif
 }
 
@@ -165,6 +205,7 @@ int PrimitiveSet::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {
     case VERTICES: return nvertices;
+    case INDICES: return nindices;
   }
   return Shape::getAttributeCount(bbox, attrib);
 }
@@ -174,15 +215,21 @@ void PrimitiveSet::getAttribute(AABox& bbox, AttribID attrib, int first, int cou
   int n = getAttributeCount(bbox, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
-    if (attrib == VERTICES) {
+    switch (attrib) {
+    case VERTICES:
       while (first < n) {
         *result++ = vertexArray[first].x;
         *result++ = vertexArray[first].y;
         *result++ = vertexArray[first].z;
         first++;
       }
-    } else
-      Shape::getAttribute(bbox, attrib, first, count, result);
+      return;
+    case INDICES:
+      while (first < n)
+        *result++ = indices[first++];
+      return;
+    }
+    Shape::getAttribute(bbox, attrib, first, count, result);
   }
 }
 
@@ -198,12 +245,15 @@ FaceSet::FaceSet(
   int in_type, 
   int in_nverticesperelement,
   bool in_ignoreExtent,
+  int in_nindices, 
+  int* in_indices,
   int in_useNormals,
   int in_useTexcoords,
   bool in_bboxChange
 
 )
-: PrimitiveSet(in_material, in_nelements, in_vertex, in_type, in_nverticesperelement, in_ignoreExtent, in_bboxChange)
+: PrimitiveSet(in_material, in_nelements, in_vertex, in_type, in_nverticesperelement, in_ignoreExtent, 
+  in_nindices, in_indices, in_bboxChange)
 {
   if (in_useNormals)
     initNormals(in_normals);
@@ -259,7 +309,7 @@ void FaceSet::initNormals(double* in_normals)
       normalArray[i].y = (float) in_normals[i*3+1];
       normalArray[i].z = (float) in_normals[i*3+2];
     }
-  } else {
+  } else if (!nindices){
     for (int i=0;i<=nvertices-nverticesperelement;i+=nverticesperelement) 
     {   
       if (hasmissing && (vertexArray[i].missing() ||
@@ -271,6 +321,22 @@ void FaceSet::initNormals(double* in_normals)
       for (int j=1;j<nverticesperelement;++j)    
         normalArray[i+j] = normalArray[i];
     }
+  } else {
+    for (int i=0;i < nvertices; i++)
+      normalArray[i] = Vertex(0.0, 0.0, 0.0);
+    for (int i=0;i<=nindices-nverticesperelement;i+=nverticesperelement) 
+    {   
+      if (!hasmissing || (vertexArray[indices[i]].missing() &&
+          !vertexArray[indices[i+1]].missing() &&
+          !vertexArray[indices[i+2]].missing()) ) {
+        Vertex faceNormal = vertexArray.getNormal(indices[i],indices[i+1],indices[i+2]);
+      
+        for (int j=0;j<nverticesperelement;++j)    
+          normalArray[indices[i+j]] += faceNormal;
+      }
+    }
+    for (int i=0; i < nvertices; i++)
+      normalArray[i].normalize();
   }
 }
 

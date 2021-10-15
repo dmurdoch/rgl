@@ -23,7 +23,7 @@ rgl.quads(x, y = NULL, z = NULL, normals = NULL, texcoords = NULL, ... )
     for details.}
   \item{normals}{Normals at each point.}
   \item{texcoords}{Texture coordinates at each point.}
-  \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
+  \item{ ... }{Material properties (see \code{\link{rgl.material}} for details) or \code{indices} (see the note below).}  
 }
 \details{
   Adds a shape node to the scene. The appearance is defined by the material properties.
@@ -56,7 +56,18 @@ rgl.quads(x, y = NULL, z = NULL, normals = NULL, texcoords = NULL, ... )
   the latter use current values as defaults; the former make
   persistent changes to material properties with each call, whereas
   the latter make temporary changes only for the duration of the call.
+}
+\note{
+All of these functions support an argument called
+\code{indices}, which allows vertices (and other attributes)
+to be re-used, as they are in objects created by \code{\link{mesh3d}} and related functions.  This is
+intended to be used on smooth surfaces, where each shared
+vertex has just one value for normals, colors and texture
+coordinates.  
 
+For shapes with flat-looking faces (e.g. polyhedra like \code{\link{cube3d}}),
+the vertices \bold{must} be duplicated
+to be rendered properly.
 }
 \value{
    Each primitive function returns the integer object ID of the shape that

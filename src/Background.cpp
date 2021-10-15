@@ -52,7 +52,7 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
                             0, 1 };
     material.colorPerVertex(false);
     material.colors.recycle(1);
-    quad = new QuadSet(material, 4, vertices, NULL, texcoords, true, 0, 1);
+    quad = new QuadSet(material, 4, vertices, NULL, texcoords, true, 0, NULL, 0, 1);
     quad->owner = this;
   } else
     material.colors.recycle(1);    

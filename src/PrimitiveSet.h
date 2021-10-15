@@ -62,7 +62,8 @@ public:
   /**
    * setup all vertices
    **/
-  void initPrimitiveSet(int in_nvertices, double* in_vertices);
+  void initPrimitiveSet(int in_nvertices, double* in_vertices,
+                        int in_nindices = 0, int* in_indices = NULL);
 
 protected:
 
@@ -76,15 +77,19 @@ protected:
       int in_type, 
       int in_nverticesperelement,
       bool in_ignoreExtent,
+      int in_nindices, 
+      int* in_indices,
       bool in_bboxChange = false
   );
   PrimitiveSet(
-    Material& in_material, 
-    int in_type, 
+    Material& in_material,
+    int in_type,
     int in_verticesperelement,
     bool in_ignoreExtent,
-    bool in_bboxChange 
+    bool in_bboxChange
   );
+  
+  ~PrimitiveSet();
 
   /**
    * get primitive center point
@@ -124,6 +129,8 @@ protected:
   VertexArray vertexArray,  /* the vertices given by the user */
               verticesTodraw; /* the margin vertices in data coords */
   bool hasmissing; 	/* whether any vertices contain missing values */
+  int nindices;
+  unsigned int* indices;
 };
 
 
@@ -165,6 +172,8 @@ protected:
     int in_type, 
     int in_nverticesperelement,
     bool in_ignoreExtent,
+    int in_nindices, 
+    int* in_indices,
     int in_useNormals,
     int in_useTexcoords,
     bool in_bboxChange = false
@@ -196,7 +205,9 @@ private:
 class PointSet : public PrimitiveSet
 { 
 public:
-  PointSet(Material& material, int nvertices, double* vertices, bool in_ignoreExtent, bool bboxChange=false);
+  PointSet(Material& material, int nvertices, double* vertices, bool in_ignoreExtent, int nindices, int* indices,
+           bool bboxChange=false
+           );
   /**
    * overloaded
    **/  
@@ -211,7 +222,8 @@ public:
 class LineSet : public PrimitiveSet
 { 
 public:
-  LineSet(Material& material, int nvertices, double* vertices, bool in_ignoreExtent, bool in_bboxChange=false);
+  LineSet(Material& material, int nvertices, double* vertices, bool in_ignoreExtent, 
+          int in_nindices, int* in_indices, bool in_bboxChange=false);
   LineSet(Material& in_material, bool in_ignoreExtent, bool in_bboxChange);
 
   /**
@@ -229,9 +241,11 @@ class TriangleSet : public FaceSet
 { 
 public:
   TriangleSet(Material& in_material, int in_nvertex, double* in_vertex, double* in_normals,
-              double* in_texcoords, bool in_ignoreExtent, int in_useNormals, int in_useTexcoords, bool in_bboxChange = false)
+              double* in_texcoords, bool in_ignoreExtent, 
+              int in_nindices, int* in_indices, int in_useNormals, int in_useTexcoords, bool in_bboxChange = false)
     : FaceSet(in_material,in_nvertex, in_vertex, in_normals, in_texcoords, 
-              GL_TRIANGLES, 3, in_ignoreExtent, in_useNormals, in_useTexcoords, in_bboxChange)
+              GL_TRIANGLES, 3, in_ignoreExtent, in_nindices, in_indices,
+                in_useNormals, in_useTexcoords, in_bboxChange)
   { }
   TriangleSet(Material& in_material, bool in_ignoreExtent, bool in_bboxChange) : 
     FaceSet(in_material, GL_TRIANGLES, 3, in_ignoreExtent, in_bboxChange) 
@@ -251,9 +265,10 @@ class QuadSet : public FaceSet
 { 
 public:
   QuadSet(Material& in_material, int in_nvertex, double* in_vertex, double* in_normals,
-          double* in_texcoords, bool in_ignoreExtent, int in_useNormals, int in_useTexcoords)
+          double* in_texcoords, bool in_ignoreExtent, int in_nindices, int* in_indices,
+          int in_useNormals, int in_useTexcoords)
     : FaceSet(in_material,in_nvertex,in_vertex, in_normals, in_texcoords, 
-              GL_QUADS, 4, in_ignoreExtent, in_useNormals, in_useTexcoords)
+              GL_QUADS, 4, in_ignoreExtent, in_nindices, in_indices, in_useNormals, in_useTexcoords)
   { }
   
   /**
@@ -270,7 +285,8 @@ public:
 class LineStripSet : public PrimitiveSet
 {
 public:
-  LineStripSet(Material& material, int in_nelements, double* in_vertex, bool in_ignoreExtent, bool in_bboxChange = false);
+  LineStripSet(Material& material, int in_nelements, double* in_vertex, bool in_ignoreExtent, 
+               int in_nindices, int* in_indices, bool in_bboxChange = false);
   void drawPrimitive(RenderContext* renderContext, int index);
   /**
    * overloaded

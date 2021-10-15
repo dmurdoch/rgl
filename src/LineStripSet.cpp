@@ -8,8 +8,10 @@ using namespace rgl;
 //   LineStripSet
 //
 
-LineStripSet::LineStripSet(Material& in_material, int in_nvertices, double* in_vertex, bool in_ignoreExtent, bool in_bboxChange)
-  : PrimitiveSet(in_material, in_nvertices, in_vertex, GL_LINE_STRIP, 1, in_ignoreExtent, in_bboxChange)
+LineStripSet::LineStripSet(Material& in_material, int in_nvertices, double* in_vertex, bool in_ignoreExtent, 
+                           int in_nindices, int* in_indices, bool in_bboxChange)
+  : PrimitiveSet(in_material, in_nvertices, in_vertex, GL_LINE_STRIP, 1, in_ignoreExtent, 
+    in_nindices, in_indices, in_bboxChange)
 {
   material.lit = false;
   if (material.line_antialias) blended = true;
