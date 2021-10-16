@@ -48,7 +48,7 @@ the
 edges of each quad in the \code{x$ib} matrix.  This mode
 is only supported if both front and back materials are
 \code{"lines"}, and the mesh contains no points.}
-\item{\code{"faces"}}{Colours and textures are applied to each face:  first to the
+\item{\code{"faces"}}{Colours are applied to each face:  first to the
 triangles in the \code{it} matrix, then to the quads in the \code{ib}
 matrix.  Not compatible with meshes containing points or segments.}
 \item{\code{"legacy"}}{Colours and textures are applied in the same way
