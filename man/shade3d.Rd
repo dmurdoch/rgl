@@ -42,7 +42,7 @@ was added in \pkg{rgl} version 0.100.1 (0.100.27 for \code{dot3d}).  Possible va
 \describe{
 \item{\code{"vertices"}}{Colours and texture coordinates are applied by vertex, in the order
 they appear in the \code{x$vb} matrix.}
-\item{\code{"edges"}}{Colours and textures are applied to each edge:  first to the segments in the \code{x$is} matrix, then
+\item{\code{"edges"}}{Colours are applied to each edge:  first to the segments in the \code{x$is} matrix, then
 the 
 3 edges of each triangle in the \code{x$it} matrix, then the 4
 edges of each quad in the \code{x$ib} matrix.  This mode
