@@ -352,8 +352,7 @@ shade3d.mesh3d <- function( x, override = TRUE,
   getArgs <- function(inds) {
     args <- c(list(x = vertices[as.numeric(inds),]), material)
     if (!is.null(texcoords))
-      args$texcoords <- cbind(repfn(texcoords[,1], inds, FALSE),
-                              repfn(texcoords[,2], inds, FALSE))
+      args$texcoords <- texcoords[as.numeric(inds),]
     if (!is.null(normals))
       args$normals <- normals[as.numeric(inds),]
     args$color <- repfn(args$color, inds, FALSE)
