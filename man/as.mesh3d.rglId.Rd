@@ -28,9 +28,10 @@ Ignored.
 }
 \details{
 This function attempts to construct a triangle mesh to approximate 
-one or more objects from the current display.  It can only handle objects of types from \code{c("triangles", "quads", "planes", "surface")}.
+one or more objects from the current display.  It can handle objects of types from \code{c("points", "lines", "linestrip", "triangles", "quads", "planes", "surface")}.
 
-Since this method only produces triangular meshes, they won't necessarily
+Since this method only produces meshes containing points,
+segments and triangles, they won't necessarily
 be an exact match to the original object.
 
 If the generic \code{\link{as.mesh3d}} is called with no \code{x}
@@ -38,7 +39,7 @@ argument, this method will be called with \code{x} set to the
 ids in the current scene.  
 }
 \value{
-A triangular mesh object.
+A mesh object.
 }
 \author{
 Duncan Murdoch
