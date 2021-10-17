@@ -36,6 +36,8 @@ the `checkDeldir()` function to avoid running it.
   duplicated the first one for the whole face when `meshColor = "faces"` was chosen.
   Instead, they are now treated like vertex coordinates.
   (Reported by Michael Sumner in issue #145).
+* Corrected the documentation and made the implementations
+of `asHomogeneous`, `asEuclidean` etc. more consistent.
   
 ## Bug fixes
 
