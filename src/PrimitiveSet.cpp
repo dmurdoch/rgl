@@ -226,7 +226,7 @@ void PrimitiveSet::getAttribute(AABox& bbox, AttribID attrib, int first, int cou
       return;
     case INDICES:
       while (first < n)
-        *result++ = indices[first++];
+        *result++ = indices[first++] + 1;
       return;
     }
     Shape::getAttribute(bbox, attrib, first, count, result);

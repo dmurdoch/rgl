@@ -123,7 +123,8 @@ rgl.attrib.count <- function( id, attrib ) {
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
             texts=1, cex=1, adj=3, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
-	    family=1, font=1, pos=1, fogscale=1, axes=3)
+	    family=1, font=1, pos=1, fogscale=1, axes=3,
+	    indices=1)
 
 rgl.attrib.info <- function( id = ids3d("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
@@ -191,12 +192,13 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("x", "y", "z", "w"), # usermatrix
                            "type",	     # types
                            "flag",	     # flags
-			   "offset",         # offsets
-  			   "family",         # family
-  			   "font",           # font
-			   "pos",            # pos
-			   "fogscale",        # fogscale
-			   c("x", "y", "z")   # axes
+			                     "offset",         # offsets
+  			                   "family",         # family
+  			                   "font",           # font
+			                     "pos",            # pos
+			                     "fogscale",        # fogscale
+			                     c("x", "y", "z"),   # axes
+			                     "vertex"          # indices
                            )[[attrib]]
   if (attrib == 14 && count) # flags
     if (id %in% ids3d("lights", subscene = 0)$id)

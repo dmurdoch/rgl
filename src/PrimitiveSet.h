@@ -99,8 +99,12 @@ protected:
     Vertex accu;
     int begin = index*nverticesperelement;
     int end   = begin+nverticesperelement;
-    for (int i = begin ; i < end ; ++i )
-      accu += vertexArray[i];
+    for (int i = begin ; i < end ; ++i ) {
+      if (nindices)
+        accu += vertexArray[indices[i]];
+      else
+        accu += vertexArray[i];
+    }
     return accu * ( 1.0f / ( (float) nverticesperelement ) );
   }
 
