@@ -35,7 +35,13 @@ build of R.
 examples.
 * `deldir` version 1.0-2 is incompatible with `rgl`.  Added
 the `checkDeldir()` function to avoid running it.
-
+* `shade3d()` treated texture coordinates like colors, and
+  duplicated the first one for the whole face when `meshColor = "faces"` was chosen.
+  Instead, they are now treated like vertex coordinates.
+  (Reported by Michael Sumner in issue #145).
+* Corrected the documentation and made the implementations
+of `asHomogeneous`, `asEuclidean` etc. more consistent.
+  
 ## Bug fixes
 
 * Fixed rendering of text as sprites3d() objects.

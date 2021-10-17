@@ -34,33 +34,55 @@ rotationMatrix <- function(angle,x,y,z,matrix) {
 # Coordinate conversions
 
 asHomogeneous <- function(x) {
-    if (is.matrix(x) && dim(x)[2] == 3) return(cbind(x,1))
-    else if (length(x) == 3) return(c(x,1))
-    else stop("'x' is not row vector(s)")
+    if (is.matrix(x)) {
+      if (ncol(x) == 3) return(cbind(x,1))
+      if (ncol(x) == 4) return(x)
+    } else {
+      if (length(x) %% 3 == 0) 
+        return(cbind(matrix(x, ncol = 3, byrow = TRUE),1))
+      if (length(x) %% 4 == 0)
+        return(matrix(x, ncol = 4, byrow = TRUE))
+    }
+    stop("Don't know how to convert x")
 }
 
 asHomogeneous2 <- function(x) {
   if (is.matrix(x)) {
+    if (nrow(x) == 3) return(rbind(x,1))
     if (nrow(x) == 4) return(x)
-    else if (nrow(x) == 3) return(rbind(x,1))
-    else stop("x should be 3 or 4 by n")
-  } else if (length(x) %% 3 == 0) return(rbind(matrix(x, nrow = 3), 1))
-  else stop("Don't know how to convert x")
+  } else {
+    if (length(x) %% 3 == 0) 
+      return(rbind(matrix(x, nrow = 3), 1))
+    if (length(x) %% 4 == 0)
+      return(matrix(x, nrow = 4))
+  }
+  stop("Don't know how to convert x")
 }
 
 asEuclidean <- function(x) {
-    if (is.matrix(x) && dim(x)[2] == 4) return(x[, 1:3, drop = FALSE]/x[, 4])
-    else if (length(x) == 4) return(c(x[1]/x[4],x[2]/x[4],x[3]/x[4]))
-    else stop("'x' is not row vectors(s)")
+    if (is.matrix(x)) {
+      if (ncol(x) == 4) return(x[, 1:3, drop = FALSE]/x[, 4])
+      if (ncol(x) == 3) return(x)
+    } else {
+      if (length(x) %% 4 == 0) 
+        return(asEuclidean(matrix(x, ncol = 4, byrow = TRUE)))
+      if (length(x) %% 3 == 0)
+        return(matrix(x, ncol = 3, byrow = TRUE))
+    }
+    stop("Don't know how to convert x")
 }
 
 asEuclidean2 <- function(x) {
   if (is.matrix(x)) {
+    if (nrow(x) == 4) return(rbind(x[1,]/x[4,], x[2,]/x[4,], x[3,]/x[4,]))
     if (nrow(x) == 3) return(x)
-    else if (nrow(x) == 4) return(rbind(x[1,]/x[4,], x[2,]/x[4,], x[3,]/x[4,]))
-    else stop("x should be 3 or 4 by n")
-  } else if (length(x) %% 3 == 0) return(matrix(x, nrow = 3))
-  else stop("Don't know how to convert x")
+  } else {
+    if (length(x) %% 4 == 0) 
+      return(asEuclidean2(matrix(x, nrow = 4)))
+    if (length(x) %% 3 == 0)
+      return(matrix(x, nrow = 3))
+  }
+  stop("Don't know how to convert x")
 }
 
 # Default implementations of transformations
