@@ -82,13 +82,16 @@ Use \code{asHomogeneous(x)} to convert the Euclidean vector \code{x} to
 homogeneous coordinates, and \code{asEuclidean(x)} for the reverse transformation.  These functions accept the following
 inputs:
 \itemize{
-\item n x 3 matrices:  columns are assumed to be Euclidean
-\item n x 4 matrices:  columns are assumed to be homogeneous
-\item vectors of length 3n:  assumed to be Euclidean vectors
-concatenated.
+\item n x 3 matrices:  rows are assumed to be Euclidean
+\item n x 4 matrices:  rows are assumed to be homogeneous
+\item vectors of length 3n or 4n:  assumed to be vectors
+concatenated. For the ambiguous case
+of vectors that are length 12n (so both 3n and 4n are possible),
+the assumption is that the conversion is necessary:  \code{asEuclidean} assumes the vectors are homogeneous,
+and \code{asHomogeneous} assumes the vectors are Euclidean.
 }
 Outputs are n x 4 or n x 3 matrices for \code{asHomogeneous}
-and \code{asEuclidean} respectively.
+and \code{asEuclidean} respectively.  
 
 The functions \code{asHomogeneous2} and \code{asEuclidean2}
 act similarly, but they assume inputs are 3 x n or 4 x n

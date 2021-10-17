@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.107.21
+Version: 0.107.22
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
