@@ -521,3 +521,7 @@ all.equal.rglscene <- function(target, current, ...) {
 	} else
 		"'current' is not an rglscene object"
 }
+
+as.rglscene <- function(x, ...) {
+  UseMethod("as.rglscene")
+}

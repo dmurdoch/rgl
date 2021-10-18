@@ -40,7 +40,9 @@ the `checkDeldir()` function to avoid running it.
   Instead, they are now treated like vertex coordinates.
   (Reported by Michael Sumner in issue #145).
 * Corrected the documentation and made the implementations
-of `asHomogeneous`, `asEuclidean` etc. more consistent.
+of `asHomogeneous()`, `asEuclidean()` etc. more consistent.
+* An `as.rglscene()` generic has been added, though no methods
+are defined in this package.
   
 ## Bug fixes
 
