@@ -49,7 +49,7 @@ of `asHomogeneous`, `asEuclidean` etc. more consistent.
 * rglwidget() handling of bounding box decorations had
   several bugs.
 * `rgl` could not find routines in the DLL on some Windows
-installs.
+installs (Issue 148.)
   
 # rgl  0.107.10
 
