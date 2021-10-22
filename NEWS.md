@@ -48,6 +48,8 @@ of `asHomogeneous`, `asEuclidean` etc. more consistent.
   `"front"` and `"back"` material settings in mesh objects.
 * rglwidget() handling of bounding box decorations had
   several bugs.
+* `rgl` could not find routines in the DLL on some Windows
+installs.
   
 # rgl  0.107.10
 
