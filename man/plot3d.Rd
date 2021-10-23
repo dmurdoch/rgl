@@ -13,7 +13,8 @@ plot3d(x, ...)
 	col, size, lwd, radius,
 	add = FALSE, aspect = !add, 
 	xlim = NULL, ylim = NULL, zlim = NULL, 
-	forceClipregion = FALSE, ...)
+	forceClipregion = FALSE, 
+	decorate = !add, ...)
 \method{plot3d}{mesh3d}(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
 	add = FALSE, aspect = !add, ...)	
 }
@@ -38,6 +39,8 @@ plot3d(x, ...)
 limits for the plot.}
   \item{forceClipregion}{Force a clipping region to be used,
 whether or not limits are given.}
+  \item{decorate}{Whether to add bounding axes and other
+  decorations.}
   \item{\dots}{additional parameters which will be passed to \code{\link{par3d}}, \code{\link{material3d}}
   or \code{\link{decorate3d}}.}
 }
