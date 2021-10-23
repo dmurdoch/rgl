@@ -68,7 +68,7 @@
     if (inherits(dll, "try-error"))
       stop("Loading failed.")
   }
-  routines <- getDLLRegisteredRoutines(getLoadedDLLs()[["rgl"]], addNames = FALSE)
+  routines <- getDLLRegisteredRoutines(dll, addNames = FALSE)
   ns <- asNamespace(pkg)
   for(i in 1:4)
     lapply(routines[[i]],
