@@ -2,10 +2,6 @@
 
 ## Major changes
 
-* Textures can now take a vector of filenames which
-will be used as a "mipmap".  This may be used in
-`legend3d()` to give legends that adjust to the size 
-of the display.
 * Added `getBoundary3d()` function to extract the boundary
 edges of a mesh.
 * Added material property `tag`, a string associated 
@@ -19,6 +15,7 @@ can now accept an `indices` parameter, similar to the
 indices in `mesh3d` objects.
 
 ## Minor changes
+
 * Allowed for a third coordinate in `text3d()`'s `adj` 
 parameter.
 * Added support for `adj`, `pos` and `offset` to 
@@ -53,6 +50,8 @@ are defined in this package.
   `"front"` and `"back"` material settings in mesh objects.
 * rglwidget() handling of bounding box decorations had
   several bugs.
+* `rgl` could not find routines in the DLL on some Windows
+installs (Issue 148.)
   
 # rgl  0.107.10
 
