@@ -40,9 +40,12 @@ x <- cube3d()
 x$ib <- x$ib[,-(1:2)]
 b <- getBoundary3d(x, sorted = TRUE)
 
-open3d(); shade3d(x, alpha=0.2, col = "blue"); shade3d(b) 
-text3d(t(x$vb), text = 1:ncol(x$vb), adj = 0)
+open3d()
+shade3d(x, alpha=0.2, col = "blue")
+
+shade3d(b) 
 
 # Show edge vertices in sequence:
+text3d(t(b$vb), text = 1:ncol(b$vb), adj = 0)
 c(b$is[1,1], b$is[2,]) 
 }
