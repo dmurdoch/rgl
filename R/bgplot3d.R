@@ -8,64 +8,31 @@ legend3d <- function(...) {
     args <- args[-idx]
   } else
     bgargs <- NULL
-  if (isTRUE(bgargs$manual_mip) && is.null(args$cex))
-    viewport <- par3d("viewport")
-  else
-    viewport <- NULL
   do.call(bgplot3d, c(list(quote({
     par(mar=c(0,0,0,0))
     plot(0,0, type="n", xlim=0:1, ylim=0:1, xaxs="i", yaxs="i", axes=FALSE, bty="n")
-    if (!is.null(viewport))
-      args$cex <- sqrt(bgplot3d_width/viewport["width"])
     do.call(legend, args)
   })), bgargs))
 }
 
 bgplot3d <- function(expression, bg.color = getr3dDefaults("bg", "color"), 
-                     magnify = 1, manual_mip = FALSE, texmipmap = manual_mip, 
-                     texminfilter = "linear", 
-                     envir = parent.frame(), ...) {
-  expression <- substitute(expression)
+                     magnify = 1, ...) {
   viewport <- par3d("viewport")
   width <- magnify*viewport["width"]
   height <- magnify*viewport["height"]
-  if (texmipmap) {
-    width <- nextPowerOfTwo(width)
-    height <- nextPowerOfTwo(height)
-  }
-  env <- new.env(parent = envir)
-  filenames <- character()
-  values <- list()
   if (width > 0 && height > 0) {
-    repeat {
-      filename <- tempfile(fileext = ".png")
-      png(filename, 
-          width = width, height = height, bg = bg.color)
-      grDevices::devAskNewPage(FALSE)
-      env$bgplot3d_width <- width
-      env$bgplot3d_height <- height
-      value <- try(eval(expression, envir = env), silent = TRUE)
-      dev.off()
-      if (inherits(value, "try-error")) break
-      values <- c(values, list(value))
-      filenames <- c(filenames, filename)
-      if (!manual_mip || (width == 1 && height == 1)) break
-      width <- if (width > 1) width/2 else 1
-      height <- if (height > 1) height/2 else 1
-    }
-    if (!manual_mip)
-      value <- values[[1]]
-    if (texmipmap && missing(texminfilter)) {
-      texminfilter <- "linear.mipmap.nearest"
-    }
-    result <- bg3d(texture = filenames, col = "white", lit = FALSE, 
-                   texmipmap = texmipmap, texminfilter = texminfilter, 
-                   ...)
+    filename <- tempfile(fileext = ".png")
+    png(filename = filename, width = width, height = height,
+        bg = bg.color)
+    grDevices::devAskNewPage(FALSE)
+    value <- try(expression)  
+    dev.off()
+    result <- bg3d(texture = filename, col = "white", lit = FALSE, ...)
   } else {
-    values <- NULL
+    value <- NULL
     result <- bg3d(col = bg.color, ...)
   }
-  lowlevel(structure(result, value = values))
+  lowlevel(structure(result, value = value))
 }
 
 show2d <- function(expression, 
@@ -153,12 +120,4 @@ show2d <- function(expression,
   		  texminfilter = texminfilter, ...)
   lowlevel(structure(result, value = value, xyz = x, texcoords = texcoords,
             filename = filename))
-}
-
-# next higher power of 2, from https://www.khronos.org/webgl/wiki/WebGL_and_OpenGL_Differences#Non-Power_of_Two_Texture_Support
-nextPowerOfTwo <- function(x) {
-  x <- x - 1
-  for (i in c(1, 2, 4, 8, 16))  
-    x <- bitwOr(x, bitwShiftR(x, i))
-  x + 1
 }

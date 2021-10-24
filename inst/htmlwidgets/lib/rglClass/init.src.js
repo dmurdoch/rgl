@@ -444,7 +444,7 @@
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
-          i,j,v,v1,v2, pass, pmode,
+          i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
           dim, nx, nz, nrow;
 
     obj.initialized = true;
@@ -592,11 +592,25 @@
       obj.uFogParms = gl.getUniformLocation(obj.prog, "uFogParms");
     }
 
-    if (has_texture) 
-      this.loadImageToTexture(obj);
+    if (has_texture) {
+      mat = obj.material;
+      if (typeof mat.uri !== "undefined")
+        uri = mat.uri;
+      else if (typeof mat.uriElementId === "undefined") {
+        matobj = this.getObj(mat.uriId);
+        if (typeof matobj !== "undefined") {
+          uri = matobj.material.uri;
+        } else {
+          uri = "";
+        }
+      } else
+        uri = document.getElementById(mat.uriElementId).rglinstance.getObj(mat.uriId).material.uri;
+
+      this.loadImageToTexture(uri, obj.texture);
+    }
 
     if (type === "text") {
-      this.handleLoadedTexture(obj.texture, 0, this.textureCanvas);
+      this.handleLoadedTexture(obj.texture, this.textureCanvas);
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
