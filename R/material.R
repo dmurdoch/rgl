@@ -72,10 +72,13 @@ rgl.material <- function(
 
   rgl.bool(texmipmap)
 
-  if (length(texture))
+  if (length(texture) > 1)
+    stop("'texture' should be a single character string or NULL")
+
+  if (is.null(texture))
+    texture <- ""
+  else 
     texture <- normalizePath(texture)
-  texture <- as.character(texture)
-  ntexturefiles <- length(texture)
 
   textype <- rgl.enum.textype( textype )
   texminfilter <- rgl.enum.texminfilter( texminfilter )
@@ -110,8 +113,9 @@ rgl.material <- function(
                           point_antialias, line_antialias, 
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
-                          ntexturefiles, color) )
-  cdata <- c(tag, texture)
+
+                          color) )
+  cdata <- as.character(c( tag, texture ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
   ret <- .C( rgl_material,
@@ -130,17 +134,18 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   if (missing(ncolors))
     ncolors <- if (id) rgl.attrib.count(id, "colors") else rgl.getcolorcount()
   
-  idata <- rep(-1, 32+3*ncolors)
+  idata <- rep(-1, 31+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
+  cdata <- rep(paste(rep(" ", 512), collapse=""), 2)
   ddata <- rep(0, 5+ncolors)
   
   ret <- .C( rgl_getmaterial,
     success = FALSE,
     id = as.integer(id),
     idata = as.integer(idata),
-    cdata = character(1),
+    cdata = cdata,
     ddata = as.numeric(ddata)
   )
   
@@ -157,20 +162,9 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  if (idata[32] > 0) {
-    texture <- character(idata[32])
-    ret2 <- .C( rgl_getTextureFiles,
-               success = FALSE,
-               id = as.integer(id),
-               nfilenames = as.integer(idata[32]),
-               texture = texture)
-    texture <- ret2$texture
-  } else
-    texture <- NULL
-  
-  list(color = rgb(idata[30 + 3*(seq_len(idata[1]))], 
-                   idata[31 + 3*(seq_len(idata[1]))], 
-                   idata[32 + 3*(seq_len(idata[1]))], maxColorValue = 255),
+  list(color = rgb(idata[29 + 3*(seq_len(idata[1]))], 
+                   idata[30 + 3*(seq_len(idata[1]))], 
+                   idata[31 + 3*(seq_len(idata[1]))], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=6, length=idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
@@ -178,7 +172,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        emission = rgb(idata[18], idata[19], idata[20], maxColorValue = 255),
        shininess = ddata[1],
        smooth = idata[3] > 0,
-       texture      = texture,
+       texture = if (cdata[2] == "") NULL else cdata[2],
        textype      = textypes[idata[7]], 
        texmipmap    = idata[8] == 1,
        texminfilter = minfilters[idata[9] + 1],
@@ -197,7 +191,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        polygon_offset = ddata[4:5],
        margin = deparseMargin(list(coord = idata[27] + 1, edge = idata[28:30])),
        floating = idata[31] == 1,
-       tag = cdata
+       tag = cdata[1]
        )
                    
 }

@@ -411,7 +411,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
         texture <- result$material$texture
       if (!is.null(texture) && nchar(texture)) {
         texturefile <- texture
-        obj$material$uris <- lapply(texturefile, image_uri)
+        obj$material$uri <- image_uri(texturefile)
         obj$material$texture <- NULL
       }
       if (!is.null(obj$material)) # Never use material$color

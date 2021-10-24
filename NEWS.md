@@ -2,10 +2,6 @@
 
 ## Major changes
 
-* Textures can now take a vector of filenames which
-will be used as a "mipmap".  This may be used in
-`legend3d()` to give legends that adjust to the size 
-of the display.
 * Added `getBoundary3d()` function to extract the boundary
 edges of a mesh.
 * Added material property `tag`, a string associated 
@@ -16,6 +12,7 @@ largely ignored by `rgl`.  The `tagged3d()` function returns
 information on tags.
 
 ## Minor changes
+
 * Allowed for a third coordinate in `text3d()`'s `adj` 
 parameter.
 * Added support for `adj`, `pos` and `offset` to 
