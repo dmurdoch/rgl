@@ -539,26 +539,31 @@ void rgl::rgl_primitive(int* successptr, int* idata, double* vertex, double* nor
     int   ignoreExtent = device->getIgnoreExtent() || currentMaterial.marginCoord >= 0;
     int   useNormals = idata[2];
     int   useTexcoords = idata[3];
-    
+    int   nindices = idata[4];
+    int*  indices = idata + 5;
+
     SceneNode* node;
 
     switch(type) {
     case 1: // RGL_POINTS:
-      node = new PointSet( currentMaterial, nvertex, vertex, ignoreExtent);
+      node = new PointSet( currentMaterial, nvertex, vertex, ignoreExtent, nindices, indices);
       break;
     case 2: // RGL_LINES:
-      node = new LineSet( currentMaterial, nvertex, vertex, ignoreExtent);
+      node = new LineSet( currentMaterial, nvertex, vertex, ignoreExtent, nindices, indices);
       break;
     case 3: // RGL_TRIANGLES:
       node = new TriangleSet( currentMaterial, nvertex, vertex, normals, texcoords, 
-                              ignoreExtent, useNormals, useTexcoords);
+                              ignoreExtent, nindices, indices, 
+                              useNormals, useTexcoords);
       break;
     case 4: // RGL_QUADS:
       node = new QuadSet( currentMaterial, nvertex, vertex, normals, texcoords, 
-                              ignoreExtent, useNormals, useTexcoords);
+                              ignoreExtent, nindices, indices,
+                              useNormals, useTexcoords);
       break;
     case 5: // RGL_LINE_STRIP:
-      node = new LineStripSet( currentMaterial, nvertex, vertex, ignoreExtent);
+      node = new LineStripSet( currentMaterial, nvertex, vertex, ignoreExtent, 
+                               nindices, indices);
       break;
     default:
       node = NULL;

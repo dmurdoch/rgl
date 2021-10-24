@@ -58,6 +58,7 @@ typedef int ObjID;
 #define POS 18
 #define FOGSCALE 19
 #define AXES 20
+#define INDICES 21
 
 typedef unsigned int AttribID;
 

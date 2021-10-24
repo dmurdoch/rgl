@@ -7,7 +7,7 @@ plot3d.default <- function(x, y = NULL, z = NULL,
         lwd = material3d("lwd"),
         radius = avgscale*size/60, add = FALSE, aspect = !add, 
         xlim = NULL, ylim = NULL, zlim = NULL,
-        forceClipregion = FALSE, ...) {
+        forceClipregion = FALSE, decorate = !add, ...) {
     if (!add) next3d()
     skip <- par3d(skipRedraw=TRUE)
     on.exit(par3d(skip))
@@ -62,11 +62,12 @@ plot3d.default <- function(x, y = NULL, z = NULL,
                                  rep(range(z, na.rm=TRUE), c(2,2))))
 	)
     useSubscene3d(savesubscene)
-    if (!add) {
-    	result <- c(result, decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, 
-                                       xlim=xlim, ylim=ylim, zlim=zlim, ...))
+    if (decorate)
+      result <- c(result, decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, aspect = aspect, 
+                               xlim=xlim, ylim=ylim, zlim=zlim, ...))
+    if (!add)
     	highlevel(result)
-    } else 
+    else 
     	lowlevel(result)
 }
 

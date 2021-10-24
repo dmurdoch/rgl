@@ -26,7 +26,7 @@ scene3d <- function(minimal = TRUE) {
     attribs <- c("vertices", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
           "usermatrix", "types", "offsets", "centers",
-          "family", "font", "pos", "axes")
+          "family", "font", "pos", "axes", "indices")
     if (lit || !minimal || type %in% c("light", "clipplanes", "planes"))
       attribs <- c(attribs, "normals")
     for (a in attribs) 
@@ -319,6 +319,7 @@ plot3d.rglobject <- function(x, ...) {
   args$adj <- x$adj
   args$radius <- x$radii
   args$d <- x$offsets
+  args$indices <- x$indices
   
   switch(type, 
     abclines = {
@@ -519,4 +520,8 @@ all.equal.rglscene <- function(target, current, ...) {
 		result
 	} else
 		"'current' is not an rglscene object"
+}
+
+as.rglscene <- function(x, ...) {
+  UseMethod("as.rglscene")
 }

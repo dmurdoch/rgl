@@ -1,4 +1,4 @@
-# rgl  0.107.23
+# rgl  0.107.25
 
 ## Major changes
 
@@ -10,6 +10,9 @@ may be used to select objects in most functions that use ids,
 but otherwise is 
 largely ignored by `rgl`.  The `tagged3d()` function returns
 information on tags.
+* Primitive types (points, lines, segments, triangles, quads)
+can now accept an `indices` parameter, similar to the 
+indices in `mesh3d` objects.
 
 ## Minor changes
 
@@ -34,7 +37,9 @@ the `checkDeldir()` function to avoid running it.
   Instead, they are now treated like vertex coordinates.
   (Reported by Michael Sumner in issue #145).
 * Corrected the documentation and made the implementations
-of `asHomogeneous`, `asEuclidean` etc. more consistent.
+of `asHomogeneous()`, `asEuclidean()` etc. more consistent.
+* An `as.rglscene()` generic has been added, though no methods
+are defined in this package.
   
 ## Bug fixes
 

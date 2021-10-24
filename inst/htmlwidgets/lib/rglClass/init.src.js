@@ -440,7 +440,8 @@
           is_brush = this.isSet(flags, this.f_is_brush),
           has_fog = this.isSet(flags, this.f_has_fog),
           has_normals = (typeof obj.normals !== "undefined") ||
-                        obj.type === "spheres", 
+                        obj.type === "spheres",
+          has_indices = typeof obj.indices !== "undefined",
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
@@ -495,7 +496,11 @@
       obj.vertices = [];
 
     v = obj.vertices;
-    obj.vertexCount = v.length;
+    if (has_indices)
+      obj.vertexCount = obj.indices.length;
+    else
+      obj.vertexCount = v.length;
+      
     if (!obj.vertexCount) return;
 
     if (is_twosided && !has_normals) {
@@ -677,9 +682,15 @@
       radofs = -1;
       
     // Add default indices
-    f = Array(v.length);
-    for (i = 0; i < v.length; i++)
-      f[i] = i;
+    if (has_indices) {
+      f = Array(obj.indices.length);
+      for (i = 0; i < f.length; i++)
+        f[i] = obj.indices[i] - 1;
+    } else {
+      f = Array(v.length);
+      for (i = 0; i < v.length; i++)
+        f[i] = i;
+    }
     obj.f = [f,f];
 
     if (type === "sprites" && !sprites_3d) {

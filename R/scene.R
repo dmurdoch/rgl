@@ -123,7 +123,8 @@ rgl.attrib.count <- function( id, attrib ) {
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
             texts=1, cex=1, adj=3, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
-	    family=1, font=1, pos=1, fogscale=1, axes=3)
+	    family=1, font=1, pos=1, fogscale=1, axes=3,
+	    indices=1)
 
 rgl.attrib.info <- function( id = ids3d("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
@@ -191,12 +192,13 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("x", "y", "z", "w"), # usermatrix
                            "type",	     # types
                            "flag",	     # flags
-			   "offset",         # offsets
-  			   "family",         # family
-  			   "font",           # font
-			   "pos",            # pos
-			   "fogscale",        # fogscale
-			   c("x", "y", "z")   # axes
+			                     "offset",         # offsets
+  			                   "family",         # family
+  			                   "font",           # font
+			                     "pos",            # pos
+			                     "fogscale",        # fogscale
+			                     c("x", "y", "z"),   # axes
+			                     "vertex"          # indices
                            )[[attrib]]
   if (attrib == 14 && count) # flags
     if (id %in% ids3d("lights", subscene = 0)$id)
@@ -426,7 +428,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
+rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, indices=NULL, ... ) {
   rgl.material( ... )
 
   type <- rgl.enum.primtype(type)
@@ -438,17 +440,29 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
 
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
+  
+  if (is.null(indices)) {
+    nindices <- 0
+    indices <- 0 # to avoid pointing out of range
+  } else {
+    nindices <- length(indices)
+    if (!all(indices > 0 & indices <= nvertex))
+      stop("indices out of range")
+  }
+  
   if (nvertex > 0) {
     
     perelement <- c(points=1, lines=2, triangles=3, quadrangles=4, linestrips=1)[type]
-    if (nvertex %% perelement) 
+    if (nindices > 0) {
+      if (nindices %% perelement)
+        stop("Illegal number of indices") 
+    } else if (nvertex %% perelement) 
       stop("Illegal number of vertices")
     
-    idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords) ) )
+    idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords), nindices, indices - 1 ) )
     
     if (is.null(normals)) normals <- 0
     else {
-    
       normals <- xyz.coords(normals, recycle=TRUE)
       x <- rep(normals$x, len=nvertex)
       y <- rep(normals$y, len=nvertex)
@@ -458,7 +472,6 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     
     if (is.null(texcoords)) texcoords <- 0
     else {
-    
       texcoords <- xy.coords(texcoords, recycle=TRUE)
       s <- rep(texcoords$x, len=nvertex)
       t <- rep(texcoords$y, len=nvertex)
@@ -467,7 +480,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     
     ret <- .C( rgl_primitive,
       success = as.integer(FALSE),
-      idata,
+      as.integer(idata),
       as.numeric(vertex),
       as.numeric(normals),
       as.numeric(texcoords),
