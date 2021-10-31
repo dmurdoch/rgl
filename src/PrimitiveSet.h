@@ -169,7 +169,7 @@ protected:
    **/
   FaceSet(
     Material& in_material, 
-    int in_nelements, 
+    int in_nvertex, 
     double* in_vertex,
     double* in_normals,
     double* in_texcoords,
@@ -192,7 +192,7 @@ protected:
   );
   
   /* (re-)set mesh */
-  void initFaceSet(int in_nelements, double* in_vertex, double* in_normals, double* in_texcoords);
+  void initFaceSet(int in_nvertex, double* in_vertex, double* in_normals, double* in_texcoords);
  
   /* set up normals */
   void initNormals(double* in_normals);
@@ -289,7 +289,7 @@ public:
 class LineStripSet : public PrimitiveSet
 {
 public:
-  LineStripSet(Material& material, int in_nelements, double* in_vertex, bool in_ignoreExtent, 
+  LineStripSet(Material& material, int in_nvertex, double* in_vertex, bool in_ignoreExtent, 
                int in_nindices, int* in_indices, bool in_bboxChange = false);
   void drawPrimitive(RenderContext* renderContext, int index);
   /**
