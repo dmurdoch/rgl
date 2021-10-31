@@ -164,15 +164,19 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
 void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
-  int elt = nindices ? indices[index*nverticesperelement] :
-                       index*nverticesperelement;
+  int idx = index*nverticesperelement;
   if (hasmissing) {
     bool skip = false;
-    for (int j=0; j<nverticesperelement; j++)
-      skip |= vertexArray[elt + j].missing();
-    if (skip) return;
+    for (int j=0; j<nverticesperelement; j++) {
+      int elt = nindices ? indices[idx + j] : idx + j;
+      skip |= vertexArray[elt].missing();
+      if (skip) return;
+    }
   }
-  glDrawArrays(type, elt, nverticesperelement);
+  if (nindices)
+    glDrawElements(type, nverticesperelement, GL_UNSIGNED_INT, indices + idx);
+  else
+    glDrawArrays(type, idx, nverticesperelement);
 #endif
 }
 
@@ -238,7 +242,7 @@ void PrimitiveSet::getAttribute(AABox& bbox, AttribID attrib, int first, int cou
 FaceSet::FaceSet(
 
   Material& in_material, 
-  int in_nelements, 
+  int in_nvertex, 
   double* in_vertex, 
   double* in_normals,
   double* in_texcoords,
@@ -252,7 +256,7 @@ FaceSet::FaceSet(
   bool in_bboxChange
 
 )
-: PrimitiveSet(in_material, in_nelements, in_vertex, in_type, in_nverticesperelement, in_ignoreExtent, 
+: PrimitiveSet(in_material, in_nvertex, in_vertex, in_type, in_nverticesperelement, in_ignoreExtent, 
   in_nindices, in_indices, in_bboxChange)
 {
   if (in_useNormals)
@@ -279,12 +283,12 @@ FaceSet::FaceSet(Material& in_material,
 }
 
 void FaceSet::initFaceSet(
-  int in_nelements, 
+  int in_nvertex, 
   double* in_vertex, 
   double* in_normals,
   double* in_texcoords
 ) {
-  initPrimitiveSet(in_nelements, in_vertex);
+  initPrimitiveSet(in_nvertex, in_vertex);
   
   bool useTexcoords = (in_texcoords) ? true : false;
 
