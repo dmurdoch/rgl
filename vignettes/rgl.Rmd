@@ -475,6 +475,9 @@ Class |  Package | Description
 `r indexfns("ashape3d", pkg = "alphashape3d")` | `alphashape3d` | Alpha-shapes
 `r linkfn("rglId")` | `rgl` | `rgl` object identifiers
 
+The `r indexfns("checkDeldir")` function checks that a compatible version
+of the `deldir` package is installed.
+
 The default `r indexfns("as.mesh3d.default")` method is a simple way
 to construct a mesh from a matrix of vertices; it can use
 `r indexfns("mergeVertices")` (which can also be used on its own)
@@ -791,9 +794,11 @@ Function    | Description
 `r indexfns("writePLY")`:   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`:   | Read or write OBJ files (commonly used in 3D graphics)
 `r indexfns(c("readSTL", "writeSTL"))`:   | Read or write STL files (also common in 3D printing)
+`r indexfns("as.rglscene")`: | Generic function, no methods in `rgl`
 
 The in-development [`rgl2gltf`](https://dmurdoch.github.io/rgl2gltf/dev)
-package can read or write GLTF and GLB files.
+package can read or write GLTF and GLB files.  It includes an
+`as.rglscene` method to convert GLTF objects to `rgl` scenes.
 
 There are also functions to save snapshots or other recordings of a scene,
 without any 3D information being saved:
@@ -920,6 +925,7 @@ Function                             | Description
 `r indexfns(c("pop3d", "rgl.pop"))`:     | delete objects from the scene
 `r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
 `r indexfns(c("ids3d", "rgl.ids"))`:              | ids, types and tags of current objects
+`r indexfns("tagged3d")`:                         | find tags or objects with tags
 
 These functions are mainly intended for programming, and 
 have no corresponding `*3d` counterparts:

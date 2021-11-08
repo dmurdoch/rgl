@@ -99,6 +99,7 @@ reference:
   - as.triangles3d
   - as.tmesh3d
   - mergeVertices
+  - getBoundary3d
 - subtitle: Contouring
   desc: These functions are related to showing contour lines.
 - contents:
@@ -172,6 +173,7 @@ reference:
   - rglToBase
   - rglToLattice
   - rgl.postscript
+  - as.rglscene
 - title: Miscellaneous utility functions
 - subtitle: Opening, closing and changing the display
 - contents:
@@ -189,6 +191,7 @@ reference:
   - pop3d
   - clear3d
   - ids3d
+  - tagged3d
   - identify3d
   - selectpoints3d
   - selectionFunction3d
@@ -232,6 +235,7 @@ reference:
   - projectDown
   - expect_known_scene
   - all.equal.mesh3d
+  - checkDeldir
 - title: General documentation
 - contents:
   - rgl-package
