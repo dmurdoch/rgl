@@ -70,6 +70,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/as.mesh3d.rglId.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/as.rglscene.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/as.tmesh3d.html</loc>
   </url>
   <url>
@@ -101,6 +104,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/check3d.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/checkDeldir.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/clipMesh3d.html</loc>
@@ -140,6 +146,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/figWidth.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/getBoundary3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/grid3d.html</loc>
@@ -388,6 +397,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/surface3d.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/tagged3d.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/texts.html</loc>
   </url>
   <url>
@@ -434,65 +446,5 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/writeWebGL.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/axes.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/controls.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/draw.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/global.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/index.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/init.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/list_class.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/mouse.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/pieces.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/pretty.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/projection.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/rglClass.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/rglTimer.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/rgltimerClass.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/rglwidgetClass.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/selection.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/shaders.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/subscenes.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/textures.src.js.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/utils.src.js.html</loc>
   </url>
 </urlset>
