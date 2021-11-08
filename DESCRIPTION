@@ -27,7 +27,7 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
 Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir (>= 1.0-4), orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
-          js (>= 1.2), akima, webshot2, downlit, pkgdown, extrafont,
+          js (>= 1.2), akima, webshot2, downlit (>= 0.4.0), pkgdown, extrafont,
           shiny, manipulateWidget (>= 0.9.0), testthat, markdown,
           crosstalk
 Imports: graphics, grDevices, stats, utils, 

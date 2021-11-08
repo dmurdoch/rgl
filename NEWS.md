@@ -1,4 +1,4 @@
-# rgl  0.107.25
+# rgl  0.107.26
 
 ## Major changes
 
@@ -40,6 +40,8 @@ the `checkDeldir()` function to avoid running it.
 of `asHomogeneous()`, `asEuclidean()` etc. more consistent.
 * An `as.rglscene()` generic has been added, though no methods
 are defined in this package.
+* `downlit` 0.4.0 has been released with support for `rgl`, so instructions
+for installing the devel version have been removed.
   
 ## Bug fixes
 

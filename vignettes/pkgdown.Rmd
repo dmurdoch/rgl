@@ -44,7 +44,8 @@ users require multiple Javascript libraries to be linked to
 each web page.  `pkgdown` 1.6.1 can't do this, but the 
 current development version on Github
 adds support for additional dependent libraries.  This 
-also requires changes to [downlit](https://downlit.r-lib.org/).
+also require [downlit](https://downlit.r-lib.org/) version 0.4.0 or
+higher.
 
 ## Installing the changes
 
@@ -55,7 +56,6 @@ run
 ```{r eval=FALSE}
 remotes::install_github(c("rstudio/webshot2",
                           "rstudio/chromote",
-                          "r-lib/downlit",
                           "r-lib/pkgdown"))
 ```
 
@@ -133,7 +133,7 @@ contain bugs, either in my changes or in other unreleased
 changes.  I don't recommend you use them in regular production
 code.  To re-install released versions of the packages, run
 ```{r eval=FALSE}
-install.packages(c("downlit", "pkgdown", "rgl"))
+install.packages(c("pkgdown", "rgl"))
 ```
 
 If you do use them and notice any bugs, please [report them](https://github.com/dmurdoch/rgl/issues)!
