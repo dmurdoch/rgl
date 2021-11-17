@@ -38,18 +38,6 @@ getType <- function(x, useDouble = FALSE) {
     stop('Unrecognized type')
 }
 
-# This function checks if a connection is still valid, since
-# isOpen() doesn't work
-
-isValidConnection <- function(con) {
-  allconns <- showConnections()
-  for (i in rownames(allconns)) {
-    if (identical(con, getConnection(i)))
-      return(TRUE)
-  }
-  FALSE
-}
-
 #' @title R6 Class for binary buffers in glTF files.
 #'
 #' @description
@@ -218,10 +206,8 @@ Buffer <- R6Class("Buffer",
         buffer <- self$getBuffer(buf)
         if (!is.null(buffer) &&
             !is.null(buffer$con)) {
-          if(isValidConnection(buffer$con)) {
-            buffer$bytes <- rawConnectionValue(buffer$con)
-            close(buffer$con)
-          }
+          buffer$bytes <- rawConnectionValue(buffer$con)
+          close(buffer$con)
           buffer$con <- NULL
           self$setBuffer(buf, buffer)
         }
