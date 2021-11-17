@@ -438,8 +438,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     for (n in c("vertices", "normals", "indices", 
                 "texcoords", "colors", "centers")) {
       if (!is.null(obj[[n]]))
-        obj[[n]] <- c(buffer$addAccessor(t(obj[[n]])),
-                      "rglBuffered")
+        obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
     }
     setObj(cids[i], obj)
   }
