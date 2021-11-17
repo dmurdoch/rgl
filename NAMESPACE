@@ -4,6 +4,7 @@ export(.check3d,
   ageSetter, asEuclidean, asEuclidean2, asHomogeneous, asHomogeneous2,
   aspect3d, axes3d, axis3d, box3d,
   bbox3d, bg3d, bgplot3d, 
+  Buffer,
   checkDeldir,
 	clear3d, clearSubsceneList, clipplanes3d, clipplaneSlider, 
 	clipMesh3d, clipObj3d, close3d, compare_proxy.mesh3d,
@@ -163,6 +164,8 @@ export(.check3d,
       qchisq, qf, splinefun, terms, var)
  importFrom(utils, capture.output, count.fields, file_test, 
             flush.console, packageVersion, read.table, head, tail)
+ importFrom(R6, R6Class)
+ importFrom(base64enc, dataURI)
  
 # These were in rglwidget
  

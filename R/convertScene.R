@@ -1,3 +1,4 @@
+
 convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
@@ -294,9 +295,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       "subscene")
   
   #  Execution starts here!
-  
-  result <- NULL
-  
+
   # Do a few checks first
 
   if (!webgl)
@@ -329,6 +328,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   height <- hfactor*rheight
   
   shared <- x$crosstalk$id
+  
+  result <- NULL
   
   initResult()
   
@@ -396,12 +397,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   
   for (i in seq_along(ids)) {
     obj <- getObj(cids[i])
-    if (obj$type == "sprites" && flags[i, "sprites_3d"]) {
-      obj$objects <- NULL
-    }
-  }
-  for (i in seq_along(ids)) {
-    obj <- getObj(cids[i])
     obj$flags <- nflags[i]
     if (obj$type != "subscene") {
       texturefile <- ""
@@ -436,8 +431,25 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     }
     setObj(cids[i], obj)
   }
+  # Put the data into the buffer
+  buffer <- Buffer$new()
+  for (i in seq_along(ids)) {
+    obj <- getObj(cids[i])
+    for (n in c("vertices", "normals", "indices", 
+                "texcoords", "colors", "centers")) {
+      if (!is.null(obj[[n]]))
+        obj[[n]] <- c(buffer$addAccessor(t(obj[[n]])),
+                      "rglBuffered")
+    }
+    setObj(cids[i], obj)
+  }
 
   result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
-  
+  buffer$closeBuffers()
+  buf <- buffer$as.list()
+
+  buf$buffers[[1]]$bytes <- buffer$dataURI(0)
+  result$buffer <- buf
+
   result
 }

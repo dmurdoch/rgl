@@ -1,4 +1,4 @@
-# rgl  0.107.26
+# rgl  0.107.27
 
 ## Major changes
 
@@ -13,6 +13,8 @@ information on tags.
 * Primitive types (points, lines, segments, triangles, quads)
 can now accept an `indices` parameter, similar to the 
 indices in `mesh3d` objects.
+* Added `Buffer` object, based on glTF design, for holding binary
+data for `rglwidget()`.
 
 ## Minor changes
 

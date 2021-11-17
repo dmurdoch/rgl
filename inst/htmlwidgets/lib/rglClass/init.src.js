@@ -452,6 +452,7 @@
 
     obj.someHidden = false; // used in selection
     obj.is_transparent = is_transparent;
+    obj.colors = this.maybeBuffered(obj.colors);
     
     if (type === "subscene")
       return;
@@ -495,7 +496,7 @@
     if (typeof obj.vertices === "undefined")
       obj.vertices = [];
 
-    v = obj.vertices;
+    v = this.maybeBuffered(obj.vertices);
     if (has_indices)
       obj.vertexCount = obj.indices.length;
     else
@@ -665,7 +666,7 @@
     if (has_normals && obj.type !== "spheres") {
       nofs = stride;
       stride = stride + 3;
-      v = this.cbind(v, typeof obj.pnormals !== "undefined" ? obj.pnormals : obj.normals);
+      v = this.cbind(v, typeof obj.pnormals !== "undefined" ? obj.pnormals : this.maybeBuffered(obj.normals));
     } else
       nofs = -1;
 
@@ -783,7 +784,7 @@
       tofs = stride;
       stride += 2;
       oofs = -1;
-      v = this.cbind(v, obj.texcoords);
+      v = this.cbind(v, this.maybeBuffered(obj.texcoords));
     } else {
       tofs = -1;
       oofs = -1;

@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.107.26
+Version: 0.107.27
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -32,7 +32,7 @@ Suggests: MASS, rmarkdown, deldir (>= 1.0-4), orientlib, lattice, misc3d,
           crosstalk
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr (>= 1.33), jsonlite (>= 0.9.20),
-         magrittr
+         magrittr, R6, base64enc
 Enhances: waldo
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for
