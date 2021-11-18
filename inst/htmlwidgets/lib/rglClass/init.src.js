@@ -452,7 +452,8 @@
 
     obj.someHidden = false; // used in selection
     obj.is_transparent = is_transparent;
-    obj.colors = this.maybeBuffered(obj.colors);
+    
+    this.expandBufferedFields(obj);
     
     if (type === "subscene")
       return;

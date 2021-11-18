@@ -435,6 +435,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   buffer <- Buffer$new()
   for (i in seq_along(ids)) {
     obj <- getObj(cids[i])
+    # This list needs to match the one in buffer.src.js
     for (n in c("vertices", "normals", "indices", 
                 "texcoords", "colors", "centers")) {
       if (!is.null(obj[[n]]))

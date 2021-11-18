@@ -52,7 +52,7 @@
     /* jshint bitwise:true */
     rglwidgetClass.prototype.getArrayBuffer = function(base64) {
       var data;
-      data = base64.match(/^data:.+\/(.+);base64,(.*)$/)[2];
+      data = base64.slice(base64.indexOf(",") + 1);
       return this.base64DecToArr(data, 4).buffer;
     };
 
@@ -148,4 +148,15 @@
         arr.push(row);
       }
       return arr;
+    };
+    
+    rglwidgetClass.prototype.expandBufferedFields = function(obj) {
+      /* this list needs to match the one in convertScene.R */
+      var fields = ["vertices", "normals", "indices", 
+                    "texcoords", "colors", "centers"], i, field;
+      for (i = 0; i < fields.length; i++) {
+        field = obj[fields[i]];
+        if (this.isBuffered(field))
+          obj[fields[i]] = this.getBufferedData(field);
+      }
     };
