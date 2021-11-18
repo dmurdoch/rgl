@@ -49,4 +49,5 @@ SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Biarch: true
-Additional_repositories:  https://dmurdoch.github.io/drat
+Additional_repositories: https://dmurdoch.github.io/drat
+RoxygenNote: 7.1.2

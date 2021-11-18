@@ -1,15 +1,13 @@
 
-#' Widget output function for use in Shiny
-#'
-#' @export
+# Widget output function for use in Shiny
+
 playwidgetOutput <- function(outputId, width = '0px', height = '0px') {
 	registerShinyHandlers()
   shinyWidgetOutput(outputId, 'rglPlayer', width, height, package = 'rgl')
 }
 
-#' Widget render function for use in Shiny
-#'
-#' @export
+# Widget render function for use in Shiny
+
 renderPlaywidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
 	registerShinyHandlers()
   if (!quoted) expr <- substitute(expr)  # force quoted
