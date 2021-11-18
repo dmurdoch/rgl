@@ -453,6 +453,8 @@
     obj.someHidden = false; // used in selection
     obj.is_transparent = is_transparent;
     
+    this.expandBufferedFields(obj);
+    
     if (type === "subscene")
       return;
       

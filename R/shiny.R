@@ -30,17 +30,15 @@ registerShinyHandlers <- fns$registerShinyHandlers
 unregisterShinyHandlers <- fns$unregisterShinyHandlers
 rm(fns)
 
-#' Widget output function for use in Shiny
-#'
-#' @export
+# Widget output function for use in Shiny
+
 rglwidgetOutput <- function(outputId, width = '512px', height = '512px') {
 	registerShinyHandlers()
 	shinyWidgetOutput(outputId, 'rglWebGL', width, height, package = 'rgl')
 }
 
-#' Widget render function for use in Shiny
-#'
-#' @export
+# Widget render function for use in Shiny
+
 renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
 	registerShinyHandlers()
 	if (!quoted) expr <- substitute(expr)  # force quoted
