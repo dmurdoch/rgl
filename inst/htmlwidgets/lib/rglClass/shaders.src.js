@@ -98,8 +98,9 @@
 
       result = result + "    vCol = aCol;\n";
 
-      if (needs_vnormal)
-        result = result + "    vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n";
+      if (needs_vnormal) /* Need to normalize the xyz part */
+        result = result + "    vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n"+
+                          "    vNormal = vec4(normalize(vNormal.xyz), 1);\n";
 
       if (has_texture || type === "text")
         result = result + "    vTexcoord = aTexcoord;\n";
