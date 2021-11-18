@@ -13,13 +13,6 @@
       return typeof obj === "string";
     };
 
-    rglwidgetClass.prototype.maybeBuffered = function(obj) {
-      if (this.isBuffered(obj)) 
-        return this.getBufferedData(obj); 
-      else 
-        return obj;
-    };
-
     /* Array of bytes to Base64 string decoding */
     rglwidgetClass.prototype.b64ToUint6 = function(nChr) {
       return nChr > 64 && nChr < 91 ? nChr - 65 : 
