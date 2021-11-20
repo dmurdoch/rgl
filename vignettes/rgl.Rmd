@@ -796,9 +796,12 @@ Function    | Description
 `r indexfns(c("readSTL", "writeSTL"))`:   | Read or write STL files (also common in 3D printing)
 `r indexfns("as.rglscene")`: | Generic function, no methods in `rgl`
 
-The in-development [`rgl2gltf`](https://dmurdoch.github.io/rgl2gltf/dev)
+The [`rgl2gltf`](https://dmurdoch.github.io/rgl2gltf/dev)
 package can read or write GLTF and GLB files.  It includes an
-`as.rglscene` method to convert GLTF objects to `rgl` scenes.
+`as.rglscene` method to convert GLTF objects to `rgl` scenes.  The
+code in `rgl`'s `r indexfns("Buffer")` R6 class is based on the GLTF
+format.  It is used by `r linkfn("rglwidget")` to make output
+webpages somewhat smaller than they were previously.
 
 There are also functions to save snapshots or other recordings of a scene,
 without any 3D information being saved:

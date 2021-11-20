@@ -236,6 +236,7 @@ reference:
   - expect_known_scene
   - all.equal.mesh3d
   - checkDeldir
+  - Buffer
 - title: General documentation
 - contents:
   - rgl-package
