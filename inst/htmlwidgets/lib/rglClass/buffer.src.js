@@ -13,6 +13,13 @@
       return typeof obj === "string";
     };
 
+    /* The next two functions are taken from 
+     
+     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Base64_encoding_and_decoding
+     
+     They were written by Mozilla Contributors and dedicated
+     to the public domain under CC0. */
+     
     /* Array of bytes to Base64 string decoding */
     rglwidgetClass.prototype.b64ToUint6 = function(nChr) {
       return nChr > 64 && nChr < 91 ? nChr - 65 : 
