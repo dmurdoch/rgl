@@ -469,11 +469,12 @@ Buffer <- R6Class("Buffer",
   private = list(
     buffers = list(),
     bufferViews = list(),
-    accessors = list(),
-
-    finalize = function() {
-      self$closeBuffers()
-    }
+    accessors = list()
+    # ,
+    # 
+    # finalize = function() {
+    #   self$closeBuffers()
+    # }
 
   )
 )

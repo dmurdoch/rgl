@@ -448,7 +448,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   buffer$closeBuffers()
   buf <- buffer$as.list()
 
-  buf$buffers[[1]]$bytes <- buffer$dataURI(0)
   result$buffer <- buf
 
   result

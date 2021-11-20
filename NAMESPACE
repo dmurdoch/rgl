@@ -165,7 +165,6 @@ export(.check3d,
  importFrom(utils, capture.output, count.fields, file_test, 
             flush.console, packageVersion, read.table, head, tail)
  importFrom(R6, R6Class)
- importFrom(base64enc, dataURI)
  
 # These were in rglwidget
  

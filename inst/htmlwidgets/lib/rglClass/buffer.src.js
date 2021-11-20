@@ -41,12 +41,10 @@
       }
       return taBytes;
     };
-
     /* jshint bitwise:true */
+    
     rglwidgetClass.prototype.getArrayBuffer = function(base64) {
-      var data;
-      data = base64.slice(base64.indexOf(",") + 1);
-      return this.base64DecToArr(data, 4).buffer;
+      return this.base64DecToArr(base64, 4).buffer;
     };
 
     rglwidgetClass.prototype.getBufferedData = function(v) {
