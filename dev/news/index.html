@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.27</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.28</span>
       </span>
     </div>
 
@@ -70,16 +70,16 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.107.27" id="rgl-010727">rgl 0.107.27<a class="anchor" aria-label="anchor" href="#rgl-010727"></a></h2>
+<h2 class="page-header" data-toc-text="0.107.28" id="rgl-010728">rgl 0.107.28<a class="anchor" aria-label="anchor" href="#rgl-010728"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-0-107-27">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-107-27"></a></h3>
+<h3 id="major-changes-0-107-28">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-107-28"></a></h3>
 <ul><li>Added <code><a href="../reference/getBoundary3d.html">getBoundary3d()</a></code> function to extract the boundary edges of a mesh.</li>
-<li>Added material property <code>tag</code>, a string associated with each object. The value is reported by <code><a href="../reference/scene.html">ids3d()</a></code> and may be used to select objects in most functions that use ids, but otherwise is largely ignored by <code>rgl</code>. The <code><a href="../reference/tagged3d.html">tagged3d()</a></code> function returns information on tags.</li>
+<li>Added material property <code>tag</code>, a string associated with each object. The value is reported by <code>ids3d(tags = TRUE)</code> and may be used to select objects in most functions that use ids, but otherwise is largely ignored by <code>rgl</code>. The <code><a href="../reference/tagged3d.html">tagged3d()</a></code> function returns information on tags.</li>
 <li>Primitive types (points, lines, segments, triangles, quads) can now accept an <code>indices</code> parameter, similar to the indices in <code>mesh3d</code> objects.</li>
 <li>Added <code>Buffer</code> object, based on glTF design, for holding binary data for <code><a href="../reference/rglwidget.html">rglwidget()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-changes-0-107-27">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-107-27"></a></h3>
+<h3 id="minor-changes-0-107-28">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-107-28"></a></h3>
 <ul><li>Allowed for a third coordinate in <code><a href="../reference/texts.html">text3d()</a></code>’s <code>adj</code> parameter.</li>
 <li>Added support for <code>adj</code>, <code>pos</code> and <code>offset</code> to <code><a href="../reference/sprites.html">sprites3d()</a></code>.</li>
 <li>Added support for <code>pos</code> values of <code>0</code> (at specified location), <code>5</code> (in front of it), and <code>6</code> (behind it) in <code><a href="../reference/texts.html">text3d()</a></code>, <code><a href="../reference/sprites.html">sprites3d()</a></code> and <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code>.</li>
@@ -98,7 +98,7 @@
 <code>downlit</code> 0.4.0 has been released with support for <code>rgl</code>, so instructions for installing the devel version have been removed.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-107-27">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-107-27"></a></h3>
+<h3 id="bug-fixes-0-107-28">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-107-28"></a></h3>
 <ul><li>Fixed rendering of text as sprites3d() objects.</li>
 <li>Added <code>--static</code> flag to configure script for FreeType installation. (Suggestion of Simon Urbanek and Prof. Brian Ripley.)</li>
 <li>
