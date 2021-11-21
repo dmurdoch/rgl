@@ -75,7 +75,7 @@ The \code{\link{surface3d}} function is used to draw the surface without the axe
 # (1) The Obligatory Mathematical surface.
 #     Rotated sinc function.
 
-x <- seq(-10, 10, length = 30)
+x <- seq(-10, 10, length = 20)
 y <- x
 f <- function(x, y) { r <- sqrt(x^2 + y^2); 10 * sin(r)/r }
 z <- outer(x, y, f)
@@ -132,8 +132,6 @@ persp3d(x, y, z, col = "white",
        texture = system.file("textures/worldsmall.png", package = "rgl"), 
        specular = "black", axes = FALSE, box = FALSE, xlab = "", ylab = "", zlab = "",
        normal_x = x, normal_y = y, normal_z = z)
-if (!rgl.useNULL())
-  play3d(spin3d(axis = c(0, 0, 1), rpm = 16), duration = 2.5)
 
 \dontrun{
 # This looks much better, but is slow because the texture is very big

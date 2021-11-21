@@ -1,3 +1,7 @@
+0.108.3:
+
+Changes in response to CRAN request.
+
 0.108.2:
 
 Sorry, I missed the notes from rchk on CRAN.  They should be fixed now.
