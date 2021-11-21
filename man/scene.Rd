@@ -9,7 +9,7 @@ Clear shapes, lights, bbox
 \usage{
 clear3d( type = c("shapes", "bboxdeco", "material"), defaults, subscene = 0 ) 
 pop3d( type = "shapes", id = 0, tag = NULL)
-ids3d( type = "shapes", subscene = NA )
+ids3d( type = "shapes", subscene = NA, tags = FALSE )
 }
 \arguments{
   \item{type}{Select subtype(s):
@@ -31,6 +31,7 @@ ids3d( type = "shapes", subscene = NA )
   \item{id}{vector of ID numbers of items to remove}
   \item{tag}{override \code{id} with objects matching
   these \code{tag} material properties}
+  \item{tags}{logical; whether to return \code{tag} column.}
 }
 \details{
 RGL holds several lists of objects in each scene. 
@@ -52,7 +53,7 @@ is currently used by \code{clear3d}.
 
 \code{ids3d} returns a dataframe containing the IDs in the currently active subscene
 by default, or a specified subscene, or if \code{subscene = 0}, in the whole
-rgl window, along with an indicator of their type and the
+rgl window along with an indicator of their type and if \code{tags = TRUE}, the
 \code{tag} value for each.
 
 Note that clearing the light stack leaves the scene in darkness; it should normally
@@ -71,7 +72,7 @@ be followed by a call to \code{\link{light3d}} or \code{\link{light3d}}.
   p <- plot3d(x, y, z, type = 's', tag = "plot")
   ids3d()
   lines3d(x, y, z)
-  ids3d()
+  ids3d(tags = TRUE)
   if (interactive() && !rgl.useNULL()) {
     readline("Hit enter to change spheres")
     pop3d(id = p["data"])

@@ -86,23 +86,25 @@ pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
   lowlevel()
 }
 
-ids3d <- rgl.ids <- function( type = "shapes", subscene = NA ) {
+ids3d <- rgl.ids <- function( type = "shapes", subscene = NA, tags = FALSE) {
   type <- c(rgl.enum.nodetype(type), 0)
   if (is.na(subscene)) 
-      subscene <- currentSubscene3d()
+    subscene <- currentSubscene3d()
   
   count <- .C( rgl_id_count, as.integer(type), count = integer(1), subscene = as.integer(subscene))$count
   
   result <- as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
-                                type=rep("",count), subscene = as.integer(subscene) )[2:3] )
-
-  result$tag <- rep("", nrow(result))
-  if (NROW(result)) {
-    hasmaterial <- !(result$type %in% c("light", "userviewpoint", "background", "modelviewpoint", "subscene"))
-    result$tag[hasmaterial] <- vapply(result$id[hasmaterial],
-          function(id) {
-            rgl.getmaterial(0, id = id)$tag
-            }, "")
+                               type=rep("",count), subscene = as.integer(subscene) )[2:3] )
+  
+  if (tags) {
+    result$tag <- rep("", nrow(result))
+    if (NROW(result)) {
+      hasmaterial <- !(result$type %in% c("light", "userviewpoint", "background", "modelviewpoint", "subscene"))
+      result$tag[hasmaterial] <- vapply(result$id[hasmaterial],
+                                        function(id) {
+                                          rgl.getmaterial(0, id = id)$tag
+                                        }, "")
+    }
   }
   result
 }
@@ -982,7 +984,7 @@ selectionFunction3d <- function(proj, region = proj$region) {
 tagged3d <- function(tags = NULL, ids = NULL, full = FALSE, subscene = 0) {
   if ((missing(tags) + missing(ids)) != 1) 
     stop("Exactly one of 'tags' and 'ids' should be specified.")
-  all <- ids3d("all", subscene = subscene)
+  all <- ids3d("all", subscene = subscene, tags = TRUE)
   if (!missing(tags))
     all <- all[all$tag %in% tags,]
   else
