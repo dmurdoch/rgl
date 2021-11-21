@@ -52,29 +52,32 @@ An object that can be included in a list of dependencies passed to \code{htmltoo
 Duncan Murdoch
 }
 \examples{
+\dontrun{
 # This is the code used to produce one of the dependencies
 # for rglwidget().  
 # It writes to the system library copy of rgl so 
 # has been marked not to run in the example code.
 
-\dontrun{
 makeDependency("rglwidgetClass", 
-    src = "htmlwidgets/lib/rglClass",
-    script = c("rglClass.src.js",
-               "utils.src.js",
-               "subscenes.src.js",
-               "shaders.src.js",
-               "textures.src.js",
-               "projection.src.js",
-               "mouse.src.js",
-               "init.src.js",
-               "pieces.src.js",
-               "draw.src.js",
-               "controls.src.js",
-               "selection.src.js",
-               "rglTimer.src.js"),
-    stylesheet = "rgl.css",
-    package = "rgl",
-    debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE")))
+               src = "htmlwidgets/lib/rglClass",
+               script = c("rglClass.src.js",
+                          "utils.src.js",
+                          "buffer.src.js",
+                          "subscenes.src.js",
+                          "shaders.src.js",
+                          "textures.src.js",
+                          "projection.src.js",
+                          "mouse.src.js",
+                          "init.src.js",
+                          "pieces.src.js",
+                          "draw.src.js",
+                          "controls.src.js",
+                          "selection.src.js",
+                          "rglTimer.src.js",
+                          "pretty.src.js",
+                          "axes.src.js"),
+               stylesheet = "rgl.css",
+               package = "rgl",
+               debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))
 }
 }
