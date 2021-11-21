@@ -443,7 +443,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
     setIgnoreExtent(&iv, dev);
   }    
   else if (streql(what, "mouseMode")) {
-    value = coerceVector(value, STRSXP);
+    PROTECT(value = coerceVector(value, STRSXP));
     if (length(value) > 5) par_error(what);   
     for (int i=bnNOBUTTON; i<=bnWHEEL && i < length(value); i++) {
       if (STRING_ELT(value, i) != NA_STRING) {
@@ -468,6 +468,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
         if (!success) par_error(what);
       }
     }
+    UNPROTECT(1);
   }
   else if (streql(what, "listeners")) {
     x = coerceVector(value, INTSXP);
@@ -535,12 +536,13 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
   }
   else if (streql(what, "useFreeType")) {
     lengthCheck(what, value, 1);
-    x=coerceVector(value, LGLSXP);
+    PROTECT(x=coerceVector(value, LGLSXP));
 #ifndef HAVE_FREETYPE
     if (LOGICAL(x)[0] && strcmp( dev->getDevtype(), "null" ))
       warning("FreeType not supported in this build");
 #endif
     if (!setUseFreeType(LOGICAL(x)[0], rglview)) success = 0;
+    UNPROTECT(1);
   }
   
   else warning(_("parameter \"%s\" cannot be set"), what);

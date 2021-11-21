@@ -1,3 +1,17 @@
+0.108.2:
+
+Sorry, I missed the notes from rchk on CRAN.  They should be fixed now.
+
+The note from the M1mac check is too uninformative, so I haven't 
+addressed it.  It just says "Error(s) in re-building vignettes:
+--- re-building ‘WebGL.Rmd’ using rmarkdown".  If I knew what the error
+was, perhaps I could fix it.
+
+The other notes in the main CRAN checks are about the unavailability
+of the webshot2 suggested package (which I have made available), the
+lack of pandoc on some test machines (which I can't do anything about
+other than listing pandoc as a system requirement, which I have done),
+and some timing issues (where builds have just exceeded the limits).
 
 0.108.1:
 

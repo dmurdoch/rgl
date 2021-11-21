@@ -1,4 +1,4 @@
-# rgl  0.108.1
+# rgl  0.108.2
 
 ## Major changes
 
@@ -56,6 +56,7 @@ for installing the devel version have been removed.
   several bugs.
 * `rgl` could not find routines in the DLL on some Windows
 installs (Issue 148.)
+* Some cases where allocations were not protected have been fixed.
   
 # rgl  0.107.10
 
