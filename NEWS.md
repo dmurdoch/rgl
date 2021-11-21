@@ -1,11 +1,11 @@
-# rgl  0.107.27
+# rgl  0.107.28
 
 ## Major changes
 
 * Added `getBoundary3d()` function to extract the boundary
 edges of a mesh.
 * Added material property `tag`, a string associated 
-with each object.  The value is reported by `ids3d()` and
+with each object.  The value is reported by `ids3d(tags = TRUE)` and
 may be used to select objects in most functions that use ids,
 but otherwise is 
 largely ignored by `rgl`.  The `tagged3d()` function returns

@@ -24,7 +24,7 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1,
 rgl.spheres(x, y = NULL, z = NULL, radius, fastTransparency = TRUE, ...)
 rgl.clear( type = "shapes", subscene = 0 )
 rgl.pop( type = "shapes", id = 0, tag = NULL )  
-rgl.ids( type = "shapes", subscene = NA )
+rgl.ids( type = "shapes", subscene = NA, tags = FALSE )
 }
 \arguments{
   \item{x, y, z}{
@@ -41,6 +41,7 @@ or normals for the planes.
   \item{adj, pos, offset}{Positioning.}
   \item{tag}{Select objects with material property
   \code{tag} in this vector.}
+  \item{tags}{Whether to return tags.}
   \item{...}{
 Material properties.
 }
