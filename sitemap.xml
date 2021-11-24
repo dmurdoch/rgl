@@ -40,6 +40,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/Buffer.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/GramSchmidt.html</loc>
   </url>
   <url>
@@ -73,6 +76,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/as.mesh3d.rglId.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/as.rglscene.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/as.tmesh3d.html</loc>
   </url>
   <url>
@@ -104,6 +110,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/check3d.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/checkDeldir.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/clipMesh3d.html</loc>
@@ -143,6 +152,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/figWidth.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/getBoundary3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/grid3d.html</loc>
@@ -389,6 +401,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/surface3d.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/tagged3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/texts.html</loc>
