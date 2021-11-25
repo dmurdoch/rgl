@@ -1,3 +1,10 @@
+# rgl  0.108.4
+
+* Changes to support glTF animation:
+  - Handling of `embedding = "modify"` for the model matrix
+    has changed.  Now the centering step is only done for
+    `embedding = "replace"`.
+    
 # rgl  0.108.3
 
 ## Major changes

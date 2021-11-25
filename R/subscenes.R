@@ -64,7 +64,7 @@ newSubscene3d <- function(viewport = "replace",
   mouseMode <- pmatch(mouseMode, embedding)
   
   if (missing(ignoreExtent))
-    ignoreExtent <- model != 1
+    ignoreExtent <- model == 3
   stopifnot(length(viewport) == 1L, length(projection) == 1L, 
             length(model) == 1L, length(mouseMode) ==1L,
             mouseMode != 2L,

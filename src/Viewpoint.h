@@ -20,7 +20,7 @@ public:
   PolarCoord& getPosition();
   void        setPosition(const PolarCoord& position);
   void	      clearMouseMatrix();
-  void        setupTransformation(RenderContext* rctx, Vertex center);
+  void        setupTransformation(RenderContext* rctx);
   void        setupOrientation(RenderContext* rctx) const;
   bool        isInteractive() const;
   void        updateMouseMatrix(Vertex dragStart,Vertex dragCurrent);

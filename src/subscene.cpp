@@ -832,8 +832,10 @@ void Subscene::setupModelMatrix(RenderContext* rctx, Vertex center)
     parent->setupModelMatrix(rctx, center);
     
   if (do_model > EMBED_INHERIT)
-    getModelViewpoint()->setupTransformation(rctx, center);
+    getModelViewpoint()->setupTransformation(rctx);
   
+  if (do_model == EMBED_REPLACE)
+    modelMatrix = modelMatrix * Matrix4x4::translationMatrix(-center.x, -center.y, -center.z);
 }
 
 void Subscene::disableLights(RenderContext* rctx)

@@ -174,12 +174,11 @@ void ModelViewpoint::setupOrientation(RenderContext* rctx) const
   rctx->subscene->modelMatrix = rctx->subscene->modelMatrix * mouseMatrix * userMatrix;
 }
 
-void ModelViewpoint::setupTransformation(RenderContext* rctx, Vertex center)
+void ModelViewpoint::setupTransformation(RenderContext* rctx)
 {     
   // modelview
   setupOrientation(rctx);
-  rctx->subscene->modelMatrix = rctx->subscene->modelMatrix * Matrix4x4::scaleMatrix(scale.x, scale.y, scale.z)
-                      * Matrix4x4::translationMatrix(-center.x, -center.y, -center.z);
+  rctx->subscene->modelMatrix = rctx->subscene->modelMatrix * Matrix4x4::scaleMatrix(scale.x, scale.y, scale.z);
 }
 
 void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
