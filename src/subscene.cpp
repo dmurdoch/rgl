@@ -547,28 +547,12 @@ void Subscene::update(RenderContext* renderContext)
   if (bboxChanges) 
     calcDataBBox();
   
-  Sphere total_bsphere;
-
-  if (data_bbox.isValid()) {
-    
-    // 
-    // GET DATA VOLUME SPHERE
-    //
-
-    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, getModelViewpoint()->scale );
-    if (total_bsphere.radius <= 0.0)
-      total_bsphere.radius = 1.0;
-
-  } else {
-    total_bsphere = Sphere( Vertex(0,0,0), 1 );
-  }
-  
   // Now get the matrices.  First we compute the projection matrix.  If we're inheriting,
   // just use the parent.
   
   if (do_projection > EMBED_INHERIT) {
     projMatrix.getData(saveprojection);
-    setupProjMatrix(renderContext, total_bsphere);
+    setupProjMatrix(renderContext);
   } else
     projMatrix = parent->projMatrix;
   
@@ -577,7 +561,7 @@ void Subscene::update(RenderContext* renderContext)
   // every subscene.
   
   if (do_projection > EMBED_INHERIT || do_model > EMBED_INHERIT)
-    setupModelViewMatrix(renderContext, total_bsphere.center);
+    setupModelViewMatrix(renderContext);
   else
     modelMatrix = parent->modelMatrix;
     
@@ -803,12 +787,12 @@ void Subscene::setupViewport(RenderContext* rctx)
   pviewport = rect;
 }
 
-void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
+void Subscene::setupProjMatrix(RenderContext* rctx)
 {
   if (do_projection == EMBED_REPLACE) 
     projMatrix.setIdentity();
 
-  getUserViewpoint()->setupProjMatrix(rctx, viewSphere);   
+  getUserViewpoint()->setupProjMatrix(rctx, getViewSphere());   
 }
 
 // The ModelView matrix has components of the user view (the translation at the start)
@@ -816,26 +800,45 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 // the latter from the modelViewpoint, possibly after applying the same from the parents.
 // We always reconstruct from scratch rather than trying to use the matrix in place.
 
-void Subscene::setupModelViewMatrix(RenderContext* rctx, Vertex center)
+void Subscene::setupModelViewMatrix(RenderContext* rctx)
 {
   modelMatrix.setIdentity();
   getUserViewpoint()->setupViewer(rctx);
-  setupModelMatrix(rctx, center);
+  setupModelMatrix(rctx);
 }
 
-void Subscene::setupModelMatrix(RenderContext* rctx, Vertex center)
+void Subscene::setupModelMatrix(RenderContext* rctx)
 {
   /* The recursive call below will set the active subscene
      modelMatrix, not the inherited one. */
      
-  if (do_model < EMBED_REPLACE && parent)
-    parent->setupModelMatrix(rctx, center);
+  if (do_model < EMBED_REPLACE && parent) 
+    parent->setupModelMatrix(rctx);
     
   if (do_model > EMBED_INHERIT)
     getModelViewpoint()->setupTransformation(rctx);
   
-  if (do_model == EMBED_REPLACE)
+  if (do_model == EMBED_REPLACE) {
+    Vertex center = getViewSphere().center;
+
     modelMatrix = modelMatrix * Matrix4x4::translationMatrix(-center.x, -center.y, -center.z);
+  }
+}
+
+// 
+// GET DATA VOLUME SPHERE
+//
+
+Sphere Subscene::getViewSphere() 
+{
+  Sphere total_bsphere;
+  if (data_bbox.isValid()) {
+    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, getModelViewpoint()->scale );
+    if (total_bsphere.radius <= 0.0)
+      total_bsphere.radius = 1.0;
+    } else
+    total_bsphere = Sphere( Vertex(0,0,0), 1 );
+  return total_bsphere;
 }
 
 void Subscene::disableLights(RenderContext* rctx)

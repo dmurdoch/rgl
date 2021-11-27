@@ -38,10 +38,11 @@ class Subscene : public SceneNode {
   */
 private:
 
+  Sphere getViewSphere();
   void setupViewport(RenderContext* rctx);
-  void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
-  void setupModelMatrix(RenderContext* rctx, Vertex center);
-  void setupModelViewMatrix(RenderContext* rctx, Vertex center);
+  void setupProjMatrix(RenderContext* rctx);
+  void setupModelMatrix(RenderContext* rctx);
+  void setupModelViewMatrix(RenderContext* rctx);
   void setDefaultMouseMode();
   
   void disableLights(RenderContext* rctx);
