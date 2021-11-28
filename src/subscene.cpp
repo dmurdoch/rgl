@@ -873,6 +873,9 @@ void Subscene::setupLights(RenderContext* rctx)
   }
 
   SAVEGLERROR;
+  
+  if (nlights == 0 && parent)
+    parent->setupLights(rctx);
 
   if (anyviewpoint) {
     //

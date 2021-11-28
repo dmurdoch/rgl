@@ -4,6 +4,9 @@
   - Handling of `embedding = "modify"` for the model matrix
     has changed.  Now the centering step is only done for
     `embedding = "replace"`.
+  - If a subscene has no lights defined, the lights from the parent
+    are used.
+    
     
 # rgl  0.108.3
 
