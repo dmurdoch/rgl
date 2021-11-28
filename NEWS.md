@@ -6,6 +6,7 @@
     `embedding = "replace"`.
   - If a subscene has no lights defined, the lights from the parent
     are used.
+  - plot.rglscene() now ends with the root subscene as current.
     
     
 # rgl  0.108.3

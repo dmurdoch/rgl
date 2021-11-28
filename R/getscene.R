@@ -279,6 +279,7 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
         dotranslations(child)
     }
     dotranslations(subscene)
+    useSubscene3d(subscene)
     return(results)
   } else
     return(list(results=results, objects=objects, listeners=listeners))
