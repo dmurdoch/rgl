@@ -809,8 +809,9 @@ void Subscene::setupModelViewMatrix(RenderContext* rctx)
 
 void Subscene::setupModelMatrix(RenderContext* rctx)
 {
-  /* The recursive call below will set the active subscene
-     modelMatrix, not the inherited one. */
+  /* This sets the active subscene
+     modelMatrix, not the local one (though often
+     they're the same one). */
      
   if (do_model < EMBED_REPLACE && parent) 
     parent->setupModelMatrix(rctx);
@@ -821,7 +822,9 @@ void Subscene::setupModelMatrix(RenderContext* rctx)
   if (do_model == EMBED_REPLACE) {
     Vertex center = getViewSphere().center;
 
-    modelMatrix = modelMatrix * Matrix4x4::translationMatrix(-center.x, -center.y, -center.z);
+    rctx->subscene->modelMatrix = 
+      rctx->subscene->modelMatrix * 
+      Matrix4x4::translationMatrix(-center.x, -center.y, -center.z);
   }
 }
 
