@@ -6,14 +6,10 @@ pkgdown_rdname <- function()
 in_pkgdown <- function() 
 	requireNamespace("pkgdown", quietly = TRUE) && pkgdown::in_pkgdown()
 
-# The exists() part of this test are only needed until
-# CRAN's version of the packages contain my suggested patches.
 in_pkgdown_example <- function() 
 	nchar(pkgdown_rdname()) && 
 	requireNamespace("downlit", quietly = TRUE) &&
-	exists("is_low_change.default", asNamespace("downlit")) &&
-	requireNamespace("pkgdown", quietly = TRUE) &&
-	exists("pkgdown_print", asNamespace("pkgdown"))
+	requireNamespace("pkgdown", quietly = TRUE)
 
 fns <- local({
 	plotnum <- 0
@@ -47,7 +43,7 @@ rm(fns)
 
 globalVariables("fig.asp")
 pkgdown_dims <- function() {
-	settings <- pkgdown_fig_settings()
+	settings <- pkgdown::fig_settings()
 	rgl <- settings$other.parameters$rgl
 	
 	settings[names(rgl)] <- rgl
@@ -98,13 +94,6 @@ pkgdown_info <- local({
     }
   }
 })
-
-# These are only needed until CRAN's pkgdown exports pkgdown_print
-# and fig_settings,
-# then we should use pkgdown::pkgdown_print and pkgdown::fig_settings
-pkgdown_print <- function(x, visible = TRUE) ""
-
-pkgdown_fig_settings <- function() list(dpi = 96, fig.width = 5, fig.height = 5)
 
 register_pkgdown_methods <- local({
 	registered <- FALSE

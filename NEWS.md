@@ -1,3 +1,11 @@
+# rgl 0.108.4
+
+## Minor changes
+
+* Now that `pkgdown` 2.0.0 has been released, a number 
+of internal workarounds to support the development version
+have been removed.
+
 # rgl  0.108.3
 
 ## Major changes

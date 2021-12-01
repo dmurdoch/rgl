@@ -35,26 +35,19 @@ The currently active development site is here:
 
 ## NOTE ABOUT DEVEL VERSIONS
 
-`rgl` can make use of development versions of some packages: `webshot2`,
-`chromote`, `pkgdown`. Though it doesn’t require any of these, they each
-provide some nice features:
-
--   `webshot2` and `chromote` support good quality PNG snapshots of
-    `rgl` scenes, even on servers that don’t have a graphics display.
--   The devel version of `pkgdown` supports inclusion of `rgl` graphics
-    in example code in automatically built package websites. (It also
-    supports inclusion of `htmlwidgets` for other dynamic web packages
-    like `plotly`, `leaflet`, etc.)
+`rgl` can make use of development versions of some packages, currently
+`webshot2` and `chromote`. Though it doesn’t require these, they provide
+some nice features, supporting good quality PNG snapshots of `rgl`
+scenes, even on servers that don’t have a graphics display.
 
 Unfortunately, being development versions, these packages sometimes
-introduce bugs that break `rgl` usage. Currently (November 8, 2021) the
-main branches of all packages are fine. I recommend the following code
+introduce bugs that break `rgl` usage. Currently (December 1, 2021) the
+main branches of the packages are fine. I recommend the following code
 to install them:
 
 ``` r
 remotes::install_github(c("rstudio/webshot2",
-                          "rstudio/chromote",
-                          "r-lib/pkgdown"))
+                          "rstudio/chromote"))
 ```
 
 ## INSTALLATION
