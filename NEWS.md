@@ -1,4 +1,4 @@
-# rgl  0.108.4
+# rgl  0.108.5
 
 * Changes to support glTF animation:
   - Handling of `embedding = "modify"` for the model matrix
@@ -7,6 +7,8 @@
   - If a subscene has no lights defined, the lights from the parent
     are used.
   - plot.rglscene() now ends with the root subscene as current.
+  - The `MATn` types in `Buffer` are returned as arrays with
+    dim `c(n, n, count)`.
     
     
 # rgl  0.108.3

@@ -313,7 +313,8 @@ Buffer <- R6Class("Buffer",
 #'
 #' @param acc Accessor number.
 #'
-#' @return A vector or array as specified in the accessor.
+#' @return A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+#' indexes the element.
 #'
       readAccessor = function(acc) {
         typenames <- c("5120" = "byte", "5121" = "unsigned_byte",
@@ -377,7 +378,7 @@ Buffer <- R6Class("Buffer",
                            values)                 # default
         if (len > 1)
           if (grepl("MAT", atype)) {
-            values <- matrix(values, ncol = sqrt(len), byrow = TRUE)
+            values <- array(values, dim=c(sqrt(len), sqrt(len), count))
           } else
             values <- matrix(values, ncol = len, byrow = TRUE)
         values
