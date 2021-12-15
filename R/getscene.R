@@ -246,8 +246,10 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
 			    newviewport = x$par3d$viewport,
 			    copyLights = FALSE)
 			   
-  if (!is.null(x$par3d$scale))
-    par3d(scale = x$par3d$scale)
+  if (!is.null(scale <- x$par3d$scale))
+    par3d(scale = scale)
+  if (!is.null(userMatrix <- x$par3d$userMatrix))
+    par3d(userMatrix = userMatrix)
   listeners <- list(x$par3d$listeners) # list contains old ids
   names(listeners) <- subscene         # names are new ids
     
