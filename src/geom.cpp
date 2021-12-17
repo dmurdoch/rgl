@@ -65,6 +65,24 @@ Vertex AABox::getCenter(void) const
   return Vertex( (vmax + vmin) * 0.5f );
 }
 
+AABox AABox::transform(Matrix4x4& M)
+{
+  if (!isValid()) return AABox();
+  AABox result;
+  Vertex corner;
+  for (int i = 0; i < 2; i++) {
+    corner.x = i ? vmax.x : vmin.x;
+    for (int j = 0; j < 2; j++) {
+      corner.y = j ? vmax.y : vmin.y;
+      for (int k = 0; k < 2; k++) {
+        corner.z = k ? vmax.z : vmin.z;
+        result += M*corner;
+      }
+    }
+  }
+  return result;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS

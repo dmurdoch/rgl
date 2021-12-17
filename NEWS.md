@@ -3,7 +3,8 @@
 * Changes to support glTF animation:
   - Handling of `embedding = "modify"` for the model matrix
     has changed.  Now the centering step is only done for
-    `embedding = "replace"`.
+    `embedding = "replace"`.  In addition, various bugs
+    have been fixed.
   - If a subscene has no lights defined, the lights from the parent
     are used.
   - plot.rglscene() now ends with the root subscene as current.
