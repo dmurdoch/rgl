@@ -10,6 +10,7 @@
   - plot.rglscene() now ends with the root subscene as current.
   - The `MATn` types in `Buffer` are returned as arrays with
     dim `c(n, n, count)`.
+  - The `plot3d.rglscene` method now passes `...` to `open3d()`.
     
     
 # rgl  0.108.3

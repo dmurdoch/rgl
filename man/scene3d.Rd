@@ -25,7 +25,9 @@ scene3d(minimal = TRUE)
   no effect?  See Details.}
 \item{x}{An object of class \code{"rglscene"}}
 \item{add}{Whether to open a new window, or add to the existing one.}
-\item{...}{Additional parameters, currently ignored.}
+\item{...}{Additional parameters passed to \code{open3d}
+by \code{plot3d(..., add = FALSE)}.
+}
 }
 \details{
 The components saved are:  the \code{\link{par3d}} settings, the \code{\link{material3d}}
