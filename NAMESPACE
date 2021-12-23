@@ -85,6 +85,9 @@ export(.check3d,
  S3method(as.mesh3d, ashape3d)
  S3method(as.mesh3d, rglId)
  S3method(as.mesh3d, rglobject)
+ S3method(as.mesh3d, rglsubscene)
+ S3method(as.mesh3d, rglscene)
+ 
  S3method(as.mesh3d, default)
  
  S3method(as.tmesh3d, mesh3d)

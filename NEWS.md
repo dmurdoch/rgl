@@ -1,6 +1,8 @@
 
 # rgl  0.108.6
 
+## Major changes
+
 * Changes to support glTF animation:
   - Handling of `embedding = "modify"` for the model matrix
     has changed.  Now the centering step is only done for
@@ -8,10 +10,14 @@
     have been fixed.
   - If a subscene has no lights defined, the lights from the parent
     are used.
-  - plot.rglscene() now ends with the root subscene as current.
+  - `plot.rglscene()` now ends with the root subscene as current.
   - The `MATn` types in `Buffer` are returned as arrays with
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
+  
+## Minor changes
+
+  * Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
     
 # rgl 0.108.5
 

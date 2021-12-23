@@ -329,6 +329,30 @@ as.mesh3d.rglobject <- function(x, ...) {
     NULL
 }
 
+as.mesh3d.rglsubscene <- function(x, rglscene, transform = diag(4), simplify = TRUE, ...) {
+  outmeshes <- list()
+  objects <- rglscene$objects
+  for (i in x$objects) {
+    m <- as.mesh3d(objects[[as.character(i)]])
+    if (!is.null(m))
+      outmeshes <- c(outmeshes, list(rotate3d(m, matrix = transform)))
+  }
+  for (i in seq_along(x$subscenes)) {
+    child <- x$subscenes[[i]]
+    outmeshes <- c(outmeshes, as.mesh3d(child, rglscene, transform %*% child$par3d$userMatrix, simplify = FALSE))
+  }
+  if (simplify && length(outmeshes) == 1)
+    outmeshes[[1]]
+  else if (length(outmeshes))
+    shapelist3d(outmeshes, plot = FALSE)
+  else
+    NULL
+}
+
+as.mesh3d.rglscene <- function(x, ...) {
+  result <- as.mesh3d(x$rootSubscene, rglscene = x, ...)
+}
+
 mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
                           tolerance = sqrt(.Machine$double.eps)) {
 
