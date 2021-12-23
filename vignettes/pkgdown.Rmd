@@ -33,34 +33,17 @@ setupKnitr(autoprint = TRUE)
 ## What is the problem?
 
 [pkgdown](https://pkgdown.r-lib.org/) is an R package that
-makes it easy to build a web site for your package.  However, the current version 1.6.1 on CRAN doesn't work so well for
+makes it easy to build a web site for your package.  However, the previous version 1.6.1 on CRAN didn't work so well for
 packages whose examples use RGL or other packages like [leaflet](http://rstudio.github.io/leaflet/) that use
 [htmlwidgets](http://www.htmlwidgets.org).  This document
-describes current progress in supporting both of these.
+described changes that support both of these.  The changes
+are now incorporated into `pkgdown` 2.0.0, so everything but
+user instructions has been removed.
 
-The main problem for [pkgdown](https://pkgdown.r-lib.org/) support
-is that RGL and other [htmlwidgets](http://www.htmlwidgets.org)
-users require multiple Javascript libraries to be linked to
-each web page.  `pkgdown` 1.6.1 can't do this, but the 
-current development version on Github
-adds support for additional dependent libraries.  This 
-also require [downlit](https://downlit.r-lib.org/) version 0.4.0 or
-higher.
+## Using `RGL in examples.
 
-## Installing the changes
-
-Installing the changes is fairly easy.  Make sure you have the
-[remotes](https://remotes.r-lib.org/) package installed, then 
-run
-
-```{r eval=FALSE}
-remotes::install_github(c("rstudio/webshot2",
-                          "rstudio/chromote",
-                          "r-lib/pkgdown"))
-```
-
-With these development version packages installed, you should 
-see RGL or `leaflet` output appear automatically in examples.
+If you use RGL in example code, they should
+appear automatically in examples.
 The RGL output is set up to mimic what would happen in a
 `knitr` document that uses 
 ```{r eval=FALSE}
@@ -125,15 +108,3 @@ figures:
 ```
 This will make all plots have a width of 5 inches
 and will make RGL plots square.
-
-## Is this safe to use?
-
-These are development versions of the packages, so they may
-contain bugs, either in my changes or in other unreleased 
-changes.  I don't recommend you use them in regular production
-code.  To re-install released versions of the packages, run
-```{r eval=FALSE}
-install.packages(c("pkgdown", "rgl"))
-```
-
-If you do use them and notice any bugs, please [report them](https://github.com/dmurdoch/rgl/issues)!

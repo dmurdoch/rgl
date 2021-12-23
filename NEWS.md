@@ -1,4 +1,5 @@
-# rgl  0.108.5
+
+# rgl  0.108.6
 
 * Changes to support glTF animation:
   - Handling of `embedding = "modify"` for the model matrix
@@ -12,7 +13,19 @@
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
     
-    
+# rgl 0.108.5
+
+## Minor changes
+
+* Now that `pkgdown` 2.0.0 has been released, a number 
+of internal workarounds to support the development version
+have been removed.
+
+## Bug fixes
+
+* as.mesh3d.rglobject() didn't handle objects with indices
+properly.
+
 # rgl  0.108.3
 
 ## Major changes

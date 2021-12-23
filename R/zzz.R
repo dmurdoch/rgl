@@ -124,17 +124,6 @@
 
   if (!rgl.useNULL()) 
     setGraphicsDelay(unixos = unixos)
-
-  # handle pkgdown_print and fig_settings before they are in the CRAN version
-
-  if (requireNamespace("pkgdown", quietly = TRUE)) {
-    
-    if ("pkgdown_print" %in% getNamespaceExports("pkgdown")) {
-      pkgdown_print <<- getExportedValue("pkgdown", "pkgdown_print")
-    }
-    if ("fig_settings" %in% getNamespaceExports("pkgdown"))
-      pkgdown_fig_settings <<- getExportedValue("pkgdown", "fig_settings")
-  }         
 }
 
 # Do we need a delay opening graphics?    
