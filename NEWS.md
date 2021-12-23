@@ -1,10 +1,15 @@
-# rgl 0.108.4
+# rgl 0.108.5
 
 ## Minor changes
 
 * Now that `pkgdown` 2.0.0 has been released, a number 
 of internal workarounds to support the development version
 have been removed.
+
+## Bug fixes
+
+* as.mesh3d.rglobject() didn't handle objects with indices
+properly.
 
 # rgl  0.108.3
 

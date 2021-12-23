@@ -277,48 +277,56 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
 }
 
 as.mesh3d.rglobject <- function(x, ...) {
-  local_t <- function(x) {
-    if (!is.null(x)) t(x)
-  }
-  indices <- NULL
-  vertices <- NULL
-  normals <- NULL
-  texcoords <- NULL
-  verts <- x$vertices
-  nvert <- NROW(verts)
-  if (!is.null(verts)) {
-    type <- x$type
-    inds <- switch(as.character(type),
-                     triangles =,
-                     planes = matrix(1:nvert, nrow = 3),
-                     quads = {
-                       nquads <- nvert/4
-                       matrix(4*rep(seq_len(nquads) - 1, each = 6) + c(1,2,3,1,3,4), nrow = 3)
-                     },
-                     surface = {
-                       dim <- x$dim
-                       ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1)
-                       if (x$flipped)
-                         rbind(c(ul-1, ul-1+dim[1]),
-                               c(ul, ul),
-                               c(ul-1+dim[1], ul+dim[1]))
-                       else
-                         rbind(c(ul, ul),
-                               c(ul-1, ul-1+dim[1]),
-                               c(ul-1+dim[1], ul+dim[1]))
-                     },
-                     NULL)
-      if (length(inds)) {
-        indices <- inds
-        vertices <- local_t(x$vertices)
-        normals <- x$normals
-        texcoords <- x$texcoords
-        material <- x$material
-      }
-    }
-  if (length(vertices))
-    tmesh3d(vertices, indices, homogeneous = FALSE, material = material,
-            normals = normals, texcoords = texcoords)
+  vertices <- x$vertices
+  if (is.null(indices <- x$indices))
+    if (x$type == "surface") {
+      dim <- x$dim
+      ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1)
+      if (x$flipped)
+        indices <- rbind(c(ul-1, ul-1+dim[1]),
+                         c(ul, ul),
+                         c(ul-1+dim[1], ul+dim[1]))
+      else
+        indices <- rbind(c(ul, ul),
+                         c(ul-1, ul-1+dim[1]),
+                         c(ul-1+dim[1], ul+dim[1]))
+    } else
+      indices <- seq_len(NROW(vertices))
+  material <- x$material
+  if (length(indices))
+    switch(x$type,
+      points = mesh3d(x = vertices,
+                      normals = x$normals,
+                      texcoords = x$texcoords,
+                      points = indices,
+                      material = x$material),
+      linestrip = {
+        indices <- as.numeric(rbind(indices[-length(indices)],
+                                    indices[-1]))
+        mesh3d(x = vertices,
+               segments = indices,
+               material = x$material)
+      }, 
+      lines = mesh3d(x = vertices,
+                        normals = x$normals,
+                        texcoords = x$texcoords,
+                        segments = indices,
+                        material = x$material),
+      surface =,
+      triangles = mesh3d(x = vertices,
+                         normals = x$normals,
+                         texcoords = x$texcoords,
+                         triangles = indices,
+                         material = x$material),
+      quads = mesh3d(x = vertices,
+                     normals = x$normals,
+                     texcoords = x$texcoords,
+                     quads = indices,
+                     material = x$material),
+        NULL
+      )
+  else
+    NULL
 }
 
 mergeVertices <- function(mesh, notEqual = NULL, attribute = "vertices",
