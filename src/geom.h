@@ -24,6 +24,7 @@ public:
   void operator += (const Sphere& sphere);
   void operator += (const Vertex& vertex);
   bool operator < (const AABox& aabox) const;
+  AABox transform(Matrix4x4& M);
   Vertex getCenter(void) const;
   Vertex vmin, vmax;
 };

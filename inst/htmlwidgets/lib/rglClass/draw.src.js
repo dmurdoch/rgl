@@ -217,6 +217,12 @@
         gl.uniformMatrix4fv( obj.normMatLoc, false, new Float32Array(this.normMatrix.getAsArray()) );
         gl.uniform3fv( obj.emissionLoc, obj.emission);
         gl.uniform1f( obj.shininessLoc, obj.shininess);
+        while ((typeof subscene.lights === "undefined" ||
+                subscene.lights.length === 0) && 
+               typeof subscene.parent !== "undefined")
+          subscene = this.getObj(subscene.parent);
+        if (typeof subscene.lights === "undefined")
+          return;
         for (i=0; i < subscene.lights.length; i++) {
           light = this.getObj(subscene.lights[i]);
           if (!light.initialized) this.initObj(light);

@@ -186,7 +186,9 @@ plot3d.rglscene <- function(x, add=FALSE, ...) {
   root <- x$rootSubscene
   if (is.null(root)) root <- x  # Should work with pre-subscene objects
   if (!add) {
+    args <- list(...)
     params <- getr3dDefaults()
+    params[names(args)] <- args
     if (!is.null(x$material)) {
       if (is.null(params$material)) params$material <- list()
       params$material[names(x$material)] <- x$material
@@ -246,8 +248,10 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
 			    newviewport = x$par3d$viewport,
 			    copyLights = FALSE)
 			   
-  if (!is.null(x$par3d$scale))
-    par3d(scale = x$par3d$scale)
+  if (!is.null(scale <- x$par3d$scale))
+    par3d(scale = scale)
+  if (!is.null(userMatrix <- x$par3d$userMatrix))
+    par3d(userMatrix = userMatrix)
   listeners <- list(x$par3d$listeners) # list contains old ids
   names(listeners) <- subscene         # names are new ids
     
@@ -279,6 +283,7 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
         dotranslations(child)
     }
     dotranslations(subscene)
+    useSubscene3d(subscene)
     return(results)
   } else
     return(list(results=results, objects=objects, listeners=listeners))

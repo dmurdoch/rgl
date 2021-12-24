@@ -28,6 +28,9 @@ rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF",
   be used to form the location values, so all three coordinates
   can be specified in \code{x}.
   
+  If no lights have been added to a subscene, lights from the parent
+  subscene will be used.
+  
 See \code{\link{material3d}} for a discussion of how
 the components of the light affect the display of objects.
 }

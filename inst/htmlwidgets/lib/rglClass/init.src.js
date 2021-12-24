@@ -352,6 +352,8 @@
       sub.opaque = [];
       sub.lights = [];
       sub.needsBegin = true;
+      if (typeof sub.objects !== "undefined")
+        sub.objects = [].concat(sub.objects); /* make sure it's an array */
       for (i=0; i < sub.objects.length; i++) {
         obj = this.getObj(sub.objects[i]);
         if (typeof obj === "undefined") {

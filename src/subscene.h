@@ -38,10 +38,11 @@ class Subscene : public SceneNode {
   */
 private:
 
+  Sphere getViewSphere();
   void setupViewport(RenderContext* rctx);
-  void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
-  void setupModelMatrix(RenderContext* rctx, Vertex center);
-  void setupModelViewMatrix(RenderContext* rctx, Vertex center);
+  void setupProjMatrix(RenderContext* rctx);
+  void setupModelMatrix(RenderContext* rctx);
+  void setupModelViewMatrix(RenderContext* rctx);
   void setDefaultMouseMode();
   
   void disableLights(RenderContext* rctx);
@@ -125,11 +126,6 @@ public:
   size_t getChildCount() const { return subscenes.size(); }
   Subscene* getChild(int which) const { return subscenes[which]; }
   
-  /**
-   * obtain bounding box
-   **/
-  const AABox& getBoundingBox() const { return data_bbox; }
-    
   /**
    * get the bbox
    */
@@ -276,10 +272,10 @@ private:
   void calcDataBBox();
   
   /**
-   * shrink bounding-box when something has been removed
+   * Need to recalc bbox
    **/
 
-  void shrinkBBox();
+  void newBBox();
   
   /**
    * bounding box of subscene

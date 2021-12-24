@@ -354,7 +354,8 @@ Read data given by accessor object.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A vector or array as specified in the accessor.
+A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+indexes the element.
 }
 }
 \if{html}{\out{<hr>}}

@@ -214,14 +214,17 @@ the following operations:
 \item It converts the point to homogeneous coordinates by appending \code{w = 1}, giving
 the vector \code{v = (x, y, z, 1)}.
 \item It calculates the \code{M = par3d("modelMatrix")} as a product from right to left
-of the following matrices:
+of several matrices:
   \itemize{  
   \item A matrix to translate the centre of the bounding box to the origin.
   \item A matrix to rescale according to \code{par3d("scale")}.
   \item The \code{par3d("userMatrix")} as set by the user.
   \item A matrix which may be set by mouse movements.
-  \item If \code{s} has the \code{"model"} set to \code{"modify"}, a similar collection of
-  matrices using parameters from the parent subscene.
+  \item The description above applies to the usual case where there 
+  is just one subscene, or where the subscene's \code{"model"} is set to
+  \code{"replace"}.  If it is set to \code{"modify"}, the first step is
+  skipped, and at the end the procedure is followed for the parent subscene.  If it is set to \code{"inherit"} only the parent settings
+  are used.
   }
 \item It multiplies the point by \code{M} giving \code{u = M \%*\% v}. 
 \item It multiplies that point by a matrix based on the observer position
