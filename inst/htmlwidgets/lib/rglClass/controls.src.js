@@ -20,7 +20,7 @@
           fullset = [].concat(control.fullset),
           i, j, subsceneid,
           adds = [], deletes = [];
-      if (this.missing(value))
+      if (rglwidgetClass.missing(value))
         value = control.value = 0;
       if (control.accumulate)
         for (i=0; i <= value; i++)
@@ -52,8 +52,8 @@
           entries = [].concat(control.entries),
           ncol = entries.length,
           nrow = values.length/ncol,
-          properties = this.repeatToLen(control.properties, ncol),
-          objids = this.repeatToLen(control.objids, ncol),
+          properties = rglwidgetClass.repeatToLen(control.properties, ncol),
+          objids = rglwidgetClass.repeatToLen(control.objids, ncol),
           property, objid = objids[0],
           obj = this.getObj(objid),
           propvals, i, j, v1, v2, p, entry, gl, needsBinding,
@@ -173,8 +173,8 @@
       if (!ncol)
         return;
 
-      vertices = this.repeatToLen(vertices, ncol);
-      attributes = this.repeatToLen(attributes, ncol);
+      vertices = rglwidgetClass.repeatToLen(vertices, ncol);
+      attributes = rglwidgetClass.repeatToLen(attributes, ncol);
 
       if (direct)
         interp = false;

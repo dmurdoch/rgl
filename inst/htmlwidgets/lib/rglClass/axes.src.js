@@ -17,12 +17,12 @@
                       [1,1,0,1], [1,1,1,1]], 
            dim, i, j, k, edges, hull, step, result = [], proj = [];
       for (i = 0; i < vertices.length; i++) {
-        proj[i] = this.multVM(vertices[i], prmv);
+        proj[i] = rglwidgetClass.multVM(vertices[i], prmv);
         proj[i][0] = proj[i][0]/proj[i][3];
         proj[i][1] = proj[i][1]/proj[i][3];
         proj[i][2] = i;
       }
-      hull = this.chull(proj.slice());  
+      hull = rglwidgetClass.chull(proj.slice());  
       for (i = 0; i < hull.length; i++)
         hull[i] = hull[i][2];
       hull.push(hull[0]);
@@ -139,7 +139,7 @@
         }
       ticks.vertices = vertices;
       ticks.vertexCount = vertices.length;
-      ticks.values = new Float32Array(this.flatten(vertices));
+      ticks.values = new Float32Array(rglwidgetClass.flatten(vertices));
       ticks.initialized = false;
     };
     
@@ -202,7 +202,7 @@
           for (i = 0; i < locations.length; i++) {
             if (Math.abs(values[i])/max < Math.pow(10, -5))
               values[i] = 0;
-            labels.push(this.signif(values[i], 4).toString());
+            labels.push(rglwidgetClass.signif(values[i], 4).toString());
           }
           obj.axes.nticks[dim] = locations.length;  
         }
@@ -305,7 +305,7 @@
     
     rglwidgetClass.prototype.fixVertex = function(orig, parms, center, bbox) {
       var vertex = [0,0,0];
-      if (this.missing(orig[0]))
+      if (rglwidgetClass.missing(orig[0]))
         vertex[parms.at] = center[parms.at];
       else if (orig[0] === "-Inf")
         vertex[parms.at] = bbox[2*parms.at];

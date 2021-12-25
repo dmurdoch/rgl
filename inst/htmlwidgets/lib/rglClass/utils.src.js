@@ -12,7 +12,7 @@
      * @param M {number[][]} Left operand
      * @param v {number[]} Right operand
      */
-    rglwidgetClass.prototype.multMV = function(M, v) {
+    rglwidgetClass.multMV = function(M, v) {
         return [ M.m11 * v[0] + M.m12 * v[1] + M.m13 * v[2] + M.m14 * v[3],
                  M.m21 * v[0] + M.m22 * v[1] + M.m23 * v[2] + M.m24 * v[3],
                  M.m31 * v[0] + M.m32 * v[1] + M.m33 * v[2] + M.m34 * v[3],
@@ -26,7 +26,7 @@
      * @param v {number[]} left operand
      * @param M {number[][]} right operand
      */
-    rglwidgetClass.prototype.multVM = function(v, M) {
+    rglwidgetClass.multVM = function(v, M) {
         return [ M.m11 * v[0] + M.m21 * v[1] + M.m31 * v[2] + M.m41 * v[3],
                  M.m12 * v[0] + M.m22 * v[1] + M.m32 * v[2] + M.m42 * v[3],
                  M.m13 * v[0] + M.m23 * v[1] + M.m33 * v[2] + M.m43 * v[3],
@@ -39,8 +39,8 @@
      * @returns {number}
      * @param v {number[]}
      */
-    rglwidgetClass.prototype.vlen = function(v) {
-      return Math.sqrt(this.dotprod(v, v));
+    rglwidgetClass.vlen = function(v) {
+      return Math.sqrt(rglwidgetClass.dotprod(v, v));
     };
 
     /**
@@ -50,7 +50,7 @@
      * @param a {number[]}
      * @param b {number[]}
      */
-    rglwidgetClass.prototype.dotprod = function(a, b) {
+    rglwidgetClass.dotprod = function(a, b) {
       return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
     };
 
@@ -60,7 +60,7 @@
      * @param a {number[]}
      * @param b {number[]}
      */
-    rglwidgetClass.prototype.xprod = function(a, b) {
+    rglwidgetClass.xprod = function(a, b) {
       return [a[1]*b[2] - a[2]*b[1],
           a[2]*b[0] - a[0]*b[2],
           a[0]*b[1] - a[1]*b[0]];
@@ -72,11 +72,11 @@
      * @param a {number[][]}
      * @param b {number[]|number[][]}
      */
-    rglwidgetClass.prototype.cbind = function(a, b) {
+    rglwidgetClass.cbind = function(a, b) {
       if (b.length < a.length)
-        b = this.repeatToLen(b, a.length);
+        b = rglwidgetClass.repeatToLen(b, a.length);
       else if (a.length < b.length)
-        a = this.repeatToLen(a, b.length);
+        a = rglwidgetClass.repeatToLen(a, b.length);
       return a.map(function(currentValue, index) {
             return currentValue.concat(b[index]);
       });
@@ -89,7 +89,7 @@
      * @param i {number} Element to swap
      * @param j {number} Other element to swap
      */
-    rglwidgetClass.prototype.swap = function(a, i, j) {
+    rglwidgetClass.swap = function(a, i, j) {
       var temp = a[i];
       a[i] = a[j];
       a[j] = temp;
@@ -100,13 +100,13 @@
      * @returns {any[]}
      * @param a {any[][]}
      */
-    rglwidgetClass.prototype.flatten = function(arr, result) {
+    rglwidgetClass.flatten = function(arr, result) {
       var value;
       if (typeof result === "undefined") result = [];
       for (var i = 0, length = arr.length; i < length; i++) {
         value = arr[i];
         if (Array.isArray(value)) {
-          this.flatten(value, result);
+          rglwidgetClass.flatten(value, result);
         } else {
           result.push(value);
         }
@@ -176,7 +176,7 @@
       if (mat instanceof CanvasMatrix4)
         return mat;
       var result = new CanvasMatrix4();
-      mat = this.flatten(this.transpose(mat));
+      mat = rglwidgetClass.flatten(this.transpose(mat));
       result.load(mat);
       return result;
     };
@@ -205,11 +205,11 @@
           flags = obj.flags;
         if (obj.type === "light")
           return "lights";
-        if (this.isSet(flags, this.f_is_subscene))
+        if (rglwidgetClass.isSet(flags, rglwidgetClass.f_is_subscene))
             return "subscenes";
-        if (this.isSet(flags, this.f_is_clipplanes))
+        if (rglwidgetClass.isSet(flags, rglwidgetClass.f_is_clipplanes))
             return "clipplanes";
-        if (this.isSet(flags, this.f_is_transparent))
+        if (rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent))
             return "transparent";
         return "opaque";
     };
@@ -273,7 +273,7 @@
      * @param {any | any[]} arr The input array
      * @param {number} len The desired output length
      */
-    rglwidgetClass.prototype.repeatToLen = function(arr, len) {
+    rglwidgetClass.repeatToLen = function(arr, len) {
       arr = [].concat(arr);
       if (!arr.length) 
         throw new RangeError("array is length 0");
@@ -363,7 +363,7 @@
     rglwidgetClass.prototype.getAdj = function (obj, index, offset, text) {
       var len, pos;
       if (typeof obj.pos === "undefined")
-        return this.flatten(obj.adj);
+        return rglwidgetClass.flatten(obj.adj);
       pos = obj.pos[index % obj.pos.length];
       switch(pos) {
         case 0: return [0.5, 0.5, 0.5];
@@ -476,7 +476,7 @@
       	rect.right <= 2*windWidth);
     };
     
-    rglwidgetClass.prototype.keydiff = function(obj1, obj2) {
+    rglwidgetClass.keydiff = function(obj1, obj2) {
       var keys = Object.keys(obj1), i, result = [];
       for (i=0;i<keys.length;i++) {
         if (typeof obj1[keys[i]] !== "undefined" &&
@@ -486,7 +486,7 @@
       return result;
     };
 
-    rglwidgetClass.prototype.isSet = function(flags, flag) {
+    rglwidgetClass.isSet = function(flags, flag) {
       /* jshint bitwise: false */
       return (flags & flag) !== 0;
       /* jshint bitwise: true */
@@ -497,10 +497,10 @@
       
       this.setmvMatrix(subid);
       m = new CanvasMatrix4(this.mvMatrix);
-      v = this.multVM(v, m);
+      v = rglwidgetClass.multVM(v, m);
       this.setprMatrix(subid);
       m = new CanvasMatrix4(this.prMatrix);
-      v = this.multVM(v, m);
+      v = rglwidgetClass.multVM(v, m);
       this.getViewport(subid);
       v[0] = v[0]*0.5/v[3] + 0.5 + this.vp.x/this.vp.width;
       v[1] = v[1]*0.5/v[3] + 0.5 + this.vp.y/this.vp.height;
@@ -513,7 +513,7 @@
      * From Wikipedia, used under Creative Commons Attribution-ShareAlike License
      * @returns { Array } Indices of convex hull points
      */
-    rglwidgetClass.prototype.chull = function(points) {
+    rglwidgetClass.chull = function(points) {
       function cross(a, b, o) {
         return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
       }
@@ -548,7 +548,7 @@
      * @param { number } digits
      * @returns { number } 
      */
-    rglwidgetClass.prototype.signif = function(x, digits) { 
+    rglwidgetClass.signif = function(x, digits) { 
       return parseFloat(x.toPrecision(digits));
     };
       
@@ -557,7 +557,7 @@
      * @param x
      * @returns { bool }
      */
-    rglwidgetClass.prototype.missing = function(x) {
+    rglwidgetClass.missing = function(x) {
       return x !== "-Inf" && x !== "Inf" &&
              (isNaN(x) || x === null || typeof(x) === "undefined");
     };
@@ -566,7 +566,7 @@
      * Write matrix to log
      * @param M
      */
-    rglwidgetClass.prototype.logMatrix = function(M) {
+    rglwidgetClass.logMatrix = function(M) {
       console.log("matrix(c("+M.m11+","+M.m12+","+M.m13+","+M.m14+",\n"+
                               M.m21+","+M.m22+","+M.m23+","+M.m24+",\n"+
                               M.m31+","+M.m32+","+M.m33+","+M.m34+",\n"+
@@ -578,7 +578,7 @@
      * @param {3 vector} v
      */
      
-    rglwidgetClass.prototype.logVec3 = function(v) {
+    rglwidgetClass.logVec3 = function(v) {
       console.log("c("+v[0]+","+v[1]+","+v[2]+")");
     };
     
@@ -587,7 +587,7 @@
      * @param {vector} x
      * @param {vector} y
      */
-     rglwidgetClass.prototype.vsum = function(x, y) {
+     rglwidgetClass.vsum = function(x, y) {
        var i, result = [].concat(x);
        for (i = 0; i < y.length; i++)
          result[i] += y[i];
@@ -599,8 +599,8 @@
      * @param {vector} x
      * @param {vector} y
      */
-     rglwidgetClass.prototype.vdiff = function(x, y) {
-        return this.vsum(x, this.vscale(y, -1));
+     rglwidgetClass.vdiff = function(x, y) {
+        return rglwidgetClass.vsum(x, rglwidgetClass.vscale(y, -1));
      };
 
     /**
@@ -608,7 +608,7 @@
      * @param {number} s
      * @param {vector} x
      */
-     rglwidgetClass.prototype.vscale = function(x, s) {
+     rglwidgetClass.vscale = function(x, s) {
        var i, result = [].concat(x);
        for (i = 0; i < x.length; i++)
          result[i] *= s;
@@ -619,6 +619,6 @@
      * Normalize a vector
      * @param {vector} v
      */
-    rglwidgetClass.prototype.normalize = function(v) {
-      return this.vscale(v, 1/this.vlen(v));
+    rglwidgetClass.normalize = function(v) {
+      return rglwidgetClass.vscale(v, 1/rglwidgetClass.vlen(v));
     };
