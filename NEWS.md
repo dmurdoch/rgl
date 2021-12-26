@@ -15,6 +15,8 @@
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
   
+* Added `getShaders()` function to get shaders used in WebGL.
+  
 ## Minor changes
 
   * Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
