@@ -1,5 +1,5 @@
 
-# rgl  0.108.6
+# rgl  0.108.7
 
 ## Major changes
 
@@ -18,6 +18,11 @@
 ## Minor changes
 
   * Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
+  
+## Bug fixes
+
+  * In WebGL, the front vs back calculation sometimes
+got the wrong result (issue #164).
     
 # rgl 0.108.5
 
