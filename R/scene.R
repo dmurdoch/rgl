@@ -66,7 +66,7 @@ pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
   if (!is.null(tag)) {
     if (!missing(id))
       stop("Only one of 'id' and 'tag' should be specified.")
-    allids <- ids3d(intersect(c("shapes", "bboxdeco"), type))
+    allids <- ids3d(intersect(c("shapes", "bboxdeco"), type), subscene = 0, tags = TRUE)
     id <- allids$id[allids$tag %in% tag]
   }
   type <- rgl.enum.nodetype(type)
