@@ -178,12 +178,18 @@ void Subscene::addShape(Shape* shape)
 
 void Subscene::addBBox(const AABox& bbox, bool changes)
 {
-  data_bbox += bbox;
   bboxChanges |= changes;
-  intersectClipplanes();
-  if (parent && !ignoreExtent) {
-    parent->bboxChanges |= changes;
-    parent->newBBox();
+  if (data_bbox.isValid()) {
+    /* Update will make it test as valid but not
+     * handle other shapes, so we don't
+     * update unless it is already valid */
+    data_bbox += bbox;
+    intersectClipplanes();
+    if (parent && !ignoreExtent) {
+      Rprintf("parent %d newBBox\n", parent->getObjID());
+      parent->bboxChanges |= changes;
+      parent->newBBox();
+    }
   }
 }
   
@@ -1065,6 +1071,7 @@ void Subscene::setUserMatrix(double* src)
 {
   ModelViewpoint* this_modelviewpoint = getModelViewpoint();
   this_modelviewpoint->setUserMatrix(src);
+  newBBox();
 }
 
 void Subscene::getUserProjection(double* dest)
