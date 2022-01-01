@@ -15,3 +15,14 @@ test_that("tags work", {
   expect_equal(unclass(x), tagged3d("hello2", full = TRUE)$id)
   expect_equal(tagged3d(ids = x), "hello2")
 })
+
+test_that("pop3d works on tags", {
+  open3d()
+  id1 <- points3d(1,1,1, tag = "id1")
+  newSubscene3d()
+  id2 <- points3d(2,2,2, tag = "id2")
+  pop3d(tag = "id1")
+  expect_equal(ids3d(subscene = 0, tags = TRUE),
+               data.frame(id = as.numeric(id2), 
+                          type = "points", tag = "id2"))
+})

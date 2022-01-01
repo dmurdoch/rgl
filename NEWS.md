@@ -1,5 +1,5 @@
 
-# rgl  0.108.7
+# rgl  0.108.8
 
 ## Major changes
 
@@ -17,12 +17,13 @@
   
 ## Minor changes
 
-  * Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
+* Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
   
 ## Bug fixes
 
-  * In WebGL, the front vs back calculation sometimes
+* In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
+* `pop3d(tag = x)` did not always find the objects with `tag == x` if they were not in the current subscene.
     
 # rgl 0.108.5
 
