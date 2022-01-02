@@ -186,7 +186,6 @@ void Subscene::addBBox(const AABox& bbox, bool changes)
     data_bbox += bbox;
     intersectClipplanes();
     if (parent && !ignoreExtent) {
-      Rprintf("parent %d newBBox\n", parent->getObjID());
       parent->bboxChanges |= changes;
       parent->newBBox();
     }
