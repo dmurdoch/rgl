@@ -45,19 +45,20 @@ ABCLineSet::ABCLineSet(Material& in_material, int in_nbase, double* in_base, int
 
 AABox& ABCLineSet::getBoundingBox(Subscene* subscene)
 {
-  updateSegments(subscene->getBoundingBox());
+  updateSegments(subscene);
   return LineSet::getBoundingBox(subscene); 
 }
 
 void ABCLineSet::renderBegin(RenderContext* renderContext)
 {
-  updateSegments(renderContext->subscene->getBoundingBox());
+  updateSegments(renderContext->subscene);
   invalidateDisplaylist();
   LineSet::renderBegin(renderContext);
 }
 
-void ABCLineSet::updateSegments(const AABox& sceneBBox)
+void ABCLineSet::updateSegments(SceneNode* subscene)
 {
+  AABox sceneBBox = ((Subscene*)subscene)->getBoundingBox();
   double bbox[2][3] = { {sceneBBox.vmin.x, sceneBBox.vmin.y, sceneBBox.vmin.z},
   {sceneBBox.vmax.x, sceneBBox.vmax.y, sceneBBox.vmax.z} };
   double x[2][3];
@@ -94,9 +95,9 @@ void ABCLineSet::updateSegments(const AABox& sceneBBox)
   }
 }
 
-void ABCLineSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void ABCLineSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  updateSegments(bbox);
-  LineSet::getAttribute(bbox, attrib, first, count, result);
+  updateSegments(subscene);
+  LineSet::getAttribute(subscene, attrib, first, count, result);
 }
 

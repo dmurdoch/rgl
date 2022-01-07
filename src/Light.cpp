@@ -59,7 +59,7 @@ void Light::setup(RenderContext* renderContext)
 #endif
 }
 
-int Light::getAttributeCount(AABox& bbox, AttribID attrib)
+int Light::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
     case COLORS: return 3;
@@ -70,9 +70,9 @@ int Light::getAttributeCount(AABox& bbox, AttribID attrib)
   return 0;
 }
 
-void Light::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void Light::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {

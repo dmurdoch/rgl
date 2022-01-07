@@ -99,7 +99,7 @@ void Shape::drawEnd(RenderContext* renderContext)
   drawLevel--;
 }
 
-int Shape::getAttributeCount(AABox& bbox, AttribID attrib)
+int Shape::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) { 
     case COLORS:  return material.colors.getLength();
@@ -109,9 +109,9 @@ int Shape::getAttributeCount(AABox& bbox, AttribID attrib)
   return 0;
 }
 
-void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void Shape::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {

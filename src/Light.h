@@ -26,8 +26,8 @@ public:
   	 Color specular=Color(1.0,1.0,1.0) );
   void setup(RenderContext* renderContext);
 
-  int getAttributeCount(AABox& bbox, AttribID attrib);
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(SceneNode* subscene, AttribID attrib);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "light", buflen); };
 
 private:

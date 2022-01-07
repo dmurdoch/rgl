@@ -55,9 +55,9 @@ public:
   void render(RenderContext* renderContext);
   AABox getBoundingBox(const AABox& boundingBox) const;
   Vertex getMarkLength(const AABox& boundingBox) const;
-  int getAttributeCount(AABox& bbox, AttribID attrib);
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
-  String  getTextAttribute(AABox& bbox, AttribID attrib, int index);
+  int getAttributeCount(SceneNode* subscene, AttribID attrib);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
+  String  getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
   Material* getMaterial()  { return &material; }
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "bboxdeco", buflen); };
   Vec3 marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, Material* material);

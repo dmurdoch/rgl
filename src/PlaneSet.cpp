@@ -55,20 +55,21 @@ PlaneSet::PlaneSet(Material& in_material, int in_nnormal, double* in_normal, int
 
 AABox& PlaneSet::getBoundingBox(Subscene* subscene)
 {
-  updateTriangles(subscene->getBoundingBox());
+  updateTriangles(subscene);
   return TriangleSet::getBoundingBox(subscene); 
 }
 
 void PlaneSet::renderBegin(RenderContext* renderContext)
 {
-  updateTriangles(renderContext->subscene->getBoundingBox());
+  updateTriangles(renderContext->subscene);
   invalidateDisplaylist();
   TriangleSet::renderBegin(renderContext);
 }
 
-void PlaneSet::updateTriangles(const AABox& sceneBBox)
+void PlaneSet::updateTriangles(Subscene* subscene)
 {
   int perms[3][3] = { {0,0,1}, {1,2,2}, {2,1,0} };
+  AABox sceneBBox = subscene->getBoundingBox();
   double bbox[2][3] = { {sceneBBox.vmin.x, sceneBBox.vmin.y, sceneBBox.vmin.z},
                        {sceneBBox.vmax.x, sceneBBox.vmax.y, sceneBBox.vmax.z} };
   double x[12][3];
@@ -164,18 +165,18 @@ void PlaneSet::updateTriangles(const AABox& sceneBBox)
   }
 }
 
-int PlaneSet::getAttributeCount(AABox& bbox, AttribID attrib)
+int PlaneSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
 	switch (attrib) {
 	case NORMALS: 
 	case OFFSETS: return nPlanes;
 	}
-	return TriangleSet::getAttributeCount(bbox, attrib);
+	return TriangleSet::getAttributeCount(subscene, attrib);
 }
 
-void PlaneSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void PlaneSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-	int n = getAttributeCount(bbox, attrib);
+	int n = getAttributeCount(subscene, attrib);
 	if (first + count < n) n = first + count;
 	if (first < n) {
 		if (attrib == NORMALS) {
@@ -189,8 +190,8 @@ void PlaneSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
 			while (first < n) 
 				*result++ = offset.getRecycled(first++);
 		} else {
-			updateTriangles(bbox);
-			TriangleSet::getAttribute(bbox, attrib, first, count, result);
+			updateTriangles((Subscene*)subscene);
+			TriangleSet::getAttribute(subscene, attrib, first, count, result);
 		}
 	}
 }

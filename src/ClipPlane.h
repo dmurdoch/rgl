@@ -34,9 +34,9 @@ public:
   
   virtual int getElementCount(void) { return nPlanes; }
 
-  virtual int getAttributeCount(AABox& bbox, AttribID attrib);
+  virtual int getAttributeCount(SceneNode* subscene, AttribID attrib);
   
-  virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  virtual void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
 
   void enable(bool show);  // after it has been drawn, this enables it or disables it
   

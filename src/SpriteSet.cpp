@@ -275,7 +275,7 @@ void SpriteSet::render(RenderContext* renderContext)
     draw(renderContext);
 }
 
-int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib) 
+int SpriteSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 
 {
   switch (attrib) {
     case VERTICES: return vertex.size();
@@ -290,12 +290,12 @@ int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib)
     case ADJ: return 1;
     case POS: return pos.size();
   }
-  return Shape::getAttributeCount(bbox, attrib);
+  return Shape::getAttributeCount(subscene, attrib);
 }
 
-void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void SpriteSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   int ind = 0;
 
   if (first + count < n) n = first + count;
@@ -350,19 +350,19 @@ void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count,
       	  *result++ = pos.get(first++);
       	return;      	
     }  
-    Shape::getAttribute(bbox, attrib, first, count, result);
+    Shape::getAttribute(subscene, attrib, first, count, result);
   }
 }
 
-String SpriteSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+String SpriteSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     scene->get_shape(shapes[index])->getTypeName(buffer, 20);
     return String(static_cast<int>(strlen(buffer)), buffer);
   } else
-    return Shape::getTextAttribute(bbox, attrib, index);
+    return Shape::getTextAttribute(subscene, attrib, index);
 }
 
 Shape* SpriteSet::get_shape(int id)

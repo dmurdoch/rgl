@@ -120,7 +120,7 @@ void TextSet::drawEnd(RenderContext* renderContext)
 #endif
 }
 
-int TextSet::getAttributeCount(AABox& bbox, AttribID attrib) 
+int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 
 {
   switch (attrib) {
     case FAMILY: 
@@ -131,12 +131,12 @@ int TextSet::getAttributeCount(AABox& bbox, AttribID attrib)
     case ADJ: return 1;
     case POS: return pos[0] ? npos : 0;
   }
-  return Shape::getAttributeCount(bbox, attrib);
+  return Shape::getAttributeCount(subscene, attrib);
 }
 
-void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void TextSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch(attrib) {
@@ -166,13 +166,13 @@ void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
         *result++ = pos[first++];
       return;
     }
-    Shape::getAttribute(bbox, attrib, first, count, result);
+    Shape::getAttribute(subscene, attrib, first, count, result);
   }
 }
 
-String TextSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+String TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (index < n) {
     switch (attrib) {
     case TEXTS: 
@@ -182,5 +182,5 @@ String TextSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
       return String(static_cast<int>(strlen(family)), family);
     }
   }
-  return Shape::getTextAttribute(bbox, attrib, index);
+  return Shape::getTextAttribute(subscene, attrib, index);
 }

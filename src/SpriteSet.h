@@ -33,9 +33,9 @@ public:
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "sprites", buflen); };
   
   virtual int getElementCount(void);
-  int getAttributeCount(AABox& bbox, AttribID attrib);
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
-  String getTextAttribute(AABox& bbox, AttribID attrib, int index);
+  int getAttributeCount(SceneNode* subscene, AttribID attrib);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
+  String getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
   
   /**
    * location of individual items

@@ -255,7 +255,7 @@ void Surface::drawEnd(RenderContext* renderContext)
 #endif
 }
 
-int Surface::getAttributeCount(AABox& bbox, AttribID attrib)
+int Surface::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
     case VERTICES: return nx*nz;
@@ -267,12 +267,12 @@ int Surface::getAttributeCount(AABox& bbox, AttribID attrib)
     case SURFACEDIM: return 1;
     case FLAGS: return 2; 
   }
-  return Shape::getAttributeCount(bbox, attrib);
+  return Shape::getAttributeCount(subscene, attrib);
 }
 
-void Surface::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void Surface::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {
@@ -312,6 +312,6 @@ void Surface::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
         *result++ = (double) orientation;
         return;
       }
-    Shape::getAttribute(bbox, attrib, first, count, result);
+    Shape::getAttribute(subscene, attrib, first, count, result);
   }
 }

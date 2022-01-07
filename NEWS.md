@@ -1,5 +1,5 @@
 
-# rgl  0.108.8
+# rgl  0.108.9
 
 ## Major changes
 
@@ -18,6 +18,7 @@
 ## Minor changes
 
 * Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
+* Changed the internal organization of bounding box calculations.
   
 ## Bug fixes
 

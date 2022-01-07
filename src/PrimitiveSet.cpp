@@ -205,18 +205,18 @@ void PrimitiveSet::draw(RenderContext* renderContext)
   SAVEGLERROR;
 }
 
-int PrimitiveSet::getAttributeCount(AABox& bbox, AttribID attrib)
+int PrimitiveSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
     case VERTICES: return nvertices;
     case INDICES: return nindices;
   }
-  return Shape::getAttributeCount(bbox, attrib);
+  return Shape::getAttributeCount(subscene, attrib);
 }
 
-void PrimitiveSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void PrimitiveSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {
@@ -233,7 +233,7 @@ void PrimitiveSet::getAttribute(AABox& bbox, AttribID attrib, int first, int cou
         *result++ = indices[first++] + 1;
       return;
     }
-    Shape::getAttribute(bbox, attrib, first, count, result);
+    Shape::getAttribute(subscene, attrib, first, count, result);
   }
 }
 
@@ -383,18 +383,18 @@ void FaceSet::drawEnd(RenderContext* renderContext)
 }
 
 
-int FaceSet::getAttributeCount(AABox& bbox, AttribID attrib)
+int FaceSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
     case NORMALS: return nvertices;
     case TEXCOORDS: return texCoordArray.size();
   }
-  return PrimitiveSet::getAttributeCount(bbox, attrib);
+  return PrimitiveSet::getAttributeCount(subscene, attrib);
 }
 
-void FaceSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void FaceSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {
@@ -418,6 +418,6 @@ void FaceSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, d
 	      return;
       }
     }
-    PrimitiveSet::getAttribute(bbox, attrib, first, count, result);
+    PrimitiveSet::getAttribute(subscene, attrib, first, count, result);
   }
 }
