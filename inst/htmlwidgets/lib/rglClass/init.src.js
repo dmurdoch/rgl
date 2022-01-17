@@ -490,7 +490,8 @@
 
     if (is_transparent) {
       depth_sort = ["triangles", "quads", "surface",
-                    "spheres", "sprites", "text"].indexOf(type) >= 0;
+                    "spheres", "sprites", "text",
+                    "planes"].indexOf(type) >= 0;
     }
     
     if (is_brush)

@@ -35,9 +35,10 @@
       var perms = [[0,0,1], [1,2,2], [2,1,0]],
           x, xrow, elem, A, d, nhits, i, j, k, u, v, w, intersect, which, v0, v2, vx, reverse,
           face1 = [], face2 = [], normals = [],
-          nPlanes = obj.normals.length;
+          nPlanes = obj.normals.length, idx, center;
       obj.bbox = bbox;
       obj.vertices = [];
+      obj.centers = [];
       obj.initialized = false;
       for (elem = 0; elem < nPlanes; elem++) {
 //    Vertex Av = normal.getRecycled(elem);
@@ -94,11 +95,18 @@
 
               for (i=0; i<nhits-2; i++) {
                 obj.vertices.push(x[0]);
+                center = [];
+                for (k = 0; k<3; k++)
+                  center.push(x[0][k]/3);
                 normals.push(A);
                 for (j=1; j<3; j++) {
-                  obj.vertices.push(x[i + (reverse ? 3-j : j)]);
+                  idx = i + (reverse ? 3-j : j);
+                  obj.vertices.push(x[idx]);
+                  for (k=0; k<3; k++)
+                    center[k] += x[idx][k]/3;
                   normals.push(A);
                 }
+                obj.centers.push(center);
               }
             }
       }
