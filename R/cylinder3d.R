@@ -51,7 +51,7 @@ cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 =
   
   if (!is.null(e1)) {
     e1 <- as.matrix(as.data.frame(xyz.coords(e1)[c("x", "y", "z")]))
-    e1 <- e1[rep(seq_len(nrow(e1)), len=n),] 
+    e1 <- e1[rep(seq_len(nrow(e1)), length.out = n),] 
   } else 
     e1 <- (center[ind2,] - center[ind0,])[inds,]
   
@@ -71,7 +71,7 @@ cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 =
   }
   if (!is.null(e2)) {
     e2 <- as.matrix(as.data.frame(xyz.coords(e2)[c("x", "y", "z")]))
-    e2 <- e2[rep(seq_len(nrow(e2)), len=n),] 
+    e2 <- e2[rep(seq_len(nrow(e2)), length.out = n),] 
   } else
     e2 <- (e1[ind2,] - e1[ind0,])[inds,]
     
@@ -103,7 +103,7 @@ cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 =
   
   if (!is.null(e3)) {
     e3 <- as.matrix(as.data.frame(xyz.coords(e3)[c("x", "y", "z")]))
-    e3 <- e3[rep(seq_len(nrow(e3)), len=n),] 
+    e3 <- e3[rep(seq_len(nrow(e3)), length.out = n),] 
   } else {
     e3 <- matrix(NA_real_, n, 3)
     for (i in inds) e3[i,] <- xprod(e1[i,], e2[i,])
@@ -139,15 +139,15 @@ cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 =
     e3 <- s
   }
 
-  radius <- rep(radius, len=n)
-  twist <- rep(twist, len=n)
+  radius <- rep(radius, length.out = n)
+  twist <- rep(twist, length.out = n)
   
   if (debug) {
     for (i in inds) {
       segments3d(rbind(center[i,],center[i,]+e3[i,]*radius[i]*1.5,
                      center[i,],center[i,]+e2[i,]*radius[i]*1.5,
                      center[i,],center[i,]+e1[i,]*radius[i]*1.5), 
-                 col=rep(c("red", "green", "blue"), each=2))
+                 col = rep(c("red", "green", "blue"), each=2))
       text3d(center, texts=inds)
     }
   }
@@ -163,7 +163,7 @@ cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 =
     }
   }
   if (is.null(section)) {
-    theta <- seq(0, 2*pi, len=sides+1)[-1]
+    theta <- seq(0, 2*pi, length.out = sides+1)[-1]
     section <- cbind(cos(theta), sin(theta), 0)
   } else 
     sides <- nrow(section)

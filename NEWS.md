@@ -1,5 +1,5 @@
 
-# rgl  0.108.8
+# rgl  0.108.9
 
 ## Major changes
 
@@ -24,6 +24,10 @@
 * In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
 * `pop3d(tag = x)` did not always find the objects with `tag == x` if they were not in the current subscene.
+* The `fog` setting wasn't handled properly by `bg3d()`.
+* Numerous cases of partial argument matching were fixed
+(suggestion of Henrik Bengtsson in issue #170.)
+* Argument `col` is accepted as a synonym for `color` in `material3d()` and `rgl.material()`.
     
 # rgl 0.108.5
 

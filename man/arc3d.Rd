@@ -105,6 +105,6 @@ arc3d(from, to, center, col = "red")
 arc3d(from, 2*to, center, col = "blue")
 
 text3d(rbind(from, to, center, 2*to), 
-       text = c(paste0("from", 1:3), "to", "center", "2*to"),
+       texts = c(paste0("from", 1:3), "to", "center", "2*to"),
        depth_mask = FALSE, depth_test = "always")
 }
