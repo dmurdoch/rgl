@@ -1,5 +1,5 @@
 
-# rgl  0.108.8
+# rgl  0.108.10
 
 ## Major changes
 
@@ -24,6 +24,9 @@
 * In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
 * `pop3d(tag = x)` did not always find the objects with `tag == x` if they were not in the current subscene.
+* `planes3d()` objects were not displayed consistently 
+in `rgl` windows and WebGL displays, because the bounding
+boxes were not computed consistently (issue #169).
     
 # rgl 0.108.5
 
