@@ -8,7 +8,7 @@ typeFloat         <- 5126
 typeDouble        <- 5130  # Not supported in glTF
 
 getType <- function(x, useDouble = FALSE) {
-  r <- range(x, na.rm = TRUE)
+  r <- suppressWarnings(range(x, na.rm = TRUE))
   if (is.integer(x) && !any(is.na(x))) {
     if (r[1] < 0) {
       if (-128 <= r[1] && r[2] <= 127)

@@ -1,5 +1,5 @@
 
-# rgl  0.108.9
+# rgl  0.108.10
 
 ## Major changes
 
@@ -28,6 +28,9 @@ got the wrong result (issue #164).
 * Numerous cases of partial argument matching were fixed
 (suggestion of Henrik Bengtsson in issue #170.)
 * Argument `col` is accepted as a synonym for `color` in `material3d()` and `rgl.material()`.
+* `planes3d()` objects were not displayed consistently 
+in `rgl` windows and WebGL displays, because the bounding
+boxes were not computed consistently (issue #169).
     
 # rgl 0.108.5
 
