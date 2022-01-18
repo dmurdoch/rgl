@@ -23,7 +23,7 @@ turn3d <- function(x, y = NULL, n = 12, smooth = FALSE, ...) {
   ib <- matrix(nrow=4, ncol=0)
   it <- matrix(nrow=3, ncol=0)
   
-  theta <- seq(0, 2*pi, len = n + 1)[-(n + 1)]
+  theta <- seq(0, 2*pi, length.out = n + 1)[-(n + 1)]
   for (i in inds) {
     vb <- cbind(vb, rbind(x[i], sin(theta)*y[i], cos(theta)*y[i], 1))
     if (smooth)

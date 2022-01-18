@@ -58,7 +58,7 @@ Duncan Murdoch
 \examples{
   saveopts <- options(rgl.useNULL = TRUE)
 
-  theta <- seq(0, 4*pi, len=100)
+  theta <- seq(0, 4*pi, length.out = 100)
   xyz <- cbind(sin(theta), cos(theta), sin(theta/2))
   lineid <- plot3d(xyz, type="l", alpha = 0, lwd = 5, col = "blue")["data"]
 

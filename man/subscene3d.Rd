@@ -137,8 +137,8 @@ multiple panes of subscenes.
 
 # Show the Earth with a cutout by using clipplanes in subscenes
 
-lat <- matrix(seq(90, -90, len = 50)*pi/180, 50, 50, byrow = TRUE)
-long <- matrix(seq(-180, 180, len = 50)*pi/180, 50, 50)
+lat <- matrix(seq(90, -90, length.out = 50)*pi/180, 50, 50, byrow = TRUE)
+long <- matrix(seq(-180, 180, length.out = 50)*pi/180, 50, 50)
 
 r <- 6378.1 # radius of Earth in km
 x <- r*cos(lat)*cos(long)

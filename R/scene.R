@@ -466,17 +466,17 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     if (is.null(normals)) normals <- 0
     else {
       normals <- xyz.coords(normals, recycle=TRUE)
-      x <- rep(normals$x, len=nvertex)
-      y <- rep(normals$y, len=nvertex)
-      z <- rep(normals$z, len=nvertex)
+      x <- rep(normals$x, length.out = nvertex)
+      y <- rep(normals$y, length.out = nvertex)
+      z <- rep(normals$z, length.out = nvertex)
       normals <- rgl.vertex(x,y,z)
     }
     
     if (is.null(texcoords)) texcoords <- 0
     else {
       texcoords <- xy.coords(texcoords, recycle=TRUE)
-      s <- rep(texcoords$x, len=nvertex)
-      t <- rep(texcoords$y, len=nvertex)
+      s <- rep(texcoords$x, length.out = nvertex)
+      t <- rep(texcoords$y, length.out = nvertex)
       texcoords <- rgl.texcoords(s,t)
     } 
     
@@ -768,9 +768,9 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
   idata <- as.integer(nvertex)
   
   nfonts <- max(length(family), length(font), length(cex)) 
-  family <- rep(family, len=nfonts)
-  font <- rep(font, len=nfonts)
-  cex <- rep(cex, len=nfonts)  
+  family <- rep(family, length.out = nfonts)
+  font <- rep(font, length.out = nfonts)
+  cex <- rep(cex, length.out = nfonts)  
   
   family[font == 5] <- "symbol"
   font <- ifelse( font < 0 | font > 4, 1, font)  

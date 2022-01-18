@@ -42,16 +42,16 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
   
   if ( !is.null(normals) ) {
     normals <- xyz.coords(normals, recycle=TRUE)
-    x <- rep(normals$x, len = nvertex)
-    y <- rep(normals$y, len = nvertex)
-    z <- rep(normals$z, len = nvertex)
+    x <- rep(normals$x, length.out = nvertex)
+    y <- rep(normals$y, length.out = nvertex)
+    z <- rep(normals$z, length.out = nvertex)
     normals <- rgl.vertex(x, y, z)
   }
   
   if ( !is.null(texcoords) ) {
     texcoords <- xy.coords(texcoords, recycle = TRUE)
-    x <- rep(texcoords$x, len = nvertex)
-    y <- rep(texcoords$y, len = nvertex)
+    x <- rep(texcoords$x, length.out = nvertex)
+    y <- rep(texcoords$y, length.out = nvertex)
     texcoords <- rbind(x, y)
   }
   
