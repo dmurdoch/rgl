@@ -124,7 +124,7 @@ property int vertex2\n", file=con)
     if (withColors) {
       colors <- mesh$material$col
       if (!length(colors)) colors <- material3d("color")
-      colors <- rep(colors, length=nrow(vertices))
+      colors <- rep(colors, length.out = nrow(vertices))
       colors <- t(col2rgb(colors, alpha=TRUE))
     }
     if (withNormals) 

@@ -111,7 +111,7 @@ if (requireNamespace("tripack", quietly = TRUE)) {
     save <- options(rgl.meshColorWarning = FALSE)
 
   # Leave a circular hole around (3, 0)
-  theta <- seq(0, 2*pi, len = 30)[-1]
+  theta <- seq(0, 2*pi, length.out = 30)[-1]
   cx <- 2*cos(theta) + 3
   cy <- 2*sin(theta)
   keep <- (x - 3)^2 + y^2 > 4

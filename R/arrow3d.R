@@ -38,7 +38,7 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
  p1 <- xyz[2,]
  
  ## rotational angles of barbs
- phi <- seq(pi/nbarbs, 2*pi-pi/nbarbs, len = nbarbs)
+ phi <- seq(pi/nbarbs, 2*pi-pi/nbarbs, length.out = nbarbs)
 
  ## length of line
  lp <- sqrt(sum((p1-p0)^2))

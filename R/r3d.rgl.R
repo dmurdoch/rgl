@@ -61,8 +61,11 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 # in place for any entries that are not listed.  
 # Unrecognized args are left in place.
 
-.fixMaterialArgs <- function(..., Params = material3d()) {
+.fixMaterialArgs <- function(..., Params = material3d(), col) {
    f <- function(...) list(...)
+   dots <- list(...)
+   if (!missing(col)) 
+     Params$color <- col
    formals(f) <- c(Params, formals(f))
    names <- as.list(names(Params))
    names(names) <- names
@@ -75,10 +78,12 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 # This one just gets the material args
 # If warn is TRUE, give a warning instead of ignoring extras.
 
-.getMaterialArgs <- function(..., material = list(), warn = FALSE) {
+.getMaterialArgs <- function(..., material = list(), warn = FALSE, col = material[["col"]]) {
   fullyNamed <- as.list(match.call(rgl.material, 
                            as.call(c(list(as.name("rgl.material"),
                                         ...), material))))[-1]
+  if (!is.null(col) && !("color" %in% names(fullyNamed)))
+    fullyNamed$color <- col
   good <- names(fullyNamed) %in% .material3d
   if (warn && !all(good))
     warning("Argument(s) ", paste(names(fullyNamed)[!good], collapse = ", "), " not matched.")
@@ -125,7 +130,16 @@ bg3d        <- function(...) {
     sphere <- FALSE
     fogtype <- "none"
   }
-  new <- .fixMaterialArgs(sphere = sphere, fogtype = fogtype, 
+  dots <- list(...)
+  if ("fogtype" %in% names(dots))
+    fogtype <- dots$fogtype
+  if ("fogScale" %in% names(dots))
+    fogScale <- dots$fogScale
+  else
+    fogScale <- 1
+  new <- .fixMaterialArgs(sphere = sphere, 
+                          fogtype = fogtype, 
+                          fogScale = fogScale,
                           color = c("black", "white"), 
   			  back = "lines", lit = FALSE, Params = save)
   do.call("rgl.bg", .fixMaterialArgs(..., Params = new))

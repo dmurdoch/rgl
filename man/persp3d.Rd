@@ -7,7 +7,8 @@
 \usage{
 persp3d(x, \dots)
 
-\method{persp3d}{default}(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)), z,
+\method{persp3d}{default}(x = seq(0, 1, length.out = nrow(z)),
+    y = seq(0, 1, length.out = ncol(z)), z,
     xlim = NULL, ylim = NULL, zlim = NULL,
     xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, 
     forceClipregion = FALSE, ...)
@@ -75,7 +76,7 @@ The \code{\link{surface3d}} function is used to draw the surface without the axe
 # (1) The Obligatory Mathematical surface.
 #     Rotated sinc function.
 
-x <- seq(-10, 10, length = 20)
+x <- seq(-10, 10, length.out = 20)
 y <- x
 f <- function(x, y) { r <- sqrt(x^2 + y^2); 10 * sin(r)/r }
 z <- outer(x, y, f)
@@ -99,7 +100,7 @@ xE <- c(-10, 10); xy <- expand.grid(xE, xE)
 points3d(xy[, 1], xy[, 2], 6, col = "red")
 lines3d(x, y = 10, z = 6 + sin(x), col = "green")
 
-phi <- seq(0, 2*pi, len = 201)
+phi <- seq(0, 2*pi, length.out = 201)
 r1 <- 7.725 # radius of 2nd maximum
 xr <- r1 * cos(phi)
 yr <- r1 * sin(phi)
@@ -119,8 +120,8 @@ persp3d(x, y, z, col = "green3", aspect = "iso",
 
 # (4) A globe
 
-lat <- matrix(seq(90, -90, len = 50)*pi/180, 50, 50, byrow = TRUE)
-long <- matrix(seq(-180, 180, len = 50)*pi/180, 50, 50)
+lat <- matrix(seq(90, -90, length.out = 50)*pi/180, 50, 50, byrow = TRUE)
+long <- matrix(seq(-180, 180, length.out = 50)*pi/180, 50, 50)
 
 r <- 6378.1 # radius of Earth in km
 x <- r*cos(lat)*cos(long)
