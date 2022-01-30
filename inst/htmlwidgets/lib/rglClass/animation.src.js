@@ -123,7 +123,7 @@
      * we really want.
      * @param q - a single unit quaternion
      */
-    CanvasMatrix4.prototype.rotateByQuaternion = function(q) {
+    rglwidgetClass.prototype.rotateByQuaternion = function(M, q) {
 
     var xx = q[0]*q[0],
         xy = q[0]*q[1],
@@ -147,5 +147,5 @@
       matrix.m32 = 2*(yz - xw);
       matrix.m33 = 1 - 2*(xx + yy);
 
-      this.multRight(matrix);      
+      M.multRight(matrix);      
     };
