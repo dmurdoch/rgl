@@ -24,6 +24,9 @@
 * In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
 * `pop3d(tag = x)` did not always find the objects with `tag == x` if they were not in the current subscene.
+* The default values for `front` and `back` in `rgl.material`
+and `material3d` are now `"filled"`, as documented in some
+places.
     
 # rgl 0.108.5
 
