@@ -1,5 +1,5 @@
 
-# rgl  0.108.8
+# rgl  0.108.9
 
 ## Major changes
 
@@ -17,7 +17,9 @@
   
 ## Minor changes
 
-* Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
+* Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`.
+* `open3d()` now handles `useNULL` and `silent` arguments
+passed in `params`.
   
 ## Bug fixes
 
