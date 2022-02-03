@@ -55,6 +55,10 @@
     };
 
     rglwidgetClass.prototype.getBufferedData = function(v) {
+      return this.readAccessor(parseInt(v, 10), this.scene.buffer);
+    };
+    
+    rglwidgetClass.prototype.readAccessor = function(acc, buf) {
       var typeSignedByte = 5120, 
           typeUnsignedByte = 5121, 
           typeSignedShort = 5122, 
@@ -63,8 +67,7 @@
           typeUnsignedInt = 5125, 
           typeFloat = 5126, 
           typeDouble = 5130, 
-          buf = this.scene.buffer, 
-          accessor = buf.accessors[parseInt(v, 10)], 
+          accessor = buf.accessors[acc], 
           bufferView = buf.bufferViews[accessor.bufferView], 
           buffer = buf.buffers[bufferView.buffer], 
           bytes, 

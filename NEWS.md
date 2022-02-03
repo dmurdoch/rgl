@@ -1,5 +1,5 @@
 
-# rgl  0.108.9
+# rgl  0.108.10
 
 ## Major changes
 
@@ -20,6 +20,10 @@
 * Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`.
 * `open3d()` now handles `useNULL` and `silent` arguments
 passed in `params`.
+* Controls passed to `playwidget()` may now include a 
+component specifying HTML dependencies.
+* Added `rglwidgetClass.readAccessor()` method to let other
+code use the buffering.
   
 ## Bug fixes
 
