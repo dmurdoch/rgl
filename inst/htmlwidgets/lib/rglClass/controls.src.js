@@ -1,17 +1,10 @@
-    /**
-     * Methods related to controls
-     * @name ___METHODS_FOR_CONTROLS___
-     * @memberof rglwidgetClass
-     * @kind function
-     * @instance
-     */
-     
+
     /**
      * Change the displayed subset
      * @param { Object } el - Element of the control; not used.
-     * @param { Object } control - The subset control data.
+     * @param { Object } control - The animation control data.
      */
-    rglwidgetClass.prototype.subsetSetter = function(el, control) {
+    rglwidgetClass.prototype.rgl2gltfAnimate = function(el, control) {
       if (typeof control.subscenes === "undefined" ||
           control.subscenes === null)
         control.subscenes = this.scene.rootSubscene;

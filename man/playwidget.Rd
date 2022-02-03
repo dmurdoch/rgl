@@ -109,6 +109,16 @@ the \code{\link{rglwidget}} does not come first,
 previous values should be piped into its \code{controllers}
 argument.  Other HTML code (including other widgets)
 can be used in the chain if wrapped in \code{htmltools::\link[htmltools:tag]{tagList}}.
+
+Each control should inherit from \code{"rglControl"}.  They
+can have the following components in addition to any 
+private ones:
+\describe{
+\item{\code{labels}}{default labels for the slider.}
+\item{\code{param}}{values to include on the slider.}
+\item{\code{dependencies}}{additional HTML dependencies to
+include, after the default \code{rglwidgetClass}.}
+}
 }
 \section{Appearance}{
 The appearance of the controls is set by the stylesheet
