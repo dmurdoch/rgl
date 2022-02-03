@@ -208,7 +208,7 @@
     rglwidgetClass.prototype.initShapeFromObj = function(shape, obj) {
       var i, pass, f, mode, self = this,
         is_back = function(i) {
-                var normal = shape.normals[i],
+                var normal = [].concat(shape.normals[i]),
                   pt = shape.vertices[i];
                 normal.push(-self.dotprod(normal, pt));
                 normal = self.multVM(normal, self.normMatrix);
