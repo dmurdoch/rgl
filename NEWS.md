@@ -1,4 +1,4 @@
-# rgl  0.108.12
+# rgl  0.108.13
 
 ## Major changes
 
@@ -41,6 +41,8 @@ in `rgl` windows and WebGL displays, because the bounding
 boxes were not computed consistently (issue #169).
 * Some initialization wasn't done properly in Shiny apps,
 so they failed after a redraw (issue #173).
+* Buffers are now optional, as they don't work with 
+Shiny scene changes (also issue #173).
     
 # rgl 0.108.5
 
