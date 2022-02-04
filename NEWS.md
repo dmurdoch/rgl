@@ -1,5 +1,5 @@
 
-# rgl  0.108.10
+# rgl  0.108.11
 
 ## Major changes
 
@@ -31,6 +31,8 @@ got the wrong result (issue #164).
 * `planes3d()` objects were not displayed consistently 
 in `rgl` windows and WebGL displays, because the bounding
 boxes were not computed consistently (issue #169).
+* Some initialization wasn't done properly in Shiny apps,
+so they failed after a redraw (issue #173).
     
 # rgl 0.108.5
 
