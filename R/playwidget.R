@@ -47,10 +47,10 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
   if (inherits(controls, "rglControl"))
     controls <- list(controls)
 
-  types <- vapply(controls, class, "")
-  if (any(bad <- types != "rglControl")) {
+  okay <- vapply(controls, inherits, TRUE, "rglControl")
+  if (any(bad <- !okay)) {
     bad <- which(bad)[1]
-    stop("Controls should be of class 'rglControl', control ", bad, " is ", types[bad])
+    stop("Controls should inherit from 'rglControl', control ", bad, " is ", class(controls[[bad]]))
   }
   names(controls) <- NULL
 
@@ -72,17 +72,21 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
   stopifnot(length(buttonLabels) == length(components),
   	    length(pause) == 1)
   
+  dependencies <- list(rglDependency)
+  
   for (i in seq_along(controls)) {
     control <- controls[[i]]
-    if (!is.null(labels)) 
+    if (is.null(labels)) 
       labels <- control$labels
     if (!is.null(control$param)) {
       start <- min(start, control$param[is.finite(control$param)])
       stop <- max(stop, control$param[is.finite(control$param)])
     }
+    if (!is.null(control$dependencies))
+      dependencies <- c(dependencies, control$dependencies)
   }
 
-  if (is.null(stop) && !missing(labels) && length(labels)) {
+  if (is.null(stop) && length(labels)) {
     stop <- start + (length(labels) - 1)*step
   }
   
@@ -123,7 +127,7 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
     height = height,
     sizingPolicy = sizingPolicy(defaultWidth = "auto",
                                 defaultHeight = "auto"),
-    dependencies = rglDependency,
+    dependencies = dependencies,
     ...
   )
   if (is.list(upstream$objects)) {

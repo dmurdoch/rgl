@@ -1,5 +1,4 @@
-
-# rgl  0.108.11
+# rgl  0.108.12
 
 ## Major changes
 
@@ -17,13 +16,22 @@
   
 ## Minor changes
 
-* Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
+* Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`.
+* `open3d()` now handles `useNULL` and `silent` arguments
+passed in `params`.
+* Controls passed to `playwidget()` may now include a 
+component specifying HTML dependencies.
+* Added `rglwidgetClass.readAccessor()` method to let other
+code use the buffering.
   
 ## Bug fixes
 
 * In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
 * `pop3d(tag = x)` did not always find the objects with `tag == x` if they were not in the current subscene.
+* The default values for `front` and `back` in `rgl.material`
+and `material3d` are now `"filled"`, as documented in some
+places.
 * The `fog` setting wasn't handled properly by `bg3d()`.
 * Numerous cases of partial argument matching were fixed
 (suggestion of Henrik Bengtsson in issue #170.)

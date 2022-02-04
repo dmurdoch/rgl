@@ -330,6 +330,14 @@ open3d <- function(..., params = getr3dDefaults(),
 	  register_pkgdown_methods()
 	
     args <- list(...)
+    if (missing(useNULL) && !is.null(params$useNULL)) {
+      useNULL <- params$useNULL
+      params$useNULL <- NULL
+    }
+    if (missing(silent) && !is.null(params$silent)) {
+      silent <- params$silent
+      params$silent <- NULL
+    }
     if (!is.null(args$antialias) 
         || !is.null(args$antialias <- r3dDefaults$antialias)) {
     	saveopt <- options(rgl.antialias = args$antialias)

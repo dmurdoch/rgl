@@ -226,7 +226,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     # plot the clipping planes as they affect the bounding box
     plotClipplanes(subscene)
     
-    mat$front <- mat$back <- "fill"
+    mat$front <- mat$back <- "filled"
     
     if (any(inds <- is.na(verts[,2]) & is.na(verts[,3])) && length(keep <- intersect(bbox[1:2], verts[inds, 1])))
       res <- c(res, do.call(axis3d, c(list(edge = "x", at = verts[inds, 1][keep], labels = text[inds][keep]), mat)))
