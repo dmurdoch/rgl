@@ -208,7 +208,7 @@
     rglwidgetClass.prototype.initShapeFromObj = function(shape, obj) {
       var i, pass, f, mode, self = this,
         is_back = function(i) {
-                var normal = shape.normals[i],
+                var normal = [].concat(shape.normals[i]),
                   pt = shape.vertices[i];
                 normal.push(-self.dotprod(normal, pt));
                 normal = self.multVM(normal, self.normMatrix);
@@ -1226,6 +1226,14 @@
       this.restartCanvas();
       var objs = this.scene.objects,
           self = this;
+          
+      /* These hold context specific data.  In Shiny, they   
+         need to be deleted.  Elsewhere, they don't exist
+         and these are no-ops. */
+         
+      delete this.cube;
+      delete this.sphere;
+      
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });
