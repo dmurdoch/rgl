@@ -1,5 +1,4 @@
-
-# rgl  0.108.10
+# rgl  0.108.12
 
 ## Major changes
 
@@ -33,6 +32,15 @@ got the wrong result (issue #164).
 * The default values for `front` and `back` in `rgl.material`
 and `material3d` are now `"filled"`, as documented in some
 places.
+* The `fog` setting wasn't handled properly by `bg3d()`.
+* Numerous cases of partial argument matching were fixed
+(suggestion of Henrik Bengtsson in issue #170.)
+* Argument `col` is accepted as a synonym for `color` in `material3d()` and `rgl.material()`.
+* `planes3d()` objects were not displayed consistently 
+in `rgl` windows and WebGL displays, because the bounding
+boxes were not computed consistently (issue #169).
+* Some initialization wasn't done properly in Shiny apps,
+so they failed after a redraw (issue #173).
     
 # rgl 0.108.5
 

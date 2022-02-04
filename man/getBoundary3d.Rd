@@ -46,6 +46,6 @@ shade3d(x, alpha=0.2, col = "blue")
 shade3d(b) 
 
 # Show edge vertices in sequence:
-text3d(t(b$vb), text = 1:ncol(b$vb), adj = 0)
+text3d(t(b$vb), texts = 1:ncol(b$vb), adj = 0)
 c(b$is[1,1], b$is[2,]) 
 }

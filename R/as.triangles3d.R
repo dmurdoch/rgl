@@ -45,7 +45,7 @@ as.triangles3d.rglId <- function(obj,
     attrib <- rgl.attrib(id, attribute)
     if (nrow(attrib)) {
       if (nrow(attrib) < nvert)
-        attrib <- apply(attrib, 2, function(col) rep(col, len = nvert))
+        attrib <- apply(attrib, 2, function(col) rep(col, length.out = nvert))
       type <- ids[i, "type"]
       result <- rbind(result, switch(as.character(type),
         triangles =,              
