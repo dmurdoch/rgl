@@ -1226,6 +1226,14 @@
       this.restartCanvas();
       var objs = this.scene.objects,
           self = this;
+          
+      /* These hold context specific data.  In Shiny, they   
+         need to be deleted.  Elsewhere, they don't exist
+         and these are no-ops. */
+         
+      delete this.cube;
+      delete this.sphere;
+      
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });
