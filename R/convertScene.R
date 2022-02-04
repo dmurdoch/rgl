@@ -3,7 +3,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
                          snapshot = FALSE,
-                         oldConvertBBox = FALSE) {
+                         oldConvertBBox = FALSE,
+                         useBuffer = TRUE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -431,24 +432,26 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     }
     setObj(cids[i], obj)
   }
-  # Put the data into the buffer
-  buffer <- Buffer$new()
-  for (i in seq_along(ids)) {
-    obj <- getObj(cids[i])
-    # This list needs to match the one in buffer.src.js
-    for (n in c("vertices", "normals", "indices", 
-                "texcoords", "colors", "centers")) {
-      if (!is.null(obj[[n]]))
-        obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+  if (useBuffer) {
+    # Put the data into the buffer
+    buffer <- Buffer$new()
+    for (i in seq_along(ids)) {
+      obj <- getObj(cids[i])
+      # This list needs to match the one in buffer.src.js
+      for (n in c("vertices", "normals", "indices", 
+                  "texcoords", "colors", "centers")) {
+        if (!is.null(obj[[n]]))
+          obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+      }
+      setObj(cids[i], obj)
     }
-    setObj(cids[i], obj)
+    buffer$closeBuffers()
+    buf <- buffer$as.list()
+    
+    result$buffer <- buf
   }
 
   result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
-  buffer$closeBuffers()
-  buf <- buffer$as.list()
-
-  result$buffer <- buf
 
   result
 }
