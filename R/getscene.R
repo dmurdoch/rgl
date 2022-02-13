@@ -182,12 +182,12 @@ print.rglsubscene <- function(x, ...) {
 }
   
 
-plot3d.rglscene <- function(x, add=FALSE, ...) {
+plot3d.rglscene <- function(x, add=FALSE, open3dParams = getr3dDefaults(), ...) {
   root <- x$rootSubscene
   if (is.null(root)) root <- x  # Should work with pre-subscene objects
   if (!add) {
     args <- list(...)
-    params <- getr3dDefaults()
+    params <- open3dParams
     params[names(args)] <- args
     if (!is.null(x$material)) {
       if (is.null(params$material)) params$material <- list()
