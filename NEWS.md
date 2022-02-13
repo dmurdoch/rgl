@@ -9,7 +9,9 @@
     have been fixed.
   - If a subscene has no lights defined, the lights from the parent
     are used.
-  - `plot.rglscene()` now ends with the root subscene as current.
+  - `plot.rglscene()` now ends with the root subscene as
+    current.  It also allows specification of `open3d()`
+    parameters in a list.
   - The `MATn` types in `Buffer` are returned as arrays with
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
