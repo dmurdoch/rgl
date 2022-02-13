@@ -99,14 +99,18 @@
         p1 = [-p1[0], -p1[1], -p1[2], -p1[3]];
         dot = -dot;
       }
-      Omega = Math.acos(dot);
-      alpha = (newx - x[lo])/(x[hi] - x[lo]);
-      alpha0 = Math.sin((1 - alpha)*Omega);
-      alpha1 = Math.sin(alpha*Omega);
-      result = [alpha0*p0[0] + alpha1*p1[0],
-                alpha0*p0[1] + alpha1*p1[1],
-                alpha0*p0[2] + alpha1*p1[2],
-                alpha0*p0[3] + alpha1*p1[3]];
+      if (dot >= 1)
+        result = p1;
+      else {
+        alpha = (newx - x[lo])/(x[hi] - x[lo]);
+        Omega = Math.acos(dot);
+        alpha0 = Math.sin((1 - alpha)*Omega);
+        alpha1 = Math.sin(alpha*Omega);
+        result = [alpha0*p0[0] + alpha1*p1[0],
+                  alpha0*p0[1] + alpha1*p1[1],
+                  alpha0*p0[2] + alpha1*p1[2],
+                  alpha0*p0[3] + alpha1*p1[3]];
+      }
       len = Math.sqrt(result[0]*result[0] +
                       result[1]*result[1] +
                       result[2]*result[2] +
