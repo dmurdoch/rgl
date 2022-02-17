@@ -1,4 +1,4 @@
-# rgl  0.108.14
+# rgl  0.108.15
 
 ## Major changes
 
@@ -45,6 +45,8 @@ boxes were not computed consistently (issue #169).
 so they failed after a redraw (issue #173).
 * Buffers are now optional, as they don't work with 
 Shiny scene changes (also issue #173).
+* The NULL device would sometimes miscalculate the
+bounding box.
     
 # rgl 0.108.5
 
