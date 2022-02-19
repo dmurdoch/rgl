@@ -21,6 +21,7 @@
           sprites_3d = this.isSet(flags, this.f_sprites_3d),
           nclipplanes = this.countClipplanes(),
           fixed_size = this.isSet(flags, this.f_fixed_size),
+          rotating = this.isSet(flags, this.f_rotating),
           is_points = this.isSet(flags, this.f_is_points),
           is_twosided = this.isSet(flags, this.f_is_twosided),
           fat_lines = this.isSet(flags, this.f_fat_lines),
@@ -119,10 +120,17 @@
       if (has_texture || type === "text")
         result = result + "    vTexcoord = aTexcoord;\n";
 
-      if (fixed_size)
+      if (fixed_size && !rotating)
         result = result + "    vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);\n"+
                           "    pos = pos/pos.w;\n"+
                           "    gl_Position = pos + vec4(aOfs*textScale, 0.);\n";
+      else if (fixed_size) // rotating
+        result = result;
+        
+        
+        
+        
+        
 
       if (type === "sprites" && !fixed_size)
         result = result + "    vec4 pos = mvMatrix * vec4(aPos, 1.);\n"+

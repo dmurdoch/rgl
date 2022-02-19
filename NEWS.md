@@ -15,6 +15,9 @@
   - The `MATn` types in `Buffer` are returned as arrays with
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
+* `sprites3d()` now has the option of
+`rotating=TRUE`, to allow 3D sprites to rotate with
+the scene.
   
 ## Minor changes
 

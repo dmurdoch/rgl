@@ -97,7 +97,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
            "is_lines", "sprites_3d", 
            "is_subscene", "is_clipplanes",
            "fixed_size", "is_points", "is_twosided",
-           "fat_lines", "is_brush", "has_fog")
+           "fat_lines", "is_brush", "has_fog",
+           "rotating")
   
   getFlags <- function(id) {
     
@@ -146,6 +147,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
       length(unique(c(mat$front, mat$back))) > 1
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
+    result["rotating"] <- isTRUE(obj$rotating)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
                   "lines" %in% unlist(mat[c("front", "back")]))
     result["is_brush"] <- !is.na(brushId) && id == brushId

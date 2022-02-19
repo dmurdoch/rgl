@@ -14,7 +14,8 @@ using namespace rgl;
 
 SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, int in_nsize, double* in_size,
                      int in_ignoreExtent, int count, Shape** in_shapelist, double* in_userMatrix,
-                     bool in_fixedSize, Scene *in_scene, double* in_adj,
+                     bool in_fixedSize, bool in_rotating,
+                     Scene *in_scene, double* in_adj,
                      int in_npos, int *in_pos, double in_offset)
  : Shape(in_material, in_ignoreExtent, SHAPE, true), 
   vertex(in_nvertex, in_vertex),
@@ -22,6 +23,7 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
    pos(in_npos, in_pos),
    offset(in_offset),
    fixedSize(in_fixedSize),
+   rotating(in_rotating),
    scene(in_scene)
 { 
   if (!count)
@@ -143,15 +145,26 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
     float winheight = (float) renderContext->rect.height;
     // The magic number 27 is chosen so that plotmath3d matches text3d.
     float scalex = 27.0f/winwidth, scaley = 27.0f/winheight;
-    v3 =  (p * m) * o;
+    if (!rotating)
+      v3 =  (p * m) * o;
+    else
+      v3 = o;
     *modelMatrix = Matrix4x4::translationMatrix(v3.x, v3.y, v3.z)*
                    Matrix4x4::scaleMatrix(scalex, scaley, (scalex + scaley)/2.0f);
-  } else {
+    if (rotating)
+      *modelMatrix = m * *modelMatrix;
+    
+  } else if (!rotating){
+    // Only orientation fixed
     s = s * 0.5f;	
     v3 = m * o;
     *modelMatrix = Matrix4x4::translationMatrix(v3.x, v3.y, v3.z);
+  } else {
+    // neither one fixed
+    s = s * 0.5f;
+    *modelMatrix = m * Matrix4x4::translationMatrix(o.x, o.y, o.z);
   }
-  
+    
   if (pos.size())
     getAdj(index);
   
@@ -286,7 +299,7 @@ int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib)
       if (!shapes.size()) return 0;
       else return 4;
     }
-    case FLAGS:	   return 2;
+    case FLAGS:	   return 3;
     case ADJ: return 1;
     case POS: return pos.size();
   }
@@ -331,8 +344,9 @@ void SpriteSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count,
         }
         return;
       case FLAGS:
-      	if (first == 0) *result++ = (double) ignoreExtent;
-      	*result++ = (double) fixedSize;
+      	if (first < 1) *result++ = (double) ignoreExtent;
+      	if (first < 2 && n > 1) *result++ = (double) fixedSize;
+      	if (n > 2) *result++ = (double) rotating;
       	return;
       case ADJ:
         if (pos.size() > 0) {
