@@ -99,9 +99,23 @@
 
       result = result + "    vCol = aCol;\n";
 
-      if (needs_vnormal) /* Need to normalize the xyz part */
-        result = result + "    vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n"+
-                          "    vNormal = vec4(normalize(vNormal.xyz), 1);\n";
+      if (needs_vnormal) 
+        result = result + "    vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n";
+        
+      if (is_twosided) {
+        if (has_normals)
+          /* normz should be calculated *after* projection */
+          result = result + "    normz = (invPrMatrix*vNormal).z;\n";
+        else
+          result = result + "    vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n"+
+                          "    pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n"+
+                          "    vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n"+
+                          "    pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n"+
+                          "    normz = pos1.x*pos2.y - pos1.y*pos2.x;\n";
+      }
+      
+      if (needs_vnormal)  /* Need to normalize the xyz part */
+        result = result + "    vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);\n";
 
       if (has_texture || type === "text")
         result = result + "    vTexcoord = aTexcoord;\n";
@@ -115,17 +129,6 @@
         result = result + "    vec4 pos = mvMatrix * vec4(aPos, 1.);\n"+
                           "    pos = pos/pos.w + vec4(aOfs,  0.);\n"+
                           "    gl_Position = prMatrix*pos;\n";
-
-      if (is_twosided)
-        if (has_normals)
-          /* normz should be calculated *after* projection */
-          result = result + "    normz = (invPrMatrix*vNormal).z;\n";
-        else
-          result = result + "   vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n"+
-                            "   pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n"+
-                            "   vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n"+
-                            "   pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n"+
-                            "   normz = pos1.x*pos2.y - pos1.y*pos2.x;\n";
                           
       if (fat_lines) 
         /* This code was inspired by Matt Deslauriers' code in https://mattdesl.svbtle.com/drawing-lines-is-hard */
@@ -287,31 +290,31 @@
 
       if (is_lit) {
         result = result + "    vec3 eye = normalize(-vPosition.xyz);\n"+
-                          "   vec3 lightdir;\n"+
-                          "   vec4 colDiff;\n"+
-                          "   vec3 halfVec;\n"+
-                          "   vec4 lighteffect = vec4(emission, 0.);\n"+
-                          "   vec3 col;\n"+
-                          "   float nDotL;\n";
+                          "    vec3 lightdir;\n"+
+                          "    vec4 colDiff;\n"+
+                          "    vec3 halfVec;\n"+
+                          "    vec4 lighteffect = vec4(emission, 0.);\n"+
+                          "    vec3 col;\n"+
+                          "    float nDotL;\n";
         if (!fixed_quads) {
-          result = result +   "   n = -faceforward(n, n, eye);\n";
+          result = result +   "    n = -faceforward(n, n, eye);\n";
         }
         for (i=0; i < nlights; i++) {
-          result = result + "   colDiff = vec4(vCol.rgb * diffuse" + i + ", vCol.a);\n"+
-                            "   lightdir = lightDir" + i + ";\n"+
-                            "   if (!viewpoint" + i +")\n"+
-                            "     lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n"+
-                            "   if (!finite" + i + ") {\n"+
-                            "     halfVec = normalize(lightdir + eye);\n"+
-                            "   } else {\n"+
-                            "     lightdir = normalize(lightdir - vPosition.xyz);\n"+
-                            "     halfVec = normalize(lightdir + eye);\n"+
-                            "   }\n"+
+          result = result + "    colDiff = vec4(vCol.rgb * diffuse" + i + ", vCol.a);\n"+
+                            "    lightdir = lightDir" + i + ";\n"+
+                            "    if (!viewpoint" + i +")\n"+
+                            "      lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n"+
+                            "    if (!finite" + i + ") {\n"+
+                            "      halfVec = normalize(lightdir + eye);\n"+
+                            "    } else {\n"+
+                            "      lightdir = normalize(lightdir - vPosition.xyz);\n"+
+                            "      halfVec = normalize(lightdir + eye);\n"+
+                            "    }\n"+
                             "    col = ambient" + i + ";\n"+
-                            "   nDotL = dot(n, lightdir);\n"+
-                            "   col = col + max(nDotL, 0.) * colDiff.rgb;\n"+
-                            "   col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular" + i + ";\n"+
-                            "   lighteffect = lighteffect + vec4(col, colDiff.a);\n";
+                            "    nDotL = dot(n, lightdir);\n"+
+                            "    col = col + max(nDotL, 0.) * colDiff.rgb;\n"+
+                            "    col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular" + i + ";\n"+
+                            "    lighteffect = lighteffect + vec4(col, colDiff.a);\n";
         }
 
       } else {
@@ -324,12 +327,12 @@
 
       if (has_texture) {
         result = result + {
-            rgb:            "   vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);\n",
-            rgba:           "   vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n",
-            alpha:          "   vec4 textureColor = texture2D(uSampler, vTexcoord);\n"+
-                            "   float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;\n"+
-                            "   textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);\n",
-            luminance:      "   vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);\n",
+            rgb:            "    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);\n",
+            rgba:           "    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n",
+            alpha:          "    vec4 textureColor = texture2D(uSampler, vTexcoord);\n"+
+                            "    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;\n"+
+                            "    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);\n",
+            luminance:      "    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);\n",
           "luminance.alpha":"    vec4 textureColor = texture2D(uSampler, vTexcoord);\n"+
                             "    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;\n"+
                             "    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);\n"
@@ -362,13 +365,10 @@
                             "        fogF = 1.0 - exp(-fogF*fogF);\n"+ 
                             "      fogF = clamp(fogF, 0.0, 1.0);\n"+
                             "      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);\n"+
-                          //  "      if (fogF < 0.) gl_FragColor = vec4(1.0,0.0,0.0,1.0); else if (fogF < 1.0) gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);else gl_FragColor = vec4(0.0,1.0,0.0,1.0);\n"+
                             "    } else gl_FragColor = fragColor;\n";
       } else
         result = result +   "    gl_FragColor = fragColor;\n";
  
-      //if (fat_lines)
-      //  result = result +   "   gl_FragColor = vec4(0.0, abs(point.x), abs(point.y), 1.0);"
       result = result +     "  }\n";
 
       // console.log(result);

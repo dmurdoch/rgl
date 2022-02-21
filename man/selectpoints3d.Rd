@@ -60,6 +60,9 @@ If \code{value} is \code{FALSE}, a 2-column matrix containing columns:
 If multiple points have the same coordinates, all indices will be returned.}
 
 }
+\note{This function selects points, not areas.  For example,
+if the selection region is in the interior of the triangle, that
+will count as a miss for all of the triangle's vertices.}
 \author{
 Duncan Murdoch
 }

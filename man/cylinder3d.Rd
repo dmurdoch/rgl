@@ -88,7 +88,7 @@ ACM Transactions on Graphics, Vol. 27, No. 1, Article 2.
 \examples{
 # A trefoil knot
 open3d()
-theta <- seq(0, 2*pi, len = 25)
+theta <- seq(0, 2*pi, length.out = 25)
 knot <- cylinder3d(
       center = cbind(
         sin(theta) + 2*sin(2*theta), 

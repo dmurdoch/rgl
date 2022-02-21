@@ -208,7 +208,7 @@
     rglwidgetClass.prototype.initShapeFromObj = function(shape, obj) {
       var i, pass, f, mode, self = this,
         is_back = function(i) {
-                var normal = shape.normals[i],
+                var normal = [].concat(shape.normals[i]),
                   pt = shape.vertices[i];
                 normal.push(-rglwidgetClass.dotprod(normal, pt));
                 normal = rglwidgetClass.multVM(normal, self.normMatrix);
@@ -490,7 +490,8 @@
 
     if (is_transparent) {
       depth_sort = ["triangles", "quads", "surface",
-                    "spheres", "sprites", "text"].indexOf(type) >= 0;
+                    "spheres", "sprites", "text",
+                    "planes"].indexOf(type) >= 0;
     }
     
     if (is_brush)
@@ -1225,6 +1226,14 @@
       this.restartCanvas();
       var objs = this.scene.objects,
           self = this;
+          
+      /* These hold context specific data.  In Shiny, they   
+         need to be deleted.  Elsewhere, they don't exist
+         and these are no-ops. */
+         
+      delete this.cube;
+      delete this.sphere;
+      
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });

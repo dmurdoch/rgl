@@ -73,7 +73,7 @@ occasionally take more than one try.
 a flat display; both use \code{triangulate}.
 }
 \examples{
-theta <- seq(0, 2*pi, len = 25)[-25]
+theta <- seq(0, 2*pi, length.out = 25)[-25]
 theta <- c(theta, NA, theta, NA, theta, NA, theta, NA, theta)
 r <- c(rep(1.5, 24), NA, rep(0.5, 24), NA, rep(0.5, 24), NA, rep(0.3, 24), NA, rep(0.1, 24))
 dx <- c(rep(0, 24), NA, rep(0.6, 24), NA, rep(-0.6, 24), NA, rep(-0.6, 24), NA, rep(-0.6, 24))

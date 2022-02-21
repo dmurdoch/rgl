@@ -3,7 +3,7 @@ aspect3d <- function(x, y = NULL, z = NULL) {
     	scale <- c(1,1,1)
     } else {
 	if (is.null(y)) {
-	    x <- rep(x, len=3)
+	    x <- rep(x, length.out = 3)
 	    z <- x[3]
 	    y <- x[2]
 	    x <- x[1]

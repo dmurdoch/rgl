@@ -233,7 +233,7 @@ sceneChange <- function(elementId, x = scene3d(minimal),
   delete <- unique(c(delete, replace))
   add <- unique(c(add, replace))
 
-  scene <- convertScene(x)
+  scene <- convertScene(x, useBuffer = FALSE)
   allsubids <- allSubscenes()
   allsubs <- scene$objects[as.character(allsubids)]
   for (id in add)

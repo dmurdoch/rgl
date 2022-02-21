@@ -78,7 +78,7 @@
       else if (a.length < b.length)
         a = rglwidgetClass.repeatToLen(a, b.length);
       return a.map(function(currentValue, index) {
-            return currentValue.concat(b[index]);
+            return [].concat(currentValue).concat(b[index]);
       });
     };
 

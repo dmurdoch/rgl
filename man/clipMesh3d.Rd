@@ -135,7 +135,8 @@ corresponding to the \code{ids} passed as arguments.
 Duncan Murdoch
 }
 \references{
-See \url{https://stackoverflow.com/q/56242470/2554330} for a
+See \url{https://stackoverflow.com/q/56242470/2554330} and
+\url{https://laustep.github.io/stlahblog/posts/MeshClipping.html} for a
 motivating example.
 }
 \seealso{

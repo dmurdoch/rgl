@@ -97,9 +97,9 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
         return(mesh)
       }
       if (length(cols) == 1)
-        cols <- rep(cols, len = ncol(mesh$vb))
+        cols <- rep(cols, length.out = ncol(mesh$vb))
       if (length(alpha) == 1)
-        alpha <- rep(alpha, len = ncol(mesh$vb))
+        alpha <- rep(alpha, length.out = ncol(mesh$vb))
       prev <- 0
       newcols <- NULL
       newalpha <- NULL
@@ -165,9 +165,9 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
   
   mergeMaterials <- function(oldmat, newmat, n, type) {
     if (length(newmat$color) == 1)
-      newmat$color <- rep(newmat$color, len = n)
+      newmat$color <- rep(newmat$color, length.out = n)
     if (length(newmat$alpha) == 1)
-      newmat$alpha <- rep(newmat$alpha, len = n)
+      newmat$alpha <- rep(newmat$alpha, length.out = n)
     # meshColor isn't a material property, but put it here
     # for now...
     newmat$meshColor <- "vertices"
