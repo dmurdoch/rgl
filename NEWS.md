@@ -1,4 +1,4 @@
-# rgl  0.108.15
+# rgl  0.108.16
 
 ## Major changes
 
@@ -47,6 +47,8 @@ so they failed after a redraw (issue #173).
 Shiny scene changes (also issue #173).
 * The NULL device would sometimes miscalculate the
 bounding box.
+* `selectpoints3d(closest = TRUE)` selected too many points
+when multiple objects were in the scene.
     
 # rgl 0.108.5
 
