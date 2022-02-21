@@ -3,17 +3,17 @@ selectpoints3d <- function(objects = ids3d()$id, value = TRUE, closest = TRUE,
 
   if (value) result <- cbind(x = numeric(0), y = numeric(0), z = numeric(0))
   else result <- cbind(id = integer(0), index = integer(0))
-  rdist <- I
 
   first <- TRUE
+  prevdist <- dist <- Inf
+  
   while (first || is.function(multiple) || multiple) {
     f <- select3d(...)
     if (is.null(f)) break
     
     e <- environment(f)
     
-    dist <- Inf
-    prev <- nrow(result)
+    prev <- nrow(result) # Number to keep from previous selection
     
     for (id in objects) {
       verts <- rgl.attrib(id, "vertices")
@@ -41,8 +41,10 @@ selectpoints3d <- function(objects = ids3d()$id, value = TRUE, closest = TRUE,
       
       if (!any(hits)) next
       
-      if (prev && nrow(result) > prev  && rdist > dist)
-        result <- result[seq_len(prev),,drop=FALSE]
+      if (prev && prevdist > dist) {
+        result <- result[FALSE, , drop = FALSE]
+        prev <- 0
+      }
         
       if (value)
         result <- rbind(result, verts[hits,])
@@ -53,8 +55,8 @@ selectpoints3d <- function(objects = ids3d()$id, value = TRUE, closest = TRUE,
           && !multiple(result[(prev+1):nrow(result),,drop=FALSE]))
         break  
         
-      rdist <- dist
-      
+      prevdist <- dist
+      prev <- nrow(result)
       first <- FALSE
     }
     
