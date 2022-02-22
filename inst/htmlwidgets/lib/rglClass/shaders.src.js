@@ -14,29 +14,31 @@
     rglwidgetClass.prototype.getVertexShader = function(obj) {
       var userShader = obj.userVertexShader,
           flags = obj.flags,
-          type = obj.type,
-          is_lit = this.isSet(flags, this.f_is_lit),
-          has_texture = this.isSet(flags, this.f_has_texture),
-          fixed_quads = this.isSet(flags, this.f_fixed_quads),
-          sprites_3d = this.isSet(flags, this.f_sprites_3d),
-          nclipplanes = this.countClipplanes(),
-          fixed_size = this.isSet(flags, this.f_fixed_size),
-          rotating = this.isSet(flags, this.f_rotating),
-          is_points = this.isSet(flags, this.f_is_points),
-          is_twosided = this.isSet(flags, this.f_is_twosided),
-          fat_lines = this.isSet(flags, this.f_fat_lines),
-          is_brush = this.isSet(flags, this.f_is_brush),
-          has_fog = this.isSet(flags, this.f_has_fog),
-          has_normals = (typeof obj.normals !== "undefined") ||
-                        obj.type === "spheres",
-          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),
-          result;
-
-      if (type === "clipplanes" || sprites_3d) return;
+          type = obj.type;
 
       if (typeof userShader !== "undefined") return userShader;
+      return rglwidgetClass.makeVertexShader(obj.id, type, flags, 
+        this.countClipplanes(), obj.normals, this.getMaterial(obj, "size"));
+    };
+    
+    rglwidgetClass.makeVertexShader = function(id, type, flags, nclipplanes, normals, pointSize) {
+      var
+          is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit),
+          has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture),
+          fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads),
+          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
+          is_points = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_points),
+          is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided),
+          fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines),
+          is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush),
+          has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
+          has_normals = (typeof normals !== "undefined") ||
+                        type === "spheres",
+          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),
+          rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating),
+          result;
 
-      result = "  /* ****** "+type+" object "+obj.id+" vertex shader ****** */\n"+
+      result = "  /* ****** "+type+" object "+id+" vertex shader ****** */\n"+
       "#ifdef GL_ES\n"+
       "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"+
       "  precision highp float;\n"+
@@ -93,8 +95,7 @@
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
-        var size = this.getMaterial(obj, "size");
-        result = result + "    gl_PointSize = "+size.toFixed(1)+";\n";
+        result = result + "    gl_PointSize = "+pointSize.toFixed(1)+";\n";
       }
 
       result = result + "    vCol = aCol;\n";
@@ -177,28 +178,35 @@
     rglwidgetClass.prototype.getFragmentShader = function(obj) {
       var userShader = obj.userFragmentShader,
           flags = obj.flags,
-          type = obj.type,
-          is_lit = this.isSet(flags, this.f_is_lit),
-          has_texture = this.isSet(flags, this.f_has_texture),
-          fixed_quads = this.isSet(flags, this.f_fixed_quads),
-          sprites_3d = this.isSet(flags, this.f_sprites_3d),
-          is_twosided = this.isSet(flags, this.f_is_twosided),
-          fat_lines = this.isSet(flags, this.f_fat_lines),
-          is_transparent = this.isSet(flags, this.f_is_transparent),
-          is_points = this.isSet(flags, this.f_is_points),
-          has_fog = this.isSet(flags, this.f_has_fog),
-          nclipplanes = this.countClipplanes(), i,
-          texture_format, nlights,
-          result;
+          type = obj.type;
+          
+      if (typeof userShader !== "undefined") return userShader;        
+      return rglwidgetClass.makeFragmentShader(obj.id, type, flags, 
+        this.countClipplanes(), this.countLights(), 
+        this.getMaterial(obj, "textype"),
+        this.getMaterial(obj, "point_antialias"));
+    };
+    
+    rglwidgetClass.makeFragmentShader = function(id, type, flags, 
+      nclipplanes, nlights, textype, antialias) {
+        var
+          is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit),
+          has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture),
+          fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads),
+          sprites_3d = rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d),
+          is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided),
+          fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines),
+          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
+          is_points = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_points),
+          has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
+          i, texture_format, result;
 
       if (type === "clipplanes" || sprites_3d) return;
 
-      if (typeof userShader !== "undefined") return userShader;
-
       if (has_texture)
-        texture_format = this.getMaterial(obj, "textype");
+        texture_format = textype;
 
-      result = "/* ****** "+type+" object "+obj.id+" fragment shader ****** */\n"+
+      result = "/* ****** "+type+" object "+id+" fragment shader ****** */\n"+
                "#ifdef GL_ES\n"+
                "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"+
                "  precision highp float;\n"+
@@ -225,7 +233,6 @@
         result = result + "  uniform vec4 vClipplane"+i+";\n";
 
       if (is_lit) {
-        nlights = this.countLights();
         if (nlights)
             result = result + "  uniform mat4 mvMatrix;\n";
         else
@@ -270,7 +277,7 @@
       }
       
       if (is_points) {
-        var round = this.getMaterial(obj, "point_antialias");
+        var round = antialias;
         if (round)
           result = result + "    vec2 coord = gl_PointCoord - vec2(0.5);\n"+
                             "    if (length(coord) > 0.5) discard;\n";

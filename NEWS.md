@@ -1,4 +1,5 @@
-# rgl  0.108.15
+
+# rgl  0.108.17
 
 ## Major changes
 
@@ -18,6 +19,8 @@
 * `sprites3d()` now has the option of
 `rotating=TRUE`, to allow 3D sprites to rotate with
 the scene.
+  
+* Added `getShaders()` function to get shaders used in WebGL.
   
 ## Minor changes
 
@@ -50,6 +53,8 @@ so they failed after a redraw (issue #173).
 Shiny scene changes (also issue #173).
 * The NULL device would sometimes miscalculate the
 bounding box.
+* `selectpoints3d(closest = TRUE)` selected too many points
+when multiple objects were in the scene.
     
 # rgl 0.108.5
 
