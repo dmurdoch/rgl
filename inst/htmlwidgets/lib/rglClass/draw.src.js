@@ -785,6 +785,7 @@
       var flags = obj.flags,
           is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
           sprites3d = rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d),
+          rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating),
           i,j,
           origMV = new CanvasMatrix4( this.mvMatrix ),
           origPRMV = null,
@@ -829,8 +830,11 @@
           j = iOrig;
         else
           j = context.subid;
-
-        pos = rglwidgetClass.multVM([].concat(obj.vertices[j]).concat(1.0),
+debugger;
+        if (rotating)
+          pos = [].concat(obj.vertices[j]).concat(1.0);
+        else
+          pos = rglwidgetClass.multVM([].concat(obj.vertices[j]).concat(1.0),
                           origMV);
         radius = obj.radii.length > 1 ? obj.radii[j][0] : obj.radii[0][0];
         this.mvMatrix = new CanvasMatrix4(userMatrix);
@@ -838,6 +842,8 @@
         this.mvMatrix.translate(1 - 2*adj[0], 1 - 2*adj[1], 1 - 2*adj[2]);
         this.mvMatrix.scale(radius);
         this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+        if (rotating)
+          this.mvMatrix.multRight(origMV);
         this.setprmvMatrix();
         for (i=0; i < obj.objects.length; i++)
           if (this.opaquePass)
