@@ -11,7 +11,7 @@
      * @param newx - value to find, assumed to be in the range of x
      * @result index of largest x value below newx
      */
-    rglwidgetClass.prototype.bisect = function(x, newx) {
+    rglwidgetClass.bisect = function(x, newx) {
       var lo = 0, hi = x.length - 1, mid;
       while (lo < hi - 1) {
         mid = Math.round((lo + hi)/2);
@@ -29,7 +29,7 @@
      * @param v - values at x; either a vector or matrix
      * @param newx - value at which to evaluate
      */
-    rglwidgetClass.prototype.step = function(x, v, newx) {
+    rglwidgetClass.step = function(x, v, newx) {
       var n, lo;
       if (newx <= x[0])
         return v[0];    
@@ -46,7 +46,7 @@
      * @param v - values at x; either a vector or matrix
      * @param newx - value at which to evaluate
      */
-    rglwidgetClass.prototype.lerp = function(x, v, newx) {
+    rglwidgetClass.lerp = function(x, v, newx) {
       var i, n, lo, hi, alpha, result;
       if (newx <= x[0])
         return v[0];    
@@ -76,7 +76,7 @@
      * @param v - a matrix of unit quaternions
      * @param newx - value at which to evaluate
      */
-    rglwidgetClass.prototype.slerp = function(x, v, newx) {
+    rglwidgetClass.slerp = function(x, v, newx) {
       var n, lo, hi, alpha, result,
           p0, p1, dot, Omega, alpha0, alpha1, len;
       if (newx <= x[0])
@@ -127,7 +127,7 @@
      * we really want.
      * @param q - a single unit quaternion
      */
-    rglwidgetClass.prototype.rotateByQuaternion = function(M, q) {
+    rglwidgetClass.rotateByQuaternion = function(M, q) {
 
     var xx = q[0]*q[0],
         xy = q[0]*q[1],

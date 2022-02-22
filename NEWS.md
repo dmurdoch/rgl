@@ -1,4 +1,5 @@
-# rgl  0.108.16
+
+# rgl  0.108.17
 
 ## Major changes
 
@@ -15,6 +16,8 @@
   - The `MATn` types in `Buffer` are returned as arrays with
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
+  
+* Added `getShaders()` function to get shaders used in WebGL.
   
 ## Minor changes
 
