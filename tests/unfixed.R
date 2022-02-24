@@ -1,3 +1,11 @@
+library(rgl)
+mfrow3d(2,2, sharedMouse = TRUE)
+sprites3d( rnorm(10) + 6, rnorm(10), rnorm(10), shape = shade3d(tetrahedron3d(), col = "red"), rotating = FALSE, fixedSize = FALSE)
+next3d()
+sprites3d( rnorm(10) + 6, rnorm(10), rnorm(10), shape = shade3d(tetrahedron3d(), col = "red"), rotating = FALSE, fixedSize = TRUE)
+next3d()
+sprites3d( rnorm(10) + 6, rnorm(10), rnorm(10), shape = shade3d(tetrahedron3d(), col = "red"), rotating = TRUE, fixedSize = FALSE)
+next3d()
 sprites3d( rnorm(10) + 6, rnorm(10), rnorm(10), shape = shade3d(tetrahedron3d(), col = "red"), rotating = TRUE, fixedSize = TRUE)
 rglwidget()
 
