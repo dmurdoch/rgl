@@ -9,7 +9,8 @@
 sprites3d(x, y = NULL, z = NULL, radius = 1, 
           shapes = NULL, userMatrix, 
           fixedSize = FALSE, 
-          adj = 0.5, pos = NULL, offset = 0.25, ...)
+          adj = 0.5, pos = NULL, offset = 0.25, 
+          rotating = FALSE, ...)
 particles3d(x, y = NULL, z = NULL, radius = 1, ...)
 }
 \arguments{
@@ -24,6 +25,7 @@ particles3d(x, y = NULL, z = NULL, radius = 1, ...)
   \item{ fixedSize }{should sprites remain at a fixed size,
 or resize with the scene?}
   \item{ adj, pos, offset }{positioning arguments; see Details}
+  \item{ rotating }{should sprites remain at a fixed orientation, or rotate with the scene?}
   \item{ ... }{material properties when \code{shapes = NULL}, texture mapping is supported}
 }
 \details{

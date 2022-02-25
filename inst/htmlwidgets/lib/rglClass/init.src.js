@@ -1109,10 +1109,10 @@
     if (!sprites_3d) {
       obj.mvMatLoc = gl.getUniformLocation(obj.prog, "mvMatrix");
       obj.prMatLoc = gl.getUniformLocation(obj.prog, "prMatrix");
-    }
 
-    if (fixed_size) {
-      obj.textScaleLoc = gl.getUniformLocation(obj.prog, "textScale");
+      if (fixed_size) {
+        obj.textScaleLoc = gl.getUniformLocation(obj.prog, "textScale");
+      }
     }
 
     if (is_lit && !sprites_3d) {

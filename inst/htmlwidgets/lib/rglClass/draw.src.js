@@ -785,9 +785,12 @@
       var flags = obj.flags,
           is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
           sprites3d = rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d),
+          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
+          rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating),
           i,j,
           origMV = new CanvasMatrix4( this.mvMatrix ),
           origPRMV = null,
+          origPR,
           pos, radius, userMatrix,
           result = [], margin = obj.material.margin;
  
@@ -823,21 +826,50 @@
          origPRMV = new CanvasMatrix4( this.prmvMatrix );
 
       offset = obj.offset;
+      
+      if (fixed_size && !rotating) {
+        origPR = this.prMatrix;
+        this.prMatrix = new CanvasMatrix4();
+      }
         
       for (iOrig=0; iOrig < norigs; iOrig++) {
         if (this.opaquePass)
           j = iOrig;
         else
           j = context.subid;
-
-        pos = rglwidgetClass.multVM([].concat(obj.vertices[j]).concat(1.0),
-                          origMV);
+        pos = [].concat(obj.vertices[j]).concat(1.0);
         radius = obj.radii.length > 1 ? obj.radii[j][0] : obj.radii[0][0];
         this.mvMatrix = new CanvasMatrix4(userMatrix);
         adj = this.getAdj(obj, j, offset);
         this.mvMatrix.translate(1 - 2*adj[0], 1 - 2*adj[1], 1 - 2*adj[2]);
-        this.mvMatrix.scale(radius);
-        this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+        this.mvMatrix.scale(radius, radius, radius);
+        
+        if (fixed_size) {
+          var viewport = subscene.par3d.viewport,
+            winwidth = viewport.width*this.canvas.width,
+            winheight = viewport.height*this.canvas.height,
+            scalex = 27/winwidth, scaley = 27/winheight,
+              scale = Math.sqrt(scalex * scaley);
+          if (!rotating) {
+            pos = rglwidgetClass.multVM(pos, origMV);
+            pos = rglwidgetClass.multVM(pos, origPR);
+            this.mvMatrix.scale(scalex, scaley, scale);
+          } else {
+            scale = 4.0 * scale * subscene.par3d.zoom;
+            this.mvMatrix.scale(scale, scale, scale);
+          }
+          this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+          if (rotating)
+            this.mvMatrix.multRight(origMV);
+        } else {
+          if (!rotating) {
+            pos = rglwidgetClass.multVM(pos, origMV);
+            this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+          } else {
+            this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+            this.mvMatrix.multRight(origMV);
+          }
+        }
         this.setprmvMatrix();
         for (i=0; i < obj.objects.length; i++)
           if (this.opaquePass)
@@ -847,6 +879,8 @@
       }
       this.normMatrix = savenorm;
       this.mvMatrix = origMV;
+      if (fixed_size && !rotating)
+        this.prMatrix = origPR;
       if (origPRMV !== null)
         this.prmvMatrix = origPRMV;
       return result;

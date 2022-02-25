@@ -38,6 +38,8 @@ scene3d <- function(minimal = TRUE) {
           result$ignoreExtent <- flags["ignoreExtent", 1]
     	if ("fixedSize" %in% rownames(flags))
     	  result$fixedSize <- flags["fixedSize", 1]
+    	if ("rotating" %in% rownames(flags))
+    	  result$rotating <- flags["rotating", 1]
     	if ("fastTransparency" %in% rownames(flags))
     	  result$fastTransparency <- flags["fastTransparency", 1]
     	if ("flipped" %in% rownames(flags))

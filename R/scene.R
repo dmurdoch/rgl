@@ -214,7 +214,8 @@ rgl.attrib <- function( id, attrib, first=1,
       rownames(result) <- c("ignoreExtent", 
                             if (type == "surface") "flipped"
                             else if (type == "spheres") "fastTransparency"
-                            else "fixedSize")[first:last]
+                            else "fixedSize",
+                            "rotating")[first:last]
     }
   if (attrib == 20 && count) { # axes
     rownames(result) <- c("mode", "step", "nticks",
@@ -803,7 +804,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
 
 rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL, 
                          userMatrix=diag(4), fixedSize = FALSE,
-                         adj = 0.5, pos = NULL, offset = 0.25,
+                         adj = 0.5, pos = NULL, offset = 0.25, rotating = FALSE, 
 			 ... ) {
   rgl.material(...)
 
@@ -822,7 +823,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   if (!nradius) stop("No radius specified")
   if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
   if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
-  idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos) )
+  idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos, rotating) )
   
   ret <- .C( rgl_sprites,
     success = as.integer(FALSE),

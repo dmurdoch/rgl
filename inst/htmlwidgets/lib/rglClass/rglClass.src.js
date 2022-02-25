@@ -26,7 +26,6 @@ rglwidgetClass = function() {
     this.drawing = false;
 };
 
-
     rglwidgetClass.f_is_lit = 1;
     rglwidgetClass.f_is_smooth = 2;
     rglwidgetClass.f_has_texture = 4;
@@ -43,6 +42,7 @@ rglwidgetClass = function() {
     rglwidgetClass.f_fat_lines = 8192;
     rglwidgetClass.f_is_brush = 16384;
     rglwidgetClass.f_has_fog = 32768;
+    rglwidgetClass.f_rotating = 65536;
     
     rglwidgetClass.prototype.fogNone = 0;
     rglwidgetClass.prototype.fogLinear = 1;

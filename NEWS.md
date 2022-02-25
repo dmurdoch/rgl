@@ -1,5 +1,5 @@
 
-# rgl  0.108.17
+# rgl  0.108.18
 
 ## Major changes
 
@@ -16,6 +16,9 @@
   - The `MATn` types in `Buffer` are returned as arrays with
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
+* `sprites3d()` now has the option of
+`rotating = TRUE`, to allow 3D sprites to rotate with
+the scene.
   
 * Added `getShaders()` function to get shaders used in WebGL.
   

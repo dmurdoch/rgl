@@ -35,6 +35,7 @@
           has_normals = (typeof normals !== "undefined") ||
                         type === "spheres",
           needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),
+          rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating),
           result;
 
       result = "  /* ****** "+type+" object "+id+" vertex shader ****** */\n"+
@@ -120,10 +121,17 @@
       if (has_texture || type === "text")
         result = result + "    vTexcoord = aTexcoord;\n";
 
-      if (fixed_size)
+      if (fixed_size && !rotating)
         result = result + "    vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);\n"+
                           "    pos = pos/pos.w;\n"+
                           "    gl_Position = pos + vec4(aOfs*textScale, 0.);\n";
+      else if (fixed_size) // rotating
+        result = result;
+        
+        
+        
+        
+        
 
       if (type === "sprites" && !fixed_size)
         result = result + "    vec4 pos = mvMatrix * vec4(aPos, 1.);\n"+
