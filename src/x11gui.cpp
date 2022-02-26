@@ -627,7 +627,16 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 #define RGL_ERROR_CODE (LastExtensionError + 1000)
 
   /* clear old errors */
-  while ((error_code = glGetError())) { Rprintf("cleared error %d\n", error_code); };
+  while ((error_code = glGetError())) { 
+    switch(error_code) {
+      case GL_INVALID_ENUM: Rprintf("cleared GL_INVALID_ENUM\n"); break;
+      case GL_INVALID_VALUE:Rprintf("cleared GL_INVALID_VALUE\n"); break;
+      case GL_INVALID_OPERATION:Rprintf("cleared GL_INVALID_OPERATION\n"); break;
+      case GL_STACK_OVERFLOW:Rprintf("cleared GL_STACK_OVERFLOW\n"); break;
+      case GL_STACK_UNDERFLOW:Rprintf("cleared GL_STACK_UNDERFLOW\n"); break;
+      default: Rprintf("cleared GL error %d\n", error_code);
+    };
+  };
 
   /* Work around problems with Xvfb on MacOSX and disabled IGLX:  
    temporarily catch protocol errors and convert
