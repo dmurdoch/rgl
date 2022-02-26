@@ -80,8 +80,9 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
 
 Subscene::~Subscene() 
 {
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    delete (*i);
+  // Don't destroy contained subscenes:  they're
+  // still in the scene list
+  
   for (int i=0; i<5; i++) 
     if (cleanupCallback[i]) 
       (*cleanupCallback[i])(userData + 3*i);

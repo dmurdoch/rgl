@@ -1,5 +1,5 @@
 
-# rgl  0.108.19
+# rgl  0.108.20
 
 ## Major changes
 
@@ -56,6 +56,7 @@ Shiny scene changes (also issue #173).
 bounding box.
 * `selectpoints3d(closest = TRUE)` selected too many points
 when multiple objects were in the scene.
+* Clearing nested subscenes could cause a segfault and crash.
     
 # rgl 0.108.5
 
