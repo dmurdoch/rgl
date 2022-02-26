@@ -15,7 +15,7 @@ window to a variable.
 }
 \usage{
 scene3d(minimal = TRUE)
-\S3method{plot3d}{rglscene}(x, add = FALSE, ...)
+\S3method{plot3d}{rglscene}(x, add = FALSE, open3dParams = getr3dDefaults(), ...)
 \S3method{plot3d}{rglobject}(x, ...)
 \S3method{print}{rglscene}(x, ...)
 \S3method{print}{rglobject}(x, ...)
@@ -25,8 +25,10 @@ scene3d(minimal = TRUE)
   no effect?  See Details.}
 \item{x}{An object of class \code{"rglscene"}}
 \item{add}{Whether to open a new window, or add to the existing one.}
+\item{open3dParams}{Default parameters for \code{open3d}}
 \item{...}{Additional parameters passed to \code{open3d}
-by \code{plot3d(..., add = FALSE)}.
+by \code{plot3d(..., add = FALSE)}.  These override
+\code{open3dParams}.
 }
 }
 \details{

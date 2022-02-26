@@ -29,7 +29,7 @@ public:
   void show() {};
   void hide() {};
   void bringToTop(int stay) {};
-  void update() { if (window) window->paint(); };
+  void update() { if (window && !window->skipRedraw) window->paint(); };
   void destroy() { if (window) window->notifyDestroy(); };
   void captureMouse(View* pView) {};
   void releaseMouse() {};

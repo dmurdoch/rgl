@@ -38,6 +38,8 @@ scene3d <- function(minimal = TRUE) {
           result$ignoreExtent <- flags["ignoreExtent", 1]
     	if ("fixedSize" %in% rownames(flags))
     	  result$fixedSize <- flags["fixedSize", 1]
+    	if ("rotating" %in% rownames(flags))
+    	  result$rotating <- flags["rotating", 1]
     	if ("fastTransparency" %in% rownames(flags))
     	  result$fastTransparency <- flags["fastTransparency", 1]
     	if ("flipped" %in% rownames(flags))
@@ -182,12 +184,12 @@ print.rglsubscene <- function(x, ...) {
 }
   
 
-plot3d.rglscene <- function(x, add=FALSE, ...) {
+plot3d.rglscene <- function(x, add=FALSE, open3dParams = getr3dDefaults(), ...) {
   root <- x$rootSubscene
   if (is.null(root)) root <- x  # Should work with pre-subscene objects
   if (!add) {
     args <- list(...)
-    params <- getr3dDefaults()
+    params <- open3dParams
     params[names(args)] <- args
     if (!is.null(x$material)) {
       if (is.null(params$material)) params$material <- list()

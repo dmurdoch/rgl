@@ -61,8 +61,11 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 # in place for any entries that are not listed.  
 # Unrecognized args are left in place.
 
-.fixMaterialArgs <- function(..., Params = material3d()) {
+.fixMaterialArgs <- function(..., Params = material3d(), col) {
    f <- function(...) list(...)
+   dots <- list(...)
+   if (!missing(col)) 
+     Params$color <- col
    formals(f) <- c(Params, formals(f))
    names <- as.list(names(Params))
    names(names) <- names
@@ -75,10 +78,12 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 # This one just gets the material args
 # If warn is TRUE, give a warning instead of ignoring extras.
 
-.getMaterialArgs <- function(..., material = list(), warn = FALSE) {
+.getMaterialArgs <- function(..., material = list(), warn = FALSE, col = material[["col"]]) {
   fullyNamed <- as.list(match.call(rgl.material, 
                            as.call(c(list(as.name("rgl.material"),
                                         ...), material))))[-1]
+  if (!is.null(col) && !("color" %in% names(fullyNamed)))
+    fullyNamed$color <- col
   good <- names(fullyNamed) %in% .material3d
   if (warn && !all(good))
     warning("Argument(s) ", paste(names(fullyNamed)[!good], collapse = ", "), " not matched.")
@@ -125,7 +130,16 @@ bg3d        <- function(...) {
     sphere <- FALSE
     fogtype <- "none"
   }
-  new <- .fixMaterialArgs(sphere = sphere, fogtype = fogtype, 
+  dots <- list(...)
+  if ("fogtype" %in% names(dots))
+    fogtype <- dots$fogtype
+  if ("fogScale" %in% names(dots))
+    fogScale <- dots$fogScale
+  else
+    fogScale <- 1
+  new <- .fixMaterialArgs(sphere = sphere, 
+                          fogtype = fogtype, 
+                          fogScale = fogScale,
                           color = c("black", "white"), 
   			  back = "lines", lit = FALSE, Params = save)
   do.call("rgl.bg", .fixMaterialArgs(..., Params = new))
@@ -240,6 +254,7 @@ abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
 sprites3d   <- function(x, y = NULL, z = NULL, radius = 1, 
                         shapes = NULL, userMatrix, fixedSize = FALSE,  
                         adj = 0.5, pos = NULL, offset = 0.25,
+                        rotating = FALSE,
 												...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   if (missing(userMatrix)) {
@@ -253,6 +268,7 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
 
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius,shapes=shapes,
                                 userMatrix=userMatrix, fixedSize = fixedSize, 
+                                rotating = rotating,
                                 adj = adj, pos = pos, offset = offset), 
           .fixMaterialArgs(..., Params = save)))
 }
@@ -316,6 +332,14 @@ open3d <- function(..., params = getr3dDefaults(),
 	  register_pkgdown_methods()
 	
     args <- list(...)
+    if (missing(useNULL) && !is.null(params$useNULL)) {
+      useNULL <- params$useNULL
+      params$useNULL <- NULL
+    }
+    if (missing(silent) && !is.null(params$silent)) {
+      silent <- params$silent
+      params$silent <- NULL
+    }
     if (!is.null(args$antialias) 
         || !is.null(args$antialias <- r3dDefaults$antialias)) {
     	saveopt <- options(rgl.antialias = args$antialias)

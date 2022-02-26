@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.108.9
+Version: 0.108.19
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -29,7 +29,7 @@ Suggests: MASS, rmarkdown, deldir (>= 1.0-4), orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
           js (>= 1.2), akima, webshot2, downlit (>= 0.4.0), pkgdown (>= 2.0.0), extrafont,
           shiny, manipulateWidget (>= 0.9.0), testthat, markdown,
-          crosstalk
+          crosstalk, V8
 Imports: graphics, grDevices, stats, utils, 
          htmlwidgets, htmltools, knitr (>= 1.33), jsonlite (>= 0.9.20),
          magrittr, R6

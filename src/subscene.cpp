@@ -765,6 +765,13 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
 #endif
 }
 
+// static void printbbox(AABox bbox) {
+//   Rprintf("%.3g %.3g %.3g %.3g %.3g %.3g\n",
+//           bbox.vmin.x, bbox.vmax.x,
+//           bbox.vmin.y, bbox.vmax.y,
+//           bbox.vmin.z, bbox.vmax.z);  
+// }
+
 void Subscene::calcDataBBox()
 {
   data_bbox.invalidate();
@@ -774,13 +781,21 @@ void Subscene::calcDataBBox()
   for(subiter = subscenes.begin(); subiter != subscenes.end(); ++subiter) {
     Subscene* subscene = *subiter;
     if (!subscene->getIgnoreExtent()) {
-      double scale[3], matrix[16];
       AABox sub_bbox = subscene->getBoundingBox();
+      
       if (!sub_bbox.isEmpty()) {
-        subscene->getScale(scale);
-        subscene->getUserMatrix(matrix);
-        Matrix4x4 M(matrix);
-        M = Matrix4x4::scaleMatrix(scale[0], scale[1], scale[2])*M;
+        Matrix4x4 M;
+        if (subscene->getEmbedding(EM_MODEL) > EMBED_INHERIT) {
+          double matrix[16];
+          subscene->getUserMatrix(matrix);
+          M.loadData(matrix);
+        } else
+          M.setIdentity();
+        if (subscene->getEmbedding(EM_PROJECTION) > EMBED_INHERIT) {
+          double scale[3];
+          subscene->getScale(scale);
+          M = Matrix4x4::scaleMatrix(scale[0], scale[1], scale[2])*M;
+        }
         sub_bbox = sub_bbox.transform(M);
         data_bbox += sub_bbox;
       }

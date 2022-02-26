@@ -183,8 +183,8 @@ mtext3d <- function(text, edge, at = NULL, line = 0,
   ranges <- .getRanges()
   
   newlen <- max(length(text),length(line),length(at))
-  text <- rep(text, len = newlen)
-  line <- rep(line, len = newlen)
+  text <- rep(text, length.out = newlen)
+  line <- rep(line, length.out = newlen)
   
   if (is.na(floating)) {
     margin <- parseMargin(edge, floating)
@@ -193,7 +193,7 @@ mtext3d <- function(text, edge, at = NULL, line = 0,
       stop("Bad edge spec.")
     range <- ranges[[coord]]
     if (is.null(at)) at <- mean(range)
-    at <- rep(at, len = newlen)
+    at <- rep(at, length.out = newlen)
     if (all(is.na(pos))) {
       edge <- margin$edge
       pos <- matrix(NA,3,length(at))

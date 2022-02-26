@@ -1,5 +1,5 @@
 
-# rgl  0.108.9
+# rgl  0.108.19
 
 ## Major changes
 
@@ -10,14 +10,27 @@
     have been fixed.
   - If a subscene has no lights defined, the lights from the parent
     are used.
-  - `plot.rglscene()` now ends with the root subscene as current.
+  - `plot.rglscene()` now ends with the root subscene as
+    current.  It also allows specification of `open3d()`
+    parameters in a list.
   - The `MATn` types in `Buffer` are returned as arrays with
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
+* `sprites3d()` now has the option of
+`rotating = TRUE`, to allow 3D sprites to rotate with
+the scene.
+  
+* Added `getShaders()` function to get shaders used in WebGL.
   
 ## Minor changes
 
-* Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`. 
+* Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`.
+* `open3d()` now handles `useNULL` and `silent` arguments
+passed in `params`.
+* Controls passed to `playwidget()` may now include a 
+component specifying HTML dependencies.
+* Added `rglwidgetClass.readAccessor()` method to let other
+code use the buffering.
 * Changed the internal organization of bounding box calculations.
   
 ## Bug fixes
@@ -25,6 +38,24 @@
 * In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
 * `pop3d(tag = x)` did not always find the objects with `tag == x` if they were not in the current subscene.
+* The default values for `front` and `back` in `rgl.material`
+and `material3d` are now `"filled"`, as documented in some
+places.
+* The `fog` setting wasn't handled properly by `bg3d()`.
+* Numerous cases of partial argument matching were fixed
+(suggestion of Henrik Bengtsson in issue #170.)
+* Argument `col` is accepted as a synonym for `color` in `material3d()` and `rgl.material()`.
+* `planes3d()` objects were not displayed consistently 
+in `rgl` windows and WebGL displays, because the bounding
+boxes were not computed consistently (issue #169).
+* Some initialization wasn't done properly in Shiny apps,
+so they failed after a redraw (issue #173).
+* Buffers are now optional, as they don't work with 
+Shiny scene changes (also issue #173).
+* The NULL device would sometimes miscalculate the
+bounding box.
+* `selectpoints3d(closest = TRUE)` selected too many points
+when multiple objects were in the scene.
     
 # rgl 0.108.5
 

@@ -3,7 +3,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
                          snapshot = FALSE,
-                         oldConvertBBox = FALSE) {
+                         oldConvertBBox = FALSE,
+                         useBuffer = TRUE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -96,7 +97,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
            "is_lines", "sprites_3d", 
            "is_subscene", "is_clipplanes",
            "fixed_size", "is_points", "is_twosided",
-           "fat_lines", "is_brush", "has_fog")
+           "fat_lines", "is_brush", "has_fog",
+           "rotating")
   
   getFlags <- function(id) {
     
@@ -145,6 +147,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
       length(unique(c(mat$front, mat$back))) > 1
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
+    result["rotating"] <- isTRUE(obj$rotating)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
                   "lines" %in% unlist(mat[c("front", "back")]))
     result["is_brush"] <- !is.na(brushId) && id == brushId
@@ -226,7 +229,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     # plot the clipping planes as they affect the bounding box
     plotClipplanes(subscene)
     
-    mat$front <- mat$back <- "fill"
+    mat$front <- mat$back <- "filled"
     
     if (any(inds <- is.na(verts[,2]) & is.na(verts[,3])) && length(keep <- intersect(bbox[1:2], verts[inds, 1])))
       res <- c(res, do.call(axis3d, c(list(edge = "x", at = verts[inds, 1][keep], labels = text[inds][keep]), mat)))
@@ -431,24 +434,26 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     }
     setObj(cids[i], obj)
   }
-  # Put the data into the buffer
-  buffer <- Buffer$new()
-  for (i in seq_along(ids)) {
-    obj <- getObj(cids[i])
-    # This list needs to match the one in buffer.src.js
-    for (n in c("vertices", "normals", "indices", 
-                "texcoords", "colors", "centers")) {
-      if (!is.null(obj[[n]]))
-        obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+  if (useBuffer) {
+    # Put the data into the buffer
+    buffer <- Buffer$new()
+    for (i in seq_along(ids)) {
+      obj <- getObj(cids[i])
+      # This list needs to match the one in buffer.src.js
+      for (n in c("vertices", "normals", "indices", 
+                  "texcoords", "colors", "centers")) {
+        if (!is.null(obj[[n]]))
+          obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+      }
+      setObj(cids[i], obj)
     }
-    setObj(cids[i], obj)
+    buffer$closeBuffers()
+    buf <- buffer$as.list()
+    
+    result$buffer <- buf
   }
 
   result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
-  buffer$closeBuffers()
-  buf <- buffer$as.list()
-
-  result$buffer <- buf
 
   result
 }

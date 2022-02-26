@@ -173,7 +173,7 @@
           return obj;
       }
       if (sub.parent) 
-        return this.getBBoxDeco(sub.parent);
+        return this.getBBoxDeco(this.getObj(sub.parent));
       else
         return undefined;
     };

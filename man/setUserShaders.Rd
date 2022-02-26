@@ -1,22 +1,29 @@
 \name{setUserShaders}
 \alias{setUserShaders}
+\alias{getShaders}
 \title{
-Set user-defined shaders for RGL objects.
+Set user-defined shaders for RGL objects, or get
+shaders.
 }
 \description{
-Sets user-defined shaders (programs written in GLSL)
+\code{setUserShaders} sets user-defined shaders (programs written in GLSL)
 for customized display of RGL objects.  Currently
 only supported in WebGL displays, as the regular
-displays do not support GLSL.
+displays do not support GLSL.  \code{getShaders} gets
+the user defined shader, or if it is not present, the
+automatically generated one.
 }
 \usage{
 setUserShaders(ids, vertexShader = NULL, fragmentShader = NULL, 
                attributes = NULL, uniforms = NULL, 
                scene = scene3d(minimal), minimal = TRUE)
+
+getShaders(id, scene = scene3d(minimal), minimal = TRUE)
 }
 \arguments{
-  \item{ids}{
-Which objects should receive the shaders.
+  \item{ids, id}{
+Which objects should receive the shaders, or which object
+should be queried?
 }
   \item{vertexShader, fragmentShader}{
 The vertex and fragment shader source code.  If \code{NULL}, the
@@ -29,7 +36,7 @@ A named list of \dQuote{attributes} to attach to each vertex.
 A named list of \dQuote{uniforms}.
 }
   \item{scene}{
-A \code{\link{scene3d}} object to modify.
+A \code{\link{scene3d}} object to work with.
 }
   \item{minimal}{
 See \code{\link{scene3d}}.  
@@ -47,12 +54,14 @@ There may be many objects at a particular location, and
 each will result in a fragment calculation unless culled
 by z-buffering or being discarded in some other way.)
 
-Normally the WebGL code automatically generates shaders
+Normally the WebGL Javascript code automatically generates shaders
 for each object.  This function allows them to be written
 by hand, for testing new features, hand optimization, etc.
-Currently it is not easy to get copies of the default
-shaders; they need to be obtained from a Javascript debugger
-while displaying the scene.
+}
+\note{
+The \code{getShaders} function requires the \pkg{V8} package
+to extract auto-generated shaders, since they
+are generated within the Javascript code.
 }
 \value{
 A modified version of the \code{scene}.

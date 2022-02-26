@@ -35,9 +35,10 @@
       var perms = [[0,0,1], [1,2,2], [2,1,0]],
           x, xrow, elem, A, d, nhits, i, j, k, u, v, w, intersect, which, v0, v2, vx, reverse,
           face1 = [], face2 = [], normals = [],
-          nPlanes = obj.normals.length;
+          nPlanes = obj.normals.length, idx, center;
       obj.bbox = bbox;
       obj.vertices = [];
+      obj.centers = [];
       obj.initialized = false;
       for (elem = 0; elem < nPlanes; elem++) {
 //    Vertex Av = normal.getRecycled(elem);
@@ -78,9 +79,9 @@
                   }
                 }
                 if (which > i+1) {
-                  this.swap(x, i+1, which);
-                  this.swap(face1, i+1, which);
-                  this.swap(face2, i+1, which);
+                  rglwidgetClass.swap(x, i+1, which);
+                  rglwidgetClass.swap(face1, i+1, which);
+                  rglwidgetClass.swap(face2, i+1, which);
                 }
               }
             }
@@ -89,16 +90,23 @@
               v0 = [x[0][0] - x[1][0] , x[0][1] - x[1][1], x[0][2] - x[1][2]];
               v2 = [x[2][0] - x[1][0] , x[2][1] - x[1][1], x[2][2] - x[1][2]];
               /* cross-product */
-              vx = this.xprod(v0, v2);
-              reverse = this.dotprod(vx, A) > 0;
+              vx = rglwidgetClass.xprod(v0, v2);
+              reverse = rglwidgetClass.dotprod(vx, A) > 0;
 
               for (i=0; i<nhits-2; i++) {
                 obj.vertices.push(x[0]);
+                center = [];
+                for (k = 0; k<3; k++)
+                  center.push(x[0][k]/3);
                 normals.push(A);
                 for (j=1; j<3; j++) {
-                  obj.vertices.push(x[i + (reverse ? 3-j : j)]);
+                  idx = i + (reverse ? 3-j : j);
+                  obj.vertices.push(x[idx]);
+                  for (k=0; k<3; k++)
+                    center[k] += x[idx][k]/3;
                   normals.push(A);
                 }
+                obj.centers.push(center);
               }
             }
       }
@@ -344,7 +352,7 @@
       var gl = this.gl,
           f = obj.f[pass],
           type = obj.type,
-          fat_lines = this.isSet(obj.flags, this.f_fat_lines),
+          fat_lines = rglwidgetClass.isSet(obj.flags, rglwidgetClass.f_fat_lines),
           fnew, step;
       switch(type){
         case "points":
@@ -470,15 +478,15 @@
       var 
           flags = obj.flags,
           type = obj.type,
-          is_lit = this.isSet(flags, this.f_is_lit),
-          has_texture = this.isSet(flags, this.f_has_texture),
-          is_transparent = this.isSet(flags, this.f_is_transparent),
-          fixed_size = this.isSet(flags, this.f_fixed_size),
-          fixed_quads = this.isSet(flags, this.f_fixed_quads),
-          is_lines = this.isSet(flags, this.f_is_lines),
-          fat_lines = this.isSet(flags, this.f_fat_lines),
-          is_twosided = this.isSet(flags, this.f_is_twosided),
-          has_fog = this.isSet(flags, this.f_has_fog),
+          is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit),
+          has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture),
+          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
+          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
+          fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads),
+          is_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lines),
+          fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines),
+          is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided),
+          has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
           has_normals = (typeof obj.normals !== "undefined") ||
                         obj.type === "sphere",
           gl = this.gl || this.initGL(),
@@ -623,7 +631,7 @@
 
     rglwidgetClass.prototype.drawSpheres = function(obj, subscene, context) {
       var flags = obj.flags,
-          is_transparent = this.isSet(flags, this.f_is_transparent),
+          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
           sphereMV, baseofs, ofs, sscale, i,
           count, nc, scount, scale, indices, sphereNorm,
           enabled = {}, drawing,
@@ -734,7 +742,7 @@
       var count = obj.offsets.length,
         IMVClip = [];
       for (var i=0; i < count; i++) {
-        IMVClip[i] = this.multMV(this.invMatrix, obj.vClipplane.slice(4*i, 4*(i+1)));
+        IMVClip[i] = rglwidgetClass.multMV(this.invMatrix, obj.vClipplane.slice(4*i, 4*(i+1)));
       }
       obj.IMVClip = IMVClip;
       return [];
@@ -775,11 +783,14 @@
      */
     rglwidgetClass.prototype.drawSprites = function(obj, subscene, context) {
       var flags = obj.flags,
-          is_transparent = this.isSet(flags, this.f_is_transparent),
-          sprites3d = this.isSet(flags, this.f_sprites_3d),
+          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
+          sprites3d = rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d),
+          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
+          rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating),
           i,j,
           origMV = new CanvasMatrix4( this.mvMatrix ),
           origPRMV = null,
+          origPR,
           pos, radius, userMatrix,
           result = [], margin = obj.material.margin;
  
@@ -815,21 +826,50 @@
          origPRMV = new CanvasMatrix4( this.prmvMatrix );
 
       offset = obj.offset;
+      
+      if (fixed_size && !rotating) {
+        origPR = this.prMatrix;
+        this.prMatrix = new CanvasMatrix4();
+      }
         
       for (iOrig=0; iOrig < norigs; iOrig++) {
         if (this.opaquePass)
           j = iOrig;
         else
           j = context.subid;
-
-        pos = this.multVM([].concat(obj.vertices[j]).concat(1.0),
-                          origMV);
+        pos = [].concat(obj.vertices[j]).concat(1.0);
         radius = obj.radii.length > 1 ? obj.radii[j][0] : obj.radii[0][0];
         this.mvMatrix = new CanvasMatrix4(userMatrix);
         adj = this.getAdj(obj, j, offset);
         this.mvMatrix.translate(1 - 2*adj[0], 1 - 2*adj[1], 1 - 2*adj[2]);
-        this.mvMatrix.scale(radius);
-        this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+        this.mvMatrix.scale(radius, radius, radius);
+        
+        if (fixed_size) {
+          var viewport = subscene.par3d.viewport,
+            winwidth = viewport.width*this.canvas.width,
+            winheight = viewport.height*this.canvas.height,
+            scalex = 27/winwidth, scaley = 27/winheight,
+              scale = Math.sqrt(scalex * scaley);
+          if (!rotating) {
+            pos = rglwidgetClass.multVM(pos, origMV);
+            pos = rglwidgetClass.multVM(pos, origPR);
+            this.mvMatrix.scale(scalex, scaley, scale);
+          } else {
+            scale = 4.0 * scale * subscene.par3d.zoom;
+            this.mvMatrix.scale(scale, scale, scale);
+          }
+          this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+          if (rotating)
+            this.mvMatrix.multRight(origMV);
+        } else {
+          if (!rotating) {
+            pos = rglwidgetClass.multVM(pos, origMV);
+            this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+          } else {
+            this.mvMatrix.translate(pos[0]/pos[3], pos[1]/pos[3], pos[2]/pos[3]);
+            this.mvMatrix.multRight(origMV);
+          }
+        }
         this.setprmvMatrix();
         for (i=0; i < obj.objects.length; i++)
           if (this.opaquePass)
@@ -839,6 +879,8 @@
       }
       this.normMatrix = savenorm;
       this.mvMatrix = origMV;
+      if (fixed_size && !rotating)
+        this.prMatrix = origPR;
       if (origPRMV !== null)
         this.prmvMatrix = origPRMV;
       return result;
@@ -868,7 +910,7 @@
      */
     rglwidgetClass.prototype.drawBBox = function(obj, subscene, context) {
       var flags = obj.flags,
-          is_transparent = this.isSet(flags, this.f_is_transparent),
+          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
           scale, bbox, indices,
           enabled = {}, drawing,
           result = [], idx, center, edges,
@@ -1064,13 +1106,13 @@
           flags = obj.flags;
           if (typeof flags !== "undefined") {
             subscene_has_faces = subscene_has_faces || 
-                            (this.isSet(flags, this.f_is_lit) &&
-                            !this.isSet(flags, this.f_fixed_quads));
+                            (rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit) &&
+                            !rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads));
             obj.is_transparent = obj.someHidden || 
-              this.isSet(flags, this.f_is_transparent);
+              rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent);
             subscene_needs_sorting = subscene_needs_sorting || 
               obj.is_transparent ||
-              this.isSet(flags, this.f_depth_sort);
+              rglwidgetClass.isSet(flags, rglwidgetClass.f_depth_sort);
           }
         }
       }
@@ -1087,7 +1129,7 @@
 
       if (subids.length) {
         if (subscene_has_faces &&
-            this.isSet(sub.flags, this.f_sprites_3d) &&
+            rglwidgetClass.isSet(sub.flags, rglwidgetClass.f_sprites_3d) &&
             typeof sub.spriteNormmat === "undefined") {
           sub.spriteNormmat = new CanvasMatrix4(this.normMatrix);
         }

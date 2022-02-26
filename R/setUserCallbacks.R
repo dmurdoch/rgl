@@ -141,8 +141,8 @@ setAxisCallbacks <- function(axes, fns,
     fns <- list(fns)
   
   n <- max(length(axes), length(fns))
-  axes <- rep(axes, length = n)
-  fns <- rep(fns, length = n)
+  axes <- rep(axes, length.out = n)
+  fns <- rep(fns, length.out = n)
   
   # Call each function once to set things up before grabbing
   # the scene

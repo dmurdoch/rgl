@@ -2,7 +2,7 @@ persp3d <- function(x, ...) UseMethod("persp3d")
 
 
 persp3d.default <-
-function(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
+function(x = seq(0, 1, length.out = nrow(z)), y = seq(0, 1, length.out = ncol(z)),
     z, xlim = NULL, ylim = NULL, zlim = NULL,
     xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, 
     forceClipregion = FALSE, ...) {
@@ -26,7 +26,7 @@ function(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
             }
             else {
                 z <- x
-                x <- seq(0, 1, len = nrow(z))
+                x <- seq(0, 1, length.out = nrow(z))
             }
         }
         else stop("No 'z' matrix specified")

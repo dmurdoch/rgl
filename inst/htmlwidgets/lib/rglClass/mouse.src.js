@@ -129,8 +129,8 @@
             dot = rotBase[0]*rotCurrent[0] +
                   rotBase[1]*rotCurrent[1] +
                   rotBase[2]*rotCurrent[2],
-            angle = Math.acos( dot/self.vlen(rotBase)/self.vlen(rotCurrent) )*180.0/Math.PI,
-            axis = self.xprod(rotBase, rotCurrent),
+            angle = Math.acos( dot/rglwidgetClass.vlen(rotBase)/rglwidgetClass.vlen(rotCurrent) )*180.0/Math.PI,
+            axis = rglwidgetClass.xprod(rotBase, rotCurrent),
             objects = self.scene.objects,
             activeSub = self.getObj(activeSubscene),
             activeModel = self.getObj(self.useid(activeSub.id, "model")),

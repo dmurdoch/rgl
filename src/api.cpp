@@ -695,6 +695,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex,
     int nshapes = idata[2];
     bool fixedSize = (bool)idata[3];
     int npos = idata[4];
+    bool rotating = (bool)idata[5];
     int count = 0;
     Shape** shapelist;
     Scene* scene = NULL;
@@ -720,7 +721,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex,
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
                      device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
     						     count, shapelist, userMatrix,
-    						     fixedSize, scene, adj, npos, pos, *offset) ) );
+    						     fixedSize, rotating, scene, adj, npos, pos, *offset) ) );
     CHECKGLERROR;
   }
 

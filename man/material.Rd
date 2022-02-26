@@ -21,8 +21,8 @@ rgl.material(
   texminfilter = "linear", 
   texmagfilter = "linear",
   texenvmap    = FALSE,
-  front        = "fill", 
-  back         = "fill",
+  front        = "filled", 
+  back         = "filled",
   size         = 3.0, 
   lwd          = 1.0,
   fog          = TRUE,
@@ -34,6 +34,7 @@ rgl.material(
   margin       = "",
   floating     = FALSE,
   tag          = "",
+  col,
   ...
 )
 material3d(...)
@@ -128,6 +129,7 @@ material3d(...)
   \item{tag}{A length 1 string value.  These
   may be used to identify objects, or encode other meta
   data about the object.}
+  \item{col}{An allowed abbreviation of \code{color}.}
   \item{...}{Any of the arguments above can
   be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
 }

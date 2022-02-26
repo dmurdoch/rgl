@@ -26,23 +26,23 @@ rglwidgetClass = function() {
     this.drawing = false;
 };
 
-
-    rglwidgetClass.prototype.f_is_lit = 1;
-    rglwidgetClass.prototype.f_is_smooth = 2;
-    rglwidgetClass.prototype.f_has_texture = 4;
-    rglwidgetClass.prototype.f_depth_sort = 8;
-    rglwidgetClass.prototype.f_fixed_quads = 16;
-    rglwidgetClass.prototype.f_is_transparent = 32;
-    rglwidgetClass.prototype.f_is_lines = 64;
-    rglwidgetClass.prototype.f_sprites_3d = 128;
-    rglwidgetClass.prototype.f_is_subscene = 256;
-    rglwidgetClass.prototype.f_is_clipplanes = 512;
-    rglwidgetClass.prototype.f_fixed_size = 1024;
-    rglwidgetClass.prototype.f_is_points = 2048;
-    rglwidgetClass.prototype.f_is_twosided = 4096;
-    rglwidgetClass.prototype.f_fat_lines = 8192;
-    rglwidgetClass.prototype.f_is_brush = 16384;
-    rglwidgetClass.prototype.f_has_fog = 32768;
+    rglwidgetClass.f_is_lit = 1;
+    rglwidgetClass.f_is_smooth = 2;
+    rglwidgetClass.f_has_texture = 4;
+    rglwidgetClass.f_depth_sort = 8;
+    rglwidgetClass.f_fixed_quads = 16;
+    rglwidgetClass.f_is_transparent = 32;
+    rglwidgetClass.f_is_lines = 64;
+    rglwidgetClass.f_sprites_3d = 128;
+    rglwidgetClass.f_is_subscene = 256;
+    rglwidgetClass.f_is_clipplanes = 512;
+    rglwidgetClass.f_fixed_size = 1024;
+    rglwidgetClass.f_is_points = 2048;
+    rglwidgetClass.f_is_twosided = 4096;
+    rglwidgetClass.f_fat_lines = 8192;
+    rglwidgetClass.f_is_brush = 16384;
+    rglwidgetClass.f_has_fog = 32768;
+    rglwidgetClass.f_rotating = 65536;
     
     rglwidgetClass.prototype.fogNone = 0;
     rglwidgetClass.prototype.fogLinear = 1;

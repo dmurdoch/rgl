@@ -114,9 +114,9 @@
                fontString = "italic " + fontString;
              return fontString;
            };
-       cex = this.repeatToLen(cex, text.length);
-       family = this.repeatToLen(family, text.length);
-       font = this.repeatToLen(font, text.length);
+       cex = rglwidgetClass.repeatToLen(cex, text.length);
+       family = rglwidgetClass.repeatToLen(family, text.length);
+       font = rglwidgetClass.repeatToLen(font, text.length);
 
        canvasX = 1;
        line = -1;

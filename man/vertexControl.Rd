@@ -80,7 +80,7 @@ Duncan Murdoch
 \examples{
   saveopts <- options(rgl.useNULL = TRUE)
 
-  theta <- seq(0, 6*pi, len=100)
+  theta <- seq(0, 6*pi, length.out = 100)
   xyz <- cbind(sin(theta), cos(theta), theta)
   plot3d(xyz, type="l")
   id <- spheres3d(xyz[1,,drop=FALSE], col="red")

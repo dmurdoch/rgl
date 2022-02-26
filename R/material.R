@@ -23,8 +23,8 @@ rgl.material <- function(
   texminfilter = "linear", 
   texmagfilter = "linear",
   texenvmap    = FALSE,
-  front        = "fill", 
-  back         = "fill",
+  front        = "filled", 
+  back         = "filled",
   size         = 3.0,
   lwd          = 1.0, 
   fog          = TRUE,
@@ -36,10 +36,16 @@ rgl.material <- function(
   margin = "",
   floating = FALSE,
   tag = "",
+  col,
   ...
 ) {
+  # Allow compatibility with base graphics without relying
+  # on abbreviated arguments
+  
+  if (missing(color) && !missing(col))
+    color <- col
+  
   # solid or diffuse component
-
   color     <- rgl.mcolor(color)
   if (length(color) < 1)
     stop("There must be at least one color")
@@ -165,7 +171,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   list(color = rgb(idata[29 + 3*(seq_len(idata[1]))], 
                    idata[30 + 3*(seq_len(idata[1]))], 
                    idata[31 + 3*(seq_len(idata[1]))], maxColorValue = 255),
-       alpha = if (idata[11]) ddata[seq(from=6, length=idata[11])] else 1,
+       alpha = if (idata[11]) ddata[seq(from=6, length.out = idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
        specular = rgb(idata[15], idata[16], idata[17], maxColorValue = 255),

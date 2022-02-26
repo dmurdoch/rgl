@@ -59,7 +59,7 @@ Duncan Murdoch
 the triangulation.
 }
 \examples{
-theta <- seq(0, 4*pi, len = 50)
+theta <- seq(0, 4*pi, length.out = 50)
 r <- theta + 1
 r <- c(r[-50], rev(theta*0.8) + 1)
 theta <- c(theta[-50], rev(theta))
