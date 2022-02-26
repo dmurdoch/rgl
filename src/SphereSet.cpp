@@ -156,19 +156,19 @@ Vertex SphereSet::getPrimitiveCenter(int index)
 }
 		
 	
-int SphereSet::getAttributeCount(AABox& bbox, AttribID attrib) 
+int SphereSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 
 {
   switch (attrib) {
     case RADII:    return radius.size();
     case VERTICES: return center.size();
     case FLAGS:    return 2;    
   }
-  return Shape::getAttributeCount(bbox, attrib);
+  return Shape::getAttributeCount(subscene, attrib);
 }
 
-void SphereSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void SphereSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {
@@ -189,7 +189,7 @@ void SphereSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count,
         *result++ = (double) fastTransparency;
         return;
     }  
-    Shape::getAttribute(bbox, attrib, first, count, result);
+    Shape::getAttribute(subscene, attrib, first, count, result);
   }
 }
 

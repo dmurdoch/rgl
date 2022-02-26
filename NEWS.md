@@ -1,5 +1,5 @@
 
-# rgl  0.108.18
+# rgl  0.108.19
 
 ## Major changes
 
@@ -31,6 +31,7 @@ passed in `params`.
 component specifying HTML dependencies.
 * Added `rglwidgetClass.readAccessor()` method to let other
 code use the buffering.
+* Changed the internal organization of bounding box calculations.
   
 ## Bug fixes
 

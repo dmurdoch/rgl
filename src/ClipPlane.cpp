@@ -22,7 +22,7 @@ ClipPlaneSet::ClipPlaneSet(Material& in_material, int in_nnormal, double* in_nor
 {
 }
 
-int ClipPlaneSet::getAttributeCount(AABox& bbox, AttribID attrib)
+int ClipPlaneSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
     case NORMALS: 
@@ -31,9 +31,9 @@ int ClipPlaneSet::getAttributeCount(AABox& bbox, AttribID attrib)
   return 0;
 }
 
-void ClipPlaneSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void ClipPlaneSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (first + count < n) n = first + count;
   if (first < n) {
     if (attrib == NORMALS) {

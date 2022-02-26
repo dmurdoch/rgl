@@ -36,13 +36,13 @@ public:
   /**
    * update mesh
    */
-  void updateTriangles(const AABox& sceneBBox);
+  void updateTriangles(Subscene* subscene);
   
   /**
    * update then get attributes 
    */
-  int getAttributeCount(AABox& bbox, AttribID attrib);
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);  
+  int getAttributeCount(SceneNode* subscene, AttribID attrib);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);  
 };
 
 } // namespace rgl

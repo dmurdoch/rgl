@@ -324,7 +324,7 @@ void rgl::rgl_attrib_count(int* id, int* attrib, int* count)
     AABox bbox = subscene->getBoundingBox();
     SceneNode* scenenode = scene->get_scenenode(*id);
     if ( scenenode )
-      *count = scenenode->getAttributeCount(bbox, *attrib);
+      *count = scenenode->getAttributeCount(subscene, *attrib);
     else
       *count = 0;
   }
@@ -342,10 +342,9 @@ void rgl::rgl_attrib(int* id, int* attrib, int* first, int* count, double* resul
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     Subscene* subscene = scene->whichSubscene(*id);
-    AABox bbox = subscene->getBoundingBox();
     SceneNode* scenenode = scene->get_scenenode(*id);
     if ( scenenode )
-      scenenode->getAttribute(bbox, *attrib, *first, *count, result);
+      scenenode->getAttribute(subscene, *attrib, *first, *count, result);
   }
 } 
 
@@ -360,12 +359,12 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
-    AABox bbox = scene->getBoundingBox();
+    Subscene* subscene = scene->whichSubscene(*id);
     SceneNode* scenenode = scene->get_scenenode(*id);
     
     if (scenenode)
       for (int i=0; i < *count; i++) {
-        String s = scenenode->getTextAttribute(bbox, *attrib, i + *first);
+        String s = scenenode->getTextAttribute(subscene, *attrib, i + *first);
         if (s.length) {
           *result = R_alloc(s.length + 1, 1);
           strncpy(*result, s.text, s.length);

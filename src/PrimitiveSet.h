@@ -28,8 +28,8 @@ public:
    * overloaded
    **/
   virtual int getElementCount(void) { return nprimitives; }
-  int getAttributeCount(AABox& bbox, AttribID attrib);
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(SceneNode* subscene, AttribID attrib);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
   
   /**
    * overloaded
@@ -160,8 +160,8 @@ public:
    **/  
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "faces", buflen); };  
   
-  int getAttributeCount(AABox& bbox, AttribID attrib);
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(SceneNode* subscene, AttribID attrib);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
 
 protected:
   /**

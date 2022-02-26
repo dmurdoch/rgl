@@ -157,10 +157,10 @@ public:
   int get_id_count(TypeID type, bool recursive);
   int get_ids(TypeID type, int* ids, char** types, bool recursive);
 
-  virtual int getAttributeCount(AABox& bbox, AttribID attrib);
+  virtual int getAttributeCount(SceneNode* subscene, AttribID attrib);
   
-  virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
-  virtual String getTextAttribute(AABox& bbox, AttribID attrib, int index);
+  virtual void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
+  virtual String getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
 
   /* Update matrices etc. in preparation for rendering */
   void update(RenderContext* renderContext);

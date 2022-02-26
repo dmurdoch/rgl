@@ -72,9 +72,9 @@ public:
   SceneNode *owner;  /* don't delete this node while the owner is non-NULL */
 
   /* Some nodes depend on the bbox, so we pass it to all */
-  virtual int getAttributeCount(AABox& bbox, AttribID attrib) { return 0; }
-  virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result) { return; }
-  virtual String  getTextAttribute(AABox& bbox, AttribID attrib, int index) { return String(0, NULL); }
+  virtual int getAttributeCount(SceneNode* subscene, AttribID attrib) { return 0; }
+  virtual void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result) { return; }
+  virtual String  getTextAttribute(SceneNode* subscene, AttribID attrib, int index) { return String(0, NULL); }
   virtual void getTypeName(char* buffer, int buflen) = 0;
 
 protected:

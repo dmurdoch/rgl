@@ -215,7 +215,7 @@ void Background::drawPrimitive(RenderContext* renderContext, int index)
 #endif
 }
 
-int Background::getAttributeCount(AABox& bbox, AttribID attrib) 
+int Background::getAttributeCount(SceneNode* subscene, AttribID attrib) 
 {
   switch (attrib) {    
   case FLAGS: return 4;
@@ -225,12 +225,12 @@ int Background::getAttributeCount(AABox& bbox, AttribID attrib)
             else return 0;
          
   }
-  return Shape::getAttributeCount(bbox, attrib);
+  return Shape::getAttributeCount(subscene, attrib);
 }
 
-void Background::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void Background::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
 
   if (first + count < n) n = first + count;
   if (first < n) {
@@ -254,17 +254,17 @@ void Background::getAttribute(AABox& bbox, AttribID attrib, int first, int count
       	*result++ = quad->getObjID();
       return;
     }
-    Shape::getAttribute(bbox, attrib, first, count, result);
+    Shape::getAttribute(subscene, attrib, first, count, result);
   }
 }
 
-String Background::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+String Background::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     quad->getTypeName(buffer, 20);
     return String(static_cast<int>(strlen(buffer)), buffer);
   } else
-    return Shape::getTextAttribute(bbox, attrib, index);
+    return Shape::getTextAttribute(subscene, attrib, index);
 }

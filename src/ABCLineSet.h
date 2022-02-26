@@ -35,12 +35,12 @@ public:
   /**
    * update mesh
    */
-  void updateSegments(const AABox& sceneBBox);
+  void updateSegments(SceneNode* subscene);
   
   /**
    * update then get attributes 
    */
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
 
 };
 

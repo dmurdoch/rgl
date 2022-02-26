@@ -83,8 +83,8 @@ public:
   virtual int getPrimitiveCount(void) { return getElementCount(); } 
 
   /* overrides */
-  int getAttributeCount(AABox& bbox, AttribID attrib);
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(SceneNode* subscene, AttribID attrib);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
   
   /**
    * location of individual parts

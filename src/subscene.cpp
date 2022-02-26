@@ -334,18 +334,18 @@ Subscene* Subscene::whichSubscene(int mouseX, int mouseY)
   return result;
 }
 
-int Subscene::getAttributeCount(AABox& bbox, AttribID attrib)
+int Subscene::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
     case IDS:	   
     case TYPES:    return (int)shapes.size();
   }
-  return SceneNode::getAttributeCount(bbox, attrib);
+  return SceneNode::getAttributeCount(subscene, attrib);
 }
 
-void Subscene::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void Subscene::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   int ind = 0;
 
   if (first + count < n) n = first + count;
@@ -359,19 +359,19 @@ void Subscene::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
         }
         return;
     }  
-    SceneNode::getAttribute(bbox, attrib, first, count, result);
+    SceneNode::getAttribute(subscene, attrib, first, count, result);
   }
 }
 
-String Subscene::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+String Subscene::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     shapes[index]->getTypeName(buffer, 20);
     return String(static_cast<int>(strlen(buffer)), buffer);
   } else
-    return SceneNode::getTextAttribute(bbox, attrib, index);
+    return SceneNode::getTextAttribute(subscene, attrib, index);
 }
 
 void Subscene::renderClipplanes(RenderContext* renderContext)
@@ -782,20 +782,23 @@ void Subscene::calcDataBBox()
     Subscene* subscene = *subiter;
     if (!subscene->getIgnoreExtent()) {
       AABox sub_bbox = subscene->getBoundingBox();
-      Matrix4x4 M;
-      if (subscene->getEmbedding(EM_MODEL) > EMBED_INHERIT) {
-        double matrix[16];
-        subscene->getUserMatrix(matrix);
-        M.loadData(matrix);
-      } else
-        M.setIdentity();
-      if (subscene->getEmbedding(EM_PROJECTION) > EMBED_INHERIT) {
-        double scale[3];
-        subscene->getScale(scale);
-        M = Matrix4x4::scaleMatrix(scale[0], scale[1], scale[2])*M;
+      
+      if (!sub_bbox.isEmpty()) {
+        Matrix4x4 M;
+        if (subscene->getEmbedding(EM_MODEL) > EMBED_INHERIT) {
+          double matrix[16];
+          subscene->getUserMatrix(matrix);
+          M.loadData(matrix);
+        } else
+          M.setIdentity();
+        if (subscene->getEmbedding(EM_PROJECTION) > EMBED_INHERIT) {
+          double scale[3];
+          subscene->getScale(scale);
+          M = Matrix4x4::scaleMatrix(scale[0], scale[1], scale[2])*M;
+        }
+        sub_bbox = sub_bbox.transform(M);
+        data_bbox += sub_bbox;
       }
-      sub_bbox = sub_bbox.transform(M);
-      data_bbox += sub_bbox;
       bboxChanges |= subscene->bboxChanges;
     }
   }
@@ -810,6 +813,8 @@ void Subscene::calcDataBBox()
     }
   }
   intersectClipplanes(); 
+  if (!data_bbox.isValid())
+    data_bbox.setEmpty();
 }
 
 void Subscene::intersectClipplanes(void) 
@@ -1020,8 +1025,17 @@ void Subscene::renderZsort(RenderContext* renderContext)
 
 const AABox& Subscene::getBoundingBox()
 { 
-  if (bboxChanges || !data_bbox.isValid()) 
+  if (bboxChanges || !data_bbox.isValid()) {
+    // Rprintf("recalc bbox for %d\n", getObjID());
     calcDataBBox();
+    // Rprintf("%d: ", getObjID());
+    // if (data_bbox.isEmpty())
+    //   Rprintf("empty\n");
+    // else if (data_bbox.isValid())
+    //   Rprintf("%.1f %.1f\n", data_bbox.vmin.x, data_bbox.vmax.x);
+    // else
+    //   Rprintf("invalid\n", data_bbox.vmin.x, data_bbox.vmax.x);
+  }
   return data_bbox; 
 }
 

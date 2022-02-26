@@ -29,8 +29,8 @@ public:
   Vertex getCenter(int ix, int iz);  
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "surface", buflen); };
   
-  int getAttributeCount(AABox& bbox, AttribID attrib);
-  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  int getAttributeCount(SceneNode* subscene, AttribID attrib);
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
   
   virtual int getElementCount(void) { return (nx-1)*(nz-1); }
   
