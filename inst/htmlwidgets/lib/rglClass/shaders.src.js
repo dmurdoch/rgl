@@ -297,7 +297,7 @@
       }
 
       if (is_lit) {
-        result = result + "    vec3 eye = normalize(-vPosition.xyz);\n"+
+        result = result + "    vec3 eye = normalize(-vPosition.xyz/vPosition.w);\n"+
                           "    vec3 lightdir;\n"+
                           "    vec4 colDiff;\n"+
                           "    vec3 halfVec;\n"+
@@ -315,7 +315,7 @@
                             "    if (!finite" + i + ") {\n"+
                             "      halfVec = normalize(lightdir + eye);\n"+
                             "    } else {\n"+
-                            "      lightdir = normalize(lightdir - vPosition.xyz);\n"+
+                            "      lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);\n"+
                             "      halfVec = normalize(lightdir + eye);\n"+
                             "    }\n"+
                             "    col = ambient" + i + ";\n"+

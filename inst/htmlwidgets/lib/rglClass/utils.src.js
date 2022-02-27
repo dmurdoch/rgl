@@ -622,3 +622,16 @@
     rglwidgetClass.normalize = function(v) {
       return rglwidgetClass.vscale(v, 1/rglwidgetClass.vlen(v));
     };
+    
+    /**
+     * Compute the dimensions of a regular array
+     * without checking that it is regular
+     */ 
+    rglwidgetClass.arrayDim = function(arr) {
+      var result = [];
+      while (typeof arr.length !== "undefined") {
+        result = result.concat(arr.length);
+        arr = arr[0];
+      }
+      return result;
+    };

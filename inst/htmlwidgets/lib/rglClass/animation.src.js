@@ -123,8 +123,6 @@
 
     /**
      * Rotate using unit quaternion
-     * FIXME:  check that we haven't got the transpose of what 
-     * we really want.
      * @param q - a single unit quaternion
      */
     rglwidgetClass.rotateByQuaternion = function(M, q) {
