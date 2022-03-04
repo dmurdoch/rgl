@@ -19,8 +19,8 @@ setUserShaders <- function(ids, vertexShader = NULL, fragmentShader = NULL,
 
 getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
   obj <- scene$objects[[as.character(id)]]
-  vertexShader <- obj$vertexShader
-  fragmentShader <- obj$fragmentShader
+  vertexShader <- obj$userVertexShader
+  fragmentShader <- obj$userFragmentShader
   if (is.null(vertexShader) || is.null(fragmentShader)) {
     if (!requireNamespace("V8"))
       stop("This function requires the V8 package.")
