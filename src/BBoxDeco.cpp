@@ -463,25 +463,21 @@ struct BBoxDeco::BBoxDecoImpl {
       }
     }
     
-    AxisInfo*  axis;
     Edge*  axisedge;
     int    nedges;
     
     switch(coord)
     {
       case 0:
-        axis     = &(bboxdeco.xaxis);       
         axisedge = xaxisedge;
         nedges   = 4;
         break;
       case 1:
-        axis     = &(bboxdeco.yaxis);
         axisedge = yaxisedge;
         nedges   = 8;
         break;
       case 2:
       default:
-        axis     = &(bboxdeco.zaxis);
         axisedge = zaxisedge;
         nedges   = 4;
         break;
@@ -520,13 +516,14 @@ struct BBoxDeco::BBoxDecoImpl {
   
   static Edge* fixedEdge(Material* material)
   {
-    Edge* axisedge;
-    int i,j, lim, coord = material->marginCoord;
+    Edge* axisedge = xaxisedge;
+    int i,j, lim = 4, coord = material->marginCoord;
     bool match;
     switch(coord) {
       case 0: 
-        axisedge = xaxisedge;
-        lim = 4;
+        // Initialized to this case to suppress "may be unused" message
+        // axisedge = xaxisedge;
+        // lim = 4;
         break;
       case 1: 
         axisedge = yaxisedge; 

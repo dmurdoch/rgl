@@ -321,8 +321,9 @@ void rgl::rgl_attrib_count(int* id, int* attrib, int* count)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     Subscene* subscene = scene->whichSubscene(*id);
-    AABox bbox = subscene->getBoundingBox();
     SceneNode* scenenode = scene->get_scenenode(*id);
+    // getBoundingBox is called for the side effect of possibly calculating data_bbox.
+    subscene->getBoundingBox();
     if ( scenenode )
       *count = scenenode->getAttributeCount(subscene, *attrib);
     else
