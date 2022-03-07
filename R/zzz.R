@@ -124,6 +124,13 @@
 
   if (!rgl.useNULL()) 
     setGraphicsDelay(unixos = unixos)
+  
+  # Are we running in reprex::reprex?  If so, do
+  # the knitr setup so our output appears there.
+  
+  if (in_reprex()) {
+    setupKnitr(autoprint = TRUE)
+  }
 }
 
 # Do we need a delay opening graphics?    
@@ -191,3 +198,6 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
   .C( rgl_quit, success=FALSE )
   
 }
+
+in_reprex <- function() 
+  !is.null(getOption("reprex.current_venue"))
