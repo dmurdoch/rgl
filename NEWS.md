@@ -20,9 +20,11 @@
 * `sprites3d()` now has the option of
 `rotating = TRUE`, to allow 3D sprites to rotate with
 the scene.
-  
 * Added `getShaders()` function to get shaders used in WebGL.
-  
+* Now detects if `rgl` is running within `reprex::reprex()`
+and if so arranges that a screenshot will be included in the
+output.
+
 ## Minor changes
 
 * Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`.
