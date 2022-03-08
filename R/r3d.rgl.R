@@ -74,6 +74,16 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
    body(f) <- as.call(c(b[1], names, b[-1]))
    f(...)
 } 
+
+# This one just expands the argument names to match the
+# standard names
+.fixMaterialArgs2 <- function(..., col) {
+  call <- do.call(call, list("rgl.material", ...))
+  result <- as.list(match.call(rgl.material, call))[-1]
+  if (!missing(col) && is.null(result$color))
+    result$color <- col
+  result
+}
      
 # This one just gets the material args
 # If warn is TRUE, give a warning instead of ignoring extras.

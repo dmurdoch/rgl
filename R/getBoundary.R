@@ -1,4 +1,4 @@
-getBoundary3d <- function(mesh, sorted = FALSE, simplify = TRUE) {
+getBoundary3d <- function(mesh, sorted = FALSE, simplify = TRUE, ...) {
   if (!inherits(mesh, "mesh3d"))
     stop(deparse(substitute(mesh)), " is not a mesh3d object.")
   edges <- NULL
@@ -25,7 +25,8 @@ getBoundary3d <- function(mesh, sorted = FALSE, simplify = TRUE) {
       edges <- edges[, order, drop = FALSE]
     }
   }
-  result <- mesh3d(vertices = mesh$vb, segments = edges)
+  result <- mesh3d(vertices = mesh$vb, segments = edges,
+                   material = .fixMaterialArgs2(...))
   if (simplify)
     result <- cleanMesh3d(result)
   result

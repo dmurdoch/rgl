@@ -18,7 +18,7 @@ GramSchmidt <- function(v1, v2, v3, order=1:3) {
 cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 = NULL, 
                        sides = 8, section = NULL, closed = 0, 
 		       rotationMinimizing = is.null(e2) && is.null(e3),
-		       debug = FALSE, keepVars = FALSE) {
+		       debug = FALSE, keepVars = FALSE, ...) {
   force(rotationMinimizing) # Need this since e2 and e3 get changed later	
   center <- as.matrix(as.data.frame(xyz.coords(center)[c("x", "y", "z")]))
   n <- nrow(center)  
@@ -221,5 +221,8 @@ cylinder3d <- function(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 =
     
   if (keepVars)
     attr(result, "vars") <- environment()
+  
+  result$material <- .fixMaterialArgs2(...)
+  
   result
 }
