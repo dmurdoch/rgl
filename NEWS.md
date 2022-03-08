@@ -1,5 +1,5 @@
 
-# rgl  0.108.21
+# rgl  0.108.23
 
 ## Major changes
 
@@ -35,6 +35,9 @@ component specifying HTML dependencies.
 * Added `rglwidgetClass.readAccessor()` method to let other
 code use the buffering.
 * Changed the internal organization of bounding box calculations.
+* All functions that produce meshes now accept 
+material properties.  Newly modified to do so using the `...`
+argument:  `cylinder3d()`, and `getBoundary3d()`.
   
 ## Bug fixes
 

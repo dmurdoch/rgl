@@ -12,7 +12,7 @@ object forming a cylindrical tube around the curve.
 cylinder3d(center, radius = 1, twist = 0, e1 = NULL, e2 = NULL, e3 = NULL, 
 	sides = 8, section = NULL, closed = 0, 
 	rotationMinimizing = is.null(e2) && is.null(e3),
-	debug = FALSE, keepVars = FALSE)
+	debug = FALSE, keepVars = FALSE, ...)
 }
 \arguments{
   \item{center}{An n by 3 matrix whose columns are the x, y and z coordinates of the space curve.}
@@ -28,6 +28,7 @@ minimizing frame or Frenet coordinates.}
 frame if \code{TRUE}, or a Frenet or user-specified frame if \code{FALSE}.}
   \item{debug}{If \code{TRUE}, plot the local Frenet coordinates at each point.}
   \item{keepVars}{If \code{TRUE}, return the local variables in attribute \code{"vars"}.}
+  \item{...}{Additional arguments to set as material properties.}
 }
 \details{
 
@@ -99,9 +100,10 @@ knot <- cylinder3d(
         6*cos(3*theta), 
         sin(theta) + 4*sin(2*theta)),
       radius = 0.8, 
-      closed = TRUE)
+      closed = TRUE,
+      color = "green")
                      
-shade3d(addNormals(subdivision3d(knot, depth = 2)), col = "green")  
+shade3d(addNormals(subdivision3d(knot, depth = 2)))  
 }
 
 \keyword{ dynamic }

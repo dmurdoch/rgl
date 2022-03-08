@@ -23,7 +23,7 @@ cube3d.ib <- c(
 )
   
 cube3d <- function( trans = identityMatrix(), ... ) {
-  rotate3d( mesh3d( vertices = cube3d.vb, quads = cube3d.ib, material=list(...) ), matrix = trans)
+  rotate3d( mesh3d( vertices = cube3d.vb, quads = cube3d.ib, material=.fixMaterialArgs2(...) ), matrix = trans)
 }  
 
 # 
@@ -45,7 +45,7 @@ tetra3d.it <- c(
 )
 
 tetrahedron3d <- function( trans = identityMatrix(), ... ) {
-  rotate3d( mesh3d(vertices = tetra3d.vb, triangles = tetra3d.it, material=list(...) ), matrix = trans)
+  rotate3d( mesh3d(vertices = tetra3d.vb, triangles = tetra3d.it, material=.fixMaterialArgs2(...) ), matrix = trans)
 }
 
 # 
@@ -73,7 +73,7 @@ octa3d.it <- c(
 )
 
 octahedron3d <- function( trans = identityMatrix(), ... ) {
-  rotate3d( mesh3d( vertices = octa3d.vb, triangles = octa3d.it, material=list(...) ), matrix = trans)
+  rotate3d( mesh3d( vertices = octa3d.vb, triangles = octa3d.it, material=.fixMaterialArgs2(...) ), matrix = trans)
 }
 
 #
@@ -119,7 +119,7 @@ ico3d.vb <- c(
   12, 8, 10)
   
 icosahedron3d <- function( trans = identityMatrix(), ... ) {
-    rotate3d( mesh3d( vertices = ico3d.vb, triangles = ico3d.it, material=list(...) ), matrix = trans)
+    rotate3d( mesh3d( vertices = ico3d.vb, triangles = ico3d.it, material=.fixMaterialArgs2(...) ), matrix = trans)
 }
 
 dodec3d.vb <- c(
@@ -161,7 +161,7 @@ dodec3d.if <- c(
   
 dodecahedron3d <- function( trans = identityMatrix(), ...) {
   m <- matrix(dodec3d.if, 5, 12)
-  rotate3d( mesh3d( vertices = dodec3d.vb, triangles = c(m[c(1,2,3, 1,3,4, 1,4,5),]), material=list(...) ), matrix=trans)
+  rotate3d( mesh3d( vertices = dodec3d.vb, triangles = c(m[c(1,2,3, 1,3,4, 1,4,5),]), material=.fixMaterialArgs2(...) ), matrix=trans)
 }
 
 cuboct3d.vb <- c(
@@ -198,5 +198,5 @@ cuboct3d.it <- c(
   4, 12, 8)
   
 cuboctahedron3d <- function( trans = identityMatrix(), ...) {
-  rotate3d( mesh3d( vertices = cuboct3d.vb, triangles = cuboct3d.it, quads = cuboct3d.ib, material=list(...) ), matrix = trans)
+  rotate3d( mesh3d( vertices = cuboct3d.vb, triangles = cuboct3d.it, quads = cuboct3d.ib, material=.fixMaterialArgs2(...) ), matrix = trans)
 }  
