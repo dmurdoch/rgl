@@ -1,5 +1,5 @@
 
-# rgl  0.108.23
+# rgl  0.108.24
 
 ## Major changes
 
@@ -63,6 +63,8 @@ bounding box.
 * `selectpoints3d(closest = TRUE)` selected too many points
 when multiple objects were in the scene.
 * Clearing nested subscenes could cause a segfault and crash.
+* In `knitr` and `rmarkdown`, blank plots could be shown
+when `par3d(skipRedraw=TRUE)` was set (issue #188).
     
 # rgl 0.108.5
 

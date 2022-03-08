@@ -222,7 +222,7 @@ fns <- local({
   }
   
   knit_print.rglId <- function(x, options, ...) {
-    if (getOption("rgl.printRglwidget", FALSE))	{
+    if (getOption("rgl.printRglwidget", FALSE) && !par3d("skipRedraw"))	{
       scene <- scene3d()
       args <- list(...)
       if (inherits(x, "rglHighlevel"))
