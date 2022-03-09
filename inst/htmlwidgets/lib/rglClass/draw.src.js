@@ -317,36 +317,51 @@
      * @param { object } obj - Object to work with
      */    
     rglwidgetClass.prototype.doUserUniforms = function(obj) {
+      var gl = this.gl, attr;
       if (typeof obj.userUniforms !== "undefined") {
-        var gl = this.gl;
-      	for (var attr in obj.userUniformLocations) {
+      	for (attr in obj.userUniformLocations) {
       	  var loc = obj.userUniformLocations[attr];
       	  if (loc !== null) {
-      	    var uniform = obj.userUniforms[attr],
-      	        dim = rglwidgetClass.arrayDim(uniform);
-      	    if (dim.length === 0)
-      	      gl.uniform1f(loc, uniform);
-      	    else if (dim.length === 1) {
-      	      uniform = new Float32Array(uniform);
-      	      switch(uniform.length) {
-      	      	case 2: gl.uniform2fv(loc, uniform); break;
-      	      	case 3: gl.uniform3fv(loc, uniform); break;
-      	      	case 4: gl.uniform4fv(loc, uniform); break;
-      	      	default: console.warn("bad uniform length");
-      	      }
-      	    } else if (dim.length === 2 && dim[0] === 4 && dim[1] === 4)
-      	      gl.uniformMatrix4fv(loc, false, new Float32Array(rglwidgetClass.flatten(uniform)));
-      	    else if (dim.length === 2) {
-      	      uniform = new Float32Array(rglwidgetClass.flatten(uniform));
-      	      switch(dim[[1]]) {
-      	        case 1: gl.uniform1fv(loc, uniform); break;
-      	        case 2: gl.uniform2fv(loc, uniform); break;
-      	        case 3: gl.uniform3fv(loc, uniform); break;
-      	        case 4: gl.uniform4fv(loc, uniform); break;
-      	        default: console.warn("bad uniform column count");
-      	      }
-      	    } else
-      	      console.warn("unsupported uniform shape");
+      	    var uniform = obj.userUniforms[attr];
+      	    if (typeof uniform !== "undefined") {
+      	      var dim = rglwidgetClass.arrayDim(uniform);
+      	      if (dim.length === 0)
+      	        gl.uniform1f(loc, uniform);
+      	      else if (dim.length === 1) {
+      	        uniform = new Float32Array(uniform);
+      	        switch(uniform.length) {
+      	      	  case 2: gl.uniform2fv(loc, uniform); break;
+      	      	  case 3: gl.uniform3fv(loc, uniform); break;
+      	      	  case 4: gl.uniform4fv(loc, uniform); break;
+      	      	  default: console.warn("bad uniform length");
+      	        }
+      	      } else if (dim.length === 2 && dim[0] === 4 && dim[1] === 4)
+      	        gl.uniformMatrix4fv(loc, false, new Float32Array(rglwidgetClass.flatten(uniform)));
+      	      else if (dim.length === 2) {
+      	        uniform = new Float32Array(rglwidgetClass.flatten(uniform));
+      	        switch(dim[[1]]) {
+      	          case 1: gl.uniform1fv(loc, uniform); break;
+      	          case 2: gl.uniform2fv(loc, uniform); break;
+      	          case 3: gl.uniform3fv(loc, uniform); break;
+      	          case 4: gl.uniform4fv(loc, uniform); break;
+      	          default: console.warn("bad uniform column count");
+      	        }
+      	      } else
+      	        console.warn("unsupported uniform shape");
+      	    }
+      	  }
+      	}
+      }
+      if (typeof obj.userTextures !== "undefined") {
+        var has_texture = rglwidgetClass.isSet(obj.flags, rglwidgetClass.f_has_texture),
+              texnum = has_texture - 1;
+        for (attr in obj.userTextures) {
+      	  var texture = obj.userTextures[attr];
+      	  if (texture.sampler !== null) {
+      	    texnum += 1;
+      	    gl.activeTexture(gl.TEXTURE0 + texnum);
+            gl.bindTexture(gl.TEXTURE_2D, texture.texture);
+            gl.uniform1i( texture.sampler, texnum);
       	  }
       	}
       }

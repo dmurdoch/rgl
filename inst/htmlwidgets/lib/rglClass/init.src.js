@@ -807,14 +807,32 @@
       	  v = rglwidgetClass.cbind(v, obj.userAttributes[attr]);
       	  stride = v[0].length;
       	  obj.userAttribSizes[attr] = stride - obj.userAttribOffsets[attr];
-      	}
+      	} else
+      	  console.warn("attribute '"+attr+"' not found in object "+obj.id+".");
       }
     }
 
-    if (typeof obj.userUniforms !== "undefined") {
+    if (typeof obj.userUniforms !== "undefined" ||
+        typeof obj.userTextures !== "undefined") {
       obj.userUniformLocations = {};
-      for (attr in obj.userUniforms)
+      for (attr in obj.userUniforms) {
         obj.userUniformLocations[attr] = gl.getUniformLocation(obj.prog, attr);
+        if (obj.userUniformLocations[attr] === null)
+          console.warn("uniform '"+attr+"' not found in object "+obj.id+".");
+      }
+      for (attr in obj.userTextures) {
+        var texture = obj.userTextures[attr];
+        texture.texture = gl.createTexture();
+        // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
+        gl.bindTexture(gl.TEXTURE_2D, texture.texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([255,255,255, 255])); // white
+        texture.sampler = gl.getUniformLocation(obj.prog, attr);
+        if (texture.sampler === null)
+          console.warn("sampler '"+attr+"' not found in object "+obj.id+".");
+        uri = texture.uri;
+        this.loadImageToTexture(uri, texture.texture);
+      }
     }
 
     if (sprites_3d) {

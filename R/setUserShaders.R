@@ -1,5 +1,5 @@
 setUserShaders <- function(ids, vertexShader = NULL, fragmentShader = NULL,
-			   attributes = NULL, uniforms = NULL,
+			   attributes = NULL, uniforms = NULL, textures = NULL,
 			   scene = scene3d(minimal),
 			   minimal = TRUE) {
   stopifnot(inherits(scene, "rglscene"))
@@ -12,6 +12,13 @@ setUserShaders <- function(ids, vertexShader = NULL, fragmentShader = NULL,
       obj$userFragmentShader <- paste(fragmentShader, collapse = "\n")
     obj$userAttributes <- attributes
     obj$userUniforms <- uniforms
+    obj$userTextures <- textures
+    alldata <- c(obj$userAttributes, obj$userUniforms, obj$userTextures)
+    allnames <- names(alldata)
+    if (length(allnames) != length(alldata) ||
+        any(nchar(allnames) == 0) ||
+        any(duplicated(allnames)))
+      stop("attributes, uniforms and textures should be named")
     scene$objects[[id]] <- obj
   }
   scene
