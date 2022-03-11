@@ -432,6 +432,17 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       obj$material$floating <- margin$floating
       obj$material$edge <- margin$edge
     }
+    if (is.list(obj$userTextures) && !is.list(obj$userTextures[[1]])) {
+      textureNames <- names(obj$userTextures)
+      userTextures <- as.character(obj$userTextures)
+      obj$userTextures <- list()
+      for (j in seq_along(userTextures)) {
+        texturefile <- userTextures[j]
+        obj$userTextures[[j]] <- list(file = texturefile,
+                                      uri = image_uri(texturefile))
+      }
+      names(obj$userTextures) <- textureNames
+    }
     setObj(cids[i], obj)
   }
   if (useBuffer) {

@@ -15,7 +15,7 @@ automatically generated one.
 }
 \usage{
 setUserShaders(ids, vertexShader = NULL, fragmentShader = NULL, 
-               attributes = NULL, uniforms = NULL, 
+               attributes = NULL, uniforms = NULL, textures = NULL,
                scene = scene3d(minimal), minimal = TRUE)
 
 getShaders(id, scene = scene3d(minimal), minimal = TRUE)
@@ -35,6 +35,9 @@ A named list of \dQuote{attributes} to attach to each vertex.
   \item{uniforms}{
 A named list of \dQuote{uniforms}.
 }
+  \item{textures}{
+A named list of textures.
+  }
   \item{scene}{
 A \code{\link{scene3d}} object to work with.
 }
@@ -57,6 +60,11 @@ by z-buffering or being discarded in some other way.)
 Normally the WebGL Javascript code automatically generates shaders
 for each object.  This function allows them to be written
 by hand, for testing new features, hand optimization, etc.
+
+The names used for the \code{attributes}, \code{uniforms}
+and \code{textures} should match names in the shaders
+for corresponding variables.  (The texture names should be
+names of \code{uniform sampler2D} variables.)
 }
 \note{
 The \code{getShaders} function requires the \pkg{V8} package

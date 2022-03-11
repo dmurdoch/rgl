@@ -1,5 +1,5 @@
 
-# rgl  0.108.24
+# rgl  0.108.25
 
 ## Major changes
 
@@ -16,7 +16,7 @@
   - The `MATn` types in `Buffer` are returned as arrays with
     dim `c(n, n, count)`.
   - The `plot3d.rglscene` method now passes `...` to `open3d()`.
-  - The `setUserShaders()` function now allows arrays of 4x4 matrices as "uniforms".
+  - The `setUserShaders()` function now allows arrays of 4x4 matrices as "uniforms", and allows additional textures to be specified.
 * `sprites3d()` now has the option of
 `rotating = TRUE`, to allow 3D sprites to rotate with
 the scene.
