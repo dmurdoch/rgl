@@ -1,5 +1,5 @@
 
-# rgl  0.108.25
+# rgl  0.108.26
 
 ## Major changes
 
@@ -65,6 +65,8 @@ when multiple objects were in the scene.
 * Clearing nested subscenes could cause a segfault and crash.
 * In `knitr` and `rmarkdown`, blank plots could be shown
 when `par3d(skipRedraw=TRUE)` was set (issue #188).
+* Objects drawn with `sprites3d()` weren't lit correctly
+in WebGL (issue #189).
     
 # rgl 0.108.5
 
