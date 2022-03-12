@@ -838,7 +838,6 @@
           savenorm = new CanvasMatrix4(this.normMatrix),
           iOrig, adj, offset;
 
-      this.normMatrix = subscene.spriteNormmat;
       userMatrix = obj.userMatrix;
                    
       if (this.opaquePass) {
@@ -895,7 +894,9 @@
             this.mvMatrix.multRight(origMV);
           }
         }
+        this.setnormMatrix2();
         this.setprmvMatrix();
+      
         for (i=0; i < obj.objects.length; i++)
           if (this.opaquePass)
             result = result.concat(this.drawObjId(obj.objects[i], subscene.id, context.concat(j)));
@@ -1153,11 +1154,6 @@
         this.drawBackground(sub.backgroundId, subsceneid);
 
       if (subids.length) {
-        if (subscene_has_faces &&
-            rglwidgetClass.isSet(sub.flags, rglwidgetClass.f_sprites_3d) &&
-            typeof sub.spriteNormmat === "undefined") {
-          sub.spriteNormmat = new CanvasMatrix4(this.normMatrix);
-        }
 
         if (subscene_needs_sorting)
           this.setprmvMatrix();
