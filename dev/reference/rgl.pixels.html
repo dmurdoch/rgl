@@ -18,7 +18,7 @@ topmost window."><meta name="robots" content="noindex"><!-- mathjax --><script s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.28</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.26</span>
       </span>
     </div>
 
@@ -76,10 +76,11 @@ topmost window."><meta name="robots" content="noindex"><!-- mathjax --><script s
 topmost window.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.pixels</span><span class="op">(</span>component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span>, 
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.pixels</span><span class="op">(</span>component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span>, 
         viewport <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"viewport"</span><span class="op">)</span>, top <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>component</dt>
@@ -114,11 +115,10 @@ is the list of components.</p>
 <code>demo("stereo")</code> for functions that make use of this to draw
 a random dot stereogram and an anaglyph.</p></div>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">surface3d</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">surface3d</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; #</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; # volcano example taken from "persp"</span>
@@ -139,12 +139,11 @@ a random dot stereogram and an anaglyph.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; col &lt;- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; open3d()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  120 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> glX </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; surface3d(x, y, z, color = col, back = "lines")</span>
 <span class="r-in"><span class="va">depth</span> <span class="op">&lt;-</span> <span class="fu">rgl.pixels</span><span class="op">(</span>component <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Error reading component 'depth'</span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">is.matrix</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span><span class="op">)</span> <span class="co"># Protect against empty or single pixel windows</span></span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/graphics/contour.html" class="external-link">contour</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span></span>
 <span class="r-plt img"><img src="rgl.pixels-1.png" alt="" width="480" height="297"></span>
@@ -158,11 +157,14 @@ a random dot stereogram and an anaglyph.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

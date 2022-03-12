@@ -18,7 +18,7 @@ point or region in the scene, then reports on all the vertices in or near that s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.28</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.26</span>
       </span>
     </div>
 
@@ -76,10 +76,11 @@ point or region in the scene, then reports on all the vertices in or near that s
 point or region in the scene, then reports on all the vertices in or near that selection.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre><code>selectpoints3d(objects = ids3d()$id, value = TRUE, closest = TRUE, &lt;!-- % $ --&gt;
+    <div id="ref-usage">
+    <div class="sourceCode"><pre><code>selectpoints3d(objects = ids3d()$id, value = TRUE, closest = TRUE, &lt;!-- % $ --&gt;
                multiple = FALSE, ...)</code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>objects</dt>
@@ -125,6 +126,12 @@ If <code>value</code> is <code>FALSE</code>, a 2-column matrix containing column
 <dd><p>The index of the point within <code><a href="attributes.html">rgl.attrib</a>(id, "vertices")</code>.
 If multiple points have the same coordinates, all indices will be returned.</p></dd>
 </dl></div>
+    <div id="note">
+    <h2>Note</h2>
+    <p>This function selects points, not areas.  For example,
+if the selection region is in the interior of the triangle, that
+will count as a miss for all of the triangle's vertices.</p>
+    </div>
     <div id="author">
     <h2>Author</h2>
     <p>Duncan Murdoch</p>
@@ -133,11 +140,10 @@ If multiple points have the same coordinates, all indices will be returned.</p><
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="select3d.html">select3d</a></code> to return a selection function.</p></div>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span> <span class="va">xyz</span> <span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -170,11 +176,14 @@ If multiple points have the same coordinates, all indices will be returned.</p><
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

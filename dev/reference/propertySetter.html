@@ -20,7 +20,7 @@ playwidget and related functions instead."><meta name="robots" content="noindex"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.28</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.26</span>
       </span>
     </div>
 
@@ -80,7 +80,8 @@ using the obsolete <code>writeWebGL</code>.  Use
 <code><a href="playwidget.html">playwidget</a></code> and related functions instead.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">propertySlider</span><span class="op">(</span>setter <span class="op">=</span> <span class="va">propertySetter</span>,
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">propertySlider</span><span class="op">(</span>setter <span class="op">=</span> <span class="va">propertySetter</span>,
              minS <span class="op">=</span> <span class="cn">NULL</span>, maxS <span class="op">=</span> <span class="cn">NULL</span>, step <span class="op">=</span> <span class="fl">1</span>, init <span class="op">=</span> <span class="cn">NULL</span>, 
        <span class="va">labels</span>, 
        id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"input"</span><span class="op">)</span><span class="op">)</span>, name <span class="op">=</span> <span class="va">id</span>,
@@ -100,8 +101,8 @@ using the obsolete <code>writeWebGL</code>.  Use
 <span class="fu">vertexSetter</span><span class="op">(</span><span class="va">values</span>, vertices <span class="op">=</span> <span class="fl">1</span>, <span class="va">attributes</span>, <span class="va">objid</span>, prefix <span class="op">=</span> <span class="st">""</span>,
        param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>, interp <span class="op">=</span> <span class="cn">TRUE</span>,
        digits <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>setter</dt>
@@ -177,7 +178,6 @@ will display the slider value, or <code>NULL</code> for none.</p></dd>
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="rglwidget.html">rglwidget</a></code>, <code><a href="playwidget.html">playwidget</a></code></p></div>
     </div>
-    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -187,11 +187,14 @@ will display the slider value, or <code>NULL</code> for none.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

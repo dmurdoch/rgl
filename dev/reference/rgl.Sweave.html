@@ -19,7 +19,7 @@ integration."><meta name="robots" content="noindex"><!-- mathjax --><script src=
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.28</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.26</span>
       </span>
     </div>
 
@@ -78,11 +78,12 @@ a <a href="https://rdrr.io/r/utils/Sweave.html" class="external-link">Sweave</a>
 integration.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">Sweave.snapshot</span><span class="op">(</span><span class="op">)</span>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Sweave.snapshot</span><span class="op">(</span><span class="op">)</span>
 <span class="fu">rgl.Sweave</span><span class="op">(</span><span class="va">name</span>, <span class="va">width</span>, <span class="va">height</span>, <span class="va">options</span>, <span class="va">...</span><span class="op">)</span>
 <span class="fu">rgl.Sweave.off</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>name, width, height, options, ...</dt>
@@ -94,7 +95,7 @@ when it opens the device.</p></dd>
     <p>The <code>rgl.Sweave</code> function is not normally called by the user.  The user
 specifies it as the graphics driver when opening the code chunk, e.g. by
 using</p>
-<pre><code>&lt;&lt;fig = TRUE, pdf = FALSE, grdevice = rgl.Sweave, resolution = 100&gt;&gt;=</code></pre>
+<div class="sourceCode"><pre><code>&lt;&lt;fig = TRUE, pdf = FALSE, grdevice = rgl.Sweave, resolution = 100&gt;&gt;=</code></pre></div>
 
 <p>When the RGL device is closed at the end of the code chunk,
 <code>rgl.Sweave.off()</code> will be called automatically.  It
@@ -159,7 +160,6 @@ and <code><a href="setupKnitr.html">hook_webgl</a></code> allow fixed or interac
 scenes to be embedded in <span class="pkg">knitr</span> 
 documents.</p></div>
     </div>
-    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -169,11 +169,14 @@ documents.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

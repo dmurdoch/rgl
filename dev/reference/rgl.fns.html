@@ -18,7 +18,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.107.28</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.26</span>
       </span>
     </div>
 
@@ -76,18 +76,20 @@
 <code>*3d</code> functions designed for users to call.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.abclines</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.abclines</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
 <span class="fu">rgl.planes</span><span class="op">(</span><span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, d <span class="op">=</span> <span class="fl">0</span>, <span class="va">...</span><span class="op">)</span>
 <span class="fu">rgl.clipplanes</span><span class="op">(</span><span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, d <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="fu">rgl.sprites</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, radius <span class="op">=</span> <span class="fl">1</span>, 
             shapes <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">userMatrix</span>, fixedSize <span class="op">=</span> <span class="cn">FALSE</span>,
-            adj <span class="op">=</span> <span class="fl">0.5</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, offset <span class="op">=</span> <span class="fl">0.25</span>, <span class="va">...</span><span class="op">)</span>
+            adj <span class="op">=</span> <span class="fl">0.5</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, offset <span class="op">=</span> <span class="fl">0.25</span>, 
+            rotating <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
 <span class="fu">rgl.spheres</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">radius</span>, fastTransparency <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 <span class="fu">rgl.clear</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, subscene <span class="op">=</span> <span class="fl">0</span> <span class="op">)</span>
 <span class="fu">rgl.pop</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, id <span class="op">=</span> <span class="fl">0</span>, tag <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span>  
 <span class="fu">rgl.ids</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, subscene <span class="op">=</span> <span class="cn">NA</span>, tags <span class="op">=</span> <span class="cn">FALSE</span> <span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x, y, z</dt>
@@ -99,6 +101,8 @@ or normals for the planes.</p></dd>
 <dd><p>Plane offset.</p></dd>
 <dt>radius</dt>
 <dd><p>Size of sprites or spheres.</p></dd>
+<dt>fixedSize, rotating</dt>
+<dd><p>Fixed size, changing orientation.</p></dd>
 <dt>fastTransparency</dt>
 <dd><p>Sphere drawing strategy.</p></dd>
 <dt>type, id, subscene</dt>
@@ -117,7 +121,6 @@ or normals for the planes.</p></dd>
     <h2>Details</h2>
     <p>See the corresponding <code>*3d</code> function: <code><a href="abclines.html">abclines3d</a></code>, <code><a href="planes.html">planes3d</a></code>, <code><a href="planes.html">clipplanes3d</a></code>, <code><a href="sprites.html">sprites3d</a></code>, <code><a href="spheres.html">spheres3d</a></code>.</p>
     </div>
-    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -127,11 +130,14 @@ or normals for the planes.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>
