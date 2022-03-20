@@ -73,8 +73,13 @@
          ctx.imageSmoothingEnabled = true;
          ctx.drawImage(image, 0, 0, canvasX, canvasY);
          self.handleLoadedTexture(texture, canvas);
-         self.drawScene();
+         self.texturesLoading -= 1;
+         if (!self.texturesLoading)
+           self.drawScene();
        };
+       if (!self.texturesLoading)
+         self.texturesLoading = 0; // may have been undefined
+       self.texturesLoading += 1;
        image.src = uri;
      };
 

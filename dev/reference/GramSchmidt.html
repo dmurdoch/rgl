@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.26</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.27</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
   <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -112,25 +112,25 @@ row vectors.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Proceed through the rows in order</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">9</span><span class="op">)</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]      [,2]        [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.1699708 0.9559331  0.19812127</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -2.3196951 1.8220344  0.10668697</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.7311022 0.6462894 -0.05741798</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]       [,2]       [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -0.47759054  0.7482187 -0.8177529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.35994858 -0.5320928 -1.7618911</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.04789103 -0.3999969  1.5900132</span>
 <span class="r-in"><span class="fu">GramSchmidt</span><span class="op">(</span><span class="va">A</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">A</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span>, <span class="va">A</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,1]       [,2]       [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> v1 -0.1715258  0.9646789  0.1999339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> v2 -0.9764148 -0.1394518 -0.1648251</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> v3  0.1311222  0.2234902 -0.9658463</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          [,1]       [,2]         [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v1 -0.3957118  0.6199431 -0.677556383</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v2  0.3728710 -0.5657763 -0.735434858</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v3 -0.8392731 -0.5436614 -0.007274476</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Keep the middle row unchanged</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="fl">3</span>, <span class="fl">3</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]      [,2]      [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] -1.1755551 0.1986942 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  1.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2052643 0.4615841 0.4297568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]     [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.07692072 -0.05021077 0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  1.00000000  0.00000000 0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.59309108 -1.19842820 1.032497</span>
 <span class="r-in"><span class="fu">GramSchmidt</span><span class="op">(</span><span class="va">A</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">A</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span>, <span class="va">A</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span>, order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    [,1] [,2] [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> v2    0    1    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> v2    0   -1    0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> v1    1    0    0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> v3    0    0    1</span>
 </code></pre></div>

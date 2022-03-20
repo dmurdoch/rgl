@@ -20,7 +20,7 @@ lower-level function more likely to be used in programming."><meta name="robots"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.26</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.27</span>
       </span>
     </div>
 
@@ -35,7 +35,7 @@ lower-level function more likely to be used in programming."><meta name="robots"
   <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -127,43 +127,43 @@ by <code><a href="attributes.html">rgl.attrib</a></code> for this attribute.</p>
 <span class="r-in"><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">rgl.attrib.info</span><span class="op">(</span><span class="va">id</span>, showAll <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id     attrib nrow ncol</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1424   vertices  100    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1424    normals    0    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1424     colors    1    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1424  texcoords    0    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1424        dim    0    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1424      texts    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1424        cex    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1424        adj    0    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1424      radii    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1424    centers  100    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1424        ids    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1424 usermatrix    0    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1424      types    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1424      flags    1    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1424    offsets    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1424     family    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 1424       font    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1424        pos    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 1424   fogscale    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1424       axes    0    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 1424    indices    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1417   vertices  100    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1417    normals    0    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1417     colors    1    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1417  texcoords    0    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1417        dim    0    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1417      texts    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1417        cex    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1417        adj    0    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1417      radii    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1417    centers  100    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1417        ids    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1417 usermatrix    0    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1417      types    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1417      flags    1    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1417    offsets    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1417     family    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 1417       font    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1417        pos    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 1417   fogscale    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1417       axes    0    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 1417    indices    0    1</span>
 <span class="r-in"><span class="fu">rgl.attrib.count</span><span class="op">(</span><span class="va">id</span>, <span class="st">"vertices"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 100</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="fu">rgl.attrib.info</span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="scene.html">ids3d</a></span><span class="op">(</span><span class="st">"all"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id   attrib nrow ncol       type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1422   colors    3    4      light</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1422    flags    2    1      light</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1422 vertices    1    3      light</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1423    flags    4    1 background</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1423 fogscale    1    1 background</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1423   colors    1    4 background</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1423  centers    1    3 background</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1424   colors    1    4     points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1424  centers  100    3     points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1424 vertices  100    3     points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1424    flags    1    1     points</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1415   colors    3    4      light</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1415    flags    2    1      light</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1415 vertices    1    3      light</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1416    flags    4    1 background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1416 fogscale    1    1 background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1416   colors    1    4 background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1416  centers    1    3 background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1417   colors    1    4     points</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1417  centers  100    3     points</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1417 vertices  100    3     points</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1417    flags    1    1     points</span>
 </code></pre></div>
     </div>
   </div>

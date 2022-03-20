@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.26</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.27</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
   <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,9 +70,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.108.26" id="rgl-010826">rgl 0.108.26<a class="anchor" aria-label="anchor" href="#rgl-010826"></a></h2>
+<h2 class="page-header" data-toc-text="0.108.27" id="rgl-010827">rgl 0.108.27<a class="anchor" aria-label="anchor" href="#rgl-010827"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-0-108-26">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-108-26"></a></h3>
+<h3 id="major-changes-0-108-27">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-108-27"></a></h3>
 <ul><li>Changes to support glTF animation:
 <ul><li>Handling of <code>embedding = "modify"</code> for the model matrix
 has changed. Now the centering step is only done for
@@ -103,7 +103,7 @@ WebGL.</li>
 be included in the output.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-changes-0-108-26">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-108-26"></a></h3>
+<h3 id="minor-changes-0-108-27">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-108-27"></a></h3>
 <ul><li>Added <code><a href="../reference/as.mesh3d.default.html">as.mesh3d()</a></code> methods for
 <code>"rglsubscene"</code> and <code>"rglscene"</code>.</li>
 <li>
@@ -119,7 +119,7 @@ Newly modified to do so using the <code>...</code> argument:
 <code><a href="../reference/cylinder3d.html">cylinder3d()</a></code>, and <code><a href="../reference/getBoundary3d.html">getBoundary3d()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-108-26">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-108-26"></a></h3>
+<h3 id="bug-fixes-0-108-27">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-108-27"></a></h3>
 <ul><li>In WebGL, the front vs back calculation sometimes got the wrong
 result (issue <a href="https://github.com/dmurdoch/rgl/issues/164" class="external-link">#164</a>).</li>
 <li>
@@ -153,6 +153,9 @@ be shown when <code>par3d(skipRedraw=TRUE)</code> was set (issue
 <a href="https://github.com/dmurdoch/rgl/issues/188" class="external-link">#188</a>).</li>
 <li>Objects drawn with <code><a href="../reference/sprites.html">sprites3d()</a></code> weren’t lit correctly in
 WebGL (issue <a href="https://github.com/dmurdoch/rgl/issues/189" class="external-link">#189</a>).</li>
+<li>Objects with textures were sometimes drawn more than once, both
+before the texture loaded and after. This was most noticeable for
+objects with user textures.</li>
 </ul></div>
 </div>
     <div class="section level2">
