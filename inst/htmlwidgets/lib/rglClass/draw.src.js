@@ -521,6 +521,9 @@
         
       if (!obj.initialized)
         this.initObj(obj);
+        
+      if (this.texturesLoading)
+        return[];
 
       count = obj.vertexCount;
       if (!count)
