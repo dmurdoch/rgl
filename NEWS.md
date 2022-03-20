@@ -1,5 +1,5 @@
 
-# rgl  0.108.26
+# rgl  0.108.27
 
 ## Major changes
 
@@ -67,6 +67,9 @@ when multiple objects were in the scene.
 when `par3d(skipRedraw=TRUE)` was set (issue #188).
 * Objects drawn with `sprites3d()` weren't lit correctly
 in WebGL (issue #189).
+* Objects with textures were sometimes drawn more than once, both
+before the texture loaded and after.  This was most noticeable for
+objects with user textures.
     
 # rgl 0.108.5
 
