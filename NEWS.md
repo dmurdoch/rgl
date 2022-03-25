@@ -1,5 +1,5 @@
 
-# rgl  0.108.27
+# rgl  0.108.29
 
 ## Major changes
 
@@ -70,6 +70,7 @@ in WebGL (issue #189).
 * Objects with textures were sometimes drawn more than once, both
 before the texture loaded and after.  This was most noticeable for
 objects with user textures.
+* Axis mode `"pretty"` got lost when scenes were redrawn.
     
 # rgl 0.108.5
 
