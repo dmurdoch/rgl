@@ -76,7 +76,8 @@
         case "custom":
           for (i=0; i < obj.vertices.length; i++) {
             value = (obj.vertices[i][dim] - limits[0])/range;
-            if (typeof value !== "undefined")
+            if (typeof value !== "undefined" &&
+                !isNaN(value))
               result[dim].push(value);
           }
           break;
@@ -158,6 +159,8 @@
         locations = ticks.locations[dim];
         if (locations.length)
           for (i = 0; i < locations.length; i++) {
+            if (isNaN(locations[i]))
+              continue;
             while (j < tickvertices.length && 
                    tickvertices[j][dim] !== locations[i]) j++;
             if (j >= tickvertices.length)

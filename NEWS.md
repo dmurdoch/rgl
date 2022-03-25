@@ -1,5 +1,5 @@
 
-# rgl  0.108.27
+# rgl  0.108.28
 
 ## Major changes
 
@@ -70,6 +70,8 @@ in WebGL (issue #189).
 * Objects with textures were sometimes drawn more than once, both
 before the texture loaded and after.  This was most noticeable for
 objects with user textures.
+* Tick labels were sometimes lost in WebGL displays and
+`snapshot3d()` results (issue #197).
     
 # rgl 0.108.5
 
