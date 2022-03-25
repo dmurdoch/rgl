@@ -71,6 +71,8 @@ in WebGL (issue #189).
 before the texture loaded and after.  This was most noticeable for
 objects with user textures.
 * Axis mode `"pretty"` got lost when scenes were redrawn.
+* Tick labels were sometimes lost in WebGL displays and
+`snapshot3d()` results (issue #197).
     
 # rgl 0.108.5
 
