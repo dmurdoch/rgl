@@ -432,7 +432,9 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       obj$material$floating <- margin$floating
       obj$material$edge <- margin$edge
     }
-    if (is.list(obj$userTextures) && !is.list(obj$userTextures[[1]])) {
+    if (is.list(obj$userTextures) && 
+        length(obj$userTextures) &&
+        !is.list(obj$userTextures[[1]])) {
       textureNames <- names(obj$userTextures)
       userTextures <- as.character(obj$userTextures)
       obj$userTextures <- list()
