@@ -401,29 +401,36 @@ plot3d.rglbboxdeco <- function(x, ...) {
   args <- list()     
   v <- x$vertices
   t <- x$texts
-  ind <- is.na(v[,2]) & is.na(v[,3])
-  if (any(ind)) {
-    args$xat <- v[ind,1]
-    if (!is.null(t))
-      args$xlab <- t[ind]
-    else
-      args$xlab <- signif(args$xat, 4)
+  m <- x$axes$mode
+  if (m[1] != "pretty") {
+    ind <- is.na(v[,2]) & is.na(v[,3])
+    if (any(ind)) {
+      args$xat <- v[ind,1]
+      if (!is.null(t))
+        args$xlab <- t[ind]
+      else
+        args$xlab <- signif(args$xat, 4)
+    }
   }
-  ind <- is.na(v[,1]) & is.na(v[,3])
-  if (any(ind)) {
-    args$yat <- v[ind,2]
-    if (!is.null(t))
-      args$ylab <- t[ind]
-    else
-      args$ylab <- signif(args$yat, 4)
+  if (m[2] != "pretty") {
+    ind <- is.na(v[,1]) & is.na(v[,3])
+    if (any(ind)) {
+      args$yat <- v[ind,2]
+      if (!is.null(t))
+        args$ylab <- t[ind]
+      else
+        args$ylab <- signif(args$yat, 4)
+    }
   }
-  ind <- is.na(v[,1]) & is.na(v[,2])
-  if (any(ind)) {
-    args$zat <- v[ind,3]
-    if (!is.null(t))
-      args$zlab <- t[ind]
-    else
-      args$zlab <- signif(args$zat, 4)
+  if (m[3] != "pretty") {
+    ind <- is.na(v[,1]) & is.na(v[,2])
+    if (any(ind)) {
+      args$zat <- v[ind,3]
+      if (!is.null(t))
+        args$zlab <- t[ind]
+      else
+        args$zlab <- signif(args$zat, 4)
+    }
   }
   args$draw_front <- x$draw_front
   args <- c(args, x$material)
