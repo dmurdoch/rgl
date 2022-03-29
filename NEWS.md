@@ -1,5 +1,5 @@
 
-# rgl  0.108.29
+# rgl  0.108.30
 
 ## Major changes
 
@@ -73,6 +73,8 @@ objects with user textures.
 * Axis mode `"pretty"` got lost when scenes were redrawn.
 * Tick labels were sometimes lost in WebGL displays and
 `snapshot3d()` results (issue #197).
+* The new material properties from 0.107.10 and 0.108.3
+were not handled properly by `plotmath3d()`.
     
 # rgl 0.108.5
 
