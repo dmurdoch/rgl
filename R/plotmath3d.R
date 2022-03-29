@@ -4,6 +4,7 @@ plotmath3d <- function(x, y = NULL, z = NULL,
 		       pos = NULL, offset = 0.5,
 		       fixedSize = TRUE,
 		       startsize = 480, initCex = 5, 
+		       margin = "", floating = FALSE, tag = "",
 		       ...) {
   xyz <- xyz.coords(x, y, z)
   n <- length(xyz$x)
@@ -50,7 +51,8 @@ plotmath3d <- function(x, y = NULL, z = NULL,
     result[i] <- with(xyz, sprites3d(x[i], y[i], z[i], texture = f, textype = "rgba", 
             col = "white", lit = FALSE, radius = cex[i]*size/initCex/20,
             adj = adj, pos = posi, offset = offseti,
-            fixedSize = fixedSize))
+            fixedSize = fixedSize,
+            margin = margin, floating = floating, tag = tag))
   }
   lowlevel(result)
 }

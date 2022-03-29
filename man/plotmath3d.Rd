@@ -11,7 +11,8 @@ file as a texture in a sprite.
 \usage{
 plotmath3d(x, y = NULL, z = NULL, text, cex = par("cex"),
            adj = 0.5, pos = NULL, offset = 0.5,
-           fixedSize = TRUE, startsize = 480, initCex = 5, ...)
+           fixedSize = TRUE, startsize = 480, initCex = 5, 
+           margin = "", floating = FALSE, tag = "", ...)
 }
 \arguments{
   \item{x, y, z}{coordinates.  Any reasonable way of defining the
@@ -41,7 +42,9 @@ are cut off.  \code{initCex} is the size of text used
 to form the bitmap.  Increase this if letters look too blurry
 at the desired size.
 }
-
+  \item{margin, floating, tag}{
+\code{\link{material3d}} properties.
+  }
   \item{\dots}{
 Additional arguments to pass to  
 \code{\link[graphics]{text}} when drawing the text.
@@ -50,9 +53,8 @@ Additional arguments to pass to
 \note{
 The \code{\link{text3d}} function passes calls to this
 function if its \code{usePlotmath} argument is \code{TRUE}.
-The default value is determined by examining its
-\code{texts} argument; if it looks like an expression, 
-\code{plotmath3d} is used.
+This is the default value if its
+\code{texts} argument looks like an expression.
 }
 \value{
 Called for the side effect of displaying the sprites.
