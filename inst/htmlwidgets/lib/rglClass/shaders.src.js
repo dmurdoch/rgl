@@ -170,6 +170,194 @@
       return result;
     };
 
+    rglwidgetClass.makeVertexShader2 = function(id, type, flags, nclipplanes, normals, pointSize) {
+      var
+          is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit),
+          has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture),
+          fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads),
+          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
+          is_points = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_points),
+          is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided),
+          fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines),
+          is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush),
+          has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
+          has_normals = (typeof normals !== "undefined") ||
+                        type === "spheres",
+          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),
+          rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating),
+          result;
+
+      result = "  /* ****** "+type+" object "+id+" vertex shader ****** */\n"+
+      "#ifdef GL_ES\n"+
+      "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"+
+      "  precision highp float;\n"+
+      "#else\n"+
+      "  precision mediump float;\n"+
+      "#endif\n"+
+      "#endif\n"+
+      "  attribute vec3 aPos;\n"+
+      "  attribute vec4 aCol;\n"+
+      "  uniform mat4 mvMatrix;\n"+
+      "  uniform mat4 prMatrix;\n"+
+      "  varying vec4 vCol;\n"+
+      "  varying vec4 vPosition;\n";
+
+//      if (needs_vnormal)
+        result = result + "#ifdef needs_vnormal\n"+
+                          "  attribute vec3 aNorm;\n"+
+                          "  uniform mat4 normMatrix;\n"+
+                          "  varying vec4 vNormal;\n"+
+                          "#endif\n";
+
+//      if (has_texture || type === "text")
+        result = result + "#ifdef texture_or_text\n"+
+                          "  attribute vec2 aTexcoord;\n"+
+                          "  varying vec2 vTexcoord;\n"+
+                          "#endif\n";
+
+//      if (fixed_size)
+        result = result + "#ifdef fixed_size\n"+
+                          "  uniform vec3 textScale;\n"+
+                          "#endif\n";
+
+//      if (fixed_quads)
+        result = result + "#ifdef fixed_quads\n"+
+                          "  attribute vec3 aOfs;\n"+
+                          "#endif\n";
+
+//      if (is_twosided)
+        result = result + "#ifdef is_twosided\n";
+//        if (has_normals)
+          result = result + "#ifdef has_normals\n"+
+                            "  varying float normz;\n"+
+                            "  uniform mat4 invPrMatrix;\n"+
+                            "#else\n";
+//        else
+          result = result + "  attribute vec3 aPos1;\n"+
+                            "  attribute vec3 aPos2;\n"+
+                            "  varying float normz;\n"+
+                            "#endif\n";
+      result = result + "#endif\n";
+//      if (fat_lines) {
+      	result = result +   "#ifdef fat_lines\n"+
+      	                    "  attribute vec3 aNext;\n"+
+                            "  attribute vec2 aPoint;\n"+
+                            "  varying vec2 vPoint;\n"+
+                            "  varying float vLength;\n"+
+                            "  uniform float uAspect;\n"+
+                            "  uniform float uLwd;\n"+
+                            "#endif\n";
+//      }
+      
+      result = result + "  void main(void) {\n";
+
+//      if ((nclipplanes || !fixed_quads || has_fog) && !is_brush)
+        result = result + "#ifdef not_brush\n"+
+                          "#if defined(nclipplanes) || !defined(fixed_quads) || defined(has_fog)\n"+
+                          "    vPosition = mvMatrix * vec4(aPos, 1.);\n"+
+                          "#endif\n";
+
+//      if (!fixed_quads && !is_brush)
+        result = result + "#ifdef not_fixed_quads\n"+
+                          "    gl_Position = prMatrix * vPosition;\n"+
+                          "#endif\n"+
+                          "#endif\n";
+
+//      if (is_points) 
+        result = result + "#ifdef is_points\n"+
+                          "    gl_PointSize = "+pointSize.toFixed(1)+";\n"+
+                          "#endif\n";
+
+
+      result = result + "    vCol = aCol;\n";
+
+//      if (needs_vnormal) 
+        result = result + "#ifdef needs_vnormal\n"+
+                          "    vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n"+
+                          "#endif\n";
+        
+//      if (is_twosided) {
+        result = result + "#ifdef is_twosided\n"+
+//        if (has_normals)
+                          "#ifdef has_normals\n"+
+                            "/* normz should be calculated *after* projection */\n"+
+                            
+                            "    normz = (invPrMatrix*vNormal).z;\n"+
+                            "#else\n"+
+//        else
+                            "    vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n"+
+                          "    pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n"+
+                          "    vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n"+
+                          "    pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n"+
+                          "    normz = pos1.x*pos2.y - pos1.y*pos2.x;\n"+
+                          "#endif\n"+
+                          "#endif\n";
+//      }
+      
+//      if (needs_vnormal)  /* Need to normalize the xyz part */
+        result = result + "#ifdef needs_vnormal\n"+
+                          "    vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);\n"+
+                          "#endif\n";
+
+//      if (has_texture || type === "text")
+        result = result + "#ifdef has_texture_or_text\n"+
+                          "    vTexcoord = aTexcoord;\n"+
+                          "#endif\n";
+
+//      if (fixed_size && !rotating)
+        result = result + "#ifdef fixed_size\n"+
+                          "#ifdef not_rotating\n"+
+                          "    vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);\n"+
+                          "    pos = pos/pos.w;\n"+
+                          "    gl_Position = pos + vec4(aOfs*textScale, 0.);\n"+
+                          "#endif\n"+
+                          "#endif\n";
+
+//      if (type === "sprites" && !fixed_size)
+        result = result + "#ifdef sprites_not_fixed\n"+
+                          "    vec4 pos = mvMatrix * vec4(aPos, 1.);\n"+
+                          "    pos = pos/pos.w + vec4(aOfs,  0.);\n"+
+                          "    gl_Position = prMatrix*pos;\n"+
+                          "#endif\n";
+                          
+//      if (fat_lines) 
+
+        result = result + "#ifdef fat_lines\n"+
+                          "/* This code was inspired by Matt Deslauriers' code in \n"+
+                          "   https://mattdesl.svbtle.com/drawing-lines-is-hard */\n"+
+                          "   vec2 aspectVec = vec2(uAspect, 1.0);\n"+
+                          "   mat4 projViewModel = prMatrix * mvMatrix;\n"+
+                          "   vec4 currentProjected = projViewModel * vec4(aPos, 1.0);\n"+
+                          "   currentProjected = currentProjected/currentProjected.w;\n"+
+                          "   vec4 nextProjected = projViewModel * vec4(aNext, 1.0);\n"+
+                          "   vec2 currentScreen = currentProjected.xy * aspectVec;\n"+
+                          "   vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;\n"+
+                          "   float len = uLwd;\n"+
+                          "   vec2 dir = vec2(1.0, 0.0);\n"+
+                          "   vPoint = aPoint;\n"+
+                          "   vLength = length(nextScreen - currentScreen)/2.0;\n"+
+                          "   vLength = vLength/(vLength + len);\n"+
+                          "   if (vLength > 0.0) {\n"+
+                          "     dir = normalize(nextScreen - currentScreen);\n"+
+                          "   }\n"+
+                          "   vec2 normal = vec2(-dir.y, dir.x);\n"+
+                          "   dir.x /= uAspect;\n"+
+                          "   normal.x /= uAspect;\n"+
+                          "   vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);\n"+
+                          "   gl_Position = currentProjected + offset;\n"+
+                          "#endif\n";
+
+//      if (is_brush)
+        result = result + "#ifdef is_brush\n"+
+                          "   gl_Position = vec4(aPos, 1.);\n"+
+                          "#endif\n";
+        
+      result = result + "  }\n";
+
+      console.log(result);
+      return result;
+    };
+
     /**
      * Generate the fragment shader for an object
      * @returns {string}

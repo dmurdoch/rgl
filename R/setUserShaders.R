@@ -58,7 +58,7 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
     }
     if (is.null(vertexShader))
       vertexShader <- ctx$eval(subst(
-        'rglwidgetClass.makeVertexShader(%id%, "%type%", %flags%, %nclipplanes%, %normals%, %pointSize%)', 
+        'rglwidgetClass.makeVertexShader2(%id%, "%type%", %flags%, %nclipplanes%, %normals%, %pointSize%)', 
         id = id, 
         type = obj$type, 
         flags = obj$flags, 
