@@ -257,6 +257,8 @@
           type = obj.type;
           
       if (typeof userShader !== "undefined") return userShader;        
+      this.getShaders(obj);
+      
       return rglwidgetClass.makeFragmentShader(obj.id, type, flags, 
         this.countClipplanes(), this.countLights(), 
         this.getMaterial(obj, "textype"),
@@ -460,7 +462,35 @@
     };
 
     /**
-     * Call gl functions to create and compile shader
+     * Create code for vertex and fragment shaders
+     * @returns {Object}
+     * @param { number } shaderType - gl code for shader type
+     * @param { string } code - code for the shader
+     */
+    rglwidgetClass.prototype.getShaders = function(obj) {
+      var header, vertex, fragment;
+      
+      header = rglwidgetClass.getDefines(
+        obj.id, obj.type, obj.flags, 
+        this.countClipplanes(), this.countLights(), 
+        obj.normals, 
+        this.getMaterial(obj, "size"), 
+        this.getMaterial(obj, "textype"), 
+        this.getMaterial(obj, "point_antialias")
+      );
+      
+            debugger;
+      vertex = document.getElementById("rgl-vertex-shader").text;
+      fragment = document.getElementById("rgl-fragment-shader").text;
+
+      return {vertex: header + vertex,
+              fragment: header + fragment};
+      
+    };
+    
+    
+    /**
+     * Call gl functions to create and compile shader from code
      * @returns {Object}
      * @param { number } shaderType - gl code for shader type
      * @param { string } code - code for the shader
