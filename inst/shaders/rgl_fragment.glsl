@@ -8,7 +8,7 @@ precision mediump float;
 #endif
 varying vec4 vCol; // carries alpha
 varying vec4 vPosition;
-#ifdef texture_or_text
+#if defined(has_texture) || defined (is_text)
 varying vec2 vTexcoord;
 uniform sampler2D uSampler;
 #endif
@@ -19,7 +19,7 @@ uniform vec3 uFogColor;
 uniform vec4 uFogParms;
 #endif
 
-#ifdef lit_and_not_fixed
+#if defined(is_lit) && !defined(fixed_quads)
 varying vec4 vNormal;
 #endif
 

@@ -19,7 +19,7 @@ uniform mat4 normMatrix;
 varying vec4 vNormal;
 #endif
 
-#ifdef texture_or_text
+#if defined(has_texture) || defined (is_text)
 attribute vec2 aTexcoord;
 varying vec2 vTexcoord;
 #endif
@@ -68,7 +68,7 @@ void main(void) {
 #endif // not_brush
   
 #ifdef is_points
-  gl_PointSize = 3.0;
+  gl_PointSize = POINTSIZE;
 #endif
   
   vCol = aCol;
@@ -94,7 +94,7 @@ void main(void) {
   vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
 #endif
   
-#ifdef has_texture_or_text
+#if defined(has_texture) || defined(is_text)
   vTexcoord = aTexcoord;
 #endif
   
@@ -104,7 +104,7 @@ void main(void) {
   gl_Position = pos + vec4(aOfs*textScale, 0.);
 #endif
   
-#ifdef sprites_not_fixed
+#if defined(is_sprites) && !defined(fixed_size)
   vec4 pos = mvMatrix * vec4(aPos, 1.);
   pos = pos/pos.w + vec4(aOfs,  0.);
   gl_Position = prMatrix*pos;
