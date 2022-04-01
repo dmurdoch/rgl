@@ -231,6 +231,10 @@
           subscene = this.getObj(subscene.parent);
         if (typeof subscene.lights === "undefined")
           return;
+          
+        THIS NEEDS FIXING TO HANDLE THE NEW SHADER
+        
+        
         for (i=0; i < subscene.lights.length; i++) {
           light = this.getObj(subscene.lights[i]);
           if (!light.initialized) this.initObj(light);

@@ -1,4 +1,5 @@
-
+#line 2 2
+// File 2 is the fragment shader
 #ifdef GL_ES
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
@@ -80,7 +81,7 @@ void main(void) {
     
 #ifdef fixed_quads
     vec3 n = vec3(0., 0., 1.);
-#else
+#elif defined(is_lit)
     vec3 n = normalize(vNormal.xyz);
 #endif
     

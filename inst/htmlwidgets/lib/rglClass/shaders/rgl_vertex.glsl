@@ -1,4 +1,5 @@
-
+#line 2 1
+// File 1 is the vertex shader
 #ifdef GL_ES
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
@@ -58,15 +59,15 @@ uniform float uLwd;
 
 void main(void) {
   
-#ifdef not_brush
+#ifndef is_brush
 #if defined(nclipplanes) || !defined(fixed_quads) || defined(has_fog)
   vPosition = mvMatrix * vec4(aPos, 1.);
 #endif
   
-#ifdef not_fixed_quads
+#ifndef fixed_quads
   gl_Position = prMatrix * vPosition;
 #endif
-#endif // not_brush
+#endif // !is_brush
   
 #ifdef is_points
   gl_PointSize = POINTSIZE;

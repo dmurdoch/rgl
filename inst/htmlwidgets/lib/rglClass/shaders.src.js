@@ -95,7 +95,7 @@
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
-        result = result + "    gl_PointSize = "+pointSize.toFixed(1)+";\n";
+        result = result + "    gl_PointSize = "+Number.parseFloat(pointSize).toFixed(1)+";\n";
       }
 
       result = result + "    vCol = aCol;\n";
@@ -218,7 +218,7 @@
       
       if (is_points) {
         defines = defines + "#define is_points 1\n";
-        defines = defines + "#define POINTSIZE " + pointSize + "\n";
+        defines = defines + "#define POINTSIZE " + Number.parseFloat(pointSize).toFixed(1) + "\n";
       }
         
       if (type === "sprites")
@@ -256,8 +256,7 @@
           flags = obj.flags,
           type = obj.type;
           
-      if (typeof userShader !== "undefined") return userShader;        
-      this.getShaders(obj);
+      if (typeof userShader !== "undefined") return userShader;
       
       return rglwidgetClass.makeFragmentShader(obj.id, type, flags, 
         this.countClipplanes(), this.countLights(), 
@@ -478,11 +477,15 @@
         this.getMaterial(obj, "textype"), 
         this.getMaterial(obj, "point_antialias")
       );
-      
-            debugger;
+
       vertex = document.getElementById("rgl-vertex-shader").text;
       fragment = document.getElementById("rgl-fragment-shader").text;
-
+      
+//      console.log("vertex:");
+//      console.log(header + vertex);
+//      console.log("fragment:");
+//      console.log(header + fragment);
+      
       return {vertex: header + vertex,
               fragment: header + fragment};
       
