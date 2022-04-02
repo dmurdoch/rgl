@@ -36,16 +36,14 @@ attribute vec3 aOfs;
 
 #ifdef is_twosided
 #ifdef has_normals
-/* normz should be calculated *after* projection */
-normz = (invPrMatrix*vNormal).z;
+varying float normz;
+uniform mat4 invPrMatrix;
 #else
-vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
-pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
-vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
-pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
-normz = pos1.x*pos2.y - pos1.y*pos2.x;
+attribute vec3 aPos1;
+attribute vec3 aPos2;
+varying float normz;
 #endif
-#endif
+#endif // is_twosided
 
 #ifdef fat_lines
 attribute vec3 aNext;

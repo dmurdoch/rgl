@@ -95,7 +95,7 @@
         result = result + "    gl_Position = prMatrix * vPosition;\n";
 
       if (is_points) {
-        result = result + "    gl_PointSize = "+Number.parseFloat(pointSize).toFixed(1)+";\n";
+        result = result + "    gl_PointSize = "+pointSize.toFixed(1)+";\n";
       }
 
       result = result + "    vCol = aCol;\n";
