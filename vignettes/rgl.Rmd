@@ -262,7 +262,8 @@ location using `x,y,z` coordinates. In particular, increasing
 the `z` coordinate lets you zoom out, and decreasing it zooms you in.
 
 One useful approach is to use the mouse to find a nice viewing angle.
-You can then save it using `par3d("userMatrix")`:
+You can then save it using `par3d("userMatrix")` and restore
+the same view later:
 
 ```{r, eval = FALSE}
 myview <- par3d("userMatrix")
