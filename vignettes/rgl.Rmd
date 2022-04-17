@@ -244,7 +244,7 @@ the mouse.
 To set the camera angle programmatically, use `r indexfns("view3d")`. 
 This uses polar coordinates:
 
-* `theta` sets the rotation around the z axis, in degrees. 
+* `theta` sets the rotation around the y axis, in degrees. 
 * `phi` sets the "vertical" rotation around the x axis, from -90 to 90
   degrees.
   
