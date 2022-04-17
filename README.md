@@ -217,4 +217,5 @@ Fernandez i Marin for help debugging the build.
 George Helffrich for draping code.  
 Ivan Krylov for window_group code in X11.  
 Michael Sumner for as.mesh3d.default enhancement.  
-Tomas Kalibera for `winutf8` help.
+Tomas Kalibera for `winutf8` help. David Hugh-Jones for documentation
+improvements.

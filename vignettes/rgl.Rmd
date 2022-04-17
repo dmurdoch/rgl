@@ -230,6 +230,48 @@ provide low-level support for `r linkfn("setAxisCallbacks")`.
 
 ## Controlling the Look of the Scene
 
+### Camera angle
+
+By default when you open a new plot with `r linkfn("open3d")`:
+
+* The x axis goes from left to right.
+* The y axis goes from near the camera to far away.
+* The z axis goes from down to up.
+
+You can change the camera angle simply by dragging the picture with
+the mouse.
+
+To set the camera angle programmatically, use `r indexfns("view3d")`. 
+This uses polar coordinates:
+
+* `theta` sets the rotation around the vertical axis, in degrees. 
+* `phi` sets the "vertical" rotation around the horizontal axis, 
+  from -90 to 90 degrees.
+  
+The default angle is roughly `theta = 0, phi = -70`. Starting from
+this position:
+
+* As you increase `theta`, the graph will spin anticlockwise from your
+  point of view.
+* As you increase `phi` to 0, you start to look down at the scene
+  from the top. If you increase `phi` above 0, you continue over and 
+  start to see the graph from the "back" (and upside down).
+
+You can also use `r indexfns("observer3d")` to change the camera 
+location using `x,y,z` coordinates. In particular, increasing
+the `z` coordinate lets you zoom out, and decreasing it zooms you in.
+
+One useful approach is to use the mouse to find a nice viewing angle.
+You can then save it using `par3d("userMatrix")` and restore
+the same view later:
+
+```{r, eval = FALSE}
+myview <- par3d("userMatrix")
+# ... later ...
+par3d(userMatrix = myview)
+```
+
+
 ### Lighting
 
 In most scenes, objects are "lit", meaning that their appearance
