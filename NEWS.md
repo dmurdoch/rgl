@@ -1,5 +1,5 @@
 
-# rgl  0.108.30
+# rgl  0.108.31
 
 ## Major changes
 
@@ -38,6 +38,7 @@ code use the buffering.
 * All functions that produce meshes now accept 
 material properties.  Newly modified to do so using the `...`
 argument:  `cylinder3d()`, and `getBoundary3d()`.
+* Updated the system requirements and installation instructions.
   
 ## Bug fixes
 

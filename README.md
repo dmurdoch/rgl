@@ -116,19 +116,25 @@ A browser with WebGL enabled. See <https://get.webgl.org>.
 
 ## Installing OpenGL support
 
-**Debian:**  
-aptitude install libgl1-mesa-dev libglu1-mesa-dev
+**Debian and variants including Ubuntu:**
 
-**Fedora:**  
-yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
+    sudo apt install r-cran-rgl
 
-**macOS:**  
+to install the CRAN release of rgl and all its dependencies.
+
+**Fedora:**
+
+    yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
+
+**macOS:**
+
 Install XQuartz.  
 `rgl` should work with XQuartz 2.7.11 or newer, but it will probably
 need rebuilding if the XQuartz version changes. XQuartz normally needs
 re-installation whenever the macOS version changes.
 
-**Windows:**  
+**Windows:**
+
 Windows normally includes OpenGL support, but to get the appropriate
 include files etc., you will need the appropriate version of
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) matched to your
@@ -139,9 +145,7 @@ R version.
 The **libpng** library version 1.2.9 or newer is needed for pixmap
 import/export support.
 
-The **freetype** library is needed for resizable anti-aliased fonts. On
-Windows, it will be downloaded from <https://github.com/rwinlib> during
-the install.
+The **freetype** library is needed for resizable anti-aliased fonts.
 
 ## BUILDING/INSTALLING
 
@@ -150,7 +154,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.108.30.tar.gz
+    R CMD INSTALL rgl_0.108.31.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -180,7 +184,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.108.30.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.108.31.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
