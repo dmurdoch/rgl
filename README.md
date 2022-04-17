@@ -118,9 +118,7 @@ A browser with WebGL enabled. See <https://get.webgl.org>.
 
 **Debian and variants including Ubuntu:**
 
-    sudo apt install r-cran-rgl
-
-to install the CRAN release of rgl and all its dependencies.
+    aptitude install libgl1-mesa-dev libglu1-mesa-dev
 
 **Fedora:**
 
