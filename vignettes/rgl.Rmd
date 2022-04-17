@@ -232,7 +232,7 @@ provide low-level support for `r linkfn("setAxisCallbacks")`.
 
 ### Camera angle
 
-By default when you open a new plot:
+By default when you open a new plot with `r linkfn("open3d")`:
 
 * The x axis goes from left to right.
 * The y axis goes from near the camera to far away.
