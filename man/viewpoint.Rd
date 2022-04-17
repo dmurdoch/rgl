@@ -12,7 +12,7 @@ rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1,
         type = c("userviewpoint", "modelviewpoint") )
 }
 \arguments{
-  \item{theta, phi}{polar coordinates}
+  \item{theta, phi}{polar coordinates in degrees. \code{theta} rotates round the z axis. \code{phi} rotates round the x axis, from -90 to 90.}
   \item{...}{additional parameters to pass to \code{rgl.viewpoint}}
   \item{fov}{field-of-view angle in degrees}
   \item{zoom}{zoom factor}
