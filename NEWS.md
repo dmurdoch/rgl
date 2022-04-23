@@ -1,4 +1,5 @@
-# rgl  0.108.32
+
+# rgl  0.108.33
 
 ## Major changes
 
@@ -38,6 +39,7 @@ code use the buffering.
 material properties.  Newly modified to do so using the `...`
 argument:  `cylinder3d()`, and `getBoundary3d()`.
 * Updated the system requirements and installation instructions.
+* Solid bounding box decorations now try harder to display 3 faces (issue #206).
   
 ## Bug fixes
 

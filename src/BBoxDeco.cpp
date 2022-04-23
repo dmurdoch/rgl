@@ -442,6 +442,12 @@ struct BBoxDeco::BBoxDecoImpl {
       const Vertex4 view(0.0f,0.0f,1.0f,0.0f);
       
       float cos_a = view * q;
+
+      /* break tie using x coordinate */
+      if (cos_a == 0.0f) {
+        const Vertex4 view2(1.0f,0.0f,0.0f,0.0f);
+        cos_a = view2 * q;
+      }
       
       const bool front = (cos_a >= 0.0f) ? true : false;
       
@@ -649,6 +655,11 @@ void BBoxDeco::render(RenderContext* renderContext)
       const Vertex4 view(0.0f,0.0f,1.0f,0.0f);
       
       float cos_a = view * q;
+      
+      if (cos_a == 0.0f) {
+        Vertex4 view2(1.0f,0.0f,0.0f,0.0f);
+        cos_a = view2 * q;
+      }
       
       const bool front = (cos_a >= 0.0f) ? true : false;
       
