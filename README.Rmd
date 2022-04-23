@@ -71,19 +71,17 @@ The currently active development site is here:
 NOTE ABOUT DEVEL VERSIONS
 -------------------------
 
-  `rgl` can make use of development versions of some
-packages, currently  `webshot2` and `chromote`.  Though it doesn't require these, 
-they provide some nice features, supporting good quality PNG 
- snapshots of `rgl` scenes, even on servers that don't
- have a graphics display.
- 
-Unfortunately, being development versions, these packages
-sometimes introduce bugs that break `rgl` usage.  Currently
-(December 1, 2021) the main branches of the packages
-are fine.  I recommend the following code to install them:
+`rgl` can make use of development versions of some packages, currently just
+`webshot2`. Though it isn't required, it provides
+some nice features, supporting good quality PNG snapshots of `rgl`
+scenes, even on servers that don’t have a graphics display.
+
+Unfortunately, development versions of packages sometimes
+introduce bugs that break `rgl` usage. Currently (April 19, 2022) the
+main branch is fine. I recommend the following code
+to install it:
 ```{r eval=FALSE}
-remotes::install_github(c("rstudio/webshot2",
-                          "rstudio/chromote"))
+remotes::install_github("rstudio/webshot2")
 ```
 
 INSTALLATION
@@ -169,9 +167,7 @@ Installing OpenGL support
 
 **Debian and variants including Ubuntu:**
 
-    sudo apt install r-cran-rgl
-
-to install the CRAN release of rgl and all its dependencies.
+    aptitude install libgl1-mesa-dev libglu1-mesa-dev
 
 **Fedora:**
 

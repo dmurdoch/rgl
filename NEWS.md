@@ -77,6 +77,8 @@ objects with user textures.
 `snapshot3d()` results (issue #197).
 * The new material properties from 0.107.10 and 0.108.3
 were not handled properly by `plotmath3d()`.
+* Changes introduced in 0.100.50 lacked checks; these caused 
+segfaults in Windows with R 4.2.0 and RStudio (issue #208).
     
 # rgl 0.108.5
 
