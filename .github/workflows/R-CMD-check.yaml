@@ -48,6 +48,7 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
+          rtools-version: ${{ matrix.config.rtools-version }}
 
       - uses: r-lib/actions/setup-pandoc@v1
       
