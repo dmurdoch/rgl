@@ -1,5 +1,5 @@
 
-# rgl  0.108.30
+# rgl  0.108.33
 
 ## Major changes
 
@@ -38,6 +38,8 @@ code use the buffering.
 * All functions that produce meshes now accept 
 material properties.  Newly modified to do so using the `...`
 argument:  `cylinder3d()`, and `getBoundary3d()`.
+* Updated the system requirements and installation instructions.
+* Solid bounding box decorations now try harder to display 3 faces (issue #206).
   
 ## Bug fixes
 
@@ -75,6 +77,8 @@ objects with user textures.
 `snapshot3d()` results (issue #197).
 * The new material properties from 0.107.10 and 0.108.3
 were not handled properly by `plotmath3d()`.
+* Changes introduced in 0.100.50 lacked checks; these caused 
+segfaults in Windows with R 4.2.0 and RStudio (issue #208).
     
 # rgl 0.108.5
 

@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.108.30
+Version: 0.108.33
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -42,10 +42,11 @@ Description: Provides medium to high level functions for 3D interactive graphics
 License: GPL
 URL: https://github.com/dmurdoch/rgl, 
      https://dmurdoch.github.io/rgl/
-SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX),
+SystemRequirements: OpenGL and GLU Library (Required for
+    display in R.  See "Installing OpenGL support" in README.md.  
+    Not needed if only browser displays using rglwidget() are wanted.),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
-    pandoc (>=1.14, needed for vignettes; if not present, 
-    markdown package will be used)
+    pandoc (>=1.14, needed for vignettes)
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Biarch: true

@@ -71,19 +71,17 @@ The currently active development site is here:
 NOTE ABOUT DEVEL VERSIONS
 -------------------------
 
-  `rgl` can make use of development versions of some
-packages, currently  `webshot2` and `chromote`.  Though it doesn't require these, 
-they provide some nice features, supporting good quality PNG 
- snapshots of `rgl` scenes, even on servers that don't
- have a graphics display.
- 
-Unfortunately, being development versions, these packages
-sometimes introduce bugs that break `rgl` usage.  Currently
-(December 1, 2021) the main branches of the packages
-are fine.  I recommend the following code to install them:
+`rgl` can make use of development versions of some packages, currently just
+`webshot2`. Though it isn't required, it provides
+some nice features, supporting good quality PNG snapshots of `rgl`
+scenes, even on servers that don’t have a graphics display.
+
+Unfortunately, development versions of packages sometimes
+introduce bugs that break `rgl` usage. Currently (April 19, 2022) the
+main branch is fine. I recommend the following code
+to install it:
 ```{r eval=FALSE}
-remotes::install_github(c("rstudio/webshot2",
-                          "rstudio/chromote"))
+remotes::install_github("rstudio/webshot2")
 ```
 
 INSTALLATION
@@ -167,25 +165,27 @@ A browser with WebGL enabled.  See https://get.webgl.org.
 Installing OpenGL support
 -----------------------
 
-**Debian:**  
-aptitude install libgl1-mesa-dev libglu1-mesa-dev
+**Debian and variants including Ubuntu:**
 
-**Fedora:**  
-yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
+    aptitude install libgl1-mesa-dev libglu1-mesa-dev
+
+**Fedora:**
+
+    yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
 
 **macOS:**  
+
 Install XQuartz.  
-`rgl` should work with XQuartz 2.7.11 or newer, but
-it will probably need rebuilding if the XQuartz version
-changes.  XQuartz normally needs re-installation whenever the
-macOS version changes.
+`rgl` should work with XQuartz 2.7.11 or newer, but it will probably
+need rebuilding if the XQuartz version changes. XQuartz normally needs
+re-installation whenever the macOS version changes.
 
 **Windows:**  
-Windows normally includes OpenGL support, but to get the
-appropriate include files etc., you will need 
-the appropriate version of
-[Rtools](https://cran.r-project.org/bin/windows/Rtools/)
-matched to your R version.  
+
+Windows normally includes OpenGL support, but to get the appropriate
+include files etc., you will need the appropriate version of
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) matched to your
+R version.
 
 Options
 -------
@@ -193,8 +193,7 @@ Options
 The **libpng** library version 1.2.9 or newer is needed for pixmap import/export support.
 
 The **freetype** library is needed for resizable 
-anti-aliased fonts.  On Windows, it will be downloaded 
-from https://github.com/rwinlib during the install.
+anti-aliased fonts.  
 
 
 BUILDING/INSTALLING
@@ -278,3 +277,4 @@ George Helffrich for draping code.
 Ivan Krylov for window_group code in X11.  
 Michael Sumner for as.mesh3d.default enhancement.  
 Tomas Kalibera for `winutf8` help.
+David Hugh-Jones for documentation improvements.

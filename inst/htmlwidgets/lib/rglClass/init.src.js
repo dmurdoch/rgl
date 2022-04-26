@@ -212,7 +212,7 @@
                   pt = shape.vertices[i];
                 normal.push(-rglwidgetClass.dotprod(normal, pt));
                 normal = rglwidgetClass.multVM(normal, self.normMatrix);
-                return normal[2] < 0;
+                return normal[2] < 0 || (normal[2] === 0 && normal[0] < 0);
               }; 
       shape.ofsLoc = obj.ofsLoc;
       shape.texLoc = obj.texLoc;
