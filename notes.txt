@@ -9,7 +9,10 @@ Still to do:
      won't be counted.  DONE
    - remove old shader generator code
    - rename defines to all uppercase?
+   - the sizing looks wrong in `example(rglShared)`.  Probably
+     not related to shaders.
+   - the initial display of the mouse mode is wrong in `example(rglMouse)`.  Probably not related to shaders.
 
 Have checked:
 
-   pages in alpha order from subsceneInfo.html to writeWebGL.html.
+   pages in alpha order from r3d.html to writeWebGL.html.
