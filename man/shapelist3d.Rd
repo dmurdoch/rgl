@@ -41,7 +41,8 @@ An object of class \code{c("shapelist3d", "shape3d")}.
 \author{ Duncan Murdoch }
 \seealso{ \code{\link{mesh3d}} }
 \examples{
- 
+
+open3d() 
 shapelist3d(icosahedron3d(), x = rnorm(10), y = rnorm(10), z = rnorm(10), col = 1:5, size = 0.3)
 
 }
