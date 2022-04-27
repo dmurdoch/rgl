@@ -481,6 +481,11 @@
       vertex = document.getElementById("rgl-vertex-shader").text;
       fragment = document.getElementById("rgl-fragment-shader").text;
       
+//      console.log("\nOLD:");
+//      console.log(this.getFragmentShader(obj));
+//      console.log("\nNEW:");
+//      console.log(header + fragment);
+
 //      console.log("vertex:");
 //      console.log(header + vertex);
 //      console.log("fragment:");

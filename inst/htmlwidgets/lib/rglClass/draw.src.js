@@ -202,17 +202,20 @@
       var gl = this.gl,
           clipcheck = 0,
           clipplaneids = subscene.clipplanes,
-          clip, i,j;
+          clip, i,j, n = this.countClipplanes(),
+          clipplanedata = new Float32Array(4*n);
+          
       for (i=0; i < clipplaneids.length; i++) {
         clip = this.getObj(clipplaneids[i]);
         for (j=0; j < clip.offsets.length; j++) {
-          gl.uniform4fv(obj.clipLoc[clipcheck + j], clip.IMVClip[j]);
+          clipplanedata.set(clip.IMVClip[j], clipcheck);
+          clipcheck += 4;
         }
-        clipcheck += clip.offsets.length;
       }
-      if (typeof obj.clipLoc !== "undefined")
-        for (i=clipcheck; i < obj.clipLoc.length; i++)
-          gl.uniform4f(obj.clipLoc[i], 0,0,0,0);
+      
+      // Leftovers are initialized to zero, which is fine
+          
+      gl.uniform4fv(obj.clipLoc, clipplanedata);
     };
     
     /**

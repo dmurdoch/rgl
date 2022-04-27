@@ -388,6 +388,23 @@
      * @returns {number}
      */
     rglwidgetClass.prototype.countClipplanes = function() {
+      var self = this,
+          bound = 0;
+      
+      Object.keys(this.scene.objects).forEach(
+        function(key) {
+          var obj = self.getObj(parseInt(key, 10));
+          if (obj.type === "clipplanes")
+            bound = bound + obj.offsets.length;
+        });
+      return bound;
+    };
+
+    /**
+     * Count clipping plane objects in a scene
+     * @returns {number}
+     */
+    rglwidgetClass.prototype.countClipplaneObjs = function() {
       return this.countObjs("clipplanes");
     };
 

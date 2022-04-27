@@ -860,9 +860,7 @@
 
     nclipplanes = this.countClipplanes();
     if (nclipplanes && !sprites_3d) {
-      obj.clipLoc = [];
-      for (i=0; i < nclipplanes; i++)
-        obj.clipLoc[i] = gl.getUniformLocation(obj.prog,"vClipplane" + i);
+      obj.clipLoc = gl.getUniformLocation(obj.prog,"vClipplane");
     }
 
     if (is_lit) {
