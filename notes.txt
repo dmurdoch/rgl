@@ -1,0 +1,15 @@
+notes on shaders branch
+
+Still to do:
+  
+   - check all help pages on pkgdown site
+   - fix problem on ?subscenes3d: clipplanes not respected.
+     They aren't being initialized properly.  countClipPlanes
+     looks wrong too:  if two planes are in the same obj, they
+     won't be counted.  DONE
+   - remove old shader generator code
+   - rename defines to all uppercase?
+
+Have checked:
+
+   pages in alpha order from subsceneInfo.html to writeWebGL.html.

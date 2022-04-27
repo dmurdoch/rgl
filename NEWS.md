@@ -24,6 +24,10 @@ the scene.
 * Now detects if `rgl` is running within `reprex::reprex()`
 and if so arranges that a screenshot will be included in the
 output.
+* Added default shaders to be used in `rglwidget()`, rather than
+constructing them on the fly.  This incompatibly affects the use
+of lights and clipping planes with user shaders:  their data 
+is now stored in arrays rather than multiple numbered variables.
 
 ## Minor changes
 

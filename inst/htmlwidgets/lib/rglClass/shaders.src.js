@@ -467,7 +467,9 @@
      * @param { string } code - code for the shader
      */
     rglwidgetClass.prototype.getShaders = function(obj) {
-      var header, vertex, fragment;
+      var header, 
+        vertex = obj.userVertexShader, 
+        fragment = obj.userFragmentShader;
       
       header = rglwidgetClass.getDefines(
         obj.id, obj.type, obj.flags, 
@@ -478,8 +480,11 @@
         this.getMaterial(obj, "point_antialias")
       );
 
-      vertex = document.getElementById("rgl-vertex-shader").text;
-      fragment = document.getElementById("rgl-fragment-shader").text;
+      if (typeof vertex === "undefined")
+        vertex = document.getElementById("rgl-vertex-shader").text;
+        
+      if (typeof fragment === "undefined") 
+        fragment = document.getElementById("rgl-fragment-shader").text;
       
 //      console.log("\nOLD:");
 //      console.log(this.getFragmentShader(obj));
@@ -493,7 +498,6 @@
       
       return {vertex: header + vertex,
               fragment: header + fragment};
-      
     };
     
     
