@@ -202,17 +202,20 @@
       var gl = this.gl,
           clipcheck = 0,
           clipplaneids = subscene.clipplanes,
-          clip, i,j;
+          clip, i,j, n = this.countClipplanes(),
+          clipplanedata = new Float32Array(4*n);
+          
       for (i=0; i < clipplaneids.length; i++) {
         clip = this.getObj(clipplaneids[i]);
         for (j=0; j < clip.offsets.length; j++) {
-          gl.uniform4fv(obj.clipLoc[clipcheck + j], clip.IMVClip[j]);
+          clipplanedata.set(clip.IMVClip[j], clipcheck);
+          clipcheck += 4;
         }
-        clipcheck += clip.offsets.length;
       }
-      if (typeof obj.clipLoc !== "undefined")
-        for (i=clipcheck; i < obj.clipLoc.length; i++)
-          gl.uniform4f(obj.clipLoc[i], 0,0,0,0);
+      
+      // Leftovers are initialized to zero, which is fine
+          
+      gl.uniform4fv(obj.clipLoc, clipplanedata);
     };
     
     /**
@@ -221,31 +224,59 @@
      * @param { object } subscene - Subscene to work with
      */
     rglwidgetClass.prototype.doLighting = function(obj, subscene) {
-      var gl = this.gl, i, light;
-        gl.uniformMatrix4fv( obj.normMatLoc, false, new Float32Array(this.normMatrix.getAsArray()) );
-        gl.uniform3fv( obj.emissionLoc, obj.emission);
-        gl.uniform1f( obj.shininessLoc, obj.shininess);
-        while ((typeof subscene.lights === "undefined" ||
-                subscene.lights.length === 0) && 
-               typeof subscene.parent !== "undefined")
-          subscene = this.getObj(subscene.parent);
-        if (typeof subscene.lights === "undefined")
-          return;
-        for (i=0; i < subscene.lights.length; i++) {
-          light = this.getObj(subscene.lights[i]);
-          if (!light.initialized) this.initObj(light);
-          gl.uniform3fv( obj.ambientLoc[i], this.componentProduct(light.ambient, obj.ambient));
-          gl.uniform3fv( obj.specularLoc[i], this.componentProduct(light.specular, obj.specular));
-          gl.uniform3fv( obj.diffuseLoc[i], light.diffuse);
-          gl.uniform3fv( obj.lightDirLoc[i], light.lightDir);
-          gl.uniform1i( obj.viewpointLoc[i], light.viewpoint);
-          gl.uniform1i( obj.finiteLoc[i], light.finite);
+    var gl = this.gl, i, j, n, light,
+      ambient, specular, diffuse, lightDir, viewpoint, finite,
+      ambient0, specular0;
+        
+      gl.uniformMatrix4fv( obj.normMatLoc, false, new Float32Array(this.normMatrix.getAsArray()) );
+      gl.uniform3fv( obj.emissionLoc, obj.emission);
+      gl.uniform1f( obj.shininessLoc, obj.shininess);
+      while ((typeof subscene.lights === "undefined" ||
+              subscene.lights.length === 0) && 
+             typeof subscene.parent !== "undefined")
+        subscene = this.getObj(subscene.parent);
+
+      if (typeof subscene.lights === "undefined")
+        return;
+        
+      n = subscene.lights.length;
+        
+      ambient = new Float32Array(3*n);
+      specular = new Float32Array(3*n);
+      diffuse = new Float32Array(3*n);
+      lightDir = new Float32Array(3*n);
+      viewpoint = new Int32Array(n);
+      finite = new Int32Array(n);
+          
+      for (i=0; i < n; i++) {
+        light = this.getObj(subscene.lights[i]);
+        if (!light.initialized) this.initObj(light);
+        ambient0 = this.componentProduct(light.ambient, obj.ambient);
+        specular0 = this.componentProduct(light.specular, obj.specular);
+        for (j=0; j < 3; j++) {
+          ambient[3*i + j] = ambient0[j];
+          specular[3*i + j] = specular0[j];
+          diffuse[3*i + j] = light.diffuse[j];
+          lightDir[3*i + j] = light.lightDir[j];
         }
-        for (i=subscene.lights.length; i < obj.nlights; i++) {
-          gl.uniform3f( obj.ambientLoc[i], 0,0,0);
-          gl.uniform3f( obj.specularLoc[i], 0,0,0);
-          gl.uniform3f( obj.diffuseLoc[i], 0,0,0);
+        viewpoint[i] = light.viewpoint;
+        finite[i] = light.finite;
+      }
+        
+      for (i = n; i < obj.nlights; i++) {
+        for (j = 0; j < 3; j++) {
+          ambient[3*i + j] = 0.0;
+          specular[3*i + j] = 0.0;
+          diffuse[3*i + j] = 0.0;
         }
+      }
+        
+      gl.uniform3fv( obj.ambientLoc, ambient);
+      gl.uniform3fv( obj.specularLoc, specular);
+      gl.uniform3fv( obj.diffuseLoc, diffuse);
+      gl.uniform3fv( obj.lightDirLoc, lightDir);
+      gl.uniform1iv( obj.viewpointLoc, viewpoint);
+      gl.uniform1iv( obj.finiteLoc, finite);
     };
     
     /**

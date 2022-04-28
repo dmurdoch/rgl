@@ -346,6 +346,9 @@ rglwidget <- local({
   upstream <- processUpstream(controllers, elementId = elementId)
   
   if (webgl) {
+    x$vertexShader <- paste(readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_vertex.glsl", package = "rgl")), collapse = "\n")
+    x$fragmentShader <- paste(readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_fragment.glsl", package = "rgl")), collapse = "\n")
+      
     x$players <- upstream$players
 
     x$webGLoptions <- webGLoptions
@@ -401,11 +404,12 @@ makeDependency <- function(name, src, script = NULL, package,
                            version = packageVersion(package),
                            minifile = paste0(basename(src), ".min.js"),
                            debugging = FALSE, ...) {
-  if (!is.null(script) &&
+  javascript <- vapply(script, function(x) !is.list(x), FALSE)
+  if (any(javascript) &&
       requireNamespace("js", quietly = TRUE) &&
       packageVersion("js") >= "1.2") {
     if (debugging) {
-      for (f in script) {
+      for (f in script[javascript]) {
         hints <- js::jshint(readLines(file.path(system.file(src, package = package), f)),
                             undef = TRUE, bitwise = TRUE, eqeqeq = TRUE,
                             latedef = TRUE, browser = TRUE, devel = TRUE,
@@ -420,10 +424,10 @@ makeDependency <- function(name, src, script = NULL, package,
                   call. = FALSE, immediate. = TRUE)
       }
     }
-    minified <- js::uglify_files(file.path(system.file(src, package = package), script))
+    minified <- js::uglify_files(file.path(system.file(src, package = package), script[javascript]))
     writeLines(minified, file.path(system.file(src, package = package), minifile))
     if (!debugging)
-      script <- minifile
+      script <- c(minifile, script[!javascript])
   }
   htmlDependency(name = name, 
                       src = src,
@@ -439,6 +443,13 @@ CanvasMatrixDependency <- makeDependency("CanvasMatrix4",
                                          script = "CanvasMatrix.src.js",
                                          package = "rgl",
                                          debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))
+
+shaders <- c('<script type = "text/plain" id = "rgl-vertex-shader">',
+             readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_vertex.glsl", package = "rgl")),
+             '</script>',
+             '<script type = "text/plain" id = "rgl-fragment-shader">',
+             readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_fragment.glsl", package = "rgl")),
+             '</script>')
 
 rglDependency <- makeDependency("rglwidgetClass", 
                       src = "htmlwidgets/lib/rglClass",
@@ -459,6 +470,7 @@ rglDependency <- makeDependency("rglwidgetClass",
                                  "pretty.src.js",
                                  "axes.src.js",
                                  "animation.src.js"),
+                      head = shaders,
                       stylesheet = "rgl.css",
                       package = "rgl",
                       debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))
