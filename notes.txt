@@ -2,9 +2,9 @@ notes on shaders branch
 
 Still to do:
   
-   - example(contourLines3d) has shading wrong.
-   - check all help pages on pkgdown site
-   - the sizing looks wrong in `example(rglShared)`.  Probably
+   - example(contourLines3d) has shading wrong. Also in master,
+     so not related to shaders.
+   - the sizing looks wrong in `example(rglShared)` and `example(asRow)`.  Probably
      not related to shaders.
    - the initial display of the mouse mode is wrong in `example(rglMouse)`.  Probably not related to shaders.
 
@@ -20,3 +20,4 @@ Fixed:
      won't be counted.  DONE
    - rename defines to all uppercase DONE
    - remove old shader generator code DONE
+   - check all help pages on pkgdown site DONE
