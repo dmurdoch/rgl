@@ -15,27 +15,27 @@ uniform mat4 prMatrix;
 varying vec4 vCol;
 varying vec4 vPosition;
 
-#ifdef needs_vnormal
+#ifdef NEEDS_VNORMAL
 attribute vec3 aNorm;
 uniform mat4 normMatrix;
 varying vec4 vNormal;
 #endif
 
-#if defined(has_texture) || defined (is_text)
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
 attribute vec2 aTexcoord;
 varying vec2 vTexcoord;
 #endif
 
-#ifdef fixed_size
+#ifdef FIXED_SIZE
 uniform vec3 textScale;
 #endif
 
-#ifdef fixed_quads
+#ifdef FIXED_QUADS
 attribute vec3 aOfs;
 #endif
 
-#ifdef is_twosided
-#ifdef has_normals
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
 varying float normz;
 uniform mat4 invPrMatrix;
 #else
@@ -43,9 +43,9 @@ attribute vec3 aPos1;
 attribute vec3 aPos2;
 varying float normz;
 #endif
-#endif // is_twosided
+#endif // IS_TWOSIDED
 
-#ifdef fat_lines
+#ifdef FAT_LINES
 attribute vec3 aNext;
 attribute vec2 aPoint;
 varying vec2 vPoint;
@@ -57,28 +57,28 @@ uniform float uLwd;
 
 void main(void) {
   
-#ifndef is_brush
-#if defined(nclipplanes) || !defined(fixed_quads) || defined(has_fog)
+#ifndef IS_BRUSH
+#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
   vPosition = mvMatrix * vec4(aPos, 1.);
 #endif
   
-#ifndef fixed_quads
+#ifndef FIXED_QUADS
   gl_Position = prMatrix * vPosition;
 #endif
-#endif // !is_brush
+#endif // !IS_BRUSH
   
-#ifdef is_points
+#ifdef IS_POINTS
   gl_PointSize = POINTSIZE;
 #endif
   
   vCol = aCol;
   
-#ifdef needs_vnormal
+#ifdef NEEDS_VNORMAL
   vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
 #endif
   
-#ifdef is_twosided
-#ifdef has_normals
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
   /* normz should be calculated *after* projection */
   normz = (invPrMatrix*vNormal).z;
 #else
@@ -88,29 +88,29 @@ void main(void) {
   pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
   normz = pos1.x*pos2.y - pos1.y*pos2.x;
 #endif
-#endif // is_twosided
+#endif // IS_TWOSIDED
   
-#ifdef needs_vnormal
+#ifdef NEEDS_VNORMAL
   vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
 #endif
   
-#if defined(has_texture) || defined(is_text)
+#if defined(HAS_TEXTURE) || defined(IS_TEXT)
   vTexcoord = aTexcoord;
 #endif
   
-#if defined(fixed_size) && !defined(rotating)
+#if defined(FIXED_SIZE) && !defined(ROTATING)
   vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
   pos = pos/pos.w;
   gl_Position = pos + vec4(aOfs*textScale, 0.);
 #endif
   
-#if defined(is_sprites) && !defined(fixed_size)
+#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
   vec4 pos = mvMatrix * vec4(aPos, 1.);
   pos = pos/pos.w + vec4(aOfs,  0.);
   gl_Position = prMatrix*pos;
 #endif
   
-#ifdef fat_lines
+#ifdef FAT_LINES
   /* This code was inspired by Matt Deslauriers' code in 
    https://mattdesl.svbtle.com/drawing-lines-is-hard */
   vec2 aspectVec = vec2(uAspect, 1.0);
@@ -135,7 +135,7 @@ void main(void) {
   gl_Position = currentProjected + offset;
 #endif
   
-#ifdef is_brush
+#ifdef IS_BRUSH
   gl_Position = vec4(aPos, 1.);
 #endif
 }

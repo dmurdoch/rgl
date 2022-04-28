@@ -9,18 +9,18 @@ precision mediump float;
 #endif
 varying vec4 vCol; // carries alpha
 varying vec4 vPosition;
-#if defined(has_texture) || defined (is_text)
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
 varying vec2 vTexcoord;
 uniform sampler2D uSampler;
 #endif
 
-#ifdef has_fog
+#ifdef HAS_FOG
 uniform int uFogMode;
 uniform vec3 uFogColor;
 uniform vec4 uFogParms;
 #endif
 
-#if defined(is_lit) && !defined(fixed_quads)
+#if defined(IS_LIT) && !defined(FIXED_QUADS)
 varying vec4 vNormal;
 #endif
 
@@ -32,7 +32,7 @@ uniform vec4 vClipplane[NCLIPPLANES];
 uniform mat4 mvMatrix;
 #endif
 
-#ifdef is_lit
+#ifdef IS_LIT
 uniform vec3 emission;
 uniform float shininess;
 #if NLIGHTS > 0
@@ -43,33 +43,33 @@ uniform vec3 lightDir[NLIGHTS];
 uniform bool viewpoint[NLIGHTS];
 uniform bool finite[NLIGHTS];
 #endif
-#endif // is_lit
+#endif // IS_LIT
 
-#ifdef is_twosided
+#ifdef IS_TWOSIDED
 uniform bool front;
 varying float normz;
 #endif
 
-#ifdef fat_lines
+#ifdef FAT_LINES
 varying vec2 vPoint;
 varying float vLength;
 #endif
 
 void main(void) {
   vec4 fragColor;
-#ifdef fat_lines
+#ifdef FAT_LINES
   vec2 point = vPoint;
   bool neg = point.y < 0.0;
   point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
                  -(point.y - vLength)/(1.0 - vLength);
-#if defined(is_transparent) && defined(is_linestrip)
+#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
   if (neg && length(point) <= 1.0) discard;
 #endif
   point.y = min(point.y, 0.0);
   if (length(point) > 1.0) discard;
-#endif // fat_lines
+#endif // FAT_LINES
   
-#ifdef round_points
+#ifdef ROUND_POINTS
   vec2 coord = gl_PointCoord - vec2(0.5);
   if (length(coord) > 0.5) discard;
 #endif
@@ -79,17 +79,17 @@ void main(void) {
     if (dot(vPosition, vClipplane[i]) < 0.0) discard;
 #endif
     
-#ifdef fixed_quads
+#ifdef FIXED_QUADS
     vec3 n = vec3(0., 0., 1.);
-#elif defined(is_lit)
+#elif defined(IS_LIT)
     vec3 n = normalize(vNormal.xyz);
 #endif
     
-#ifdef is_twosided
+#ifdef IS_TWOSIDED
     if ((normz <= 0.) != front) discard;
 #endif
     
-#ifdef is_lit
+#ifdef IS_LIT
     vec3 eye = normalize(-vPosition.xyz/vPosition.w);
     vec3 lightdir;
     vec4 colDiff;
@@ -97,7 +97,7 @@ void main(void) {
     vec4 lighteffect = vec4(emission, 0.);
     vec3 col;
     float nDotL;
-#ifdef fixed_quads
+#ifdef FIXED_QUADS
     n = -faceforward(n, n, eye);
 #endif
     
@@ -121,35 +121,35 @@ void main(void) {
     }
 #endif
     
-#else // not is_lit
+#else // not IS_LIT
     vec4 colDiff = vCol;
     vec4 lighteffect = colDiff;
 #endif
     
-#ifdef is_text
+#ifdef IS_TEXT
     vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
 #endif
     
-#ifdef has_texture
-#ifdef texture_rgb
+#ifdef HAS_TEXTURE
+#ifdef TEXTURE_rgb
     vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
 #endif
     
-#ifdef texture_rgba
+#ifdef TEXTURE_rgba
     vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
 #endif
     
-#ifdef texture_alpha
+#ifdef TEXTURE_alpha
     vec4 textureColor = texture2D(uSampler, vTexcoord);
     float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
     textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
 #endif
     
-#ifdef texture_luminance
+#ifdef TEXTURE_luminance
     vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
 #endif
     
-#ifdef texture_luminance_alpha
+#ifdef TEXTURE_luminance_alpha
     vec4 textureColor = texture2D(uSampler, vTexcoord);
     float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
     textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
@@ -157,16 +157,16 @@ void main(void) {
     
     fragColor = textureColor;
 
-#elif defined(is_text)
+#elif defined(IS_TEXT)
     if (textureColor.a < 0.1)
       discard;
     else
       fragColor = textureColor;
 #else
     fragColor = lighteffect;
-#endif // has_texture
+#endif // HAS_TEXTURE
     
-#ifdef has_fog
+#ifdef HAS_FOG
     // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
     // In Exp and Exp2: use density = density/far
     // fogF will be the proportion of fog
@@ -188,6 +188,6 @@ void main(void) {
     } else gl_FragColor = fragColor;
 #else
     gl_FragColor = fragColor;
-#endif // has_fog
+#endif // HAS_FOG
     
 }

@@ -3,12 +3,7 @@ notes on shaders branch
 Still to do:
   
    - check all help pages on pkgdown site
-   - fix problem on ?subscenes3d: clipplanes not respected.
-     They aren't being initialized properly.  countClipPlanes
-     looks wrong too:  if two planes are in the same obj, they
-     won't be counted.  DONE
    - remove old shader generator code
-   - rename defines to all uppercase?
    - the sizing looks wrong in `example(rglShared)`.  Probably
      not related to shaders.
    - the initial display of the mouse mode is wrong in `example(rglMouse)`.  Probably not related to shaders.
@@ -16,3 +11,11 @@ Still to do:
 Have checked:
 
    pages in alpha order from r3d.html to writeWebGL.html.
+
+Fixed:
+
+   - fix problem on ?subscenes3d: clipplanes not respected.
+     They aren't being initialized properly.  countClipPlanes
+     looks wrong too:  if two planes are in the same obj, they
+     won't be counted.  DONE
+   - rename defines to all uppercase DONE

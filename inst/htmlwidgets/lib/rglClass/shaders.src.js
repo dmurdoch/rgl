@@ -188,59 +188,59 @@
                 "#define NLIGHTS " + nlights + "\n";
       
       if (fat_lines)
-        defines = defines + "#define fat_lines 1\n";
+        defines = defines + "#define FAT_LINES 1\n";
       
       if (fixed_quads)
-        defines = defines + "#define fixed_quads 1\n";
+        defines = defines + "#define FIXED_QUADS 1\n";
 
       if (fixed_size)
-        defines = defines + "#define fixed_size 1\n";
+        defines = defines + "#define FIXED_SIZE 1\n";
 
       if (has_fog)
-        defines = defines + "#define has_fog 1\n";
+        defines = defines + "#define HAS_FOG 1\n";
         
       if (has_normals)
-        defines = defines + "#define has_normals 1\n";
+        defines = defines + "#define HAS_NORMALS 1\n";
         
       if (has_texture) {
-        defines = defines + "#define has_texture 1\n";
-        defines = defines + "#define texture_" + textype + "\n";
+        defines = defines + "#define HAS_TEXTURE 1\n";
+        defines = defines + "#define TEXTURE_" + textype + "\n";
       }
       
       if (is_brush)
-        defines = defines + "#define is_brush 1\n";  
+        defines = defines + "#define IS_BRUSH 1\n";  
 
       if (type === "linestrip")
-        defines = defines + "#define is_linestrip 1\n";         
+        defines = defines + "#define IS_LINESTRIP 1\n";         
 
       if (is_lit)
-        defines = defines + "#define is_lit 1\n"; 
+        defines = defines + "#define IS_LIT 1\n"; 
       
       if (is_points) {
-        defines = defines + "#define is_points 1\n";
+        defines = defines + "#define IS_POINTS 1\n";
         defines = defines + "#define POINTSIZE " + Number.parseFloat(pointSize).toFixed(1) + "\n";
       }
         
       if (type === "sprites")
-        defines = defines + "#define is_sprites 1\n";
+        defines = defines + "#define IS_SPRITES 1\n";
         
       if (type === "text")
-        defines = defines + "#define is_text 1\n";
+        defines = defines + "#define IS_TEXT 1\n";
 
       if (is_transparent)
-        defines = defines + "#define is_transparent 1\n"; 
+        defines = defines + "#define IS_TRANSPARENT 1\n"; 
         
       if (is_twosided)
-        defines = defines + "#define is_twosided 1\n";
+        defines = defines + "#define IS_TWOSIDED 1\n";
         
       if (needs_vnormal)
-        defines = defines + "#define needs_vnormal 1\n";
+        defines = defines + "#define NEEDS_VNORMAL 1\n";
 
       if (rotating)
-        defines = defines + "#define rotating 1\n";
+        defines = defines + "#define ROTATING 1\n";
         
       if (antialias)
-        defines = defines + "#define round_points 1\n";   
+        defines = defines + "#define ROUND_POINTS 1\n";   
 
       // console.log(result);
       return title + defines;
