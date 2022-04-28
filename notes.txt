@@ -3,14 +3,13 @@ notes on shaders branch
 Still to do:
   
    - check all help pages on pkgdown site
-   - remove old shader generator code
    - the sizing looks wrong in `example(rglShared)`.  Probably
      not related to shaders.
    - the initial display of the mouse mode is wrong in `example(rglMouse)`.  Probably not related to shaders.
 
 Have checked:
 
-   pages in alpha order from r3d.html to writeWebGL.html.
+   pages in alpha order from par3d.html to writeWebGL.html.
 
 Fixed:
 
@@ -19,3 +18,4 @@ Fixed:
      looks wrong too:  if two planes are in the same obj, they
      won't be counted.  DONE
    - rename defines to all uppercase DONE
+   - remove old shader generator code DONE
