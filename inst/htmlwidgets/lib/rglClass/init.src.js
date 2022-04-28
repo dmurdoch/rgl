@@ -448,7 +448,7 @@
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
           i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
-          dim, nx, nz, nrow;
+          dim, nx, nz, nrow, shaders;
 
     obj.initialized = true;
 
@@ -552,11 +552,14 @@
         gl.deleteProgram(obj.prog);
         obj.prog = undefined;
       }
+      
+      shaders = this.getShaders(obj);
+      
       obj.prog = gl.createProgram();
       gl.attachShader(obj.prog, this.getShader( gl.VERTEX_SHADER,
-        this.getVertexShader(obj) ));
+                      shaders.vertex ));
       gl.attachShader(obj.prog, this.getShader( gl.FRAGMENT_SHADER,
-                      this.getFragmentShader(obj) ));
+                      shaders.fragment ));
       //  Force aPos to location 0, aCol to location 1
       gl.bindAttribLocation(obj.prog, 0, "aPos");
       gl.bindAttribLocation(obj.prog, 1, "aCol");
@@ -857,9 +860,7 @@
 
     nclipplanes = this.countClipplanes();
     if (nclipplanes && !sprites_3d) {
-      obj.clipLoc = [];
-      for (i=0; i < nclipplanes; i++)
-        obj.clipLoc[i] = gl.getUniformLocation(obj.prog,"vClipplane" + i);
+      obj.clipLoc = gl.getUniformLocation(obj.prog,"vClipplane");
     }
 
     if (is_lit) {
@@ -868,21 +869,15 @@
       obj.shininessLoc = gl.getUniformLocation(obj.prog, "shininess");
       obj.shininess = this.getMaterial(obj, "shininess");
       obj.nlights = this.countLights();
-      obj.ambientLoc = [];
-      obj.ambient = new Float32Array(this.stringToRgb(this.getMaterial(obj, "ambient")));
-      obj.specularLoc = [];
-      obj.specular = new Float32Array(this.stringToRgb(this.getMaterial(obj, "specular")));
-      obj.diffuseLoc = [];
-      obj.lightDirLoc = [];
-      obj.viewpointLoc = [];
-      obj.finiteLoc = [];
-      for (i=0; i < obj.nlights; i++) {
-        obj.ambientLoc[i] = gl.getUniformLocation(obj.prog, "ambient" + i);
-        obj.specularLoc[i] = gl.getUniformLocation(obj.prog, "specular" + i);
-        obj.diffuseLoc[i] = gl.getUniformLocation(obj.prog, "diffuse" + i);
-        obj.lightDirLoc[i] = gl.getUniformLocation(obj.prog, "lightDir" + i);
-        obj.viewpointLoc[i] = gl.getUniformLocation(obj.prog, "viewpoint" + i);
-        obj.finiteLoc[i] = gl.getUniformLocation(obj.prog, "finite" + i);
+      if (obj.nlights > 0) {
+        obj.ambient = new Float32Array(this.stringToRgb(this.getMaterial(obj, "ambient")));
+        obj.specular = new Float32Array(this.stringToRgb(this.getMaterial(obj, "specular")));
+        obj.ambientLoc = gl.getUniformLocation(obj.prog, "ambient");
+        obj.specularLoc = gl.getUniformLocation(obj.prog, "specular");
+        obj.diffuseLoc = gl.getUniformLocation(obj.prog, "diffuse" );
+        obj.lightDirLoc = gl.getUniformLocation(obj.prog, "lightDir");
+        obj.viewpointLoc = gl.getUniformLocation(obj.prog, "viewpoint");
+        obj.finiteLoc = gl.getUniformLocation(obj.prog, "finite" );
       }
     }
     

@@ -79,8 +79,22 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
         antialias = tolower(antialias)))
   }
   
+  defines <- ctx$eval(subst(
+    'rglwidgetClass.getDefines(%id%, "%type%", %flags%, %nclipplanes%, %nlights%, %normals%, %pointSize%, "%textype%", %antialias%)', 
+    id = id, 
+    type = obj$type, 
+    flags = obj$flags, 
+    nclipplanes = nclipplanes, 
+    nlights = nlights, 
+    normals = if (is.null(obj$normals)) "undefined" else 1,
+    pointSize = pointSize,
+    textype = textype, 
+    antialias = tolower(antialias)
+  ))
+  
   structure(list(vertexShader = vertexShader,
-            fragmentShader = fragmentShader), class = "rglshaders")
+            fragmentShader = fragmentShader,
+            defines = defines), class = "rglshaders")
 }
 
 print.rglshaders <- function(x, ...) {
