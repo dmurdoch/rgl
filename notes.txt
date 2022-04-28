@@ -2,6 +2,7 @@ notes on shaders branch
 
 Still to do:
   
+   - example(contourLines3d) has shading wrong.
    - check all help pages on pkgdown site
    - the sizing looks wrong in `example(rglShared)`.  Probably
      not related to shaders.
@@ -9,7 +10,7 @@ Still to do:
 
 Have checked:
 
-   pages in alpha order from par3d.html to writeWebGL.html.
+   pages in alpha order from makeDependency.html to writeWebGL.html.
 
 Fixed:
 

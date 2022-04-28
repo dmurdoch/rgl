@@ -53,8 +53,8 @@ Duncan Murdoch
 }
 \examples{
 \dontrun{
-# This is the code used to produce one of the dependencies
-# for rglwidget().  
+# This is a slightly simplified version of the code used to 
+# produce one of the dependencies for rglwidget().  
 # It writes to the system library copy of rgl so 
 # has been marked not to run in the example code.
 
