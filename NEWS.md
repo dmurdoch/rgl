@@ -1,5 +1,5 @@
 
-# rgl  0.108.34
+# rgl  0.108.35
 
 ## Major changes
 
@@ -85,6 +85,8 @@ were not handled properly by `plotmath3d()`.
 segfaults in Windows with R 4.2.0 and RStudio (issue #208).
 * `rglMouse()` did not set the default value of the drop-down
 selector properly (issue #213).
+* `merge.mesh3d()`, used by `filledContour3d()`, didn't handle
+colors properly (issue #212).
     
 # rgl 0.108.5
 
