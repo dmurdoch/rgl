@@ -17,7 +17,7 @@ rglMouse(sceneId,
          button = 1, 
          dev = cur3d(), 
          subscene = currentSubscene3d(dev), 
-         default = par3d("mouseMode", dev = dev, subscene = subscene)[button],
+         default = par3d("mouseMode", dev = dev, subscene = subscene)[button + 1],
          stayActive = FALSE,
          height = 40,
          ...)

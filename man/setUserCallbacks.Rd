@@ -163,7 +163,7 @@ Duncan Murdoch
          pt[0] = x - pt[0];
          pt[1] = y - pt[1];
          pt[2] = 0;
-         newdist = this.vlen(pt);
+         newdist = rglwidgetClass.vlen(pt);
          if (newdist < dist) {
            dist = newdist;
            newclosest = i;
@@ -182,6 +182,7 @@ Duncan Murdoch
      };
      window.rglend = function() {
        var text = this.getObj(idtext);
+       closest = -1;
        text.colors[0][3] = 0;
        text.initialized = false;
        this.drawScene();

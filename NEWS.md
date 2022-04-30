@@ -1,5 +1,5 @@
 
-# rgl  0.108.33
+# rgl  0.108.34
 
 ## Major changes
 
@@ -83,6 +83,8 @@ objects with user textures.
 were not handled properly by `plotmath3d()`.
 * Changes introduced in 0.100.50 lacked checks; these caused 
 segfaults in Windows with R 4.2.0 and RStudio (issue #208).
+* `rglMouse()` did not set the default value of the drop-down
+selector properly (issue #213).
     
 # rgl 0.108.5
 
