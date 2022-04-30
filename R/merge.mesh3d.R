@@ -16,7 +16,11 @@ merge.mesh3d <- function(x, y, ..., attributesMustMatch = FALSE) {
     if (is.null(m$meshColor))
       m$meshColor <- "vertices"
     if (!is.null(m$material)) {
-      n <- ncol(m$vb)
+      n <- switch(m$meshColor,
+                  vertices = ncol(m$vb),
+                  edges = NCOL(m$is),
+                  faces = NCOL(m$it) + NCOL(m$ib),
+                  legacy = 3*NCOL(m$it) + 4*NCOL(m$ib))
       if (length(m$material$color) == 1)
         m$material$color <- rep(m$material$color, n)
       if (length(m$material$alpha) == 1)
