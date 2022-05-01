@@ -124,7 +124,7 @@ void Background::render(RenderContext* renderContext)
 
     float fov = userviewpoint->getFOV();
     float hlen, znear;
-    
+
     if (fov > 0.0) {
       double rad = math::deg2rad(fov/2.0f);
 
@@ -134,48 +134,28 @@ void Background::render(RenderContext* renderContext)
       hlen = static_cast<float>(math::cos(math::deg2rad(45.0)));
       znear = hlen;
     }
-    
-    float zfar  = znear + 1.0f;
-    float hwidth, hheight;
 
     float winwidth  = (float) renderContext->rect.width;
     float winheight = (float) renderContext->rect.height;
 
-    // aspect ratio
-
-    if (winwidth >= winheight) {
-      hwidth  = hlen;
-      hheight = hlen * (winheight / winwidth);
-    } else {
-      hwidth  = hlen * (winwidth  / winheight);
-      hheight = hlen;
-    }
-
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     
-    glLoadIdentity();
-    if (fov != 0.0) {
-      glFrustum(-hwidth, hwidth, -hheight, hheight, znear, zfar );
-    } else {
-      glOrtho(-hwidth, hwidth, -hheight, hheight, znear, zfar );
-    }
+    Frustum frust;
+    frust.enclose(0.5, fov, winwidth, winheight);
+    subscene->projMatrix = frust.getMatrix();
     
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     
-    glLoadIdentity();
-
-    glTranslatef(0.0f,0.0f,-znear);
-
+    subscene->modelMatrix = Matrix4x4::translationMatrix(0.0, 0.0, -znear);
+    
     ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
     modelviewpoint->setupOrientation(renderContext);
+    subscene->loadMatrices();
 
     Shape::render(renderContext);
-    glMatrixMode(GL_MODELVIEW); /* just in case... */
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
+    
   } else if (quad) {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -186,18 +166,18 @@ void Background::render(RenderContext* renderContext)
     glLoadIdentity();
     
     quad->draw(renderContext);
-    
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
   }
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
 #endif    
 }
 
 void Background::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL  
+  
   glPushAttrib(GL_ENABLE_BIT);
 
   material.beginUse(renderContext);
@@ -207,7 +187,7 @@ void Background::drawPrimitive(RenderContext* renderContext, int index)
   glDisable(GL_DEPTH_TEST);
   glDepthMask(GL_FALSE);
 
-  sphereMesh.drawPrimitive(renderContext, index);
+  sphereMesh.draw(renderContext);
 
   material.endUse(renderContext);
 
