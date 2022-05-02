@@ -148,10 +148,15 @@ void Background::render(RenderContext* renderContext)
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     
+    Matrix4x4 rotation;
+    rotation.setRotate(0, 90.0);
+    
     subscene->modelMatrix = Matrix4x4::translationMatrix(0.0, 0.0, -znear);
     
-    ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
-    modelviewpoint->setupOrientation(renderContext);
+    subscene->getModelViewpoint()->setupOrientation(renderContext);
+    
+    subscene->modelMatrix.multRight(rotation);
+    
     subscene->loadMatrices();
 
     Shape::render(renderContext);
