@@ -365,10 +365,12 @@ void Matrix4x4::multLeft(const Matrix4x4& M) {
 
 Matrix4x4 Matrix4x4::permutationMatrix(int newx, int newy, int newz) {
   Matrix4x4 result;
-  result.ref(0, newx) = 1.0;
-  result.ref(1, newy) = 1.0;
-  result.ref(2, newz) = 1.0;
-  result.ref(3, 3) = 1.0;
+  for(int i=0;i<16;i++)
+    result.data[i] = 0.0f;
+  result.ref(0, newx) = 1.0f;
+  result.ref(1, newy) = 1.0f;
+  result.ref(2, newz) = 1.0f;
+  result.ref(3, 3) = 1.0f;
   return result;
 }
 
