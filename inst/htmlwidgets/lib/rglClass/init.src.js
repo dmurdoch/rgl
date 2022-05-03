@@ -411,6 +411,20 @@
       this.scene.objects[obj.labels.id] = obj.labels;
       obj.initialized = true;
     };
+    
+    rglwidgetClass.prototype.initBackground = function(obj) {
+      var material, colors;
+      if (typeof obj.ids !== "undefined")
+        obj.quad = rglwidgetClass.flatten([].concat(obj.ids));
+      else if (obj.sphere) {
+        material = obj.material;
+        colors = obj.colors;
+        obj.colors = colors.length > 1 ? [colors[1]] : [colors[0]];
+        obj.vertices = [[0,0,0]];
+        obj.texcoords = [[0,0]];
+        debugger;
+      }  
+    };
 
     /**
      * Initialize object for display
@@ -442,8 +456,10 @@
           is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush),
           has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
           has_normals = (typeof obj.normals !== "undefined") ||
-                        obj.type === "spheres",
+                        type === "spheres",
           has_indices = typeof obj.indices !== "undefined",
+          has_spheres = type === "spheres" || 
+                        (type === "background" && obj.sphere),
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
@@ -463,7 +479,7 @@
     if (type === "bboxdeco")
       return this.initBBox(obj);
       
-    if (type === "spheres" && typeof this.sphere === "undefined")
+    if (has_spheres && typeof this.sphere === "undefined")
       this.initSphere(16, 16);
 
     if (type === "light") {
@@ -479,9 +495,10 @@
       return;
     }
 
-    if (type === "background" && typeof obj.ids !== "undefined") {
-      obj.quad = rglwidgetClass.flatten([].concat(obj.ids));
-      return;
+    if (type === "background") {
+      this.initBackground(obj);
+      if (!obj.sphere)
+        return;
     }
 
     polygon_offset = this.getMaterial(obj, "polygon_offset");
@@ -508,7 +525,7 @@
       
     if (!obj.vertexCount) return;
 
-    if (is_twosided && !has_normals) {
+    if (is_twosided && !has_normals && type !== "background") {
       if (typeof obj.userAttributes === "undefined")
         obj.userAttributes = {};
       v1 = Array(v.length);
@@ -670,7 +687,7 @@
       obj.onecolor = rglwidgetClass.flatten(colors);
     }
 
-    if (has_normals && obj.type !== "spheres") {
+    if (has_normals && !has_spheres) {
       nofs = stride;
       stride = stride + 3;
       v = rglwidgetClass.cbind(v, typeof obj.pnormals !== "undefined" ? obj.pnormals : obj.normals);
@@ -884,12 +901,12 @@
     obj.passes = is_twosided + 1;
     obj.pmode = new Array(obj.passes);
     for (pass = 0; pass < obj.passes; pass++) {
-      if (type === "triangles" || type === "quads" || type === "surface" || type === "spheres")
+      if (type === "triangles" || type === "quads" || type === "surface" || has_spheres)
       	pmode = this.getMaterial(obj, (pass === 0) ? "front" : "back");
       else pmode = "filled";
       obj.pmode[pass] = pmode;
     }
-    if (type !== "spheres") {
+    if (!has_spheres) {
       obj.f.length = obj.passes;
       for (pass = 0; pass < obj.passes; pass++) {
       	f = fnew = obj.f[pass];
@@ -942,7 +959,7 @@
       	      fnew[6*i + 5] = f[3*i];
       	    }
           }
-        } else if (type === "spheres") {
+        } else if (has_spheres) {
           // default
         } else if (type === "surface") {
           dim = obj.dim[0];
@@ -1104,7 +1121,7 @@
 
     obj.values = new Float32Array(rglwidgetClass.flatten(v));
 
-    if (type !== "spheres" && !sprites_3d) {
+    if (!has_spheres && !sprites_3d) {
       obj.buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
       gl.bufferData(gl.ARRAY_BUFFER, obj.values, gl.STATIC_DRAW); //

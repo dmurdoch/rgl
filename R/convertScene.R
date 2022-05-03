@@ -134,7 +134,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     
     result["has_texture"] <- has_texture <- !is.null(mat$texture) &&
                                             (!is.null(obj$texcoords) 
-                                             || (type == "sprites" && !sprites_3d))
+                                             || (type == "sprites" && !sprites_3d)
+                                             || (type == "background" && obj$sphere))
     
     result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || result["is_transparent"]
     
@@ -144,8 +145,9 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
     result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
     result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
-    result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
-      length(unique(c(mat$front, mat$back))) > 1
+    result["is_twosided"] <- (type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
+      length(unique(c(mat$front, mat$back))) > 1) ||
+      (type == "background" && obj$sphere)
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
     result["rotating"] <- isTRUE(obj$rotating)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 

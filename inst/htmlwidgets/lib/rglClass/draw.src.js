@@ -316,9 +316,9 @@
      */    
     rglwidgetClass.prototype.doTexture = function(obj) {
       var gl = this.gl, 
-          is_spheres = obj.type === "spheres";
+          is_sphere = obj.type === "sphere";
         gl.enableVertexAttribArray( obj.texLoc );
-        if (is_spheres)
+        if (is_sphere)
           gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride, 4*this.sphere.vOffsets.tofs);
         else
           gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.tofs);
@@ -1104,10 +1104,11 @@
      * @param { number } id - id of background object
      * @param { number } subsceneid - id of subscene
      */
-    rglwidgetClass.prototype.drawBackground = function(id, subsceneid) {
+    rglwidgetClass.prototype.drawBackground = function(id, subsceneid, context) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(id),
-          bg, i, savepr, saveinvpr, savemv;
+          subscene,
+          bg, i, savepr, saveinvpr, savemv, m, bbox, center;
 
       if (!obj.initialized)
         this.initObj(obj);
@@ -1139,6 +1140,25 @@
           this.drawObjId(obj.quad[i], subsceneid);
         this.prMatrix = savepr;
         this.invPrMatrix = saveinvpr;
+        this.mvMatrix = savemv;
+      } else if (obj.sphere) {
+        subscene = this.getObj(subsceneid);
+        savemv = this.mvMatrix;
+        bbox = subscene.par3d.bbox;
+        center = [(bbox[0] + bbox[1])/2, (bbox[2]+bbox[3])/2, (bbox[4]+bbox[5])/2, 1];
+        m = new CanvasMatrix4();
+        m.rotate(90, 1, 0, 0);
+        m.translate(center[0], center[1], center[2]);
+        m.multRight(savemv);
+        center = rglwidgetClass.multVM(center, m);
+        m.translate(-center[0], -center[1], center[2]);
+        m.scale(1, 1, 0);
+        m.translate(center[0], center[1], center[2]);
+        this.mvMatrix = m;
+        this.initShapeFromObj(this.sphere, obj);
+        this.sphere.onecolor = obj.onecolor;
+        this.sphere.texture = obj.texture;
+        this.drawSimple(this.sphere, subscene, context);
         this.mvMatrix = savemv;
       }
     };
@@ -1185,7 +1205,7 @@
       this.setnormMatrix2();
         
       if (typeof sub.backgroundId !== "undefined" && this.opaquePass)
-        this.drawBackground(sub.backgroundId, subsceneid);
+        this.drawBackground(sub.backgroundId, subsceneid, context);
 
       if (subids.length) {
 
