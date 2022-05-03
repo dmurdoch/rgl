@@ -34,6 +34,9 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
       sphereMesh.setGenNormal(true);
     if ( (material.texture) && (!material.texture->is_envmap() ) )
       sphereMesh.setGenTexCoord(true);
+    
+    material.depth_mask = false;
+    material.depth_test = false;
 
     sphereMesh.setGlobe (16,16);
 
@@ -120,46 +123,38 @@ void Background::render(RenderContext* renderContext)
 
   // render bg sphere 
   
-  if (sphere) {
+  if (sphere) { 
+    /* The way we draw a background sphere is to start by rotating
+     * the sphere so the pole is at (0, 1, 0) instead of (0, 0, 1),
+     * then scale it to 4 times the radius of the bounding box,
+     * then translate it to the center of the bbox and apply
+     * the model-view transformation to it.  After that, 
+     * flatten it to zero thickness in the z direction.
+     */
 
-    float fov = userviewpoint->getFOV();
-    float hlen, znear;
-
-    if (fov > 0.0) {
-      double rad = math::deg2rad(fov/2.0f);
-
-      hlen  = static_cast<float>(math::sin(rad) * math::cos(math::deg2rad(45.0)));
-      znear = hlen / static_cast<float>(math::tan(rad));
-    } else {
-      hlen = static_cast<float>(math::cos(math::deg2rad(45.0)));
-      znear = hlen;
-    }
-
-    float winwidth  = (float) renderContext->rect.width;
-    float winheight = (float) renderContext->rect.height;
-
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
+    Matrix4x4 savedModelMatrix = subscene->modelMatrix;
     
-    Frustum frust;
-    frust.enclose(0.5, fov, winwidth, winheight);
-    subscene->projMatrix = frust.getMatrix();
+    AABox bbox = subscene->getBoundingBox();
+    Vec3 center = bbox.getCenter();
+    double radius = 4.0*(bbox.vmax - center).getLength();
+    Matrix4x4 m;
+    m.setRotate(0, 90);
+    m.multLeft(Matrix4x4::scaleMatrix(radius, radius, radius));
+    m.multLeft(Matrix4x4::translationMatrix(center.x, center.y, center.z));
     
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
+    m.multLeft(savedModelMatrix);
     
-    Matrix4x4 rotation;
-    rotation.setRotate(0, 90.0);
-    
-    subscene->modelMatrix = Matrix4x4::translationMatrix(0.0, 0.0, -znear);
-    
-    subscene->getModelViewpoint()->setupOrientation(renderContext);
-    
-    subscene->modelMatrix.multRight(rotation);
-    
+    center = m * center;
+    m.multLeft(Matrix4x4::translationMatrix(-center.x, -center.y, -center.z));
+    m.multLeft(Matrix4x4::scaleMatrix(1.0, 1.0, 0.0));
+    m.multLeft(Matrix4x4::translationMatrix(center.x, center.y, center.z));
+    subscene->modelMatrix.loadData(m);
     subscene->loadMatrices();
-
+    
     Shape::render(renderContext);
+    
+    subscene->modelMatrix.loadData(savedModelMatrix);
+    subscene->loadMatrices();
     
   } else if (quad) {
     glMatrixMode(GL_MODELVIEW);
