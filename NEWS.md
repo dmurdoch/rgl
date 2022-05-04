@@ -1,5 +1,5 @@
 
-# rgl  0.108.36
+# rgl  0.108.37
 
 ## Major changes
 
@@ -88,6 +88,7 @@ selector properly (issue #213).
 * `merge.mesh3d()`, used by `filledContour3d()`, didn't handle
 colors properly (issue #212).
 * `bg3d(sphere = TRUE)` has been fixed (issue #207).
+* Textures were not appearing on spheres (issue #217).
     
 # rgl 0.108.5
 
