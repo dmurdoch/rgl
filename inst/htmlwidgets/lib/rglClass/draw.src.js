@@ -1157,7 +1157,6 @@
         this.mvMatrix = m;
         this.initShapeFromObj(this.sphere, obj);
         this.sphere.onecolor = obj.onecolor;
-        this.sphere.texture = obj.texture;
         this.drawSimple(this.sphere, subscene, context);
         this.mvMatrix = savemv;
       }

@@ -135,7 +135,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     result["has_texture"] <- has_texture <- !is.null(mat$texture) &&
                                             (!is.null(obj$texcoords) 
                                              || (type == "sprites" && !sprites_3d)
-                                             || (type == "background" && obj$sphere))
+                                             || (type == "background" && obj$sphere)
                                              || (type == "spheres"))
     
     result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || result["is_transparent"]
