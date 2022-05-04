@@ -216,6 +216,7 @@
               }; 
       shape.ofsLoc = obj.ofsLoc;
       shape.texLoc = obj.texLoc;
+      shape.texture = obj.texture;
       shape.sampler = obj.sampler;
       shape.uFogMode = obj.uFogMode;
       shape.uFogColor = obj.uFogColor;
