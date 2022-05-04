@@ -41,7 +41,7 @@
           rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating),
           title, defines;
 
-      title = "  /* ****** "+type+" object "+id+" vertex shader ****** */\n";
+      title = "  /* ****** "+type+" object "+id+" shader ****** */\n";
       
       defines = "#define NCLIPPLANES " + nclipplanes + "\n"+
                 "#define NLIGHTS " + nlights + "\n";
