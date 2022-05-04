@@ -227,8 +227,7 @@
     var gl = this.gl, i, j, n, light,
       ambient, specular, diffuse, lightDir, viewpoint, finite,
       ambient0, specular0;
-        
-      gl.uniformMatrix4fv( obj.normMatLoc, false, new Float32Array(this.normMatrix.getAsArray()) );
+
       gl.uniform3fv( obj.emissionLoc, obj.emission);
       gl.uniform1f( obj.shininessLoc, obj.shininess);
       while ((typeof subscene.lights === "undefined" ||
@@ -308,6 +307,16 @@
         return true;
       } else
         return false;
+    };
+    
+    /**
+     * Do code for vNormal
+     * @param { object } obj - Object to work with
+     */
+    rglwidgetClass.prototype.doNormMat = function(obj) {
+      var gl = this.gl;
+        
+      gl.uniformMatrix4fv( obj.normMatLoc, false, new Float32Array(this.normMatrix.getAsArray()) );
     };
     
     /**
@@ -545,6 +554,8 @@
           has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
           has_normals = (typeof obj.normals !== "undefined") ||
                         obj.type === "sphere",
+          is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush),              
+          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),              
           gl = this.gl || this.initGL(),
           count,
           pass, mode, pmode,
@@ -580,6 +591,9 @@
 
       this.doClipping(obj, subscene);
 
+      if (needs_vnormal)
+        this.doNormMat(obj);
+        
       if (is_lit)
         this.doLighting(obj, subscene);
 
@@ -597,8 +611,7 @@
         enabled.texLoc = this.doTexture(obj);
 
       enabled.colLoc = this.doColors(obj);
-      if (is_lit)
-        enabled.normLoc = this.doNormals(obj);
+      enabled.normLoc = this.doNormals(obj);
 
       if (fixed_size) {
         gl.uniform3f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height, 1.0);
