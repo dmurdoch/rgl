@@ -76,27 +76,31 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   /* Some systems write useless messages to stderr.  We'll
    * hide those
    */
-  int stderr_copy = STDERR_FILENO; /* suppress "maybe undefined" warning */
+  int stderr_copy = STDERR_FILENO, /* suppress "maybe undefined" warning */
+      devNull = -1;
   if (!rglDebug) {
-     int devNull = 
 #ifdef windows
-        open("nul", O_WRONLY);
-#else
-        open("/dev/null", O_WRONLY);
+     devNull = open("nul", O_WRONLY);
 #endif
-     R_FlushConsole();
-     stderr_copy = dup(STDERR_FILENO);
-     dup2(devNull, STDERR_FILENO);
+     if (devNull == -1) 
+       devNull = open("/dev/null", O_WRONLY);
+
+     if (devNull != -1) {
+       R_FlushConsole();
+       stderr_copy = dup(STDERR_FILENO);
+       dup2(devNull, STDERR_FILENO);
+     }
   }
   if ( init(useNULLDevice) ) {
     deviceManager = new DeviceManager(useNULLDevice);
   }
   if ( deviceManager && (useNULLDevice || deviceManager->createTestWindow()))
        success = 1;
+  
   /* Restore STDERR */
-  if (!rglDebug) {
-     dup2(stderr_copy, STDERR_FILENO);
-     close(stderr_copy);
+  if (devNull != -1) {
+    dup2(stderr_copy, STDERR_FILENO);
+    close(stderr_copy);
   }
   return(ScalarInteger(success));
 }
