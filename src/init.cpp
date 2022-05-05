@@ -79,7 +79,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   int stderr_copy = STDERR_FILENO, /* suppress "maybe undefined" warning */
       devNull = -1;
   if (!rglDebug) {
-#ifdef windows
+#if defined(_WIN32) || defined(windows) || defined(RGL_W32) 
      devNull = open("nul", O_WRONLY);
 #endif
      if (devNull == -1) 
