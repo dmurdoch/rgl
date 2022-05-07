@@ -445,6 +445,7 @@
           has_normals = (typeof obj.normals !== "undefined") ||
                         obj.type === "spheres",
           has_indices = typeof obj.indices !== "undefined",
+          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals), 
           gl = this.gl || this.initGL(),
           polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
@@ -855,10 +856,6 @@
         this.initObjId(obj.objects[i]);
     }
 
-    if (is_lit && !fixed_quads) {
-       obj.normLoc = gl.getAttribLocation(obj.prog, "aNorm");
-    }
-
     nclipplanes = this.countClipplanes();
     if (nclipplanes && !sprites_3d) {
       obj.clipLoc = gl.getUniformLocation(obj.prog,"vClipplane");
@@ -1129,7 +1126,8 @@
       }
     }
 
-    if (is_lit && !sprites_3d) {
+    if (needs_vnormal) {
+      obj.normLoc = gl.getAttribLocation(obj.prog, "aNorm");
       obj.normMatLoc = gl.getUniformLocation(obj.prog, "normMatrix");
     }
 
