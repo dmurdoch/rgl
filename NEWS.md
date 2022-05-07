@@ -1,5 +1,5 @@
 
-# rgl  0.108.36
+# rgl  0.108.37
 
 ## Major changes
 
@@ -90,7 +90,9 @@ were not handled properly by `plotmath3d()`.
 selector properly (issue #213).
 * `merge.mesh3d()`, used by `filledContour3d()`, didn't handle
 colors properly (issue #212).
-* Textures were not appearing on spheres (issue #217).
+* Textures were not appearing on spheres, and front-back
+differences weren't being rendered (issue #217).
+
 
 # rgl  0.108.3.1
 
