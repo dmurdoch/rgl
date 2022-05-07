@@ -30,3 +30,4 @@ rglClass/README.md$
 ^\.github$
 ^R/noOpenGL.R$
 [.]JSDoc
+^CRAN-SUBMISSION$

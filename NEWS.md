@@ -31,6 +31,9 @@ is now stored in arrays rather than multiple numbered variables.
 
 ## Minor changes
 
+* Now that `pkgdown` 2.0.0 has been released, a number 
+of internal workarounds to support the development version
+have been removed.
 * Added `as.mesh3d()` methods for `"rglsubscene"` and `"rglscene"`.
 * `open3d()` now handles `useNULL` and `silent` arguments
 passed in `params`.
@@ -47,6 +50,8 @@ argument:  `cylinder3d()`, and `getBoundary3d()`.
   
 ## Bug fixes
 
+* as.mesh3d.rglobject() didn't handle objects with indices
+properly.
 * In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
 * `pop3d(tag = x)` did not always find the objects with `tag == x` if they were not in the current subscene.
@@ -81,27 +86,21 @@ objects with user textures.
 `snapshot3d()` results (issue #197).
 * The new material properties from 0.107.10 and 0.108.3
 were not handled properly by `plotmath3d()`.
-* Changes introduced in 0.100.50 lacked checks; these caused 
-segfaults in Windows with R 4.2.0 and RStudio (issue #208).
 * `rglMouse()` did not set the default value of the drop-down
 selector properly (issue #213).
 * `merge.mesh3d()`, used by `filledContour3d()`, didn't handle
 colors properly (issue #212).
 * `bg3d(sphere = TRUE)` has been fixed (issue #207).
-* Textures were not appearing on spheres (issue #217).
-    
-# rgl 0.108.5
+* Textures were not appearing on spheres, and front-back
+differences weren't being rendered (issue #217).
 
-## Minor changes
 
-* Now that `pkgdown` 2.0.0 has been released, a number 
-of internal workarounds to support the development version
-have been removed.
+# rgl  0.108.3.1
 
 ## Bug fixes
 
-* as.mesh3d.rglobject() didn't handle objects with indices
-properly.
+* Changes introduced in 0.100.50 lacked checks; these caused 
+segfaults in Windows with R 4.2.0 and RStudio (issue #208).
 
 # rgl  0.108.3
 
