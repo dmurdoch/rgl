@@ -541,21 +541,9 @@
      */       
     rglwidgetClass.prototype.drawSimple = function(obj, subscene, context) {
       var 
-          flags = obj.flags,
+          fl,
+          is_transparent,
           type = obj.type,
-          is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit),
-          has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture),
-          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
-          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
-          fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads),
-          is_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lines),
-          fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines),
-          is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided),
-          has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
-          has_normals = (typeof obj.normals !== "undefined") ||
-                        obj.type === "sphere",
-          is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush),              
-          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),              
           gl = this.gl || this.initGL(),
           count,
           pass, mode, pmode,
@@ -571,7 +559,8 @@
       if (!count)
         return [];
     
-      is_transparent = is_transparent || obj.someHidden;
+      fl = obj.defFlags;
+      is_transparent = fl.is_transparent || obj.someHidden;
       
       if (is_transparent && this.opaquePass)
         return this.getPieces(context, obj.id, 0, obj);
@@ -591,13 +580,13 @@
 
       this.doClipping(obj, subscene);
 
-      if (needs_vnormal)
+      if (fl.needs_vnormal)
         this.doNormMat(obj);
         
-      if (is_lit)
+      if (fl.is_lit)
         this.doLighting(obj, subscene);
 
-      if (has_fog)
+      if (fl.has_fog)
         this.doFog(obj, subscene);
 
       this.doUserAttributes(obj);
@@ -607,17 +596,17 @@
       gl.enableVertexAttribArray( this.posLoc );
       enabled.posLoc = true;
         
-      if (has_texture || obj.type === "text")
+      if (fl.has_texture || obj.type === "text")
         enabled.texLoc = this.doTexture(obj);
 
       enabled.colLoc = this.doColors(obj);
       enabled.normLoc = this.doNormals(obj);
 
-      if (fixed_size) {
+      if (fl.fixed_size) {
         gl.uniform3f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height, 1.0);
       }
       
-      if (fixed_quads) {
+      if (fl.fixed_quads) {
         gl.enableVertexAttribArray( obj.ofsLoc );
         enabled.ofsLoc = true;
         gl.vertexAttribPointer(obj.ofsLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
@@ -628,11 +617,11 @@
         if (pmode === "culled")
           continue;
 
-      	mode = fat_lines && (is_lines || pmode === "lines") ? "TRIANGLES" : this.mode4type[type];
+      	mode = fl.fat_lines && (fl.is_lines || pmode === "lines") ? "TRIANGLES" : this.mode4type[type];
 
-      	if (is_twosided) {
+      	if (fl.is_twosided) {
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
-      	  if (has_normals) {
+      	  if (fl.has_normals) {
       	    gl.uniformMatrix4fv(obj.invPrMatLoc, false, new Float32Array(this.invPrMatrix.getAsArray()));
       	  }
       	}
@@ -647,13 +636,13 @@
           count = obj.f[pass].length;
           gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[pass], gl.STATIC_DRAW);
         }
-      	if (!is_lines && pmode === "lines" && !fat_lines) {
+      	if (!fl.is_lines && pmode === "lines" && !fl.fat_lines) {
           mode = "LINES";
         } else if (pmode === "points") {
           mode = "POINTS";
         }
                           
-        if ((is_lines || pmode === "lines") && fat_lines) {
+        if ((fl.is_lines || pmode === "lines") && fl.fat_lines) {
           gl.enableVertexAttribArray(obj.pointLoc);
           enabled.pointLoc = true;
           gl.vertexAttribPointer(obj.pointLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.pointofs);

@@ -57,26 +57,10 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
       nlights <- nlights + (scene$objects[[i]]$type == "light")
     }
     if (is.null(vertexShader))
-      vertexShader <- ctx$eval(subst(
-        'rglwidgetClass.makeVertexShader(%id%, "%type%", %flags%, %nclipplanes%, %normals%, %pointSize%)', 
-        id = id, 
-        type = obj$type, 
-        flags = obj$flags, 
-        nclipplanes = nclipplanes,
-        normals = if (is.null(obj$normals)) "undefined" else 1,
-        pointSize = pointSize 
-      ))
+      vertexShader <- readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_vertex.glsl", package = "rgl"))
     
     if (is.null(fragmentShader))
-      fragmentShader <- ctx$eval(subst(
-        'rglwidgetClass.makeFragmentShader(%id%, "%type%", %flags%, %nclipplanes%, %nlights%, "%textype%", %antialias%)', 
-        id = id, 
-        type = obj$type, 
-        flags = obj$flags, 
-        nclipplanes = nclipplanes, 
-        nlights = nlights, 
-        textype = textype, 
-        antialias = tolower(antialias)))
+      fragmentShader <- readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_fragment.glsl", package = "rgl"))
   }
   
   defines <- ctx$eval(subst(
@@ -98,8 +82,10 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
 }
 
 print.rglshaders <- function(x, ...) {
-  cat(x$vertexShader)
+  cat(x$defines, sep = "\n")
+  cat(x$vertexShader, sep = "\n")
   cat("\n")
-  cat(x$fragmentShader)
+  cat(x$defines, sep = "\n" )
+  cat(x$fragmentShader, sep = "\n")
   invisible(x)
 }

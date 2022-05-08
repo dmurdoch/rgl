@@ -233,6 +233,7 @@
       shape.prog = obj.prog;
       shape.material = obj.material;
       shape.flags = obj.flags;
+      shape.defFlags = obj.defFlags;
       shape.someHidden = obj.someHidden;
       shape.fastTransparency = obj.fastTransparency;
       shape.nlights = obj.nlights;
@@ -423,7 +424,6 @@
         obj.colors = colors.length > 1 ? [colors[1]] : [colors[0]];
         obj.vertices = [[0,0,0]];
         obj.texcoords = [[0,0]];
-        debugger;
       }  
     };
 
@@ -437,47 +437,41 @@
       }
       return this.initObj(this.getObj(id));
     };
-    
+
     /**
      * Initialize object for display
      * @param { Object } obj - object to initialize
      */
     rglwidgetClass.prototype.initObj = function(obj) {
-      var flags = obj.flags,
-          type = obj.type,
-          is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit),
-          fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines),
-          has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture),
-          fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads),
-          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
-          depth_sort = rglwidgetClass.isSet(flags, rglwidgetClass.f_depth_sort),
-          sprites_3d = rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d),
-          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
-          is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided),
-          is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush),
-          has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
-          has_normals = (typeof obj.normals !== "undefined") ||
-                        type === "spheres",
+      var type = obj.type, 
+          flags = obj.flags,
+          normals = obj.normals,
+          round_points = (typeof obj.material === "undefined") ?
+            false : this.getMaterial(obj, "round_points"),
           has_indices = typeof obj.indices !== "undefined",
           has_spheres = type === "spheres" || 
                         (type === "background" && obj.sphere),
-          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals), 
+          sprites_3d = rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d),
+          depth_sort = rglwidgetClass.isSet(flags, rglwidgetClass.f_depth_sort),
           gl = this.gl || this.initGL(),
-          polygon_offset,
+          fl, polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
           i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
           dim, nx, nz, nrow, shaders;
 
     obj.initialized = true;
-
+    
     obj.someHidden = false; // used in selection
-    obj.is_transparent = is_transparent;
     
     this.expandBufferedFields(obj);
     
     if (type === "subscene")
       return;
       
+    obj.defFlags = fl = rglwidgetClass.getDefFlags(flags, type, normals, round_points);
+  
+    obj.is_transparent = fl.is_transparent;
+  
     if (type === "bboxdeco")
       return this.initBBox(obj);
       
@@ -507,13 +501,13 @@
     if (polygon_offset[0] !== 0 || polygon_offset[1] !== 0)
       obj.polygon_offset = polygon_offset;
 
-    if (is_transparent) {
+    if (fl.is_transparent) {
       depth_sort = ["triangles", "quads", "surface",
                     "spheres", "sprites", "text",
                     "planes"].indexOf(type) >= 0;
     }
     
-    if (is_brush)
+    if (fl.is_brush)
       this.initSelection(obj.id);
 
     if (typeof obj.vertices === "undefined")
@@ -527,7 +521,7 @@
       
     if (!obj.vertexCount) return;
 
-    if (is_twosided && !has_normals && type !== "background") {
+    if (fl.is_twosided && !fl.has_normals && type !== "background") {
       if (typeof obj.userAttributes === "undefined")
         obj.userAttributes = {};
       v1 = Array(v.length);
@@ -602,11 +596,11 @@
                                       rglwidgetClass.flatten(obj.family));
     }
 
-    if (fixed_quads && !sprites_3d) {
+    if (fl.fixed_quads && !sprites_3d) {
       obj.ofsLoc = gl.getAttribLocation(obj.prog, "aOfs");
     }
 
-    if (has_texture || type === "text") {
+    if (fl.has_texture || type === "text") {
       if (!obj.texture) {
         obj.texture = gl.createTexture();
         // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
@@ -618,13 +612,13 @@
       obj.sampler = gl.getUniformLocation(obj.prog, "uSampler");
     }
     
-    if (has_fog && !sprites_3d) {
+    if (fl.has_fog && !sprites_3d) {
       obj.uFogMode = gl.getUniformLocation(obj.prog, "uFogMode");
       obj.uFogColor = gl.getUniformLocation(obj.prog, "uFogColor");
       obj.uFogParms = gl.getUniformLocation(obj.prog, "uFogParms");
     }
 
-    if (has_texture) {
+    if (fl.has_texture) {
       mat = obj.material;
       if (typeof mat.uri !== "undefined")
         uri = mat.uri;
@@ -689,7 +683,7 @@
       obj.onecolor = rglwidgetClass.flatten(colors);
     }
 
-    if (has_normals && !has_spheres) {
+    if (fl.has_normals && !has_spheres) {
       nofs = stride;
       stride = stride + 3;
       v = rglwidgetClass.cbind(v, typeof obj.pnormals !== "undefined" ? obj.pnormals : obj.normals);
@@ -728,7 +722,7 @@
       vnew = new Array(4*v.length);
       fnew = new Array(4*v.length);
       alias = new Array(v.length);
-      var rescale = fixed_size ? 72 : 1,
+      var rescale = fl.fixed_size ? 72 : 1,
           size = obj.radii, s = rescale*size[0]/2;
       last = v.length;
       f = obj.f[0];
@@ -861,7 +855,7 @@
       obj.userMatrix = new CanvasMatrix4();
       obj.userMatrix.load(rglwidgetClass.flatten(obj.usermatrix));
       obj.objects = rglwidgetClass.flatten([].concat(obj.ids));
-      is_lit = false;
+      fl.is_lit = false;
       obj.adj = rglwidgetClass.flatten(obj.adj);
       if (typeof obj.pos !== "undefined") {
         obj.pos = rglwidgetClass.flatten(obj.pos);
@@ -878,7 +872,7 @@
       obj.clipLoc = gl.getUniformLocation(obj.prog,"vClipplane");
     }
 
-    if (is_lit) {
+    if (fl.is_lit) {
       obj.emissionLoc = gl.getUniformLocation(obj.prog, "emission");
       obj.emission = new Float32Array(this.stringToRgb(this.getMaterial(obj, "emission")));
       obj.shininessLoc = gl.getUniformLocation(obj.prog, "shininess");
@@ -896,7 +890,7 @@
       }
     }
     
-    obj.passes = is_twosided + 1;
+    obj.passes = fl.is_twosided + 1;
     obj.pmode = new Array(obj.passes);
     for (pass = 0; pass < obj.passes; pass++) {
       if (type === "triangles" || type === "quads" || type === "surface" || has_spheres)
@@ -998,7 +992,7 @@
       }
     }
     
-    if (fat_lines) {
+    if (fl.fat_lines) {
       alias = undefined;
       obj.nextLoc = gl.getAttribLocation(obj.prog, "aNext");
       obj.pointLoc = gl.getAttribLocation(obj.prog, "aPoint");
@@ -1127,7 +1121,7 @@
       obj.ibuf[0] = gl.createBuffer();
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[0]);
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[0], gl[drawtype]);
-      if (is_twosided) {
+      if (fl.is_twosided) {
       	obj.ibuf[1] = gl.createBuffer();
       	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[1]);
       	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[1], gl[drawtype]);
@@ -1138,19 +1132,19 @@
       obj.mvMatLoc = gl.getUniformLocation(obj.prog, "mvMatrix");
       obj.prMatLoc = gl.getUniformLocation(obj.prog, "prMatrix");
 
-      if (fixed_size) {
+      if (fl.fixed_size) {
         obj.textScaleLoc = gl.getUniformLocation(obj.prog, "textScale");
       }
     }
 
-    if (needs_vnormal) {
+    if (fl.needs_vnormal) {
       obj.normLoc = gl.getAttribLocation(obj.prog, "aNorm");
       obj.normMatLoc = gl.getUniformLocation(obj.prog, "normMatrix");
     }
 
-    if (is_twosided) {
+    if (fl.is_twosided) {
       obj.frontLoc = gl.getUniformLocation(obj.prog, "front");
-      if (has_normals)
+      if (fl.has_normals)
         obj.invPrMatLoc = gl.getUniformLocation(obj.prog, "invPrMatrix");
     }
   };
