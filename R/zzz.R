@@ -89,7 +89,7 @@
              symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4))
     if (requireNamespace("extrafont", quietly = TRUE))
       suppressWarnings(
-        rglExtrafonts(sans = c("rglHelvetica", "Arial"), 
+        rglExtrafonts(sans = c("Helvetica", "Arial"), 
                       serif = c("Times", "Times New Roman"), 
                       mono = c("Courier", "Courier New")))
   }
