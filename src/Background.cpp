@@ -136,17 +136,26 @@ void Background::render(RenderContext* renderContext)
     
     AABox bbox = subscene->getBoundingBox();
     Vec3 center = bbox.getCenter();
-    double radius = 4.0*(bbox.vmax - center).getLength();
+    Vec3 scale = subscene->getModelViewpoint()->scale;
     Matrix4x4 m;
     m.setRotate(0, 90);
-    m.multLeft(Matrix4x4::scaleMatrix(radius, radius, radius));
+    /* This calculation gets the aspect ratio
+     * from the scale and range, by undoing aspect3d()
+     */
+    Vec3 ranges = bbox.vmax - bbox.vmin;
+    float avgscale = ranges.getLength()/sqrt(3.0);
+    Vec3 aspect(ranges.x*scale.x/avgscale, ranges.y*scale.y/avgscale, ranges.z*scale.z/avgscale);
+    float maxaspect = max(aspect.x, max(aspect.y, aspect.z));
+    m.multLeft(Matrix4x4::scaleMatrix(2.0*maxaspect*ranges.x/aspect.x,
+                                      2.0*maxaspect*ranges.y/aspect.y,
+                                      2.0*maxaspect*ranges.z/aspect.z));
     m.multLeft(Matrix4x4::translationMatrix(center.x, center.y, center.z));
     
     m.multLeft(savedModelMatrix);
     
-    center = m * center;
+    center = savedModelMatrix * center;
     m.multLeft(Matrix4x4::translationMatrix(-center.x, -center.y, -center.z));
-    m.multLeft(Matrix4x4::scaleMatrix(1.0, 1.0, 0.0));
+    m.multLeft(Matrix4x4::scaleMatrix(1.0, 1.0, 0.25));
     m.multLeft(Matrix4x4::translationMatrix(center.x, center.y, center.z));
     subscene->modelMatrix.loadData(m);
     subscene->loadMatrices();
