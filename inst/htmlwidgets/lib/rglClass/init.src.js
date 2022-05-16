@@ -415,13 +415,15 @@
     };
     
     rglwidgetClass.prototype.initBackground = function(obj) {
-      var material, colors;
+      var material, fl = obj.defFlags;
       if (typeof obj.ids !== "undefined")
         obj.quad = rglwidgetClass.flatten([].concat(obj.ids));
       else if (obj.sphere) {
+        fl.has_normals = true;
+        fl.needs_vnormal = true;
+        obj.defFlags = fl;
         material = obj.material;
-        colors = obj.colors;
-        obj.colors = colors.length > 1 ? [colors[1]] : [colors[0]];
+        material.front = "culled";
         obj.vertices = [[0,0,0]];
         obj.texcoords = [[0,0]];
       }  
@@ -447,7 +449,7 @@
           flags = obj.flags,
           normals = obj.normals,
           round_points = (typeof obj.material === "undefined") ?
-            false : this.getMaterial(obj, "round_points"),
+            false : this.getMaterial(obj, "point_antialias"),
           has_indices = typeof obj.indices !== "undefined",
           has_spheres = type === "spheres" || 
                         (type === "background" && obj.sphere),

@@ -203,19 +203,21 @@
           clipcheck = 0,
           clipplaneids = subscene.clipplanes,
           clip, i,j, n = this.countClipplanes(),
-          clipplanedata = new Float32Array(4*n);
+          clipplanedata; 
           
-      for (i=0; i < clipplaneids.length; i++) {
-        clip = this.getObj(clipplaneids[i]);
-        for (j=0; j < clip.offsets.length; j++) {
-          clipplanedata.set(clip.IMVClip[j], clipcheck);
-          clipcheck += 4;
+      if (n > 0) {
+        clipplanedata = new Float32Array(4*n);
+        for (i=0; i < clipplaneids.length; i++) {
+          clip = this.getObj(clipplaneids[i]);
+          for (j=0; j < clip.offsets.length; j++) {
+            clipplanedata.set(clip.IMVClip[j], clipcheck);
+            clipcheck += 4;
+          }
         }
-      }
       
-      // Leftovers are initialized to zero, which is fine
-          
-      gl.uniform4fv(obj.clipLoc, clipplanedata);
+        // Leftovers are initialized to zero, which is fine
+        gl.uniform4fv(obj.clipLoc, clipplanedata);
+      }
     };
     
     /**
@@ -1110,24 +1112,31 @@
       var gl = this.gl || this.initGL(),
           obj = this.getObj(id),
           subscene,
-          bg, i, savepr, saveinvpr, savemv, m, bbox, center;
+          bg, i, savepr, saveinvpr, savemv, savenorm, m, bbox, result = [], 
+          savedm = gl.getParameter(gl.DEPTH_WRITEMASK),
+          savedt = gl.isEnabled(gl.DEPTH_TEST),
+          saveblend = gl.isEnabled(gl.BLEND);
 
       if (!obj.initialized)
         this.initObj(obj);
 
       if (obj.colors.length) {
         bg = obj.colors[0];
-        gl.clearColor(bg[0], bg[1], bg[2], bg[3]);
         gl.depthMask(true);
-        /* jshint bitwise: false */
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        /* jshint bitwise: true */
+        gl.clear(gl.DEPTH_BUFFER_BIT);
+        gl.clearColor(bg[0], bg[1], bg[2], bg[3]);
+        gl.clear(gl.COLOR_BUFFER_BIT);
         this.fogColor = bg;
-      } else 
+      } else {
         this.fogColor = [0,0,0,0];
+        obj.colors = [[0,0,0,0]];
+      }
   
       this.fogType = obj.fogtype;
       this.fogScale = obj.fogscale;
+      gl.disable(gl.BLEND);
+      gl.disable(gl.DEPTH_TEST);
+      gl.depthMask(false);
       if (typeof obj.quad !== "undefined") {
         savepr = this.prMatrix;
         saveinvpr = this.invPrMatrix;
@@ -1135,33 +1144,60 @@
         this.prMatrix = new CanvasMatrix4();
         this.invPrMatrix = new CanvasMatrix4();
         this.mvMatrix = new CanvasMatrix4();
-        gl.disable(gl.BLEND);
-        gl.disable(gl.DEPTH_TEST);
-        gl.depthMask(false);
         for (i=0; i < obj.quad.length; i++)
-          this.drawObjId(obj.quad[i], subsceneid);
+          result = result.concat(this.drawObjId(obj.quad[i], subsceneid));
         this.prMatrix = savepr;
         this.invPrMatrix = saveinvpr;
         this.mvMatrix = savemv;
+
       } else if (obj.sphere) {
         subscene = this.getObj(subsceneid);
         savemv = this.mvMatrix;
+        savenorm = this.normMatrix;
         bbox = subscene.par3d.bbox;
-        center = [(bbox[0] + bbox[1])/2, (bbox[2]+bbox[3])/2, (bbox[4]+bbox[5])/2, 1];
+        var center = [(bbox[0] + bbox[1])/2, 
+                  (bbox[2] + bbox[3])/2, 
+                  (bbox[4] + bbox[5])/2, 1],
+            scale = subscene.par3d.scale,
+            ranges = [bbox[1] - bbox[0], 
+                  bbox[3] - bbox[2],
+                  bbox[5] - bbox[4]],
+            avgscale = rglwidgetClass.vlen(ranges)/Math.sqrt(3),
+            aspect = [ranges[0]*scale[0]/avgscale,
+                      ranges[1]*scale[1]/avgscale,
+                      ranges[2]*scale[2]/avgscale],
+            maxaspect = Math.max(aspect[0], aspect[1], aspect[2]),
+            zoom = subscene.par3d.zoom;
         m = new CanvasMatrix4();
         m.rotate(90, 1, 0, 0);
+        m.scale(zoom*2.0*maxaspect*ranges[0]/aspect[0], 
+                zoom*2.0*maxaspect*ranges[1]/aspect[1],
+                zoom*2.0*maxaspect*ranges[2]/aspect[2]);
         m.translate(center[0], center[1], center[2]);
         m.multRight(savemv);
-        center = rglwidgetClass.multVM(center, m);
-        m.translate(-center[0], -center[1], center[2]);
-        m.scale(1, 1, 0);
+        center = rglwidgetClass.multVM(center, savemv);
+        m.translate(-center[0], -center[1], -center[2]);
+        m.scale(1, 1, 0.25/zoom);
         m.translate(center[0], center[1], center[2]);
         this.mvMatrix = m;
         this.initShapeFromObj(this.sphere, obj);
-        this.sphere.onecolor = obj.onecolor;
-        this.drawSimple(this.sphere, subscene, context);
+        this.sphere.onecolor = obj.colors.length > 1 ? obj.colors[1] : obj.colors[0];
+        
+        this.normMatrix = new CanvasMatrix4();
+        
+        this.setnormMatrix2();
+        this.setprmvMatrix();
+        
+        result = result.concat(this.drawSimple(this.sphere, subscene, context));
         this.mvMatrix = savemv;
+        this.normMatrix = savenorm;
       }
+      gl.depthMask(savedm);
+      if (savedt)
+        gl.enable(gl.DEPTH_TEST);
+      if (saveblend)
+        gl.enable(gl.BLEND);
+      return result;
     };
 
     /**
@@ -1204,31 +1240,31 @@
       this.setInvPrMatrix();
       this.setmvMatrix(subsceneid);
       this.setnormMatrix2();
+      this.setprmvMatrix();
+      this.invMatrix = new CanvasMatrix4(this.mvMatrix);
+      this.invMatrix.invert();
+      
+      if (this.opaquePass) {
+        context = context.slice();
+        context.push(subsceneid);
         
-      if (typeof sub.backgroundId !== "undefined" && this.opaquePass)
-        this.drawBackground(sub.backgroundId, subsceneid, context);
+        this.doBlending(false);
+        this.subsceneid = subsceneid;
+        if (typeof this.sphere !== "undefined") // reset this.sphere.fastpieces; it will be recreated if needed
+          this.sphere.fastpieces = undefined;
+        if (typeof sub.backgroundId !== "undefined")
+          result = result.concat(this.drawBackground(sub.backgroundId, subsceneid, context));
+      }
 
       if (subids.length) {
-
-        if (subscene_needs_sorting)
-          this.setprmvMatrix();
             
         if (clipids.length > 0) {
-          this.invMatrix = new CanvasMatrix4(this.mvMatrix);
-          this.invMatrix.invert();
           for (i = 0; i < clipids.length; i++)
             this.drawObjId(clipids[i], subsceneid);
         }
         
         subids = sub.opaque.concat(sub.transparent);
         if (this.opaquePass) {
-          context = context.slice();
-          context.push(subsceneid);
-        
-          this.doBlending(false);
-          this.subsceneid = subsceneid;
-          if (typeof this.sphere !== "undefined") // reset this.sphere.fastpieces; it will be recreated if needed
-            this.sphere.fastpieces = undefined;
           for (i = 0; i < subids.length; i++)
             result = result.concat(this.drawObjId(subids[i], subsceneid, context));
           subids = sub.subscenes;
