@@ -21,7 +21,7 @@ an RGL scene."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
       </span>
     </div>
 
@@ -36,7 +36,7 @@ an RGL scene."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
   <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -82,7 +82,8 @@ write an Asymptote program to approximate
 an RGL scene.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">writeASY</span><span class="op">(</span>scene <span class="op">=</span> <span class="fu"><a href="scene3d.html">scene3d</a></span><span class="op">(</span><span class="op">)</span>,
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">writeASY</span><span class="op">(</span>scene <span class="op">=</span> <span class="fu"><a href="scene3d.html">scene3d</a></span><span class="op">(</span><span class="op">)</span>,
          title <span class="op">=</span> <span class="st">"scene"</span>, 
          outtype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pdf"</span>, <span class="st">"eps"</span>, <span class="st">"asy"</span>, <span class="st">"latex"</span>, <span class="st">"pdflatex"</span><span class="op">)</span>, 
          prc <span class="op">=</span> <span class="cn">TRUE</span>, 
@@ -93,8 +94,8 @@ an RGL scene.</p>
          ids <span class="op">=</span> <span class="fu"><a href="tagged3d.html">tagged3d</a></span><span class="op">(</span><span class="va">tags</span><span class="op">)</span>,
          tags <span class="op">=</span> <span class="cn">NULL</span>, 
          version <span class="op">=</span> <span class="st">"2.65"</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>scene</dt>
@@ -175,11 +176,10 @@ at your own risk!</p>
 <code><a href="writePLY.html">writePLY</a></code>, <code><a href="writeOBJ.html">writeOBJ</a></code> and <code><a href="readSTL.html">writeSTL</a></code>
 write the scene to a file in various other formats.</p></div>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="co"># On some systems, the program  "asy"  used</span></span>
 <span class="r-in"><span class="co"># to process the output has bugs, so this may fail.</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span></span>
@@ -201,11 +201,14 @@ write the scene to a file in various other formats.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.9000.</p>
 </div>
 
       </footer></div>

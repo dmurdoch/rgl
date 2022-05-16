@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
       </span>
     </div>
 
@@ -49,7 +49,7 @@
   <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -87,12 +87,349 @@
 
       
 
-      </header><script src="pkgdown_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="pkgdown_files/rglWebGL-binding-0.108.3/rglWebGL.js"></script><link href="pkgdown_files/rglwidgetClass-0.108.3/rgl.css" rel="stylesheet">
-<script src="pkgdown_files/rglwidgetClass-0.108.3/rglClass.min.js"></script><script src="pkgdown_files/CanvasMatrix4-0.108.3/CanvasMatrix.min.js"></script><div class="row">
+      </header><script src="pkgdown_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="pkgdown_files/rglWebGL-binding-0.108.37/rglWebGL.js"></script><link href="pkgdown_files/rglwidgetClass-0.108.37/rgl.css" rel="stylesheet">
+<script src="pkgdown_files/rglwidgetClass-0.108.37/rglClass.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/utils.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/buffer.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/subscenes.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/shaders.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/textures.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/projection.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/mouse.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/init.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/pieces.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/draw.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/controls.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/selection.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/rglTimer.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/pretty.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/axes.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.37/animation.src.js"></script><script type="text/plain" id="rgl-vertex-shader">
+#line 2 1
+// File 1 is the vertex shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+
+attribute vec3 aPos;
+attribute vec4 aCol;
+uniform mat4 mvMatrix;
+uniform mat4 prMatrix;
+varying vec4 vCol;
+varying vec4 vPosition;
+
+#ifdef NEEDS_VNORMAL
+attribute vec3 aNorm;
+uniform mat4 normMatrix;
+varying vec4 vNormal;
+#endif
+
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+attribute vec2 aTexcoord;
+varying vec2 vTexcoord;
+#endif
+
+#ifdef FIXED_SIZE
+uniform vec3 textScale;
+#endif
+
+#ifdef FIXED_QUADS
+attribute vec3 aOfs;
+#endif
+
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+varying float normz;
+uniform mat4 invPrMatrix;
+#else
+attribute vec3 aPos1;
+attribute vec3 aPos2;
+varying float normz;
+#endif
+#endif // IS_TWOSIDED
+
+#ifdef FAT_LINES
+attribute vec3 aNext;
+attribute vec2 aPoint;
+varying vec2 vPoint;
+varying float vLength;
+uniform float uAspect;
+uniform float uLwd;
+#endif
+
+
+void main(void) {
+  
+#ifndef IS_BRUSH
+#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
+  vPosition = mvMatrix * vec4(aPos, 1.);
+#endif
+  
+#ifndef FIXED_QUADS
+  gl_Position = prMatrix * vPosition;
+#endif
+#endif // !IS_BRUSH
+  
+#ifdef IS_POINTS
+  gl_PointSize = POINTSIZE;
+#endif
+  
+  vCol = aCol;
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
+#endif
+  
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+  /* normz should be calculated *after* projection */
+  normz = (invPrMatrix*vNormal).z;
+#else
+  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
+  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
+  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
+  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
+  normz = pos1.x*pos2.y - pos1.y*pos2.x;
+#endif
+#endif // IS_TWOSIDED
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
+#endif
+  
+#if defined(HAS_TEXTURE) || defined(IS_TEXT)
+  vTexcoord = aTexcoord;
+#endif
+  
+#if defined(FIXED_SIZE) && !defined(ROTATING)
+  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w;
+  gl_Position = pos + vec4(aOfs*textScale, 0.);
+#endif
+  
+#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
+  vec4 pos = mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w + vec4(aOfs,  0.);
+  gl_Position = prMatrix*pos;
+#endif
+  
+#ifdef FAT_LINES
+  /* This code was inspired by Matt Deslauriers' code in 
+   https://mattdesl.svbtle.com/drawing-lines-is-hard */
+  vec2 aspectVec = vec2(uAspect, 1.0);
+  mat4 projViewModel = prMatrix * mvMatrix;
+  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
+  currentProjected = currentProjected/currentProjected.w;
+  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
+  vec2 currentScreen = currentProjected.xy * aspectVec;
+  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
+  float len = uLwd;
+  vec2 dir = vec2(1.0, 0.0);
+  vPoint = aPoint;
+  vLength = length(nextScreen - currentScreen)/2.0;
+  vLength = vLength/(vLength + len);
+  if (vLength > 0.0) {
+    dir = normalize(nextScreen - currentScreen);
+  }
+  vec2 normal = vec2(-dir.y, dir.x);
+  dir.x /= uAspect;
+  normal.x /= uAspect;
+  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
+  gl_Position = currentProjected + offset;
+#endif
+  
+#ifdef IS_BRUSH
+  gl_Position = vec4(aPos, 1.);
+#endif
+}
+</script><script type="text/plain" id="rgl-fragment-shader">
+#line 2 2
+// File 2 is the fragment shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+varying vec4 vCol; // carries alpha
+varying vec4 vPosition;
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+varying vec2 vTexcoord;
+uniform sampler2D uSampler;
+#endif
+
+#ifdef HAS_FOG
+uniform int uFogMode;
+uniform vec3 uFogColor;
+uniform vec4 uFogParms;
+#endif
+
+#if defined(IS_LIT) && !defined(FIXED_QUADS)
+varying vec4 vNormal;
+#endif
+
+#if NCLIPPLANES > 0
+uniform vec4 vClipplane[NCLIPPLANES];
+#endif
+
+#if NLIGHTS > 0
+uniform mat4 mvMatrix;
+#endif
+
+#ifdef IS_LIT
+uniform vec3 emission;
+uniform float shininess;
+#if NLIGHTS > 0
+uniform vec3 ambient[NLIGHTS];
+uniform vec3 specular[NLIGHTS]; // light*material
+uniform vec3 diffuse[NLIGHTS];
+uniform vec3 lightDir[NLIGHTS];
+uniform bool viewpoint[NLIGHTS];
+uniform bool finite[NLIGHTS];
+#endif
+#endif // IS_LIT
+
+#ifdef IS_TWOSIDED
+uniform bool front;
+varying float normz;
+#endif
+
+#ifdef FAT_LINES
+varying vec2 vPoint;
+varying float vLength;
+#endif
+
+void main(void) {
+  vec4 fragColor;
+#ifdef FAT_LINES
+  vec2 point = vPoint;
+  bool neg = point.y < 0.0;
+  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
+                 -(point.y - vLength)/(1.0 - vLength);
+#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
+  if (neg && length(point) <= 1.0) discard;
+#endif
+  point.y = min(point.y, 0.0);
+  if (length(point) > 1.0) discard;
+#endif // FAT_LINES
+  
+#ifdef ROUND_POINTS
+  vec2 coord = gl_PointCoord - vec2(0.5);
+  if (length(coord) > 0.5) discard;
+#endif
+  
+#if NCLIPPLANES > 0
+  for (int i = 0; i < NCLIPPLANES; i++)
+    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
+#endif
+    
+#ifdef FIXED_QUADS
+    vec3 n = vec3(0., 0., 1.);
+#elif defined(IS_LIT)
+    vec3 n = normalize(vNormal.xyz);
+#endif
+    
+#ifdef IS_TWOSIDED
+    if ((normz <= 0.) != front) discard;
+#endif
+    
+#ifdef IS_LIT
+    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
+    vec3 lightdir;
+    vec4 colDiff;
+    vec3 halfVec;
+    vec4 lighteffect = vec4(emission, 0.);
+    vec3 col;
+    float nDotL;
+#ifdef FIXED_QUADS
+    n = -faceforward(n, n, eye);
+#endif
+    
+#if NLIGHTS > 0
+    for (int i=0;i<NLIGHTS;i++) {
+      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
+      lightdir = lightDir[i];
+      if (!viewpoint[i])
+        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
+      if (!finite[i]) {
+        halfVec = normalize(lightdir + eye);
+      } else {
+        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
+        halfVec = normalize(lightdir + eye);
+      }
+      col = ambient[i];
+      nDotL = dot(n, lightdir);
+      col = col + max(nDotL, 0.) * colDiff.rgb;
+      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
+      lighteffect = lighteffect + vec4(col, colDiff.a);
+    }
+#endif
+    
+#else // not IS_LIT
+    vec4 colDiff = vCol;
+    vec4 lighteffect = colDiff;
+#endif
+    
+#ifdef IS_TEXT
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef HAS_TEXTURE
+#ifdef TEXTURE_rgb
+    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
+#endif
+    
+#ifdef TEXTURE_rgba
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef TEXTURE_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
+    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
+#endif
+    
+#ifdef TEXTURE_luminance
+    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
+#endif
+    
+#ifdef TEXTURE_luminance_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
+    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
+#endif
+    
+    fragColor = textureColor;
+
+#elif defined(IS_TEXT)
+    if (textureColor.a < 0.1)
+      discard;
+    else
+      fragColor = textureColor;
+#else
+    fragColor = lighteffect;
+#endif // HAS_TEXTURE
+    
+#ifdef HAS_FOG
+    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
+    // In Exp and Exp2: use density = density/far
+    // fogF will be the proportion of fog
+    // Initialize it to the linear value
+    float fogF;
+    if (uFogMode > 0) {
+      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
+      if (uFogMode > 1)
+        fogF = mix(uFogParms.w, 1.0, fogF);
+      fogF = fogF*uFogParms.z;
+      if (uFogMode == 2)
+        fogF = 1.0 - exp(-fogF);
+      // Docs are wrong: use (density*c)^2, not density*c^2
+      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
+      else if (uFogMode == 3)
+        fogF = 1.0 - exp(-fogF*fogF);
+      fogF = clamp(fogF, 0.0, 1.0);
+      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
+    } else gl_FragColor = fragColor;
+#else
+    gl_FragColor = fragColor;
+#endif // HAS_FOG
+    
+}
+</script><script src="pkgdown_files/CanvasMatrix4-0.108.37/CanvasMatrix.src.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using RGL in pkgdown web sites</h1>
-                        <h4 data-toc-skip class="author">Duncan Murdoch</h4>
+                        <h4 data-toc-skip class="author">Duncan
+Murdoch</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/dmurdoch/rgl/blob/HEAD/vignettes/pkgdown.Rmd" class="external-link"><code>vignettes/pkgdown.Rmd</code></a></small>
@@ -105,21 +442,35 @@
 <div class="section level2">
 <h2 id="what-is-the-problem">What is the problem?<a class="anchor" aria-label="anchor" href="#what-is-the-problem"></a>
 </h2>
-<p><a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> is an R package that makes it easy to build a web site for your package. However, the current version 1.6.1 on CRAN doesn’t work so well for packages whose examples use RGL or other packages like <a href="http://rstudio.github.io/leaflet/" class="external-link">leaflet</a> that use <a href="http://www.htmlwidgets.org" class="external-link">htmlwidgets</a>. This document describes current progress in supporting both of these.</p>
-<p>The main problem for <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> support is that RGL and other <a href="http://www.htmlwidgets.org" class="external-link">htmlwidgets</a> users require multiple Javascript libraries to be linked to each web page. <code>pkgdown</code> 1.6.1 can’t do this, but the current development version on Github adds support for additional dependent libraries. This also require <a href="https://downlit.r-lib.org/" class="external-link">downlit</a> version 0.4.0 or higher.</p>
+<p><a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> is an R package that
+makes it easy to build a web site for your package. However, the current
+version 1.6.1 on CRAN doesn’t work so well for packages whose examples
+use RGL or other packages like <a href="http://rstudio.github.io/leaflet/" class="external-link">leaflet</a> that use <a href="http://www.htmlwidgets.org" class="external-link">htmlwidgets</a>. This document
+describes current progress in supporting both of these.</p>
+<p>The main problem for <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+support is that RGL and other <a href="http://www.htmlwidgets.org" class="external-link">htmlwidgets</a> users require multiple
+Javascript libraries to be linked to each web page. <code>pkgdown</code>
+1.6.1 can’t do this, but the current development version on Github adds
+support for additional dependent libraries. This also require <a href="https://downlit.r-lib.org/" class="external-link">downlit</a> version 0.4.0 or
+higher.</p>
 </div>
 <div class="section level2">
 <h2 id="installing-the-changes">Installing the changes<a class="anchor" aria-label="anchor" href="#installing-the-changes"></a>
 </h2>
-<p>Installing the changes is fairly easy. Make sure you have the <a href="https://remotes.r-lib.org/" class="external-link">remotes</a> package installed, then run</p>
+<p>Installing the changes is fairly easy. Make sure you have the <a href="https://remotes.r-lib.org/" class="external-link">remotes</a> package installed, then
+run</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rstudio/webshot2"</span>,
                           <span class="st">"rstudio/chromote"</span>,
                           <span class="st">"r-lib/pkgdown"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>With these development version packages installed, you should see RGL or <code>leaflet</code> output appear automatically in examples. The RGL output is set up to mimic what would happen in a <code>knitr</code> document that uses</p>
+<p>With these development version packages installed, you should see RGL
+or <code>leaflet</code> output appear automatically in examples. The RGL
+output is set up to mimic what would happen in a <code>knitr</code>
+document that uses</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/setupKnitr.html">setupKnitr</a></span><span class="op">(</span>autoprint <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>i.e. the output RGL commands will automatically be included in the display. Low-level changes will be collected into a single display:</p>
+<p>i.e. the output RGL commands will automatically be included in the
+display. Low-level changes will be collected into a single display:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Show regression plane with z as dependent variable</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dmurdoch/rgl" class="external-link">rgl</a></span><span class="op">)</span>
@@ -142,14 +493,19 @@
 <span class="va">c</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1</span>
 <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">coefs</span><span class="op">[</span><span class="st">"(Intercept)"</span><span class="op">]</span>
 <span class="fu"><a href="../reference/planes.html">planes3d</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, <span class="va">c</span>, <span class="va">d</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<div id="rgl1915" style="width:480px;height:296.662546353523px;" class="rglWebGL html-widget"></div>
-<script type="application/json" data-for="rgl1915">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0],"margin":"","floating":false,"tag":""},"rootSubscene":19,"objects":{"25":{"id":25,"type":"spheres","material":{},"vertices":"0","colors":"1","radii":[[0.0684092566370964]],"centers":"2","ignoreExtent":false,"fastTransparency":true,"flags":32771},"27":{"id":27,"type":"text","material":{"lit":false,"margin":0,"floating":true,"edge":[0,1,1]},"vertices":"3","colors":"4","texts":[["x"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"5","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"28":{"id":28,"type":"text","material":{"lit":false,"margin":1,"floating":true,"edge":[1,1,1]},"vertices":"6","colors":"7","texts":[["y"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"8","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"29":{"id":29,"type":"text","material":{"lit":false,"margin":2,"floating":true,"edge":[1,1,1]},"vertices":"9","colors":"10","texts":[["z"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"11","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"30":{"id":30,"type":"planes","material":{"alpha":0.498039215803146,"isTransparent":true},"vertices":"12","colors":"14","offsets":[[0.00207176059484482]],"centers":"15","normals":"13","ignoreExtent":true,"flags":32803},"23":{"id":23,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"22":{"id":22,"type":"background","material":{},"colors":"16","centers":"17","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"24":{"id":24,"type":"background","material":{"lit":false,"back":"lines"},"colors":"18","centers":"19","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"26":{"id":26,"type":"bboxdeco","material":{"front":"lines","back":"lines"},"vertices":"20","colors":"21","axes":{"mode":["pretty","pretty","pretty"],"step":[1,1,0.5],"nticks":[5,5,5],"marklen":[15,15,15],"expand":[1.02999997138977,1.02999997138977,1.02999997138977]},"draw_front":true,"flags":32769},"19":{"id":19,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":19,"mouseMode":{"none":"none","left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,17.9764232635498],"modelMatrix":[[0.877605855464935,0,0,0.066766232252121],[0,0.283653378486633,1.88791465759277,0.298123598098755],[0,-0.779331207275391,0.687144756317139,-18.0600662231445],[0,0,0,1]],"projMatrix":[[3.73205065727234,0,0,0],[0,3.73205065727234,0,0],[0,0,-3.86370325088501,-64.8029251098633],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[0.877605855464935,0.82934695482254,2.00907683372498],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-2.49252343177795,2.34036803245544,-2.77477431297302,2.33933854103088,-1.18075311183929,0.930352807044983],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":"NA","activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[24,26,25,27,28,29,30,23],"subscenes":[],"flags":34099}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":296.662546353523,"context":{"shiny":false,"rmarkdown":"rmarkdown::html_vignette"},"buffer":{"accessors":[{"bufferView":0,"componentType":5126,"count":100,"type":"VEC3"},{"bufferView":1,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":2,"componentType":5126,"count":100,"type":"VEC3"},{"bufferView":3,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":4,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":5,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":6,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":7,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":8,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":9,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":10,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":11,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":12,"componentType":5126,"count":3,"type":"VEC3"},{"bufferView":13,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":14,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":15,"componentType":5126,"count":4,"type":"VEC3"},{"bufferView":16,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":17,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":18,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":19,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":20,"componentType":5126,"count":14,"type":"VEC3"},{"bufferView":21,"componentType":5121,"count":1,"type":"VEC4"}],"bufferViews":[{"buffer":0,"byteLength":1200,"byteOffset":0},{"buffer":0,"byteLength":4,"byteOffset":1200},{"buffer":0,"byteLength":1200,"byteOffset":1204},{"buffer":0,"byteLength":12,"byteOffset":2404},{"buffer":0,"byteLength":4,"byteOffset":2416},{"buffer":0,"byteLength":12,"byteOffset":2420},{"buffer":0,"byteLength":12,"byteOffset":2432},{"buffer":0,"byteLength":4,"byteOffset":2444},{"buffer":0,"byteLength":12,"byteOffset":2448},{"buffer":0,"byteLength":12,"byteOffset":2460},{"buffer":0,"byteLength":4,"byteOffset":2472},{"buffer":0,"byteLength":12,"byteOffset":2476},{"buffer":0,"byteLength":36,"byteOffset":2488},{"buffer":0,"byteLength":12,"byteOffset":2524},{"buffer":0,"byteLength":16,"byteOffset":2536},{"buffer":0,"byteLength":48,"byteOffset":2552},{"buffer":0,"byteLength":16,"byteOffset":2600},{"buffer":0,"byteLength":3,"byteOffset":2616},{"buffer":0,"byteLength":4,"byteOffset":2619},{"buffer":0,"byteLength":3,"byteOffset":2623},{"buffer":0,"byteLength":168,"byteOffset":2628},{"buffer":0,"byteLength":4,"byteOffset":2796}],"buffers":[{"byteLength":2800,"bytes":"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"}]},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script>
+<div id="rgl72694" style="width:480px;height:296.662546353523px;" class="rglWebGL html-widget"></div>
+<script type="application/json" data-for="rgl72694">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0],"margin":"","floating":false,"tag":""},"rootSubscene":25,"objects":{"31":{"id":31,"type":"spheres","material":{},"vertices":"0","colors":"1","radii":[[0.0713506117463112]],"centers":"2","ignoreExtent":false,"fastTransparency":true,"flags":32771},"33":{"id":33,"type":"text","material":{"lit":false,"margin":0,"floating":true,"edge":[0,1,1]},"vertices":"3","colors":"4","texts":[["x"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"5","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"34":{"id":34,"type":"text","material":{"lit":false,"margin":1,"floating":true,"edge":[1,1,1]},"vertices":"6","colors":"7","texts":[["y"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"8","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"35":{"id":35,"type":"text","material":{"lit":false,"margin":2,"floating":true,"edge":[1,1,1]},"vertices":"9","colors":"10","texts":[["z"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"11","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"36":{"id":36,"type":"planes","material":{"alpha":0.498039215803146,"isTransparent":true},"vertices":"12","colors":"14","offsets":[[-0.0161982141435146]],"centers":"15","normals":"13","ignoreExtent":true,"flags":32803},"29":{"id":29,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"28":{"id":28,"type":"background","material":{},"colors":"16","centers":"17","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"30":{"id":30,"type":"background","material":{"lit":false,"back":"lines"},"colors":"18","centers":"19","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"32":{"id":32,"type":"bboxdeco","material":{"front":"lines","back":"lines"},"vertices":"20","colors":"21","axes":{"mode":["pretty","pretty","pretty"],"step":[1,1,0.5],"nticks":[5,5,5],"marklen":[15,15,15],"expand":[1.02999997138977,1.02999997138977,1.02999997138977]},"draw_front":true,"flags":32769},"25":{"id":25,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":25,"mouseMode":{"none":"none","left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,18.7493457794189],"modelMatrix":[[0.836746513843536,0,0,0.395378559827805],[0,0.296256572008133,1.92248380184174,-0.00327790528535843],[0,-0.81395822763443,0.699726939201355,-18.4546718597412],[0,0,0,1]],"projMatrix":[[3.73205089569092,0,0,0],[0,3.73205089569092,0,0],[0,0,-3.86370325088501,-67.5892181396484],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[0.836746513843536,0.866196274757385,2.04586458206177],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-3.1159348487854,2.17089700698853,-2.23257207870483,2.87451267242432,-1.12889814376831,1.0333845615387],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":"NA","activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[30,32,31,33,34,35,36,29],"subscenes":[],"flags":34099}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":296.662546353523,"buffer":{"accessors":[{"bufferView":0,"componentType":5126,"count":100,"type":"VEC3"},{"bufferView":1,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":2,"componentType":5126,"count":100,"type":"VEC3"},{"bufferView":3,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":4,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":5,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":6,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":7,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":8,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":9,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":10,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":11,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":12,"componentType":5126,"count":3,"type":"VEC3"},{"bufferView":13,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":14,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":15,"componentType":5126,"count":4,"type":"VEC3"},{"bufferView":16,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":17,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":18,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":19,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":20,"componentType":5126,"count":16,"type":"VEC3"},{"bufferView":21,"componentType":5121,"count":1,"type":"VEC4"}],"bufferViews":[{"buffer":0,"byteLength":1200,"byteOffset":0},{"buffer":0,"byteLength":4,"byteOffset":1200},{"buffer":0,"byteLength":1200,"byteOffset":1204},{"buffer":0,"byteLength":12,"byteOffset":2404},{"buffer":0,"byteLength":4,"byteOffset":2416},{"buffer":0,"byteLength":12,"byteOffset":2420},{"buffer":0,"byteLength":12,"byteOffset":2432},{"buffer":0,"byteLength":4,"byteOffset":2444},{"buffer":0,"byteLength":12,"byteOffset":2448},{"buffer":0,"byteLength":12,"byteOffset":2460},{"buffer":0,"byteLength":4,"byteOffset":2472},{"buffer":0,"byteLength":12,"byteOffset":2476},{"buffer":0,"byteLength":36,"byteOffset":2488},{"buffer":0,"byteLength":12,"byteOffset":2524},{"buffer":0,"byteLength":16,"byteOffset":2536},{"buffer":0,"byteLength":48,"byteOffset":2552},{"buffer":0,"byteLength":16,"byteOffset":2600},{"buffer":0,"byteLength":3,"byteOffset":2616},{"buffer":0,"byteLength":4,"byteOffset":2619},{"buffer":0,"byteLength":3,"byteOffset":2623},{"buffer":0,"byteLength":192,"byteOffset":2628},{"buffer":0,"byteLength":4,"byteOffset":2820}],"buffers":[{"byteLength":2824,"bytes":"TtaKP61aI7/Ug5Y+fraDvxOiiL/fEQa/x8hWv+9HKL9mDq29asGlvuWmWT+/jgq/bHuGvUgr\nfr0ZGK893e2uP2HdBL7u/ck+2sIgPyEByT78PYy9VJR7v8NKPb/dvsG+OaxOv7+5BD6Opso9\nqbTBvjsn0z+Q8Vy/HAmOv94Gm74Btcw+nX+cPvF05L6QMtW7zpGvvgjltz99h9i+XkkXv+On\nlD9dpEK/XrTXPU4nq78aNaY+HR+UP6ib6T6/RXM9LaHqv5bOCj/4wc++vcdfvz70SL+lhLK+\njejbPt+cCcAvboU+9TIwP3H3+r+9TBQ/RWW0PN+HhD/WLG++CayKPz1c1T+8qLS+msXkPmpT\n8L9AQi4/UmGcPwBTzr9VRQQ/guAMP0wcoz8jYiu9sLiOv6o8ZT4jqaQ8H2bVv0bW+D47YD2/\nHYJ9P62Rub4/iRQ95HoFQGnkar8yWc48HF0DPzHMgr29eSm/3grHvqvd5744YIk+YPfIPZCK\nrD5PDEo9P1Qcv4GnIj+//Jy9Degfvla3Ib8qVE6+4Vv+PqXQYj7+4xQ7cWeeP3yT3D6oFrk+\nEDZJvxrvHD8uuoW+vLDWv6+OZD1qTHG+5iBcP1pedb9AB40+XcTmv1DtqT3vCIy/jrZQv7FF\nar4Ydiq+FnDmvngWnb6QA5w+BhQ0P+Mni7/uf0k/TJNOv14Mdr/ehSA/2R31P4WHxr+hdBs/\n6l2vP/JfGb87W14/ISsiv1Z+Gr/DwpQ9h1eov4tV2D7SYLO++Q3OPt+8eL4RmJY+QVLcvRaz\nWD9NkjK8+ZwkvQuclb5Tphq+Ms/Xvn/jgb5fn7y+YsDTPopECcBT9u4+DdM3P0YvRD/8zg6+\noCojvokPPz/SeqC+LnIQvuBZHT/SLLu9TcLVPljLv76Lj70+RZ/3vlRU1L3na6K9Nv/DPf+r\nP78qqkY/wREgPyAb1L4uX4M9P0K8PRZEbb5rQ7M+56VcPjVbib8lJWY/CNSxP1h75T+O7UI+\nlH/OvgbKFT/uali/qfQRP8Swwj6Qxx6+oS22vUNjEL6bvWO+3nEcv570vbzFB+W8FYewP6U+\nyz5Ki7k9hKtHvyxjbb+HvMU9jJvkPkN64T7LJQW//0L/vmQ3ez9npKK+ntiGv13gUb+mVI4+\nSRJgPrRLor8myYA+T7AzP/sqn79Jnn8/XOEYvtWwRD/zgry9+FUHvxNhrb5p7Jq+Kqyzv+jf\n0763HKq+rpmGP5+0sT73wOk9lDxyPjao8T6xAUS9IwKTv22yMkCGcXy/pGICPt1iWL6VfBI+\nY/ZBwEeOXb0zTnO/yu6ivKIkPb+UYFo+76yfPoDlFb8X11g+/6hPP8seOj47f4g+t2GXv8d7\ngD8BlkC/LNF0Pk0JPTuDe5+9q+m+Pl4HaD5IZJM+hqEAQDgMND/0U4M9UKZMP0EJmr8YLbs+\nAJdmvoG8JzsfyAY/6w5ZvwKC/j4Caym/wUmjP/3wvD5MGH0/mNF/vx2gC76l+4O9mnAQP1Ve\n2r74KIU+l6TjPZ8Orb1kCpo9dkkSP/m7FL90fzU/iuC0PgQwMT/60mQ+hvGqP8oh2T4kXNS+\nLDvLvleDWj8lnf6+AQAAAU7Wij+tWiO/1IOWPn62g78Tooi/3xEGv8fIVr/vRyi/Zg6tvWrB\npb7lplk/v44Kv2x7hr1IK369GRivPd3trj9h3QS+7v3JPtrCID8hAck+/D2MvVSUe7/DSj2/\n3b7BvjmsTr+/uQQ+jqbKPam0wb47J9M/kPFcvxwJjr/eBpu+AbXMPp1/nD7xdOS+kDLVu86R\nr74I5bc/fYfYvl5JF7/jp5Q/XaRCv1601z1OJ6u/GjWmPh0flD+om+k+v0VzPS2h6r+Wzgo/\n+MHPvr3HX78+9Ei/pYSyvo3o2z7fnAnAL26FPvUyMD9x9/q/vUwUP0VltDzfh4Q/1ixvvgms\nij89XNU/vKi0vprF5D5qU/C/QEIuP1JhnD8AU86/VUUEP4LgDD9MHKM/I2IrvbC4jr+qPGU+\nI6mkPB9m1b9G1vg+O2A9vx2CfT+tkbm+P4kUPeR6BUBp5Gq/MlnOPBxdAz8xzIK9vXkpv94K\nx76r3ee+OGCJPmD3yD2Qiqw+TwxKPT9UHL+BpyI/v/ycvQ3oH75WtyG/KlROvuFb/j6l0GI+\n/uMUO3Fnnj98k9w+qBa5PhA2Sb8a7xw/LrqFvryw1r+vjmQ9akxxvuYgXD9aXnW/QAeNPl3E\n5r9Q7ak97wiMv462UL+xRWq+GHYqvhZw5r54Fp2+kAOcPgYUND/jJ4u/7n9JP0yTTr9eDHa/\n3oUgP9kd9T+Fh8a/oXQbP+pdrz/yXxm/O1tePyErIr9Wfhq/w8KUPYdXqL+LVdg+0mCzvvkN\nzj7fvHi+EZiWPkFS3L0Ws1g/TZIyvPmcJL0LnJW+U6YavjLP175/44G+X5+8vmLA0z6KRAnA\nU/buPg3TNz9GL0Q//M4OvqAqI76JDz8/0nqgvi5yEL7gWR0/0iy7vU3C1T5Yy7++i4+9PkWf\n975UVNS952uivTb/wz3/qz+/KqpGP8ERID8gG9S+Ll+DPT9CvD0WRG2+a0OzPuelXD41W4m/\nJSVmPwjUsT9Ye+U/ju1CPpR/zr4GyhU/7mpYv6n0ET/EsMI+kMcevqEttr1DYxC+m71jvt5x\nHL+e9L28xQflvBWHsD+lPss+Sou5PYSrR78sY22/h7zFPYyb5D5DeuE+yyUFv/9C/75kN3s/\nZ6Sivp7Yhr9d4FG/plSOPkkSYD60S6K/JsmAPk+wMz/7Kp+/SZ5/P1zhGL7VsEQ/84K8vfhV\nB78TYa2+aeyaviqss7/o39O+txyqvq6Zhj+ftLE+98DpPZQ8cj42qPE+sQFEvSMCk79tsjJA\nhnF8v6RiAj7dYli+lXwSPmP2QcBHjl29M05zv8ruoryiJD2/lGBaPu+snz6A5RW/F9dYPv+o\nTz/LHjo+O3+IPrdhl7/He4A/AZZAvyzRdD5NCT07g3ufvavpvj5eB2g+SGSTPoahAEA4DDQ/\n9FODPVCmTD9BCZq/GC27PgCXZr6BvCc7H8gGP+sOWb8Cgv4+Amspv8FJoz/98Lw+TBh9P5jR\nf78doAu+pfuDvZpwED9VXtq++CiFPpek4z2fDq29ZAqaPXZJEj/5uxS/dH81P4rgtD4EMDE/\n+tJkPobxqj/KIdk+JFzUviw7y75Xg1o/JZ3+vgAAwH8AAIBAAACAPwAAAAEAAMB/AACAQAAA\ngD8AAMB/AACAQAAAgD8AAAABAADAfwAAgEAAAIA/AADAfwAAgEAAAIA/AAAAAQAAwH8AAIBA\nAACAP3prR8B24g7Ahf4YvnprR8B+KsY/vH+Qv98/zr8E+DdAvH+Qv9fbaT5BpYS+AACAvwAA\nAAAAAAAAAAAAAP/+/j5MUifAvOM6PzBqTb+WJFq/DAmWP760A7+bNtE+6EL/vjI8Uz4j1L4+\n3NsMwGOdIz+ZmJg+mZiYPpmYmD4AAIA/AAAAAQEBAQAAAAAAAABAwAAAwH8AAMB/AAAAwAAA\nwH8AAMB/AACAvwAAwH8AAMB/AAAAAAAAwH8AAMB/AACAPwAAwH8AAMB/AAAAQAAAwH8AAMB/\nAADAfwAAAMAAAMB/AADAfwAAgL8AAMB/AADAfwAAAAAAAMB/AADAfwAAgD8AAMB/AADAfwAA\nAEAAAMB/AADAfwAAwH8AAIC/AADAfwAAwH8AAAC/AADAfwAAwH8AAAAAAADAfwAAwH8AAAA/\nAADAfwAAwH8AAIA/AAAAAQ=="}]},"context":{"shiny":false,"rmarkdown":"rmarkdown::html_vignette"},"vertexShader":"#line 2 1\n// File 1 is the vertex shader\n#ifdef GL_ES\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n#endif\n\nattribute vec3 aPos;\nattribute vec4 aCol;\nuniform mat4 mvMatrix;\nuniform mat4 prMatrix;\nvarying vec4 vCol;\nvarying vec4 vPosition;\n\n#ifdef NEEDS_VNORMAL\nattribute vec3 aNorm;\nuniform mat4 normMatrix;\nvarying vec4 vNormal;\n#endif\n\n#if defined(HAS_TEXTURE) || defined (IS_TEXT)\nattribute vec2 aTexcoord;\nvarying vec2 vTexcoord;\n#endif\n\n#ifdef FIXED_SIZE\nuniform vec3 textScale;\n#endif\n\n#ifdef FIXED_QUADS\nattribute vec3 aOfs;\n#endif\n\n#ifdef IS_TWOSIDED\n#ifdef HAS_NORMALS\nvarying float normz;\nuniform mat4 invPrMatrix;\n#else\nattribute vec3 aPos1;\nattribute vec3 aPos2;\nvarying float normz;\n#endif\n#endif // IS_TWOSIDED\n\n#ifdef FAT_LINES\nattribute vec3 aNext;\nattribute vec2 aPoint;\nvarying vec2 vPoint;\nvarying float vLength;\nuniform float uAspect;\nuniform float uLwd;\n#endif\n\n\nvoid main(void) {\n  \n#ifndef IS_BRUSH\n#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)\n  vPosition = mvMatrix * vec4(aPos, 1.);\n#endif\n  \n#ifndef FIXED_QUADS\n  gl_Position = prMatrix * vPosition;\n#endif\n#endif // !IS_BRUSH\n  \n#ifdef IS_POINTS\n  gl_PointSize = POINTSIZE;\n#endif\n  \n  vCol = aCol;\n  \n#ifdef NEEDS_VNORMAL\n  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n#endif\n  \n#ifdef IS_TWOSIDED\n#ifdef HAS_NORMALS\n  /* normz should be calculated *after* projection */\n  normz = (invPrMatrix*vNormal).z;\n#else\n  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n  normz = pos1.x*pos2.y - pos1.y*pos2.x;\n#endif\n#endif // IS_TWOSIDED\n  \n#ifdef NEEDS_VNORMAL\n  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);\n#endif\n  \n#if defined(HAS_TEXTURE) || defined(IS_TEXT)\n  vTexcoord = aTexcoord;\n#endif\n  \n#if defined(FIXED_SIZE) && !defined(ROTATING)\n  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);\n  pos = pos/pos.w;\n  gl_Position = pos + vec4(aOfs*textScale, 0.);\n#endif\n  \n#if defined(IS_SPRITES) && !defined(FIXED_SIZE)\n  vec4 pos = mvMatrix * vec4(aPos, 1.);\n  pos = pos/pos.w + vec4(aOfs,  0.);\n  gl_Position = prMatrix*pos;\n#endif\n  \n#ifdef FAT_LINES\n  /* This code was inspired by Matt Deslauriers' code in \n   https://mattdesl.svbtle.com/drawing-lines-is-hard */\n  vec2 aspectVec = vec2(uAspect, 1.0);\n  mat4 projViewModel = prMatrix * mvMatrix;\n  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);\n  currentProjected = currentProjected/currentProjected.w;\n  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);\n  vec2 currentScreen = currentProjected.xy * aspectVec;\n  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;\n  float len = uLwd;\n  vec2 dir = vec2(1.0, 0.0);\n  vPoint = aPoint;\n  vLength = length(nextScreen - currentScreen)/2.0;\n  vLength = vLength/(vLength + len);\n  if (vLength > 0.0) {\n    dir = normalize(nextScreen - currentScreen);\n  }\n  vec2 normal = vec2(-dir.y, dir.x);\n  dir.x /= uAspect;\n  normal.x /= uAspect;\n  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);\n  gl_Position = currentProjected + offset;\n#endif\n  \n#ifdef IS_BRUSH\n  gl_Position = vec4(aPos, 1.);\n#endif\n}","fragmentShader":"#line 2 2\n// File 2 is the fragment shader\n#ifdef GL_ES\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n#endif\nvarying vec4 vCol; // carries alpha\nvarying vec4 vPosition;\n#if defined(HAS_TEXTURE) || defined (IS_TEXT)\nvarying vec2 vTexcoord;\nuniform sampler2D uSampler;\n#endif\n\n#ifdef HAS_FOG\nuniform int uFogMode;\nuniform vec3 uFogColor;\nuniform vec4 uFogParms;\n#endif\n\n#if defined(IS_LIT) && !defined(FIXED_QUADS)\nvarying vec4 vNormal;\n#endif\n\n#if NCLIPPLANES > 0\nuniform vec4 vClipplane[NCLIPPLANES];\n#endif\n\n#if NLIGHTS > 0\nuniform mat4 mvMatrix;\n#endif\n\n#ifdef IS_LIT\nuniform vec3 emission;\nuniform float shininess;\n#if NLIGHTS > 0\nuniform vec3 ambient[NLIGHTS];\nuniform vec3 specular[NLIGHTS]; // light*material\nuniform vec3 diffuse[NLIGHTS];\nuniform vec3 lightDir[NLIGHTS];\nuniform bool viewpoint[NLIGHTS];\nuniform bool finite[NLIGHTS];\n#endif\n#endif // IS_LIT\n\n#ifdef IS_TWOSIDED\nuniform bool front;\nvarying float normz;\n#endif\n\n#ifdef FAT_LINES\nvarying vec2 vPoint;\nvarying float vLength;\n#endif\n\nvoid main(void) {\n  vec4 fragColor;\n#ifdef FAT_LINES\n  vec2 point = vPoint;\n  bool neg = point.y < 0.0;\n  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :\n                 -(point.y - vLength)/(1.0 - vLength);\n#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)\n  if (neg && length(point) <= 1.0) discard;\n#endif\n  point.y = min(point.y, 0.0);\n  if (length(point) > 1.0) discard;\n#endif // FAT_LINES\n  \n#ifdef ROUND_POINTS\n  vec2 coord = gl_PointCoord - vec2(0.5);\n  if (length(coord) > 0.5) discard;\n#endif\n  \n#if NCLIPPLANES > 0\n  for (int i = 0; i < NCLIPPLANES; i++)\n    if (dot(vPosition, vClipplane[i]) < 0.0) discard;\n#endif\n    \n#ifdef FIXED_QUADS\n    vec3 n = vec3(0., 0., 1.);\n#elif defined(IS_LIT)\n    vec3 n = normalize(vNormal.xyz);\n#endif\n    \n#ifdef IS_TWOSIDED\n    if ((normz <= 0.) != front) discard;\n#endif\n    \n#ifdef IS_LIT\n    vec3 eye = normalize(-vPosition.xyz/vPosition.w);\n    vec3 lightdir;\n    vec4 colDiff;\n    vec3 halfVec;\n    vec4 lighteffect = vec4(emission, 0.);\n    vec3 col;\n    float nDotL;\n#ifdef FIXED_QUADS\n    n = -faceforward(n, n, eye);\n#endif\n    \n#if NLIGHTS > 0\n    for (int i=0;i<NLIGHTS;i++) {\n      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);\n      lightdir = lightDir[i];\n      if (!viewpoint[i])\n        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n      if (!finite[i]) {\n        halfVec = normalize(lightdir + eye);\n      } else {\n        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);\n        halfVec = normalize(lightdir + eye);\n      }\n      col = ambient[i];\n      nDotL = dot(n, lightdir);\n      col = col + max(nDotL, 0.) * colDiff.rgb;\n      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];\n      lighteffect = lighteffect + vec4(col, colDiff.a);\n    }\n#endif\n    \n#else // not IS_LIT\n    vec4 colDiff = vCol;\n    vec4 lighteffect = colDiff;\n#endif\n    \n#ifdef IS_TEXT\n    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n#endif\n    \n#ifdef HAS_TEXTURE\n#ifdef TEXTURE_rgb\n    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);\n#endif\n    \n#ifdef TEXTURE_rgba\n    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n#endif\n    \n#ifdef TEXTURE_alpha\n    vec4 textureColor = texture2D(uSampler, vTexcoord);\n    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;\n    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);\n#endif\n    \n#ifdef TEXTURE_luminance\n    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);\n#endif\n    \n#ifdef TEXTURE_luminance_alpha\n    vec4 textureColor = texture2D(uSampler, vTexcoord);\n    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;\n    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);\n#endif\n    \n    fragColor = textureColor;\n\n#elif defined(IS_TEXT)\n    if (textureColor.a < 0.1)\n      discard;\n    else\n      fragColor = textureColor;\n#else\n    fragColor = lighteffect;\n#endif // HAS_TEXTURE\n    \n#ifdef HAS_FOG\n    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))\n    // In Exp and Exp2: use density = density/far\n    // fogF will be the proportion of fog\n    // Initialize it to the linear value\n    float fogF;\n    if (uFogMode > 0) {\n      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);\n      if (uFogMode > 1)\n        fogF = mix(uFogParms.w, 1.0, fogF);\n      fogF = fogF*uFogParms.z;\n      if (uFogMode == 2)\n        fogF = 1.0 - exp(-fogF);\n      // Docs are wrong: use (density*c)^2, not density*c^2\n      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58\n      else if (uFogMode == 3)\n        fogF = 1.0 - exp(-fogF*fogF);\n      fogF = clamp(fogF, 0.0, 1.0);\n      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);\n    } else gl_FragColor = fragColor;\n#else\n    gl_FragColor = fragColor;\n#endif // HAS_FOG\n    \n}","players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="specifying-the-size-of-figures">Specifying the size of figures<a class="anchor" aria-label="anchor" href="#specifying-the-size-of-figures"></a>
 </h2>
-<p>By default, pkgdown generates standard plots which are wider than they are high (according to the golden ratio). Often RGL plots look better with equal width and height, since the contents may be rotated by the user.</p>
-<p>To specify the size of plots in pkgdown, you use the <code>figures</code> entry in <code>_pkgdown.yml</code>. The defaults are similar to</p>
+<p>By default, pkgdown generates standard plots which are wider than
+they are high (according to the golden ratio). Often RGL plots look
+better with equal width and height, since the contents may be rotated by
+the user.</p>
+<p>To specify the size of plots in pkgdown, you use the
+<code>figures</code> entry in <code>_pkgdown.yml</code>. The defaults
+are similar to</p>
 <pre><code>figures:
   dev: ragg::agg_png
   dpi: 96
@@ -161,18 +517,25 @@
   fig.asp: 1.618
   bg: NA
   other.parameters: []</code></pre>
-<p>By default RGL uses these parameters as well, but allows you to override any of <code>fig.width</code>, <code>fig.height</code> and <code>fig.asp</code> by specifying an <code>rgl</code> entry in <code>other.parameters</code>. For example:</p>
+<p>By default RGL uses these parameters as well, but allows you to
+override any of <code>fig.width</code>, <code>fig.height</code> and
+<code>fig.asp</code> by specifying an <code>rgl</code> entry in
+<code>other.parameters</code>. For example:</p>
 <pre><code><span class="va">figures</span><span class="op">:</span>
   <span class="va">fig.width</span><span class="op">:</span> <span class="fl">5</span>
   <span class="va">other.parameters</span><span class="op">:</span>
     <span class="va">rgl</span><span class="op">:</span>
       <span class="va">fig.asp</span><span class="op">:</span> <span class="fl">1</span></code></pre>
-<p>This will make all plots have a width of 5 inches and will make RGL plots square.</p>
+<p>This will make all plots have a width of 5 inches and will make RGL
+plots square.</p>
 </div>
 <div class="section level2">
 <h2 id="is-this-safe-to-use">Is this safe to use?<a class="anchor" aria-label="anchor" href="#is-this-safe-to-use"></a>
 </h2>
-<p>These are development versions of the packages, so they may contain bugs, either in my changes or in other unreleased changes. I don’t recommend you use them in regular production code. To re-install released versions of the packages, run</p>
+<p>These are development versions of the packages, so they may contain
+bugs, either in my changes or in other unreleased changes. I don’t
+recommend you use them in regular production code. To re-install
+released versions of the packages, run</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pkgdown"</span>, <span class="st">"rgl"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>If you do use them and notice any bugs, please <a href="https://github.com/dmurdoch/rgl/issues" class="external-link">report them</a>!</p>
@@ -191,12 +554,15 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+<p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.9000.</p>
 </div>
 
       </footer>

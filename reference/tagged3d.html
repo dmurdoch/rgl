@@ -20,7 +20,7 @@ given ids."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
       </span>
     </div>
 
@@ -35,7 +35,7 @@ given ids."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/
   <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -80,9 +80,10 @@ values associated with a given tag, or the tags set on
 given ids.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">tagged3d</span><span class="op">(</span>tags <span class="op">=</span> <span class="cn">NULL</span>, ids <span class="op">=</span> <span class="cn">NULL</span>, full <span class="op">=</span> <span class="cn">FALSE</span>, subscene <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tagged3d</span><span class="op">(</span>tags <span class="op">=</span> <span class="cn">NULL</span>, ids <span class="op">=</span> <span class="cn">NULL</span>, full <span class="op">=</span> <span class="cn">FALSE</span>, subscene <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>tags</dt>
@@ -122,24 +123,23 @@ as <code>ids</code>).</p>
     <h2>Author</h2>
     <p>Duncan Murdoch</p>
     </div>
-    </div>
 
-    <div id="examples">
+    <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="open3d.html">open3d</a></span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="open3d.html">open3d</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, tag <span class="op">=</span> <span class="st">"plot"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">unclass</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data axes xlab ylab zlab </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1847 1848 1849 1850 1851 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1841 1842 1843 1844 1845 </span>
 <span class="r-in"><span class="fu">tagged3d</span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1847 1849 1850 1851 1848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1841 1843 1844 1845 1842</span>
 <span class="r-in"><span class="fu">tagged3d</span><span class="op">(</span>ids <span class="op">=</span> <span class="va">ids</span>, full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id     type  tag</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1847   points plot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 1848 bboxdeco plot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1849     text plot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1850     text plot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 1851     text plot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1841   points plot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 1842 bboxdeco plot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1843     text plot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1844     text plot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 1845     text plot</span>
 </code></pre></div>
     </div>
   </div>
@@ -150,11 +150,14 @@ as <code>ids</code>).</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.9000.</p>
 </div>
 
       </footer></div>

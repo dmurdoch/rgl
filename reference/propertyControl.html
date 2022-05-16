@@ -18,7 +18,7 @@ or in an animation."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
       </span>
     </div>
 
@@ -33,7 +33,7 @@ or in an animation."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
   <a href="../rglClass/index.html">Javascript</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,14 +76,15 @@ or in an animation."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
 or in an animation.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">subsetControl</span><span class="op">(</span>value <span class="op">=</span> <span class="fl">1</span>, <span class="va">subsets</span>, subscenes <span class="op">=</span> <span class="cn">NULL</span>,
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">subsetControl</span><span class="op">(</span>value <span class="op">=</span> <span class="fl">1</span>, <span class="va">subsets</span>, subscenes <span class="op">=</span> <span class="cn">NULL</span>,
                          fullset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">union</span>, <span class="va">subsets</span><span class="op">)</span>,
                          accumulate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu">propertyControl</span><span class="op">(</span>value <span class="op">=</span> <span class="fl">0</span>, <span class="va">entries</span>, <span class="va">properties</span>, 
                 objids <span class="op">=</span> <span class="fu"><a href="tagged3d.html">tagged3d</a></span><span class="op">(</span><span class="va">tags</span><span class="op">)</span>, <span class="va">tags</span>, values <span class="op">=</span> <span class="cn">NULL</span>,
                 param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, interp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    </div>
 
-    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>value</dt>
@@ -146,7 +147,6 @@ control, and <code><a href="playwidget.html">playwidget</a></code> for a way to 
 in animations (including Shiny), <code><a href="rglShared.html">rglShared</a></code>
 for linking using the <span class="pkg">crosstalk</span> package.</p></div>
     </div>
-    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -156,11 +156,14 @@ for linking using the <span class="pkg">crosstalk</span> package.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
+Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
+Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.9000.</p>
 </div>
 
       </footer></div>
