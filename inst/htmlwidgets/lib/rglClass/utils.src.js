@@ -592,7 +592,7 @@
     
     /**
      * Write vector to log
-     * @param {3 vector} v
+     * @param {vector} v
      */
      
     rglwidgetClass.logVec3 = function(v) {
