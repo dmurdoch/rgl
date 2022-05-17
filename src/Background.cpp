@@ -34,6 +34,9 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
       sphereMesh.setGenNormal(true);
     if ( (material.texture) && (!material.texture->is_envmap() ) )
       sphereMesh.setGenTexCoord(true);
+    
+    material.depth_mask = false;
+    material.depth_test = false;
 
     sphereMesh.setGlobe (16,16);
 
@@ -120,62 +123,50 @@ void Background::render(RenderContext* renderContext)
 
   // render bg sphere 
   
-  if (sphere) {
+  if (sphere) { 
+    /* The way we draw a background sphere is to start by rotating
+     * the sphere so the pole is at (0, 1, 0) instead of (0, 0, 1),
+     * then scale it to 4 times the radius of the bounding box,
+     * then translate it to the center of the bbox and apply
+     * the model-view transformation to it.  After that, 
+     * flatten it to zero thickness in the z direction.
+     */
 
-    float fov = userviewpoint->getFOV();
-    float hlen, znear;
+    Matrix4x4 savedModelMatrix = subscene->modelMatrix;
     
-    if (fov > 0.0) {
-      double rad = math::deg2rad(fov/2.0f);
-
-      hlen  = static_cast<float>(math::sin(rad) * math::cos(math::deg2rad(45.0)));
-      znear = hlen / static_cast<float>(math::tan(rad));
-    } else {
-      hlen = static_cast<float>(math::cos(math::deg2rad(45.0)));
-      znear = hlen;
-    }
+    AABox bbox = subscene->getBoundingBox();
+    Vec3 center = bbox.getCenter();
+    Vec3 scale = subscene->getModelViewpoint()->scale;
+    double zoom = subscene->getUserViewpoint()->getZoom();
     
-    float zfar  = znear + 1.0f;
-    float hwidth, hheight;
-
-    float winwidth  = (float) renderContext->rect.width;
-    float winheight = (float) renderContext->rect.height;
-
-    // aspect ratio
-
-    if (winwidth >= winheight) {
-      hwidth  = hlen;
-      hheight = hlen * (winheight / winwidth);
-    } else {
-      hwidth  = hlen * (winwidth  / winheight);
-      hheight = hlen;
-    }
-
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
+    Matrix4x4 m;
+    m.setRotate(0, 90);
+    /* This calculation gets the aspect ratio
+     * from the scale and range, by undoing aspect3d()
+     */
+    Vec3 ranges = bbox.vmax - bbox.vmin;
+    float avgscale = ranges.getLength()/sqrt(3.0);
+    Vec3 aspect(ranges.x*scale.x/avgscale, ranges.y*scale.y/avgscale, ranges.z*scale.z/avgscale);
+    float maxaspect = max(aspect.x, max(aspect.y, aspect.z));
+    m.multLeft(Matrix4x4::scaleMatrix(zoom*2.0*maxaspect*ranges.x/aspect.x,
+                                      zoom*2.0*maxaspect*ranges.y/aspect.y,
+                                      zoom*2.0*maxaspect*ranges.z/aspect.z));
+    m.multLeft(Matrix4x4::translationMatrix(center.x, center.y, center.z));
     
-    glLoadIdentity();
-    if (fov != 0.0) {
-      glFrustum(-hwidth, hwidth, -hheight, hheight, znear, zfar );
-    } else {
-      glOrtho(-hwidth, hwidth, -hheight, hheight, znear, zfar );
-    }
+    m.multLeft(savedModelMatrix);
     
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
+    center = savedModelMatrix * center;
+    m.multLeft(Matrix4x4::translationMatrix(-center.x, -center.y, -center.z));
+    m.multLeft(Matrix4x4::scaleMatrix(1.0, 1.0, 0.25/zoom));
+    m.multLeft(Matrix4x4::translationMatrix(center.x, center.y, center.z));
+    subscene->modelMatrix.loadData(m);
+    subscene->loadMatrices();
     
-    glLoadIdentity();
-
-    glTranslatef(0.0f,0.0f,-znear);
-
-    ModelViewpoint* modelviewpoint = subscene->getModelViewpoint();
-    modelviewpoint->setupOrientation(renderContext);
-
     Shape::render(renderContext);
-    glMatrixMode(GL_MODELVIEW); /* just in case... */
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
+    
+    subscene->modelMatrix.loadData(savedModelMatrix);
+    subscene->loadMatrices();
+    
   } else if (quad) {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -186,18 +177,18 @@ void Background::render(RenderContext* renderContext)
     glLoadIdentity();
     
     quad->draw(renderContext);
-    
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
   }
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
 #endif    
 }
 
 void Background::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL  
+  
   glPushAttrib(GL_ENABLE_BIT);
 
   material.beginUse(renderContext);
@@ -207,7 +198,7 @@ void Background::drawPrimitive(RenderContext* renderContext, int index)
   glDisable(GL_DEPTH_TEST);
   glDepthMask(GL_FALSE);
 
-  sphereMesh.drawPrimitive(renderContext, index);
+  sphereMesh.draw(renderContext);
 
   material.endUse(renderContext);
 

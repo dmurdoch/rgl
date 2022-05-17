@@ -203,19 +203,21 @@
           clipcheck = 0,
           clipplaneids = subscene.clipplanes,
           clip, i,j, n = this.countClipplanes(),
-          clipplanedata = new Float32Array(4*n);
+          clipplanedata; 
           
-      for (i=0; i < clipplaneids.length; i++) {
-        clip = this.getObj(clipplaneids[i]);
-        for (j=0; j < clip.offsets.length; j++) {
-          clipplanedata.set(clip.IMVClip[j], clipcheck);
-          clipcheck += 4;
+      if (n > 0) {
+        clipplanedata = new Float32Array(4*n);
+        for (i=0; i < clipplaneids.length; i++) {
+          clip = this.getObj(clipplaneids[i]);
+          for (j=0; j < clip.offsets.length; j++) {
+            clipplanedata.set(clip.IMVClip[j], clipcheck);
+            clipcheck += 4;
+          }
         }
-      }
       
-      // Leftovers are initialized to zero, which is fine
-          
-      gl.uniform4fv(obj.clipLoc, clipplanedata);
+        // Leftovers are initialized to zero, which is fine
+        gl.uniform4fv(obj.clipLoc, clipplanedata);
+      }
     };
     
     /**
@@ -325,9 +327,9 @@
      */    
     rglwidgetClass.prototype.doTexture = function(obj) {
       var gl = this.gl, 
-          is_spheres = obj.type === "spheres";
+          is_sphere = obj.type === "sphere";
         gl.enableVertexAttribArray( obj.texLoc );
-        if (is_spheres)
+        if (is_sphere)
           gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride, 4*this.sphere.vOffsets.tofs);
         else
           gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.tofs);
@@ -541,21 +543,9 @@
      */       
     rglwidgetClass.prototype.drawSimple = function(obj, subscene, context) {
       var 
-          flags = obj.flags,
+          fl,
+          is_transparent,
           type = obj.type,
-          is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit),
-          has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture),
-          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
-          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
-          fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads),
-          is_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lines),
-          fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines),
-          is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided),
-          has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
-          has_normals = (typeof obj.normals !== "undefined") ||
-                        obj.type === "sphere",
-          is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush),              
-          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),              
           gl = this.gl || this.initGL(),
           count,
           pass, mode, pmode,
@@ -571,7 +561,8 @@
       if (!count)
         return [];
     
-      is_transparent = is_transparent || obj.someHidden;
+      fl = obj.defFlags;
+      is_transparent = fl.is_transparent || obj.someHidden;
       
       if (is_transparent && this.opaquePass)
         return this.getPieces(context, obj.id, 0, obj);
@@ -591,13 +582,13 @@
 
       this.doClipping(obj, subscene);
 
-      if (needs_vnormal)
+      if (fl.needs_vnormal)
         this.doNormMat(obj);
         
-      if (is_lit)
+      if (fl.is_lit)
         this.doLighting(obj, subscene);
 
-      if (has_fog)
+      if (fl.has_fog)
         this.doFog(obj, subscene);
 
       this.doUserAttributes(obj);
@@ -607,17 +598,17 @@
       gl.enableVertexAttribArray( this.posLoc );
       enabled.posLoc = true;
         
-      if (has_texture || obj.type === "text")
+      if (fl.has_texture || obj.type === "text")
         enabled.texLoc = this.doTexture(obj);
 
       enabled.colLoc = this.doColors(obj);
       enabled.normLoc = this.doNormals(obj);
 
-      if (fixed_size) {
+      if (fl.fixed_size) {
         gl.uniform3f( obj.textScaleLoc, 0.75/this.vp.width, 0.75/this.vp.height, 1.0);
       }
       
-      if (fixed_quads) {
+      if (fl.fixed_quads) {
         gl.enableVertexAttribArray( obj.ofsLoc );
         enabled.ofsLoc = true;
         gl.vertexAttribPointer(obj.ofsLoc, 3, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.oofs);
@@ -628,11 +619,11 @@
         if (pmode === "culled")
           continue;
 
-      	mode = fat_lines && (is_lines || pmode === "lines") ? "TRIANGLES" : this.mode4type[type];
+      	mode = fl.fat_lines && (fl.is_lines || pmode === "lines") ? "TRIANGLES" : this.mode4type[type];
 
-      	if (is_twosided) {
+      	if (fl.is_twosided) {
       	  gl.uniform1i(obj.frontLoc, pass !== 0);
-      	  if (has_normals) {
+      	  if (fl.has_normals) {
       	    gl.uniformMatrix4fv(obj.invPrMatLoc, false, new Float32Array(this.invPrMatrix.getAsArray()));
       	  }
       	}
@@ -647,13 +638,13 @@
           count = obj.f[pass].length;
           gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[pass], gl.STATIC_DRAW);
         }
-      	if (!is_lines && pmode === "lines" && !fat_lines) {
+      	if (!fl.is_lines && pmode === "lines" && !fl.fat_lines) {
           mode = "LINES";
         } else if (pmode === "points") {
           mode = "POINTS";
         }
                           
-        if ((is_lines || pmode === "lines") && fat_lines) {
+        if ((fl.is_lines || pmode === "lines") && fl.fat_lines) {
           gl.enableVertexAttribArray(obj.pointLoc);
           enabled.pointLoc = true;
           gl.vertexAttribPointer(obj.pointLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.pointofs);
@@ -1117,27 +1108,35 @@
      * @param { number } id - id of background object
      * @param { number } subsceneid - id of subscene
      */
-    rglwidgetClass.prototype.drawBackground = function(id, subsceneid) {
+    rglwidgetClass.prototype.drawBackground = function(id, subsceneid, context) {
       var gl = this.gl || this.initGL(),
           obj = this.getObj(id),
-          bg, i, savepr, saveinvpr, savemv;
+          subscene,
+          bg, i, savepr, saveinvpr, savemv, savenorm, m, bbox, result = [], 
+          savedm = gl.getParameter(gl.DEPTH_WRITEMASK),
+          savedt = gl.isEnabled(gl.DEPTH_TEST),
+          saveblend = gl.isEnabled(gl.BLEND);
 
       if (!obj.initialized)
         this.initObj(obj);
 
       if (obj.colors.length) {
         bg = obj.colors[0];
-        gl.clearColor(bg[0], bg[1], bg[2], bg[3]);
         gl.depthMask(true);
-        /* jshint bitwise: false */
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        /* jshint bitwise: true */
+        gl.clear(gl.DEPTH_BUFFER_BIT);
+        gl.clearColor(bg[0], bg[1], bg[2], bg[3]);
+        gl.clear(gl.COLOR_BUFFER_BIT);
         this.fogColor = bg;
-      } else 
+      } else {
         this.fogColor = [0,0,0,0];
+        obj.colors = [[0,0,0,0]];
+      }
   
       this.fogType = obj.fogtype;
       this.fogScale = obj.fogscale;
+      gl.disable(gl.BLEND);
+      gl.disable(gl.DEPTH_TEST);
+      gl.depthMask(false);
       if (typeof obj.quad !== "undefined") {
         savepr = this.prMatrix;
         saveinvpr = this.invPrMatrix;
@@ -1145,15 +1144,60 @@
         this.prMatrix = new CanvasMatrix4();
         this.invPrMatrix = new CanvasMatrix4();
         this.mvMatrix = new CanvasMatrix4();
-        gl.disable(gl.BLEND);
-        gl.disable(gl.DEPTH_TEST);
-        gl.depthMask(false);
         for (i=0; i < obj.quad.length; i++)
-          this.drawObjId(obj.quad[i], subsceneid);
+          result = result.concat(this.drawObjId(obj.quad[i], subsceneid));
         this.prMatrix = savepr;
         this.invPrMatrix = saveinvpr;
         this.mvMatrix = savemv;
+
+      } else if (obj.sphere) {
+        subscene = this.getObj(subsceneid);
+        savemv = this.mvMatrix;
+        savenorm = this.normMatrix;
+        bbox = subscene.par3d.bbox;
+        var center = [(bbox[0] + bbox[1])/2, 
+                  (bbox[2] + bbox[3])/2, 
+                  (bbox[4] + bbox[5])/2, 1],
+            scale = subscene.par3d.scale,
+            ranges = [bbox[1] - bbox[0], 
+                  bbox[3] - bbox[2],
+                  bbox[5] - bbox[4]],
+            avgscale = rglwidgetClass.vlen(ranges)/Math.sqrt(3),
+            aspect = [ranges[0]*scale[0]/avgscale,
+                      ranges[1]*scale[1]/avgscale,
+                      ranges[2]*scale[2]/avgscale],
+            maxaspect = Math.max(aspect[0], aspect[1], aspect[2]),
+            zoom = subscene.par3d.zoom;
+        m = new CanvasMatrix4();
+        m.rotate(90, 1, 0, 0);
+        m.scale(zoom*2.0*maxaspect*ranges[0]/aspect[0], 
+                zoom*2.0*maxaspect*ranges[1]/aspect[1],
+                zoom*2.0*maxaspect*ranges[2]/aspect[2]);
+        m.translate(center[0], center[1], center[2]);
+        m.multRight(savemv);
+        center = rglwidgetClass.multVM(center, savemv);
+        m.translate(-center[0], -center[1], -center[2]);
+        m.scale(1, 1, 0.25/zoom);
+        m.translate(center[0], center[1], center[2]);
+        this.mvMatrix = m;
+        this.initShapeFromObj(this.sphere, obj);
+        this.sphere.onecolor = obj.colors.length > 1 ? obj.colors[1] : obj.colors[0];
+        
+        this.normMatrix = new CanvasMatrix4();
+        
+        this.setnormMatrix2();
+        this.setprmvMatrix();
+        
+        result = result.concat(this.drawSimple(this.sphere, subscene, context));
+        this.mvMatrix = savemv;
+        this.normMatrix = savenorm;
       }
+      gl.depthMask(savedm);
+      if (savedt)
+        gl.enable(gl.DEPTH_TEST);
+      if (saveblend)
+        gl.enable(gl.BLEND);
+      return result;
     };
 
     /**
@@ -1196,31 +1240,31 @@
       this.setInvPrMatrix();
       this.setmvMatrix(subsceneid);
       this.setnormMatrix2();
+      this.setprmvMatrix();
+      this.invMatrix = new CanvasMatrix4(this.mvMatrix);
+      this.invMatrix.invert();
+      
+      if (this.opaquePass) {
+        context = context.slice();
+        context.push(subsceneid);
         
-      if (typeof sub.backgroundId !== "undefined" && this.opaquePass)
-        this.drawBackground(sub.backgroundId, subsceneid);
+        this.doBlending(false);
+        this.subsceneid = subsceneid;
+        if (typeof this.sphere !== "undefined") // reset this.sphere.fastpieces; it will be recreated if needed
+          this.sphere.fastpieces = undefined;
+        if (typeof sub.backgroundId !== "undefined")
+          result = result.concat(this.drawBackground(sub.backgroundId, subsceneid, context));
+      }
 
       if (subids.length) {
-
-        if (subscene_needs_sorting)
-          this.setprmvMatrix();
             
         if (clipids.length > 0) {
-          this.invMatrix = new CanvasMatrix4(this.mvMatrix);
-          this.invMatrix.invert();
           for (i = 0; i < clipids.length; i++)
             this.drawObjId(clipids[i], subsceneid);
         }
         
         subids = sub.opaque.concat(sub.transparent);
         if (this.opaquePass) {
-          context = context.slice();
-          context.push(subsceneid);
-        
-          this.doBlending(false);
-          this.subsceneid = subsceneid;
-          if (typeof this.sphere !== "undefined") // reset this.sphere.fastpieces; it will be recreated if needed
-            this.sphere.fastpieces = undefined;
           for (i = 0; i < subids.length; i++)
             result = result.concat(this.drawObjId(subids[i], subsceneid, context));
           subids = sub.subscenes;

@@ -90,6 +90,7 @@ were not handled properly by `plotmath3d()`.
 selector properly (issue #213).
 * `merge.mesh3d()`, used by `filledContour3d()`, didn't handle
 colors properly (issue #212).
+* `bg3d(sphere = TRUE)` has been fixed (issue #207).
 * Textures were not appearing on spheres, and front-back
 differences weren't being rendered (issue #217).
 

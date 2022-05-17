@@ -5,6 +5,32 @@
      * @kind function
      * @instance
      */
+     
+    /**
+     * Get flags that will end up as shader defines.
+     * Static method so it can be called from R
+     */
+    rglwidgetClass.getDefFlags = function(flags, type, normals, round_points) {
+      var f = {};
+      f.fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines);
+      f.fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads);
+      f.fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size);
+      f.has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog);
+      f.has_normals = (typeof normals !== "undefined") ||
+                        type === "spheres";
+      f.has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture);
+      f.is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush);
+      f.is_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lines);
+      f.is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit);
+      f.is_points = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_points);
+      f.is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent);
+      f.is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided);
+      f.needs_vnormal = (f.is_lit && !f.fixed_quads && !f.is_brush) || (f.is_twosided && f.has_normals);
+      f.rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating);
+      f.round_points = round_points;
+      return f;
+    };
+     
     
     /**
      * Generate the defines for the shader code for an object.
@@ -23,59 +49,48 @@
      * @param  textype - texture type for object 
      * @param  antialias - use antialiasing?
      */
-    rglwidgetClass.getDefines = function(id, type, flags, nclipplanes, nlights, normals, pointSize, textype, antialias) {
+    rglwidgetClass.getDefines = function(id, type, flags, nclipplanes, nlights, normals, pointSize, textype, antialias, fl) {
       var
-          is_lit = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_lit),
-          has_texture = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_texture),
-          fixed_quads = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_quads),
-          fixed_size = rglwidgetClass.isSet(flags, rglwidgetClass.f_fixed_size),
-          is_points = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_points),
-          is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent),
-          is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided),
-          fat_lines = rglwidgetClass.isSet(flags, rglwidgetClass.f_fat_lines),
-          is_brush = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_brush),
-          has_fog = rglwidgetClass.isSet(flags, rglwidgetClass.f_has_fog),
-          has_normals = (typeof normals !== "undefined") ||
-                        type === "spheres",
-          needs_vnormal = (is_lit && !fixed_quads && !is_brush) || (is_twosided && has_normals),
-          rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating),
-          title, defines;
-
+        title, defines;
+      
+      if (typeof fl === "undefined")
+        fl = rglwidgetClass.getDefFlags(flags, type, normals, antialias);
+        
       title = "  /* ****** "+type+" object "+id+" shader ****** */\n";
       
       defines = "#define NCLIPPLANES " + nclipplanes + "\n"+
                 "#define NLIGHTS " + nlights + "\n";
       
-      if (fat_lines)
+      if (fl.fat_lines)
         defines = defines + "#define FAT_LINES 1\n";
       
-      if (fixed_quads)
+      if (fl.fixed_quads)
         defines = defines + "#define FIXED_QUADS 1\n";
 
-      if (fixed_size)
+      if (fl.fixed_size)
         defines = defines + "#define FIXED_SIZE 1\n";
 
-      if (has_fog)
+      if (fl.has_fog)
         defines = defines + "#define HAS_FOG 1\n";
         
-      if (has_normals)
+      if (fl.has_normals)
         defines = defines + "#define HAS_NORMALS 1\n";
         
-      if (has_texture) {
+      if (fl.has_texture) {
         defines = defines + "#define HAS_TEXTURE 1\n";
         defines = defines + "#define TEXTURE_" + textype + "\n";
       }
       
-      if (is_brush)
+      if (fl.is_brush)
         defines = defines + "#define IS_BRUSH 1\n";  
 
       if (type === "linestrip")
         defines = defines + "#define IS_LINESTRIP 1\n";         
 
-      if (is_lit)
+      if (fl.is_lit)
         defines = defines + "#define IS_LIT 1\n"; 
       
-      if (is_points) {
+      if (fl.is_points) {
         defines = defines + "#define IS_POINTS 1\n";
         defines = defines + "#define POINTSIZE " + Number.parseFloat(pointSize).toFixed(1) + "\n";
       }
@@ -86,19 +101,19 @@
       if (type === "text")
         defines = defines + "#define IS_TEXT 1\n";
 
-      if (is_transparent)
+      if (fl.is_transparent)
         defines = defines + "#define IS_TRANSPARENT 1\n"; 
         
-      if (is_twosided)
+      if (fl.is_twosided)
         defines = defines + "#define IS_TWOSIDED 1\n";
         
-      if (needs_vnormal)
+      if (fl.needs_vnormal)
         defines = defines + "#define NEEDS_VNORMAL 1\n";
 
-      if (rotating)
+      if (fl.rotating)
         defines = defines + "#define ROTATING 1\n";
         
-      if (antialias)
+      if (fl.round_points)        
         defines = defines + "#define ROUND_POINTS 1\n";   
 
       // console.log(result);
@@ -122,7 +137,8 @@
         obj.normals, 
         this.getMaterial(obj, "size"), 
         this.getMaterial(obj, "textype"), 
-        this.getMaterial(obj, "point_antialias")
+        this.getMaterial(obj, "point_antialias"),
+        obj.defFlags
       );
 
       if (typeof vertex === "undefined")
