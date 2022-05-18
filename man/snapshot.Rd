@@ -1,6 +1,7 @@
 \name{snapshot3d}
 \alias{rgl.snapshot}
 \alias{snapshot3d}
+\alias{RGL_USE_WEBSHOT}
 \title{Export screenshot}
 \description{
   Saves the screenshot to a file.
@@ -10,7 +11,7 @@ rgl.snapshot( filename, fmt = "png", top = TRUE )
 snapshot3d( filename = tempfile(fileext = ".png"), 
             fmt = "png", top = TRUE,
             ..., scene, width = NULL, height = NULL,
-            webshot = TRUE)
+            webshot = as.logical(Sys.getenv("RGL_USE_WEBSHOT", "TRUE")) )
 }
 \arguments{
   \item{filename}{path to file to save.}
@@ -64,7 +65,13 @@ size.
 There are slight differences between the displays with
 \code{webshot = TRUE} and \code{webshot = FALSE}, as the 
 former are rendered using WebGL while the latter are rendered
-using OpenGL.  Often the \code{webshot = TRUE} displays have better quality.
+using OpenGL.  Often the \code{webshot = TRUE} displays
+have better quality, but they are usually slower to
+produce, sometimes drastically so.  
+
+Set the environment
+variable \env{RGL_USE_WEBSHOT} to \code{"FALSE"} if
+you want \code{rgl.snapshot} to be used by default.
 }
 \seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
 

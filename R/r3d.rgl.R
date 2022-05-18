@@ -422,7 +422,8 @@ requireWebshot2 <- function() {
 
 snapshot3d <- function(filename = tempfile(fileext = ".png"), 
                        fmt = "png", top = TRUE, ..., scene, width = NULL, height = NULL,
-                       webshot = TRUE) {
+                       webshot = as.logical(Sys.getenv("RGL_USE_WEBSHOT", 
+                                                                                                                     "TRUE"))) {
   force(filename)
   
   if (webshot && !requireWebshot2()) {

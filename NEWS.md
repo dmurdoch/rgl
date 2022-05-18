@@ -1,5 +1,5 @@
 
-# rgl  0.108.39
+# rgl  0.108.40
 
 ## Major changes
 
@@ -47,8 +47,12 @@ material properties.  Newly modified to do so using the `...`
 argument:  `cylinder3d()`, and `getBoundary3d()`.
 * Updated the system requirements and installation instructions.
 * Solid bounding box decorations now try harder to display 3 faces (issue #206).
-*  Now that `webshot2` is on CRAN, instructions for
+* Now that `webshot2` is on CRAN, instructions for
 installing it from Github have been removed.
+* Sometimes `webshot2` snapshots are very slow, so
+the default for the `webshot` argument to `snapshot3d()`
+now depends on the `RGL_USE_WEBSHOT` environment
+variable, using `TRUE` if it is unset (Reported by Prof. B. D. Ripley.)
   
 ## Bug fixes
 

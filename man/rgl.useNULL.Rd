@@ -1,5 +1,6 @@
 \name{rgl.useNULL}
 \alias{rgl.useNULL}
+\alias{RGL_USE_NULL}
 \title{
 Report default use of null device
 }
