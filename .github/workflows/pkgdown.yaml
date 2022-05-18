@@ -53,10 +53,9 @@ jobs:
           remotes::install_github(c("r-lib/downlit",
                           "r-lib/pkgdown"))
           deps <- subset(desc::desc_get_deps(), type == "Suggests")$package
-          deps <- setdiff(deps, c("tcltk", "webshot2", 
+          deps <- setdiff(deps, c("tcltk", 
                                   "downlit", "pkgdown", "htmlwidgets"))
           remotes::install_cran(deps)
-          install.packages("webshot2", repos = "https://dmurdoch.github.io/drat", type = "source")
         shell: Rscript {0}
 
       - name: Session info

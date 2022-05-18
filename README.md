@@ -33,21 +33,6 @@ The currently active development site is here:
 
 <https://github.com/dmurdoch/rgl>
 
-## NOTE ABOUT DEVEL VERSIONS
-
-`rgl` can make use of development versions of some packages, currently
-just `webshot2`. Though it isn’t required, it provides some nice
-features, supporting good quality PNG snapshots of `rgl` scenes, even on
-servers that don’t have a graphics display.
-
-Unfortunately, development versions of packages sometimes introduce bugs
-that break `rgl` usage. Currently (April 19, 2022) the main branch is
-fine. I recommend the following code to install it:
-
-``` r
-remotes::install_github("rstudio/webshot2")
-```
-
 ## INSTALLATION
 
 Most users will want to install the latest CRAN release. For Windows,
@@ -150,7 +135,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.108.31.tar.gz
+    R CMD INSTALL rgl_0.108.38.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -180,7 +165,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.108.31.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.108.38.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
@@ -213,5 +198,5 @@ Fernandez i Marin for help debugging the build.
 George Helffrich for draping code.  
 Ivan Krylov for window_group code in X11.  
 Michael Sumner for as.mesh3d.default enhancement.  
-Tomas Kalibera for `winutf8` help. David Hugh-Jones for documentation
-improvements.
+Tomas Kalibera for `winutf8` help.  
+David Hugh-Jones for documentation improvements.

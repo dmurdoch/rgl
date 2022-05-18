@@ -45,8 +45,7 @@ filename of the saved file is returned invisibly.
 \note{
 When \code{rgl.useNULL()} is \code{TRUE}, only \code{webshot = TRUE}
 will produce a snapshot.  It requires the \pkg{webshot2}
-package, which as of this writing is not available on CRAN; to
-install it, use \code{remotes::install_github("rstudio/webshot2")}
+package.
 
 \code{rgl.snapshot} works by taking an image from the displayed
 window on-screen.

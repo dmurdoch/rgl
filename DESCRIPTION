@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.108.38
+Version: 0.108.39
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -27,7 +27,7 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
 Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir (>= 1.0-4), orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), tripack, interp, alphashape3d, tcltk,
-          js (>= 1.2), akima, webshot2, downlit (>= 0.4.0), pkgdown (>= 2.0.0), extrafont,
+          js (>= 1.2), akima, webshot2 (>= 0.1.0), downlit (>= 0.4.0), pkgdown (>= 2.0.0), extrafont,
           shiny, manipulateWidget (>= 0.9.0), testthat, markdown,
           crosstalk, V8
 Imports: graphics, grDevices, stats, utils, 
@@ -50,5 +50,4 @@ SystemRequirements: OpenGL and GLU Library (Required for
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
 Biarch: true
-Additional_repositories: https://dmurdoch.github.io/drat
 RoxygenNote: 7.1.2
