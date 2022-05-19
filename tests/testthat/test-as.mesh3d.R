@@ -1,4 +1,6 @@
 test_that("mergeVertices works", {
+  # Pre 4.0.0, stringsAsFactors defaulted to TRUE
+  options(stringsAsFactors = FALSE)
 	open3d()
   col <- rainbow(14)
   # Older R versions added FF for default alpha=1
