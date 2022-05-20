@@ -417,6 +417,11 @@ set3d <- function(dev, silent = FALSE) {
 
 requireWebshot2 <- function() {
   suppressMessages(res <- requireNamespace("webshot2", quietly = TRUE))
+  if (res) 
+    res <- requireNamespace("chromote") &&
+           !is.null(path <- chromote::find_chrome()) &&
+           nchar(path) > 0 &&
+           file.exists(path)
   res
 }
 
@@ -427,7 +432,7 @@ snapshot3d <- function(filename = tempfile(fileext = ".png"),
   force(filename)
   
   if (webshot && !requireWebshot2()) {
-    warning("webshot = TRUE requires the webshot2 package; using rgl.snapshot() instead")
+    warning("webshot = TRUE requires the webshot2 package and Chrome browser; using rgl.snapshot() instead")
     webshot <- FALSE
   }
   saveopts <- options(rgl.useNULL = webshot)
@@ -489,10 +494,13 @@ snapshot3d <- function(filename = tempfile(fileext = ".png"),
                          height = height,
                          webgl = TRUE), 
                f1)
-    capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
+    res <- try(capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
                         vwidth = width + 100, vheight = height, ...),
-                   type = "message")
-    invisible(filename)
-  } else
-    rgl.snapshot(filename, fmt, top)
+                   type = "message"))
+    if (!inherits(res, "try-error"))
+      return(invisible(filename))
+    
+    warning("webshot2::webshot() failed; trying rgl.snapshot()")
+  }
+  rgl.snapshot(filename, fmt, top)
 }
