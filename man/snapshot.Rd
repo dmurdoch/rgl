@@ -46,7 +46,11 @@ filename of the saved file is returned invisibly.
 \note{
 When \code{rgl.useNULL()} is \code{TRUE}, only \code{webshot = TRUE}
 will produce a snapshot.  It requires the \pkg{webshot2}
-package.
+package and a Chrome browser.  If no suitable browser is
+found, \code{snapshot3d()} will revert to \code{rgl.snapshot()}.
+To override the automatic search, set
+environment variable \env{CHROMOTE_CHROME}
+to the path to a suitable browser.
 
 \code{rgl.snapshot} works by taking an image from the displayed
 window on-screen.

@@ -52,7 +52,9 @@ installing it from Github have been removed.
 * Sometimes `webshot2` snapshots are very slow, so
 the default for the `webshot` argument to `snapshot3d()`
 now depends on the `RGL_USE_WEBSHOT` environment
-variable, using `TRUE` if it is unset (Reported by Prof. B. D. Ripley.)
+variable, using `TRUE` if it is unset. (Reported by Prof. B. D. Ripley.)
+* If the Chrome browser is not found, `snapshot3d(webshot = TRUE)` now issues a warning and 
+reverts to using `rgl.snapshot()`.  
   
 ## Bug fixes
 
