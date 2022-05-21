@@ -65,12 +65,13 @@ View::~View()
 // ---------------------------------------------------------------------------
 void View::setSize(int inWidth, int inHeight)
 {
+  /* record the size in case the Impl doesn't do anything */
+  resize(inWidth, inHeight);
   if ((windowImpl) && (flags & WINDOW_IMPL_OWNER)) {
     int left, top, right, bottom;
     windowImpl->getWindowRect(&left, &top, &right, &bottom);
     windowImpl->setWindowRect(left, top, left+inWidth, top+inHeight);
-  } else
-    resize(inWidth, inHeight);
+  }
 }
 // ---------------------------------------------------------------------------
 void View::setLocation(int inBaseX, int inBaseY)
@@ -208,6 +209,11 @@ void Window::bringToTop(int stay)
 // ---------------------------------------------------------------------------
 void Window::getWindowRect(int *in_left, int *in_top, int *in_width, int *in_height)
 {
+  /* Set defaults in case the impl doesn't do anything */
+  *in_left = 0;
+  *in_top = 0;
+  *in_width = width;
+  *in_height = height;
   windowImpl->getWindowRect(in_left, in_top, in_width, in_height);
 }
 // ---------------------------------------------------------------------------

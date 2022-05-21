@@ -1,5 +1,5 @@
 
-# rgl  0.108.41
+# rgl  0.108.42
 
 ## Major changes
 
@@ -101,6 +101,9 @@ colors properly (issue #212).
 * `bg3d(sphere = TRUE)` has been fixed (issue #207).
 * Textures were not appearing on spheres, and front-back
 differences weren't being rendered (issue #217).
+* When "knitting" within RStudio under R 4.2.0 on
+Windows, `rgl` scenes didn't appear (reported by
+Dieter Menne.) A workaround has been added.
 
 
 # rgl  0.108.3.2

@@ -16,7 +16,7 @@ class RenderContext
 public:
   RenderContext()
   : subscene(0)
-  , rect(0,0,0,0)
+  , rect(0,0,256,256)
   , font(0)
   , time(0.0)
   , lastTime(0.0)
