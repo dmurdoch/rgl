@@ -494,10 +494,11 @@ snapshot3d <- function(filename = tempfile(fileext = ".png"),
                          height = height,
                          webgl = TRUE), 
                f1)
+    unlink(filename)
     res <- try(capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
                         vwidth = width + 100, vheight = height, ...),
                    type = "message"))
-    if (!inherits(res, "try-error"))
+    if (!inherits(res, "try-error") && file.exists(filename) && file.size(filename) > 0)
       return(invisible(filename))
     
     warning("webshot2::webshot() failed; trying rgl.snapshot()")
