@@ -21,9 +21,12 @@ getType <- function(x, types = "anyGLTF") {
     types <- c(types, names(gltfTypes))
   types <- unique(setdiff(types, c("anyGLTF", "any")))
   r <- suppressWarnings(range(x, na.rm = TRUE))
-  if (is.integer(x) && !any(is.na(x)) &&
-      (r[1] >= 0) && any(c("byte", "short", "int", "ubyte", "ushort", "uint") %in% types) ||
-      (r[1] < 0 && any(c("byte", "short", "int") %in% types)))
+  if (is.integer(x) && 
+      !any(is.na(x)) &&
+      (r[1] >= 0 && 
+       any(c("byte", "short", "int", "ubyte", "ushort", "uint") %in% types) ||
+      (r[1] < 0 && 
+       any(c("byte", "short", "int") %in% types))))
       {
     if (r[1] < 0 && ("byte" %in% types)) {
       if (-128 <= r[1] && r[2] <= 127)
@@ -432,7 +435,7 @@ Buffer <- R6Class("Buffer",
           type <- "SCALAR"
         }
         accessor <- list(bufferView = bufferView,
-                         componentType = gltfTypes[componentTypeName],
+                         componentType = gltfTypes[[componentTypeName]], # double to drop name
                          count = count,
                          type = type)
 
