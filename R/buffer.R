@@ -7,51 +7,36 @@ typeUnsignedInt   <- 5125
 typeFloat         <- 5126
 typeDouble        <- 5130  # Not supported in glTF
 
-gltfTypes <- c(byte = 5120, ubyte = 5121,
-                   short = 5122, ushort = 5123,
-                   uint = 5125, float = 5126,                     int = 5124, double = 5130)
 
-getType <- function(x, types = "anyGLTF") {
-  types <- match.arg(types, 
-                     c(names(gltfTypes), c("anyGLTF", "any")), 
-                     several.ok = TRUE)
-  if ("anyGLTF" %in% types)
-    types <- c(types, names(gltfTypes)[1:6])
-  if ("any" %in% types)
-    types <- c(types, names(gltfTypes))
-  types <- unique(setdiff(types, c("anyGLTF", "any")))
+getType <- function(x, useDouble = FALSE) {
   r <- suppressWarnings(range(x, na.rm = TRUE))
-  if (is.integer(x) && !any(is.na(x)) &&
-      (r[1] >= 0) && any(c("byte", "short", "int", "ubyte", "ushort", "uint") %in% types) ||
-      (r[1] < 0 && any(c("byte", "short", "int") %in% types)))
-      {
-    if (r[1] < 0 && ("byte" %in% types)) {
+  if (is.integer(x) && !any(is.na(x))) {
+    if (r[1] < 0) {
       if (-128 <= r[1] && r[2] <= 127)
-        "byte"
-      else if (-32768 <= r[1] && r[2] <= 32767 && ("short" %in% types))
-        "short"
+        typeSignedByte
+      else if (-32768 <= r[1] && r[2] <= 32767)
+        typeSignedShort
       else
-        "int"
+        typeSignedInt
     } else {
-      if (r[2] <= 255 && ("ubyte" %in% types))
-        "ubyte"
-      else if (r[2] <= 65535 && ("ushort" %in% types))
-        "ushort"
+      if (r[2] <= 255)
+        typeUnsignedByte
+      else if (r[2] <= 65535)
+        typeUnsignedShort
       else
-        "uint"
+        typeUnsignedInt
     }
   } else if (is.numeric(x)) {
     if ((-32768 <= r[1] && r[2] <= 32767 ||
          0 <= r[1] && r[2] <= 65535) && 
-        isTRUE(all(x == as.integer(x))) &&
-        any(c("byte", "short", "ubyte", "ushort") %in% types))
-      getType(as.integer(x), types)
-    else if ("float" %in% types)
-      "float"
-    else if ("double" %in% types)
-      "double"
+        isTRUE(all(x == as.integer(x))))
+      getType(as.integer(x))
+    else if (!useDouble)
+      typeFloat
+    else
+      typeDouble
   } else
-    stop('Unrecognized or disallowed type')
+    stop('Unrecognized type')
 }
 
 #' @title R6 Class for binary buffers in glTF files.
@@ -410,19 +395,19 @@ Buffer <- R6Class("Buffer",
 #'
 #' @return New accessor number
 
-      addAccessor = function(values, target = NULL, types = "anyGLTF") {
-        componentTypeName <- getType(values, types)
-        size <- switch(componentTypeName,
-            "byte" =,       # typeSignedByte
-            "ubyte" = 1,     # typeUnsignedByte = 1,
-            "short" =,       # typeSignedShort =,
-            "ushort" = 2,     # typeUnsignedShort = 2,
-            "uint" =,       # typeUnsignedInt =,
-            "int" =,       # typeSignedInt =,
-            "float" = 4,     # typeFloat = 4,
-            "double" = 8)     # typeDouble = 8)
+      addAccessor = function(values, target = NULL, useDouble = FALSE) {
+        componentType <- getType(values, useDouble)
+        size <- switch(as.character(componentType),
+            "5120" =,       # typeSignedByte
+            "5121" = 1,     # typeUnsignedByte = 1,
+            "5122" =,       # typeSignedShort =,
+            "5123" = 2,     # typeUnsignedShort = 2,
+            "5124" =,       # typeUnsignedInt =,
+            "5125" =,       # typeSignedInt =,
+            "5126" = 4,     # typeFloat = 4,
+            "5130" = 8)     # typeDouble = 8)
 
-        bufferView <- self$addBufferView(c(values), gltfTypes[componentTypeName],
+        bufferView <- self$addBufferView(c(values), componentType,
                                     size = size, target = target)
         if (is.matrix(values) && nrow(values) > 1) {
           count <- ncol(values)
@@ -432,7 +417,7 @@ Buffer <- R6Class("Buffer",
           type <- "SCALAR"
         }
         accessor <- list(bufferView = bufferView,
-                         componentType = gltfTypes[componentTypeName],
+                         componentType = componentType,
                          count = count,
                          type = type)
 
