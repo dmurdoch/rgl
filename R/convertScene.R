@@ -458,8 +458,31 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       # This list needs to match the one in buffer.src.js
       for (n in c("vertices", "normals", "indices", 
                   "texcoords", "colors", "centers")) {
-        if (!is.null(obj[[n]]))
-          obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+        if (!is.null(obj[[n]])) {
+          normalized <- FALSE
+          normalization <- ""
+          if (length(obj[[n]]) > 6 &&  # Don't bother for short ones
+              n %in% c("colors","texcoords") &&
+              0 <= (objrange <- range(obj[[n]]))[1] &&
+              objrange[2] <= 1) {
+            scaled <- 255*obj[[n]]
+            rounded <- round(scaled)
+            normalized <- max(abs(scaled - rounded))/255 < 1.e-7
+            if (normalized)
+              normalization <- "ubyte"
+            else {
+              scaled <- 65535*obj[[n]]
+              rounded <- round(scaled)
+              normalized <- max(abs(scaled - rounded))/65535 < 1.e-7
+              if (normalized)
+                normalization <- "ushort"
+            }
+          }
+          if (normalized)
+            obj[[n]] <- as.character(buffer$addAccessor(t(rounded), types = normalization, normalized = TRUE))
+          else
+            obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+        }
       }
       setObj(cids[i], obj)
     }
