@@ -1,5 +1,5 @@
 
-# rgl  0.108.43
+# rgl  0.108.44
 
 ## Major changes
 
@@ -54,7 +54,10 @@ the default for the `webshot` argument to `snapshot3d()`
 now depends on the `RGL_USE_WEBSHOT` environment
 variable, using `TRUE` if it is unset. (Reported by Prof. B. D. Ripley.)
 * If the Chrome browser is not found, `snapshot3d(webshot = TRUE)` now issues a warning and 
-reverts to using `rgl.snapshot()`.  
+reverts to using `rgl.snapshot()`. 
+* Buffers now use "normalized integers" to store
+color or texture coordinate values that lie between 0
+and 1 when it saves some space.
   
 ## Bug fixes
 

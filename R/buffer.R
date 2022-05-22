@@ -413,7 +413,7 @@ Buffer <- R6Class("Buffer",
 #'
 #' @return New accessor number
 
-      addAccessor = function(values, target = NULL, types = "anyGLTF") {
+      addAccessor = function(values, target = NULL, types = "anyGLTF", normalized = FALSE) {
         componentTypeName <- getType(values, types)
         size <- switch(componentTypeName,
             "byte" =,       # typeSignedByte
@@ -434,10 +434,16 @@ Buffer <- R6Class("Buffer",
           count <- length(values)
           type <- "SCALAR"
         }
+        if (normalized && 
+            !(componentTypeName %in% 
+              c("byte", "ubyte", "short", "ushort")))
+          stop("Only bytes and short values can be normalized")
         accessor <- list(bufferView = bufferView,
                          componentType = gltfTypes[[componentTypeName]], # double to drop name
                          count = count,
                          type = type)
+        if (normalized)
+          accessor$normalized <- TRUE
 
         private$accessors <- c(private$accessors, list(accessor))
         length(private$accessors) - 1
