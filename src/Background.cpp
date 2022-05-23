@@ -177,11 +177,12 @@ void Background::render(RenderContext* renderContext)
     glLoadIdentity();
     
     quad->draw(renderContext);
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
   }
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
 #endif    
 }
 
