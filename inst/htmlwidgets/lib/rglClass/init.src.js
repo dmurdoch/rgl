@@ -207,6 +207,9 @@
     */
     rglwidgetClass.prototype.initShapeFromObj = function(shape, obj) {
       var i, pass, f, mode, self = this,
+        /* This function selects things that would be
+           the back, ignoring perspective -- this is what 
+           we want for the bounding box decoration. */
         is_back = function(i) {
                 var normal = [].concat(shape.normals[i]),
                   pt = shape.vertices[i];

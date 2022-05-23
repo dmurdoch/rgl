@@ -1025,29 +1025,33 @@
       } else 
         result = result.concat(this.getCubePieces(context, obj));
 
+      if (!obj.ticks.initialized) {
+        obj.ticks.locations = this.getTickLocations(obj);
+        obj.ticks.edges = undefined;
+      }
+      edges = this.getTickEdges(this.prmvMatrix);
+      if (obj.needsAxisCallback) 
+        this.doAxisCallback(obj, edges);
+      if (!obj.ticks.edges || edges.toString() !== obj.ticks.edges.toString()) {
+        obj.ticks.edges = edges;
+        this.getTickVertices(obj.ticks);
+        this.placeTickLabels(obj);
+        this.setTickLabels(obj);
+      }
+      if (!obj.ticks.initialized) {
+        this.initObj(obj.ticks);
+        this.initObj(obj.labels);
+      }
+        
       if (drawing) {
-        if (!obj.ticks.initialized) {
-          obj.ticks.locations = this.getTickLocations(obj);
-          obj.ticks.edges = undefined;
-        }
-        edges = this.getTickEdges(this.prmvMatrix);
-        if (obj.needsAxisCallback) 
-          this.doAxisCallback(obj, edges);
-        if (!obj.ticks.edges || edges.toString() !== obj.ticks.edges.toString()) {
-          obj.ticks.edges = edges;
-          this.getTickVertices(obj.ticks);
-          this.placeTickLabels(obj);
-          this.setTickLabels(obj);
-        }
-        if (!obj.ticks.initialized) {
-          this.initObj(obj.ticks);
-          this.initObj(obj.labels);
-        }
         this.drawSimple(obj.ticks, subscene, context);
         this.drawSimple(obj.labels, subscene, context);
-      }
-      if (drawing)
+
         this.disableArrays(obj, enabled);
+      } else {
+        result = result.concat(this.drawSimple(obj.ticks, subscene, context));
+        result = result.concat(this.drawSimple(obj.labels, subscene, context));
+      }
 
       this.restoreBBoxMatrices(saved);
         
