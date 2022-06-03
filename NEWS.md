@@ -1,5 +1,5 @@
 
-# rgl  0.108.44
+# rgl  0.108.45
 
 ## Major changes
 
@@ -107,6 +107,9 @@ differences weren't being rendered (issue #217).
 * When "knitting" within RStudio under R 4.2.0 on
 Windows, `rgl` scenes didn't appear (reported by
 Dieter Menne.) A workaround has been added.
+* On some systems, `lines3d()` using both missing values
+and transparency did not draw properly (issue #234,
+originally reported by Gaspar Jekely).
 
 
 # rgl  0.108.3.2
