@@ -15,7 +15,33 @@
                       [0,1,0,1], [0,1,1,1],
                       [1,0,0,1], [1,0,1,1],
                       [1,1,0,1], [1,1,1,1]], 
-           dim, i, j, k, edges, hull, step, result = [], proj = [];
+           dim, i, j, k, edges, hull, step, result = [], proj = [],
+
+        // Filter to edges that are on sides that would
+        // be shown with a filled backing.
+        
+      has_back = function(edge) {
+          var normals = [[], []],
+              verts = [vertices[edge[0]], 
+                       vertices[edge[1]]], 
+              normal, m, n;
+          n = 0;
+          for (m=0; m<3; m++) {
+            if (verts[0][m] === verts[1][m]) {
+              normals[n] = [0,0,0,1];
+              normals[n][m] = 2*verts[0][m] - 1;
+              n++;
+            }
+          }
+          for (n=0; n<2; n++) {
+            normal = rglwidgetClass.multVM(normals[n], self.normMatrix);
+            if (normal[2] < 0 ||
+                (normal[2] === 0 && normal[0] < 0))
+              return true;
+          }
+          return false;
+        }, self = this;
+        
       for (i = 0; i < vertices.length; i++) {
         proj[i] = rglwidgetClass.multVM(vertices[i], prmv);
         proj[i][0] = proj[i][0]/proj[i][3];
@@ -38,6 +64,9 @@
               edges.push([j, j+step], [j+step, j]);
           }
         }
+
+        edges = edges.filter(has_back);
+        
         // Find the edge with a vertex closest
         // to the bottom left corner
         if (edges.length) {
