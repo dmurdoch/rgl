@@ -1,5 +1,5 @@
 
-# rgl  0.108.45
+# rgl  0.108.46
 
 ## Major changes
 
@@ -58,6 +58,8 @@ reverts to using `rgl.snapshot()`.
 * Buffers now use "normalized integers" to store
 color or texture coordinate values that lie between 0
 and 1 when it saves some space.
+* At the request of CRAN, the `akima` package is no
+longer suggested.
   
 ## Bug fixes
 

@@ -99,7 +99,7 @@ If \code{clip_to_density > 0},
 approximate, so it may not agree perfectly between
 surfaces, planes and grids.}
 \item{This option requires the suggested packages
-\pkg{MASS} and \pkg{akima}, and will be ignored with
+\pkg{MASS} and \pkg{interp}, and will be ignored with
 a warning if either is not installed.}
 }
 }

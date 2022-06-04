@@ -160,8 +160,8 @@ plot3d.lm <- function(x, which = 1,
       warning("'clip_to_density' requires the MASS package.")
       clip_to_density <- 0
     }
-    if (!requireNamespace("akima", quietly = TRUE)) {
-      warning("'clip_to_density' requires the akima package.")
+    if (!requireNamespace("interp", quietly = TRUE)) {
+      warning("'clip_to_density' requires the interp package.")
       clip_to_density <- 0
     }
   }
@@ -191,7 +191,7 @@ plot3d.lm <- function(x, which = 1,
     densityVals <- MASS::kde2d(observed[,1], observed[,2])
     densityVals$z <- with(densityVals, z/max(z)) # nolint
     density <- function(xyz) {
-      with(densityVals, akima::bilinear(x, y, z, xyz[,1], xyz[,2])$z) # nolint
+      with(densityVals, interp::bilinear(x, y, z, xyz[,1], xyz[,2])$z) # nolint
     }
   }
   
