@@ -1,5 +1,5 @@
 
-# rgl  0.108.46
+# rgl  0.108.47
 
 ## Major changes
 
@@ -109,6 +109,9 @@ differences weren't being rendered (issue #217).
 * When "knitting" within RStudio under R 4.2.0 on
 Windows, `rgl` scenes didn't appear (reported by
 Dieter Menne.) A workaround has been added.
+* In `rglwidget()`, axis labels were not always
+displayed, and did not move with solid bounding box
+decorations properly (issue #206).
 * On some systems, `lines3d()` using both missing values
 and transparency did not draw properly (issue #234,
 originally reported by Gaspar Jekely).
