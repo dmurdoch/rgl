@@ -262,7 +262,7 @@ New bufferView number.
 \if{html}{\out{<a id="method-openBufferview"></a>}}
 \if{latex}{\out{\hypertarget{method-openBufferview}{}}}
 \subsection{Method \code{openBufferview()}}{
-Open a connecton to a buffer view.
+Open a connection to a buffer view.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Buffer$openBufferview(bufv)}\if{html}{\out{</div>}}
 }
@@ -364,7 +364,12 @@ indexes the element.
 \subsection{Method \code{addAccessor()}}{
 Write values to accessor, not including `min` and `max`.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Buffer$addAccessor(values, target = NULL, useDouble = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Buffer$addAccessor(
+  values,
+  target = NULL,
+  types = "anyGLTF",
+  normalized = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -374,9 +379,11 @@ Write values to accessor, not including `min` and `max`.
 
 \item{\code{target}}{Optional target use for values.}
 
-\item{\code{useDouble}}{Whether to write doubles or singles.}
+\item{\code{types}}{Which types can be used?}
 
-\item{\code{glTF}}{Whether this is for glTF use.}
+\item{\code{normalized}}{Are normalized integers allowed?}
+
+\item{\code{useDouble}}{Whether to write doubles or singles.}
 }
 \if{html}{\out{</div>}}
 }

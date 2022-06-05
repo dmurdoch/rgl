@@ -285,7 +285,7 @@ Buffer <- R6Class("Buffer",
       },
 
 #' @description
-#'   Open a connecton to a buffer view.
+#'   Open a connection to a buffer view.
 #'
 #' @param bufv Which bufferView.
 #'
@@ -408,7 +408,8 @@ Buffer <- R6Class("Buffer",
 #'
 #' @param values Values to write.
 #' @param target Optional target use for values.
-#' @param glTF Whether this is for glTF use.
+#' @param types Which types can be used?
+#' @param normalized Are normalized integers allowed?
 #' @param useDouble Whether to write doubles or singles.
 #'
 #' @return New accessor number
