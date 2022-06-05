@@ -58,6 +58,8 @@ reverts to using `rgl.snapshot()`.
 * Buffers now use "normalized integers" to store
 color or texture coordinate values that lie between 0
 and 1 when it saves some space.
+* At the request of CRAN, the `akima` package is no
+longer suggested.
   
 ## Bug fixes
 
@@ -110,6 +112,9 @@ Dieter Menne.) A workaround has been added.
 * In `rglwidget()`, axis labels were not always
 displayed, and did not move with solid bounding box
 decorations properly (issue #206).
+* On some systems, `lines3d()` using both missing values
+and transparency did not draw properly (issue #234,
+originally reported by Gaspar Jekely).
 
 
 # rgl  0.108.3.2
