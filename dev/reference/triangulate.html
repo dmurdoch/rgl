@@ -4,7 +4,343 @@ polygons and uses the &amp;#8220;ear-clipping&amp;#8221; algorithm to triangulat
 Polygons with holes are supported."><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><!-- dependencies from examples --><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="libs/rglWebGL-binding-0.108.27/rglWebGL.js"></script><link href="libs/rglwidgetClass-0.108.27/rgl.css" rel="stylesheet"><script src="libs/rglwidgetClass-0.108.27/rglClass.src.js"></script><script src="libs/rglwidgetClass-0.108.27/utils.src.js"></script><script src="libs/rglwidgetClass-0.108.27/buffer.src.js"></script><script src="libs/rglwidgetClass-0.108.27/subscenes.src.js"></script><script src="libs/rglwidgetClass-0.108.27/shaders.src.js"></script><script src="libs/rglwidgetClass-0.108.27/textures.src.js"></script><script src="libs/rglwidgetClass-0.108.27/projection.src.js"></script><script src="libs/rglwidgetClass-0.108.27/mouse.src.js"></script><script src="libs/rglwidgetClass-0.108.27/init.src.js"></script><script src="libs/rglwidgetClass-0.108.27/pieces.src.js"></script><script src="libs/rglwidgetClass-0.108.27/draw.src.js"></script><script src="libs/rglwidgetClass-0.108.27/controls.src.js"></script><script src="libs/rglwidgetClass-0.108.27/selection.src.js"></script><script src="libs/rglwidgetClass-0.108.27/rglTimer.src.js"></script><script src="libs/rglwidgetClass-0.108.27/pretty.src.js"></script><script src="libs/rglwidgetClass-0.108.27/axes.src.js"></script><script src="libs/rglwidgetClass-0.108.27/animation.src.js"></script><script src="libs/CanvasMatrix4-0.108.27/CanvasMatrix.src.js"></script></head><body data-spy="scroll" data-target="#toc">
+<![endif]--><!-- dependencies from examples --><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="libs/rglWebGL-binding-0.108.47/rglWebGL.js"></script><link href="libs/rglwidgetClass-0.108.47/rgl.css" rel="stylesheet"><script src="libs/rglwidgetClass-0.108.47/rglClass.src.js"></script><script src="libs/rglwidgetClass-0.108.47/utils.src.js"></script><script src="libs/rglwidgetClass-0.108.47/buffer.src.js"></script><script src="libs/rglwidgetClass-0.108.47/subscenes.src.js"></script><script src="libs/rglwidgetClass-0.108.47/shaders.src.js"></script><script src="libs/rglwidgetClass-0.108.47/textures.src.js"></script><script src="libs/rglwidgetClass-0.108.47/projection.src.js"></script><script src="libs/rglwidgetClass-0.108.47/mouse.src.js"></script><script src="libs/rglwidgetClass-0.108.47/init.src.js"></script><script src="libs/rglwidgetClass-0.108.47/pieces.src.js"></script><script src="libs/rglwidgetClass-0.108.47/draw.src.js"></script><script src="libs/rglwidgetClass-0.108.47/controls.src.js"></script><script src="libs/rglwidgetClass-0.108.47/selection.src.js"></script><script src="libs/rglwidgetClass-0.108.47/rglTimer.src.js"></script><script src="libs/rglwidgetClass-0.108.47/pretty.src.js"></script><script src="libs/rglwidgetClass-0.108.47/axes.src.js"></script><script src="libs/rglwidgetClass-0.108.47/animation.src.js"></script><script type="text/plain" id="rgl-vertex-shader">
+#line 2 1
+// File 1 is the vertex shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+
+attribute vec3 aPos;
+attribute vec4 aCol;
+uniform mat4 mvMatrix;
+uniform mat4 prMatrix;
+varying vec4 vCol;
+varying vec4 vPosition;
+
+#ifdef NEEDS_VNORMAL
+attribute vec3 aNorm;
+uniform mat4 normMatrix;
+varying vec4 vNormal;
+#endif
+
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+attribute vec2 aTexcoord;
+varying vec2 vTexcoord;
+#endif
+
+#ifdef FIXED_SIZE
+uniform vec3 textScale;
+#endif
+
+#ifdef FIXED_QUADS
+attribute vec3 aOfs;
+#endif
+
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+varying float normz;
+uniform mat4 invPrMatrix;
+#else
+attribute vec3 aPos1;
+attribute vec3 aPos2;
+varying float normz;
+#endif
+#endif // IS_TWOSIDED
+
+#ifdef FAT_LINES
+attribute vec3 aNext;
+attribute vec2 aPoint;
+varying vec2 vPoint;
+varying float vLength;
+uniform float uAspect;
+uniform float uLwd;
+#endif
+
+
+void main(void) {
+  
+#ifndef IS_BRUSH
+#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
+  vPosition = mvMatrix * vec4(aPos, 1.);
+#endif
+  
+#ifndef FIXED_QUADS
+  gl_Position = prMatrix * vPosition;
+#endif
+#endif // !IS_BRUSH
+  
+#ifdef IS_POINTS
+  gl_PointSize = POINTSIZE;
+#endif
+  
+  vCol = aCol;
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
+#endif
+  
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+  /* normz should be calculated *after* projection */
+  normz = (invPrMatrix*vNormal).z;
+#else
+  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
+  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
+  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
+  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
+  normz = pos1.x*pos2.y - pos1.y*pos2.x;
+#endif
+#endif // IS_TWOSIDED
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
+#endif
+  
+#if defined(HAS_TEXTURE) || defined(IS_TEXT)
+  vTexcoord = aTexcoord;
+#endif
+  
+#if defined(FIXED_SIZE) && !defined(ROTATING)
+  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w;
+  gl_Position = pos + vec4(aOfs*textScale, 0.);
+#endif
+  
+#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
+  vec4 pos = mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w + vec4(aOfs,  0.);
+  gl_Position = prMatrix*pos;
+#endif
+  
+#ifdef FAT_LINES
+  /* This code was inspired by Matt Deslauriers' code in 
+   https://mattdesl.svbtle.com/drawing-lines-is-hard */
+  vec2 aspectVec = vec2(uAspect, 1.0);
+  mat4 projViewModel = prMatrix * mvMatrix;
+  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
+  currentProjected = currentProjected/currentProjected.w;
+  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
+  vec2 currentScreen = currentProjected.xy * aspectVec;
+  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
+  float len = uLwd;
+  vec2 dir = vec2(1.0, 0.0);
+  vPoint = aPoint;
+  vLength = length(nextScreen - currentScreen)/2.0;
+  vLength = vLength/(vLength + len);
+  if (vLength > 0.0) {
+    dir = normalize(nextScreen - currentScreen);
+  }
+  vec2 normal = vec2(-dir.y, dir.x);
+  dir.x /= uAspect;
+  normal.x /= uAspect;
+  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
+  gl_Position = currentProjected + offset;
+#endif
+  
+#ifdef IS_BRUSH
+  gl_Position = vec4(aPos, 1.);
+#endif
+}
+</script><script type="text/plain" id="rgl-fragment-shader">
+#line 2 2
+// File 2 is the fragment shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+varying vec4 vCol; // carries alpha
+varying vec4 vPosition;
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+varying vec2 vTexcoord;
+uniform sampler2D uSampler;
+#endif
+
+#ifdef HAS_FOG
+uniform int uFogMode;
+uniform vec3 uFogColor;
+uniform vec4 uFogParms;
+#endif
+
+#if defined(IS_LIT) && !defined(FIXED_QUADS)
+varying vec4 vNormal;
+#endif
+
+#if NCLIPPLANES > 0
+uniform vec4 vClipplane[NCLIPPLANES];
+#endif
+
+#if NLIGHTS > 0
+uniform mat4 mvMatrix;
+#endif
+
+#ifdef IS_LIT
+uniform vec3 emission;
+uniform float shininess;
+#if NLIGHTS > 0
+uniform vec3 ambient[NLIGHTS];
+uniform vec3 specular[NLIGHTS]; // light*material
+uniform vec3 diffuse[NLIGHTS];
+uniform vec3 lightDir[NLIGHTS];
+uniform bool viewpoint[NLIGHTS];
+uniform bool finite[NLIGHTS];
+#endif
+#endif // IS_LIT
+
+#ifdef IS_TWOSIDED
+uniform bool front;
+varying float normz;
+#endif
+
+#ifdef FAT_LINES
+varying vec2 vPoint;
+varying float vLength;
+#endif
+
+void main(void) {
+  vec4 fragColor;
+#ifdef FAT_LINES
+  vec2 point = vPoint;
+  bool neg = point.y < 0.0;
+  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
+                 -(point.y - vLength)/(1.0 - vLength);
+#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
+  if (neg && length(point) <= 1.0) discard;
+#endif
+  point.y = min(point.y, 0.0);
+  if (length(point) > 1.0) discard;
+#endif // FAT_LINES
+  
+#ifdef ROUND_POINTS
+  vec2 coord = gl_PointCoord - vec2(0.5);
+  if (length(coord) > 0.5) discard;
+#endif
+  
+#if NCLIPPLANES > 0
+  for (int i = 0; i < NCLIPPLANES; i++)
+    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
+#endif
+    
+#ifdef FIXED_QUADS
+    vec3 n = vec3(0., 0., 1.);
+#elif defined(IS_LIT)
+    vec3 n = normalize(vNormal.xyz);
+#endif
+    
+#ifdef IS_TWOSIDED
+    if ((normz <= 0.) != front) discard;
+#endif
+    
+#ifdef IS_LIT
+    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
+    vec3 lightdir;
+    vec4 colDiff;
+    vec3 halfVec;
+    vec4 lighteffect = vec4(emission, 0.);
+    vec3 col;
+    float nDotL;
+#ifdef FIXED_QUADS
+    n = -faceforward(n, n, eye);
+#endif
+    
+#if NLIGHTS > 0
+    for (int i=0;i<NLIGHTS;i++) {
+      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
+      lightdir = lightDir[i];
+      if (!viewpoint[i])
+        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
+      if (!finite[i]) {
+        halfVec = normalize(lightdir + eye);
+      } else {
+        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
+        halfVec = normalize(lightdir + eye);
+      }
+      col = ambient[i];
+      nDotL = dot(n, lightdir);
+      col = col + max(nDotL, 0.) * colDiff.rgb;
+      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
+      lighteffect = lighteffect + vec4(col, colDiff.a);
+    }
+#endif
+    
+#else // not IS_LIT
+    vec4 colDiff = vCol;
+    vec4 lighteffect = colDiff;
+#endif
+    
+#ifdef IS_TEXT
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef HAS_TEXTURE
+#ifdef TEXTURE_rgb
+    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
+#endif
+    
+#ifdef TEXTURE_rgba
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef TEXTURE_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
+    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
+#endif
+    
+#ifdef TEXTURE_luminance
+    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
+#endif
+    
+#ifdef TEXTURE_luminance_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
+    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
+#endif
+    
+    fragColor = textureColor;
+
+#elif defined(IS_TEXT)
+    if (textureColor.a < 0.1)
+      discard;
+    else
+      fragColor = textureColor;
+#else
+    fragColor = lighteffect;
+#endif // HAS_TEXTURE
+    
+#ifdef HAS_FOG
+    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
+    // In Exp and Exp2: use density = density/far
+    // fogF will be the proportion of fog
+    // Initialize it to the linear value
+    float fogF;
+    if (uFogMode > 0) {
+      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
+      if (uFogMode > 1)
+        fogF = mix(uFogParms.w, 1.0, fogF);
+      fogF = fogF*uFogParms.z;
+      if (uFogMode == 2)
+        fogF = 1.0 - exp(-fogF);
+      // Docs are wrong: use (density*c)^2, not density*c^2
+      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
+      else if (uFogMode == 3)
+        fogF = 1.0 - exp(-fogF*fogF);
+      fogF = clamp(fogF, 0.0, 1.0);
+      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
+    } else gl_FragColor = fragColor;
+#else
+    gl_FragColor = fragColor;
+#endif // HAS_FOG
+    
+}
+</script><script src="libs/CanvasMatrix4-0.108.47/CanvasMatrix.src.js"></script></head><body data-spy="scroll" data-target="#toc">
     
 
     <div class="container template-reference-topic">
@@ -19,7 +355,7 @@ Polygons with holes are supported."><meta name="robots" content="noindex"><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.27</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
       </span>
     </div>
 
@@ -155,49 +491,49 @@ a flat display; both use <code>triangulate</code>.</p></div>
 <span class="r-in"><span class="fu">triangulate</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-plt img"><img src="triangulate-1.png" alt="" width="480" height="297"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   44   20   69   68   67   67   66   65   64    63    44    62    61    60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   69   45   68   67   13   66   65   64   63    62    70    61    60    59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   20   44   20   20   20   13   13   13   13    13    69    13    13    13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   73   72   71   71   39   38   70   37   36    36    70    35    34    33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   72   71   40   70   38   37   41   36    5    35    15    34    33    32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   39   39   39   40   73   73   40   73   73     5    41     5     5     5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    20    20    44    59    43    59    43    20    58    43    20    57</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    46    47    43     8    71    58    72    48    57    73     1    32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    45    46    70    13    70     8    71    47     8    72    48     8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    32    31    70    69    30    29    68    67    66    65    64    28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    31    30    69    68    29    28    67    66    65    64    63    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     5     5    15    15     5     5    15    15    15    15    15     5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35] [,36] [,37] [,38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     1    57    32    43    42    41    31    41    57    30     1    29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    49    33    31    42    41    74    30    51    34    29    26     5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    48    32     8    73    73    73     8    74    33     8    49     8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    28    63    27    26    49    48    62    62    61    47     5    60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    27    62    26    49    48    47    11    61    60    46    74    59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    24    15    24    24    24    24    15    11    11    24    73    11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,39] [,40] [,41] [,42] [,43] [,44] [,45] [,46] [,47] [,48] [,49] [,50]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     1    57     1    56    41    40    55    55    54    53    29    53</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    27    56    28    55    40    52    35    54    53    36    28    37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    26    34    27    34    51    51    34    35    35    35     5    36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    59     5    58    46     5    45    45    44     5    57    19     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    58    51    57    45    52    19    44    15    53     6    21    54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    11    74    11    24    51    24    19    19    52    11    24    53</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,51] [,52] [,53] [,54] [,55] [,56] [,57] [,58] [,59] [,60] [,61] [,62]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    53    52    40    20    28    13     8    11     5     1     6    39</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    52    38    39    23     3    14    11    12     6     2     7    38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    37    37    52     1     5    20    13    13     8    28     8    52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    15    21     5    57    56    11    15    24     1    15    19     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    18    22    55    56    55    13    42     1     2    16    20     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    19    24    54     6     6    15    41     5     5    18    21     5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,63] [,64] [,65] [,66] [,67] [,68] [,69] [,70] [,71] [,72] [,73] [,74]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    14    20    15    21    16    16     8    23    28    18     8     3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    15    21    16    22    18    17    10    24     2    19     9     4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    20    23    20    23    20    18    11     1     3    20    10     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     6     5     9    16     6    15    22     3    13    44     6    11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     9     6    10    17     8    43    23     4    14    43     7    12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    11    55    11    18     9    42    24     5    15    15     8    13</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,75] [,76] [,77] [,78] [,79] [,80] [,81] [,82] [,83] [,84] [,85] [,86]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    90   116   115    90    90    96    96    96    96    96   114   113</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   117   115   114   118    96   119   120   121   122   123   113   112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   116    90    90   117   118   118   119   120   121   122    90    90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   122    95   121    95    95   120    77    77   119    77   119   118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   121   123   120   124    77   119   101   102    89   103   118   117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    95   122    95   123   124    95   124   101    95   102    89    89</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,87] [,88] [,89] [,90] [,91] [,92] [,93] [,94] [,95] [,96] [,97] [,98]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   112   111   110   110   109   108   107   106   105   105   104   103</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   111   110    84   109   108   107   106   105    79   104   103    97</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    90    90    90    84    84    84    84    84    84    79    79    79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   117    77   116    77    77   115   114    77   113    77    80   113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   116   104   115   105   106   114   113   107    83    80   108   112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    89   103    89   104   105    89    89   106    89   107   107    83</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,99] [,100] [,101] [,102] [,103] [,104] [,105] [,106] [,107] [,108]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    97     84     79    103     99     99     96     87     77     79</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    99     87     83    102     77     76    124     89     78     80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    79     90     84     97     79     77    123     90     79     83</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    80    112     83     95     83     77    111     95     78     89</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   109    111     88     76     84     78    110     97     79     90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   108     83     89     77     88     80     83     76     80     95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,109] [,110] [,111] [,112] [,113] [,114] [,115] [,116] [,117] [,118]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     96     84     96     90     92     80     84     92     97     81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    101     86    102     92     95     81     85     93     98     82</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    124     87    101     96     96     83     86     95     99     83</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    110     90     92     84     84    110     80     95     84     80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     82     92     94     87     86    109     82     96     85     81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     83     95     95     88     87     82    109     97     86     82</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,119] [,120] [,121] [,122]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    102     87     90     93</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     96     88     91     94</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     97     89     92     95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     90     92     97     98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     91     93     98     99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     92     94     76     76</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"nextvert")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1]   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [19]  20  21  22  23  24   1  NA  49  26  27  28  29  30  31  32  33  34  35</span>
@@ -208,8 +544,8 @@ a flat display; both use <code>triangulate</code>.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [109] 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123</span>
 <span class="r-in"><span class="fu"><a href="open3d.html">open3d</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="polygon3d.html">polygon3d</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">x</span> <span class="op">-</span> <span class="va">y</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<div id="rgl62963" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
-<script type="application/json" data-for="rgl62963">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0],"margin":"","floating":false,"tag":""},"rootSubscene":1811,"objects":{"1817":{"id":1817,"type":"triangles","material":{},"vertices":"0","colors":"2","centers":"3","normals":"1","ignoreExtent":false,"flags":32771},"1815":{"id":1815,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"1814":{"id":1814,"type":"background","material":{},"colors":"4","centers":"5","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"1816":{"id":1816,"type":"background","material":{"lit":false,"back":"lines"},"colors":"6","centers":"7","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"1811":{"id":1811,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":1811,"mouseMode":{"none":"none","left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,11.5911102294922],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-11.5911102294922],[0,0,0,1]],"projMatrix":[[3.73205089569092,0,0,0],[0,3.73205089569092,0,0],[0,0,-3.86370348930359,-41.784610748291],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1.5,1.5,-1.5,1.5,-2.12132024765015,2.12132024765015],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":2.1,"activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[1816,1817,1815],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"buffer":{"accessors":[{"bufferView":0,"componentType":5126,"count":366,"type":"VEC3"},{"bufferView":1,"componentType":5126,"count":366,"type":"VEC3"},{"bufferView":2,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":3,"componentType":5126,"count":122,"type":"VEC3"},{"bufferView":4,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":5,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":6,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":7,"componentType":5121,"count":1,"type":"VEC3"}],"bufferViews":[{"buffer":0,"byteLength":4392,"byteOffset":0},{"buffer":0,"byteLength":4392,"byteOffset":4392},{"buffer":0,"byteLength":4,"byteOffset":8784},{"buffer":0,"byteLength":1464,"byteOffset":8788},{"buffer":0,"byteLength":16,"byteOffset":10252},{"buffer":0,"byteLength":3,"byteOffset":10268},{"buffer":0,"byteLength":4,"byteOffset":10271},{"buffer":0,"byteLength":3,"byteOffset":10275}],"buffers":[{"byteLength":10278,"bytes":"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\ngX8Hv8PQkL3Syuq+si2uvpqZGb7KwUK+si2uvpqZGT5/+vq+echjv7cEnz0QqXe/ZmZmvzxu\nKSRmZma/Whxcv5qZGb70tTW/si2uvpqZGT5/+vq+mpkZv5qZmT5mZma/AABAv4EFhT5gQYG/\ngX8Hv8PQkL3Syuq+A7kFv8BdlL6LKG6+si2uvpqZGb7KwUK+si2uvpqZGT5/+vq+A7kFv8Bd\nlD7j50+/mpkZv5qZmT5mZma/gX8Hv8PQkL3Syuq+zcwMv6xcsb1vQu2+A7kFv8BdlL6LKG6+\nmpkZv5qZmT5mZma/MXotv8BdlD4QqXe/AABAv4EFhT5gQYG/ZmZmvzxuKSRmZma/echjv7cE\nn73j50+/Whxcv5qZGb70tTW/zcwMv6xcsb1vQu2+Z/kSv1XSxb05fvS+A7kFv8BdlL6LKG6+\nsi2uvpqZGb7KwUK+c9WevrcEn72LKG6+si2uvpqZGT5/+vq+Whxcv5qZGb70tTW/4+dPvyQ5\nWb6amRm/AABAv4EFhb5/+vq+c9WevrcEn72LKG6+c9WevrcEnz2hlsa+si2uvpqZGT5/+vq+\nA7kFv8BdlL6LKG6+ZmbmvoEFhb7KwUK+si2uvpqZGb7KwUK+4+dPvyQ5WT4WG4O/Whxcv5qZ\nGT5gQYG/echjv7cEnz0QqXe/ZmbmvoEFhb7KwUK+oZbGviQ5Wb4f9DO+si2uvpqZGb7KwUK+\nsi2uvpqZGT5/+vq+oZbGviQ5WT6amRm/A7kFv8BdlD7j50+/AABAv4EFhb5/+vq+MXotv8Bd\nlL6hlsa+mpkZv5qZmb6amZm+c9WevrcEn72LKG6+mpmZvgAAAACamZm+c9WevrcEnz2hlsa+\nmpkZv5qZmb6amZm+A7kFv8BdlL6LKG6+Z/kSv1XSxb05fvS+oZbGviQ5WT6amRm/ZmbmvoEF\nhT70tTW/A7kFv8BdlD7j50+/Q80TvzPNEz84zRM/Q80TvzPNEz84zRM/Q80TvzPNEz84zRM/\nJc0Tv0vNEz8+zRM/Jc0Tv0vNEz8+zRM/Jc0Tv0vNEz8+zRM/Os0TvzvNEz87zRM/Os0TvzvN\nEz87zRM/Os0TvzvNEz87zRM/Pc0TvznNEz86zRM/Pc0TvznNEz86zRM/Pc0TvznNEz86zRM/\nO80TvzrNEz87zRM/O80TvzrNEz87zRM/O80TvzrNEz87zRM/O80TvzvNEz87zRM/O80TvzvN\nEz87zRM/O80TvzvNEz87zRM/Ps0Tvz7NEz8xzRM/Ps0Tvz7NEz8xzRM/Ps0Tvz7NEz8xzRM/\nPM0TvzzNEz84zRM/PM0TvzzNEz84zRM/PM0TvzzNEz84zRM/I80Tvw7NEz99zRM/I80Tvw7N\nEz99zRM/I80Tvw7NEz99zRM/PM0TvzzNEz85zRM/PM0TvzzNEz85zRM/PM0TvzzNEz85zRM/\nIc0Tv0/NEz89zRM/Ic0Tv0/NEz89zRM/Ic0Tv0/NEz89zRM/Pc0TvzfNEz86zRM/Pc0TvzfN\nEz86zRM/Pc0TvzfNEz86zRM/Pc0TvznNEz85zRM/Pc0TvznNEz85zRM/Pc0TvznNEz85zRM/\nPs0TvzjNEz84zRM/Ps0TvzjNEz84zRM/Ps0TvzjNEz84zRM/Oc0TvzzNEz87zRM/Oc0TvzzN\nEz87zRM/Oc0TvzzNEz87zRM/N80TvzvNEz85zRM/N80TvzvNEz85zRM/N80TvzvNEz85zRM/\nQ80TvzbNEz82zRM/Q80TvzbNEz82zRM/Q80TvzbNEz82zRM/Oc0TvznNEz86zRM/Oc0TvznN\nEz86zRM/Oc0TvznNEz86zRM/K80Tv0LNEz9BzRM/K80Tv0LNEz9BzRM/K80Tv0LNEz9BzRM/\nRc0TvzXNEz81zRM/Rc0TvzXNEz81zRM/Rc0TvzXNEz81zRM/Os0TvzvNEz86zRM/Os0TvzvN\nEz86zRM/Os0TvzvNEz86zRM/NM0Tv0jNEz8zzRM/NM0Tv0jNEz8zzRM/NM0Tv0jNEz8zzRM/\nO80TvznNEz87zRM/O80TvznNEz87zRM/O80TvznNEz87zRM/PM0TvznNEz88zRM/PM0TvznN\nEz88zRM/PM0TvznNEz88zRM/O80TvzfNEz87zRM/O80TvzfNEz87zRM/O80TvzfNEz87zRM/\nOM0Tvz7NEz84zRM/OM0Tvz7NEz84zRM/OM0Tvz7NEz84zRM/PM0TvzPNEz8/zRM/PM0TvzPN\nEz8/zRM/PM0TvzPNEz8/zRM/O80TvzvNEz85zRM/O80TvzvNEz85zRM/O80TvzvNEz85zRM/\nM80TvzzNEz89zRM/M80TvzzNEz89zRM/M80TvzzNEz89zRM/O80TvzrNEz87zRM/O80TvzrN\nEz87zRM/O80TvzrNEz87zRM/Os0TvznNEz85zRM/Os0TvznNEz85zRM/Os0TvznNEz85zRM/\nOs0TvznNEz86zRM/Os0TvznNEz86zRM/Os0TvznNEz86zRM/Os0TvzrNEz87zRM/Os0TvzrN\nEz87zRM/Os0TvzrNEz87zRM/Ps0TvzrNEz85zRM/Ps0TvzrNEz85zRM/Ps0TvzrNEz85zRM/\nOs0TvzvNEz87zRM/Os0TvzvNEz87zRM/Os0TvzvNEz87zRM/Os0TvzzNEz85zRM/Os0TvzzN\nEz85zRM/Os0TvzzNEz85zRM/PM0TvzrNEz86zRM/PM0TvzrNEz86zRM/PM0TvzrNEz86zRM/\nOs0TvzrNEz87zRM/Os0TvzrNEz87zRM/Os0TvzrNEz87zRM/O80TvzrNEz86zRM/O80TvzrN\nEz86zRM/O80TvzrNEz86zRM/OM0TvzvNEz87zRM/OM0TvzvNEz87zRM/OM0TvzvNEz87zRM/\nOs0TvzrNEz87zRM/Os0TvzrNEz87zRM/Os0TvzrNEz87zRM/O80TvzrNEz85zRM/O80TvzrN\nEz85zRM/O80TvzrNEz85zRM/Os0TvznNEz86zRM/Os0TvznNEz86zRM/Os0TvznNEz86zRM/\nOs0TvzrNEz86zRM/Os0TvzrNEz86zRM/Os0TvzrNEz86zRM/OM0TvzzNEz89zRM/OM0TvzzN\nEz89zRM/OM0TvzzNEz89zRM/Os0TvzrNEz87zRM/Os0TvzrNEz87zRM/Os0TvzrNEz87zRM/\nO80TvzvNEz85zRM/O80TvzvNEz85zRM/O80TvzvNEz85zRM/Oc0TvzrNEz87zRM/Oc0TvzrN\nEz87zRM/Oc0TvzrNEz87zRM/O80Tvz3NEz83zRM/O80Tvz3NEz83zRM/O80Tvz3NEz83zRM/\nOM0TvzvNEz88zRM/OM0TvzvNEz88zRM/OM0TvzvNEz88zRM/O80TvzvNEz86zRM/O80TvzvN\nEz86zRM/O80TvzvNEz86zRM/Os0TvzrNEz86zRM/Os0TvzrNEz86zRM/Os0TvzrNEz86zRM/\nM80Tvz/NEz88zRM/M80Tvz/NEz88zRM/M80Tvz/NEz88zRM/Os0TvznNEz86zRM/Os0TvznN\nEz86zRM/Os0TvznNEz86zRM/O80TvzvNEz85zRM/O80TvzvNEz85zRM/O80TvzvNEz85zRM/\nNs0Tv0PNEz82zRM/Ns0Tv0PNEz82zRM/Ns0Tv0PNEz82zRM/Os0TvznNEz88zRM/Os0TvznN\nEz88zRM/Os0TvznNEz88zRM/Oc0TvzrNEz86zRM/Oc0TvzrNEz86zRM/Oc0TvzrNEz86zRM/\nPc0Tvz3NEz82zRM/Pc0Tvz3NEz82zRM/Pc0Tvz3NEz82zRM/OM0TvzvNEz87zRM/OM0TvzvN\nEz87zRM/OM0TvzvNEz87zRM/Os0TvzrNEz85zRM/Os0TvzrNEz85zRM/Os0TvzrNEz85zRM/\nOs0TvzrNEz85zRM/Os0TvzrNEz85zRM/Os0TvzrNEz85zRM/Os0TvzrNEz87zRM/Os0TvzrN\nEz87zRM/Os0TvzrNEz87zRM/Os0TvznNEz86zRM/Os0TvznNEz86zRM/Os0TvznNEz86zRM/\nPc0Tvz3NEz82zRM/Pc0Tvz3NEz82zRM/Pc0Tvz3NEz82zRM/Mc0Tvz7NEz9AzRM/Mc0Tvz7N\nEz9AzRM/Mc0Tvz7NEz9AzRM/Os0TvzrNEz86zRM/Os0TvzrNEz86zRM/Os0TvzrNEz86zRM/\nNc0TvzXNEz9FzRM/Nc0TvzXNEz9FzRM/Nc0TvzXNEz9FzRM/Ss0Tvy3NEz83zRM/Ss0Tvy3N\nEz83zRM/Ss0Tvy3NEz83zRM/Ss0Tvy3NEz83zRM/Ss0Tvy3NEz83zRM/Ss0Tvy3NEz83zRM/\nQ80TvzbNEz82zRM/Q80TvzbNEz82zRM/Q80TvzbNEz82zRM/Lc0Tv0rNEz83zRM/Lc0Tv0rN\nEz83zRM/Lc0Tv0rNEz83zRM/Nc0TvzXNEz9FzRM/Nc0TvzXNEz9FzRM/Nc0TvzXNEz9FzRM/\nPc0Tvz3NEz83zRM/Pc0Tvz3NEz83zRM/Pc0Tvz3NEz83zRM/PM0TvzfNEz87zRM/PM0TvzfN\nEz87zRM/PM0TvzfNEz87zRM/Ts0TvyfNEz85zRM/Ts0TvyfNEz85zRM/Ts0TvyfNEz85zRM/\nIs0Tv1PNEz87zRM/Is0Tv1PNEz87zRM/Is0Tv1PNEz87zRM/K80Tv0XNEz8+zRM/K80Tv0XN\nEz8+zRM/K80Tv0XNEz8+zRM/RM0TvzLNEz84zRM/RM0TvzLNEz84zRM/RM0TvzLNEz84zRM/\nO80TvzrNEz87zRM/O80TvzrNEz87zRM/O80TvzrNEz87zRM/Zc0Tvw3NEz89zRM/Zc0Tvw3N\nEz89zRM/Zc0Tvw3NEz89zRM/HMwTv2XOEz8wzRM/HMwTv2XOEz8wzRM/HMwTv2XOEz8wzRM/\nMM0TvzTNEz9JzRM/MM0TvzTNEz9JzRM/MM0TvzTNEz9JzRM/Qc0Tv0DNEz8uzRM/Qc0Tv0DN\nEz8uzRM/Qc0Tv0DNEz8uzRM/O80TvzbNEz87zRM/O80TvzbNEz87zRM/O80TvzbNEz87zRM/\nO80Tvz7NEz82zRM/O80Tvz7NEz82zRM/O80Tvz7NEz82zRM/Os0TvzfNEz8+zRM/Os0TvzfN\nEz8+zRM/Os0TvzfNEz8+zRM/Pc0Tvz7NEz81zRM/Pc0Tvz7NEz81zRM/Pc0Tvz7NEz81zRM/\nOs0TvzPNEz9AzRM/Os0TvzPNEz9AzRM/Os0TvzPNEz9AzRM/Os0TvzjNEz87zRM/Os0TvzjN\nEz87zRM/Os0TvzjNEz87zRM/O80Tvz/NEz81zRM/O80Tvz/NEz81zRM/O80Tvz/NEz81zRM/\nOc0TvzjNEz8+zRM/Oc0TvzjNEz8+zRM/Oc0TvzjNEz8+zRM/N80Tv0vNEz8uzRM/N80Tv0vN\nEz8uzRM/N80Tv0vNEz8uzRM/PM0TvzbNEz87zRM/PM0TvzbNEz87zRM/PM0TvzbNEz87zRM/\nO80TvzvNEz83zRM/O80TvzvNEz83zRM/O80TvzvNEz83zRM/Zc0Tv7rMEz+PzRM/Zc0Tv7rM\nEz+PzRM/Zc0Tv7rMEz+PzRM/Ms0TvzTNEz9KzRM/Ms0TvzTNEz9KzRM/Ms0TvzTNEz9KzRM/\nOs0TvzjNEz88zRM/Os0TvzjNEz88zRM/Os0TvzjNEz88zRM/Pc0TvznNEz85zRM/Pc0TvznN\nEz85zRM/Pc0TvznNEz85zRM/O80TvzrNEz86zRM/O80TvzrNEz86zRM/O80TvzrNEz86zRM/\nN80Tvz3NEz83zRM/N80Tvz3NEz83zRM/N80Tvz3NEz83zRM/OM0TvzrNEz86zRM/OM0TvzrN\nEz86zRM/OM0TvzrNEz86zRM/O80TvzrNEz86zRM/O80TvzrNEz86zRM/O80TvzrNEz86zRM/\nNs0Tvz3NEz89zRM/Ns0Tvz3NEz89zRM/Ns0Tvz3NEz89zRM/PM0TvzfNEz87zRM/PM0TvzfN\nEz87zRM/PM0TvzfNEz87zRM/Os0TvzzNEz85zRM/Os0TvzzNEz85zRM/Os0TvzzNEz85zRM/\nMM0Tv0bNEz86zRM/MM0Tv0bNEz86zRM/MM0Tv0bNEz86zRM/NM0Tvz/NEz89zRM/NM0Tvz/N\nEz89zRM/NM0Tvz/NEz89zRM/Ps0TvzPNEz9AzRM/Ps0TvzPNEz9AzRM/Ps0TvzPNEz9AzRM/\nV80TvybNEz8zzRM/V80TvybNEz8zzRM/V80TvybNEz8zzRM/PM0TvznNEz85zRM/PM0TvznN\nEz85zRM/PM0TvznNEz85zRM/Oc0TvzrNEz86zRM/Oc0TvzrNEz86zRM/Oc0TvzrNEz86zRM/\nMM0Tv0TNEz85zRM/MM0Tv0TNEz85zRM/MM0Tv0TNEz85zRM/OM0TvzrNEz86zRM/OM0TvzrN\nEz86zRM/OM0TvzrNEz86zRM/Oc0TvznNEz88zRM/Oc0TvznNEz88zRM/Oc0TvznNEz88zRM/\nLc0TvznNEz9JzRM/Lc0TvznNEz9JzRM/Lc0TvznNEz9JzRM/N80TvzfNEz9BzRM/N80TvzfN\nEz9BzRM/N80TvzfNEz9BzRM/Mc0Tv0TNEz85zRM/Mc0Tv0TNEz85zRM/Mc0Tv0TNEz85zRM/\nLM0Tv03NEz81zRM/LM0Tv03NEz81zRM/LM0Tv03NEz81zRM/QM0TvzjNEz84zRM/QM0TvzjN\nEz84zRM/QM0TvzjNEz84zRM/PM0TvzrNEz86zRM/PM0TvzrNEz86zRM/PM0TvzrNEz86zRM/\nMc0Tv0TNEz87zRM/Mc0Tv0TNEz87zRM/Mc0Tv0TNEz87zRM/AQAAATYIO79Cwj6/AINuPC+m\nSr9IJC+/Ng/cvbbnJ79AzUm/KJYHPmCSEr+chE+/7shzPu6DBL7L+FC/0NcvP9OgoD6chE+/\ng+qPP/TqdL+fr9++JBMFv35Lyz5AzUm/f7mXP3yM8T5Cwj6/QMSbP6IXHz/zzlm/S3O8P9QZ\nmL+rp0A7J3qYv4L1mr/or7A9gACmv5AvjD+nAee++O/FPw+1kT+owMC+OuXBP4L1mr/orzA+\nfwuxv7yQlD/+FZa+PBa6PyKdkz/LE9Q95luGP9OgID6jF/2+BrQmPwNlij/wGss+jzwvP1aJ\nhz+bxfU+3i8UP/uWlj3rqPG+VacLPyj2db7rqPG+rlttPtQZmL+fAoM+e9q4v1SUkr+eQ6k+\nO+W8v+vVKz2Sqti+UCXuPljFir+Qf8g+O+W8vxg1gb+Mld4+e9q4v6zAGL/u+kU/zF2vv9cD\ngj9NAw4/wAjsPtSgoL6chE8/g+qPv7PpaL6chE8/hN+Ev12UE75AzUk/V7Juv78kjr1Cwj4/\n2oZQv7NpdD9GoR0/25CtPnb5Q76Sqti+r1ttPoY3rTxE6LC+vLu7PqCnCbxIJC8/50oxv7qW\nEr5E6LC+zjlPPgBGDj3KAxw/aR8TvzKupD/LE9Q99myXPzNJYT9ErCg/vnNiPt/zSz+gYy4/\n74HsPe6DBD5zuRE/7jDhvos5TTxHL3q+cIGDPlx2ZT7KAxw/Y0zFvuLdNT+gYy4/HEjvPBpX\nyr1HL3q+ugMVPivRiD5IJC8/ZnfVvmZcSb9yxFw/axDTv2JR7D5wVIQ/LoASv4iICL3or7A9\nLPT0vVariDxQgQG+upYSPvgSqz/qRvc+eoJaP9ez3b52o5s/axDTv+Bxmz670Z2/M67EPwAA\nAAB2o7s/dqO7v+f6Dz+70Z2/Ls/lP4iICL0AAAAAiYgIvef6T7+wPpU/Jjz9v/QzjL/rRve+\ncsQcvy+KLz/jh2c/0vZfvomICD0AAAAAiYgIPetGd7/rRne/AAAAADBBe71QgQG+B2KFPef6\nTz+wPpW/Jjz9P7A+tT/3QcK+L8/lP4yIID9ErCg/hjsCvTOuhL8zroQ/M64EwO1/or92ozu/\nZlwJv+1/oj92ozs/ZlwJP3aju78AAAAAdqO7v3ajO7/uf6K/ZlwJPzOuhD8zroS/M64EQA1o\nDT9GoR0/ysmBvRDgLL8sNhc+nK1Sv82bKL/cyBs+A45PvwAxJL/cyBs+NyNLv16zML+UYA4+\ng0tUv/bSM78z4gE+g0tUv9j1Q7/PMFo95phRv7zsH78sNhc+R7pFv3AZHL+UYA4+lLE/vyRn\nP79QZMq8AxQ5v9CLQL9sdim9a/Q1vx4yCr9VBCQ+MzMzv+gC7L4gzrg9OhsNv9CLQL8vI3C9\nnokxvyRnP7+6M5q9riAsv78xPb8gzri9+xcmvyYSOr/iytG9ytgfvx6Y5766M5o9hhIHv8ZO\n5b4vI3A9lqkBv9o+Nr8SduO9F9AZv5b6Mb9ym+y9J2cUv8ZO5b5sdik9k336vsiPLb9ym+y9\nW/wPvx6Y575PZMo8Yz70vugC7L5w9R88lgLxvhasTr8Ix9s99iRqv8qPLb/+kTq+k9b9vvyR\nPL/wR3K+AAAAv5OZWr/e1z49EIdmv3hzzr5bFsG8E2LCvhMZYr9Sk8W8eOxbv9I6EL/wR3I+\nzsxMvz6K7b4qPy6+qmqWvqSb+b7Ggnw+g+47v3CsCL9omxi+LAvFvpoGLb/0/pA+E4Z1vxMZ\nYr/6Z5u9FKxOv75/DL8AcSG++kbIvkgQqb5LBtS848+bvhSsTr/rSVS+mpkZv97yo77OzEw9\nd4y9vgsC4L6zym6+YDlRvpKZWr9eHBY+VRCAvz4Oyb7rSVS+kNI9vnNn1b7AhF4+6lQiv5gG\nLb/0/pC+Pg7JvtYWnb4AAAAA1hadvgLEEL/2R2q+CGSsvgYl6L7y/4E+exI1v5mYmD6ZmJg+\nmZiYPgAAgD8AAAABAQEBAAAA"}]},"context":{"shiny":false,"rmarkdown":null},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script></code></pre></div>
+<div id="rgl26676" style="width:480px;height:480px;" class="rglWebGL html-widget"></div>
+<script type="application/json" data-for="rgl26676">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0],"margin":"","floating":false,"tag":""},"rootSubscene":1879,"objects":{"1885":{"id":1885,"type":"triangles","material":{},"vertices":"0","colors":"2","centers":"3","normals":"1","ignoreExtent":false,"flags":32771},"1883":{"id":1883,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"1882":{"id":1882,"type":"background","material":{},"colors":"4","centers":"5","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"1884":{"id":1884,"type":"background","material":{"lit":false,"back":"lines"},"colors":"6","centers":"7","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"1879":{"id":1879,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":1879,"mouseMode":{"none":"none","left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,11.5911102294922],"modelMatrix":[[1,0,0,0],[0,0.342020153999329,0.939692616462708,0],[0,-0.939692616462708,0.342020153999329,-11.5911102294922],[0,0,0,1]],"projMatrix":[[3.73205089569092,0,0,0],[0,3.73205089569092,0,0],[0,0,-3.86370348930359,-41.784610748291],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[1,1,1],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-1.5,1.5,-1.5,1.5,-2.12132024765015,2.12132024765015],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":2.1,"activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[1884,1885,1883],"subscenes":[],"flags":33027}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":480,"buffer":{"accessors":[{"bufferView":0,"componentType":5126,"count":366,"type":"VEC3"},{"bufferView":1,"componentType":5126,"count":366,"type":"VEC3"},{"bufferView":2,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":3,"componentType":5126,"count":122,"type":"VEC3"},{"bufferView":4,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":5,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":6,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":7,"componentType":5121,"count":1,"type":"VEC3"}],"bufferViews":[{"buffer":0,"byteLength":4392,"byteOffset":0},{"buffer":0,"byteLength":4392,"byteOffset":4392},{"buffer":0,"byteLength":4,"byteOffset":8784},{"buffer":0,"byteLength":1464,"byteOffset":8788},{"buffer":0,"byteLength":16,"byteOffset":10252},{"buffer":0,"byteLength":3,"byteOffset":10268},{"buffer":0,"byteLength":4,"byteOffset":10271},{"buffer":0,"byteLength":3,"byteOffset":10275}],"buffers":[{"byteLength":10278,"bytes":"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\nA7kFv8BdlL6LKG6+ZmbmvoEFhb7KwUK+oZbGviQ5Wb4f9DO+si2uvpqZGb7KwUK+c9WevrcE\nnz2hlsa+A7kFv8BdlD7j50+/zDkgv1XSxb2Bfwe/AABAv4EFhb5/+vq+mpkZv5qZmb6amZm+\nzDkgv1XSxb2Bfwe/Whxcv5qZGb70tTW/AABAv4EFhb5/+vq+zDkgv1XSxb2Bfwe/ZmYmv6xc\nsb3ROhC/Whxcv5qZGb70tTW/ZmYmv6xcsb3ROhC/srMrv8PQkL2amRm/Whxcv5qZGb70tTW/\nechjv7cEnz0QqXe/5FMyv0oG1Lyysyu/MzMzv0/oYSMzMzO/echjv7cEnz0QqXe/ZmZmvzxu\nKSRmZma/5FMyv0oG1Lyysyu/srMrv8PQkL2amRm/echjv7cEn73j50+/Whxcv5qZGb70tTW/\nc9WevrcEnz2hlsa+ZmbmvoEFhT70tTW/A7kFv8BdlD7j50+/srMrv8PQkL2amRm/L8Uvv83M\nTL1i+CK/echjv7cEn73j50+/ZmZmvzxuKSRmZma/L8Uvv83MTL1i+CK/5FMyv0oG1Lyysyu/\nAABAv4EFhT5gQYG/4+dPvyQ5WT4WG4O/Whxcv5qZGT5gQYG/c9WevrcEnz2hlsa+si2uvpqZ\nGT5/+vq+ZmbmvoEFhT70tTW/si2uvpqZGb7KwUK+mpmZvgAAAACamZm+c9WevrcEnz2hlsa+\nWhxcv5qZGb70tTW/4+dPvyQ5Wb6amRm/AABAv4EFhb5/+vq+si2uvpqZGT5/+vq+oZbGviQ5\nWT6amRm/ZmbmvoEFhT70tTW/AABAv4EFhb5/+vq+MXotv8BdlL6hlsa+mpkZv5qZmb6amZm+\nZmZmvzxuKSRmZma/echjv7cEn73j50+/L8Uvv83MTL1i+CK/si2uvpqZGb7KwUK+c9WevrcE\nn72LKG6+mpmZvgAAAACamZm+Os0TvzvNEz86zRM/Os0TvzvNEz86zRM/Os0TvzvNEz86zRM/\nOs0TvzrNEz89zRM/Os0TvzrNEz89zRM/Os0TvzrNEz89zRM/O80TvzvNEz87zRM/O80TvzvN\nEz87zRM/O80TvzvNEz87zRM/O80TvzvNEz86zRM/O80TvzvNEz86zRM/O80TvzvNEz86zRM/\nOs0TvzvNEz86zRM/Os0TvzvNEz86zRM/Os0TvzvNEz86zRM/Oc0TvzrNEz86zRM/Oc0TvzrN\nEz86zRM/Oc0TvzrNEz86zRM/OM0Tvz3NEz84zRM/OM0Tvz3NEz84zRM/OM0Tvz3NEz84zRM/\nOs0TvzvNEz87zRM/Os0TvzvNEz87zRM/Os0TvzvNEz87zRM/O80TvzvNEz87zRM/O80TvzvN\nEz87zRM/O80TvzvNEz87zRM/O80TvzvNEz86zRM/O80TvzvNEz86zRM/O80TvzvNEz86zRM/\nOs0TvzvNEz86zRM/Os0TvzvNEz86zRM/Os0TvzvNEz86zRM/Os0TvzzNEz85zRM/Os0TvzzN\nEz85zRM/Os0TvzzNEz85zRM/PM0TvzvNEz83zRM/PM0TvzvNEz83zRM/PM0TvzvNEz83zRM/\nPM0Tvz3NEz84zRM/PM0Tvz3NEz84zRM/PM0Tvz3NEz84zRM/Pc0TvzbNEz89zRM/Pc0TvzbN\nEz89zRM/Pc0TvzbNEz89zRM/Os0TvzrNEz87zRM/Os0TvzrNEz87zRM/Os0TvzrNEz87zRM/\nOc0TvznNEz87zRM/Oc0TvznNEz87zRM/Oc0TvznNEz87zRM/Pc0TvzPNEz9AzRM/Pc0TvzPN\nEz9AzRM/Pc0TvzPNEz9AzRM/O80TvzvNEz84zRM/O80TvzvNEz84zRM/O80TvzvNEz84zRM/\nO80TvzjNEz88zRM/O80TvzjNEz88zRM/O80TvzjNEz88zRM/O80TvzrNEz85zRM/O80TvzrN\nEz85zRM/O80TvzrNEz85zRM/O80TvzrNEz83zRM/O80TvzrNEz83zRM/O80TvzrNEz83zRM/\nOc0TvznNEz89zRM/Oc0TvznNEz89zRM/Oc0TvznNEz89zRM/Os0TvznNEz87zRM/Os0TvznN\nEz87zRM/Os0TvznNEz87zRM/Oc0TvzvNEz87zRM/Oc0TvzvNEz87zRM/Oc0TvzvNEz87zRM/\nO80TvzrNEz87zRM/O80TvzrNEz87zRM/O80TvzrNEz87zRM/P80TvznNEz82zRM/P80TvznN\nEz82zRM/P80TvznNEz82zRM/OM0TvzrNEz87zRM/OM0TvzrNEz87zRM/OM0TvzrNEz87zRM/\nOs0TvzrNEz87zRM/Os0TvzrNEz87zRM/Os0TvzrNEz87zRM/Os0TvzvNEz85zRM/Os0TvzvN\nEz85zRM/Os0TvzvNEz85zRM/Pc0TvzrNEz85zRM/Pc0TvzrNEz85zRM/Pc0TvzrNEz85zRM/\nP80TvzjNEz84zRM/P80TvzjNEz84zRM/P80TvzjNEz84zRM/Os0TvznNEz88zRM/Os0TvznN\nEz88zRM/Os0TvznNEz88zRM/Nc0TvzzNEz89zRM/Nc0TvzzNEz89zRM/Nc0TvzzNEz89zRM/\nOs0Tvz3NEz86zRM/Os0Tvz3NEz86zRM/Os0Tvz3NEz86zRM/Rc0TvzbNEz81zRM/Rc0TvzbN\nEz81zRM/Rc0TvzbNEz81zRM/K80Tv0HNEz9BzRM/K80Tv0HNEz9BzRM/K80Tv0HNEz9BzRM/\nOc0TvzvNEz87zRM/Oc0TvzvNEz87zRM/Oc0TvzvNEz87zRM/Oc0TvzzNEz85zRM/Oc0TvzzN\nEz85zRM/Oc0TvzzNEz85zRM/O80TvzrNEz86zRM/O80TvzrNEz86zRM/O80TvzrNEz86zRM/\nOc0TvzzNEz87zRM/Oc0TvzzNEz87zRM/Oc0TvzzNEz87zRM/Os0TvzvNEz86zRM/Os0TvzvN\nEz86zRM/Os0TvzvNEz86zRM/Ss0Tvy3NEz83zRM/Ss0Tvy3NEz83zRM/Ss0Tvy3NEz83zRM/\nOc0TvznNEz87zRM/Oc0TvznNEz87zRM/Oc0TvznNEz87zRM/O80TvzrNEz87zRM/O80TvzrN\nEz87zRM/O80TvzrNEz87zRM/Os0TvzrNEz84zRM/Os0TvzrNEz84zRM/Os0TvzrNEz84zRM/\nN80TvzzNEz88zRM/N80TvzzNEz88zRM/N80TvzzNEz88zRM/O80TvzvNEz87zRM/O80TvzvN\nEz87zRM/O80TvzvNEz87zRM/Os0TvzrNEz86zRM/Os0TvzrNEz86zRM/Os0TvzrNEz86zRM/\nPM0TvznNEz85zRM/PM0TvznNEz85zRM/PM0TvznNEz85zRM/Mc0Tv0bNEz85zRM/Mc0Tv0bN\nEz85zRM/Mc0Tv0bNEz85zRM/Oc0TvzzNEz85zRM/Oc0TvzzNEz85zRM/Oc0TvzzNEz85zRM/\nPM0Tv0TNEz8uzRM/PM0Tv0TNEz8uzRM/PM0Tv0TNEz8uzRM/LM0Tv0HNEz9CzRM/LM0Tv0HN\nEz9CzRM/LM0Tv0HNEz9CzRM/N80Tvz3NEz87zRM/N80Tvz3NEz87zRM/N80Tvz3NEz87zRM/\nPM0TvznNEz85zRM/PM0TvznNEz85zRM/PM0TvznNEz85zRM/Nc0TvzXNEz9FzRM/Nc0TvzXN\nEz9FzRM/Nc0TvzXNEz9FzRM/SM0TvzfNEz8vzRM/SM0TvzfNEz8vzRM/SM0TvzfNEz8vzRM/\nO80TvzvNEz86zRM/O80TvzvNEz86zRM/O80TvzvNEz86zRM/Ps0TvzLNEz89zRM/Ps0TvzLN\nEz89zRM/Ps0TvzLNEz89zRM/Pc0TvznNEz85zRM/Pc0TvznNEz85zRM/Pc0TvznNEz85zRM/\nMc0Tvz7NEz9AzRM/Mc0Tvz7NEz9AzRM/Mc0Tvz7NEz9AzRM/P80TvznNEz82zRM/P80TvznN\nEz82zRM/P80TvznNEz82zRM/O80TvzvNEz87zRM/O80TvzvNEz87zRM/O80TvzvNEz87zRM/\nPM0TvzzNEz84zRM/PM0TvzzNEz84zRM/PM0TvzzNEz84zRM/I80Tvw7NEz99zRM/I80Tvw7N\nEz99zRM/I80Tvw7NEz99zRM/Ns0Tv0PNEz82zRM/Ns0Tv0PNEz82zRM/Ns0Tv0PNEz82zRM/\nO80TvzvNEz85zRM/O80TvzvNEz85zRM/O80TvzvNEz85zRM/Pc0TvznNEz83zRM/Pc0TvznN\nEz83zRM/Pc0TvznNEz83zRM/O80TvzvNEz84zRM/O80TvzvNEz84zRM/O80TvzvNEz84zRM/\nNc0Tvz3NEz88zRM/Nc0Tvz3NEz88zRM/Nc0Tvz3NEz88zRM/Pc0TvzXNEz88zRM/Pc0TvzXN\nEz88zRM/Pc0TvzXNEz88zRM/Q80TvzbNEz82zRM/Q80TvzbNEz82zRM/Q80TvzbNEz82zRM/\nNs0Tv0PNEz82zRM/Ns0Tv0PNEz82zRM/Ns0Tv0PNEz82zRM/H80Tv0zNEz9FzRM/H80Tv0zN\nEz9FzRM/H80Tv0zNEz9FzRM/QM0TvzjNEz85zRM/QM0TvzjNEz85zRM/QM0TvzjNEz85zRM/\nw8wTv6vNEz89zRM/w8wTv6vNEz89zRM/w8wTv6vNEz89zRM/Is0Tv1PNEz89zRM/Is0Tv1PN\nEz89zRM/Is0Tv1PNEz89zRM/Qs0TvzLNEz86zRM/Qs0TvzLNEz86zRM/Qs0TvzLNEz86zRM/\nTc0Tvy3NEz81zRM/Tc0Tvy3NEz81zRM/Tc0Tvy3NEz81zRM/K80Tv0DNEz9BzRM/K80Tv0DN\nEz9BzRM/K80Tv0DNEz9BzRM/N80Tvz3NEz86zRM/N80Tvz3NEz86zRM/N80Tvz3NEz86zRM/\nQs0TvzLNEz87zRM/Qs0TvzLNEz87zRM/Qs0TvzLNEz87zRM/Sc0TvzLNEz8yzRM/Sc0TvzLN\nEz8yzRM/Sc0TvzLNEz8yzRM/Pc0TvzfNEz87zRM/Pc0TvzfNEz87zRM/Pc0TvzfNEz87zRM/\nKM0Tvz3NEz9KzRM/KM0Tvz3NEz9KzRM/KM0Tvz3NEz9KzRM/Tc0TvzbNEz8szRM/Tc0TvzbN\nEz8szRM/Tc0TvzbNEz8szRM/O80TvznNEz86zRM/O80TvznNEz86zRM/O80TvznNEz86zRM/\nOs0TvzvNEz86zRM/Os0TvzvNEz86zRM/Os0TvzvNEz86zRM/Os0TvzjNEz87zRM/Os0TvzjN\nEz87zRM/Os0TvzjNEz87zRM/O80Tvz3NEz85zRM/O80Tvz3NEz85zRM/O80Tvz3NEz85zRM/\nM80TvzzNEz9AzRM/M80TvzzNEz9AzRM/M80TvzzNEz9AzRM/S80TvzDNEz8xzRM/S80TvzDN\nEz8xzRM/S80TvzDNEz8xzRM/PM0TvzrNEz85zRM/PM0TvzrNEz85zRM/PM0TvzrNEz85zRM/\nO80TvznNEz88zRM/O80TvznNEz88zRM/O80TvznNEz88zRM/M80Tvz7NEz8/zRM/M80Tvz7N\nEz8/zRM/M80Tvz7NEz8/zRM/Ms0Tv0fNEz84zRM/Ms0Tv0fNEz84zRM/Ms0Tv0fNEz84zRM/\nPM0TvznNEz83zRM/PM0TvznNEz83zRM/PM0TvznNEz83zRM/O80TvznNEz86zRM/O80TvznN\nEz86zRM/O80TvznNEz86zRM/M80Tvz7NEz87zRM/M80Tvz7NEz87zRM/M80Tvz7NEz87zRM/\nN80TvzfNEz9AzRM/N80TvzfNEz9AzRM/N80TvzfNEz9AzRM/N80TvzbNEz8+zRM/N80TvzbN\nEz8+zRM/N80TvzbNEz8+zRM/OM0TvzvNEz87zRM/OM0TvzvNEz87zRM/OM0TvzvNEz87zRM/\nOc0TvzrNEz85zRM/Oc0TvzrNEz85zRM/Oc0TvzrNEz85zRM/O80TvznNEz87zRM/O80TvznN\nEz87zRM/O80TvznNEz87zRM/O80TvzrNEz85zRM/O80TvzrNEz85zRM/O80TvzrNEz85zRM/\nNc0Tv0rNEz8tzRM/Nc0Tv0rNEz8tzRM/Nc0Tv0rNEz8tzRM/Os0TvzjNEz86zRM/Os0TvzjN\nEz86zRM/Os0TvzjNEz86zRM/P80TvzTNEz89zRM/P80TvzTNEz89zRM/P80TvzTNEz89zRM/\nOc0TvzrNEz86zRM/Oc0TvzrNEz86zRM/Oc0TvzrNEz86zRM/Os0TvzvNEz85zRM/Os0TvzvN\nEz85zRM/Os0TvzvNEz85zRM/Ms0Tv0HNEz86zRM/Ms0Tv0HNEz86zRM/Ms0Tv0HNEz86zRM/\nQM0Tvy/NEz9AzRM/QM0Tvy/NEz9AzRM/QM0Tvy/NEz9AzRM/M80Tv0TNEz82zRM/M80Tv0TN\nEz82zRM/M80Tv0TNEz82zRM/Qc0Tv0HNEz8szRM/Qc0Tv0HNEz8szRM/Qc0Tv0HNEz8szRM/\nP80TvzXNEz85zRM/P80TvzXNEz85zRM/P80TvzXNEz85zRM/O80TvznNEz84zRM/O80TvznN\nEz84zRM/O80TvznNEz84zRM/MM0Tv0TNEz85zRM/MM0Tv0TNEz85zRM/MM0Tv0TNEz85zRM/\nMc0Tv0TNEz87zRM/Mc0Tv0TNEz87zRM/Mc0Tv0TNEz87zRM/LM0Tv03NEz81zRM/LM0Tv03N\nEz81zRM/LM0Tv03NEz81zRM/Ps0TvzXNEz89zRM/Ps0TvzXNEz89zRM/Ps0TvzXNEz89zRM/\nNc0TvzrNEz89zRM/Nc0TvzrNEz89zRM/Nc0TvzrNEz89zRM/AQAAARpXyr1IL3q+ugMVPnKj\nI76WU5y+ugMVPkv+Y71KrS2+blvpPYmICL3or7C9SNdYPW3LHz3orzC9qz2oPUsotLxGp4q+\ngMl+PrgYX75A/sa+yuMuPm7LH73orzA9qz2ovYiICD3or7A9SNdYvUv+Yz1KrS0+blvpvRpX\nyj1IL3o+ugMVvlYTnLyfbrm+a62vPvAayz72uAM/71vxvQ1oDT9GoR0/ysmBvWv6Ab/6YQe/\n6/GsPIyIID9ErCg/hjsCveLdNT+gYy4/HEjvPFM1Sr8n4RO/s1BZvlBLYL8n4RO/U9SYvqag\ndb/LKQ6/tu3Ovt/zSz+gYy4/74HsPZNghL/MHgO/WqIFv48vjL+nAee+TN4kv2DRb77NHgO/\n6FSOPjRJYT9ErCg/vnNiPmRPI77LKQ6/46vKPg+1kb+owMC+yglDv7yQlL/+FZa+exZev7yL\nhD6bxfU+vnNivn7rXD5NAw4/25CtvrNpdD9GoR0/25CtPiKdk7/LE9Q9Xt6gv5hzHj5GoR0/\nwAjsvtYDgj9NAw4/wAjsPhv0m70n4RO/pGIAP1aJhz+bxfU+3i8UPwRlij/wGss+jzwvP+YB\nmj/qRvc+WGA4P4L1mj/or7A9g+qPPzfjoz1ErCg/3i8Uv5MGjD/eh7G+i2i4P6vuWLugYy4/\njzwvv+1/oj92ozs/ZlwJP153t72gYy4/jFJFv2ePub4gTma/bIYJP7A+lT/wuA2/KBvcP+5/\nor9A0NO8rDCfv8f4eL5vO14/0DyOv+6DBL40VJg/suSovzRJYb9ErCg/vPrEv+f6T7+wPpW/\n8wS1PvzC8j7uf6I/XJ5Lv3ajO7/tf6I/1CgAwARlir/wGss+wCu9v7NpdL9GoR0/fAXJv9YD\ngr9NAw4/fgXJvzOuhD8zroS/M64EQDKQdD9AOg+/OOXBP7A+tT8k+Pa9M67EPwAAgD5rELM/\naxCTv1aJh7+bxfU+vPrEv7A+tT/3QcK+L8/lP+5/or/8wvI+rjDfv9OgoD6chE+/g+qPP35L\nyz5AzUm/f7mXP3yM8T5Cwj6/QMSbPwAAAAB2o7s/dqO7vzOuhL8zroS/AAAAADOFaT+/WiK/\n+O/FP2t74D5wVIS/S3O8P2sQs78AAIA+axDTvwAAgD5rELO/axDTP3aju78AAAAAdqO7vwAA\nAAB2o7u/dqO7P6NMD7+kGBw+y1I2v6PK+r7+q5Y90ToQv+gC7L5w9R+8PwPnvh6Y575PZMq8\n2PHavsZO5b5sdim99x/Qvu8fE7887iQ+fls8vzRkF7/sgCk+bsRBv8ZO5b4vI3C9X0rHvh6Y\n5766M5q9LwvBvgDPG7/sgCk+Oy9Gv0QTIL887iQ+005Jv5HmI7+kGBw+uuxKvykGJ79Emg8+\nuuxKv+gC7L4gzri9Ys+9vqPK+r5mvDG+cOyhvqqdJ7+jYFo+0DVev6Ob+b7Ggny+g7R2vqNM\nD7+kGBy+84zQvsLbL7+qn/k9tw9Pv/AfE7887iS+wMjTvjAyQb+NPwY+E8JivzRkF7/sgCm+\n8AfavoYaQ7+HWQ09H/BLv+PARb9KGFY+9kZ7vwDPG7/sgCm+iN3ivqSb+b5eHBY+6lQiv0dM\nVb9TYiY+2+R+v3Nn1b7AhF6+J0pMvgQl6L7x/4G+J0pMvg4nyL6CbZQ9b0Ltvs2bKL8gDWC+\nCDHhvmPHPr/u2Sy+55ATv9o+Nr8SduO9GNAZvyYSOr/iytG9y9gfv4YaQ7+GWY08UoVHv5cr\nVL+GWY08Y5ZYvy6ITr+Qrcu9exI1v6Dk2r5LGFY+Y/giv3PAP79LaYe9S9MuvyjVQr9MNc+8\nfls8vxasTr/rSVQ+SN+Bv9jNu75TYiY+gn8Hv0A0or5Sk8W8C9uVvhSsTr/rSVS+mpkZvz4O\nyb7rSVQ+mpkZv5gGLb/0/pC+Pg7JvltRU79qRy6942xIv0A0or76Z5u9g7R2vpmYmD6ZmJg+\nmZiYPgAAgD8AAAABAQEBAAAA"}]},"context":{"shiny":false,"rmarkdown":null},"vertexShader":"#line 2 1\n// File 1 is the vertex shader\n#ifdef GL_ES\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n#endif\n\nattribute vec3 aPos;\nattribute vec4 aCol;\nuniform mat4 mvMatrix;\nuniform mat4 prMatrix;\nvarying vec4 vCol;\nvarying vec4 vPosition;\n\n#ifdef NEEDS_VNORMAL\nattribute vec3 aNorm;\nuniform mat4 normMatrix;\nvarying vec4 vNormal;\n#endif\n\n#if defined(HAS_TEXTURE) || defined (IS_TEXT)\nattribute vec2 aTexcoord;\nvarying vec2 vTexcoord;\n#endif\n\n#ifdef FIXED_SIZE\nuniform vec3 textScale;\n#endif\n\n#ifdef FIXED_QUADS\nattribute vec3 aOfs;\n#endif\n\n#ifdef IS_TWOSIDED\n#ifdef HAS_NORMALS\nvarying float normz;\nuniform mat4 invPrMatrix;\n#else\nattribute vec3 aPos1;\nattribute vec3 aPos2;\nvarying float normz;\n#endif\n#endif // IS_TWOSIDED\n\n#ifdef FAT_LINES\nattribute vec3 aNext;\nattribute vec2 aPoint;\nvarying vec2 vPoint;\nvarying float vLength;\nuniform float uAspect;\nuniform float uLwd;\n#endif\n\n\nvoid main(void) {\n  \n#ifndef IS_BRUSH\n#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)\n  vPosition = mvMatrix * vec4(aPos, 1.);\n#endif\n  \n#ifndef FIXED_QUADS\n  gl_Position = prMatrix * vPosition;\n#endif\n#endif // !IS_BRUSH\n  \n#ifdef IS_POINTS\n  gl_PointSize = POINTSIZE;\n#endif\n  \n  vCol = aCol;\n  \n#ifdef NEEDS_VNORMAL\n  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n#endif\n  \n#ifdef IS_TWOSIDED\n#ifdef HAS_NORMALS\n  /* normz should be calculated *after* projection */\n  normz = (invPrMatrix*vNormal).z;\n#else\n  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n  normz = pos1.x*pos2.y - pos1.y*pos2.x;\n#endif\n#endif // IS_TWOSIDED\n  \n#ifdef NEEDS_VNORMAL\n  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);\n#endif\n  \n#if defined(HAS_TEXTURE) || defined(IS_TEXT)\n  vTexcoord = aTexcoord;\n#endif\n  \n#if defined(FIXED_SIZE) && !defined(ROTATING)\n  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);\n  pos = pos/pos.w;\n  gl_Position = pos + vec4(aOfs*textScale, 0.);\n#endif\n  \n#if defined(IS_SPRITES) && !defined(FIXED_SIZE)\n  vec4 pos = mvMatrix * vec4(aPos, 1.);\n  pos = pos/pos.w + vec4(aOfs,  0.);\n  gl_Position = prMatrix*pos;\n#endif\n  \n#ifdef FAT_LINES\n  /* This code was inspired by Matt Deslauriers' code in \n   https://mattdesl.svbtle.com/drawing-lines-is-hard */\n  vec2 aspectVec = vec2(uAspect, 1.0);\n  mat4 projViewModel = prMatrix * mvMatrix;\n  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);\n  currentProjected = currentProjected/currentProjected.w;\n  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);\n  vec2 currentScreen = currentProjected.xy * aspectVec;\n  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;\n  float len = uLwd;\n  vec2 dir = vec2(1.0, 0.0);\n  vPoint = aPoint;\n  vLength = length(nextScreen - currentScreen)/2.0;\n  vLength = vLength/(vLength + len);\n  if (vLength > 0.0) {\n    dir = normalize(nextScreen - currentScreen);\n  }\n  vec2 normal = vec2(-dir.y, dir.x);\n  dir.x /= uAspect;\n  normal.x /= uAspect;\n  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);\n  gl_Position = currentProjected + offset;\n#endif\n  \n#ifdef IS_BRUSH\n  gl_Position = vec4(aPos, 1.);\n#endif\n}","fragmentShader":"#line 2 2\n// File 2 is the fragment shader\n#ifdef GL_ES\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n#endif\nvarying vec4 vCol; // carries alpha\nvarying vec4 vPosition;\n#if defined(HAS_TEXTURE) || defined (IS_TEXT)\nvarying vec2 vTexcoord;\nuniform sampler2D uSampler;\n#endif\n\n#ifdef HAS_FOG\nuniform int uFogMode;\nuniform vec3 uFogColor;\nuniform vec4 uFogParms;\n#endif\n\n#if defined(IS_LIT) && !defined(FIXED_QUADS)\nvarying vec4 vNormal;\n#endif\n\n#if NCLIPPLANES > 0\nuniform vec4 vClipplane[NCLIPPLANES];\n#endif\n\n#if NLIGHTS > 0\nuniform mat4 mvMatrix;\n#endif\n\n#ifdef IS_LIT\nuniform vec3 emission;\nuniform float shininess;\n#if NLIGHTS > 0\nuniform vec3 ambient[NLIGHTS];\nuniform vec3 specular[NLIGHTS]; // light*material\nuniform vec3 diffuse[NLIGHTS];\nuniform vec3 lightDir[NLIGHTS];\nuniform bool viewpoint[NLIGHTS];\nuniform bool finite[NLIGHTS];\n#endif\n#endif // IS_LIT\n\n#ifdef IS_TWOSIDED\nuniform bool front;\nvarying float normz;\n#endif\n\n#ifdef FAT_LINES\nvarying vec2 vPoint;\nvarying float vLength;\n#endif\n\nvoid main(void) {\n  vec4 fragColor;\n#ifdef FAT_LINES\n  vec2 point = vPoint;\n  bool neg = point.y < 0.0;\n  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :\n                 -(point.y - vLength)/(1.0 - vLength);\n#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)\n  if (neg && length(point) <= 1.0) discard;\n#endif\n  point.y = min(point.y, 0.0);\n  if (length(point) > 1.0) discard;\n#endif // FAT_LINES\n  \n#ifdef ROUND_POINTS\n  vec2 coord = gl_PointCoord - vec2(0.5);\n  if (length(coord) > 0.5) discard;\n#endif\n  \n#if NCLIPPLANES > 0\n  for (int i = 0; i < NCLIPPLANES; i++)\n    if (dot(vPosition, vClipplane[i]) < 0.0) discard;\n#endif\n    \n#ifdef FIXED_QUADS\n    vec3 n = vec3(0., 0., 1.);\n#elif defined(IS_LIT)\n    vec3 n = normalize(vNormal.xyz);\n#endif\n    \n#ifdef IS_TWOSIDED\n    if ((normz <= 0.) != front) discard;\n#endif\n    \n#ifdef IS_LIT\n    vec3 eye = normalize(-vPosition.xyz/vPosition.w);\n    vec3 lightdir;\n    vec4 colDiff;\n    vec3 halfVec;\n    vec4 lighteffect = vec4(emission, 0.);\n    vec3 col;\n    float nDotL;\n#ifdef FIXED_QUADS\n    n = -faceforward(n, n, eye);\n#endif\n    \n#if NLIGHTS > 0\n    for (int i=0;i<NLIGHTS;i++) {\n      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);\n      lightdir = lightDir[i];\n      if (!viewpoint[i])\n        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n      if (!finite[i]) {\n        halfVec = normalize(lightdir + eye);\n      } else {\n        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);\n        halfVec = normalize(lightdir + eye);\n      }\n      col = ambient[i];\n      nDotL = dot(n, lightdir);\n      col = col + max(nDotL, 0.) * colDiff.rgb;\n      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];\n      lighteffect = lighteffect + vec4(col, colDiff.a);\n    }\n#endif\n    \n#else // not IS_LIT\n    vec4 colDiff = vCol;\n    vec4 lighteffect = colDiff;\n#endif\n    \n#ifdef IS_TEXT\n    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n#endif\n    \n#ifdef HAS_TEXTURE\n#ifdef TEXTURE_rgb\n    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);\n#endif\n    \n#ifdef TEXTURE_rgba\n    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n#endif\n    \n#ifdef TEXTURE_alpha\n    vec4 textureColor = texture2D(uSampler, vTexcoord);\n    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;\n    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);\n#endif\n    \n#ifdef TEXTURE_luminance\n    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);\n#endif\n    \n#ifdef TEXTURE_luminance_alpha\n    vec4 textureColor = texture2D(uSampler, vTexcoord);\n    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;\n    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);\n#endif\n    \n    fragColor = textureColor;\n\n#elif defined(IS_TEXT)\n    if (textureColor.a < 0.1)\n      discard;\n    else\n      fragColor = textureColor;\n#else\n    fragColor = lighteffect;\n#endif // HAS_TEXTURE\n    \n#ifdef HAS_FOG\n    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))\n    // In Exp and Exp2: use density = density/far\n    // fogF will be the proportion of fog\n    // Initialize it to the linear value\n    float fogF;\n    if (uFogMode > 0) {\n      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);\n      if (uFogMode > 1)\n        fogF = mix(uFogParms.w, 1.0, fogF);\n      fogF = fogF*uFogParms.z;\n      if (uFogMode == 2)\n        fogF = 1.0 - exp(-fogF);\n      // Docs are wrong: use (density*c)^2, not density*c^2\n      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58\n      else if (uFogMode == 3)\n        fogF = 1.0 - exp(-fogF*fogF);\n      fogF = clamp(fogF, 0.0, 1.0);\n      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);\n    } else gl_FragColor = fragColor;\n#else\n    gl_FragColor = fragColor;\n#endif // HAS_FOG\n    \n}","players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script></code></pre></div>
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -219,14 +555,11 @@ a flat display; both use <code>triangulate</code>.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
       </footer></div>

@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.27</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
       </span>
     </div>
 
@@ -88,8 +88,344 @@
 
       
 
-      </header><script src="pkgdown_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="pkgdown_files/rglWebGL-binding-0.108.27/rglWebGL.js"></script><link href="pkgdown_files/rglwidgetClass-0.108.27/rgl.css" rel="stylesheet">
-<script src="pkgdown_files/rglwidgetClass-0.108.27/rglClass.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/utils.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/buffer.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/subscenes.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/shaders.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/textures.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/projection.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/mouse.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/init.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/pieces.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/draw.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/controls.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/selection.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/rglTimer.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/pretty.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/axes.src.js"></script><script src="pkgdown_files/rglwidgetClass-0.108.27/animation.src.js"></script><script src="pkgdown_files/CanvasMatrix4-0.108.27/CanvasMatrix.src.js"></script><div class="row">
+      </header><script src="pkgdown_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="pkgdown_files/rglWebGL-binding-0.108.47/rglWebGL.js"></script><link href="pkgdown_files/rglwidgetClass-0.108.47/rgl.css" rel="stylesheet">
+<script src="pkgdown_files/rglwidgetClass-0.108.47/rglClass.min.js"></script><script type="text/plain" id="rgl-vertex-shader">
+#line 2 1
+// File 1 is the vertex shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+
+attribute vec3 aPos;
+attribute vec4 aCol;
+uniform mat4 mvMatrix;
+uniform mat4 prMatrix;
+varying vec4 vCol;
+varying vec4 vPosition;
+
+#ifdef NEEDS_VNORMAL
+attribute vec3 aNorm;
+uniform mat4 normMatrix;
+varying vec4 vNormal;
+#endif
+
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+attribute vec2 aTexcoord;
+varying vec2 vTexcoord;
+#endif
+
+#ifdef FIXED_SIZE
+uniform vec3 textScale;
+#endif
+
+#ifdef FIXED_QUADS
+attribute vec3 aOfs;
+#endif
+
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+varying float normz;
+uniform mat4 invPrMatrix;
+#else
+attribute vec3 aPos1;
+attribute vec3 aPos2;
+varying float normz;
+#endif
+#endif // IS_TWOSIDED
+
+#ifdef FAT_LINES
+attribute vec3 aNext;
+attribute vec2 aPoint;
+varying vec2 vPoint;
+varying float vLength;
+uniform float uAspect;
+uniform float uLwd;
+#endif
+
+
+void main(void) {
+  
+#ifndef IS_BRUSH
+#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
+  vPosition = mvMatrix * vec4(aPos, 1.);
+#endif
+  
+#ifndef FIXED_QUADS
+  gl_Position = prMatrix * vPosition;
+#endif
+#endif // !IS_BRUSH
+  
+#ifdef IS_POINTS
+  gl_PointSize = POINTSIZE;
+#endif
+  
+  vCol = aCol;
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
+#endif
+  
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+  /* normz should be calculated *after* projection */
+  normz = (invPrMatrix*vNormal).z;
+#else
+  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
+  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
+  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
+  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
+  normz = pos1.x*pos2.y - pos1.y*pos2.x;
+#endif
+#endif // IS_TWOSIDED
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
+#endif
+  
+#if defined(HAS_TEXTURE) || defined(IS_TEXT)
+  vTexcoord = aTexcoord;
+#endif
+  
+#if defined(FIXED_SIZE) && !defined(ROTATING)
+  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w;
+  gl_Position = pos + vec4(aOfs*textScale, 0.);
+#endif
+  
+#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
+  vec4 pos = mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w + vec4(aOfs,  0.);
+  gl_Position = prMatrix*pos;
+#endif
+  
+#ifdef FAT_LINES
+  /* This code was inspired by Matt Deslauriers' code in 
+   https://mattdesl.svbtle.com/drawing-lines-is-hard */
+  vec2 aspectVec = vec2(uAspect, 1.0);
+  mat4 projViewModel = prMatrix * mvMatrix;
+  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
+  currentProjected = currentProjected/currentProjected.w;
+  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
+  vec2 currentScreen = currentProjected.xy * aspectVec;
+  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
+  float len = uLwd;
+  vec2 dir = vec2(1.0, 0.0);
+  vPoint = aPoint;
+  vLength = length(nextScreen - currentScreen)/2.0;
+  vLength = vLength/(vLength + len);
+  if (vLength > 0.0) {
+    dir = normalize(nextScreen - currentScreen);
+  }
+  vec2 normal = vec2(-dir.y, dir.x);
+  dir.x /= uAspect;
+  normal.x /= uAspect;
+  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
+  gl_Position = currentProjected + offset;
+#endif
+  
+#ifdef IS_BRUSH
+  gl_Position = vec4(aPos, 1.);
+#endif
+}
+</script><script type="text/plain" id="rgl-fragment-shader">
+#line 2 2
+// File 2 is the fragment shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+varying vec4 vCol; // carries alpha
+varying vec4 vPosition;
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+varying vec2 vTexcoord;
+uniform sampler2D uSampler;
+#endif
+
+#ifdef HAS_FOG
+uniform int uFogMode;
+uniform vec3 uFogColor;
+uniform vec4 uFogParms;
+#endif
+
+#if defined(IS_LIT) && !defined(FIXED_QUADS)
+varying vec4 vNormal;
+#endif
+
+#if NCLIPPLANES > 0
+uniform vec4 vClipplane[NCLIPPLANES];
+#endif
+
+#if NLIGHTS > 0
+uniform mat4 mvMatrix;
+#endif
+
+#ifdef IS_LIT
+uniform vec3 emission;
+uniform float shininess;
+#if NLIGHTS > 0
+uniform vec3 ambient[NLIGHTS];
+uniform vec3 specular[NLIGHTS]; // light*material
+uniform vec3 diffuse[NLIGHTS];
+uniform vec3 lightDir[NLIGHTS];
+uniform bool viewpoint[NLIGHTS];
+uniform bool finite[NLIGHTS];
+#endif
+#endif // IS_LIT
+
+#ifdef IS_TWOSIDED
+uniform bool front;
+varying float normz;
+#endif
+
+#ifdef FAT_LINES
+varying vec2 vPoint;
+varying float vLength;
+#endif
+
+void main(void) {
+  vec4 fragColor;
+#ifdef FAT_LINES
+  vec2 point = vPoint;
+  bool neg = point.y < 0.0;
+  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
+                 -(point.y - vLength)/(1.0 - vLength);
+#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
+  if (neg && length(point) <= 1.0) discard;
+#endif
+  point.y = min(point.y, 0.0);
+  if (length(point) > 1.0) discard;
+#endif // FAT_LINES
+  
+#ifdef ROUND_POINTS
+  vec2 coord = gl_PointCoord - vec2(0.5);
+  if (length(coord) > 0.5) discard;
+#endif
+  
+#if NCLIPPLANES > 0
+  for (int i = 0; i < NCLIPPLANES; i++)
+    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
+#endif
+    
+#ifdef FIXED_QUADS
+    vec3 n = vec3(0., 0., 1.);
+#elif defined(IS_LIT)
+    vec3 n = normalize(vNormal.xyz);
+#endif
+    
+#ifdef IS_TWOSIDED
+    if ((normz <= 0.) != front) discard;
+#endif
+    
+#ifdef IS_LIT
+    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
+    vec3 lightdir;
+    vec4 colDiff;
+    vec3 halfVec;
+    vec4 lighteffect = vec4(emission, 0.);
+    vec3 col;
+    float nDotL;
+#ifdef FIXED_QUADS
+    n = -faceforward(n, n, eye);
+#endif
+    
+#if NLIGHTS > 0
+    for (int i=0;i<NLIGHTS;i++) {
+      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
+      lightdir = lightDir[i];
+      if (!viewpoint[i])
+        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
+      if (!finite[i]) {
+        halfVec = normalize(lightdir + eye);
+      } else {
+        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
+        halfVec = normalize(lightdir + eye);
+      }
+      col = ambient[i];
+      nDotL = dot(n, lightdir);
+      col = col + max(nDotL, 0.) * colDiff.rgb;
+      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
+      lighteffect = lighteffect + vec4(col, colDiff.a);
+    }
+#endif
+    
+#else // not IS_LIT
+    vec4 colDiff = vCol;
+    vec4 lighteffect = colDiff;
+#endif
+    
+#ifdef IS_TEXT
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef HAS_TEXTURE
+#ifdef TEXTURE_rgb
+    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
+#endif
+    
+#ifdef TEXTURE_rgba
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef TEXTURE_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
+    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
+#endif
+    
+#ifdef TEXTURE_luminance
+    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
+#endif
+    
+#ifdef TEXTURE_luminance_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
+    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
+#endif
+    
+    fragColor = textureColor;
+
+#elif defined(IS_TEXT)
+    if (textureColor.a < 0.1)
+      discard;
+    else
+      fragColor = textureColor;
+#else
+    fragColor = lighteffect;
+#endif // HAS_TEXTURE
+    
+#ifdef HAS_FOG
+    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
+    // In Exp and Exp2: use density = density/far
+    // fogF will be the proportion of fog
+    // Initialize it to the linear value
+    float fogF;
+    if (uFogMode > 0) {
+      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
+      if (uFogMode > 1)
+        fogF = mix(uFogParms.w, 1.0, fogF);
+      fogF = fogF*uFogParms.z;
+      if (uFogMode == 2)
+        fogF = 1.0 - exp(-fogF);
+      // Docs are wrong: use (density*c)^2, not density*c^2
+      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
+      else if (uFogMode == 3)
+        fogF = 1.0 - exp(-fogF*fogF);
+      fogF = clamp(fogF, 0.0, 1.0);
+      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
+    } else gl_FragColor = fragColor;
+#else
+    gl_FragColor = fragColor;
+#endif // HAS_FOG
+    
+}
+</script><script src="pkgdown_files/CanvasMatrix4-0.108.47/CanvasMatrix.min.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using RGL in pkgdown web sites</h1>
@@ -147,8 +483,8 @@ display. Low-level changes will be collected into a single display:</p>
 <span class="va">c</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1</span>
 <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">coefs</span><span class="op">[</span><span class="st">"(Intercept)"</span><span class="op">]</span>
 <span class="fu"><a href="../reference/planes.html">planes3d</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, <span class="va">c</span>, <span class="va">d</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<div id="rgl64800" style="width:480px;height:296.662546353523px;" class="rglWebGL html-widget"></div>
-<script type="application/json" data-for="rgl64800">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0],"margin":"","floating":false,"tag":""},"rootSubscene":19,"objects":{"25":{"id":25,"type":"spheres","material":{},"vertices":"0","colors":"1","radii":[[0.0749427676200867]],"centers":"2","ignoreExtent":false,"fastTransparency":true,"flags":32771},"27":{"id":27,"type":"text","material":{"lit":false,"margin":0,"floating":true,"edge":[0,1,1]},"vertices":"3","colors":"4","texts":[["x"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"5","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"28":{"id":28,"type":"text","material":{"lit":false,"margin":1,"floating":true,"edge":[1,1,1]},"vertices":"6","colors":"7","texts":[["y"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"8","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"29":{"id":29,"type":"text","material":{"lit":false,"margin":2,"floating":true,"edge":[1,1,1]},"vertices":"9","colors":"10","texts":[["z"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"11","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"30":{"id":30,"type":"planes","material":{"alpha":0.498039215803146,"isTransparent":true},"vertices":"12","colors":"14","offsets":[[0.0104441745206714]],"centers":"15","normals":"13","ignoreExtent":true,"flags":32803},"23":{"id":23,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"22":{"id":22,"type":"background","material":{},"colors":"16","centers":"17","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"24":{"id":24,"type":"background","material":{"lit":false,"back":"lines"},"colors":"18","centers":"19","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"26":{"id":26,"type":"bboxdeco","material":{"front":"lines","back":"lines"},"vertices":"20","colors":"21","axes":{"mode":["pretty","pretty","pretty"],"step":[1,1,0.5],"nticks":[5,5,5],"marklen":[15,15,15],"expand":[1.02999997138977,1.02999997138977,1.02999997138977]},"draw_front":true,"flags":32769},"19":{"id":19,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":19,"mouseMode":{"none":"none","left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,19.6932830810547],"modelMatrix":[[0.932660460472107,0,0,0.443679720163345],[0,0.271094739437103,1.84757041931152,-0.109630852937698],[0,-0.744826674461365,0.672460675239563,-20.0323886871338],[0,0,0,1]],"projMatrix":[[3.73205089569092,0,0,0],[0,3.73205089569092,0,0],[0,0,-3.86370372772217,-70.9920120239258],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[0.932660460472107,0.792627990245819,1.96614336967468],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-2.96668028831482,2.01525211334229,-3.28575921058655,2.57632398605347,-1.07022976875305,1.29300117492676],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":"NA","activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[24,26,25,27,28,29,30,23],"subscenes":[],"flags":34099}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":296.662546353523,"buffer":{"accessors":[{"bufferView":0,"componentType":5126,"count":100,"type":"VEC3"},{"bufferView":1,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":2,"componentType":5126,"count":100,"type":"VEC3"},{"bufferView":3,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":4,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":5,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":6,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":7,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":8,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":9,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":10,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":11,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":12,"componentType":5126,"count":3,"type":"VEC3"},{"bufferView":13,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":14,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":15,"componentType":5126,"count":4,"type":"VEC3"},{"bufferView":16,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":17,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":18,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":19,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":20,"componentType":5126,"count":16,"type":"VEC3"},{"bufferView":21,"componentType":5121,"count":1,"type":"VEC4"}],"bufferViews":[{"buffer":0,"byteLength":1200,"byteOffset":0},{"buffer":0,"byteLength":4,"byteOffset":1200},{"buffer":0,"byteLength":1200,"byteOffset":1204},{"buffer":0,"byteLength":12,"byteOffset":2404},{"buffer":0,"byteLength":4,"byteOffset":2416},{"buffer":0,"byteLength":12,"byteOffset":2420},{"buffer":0,"byteLength":12,"byteOffset":2432},{"buffer":0,"byteLength":4,"byteOffset":2444},{"buffer":0,"byteLength":12,"byteOffset":2448},{"buffer":0,"byteLength":12,"byteOffset":2460},{"buffer":0,"byteLength":4,"byteOffset":2472},{"buffer":0,"byteLength":12,"byteOffset":2476},{"buffer":0,"byteLength":36,"byteOffset":2488},{"buffer":0,"byteLength":12,"byteOffset":2524},{"buffer":0,"byteLength":16,"byteOffset":2536},{"buffer":0,"byteLength":48,"byteOffset":2552},{"buffer":0,"byteLength":16,"byteOffset":2600},{"buffer":0,"byteLength":3,"byteOffset":2616},{"buffer":0,"byteLength":4,"byteOffset":2619},{"buffer":0,"byteLength":3,"byteOffset":2623},{"buffer":0,"byteLength":192,"byteOffset":2628},{"buffer":0,"byteLength":4,"byteOffset":2820}],"buffers":[{"byteLength":2824,"bytes":"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\nAADAfwAAwH8AAIA/AAAAAQ=="}]},"context":{"shiny":false,"rmarkdown":"rmarkdown::html_vignette"},"players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script>
+<div id="rgl9617" style="width:480px;height:296.662546353523px;" class="rglWebGL html-widget"></div>
+<script type="application/json" data-for="rgl9617">{"x":{"material":{"color":"#000000","alpha":1,"lit":true,"ambient":"#000000","specular":"#FFFFFF","emission":"#000000","shininess":50,"smooth":true,"front":"filled","back":"filled","size":3,"lwd":1,"fog":true,"point_antialias":false,"line_antialias":false,"texture":null,"textype":"rgb","texmipmap":false,"texminfilter":"linear","texmagfilter":"linear","texenvmap":false,"depth_mask":true,"depth_test":"less","isTransparent":false,"polygon_offset":[0,0],"margin":"","floating":false,"tag":""},"rootSubscene":19,"objects":{"25":{"id":25,"type":"spheres","material":{},"vertices":"0","colors":"1","radii":[[0.0652097091078758]],"centers":"2","ignoreExtent":false,"fastTransparency":true,"flags":32771},"27":{"id":27,"type":"text","material":{"lit":false,"margin":0,"floating":true,"edge":[0,1,1]},"vertices":"3","colors":"4","texts":[["x"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"5","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"28":{"id":28,"type":"text","material":{"lit":false,"margin":1,"floating":true,"edge":[1,1,1]},"vertices":"6","colors":"7","texts":[["y"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"8","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"29":{"id":29,"type":"text","material":{"lit":false,"margin":2,"floating":true,"edge":[1,1,1]},"vertices":"9","colors":"10","texts":[["z"]],"cex":[[1]],"adj":[[0.5,0.5,0.5]],"centers":"11","family":[["sans"]],"font":[[1]],"ignoreExtent":true,"flags":33808},"30":{"id":30,"type":"planes","material":{"alpha":0.498039215803146,"isTransparent":true},"vertices":"12","colors":"14","offsets":[[-0.0339578948915005]],"centers":"15","normals":"13","ignoreExtent":true,"flags":32803},"23":{"id":23,"type":"light","vertices":[[0,0,1]],"colors":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"viewpoint":true,"finite":false},"22":{"id":22,"type":"background","material":{},"colors":"16","centers":"17","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"24":{"id":24,"type":"background","material":{"lit":false,"back":"lines"},"colors":"18","centers":"19","sphere":false,"fogtype":"none","fogscale":1,"flags":32768},"26":{"id":26,"type":"bboxdeco","material":{"front":"lines","back":"lines"},"vertices":"20","colors":"21","axes":{"mode":["pretty","pretty","pretty"],"step":[1,1,0.5],"nticks":[5,5,5],"marklen":[15,15,15],"expand":[1.02999997138977,1.02999997138977,1.02999997138977]},"draw_front":true,"flags":32769},"19":{"id":19,"type":"subscene","par3d":{"antialias":8,"FOV":30,"ignoreExtent":false,"listeners":19,"mouseMode":{"none":"none","left":"trackball","right":"zoom","middle":"fov","wheel":"pull"},"observer":[0,0,17.1356525421143],"modelMatrix":[[0.909816324710846,0,0,0.0410271622240543],[0,0.286864250898361,1.54397594928741,0.37757271528244],[0,-0.788152992725372,0.56196129322052,-16.7744922637939],[0,0,0,1]],"projMatrix":[[3.73205089569092,0,0,0],[0,3.73205089569092,0,0],[0,0,-3.86370277404785,-61.7720336914062],[0,0,-1,0]],"skipRedraw":false,"userMatrix":[[1,0,0,0],[0,0.342020143325668,0.939692620785909,0],[0,-0.939692620785909,0.342020143325668,0],[0,0,0,1]],"userProjection":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"scale":[0.909816324710846,0.838734924793243,1.64306485652924],"viewport":{"x":0,"y":0,"width":1,"height":1},"zoom":1,"bbox":[-2.26697182655334,2.1767840385437,-2.15951251983643,2.66084432601929,-1.52144157886505,0.939204812049866],"windowRect":[0,0,256,256],"family":"sans","font":1,"cex":1,"useFreeType":true,"fontname":"NULL","maxClipPlanes":2147483647,"glVersion":"NA","activeSubscene":0},"embeddings":{"viewport":"replace","projection":"replace","model":"replace","mouse":"replace"},"objects":[24,26,25,27,28,29,30,23],"subscenes":[],"flags":34099}},"crosstalk":{"key":[],"group":[],"id":[],"options":[]},"width":480,"height":296.662546353523,"buffer":{"accessors":[{"bufferView":0,"componentType":5126,"count":100,"type":"VEC3"},{"bufferView":1,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":2,"componentType":5126,"count":100,"type":"VEC3"},{"bufferView":3,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":4,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":5,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":6,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":7,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":8,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":9,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":10,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":11,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":12,"componentType":5126,"count":3,"type":"VEC3"},{"bufferView":13,"componentType":5126,"count":1,"type":"VEC3"},{"bufferView":14,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":15,"componentType":5126,"count":4,"type":"VEC3"},{"bufferView":16,"componentType":5126,"count":1,"type":"VEC4"},{"bufferView":17,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":18,"componentType":5121,"count":1,"type":"VEC4"},{"bufferView":19,"componentType":5121,"count":1,"type":"VEC3"},{"bufferView":20,"componentType":5126,"count":15,"type":"VEC3"},{"bufferView":21,"componentType":5121,"count":1,"type":"VEC4"}],"bufferViews":[{"buffer":0,"byteLength":1200,"byteOffset":0},{"buffer":0,"byteLength":4,"byteOffset":1200},{"buffer":0,"byteLength":1200,"byteOffset":1204},{"buffer":0,"byteLength":12,"byteOffset":2404},{"buffer":0,"byteLength":4,"byteOffset":2416},{"buffer":0,"byteLength":12,"byteOffset":2420},{"buffer":0,"byteLength":12,"byteOffset":2432},{"buffer":0,"byteLength":4,"byteOffset":2444},{"buffer":0,"byteLength":12,"byteOffset":2448},{"buffer":0,"byteLength":12,"byteOffset":2460},{"buffer":0,"byteLength":4,"byteOffset":2472},{"buffer":0,"byteLength":12,"byteOffset":2476},{"buffer":0,"byteLength":36,"byteOffset":2488},{"buffer":0,"byteLength":12,"byteOffset":2524},{"buffer":0,"byteLength":16,"byteOffset":2536},{"buffer":0,"byteLength":48,"byteOffset":2552},{"buffer":0,"byteLength":16,"byteOffset":2600},{"buffer":0,"byteLength":3,"byteOffset":2616},{"buffer":0,"byteLength":4,"byteOffset":2619},{"buffer":0,"byteLength":3,"byteOffset":2623},{"buffer":0,"byteLength":180,"byteOffset":2628},{"buffer":0,"byteLength":4,"byteOffset":2808}],"buffers":[{"byteLength":2812,"bytes":"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\nAAAAAQ=="}]},"context":{"shiny":false,"rmarkdown":"rmarkdown::html_vignette"},"vertexShader":"#line 2 1\n// File 1 is the vertex shader\n#ifdef GL_ES\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n#endif\n\nattribute vec3 aPos;\nattribute vec4 aCol;\nuniform mat4 mvMatrix;\nuniform mat4 prMatrix;\nvarying vec4 vCol;\nvarying vec4 vPosition;\n\n#ifdef NEEDS_VNORMAL\nattribute vec3 aNorm;\nuniform mat4 normMatrix;\nvarying vec4 vNormal;\n#endif\n\n#if defined(HAS_TEXTURE) || defined (IS_TEXT)\nattribute vec2 aTexcoord;\nvarying vec2 vTexcoord;\n#endif\n\n#ifdef FIXED_SIZE\nuniform vec3 textScale;\n#endif\n\n#ifdef FIXED_QUADS\nattribute vec3 aOfs;\n#endif\n\n#ifdef IS_TWOSIDED\n#ifdef HAS_NORMALS\nvarying float normz;\nuniform mat4 invPrMatrix;\n#else\nattribute vec3 aPos1;\nattribute vec3 aPos2;\nvarying float normz;\n#endif\n#endif // IS_TWOSIDED\n\n#ifdef FAT_LINES\nattribute vec3 aNext;\nattribute vec2 aPoint;\nvarying vec2 vPoint;\nvarying float vLength;\nuniform float uAspect;\nuniform float uLwd;\n#endif\n\n\nvoid main(void) {\n  \n#ifndef IS_BRUSH\n#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)\n  vPosition = mvMatrix * vec4(aPos, 1.);\n#endif\n  \n#ifndef FIXED_QUADS\n  gl_Position = prMatrix * vPosition;\n#endif\n#endif // !IS_BRUSH\n  \n#ifdef IS_POINTS\n  gl_PointSize = POINTSIZE;\n#endif\n  \n  vCol = aCol;\n  \n#ifdef NEEDS_VNORMAL\n  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));\n#endif\n  \n#ifdef IS_TWOSIDED\n#ifdef HAS_NORMALS\n  /* normz should be calculated *after* projection */\n  normz = (invPrMatrix*vNormal).z;\n#else\n  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));\n  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;\n  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));\n  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;\n  normz = pos1.x*pos2.y - pos1.y*pos2.x;\n#endif\n#endif // IS_TWOSIDED\n  \n#ifdef NEEDS_VNORMAL\n  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);\n#endif\n  \n#if defined(HAS_TEXTURE) || defined(IS_TEXT)\n  vTexcoord = aTexcoord;\n#endif\n  \n#if defined(FIXED_SIZE) && !defined(ROTATING)\n  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);\n  pos = pos/pos.w;\n  gl_Position = pos + vec4(aOfs*textScale, 0.);\n#endif\n  \n#if defined(IS_SPRITES) && !defined(FIXED_SIZE)\n  vec4 pos = mvMatrix * vec4(aPos, 1.);\n  pos = pos/pos.w + vec4(aOfs,  0.);\n  gl_Position = prMatrix*pos;\n#endif\n  \n#ifdef FAT_LINES\n  /* This code was inspired by Matt Deslauriers' code in \n   https://mattdesl.svbtle.com/drawing-lines-is-hard */\n  vec2 aspectVec = vec2(uAspect, 1.0);\n  mat4 projViewModel = prMatrix * mvMatrix;\n  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);\n  currentProjected = currentProjected/currentProjected.w;\n  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);\n  vec2 currentScreen = currentProjected.xy * aspectVec;\n  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;\n  float len = uLwd;\n  vec2 dir = vec2(1.0, 0.0);\n  vPoint = aPoint;\n  vLength = length(nextScreen - currentScreen)/2.0;\n  vLength = vLength/(vLength + len);\n  if (vLength > 0.0) {\n    dir = normalize(nextScreen - currentScreen);\n  }\n  vec2 normal = vec2(-dir.y, dir.x);\n  dir.x /= uAspect;\n  normal.x /= uAspect;\n  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);\n  gl_Position = currentProjected + offset;\n#endif\n  \n#ifdef IS_BRUSH\n  gl_Position = vec4(aPos, 1.);\n#endif\n}","fragmentShader":"#line 2 2\n// File 2 is the fragment shader\n#ifdef GL_ES\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n#endif\nvarying vec4 vCol; // carries alpha\nvarying vec4 vPosition;\n#if defined(HAS_TEXTURE) || defined (IS_TEXT)\nvarying vec2 vTexcoord;\nuniform sampler2D uSampler;\n#endif\n\n#ifdef HAS_FOG\nuniform int uFogMode;\nuniform vec3 uFogColor;\nuniform vec4 uFogParms;\n#endif\n\n#if defined(IS_LIT) && !defined(FIXED_QUADS)\nvarying vec4 vNormal;\n#endif\n\n#if NCLIPPLANES > 0\nuniform vec4 vClipplane[NCLIPPLANES];\n#endif\n\n#if NLIGHTS > 0\nuniform mat4 mvMatrix;\n#endif\n\n#ifdef IS_LIT\nuniform vec3 emission;\nuniform float shininess;\n#if NLIGHTS > 0\nuniform vec3 ambient[NLIGHTS];\nuniform vec3 specular[NLIGHTS]; // light*material\nuniform vec3 diffuse[NLIGHTS];\nuniform vec3 lightDir[NLIGHTS];\nuniform bool viewpoint[NLIGHTS];\nuniform bool finite[NLIGHTS];\n#endif\n#endif // IS_LIT\n\n#ifdef IS_TWOSIDED\nuniform bool front;\nvarying float normz;\n#endif\n\n#ifdef FAT_LINES\nvarying vec2 vPoint;\nvarying float vLength;\n#endif\n\nvoid main(void) {\n  vec4 fragColor;\n#ifdef FAT_LINES\n  vec2 point = vPoint;\n  bool neg = point.y < 0.0;\n  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :\n                 -(point.y - vLength)/(1.0 - vLength);\n#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)\n  if (neg && length(point) <= 1.0) discard;\n#endif\n  point.y = min(point.y, 0.0);\n  if (length(point) > 1.0) discard;\n#endif // FAT_LINES\n  \n#ifdef ROUND_POINTS\n  vec2 coord = gl_PointCoord - vec2(0.5);\n  if (length(coord) > 0.5) discard;\n#endif\n  \n#if NCLIPPLANES > 0\n  for (int i = 0; i < NCLIPPLANES; i++)\n    if (dot(vPosition, vClipplane[i]) < 0.0) discard;\n#endif\n    \n#ifdef FIXED_QUADS\n    vec3 n = vec3(0., 0., 1.);\n#elif defined(IS_LIT)\n    vec3 n = normalize(vNormal.xyz);\n#endif\n    \n#ifdef IS_TWOSIDED\n    if ((normz <= 0.) != front) discard;\n#endif\n    \n#ifdef IS_LIT\n    vec3 eye = normalize(-vPosition.xyz/vPosition.w);\n    vec3 lightdir;\n    vec4 colDiff;\n    vec3 halfVec;\n    vec4 lighteffect = vec4(emission, 0.);\n    vec3 col;\n    float nDotL;\n#ifdef FIXED_QUADS\n    n = -faceforward(n, n, eye);\n#endif\n    \n#if NLIGHTS > 0\n    for (int i=0;i<NLIGHTS;i++) {\n      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);\n      lightdir = lightDir[i];\n      if (!viewpoint[i])\n        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n      if (!finite[i]) {\n        halfVec = normalize(lightdir + eye);\n      } else {\n        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);\n        halfVec = normalize(lightdir + eye);\n      }\n      col = ambient[i];\n      nDotL = dot(n, lightdir);\n      col = col + max(nDotL, 0.) * colDiff.rgb;\n      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];\n      lighteffect = lighteffect + vec4(col, colDiff.a);\n    }\n#endif\n    \n#else // not IS_LIT\n    vec4 colDiff = vCol;\n    vec4 lighteffect = colDiff;\n#endif\n    \n#ifdef IS_TEXT\n    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n#endif\n    \n#ifdef HAS_TEXTURE\n#ifdef TEXTURE_rgb\n    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);\n#endif\n    \n#ifdef TEXTURE_rgba\n    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);\n#endif\n    \n#ifdef TEXTURE_alpha\n    vec4 textureColor = texture2D(uSampler, vTexcoord);\n    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;\n    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);\n#endif\n    \n#ifdef TEXTURE_luminance\n    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);\n#endif\n    \n#ifdef TEXTURE_luminance_alpha\n    vec4 textureColor = texture2D(uSampler, vTexcoord);\n    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;\n    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);\n#endif\n    \n    fragColor = textureColor;\n\n#elif defined(IS_TEXT)\n    if (textureColor.a < 0.1)\n      discard;\n    else\n      fragColor = textureColor;\n#else\n    fragColor = lighteffect;\n#endif // HAS_TEXTURE\n    \n#ifdef HAS_FOG\n    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))\n    // In Exp and Exp2: use density = density/far\n    // fogF will be the proportion of fog\n    // Initialize it to the linear value\n    float fogF;\n    if (uFogMode > 0) {\n      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);\n      if (uFogMode > 1)\n        fogF = mix(uFogParms.w, 1.0, fogF);\n      fogF = fogF*uFogParms.z;\n      if (uFogMode == 2)\n        fogF = 1.0 - exp(-fogF);\n      // Docs are wrong: use (density*c)^2, not density*c^2\n      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58\n      else if (uFogMode == 3)\n        fogF = 1.0 - exp(-fogF*fogF);\n      fogF = clamp(fogF, 0.0, 1.0);\n      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);\n    } else gl_FragColor = fragColor;\n#else\n    gl_FragColor = fragColor;\n#endif // HAS_FOG\n    \n}","players":[],"webGLoptions":{"preserveDrawingBuffer":true}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="specifying-the-size-of-figures">Specifying the size of figures<a class="anchor" aria-label="anchor" href="#specifying-the-size-of-figures"></a>
@@ -197,15 +533,12 @@ plots square.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+<p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
       </footer>
