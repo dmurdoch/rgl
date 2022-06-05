@@ -237,6 +237,7 @@ reference:
   - all.equal.mesh3d
   - checkDeldir
   - Buffer
+  - gltfTypes
 - title: General documentation
 - contents:
   - rgl-package

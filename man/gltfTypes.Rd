@@ -6,7 +6,8 @@ Names of glTF types.
 }
 \description{
 The glTF specification packs data into buffers, labelling
-type type of each part with an integer.  The first six are the
+the type of each part with an integer.  The first six values
+in \code{gltfTypes} are the
 integers used there, with \code{"int"} and \code{"double"}
 added for completeness; those values are taken from
 OpenGL header files.
