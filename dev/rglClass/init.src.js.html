@@ -151,7 +151,7 @@
       pole = v.length;
       v.push([0, -1, 0, 0, 0]); 
       v.push([0,  1, 0, 0, 1]);
-      result.values = new Float32Array(this.flatten(v));
+      result.values = new Float32Array(rglwidgetClass.flatten(v));
       result.vertexCount = v.length;
       
       mod1 = segments*(sections - 1);
@@ -172,7 +172,7 @@
                  ((j + 1)*(sections - 1) - 1) % mod1,
                  ((j + 1)*(sections - 1) + sections - 2) % mod1]);
       }
-      result.it = new Uint16Array(this.flatten(it));
+      result.it = new Uint16Array(rglwidgetClass.flatten(it));
       
       for (i = 0; i &lt; it.length; i++) {
         centers.push([0,0,0]);
@@ -234,8 +234,8 @@
           i1 = ib[i][(j + 1) % 4];
           i2 = ib[i][(j + 2) % 4];
           if (j === 0)
-            normal = this.normalize(this.xprod(this.vdiff(v[i1], v[i0]),
-                                  this.vdiff(v[i2], v[i0])));
+            normal = rglwidgetClass.normalize(rglwidgetClass.xprod(rglwidgetClass.vdiff(v[i1], v[i0]),
+                                  rglwidgetClass.vdiff(v[i2], v[i0])));
           result.normals[4*i + j] = normal;
           for (k=0; k &lt; 3; k++) {
             result.values[i*24 + j*6 + k] = v[i0][k];
@@ -245,7 +245,7 @@
         for (j=0; j&lt;4; j++)
           ib[i][j] = 4*i + j;
       }
-      result.ib = new Uint16Array(this.flatten(ib));
+      result.ib = new Uint16Array(rglwidgetClass.flatten(ib));
       
       result.vOffsets = {vofs:0, cofs:-1, nofs:3, radofs:-1, oofs:-1,
                          tofs:-1, nextofs:-1, pointofs:-1, stride:6};
@@ -277,15 +277,19 @@
     */
     rglwidgetClass.prototype.initShapeFromObj = function(shape, obj) {
       var i, pass, f, mode, self = this,
+        /* This function selects things that would be
+           the back, ignoring perspective -- this is what 
+           we want for the bounding box decoration. */
         is_back = function(i) {
-                var normal = shape.normals[i],
+                var normal = [].concat(shape.normals[i]),
                   pt = shape.vertices[i];
-                normal.push(-self.dotprod(normal, pt));
-                normal = self.multVM(normal, self.normMatrix);
-                return normal[2] &lt; 0;
+                normal.push(-rglwidgetClass.dotprod(normal, pt));
+                normal = rglwidgetClass.multVM(normal, self.normMatrix);
+                return normal[2] &lt; 0 || (normal[2] === 0 &amp;&amp; normal[0] &lt; 0);
               }; 
       shape.ofsLoc = obj.ofsLoc;
       shape.texLoc = obj.texLoc;
+      shape.texture = obj.texture;
       shape.sampler = obj.sampler;
       shape.uFogMode = obj.uFogMode;
       shape.uFogColor = obj.uFogColor;
@@ -302,6 +306,7 @@
       shape.prog = obj.prog;
       shape.material = obj.material;
       shape.flags = obj.flags;
+      shape.defFlags = obj.defFlags;
       shape.someHidden = obj.someHidden;
       shape.fastTransparency = obj.fastTransparency;
       shape.nlights = obj.nlights;
@@ -396,7 +401,7 @@
           shape.f[pass] = shape.f[pass].filter(is_back);   
         }
       }
-      // console.log("Names in  shapes not in  shape:"+JSON.stringify(this.keydiff(obj,  shape)));
+      // console.log("Names in  shapes not in  shape:"+JSON.stringify(rglwidgetClass.keydiff(obj,  shape)));
        shape.initialized = true;
     };
 
@@ -422,6 +427,8 @@
       sub.opaque = [];
       sub.lights = [];
       sub.needsBegin = true;
+      if (typeof sub.objects !== "undefined")
+        sub.objects = [].concat(sub.objects); /* make sure it's an array */
       for (i=0; i &lt; sub.objects.length; i++) {
         obj = this.getObj(sub.objects[i]);
         if (typeof obj === "undefined") {
@@ -450,12 +457,12 @@
       if (this.getMaterial(obj.cube, "front") !==
           this.getMaterial(obj.cube, "back"))
         /* jshint bitwise: false */  
-        obj.cube.flags |= this.f_is_twosided;
+        obj.cube.flags |= rglwidgetClass.f_is_twosided;
         /* jshint bitwise: true */
       this.scene.objects[obj.cube.id] = obj.cube;
       obj.ticks = {id: obj.id + 0.2,
                      type: "lines",
-                     flags: this.f_has_fog,
+                     flags: rglwidgetClass.f_has_fog,
                      material: obj.material,
                      colors: (obj.colors.length > 1 ? [obj.colors[1]] : [obj.colors[0]]),
                      axes: obj.axes,
@@ -464,9 +471,9 @@
       this.scene.objects[obj.ticks.id] = obj.ticks;
       obj.labels = {id: obj.id + 0.3,
                      type: "text",
-                     flags: this.f_has_fog + 
-                            this.f_fixed_size + 
-                            this.f_fixed_quads,
+                     flags: rglwidgetClass.f_has_fog + 
+                            rglwidgetClass.f_fixed_size + 
+                            rglwidgetClass.f_fixed_quads,
                      material: {lit: false},
                      colors: (obj.colors.length > 1 ? [obj.colors[1]] : [obj.colors[0]]),
                      cex: [[1]],
@@ -479,6 +486,21 @@
       this.scene.objects[obj.labels.id] = obj.labels;
       obj.initialized = true;
     };
+    
+    rglwidgetClass.prototype.initBackground = function(obj) {
+      var material, fl = obj.defFlags;
+      if (typeof obj.ids !== "undefined")
+        obj.quad = rglwidgetClass.flatten([].concat(obj.ids));
+      else if (obj.sphere) {
+        fl.has_normals = true;
+        fl.needs_vnormal = true;
+        obj.defFlags = fl;
+        material = obj.material;
+        material.front = "culled";
+        obj.vertices = [[0,0,0]];
+        obj.texcoords = [[0,0]];
+      }  
+    };
 
     /**
      * Initialize object for display
@@ -490,48 +512,45 @@
       }
       return this.initObj(this.getObj(id));
     };
-    
+
     /**
      * Initialize object for display
      * @param { Object } obj - object to initialize
      */
     rglwidgetClass.prototype.initObj = function(obj) {
-      var flags = obj.flags,
-          type = obj.type,
-          is_lit = this.isSet(flags, this.f_is_lit),
-          fat_lines = this.isSet(flags, this.f_fat_lines),
-          has_texture = this.isSet(flags, this.f_has_texture),
-          fixed_quads = this.isSet(flags, this.f_fixed_quads),
-          is_transparent = this.isSet(flags, this.f_is_transparent),
-          depth_sort = this.isSet(flags, this.f_depth_sort),
-          sprites_3d = this.isSet(flags, this.f_sprites_3d),
-          fixed_size = this.isSet(flags, this.f_fixed_size),
-          is_twosided = this.isSet(flags, this.f_is_twosided),
-          is_brush = this.isSet(flags, this.f_is_brush),
-          has_fog = this.isSet(flags, this.f_has_fog),
-          has_normals = (typeof obj.normals !== "undefined") ||
-                        obj.type === "spheres",
+      var type = obj.type, 
+          flags = obj.flags,
+          normals = obj.normals,
+          round_points = (typeof obj.material === "undefined") ?
+            false : this.getMaterial(obj, "point_antialias"),
           has_indices = typeof obj.indices !== "undefined",
+          has_spheres = type === "spheres" || 
+                        (type === "background" &amp;&amp; obj.sphere),
+          sprites_3d = rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d),
+          depth_sort = rglwidgetClass.isSet(flags, rglwidgetClass.f_depth_sort),
           gl = this.gl || this.initGL(),
-          polygon_offset,
+          fl, polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
           i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
-          dim, nx, nz, nrow;
+          dim, nx, nz, nrow, shaders;
 
     obj.initialized = true;
-
+    
     obj.someHidden = false; // used in selection
-    obj.is_transparent = is_transparent;
     
     this.expandBufferedFields(obj);
     
     if (type === "subscene")
       return;
       
+    obj.defFlags = fl = rglwidgetClass.getDefFlags(flags, type, normals, round_points);
+  
+    obj.is_transparent = fl.is_transparent;
+  
     if (type === "bboxdeco")
       return this.initBBox(obj);
       
-    if (type === "spheres" &amp;&amp; typeof this.sphere === "undefined")
+    if (has_spheres &amp;&amp; typeof this.sphere === "undefined")
       this.initSphere(16, 16);
 
     if (type === "light") {
@@ -543,25 +562,27 @@
     }
 
     if (type === "clipplanes") {
-      obj.vClipplane = this.flatten(this.cbind(obj.normals, obj.offsets));
+      obj.vClipplane = rglwidgetClass.flatten(rglwidgetClass.cbind(obj.normals, obj.offsets));
       return;
     }
 
-    if (type === "background" &amp;&amp; typeof obj.ids !== "undefined") {
-      obj.quad = this.flatten([].concat(obj.ids));
-      return;
+    if (type === "background") {
+      this.initBackground(obj);
+      if (!obj.sphere)
+        return;
     }
 
     polygon_offset = this.getMaterial(obj, "polygon_offset");
     if (polygon_offset[0] !== 0 || polygon_offset[1] !== 0)
       obj.polygon_offset = polygon_offset;
 
-    if (is_transparent) {
+    if (fl.is_transparent) {
       depth_sort = ["triangles", "quads", "surface",
-                    "spheres", "sprites", "text"].indexOf(type) >= 0;
+                    "spheres", "sprites", "text",
+                    "planes"].indexOf(type) >= 0;
     }
     
-    if (is_brush)
+    if (fl.is_brush)
       this.initSelection(obj.id);
 
     if (typeof obj.vertices === "undefined")
@@ -575,7 +596,7 @@
       
     if (!obj.vertexCount) return;
 
-    if (is_twosided &amp;&amp; !has_normals) {
+    if (fl.is_twosided &amp;&amp; !fl.has_normals &amp;&amp; type !== "background") {
       if (typeof obj.userAttributes === "undefined")
         obj.userAttributes = {};
       v1 = Array(v.length);
@@ -619,11 +640,14 @@
         gl.deleteProgram(obj.prog);
         obj.prog = undefined;
       }
+      
+      shaders = this.getShaders(obj);
+      
       obj.prog = gl.createProgram();
       gl.attachShader(obj.prog, this.getShader( gl.VERTEX_SHADER,
-        this.getVertexShader(obj) ));
+                      shaders.vertex ));
       gl.attachShader(obj.prog, this.getShader( gl.FRAGMENT_SHADER,
-                      this.getFragmentShader(obj) ));
+                      shaders.fragment ));
       //  Force aPos to location 0, aCol to location 1
       gl.bindAttribLocation(obj.prog, 0, "aPos");
       gl.bindAttribLocation(obj.prog, 1, "aCol");
@@ -642,16 +666,16 @@
 
     if (type === "text") {
       texinfo = this.drawTextToCanvas(obj.texts,
-                                      this.flatten(obj.cex),
-                                      this.flatten(obj.family),
-                                      this.flatten(obj.family));
+                                      rglwidgetClass.flatten(obj.cex),
+                                      rglwidgetClass.flatten(obj.family),
+                                      rglwidgetClass.flatten(obj.family));
     }
 
-    if (fixed_quads &amp;&amp; !sprites_3d) {
+    if (fl.fixed_quads &amp;&amp; !sprites_3d) {
       obj.ofsLoc = gl.getAttribLocation(obj.prog, "aOfs");
     }
 
-    if (has_texture || type === "text") {
+    if (fl.has_texture || type === "text") {
       if (!obj.texture) {
         obj.texture = gl.createTexture();
         // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
@@ -663,13 +687,13 @@
       obj.sampler = gl.getUniformLocation(obj.prog, "uSampler");
     }
     
-    if (has_fog &amp;&amp; !sprites_3d) {
+    if (fl.has_fog &amp;&amp; !sprites_3d) {
       obj.uFogMode = gl.getUniformLocation(obj.prog, "uFogMode");
       obj.uFogColor = gl.getUniformLocation(obj.prog, "uFogColor");
       obj.uFogParms = gl.getUniformLocation(obj.prog, "uFogParms");
     }
 
-    if (has_texture) {
+    if (fl.has_texture) {
       mat = obj.material;
       if (typeof mat.uri !== "undefined")
         uri = mat.uri;
@@ -728,16 +752,16 @@
     if (nc > 1) {
       cofs = stride;
       stride = stride + 4;
-      v = this.cbind(v, colors);
+      v = rglwidgetClass.cbind(v, colors);
     } else {
       cofs = -1;
-      obj.onecolor = this.flatten(colors);
+      obj.onecolor = rglwidgetClass.flatten(colors);
     }
 
-    if (has_normals &amp;&amp; obj.type !== "spheres") {
+    if (fl.has_normals &amp;&amp; !has_spheres) {
       nofs = stride;
       stride = stride + 3;
-      v = this.cbind(v, typeof obj.pnormals !== "undefined" ? obj.pnormals : obj.normals);
+      v = rglwidgetClass.cbind(v, typeof obj.pnormals !== "undefined" ? obj.pnormals : obj.normals);
     } else
       nofs = -1;
 
@@ -746,7 +770,7 @@
       stride = stride + 1;
       // FIXME:  always concat the radii?
       if (obj.radii.length === v.length) {
-        v = this.cbind(v, obj.radii);
+        v = rglwidgetClass.cbind(v, obj.radii);
       } else if (obj.radii.length === 1) {
         v = v.map(function(row) { return row.concat(obj.radii[0]);});
       }
@@ -773,13 +797,13 @@
       vnew = new Array(4*v.length);
       fnew = new Array(4*v.length);
       alias = new Array(v.length);
-      var rescale = fixed_size ? 72 : 1,
+      var rescale = fl.fixed_size ? 72 : 1,
           size = obj.radii, s = rescale*size[0]/2;
       last = v.length;
       f = obj.f[0];
-      obj.adj = this.flatten(obj.adj);
+      obj.adj = rglwidgetClass.flatten(obj.adj);
       if (typeof obj.pos !== "undefined") {
-        obj.pos = this.flatten(obj.pos);
+        obj.pos = rglwidgetClass.flatten(obj.pos);
         offset = obj.adj[0];
       } else
         offset = 0;
@@ -821,9 +845,9 @@
       fnew = new Array(4*f.length);
       alias = new Array(v.length);
       last = v.length;
-      adj = this.flatten(obj.adj);
+      adj = rglwidgetClass.flatten(obj.adj);
       if (typeof obj.pos !== "undefined") {
-        obj.pos = this.flatten(obj.pos);
+        obj.pos = rglwidgetClass.flatten(obj.pos);
         offset = adj[0];
       } else
         offset = 0;
@@ -855,7 +879,7 @@
       tofs = stride;
       stride += 2;
       oofs = -1;
-      v = this.cbind(v, obj.texcoords);
+      v = rglwidgetClass.cbind(v, obj.texcoords);
     } else {
       tofs = -1;
       oofs = -1;
@@ -871,27 +895,45 @@
       	obj.userAttribLocations[attr] = gl.getAttribLocation(obj.prog, attr);
       	if (obj.userAttribLocations[attr] >= 0) { // Attribute may not have been used
       	  obj.userAttribOffsets[attr] = stride;
-      	  v = this.cbind(v, obj.userAttributes[attr]);
+      	  v = rglwidgetClass.cbind(v, obj.userAttributes[attr]);
       	  stride = v[0].length;
       	  obj.userAttribSizes[attr] = stride - obj.userAttribOffsets[attr];
-      	}
+      	} else
+      	  console.warn("attribute '"+attr+"' not found in object "+obj.id+".");
       }
     }
 
-    if (typeof obj.userUniforms !== "undefined") {
+    if (typeof obj.userUniforms !== "undefined" ||
+        typeof obj.userTextures !== "undefined") {
       obj.userUniformLocations = {};
-      for (attr in obj.userUniforms)
+      for (attr in obj.userUniforms) {
         obj.userUniformLocations[attr] = gl.getUniformLocation(obj.prog, attr);
+        if (obj.userUniformLocations[attr] === null)
+          console.warn("uniform '"+attr+"' not found in object "+obj.id+".");
+      }
+      for (attr in obj.userTextures) {
+        var texture = obj.userTextures[attr];
+        texture.texture = gl.createTexture();
+        // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
+        gl.bindTexture(gl.TEXTURE_2D, texture.texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([255,255,255, 255])); // white
+        texture.sampler = gl.getUniformLocation(obj.prog, attr);
+        if (texture.sampler === null)
+          console.warn("sampler '"+attr+"' not found in object "+obj.id+".");
+        uri = texture.uri;
+        this.loadImageToTexture(uri, texture.texture);
+      }
     }
 
     if (sprites_3d) {
       obj.userMatrix = new CanvasMatrix4();
-      obj.userMatrix.load(this.flatten(obj.usermatrix));
-      obj.objects = this.flatten([].concat(obj.ids));
-      is_lit = false;
-      obj.adj = this.flatten(obj.adj);
+      obj.userMatrix.load(rglwidgetClass.flatten(obj.usermatrix));
+      obj.objects = rglwidgetClass.flatten([].concat(obj.ids));
+      fl.is_lit = false;
+      obj.adj = rglwidgetClass.flatten(obj.adj);
       if (typeof obj.pos !== "undefined") {
-        obj.pos = this.flatten(obj.pos);
+        obj.pos = rglwidgetClass.flatten(obj.pos);
         obj.offset = obj.adj[0];
       } else
         obj.offset = 0;
@@ -900,50 +942,38 @@
         this.initObjId(obj.objects[i]);
     }
 
-    if (is_lit &amp;&amp; !fixed_quads) {
-       obj.normLoc = gl.getAttribLocation(obj.prog, "aNorm");
-    }
-
     nclipplanes = this.countClipplanes();
     if (nclipplanes &amp;&amp; !sprites_3d) {
-      obj.clipLoc = [];
-      for (i=0; i &lt; nclipplanes; i++)
-        obj.clipLoc[i] = gl.getUniformLocation(obj.prog,"vClipplane" + i);
+      obj.clipLoc = gl.getUniformLocation(obj.prog,"vClipplane");
     }
 
-    if (is_lit) {
+    if (fl.is_lit) {
       obj.emissionLoc = gl.getUniformLocation(obj.prog, "emission");
       obj.emission = new Float32Array(this.stringToRgb(this.getMaterial(obj, "emission")));
       obj.shininessLoc = gl.getUniformLocation(obj.prog, "shininess");
       obj.shininess = this.getMaterial(obj, "shininess");
       obj.nlights = this.countLights();
-      obj.ambientLoc = [];
-      obj.ambient = new Float32Array(this.stringToRgb(this.getMaterial(obj, "ambient")));
-      obj.specularLoc = [];
-      obj.specular = new Float32Array(this.stringToRgb(this.getMaterial(obj, "specular")));
-      obj.diffuseLoc = [];
-      obj.lightDirLoc = [];
-      obj.viewpointLoc = [];
-      obj.finiteLoc = [];
-      for (i=0; i &lt; obj.nlights; i++) {
-        obj.ambientLoc[i] = gl.getUniformLocation(obj.prog, "ambient" + i);
-        obj.specularLoc[i] = gl.getUniformLocation(obj.prog, "specular" + i);
-        obj.diffuseLoc[i] = gl.getUniformLocation(obj.prog, "diffuse" + i);
-        obj.lightDirLoc[i] = gl.getUniformLocation(obj.prog, "lightDir" + i);
-        obj.viewpointLoc[i] = gl.getUniformLocation(obj.prog, "viewpoint" + i);
-        obj.finiteLoc[i] = gl.getUniformLocation(obj.prog, "finite" + i);
+      if (obj.nlights > 0) {
+        obj.ambient = new Float32Array(this.stringToRgb(this.getMaterial(obj, "ambient")));
+        obj.specular = new Float32Array(this.stringToRgb(this.getMaterial(obj, "specular")));
+        obj.ambientLoc = gl.getUniformLocation(obj.prog, "ambient");
+        obj.specularLoc = gl.getUniformLocation(obj.prog, "specular");
+        obj.diffuseLoc = gl.getUniformLocation(obj.prog, "diffuse" );
+        obj.lightDirLoc = gl.getUniformLocation(obj.prog, "lightDir");
+        obj.viewpointLoc = gl.getUniformLocation(obj.prog, "viewpoint");
+        obj.finiteLoc = gl.getUniformLocation(obj.prog, "finite" );
       }
     }
     
-    obj.passes = is_twosided + 1;
+    obj.passes = fl.is_twosided + 1;
     obj.pmode = new Array(obj.passes);
     for (pass = 0; pass &lt; obj.passes; pass++) {
-      if (type === "triangles" || type === "quads" || type === "surface" || type === "spheres")
+      if (type === "triangles" || type === "quads" || type === "surface" || has_spheres)
       	pmode = this.getMaterial(obj, (pass === 0) ? "front" : "back");
       else pmode = "filled";
       obj.pmode[pass] = pmode;
     }
-    if (type !== "spheres") {
+    if (!has_spheres) {
       obj.f.length = obj.passes;
       for (pass = 0; pass &lt; obj.passes; pass++) {
       	f = fnew = obj.f[pass];
@@ -996,7 +1026,7 @@
       	      fnew[6*i + 5] = f[3*i];
       	    }
           }
-        } else if (type === "spheres") {
+        } else if (has_spheres) {
           // default
         } else if (type === "surface") {
           dim = obj.dim[0];
@@ -1037,7 +1067,7 @@
       }
     }
     
-    if (fat_lines) {
+    if (fl.fat_lines) {
       alias = undefined;
       obj.nextLoc = gl.getAttribLocation(obj.prog, "aNext");
       obj.pointLoc = gl.getAttribLocation(obj.prog, "aPoint");
@@ -1156,9 +1186,9 @@
     obj.vOffsets = {vofs:0, cofs:cofs, nofs:nofs, radofs:radofs, oofs:oofs, tofs:tofs,
                     nextofs:nextofs, pointofs:pointofs, stride:stride};
 
-    obj.values = new Float32Array(this.flatten(v));
+    obj.values = new Float32Array(rglwidgetClass.flatten(v));
 
-    if (type !== "spheres" &amp;&amp; !sprites_3d) {
+    if (!has_spheres &amp;&amp; !sprites_3d) {
       obj.buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, obj.buf);
       gl.bufferData(gl.ARRAY_BUFFER, obj.values, gl.STATIC_DRAW); //
@@ -1166,7 +1196,7 @@
       obj.ibuf[0] = gl.createBuffer();
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[0]);
       gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[0], gl[drawtype]);
-      if (is_twosided) {
+      if (fl.is_twosided) {
       	obj.ibuf[1] = gl.createBuffer();
       	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibuf[1]);
       	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, obj.f[1], gl[drawtype]);
@@ -1176,19 +1206,20 @@
     if (!sprites_3d) {
       obj.mvMatLoc = gl.getUniformLocation(obj.prog, "mvMatrix");
       obj.prMatLoc = gl.getUniformLocation(obj.prog, "prMatrix");
+
+      if (fl.fixed_size) {
+        obj.textScaleLoc = gl.getUniformLocation(obj.prog, "textScale");
+      }
     }
 
-    if (fixed_size) {
-      obj.textScaleLoc = gl.getUniformLocation(obj.prog, "textScale");
-    }
-
-    if (is_lit &amp;&amp; !sprites_3d) {
+    if (fl.needs_vnormal) {
+      obj.normLoc = gl.getAttribLocation(obj.prog, "aNorm");
       obj.normMatLoc = gl.getUniformLocation(obj.prog, "normMatrix");
     }
 
-    if (is_twosided) {
+    if (fl.is_twosided) {
       obj.frontLoc = gl.getUniformLocation(obj.prog, "front");
-      if (has_normals)
+      if (fl.has_normals)
         obj.invPrMatLoc = gl.getUniformLocation(obj.prog, "invPrMatrix");
     }
   };
@@ -1293,6 +1324,14 @@
       this.restartCanvas();
       var objs = this.scene.objects,
           self = this;
+          
+      /* These hold context specific data.  In Shiny, they   
+         need to be deleted.  Elsewhere, they don't exist
+         and these are no-ops. */
+         
+      delete this.cube;
+      delete this.sphere;
+      
       Object.keys(objs).forEach(function(key){
         self.initSubscene(parseInt(key, 10));
       });

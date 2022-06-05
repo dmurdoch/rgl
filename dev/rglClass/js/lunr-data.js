@@ -63,6 +63,77 @@ window.lunrData = {
           "rglwidgetclass",
           "widget"
         ],
+        "rglwidgetClass.html#___METHODS_FOR_ANIMATION___": [
+          "___methods_for_animation___",
+          "anim",
+          "function",
+          "method",
+          "relat",
+          "rglwidgetclass#___methods_for_animation___"
+        ],
+        "rglwidgetClass.html#.bisect": [
+          "binari",
+          "bisect",
+          "function",
+          "lt;static&gt",
+          "newx",
+          "rglwidgetclass.bisect",
+          "search",
+          "x"
+        ],
+        "rglwidgetClass.html#.lerp": [
+          "bound",
+          "constant",
+          "function",
+          "interpol",
+          "lerp",
+          "linear",
+          "lt;static&gt",
+          "newx",
+          "outsid",
+          "rglwidgetclass.lerp",
+          "v",
+          "x"
+        ],
+        "rglwidgetClass.html#.rotateByQuaternion": [
+          "function",
+          "lt;static&gt",
+          "q",
+          "quaternion",
+          "rglwidgetclass.rotatebyquaternion",
+          "rotat",
+          "rotatebyquaternion",
+          "unit",
+          "us"
+        ],
+        "rglwidgetClass.html#.slerp": [
+          "bound",
+          "constant",
+          "function",
+          "interpol",
+          "linear",
+          "lt;static&gt",
+          "newx",
+          "outsid",
+          "rglwidgetclass.slerp",
+          "slerp",
+          "spheric",
+          "v",
+          "x"
+        ],
+        "rglwidgetClass.html#.step": [
+          "bound",
+          "constant",
+          "function",
+          "interpol",
+          "lt;static&gt",
+          "newx",
+          "outsid",
+          "rglwidgetclass.step",
+          "step",
+          "v",
+          "x"
+        ],
         "rglwidgetClass.html#___METHODS_FOR_AXES___": [
           "___methods_for_axes___",
           "ax",
@@ -145,14 +216,6 @@ window.lunrData = {
           "object",
           "rglbuffer",
           "rglwidgetclass#isbuff"
-        ],
-        "rglwidgetClass.html#___METHODS_FOR_CONTROLS___": [
-          "___methods_for_controls___",
-          "control",
-          "function",
-          "method",
-          "relat",
-          "rglwidgetclass#___methods_for_controls___"
         ],
         "rglwidgetClass.html#ageSetter": [
           "ag",
@@ -336,6 +399,14 @@ window.lunrData = {
           "normal",
           "obj",
           "rglwidgetclass#donorm"
+        ],
+        "rglwidgetClass.html#doNormMat": [
+          "code",
+          "donormmat",
+          "function",
+          "obj",
+          "rglwidgetclass#donormmat",
+          "vnormal"
         ],
         "rglwidgetClass.html#doPolygonOffset": [
           "dopolygonoffset",
@@ -1028,16 +1099,45 @@ window.lunrData = {
           "rglwidgetclass#___methods_for_shaders___",
           "shader"
         ],
-        "rglwidgetClass.html#getFragmentShader": [
-          "fragment",
+        "rglwidgetClass.html#.getDefFlags": [
+          "call",
+          "defin",
+          "end",
+          "flag",
+          "function",
+          "getdefflag",
+          "lt;static&gt",
+          "method",
+          "r",
+          "rglwidgetclass.getdefflag",
+          "shader",
+          "static",
+          "up"
+        ],
+        "rglwidgetClass.html#.getDefines": [
+          "antialia",
+          "call",
+          "code",
+          "defin",
+          "flag",
           "function",
           "gener",
-          "getfragmentshad",
+          "getdefin",
           "id",
+          "lt;static&gt",
+          "method",
+          "nclipplan",
+          "nlight",
+          "normal",
           "object",
-          "rglwidgetclass#getfragmentshad",
+          "pointsiz",
+          "r",
+          "rglwidgetclass.getdefin",
           "shader",
-          "string"
+          "static",
+          "string",
+          "textyp",
+          "type"
         ],
         "rglwidgetClass.html#getShader": [
           "call",
@@ -1052,15 +1152,16 @@ window.lunrData = {
           "shader",
           "shadertyp"
         ],
-        "rglwidgetClass.html#getVertexShader": [
+        "rglwidgetClass.html#getShaders": [
+          "code",
+          "creat",
+          "fragment",
           "function",
-          "gener",
-          "getvertexshad",
-          "id",
+          "getshad",
           "object",
-          "rglwidgetclass#getvertexshad",
+          "rglwidgetclass#getshad",
           "shader",
-          "string",
+          "shadertyp",
           "vertex"
         ],
         "rglwidgetClass.html#___METHODS_FOR_SUBSCENES___": [
@@ -1249,18 +1350,31 @@ window.lunrData = {
           "rglwidgetclass#alertonc",
           "singl"
         ],
-        "rglwidgetClass.html#cbind": [
+        "rglwidgetClass.html#.arrayDim": [
+          "array",
+          "arraydim",
+          "check",
+          "comput",
+          "dimens",
+          "function",
+          "lt;static&gt",
+          "regular",
+          "rglwidgetclass.arraydim",
+          "without"
+        ],
+        "rglwidgetClass.html#.cbind": [
           "array.&lt;array.&lt;number&gt;&gt",
           "b",
           "bind",
           "cbind",
           "column",
           "function",
+          "lt;static&gt",
           "matric",
-          "rglwidgetclass#cbind",
+          "rglwidgetclass.cbind",
           "vector"
         ],
-        "rglwidgetClass.html#chull": [
+        "rglwidgetClass.html#.chull": [
           "algorithm",
           "andrew'",
           "array",
@@ -1272,7 +1386,8 @@ window.lunrData = {
           "function",
           "hull",
           "licens",
-          "rglwidgetclass#chul",
+          "lt;static&gt",
+          "rglwidgetclass.chul",
           "sharealik",
           "under",
           "us",
@@ -1291,6 +1406,17 @@ window.lunrData = {
           "vector",
           "x",
           "y"
+        ],
+        "rglwidgetClass.html#countClipplaneObjs": [
+          "clip",
+          "count",
+          "countclipplaneobj",
+          "function",
+          "number",
+          "object",
+          "plane",
+          "rglwidgetclass#countclipplaneobj",
+          "scene"
         ],
         "rglwidgetClass.html#countClipplanes": [
           "clip",
@@ -1331,14 +1457,15 @@ window.lunrData = {
           "msg",
           "rglwidgetclass#debug"
         ],
-        "rglwidgetClass.html#dotprod": [
+        "rglwidgetClass.html#.dotprod": [
           "b",
           "dot",
           "dotprod",
           "function",
+          "lt;static&gt",
           "number",
           "product",
-          "rglwidgetclass#dotprod",
+          "rglwidgetclass.dotprod",
           "two",
           "vector"
         ],
@@ -1352,12 +1479,13 @@ window.lunrData = {
           "rglwidgetclass#equalarray",
           "shallow"
         ],
-        "rglwidgetClass.html#flatten": [
+        "rglwidgetClass.html#.flatten": [
           "array.&lt;any&gt",
           "flatten",
           "function",
+          "lt;static&gt",
           "matrix",
-          "rglwidgetclass#flatten",
+          "rglwidgetclass.flatten",
           "vector"
         ],
         "rglwidgetClass.html#getIdsByType": [
@@ -1431,67 +1559,73 @@ window.lunrData = {
           "scene",
           "visibl"
         ],
-        "rglwidgetClass.html#logMatrix": [
+        "rglwidgetClass.html#.logMatrix": [
           "function",
           "log",
           "logmatrix",
+          "lt;static&gt",
           "m",
           "matrix",
-          "rglwidgetclass#logmatrix",
+          "rglwidgetclass.logmatrix",
           "write"
         ],
-        "rglwidgetClass.html#logVec3": [
+        "rglwidgetClass.html#.logVec3": [
           "function",
           "log",
           "logvec3",
-          "rglwidgetclass#logvec3",
+          "lt;static&gt",
+          "rglwidgetclass.logvec3",
           "v",
           "vector",
           "write"
         ],
-        "rglwidgetClass.html#missing": [
+        "rglwidgetClass.html#.missing": [
           "bool",
           "check",
           "function",
+          "lt;static&gt",
           "miss",
           "na",
           "nan",
           "null",
-          "rglwidgetclass#miss",
+          "rglwidgetclass.miss",
           "undefin",
           "x"
         ],
-        "rglwidgetClass.html#multMV": [
+        "rglwidgetClass.html#.multMV": [
           "array.&lt;number&gt",
           "function",
+          "lt;static&gt",
           "m",
           "matrix",
           "multipli",
           "multmv",
-          "rglwidgetclass#multmv",
+          "rglwidgetclass.multmv",
           "v",
           "vector"
         ],
-        "rglwidgetClass.html#multVM": [
+        "rglwidgetClass.html#.multVM": [
           "array.&lt;number&gt",
           "function",
+          "lt;static&gt",
           "m",
           "matrix",
           "multipli",
           "multvm",
-          "rglwidgetclass#multvm",
+          "rglwidgetclass.multvm",
           "row",
           "v",
           "vector"
         ],
-        "rglwidgetClass.html#normalize": [
+        "rglwidgetClass.html#.normalize": [
           "function",
+          "lt;static&gt",
           "normal",
-          "rglwidgetclass#norm",
+          "rglwidgetclass.norm",
           "v",
           "vector"
         ],
-        "rglwidgetClass.html#repeatToLen": [
+        "rglwidgetClass.html#.repeatToLen": [
           "arr",
           "array",
           "array.&lt;any&gt",
@@ -1499,9 +1633,10 @@ window.lunrData = {
           "function",
           "len",
           "length",
+          "lt;static&gt",
           "repeat",
           "repeattolen",
-          "rglwidgetclass#repeattolen"
+          "rglwidgetclass.repeattolen"
         ],
         "rglwidgetClass.html#setElement": [
           "1d",
@@ -1520,13 +1655,14 @@ window.lunrData = {
           "valu",
           "zero"
         ],
-        "rglwidgetClass.html#signif": [
+        "rglwidgetClass.html#.signif": [
           "digit",
           "function",
           "given",
+          "lt;static&gt",
           "number",
           "precis",
-          "rglwidgetclass#signif",
+          "rglwidgetclass.signif",
           "round",
           "signif",
           "x"
@@ -1543,12 +1679,13 @@ window.lunrData = {
           "vector",
           "x"
         ],
-        "rglwidgetClass.html#swap": [
+        "rglwidgetClass.html#.swap": [
           "array.&lt;any&gt",
           "element",
           "function",
           "j",
-          "rglwidgetclass#swap",
+          "lt;static&gt",
+          "rglwidgetclass.swap",
           "swap"
         ],
         "rglwidgetClass.html#toCanvasMatrix4": [
@@ -1575,38 +1712,42 @@ window.lunrData = {
           "rglwidgetclass#uniqu",
           "uniqu"
         ],
-        "rglwidgetClass.html#vdiff": [
+        "rglwidgetClass.html#.vdiff": [
           "differ",
           "function",
-          "rglwidgetclass#vdiff",
+          "lt;static&gt",
+          "rglwidgetclass.vdiff",
           "two",
           "vdiff",
           "vector",
           "x",
           "y"
         ],
-        "rglwidgetClass.html#vlen": [
+        "rglwidgetClass.html#.vlen": [
           "euclidean",
           "function",
           "length",
+          "lt;static&gt",
           "number",
-          "rglwidgetclass#vlen",
+          "rglwidgetclass.vlen",
           "v",
           "vector",
           "vlen"
         ],
-        "rglwidgetClass.html#vscale": [
+        "rglwidgetClass.html#.vscale": [
           "function",
-          "rglwidgetclass#vscal",
+          "lt;static&gt",
+          "rglwidgetclass.vscal",
           "s",
           "scale",
           "vector",
           "vscale",
           "x"
         ],
-        "rglwidgetClass.html#vsum": [
+        "rglwidgetClass.html#.vsum": [
           "function",
-          "rglwidgetclass#vsum",
+          "lt;static&gt",
+          "rglwidgetclass.vsum",
           "sum",
           "two",
           "vector",
@@ -1624,13 +1765,14 @@ window.lunrData = {
           "string",
           "whichlist"
         ],
-        "rglwidgetClass.html#xprod": [
+        "rglwidgetClass.html#.xprod": [
           "array.&lt;number&gt",
           "b",
           "cross",
           "function",
+          "lt;static&gt",
           "product",
-          "rglwidgetclass#xprod",
+          "rglwidgetclass.xprod",
           "two",
           "vector",
           "xprod"
@@ -1789,7 +1931,7 @@ window.lunrData = {
           "take"
         ]
       },
-      "length": 176
+      "length": 185
     },
     "tokenStore": {
       "root": {
@@ -1922,6 +2064,57 @@ window.lunrData = {
                     "rglwidgetClass.html#doLoadIndices": {
                       "ref": "rglwidgetClass.html#doLoadIndices",
                       "tf": 37.5
+                    }
+                  }
+                }
+              }
+            },
+            "t": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "r": {
+                  "docs": {},
+                  "p": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "l": {
+                        "docs": {
+                          "rglwidgetClass.html#.lerp": {
+                            "ref": "rglwidgetClass.html#.lerp",
+                            "tf": 10
+                          },
+                          "rglwidgetClass.html#.slerp": {
+                            "ref": "rglwidgetClass.html#.slerp",
+                            "tf": 8.333333333333332
+                          },
+                          "rglwidgetClass.html#.step": {
+                            "ref": "rglwidgetClass.html#.step",
+                            "tf": 10
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "v": {
+                    "docs": {
+                      "rglwidgetClass.html#R_pretty": {
+                        "ref": "rglwidgetClass.html#R_pretty",
+                        "tf": 2.5423728813559325
+                      },
+                      "rgltimerClass.html#interval": {
+                        "ref": "rgltimerClass.html#interval",
+                        "tf": 750
+                      }
+                    }
+                  }
+                },
+                "g": {
+                  "docs": {
+                    "rglwidgetClass.html#R_pretty": {
+                      "ref": "rglwidgetClass.html#R_pretty",
+                      "tf": 1.694915254237288
                     }
                   }
                 }
@@ -2142,35 +2335,6 @@ window.lunrData = {
                 }
               }
             },
-            "t": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                "g": {
-                  "docs": {
-                    "rglwidgetClass.html#R_pretty": {
-                      "ref": "rglwidgetClass.html#R_pretty",
-                      "tf": 1.694915254237288
-                    }
-                  }
-                },
-                "r": {
-                  "docs": {},
-                  "v": {
-                    "docs": {
-                      "rglwidgetClass.html#R_pretty": {
-                        "ref": "rglwidgetClass.html#R_pretty",
-                        "tf": 2.5423728813559325
-                      },
-                      "rgltimerClass.html#interval": {
-                        "ref": "rgltimerClass.html#interval",
-                        "tf": 750
-                      }
-                    }
-                  }
-                }
-              }
-            },
             "s": {
               "docs": {},
               "u": {
@@ -2381,13 +2545,9 @@ window.lunrData = {
                 "ref": "rglwidgetClass.html#setViewport",
                 "tf": 50
               },
-              "rglwidgetClass.html#getFragmentShader": {
-                "ref": "rglwidgetClass.html#getFragmentShader",
-                "tf": 33.33333333333333
-              },
-              "rglwidgetClass.html#getVertexShader": {
-                "ref": "rglwidgetClass.html#getVertexShader",
-                "tf": 33.33333333333333
+              "rglwidgetClass.html#.getDefines": {
+                "ref": "rglwidgetClass.html#.getDefines",
+                "tf": 8.333333333333332
               },
               "rglwidgetClass.html#addToSubscene": {
                 "ref": "rglwidgetClass.html#addToSubscene",
@@ -2500,9 +2660,9 @@ window.lunrData = {
         },
         "j": {
           "docs": {
-            "rglwidgetClass.html#swap": {
-              "ref": "rglwidgetClass.html#swap",
-              "tf": 33.33333333333333
+            "rglwidgetClass.html#.swap": {
+              "ref": "rglwidgetClass.html#.swap",
+              "tf": 25
             }
           },
           "a": {
@@ -2543,6 +2703,14 @@ window.lunrData = {
             "rglwidgetClass.html#___PRETTY_FROM_R___": {
               "ref": "rglwidgetClass.html#___PRETTY_FROM_R___",
               "tf": 16.666666666666664
+            },
+            "rglwidgetClass.html#.getDefFlags": {
+              "ref": "rglwidgetClass.html#.getDefFlags",
+              "tf": 5.555555555555555
+            },
+            "rglwidgetClass.html#.getDefines": {
+              "ref": "rglwidgetClass.html#.getDefines",
+              "tf": 5.555555555555555
             }
           },
           "e": {
@@ -2600,6 +2768,10 @@ window.lunrData = {
                 "docs": {},
                 "t": {
                   "docs": {
+                    "rglwidgetClass.html#___METHODS_FOR_ANIMATION___": {
+                      "ref": "rglwidgetClass.html#___METHODS_FOR_ANIMATION___",
+                      "tf": 16.666666666666664
+                    },
                     "rglwidgetClass.html#___METHODS_FOR_AXES___": {
                       "ref": "rglwidgetClass.html#___METHODS_FOR_AXES___",
                       "tf": 16.666666666666664
@@ -2607,10 +2779,6 @@ window.lunrData = {
                     "rglwidgetClass.html#___METHODS_FOR_BUFFERS___": {
                       "ref": "rglwidgetClass.html#___METHODS_FOR_BUFFERS___",
                       "tf": 12.5
-                    },
-                    "rglwidgetClass.html#___METHODS_FOR_CONTROLS___": {
-                      "ref": "rglwidgetClass.html#___METHODS_FOR_CONTROLS___",
-                      "tf": 16.666666666666664
                     },
                     "rglwidgetClass.html#___METHODS_FOR_DRAWING___": {
                       "ref": "rglwidgetClass.html#___METHODS_FOR_DRAWING___",
@@ -2734,6 +2902,23 @@ window.lunrData = {
                       "rglwidgetClass.html#applyControls": {
                         "ref": "rglwidgetClass.html#applyControls",
                         "tf": 16.666666666666664
+                      }
+                    }
+                  }
+                }
+              },
+              "u": {
+                "docs": {},
+                "l": {
+                  "docs": {},
+                  "a": {
+                    "docs": {},
+                    "r": {
+                      "docs": {
+                        "rglwidgetClass.html#.arrayDim": {
+                          "ref": "rglwidgetClass.html#.arrayDim",
+                          "tf": 14.285714285714285
+                        }
                       }
                     }
                   }
@@ -2919,8 +3104,8 @@ window.lunrData = {
                         "ref": "rglwidgetClass.html#alertOnce",
                         "tf": 10
                       },
-                      "rglwidgetClass.html#repeatToLen": {
-                        "ref": "rglwidgetClass.html#repeatToLen",
+                      "rglwidgetClass.html#.repeatToLen": {
+                        "ref": "rglwidgetClass.html#.repeatToLen",
                         "tf": 12.5
                       }
                     },
@@ -2934,9 +3119,9 @@ window.lunrData = {
                             "docs": {},
                             "n": {
                               "docs": {
-                                "rglwidgetClass.html#repeatToLen": {
-                                  "ref": "rglwidgetClass.html#repeatToLen",
-                                  "tf": 675
+                                "rglwidgetClass.html#.repeatToLen": {
+                                  "ref": "rglwidgetClass.html#.repeatToLen",
+                                  "tf": 670
                                 }
                               }
                             }
@@ -3069,6 +3254,44 @@ window.lunrData = {
                                                                     "docs": {},
                                                                     "a": {
                                                                       "docs": {},
+                                                                      "n": {
+                                                                        "docs": {},
+                                                                        "i": {
+                                                                          "docs": {},
+                                                                          "m": {
+                                                                            "docs": {},
+                                                                            "a": {
+                                                                              "docs": {},
+                                                                              "t": {
+                                                                                "docs": {},
+                                                                                "i": {
+                                                                                  "docs": {},
+                                                                                  "o": {
+                                                                                    "docs": {},
+                                                                                    "n": {
+                                                                                      "docs": {},
+                                                                                      "_": {
+                                                                                        "docs": {},
+                                                                                        "_": {
+                                                                                          "docs": {},
+                                                                                          "_": {
+                                                                                            "docs": {
+                                                                                              "rglwidgetClass.html#___METHODS_FOR_ANIMATION___": {
+                                                                                                "ref": "rglwidgetClass.html#___METHODS_FOR_ANIMATION___",
+                                                                                                "tf": 1150
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
                                                                       "x": {
                                                                         "docs": {},
                                                                         "e": {
@@ -3116,44 +3339,6 @@ window.lunrData = {
                                                                                           "rglwidgetClass.html#___METHODS_FOR_BUFFERS___": {
                                                                                             "ref": "rglwidgetClass.html#___METHODS_FOR_BUFFERS___",
                                                                                             "tf": 1150
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                    }
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    },
-                                                                    "c": {
-                                                                      "docs": {},
-                                                                      "o": {
-                                                                        "docs": {},
-                                                                        "n": {
-                                                                          "docs": {},
-                                                                          "t": {
-                                                                            "docs": {},
-                                                                            "r": {
-                                                                              "docs": {},
-                                                                              "o": {
-                                                                                "docs": {},
-                                                                                "l": {
-                                                                                  "docs": {},
-                                                                                  "s": {
-                                                                                    "docs": {},
-                                                                                    "_": {
-                                                                                      "docs": {},
-                                                                                      "_": {
-                                                                                        "docs": {},
-                                                                                        "_": {
-                                                                                          "docs": {
-                                                                                            "rglwidgetClass.html#___METHODS_FOR_CONTROLS___": {
-                                                                                              "ref": "rglwidgetClass.html#___METHODS_FOR_CONTROLS___",
-                                                                                              "tf": 1150
-                                                                                            }
                                                                                           }
                                                                                         }
                                                                                       }
@@ -3973,6 +4158,10 @@ window.lunrData = {
                                                       "rglwidgetClass.html#getShader": {
                                                         "ref": "rglwidgetClass.html#getShader",
                                                         "tf": 1150
+                                                      },
+                                                      "rglwidgetClass.html#getShaders": {
+                                                        "ref": "rglwidgetClass.html#getShaders",
+                                                        "tf": 1150
                                                       }
                                                     }
                                                   }
@@ -4053,79 +4242,6 @@ window.lunrData = {
                                                               "rglwidgetClass.html#getViewport": {
                                                                 "ref": "rglwidgetClass.html#getViewport",
                                                                 "tf": 1150
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "e": {
-                                                "docs": {},
-                                                "r": {
-                                                  "docs": {},
-                                                  "t": {
-                                                    "docs": {},
-                                                    "e": {
-                                                      "docs": {},
-                                                      "x": {
-                                                        "docs": {},
-                                                        "s": {
-                                                          "docs": {},
-                                                          "h": {
-                                                            "docs": {},
-                                                            "a": {
-                                                              "docs": {},
-                                                              "d": {
-                                                                "docs": {
-                                                                  "rglwidgetClass.html#getVertexShader": {
-                                                                    "ref": "rglwidgetClass.html#getVertexShader",
-                                                                    "tf": 1150
-                                                                  }
-                                                                }
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "f": {
-                                              "docs": {},
-                                              "r": {
-                                                "docs": {},
-                                                "a": {
-                                                  "docs": {},
-                                                  "g": {
-                                                    "docs": {},
-                                                    "m": {
-                                                      "docs": {},
-                                                      "e": {
-                                                        "docs": {},
-                                                        "n": {
-                                                          "docs": {},
-                                                          "t": {
-                                                            "docs": {},
-                                                            "s": {
-                                                              "docs": {},
-                                                              "h": {
-                                                                "docs": {},
-                                                                "a": {
-                                                                  "docs": {},
-                                                                  "d": {
-                                                                    "docs": {
-                                                                      "rglwidgetClass.html#getFragmentShader": {
-                                                                        "ref": "rglwidgetClass.html#getFragmentShader",
-                                                                        "tf": 1150
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
                                                               }
                                                             }
                                                           }
@@ -5005,40 +5121,6 @@ window.lunrData = {
                                               }
                                             }
                                           }
-                                        },
-                                        "i": {
-                                          "docs": {},
-                                          "g": {
-                                            "docs": {},
-                                            "n": {
-                                              "docs": {},
-                                              "i": {
-                                                "docs": {},
-                                                "f": {
-                                                  "docs": {
-                                                    "rglwidgetClass.html#signif": {
-                                                      "ref": "rglwidgetClass.html#signif",
-                                                      "tf": 1150
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "w": {
-                                          "docs": {},
-                                          "a": {
-                                            "docs": {},
-                                            "p": {
-                                              "docs": {
-                                                "rglwidgetClass.html#swap": {
-                                                  "ref": "rglwidgetClass.html#swap",
-                                                  "tf": 1150
-                                                }
-                                              }
-                                            }
-                                          }
                                         }
                                       },
                                       "i": {
@@ -5543,65 +5625,6 @@ window.lunrData = {
                                               }
                                             }
                                           }
-                                        },
-                                        "d": {
-                                          "docs": {},
-                                          "i": {
-                                            "docs": {},
-                                            "f": {
-                                              "docs": {},
-                                              "f": {
-                                                "docs": {
-                                                  "rglwidgetClass.html#vdiff": {
-                                                    "ref": "rglwidgetClass.html#vdiff",
-                                                    "tf": 1150
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "l": {
-                                          "docs": {},
-                                          "e": {
-                                            "docs": {},
-                                            "n": {
-                                              "docs": {
-                                                "rglwidgetClass.html#vlen": {
-                                                  "ref": "rglwidgetClass.html#vlen",
-                                                  "tf": 1150
-                                                }
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "s": {
-                                          "docs": {},
-                                          "c": {
-                                            "docs": {},
-                                            "a": {
-                                              "docs": {},
-                                              "l": {
-                                                "docs": {
-                                                  "rglwidgetClass.html#vscale": {
-                                                    "ref": "rglwidgetClass.html#vscale",
-                                                    "tf": 1150
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          },
-                                          "u": {
-                                            "docs": {},
-                                            "m": {
-                                              "docs": {
-                                                "rglwidgetClass.html#vsum": {
-                                                  "ref": "rglwidgetClass.html#vsum",
-                                                  "tf": 1150
-                                                }
-                                              }
-                                            }
-                                          }
                                         }
                                       },
                                       "d": {
@@ -5824,6 +5847,20 @@ window.lunrData = {
                                                       "ref": "rglwidgetClass.html#doNormals",
                                                       "tf": 1150
                                                     }
+                                                  },
+                                                  "m": {
+                                                    "docs": {},
+                                                    "a": {
+                                                      "docs": {},
+                                                      "t": {
+                                                        "docs": {
+                                                          "rglwidgetClass.html#doNormMat": {
+                                                            "ref": "rglwidgetClass.html#doNormMat",
+                                                            "tf": 1150
+                                                          }
+                                                        }
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -5921,23 +5958,6 @@ window.lunrData = {
                                                           "ref": "rglwidgetClass.html#doTexture",
                                                           "tf": 1150
                                                         }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "p": {
-                                              "docs": {},
-                                              "r": {
-                                                "docs": {},
-                                                "o": {
-                                                  "docs": {},
-                                                  "d": {
-                                                    "docs": {
-                                                      "rglwidgetClass.html#dotprod": {
-                                                        "ref": "rglwidgetClass.html#dotprod",
-                                                        "tf": 1150
                                                       }
                                                     }
                                                   }
@@ -6512,38 +6532,6 @@ window.lunrData = {
                                                 }
                                               }
                                             }
-                                          },
-                                          "p": {
-                                            "docs": {},
-                                            "e": {
-                                              "docs": {},
-                                              "a": {
-                                                "docs": {},
-                                                "t": {
-                                                  "docs": {},
-                                                  "t": {
-                                                    "docs": {},
-                                                    "o": {
-                                                      "docs": {},
-                                                      "l": {
-                                                        "docs": {},
-                                                        "e": {
-                                                          "docs": {},
-                                                          "n": {
-                                                            "docs": {
-                                                              "rglwidgetClass.html#repeatToLen": {
-                                                                "ref": "rglwidgetClass.html#repeatToLen",
-                                                                "tf": 1150
-                                                              }
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
                                           }
                                         },
                                         "_": {
@@ -6603,51 +6591,6 @@ window.lunrData = {
                                               }
                                             }
                                           }
-                                        },
-                                        "i": {
-                                          "docs": {},
-                                          "s": {
-                                            "docs": {},
-                                            "s": {
-                                              "docs": {
-                                                "rglwidgetClass.html#missing": {
-                                                  "ref": "rglwidgetClass.html#missing",
-                                                  "tf": 1150
-                                                }
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "u": {
-                                          "docs": {},
-                                          "l": {
-                                            "docs": {},
-                                            "t": {
-                                              "docs": {},
-                                              "m": {
-                                                "docs": {},
-                                                "v": {
-                                                  "docs": {
-                                                    "rglwidgetClass.html#multMV": {
-                                                      "ref": "rglwidgetClass.html#multMV",
-                                                      "tf": 1150
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "v": {
-                                                "docs": {},
-                                                "m": {
-                                                  "docs": {
-                                                    "rglwidgetClass.html#multVM": {
-                                                      "ref": "rglwidgetClass.html#multVM",
-                                                      "tf": 1150
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
                                         }
                                       },
                                       "c": {
@@ -6679,37 +6622,6 @@ window.lunrData = {
                                                       }
                                                     }
                                                   }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "b": {
-                                          "docs": {},
-                                          "i": {
-                                            "docs": {},
-                                            "n": {
-                                              "docs": {},
-                                              "d": {
-                                                "docs": {
-                                                  "rglwidgetClass.html#cbind": {
-                                                    "ref": "rglwidgetClass.html#cbind",
-                                                    "tf": 1150
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "h": {
-                                          "docs": {},
-                                          "u": {
-                                            "docs": {},
-                                            "l": {
-                                              "docs": {
-                                                "rglwidgetClass.html#chull": {
-                                                  "ref": "rglwidgetClass.html#chull",
-                                                  "tf": 1150
                                                 }
                                               }
                                             }
@@ -6789,6 +6701,23 @@ window.lunrData = {
                                                                   "rglwidgetClass.html#countClipplanes": {
                                                                     "ref": "rglwidgetClass.html#countClipplanes",
                                                                     "tf": 1150
+                                                                  }
+                                                                },
+                                                                "e": {
+                                                                  "docs": {},
+                                                                  "o": {
+                                                                    "docs": {},
+                                                                    "b": {
+                                                                      "docs": {},
+                                                                      "j": {
+                                                                        "docs": {
+                                                                          "rglwidgetClass.html#countClipplaneObjs": {
+                                                                            "ref": "rglwidgetClass.html#countClipplaneObjs",
+                                                                            "tf": 1150
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
                                                                   }
                                                                 }
                                                               }
@@ -7153,49 +7082,6 @@ window.lunrData = {
                                                 }
                                               }
                                             }
-                                          },
-                                          "g": {
-                                            "docs": {},
-                                            "m": {
-                                              "docs": {},
-                                              "a": {
-                                                "docs": {},
-                                                "t": {
-                                                  "docs": {},
-                                                  "r": {
-                                                    "docs": {},
-                                                    "i": {
-                                                      "docs": {},
-                                                      "x": {
-                                                        "docs": {
-                                                          "rglwidgetClass.html#logMatrix": {
-                                                            "ref": "rglwidgetClass.html#logMatrix",
-                                                            "tf": 1150
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            "v": {
-                                              "docs": {},
-                                              "e": {
-                                                "docs": {},
-                                                "c": {
-                                                  "3": {
-                                                    "docs": {
-                                                      "rglwidgetClass.html#logVec3": {
-                                                        "ref": "rglwidgetClass.html#logVec3",
-                                                        "tf": 1150
-                                                      }
-                                                    }
-                                                  },
-                                                  "docs": {}
-                                                }
-                                              }
-                                            }
                                           }
                                         }
                                       },
@@ -7233,6 +7119,392 @@ window.lunrData = {
                                             }
                                           }
                                         }
+                                      }
+                                    },
+                                    ".": {
+                                      "docs": {},
+                                      "b": {
+                                        "docs": {},
+                                        "i": {
+                                          "docs": {},
+                                          "s": {
+                                            "docs": {},
+                                            "e": {
+                                              "docs": {},
+                                              "c": {
+                                                "docs": {},
+                                                "t": {
+                                                  "docs": {
+                                                    "rglwidgetClass.html#.bisect": {
+                                                      "ref": "rglwidgetClass.html#.bisect",
+                                                      "tf": 1150
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "l": {
+                                        "docs": {},
+                                        "e": {
+                                          "docs": {},
+                                          "r": {
+                                            "docs": {},
+                                            "p": {
+                                              "docs": {
+                                                "rglwidgetClass.html#.lerp": {
+                                                  "ref": "rglwidgetClass.html#.lerp",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "o": {
+                                          "docs": {},
+                                          "g": {
+                                            "docs": {},
+                                            "m": {
+                                              "docs": {},
+                                              "a": {
+                                                "docs": {},
+                                                "t": {
+                                                  "docs": {},
+                                                  "r": {
+                                                    "docs": {},
+                                                    "i": {
+                                                      "docs": {},
+                                                      "x": {
+                                                        "docs": {
+                                                          "rglwidgetClass.html#.logMatrix": {
+                                                            "ref": "rglwidgetClass.html#.logMatrix",
+                                                            "tf": 1150
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "v": {
+                                              "docs": {},
+                                              "e": {
+                                                "docs": {},
+                                                "c": {
+                                                  "3": {
+                                                    "docs": {
+                                                      "rglwidgetClass.html#.logVec3": {
+                                                        "ref": "rglwidgetClass.html#.logVec3",
+                                                        "tf": 1150
+                                                      }
+                                                    }
+                                                  },
+                                                  "docs": {}
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "r": {
+                                        "docs": {},
+                                        "o": {
+                                          "docs": {},
+                                          "t": {
+                                            "docs": {},
+                                            "a": {
+                                              "docs": {},
+                                              "t": {
+                                                "docs": {},
+                                                "e": {
+                                                  "docs": {},
+                                                  "b": {
+                                                    "docs": {},
+                                                    "y": {
+                                                      "docs": {},
+                                                      "q": {
+                                                        "docs": {},
+                                                        "u": {
+                                                          "docs": {},
+                                                          "a": {
+                                                            "docs": {},
+                                                            "t": {
+                                                              "docs": {},
+                                                              "e": {
+                                                                "docs": {},
+                                                                "r": {
+                                                                  "docs": {},
+                                                                  "n": {
+                                                                    "docs": {},
+                                                                    "i": {
+                                                                      "docs": {},
+                                                                      "o": {
+                                                                        "docs": {},
+                                                                        "n": {
+                                                                          "docs": {
+                                                                            "rglwidgetClass.html#.rotateByQuaternion": {
+                                                                              "ref": "rglwidgetClass.html#.rotateByQuaternion",
+                                                                              "tf": 1150
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "e": {
+                                          "docs": {},
+                                          "p": {
+                                            "docs": {},
+                                            "e": {
+                                              "docs": {},
+                                              "a": {
+                                                "docs": {},
+                                                "t": {
+                                                  "docs": {},
+                                                  "t": {
+                                                    "docs": {},
+                                                    "o": {
+                                                      "docs": {},
+                                                      "l": {
+                                                        "docs": {},
+                                                        "e": {
+                                                          "docs": {},
+                                                          "n": {
+                                                            "docs": {
+                                                              "rglwidgetClass.html#.repeatToLen": {
+                                                                "ref": "rglwidgetClass.html#.repeatToLen",
+                                                                "tf": 1150
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "s": {
+                                        "docs": {},
+                                        "l": {
+                                          "docs": {},
+                                          "e": {
+                                            "docs": {},
+                                            "r": {
+                                              "docs": {},
+                                              "p": {
+                                                "docs": {
+                                                  "rglwidgetClass.html#.slerp": {
+                                                    "ref": "rglwidgetClass.html#.slerp",
+                                                    "tf": 1150
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "t": {
+                                          "docs": {},
+                                          "e": {
+                                            "docs": {},
+                                            "p": {
+                                              "docs": {
+                                                "rglwidgetClass.html#.step": {
+                                                  "ref": "rglwidgetClass.html#.step",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "i": {
+                                          "docs": {},
+                                          "g": {
+                                            "docs": {},
+                                            "n": {
+                                              "docs": {},
+                                              "i": {
+                                                "docs": {},
+                                                "f": {
+                                                  "docs": {
+                                                    "rglwidgetClass.html#.signif": {
+                                                      "ref": "rglwidgetClass.html#.signif",
+                                                      "tf": 1150
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "w": {
+                                          "docs": {},
+                                          "a": {
+                                            "docs": {},
+                                            "p": {
+                                              "docs": {
+                                                "rglwidgetClass.html#.swap": {
+                                                  "ref": "rglwidgetClass.html#.swap",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "g": {
+                                        "docs": {},
+                                        "e": {
+                                          "docs": {},
+                                          "t": {
+                                            "docs": {},
+                                            "d": {
+                                              "docs": {},
+                                              "e": {
+                                                "docs": {},
+                                                "f": {
+                                                  "docs": {},
+                                                  "f": {
+                                                    "docs": {},
+                                                    "l": {
+                                                      "docs": {},
+                                                      "a": {
+                                                        "docs": {},
+                                                        "g": {
+                                                          "docs": {
+                                                            "rglwidgetClass.html#.getDefFlags": {
+                                                              "ref": "rglwidgetClass.html#.getDefFlags",
+                                                              "tf": 1150
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "i": {
+                                                    "docs": {},
+                                                    "n": {
+                                                      "docs": {
+                                                        "rglwidgetClass.html#.getDefines": {
+                                                          "ref": "rglwidgetClass.html#.getDefines",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "a": {
+                                        "docs": {},
+                                        "r": {
+                                          "docs": {},
+                                          "r": {
+                                            "docs": {},
+                                            "a": {
+                                              "docs": {},
+                                              "y": {
+                                                "docs": {},
+                                                "d": {
+                                                  "docs": {},
+                                                  "i": {
+                                                    "docs": {},
+                                                    "m": {
+                                                      "docs": {
+                                                        "rglwidgetClass.html#.arrayDim": {
+                                                          "ref": "rglwidgetClass.html#.arrayDim",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "c": {
+                                        "docs": {},
+                                        "b": {
+                                          "docs": {},
+                                          "i": {
+                                            "docs": {},
+                                            "n": {
+                                              "docs": {},
+                                              "d": {
+                                                "docs": {
+                                                  "rglwidgetClass.html#.cbind": {
+                                                    "ref": "rglwidgetClass.html#.cbind",
+                                                    "tf": 1150
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "h": {
+                                          "docs": {},
+                                          "u": {
+                                            "docs": {},
+                                            "l": {
+                                              "docs": {
+                                                "rglwidgetClass.html#.chull": {
+                                                  "ref": "rglwidgetClass.html#.chull",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "d": {
+                                        "docs": {},
+                                        "o": {
+                                          "docs": {},
+                                          "t": {
+                                            "docs": {},
+                                            "p": {
+                                              "docs": {},
+                                              "r": {
+                                                "docs": {},
+                                                "o": {
+                                                  "docs": {},
+                                                  "d": {
+                                                    "docs": {
+                                                      "rglwidgetClass.html#.dotprod": {
+                                                        "ref": "rglwidgetClass.html#.dotprod",
+                                                        "tf": 1150
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
                                       },
                                       "f": {
                                         "docs": {},
@@ -7248,10 +7520,58 @@ window.lunrData = {
                                                   "docs": {},
                                                   "n": {
                                                     "docs": {
-                                                      "rglwidgetClass.html#flatten": {
-                                                        "ref": "rglwidgetClass.html#flatten",
+                                                      "rglwidgetClass.html#.flatten": {
+                                                        "ref": "rglwidgetClass.html#.flatten",
                                                         "tf": 1150
                                                       }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "m": {
+                                        "docs": {},
+                                        "i": {
+                                          "docs": {},
+                                          "s": {
+                                            "docs": {},
+                                            "s": {
+                                              "docs": {
+                                                "rglwidgetClass.html#.missing": {
+                                                  "ref": "rglwidgetClass.html#.missing",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "u": {
+                                          "docs": {},
+                                          "l": {
+                                            "docs": {},
+                                            "t": {
+                                              "docs": {},
+                                              "m": {
+                                                "docs": {},
+                                                "v": {
+                                                  "docs": {
+                                                    "rglwidgetClass.html#.multMV": {
+                                                      "ref": "rglwidgetClass.html#.multMV",
+                                                      "tf": 1150
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "v": {
+                                                "docs": {},
+                                                "m": {
+                                                  "docs": {
+                                                    "rglwidgetClass.html#.multVM": {
+                                                      "ref": "rglwidgetClass.html#.multVM",
+                                                      "tf": 1150
                                                     }
                                                   }
                                                 }
@@ -7268,8 +7588,70 @@ window.lunrData = {
                                             "docs": {},
                                             "m": {
                                               "docs": {
-                                                "rglwidgetClass.html#normalize": {
-                                                  "ref": "rglwidgetClass.html#normalize",
+                                                "rglwidgetClass.html#.normalize": {
+                                                  "ref": "rglwidgetClass.html#.normalize",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "v": {
+                                        "docs": {},
+                                        "d": {
+                                          "docs": {},
+                                          "i": {
+                                            "docs": {},
+                                            "f": {
+                                              "docs": {},
+                                              "f": {
+                                                "docs": {
+                                                  "rglwidgetClass.html#.vdiff": {
+                                                    "ref": "rglwidgetClass.html#.vdiff",
+                                                    "tf": 1150
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "l": {
+                                          "docs": {},
+                                          "e": {
+                                            "docs": {},
+                                            "n": {
+                                              "docs": {
+                                                "rglwidgetClass.html#.vlen": {
+                                                  "ref": "rglwidgetClass.html#.vlen",
+                                                  "tf": 1150
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "s": {
+                                          "docs": {},
+                                          "c": {
+                                            "docs": {},
+                                            "a": {
+                                              "docs": {},
+                                              "l": {
+                                                "docs": {
+                                                  "rglwidgetClass.html#.vscale": {
+                                                    "ref": "rglwidgetClass.html#.vscale",
+                                                    "tf": 1150
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "u": {
+                                            "docs": {},
+                                            "m": {
+                                              "docs": {
+                                                "rglwidgetClass.html#.vsum": {
+                                                  "ref": "rglwidgetClass.html#.vsum",
                                                   "tf": 1150
                                                 }
                                               }
@@ -7287,8 +7669,8 @@ window.lunrData = {
                                               "docs": {},
                                               "d": {
                                                 "docs": {
-                                                  "rglwidgetClass.html#xprod": {
-                                                    "ref": "rglwidgetClass.html#xprod",
+                                                  "rglwidgetClass.html#.xprod": {
+                                                    "ref": "rglwidgetClass.html#.xprod",
                                                     "tf": 1150
                                                   }
                                                 }
@@ -7795,6 +8177,89 @@ window.lunrData = {
               }
             }
           },
+          "o": {
+            "docs": {},
+            "t": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "rglwidgetClass.html#.rotateByQuaternion": {
+                      "ref": "rglwidgetClass.html#.rotateByQuaternion",
+                      "tf": 12.5
+                    }
+                  },
+                  "e": {
+                    "docs": {},
+                    "b": {
+                      "docs": {},
+                      "y": {
+                        "docs": {},
+                        "q": {
+                          "docs": {},
+                          "u": {
+                            "docs": {},
+                            "a": {
+                              "docs": {},
+                              "t": {
+                                "docs": {},
+                                "e": {
+                                  "docs": {},
+                                  "r": {
+                                    "docs": {},
+                                    "n": {
+                                      "docs": {},
+                                      "i": {
+                                        "docs": {},
+                                        "o": {
+                                          "docs": {},
+                                          "n": {
+                                            "docs": {
+                                              "rglwidgetClass.html#.rotateByQuaternion": {
+                                                "ref": "rglwidgetClass.html#.rotateByQuaternion",
+                                                "tf": 683.3333333333334
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "w": {
+              "docs": {
+                "rglwidgetClass.html#.multVM": {
+                  "ref": "rglwidgetClass.html#.multVM",
+                  "tf": 12.5
+                }
+              }
+            },
+            "u": {
+              "docs": {},
+              "n": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "rglwidgetClass.html#.signif": {
+                      "ref": "rglwidgetClass.html#.signif",
+                      "tf": 12.5
+                    }
+                  }
+                }
+              }
+            }
+          },
           "_": {
             "docs": {},
             "p": {
@@ -7815,31 +8280,6 @@ window.lunrData = {
                           }
                         }
                       }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "o": {
-            "docs": {},
-            "w": {
-              "docs": {
-                "rglwidgetClass.html#multVM": {
-                  "ref": "rglwidgetClass.html#multVM",
-                  "tf": 12.5
-                }
-              }
-            },
-            "u": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "d": {
-                  "docs": {
-                    "rglwidgetClass.html#signif": {
-                      "ref": "rglwidgetClass.html#signif",
-                      "tf": 12.5
                     }
                   }
                 }
@@ -7878,9 +8318,9 @@ window.lunrData = {
               "ref": "rglwidgetClass.html#R_pretty",
               "tf": 1.694915254237288
             },
-            "rglwidgetClass.html#vscale": {
-              "ref": "rglwidgetClass.html#vscale",
-              "tf": 33.33333333333333
+            "rglwidgetClass.html#.vscale": {
+              "ref": "rglwidgetClass.html#.vscale",
+              "tf": 25
             }
           },
           "u": {
@@ -8141,8 +8581,8 @@ window.lunrData = {
                   "ref": "rglwidgetClass.html#sumsq",
                   "tf": 10
                 },
-                "rglwidgetClass.html#vsum": {
-                  "ref": "rglwidgetClass.html#vsum",
+                "rglwidgetClass.html#.vsum": {
+                  "ref": "rglwidgetClass.html#.vsum",
                   "tf": 16.666666666666664
                 }
               },
@@ -8161,6 +8601,23 @@ window.lunrData = {
           },
           "e": {
             "docs": {},
+            "a": {
+              "docs": {},
+              "r": {
+                "docs": {},
+                "c": {
+                  "docs": {},
+                  "h": {
+                    "docs": {
+                      "rglwidgetClass.html#.bisect": {
+                        "ref": "rglwidgetClass.html#.bisect",
+                        "tf": 25
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "t": {
               "docs": {
                 "rglwidgetClass.html#getTickVertices": {
@@ -8725,8 +9182,185 @@ window.lunrData = {
               }
             }
           },
+          "l": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "r": {
+                "docs": {},
+                "p": {
+                  "docs": {
+                    "rglwidgetClass.html#.slerp": {
+                      "ref": "rglwidgetClass.html#.slerp",
+                      "tf": 670
+                    }
+                  }
+                }
+              }
+            },
+            "i": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "e": {
+                  "docs": {
+                    "rglwidgetClass.html#getSlide": {
+                      "ref": "rglwidgetClass.html#getSlide",
+                      "tf": 7.142857142857142
+                    }
+                  }
+                },
+                "i": {
+                  "docs": {
+                    "rglwidgetClass.html#getSlide": {
+                      "ref": "rglwidgetClass.html#getSlide",
+                      "tf": 7.142857142857142
+                    }
+                  }
+                }
+              }
+            },
+            "o": {
+              "docs": {},
+              "w": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "rgltimerClass.html#slower": {
+                        "ref": "rgltimerClass.html#slower",
+                        "tf": 762.5
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "p": {
+            "docs": {},
+            "h": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "r": {
+                  "docs": {},
+                  "i": {
+                    "docs": {},
+                    "c": {
+                      "docs": {
+                        "rglwidgetClass.html#.slerp": {
+                          "ref": "rglwidgetClass.html#.slerp",
+                          "tf": 8.333333333333332
+                        }
+                      }
+                    }
+                  },
+                  "e": {
+                    "docs": {
+                      "rglwidgetClass.html#drawSpheres": {
+                        "ref": "rglwidgetClass.html#drawSpheres",
+                        "tf": 3.90625
+                      },
+                      "rglwidgetClass.html#initShapeGL": {
+                        "ref": "rglwidgetClass.html#initShapeGL",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#initSphere": {
+                        "ref": "rglwidgetClass.html#initSphere",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#getSpherePieces": {
+                        "ref": "rglwidgetClass.html#getSpherePieces",
+                        "tf": 25
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "r": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "e": {
+                    "docs": {
+                      "rglwidgetClass.html#drawSprites": {
+                        "ref": "rglwidgetClass.html#drawSprites",
+                        "tf": 12.5
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "e": {
+              "docs": {},
+              "c": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "f": {
+                    "docs": {
+                      "rglwidgetClass.html#countObjs": {
+                        "ref": "rglwidgetClass.html#countObjs",
+                        "tf": 10
+                      }
+                    }
+                  }
+                }
+              },
+              "e": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "rgltimerClass.html#newmultiplier": {
+                      "ref": "rgltimerClass.html#newmultiplier",
+                      "tf": 12.5
+                    }
+                  }
+                }
+              }
+            }
+          },
           "t": {
             "docs": {},
+            "e": {
+              "docs": {},
+              "p": {
+                "docs": {
+                  "rglwidgetClass.html#.step": {
+                    "ref": "rglwidgetClass.html#.step",
+                    "tf": 680
+                  },
+                  "rgltimerClass.html#stepSize": {
+                    "ref": "rgltimerClass.html#stepSize",
+                    "tf": 16.666666666666664
+                  },
+                  "rgltimerClass.html#step": {
+                    "ref": "rgltimerClass.html#step",
+                    "tf": 766.6666666666666
+                  }
+                },
+                "s": {
+                  "docs": {},
+                  "i": {
+                    "docs": {},
+                    "z": {
+                      "docs": {
+                        "rgltimerClass.html#stepSize": {
+                          "ref": "rgltimerClass.html#stepSize",
+                          "tf": 750
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "y": {
               "docs": {},
               "l": {
@@ -8825,6 +9459,24 @@ window.lunrData = {
                     }
                   }
                 }
+              },
+              "t": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "c": {
+                    "docs": {
+                      "rglwidgetClass.html#.getDefFlags": {
+                        "ref": "rglwidgetClass.html#.getDefFlags",
+                        "tf": 5.555555555555555
+                      },
+                      "rglwidgetClass.html#.getDefines": {
+                        "ref": "rglwidgetClass.html#.getDefines",
+                        "tf": 5.555555555555555
+                      }
+                    }
+                  }
+                }
               }
             },
             "o": {
@@ -8881,46 +9533,13 @@ window.lunrData = {
                   "docs": {},
                   "g": {
                     "docs": {
-                      "rglwidgetClass.html#getFragmentShader": {
-                        "ref": "rglwidgetClass.html#getFragmentShader",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#getVertexShader": {
-                        "ref": "rglwidgetClass.html#getVertexShader",
-                        "tf": 33.33333333333333
+                      "rglwidgetClass.html#.getDefines": {
+                        "ref": "rglwidgetClass.html#.getDefines",
+                        "tf": 8.333333333333332
                       },
                       "rglwidgetClass.html#whichList": {
                         "ref": "rglwidgetClass.html#whichList",
                         "tf": 33.33333333333333
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "e": {
-              "docs": {},
-              "p": {
-                "docs": {
-                  "rgltimerClass.html#stepSize": {
-                    "ref": "rgltimerClass.html#stepSize",
-                    "tf": 16.666666666666664
-                  },
-                  "rgltimerClass.html#step": {
-                    "ref": "rgltimerClass.html#step",
-                    "tf": 766.6666666666666
-                  }
-                },
-                "s": {
-                  "docs": {},
-                  "i": {
-                    "docs": {},
-                    "z": {
-                      "docs": {
-                        "rgltimerClass.html#stepSize": {
-                          "ref": "rgltimerClass.html#stepSize",
-                          "tf": 750
-                        }
                       }
                     }
                   }
@@ -8959,6 +9578,10 @@ window.lunrData = {
                     "rglwidgetClass.html#start": {
                       "ref": "rglwidgetClass.html#start",
                       "tf": 6.25
+                    },
+                    "rglwidgetClass.html#countClipplaneObjs": {
+                      "ref": "rglwidgetClass.html#countClipplaneObjs",
+                      "tf": 10
                     },
                     "rglwidgetClass.html#countClipplanes": {
                       "ref": "rglwidgetClass.html#countClipplanes",
@@ -9032,8 +9655,8 @@ window.lunrData = {
                       "ref": "rglwidgetClass.html#R_pretty",
                       "tf": 0.847457627118644
                     },
-                    "rglwidgetClass.html#vscale": {
-                      "ref": "rglwidgetClass.html#vscale",
+                    "rglwidgetClass.html#.vscale": {
+                      "ref": "rglwidgetClass.html#.vscale",
                       "tf": 25
                     }
                   }
@@ -9129,9 +9752,9 @@ window.lunrData = {
                   "docs": {},
                   "f": {
                     "docs": {
-                      "rglwidgetClass.html#signif": {
-                        "ref": "rglwidgetClass.html#signif",
-                        "tf": 675
+                      "rglwidgetClass.html#.signif": {
+                        "ref": "rglwidgetClass.html#.signif",
+                        "tf": 670
                       }
                     }
                   }
@@ -9145,83 +9768,6 @@ window.lunrData = {
                   "rgltimerClass.html#stepSize": {
                     "ref": "rgltimerClass.html#stepSize",
                     "tf": 16.666666666666664
-                  }
-                }
-              }
-            }
-          },
-          "p": {
-            "docs": {},
-            "h": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                "r": {
-                  "docs": {},
-                  "e": {
-                    "docs": {
-                      "rglwidgetClass.html#drawSpheres": {
-                        "ref": "rglwidgetClass.html#drawSpheres",
-                        "tf": 3.90625
-                      },
-                      "rglwidgetClass.html#initShapeGL": {
-                        "ref": "rglwidgetClass.html#initShapeGL",
-                        "tf": 10
-                      },
-                      "rglwidgetClass.html#initSphere": {
-                        "ref": "rglwidgetClass.html#initSphere",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#getSpherePieces": {
-                        "ref": "rglwidgetClass.html#getSpherePieces",
-                        "tf": 25
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "r": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "e": {
-                    "docs": {
-                      "rglwidgetClass.html#drawSprites": {
-                        "ref": "rglwidgetClass.html#drawSprites",
-                        "tf": 12.5
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "e": {
-              "docs": {},
-              "c": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "f": {
-                    "docs": {
-                      "rglwidgetClass.html#countObjs": {
-                        "ref": "rglwidgetClass.html#countObjs",
-                        "tf": 10
-                      }
-                    }
-                  }
-                }
-              },
-              "e": {
-                "docs": {},
-                "d": {
-                  "docs": {
-                    "rgltimerClass.html#newmultiplier": {
-                      "ref": "rgltimerClass.html#newmultiplier",
-                      "tf": 12.5
-                    }
                   }
                 }
               }
@@ -9312,17 +9858,21 @@ window.lunrData = {
                         "ref": "rglwidgetClass.html#___METHODS_FOR_SHADERS___",
                         "tf": 16.666666666666664
                       },
-                      "rglwidgetClass.html#getFragmentShader": {
-                        "ref": "rglwidgetClass.html#getFragmentShader",
-                        "tf": 12.5
+                      "rglwidgetClass.html#.getDefFlags": {
+                        "ref": "rglwidgetClass.html#.getDefFlags",
+                        "tf": 5.555555555555555
+                      },
+                      "rglwidgetClass.html#.getDefines": {
+                        "ref": "rglwidgetClass.html#.getDefines",
+                        "tf": 5.555555555555555
                       },
                       "rglwidgetClass.html#getShader": {
                         "ref": "rglwidgetClass.html#getShader",
-                        "tf": 8.333333333333332
+                        "tf": 7.142857142857142
                       },
-                      "rglwidgetClass.html#getVertexShader": {
-                        "ref": "rglwidgetClass.html#getVertexShader",
-                        "tf": 12.5
+                      "rglwidgetClass.html#getShaders": {
+                        "ref": "rglwidgetClass.html#getShaders",
+                        "tf": 10
                       }
                     },
                     "t": {
@@ -9333,6 +9883,10 @@ window.lunrData = {
                           "docs": {
                             "rglwidgetClass.html#getShader": {
                               "ref": "rglwidgetClass.html#getShader",
+                              "tf": 25
+                            },
+                            "rglwidgetClass.html#getShaders": {
+                              "ref": "rglwidgetClass.html#getShaders",
                               "tf": 25
                             }
                           }
@@ -9354,8 +9908,8 @@ window.lunrData = {
                         "docs": {},
                         "k": {
                           "docs": {
-                            "rglwidgetClass.html#chull": {
-                              "ref": "rglwidgetClass.html#chull",
+                            "rglwidgetClass.html#.chull": {
+                              "ref": "rglwidgetClass.html#.chull",
                               "tf": 4.166666666666666
                             }
                           }
@@ -9443,48 +9997,6 @@ window.lunrData = {
               }
             }
           },
-          "l": {
-            "docs": {},
-            "i": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "e": {
-                  "docs": {
-                    "rglwidgetClass.html#getSlide": {
-                      "ref": "rglwidgetClass.html#getSlide",
-                      "tf": 7.142857142857142
-                    }
-                  }
-                },
-                "i": {
-                  "docs": {
-                    "rglwidgetClass.html#getSlide": {
-                      "ref": "rglwidgetClass.html#getSlide",
-                      "tf": 7.142857142857142
-                    }
-                  }
-                }
-              }
-            },
-            "o": {
-              "docs": {},
-              "w": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "rgltimerClass.html#slower": {
-                        "ref": "rgltimerClass.html#slower",
-                        "tf": 762.5
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
           "q": {
             "docs": {},
             "u": {
@@ -9508,9 +10020,9 @@ window.lunrData = {
               "docs": {},
               "p": {
                 "docs": {
-                  "rglwidgetClass.html#swap": {
-                    "ref": "rglwidgetClass.html#swap",
-                    "tf": 708.3333333333334
+                  "rglwidgetClass.html#.swap": {
+                    "ref": "rglwidgetClass.html#.swap",
+                    "tf": 700
                   }
                 }
               }
@@ -9732,6 +10244,20 @@ window.lunrData = {
                         "ref": "rglwidgetClass.html#doNormals",
                         "tf": 700
                       }
+                    },
+                    "m": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "t": {
+                          "docs": {
+                            "rglwidgetClass.html#doNormMat": {
+                              "ref": "rglwidgetClass.html#doNormMat",
+                              "tf": 700
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -9815,8 +10341,8 @@ window.lunrData = {
             },
             "t": {
               "docs": {
-                "rglwidgetClass.html#dotprod": {
-                  "ref": "rglwidgetClass.html#dotprod",
+                "rglwidgetClass.html#.dotprod": {
+                  "ref": "rglwidgetClass.html#.dotprod",
                   "tf": 12.5
                 }
               },
@@ -9848,9 +10374,9 @@ window.lunrData = {
                     "docs": {},
                     "d": {
                       "docs": {
-                        "rglwidgetClass.html#dotprod": {
-                          "ref": "rglwidgetClass.html#dotprod",
-                          "tf": 683.3333333333334
+                        "rglwidgetClass.html#.dotprod": {
+                          "ref": "rglwidgetClass.html#.dotprod",
+                          "tf": 675
                         }
                       }
                     }
@@ -10075,6 +10601,24 @@ window.lunrData = {
                 }
               }
             },
+            "f": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "n": {
+                  "docs": {
+                    "rglwidgetClass.html#.getDefFlags": {
+                      "ref": "rglwidgetClass.html#.getDefFlags",
+                      "tf": 5.555555555555555
+                    },
+                    "rglwidgetClass.html#.getDefines": {
+                      "ref": "rglwidgetClass.html#.getDefines",
+                      "tf": 5.555555555555555
+                    }
+                  }
+                }
+              }
+            },
             "l": {
               "docs": {},
               "e": {
@@ -10133,8 +10677,8 @@ window.lunrData = {
                 "docs": {},
                 "r": {
                   "docs": {
-                    "rglwidgetClass.html#repeatToLen": {
-                      "ref": "rglwidgetClass.html#repeatToLen",
+                    "rglwidgetClass.html#.repeatToLen": {
+                      "ref": "rglwidgetClass.html#.repeatToLen",
                       "tf": 12.5
                     }
                   }
@@ -10671,6 +11215,10 @@ window.lunrData = {
                       "rglwidgetClass.html#getMaxTexSize": {
                         "ref": "rglwidgetClass.html#getMaxTexSize",
                         "tf": 10
+                      },
+                      "rglwidgetClass.html#.arrayDim": {
+                        "ref": "rglwidgetClass.html#.arrayDim",
+                        "tf": 7.142857142857142
                       }
                     }
                   }
@@ -10683,9 +11231,9 @@ window.lunrData = {
                 "docs": {},
                 "t": {
                   "docs": {
-                    "rglwidgetClass.html#signif": {
-                      "ref": "rglwidgetClass.html#signif",
-                      "tf": 25
+                    "rglwidgetClass.html#.signif": {
+                      "ref": "rglwidgetClass.html#.signif",
+                      "tf": 20
                     }
                   }
                 }
@@ -10699,8 +11247,8 @@ window.lunrData = {
                   "docs": {},
                   "r": {
                     "docs": {
-                      "rglwidgetClass.html#vdiff": {
-                        "ref": "rglwidgetClass.html#vdiff",
+                      "rglwidgetClass.html#.vdiff": {
+                        "ref": "rglwidgetClass.html#.vdiff",
                         "tf": 16.666666666666664
                       }
                     }
@@ -10745,7 +11293,7 @@ window.lunrData = {
               },
               "rglwidgetClass.html#getShader": {
                 "ref": "rglwidgetClass.html#getShader",
-                "tf": 8.333333333333332
+                "tf": 7.142857142857142
               }
             },
             "o": {
@@ -10992,6 +11540,10 @@ window.lunrData = {
                         "rglwidgetClass.html#getShader": {
                           "ref": "rglwidgetClass.html#getShader",
                           "tf": 675
+                        },
+                        "rglwidgetClass.html#getShaders": {
+                          "ref": "rglwidgetClass.html#getShaders",
+                          "tf": 675
                         }
                       }
                     }
@@ -11080,74 +11632,38 @@ window.lunrData = {
                       }
                     }
                   }
-                },
+                }
+              },
+              "d": {
+                "docs": {},
                 "e": {
                   "docs": {},
-                  "r": {
+                  "f": {
                     "docs": {},
-                    "t": {
+                    "f": {
                       "docs": {},
-                      "e": {
+                      "l": {
                         "docs": {},
-                        "x": {
+                        "a": {
                           "docs": {},
-                          "s": {
-                            "docs": {},
-                            "h": {
-                              "docs": {},
-                              "a": {
-                                "docs": {},
-                                "d": {
-                                  "docs": {
-                                    "rglwidgetClass.html#getVertexShader": {
-                                      "ref": "rglwidgetClass.html#getVertexShader",
-                                      "tf": 683.3333333333334
-                                    }
-                                  }
-                                }
+                          "g": {
+                            "docs": {
+                              "rglwidgetClass.html#.getDefFlags": {
+                                "ref": "rglwidgetClass.html#.getDefFlags",
+                                "tf": 700
                               }
                             }
                           }
                         }
                       }
-                    }
-                  }
-                }
-              },
-              "f": {
-                "docs": {},
-                "r": {
-                  "docs": {},
-                  "a": {
-                    "docs": {},
-                    "g": {
+                    },
+                    "i": {
                       "docs": {},
-                      "m": {
-                        "docs": {},
-                        "e": {
-                          "docs": {},
-                          "n": {
-                            "docs": {},
-                            "t": {
-                              "docs": {},
-                              "s": {
-                                "docs": {},
-                                "h": {
-                                  "docs": {},
-                                  "a": {
-                                    "docs": {},
-                                    "d": {
-                                      "docs": {
-                                        "rglwidgetClass.html#getFragmentShader": {
-                                          "ref": "rglwidgetClass.html#getFragmentShader",
-                                          "tf": 683.3333333333334
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
+                      "n": {
+                        "docs": {
+                          "rglwidgetClass.html#.getDefines": {
+                            "ref": "rglwidgetClass.html#.getDefines",
+                            "tf": 658.3333333333334
                           }
                         }
                       }
@@ -11294,13 +11810,9 @@ window.lunrData = {
                 "docs": {},
                 "r": {
                   "docs": {
-                    "rglwidgetClass.html#getFragmentShader": {
-                      "ref": "rglwidgetClass.html#getFragmentShader",
-                      "tf": 12.5
-                    },
-                    "rglwidgetClass.html#getVertexShader": {
-                      "ref": "rglwidgetClass.html#getVertexShader",
-                      "tf": 12.5
+                    "rglwidgetClass.html#.getDefines": {
+                      "ref": "rglwidgetClass.html#.getDefines",
+                      "tf": 5.555555555555555
                     }
                   }
                 }
@@ -11324,8 +11836,8 @@ window.lunrData = {
                       "ref": "rglwidgetClass.html#R_pretty",
                       "tf": 0.847457627118644
                     },
-                    "rglwidgetClass.html#signif": {
-                      "ref": "rglwidgetClass.html#signif",
+                    "rglwidgetClass.html#.signif": {
+                      "ref": "rglwidgetClass.html#.signif",
                       "tf": 12.5
                     }
                   }
@@ -11375,6 +11887,10 @@ window.lunrData = {
                   "rglwidgetClass.html#doClipping": {
                     "ref": "rglwidgetClass.html#doClipping",
                     "tf": 25
+                  },
+                  "rglwidgetClass.html#countClipplaneObjs": {
+                    "ref": "rglwidgetClass.html#countClipplaneObjs",
+                    "tf": 10
                   },
                   "rglwidgetClass.html#countClipplanes": {
                     "ref": "rglwidgetClass.html#countClipplanes",
@@ -11435,149 +11951,59 @@ window.lunrData = {
               }
             }
           },
-          "h": {
-            "docs": {},
-            "o": {
-              "docs": {},
-              "o": {
-                "docs": {},
-                "s": {
-                  "docs": {
-                    "rglwidgetClass.html#getTickEdges": {
-                      "ref": "rglwidgetClass.html#getTickEdges",
-                      "tf": 16.666666666666664
-                    },
-                    "rglwidgetClass.html#getTickLocations": {
-                      "ref": "rglwidgetClass.html#getTickLocations",
-                      "tf": 16.666666666666664
-                    },
-                    "rglwidgetClass.html#drawObjId": {
-                      "ref": "rglwidgetClass.html#drawObjId",
-                      "tf": 10
-                    }
-                  }
-                }
-              }
-            },
-            "a": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "g": {
-                  "docs": {
-                    "rglwidgetClass.html#ageSetter": {
-                      "ref": "rglwidgetClass.html#ageSetter",
-                      "tf": 10
-                    },
-                    "rglwidgetClass.html#propertySetter": {
-                      "ref": "rglwidgetClass.html#propertySetter",
-                      "tf": 16.666666666666664
-                    },
-                    "rglwidgetClass.html#sceneChangeHandler": {
-                      "ref": "rglwidgetClass.html#sceneChangeHandler",
-                      "tf": 16.666666666666664
-                    },
-                    "rglwidgetClass.html#subsetSetter": {
-                      "ref": "rglwidgetClass.html#subsetSetter",
-                      "tf": 16.666666666666664
-                    },
-                    "rglwidgetClass.html#vertexSetter": {
-                      "ref": "rglwidgetClass.html#vertexSetter",
-                      "tf": 16.666666666666664
-                    },
-                    "rglwidgetClass.html#selection": {
-                      "ref": "rglwidgetClass.html#selection",
-                      "tf": 10
-                    },
-                    "rglwidgetClass.html#selectionChanged": {
-                      "ref": "rglwidgetClass.html#selectionChanged",
-                      "tf": 16.666666666666664
-                    },
-                    "rgltimerClass.html#reverse": {
-                      "ref": "rgltimerClass.html#reverse",
-                      "tf": 10
-                    }
-                  }
-                }
-              }
-            },
-            "e": {
-              "docs": {},
-              "c": {
-                "docs": {},
-                "k": {
-                  "docs": {
-                    "rglwidgetClass.html#stopDrawing": {
-                      "ref": "rglwidgetClass.html#stopDrawing",
-                      "tf": 10
-                    },
-                    "rglwidgetClass.html#inViewport": {
-                      "ref": "rglwidgetClass.html#inViewport",
-                      "tf": 10
-                    },
-                    "rglwidgetClass.html#missing": {
-                      "ref": "rglwidgetClass.html#missing",
-                      "tf": 10
-                    }
-                  }
-                }
-              }
-            },
-            "u": {
-              "docs": {},
-              "l": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "rglwidgetClass.html#chull": {
-                      "ref": "rglwidgetClass.html#chull",
-                      "tf": 700
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "e": {
-            "docs": {},
-            "n": {
-              "docs": {},
-              "t": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "rglwidgetClass.html#setBbox": {
-                        "ref": "rglwidgetClass.html#setBbox",
-                        "tf": 10
-                      }
-                    }
-                  }
-                },
-                "r": {
-                  "docs": {
-                    "rglwidgetClass.html#drawSpheres": {
-                      "ref": "rglwidgetClass.html#drawSpheres",
-                      "tf": 0.78125
-                    }
-                  }
-                }
-              }
-            },
-            "x": {
-              "docs": {
-                "rglwidgetClass.html#drawTextToCanvas": {
-                  "ref": "rglwidgetClass.html#drawTextToCanvas",
-                  "tf": 16.666666666666664
-                }
-              }
-            }
-          },
           "o": {
             "docs": {},
             "n": {
               "docs": {},
+              "s": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "a": {
+                    "docs": {},
+                    "n": {
+                      "docs": {},
+                      "t": {
+                        "docs": {
+                          "rglwidgetClass.html#.lerp": {
+                            "ref": "rglwidgetClass.html#.lerp",
+                            "tf": 10
+                          },
+                          "rglwidgetClass.html#.slerp": {
+                            "ref": "rglwidgetClass.html#.slerp",
+                            "tf": 8.333333333333332
+                          },
+                          "rglwidgetClass.html#.step": {
+                            "ref": "rglwidgetClass.html#.step",
+                            "tf": 10
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "r": {
+                    "docs": {},
+                    "u": {
+                      "docs": {},
+                      "c": {
+                        "docs": {},
+                        "t": {
+                          "docs": {
+                            "rglwidgetClass.html#R_pretty": {
+                              "ref": "rglwidgetClass.html#R_pretty",
+                              "tf": 0.847457627118644
+                            },
+                            "rgltimerClass.html": {
+                              "ref": "rgltimerClass.html",
+                              "tf": 16.666666666666664
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               "t": {
                 "docs": {},
                 "r": {
@@ -11586,10 +12012,6 @@ window.lunrData = {
                     "docs": {},
                     "l": {
                       "docs": {
-                        "rglwidgetClass.html#___METHODS_FOR_CONTROLS___": {
-                          "ref": "rglwidgetClass.html#___METHODS_FOR_CONTROLS___",
-                          "tf": 16.666666666666664
-                        },
                         "rglwidgetClass.html#ageSetter": {
                           "ref": "rglwidgetClass.html#ageSetter",
                           "tf": 33.33333333333333
@@ -11703,41 +12125,14 @@ window.lunrData = {
                   }
                 }
               },
-              "s": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "u": {
-                      "docs": {},
-                      "c": {
-                        "docs": {},
-                        "t": {
-                          "docs": {
-                            "rglwidgetClass.html#R_pretty": {
-                              "ref": "rglwidgetClass.html#R_pretty",
-                              "tf": 0.847457627118644
-                            },
-                            "rgltimerClass.html": {
-                              "ref": "rgltimerClass.html",
-                              "tf": 16.666666666666664
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
               "v": {
                 "docs": {},
                 "e": {
                   "docs": {},
                   "x": {
                     "docs": {
-                      "rglwidgetClass.html#chull": {
-                        "ref": "rglwidgetClass.html#chull",
+                      "rglwidgetClass.html#.chull": {
+                        "ref": "rglwidgetClass.html#.chull",
                         "tf": 4.166666666666666
                       }
                     }
@@ -11784,6 +12179,10 @@ window.lunrData = {
                     "ref": "rglwidgetClass.html#doNormals",
                     "tf": 25
                   },
+                  "rglwidgetClass.html#doNormMat": {
+                    "ref": "rglwidgetClass.html#doNormMat",
+                    "tf": 25
+                  },
                   "rglwidgetClass.html#doTexture": {
                     "ref": "rglwidgetClass.html#doTexture",
                     "tf": 25
@@ -11796,9 +12195,17 @@ window.lunrData = {
                     "ref": "rglwidgetClass.html#doUserUniforms",
                     "tf": 16.666666666666664
                   },
+                  "rglwidgetClass.html#.getDefines": {
+                    "ref": "rglwidgetClass.html#.getDefines",
+                    "tf": 5.555555555555555
+                  },
                   "rglwidgetClass.html#getShader": {
                     "ref": "rglwidgetClass.html#getShader",
-                    "tf": 25
+                    "tf": 32.14285714285714
+                  },
+                  "rglwidgetClass.html#getShaders": {
+                    "ref": "rglwidgetClass.html#getShaders",
+                    "tf": 35
                   }
                 }
               }
@@ -11839,8 +12246,8 @@ window.lunrData = {
                   "docs": {},
                   "n": {
                     "docs": {
-                      "rglwidgetClass.html#cbind": {
-                        "ref": "rglwidgetClass.html#cbind",
+                      "rglwidgetClass.html#.cbind": {
+                        "ref": "rglwidgetClass.html#.cbind",
                         "tf": 12.5
                       },
                       "rglwidgetClass.html#setElement": {
@@ -11877,6 +12284,10 @@ window.lunrData = {
                       "rglwidgetClass.html#relMouseCoords": {
                         "ref": "rglwidgetClass.html#relMouseCoords",
                         "tf": 8.333333333333332
+                      },
+                      "rglwidgetClass.html#.arrayDim": {
+                        "ref": "rglwidgetClass.html#.arrayDim",
+                        "tf": 7.142857142857142
                       }
                     }
                   }
@@ -11906,7 +12317,7 @@ window.lunrData = {
                     "docs": {
                       "rglwidgetClass.html#getShader": {
                         "ref": "rglwidgetClass.html#getShader",
-                        "tf": 8.333333333333332
+                        "tf": 7.142857142857142
                       }
                     }
                   }
@@ -11978,8 +12389,8 @@ window.lunrData = {
                   "docs": {},
                   "n": {
                     "docs": {
-                      "rglwidgetClass.html#chull": {
-                        "ref": "rglwidgetClass.html#chull",
+                      "rglwidgetClass.html#.chull": {
+                        "ref": "rglwidgetClass.html#.chull",
                         "tf": 4.166666666666666
                       }
                     }
@@ -12004,6 +12415,10 @@ window.lunrData = {
                     "rglwidgetClass.html#drawSpheres": {
                       "ref": "rglwidgetClass.html#drawSpheres",
                       "tf": 1.5625
+                    },
+                    "rglwidgetClass.html#countClipplaneObjs": {
+                      "ref": "rglwidgetClass.html#countClipplaneObjs",
+                      "tf": 10
                     },
                     "rglwidgetClass.html#countClipplanes": {
                       "ref": "rglwidgetClass.html#countClipplanes",
@@ -12037,6 +12452,23 @@ window.lunrData = {
                                     "rglwidgetClass.html#countClipplanes": {
                                       "ref": "rglwidgetClass.html#countClipplanes",
                                       "tf": 700
+                                    }
+                                  },
+                                  "e": {
+                                    "docs": {},
+                                    "o": {
+                                      "docs": {},
+                                      "b": {
+                                        "docs": {},
+                                        "j": {
+                                          "docs": {
+                                            "rglwidgetClass.html#countClipplaneObjs": {
+                                              "ref": "rglwidgetClass.html#countClipplaneObjs",
+                                              "tf": 700
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -12136,6 +12568,149 @@ window.lunrData = {
               }
             }
           },
+          "h": {
+            "docs": {},
+            "o": {
+              "docs": {},
+              "o": {
+                "docs": {},
+                "s": {
+                  "docs": {
+                    "rglwidgetClass.html#getTickEdges": {
+                      "ref": "rglwidgetClass.html#getTickEdges",
+                      "tf": 16.666666666666664
+                    },
+                    "rglwidgetClass.html#getTickLocations": {
+                      "ref": "rglwidgetClass.html#getTickLocations",
+                      "tf": 16.666666666666664
+                    },
+                    "rglwidgetClass.html#drawObjId": {
+                      "ref": "rglwidgetClass.html#drawObjId",
+                      "tf": 10
+                    }
+                  }
+                }
+              }
+            },
+            "a": {
+              "docs": {},
+              "n": {
+                "docs": {},
+                "g": {
+                  "docs": {
+                    "rglwidgetClass.html#ageSetter": {
+                      "ref": "rglwidgetClass.html#ageSetter",
+                      "tf": 10
+                    },
+                    "rglwidgetClass.html#propertySetter": {
+                      "ref": "rglwidgetClass.html#propertySetter",
+                      "tf": 16.666666666666664
+                    },
+                    "rglwidgetClass.html#sceneChangeHandler": {
+                      "ref": "rglwidgetClass.html#sceneChangeHandler",
+                      "tf": 16.666666666666664
+                    },
+                    "rglwidgetClass.html#subsetSetter": {
+                      "ref": "rglwidgetClass.html#subsetSetter",
+                      "tf": 16.666666666666664
+                    },
+                    "rglwidgetClass.html#vertexSetter": {
+                      "ref": "rglwidgetClass.html#vertexSetter",
+                      "tf": 16.666666666666664
+                    },
+                    "rglwidgetClass.html#selection": {
+                      "ref": "rglwidgetClass.html#selection",
+                      "tf": 10
+                    },
+                    "rglwidgetClass.html#selectionChanged": {
+                      "ref": "rglwidgetClass.html#selectionChanged",
+                      "tf": 16.666666666666664
+                    },
+                    "rgltimerClass.html#reverse": {
+                      "ref": "rgltimerClass.html#reverse",
+                      "tf": 10
+                    }
+                  }
+                }
+              }
+            },
+            "e": {
+              "docs": {},
+              "c": {
+                "docs": {},
+                "k": {
+                  "docs": {
+                    "rglwidgetClass.html#stopDrawing": {
+                      "ref": "rglwidgetClass.html#stopDrawing",
+                      "tf": 10
+                    },
+                    "rglwidgetClass.html#inViewport": {
+                      "ref": "rglwidgetClass.html#inViewport",
+                      "tf": 10
+                    },
+                    "rglwidgetClass.html#.arrayDim": {
+                      "ref": "rglwidgetClass.html#.arrayDim",
+                      "tf": 7.142857142857142
+                    },
+                    "rglwidgetClass.html#.missing": {
+                      "ref": "rglwidgetClass.html#.missing",
+                      "tf": 10
+                    }
+                  }
+                }
+              }
+            },
+            "u": {
+              "docs": {},
+              "l": {
+                "docs": {},
+                "l": {
+                  "docs": {
+                    "rglwidgetClass.html#.chull": {
+                      "ref": "rglwidgetClass.html#.chull",
+                      "tf": 683.3333333333334
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "e": {
+            "docs": {},
+            "n": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "rglwidgetClass.html#setBbox": {
+                        "ref": "rglwidgetClass.html#setBbox",
+                        "tf": 10
+                      }
+                    }
+                  }
+                },
+                "r": {
+                  "docs": {
+                    "rglwidgetClass.html#drawSpheres": {
+                      "ref": "rglwidgetClass.html#drawSpheres",
+                      "tf": 0.78125
+                    }
+                  }
+                }
+              }
+            },
+            "x": {
+              "docs": {
+                "rglwidgetClass.html#drawTextToCanvas": {
+                  "ref": "rglwidgetClass.html#drawTextToCanvas",
+                  "tf": 16.666666666666664
+                }
+              }
+            }
+          },
           "a": {
             "docs": {},
             "n": {
@@ -12201,9 +12776,17 @@ window.lunrData = {
                     "ref": "rglwidgetClass.html#mergePieces",
                     "tf": 10
                   },
+                  "rglwidgetClass.html#.getDefFlags": {
+                    "ref": "rglwidgetClass.html#.getDefFlags",
+                    "tf": 5.555555555555555
+                  },
+                  "rglwidgetClass.html#.getDefines": {
+                    "ref": "rglwidgetClass.html#.getDefines",
+                    "tf": 5.555555555555555
+                  },
                   "rglwidgetClass.html#getShader": {
                     "ref": "rglwidgetClass.html#getShader",
-                    "tf": 8.333333333333332
+                    "tf": 7.142857142857142
                   }
                 }
               },
@@ -12285,8 +12868,8 @@ window.lunrData = {
                 "docs": {},
                 "s": {
                   "docs": {
-                    "rglwidgetClass.html#xprod": {
-                      "ref": "rglwidgetClass.html#xprod",
+                    "rglwidgetClass.html#.xprod": {
+                      "ref": "rglwidgetClass.html#.xprod",
                       "tf": 12.5
                     }
                   },
@@ -12318,15 +12901,19 @@ window.lunrData = {
                   "docs": {
                     "rglwidgetClass.html#getShader": {
                       "ref": "rglwidgetClass.html#getShader",
-                      "tf": 8.333333333333332
+                      "tf": 7.142857142857142
+                    },
+                    "rglwidgetClass.html#getShaders": {
+                      "ref": "rglwidgetClass.html#getShaders",
+                      "tf": 10
                     }
                   },
                   "i": {
                     "docs": {},
                     "v": {
                       "docs": {
-                        "rglwidgetClass.html#chull": {
-                          "ref": "rglwidgetClass.html#chull",
+                        "rglwidgetClass.html#.chull": {
+                          "ref": "rglwidgetClass.html#.chull",
                           "tf": 4.166666666666666
                         }
                       }
@@ -12344,9 +12931,9 @@ window.lunrData = {
                 "docs": {},
                 "d": {
                   "docs": {
-                    "rglwidgetClass.html#cbind": {
-                      "ref": "rglwidgetClass.html#cbind",
-                      "tf": 683.3333333333334
+                    "rglwidgetClass.html#.cbind": {
+                      "ref": "rglwidgetClass.html#.cbind",
+                      "tf": 675
                     }
                   }
                 }
@@ -12410,28 +12997,25 @@ window.lunrData = {
                 }
               }
             },
-            "g": {
-              "docs": {},
-              "h": {
-                "docs": {},
-                "t": {
-                  "docs": {
-                    "rglwidgetClass.html#doLighting": {
-                      "ref": "rglwidgetClass.html#doLighting",
-                      "tf": 25
-                    },
-                    "rglwidgetClass.html#countLights": {
-                      "ref": "rglwidgetClass.html#countLights",
-                      "tf": 16.666666666666664
-                    }
-                  }
-                }
-              }
-            },
             "n": {
               "docs": {},
               "e": {
                 "docs": {},
+                "a": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "rglwidgetClass.html#.lerp": {
+                        "ref": "rglwidgetClass.html#.lerp",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#.slerp": {
+                        "ref": "rglwidgetClass.html#.slerp",
+                        "tf": 8.333333333333332
+                      }
+                    }
+                  }
+                },
                 "s": {
                   "docs": {},
                   "t": {
@@ -12454,6 +13038,24 @@ window.lunrData = {
                 }
               }
             },
+            "g": {
+              "docs": {},
+              "h": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "rglwidgetClass.html#doLighting": {
+                      "ref": "rglwidgetClass.html#doLighting",
+                      "tf": 25
+                    },
+                    "rglwidgetClass.html#countLights": {
+                      "ref": "rglwidgetClass.html#countLights",
+                      "tf": 16.666666666666664
+                    }
+                  }
+                }
+              }
+            },
             "c": {
               "docs": {},
               "e": {
@@ -12462,10 +13064,202 @@ window.lunrData = {
                   "docs": {},
                   "s": {
                     "docs": {
-                      "rglwidgetClass.html#chull": {
-                        "ref": "rglwidgetClass.html#chull",
+                      "rglwidgetClass.html#.chull": {
+                        "ref": "rglwidgetClass.html#.chull",
                         "tf": 4.166666666666666
                       }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "t": {
+            "docs": {},
+            ";": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "a": {
+                    "docs": {},
+                    "t": {
+                      "docs": {},
+                      "i": {
+                        "docs": {},
+                        "c": {
+                          "docs": {},
+                          "&": {
+                            "docs": {},
+                            "g": {
+                              "docs": {},
+                              "t": {
+                                "docs": {
+                                  "rglwidgetClass.html#.bisect": {
+                                    "ref": "rglwidgetClass.html#.bisect",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.lerp": {
+                                    "ref": "rglwidgetClass.html#.lerp",
+                                    "tf": 20
+                                  },
+                                  "rglwidgetClass.html#.rotateByQuaternion": {
+                                    "ref": "rglwidgetClass.html#.rotateByQuaternion",
+                                    "tf": 33.33333333333333
+                                  },
+                                  "rglwidgetClass.html#.slerp": {
+                                    "ref": "rglwidgetClass.html#.slerp",
+                                    "tf": 20
+                                  },
+                                  "rglwidgetClass.html#.step": {
+                                    "ref": "rglwidgetClass.html#.step",
+                                    "tf": 20
+                                  },
+                                  "rglwidgetClass.html#.getDefFlags": {
+                                    "ref": "rglwidgetClass.html#.getDefFlags",
+                                    "tf": 50
+                                  },
+                                  "rglwidgetClass.html#.getDefines": {
+                                    "ref": "rglwidgetClass.html#.getDefines",
+                                    "tf": 8.333333333333332
+                                  },
+                                  "rglwidgetClass.html#.arrayDim": {
+                                    "ref": "rglwidgetClass.html#.arrayDim",
+                                    "tf": 50
+                                  },
+                                  "rglwidgetClass.html#.cbind": {
+                                    "ref": "rglwidgetClass.html#.cbind",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.chull": {
+                                    "ref": "rglwidgetClass.html#.chull",
+                                    "tf": 33.33333333333333
+                                  },
+                                  "rglwidgetClass.html#.dotprod": {
+                                    "ref": "rglwidgetClass.html#.dotprod",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.flatten": {
+                                    "ref": "rglwidgetClass.html#.flatten",
+                                    "tf": 33.33333333333333
+                                  },
+                                  "rglwidgetClass.html#.logMatrix": {
+                                    "ref": "rglwidgetClass.html#.logMatrix",
+                                    "tf": 33.33333333333333
+                                  },
+                                  "rglwidgetClass.html#.logVec3": {
+                                    "ref": "rglwidgetClass.html#.logVec3",
+                                    "tf": 33.33333333333333
+                                  },
+                                  "rglwidgetClass.html#.missing": {
+                                    "ref": "rglwidgetClass.html#.missing",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.multMV": {
+                                    "ref": "rglwidgetClass.html#.multMV",
+                                    "tf": 20
+                                  },
+                                  "rglwidgetClass.html#.multVM": {
+                                    "ref": "rglwidgetClass.html#.multVM",
+                                    "tf": 20
+                                  },
+                                  "rglwidgetClass.html#.normalize": {
+                                    "ref": "rglwidgetClass.html#.normalize",
+                                    "tf": 33.33333333333333
+                                  },
+                                  "rglwidgetClass.html#.repeatToLen": {
+                                    "ref": "rglwidgetClass.html#.repeatToLen",
+                                    "tf": 20
+                                  },
+                                  "rglwidgetClass.html#.signif": {
+                                    "ref": "rglwidgetClass.html#.signif",
+                                    "tf": 20
+                                  },
+                                  "rglwidgetClass.html#.swap": {
+                                    "ref": "rglwidgetClass.html#.swap",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.vdiff": {
+                                    "ref": "rglwidgetClass.html#.vdiff",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.vlen": {
+                                    "ref": "rglwidgetClass.html#.vlen",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.vscale": {
+                                    "ref": "rglwidgetClass.html#.vscale",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.vsum": {
+                                    "ref": "rglwidgetClass.html#.vsum",
+                                    "tf": 25
+                                  },
+                                  "rglwidgetClass.html#.xprod": {
+                                    "ref": "rglwidgetClass.html#.xprod",
+                                    "tf": 25
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "e": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "p": {
+                "docs": {
+                  "rglwidgetClass.html#.lerp": {
+                    "ref": "rglwidgetClass.html#.lerp",
+                    "tf": 670
+                  }
+                }
+              }
+            },
+            "n": {
+              "docs": {
+                "rglwidgetClass.html#.repeatToLen": {
+                  "ref": "rglwidgetClass.html#.repeatToLen",
+                  "tf": 20
+                }
+              },
+              "g": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "h": {
+                    "docs": {
+                      "rglwidgetClass.html#.repeatToLen": {
+                        "ref": "rglwidgetClass.html#.repeatToLen",
+                        "tf": 12.5
+                      },
+                      "rglwidgetClass.html#.vlen": {
+                        "ref": "rglwidgetClass.html#.vlen",
+                        "tf": 16.666666666666664
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "g": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "l": {
+                  "docs": {
+                    "rgltimerClass.html#forceToRange": {
+                      "ref": "rgltimerClass.html#forceToRange",
+                      "tf": 12.5
                     }
                   }
                 }
@@ -12569,12 +13363,12 @@ window.lunrData = {
             },
             "g": {
               "docs": {
-                "rglwidgetClass.html#logMatrix": {
-                  "ref": "rglwidgetClass.html#logMatrix",
+                "rglwidgetClass.html#.logMatrix": {
+                  "ref": "rglwidgetClass.html#.logMatrix",
                   "tf": 16.666666666666664
                 },
-                "rglwidgetClass.html#logVec3": {
-                  "ref": "rglwidgetClass.html#logVec3",
+                "rglwidgetClass.html#.logVec3": {
+                  "ref": "rglwidgetClass.html#.logVec3",
                   "tf": 16.666666666666664
                 }
               },
@@ -12590,9 +13384,9 @@ window.lunrData = {
                         "docs": {},
                         "x": {
                           "docs": {
-                            "rglwidgetClass.html#logMatrix": {
-                              "ref": "rglwidgetClass.html#logMatrix",
-                              "tf": 700
+                            "rglwidgetClass.html#.logMatrix": {
+                              "ref": "rglwidgetClass.html#.logMatrix",
+                              "tf": 683.3333333333334
                             }
                           }
                         }
@@ -12608,9 +13402,9 @@ window.lunrData = {
                   "c": {
                     "3": {
                       "docs": {
-                        "rglwidgetClass.html#logVec3": {
-                          "ref": "rglwidgetClass.html#logVec3",
-                          "tf": 700
+                        "rglwidgetClass.html#.logVec3": {
+                          "ref": "rglwidgetClass.html#.logVec3",
+                          "tf": 683.3333333333334
                         }
                       }
                     },
@@ -12646,49 +13440,6 @@ window.lunrData = {
                     "rglwidgetClass.html#setTickLabels": {
                       "ref": "rglwidgetClass.html#setTickLabels",
                       "tf": 16.666666666666664
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "e": {
-            "docs": {},
-            "n": {
-              "docs": {
-                "rglwidgetClass.html#repeatToLen": {
-                  "ref": "rglwidgetClass.html#repeatToLen",
-                  "tf": 25
-                }
-              },
-              "g": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "h": {
-                    "docs": {
-                      "rglwidgetClass.html#repeatToLen": {
-                        "ref": "rglwidgetClass.html#repeatToLen",
-                        "tf": 12.5
-                      },
-                      "rglwidgetClass.html#vlen": {
-                        "ref": "rglwidgetClass.html#vlen",
-                        "tf": 16.666666666666664
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "g": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "rgltimerClass.html#forceToRange": {
-                      "ref": "rgltimerClass.html#forceToRange",
-                      "tf": 12.5
                     }
                   }
                 }
@@ -12731,6 +13482,20 @@ window.lunrData = {
                       }
                     }
                   }
+                },
+                "o": {
+                  "docs": {},
+                  "u": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "rglwidgetClass.html#.arrayDim": {
+                          "ref": "rglwidgetClass.html#.arrayDim",
+                          "tf": 7.142857142857142
+                        }
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -12765,8 +13530,8 @@ window.lunrData = {
                         "docs": {},
                         "a": {
                           "docs": {
-                            "rglwidgetClass.html#chull": {
-                              "ref": "rglwidgetClass.html#chull",
+                            "rglwidgetClass.html#.chull": {
+                              "ref": "rglwidgetClass.html#.chull",
                               "tf": 4.166666666666666
                             }
                           }
@@ -12919,12 +13684,12 @@ window.lunrData = {
                 "docs": {},
                 "e": {
                   "docs": {
-                    "rglwidgetClass.html#logMatrix": {
-                      "ref": "rglwidgetClass.html#logMatrix",
+                    "rglwidgetClass.html#.logMatrix": {
+                      "ref": "rglwidgetClass.html#.logMatrix",
                       "tf": 16.666666666666664
                     },
-                    "rglwidgetClass.html#logVec3": {
-                      "ref": "rglwidgetClass.html#logVec3",
+                    "rglwidgetClass.html#.logVec3": {
+                      "ref": "rglwidgetClass.html#.logVec3",
                       "tf": 16.666666666666664
                     }
                   },
@@ -13002,6 +13767,44 @@ window.lunrData = {
                                       "docs": {},
                                       "a": {
                                         "docs": {},
+                                        "n": {
+                                          "docs": {},
+                                          "i": {
+                                            "docs": {},
+                                            "m": {
+                                              "docs": {},
+                                              "a": {
+                                                "docs": {},
+                                                "t": {
+                                                  "docs": {},
+                                                  "i": {
+                                                    "docs": {},
+                                                    "o": {
+                                                      "docs": {},
+                                                      "n": {
+                                                        "docs": {},
+                                                        "_": {
+                                                          "docs": {},
+                                                          "_": {
+                                                            "docs": {},
+                                                            "_": {
+                                                              "docs": {
+                                                                "rglwidgetClass.html#___METHODS_FOR_ANIMATION___": {
+                                                                  "ref": "rglwidgetClass.html#___METHODS_FOR_ANIMATION___",
+                                                                  "tf": 750
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
                                         "x": {
                                           "docs": {},
                                           "e": {
@@ -13049,44 +13852,6 @@ window.lunrData = {
                                                             "rglwidgetClass.html#___METHODS_FOR_BUFFERS___": {
                                                               "ref": "rglwidgetClass.html#___METHODS_FOR_BUFFERS___",
                                                               "tf": 750
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "c": {
-                                        "docs": {},
-                                        "o": {
-                                          "docs": {},
-                                          "n": {
-                                            "docs": {},
-                                            "t": {
-                                              "docs": {},
-                                              "r": {
-                                                "docs": {},
-                                                "o": {
-                                                  "docs": {},
-                                                  "l": {
-                                                    "docs": {},
-                                                    "s": {
-                                                      "docs": {},
-                                                      "_": {
-                                                        "docs": {},
-                                                        "_": {
-                                                          "docs": {},
-                                                          "_": {
-                                                            "docs": {
-                                                              "rglwidgetClass.html#___METHODS_FOR_CONTROLS___": {
-                                                                "ref": "rglwidgetClass.html#___METHODS_FOR_CONTROLS___",
-                                                                "tf": 750
-                                                              }
                                                             }
                                                           }
                                                         }
@@ -13712,6 +14477,63 @@ window.lunrData = {
         },
         "a": {
           "docs": {},
+          "n": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "m": {
+                "docs": {
+                  "rglwidgetClass.html#___METHODS_FOR_ANIMATION___": {
+                    "ref": "rglwidgetClass.html#___METHODS_FOR_ANIMATION___",
+                    "tf": 16.666666666666664
+                  }
+                }
+              }
+            },
+            "t": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "a": {
+                  "docs": {},
+                  "l": {
+                    "docs": {},
+                    "i": {
+                      "docs": {},
+                      "a": {
+                        "docs": {
+                          "rglwidgetClass.html#.getDefines": {
+                            "ref": "rglwidgetClass.html#.getDefines",
+                            "tf": 8.333333333333332
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "d": {
+              "docs": {},
+              "r": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "w": {
+                    "docs": {},
+                    "'": {
+                      "docs": {
+                        "rglwidgetClass.html#.chull": {
+                          "ref": "rglwidgetClass.html#.chull",
+                          "tf": 4.166666666666666
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "x": {
             "docs": {
               "rglwidgetClass.html#___METHODS_FOR_AXES___": {
@@ -13818,9 +14640,9 @@ window.lunrData = {
             "docs": {},
             "r": {
               "docs": {
-                "rglwidgetClass.html#repeatToLen": {
-                  "ref": "rglwidgetClass.html#repeatToLen",
-                  "tf": 25
+                "rglwidgetClass.html#.repeatToLen": {
+                  "ref": "rglwidgetClass.html#.repeatToLen",
+                  "tf": 20
                 },
                 "rglwidgetClass.html#unique": {
                   "ref": "rglwidgetClass.html#unique",
@@ -13843,16 +14665,20 @@ window.lunrData = {
                       "ref": "rglwidgetClass.html#sortPieces",
                       "tf": 33.33333333333333
                     },
-                    "rglwidgetClass.html#chull": {
-                      "ref": "rglwidgetClass.html#chull",
-                      "tf": 50
+                    "rglwidgetClass.html#.arrayDim": {
+                      "ref": "rglwidgetClass.html#.arrayDim",
+                      "tf": 7.142857142857142
+                    },
+                    "rglwidgetClass.html#.chull": {
+                      "ref": "rglwidgetClass.html#.chull",
+                      "tf": 33.33333333333333
                     },
                     "rglwidgetClass.html#equalArrays": {
                       "ref": "rglwidgetClass.html#equalArrays",
                       "tf": 16.666666666666664
                     },
-                    "rglwidgetClass.html#repeatToLen": {
-                      "ref": "rglwidgetClass.html#repeatToLen",
+                    "rglwidgetClass.html#.repeatToLen": {
+                      "ref": "rglwidgetClass.html#.repeatToLen",
                       "tf": 12.5
                     },
                     "rglwidgetClass.html#setElement": {
@@ -13908,17 +14734,17 @@ window.lunrData = {
                                                   "ref": "rglwidgetClass.html#getIdsByType",
                                                   "tf": 25
                                                 },
-                                                "rglwidgetClass.html#multMV": {
-                                                  "ref": "rglwidgetClass.html#multMV",
-                                                  "tf": 25
+                                                "rglwidgetClass.html#.multMV": {
+                                                  "ref": "rglwidgetClass.html#.multMV",
+                                                  "tf": 20
                                                 },
-                                                "rglwidgetClass.html#multVM": {
-                                                  "ref": "rglwidgetClass.html#multVM",
-                                                  "tf": 25
+                                                "rglwidgetClass.html#.multVM": {
+                                                  "ref": "rglwidgetClass.html#.multVM",
+                                                  "tf": 20
                                                 },
-                                                "rglwidgetClass.html#xprod": {
-                                                  "ref": "rglwidgetClass.html#xprod",
-                                                  "tf": 33.33333333333333
+                                                "rglwidgetClass.html#.xprod": {
+                                                  "ref": "rglwidgetClass.html#.xprod",
+                                                  "tf": 25
                                                 }
                                               }
                                             }
@@ -13976,9 +14802,9 @@ window.lunrData = {
                                                                         "docs": {},
                                                                         "t": {
                                                                           "docs": {
-                                                                            "rglwidgetClass.html#cbind": {
-                                                                              "ref": "rglwidgetClass.html#cbind",
-                                                                              "tf": 33.33333333333333
+                                                                            "rglwidgetClass.html#.cbind": {
+                                                                              "ref": "rglwidgetClass.html#.cbind",
+                                                                              "tf": 25
                                                                             }
                                                                           }
                                                                         }
@@ -14048,17 +14874,17 @@ window.lunrData = {
                                       "docs": {},
                                       "t": {
                                         "docs": {
-                                          "rglwidgetClass.html#flatten": {
-                                            "ref": "rglwidgetClass.html#flatten",
-                                            "tf": 50
-                                          },
-                                          "rglwidgetClass.html#repeatToLen": {
-                                            "ref": "rglwidgetClass.html#repeatToLen",
-                                            "tf": 25
-                                          },
-                                          "rglwidgetClass.html#swap": {
-                                            "ref": "rglwidgetClass.html#swap",
+                                          "rglwidgetClass.html#.flatten": {
+                                            "ref": "rglwidgetClass.html#.flatten",
                                             "tf": 33.33333333333333
+                                          },
+                                          "rglwidgetClass.html#.repeatToLen": {
+                                            "ref": "rglwidgetClass.html#.repeatToLen",
+                                            "tf": 20
+                                          },
+                                          "rglwidgetClass.html#.swap": {
+                                            "ref": "rglwidgetClass.html#.swap",
+                                            "tf": 25
                                           },
                                           "rglwidgetClass.html#unique": {
                                             "ref": "rglwidgetClass.html#unique",
@@ -14176,6 +15002,20 @@ window.lunrData = {
                         }
                       }
                     }
+                  },
+                  "d": {
+                    "docs": {},
+                    "i": {
+                      "docs": {},
+                      "m": {
+                        "docs": {
+                          "rglwidgetClass.html#.arrayDim": {
+                            "ref": "rglwidgetClass.html#.arrayDim",
+                            "tf": 700
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -14253,8 +15093,8 @@ window.lunrData = {
                         "docs": {},
                         "m": {
                           "docs": {
-                            "rglwidgetClass.html#chull": {
-                              "ref": "rglwidgetClass.html#chull",
+                            "rglwidgetClass.html#.chull": {
+                              "ref": "rglwidgetClass.html#.chull",
                               "tf": 4.166666666666666
                             }
                           }
@@ -14284,8 +15124,8 @@ window.lunrData = {
                             "ref": "rglwidgetClass.html#doUserAttributes",
                             "tf": 16.666666666666664
                           },
-                          "rglwidgetClass.html#chull": {
-                            "ref": "rglwidgetClass.html#chull",
+                          "rglwidgetClass.html#.chull": {
+                            "ref": "rglwidgetClass.html#.chull",
                             "tf": 4.166666666666666
                           }
                         }
@@ -14363,29 +15203,6 @@ window.lunrData = {
                 }
               }
             }
-          },
-          "n": {
-            "docs": {},
-            "d": {
-              "docs": {},
-              "r": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "w": {
-                    "docs": {},
-                    "'": {
-                      "docs": {
-                        "rglwidgetClass.html#chull": {
-                          "ref": "rglwidgetClass.html#chull",
-                          "tf": 4.166666666666666
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "f": {
@@ -14404,6 +15221,30 @@ window.lunrData = {
                       "docs": {},
                       "n": {
                         "docs": {
+                          "rglwidgetClass.html#___METHODS_FOR_ANIMATION___": {
+                            "ref": "rglwidgetClass.html#___METHODS_FOR_ANIMATION___",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#.bisect": {
+                            "ref": "rglwidgetClass.html#.bisect",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#.lerp": {
+                            "ref": "rglwidgetClass.html#.lerp",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#.rotateByQuaternion": {
+                            "ref": "rglwidgetClass.html#.rotateByQuaternion",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#.slerp": {
+                            "ref": "rglwidgetClass.html#.slerp",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#.step": {
+                            "ref": "rglwidgetClass.html#.step",
+                            "tf": 110
+                          },
                           "rglwidgetClass.html#___METHODS_FOR_AXES___": {
                             "ref": "rglwidgetClass.html#___METHODS_FOR_AXES___",
                             "tf": 110
@@ -14438,10 +15279,6 @@ window.lunrData = {
                           },
                           "rglwidgetClass.html#isBuffered": {
                             "ref": "rglwidgetClass.html#isBuffered",
-                            "tf": 110
-                          },
-                          "rglwidgetClass.html#___METHODS_FOR_CONTROLS___": {
-                            "ref": "rglwidgetClass.html#___METHODS_FOR_CONTROLS___",
                             "tf": 110
                           },
                           "rglwidgetClass.html#ageSetter": {
@@ -14518,6 +15355,10 @@ window.lunrData = {
                           },
                           "rglwidgetClass.html#doNormals": {
                             "ref": "rglwidgetClass.html#doNormals",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#doNormMat": {
+                            "ref": "rglwidgetClass.html#doNormMat",
                             "tf": 110
                           },
                           "rglwidgetClass.html#doPolygonOffset": {
@@ -14780,16 +15621,20 @@ window.lunrData = {
                             "ref": "rglwidgetClass.html#___METHODS_FOR_SHADERS___",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#getFragmentShader": {
-                            "ref": "rglwidgetClass.html#getFragmentShader",
+                          "rglwidgetClass.html#.getDefFlags": {
+                            "ref": "rglwidgetClass.html#.getDefFlags",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#.getDefines": {
+                            "ref": "rglwidgetClass.html#.getDefines",
                             "tf": 110
                           },
                           "rglwidgetClass.html#getShader": {
                             "ref": "rglwidgetClass.html#getShader",
-                            "tf": 118.33333333333333
+                            "tf": 117.14285714285714
                           },
-                          "rglwidgetClass.html#getVertexShader": {
-                            "ref": "rglwidgetClass.html#getVertexShader",
+                          "rglwidgetClass.html#getShaders": {
+                            "ref": "rglwidgetClass.html#getShaders",
                             "tf": 110
                           },
                           "rglwidgetClass.html#___METHODS_FOR_SUBSCENES___": {
@@ -14868,16 +15713,24 @@ window.lunrData = {
                             "ref": "rglwidgetClass.html#alertOnce",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#cbind": {
-                            "ref": "rglwidgetClass.html#cbind",
+                          "rglwidgetClass.html#.arrayDim": {
+                            "ref": "rglwidgetClass.html#.arrayDim",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#chull": {
-                            "ref": "rglwidgetClass.html#chull",
+                          "rglwidgetClass.html#.cbind": {
+                            "ref": "rglwidgetClass.html#.cbind",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#.chull": {
+                            "ref": "rglwidgetClass.html#.chull",
                             "tf": 110
                           },
                           "rglwidgetClass.html#componentProduct": {
                             "ref": "rglwidgetClass.html#componentProduct",
+                            "tf": 110
+                          },
+                          "rglwidgetClass.html#countClipplaneObjs": {
+                            "ref": "rglwidgetClass.html#countClipplaneObjs",
                             "tf": 110
                           },
                           "rglwidgetClass.html#countClipplanes": {
@@ -14896,16 +15749,16 @@ window.lunrData = {
                             "ref": "rglwidgetClass.html#debug",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#dotprod": {
-                            "ref": "rglwidgetClass.html#dotprod",
+                          "rglwidgetClass.html#.dotprod": {
+                            "ref": "rglwidgetClass.html#.dotprod",
                             "tf": 110
                           },
                           "rglwidgetClass.html#equalArrays": {
                             "ref": "rglwidgetClass.html#equalArrays",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#flatten": {
-                            "ref": "rglwidgetClass.html#flatten",
+                          "rglwidgetClass.html#.flatten": {
+                            "ref": "rglwidgetClass.html#.flatten",
                             "tf": 110
                           },
                           "rglwidgetClass.html#getIdsByType": {
@@ -14936,48 +15789,48 @@ window.lunrData = {
                             "ref": "rglwidgetClass.html#isInBrowserViewport",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#logMatrix": {
-                            "ref": "rglwidgetClass.html#logMatrix",
+                          "rglwidgetClass.html#.logMatrix": {
+                            "ref": "rglwidgetClass.html#.logMatrix",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#logVec3": {
-                            "ref": "rglwidgetClass.html#logVec3",
+                          "rglwidgetClass.html#.logVec3": {
+                            "ref": "rglwidgetClass.html#.logVec3",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#missing": {
-                            "ref": "rglwidgetClass.html#missing",
+                          "rglwidgetClass.html#.missing": {
+                            "ref": "rglwidgetClass.html#.missing",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#multMV": {
-                            "ref": "rglwidgetClass.html#multMV",
+                          "rglwidgetClass.html#.multMV": {
+                            "ref": "rglwidgetClass.html#.multMV",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#multVM": {
-                            "ref": "rglwidgetClass.html#multVM",
+                          "rglwidgetClass.html#.multVM": {
+                            "ref": "rglwidgetClass.html#.multVM",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#normalize": {
-                            "ref": "rglwidgetClass.html#normalize",
+                          "rglwidgetClass.html#.normalize": {
+                            "ref": "rglwidgetClass.html#.normalize",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#repeatToLen": {
-                            "ref": "rglwidgetClass.html#repeatToLen",
+                          "rglwidgetClass.html#.repeatToLen": {
+                            "ref": "rglwidgetClass.html#.repeatToLen",
                             "tf": 110
                           },
                           "rglwidgetClass.html#setElement": {
                             "ref": "rglwidgetClass.html#setElement",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#signif": {
-                            "ref": "rglwidgetClass.html#signif",
+                          "rglwidgetClass.html#.signif": {
+                            "ref": "rglwidgetClass.html#.signif",
                             "tf": 110
                           },
                           "rglwidgetClass.html#sumsq": {
                             "ref": "rglwidgetClass.html#sumsq",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#swap": {
-                            "ref": "rglwidgetClass.html#swap",
+                          "rglwidgetClass.html#.swap": {
+                            "ref": "rglwidgetClass.html#.swap",
                             "tf": 110
                           },
                           "rglwidgetClass.html#toCanvasMatrix4": {
@@ -14992,28 +15845,28 @@ window.lunrData = {
                             "ref": "rglwidgetClass.html#unique",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#vdiff": {
-                            "ref": "rglwidgetClass.html#vdiff",
+                          "rglwidgetClass.html#.vdiff": {
+                            "ref": "rglwidgetClass.html#.vdiff",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#vlen": {
-                            "ref": "rglwidgetClass.html#vlen",
+                          "rglwidgetClass.html#.vlen": {
+                            "ref": "rglwidgetClass.html#.vlen",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#vscale": {
-                            "ref": "rglwidgetClass.html#vscale",
+                          "rglwidgetClass.html#.vscale": {
+                            "ref": "rglwidgetClass.html#.vscale",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#vsum": {
-                            "ref": "rglwidgetClass.html#vsum",
+                          "rglwidgetClass.html#.vsum": {
+                            "ref": "rglwidgetClass.html#.vsum",
                             "tf": 110
                           },
                           "rglwidgetClass.html#whichList": {
                             "ref": "rglwidgetClass.html#whichList",
                             "tf": 110
                           },
-                          "rglwidgetClass.html#xprod": {
-                            "ref": "rglwidgetClass.html#xprod",
+                          "rglwidgetClass.html#.xprod": {
+                            "ref": "rglwidgetClass.html#.xprod",
                             "tf": 110
                           },
                           "rgltimerClass.html#___METHODS_FOR_PLAYERS___": {
@@ -15264,6 +16117,18 @@ window.lunrData = {
             },
             "a": {
               "docs": {},
+              "g": {
+                "docs": {
+                  "rglwidgetClass.html#.getDefFlags": {
+                    "ref": "rglwidgetClass.html#.getDefFlags",
+                    "tf": 5.555555555555555
+                  },
+                  "rglwidgetClass.html#.getDefines": {
+                    "ref": "rglwidgetClass.html#.getDefines",
+                    "tf": 8.333333333333332
+                  }
+                }
+              },
               "t": {
                 "docs": {},
                 "t": {
@@ -15272,9 +16137,9 @@ window.lunrData = {
                     "docs": {},
                     "n": {
                       "docs": {
-                        "rglwidgetClass.html#flatten": {
-                          "ref": "rglwidgetClass.html#flatten",
-                          "tf": 716.6666666666666
+                        "rglwidgetClass.html#.flatten": {
+                          "ref": "rglwidgetClass.html#.flatten",
+                          "tf": 700
                         },
                         "rglwidgetClass.html#setElement": {
                           "ref": "rglwidgetClass.html#setElement",
@@ -15301,9 +16166,9 @@ window.lunrData = {
                       "docs": {},
                       "t": {
                         "docs": {
-                          "rglwidgetClass.html#getFragmentShader": {
-                            "ref": "rglwidgetClass.html#getFragmentShader",
-                            "tf": 12.5
+                          "rglwidgetClass.html#getShaders": {
+                            "ref": "rglwidgetClass.html#getShaders",
+                            "tf": 10
                           }
                         }
                       }
@@ -15320,17 +16185,17 @@ window.lunrData = {
               "ref": "rglwidgetClass.html#R_pretty",
               "tf": 1.694915254237288
             },
-            "rglwidgetClass.html#logMatrix": {
-              "ref": "rglwidgetClass.html#logMatrix",
-              "tf": 50
+            "rglwidgetClass.html#.logMatrix": {
+              "ref": "rglwidgetClass.html#.logMatrix",
+              "tf": 33.33333333333333
             },
-            "rglwidgetClass.html#multMV": {
-              "ref": "rglwidgetClass.html#multMV",
-              "tf": 25
+            "rglwidgetClass.html#.multMV": {
+              "ref": "rglwidgetClass.html#.multMV",
+              "tf": 20
             },
-            "rglwidgetClass.html#multVM": {
-              "ref": "rglwidgetClass.html#multVM",
-              "tf": 25
+            "rglwidgetClass.html#.multVM": {
+              "ref": "rglwidgetClass.html#.multVM",
+              "tf": 20
             }
           },
           "e": {
@@ -15343,6 +16208,10 @@ window.lunrData = {
                   "docs": {},
                   "d": {
                     "docs": {
+                      "rglwidgetClass.html#___METHODS_FOR_ANIMATION___": {
+                        "ref": "rglwidgetClass.html#___METHODS_FOR_ANIMATION___",
+                        "tf": 16.666666666666664
+                      },
                       "rglwidgetClass.html#___METHODS_FOR_AXES___": {
                         "ref": "rglwidgetClass.html#___METHODS_FOR_AXES___",
                         "tf": 16.666666666666664
@@ -15350,10 +16219,6 @@ window.lunrData = {
                       "rglwidgetClass.html#___METHODS_FOR_BUFFERS___": {
                         "ref": "rglwidgetClass.html#___METHODS_FOR_BUFFERS___",
                         "tf": 12.5
-                      },
-                      "rglwidgetClass.html#___METHODS_FOR_CONTROLS___": {
-                        "ref": "rglwidgetClass.html#___METHODS_FOR_CONTROLS___",
-                        "tf": 16.666666666666664
                       },
                       "rglwidgetClass.html#___METHODS_FOR_DRAWING___": {
                         "ref": "rglwidgetClass.html#___METHODS_FOR_DRAWING___",
@@ -15386,6 +16251,14 @@ window.lunrData = {
                       "rglwidgetClass.html#___METHODS_FOR_SHADERS___": {
                         "ref": "rglwidgetClass.html#___METHODS_FOR_SHADERS___",
                         "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#.getDefFlags": {
+                        "ref": "rglwidgetClass.html#.getDefFlags",
+                        "tf": 5.555555555555555
+                      },
+                      "rglwidgetClass.html#.getDefines": {
+                        "ref": "rglwidgetClass.html#.getDefines",
+                        "tf": 5.555555555555555
                       },
                       "rglwidgetClass.html#___METHODS_FOR_SUBSCENES___": {
                         "ref": "rglwidgetClass.html#___METHODS_FOR_SUBSCENES___",
@@ -15586,20 +16459,20 @@ window.lunrData = {
                         "ref": "rglwidgetClass.html#setprmvMatrix",
                         "tf": 8.333333333333332
                       },
-                      "rglwidgetClass.html#flatten": {
-                        "ref": "rglwidgetClass.html#flatten",
+                      "rglwidgetClass.html#.flatten": {
+                        "ref": "rglwidgetClass.html#.flatten",
                         "tf": 16.666666666666664
                       },
-                      "rglwidgetClass.html#logMatrix": {
-                        "ref": "rglwidgetClass.html#logMatrix",
+                      "rglwidgetClass.html#.logMatrix": {
+                        "ref": "rglwidgetClass.html#.logMatrix",
                         "tf": 16.666666666666664
                       },
-                      "rglwidgetClass.html#multMV": {
-                        "ref": "rglwidgetClass.html#multMV",
+                      "rglwidgetClass.html#.multMV": {
+                        "ref": "rglwidgetClass.html#.multMV",
                         "tf": 16.666666666666664
                       },
-                      "rglwidgetClass.html#multVM": {
-                        "ref": "rglwidgetClass.html#multVM",
+                      "rglwidgetClass.html#.multVM": {
+                        "ref": "rglwidgetClass.html#.multVM",
                         "tf": 12.5
                       },
                       "rglwidgetClass.html#toCanvasMatrix4": {
@@ -15610,8 +16483,8 @@ window.lunrData = {
                   },
                   "c": {
                     "docs": {
-                      "rglwidgetClass.html#cbind": {
-                        "ref": "rglwidgetClass.html#cbind",
+                      "rglwidgetClass.html#.cbind": {
+                        "ref": "rglwidgetClass.html#.cbind",
                         "tf": 12.5
                       }
                     }
@@ -15773,9 +16646,9 @@ window.lunrData = {
               "docs": {},
               "s": {
                 "docs": {
-                  "rglwidgetClass.html#missing": {
-                    "ref": "rglwidgetClass.html#missing",
-                    "tf": 683.3333333333334
+                  "rglwidgetClass.html#.missing": {
+                    "ref": "rglwidgetClass.html#.missing",
+                    "tf": 675
                   }
                 }
               }
@@ -15810,12 +16683,12 @@ window.lunrData = {
                       "docs": {},
                       "i": {
                         "docs": {
-                          "rglwidgetClass.html#multMV": {
-                            "ref": "rglwidgetClass.html#multMV",
+                          "rglwidgetClass.html#.multMV": {
+                            "ref": "rglwidgetClass.html#.multMV",
                             "tf": 16.666666666666664
                           },
-                          "rglwidgetClass.html#multVM": {
-                            "ref": "rglwidgetClass.html#multVM",
+                          "rglwidgetClass.html#.multVM": {
+                            "ref": "rglwidgetClass.html#.multVM",
                             "tf": 12.5
                           },
                           "rgltimerClass.html#multiplier": {
@@ -15847,9 +16720,9 @@ window.lunrData = {
                   "docs": {},
                   "v": {
                     "docs": {
-                      "rglwidgetClass.html#multMV": {
-                        "ref": "rglwidgetClass.html#multMV",
-                        "tf": 675
+                      "rglwidgetClass.html#.multMV": {
+                        "ref": "rglwidgetClass.html#.multMV",
+                        "tf": 670
                       }
                     }
                   }
@@ -15858,11 +16731,1918 @@ window.lunrData = {
                   "docs": {},
                   "m": {
                     "docs": {
-                      "rglwidgetClass.html#multVM": {
-                        "ref": "rglwidgetClass.html#multVM",
+                      "rglwidgetClass.html#.multVM": {
+                        "ref": "rglwidgetClass.html#.multVM",
+                        "tf": 670
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "b": {
+          "docs": {
+            "rglwidgetClass.html#.cbind": {
+              "ref": "rglwidgetClass.html#.cbind",
+              "tf": 25
+            },
+            "rglwidgetClass.html#.dotprod": {
+              "ref": "rglwidgetClass.html#.dotprod",
+              "tf": 25
+            },
+            "rglwidgetClass.html#equalArrays": {
+              "ref": "rglwidgetClass.html#equalArrays",
+              "tf": 33.33333333333333
+            },
+            "rglwidgetClass.html#.xprod": {
+              "ref": "rglwidgetClass.html#.xprod",
+              "tf": 25
+            }
+          },
+          "i": {
+            "docs": {},
+            "n": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "r": {
+                  "docs": {},
+                  "i": {
+                    "docs": {
+                      "rglwidgetClass.html#.bisect": {
+                        "ref": "rglwidgetClass.html#.bisect",
+                        "tf": 25
+                      }
+                    }
+                  }
+                }
+              },
+              "d": {
+                "docs": {
+                  "rglwidgetClass.html#.cbind": {
+                    "ref": "rglwidgetClass.html#.cbind",
+                    "tf": 12.5
+                  }
+                }
+              }
+            },
+            "s": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "c": {
+                  "docs": {},
+                  "t": {
+                    "docs": {
+                      "rglwidgetClass.html#.bisect": {
+                        "ref": "rglwidgetClass.html#.bisect",
                         "tf": 675
                       }
                     }
+                  }
+                }
+              }
+            }
+          },
+          "o": {
+            "docs": {},
+            "u": {
+              "docs": {},
+              "n": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "rglwidgetClass.html#.lerp": {
+                      "ref": "rglwidgetClass.html#.lerp",
+                      "tf": 10
+                    },
+                    "rglwidgetClass.html#.slerp": {
+                      "ref": "rglwidgetClass.html#.slerp",
+                      "tf": 8.333333333333332
+                    },
+                    "rglwidgetClass.html#.step": {
+                      "ref": "rglwidgetClass.html#.step",
+                      "tf": 10
+                    },
+                    "rglwidgetClass.html#drawBBox": {
+                      "ref": "rglwidgetClass.html#drawBBox",
+                      "tf": 12.5
+                    }
+                  }
+                }
+              }
+            },
+            "x": {
+              "docs": {
+                "rglwidgetClass.html#drawBBox": {
+                  "ref": "rglwidgetClass.html#drawBBox",
+                  "tf": 12.5
+                },
+                "rglwidgetClass.html#initSelection": {
+                  "ref": "rglwidgetClass.html#initSelection",
+                  "tf": 10
+                }
+              }
+            },
+            "o": {
+              "docs": {},
+              "l": {
+                "docs": {
+                  "rglwidgetClass.html#.missing": {
+                    "ref": "rglwidgetClass.html#.missing",
+                    "tf": 25
+                  }
+                },
+                "e": {
+                  "docs": {},
+                  "a": {
+                    "docs": {},
+                    "n": {
+                      "docs": {
+                        "rglwidgetClass.html#startDrawing": {
+                          "ref": "rglwidgetClass.html#startDrawing",
+                          "tf": 50
+                        },
+                        "rglwidgetClass.html#inSubscene": {
+                          "ref": "rglwidgetClass.html#inSubscene",
+                          "tf": 25
+                        },
+                        "rglwidgetClass.html#inViewport": {
+                          "ref": "rglwidgetClass.html#inViewport",
+                          "tf": 25
+                        },
+                        "rglwidgetClass.html#equalArrays": {
+                          "ref": "rglwidgetClass.html#equalArrays",
+                          "tf": 33.33333333333333
+                        },
+                        "rglwidgetClass.html#isInBrowserViewport": {
+                          "ref": "rglwidgetClass.html#isInBrowserViewport",
+                          "tf": 50
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "b": {
+            "docs": {},
+            "o": {
+              "docs": {},
+              "x": {
+                "docs": {
+                  "rglwidgetClass.html#setBbox": {
+                    "ref": "rglwidgetClass.html#setBbox",
+                    "tf": 10
+                  },
+                  "rglwidgetClass.html#planeUpdateTriangles": {
+                    "ref": "rglwidgetClass.html#planeUpdateTriangles",
+                    "tf": 33.33333333333333
+                  }
+                },
+                "d": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "c": {
+                      "docs": {},
+                      "o": {
+                        "docs": {
+                          "rglwidgetClass.html#setBbox": {
+                            "ref": "rglwidgetClass.html#setBbox",
+                            "tf": 10
+                          },
+                          "rglwidgetClass.html#getBBoxDeco": {
+                            "ref": "rglwidgetClass.html#getBBoxDeco",
+                            "tf": 16.666666666666664
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "u": {
+            "docs": {},
+            "f": {
+              "docs": {},
+              "f": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "rglwidgetClass.html#___METHODS_FOR_BUFFERS___": {
+                        "ref": "rglwidgetClass.html#___METHODS_FOR_BUFFERS___",
+                        "tf": 12.5
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "t": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "n": {
+                    "docs": {
+                      "rglwidgetClass.html#setMouseMode": {
+                        "ref": "rglwidgetClass.html#setMouseMode",
+                        "tf": 20
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "r": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "g": {
+                  "docs": {
+                    "rglwidgetClass.html#oldBridge": {
+                      "ref": "rglwidgetClass.html#oldBridge",
+                      "tf": 12.5
+                    }
+                  }
+                }
+              }
+            },
+            "e": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "k": {
+                  "docs": {
+                    "rglwidgetClass.html#getPieces": {
+                      "ref": "rglwidgetClass.html#getPieces",
+                      "tf": 16.666666666666664
+                    }
+                  }
+                }
+              }
+            },
+            "u": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "h": {
+                  "docs": {
+                    "rglwidgetClass.html#clearBrush": {
+                      "ref": "rglwidgetClass.html#clearBrush",
+                      "tf": 16.666666666666664
+                    },
+                    "rglwidgetClass.html#selectionChanged": {
+                      "ref": "rglwidgetClass.html#selectionChanged",
+                      "tf": 16.666666666666664
+                    }
+                  }
+                }
+              }
+            },
+            "o": {
+              "docs": {},
+              "w": {
+                "docs": {},
+                "s": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "r": {
+                      "docs": {
+                        "rglwidgetClass.html#getMaxTexSize": {
+                          "ref": "rglwidgetClass.html#getMaxTexSize",
+                          "tf": 10
+                        },
+                        "rglwidgetClass.html#isInBrowserViewport": {
+                          "ref": "rglwidgetClass.html#isInBrowserViewport",
+                          "tf": 16.666666666666664
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "l": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "n": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "rglwidgetClass.html#doBlending": {
+                      "ref": "rglwidgetClass.html#doBlending",
+                      "tf": 66.66666666666666
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "a": {
+            "docs": {},
+            "s": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "rglwidgetClass.html#doDepthTest": {
+                    "ref": "rglwidgetClass.html#doDepthTest",
+                    "tf": 7.142857142857142
+                  },
+                  "rglwidgetClass.html#setElement": {
+                    "ref": "rglwidgetClass.html#setElement",
+                    "tf": 5
+                  }
+                }
+              }
+            },
+            "c": {
+              "docs": {},
+              "k": {
+                "docs": {},
+                "g": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "u": {
+                        "docs": {},
+                        "n": {
+                          "docs": {},
+                          "d": {
+                            "docs": {
+                              "rglwidgetClass.html#drawBackground": {
+                                "ref": "rglwidgetClass.html#drawBackground",
+                                "tf": 16.666666666666664
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "e": {
+            "docs": {},
+            "l": {
+              "docs": {},
+              "o": {
+                "docs": {},
+                "w": {
+                  "docs": {
+                    "rglwidgetClass.html#R_pretty": {
+                      "ref": "rglwidgetClass.html#R_pretty",
+                      "tf": 0.847457627118644
+                    }
+                  }
+                }
+              }
+            },
+            "t": {
+              "docs": {},
+              "w": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "n": {
+                      "docs": {
+                        "rgltimerClass.html#interval": {
+                          "ref": "rgltimerClass.html#interval",
+                          "tf": 16.666666666666664
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "n": {
+          "docs": {},
+          "e": {
+            "docs": {},
+            "w": {
+              "docs": {
+                "rglwidgetClass.html#R_pretty": {
+                  "ref": "rglwidgetClass.html#R_pretty",
+                  "tf": 0.847457627118644
+                }
+              },
+              "x": {
+                "docs": {
+                  "rglwidgetClass.html#.bisect": {
+                    "ref": "rglwidgetClass.html#.bisect",
+                    "tf": 25
+                  },
+                  "rglwidgetClass.html#.lerp": {
+                    "ref": "rglwidgetClass.html#.lerp",
+                    "tf": 20
+                  },
+                  "rglwidgetClass.html#.slerp": {
+                    "ref": "rglwidgetClass.html#.slerp",
+                    "tf": 20
+                  },
+                  "rglwidgetClass.html#.step": {
+                    "ref": "rglwidgetClass.html#.step",
+                    "tf": 20
+                  }
+                }
+              },
+              "m": {
+                "docs": {},
+                "u": {
+                  "docs": {},
+                  "l": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "rgltimerClass.html#newmultiplier": {
+                          "ref": "rgltimerClass.html#newmultiplier",
+                          "tf": 50
+                        }
+                      },
+                      "i": {
+                        "docs": {},
+                        "p": {
+                          "docs": {},
+                          "l": {
+                            "docs": {},
+                            "i": {
+                              "docs": {
+                                "rgltimerClass.html#newmultiplier": {
+                                  "ref": "rgltimerClass.html#newmultiplier",
+                                  "tf": 700
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "x": {
+              "docs": {},
+              "t": {
+                "docs": {
+                  "rglwidgetClass.html#getPowerOfTwo": {
+                    "ref": "rglwidgetClass.html#getPowerOfTwo",
+                    "tf": 12.5
+                  }
+                }
+              }
+            }
+          },
+          "o": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "m": {
+                "docs": {},
+                "a": {
+                  "docs": {},
+                  "l": {
+                    "docs": {
+                      "rglwidgetClass.html#doNormals": {
+                        "ref": "rglwidgetClass.html#doNormals",
+                        "tf": 25
+                      },
+                      "rglwidgetClass.html#setnormMatrix2": {
+                        "ref": "rglwidgetClass.html#setnormMatrix2",
+                        "tf": 12.5
+                      },
+                      "rglwidgetClass.html#.getDefines": {
+                        "ref": "rglwidgetClass.html#.getDefines",
+                        "tf": 8.333333333333332
+                      },
+                      "rglwidgetClass.html#.normalize": {
+                        "ref": "rglwidgetClass.html#.normalize",
+                        "tf": 708.3333333333334
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "t": {
+              "docs": {},
+              "h": {
+                "docs": {
+                  "rglwidgetClass.html#drawSpheres": {
+                    "ref": "rglwidgetClass.html#drawSpheres",
+                    "tf": 0.78125
+                  }
+                }
+              },
+              "e": {
+                "docs": {
+                  "rglwidgetClass.html#R_pretty": {
+                    "ref": "rglwidgetClass.html#R_pretty",
+                    "tf": 0.847457627118644
+                  }
+                }
+              }
+            },
+            "n": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "rgltimerClass.html#loop": {
+                    "ref": "rgltimerClass.html#loop",
+                    "tf": 16.666666666666664
+                  }
+                }
+              }
+            },
+            "m": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "n": {
+                  "docs": {
+                    "rgltimerClass.html#rate": {
+                      "ref": "rgltimerClass.html#rate",
+                      "tf": 12.5
+                    },
+                    "rgltimerClass.html#startTime": {
+                      "ref": "rgltimerClass.html#startTime",
+                      "tf": 12.5
+                    },
+                    "rgltimerClass.html#stepSize": {
+                      "ref": "rgltimerClass.html#stepSize",
+                      "tf": 16.666666666666664
+                    },
+                    "rgltimerClass.html#stopTime": {
+                      "ref": "rgltimerClass.html#stopTime",
+                      "tf": 16.666666666666664
+                    },
+                    "rgltimerClass.html#value": {
+                      "ref": "rgltimerClass.html#value",
+                      "tf": 16.666666666666664
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "d": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "v": {
+                "docs": {
+                  "rglwidgetClass.html#R_pretty": {
+                    "ref": "rglwidgetClass.html#R_pretty",
+                    "tf": 11.958568738229754
+                  }
+                }
+              }
+            }
+          },
+          "s": {
+            "docs": {
+              "rglwidgetClass.html#R_pretty": {
+                "ref": "rglwidgetClass.html#R_pretty",
+                "tf": 0.847457627118644
+              }
+            }
+          },
+          "u": {
+            "docs": {
+              "rglwidgetClass.html#R_pretty": {
+                "ref": "rglwidgetClass.html#R_pretty",
+                "tf": 0.847457627118644
+              }
+            },
+            "m": {
+              "docs": {},
+              "b": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "rglwidgetClass.html#getBBoxDeco": {
+                        "ref": "rglwidgetClass.html#getBBoxDeco",
+                        "tf": 33.33333333333333
+                      },
+                      "rglwidgetClass.html#useid": {
+                        "ref": "rglwidgetClass.html#useid",
+                        "tf": 25
+                      },
+                      "rglwidgetClass.html#whichSubscene": {
+                        "ref": "rglwidgetClass.html#whichSubscene",
+                        "tf": 33.33333333333333
+                      },
+                      "rglwidgetClass.html#getMaxTexSize": {
+                        "ref": "rglwidgetClass.html#getMaxTexSize",
+                        "tf": 50
+                      },
+                      "rglwidgetClass.html#countClipplaneObjs": {
+                        "ref": "rglwidgetClass.html#countClipplaneObjs",
+                        "tf": 50
+                      },
+                      "rglwidgetClass.html#countClipplanes": {
+                        "ref": "rglwidgetClass.html#countClipplanes",
+                        "tf": 50
+                      },
+                      "rglwidgetClass.html#countLights": {
+                        "ref": "rglwidgetClass.html#countLights",
+                        "tf": 50
+                      },
+                      "rglwidgetClass.html#countObjs": {
+                        "ref": "rglwidgetClass.html#countObjs",
+                        "tf": 33.33333333333333
+                      },
+                      "rglwidgetClass.html#.dotprod": {
+                        "ref": "rglwidgetClass.html#.dotprod",
+                        "tf": 25
+                      },
+                      "rglwidgetClass.html#getObj": {
+                        "ref": "rglwidgetClass.html#getObj",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#getPowerOfTwo": {
+                        "ref": "rglwidgetClass.html#getPowerOfTwo",
+                        "tf": 33.33333333333333
+                      },
+                      "rglwidgetClass.html#.signif": {
+                        "ref": "rglwidgetClass.html#.signif",
+                        "tf": 32.5
+                      },
+                      "rglwidgetClass.html#sumsq": {
+                        "ref": "rglwidgetClass.html#sumsq",
+                        "tf": 33.33333333333333
+                      },
+                      "rglwidgetClass.html#.vlen": {
+                        "ref": "rglwidgetClass.html#.vlen",
+                        "tf": 25
+                      }
+                    }
+                  }
+                }
+              },
+              "e": {
+                "docs": {},
+                "r": {
+                  "docs": {
+                    "rglwidgetClass.html#sumsq": {
+                      "ref": "rglwidgetClass.html#sumsq",
+                      "tf": 10
+                    }
+                  }
+                }
+              }
+            },
+            "l": {
+              "docs": {},
+              "l": {
+                "docs": {
+                  "rglwidgetClass.html#.missing": {
+                    "ref": "rglwidgetClass.html#.missing",
+                    "tf": 10
+                  }
+                }
+              }
+            }
+          },
+          "c": {
+            "docs": {},
+            "l": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "p": {
+                  "docs": {},
+                  "p": {
+                    "docs": {},
+                    "l": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "n": {
+                          "docs": {
+                            "rglwidgetClass.html#.getDefines": {
+                              "ref": "rglwidgetClass.html#.getDefines",
+                              "tf": 8.333333333333332
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "l": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "g": {
+                "docs": {},
+                "h": {
+                  "docs": {},
+                  "t": {
+                    "docs": {
+                      "rglwidgetClass.html#.getDefines": {
+                        "ref": "rglwidgetClass.html#.getDefines",
+                        "tf": 8.333333333333332
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "a": {
+            "docs": {
+              "rglwidgetClass.html#.missing": {
+                "ref": "rglwidgetClass.html#.missing",
+                "tf": 10
+              }
+            },
+            "n": {
+              "docs": {
+                "rglwidgetClass.html#.missing": {
+                  "ref": "rglwidgetClass.html#.missing",
+                  "tf": 10
+                }
+              }
+            }
+          }
+        },
+        "x": {
+          "docs": {
+            "rglwidgetClass.html#.bisect": {
+              "ref": "rglwidgetClass.html#.bisect",
+              "tf": 25
+            },
+            "rglwidgetClass.html#.lerp": {
+              "ref": "rglwidgetClass.html#.lerp",
+              "tf": 20
+            },
+            "rglwidgetClass.html#.slerp": {
+              "ref": "rglwidgetClass.html#.slerp",
+              "tf": 20
+            },
+            "rglwidgetClass.html#.step": {
+              "ref": "rglwidgetClass.html#.step",
+              "tf": 20
+            },
+            "rglwidgetClass.html#applyControls": {
+              "ref": "rglwidgetClass.html#applyControls",
+              "tf": 25
+            },
+            "rglwidgetClass.html#initialize": {
+              "ref": "rglwidgetClass.html#initialize",
+              "tf": 33.33333333333333
+            },
+            "rglwidgetClass.html#componentProduct": {
+              "ref": "rglwidgetClass.html#componentProduct",
+              "tf": 25
+            },
+            "rglwidgetClass.html#.missing": {
+              "ref": "rglwidgetClass.html#.missing",
+              "tf": 25
+            },
+            "rglwidgetClass.html#.signif": {
+              "ref": "rglwidgetClass.html#.signif",
+              "tf": 20
+            },
+            "rglwidgetClass.html#sumsq": {
+              "ref": "rglwidgetClass.html#sumsq",
+              "tf": 33.33333333333333
+            },
+            "rglwidgetClass.html#.vdiff": {
+              "ref": "rglwidgetClass.html#.vdiff",
+              "tf": 25
+            },
+            "rglwidgetClass.html#.vscale": {
+              "ref": "rglwidgetClass.html#.vscale",
+              "tf": 25
+            },
+            "rglwidgetClass.html#.vsum": {
+              "ref": "rglwidgetClass.html#.vsum",
+              "tf": 25
+            }
+          },
+          "p": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "o": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "rglwidgetClass.html#.xprod": {
+                      "ref": "rglwidgetClass.html#.xprod",
+                      "tf": 675
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "o": {
+          "docs": {},
+          "u": {
+            "docs": {},
+            "t": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "rglwidgetClass.html#.lerp": {
+                        "ref": "rglwidgetClass.html#.lerp",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#.slerp": {
+                        "ref": "rglwidgetClass.html#.slerp",
+                        "tf": 8.333333333333332
+                      },
+                      "rglwidgetClass.html#.step": {
+                        "ref": "rglwidgetClass.html#.step",
+                        "tf": 10
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "b": {
+            "docs": {},
+            "j": {
+              "docs": {
+                "rglwidgetClass.html#getTickLocations": {
+                  "ref": "rglwidgetClass.html#getTickLocations",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#placeTickLabels": {
+                  "ref": "rglwidgetClass.html#placeTickLabels",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#setBbox": {
+                  "ref": "rglwidgetClass.html#setBbox",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#setTickLabels": {
+                  "ref": "rglwidgetClass.html#setTickLabels",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#isBuffered": {
+                  "ref": "rglwidgetClass.html#isBuffered",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#disableArrays": {
+                  "ref": "rglwidgetClass.html#disableArrays",
+                  "tf": 33.33333333333333
+                },
+                "rglwidgetClass.html#doClipping": {
+                  "ref": "rglwidgetClass.html#doClipping",
+                  "tf": 33.33333333333333
+                },
+                "rglwidgetClass.html#doColors": {
+                  "ref": "rglwidgetClass.html#doColors",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#doDepthTest": {
+                  "ref": "rglwidgetClass.html#doDepthTest",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#doFog": {
+                  "ref": "rglwidgetClass.html#doFog",
+                  "tf": 33.33333333333333
+                },
+                "rglwidgetClass.html#doLighting": {
+                  "ref": "rglwidgetClass.html#doLighting",
+                  "tf": 33.33333333333333
+                },
+                "rglwidgetClass.html#doLoadIndices": {
+                  "ref": "rglwidgetClass.html#doLoadIndices",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#doNormals": {
+                  "ref": "rglwidgetClass.html#doNormals",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#doNormMat": {
+                  "ref": "rglwidgetClass.html#doNormMat",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#doPolygonOffset": {
+                  "ref": "rglwidgetClass.html#doPolygonOffset",
+                  "tf": 62.5
+                },
+                "rglwidgetClass.html#doTexture": {
+                  "ref": "rglwidgetClass.html#doTexture",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#doUserAttributes": {
+                  "ref": "rglwidgetClass.html#doUserAttributes",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#doUserUniforms": {
+                  "ref": "rglwidgetClass.html#doUserUniforms",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#drawBBox": {
+                  "ref": "rglwidgetClass.html#drawBBox",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#drawClipplanes": {
+                  "ref": "rglwidgetClass.html#drawClipplanes",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#drawLinestrip": {
+                  "ref": "rglwidgetClass.html#drawLinestrip",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#drawMarginal": {
+                  "ref": "rglwidgetClass.html#drawMarginal",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#drawObj": {
+                  "ref": "rglwidgetClass.html#drawObj",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#drawPlanes": {
+                  "ref": "rglwidgetClass.html#drawPlanes",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#drawSimple": {
+                  "ref": "rglwidgetClass.html#drawSimple",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#drawSpheres": {
+                  "ref": "rglwidgetClass.html#drawSpheres",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#drawSprites": {
+                  "ref": "rglwidgetClass.html#drawSprites",
+                  "tf": 25
+                },
+                "rglwidgetClass.html#initObj": {
+                  "ref": "rglwidgetClass.html#initObj",
+                  "tf": 50
+                },
+                "rglwidgetClass.html#getCubePieces": {
+                  "ref": "rglwidgetClass.html#getCubePieces",
+                  "tf": 20
+                },
+                "rglwidgetClass.html#getSpherePieces": {
+                  "ref": "rglwidgetClass.html#getSpherePieces",
+                  "tf": 20
+                },
+                "rglwidgetClass.html#getMaterial": {
+                  "ref": "rglwidgetClass.html#getMaterial",
+                  "tf": 45.83333333333333
+                }
+              },
+              "e": {
+                "docs": {},
+                "c": {
+                  "docs": {},
+                  "t": {
+                    "docs": {
+                      "rglwidgetClass.html#isBuffered": {
+                        "ref": "rglwidgetClass.html#isBuffered",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#drawMarginal": {
+                        "ref": "rglwidgetClass.html#drawMarginal",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#drawObj": {
+                        "ref": "rglwidgetClass.html#drawObj",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#drawObjId": {
+                        "ref": "rglwidgetClass.html#drawObjId",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#drawPlanes": {
+                        "ref": "rglwidgetClass.html#drawPlanes",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#drawSimple": {
+                        "ref": "rglwidgetClass.html#drawSimple",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#drawSprites": {
+                        "ref": "rglwidgetClass.html#drawSprites",
+                        "tf": 12.5
+                      },
+                      "rglwidgetClass.html#initCube": {
+                        "ref": "rglwidgetClass.html#initCube",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#initGL": {
+                        "ref": "rglwidgetClass.html#initGL",
+                        "tf": 50
+                      },
+                      "rglwidgetClass.html#initialize": {
+                        "ref": "rglwidgetClass.html#initialize",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#initObj": {
+                        "ref": "rglwidgetClass.html#initObj",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#initObjId": {
+                        "ref": "rglwidgetClass.html#initObjId",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#initSphere": {
+                        "ref": "rglwidgetClass.html#initSphere",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#relMouseCoords": {
+                        "ref": "rglwidgetClass.html#relMouseCoords",
+                        "tf": 33.33333333333333
+                      },
+                      "rglwidgetClass.html#___METHODS_FOR_TRANSPARENCY___": {
+                        "ref": "rglwidgetClass.html#___METHODS_FOR_TRANSPARENCY___",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#getCubePieces": {
+                        "ref": "rglwidgetClass.html#getCubePieces",
+                        "tf": 20
+                      },
+                      "rglwidgetClass.html#getPieces": {
+                        "ref": "rglwidgetClass.html#getPieces",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#getSpherePieces": {
+                        "ref": "rglwidgetClass.html#getSpherePieces",
+                        "tf": 20
+                      },
+                      "rglwidgetClass.html#mergePieces": {
+                        "ref": "rglwidgetClass.html#mergePieces",
+                        "tf": 33.33333333333333
+                      },
+                      "rglwidgetClass.html#initSelection": {
+                        "ref": "rglwidgetClass.html#initSelection",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#.getDefines": {
+                        "ref": "rglwidgetClass.html#.getDefines",
+                        "tf": 5.555555555555555
+                      },
+                      "rglwidgetClass.html#getShader": {
+                        "ref": "rglwidgetClass.html#getShader",
+                        "tf": 25
+                      },
+                      "rglwidgetClass.html#getShaders": {
+                        "ref": "rglwidgetClass.html#getShaders",
+                        "tf": 25
+                      },
+                      "rglwidgetClass.html#translateCoords": {
+                        "ref": "rglwidgetClass.html#translateCoords",
+                        "tf": 25
+                      },
+                      "rglwidgetClass.html#drawTextToCanvas": {
+                        "ref": "rglwidgetClass.html#drawTextToCanvas",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#countClipplaneObjs": {
+                        "ref": "rglwidgetClass.html#countClipplaneObjs",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#countObjs": {
+                        "ref": "rglwidgetClass.html#countObjs",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#getObj": {
+                        "ref": "rglwidgetClass.html#getObj",
+                        "tf": 49.99999999999999
+                      },
+                      "rglwidgetClass.html#getSlide": {
+                        "ref": "rglwidgetClass.html#getSlide",
+                        "tf": 50
+                      },
+                      "rgltimerClass.html": {
+                        "ref": "rgltimerClass.html",
+                        "tf": 16.666666666666664
+                      }
+                    },
+                    "'": {
+                      "docs": {
+                        "rglwidgetClass.html#doDepthTest": {
+                          "ref": "rglwidgetClass.html#doDepthTest",
+                          "tf": 7.142857142857142
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "s": {
+              "docs": {},
+              "o": {
+                "docs": {},
+                "l": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "rglwidgetClass.html#___OBSOLETE_METHODS___": {
+                          "ref": "rglwidgetClass.html#___OBSOLETE_METHODS___",
+                          "tf": 12.5
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "l": {
+            "docs": {},
+            "d": {
+              "docs": {
+                "rglwidgetClass.html#oldBridge": {
+                  "ref": "rglwidgetClass.html#oldBridge",
+                  "tf": 12.5
+                }
+              },
+              "b": {
+                "docs": {},
+                "r": {
+                  "docs": {},
+                  "i": {
+                    "docs": {},
+                    "d": {
+                      "docs": {},
+                      "g": {
+                        "docs": {
+                          "rglwidgetClass.html#oldBridge": {
+                            "ref": "rglwidgetClass.html#oldBridge",
+                            "tf": 683.3333333333334
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "f": {
+            "docs": {},
+            "f": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "t": {
+                    "docs": {
+                      "rglwidgetClass.html#doPolygonOffset": {
+                        "ref": "rglwidgetClass.html#doPolygonOffset",
+                        "tf": 12.5
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "n": {
+            "docs": {
+              "rglwidgetClass.html#drawSpheres": {
+                "ref": "rglwidgetClass.html#drawSpheres",
+                "tf": 2.34375
+              },
+              "rglwidgetClass.html#mergePieces": {
+                "ref": "rglwidgetClass.html#mergePieces",
+                "tf": 10
+              },
+              "rgltimerClass.html#step": {
+                "ref": "rgltimerClass.html#step",
+                "tf": 16.666666666666664
+              }
+            },
+            "c": {
+              "docs": {
+                "rglwidgetClass.html#drawSpheres": {
+                  "ref": "rglwidgetClass.html#drawSpheres",
+                  "tf": 0.78125
+                }
+              }
+            }
+          },
+          "p": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "q": {
+                "docs": {},
+                "u": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "p": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "s": {
+                          "docs": {},
+                          "s": {
+                            "docs": {
+                              "rglwidgetClass.html#drawSpheres": {
+                                "ref": "rglwidgetClass.html#drawSpheres",
+                                "tf": 4.6875
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "r": {
+            "docs": {},
+            "d": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "r": {
+                  "docs": {
+                    "rglwidgetClass.html#drawSpheres": {
+                      "ref": "rglwidgetClass.html#drawSpheres",
+                      "tf": 2.34375
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "v": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "r": {
+                "docs": {},
+                "f": {
+                  "docs": {},
+                  "l": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "w": {
+                        "docs": {
+                          "rglwidgetClass.html#R_pretty": {
+                            "ref": "rglwidgetClass.html#R_pretty",
+                            "tf": 0.847457627118644
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "s": {
+            "docs": {},
+            "c": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "l": {
+                  "docs": {
+                    "rgltimerClass.html#loop": {
+                      "ref": "rgltimerClass.html#loop",
+                      "tf": 16.666666666666664
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "v": {
+          "docs": {
+            "rglwidgetClass.html#.lerp": {
+              "ref": "rglwidgetClass.html#.lerp",
+              "tf": 20
+            },
+            "rglwidgetClass.html#.slerp": {
+              "ref": "rglwidgetClass.html#.slerp",
+              "tf": 20
+            },
+            "rglwidgetClass.html#.step": {
+              "ref": "rglwidgetClass.html#.step",
+              "tf": 20
+            },
+            "rglwidgetClass.html#.logVec3": {
+              "ref": "rglwidgetClass.html#.logVec3",
+              "tf": 33.33333333333333
+            },
+            "rglwidgetClass.html#.multMV": {
+              "ref": "rglwidgetClass.html#.multMV",
+              "tf": 20
+            },
+            "rglwidgetClass.html#.multVM": {
+              "ref": "rglwidgetClass.html#.multVM",
+              "tf": 20
+            },
+            "rglwidgetClass.html#.normalize": {
+              "ref": "rglwidgetClass.html#.normalize",
+              "tf": 33.33333333333333
+            },
+            "rglwidgetClass.html#.vlen": {
+              "ref": "rglwidgetClass.html#.vlen",
+              "tf": 25
+            }
+          },
+          "e": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "i": {
+                  "docs": {},
+                  "c": {
+                    "docs": {
+                      "rglwidgetClass.html#getTickVertices": {
+                        "ref": "rglwidgetClass.html#getTickVertices",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#vertexSetter": {
+                        "ref": "rglwidgetClass.html#vertexSetter",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#initSelection": {
+                        "ref": "rglwidgetClass.html#initSelection",
+                        "tf": 10
+                      }
+                    }
+                  }
+                },
+                "e": {
+                  "docs": {},
+                  "x": {
+                    "docs": {
+                      "rglwidgetClass.html#ageSetter": {
+                        "ref": "rglwidgetClass.html#ageSetter",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#getShaders": {
+                        "ref": "rglwidgetClass.html#getShaders",
+                        "tf": 10
+                      }
+                    },
+                    "s": {
+                      "docs": {},
+                      "e": {
+                        "docs": {},
+                        "t": {
+                          "docs": {},
+                          "t": {
+                            "docs": {
+                              "rglwidgetClass.html#vertexSetter": {
+                                "ref": "rglwidgetClass.html#vertexSetter",
+                                "tf": 683.3333333333334
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "c": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "r": {
+                    "docs": {
+                      "rglwidgetClass.html#setBbox": {
+                        "ref": "rglwidgetClass.html#setBbox",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#.cbind": {
+                        "ref": "rglwidgetClass.html#.cbind",
+                        "tf": 12.5
+                      },
+                      "rglwidgetClass.html#componentProduct": {
+                        "ref": "rglwidgetClass.html#componentProduct",
+                        "tf": 7.142857142857142
+                      },
+                      "rglwidgetClass.html#.dotprod": {
+                        "ref": "rglwidgetClass.html#.dotprod",
+                        "tf": 12.5
+                      },
+                      "rglwidgetClass.html#.flatten": {
+                        "ref": "rglwidgetClass.html#.flatten",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#.logVec3": {
+                        "ref": "rglwidgetClass.html#.logVec3",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#.multMV": {
+                        "ref": "rglwidgetClass.html#.multMV",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#.multVM": {
+                        "ref": "rglwidgetClass.html#.multVM",
+                        "tf": 12.5
+                      },
+                      "rglwidgetClass.html#.normalize": {
+                        "ref": "rglwidgetClass.html#.normalize",
+                        "tf": 25
+                      },
+                      "rglwidgetClass.html#sumsq": {
+                        "ref": "rglwidgetClass.html#sumsq",
+                        "tf": 10
+                      },
+                      "rglwidgetClass.html#.vdiff": {
+                        "ref": "rglwidgetClass.html#.vdiff",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#.vlen": {
+                        "ref": "rglwidgetClass.html#.vlen",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#.vscale": {
+                        "ref": "rglwidgetClass.html#.vscale",
+                        "tf": 25
+                      },
+                      "rglwidgetClass.html#.vsum": {
+                        "ref": "rglwidgetClass.html#.vsum",
+                        "tf": 16.666666666666664
+                      },
+                      "rglwidgetClass.html#.xprod": {
+                        "ref": "rglwidgetClass.html#.xprod",
+                        "tf": 12.5
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "n": {
+            "docs": {},
+            "o": {
+              "docs": {},
+              "r": {
+                "docs": {},
+                "m": {
+                  "docs": {},
+                  "a": {
+                    "docs": {},
+                    "l": {
+                      "docs": {
+                        "rglwidgetClass.html#doNormMat": {
+                          "ref": "rglwidgetClass.html#doNormMat",
+                          "tf": 25
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "a": {
+            "docs": {},
+            "l": {
+              "docs": {},
+              "u": {
+                "docs": {
+                  "rglwidgetClass.html#R_pretty": {
+                    "ref": "rglwidgetClass.html#R_pretty",
+                    "tf": 0.847457627118644
+                  },
+                  "rglwidgetClass.html#getPowerOfTwo": {
+                    "ref": "rglwidgetClass.html#getPowerOfTwo",
+                    "tf": 33.33333333333333
+                  },
+                  "rglwidgetClass.html#setElement": {
+                    "ref": "rglwidgetClass.html#setElement",
+                    "tf": 33.33333333333333
+                  },
+                  "rgltimerClass.html#value": {
+                    "ref": "rgltimerClass.html#value",
+                    "tf": 750
+                  },
+                  "rgltimerClass.html#forceToRange": {
+                    "ref": "rgltimerClass.html#forceToRange",
+                    "tf": 12.5
+                  },
+                  "rgltimerClass.html#reset": {
+                    "ref": "rgltimerClass.html#reset",
+                    "tf": 16.666666666666664
+                  }
+                }
+              }
+            }
+          },
+          "i": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "w": {
+                "docs": {
+                  "rglwidgetClass.html#setmvMatrix": {
+                    "ref": "rglwidgetClass.html#setmvMatrix",
+                    "tf": 10
+                  },
+                  "rglwidgetClass.html#setprmvMatrix": {
+                    "ref": "rglwidgetClass.html#setprmvMatrix",
+                    "tf": 8.333333333333332
+                  }
+                },
+                "p": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "r": {
+                      "docs": {},
+                      "t": {
+                        "docs": {
+                          "rglwidgetClass.html#getViewport": {
+                            "ref": "rglwidgetClass.html#getViewport",
+                            "tf": 50
+                          },
+                          "rglwidgetClass.html#setViewport": {
+                            "ref": "rglwidgetClass.html#setViewport",
+                            "tf": 10
+                          },
+                          "rglwidgetClass.html#inViewport": {
+                            "ref": "rglwidgetClass.html#inViewport",
+                            "tf": 10
+                          },
+                          "rglwidgetClass.html#translateCoords": {
+                            "ref": "rglwidgetClass.html#translateCoords",
+                            "tf": 10
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "s": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "b": {
+                  "docs": {},
+                  "l": {
+                    "docs": {
+                      "rglwidgetClass.html#isInBrowserViewport": {
+                        "ref": "rglwidgetClass.html#isInBrowserViewport",
+                        "tf": 16.666666666666664
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "d": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "f": {
+                "docs": {},
+                "f": {
+                  "docs": {
+                    "rglwidgetClass.html#.vdiff": {
+                      "ref": "rglwidgetClass.html#.vdiff",
+                      "tf": 675
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "l": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "n": {
+                "docs": {
+                  "rglwidgetClass.html#.vlen": {
+                    "ref": "rglwidgetClass.html#.vlen",
+                    "tf": 675
+                  }
+                }
+              }
+            }
+          },
+          "s": {
+            "docs": {},
+            "c": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "l": {
+                  "docs": {},
+                  "e": {
+                    "docs": {
+                      "rglwidgetClass.html#.vscale": {
+                        "ref": "rglwidgetClass.html#.vscale",
+                        "tf": 675
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "u": {
+              "docs": {},
+              "m": {
+                "docs": {
+                  "rglwidgetClass.html#.vsum": {
+                    "ref": "rglwidgetClass.html#.vsum",
+                    "tf": 675
+                  }
+                }
+              }
+            }
+          }
+        },
+        "q": {
+          "docs": {
+            "rglwidgetClass.html#.rotateByQuaternion": {
+              "ref": "rglwidgetClass.html#.rotateByQuaternion",
+              "tf": 33.33333333333333
+            }
+          },
+          "u": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "n": {
+                      "docs": {},
+                      "i": {
+                        "docs": {},
+                        "o": {
+                          "docs": {},
+                          "n": {
+                            "docs": {
+                              "rglwidgetClass.html#.rotateByQuaternion": {
+                                "ref": "rglwidgetClass.html#.rotateByQuaternion",
+                                "tf": 12.5
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "u": {
+          "docs": {},
+          "n": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "t": {
+                "docs": {
+                  "rglwidgetClass.html#.rotateByQuaternion": {
+                    "ref": "rglwidgetClass.html#.rotateByQuaternion",
+                    "tf": 12.5
+                  },
+                  "rgltimerClass.html#rate": {
+                    "ref": "rgltimerClass.html#rate",
+                    "tf": 12.5
+                  }
+                }
+              },
+              "f": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "m": {
+                      "docs": {
+                        "rglwidgetClass.html#doUserUniforms": {
+                          "ref": "rglwidgetClass.html#doUserUniforms",
+                          "tf": 16.666666666666664
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "q": {
+                "docs": {},
+                "u": {
+                  "docs": {
+                    "rglwidgetClass.html#unique": {
+                      "ref": "rglwidgetClass.html#unique",
+                      "tf": 708.3333333333334
+                    }
+                  }
+                }
+              }
+            },
+            "u": {
+              "docs": {},
+              "s": {
+                "docs": {
+                  "rglwidgetClass.html#disableArrays": {
+                    "ref": "rglwidgetClass.html#disableArrays",
+                    "tf": 16.666666666666664
+                  }
+                }
+              }
+            },
+            "d": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "r": {
+                  "docs": {
+                    "rglwidgetClass.html#.chull": {
+                      "ref": "rglwidgetClass.html#.chull",
+                      "tf": 4.166666666666666
+                    }
+                  }
+                },
+                "f": {
+                  "docs": {},
+                  "i": {
+                    "docs": {},
+                    "n": {
+                      "docs": {
+                        "rglwidgetClass.html#.missing": {
+                          "ref": "rglwidgetClass.html#.missing",
+                          "tf": 10
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "s": {
+            "docs": {
+              "rglwidgetClass.html#.rotateByQuaternion": {
+                "ref": "rglwidgetClass.html#.rotateByQuaternion",
+                "tf": 12.5
+              },
+              "rglwidgetClass.html#drawObjId": {
+                "ref": "rglwidgetClass.html#drawObjId",
+                "tf": 10
+              },
+              "rglwidgetClass.html#planeUpdateTriangles": {
+                "ref": "rglwidgetClass.html#planeUpdateTriangles",
+                "tf": 10
+              },
+              "rglwidgetClass.html#start": {
+                "ref": "rglwidgetClass.html#start",
+                "tf": 6.25
+              },
+              "rglwidgetClass.html#.chull": {
+                "ref": "rglwidgetClass.html#.chull",
+                "tf": 4.166666666666666
+              }
+            },
+            "e": {
+              "docs": {},
+              "r": {
+                "docs": {
+                  "rglwidgetClass.html#doUserAttributes": {
+                    "ref": "rglwidgetClass.html#doUserAttributes",
+                    "tf": 16.666666666666664
+                  },
+                  "rglwidgetClass.html#doUserUniforms": {
+                    "ref": "rglwidgetClass.html#doUserUniforms",
+                    "tf": 16.666666666666664
+                  }
+                }
+              },
+              "i": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "rglwidgetClass.html#useid": {
+                      "ref": "rglwidgetClass.html#useid",
+                      "tf": 675
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "p": {
+            "docs": {
+              "rglwidgetClass.html#Player": {
+                "ref": "rglwidgetClass.html#Player",
+                "tf": 12.5
+              },
+              "rglwidgetClass.html#doFog": {
+                "ref": "rglwidgetClass.html#doFog",
+                "tf": 12.5
+              },
+              "rglwidgetClass.html#R_pretty": {
+                "ref": "rglwidgetClass.html#R_pretty",
+                "tf": 12.806026365348398
+              },
+              "rglwidgetClass.html#.getDefFlags": {
+                "ref": "rglwidgetClass.html#.getDefFlags",
+                "tf": 5.555555555555555
+              }
+            },
+            "d": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "rglwidgetClass.html#planeUpdateTriangles": {
+                      "ref": "rglwidgetClass.html#planeUpdateTriangles",
+                      "tf": 10
+                    },
+                    "rgltimerClass.html#interval": {
+                      "ref": "rgltimerClass.html#interval",
+                      "tf": 16.666666666666664
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "r": {
+            "docs": {},
+            "i": {
+              "docs": {
+                "rglwidgetClass.html#loadImageToTexture": {
+                  "ref": "rglwidgetClass.html#loadImageToTexture",
+                  "tf": 33.33333333333333
+                }
+              }
+            }
+          },
+          "t": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "l": {
+                "docs": {
+                  "rglwidgetClass.html#___UTILITY_METHODS___": {
+                    "ref": "rglwidgetClass.html#___UTILITY_METHODS___",
+                    "tf": 25
                   }
                 }
               }
@@ -15951,8 +18731,8 @@ window.lunrData = {
                           "ref": "rglwidgetClass.html#setElement",
                           "tf": 5
                         },
-                        "rglwidgetClass.html#swap": {
-                          "ref": "rglwidgetClass.html#swap",
+                        "rglwidgetClass.html#.swap": {
+                          "ref": "rglwidgetClass.html#.swap",
                           "tf": 25
                         }
                       }
@@ -15979,6 +18759,14 @@ window.lunrData = {
                       "tf": 0.847457627118644
                     }
                   }
+                }
+              }
+            },
+            "d": {
+              "docs": {
+                "rglwidgetClass.html#.getDefFlags": {
+                  "ref": "rglwidgetClass.html#.getDefFlags",
+                  "tf": 5.555555555555555
                 }
               }
             },
@@ -16135,8 +18923,8 @@ window.lunrData = {
                         "docs": {},
                         "n": {
                           "docs": {
-                            "rglwidgetClass.html#vlen": {
-                              "ref": "rglwidgetClass.html#vlen",
+                            "rglwidgetClass.html#.vlen": {
+                              "ref": "rglwidgetClass.html#.vlen",
                               "tf": 16.666666666666664
                             }
                           }
@@ -16255,12 +19043,12 @@ window.lunrData = {
                           "ref": "rglwidgetClass.html#componentProduct",
                           "tf": 7.142857142857142
                         },
-                        "rglwidgetClass.html#dotprod": {
-                          "ref": "rglwidgetClass.html#dotprod",
+                        "rglwidgetClass.html#.dotprod": {
+                          "ref": "rglwidgetClass.html#.dotprod",
                           "tf": 12.5
                         },
-                        "rglwidgetClass.html#xprod": {
-                          "ref": "rglwidgetClass.html#xprod",
+                        "rglwidgetClass.html#.xprod": {
+                          "ref": "rglwidgetClass.html#.xprod",
                           "tf": 12.5
                         }
                       }
@@ -16330,8 +19118,8 @@ window.lunrData = {
                   "docs": {},
                   "s": {
                     "docs": {
-                      "rglwidgetClass.html#signif": {
-                        "ref": "rglwidgetClass.html#signif",
+                      "rglwidgetClass.html#.signif": {
+                        "ref": "rglwidgetClass.html#.signif",
                         "tf": 12.5
                       }
                     }
@@ -16427,6 +19215,10 @@ window.lunrData = {
                     },
                     "rglwidgetClass.html#planeUpdateTriangles": {
                       "ref": "rglwidgetClass.html#planeUpdateTriangles",
+                      "tf": 10
+                    },
+                    "rglwidgetClass.html#countClipplaneObjs": {
+                      "ref": "rglwidgetClass.html#countClipplaneObjs",
                       "tf": 10
                     },
                     "rglwidgetClass.html#countClipplanes": {
@@ -16535,6 +19327,20 @@ window.lunrData = {
                     "rglwidgetClass.html#whichSubscene": {
                       "ref": "rglwidgetClass.html#whichSubscene",
                       "tf": 12.5
+                    }
+                  },
+                  "s": {
+                    "docs": {},
+                    "i": {
+                      "docs": {},
+                      "z": {
+                        "docs": {
+                          "rglwidgetClass.html#.getDefines": {
+                            "ref": "rglwidgetClass.html#.getDefines",
+                            "tf": 8.333333333333332
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -16836,6 +19642,17 @@ window.lunrData = {
                       }
                     }
                   }
+                },
+                "y": {
+                  "docs": {},
+                  "p": {
+                    "docs": {
+                      "rglwidgetClass.html#.getDefines": {
+                        "ref": "rglwidgetClass.html#.getDefines",
+                        "tf": 8.333333333333332
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -17012,6 +19829,10 @@ window.lunrData = {
               "docs": {},
               "e": {
                 "docs": {
+                  "rglwidgetClass.html#.getDefines": {
+                    "ref": "rglwidgetClass.html#.getDefines",
+                    "tf": 8.333333333333332
+                  },
                   "rglwidgetClass.html#useid": {
                     "ref": "rglwidgetClass.html#useid",
                     "tf": 25
@@ -17054,24 +19875,24 @@ window.lunrData = {
                   "ref": "rglwidgetClass.html#componentProduct",
                   "tf": 7.142857142857142
                 },
-                "rglwidgetClass.html#dotprod": {
-                  "ref": "rglwidgetClass.html#dotprod",
+                "rglwidgetClass.html#.dotprod": {
+                  "ref": "rglwidgetClass.html#.dotprod",
                   "tf": 12.5
                 },
                 "rglwidgetClass.html#getPowerOfTwo": {
                   "ref": "rglwidgetClass.html#getPowerOfTwo",
                   "tf": 12.5
                 },
-                "rglwidgetClass.html#vdiff": {
-                  "ref": "rglwidgetClass.html#vdiff",
+                "rglwidgetClass.html#.vdiff": {
+                  "ref": "rglwidgetClass.html#.vdiff",
                   "tf": 16.666666666666664
                 },
-                "rglwidgetClass.html#vsum": {
-                  "ref": "rglwidgetClass.html#vsum",
+                "rglwidgetClass.html#.vsum": {
+                  "ref": "rglwidgetClass.html#.vsum",
                   "tf": 16.666666666666664
                 },
-                "rglwidgetClass.html#xprod": {
-                  "ref": "rglwidgetClass.html#xprod",
+                "rglwidgetClass.html#.xprod": {
+                  "ref": "rglwidgetClass.html#.xprod",
                   "tf": 12.5
                 }
               }
@@ -17119,1374 +19940,6 @@ window.lunrData = {
                         }
                       }
                     }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "o": {
-          "docs": {},
-          "b": {
-            "docs": {},
-            "j": {
-              "docs": {
-                "rglwidgetClass.html#getTickLocations": {
-                  "ref": "rglwidgetClass.html#getTickLocations",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#placeTickLabels": {
-                  "ref": "rglwidgetClass.html#placeTickLabels",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#setBbox": {
-                  "ref": "rglwidgetClass.html#setBbox",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#setTickLabels": {
-                  "ref": "rglwidgetClass.html#setTickLabels",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#isBuffered": {
-                  "ref": "rglwidgetClass.html#isBuffered",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#disableArrays": {
-                  "ref": "rglwidgetClass.html#disableArrays",
-                  "tf": 33.33333333333333
-                },
-                "rglwidgetClass.html#doClipping": {
-                  "ref": "rglwidgetClass.html#doClipping",
-                  "tf": 33.33333333333333
-                },
-                "rglwidgetClass.html#doColors": {
-                  "ref": "rglwidgetClass.html#doColors",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#doDepthTest": {
-                  "ref": "rglwidgetClass.html#doDepthTest",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#doFog": {
-                  "ref": "rglwidgetClass.html#doFog",
-                  "tf": 33.33333333333333
-                },
-                "rglwidgetClass.html#doLighting": {
-                  "ref": "rglwidgetClass.html#doLighting",
-                  "tf": 33.33333333333333
-                },
-                "rglwidgetClass.html#doLoadIndices": {
-                  "ref": "rglwidgetClass.html#doLoadIndices",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#doNormals": {
-                  "ref": "rglwidgetClass.html#doNormals",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#doPolygonOffset": {
-                  "ref": "rglwidgetClass.html#doPolygonOffset",
-                  "tf": 62.5
-                },
-                "rglwidgetClass.html#doTexture": {
-                  "ref": "rglwidgetClass.html#doTexture",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#doUserAttributes": {
-                  "ref": "rglwidgetClass.html#doUserAttributes",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#doUserUniforms": {
-                  "ref": "rglwidgetClass.html#doUserUniforms",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#drawBBox": {
-                  "ref": "rglwidgetClass.html#drawBBox",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#drawClipplanes": {
-                  "ref": "rglwidgetClass.html#drawClipplanes",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#drawLinestrip": {
-                  "ref": "rglwidgetClass.html#drawLinestrip",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#drawMarginal": {
-                  "ref": "rglwidgetClass.html#drawMarginal",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#drawObj": {
-                  "ref": "rglwidgetClass.html#drawObj",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#drawPlanes": {
-                  "ref": "rglwidgetClass.html#drawPlanes",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#drawSimple": {
-                  "ref": "rglwidgetClass.html#drawSimple",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#drawSpheres": {
-                  "ref": "rglwidgetClass.html#drawSpheres",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#drawSprites": {
-                  "ref": "rglwidgetClass.html#drawSprites",
-                  "tf": 25
-                },
-                "rglwidgetClass.html#initObj": {
-                  "ref": "rglwidgetClass.html#initObj",
-                  "tf": 50
-                },
-                "rglwidgetClass.html#getCubePieces": {
-                  "ref": "rglwidgetClass.html#getCubePieces",
-                  "tf": 20
-                },
-                "rglwidgetClass.html#getSpherePieces": {
-                  "ref": "rglwidgetClass.html#getSpherePieces",
-                  "tf": 20
-                },
-                "rglwidgetClass.html#getMaterial": {
-                  "ref": "rglwidgetClass.html#getMaterial",
-                  "tf": 45.83333333333333
-                }
-              },
-              "e": {
-                "docs": {},
-                "c": {
-                  "docs": {},
-                  "t": {
-                    "docs": {
-                      "rglwidgetClass.html#isBuffered": {
-                        "ref": "rglwidgetClass.html#isBuffered",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#drawMarginal": {
-                        "ref": "rglwidgetClass.html#drawMarginal",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#drawObj": {
-                        "ref": "rglwidgetClass.html#drawObj",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#drawObjId": {
-                        "ref": "rglwidgetClass.html#drawObjId",
-                        "tf": 10
-                      },
-                      "rglwidgetClass.html#drawPlanes": {
-                        "ref": "rglwidgetClass.html#drawPlanes",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#drawSimple": {
-                        "ref": "rglwidgetClass.html#drawSimple",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#drawSprites": {
-                        "ref": "rglwidgetClass.html#drawSprites",
-                        "tf": 12.5
-                      },
-                      "rglwidgetClass.html#initCube": {
-                        "ref": "rglwidgetClass.html#initCube",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#initGL": {
-                        "ref": "rglwidgetClass.html#initGL",
-                        "tf": 50
-                      },
-                      "rglwidgetClass.html#initialize": {
-                        "ref": "rglwidgetClass.html#initialize",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#initObj": {
-                        "ref": "rglwidgetClass.html#initObj",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#initObjId": {
-                        "ref": "rglwidgetClass.html#initObjId",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#initSphere": {
-                        "ref": "rglwidgetClass.html#initSphere",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#relMouseCoords": {
-                        "ref": "rglwidgetClass.html#relMouseCoords",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#___METHODS_FOR_TRANSPARENCY___": {
-                        "ref": "rglwidgetClass.html#___METHODS_FOR_TRANSPARENCY___",
-                        "tf": 10
-                      },
-                      "rglwidgetClass.html#getCubePieces": {
-                        "ref": "rglwidgetClass.html#getCubePieces",
-                        "tf": 20
-                      },
-                      "rglwidgetClass.html#getPieces": {
-                        "ref": "rglwidgetClass.html#getPieces",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#getSpherePieces": {
-                        "ref": "rglwidgetClass.html#getSpherePieces",
-                        "tf": 20
-                      },
-                      "rglwidgetClass.html#mergePieces": {
-                        "ref": "rglwidgetClass.html#mergePieces",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#initSelection": {
-                        "ref": "rglwidgetClass.html#initSelection",
-                        "tf": 10
-                      },
-                      "rglwidgetClass.html#getFragmentShader": {
-                        "ref": "rglwidgetClass.html#getFragmentShader",
-                        "tf": 12.5
-                      },
-                      "rglwidgetClass.html#getShader": {
-                        "ref": "rglwidgetClass.html#getShader",
-                        "tf": 25
-                      },
-                      "rglwidgetClass.html#getVertexShader": {
-                        "ref": "rglwidgetClass.html#getVertexShader",
-                        "tf": 12.5
-                      },
-                      "rglwidgetClass.html#translateCoords": {
-                        "ref": "rglwidgetClass.html#translateCoords",
-                        "tf": 25
-                      },
-                      "rglwidgetClass.html#drawTextToCanvas": {
-                        "ref": "rglwidgetClass.html#drawTextToCanvas",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#countObjs": {
-                        "ref": "rglwidgetClass.html#countObjs",
-                        "tf": 10
-                      },
-                      "rglwidgetClass.html#getObj": {
-                        "ref": "rglwidgetClass.html#getObj",
-                        "tf": 49.99999999999999
-                      },
-                      "rglwidgetClass.html#getSlide": {
-                        "ref": "rglwidgetClass.html#getSlide",
-                        "tf": 50
-                      },
-                      "rgltimerClass.html": {
-                        "ref": "rgltimerClass.html",
-                        "tf": 16.666666666666664
-                      }
-                    },
-                    "'": {
-                      "docs": {
-                        "rglwidgetClass.html#doDepthTest": {
-                          "ref": "rglwidgetClass.html#doDepthTest",
-                          "tf": 7.142857142857142
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "s": {
-              "docs": {},
-              "o": {
-                "docs": {},
-                "l": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "rglwidgetClass.html#___OBSOLETE_METHODS___": {
-                          "ref": "rglwidgetClass.html#___OBSOLETE_METHODS___",
-                          "tf": 12.5
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "l": {
-            "docs": {},
-            "d": {
-              "docs": {
-                "rglwidgetClass.html#oldBridge": {
-                  "ref": "rglwidgetClass.html#oldBridge",
-                  "tf": 12.5
-                }
-              },
-              "b": {
-                "docs": {},
-                "r": {
-                  "docs": {},
-                  "i": {
-                    "docs": {},
-                    "d": {
-                      "docs": {},
-                      "g": {
-                        "docs": {
-                          "rglwidgetClass.html#oldBridge": {
-                            "ref": "rglwidgetClass.html#oldBridge",
-                            "tf": 683.3333333333334
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "f": {
-            "docs": {},
-            "f": {
-              "docs": {},
-              "s": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "t": {
-                    "docs": {
-                      "rglwidgetClass.html#doPolygonOffset": {
-                        "ref": "rglwidgetClass.html#doPolygonOffset",
-                        "tf": 12.5
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "n": {
-            "docs": {
-              "rglwidgetClass.html#drawSpheres": {
-                "ref": "rglwidgetClass.html#drawSpheres",
-                "tf": 2.34375
-              },
-              "rglwidgetClass.html#mergePieces": {
-                "ref": "rglwidgetClass.html#mergePieces",
-                "tf": 10
-              },
-              "rgltimerClass.html#step": {
-                "ref": "rgltimerClass.html#step",
-                "tf": 16.666666666666664
-              }
-            },
-            "c": {
-              "docs": {
-                "rglwidgetClass.html#drawSpheres": {
-                  "ref": "rglwidgetClass.html#drawSpheres",
-                  "tf": 0.78125
-                }
-              }
-            }
-          },
-          "p": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "q": {
-                "docs": {},
-                "u": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "p": {
-                      "docs": {},
-                      "a": {
-                        "docs": {},
-                        "s": {
-                          "docs": {},
-                          "s": {
-                            "docs": {
-                              "rglwidgetClass.html#drawSpheres": {
-                                "ref": "rglwidgetClass.html#drawSpheres",
-                                "tf": 4.6875
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "r": {
-            "docs": {},
-            "d": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                "r": {
-                  "docs": {
-                    "rglwidgetClass.html#drawSpheres": {
-                      "ref": "rglwidgetClass.html#drawSpheres",
-                      "tf": 2.34375
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "v": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "r": {
-                "docs": {},
-                "f": {
-                  "docs": {},
-                  "l": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "w": {
-                        "docs": {
-                          "rglwidgetClass.html#R_pretty": {
-                            "ref": "rglwidgetClass.html#R_pretty",
-                            "tf": 0.847457627118644
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "s": {
-            "docs": {},
-            "c": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "rgltimerClass.html#loop": {
-                      "ref": "rgltimerClass.html#loop",
-                      "tf": 16.666666666666664
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "v": {
-          "docs": {
-            "rglwidgetClass.html#logVec3": {
-              "ref": "rglwidgetClass.html#logVec3",
-              "tf": 50
-            },
-            "rglwidgetClass.html#multMV": {
-              "ref": "rglwidgetClass.html#multMV",
-              "tf": 25
-            },
-            "rglwidgetClass.html#multVM": {
-              "ref": "rglwidgetClass.html#multVM",
-              "tf": 25
-            },
-            "rglwidgetClass.html#normalize": {
-              "ref": "rglwidgetClass.html#normalize",
-              "tf": 50
-            },
-            "rglwidgetClass.html#vlen": {
-              "ref": "rglwidgetClass.html#vlen",
-              "tf": 33.33333333333333
-            }
-          },
-          "e": {
-            "docs": {},
-            "r": {
-              "docs": {},
-              "t": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "c": {
-                    "docs": {
-                      "rglwidgetClass.html#getTickVertices": {
-                        "ref": "rglwidgetClass.html#getTickVertices",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#vertexSetter": {
-                        "ref": "rglwidgetClass.html#vertexSetter",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#initSelection": {
-                        "ref": "rglwidgetClass.html#initSelection",
-                        "tf": 10
-                      }
-                    }
-                  }
-                },
-                "e": {
-                  "docs": {},
-                  "x": {
-                    "docs": {
-                      "rglwidgetClass.html#ageSetter": {
-                        "ref": "rglwidgetClass.html#ageSetter",
-                        "tf": 10
-                      },
-                      "rglwidgetClass.html#getVertexShader": {
-                        "ref": "rglwidgetClass.html#getVertexShader",
-                        "tf": 12.5
-                      }
-                    },
-                    "s": {
-                      "docs": {},
-                      "e": {
-                        "docs": {},
-                        "t": {
-                          "docs": {},
-                          "t": {
-                            "docs": {
-                              "rglwidgetClass.html#vertexSetter": {
-                                "ref": "rglwidgetClass.html#vertexSetter",
-                                "tf": 683.3333333333334
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "c": {
-              "docs": {},
-              "t": {
-                "docs": {},
-                "o": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "rglwidgetClass.html#setBbox": {
-                        "ref": "rglwidgetClass.html#setBbox",
-                        "tf": 10
-                      },
-                      "rglwidgetClass.html#cbind": {
-                        "ref": "rglwidgetClass.html#cbind",
-                        "tf": 12.5
-                      },
-                      "rglwidgetClass.html#componentProduct": {
-                        "ref": "rglwidgetClass.html#componentProduct",
-                        "tf": 7.142857142857142
-                      },
-                      "rglwidgetClass.html#dotprod": {
-                        "ref": "rglwidgetClass.html#dotprod",
-                        "tf": 12.5
-                      },
-                      "rglwidgetClass.html#flatten": {
-                        "ref": "rglwidgetClass.html#flatten",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#logVec3": {
-                        "ref": "rglwidgetClass.html#logVec3",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#multMV": {
-                        "ref": "rglwidgetClass.html#multMV",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#multVM": {
-                        "ref": "rglwidgetClass.html#multVM",
-                        "tf": 12.5
-                      },
-                      "rglwidgetClass.html#normalize": {
-                        "ref": "rglwidgetClass.html#normalize",
-                        "tf": 25
-                      },
-                      "rglwidgetClass.html#sumsq": {
-                        "ref": "rglwidgetClass.html#sumsq",
-                        "tf": 10
-                      },
-                      "rglwidgetClass.html#vdiff": {
-                        "ref": "rglwidgetClass.html#vdiff",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#vlen": {
-                        "ref": "rglwidgetClass.html#vlen",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#vscale": {
-                        "ref": "rglwidgetClass.html#vscale",
-                        "tf": 25
-                      },
-                      "rglwidgetClass.html#vsum": {
-                        "ref": "rglwidgetClass.html#vsum",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#xprod": {
-                        "ref": "rglwidgetClass.html#xprod",
-                        "tf": 12.5
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "a": {
-            "docs": {},
-            "l": {
-              "docs": {},
-              "u": {
-                "docs": {
-                  "rglwidgetClass.html#R_pretty": {
-                    "ref": "rglwidgetClass.html#R_pretty",
-                    "tf": 0.847457627118644
-                  },
-                  "rglwidgetClass.html#getPowerOfTwo": {
-                    "ref": "rglwidgetClass.html#getPowerOfTwo",
-                    "tf": 33.33333333333333
-                  },
-                  "rglwidgetClass.html#setElement": {
-                    "ref": "rglwidgetClass.html#setElement",
-                    "tf": 33.33333333333333
-                  },
-                  "rgltimerClass.html#value": {
-                    "ref": "rgltimerClass.html#value",
-                    "tf": 750
-                  },
-                  "rgltimerClass.html#forceToRange": {
-                    "ref": "rgltimerClass.html#forceToRange",
-                    "tf": 12.5
-                  },
-                  "rgltimerClass.html#reset": {
-                    "ref": "rgltimerClass.html#reset",
-                    "tf": 16.666666666666664
-                  }
-                }
-              }
-            }
-          },
-          "i": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "w": {
-                "docs": {
-                  "rglwidgetClass.html#setmvMatrix": {
-                    "ref": "rglwidgetClass.html#setmvMatrix",
-                    "tf": 10
-                  },
-                  "rglwidgetClass.html#setprmvMatrix": {
-                    "ref": "rglwidgetClass.html#setprmvMatrix",
-                    "tf": 8.333333333333332
-                  }
-                },
-                "p": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "r": {
-                      "docs": {},
-                      "t": {
-                        "docs": {
-                          "rglwidgetClass.html#getViewport": {
-                            "ref": "rglwidgetClass.html#getViewport",
-                            "tf": 50
-                          },
-                          "rglwidgetClass.html#setViewport": {
-                            "ref": "rglwidgetClass.html#setViewport",
-                            "tf": 10
-                          },
-                          "rglwidgetClass.html#inViewport": {
-                            "ref": "rglwidgetClass.html#inViewport",
-                            "tf": 10
-                          },
-                          "rglwidgetClass.html#translateCoords": {
-                            "ref": "rglwidgetClass.html#translateCoords",
-                            "tf": 10
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "s": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "b": {
-                  "docs": {},
-                  "l": {
-                    "docs": {
-                      "rglwidgetClass.html#isInBrowserViewport": {
-                        "ref": "rglwidgetClass.html#isInBrowserViewport",
-                        "tf": 16.666666666666664
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "d": {
-            "docs": {},
-            "i": {
-              "docs": {},
-              "f": {
-                "docs": {},
-                "f": {
-                  "docs": {
-                    "rglwidgetClass.html#vdiff": {
-                      "ref": "rglwidgetClass.html#vdiff",
-                      "tf": 683.3333333333334
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "l": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "n": {
-                "docs": {
-                  "rglwidgetClass.html#vlen": {
-                    "ref": "rglwidgetClass.html#vlen",
-                    "tf": 683.3333333333334
-                  }
-                }
-              }
-            }
-          },
-          "s": {
-            "docs": {},
-            "c": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "l": {
-                  "docs": {},
-                  "e": {
-                    "docs": {
-                      "rglwidgetClass.html#vscale": {
-                        "ref": "rglwidgetClass.html#vscale",
-                        "tf": 683.3333333333334
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "u": {
-              "docs": {},
-              "m": {
-                "docs": {
-                  "rglwidgetClass.html#vsum": {
-                    "ref": "rglwidgetClass.html#vsum",
-                    "tf": 683.3333333333334
-                  }
-                }
-              }
-            }
-          }
-        },
-        "b": {
-          "docs": {
-            "rglwidgetClass.html#cbind": {
-              "ref": "rglwidgetClass.html#cbind",
-              "tf": 33.33333333333333
-            },
-            "rglwidgetClass.html#dotprod": {
-              "ref": "rglwidgetClass.html#dotprod",
-              "tf": 33.33333333333333
-            },
-            "rglwidgetClass.html#equalArrays": {
-              "ref": "rglwidgetClass.html#equalArrays",
-              "tf": 33.33333333333333
-            },
-            "rglwidgetClass.html#xprod": {
-              "ref": "rglwidgetClass.html#xprod",
-              "tf": 33.33333333333333
-            }
-          },
-          "b": {
-            "docs": {},
-            "o": {
-              "docs": {},
-              "x": {
-                "docs": {
-                  "rglwidgetClass.html#setBbox": {
-                    "ref": "rglwidgetClass.html#setBbox",
-                    "tf": 10
-                  },
-                  "rglwidgetClass.html#planeUpdateTriangles": {
-                    "ref": "rglwidgetClass.html#planeUpdateTriangles",
-                    "tf": 33.33333333333333
-                  }
-                },
-                "d": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "c": {
-                      "docs": {},
-                      "o": {
-                        "docs": {
-                          "rglwidgetClass.html#setBbox": {
-                            "ref": "rglwidgetClass.html#setBbox",
-                            "tf": 10
-                          },
-                          "rglwidgetClass.html#getBBoxDeco": {
-                            "ref": "rglwidgetClass.html#getBBoxDeco",
-                            "tf": 16.666666666666664
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "u": {
-            "docs": {},
-            "f": {
-              "docs": {},
-              "f": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "rglwidgetClass.html#___METHODS_FOR_BUFFERS___": {
-                        "ref": "rglwidgetClass.html#___METHODS_FOR_BUFFERS___",
-                        "tf": 12.5
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "t": {
-              "docs": {},
-              "t": {
-                "docs": {},
-                "o": {
-                  "docs": {},
-                  "n": {
-                    "docs": {
-                      "rglwidgetClass.html#setMouseMode": {
-                        "ref": "rglwidgetClass.html#setMouseMode",
-                        "tf": 20
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "r": {
-            "docs": {},
-            "i": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "g": {
-                  "docs": {
-                    "rglwidgetClass.html#oldBridge": {
-                      "ref": "rglwidgetClass.html#oldBridge",
-                      "tf": 12.5
-                    }
-                  }
-                }
-              }
-            },
-            "e": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "k": {
-                  "docs": {
-                    "rglwidgetClass.html#getPieces": {
-                      "ref": "rglwidgetClass.html#getPieces",
-                      "tf": 16.666666666666664
-                    }
-                  }
-                }
-              }
-            },
-            "u": {
-              "docs": {},
-              "s": {
-                "docs": {},
-                "h": {
-                  "docs": {
-                    "rglwidgetClass.html#clearBrush": {
-                      "ref": "rglwidgetClass.html#clearBrush",
-                      "tf": 16.666666666666664
-                    },
-                    "rglwidgetClass.html#selectionChanged": {
-                      "ref": "rglwidgetClass.html#selectionChanged",
-                      "tf": 16.666666666666664
-                    }
-                  }
-                }
-              }
-            },
-            "o": {
-              "docs": {},
-              "w": {
-                "docs": {},
-                "s": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "r": {
-                      "docs": {
-                        "rglwidgetClass.html#getMaxTexSize": {
-                          "ref": "rglwidgetClass.html#getMaxTexSize",
-                          "tf": 10
-                        },
-                        "rglwidgetClass.html#isInBrowserViewport": {
-                          "ref": "rglwidgetClass.html#isInBrowserViewport",
-                          "tf": 16.666666666666664
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "l": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "d": {
-                  "docs": {
-                    "rglwidgetClass.html#doBlending": {
-                      "ref": "rglwidgetClass.html#doBlending",
-                      "tf": 66.66666666666666
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "a": {
-            "docs": {},
-            "s": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "rglwidgetClass.html#doDepthTest": {
-                    "ref": "rglwidgetClass.html#doDepthTest",
-                    "tf": 7.142857142857142
-                  },
-                  "rglwidgetClass.html#setElement": {
-                    "ref": "rglwidgetClass.html#setElement",
-                    "tf": 5
-                  }
-                }
-              }
-            },
-            "c": {
-              "docs": {},
-              "k": {
-                "docs": {},
-                "g": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "u": {
-                        "docs": {},
-                        "n": {
-                          "docs": {},
-                          "d": {
-                            "docs": {
-                              "rglwidgetClass.html#drawBackground": {
-                                "ref": "rglwidgetClass.html#drawBackground",
-                                "tf": 16.666666666666664
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "o": {
-            "docs": {},
-            "u": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "d": {
-                  "docs": {
-                    "rglwidgetClass.html#drawBBox": {
-                      "ref": "rglwidgetClass.html#drawBBox",
-                      "tf": 12.5
-                    }
-                  }
-                }
-              }
-            },
-            "x": {
-              "docs": {
-                "rglwidgetClass.html#drawBBox": {
-                  "ref": "rglwidgetClass.html#drawBBox",
-                  "tf": 12.5
-                },
-                "rglwidgetClass.html#initSelection": {
-                  "ref": "rglwidgetClass.html#initSelection",
-                  "tf": 10
-                }
-              }
-            },
-            "o": {
-              "docs": {},
-              "l": {
-                "docs": {
-                  "rglwidgetClass.html#missing": {
-                    "ref": "rglwidgetClass.html#missing",
-                    "tf": 33.33333333333333
-                  }
-                },
-                "e": {
-                  "docs": {},
-                  "a": {
-                    "docs": {},
-                    "n": {
-                      "docs": {
-                        "rglwidgetClass.html#startDrawing": {
-                          "ref": "rglwidgetClass.html#startDrawing",
-                          "tf": 50
-                        },
-                        "rglwidgetClass.html#inSubscene": {
-                          "ref": "rglwidgetClass.html#inSubscene",
-                          "tf": 25
-                        },
-                        "rglwidgetClass.html#inViewport": {
-                          "ref": "rglwidgetClass.html#inViewport",
-                          "tf": 25
-                        },
-                        "rglwidgetClass.html#equalArrays": {
-                          "ref": "rglwidgetClass.html#equalArrays",
-                          "tf": 33.33333333333333
-                        },
-                        "rglwidgetClass.html#isInBrowserViewport": {
-                          "ref": "rglwidgetClass.html#isInBrowserViewport",
-                          "tf": 50
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "e": {
-            "docs": {},
-            "l": {
-              "docs": {},
-              "o": {
-                "docs": {},
-                "w": {
-                  "docs": {
-                    "rglwidgetClass.html#R_pretty": {
-                      "ref": "rglwidgetClass.html#R_pretty",
-                      "tf": 0.847457627118644
-                    }
-                  }
-                }
-              }
-            },
-            "t": {
-              "docs": {},
-              "w": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "n": {
-                      "docs": {
-                        "rgltimerClass.html#interval": {
-                          "ref": "rgltimerClass.html#interval",
-                          "tf": 16.666666666666664
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "i": {
-            "docs": {},
-            "n": {
-              "docs": {},
-              "d": {
-                "docs": {
-                  "rglwidgetClass.html#cbind": {
-                    "ref": "rglwidgetClass.html#cbind",
-                    "tf": 12.5
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x": {
-          "docs": {
-            "rglwidgetClass.html#applyControls": {
-              "ref": "rglwidgetClass.html#applyControls",
-              "tf": 25
-            },
-            "rglwidgetClass.html#initialize": {
-              "ref": "rglwidgetClass.html#initialize",
-              "tf": 33.33333333333333
-            },
-            "rglwidgetClass.html#componentProduct": {
-              "ref": "rglwidgetClass.html#componentProduct",
-              "tf": 25
-            },
-            "rglwidgetClass.html#missing": {
-              "ref": "rglwidgetClass.html#missing",
-              "tf": 33.33333333333333
-            },
-            "rglwidgetClass.html#signif": {
-              "ref": "rglwidgetClass.html#signif",
-              "tf": 25
-            },
-            "rglwidgetClass.html#sumsq": {
-              "ref": "rglwidgetClass.html#sumsq",
-              "tf": 33.33333333333333
-            },
-            "rglwidgetClass.html#vdiff": {
-              "ref": "rglwidgetClass.html#vdiff",
-              "tf": 33.33333333333333
-            },
-            "rglwidgetClass.html#vscale": {
-              "ref": "rglwidgetClass.html#vscale",
-              "tf": 33.33333333333333
-            },
-            "rglwidgetClass.html#vsum": {
-              "ref": "rglwidgetClass.html#vsum",
-              "tf": 33.33333333333333
-            }
-          },
-          "p": {
-            "docs": {},
-            "r": {
-              "docs": {},
-              "o": {
-                "docs": {},
-                "d": {
-                  "docs": {
-                    "rglwidgetClass.html#xprod": {
-                      "ref": "rglwidgetClass.html#xprod",
-                      "tf": 683.3333333333334
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "u": {
-          "docs": {},
-          "p": {
-            "docs": {
-              "rglwidgetClass.html#Player": {
-                "ref": "rglwidgetClass.html#Player",
-                "tf": 12.5
-              },
-              "rglwidgetClass.html#doFog": {
-                "ref": "rglwidgetClass.html#doFog",
-                "tf": 12.5
-              },
-              "rglwidgetClass.html#R_pretty": {
-                "ref": "rglwidgetClass.html#R_pretty",
-                "tf": 12.806026365348398
-              }
-            },
-            "d": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "t": {
-                  "docs": {
-                    "rglwidgetClass.html#planeUpdateTriangles": {
-                      "ref": "rglwidgetClass.html#planeUpdateTriangles",
-                      "tf": 10
-                    },
-                    "rgltimerClass.html#interval": {
-                      "ref": "rgltimerClass.html#interval",
-                      "tf": 16.666666666666664
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "n": {
-            "docs": {},
-            "u": {
-              "docs": {},
-              "s": {
-                "docs": {
-                  "rglwidgetClass.html#disableArrays": {
-                    "ref": "rglwidgetClass.html#disableArrays",
-                    "tf": 16.666666666666664
-                  }
-                }
-              }
-            },
-            "i": {
-              "docs": {},
-              "f": {
-                "docs": {},
-                "o": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "m": {
-                      "docs": {
-                        "rglwidgetClass.html#doUserUniforms": {
-                          "ref": "rglwidgetClass.html#doUserUniforms",
-                          "tf": 16.666666666666664
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "q": {
-                "docs": {},
-                "u": {
-                  "docs": {
-                    "rglwidgetClass.html#unique": {
-                      "ref": "rglwidgetClass.html#unique",
-                      "tf": 708.3333333333334
-                    }
-                  }
-                }
-              },
-              "t": {
-                "docs": {
-                  "rgltimerClass.html#rate": {
-                    "ref": "rgltimerClass.html#rate",
-                    "tf": 12.5
-                  }
-                }
-              }
-            },
-            "d": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                "r": {
-                  "docs": {
-                    "rglwidgetClass.html#chull": {
-                      "ref": "rglwidgetClass.html#chull",
-                      "tf": 4.166666666666666
-                    }
-                  }
-                },
-                "f": {
-                  "docs": {},
-                  "i": {
-                    "docs": {},
-                    "n": {
-                      "docs": {
-                        "rglwidgetClass.html#missing": {
-                          "ref": "rglwidgetClass.html#missing",
-                          "tf": 10
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "s": {
-            "docs": {
-              "rglwidgetClass.html#drawObjId": {
-                "ref": "rglwidgetClass.html#drawObjId",
-                "tf": 10
-              },
-              "rglwidgetClass.html#planeUpdateTriangles": {
-                "ref": "rglwidgetClass.html#planeUpdateTriangles",
-                "tf": 10
-              },
-              "rglwidgetClass.html#start": {
-                "ref": "rglwidgetClass.html#start",
-                "tf": 6.25
-              },
-              "rglwidgetClass.html#chull": {
-                "ref": "rglwidgetClass.html#chull",
-                "tf": 4.166666666666666
-              }
-            },
-            "e": {
-              "docs": {},
-              "r": {
-                "docs": {
-                  "rglwidgetClass.html#doUserAttributes": {
-                    "ref": "rglwidgetClass.html#doUserAttributes",
-                    "tf": 16.666666666666664
-                  },
-                  "rglwidgetClass.html#doUserUniforms": {
-                    "ref": "rglwidgetClass.html#doUserUniforms",
-                    "tf": 16.666666666666664
-                  }
-                }
-              },
-              "i": {
-                "docs": {},
-                "d": {
-                  "docs": {
-                    "rglwidgetClass.html#useid": {
-                      "ref": "rglwidgetClass.html#useid",
-                      "tf": 675
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "r": {
-            "docs": {},
-            "i": {
-              "docs": {
-                "rglwidgetClass.html#loadImageToTexture": {
-                  "ref": "rglwidgetClass.html#loadImageToTexture",
-                  "tf": 33.33333333333333
-                }
-              }
-            }
-          },
-          "t": {
-            "docs": {},
-            "i": {
-              "docs": {},
-              "l": {
-                "docs": {
-                  "rglwidgetClass.html#___UTILITY_METHODS___": {
-                    "ref": "rglwidgetClass.html#___UTILITY_METHODS___",
-                    "tf": 25
                   }
                 }
               }
@@ -18655,290 +20108,10 @@ window.lunrData = {
               "docs": {},
               "l": {
                 "docs": {
-                  "rglwidgetClass.html#chull": {
-                    "ref": "rglwidgetClass.html#chull",
+                  "rglwidgetClass.html#.chull": {
+                    "ref": "rglwidgetClass.html#.chull",
                     "tf": 4.166666666666666
                   }
-                }
-              }
-            }
-          }
-        },
-        "n": {
-          "docs": {},
-          "o": {
-            "docs": {},
-            "r": {
-              "docs": {},
-              "m": {
-                "docs": {},
-                "a": {
-                  "docs": {},
-                  "l": {
-                    "docs": {
-                      "rglwidgetClass.html#doNormals": {
-                        "ref": "rglwidgetClass.html#doNormals",
-                        "tf": 25
-                      },
-                      "rglwidgetClass.html#setnormMatrix2": {
-                        "ref": "rglwidgetClass.html#setnormMatrix2",
-                        "tf": 12.5
-                      },
-                      "rglwidgetClass.html#normalize": {
-                        "ref": "rglwidgetClass.html#normalize",
-                        "tf": 725
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "t": {
-              "docs": {},
-              "h": {
-                "docs": {
-                  "rglwidgetClass.html#drawSpheres": {
-                    "ref": "rglwidgetClass.html#drawSpheres",
-                    "tf": 0.78125
-                  }
-                }
-              },
-              "e": {
-                "docs": {
-                  "rglwidgetClass.html#R_pretty": {
-                    "ref": "rglwidgetClass.html#R_pretty",
-                    "tf": 0.847457627118644
-                  }
-                }
-              }
-            },
-            "n": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "rgltimerClass.html#loop": {
-                    "ref": "rgltimerClass.html#loop",
-                    "tf": 16.666666666666664
-                  }
-                }
-              }
-            },
-            "m": {
-              "docs": {},
-              "i": {
-                "docs": {},
-                "n": {
-                  "docs": {
-                    "rgltimerClass.html#rate": {
-                      "ref": "rgltimerClass.html#rate",
-                      "tf": 12.5
-                    },
-                    "rgltimerClass.html#startTime": {
-                      "ref": "rgltimerClass.html#startTime",
-                      "tf": 12.5
-                    },
-                    "rgltimerClass.html#stepSize": {
-                      "ref": "rgltimerClass.html#stepSize",
-                      "tf": 16.666666666666664
-                    },
-                    "rgltimerClass.html#stopTime": {
-                      "ref": "rgltimerClass.html#stopTime",
-                      "tf": 16.666666666666664
-                    },
-                    "rgltimerClass.html#value": {
-                      "ref": "rgltimerClass.html#value",
-                      "tf": 16.666666666666664
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "d": {
-            "docs": {},
-            "i": {
-              "docs": {},
-              "v": {
-                "docs": {
-                  "rglwidgetClass.html#R_pretty": {
-                    "ref": "rglwidgetClass.html#R_pretty",
-                    "tf": 11.958568738229754
-                  }
-                }
-              }
-            }
-          },
-          "e": {
-            "docs": {},
-            "w": {
-              "docs": {
-                "rglwidgetClass.html#R_pretty": {
-                  "ref": "rglwidgetClass.html#R_pretty",
-                  "tf": 0.847457627118644
-                }
-              },
-              "m": {
-                "docs": {},
-                "u": {
-                  "docs": {},
-                  "l": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "rgltimerClass.html#newmultiplier": {
-                          "ref": "rgltimerClass.html#newmultiplier",
-                          "tf": 50
-                        }
-                      },
-                      "i": {
-                        "docs": {},
-                        "p": {
-                          "docs": {},
-                          "l": {
-                            "docs": {},
-                            "i": {
-                              "docs": {
-                                "rgltimerClass.html#newmultiplier": {
-                                  "ref": "rgltimerClass.html#newmultiplier",
-                                  "tf": 700
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "x": {
-              "docs": {},
-              "t": {
-                "docs": {
-                  "rglwidgetClass.html#getPowerOfTwo": {
-                    "ref": "rglwidgetClass.html#getPowerOfTwo",
-                    "tf": 12.5
-                  }
-                }
-              }
-            }
-          },
-          "s": {
-            "docs": {
-              "rglwidgetClass.html#R_pretty": {
-                "ref": "rglwidgetClass.html#R_pretty",
-                "tf": 0.847457627118644
-              }
-            }
-          },
-          "u": {
-            "docs": {
-              "rglwidgetClass.html#R_pretty": {
-                "ref": "rglwidgetClass.html#R_pretty",
-                "tf": 0.847457627118644
-              }
-            },
-            "m": {
-              "docs": {},
-              "b": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "rglwidgetClass.html#getBBoxDeco": {
-                        "ref": "rglwidgetClass.html#getBBoxDeco",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#useid": {
-                        "ref": "rglwidgetClass.html#useid",
-                        "tf": 25
-                      },
-                      "rglwidgetClass.html#whichSubscene": {
-                        "ref": "rglwidgetClass.html#whichSubscene",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#getMaxTexSize": {
-                        "ref": "rglwidgetClass.html#getMaxTexSize",
-                        "tf": 50
-                      },
-                      "rglwidgetClass.html#countClipplanes": {
-                        "ref": "rglwidgetClass.html#countClipplanes",
-                        "tf": 50
-                      },
-                      "rglwidgetClass.html#countLights": {
-                        "ref": "rglwidgetClass.html#countLights",
-                        "tf": 50
-                      },
-                      "rglwidgetClass.html#countObjs": {
-                        "ref": "rglwidgetClass.html#countObjs",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#dotprod": {
-                        "ref": "rglwidgetClass.html#dotprod",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#getObj": {
-                        "ref": "rglwidgetClass.html#getObj",
-                        "tf": 16.666666666666664
-                      },
-                      "rglwidgetClass.html#getPowerOfTwo": {
-                        "ref": "rglwidgetClass.html#getPowerOfTwo",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#signif": {
-                        "ref": "rglwidgetClass.html#signif",
-                        "tf": 37.5
-                      },
-                      "rglwidgetClass.html#sumsq": {
-                        "ref": "rglwidgetClass.html#sumsq",
-                        "tf": 33.33333333333333
-                      },
-                      "rglwidgetClass.html#vlen": {
-                        "ref": "rglwidgetClass.html#vlen",
-                        "tf": 33.33333333333333
-                      }
-                    }
-                  }
-                }
-              },
-              "e": {
-                "docs": {},
-                "r": {
-                  "docs": {
-                    "rglwidgetClass.html#sumsq": {
-                      "ref": "rglwidgetClass.html#sumsq",
-                      "tf": 10
-                    }
-                  }
-                }
-              }
-            },
-            "l": {
-              "docs": {},
-              "l": {
-                "docs": {
-                  "rglwidgetClass.html#missing": {
-                    "ref": "rglwidgetClass.html#missing",
-                    "tf": 10
-                  }
-                }
-              }
-            }
-          },
-          "a": {
-            "docs": {
-              "rglwidgetClass.html#missing": {
-                "ref": "rglwidgetClass.html#missing",
-                "tf": 10
-              }
-            },
-            "n": {
-              "docs": {
-                "rglwidgetClass.html#missing": {
-                  "ref": "rglwidgetClass.html#missing",
-                  "tf": 10
                 }
               }
             }
@@ -18950,13 +20123,13 @@ window.lunrData = {
               "ref": "rglwidgetClass.html#componentProduct",
               "tf": 25
             },
-            "rglwidgetClass.html#vdiff": {
-              "ref": "rglwidgetClass.html#vdiff",
-              "tf": 33.33333333333333
+            "rglwidgetClass.html#.vdiff": {
+              "ref": "rglwidgetClass.html#.vdiff",
+              "tf": 25
             },
-            "rglwidgetClass.html#vsum": {
-              "ref": "rglwidgetClass.html#vsum",
-              "tf": 33.33333333333333
+            "rglwidgetClass.html#.vsum": {
+              "ref": "rglwidgetClass.html#.vsum",
+              "tf": 25
             }
           }
         },
@@ -18978,7 +20151,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 1397
+      "length": 1521
     },
     "corpusTokens": [
       "0",
@@ -18991,9 +20164,9 @@ window.lunrData = {
       "4",
       "5",
       "6",
+      "___methods_for_animation___",
       "___methods_for_axes___",
       "___methods_for_buffers___",
-      "___methods_for_controls___",
       "___methods_for_drawing___",
       "___methods_for_initialization___",
       "___methods_for_mouse_handling___",
@@ -19019,6 +20192,8 @@ window.lunrData = {
       "alpha",
       "amp",
       "andrew'",
+      "anim",
+      "antialia",
       "appli",
       "applycontrol",
       "approach",
@@ -19029,6 +20204,7 @@ window.lunrData = {
       "array.&lt;array.&lt;any&gt;&gt",
       "array.&lt;array.&lt;number&gt;&gt",
       "array.&lt;number&gt",
+      "arraydim",
       "attribut",
       "ax",
       "b",
@@ -19038,7 +20214,9 @@ window.lunrData = {
       "bboxdeco",
       "below",
       "between",
+      "binari",
       "bind",
+      "bisect",
       "blend",
       "bool",
       "boolean",
@@ -19081,6 +20259,7 @@ window.lunrData = {
       "compon",
       "componentproduct",
       "comput",
+      "constant",
       "construct",
       "contain",
       "context",
@@ -19091,6 +20270,7 @@ window.lunrData = {
       "coordin",
       "count",
       "countclipplan",
+      "countclipplaneobj",
       "countlight",
       "countobj",
       "cover",
@@ -19106,6 +20286,7 @@ window.lunrData = {
       "debug",
       "decor",
       "decreas",
+      "defin",
       "delet",
       "delfromsubscen",
       "depth",
@@ -19131,6 +20312,7 @@ window.lunrData = {
       "dom",
       "domask",
       "donorm",
+      "donormmat",
       "dopolygonoffset",
       "dostartscen",
       "dot",
@@ -19160,6 +20342,7 @@ window.lunrData = {
       "el",
       "element",
       "enabl",
+      "end",
       "entri",
       "eps_correct",
       "equalarray",
@@ -19174,6 +20357,7 @@ window.lunrData = {
       "filter",
       "find",
       "fix",
+      "flag",
       "flatten",
       "float",
       "fog",
@@ -19187,7 +20371,8 @@ window.lunrData = {
       "getbboxdeco",
       "getchildsubscen",
       "getcubepiec",
-      "getfragmentshad",
+      "getdefflag",
+      "getdefin",
       "getidsbytyp",
       "getmateri",
       "getmaterialid",
@@ -19202,7 +20387,6 @@ window.lunrData = {
       "gettickedg",
       "gettickloc",
       "gettickvertic",
-      "getvertexshad",
       "getviewport",
       "give",
       "given",
@@ -19238,6 +20422,7 @@ window.lunrData = {
       "initsubscen",
       "insubscen",
       "integ",
+      "interpol",
       "interv",
       "inviewport",
       "ioslid",
@@ -19249,8 +20434,10 @@ window.lunrData = {
       "legal",
       "len",
       "length",
+      "lerp",
       "licens",
       "light",
+      "linear",
       "linestrip",
       "list",
       "list:class",
@@ -19263,6 +20450,7 @@ window.lunrData = {
       "logvec3",
       "loop",
       "loss",
+      "lt;static&gt",
       "m",
       "major",
       "margin",
@@ -19290,11 +20478,14 @@ window.lunrData = {
       "multvm",
       "na",
       "nan",
+      "nclipplan",
       "ndiv",
       "new",
       "newmult",
       "newmultipli",
+      "newx",
       "next",
+      "nlight",
       "nomin",
       "none",
       "normal",
@@ -19317,6 +20508,7 @@ window.lunrData = {
       "opaquepass",
       "order",
       "oscil",
+      "outsid",
       "overflow",
       "paramet",
       "part",
@@ -19330,6 +20522,7 @@ window.lunrData = {
       "play",
       "player",
       "point",
+      "pointsiz",
       "polygon",
       "posit",
       "power",
@@ -19342,6 +20535,8 @@ window.lunrData = {
       "project",
       "properti",
       "propertysett",
+      "q",
+      "quaternion",
       "r",
       "r_pretti",
       "rang",
@@ -19351,6 +20546,7 @@ window.lunrData = {
       "realstart",
       "recordselect",
       "regist",
+      "regular",
       "rel",
       "relat",
       "relmousecoord",
@@ -19389,9 +20585,9 @@ window.lunrData = {
       "rgltimerclass#valu",
       "rglwidget",
       "rglwidgetclass",
+      "rglwidgetclass#___methods_for_animation___",
       "rglwidgetclass#___methods_for_axes___",
       "rglwidgetclass#___methods_for_buffers___",
-      "rglwidgetclass#___methods_for_controls___",
       "rglwidgetclass#___methods_for_drawing___",
       "rglwidgetclass#___methods_for_initialization___",
       "rglwidgetclass#___methods_for_mouse_handling___",
@@ -19408,11 +20604,10 @@ window.lunrData = {
       "rglwidgetclass#agesett",
       "rglwidgetclass#alertonc",
       "rglwidgetclass#applycontrol",
-      "rglwidgetclass#cbind",
-      "rglwidgetclass#chul",
       "rglwidgetclass#clearbrush",
       "rglwidgetclass#componentproduct",
       "rglwidgetclass#countclipplan",
+      "rglwidgetclass#countclipplaneobj",
       "rglwidgetclass#countlight",
       "rglwidgetclass#countobj",
       "rglwidgetclass#debug",
@@ -19427,10 +20622,10 @@ window.lunrData = {
       "rglwidgetclass#doloadindic",
       "rglwidgetclass#domask",
       "rglwidgetclass#donorm",
+      "rglwidgetclass#donormmat",
       "rglwidgetclass#dopolygonoffset",
       "rglwidgetclass#dostartscen",
       "rglwidgetclass#dotextur",
-      "rglwidgetclass#dotprod",
       "rglwidgetclass#douserattribut",
       "rglwidgetclass#douseruniform",
       "rglwidgetclass#drawbackground",
@@ -19449,11 +20644,9 @@ window.lunrData = {
       "rglwidgetclass#drawsubscen",
       "rglwidgetclass#drawtexttocanva",
       "rglwidgetclass#equalarray",
-      "rglwidgetclass#flatten",
       "rglwidgetclass#getbboxdeco",
       "rglwidgetclass#getchildsubscen",
       "rglwidgetclass#getcubepiec",
-      "rglwidgetclass#getfragmentshad",
       "rglwidgetclass#getidsbytyp",
       "rglwidgetclass#getmateri",
       "rglwidgetclass#getmaterialid",
@@ -19468,7 +20661,6 @@ window.lunrData = {
       "rglwidgetclass#gettickedg",
       "rglwidgetclass#gettickloc",
       "rglwidgetclass#gettickvertic",
-      "rglwidgetclass#getvertexshad",
       "rglwidgetclass#getviewport",
       "rglwidgetclass#handleloadedtextur",
       "rglwidgetclass#initcanva",
@@ -19487,13 +20679,7 @@ window.lunrData = {
       "rglwidgetclass#isbuff",
       "rglwidgetclass#isinbrowserviewport",
       "rglwidgetclass#loadimagetotextur",
-      "rglwidgetclass#logmatrix",
-      "rglwidgetclass#logvec3",
       "rglwidgetclass#mergepiec",
-      "rglwidgetclass#miss",
-      "rglwidgetclass#multmv",
-      "rglwidgetclass#multvm",
-      "rglwidgetclass#norm",
       "rglwidgetclass#oldbridg",
       "rglwidgetclass#placeticklabel",
       "rglwidgetclass#planeupdatetriangl",
@@ -19502,7 +20688,6 @@ window.lunrData = {
       "rglwidgetclass#r_pretti",
       "rglwidgetclass#recordselect",
       "rglwidgetclass#relmousecoord",
-      "rglwidgetclass#repeattolen",
       "rglwidgetclass#res",
       "rglwidgetclass#restartcanva",
       "rglwidgetclass#scenechangehandl",
@@ -19521,27 +20706,48 @@ window.lunrData = {
       "rglwidgetclass#setsubsceneentri",
       "rglwidgetclass#setticklabel",
       "rglwidgetclass#setviewport",
-      "rglwidgetclass#signif",
       "rglwidgetclass#sortpiec",
       "rglwidgetclass#start",
       "rglwidgetclass#startdraw",
       "rglwidgetclass#stopdraw",
       "rglwidgetclass#subsetsett",
       "rglwidgetclass#sumsq",
-      "rglwidgetclass#swap",
       "rglwidgetclass#tocanvasmatrix4",
       "rglwidgetclass#translatecoord",
       "rglwidgetclass#transpos",
       "rglwidgetclass#uniqu",
       "rglwidgetclass#useid",
-      "rglwidgetclass#vdiff",
       "rglwidgetclass#vertexsett",
-      "rglwidgetclass#vlen",
-      "rglwidgetclass#vscal",
-      "rglwidgetclass#vsum",
       "rglwidgetclass#whichlist",
       "rglwidgetclass#whichsubscen",
-      "rglwidgetclass#xprod",
+      "rglwidgetclass.arraydim",
+      "rglwidgetclass.bisect",
+      "rglwidgetclass.cbind",
+      "rglwidgetclass.chul",
+      "rglwidgetclass.dotprod",
+      "rglwidgetclass.flatten",
+      "rglwidgetclass.getdefflag",
+      "rglwidgetclass.getdefin",
+      "rglwidgetclass.lerp",
+      "rglwidgetclass.logmatrix",
+      "rglwidgetclass.logvec3",
+      "rglwidgetclass.miss",
+      "rglwidgetclass.multmv",
+      "rglwidgetclass.multvm",
+      "rglwidgetclass.norm",
+      "rglwidgetclass.repeattolen",
+      "rglwidgetclass.rotatebyquaternion",
+      "rglwidgetclass.signif",
+      "rglwidgetclass.slerp",
+      "rglwidgetclass.step",
+      "rglwidgetclass.swap",
+      "rglwidgetclass.vdiff",
+      "rglwidgetclass.vlen",
+      "rglwidgetclass.vscal",
+      "rglwidgetclass.vsum",
+      "rglwidgetclass.xprod",
+      "rotat",
+      "rotatebyquaternion",
       "round",
       "row",
       "s",
@@ -19550,6 +20756,7 @@ window.lunrData = {
       "scene",
       "scenechangehandl",
       "scissor",
+      "search",
       "second",
       "select",
       "selectionchang",
@@ -19583,6 +20790,7 @@ window.lunrData = {
       "situat",
       "six",
       "size",
+      "slerp",
       "slide",
       "slidi",
       "slower",
@@ -19593,11 +20801,13 @@ window.lunrData = {
       "specif",
       "speed",
       "sphere",
+      "spheric",
       "sprite",
       "squar",
       "start",
       "startdraw",
       "starttim",
+      "static",
       "stayact",
       "step",
       "stepsiz",
@@ -19621,6 +20831,7 @@ window.lunrData = {
       "text",
       "textur",
       "texturecanva",
+      "textyp",
       "this.spher",
       "tick",
       "time",
@@ -19658,6 +20869,7 @@ window.lunrData = {
       "viewport",
       "visibl",
       "vlen",
+      "vnormal",
       "vscale",
       "vsum",
       "way",
@@ -19670,6 +20882,7 @@ window.lunrData = {
       "wikipedia",
       "window",
       "within",
+      "without",
       "world",
       "write",
       "writewebgl",
@@ -19728,6 +20941,66 @@ window.lunrData = {
       "summary": "",
       "description": "The class of an rgl widget",
       "body": ""
+    },
+    "rglwidgetClass.html#___METHODS_FOR_ANIMATION___": {
+      "id": "rglwidgetClass.html#___METHODS_FOR_ANIMATION___",
+      "kind": "function",
+      "title": "___METHODS_FOR_ANIMATION___()",
+      "longname": "rglwidgetClass#___METHODS_FOR_ANIMATION___",
+      "name": "___METHODS_FOR_ANIMATION___",
+      "tags": "rglwidgetClass#___METHODS_FOR_ANIMATION___ ___METHODS_FOR_ANIMATION___",
+      "summary": "",
+      "description": "Methods related to animations"
+    },
+    "rglwidgetClass.html#.bisect": {
+      "id": "rglwidgetClass.html#.bisect",
+      "kind": "function",
+      "title": "&lt;static&gt; bisect( x, newx )",
+      "longname": "rglwidgetClass.bisect",
+      "name": "bisect",
+      "tags": "rglwidgetClass.bisect bisect",
+      "summary": "",
+      "description": "Binary search"
+    },
+    "rglwidgetClass.html#.lerp": {
+      "id": "rglwidgetClass.html#.lerp",
+      "kind": "function",
+      "title": "&lt;static&gt; lerp( x, v, newx )",
+      "longname": "rglwidgetClass.lerp",
+      "name": "lerp",
+      "tags": "rglwidgetClass.lerp lerp",
+      "summary": "",
+      "description": "Linear interpolation (constant outside bounds)"
+    },
+    "rglwidgetClass.html#.rotateByQuaternion": {
+      "id": "rglwidgetClass.html#.rotateByQuaternion",
+      "kind": "function",
+      "title": "&lt;static&gt; rotateByQuaternion( q )",
+      "longname": "rglwidgetClass.rotateByQuaternion",
+      "name": "rotateByQuaternion",
+      "tags": "rglwidgetClass.rotateByQuaternion rotateByQuaternion",
+      "summary": "",
+      "description": "Rotate using unit quaternion"
+    },
+    "rglwidgetClass.html#.slerp": {
+      "id": "rglwidgetClass.html#.slerp",
+      "kind": "function",
+      "title": "&lt;static&gt; slerp( x, v, newx )",
+      "longname": "rglwidgetClass.slerp",
+      "name": "slerp",
+      "tags": "rglwidgetClass.slerp slerp",
+      "summary": "",
+      "description": "Spherical linear interpolation (constant outside bounds)"
+    },
+    "rglwidgetClass.html#.step": {
+      "id": "rglwidgetClass.html#.step",
+      "kind": "function",
+      "title": "&lt;static&gt; step( x, v, newx )",
+      "longname": "rglwidgetClass.step",
+      "name": "step",
+      "tags": "rglwidgetClass.step step",
+      "summary": "",
+      "description": "Step interpolation (constant outside bounds)"
     },
     "rglwidgetClass.html#___METHODS_FOR_AXES___": {
       "id": "rglwidgetClass.html#___METHODS_FOR_AXES___",
@@ -19818,16 +21091,6 @@ window.lunrData = {
       "tags": "rglwidgetClass#isBuffered isBuffered",
       "summary": "",
       "description": "Detect rglBuffered object"
-    },
-    "rglwidgetClass.html#___METHODS_FOR_CONTROLS___": {
-      "id": "rglwidgetClass.html#___METHODS_FOR_CONTROLS___",
-      "kind": "function",
-      "title": "___METHODS_FOR_CONTROLS___()",
-      "longname": "rglwidgetClass#___METHODS_FOR_CONTROLS___",
-      "name": "___METHODS_FOR_CONTROLS___",
-      "tags": "rglwidgetClass#___METHODS_FOR_CONTROLS___ ___METHODS_FOR_CONTROLS___",
-      "summary": "",
-      "description": "Methods related to controls"
     },
     "rglwidgetClass.html#ageSetter": {
       "id": "rglwidgetClass.html#ageSetter",
@@ -20018,6 +21281,16 @@ window.lunrData = {
       "tags": "rglwidgetClass#doNormals doNormals",
       "summary": "",
       "description": "Do code for normals"
+    },
+    "rglwidgetClass.html#doNormMat": {
+      "id": "rglwidgetClass.html#doNormMat",
+      "kind": "function",
+      "title": "doNormMat( obj )",
+      "longname": "rglwidgetClass#doNormMat",
+      "name": "doNormMat",
+      "tags": "rglwidgetClass#doNormMat doNormMat",
+      "summary": "",
+      "description": "Do code for vNormal"
     },
     "rglwidgetClass.html#doPolygonOffset": {
       "id": "rglwidgetClass.html#doPolygonOffset",
@@ -20669,15 +21942,25 @@ window.lunrData = {
       "summary": "",
       "description": "Methods related to shaders"
     },
-    "rglwidgetClass.html#getFragmentShader": {
-      "id": "rglwidgetClass.html#getFragmentShader",
+    "rglwidgetClass.html#.getDefFlags": {
+      "id": "rglwidgetClass.html#.getDefFlags",
       "kind": "function",
-      "title": "getFragmentShader( id ) → {string}",
-      "longname": "rglwidgetClass#getFragmentShader",
-      "name": "getFragmentShader",
-      "tags": "rglwidgetClass#getFragmentShader getFragmentShader",
+      "title": "&lt;static&gt; getDefFlags()",
+      "longname": "rglwidgetClass.getDefFlags",
+      "name": "getDefFlags",
+      "tags": "rglwidgetClass.getDefFlags getDefFlags",
       "summary": "",
-      "description": "Generate the fragment shader for an object"
+      "description": "Get flags that will end up as shader defines. Static method so it can be called from R"
+    },
+    "rglwidgetClass.html#.getDefines": {
+      "id": "rglwidgetClass.html#.getDefines",
+      "kind": "function",
+      "title": "&lt;static&gt; getDefines( id, type, flags, nclipplanes, nlights, normals, pointSize, textype, antialias ) → {string}",
+      "longname": "rglwidgetClass.getDefines",
+      "name": "getDefines",
+      "tags": "rglwidgetClass.getDefines getDefines",
+      "summary": "",
+      "description": "Generate the defines for the shader code for an object. This is a static method so it can be called from R."
     },
     "rglwidgetClass.html#getShader": {
       "id": "rglwidgetClass.html#getShader",
@@ -20687,17 +21970,17 @@ window.lunrData = {
       "name": "getShader",
       "tags": "rglwidgetClass#getShader getShader",
       "summary": "",
-      "description": "Call gl functions to create and compile shader"
+      "description": "Call gl functions to create and compile shader from code"
     },
-    "rglwidgetClass.html#getVertexShader": {
-      "id": "rglwidgetClass.html#getVertexShader",
+    "rglwidgetClass.html#getShaders": {
+      "id": "rglwidgetClass.html#getShaders",
       "kind": "function",
-      "title": "getVertexShader( id ) → {string}",
-      "longname": "rglwidgetClass#getVertexShader",
-      "name": "getVertexShader",
-      "tags": "rglwidgetClass#getVertexShader getVertexShader",
+      "title": "getShaders( shaderType, code ) → {Object}",
+      "longname": "rglwidgetClass#getShaders",
+      "name": "getShaders",
+      "tags": "rglwidgetClass#getShaders getShaders",
       "summary": "",
-      "description": "Generate the vertex shader for an object"
+      "description": "Create code for vertex and fragment shaders"
     },
     "rglwidgetClass.html#___METHODS_FOR_SUBSCENES___": {
       "id": "rglwidgetClass.html#___METHODS_FOR_SUBSCENES___",
@@ -20889,23 +22172,33 @@ window.lunrData = {
       "summary": "",
       "description": "Give a single alert message, not to be repeated."
     },
-    "rglwidgetClass.html#cbind": {
-      "id": "rglwidgetClass.html#cbind",
+    "rglwidgetClass.html#.arrayDim": {
+      "id": "rglwidgetClass.html#.arrayDim",
       "kind": "function",
-      "title": "cbind( a, b ) → {Array.&lt;Array.&lt;number&gt;&gt;}",
-      "longname": "rglwidgetClass#cbind",
+      "title": "&lt;static&gt; arrayDim()",
+      "longname": "rglwidgetClass.arrayDim",
+      "name": "arrayDim",
+      "tags": "rglwidgetClass.arrayDim arrayDim",
+      "summary": "",
+      "description": "Compute the dimensions of a regular array without checking that it is regular"
+    },
+    "rglwidgetClass.html#.cbind": {
+      "id": "rglwidgetClass.html#.cbind",
+      "kind": "function",
+      "title": "&lt;static&gt; cbind( a, b ) → {Array.&lt;Array.&lt;number&gt;&gt;}",
+      "longname": "rglwidgetClass.cbind",
       "name": "cbind",
-      "tags": "rglwidgetClass#cbind cbind",
+      "tags": "rglwidgetClass.cbind cbind",
       "summary": "",
       "description": "Bind vectors or matrices by columns"
     },
-    "rglwidgetClass.html#chull": {
-      "id": "rglwidgetClass.html#chull",
+    "rglwidgetClass.html#.chull": {
+      "id": "rglwidgetClass.html#.chull",
       "kind": "function",
-      "title": "chull() → {Array}",
-      "longname": "rglwidgetClass#chull",
+      "title": "&lt;static&gt; chull() → {Array}",
+      "longname": "rglwidgetClass.chull",
       "name": "chull",
-      "tags": "rglwidgetClass#chull chull",
+      "tags": "rglwidgetClass.chull chull",
       "summary": "",
       "description": "Andrew's convex hull algorithm. From Wikipedia, used under Creative Commons Attribution-ShareAlike License"
     },
@@ -20918,6 +22211,16 @@ window.lunrData = {
       "tags": "rglwidgetClass#componentProduct componentProduct",
       "summary": "",
       "description": "Take a component-by-component product of two 3 vectors"
+    },
+    "rglwidgetClass.html#countClipplaneObjs": {
+      "id": "rglwidgetClass.html#countClipplaneObjs",
+      "kind": "function",
+      "title": "countClipplaneObjs() → {number}",
+      "longname": "rglwidgetClass#countClipplaneObjs",
+      "name": "countClipplaneObjs",
+      "tags": "rglwidgetClass#countClipplaneObjs countClipplaneObjs",
+      "summary": "",
+      "description": "Count clipping plane objects in a scene"
     },
     "rglwidgetClass.html#countClipplanes": {
       "id": "rglwidgetClass.html#countClipplanes",
@@ -20959,13 +22262,13 @@ window.lunrData = {
       "summary": "",
       "description": "Display a debug message"
     },
-    "rglwidgetClass.html#dotprod": {
-      "id": "rglwidgetClass.html#dotprod",
+    "rglwidgetClass.html#.dotprod": {
+      "id": "rglwidgetClass.html#.dotprod",
       "kind": "function",
-      "title": "dotprod( a, b ) → {number}",
-      "longname": "rglwidgetClass#dotprod",
+      "title": "&lt;static&gt; dotprod( a, b ) → {number}",
+      "longname": "rglwidgetClass.dotprod",
       "name": "dotprod",
-      "tags": "rglwidgetClass#dotprod dotprod",
+      "tags": "rglwidgetClass.dotprod dotprod",
       "summary": "",
       "description": "Dot product of two vectors"
     },
@@ -20979,13 +22282,13 @@ window.lunrData = {
       "summary": "",
       "description": "Shallow compare of arrays"
     },
-    "rglwidgetClass.html#flatten": {
-      "id": "rglwidgetClass.html#flatten",
+    "rglwidgetClass.html#.flatten": {
+      "id": "rglwidgetClass.html#.flatten",
       "kind": "function",
-      "title": "flatten( a ) → {Array.&lt;any&gt;}",
-      "longname": "rglwidgetClass#flatten",
+      "title": "&lt;static&gt; flatten( a ) → {Array.&lt;any&gt;}",
+      "longname": "rglwidgetClass.flatten",
       "name": "flatten",
-      "tags": "rglwidgetClass#flatten flatten",
+      "tags": "rglwidgetClass.flatten flatten",
       "summary": "",
       "description": "Flatten a matrix into a vector"
     },
@@ -21059,73 +22362,73 @@ window.lunrData = {
       "summary": "",
       "description": "Is this scene visible in the browser?"
     },
-    "rglwidgetClass.html#logMatrix": {
-      "id": "rglwidgetClass.html#logMatrix",
+    "rglwidgetClass.html#.logMatrix": {
+      "id": "rglwidgetClass.html#.logMatrix",
       "kind": "function",
-      "title": "logMatrix( M )",
-      "longname": "rglwidgetClass#logMatrix",
+      "title": "&lt;static&gt; logMatrix( M )",
+      "longname": "rglwidgetClass.logMatrix",
       "name": "logMatrix",
-      "tags": "rglwidgetClass#logMatrix logMatrix",
+      "tags": "rglwidgetClass.logMatrix logMatrix",
       "summary": "",
       "description": "Write matrix to log"
     },
-    "rglwidgetClass.html#logVec3": {
-      "id": "rglwidgetClass.html#logVec3",
+    "rglwidgetClass.html#.logVec3": {
+      "id": "rglwidgetClass.html#.logVec3",
       "kind": "function",
-      "title": "logVec3( v )",
-      "longname": "rglwidgetClass#logVec3",
+      "title": "&lt;static&gt; logVec3( v )",
+      "longname": "rglwidgetClass.logVec3",
       "name": "logVec3",
-      "tags": "rglwidgetClass#logVec3 logVec3",
+      "tags": "rglwidgetClass.logVec3 logVec3",
       "summary": "",
       "description": "Write vector to log"
     },
-    "rglwidgetClass.html#missing": {
-      "id": "rglwidgetClass.html#missing",
+    "rglwidgetClass.html#.missing": {
+      "id": "rglwidgetClass.html#.missing",
       "kind": "function",
-      "title": "missing( x ) → {bool}",
-      "longname": "rglwidgetClass#missing",
+      "title": "&lt;static&gt; missing( x ) → {bool}",
+      "longname": "rglwidgetClass.missing",
       "name": "missing",
-      "tags": "rglwidgetClass#missing missing",
+      "tags": "rglwidgetClass.missing missing",
       "summary": "",
       "description": "Check for NA, NaN, undefined, or null"
     },
-    "rglwidgetClass.html#multMV": {
-      "id": "rglwidgetClass.html#multMV",
+    "rglwidgetClass.html#.multMV": {
+      "id": "rglwidgetClass.html#.multMV",
       "kind": "function",
-      "title": "multMV( M, v ) → {Array.&lt;number&gt;}",
-      "longname": "rglwidgetClass#multMV",
+      "title": "&lt;static&gt; multMV( M, v ) → {Array.&lt;number&gt;}",
+      "longname": "rglwidgetClass.multMV",
       "name": "multMV",
-      "tags": "rglwidgetClass#multMV multMV",
+      "tags": "rglwidgetClass.multMV multMV",
       "summary": "",
       "description": "Multiply matrix by vector"
     },
-    "rglwidgetClass.html#multVM": {
-      "id": "rglwidgetClass.html#multVM",
+    "rglwidgetClass.html#.multVM": {
+      "id": "rglwidgetClass.html#.multVM",
       "kind": "function",
-      "title": "multVM( v, M ) → {Array.&lt;number&gt;}",
-      "longname": "rglwidgetClass#multVM",
+      "title": "&lt;static&gt; multVM( v, M ) → {Array.&lt;number&gt;}",
+      "longname": "rglwidgetClass.multVM",
       "name": "multVM",
-      "tags": "rglwidgetClass#multVM multVM",
+      "tags": "rglwidgetClass.multVM multVM",
       "summary": "",
       "description": "Multiply row vector by Matrix"
     },
-    "rglwidgetClass.html#normalize": {
-      "id": "rglwidgetClass.html#normalize",
+    "rglwidgetClass.html#.normalize": {
+      "id": "rglwidgetClass.html#.normalize",
       "kind": "function",
-      "title": "normalize( v )",
-      "longname": "rglwidgetClass#normalize",
+      "title": "&lt;static&gt; normalize( v )",
+      "longname": "rglwidgetClass.normalize",
       "name": "normalize",
-      "tags": "rglwidgetClass#normalize normalize",
+      "tags": "rglwidgetClass.normalize normalize",
       "summary": "",
       "description": "Normalize a vector"
     },
-    "rglwidgetClass.html#repeatToLen": {
-      "id": "rglwidgetClass.html#repeatToLen",
+    "rglwidgetClass.html#.repeatToLen": {
+      "id": "rglwidgetClass.html#.repeatToLen",
       "kind": "function",
-      "title": "repeatToLen( arr, len ) → {Array.&lt;any&gt;}",
-      "longname": "rglwidgetClass#repeatToLen",
+      "title": "&lt;static&gt; repeatToLen( arr, len ) → {Array.&lt;any&gt;}",
+      "longname": "rglwidgetClass.repeatToLen",
       "name": "repeatToLen",
-      "tags": "rglwidgetClass#repeatToLen repeatToLen",
+      "tags": "rglwidgetClass.repeatToLen repeatToLen",
       "summary": "",
       "description": "Repeat an array to a desired length"
     },
@@ -21139,13 +22442,13 @@ window.lunrData = {
       "summary": "",
       "description": "set element of 1d or 2d array as if it was flattened. Column major, zero based!"
     },
-    "rglwidgetClass.html#signif": {
-      "id": "rglwidgetClass.html#signif",
+    "rglwidgetClass.html#.signif": {
+      "id": "rglwidgetClass.html#.signif",
       "kind": "function",
-      "title": "signif( x, digits ) → {number}",
-      "longname": "rglwidgetClass#signif",
+      "title": "&lt;static&gt; signif( x, digits ) → {number}",
+      "longname": "rglwidgetClass.signif",
       "name": "signif",
-      "tags": "rglwidgetClass#signif signif",
+      "tags": "rglwidgetClass.signif signif",
       "summary": "",
       "description": "Round number to given precision"
     },
@@ -21159,13 +22462,13 @@ window.lunrData = {
       "summary": "",
       "description": "Calculate sum of squares of a numeric vector"
     },
-    "rglwidgetClass.html#swap": {
-      "id": "rglwidgetClass.html#swap",
+    "rglwidgetClass.html#.swap": {
+      "id": "rglwidgetClass.html#.swap",
       "kind": "function",
-      "title": "swap( a, i, j ) → {Array.&lt;any&gt;}",
-      "longname": "rglwidgetClass#swap",
+      "title": "&lt;static&gt; swap( a, i, j ) → {Array.&lt;any&gt;}",
+      "longname": "rglwidgetClass.swap",
       "name": "swap",
-      "tags": "rglwidgetClass#swap swap",
+      "tags": "rglwidgetClass.swap swap",
       "summary": "",
       "description": "Swap elements"
     },
@@ -21199,43 +22502,43 @@ window.lunrData = {
       "summary": "",
       "description": "Unique entries"
     },
-    "rglwidgetClass.html#vdiff": {
-      "id": "rglwidgetClass.html#vdiff",
+    "rglwidgetClass.html#.vdiff": {
+      "id": "rglwidgetClass.html#.vdiff",
       "kind": "function",
-      "title": "vdiff( x, y )",
-      "longname": "rglwidgetClass#vdiff",
+      "title": "&lt;static&gt; vdiff( x, y )",
+      "longname": "rglwidgetClass.vdiff",
       "name": "vdiff",
-      "tags": "rglwidgetClass#vdiff vdiff",
+      "tags": "rglwidgetClass.vdiff vdiff",
       "summary": "",
       "description": "difference of two vectors"
     },
-    "rglwidgetClass.html#vlen": {
-      "id": "rglwidgetClass.html#vlen",
+    "rglwidgetClass.html#.vlen": {
+      "id": "rglwidgetClass.html#.vlen",
       "kind": "function",
-      "title": "vlen( v ) → {number}",
-      "longname": "rglwidgetClass#vlen",
+      "title": "&lt;static&gt; vlen( v ) → {number}",
+      "longname": "rglwidgetClass.vlen",
       "name": "vlen",
-      "tags": "rglwidgetClass#vlen vlen",
+      "tags": "rglwidgetClass.vlen vlen",
       "summary": "",
       "description": "Euclidean length of a vector"
     },
-    "rglwidgetClass.html#vscale": {
-      "id": "rglwidgetClass.html#vscale",
+    "rglwidgetClass.html#.vscale": {
+      "id": "rglwidgetClass.html#.vscale",
       "kind": "function",
-      "title": "vscale( s, x )",
-      "longname": "rglwidgetClass#vscale",
+      "title": "&lt;static&gt; vscale( s, x )",
+      "longname": "rglwidgetClass.vscale",
       "name": "vscale",
-      "tags": "rglwidgetClass#vscale vscale",
+      "tags": "rglwidgetClass.vscale vscale",
       "summary": "",
       "description": "Scale a vector"
     },
-    "rglwidgetClass.html#vsum": {
-      "id": "rglwidgetClass.html#vsum",
+    "rglwidgetClass.html#.vsum": {
+      "id": "rglwidgetClass.html#.vsum",
       "kind": "function",
-      "title": "vsum( x, y )",
-      "longname": "rglwidgetClass#vsum",
+      "title": "&lt;static&gt; vsum( x, y )",
+      "longname": "rglwidgetClass.vsum",
       "name": "vsum",
-      "tags": "rglwidgetClass#vsum vsum",
+      "tags": "rglwidgetClass.vsum vsum",
       "summary": "",
       "description": "Sum two vectors"
     },
@@ -21249,13 +22552,13 @@ window.lunrData = {
       "summary": "",
       "description": "Which list does a particular id come from?"
     },
-    "rglwidgetClass.html#xprod": {
-      "id": "rglwidgetClass.html#xprod",
+    "rglwidgetClass.html#.xprod": {
+      "id": "rglwidgetClass.html#.xprod",
       "kind": "function",
-      "title": "xprod( a, b ) → {Array.&lt;number&gt;}",
-      "longname": "rglwidgetClass#xprod",
+      "title": "&lt;static&gt; xprod( a, b ) → {Array.&lt;number&gt;}",
+      "longname": "rglwidgetClass.xprod",
       "name": "xprod",
-      "tags": "rglwidgetClass#xprod xprod",
+      "tags": "rglwidgetClass.xprod xprod",
       "summary": "",
       "description": "Cross product of two vectors"
     },

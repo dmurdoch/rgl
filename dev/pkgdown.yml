@@ -6,7 +6,7 @@ articles:
   pkgdown: pkgdown.html
   rgl: rgl.html
   transparency: transparency.html
-last_built: 2022-06-05T14:54Z
+last_built: 2022-06-05T15:42Z
 urls:
   reference: https://dmurdoch.github.io/rgl/dev/reference
   article: https://dmurdoch.github.io/rgl/dev/articles

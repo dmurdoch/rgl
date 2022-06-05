@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>projection.src.js</title>
+		<title>animation.src.js</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -60,7 +60,7 @@
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
 				<span class="kind">source</span>
-				<h1><span class="name">projection.src.js</span></h1>
+				<h1><span class="name">animation.src.js</span></h1>
 			</div>
 		</div>
 	<div class="container content">
@@ -68,153 +68,158 @@
 			<div class="col-md-12 main-content">
 		<section class="source-section">
 			<article></article>
-			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">    /**
-     * Methods related to projections
-     * @name ___METHODS_FOR_PROJECTIONS___
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+     * Methods related to animations
+     * @name ___METHODS_FOR_ANIMATION___
      * @memberof rglwidgetClass
      * @kind function
      * @instance
      */
-     
     /**
-     * Get the viewport
+     * Binary search
+     * @param x - x coordinates in increasing order
+     * @param newx - value to find, assumed to be in the range of x
+     * @result index of largest x value below newx
      */
-     
-    rglwidgetClass.prototype.getViewport = function(id) {
-      var vp = this.getObj(id).par3d.viewport,
-         x = vp.x*this.canvas.width,
-         y = vp.y*this.canvas.height,
-         width = vp.width*this.canvas.width,
-         height = vp.height*this.canvas.height;
-       this.vp = {x:x, y:y, width:width, height:height};
+    rglwidgetClass.bisect = function(x, newx) {
+      var lo = 0, hi = x.length - 1, mid;
+      while (lo &lt; hi - 1) {
+        mid = Math.round((lo + hi)/2);
+        if (x[mid] &lt; newx)
+          lo = mid;
+        else
+          hi = mid;
+      }
+      return lo;
     };
     
     /**
-     * Set the gl viewport and scissor test
-     * @param { number } id - id of subscene
+     * Step interpolation (constant outside bounds)
+     * @param x - x coordinates in increasing order
+     * @param v - values at x; either a vector or matrix
+     * @param newx - value at which to evaluate
      */
-    rglwidgetClass.prototype.setViewport = function(id) {
-       var gl = this.gl || this.initGL();
-       this.getViewport(id);
-       gl.viewport(this.vp.x, this.vp.y, this.vp.width, this.vp.height);
-       gl.scissor(this.vp.x, this.vp.y, this.vp.width, this.vp.height);
-       gl.enable(gl.SCISSOR_TEST);
-     };
-
+    rglwidgetClass.step = function(x, v, newx) {
+      var n, lo;
+      if (newx &lt;= x[0])
+        return v[0];    
+      n = x.length;
+      if (newx >= x[n-1])
+        return v[n-1];
+      lo = this.bisect(x, newx);
+      return v[lo];
+    };
+    
     /**
-     * Set the projection matrix for a subscene
-     * @param { number } id - id of subscene
+     * Linear interpolation (constant outside bounds)
+     * @param x - x coordinates in increasing order
+     * @param v - values at x; either a vector or matrix
+     * @param newx - value at which to evaluate
      */
-    rglwidgetClass.prototype.setprMatrix = function(id) {
-       var subscene = this.getObj(id),
-          embedding = subscene.embeddings.projection;
-       if (embedding === "replace")
-         this.prMatrix.makeIdentity();
-       else
-         this.setprMatrix(subscene.parent);
-       if (embedding === "inherit")
-         return;
-       // This is based on the Frustum::enclose code from geom.cpp
-       var bbox = subscene.par3d.bbox,
-           scale = subscene.par3d.scale,
-           ranges = [(bbox[1]-bbox[0])*scale[0]/2,
-                     (bbox[3]-bbox[2])*scale[1]/2,
-                     (bbox[5]-bbox[4])*scale[2]/2],
-           radius = Math.sqrt(this.sumsq(ranges))*1.1; // A bit bigger to handle labels
-       if (radius &lt;= 0) radius = 1;
-       var observer = subscene.par3d.observer,
-           distance = observer[2],
-           FOV = subscene.par3d.FOV, ortho = FOV === 0,
-           t = ortho ? 1 : Math.tan(FOV*Math.PI/360),
-           near = distance - radius,
-           far = distance + radius,
-           hlen,
-           aspect = this.vp.width/this.vp.height,
-           z = subscene.par3d.zoom,
-           userProjection = subscene.par3d.userProjection;
-       if (far &lt; 0.0)
-         far = 1.0;
-       if (near &lt; far/100.0)
-         near = far/100.0;
-       this.frustum = {near:near, far:far};
-       hlen = t*near;
-       if (ortho) {
-         if (aspect > 1)
-           this.prMatrix.ortho(-hlen*aspect*z, hlen*aspect*z,
-                          -hlen*z, hlen*z, near, far);
-         else
-           this.prMatrix.ortho(-hlen*z, hlen*z,
-                          -hlen*z/aspect, hlen*z/aspect,
-                          near, far);
-       } else {
-         if (aspect > 1)
-           this.prMatrix.frustum(-hlen*aspect*z, hlen*aspect*z,
-                          -hlen*z, hlen*z, near, far);
-         else
-           this.prMatrix.frustum(-hlen*z, hlen*z,
-                          -hlen*z/aspect, hlen*z/aspect,
-                          near, far);
-       }
-       this.prMatrix.multRight(userProjection);
-     };
-
+    rglwidgetClass.lerp = function(x, v, newx) {
+      var i, n, lo, hi, alpha, result;
+      if (newx &lt;= x[0])
+        return v[0];    
+      n = x.length;
+      if (newx >= x[n-1])
+        return v[n-1];
+      lo = this.bisect(x, newx);
+      if (newx === x[lo])
+        return v[lo];
+      hi = lo + 1;
+      if (newx === x[hi])
+        return v[hi];
+      alpha = (newx - x[lo])/(x[hi] - x[lo]);
+      result = v[lo];
+      n = result.length;
+      if (typeof n !== "undefined") {
+        for (i = 0; i &lt; n; i++)
+          result[i] = (1 - alpha)*result[i] + alpha*v[hi][i];
+      } else
+        result = (1 - alpha)*result + alpha*v[hi];
+      return result;
+    };
+    
     /**
-     * Set the model-view matrix for a subscene
-     * @param { number } id - id of the subscene
+     * Spherical linear interpolation (constant outside bounds)
+     * @param x - x coordinates in increasing order
+     * @param v - a matrix of unit quaternions
+     * @param newx - value at which to evaluate
      */
-    rglwidgetClass.prototype.setmvMatrix = function(id) {
-       var observer = this.getObj(id).par3d.observer;
-       this.mvMatrix.makeIdentity();
-       this.setmodelMatrix(id);
-       this.mvMatrix.translate(-observer[0], -observer[1], -observer[2]);
-
-     };
-
-    /**
-     * Set the model matrix for a subscene
-     * @param { number } id - id of the subscene
-     */
-    rglwidgetClass.prototype.setmodelMatrix = function(id) {
-      var subscene = this.getObj(id),
-          embedding = subscene.embeddings.model;
-      if (embedding === "replace") {
-        var bbox = subscene.par3d.bbox,
-            center = [(bbox[0]+bbox[1])/2,
-                      (bbox[2]+bbox[3])/2,
-                      (bbox[4]+bbox[5])/2];
-        this.mvMatrix.translate(-center[0], -center[1], -center[2]);
+    rglwidgetClass.slerp = function(x, v, newx) {
+      var n, lo, hi, alpha, result,
+          p0, p1, dot, Omega, alpha0, alpha1, len;
+      if (newx &lt;= x[0])
+        return v[0];    
+      if (newx >= x[n-1])
+        return v[n-1];
+      lo = this.bisect(x, newx);
+      if (newx === x[lo])
+        return v[lo];
+      hi = lo + 1;
+      if (newx === x[hi])
+        return v[hi];
+      p0 = v[lo];
+      p1 = v[hi];
+      dot = p0[0]*p1[0] + 
+            p0[1]*p1[1] +
+            p0[2]*p1[2] +
+            p0[3]*p1[3];
+      if (dot &lt; 0) {
+        p1 = [-p1[0], -p1[1], -p1[2], -p1[3]];
+        dot = -dot;
       }
-      if (embedding !== "inherit") {
-        var scale = subscene.par3d.scale;
-        this.mvMatrix.scale(scale[0], scale[1], scale[2]);
-        this.mvMatrix.multRight( subscene.par3d.userMatrix );
+      if (dot >= 1)
+        result = p1;
+      else {
+        alpha = (newx - x[lo])/(x[hi] - x[lo]);
+        Omega = Math.acos(dot);
+        alpha0 = Math.sin((1 - alpha)*Omega);
+        alpha1 = Math.sin(alpha*Omega);
+        result = [alpha0*p0[0] + alpha1*p1[0],
+                  alpha0*p0[1] + alpha1*p1[1],
+                  alpha0*p0[2] + alpha1*p1[2],
+                  alpha0*p0[3] + alpha1*p1[3]];
       }
-      if (embedding !== "replace")
-        this.setmodelMatrix(subscene.parent);
-     };
+      len = Math.sqrt(result[0]*result[0] +
+                      result[1]*result[1] +
+                      result[2]*result[2] +
+                      result[3]*result[3]);
+      return [result[0]/len,
+              result[1]/len,
+              result[2]/len,
+              result[3]/len];
+    };
 
     /**
-     * Set the normals matrix for a subscene
-     * @param { number } subsceneid - id of the subscene
+     * Rotate using unit quaternion
+     * @param q - a single unit quaternion
      */
-     rglwidgetClass.prototype.setnormMatrix2 = function() {
-       this.normMatrix = new CanvasMatrix4(this.mvMatrix);
-       this.normMatrix.invert();
-       this.normMatrix.transpose();
-     };
+    rglwidgetClass.rotateByQuaternion = function(M, q) {
 
-    /**
-     * Set the combined projection-model-view matrix
-     */
-    rglwidgetClass.prototype.setprmvMatrix = function() {
-       this.prmvMatrix = new CanvasMatrix4( this.mvMatrix );
-       this.prmvMatrix.multRight( this.prMatrix );
-     };
+    var xx = q[0]*q[0],
+        xy = q[0]*q[1],
+        xz = q[0]*q[2],
+        xw = q[0]*q[3],
+        yy = q[1]*q[1],
+        yz = q[1]*q[2],
+        yw = q[1]*q[3],
+        zz = q[2]*q[2],
+        zw = q[2]*q[3],
+        matrix = new CanvasMatrix4();
+      matrix.m11 = 1 - 2*(yy + zz);
+      matrix.m12 = 2*(xy + zw);
+      matrix.m13 = 2*(xz - yw);
+        
+      matrix.m21 = 2*(xy - zw);
+      matrix.m22 = 1 - 2*(xx + zz);
+      matrix.m23 = 2*(yz + xw);
 
-    rglwidgetClass.prototype.setInvPrMatrix = function() {
-      this.invPrMatrix = new CanvasMatrix4( this.prMatrix );
-      this.invPrMatrix.invert();
-      this.invPrMatrix.transpose();
+      matrix.m31 = 2*(xz + yw);
+      matrix.m32 = 2*(yz - xw);
+      matrix.m33 = 1 - 2*(xx + yy);
+
+      M.multRight(matrix);      
     };
 </code></pre>
 		</section>
