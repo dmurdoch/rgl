@@ -1,28 +1,17 @@
-0.108.3.2:
+0.108.47:
 
-In addition to the change in 0.108.3.1, this submission
-includes a correction to a typo in a font name that could
-conceivably have caused trouble on the M1Mac test machine.
+This is a fairly large update, fixing a lot of bugs and
+adding a number of new features.
 
-It makes no changes to the Pandoc test code.  If that's really
-the problem instead of this font issue, then it might be a bug
-in rmarkdown reported here: 
+It removes akima from the Suggests list, as requested.
 
-https://github.com/rstudio/rmarkdown/issues/2359
+It makes several changes to attempt to deal with Pandoc
+issues on some CRAN systems.  If none of these work, then 
+the environment variable RGL_USE_WEBSHOT can be set to 
+FALSE to stop Pandoc from being used when taking snapshots.
+However, an acceptable version of Pandoc is needed to build
+the vignettes.
 
-On the R-hub test machine, running "pandoc --version" produces 
-a zero length result and that causes rmarkdown to error out.
-I don't know if the same thing happens on CRAN.
-
-
-0.108.3.1:
-
-This is a small bug fix requested by Tomas Kalibera.  The only
-change is to the startup code, to prevent crashes 
-in R 4.2.0 under RStudio on Windows.
-
-In particular, I haven't run new revdep checks, and haven't
-attempted to address the problems shown on the CRAN checks due
-to pandoc being missing on the check machine.
-
-A more extensive update will come in a few weeks.
+Some CRAN notes are about the very large size of the libs
+directory.  I don't know what is causing that; on my system
+it builds to a reasonable size.
