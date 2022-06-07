@@ -82,6 +82,8 @@ jobs:
         run: |
           # rgl plus hard deps
           remotes::install_local(force = TRUE)
+          # and rmarkdown
+          remotes::install_cran("rmarkdown")
         shell: Rscript {0}
 
       - name: Session info
