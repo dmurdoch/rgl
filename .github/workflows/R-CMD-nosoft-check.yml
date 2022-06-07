@@ -93,6 +93,7 @@ jobs:
 
       - name: Check with hard deps
         run:  |
+          # _R_CHECK_DEPENDS_ONLY_ is true!
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning",
                                check_dir = "check")
         shell: Rscript {0}
