@@ -1,13 +1,12 @@
 0.109.2:
 
-Added a check for the presence of crosstalk in 
-example(rglShared).
-
+The noSuggests checks should all be in place now.
 Added base64enc to the imports and dropped use of the
 problematic knitr::image_uri.
 
 I believe the M1mac issue is also fixed, but I don't have such
 a system for testing.
+
 
 0.109.1:
 
