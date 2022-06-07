@@ -102,7 +102,8 @@ for details.  For example, the `MASS` package estimates
 Gamma parameters using maximum likelihood in a 
 `r linkfn("fitdistr", text="?MASS::fitdistr", pkg="MASS")` example.
 Here we show the log likelihood surface. 
-```{r persp3d, fig.height=3, fig.width=6, fig.keep="last"}
+```{r persp3d, fig.height=3, fig.width=6, fig.keep="last", eval=requireNamespace("MASS",quietly=TRUE)}
+# This example requires the MASS package
 library(MASS)
 # from the fitdistr example
 set.seed(123)

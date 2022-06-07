@@ -10,6 +10,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{User Interaction in WebGL (updated)} 
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{crosstalk}
 ---
 
 
@@ -292,7 +293,7 @@ of particular points, but the mouse mode may be changed
 to let the user rotate the display for a another 
 view of the scene.
 
-```{r eval = requireNamespace("crosstalk")}
+```{r eval = requireNamespace("crosstalk", quietly=TRUE)}
 # This example requires the crosstalk package
 # We skip it if crosstalk is not available. 
 
@@ -359,7 +360,7 @@ If a shared data object has been created in some other way, it can be linked to
 a particular `rgl` `id` value by copying its `key` and `group` properties
 as shown in the example below.
 
-```{r eval=requireNamespace("crosstalk")}
+```{r eval=requireNamespace("crosstalk", quietly = TRUE)}
 # This example requires the crosstalk package.  
 # We skip it if crosstalk is not available. 
 
