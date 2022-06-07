@@ -465,7 +465,7 @@ Buffer <- R6Class("Buffer",
         bytes <- buffer$bytes
         if (is.null(bytes)) {
           if (is.null(buffer$uri))
-            return(dataURI(raw(0), mime = "application/octet-stream"))
+            return(base64enc::dataURI(raw(0), mime = "application/octet-stream"))
           else {
             self$load(buffer$uri, buf)
             self$closeBuffer(buf)

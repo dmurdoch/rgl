@@ -1,4 +1,14 @@
-0.108.47:
+0.109.2:
+
+Added a check for the presence of crosstalk in 
+example(rglShared).
+
+Added base64enc to the imports.  
+
+I believe the M1mac issue is also fixed, but I don't have such
+a system for testing.
+
+0.109.1:
 
 This is a fairly large update, fixing a lot of bugs and
 adding a number of new features.
