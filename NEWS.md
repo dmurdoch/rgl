@@ -1,5 +1,5 @@
 
-# rgl  0.108.47
+# rgl  0.109.2
 
 ## Major changes
 
@@ -115,6 +115,8 @@ decorations properly (issue #206).
 * On some systems, `lines3d()` using both missing values
 and transparency did not draw properly (issue #234,
 originally reported by Gaspar Jekely).
+* The `rglShared()` example failed when `crosstalk`
+was uninstalled.
 
 
 # rgl  0.108.3.2

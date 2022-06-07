@@ -474,3 +474,8 @@ rglDependency <- makeDependency("rglwidgetClass",
                       stylesheet = "rgl.css",
                       package = "rgl",
                       debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))
+
+image_uri <- function(filename) {
+  paste0("data:", mime::guess_type(filename),
+         ";base64,", base64encode(filename))
+}

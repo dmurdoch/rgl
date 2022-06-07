@@ -67,8 +67,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -76,24 +76,14 @@ jobs:
           while read -r cmd
           do
             eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
-
-      - name: Install old packages
-        if:  matrix.config.r == '3.4' || matrix.config.r == '3.3'
-        run: |
-          remotes::install_version("deldir", "0.1-29")
-          remotes::install_version("plotrix", "3.7-5")
-        shell: Rscript {0}
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "18.04"))')
         
       - name: Install rgl & dependencies
         run: |
-          # Be sure to get appropriate CRAN or Github versions
-          install.packages(c("pkgdown", "downlit", "htmlwidgets"))
-          # First rgl plus hard deps
+          # rgl plus hard deps
           remotes::install_local(force = TRUE)
-          deps <- tools::package_dependencies("rgl", which = c("Suggests", "Enhances"))$rgl
-          deps <- setdiff(deps, c("tcltk"))
-          remotes::install_cran(deps)
+          # and rmarkdown
+          remotes::install_cran("rmarkdown")
         shell: Rscript {0}
 
       - name: Session info
@@ -105,6 +95,7 @@ jobs:
 
       - name: Check with hard deps
         run:  |
+          # _R_CHECK_DEPENDS_ONLY_ is true!
           rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning",
                                check_dir = "check")
         shell: Rscript {0}
