@@ -48,6 +48,6 @@ SystemRequirements: OpenGL and GLU Library (Required for
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
     pandoc (>=1.14, needed for vignettes)
 BugReports: https://github.com/dmurdoch/rgl/issues
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown
 Biarch: true
 RoxygenNote: 7.1.2
