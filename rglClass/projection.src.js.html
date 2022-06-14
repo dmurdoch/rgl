@@ -177,18 +177,20 @@
     rglwidgetClass.prototype.setmodelMatrix = function(id) {
       var subscene = this.getObj(id),
           embedding = subscene.embeddings.model;
-      if (embedding !== "inherit") {
-        var scale = subscene.par3d.scale,
-            bbox = subscene.par3d.bbox,
+      if (embedding === "replace") {
+        var bbox = subscene.par3d.bbox,
             center = [(bbox[0]+bbox[1])/2,
                       (bbox[2]+bbox[3])/2,
                       (bbox[4]+bbox[5])/2];
-         this.mvMatrix.translate(-center[0], -center[1], -center[2]);
-         this.mvMatrix.scale(scale[0], scale[1], scale[2]);
-         this.mvMatrix.multRight( subscene.par3d.userMatrix );
-       }
-       if (embedding !== "replace")
-         this.setmodelMatrix(subscene.parent);
+        this.mvMatrix.translate(-center[0], -center[1], -center[2]);
+      }
+      if (embedding !== "inherit") {
+        var scale = subscene.par3d.scale;
+        this.mvMatrix.scale(scale[0], scale[1], scale[2]);
+        this.mvMatrix.multRight( subscene.par3d.userMatrix );
+      }
+      if (embedding !== "replace")
+        this.setmodelMatrix(subscene.parent);
      };
 
     /**

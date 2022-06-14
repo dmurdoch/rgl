@@ -18,7 +18,7 @@ window."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mat
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -84,10 +84,13 @@ window.</p>
     <h2>Arguments</h2>
     <dl><dt>id</dt>
 <dd><p>Which subscene to report on; <code>NA</code> is the current subscene.  Set to <code>"root"</code> for the root.</p></dd>
-<dt>embeddings</dt>
+
+  <dt>embeddings</dt>
 <dd><p>Optional new setting for the embeddings for this subscene.</p></dd>
-<dt>recursive</dt>
+
+  <dt>recursive</dt>
 <dd><p>Whether to report on children recursively.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -103,14 +106,18 @@ specified if <code>embeddings</code> is used.</p>
     <h2>Value</h2>
     <dl><dt>id</dt>
 <dd><p>The object id of the subscene</p></dd>
+
 <dt>parent</dt>
 <dd><p>The object id of the parent subscene, if any</p></dd>
+
 <dt>children</dt>
 <dd><p>If <code>recursive</code>, a list of the information for the children,
 otherwise just their object ids.</p></dd>
+
 <dt>embedding</dt>
 <dd><p>A vector of 3 components describing how this subscene is
 embedded in its parent.</p></dd>
+
 </dl></div>
     <div id="author">
     <h2>Author</h2>
@@ -127,7 +134,7 @@ embedded in its parent.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   open3d()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  157 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  158 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   x &lt;- sort(rnorm(1000))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -138,7 +145,7 @@ embedded in its parent.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   plot3d(x, y, z, col = rainbow(1000))</span>
 <span class="r-in"><span class="fu">subsceneInfo</span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1808</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $embeddings</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   viewport projection      model      mouse </span>
@@ -154,14 +161,11 @@ embedded in its parent.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

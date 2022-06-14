@@ -18,7 +18,7 @@ or in an animation."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -90,30 +90,40 @@ or in an animation.</p>
     <dl><dt>value</dt>
 <dd><p>The value to use for input (typically <code>input$value</code>
   in a Shiny app.)</p></dd>
-<dt>subsets</dt>
+
+  <dt>subsets</dt>
 <dd><p>A list of vectors of object identifiers; the value will
   choose among them.</p></dd>
-<dt>fullset</dt>
+
+  <dt>fullset</dt>
 <dd><p>Objects in the subscene which are not in <code>fullset</code>
   will not be touched.</p></dd>
-<dt>subscenes</dt>
+
+  <dt>subscenes</dt>
 <dd><p>The subscenes to be controlled.  If <code>NULL</code>, the
   root subscene.</p></dd>
-<dt>accumulate</dt>
+
+  <dt>accumulate</dt>
 <dd><p>If <code>TRUE</code>, the subsets will accumulate (by union)
   as the value increases.</p></dd>
-<dt>entries, properties, objids</dt>
+
+  <dt>entries, properties, objids</dt>
 <dd><p>Which properties to set.</p></dd>
-<dt>tags</dt>
+
+  <dt>tags</dt>
 <dd><p>Select objects with matching tags.  Ignored
 if <code>objids</code> is specified.</p></dd>
-<dt>values</dt>
+
+  <dt>values</dt>
 <dd><p>Values to set.</p></dd>
-<dt>param</dt>
+
+  <dt>param</dt>
 <dd><p>Parameter values corresponding to the rows of <code>value</code></p></dd>
-<dt>interp</dt>
+
+  <dt>interp</dt>
 <dd><p>Whether to use linear interpolation between <code>param</code>
   values</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -133,7 +143,9 @@ in <code>param</code>.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>These functions return controller data in a list of class
+    
+
+<p>These functions return controller data in a list of class
 <code>"rglControl"</code>.</p>
     </div>
     <div id="author">
@@ -156,14 +168,11 @@ for linking using the <span class="pkg">crosstalk</span> package.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

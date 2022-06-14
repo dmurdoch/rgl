@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -84,21 +84,29 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>theta, phi</dt>
-<dd><p>polar coordinates</p></dd>
-<dt>...</dt>
+<dd><p>polar coordinates in degrees. <code>theta</code> rotates round the vertical axis. <code>phi</code> rotates round the horizontal axis.</p></dd>
+
+  <dt>...</dt>
 <dd><p>additional parameters to pass to <code>rgl.viewpoint</code></p></dd>
-<dt>fov</dt>
+
+  <dt>fov</dt>
 <dd><p>field-of-view angle in degrees</p></dd>
-<dt>zoom</dt>
+
+  <dt>zoom</dt>
 <dd><p>zoom factor</p></dd>
-<dt>scale</dt>
+
+  <dt>scale</dt>
 <dd><p>real length 3 vector specifying the rescaling to apply to each axis</p></dd>
-<dt>interactive</dt>
+
+  <dt>interactive</dt>
 <dd><p>logical, specifying if interactive navigation is allowed</p></dd>
-<dt>userMatrix</dt>
+
+  <dt>userMatrix</dt>
 <dd><p>4x4 matrix specifying user point of view</p></dd>
-<dt>type</dt>
+
+  <dt>type</dt>
 <dd><p>which viewpoint to set?</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -155,14 +163,11 @@ sets both, but the <code>type</code> argument can be used to limit the effect.</
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

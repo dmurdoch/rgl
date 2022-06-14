@@ -143,8 +143,13 @@
          ctx.imageSmoothingEnabled = true;
          ctx.drawImage(image, 0, 0, canvasX, canvasY);
          self.handleLoadedTexture(texture, canvas);
-         self.drawScene();
+         self.texturesLoading -= 1;
+         if (!self.texturesLoading)
+           self.drawScene();
        };
+       if (!self.texturesLoading)
+         self.texturesLoading = 0; // may have been undefined
+       self.texturesLoading += 1;
        image.src = uri;
      };
 
@@ -184,9 +189,9 @@
                fontString = "italic " + fontString;
              return fontString;
            };
-       cex = this.repeatToLen(cex, text.length);
-       family = this.repeatToLen(family, text.length);
-       font = this.repeatToLen(font, text.length);
+       cex = rglwidgetClass.repeatToLen(cex, text.length);
+       family = rglwidgetClass.repeatToLen(family, text.length);
+       font = rglwidgetClass.repeatToLen(font, text.length);
 
        canvasX = 1;
        line = -1;

@@ -157,6 +157,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/getBoundary3d.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/gltfTypes.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/grid3d.html</loc>
   </url>
   <url>
@@ -452,6 +455,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/writeWebGL.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/rglClass/animation.src.js.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/rglClass/axes.src.js.html</loc>

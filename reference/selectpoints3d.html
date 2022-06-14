@@ -18,7 +18,7 @@ point or region in the scene, then reports on all the vertices in or near that s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -85,16 +85,21 @@ point or region in the scene, then reports on all the vertices in or near that s
     <h2>Arguments</h2>
     <dl><dt>objects</dt>
 <dd><p>A vector of object id values to use for the search.</p></dd>
-<dt>value</dt>
+
+  <dt>value</dt>
 <dd><p>If <code>TRUE</code>, return the coordinates of the points; otherwise, return
 their indices.</p></dd>
-<dt>closest</dt>
+
+  <dt>closest</dt>
 <dd><p>If <code>TRUE</code>, return the points closest to the selection of no points are
 exactly within it.</p></dd>
-<dt>multiple</dt>
+
+  <dt>multiple</dt>
 <dd><p>If <code>TRUE</code> or a function, do multiple selections.  See the Details below.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Other parameters to pass to <code><a href="select3d.html">select3d</a></code>.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -116,16 +121,29 @@ stop the process.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>If <code>value</code> is <code>TRUE</code>, a 3-column matrix giving the coordinates of the 
+    
+
+<p>If <code>value</code> is <code>TRUE</code>, a 3-column matrix giving the coordinates of the 
 selected points.  All rows in the matrix will be unique even if multiple vertices
-have the same coordinates.
-If <code>value</code> is <code>FALSE</code>, a 2-column matrix containing columns:</p>
+have the same coordinates.</p>
+
+
+<p>If <code>value</code> is <code>FALSE</code>, a 2-column matrix containing columns:</p>
 <dl><dt>id</dt>
 <dd><p>The object id containing the point.</p></dd>
+
 <dt>index</dt>
 <dd><p>The index of the point within <code><a href="attributes.html">rgl.attrib</a>(id, "vertices")</code>.
 If multiple points have the same coordinates, all indices will be returned.</p></dd>
+
+
 </dl></div>
+    <div id="note">
+    <h2>Note</h2>
+    <p>This function selects points, not areas.  For example,
+if the selection region is in the interior of the triangle, that
+will count as a miss for all of the triangle's vertices.</p>
+    </div>
     <div id="author">
     <h2>Author</h2>
     <p>Duncan Murdoch</p>
@@ -170,14 +188,11 @@ If multiple points have the same coordinates, all indices will be returned.</p><
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

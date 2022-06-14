@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -87,10 +87,13 @@
     <h2>Arguments</h2>
     <dl><dt>useNULL</dt>
 <dd><p>whether to open the “null” device</p></dd>
-<dt>which</dt>
+
+  <dt>which</dt>
 <dd><p>device ID</p></dd>
-<dt>silent</dt>
+
+  <dt>silent</dt>
 <dd><p>whether to suppress update of window titles</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -123,13 +126,16 @@
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>rgl.open</code>, <code>rgl.close</code> and <code>rgl.set</code> are called for their side effects
+    <p></p>
+<p><code>rgl.open</code>, <code>rgl.close</code> and <code>rgl.set</code> are called for their side effects
   and return no useful value.  Similarly <code>rgl.quit</code> is not designed
-  to return useful values; in fact, users shouldn't call it at all!
-<code>rgl.cur</code> returns the currently active devices, or <code>0</code> if none is
+  to return useful values; in fact, users shouldn't call it at all!</p>
+<p></p>
+<p><code>rgl.cur</code> returns the currently active devices, or <code>0</code> if none is
   active; <code>rgl.dev.list</code> returns a vector of all open devices.  Both functions name
-  the items according to the type of device:  <code>null</code> for a hidden null device, 
-<code>wgl</code> for a Windows device, and <code>glX</code> for an X windows device.</p>
+  the items according to the type of device:  <code>null</code> for a hidden null device,</p>
+<p></p>
+<p><code>wgl</code> for a Windows device, and <code>glX</code> for an X windows device.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -161,14 +167,11 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

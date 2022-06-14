@@ -18,7 +18,7 @@ settings that may have been modified by user interaction in the browser."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -86,21 +86,27 @@ settings that may have been modified by user interaction in the browser.</p>
     <h2>Arguments</h2>
     <dl><dt>parameters</dt>
 <dd><p>A character vector naming the parameters to get.</p></dd>
-<dt>session</dt>
+
+  <dt>session</dt>
 <dd><p>The Shiny session object.</p></dd>
-<dt>subscene</dt>
+
+  <dt>subscene</dt>
 <dd><p>The subscene to which the parameters apply.  Defaults to 
 the currently active subscene in the R session.</p></dd>
-<dt>tag</dt>
+
+  <dt>tag</dt>
 <dd><p>An arbitrary string or value which will be sent as part of the
 response.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>A number of <code>name = value</code> pairs to be modified, or a
 single named list of parameters.  Entries named <code>tag</code>
 or <code>subscene</code> will be ignored.</p></dd>
-<dt>brush</dt>
+
+  <dt>brush</dt>
 <dd><p>The name of a Shiny input element corresponding to
   the <code>shinyBrush</code> argument to <code><a href="rglwidget.html">rglwidget</a></code>.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -117,12 +123,21 @@ so should be reasonably fast.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>These functions are called for their side effects, and don't return
-useful values.
-The side effect of <code>shinyGetPar3d</code> is to cause <code>input$par3d</code>to be updated sometime later.  
+    
+
+<p>These functions are called for their side effects, and don't return
+useful values.</p>
+
+
+<p>The side effect of <code>shinyGetPar3d</code> is to cause <code>input$par3d</code></p>
+
+
+<p>to be updated sometime later.  
 Besides the requested parameter values, <code>input$par3d</code> will
-contain a copy of the <code>subscene</code> and <code>tag</code> arguments.
-The side effect of <code>shinySetPar3d</code> is to send a message to the
+contain a copy of the <code>subscene</code> and <code>tag</code> arguments.</p>
+
+
+<p>The side effect of <code>shinySetPar3d</code> is to send a message to the
 browser to update its copy of the <code>par3d</code> parameters 
 immediately.</p>
     </div>
@@ -191,14 +206,11 @@ to be returned to R.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

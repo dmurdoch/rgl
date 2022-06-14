@@ -18,7 +18,7 @@ binary data for a scene."><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -348,7 +348,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 
 </div><p></p><hr><a id="method-openBufferview"></a><div class="section">
 <h3 id="method-openbufferview-">Method <code>openBufferview()</code><a class="anchor" aria-label="anchor" href="#method-openbufferview-"></a></h3>
-<p>Open a connecton to a buffer view.</p><div class="section">
+<p>Open a connection to a buffer view.</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Buffer</span><span class="op">$</span><span class="fu">openBufferview</span><span class="op">(</span><span class="va">bufv</span><span class="op">)</span></code></pre></div><p></p></div>
 </div>
@@ -444,14 +444,20 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 </div>
 <div class="section">
 <h4 id="returns-7">Returns<a class="anchor" aria-label="anchor" href="#returns-7"></a></h4>
-<p>A vector or array as specified in the accessor.</p>
+<p>A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+indexes the element.</p>
 </div>
 
 </div><p></p><hr><a id="method-addAccessor"></a><div class="section">
 <h3 id="method-addaccessor-">Method <code>addAccessor()</code><a class="anchor" aria-label="anchor" href="#method-addaccessor-"></a></h3>
 <p>Write values to accessor, not including `min` and `max`.</p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Buffer</span><span class="op">$</span><span class="fu">addAccessor</span><span class="op">(</span><span class="va">values</span>, target <span class="op">=</span> <span class="cn">NULL</span>, useDouble <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Buffer</span><span class="op">$</span><span class="fu">addAccessor</span><span class="op">(</span>
+  <span class="va">values</span>,
+  target <span class="op">=</span> <span class="cn">NULL</span>,
+  types <span class="op">=</span> <span class="st">"anyGLTF"</span>,
+  normalized <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -464,12 +470,16 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 <dd><p>Optional target use for values.</p></dd>
 
 
+<dt><code>types</code></dt>
+<dd><p>Which types can be used?</p></dd>
+
+
+<dt><code>normalized</code></dt>
+<dd><p>Are normalized integers allowed?</p></dd>
+
+
 <dt><code>useDouble</code></dt>
 <dd><p>Whether to write doubles or singles.</p></dd>
-
-
-<dt><code>glTF</code></dt>
-<dd><p>Whether this is for glTF use.</p></dd>
 
 
 </dl><p></p></div>
@@ -539,14 +549,11 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

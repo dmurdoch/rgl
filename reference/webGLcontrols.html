@@ -18,7 +18,7 @@ now been removed."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -100,41 +100,58 @@ now been removed.</p>
     <dl><dt>subsets</dt>
 <dd><p>A list of vectors of object identifiers; the slider or setter
   will choose among them.</p></dd>
-<dt>labels</dt>
+
+  <dt>labels</dt>
 <dd><p>Labels to display corresponding to each subset.  If <code>NULL</code>,
   numeric labels will be shown.</p></dd>
-<dt>fullset</dt>
+
+  <dt>fullset</dt>
 <dd><p>Objects in the subscene which are not in <code>fullset</code>
   will not be touched.</p></dd>
-<dt>subscenes</dt>
+
+  <dt>subscenes</dt>
 <dd><p>The subscenes to be controlled.</p></dd>
-<dt>prefixes</dt>
+  
+  <dt>prefixes</dt>
 <dd><p>The prefixes of the WebGL scenes to be controlled.</p></dd>
-<dt>accumulate</dt>
+
+  <dt>accumulate</dt>
 <dd><p>If <code>TRUE</code>, the subsets will accumulate (by union)
   as the value increases.</p></dd>
-<dt>id</dt>
+
+  <dt>id</dt>
 <dd><p>The <code>id</code> of the input control that will be generated.</p></dd>
-<dt>name</dt>
+
+  <dt>name</dt>
 <dd><p>The name of the input control that will be generated.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Arguments to pass to <code><a href="propertySetter.html">propertySlider</a></code>.</p></dd>
-<dt>a,b,c,d</dt>
+
+  <dt>a,b,c,d</dt>
 <dd><p>The parameter values to change.  Leave as <code>NULL</code>
   to hold the parameter constant.</p></dd>
-<dt>plane, clipplaneids</dt>
+
+  <dt>plane, clipplaneids</dt>
 <dd><p>The identifier of the particular clipplane
   to modify.</p></dd>
-<dt>subset</dt>
+
+  <dt>subset</dt>
 <dd><p>The subset that the button should toggle.</p></dd>
-<dt>label</dt>
+
+  <dt>label</dt>
 <dd><p>The button label.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>subsetSetter</code> returns a length-one character vector
-of class <code>"propertySetter"</code>.  
-The other functions 
+    
+
+<p><code>subsetSetter</code> returns a length-one character vector
+of class <code>"propertySetter"</code>.</p>
+
+
+<p>The other functions 
 use <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></code> to write their output and invisibly return the 
 <code>id</code> of the control that was generated.</p>
     </div>
@@ -157,14 +174,11 @@ into a scene.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

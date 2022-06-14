@@ -19,7 +19,7 @@ to minify it and report on errors and bad style."><!-- mathjax --><script src="h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -89,10 +89,13 @@ to minify it and report on errors and bad style.</p>
     <h2>Arguments</h2>
     <dl><dt>name, src, script, package, version, ...</dt>
 <dd><p>Arguments to pass to <code>htmltools::<a href="https://rdrr.io/pkg/htmltools/man/htmlDependency.html" class="external-link">htmlDependency</a>.</code></p></dd>
-<dt>minifile</dt>
+
+  <dt>minifile</dt>
 <dd><p>Basename of minified file.</p></dd>
-<dt>debugging</dt>
+
+  <dt>debugging</dt>
 <dd><p>See details below.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -115,7 +118,9 @@ uninformative failure to minify.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object that can be included in a list of dependencies passed to <code>htmltools::<a href="https://rdrr.io/pkg/htmltools/man/htmlDependencies.html" class="external-link">attachDependencies</a></code>.</p>
+    
+
+<p>An object that can be included in a list of dependencies passed to <code>htmltools::<a href="https://rdrr.io/pkg/htmltools/man/htmlDependencies.html" class="external-link">attachDependencies</a></code>.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -125,8 +130,8 @@ uninformative failure to minify.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># This is the code used to produce one of the dependencies</span></span>
-<span class="r-in"><span class="co"># for rglwidget().  </span></span>
+<span class="r-in"><span class="co"># This is a slightly simplified version of the code used to </span></span>
+<span class="r-in"><span class="co"># produce one of the dependencies for rglwidget().  </span></span>
 <span class="r-in"><span class="co"># It writes to the system library copy of rgl so </span></span>
 <span class="r-in"><span class="co"># has been marked not to run in the example code.</span></span>
 <span class="r-in"></span>
@@ -147,7 +152,8 @@ uninformative failure to minify.</p>
 <span class="r-in">                          <span class="st">"selection.src.js"</span>,</span>
 <span class="r-in">                          <span class="st">"rglTimer.src.js"</span>,</span>
 <span class="r-in">                          <span class="st">"pretty.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"axes.src.js"</span><span class="op">)</span>,</span>
+<span class="r-in">                          <span class="st">"axes.src.js"</span>,</span>
+<span class="r-in">                          <span class="st">"animation.src.js"</span><span class="op">)</span>,</span>
 <span class="r-in">               stylesheet <span class="op">=</span> <span class="st">"rgl.css"</span>,</span>
 <span class="r-in">               package <span class="op">=</span> <span class="st">"rgl"</span>,</span>
 <span class="r-in">               debugging <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"RGL_DEBUGGING"</span>, <span class="st">"FALSE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -162,14 +168,11 @@ uninformative failure to minify.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

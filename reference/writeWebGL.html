@@ -18,7 +18,7 @@ it in a browser.  Please use rglwidget instead."><!-- mathjax --><script src="ht
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -88,30 +88,39 @@ it in a browser.  Please use <code><a href="rglwidget.html">rglwidget</a></code>
     <h2>Arguments</h2>
     <dl><dt>dir</dt>
 <dd><p>Where to write the files.</p></dd>
-<dt>filename</dt>
+
+  <dt>filename</dt>
 <dd><p>The filename to use for the main file.</p></dd>
-<dt>template</dt>
+
+  <dt>template</dt>
 <dd><p>The template web page to which to write the Javascript for the scene.  See Details below.</p></dd>
-<dt>prefix</dt>
+
+  <dt>prefix</dt>
 <dd><p>An optional prefix to use on global identifiers in the scene; use different prefixes
 for different scenes displayed on the same web page.  If not blank, it should be a legal identifier
 in Javascript and HTML.</p></dd>
-<dt>snapshot</dt>
+
+  <dt>snapshot</dt>
 <dd><p>Whether to include a snapshot of the scene, to be displayed in browsers that don't support WebGL, or
 a specification of the snapshot to use.  See
 details below.</p></dd>
-<dt>commonParts</dt>
+
+  <dt>commonParts</dt>
 <dd><p>Whether to include parts that would be common to several
 figures on the same page.  Currently this includes
 a reference to and copy of the <code class="file">CanvasMatrix.js</code>
 file in the output.</p></dd>
-<dt>reuse</dt>
+
+  <dt>reuse</dt>
 <dd><p>Ignored.</p></dd>
-<dt>font</dt>
+
+  <dt>font</dt>
 <dd><p>The font to use for text.</p></dd>
-<dt>width, height</dt>
+
+  <dt>width, height</dt>
 <dd><p>The (optional) width and height in pixels of the image to display.  If omitted,
 the <code>par3d("windowRect")</code> dimensions will be used.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -124,7 +133,9 @@ use of this function.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>The <code>filename</code> is returned.</p>
+    
+
+<p>The <code>filename</code> is returned.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -154,14 +165,11 @@ write the scene to a file in various other formats.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>

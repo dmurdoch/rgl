@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.108.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
       </span>
     </div>
 
@@ -83,7 +83,8 @@
     <h2>Arguments</h2>
     <dl><dt>id</dt>
 <dd><p>A shape identifier, as returned by <code><a href="scene.html">ids3d</a></code>.</p></dd>
-<dt>attrib</dt>
+
+  <dt>attrib</dt>
 <dd><p>An attribute of a shape.  Currently supported: one of <br><code>"vertices"</code>, <code>"normals"</code>, <code>"colors"</code>, <code>"texcoords"</code>, 
 <code>"dim"</code>, <code>"texts"</code>, <code>"cex"</code>, <code>"adj"</code>, <code>"radii"</code>, 
 <code>"centers"</code>, <code>"ids"</code>, <code>"usermatrix"</code>, <code>"types"</code>,
@@ -91,8 +92,10 @@
 <code>"pos"</code><br>
 or unique prefixes
 to one of those.</p></dd>
-<dt>first, last</dt>
+
+  <dt>first, last</dt>
 <dd><p>Specify these to retrieve only those rows of the result.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -106,9 +109,22 @@ and columns in the rectangular grid; <code>"cex"</code>, <code>"adj"</code>,
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>rgl.attrib</code>returns the values of the attribute.  Attributes
-are mostly real-valued, with the following sizes:</p><table class="table table"><tr><td><code>"vertices"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"normals"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"centers"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"colors"</code></td><td>4 values</td><td>r, g, b, a</td></tr><tr><td><code>"texcoords"</code></td><td>2 values</td><td>s, t</td></tr><tr><td><code>"dim"</code></td><td>2 values</td><td>r, c</td></tr><tr><td><code>"cex"</code></td><td>1 value</td><td>cex</td></tr><tr><td><code>"adj"</code></td><td>2 values</td><td>x, y</td></tr><tr><td><code>"radii"</code></td><td>1 value</td><td>r</td></tr><tr><td><code>"ids"</code></td><td>1 value</td><td>id</td></tr><tr><td><code>"usermatrix"</code></td><td>4 values</td><td>x, y, z, w</td></tr><tr><td><code>"texts"</code></td><td>1 value</td><td>text</td></tr><tr><td><code>"types"</code></td><td>1 value</td><td>type</td></tr><tr><td><code>"flags"</code></td><td>1 value</td><td>flag</td></tr><tr><td><code>"family"</code></td><td>1 value</td><td>family</td></tr><tr><td><code>"font"</code></td><td>1 value</td><td>font</td></tr><tr><td><code>"pos"</code></td><td>1 value</td><td>pos</td></tr></table><p>The <code>"texts"</code>, <code>"types"</code> and <code>"family"</code>attributes are character-valued; the <code>"flags"</code>attribute is logical valued, with named rows.
-These are returned as matrices with the row count equal to the count for the attribute,
+    
+
+<p><code>rgl.attrib</code></p>
+
+
+<p>returns the values of the attribute.  Attributes
+are mostly real-valued, with the following sizes:</p><table class="table table"><tr><td><code>"vertices"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"normals"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"centers"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"colors"</code></td><td>4 values</td><td>r, g, b, a</td></tr><tr><td><code>"texcoords"</code></td><td>2 values</td><td>s, t</td></tr><tr><td><code>"dim"</code></td><td>2 values</td><td>r, c</td></tr><tr><td><code>"cex"</code></td><td>1 value</td><td>cex</td></tr><tr><td><code>"adj"</code></td><td>2 values</td><td>x, y</td></tr><tr><td><code>"radii"</code></td><td>1 value</td><td>r</td></tr><tr><td><code>"ids"</code></td><td>1 value</td><td>id</td></tr><tr><td><code>"usermatrix"</code></td><td>4 values</td><td>x, y, z, w</td></tr><tr><td><code>"texts"</code></td><td>1 value</td><td>text</td></tr><tr><td><code>"types"</code></td><td>1 value</td><td>type</td></tr><tr><td><code>"flags"</code></td><td>1 value</td><td>flag</td></tr><tr><td><code>"family"</code></td><td>1 value</td><td>family</td></tr><tr><td><code>"font"</code></td><td>1 value</td><td>font</td></tr><tr><td><code>"pos"</code></td><td>1 value</td><td>pos</td></tr></table><p>The <code>"texts"</code>, <code>"types"</code> and <code>"family"</code></p>
+
+
+<p>attributes are character-valued; the <code>"flags"</code></p>
+
+
+<p>attribute is logical valued, with named rows.</p>
+
+
+<p>These are returned as matrices with the row count equal to the count for the attribute,
 and the columns as listed above.</p>
     </div>
     <div id="author">
@@ -145,14 +161,11 @@ and the columns as listed above.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan
-Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel
-Adler</a>.</p>
+  <p></p><p>Developed by <a href="https://github.com/dmurdoch" class="external-link">Duncan Murdoch</a>, <a href="http://neoscientists.org/~plex/" class="external-link">Daniel Adler</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
       </footer></div>
