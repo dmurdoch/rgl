@@ -181,7 +181,7 @@ for installing the devel version have been removed.
   installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
 * `shade3d()`, `wire3d()` and `dots3d()` overrode
   `"front"` and `"back"` material settings in mesh objects.
-* rglwidget() handling of bounding box decorations had
+* `rglwidget()` handling of bounding box decorations had
   several bugs.
 * `rgl` could not find routines in the DLL on some Windows
 installs (Issue 148.)
