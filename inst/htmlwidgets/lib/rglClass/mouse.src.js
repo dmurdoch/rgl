@@ -337,7 +337,7 @@
         }
       };
 
-      self.canvas.onmousedown = function ( ev ){
+      self.canvas.onpointerdown = function ( ev ){
         if (!ev.which) // Use w3c defns in preference to MS
         switch (ev.button) {
           case 0: ev.which = 1; break;
@@ -375,7 +375,7 @@
 
       };
 
-      self.canvas.onmouseup = function ( ev ){
+      self.canvas.onpointerup = function ( ev ){
         if ( !drag ) return;
         var f = handlers[handler + "end"];
         if (f) {
@@ -383,12 +383,12 @@
           ev.preventDefault();
         }
         drag = 0;
-        handlers.onmousemove( ev );
+        handlers.onpointermove( ev );
       };
 
-      self.canvas.onmouseout = self.canvas.onmouseup;
+      self.canvas.onpointerout = self.canvas.onpointerup;
 
-      handlers.onmousemove = function ( ev ) {
+      handlers.onpointermove = function ( ev ) {
         var coords = self.relMouseCoords(ev), sub, f;
         coords.y = self.canvas.height - coords.y;
         if (ev.buttons === 0) {
@@ -419,13 +419,13 @@
       };
       
 
-      self.canvas.onmouseenter = function() {
-        self.canvas.addEventListener("mousemove",               handlers.onmousemove);
+      self.canvas.onpointerenter = function() {
+        self.canvas.addEventListener("pointermove",               handlers.onpointermove);
       };
       
-      self.canvas.onmouseleave = function() {
-        self.canvas.removeEventListener("mousemove",
-          handlers.onmousemove);
+      self.canvas.onpointerleave = function() {
+        self.canvas.removeEventListener("pointermove",
+          handlers.onpointermove);
       };
 
       handlers.setZoom = function(ds) {
@@ -495,11 +495,11 @@
             evlocal.which = 4;
             evlocal.clientX = self.canvas.width/2;
             evlocal.clientY = self.canvas.height/2;
-            self.canvas.onmousedown(evlocal);
+            self.canvas.onpointerdown(evlocal);
             evlocal.clientX += ev.deltaX;
             evlocal.clientY += ev.deltaY;
-            handlers.onmousemove(evlocal);
-            self.canvas.onmouseup(evlocal);
+            handlers.onpointermove(evlocal);
+            self.canvas.onpointerup(evlocal);
         }
         ev.preventDefault();
       };
@@ -512,7 +512,7 @@
       
       handlers.touchstart = function(ev) {
         var touch = ev.touches[0],
-          mouseEvent = new MouseEvent("mousedown",
+          mouseEvent = new MouseEvent("pointerdown",
             {
               clientX: touch.clientX,
               clientY: touch.clientY
@@ -532,7 +532,7 @@
         var mouseEvent;
         ev.preventDefault();
         if (ev.touches.length === 1) {
-          mouseEvent = new MouseEvent("mouseup", {});
+          mouseEvent = new MouseEvent("pointerup", {});
           self.dispatchEvent(mouseEvent);
         }
       };
@@ -547,7 +547,7 @@
           coords.y = self.canvas.height*Math.log(handlers.finger_dist0/new_dist) + handlers.y0zoom;
           handlers.zoommove(coords.x, coords.y);
         } else {
-          mouseEvent = new MouseEvent("mousemove",
+          mouseEvent = new MouseEvent("pointermove",
           {
             clientX: touch.clientX,
             clientY: touch.clientY
@@ -561,4 +561,4 @@
       self.canvas.addEventListener("touchstart", handlers.touchstart, {passive: false});
       self.canvas.addEventListener("touchend", handlers.touchend, {passive: false});
       self.canvas.addEventListener("touchmove", handlers.touchmove, {passive: false});
-    };
+	  };
