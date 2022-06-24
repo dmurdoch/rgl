@@ -402,7 +402,9 @@ plot3d.rglbboxdeco <- function(x, ...) {
   v <- x$vertices
   t <- x$texts
   m <- x$axes$mode
-  if (m[1] != "pretty") {
+  if (m[1] == "none")
+    args$xat <- numeric()
+  else if (m[1] != "pretty") {
     ind <- is.na(v[,2]) & is.na(v[,3])
     if (any(ind)) {
       args$xat <- v[ind,1]
@@ -412,7 +414,9 @@ plot3d.rglbboxdeco <- function(x, ...) {
         args$xlab <- signif(args$xat, 4)
     }
   }
-  if (m[2] != "pretty") {
+  if (m[2] == "none")
+    args$yat <- numeric()
+  else if (m[2] != "pretty") {
     ind <- is.na(v[,1]) & is.na(v[,3])
     if (any(ind)) {
       args$yat <- v[ind,2]
@@ -422,7 +426,9 @@ plot3d.rglbboxdeco <- function(x, ...) {
         args$ylab <- signif(args$yat, 4)
     }
   }
-  if (m[3] != "pretty") {
+  if (m[3] == "none")
+    args$zat <- numeric()
+  else if (m[3] != "pretty") {
     ind <- is.na(v[,1]) & is.na(v[,2])
     if (any(ind)) {
       args$zat <- v[ind,3]

@@ -1,3 +1,10 @@
+# rgl  0.109.3
+
+## Bug fixes
+
+* Plotting `scene3d()` objects didn't handle suppressed
+axes properly, drawing the default axis instead (issue
+#241).
 
 # rgl  0.109.2
 
