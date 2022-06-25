@@ -338,6 +338,11 @@
       };
 
       self.canvas.onpointerdown = function ( ev ){
+        // pointers and mice differ in capture rules; 
+        // act like a mouse.
+        if (ev.target.hasPointerCapture(ev.pointerId))
+          ev.target.releasePointerCapture(ev.pointerId);
+          
         if (!ev.which) // Use w3c defns in preference to MS
         switch (ev.button) {
           case 0: ev.which = 1; break;
