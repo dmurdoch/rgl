@@ -1,4 +1,10 @@
-# rgl  0.109.3
+# rgl  0.109.4
+
+## Minor changes
+
+* `rglwidget()` displays now act on "pointer" events, 
+not just "mouse" events, so they should be more usable 
+on touch screens and tablets (PR #240).
 
 ## Bug fixes
 
