@@ -415,7 +415,7 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
 GLBitmapFont* X11WindowImpl::initGLFont()
 {
   GLBitmapFont* font = NULL; 
-  if (beginGL()) {
+  if (factory->xfont && beginGL()) {
     font = new GLBitmapFont("bitmap", 1, 1, "fixed");  
     font->nglyph     = GL_BITMAP_FONT_COUNT;
     font->firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
@@ -503,7 +503,13 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
 
   // Load System font
   xfont = XLoadQueryFont(xdisplay,"fixed");
- 
+  if (!xfont) {
+    // Try the first available
+    xfont = XLoadQueryFont(xdisplay, "*");
+    if (!xfont)
+      throw_error("unable to load X11 font"); return;
+  }
+  
   // Obtain display atoms
   static char* atom_names[GUI_X11_ATOM_LAST] = {
     const_cast<char*>("WM_DELETE_WINDOW")

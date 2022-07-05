@@ -1,4 +1,4 @@
-# rgl  0.109.4
+# rgl  0.109.5
 
 ## Minor changes
 
@@ -11,6 +11,8 @@ on touch screens and tablets (PR #240).
 * Plotting `scene3d()` objects didn't handle suppressed
 axes properly, drawing the default axis instead (issue
 #241).
+* On some systems using X11, `rgl` would segfault when
+the "fixed" font was not found.
 
 # rgl  0.109.2
 
