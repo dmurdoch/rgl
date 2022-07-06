@@ -1,4 +1,4 @@
-# rgl  0.109.5
+# rgl  0.109.6
 
 ## Minor changes
 
@@ -13,6 +13,7 @@ axes properly, drawing the default axis instead (issue
 #241).
 * On some systems using X11, `rgl` would segfault when
 the "fixed" font was not found.
+* X11 errors could cause R to abort.
 
 # rgl  0.109.2
 
