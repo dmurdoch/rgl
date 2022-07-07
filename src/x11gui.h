@@ -47,6 +47,9 @@ public:
   // Font specific
   XFontStruct* xfont;
   
+  // Previous error handler
+  XErrorHandler old_error_handler;
+  
   void throw_error(const char* string);
 private:
 

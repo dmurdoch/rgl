@@ -63,25 +63,6 @@ static void set_R_handler()
     R_handler = R_handler->next;
 }
 
-// This is taken from the R sources, where
-// it is described as rather sloppy.
-
-static int X11Err(Display *dsp, XErrorEvent *event)
-{
-  char buff[1000];
-  /* for tcl/tk */
-  if (event->error_code == BadWindow) return 0;
-  
-  XGetErrorText(dsp, event->error_code, buff, 1000);
-  warning("X11 protocol error: %s", buff);
-  return 0;
-}
-
-static void set_R_error_handler()
-{
-  XSetErrorHandler(X11Err);
-}
-
 static void unset_R_handler()
 {
   if (R_handler) {
@@ -108,7 +89,6 @@ bool rgl::init(bool useNULLDevice)
     gpX11GUIFactory = new X11GUIFactory(NULL);
     if ( gpX11GUIFactory->isConnected() ) {
       set_R_handler();
-      set_R_error_handler();
       success = true;
     }
   }
