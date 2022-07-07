@@ -1,3 +1,19 @@
+# rgl  0.109.6
+
+## Minor changes
+
+* `rglwidget()` displays now act on "pointer" events, 
+not just "mouse" events, so they should be more usable 
+on touch screens and tablets (PR #240).
+
+## Bug fixes
+
+* Plotting `scene3d()` objects didn't handle suppressed
+axes properly, drawing the default axis instead (issue
+#241).
+* On some systems using X11, `rgl` would segfault when
+the "fixed" font was not found.
+* X11 errors could cause R to abort.
 
 # rgl  0.109.2
 
@@ -181,7 +197,7 @@ for installing the devel version have been removed.
   installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
 * `shade3d()`, `wire3d()` and `dots3d()` overrode
   `"front"` and `"back"` material settings in mesh objects.
-* rglwidget() handling of bounding box decorations had
+* `rglwidget()` handling of bounding box decorations had
   several bugs.
 * `rgl` could not find routines in the DLL on some Windows
 installs (Issue 148.)

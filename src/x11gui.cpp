@@ -344,10 +344,14 @@ void X11WindowImpl::processEvent(XEvent& ev)
   }
 }
 // ---------------------------------------------------------------------------
-static int error_code; 
+static int error_code;
+static X11GUIFactory *errorGuiFactory;
 
 static int X11SaveErr(Display *dsp, XErrorEvent *event)
 {
+  if (errorGuiFactory->old_error_handler &&
+      dsp != errorGuiFactory->xdisplay)
+    return errorGuiFactory->old_error_handler(dsp, event);
   error_code = event->error_code;
   return 0;
 }
@@ -415,7 +419,7 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
 GLBitmapFont* X11WindowImpl::initGLFont()
 {
   GLBitmapFont* font = NULL; 
-  if (beginGL()) {
+  if (factory->xfont && beginGL()) {
     font = new GLBitmapFont("bitmap", 1, 1, "fixed");  
     font->nglyph     = GL_BITMAP_FONT_COUNT;
     font->firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
@@ -493,6 +497,7 @@ void X11GUIFactory::throw_error(const char* string)
 X11GUIFactory::X11GUIFactory(const char* displayname)
 : xdisplay(0)
 , xfont(0)
+, old_error_handler(0)
 {
   // Open one display connection for all RGL X11 devices
   xdisplay = XOpenDisplay(displayname);
@@ -503,7 +508,13 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
 
   // Load System font
   xfont = XLoadQueryFont(xdisplay,"fixed");
- 
+  if (!xfont) {
+    // Try the first available
+    xfont = XLoadQueryFont(xdisplay, "*");
+    if (!xfont)
+      throw_error("unable to load X11 font"); return;
+  }
+  
   // Obtain display atoms
   static char* atom_names[GUI_X11_ATOM_LAST] = {
     const_cast<char*>("WM_DELETE_WINDOW")
@@ -545,10 +556,15 @@ void X11GUIFactory::disconnect()
       XUnloadFont(xdisplay, xfont->fid);
       xfont = 0;
     }
-  
+    
     // disconnect from X server
     XCloseDisplay(xdisplay);
     xdisplay = 0;
+    
+    if (old_error_handler) {
+      XSetErrorHandler(old_error_handler);
+      old_error_handler = 0;
+    }
   }
 }
 // ---------------------------------------------------------------------------
@@ -638,11 +654,10 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     };
   };
 
-  /* Work around problems with Xvfb on MacOSX and disabled IGLX:  
-   temporarily catch protocol errors and convert
-   to R errors */
+  /* Catch protocol errors and convert to R errors */
   error_code = 0;
-  XErrorHandler old_handler = XSetErrorHandler(X11SaveErr);
+  errorGuiFactory = this;
+  old_error_handler = XSetErrorHandler(X11SaveErr);
   
   xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
 #ifdef GLX_SAMPLE_BUFFERS
@@ -764,8 +779,6 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   
   flushX();
   
-  XSetErrorHandler(old_handler);
-
   if (error_code) impl = NULL;
   
   // register instance
