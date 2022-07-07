@@ -1,31 +1,23 @@
-0.109.2:
+0.109.6
 
-The noSuggests checks should all be in place now.
-Added base64enc to the imports and dropped use of the
-problematic knitr::image_uri.
+This is a small update that fixes a major bug, some minor
+ones, and makes one small change.
 
-I believe the M1mac issue is also fixed, but I don't have such
-a system for testing.
+The major bug is a segfault caused when trying to load 
+a default font in X11.  If the font is not present, 
+rgl would try to dereference a null pointer:  this is now
+fixed.  Simon Urbanek reported this and asked for this
+update.
 
+The minor issue and bugs are described in the NEWS file.
 
-0.109.1:
+Regarding CRAN checks:  I don't know what caused the
+vignette errors that are reported there.  Probably they
+are unrelated to the bugs that were fixed.  If more 
+information is available about exactly what is failing, 
+I'll try to fix it.
 
-This is a fairly large update, fixing a lot of bugs and
-adding a number of new features.
-
-It removes akima from the Suggests list, as requested.
-
-It makes several changes to attempt to deal with Pandoc
-issues on some CRAN systems.  If none of these work, then 
-the environment variable RGL_USE_WEBSHOT can be set to 
-FALSE to stop Pandoc from being used when taking snapshots.
-However, an acceptable version of Pandoc is needed to build
-the vignettes.
-
-Some CRAN notes are about the very large size of the libs
-directory.  I don't know what is causing that; on my system
-it builds to a reasonable size.
-
-I've run revdep checks and saw no new errors, but there are
-a few dozen packages I was unable to install, so the tests
-were incomplete.
+The very large size of macos installs is due to them
+including debug information in the libs.  Other platforms
+exceed the size limits by a bit, but I think this is
+unavoidable given the amount of code in rgl.
