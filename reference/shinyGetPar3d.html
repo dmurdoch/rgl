@@ -18,7 +18,7 @@ settings that may have been modified by user interaction in the browser."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.6</span>
       </span>
     </div>
 
@@ -77,9 +77,9 @@ settings that may have been modified by user interaction in the browser.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">shinyGetPar3d</span><span class="op">(</span><span class="va">parameters</span>, <span class="va">session</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, tag <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
-<span class="fu">shinySetPar3d</span><span class="op">(</span><span class="va">...</span>, <span class="va">session</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">shinyResetBrush</span><span class="op">(</span><span class="va">session</span>, <span class="va">brush</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">shinyGetPar3d</span><span class="op">(</span><span class="va">parameters</span>, <span class="va">session</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, tag <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu">shinySetPar3d</span><span class="op">(</span><span class="va">...</span>, <span class="va">session</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">shinyResetBrush</span><span class="op">(</span><span class="va">session</span>, <span class="va">brush</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -165,37 +165,37 @@ to be returned to R.</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="in_pkgdown_example.html">in_pkgdown_example</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"shiny"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">save</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>rgl.useNULL <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">300</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">app</span> <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
-<span class="r-in">    ui <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/bootstrapPage.html" class="external-link">bootstrapPage</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"redraw"</span>, <span class="st">"Redraw"</span><span class="op">)</span>,</span>
-<span class="r-in">      <span class="fu"><a href="shiny.html">rglwidgetOutput</a></span><span class="op">(</span><span class="st">"rglPlot"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">      <span class="co"># This waits until the user to click on the "redraw" </span></span>
-<span class="r-in">      <span class="co"># button, then sends a request for the current userMatrix</span></span>
-<span class="r-in">      <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">redraw</span>, <span class="op">{</span></span>
-<span class="r-in">        <span class="fu">shinyGetPar3d</span><span class="op">(</span><span class="st">"userMatrix"</span>, <span class="va">session</span><span class="op">)</span></span>
-<span class="r-in">      <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">    </span>
-<span class="r-in">      <span class="co"># This draws the plot whenever input$par3d changes,</span></span>
-<span class="r-in">      <span class="co"># i.e. whenever a response to the request above is</span></span>
-<span class="r-in">      <span class="co"># received.</span></span>
-<span class="r-in">      <span class="va">output</span><span class="op">$</span><span class="va">rglPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="shiny.html">renderRglwidget</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in">        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="rgl.open.html">rgl.dev.list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="open3d.html">close3d</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">        <span class="va">col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colors.html" class="external-link">colors</a></span><span class="op">(</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in">        <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="va">xyz</span>, col <span class="op">=</span> <span class="va">col</span>, type <span class="op">=</span> <span class="st">"s"</span>, main <span class="op">=</span> <span class="va">col</span><span class="op">)</span></span>
-<span class="r-in">        <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span>userMatrix <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">par3d</span><span class="op">$</span><span class="va">userMatrix</span><span class="op">)</span></span>
-<span class="r-in">        <span class="fu"><a href="rglwidget.html">rglwidget</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">      <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="va">save</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="in_pkgdown_example.html">in_pkgdown_example</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"shiny"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">save</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>rgl.useNULL <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">300</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">app</span> <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    ui <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/bootstrapPage.html" class="external-link">bootstrapPage</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"redraw"</span>, <span class="st">"Redraw"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="shiny.html">rglwidgetOutput</a></span><span class="op">(</span><span class="st">"rglPlot"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="co"># This waits until the user to click on the "redraw" </span></span></span>
+<span class="r-in"><span>      <span class="co"># button, then sends a request for the current userMatrix</span></span></span>
+<span class="r-in"><span>      <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">redraw</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>        <span class="fu">shinyGetPar3d</span><span class="op">(</span><span class="st">"userMatrix"</span>, <span class="va">session</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    </span></span>
+<span class="r-in"><span>      <span class="co"># This draws the plot whenever input$par3d changes,</span></span></span>
+<span class="r-in"><span>      <span class="co"># i.e. whenever a response to the request above is</span></span></span>
+<span class="r-in"><span>      <span class="co"># received.</span></span></span>
+<span class="r-in"><span>      <span class="va">output</span><span class="op">$</span><span class="va">rglPlot</span> <span class="op">&lt;-</span> <span class="fu"><a href="shiny.html">renderRglwidget</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="rgl.open.html">rgl.dev.list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="open3d.html">close3d</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="va">col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colors.html" class="external-link">colors</a></span><span class="op">(</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="va">xyz</span>, col <span class="op">=</span> <span class="va">col</span>, type <span class="op">=</span> <span class="st">"s"</span>, main <span class="op">=</span> <span class="va">col</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span>userMatrix <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">par3d</span><span class="op">$</span><span class="va">userMatrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="rglwidget.html">rglwidget</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="va">save</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -210,7 +210,7 @@ to be returned to R.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -19,7 +19,7 @@ to minify it and report on errors and bad style."><!-- mathjax --><script src="h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.6</span>
       </span>
     </div>
 
@@ -79,10 +79,10 @@ to minify it and report on errors and bad style.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">makeDependency</span><span class="op">(</span><span class="va">name</span>, <span class="va">src</span>, script <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">package</span>, 
-               version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="va">package</span><span class="op">)</span>,
-               minifile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">src</span><span class="op">)</span>, <span class="st">".min.js"</span><span class="op">)</span>,
-               debugging <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">makeDependency</span><span class="op">(</span><span class="va">name</span>, <span class="va">src</span>, script <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">package</span>, </span>
+<span>               version <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="va">package</span><span class="op">)</span>,</span>
+<span>               minifile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">src</span><span class="op">)</span>, <span class="st">".min.js"</span><span class="op">)</span>,</span>
+<span>               debugging <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -129,35 +129,35 @@ uninformative failure to minify.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># This is a slightly simplified version of the code used to </span></span>
-<span class="r-in"><span class="co"># produce one of the dependencies for rglwidget().  </span></span>
-<span class="r-in"><span class="co"># It writes to the system library copy of rgl so </span></span>
-<span class="r-in"><span class="co"># has been marked not to run in the example code.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">makeDependency</span><span class="op">(</span><span class="st">"rglwidgetClass"</span>, </span>
-<span class="r-in">               src <span class="op">=</span> <span class="st">"htmlwidgets/lib/rglClass"</span>,</span>
-<span class="r-in">               script <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rglClass.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"utils.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"buffer.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"subscenes.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"shaders.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"textures.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"projection.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"mouse.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"init.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"pieces.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"draw.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"controls.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"selection.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"rglTimer.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"pretty.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"axes.src.js"</span>,</span>
-<span class="r-in">                          <span class="st">"animation.src.js"</span><span class="op">)</span>,</span>
-<span class="r-in">               stylesheet <span class="op">=</span> <span class="st">"rgl.css"</span>,</span>
-<span class="r-in">               package <span class="op">=</span> <span class="st">"rgl"</span>,</span>
-<span class="r-in">               debugging <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"RGL_DEBUGGING"</span>, <span class="st">"FALSE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># This is a slightly simplified version of the code used to </span></span></span>
+<span class="r-in"><span><span class="co"># produce one of the dependencies for rglwidget().  </span></span></span>
+<span class="r-in"><span><span class="co"># It writes to the system library copy of rgl so </span></span></span>
+<span class="r-in"><span><span class="co"># has been marked not to run in the example code.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">makeDependency</span><span class="op">(</span><span class="st">"rglwidgetClass"</span>, </span></span>
+<span class="r-in"><span>               src <span class="op">=</span> <span class="st">"htmlwidgets/lib/rglClass"</span>,</span></span>
+<span class="r-in"><span>               script <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rglClass.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"utils.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"buffer.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"subscenes.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"shaders.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"textures.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"projection.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"mouse.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"init.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"pieces.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"draw.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"controls.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"selection.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"rglTimer.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"pretty.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"axes.src.js"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"animation.src.js"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>               stylesheet <span class="op">=</span> <span class="st">"rgl.css"</span>,</span></span>
+<span class="r-in"><span>               package <span class="op">=</span> <span class="st">"rgl"</span>,</span></span>
+<span class="r-in"><span>               debugging <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"RGL_DEBUGGING"</span>, <span class="st">"FALSE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -172,7 +172,7 @@ uninformative failure to minify.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
