@@ -444,12 +444,12 @@ CanvasMatrixDependency <- makeDependency("CanvasMatrix4",
                                          package = "rgl",
                                          debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))
 
-shaders <- c('<script type = "text/plain" id = "rgl-vertex-shader">',
+shaders <- htmlPreserve(c('<script type = "text/plain" id = "rgl-vertex-shader">',
              readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_vertex.glsl", package = "rgl")),
              '</script>',
              '<script type = "text/plain" id = "rgl-fragment-shader">',
              readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_fragment.glsl", package = "rgl")),
-             '</script>')
+             '</script>'))
 
 rglDependency <- makeDependency("rglwidgetClass", 
                       src = "htmlwidgets/lib/rglClass",
