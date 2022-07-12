@@ -1,9 +1,10 @@
-# rgl 0.109.7
+# rgl 0.109.9
 
 ## Bug fixes
 
 * The bounding box could be calculated incorrectly
 if data all had large values (issue #250).
+* transform3d() failed due to missing argument (issue #253).
 
 # rgl  0.109.6
 
