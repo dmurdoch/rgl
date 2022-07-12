@@ -167,8 +167,7 @@ Duncan Murdoch
 \code{\link{hook_webgl}} for an earlier approach to this problem. \code{\link{rglwidgetOutput}} for Shiny details.
 }
 \examples{
-save <- getOption("rgl.useNULL")
-options(rgl.useNULL=TRUE)
+save <- options(rgl.useNULL=TRUE)
 example("plot3d", "rgl")
 widget <- rglwidget()
 if (interactive() || in_pkgdown_example())
@@ -182,5 +181,7 @@ if (interactive() && !in_pkgdown_example()) {
   browseURL(filename)
 }
 }
+
+options(save)
 }
 

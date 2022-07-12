@@ -1,3 +1,10 @@
+# rgl 0.109.7
+
+## Bug fixes
+
+* The bounding box could be calculated incorrectly
+if data all had large values (issue #250).
+
 # rgl  0.109.6
 
 ## Minor changes
