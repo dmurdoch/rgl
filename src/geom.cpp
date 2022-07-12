@@ -29,16 +29,25 @@ void AABox::setEmpty(void)
 void AABox::operator += (const Vertex& v)
 {
   if (!ISNAN(v.x)) {
-    vmin.x = getMin(vmin.x, v.x);
-    vmax.x = getMax(vmax.x, v.x);   
+    if (vmin.x <= vmax.x) {
+      vmin.x = getMin(vmin.x, v.x);
+      vmax.x = getMax(vmax.x, v.x);   
+    } else
+      vmin.x = vmax.x = v.x;
   }
   if (!ISNAN(v.y)) {
-    vmin.y = getMin(vmin.y, v.y);
-    vmax.y = getMax(vmax.y, v.y);   
+    if (vmin.y <= vmax.y) {
+      vmin.y = getMin(vmin.y, v.y);
+      vmax.y = getMax(vmax.y, v.y);   
+    } else
+      vmin.y = vmax.y = v.y;
   }
   if (!ISNAN(v.z)) {
-    vmin.z = getMin(vmin.z, v.z);
-    vmax.z = getMax(vmax.z, v.z);
+    if (vmin.z <= vmax.z) {
+      vmin.z = getMin(vmin.z, v.z);
+      vmax.z = getMax(vmax.z, v.z);
+    } else
+      vmin.z = vmax.z = v.z;
   }
 }
 
