@@ -310,7 +310,7 @@ shade3d <- function(x,...) UseMethod("shade3d")
 translate3d <- function(obj,x,y,z,...) UseMethod("translate3d")
 scale3d <- function(obj,x,y,z,...) UseMethod("scale3d")
 rotate3d <- function(obj,angle,x,y,z,matrix,...) UseMethod("rotate3d")
-transform3d <- function(obj,matrix,...) rotate3d(obj, matrix=matrix, ...)
+transform3d <- function(obj,matrix,...) rotate3d(obj, matrix = matrix, angle = NA, x = NA, y = NA, z = NA)
 
 subdivision3d <- function(x,...) UseMethod("subdivision3d")
 

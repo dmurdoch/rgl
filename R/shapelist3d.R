@@ -73,7 +73,7 @@ translate3d.shapelist3d <- function( obj, x, y, z, ... ) {
 }  
 
 rotate3d.shapelist3d <- function( obj,angle,x,y,z,matrix, ... ) {
-  structure(lapply( obj, function(item) rotate3d(item, x,y,z,matrix,...) ),
+  structure(lapply( obj, function(item) rotate3d(item,angle, x,y,z,matrix,...) ),
             class = class(obj))
 }  
 
