@@ -328,14 +328,29 @@ Buffer <- R6Class("Buffer",
         private$accessors[[acc + 1]] <- unclass(accessor),
 
 #' @description
-#'   Read data given by accessor object.
+#'   Read data given by accessor number.
 #'
 #' @param acc Accessor number.
 #'
 #' @return A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
 #' indexes the element.
 #'
-      readAccessor = function(acc) {
+   readAccessor = function(acc) {
+     if (acc + 1 > length(private$accessors))
+       stop("No such accessor")
+     accessor <- self$getAccessor(acc)
+     self$readAccessor0(accessor)
+   },
+
+#' @description
+#'   Read data given by accessor object.
+#'
+#' @param accessor Accessor object
+#'
+#' @return A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+#' indexes the element.
+#'
+      readAccessor0 = function(accessor) {
         typenames <- c("5120" = "byte", "5121" = "unsigned_byte",
                        "5122" = "short", "5123" = "unsigned_short",
                        "5125" = "unsigned_int", "5126" = "float")
@@ -351,11 +366,6 @@ Buffer <- R6Class("Buffer",
                      "5126" = TRUE)
         lens <- c(SCALAR = 1, VEC2 = 2, VEC3 = 3, VEC4 = 4,
                   MAT2 = 4, MAT3 = 9, MAT4 = 16)
-        if (acc + 1 > length(private$accessors))
-          stop("No such accessor")
-        accessor <- self$getAccessor(acc)
-        view <- self$getBufferview(accessor$bufferView)
-        con <- self$openBufferview(accessor$bufferView)
         ctype <- as.character(accessor$componentType)
         atype <- accessor$type
         type <- types[ctype]
@@ -363,31 +373,56 @@ Buffer <- R6Class("Buffer",
         size <- sizes[ctype]
         signed <- signeds[ctype]
         count <- accessor$count
-        if (is.null(view$byteStride)) {
-          skip <- 0
-        } else
-          skip <- len*size - view$byteStride
-        if (is.null(byteOffset <- accessor$byteOffset))
-          byteOffset <- 0
-        start <- seek(con) + byteOffset
-
-        if (skip == 0) {
-          seek(con, start)
-          values <- readBin(con, type, n = len*count,  size = size,
-                            signed = signed, endian = "little")
+        if (is.null(accessor$bufferView)) {
+          values <- numeric(count*len) # initialized to zero
         } else {
-          values <- numeric(count*len)
-          for (i in seq_len(count)) {
-            seek(con, start + (i-1)*view$byteStride)
-            values[(i-1)*len + seq_len(len)] <-
-              readBin(con, type, n = len,  size = size,
+          view <- self$getBufferview(accessor$bufferView)
+          con <- self$openBufferview(accessor$bufferView)
+          if (is.null(view$byteStride)) {
+            skip <- 0
+          } else
+            skip <- len*size - view$byteStride
+          if (is.null(byteOffset <- accessor$byteOffset))
+            byteOffset <- 0
+          start <- seek(con) + byteOffset
+
+          if (skip == 0) {
+            seek(con, start)
+            values <- readBin(con, type, n = len*count,  size = size,
+                              signed = signed, endian = "little")
+          } else {
+            values <- numeric(count*len)
+            for (i in seq_len(count)) {
+              seek(con, start + (i-1)*view$byteStride)
+              values[(i-1)*len + seq_len(len)] <-
+                readBin(con, type, n = len,  size = size,
                       signed = signed, endian = "little")
+            }
+          }
+          if (ctype == "5125") { # fix up unsigned integers
+            values[is.na(values)] <- 2^31
+            values[values < 0] <- values[values < 0] + 2^32
           }
         }
-        if (ctype == "5125") { # fix up unsigned integers
-          values[is.na(values)] <- 2^31
-          values[values < 0] <- values[values < 0] + 2^32
+        if (!is.null(sparse <- accessor$sparse)) {
+          browser()
+          indexobj <- sparse$indices
+          indexobj$type <- "SCALAR"
+          indexobj$count <- sparse$count
+          index <- self$readAccessor0(indexobj)
+          
+          valueobj <- sparse$values
+          valueobj$type <- "SCALAR"
+          valueobj$componentType <- accessor$componentType
+          valueobj$count <- len*sparse$count
+          newvalues <- self$readAccessor0(valueobj)
+          
+          for (i in seq_len(sparse$count)) 
+            for (j in seq_len(len))
+              values[len*index[i] + j] <-
+                newvalues[len*(i-1) + j]
         }
+        
         if (!is.null(accessor$normalized) && accessor$normalized)
           values <- switch(ctype,
                            "5120" = (values + 128)/255 - 1, # byte

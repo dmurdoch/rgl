@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.109.10
+Version: 0.109.11
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -51,4 +51,4 @@ SystemRequirements: OpenGL and GLU Library (Required for
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr, rmarkdown
 Biarch: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0

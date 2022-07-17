@@ -10,31 +10,32 @@ binary data for a scene.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Buffer$new()}}
-\item \href{#method-load}{\code{Buffer$load()}}
-\item \href{#method-saveOpenBuffer}{\code{Buffer$saveOpenBuffer()}}
-\item \href{#method-getBuffer}{\code{Buffer$getBuffer()}}
-\item \href{#method-setBuffer}{\code{Buffer$setBuffer()}}
-\item \href{#method-openBuffer}{\code{Buffer$openBuffer()}}
-\item \href{#method-writeBuffer}{\code{Buffer$writeBuffer()}}
-\item \href{#method-closeBuffer}{\code{Buffer$closeBuffer()}}
-\item \href{#method-closeBuffers}{\code{Buffer$closeBuffers()}}
-\item \href{#method-getBufferview}{\code{Buffer$getBufferview()}}
-\item \href{#method-addBufferView}{\code{Buffer$addBufferView()}}
-\item \href{#method-openBufferview}{\code{Buffer$openBufferview()}}
-\item \href{#method-setBufferview}{\code{Buffer$setBufferview()}}
-\item \href{#method-getAccessor}{\code{Buffer$getAccessor()}}
-\item \href{#method-setAccessor}{\code{Buffer$setAccessor()}}
-\item \href{#method-readAccessor}{\code{Buffer$readAccessor()}}
-\item \href{#method-addAccessor}{\code{Buffer$addAccessor()}}
-\item \href{#method-dataURI}{\code{Buffer$dataURI()}}
-\item \href{#method-as.list}{\code{Buffer$as.list()}}
-\item \href{#method-clone}{\code{Buffer$clone()}}
+\item \href{#method-Buffer-new}{\code{Buffer$new()}}
+\item \href{#method-Buffer-load}{\code{Buffer$load()}}
+\item \href{#method-Buffer-saveOpenBuffer}{\code{Buffer$saveOpenBuffer()}}
+\item \href{#method-Buffer-getBuffer}{\code{Buffer$getBuffer()}}
+\item \href{#method-Buffer-setBuffer}{\code{Buffer$setBuffer()}}
+\item \href{#method-Buffer-openBuffer}{\code{Buffer$openBuffer()}}
+\item \href{#method-Buffer-writeBuffer}{\code{Buffer$writeBuffer()}}
+\item \href{#method-Buffer-closeBuffer}{\code{Buffer$closeBuffer()}}
+\item \href{#method-Buffer-closeBuffers}{\code{Buffer$closeBuffers()}}
+\item \href{#method-Buffer-getBufferview}{\code{Buffer$getBufferview()}}
+\item \href{#method-Buffer-addBufferView}{\code{Buffer$addBufferView()}}
+\item \href{#method-Buffer-openBufferview}{\code{Buffer$openBufferview()}}
+\item \href{#method-Buffer-setBufferview}{\code{Buffer$setBufferview()}}
+\item \href{#method-Buffer-getAccessor}{\code{Buffer$getAccessor()}}
+\item \href{#method-Buffer-setAccessor}{\code{Buffer$setAccessor()}}
+\item \href{#method-Buffer-readAccessor}{\code{Buffer$readAccessor()}}
+\item \href{#method-Buffer-readAccessor0}{\code{Buffer$readAccessor0()}}
+\item \href{#method-Buffer-addAccessor}{\code{Buffer$addAccessor()}}
+\item \href{#method-Buffer-dataURI}{\code{Buffer$dataURI()}}
+\item \href{#method-Buffer-as.list}{\code{Buffer$as.list()}}
+\item \href{#method-Buffer-clone}{\code{Buffer$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Buffer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Buffer$new(json = NULL, binfile = NULL)}\if{html}{\out{</div>}}
@@ -51,8 +52,8 @@ binary data for a scene.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-load"></a>}}
-\if{latex}{\out{\hypertarget{method-load}{}}}
+\if{html}{\out{<a id="method-Buffer-load"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-load}{}}}
 \subsection{Method \code{load()}}{
 Load from file.
 \subsection{Usage}{
@@ -70,8 +71,8 @@ Load from file.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-saveOpenBuffer"></a>}}
-\if{latex}{\out{\hypertarget{method-saveOpenBuffer}{}}}
+\if{html}{\out{<a id="method-Buffer-saveOpenBuffer"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-saveOpenBuffer}{}}}
 \subsection{Method \code{saveOpenBuffer()}}{
 Write open buffer to connection.
 \subsection{Usage}{
@@ -89,8 +90,8 @@ Write open buffer to connection.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getBuffer"></a>}}
-\if{latex}{\out{\hypertarget{method-getBuffer}{}}}
+\if{html}{\out{<a id="method-Buffer-getBuffer"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-getBuffer}{}}}
 \subsection{Method \code{getBuffer()}}{
 Get buffer object.
 \subsection{Usage}{
@@ -112,8 +113,8 @@ A list containing components described here:
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setBuffer"></a>}}
-\if{latex}{\out{\hypertarget{method-setBuffer}{}}}
+\if{html}{\out{<a id="method-Buffer-setBuffer"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-setBuffer}{}}}
 \subsection{Method \code{setBuffer()}}{
 Set buffer object.
 \subsection{Usage}{
@@ -131,8 +132,8 @@ Set buffer object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-openBuffer"></a>}}
-\if{latex}{\out{\hypertarget{method-openBuffer}{}}}
+\if{html}{\out{<a id="method-Buffer-openBuffer"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-openBuffer}{}}}
 \subsection{Method \code{openBuffer()}}{
 Open a connection for the data in a buffer.
 \subsection{Usage}{
@@ -151,8 +152,8 @@ An open binary connection.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-writeBuffer"></a>}}
-\if{latex}{\out{\hypertarget{method-writeBuffer}{}}}
+\if{html}{\out{<a id="method-Buffer-writeBuffer"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-writeBuffer}{}}}
 \subsection{Method \code{writeBuffer()}}{
 Write data to buffer.
 \subsection{Usage}{
@@ -177,8 +178,8 @@ Byte offset of start of bytes written.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-closeBuffer"></a>}}
-\if{latex}{\out{\hypertarget{method-closeBuffer}{}}}
+\if{html}{\out{<a id="method-Buffer-closeBuffer"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-closeBuffer}{}}}
 \subsection{Method \code{closeBuffer()}}{
 Close the connection in a buffer.
 
@@ -197,8 +198,8 @@ contents in the raw vector `bytes` within the buffer object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-closeBuffers"></a>}}
-\if{latex}{\out{\hypertarget{method-closeBuffers}{}}}
+\if{html}{\out{<a id="method-Buffer-closeBuffers"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-closeBuffers}{}}}
 \subsection{Method \code{closeBuffers()}}{
 Close any open buffers.
 
@@ -210,8 +211,8 @@ Close any open buffers.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getBufferview"></a>}}
-\if{latex}{\out{\hypertarget{method-getBufferview}{}}}
+\if{html}{\out{<a id="method-Buffer-getBufferview"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-getBufferview}{}}}
 \subsection{Method \code{getBufferview()}}{
 Get bufferView object.
 \subsection{Usage}{
@@ -231,8 +232,8 @@ A list containing components described here:
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addBufferView"></a>}}
-\if{latex}{\out{\hypertarget{method-addBufferView}{}}}
+\if{html}{\out{<a id="method-Buffer-addBufferView"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-addBufferView}{}}}
 \subsection{Method \code{addBufferView()}}{
 Add a new buffer view.
 \subsection{Usage}{
@@ -259,8 +260,8 @@ New bufferView number.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-openBufferview"></a>}}
-\if{latex}{\out{\hypertarget{method-openBufferview}{}}}
+\if{html}{\out{<a id="method-Buffer-openBufferview"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-openBufferview}{}}}
 \subsection{Method \code{openBufferview()}}{
 Open a connection to a buffer view.
 \subsection{Usage}{
@@ -279,8 +280,8 @@ A connection.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setBufferview"></a>}}
-\if{latex}{\out{\hypertarget{method-setBufferview}{}}}
+\if{html}{\out{<a id="method-Buffer-setBufferview"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-setBufferview}{}}}
 \subsection{Method \code{setBufferview()}}{
 Set bufferView object.
 \subsection{Usage}{
@@ -298,8 +299,8 @@ Set bufferView object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getAccessor"></a>}}
-\if{latex}{\out{\hypertarget{method-getAccessor}{}}}
+\if{html}{\out{<a id="method-Buffer-getAccessor"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-getAccessor}{}}}
 \subsection{Method \code{getAccessor()}}{
 Get accessor object
 \subsection{Usage}{
@@ -319,8 +320,8 @@ A list containing components described here:
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setAccessor"></a>}}
-\if{latex}{\out{\hypertarget{method-setAccessor}{}}}
+\if{html}{\out{<a id="method-Buffer-setAccessor"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-setAccessor}{}}}
 \subsection{Method \code{setAccessor()}}{
 Set accessor object.
 \subsection{Usage}{
@@ -338,10 +339,10 @@ Set accessor object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-readAccessor"></a>}}
-\if{latex}{\out{\hypertarget{method-readAccessor}{}}}
+\if{html}{\out{<a id="method-Buffer-readAccessor"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-readAccessor}{}}}
 \subsection{Method \code{readAccessor()}}{
-Read data given by accessor object.
+Read data given by accessor number.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Buffer$readAccessor(acc)}\if{html}{\out{</div>}}
 }
@@ -359,8 +360,29 @@ indexes the element.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addAccessor"></a>}}
-\if{latex}{\out{\hypertarget{method-addAccessor}{}}}
+\if{html}{\out{<a id="method-Buffer-readAccessor0"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-readAccessor0}{}}}
+\subsection{Method \code{readAccessor0()}}{
+Read data given by accessor object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Buffer$readAccessor0(accessor)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{accessor}}{Accessor object}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+indexes the element.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Buffer-addAccessor"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-addAccessor}{}}}
 \subsection{Method \code{addAccessor()}}{
 Write values to accessor, not including `min` and `max`.
 \subsection{Usage}{
@@ -392,8 +414,8 @@ New accessor number
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-dataURI"></a>}}
-\if{latex}{\out{\hypertarget{method-dataURI}{}}}
+\if{html}{\out{<a id="method-Buffer-dataURI"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-dataURI}{}}}
 \subsection{Method \code{dataURI()}}{
 Convert buffer to data URI.
 \subsection{Usage}{
@@ -412,8 +434,8 @@ String containing data URI.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as.list"></a>}}
-\if{latex}{\out{\hypertarget{method-as.list}{}}}
+\if{html}{\out{<a id="method-Buffer-as.list"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-as.list}{}}}
 \subsection{Method \code{as.list()}}{
 Convert to list.
 \subsection{Usage}{
@@ -425,8 +447,8 @@ List suitable for writing using JSON.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Buffer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Buffer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
