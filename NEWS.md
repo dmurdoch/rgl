@@ -1,5 +1,10 @@
 
-# rgl 0.109.10
+# rgl 0.109.11
+
+## Minor changes
+
+* The `Buffer` object now handles reading of sparse
+accessors.
 
 ## Bug fixes
 
