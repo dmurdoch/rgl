@@ -405,7 +405,6 @@ Buffer <- R6Class("Buffer",
           }
         }
         if (!is.null(sparse <- accessor$sparse)) {
-          browser()
           indexobj <- sparse$indices
           indexobj$type <- "SCALAR"
           indexobj$count <- sparse$count
