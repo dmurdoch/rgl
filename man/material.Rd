@@ -34,6 +34,7 @@ rgl.material(
   margin       = "",
   floating     = FALSE,
   tag          = "",
+  blend        = c("src_alpha", "one_minus_src_alpha"),
   col,
   ...
 )
@@ -129,6 +130,32 @@ material3d(...)
   \item{tag}{A length 1 string value.  These
   may be used to identify objects, or encode other meta
   data about the object.}
+  \item{blend}{Two string values from the list below
+  describing how transparent objects are blended with
+  colors behind them.
+  The first determines the coefficient applied to the 
+  color of the current object (the source); the second determines
+  the coefficient applied to the existing color 
+  (the destination). The resulting
+  color will be the sum of the two resulting colors.
+  The allowed strings
+  correspond to OpenGL constants:
+  \describe{
+  \item{"zero"}{Zero; color has no effect.}
+  \item{"one"}{One; color is added to the other term.}
+  \item{"src_color", "one_minus_src_color"}{Multiply by source color or its opposite.}
+  \item{"dst_color", "one_minus_dst_color"}{Multiply by destination color or its opposite.}
+  \item{"src_alpha", "one_minus_src_alpha"}{Multiply by
+source alpha or its opposite.  Default values.}
+  \item{"dst_alpha", "one_minus_dst_alpha"}{Multiply by
+destination alpha or its opposite.}
+  \item{"constant_color", "one_minus_constant_color",
+  "constant_alpha", "one_minus_constant_alpha",
+  "src_alpha_saturate"}{These are allowed, but to be useful
+  they require other settings which \pkg{rgl} doesn't
+  support.}
+  }
+  }
   \item{col}{An allowed abbreviation of \code{color}.}
   \item{...}{Any of the arguments above can
   be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
@@ -250,6 +277,15 @@ for (i in 1:8) {
   texts3d(xmid, ymid, z + i, paste(i, tests[i], sep = ". "), depth_test = tests[i]) 
 }
 highlevel()  # To trigger display
+
+# this illustrates additive blending
+open3d()
+bg3d("darkgray")
+quad <- cbind(c(-1, 1, 1, -1), 1, c(-1, -1, 1, 1))
+quads3d(rbind(quad, 2*quad, 3*quad ), 
+        col = rep(c("red", "green", "blue"), each = 4),
+        alpha = 0.5, 
+        blend = c("src_alpha", "one"))
 }
 \keyword{dynamic}
 

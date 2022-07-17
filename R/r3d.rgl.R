@@ -52,7 +52,8 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap",
     "depth_mask", "depth_test", "isTransparent",
-    "polygon_offset", "margin", "floating", "tag")
+    "polygon_offset", "margin", "floating", "tag",
+    "blend")
 
 .material3d.readOnly <- "isTransparent"
 

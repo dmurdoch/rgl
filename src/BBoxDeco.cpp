@@ -635,11 +635,6 @@ void BBoxDeco::render(RenderContext* renderContext)
     material.beginUse(renderContext);
     
     if (material.line_antialias || material.isTransparent()) {
-      // SETUP BLENDING
-      if (renderContext->gl2psActive == GL2PS_NONE) 
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-      else
-        gl2psBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
       // ENABLE BLENDING
       glEnable(GL_BLEND);
       

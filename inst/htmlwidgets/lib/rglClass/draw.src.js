@@ -478,12 +478,31 @@
     /**
      * Do code for alpha blending
      * @param { boolean }  blend - Whether to blend.
+     * @param { integer }  objid - Object id
      */    
-    rglwidgetClass.prototype.doBlending = function(blend) {
-      var gl = this.gl;
+    rglwidgetClass.prototype.doBlending = function(blend, objid) {
+      var gl = this.gl, blendfunc, obj, 
+        blends =  {zero: gl.ZERO,
+                   one:  gl.ONE,
+                   src_color: gl.SRC_COLOR,
+                   one_minus_src_color: gl.ONE_MINUS_SRC_COLOR,
+                   dst_color: gl.DST_COLOR,
+                   one_minus_dst_color: gl.ONE_MINUS_DST_COLOR,
+                   src_alpha: gl.SRC_ALPHA,
+                   one_minus_src_alpha: gl.ONE_MINUS_SRC_ALPHA,
+                   dst_alpha: gl.DST_ALPHA,
+                   one_minus_dst_alpha: gl.ONE_MINUS_DST_ALPHA,
+                   constant_color: gl.CONSTANT_COLOR,
+                   one_minus_constant_color: gl.ONE_MINUS_CONSTANT_COLOR,
+                   constant_alpha: gl.CONSTANT_ALPHA,
+                   one_minus_constant_alpha: gl.ONE_MINUS_CONSTANT_ALPHA,
+                   src_alpha_saturate: gl.SRC_ALPHA_SATURATE};
       if (blend) {
-        gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA,
-                           gl.ONE, gl.ONE);
+        obj = this.getObj(objid);
+        blendfunc = this.getMaterial(obj, "blend");
+        gl.blendFuncSeparate(blends[blendfunc[0]],
+                             blends[blendfunc[1]],
+                             gl.ONE, gl.ONE);
         gl.enable(gl.BLEND);
       } else {
         gl.disable(gl.BLEND);
@@ -1317,12 +1336,12 @@
      */
     rglwidgetClass.prototype.drawPieces = function(pieces) {
       var i, prevcontext = [], context;
-      this.doBlending(true);
       for (i = 0; i < pieces.length; i++) {
         context = pieces[i].context.slice();
         if (context !== prevcontext) {
           prevcontext = context.slice();
           context = this.setContext(context);
+          this.doBlending(true, pieces[i].objid);
         }
         this.drawObjId(pieces[i].objid, this.subsceneid, 
                        pieces[i]);

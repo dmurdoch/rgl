@@ -65,6 +65,7 @@ public:
   int          edge[3];
   bool         floating;
   string       tag;
+  int          blend[2];
   
   double       glVersion;
 };

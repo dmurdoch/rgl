@@ -36,6 +36,7 @@ rgl.material <- function(
   margin = "",
   floating = FALSE,
   tag = "",
+  blend = c("src_alpha", "one_minus_src_alpha"),
   col,
   ...
 ) {
@@ -99,6 +100,11 @@ rgl.material <- function(
   if (length(polygon_offset) == 1)
     polygon_offset <- c(polygon_offset, polygon_offset)
 
+  # blending
+  
+  stopifnot(length(blend) == 2)
+  blend <- c(rgl.enum.blend(blend[1]), rgl.enum.blend(blend[2]))
+  
   # vector length
 
   ncolor <- dim(color)[2]
@@ -120,7 +126,7 @@ rgl.material <- function(
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
 
-                          color) )
+                          blend, color) )
   cdata <- as.character(c( tag, texture ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
@@ -140,7 +146,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   if (missing(ncolors))
     ncolors <- if (id) rgl.attrib.count(id, "colors") else rgl.getcolorcount()
   
-  idata <- rep(-1, 31+3*ncolors)
+  idata <- rep(-1, 33+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -164,13 +170,21 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   magfilters <- c("nearest", "linear")
   depthtests <- c("never", "less", "equal", "lequal", "greater", 
                   "notequal", "gequal", "always")
+  blendmodes <- c("zero", "one", 
+                  "src_color", "one_minus_src_color", 
+                  "dst_color", "one_minus_dst_color",
+                  "src_alpha", "one_minus_src_alpha",
+                  "dst_alpha", "one_minus_dst_alpha",
+                  "constant_color", "one_minus_constant_color",
+                  "constant_alpha", "one_minus_constant_alpha",
+                  "src_alpha_saturate")
   idata <- ret$idata
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[29 + 3*(seq_len(idata[1]))], 
-                   idata[30 + 3*(seq_len(idata[1]))], 
-                   idata[31 + 3*(seq_len(idata[1]))], maxColorValue = 255),
+  list(color = rgb(idata[31 + 3*(seq_len(idata[1]))], 
+                   idata[32 + 3*(seq_len(idata[1]))], 
+                   idata[33 + 3*(seq_len(idata[1]))], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=6, length.out = idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
@@ -197,6 +211,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        polygon_offset = ddata[4:5],
        margin = deparseMargin(list(coord = idata[27] + 1, edge = idata[28:30])),
        floating = idata[31] == 1,
+       blend = blendmodes[idata[32:33] + 1],
        tag = cdata[1]
        )
                    
