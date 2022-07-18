@@ -1,5 +1,11 @@
 
-# rgl 0.109.11
+# rgl 0.109.12
+
+## Major changes
+
+* Material property `"blend"` has been added, to allow
+various kinds of blending for semi-transparent objects
+(issue #245).
 
 ## Minor changes
 

@@ -1001,8 +1001,10 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.edge[1] = idata[27];
   mat.edge[2] = idata[28];
   mat.floating = idata[29];
+  mat.blend[0] = idata[30];
+  mat.blend[1] = idata[31];
   
-  int* colors   = &idata[30];
+  int* colors   = &idata[32];
   char*  pixmapfn = cdata[1];
 
   mat.shininess   = (float) ddata[0];
@@ -1123,8 +1125,10 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[28] = mat->edge[1];
   idata[29] = mat->edge[2];
   idata[30] = mat->floating;
+  idata[31] = mat->blend[0];
+  idata[32] = mat->blend[1];
 
-  for (i=0, j=31; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=33; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat->colors.getColor(i).getRedub();
     idata[j++] = (int) mat->colors.getColor(i).getGreenub();
     idata[j++] = (int) mat->colors.getColor(i).getBlueub();

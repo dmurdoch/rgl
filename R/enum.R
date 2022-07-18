@@ -63,3 +63,13 @@ rgl.enum(component, red=0, green=1, blue=2, alpha=3, depth=4, luminance=5)
 rgl.enum.depthtest <- function(depthtest)
 rgl.enum(depthtest, never=0, less=1, equal=2, lequal=3, greater=4, 
                     notequal=5, gequal=6, always= 7)
+
+rgl.enum.blend <- function(blend)
+rgl.enum(blend, zero=0, one=1, 
+         src_color=2, one_minus_src_color=3, 
+         dst_color=4, one_minus_dst_color=5,
+         src_alpha=6, one_minus_src_alpha=7,
+         dst_alpha=8, one_minus_dst_alpha=9,
+         constant_color=10, one_minus_constant_color=11,
+         constant_alpha=12, one_minus_constant_alpha=13,
+         src_alpha_saturate=14)

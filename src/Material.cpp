@@ -48,6 +48,8 @@ Material::Material(Color bg, Color fg)
   edge[0] = -2;
   edge[1] = -2;
   edge[2] = -2;
+  blend[0] = 6;  // GL_SRC_ALPHA
+  blend[1] = 7;  // GL_ONE_MINUS_SRC_ALPHA
 }
 
 void Material::setup()
@@ -68,6 +70,14 @@ void Material::beginUse(RenderContext* renderContext)
   GLenum depthfunc[] = { GL_NEVER, GL_LESS, GL_EQUAL, GL_LEQUAL, GL_GREATER,
                          GL_NOTEQUAL, GL_GEQUAL, GL_ALWAYS };
   
+  GLenum blendfunc[] = { GL_ZERO, GL_ONE, 
+                         GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, 
+                         GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
+                         GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
+                         GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA,
+                         GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR,
+                         GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA,
+                         GL_SRC_ALPHA_SATURATE};
   SAVEGLERROR;
   
   glDepthFunc(depthfunc[depth_test]);
@@ -79,8 +89,14 @@ void Material::beginUse(RenderContext* renderContext)
   
   SAVEGLERROR;
 
-  if (!alphablend) 
+  if (!alphablend)
     glDepthMask(GL_TRUE);
+  else {
+    if (renderContext->gl2psActive == GL2PS_NONE)
+      glBlendFunc(blendfunc[blend[0]], blendfunc[blend[1]]);
+    else
+      gl2psBlendFunc(blendfunc[blend[0]], blendfunc[blend[1]]);
+  }
 
   SAVEGLERROR;
 

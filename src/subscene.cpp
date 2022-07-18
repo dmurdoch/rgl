@@ -719,14 +719,6 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
     
     SAVEGLERROR;
     
-    // SETUP BLENDING
-    if (renderContext->gl2psActive == GL2PS_NONE) 
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    else
-      gl2psBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-    SAVEGLERROR;
-    
     // ENABLE BLENDING
     glEnable(GL_BLEND);
 
