@@ -282,7 +282,9 @@ highlevel()  # To trigger display
 open3d()
 bg3d("darkgray")
 quad <- cbind(c(-1, 1, 1, -1), 1, c(-1, -1, 1, 1))
-quads3d(rbind(quad, 2*quad, 3*quad ), 
+quads3d(rbind(translate3d(quad, -0.5, 0, -0.5),
+              translate3d(quad, 0.5,  0.5, -0.5),
+              translate3d(quad, 0, 1, 0.5)), 
         col = rep(c("red", "green", "blue"), each = 4),
         alpha = 0.5, 
         blend = c("src_alpha", "one"))
