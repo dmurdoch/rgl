@@ -18,7 +18,7 @@ or in an animation."><meta name="robots" content="noindex"><!-- mathjax --><scri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,12 +77,12 @@ or in an animation.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">subsetControl</span><span class="op">(</span>value <span class="op">=</span> <span class="fl">1</span>, <span class="va">subsets</span>, subscenes <span class="op">=</span> <span class="cn">NULL</span>,
-                         fullset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">union</span>, <span class="va">subsets</span><span class="op">)</span>,
-                         accumulate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="fu">propertyControl</span><span class="op">(</span>value <span class="op">=</span> <span class="fl">0</span>, <span class="va">entries</span>, <span class="va">properties</span>, 
-                objids <span class="op">=</span> <span class="fu"><a href="tagged3d.html">tagged3d</a></span><span class="op">(</span><span class="va">tags</span><span class="op">)</span>, <span class="va">tags</span>, values <span class="op">=</span> <span class="cn">NULL</span>,
-                param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, interp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">subsetControl</span><span class="op">(</span>value <span class="op">=</span> <span class="fl">1</span>, <span class="va">subsets</span>, subscenes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                         fullset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">union</span>, <span class="va">subsets</span><span class="op">)</span>,</span>
+<span>                         accumulate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">propertyControl</span><span class="op">(</span>value <span class="op">=</span> <span class="fl">0</span>, <span class="va">entries</span>, <span class="va">properties</span>, </span>
+<span>                objids <span class="op">=</span> <span class="fu"><a href="tagged3d.html">tagged3d</a></span><span class="op">(</span><span class="va">tags</span><span class="op">)</span>, <span class="va">tags</span>, values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, interp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,30 +90,40 @@ or in an animation.</p>
     <dl><dt>value</dt>
 <dd><p>The value to use for input (typically <code>input$value</code>
   in a Shiny app.)</p></dd>
-<dt>subsets</dt>
+
+  <dt>subsets</dt>
 <dd><p>A list of vectors of object identifiers; the value will
   choose among them.</p></dd>
-<dt>fullset</dt>
+
+  <dt>fullset</dt>
 <dd><p>Objects in the subscene which are not in <code>fullset</code>
   will not be touched.</p></dd>
-<dt>subscenes</dt>
+
+  <dt>subscenes</dt>
 <dd><p>The subscenes to be controlled.  If <code>NULL</code>, the
   root subscene.</p></dd>
-<dt>accumulate</dt>
+
+  <dt>accumulate</dt>
 <dd><p>If <code>TRUE</code>, the subsets will accumulate (by union)
   as the value increases.</p></dd>
-<dt>entries, properties, objids</dt>
+
+  <dt>entries, properties, objids</dt>
 <dd><p>Which properties to set.</p></dd>
-<dt>tags</dt>
+
+  <dt>tags</dt>
 <dd><p>Select objects with matching tags.  Ignored
 if <code>objids</code> is specified.</p></dd>
-<dt>values</dt>
+
+  <dt>values</dt>
 <dd><p>Values to set.</p></dd>
-<dt>param</dt>
+
+  <dt>param</dt>
 <dd><p>Parameter values corresponding to the rows of <code>value</code></p></dd>
-<dt>interp</dt>
+
+  <dt>interp</dt>
 <dd><p>Whether to use linear interpolation between <code>param</code>
   values</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -133,7 +143,9 @@ in <code>param</code>.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>These functions return controller data in a list of class
+    
+
+<p>These functions return controller data in a list of class
 <code>"rglControl"</code>.</p>
     </div>
     <div id="author">
@@ -160,7 +172,7 @@ for linking using the <span class="pkg">crosstalk</span> package.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

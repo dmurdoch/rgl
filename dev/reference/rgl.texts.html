@@ -18,7 +18,7 @@ should normally use the high-level function text3d instead."><meta name="robots"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,11 +77,11 @@ should normally use the high-level function <code><a href="texts.html">text3d</a
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.texts</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">text</span>, 
-          adj <span class="op">=</span> <span class="fl">0.5</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, offset <span class="op">=</span> <span class="fl">0.5</span>, 
-          family <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"family"</span><span class="op">)</span>, font <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"font"</span><span class="op">)</span>, 
-          cex <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"cex"</span><span class="op">)</span>, useFreeType <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"useFreeType"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
-<span class="fu">rglFonts</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.texts</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">text</span>, </span>
+<span>          adj <span class="op">=</span> <span class="fl">0.5</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, offset <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span>          family <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"family"</span><span class="op">)</span>, font <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"font"</span><span class="op">)</span>, </span>
+<span>          cex <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"cex"</span><span class="op">)</span>, useFreeType <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"useFreeType"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">rglFonts</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,27 +90,37 @@ should normally use the high-level function <code><a href="texts.html">text3d</a
 <dd><p>point coordinates.  Any reasonable way of defining the
     coordinates is acceptable.  See the function <code><a href="https://rdrr.io/r/grDevices/xyz.coords.html" class="external-link">xyz.coords</a></code>
     for details.</p></dd>
-<dt>text</dt>
+
+  <dt>text</dt>
 <dd><p>text character vector to draw</p></dd>
-<dt>adj</dt>
+
+  <dt>adj</dt>
 <dd><p>one value specifying the horizontal adjustment, or two, 
               specifying horizontal and vertical adjustment respectively, or three, specifying adjustment in all
               three directions.</p></dd>
-<dt>pos</dt>
+
+  <dt>pos</dt>
 <dd><p>a position specifier for the text.  If specified, this
   overrides any <code>adj</code> value given. Values of 0, 1, 2, 3, 4, 5 and 6 respectively indicate positions on, below, to the left of, above, to the right of, in front of and behind the specified coordinates.</p></dd>
-<dt>offset</dt>
+
+  <dt>offset</dt>
 <dd><p>when <code>pos</code> is specified, this value gives the offset of the label from the specified coordinate in fractions of a character width.</p></dd>
-<dt> family </dt>
+
+  <dt> family </dt>
 <dd><p>A device-independent font family name, or ""</p></dd>
-<dt> font </dt>
+
+  <dt> font </dt>
 <dd><p>A numeric font number from 1 to 4</p></dd>
-<dt> cex </dt>
+
+  <dt> cex </dt>
 <dd><p>A numeric character expansion value</p></dd>
-<dt> useFreeType </dt>
+
+  <dt> useFreeType </dt>
 <dd><p>logical.  Should FreeType be used to draw text? (See details below.)</p></dd>
-<dt> ... </dt>
+
+  <dt> ... </dt>
 <dd><p>In <code>rgl.texts</code>, material properties; see <code><a href="material.html">rgl.material</a></code> for details.  In <code>rglFonts</code>, device dependent font definitions for use with FreeType.</p></dd>
+  
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -173,28 +183,32 @@ unsupported characters are used, an error will be thrown.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>rgl.texts</code> returns the object ID of the text object (or sprites, in case of <code>usePlotmath = TRUE</code>)
-invisibly.
-<code>rglFonts</code> returns the current set of font definitions.</p>
+    
+
+<p><code>rgl.texts</code> returns the object ID of the text object (or sprites, in case of <code>usePlotmath = TRUE</code>)
+invisibly.</p>
+
+
+<p><code>rglFonts</code> returns the current set of font definitions.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># These FreeType fonts are available from the Amaya project, and are not shipped</span></span>
-<span class="r-in"><span class="co"># with rgl.  You would normally install them to the rgl/fonts directory</span></span>
-<span class="r-in"><span class="co"># and use fully qualified pathnames, e.g. </span></span>
-<span class="r-in"><span class="co"># system.file("fonts/FreeSerif.ttf", package = "rgl")</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">rglFonts</span><span class="op">(</span>serif <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FreeSerif.ttf"</span>, <span class="st">"FreeSerifBold.ttf"</span>, <span class="st">"FreeSerifItalic.ttf"</span>,</span>
-<span class="r-in">                 <span class="st">"FreeSerifBoldItalic.ttf"</span><span class="op">)</span>,</span>
-<span class="r-in">         sans  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FreeSans.ttf"</span>, <span class="st">"FreeSansBold.ttf"</span>, <span class="st">"FreeSansOblique.ttf"</span>,</span>
-<span class="r-in">                 <span class="st">"FreeSansBoldOblique.ttf"</span><span class="op">)</span>,</span>
-<span class="r-in">         mono  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FreeMono.ttf"</span>, <span class="st">"FreeMonoBold.ttf"</span>, <span class="st">"FreeMonoOblique.ttf"</span>,</span>
-<span class="r-in">                 <span class="st">"FreeMonoBoldOblique.ttf"</span><span class="op">)</span>,</span>
-<span class="r-in">         symbol<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ESSTIX10.TTF"</span>, <span class="st">"ESSTIX12.TTF"</span>, <span class="st">"ESSTIX9_.TTF"</span>, </span>
-<span class="r-in">                 <span class="st">"ESSTIX11.TTF"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span> </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># These FreeType fonts are available from the Amaya project, and are not shipped</span></span></span>
+<span class="r-in"><span><span class="co"># with rgl.  You would normally install them to the rgl/fonts directory</span></span></span>
+<span class="r-in"><span><span class="co"># and use fully qualified pathnames, e.g. </span></span></span>
+<span class="r-in"><span><span class="co"># system.file("fonts/FreeSerif.ttf", package = "rgl")</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">rglFonts</span><span class="op">(</span>serif <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FreeSerif.ttf"</span>, <span class="st">"FreeSerifBold.ttf"</span>, <span class="st">"FreeSerifItalic.ttf"</span>,</span></span>
+<span class="r-in"><span>                 <span class="st">"FreeSerifBoldItalic.ttf"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         sans  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FreeSans.ttf"</span>, <span class="st">"FreeSansBold.ttf"</span>, <span class="st">"FreeSansOblique.ttf"</span>,</span></span>
+<span class="r-in"><span>                 <span class="st">"FreeSansBoldOblique.ttf"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         mono  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FreeMono.ttf"</span>, <span class="st">"FreeMonoBold.ttf"</span>, <span class="st">"FreeMonoOblique.ttf"</span>,</span></span>
+<span class="r-in"><span>                 <span class="st">"FreeMonoBoldOblique.ttf"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         symbol<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ESSTIX10.TTF"</span>, <span class="st">"ESSTIX12.TTF"</span>, <span class="st">"ESSTIX9_.TTF"</span>, </span></span>
+<span class="r-in"><span>                 <span class="st">"ESSTIX11.TTF"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> </span></span>
 </code></pre></div>
     </div>
   </div>
@@ -209,7 +223,7 @@ invisibly.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

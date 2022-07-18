@@ -39,7 +39,7 @@ deletion of RGL scenes."><meta name="robots" content="noindex"><!-- mathjax --><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -119,12 +119,12 @@ deletion of RGL scenes.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">setupKnitr</span><span class="op">(</span>autoprint <span class="op">=</span> <span class="cn">FALSE</span>,
-           rgl.newwindow <span class="op">=</span> <span class="va">autoprint</span>,
-           rgl.closewindows <span class="op">=</span> <span class="va">autoprint</span><span class="op">)</span>
-<span class="fu">hook_rgl</span><span class="op">(</span><span class="va">before</span>, <span class="va">options</span>, <span class="va">envir</span><span class="op">)</span>
-<span class="fu">hook_webgl</span><span class="op">(</span><span class="va">before</span>, <span class="va">options</span>, <span class="va">envir</span><span class="op">)</span>
-<span class="fu">hook_rglchunk</span><span class="op">(</span><span class="va">before</span>, <span class="va">options</span>, <span class="va">envir</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">setupKnitr</span><span class="op">(</span>autoprint <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>           rgl.newwindow <span class="op">=</span> <span class="va">autoprint</span>,</span>
+<span>           rgl.closewindows <span class="op">=</span> <span class="va">autoprint</span><span class="op">)</span></span>
+<span><span class="fu">hook_rgl</span><span class="op">(</span><span class="va">before</span>, <span class="va">options</span>, <span class="va">envir</span><span class="op">)</span></span>
+<span><span class="fu">hook_webgl</span><span class="op">(</span><span class="va">before</span>, <span class="va">options</span>, <span class="va">envir</span><span class="op">)</span></span>
+<span><span class="fu">hook_rglchunk</span><span class="op">(</span><span class="va">before</span>, <span class="va">options</span>, <span class="va">envir</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="note">
@@ -151,11 +151,14 @@ in a code chunk if the example prints RGL objects.</p>
 <dd><p>If true, RGL commands
   automatically plot (with low level plots suppressed by
   the default value of the <code>fig.keep</code> chunk option.)</p></dd>
-<dt>rgl.newwindow, rgl.closewindows</dt>
+
+  <dt>rgl.newwindow, rgl.closewindows</dt>
 <dd><p>Default values
   for the <span class="pkg">knitr</span> chunk options.</p></dd>
-<dt>before, options, envir</dt>
+
+  <dt>before, options, envir</dt>
 <dd><p>Standard <span class="pkg">knitr</span> hook function arguments.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -185,7 +188,9 @@ display of plots.</p></li>
 </ul></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A string to be embedded into the output, or <code>NULL</code> if called
+    
+
+<p>A string to be embedded into the output, or <code>NULL</code> if called
 when no output is available.</p>
     </div>
     <div id="author">
@@ -207,7 +212,7 @@ duplicate source code from <span class="pkg">knitr</span>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

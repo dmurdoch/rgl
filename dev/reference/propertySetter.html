@@ -20,7 +20,7 @@ playwidget and related functions instead."><meta name="robots" content="noindex"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -81,26 +81,26 @@ using the obsolete <code>writeWebGL</code>.  Use
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">propertySlider</span><span class="op">(</span>setter <span class="op">=</span> <span class="va">propertySetter</span>,
-             minS <span class="op">=</span> <span class="cn">NULL</span>, maxS <span class="op">=</span> <span class="cn">NULL</span>, step <span class="op">=</span> <span class="fl">1</span>, init <span class="op">=</span> <span class="cn">NULL</span>, 
-       <span class="va">labels</span>, 
-       id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"input"</span><span class="op">)</span><span class="op">)</span>, name <span class="op">=</span> <span class="va">id</span>,
-       outputid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">id</span>, <span class="st">"text"</span><span class="op">)</span>,
-       index <span class="op">=</span> <span class="cn">NULL</span>,
-       <span class="va">...</span><span class="op">)</span> 
-       
-<span class="fu">propertySetter</span><span class="op">(</span>values <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">entries</span>, <span class="va">properties</span>, <span class="va">objids</span>, prefixes <span class="op">=</span> <span class="st">""</span>,
-               param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>, interp <span class="op">=</span> <span class="cn">TRUE</span>, digits <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> 
-               
-<span class="fu">par3dinterpSetter</span><span class="op">(</span><span class="va">fn</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">steps</span>, <span class="va">subscene</span>, omitConstant <span class="op">=</span> <span class="cn">TRUE</span>, 
-                  rename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">matrixSetter</span><span class="op">(</span><span class="va">fns</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">steps</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="op">)</span>, 
-             matrix <span class="op">=</span> <span class="st">"userMatrix"</span>, omitConstant <span class="op">=</span> <span class="cn">TRUE</span>, prefix <span class="op">=</span> <span class="st">""</span>, <span class="va">...</span><span class="op">)</span> 
-             
-<span class="fu">vertexSetter</span><span class="op">(</span><span class="va">values</span>, vertices <span class="op">=</span> <span class="fl">1</span>, <span class="va">attributes</span>, <span class="va">objid</span>, prefix <span class="op">=</span> <span class="st">""</span>,
-       param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>, interp <span class="op">=</span> <span class="cn">TRUE</span>,
-       digits <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">propertySlider</span><span class="op">(</span>setter <span class="op">=</span> <span class="va">propertySetter</span>,</span>
+<span>             minS <span class="op">=</span> <span class="cn">NULL</span>, maxS <span class="op">=</span> <span class="cn">NULL</span>, step <span class="op">=</span> <span class="fl">1</span>, init <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>       <span class="va">labels</span>, </span>
+<span>       id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"input"</span><span class="op">)</span><span class="op">)</span>, name <span class="op">=</span> <span class="va">id</span>,</span>
+<span>       outputid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">id</span>, <span class="st">"text"</span><span class="op">)</span>,</span>
+<span>       index <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>       <span class="va">...</span><span class="op">)</span> </span>
+<span>       </span>
+<span><span class="fu">propertySetter</span><span class="op">(</span>values <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">entries</span>, <span class="va">properties</span>, <span class="va">objids</span>, prefixes <span class="op">=</span> <span class="st">""</span>,</span>
+<span>               param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>, interp <span class="op">=</span> <span class="cn">TRUE</span>, digits <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> </span>
+<span>               </span>
+<span><span class="fu">par3dinterpSetter</span><span class="op">(</span><span class="va">fn</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">steps</span>, <span class="va">subscene</span>, omitConstant <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                  rename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">matrixSetter</span><span class="op">(</span><span class="va">fns</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">steps</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>             matrix <span class="op">=</span> <span class="st">"userMatrix"</span>, omitConstant <span class="op">=</span> <span class="cn">TRUE</span>, prefix <span class="op">=</span> <span class="st">""</span>, <span class="va">...</span><span class="op">)</span> </span>
+<span>             </span>
+<span><span class="fu">vertexSetter</span><span class="op">(</span><span class="va">values</span>, vertices <span class="op">=</span> <span class="fl">1</span>, <span class="va">attributes</span>, <span class="va">objid</span>, prefix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>       param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>, interp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>       digits <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -108,67 +108,91 @@ using the obsolete <code>writeWebGL</code>.  Use
     <dl><dt>setter</dt>
 <dd><p>A function to write Javascript code, or its output, or
    a list containing several of these.</p></dd>
-<dt>minS, maxS, step, init</dt>
+
+  <dt>minS, maxS, step, init</dt>
 <dd><p>Slider values to be displayed. Reasonable defaults are used if missing.</p></dd>
-<dt>labels</dt>
+
+  <dt>labels</dt>
 <dd><p>Labels to display for each slider value.  The
   defaults are calculated using internal variables.  If <code>NULL</code>,
   no labels will be shown.</p></dd>
-<dt>id</dt>
+
+  <dt>id</dt>
 <dd><p>The <code>id</code> of the input control that will be generated.</p></dd>
-<dt>name</dt>
+
+  <dt>name</dt>
 <dd><p>The name of the input control that will be generated.</p></dd>
-<dt>outputid</dt>
+
+  <dt>outputid</dt>
 <dd><p>The <code>id</code> of the output control that
 will display the slider value, or <code>NULL</code> for none.</p></dd>
-<dt>index</dt>
+
+  <dt>index</dt>
 <dd><p>The 1-based index of this slider:  it controls the
   corresponding entry in an indexed setter such as <code>matrixSetter</code>.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Other parameters.</p></dd>
-<dt>values</dt>
+
+  <dt>values</dt>
 <dd><p>An array of values; rows correspond to slider positions.  Alternatively, <code>NULL</code>; the generated function takes a
   single value or array of values and applies them directly.</p></dd>
-<dt>entries, properties, objids, prefixes</dt>
+
+  <dt>entries, properties, objids, prefixes</dt>
 <dd><p>Vectors describing
   the columns of <code>values</code>.</p></dd>
-<dt>param</dt>
+
+  <dt>param</dt>
 <dd><p>Parameter values corresponding to each row of <code>values</code>.</p></dd>
-<dt>interp</dt>
+
+  <dt>interp</dt>
 <dd><p>Whether to interpolate values.  If <code>FALSE</code>, 
   the Javascript function will expect non-negative integer values.
   Ignored if <code>values</code> is <code>NULL</code>.</p></dd>
-<dt>digits</dt>
+
+  <dt>digits</dt>
 <dd><p>How many significant digits to emit in the Javascript code.</p></dd>
-<dt>fn</dt>
+
+  <dt>fn</dt>
 <dd><p>A function returned from <code><a href="par3dinterp.html">par3dinterp</a></code>.</p></dd>
-<dt>from, to, steps</dt>
+
+  <dt>from, to, steps</dt>
 <dd><p>Values where <code>fn</code> should be evaluated.</p></dd>
-<dt>subscene</dt>
+
+  <dt>subscene</dt>
 <dd><p>Which subscene's properties should be modified?</p></dd>
-<dt>omitConstant</dt>
+
+  <dt>omitConstant</dt>
 <dd><p>If <code>TRUE</code>, do not set values that are
   constant across the range.</p></dd>
-<dt>rename</dt>
+
+  <dt>rename</dt>
 <dd><p>A named character vector of names of Javascript properties
   to modify.</p></dd>
-<dt>fns</dt>
+
+  <dt>fns</dt>
 <dd><p>A list containing functions returned from 
     <code><a href="par3dinterp.html">par3dinterp</a></code>.</p></dd>
-<dt>matrix</dt>
+
+  <dt>matrix</dt>
 <dd><p>A character string giving the Javascript property
     name of the matrix to modify.</p></dd>
-<dt>prefix</dt>
+
+  <dt>prefix</dt>
 <dd><p>The prefix of the scene containing <code>matrix</code>.</p></dd>
-<dt>vertices</dt>
+
+  <dt>vertices</dt>
 <dd><p>A vector of vertex numbers (1-based) within 
   an object.</p></dd>
-<dt>attributes</dt>
+
+  <dt>attributes</dt>
 <dd><p>A vector of attributes of a vertex, 
   from <code>c("x", "y", "z", "r", "g", "b", "a", "nx", "ny", "nz",
                "radius", "ox", "oy", "oz", "ts", "tt")</code>.</p></dd>
-<dt>objid</dt>
+
+  <dt>objid</dt>
 <dd><p>The object containing the vertices to be modified.</p></dd>
+
 </dl></div>
     <div id="author">
     <h2>Author</h2>
@@ -191,7 +215,7 @@ will display the slider value, or <code>NULL</code> for none.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

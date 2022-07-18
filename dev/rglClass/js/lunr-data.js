@@ -322,6 +322,7 @@ window.lunrData = {
           "code",
           "doblend",
           "function",
+          "objid",
           "rglwidgetclass#doblend"
         ],
         "rglwidgetClass.html#doClipping": [
@@ -10103,7 +10104,7 @@ window.lunrData = {
                       "docs": {
                         "rglwidgetClass.html#doBlending": {
                           "ref": "rglwidgetClass.html#doBlending",
-                          "tf": 700
+                          "tf": 683.3333333333334
                         }
                       }
                     }
@@ -17047,7 +17048,7 @@ window.lunrData = {
                   "docs": {
                     "rglwidgetClass.html#doBlending": {
                       "ref": "rglwidgetClass.html#doBlending",
-                      "tf": 66.66666666666666
+                      "tf": 49.99999999999999
                     }
                   }
                 }
@@ -17862,6 +17863,17 @@ window.lunrData = {
                           "tf": 7.142857142857142
                         }
                       }
+                    }
+                  }
+                }
+              },
+              "i": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "rglwidgetClass.html#doBlending": {
+                      "ref": "rglwidgetClass.html#doBlending",
+                      "tf": 33.33333333333333
                     }
                   }
                 }
@@ -20151,7 +20163,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 1521
+      "length": 1522
     },
     "corpusTokens": [
       "0",
@@ -20499,6 +20511,7 @@ window.lunrData = {
       "obj",
       "object",
       "object'",
+      "objid",
       "obsolet",
       "offset",
       "old",
@@ -21195,7 +21208,7 @@ window.lunrData = {
     "rglwidgetClass.html#doBlending": {
       "id": "rglwidgetClass.html#doBlending",
       "kind": "function",
-      "title": "doBlending( blend )",
+      "title": "doBlending( blend, objid )",
       "longname": "rglwidgetClass#doBlending",
       "name": "doBlending",
       "tags": "rglwidgetClass#doBlending doBlending",

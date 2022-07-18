@@ -18,7 +18,7 @@ in base graphics."><meta name="robots" content="noindex"><!-- mathjax --><script
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,9 +77,9 @@ in base graphics.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">identify3d</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, 
-  plot <span class="op">=</span> <span class="cn">TRUE</span>, adj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.5</span><span class="op">)</span>, tolerance <span class="op">=</span> <span class="fl">20</span>, 
-  buttons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"middle"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">identify3d</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, </span>
+<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>, adj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.5</span><span class="op">)</span>, tolerance <span class="op">=</span> <span class="fl">20</span>, </span>
+<span>  buttons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"middle"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -88,24 +88,31 @@ in base graphics.</p>
 <dd><p>coordinates of points in a scatter plot.  Alternatively, any
     object which defines coordinates (see <code><a href="https://rdrr.io/r/grDevices/xyz.coords.html" class="external-link">xyz.coords</a></code>) 
     can be given as <code>x</code>, and <code>y</code> and <code>z</code> left missing.</p></dd>
-<dt>labels</dt>
+
+  <dt>labels</dt>
 <dd><p>an optional character vector giving labels for the
     points.  Will be coerced using <code><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></code>, and
     recycled if necessary to the length of <code>x</code>.</p></dd>
-<dt>n</dt>
+
+  <dt>n</dt>
 <dd><p>the maximum number of points to be identified.</p></dd>
-<dt>plot</dt>
+
+  <dt>plot</dt>
 <dd><p>logical: if <code>plot</code> is <code>TRUE</code>, the labels are
     printed near the points and if <code>FALSE</code> they are omitted.</p></dd>
-<dt>adj</dt>
+
+  <dt>adj</dt>
 <dd><p>numeric vector to use as <code>adj</code> parameter to 
     <code><a href="texts.html">text3d</a></code> when plotting the labels.</p></dd>
-<dt>tolerance</dt>
+
+  <dt>tolerance</dt>
 <dd><p>the maximal distance (in pixels) 
     for the pointer to be ‘close enough’ to a point.</p></dd>
-<dt>buttons</dt>
+
+  <dt>buttons</dt>
 <dd><p>a length 1 or 2 character vector giving the buttons
     to use for selection and quitting.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -115,7 +122,9 @@ escape key, but the result will be lost if escape is used.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of selected indices.</p>
+    
+
+<p>A vector of selected indices.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -138,7 +147,7 @@ escape key, but the result will be lost if escape is used.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

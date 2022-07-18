@@ -18,7 +18,7 @@ functions should not normally be called by users."><meta name="robots" content="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,11 +77,11 @@ functions should not normally be called by users.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.points</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span>
-<span class="fu">rgl.lines</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span>
-<span class="fu">rgl.linestrips</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
-<span class="fu">rgl.triangles</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, normals <span class="op">=</span> <span class="cn">NULL</span>, texcoords <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span>
-<span class="fu">rgl.quads</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, normals <span class="op">=</span> <span class="cn">NULL</span>, texcoords <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.points</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span></span>
+<span><span class="fu">rgl.lines</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span></span>
+<span><span class="fu">rgl.linestrips</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">rgl.triangles</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, normals <span class="op">=</span> <span class="cn">NULL</span>, texcoords <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span></span>
+<span><span class="fu">rgl.quads</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, normals <span class="op">=</span> <span class="cn">NULL</span>, texcoords <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span> <span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,12 +90,16 @@ functions should not normally be called by users.</p>
 <dd><p>coordinates.  Any reasonable way of defining the
     coordinates is acceptable.  See the function <code><a href="https://rdrr.io/r/grDevices/xyz.coords.html" class="external-link">xyz.coords</a></code>
     for details.</p></dd>
-<dt>normals</dt>
+
+  <dt>normals</dt>
 <dd><p>Normals at each point.</p></dd>
-<dt>texcoords</dt>
+
+  <dt>texcoords</dt>
 <dd><p>Texture coordinates at each point.</p></dd>
-<dt> ... </dt>
+
+  <dt> ... </dt>
 <dd><p>Material properties (see <code><a href="material.html">rgl.material</a></code> for details) or <code>indices</code> (see the note below).</p></dd>
+  
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -140,8 +144,13 @@ to be rendered properly.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>Each primitive function returns the integer object ID of the shape that
-   was added to the scene.  These can be passed to <code><a href="scene.html">pop3d</a></code>   to remove the object from the scene.</p>
+    
+
+<p>Each primitive function returns the integer object ID of the shape that
+   was added to the scene.  These can be passed to <code><a href="scene.html">pop3d</a></code></p>
+
+
+<p>to remove the object from the scene.</p>
     </div>
 
   </div>
@@ -156,7 +165,7 @@ to be rendered properly.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

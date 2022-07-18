@@ -18,7 +18,7 @@ point or region in the scene, then reports on all the vertices in or near that s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -85,16 +85,21 @@ point or region in the scene, then reports on all the vertices in or near that s
     <h2>Arguments</h2>
     <dl><dt>objects</dt>
 <dd><p>A vector of object id values to use for the search.</p></dd>
-<dt>value</dt>
+
+  <dt>value</dt>
 <dd><p>If <code>TRUE</code>, return the coordinates of the points; otherwise, return
 their indices.</p></dd>
-<dt>closest</dt>
+
+  <dt>closest</dt>
 <dd><p>If <code>TRUE</code>, return the points closest to the selection of no points are
 exactly within it.</p></dd>
-<dt>multiple</dt>
+
+  <dt>multiple</dt>
 <dd><p>If <code>TRUE</code> or a function, do multiple selections.  See the Details below.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Other parameters to pass to <code><a href="select3d.html">select3d</a></code>.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -116,15 +121,22 @@ stop the process.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>If <code>value</code> is <code>TRUE</code>, a 3-column matrix giving the coordinates of the 
+    
+
+<p>If <code>value</code> is <code>TRUE</code>, a 3-column matrix giving the coordinates of the 
 selected points.  All rows in the matrix will be unique even if multiple vertices
-have the same coordinates.
-If <code>value</code> is <code>FALSE</code>, a 2-column matrix containing columns:</p>
+have the same coordinates.</p>
+
+
+<p>If <code>value</code> is <code>FALSE</code>, a 2-column matrix containing columns:</p>
 <dl><dt>id</dt>
 <dd><p>The object id containing the point.</p></dd>
+
 <dt>index</dt>
 <dd><p>The index of the point within <code><a href="attributes.html">rgl.attrib</a>(id, "vertices")</code>.
 If multiple points have the same coordinates, all indices will be returned.</p></dd>
+
+
 </dl></div>
     <div id="note">
     <h2>Note</h2>
@@ -143,28 +155,28 @@ will count as a miss for all of the triangle's vertices.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span> <span class="va">xyz</span> <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="co"># Click near a point to select it and put a sphere there.</span></span>
-<span class="r-in">  <span class="co"># Press ESC to quit...</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># This version returns coordinates</span></span>
-<span class="r-in">  <span class="fu">selectpoints3d</span><span class="op">(</span><span class="va">ids</span><span class="op">[</span><span class="st">"data"</span><span class="op">]</span>, </span>
-<span class="r-in">     multiple <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">        <span class="fu"><a href="spheres.html">spheres3d</a></span><span class="op">(</span><span class="va">x</span>, color <span class="op">=</span> <span class="st">"red"</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>, radius <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
-<span class="r-in">        <span class="cn">TRUE</span></span>
-<span class="r-in">     <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># This one returns indices</span></span>
-<span class="r-in">  <span class="fu">selectpoints3d</span><span class="op">(</span><span class="va">ids</span><span class="op">[</span><span class="st">"data"</span><span class="op">]</span>, value <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">     multiple <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ids</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">        <span class="fu"><a href="spheres.html">spheres3d</a></span><span class="op">(</span><span class="va">xyz</span><span class="op">[</span><span class="va">ids</span><span class="op">[</span>, <span class="st">"index"</span><span class="op">]</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, color <span class="op">=</span> <span class="st">"blue"</span>, </span>
-<span class="r-in">                  alpha <span class="op">=</span> <span class="fl">0.3</span>, radius <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
-<span class="r-in">        <span class="cn">TRUE</span></span>
-<span class="r-in">     <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span> <span class="va">xyz</span> <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># Click near a point to select it and put a sphere there.</span></span></span>
+<span class="r-in"><span>  <span class="co"># Press ESC to quit...</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># This version returns coordinates</span></span></span>
+<span class="r-in"><span>  <span class="fu">selectpoints3d</span><span class="op">(</span><span class="va">ids</span><span class="op">[</span><span class="st">"data"</span><span class="op">]</span>, </span></span>
+<span class="r-in"><span>     multiple <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="spheres.html">spheres3d</a></span><span class="op">(</span><span class="va">x</span>, color <span class="op">=</span> <span class="st">"red"</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>, radius <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>     <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># This one returns indices</span></span></span>
+<span class="r-in"><span>  <span class="fu">selectpoints3d</span><span class="op">(</span><span class="va">ids</span><span class="op">[</span><span class="st">"data"</span><span class="op">]</span>, value <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>     multiple <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ids</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="spheres.html">spheres3d</a></span><span class="op">(</span><span class="va">xyz</span><span class="op">[</span><span class="va">ids</span><span class="op">[</span>, <span class="st">"index"</span><span class="op">]</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, color <span class="op">=</span> <span class="st">"blue"</span>, </span></span>
+<span class="r-in"><span>                  alpha <span class="op">=</span> <span class="fl">0.3</span>, radius <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>     <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id index</span>
 </code></pre></div>
     </div>
@@ -180,7 +192,7 @@ will count as a miss for all of the triangle's vertices.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

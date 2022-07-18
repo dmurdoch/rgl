@@ -19,7 +19,7 @@ point or segment components."><meta name="robots" content="noindex"><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -79,22 +79,25 @@ point or segment components.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-<span class="co"># S3 method for default</span>
-<span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
-<span class="co"># S3 method for mesh3d</span>
-<span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="co"># S3 method for mesh3d</span></span>
+<span><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>An object from which to create a triangular mesh object.</p></dd>
-<dt>drop</dt>
+
+  <dt>drop</dt>
 <dd><p>If <code>TRUE</code>, drop any point or segment components.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Ignored in the <code>mesh3d</code> method, passed to 
 <code>as.mesh3d</code> in the default method.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -110,7 +113,9 @@ for meshes of triangles.  That class is no longer used:
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>"mesh3d"</code> object containing no quads.  If <code>drop = TRUE</code>, it will only contain triangles.</p>
+    
+
+<p>A <code>"mesh3d"</code> object containing no quads.  If <code>drop = TRUE</code>, it will only contain triangles.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -123,10 +128,10 @@ for meshes of triangles.  That class is no longer used:
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="cube3d.html">cuboctahedron3d</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span>             <span class="co"># has quads and triangles</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="cube3d.html">cuboctahedron3d</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span>             <span class="co"># has quads and triangles</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  mesh3d object with 12 vertices, 8 triangles, 6 quads.</span>
-<span class="r-in"><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="co"># has only triangles</span></span>
+<span class="r-in"><span><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="co"># has only triangles</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  mesh3d object with 12 vertices, 20 triangles.</span>
 </code></pre></div>
     </div>
@@ -142,7 +147,7 @@ for meshes of triangles.  That class is no longer used:
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

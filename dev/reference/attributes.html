@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -75,15 +75,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.attrib</span><span class="op">(</span><span class="va">id</span>, <span class="va">attrib</span>, first <span class="op">=</span> <span class="fl">1</span>, 
-  last <span class="op">=</span> <span class="fu"><a href="rgl.attrib.info.html">rgl.attrib.count</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">attrib</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.attrib</span><span class="op">(</span><span class="va">id</span>, <span class="va">attrib</span>, first <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>  last <span class="op">=</span> <span class="fu"><a href="rgl.attrib.info.html">rgl.attrib.count</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">attrib</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>id</dt>
 <dd><p>A shape identifier, as returned by <code><a href="scene.html">ids3d</a></code>.</p></dd>
-<dt>attrib</dt>
+
+  <dt>attrib</dt>
 <dd><p>An attribute of a shape.  Currently supported: one of <br><code>"vertices"</code>, <code>"normals"</code>, <code>"colors"</code>, <code>"texcoords"</code>, 
 <code>"dim"</code>, <code>"texts"</code>, <code>"cex"</code>, <code>"adj"</code>, <code>"radii"</code>, 
 <code>"centers"</code>, <code>"ids"</code>, <code>"usermatrix"</code>, <code>"types"</code>,
@@ -91,8 +92,10 @@
 <code>"pos"</code><br>
 or unique prefixes
 to one of those.</p></dd>
-<dt>first, last</dt>
+
+  <dt>first, last</dt>
 <dd><p>Specify these to retrieve only those rows of the result.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -106,9 +109,22 @@ and columns in the rectangular grid; <code>"cex"</code>, <code>"adj"</code>,
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>rgl.attrib</code>returns the values of the attribute.  Attributes
-are mostly real-valued, with the following sizes:</p><table class="table table"><tr><td><code>"vertices"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"normals"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"centers"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"colors"</code></td><td>4 values</td><td>r, g, b, a</td></tr><tr><td><code>"texcoords"</code></td><td>2 values</td><td>s, t</td></tr><tr><td><code>"dim"</code></td><td>2 values</td><td>r, c</td></tr><tr><td><code>"cex"</code></td><td>1 value</td><td>cex</td></tr><tr><td><code>"adj"</code></td><td>2 values</td><td>x, y</td></tr><tr><td><code>"radii"</code></td><td>1 value</td><td>r</td></tr><tr><td><code>"ids"</code></td><td>1 value</td><td>id</td></tr><tr><td><code>"usermatrix"</code></td><td>4 values</td><td>x, y, z, w</td></tr><tr><td><code>"texts"</code></td><td>1 value</td><td>text</td></tr><tr><td><code>"types"</code></td><td>1 value</td><td>type</td></tr><tr><td><code>"flags"</code></td><td>1 value</td><td>flag</td></tr><tr><td><code>"family"</code></td><td>1 value</td><td>family</td></tr><tr><td><code>"font"</code></td><td>1 value</td><td>font</td></tr><tr><td><code>"pos"</code></td><td>1 value</td><td>pos</td></tr></table><p>The <code>"texts"</code>, <code>"types"</code> and <code>"family"</code>attributes are character-valued; the <code>"flags"</code>attribute is logical valued, with named rows.
-These are returned as matrices with the row count equal to the count for the attribute,
+    
+
+<p><code>rgl.attrib</code></p>
+
+
+<p>returns the values of the attribute.  Attributes
+are mostly real-valued, with the following sizes:</p><table class="table table"><tr><td><code>"vertices"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"normals"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"centers"</code></td><td>3 values</td><td>x, y, z</td></tr><tr><td><code>"colors"</code></td><td>4 values</td><td>r, g, b, a</td></tr><tr><td><code>"texcoords"</code></td><td>2 values</td><td>s, t</td></tr><tr><td><code>"dim"</code></td><td>2 values</td><td>r, c</td></tr><tr><td><code>"cex"</code></td><td>1 value</td><td>cex</td></tr><tr><td><code>"adj"</code></td><td>2 values</td><td>x, y</td></tr><tr><td><code>"radii"</code></td><td>1 value</td><td>r</td></tr><tr><td><code>"ids"</code></td><td>1 value</td><td>id</td></tr><tr><td><code>"usermatrix"</code></td><td>4 values</td><td>x, y, z, w</td></tr><tr><td><code>"texts"</code></td><td>1 value</td><td>text</td></tr><tr><td><code>"types"</code></td><td>1 value</td><td>type</td></tr><tr><td><code>"flags"</code></td><td>1 value</td><td>flag</td></tr><tr><td><code>"family"</code></td><td>1 value</td><td>family</td></tr><tr><td><code>"font"</code></td><td>1 value</td><td>font</td></tr><tr><td><code>"pos"</code></td><td>1 value</td><td>pos</td></tr></table><p>The <code>"texts"</code>, <code>"types"</code> and <code>"family"</code></p>
+
+
+<p>attributes are character-valued; the <code>"flags"</code></p>
+
+
+<p>attribute is logical valued, with named rows.</p>
+
+
+<p>These are returned as matrices with the row count equal to the count for the attribute,
 and the columns as listed above.</p>
     </div>
     <div id="author">
@@ -122,8 +138,8 @@ and the columns as listed above.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"s"</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">rgl.attrib</span><span class="op">(</span><span class="va">p</span><span class="op">[</span><span class="st">"data"</span><span class="op">]</span>, <span class="st">"vertices"</span>, last <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"s"</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">rgl.attrib</span><span class="op">(</span><span class="va">p</span><span class="op">[</span><span class="st">"data"</span><span class="op">]</span>, <span class="st">"vertices"</span>, last <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                x           y          z</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.2473408 -0.19579253 -0.7306377</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -1.1531678  0.56433702  1.1116332</span>
@@ -149,7 +165,7 @@ and the columns as listed above.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

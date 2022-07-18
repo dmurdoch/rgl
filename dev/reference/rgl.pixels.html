@@ -18,7 +18,7 @@ topmost window."><meta name="robots" content="noindex"><!-- mathjax --><script s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,18 +77,21 @@ topmost window.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.pixels</span><span class="op">(</span>component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span>, 
-        viewport <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"viewport"</span><span class="op">)</span>, top <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.pixels</span><span class="op">(</span>component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span>, </span>
+<span>        viewport <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"viewport"</span><span class="op">)</span>, top <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>component</dt>
 <dd><p>Which component(s)?</p></dd>
-<dt>viewport</dt>
+
+  <dt>viewport</dt>
 <dd><p>Lower left corner and size of desired region.</p></dd>
-<dt>top</dt>
+
+  <dt>top</dt>
 <dd><p>Whether to bring window to top before reading.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -100,7 +103,9 @@ definition used for the <code>GL_LUMINANCE</code> component in OpenGL.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector, matrix or array containing the desired components.  If one component
+    
+
+<p>A vector, matrix or array containing the desired components.  If one component
 is requested, a vector or matrix will be returned depending on the size of
 block requested (length 1 dimensions are dropped); if more, an array, whose last dimension
 is the list of components.</p>
@@ -118,7 +123,7 @@ a random dot stereogram and an anaglyph.</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">surface3d</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">surface3d</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; #</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; # volcano example taken from "persp"</span>
@@ -140,13 +145,13 @@ a random dot stereogram and an anaglyph.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; open3d()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  290 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  125 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; surface3d(x, y, z, color = col, back = "lines")</span>
-<span class="r-in"><span class="va">depth</span> <span class="op">&lt;-</span> <span class="fu">rgl.pixels</span><span class="op">(</span>component <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">depth</span> <span class="op">&lt;-</span> <span class="fu">rgl.pixels</span><span class="op">(</span>component <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Error reading component 'depth'</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">is.matrix</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span><span class="op">)</span> <span class="co"># Protect against empty or single pixel windows</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/graphics/contour.html" class="external-link">contour</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">is.matrix</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span><span class="op">)</span> <span class="co"># Protect against empty or single pixel windows</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/graphics/contour.html" class="external-link">contour</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="rgl.pixels-1.png" alt="" width="480" height="297"></span>
 </code></pre></div>
     </div>
@@ -162,7 +167,7 @@ a random dot stereogram and an anaglyph.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

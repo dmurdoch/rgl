@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -75,30 +75,38 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">view3d</span><span class="op">(</span> theta <span class="op">=</span> <span class="fl">0</span>, phi <span class="op">=</span> <span class="fl">15</span>, <span class="va">...</span><span class="op">)</span>
-<span class="fu">rgl.viewpoint</span><span class="op">(</span> theta <span class="op">=</span> <span class="fl">0</span>, phi <span class="op">=</span> <span class="fl">15</span>, fov <span class="op">=</span> <span class="fl">60</span>, zoom <span class="op">=</span> <span class="fl">1</span>, 
-        scale <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"scale"</span><span class="op">)</span>, interactive <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">userMatrix</span>, 
-        type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"userviewpoint"</span>, <span class="st">"modelviewpoint"</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">view3d</span><span class="op">(</span> theta <span class="op">=</span> <span class="fl">0</span>, phi <span class="op">=</span> <span class="fl">15</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">rgl.viewpoint</span><span class="op">(</span> theta <span class="op">=</span> <span class="fl">0</span>, phi <span class="op">=</span> <span class="fl">15</span>, fov <span class="op">=</span> <span class="fl">60</span>, zoom <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>        scale <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"scale"</span><span class="op">)</span>, interactive <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">userMatrix</span>, </span>
+<span>        type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"userviewpoint"</span>, <span class="st">"modelviewpoint"</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>theta, phi</dt>
 <dd><p>polar coordinates in degrees. <code>theta</code> rotates round the vertical axis. <code>phi</code> rotates round the horizontal axis.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>additional parameters to pass to <code>rgl.viewpoint</code></p></dd>
-<dt>fov</dt>
+
+  <dt>fov</dt>
 <dd><p>field-of-view angle in degrees</p></dd>
-<dt>zoom</dt>
+
+  <dt>zoom</dt>
 <dd><p>zoom factor</p></dd>
-<dt>scale</dt>
+
+  <dt>scale</dt>
 <dd><p>real length 3 vector specifying the rescaling to apply to each axis</p></dd>
-<dt>interactive</dt>
+
+  <dt>interactive</dt>
 <dd><p>logical, specifying if interactive navigation is allowed</p></dd>
-<dt>userMatrix</dt>
+
+  <dt>userMatrix</dt>
 <dd><p>4x4 matrix specifying user point of view</p></dd>
-<dt>type</dt>
+
+  <dt>type</dt>
 <dd><p>which viewpoint to set?</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -134,17 +142,17 @@ sets both, but the <code>type</code> argument can be used to limit the effect.</
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># animated round trip tour for 10 seconds</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="rgl.open.html">rgl.open</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="shade3d.html">shade3d</a></span><span class="op">(</span><span class="fu"><a href="cube3d.html">oh3d</a></span><span class="op">(</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
-<span class="r-in"><span class="kw">while</span> <span class="op">(</span><span class="op">(</span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fl">36</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">start</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">360</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu">rgl.viewpoint</span><span class="op">(</span><span class="va">i</span>, <span class="va">i</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span>; </span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># animated round trip tour for 10 seconds</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="rgl.open.html">rgl.open</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="shade3d.html">shade3d</a></span><span class="op">(</span><span class="fu"><a href="cube3d.html">oh3d</a></span><span class="op">(</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="kw">while</span> <span class="op">(</span><span class="op">(</span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fl">36</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">start</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">360</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">rgl.viewpoint</span><span class="op">(</span><span class="va">i</span>, <span class="va">i</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span>; </span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -159,7 +167,7 @@ sets both, but the <code>type</code> argument can be used to limit the effect.</
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -19,7 +19,7 @@ the window afterwards."><meta name="robots" content="noindex"><!-- mathjax --><s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -79,10 +79,10 @@ the window afterwards.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">expect_known_scene</span><span class="op">(</span><span class="va">name</span>, 
-                   close <span class="op">=</span> <span class="cn">TRUE</span>, 
-                   file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"testdata/"</span>, <span class="va">name</span>, <span class="st">".rds"</span><span class="op">)</span>,
-                   <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">expect_known_scene</span><span class="op">(</span><span class="va">name</span>, </span>
+<span>                   close <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                   file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"testdata/"</span>, <span class="va">name</span>, <span class="st">".rds"</span><span class="op">)</span>,</span>
+<span>                   <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,12 +90,16 @@ the window afterwards.</p>
     <dl><dt>name</dt>
 <dd><p>By default, the base name of the file to save results in.
 Not used if <code>file</code> is specified.</p></dd>
-<dt>close</dt>
+
+  <dt>close</dt>
 <dd><p>Whether to close the <span class="pkg">rgl</span> window after the comparison.</p></dd>
-<dt>file</dt>
+
+  <dt>file</dt>
 <dd><p>The file in which to save the result.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Other arguments which will be passed to <code><a href="https://testthat.r-lib.org/reference/expect_known_output.html" class="external-link">expect_known_value</a></code>.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -110,17 +114,19 @@ for the duration of the call, so it will work in <span class="pkg">testthat</spa
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>A value describing the changes to the saved object,
+    
+
+<p>A value describing the changes to the saved object,
 suitable for use in <code><a href="https://testthat.r-lib.org/reference/test_that.html" class="external-link">test_that</a>()</code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># These lines can be included in testthat::test_that() code.</span></span>
-<span class="r-in"><span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">expect_known_scene</span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># These lines can be included in testthat::test_that() code.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">expect_known_scene</span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -135,7 +141,7 @@ suitable for use in <code><a href="https://testthat.r-lib.org/reference/test_tha
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

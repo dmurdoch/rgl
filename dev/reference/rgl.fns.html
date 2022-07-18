@@ -18,7 +18,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,45 +77,57 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.abclines</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
-<span class="fu">rgl.planes</span><span class="op">(</span><span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, d <span class="op">=</span> <span class="fl">0</span>, <span class="va">...</span><span class="op">)</span>
-<span class="fu">rgl.clipplanes</span><span class="op">(</span><span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, d <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-<span class="fu">rgl.sprites</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, radius <span class="op">=</span> <span class="fl">1</span>, 
-            shapes <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">userMatrix</span>, fixedSize <span class="op">=</span> <span class="cn">FALSE</span>,
-            adj <span class="op">=</span> <span class="fl">0.5</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, offset <span class="op">=</span> <span class="fl">0.25</span>, 
-            rotating <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
-<span class="fu">rgl.spheres</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">radius</span>, fastTransparency <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-<span class="fu">rgl.clear</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, subscene <span class="op">=</span> <span class="fl">0</span> <span class="op">)</span>
-<span class="fu">rgl.pop</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, id <span class="op">=</span> <span class="fl">0</span>, tag <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span>  
-<span class="fu">rgl.ids</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, subscene <span class="op">=</span> <span class="cn">NA</span>, tags <span class="op">=</span> <span class="cn">FALSE</span> <span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.abclines</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">rgl.planes</span><span class="op">(</span><span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, d <span class="op">=</span> <span class="fl">0</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">rgl.clipplanes</span><span class="op">(</span><span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, d <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="fu">rgl.sprites</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, radius <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>            shapes <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">userMatrix</span>, fixedSize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>            adj <span class="op">=</span> <span class="fl">0.5</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, offset <span class="op">=</span> <span class="fl">0.25</span>, </span>
+<span>            rotating <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">rgl.spheres</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">radius</span>, fastTransparency <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">rgl.clear</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, subscene <span class="op">=</span> <span class="fl">0</span> <span class="op">)</span></span>
+<span><span class="fu">rgl.pop</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, id <span class="op">=</span> <span class="fl">0</span>, tag <span class="op">=</span> <span class="cn">NULL</span> <span class="op">)</span>  </span>
+<span><span class="fu">rgl.ids</span><span class="op">(</span> type <span class="op">=</span> <span class="st">"shapes"</span>, subscene <span class="op">=</span> <span class="cn">NA</span>, tags <span class="op">=</span> <span class="cn">FALSE</span> <span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x, y, z</dt>
 <dd><p>Coordinates of points</p></dd>
-<dt>a, b, c</dt>
+ 
+  <dt>a, b, c</dt>
 <dd><p>Coordinates of the direction vectors for the lines,
 or normals for the planes.</p></dd>
-<dt>d</dt>
+
+  <dt>d</dt>
 <dd><p>Plane offset.</p></dd>
-<dt>radius</dt>
+
+  <dt>radius</dt>
 <dd><p>Size of sprites or spheres.</p></dd>
-<dt>fixedSize, rotating</dt>
+
+  <dt>fixedSize, rotating</dt>
 <dd><p>Fixed size, changing orientation.</p></dd>
-<dt>fastTransparency</dt>
+
+  <dt>fastTransparency</dt>
 <dd><p>Sphere drawing strategy.</p></dd>
-<dt>type, id, subscene</dt>
+
+  <dt>type, id, subscene</dt>
 <dd><p>Selecting objects.</p></dd>
-<dt>adj, pos, offset</dt>
+
+  <dt>adj, pos, offset</dt>
 <dd><p>Positioning.</p></dd>
-<dt>tag</dt>
+
+  <dt>tag</dt>
 <dd><p>Select objects with material property
   <code>tag</code> in this vector.</p></dd>
-<dt>tags</dt>
+
+  <dt>tags</dt>
 <dd><p>Whether to return tags.</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Material properties.</p></dd>
+
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -134,7 +146,7 @@ or normals for the planes.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

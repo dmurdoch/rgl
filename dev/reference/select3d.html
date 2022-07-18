@@ -18,7 +18,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,25 +77,30 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.select3d</span><span class="op">(</span>button <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"left"</span>, <span class="st">"middle"</span>, <span class="st">"right"</span><span class="op">)</span>,
-             dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="va">dev</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">select3d</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-<span class="fu">selectionFunction3d</span><span class="op">(</span><span class="va">proj</span>, region <span class="op">=</span> <span class="va">proj</span><span class="op">$</span><span class="va">region</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.select3d</span><span class="op">(</span>button <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"left"</span>, <span class="st">"middle"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
+<span>             dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="va">dev</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">select3d</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">selectionFunction3d</span><span class="op">(</span><span class="va">proj</span>, region <span class="op">=</span> <span class="va">proj</span><span class="op">$</span><span class="va">region</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt> button </dt>
 <dd><p>Which button to use for selection.</p></dd>
-<dt> dev, subscene</dt>
+
+  <dt> dev, subscene</dt>
 <dd><p>The RGL device and subscene to work with</p></dd>
-<dt> ... </dt>
+
+  <dt> ... </dt>
 <dd><p>Button argument to pass to <code>rgl.select3d</code></p></dd>
-<dt>proj</dt>
+
+  <dt>proj</dt>
 <dd><p>An object returned from <code><a href="rgl.user2window.html">rgl.projection</a></code>
   containing details of the current projection.</p></dd>
-<dt>region</dt>
+
+  <dt>region</dt>
 <dd><p>Corners of a rectangular region in the display.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -112,10 +117,15 @@ remain the same, though no longer corresponding to a rectangle on the screen.</p
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>All of these return a function <code>f(x, y, z)</code> which tests whether each
+    
+
+<p>All of these return a function <code>f(x, y, z)</code> which tests whether each
 of the points <code>(x, y, z)</code> is in the selected region, returning
 a logical vector.  This function accepts input in a wide
-variety of formats as it uses <code><a href="https://rdrr.io/r/grDevices/xyz.coords.html" class="external-link">xyz.coords</a></code>to interpret its parameters.</p>
+variety of formats as it uses <code><a href="https://rdrr.io/r/grDevices/xyz.coords.html" class="external-link">xyz.coords</a></code></p>
+ 
+
+<p>to interpret its parameters.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -128,24 +138,24 @@ variety of formats as it uses <code><a href="https://rdrr.io/r/grDevices/xyz.coo
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># Allow the user to select some points, and then redraw them</span></span>
-<span class="r-in"><span class="co"># in a different color</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"> <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
-<span class="r-in"> <span class="fu"><a href="open3d.html">open3d</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"> <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">select3d</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">   <span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">f</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span></span>
-<span class="r-in">   <span class="fu"><a href="scene.html">pop3d</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">   <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="va">keep</span><span class="op">]</span>, <span class="va">y</span><span class="op">[</span><span class="va">keep</span><span class="op">]</span>, <span class="va">z</span><span class="op">[</span><span class="va">keep</span><span class="op">]</span>, color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span>
-<span class="r-in">   <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="op">!</span><span class="va">keep</span><span class="op">]</span>, <span class="va">y</span><span class="op">[</span><span class="op">!</span><span class="va">keep</span><span class="op">]</span>, <span class="va">z</span><span class="op">[</span><span class="op">!</span><span class="va">keep</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"> <span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Allow the user to select some points, and then redraw them</span></span></span>
+<span class="r-in"><span><span class="co"># in a different color</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="open3d.html">open3d</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">select3d</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>   <span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu">f</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="scene.html">pop3d</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="va">keep</span><span class="op">]</span>, <span class="va">y</span><span class="op">[</span><span class="va">keep</span><span class="op">]</span>, <span class="va">z</span><span class="op">[</span><span class="va">keep</span><span class="op">]</span>, color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="op">!</span><span class="va">keep</span><span class="op">]</span>, <span class="va">y</span><span class="op">[</span><span class="op">!</span><span class="va">keep</span><span class="op">]</span>, <span class="va">z</span><span class="op">[</span><span class="op">!</span><span class="va">keep</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -160,7 +170,7 @@ variety of formats as it uses <code><a href="https://rdrr.io/r/grDevices/xyz.coo
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -18,7 +18,7 @@ suitable for use in animations."><meta name="robots" content="noindex"><!-- math
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,32 +77,41 @@ suitable for use in animations.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">par3dinterp</span><span class="op">(</span>times <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">userMatrix</span>, <span class="va">scale</span>, <span class="va">zoom</span>, <span class="va">FOV</span>, 
-            method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"spline"</span>, <span class="st">"linear"</span><span class="op">)</span>, 
-            extrapolate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"oscillate"</span>, <span class="st">"cycle"</span>, <span class="st">"constant"</span>, <span class="st">"natural"</span><span class="op">)</span>,
-            dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"listeners"</span>, dev <span class="op">=</span> <span class="va">dev</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">par3dinterp</span><span class="op">(</span>times <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">userMatrix</span>, <span class="va">scale</span>, <span class="va">zoom</span>, <span class="va">FOV</span>, </span>
+<span>            method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"spline"</span>, <span class="st">"linear"</span><span class="op">)</span>, </span>
+<span>            extrapolate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"oscillate"</span>, <span class="st">"cycle"</span>, <span class="st">"constant"</span>, <span class="st">"natural"</span><span class="op">)</span>,</span>
+<span>            dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"listeners"</span>, dev <span class="op">=</span> <span class="va">dev</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>times</dt>
 <dd><p>Times at which values are recorded or a list; see below</p></dd>
-<dt>userMatrix</dt>
+
+  <dt>userMatrix</dt>
 <dd><p>Values of <code>par3d("userMatrix")</code></p></dd>
-<dt>scale</dt>
+
+  <dt>scale</dt>
 <dd><p>Values of <code>par3d("scale")</code></p></dd>
-<dt>zoom</dt>
+
+  <dt>zoom</dt>
 <dd><p>Values of <code>par3d("zoom")</code></p></dd>
-<dt>FOV</dt>
+
+  <dt>FOV</dt>
 <dd><p>Values of <code>par3d("FOV")</code></p></dd>
-<dt>method</dt>
+
+  <dt>method</dt>
 <dd><p>Method of interpolation</p></dd>
-<dt>extrapolate</dt>
+
+  <dt>extrapolate</dt>
 <dd><p>How to extrapolate outside the time range</p></dd>
-<dt>dev</dt>
+
+  <dt>dev</dt>
 <dd><p>Which RGL device to use</p></dd>
-<dt>subscene</dt>
+
+  <dt>subscene</dt>
 <dd><p>Which subscene to use</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -133,7 +142,9 @@ is only supported with spline interpolation.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>A function is returned.  The function takes one argument, and returns a list of 
+    
+
+<p>A function is returned.  The function takes one argument, and returns a list of 
 <code>par3d</code> settings interpolated to that time.</p>
     </div>
     <div id="note">
@@ -157,43 +168,43 @@ by this function.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">par3dinterp</span><span class="op">(</span> zoom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">)</span></span>
-<span class="r-in"><span class="fu">f</span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">par3dinterp</span><span class="op">(</span> zoom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">f</span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dev</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  235 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   70 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $subscene</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2813</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 923</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $zoom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">f</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">f</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dev</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  235 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   70 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $subscene</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2813</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 923</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $zoom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">f</span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">f</span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dev</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  235 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   70 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $subscene</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2813</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 923</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $zoom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.245309</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="play3d.html">play3d</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="play3d.html">play3d</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -208,7 +219,7 @@ by this function.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

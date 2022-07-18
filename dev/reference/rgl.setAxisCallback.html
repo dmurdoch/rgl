@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -75,19 +75,22 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.setAxisCallback</span><span class="op">(</span><span class="va">axis</span>, draw <span class="op">=</span> <span class="cn">NULL</span>, 
-                    dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="va">dev</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">rgl.getAxisCallback</span><span class="op">(</span><span class="va">axis</span>, dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="va">dev</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.setAxisCallback</span><span class="op">(</span><span class="va">axis</span>, draw <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>                    dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="va">dev</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">rgl.getAxisCallback</span><span class="op">(</span><span class="va">axis</span>, dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="va">dev</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>axis</dt>
 <dd><p>Which axis? Can be value from <code>1:3</code>.</p></dd>
-<dt>draw</dt>
+
+  <dt>draw</dt>
 <dd><p>The function to draw the axis.  See Details below.</p></dd>
-<dt>dev, subscene</dt>
+
+  <dt>dev, subscene</dt>
 <dd><p>The RGL device and subscene to work with.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -109,7 +112,9 @@ can be made invisible by setting <code>front = "cull", back = "cull"</code> in t
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>Called for the side effect of setting the callback.  The set
+    
+
+<p>Called for the side effect of setting the callback.  The set
 function returns
 <code>NULL</code> invisibly.</p>
     </div>
@@ -125,42 +130,42 @@ work with <code><a href="rglwidget.html">rglwidget</a></code>.</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">datelabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">local</a></span><span class="op">(</span><span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span class="r-in">  <span class="va">bbox</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span class="r-in">  </span>
-<span class="r-in"><span class="kw">function</span><span class="op">(</span><span class="va">margin</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="co"># Only need to redraw when the bbox changes</span></span>
-<span class="r-in">  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">bbox</span>, <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"bbox"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="kw">if</span> <span class="op">(</span><span class="va">id</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
-<span class="r-in">      <span class="fu"><a href="scene.html">pop3d</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></span>
-<span class="r-in">    <span class="va">axis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">margin</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">    <span class="va">range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"bbox"</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">*</span><span class="va">axis</span> <span class="op">+</span> <span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="fl">0</span><span class="op">]</span>,</span>
-<span class="r-in">                          origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="va">where</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty</a></span><span class="op">(</span><span class="va">range</span><span class="op">)</span>  </span>
-<span class="r-in">    <span class="va">where</span> <span class="op">&lt;-</span> <span class="va">where</span><span class="op">[</span><span class="va">range</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;=</span> <span class="va">where</span> <span class="op">&amp;</span> <span class="va">where</span> <span class="op">&lt;=</span> <span class="va">range</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in">    <span class="va">id</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="axes3d.html">mtext3d</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">where</span>, format<span class="op">=</span><span class="st">"%b %d"</span><span class="op">)</span>, <span class="va">margin</span>, at <span class="op">=</span> <span class="va">where</span>, line <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in">    <span class="va">bbox</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"bbox"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># This doesn't work in WebGL displays</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="in_pkgdown_example.html">in_pkgdown_example</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, mean <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
-<span class="r-in">               <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="open3d.html">open3d</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># The default plots dates numerically:</span></span>
-<span class="r-in">  <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="va">xyz</span>, xlab <span class="op">=</span> <span class="st">"Date"</span>, ylab <span class="op">=</span> <span class="st">"y"</span>, zlab <span class="op">=</span> <span class="st">"z"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="fu">rgl.setAxisCallback</span><span class="op">(</span><span class="fl">1</span>, <span class="va">datelabels</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># Repeat the data 5 days later</span></span>
-<span class="r-in">  <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="va">xyz</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># Make the plot square again</span></span>
-<span class="r-in">  <span class="fu"><a href="aspect3d.html">aspect3d</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">datelabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">local</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span>  <span class="va">bbox</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span><span class="kw">function</span><span class="op">(</span><span class="va">margin</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># Only need to redraw when the bbox changes</span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">bbox</span>, <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"bbox"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw">if</span> <span class="op">(</span><span class="va">id</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="scene.html">pop3d</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">axis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">margin</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"bbox"</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">*</span><span class="va">axis</span> <span class="op">+</span> <span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="fl">0</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                          origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">where</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty</a></span><span class="op">(</span><span class="va">range</span><span class="op">)</span>  </span></span>
+<span class="r-in"><span>    <span class="va">where</span> <span class="op">&lt;-</span> <span class="va">where</span><span class="op">[</span><span class="va">range</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;=</span> <span class="va">where</span> <span class="op">&amp;</span> <span class="va">where</span> <span class="op">&lt;=</span> <span class="va">range</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span>    <span class="va">id</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="axes3d.html">mtext3d</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">where</span>, format<span class="op">=</span><span class="st">"%b %d"</span><span class="op">)</span>, <span class="va">margin</span>, at <span class="op">=</span> <span class="va">where</span>, line <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">bbox</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="par3d.html">par3d</a></span><span class="op">(</span><span class="st">"bbox"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># This doesn't work in WebGL displays</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="in_pkgdown_example.html">in_pkgdown_example</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, mean <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>               <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="open3d.html">open3d</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># The default plots dates numerically:</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="va">xyz</span>, xlab <span class="op">=</span> <span class="st">"Date"</span>, ylab <span class="op">=</span> <span class="st">"y"</span>, zlab <span class="op">=</span> <span class="st">"z"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="fu">rgl.setAxisCallback</span><span class="op">(</span><span class="fl">1</span>, <span class="va">datelabels</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># Repeat the data 5 days later</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="3dobjects.html">points3d</a></span><span class="op">(</span><span class="va">xyz</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># Make the plot square again</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="aspect3d.html">aspect3d</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -175,7 +180,7 @@ work with <code><a href="rglwidget.html">rglwidget</a></code>.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

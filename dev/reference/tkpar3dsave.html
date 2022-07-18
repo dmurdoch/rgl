@@ -18,7 +18,7 @@ to be saved."><meta name="robots" content="noindex"><!-- mathjax --><script src=
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,20 +77,24 @@ to be saved.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tkpar3dsave</span><span class="op">(</span>params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"userMatrix"</span>, <span class="st">"scale"</span>, <span class="st">"zoom"</span>, <span class="st">"FOV"</span><span class="op">)</span>,
-          times <span class="op">=</span> <span class="cn">FALSE</span>, dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tkpar3dsave</span><span class="op">(</span>params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"userMatrix"</span>, <span class="st">"scale"</span>, <span class="st">"zoom"</span>, <span class="st">"FOV"</span><span class="op">)</span>,</span>
+<span>          times <span class="op">=</span> <span class="cn">FALSE</span>, dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>params</dt>
 <dd><p>Which parameters to save</p></dd>
-<dt>times</dt>
+
+  <dt>times</dt>
 <dd><p>Should times be saved as well?</p></dd>
-<dt>dev</dt>
+
+  <dt>dev</dt>
 <dd><p>Which RGL device to work with</p></dd>
-<dt>...</dt>
+
+  <dt>...</dt>
 <dd><p>Additional parameters to pass to <code><a href="https://rdrr.io/r/tcltk/TkWidgets.html" class="external-link">tktoplevel</a></code></p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -102,7 +106,9 @@ the <code><a href="play3d.html">play3d</a></code> function will play back with t
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of the requested components.  Each one will consist of a list of values that were
+    
+
+<p>A list of the requested components.  Each one will consist of a list of values that were
 current when the <code>Record</code> button was clicked.  These are suitable to be passed directly
 to the <code><a href="par3dinterp.html">par3dinterp</a></code> function.</p>
     </div>
@@ -117,17 +123,17 @@ to the <code><a href="par3dinterp.html">par3dinterp</a></code> function.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="in_pkgdown_example.html">in_pkgdown_example</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># Record a series of positions, and then play them back immediately</span></span>
-<span class="r-in">  <span class="co"># at evenly spaced times, in an oscillating loop</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">plot3d</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="play3d.html">play3d</a></span><span class="op">(</span> <span class="fu"><a href="par3dinterp.html">par3dinterp</a></span><span class="op">(</span> <span class="fu">tkpar3dsave</span><span class="op">(</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># As above, but preserve the click timings</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># play3d( par3dinterp( tkpar3dsave(times=TRUE) ) )</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="in_pkgdown_example.html">in_pkgdown_example</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Record a series of positions, and then play them back immediately</span></span></span>
+<span class="r-in"><span>  <span class="co"># at evenly spaced times, in an oscillating loop</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">plot3d</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="play3d.html">play3d</a></span><span class="op">(</span> <span class="fu"><a href="par3dinterp.html">par3dinterp</a></span><span class="op">(</span> <span class="fu">tkpar3dsave</span><span class="op">(</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># As above, but preserve the click timings</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># play3d( par3dinterp( tkpar3dsave(times=TRUE) ) )</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -142,7 +148,7 @@ to the <code><a href="par3dinterp.html">par3dinterp</a></code> function.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

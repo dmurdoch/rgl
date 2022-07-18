@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -75,22 +75,27 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rgl.init</span><span class="op">(</span>initValue <span class="op">=</span> <span class="fl">0</span>, onlyNULL <span class="op">=</span> <span class="cn">FALSE</span>, 
-         debug <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"rgl.debug"</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.init</span><span class="op">(</span>initValue <span class="op">=</span> <span class="fl">0</span>, onlyNULL <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>         debug <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"rgl.debug"</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>initValue</dt>
 <dd><p>value for internal use only</p></dd>
-<dt>onlyNULL</dt>
+
+  <dt>onlyNULL</dt>
 <dd><p>only initialize the null (no display) device</p></dd>
-<dt>debug</dt>
+
+  <dt>debug</dt>
 <dd><p>enable some debugging messages</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Normally the user doesn't call <code>rgl.init</code> at all:  it
+    
+
+<p>Normally the user doesn't call <code>rgl.init</code> at all:  it
 is called when the package is loaded.  It returns no
 useful value.</p>
     </div>
@@ -153,7 +158,7 @@ specify it explicitly.)  See the instructions in the
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

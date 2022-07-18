@@ -18,7 +18,7 @@ window."><meta name="robots" content="noindex"><!-- mathjax --><script src="http
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,17 +77,20 @@ window.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">subsceneInfo</span><span class="op">(</span>id <span class="op">=</span> <span class="cn">NA</span>, <span class="va">embeddings</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">subsceneInfo</span><span class="op">(</span>id <span class="op">=</span> <span class="cn">NA</span>, <span class="va">embeddings</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>id</dt>
 <dd><p>Which subscene to report on; <code>NA</code> is the current subscene.  Set to <code>"root"</code> for the root.</p></dd>
-<dt>embeddings</dt>
+
+  <dt>embeddings</dt>
 <dd><p>Optional new setting for the embeddings for this subscene.</p></dd>
-<dt>recursive</dt>
+
+  <dt>recursive</dt>
 <dd><p>Whether to report on children recursively.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -103,14 +106,18 @@ specified if <code>embeddings</code> is used.</p>
     <h2>Value</h2>
     <dl><dt>id</dt>
 <dd><p>The object id of the subscene</p></dd>
+
 <dt>parent</dt>
 <dd><p>The object id of the parent subscene, if any</p></dd>
+
 <dt>children</dt>
 <dd><p>If <code>recursive</code>, a list of the information for the children,
 otherwise just their object ids.</p></dd>
+
 <dt>embedding</dt>
 <dd><p>A vector of 3 components describing how this subscene is
 embedded in its parent.</p></dd>
+
 </dl></div>
     <div id="author">
     <h2>Author</h2>
@@ -123,11 +130,11 @@ embedded in its parent.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">plot3d</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">plot3d</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   open3d()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  328 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  163 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   x &lt;- sort(rnorm(1000))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -136,9 +143,9 @@ embedded in its parent.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   z &lt;- rnorm(1000) + atan2(x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   plot3d(x, y, z, col = rainbow(1000))</span>
-<span class="r-in"><span class="fu">subsceneInfo</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">subsceneInfo</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1845</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $embeddings</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   viewport projection      model      mouse </span>
@@ -158,7 +165,7 @@ embedded in its parent.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

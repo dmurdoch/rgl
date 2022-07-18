@@ -18,7 +18,7 @@ it in a browser.  Please use rglwidget instead."><meta name="robots" content="no
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.108.47</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.109.12</span>
       </span>
     </div>
 
@@ -77,41 +77,50 @@ it in a browser.  Please use <code><a href="rglwidget.html">rglwidget</a></code>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">writeWebGL</span><span class="op">(</span>dir <span class="op">=</span> <span class="st">"webGL"</span>, filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"index.html"</span><span class="op">)</span>, 
-           template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"WebGL"</span>, <span class="st">"template.html"</span><span class="op">)</span>, package <span class="op">=</span> <span class="st">"rgl"</span><span class="op">)</span>,
-           prefix <span class="op">=</span> <span class="st">""</span>,
-           snapshot <span class="op">=</span> <span class="cn">TRUE</span>, commonParts <span class="op">=</span> <span class="cn">TRUE</span>, reuse <span class="op">=</span> <span class="cn">NULL</span>, 
-           font <span class="op">=</span> <span class="st">"Arial"</span>, <span class="va">width</span>, <span class="va">height</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">writeWebGL</span><span class="op">(</span>dir <span class="op">=</span> <span class="st">"webGL"</span>, filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"index.html"</span><span class="op">)</span>, </span>
+<span>           template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"WebGL"</span>, <span class="st">"template.html"</span><span class="op">)</span>, package <span class="op">=</span> <span class="st">"rgl"</span><span class="op">)</span>,</span>
+<span>           prefix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>           snapshot <span class="op">=</span> <span class="cn">TRUE</span>, commonParts <span class="op">=</span> <span class="cn">TRUE</span>, reuse <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>           font <span class="op">=</span> <span class="st">"Arial"</span>, <span class="va">width</span>, <span class="va">height</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dir</dt>
 <dd><p>Where to write the files.</p></dd>
-<dt>filename</dt>
+
+  <dt>filename</dt>
 <dd><p>The filename to use for the main file.</p></dd>
-<dt>template</dt>
+
+  <dt>template</dt>
 <dd><p>The template web page to which to write the Javascript for the scene.  See Details below.</p></dd>
-<dt>prefix</dt>
+
+  <dt>prefix</dt>
 <dd><p>An optional prefix to use on global identifiers in the scene; use different prefixes
 for different scenes displayed on the same web page.  If not blank, it should be a legal identifier
 in Javascript and HTML.</p></dd>
-<dt>snapshot</dt>
+
+  <dt>snapshot</dt>
 <dd><p>Whether to include a snapshot of the scene, to be displayed in browsers that don't support WebGL, or
 a specification of the snapshot to use.  See
 details below.</p></dd>
-<dt>commonParts</dt>
+
+  <dt>commonParts</dt>
 <dd><p>Whether to include parts that would be common to several
 figures on the same page.  Currently this includes
 a reference to and copy of the <code class="file">CanvasMatrix.js</code>
 file in the output.</p></dd>
-<dt>reuse</dt>
+
+  <dt>reuse</dt>
 <dd><p>Ignored.</p></dd>
-<dt>font</dt>
+
+  <dt>font</dt>
 <dd><p>The font to use for text.</p></dd>
-<dt>width, height</dt>
+
+  <dt>width, height</dt>
 <dd><p>The (optional) width and height in pixels of the image to display.  If omitted,
 the <code>par3d("windowRect")</code> dimensions will be used.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -124,7 +133,9 @@ use of this function.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>The <code>filename</code> is returned.</p>
+    
+
+<p>The <code>filename</code> is returned.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -158,7 +169,7 @@ write the scene to a file in various other formats.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
