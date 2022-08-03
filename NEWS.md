@@ -1,5 +1,5 @@
 
-# rgl 0.109.12
+# rgl 0.109.13
 
 ## Major changes
 
@@ -17,7 +17,9 @@ accessors.
 * The bounding box could be calculated incorrectly
 if data all had large values (issue #250).
 * Shiny displays failed to load the shaders (issue #249).
-* transform3d() failed due to missing argument (issue #253).
+* `transform3d()` failed due to missing argument (issue #253).
+* `readOBJ()` is now more flexible in what kinds of
+separators it will accept. (issue #258).
 
 # rgl  0.109.6
 
