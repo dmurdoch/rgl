@@ -312,7 +312,8 @@ writeOBJ <- function(con,
 
 readOBJ <- function(con, ...) {
   lines <- readLines(con)
-  instrs <- sub(" .*", "", lines)
+  lines <- sub("^[[:blank:]]*", "", lines)
+  instrs <- sub("[[:blank:]].*", "", lines)
   vertices <- read.table(textConnection(lines[instrs == "v"]),
                          col.names = c("instr", "x", "y", "z"),
                          colClasses = c(instr = "character", 
@@ -352,18 +353,19 @@ readOBJ <- function(con, ...) {
     vt <- matrix(numeric(), nrow = 2, ncol = 0)
   
   # Get rid of texture and normal info
-  polys <- gsub("/[^ ]*", "", lines[instrs == "f"])
-  polys <- strsplit(polys, " ")
+  polys <- gsub("/[^[:blank:]]*", "", lines[instrs == "f"])
+  polys <- strsplit(polys, "[[:blank:]]+")
   polys <- lapply(polys, function(poly) as.numeric(poly[-1]))
   
-  # Regexp suggested by Bill Dunlap -- thanks!
-  normals <- gsub("(^| *)([^/ ]*/?){0,2}", "\\1", lines[instrs == "f"]) # nolint
-  normals <- strsplit(normals, " ")
+  # Regexp suggested by Bill Dunlap -- thanks!  Modified 
+  # by DJM to replace " " with "[[:blank:]]"
+  normals <- gsub("(^|[[:blank:]]*)([^/[:blank:]]*/?){0,2}", "\\1", lines[instrs == "f"]) # nolint
+  normals <- strsplit(normals, "[[:blank:]]+")
   normals <- lapply(normals, function(normal) as.numeric(normal[nchar(normal) > 0]))
 
-  textures <- gsub("(^| *)([^/ ]*/?){0,1}", "\\1", lines[instrs == "f"]) # nolint
-  textures <- gsub("/[^ ]*", "", textures)
-  textures <- strsplit(textures, " ")
+  textures <- gsub("(^|[[:blank:]]*)([^/[:blank:]]*/?){0,1}", "\\1", lines[instrs == "f"]) # nolint
+  textures <- gsub("/[^[:blank:]]*", "", textures)
+  textures <- strsplit(textures, "[[:blank:]]+")
   textures <- lapply(textures, function(texture) as.numeric(texture[nchar(texture) > 0]))
   
   nverts <- sapply(polys, length)
