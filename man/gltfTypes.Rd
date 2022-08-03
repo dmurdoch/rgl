@@ -20,7 +20,7 @@ OpenGL header files.
 These are used in the \code{\link{Buffer}} object.
 }
 \references{
-\url{https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#_accessor_componenttype}
+\url{https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#_accessor_componenttype}
 }
 \examples{
 gltfTypes

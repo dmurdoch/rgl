@@ -54,7 +54,7 @@ fog; for the exponential fog types it multiplies the density
 parameter used in the display.  
 
 See 
-\href{https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFog.xml}{the OpenGL 2.1 reference} 
+\href{https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/glFog.xml}{the OpenGL 2.1 reference} 
 for the formulas used in the fog calculations within \R (though the
 \code{"exp2"} formula appears to be wrong, at least on my
 system).  In WebGL displays,
