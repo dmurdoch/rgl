@@ -15,7 +15,7 @@ accessors.
 memory efficient.  This is only likely to make a 
 noticeable change with very large objects, where R
 was running out of memory because of unnecessary
-duplication.
+duplication. (Related to issue #260.)
 * Recycling of x, y and z vectors in several functions
 is more consistent.
 
