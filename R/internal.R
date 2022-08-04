@@ -71,9 +71,9 @@ rgl.string <- function( x ) {
 # vertex data object
 #
 
-rgl.vertex <- function(x,y=NULL,z=NULL) {
-  xyz <- xyz.coords(x,y,z,recycle=TRUE)
-  return( matrix( rbind(xyz$x,xyz$y,xyz$z), nrow=3, dimnames=list( c("x","y","z"), NULL ) ) )
+rgl.vertex <- function(x, y = NULL, z = NULL) {
+  xyz <- xyz.coords(x, y, z, recycle=TRUE)
+  rbind(x = xyz$x, y = xyz$y, z = xyz$z)
 }
 
 #

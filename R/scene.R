@@ -435,11 +435,6 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
   rgl.material( ... )
 
   type <- rgl.enum.primtype(type)
-  
-  xyz <- xyz.coords(x,y,z,recycle=TRUE)
-  x <- xyz$x
-  y <- xyz$y
-  z <- xyz$z
 
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
