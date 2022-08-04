@@ -527,42 +527,47 @@ void rgl::rgl_setObserver(int* successptr, double* ddata)
   *successptr = success;
 }
 
-void rgl::rgl_primitive(int* successptr, int* idata, double* vertex, double* normals, double* texcoords)
+SEXP rgl::rgl_primitive(SEXP idata, SEXP vertex, SEXP normals, SEXP texcoords)
 {
-  int success = RGL_FAIL;
+  int success = RGL_FAIL, *idataptr = INTEGER(idata);
+  double *vertexptr = REAL(vertex), *normalptr, *texcoordptr;
+  
   Device* device;
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-    int   type    = idata[0];
-    int   nvertex = idata[1];
+    int   type    = idataptr[0];
+    int   nvertex = idataptr[1];
     int   ignoreExtent = device->getIgnoreExtent() || currentMaterial.marginCoord >= 0;
-    int   useNormals = idata[2];
-    int   useTexcoords = idata[3];
-    int   nindices = idata[4];
-    int*  indices = idata + 5;
+    int   useNormals = idataptr[2];
+    int   useTexcoords = idataptr[3];
+    int   nindices = idataptr[4];
+    int*  indices = idataptr + 5;
 
+    normalptr = useNormals ? REAL(normals) : NULL;
+    texcoordptr = useTexcoords ? REAL(texcoords) : NULL;
+    
     SceneNode* node;
 
     switch(type) {
     case 1: // RGL_POINTS:
-      node = new PointSet( currentMaterial, nvertex, vertex, ignoreExtent, nindices, indices);
+      node = new PointSet( currentMaterial, nvertex, vertexptr, ignoreExtent, nindices, indices);
       break;
     case 2: // RGL_LINES:
-      node = new LineSet( currentMaterial, nvertex, vertex, ignoreExtent, nindices, indices);
+      node = new LineSet( currentMaterial, nvertex, vertexptr, ignoreExtent, nindices, indices);
       break;
     case 3: // RGL_TRIANGLES:
-      node = new TriangleSet( currentMaterial, nvertex, vertex, normals, texcoords, 
+      node = new TriangleSet( currentMaterial, nvertex, vertexptr, normalptr, texcoordptr, 
                               ignoreExtent, nindices, indices, 
                               useNormals, useTexcoords);
       break;
     case 4: // RGL_QUADS:
-      node = new QuadSet( currentMaterial, nvertex, vertex, normals, texcoords, 
+      node = new QuadSet( currentMaterial, nvertex, vertexptr, normalptr, texcoordptr, 
                               ignoreExtent, nindices, indices,
                               useNormals, useTexcoords);
       break;
     case 5: // RGL_LINE_STRIP:
-      node = new LineStripSet( currentMaterial, nvertex, vertex, ignoreExtent, 
+      node = new LineStripSet( currentMaterial, nvertex, vertexptr, ignoreExtent, 
                                nindices, indices);
       break;
     default:
@@ -578,7 +583,7 @@ void rgl::rgl_primitive(int* successptr, int* idata, double* vertex, double* nor
     CHECKGLERROR;
   }
 
-  *successptr = success;
+  return ScalarInteger(success);
 }
 
 void rgl::rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, 

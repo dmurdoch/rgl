@@ -69,7 +69,7 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata);
 void rgl_bg       (int* successptr, int* idata, double* fogScale);
 void rgl_bbox     (int* successptr, int* idata, double* ddata, double* xat, char** xtext, double* yat, char** ytext, double* zat, char** ztext);
 
-void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals, double* texcoords);
+SEXP rgl_primitive(SEXP idata, SEXP vertex, SEXP normals, SEXP texcoords);
 void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex,
                                  int* nfonts, char** family, int* style, double* cex, int* useFreeType,
                                  int* npos, int* pos);
