@@ -191,7 +191,7 @@ observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
   if (missing(x))
     location <- c(NA, NA, NA)
   else {
-    xyz <- xyz.coords(x,y,z)
+    xyz <- xyz.coords(x,y,z, recycle = TRUE)
     location <- c(xyz$x, xyz$y, xyz$z)
     if (length(location) != 3) stop("A single point must be specified for the observer location") 
   }    

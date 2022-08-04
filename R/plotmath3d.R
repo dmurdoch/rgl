@@ -6,7 +6,7 @@ plotmath3d <- function(x, y = NULL, z = NULL,
 		       startsize = 480, initCex = 5, 
 		       margin = "", floating = FALSE, tag = "",
 		       ...) {
-  xyz <- xyz.coords(x, y, z)
+  xyz <- xyz.coords(x, y, z, recycle = TRUE)
   n <- length(xyz$x)
   if (is.vector(text))
     text <- rep(text, length.out = n)

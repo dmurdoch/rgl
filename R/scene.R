@@ -388,7 +388,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   if ( !is.null(x) ) {
     if ( !missing(theta) || !missing(phi) )
       warning("'theta' and 'phi' ignored when 'x' is present")
-    xyz <- xyz.coords(x,y,z)
+    xyz <- xyz.coords(x,y,z, recycle = TRUE)
     x <- xyz$x
     y <- xyz$y
     z <- xyz$z

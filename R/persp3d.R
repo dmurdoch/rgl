@@ -169,7 +169,7 @@ persp3d.formula <- function(x, data=NULL, xlab = xyz$xlab, ylab = xyz$ylab, zlab
   checkDeldir(error = TRUE)
   if (!is.null(data))
     environment(x) <- list2env(data, envir = environment(x))
-  xyz <- xyz.coords(x)
+  xyz <- xyz.coords(x, recycle = TRUE)
   dxyz <- with(xyz, deldir::deldir(x, y, z = z, suppressMsge = TRUE)) # nolint
   persp3d(dxyz, xlab = xlab, ylab = ylab, zlab = zlab, ...)
 }

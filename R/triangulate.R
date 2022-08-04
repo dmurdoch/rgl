@@ -279,7 +279,7 @@ extrude3d <- function(x,y = NULL, thickness=1, smooth=FALSE, ...) {
 
 polygon3d <- function(x, y = NULL, z = NULL, fill = TRUE, plot = TRUE, 
                       coords = 1:2, random = TRUE, ...) {
-  xyz <- xyz.coords(x,y,z)
+  xyz <- xyz.coords(x,y,z, recycle = TRUE)
   if (!fill) {
     n <- length(xyz$x)
     nas <- with(xyz, c(which(is.na(x) | is.na(y) | is.na(z)), n + 1L))
