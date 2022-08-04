@@ -10,10 +10,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
     x <- rglId(ids3d()$id)
     return(as.mesh3d(x, ...))
   }
-  xyz <- xyz.coords(x, y, z, recycle = TRUE)
-  x <- xyz$x
-  y <- xyz$y
-  z <- xyz$z
+  verts <- rgl.vertex(x, y, z)
   if (!missing(triangles)) {
     warning("Argument 'triangles' is deprecated; please use 'type' instead.")
     if (missing(type)) {
@@ -25,7 +22,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
   }
   type <- match.arg(type, several.ok = TRUE)
   pcs <- c(triangles = 3, quads = 4, segments = 2, points = 1)
-  nvert <- length(x)
+  nvert <- ncol(verts)
   okay <- FALSE
   for (i in seq_along(type)) {
     if (nvert %% pcs[type[i]] == 0) {
@@ -36,8 +33,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
   if (okay) type <- type[i]
   else stop("Wrong number of vertices")
     
-  verts <- rbind(x, y, z)
-  indices <- matrix(seq_along(x), nrow = pcs[type])
+  indices <- matrix(seq_len(nvert), nrow = pcs[type])
   if (merge) {
     if (!is.null(notEqual)) {
       dim <- dim(notEqual)
@@ -46,7 +42,7 @@ as.mesh3d.default <- function(x, y = NULL, z = NULL,
       notEqual <- notEqual | t(notEqual) # Make it symmetric
     } else
       notEqual <- matrix(FALSE, nvert, nvert)
-    o <- order(x, y, z)
+    o <- order(verts[1,], verts[2,], verts[3,])
     i1 <- seq_len(nvert)[o]
     for (i in seq_len(nvert)[-1]) {
       if (isTRUE(all.equal(verts[,i1[i-1]], verts[,i1[i]], tolerance = tolerance))

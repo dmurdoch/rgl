@@ -388,7 +388,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   if ( !is.null(x) ) {
     if ( !missing(theta) || !missing(phi) )
       warning("'theta' and 'phi' ignored when 'x' is present")
-    xyz <- xyz.coords(x,y,z)
+    xyz <- xyz.coords(x,y,z, recycle = TRUE)
     x <- xyz$x
     y <- xyz$y
     z <- xyz$z
@@ -435,11 +435,6 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
   rgl.material( ... )
 
   type <- rgl.enum.primtype(type)
-  
-  xyz <- xyz.coords(x,y,z,recycle=TRUE)
-  x <- xyz$x
-  y <- xyz$y
-  z <- xyz$z
 
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
@@ -481,19 +476,17 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
       texcoords <- rgl.texcoords(s,t)
     } 
     
-    ret <- .C( rgl_primitive,
-      success = as.integer(FALSE),
+    success <- .Call( rgl_primitive,
       as.integer(idata),
       as.numeric(vertex),
       as.numeric(normals),
-      as.numeric(texcoords),
-      NAOK = TRUE
+      as.numeric(texcoords)
     )
         
-    if (! ret$success)
+    if (!success)
       stop("'rgl_primitive' failed")
       
-    lowlevel(ret$success)
+    lowlevel(success)
   }
 }
 
