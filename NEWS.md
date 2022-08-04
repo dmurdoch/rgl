@@ -1,5 +1,5 @@
 
-# rgl 0.109.13
+# rgl 0.109.14
 
 ## Major changes
 
@@ -11,6 +11,13 @@ various kinds of blending for semi-transparent objects
 
 * The `Buffer` object now handles reading of sparse
 accessors.
+* Low level drawing of primitives has been made more
+memory efficient.  This is only likely to make a 
+noticeable change with very large objects, where R
+was running out of memory because of unnecessary
+duplication.
+* Recycling of x, y and z vectors in several functions
+is more consistent.
 
 ## Bug fixes
 
