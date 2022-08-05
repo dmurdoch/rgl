@@ -19,7 +19,7 @@ duplication. (Related to issue #260.)
 * Recycling of x, y and z vectors in several functions
 is more consistent.
 * The `polygon3d()` function now chooses coordinates
-automatically, as `triangulate()` does.
+automatically, as `triangulate()` does (PR #262.)
 
 ## Bug fixes
 
