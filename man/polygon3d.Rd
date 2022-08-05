@@ -9,7 +9,7 @@ and draws it in three dimensions.
 }
 \usage{
 polygon3d(x, y = NULL, z = NULL, fill = TRUE, plot = TRUE, 
-          coords = 1:2, random = TRUE, ...)
+          coords, random = TRUE, ...)
 }
 \arguments{
   \item{x, y, z}{
@@ -23,7 +23,8 @@ logical; should the polygon be displayed?
 }
   \item{coords}{
 Which two coordinates (\code{x = 1}, \code{y = 2}, \code{z = 3}) describe the
-polygon.  
+polygon.  If missing, \code{\link{triangulate}} makes
+an automatic choice.
 }
   \item{random}{
 Should a random triangulation be used?

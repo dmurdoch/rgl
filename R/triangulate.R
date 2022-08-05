@@ -102,9 +102,9 @@ triangulate <- function(x, y = NULL, z = NULL, random=TRUE, plot=FALSE, partial=
   } else {
     x <- xyz$x
     y <- xyz$y
-    if (!diff(range(x))) 
+    if (!diff(range(x, na.rm = TRUE))) 
       x <- xyz$z
-    else if (!diff(range(y))) 
+    else if (!diff(range(y, na.rm = TRUE))) 
       y <- xyz$z
   } 
   nesting <- nestPolys(x, y)
@@ -278,7 +278,7 @@ extrude3d <- function(x,y = NULL, thickness=1, smooth=FALSE, ...) {
 }
 
 polygon3d <- function(x, y = NULL, z = NULL, fill = TRUE, plot = TRUE, 
-                      coords = 1:2, random = TRUE, ...) {
+                      coords, random = TRUE, ...) {
   xyz <- xyz.coords(x,y,z, recycle = TRUE)
   if (!fill) {
     n <- length(xyz$x)
@@ -295,10 +295,14 @@ polygon3d <- function(x, y = NULL, z = NULL, fill = TRUE, plot = TRUE,
     else
       res
   } else {
-    cnames <- c("x", "y", "z")
-    x <- xyz[[cnames[coords[1]]]]
-    y <- xyz[[cnames[coords[2]]]]
-    tri <- triangulate(x, y, random = random)
+    if (missing(coords)) 
+      tri <- triangulate(xyz, random = random)
+    else {
+      cnames <- c("x", "y", "z")
+      x <- xyz[[cnames[coords[1]]]]
+      y <- xyz[[cnames[coords[2]]]]
+      tri <- triangulate(x, y, random = random)
+    }
     shape <- tmesh3d(rbind(xyz$x, xyz$y, xyz$z, 1), indices = tri)
     if (plot)
       shade3d(shape, ...)
