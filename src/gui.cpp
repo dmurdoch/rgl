@@ -303,7 +303,8 @@ void Window::wheelRotate(int dir, int mouseX, int mouseY)
 // ---------------------------------------------------------------------------
 void Window::on_close()
 {
-  windowImpl->destroy();
+  if (windowImpl)
+    windowImpl->destroy();
 }
 // ---------------------------------------------------------------------------
 void Window::getFonts(FontArray& outfonts, int nfonts, char** family, int* style, 

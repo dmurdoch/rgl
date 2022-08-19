@@ -1,5 +1,5 @@
 
-# rgl 0.109.15
+# rgl 0.109.16
 
 ## Major changes
 
@@ -29,6 +29,7 @@ if data all had large values (issue #250).
 * `transform3d()` failed due to missing argument (issue #253).
 * `readOBJ()` is now more flexible in what kinds of
 separators it will accept. (issue #258).
+* Failure to initialize could cause a segfault.
 
 # rgl  0.109.6
 
