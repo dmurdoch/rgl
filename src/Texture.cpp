@@ -183,13 +183,10 @@ void Texture::init(RenderContext* renderContext)
     bytesperpixel = 1;
     switch(internalFormat)
     {
-    case GL_LUMINANCE:
-      format = GL_LUMINANCE;
-      break;
     case GL_ALPHA:
       format = GL_ALPHA;
       break;
-    case GL_LUMINANCE_ALPHA:
+    default:
       format = GL_LUMINANCE;
       break;
     }
