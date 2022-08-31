@@ -1,5 +1,5 @@
 
-# rgl 0.109.16
+# rgl 0.109.17
 
 ## Major changes
 
@@ -30,6 +30,8 @@ if data all had large values (issue #250).
 * `readOBJ()` is now more flexible in what kinds of
 separators it will accept. (issue #258).
 * Failure to initialize could cause a segfault.
+* On non-macOS platforms, gray-scale textures failed
+to display, with a message about an invalid enumerant.
 
 # rgl  0.109.6
 
