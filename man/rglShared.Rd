@@ -87,8 +87,11 @@ Duncan Murdoch
 \examples{
   save <- options(rgl.useNULL = TRUE)
   
-  #  rglShared requires the crosstalk package.
-  if (requireNamespace("crosstalk", quietly = TRUE)) {
+  #  rglShared requires the crosstalk package,
+  #  and the slider and rglMouse require manipulateWidget
+  
+  if (requireNamespace("crosstalk", quietly = TRUE) &&
+      requireNamespace("manipulateWidget", quietly = TRUE)) {
     open3d()
     x <- sort(rnorm(100))
     y <- rnorm(100)
