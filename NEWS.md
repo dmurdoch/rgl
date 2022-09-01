@@ -1,5 +1,5 @@
 
-# rgl 0.109.17
+# rgl 0.109.18
 
 ## Major changes
 
@@ -32,6 +32,10 @@ separators it will accept. (issue #258).
 * Failure to initialize could cause a segfault.
 * On non-macOS platforms, gray-scale textures failed
 to display, with a message about an invalid enumerant.
+* The third coordinate for `adj` that was added in 0.108.3
+was not rendered properly in `rglwidget()` displays of
+text.  This sometimes caused text to disappear when it
+was near the far limit of the display (issue #269).
 
 # rgl  0.109.6
 

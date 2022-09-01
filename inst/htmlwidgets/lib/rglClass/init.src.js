@@ -794,8 +794,9 @@
         alias[i] = [last-3, last-2, last-1];
         for (j=0; j < 4; j++) {
           v1 = vnew[fnew[4*i+j]];
-          v1[tofs+2] = 2*(v1[tofs]-v1[tofs+2])*texinfo.widths[i];
-          v1[tofs+3] = 2*(v1[tofs+1]-v1[tofs+3])*texinfo.textHeights[i];
+          v1[oofs] = 2*(v1[tofs]-v1[oofs])*texinfo.widths[i];
+          v1[oofs+1] = 2*(v1[tofs+1]-v1[oofs+1])*texinfo.textHeights[i];
+          v1[oofs+2] = 2*(0.5-v1[oofs+2])*texinfo.textHeights[i]/1000.0;
           v1[tofs] = (texinfo.offsetsx[i] + v1[tofs]*texinfo.widths[i])/texinfo.canvasX;
           v1[tofs+1] = 1.0-(texinfo.offsetsy[i] -
               v1[tofs+1]*texinfo.textHeights[i])/texinfo.canvasY;
