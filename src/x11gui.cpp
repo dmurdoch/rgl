@@ -349,6 +349,9 @@ static X11GUIFactory *errorGuiFactory;
 
 static int X11SaveErr(Display *dsp, XErrorEvent *event)
 {
+  if (errorGuiFactory->old_error_handler &&
+      dsp != errorGuiFactory->xdisplay)
+    return errorGuiFactory->old_error_handler(dsp, event);
   error_code = event->error_code;
   return 0;
 }
