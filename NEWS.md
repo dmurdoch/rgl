@@ -1,5 +1,5 @@
 
-# rgl 0.109.20
+# rgl 0.109.21
 
 ## Major changes
 
@@ -41,6 +41,9 @@ text.  This sometimes caused text to disappear when it
 was near the far limit of the display (issue #269).
 * The X11 error fix in 0.109.6 could result in R
 freezing in `Rcmdr`.
+* Low level drawing functions are now more consistent
+about returning an invisible `NULL` if asked to plot zero
+items, rather than raising an error or crashing (issue #274).
 
 # rgl  0.109.6
 
