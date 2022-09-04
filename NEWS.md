@@ -1,5 +1,5 @@
 
-# rgl 0.109.21
+# rgl 0.110.1
 
 ## Major changes
 
@@ -20,7 +20,8 @@ duplication. (Related to issue #260.)
 is more consistent.
 * The `polygon3d()` function now chooses coordinates
 automatically, as `triangulate()` does (PR #262.)
-* The `mtext3d()` and related functions such as `title3d()' now accept language objects
+* The `mtext3d()` and related functions such as
+`title3d()' now accept language objects
 other than expressions, as `plotmath3d()` always has 
 (issue #273).
 
