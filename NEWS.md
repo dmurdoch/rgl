@@ -1,5 +1,5 @@
 
-# rgl 0.109.18
+# rgl 0.109.19
 
 ## Major changes
 
@@ -36,6 +36,8 @@ to display, with a message about an invalid enumerant.
 was not rendered properly in `rglwidget()` displays of
 text.  This sometimes caused text to disappear when it
 was near the far limit of the display (issue #269).
+* The X11 error fix in 0.109.6 could result in R
+freezing in `Rcmdr`.
 
 # rgl  0.109.6
 

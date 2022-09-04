@@ -657,7 +657,10 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   /* Catch protocol errors and convert to R errors */
   error_code = 0;
   errorGuiFactory = this;
-  old_error_handler = XSetErrorHandler(X11SaveErr);
+  if (old_error_handler)
+    XSetErrorHandler(X11SaveErr);
+  else
+    old_error_handler = XSetErrorHandler(X11SaveErr);
   
   xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
 #ifdef GLX_SAMPLE_BUFFERS
