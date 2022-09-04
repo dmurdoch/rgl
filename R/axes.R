@@ -182,6 +182,9 @@ mtext3d <- function(text, edge, at = NULL, line = 0,
   
   ranges <- .getRanges()
   
+  if (is.language(text))
+    text <- as.expression(text)
+  
   newlen <- max(length(text),length(line),length(at))
   text <- rep(text, length.out = newlen)
   line <- rep(line, length.out = newlen)
