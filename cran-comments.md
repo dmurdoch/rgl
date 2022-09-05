@@ -15,8 +15,8 @@ package, and is only
 present to support extracting data from `"tri"` objects
 defined in it.
 
-Reverse dependency checks:  IN PROGRESS.  After a random selection
-of 30% done, no changes.
+Reverse dependency checks:  I have run comparisons of 
+checks of all reverse dependencies, with no non-negligible changes.
 
 Regarding CRAN checks:  I don't know what caused the
 vignette errors that are reported there, but I've seen
