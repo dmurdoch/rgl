@@ -1,5 +1,5 @@
 
-# rgl 0.109.21
+# rgl 0.110.2
 
 ## Major changes
 
@@ -20,7 +20,8 @@ duplication. (Related to issue #260.)
 is more consistent.
 * The `polygon3d()` function now chooses coordinates
 automatically, as `triangulate()` does (PR #262.)
-* The `mtext3d()` and related functions such as `title3d()' now accept language objects
+* The `mtext3d()` and related functions such as
+`title3d()' now accept language objects
 other than expressions, as `plotmath3d()` always has 
 (issue #273).
 
@@ -44,6 +45,8 @@ freezing in `Rcmdr`.
 * Low level drawing functions are now more consistent
 about returning an invisible `NULL` if asked to plot zero
 items, rather than raising an error or crashing (issue #274).
+* Calling `axis3d()` with no ticks or labels no longer triggers
+an error, it now silently returns `NULL`.
 
 # rgl  0.109.6
 

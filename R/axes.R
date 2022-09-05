@@ -46,42 +46,43 @@ axis3d <- function(edge, at = NULL, labels = TRUE, tick = TRUE, line = 0,
     at <- pretty(range, nticks)
     at <- at[at >= range[1] & at <= range[2]]
   }
-  
-  if (is.logical(labels)) {
-    if (labels) labels <- format(at)
-    else labels <- NA
+  if (length(at)) {
+    if (is.logical(labels)) {
+      if (labels) labels <- format(at)
+      else labels <- NA
+    }
+    
+    mpos <- matrix(NA,3,length(at))
+    if (edge[1] == '+') mpos[1,] <- ranges$x[2]
+    else mpos[1,] <- ranges$x[1]
+    if (edge[2] == '+') mpos[2,] <- ranges$y[2]
+    else mpos[2,] <- ranges$y[1]
+    if (edge[3] == '+') mpos[3,] <- ranges$z[2]
+    else mpos[3,] <- ranges$z[1]
+    
+    ticksize <- 0.05*(mpos[,1]-c(mean(ranges$x),mean(ranges$y),mean(ranges$z)))
+    ticksize[coord] <- 0
+    
+    if (!is.null(pos)) mpos <- matrix(pos,3,length(at))
+    mpos[coord,] <- at
+    
+    x <- c(mpos[1,1],mpos[1,length(at)])
+    y <- c(mpos[2,1],mpos[2,length(at)])
+    z <- c(mpos[3,1],mpos[3,length(at)])
+    if (tick) {
+      x <- c(x,as.double(rbind(mpos[1,],mpos[1,]+ticksize[1])))
+      y <- c(y,as.double(rbind(mpos[2,],mpos[2,]+ticksize[2])))
+      z <- c(z,as.double(rbind(mpos[3,],mpos[3,]+ticksize[3])))
+    }
+    result <- c(ticks=segments3d(x,y,z,...))
+    
+    if (!all(is.na(labels)))
+      result <- c(result, labels=text3d(mpos[1,]+3*ticksize[1],
+                                        mpos[2,]+3*ticksize[2],
+                                        mpos[3,]+3*ticksize[3],
+                                        labels, ...))
+    lowlevel(result)
   }
-  
-  mpos <- matrix(NA,3,length(at))
-  if (edge[1] == '+') mpos[1,] <- ranges$x[2]
-  else mpos[1,] <- ranges$x[1]
-  if (edge[2] == '+') mpos[2,] <- ranges$y[2]
-  else mpos[2,] <- ranges$y[1]
-  if (edge[3] == '+') mpos[3,] <- ranges$z[2]
-  else mpos[3,] <- ranges$z[1]
-  
-  ticksize <- 0.05*(mpos[,1]-c(mean(ranges$x),mean(ranges$y),mean(ranges$z)))
-  ticksize[coord] <- 0
-  
-  if (!is.null(pos)) mpos <- matrix(pos,3,length(at))
-  mpos[coord,] <- at
-  
-  x <- c(mpos[1,1],mpos[1,length(at)])
-  y <- c(mpos[2,1],mpos[2,length(at)])
-  z <- c(mpos[3,1],mpos[3,length(at)])
-  if (tick) {
-    x <- c(x,as.double(rbind(mpos[1,],mpos[1,]+ticksize[1])))
-    y <- c(y,as.double(rbind(mpos[2,],mpos[2,]+ticksize[2])))
-    z <- c(z,as.double(rbind(mpos[3,],mpos[3,]+ticksize[3])))
-  }
-  result <- c(ticks=segments3d(x,y,z,...))
-  
-  if (!all(is.na(labels)))
-    result <- c(result, labels=text3d(mpos[1,]+3*ticksize[1],
-                                      mpos[2,]+3*ticksize[2],
-                                      mpos[3,]+3*ticksize[3],
-                                      labels, ...))
-  lowlevel(result)
 }
 
 axes3d <- function(edges='bbox', labels=TRUE,

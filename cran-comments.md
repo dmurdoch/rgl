@@ -1,21 +1,27 @@
-0.109.6
+0.110.1
 
-This is a small update that fixes a major bug, some minor
-ones, and makes one small change.
+This is a fairly small update.
 
-The major bug is a segfault caused when trying to load 
-a default font in X11.  If the font is not present, 
-rgl would try to dereference a null pointer:  this is now
-fixed.  Simon Urbanek reported this and asked for this
-update.
+The main reason for the submission is to fix an
+incompatibility with `Rcmdr` that was introduced in the
+last release.  When run from `tcltk`, `rgl` plots sometimes
+locked up the whole system.  Some other important bug
+fixes avoid segfaults in unusual circumstances.  Details
+and other changes are described in the `NEWS.md` file.
 
-The minor issue and bugs are described in the NEWS file.
+When locally running R-devel check I see a message about
+`tripack`, which is ACM-licensed.  It is only a suggested
+package, and is only
+present to support extracting data from `"tri"` objects
+defined in it.
+
+Reverse dependency checks:  I have run comparisons of 
+checks of all reverse dependencies, with no non-negligible changes.
 
 Regarding CRAN checks:  I don't know what caused the
-vignette errors that are reported there.  Probably they
-are unrelated to the bugs that were fixed.  If more 
-information is available about exactly what is failing, 
-I'll try to fix it.
+vignette errors that are reported there, but I've seen
+vignette builds fail when a compatible version of Pandoc 
+was unavailable.
 
 The very large size of macos installs is due to them
 including debug information in the libs.  Other platforms
