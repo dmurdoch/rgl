@@ -1,5 +1,5 @@
 
-# rgl 0.110.1
+# rgl 0.110.2
 
 ## Major changes
 
@@ -45,6 +45,8 @@ freezing in `Rcmdr`.
 * Low level drawing functions are now more consistent
 about returning an invisible `NULL` if asked to plot zero
 items, rather than raising an error or crashing (issue #274).
+* Calling `axis3d()` with no ticks or labels no longer triggers
+an error, it now silently returns `NULL`.
 
 # rgl  0.109.6
 
