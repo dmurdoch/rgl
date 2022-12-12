@@ -3,6 +3,8 @@
 ## Minor changes
 
 * Added a panning example to the help page for `setUserCallbacks()`.
+* Replaced all calls to `sprintf` from C/C++ code with calls to
+`snprintf`.
 
 # rgl 0.110.2
 
