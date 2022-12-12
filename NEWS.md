@@ -1,3 +1,8 @@
+# rgl 0.110.3
+
+## Minor changes
+
+* Added a panning example to the help page for `setUserCallbacks()`.
 
 # rgl 0.110.2
 
