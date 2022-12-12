@@ -1,3 +1,9 @@
+# rgl 0.110.3
+
+## Minor changes
+
+* Replaced all calls to `sprintf` from C/C++ code with calls to
+`snprintf`.
 
 # rgl 0.110.2
 

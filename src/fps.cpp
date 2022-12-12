@@ -23,7 +23,7 @@ void FPS::render(double t, RenderContext* ctx)
 #ifndef RGL_NO_OPENGL
   if (lastTime + 1.0f < t ) {
     lastTime = t;
-    sprintf(buffer, "FPS %d", framecnt);
+    snprintf(buffer, sizeof(buffer), "FPS %d", framecnt);
     framecnt = 0;
   }
 

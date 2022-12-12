@@ -112,13 +112,13 @@ private:
 
     static void printError(const char* error_msg) {
       char buf[256];
-      sprintf(buf, "PNG Pixmap Loader Error: %s", error_msg);
+      snprintf(buf, 256, "PNG Pixmap Loader Error: %s", error_msg);
       printMessage(buf);
     }
 
     static void printWarning(const char* warning_msg) {
       char buf[256];
-      sprintf(buf, "PNG Pixmap Loader Warning: %s", warning_msg);
+      snprintf(buf, 256, "PNG Pixmap Loader Warning: %s", warning_msg);
       printMessage(buf);
     }
 
@@ -223,7 +223,7 @@ init:
       return;
 
 unsupported:
-      sprintf(buffer,"%s%s format unsupported: %lux%lu (%d bits per channel)", 
+      snprintf(buffer, sizeof(buffer), "%s%s format unsupported: %lux%lu (%d bits per channel)", 
               interlace_string, color_type_name, 
               (long unsigned int)width, (long unsigned int)height, bit_depth);
       printMessage(buffer);
@@ -374,13 +374,13 @@ unsupported:
 
     static void printError(const char* error_msg) {
       char buf[256];
-      sprintf(buf, "PNG Pixmap Saver Error: %s", error_msg);
+      snprintf(buf, 256, "PNG Pixmap Saver Error: %s", error_msg);
       printMessage(buf);
     }
 
     static void printWarning(const char* warning_msg) {
       char buf[256];
-      sprintf(buf, "PNG Pixmap Saver Warning: %s", warning_msg);
+      snprintf(buf, 256, "PNG Pixmap Saver Warning: %s", warning_msg);
       printMessage(buf);
     }
 
