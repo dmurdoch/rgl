@@ -106,6 +106,9 @@ and \code{\link{rgl.setWheelCallback}}.
 Duncan Murdoch
 }
 \examples{
+  # This example identifies points in both the rgl window and
+  # in WebGL
+  
   verts <- cbind(rnorm(11), rnorm(11), rnorm(11))
   idverts <- plot3d(verts, type = "s", col = "blue")["data"]
   
@@ -198,4 +201,65 @@ Duncan Murdoch
                     end = "rglend",
                     javascript = js)
   rglwidget()
+  
+  # This example doesn't affect the rgl window, it only modifies
+  # the scene object to implement panning
+  
+  # Define the Javascript functions to use in WebGL
+  js <-
+  '  window.subid = \%subid\%;
+   
+     window.panbegin = function(x, y) {
+       var activeSub = this.getObj(subid),
+           viewport = activeSub.par3d.viewport,
+           activeModel = this.getObj(this.useid(activeSub.id, "model")),
+           l = activeModel.par3d.listeners, i;
+
+        this.userSave = {x:x, y:y, viewport:viewport,
+                            cursor:this.canvas.style.cursor};
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          activeSub.userSaveMat = new CanvasMatrix4(activeSub.par3d.userMatrix);
+        }
+        this.canvas.style.cursor = "grabbing";
+     };
+     
+     window.panupdate = function(x, y) { 
+        var objects = this.scene.objects,
+            activeSub = this.getObj(subid),
+            activeModel = this.getObj(this.useid(activeSub.id, "model")),
+            l = activeModel.par3d.listeners,
+            viewport = this.userSave.viewport,
+            par3d, i, zoom;
+        if (x === this.userSave.x && y === this.userSave.y)
+          return;
+        x = (x - this.userSave.x)/this.canvas.width;
+        y = (y - this.userSave.y)/this.canvas.height;
+        for (i = 0; i < l.length; i++) {
+          activeSub = this.getObj(l[i]);
+          par3d = activeSub.par3d;
+          /* NB:  The right amount of zoom depends on the scaling of the data
+                  and the position of the observer.  This might
+                  need tweaking.
+          */
+          zoom = par3d.observer[2]*par3d.zoom;
+          activeSub.par3d.userMatrix.load(objects[l[i]].userSaveMat);
+          activeSub.par3d.userMatrix.translate(zoom*x, zoom*y, 0);
+        }
+        this.drawScene();
+     };
+     
+     window.panend = function() {
+       this.canvas.style.cursor = this.userSave.cursor;
+     };
+'
+
+js <- sub("\%subid\%", subsceneInfo()$id, js)
+
+scene <- setUserCallbacks("left", 
+                 begin = "panbegin", 
+                 update = "panupdate", 
+                 end = "panend", 
+                 applyToDev = FALSE, javascript = js)
+rglwidget(scene)
 }
