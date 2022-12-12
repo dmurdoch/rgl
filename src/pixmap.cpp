@@ -103,7 +103,7 @@ bool Pixmap::load(const char* filename)
   file = fopen(filename, "rb");
   if (!file) {
     char buffer[256];
-    sprintf(buffer, "Pixmap load: unable to open file '%s' for reading", filename);
+    snprintf(buffer, 256, "Pixmap load: unable to open file '%s' for reading", filename);
     printMessage(buffer);
     return false;
   }
@@ -144,7 +144,7 @@ bool Pixmap::save(PixmapFormat* format, const char* filename)
   file = fopen(filename, "wb");
   if (!file) {
     char buffer[256];
-    sprintf(buffer, "Pixmap save: unable to open file '%s' for writing", filename);
+    snprintf(buffer, 256, "Pixmap save: unable to open file '%s' for writing", filename);
     printMessage(buffer);
     return false;
   }

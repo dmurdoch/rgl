@@ -85,12 +85,12 @@ bool DeviceManager::setCurrent(int id, bool silent)
   }
   if ( i != devices.end() ) {
     if ( !silent && current != devices.end() ) {
-      sprintf(buffer, "RGL device %d", (*current)->getID() );    
+      snprintf(buffer, 64, "RGL device %d", (*current)->getID() );    
       (*current)->setName(buffer);
     }
     current = i;
     if ( !silent ) {
-      sprintf(buffer, "RGL device %d [Focus]", (*current)->getID() );    
+      snprintf(buffer, 64, "RGL device %d [Focus]", (*current)->getID() );    
       (*current)->setName(buffer);
     }
     return true;

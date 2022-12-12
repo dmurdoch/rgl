@@ -136,7 +136,7 @@ static void printGluErrorMessage(GLint error)
   const GLubyte* gluError;
   char buf[256];        
   gluError = gluErrorString (error);
-  sprintf(buf, "GLU Library Error : %s", (const char*) gluError);
+  snprintf(buf, 256, "GLU Library Error : %s", (const char*) gluError);
   printMessage(buf);
 }
 #endif
@@ -232,7 +232,7 @@ void Texture::init(RenderContext* renderContext)
     
     if ( (width > maxSize) || (height > maxSize) ) {
       char buf[256];
-      sprintf(buf, "GL Library : Maximum texture size of %dx%d exceeded.\n(Perhaps enabling mipmapping could help.)", maxSize,maxSize);
+      snprintf(buf, 256, "GL Library : Maximum texture size of %dx%d exceeded.\n(Perhaps enabling mipmapping could help.)", maxSize,maxSize);
       printMessage(buf);
     } else if ( (pixmap->width != width) || ( pixmap->height != height) ) {
       char* data = new char[width * height * bytesperpixel];
