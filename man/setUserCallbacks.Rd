@@ -242,7 +242,7 @@ Duncan Murdoch
                   and the position of the observer.  This might
                   need tweaking.
           */
-          zoom = par3d.observer[2]*par3d.zoom;
+          zoom = rglwidgetClass.vlen(par3d.observer)*par3d.zoom;
           activeSub.par3d.userMatrix.load(objects[l[i]].userSaveMat);
           activeSub.par3d.userMatrix.translate(zoom*x, zoom*y, 0);
         }
