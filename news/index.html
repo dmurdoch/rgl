@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.110.2</span>
       </span>
     </div>
 
@@ -69,6 +69,36 @@
       <small>Source: <a href="https://github.com/dmurdoch/rgl/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.110.2" id="rgl-01102">rgl 0.110.2<small>2022-09-26</small><a class="anchor" aria-label="anchor" href="#rgl-01102"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-0-110-2">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-110-2"></a></h3>
+<ul><li>Material property <code>"blend"</code> has been added, to allow various kinds of blending for semi-transparent objects (issue <a href="https://github.com/dmurdoch/rgl/issues/245" class="external-link">#245</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-changes-0-110-2">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-110-2"></a></h3>
+<ul><li>The <code>Buffer</code> object now handles reading of sparse accessors.</li>
+<li>Low level drawing of primitives has been made more memory efficient. This is only likely to make a noticeable change with very large objects, where R was running out of memory because of unnecessary duplication. (Related to issue <a href="https://github.com/dmurdoch/rgl/issues/260" class="external-link">#260</a>.)</li>
+<li>Recycling of x, y and z vectors in several functions is more consistent.</li>
+<li>The <code><a href="../reference/polygon3d.html">polygon3d()</a></code> function now chooses coordinates automatically, as <code><a href="../reference/triangulate.html">triangulate()</a></code> does (PR <a href="https://github.com/dmurdoch/rgl/issues/262" class="external-link">#262</a>.)</li>
+<li>The <code><a href="../reference/axes3d.html">mtext3d()</a></code> and related functions such as <code>title3d()' now accept language objects other than expressions, as</code>plotmath3d()` always has (issue <a href="https://github.com/dmurdoch/rgl/issues/273" class="external-link">#273</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-110-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-110-2"></a></h3>
+<ul><li>The bounding box could be calculated incorrectly if data all had large values (issue <a href="https://github.com/dmurdoch/rgl/issues/250" class="external-link">#250</a>).</li>
+<li>Shiny displays failed to load the shaders (issue <a href="https://github.com/dmurdoch/rgl/issues/249" class="external-link">#249</a>).</li>
+<li>
+<code><a href="../reference/matrices.html">transform3d()</a></code> failed due to missing argument (issue <a href="https://github.com/dmurdoch/rgl/issues/253" class="external-link">#253</a>).</li>
+<li>
+<code><a href="../reference/writeOBJ.html">readOBJ()</a></code> is now more flexible in what kinds of separators it will accept. (issue <a href="https://github.com/dmurdoch/rgl/issues/258" class="external-link">#258</a>).</li>
+<li>Failure to initialize could cause a segfault.</li>
+<li>On non-macOS platforms, gray-scale textures failed to display, with a message about an invalid enumerant.</li>
+<li>The third coordinate for <code>adj</code> that was added in 0.108.3 was not rendered properly in <code><a href="../reference/rglwidget.html">rglwidget()</a></code> displays of text. This sometimes caused text to disappear when it was near the far limit of the display (issue <a href="https://github.com/dmurdoch/rgl/issues/269" class="external-link">#269</a>).</li>
+<li>The X11 error fix in 0.109.6 could result in R freezing in <code>Rcmdr</code>.</li>
+<li>Low level drawing functions are now more consistent about returning an invisible <code>NULL</code> if asked to plot zero items, rather than raising an error or crashing (issue <a href="https://github.com/dmurdoch/rgl/issues/274" class="external-link">#274</a>).</li>
+<li>Calling <code><a href="../reference/axes3d.html">axis3d()</a></code> with no ticks or labels no longer triggers an error, it now silently returns <code>NULL</code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.109.6" id="rgl-01096">rgl 0.109.6<small>2022-07-08</small><a class="anchor" aria-label="anchor" href="#rgl-01096"></a></h2>
 <div class="section level3">
@@ -633,7 +663,7 @@ Line endings and joins are rounded, not squared as in OpenGL.</li>
 <li>Cleaned up dynamic entry points.</li>
 <li>Added <code>add = FALSE</code> argument to <code><a href="../reference/persp3d.deldir.html">persp3d.deldir()</a></code>.</li>
 <li>
-<code>"shiny.tag"</code> objects are now supported as inputs to <code><a href="../reference/playwidget.html">playwidget()</a></code>, so that <code><a href="../reference/rglwidget.html">rglwidget()</a></code> values can be wrapped in <code><a href="https://rdrr.io/pkg/htmltools/man/builder.html" class="external-link">htmltools::div()</a></code> to set their style.</li>
+<code>"shiny.tag"</code> objects are now supported as inputs to <code><a href="../reference/playwidget.html">playwidget()</a></code>, so that <code><a href="../reference/rglwidget.html">rglwidget()</a></code> values can be wrapped in <code><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">htmltools::div()</a></code> to set their style.</li>
 <li>Added <code><a href="../reference/figWidth.html">figWidth()</a></code> and <code><a href="../reference/figWidth.html">figHeight()</a></code> functions for sizing <code>rgl</code> plots in R Markdown documents.</li>
 </ul></div>
 <div class="section level3">
@@ -1717,7 +1747,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

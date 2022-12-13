@@ -18,7 +18,7 @@ settings that may have been modified by user interaction in the browser."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.109.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.110.2</span>
       </span>
     </div>
 
@@ -170,15 +170,15 @@ to be returned to R.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="va">xyz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">300</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="va">app</span> <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    ui <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/bootstrapPage.html" class="external-link">bootstrapPage</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"redraw"</span>, <span class="st">"Redraw"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">app</span> <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    ui <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/bootstrapPage.html" class="external-link">bootstrapPage</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"redraw"</span>, <span class="st">"Redraw"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      <span class="fu"><a href="shiny.html">rglwidgetOutput</a></span><span class="op">(</span><span class="st">"rglPlot"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span>,</span></span>
 <span class="r-in"><span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>      <span class="co"># This waits until the user to click on the "redraw" </span></span></span>
 <span class="r-in"><span>      <span class="co"># button, then sends a request for the current userMatrix</span></span></span>
-<span class="r-in"><span>      <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">redraw</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">redraw</span>, <span class="op">{</span></span></span>
 <span class="r-in"><span>        <span class="fu">shinyGetPar3d</span><span class="op">(</span><span class="st">"userMatrix"</span>, <span class="va">session</span><span class="op">)</span></span></span>
 <span class="r-in"><span>      <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    </span></span>
@@ -193,7 +193,7 @@ to be returned to R.</p></div>
 <span class="r-in"><span>        <span class="fu"><a href="rglwidget.html">rglwidget</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>      <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="va">save</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
@@ -210,7 +210,7 @@ to be returned to R.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
