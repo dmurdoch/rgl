@@ -6,6 +6,12 @@
 * Replaced all calls to `sprintf` from C/C++ code with calls to
 `snprintf`.
 
+## Bug fixes
+
+* Default mouse modes used when a window is opened by an `rgl.*`
+call (which is not recommended!) now match
+the defaults in `rgl::r3dDefaults`.
+
 # rgl 0.110.2
 
 ## Major changes
