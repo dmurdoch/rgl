@@ -1,4 +1,4 @@
-\name{rgl.material}
+\name{material3d}
 \alias{rgl.material}
 \alias{material3d}
 \title{Set material properties}
@@ -6,6 +6,8 @@
   Set material properties for geometry appearance.
 }
 \usage{
+material3d(...)
+
 rgl.material(
   color        = "white",
   alpha        = 1.0,
@@ -38,7 +40,6 @@ rgl.material(
   col,
   ...
 )
-material3d(...)
 }
 \arguments{
   \item{color}{
@@ -222,12 +223,12 @@ Experimentation may be needed to get it right.  The first
 example in \code{?\link{persp3d}} uses this property to add 
 grid lines to a surface.
   
-  \code{material3d} is an alternate interface to the material properties, modelled after
-\code{\link{par3d}}:  rather than setting defaults for parameters that are not specified, 
-they will be left unchanged.  \code{material3d} may also be used to query the material
+  \code{material3d} is the recommended interface to the material properties, modelled after
+\code{\link{par3d}}:  unspecified parameters, 
+will be left unchanged, whereas \code{rgl.material}
+will set them to the defaults shown above.  
+\code{material3d} may also be used to query the material
 properties; see the examples below.
-
-  The current implementation does not return parameters for textures.
 
   The \code{material} member of the \code{\link{r3dDefaults}} list may be used to 
 set default values for material properties.
@@ -235,14 +236,14 @@ set default values for material properties.
   The \code{...} parameter to \code{rgl.material} is ignored.
 }
 \value{
-\code{rgl.material()} is called for the side effect of setting the material properties.
-It returns a value invisibly which is not intended for use by the user.
-
-Users should use \code{material3d()} to query material properties.  It returns values similarly
+Users should use \code{material3d()} to set and query material properties.  It returns values similarly
 to \code{\link{par3d}} as follows:
 When setting properties, it returns the previous values in a named list.  A named list is also
 returned when more than one value is queried.  When a single value is queried it is returned 
 directly.
+
+\code{rgl.material()} is called for the side effect of setting the material properties.
+It returns a value invisibly which is not intended for use by the user.
 } 
 \note{
   If \code{point_antialias} is \code{TRUE}, points will be drawn as circles in WebGL; otherwise, they
@@ -254,10 +255,9 @@ Within R, lines tend to appear heavier with \code{line_antialias == TRUE}.  Ther
 in WebGL.
 }
 \seealso{
-\code{\link{rgl.primitive}},
-\code{\link{rgl.bbox}},
-\code{\link{rgl.bg}},
-\code{\link{rgl.light}}
+\code{\link{bbox3d}},
+\code{\link{bg3d}},
+\code{\link{light3d}}
 }
 \examples{
 save <- material3d("color")

@@ -39,7 +39,7 @@ the components of the light affect the display of objects.
   returned to allow \code{\link{pop3d}} to remove it.
 }
 \seealso{
-  \code{\link{rgl.clear}}
+  \code{\link{clear3d}}
   \code{\link{pop3d}}
 }
 \examples{

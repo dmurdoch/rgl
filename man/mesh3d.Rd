@@ -66,7 +66,7 @@ quads respectively.
 Objects of class \code{c("mesh3d",
   "shape3d")}. 
   
-  See \code{\link{rgl.primitive}} for a discussion of texture coordinates.
+  See \code{\link{points3d}} for a discussion of texture coordinates.
 }
 \examples{
 

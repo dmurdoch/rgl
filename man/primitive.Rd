@@ -8,7 +8,7 @@
 \title{Add primitive set shape}
 \description{
 Adds a shape node to the current scene.  These low-level
-functions should not normally be called by users.
+functions should not be called by users.
 }
 \usage{
 rgl.points(x, y = NULL, z = NULL, ... )
@@ -23,11 +23,10 @@ rgl.quads(x, y = NULL, z = NULL, normals = NULL, texcoords = NULL, ... )
     for details.}
   \item{normals}{Normals at each point.}
   \item{texcoords}{Texture coordinates at each point.}
-  \item{ ... }{Material properties (see \code{\link{rgl.material}} for details) or \code{indices} (see the note below).}  
+  \item{ ... }{Material properties (see \code{\link{material3d}} for details) or \code{indices} (see \code{\link{points3d}} for details).}  
 }
 \details{
-  Adds a shape node to the scene. The appearance is defined by the material properties.
-  See \code{\link{rgl.material}} for details.
+  Adds a shape node to the scene.
   
   The names of these functions correspond to OpenGL primitives.  They
   all take a sequence of vertices in \code{x, y, z}.  The only non-obvious 
@@ -35,18 +34,6 @@ rgl.quads(x, y = NULL, z = NULL, normals = NULL, texcoords = NULL, ... )
   pairs of vertices, and \code{rgl.linestrips} which joins the
   vertices.
   
-  For triangles and quads, the normals at each vertex may be specified
-  using \code{normals}.  These may be given in any way that would be
-  acceptable as a single argument to \code{\link[grDevices]{xyz.coords}}.  
-  These need not match the actual normals to the polygon:
-  curved surfaces can be simulated by using other choices of normals.
-  
-  Texture coordinates may also be specified.  These may be given in
-  any way that would be acceptable as a single argument to 
-  \code{\link[grDevices]{xy.coords}}, and are interpreted in terms
-  of the bitmap specified as the material texture, with \code{(0, 0)} 
-  at the lower left, \code{(1, 1)} at the upper right.  The texture
-  is used to modulate the color of the polygon.
   
   These are the lower level functions called by
   \code{\link{points3d}}, \code{\link{segments3d}},
@@ -55,20 +42,13 @@ rgl.quads(x, y = NULL, z = NULL, normals = NULL, texcoords = NULL, ... )
   former set all unspecified material properties to defaults, whereas
   the latter use current values as defaults; the former make
   persistent changes to material properties with each call, whereas
-  the latter make temporary changes only for the duration of the call.
-}
-\note{
-All of these functions support an argument called
-\code{indices}, which allows vertices (and other attributes)
-to be re-used, as they are in objects created by \code{\link{mesh3d}} and related functions.  This is
-intended to be used on smooth surfaces, where each shared
-vertex has just one value for normals, colors and texture
-coordinates.  
+  the latter make temporary changes only for the duration of the call.  There are also differences in default settings when 
+the function calls trigger the opening of a new window.  
 
-For shapes with flat-looking faces (e.g. polyhedra like \code{\link{cube3d}}),
-the vertices \bold{must} be duplicated
-to be rendered properly.
+Users should never call these functions, which are supplied only
+for back-compatibility.
 }
+
 \value{
    Each primitive function returns the integer object ID of the shape that
    was added to the scene.  These can be passed to \code{\link{pop3d}}
