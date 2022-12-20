@@ -19,10 +19,8 @@ quads3d(x, y = NULL, z = NULL, ...)
   \item{x, y, z}{coordinates. Any reasonable way of defining the
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
-  \item{ ... }{Material properties (see \code{\link{material3d}}).
-  For normals use \code{normals} and for
-  texture coordinates use \code{texcoords}; see \code{\link{rgl.primitive}}
-  for details.}  
+  \item{ ... }{Material properties (see \code{\link{material3d}}), \code{normals},
+\code{texcoords} or \code{indices}; see details below.}  
 }
 \details{
 
@@ -38,17 +36,33 @@ are blended over the extent of the object.  Polygons
 must be non-degenerate and quadrilaterals must be entirely 
 in one plane and convex, or the results are undefined.
 
-These functions call the lower level functions \code{\link{rgl.points}}, \code{\link{rgl.linestrips}}.  
-
 The appearance of the new objects are defined by the material properties.
-See \code{\link{rgl.material}} for details.
+See \code{\link{material3d}} for details.
 
-The two principal differences between the \code{rgl.*} functions and
-the \code{*3d} functions are that the former set all unspecified
-material properties to defaults, whereas the latter use current values
-as defaults; the former make persistent changes to material properties
-with each call, whereas the latter make temporary changes only for the
-duration of the call.  
+  For triangles and quads, the normals at each vertex may be specified
+  using \code{normals}.  These may be given in any way that would be
+  acceptable as a single argument to \code{\link[grDevices]{xyz.coords}}.  
+  These need not match the actual normals to the polygon:
+  curved surfaces can be simulated by using other choices of normals.
+  
+  Texture coordinates may also be specified.  These may be given in
+  any way that would be acceptable as a single argument to 
+  \code{\link[grDevices]{xy.coords}}, and are interpreted in terms
+  of the bitmap specified as the material texture, with \code{(0, 0)} 
+  at the lower left, \code{(1, 1)} at the upper right.  The texture
+  is used to modulate the color of the polygon.
+
+All of these functions support an argument called
+\code{indices}, which allows vertices (and other attributes)
+to be re-used, as they are in objects created by \code{\link{mesh3d}} and related functions.  This is
+intended to be used on smooth surfaces, where each shared
+vertex has just one value for normals, colors and texture
+coordinates.  
+
+For shapes with flat-looking faces (e.g. polyhedra like \code{\link{cube3d}}),
+the vertices \bold{must} be duplicated
+to be rendered properly.
+
 
 }
 \value{

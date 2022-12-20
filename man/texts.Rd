@@ -62,6 +62,6 @@ text3d(font, cex, famnum, texts = paste(family, font), adj = 0.5,
        color = "blue", family = family, font = font, cex = cex)
 }
 \seealso{
-  \code{\link{r3d}}, \code{\link{rgl.texts}}, \code{\link{plotmath3d}}, \code{\link{rglExtrafonts}} for adding fonts
+  \code{\link{r3d}}, \code{\link{plotmath3d}}, \code{\link{rglExtrafonts}} for adding fonts
 }
 \keyword{dynamic}

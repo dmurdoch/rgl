@@ -37,7 +37,7 @@ A shape ID of the object is returned invisibly.
 }
 
 \seealso{
-\code{\link{planes3d}}, \code{\link{rgl.planes}} for mathematical planes.
+\code{\link{planes3d}} for mathematical planes.
 
 \code{\link{segments3d}} draws sections of lines that
 do not adapt to the bounding box.
