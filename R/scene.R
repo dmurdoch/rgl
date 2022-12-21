@@ -546,9 +546,17 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   if (is.matrix(z)) {
     nz <- ncol(z)
     flags[2] <- TRUE
-    if ( !identical( dim(z), dim(y) ) ) stop(gettextf("Bad dimension for %s", "cols"),
-                                             domain = NA)     
   } else nz <- length(z)
+  
+  if (is.matrix(y)) {
+    if (any(dim(y) != c(nx, nz)))
+      stop(gettextf("Bad dimension for %s", "y"))
+  } else if (is.matrix(x)) {
+    if (length(y) != nx)
+      stop(gettextf("Bad length for %s", "y"))
+    y <- matrix(y, nx, nz)
+  } else 
+    y <- matrix(y, nx, nz, byrow = TRUE)
   
   ny <- length(y)
 
