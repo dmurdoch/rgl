@@ -1,10 +1,13 @@
-# rgl 0.110.3
+# rgl 0.110.4
 
 ## Minor changes
 
 * Added a panning example to the help page for `setUserCallbacks()`.
 * Replaced all calls to `sprintf` from C/C++ code with calls to
 `snprintf`.
+* `surface3d` and `rgl.surface` are now more flexible,
+allowing any of the 3 coordinates to be a vector or matrix
+as long as at least one is a matrix.
 
 ## Bug fixes
 

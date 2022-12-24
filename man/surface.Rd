@@ -2,9 +2,9 @@
 \title{Add surface (obsolete)}
 \alias{rgl.surface}
 \description{
-  Adds a surface to the current scene. The surface is defined by 
-  a matrix defining the height of each grid point and two vectors
-  defining the grid.
+  Adds a surface to the current scene.  This function
+is intended for internal use, and will be removed in a future
+release.
 }
 \usage{
 rgl.surface(x, z, y, coords = 1:3, ..., 
@@ -101,7 +101,7 @@ rgl.surface(x, z, y, color = col, back = "lines")
 
 }
 \seealso{
-  \code{\link{rgl.material}}, \code{\link{surface3d}}, \code{\link{terrain3d}}.
+  \code{\link{material3d}}, \code{\link{surface3d}}.
   See \code{\link{persp3d}} for a higher level interface.
 }
 \keyword{dynamic}

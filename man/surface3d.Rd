@@ -4,7 +4,7 @@
 \alias{terrain3d}
 \description{
   Adds a surface to the current scene. The surface is defined by 
-  a matrix defining the height of each grid point and two vectors
+  a matrix defining the height of each grid point and two vectors or matrices
   defining the grid.
 }
 \usage{
@@ -25,19 +25,26 @@ Adds a surface mesh to the current scene. The surface is
 typically defined by a matrix of height values in \code{z}
 (as in \code{\link{persp}}), 
 but any of \code{x}, \code{y}, or \code{z} may be matrices or
-vectors, as long as at least one is a matrix.  If 
-\code{x} is a vector it is taken to correspond to rows
-of the matrix; if \code{y} is a vector it corresponds to
-columns; if \code{z} is a vector it corresponds to rows
-or columns as appropriate.
+vectors, as long as at least one is a matrix. 
 
 Dimensions of all matrices must match.
+
+If any of the coordinates are vectors, they are interpreted as follows:
+\itemize{
+\item If \code{x} is a vector, it corresponds to rows of the matrix.
+\item If \code{y} is a vector, it corresponds to columns
+of the matrix.
+\item If \code{z} is a vector, it corresponds to columns
+unless \code{y} is also a vector, in which case it corresponds
+to rows.
+}
+
   
   If the normals are not supplied, they will be calculated automatically based
   on neighbouring points.
   
   \code{surface3d} always draws the surface with the `front' upwards
-  (i.e. towards higher \code{z} values).  This can be used to render
+  (typically towards higher \code{z} values).  This can be used to render
   the top and bottom differently; see \code{\link{material3d}} and
   the example below.
   
@@ -65,7 +72,6 @@ surface3d(x, y, z, color = col, back = "lines")
 
 }
 \seealso{
-  \code{\link{rgl.material}}, \code{\link{rgl.surface}}.
   See \code{\link{persp3d}} for a higher level interface.
 }
 \keyword{dynamic}
