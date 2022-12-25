@@ -161,7 +161,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
     ddata = as.numeric(ddata)
   )
   
-  if (!ret$success) stop('rgl.getmaterial')
+  if (!ret$success) stop('rgl.getmaterial failed')
   
   polymodes <- c("filled", "lines", "points", "culled")
   textypes <- c("alpha", "luminance", "luminance.alpha", "rgb", "rgba")
