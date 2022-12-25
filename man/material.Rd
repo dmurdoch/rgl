@@ -1,12 +1,12 @@
 \name{material3d}
 \alias{rgl.material}
 \alias{material3d}
-\title{Set material properties}
+\title{Get or set material properties}
 \description{
-  Set material properties for geometry appearance.
+  Get or set material properties for geometry appearance.
 }
 \usage{
-material3d(...)
+material3d(..., id = NULL)
 
 rgl.material(
   color        = "white",
@@ -42,6 +42,11 @@ rgl.material(
 )
 }
 \arguments{
+  \item{...}{\code{material3d} passes these to \code{rgl.material}; \code{rgl.material} ignores unrecognized arguments. See Details below.}
+  \item{id}{
+  the \pkg{rgl} id of an object to query, or \code{NULL}
+  to query or set the defaults.
+  }
   \item{color}{
     vector of R color characters. Represents the diffuse component in case of lighting calculation (lit = TRUE),
     otherwise it describes the solid color characteristics.
@@ -158,8 +163,7 @@ destination alpha or its opposite.}
   }
   }
   \item{col}{An allowed abbreviation of \code{color}.}
-  \item{...}{Any of the arguments above can
-  be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
+
 }
 \details{
   Values can be queried by specifying their names

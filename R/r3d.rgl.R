@@ -101,31 +101,36 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
   fullyNamed[good]
 }
 
-material3d  <- function(...) {
-    args <- list(...)
-    argnames <- setdiff(names(args), .material3d.readOnly)
-    if (!length(args))
-	argnames <- .material3d
-    else {
-	if (is.null(names(args)) && all(unlist(lapply(args, is.character)))) {
-	    argnames <- unlist(args)
-	    args <- NULL
-	}
-	
-	if (length(args) == 1) {
-	    if (is.list(args[[1]]) | is.null(args[[1]])) {
-		args <- args[[1]]
-		argnames <- names(args)
-	    }
-	}
+material3d  <- function(..., id = NULL) {
+  args <- list(...)
+  argnames <- names(args)
+  if (length(argnames) && !is.null(id))
+    stop("Material properties cannot be set on existing objects.")
+  if (length(id) > 1)
+   stop("Material properties may only be queried for single objects.")
+  argnames <- setdiff(argnames, .material3d.readOnly)
+  if (!length(args))
+    argnames <- .material3d
+  else {
+    if (is.null(names(args)) && all(unlist(lapply(args, is.character)))) {
+      argnames <- unlist(args)
+      args <- NULL
     }
-    value <- rgl.getmaterial()[argnames]
-    if (length(args)) {
-    	args <- do.call(".fixMaterialArgs", args)
-        do.call("rgl.material", args)
-        return(invisible(value))
-    } else if (length(argnames) == 1) return(value[[1]])
-    else return(value)
+    
+    if (length(args) == 1) {
+      if (is.list(args[[1]]) | is.null(args[[1]])) {
+        args <- args[[1]]
+        argnames <- names(args)
+      }
+    }
+  }
+  value <- rgl.getmaterial(id = id)[argnames]
+  if (length(args)) {
+    args <- do.call(".fixMaterialArgs", args)
+    do.call("rgl.material", args)
+    return(invisible(value))
+  } else if (length(argnames) == 1) return(value[[1]])
+  else return(value)
 }
 
 bg3d        <- function(...) {
