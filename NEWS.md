@@ -1,4 +1,4 @@
-# rgl 0.110.4
+# rgl 0.110.5
 
 ## Minor changes
 
@@ -8,6 +8,8 @@
 * `surface3d` and `rgl.surface` are now more flexible,
 allowing any of the 3 coordinates to be a vector or matrix
 as long as at least one is a matrix.
+* `material3d` can now specify an `id` to query properties
+for individual objects.
 
 ## Bug fixes
 
