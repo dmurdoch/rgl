@@ -899,7 +899,7 @@ in `knitr`, use the
 chunk option `webgl=TRUE`; we recommend the explicit use of
 `rglwidget`.)  This approach also
 allows display of `rgl` scenes in
-[RStudio](https://www.rstudio.com/).  Besides 
+[RStudio](https://posit.co/).  Besides 
 `rgl` scenes, various controls for them can
 be displayed, and there are a few utility functions
 that can be useful:
