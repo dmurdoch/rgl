@@ -1,29 +1,25 @@
-0.110.1
+0.111.2
 
-This is a fairly small update.
+This is a fairly small update, triggered by a request from CRAN.
 
-The main reason for the submission is to fix an
-incompatibility with `Rcmdr` that was introduced in the
-last release.  When run from `tcltk`, `rgl` plots sometimes
-locked up the whole system.  Some other important bug
-fixes avoid segfaults in unusual circumstances.  Details
-and other changes are described in the `NEWS.md` file.
+Of the issues reported in the CRAN tests, the following have
+been addressed:
 
-When locally running R-devel check I see a message about
-`tripack`, which is ACM-licensed.  It is only a suggested
-package, and is only
-present to support extracting data from `"tri"` objects
-defined in it.
+- The C prototype in `gl2ps` has been corrected.
+- `sprintf` calls have been replaced with `snprintf` calls.
 
-Reverse dependency checks:  I have run comparisons of 
-checks of all reverse dependencies, with no non-negligible changes.
+The size notes haven't been dealt with.
 
-Regarding CRAN checks:  I don't know what caused the
-vignette errors that are reported there, but I've seen
-vignette builds fail when a compatible version of Pandoc 
-was unavailable.
+The vignette build failure on M1mac isn't reproducible on 
+my Intel Mac, nor on the macbuilder R-devel machine and hasn't
+been addressed.  Prof.
+Ripley suggested it's related to a Pandoc change; recent 
+updates to `rmarkdown` and `htmlwidgets` addressed one of
+those, so
+perhaps it is now fixed.
 
-The very large size of macos installs is due to them
-including debug information in the libs.  Other platforms
-exceed the size limits by a bit, but I think this is
-unavoidable given the amount of code in rgl.
+Besides those issues, I have found and fixed an issue that
+could cause a segfault, have made some minor improvements
+that will allow the `rayshader` package to update to more
+reliable `rgl` calls, and added an example mouse handler
+for panning the display.
