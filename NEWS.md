@@ -42,7 +42,7 @@ is more consistent.
 * The `polygon3d()` function now chooses coordinates
 automatically, as `triangulate()` does (PR #262.)
 * The `mtext3d()` and related functions such as
-`title3d()' now accept language objects
+`title3d()` now accept language objects
 other than expressions, as `plotmath3d()` always has 
 (issue #273).
 
@@ -150,7 +150,7 @@ longer suggested.
   
 ## Bug fixes
 
-* as.mesh3d.rglobject() didn't handle objects with indices
+* `as.mesh3d.rglobject()` didn't handle objects with indices
 properly.
 * In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
@@ -244,7 +244,7 @@ location), `5` (in front of it), and `6` (behind it) in
 * `crosstalk` is now a Suggested package, rather than
 a required one.
 * The `Makevars.ucrt` file has been modified with
-contributions from Tomas Kalibera to work with his winutf8
+contributions from Tomas Kalibera to work with his `winutf8`
 build of R.
 * `bgplot3d()` no longer pauses for each page when running
 examples.

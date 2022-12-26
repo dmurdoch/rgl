@@ -245,9 +245,9 @@ Buffer <- R6Class("Buffer",
       },
 
 #' @description
-#'   Get bufferView object.
+#'   Get `bufferView` object.
 #'
-#' @param bufv bufferView number.
+#' @param bufv `bufferView` number.
 #'
 #' @return A list containing components described here:
 #' \url{https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#reference-bufferview}.
@@ -268,7 +268,7 @@ Buffer <- R6Class("Buffer",
 #' @param target Optional target use for values.
 #' @param buf Which buffer to write to.
 #'
-#' @return New bufferView number.
+#' @return New `bufferView` number.
 #'
       addBufferView = function(values, type, size, target = NULL, buf = 0) {
         bufferview <- list()
@@ -287,7 +287,7 @@ Buffer <- R6Class("Buffer",
 #' @description
 #'   Open a connection to a buffer view.
 #'
-#' @param bufv Which bufferView.
+#' @param bufv Which `bufferView`.
 #'
 #' @return A connection.
 
@@ -299,9 +299,9 @@ Buffer <- R6Class("Buffer",
       },
 
 #' @description
-#'   Set bufferView object.
+#'   Set `bufferView` object.
 #'
-#' @param bufv bufferView number.
+#' @param bufv `bufferView` number.
 #' @param bufferView New value to insert.
 
       setBufferview = function(bufv, bufferView)
