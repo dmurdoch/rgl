@@ -1,4 +1,4 @@
-# rgl 0.110.5
+# rgl 0.110.6
 
 ## Minor changes
 
@@ -16,6 +16,7 @@ for individual objects.
 * Default mouse modes used when a window is opened by an `rgl.*`
 call (which is not recommended!) now match
 the defaults in `rgl::r3dDefaults`.
+* Missing values could cause `surface3d()` to segfault.
 
 # rgl 0.110.2
 

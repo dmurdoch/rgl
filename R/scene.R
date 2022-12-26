@@ -593,7 +593,9 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
 
   idata <- as.integer( c( nx, nz ) )
 
-  parity <- (perm_parity(coords) + (x[2] < x[1]) + (z[2] < z[1]) ) %% 2
+  xdecreasing <- diff(x[!is.na(x)][1:2]) < 0
+  zdecreasing <- diff(z[!is.na(z)][1:2]) < 0
+  parity <- (perm_parity(coords) + xdecreasing + zdecreasing ) %% 2
   
   ret <- .C( rgl_surface,
     success = as.integer(FALSE),
