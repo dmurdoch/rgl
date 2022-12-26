@@ -1,4 +1,4 @@
-0.111.2
+0.111.3
 
 This is a fairly small update, triggered by a request from CRAN.
 
