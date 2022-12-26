@@ -597,6 +597,9 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   zdecreasing <- diff(z[!is.na(z)][1:2]) < 0
   parity <- (perm_parity(coords) + xdecreasing + zdecreasing ) %% 2
   
+  if (is.na(parity))
+    stop("Unable to determine orientation")
+  
   ret <- .C( rgl_surface,
     success = as.integer(FALSE),
     idata,
