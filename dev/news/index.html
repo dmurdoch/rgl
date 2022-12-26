@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.111.1</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.111.2</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@
 <li>Low level drawing of primitives has been made more memory efficient. This is only likely to make a noticeable change with very large objects, where R was running out of memory because of unnecessary duplication. (Related to issue <a href="https://github.com/dmurdoch/rgl/issues/260" class="external-link">#260</a>.)</li>
 <li>Recycling of x, y and z vectors in several functions is more consistent.</li>
 <li>The <code><a href="../reference/polygon3d.html">polygon3d()</a></code> function now chooses coordinates automatically, as <code><a href="../reference/triangulate.html">triangulate()</a></code> does (PR <a href="https://github.com/dmurdoch/rgl/issues/262" class="external-link">#262</a>.)</li>
-<li>The <code><a href="../reference/axes3d.html">mtext3d()</a></code> and related functions such as <code>title3d()' now accept language objects other than expressions, as</code>plotmath3d()` always has (issue <a href="https://github.com/dmurdoch/rgl/issues/273" class="external-link">#273</a>).</li>
+<li>The <code><a href="../reference/axes3d.html">mtext3d()</a></code> and related functions such as <code><a href="../reference/axes3d.html">title3d()</a></code> now accept language objects other than expressions, as <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> always has (issue <a href="https://github.com/dmurdoch/rgl/issues/273" class="external-link">#273</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-110-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-110-2"></a></h3>
@@ -170,7 +170,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-109-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-109-2"></a></h3>
-<ul><li>as.mesh3d.rglobject() didn’t handle objects with indices properly.</li>
+<ul><li>
+<code>as.mesh3d.rglobject()</code> didn’t handle objects with indices properly.</li>
 <li>In WebGL, the front vs back calculation sometimes got the wrong result (issue <a href="https://github.com/dmurdoch/rgl/issues/164" class="external-link">#164</a>).</li>
 <li>
 <code>pop3d(tag = x)</code> did not always find the objects with <code>tag == x</code> if they were not in the current subscene.</li>
@@ -229,7 +230,7 @@
 <li>Added support for <code>pos</code> values of <code>0</code> (at specified location), <code>5</code> (in front of it), and <code>6</code> (behind it) in <code><a href="../reference/texts.html">text3d()</a></code>, <code><a href="../reference/sprites.html">sprites3d()</a></code> and <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code>.</li>
 <li>
 <code>crosstalk</code> is now a Suggested package, rather than a required one.</li>
-<li>The <code>Makevars.ucrt</code> file has been modified with contributions from Tomas Kalibera to work with his winutf8 build of R.</li>
+<li>The <code>Makevars.ucrt</code> file has been modified with contributions from Tomas Kalibera to work with his <code>winutf8</code> build of R.</li>
 <li>
 <code><a href="../reference/bgplot3d.html">bgplot3d()</a></code> no longer pauses for each page when running examples.</li>
 <li>
