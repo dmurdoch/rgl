@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.110.6</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.110.7</span>
       </span>
     </div>
 
@@ -70,9 +70,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.110.6" id="rgl-01106">rgl 0.110.6<a class="anchor" aria-label="anchor" href="#rgl-01106"></a></h2>
+<h2 class="page-header" data-toc-text="0.110.7" id="rgl-01107">rgl 0.110.7<a class="anchor" aria-label="anchor" href="#rgl-01107"></a></h2>
 <div class="section level3">
-<h3 id="minor-changes-0-110-6">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-110-6"></a></h3>
+<h3 id="minor-changes-0-110-7">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-110-7"></a></h3>
 <ul><li>Added a panning example to the help page for <code><a href="../reference/setUserCallbacks.html">setUserCallbacks()</a></code>.</li>
 <li>Replaced all calls to <code>sprintf</code> from C/C++ code with calls to <code>snprintf</code>.</li>
 <li>
@@ -81,9 +81,10 @@
 <code>material3d</code> can now specify an <code>id</code> to query properties for individual objects.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-110-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-110-6"></a></h3>
+<h3 id="bug-fixes-0-110-7">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-110-7"></a></h3>
 <ul><li>Default mouse modes used when a window is opened by an <code>rgl.*</code> call (which is not recommended!) now match the defaults in <code><a href="../reference/open3d.html">rgl::r3dDefaults</a></code>.</li>
 <li>Missing values could cause <code><a href="../reference/surface3d.html">surface3d()</a></code> to segfault.</li>
+<li>The C source code for <code>gl2psGetFileFormat</code> missed declaring a prototype.</li>
 </ul></div>
 </div>
     <div class="section level2">
