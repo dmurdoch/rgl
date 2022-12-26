@@ -1,4 +1,4 @@
-# rgl 0.110.6
+# rgl 0.110.7
 
 ## Minor changes
 
@@ -17,6 +17,8 @@ for individual objects.
 call (which is not recommended!) now match
 the defaults in `rgl::r3dDefaults`.
 * Missing values could cause `surface3d()` to segfault.
+* The C source code for `gl2psGetFileFormat` missed declaring
+a prototype.
 
 # rgl 0.110.2
 
