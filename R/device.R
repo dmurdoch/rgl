@@ -28,6 +28,8 @@ rgl.useNULL <- function() {
 
 rgl.open <- function(useNULL = rgl.useNULL()) {
 
+  .Deprecated("open3d")
+  
   ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL )
 
   if (! ret$success)
@@ -43,6 +45,8 @@ rgl.open <- function(useNULL = rgl.useNULL()) {
 
 rgl.close <- function() {
 
+  .Deprecated("close3d")
+  
   if (length(hook <- getHook("on.rgl.close"))) {
     if (is.list(hook)) hook <- hook[[1]]  # test is for compatibility with R < 3.0.0
     hook()

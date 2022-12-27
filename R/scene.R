@@ -491,22 +491,27 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
 }
 
 rgl.points <- function( x, y=NULL, z=NULL, ... ) {
+  .Deprecated("points3d")
   rgl.primitive( "points", x, y, z, ... )
 }
 
 rgl.lines <- function(x, y=NULL, z=NULL, ... ) {
+  .Deprecated("segments3d")
   rgl.primitive( "lines", x, y, z, ... )
 }
 
 rgl.triangles <- function(x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
+  .Deprecated("triangles3d")
   rgl.primitive( "triangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.quads <- function( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
+  .Deprecated("quads3d")
   rgl.primitive( "quadrangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.linestrips<- function( x, y=NULL, z=NULL, ... ) {
+  .Deprecated("lines3d")
   rgl.primitive( "linestrips", x, y, z, ... )
 }
 
@@ -659,6 +664,8 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE,
 ##
 
 rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
+  .Deprecated("planes3d")
+  
   rgl.material(...)
   
   normals  <- rgl.vertex(a, b, c)
@@ -689,6 +696,8 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
 ##
 
 rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
+  .Deprecated("clipplanes3d")
+  
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
   noffsets <- length(d)
@@ -716,6 +725,8 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
 ##
 
 rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
+  .Deprecated("abclines3d")
+  
   rgl.material(...)
   
   bases  <- rgl.vertex(x, y, z)
@@ -815,6 +826,8 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
                          userMatrix=diag(4), fixedSize = FALSE,
                          adj = 0.5, pos = NULL, offset = 0.25, rotating = FALSE, 
                          ... ) {
+  .Deprecated("sprites3d")
+  
   rgl.material(...)
   
   center  <- rgl.vertex(x,y,z)

@@ -26,5 +26,5 @@ rgl.dev.list()
 rgl.dev.list()
 .check3d()
 rgl.dev.list()
-rgl.close()
+close3d()
 }

@@ -209,27 +209,28 @@ observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
 
 points3d    <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.points", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "points", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 lines3d     <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.linestrips", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "linestrips", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 segments3d  <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.lines", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "lines", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 triangles3d <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.triangles", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "triangles", x=x, y=y, z=z), 
+                             .fixMaterialArgs(..., Params = save)))
 }
 
 quads3d     <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.quads", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "quadrangles", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 text3d      <- function(x, y = NULL, z = NULL,
@@ -248,23 +249,111 @@ texts3d	    <- text3d
 
 spheres3d   <- function(x, y = NULL, z = NULL, radius = 1, fastTransparency = TRUE, ...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.spheres", c(list(x = x, y = y, z = z, 
-  															radius = radius, fastTransparency = fastTransparency), .fixMaterialArgs(..., Params = save)))
+  # Force evaluation of args
+  list(x = x, y = y, z = z, radius = radius, fastTransparency = fastTransparency)
+  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  
+  vertex  <- rgl.vertex(x,y,z)
+  nvertex <- rgl.nvertex(vertex)
+  radius  <- rgl.attr(radius, nvertex)
+  nradius <- length(radius)
+  if (nvertex && nradius) {
+    
+    idata <- as.integer( c( nvertex, nradius ) )
+    
+    ret <- .C( rgl_spheres,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(vertex),    
+               as.numeric(radius),
+               as.integer(fastTransparency),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_spheres' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 planes3d   <- function(a,b=NULL,c=NULL,d=0,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.planes", c(list(a=a,b=b,c=c,d=d), .fixMaterialArgs(..., Params = save)))
+  # Force evaluation of args
+  list(a=a,b=b,c=c,d=d)
+  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  normals  <- rgl.vertex(a, b, c)
+  nnormals <- rgl.nvertex(normals)
+  noffsets <- length(d)
+  
+  if (nnormals && noffsets) {
+    
+    idata <- as.integer( c( nnormals, noffsets ) )
+    
+    ret <- .C( rgl_planes,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(normals),    
+               as.numeric(d),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_planes' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 clipplanes3d   <- function(a,b=NULL,c=NULL,d=0) {
   .check3d()
-  rgl.clipplanes(a=a,b=b,c=c,d=d)
+  normals  <- rgl.vertex(a, b, c)
+  nnormals <- rgl.nvertex(normals)
+  noffsets <- length(d)
+  if (nnormals && noffsets) {
+    idata <- as.integer( c( nnormals, noffsets ) )
+    
+    ret <- .C( rgl_clipplanes,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(normals),    
+               as.numeric(d),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_clipplanes' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.abclines", c(list(x=x,y=y,z=z,a=a,b=b,c=c), .fixMaterialArgs(..., Params = save)))
+  # Force evaluation of args
+  list(x=x,y=y,z=z,a=a,b=b,c=c)
+  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  
+  bases  <- rgl.vertex(x, y, z)
+  nbases <- rgl.nvertex(bases)
+  directions <- rgl.vertex(a, b, c)
+  ndirs <-  rgl.nvertex(directions)
+  if (nbases && ndirs) {
+    idata <- as.integer( c( nbases, ndirs ) )
+    
+    ret <- .C( rgl_abclines,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(bases),    
+               as.numeric(directions),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_abclines' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 sprites3d   <- function(x, y = NULL, z = NULL, radius = 1, 
@@ -273,6 +362,9 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
                         rotating = FALSE,
 												...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
+  
+  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  
   if (missing(userMatrix)) {
     userMatrix <- getr3dDefaults()$userMatrix
     if (is.null(userMatrix)) userMatrix <- diag(4)
@@ -280,13 +372,48 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
   savepar <- par3d(skipRedraw=TRUE, ignoreExtent=TRUE)
   on.exit(par3d(savepar), add=TRUE)
   force(shapes)
+  
   par3d(ignoreExtent=savepar$ignoreExtent)
-
-  do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius,shapes=shapes,
-                                userMatrix=userMatrix, fixedSize = fixedSize, 
-                                rotating = rotating,
-                                adj = adj, pos = pos, offset = offset), 
-          .fixMaterialArgs(..., Params = save)))
+  # Force evaluation of args
+  list(x=x,y=y,z=z,radius=radius,shapes=shapes,
+       userMatrix=userMatrix, fixedSize = fixedSize, 
+       rotating = rotating,
+       adj = adj, pos = pos, offset = offset)
+  center  <- rgl.vertex(x,y,z)
+  ncenter <- rgl.nvertex(center)
+  radius  <- rgl.attr(radius, ncenter)
+  nradius <- length(radius)
+  
+  pos <- as.integer(pos)
+  npos <- length(pos)
+  if (npos) {
+    pos <- rep(pos, length.out = ncenter)
+    adj <- offset
+  }
+  adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
+  if (ncenter && nradius) {
+    if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
+    if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
+    idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos, rotating) )
+    
+    ret <- .C( rgl_sprites,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(center),
+               as.numeric(radius),
+               as.integer(shapes),
+               as.numeric(t(userMatrix)),
+               as.numeric(adj),
+               pos,
+               as.numeric(offset),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_sprites' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z=NULL) {
@@ -363,7 +490,10 @@ open3d <- function(..., params = getr3dDefaults(),
     	args$antialias <- NULL
     }
     
-    rgl.open(useNULL)
+    ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL )
+    
+    if (! ret$success)
+      stop("open failed") 
     
     if (!is.null(args$material)) {
     	params$material <- do.call(.fixMaterialArgs, c(args$material, Params=list(params$material)))
@@ -401,7 +531,16 @@ close3d <- function(dev = cur3d(), silent = TRUE) {
     devname <- paste0("dev", d)
     rgl.callback.env[[devname]] <- NULL
     set3d(d, silent = silent)
-    rgl.close()
+    if (length(hook <- getHook("on.rgl.close"))) {
+      if (is.list(hook)) hook <- hook[[1]]  # test is for compatibility with R < 3.0.0
+      hook()
+    }
+    
+    ret <- .C( rgl_dev_close, success=FALSE )
+    
+    if (! ret$success)
+      stop("close failed")
+    
     if (!silent)
       message("Closed device ", d)
   }

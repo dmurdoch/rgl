@@ -53,12 +53,12 @@ sets both, but the \code{type} argument can be used to limit the effect.
 \dontrun{
 # animated round trip tour for 10 seconds
 
-rgl.open()
+open3d()
 shade3d(oh3d(), color = "red")
 
 start <- proc.time()[3]
 while ((i <- 36*(proc.time()[3] - start)) < 360) {
-  rgl.viewpoint(i, i/4); 
+  view3d(i, i/4); 
 }
 }
 }

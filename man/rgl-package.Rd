@@ -25,10 +25,6 @@ RGL provides medium to high level functions for 3D interactive graphics, includi
   
   The \code{\link{open3d}()} function attempts to open a new RGL window,
   using default settings specified by the user.
-  
-RGL also includes a lower level interface which is described
-in the \link{rgl.open} help topic.  We recommend that you avoid mixing
-\code{rgl.*} and \code{*3d} calls.
 
   See the first example below to display the ChangeLog.
 }

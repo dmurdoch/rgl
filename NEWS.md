@@ -1,3 +1,11 @@
+# rgl 1.0.0
+
+## Major changes
+
+* The long promised deprecations of the `rgl.*` functions
+have started.  Currently deprecated: the primitives, 
+`rgl.points` etc., `rgl.open` and `rgl.closed`.
+
 # rgl 0.111.3
 
 ## Minor changes
