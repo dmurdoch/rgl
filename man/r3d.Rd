@@ -86,13 +86,6 @@
      labels <- c("Origin", "X", "Y", "Z")
      i <- c(1, 2, 1, 3, 1, 4)
 
-     # rgl.* interface
-     
-     rgl.open()
-     rgl.texts(x, y, z, labels)
-     rgl.texts(1, 1, 1, "rgl.* coordinates")
-     rgl.lines(x[i], y[i], z[i])
-
      # *3d interface
      
      open3d()

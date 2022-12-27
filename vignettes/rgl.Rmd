@@ -217,10 +217,12 @@ bg3d("lightgray")
 aspect3d(1,1,1)
 ```
 
-Besides the `*3d` functions mentioned above, there are even lower-level
+Besides the `*3d` functions mentioned above, there are 
+deprecated
 functions 
 `r indexfns(c("rgl.primitive", "rgl.points", "rgl.linestrips", "rgl.lines", "rgl.triangles",
-"rgl.quads", "rgl.texts", "rgl.abclines", "rgl.planes", "rgl.bg",
+"rgl.quads"))`
+and other functions soon to be deprecated: `r indexfns(c("rgl.texts", "rgl.abclines", "rgl.planes", "rgl.bg",
 "rgl.clipplanes", "rgl.bbox", "rgl.spheres", "rgl.sprites", "rgl.surface"))`.  
 You should avoid using these functions, which do not
 work well with the higher level `*3d` functions.  See the 
@@ -967,7 +969,7 @@ and are mainly intended for internal use.
 Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("open3d")`:               | open a new window
-`r indexfns(c("close3d", "rgl.close"))`:              | close the current window
+`r indexfns("close3d")`:              | close the current window
 `r indexfns(c("cur3d", "rgl.cur"))`:                | id of the active device
 `r indexfns(c("set3d", "rgl.set"))`:                | set a particular device to be active
 `r indexfns(c("pop3d", "rgl.pop"))`:     | delete objects from the scene

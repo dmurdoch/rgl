@@ -491,22 +491,27 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
 }
 
 rgl.points <- function( x, y=NULL, z=NULL, ... ) {
+  .Deprecated("points3d")
   rgl.primitive( "points", x, y, z, ... )
 }
 
 rgl.lines <- function(x, y=NULL, z=NULL, ... ) {
+  .Deprecated("segments3d")
   rgl.primitive( "lines", x, y, z, ... )
 }
 
 rgl.triangles <- function(x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
+  .Deprecated("triangles3d")
   rgl.primitive( "triangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.quads <- function( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
+  .Deprecated("quads3d")
   rgl.primitive( "quadrangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.linestrips<- function( x, y=NULL, z=NULL, ... ) {
+  .Deprecated("lines3d")
   rgl.primitive( "linestrips", x, y, z, ... )
 }
 

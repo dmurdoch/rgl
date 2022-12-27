@@ -96,9 +96,6 @@ colorlut <- terrain.colors(ylen) # height color lookup table
 
 col <- colorlut[ y - ylim[1] + 1 ] # assign colors to heights for each point
 
-rgl.open()
-rgl.surface(x, z, y, color = col, back = "lines")
-
 }
 \seealso{
   \code{\link{material3d}}, \code{\link{surface3d}}.

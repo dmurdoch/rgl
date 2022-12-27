@@ -209,27 +209,28 @@ observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
 
 points3d    <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.points", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "points", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 lines3d     <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.linestrips", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "linestrips", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 segments3d  <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.lines", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "lines", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 triangles3d <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.triangles", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "triangles", x=x, y=y, z=z), 
+                             .fixMaterialArgs(..., Params = save)))
 }
 
 quads3d     <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.quads", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive", c(list(type = "quadrangles", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 text3d      <- function(x, y = NULL, z = NULL,
@@ -363,7 +364,10 @@ open3d <- function(..., params = getr3dDefaults(),
     	args$antialias <- NULL
     }
     
-    rgl.open(useNULL)
+    ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL )
+    
+    if (! ret$success)
+      stop("open failed") 
     
     if (!is.null(args$material)) {
     	params$material <- do.call(.fixMaterialArgs, c(args$material, Params=list(params$material)))
@@ -401,7 +405,16 @@ close3d <- function(dev = cur3d(), silent = TRUE) {
     devname <- paste0("dev", d)
     rgl.callback.env[[devname]] <- NULL
     set3d(d, silent = silent)
-    rgl.close()
+    if (length(hook <- getHook("on.rgl.close"))) {
+      if (is.list(hook)) hook <- hook[[1]]  # test is for compatibility with R < 3.0.0
+      hook()
+    }
+    
+    ret <- .C( rgl_dev_close, success=FALSE )
+    
+    if (! ret$success)
+      stop("close failed")
+    
     if (!silent)
       message("Closed device ", d)
   }
