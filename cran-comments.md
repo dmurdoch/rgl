@@ -23,3 +23,5 @@ could cause a segfault, have made some minor improvements
 that will allow the `rayshader` package to update to more
 reliable `rgl` calls, and added an example mouse handler
 for panning the display.
+
+I have run revdep checks and identified no issues.
