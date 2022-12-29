@@ -1,26 +1,27 @@
 \name{light}
-\alias{rgl.light}
 \alias{light3d}
 \title{Add light source}
 \description{
   add a light source to the scene.
 }
 \usage{
-light3d(theta = 0, phi = 15, x = NULL, ...)
-rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", 
-           diffuse = "#FFFFFF", specular = "#FFFFFF", x = NULL, y = NULL, z = NULL)
+light3d(theta=0, phi=15,
+        x=NULL, y = NULL, z = NULL,
+        viewpoint.rel = TRUE, 
+        ambient = "#FFFFFF", 
+        diffuse = "#FFFFFF", 
+        specular = "#FFFFFF")
 }
 \arguments{
-  \item{theta, phi}{polar coordinates, used by default}
+  \item{theta, phi}{direction to infinitely distant light}
+  \item{x, y, z}{position of finitely distant light}
   \item{viewpoint.rel}{logical, if TRUE light is a viewpoint light that is positioned relative to the current viewpoint}
   \item{ambient, diffuse, specular }{ light color values used for lighting calculation }
-  \item{x, y, z}{cartesian coordinates, optional}
-  \item{...}{generic arguments passed through to RGL-specific (or other) functions}
 }
 \details{
   Up to 8 light sources are supported. They are positioned either in
   world space or relative to the camera. By providing polar
-  coordinates to theta and phi a directional light source is used. If
+  coordinates to \code{theta} and \code{phi} a directional light source is used. If
   numerical values are given to x, y and z, a point-like light source with
   finite distance to the objects in the scene is set up.
   

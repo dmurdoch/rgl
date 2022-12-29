@@ -52,6 +52,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
                        snapshot = TRUE, commonParts = TRUE, reuse = NULL,
 		       font="Arial",
                        width = NULL, height = NULL) {
+  
+  .Deprecated("rglwidget")
 
   # Lots of utility functions and constants defined first; execution starts way down there...
 

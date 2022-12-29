@@ -57,7 +57,7 @@ rgl window along with an indicator of their type and if \code{tags = TRUE}, the
 \code{tag} value for each.
 
 Note that clearing the light stack leaves the scene in darkness; it should normally
-be followed by a call to \code{\link{light3d}} or \code{\link{light3d}}.
+be followed by a call to \code{\link{light3d}}.
 }
 \seealso{
 \code{\link{rgl}},

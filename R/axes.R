@@ -172,10 +172,10 @@ mtext3d <- function(text, edge, at = NULL, line = 0,
   save <- par3d(ignoreExtent = TRUE)
   on.exit(par3d(save))
   
-  bboxdeco <- rgl.ids("bboxdeco")
+  bboxdeco <- ids3d("bboxdeco")
   if (!is.na(floating) && !nrow(bboxdeco)) {
     dummyBbox()
-    bboxdeco <- rgl.ids("bboxdeco")
+    bboxdeco <- ids3d("bboxdeco")
   }
     
   if (!nrow(bboxdeco) || (missing(floating) && !missing(pos)))

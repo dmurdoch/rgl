@@ -91,9 +91,9 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
     OpenGL driver may not support the requested number, in which case
     \code{par3d("antialias")} will report what was actually set. Applies to the whole device.}    
     \item{\code{cex}}{real.  The default size for text.}
-    \item{\code{family}}{character.  The default device independent family name; see \code{\link{rgl.texts}}.
+    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.
     Applies to the whole device.}
-    \item{\code{font}}{integer.  The default font number (from 1 to 4; see \code{\link{rgl.texts}}).
+   \item{\code{font}}{integer.  The default font number (from 1 to 4; see \code{\link{text3d}}).
     Applies to the whole device.}
     \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?
     Applies to the whole device.}

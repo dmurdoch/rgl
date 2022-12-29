@@ -4,9 +4,7 @@
 \alias{rgl.clipplanes}
 \alias{rgl.sprites}
 \alias{rgl.spheres}
-\alias{rgl.clear}
 \alias{rgl.pop}
-\alias{rgl.ids}
 \title{
 Low level functions that should not be called by users.
 }
@@ -23,9 +21,7 @@ rgl.sprites(x, y = NULL, z = NULL, radius = 1,
             adj = 0.5, pos = NULL, offset = 0.25, 
             rotating = FALSE, ...)
 rgl.spheres(x, y = NULL, z = NULL, radius, fastTransparency = TRUE, ...)
-rgl.clear( type = "shapes", subscene = 0 )
 rgl.pop( type = "shapes", id = 0, tag = NULL )  
-rgl.ids( type = "shapes", subscene = NA, tags = FALSE )
 }
 \arguments{
   \item{x, y, z}{

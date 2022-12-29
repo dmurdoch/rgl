@@ -220,18 +220,21 @@ aspect3d(1,1,1)
 Besides the `*3d` functions mentioned above, there are 
 deprecated
 functions 
-`r deprecated(c("rgl.primitive", "rgl.points",
-"rgl.linestrips", "rgl.lines", "rgl.triangles",
-"rgl.quads", "rgl.abclines", "rgl.planes", "rgl.clipplanes",
-"rgl.spheres", "rgl.sprites"))`
-and other functions soon to be deprecated: `r indexfns(c("rgl.texts", "rgl.bg",
-"rgl.bbox", "rgl.surface"))`.  
+`r deprecated(c("rgl.abclines", "rgl.bbox", "rgl.bg",
+"rgl.clipplanes", "rgl.lines", 
+"rgl.linestrips", "rgl.planes", "rgl.points",
+"rgl.primitive", 
+"rgl.quads", "rgl.setAxisCallback",
+"rgl.spheres", "rgl.sprites", "rgl.surface",
+"rgl.texts", 
+"rgl.triangles"))`. 
 You should avoid using all of these functions, which do not
-work well with the higher level `*3d` functions.  See the 
+work properly with the `*3d` functions and will
+soon be removed from `rgl`.  See the 
 `r linkfn("r3d", text="?r3d", pkg="rgl")` help
-topic for details.  The functions 
-`r indexfns(c("rgl.setAxisCallback", "rgl.getAxisCallback"))`
-provide low-level support for `r linkfn("setAxisCallbacks")`.
+topic for details.  The function
+`r indexfns(c("rgl.getAxisCallback"))`
+provides low-level support for `r linkfn("setAxisCallbacks")`.
 
 ## Controlling the Look of the Scene
 
@@ -295,9 +298,8 @@ depends on the angle between the surface and the light,
 while the `specular` component also takes the viewer's
 position into account.
 
-The `r indexfns("rgl.light")` function is a lower-level
-function with different defaults; users should normally
-use `r linkfn("light3d")`.
+The deprecated `r deprecated("rgl.light")` function should
+no longer be used; use `r linkfn("light3d")` instead.
 
 ### Materials
 
@@ -732,11 +734,8 @@ you run out of memory if your scenes are really big.
 ### Older methods
 
 The original way to insert an `rgl` scene in a document was to use
-the `r indexfns("writeWebGL")` function to write HTML code to insert in a document. 
-Later, `Sweave` and `knitr` hooks were added.  These are no longer maintained, and it is recommended that
-you update old documents to use the newer methods.  See
-the `r linkfn("writeWebGL")`, `r linkfn("rgl.Sweave")` and `r linkfn("hook_rgl")` help
-topics for details on these if you must use them.  If you are
+the deprecated `r indexfns("writeWebGL")` function to write HTML code to insert in a document. 
+Later, `Sweave` and `knitr` hooks were added.  These are no longer supported, and you should update old documents to use the newer methods.  If you are
 reading documents that suggest using those methods, let the
 author know they need updating!
   
@@ -948,17 +947,6 @@ use hand-written shaders in WebGL, and
 `r indexfns("getShaders")` allows you to see what
 shader would be used.
 
-The older approach uses the `r linkfn("writeWebGL")` function to export a scene 
-to HTML and Javascript code.  
-These functions write HTML and Javascript for working with the 
-exported scene:  `r indexfns("propertySlider")`,
-`r indexfns("clipplaneSlider")`, `r indexfns("subsetSlider")`,
-`r indexfns("toggleButton")`, `r indexfns("propertySetter")`,
-`r indexfns("subsetSetter")`, `r indexfns("ageSetter")`, 
-`r indexfns("par3dinterpSetter")`, 
-`r indexfns("vertexSetter")`, `r indexfns("matrixSetter")`.
-Use the newer functions instead.
-
 ### Working with the scene
 
 `rgl` maintains internal structures for all the scenes it displays.
@@ -975,12 +963,12 @@ Function                             | Description
 `r indexfns("cur3d")`:                | id of the active device
 `r indexfns("set3d")`:                | set a particular device to be active
 `r indexfns(c("pop3d", "rgl.pop"))`:     | delete objects from the scene
-`r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
-`r indexfns(c("ids3d", "rgl.ids"))`:              | ids, types and tags of current objects
+`r indexfns(c("clear3d"))`:            | delete all objects of certain classes
+`r indexfns("ids3d")`:              | ids, types and tags of current objects
 `r indexfns("tagged3d")`:                         | find tags or objects with tags
 
 There are deprecated versions of the functions above:
-`r deprecated(c("rgl.cur", "rgl.set"))`.  These should not be called.
+`r deprecated(c("rgl.clear", "rgl.cur", "rgl.ids", "rgl.set"))`.  These should not be called.
 
 These functions are mainly intended for programming, and 
 have no corresponding `*3d` counterparts:

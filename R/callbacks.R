@@ -14,6 +14,9 @@ rgl.getWheelCallback <- function(dev = cur3d(), subscene = currentSubscene3d(dev
     .Call(rgl_getWheelCallback, as.integer(dev), as.integer(subscene))
 
 rgl.setAxisCallback <- function(axis, draw = NULL, dev = cur3d(), subscene = currentSubscene3d(dev)) {
+  
+  .Deprecated("setAxisCallbacks")
+  
   stopifnot(length(axis) == 1, axis %in% 1:3)
   .Call(rgl_setAxisCallback, draw, as.integer(dev), as.integer(subscene), as.integer(axis - 1))
   invisible(NULL)

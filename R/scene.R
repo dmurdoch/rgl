@@ -15,6 +15,8 @@
 ##
 
 rgl.clear <- function( type = "shapes", subscene = 0 )  {
+  .Deprecated("clear3d")
+  
   if (is.na(subscene)) 
     subscene <- currentSubscene3d()
 
@@ -86,7 +88,7 @@ pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
   lowlevel()
 }
 
-ids3d <- rgl.ids <- function( type = "shapes", subscene = NA, tags = FALSE) {
+ids3d <- function( type = "shapes", subscene = NA, tags = FALSE) {
   type <- c(rgl.enum.nodetype(type), 0)
   if (is.na(subscene)) 
     subscene <- currentSubscene3d()
@@ -107,6 +109,11 @@ ids3d <- rgl.ids <- function( type = "shapes", subscene = NA, tags = FALSE) {
     }
   }
   result
+}
+
+rgl.ids <- function(...) {
+  .Deprecated("ids3d")
+  ids3d(...)
 }
 
 rgl.attrib.count <- function( id, attrib ) {
@@ -269,6 +276,8 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
 
 rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back="lines", 
                    fogScale = 1, ... ) {
+  .Deprecated("bg3d")
+  
   rgl.material( color=color, back=back, ... )
 
   fogtype <- rgl.enum.fogtype(fogtype)
@@ -303,6 +312,8 @@ rgl.bbox <- function(
   marklen=15.0, marklen.rel=TRUE, expand=1, draw_front=FALSE,
   ...) {
 
+  .Deprecated("bbox3d")
+  
   rgl.material( ... )
 
   if (is.null(xat)) 
@@ -379,6 +390,9 @@ rgl.bbox <- function(
 ##
 
 rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF", x = NULL, y = NULL, z = NULL) {
+  
+  .Deprecated("light3d")
+  
   ambient  <- rgl.color(ambient)
   diffuse  <- rgl.color(diffuse)
   specular <- rgl.color(specular)
@@ -537,6 +551,8 @@ perm_parity <- function(p) {
 
 rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL, normal_z=NULL,
                          texture_s=NULL, texture_t=NULL) {
+  .Deprecated("surface3d")
+  
   rgl.material(...)
   
   flags <- rep(FALSE, 4)
@@ -760,6 +776,9 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
                       family=par3d("family"), font=par3d("font"), 
                       cex=par3d("cex"), useFreeType=par3d("useFreeType"), 
                       ... ) {
+  
+  .Deprecated()
+  
   rgl.material( ... )
   
   vertex  <- rgl.vertex(x,y,z)

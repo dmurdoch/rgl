@@ -25,23 +25,60 @@ getr3dDefaults <- function(class = NULL, value = NULL) {
 clear3d     <- function(type = c("shapes", "bboxdeco", "material"), 
                         defaults=getr3dDefaults(),
                         subscene = 0) {
-    .check3d()
-    rgl.clear( type, subscene = subscene )
-
-    type <- rgl.enum.nodetype(type)
-    if ( 4 %in% type ) { # userviewpoint
-	do.call("par3d", defaults["FOV"])
+  .check3d()
+  
+  if (is.na(subscene)) 
+    subscene <- currentSubscene3d()
+  
+  typeid0 <- rgl.enum.nodetype(type)
+  
+  userviewpoint <- 4 %in% typeid0
+  material  <- 5 %in% typeid0
+  modelviewpoint <- 8 %in% typeid0
+  
+  drop <- typeid0 %in% c(4:5, 8)
+  typeid <- typeid0[!drop]
+  type <- names(typeid)
+  
+  if (subscene == 0) {
+    idata <- as.integer(c(length(typeid), typeid))    	
+    ret <- .C( rgl_clear, 
+               success = FALSE,
+               idata
+    )$success
+    
+    if (! ret)
+      stop("'rgl_clear' failed")
+    
+  } else {
+    sceneids <- ids3d(type=type, subscene = 0)$id
+    thisids <- ids3d(type=type, subscene = subscene)$id
+    if (length(thisids)) {
+      delFromSubscene3d(ids = thisids, subscene = subscene)
+      gc3d(protect = setdiff(sceneids, thisids))
     }
-    if ( 8 %in% type ) { # modelviewpoint
-        do.call("par3d", defaults["userMatrix"])
-    }
-    if ( 5 %in% type ) { # material
-        if (length(defaults$material))
-    	    do.call("material3d", defaults$material)
-    }
-    if ( 6 %in% type ) { # background
-    	do.call("bg3d", as.list(defaults$bg))
-    }
+  }
+  
+  if ( userviewpoint || modelviewpoint) 
+    rgl.viewpoint(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
+  
+  if ( material ) 
+    rgl.material()
+  
+  if ( 4 %in% typeid0 ) { # userviewpoint
+    do.call("par3d", defaults["FOV"])
+  }
+  if ( 8 %in% typeid0 ) { # modelviewpoint
+    do.call("par3d", defaults["userMatrix"])
+  }
+  if ( 5 %in% typeid0 ) { # material
+    if (length(defaults$material))
+      do.call("material3d", defaults$material)
+  }
+  if ( 6 %in% typeid0 ) { # background
+    do.call("bg3d", as.list(defaults$bg))
+  }
+  lowlevel()
 }
 
 # Environment
@@ -133,40 +170,123 @@ material3d  <- function(..., id = NULL) {
   else return(value)
 }
 
-bg3d        <- function(...) {
+bg3d        <- function(color,
+                        sphere=FALSE, 
+                        back="lines",
+                        fogtype="none", 
+                        fogScale = 1, 
+                        col, ... ) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
+
   bgid <- ids3d("background")$id
   if (length(bgid) && nrow(flags <- rgl.attrib(bgid[1], "flags"))) {
-    sphere <- flags["sphere", 1]
-    fogtype <- if (flags["linear_fog", 1]) "linear"
-    else if (flags["exp_fog", 1]) "exp"
-    else if (flags["exp2_fog", 1]) "exp2"
-    else "none"
-  } else {
-    sphere <- FALSE
-    fogtype <- "none"
+    if (missing(sphere))
+      sphere <- flags["sphere", 1]
+    if (missing(fogtype))
+      fogtype <- if (flags["linear_fog", 1]) "linear"
+      else if (flags["exp_fog", 1]) "exp"
+      else if (flags["exp2_fog", 1]) "exp2"
+      else "none"
   }
   dots <- list(...)
+  
+  if (!missing(color)) {
+    dots$color <- color
+    if (!missing(col))
+      warning("'color' specified, so 'col' is ignored.")
+  } else if (!missing(col))
+    dots$color <- col
+  
   if ("fogtype" %in% names(dots))
     fogtype <- dots$fogtype
   if ("fogScale" %in% names(dots))
     fogScale <- dots$fogScale
   else
     fogScale <- 1
+  
+  if ("color" %in% names(dots))
+    color <- dots$color
+  else if ("col" %in% names(dots))
+    color <- dots$col
+  else
+    color <- getr3dDefaults("bg", "color")
+  if (is.null(color))
+    color <- "white"
+    
   new <- .fixMaterialArgs(sphere = sphere, 
                           fogtype = fogtype, 
                           fogScale = fogScale,
-                          color = c("black", "white"), 
-  			  back = "lines", lit = FALSE, Params = save)
-  do.call("rgl.bg", .fixMaterialArgs(..., Params = new))
+                          color = color, 
+  			  back = back, lit = FALSE, Params = save)
+  
+  do.call("rgl.material", .fixMaterialArgs(..., Params = new))
+  fogtype <- rgl.enum.fogtype(fogtype)
+  
+  idata   <- as.integer(c(sphere,fogtype))
+  
+  fogScale <- as.numeric(fogScale)
+  stopifnot(length(fogScale) == 1, fogScale > 0)
+  
+  ret <- .C( rgl_bg, 
+             success = as.integer(FALSE),
+             idata,
+             fogScale
+  )
+  
+  if (! ret$success)
+    stop("'rgl_bg' failed")
+  
+  lowlevel(ret$success)
 }
 
-light3d     <- function(theta=0,phi=15,x=NULL, ...) {
+light3d     <- function(theta=0, phi=15,
+                        x=NULL, y = NULL, z = NULL,
+                        viewpoint.rel = TRUE, 
+                        ambient = "#FFFFFF", 
+                        diffuse = "#FFFFFF", 
+                        specular = "#FFFFFF") {
   .check3d()
-  if (is.null(x))
-    rgl.light(theta=theta,phi=phi,x=x, ...)
-  else
-    rgl.light(x=x, ...)
+
+  ambient  <- rgl.color(ambient)
+  diffuse  <- rgl.color(diffuse)
+  specular <- rgl.color(specular)
+  
+  # if a complete set of x, y, z is given, the light source is assumed to be part of the scene, theta and phi are ignored
+  # else the light source is infinitely far away and its direction is determined by theta, phi (default) 
+  
+  if ( !is.null(x) ) {
+    if ( !missing(theta) || !missing(phi) )
+      warning("'theta' and 'phi' ignored when 'x' is present")
+    xyz <- xyz.coords(x,y,z, recycle = TRUE)
+    x <- xyz$x
+    y <- xyz$y
+    z <- xyz$z
+    if (length(x) > 1) stop("A light can only be in one place at a time")
+    finite.pos <- TRUE
+  }
+  else {
+    
+    if ( !is.null(y) || !is.null(z) ) 
+      warning("'y' and 'z' ignored, 'theta' and 'phi' used")
+    finite.pos <- FALSE
+    x <- 0
+    y <- 0
+    z <- 0
+  }
+  
+  idata <- as.integer(c(viewpoint.rel, ambient, diffuse, specular, finite.pos))
+  ddata <- as.numeric(c(theta, phi, x, y, z))
+  
+  ret <- .C( rgl_light,
+             success = as.integer(FALSE),
+             idata,
+             ddata
+  )
+  
+  if (! ret$success)
+    stop("Error in 'rgl_light'.  Too many lights? maximum is 8 sources per scene")
+  
+  lowlevel(ret$success)
 }
 
 view3d      <- function(theta=0,phi=15,...) {
@@ -180,12 +300,84 @@ bbox3d	    <- function(xat = NULL,
                         xunit = "pretty",
                         yunit = "pretty",
                         zunit = "pretty",
-		        expand = 1.03, draw_front = FALSE, ...) {
+                        expand = 1.03, draw_front = FALSE,
+                        xlab=NULL, ylab=NULL, zlab=NULL,
+                        xlen=5, ylen=5, zlen=5,
+                        marklen=15.0, marklen.rel=TRUE, 
+                       ...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.bbox", c(list(xat=xat, yat=yat, zat=zat, 
-                             xunit=xunit, yunit=yunit, zunit=zunit, expand=expand,
-                             draw_front=draw_front), 
-                        .fixMaterialArgs(..., Params = save)))
+  # Force evaluation of args as in old bbox3d
+  list(xat=xat, yat=yat, zat=zat, 
+       xunit=xunit, yunit=yunit, zunit=zunit, expand=expand,
+       draw_front=draw_front)
+  
+  do.call(rgl.material, .fixMaterialArgs(..., Params = save))
+  
+  if (is.null(xat)) 
+    xlab <- NULL
+  else {
+    xlen <- length(xat)
+    if (is.null(xlab)) 
+      xlab <- format(xat)
+    else 
+      xlab <- rep(xlab, length.out=xlen)
+  }
+  if (is.null(yat)) 
+    ylab <- NULL
+  else {
+    ylen <- length(yat)
+    if (is.null(ylab)) 
+      ylab <- format(yat)
+    else 
+      ylab <- rep(ylab, length.out=ylen)
+  }
+  if (is.null(zat)) 
+    zlab <- NULL
+  else {
+    zlen <- length(zat)
+    if (is.null(zlab)) 
+      zlab <- format(zat)
+    else 
+      zlab <- rep(zlab,length.out=length(zat))
+  }
+  xticks <- length(xat)
+  yticks <- length(yat)
+  zticks <- length(zat)
+  
+  if (identical(xunit, "pretty")) xunit <- -1
+  if (identical(yunit, "pretty")) yunit <- -1
+  if (identical(zunit, "pretty")) zunit <- -1
+  
+  length(xlen)        <- 1
+  length(ylen)        <- 1
+  length(zlen)        <- 1
+  length(marklen.rel) <- 1
+  length(draw_front)  <- 1
+  length(xunit)       <- 1
+  length(yunit)       <- 1
+  length(zunit)       <- 1
+  length(marklen)     <- 1
+  length(expand)      <- 1
+  
+  idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel, draw_front))
+  ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
+  
+  ret <- .C( rgl_bbox,
+             success = as.integer(FALSE),
+             idata,
+             ddata,
+             as.numeric(xat),
+             as.character(xlab),
+             as.numeric(yat),
+             as.character(ylab),
+             as.numeric(zat),
+             as.character(zlab)
+  )
+  
+  if (! ret$success)
+    stop("'rgl_bbox' failed")
+  
+  lowlevel(ret$success)
 }
 
 dummyBbox <- function()
@@ -235,15 +427,75 @@ quads3d     <- function(x,y=NULL,z=NULL,...) {
 
 text3d      <- function(x, y = NULL, z = NULL,
 			texts, adj = 0.5, pos = NULL, offset = 0.5,
-			usePlotmath = is.language(texts), ...) {
+			usePlotmath = is.language(texts),
+			family = par3d("family"), font = par3d("font"), 
+			cex = par3d("cex"), useFreeType = par3d("useFreeType"),
+			...) {
   if (usePlotmath) 
     return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, 
                       pos = pos, offset = offset, ...))
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  new <- .fixMaterialArgs(..., Params = save)
-  do.call("rgl.texts", c(list(x = x, y = y, z = z, text = texts, 
+  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  # Force evaluation
+  list(x = x, y = y, z = z, text = texts, 
                               adj = adj, pos = pos,
-                              offset = offset), new))
+                              offset = offset)
+  
+  vertex  <- rgl.vertex(x,y,z)
+  nvertex <- rgl.nvertex(vertex)
+  
+  if (!is.null(pos)) {
+    npos <- length(pos)
+    stopifnot(all(pos %in% 0:6))
+    stopifnot(length(offset) == 1)
+    adj <- offset
+  } else {
+    pos <- 0
+    npos <- 1
+  }
+  if (length(adj) > 3) warning("Only the first three entries of 'adj' are used")
+  adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
+  
+  if (!length(texts)) {
+    if (nvertex)
+      warning("No text to plot")
+    return(invisible(integer(0)))
+  }
+  if (nvertex) {
+    texts    <- rep(texts, length.out=nvertex)
+    
+    idata <- as.integer(nvertex)
+    
+    nfonts <- max(length(family), length(font), length(cex)) 
+    family <- rep(family, length.out = nfonts)
+    font <- rep(font, length.out = nfonts)
+    cex <- rep(cex, length.out = nfonts)  
+    
+    family[font == 5] <- "symbol"
+    font <- ifelse( font < 0 | font > 4, 1, font)  
+    
+    ret <- .C( rgl_texts,
+               success = as.integer(FALSE),
+               idata,
+               as.double(adj),
+               as.character(texts),
+               as.numeric(vertex),
+               as.integer(nfonts),
+               as.character(family), 
+               as.integer(font),
+               as.numeric(cex),
+               as.integer(useFreeType),
+               as.integer(npos),
+               as.integer(pos),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_texts' failed")
+    
+    lowlevel(ret$success)
+  }
+  
 }
 texts3d	    <- text3d
 
@@ -416,11 +668,97 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
   }
 }
 
-terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z=NULL) {
+terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z=NULL,texture_s=NULL, texture_t=NULL) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.surface", c(list(x=x,y=z,z=y,coords=c(1,3,2),
-                                normal_x=normal_x,normal_y=normal_z,normal_z=normal_y), 
-                           .fixMaterialArgs(..., Params = save)))
+  # Evaluate args
+  list(x=x,y=z,z=y,coords=c(1,3,2),
+       normal_x=normal_x,normal_y=normal_z,normal_z=normal_y)
+  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  flags <- rep(FALSE, 4)
+  
+  if (is.matrix(x)) {
+    nx <- nrow(x)
+    flags[1] <- TRUE
+    if ( !identical( dim(x), dim(y) ) ) stop(gettextf("Bad dimension for %s", "rows"),
+                                             domain = NA)
+  } else nx <- length(x)
+  
+  if (is.matrix(y)) {
+    ny <- ncol(y)
+    flags[2] <- TRUE
+  } else ny <- length(y)
+  
+  if (is.matrix(z)) {
+    if (any(dim(z) != c(nx, ny)))
+      stop(gettextf("Bad dimension for %s", "z"))
+  } else if (is.matrix(x)) {
+    if (length(z) != nx)
+      stop(gettextf("Bad length for %s", "z"))
+    z <- matrix(z, nx, ny)
+  } else 
+    z <- matrix(z, nx, ny, byrow = TRUE)
+  
+  nz <- length(z)
+  
+  if ( nx*ny != nz)
+    stop("'z' length != 'x' rows * 'y' cols")
+  
+  if ( nx < 2 )
+    stop("rows < 2")
+  
+  if ( ny < 2 )   
+    stop("cols < 2")
+  
+  coords <- c(1,3,2)
+  nulls <- c(is.null(normal_x), is.null(normal_y), is.null(normal_z))
+  if (!all( nulls ) ) {
+    if (any( nulls )) stop("All normals must be supplied")
+    if ( !identical(dim(z), dim(normal_x)) 
+         || !identical(dim(z), dim(normal_y))
+         || !identical(dim(z), dim(normal_z)) ) stop(gettextf("Bad dimension for %s", "normals"),
+                                                     domain = NA)
+    flags[3] <- TRUE
+  }
+  
+  nulls <- c(is.null(texture_s), is.null(texture_t))
+  if (!all( nulls ) ) {
+    if (any( nulls )) stop("Both texture coordinates must be supplied")
+    if ( !identical(dim(z), dim(texture_s))
+         || !identical(dim(z), dim(texture_t)) ) stop(gettextf("Bad dimension for %s", "textures"),
+                                                      domain = NA)
+    flags[4] <- TRUE
+  }
+  
+  idata <- as.integer( c( nx, ny ) )
+  
+  xdecreasing <- diff(x[!is.na(x)][1:2]) < 0
+  ydecreasing <- diff(y[!is.na(y)][1:2]) < 0
+  parity <- (perm_parity(coords) + xdecreasing + ydecreasing ) %% 2
+  
+  if (is.na(parity))
+    parity <- 0
+  
+  ret <- .C( rgl_surface,
+             success = as.integer(FALSE),
+             idata,
+             as.numeric(x),
+             as.numeric(y),
+             as.numeric(z),
+             as.numeric(normal_x),
+             as.numeric(normal_y),
+             as.numeric(normal_z),
+             as.numeric(texture_s),
+             as.numeric(texture_t),
+             as.integer(coords),
+             as.integer(parity),
+             as.integer(flags),
+             NAOK=TRUE
+  )
+  
+  if (! ret$success)
+    stop("'rgl_surface' failed")
+  
+  lowlevel(ret$success)
 }
 surface3d   <- terrain3d
 
