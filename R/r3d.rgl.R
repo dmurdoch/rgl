@@ -547,11 +547,22 @@ close3d <- function(dev = cur3d(), silent = TRUE) {
   invisible(cur3d())
 }
 
-cur3d <- rgl.cur
+cur3d <- function() 
+  .Call( rgl_dev_getcurrent )
 
 set3d <- function(dev, silent = FALSE) {
   prev <- cur3d()
-  rgl.set(dev, silent = silent)
+  
+  idata <- c( as.integer(dev), as.integer(silent) )
+  
+  ret <- .C( rgl_dev_setcurrent, 
+             success=FALSE, 
+             idata
+  )
+  
+  if (! ret$success)
+    stop(gettextf("No device opened with id %s", dev), domain = NA)
+  
   prev
 }
 

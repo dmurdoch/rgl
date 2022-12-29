@@ -220,11 +220,13 @@ aspect3d(1,1,1)
 Besides the `*3d` functions mentioned above, there are 
 deprecated
 functions 
-`r indexfns(c("rgl.primitive", "rgl.points", "rgl.linestrips", "rgl.lines", "rgl.triangles",
-"rgl.quads"))`
-and other functions soon to be deprecated: `r indexfns(c("rgl.texts", "rgl.abclines", "rgl.planes", "rgl.bg",
-"rgl.clipplanes", "rgl.bbox", "rgl.spheres", "rgl.sprites", "rgl.surface"))`.  
-You should avoid using these functions, which do not
+`r deprecated(c("rgl.primitive", "rgl.points",
+"rgl.linestrips", "rgl.lines", "rgl.triangles",
+"rgl.quads", "rgl.abclines", "rgl.planes", "rgl.clipplanes",
+"rgl.spheres", "rgl.sprites"))`
+and other functions soon to be deprecated: `r indexfns(c("rgl.texts", "rgl.bg",
+"rgl.bbox", "rgl.surface"))`.  
+You should avoid using all of these functions, which do not
 work well with the higher level `*3d` functions.  See the 
 `r linkfn("r3d", text="?r3d", pkg="rgl")` help
 topic for details.  The functions 
@@ -970,12 +972,15 @@ Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("open3d")`:               | open a new window
 `r indexfns("close3d")`:              | close the current window
-`r indexfns(c("cur3d", "rgl.cur"))`:                | id of the active device
-`r indexfns(c("set3d", "rgl.set"))`:                | set a particular device to be active
+`r indexfns("cur3d")`:                | id of the active device
+`r indexfns("set3d")`:                | set a particular device to be active
 `r indexfns(c("pop3d", "rgl.pop"))`:     | delete objects from the scene
 `r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
 `r indexfns(c("ids3d", "rgl.ids"))`:              | ids, types and tags of current objects
 `r indexfns("tagged3d")`:                         | find tags or objects with tags
+
+There are deprecated versions of the functions above:
+`r deprecated(c("rgl.cur", "rgl.set"))`.  These should not be called.
 
 These functions are mainly intended for programming, and 
 have no corresponding `*3d` counterparts:
@@ -993,8 +998,8 @@ extract coordinates in a form suitable for passing to
 `r linkfn("triangles3d")`.  Currently a method is provided for
 `r linkfn("rglId")` objects.
 
-In addition to these, there are some other related functions which
-should rarely be called by users: `r indexfns(c("rgl.init", "rgl.open", "rgl.quit"))`.  
+In addition to these, there are some deprecated functions which
+should not be called: `r deprecated(c("rgl.init", "rgl.open", "rgl.close", "rgl.quit"))`.  
 
 
 ### Working with 3-D vectors
@@ -1094,7 +1099,7 @@ package are not described, or do not have examples.  There may
 even be functions that are missed completely, if the following
 list is not empty:
 ```{r echo=FALSE}
-setdiff(ls("package:rgl"), documentedfns)
+setdiff(ls("package:rgl"), c(documentedfns, deprecatedfns))
 ```
 
 ## Index of Functions

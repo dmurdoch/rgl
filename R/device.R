@@ -65,6 +65,8 @@ rgl.close <- function() {
 ##
 
 rgl.cur <- function() {
+  
+  .Deprecated("cur3d")
 
   .Call( rgl_dev_getcurrent )
 
@@ -75,11 +77,8 @@ rgl.cur <- function() {
 ##
 ##
 
-rgl.dev.list <- function() {
-
+rgl.dev.list <- function() 
   .Call( rgl_dev_list )
-  
-}
 
 
 ##
@@ -88,6 +87,8 @@ rgl.dev.list <- function() {
 ##
 
 rgl.set <- function(which, silent = FALSE) {
+  
+  .Deprecated("set3d")
 
   idata <- c( as.integer(which), as.integer(silent) )
 

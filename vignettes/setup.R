@@ -12,6 +12,7 @@ if (!requireNamespace("rmarkdown", quietly = TRUE) ||
 # knitr::opts_chunk$set(snapshot = TRUE)  # for snapshots instead of dynamic
 
 documentedfns <- c()
+deprecatedfns <- c()
 
 backticked <- function(s) paste0("`", s, "`")
 
@@ -21,6 +22,12 @@ indexfns <- function(fns, text = backticked(fns), show = TRUE, pkg = "rgl") {
                     if (show) linkfn(fns, text, pkg = pkg),
                     '</a>')
   paste(anchors, collapse=if (show) ", " else "")
+}
+
+deprecated <- function(fns, text = backticked(fns), show = TRUE, pkg = "rgl") {
+  deprecatedfns <<- c(deprecatedfns, fns)
+  if (show)
+    paste(text, collapse = ", ")
 }
 
 indexclass <-

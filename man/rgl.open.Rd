@@ -1,22 +1,20 @@
 \name{rgl.open}
-\title{Low level window interface}
+\title{Deprecated window interface}
 \alias{rgl.open}
 \alias{rgl.close}
 \alias{rgl.cur}
 \alias{rgl.set}
-\alias{rgl.quit}
 \alias{rgl.antialias}
-\alias{rgl.dev.list}
 \description{
-  3D real-time rendering system.
+Deprecated functions which are supplied for 
+back-compatibility only.  These may be removed as soon
+as the next release.
 }
 \usage{
 rgl.open(useNULL = rgl.useNULL())     # open new device
 rgl.close()    # close current device
 rgl.cur()      # returns active device ID
-rgl.dev.list() # returns all device IDs
 rgl.set(which, silent = FALSE) # set device as active
-rgl.quit()     # shutdown RGL device system
 }
 \arguments{
   \item{useNULL}{whether to open the \dQuote{null} device}
@@ -29,8 +27,6 @@ rgl.quit()     # shutdown RGL device system
   automatically.
   Opened devices automatically get the current device focus. The focus may be
   changed by using \code{rgl.set()}.
-  \code{rgl.quit()} shuts down the RGL subsystem and all open devices, 
-  detaches the package including the shared library and additional system libraries.
   
   The \code{rgl.open()} function attempts to open a new RGL window.
   If the \code{"rgl.antialias"} option is set, it will be used to
@@ -57,32 +53,11 @@ rgl.quit()     # shutdown RGL device system
 }
 \value{
   \code{rgl.open}, \code{rgl.close} and \code{rgl.set} are called for their side effects
-  and return no useful value.  Similarly \code{rgl.quit} is not designed
-  to return useful values; in fact, users shouldn't call it at all!
+  and return no useful value.  
   
-  \code{rgl.cur} returns the currently active devices, or \code{0} if none is
-  active; \code{rgl.dev.list} returns a vector of all open devices.  Both functions name
-  the items according to the type of device:  \code{null} for a hidden null device, 
+  \code{rgl.cur} returns the currently active device, or \code{0} if none is
+  active.  It is named according to the type of device:  \code{null} for a hidden null device, 
   \code{wgl} for a Windows device, and \code{glX} for an X windows device.
 }
-\seealso{
-\link{r3d},
-\code{\link{rgl.init}},
-\code{\link{rgl.clear}}, 
-\code{\link{rgl.pop}},
-\code{\link{rgl.viewpoint}},
-\code{\link{rgl.light}},
-\code{\link{rgl.bg}},
-\code{\link{rgl.bbox}},
-\code{\link{rgl.points}},
-\code{\link{rgl.lines}},
-\code{\link{rgl.triangles}},
-\code{\link{rgl.quads}},
-\code{\link{rgl.texts}},
-\code{\link{rgl.surface}},
-\code{\link{rgl.spheres}},
-\code{\link{rgl.sprites}},
-\code{\link{rgl.snapshot}},
-\code{\link{rgl.useNULL}}
-}
-\keyword{dynamic}
+
+\keyword{internal}
