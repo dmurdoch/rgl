@@ -1,4 +1,4 @@
-0.111.3
+0.111.4
 
 This is a fairly small update, triggered by a request from CRAN.
 
@@ -25,3 +25,5 @@ reliable `rgl` calls, and added an example mouse handler
 for panning the display.
 
 I have run revdep checks and identified no issues.
+
+Version 0.111.4 fixes some changed URLs.

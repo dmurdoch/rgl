@@ -109,7 +109,7 @@ Get buffer object.
 }
 \subsection{Returns}{
 A list containing components described here:
-\url{https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#reference-buffer}.
+\url{https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-buffer}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -228,7 +228,7 @@ Get \code{bufferView} object.
 }
 \subsection{Returns}{
 A list containing components described here:
-\url{https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#reference-bufferview}.
+\url{https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-bufferview}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -316,7 +316,7 @@ Get accessor object
 }
 \subsection{Returns}{
 A list containing components described here:
-\url{https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#reference-accessor}
+\url{https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-accessor}
 }
 }
 \if{html}{\out{<hr>}}

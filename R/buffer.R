@@ -134,7 +134,7 @@ Buffer <- R6Class("Buffer",
 #' @param default Default buffer object if `buf` not found.
 #'
 #' @return A list containing components described here:
-#' \url{https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#reference-buffer}.
+#' \url{https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-buffer}.
 #'
       getBuffer = function(buf, default = list(byteLength = 0)) {
         buffer <- if (buf + 1 <= length(private$buffers))
@@ -250,7 +250,7 @@ Buffer <- R6Class("Buffer",
 #' @param bufv `bufferView` number.
 #'
 #' @return A list containing components described here:
-#' \url{https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#reference-bufferview}.
+#' \url{https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-bufferview}.
 #'
       getBufferview = function(bufv) {
         bufferview <- private$bufferViews[[bufv+1]]
@@ -313,7 +313,7 @@ Buffer <- R6Class("Buffer",
 #' @param acc Accessor number
 #'
 #' @return A list containing components described here:
-#' \url{https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#reference-accessor}
+#' \url{https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-accessor}
 #'
       getAccessor = function(acc)
         structure(private$accessors[[acc + 1]], class = "gltfAccessor"),
