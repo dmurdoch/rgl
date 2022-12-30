@@ -1,19 +1,16 @@
 \name{viewpoint}
-\alias{rgl.viewpoint}
 \alias{view3d}
 \title{Set up viewpoint}
 \description{
   Set the viewpoint orientation.
 }
 \usage{
-view3d( theta = 0, phi = 15, ...)
-rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, 
+view3d( theta = 0, phi = 15, fov = 60, zoom = 1, 
         scale = par3d("scale"), interactive = TRUE, userMatrix, 
         type = c("userviewpoint", "modelviewpoint") )
 }
 \arguments{
   \item{theta, phi}{polar coordinates in degrees. \code{theta} rotates round the vertical axis. \code{phi} rotates round the horizontal axis.}
-  \item{...}{additional parameters to pass to \code{rgl.viewpoint}}
   \item{fov}{field-of-view angle in degrees}
   \item{zoom}{zoom factor}
   \item{scale}{real length 3 vector specifying the rescaling to apply to each axis}

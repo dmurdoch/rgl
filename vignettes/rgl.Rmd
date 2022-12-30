@@ -428,7 +428,7 @@ FOV         |       | Field of view, in degrees.  Zero means isometric perspecti
 ignoreExtent |      | Should `rgl` ignore the size of new objects when computing the bounding box?
 skipRedraw   |      | Should `rgl` suppress updates to the display? 
 maxClipPlanes | read-only | How many clip planes can be defined?
-modelMatrix | read-only | The OpenGL ModelView matrix; partly set by `r indexfns("view3d")` or the obsolete `r indexfns("rgl.viewpoint")`
+modelMatrix | read-only | The OpenGL ModelView matrix; partly set by `r indexfns("view3d")`
 projMatrix  | read-only | The OpenGL Projection matrix
 bbox        | read-only | Current bounding-box of the scene
 viewport    |       | Dimensions in pixels of the scene within the window
@@ -438,6 +438,9 @@ mouseMode   |       | What the mouse buttons do.  See `r linkfn("mouseMode", '<c
 observer    | read-only | The position of the observer; set by `r indexfns("observer3d")`
 scale       |           | Rescaling for each coordinate; see `r linkfn("aspect3d")`
 zoom        |           | Magnification of the scene
+
+The deprecated `r deprecated("rgl.viewpoint")` function
+should not be used.
 
 ### Default settings
 
@@ -734,7 +737,7 @@ you run out of memory if your scenes are really big.
 ### Older methods
 
 The original way to insert an `rgl` scene in a document was to use
-the deprecated `r indexfns("writeWebGL")` function to write HTML code to insert in a document. 
+the deprecated `r deprecated("writeWebGL")` function to write HTML code to insert in a document. 
 Later, `Sweave` and `knitr` hooks were added.  These are no longer supported, and you should update old documents to use the newer methods.  If you are
 reading documents that suggest using those methods, let the
 author know they need updating!
@@ -835,7 +838,6 @@ Function    | Description
 ----------- | -------------
 `r indexfns("scene3d")`:    | Save a scene to an R variable, which can be saved and reloaded
 `r indexfns("rglwidget")`: | Prints as HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
-`r linkfn("writeWebGL")`: | Deprecated.
 `r indexfns("writeASY")`:   | Write files for Asymptote
 `r indexfns("writePLY")`:   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`:   | Read or write OBJ files (commonly used in 3D graphics)
