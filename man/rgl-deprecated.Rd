@@ -7,6 +7,8 @@
 \alias{rgl.light}
 \alias{rgl.lines}
 \alias{rgl.linestrips}
+\alias{rgl.pop}
+\alias{rgl.select3d}
 \alias{rgl.triangles}
 \alias{rgl.quads}
 \alias{rgl.open}
@@ -48,7 +50,10 @@ rgl.linestrips(x, y = NULL, z = NULL, ...)
 rgl.open(useNULL = rgl.useNULL())     # open new device
 
 rgl.points(x, y = NULL, z = NULL, ... )
+rgl.pop(...)
 rgl.quads(x, y = NULL, z = NULL, normals = NULL, texcoords = NULL, ... )
+rgl.select3d(button = c("left", "middle", "right"),
+             dev = cur3d(), subscene = currentSubscene3d(dev))
 rgl.set(which, silent = FALSE) # set device as active
 rgl.setAxisCallback(axis, draw = NULL, 
                     dev = cur3d(), subscene = currentSubscene3d(dev))

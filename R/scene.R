@@ -64,7 +64,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
 ##
 ##
 
-pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
+pop3d <- function( type = "shapes", id = 0, tag = NULL) {
   if (!is.null(tag)) {
     if (!missing(id))
       stop("Only one of 'id' and 'tag' should be specified.")
@@ -83,9 +83,14 @@ pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
     )
 
     if (! ret$success)
-      stop(gettextf("'rgl.pop' failed for id %d", i), domain = NA)
+      stop(gettextf("'rgl_pop' failed for id %d", i), domain = NA)
   }
   lowlevel()
+}
+
+rgl.pop <- function(...) {
+  .Deprecated("pop3d")
+  pop3d(...)
 }
 
 ids3d <- function( type = "shapes", subscene = NA, tags = FALSE) {
@@ -985,6 +990,7 @@ rgl.projection <- function(dev = cur3d(), subscene = currentSubscene3d(dev)) {
      
 rgl.select3d <- function(button = c("left", "middle", "right"), 
                          dev = cur3d(), subscene = currentSubscene3d(dev)) {
+  .Deprecated("select3d")
   rect <- rgl.select(button = button, dev = dev, subscene = subscene)
   if (is.null(rect)) return(NULL)
   proj <- rgl.projection(dev = dev, subscene = subscene)

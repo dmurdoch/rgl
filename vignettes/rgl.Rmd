@@ -786,7 +786,7 @@ function from information about the projection and mouse
 selection region; it is used internally in the 
 functions above.
 
-The `r indexfns("rgl.select3d")` function is an obsolete version of
+The deprecated `r deprecated("rgl.select3d")` function is an obsolete version of
 `select3d`, and `r indexfns("rgl.select")` is a low-level support
 function.
 
@@ -962,13 +962,13 @@ Function                             | Description
 `r indexfns("close3d")`:              | close the current window
 `r indexfns("cur3d")`:                | id of the active device
 `r indexfns("set3d")`:                | set a particular device to be active
-`r indexfns(c("pop3d", "rgl.pop"))`:     | delete objects from the scene
+`r indexfns("pop3d")`:     | delete objects from the scene
 `r indexfns(c("clear3d"))`:            | delete all objects of certain classes
 `r indexfns("ids3d")`:              | ids, types and tags of current objects
 `r indexfns("tagged3d")`:                         | find tags or objects with tags
 
 There are deprecated versions of the functions above:
-`r deprecated(c("rgl.clear", "rgl.cur", "rgl.ids", "rgl.set"))`.  These should not be called.
+`r deprecated(c("rgl.clear", "rgl.cur", "rgl.ids", "rgl.pop", "rgl.set"))`.  These should not be called.
 
 These functions are mainly intended for programming, and 
 have no corresponding `*3d` counterparts:

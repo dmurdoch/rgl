@@ -764,9 +764,19 @@ surface3d   <- terrain3d
 
 # Interaction
 
-select3d    <- function(...) {
+select3d    <- function(button = c("left", "middle", "right"), 
+                        dev = cur3d(), subscene = currentSubscene3d(dev)) {
   .check3d()
-  rgl.select3d(...)
+  rect <- rgl.select(button = button, dev = dev, subscene = subscene)
+  if (is.null(rect)) return(NULL)
+  proj <- rgl.projection(dev = dev, subscene = subscene)
+  
+  llx <- rect[1]
+  lly <- rect[2]
+  urx <- rect[3]
+  ury <- rect[4]
+  
+  selectionFunction3d(proj, region = c(llx, lly, urx, ury))
 }
 
 # 3D Generic Object Rendering Attributes
