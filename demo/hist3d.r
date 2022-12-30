@@ -54,7 +54,7 @@ light3d(0, 0)
 binplot.3d(c(-0.5,0.5),c(4.5,5.5),2,alpha=0.6)
 
 # Setting the viewpoint ('theta' and 'phi' have the same meaning as in persp):
-rgl.viewpoint(theta=40,phi=40)
+view3d(theta=40,phi=40)
 
 # Choosing a lightgrey background:
 bg3d(col="#cccccc")

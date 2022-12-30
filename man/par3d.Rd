@@ -253,7 +253,7 @@ digit precision to distinguish values in any coordinate.
 }
 
 \seealso{
-\code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
+\code{\link{view3d}} to set \code{FOV} and \code{zoom}.
 
 \code{\link{open3d}} for how to open a new window
 with default settings for these parameters.

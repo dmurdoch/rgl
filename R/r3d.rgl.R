@@ -60,7 +60,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
   }
   
   if ( userviewpoint || modelviewpoint) 
-    rgl.viewpoint(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
+    view3d(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
   
   if ( material ) 
     rgl.material()
@@ -289,9 +289,32 @@ light3d     <- function(theta=0, phi=15,
   lowlevel(ret$success)
 }
 
-view3d      <- function(theta=0,phi=15,...) {
+view3d      <- function(theta = 0.0, phi = 15.0, 
+                        fov = 60.0, zoom = 1.0, scale = par3d("scale"),
+                        interactive = TRUE, userMatrix, 
+                        type = c("userviewpoint", "modelviewpoint")) {
   .check3d()
-  rgl.viewpoint(theta=theta,phi=phi,...)
+  
+  zoom <- rgl.clamp(zoom,0,Inf)
+  phi  <- rgl.clamp(phi,-90,90)
+  fov  <- rgl.clamp(fov,0,179)
+  
+  type <- match.arg(type, several.ok = TRUE)
+  
+  polar <- missing(userMatrix)
+  if (polar) userMatrix <- diag(4)
+  
+  idata <- as.integer(c(interactive,polar, "userviewpoint" %in% type, "modelviewpoint" %in% type))
+  ddata <- as.numeric(c(theta,phi,fov,zoom,scale,userMatrix[1:16]))
+  
+  ret <- .C( rgl_viewpoint,
+             success = FALSE,
+             idata,
+             ddata
+  )
+  
+  if (! ret$success)
+    stop("'rgl_viewpoint' failed")
 }
 
 bbox3d	    <- function(xat = NULL, 

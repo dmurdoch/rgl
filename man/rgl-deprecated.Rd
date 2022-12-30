@@ -11,6 +11,7 @@
 \alias{rgl.select3d}
 \alias{rgl.triangles}
 \alias{rgl.quads}
+\alias{rgl.viewpoint}
 \alias{rgl.open}
 \alias{rgl.close}
 \alias{rgl.cur}
@@ -67,6 +68,9 @@ rgl.texts(x, y = NULL, z = NULL, text,
           cex = par3d("cex"), 
           useFreeType = par3d("useFreeType"), ...)
 rgl.triangles(x, y = NULL, z = NULL, normals = NULL, texcoords = NULL, ... )
+rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, 
+        scale = par3d("scale"), interactive = TRUE, userMatrix, 
+        type = c("userviewpoint", "modelviewpoint") )
 writeWebGL(dir = "webGL", filename = file.path(dir, "index.html"), 
            template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
            prefix = "",
