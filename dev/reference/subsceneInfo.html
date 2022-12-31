@@ -18,7 +18,7 @@ window."><meta name="robots" content="noindex"><!-- mathjax --><script src="http
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.111.4</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@ window."><meta name="robots" content="noindex"><!-- mathjax --><script src="http
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
+    </li>
+    <li>
+      <a href="../articles/deprecation.html">Deprecating the `rgl.*` interface</a>
     </li>
     <li>
       <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
@@ -133,8 +136,8 @@ embedded in its parent.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">plot3d</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   open3d()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  157 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> glX </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 157 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   x &lt;- sort(rnorm(1000))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -145,7 +148,7 @@ embedded in its parent.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   plot3d(x, y, z, col = rainbow(1000))</span>
 <span class="r-in"><span><span class="fu">subsceneInfo</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1849</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1870</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $embeddings</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   viewport projection      model      mouse </span>

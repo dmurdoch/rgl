@@ -18,7 +18,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.111.4</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
+    </li>
+    <li>
+      <a href="../articles/deprecation.html">Deprecating the `rgl.*` interface</a>
     </li>
     <li>
       <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
@@ -77,9 +80,8 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.select3d</span><span class="op">(</span>button <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"left"</span>, <span class="st">"middle"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">select3d</span><span class="op">(</span>button <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"left"</span>, <span class="st">"middle"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
 <span>             dev <span class="op">=</span> <span class="fu"><a href="open3d.html">cur3d</a></span><span class="op">(</span><span class="op">)</span>, subscene <span class="op">=</span> <span class="fu"><a href="subscene3d.html">currentSubscene3d</a></span><span class="op">(</span><span class="va">dev</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">select3d</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
 <span><span class="fu">selectionFunction3d</span><span class="op">(</span><span class="va">proj</span>, region <span class="op">=</span> <span class="va">proj</span><span class="op">$</span><span class="va">region</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -90,9 +92,6 @@
 
   <dt> dev, subscene</dt>
 <dd><p>The RGL device and subscene to work with</p></dd>
-
-  <dt> ... </dt>
-<dd><p>Button argument to pass to <code>rgl.select3d</code></p></dd>
 
   <dt>proj</dt>
 <dd><p>An object returned from <code><a href="rgl.user2window.html">rgl.projection</a></code>
@@ -106,9 +105,9 @@
     <h2>Details</h2>
     
     
-<p><code>select3d</code> and <code>rgl.select3d</code> select 3-dimensional regions by allowing the
+<p><code>select3d</code> selects 3-dimensional regions by allowing the
 user to use a mouse to draw a rectangle showing
-the projection of the region onto the screen.  They return
+the projection of the region onto the screen.  It returns
 a function which tests points for inclusion in the selected region.</p>
 <p><code>selectionFunction3d</code> constructs such a test function given 
 coordinates and current transformation matrices.</p>
@@ -119,7 +118,7 @@ remain the same, though no longer corresponding to a rectangle on the screen.</p
     <h2>Value</h2>
     
 
-<p>All of these return a function <code>f(x, y, z)</code> which tests whether each
+<p>These return a function <code>f(x, y, z)</code> which tests whether each
 of the points <code>(x, y, z)</code> is in the selected region, returning
 a logical vector.  This function accepts input in a wide
 variety of formats as it uses <code><a href="https://rdrr.io/r/grDevices/xyz.coords.html" class="external-link">xyz.coords</a></code></p>
