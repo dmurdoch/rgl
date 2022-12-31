@@ -50,7 +50,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
     view3d(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
     
   if ( material ) 
-    rgl.material()
+    rgl.material0()
   
   if (! ret)
     stop("'rgl_clear' failed")
@@ -285,7 +285,7 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
                    fogScale = 1, ... ) {
   .Deprecated("bg3d")
   
-  rgl.material( color=color, back=back, ... )
+  rgl.material0( color=color, back=back, ... )
 
   fogtype <- rgl.enum.fogtype(fogtype)
 
@@ -321,7 +321,7 @@ rgl.bbox <- function(
 
   .Deprecated("bbox3d")
   
-  rgl.material( ... )
+  rgl.material0( ... )
 
   if (is.null(xat)) 
     xlab <- NULL
@@ -453,7 +453,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 
 rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, indices=NULL, ... ) {
-  rgl.material( ... )
+  rgl.material0( ... )
 
   type <- rgl.enum.primtype(type)
 
@@ -560,7 +560,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
                          texture_s=NULL, texture_t=NULL) {
   .Deprecated("surface3d")
   
-  rgl.material(...)
+  rgl.material0(...)
   
   flags <- rep(FALSE, 4)
   
@@ -656,7 +656,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
 ##
 
 rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE, ...) {
-  rgl.material(...)
+  rgl.material0(...)
   
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
@@ -689,7 +689,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE,
 rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
   .Deprecated("planes3d")
   
-  rgl.material(...)
+  rgl.material0(...)
   
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
@@ -750,7 +750,7 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
 rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
   .Deprecated("abclines3d")
   
-  rgl.material(...)
+  rgl.material0(...)
   
   bases  <- rgl.vertex(x, y, z)
   nbases <- rgl.nvertex(bases)
@@ -786,7 +786,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
   
   .Deprecated()
   
-  rgl.material( ... )
+  rgl.material0( ... )
   
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
@@ -854,7 +854,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
                          ... ) {
   .Deprecated("sprites3d")
   
-  rgl.material(...)
+  rgl.material0(...)
   
   center  <- rgl.vertex(x,y,z)
   ncenter <- rgl.nvertex(center)

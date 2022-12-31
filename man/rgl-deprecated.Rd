@@ -7,6 +7,7 @@
 \alias{rgl.light}
 \alias{rgl.lines}
 \alias{rgl.linestrips}
+\alias{rgl.material}
 \alias{rgl.pop}
 \alias{rgl.select3d}
 \alias{rgl.triangles}

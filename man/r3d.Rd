@@ -52,7 +52,7 @@
   
   The r3d functions also preserve the \code{rgl.material} setting across
   calls (except for texture elements, in the current implementation), whereas
-  the \code{rgl.*} functions leave it as set by the last call.
+  the deprecated \code{rgl.*} functions leave it as set by the last call.
   
   The example code below illustrates the two coordinate systems.
 }

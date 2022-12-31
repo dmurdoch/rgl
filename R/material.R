@@ -8,7 +8,7 @@
 ## ===[ SECTION: generic appearance function ]================================
 ##
 
-rgl.material <- function(
+rgl.material0 <- function(
   color        = "white",
   alpha        = 1.0,
   lit          = TRUE, 
@@ -136,6 +136,11 @@ rgl.material <- function(
     cdata,
     ddata
   )
+}
+
+rgl.material <- function(...) {
+  .Deprecated("material3d")
+  rgl.material0(...)
 }
 
 rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count

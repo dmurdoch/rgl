@@ -63,7 +63,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     view3d(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
   
   if ( material ) 
-    rgl.material()
+    rgl.material0()
   
   if ( 4 %in% typeid0 ) { # userviewpoint
     do.call("par3d", defaults["FOV"])
@@ -116,8 +116,8 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 # This one just expands the argument names to match the
 # standard names
 .fixMaterialArgs2 <- function(..., col) {
-  call <- do.call(call, list("rgl.material", ...))
-  result <- as.list(match.call(rgl.material, call))[-1]
+  call <- do.call(call, list("rgl.material0", ...))
+  result <- as.list(match.call(rgl.material0, call))[-1]
   if (!missing(col) && is.null(result$color))
     result$color <- col
   result
@@ -127,8 +127,8 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 # If warn is TRUE, give a warning instead of ignoring extras.
 
 .getMaterialArgs <- function(..., material = list(), warn = FALSE, col = material[["col"]]) {
-  fullyNamed <- as.list(match.call(rgl.material, 
-                           as.call(c(list(as.name("rgl.material"),
+  fullyNamed <- as.list(match.call(rgl.material0, 
+                           as.call(c(list(as.name("rgl.material0"),
                                         ...), material))))[-1]
   if (!is.null(col) && !("color" %in% names(fullyNamed)))
     fullyNamed$color <- col
@@ -164,7 +164,7 @@ material3d  <- function(..., id = NULL) {
   value <- rgl.getmaterial(id = id)[argnames]
   if (length(args)) {
     args <- do.call(".fixMaterialArgs", args)
-    do.call("rgl.material", args)
+    do.call("rgl.material0", args)
     return(invisible(value))
   } else if (length(argnames) == 1) return(value[[1]])
   else return(value)
@@ -219,7 +219,7 @@ bg3d        <- function(color,
                           color = color, 
   			  back = back, lit = FALSE, Params = save)
   
-  do.call("rgl.material", .fixMaterialArgs(..., Params = new))
+  do.call("rgl.material0", .fixMaterialArgs(..., Params = new))
   fogtype <- rgl.enum.fogtype(fogtype)
   
   idata   <- as.integer(c(sphere,fogtype))
@@ -334,7 +334,7 @@ bbox3d	    <- function(xat = NULL,
        xunit=xunit, yunit=yunit, zunit=zunit, expand=expand,
        draw_front=draw_front)
   
-  do.call(rgl.material, .fixMaterialArgs(..., Params = save))
+  do.call(rgl.material0, .fixMaterialArgs(..., Params = save))
   
   if (is.null(xat)) 
     xlab <- NULL
@@ -458,7 +458,7 @@ text3d      <- function(x, y = NULL, z = NULL,
     return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, 
                       pos = pos, offset = offset, ...))
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  do.call("rgl.material0", .fixMaterialArgs(..., Params = save))
   # Force evaluation
   list(x = x, y = y, z = z, text = texts, 
                               adj = adj, pos = pos,
@@ -526,7 +526,7 @@ spheres3d   <- function(x, y = NULL, z = NULL, radius = 1, fastTransparency = TR
   .check3d(); save <- material3d(); on.exit(material3d(save))
   # Force evaluation of args
   list(x = x, y = y, z = z, radius = radius, fastTransparency = fastTransparency)
-  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  do.call("rgl.material0", .fixMaterialArgs(..., Params = save))
   
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
@@ -556,7 +556,7 @@ planes3d   <- function(a,b=NULL,c=NULL,d=0,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   # Force evaluation of args
   list(a=a,b=b,c=c,d=d)
-  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  do.call("rgl.material0", .fixMaterialArgs(..., Params = save))
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
   noffsets <- length(d)
@@ -607,7 +607,7 @@ abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   # Force evaluation of args
   list(x=x,y=y,z=z,a=a,b=b,c=c)
-  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  do.call("rgl.material0", .fixMaterialArgs(..., Params = save))
   
   bases  <- rgl.vertex(x, y, z)
   nbases <- rgl.nvertex(bases)
@@ -638,7 +638,7 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
 												...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   
-  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  do.call("rgl.material0", .fixMaterialArgs(..., Params = save))
   
   if (missing(userMatrix)) {
     userMatrix <- getr3dDefaults()$userMatrix
@@ -696,7 +696,7 @@ terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z
   # Evaluate args
   list(x=x,y=z,z=y,coords=c(1,3,2),
        normal_x=normal_x,normal_y=normal_z,normal_z=normal_y)
-  do.call("rgl.material", .fixMaterialArgs(..., Params = save))
+  do.call("rgl.material0", .fixMaterialArgs(..., Params = save))
   flags <- rep(FALSE, 4)
   
   if (is.matrix(x)) {
