@@ -918,8 +918,9 @@ close3d <- function(dev = cur3d(), silent = TRUE) {
   invisible(cur3d())
 }
 
-cur3d <- function() 
-  .Call( rgl_dev_getcurrent )
+cur3d <- function() .Call( rgl_dev_getcurrent )
+  
+rgl.cur <- cur3d
 
 set3d <- function(dev, silent = FALSE) {
   prev <- cur3d()

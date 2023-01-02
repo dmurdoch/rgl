@@ -150,11 +150,21 @@ interface is more flexible, and more similar to the base graphics
 interface in R, so I've decided it will be the only one 
 available going forward.
 
+## Some `rgl.*` functions are not deprecated
+
 There will still be some `rgl.*` functions in the package.
 These are functions that are mainly intended for 
-programming, such as `rgl.attrib()` and `rgl.user2window()`,
-and a few legacy functions like `rgl.Sweave()` supporting
-older approaches of using `rgl`.
+programming, such as `rgl.attrib()` and `rgl.user2window()`, and
+a few legacy functions like `rgl.Sweave()` supporting
+older approaches of using `rgl`.  
+
+In a few cases
+both function versions are identical
+(`rgl.cur`, `rgl.ids`, and `rgl.pop` are identical
+to `cur3d`, `ids3d` and `pop3d` respectively),
+and for those the `rgl.*` versions will be kept,
+but the documentation will concentrate on the `*3d` functions.
+
 
 # My package uses `rgl.*`.  What do I need to do?
 
@@ -205,7 +215,7 @@ used the convention
 that the `y` argument held the surface, so the `y` direction 
 should point up.  Using `view3d(theta = 45, phi = 45)`
 (which it was already doing) gives a reasonable view.
-  
+
 ## Others
 
 If you have particular problems adapting other `rgl.*` to the

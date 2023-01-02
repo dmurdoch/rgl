@@ -60,19 +60,6 @@ rgl.close <- function() {
 }
 
 ## 
-## get current device
-##
-##
-
-rgl.cur <- function() {
-  
-  .Deprecated("cur3d")
-
-  .Call( rgl_dev_getcurrent )
-
-}
-
-## 
 ## get all devices
 ##
 ##

@@ -88,10 +88,7 @@ pop3d <- function( type = "shapes", id = 0, tag = NULL) {
   lowlevel()
 }
 
-rgl.pop <- function(...) {
-  .Deprecated("pop3d")
-  pop3d(...)
-}
+rgl.pop <- pop3d
 
 ids3d <- function( type = "shapes", subscene = NA, tags = FALSE) {
   type <- c(rgl.enum.nodetype(type), 0)
@@ -116,10 +113,7 @@ ids3d <- function( type = "shapes", subscene = NA, tags = FALSE) {
   result
 }
 
-rgl.ids <- function(...) {
-  .Deprecated("ids3d")
-  ids3d(...)
-}
+rgl.ids <- ids3d
 
 rgl.attrib.count <- function( id, attrib ) {
   stopifnot(length(attrib) == 1)
@@ -784,7 +778,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
                       cex=par3d("cex"), useFreeType=par3d("useFreeType"), 
                       ... ) {
   
-  .Deprecated()
+  .Deprecated("text3d")
   
   rgl.material0( ... )
   

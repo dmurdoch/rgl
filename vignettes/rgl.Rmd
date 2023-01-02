@@ -969,8 +969,12 @@ Function                             | Description
 `r indexfns("ids3d")`:              | ids, types and tags of current objects
 `r indexfns("tagged3d")`:                         | find tags or objects with tags
 
-There are deprecated versions of the functions above:
-`r deprecated(c("rgl.clear", "rgl.cur", "rgl.ids", "rgl.pop", "rgl.set"))`.  These should not be called.
+Some of these functions have alternate names for
+back compatibility:  `r duplicated(c("rgl.cur",
+"rgl.ids", "rgl.pop"))`.  Either name will work,
+but the `*3d` version is recommended for new code.
+Some have deprecated versions:
+`r deprecated(c("rgl.clear", "rgl.set"))`.  Those should not be called.
 
 These functions are mainly intended for programming, and 
 have no corresponding `*3d` counterparts:
