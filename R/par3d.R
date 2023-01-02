@@ -1,4 +1,4 @@
-.Par3d <- c("antialias", "FOV", "ignoreExtent", "listeners",
+rgl.par3d.names <- c("antialias", "FOV", "ignoreExtent", "listeners",
             "mouseMode", "observer", 
             "modelMatrix", "projMatrix", "skipRedraw", "userMatrix",
             "userProjection",
@@ -7,7 +7,7 @@
             "maxClipPlanes", "glVersion", "activeSubscene"
 )
 
-.Par3d.readonly <- c( 
+rgl.par3d.readonly <- c( 
   "antialias", "observer",
   "modelMatrix", "projMatrix",
   "bbox", "fontname",
@@ -20,8 +20,8 @@ par3d <- function(..., no.readonly = FALSE, dev = cur3d(), subscene = currentSub
   args <- list(...)
   if (!length(args))
     args <- as.list(if (no.readonly)
-      .Par3d[-match(.Par3d.readonly, .Par3d)]
-      else .Par3d)
+      rgl.par3d.names[-match(rgl.par3d.readonly, rgl.par3d.names)]
+      else rgl.par3d.names)
   else {
     if (is.null(names(args)) && all(unlist(lapply(args, is.character))))
       args <- as.list(unlist(args))

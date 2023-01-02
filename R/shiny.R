@@ -64,7 +64,7 @@ shinySetPar3d <- function(..., session,
 	if (is.null(argnames) || any(argnames == ""))
 		stop("Parameters must all be named")
 	
-	badargs <- argnames[!(argnames %in% .Par3d) | argnames %in% .Par3d.readonly]
+	badargs <- argnames[!(argnames %in% rgl.par3d.names) | argnames %in% rgl.par3d.readonly]
 	if (length(badargs))
 		stop("Invalid parameter(s): ", badargs)
 	
@@ -80,7 +80,7 @@ shinyGetPar3d <- function(parameters, session,
 													subscene = currentSubscene3d(cur3d()),
 													tag = "") {
 	registerShinyHandlers()
-	badargs <- parameters[!(parameters %in% .Par3d)]
+	badargs <- parameters[!(parameters %in% rgl.par3d.names)]
 	if (length(badargs))
 		stop("invalid parameter(s): ", badargs)
 	session$sendCustomMessage("shinyGetPar3d",

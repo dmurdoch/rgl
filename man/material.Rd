@@ -1,5 +1,7 @@
 \name{material3d}
 \alias{material3d}
+\alias{rgl.material.names}
+\alias{rgl.material.readonly}
 \concept{color}
 \concept{lit}
 \concept{ambient}
@@ -36,7 +38,8 @@
 }
 \usage{
 material3d(..., id = NULL)
-
+rgl.material.names
+rgl.material.readonly
 }
 \arguments{
   \item{...}{Material properties to set or query.}
@@ -46,8 +49,8 @@ material3d(..., id = NULL)
   }
 }
 \details{
-In an \pkg{rgl} scene, each object has \dQuote{material properties} that control how it is rendered, as well as
-one property (\code{tag}) which can be used to store a 
+In an \pkg{rgl} scene, each object has \dQuote{material properties} that control how it is rendered and (in the case of \code{tag}) 
+that can be used to store a 
 label or other information.  \code{material3d} sets defaults
 for these properties and queries the defaults or specific
 values for an individual object.
@@ -66,7 +69,10 @@ set default values for material properties.
 
 \section{Material Properties}{
 
-The following read-write material properties control the appearance
+The \code{rgl.material.names} variable contains the
+full list of material names.
+The following read-write material properties control
+the appearance
 of objects in an \pkg{rgl} scene.
 
 \describe{
@@ -209,8 +215,11 @@ destination alpha or its opposite.}
   \item{col}{An allowed abbreviation of \code{color}.}
 }
 
-There is one read-only property that can be queried
-but not set:
+The \code{rgl.material.readonly} variable contains
+the subset of material properties that are read-only
+so they can be queried
+but not set.
+Currently there is only one:
 
 \describe{
 \item{isTransparent}{Is the current color transparent?}

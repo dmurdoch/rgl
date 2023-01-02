@@ -1,5 +1,7 @@
 \name{par3d}
 \alias{par3d}
+\alias{rgl.par3d.names}
+\alias{rgl.par3d.readonly}
 \concept{activeSubscene}
 \concept{antialias}
 \concept{bbox}
@@ -34,6 +36,8 @@
 \usage{
 par3d(\dots, no.readonly = FALSE, dev = cur3d(), 
       subscene = currentSubscene3d(dev))
+rgl.par3d.names
+rgl.par3d.readonly
 }
 
 \arguments{
@@ -78,8 +82,14 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
 
 \section{Parameters}{
 
-  \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
-  may only be used in queries, i.e., they do \emph{not} set anything.
+The \code{rgl.par3d.names} variable contains the
+full list of names of \code{par3d} properties.
+\code{rgl.par3d.readonly} contains the list of
+read-only properties.
+
+In the list below, \emph{\bold{R.O.}} indicates the
+read-only arguments: These may only be used in
+queries, they do not set anything.
   
   \describe{
     \item{\code{activeSubscene}}{\emph{\bold{R.O.}} integer.  Used

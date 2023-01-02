@@ -203,7 +203,7 @@ plot3d.rglscene <- function(x, add=FALSE, open3dParams = getr3dDefaults(), ...) 
       params$bg[names(x$bg)] <- x$bg
     }
     if (!is.null(root$par3d)) {
-      ind <- !(names(root$par3d) %in% .Par3d.readonly)
+      ind <- !(names(root$par3d) %in% rgl.par3d.readonly)
       params[names(root$par3d)[ind]] <- root$par3d[ind]
     }
     open3d(params = params)

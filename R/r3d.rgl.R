@@ -83,7 +83,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 
 # Environment
 
-.material3d <- c("color", "alpha", "lit", "ambient", "specular",
+rgl.material.names <- c("color", "alpha", "lit", "ambient", "specular",
     "emission", "shininess", "smooth", "front", "back", "size", 
     "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
@@ -92,7 +92,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     "polygon_offset", "margin", "floating", "tag",
     "blend")
 
-.material3d.readOnly <- "isTransparent"
+rgl.material.readonly <- "isTransparent"
 
 # This function expands a list of arguments by putting
 # all entries from Params (i.e. the current settings by default)
@@ -132,7 +132,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
                                         ...), material))))[-1]
   if (!is.null(col) && !("color" %in% names(fullyNamed)))
     fullyNamed$color <- col
-  good <- names(fullyNamed) %in% .material3d
+  good <- names(fullyNamed) %in% rgl.material.names
   if (warn && !all(good))
     warning("Argument(s) ", paste(names(fullyNamed)[!good], collapse = ", "), " not matched.")
   fullyNamed[good]
@@ -145,9 +145,9 @@ material3d  <- function(..., id = NULL) {
     stop("Material properties cannot be set on existing objects.")
   if (length(id) > 1)
    stop("Material properties may only be queried for single objects.")
-  argnames <- setdiff(argnames, .material3d.readOnly)
+  argnames <- setdiff(argnames, rgl.material.readonly)
   if (!length(args))
-    argnames <- .material3d
+    argnames <- rgl.material.names
   else {
     if (is.null(names(args)) && all(unlist(lapply(args, is.character)))) {
       argnames <- unlist(args)
