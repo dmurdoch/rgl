@@ -1,4 +1,4 @@
-0.111.4
+0.111.5
 
 This is a fairly small update, triggered by a request from CRAN.
 
@@ -22,8 +22,7 @@ Besides those issues, I have found and fixed an issue that
 could cause a segfault, have made some minor improvements
 that will allow the `rayshader` package to update to more
 reliable `rgl` calls, and added an example mouse handler
-for panning the display.
+for panning the display.  I have also updated some changed
+URLs.
 
 I have run revdep checks and identified no issues.
-
-Version 0.111.4 fixes some changed URLs.
