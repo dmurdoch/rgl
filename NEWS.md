@@ -1,4 +1,4 @@
-# rgl 0.111.4
+# rgl 0.111.5
 
 ## Minor changes
 
@@ -10,6 +10,13 @@ allowing any of the 3 coordinates to be a vector or matrix
 as long as at least one is a matrix.
 * `material3d` can now specify an `id` to query properties
 for individual objects.
+* Since `rgl.material` is soon to be deprecated and no
+longer contain the list of material types in its
+argument list, `rgl.material.names` and `rgl.material.readonly` have been
+added.  
+* Similarly, `rgl.par3d.names` and `rgl.par3d.readonly`
+contain lists of properties that may be set or queried
+in `par3d()`.
 
 ## Bug fixes
 

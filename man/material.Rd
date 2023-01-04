@@ -1,6 +1,38 @@
 \name{material3d}
 \alias{rgl.material}
 \alias{material3d}
+\alias{rgl.material.names}
+\alias{rgl.material.readonly}
+\concept{color}
+\concept{lit}
+\concept{ambient}
+\concept{specular}
+\concept{emission}
+\concept{shininess}
+\concept{alpha}
+\concept{smooth}
+\concept{texture}
+\concept{textype}
+\concept{texmipmap}
+\concept{texmagfilter}
+\concept{texminfilter}
+\concept{texenvmap}
+\concept{front}
+\concept{back}
+\concept{size}
+\concept{lwd}
+\concept{fog}
+\concept{point_antialias}
+\concept{line_antialias}
+\concept{depth_mask}
+\concept{depth_test}
+\concept{polygon_offset}
+\concept{margin}
+\concept{floating}
+\concept{tag}
+\concept{blend}
+\concept{isTransparent}
+
 \title{Get or set material properties}
 \description{
   Get or set material properties for geometry appearance.
@@ -40,6 +72,8 @@ rgl.material(
   col,
   ...
 )
+rgl.material.names
+rgl.material.readonly
 }
 \arguments{
   \item{...}{\code{material3d} passes these to \code{rgl.material}; \code{rgl.material} ignores unrecognized arguments. See Details below.}
@@ -168,8 +202,13 @@ destination alpha or its opposite.}
 \details{
   Values can be queried by specifying their names
 in a character vector, e.g. \code{material3d("color")}.
-There is one read-only property that can be queried
-but not set:
+The \code{rgl.material.names} variable contains the
+full list of material names.
+The \code{rgl.material.readonly} variable contains
+the subset of material properties that are read-only
+so they can be queried
+but not set.
+Currently there is only one:
 
 \describe{
 \item{isTransparent}{Is the current color transparent?}
@@ -294,4 +333,3 @@ quads3d(rbind(translate3d(quad, -0.5, 0, -0.5),
         blend = c("src_alpha", "one"))
 }
 \keyword{dynamic}
-
