@@ -114,8 +114,33 @@ Thus a call like `rgl.material(color = "black")` will set
 the color to black, and will also set all of the other
 parameters to the default values listed above.
 
-On the other hand, `material3d(color = "black")` will set
+On the other hand, the arguments to `material3d()` are
+```r
+function (..., id = NULL)  
+```
+Calling `material3d(color = "black")` will set
 the color to black and leave all other parameters unchanged.
+
+Many functions in `rgl` and other packages use `...` to set
+material properties in a call, and for some, `...` will
+contain other optional arguments.  When `rgl.material()`
+is no longer exported it will be harder for other functions
+to know all the possible material properties, so new
+variables 
+```r
+rgl.material.names
+rgl.material.readonly
+```
+have been added.  These are character variables holding
+all the material property names.  There are also variables
+```r
+rgl.par3d.names
+rgl.par3d.readonly
+```
+which give the same information for `par3d`.  Currently
+these are planned for release in `rgl` version 1.0.0,
+the release that deprecated `rgl.*`, but they may 
+appear sooner than that.
 
 ## Primitive shapes
 
