@@ -1,4 +1,5 @@
-\name{points3d}
+\name{primitives}
+\alias{primitives}
 \alias{points3d}
 \alias{lines3d}
 \alias{segments3d}

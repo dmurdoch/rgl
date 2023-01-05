@@ -92,7 +92,7 @@ rule 2 above was not respected.
   \code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
   of drawing an object into the scene; they return an object ID (or vector of IDs) invisibly.
   
-  See \code{\link{rgl.primitive}} for a discussion of texture coordinates.
+  See \link{primitives} for a discussion of texture coordinates.
 }
 \examples{
 

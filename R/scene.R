@@ -446,7 +446,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, indices=NULL, ... ) {
+rgl.primitive0 <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, indices=NULL, ... ) {
   rgl.material0( ... )
 
   type <- rgl.enum.primtype(type)
@@ -505,29 +505,34 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
   }
 }
 
+rgl.primitive <- function(...) {
+  .Deprecated("", msg = "Please call the primitive directly, e.g. points3d(...).")
+  rgl.primitive0(...)
+}
+
 rgl.points <- function( x, y=NULL, z=NULL, ... ) {
   .Deprecated("points3d")
-  rgl.primitive( "points", x, y, z, ... )
+  rgl.primitive0( "points", x, y, z, ... )
 }
 
 rgl.lines <- function(x, y=NULL, z=NULL, ... ) {
   .Deprecated("segments3d")
-  rgl.primitive( "lines", x, y, z, ... )
+  rgl.primitive0( "lines", x, y, z, ... )
 }
 
 rgl.triangles <- function(x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
   .Deprecated("triangles3d")
-  rgl.primitive( "triangles", x, y, z, normals, texcoords, ... )
+  rgl.primitive0( "triangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.quads <- function( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
   .Deprecated("quads3d")
-  rgl.primitive( "quadrangles", x, y, z, normals, texcoords, ... )
+  rgl.primitive0( "quadrangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.linestrips<- function( x, y=NULL, z=NULL, ... ) {
   .Deprecated("lines3d")
-  rgl.primitive( "linestrips", x, y, z, ... )
+  rgl.primitive0( "linestrips", x, y, z, ... )
 }
 
 ##

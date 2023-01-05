@@ -424,28 +424,28 @@ observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
 
 points3d    <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.primitive", c(list(type = "points", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive0", c(list(type = "points", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 lines3d     <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.primitive", c(list(type = "linestrips", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive0", c(list(type = "linestrips", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 segments3d  <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.primitive", c(list(type = "lines", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive0", c(list(type = "lines", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 triangles3d <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.primitive", c(list(type = "triangles", x=x, y=y, z=z), 
+  do.call("rgl.primitive0", c(list(type = "triangles", x=x, y=y, z=z), 
                              .fixMaterialArgs(..., Params = save)))
 }
 
 quads3d     <- function(x,y=NULL,z=NULL,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.primitive", c(list(type = "quadrangles", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.primitive0", c(list(type = "quadrangles", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
 text3d      <- function(x, y = NULL, z = NULL,

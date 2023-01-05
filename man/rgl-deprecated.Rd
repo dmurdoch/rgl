@@ -8,6 +8,7 @@
 \alias{rgl.lines}
 \alias{rgl.linestrips}
 \alias{rgl.material}
+\alias{rgl.primitive}
 \alias{rgl.select3d}
 \alias{rgl.triangles}
 \alias{rgl.quads}
@@ -47,6 +48,7 @@ rgl.linestrips(x, y = NULL, z = NULL, ...)     # lines3d
 rgl.open(useNULL = rgl.useNULL())              # open3d
 
 rgl.points(x, y = NULL, z = NULL, ... )        # points3d
+rgl.primitive(...)                             
 rgl.quads(x, y = NULL, z = NULL, 
           normals = NULL, 
           texcoords = NULL, ... )              # quads3d
