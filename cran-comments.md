@@ -1,3 +1,11 @@
+0.111.6
+
+Two examples that triggered the time NOTES have been made 
+conditional on being run interactively.
+
+The previous submission also had some connection errors to
+URLs; I think those are false positives.
+
 0.111.5
 
 This is a fairly small update, triggered by a request from CRAN.

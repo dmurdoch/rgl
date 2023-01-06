@@ -1,4 +1,4 @@
-# rgl 0.111.5
+# rgl 0.111.6
 
 ## Minor changes
 
@@ -17,6 +17,8 @@ added.
 * Similarly, `rgl.par3d.names` and `rgl.par3d.readonly`
 contain lists of properties that may be set or queried
 in `par3d()`.
+* Made some examples conditional on interactive use
+to save time on CRAN.
 
 ## Bug fixes
 
