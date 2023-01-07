@@ -15,6 +15,8 @@
 ##
 
 rgl.clear <- function( type = "shapes", subscene = 0 )  {
+  .Deprecated("clear3d")
+  
   if (is.na(subscene)) 
     subscene <- currentSubscene3d()
 
@@ -45,10 +47,10 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
   }
   
   if ( userviewpoint || modelviewpoint) 
-    rgl.viewpoint(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
+    view3d(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
     
   if ( material ) 
-    rgl.material()
+    rgl.material0()
   
   if (! ret)
     stop("'rgl_clear' failed")
@@ -62,7 +64,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
 ##
 ##
 
-pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
+pop3d <- function( type = "shapes", id = 0, tag = NULL) {
   if (!is.null(tag)) {
     if (!missing(id))
       stop("Only one of 'id' and 'tag' should be specified.")
@@ -81,12 +83,14 @@ pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
     )
 
     if (! ret$success)
-      stop(gettextf("'rgl.pop' failed for id %d", i), domain = NA)
+      stop(gettextf("'rgl_pop' failed for id %d", i), domain = NA)
   }
   lowlevel()
 }
 
-ids3d <- rgl.ids <- function( type = "shapes", subscene = NA, tags = FALSE) {
+rgl.pop <- pop3d
+
+ids3d <- function( type = "shapes", subscene = NA, tags = FALSE) {
   type <- c(rgl.enum.nodetype(type), 0)
   if (is.na(subscene)) 
     subscene <- currentSubscene3d()
@@ -108,6 +112,8 @@ ids3d <- rgl.ids <- function( type = "shapes", subscene = NA, tags = FALSE) {
   }
   result
 }
+
+rgl.ids <- ids3d
 
 rgl.attrib.count <- function( id, attrib ) {
   stopifnot(length(attrib) == 1)
@@ -240,6 +246,8 @@ rgl.attrib <- function( id, attrib, first=1,
 
 rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scale = par3d("scale"),
                            interactive = TRUE, userMatrix, type = c("userviewpoint", "modelviewpoint") ) {
+  .Deprecated("view3d")
+  
   zoom <- rgl.clamp(zoom,0,Inf)
   phi  <- rgl.clamp(phi,-90,90)
   fov  <- rgl.clamp(fov,0,179)
@@ -269,7 +277,9 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
 
 rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back="lines", 
                    fogScale = 1, ... ) {
-  rgl.material( color=color, back=back, ... )
+  .Deprecated("bg3d")
+  
+  rgl.material0( color=color, back=back, ... )
 
   fogtype <- rgl.enum.fogtype(fogtype)
 
@@ -303,7 +313,9 @@ rgl.bbox <- function(
   marklen=15.0, marklen.rel=TRUE, expand=1, draw_front=FALSE,
   ...) {
 
-  rgl.material( ... )
+  .Deprecated("bbox3d")
+  
+  rgl.material0( ... )
 
   if (is.null(xat)) 
     xlab <- NULL
@@ -379,6 +391,9 @@ rgl.bbox <- function(
 ##
 
 rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF", x = NULL, y = NULL, z = NULL) {
+  
+  .Deprecated("light3d")
+  
   ambient  <- rgl.color(ambient)
   diffuse  <- rgl.color(diffuse)
   specular <- rgl.color(specular)
@@ -431,8 +446,8 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, indices=NULL, ... ) {
-  rgl.material( ... )
+rgl.primitive0 <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, indices=NULL, ... ) {
+  rgl.material0( ... )
 
   type <- rgl.enum.primtype(type)
 
@@ -490,24 +505,34 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
   }
 }
 
+rgl.primitive <- function(...) {
+  .Deprecated("", msg = "Please call the primitive directly, e.g. points3d(...).")
+  rgl.primitive0(...)
+}
+
 rgl.points <- function( x, y=NULL, z=NULL, ... ) {
-  rgl.primitive( "points", x, y, z, ... )
+  .Deprecated("points3d")
+  rgl.primitive0( "points", x, y, z, ... )
 }
 
 rgl.lines <- function(x, y=NULL, z=NULL, ... ) {
-  rgl.primitive( "lines", x, y, z, ... )
+  .Deprecated("segments3d")
+  rgl.primitive0( "lines", x, y, z, ... )
 }
 
 rgl.triangles <- function(x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
-  rgl.primitive( "triangles", x, y, z, normals, texcoords, ... )
+  .Deprecated("triangles3d")
+  rgl.primitive0( "triangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.quads <- function( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
-  rgl.primitive( "quadrangles", x, y, z, normals, texcoords, ... )
+  .Deprecated("quads3d")
+  rgl.primitive0( "quadrangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.linestrips<- function( x, y=NULL, z=NULL, ... ) {
-  rgl.primitive( "linestrips", x, y, z, ... )
+  .Deprecated("lines3d")
+  rgl.primitive0( "linestrips", x, y, z, ... )
 }
 
 ##
@@ -532,7 +557,9 @@ perm_parity <- function(p) {
 
 rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL, normal_z=NULL,
                          texture_s=NULL, texture_t=NULL) {
-  rgl.material(...)
+  .Deprecated("surface3d")
+  
+  rgl.material0(...)
   
   flags <- rep(FALSE, 4)
   
@@ -628,7 +655,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
 ##
 
 rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE, ...) {
-  rgl.material(...)
+  rgl.material0(...)
   
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
@@ -659,7 +686,9 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE,
 ##
 
 rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
-  rgl.material(...)
+  .Deprecated("planes3d")
+  
+  rgl.material0(...)
   
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
@@ -689,6 +718,8 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
 ##
 
 rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
+  .Deprecated("clipplanes3d")
+  
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
   noffsets <- length(d)
@@ -716,7 +747,9 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
 ##
 
 rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
-  rgl.material(...)
+  .Deprecated("abclines3d")
+  
+  rgl.material0(...)
   
   bases  <- rgl.vertex(x, y, z)
   nbases <- rgl.nvertex(bases)
@@ -749,7 +782,10 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
                       family=par3d("family"), font=par3d("font"), 
                       cex=par3d("cex"), useFreeType=par3d("useFreeType"), 
                       ... ) {
-  rgl.material( ... )
+  
+  .Deprecated("text3d")
+  
+  rgl.material0( ... )
   
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
@@ -815,7 +851,9 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
                          userMatrix=diag(4), fixedSize = FALSE,
                          adj = 0.5, pos = NULL, offset = 0.25, rotating = FALSE, 
                          ... ) {
-  rgl.material(...)
+  .Deprecated("sprites3d")
+  
+  rgl.material0(...)
   
   center  <- rgl.vertex(x,y,z)
   ncenter <- rgl.nvertex(center)
@@ -953,6 +991,7 @@ rgl.projection <- function(dev = cur3d(), subscene = currentSubscene3d(dev)) {
      
 rgl.select3d <- function(button = c("left", "middle", "right"), 
                          dev = cur3d(), subscene = currentSubscene3d(dev)) {
+  .Deprecated("select3d")
   rect <- rgl.select(button = button, dev = dev, subscene = subscene)
   if (is.null(rect)) return(NULL)
   proj <- rgl.projection(dev = dev, subscene = subscene)

@@ -52,7 +52,7 @@
   
   The r3d functions also preserve the \code{rgl.material} setting across
   calls (except for texture elements, in the current implementation), whereas
-  the \code{rgl.*} functions leave it as set by the last call.
+  the deprecated \code{rgl.*} functions leave it as set by the last call.
   
   The example code below illustrates the two coordinate systems.
 }
@@ -85,13 +85,6 @@
      z <- c(0, 0, 0, 1)
      labels <- c("Origin", "X", "Y", "Z")
      i <- c(1, 2, 1, 3, 1, 4)
-
-     # rgl.* interface
-     
-     rgl.open()
-     rgl.texts(x, y, z, labels)
-     rgl.texts(1, 1, 1, "rgl.* coordinates")
-     rgl.lines(x[i], y[i], z[i])
 
      # *3d interface
      

@@ -5,6 +5,8 @@
 \alias{set3d}
 \alias{getr3dDefaults}
 \alias{r3dDefaults}
+\alias{rgl.dev.list}
+\alias{rgl.quit}
 
 \title{Work with RGL windows}
 
@@ -20,11 +22,15 @@ close3d(dev = cur3d(), silent = TRUE)
 	    
 cur3d()
 
+rgl.dev.list()
+
 set3d(dev, silent = FALSE)
 
 getr3dDefaults(class = NULL, value = NULL)
 
 r3dDefaults
+
+rgl.quit()
 }
 
 \arguments{
@@ -72,7 +78,11 @@ was opened.  If
 \code{silent = TRUE}, it is returned invisibly.
 
 The \code{cur3d} function returns the current device,
-or the value 0 if there isn't one.
+or the value 0 if there isn't one.  \code{rgl.dev.list}
+returns a vector of all open devices.  Items are named
+according to the type of device:  \code{null} for a hidden
+null device, 
+\code{wgl} for a Windows device, and \code{glX} for an X windows device.
 
 \code{set3d} returns the device number of the
 previously active device.
@@ -89,6 +99,9 @@ device, invisibly.
   of default \code{\link{material3d}} properties, or \code{"bg"}, 
   which is a
   list of defaults to pass to the \code{\link{bg3d}} function.
+  
+  \code{rgl.quit} attempts to unload \pkg{rgl} and then returns
+  \code{NULL} invisibly.
 }
 
 \seealso{

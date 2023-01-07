@@ -225,16 +225,19 @@ should point up.  Using `view3d(theta = 45, phi = 45)`
 Many functions in `rgl` and other packages use `...` to set
 material or `par3d` properties in a call, and for some,
 `...` will
-contain other optional arguments.  When `rgl.material()`
-is no longer exported it will be harder for other functions
-to know all the possible material properties, so new
+contain other optional arguments.  Some packages used the
+argument list of `rgl.material()` to identify the 
+material property names.  Going forward, packages should 
+use the
 variables 
 ```r
 rgl.material.names
 rgl.material.readonly
 ```
-have been added.  These are character variables holding
-all the material property names.  There are also variables
+These are character variables holding
+all the material property names.  (`rgl.material.names`
+contains all names; `rgl.material.readonly` is the
+read-only subset of that list.)  There are also variables
 ```r
 rgl.par3d.names
 rgl.par3d.readonly

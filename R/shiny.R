@@ -65,6 +65,7 @@ shinySetPar3d <- function(..., session,
 		stop("Parameters must all be named")
 	
 	badargs <- argnames[!(argnames %in% rgl.par3d.names)]
+
 	if (length(badargs))
 		stop("Invalid parameter(s): ", badargs)
 	

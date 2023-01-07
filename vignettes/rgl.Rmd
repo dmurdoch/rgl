@@ -217,17 +217,24 @@ bg3d("lightgray")
 aspect3d(1,1,1)
 ```
 
-Besides the `*3d` functions mentioned above, there are even lower-level
+Besides the `*3d` functions mentioned above, there are 
+deprecated
 functions 
-`r indexfns(c("rgl.primitive", "rgl.points", "rgl.linestrips", "rgl.lines", "rgl.triangles",
-"rgl.quads", "rgl.texts", "rgl.abclines", "rgl.planes", "rgl.bg",
-"rgl.clipplanes", "rgl.bbox", "rgl.spheres", "rgl.sprites", "rgl.surface"))`.  
-You should avoid using these functions, which do not
-work well with the higher level `*3d` functions.  See the 
+`r deprecated(c("rgl.abclines", "rgl.bbox", "rgl.bg",
+"rgl.clipplanes", "rgl.lines", 
+"rgl.linestrips", "rgl.planes", "rgl.points",
+"rgl.primitive", 
+"rgl.quads", "rgl.setAxisCallback",
+"rgl.spheres", "rgl.sprites", "rgl.surface",
+"rgl.texts", 
+"rgl.triangles"))`. 
+You should avoid using all of these functions, which do not
+work properly with the `*3d` functions and will
+soon be removed from `rgl`.  See the 
 `r linkfn("r3d", text="?r3d", pkg="rgl")` help
-topic for details.  The functions 
-`r indexfns(c("rgl.setAxisCallback", "rgl.getAxisCallback"))`
-provide low-level support for `r linkfn("setAxisCallbacks")`.
+topic for details.  The function
+`r indexfns(c("rgl.getAxisCallback"))`
+provides low-level support for `r linkfn("setAxisCallbacks")`.
 
 ## Controlling the Look of the Scene
 
@@ -291,9 +298,8 @@ depends on the angle between the surface and the light,
 while the `specular` component also takes the viewer's
 position into account.
 
-The `r indexfns("rgl.light")` function is a lower-level
-function with different defaults; users should normally
-use `r linkfn("light3d")`.
+The deprecated `r deprecated("rgl.light")` function should
+no longer be used; use `r linkfn("light3d")` instead.
 
 ### Materials
 
@@ -328,8 +334,8 @@ Other properties include
 "point\_antialias", "line\_antialias", "depth\_mask", "depth\_test", "polygon_offset", "margin", "floating", "tag" and "blend"; 
 see `r linkfn("material3d", "the help page", pkg = "rgl")` for details.
 
-There is also an `r indexfns("rgl.material")` function that works
-at a lower level; users should normally avoid it.
+There is also a deprecated `r deprecated("rgl.material")` function that works
+at a lower level; users should avoid it.
 
 ### Textures
 
@@ -422,7 +428,7 @@ FOV         |       | Field of view, in degrees.  Zero means isometric perspecti
 ignoreExtent |      | Should `rgl` ignore the size of new objects when computing the bounding box?
 skipRedraw   |      | Should `rgl` suppress updates to the display? 
 maxClipPlanes | read-only | How many clip planes can be defined?
-modelMatrix | read-only | The OpenGL ModelView matrix; partly set by `r indexfns("view3d")` or the obsolete `r indexfns("rgl.viewpoint")`
+modelMatrix | read-only | The OpenGL ModelView matrix; partly set by `r indexfns("view3d")`
 projMatrix  | read-only | The OpenGL Projection matrix
 bbox        | read-only | Current bounding-box of the scene
 viewport    |       | Dimensions in pixels of the scene within the window
@@ -432,6 +438,9 @@ mouseMode   |       | What the mouse buttons do.  See `r linkfn("mouseMode", '<c
 observer    | read-only | The position of the observer; set by `r indexfns("observer3d")`
 scale       |           | Rescaling for each coordinate; see `r linkfn("aspect3d")`
 zoom        |           | Magnification of the scene
+
+The deprecated `r deprecated("rgl.viewpoint")` function
+should not be used.
 
 ### Default settings
 
@@ -728,11 +737,8 @@ you run out of memory if your scenes are really big.
 ### Older methods
 
 The original way to insert an `rgl` scene in a document was to use
-the `r indexfns("writeWebGL")` function to write HTML code to insert in a document. 
-Later, `Sweave` and `knitr` hooks were added.  These are no longer maintained, and it is recommended that
-you update old documents to use the newer methods.  See
-the `r linkfn("writeWebGL")`, `r linkfn("rgl.Sweave")` and `r linkfn("hook_rgl")` help
-topics for details on these if you must use them.  If you are
+the deprecated `r deprecated("writeWebGL")` function to write HTML code to insert in a document. 
+Later, `Sweave` and `knitr` hooks were added.  These are no longer supported, and you should update old documents to use the newer methods.  If you are
 reading documents that suggest using those methods, let the
 author know they need updating!
   
@@ -783,7 +789,7 @@ function from information about the projection and mouse
 selection region; it is used internally in the 
 functions above.
 
-The `r indexfns("rgl.select3d")` function is an obsolete version of
+The deprecated `r deprecated("rgl.select3d")` function is an obsolete version of
 `select3d`, and `r indexfns("rgl.select")` is a low-level support
 function.
 
@@ -832,7 +838,6 @@ Function    | Description
 ----------- | -------------
 `r indexfns("scene3d")`:    | Save a scene to an R variable, which can be saved and reloaded
 `r indexfns("rglwidget")`: | Prints as HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
-`r linkfn("writeWebGL")`: | Deprecated.
 `r indexfns("writeASY")`:   | Write files for Asymptote
 `r indexfns("writePLY")`:   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`:   | Read or write OBJ files (commonly used in 3D graphics)
@@ -944,17 +949,6 @@ use hand-written shaders in WebGL, and
 `r indexfns("getShaders")` allows you to see what
 shader would be used.
 
-The older approach uses the `r linkfn("writeWebGL")` function to export a scene 
-to HTML and Javascript code.  
-These functions write HTML and Javascript for working with the 
-exported scene:  `r indexfns("propertySlider")`,
-`r indexfns("clipplaneSlider")`, `r indexfns("subsetSlider")`,
-`r indexfns("toggleButton")`, `r indexfns("propertySetter")`,
-`r indexfns("subsetSetter")`, `r indexfns("ageSetter")`, 
-`r indexfns("par3dinterpSetter")`, 
-`r indexfns("vertexSetter")`, `r indexfns("matrixSetter")`.
-Use the newer functions instead.
-
 ### Working with the scene
 
 `rgl` maintains internal structures for all the scenes it displays.
@@ -967,13 +961,20 @@ and are mainly intended for internal use.
 Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("open3d")`:               | open a new window
-`r indexfns(c("close3d", "rgl.close"))`:              | close the current window
-`r indexfns(c("cur3d", "rgl.cur"))`:                | id of the active device
-`r indexfns(c("set3d", "rgl.set"))`:                | set a particular device to be active
-`r indexfns(c("pop3d", "rgl.pop"))`:     | delete objects from the scene
-`r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
-`r indexfns(c("ids3d", "rgl.ids"))`:              | ids, types and tags of current objects
+`r indexfns("close3d")`:              | close the current window
+`r indexfns("cur3d")`:                | id of the active device
+`r indexfns("set3d")`:                | set a particular device to be active
+`r indexfns("pop3d")`:     | delete objects from the scene
+`r indexfns(c("clear3d"))`:            | delete all objects of certain classes
+`r indexfns("ids3d")`:              | ids, types and tags of current objects
 `r indexfns("tagged3d")`:                         | find tags or objects with tags
+
+Some of these functions have alternate names for
+back compatibility:  `r duplicated(c("rgl.cur",
+"rgl.ids", "rgl.pop"))`.  Either name will work,
+but the `*3d` version is recommended for new code.
+Some have deprecated versions:
+`r deprecated(c("rgl.clear", "rgl.set"))`.  Those should not be called.
 
 These functions are mainly intended for programming, and 
 have no corresponding `*3d` counterparts:
@@ -991,8 +992,8 @@ extract coordinates in a form suitable for passing to
 `r linkfn("triangles3d")`.  Currently a method is provided for
 `r linkfn("rglId")` objects.
 
-In addition to these, there are some other related functions which
-should rarely be called by users: `r indexfns(c("rgl.init", "rgl.open", "rgl.quit"))`.  
+In addition to these, there are some deprecated functions which
+should not be called: `r deprecated(c("rgl.init", "rgl.open", "rgl.close", "rgl.quit"))`.  
 
 
 ### Working with 3-D vectors
@@ -1092,7 +1093,7 @@ package are not described, or do not have examples.  There may
 even be functions that are missed completely, if the following
 list is not empty:
 ```{r echo=FALSE}
-setdiff(ls("package:rgl"), documentedfns)
+setdiff(ls("package:rgl"), c(documentedfns, deprecatedfns))
 ```
 
 ## Index of Functions

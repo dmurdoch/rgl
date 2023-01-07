@@ -1,5 +1,4 @@
 \name{bbox3d}
-\alias{rgl.bbox}
 \alias{bbox3d}
 \title{Set up bounding box decoration}
 \description{
@@ -9,14 +8,10 @@
 bbox3d(xat = NULL, yat = NULL, zat = NULL, 
 	xunit = "pretty", yunit = "pretty", zunit = "pretty", 
 	expand = 1.03,
-	draw_front = FALSE, ...) 
-	
-rgl.bbox( 
-	xat = NULL, xlab = NULL, xunit = 0, xlen = 5, 
-	yat = NULL, ylab = NULL, yunit = 0, ylen = 5,
-	zat = NULL, zlab = NULL, zunit = 0, zlen = 5,
-	marklen = 15.0, marklen.rel = TRUE, expand = 1, 
-	draw_front = FALSE, ...)
+	draw_front = FALSE, 
+	xlab=NULL, ylab=NULL, zlab=NULL,
+  xlen=5, ylen=5, zlen=5,
+  marklen=15.0, marklen.rel=TRUE, ...) 
 }
 \arguments{
   \item{xat, yat, zat}{vector specifying the tickmark positions}

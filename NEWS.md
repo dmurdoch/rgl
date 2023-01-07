@@ -1,3 +1,30 @@
+# rgl 1.0.0
+
+## Major changes
+
+* The long promised deprecations of the `rgl.*` functions
+have happened.  Now deprecated: `rgl.abclines`,
+`rgl.bbox`, `rgl.bg`, `rgl.clear`, `rgl.clipplanes`,
+`rgl.close`, `rgl.light`, `rgl.lines`,
+`rgl.linestrips`, `rgl.material`,  `rgl.open`,
+`rgl.planes`, `rgl.points`, `rgl.quads`,
+`rgl.select3d`, `rgl.set`, `rgl.setAxisCallback`,
+`rgl.sprites`, `rgl.surface`, `rgl.texts`,
+`rgl.triangles`, and `rgl.viewpoint`.
+* A vignette "Deprecating the `rgl.*` interface"
+has been added.
+* Also deprecated: `elementId2Prefix`, `writeWebGL`
+
+## Minor changes
+
+* Since `rgl.material` is deprecated and no
+longer contains the list of material types in its
+argument list, `rgl.material.names` and `rgl.material.readonly` have been
+added.  
+* Similarly, `rgl.par3d.names` and `rgl.par3d.readonly`
+contain lists of properties that may be set or queried
+in `par3d()`.
+
 # rgl 0.111.6
 
 ## Minor changes
