@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.110.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.111.6</span>
       </span>
     </div>
 
@@ -39,6 +39,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
+    </li>
+    <li>
+      <a href="../articles/deprecation.html">Deprecating the `rgl.*` interface</a>
     </li>
     <li>
       <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
@@ -70,6 +73,27 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.111.6" id="rgl-01116">rgl 0.111.6<small>2023-01-07</small><a class="anchor" aria-label="anchor" href="#rgl-01116"></a></h2>
+<div class="section level3">
+<h3 id="minor-changes-0-111-6">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-111-6"></a></h3>
+<ul><li>Added a panning example to the help page for <code><a href="../reference/setUserCallbacks.html">setUserCallbacks()</a></code>.</li>
+<li>Replaced all calls to <code>sprintf</code> from C/C++ code with calls to <code>snprintf</code>.</li>
+<li>
+<code>surface3d</code> and <code>rgl.surface</code> are now more flexible, allowing any of the 3 coordinates to be a vector or matrix as long as at least one is a matrix.</li>
+<li>
+<code>material3d</code> can now specify an <code>id</code> to query properties for individual objects.</li>
+<li>Since <code>rgl.material</code> is soon to be deprecated and no longer contain the list of material types in its argument list, <code>rgl.material.names</code> and <code>rgl.material.readonly</code> have been added.<br></li>
+<li>Similarly, <code>rgl.par3d.names</code> and <code>rgl.par3d.readonly</code> contain lists of properties that may be set or queried in <code><a href="../reference/par3d.html">par3d()</a></code>.</li>
+<li>Made some examples conditional on interactive use to save time on CRAN.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-111-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-111-6"></a></h3>
+<ul><li>Default mouse modes used when a window is opened by an <code>rgl.*</code> call (which is not recommended!) now match the defaults in <code><a href="../reference/open3d.html">rgl::r3dDefaults</a></code>.</li>
+<li>Missing values could cause <code><a href="../reference/surface3d.html">surface3d()</a></code> to segfault.</li>
+<li>The C source code for <code>gl2psGetFileFormat</code> missed declaring a prototype.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.110.2" id="rgl-01102">rgl 0.110.2<small>2022-09-26</small><a class="anchor" aria-label="anchor" href="#rgl-01102"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-110-2">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-110-2"></a></h3>
@@ -81,7 +105,7 @@
 <li>Low level drawing of primitives has been made more memory efficient. This is only likely to make a noticeable change with very large objects, where R was running out of memory because of unnecessary duplication. (Related to issue <a href="https://github.com/dmurdoch/rgl/issues/260" class="external-link">#260</a>.)</li>
 <li>Recycling of x, y and z vectors in several functions is more consistent.</li>
 <li>The <code><a href="../reference/polygon3d.html">polygon3d()</a></code> function now chooses coordinates automatically, as <code><a href="../reference/triangulate.html">triangulate()</a></code> does (PR <a href="https://github.com/dmurdoch/rgl/issues/262" class="external-link">#262</a>.)</li>
-<li>The <code><a href="../reference/axes3d.html">mtext3d()</a></code> and related functions such as <code>title3d()' now accept language objects other than expressions, as</code>plotmath3d()` always has (issue <a href="https://github.com/dmurdoch/rgl/issues/273" class="external-link">#273</a>).</li>
+<li>The <code><a href="../reference/axes3d.html">mtext3d()</a></code> and related functions such as <code><a href="../reference/axes3d.html">title3d()</a></code> now accept language objects other than expressions, as <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> always has (issue <a href="https://github.com/dmurdoch/rgl/issues/273" class="external-link">#273</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-110-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-110-2"></a></h3>
@@ -152,7 +176,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-109-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-109-2"></a></h3>
-<ul><li>as.mesh3d.rglobject() didn’t handle objects with indices properly.</li>
+<ul><li>
+<code>as.mesh3d.rglobject()</code> didn’t handle objects with indices properly.</li>
 <li>In WebGL, the front vs back calculation sometimes got the wrong result (issue <a href="https://github.com/dmurdoch/rgl/issues/164" class="external-link">#164</a>).</li>
 <li>
 <code>pop3d(tag = x)</code> did not always find the objects with <code>tag == x</code> if they were not in the current subscene.</li>
@@ -211,7 +236,7 @@
 <li>Added support for <code>pos</code> values of <code>0</code> (at specified location), <code>5</code> (in front of it), and <code>6</code> (behind it) in <code><a href="../reference/texts.html">text3d()</a></code>, <code><a href="../reference/sprites.html">sprites3d()</a></code> and <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code>.</li>
 <li>
 <code>crosstalk</code> is now a Suggested package, rather than a required one.</li>
-<li>The <code>Makevars.ucrt</code> file has been modified with contributions from Tomas Kalibera to work with his winutf8 build of R.</li>
+<li>The <code>Makevars.ucrt</code> file has been modified with contributions from Tomas Kalibera to work with his <code>winutf8</code> build of R.</li>
 <li>
 <code><a href="../reference/bgplot3d.html">bgplot3d()</a></code> no longer pauses for each page when running examples.</li>
 <li>
@@ -1747,7 +1772,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

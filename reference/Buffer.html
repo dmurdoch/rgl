@@ -18,7 +18,7 @@ binary data for a scene."><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.110.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.111.6</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@ binary data for a scene."><!-- mathjax --><script src="https://cdnjs.cloudflare.
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
+    </li>
+    <li>
+      <a href="../articles/deprecation.html">Deprecating the `rgl.*` interface</a>
     </li>
     <li>
       <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
@@ -179,7 +182,7 @@ binary data for a scene.</p>
 
 
 <dt><code>default</code></dt>
-<dd><p>Default buffer object if `buf` not found.</p></dd>
+<dd><p>Default buffer object if <code>buf</code> not found.</p></dd>
 
 
 </dl><p></p></div>
@@ -266,7 +269,7 @@ binary data for a scene.</p>
 <h3 id="method-closebuffer-">Method <code>closeBuffer()</code><a class="anchor" aria-label="anchor" href="#method-closebuffer-"></a></h3>
 <p>Close the connection in a buffer.</p>
 <p>If there was a connection open, this will save the
-contents in the raw vector `bytes` within the buffer object.</p><div class="section">
+contents in the raw vector <code>bytes</code> within the buffer object.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Buffer</span><span class="op">$</span><span class="fu">closeBuffer</span><span class="op">(</span><span class="va">buf</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -284,7 +287,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 <h3 id="method-closebuffers-">Method <code>closeBuffers()</code><a class="anchor" aria-label="anchor" href="#method-closebuffers-"></a></h3>
 <p>Close any open buffers.</p>
 <p>Call this after working with a GLTF file to avoid warnings
-  from R about closing unused connections.</p><div class="section">
+from R about closing unused connections.</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Buffer</span><span class="op">$</span><span class="fu">closeBuffers</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -292,7 +295,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 
 </div><p></p><hr><a id="method-Buffer-getBufferview"></a><div class="section">
 <h3 id="method-getbufferview-">Method <code>getBufferview()</code><a class="anchor" aria-label="anchor" href="#method-getbufferview-"></a></h3>
-<p>Get bufferView object.</p><div class="section">
+<p>Get <code>bufferView</code> object.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Buffer</span><span class="op">$</span><span class="fu">getBufferview</span><span class="op">(</span><span class="va">bufv</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -300,7 +303,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 <div class="section">
 <h4 id="arguments-8">Arguments<a class="anchor" aria-label="anchor" href="#arguments-8"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>bufv</code></dt>
-<dd><p>bufferView number.</p></dd>
+<dd><p><code>bufferView</code> number.</p></dd>
 
 
 </dl><p></p></div>
@@ -344,7 +347,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 </div>
 <div class="section">
 <h4 id="returns-4">Returns<a class="anchor" aria-label="anchor" href="#returns-4"></a></h4>
-<p>New bufferView number.</p>
+<p>New <code>bufferView</code> number.</p>
 </div>
 
 </div><p></p><hr><a id="method-Buffer-openBufferview"></a><div class="section">
@@ -357,7 +360,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 <div class="section">
 <h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>bufv</code></dt>
-<dd><p>Which bufferView.</p></dd>
+<dd><p>Which <code>bufferView</code>.</p></dd>
 
 
 </dl><p></p></div>
@@ -369,7 +372,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 
 </div><p></p><hr><a id="method-Buffer-setBufferview"></a><div class="section">
 <h3 id="method-setbufferview-">Method <code>setBufferview()</code><a class="anchor" aria-label="anchor" href="#method-setbufferview-"></a></h3>
-<p>Set bufferView object.</p><div class="section">
+<p>Set <code>bufferView</code> object.</p><div class="section">
 <h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Buffer</span><span class="op">$</span><span class="fu">setBufferview</span><span class="op">(</span><span class="va">bufv</span>, <span class="va">bufferView</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -377,7 +380,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 <div class="section">
 <h4 id="arguments-11">Arguments<a class="anchor" aria-label="anchor" href="#arguments-11"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>bufv</code></dt>
-<dd><p>bufferView number.</p></dd>
+<dd><p><code>bufferView</code> number.</p></dd>
 
 
 <dt><code>bufferView</code></dt>
@@ -445,7 +448,7 @@ contents in the raw vector `bytes` within the buffer object.</p><div class="sect
 </div>
 <div class="section">
 <h4 id="returns-7">Returns<a class="anchor" aria-label="anchor" href="#returns-7"></a></h4>
-<p>A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+<p>A vector or array as specified in the accessor.  For the <code>MATn</code> types, the 3rd index
 indexes the element.</p>
 </div>
 
@@ -466,13 +469,13 @@ indexes the element.</p>
 </div>
 <div class="section">
 <h4 id="returns-8">Returns<a class="anchor" aria-label="anchor" href="#returns-8"></a></h4>
-<p>A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+<p>A vector or array as specified in the accessor.  For the <code>MATn</code> types, the 3rd index
 indexes the element.</p>
 </div>
 
 </div><p></p><hr><a id="method-Buffer-addAccessor"></a><div class="section">
 <h3 id="method-addaccessor-">Method <code>addAccessor()</code><a class="anchor" aria-label="anchor" href="#method-addaccessor-"></a></h3>
-<p>Write values to accessor, not including `min` and `max`.</p><div class="section">
+<p>Write values to accessor, not including <code>min</code> and <code>max</code>.</p><div class="section">
 <h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Buffer</span><span class="op">$</span><span class="fu">addAccessor</span><span class="op">(</span></span>
 <span>  <span class="va">values</span>,</span>
@@ -575,7 +578,7 @@ indexes the element.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

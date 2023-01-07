@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.110.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.111.6</span>
       </span>
     </div>
 
@@ -39,6 +39,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
+    </li>
+    <li>
+      <a href="../articles/deprecation.html">Deprecating the `rgl.*` interface</a>
     </li>
     <li>
       <a href="../articles/pkgdown.html">Using RGL in pkgdown web sites</a>
@@ -173,7 +176,7 @@
         </td>
         <td><p>Draw boxes, axes and other text outside the data</p></td>
       </tr><tr><td>
-          <p><code><a href="bbox.html">rgl.bbox()</a></code> <code><a href="bbox.html">bbox3d()</a></code> </p>
+          <p><code><a href="bbox.html">bbox3d()</a></code> <code><a href="bbox.html">rgl.bbox()</a></code> </p>
         </td>
         <td><p>Set up bounding box decoration</p></td>
       </tr><tr><td>
@@ -221,11 +224,11 @@
         </td>
         <td><p>Add light source</p></td>
       </tr><tr><td>
-          <p><code><a href="material.html">rgl.material()</a></code> <code><a href="material.html">material3d()</a></code> </p>
+          <p><code><a href="material.html">material3d()</a></code> <code><a href="material.html">rgl.material()</a></code> <code><a href="material.html">rgl.material.names</a></code> <code><a href="material.html">rgl.material.readonly</a></code> </p>
         </td>
-        <td><p>Set material properties</p></td>
+        <td><p>Get or set material properties</p></td>
       </tr><tr><td>
-          <p><code><a href="par3d.html">par3d()</a></code> </p>
+          <p><code><a href="par3d.html">par3d()</a></code> <code><a href="par3d.html">rgl.par3d.names</a></code> <code><a href="par3d.html">rgl.par3d.readonly</a></code> </p>
         </td>
         <td><p>Set or query RGL parameters</p></td>
       </tr><tr><td>
@@ -501,7 +504,7 @@ Shiny app</p></td>
       </tr><tr><td>
           <p><code><a href="as.rglscene.html">as.rglscene()</a></code> </p>
         </td>
-        <td><p>Convert an object to an rglscene object.</p></td>
+        <td><p>Convert an object to an <code>rglscene</code> object.</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="miscellaneous-utility-functions">Miscellaneous utility functions <a href="#miscellaneous-utility-functions" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
@@ -666,7 +669,7 @@ shaders.</p></td>
       </tr><tr><td>
           <p><code><a href="checkDeldir.html">checkDeldir()</a></code> </p>
         </td>
-        <td><p>Check for a compatible version of deldir</p></td>
+        <td><p>Check for a compatible version of <span class="pkg">deldir</span></p></td>
       </tr><tr><td>
           <p><code><a href="Buffer.html">Buffer</a></code> </p>
         </td>
@@ -737,7 +740,7 @@ of objects</p></td>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
