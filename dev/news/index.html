@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.111.6</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0</span>
       </span>
     </div>
 
@@ -72,6 +72,21 @@
       <small>Source: <a href="https://github.com/dmurdoch/rgl/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0.0" id="rgl-100">rgl 1.0.0<a class="anchor" aria-label="anchor" href="#rgl-100"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-1-0-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0-0"></a></h3>
+<ul><li>The long promised deprecations of the <code>rgl.*</code> functions have happened. Now deprecated: <code>rgl.abclines</code>, <code>rgl.bbox</code>, <code>rgl.bg</code>, <code>rgl.clear</code>, <code>rgl.clipplanes</code>, <code>rgl.close</code>, <code>rgl.light</code>, <code>rgl.lines</code>, <code>rgl.linestrips</code>, <code>rgl.material</code>, <code>rgl.open</code>, <code>rgl.planes</code>, <code>rgl.points</code>, <code>rgl.quads</code>, <code>rgl.select3d</code>, <code>rgl.set</code>, <code>rgl.setAxisCallback</code>, <code>rgl.sprites</code>, <code>rgl.surface</code>, <code>rgl.texts</code>, <code>rgl.triangles</code>, and <code>rgl.viewpoint</code>.</li>
+<li>A vignette “Deprecating the <code>rgl.*</code> interface” has been added.</li>
+<li>Also deprecated: <code>elementId2Prefix</code>, <code>writeWebGL</code>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-changes-1-0-0">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-0-0"></a></h3>
+<ul><li>Since <code>rgl.material</code> is deprecated and no longer contains the list of material types in its argument list, <code>rgl.material.names</code> and <code>rgl.material.readonly</code> have been added.<br></li>
+<li>Similarly, <code>rgl.par3d.names</code> and <code>rgl.par3d.readonly</code> contain lists of properties that may be set or queried in <code><a href="../reference/par3d.html">par3d()</a></code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.111.6" id="rgl-01116">rgl 0.111.6<small>2023-01-07</small><a class="anchor" aria-label="anchor" href="#rgl-01116"></a></h2>
 <div class="section level3">
@@ -184,7 +199,7 @@
 <li>The default values for <code>front</code> and <code>back</code> in <code>rgl.material</code> and <code>material3d</code> are now <code>"filled"</code>, as documented in some places.</li>
 <li>The <code>fog</code> setting wasn’t handled properly by <code><a href="../reference/bg.html">bg3d()</a></code>.</li>
 <li>Numerous cases of partial argument matching were fixed (suggestion of Henrik Bengtsson in issue <a href="https://github.com/dmurdoch/rgl/issues/170" class="external-link">#170</a>.)</li>
-<li>Argument <code>col</code> is accepted as a synonym for <code>color</code> in <code><a href="../reference/material.html">material3d()</a></code> and <code><a href="../reference/material.html">rgl.material()</a></code>.</li>
+<li>Argument <code>col</code> is accepted as a synonym for <code>color</code> in <code><a href="../reference/material.html">material3d()</a></code> and <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code>.</li>
 <li>
 <code><a href="../reference/planes.html">planes3d()</a></code> objects were not displayed consistently in <code>rgl</code> windows and WebGL displays, because the bounding boxes were not computed consistently (issue <a href="https://github.com/dmurdoch/rgl/issues/169" class="external-link">#169</a>).</li>
 <li>Some initialization wasn’t done properly in Shiny apps, so they failed after a redraw (issue <a href="https://github.com/dmurdoch/rgl/issues/173" class="external-link">#173</a>).</li>
@@ -208,7 +223,7 @@
 <li>Textures were not appearing on spheres, and front-back differences weren’t being rendered (issue <a href="https://github.com/dmurdoch/rgl/issues/217" class="external-link">#217</a>).</li>
 <li>When “knitting” within RStudio under R 4.2.0 on Windows, <code>rgl</code> scenes didn’t appear (reported by Dieter Menne.) A workaround has been added.</li>
 <li>In <code><a href="../reference/rglwidget.html">rglwidget()</a></code>, axis labels were not always displayed, and did not move with solid bounding box decorations properly (issue <a href="https://github.com/dmurdoch/rgl/issues/206" class="external-link">#206</a>).</li>
-<li>On some systems, <code><a href="../reference/3dobjects.html">lines3d()</a></code> using both missing values and transparency did not draw properly (issue <a href="https://github.com/dmurdoch/rgl/issues/234" class="external-link">#234</a>, originally reported by Gaspar Jekely).</li>
+<li>On some systems, <code><a href="../reference/primitives.html">lines3d()</a></code> using both missing values and transparency did not draw properly (issue <a href="https://github.com/dmurdoch/rgl/issues/234" class="external-link">#234</a>, originally reported by Gaspar Jekely).</li>
 <li>The <code><a href="../reference/rglShared.html">rglShared()</a></code> example failed when <code>crosstalk</code> was uninstalled.</li>
 </ul></div>
 </div>
@@ -421,18 +436,18 @@
 <div class="section level3">
 <h3 id="minor-changes-0-103-5">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-103-5"></a></h3>
 <ul><li>Add <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code> method for <code>"mesh3d"</code> objects, and use it in <code><a href="../reference/contourLines3d.html">filledContour3d()</a></code>.</li>
-<li>More deprecation of older <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> style controls.</li>
+<li>More deprecation of older <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> style controls.</li>
 <li>Add extra <code>knitr</code> hooks, so support for <code>rgl</code> should be very similar to support for standard graphics output.</li>
 <li>Major rewrite of the WebGL code so that transparency is handled better in <code><a href="../reference/rglwidget.html">rglwidget()</a></code>. It has also been split into multiple files which are joined with “minification” on installation.</li>
 <li>Added utility function <code><a href="../reference/makeDependency.html">makeDependency()</a></code> to support Javascript library in source.</li>
 <li>WebGL code now supports fog in scenes. The default <code>r3dDefaults</code> now sets <code>material$fog</code> to <code>TRUE</code>, and <code>bg$fog</code> to <code>"none"</code>. (In <code>rgl</code>, fog must be set <em>both</em> in the background and in the object to display.) The formula used in WebGL is slightly different than in the internal R display.)<br></li>
 <li>
 <code><a href="../reference/open3d.html">getr3dDefaults()</a></code> now has two optional arguments to specify what to retrieve, e.g. <code>getr3dDefaults("material", "color")</code> to retrieve <code>r3dDefaults$material$color</code>, with NULL if either part is missing.</li>
-<li>Added <code>fogScale</code> parameter to <code><a href="../reference/bg.html">bg3d()</a></code> and <code><a href="../reference/bg.html">rgl.bg()</a></code> to allow increased or decreased fog.</li>
+<li>Added <code>fogScale</code> parameter to <code><a href="../reference/bg.html">bg3d()</a></code> and <code><a href="../reference/rgl-deprecated.html">rgl.bg()</a></code> to allow increased or decreased fog.</li>
 <li>Added <code>fastTransparency</code> parameter to <code><a href="../reference/spheres.html">spheres3d()</a></code> and <code><a href="../reference/rgl.fns.html">rgl.spheres()</a></code>, to allow them to be drawn more quickly when transparency is used.</li>
 <li>
 <code>"mesh3d"</code> methods for <code><a href="../reference/shade3d.html">shade3d()</a></code>, <code><a href="../reference/shade3d.html">wire3d()</a></code>, and <code>dots3d()</code> have been rewritten to share code, allowing meshes to have different front and back material properties.</li>
-<li>New functions <code><a href="../reference/open3d.html">cur3d()</a></code>, <code><a href="../reference/open3d.html">set3d()</a></code>, <code><a href="../reference/open3d.html">close3d()</a></code> and <code><a href="../reference/scene.html">ids3d()</a></code> have been added. Generally, users should use these rather than <code><a href="../reference/rgl.open.html">rgl.cur()</a></code>, <code><a href="../reference/rgl.open.html">rgl.set()</a></code>, <code><a href="../reference/rgl.open.html">rgl.close()</a></code> and <code><a href="../reference/rgl.fns.html">rgl.ids()</a></code>.</li>
+<li>New functions <code><a href="../reference/open3d.html">cur3d()</a></code>, <code><a href="../reference/open3d.html">set3d()</a></code>, <code><a href="../reference/open3d.html">close3d()</a></code> and <code><a href="../reference/scene.html">ids3d()</a></code> have been added. Generally, users should use these rather than <code><a href="../reference/rgl-duplicated.html">rgl.cur()</a></code>, <code><a href="../reference/rgl-deprecated.html">rgl.set()</a></code>, <code><a href="../reference/rgl-deprecated.html">rgl.close()</a></code> and <code><a href="../reference/rgl-duplicated.html">rgl.ids()</a></code>.</li>
 <li>
 <code><a href="../reference/snapshot.html">snapshot3d()</a></code> now has optional width and height parameters for the saved snapshot.</li>
 <li>the cursor now reflects the mouse mode in <code><a href="../reference/rglwidget.html">rglwidget()</a></code> displays.</li>
@@ -611,7 +626,7 @@
 <ul><li>Fixed texture bug introduced in fix in 0.99.16.</li>
 <li>The <code><a href="../reference/persp3d.deldir.html">persp3d.deldir()</a></code> method didn’t display labels properly.</li>
 <li>When the X11 initialization failed, <code>rgl</code> messed up the S3 methods system. (Reported by Gregory Jefferis.)</li>
-<li>Probably due to a compiler change, <code><a href="../reference/bbox.html">rgl.bbox()</a></code> was returning 0/1 instead of the id of the axes.</li>
+<li>Probably due to a compiler change, <code><a href="../reference/rgl-deprecated.html">rgl.bbox()</a></code> was returning 0/1 instead of the id of the axes.</li>
 <li>
 <code><a href="../reference/pch3d.html">pch3d()</a></code> was failing in <code><a href="../reference/rglwidget.html">rglwidget()</a></code> for some shapes. (Reported by Luca Scrucca.)</li>
 <li>
@@ -659,7 +674,7 @@
 <li>Tried to give a more helpful startup error message on macOS.</li>
 <li>Added documentation to <code>rglwidgetClass</code> in Javascript.</li>
 <li>
-<code><a href="../reference/propertySetter.html">vertexSetter()</a></code> can now set plane parameters.</li>
+<code><a href="../reference/rgl-defunct.html">vertexSetter()</a></code> can now set plane parameters.</li>
 <li>Modified <code>platform.cpp</code> so it works with <code>__STRICT_ANSI__</code> defined.</li>
 <li>As many browsers have dropped support for setting line width in WebGL scenes, this has been redone in <code><a href="../reference/rglwidget.html">rglwidget()</a></code> code using a vertex shader.<br>
 Line endings and joins are rounded, not squared as in OpenGL.</li>
@@ -799,8 +814,8 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="major-changes-0-95-1367">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-95-1367"></a></h3>
 <ul><li>Added <code><a href="../reference/show2d.html">show2d()</a></code> to allow a 2d plot on a quadrilateral in a scene.</li>
-<li>Added <code><a href="../reference/propertySetter.html">matrixSetter()</a></code> function to allow multiple controls to modify one matrix.</li>
-<li>Added <code><a href="../reference/propertySetter.html">vertexSetter()</a></code> function to allow easier access to vertex attributes.</li>
+<li>Added <code><a href="../reference/rgl-defunct.html">matrixSetter()</a></code> function to allow multiple controls to modify one matrix.</li>
+<li>Added <code><a href="../reference/rgl-defunct.html">vertexSetter()</a></code> function to allow easier access to vertex attributes.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-95-1367">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-95-1367"></a></h3>
@@ -810,7 +825,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <li>The <code>nticks</code> argument to <code><a href="../reference/bbox.html">bbox3d()</a></code> was never used and has been removed. Use <code>xlen</code>, <code>ylen</code> or <code>zlen</code>.</li>
 <li>Dependencies and imports have been updated.</li>
 <li>Used Jeroen Ooms’ <code>js::jshints()</code> function to clean up the WebGL Javascript code.</li>
-<li>Allowed <code>values = NULL</code> in <code><a href="../reference/propertySetter.html">propertySetter()</a></code> and <code><a href="../reference/propertySetter.html">vertexSetter()</a></code> to allow code to directly set values.</li>
+<li>Allowed <code>values = NULL</code> in <code><a href="../reference/rgl-defunct.html">propertySetter()</a></code> and <code><a href="../reference/rgl-defunct.html">vertexSetter()</a></code> to allow code to directly set values.</li>
 <li>Shaders are now stored in Javascript strings, not separate script sections.</li>
 <li>Shape centers are now stored by <code><a href="../reference/scene3d.html">scene3d()</a></code>.</li>
 <li>Font family and numeric font number (style) are now returned by <code><a href="../reference/attributes.html">rgl.attrib()</a></code> and are stored by <code><a href="../reference/scene3d.html">scene3d()</a></code>.</li>
@@ -819,9 +834,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h3 id="bug-fixes-0-95-1367">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-95-1367"></a></h3>
 <ul><li>Fixed bug that sometimes prevented textures from displaying.</li>
 <li>
-<code><a href="../reference/bbox.html">rgl.bbox()</a></code> (and hence <code><a href="../reference/bbox.html">bbox3d()</a></code>, <code><a href="../reference/decorate3d.html">decorate3d()</a></code>, <code><a href="../reference/plot3d.html">plot3d()</a></code>, etc.) did not return the correct id for the bounding box decoration.</li>
+<code><a href="../reference/rgl-deprecated.html">rgl.bbox()</a></code> (and hence <code><a href="../reference/bbox.html">bbox3d()</a></code>, <code><a href="../reference/decorate3d.html">decorate3d()</a></code>, <code><a href="../reference/plot3d.html">plot3d()</a></code>, etc.) did not return the correct id for the bounding box decoration.</li>
 <li>Modified configure script to work with OS X 10.11 (suggestion of Brian Ripley).</li>
-<li>Setting <code>xlen</code> etc. to zero in <code><a href="../reference/bbox.html">bbox3d()</a></code> or <code><a href="../reference/bbox.html">rgl.bbox()</a></code> now (correctly) suppresses tick marks. (Reported by Philipp Angerer.)</li>
+<li>Setting <code>xlen</code> etc. to zero in <code><a href="../reference/bbox.html">bbox3d()</a></code> or <code><a href="../reference/rgl-deprecated.html">rgl.bbox()</a></code> now (correctly) suppresses tick marks. (Reported by Philipp Angerer.)</li>
 <li>Specifying <code>normals</code> or <code>texcoords</code> in both a <code>"mesh3d"</code> object and a call to <code><a href="../reference/shade3d.html">shade3d()</a></code> to display it caused an error; now the <code><a href="../reference/shade3d.html">shade3d()</a></code> specified value has priority if <code>override = TRUE</code> (the default).</li>
 <li>When used with clipping on the bounds, <code><a href="../reference/persp3d.html">persp3d()</a></code> and <code><a href="../reference/plot3d.html">plot3d()</a></code> did not work properly with a shared mouse. (Reported by Marian Talbert.)</li>
 <li>Fixed a bug (reported by Dominick Samperi) that caused vignettes using WebGL code in <code>knitr</code> to fail to initialize properly. This required adding the <code><a href="../reference/setupKnitr.html">setupKnitr()</a></code> function, which should be called at the start of each vignette. It is <em>not</em> called automatically.</li>
@@ -833,7 +848,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.95.1247" id="rgl-0951247">rgl 0.95.1247<small>2015-05-01</small><a class="anchor" aria-label="anchor" href="#rgl-0951247"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-95-1247">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-95-1247"></a></h3>
-<ul><li>Added <code><a href="../reference/webGLcontrols.html">subsetSlider()</a></code>, <code><a href="../reference/webGLcontrols.html">subsetSetter()</a></code>, <code><a href="../reference/webGLcontrols.html">clipplaneSlider()</a></code>, <code><a href="../reference/propertySetter.html">propertySlider()</a></code>, <code><a href="../reference/ageSetter.html">ageSetter()</a></code>, <code><a href="../reference/propertySetter.html">propertySetter()</a></code>, <code><a href="../reference/propertySetter.html">par3dinterpSetter()</a></code> and <code><a href="../reference/webGLcontrols.html">toggleButton()</a></code> functions to output HTML/Javascript controls for WebGL.</li>
+<ul><li>Added <code><a href="../reference/rgl-defunct.html">subsetSlider()</a></code>, <code><a href="../reference/rgl-defunct.html">subsetSetter()</a></code>, <code><a href="../reference/rgl-defunct.html">clipplaneSlider()</a></code>, <code><a href="../reference/rgl-defunct.html">propertySlider()</a></code>, <code>ageSetter()</code>, <code><a href="../reference/rgl-defunct.html">propertySetter()</a></code>, <code><a href="../reference/rgl-defunct.html">par3dinterpSetter()</a></code> and <code><a href="../reference/rgl-defunct.html">toggleButton()</a></code> functions to output HTML/Javascript controls for WebGL.</li>
 <li>Added <code><a href="../reference/setupKnitr.html">hook_rgl()</a></code> and <code><a href="../reference/setupKnitr.html">hook_webgl()</a></code> functions, based on the <code>knitr</code> functions.</li>
 <li>Added clipping regions to <code><a href="../reference/plot3d.html">plot3d()</a></code> and <code><a href="../reference/persp3d.html">persp3d()</a></code>.</li>
 <li>Export the <code><a href="../reference/GramSchmidt.html">GramSchmidt()</a></code> function (request of Remko Duursma)</li>
@@ -841,19 +856,19 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-95-1247">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-95-1247"></a></h3>
-<ul><li>If a template file is used in <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code>, the string <code>%prefix%</code> will be replaced in it by the prefix argument.</li>
+<ul><li>If a template file is used in <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code>, the string <code>%prefix%</code> will be replaced in it by the prefix argument.</li>
 <li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> now outputs a Javascript global variable named <code>"&lt;prefix&gt;rgl"</code> of class <code>"rglClass"</code> that allows access to many of the scene internals. (Inspired by patch submitted by Jeff Allen.)</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> now outputs a Javascript global variable named <code>"&lt;prefix&gt;rgl"</code> of class <code>"rglClass"</code> that allows access to many of the scene internals. (Inspired by patch submitted by Jeff Allen.)</li>
 <li>User mouse callbacks can now be retrieved within R using <code><a href="../reference/callbacks.html">rgl.getMouseCallbacks()</a></code> and <code><a href="../reference/callbacks.html">rgl.getWheelCallback()</a></code>, and may be included in WebGL output.</li>
 <li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> now outputs information on object ids to allow them to be re-used in multiple figures on the same page. See the <code>reuse</code> parameter and attribute of the result.</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> now outputs information on object ids to allow them to be re-used in multiple figures on the same page. See the <code>reuse</code> parameter and attribute of the result.</li>
 <li>Started a vignette describing user interaction in WebGL.</li>
-<li>Set the class of the main <code>"canvas"</code> element in <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> output to <code>"rglWebGL"</code>.</li>
+<li>Set the class of the main <code>"canvas"</code> element in <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> output to <code>"rglWebGL"</code>.</li>
 <li>
 <code><a href="../reference/snapshot.html">rgl.snapshot()</a></code> now evaluates the <code>top</code> argument after <code>filename</code> and <code>fmt</code>, so windows created when those are evaluated don’t overlay the <code>rgl</code> window. (Suggestion of Keith Jewell.)</li>
 <li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> now includes an argument <code>commonParts</code>, to allow omission of common code in multi-figure displays.</li>
-<li>If <code>template</code> is <code>NULL</code> in <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code>, no template file is used.</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> now includes an argument <code>commonParts</code>, to allow omission of common code in multi-figure displays.</li>
+<li>If <code>template</code> is <code>NULL</code> in <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code>, no template file is used.</li>
 <li>The <code>persp.function()</code> method is now smarter about setting default axis labels.</li>
 <li>The package now contains a vignette giving an overview of the functions.</li>
 <li>
@@ -869,7 +884,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <li>Subscenes with <code>ignoreExtent = TRUE</code> were not plotted.</li>
 <li>The bounding box calculations now take clipping planes into account.</li>
 <li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> did not display the <code>bboxdeco</code> properly when working in a subscene.</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> did not display the <code>bboxdeco</code> properly when working in a subscene.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -899,7 +914,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h3 id="major-changes-0-94-1143">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-94-1143"></a></h3>
 <ul><li><p>Added function methods for <code><a href="../reference/persp3d.html">persp3d()</a></code> and <code><a href="../reference/plot3d.html">plot3d()</a></code>, to allow surfaces to be plotted just by specifying the function. ## Bug fixes</p></li>
 <li><p>Fixed a bug introduced in 0.94 that made user callbacks crash R. (Reported by Dave Hadka.)</p></li>
-<li><p>Fixed a bug exposed in 0.94 (but really introduced in 0.93.952) that caused <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> to fail when a <code>NULL</code> device was active.</p></li>
+<li><p>Fixed a bug exposed in 0.94 (but really introduced in 0.93.952) that caused <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> to fail when a <code>NULL</code> device was active.</p></li>
 <li><p>Fixed a bug introduced in 0.94 with writing 3D sprite objects.</p></li>
 <li><p>Fixed a bug computing the bounding box of an embedded subscene.</p></li>
 </ul></div>
@@ -914,11 +929,11 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="minor-changes-0-94">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-94"></a></h3>
 <ul><li>Allowed the coordinates of the viewport to be set.</li>
-<li>Changed the behaviour of <code><a href="../reference/scene.html">pop3d()</a></code> and <code><a href="../reference/rgl.fns.html">rgl.pop()</a></code>: the type is now ignored if <code>id</code> is non-zero.</li>
+<li>Changed the behaviour of <code><a href="../reference/scene.html">pop3d()</a></code> and <code><a href="../reference/rgl-duplicated.html">rgl.pop()</a></code>: the type is now ignored if <code>id</code> is non-zero.</li>
 <li>
 <code>par3d("modelMatrix")</code> no longer includes the observer translation</li>
 <li>The <code><a href="../reference/par3d.html">par3d()</a></code>, <code><a href="../reference/par3dinterp.html">par3dinterp()</a></code>, and <code><a href="../reference/spin3d.html">spin3d()</a></code> functions now have arguments dev and subscene to specify where they apply.</li>
-<li>Included a copy of the source to <code>CanvasMatrix.js</code> (used by <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code>) at the request of the Debian administrators.</li>
+<li>Included a copy of the source to <code>CanvasMatrix.js</code> (used by <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code>) at the request of the Debian administrators.</li>
 <li>Some of the animations have been sped up at the request of CRAN.</li>
 </ul></div>
 <div class="section level3">
@@ -931,7 +946,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="minor-changes-0-93-1098">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-93-1098"></a></h3>
 <ul><li>
-<code><a href="../reference/material.html">rgl.material()</a></code> (for textures), <code><a href="../reference/postscript.html">rgl.postscript()</a></code> and <code><a href="../reference/snapshot.html">rgl.snapshot()</a></code> now call <code><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath()</a></code> on filenames, so tilde expansion should be supported.</li>
+<code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> (for textures), <code><a href="../reference/postscript.html">rgl.postscript()</a></code> and <code><a href="../reference/snapshot.html">rgl.snapshot()</a></code> now call <code><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath()</a></code> on filenames, so tilde expansion should be supported.</li>
 <li>internals are updated to be consistent with macOS 10.9 requirements</li>
 <li>Improved the approximation to the surface normal for degenerate grids in <code><a href="../reference/surface3d.html">surface3d()</a></code> and <code><a href="../reference/persp3d.html">persp3d()</a></code>. (Problem found by Graham Griffiths using polar coordinates; all <code>r=0</code> points were at the same location.)</li>
 <li>The new surface normals are now saved in memory, so <code><a href="../reference/attributes.html">rgl.attrib()</a></code> will return them even if they were calculated by <code>rgl</code>. * <code><a href="../reference/scene3d.html">scene3d()</a></code> now records light settings.</li>
@@ -945,7 +960,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <li>fixed a bug in triangulation code: it failed on <code><a href="https://rdrr.io/r/graphics/locator.html" class="external-link">locator()</a></code> input.</li>
 <li>The Aqua support now works again, XQuartz is only needed for command line use in Mac OSX.</li>
 <li>Bounding box calculations for surfaces with user normals were incorrect.</li>
-<li>An array-overrun bug in <code><a href="../reference/attributes.html">rgl.attrib()</a></code> showed up in <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code>. (Reported by Brian Ripley.)</li>
+<li>An array-overrun bug in <code><a href="../reference/attributes.html">rgl.attrib()</a></code> showed up in <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code>. (Reported by Brian Ripley.)</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -977,7 +992,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-93-984">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-984"></a></h3>
 <ul><li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> and the other write methods did not handle material information properly after 0.93.975.</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> and the other write methods did not handle material information properly after 0.93.975.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -991,7 +1006,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-93-975">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-975"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl.texts.html">rgl.texts()</a></code> without a window failed because it queried the window before opening it.</li>
+<code><a href="../reference/rgl-deprecated.html">rgl.texts()</a></code> without a window failed because it queried the window before opening it.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1006,7 +1021,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="minor-changes-0-93-960">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-93-960"></a></h3>
 <ul><li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> now forces the position attribute to location 0, a recommended optimization strategy. The color attribute is forced to location 1.</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> now forces the position attribute to location 0, a recommended optimization strategy. The color attribute is forced to location 1.</li>
 <li>gl2ps has been updated to version 1.3.8 and support for point and line sizes has been added (bug 4792)</li>
 <li>internal functions <code><a href="../reference/check3d.html">.check3d()</a></code> and <code><a href="../reference/rgl.select.html">rgl.select()</a></code> have been exported, as they were used by the car package.</li>
 <li>
@@ -1028,7 +1043,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-93-952">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-93-952"></a></h3>
-<ul><li>added name of device to result returned from <code><a href="../reference/rgl.open.html">rgl.cur()</a></code>; added function <code><a href="../reference/rgl.open.html">rgl.dev.list()</a></code> to list all open devices.</li>
+<ul><li>added name of device to result returned from <code><a href="../reference/rgl-duplicated.html">rgl.cur()</a></code>; added function <code><a href="../reference/open3d.html">rgl.dev.list()</a></code> to list all open devices.</li>
 <li>examples and demos now check <code><a href="../reference/rgl.useNULL.html">rgl.useNULL()</a></code>, and don’t run invisible animations.</li>
 </ul></div>
 <div class="section level3">
@@ -1056,7 +1071,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <code><a href="../reference/addNormals.html">addNormals.mesh3d()</a></code> failed on objects when the matrices of triangles or quadrilaterals had zero columns.</li>
 <li>
 <code>rotate3d.mesh3d()</code> did not transform normals properly</li>
-<li>the <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> function produced fragment shaders that would not work in some browsers (e.g. Firefox and Chrome with the ANGLE WebGL engine).</li>
+<li>the <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> function produced fragment shaders that would not work in some browsers (e.g. Firefox and Chrome with the ANGLE WebGL engine).</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1070,7 +1085,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.93.932" id="rgl-093932">rgl 0.93.932<small>2013-04-05</small><a class="anchor" aria-label="anchor" href="#rgl-093932"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-93-932">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-932"></a></h3>
-<ul><li>calling <code><a href="../reference/material.html">rgl.material()</a></code> before any rendering caused a crash on OSX. (Reported by Dan Tenenbaum.)</li>
+<ul><li>calling <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> before any rendering caused a crash on OSX. (Reported by Dan Tenenbaum.)</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1079,12 +1094,12 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h3 id="minor-changes-0-93-930">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-93-930"></a></h3>
 <ul><li>Now handles local (not just directional) lighting. Based on code contributed by Alexander Senger.)</li>
 <li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> handles lighting properly. Based on code contributed by Alexander Senger.</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> handles lighting properly. Based on code contributed by Alexander Senger.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-93-930">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-930"></a></h3>
 <ul><li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> did not handle <code>snapshot=FALSE</code> properly. (Reported by Yihui Xie.)</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> did not handle <code>snapshot=FALSE</code> properly. (Reported by Yihui Xie.)</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1099,7 +1114,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.92.879" id="rgl-092879">rgl 0.92.879<small>2012-04-08</small><a class="anchor" aria-label="anchor" href="#rgl-092879"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-92-879">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-92-879"></a></h3>
-<ul><li>Added <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> function, to allow scenes to be viewed in a web browser.</li>
+<ul><li>Added <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> function, to allow scenes to be viewed in a web browser.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-92-879">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-92-879"></a></h3>
@@ -1139,7 +1154,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.92.891" id="rgl-092891">rgl 0.92.891<small>2012-07-17</small><a class="anchor" aria-label="anchor" href="#rgl-092891"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-92-891">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-92-891"></a></h3>
-<ul><li>Added support for 3d sprites to <code><a href="../reference/writeWebGL.html">writeWebGL()</a></code>.</li>
+<ul><li>Added support for 3d sprites to <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1154,7 +1169,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-92-893">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-92-893"></a></h3>
 <ul><li>
-<code><a href="../reference/light.html">rgl.light()</a></code> and <code><a href="../reference/light.html">light3d()</a></code> did not return the light ID value.</li>
+<code><a href="../reference/rgl-deprecated.html">rgl.light()</a></code> and <code><a href="../reference/light.html">light3d()</a></code> did not return the light ID value.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1188,7 +1203,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-93">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93"></a></h3>
 <ul><li>
-<code><a href="../reference/writeWebGL.html">writeWebGL()</a></code> did not render semi-transparent surfaces properly. (Reported by Robert Esswein.)</li>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> did not render semi-transparent surfaces properly. (Reported by Robert Esswein.)</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1229,7 +1244,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h3 id="bug-fixes-0-92-858">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-92-858"></a></h3>
 <ul><li>Bug fix for <code><a href="../reference/subdivision3d.html">divide.mesh3d()</a></code> in handling normals.</li>
 <li>
-<code><a href="../reference/rgl.fns.html">rgl.ids()</a></code> did not return all object ids as documented.</li>
+<code><a href="../reference/rgl-duplicated.html">rgl.ids()</a></code> did not return all object ids as documented.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1250,7 +1265,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-91">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-91"></a></h3>
-<ul><li>Fixed bug in <code><a href="../reference/rgl.texts.html">rgl.texts()</a></code>: zero-length texts argument caused crash. (Reported by Michael Friendly.)</li>
+<ul><li>Fixed bug in <code><a href="../reference/rgl-deprecated.html">rgl.texts()</a></code>: zero-length texts argument caused crash. (Reported by Michael Friendly.)</li>
 <li>Fixed bad declaration in <code>rglmath.h</code>
 </li>
 </ul></div>
@@ -1308,7 +1323,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="minor-changes-0-85">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-85"></a></h3>
 <ul><li>Added some namespace declarations to the C++, and renamed <code>math.h</code>, for compatibility with Sun compilers (contributed by Brian Ripley).</li>
-<li>Fixed visibility of some <code><a href="../reference/shade3d.html">shade3d()</a></code>, <code><a href="../reference/shade3d.html">wire3d()</a></code> and <code><a href="../reference/3dobjects.html">points3d()</a></code> methods.</li>
+<li>Fixed visibility of some <code><a href="../reference/shade3d.html">shade3d()</a></code>, <code><a href="../reference/shade3d.html">wire3d()</a></code> and <code><a href="../reference/primitives.html">points3d()</a></code> methods.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-85">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-85"></a></h3>
@@ -1388,7 +1403,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-81">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-81"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl.texts.html">rglFonts()</a></code> was being set at install time, but it should be set at load time.</li>
+<code><a href="../reference/rglFonts.html">rglFonts()</a></code> was being set at install time, but it should be set at load time.</li>
 <li>fixed configuration problems in OS X</li>
 <li>fixed executable marker on a number of files</li>
 </ul></div>
@@ -1406,13 +1421,13 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="minor-changes-0-79">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-79"></a></h3>
 <ul><li>added <code>mouseCallbacks()</code> demo, to show R implementations of standard mouse handlers, multiple connected windows, stereo view, etc.</li>
-<li>added “silent” argument to <code><a href="../reference/rgl.open.html">rgl.set()</a></code>, to allow temporary changes to focus without changing window labels.</li>
+<li>added “silent” argument to <code><a href="../reference/rgl-deprecated.html">rgl.set()</a></code>, to allow temporary changes to focus without changing window labels.</li>
 <li>added natural spline extrapolation to <code><a href="../reference/par3dinterp.html">par3dinterp()</a></code>.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-79">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-79"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl.fns.html">rgl.pop()</a></code> could cause corruption when multiple windows were open.</li>
+<code><a href="../reference/rgl-duplicated.html">rgl.pop()</a></code> could cause corruption when multiple windows were open.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -1444,7 +1459,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="minor-changes-0-78">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-78"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl.texts.html">rgl.texts()</a></code> and <code><a href="../reference/texts.html">text3d()</a></code> can now handle font and size specifications using the FreeType library on any platform, or GDI on Windows.</li>
+<code><a href="../reference/rgl-deprecated.html">rgl.texts()</a></code> and <code><a href="../reference/texts.html">text3d()</a></code> can now handle font and size specifications using the FreeType library on any platform, or GDI on Windows.</li>
 <li>
 <code>adj</code> is supported both horizontally and vertically in drawing text.</li>
 </ul></div>
@@ -1452,7 +1467,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h3 id="bug-fixes-0-78">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-78"></a></h3>
 <ul><li>fix miscalculation of <code>mouseMatrix</code> that caused disappearing views.</li>
 <li>
-<code><a href="../reference/rgl.fns.html">rgl.pop()</a></code> was very slow when given a long list of ids.</li>
+<code><a href="../reference/rgl-duplicated.html">rgl.pop()</a></code> was very slow when given a long list of ids.</li>
 <li>a workaround for OSX 10.5 OpenGL problems has been incorporated (thanks to <a href="mailto:mkv22@cam.ac.uk" class="email">mkv22@cam.ac.uk</a>).</li>
 </ul></div>
 </div>
@@ -1515,7 +1530,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <code><a href="../reference/scene.html">clear3d()</a></code> can now reset material properties to the defaults, and <code><a href="../reference/open3d.html">open3d()</a></code> does this.</li>
 <li>minor fix for gcc 4.3 compatibility</li>
 <li>minor fix for R 2.5+ compatibility</li>
-<li>allowed more general surfaces to be plotted by <code><a href="../reference/surface.html">rgl.surface()</a></code>, <code><a href="../reference/surface3d.html">surface3d()</a></code> and <code><a href="../reference/persp3d.html">persp3d()</a></code>, by specifying matrices for x and y coordinates</li>
+<li>allowed more general surfaces to be plotted by <code><a href="../reference/rgl-deprecated.html">rgl.surface()</a></code>, <code><a href="../reference/surface3d.html">surface3d()</a></code> and <code><a href="../reference/persp3d.html">persp3d()</a></code>, by specifying matrices for x and y coordinates</li>
 <li>added world map texture, used in <code>example(persp3d)</code>.</li>
 </ul></div>
 </div>
@@ -1570,9 +1585,9 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <li>added full MDI support</li>
 <li>removed use of <code>List</code> and <code>ListIterator</code> internally</li>
 <li>fixed handling of axes and boxes when a coordinate had zero extent</li>
-<li>changed <code><a href="../reference/viewpoint.html">rgl.viewpoint()</a></code> default to be compatible with <code>r3dDefaults</code>
+<li>changed <code><a href="../reference/rgl-deprecated.html">rgl.viewpoint()</a></code> default to be compatible with <code>r3dDefaults</code>
 </li>
-<li>added id return values to primitives and higher level functions, and to <code><a href="../reference/rgl.fns.html">rgl.pop()</a></code>; added <code><a href="../reference/rgl.fns.html">rgl.ids()</a></code> to report on them.</li>
+<li>added id return values to primitives and higher level functions, and to <code><a href="../reference/rgl-duplicated.html">rgl.pop()</a></code>; added <code><a href="../reference/rgl-duplicated.html">rgl.ids()</a></code> to report on them.</li>
 <li>updated gl2ps to version 1.3.1, adding support for svg and pgf output formats.</li>
 </ul></div>
 </div>
@@ -1601,11 +1616,11 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <li>changed zoom to use ratio scale over larger range</li>
 <li>fixed bug causing jump after resize in Mac OSX (and maybe other platforms)</li>
 <li>
-<code><a href="../reference/primitive.html">rgl.primitive()</a></code> now does sanity checks on inputs</li>
+<code><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl-deprecated.html">rgl.primitive()</a></code> now does sanity checks on inputs</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.66" id="rgl-066">rgl 0.66<small>2006-02-24</small><a class="anchor" aria-label="anchor" href="#rgl-066"></a></h2>
-<ul><li>added <code>"all"</code> and <code>"viewpoint"</code> to <code><a href="../reference/rgl.fns.html">rgl.clear()</a></code> and <code><a href="../reference/scene.html">clear3d()</a></code>
+<ul><li>added <code>"all"</code> and <code>"viewpoint"</code> to <code><a href="../reference/rgl-deprecated.html">rgl.clear()</a></code> and <code><a href="../reference/scene.html">clear3d()</a></code>
 </li>
 <li>added static libpng build support and user customizable prefix (unix)</li>
 <li>used <code><a href="https://rdrr.io/r/grDevices/xyz.coords.html" class="external-link">xyz.coords()</a></code> in all functions taking x, y, z coordinates, allowing matrix or dataframe arguments (among others)</li>
@@ -1630,8 +1645,8 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <li>added z-distance sorted rendering of alpha-blended faces</li>
 <li>added gl2ps patch ( contributed by Albrecht Gebhard )</li>
 <li>added port: native Mac OS X Carbon</li>
-<li>bugfix: <code><a href="../reference/rgl.open.html">rgl.close()</a></code>, <code><a href="../reference/rgl.open.html">rgl.quit()</a></code> crashed on X11 occasionally.</li>
-<li>generalized <code><a href="../reference/surface.html">rgl.surface()</a></code> to allow surface over any coordinate plane.</li>
+<li>bugfix: <code><a href="../reference/rgl-deprecated.html">rgl.close()</a></code>, <code><a href="../reference/open3d.html">rgl.quit()</a></code> crashed on X11 occasionally.</li>
+<li>generalized <code><a href="../reference/rgl-deprecated.html">rgl.surface()</a></code> to allow surface over any coordinate plane.</li>
 <li>added <code>r3dDefaults</code> variable to allow user to set defaults</li>
 <li>added environment texture-mapping</li>
 </ul></div>
@@ -1717,7 +1732,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64-2" id="rgl-064-2">rgl 0.64-2<a class="anchor" aria-label="anchor" href="#rgl-064-2"></a></h2>
 <ul><li>
-<code><a href="../reference/primitive.html">rgl.quads()</a></code>: <code>enum</code> id was broken, fixed (“quads” -&gt; “quadrangles”)</li>
+<code><a href="../reference/rgl-deprecated.html">rgl.quads()</a></code>: <code>enum</code> id was broken, fixed (“quads” -&gt; “quadrangles”)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64" id="rgl-064">rgl 0.64<a class="anchor" aria-label="anchor" href="#rgl-064"></a></h2>
