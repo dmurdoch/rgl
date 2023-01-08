@@ -34,7 +34,10 @@ Adds a surface mesh to the current scene. The surface is
 typically defined by a matrix of height values in \code{z}
 (as in \code{\link{persp}}), 
 but any of \code{x}, \code{y}, or \code{z} may be matrices or
-vectors, as long as at least one is a matrix. 
+vectors, as long as at least one is a matrix.  (One 
+historical exception is allowed:  if all are vectors but
+the length of \code{z} is the product of the lengths of
+\code{x} and \code{y}, \code{z} is converted to a matrix.)
 
 Dimensions of all matrices must match.
 

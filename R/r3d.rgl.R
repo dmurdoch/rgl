@@ -698,38 +698,52 @@ terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z
        normal_x=normal_x,normal_y=normal_z,normal_z=normal_y)
   do.call("rgl.material0", .fixMaterialArgs(..., Params = save))
   flags <- rep(FALSE, 4)
-  
+  nrows <- NA
+  ncols <- NA
   if (is.matrix(x)) {
-    nx <- nrow(x)
+    nrows <- nrow(x)
+    ncols <- ncol(x)
     flags[1] <- TRUE
-    if ( !identical( dim(x), dim(y) ) ) stop(gettextf("Bad dimension for %s", "rows"),
-                                             domain = NA)
-  } else nx <- length(x)
+  } else nrows <- length(x)
   
   if (is.matrix(y)) {
-    ny <- ncol(y)
+    if (is.na(ncols))
+      ncols <- ncol(y)
+    if ( any(dim(y) != c(nrows, ncols))) 
+      stop(gettextf("Bad dimension for %s", "y"),
+                                             domain = NA)
     flags[2] <- TRUE
-  } else ny <- length(y)
+  } else {
+    if (is.na(ncols))
+      ncols <- length(y)
+    else if (ncols != length(y))
+      stop(gettextf("Bad length for %s", "y"),
+           domain = NA)
+  }
   
   if (is.matrix(z)) {
-    if (any(dim(z) != c(nx, ny)))
+    if (any(dim(z) != c(nrows, ncols)))
       stop(gettextf("Bad dimension for %s", "z"))
-  } else if (is.matrix(x)) {
-    if (length(z) != nx)
+  } else if (!flags[1] && !flags[2] && length(z) == nrows*ncols) {
+      z <- matrix(z, nrows, ncols)
+  } else if (!flags[2]) {
+    if (!flags[1])
+      stop("At least one coordinate must be a matrix")
+    if (nrows != length(z))
       stop(gettextf("Bad length for %s", "z"))
-    z <- matrix(z, nx, ny)
-  } else 
-    z <- matrix(z, nx, ny, byrow = TRUE)
+    z <- matrix(z, nrows, ncols)
+  } else {
+    if (ncols != length(z))
+      stop(gettextf("Bad length for %s", "z"))
+    z <- matrix(z, nrows, ncols, byrow = TRUE)
+  }
   
   nz <- length(z)
   
-  if ( nx*ny != nz)
-    stop("'z' length != 'x' rows * 'y' cols")
-  
-  if ( nx < 2 )
+  if ( nrows < 2 )
     stop("rows < 2")
   
-  if ( ny < 2 )   
+  if ( ncols < 2 )   
     stop("cols < 2")
   
   coords <- c(1,3,2)
@@ -752,7 +766,7 @@ terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z
     flags[4] <- TRUE
   }
   
-  idata <- as.integer( c( nx, ny ) )
+  idata <- as.integer( c( nrows, ncols ) )
   
   xdecreasing <- diff(x[!is.na(x)][1:2]) < 0
   ydecreasing <- diff(y[!is.na(y)][1:2]) < 0
