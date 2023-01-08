@@ -1,4 +1,4 @@
-# rgl 1.0.0
+# rgl 1.0.0.1
 
 ## Major changes
 
@@ -24,6 +24,8 @@ added.
 * Similarly, `rgl.par3d.names` and `rgl.par3d.readonly`
 contain lists of properties that may be set or queried
 in `par3d()`.
+* The flexibility improvements for `surface3d()` in
+0.111.6 were incomplete.
 
 # rgl 0.111.6
 
