@@ -90,7 +90,12 @@ writeWebGL(dir = "webGL",
            width, height)                       # rglwidget
 }
 \seealso{
-  \code{\link{Deprecated}}
+  \code{\link{Deprecated}, \link{bbox3d}, \link{bg3d},
+  \link{clear3d}, \link{close3d}, \link{light3d}, 
+  \link{lines3d}, \link{open3d}, \link{points3d}, 
+  \link{quads3d}, \link{rglwidget}, \link{segments3d},
+  \link{select3d}, \link{set3d}, \link{surface3d},
+  \link{text3d}, \link{triangles3d}, \link{view3d}}
 }
 \keyword{internal}
 \keyword{misc}

@@ -1,7 +1,6 @@
 \name{surface3d}
 \title{Add surface}
 \alias{surface3d}
-\alias{terrain3d}
 \description{
   Adds a surface to the current scene. The surface is defined by 
   a matrix defining the height of each grid point and two vectors or matrices
@@ -10,10 +9,7 @@
 \usage{
 surface3d(x, y, z, ..., 
          normal_x = NULL, normal_y = NULL, normal_z = NULL,
-         texture_s=NULL, texture_t=NULL)
-terrain3d(x, y, z, ..., 
-          normal_x = NULL, normal_y = NULL, normal_z = NULL, 
-          texture_s=NULL, texture_t=NULL)
+         texture_s=NULL, texture_t=NULL, flip = FALSE)
 }
 \arguments{
   \item{ x, y, z }{
@@ -27,6 +23,9 @@ terrain3d(x, y, z, ...,
   \item{texture_s, texture_t}{
     matrices giving the texture coordinates at each
     grid point
+  }
+  \item{flip}{
+    flip definition of \dQuote{up}
   }
 }
 \details{
@@ -59,14 +58,14 @@ to rows.
   render the texture exactly once over the grid.  Values greater than 1 can be
   used to repeat the texture over the surface.
   
-  \code{surface3d} always draws the surface with the `front' upwards
+  \code{surface3d} always tries to draw the surface with the `front' upwards
   (typically towards higher \code{z} values).  This can be used to render
   the top and bottom differently; see \code{\link{material3d}} and
-  the example below.
+  the example below.  If you don't like its choice, set
+  \code{flip = TRUE} to use the opposition definition.
   
   \code{NA} values in the height matrix are not drawn.
   
-  \code{surface3d} and \code{terrain3d} are synonyms.
 }
 \examples{
 #

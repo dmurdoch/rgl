@@ -691,7 +691,10 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
   }
 }
 
-terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z=NULL,texture_s=NULL, texture_t=NULL) {
+surface3d   <- function(x, y = NULL, z = NULL, ...,
+                        normal_x = NULL, normal_y = NULL, normal_z = NULL,
+                        texture_s = NULL, texture_t=NULL,
+                        flip = FALSE) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   # Evaluate args
   list(x=x,y=z,z=y,coords=c(1,3,2),
@@ -770,7 +773,7 @@ terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z
   
   xdecreasing <- diff(x[!is.na(x)][1:2]) < 0
   ydecreasing <- diff(y[!is.na(y)][1:2]) < 0
-  parity <- (perm_parity(coords) + xdecreasing + ydecreasing ) %% 2
+  parity <- (perm_parity(coords) + xdecreasing + ydecreasing + flip) %% 2
   
   if (is.na(parity))
     parity <- 0
@@ -797,7 +800,7 @@ terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z
   
   lowlevel(ret$success)
 }
-surface3d   <- terrain3d
+terrain3d <- surface3d
 
 # Interaction
 
