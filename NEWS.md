@@ -1,4 +1,4 @@
-# rgl 1.0.0.1
+# rgl 1.0.0.3
 
 ## Major changes
 
@@ -26,6 +26,8 @@ contain lists of properties that may be set or queried
 in `par3d()`.
 * The flexibility improvements for `surface3d()` in
 0.111.6 were incomplete.
+* Argument `flip` has been added to `surface3d()` to allow
+front and back to be switched.
 
 # rgl 0.111.6
 
