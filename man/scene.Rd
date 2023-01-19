@@ -73,7 +73,7 @@ be followed by a call to \code{\link{light3d}}.
   ids3d()
   lines3d(x, y, z)
   ids3d(tags = TRUE)
-  if (interactive() && !rgl.useNULL()) {
+  if (interactive() && !rgl.useNULL() && !in_pkgdown_example()) {
     readline("Hit enter to change spheres")
     pop3d(id = p["data"])
     spheres3d(x, y, z, col = "red", radius = 1/5)
