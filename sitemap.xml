@@ -40,9 +40,6 @@
     <loc>https://dmurdoch.github.io/rgl/dev/news/index.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html</loc>
-  </url>
-  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/Buffer.html</loc>
   </url>
   <url>
@@ -56,9 +53,6 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/ageControl.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/ageSetter.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/all.equal.mesh3d.html</loc>
@@ -259,19 +253,25 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/postscript.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/primitive.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/primitives.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/propertyControl.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/r3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/readSTL.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl-defunct.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl-deprecated.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl-duplicated.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl-internal.html</loc>
@@ -292,22 +292,16 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.fns.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.getAxisCallback.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.open.html</loc>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.pixels.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.select.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.setAxisCallback.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.texts.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rgl.useNULL.html</loc>
@@ -317,6 +311,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rglExtrafonts.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/rglFonts.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/rglIds.html</loc>
@@ -403,9 +400,6 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/subsceneInfo.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/surface.html</loc>
-  </url>
-  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/surface3d.html</loc>
   </url>
   <url>
@@ -445,9 +439,6 @@
     <loc>https://dmurdoch.github.io/rgl/dev/reference/viewpoint.html</loc>
   </url>
   <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html</loc>
-  </url>
-  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/writeASY.html</loc>
   </url>
   <url>
@@ -455,8 +446,5 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/writePLY.html</loc>
-  </url>
-  <url>
-    <loc>https://dmurdoch.github.io/rgl/dev/reference/writeWebGL.html</loc>
   </url>
 </urlset>
