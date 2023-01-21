@@ -1,3 +1,10 @@
+# rgl 1.0.2
+
+## Bug fixes
+
+* The `writeSTL()` function did not handle indices
+in the objects it was writing (issue #293).
+
 # rgl 1.0.1
 
 ## Major changes

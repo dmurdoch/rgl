@@ -1,3 +1,21 @@
+
+# Get the attribute expanded by the indices, if any
+expandAttrib <- function(id, attrib) {
+  result <- rgl.attrib(id, attrib)
+  if (length(result)) {
+    indices <- rgl.attrib(id, "indices")
+    if (length(indices))
+      result <- result[indices,]
+  }
+  result
+}
+
+expandVertices <- function(id) 
+  expandAttrib(id, "vertices")
+
+expandNormals <- function(id)
+  expandAttrib(id, "normals")
+
 writeSTL <- function(con, ascii=FALSE, pointRadius=0.005, 
                      pointShape = icosahedron3d(),
                      lineRadius = pointRadius,
@@ -51,7 +69,7 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   }
       
   writeSurface <- function(id) {
-    vertices <- rgl.attrib(id, "vertices")
+    vertices <- expandVertices(id)
     dims <- rgl.attrib(id, "dim")
     nx <- dims[1]
     nz <- dims[2]
@@ -78,8 +96,8 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   }
 
   writeSpheres <- function(id) {
-    vertices <- rgl.attrib(id, "vertices")
-    radii <- rgl.attrib(id, "radii")
+    vertices <- expandVertices(id)
+    radii <- rgl.attrib(id, "radii") # FIXME to handle indices?
     n <- nrow(vertices)
     radii <- rep(radii, length.out=n)
     x <- subdivision3d(icosahedron3d(),3)
@@ -97,7 +115,7 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   }  
    
   writePoints <- function(id) {
-    vertices <- rgl.attrib(id, "vertices")
+    vertices <- expandVertices(id)
     n <- nrow(vertices)
     radius <- pointRadius*avgScale()
     for (i in seq_len(n))
@@ -105,7 +123,7 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   }
   
   writeSegments <- function(id) {
-    vertices <- rgl.attrib(id, "vertices")
+    vertices <- expandVertices(id)
     n <- nrow(vertices)/2
     radius <- lineRadius*avgScale()
     for (i in seq_len(n)) {
@@ -118,7 +136,7 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   }
   
   writeLines <- function(id) {
-    vertices <- rgl.attrib(id, "vertices")
+    vertices <- expandVertices(id)
     n <- nrow(vertices) - 1
     radius <- lineRadius*avgScale()
     for (i in seq_len(n)) 
@@ -177,8 +195,8 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   for (i in seq_along(ids)) 
     switch(types[i],
       planes =,
-      triangles = writeTriangles(rgl.attrib(ids[i], "vertices")),
-      quads = writeQuads(rgl.attrib(ids[i], "vertices")),
+      triangles = writeTriangles(expandVertices(ids[i])),
+      quads = writeQuads(expandVertices(ids[i])),
       surface = writeSurface(ids[i]),
       spheres = writeSpheres(ids[i]),
       points = writePoints(ids[i]),
