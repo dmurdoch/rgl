@@ -4,6 +4,8 @@ hover3d <- function(x, y = NULL, z = NULL,
                     persist = c("no", "one", "yes"),
                     labels = seq_along(x),
                     adj = c(-0.2, 0.5),
+                    applyToScene = TRUE,
+                    applyToDev = TRUE,
                     ...) {
   
   labelIndex <- function(sel, ...)
@@ -12,6 +14,10 @@ hover3d <- function(x, y = NULL, z = NULL,
 
   if (is.null(labeller))
     labeller <- labelIndex
+  else if (applyToScene) {
+    warning("Use of labeller is not supported with applyToScene")
+    applyToScene <- FALSE
+  }
   
   stopifnot(is.function(labeller))
   
@@ -32,7 +38,7 @@ hover3d <- function(x, y = NULL, z = NULL,
   
   selected <- list()
   
-  select <- function(mousex, mousey) {
+  hoverSelect <- function(mousex, mousey) {
     disp <- cur3d()
     if (disp != odev) {
       set3d(odev)
@@ -46,7 +52,7 @@ hover3d <- function(x, y = NULL, z = NULL,
     dist <- sqrt( (mousex-winxyz[,1])^2 + (mousey - winxyz[,2])^2 )
     dist[winxyz[,3] < 0 | winxyz[,3] > 1] <- Inf
     sel <- which.min(dist)
-    if (dist[sel] < tolerance) {
+    if (dist[sel] <= tolerance) {
       save <- par3d(skipRedraw = TRUE)
       on.exit(par3d(save), add = TRUE)
       if (persist != "yes")
@@ -67,6 +73,64 @@ hover3d <- function(x, y = NULL, z = NULL,
     }
   }
   
-  rgl.setMouseCallbacks(0, update=select)
+  js <- NULL
+  if (applyToScene) {
+    # Define the Javascript functions with the same names to use in WebGL
+    js <-
+    ' var selected = [];
+   
+     window.hoverSelect = function(x, y) { 
+       var   obj = this.getObj(%idverts%), i, newdist, dist = Infinity, pt, newclosest, text;
+       for (i = 0; i < obj.vertices.length; i++) {
+         pt = obj.vertices[i].concat(1);
+         pt = this.user2window(pt, %subid%);
+         pt[0] = x - pt[0]*this.canvas.width;
+         pt[1] = y - pt[1]*this.canvas.height;
+         pt[2] = 0;
+         newdist = rglwidgetClass.vlen(pt);
+         if (newdist < dist) {
+           dist = newdist;
+           newclosest = i;
+         }
+       }
+       if (dist <= %tolerance%) {
+         if ("%persist%" !== "yes" && 
+             selected.length > 0 &&
+             selected[0] !== newclosest) {
+               text = this.getObj(%idtexts%);
+               text.colors[selected[0]][3] = 0; // invisible!
+               selected = [];
+             }
+         if (!selected.includes(newclosest)) {
+           selected.push(newclosest);
+           text = this.getObj(%idtexts%);
+           text.colors[newclosest][3] = 1; // alpha is here!
+         }
+       } else if ("%persist%" === "no" && selected.length > 0) {
+         text = this.getObj(%idtexts%);
+         text.colors[selected[0]][3] = 0;
+         selected = [];
+       }
+       if (typeof text !== "undefined") {  
+         text.initialized = false;
+         this.drawScene();
+       }
+     };'
+    idverts <- points3d(xyz)
+    delFromSubscene3d(idverts)
+    idtexts <- text3d(xyz, texts = labels, adj = adj, 
+                      alpha = rep(0, length(labels)), ...)
+
+    js <- gsub("%idverts%", idverts, js)  
+    js <- gsub("%subid%", subsceneInfo()$id, js)
+    js <- gsub("%idtexts%", idtexts, js)
+    js <- gsub("%tolerance%", tolerance, js)
+    js <- gsub("%persist%", persist, js)
+  }
+  setUserCallbacks(0, update="hoverSelect", 
+                   applyToScene = applyToScene,
+                   applyToDev = applyToDev,
+                   javascript = js)
+  
   invisible(list(oldPar = opar, oldDev = odev))
 }
