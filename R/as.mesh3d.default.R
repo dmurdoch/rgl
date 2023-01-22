@@ -206,33 +206,35 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
     id <- ids[i, "id"]
     verts <- rgl.attrib(id, "vertices")
     nvert <- NROW(verts)
-    if (nvert) {
+    nvertExpanded <- getExpandedNverts(id)
+    if (nvertExpanded) {
       type <- ids[i, "type"]
       prev <- length(vertices)/3
+      indices <- getIndices(id)
       inds <- switch(as.character(type),
-                     points = seq_len(nvert) + prev,
+                     points = indices + prev,
                      lines = # from segments3d
-                       matrix(1:nvert + prev, nrow = 2),
+                       matrix(indices + prev, nrow = 2),
                      linestrip = # from lines3d
-                       rbind(seq_len(nvert - 1), 
-                             seq_len(nvert - 1) + 1) + prev,
+                       rbind(indices[-nvertExpanded], 
+                             indices[-1]) + prev,
                      triangles =,
-                     planes = matrix(1:nvert + prev, nrow = 3),
+                     planes = matrix(indices + prev, nrow = 3),
                      quads = {
-                       nquads <- nvert/4
-                       matrix(4*rep(seq_len(nquads) - 1, each = 6) + c(1,2,3,1,3,4) + prev, nrow = 3)
+                       nquads <- nvertExpanded/4
+                       matrix(indices[4*rep(seq_len(nquads) - 1, each = 6) + c(1,2,3,1,3,4)] + prev, nrow = 3)
                      },
                      surface = {
                        dim <- rgl.attrib(id, "dim")
-                       ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1) + prev
+                       ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1)
                        if (rgl.attrib(id, "flags")["flipped",])
-                         rbind(c(ul-1, ul-1+dim[1]),
-                                 c(ul, ul),
-                                 c(ul-1+dim[1], ul+dim[1]))
+                         rbind(indices[c(ul-1, ul-1+dim[1])] + prev,
+                               indices[c(ul, ul)] + prev ,
+                               indices[c(ul-1+dim[1], ul+dim[1])] + prev)
                        else
-                         rbind(c(ul, ul),
-                                 c(ul-1, ul-1+dim[1]),
-                                 c(ul-1+dim[1], ul+dim[1]))
+                         rbind(indices[c(ul, ul)] + prev,
+                               indices[c(ul-1, ul-1+dim[1])] + prev,
+                               indices[c(ul-1+dim[1], ul+dim[1])] + prev)
                      },
                      NULL)
       if (length(inds)) {
@@ -246,7 +248,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
           it <- cbind(it, inds)
           normals <- rbind(normals, rgl.attrib(id, "normals"))
         }  
-        vertices <- cbind(vertices, local_t(rgl.attrib(id, "vertices")))
+        vertices <- cbind(vertices, local_t(verts))
         if (rgl.attrib.count(id,"texcoords"))
           texcoords <- rbind(texcoords, rgl.attrib(id, "texcoords"))
         else
