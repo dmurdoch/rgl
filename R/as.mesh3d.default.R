@@ -253,7 +253,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
           texcoords <- rbind(texcoords, rgl.attrib(id, "texcoords"))
         else
           texcoords <- rbind(texcoords, matrix(NA, ncol = 2, nrow = nvert))
-        mat <- rgl.getmaterial(nvert, id)
+        mat <- rgl.getmaterial(nvert, id = id)
         
         material <- mergeMaterials(material, mat, nvert, type)
       }
