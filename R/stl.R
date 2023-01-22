@@ -1,21 +1,3 @@
-
-# Get the attribute expanded by the indices, if any
-expandAttrib <- function(id, attrib) {
-  result <- rgl.attrib(id, attrib)
-  if (length(result)) {
-    indices <- rgl.attrib(id, "indices")
-    if (length(indices))
-      result <- result[indices,]
-  }
-  result
-}
-
-expandVertices <- function(id) 
-  expandAttrib(id, "vertices")
-
-expandNormals <- function(id)
-  expandAttrib(id, "normals")
-
 writeSTL <- function(con, ascii=FALSE, pointRadius=0.005, 
                      pointShape = icosahedron3d(),
                      lineRadius = pointRadius,
