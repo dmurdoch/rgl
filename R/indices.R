@@ -52,3 +52,12 @@ getIndices <- function(id) {
     result <- seq_len(NROW(rgl.attrib(id, "vertices")))
   result
 }
+
+# Check for indices that differ from default
+checkForIndices <- function(id, warn = TRUE) {
+  has_indices <- length(indices <- rgl.attrib(id, "indices")) > 0 && 
+                 !all(indices == seq_along(indices))
+  if (has_indices && warn)
+    warning("Indices not supported.  Skipping id", id, call. = FALSE)
+  has_indices
+}

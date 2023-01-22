@@ -295,7 +295,9 @@ writeOBJ <- function(con,
   
   writeHeader()
 
-  for (i in seq_along(ids)) 
+  for (i in seq_along(ids)) {
+    if (checkForIndices(ids[i]))
+      next
     switch(types[i],
       planes =,
       triangles = writeTriangles(ids[i]),
@@ -306,6 +308,7 @@ writeOBJ <- function(con,
       lines = writeSegments(ids[i]),
       linestrip = writeLines(ids[i])
     )
+  }
   
   invisible(filename)
 }

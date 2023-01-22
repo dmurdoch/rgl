@@ -16,6 +16,8 @@ selectpoints3d <- function(objects = ids3d()$id, value = TRUE, closest = TRUE,
     prev <- nrow(result) # Number to keep from previous selection
     
     for (id in objects) {
+      if (checkForIndices(id))
+        next
       verts <- rgl.attrib(id, "vertices")
       hits <- f(verts)
       

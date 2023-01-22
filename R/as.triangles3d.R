@@ -41,6 +41,8 @@ as.triangles3d.rglId <- function(obj,
   result <- NULL
   for (i in seq_len(nrow(ids))) {
     id <- ids[i, "id"]
+    if (checkForIndices(id))
+      next
     nvert <- rgl.attrib.count(id, "vertices")
     attrib <- rgl.attrib(id, attribute)
     if (nrow(attrib)) {

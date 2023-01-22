@@ -304,7 +304,9 @@ property int vertex2\n", file=con)
   ids <- ids[keep]
   types <- types[keep]
 
-  for (i in seq_along(ids)) 
+  for (i in seq_along(ids)) {
+    if (checkForIndices(ids[i]))
+      next
     switch(types[i],
       planes =,
       triangles = writeTriangles(ids[i]),
@@ -315,6 +317,7 @@ property int vertex2\n", file=con)
       lines = writeSegments(ids[i]),
       linestrip = writeLines(ids[i])
     )
+  }
   
   writeData()
   
