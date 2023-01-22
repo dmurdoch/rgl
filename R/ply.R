@@ -88,7 +88,7 @@ property int vertex2\n", file=con)
     n <- nrow(vertices)      
     base <- nrow(Vertices)
     Vertices <<- rbind(Vertices, vertices)
-    Triangles <<- rbind(Triangles, matrix(base + seq_len(n) - 1, 
+    Triangles <<- rbind(Triangles, matrix(base + getIndices(id) - 1, 
                         ncol=3, byrow=TRUE))
   }
   
@@ -97,7 +97,7 @@ property int vertex2\n", file=con)
     n <- nrow(vertices)
     base <- nrow(Vertices)
     Vertices <<- rbind(Vertices, vertices)
-    Quads <<- rbind(Quads, matrix(base + seq_len(n) - 1, 
+    Quads <<- rbind(Quads, matrix(base + getIndices(id) - 1, 
                         ncol=4, byrow=TRUE))
   }
       
@@ -109,13 +109,15 @@ property int vertex2\n", file=con)
     base <- nrow(Vertices)
     Vertices <<- rbind(Vertices, vertices)
     rows <- seq_len(nx)
-    for (i in seq_len(nz)[-nz]) 
+    for (i in seq_len(nz)[-nz]) {
+      indices <- getIndices(id)[(i-1)*nx + 
+                                c(rows[-nx],rows[-nx],
+                                  rows[-1]+nx,rows[-nx]+nx,
+                                  rows[-1],rows[-1]+nx)]
       Triangles <<- rbind(Triangles, 
-                        matrix(base + (i-1)*nx + 
-                               c(rows[-nx],rows[-nx],
-                                 rows[-1]+nx,rows[-nx]+nx,
-                                 rows[-1],rows[-1]+nx) - 1,
+                        matrix(base + indices - 1,
                                ncol=3))
+    }
   }
   
   writeMesh <- function(mesh, scale=1, offset=c(0,0,0)) {
@@ -143,12 +145,12 @@ property int vertex2\n", file=con)
   }
 
   writeSpheres <- function(id) {
-    vertices <- rgl.attrib(id, "vertices")
+    vertices <- expandVertices(id)
     n <- nrow(vertices)    
-    colors <- rgl.attrib(id, "colors")
+    colors <- expandColors(id)
     if (nrow(colors) == 1)
       colors <- colors[rep(1, n),, drop = FALSE]
-    radii <- rgl.attrib(id, "radii")
+    radii <- expandAttrib(id, "radii")
     radii <- rep(radii, length.out=n)
     x <- subdivision3d(icosahedron3d(),3)
     r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
@@ -171,7 +173,7 @@ property int vertex2\n", file=con)
   writePoints <- function(id) {
     vertices <- getVertices(id)
     n <- nrow(vertices)
-    inds <- seq_len(n)    
+    inds <- getIndices(id)    
     if (pointsAsEdges) {
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
@@ -196,24 +198,23 @@ property int vertex2\n", file=con)
       colors <- vertices[, 4:7, drop=FALSE]
       vertices <- vertices[, 1:3, drop=FALSE]
     }
-    n <- nrow(vertices)
-    n <- n/2
-    inds <- seq_len(n)
+    inds <- getIndices(id)
+    n <- length(inds)/2
     if (linesAsEdges) {
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
-      Edges <<- rbind(Edges, base + cbind(2*inds - 2, 2*inds - 1) )  
+      Edges <<- rbind(Edges, base + matrix(inds, ncol = 2, byrow = TRUE) - 1)  
     } else {
       radius <- lineRadius*avgScale()
       for (i in seq_len(n)) {
-        cyl <- cylinder3d( vertices[(2*i-1):(2*i),1:3],
+        cyl <- cylinder3d( vertices[inds[(2*i-1):(2*i)],1:3],
      			   radius = radius,
      			   sides = lineSides, 
      			   closed = -2 )
-	if (withColors) {
-          col1 <- colors[2*i-1,]
+       if (withColors) {
+          col1 <- colors[inds[2*i-1],]
           col1 <- rgb(col1[1], col1[2], col1[3], col1[4], maxColorValue = 255)
-          col2 <- colors[2*i,]
+          col2 <- colors[inds[2*i],]
           col2 <- rgb(col2[1], col2[2], col2[3], col2[4], maxColorValue = 255)
         
           cyl$material$col <- c(rep(col1, lineSides),
@@ -229,24 +230,24 @@ property int vertex2\n", file=con)
   writeLines <- function(id) {
     vertices <- getVertices(id)
     if (linesAsEdges) {
-      n <- nrow(vertices)    
-      inds <- seq_len(n)
+      inds <- getIndices(id)
+      n <- length(inds)   
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
       Edges <<- rbind(Edges, base + cbind(inds[-n], inds[-1]) - 1)  
     } else {
       n <- nrow(vertices) - 1
       radius <- lineRadius*avgScale()
+      colors <- vertices[, 4:7, drop = FALSE]
       for (i in seq_len(n)) {
-        cyl <- cylinder3d( vertices[i:(i+1),1:3],
+        cyl <- cylinder3d( vertices[inds[i:(i+1)],1:3],
      			   radius = radius,
      			   sides = lineSides, 
      			   closed = -2 )
         if (withColors) {
-	  colors <- vertices[i, 4:7]
-          col1 <- colors[i,]
+          col1 <- colors[inds[i],]
           col1 <- rgb(col1[1], col1[2], col1[3], col1[4], maxColorValue = 255)
-          col2 <- colors[i+1,]
+          col2 <- colors[inds[i+1],]
           col2 <- rgb(col2[1], col2[2], col2[3], col2[4], maxColorValue = 255)
         
           cyl$material$col <- c(rep(col1, lineSides),
@@ -304,9 +305,7 @@ property int vertex2\n", file=con)
   ids <- ids[keep]
   types <- types[keep]
 
-  for (i in seq_along(ids)) {
-    if (checkForIndices(ids[i]))
-      next
+  for (i in seq_along(ids))
     switch(types[i],
       planes =,
       triangles = writeTriangles(ids[i]),
@@ -317,7 +316,6 @@ property int vertex2\n", file=con)
       lines = writeSegments(ids[i]),
       linestrip = writeLines(ids[i])
     )
-  }
   
   writeData()
   
