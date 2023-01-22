@@ -204,7 +204,7 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
   material <- NULL
   for (i in seq_len(NROW(ids))) {
     id <- ids[i, "id"]
-    verts <- rgl.attrib(id, "vertices")
+    verts <- expandVertices(id)
     nvert <- NROW(verts)
     if (nvert) {
       type <- ids[i, "type"]
@@ -244,14 +244,14 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
           normals <- rbind(normals, matrix(NA, ncol = 3, nrow = nvert))
         } else {
           it <- cbind(it, inds)
-          normals <- rbind(normals, rgl.attrib(id, "normals"))
+          normals <- rbind(normals, expandNormals(id))
         }  
-        vertices <- cbind(vertices, local_t(rgl.attrib(id, "vertices")))
+        vertices <- cbind(vertices, local_t(verts))
         if (rgl.attrib.count(id,"texcoords"))
-          texcoords <- rbind(texcoords, rgl.attrib(id, "texcoords"))
+          texcoords <- rbind(texcoords, expandTexcoords(id))
         else
           texcoords <- rbind(texcoords, matrix(NA, ncol = 2, nrow = nvert))
-        mat <- rgl.getmaterial(nvert, id = id)
+        mat <- expandMaterial(id, nvert)
         
         material <- mergeMaterials(material, mat, nvert, type)
       }

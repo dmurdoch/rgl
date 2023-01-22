@@ -1,9 +1,10 @@
-# rgl 1.0.2
+# rgl 1.0.2.1
 
 ## Bug fixes
 
-* The `writeSTL()` function did not handle indices
-in the objects it was writing (issue #293).
+* The `as.mesh3d().rglId` method and the `writeSTL()`
+function did not handle indices
+in the objects they were processing (issue #293).
 
 # rgl 1.0.1
 
