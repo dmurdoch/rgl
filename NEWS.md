@@ -1,10 +1,14 @@
-# rgl 1.0.2.1
+# rgl 1.0.2.2
 
 ## Bug fixes
 
 * The `as.mesh3d().rglId` method and the `writeSTL()`
 function did not handle indices
 in the objects they were processing (issue #293).
+These changes have not been implemented yet in
+`as.triangles.rglId()`, `selectpoints3d()`, `writeOBJ()` or `writePLY()`; 
+for now those functions issue warnings and skip objects they
+can't handle properly.
 
 # rgl 1.0.1
 
