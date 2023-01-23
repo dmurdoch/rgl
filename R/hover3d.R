@@ -4,20 +4,19 @@ hover3d <- function(x, y = NULL, z = NULL,
                     persist = c("no", "one", "yes"),
                     labels = seq_along(x),
                     adj = c(-0.2, 0.5),
+                    scene = scene3d(minimal = FALSE),
                     applyToScene = TRUE,
-                    applyToDev = TRUE,
                     ...) {
   
   labelIndex <- function(sel, ...)
     text3d(x[sel], y[sel], z[sel], texts=labels[sel], adj=adj,
            ...)
 
-  if (is.null(labeller))
+  custom_labeller <- FALSE
+  if (is.null(labeller)) 
     labeller <- labelIndex
-  else if (applyToScene) {
-    warning("Use of labeller is not supported with applyToScene")
-    applyToScene <- FALSE
-  }
+  else
+    custom_labeller <- TRUE
   
   stopifnot(is.function(labeller))
   
@@ -77,10 +76,12 @@ hover3d <- function(x, y = NULL, z = NULL,
   if (applyToScene) {
     # Define the Javascript functions with the same names to use in WebGL
     js <-
-    ' var selected = [];
-   
-     window.hoverSelect = function(x, y) { 
-       var   obj = this.getObj(%idverts%), i, newdist, dist = Infinity, pt, newclosest, text;
+    'window.hoverSelect = function(x, y) { 
+       var   obj = this.getObj(%idverts%), i, newdist, 
+             dist = Infinity, pt, newclosest, text,
+             customlabeller = %customlabeller%[0],
+             idtexts = %idtexts%, change = false,
+             selected = window.hoverSelect.selected;
        for (i = 0; i < obj.vertices.length; i++) {
          pt = obj.vertices[i].concat(1);
          pt = this.user2window(pt, %subid%);
@@ -97,40 +98,74 @@ hover3d <- function(x, y = NULL, z = NULL,
          if ("%persist%" !== "yes" && 
              selected.length > 0 &&
              selected[0] !== newclosest) {
-               text = this.getObj(%idtexts%);
-               text.colors[selected[0]][3] = 0; // invisible!
+               if (customlabeller) {
+                 idtexts[selected[0]].forEach(id => this.delFromSubscene(id, %subid%));
+               } else {
+                 text = this.getObj(idtexts[0]);
+                 text.colors[selected[0]][3] = 0; // invisible!
+               }
                selected = [];
+               change = true;
              }
          if (!selected.includes(newclosest)) {
            selected.push(newclosest);
-           text = this.getObj(%idtexts%);
-           text.colors[newclosest][3] = 1; // alpha is here!
+           if (customlabeller) {
+             idtexts[newclosest].forEach(id => this.addToSubscene(id, %subid%));
+           } else {
+             text = this.getObj(idtexts[0]);
+             text.colors[newclosest][3] = 1; // alpha is here!
+           }
+           change = true;
          }
        } else if ("%persist%" === "no" && selected.length > 0) {
-         text = this.getObj(%idtexts%);
-         text.colors[selected[0]][3] = 0;
+         if (customlabeller) {
+           idtexts[selected[0]].forEach(id => this.delFromSubscene(id, %subid%));
+         } else {
+           text = this.getObj(%idtexts%);
+           text.colors[selected[0]][3] = 0;
+         }
          selected = [];
+         change = true;
        }
-       if (typeof text !== "undefined") {  
-         text.initialized = false;
+       if (change) {
+         if (!customlabeller)
+           text.initialized = false;
+         window.hoverSelect.selected = selected;
          this.drawScene();
        }
-     };'
+     };
+     window.hoverSelect.selected = [];
+    '
     idverts <- points3d(xyz)
     delFromSubscene3d(idverts)
-    idtexts <- text3d(xyz, texts = labels, adj = adj, 
+    if (custom_labeller) {
+      save <- par3d(skipRedraw = TRUE)
+      on.exit(par3d(save), add = TRUE)
+      idtexts <- vector("list", length(x))
+      for (i in seq_along(x)) {
+        idtexts[[i]] <- labeller(i, ...)
+      }
+      delFromSubscene3d(unlist(idtexts))
+    } else {
+      idtexts <- text3d(xyz, texts = labels, adj = adj, 
                       alpha = rep(0, length(labels)), ...)
-
+    }
     js <- gsub("%idverts%", idverts, js)  
     js <- gsub("%subid%", subsceneInfo()$id, js)
-    js <- gsub("%idtexts%", idtexts, js)
+    js <- gsub("%idtexts%", toJSON(idtexts), js)
     js <- gsub("%tolerance%", tolerance, js)
     js <- gsub("%persist%", persist, js)
-  }
-  setUserCallbacks(0, update="hoverSelect", 
+    js <- gsub("%customlabeller%", toJSON(custom_labeller), js)
+  } else
+    idverts <- idtexts <- NULL
+  
+  setUserCallbacks(0, update="hoverSelect",
+                   scene = if (applyToScene) scene,
                    applyToScene = applyToScene,
-                   applyToDev = applyToDev,
+                   applyToDev = TRUE,
                    javascript = js)
   
-  invisible(list(oldPar = opar, oldDev = odev))
+  invisible(list(oldPar = opar, oldDev = odev,
+                 idverts = idverts, 
+                 idtexts = labels))
 }

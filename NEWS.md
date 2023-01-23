@@ -1,3 +1,11 @@
+# rgl 1.0.4
+
+## Major changes
+
+* A new function `hover3d()` has been added to display
+"hover hints":  labels next to points when the mouse 
+passes near them.
+
 # rgl 1.0.0.3
 
 ## Major changes

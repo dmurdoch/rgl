@@ -12,7 +12,11 @@ hover3d(x, y = NULL, z = NULL,
         labeller = NULL, 
         tolerance = 20, 
         persist = c("no", "one", "yes"), 
-        labels = seq_along(x), adj = c(-0.2, 0.5), ...)
+        labels = seq_along(x),
+        adj = c(-0.2, 0.5),
+        scene = scene3d(minimal = FALSE),
+        applyToScene = TRUE,
+        ...)
 }
 \arguments{
   \item{x, y, z}{
@@ -21,7 +25,7 @@ coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
 }
   \item{labeller}{
 A function to display information about identified points. \code{NULL}
-indicates the default function.  See Details.
+indicates the default function, described in Details.
 }
   \item{tolerance}{
 How close (in pixels) the mouse should be to a point to display the
@@ -40,16 +44,30 @@ If the default \code{labeller} is used, these labels will be displayed.
 If the default \code{labeller} is used, this adjustment will be passed
 to \code{\link{text3d}} to display the labels.
 }
+  \item{scene, applyToScene}{
+Arguments to pass to \code{\link{setUserCallbacks}}.
+The \code{applyToDev} argument to that function is always
+\code{TRUE}.
+}
   \item{\dots}{
 Additional arguments that will be passed to the labeller.
 }
 }
 \details{
-The \code{labeller} argument should specify a function with arguments
+If specified, the \code{labeller} argument should specify a
+function with arguments
 compatible with \code{function(index, ...)}.  It will be called with
 \code{index} being the index of the point that was selected.  It should
 plot the label, and return the \pkg{rgl} ids of the objects that were 
 plotted.
+
+When \code{applyToScene} is \code{TRUE}, all labels
+or labelling objects will be created and attached to the scene.  You may want to
+delete them (using the ids returned in \code{idverts} and
+\code{idtexts}) once \code{\link{rglwidget}} has been called,
+as they serve no purpose in the current device.
+
+Only one hover handler is supported per scene or device.
 }
 \value{
 A list is returned invisibly, containing these elements:
@@ -57,6 +75,10 @@ A list is returned invisibly, containing these elements:
 Currently only \code{"mouseMode"}.}
 \item{oldDev}{The value of \code{cur3d()} at the time of calling, so that
 \code{oldPar} can be restored to the right device.}
+\item{idverts, idtexts}{
+The \pkg{rgl} ids of the temporary objects created for 
+display in Javascript if \code{applyToScene} is \code{TRUE}.
+}
 }
 \author{
 Duncan Murdoch
