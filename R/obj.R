@@ -57,12 +57,12 @@ writeOBJ <- function(con,
     if (separateObjects)
       cat("o triangles", id, "\n", sep="", file=con)
     x <- writeData(id)
-    indices <- refnum(x$vbase + seq_len(x$n))
+    indices <- refnum(x$vbase + getIndices(id))
     if (x$ntexcoords)
-      indices <- paste0(indices, "/", refnum(x$tbase + seq_len(x$n)))
+      indices <- paste0(indices, "/", refnum(x$tbase + getIndices(id)))
     if (x$nnormals)
       indices <- paste0(indices, if (!x$ntexcoords) "/", 
-      			"/", refnum(x$nbase + seq_len(x$n)))
+      			"/", refnum(x$nbase + getIndices(id)))
     indices <- matrix(indices, ncol=3, byrow=TRUE)
     cat(paste("f", indices[,1], indices[,2], indices[,3]), 
         sep="\n", file=con)
@@ -72,12 +72,12 @@ writeOBJ <- function(con,
     if (separateObjects)
       cat("o quads", id, "\n", sep="", file=con)
     x <- writeData(id)
-    indices <- refnum(x$vbase + seq_len(x$n))
+    indices <- refnum(x$vbase + getIndices(id))
     if (x$ntexcoords)
-      indices <- paste0(indices, "/", refnum(x$tbase + seq_len(x$n)))
+      indices <- paste0(indices, "/", refnum(x$tbase + getIndices(id)))
     if (x$nnormals)
       indices <- paste0(indices, if (!x$ntexcoords) "/", 
-      			"/", refnum(x$nbase + seq_len(x$n)))
+      			"/", refnum(x$nbase + getIndices(id)))
     indices <- matrix(indices, ncol=4, byrow=TRUE)
     cat(paste("f", indices[,1], indices[,2], indices[,3], indices[,4]), 
         sep="\n", file=con)
@@ -94,10 +94,10 @@ writeOBJ <- function(con,
     
     vertices <- matrix(character(0), ncol=3)
     for (i in seq_len(nz)[-nz]) {
-      indices <- (i-1)*nx + 
+      indices <- getIndices(id)[(i-1)*nx + 
       		c(rows[-nx],rows[-nx],
                   rows[-1]+nx,rows[-nx]+nx,
-                  rows[-1],rows[-1]+nx)
+                  rows[-1],rows[-1]+nx)]
       cindices <- refnum(x$vbase + indices)
       if (x$ntexcoords)
         cindices <- paste0(cindices, "/", refnum(x$tbase + indices))
@@ -166,9 +166,9 @@ writeOBJ <- function(con,
   writeSpheres <- function(id) {
     if (separateObjects)
       cat("o sphere", id, "\n", sep="", file=con) 
-    vertices <- rgl.attrib(id, "vertices")
+    vertices <- expandVertices(id)
     n <- nrow(vertices)    
-    radii <- rgl.attrib(id, "radii")
+    radii <- expandAttrib(id, "radii")
     radii <- rep(radii, length.out=n)
     x <- subdivision3d(icosahedron3d(),3)
     r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
@@ -190,9 +190,9 @@ writeOBJ <- function(con,
       cat("o points", id, "\n", sep="", file=con)
     if (pointsAsPoints) {
       x <- writeData(id)
-      cat("p", refnum(x$vbase + seq_len(x$n)), "\n", file=con)
+      cat("p", refnum(x$vbase + getIndices(id)), "\n", file=con)
     } else {
-      vertices <- rgl.attrib(id, "vertices")
+      vertices <- expandVertices(id)
       n <- nrow(vertices)
       radius <- pointRadius*avgScale()
       if (withNormals && is.null(pointShape$normals))
@@ -207,10 +207,10 @@ writeOBJ <- function(con,
       cat("o segments", id, "\n", sep="", file=con)
     if (linesAsLines) {
       x <- writeData(id)
-      indices <- matrix(refnum(x$vbase + seq_len(x$n)), ncol=2, byrow=TRUE)
+      indices <- matrix(refnum(x$vbase + getIndices(id)), ncol=2, byrow=TRUE)
       cat(paste("l", indices[,1], indices[,2]), sep="\n", file=con)
     } else {
-      vertices <- rgl.attrib(id, "vertices")
+      vertices <- expandVertices(id)
       n <- nrow(vertices)    
       n <- n/2
       radius <- lineRadius*avgScale()
@@ -231,10 +231,10 @@ writeOBJ <- function(con,
       cat("o lines", id, "\n", sep="", file=con)
     if (linesAsLines) {
       x <- writeData(id)
-      indices <- refnum(x$vbase + seq_len(x$n))
+      indices <- refnum(x$vbase + getIndices(id))
       cat("l", indices, "\n", file=con)
     } else {
-      vertices <- rgl.attrib(id, "vertices")
+      vertices <- expandVertices(id)
       n <- nrow(vertices) - 1
       radius <- lineRadius*avgScale()
       for (i in seq_len(n)) {
@@ -295,7 +295,7 @@ writeOBJ <- function(con,
   
   writeHeader()
 
-  for (i in seq_along(ids)) 
+  for (i in seq_along(ids))
     switch(types[i],
       planes =,
       triangles = writeTriangles(ids[i]),
