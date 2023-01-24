@@ -47,7 +47,7 @@ to interpret its parameters.
 # Allow the user to select some points, and then redraw them
 # in a different color
 
-if (interactive()) {
+if (interactive() && !in_pkgdown_example()) {
  x <- rnorm(1000)
  y <- rnorm(1000)
  z <- rnorm(1000)

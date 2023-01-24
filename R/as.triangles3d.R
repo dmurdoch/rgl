@@ -41,8 +41,8 @@ as.triangles3d.rglId <- function(obj,
   result <- NULL
   for (i in seq_len(nrow(ids))) {
     id <- ids[i, "id"]
-    nvert <- rgl.attrib.count(id, "vertices")
-    attrib <- rgl.attrib(id, attribute)
+    nvert <- getExpandedNverts(id)
+    attrib <- expandAttrib(id, attribute)
     if (nrow(attrib)) {
       if (nrow(attrib) < nvert)
         attrib <- apply(attrib, 2, function(col) rep(col, length.out = nvert))
