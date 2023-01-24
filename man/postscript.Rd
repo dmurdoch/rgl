@@ -52,12 +52,12 @@ setwd(savedir)
 # create a series of frames for an animation
 #
 
-rgl.open()
+open3d()
 shade3d(oh3d(), color = "red")
-rgl.viewpoint(0, 20)
+view3d(0, 20)
 
 for (i in 1:45) {
-  rgl.viewpoint(i, 20)
+  view3d(i, 20)
   filename <- paste("pic", formatC(i, digits = 1, flag = "0"), ".eps", sep = "") 
   rgl.postscript(filename, fmt = "eps")
 }

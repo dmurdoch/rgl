@@ -1,29 +1,17 @@
-0.110.1
+1.0.1:
 
-This is a fairly small update.
+This update formalizes the deprecation of a large
+slate of functions.  Use of these has been discouraged for a 
+long time, but about 90 packages on CRAN and Bioconductor 
+were using them.  Unfortunately, this led to support problems, 
+because in many cases they weren't being used correctly.
 
-The main reason for the submission is to fix an
-incompatibility with `Rcmdr` that was introduced in the
-last release.  When run from `tcltk`, `rgl` plots sometimes
-locked up the whole system.  Some other important bug
-fixes avoid segfaults in unusual circumstances.  Details
-and other changes are described in the `NEWS.md` file.
+I have notified all of the known users of these deprecated
+functions, and in almost all cases have sent patches to them 
+to correct their code.  
 
-When locally running R-devel check I see a message about
-`tripack`, which is ACM-licensed.  It is only a suggested
-package, and is only
-present to support extracting data from `"tri"` objects
-defined in it.
+As of Jan 18, there is just one package on CRAN that
+gives deprecation warnings.  On Jan 14, there were about 23,
+and on Jan 9, the count was about 30.
 
-Reverse dependency checks:  I have run comparisons of 
-checks of all reverse dependencies, with no non-negligible changes.
-
-Regarding CRAN checks:  I don't know what caused the
-vignette errors that are reported there, but I've seen
-vignette builds fail when a compatible version of Pandoc 
-was unavailable.
-
-The very large size of macos installs is due to them
-including debug information in the libs.  Other platforms
-exceed the size limits by a bit, but I think this is
-unavoidable given the amount of code in rgl.
+The update also makes a few other small changes; see NEWS.md.

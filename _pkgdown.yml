@@ -73,7 +73,7 @@ reference:
   - grid3d
   - thigmophobe3d
   - setAxisCallbacks
-  - rgl.setAxisCallback
+  - rgl.getAxisCallback
 - title: Controlling the look of the scene
   desc: These functions control the way objects appear.
 - contents:
@@ -195,6 +195,7 @@ reference:
   - identify3d
   - selectpoints3d
   - selectionFunction3d
+  - hover3d
   - rgl.select
   - rgl.attrib
   - rgl.attrib.info
@@ -222,12 +223,13 @@ reference:
   - pipe
   - GramSchmidt
   - triangulate
-  - rgl.primitive
+  - rgl.init
   - rgl.projection
   - rgl.user2window
   - rgl.setMouseCallbacks
   - setUserCallbacks
   - setUserShaders
+  - rglFonts
   - makeDependency
   - setGraphicsDelay
   - rglId
@@ -244,11 +246,5 @@ reference:
   - r3d
 - title: Obsolete functions
 - contents:
-  - ageSetter
   - elementId2Prefix
-  - propertySetter
-  - rgl.init
-  - rgl.surface
   - rgl.Sweave
-  - subsetSlider
-  - writeWebGL

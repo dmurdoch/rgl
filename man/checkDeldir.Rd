@@ -1,7 +1,7 @@
 \name{checkDeldir}
 \alias{checkDeldir}
 \title{
-Check for a compatible version of deldir
+Check for a compatible version of \pkg{deldir}
 }
 \description{
 Version 1.0-2 of \pkg{deldir} is not compatible with \pkg{rgl}.

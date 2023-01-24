@@ -5025,7 +5025,7 @@ static void gl2psSVGGetColorString(GL2PSrgba rgba, char str[32])
   int rc = (r < 0) ? 0 : (r > 255) ? 255 : r;
   int gc = (g < 0) ? 0 : (g > 255) ? 255 : g;
   int bc = (b < 0) ? 0 : (b > 255) ? 255 : b;
-  sprintf(str, "#%2.2x%2.2x%2.2x", rc, gc, bc);
+  snprintf(str, 32, "#%2.2x%2.2x%2.2x", rc, gc, bc);
 }
 
 static void gl2psPrintSVGHeader(void)
@@ -5275,24 +5275,24 @@ static void gl2psPrintSVGPrimitive(void *data)
                   col, prim->width);
       switch (prim->linecap){
       case GL2PS_LINE_CAP_BUTT:
-        sprintf (lcap, "%s", "butt");
+        snprintf (lcap, sizeof(lcap), "%s", "butt");
         break;
       case GL2PS_LINE_CAP_ROUND:
-        sprintf (lcap, "%s", "round");
+        snprintf (lcap, sizeof(lcap), "%s", "round");
         break;
       case GL2PS_LINE_CAP_SQUARE:
-        sprintf (lcap, "%s", "square");
+        snprintf (lcap, sizeof(lcap), "%s", "square");
         break;
       }
       switch (prim->linejoin){
       case GL2PS_LINE_JOIN_MITER:
-        sprintf (ljoin, "%s", "miter");
+        snprintf (ljoin, sizeof(ljoin), "%s", "miter");
         break;
       case GL2PS_LINE_JOIN_ROUND:
-        sprintf (ljoin, "%s", "round");
+        snprintf (ljoin, sizeof(ljoin), "%s", "round");
         break;
       case GL2PS_LINE_JOIN_BEVEL:
-        sprintf (ljoin, "%s", "bevel");
+        snprintf (ljoin, sizeof(ljoin), "%s", "bevel");
         break;
       }
       gl2psPrintf("stroke-linecap=\"%s\" stroke-linejoin=\"%s\" ",
@@ -6476,7 +6476,7 @@ GL2PSDLL_API const char *gl2psGetFormatDescription(GLint format)
     return "Unknown format";
 }
 
-GL2PSDLL_API GLint gl2psGetFileFormat()
+GL2PSDLL_API GLint gl2psGetFileFormat(void)
 {
   return gl2ps->format;
 }

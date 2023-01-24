@@ -28,6 +28,6 @@ dragged rectangle.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{rgl.select3d}}, a version that allows the selection region to be used to
+\code{\link{select3d}}, a version that allows the selection region to be used to
 select points in the scene.
 }

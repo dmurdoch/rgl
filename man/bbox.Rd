@@ -1,21 +1,17 @@
-\name{rgl.bbox}
-\alias{rgl.bbox}
+\name{bbox3d}
 \alias{bbox3d}
 \title{Set up bounding box decoration}
 \description{
   Set up the bounding box decoration.
 }
 \usage{
-rgl.bbox( 
-	xat = NULL, xlab = NULL, xunit = 0, xlen = 5, 
-	yat = NULL, ylab = NULL, yunit = 0, ylen = 5,
-	zat = NULL, zlab = NULL, zunit = 0, zlen = 5,
-	marklen = 15.0, marklen.rel = TRUE, expand = 1, 
-	draw_front = FALSE, ...)
 bbox3d(xat = NULL, yat = NULL, zat = NULL, 
 	xunit = "pretty", yunit = "pretty", zunit = "pretty", 
 	expand = 1.03,
-	draw_front = FALSE, ...)  
+	draw_front = FALSE, 
+	xlab=NULL, ylab=NULL, zlab=NULL,
+  xlen=5, ylen=5, zlen=5,
+  marklen=15.0, marklen.rel=TRUE, ...) 
 }
 \arguments{
   \item{xat, yat, zat}{vector specifying the tickmark positions}
@@ -27,7 +23,7 @@ bbox3d(xat = NULL, yat = NULL, zat = NULL,
   \item{expand}{value specifying how much to expand the bounding box around the data}
   \item{draw_front}{draw the front faces of the bounding box}
   \item{ ... }{Material properties (or other \code{rgl.bbox} parameters
-  in the case of \code{bbox3d}). See \code{\link{rgl.material}} for details.}
+  in the case of \code{bbox3d}). See \code{\link{material3d}} for details.}
 }
 \details{
   Four different types of tick mark layouts are possible.
@@ -45,24 +41,19 @@ This description applies to the X axis; other axes are similar:
   box, whereas \code{rgl.bbox} covers the exact range.
   
   \code{\link{axes3d}} offers more flexibility in the specification of the axes, but 
-  they are static, unlike those drawn by \code{\link{rgl.bbox}} and \code{\link{bbox3d}}.
+  they are static, unlike those drawn by \code{\link{bbox3d}}.
 }
 \value{
   This function is called for the side effect of setting the bounding box decoration.
   A shape ID is returned to allow \code{\link{pop3d}} to delete it.
 }
 \examples{
-  rgl.open()
-  rgl.points(rnorm(100), rnorm(100), rnorm(100))
-  rgl.bbox(color = c("#333377", "white"), emission = "#333377", 
-           specular = "#3333FF", shininess = 5, alpha = 0.8 )
-  
   open3d()
   points3d(rnorm(100), rnorm(100), rnorm(100))
   bbox3d(color = c("#333377", "black"), emission = "#333377", 
          specular = "#3333FF", shininess = 5, alpha = 0.8)
 }
 \seealso{
-  \code{\link{rgl.material}}, \code{\link{axes3d}} 
+  \code{\link{material3d}}, \code{\link{axes3d}} 
 }
 \keyword{dynamic}

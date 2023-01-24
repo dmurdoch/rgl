@@ -8,7 +8,7 @@
 ## ===[ SECTION: generic appearance function ]================================
 ##
 
-rgl.material <- function(
+rgl.material0 <- function(
   color        = "white",
   alpha        = 1.0,
   lit          = TRUE, 
@@ -138,6 +138,11 @@ rgl.material <- function(
   )
 }
 
+rgl.material <- function(...) {
+  .Deprecated("material3d")
+  rgl.material0(...)
+}
+
 rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
 rgl.getmaterial <- function(ncolors, id = NULL) {
@@ -161,7 +166,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
     ddata = as.numeric(ddata)
   )
   
-  if (!ret$success) stop('rgl.getmaterial')
+  if (!ret$success) stop('rgl.getmaterial failed')
   
   polymodes <- c("filled", "lines", "points", "culled")
   textypes <- c("alpha", "luminance", "luminance.alpha", "rgb", "rgba")

@@ -1,17 +1,28 @@
 \name{bg3d}
-\alias{rgl.bg}
 \alias{bg3d}
 \title{Set up background}
 \description{
   Set up the background of the scene.
 }
 \usage{
-bg3d(...) 
-rgl.bg( sphere = FALSE, fogtype = "none", color = c("black", "white"), 
-	back = "lines", fogScale = 1, ...)
+bg3d(color,
+    sphere=FALSE, 
+    back="lines",
+    fogtype="none",
+    fogScale = 1, 
+    col, ...)
 
 }
 \arguments{
+  \item{color, col}{
+  See Details below.
+  }
+  \item{sphere}{
+  logical:  if \code{TRUE}, an environmental sphere geometry is used for the background decoration.
+  }
+  \item{back}{
+  Specifies the fill style of the sphere geometry. See \code{\link{material3d}} for details.
+  }
   \item{fogtype}{fog type:
     \describe{
       \item{"none"}{no fog}
@@ -22,24 +33,25 @@ rgl.bg( sphere = FALSE, fogtype = "none", color = c("black", "white"),
     Fog only applies to objects with \code{\link{material3d}} 
     property \code{fog} set to \code{TRUE}.
   }
-  \item{sphere}{
-  logical, if true, an environmental sphere geometry is used for the background decoration.
-  }
-  \item{color}{
-  Primary color is used for background clearing and as fog color.
-  Secondary color is used for background sphere geometry. See \code{\link{material3d}} for details.
-  }
-  \item{back}{
-  Specifies the fill style of the sphere geometry. See \code{\link{material3d}} for details.
-  }
   \item{fogScale}{
   Scaling for fog.  See Details.
   }
-  \item{ ... }{Material properties. See \code{\link{material3d}} for details.}  
+  \item{ ... }{Additional material properties. See \code{\link{material3d}} for details.}  
 }
 \details{
 
-If sphere is set to \code{TRUE}, an environmental sphere enclosing the whole scene is drawn.
+The background color is taken from \code{color} or \code{col}
+if \code{color} is missing.
+The first entry
+is used for background clearing and as the fog color.
+The second (if present) is used for background sphere geometry.
+
+If \code{color} and \code{col} are both missing, the default is found in 
+the \code{\link{r3dDefaults}$bg} list, or \code{"white"} is used
+if nothing is specified there.
+
+If \code{sphere} is set to \code{TRUE}, an environmental
+sphere enclosing the whole scene is drawn.
 
 If not, but the material properties include a bitmap as a texture, the bitmap is drawn in the 
 background of the scene.  (The bitmap colors modify the general color setting.)

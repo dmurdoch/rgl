@@ -1208,10 +1208,10 @@ void Subscene::buttonEnd(int button)
 void Subscene::setDefaultMouseMode()
 {
   setMouseMode(bnNOBUTTON,mmNONE);
-  setMouseMode(bnLEFT,    mmPOLAR);
-  setMouseMode(bnRIGHT,   mmFOV);
-  setMouseMode(bnMIDDLE,  mmZOOM);
-  setMouseMode(bnWHEEL,   mmNONE);
+  setMouseMode(bnLEFT,    mmTRACKBALL);
+  setMouseMode(bnRIGHT,   mmZOOM);
+  setMouseMode(bnMIDDLE,  mmFOV);
+  setMouseMode(bnWHEEL,   wmPULL);
 
   needsBegin = mmNONE;
   busy = false;

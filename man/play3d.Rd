@@ -102,7 +102,7 @@ of producing the output movie.  It invisibly returns
 open3d()
 plot3d( cube3d(col = "green") )
 M <- par3d("userMatrix")
-if (!rgl.useNULL())
+if (!rgl.useNULL() && interactive())
   play3d( par3dinterp(times = (0:2)*0.5, userMatrix = list(M,
                                      rotate3d(M, pi/2, 1, 0, 0),
                                      rotate3d(M, pi/2, 0, 1, 0) ) ), 

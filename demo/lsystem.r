@@ -69,9 +69,9 @@ rotY <- function( v, degree ) {
 #
 
 turtle.init <- function(pos=c(0,0,0),head=0,pitch=90,roll=0,level=0) {
-  rgl.clear("all")
-  rgl.bg(color="black")
-  rgl.light()
+  clear3d("all")
+  bg3d(color="black")
+  light3d()
   return( list(pos=pos,head=head,pitch=pitch,roll=roll,level=level) )
 }
 
@@ -87,7 +87,7 @@ turtle.move <- function(turtle, steps, color) {
   x <- c( from[1], to[1] )
   y <- c( from[2], to[2] )
   z <- c( from[3], to[3] )
-  rgl.lines(x,y,z,col=color,size=1.5,alpha=0.5)
+  lines3d(x,y,z,col=color,size=1.5,alpha=0.5)
   turtle$pos <- to
   return(turtle)
 }

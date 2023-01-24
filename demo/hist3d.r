@@ -45,24 +45,24 @@ hist3d<-function(x,y=NULL,nclass="auto",alpha=1,col="#ff0000",scale=10) {
 }
 ################################################################################
 
-rgl.open()
+open3d()
 
-rgl.bg(color="gray")
-rgl.light()
+bg3d(color="gray")
+light3d(0, 0)
 
 # Drawing a 'bin' for given coordinates:
 binplot.3d(c(-0.5,0.5),c(4.5,5.5),2,alpha=0.6)
 
 # Setting the viewpoint ('theta' and 'phi' have the same meaning as in persp):
-rgl.viewpoint(theta=40,phi=40)
+view3d(theta=40,phi=40)
 
 # Choosing a lightgrey background:
-rgl.bg(col="#cccccc")
+bg3d(col="#cccccc")
 
 
 ##### QUADS FORMING BIN:
 
-rgl.open()
+open3d()
 
 # Defining transparency and colors:
 alpha<-0.7; topcol<-"#ff0000"; sidecol<-"#aaaaaa"
@@ -73,7 +73,7 @@ x12<-c(x[1],x[2],x[2],x[1]); x11<-rep(x[1],4); x22<-rep(x[2],4)
 z00<-rep(0,4); z0z<-c(0,0,z,z); zzz<-rep(z,4); y11<-rep(y[1],4)
 y1122<-c(y[1],y[1],y[2],y[2]); y12<-c(y[1],y[2],y[2],y[1]); y22<-rep(y[2],4)
 
-rgl.quads(c(x12,x12,x11-of,x12,x22+of,x12),
+quads3d(c(x12,x12,x11-of,x12,x22+of,x12),
           c(z00-of,rep(z0z,4),zzz+of),
           c(y1122,y11-of,y12,y22+of,y12,y1122),
           col=rep(c(rep(sidecol,5),topcol),each=4),alpha=c(rep(alpha,5),1))
@@ -87,15 +87,15 @@ yl<-c(yl2,y[2]+of,y[2]+of,rep(c(y[1],y[2]),4),y[1],y[1],y[2],y[2],yl2,
       rep(y[2]+of,4),yl2,y[2],y[2],rep(y[1],4),y[2],y[2],yl1,yl2,y[2]+of,
       y[2]+of,y[1],y[1],y[2],y[2],yl1)
 
-rgl.lines(xl,zl,yl,col="#000000")
+lines3d(xl,zl,yl,col="#000000")
 
 
 ##### COMPLETE HISTOGRAM:
 
-rgl.open()
+open3d()
 
 # Choosing a lightgrey background:
-rgl.bg(col="#cccccc")
+bg3d(col="#cccccc")
 
 # Setting the rng to a fixed value:
 set.seed(1000)

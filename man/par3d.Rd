@@ -1,5 +1,7 @@
 \name{par3d}
 \alias{par3d}
+\alias{rgl.par3d.names}
+\alias{rgl.par3d.readonly}
 \concept{activeSubscene}
 \concept{antialias}
 \concept{bbox}
@@ -34,6 +36,8 @@
 \usage{
 par3d(\dots, no.readonly = FALSE, dev = cur3d(), 
       subscene = currentSubscene3d(dev))
+rgl.par3d.names
+rgl.par3d.readonly
 }
 
 \arguments{
@@ -78,8 +82,14 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
 
 \section{Parameters}{
 
-  \emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
-  may only be used in queries, i.e., they do \emph{not} set anything.
+The \code{rgl.par3d.names} variable contains the
+full list of names of \code{par3d} properties.
+\code{rgl.par3d.readonly} contains the list of
+read-only properties.
+
+In the list below, \emph{\bold{R.O.}} indicates the
+read-only arguments: These may only be used in
+queries, they do not set anything.
   
   \describe{
     \item{\code{activeSubscene}}{\emph{\bold{R.O.}} integer.  Used
@@ -91,9 +101,9 @@ par3d(\dots, no.readonly = FALSE, dev = cur3d(),
     OpenGL driver may not support the requested number, in which case
     \code{par3d("antialias")} will report what was actually set. Applies to the whole device.}    
     \item{\code{cex}}{real.  The default size for text.}
-    \item{\code{family}}{character.  The default device independent family name; see \code{\link{rgl.texts}}.
+    \item{\code{family}}{character.  The default device independent family name; see \code{\link{text3d}}.
     Applies to the whole device.}
-    \item{\code{font}}{integer.  The default font number (from 1 to 4; see \code{\link{rgl.texts}}).
+   \item{\code{font}}{integer.  The default font number (from 1 to 4; see \code{\link{text3d}}).
     Applies to the whole device.}
     \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?
     Applies to the whole device.}
@@ -253,7 +263,7 @@ digit precision to distinguish values in any coordinate.
 }
 
 \seealso{
-\code{\link{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
+\code{\link{view3d}} to set \code{FOV} and \code{zoom}.
 
 \code{\link{open3d}} for how to open a new window
 with default settings for these parameters.

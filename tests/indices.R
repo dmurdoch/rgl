@@ -16,4 +16,23 @@ quad <- cbind(x = c(-1, 1, 1, -1),
               z = c(-1, -1, 1, 1))/2
 open3d()
 triangles3d(quad, alpha = 0.5, col = "red", indices=c(1,2,3,1,3,4))
-triangles3d(quad+1, col = "blue", indices=c(1,2,3,1,3,4))
+id <- triangles3d(quad+1, col = "blue", indices=c(1,2,3,1,3,4))
+
+# These signalled errors or warnings
+
+tri <- as.triangles3d(id)
+m <- as.mesh3d(id)
+
+filename <- tempfile(fileext = ".ply")
+writePLY(filename)
+unlink(filename)
+
+filename <- tempfile(fileext = ".obj")
+writeOBJ(filename, separateObjects = FALSE)
+readOBJ(filename)
+unlink(filename)
+
+filename <- tempfile(fileext = ".stl")
+writeSTL(filename)
+readSTL(filename)
+unlink(filename)

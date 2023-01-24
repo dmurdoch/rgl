@@ -780,7 +780,7 @@ void BBoxDeco::render(RenderContext* renderContext)
             *valueptr = value;
   
             char text[32];
-            sprintf(text, "%.4g", value);
+            snprintf(text, 32, "%.4g", value);
               
             String string(static_cast<int>(strlen(text)),text);
               
@@ -796,7 +796,7 @@ void BBoxDeco::render(RenderContext* renderContext)
             *valueptr = value;
                 
             char text[32];
-            sprintf(text, "%.4g", value);
+            snprintf(text, 32, "%.4g", value);
                 
             String s (static_cast<int>(strlen(text)),text);
                 
@@ -823,7 +823,7 @@ void BBoxDeco::render(RenderContext* renderContext)
               *valueptr = value;
                     
               char text[32];
-              sprintf(text, "%.4g", value);
+              snprintf(text, 32, "%.4g", value);
                     
               String s (static_cast<int>(strlen(text)),text);
                     

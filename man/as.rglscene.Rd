@@ -1,7 +1,7 @@
 \name{as.rglscene}
 \alias{as.rglscene}
 \title{
-Convert an object to an rglscene object.
+Convert an object to an \code{rglscene} object.
 }
 \description{
 This is a placeholder generic function, to allow other

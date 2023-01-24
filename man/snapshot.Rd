@@ -77,7 +77,7 @@ Set the environment
 variable \env{RGL_USE_WEBSHOT} to \code{"FALSE"} if
 you want \code{rgl.snapshot} to be used by default.
 }
-\seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
+\seealso{\code{\link{movie3d}}, \code{\link{view3d}}}
 
 \examples{
 if (interactive() && !in_pkgdown_example()) {

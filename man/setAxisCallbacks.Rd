@@ -78,7 +78,7 @@ is \code{TRUE}.
 
 If \code{applyToDev} is \code{TRUE}, it will also 
 have the side effect of attempting to install the
-callbacks using \code{\link{rgl.setAxisCallback}}.
+callbacks.
 }
 \seealso{
 \code{\link{setUserCallbacks}} for mouse callbacks.

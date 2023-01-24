@@ -180,8 +180,8 @@ setAxisCallbacks <- function(axes, fns,
       callbacks <- bbox$callbacks
       for (i in seq_len(n)) {
         fn <- getfn(fns[[i]])
-        rgl.setAxisCallback(match(axes[i], c("x", "y", "z")), fn, 
-                            dev = dev, subscene = subscene)
+        axis <- match(axes[i], c("x", "y", "z"))
+        .Call(rgl_setAxisCallback, fn, as.integer(dev), as.integer(subscene), as.integer(axis - 1))
       }
     }
   }

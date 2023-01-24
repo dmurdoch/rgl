@@ -38,7 +38,7 @@ by this function.
 # Spin one object
 open3d()
 plot3d(oh3d(col = "lightblue", alpha = 0.5))
-if (!rgl.useNULL())
+if (!rgl.useNULL()  && interactive())
   play3d(spin3d(axis = c(1, 0, 0), rpm = 30), duration = 2)
 
 # Show spinning sprites, and rotate the whole view
@@ -59,7 +59,7 @@ f <- function(time) {
                      base = spin1(time)$userMatrix)$userMatrix)
     spin1(time)
 }
-if (!rgl.useNULL())
+if (!rgl.useNULL() && interactive())
   play3d(f, duration = 2)
 }
 \keyword{ dplot }

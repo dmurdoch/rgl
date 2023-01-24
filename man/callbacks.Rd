@@ -1,4 +1,4 @@
-\name{rgl.setMouseCallbacks}
+\name{callbacks}
 \alias{rgl.setMouseCallbacks}
 \alias{rgl.getMouseCallbacks}
 \alias{rgl.setWheelCallback}

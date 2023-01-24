@@ -1,46 +1,83 @@
-\name{rgl.material}
-\alias{rgl.material}
+\name{material3d}
 \alias{material3d}
-\title{Set material properties}
+\alias{rgl.material.names}
+\alias{rgl.material.readonly}
+\concept{color}
+\concept{lit}
+\concept{ambient}
+\concept{specular}
+\concept{emission}
+\concept{shininess}
+\concept{alpha}
+\concept{smooth}
+\concept{texture}
+\concept{textype}
+\concept{texmipmap}
+\concept{texmagfilter}
+\concept{texminfilter}
+\concept{texenvmap}
+\concept{front}
+\concept{back}
+\concept{size}
+\concept{lwd}
+\concept{fog}
+\concept{point_antialias}
+\concept{line_antialias}
+\concept{depth_mask}
+\concept{depth_test}
+\concept{polygon_offset}
+\concept{margin}
+\concept{floating}
+\concept{tag}
+\concept{blend}
+\concept{isTransparent}
+
+\title{Get or set material properties}
 \description{
-  Set material properties for geometry appearance.
+  Get or set material properties for geometry appearance.
 }
 \usage{
-rgl.material(
-  color        = "white",
-  alpha        = 1.0,
-  lit          = TRUE, 
-  ambient      = "black",
-  specular     = "white", 
-  emission     = "black", 
-  shininess    = 50.0, 
-  smooth       = TRUE,
-  texture      = NULL, 
-  textype      = "rgb", 
-  texmipmap    = FALSE, 
-  texminfilter = "linear", 
-  texmagfilter = "linear",
-  texenvmap    = FALSE,
-  front        = "filled", 
-  back         = "filled",
-  size         = 3.0, 
-  lwd          = 1.0,
-  fog          = TRUE,
-  point_antialias = FALSE,
-  line_antialias = FALSE,
-  depth_mask   = TRUE,
-  depth_test   = "less",
-  polygon_offset = c(0.0, 0.0),
-  margin       = "",
-  floating     = FALSE,
-  tag          = "",
-  blend        = c("src_alpha", "one_minus_src_alpha"),
-  col,
-  ...
-)
-material3d(...)
+material3d(..., id = NULL)
+
+rgl.material.names
+rgl.material.readonly
 }
 \arguments{
+  \item{...}{Material properties to set or query.}
+  \item{id}{
+  the \pkg{rgl} id of an object to query, or \code{NULL}
+  to query or set the defaults.
+  }
+}
+\details{
+In an \pkg{rgl} scene, each object has \dQuote{material properties} that control how it is rendered and (in the case of \code{tag}) 
+that can be used to store a 
+label or other information.  \code{material3d} sets defaults
+for these properties and queries the defaults or specific
+values for an individual object.
+
+To set values, use \code{name = value} settings, e.g.
+\code{material3d(color = "red")}.  To query values, 
+specify the property or properties in a character vector,
+e.g. \code{material3d("color")}.  
+
+  Only one side at a time can be culled.
+
+  The \code{material} member of the \code{\link{r3dDefaults}} list may be used to 
+set default values for material properties.
+  
+}
+
+\section{Material Properties}{
+
+The \code{rgl.material.names} variable contains the
+full list of material names.
+The following read-write material properties control
+the appearance
+of objects in an \pkg{rgl} scene.
+
+\describe{
+
   \item{color}{
     vector of R color characters. Represents the diffuse component in case of lighting calculation (lit = TRUE),
     otherwise it describes the solid color characteristics.
@@ -56,7 +93,10 @@ material3d(...)
     vector of alpha values between 0.0 (fully transparent) .. 1.0 (opaque).
   }
   \item{smooth}{
-    logical, specifying whether Gouraud shading (smooth) or flat shading should be used.
+    logical, specifying whether smooth shading or flat shading
+    should be used.  For smooth shading, Gouraud shading is
+    used in \pkg{rgl} windows, while Phong shading is used 
+    in WebGL.
   }
   \item{texture}{ 
     path to a texture image file. Supported formats: png.
@@ -122,8 +162,25 @@ material3d(...)
      \code{"less"} (the default), \code{"equal"}, \code{"lequal"}
      (less than or equal), \code{"greater"}, \code{"notequal"},
      \code{"gequal"} (greater than or equal), \code{"always"}.}
-  \item{polygon_offset}{If non-zero, offsets are added
-  to the recorded depth of filled polygons.  See Details below.}
+  \item{polygon_offset}{A one or two element
+vector giving the \samp{factor} and \samp{units} values
+to use in a \code{glPolygonOffset()} call in OpenGL.  If
+only one value is given, it is used for both elements.
+The \samp{units} value is added to the depth of all pixels in
+a filled polygon,
+and the \samp{factor} value is multiplied by an estimate of
+the slope of the polygon and then added to the depth.  Positive values \dQuote{push} polygons back slightly for the purpose
+of depth testing, to allow points, lines or other polygons
+to be drawn on the surface without being obscured due 
+to rounding error.  Negative values pull the object forward.
+A typical value to use is \code{1} (which
+is automatically expanded to \code{c(1,1)}).
+If values are too large, objects which should be behind
+the polygon will show through, and if values are too small,
+the objects on the surface will be partially obscured. 
+Experimentation may be needed to get it right.  The first
+example in \code{?\link{persp3d}} uses this property to add 
+grid lines to a surface.}
   \item{margin, floating}{Used mainly for text to
   draw annotations in the margins, but supported by
   most kinds of objects:  see \code{\link{mtext3d}}.}
@@ -157,20 +214,28 @@ destination alpha or its opposite.}
   }
   }
   \item{col}{An allowed abbreviation of \code{color}.}
-  \item{...}{Any of the arguments above can
-  be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
 }
-\details{
-  Values can be queried by specifying their names
-in a character vector, e.g. \code{material3d("color")}.
-There is one read-only property that can be queried
-but not set:
+
+The \code{rgl.material.readonly} variable contains
+the subset of material properties that are read-only
+so they can be queried
+but not set.
+Currently there is only one:
 
 \describe{
 \item{isTransparent}{Is the current color transparent?}
 }
-  
-  Only one side at a time can be culled.
+
+}
+\value{
+\code{material3d()} returns values similarly
+to \code{\link{par3d}}:
+When setting properties, it returns the previous values
+invisibly in a named list.  When querying multiple values, a
+named list is returned. When a single value is queried it is
+returned directly.
+} 
+\section{Display of objects}{
   
   Object display colors are determined as follows:
 \itemize{
@@ -201,50 +266,6 @@ its brightness.}
 }
 }
 }
-  
-  The \code{polygon_offset} property is a two element
-vector giving the \samp{factor} and \samp{units} values
-to use in a \code{glPolygonOffset()} call in OpenGL.  If
-only one value is given, it is used for both elements.
-The \samp{units} value is added to the depth of all pixels in
-a filled polygon,
-and the \samp{factor} value is multiplied by an estimate of
-the slope of the polygon and then added to the depth.  Positive values \dQuote{push} polygons back slightly for the purpose
-of depth testing, to allow points, lines or other polygons
-to be drawn on the surface without being obscured due 
-to rounding error.  Negative values pull the object forward.
-A typical value to use is \code{1} (which
-is automatically expanded to \code{c(1,1)}).
-If values are too large, objects which should be behind
-the polygon will show through, and if values are too small,
-the objects on the surface will be partially obscured. 
-Experimentation may be needed to get it right.  The first
-example in \code{?\link{persp3d}} uses this property to add 
-grid lines to a surface.
-  
-  \code{material3d} is an alternate interface to the material properties, modelled after
-\code{\link{par3d}}:  rather than setting defaults for parameters that are not specified, 
-they will be left unchanged.  \code{material3d} may also be used to query the material
-properties; see the examples below.
-
-  The current implementation does not return parameters for textures.
-
-  The \code{material} member of the \code{\link{r3dDefaults}} list may be used to 
-set default values for material properties.
-  
-  The \code{...} parameter to \code{rgl.material} is ignored.
-}
-\value{
-\code{rgl.material()} is called for the side effect of setting the material properties.
-It returns a value invisibly which is not intended for use by the user.
-
-Users should use \code{material3d()} to query material properties.  It returns values similarly
-to \code{\link{par3d}} as follows:
-When setting properties, it returns the previous values in a named list.  A named list is also
-returned when more than one value is queried.  When a single value is queried it is returned 
-directly.
-} 
-\note{
   If \code{point_antialias} is \code{TRUE}, points will be drawn as circles in WebGL; otherwise, they
 will be drawn as squares.  Within R, the behaviour depends
 on your graphics hardware:  for example, I see circles for 
@@ -254,10 +275,9 @@ Within R, lines tend to appear heavier with \code{line_antialias == TRUE}.  Ther
 in WebGL.
 }
 \seealso{
-\code{\link{rgl.primitive}},
-\code{\link{rgl.bbox}},
-\code{\link{rgl.bg}},
-\code{\link{rgl.light}}
+\code{\link{bbox3d}},
+\code{\link{bg3d}},
+\code{\link{light3d}}
 }
 \examples{
 save <- material3d("color")
@@ -290,4 +310,3 @@ quads3d(rbind(translate3d(quad, -0.5, 0, -0.5),
         blend = c("src_alpha", "one"))
 }
 \keyword{dynamic}
-

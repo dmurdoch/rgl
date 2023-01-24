@@ -57,7 +57,7 @@ rgl window along with an indicator of their type and if \code{tags = TRUE}, the
 \code{tag} value for each.
 
 Note that clearing the light stack leaves the scene in darkness; it should normally
-be followed by a call to \code{\link{light3d}} or \code{\link{light3d}}.
+be followed by a call to \code{\link{light3d}}.
 }
 \seealso{
 \code{\link{rgl}},
@@ -73,7 +73,7 @@ be followed by a call to \code{\link{light3d}} or \code{\link{light3d}}.
   ids3d()
   lines3d(x, y, z)
   ids3d(tags = TRUE)
-  if (interactive() && !rgl.useNULL()) {
+  if (interactive() && !rgl.useNULL() && !in_pkgdown_example()) {
     readline("Hit enter to change spheres")
     pop3d(id = p["data"])
     spheres3d(x, y, z, col = "red", radius = 1/5)

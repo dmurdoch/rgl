@@ -22,7 +22,7 @@ for details.
 Coordinates of the "offset".  See the details.
 }
   \item{\dots}{
-Material properties. See \code{\link{rgl.material}} for details.  
+Material properties. See \code{\link{material3d}} for details.  
 }
 }
 \details{

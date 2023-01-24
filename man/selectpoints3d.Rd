@@ -73,7 +73,7 @@ Duncan Murdoch
 xyz <- cbind(rnorm(20), rnorm(20), rnorm(20))
 ids <- plot3d( xyz )
 
-if (interactive()) {
+if (interactive() && !in_pkgdown_example()) {
   # Click near a point to select it and put a sphere there.
   # Press ESC to quit...
 

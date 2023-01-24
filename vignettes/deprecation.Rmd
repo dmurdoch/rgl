@@ -1,0 +1,257 @@
+---
+title: "Deprecating the `rgl.*` interface"
+author: "Duncan Murdoch"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Deprecating the `rgl.*` interface}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+Since at least 2004, `rgl` has had two interfaces for many 
+of the primitive functions:  `rgl.*` and `*3d`.  For example,
+to draw points you could use `rgl.points()` or `points3d()`.
+With the upcoming version 1.0.0 release of `rgl`, most of
+the duplication will be removed.  The first step will be
+to deprecate a large number of `rgl.*` functions so they give
+warnings when they are called, and a few months later 
+they will be removed from the package exports.
+
+This document describes the differences and changes needed 
+by users of the `rgl.*` interface.
+
+# Differences between the interfaces
+
+## Opening a window
+
+The `rgl.open()` function has a single argument, `useNULL`.
+If set to `TRUE`, the NULL `rgl` device will  be used.  The
+`par3d()` settings will be set to their defaults.
+
+The `open3d()` function has arguments
+```r
+function(..., 
+         params = getr3dDefaults(), 
+         useNULL = rgl.useNULL(), 
+         silent = FALSE	)
+```
+and allows `par3d()` values to be specified,
+and uses the `r3dDefaults` variable to set default values
+for `par3d()`, `material3d()`, and `bg3d()`.  Initially
+`r3dDefaults` is defined as
+```r
+list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
+     mouseMode = c("none", "trackball", "zoom", "fov", "pull"),
+     FOV = 30,
+     family = "sans",
+     bg = list(color="white",
+               fogtype = "none"),
+     material = list(color="black", fog = TRUE)
+)
+```
+Users can create their own default lists; e.g. to get the
+same result as `rgl.open()` would give, use
+```r
+open3d(params = list())
+```
+or
+```r
+r3dDefaults <- list()
+open3d()
+```
+
+## Material properties
+
+The `rgl.material()` function has a large number of parameters.  The pre-deprecation arguments were:
+```r
+function(
+  color        = "white",
+  alpha        = 1.0,
+  lit          = TRUE, 
+  ambient      = "black",
+  specular     = "white", 
+  emission     = "black", 
+  shininess    = 50.0, 
+  smooth       = TRUE,
+  texture      = NULL, 
+  textype      = "rgb", 
+  texmipmap    = FALSE, 
+  texminfilter = "linear", 
+  texmagfilter = "linear",
+  texenvmap    = FALSE,
+  front        = "filled", 
+  back         = "filled",
+  size         = 3.0,
+  lwd          = 1.0, 
+  fog          = TRUE,
+  point_antialias = FALSE,
+  line_antialias = FALSE,
+  depth_mask   = TRUE,
+  depth_test   = "less",
+  polygon_offset = c(0.0, 0.0),
+  margin = "",
+  floating = FALSE,
+  tag = "",
+  blend = c("src_alpha", "one_minus_src_alpha"),
+  col,
+  ...
+)
+```
+
+Thus a call like `rgl.material(color = "black")` will set
+the color to black, and will also set all of the other
+parameters to the default values listed above.
+
+On the other hand, the arguments to `material3d()` are
+```r
+function (..., id = NULL)  
+```
+Calling `material3d(color = "black")` will set
+the color to black and leave all other parameters unchanged.
+
+## Primitive shapes
+
+The primitive shapes (points etc.) can be set using calls
+like `rgl.points(x, y, z, color = "black")` or 
+`points3d(x, y, z, color = "black")`.  
+
+The first difference is
+that `rgl.*` primitives will call `rgl.material()` to set
+the material properties:  in this example `color` will be set
+to `black`, and all other parameters will be set to their 
+defaults.  The `*3d` versions of the primitives use
+`material3d()` to set material properties, so only those that
+were specified will be changed, and the original values
+will be restored afterwards.
+
+The second difference is what happens if there is no
+window already open.  The `rgl.*` functions will call
+`rgl.open()` (ignoring `r3dDefaults`), whereas the `*3d`
+functions will call `open3d()`.
+
+# Why deprecate `rgl.*`?
+
+Both of the systems worked, but they do not work together.
+For example, calling `rgl.points()` will have carry-on effects
+on later `points3d()` calls, whereas each `points3d()` call
+will just draw the points, it won't affect future calls.
+
+Users have found this confusing, and it makes their code hard
+to debug, and the `rgl` package hard to maintain.  The `*3d` 
+interface is more flexible, and more similar to the base graphics
+interface in R, so I've decided it will be the only one 
+available going forward.
+
+## Some `rgl.*` functions are not deprecated
+
+There will still be some `rgl.*` functions in the package.
+These are functions that are mainly intended for 
+programming, such as `rgl.attrib()` and `rgl.user2window()`, and
+a few legacy functions like `rgl.Sweave()` supporting
+older approaches of using `rgl`.  
+
+In a few cases
+both function versions are identical
+(`rgl.cur`, `rgl.ids`, and `rgl.pop` are identical
+to `cur3d`, `ids3d` and `pop3d` respectively),
+and for those the `rgl.*` versions will be kept,
+but the documentation will concentrate on the `*3d` functions.
+
+
+# My package uses `rgl.*`.  What do I need to do?
+
+If your package is using `rgl.*` functions, the first
+step is to just make the substitutions suggested by the
+deprecation warning message.  For example, if you use `rgl.points(rnorm(10), rnorm(10), rnorm(10))` try using
+`points3d(rnorm(10), rnorm(10), rnorm(10))` instead.
+In most cases this will give you what you want.  In
+some cases more changes will be needed.
+
+## `rgl.open` and `rgl.material`
+
+See above if you were using these.
+
+## Textures
+
+The default color after `rgl.open()` was white, whereas
+with `open3d()` the default color is black, with a white
+background.  Textures multiplicatively 
+modify the color of the object,
+so after `open3d()`, a texture on an object will still appear 
+black.  Explicitly specifying `color = "white"` when a texture
+is used will fix this.
+
+## `rgl.surface()`
+
+The arguments to `rgl.surface()` and `surface3d()` functions
+are different.  The argument lists are
+```r
+rgl.surface( x, z, y, 
+             coords = 1:3,  ..., 
+             normal_x = NULL, normal_y = NULL, normal_z = NULL,
+             texture_s = NULL, texture_t = NULL)
+surface3d(x, y = NULL, z = NULL,
+          ...,
+          normal_x = NULL, normal_y = NULL,
+          normal_z = NULL,
+          texture_s = NULL, texture_t=NULL)
+```
+Notice that the arguments are in a different order.
+Another difference is that `rgl.surface()` expects the surface
+to be defined in the `y` coordinate and viewed
+in the orientation produced by `rgl.open()`, not the one produced by
+`open3d()`.  Up until very recently, `surface3d()` didn't allow both `x` and `z` to be vectors.  
+
+The excellent [`rayshader` package](https://www.rayshader.com) 
+used the convention
+that the `y` argument held the surface, so the `y` direction 
+should point up.  Using `view3d(theta = 45, phi = 45)`
+(which it was already doing) gives a reasonable view.
+
+## Lists of material names and par3d properties
+
+Many functions in `rgl` and other packages use `...` to set
+material or `par3d` properties in a call, and for some,
+`...` will
+contain other optional arguments.  Some packages used the
+argument list of `rgl.material()` to identify the 
+material property names.  Going forward, packages should 
+use the
+variables 
+```r
+rgl.material.names
+rgl.material.readonly
+```
+These are character variables holding
+all the material property names.  (`rgl.material.names`
+contains all names; `rgl.material.readonly` is the
+read-only subset of that list.)  There are also variables
+```r
+rgl.par3d.names
+rgl.par3d.readonly
+```
+which give the same information for `par3d`.  
+
+Since these variables are recently added, you will need to add
+a dependence on `rgl (>= 0.111.5)` if you use them. 
+
+
+
+## Others
+
+If you have particular problems adapting other `rgl.*` to the
+`*3d` interface, please post them as issues on https://github.com/dmurdoch/rgl/issues .  I'll
+explain how to get what you want or fix things in `rgl` so 
+you can do it.

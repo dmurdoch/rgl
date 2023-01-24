@@ -103,7 +103,7 @@ Get buffer object.
 \describe{
 \item{\code{buf}}{Buffer number.}
 
-\item{\code{default}}{Default buffer object if `buf` not found.}
+\item{\code{default}}{Default buffer object if \code{buf} not found.}
 }
 \if{html}{\out{</div>}}
 }
@@ -184,7 +184,7 @@ Byte offset of start of bytes written.
 Close the connection in a buffer.
 
 If there was a connection open, this will save the
-contents in the raw vector `bytes` within the buffer object.
+contents in the raw vector \code{bytes} within the buffer object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Buffer$closeBuffer(buf)}\if{html}{\out{</div>}}
 }
@@ -203,8 +203,8 @@ contents in the raw vector `bytes` within the buffer object.
 \subsection{Method \code{closeBuffers()}}{
 Close any open buffers.
 
-  Call this after working with a GLTF file to avoid warnings
-  from R about closing unused connections.
+Call this after working with a GLTF file to avoid warnings
+from R about closing unused connections.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Buffer$closeBuffers()}\if{html}{\out{</div>}}
 }
@@ -214,7 +214,7 @@ Close any open buffers.
 \if{html}{\out{<a id="method-Buffer-getBufferview"></a>}}
 \if{latex}{\out{\hypertarget{method-Buffer-getBufferview}{}}}
 \subsection{Method \code{getBufferview()}}{
-Get bufferView object.
+Get \code{bufferView} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Buffer$getBufferview(bufv)}\if{html}{\out{</div>}}
 }
@@ -222,7 +222,7 @@ Get bufferView object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{bufv}}{bufferView number.}
+\item{\code{bufv}}{\code{bufferView} number.}
 }
 \if{html}{\out{</div>}}
 }
@@ -256,7 +256,7 @@ Add a new buffer view.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-New bufferView number.
+New \code{bufferView} number.
 }
 }
 \if{html}{\out{<hr>}}
@@ -271,7 +271,7 @@ Open a connection to a buffer view.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{bufv}}{Which bufferView.}
+\item{\code{bufv}}{Which \code{bufferView}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -283,7 +283,7 @@ A connection.
 \if{html}{\out{<a id="method-Buffer-setBufferview"></a>}}
 \if{latex}{\out{\hypertarget{method-Buffer-setBufferview}{}}}
 \subsection{Method \code{setBufferview()}}{
-Set bufferView object.
+Set \code{bufferView} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Buffer$setBufferview(bufv, bufferView)}\if{html}{\out{</div>}}
 }
@@ -291,7 +291,7 @@ Set bufferView object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{bufv}}{bufferView number.}
+\item{\code{bufv}}{\code{bufferView} number.}
 
 \item{\code{bufferView}}{New value to insert.}
 }
@@ -355,7 +355,7 @@ Read data given by accessor number.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+A vector or array as specified in the accessor.  For the \code{MATn} types, the 3rd index
 indexes the element.
 }
 }
@@ -376,7 +376,7 @@ Read data given by accessor object.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+A vector or array as specified in the accessor.  For the \code{MATn} types, the 3rd index
 indexes the element.
 }
 }
@@ -384,7 +384,7 @@ indexes the element.
 \if{html}{\out{<a id="method-Buffer-addAccessor"></a>}}
 \if{latex}{\out{\hypertarget{method-Buffer-addAccessor}{}}}
 \subsection{Method \code{addAccessor()}}{
-Write values to accessor, not including `min` and `max`.
+Write values to accessor, not including \code{min} and \code{max}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Buffer$addAccessor(
   values,
