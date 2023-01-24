@@ -21,7 +21,9 @@ hover3d(x, y = NULL, z = NULL,
 \arguments{
   \item{x, y, z}{
 Coordinates of point to identify. Any reasonable way of defining the
-coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}} for details.
+coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}} for details. 
+Alternatively, \code{x} may be the id of a single existing 
+object, and its vertices will be used.
 }
   \item{labeller}{
 A function to display information about identified points. \code{NULL}
@@ -105,6 +107,10 @@ labelLocation <- function(x, y = NULL, z = NULL) {
 
 xyz <- matrix(rnorm(30), ncol = 3)
 open3d()
-plot3d(xyz)
+ids <- plot3d(xyz)
 hover3d(xyz, labeller = labelLocation(xyz), col = "red", cex = 0.8)
+# The same thing using the data id:
+# hover3d(ids["data"], 
+#         labeller = labelLocation(rgl.attrib(ids["data"], "vertices")), 
+#         col = "red", cex = 0.8)
 }

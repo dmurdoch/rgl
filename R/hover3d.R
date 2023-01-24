@@ -25,6 +25,15 @@ hover3d <- function(x, y = NULL, z = NULL,
   opar <- par3d("mouseMode")
   odev <- cur3d()
   
+  if (inherits(x, "rglId") ||
+      (length(x) == 1 && is.null(y) && is.null(z))) {
+    if (length(x) != 1)
+      stop("Exactly one object may be specified as x.")
+    idverts <- x
+    x <- expandVertices(idverts)
+  } else
+    idverts <- NULL
+  
   xyz <- xyz.coords(x, y, z)
   x <- xyz$x
   y <- xyz$y
@@ -136,8 +145,10 @@ hover3d <- function(x, y = NULL, z = NULL,
      };
      window.hoverSelect.selected = [];
     '
-    idverts <- points3d(xyz)
-    delFromSubscene3d(idverts)
+    if (is.null(idverts)) {
+      idverts <- points3d(xyz)
+      delFromSubscene3d(idverts)
+    }
     if (custom_labeller) {
       save <- par3d(skipRedraw = TRUE)
       on.exit(par3d(save), add = TRUE)
@@ -157,7 +168,7 @@ hover3d <- function(x, y = NULL, z = NULL,
     js <- gsub("%persist%", persist, js)
     js <- gsub("%customlabeller%", toJSON(custom_labeller), js)
   } else
-    idverts <- idtexts <- NULL
+    idtexts <- NULL
   
   setUserCallbacks(0, update="hoverSelect",
                    scene = if (applyToScene) scene,
