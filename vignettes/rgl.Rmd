@@ -311,9 +311,11 @@ that affect how light reflects from them (or is emitted by them).
 These are mainly controlled by the `r indexfns("material3d")` function,
 or by arguments to other functions that are passed to it.
 
-The material properties that can be set by calls to `material3d` are
+The material properties that are recognized in calls to `material3d` are
 described in detail in the 
-`r linkfn("material3d", text="?material3d", pkg="rgl")` help page.
+`r linkfn("material3d", text="?material3d", pkg="rgl")` help page, and listed in the `r indexfns("rgl.material.names")`
+variable.  All of them can be set except the ones in 
+`r indexfns("rgl.material.readonly")`.
 Here we give an overview.
 
 Property  | Default | Meaning 
@@ -414,7 +416,9 @@ requires the `extrafont` package to be installed.
 The `r indexfns("par3d")` function, modelled after the classic
 graphics `r linkfn("par", pkg="graphics")` function, sets or reads 
 a variety of different `rgl` internal
-parameters.  Some parameters are completely read-only; others are
+parameters, listed in the `r indexfns("rgl.par3d.names")`
+variable.  All of them can be set except the ones in 
+`r indexfns("rgl.par3d.readonly")`.  Some parameters are completely read-only; others are
 fixed at the time the window is opened, and others may be changed 
 at any time.
 
@@ -973,8 +977,9 @@ Function                             | Description
 `r indexfns("tagged3d")`:                         | find tags or objects with tags
 
 Some of these functions have alternate names for
-back compatibility:  `r duplicated(c("rgl.cur",
-"rgl.ids", "rgl.pop"))`.  Either name will work,
+back compatibility:  
+`r deprecated(c("rgl.cur", "rgl.ids", "rgl.pop"))`. 
+Either name will work,
 but the `*3d` version is recommended for new code.
 Some have deprecated versions:
 `r deprecated(c("rgl.clear", "rgl.set"))`.  Those should not be called.
@@ -1078,16 +1083,19 @@ package.  To help in development of this code, the
 `r indexfns("makeDependency")` function was written.
 It may be useful in other packages that include Javascript.
 
-### Other functions
+### Other functions and objects
 
-This section is for miscellaneous functions that don't
-fall in any of the other categories in this document.
+This section is for miscellaneous functions and objects 
+that don't fall in any of the other categories in this document.
 
 The `r indexfns("setGraphicsDelay")` function is designed
 to work around what appears to be a bug on macOS:  if
 a standard plot window is opened too quickly after an `rgl`
 window, R can crash.  This function inserts a one second 
 delay when it appears to be needed.
+
+The `r indexfns("gltfTypes")` vector contains
+constants used in OpenGL and glTF.
 
 ## Warning:  Work in Progress!
 
