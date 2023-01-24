@@ -70,21 +70,23 @@ as they serve no purpose in the current device.
 Only one hover handler is supported per scene or device.
 }
 \value{
-A list is returned invisibly, containing these elements:
+A \code{\link{lowlevel()}} vector is returned invisibly.
+If \code{applyToScene} is \code{TRUE}, it will contain the
+ids of the temporary objects created for Javascript.
+It will also have these attributes:
 \item{oldPar}{Values of \code{\link{par3d}} parameters that were changed.
 Currently only \code{"mouseMode"}.}
 \item{oldDev}{The value of \code{cur3d()} at the time of calling, so that
 \code{oldPar} can be restored to the right device.}
-\item{idverts, idtexts}{
-The \pkg{rgl} ids of the temporary objects created for 
-display in Javascript if \code{applyToScene} is \code{TRUE}.
-}
 }
 \author{
 Duncan Murdoch
 }
 \seealso{
-\code{\link{identify3d}}
+\code{\link{identify3d}} and \code{\link{selectpoints3d}}
+work in the \pkg{rgl} device and return information
+about the selections. \code{\link{setUserCallbacks}}
+is the underlying function used by \code{hover3d}.
 }
 \examples{
 # Create a labeller to show the coordinates of the selected point.

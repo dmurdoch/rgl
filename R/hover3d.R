@@ -165,7 +165,5 @@ hover3d <- function(x, y = NULL, z = NULL,
                    applyToDev = TRUE,
                    javascript = js)
   
-  invisible(list(oldPar = opar, oldDev = odev,
-                 idverts = idverts, 
-                 idtexts = labels))
+  structure(lowlevel(c(idverts, unlist(idtexts))),                         oldPar = opar, oldDev = odev)
 }

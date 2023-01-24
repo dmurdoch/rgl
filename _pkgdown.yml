@@ -195,6 +195,7 @@ reference:
   - identify3d
   - selectpoints3d
   - selectionFunction3d
+  - hover3d
   - rgl.select
   - rgl.attrib
   - rgl.attrib.info
