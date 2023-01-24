@@ -232,7 +232,9 @@ You should avoid using all of these functions, which do not
 work properly with the `*3d` functions and will
 soon be removed from `rgl`.  See the 
 `r linkfn("r3d", text="?r3d", pkg="rgl")` help
-topic for details.  The function
+topic for details.  
+
+The function
 `r indexfns(c("rgl.getAxisCallback"))`
 provides low-level support for `r linkfn("setAxisCallbacks")`.
 
@@ -783,6 +785,7 @@ Function                     | Description
 `r indexfns("identify3d")`:   | like the classic graphics `r linkfn("identify", pkg="graphics")` function
 `r indexfns("select3d")`:     | returns a function that tests whether a coordinate was selected
 `r indexfns("selectpoints3d")`: | selects from specific objects
+`r indexfns("hover3d")`:      | displays "hover" info about points
 
 `r indexfns("selectionFunction3d")` produces the selection
 function from information about the projection and mouse
