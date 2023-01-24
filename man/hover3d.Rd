@@ -70,7 +70,7 @@ as they serve no purpose in the current device.
 Only one hover handler is supported per scene or device.
 }
 \value{
-A \code{\link{lowlevel()}} vector is returned invisibly.
+A \code{\link{lowlevel}} vector of ids is returned invisibly.
 If \code{applyToScene} is \code{TRUE}, it will contain the
 ids of the temporary objects created for Javascript.
 It will also have these attributes:
