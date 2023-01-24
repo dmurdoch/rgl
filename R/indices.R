@@ -13,6 +13,13 @@ expandAttrib <- function(id, attrib) {
 expandVertices <- function(id) 
   expandAttrib(id, "vertices")
 
+expandColors <- function(id) {
+  result <- rgl.attrib(id, "colors")
+  if (nrow(result) > 1)
+    result <- expandAttrib("colors")
+  result
+}
+
 getExpandedNverts <- function(id) {
   result <- length(rgl.attrib(id, "indices"))
   if (!result)
