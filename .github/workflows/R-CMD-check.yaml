@@ -1,19 +1,14 @@
-# This is a mix of the basic and tidyverse workflow
-
-name: CI
-
-# Controls when the action will run. 
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
 
   pull_request:
     branches: [ master ]
-    
-  workflow_dispatch:
+
+name: R-CMD-check
 
 jobs:
-
   R-CMD-check:
-  
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -23,97 +18,33 @@ jobs:
       matrix:
         config:
           - {os: windows-latest, r: 'release', rtools-version: '42'}
-          # - {os: macOS-latest,   r: 'release'}
-          - {os: ubuntu-18.04,   r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest", http-user-agent: "R/4.1.0 (ubuntu-18.04) R (4.1.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
-          # - {os: ubuntu-18.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
-          # - {os: ubuntu-18.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
-          # - {os: ubuntu-18.04,   r: '3.6',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
-          # - {os: ubuntu-18.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
-          # - {os: ubuntu-18.04,   r: '3.4',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       _R_CHECK_FORCE_SUGGESTS_: false
-      # _R_CHECK_RD_XREFS_: false
-      # _R_CHECK_CRAN_INCOMING_: false
-      # _R_CHECK_AUTOCONF_: false
-      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RGL_USE_NULL: true
+      R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
           rtools-version: ${{ matrix.config.rtools-version }}
 
-      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
       
-      - name: Install automake
-        if: runner.os == 'macOS'
-        run: |
-          brew install automake
-
-      - name: Query dependencies
-        run: |
-          install.packages(c('remotes', 'sessioninfo', 'rcmdcheck', 'desc'))
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          extra-packages: any::rcmdcheck
+          needs: check
 
-      - name: Install system dependencies
-        if: runner.os == 'Linux'
-        run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
-
-      - name: Install old packages
-        if:  matrix.config.r == '3.4' || matrix.config.r == '3.3'
-        run: |
-          remotes::install_version("deldir", "0.1-29")
-          remotes::install_version("plotrix", "3.7-5")
-        shell: Rscript {0}
-        
-      - name: Install rgl & dependencies
-        run: |
-          # Be sure to get appropriate CRAN or Github versions
-          install.packages(c("pkgdown", "downlit", "htmlwidgets"))
-          # First rgl plus hard deps
-          remotes::install_local(force = TRUE)
-          deps <- subset(desc::desc_get_deps(), type == "Suggests")$package
-          deps <- setdiff(deps, c("tcltk"))
-          remotes::install_cran(deps)
-        shell: Rscript {0}
-
-      - name: Session info
-        run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
-        shell: Rscript {0}
-
-      - name: Check
-        run:  |
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning",
-                               check_dir = "check")
-        shell: Rscript {0}
-
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@main
+      - uses: r-lib/actions/check-r-package@v2
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: check
+          upload-snapshots: true
