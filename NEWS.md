@@ -1,4 +1,4 @@
-# rgl 1.0.4
+# rgl 1.0.5
 
 ## Major changes
 
@@ -13,6 +13,8 @@ and the `selectpoints3d()`, `writeOBJ()`, `writePLY()`
 and `writeSTL()`
 functions did not handle indices
 in the objects they were processing (issue #293).
+* Transparent planes were not always drawn properly
+in WebGL (issue #300).
 
 # rgl 1.0.1
 
