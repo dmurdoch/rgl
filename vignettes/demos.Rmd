@@ -12,7 +12,7 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
+  collapse = FALSE,  # Bug in knitr 1.42 requires FALSE here
   comment = "#>")
 library(rgl)
 setupKnitr(autoprint = TRUE)
@@ -84,9 +84,6 @@ binplot.3d(c(-0.5,0.5),c(4.5,5.5),2,alpha=0.6)
 # Setting the viewpoint ('theta' and 'phi' have the same meaning as in persp):
 view3d(theta=40,phi=40)
 
-```
-
-```{r}
 ##### QUADS FORMING BIN
 
 open3d()
