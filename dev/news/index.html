@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.5</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.6</span>
       </span>
     </div>
 
@@ -73,13 +73,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.0.5" id="rgl-105">rgl 1.0.5<a class="anchor" aria-label="anchor" href="#rgl-105"></a></h2>
+<h2 class="page-header" data-toc-text="1.0.6" id="rgl-106">rgl 1.0.6<a class="anchor" aria-label="anchor" href="#rgl-106"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-1-0-5">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0-5"></a></h3>
+<h3 id="major-changes-1-0-6">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0-6"></a></h3>
 <ul><li>A new function <code><a href="../reference/hover3d.html">hover3d()</a></code> has been added to display “hover hints”: labels next to points when the mouse passes near them.</li>
+<li>A new material property <code>"texmode"</code> has been added to control how textures are applied. The default is now <code>"replace"</code>; previously the property was fixed at <code>"modulate"</code>. The change means that surfaces no longer need to be set to white to display textures.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-0-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-5"></a></h3>
+<h3 id="bug-fixes-1-0-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-6"></a></h3>
 <ul><li>The <code><a href="../reference/as.mesh3d.rglId.html">as.mesh3d.rglId()</a></code> and <code><a href="../reference/as.triangles3d.html">as.triangles3d.rglId()</a></code> methods and the <code><a href="../reference/selectpoints3d.html">selectpoints3d()</a></code>, <code><a href="../reference/writeOBJ.html">writeOBJ()</a></code>, <code><a href="../reference/writePLY.html">writePLY()</a></code> and <code><a href="../reference/readSTL.html">writeSTL()</a></code> functions did not handle indices in the objects they were processing (issue <a href="https://github.com/dmurdoch/rgl/issues/293" class="external-link">#293</a>).</li>
 <li>Transparent planes were not always drawn properly in WebGL (issue <a href="https://github.com/dmurdoch/rgl/issues/300" class="external-link">#300</a>).</li>
 </ul></div>
