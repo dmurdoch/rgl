@@ -1,10 +1,15 @@
-# rgl 1.0.5
+# rgl 1.0.6
 
 ## Major changes
 
 * A new function `hover3d()` has been added to display
 "hover hints":  labels next to points when the mouse 
 passes near them.
+* A new material property `"texmode"` has been added
+to control how textures are applied.  The default is now
+`"replace"`; previously the property was fixed at
+`"modulate"`.  The change means that surfaces no longer
+need to be set to white to display textures.
 
 ## Bug fixes
 

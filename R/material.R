@@ -18,7 +18,8 @@ rgl.material0 <- function(
   shininess    = 50.0, 
   smooth       = TRUE,
   texture      = NULL, 
-  textype      = "rgb", 
+  textype      = "rgb",
+  texmode      = "replace",
   texmipmap    = FALSE, 
   texminfilter = "linear", 
   texmagfilter = "linear",
@@ -88,6 +89,7 @@ rgl.material0 <- function(
     texture <- normalizePath(texture)
 
   textype <- rgl.enum.textype( textype )
+  texmode <- rgl.enum.texmode( texmode )
   texminfilter <- rgl.enum.texminfilter( texminfilter )
   texmagfilter <- rgl.enum.texmagfilter( texmagfilter )
   rgl.bool(texenvmap)
@@ -126,7 +128,7 @@ rgl.material0 <- function(
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
 
-                          blend, color) )
+                          blend, texmode, color) )
   cdata <- as.character(c( tag, texture ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
@@ -151,7 +153,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   if (missing(ncolors))
     ncolors <- if (id) rgl.attrib.count(id, "colors") else rgl.getcolorcount()
   
-  idata <- rep(-1, 33+3*ncolors)
+  idata <- rep(-1, 34+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -170,6 +172,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   
   polymodes <- c("filled", "lines", "points", "culled")
   textypes <- c("alpha", "luminance", "luminance.alpha", "rgb", "rgba")
+  texmodes <- c("replace", "modulate", "decal", "blend", "add")
   minfilters <- c("nearest", "linear", "nearest.mipmap.nearest", "nearest.mipmap.linear", 
                   "linear.mipmap.nearest", "linear.mipmap.linear")
   magfilters <- c("nearest", "linear")
@@ -187,9 +190,9 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[31 + 3*(seq_len(idata[1]))], 
-                   idata[32 + 3*(seq_len(idata[1]))], 
-                   idata[33 + 3*(seq_len(idata[1]))], maxColorValue = 255),
+  list(color = rgb(idata[32 + 3*(seq_len(idata[1]))], 
+                   idata[33 + 3*(seq_len(idata[1]))], 
+                   idata[34 + 3*(seq_len(idata[1]))], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=6, length.out = idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
@@ -217,6 +220,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        margin = deparseMargin(list(coord = idata[27] + 1, edge = idata[28:30])),
        floating = idata[31] == 1,
        blend = blendmodes[idata[32:33] + 1],
+       texmode = texmodes[idata[34] + 1],
        tag = cdata[1]
        )
                    

@@ -49,7 +49,7 @@
      * @param  textype - texture type for object 
      * @param  antialias - use antialiasing?
      */
-    rglwidgetClass.getDefines = function(id, type, flags, nclipplanes, nlights, normals, pointSize, textype, antialias, fl) {
+    rglwidgetClass.getDefines = function(id, type, flags, nclipplanes, nlights, normals, pointSize, textype, texmode, antialias, fl) {
       var
         title, defines;
       
@@ -79,6 +79,7 @@
       if (fl.has_texture) {
         defines = defines + "#define HAS_TEXTURE 1\n";
         defines = defines + "#define TEXTURE_" + textype + "\n";
+        defines = defines + "#define TEXMODE_" + texmode + "\n";
       }
       
       if (fl.is_brush)
@@ -136,7 +137,8 @@
         this.countClipplanes(), this.countLights(), 
         obj.normals, 
         this.getMaterial(obj, "size"), 
-        this.getMaterial(obj, "textype"), 
+        this.getMaterial(obj, "textype"),
+        this.getMaterial(obj, "texmode"),
         this.getMaterial(obj, "point_antialias"),
         obj.defFlags
       );

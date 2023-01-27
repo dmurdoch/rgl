@@ -1008,8 +1008,9 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.floating = idata[29];
   mat.blend[0] = idata[30];
   mat.blend[1] = idata[31];
+  mat.texmode = (Texture::Mode) idata[32]; 
   
-  int* colors   = &idata[32];
+  int* colors   = &idata[33];
   char*  pixmapfn = cdata[1];
 
   mat.shininess   = (float) ddata[0];
@@ -1034,7 +1035,8 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   
 
   if ( strlen(pixmapfn) > 0 ) {
-    mat.texture = new Texture(pixmapfn, mat.textype, mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
+    mat.texture = new Texture(pixmapfn, mat.textype, mat.texmode, 
+                              mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;
@@ -1096,6 +1098,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[5] = mat->fog ? 1 : 0;
   if (mat->texture) {
     mat->texture->getParameters( (Texture::Type*) (idata + 6),
+                               (Texture::Mode*) (idata + 33),   
                                (bool*) (idata + 7),
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
@@ -1132,8 +1135,9 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[30] = mat->floating;
   idata[31] = mat->blend[0];
   idata[32] = mat->blend[1];
+  idata[33] = mat->texmode;
 
-  for (i=0, j=33; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=34; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat->colors.getColor(i).getRedub();
     idata[j++] = (int) mat->colors.getColor(i).getGreenub();
     idata[j++] = (int) mat->colors.getColor(i).getBlueub();
