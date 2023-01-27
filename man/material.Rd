@@ -12,6 +12,7 @@
 \concept{smooth}
 \concept{texture}
 \concept{textype}
+\concept{texmode}
 \concept{texmipmap}
 \concept{texmagfilter}
 \concept{texminfilter}
@@ -109,6 +110,21 @@ of objects in an \pkg{rgl} scene.
       \item{"luminance.alpha"}{luminance and alpha}
       \item{"rgb"}{color}
       \item{"rgba"}{color and alpha texture}
+    }
+  }
+  \item{texmode}{
+    specifies how the texture interacts with the existing
+    color
+    \describe{
+      \item{"replace"}{default; texture value replaces existing value}
+      \item{"modulate"}{texture value multiplies existing value}
+      \item{"decal"}{for \code{textype = "rgba"}, texture
+      is mixed with existing value}
+      \item{"blend"}{uses the texture to blend the existing
+      value with black}
+      \item{"add"}{adds the texture value to the existing.
+      May not be available in the R display with very old
+      OpenGL drivers.}
     }
   }
   \item{texmipmap}{

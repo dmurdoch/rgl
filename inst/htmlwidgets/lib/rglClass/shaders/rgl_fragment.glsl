@@ -131,29 +131,119 @@ void main(void) {
 #endif
     
 #ifdef HAS_TEXTURE
+
+// These calculations use the definitions from 
+// https://docs.gl/gl3/glTexEnv
+
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+
 #ifdef TEXTURE_rgb
-    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
+
+#if defined(TEXMODE_replace) || defined(TEXMODE_decal)
+    textureColor = vec4(textureColor.rgb, lighteffect.a);
+#endif 
+
+#ifdef TEXMODE_modulate
+    textureColor = lighteffect*vec4(textureColor.rgb, 1.);
+#endif
+
+#ifdef TEXMODE_blend
+    textureColor = vec4((1. - textureColor.rgb) * lighteffect.rgb, lighteffect.a);
+#endif
+
+#ifdef TEXMODE_add
+    textureColor = vec4(lighteffect.rgb + textureColor.rgb, lighteffect.a);
+#endif
+
+#endif //TEXTURE_rgb
+        
+#ifdef TEXTURE_rgba
+
+#ifdef TEXMODE_replace
+// already done
+#endif 
+
+#ifdef TEXMODE_modulate
+    textureColor = lighteffect*textureColor;
+#endif
+
+#ifdef TEXMODE_decal
+    textureColor = vec4((1. - textureColor.a)*lighteffect.rgb) +
+                     textureColor.a*textureColor.rgb, 
+                     lighteffect.a);
+#endif
+
+#ifdef TEXMODE_blend
+    textureColor = vec4((1. - textureColor.rgb) * lighteffect.rgb,
+                    lighteffect.a*textureColor.a);
+#endif
+
+#ifdef TEXMODE_add
+    textureColor = vec4(lighteffect.rgb + textureColor.rgb,
+                    lighteffect.a*textureColor.a);
 #endif
     
-#ifdef TEXTURE_rgba
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
+#endif //TEXTURE_rgba
     
 #ifdef TEXTURE_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
-    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
+#if defined(TEXMODE_replace) || defined(TEXMODE_decal)
+    textureColor = vec4(lighteffect.rgb, textureColor.a);
+#endif 
+
+#if defined(TEXMODE_modulate) || defined(TEXMODE_blend) || defined(TEXMODE_add)
+    textureColor = vec4(lighteffect.rgb, lighteffect.a*textureColor.a);
+#endif
+ 
 #endif
     
+// The TEXTURE_luminance values are not from that reference    
 #ifdef TEXTURE_luminance
-    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
+    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
+
+#if defined(TEXMODE_replace) || defined(TEXMODE_decal)
+    textureColor = vec4(luminance, luminance, luminance, lighteffect.a);
+#endif 
+
+#ifdef TEXMODE_modulate
+    textureColor = vec4(luminance*lighteffect.rgb, lighteffect.a);
 #endif
+
+#ifdef TEXMODE_blend
+    textureColor = vec4((1. - luminance)*lighteffect.rgb,
+                        lighteffect.a);
+#endif
+
+#ifdef TEXMODE_add
+    textureColor = vec4(luminance + lighteffect.rgb, lighteffect.a);
+#endif
+
+#endif // TEXTURE_luminance
+ 
     
 #ifdef TEXTURE_luminance_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
     float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
-    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
+
+#if defined(TEXMODE_replace) || defined(TEXMODE_decal)
+    textureColor = vec4(luminance, luminance, luminance, textureColor.a);
+#endif 
+
+#ifdef TEXMODE_modulate
+    textureColor = vec4(luminance*lighteffect.rgb, 
+                        textureColor.a*lighteffect.a);
 #endif
+
+#ifdef TEXMODE_blend
+    textureColor = vec4((1. - luminance)*lighteffect.rgb,
+                        textureColor.a*lighteffect.a);
+#endif
+
+#ifdef TEXMODE_add
+    textureColor = vec4(luminance + lighteffect.rgb, 
+                        textureColor.a*lighteffect.a);
+
+#endif
+
+#endif // TEXTURE_luminance_alpha
     
     fragColor = textureColor;
 
