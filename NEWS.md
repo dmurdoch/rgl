@@ -5,6 +5,11 @@
 * A new function `hover3d()` has been added to display
 "hover hints":  labels next to points when the mouse 
 passes near them.
+* A new material property `"texmode"` has been added
+to control how textures are applied.  The default is now
+`"replace"`; previously the property was fixed at
+`"modulate"`.  The change means that surfaces no longer
+need to be set to white to display textures.
 * Many of the demos have been moved to a new vignette called 
 `demos`.
 
@@ -15,6 +20,8 @@ and the `selectpoints3d()`, `writeOBJ()`, `writePLY()`
 and `writeSTL()`
 functions did not handle indices
 in the objects they were processing (issue #293).
+* Transparent planes were not always drawn properly
+in WebGL (issue #300).
 * `view3d()` now returns a `lowlevel()` result so that 
 it will be handled properly in WebGL vignettes with 
 auto printing.

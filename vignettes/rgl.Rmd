@@ -377,21 +377,24 @@ plot(rnorm(1000), rnorm(1000))
 dev.off()
 open3d()
 xyz <- cbind(c(0,1,1,0), 0, c(0,0,1,1))
-quads3d(xyz, texture = filename, texcoords = xyz[,c(1, 3)]*2, col = "white", specular = "black")
+quads3d(xyz, texture = filename, texcoords = xyz[,c(1, 3)]*2, specular = "black")
 ```
 
 Some other notes:
 
- - The color in the figure above was specified to be white.  By default,
-the colors in the bitmap will modify the colour of the
-quad.  If `col` is black (a common default), you won't see anything.
- - On the other hand, you usually don't want specular 
+ - By default, the colors in the bitmap will replace the 
+colors in the quad.  Prior to `rgl` version 1.0.6,
+the colors in the bitmap modified the color of the
+quad.  If the quad color was black (a common default), you wouldn't see anything.  To return to the previous behaviour,
+set material property `texmode = "modulate"`.
+ - You usually don't want specular 
  reflections (which show up as glare).  Setting `specular`
  to black prevents those.
- - How the bitmap is handled is controlled by the material
+ - Another aspect of how the bitmap is handled is controlled
+ by the material
  property `"textype"`.  The default is `"rgb"`, which 
- takes the red-green-blue colours from the bitmap and
- uses them to modify the corresponding colours in the polygon.  Other possibilities for `"textype"` are described
+ takes the red-green-blue colors from the bitmap and
+ uses them to modify the corresponding colors in the polygon.  Other possibilities for `"textype"` and `"texmode"` are described
  in `r linkfn("material3d", "the material3d help page", pkg = "rgl")`.
  - The other `"tex*"` material properties control how 
  the interpolation within the image is done.
@@ -470,7 +473,7 @@ described below.  We start with functions to generate them.
 ### Specific solids
 
 These functions generate specific shapes.  Optional arguments allow
-attributes such as colour or transformations to be specified.
+attributes such as color or transformations to be specified.
 
 Function                             | Description
 ------------------------------------ | -----------

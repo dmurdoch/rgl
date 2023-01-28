@@ -17,6 +17,7 @@ using namespace rgl;
 Texture::Texture(
   const char* in_filename
 , Type in_type
+, Mode in_mode
 , bool in_mipmap
 , unsigned int in_minfilter
 , unsigned int in_magfilter
@@ -25,6 +26,7 @@ Texture::Texture(
   texName = 0;
   pixmap = new Pixmap();
   type   = in_type;
+  mode   = in_mode;
   mipmap = in_mipmap;
   envmap = in_envmap;
   magfilter = (in_magfilter) ? GL_LINEAR : GL_NEAREST;
@@ -88,11 +90,12 @@ bool Texture::isValid() const
   return (pixmap) ? true : false;
 }
 
-void Texture::getParameters(Type *out_type, bool *out_mipmap, 
+void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, 
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
                             bool *out_envmap, int buflen, char *out_filename)
 {
   *out_type = type;
+  *out_mode = mode;
   *out_mipmap = mipmap;
   switch(minfilter) {
       case GL_NEAREST:
@@ -173,6 +176,25 @@ void Texture::init(RenderContext* renderContext)
     break;
   case RGBA:
     internalFormat = GL_RGBA;
+    break;
+  }
+  
+  switch(mode)
+  {
+  case REPLACE:
+    internalMode = GL_REPLACE;
+    break;
+  case MODULATE:
+    internalMode = GL_MODULATE;
+    break;
+  case DECAL:
+    internalMode = GL_DECAL;
+    break;
+  case BLEND:
+    internalMode = GL_BLEND;
+    break;
+  case ADD:
+    internalMode = GL_ADD;
     break;
   }
 
@@ -270,7 +292,7 @@ void Texture::beginUse(RenderContext* renderContext)
   
 
   glEnable(GL_TEXTURE_2D);
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, internalMode);
   glBindTexture(GL_TEXTURE_2D, texName);
 
   if (type == ALPHA) {

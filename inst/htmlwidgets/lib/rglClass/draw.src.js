@@ -689,7 +689,7 @@
      * @param { array } context - Which context are we in?
      */      
     rglwidgetClass.prototype.drawPlanes = function(obj, subscene, context) {
-      if (obj.bbox !== subscene.par3d.bbox || !obj.initialized) {
+      if (this.opaquePass && (obj.bbox !== subscene.par3d.bbox || !obj.initialized)) {
           this.planeUpdateTriangles(obj, subscene.par3d.bbox);
       }
       return this.drawSimple(obj, subscene, context);

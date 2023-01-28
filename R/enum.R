@@ -73,3 +73,7 @@ rgl.enum(blend, zero=0, one=1,
          constant_color=10, one_minus_constant_color=11,
          constant_alpha=12, one_minus_constant_alpha=13,
          src_alpha_saturate=14)
+
+rgl.enum.texmode <- function(texmode)
+  rgl.enum(texmode, replace = 0, modulate = 1, 
+           decal = 2, blend = 3, add = 4)
