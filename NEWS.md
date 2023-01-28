@@ -1,10 +1,12 @@
-# rgl 1.0.4
+# rgl 1.0.7
 
 ## Major changes
 
 * A new function `hover3d()` has been added to display
 "hover hints":  labels next to points when the mouse 
 passes near them.
+* Many of the demos have been moved to a new vignette called 
+`demos`.
 
 ## Bug fixes
 
@@ -13,6 +15,9 @@ and the `selectpoints3d()`, `writeOBJ()`, `writePLY()`
 and `writeSTL()`
 functions did not handle indices
 in the objects they were processing (issue #293).
+* `view3d()` now returns a `lowlevel()` result so that 
+it will be handled properly in WebGL vignettes with 
+auto printing.
 
 # rgl 1.0.1
 
