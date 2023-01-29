@@ -1,4 +1,4 @@
-# rgl 1.0.7
+# rgl 1.0.8
 
 ## Major changes
 
@@ -25,6 +25,9 @@ in WebGL (issue #300).
 * `view3d()` now returns a `lowlevel()` result so that 
 it will be handled properly in WebGL vignettes with 
 auto printing.
+* If `transform3d()` or `rotate3d()` changed the orientation
+of a `mesh3d` object with normals, the normals ended up
+with the wrong sign. (Reported by Stephane Laurent.)
 
 # rgl 1.0.1
 

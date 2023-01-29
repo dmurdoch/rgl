@@ -408,14 +408,21 @@ translate3d.mesh3d <- function( obj, x, y, z, ... ) {
 rotate3d.mesh3d <- function( obj,angle,x,y,z,matrix, ... ) {
   obj$vb <- t(rotate3d(t(obj$vb), angle, x, y, z, matrix))
   if ( !is.null(obj$normals) ) {
+    normals <- obj$normals  # 4xn matrix
     if ( missing(matrix) ) 
-      obj$normals <- rotate3d(t(obj$normals), angle, x, y, z)
+      normals <- rotate3d(t(normals), angle, x, y, z) # nx4
     else {
       if (nrow(matrix) == 4) matrix[4,1:3] <- 0
       if (ncol(matrix) == 4) matrix[1:3,4] <- 0
-      obj$normals <- rotate3d(t(obj$normals), angle, x, y, z, t(solve(matrix)))
+      normals <- rotate3d(t(normals), angle, x, y, z, t(solve(matrix))) # nx4
+      # Reverse the normals if the transformation
+      # changes the orientation of the mesh
+      if (det(matrix) < 0)
+        normals[, 1:3] <- -normals[, 1:3]  # nx4
     }
-    obj$normals <- t( obj$normals/sqrt(apply(obj$normals^2, 1, sum)) )
+    normals <- asEuclidean(normals)  # nx3
+    normals <- normals/sqrt(rowSums(normals^2))
+    obj$normals <- rbind( t(normals), 1 ) # 4xn
   }
   return(obj)                            
 }  
