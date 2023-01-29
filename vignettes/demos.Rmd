@@ -1,0 +1,764 @@
+---
+title: "rgl Demos"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{rgl Demos}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = FALSE,  # Bug in knitr 1.42 requires FALSE here
+  comment = "#>")
+library(rgl)
+setupKnitr(autoprint = TRUE)
+```
+
+## Introduction
+
+This vignette holds code that was previously included as "demos" 
+in `rgl`.  Some of the demos require R to be running; those
+remain available via `demo(package = "rgl")`.
+
+## hist3d:  3D histogram using basic building blocks
+
+```{r}
+
+##########
+### 3D HIST EXAMPLE:
+##########
+
+################################################################################
+
+##### Required functions 'binplot' and 'hist3d':
+
+binplot.3d<-function(x,y,z,alpha=1,topcol="#ff0000",sidecol="#aaaaaa") {
+  save <- par3d(skipRedraw=TRUE)
+  on.exit(par3d(save))
+    
+  x1<-c(rep(c(x[1],x[2],x[2],x[1]),3),rep(x[1],4),rep(x[2],4))
+  z1<-c(rep(0,4),rep(c(0,0,z,z),4))
+  y1<-c(y[1],y[1],y[2],y[2],rep(y[1],4),rep(y[2],4),rep(c(y[1],y[2],y[2],y[1]),2))
+  x2<-c(rep(c(x[1],x[1],x[2],x[2]),2),rep(c(x[1],x[2],rep(x[1],3),rep(x[2],3)),2))
+  z2<-c(rep(c(0,z),4),rep(0,8),rep(z,8) )
+  y2<-c(rep(y[1],4),rep(y[2],4),rep(c(rep(y[1],3),rep(y[2],3),y[1],y[2]),2) )
+  quads3d(x1,z1,y1,col=rep(sidecol,each=4),alpha=alpha)
+  quads3d(c(x[1],x[2],x[2],x[1]),rep(z,4),c(y[1],y[1],y[2],y[2]),
+              col=rep(topcol,each=4),alpha=1) 
+  segments3d(x2,z2,y2,col="#000000")
+}
+
+hist3d<-function(x,y=NULL,nclass="auto",alpha=1,col="#ff0000",scale=10) {
+  save <- par3d(skipRedraw=TRUE)
+  on.exit(par3d(save))
+  xy <- xy.coords(x,y)
+  x <- xy$x
+  y <- xy$y
+  n<-length(x)
+  if (nclass == "auto") nclass<-ceiling(sqrt(nclass.Sturges(x)))
+  breaks.x <- seq(min(x),max(x),length=(nclass+1))
+  breaks.y <- seq(min(y),max(y),length=(nclass+1))
+  z<-matrix(0,(nclass),(nclass))
+  for (i in seq_len(nclass)) {
+    for (j in seq_len(nclass)) {
+      z[i, j] <- (1/n)*sum(x < breaks.x[i+1] & y < breaks.y[j+1] & 
+                            x >= breaks.x[i] & y >= breaks.y[j])
+      binplot.3d(c(breaks.x[i],breaks.x[i+1]),c(breaks.y[j],breaks.y[j+1]),
+                 scale*z[i,j],alpha=alpha,topcol=col)
+    }
+  }
+}
+################################################################################
+
+open3d()
+
+bg3d(color="gray")
+light3d(0, 0)
+
+# Drawing a 'bin' for given coordinates:
+binplot.3d(c(-0.5,0.5),c(4.5,5.5),2,alpha=0.6)
+
+# Setting the viewpoint ('theta' and 'phi' have the same meaning as in persp):
+view3d(theta=40,phi=40)
+
+##### QUADS FORMING BIN
+
+open3d()
+
+# Defining transparency and colors:
+alpha<-0.7; topcol<-"#ff0000"; sidecol<-"#aaaaaa"
+
+# Setting up coordinates for the quads and adding them to the scene:
+y<-x<-c(-1,1) ; z<-4; of<-0.3
+x12<-c(x[1],x[2],x[2],x[1]); x11<-rep(x[1],4); x22<-rep(x[2],4)
+z00<-rep(0,4); z0z<-c(0,0,z,z); zzz<-rep(z,4); y11<-rep(y[1],4)
+y1122<-c(y[1],y[1],y[2],y[2]); y12<-c(y[1],y[2],y[2],y[1]); y22<-rep(y[2],4)
+
+quads3d(c(x12,x12,x11-of,x12,x22+of,x12),
+          c(z00-of,rep(z0z,4),zzz+of),
+          c(y1122,y11-of,y12,y22+of,y12,y1122),
+          col=rep(c(rep(sidecol,5),topcol),each=4),alpha=c(rep(alpha,5),1))
+
+# Setting up coordinates for the border-lines of the quads and drawing them:
+yl1<-c(y[1],y[2],y[1],y[2]); yl2<-c(y[1]-of,y[1]-of)
+xl<-c(rep(x[1],8),rep(x[1]-of,8),rep(c(x[1],x[2]),8),rep(x[2],8),rep(x[2]+of,8))
+zl<-c(0,z,0,z,z+of,z+of,-of,-of,0,0,z,z,0,z,0,z,rep(0,4),rep(z,4),rep(-of,4),
+      rep(z+of,4),z+of,z+of,-of,-of,rep(c(0,z),4),0,0,z,z)
+yl<-c(yl2,y[2]+of,y[2]+of,rep(c(y[1],y[2]),4),y[1],y[1],y[2],y[2],yl2,
+      rep(y[2]+of,4),yl2,y[2],y[2],rep(y[1],4),y[2],y[2],yl1,yl2,y[2]+of,
+      y[2]+of,y[1],y[1],y[2],y[2],yl1)
+
+lines3d(xl,zl,yl,col="#000000")
+view3d(theta=40,phi=40)
+
+##### COMPLETE HISTOGRAM:
+
+open3d()
+
+# Setting the rng to a fixed value:
+set.seed(1000)
+
+# Drawing a 3d histogramm of 2500 normaly distributed observations:
+hist3d(rnorm(2500),rnorm(2500),alpha=0.4,nclass=7,scale=30)
+# Choosing a lightgrey background:
+bg3d(col="#cccccc")
+view3d(theta=40,phi=40)
+```
+
+
+## bivar:  Bivariate densities: kernel smoothing using surface3d and alpha-channel (requires MASS package)
+
+```{r}
+# rgl demo: rgl-bivar.r
+# author: Daniel Adler
+
+rgl.demo.bivar <- function() {
+  if (!requireNamespace("MASS", quietly = TRUE))
+    stop("This demo requires MASS")
+  
+  # parameters:
+  n<-50; ngrid<-40
+  
+  # generate samples:
+  set.seed(31415)
+  x<-rnorm(n); y<-rnorm(n)
+  
+  # estimate non-parameteric density surface via kernel smoothing
+  denobj <- MASS::kde2d(x, y, n=ngrid)
+  den.z <-denobj$z
+  
+  # generate parametric density surface of a bivariate normal distribution
+  xgrid <- denobj$x
+  ygrid <- denobj$y
+  bi.z <- dnorm(xgrid)%*%t(dnorm(ygrid))
+  
+  # visualize:
+  zscale<-20
+  
+  # New window
+  open3d()
+  
+  # clear scene:
+  clear3d("all")
+  
+  # setup env:
+  bg3d(color="#887777")
+  light3d()
+  
+  # Draws the simulated data as spheres on the baseline
+  spheres3d(x,y,rep(0,n),radius=0.1,color="#CCCCFF")
+  
+  # Draws non-parametric density
+  surface3d(xgrid,ygrid,den.z*zscale,color="#FF2222",alpha=0.5)
+  
+  # Draws parametric density
+  surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines") 
+}
+
+rgl.demo.bivar()
+```
+
+## Abundance:  Animal abundance, visualization of multi-dimension data using multiple techniques
+
+```{r}
+# RGL-Demo: animal abundance
+# Authors: Oleg Nenadic, Daniel Adler
+
+rgl.demo.abundance <- function() {
+  open3d()
+  clear3d("all")               # remove all shapes, lights, bounding-box, and restore viewpoint
+  
+  # Setup environment:
+  bg3d(col="#cccccc")     # setup background
+  light3d()               # setup head-light
+  
+  # Importing animal data (created with wisp)
+  terrain<-dget(system.file("demodata/region.dat",package="rgl"))
+  pop<-dget(system.file("demodata/population.dat",package="rgl"))
+  
+  # Define colors for terrain
+  zlim <- range(terrain)
+  colorlut <- terrain.colors(82) 
+  col1 <- colorlut[9*sqrt(3.6*(terrain-zlim[1])+2)]
+  
+  # Set color to (water-)blue for regions with zero 'altitude' 
+  col1[terrain==0]<-"#0000FF"
+  
+  # Add terrain surface shape (i.e. population density):
+  surface3d( 
+      1:100,seq(1,60,length=100),terrain,
+      col=col1,spec="#000000", ambient="#333333", back="lines"
+  )
+  
+  # Define colors for simulated populations (males:blue, females:red):
+  col2<-pop[,4]
+  col2[col2==0]<-"#3333ff"
+  col2[col2==1]<-"#ff3333"
+  
+  # Add simulated populations as sphere-set shape
+  spheres3d(
+    pop[,1],
+    pop[,2],
+    terrain[cbind( ceiling(pop[,1]),ceiling(pop[,2]*10/6) )]+0.5,
+    radius=0.2*pop[,3], col=col2, alpha=(1-(pop[,5])/10 )
+  )
+
+}
+rgl.demo.abundance()
+```
+
+
+
+## lsystem: Plant modelling using a turtle and L-system
+
+```{r}
+# demo: lsystem.r
+# author: Daniel Adler
+
+#
+# geometry 
+#
+
+deg2rad <- function( degree ) {
+  return( degree*pi/180 )
+}
+
+rotZ.m3x3 <- function( degree ) {
+  kc <- cos(deg2rad(degree))
+  ks <- sin(deg2rad(degree))
+  return( 
+    matrix(
+      c(
+        kc, -ks,   0, 
+        ks,  kc,   0,
+         0,   0,   1
+      ),ncol=3,byrow=TRUE
+    ) 
+  )
+}
+
+rotX.m3x3 <- function( degree ) {
+  kc <- cos(deg2rad(degree))
+  ks <- sin(deg2rad(degree))
+  return(
+    matrix(
+      c(
+         1,   0,   0,
+         0,  kc, -ks,
+         0,  ks,  kc
+      ),ncol=3,byrow=TRUE
+    )
+  )
+}
+
+rotY.m3x3 <- function( degree ) {
+  kc <- cos(deg2rad(degree))
+  ks <- sin(deg2rad(degree))
+  return(
+    matrix(
+      c(
+        kc,   0,   ks,
+         0,   1,    0,
+       -ks,   0,   kc
+      ),ncol=3,byrow=TRUE
+    )
+  )
+}
+
+rotZ <- function( v, degree ) {
+  return( rotZ.m3x3(degree) %*% v)
+}
+
+rotX <- function( v, degree ) {
+  return( rotX.m3x3(degree) %*% v)
+}
+
+rotY <- function( v, degree ) {
+  return( rotY.m3x3(degree) %*% v)
+}
+
+
+#
+# turtle graphics, rgl implementation:
+#
+
+turtle.init <- function(pos=c(0,0,0),head=0,pitch=90,roll=0,level=0) {
+  clear3d("all")
+  bg3d(color="gray")
+  light3d()
+  return( list(pos=pos,head=head,pitch=pitch,roll=roll,level=level) )
+}
+
+
+turtle.move <- function(turtle, steps, color) {
+  
+  rm <- rotX.m3x3(turtle$pitch) %*% rotY.m3x3(turtle$head) %*% rotZ.m3x3(turtle$roll)
+  
+  from <- as.vector( turtle$pos )  
+  dir  <- rm %*% c(0,0,-1)
+  to   <- from + dir * steps
+    
+  x <- c( from[1], to[1] )
+  y <- c( from[2], to[2] )
+  z <- c( from[3], to[3] )
+  lines3d(x,y,z,col=color,size=1.5,alpha=0.5)
+  turtle$pos <- to
+  return(turtle)
+}
+
+turtle.pitch <- function(turtle, degree) {
+  turtle$pitch <- turtle$pitch + degree
+  return(turtle)
+}
+
+turtle.head <- function(turtle, degree) {
+  turtle$head <- turtle$head + degree
+  return(turtle)
+}
+
+turtle.roll <- function(turtle, degree) {
+  turtle$roll <- turtle$roll + degree
+  return(turtle)
+}
+
+#
+# l-system general
+#
+
+
+lsystem.code <- function( x )
+  substitute( x )
+
+lsystem.gen <- function( x, grammar, levels=0 ) {
+  code <- eval( substitute( substitute( REPLACE , grammar ), list(REPLACE=x) ) )
+  if (levels)
+    return( lsystem.gen( code , grammar , levels-1 ) )
+  else
+    return( code )
+}
+
+#
+# l-system plot
+#
+
+lsystem.plot <- function( expr, level ) {
+  turtle <- turtle.init(level=level)
+  lsystem.eval( expr, turtle )
+}
+
+lsystem.eval <- function( expr, turtle ) {
+  if ( length(expr) == 3 ) {
+    turtle <- lsystem.eval( expr[[2]], turtle )
+    turtle <- lsystem.eval( expr[[3]], turtle )
+    turtle <- lsystem.eval( expr[[1]], turtle )
+  } else if ( length(expr) == 2 ) {
+    saved <- turtle
+    turtle <- lsystem.eval( expr[[1]], turtle )
+    turtle <- lsystem.eval( expr[[2]], turtle )
+    turtle <- saved
+  } else if ( length(expr) == 1 ) {
+    if ( as.name(expr) == "stem" )      turtle <- turtle.move(turtle, 5, "brown")
+    else if ( as.name(expr) == "short") turtle <- turtle.move(turtle, 5, "brown")
+    else if ( as.name(expr) == "leaf" ) {
+      spheres3d(turtle$pos[1],turtle$pos[2],turtle$pos[3],radius=0.1+turtle$level*0.3,color="green")
+      sprites3d(turtle$pos[1],turtle$pos[2],turtle$pos[3],radius=0.5+turtle$level*0.3 ,color="green",texture=system.file("textures/particle.png",package="rgl"),textype="alpha",alpha=0.5)     
+    }
+    else if ( as.name(expr) == "roll" ) turtle <- turtle.head(turtle, 60)
+    else if ( as.name(expr) == "down" ) turtle <- turtle.pitch(turtle,10)
+    else if ( as.name(expr) == "up" )   turtle <- turtle.pitch(turtle,-10)
+    else if ( as.name(expr) == "left" ) turtle <- turtle.head(turtle, 1)
+    else if ( as.name(expr) == "right") turtle <- turtle.head(turtle,-1.5)
+    else if ( as.name(expr) == "turnleft") turtle <- turtle.head(turtle,20)
+    else if ( as.name(expr) == "turnright") turtle <- turtle.head(turtle,-20)
+    else if ( as.name(expr) == "turn") turtle <- turtle.roll(turtle,180)
+  }
+  return(turtle)
+}
+
+
+#
+# example
+#
+
+simple <- function(level=0) {
+  grammar <- list(
+    stem=lsystem.code(
+      stem-(up-stem-leaf)-stem-(down-stem-leaf)-stem-leaf
+    )
+  )
+  plant <- lsystem.gen(lsystem.code(stem), grammar, level )
+  lsystem.plot(plant,level)
+}
+
+rgl.demo.lsystem <- function(level=0) {
+  gen   <- list(
+    stem=lsystem.code( 
+      stem-left-stem-branch( turnleft-down-short-turnleft-down-stem-leaf)-right-right-stem--branch( turnright-up-short-turnright-up-short-turnright-short-stem-leaf)-left-left-left-stem-branch( turnleft-down-short-turnright-down-stem-leaf )-branch( up-turnright-short-up-turnleft-up-stem-leaf ) 
+    )
+  )    
+  plant <- lsystem.gen(lsystem.code(stem), gen, level )
+  lsystem.plot(plant,level)  
+}
+
+open3d()
+rgl.demo.lsystem(level=1)
+rglwidget()
+```
+
+## subdivision:  Subdivision surfaces using generic meshes (preview of generic 3D interface)
+
+```{r}
+# RGL-demo: subdivision surfaces
+# author: Daniel Adler
+
+rgl.demo.subdivision <- function() {
+  # setup environment
+  clear3d("all")
+  view3d()
+  bg3d(color="gray")
+  light3d()
+
+  # generate basic mesh
+  obj <- oh3d()
+
+  part <- function( level, tx, ... ) {
+    shade3d( translate3d( obj, tx, 0, 0 )
+    , color="gray30", front="lines",alpha=0.5,back="lines", override=TRUE
+    )
+    shade3d( translate3d( subdivision3d( obj, depth=level ), tx, 0, 0 )
+    , override=TRUE, ... )
+  }
+  
+  part(0, -5.50, color="blue"   )
+  part(1, -1.75, color="yellow" )
+  part(2,  1.75, color="red"    )
+  part(3,  5.50, color="green"  )
+
+}
+
+open3d()
+rgl.demo.subdivision()
+```
+
+## envmap:  Environment mapping
+
+```{r}
+# RGL-Demo: environment mapping
+# Author: Daniel Adler
+
+rgl.demo.envmap <- function() {
+  open3d()
+  # Clear scene:
+  clear3d("all")
+  light3d()
+  bg3d(sphere=TRUE, color="white", back="filled"
+  , texture=system.file("textures/refmap.png",package="rgl")
+  )
+  data(volcano)
+
+  surface3d( 10*seq_len(nrow(volcano)),10*seq_len(ncol(volcano)),5*volcano
+  , texture=system.file("textures/refmap.png",package="rgl")
+  , texenvmap=TRUE
+  , texmode="modulate"
+  , color = "white"
+  )
+}
+rgl.demo.envmap()
+```
+
+
+
+## shapes3d:  3D shape primitives (cones, ellipsoids, cubes), some taken from qmesh3d
+
+```{r}
+
+cone3d <- function(base=c(0,0,0),tip=c(0,0,1),rad=1,n=30,draw.base=TRUE,qmesh=FALSE,
+                   trans = par3d("userMatrix"), ...) {
+  ax <- tip-base
+  if (missing(trans) && !cur3d()) trans <- diag(4)
+  ### is there a better way?
+  if (ax[1]!=0) {
+    p1 <- c(-ax[2]/ax[1],1,0)
+    p1 <- p1/sqrt(sum(p1^2))
+    if (p1[1]!=0) {
+      p2 <- c(-p1[2]/p1[1],1,0)
+      p2[3] <- -sum(p2*ax)
+      p2 <- p2/sqrt(sum(p2^2))
+    } else {
+      p2 <- c(0,0,1)
+    }
+  } else if (ax[2]!=0) {
+    p1 <- c(0,-ax[3]/ax[2],1)
+    p1 <- p1/sqrt(sum(p1^2))
+    if (p1[1]!=0) {
+      p2 <- c(0,-p1[3]/p1[2],1)
+      p2[3] <- -sum(p2*ax)
+      p2 <- p2/sqrt(sum(p2^2))
+    } else {
+      p2 <- c(1,0,0)
+    }
+  } else {
+    p1 <- c(0,1,0); p2 <- c(1,0,0)
+  }
+  degvec <- seq(0,2*pi,length=n+1)[-1]
+  ecoord2 <- function(theta) {
+    base+rad*(cos(theta)*p1+sin(theta)*p2)
+  }
+  i <- rbind(1:n,c(2:n,1),rep(n+1,n))
+  v <- cbind(sapply(degvec,ecoord2),tip)
+  if (qmesh) 
+    ## minor kluge for quads -- draw tip twice
+    i <- rbind(i,rep(n+1,n))
+  if (draw.base) {
+    v <- cbind(v,base)
+    i.x <- rbind(c(2:n,1),1:n,rep(n+2,n))
+    if (qmesh)  ## add base twice
+      i.x <-  rbind(i.x,rep(n+2,n))
+    i <- cbind(i,i.x)
+  }
+  if (qmesh) v <- rbind(v,rep(1,ncol(v))) ## homogeneous
+  if (!qmesh)
+    triangles3d(v[1,i],v[2,i],v[3,i],...)
+  else
+    return(rotate3d(qmesh3d(v,i,material=list(...)), matrix=trans))
+}     
+
+
+ellipsoid3d <- function(rx=1,ry=1,rz=1,n=30,ctr=c(0,0,0),
+                        qmesh=FALSE,
+                        trans = par3d("userMatrix"),...) {
+  if (missing(trans) && !cur3d()) trans <- diag(4)
+  degvec <- seq(0,pi,length=n)
+  ecoord2 <- function(p)
+    c(rx*cos(p[1])*sin(p[2]),ry*sin(p[1])*sin(p[2]),rz*cos(p[2]))
+  v <- apply(expand.grid(2*degvec,degvec),1,ecoord2)
+  if (qmesh) v <- rbind(v,rep(1,ncol(v))) ## homogeneous
+  e <- expand.grid(1:(n-1),1:n)
+  i1 <- apply(e,1,function(z)z[1]+n*(z[2]-1))
+  i2 <- i1+1
+  i3 <- (i1+n-1) %% n^2 + 1
+  i4 <- (i2+n-1) %% n^2 + 1
+  i <- rbind(i1,i2,i4,i3)
+  if (!qmesh)
+    quads3d(v[1,i],v[2,i],v[3,i],...)
+  else return(rotate3d(qmesh3d(v,i,material=list(...)),matrix=trans))
+}
+
+############
+open3d()
+ellipsoid3d(ctr=c(2,2,2),rx=3,ry=2,col="red",alpha=0.4)
+cone3d(base=c(-2,-2,-2),rad=0.5,tip=c(-3,0,-4),col="blue",front="lines",back="lines")
+shade3d(translate3d(cube3d(),3,-2,3,col="purple"))
+
+### now with qmesh()
+open3d()
+q1 <- cone3d(qmesh=TRUE,trans=diag(4))  ## the "unit cone";
+                                        ## height=1,radius=1, base at (0,0,0)
+shade3d(q1)
+## various transformations and rotations
+wire3d(translate3d(q1,3,0,0),col="green")
+wire3d(translate3d(scale3d(q1,1,1,2),6,0,0),col="green")
+dot3d(translate3d(q1,0,3,0),col="green")
+dot3d(translate3d(scale3d(q1,2,1,1),0,6,0),col="green")
+shade3d(translate3d(q1,0,0,3),col="red")
+shade3d(translate3d(rotate3d(scale3d(q1,1,1,2),pi/4,0,1,0),0,0,6),col="red")
+
+axes3d()
+open3d()
+
+s1 <- ellipsoid3d(qmesh=TRUE,trans=diag(4))  ## the "unit sphere";
+                                        ## radius=1, ctr at (0,0,0)
+shade3d(s1)
+## various transformations and rotations
+wire3d(translate3d(s1,3,0,0),col="green")
+wire3d(translate3d(scale3d(s1,1,1,2),6,0,0),col="green")
+dot3d(translate3d(s1,0,3,0),col="green")
+dot3d(translate3d(scale3d(s1,2,1,1),0,6,0),col="green")
+shade3d(translate3d(s1,0,0,3),col="red")
+shade3d(translate3d(rotate3d(scale3d(s1,1,1,2),pi/4,0,1,0),0,0,6),col="red")
+
+axes3d()
+```
+
+## lollipop3d:  "Lollipop" plots (3D scatterplot with lines between points and a surface)
+
+```{r}
+
+cone3d <- function(base,tip,rad,n=30,...) {
+  degvec <- seq(0,2*pi,length=n)
+  ax <- tip-base
+  ## what do if ax[1]==0?
+  if (ax[1]!=0) {
+    p1 <- c(-ax[2]/ax[1],1,0)
+    p1 <- p1/sqrt(sum(p1^2))
+    if (p1[1]!=0) {
+      p2 <- c(-p1[2]/p1[1],1,0)
+      p2[3] <- -sum(p2*ax)
+      p2 <- p2/sqrt(sum(p2^2))
+    } else {
+      p2 <- c(0,0,1)
+    }
+  } else if (ax[2]!=0) {
+    p1 <- c(0,-ax[3]/ax[2],1)
+    p1 <- p1/sqrt(sum(p1^2))
+    if (p1[1]!=0) {
+      p2 <- c(0,-p1[3]/p1[2],1)
+      p2[3] <- -sum(p2*ax)
+      p2 <- p2/sqrt(sum(p2^2))
+    } else {
+      p2 <- c(1,0,0)
+    }
+  } else {
+    p1 <- c(0,1,0); p2 <- c(1,0,0)
+  }
+  ecoord2 <- function(theta) {
+    base+rad*(cos(theta)*p1+sin(theta)*p2)
+  }
+    for (i in seq_len(n-1)) {
+      li <- ecoord2(degvec[i])
+      lj <- ecoord2(degvec[i+1])
+      triangles3d(c(li[1],lj[1],tip[1]),c(li[2],lj[2],tip[2]),c(li[3],lj[3],tip[3]),...)
+    }   
+}
+
+lollipop3d <- function(data.x,data.y,data.z,surf.fun,surf.n=50,
+                         xlim=range(data.x),
+			 ylim=range(data.y),
+			 zlim=range(data.z),
+                         asp=c(y=1,z=1),
+			 xlab=deparse(substitute(x)),
+			 ylab=deparse(substitute(y)),
+			 zlab=deparse(substitute(z)),
+			 alpha.surf=0.4,
+                         col.surf=fg,col.stem=c(fg,fg),
+                         col.pt="gray",type.surf="line",ptsize,
+                         lwd.stem=2,lit=TRUE,bg="white",fg="black",
+                         col.axes=fg,col.axlabs=fg,
+                         axis.arrow=TRUE,axis.labels=TRUE,
+                         box.col=bg,
+                         axes=c("lines","box")) {
+  axes <- match.arg(axes)
+  col.stem <- rep(col.stem,length=2)
+  x.ticks <- pretty(xlim)
+  x.ticks <- x.ticks[x.ticks>=min(xlim) & x.ticks<=max(xlim)]
+  x.ticklabs <- if (axis.labels) as.character(x.ticks) else NULL
+  y.ticks <- pretty(ylim)
+  y.ticks <- y.ticks[y.ticks>=min(ylim) & y.ticks<=max(ylim)]
+  y.ticklabs <- if (axis.labels) as.character(y.ticks) else NULL
+  z.ticks <- pretty(zlim)
+  z.ticks <- z.ticks[z.ticks>=min(zlim) & z.ticks<=max(zlim)]
+  z.ticklabs <- if (axis.labels) as.character(z.ticks) else NULL
+  if (!missing(surf.fun)) {
+    surf.x <- seq(xlim[1],xlim[2],length=surf.n)
+    surf.y <- seq(ylim[1],ylim[2],length=surf.n)
+    surf.z <- outer(surf.x,surf.y,surf.fun)  ## requires surf.fun be vectorized
+    z.interc <- surf.fun(data.x,data.y)
+    zdiff <- diff(range(c(surf.z,data.z)))
+  } else {
+    z.interc <- rep(min(data.z),length(data.x))
+    zdiff <- diff(range(data.z))
+  }
+  xdiff <- diff(xlim)
+  ydiff <- diff(ylim)
+  y.adj <- if (asp[1]<=0) 1 else asp[1]*xdiff/ydiff
+  data.y <- y.adj*data.y
+  y.ticks <- y.adj*y.ticks
+  ylim <- ylim*y.adj
+  ydiff <- diff(ylim)
+  z.adj <- if (asp[2]<=0) 1 else asp[2]*xdiff/zdiff
+  data.z <- z.adj*data.z
+  if (!missing(surf.fun)) {
+    surf.y <- y.adj*surf.y
+    surf.z <- z.adj*surf.z
+  }
+  z.interc <- z.adj*z.interc
+  z.ticks <- z.adj*z.ticks
+  zlim <- z.adj*zlim
+  open3d()
+  clear3d("all")
+  light3d()
+  bg3d(color=c(bg,fg))
+  if (!missing(surf.fun)) 
+    surface3d(surf.x,surf.y,surf.z,alpha=alpha.surf,
+                front=type.surf,back=type.surf,
+                col=col.surf,lit=lit)
+  if (missing(ptsize)) ptsize <- 0.02*xdiff
+  ## draw points
+  spheres3d(data.x,data.y,data.z,r=ptsize,lit=lit,color=col.pt)
+  ## draw lollipops
+  apply(cbind(data.x,data.y,data.z,z.interc),1,
+        function(X) {
+          lines3d(x=rep(X[1],2),
+                  y=rep(X[2],2),
+                  z=c(X[3],X[4]),
+                  col=ifelse(X[3]>X[4],col.stem[1],
+                    col.stem[2]),lwd=lwd.stem)
+        })
+  if (axes=="box") {
+    bbox3d(xat=x.ticks,xlab=x.ticklabs,
+             yat=y.ticks,ylab=y.ticklabs,
+             zat=z.ticks,zlab=z.ticklabs,lit=lit)
+  } else if (axes=="lines") { ## set up axis lines
+    axis3d(edge="x",at=x.ticks,labels=x.ticklabs,
+           col=col.axes,arrow=axis.arrow)
+    axis3d(edge="y",at=y.ticks,labels=y.ticklabs,
+           col=col.axes,arrow=axis.arrow)
+    axis3d(edge="z",at=z.ticks,labels=z.ticklabs,
+           col=col.axes,arrow=axis.arrow)
+    box3d(col=col.axes)
+  }
+  decorate3d(xlab=xlab, ylab=ylab, zlab=zlab, box=FALSE, axes=FALSE, col=col.axlabs)
+}
+
+x <- 1:5
+y <- x*10
+z <- (x+y)/20
+open3d()
+spheres3d(x,y,z)
+axes3d()
+set.seed(1001)
+x <- runif(30)
+y <- runif(30,max=2)
+dfun <- function(x,y)  2*x+3*y+2*x*y+3*y^2 
+z <- dfun(x,y)+rnorm(30,sd=0.5)
+## lollipops only
+lollipop3d(x,y,z)
+
+## lollipops plus theoretical surface
+
+open3d()
+lollipop3d(x,y,z,dfun,col.pt="red",col.stem=c("red","blue"))
+
+## lollipops plus regression fit
+
+linmodel <- lm(z~x+y)
+dfun <- function(x,y) predict(linmodel,newdata=data.frame(x=x,y=y))
+open3d()
+lollipop3d(x,y,z,dfun,col.pt="red",col.stem=c("red","blue"))
+
+####
+```

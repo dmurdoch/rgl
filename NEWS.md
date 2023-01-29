@@ -1,4 +1,4 @@
-# rgl 1.0.6
+# rgl 1.0.7
 
 ## Major changes
 
@@ -10,6 +10,8 @@ to control how textures are applied.  The default is now
 `"replace"`; previously the property was fixed at
 `"modulate"`.  The change means that surfaces no longer
 need to be set to white to display textures.
+* Many of the demos have been moved to a new vignette called 
+`demos`.
 
 ## Bug fixes
 
@@ -20,6 +22,9 @@ functions did not handle indices
 in the objects they were processing (issue #293).
 * Transparent planes were not always drawn properly
 in WebGL (issue #300).
+* `view3d()` now returns a `lowlevel()` result so that 
+it will be handled properly in WebGL vignettes with 
+auto printing.
 
 # rgl 1.0.1
 

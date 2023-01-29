@@ -26,7 +26,7 @@ par3d <- function(..., no.readonly = FALSE, dev = cur3d(), subscene = currentSub
     if (is.null(names(args)) && all(unlist(lapply(args, is.character))))
       args <- as.list(unlist(args))
     if (length(args) == 1) {
-      if (is.list(args[[1]]) | is.null(args[[1]]))
+      if (is.list(args[[1]]) || is.null(args[[1]]))
         args <- args[[1]]
       else
         if(is.null(names(args)))

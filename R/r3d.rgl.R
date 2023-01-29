@@ -315,6 +315,7 @@ view3d      <- function(theta = 0.0, phi = 15.0,
   
   if (! ret$success)
     stop("'rgl_viewpoint' failed")
+  lowlevel()
 }
 
 bbox3d	    <- function(xat = NULL, 

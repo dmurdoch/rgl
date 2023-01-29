@@ -1,13 +1,5 @@
-# all rgl demos
-demo(hist3d)
-demo(abundance)
-demo(lsystem)
-demo(subdivision)
-# requires MASS package
-demo(bivar)
-demo(envmap)
+# all rgl interactive demos
 demo(flag)
-demo(lollipop3d)
 demo(mouseCallbacks)
 demo(shapes3d)
 demo(shinyDemo)
