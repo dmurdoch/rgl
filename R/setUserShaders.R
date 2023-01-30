@@ -49,6 +49,14 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
     textype <- obj$material$textype
     if (is.null(textype))
       textype <- scene$material$textype
+    
+    texmode <- obj$material$texmode
+    if (is.null(texmode))
+      texmode <- scene$material$texmode
+    
+    texenvmap <- obj$material$texenvmap
+    if (is.null(texenvmap))
+      texenvmap <- scene$material$texenvmap
   
     nclipplanes <- 0
     nlights <- 0
@@ -64,7 +72,9 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
   }
   
   defines <- ctx$eval(subst(
-    'rglwidgetClass.getDefines(%id%, "%type%", %flags%, %nclipplanes%, %nlights%, %normals%, %pointSize%, "%textype%", %antialias%)', 
+    'rglwidgetClass.getDefines(%id%, "%type%", %flags%,
+      %nclipplanes%, %nlights%, %normals%, %pointSize%,
+      "%textype%", "%texmode%", %texenvmap%, %antialias%)', 
     id = id, 
     type = obj$type, 
     flags = obj$flags, 
@@ -72,7 +82,9 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
     nlights = nlights, 
     normals = if (is.null(obj$normals)) "undefined" else 1,
     pointSize = pointSize,
-    textype = textype, 
+    textype = textype,
+    texmode = texmode,
+    texenvmap = texenvmap,
     antialias = tolower(antialias)
   ))
   

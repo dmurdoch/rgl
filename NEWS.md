@@ -1,4 +1,4 @@
-# rgl 1.0.8
+# rgl 1.0.9
 
 ## Major changes
 
@@ -12,6 +12,11 @@ to control how textures are applied.  The default is now
 need to be set to white to display textures.
 * Many of the demos have been moved to a new vignette called 
 `demos`.
+
+## Minor changes
+
+* The `texenvmap = TRUE` material property is now supported
+in WebGL.
 
 ## Bug fixes
 

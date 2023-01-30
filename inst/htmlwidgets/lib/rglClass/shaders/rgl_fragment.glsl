@@ -55,6 +55,10 @@ varying vec2 vPoint;
 varying float vLength;
 #endif
 
+#ifdef USE_ENVMAP
+varying vec3 vReflection;
+#endif
+
 void main(void) {
   vec4 fragColor;
 #ifdef FAT_LINES
@@ -88,7 +92,7 @@ void main(void) {
 #ifdef IS_TWOSIDED
     if ((normz <= 0.) != front) discard;
 #endif
-    
+
 #ifdef IS_LIT
     vec3 eye = normalize(-vPosition.xyz/vPosition.w);
     vec3 lightdir;
@@ -135,7 +139,12 @@ void main(void) {
 // These calculations use the definitions from 
 // https://docs.gl/gl3/glTexEnv
 
+#ifdef USE_ENVMAP
+    float m = 2.0 * sqrt(dot(vReflection, vReflection) + 2.0*vReflection.z + 1.0);
+    vec4 textureColor = texture2D(uSampler, vReflection.xy / m + vec2(0.5, 0.5));
+#else
     vec4 textureColor = texture2D(uSampler, vTexcoord);
+#endif
 
 #ifdef TEXTURE_rgb
 

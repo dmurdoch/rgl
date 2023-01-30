@@ -1102,7 +1102,6 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
                                (bool*) (idata + 7),
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
-                               (bool*) (idata + 20),
                                static_cast<int>(strlen(cdata[1])),
                                cdata[1] );
   } else {
@@ -1110,7 +1109,6 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
     idata[7] = mat->mipmap ? 1 : 0; 
     idata[8] = mat->minfilter; 
     idata[9] = mat->magfilter; 
-    idata[20] = mat->envmap ? 1 : 0; 
     cdata[0][0] = '\0';
     cdata[1][0] = '\0';
   }
@@ -1123,6 +1121,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[17] = (int) mat->emission.getRedub();
   idata[18] = (int) mat->emission.getGreenub();
   idata[19] = (int) mat->emission.getBlueub();
+  idata[20] = mat->envmap ? 1 : 0; 
   idata[21] = mat->point_antialias ? 1 : 0;
   idata[22] = mat->line_antialias ? 1 : 0;
   idata[23] = mat->depth_mask ? 1 : 0;
