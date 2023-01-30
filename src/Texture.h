@@ -37,7 +37,7 @@ public:
   bool is_envmap() const { return envmap; }
   bool hasAlpha() const { return (type == ALPHA || type == LUMINANCE_ALPHA || type == RGBA ); }
   void getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, unsigned int *out_minfilter, 
-                     unsigned int *out_magfilter, bool *out_envmap, int bufsize, char *out_filename) ;
+                     unsigned int *out_magfilter, int bufsize, char *out_filename) ;
   Pixmap* getPixmap() const { return pixmap; }
 private:
   void init(RenderContext* renderContext);

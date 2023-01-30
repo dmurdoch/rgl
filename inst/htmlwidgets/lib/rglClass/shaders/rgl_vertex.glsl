@@ -54,11 +54,14 @@ uniform float uAspect;
 uniform float uLwd;
 #endif
 
+#ifdef USE_ENVMAP
+varying vec3 vReflection;
+#endif
 
 void main(void) {
   
 #ifndef IS_BRUSH
-#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
+#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG) || defined(USE_ENVMAP)
   vPosition = mvMatrix * vec4(aPos, 1.);
 #endif
   
@@ -73,8 +76,15 @@ void main(void) {
   
   vCol = aCol;
   
+// USE_ENVMAP implies NEEDS_VNORMAL
+
 #ifdef NEEDS_VNORMAL
   vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
+#endif
+
+#ifdef USE_ENVMAP
+  vReflection = normalize(reflect(vPosition.xyz/vPosition.w, 
+                        normalize(vNormal.xyz/vNormal.w)));
 #endif
   
 #ifdef IS_TWOSIDED

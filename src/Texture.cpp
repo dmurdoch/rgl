@@ -92,7 +92,7 @@ bool Texture::isValid() const
 
 void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, 
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
-                            bool *out_envmap, int buflen, char *out_filename)
+                            int buflen, char *out_filename)
 {
   *out_type = type;
   *out_mode = mode;
@@ -121,7 +121,6 @@ void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap,
         break;
   }
   *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
-  *out_envmap = envmap;
   strncpy(out_filename, filename, buflen);
 }
 
