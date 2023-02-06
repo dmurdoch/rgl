@@ -12,6 +12,7 @@
 #include <X11/keysym.h>
 #include <cstdio>
 #include <Rinternals.h>
+#include "glad/gl.h"
 #include "x11gui.h"
 #include "lib.h"
 #include "R.h"
@@ -62,6 +63,7 @@ private:
   ::GLXContext   glxctx;
   friend class X11GUIFactory;
   XVisualInfo* xvisualinfo;
+  int gl_version;
 };
 
 } // namespace rgl
@@ -359,6 +361,29 @@ static int X11SaveErr(Display *dsp, XErrorEvent *event)
 void X11WindowImpl::initGL()
 {  
   glxctx = glXCreateContext(factory->xdisplay, xvisualinfo, NULL, True);
+  if (glxctx) {
+    int gl_version = gladLoaderLoadGL();
+    if (gl_version) {
+      GLenum error_code;
+      Rprintf("loaded gl version %d.%d\n", GLAD_VERSION_MAJOR(gl_version), GLAD_VERSION_MINOR(gl_version));
+      /* clear old errors */
+      while ((error_code = glGetError())) { 
+        switch(error_code) {
+        case GL_INVALID_ENUM: Rprintf("cleared GL_INVALID_ENUM\n"); break;
+        case GL_INVALID_VALUE:Rprintf("cleared GL_INVALID_VALUE\n"); break;
+        case GL_INVALID_OPERATION:Rprintf("cleared GL_INVALID_OPERATION\n"); break;
+        case GL_STACK_OVERFLOW:Rprintf("cleared GL_STACK_OVERFLOW\n"); break;
+        case GL_STACK_UNDERFLOW:Rprintf("cleared GL_STACK_UNDERFLOW\n"); break;
+        default: Rprintf("cleared GL error %d\n", error_code);
+        };
+      };
+      
+      fonts[0] = initGLFont();
+    } else {
+      Rprintf("Unable to load GL");
+      shutdownGL();
+    }
+  }
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::shutdownGL()
@@ -440,8 +465,6 @@ GLBitmapFont* X11WindowImpl::initGLFont()
 void X11WindowImpl::on_init()
 {
   initGL();
-  if (glxctx)
-    fonts[0] = initGLFont();
 }
 
 void X11WindowImpl::on_shutdown()
@@ -641,18 +664,6 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   
 /* These codes are only used in debugging, they are never displayed. */
 #define RGL_ERROR_CODE (LastExtensionError + 1000)
-
-  /* clear old errors */
-  while ((error_code = glGetError())) { 
-    switch(error_code) {
-      case GL_INVALID_ENUM: Rprintf("cleared GL_INVALID_ENUM\n"); break;
-      case GL_INVALID_VALUE:Rprintf("cleared GL_INVALID_VALUE\n"); break;
-      case GL_INVALID_OPERATION:Rprintf("cleared GL_INVALID_OPERATION\n"); break;
-      case GL_STACK_OVERFLOW:Rprintf("cleared GL_STACK_OVERFLOW\n"); break;
-      case GL_STACK_UNDERFLOW:Rprintf("cleared GL_STACK_UNDERFLOW\n"); break;
-      default: Rprintf("cleared GL error %d\n", error_code);
-    };
-  };
 
   /* Catch protocol errors and convert to R errors */
   error_code = 0;

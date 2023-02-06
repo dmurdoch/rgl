@@ -1,6 +1,6 @@
 #include "gl2ps.h"
-#include "Material.h"
 #include "opengl.h"
+#include "Material.h"
 #include "Texture.h"
 #include "R.h"
 

@@ -1,6 +1,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include "opengl.h"
+
 #include "pixmap.h"
 #include "types.h"
 
@@ -13,8 +15,6 @@ namespace rgl {
 
 class RenderContext;
 class Pixmap;
-
-#include "opengl.h"
 
 class Texture : public AutoDestroy
 {
