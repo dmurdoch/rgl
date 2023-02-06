@@ -12,6 +12,8 @@
 #include <X11/keysym.h>
 #include <cstdio>
 #include <Rinternals.h>
+#include "glad/gl.h"
+#include "glad/glx.h"
 #include "x11gui.h"
 #include "lib.h"
 #include "R.h"
@@ -440,8 +442,14 @@ GLBitmapFont* X11WindowImpl::initGLFont()
 void X11WindowImpl::on_init()
 {
   initGL();
-  if (glxctx)
-    fonts[0] = initGLFont();
+  if (glxctx) {
+    int version = gladLoaderLoadGL();
+    if (version) {
+      Rprintf("loaded gl version %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+      fonts[0] = initGLFont();
+    } else
+      Rprintf("Unable to load GL");
+  }
 }
 
 void X11WindowImpl::on_shutdown()
@@ -504,6 +512,13 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   if (xdisplay == 0) {
     throw_error("unable to open X11 display"); return;
   }
+  
+  glx_version = gladLoaderLoadGLX(xdisplay, DefaultScreen(xdisplay));
+  if (!glx_version) {
+    Rprintf("Unable to load GLX.\n");
+    return;
+  } else 
+    Rprintf("loaded glx version %d.%d\n", GLAD_VERSION_MAJOR(glx_version), GLAD_VERSION_MINOR(glx_version));
 /*  XSynchronize(xdisplay, True); */
 
   // Load System font
@@ -608,6 +623,9 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   X11WindowImpl* impl = NULL;
   XVisualInfo* xvisualinfo;
 
+  if (!glx_version)
+    return impl;
+  
   // Choose GLX visual
   
   static int attribList[] =

@@ -3,11 +3,13 @@
 
 #include <vector>
 
+
+#include "opengl.h"
+
 #include "SceneNode.h"
 #include "Material.h"
 #include "RenderContext.h"
 
-#include "opengl.h"
 #include "geom.h"
 
 namespace rgl {

@@ -1,13 +1,14 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+
+#include "opengl.h"
+
 #include "SceneNode.h"
 
 #include "rglmath.h"
 #include "Color.h"
 #include "RenderContext.h"
-
-#include "opengl.h"
 
 namespace rgl {
 

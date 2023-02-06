@@ -6,6 +6,7 @@
 //
 // ---------------------------------------------------------------------------
 #include <X11/Xlib.h>
+#include "opengl.h"
 #include <GL/glx.h>
 #include <map>
 #include "gui.h"
@@ -52,6 +53,8 @@ public:
   
   void throw_error(const char* string);
 private:
+  
+  int glx_version;
 
   void connect(const char* displayname);
   void disconnect();

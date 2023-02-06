@@ -1,9 +1,8 @@
 #include "SphereMesh.h"
 #include "subscene.h"
 
-#include "opengl.h"
 #include <map>
-
+#include "opengl.h"
 using namespace rgl;
 using namespace std;
 
