@@ -149,6 +149,11 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     result["is_twosided"] <- (type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
       length(unique(c(mat$front, mat$back))) > 1) ||
       (type == "background" && obj$sphere)
+    if (result["is_twosided"] && !is.null(obj$indices)
+        && is.null(obj$normals)) {
+      warning("Object ", obj$id, " is two-sided and indexed.  It requires normals.")
+      result["is_twosided"] <- FALSE
+    }
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
     result["rotating"] <- isTRUE(obj$rotating)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
