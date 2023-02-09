@@ -910,7 +910,7 @@
       	f = fnew = obj.f[pass];
         pmode = obj.pmode[pass];
       	if (pmode === "culled")
-      	  f = [];
+      	  fnew = [];
         else if (pmode === "points") {
           // stay with default
         } else if ((type === "quads" || type === "text" ||
