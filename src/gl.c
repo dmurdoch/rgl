@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glad/gl.h>
+#include "R.h"
 
 #ifndef GLAD_IMPL_UTIL_C_
 #define GLAD_IMPL_UTIL_C_
@@ -1453,8 +1454,11 @@ static void* glad_gl_dlopen_handle(void) {
   #endif
         "libGL.so.1",
         "libGL.so",
-        "libGL.1.dylib",
-        "libGL.dylib"
+        /* Add the Mac locations */
+        "../Frameworks/OpenGL.framework/OpenGL",
+        "/Library/Frameworks/OpenGL.framework/OpenGL",
+        "/System/Library/Frameworks/OpenGL.framework/OpenGL",
+        "/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL"
     };
 #endif
 
@@ -1477,8 +1481,13 @@ static struct _glad_gl_userptr glad_gl_build_userptr(void *handle) {
 #else
     userptr.gl_get_proc_address_ptr =
         (GLADglprocaddrfunc) glad_dlsym_handle(handle, "glXGetProcAddressARB");
+    if (!userptr.gl_get_proc_address_ptr)
+      userptr.gl_get_proc_address_ptr =
+        (GLADglprocaddrfunc) glad_dlsym_handle(handle, "glXGetProcAddress");
 #endif
-
+    Rprintf("userptr.handle = %p\n", userptr.handle);
+    Rprintf("userptr.gl_get_proc_address_ptr = %p\n",
+            userptr.gl_get_proc_address_ptr);
     return userptr;
 }
 
@@ -1490,6 +1499,7 @@ int gladLoaderLoadGL(void) {
 
     did_load = _glad_GL_loader_handle == NULL;
     handle = glad_gl_dlopen_handle();
+    Rprintf("handle = %p\n", handle);
     if (handle) {
         userptr = glad_gl_build_userptr(handle);
 
