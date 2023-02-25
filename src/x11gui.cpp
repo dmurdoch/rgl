@@ -362,9 +362,9 @@ void X11WindowImpl::initGL()
 {  
   glxctx = glXCreateContext(factory->xdisplay, xvisualinfo, NULL, True);
   if (glxctx) {
+    GLenum error_code;
     int gl_version = gladLoaderLoadGL();
     if (gl_version) {
-      GLenum error_code;
       Rprintf("loaded gl version %d.%d\n", GLAD_VERSION_MAJOR(gl_version), GLAD_VERSION_MINOR(gl_version));
       /* clear old errors */
       while ((error_code = glGetError())) { 
@@ -380,7 +380,11 @@ void X11WindowImpl::initGL()
       
       fonts[0] = initGLFont();
     } else {
-      Rprintf("Unable to load GL");
+      if (glGetError)
+        error_code = glGetError();
+      else
+        error_code = 9999;
+      Rprintf("Unable to load GL, error_code=%d\n", error_code);
       shutdownGL();
     }
   }
