@@ -72,11 +72,11 @@ extern "C" {
 #endif
 
 #ifndef GLAD_PLATFORM_APPLE
-//  #ifdef __APPLE__
-//    #define GLAD_PLATFORM_APPLE 1
-//  #else
+  #ifdef __APPLE__
+    #define GLAD_PLATFORM_APPLE 1
+  #else
     #define GLAD_PLATFORM_APPLE 0
-//  #endif
+  #endif
 #endif
 
 #ifndef GLAD_PLATFORM_EMSCRIPTEN

@@ -362,30 +362,29 @@ void X11WindowImpl::initGL()
 {  
   glxctx = glXCreateContext(factory->xdisplay, xvisualinfo, NULL, True);
   if (glxctx) {
-    GLenum error_code;
-    int gl_version = gladLoaderLoadGL();
-    if (gl_version) {
-      Rprintf("loaded gl version %d.%d\n", GLAD_VERSION_MAJOR(gl_version), GLAD_VERSION_MINOR(gl_version));
-      /* clear old errors */
-      while ((error_code = glGetError())) { 
-        switch(error_code) {
-        case GL_INVALID_ENUM: Rprintf("cleared GL_INVALID_ENUM\n"); break;
-        case GL_INVALID_VALUE:Rprintf("cleared GL_INVALID_VALUE\n"); break;
-        case GL_INVALID_OPERATION:Rprintf("cleared GL_INVALID_OPERATION\n"); break;
-        case GL_STACK_OVERFLOW:Rprintf("cleared GL_STACK_OVERFLOW\n"); break;
-        case GL_STACK_UNDERFLOW:Rprintf("cleared GL_STACK_UNDERFLOW\n"); break;
-        default: Rprintf("cleared GL error %d\n", error_code);
+    if (glXMakeCurrent(factory->xdisplay, xwindow, glxctx) == True) {
+      int gl_version = gladLoadGL((GLADloadfunc)glXGetProcAddressARB);
+      if (gl_version) {
+        GLenum error_code;
+        // Rprintf("loaded gl version %d.%d\n", GLAD_VERSION_MAJOR(gl_version), GLAD_VERSION_MINOR(gl_version));
+        /* clear old errors */
+        while ((error_code = glGetError())) { 
+          switch(error_code) {
+          case GL_INVALID_ENUM: Rprintf("cleared GL_INVALID_ENUM\n"); break;
+          case GL_INVALID_VALUE:Rprintf("cleared GL_INVALID_VALUE\n"); break;
+          case GL_INVALID_OPERATION:Rprintf("cleared GL_INVALID_OPERATION\n"); break;
+          case GL_STACK_OVERFLOW:Rprintf("cleared GL_STACK_OVERFLOW\n"); break;
+          case GL_STACK_UNDERFLOW:Rprintf("cleared GL_STACK_UNDERFLOW\n"); break;
+          default: Rprintf("cleared GL error %d\n", error_code);
+          };
         };
-      };
-      
-      fonts[0] = initGLFont();
-    } else {
-      if (glGetError)
-        error_code = glGetError();
-      else
-        error_code = 9999;
-      Rprintf("Unable to load GL, error_code=%d\n", error_code);
-      shutdownGL();
+        
+        fonts[0] = initGLFont();
+      } else {
+        Rprintf("Unable to load GL");
+        shutdownGL();
+      }
+      glXMakeCurrent(factory->xdisplay, None, NULL);
     }
   }
 }

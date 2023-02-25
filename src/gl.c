@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glad/gl.h>
-#include "R.h"
 
 #ifndef GLAD_IMPL_UTIL_C_
 #define GLAD_IMPL_UTIL_C_
@@ -1317,11 +1316,9 @@ int gladLoadGLUserPtr( GLADuserptrloadfunc load, void *userptr) {
     int version;
 
     glad_glGetString = (PFNGLGETSTRINGPROC) load(userptr, "glGetString");
-    Rprintf("glGetString = %p\n", glad_glGetString);
     
     if(glad_glGetString == NULL) return 0;
     
-    Rprintf("glad_glGetString(GL_VERSION) = %p\n", glad_glGetString(GL_VERSION));
     if(glad_glGetString(GL_VERSION) == NULL) return 0;
     version = glad_gl_find_core_gl();
 
@@ -1456,10 +1453,10 @@ static void* glad_gl_dlopen_handle(void) {
   #if defined(__CYGWIN__)
         "libGL-1.so",
   #endif
-        /* Add the Mac locations */
-        "/usr/local/opt/mesa/lib/libGL.1.dylib",        
         "libGL.so.1",
-        "libGL.so"
+        "libGL.so",
+        "libGL.1.dylib",
+        "libGL.dylib"
     };
 #endif
 
@@ -1475,25 +1472,15 @@ static struct _glad_gl_userptr glad_gl_build_userptr(void *handle) {
 
     userptr.handle = handle;
 #if GLAD_PLATFORM_APPLE || defined(__HAIKU__)
-    Rprintf("GLAD_PLATFORM_APPLE\n");
     userptr.gl_get_proc_address_ptr = NULL;
 #elif GLAD_PLATFORM_WIN32
-    Rprintf("GLAD_PLATFORM_WIN32\n");
     userptr.gl_get_proc_address_ptr =
         (GLADglprocaddrfunc) glad_dlsym_handle(handle, "wglGetProcAddress");
 #else
-    Rprintf("Trying glXGetProcAddressARB\n");
     userptr.gl_get_proc_address_ptr =
         (GLADglprocaddrfunc) glad_dlsym_handle(handle, "glXGetProcAddressARB");
-    if (!userptr.gl_get_proc_address_ptr) {
-      Rprintf("trying glXGetProcAddress\n");
-      userptr.gl_get_proc_address_ptr =
-        (GLADglprocaddrfunc) glad_dlsym_handle(handle, "glXGetProcAddress");
-    }
 #endif
-    Rprintf("userptr.handle = %p\n", userptr.handle);
-    Rprintf("userptr.gl_get_proc_address_ptr = %p\n",
-            userptr.gl_get_proc_address_ptr);
+
     return userptr;
 }
 
@@ -1505,7 +1492,6 @@ int gladLoaderLoadGL(void) {
 
     did_load = _glad_GL_loader_handle == NULL;
     handle = glad_gl_dlopen_handle();
-    Rprintf("handle = %p\n", handle);
     if (handle) {
         userptr = glad_gl_build_userptr(handle);
 
