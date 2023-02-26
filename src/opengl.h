@@ -8,16 +8,17 @@
 #include "OpenGL/gl.h"
 
 #else
+
+// Use glad 
+#include <glad/gl.h>
+
 #ifdef RGL_W32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
 #include <GL/wglext.h>
 #else
-
-// Use glad 
-#include <glad/gl.h>
 
 // ---------------------------------------------------------------------------
 // Using OpenGL and GLU
