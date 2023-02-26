@@ -340,15 +340,9 @@ bool Win32WindowImpl::initGL () {
       // make that match the device context's current pixel format
       SetPixelFormat(dcHandle, iPixelFormat, &pfd);
       // create GL context
-      if ( ( glrcHandle = wglCreateContext( dcHandle ) ) ) {
-        if (wglMakeCurrent(dcHandle, glrcHandle)) {
-          if (gladLoadGL((GLADloadfunc)wglGetProcAddress)) {
-            success = true;
-          } else
-            printMessage("unable to load GL");
-          wglMakeCurrent(NULL, NULL);
-        }
-      } else
+      if ( ( glrcHandle = wglCreateContext( dcHandle ) ) )
+          success = true;
+      else
         printMessage("wglCreateContext failed");
     }
     else

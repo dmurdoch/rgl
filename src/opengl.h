@@ -8,28 +8,31 @@
 #include "OpenGL/gl.h"
 
 #else
-// Use glad 
-#include <glad/gl.h>
-// ---------------------------------------------------------------------------
-// Using OpenGL and GLU
-// ---------------------------------------------------------------------------
-#ifdef RGL_OSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#endif
-// ---------------------------------------------------------------------------
 #ifdef RGL_W32
 #include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
 #include <GL/wglext.h>
+#else
+
+// Use glad 
+#include <glad/gl.h>
+
+// ---------------------------------------------------------------------------
+// Using OpenGL and GLU
+// ---------------------------------------------------------------------------
+#ifdef RGL_OSX
+#include <OpenGL/glu.h>
 #endif
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
 #ifdef RGL_X11
-#include <GL/gl.h>
 #include <GL/glu.h>
 #endif
+
+#endif // not RGL_W32
 
 #endif // RGL_NO_OPENGL
 // ---------------------------------------------------------------------------

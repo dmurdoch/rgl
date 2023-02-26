@@ -1,3 +1,5 @@
+#ifndef RGL_W32
+
 /**
  * SPDX-License-Identifier: (WTFPL OR CC0-1.0) AND Apache-2.0
  */
@@ -1519,3 +1521,5 @@ void gladLoaderUnloadGL(void) {
 #ifdef __cplusplus
 }
 #endif
+
+#endif // not RGL_W32
