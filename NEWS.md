@@ -1,4 +1,4 @@
-# rgl 1.0.9
+# rgl 1.0.11
 
 ## Major changes
 
@@ -12,6 +12,8 @@ to control how textures are applied.  The default is now
 need to be set to white to display textures.
 * Many of the demos have been moved to a new vignette called 
 `demos`.
+* `rgl` now uses the `glad` loader which will eventually allow
+access to newer OpenGL functions in systems that support them.
 
 ## Minor changes
 
