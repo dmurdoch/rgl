@@ -1,7 +1,7 @@
 url: https://dmurdoch.github.io/rgl/dev/
 development:
   mode: devel
-authors: 
+authors:
   Duncan Murdoch:
     href: https://github.com/dmurdoch
   Daniel Adler:
@@ -15,15 +15,22 @@ template:
   assets: inst/htmlwidgets/lib/rglClass/.JSDoc
 navbar:
   structure:
-    left:  [home, intro, reference, javascript, articles, tutorials, news]
-    right: [github]
+    left:
+    - home
+    - intro
+    - reference
+    - javascript
+    - articles
+    - tutorials
+    - news
+    right: github
   components:
     javascript:
       text: Javascript
       href: rglClass/index.html
 reference:
 - title: High level functions
-  desc:  Generic functions for plotting points or surfaces.  
+  desc: Generic functions for plotting points or surfaces.
 - contents:
   - plot3d
   - persp3d
@@ -57,7 +64,7 @@ reference:
   - pch3d
   - plotmath3d
   - rgl.texts
-- subtitle:  Axes and "decorations"
+- subtitle: Axes and "decorations"
 - contents:
   - axes3d
   - box3d
@@ -217,7 +224,7 @@ reference:
   - tkrgl
   - tkspin3d
   - tkspinControl
-  - tkpar3dsave  
+  - tkpar3dsave
 - subtitle: Unclassifiable miscellany
 - contents:
   - pipe
@@ -248,3 +255,4 @@ reference:
 - contents:
   - elementId2Prefix
   - rgl.Sweave
+
