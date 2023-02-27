@@ -19,7 +19,7 @@ rgl.material0 <- function(
   smooth       = TRUE,
   texture      = NULL, 
   textype      = "rgb",
-  texmode      = "replace",
+  texmode      = "modulate",
   texmipmap    = FALSE, 
   texminfilter = "linear", 
   texmagfilter = "linear",

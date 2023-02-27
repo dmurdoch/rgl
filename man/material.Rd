@@ -116,8 +116,8 @@ of objects in an \pkg{rgl} scene.
     specifies how the texture interacts with the existing
     color
     \describe{
-      \item{"replace"}{default; texture value replaces existing value}
-      \item{"modulate"}{texture value multiplies existing value}
+      \item{"replace"}{texture value replaces existing value}
+      \item{"modulate"}{default; texture value multiplies existing value}
       \item{"decal"}{for \code{textype = "rgba"}, texture
       is mixed with existing value}
       \item{"blend"}{uses the texture to blend the existing
