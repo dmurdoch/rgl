@@ -6,10 +6,10 @@
 "hover hints":  labels next to points when the mouse 
 passes near them.
 * A new material property `"texmode"` has been added
-to control how textures are applied.  The default is now
-`"replace"`; previously the property was fixed at
-`"modulate"`.  The change means that surfaces no longer
-need to be set to white to display textures.
+to control how textures are applied.  The default is `"modulate"`,
+consistent with previous versions.  If set to `"replace"`,
+the texture is displayed without any lighting effects or dependence
+on the original color of the surface.
 * Many of the demos have been moved to a new vignette called 
 `demos`.
 
