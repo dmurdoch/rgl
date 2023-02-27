@@ -35,6 +35,11 @@ auto printing.
 * If `transform3d()` or `rotate3d()` changed the orientation
 of a `mesh3d` object with normals, the normals ended up
 with the wrong sign. (Reported by Stephane Laurent.)
+* `scene3d()` (and hence `rglwidget()`) did not save
+the normals for unlit objects.  When the objects were
+also indexed, this prevented proper calculation of 
+front and back.  This is fixed, and a warning is
+issued if normals are not provided when needed.
 
 # rgl 1.0.1
 
