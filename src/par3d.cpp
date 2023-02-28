@@ -317,11 +317,12 @@ static int getMaxClipPlanes(RGLView* rglview)
 static double getGlVersion()
 {
 #ifndef RGL_NO_OPENGL
-  const char* version = (const char*)glGetString(GL_VERSION);
-  if (version) return atof(version);
-  else 
+  if (glGetString) {
+    const char* version = (const char*)glGetString(GL_VERSION);
+    if (version) return atof(version);
+  } 
 #endif
-    return R_NaReal;
+  return R_NaReal;
 }
 
 static int activeSubscene(RGLView* rglview)
@@ -581,7 +582,7 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     PROTECT(value = allocVector(STRSXP, 5));
     for (i=0; i<5; i++) {
       getMouseMode(&i, &mode, sub); 
-      if (mode < 0 || mode > wmLAST) mode = 0;
+      if (mode < 0 || mode >= wmLAST) mode = 0;
       SET_STRING_ELT(value, i, mkChar(mouseModes[mode]));
     }
 

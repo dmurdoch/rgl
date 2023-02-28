@@ -65,7 +65,7 @@ function with optional argument `elementId`.  This allows later
 Javascript code to refer to the image.  We also 
 save the object ids from the plot, so that they
 can be manipulated later.  (The first example in [Controls](#controls) uses tags instead of saving the ids.)
-```{r eval=FALSE}
+```{r}
 library(rgl)
 plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
@@ -73,7 +73,7 @@ rglwidget(elementId = "plot3drgl")
 ```
 
 Next we insert a button to toggle the display of the data.
-```{r eval=FALSE}
+```{r}
 toggleWidget(sceneId = "plot3drgl", ids = plotids["data"], label = "Data")
 ```
 
@@ -82,7 +82,7 @@ in `rglwidget()`, the `ids` are the object ids of the
 objects that we'd like to toggle, and the `label` is the
 label shown on the button.  To find the names in the 
 `plotids` variable, apply `names()` or `unclass()`:
-```{r eval=FALSE}
+```{r}
 names(plotids)
 unclass(plotids)
 ```
@@ -101,7 +101,7 @@ operator `|>` should be usable in the same way.
 
 For example,
 
-```{r eval=FALSE}
+```{r}
 rglwidget() %>%
 toggleWidget(ids = plotids["data"], label = "Data")
 ```
@@ -116,7 +116,7 @@ toggleWidget(ids = plotids["data"], label = "Data")
 You can swap the order of button and scene; use the `magrittr` dot (or the `=>` syntax in base pipes)
 to pass the `toggleWidget` to `rglwidget` in the `controllers` argument:
 
-```{r eval = FALSE}
+```{r}
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
 rglwidget(controllers = .) 
 ```
