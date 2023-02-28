@@ -1,9 +1,8 @@
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
 
-#include "opengl.h"
-
 #include "Shape.h"
+#include "opengl.h"
 #include "PrimitiveSet.h"
 #include "SphereMesh.h"
 

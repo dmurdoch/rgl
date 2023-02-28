@@ -1,10 +1,7 @@
-
-
-
-#include "opengl.h"
 #include "Viewpoint.h"
 
 #include "subscene.h"
+#include "opengl.h"
 #include "R.h"
 
 using namespace rgl;

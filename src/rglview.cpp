@@ -8,8 +8,8 @@
 #include <locale>
 #endif
 #include <cstdio>
-#include "opengl.h"
 #include "rglview.h"
+#include "opengl.h"
 #include "lib.h"
 #include "rglmath.h"
 #include "pixmap.h"

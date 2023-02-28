@@ -12,7 +12,7 @@
 #include <X11/keysym.h>
 #include <cstdio>
 #include <Rinternals.h>
-#include "glad/gl.h"
+#include <glad/gl.h>
 #include "x11gui.h"
 #include "lib.h"
 #include "R.h"

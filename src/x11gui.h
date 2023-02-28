@@ -6,7 +6,6 @@
 //
 // ---------------------------------------------------------------------------
 #include <X11/Xlib.h>
-#include "opengl.h"
 #include <GL/glx.h>
 #include <map>
 #include "gui.h"

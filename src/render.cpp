@@ -1,9 +1,6 @@
-
-#
-
-#include "opengl.h"
 #include "render.h"
 
+#include "opengl.h"
 #include "R.h"
 
 using namespace rgl;

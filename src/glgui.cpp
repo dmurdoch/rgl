@@ -3,7 +3,6 @@
 //
 
 #include <cstdio>
-#include "opengl.h"
 #ifdef HAVE_FREETYPE
 #include "FTGL/ftgl.h"
 #include "R.h"
@@ -11,6 +10,7 @@
 #include "types.h"
 #include "glgui.h"
 #include "gl2ps.h"
+#include "opengl.h"
 #include "RenderContext.h"
 #include "subscene.h"
 #include "platform.h"

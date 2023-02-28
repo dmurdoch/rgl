@@ -1,4 +1,3 @@
-#include "opengl.h"
 #include "Color.h"
 #include "types.h"
 

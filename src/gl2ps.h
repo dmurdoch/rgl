@@ -41,8 +41,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "opengl.h"
-
 /* Define GL2PSDLL at compile time to build a Windows DLL */
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

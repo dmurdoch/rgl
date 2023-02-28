@@ -1,15 +1,13 @@
 #ifndef RENDERCONTEXT_H
 #define RENDERCONTEXT_H
 
-
-#include "opengl.h"
-
 namespace rgl {
 class Subscene;
 class GLFont;
 } // namespace rgl
 
 #include "rglmath.h"
+#include "opengl.h"
 
 namespace rgl {
 
