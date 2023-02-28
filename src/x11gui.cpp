@@ -9,10 +9,10 @@
 // #define RGL_X11_DEBUG
 
 // ---------------------------------------------------------------------------
+#include "opengl.h"
 #include <X11/keysym.h>
 #include <cstdio>
 #include <Rinternals.h>
-#include <glad/gl.h>
 #include "x11gui.h"
 #include "lib.h"
 #include "R.h"
@@ -63,7 +63,6 @@ private:
   ::GLXContext   glxctx;
   friend class X11GUIFactory;
   XVisualInfo* xvisualinfo;
-  int gl_version;
 };
 
 } // namespace rgl

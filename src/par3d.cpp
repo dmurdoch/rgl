@@ -317,7 +317,7 @@ static int getMaxClipPlanes(RGLView* rglview)
 static double getGlVersion()
 {
 #ifndef RGL_NO_OPENGL
-  if (glGetString) {
+  if (GLAD_GL_VERSION_1_0) {  /* Might not be loaded yet... */
     const char* version = (const char*)glGetString(GL_VERSION);
     if (version) return atof(version);
   } 

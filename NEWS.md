@@ -40,6 +40,10 @@ the normals for unlit objects.  When the objects were
 also indexed, this prevented proper calculation of 
 front and back.  This is fixed, and a warning is
 issued if normals are not provided when needed.
+* It was possible to call `glVersion` before OpenGL was
+initialized; this resulted in a segfault with the new
+`glad` loader, and may have been the cause of some older crashes
+as well.
 
 # rgl 1.0.1
 
