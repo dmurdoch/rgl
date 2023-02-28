@@ -2,8 +2,8 @@
 // This file is part of RGL.
 //
 
-#include "gl2ps.h"
 #include "scene.h"
+#include "gl2ps.h"
 #include "SpriteSet.h"
 #include "rglmath.h"
 #include "render.h"

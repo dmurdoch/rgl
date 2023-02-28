@@ -19,9 +19,7 @@
   // pre-Mavericks code
 #else
   // Mavericks and later  
-  
-#define MODERN_OPENGL
-  
+
 #define gluUnProject rgl_gluUnProject
 #define gluErrorString rgl_gluErrorString
   

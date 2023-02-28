@@ -340,13 +340,23 @@ bool Win32WindowImpl::initGL () {
       // make that match the device context's current pixel format
       SetPixelFormat(dcHandle, iPixelFormat, &pfd);
       // create GL context
-      if ( ( glrcHandle = wglCreateContext( dcHandle ) ) )
-          success = true;
-      else
+      if ( ( glrcHandle = wglCreateContext( dcHandle ) ) ) {
+        if (wglMakeCurrent(dcHandle, glrcHandle)) {
+          int version = gladLoaderLoadGL();
+          if (version)
+            success = true;
+          else
+            printMessage("gladLoadGL failed");
+          wglMakeCurrent(NULL, NULL);
+        } else
+          printMessage("wglMakeCurrent failed");
+      } else
         printMessage("wglCreateContext failed");
     }
     else
       printMessage("iPixelFormat == 0!");
+    
+    
     ReleaseDC(windowHandle,dcHandle);
   }
 
@@ -695,7 +705,7 @@ Win32GUIFactory::Win32GUIFactory()
     gDefWindowProc   = &DefWindowProc;
   if ( !Win32WindowImpl::registerClass() )
     error("window class registration failed");
-
+  
 #if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
   HANDLE saveHandle = gHandle;
   gHandle = NULL; /* call below fails for MDI windows */

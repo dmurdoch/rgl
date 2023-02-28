@@ -1,7 +1,7 @@
 CXX_STD = CXX11
 
 PKG_CPPFLAGS = \
-	-DHAVE_PNG_H -DHAVE_FREETYPE -Iext -Iext/ftgl \
+	-DHAVE_PNG_H -DHAVE_FREETYPE -Iext -Iext/ftgl -Iext/glad/include \
 	-I$(LOCAL_SOFT)/include/freetype2 \
 	-DRGL_W32
 

@@ -68,6 +68,7 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
   projMatrix.setIdentity(); 
   mouseListeners.push_back(this);
   for (int i=0; i<5; i++) {
+    mouseMode[i] = mmNONE;
     beginCallback[i] = NULL;
     updateCallback[i] = NULL;
     endCallback[i] = NULL;

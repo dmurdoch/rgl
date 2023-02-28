@@ -1,5 +1,5 @@
 Package: rgl
-Version: 1.0.10
+Version: 1.0.11
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -41,8 +41,8 @@ Description: Provides medium to high level functions for 3D interactive graphics
     may be on screen using OpenGL, or to various standard 3D file formats including
     WebGL, PLY, OBJ, STL as well as 2D image formats, including PNG, Postscript, SVG, PGF.
 License: GPL
-URL: https://github.com/dmurdoch/rgl, 
-     https://dmurdoch.github.io/rgl/
+URL: https://github.com/dmurdoch/rgl,
+    https://dmurdoch.github.io/rgl/
 SystemRequirements: OpenGL and GLU Library (Required for
     display in R.  See "Installing OpenGL support" in README.md.  
     Not needed if only browser displays using rglwidget() are wanted.),
