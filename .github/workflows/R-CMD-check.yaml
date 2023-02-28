@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release'}
+          - {os: windows-latest, r: 'release', rtools-version: '42'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
 
     env:
@@ -37,8 +37,10 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+          rtools-version: ${{ matrix.config.rtools-version }}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+      
         with:
           extra-packages: any::rcmdcheck
           needs: check
