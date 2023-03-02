@@ -1,4 +1,4 @@
-# rgl 1.0.11
+# rgl 1.0.13
 
 ## Major changes
 
@@ -44,6 +44,7 @@ issued if normals are not provided when needed.
 initialized; this resulted in a segfault with the new
 `glad` loader, and may have been the cause of some older crashes
 as well.
+* `readOBJ()` did not handle comments properly.
 
 # rgl 1.0.1
 

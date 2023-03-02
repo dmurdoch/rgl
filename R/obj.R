@@ -314,6 +314,7 @@ readOBJ <- function(con, ...) {
   lines <- readLines(con)
   lines <- sub("^[[:blank:]]*", "", lines)
   instrs <- sub("[[:blank:]].*", "", lines)
+  instrs <- sub("^#.*", "#", instrs)
   vertices <- read.table(textConnection(lines[instrs == "v"]),
                          col.names = c("instr", "x", "y", "z"),
                          colClasses = c(instr = "character", 
