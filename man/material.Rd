@@ -32,6 +32,7 @@
 \concept{tag}
 \concept{blend}
 \concept{isTransparent}
+\concept{rgl.warnBlackTexture}
 
 \title{Get or set material properties}
 \description{
@@ -100,7 +101,8 @@ of objects in an \pkg{rgl} scene.
     in WebGL.
   }
   \item{texture}{ 
-    path to a texture image file. Supported formats: png.
+    path to a texture image file. See the Textures section
+    below for details.
   }
   \item{textype}{
     specifies what is defined with the pixmap
@@ -251,6 +253,26 @@ invisibly in a named list.  When querying multiple values, a
 named list is returned. When a single value is queried it is
 returned directly.
 } 
+\section{Textures}{
+The \code{texture} material property may be \code{NULL} or the name of
+a bitmap file to be displayed on the surface being rendered.
+Currently only PNG format files are supported.
+
+By default, the colors in the bitmap will modify the color of the
+object being plotted.  If the color is black (a common default), you
+won't see anything, so a warning may be issued.  You can
+suppress the warning by specifying 
+the color explicitly, or calling
+\code{options{rgl.warnBlackTexture = FALSE}}.
+
+Other aspects of texture display are controlled by the material
+properties \code{textype, texmode, texmipmap, texmagfilter,
+texminfilter} and \code{texenvmap} described above.
+
+For an extensive discussion of textures, see the \href{../articles/rgl.html#textures}{Textures} section of the 
+\href{../articles/rgl.html}{rgl Overview}
+vignette.
+}
 \section{Display of objects}{
   
   Object display colors are determined as follows:
