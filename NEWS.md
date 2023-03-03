@@ -1,4 +1,4 @@
-# rgl 1.0.13
+# rgl 1.0.14
 
 ## Major changes
 
@@ -45,6 +45,9 @@ initialized; this resulted in a segfault with the new
 `glad` loader, and may have been the cause of some older crashes
 as well.
 * `readOBJ()` did not handle comments properly.
+* Sprites consisting only of line segments (as used
+for example by `pch3d()`) caused rendering to fail in
+`rglwidget()` (issue #316).
 
 # rgl 1.0.1
 

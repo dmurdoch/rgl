@@ -25,7 +25,8 @@
       f.is_points = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_points);
       f.is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent);
       f.is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided);
-      f.needs_vnormal = (f.is_lit && !f.fixed_quads && !f.is_brush) || (f.is_twosided && f.has_normals);
+      f.needs_vnormal = !rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d) &&
+        (f.is_lit && !f.fixed_quads && !f.is_brush) || (f.is_twosided && f.has_normals);
       f.rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating);
       f.round_points = round_points;
       return f;
