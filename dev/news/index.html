@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.13</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.14</span>
       </span>
     </div>
 
@@ -76,9 +76,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.0.13" id="rgl-1013">rgl 1.0.13<a class="anchor" aria-label="anchor" href="#rgl-1013"></a></h2>
+<h2 class="page-header" data-toc-text="1.0.14" id="rgl-1014">rgl 1.0.14<a class="anchor" aria-label="anchor" href="#rgl-1014"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-1-0-13">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0-13"></a></h3>
+<h3 id="major-changes-1-0-14">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0-14"></a></h3>
 <ul><li>A new function <code><a href="../reference/hover3d.html">hover3d()</a></code> has been added to display “hover hints”: labels next to points when the mouse passes near them.</li>
 <li>A new material property <code>"texmode"</code> has been added to control how textures are applied. The default is <code>"modulate"</code>, consistent with previous versions. If set to <code>"replace"</code>, the texture is displayed without any lighting effects or dependence on the original color of the surface.</li>
 <li>Many of the demos have been moved to a new vignette called <code>demos</code>.</li>
@@ -86,11 +86,11 @@
 <code>rgl</code> now uses the <code>glad</code> loader which will eventually allow access to newer OpenGL functions in systems that support them.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-changes-1-0-13">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-0-13"></a></h3>
+<h3 id="minor-changes-1-0-14">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-0-14"></a></h3>
 <ul><li>The <code>texenvmap = TRUE</code> material property is now supported in WebGL.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-0-13">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-13"></a></h3>
+<h3 id="bug-fixes-1-0-14">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-14"></a></h3>
 <ul><li>The <code><a href="../reference/as.mesh3d.rglId.html">as.mesh3d.rglId()</a></code> and <code><a href="../reference/as.triangles3d.html">as.triangles3d.rglId()</a></code> methods and the <code><a href="../reference/selectpoints3d.html">selectpoints3d()</a></code>, <code><a href="../reference/writeOBJ.html">writeOBJ()</a></code>, <code><a href="../reference/writePLY.html">writePLY()</a></code> and <code><a href="../reference/readSTL.html">writeSTL()</a></code> functions did not handle indices in the objects they were processing (issue <a href="https://github.com/dmurdoch/rgl/issues/293" class="external-link">#293</a>).</li>
 <li>Transparent planes were not always drawn properly in WebGL (issue <a href="https://github.com/dmurdoch/rgl/issues/300" class="external-link">#300</a>).</li>
 <li>
@@ -101,6 +101,7 @@
 <li>It was possible to call <code>glVersion</code> before OpenGL was initialized; this resulted in a segfault with the new <code>glad</code> loader, and may have been the cause of some older crashes as well.</li>
 <li>
 <code><a href="../reference/writeOBJ.html">readOBJ()</a></code> did not handle comments properly.</li>
+<li>Sprites consisting only of line segments (as used for example by <code><a href="../reference/pch3d.html">pch3d()</a></code>) caused rendering to fail in <code><a href="../reference/rglwidget.html">rglwidget()</a></code> (issue <a href="https://github.com/dmurdoch/rgl/issues/316" class="external-link">#316</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
