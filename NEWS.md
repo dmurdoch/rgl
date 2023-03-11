@@ -21,6 +21,8 @@ access to newer OpenGL functions in systems that support them.
 in WebGL.
 * The method of including shader source code
 has changed to work around a limitation in Jupyter.
+* The default C++ standard is now accepted, rather
+than requiring C++11.
 
 ## Bug fixes
 

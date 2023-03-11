@@ -15,7 +15,6 @@
 # 
 # Trying to make $(SHLIB)=rgl.so with no OpenGL.
 
-CXX_STD = CXX11
 PKG_CFLAGS=$(C_VISIBILITY)
 
 PKG_CPPFLAGS=@NULL_CPPFLAGS@
