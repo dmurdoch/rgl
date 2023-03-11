@@ -1,4 +1,4 @@
-# rgl 1.0.14
+# rgl 1.0.15
 
 ## Major changes
 
@@ -19,6 +19,10 @@ access to newer OpenGL functions in systems that support them.
 
 * The `texenvmap = TRUE` material property is now supported
 in WebGL.
+* The method of including shader source code
+has changed to work around a limitation in Jupyter.
+* The default C++ standard is now accepted, rather
+than requiring C++11.
 
 ## Bug fixes
 

@@ -444,12 +444,19 @@ CanvasMatrixDependency <- makeDependency("CanvasMatrix4",
                                          package = "rgl",
                                          debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))
 
-shaders <- htmlPreserve(c('<script type = "text/plain" id = "rgl-vertex-shader">',
-             readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_vertex.glsl", package = "rgl")),
-             '</script>',
-             '<script type = "text/plain" id = "rgl-fragment-shader">',
-             readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_fragment.glsl", package = "rgl")),
-             '</script>'))
+local({
+  shaders <- c('rglwidgetClass.rgl_vertex_shader = function() {',
+               paste('return ',
+                 paste0('"', readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_vertex.glsl", package = "rgl")), '\\n"', collapse = "+\n"),
+               ';};'),
+               'rglwidgetClass.rgl_fragment_shader = function() {',
+               paste('return ',
+                 paste0('"', readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_fragment.glsl", package = "rgl")), '\\n"', collapse = "+\n"),
+               ';};'))
+  writeLines(paste(shaders, collapse = "\n"), 
+             file.path(system.file("htmlwidgets/lib/rglClass", package = "rgl"),
+                       "shadersrc.src.js"))
+})
 
 rglDependency <- makeDependency("rglwidgetClass", 
                       src = "htmlwidgets/lib/rglClass",
@@ -458,6 +465,7 @@ rglDependency <- makeDependency("rglwidgetClass",
                                  "buffer.src.js",
                                  "subscenes.src.js",
                                  "shaders.src.js",
+                                 "shadersrc.src.js",
                                  "textures.src.js",
                                  "projection.src.js",
                                  "mouse.src.js",
@@ -470,7 +478,6 @@ rglDependency <- makeDependency("rglwidgetClass",
                                  "pretty.src.js",
                                  "axes.src.js",
                                  "animation.src.js"),
-                      head = shaders,
                       stylesheet = "rgl.css",
                       package = "rgl",
                       debugging = isTRUE(as.logical(Sys.getenv("RGL_DEBUGGING", "FALSE"))))

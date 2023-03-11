@@ -150,10 +150,10 @@
       );
 
       if (typeof vertex === "undefined")
-        vertex = document.getElementById("rgl-vertex-shader").text;
+        vertex = rglwidgetClass.rgl_vertex_shader();
         
       if (typeof fragment === "undefined") 
-        fragment = document.getElementById("rgl-fragment-shader").text;
+        fragment = rglwidgetClass.rgl_fragment_shader();
 
 //      console.log("vertex:");
 //      console.log(header + vertex);
