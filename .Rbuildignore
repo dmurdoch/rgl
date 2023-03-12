@@ -1,4 +1,5 @@
 ^src/Makevars$
+^src/Makevars.win$
 ^src/TODO\.txt$
 ^\.Rproj\.user$
 
