@@ -24,6 +24,8 @@ fi
 AC_PROG_CPP
 AC_PROG_CC
 
+HIDE_IF_R42PLUS=`Rscript -e 'cat(if (getRversion() >= "4.2.0") "#" else "")'`
+
 if test `uname` = "Darwin" ; then
   darwin="yes"
   ## we want the *build* cputype and not the host one.
@@ -237,6 +239,7 @@ AC_SUBST(NULL_CPPFLAGS)
 AC_SUBST(NULL_LIBS)
 AC_SUBST(HIDE_IF_NO_OPENGL)
 AC_SUBST(RGL_NO_OPENGL)
+AC_SUBST(HIDE_IF_R42PLUS)
 
 AC_CONFIG_FILES([R/noOpenGL.R src/useNULL/Makevars])
 

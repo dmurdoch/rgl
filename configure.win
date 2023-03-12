@@ -1,1 +1,2 @@
-# No configuration needed on Windows
+#!/bin/sh
+exec "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" tools/configure.R
