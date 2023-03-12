@@ -1,4 +1,4 @@
-# rgl 1.0.15
+# rgl 1.1.0
 
 ## Major changes
 
@@ -22,7 +22,8 @@ in WebGL.
 * The method of including shader source code
 has changed to work around a limitation in Jupyter.
 * The default C++ standard is now accepted, rather
-than requiring C++11.
+than requiring C++11.  On R versions prior to R 4.2.0
+C++11 is still requested.
 
 ## Bug fixes
 
@@ -47,7 +48,7 @@ issued if normals are not provided when needed.
 * It was possible to call `glVersion` before OpenGL was
 initialized; this resulted in a segfault with the new
 `glad` loader, and may have been the cause of some older crashes
-as well.
+as well.  This has been fixed.
 * `readOBJ()` did not handle comments properly.
 * Sprites consisting only of line segments (as used
 for example by `pch3d()`) caused rendering to fail in

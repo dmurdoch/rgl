@@ -91,6 +91,10 @@ remotes::install_github("dmurdoch/rgl")
 
 If that fails, read the instructions below.
 
+Currently installs are tested on older R versions 
+back to R 3.5.x, but this version of `rgl` may work
+back as far as R 3.3.0.
+
 
 LICENSE
 -------

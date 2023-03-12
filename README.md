@@ -57,24 +57,23 @@ The software is released under the GNU Public License. See
 
 ## FEATURES
 
--   portable R package using OpenGL (if available) on macOS, Win32 and
-    X11
--   can produce 3D graphics in web pages using WebGL
--   R programming interface
--   interactive viewpoint navigation
--   automatic data focus
--   geometry primitives: points, lines, triangles, quads, texts, point
-    sprites
--   high-level geometry: surface, spheres
--   up to 8 light sources
--   alpha-blending (transparency)
--   side-dependent fill-mode rendering (dots, wired and filled)
--   texture-mapping with mipmapping and environment mapping support
--   environmental effects: fogging, background sphere
--   bounding box with axis ticks marks
--   undo operation: shapes and light-sources are managed on type stacks,
-    where the top-most objects can be popped, or any item specified by
-    an identifier can be removed
+- portable R package using OpenGL (if available) on macOS, Win32 and X11
+- can produce 3D graphics in web pages using WebGL
+- R programming interface
+- interactive viewpoint navigation
+- automatic data focus
+- geometry primitives: points, lines, triangles, quads, texts, point
+  sprites
+- high-level geometry: surface, spheres
+- up to 8 light sources
+- alpha-blending (transparency)
+- side-dependent fill-mode rendering (dots, wired and filled)
+- texture-mapping with mipmapping and environment mapping support
+- environmental effects: fogging, background sphere
+- bounding box with axis ticks marks
+- undo operation: shapes and light-sources are managed on type stacks,
+  where the top-most objects can be popped, or any item specified by an
+  identifier can be removed
 
 ## PLATFORMS
 
@@ -135,7 +134,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.109.6.tar.gz
+    R CMD INSTALL rgl_1.0.15.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -165,7 +164,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.109.6.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.0.15.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
