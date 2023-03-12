@@ -19,10 +19,15 @@ AC_CONFIG_AUX_DIR(src/build/autoconf)
 if test -n "${R_HOME}"; then
   CC=`${R_HOME}/bin/R CMD config CC`
   CFLAGS=`${R_HOME}/bin/R CMD config CFLAGS`
+  HIDE_IF_R42PLUS=`${R_HOME}/bin/Rscript -e 'cat(if (getRversion() >= "4.2.0") "#" else "")'`
+else
+  HIDE_IF_R42PLUS=""
 fi
 
 AC_PROG_CPP
 AC_PROG_CC
+
+
 
 if test `uname` = "Darwin" ; then
   darwin="yes"
@@ -237,6 +242,7 @@ AC_SUBST(NULL_CPPFLAGS)
 AC_SUBST(NULL_LIBS)
 AC_SUBST(HIDE_IF_NO_OPENGL)
 AC_SUBST(RGL_NO_OPENGL)
+AC_SUBST(HIDE_IF_R42PLUS)
 
 AC_CONFIG_FILES([R/noOpenGL.R src/useNULL/Makevars])
 
