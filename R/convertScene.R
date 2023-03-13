@@ -468,7 +468,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
           normalization <- ""
           if (length(obj[[n]]) > 6 &&  # Don't bother for short ones
               n %in% c("colors","texcoords") &&
-              0 <= (objrange <- range(obj[[n]]))[1] &&
+              !anyNA(objrange <- range(obj[[n]])) &&
+              0 <= objrange[1] &&
               objrange[2] <= 1) {
             scaled <- 255*obj[[n]]
             rounded <- round(scaled)
