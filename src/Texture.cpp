@@ -5,7 +5,6 @@
 #include "platform.h"
 #include "RenderContext.h"
 
-using namespace std;
 using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////

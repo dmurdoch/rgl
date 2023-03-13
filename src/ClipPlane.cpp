@@ -16,7 +16,7 @@ int ClipPlaneSet::num_planes = 0;
 ClipPlaneSet::ClipPlaneSet(Material& in_material, int in_nnormal, double* in_normal, int in_noffset, double* in_offset)
  : 
    Shape(in_material,true),
-   nPlanes(max(in_nnormal, in_noffset)),
+   nPlanes(std::max(in_nnormal, in_noffset)),
    normal(in_nnormal, in_normal), 
    offset(in_noffset, in_offset)
 {

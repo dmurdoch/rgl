@@ -45,12 +45,14 @@ private:
   GLuint  texName;
   Type    type;
   Mode    mode;
-  GLint   internalMode;
   bool    mipmap;
   GLenum  minfilter;
   GLenum  magfilter;
   bool    envmap;
   char*   filename;
+#ifndef RGL_NO_OPENGL
+  GLint   internalMode;
+#endif
 };
 
 } // namespace rgl
