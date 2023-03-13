@@ -4,7 +4,6 @@
 
 #include <cstring>
 #include "pixmap.h"
-using namespace std;
 
 #include "lib.h"
 

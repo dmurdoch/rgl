@@ -13,7 +13,7 @@ using namespace rgl;
 ABCLineSet::ABCLineSet(Material& in_material, int in_nbase, double* in_base, int in_ndir, double* in_dir)
   : 
   LineSet(in_material,true, false/* true */),
-  nLines(max(in_nbase, in_ndir)),
+  nLines(std::max(in_nbase, in_ndir)),
   base(in_nbase, in_base), 
   direction(in_ndir, in_dir)
 {
@@ -76,8 +76,8 @@ void ABCLineSet::updateSegments(SceneNode* subscene)
         double s[2];
         for (int j=0; j<2; j++) // which limit
           s[j] = (bbox[j][i] - b[i])/d[i];
-        smin = max(smin, min(s[0], s[1]));
-        smax = min(smax, max(s[0], s[1]));
+        smin = std::max(smin, std::min(s[0], s[1]));
+        smax = std::min(smax, std::max(s[0], s[1]));
       }
     }
     if (smin <= smax) {

@@ -1029,9 +1029,9 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
     char* in_tag = new char [len_tag + 1];
     strncpy(in_tag, cdata[0], len_tag);
     in_tag[len_tag] = '\0';
-    mat.tag = string(in_tag);
+    mat.tag = std::string(in_tag);
   } else
-    mat.tag = string();
+    mat.tag = std::string();
   
 
   if ( strlen(pixmapfn) > 0 ) {

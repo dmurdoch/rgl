@@ -14,7 +14,7 @@ using namespace rgl;
 PlaneSet::PlaneSet(Material& in_material, int in_nnormal, double* in_normal, int in_noffset, double* in_offset)
  : 
    TriangleSet(in_material,true, false/* true */),
-   nPlanes(max(in_nnormal, in_noffset)),
+   nPlanes(std::max(in_nnormal, in_noffset)),
    normal(in_nnormal, in_normal), 
    offset(in_noffset, in_offset)
 {
@@ -127,9 +127,9 @@ void PlaneSet::updateTriangles(Subscene* subscene)
         }
         if (which > i+1) {
           for (int j=0; j<3; j++) 
-            swap(x[i+1][j], x[which][j]);
-          swap(face1[i+1], face1[which]);
-          swap(face2[i+1], face2[which]);
+            std::swap(x[i+1][j], x[which][j]);
+          std::swap(face1[i+1], face1[which]);
+          std::swap(face2[i+1], face2[which]);
         }
       }
     }

@@ -147,7 +147,7 @@ void Background::render(RenderContext* renderContext)
     Vec3 ranges = bbox.vmax - bbox.vmin;
     float avgscale = ranges.getLength()/sqrt(3.0);
     Vec3 aspect(ranges.x*scale.x/avgscale, ranges.y*scale.y/avgscale, ranges.z*scale.z/avgscale);
-    float maxaspect = max(aspect.x, max(aspect.y, aspect.z));
+    float maxaspect = std::max(aspect.x, std::max(aspect.y, aspect.z));
     m.multLeft(Matrix4x4::scaleMatrix(zoom*2.0*maxaspect*ranges.x/aspect.x,
                                       zoom*2.0*maxaspect*ranges.y/aspect.y,
                                       zoom*2.0*maxaspect*ranges.z/aspect.z));

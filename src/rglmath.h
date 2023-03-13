@@ -8,8 +8,6 @@
 #include <cmath>
 #include <cfloat>
 
-using namespace std;
-
 #include "types.h"
 
 #ifndef M_PI
