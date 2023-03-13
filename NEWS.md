@@ -1,4 +1,4 @@
-# rgl 1.1.0
+# rgl 1.1.1
 
 ## Major changes
 
@@ -53,6 +53,8 @@ as well.  This has been fixed.
 * Sprites consisting only of line segments (as used
 for example by `pch3d()`) caused rendering to fail in
 `rglwidget()` (issue #316).
+* Headers have been cleaned up to fix problems
+identified by Rtools43.
 
 # rgl 1.0.1
 
