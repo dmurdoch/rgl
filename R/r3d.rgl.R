@@ -104,10 +104,13 @@ warnBlackTexture <- function(...,
                              texmode = defaults$texmode) {
   if (!is.null(texture) &&
       length(color) == 1 &&
+      !is.na(color) &&
       color == "missing" &&
+      !is.na(texmode) && 
       texmode == "modulate" &&
-      getOption("rgl.warnBlackTexture", TRUE) &&
+      isTRUE(getOption("rgl.warnBlackTexture", TRUE)) &&
       length(defaults$color) &&
+      !is.na(defaults$color[1]) &&
       defaults$color[1] %in% c("#000000", "black")) {
     warning("Texture will be invisible on black surface", call. = FALSE) 
   }

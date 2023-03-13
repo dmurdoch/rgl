@@ -98,9 +98,9 @@ void PlaneSet::updateTriangles(Subscene* subscene)
   	          /* Check for duplicate */
   	          int dup = 0;
   	          for (int l=0; l < nhits; l++) {
-  	            if (abs(x[l][0] - x[nhits][0]) <= 1.e-8*abs(x[l][0]) 
-                 && abs(x[l][1] - x[nhits][1]) <= 1.e-8*abs(x[l][1])
-                 && abs(x[l][2] - x[nhits][2]) <= 1.e-8*abs(x[l][2])) {
+  	            if (std::abs(x[l][0] - x[nhits][0]) <= 1.e-8*std::abs(x[l][0]) 
+                 && std::abs(x[l][1] - x[nhits][1]) <= 1.e-8*std::abs(x[l][1])
+                 && std::abs(x[l][2] - x[nhits][2]) <= 1.e-8*std::abs(x[l][2])) {
   	              dup = 1;
   	              break;
   	            }
