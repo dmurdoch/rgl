@@ -10,7 +10,7 @@
 #include "glgui.h"
 
 #include <winuser.h>
-// #include <shlobj.h>
+#include <shlobj.h>
 #include "assert.h"
 #include "R.h"
 #include <Rinternals.h>
