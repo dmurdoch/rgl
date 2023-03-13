@@ -1,4 +1,4 @@
-# 1.1.1:
+# 1.1.2:
 
 This release contains relatively large changes
 described below.  It tests quite cleanly on R versions
