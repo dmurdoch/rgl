@@ -1,9 +1,12 @@
-# 1.1.0:
+# 1.1.1:
 
 This release contains relatively large changes
 described below.  It tests quite cleanly on R versions
 3.5.x to R-devel, with the only issues being its size
 and sometimes check times.
+
+An issue with declaration problems in Windows R-devel
+has been fixed.
 
 The segfault on the M1Mac reported on CRAN may have
 been fixed:  a similar one has definitely been fixed.
