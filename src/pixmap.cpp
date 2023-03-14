@@ -90,7 +90,7 @@ bool Pixmap::init(PixmapTypeID in_typeID, int in_width, int in_height, int in_bi
 void Pixmap::clear()
 {
   if (data) 
-    memset(data, 0, bytesperrow * height);
+    std::memset(data, 0, bytesperrow * height);
 }
 
 bool Pixmap::load(const char* filename)
