@@ -1051,7 +1051,7 @@ persp3d(volcano, col = "green")
 ```
 This display is interactive, but we can reproduce the initial view using the
 `lattice` `r linkfn("wireframe", pkg = "lattice")` or base graphics `r linkfn("persp", pkg = "graphics")` functions:
-```{r eval=requireNamespace("orientlib", quietly = TRUE) && requireNamespace("lattice", quietly = TRUE)}
+```{r eval=requireNamespace("orientlib", quietly = TRUE) && requireNamespace("lattice", quietly = TRUE), fig.alt=c("lattice display of volcano", "base graphics display of volcano")}
 # Only evaluated if the lattice & orientlib packages are installed
 lattice::wireframe(volcano, col = "green", 
 		   screen = rglToLattice())
