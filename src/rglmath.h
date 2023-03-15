@@ -130,9 +130,9 @@ struct Vec4
 
   Vec4(const Normal& n, float in_w=0.0f) : x(n.x), y(n.y), z(n.z), w(in_w) {};
   Vec4() {};
-  Vec4(const float x, const float y, const float z, const float w=1.0f);
+  Vec4(float x, float y, float z, float w=1.0f);
   float operator * (const Vec4& op2) const;
-  Vec4 operator * (const float value) const;
+  Vec4 operator * (float value) const;
   Vec4 operator + (const Vec4& op2) const;
   bool   missing() const;  /* Any components missing */
   float& operator[](int i);
@@ -147,12 +147,12 @@ public:
   Matrix4x4();
   Matrix4x4(const Matrix4x4& src);
   Matrix4x4(const double*);
-  Vec3 operator*(const Vec3 op2) const;
+  Vec3 operator*(Vec3 op2) const;
   Vec4 operator*(const Vec4& op2) const;
   Matrix4x4 operator*(const Matrix4x4& op2) const;
   Vec4 getRow(int row);
   void setIdentity(void);
-  void setRotate(const int axis, const float degree);
+  void setRotate(int axis, float degree);
   void getData(double* dest);
   void loadData(const double* from);
   void loadData(const float* from);

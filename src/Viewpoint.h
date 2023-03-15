@@ -53,9 +53,9 @@ public:
 
   UserViewpoint(float fov=90.0f, float zoom=1.0f);
   float       getZoom(void) const; 
-  void        setZoom(const float zoom);
+  void        setZoom(float zoom);
   float       getFOV(void) const;
-  void        setFOV(const float in_fov);
+  void        setFOV(float in_fov);
   void        setupFrustum(RenderContext* rctx, const Sphere& viewvolumeSphere);
   void        setupProjMatrix(RenderContext* rctx, const Sphere& viewvolumeSphere);
   Vertex      getObserver();

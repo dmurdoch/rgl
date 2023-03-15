@@ -65,8 +65,8 @@ typedef unsigned int AttribID;
 class SceneNode
 {
 public:
-  inline const TypeID getTypeID() const { return typeID; }
-  inline const ObjID getObjID() const { return objID; }
+  inline TypeID getTypeID() const { return typeID; }
+  inline ObjID getObjID() const { return objID; }
   virtual ~SceneNode() { };
   static ObjID nextID;
   SceneNode *owner;  /* don't delete this node while the owner is non-NULL */

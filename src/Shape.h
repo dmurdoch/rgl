@@ -50,7 +50,7 @@ public:
    * does this shape change dimensions according to the way it is rendered?
    * if so, the above is just a guess...
    **/
-  const bool getBBoxChanges() const { return bboxChanges; }
+  bool getBBoxChanges() const { return bboxChanges; }
 
   /**
    * this shows how the shape would be sized in the given context
@@ -62,7 +62,7 @@ public:
    **/
   Material* getMaterial()  { return &material; }
   
-  const bool getIgnoreExtent() const { return ignoreExtent; }
+  bool getIgnoreExtent() const { return ignoreExtent; }
 
   virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "shape", buflen); };
   
@@ -119,9 +119,9 @@ public:
    */
   virtual Shape* get_shape(int id) { return NULL; }
   
-  const bool isTransparent() const { return transparent; }
+  bool isTransparent() const { return transparent; }
   
-  const bool isBlended() const { return blended; }
+  bool isBlended() const { return blended; }
   
   /**
    * Does this shape need to go at the head of the shape list, rather than the tail?

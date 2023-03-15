@@ -41,8 +41,8 @@ public:
 class Sphere {
 public:
   Sphere() : center(0,0,0), radius(1) {};
-  Sphere(const Vertex& center, const float radius);
-  Sphere(const float radius);
+  Sphere(const Vertex& center, float radius);
+  Sphere(float radius);
   Sphere(const AABox& aabox);
   Sphere(const AABox& aabox, const Vertex& scale);
   Vertex center;

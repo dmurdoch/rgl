@@ -57,7 +57,7 @@ public:
   /**
    * set a vertex
    **/
-  const void setVertex(int index, double* v) { vertexArray.setVertex(index, v); }
+  void setVertex(int index, double* v) { vertexArray.setVertex(index, v); }
 
   /**
    * setup all vertices
