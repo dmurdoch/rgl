@@ -110,7 +110,7 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
     glMatrixMode(GL_MODELVIEW);
   }
 
-  if (!shapes.size()) {
+  if (shapes.empty()) {
     doTex = (material.texture) ? true : false;
     glNormal3f(0.0f,0.0f,1.0f);
     material.beginUse(renderContext);
@@ -170,23 +170,7 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
   if (pos.size())
     getAdj(index);
   
-  if (shapes.size()) {
-    Shape::drawEnd(renderContext);  // The shape will call drawBegin/drawEnd
-    *modelMatrix = (*modelMatrix)*
-                   Matrix4x4::scaleMatrix(2*s,2*s,2*s)*
-                   Matrix4x4::translationMatrix((1.0 - 2.0*adj.x), 
-                                                (1.0 - 2.0*adj.y),
-                                                (1.0 - 2.0*adj.z))*
-                   Matrix4x4(userMatrix);
-
-    /* Since we modified modelMatrix, we need to reload it */
-    renderContext->subscene->loadMatrices();    
-    
-    for (std::vector<int>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) 
-      scene->get_shape(*i)->draw(renderContext);  
-    
-    Shape::drawBegin(renderContext);
- }  else {
+  if (shapes.empty()) {
     material.useColor(index);
     /* Since we modified modelMatrix, we need to reload it */
     renderContext->subscene->loadMatrices();
@@ -216,6 +200,22 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
                s*(1.0 - 2.0*adj.z)); 
   
     glEnd();
+ }  else {
+    Shape::drawEnd(renderContext);  // The shape will call drawBegin/drawEnd
+    *modelMatrix = (*modelMatrix)*
+                   Matrix4x4::scaleMatrix(2*s,2*s,2*s)*
+                   Matrix4x4::translationMatrix((1.0 - 2.0*adj.x), 
+                                                (1.0 - 2.0*adj.y),
+                                                (1.0 - 2.0*adj.z))*
+                   Matrix4x4(userMatrix);
+
+    /* Since we modified modelMatrix, we need to reload it */
+    renderContext->subscene->loadMatrices();    
+    
+    for (std::vector<int>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) 
+      scene->get_shape(*i)->draw(renderContext);  
+    
+    Shape::drawBegin(renderContext);
   }
 #endif
 }
@@ -279,7 +279,7 @@ void SpriteSet::drawEnd(RenderContext* renderContext)
   renderContext->subscene->modelMatrix = Matrix4x4(m);
   /* Restore the original GPU matrices */
   renderContext->subscene->loadMatrices();  
-  if (!shapes.size())
+  if (shapes.empty())
     material.endUse(renderContext);
   Shape::drawEnd(renderContext);
 #endif
@@ -298,7 +298,7 @@ int SpriteSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
     case IDS:	   
     case TYPES:    return static_cast<int>(shapes.size());
     case USERMATRIX: {
-      if (!shapes.size()) return 0;
+      if (shapes.empty()) return 0;
       else return 4;
     }
     case FLAGS:	   return 3;
