@@ -96,9 +96,9 @@ struct Vec3
   }
   void normalize();
   Vec3 cross(Vec3 op2) const;
-  float angle(const Vec3& op2) const;
-  float operator * (Vec3 op2);
-  Vec3 operator * (float value);
+  float angle(const Vec3& that) const;
+  float operator * (Vec3 v);
+  Vec3 operator * (float s);
   Vec3 operator+(Vec3 op2) const;
   Vec3 operator-(Vec3 op2) const;
   Vec3 scale(const Vec3& op2) const;
@@ -131,9 +131,9 @@ struct Vec4
   Vec4(const Normal& n, float in_w=0.0f) : x(n.x), y(n.y), z(n.z), w(in_w) {};
   Vec4() {};
   Vec4(const float x, const float y, const float z, const float w=1.0f);
-  float operator * (const Vec4& op2) const;
-  Vec4 operator * (const float value) const;
-  Vec4 operator + (const Vec4& op2) const;
+  float operator * (const Vec4& v) const;
+  Vec4 operator * (const float s) const;
+  Vec4 operator + (const Vec4& v) const;
   bool   missing() const;  /* Any components missing */
   float& operator[](int i);
   static inline Vec4& asVec4(float* ptr) {
@@ -147,8 +147,8 @@ public:
   Matrix4x4();
   Matrix4x4(const Matrix4x4& src);
   Matrix4x4(const double*);
-  Vec3 operator*(const Vec3 op2) const;
-  Vec4 operator*(const Vec4& op2) const;
+  Vec3 operator*(const Vec3 v) const;
+  Vec4 operator*(const Vec4& v) const;
   Matrix4x4 operator*(const Matrix4x4& op2) const;
   Vec4 getRow(int row);
   void setIdentity(void);

@@ -56,8 +56,8 @@ public:
   void        setZoom(const float zoom);
   float       getFOV(void) const;
   void        setFOV(const float in_fov);
-  void        setupFrustum(RenderContext* rctx, const Sphere& viewvolumeSphere);
-  void        setupProjMatrix(RenderContext* rctx, const Sphere& viewvolumeSphere);
+  void        setupFrustum(RenderContext* rctx, const Sphere& viewSphere);
+  void        setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
   Vertex      getObserver();
   void	      setObserver(bool automatic, Vertex in_eye);
   void	      setupViewer(RenderContext* rctx);

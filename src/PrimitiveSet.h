@@ -73,18 +73,18 @@ protected:
   PrimitiveSet (
       Material& in_material, 
       int in_nvertices, 
-      double* vertex, 
+      double* in_vertices, 
       int in_type, 
       int in_nverticesperelement,
       bool in_ignoreExtent,
-      int in_nindices, 
+      int in_nindices,
       int* in_indices,
       bool in_bboxChange = false
   );
   PrimitiveSet(
-    Material& in_material,
+    Material& in_material, 
     int in_type,
-    int in_verticesperelement,
+    int in_nverticesperelement,
     bool in_ignoreExtent,
     bool in_bboxChange
   );
@@ -185,8 +185,8 @@ protected:
   
   FaceSet(
     Material& in_material, 
-    int in_type, 
-    int in_verticesperelement,
+    int in_type,
+    int in_nverticesperelement,
     bool in_ignoreExtent,
     bool in_bboxChange = false
   );
@@ -289,7 +289,7 @@ public:
 class LineStripSet : public PrimitiveSet
 {
 public:
-  LineStripSet(Material& material, int in_nvertex, double* in_vertex, bool in_ignoreExtent, 
+  LineStripSet(Material& in_material, int in_nvertices, double* in_vertex, bool in_ignoreExtent, 
                int in_nindices, int* in_indices, bool in_bboxChange = false);
   void drawPrimitive(RenderContext* renderContext, int index);
   /**

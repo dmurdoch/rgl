@@ -16,7 +16,7 @@ private:
   bool          lastendcap; 
   bool          fastTransparency;
 public:
-  SphereSet(Material& in_material, int nsphere, double* center, int nradius, double* radius, 
+  SphereSet(Material& in_material, int in_ncenter, double* in_center, int in_nradius, double* in_radius,
             int in_ignoreExtent, bool in_fastTransparency);
   ~SphereSet();
 

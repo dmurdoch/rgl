@@ -38,7 +38,7 @@ public:
    * location of individual items
    **/
   
-  virtual Vertex getPrimitiveCenter(int item) ;
+  virtual Vertex getPrimitiveCenter(int index) ;
 
   /**
    * begin sending items 

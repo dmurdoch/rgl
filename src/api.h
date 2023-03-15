@@ -99,8 +99,8 @@ void rgl_locator(int* successptr, double* locations);
 
 void rgl_selectstate(int* dev, int* sub, int* successptr, int* selectstate, double* locations);
 void rgl_setselectstate(int* dev, int* sub, int* successptr, int *idata);
-void rgl_setEmbeddings(int* successptr, int* embeddings);
-void rgl_getEmbeddings(int* successptr, int* embeddings);
+void rgl_setEmbeddings(int* id, int* embeddings);
+void rgl_getEmbeddings(int* id, int* embeddings);
 
 SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end, SEXP dev, SEXP sub);
 SEXP rgl_setWheelCallback(SEXP rotate, SEXP dev, SEXP sub);

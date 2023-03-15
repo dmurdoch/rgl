@@ -28,7 +28,7 @@ enum {
 
 struct AxisInfo {
   AxisInfo();
-  AxisInfo(int in_nticks, double* in_values, char** in_texts, int xlen, float xunit);
+  AxisInfo(int in_nticks, double* in_ticks, char** in_texts, int in_len, float in_unit);
   AxisInfo(AxisInfo& from);
   ~AxisInfo();
   void draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matrix4x4& modelview, 
@@ -50,10 +50,10 @@ typedef void (*userAxisPtr)(void *userData, int axis, int edge[3]);
 class BBoxDeco : public SceneNode 
 {
 public:
-  BBoxDeco(Material& in_material=defaultMaterial, AxisInfo& xaxis=defaultAxis, AxisInfo& yaxis=defaultAxis, AxisInfo& zaxis=defaultAxis, float marklen=15.0, bool marklen_fract=true,
+  BBoxDeco(Material& in_material=defaultMaterial, AxisInfo& in_xaxis=defaultAxis, AxisInfo& in_yaxis=defaultAxis, AxisInfo& in_zaxis=defaultAxis, float in_marklen_value=15.0, bool in_marklen_fract=true,
            float in_expand=1.0, bool in_front=false);
   void render(RenderContext* renderContext);
-  AABox getBoundingBox(const AABox& boundingBox) const;
+  AABox getBoundingBox(const AABox& in_bbox) const;
   Vertex getMarkLength(const AABox& boundingBox) const;
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);

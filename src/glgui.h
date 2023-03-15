@@ -90,10 +90,10 @@ public:
 
   void draw(const char* text, int length, 
             double adjx, double adjy, double adjz,
-            int draw, const RenderContext& rc);
+            int pos, const RenderContext& rc);
   void draw(const wchar_t* text, int length, 
             double adjx, double adjy, double adjz,
-            int draw, const RenderContext& rc); 
+            int pos, const RenderContext& rc); 
   double width(const char* text);
   double width(const wchar_t* text);
   double height();

@@ -203,7 +203,7 @@ public:
 
   void bringToTop(int stay);
   void setWindowRect(int left, int top, int right, int bottom);
-  void getWindowRect(int *left, int *top, int *right, int *bottom);
+  void getWindowRect(int *in_left, int *in_top, int *in_width, int *in_height);
   void getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex,
                 bool useFreeType);
 

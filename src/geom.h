@@ -26,7 +26,7 @@ public:
   void operator += (const AABox& aabox);
   void operator += (const Sphere& sphere);
   void operator += (const Vertex& vertex);
-  bool operator < (const AABox& aabox) const;
+  bool operator < (const AABox& that) const;
   AABox transform(Matrix4x4& M);
   Vertex getCenter(void) const;
   Vertex vmin, vmax;
@@ -43,8 +43,8 @@ public:
   Sphere() : center(0,0,0), radius(1) {};
   Sphere(const Vertex& center, const float radius);
   Sphere(const float radius);
-  Sphere(const AABox& aabox);
-  Sphere(const AABox& aabox, const Vertex& scale);
+  Sphere(const AABox& bbox);
+  Sphere(const AABox& bbox, const Vertex& s);
   Vertex center;
   float radius;
 };
