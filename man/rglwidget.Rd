@@ -18,6 +18,7 @@ rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           shared = NULL, minimal = TRUE, 
           webgl, snapshot, 
           shinyBrush = NULL, 
+          altText = "rglwidget",
           ...,
           oldConvertBBox = FALSE)
 }
@@ -46,6 +47,8 @@ component that will hold the scene.
   no effect?  See \code{\link{scene3d}}.}
   \item{shinyBrush}{The name of a Shiny \code{input} element
   to receive information about mouse selections.}
+  \item{altText}{Text to include for screen-readers or browsers
+  that don't handle WebGL.}
   \item{oldConvertBBox}{See Details below.}
   \item{...}{Additional arguments
 to pass to \code{htmlwidgets::\link{createWidget}}.}

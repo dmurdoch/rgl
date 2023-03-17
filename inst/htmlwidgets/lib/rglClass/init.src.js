@@ -1230,6 +1230,7 @@
         this.onContextRestored, false);
       newcanvas.addEventListener("webglcontextlost",
         this.onContextLost, false);
+      newcanvas.appendChild(document.createTextNode(this.scene.altText));
       while (this.el.firstChild) {
         this.el.removeChild(this.el.firstChild);
       }

@@ -17,7 +17,8 @@ where appropriate, according to the \code{fig.keep} chunk option.
 By default (\code{fig.keep = "high"}), only high-level plots
 are kept, after low-level changes have been merged into them.
 See the \pkg{knitr} documentation 
-\url{https://yihui.org/knitr/options/#plots} for more details.  To suppress auto-printing, the RGL calls
+\url{https://yihui.org/knitr/options/#plots} for more details.
+To suppress auto-printing, the RGL calls
 can be wrapped in \code{\link{invisible}()}.  
 Similarly to \pkg{grid} graphics (used by \pkg{lattice}
 and \pkg{ggplot2}), automatic inclusion requires the object
@@ -106,6 +107,12 @@ display of plots.
   \item \code{rgl.keepopen}:  no longer used.  Ignored
   with a warning.
 
+  \item \code{fig.alt} is partially supported:  \pkg{rgl}
+will always use the first entry if \code{fig.alt} is a vector.
+Other graphics types match the entries in \code{fig.alt}
+to successive plots within the chunk.
+(This is due to a limitation in \pkg{knitr}, and may
+change in the future.)
 }
 }
 \value{
