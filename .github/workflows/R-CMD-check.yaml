@@ -35,6 +35,10 @@ jobs:
       - uses: actions/checkout@v3
 
       - uses: r-lib/actions/setup-pandoc@v2
+      
+      - name: Set up XQuartz
+        if:   matrix-latest.os == 'macos'
+        uses: actions/virtual-environments/setup-xquartz@v1
 
       - uses: r-lib/actions/setup-r@v2
         with:
