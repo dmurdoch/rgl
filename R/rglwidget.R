@@ -265,7 +265,8 @@ rglwidget <- local({
            minimal = TRUE, 
            webgl,
            snapshot,
-           shinyBrush = NULL, ...,
+           shinyBrush = NULL, 
+           altText = "rglwidget", ...,
            oldConvertBBox = FALSE) {
     
   if (missing(snapshot)) {
@@ -352,6 +353,8 @@ rglwidget <- local({
     x$players <- upstream$players
 
     x$webGLoptions <- webGLoptions
+    
+    x$altText <- altText
 
     # create widget
     attr(x, "TOJSON_ARGS") <- list(na = "string")

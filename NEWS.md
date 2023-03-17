@@ -1,3 +1,8 @@
+# rgl 1.1.4
+
+* Support for "alt" text has been added to `rglwidget()`, with
+partial support for the `fig.alt` setting in `knitr`.
+
 # rgl 1.1.3
 
 ## Major changes

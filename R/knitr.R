@@ -244,7 +244,8 @@ fns <- local({
       content <- rglwidget(scene,
                            width = x$width,
                            height = x$height,
-                           webgl = !doSnapshot)
+                           webgl = !doSnapshot,
+                           altText = c(options$fig.alt, paste("rglwidget in chunk", options$label))[1])
       if (inherits(content, "knit_image_paths")) {
         # # We've done a snapshot, put it in the right place.
         name <- fig_path("-rgl.png", options, rgl_counter())
