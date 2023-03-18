@@ -149,7 +149,7 @@ processUpstream <- function(upstream, elementId = NULL, playerId = NULL) {
   if (inherits(upstream, c("shiny.tag", "htmlwidget")))
     upstream <- tagList(upstream)
        
-  if (is.character(upstream) && !is.na(upstream))
+  if (is.character(upstream) && !is.na(upstream[1]))
     return(list(prevRglWidget = upstream))
   
   if (is.list(upstream)) {
@@ -266,7 +266,7 @@ rglwidget <- local({
            webgl,
            snapshot,
            shinyBrush = NULL, 
-           altText = "rglwidget", ...,
+           altText = "Rotatable plot", ...,
            oldConvertBBox = FALSE) {
     
   if (missing(snapshot)) {
@@ -353,8 +353,6 @@ rglwidget <- local({
     x$players <- upstream$players
 
     x$webGLoptions <- webGLoptions
-    
-    x$altText <- altText
 
     # create widget
     attr(x, "TOJSON_ARGS") <- list(na = "string")
@@ -368,6 +366,13 @@ rglwidget <- local({
       dependencies = dependencies,
       ...
     ), origScene = origScene)
+    
+    if (!inShiny())
+      result <- htmlwidgets::prependContent(result, 
+                  tags$p(altText, id = ariaLabelId(elementId),
+                         hidden = NA))
+    else if (!missing(altText))
+      warning(strwrap("In a Shiny app, the altText needs to be specified in the rglwidgetOutput() call. It is not currently supported in Shiny documents."))
     
   } else {
     if (is.list(upstream$objects)) {
@@ -387,6 +392,14 @@ rglwidget <- local({
   }
   result
 }})
+
+ariaLabelId <- function(id)
+  paste0(id, "-label")
+
+widget_html.rglWebGL <- function(id, style, class, ...){
+  tags$div(id = id, style = style, class = class, 
+           "aria-labelledby" = ariaLabelId(id))
+}
 
 print.rglMouseSelection <- function(x, verbose = FALSE, ...) {
   if (!is.null(x$region)) {

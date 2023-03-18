@@ -12,7 +12,8 @@ These functions allow an RGL scene to be embedded
 in a Shiny app.
 }
 \usage{
-rglwidgetOutput(outputId, width = "512px", height = "512px")
+rglwidgetOutput(outputId, width = "512px", height = "512px",
+                altText = "Rotatable plot")
 renderRglwidget(expr, env = parent.frame(), quoted = FALSE, outputArgs = list())
 
 playwidgetOutput(outputId, width = "0px", height = "0px")
@@ -25,6 +26,7 @@ The name for the control.
   \item{width, height}{
 Width and height to display the control.
 }
+  \item{altText}{Fixed alternate text to display to screen readers.}
   \item{expr}{An R expression returning
 a \code{\link{rglwidget}} (for \code{renderRglwidget}) or a \code{\link{playwidget}} (for \code{renderPlaywidget}) as output.}
   \item{env}{The environment in which to evaluate \code{expr}.}
@@ -42,6 +44,14 @@ In a dynamic R Markdown document with \code{runtime: shiny}, you
 only call the render function, and may optionally pass \code{width}
 and \code{height} to the output function by putting them in
 a list in \code{outputArgs}.  See the example below.
+}
+\note{
+The \code{altText} argument is experimental.  Currently it will 
+not work if 
+it is specified in \code{rglwidget} in a Shiny display, it needs
+to be in \code{rglwidgetOutput}.  But in the long run it really
+belongs in \code{renderRglwidget}, where it could be a reactive
+value. In some future version it will probably move there.
 }
 \value{
 Used internally by Shiny.
