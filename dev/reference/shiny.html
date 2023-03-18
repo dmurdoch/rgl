@@ -86,7 +86,8 @@ in a Shiny app.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rglwidgetOutput</span><span class="op">(</span><span class="va">outputId</span>, width <span class="op">=</span> <span class="st">"512px"</span>, height <span class="op">=</span> <span class="st">"512px"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rglwidgetOutput</span><span class="op">(</span><span class="va">outputId</span>, width <span class="op">=</span> <span class="st">"512px"</span>, height <span class="op">=</span> <span class="st">"512px"</span>,</span>
+<span>                altText <span class="op">=</span> <span class="st">"Rotatable plot"</span><span class="op">)</span></span>
 <span><span class="fu">renderRglwidget</span><span class="op">(</span><span class="va">expr</span>, env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>, quoted <span class="op">=</span> <span class="cn">FALSE</span>, outputArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">playwidgetOutput</span><span class="op">(</span><span class="va">outputId</span>, width <span class="op">=</span> <span class="st">"0px"</span>, height <span class="op">=</span> <span class="st">"0px"</span><span class="op">)</span></span>
@@ -100,6 +101,9 @@ in a Shiny app.</p>
 
   <dt>width, height</dt>
 <dd><p>Width and height to display the control.</p></dd>
+
+  <dt>altText</dt>
+<dd><p>Fixed alternate text to display to screen readers.</p></dd>
 
   <dt>expr</dt>
 <dd><p>An R expression returning
@@ -126,6 +130,15 @@ function in the server section.</p>
 only call the render function, and may optionally pass <code>width</code>
 and <code>height</code> to the output function by putting them in
 a list in <code>outputArgs</code>.  See the example below.</p>
+    </div>
+    <div id="note">
+    <h2>Note</h2>
+    <p>The <code>altText</code> argument is experimental.  Currently it will 
+not work if 
+it is specified in <code>rglwidget</code> in a Shiny display, it needs
+to be in <code>rglwidgetOutput</code>.  But in the long run it really
+belongs in <code>renderRglwidget</code>, where it could be a reactive
+value. In some future version it will probably move there.</p>
     </div>
     <div id="value">
     <h2>Value</h2>
