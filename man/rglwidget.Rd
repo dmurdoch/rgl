@@ -18,7 +18,7 @@ rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           shared = NULL, minimal = TRUE, 
           webgl, snapshot, 
           shinyBrush = NULL, 
-          altText = "rglwidget",
+          altText = "Rotatable plot",
           ...,
           oldConvertBBox = FALSE)
 }
