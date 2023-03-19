@@ -266,7 +266,7 @@ rglwidget <- local({
            webgl,
            snapshot,
            shinyBrush = NULL, 
-           altText = "Rotatable plot", ...,
+           altText = "3D plot", ...,
            oldConvertBBox = FALSE) {
     
   if (missing(snapshot)) {
@@ -367,13 +367,15 @@ rglwidget <- local({
       ...
     ), origScene = origScene)
     
-    if (!inShiny())
+    # We always emit aria-labelledby.  We need to 
+    # choose here whether to write the label, or rely
+    # on other code to write it.  We let other code write it
+    # in new knitr and Shiny, and otherwise do it ourselves.
+    
+    if (!in_knitr_with_altText_support() && !inShiny())
       result <- htmlwidgets::prependContent(result, 
                   tags$p(altText, id = ariaLabelId(elementId),
                          hidden = NA))
-    else if (!missing(altText))
-      warning(strwrap("In a Shiny app, the altText needs to be specified in the rglwidgetOutput() call. It is not currently supported in Shiny documents."))
-    
   } else {
     if (is.list(upstream$objects)) {
       result <- img(src = image_uri(x), width = width, height = height)
@@ -394,7 +396,7 @@ rglwidget <- local({
 }})
 
 ariaLabelId <- function(id)
-  paste0(id, "-label")
+  paste0(id, "-aria")
 
 widget_html.rglWebGL <- function(id, style, class, ...){
   tags$div(id = id, style = style, class = class, 

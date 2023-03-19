@@ -65,7 +65,7 @@ function with optional argument `elementId`.  This allows later
 Javascript code to refer to the image.  We also 
 save the object ids from the plot, so that they
 can be manipulated later.  (The first example in [Controls](#controls) uses tags instead of saving the ids.)
-```{r}
+```{r elementId}
 library(rgl)
 plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
@@ -101,7 +101,7 @@ operator `|>` should be usable in the same way.
 
 For example,
 
-```{r}
+```{r Pipes}
 rglwidget() %>%
 toggleWidget(ids = plotids["data"], label = "Data")
 ```
@@ -116,7 +116,7 @@ toggleWidget(ids = plotids["data"], label = "Data")
 You can swap the order of button and scene; use the `magrittr` dot (or the `=>` syntax in base pipes)
 to pass the `toggleWidget` to `rglwidget` in the `controllers` argument:
 
-```{r}
+```{r "Control before widget"}
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
 rglwidget(controllers = .) 
 ```
@@ -135,7 +135,7 @@ more elaborate displays.
 For example, we can redo the previous plot, but with the
 three species as separate "spheres" objects and buttons to
 toggle them:
-```{r}
+```{r "Toggle subsets"}
 clear3d() # Remove the earlier display
 
 with(subset(iris, Species == "setosa"), 
@@ -178,7 +178,7 @@ For a more general example, we could use a slider to
 select several subsets of the data in the iris display.
 For example,
 
-```{r}
+```{r Slider}
 rglwidget() %>%
 playwidget(start = 0, stop = 3, interval = 1,
 	   subsetControl(1, subsets = list(
@@ -198,7 +198,7 @@ There are several other "control" functions.
 For example, the following code (similar to the `r linkfn("play3d")`
 example) rotates the scene in a complex way.
 
-```{r}
+```{r "par3dinterpControl()"}
 M <- r3dDefaults$userMatrix
 fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
                                       rotate3d(M, pi/2, 1, 0, 0),
@@ -237,7 +237,7 @@ of individual vertices in a scene.  For example, to set the
 x-coordinate of the closest point in the setosa group, and modify
 its colour from black to white,
 
-```{r}
+```{r "vertexControl()"}
 setosavals <- subset(iris, Species == "setosa")
 which <- which.min(setosavals$Sepal.Width)
 init <- setosavals$Sepal.Length[which]
@@ -264,7 +264,7 @@ give two `ageControl` calls in a list; the first
 one controls the colour of the trail, the second controls
 the position of the point:
 
-```{r}
+```{r "ageControl()"}
 time <- 0:500
 xyz <- cbind(cos(time/20), sin(time/10), time)
 lineid <- plot3d(xyz, type="l", col = "black")["data"]
@@ -293,7 +293,7 @@ of particular points, but the mouse mode may be changed
 to let the user rotate the display for a another 
 view of the scene.
 
-```{r eval = requireNamespace("crosstalk", quietly=TRUE)}
+```{r crosstalk,eval = requireNamespace("crosstalk", quietly=TRUE)}
 # This example requires the crosstalk package
 # We skip it if crosstalk is not available. 
 
@@ -360,7 +360,7 @@ If a shared data object has been created in some other way, it can be linked to
 a particular `rgl` `id` value by copying its `key` and `group` properties
 as shown in the example below.
 
-```{r eval=requireNamespace("crosstalk", quietly = TRUE)}
+```{r "rglShared()",eval=requireNamespace("crosstalk", quietly = TRUE)}
 # This example requires the crosstalk package.  
 # We skip it if crosstalk is not available. 
 

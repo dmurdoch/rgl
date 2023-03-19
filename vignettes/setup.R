@@ -96,3 +96,11 @@ rinline <- function(code, script = FALSE){
     html <- '<code  class="r">``` `r CODE` ```</code>'
   sub("CODE", code, html)
 }
+
+# This sets up default "alt text" for screen readers.
+
+defaultAltText <- function() {
+  paste(knitr::opts_current$get("label"), "example.")
+}
+
+knitr::opts_chunk$set(fig.alt = quote(defaultAltText()))

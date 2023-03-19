@@ -32,7 +32,7 @@ rm(fns)
 
 # Widget output function for use in Shiny
 
-rglwidgetOutput <- function(outputId, width = '512px', height = '512px', altText = "Rotatable plot") {
+rglwidgetOutput <- function(outputId, width = '512px', height = '512px', altText = "3D plot") {
 	registerShinyHandlers()
 	tagList(tags$p(altText, id = ariaLabelId(outputId), hidden = NA),
 	  shinyWidgetOutput(outputId, 'rglWebGL', width, height, package = 'rgl'))
@@ -46,8 +46,7 @@ renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputAr
   
 	if (!quoted) expr <- substitute(expr)  # force quoted
 	
-	shiny::markRenderFunction(rglwidgetOutput,
-														shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE),
+	shiny::markRenderFunction(rglwidgetOutput,										shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE),
 														outputArgs = outputArgs)
 }
 
