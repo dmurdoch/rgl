@@ -13,7 +13,7 @@ in a Shiny app.
 }
 \usage{
 rglwidgetOutput(outputId, width = "512px", height = "512px",
-                altText = "Rotatable plot")
+                altText = "3D plot")
 renderRglwidget(expr, env = parent.frame(), quoted = FALSE, outputArgs = list())
 
 playwidgetOutput(outputId, width = "0px", height = "0px")
@@ -46,12 +46,13 @@ and \code{height} to the output function by putting them in
 a list in \code{outputArgs}.  See the example below.
 }
 \note{
-The \code{altText} argument is experimental.  Currently it will 
-not work if 
-it is specified in \code{rglwidget} in a Shiny display, it needs
+The \code{altText} argument is experimental.  Currently it needs
 to be in \code{rglwidgetOutput}.  But in the long run it really
 belongs in \code{renderRglwidget}, where it could be a reactive
 value. In some future version it will probably move there.
+
+The \code{altText} argument to \code{\link{rglwidget}} will be
+ignored in Shiny.
 }
 \value{
 Used internally by Shiny.

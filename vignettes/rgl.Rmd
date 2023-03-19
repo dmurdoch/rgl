@@ -67,7 +67,7 @@ plots points within an RGL window.  It is similar to the classic
 but works in 3 dimensions.
 
 For example
-```{r}
+```{r "plot3d()"}
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 ```
@@ -102,7 +102,7 @@ for details.  For example, the `MASS` package estimates
 Gamma parameters using maximum likelihood in a 
 `r linkfn("fitdistr", text="?MASS::fitdistr", pkg="MASS")` example.
 Here we show the log likelihood surface. 
-```{r persp3d, fig.height=3, fig.width=6, fig.keep="last", eval=requireNamespace("MASS",quietly=TRUE)}
+```{r "persp3d()", fig.height=3, fig.width=6, fig.keep="last", eval=requireNamespace("MASS",quietly=TRUE)}
 # This example requires the MASS package
 library(MASS)
 # from the fitdistr example
@@ -210,7 +210,7 @@ Function                             | Description
 `r indexfns("setAxisCallbacks")`:    | set user-defined axis annotations
 
 For example, to plot three random triangles, one could use
-```{r fig.width=3, fig.height=3}
+```{r "triangles3d()", fig.width=3, fig.height=3}
 triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
 decorate3d()
 bg3d("lightgray")
@@ -370,7 +370,7 @@ following code displays four copies of a 2D plot on a quad,
 because the texture coordinates run from 0 to 2 in both
 `s` and `t`:
 
-```{r}
+```{r Texture}
 filename <- tempfile(fileext = ".png")
 png(filename = filename)
 plot(rnorm(1000), rnorm(1000))
@@ -484,7 +484,7 @@ Function                             | Description
 `r indexfns(c("tetrahedron3d", "cube3d", "octahedron3d", "dodecahedron3d", "icosahedron3d"))`: | Platonic solids
 `r indexfns(c("cuboctahedron3d", "oh3d"))`:             | other solids
 
-```{r}
+```{r Solids}
 cols <- rainbow(7)
 layout3d(matrix(1:16, 4,4), heights=c(1,3,1,3))
 text3d(0,0,0,"tetrahedron3d"); next3d()
@@ -662,7 +662,7 @@ output, but maybe only after low level modifications to it are
 complete.  For example, this code block prints both
 triangles and spheres in a single plot at the end:
 
-```{r}
+```{r Autoprint}
 xyz <- matrix(rnorm(27), ncol = 3)
 triangles3d(xyz, col = rainbow(9))
 spheres3d(xyz, col = rainbow(9), radius = 0.1)
@@ -1045,13 +1045,13 @@ display it in `lattice` or base graphics.
 The `r indexfns("rglToLattice")` and `r indexfns("rglToBase")` functions support this.
 
 For example, we first display the volcano data in `rgl`:
-```{r echo = 2:3}
+```{r fig.alt="Volcano in rgl", echo = 2:3}
 close3d()
 persp3d(volcano, col = "green")
 ```
 This display is interactive, but we can reproduce the initial view using the
 `lattice` `r linkfn("wireframe", pkg = "lattice")` or base graphics `r linkfn("persp", pkg = "graphics")` functions:
-```{r eval=requireNamespace("orientlib", quietly = TRUE) && requireNamespace("lattice", quietly = TRUE), fig.alt=c("lattice display of volcano", "base graphics display of volcano")}
+```{r eval=requireNamespace("orientlib", quietly = TRUE) && requireNamespace("lattice", quietly = TRUE), fig.alt=paste0("Volcano in ", c("lattice", "base"), "graphics.")}
 # Only evaluated if the lattice & orientlib packages are installed
 lattice::wireframe(volcano, col = "green", 
 		   screen = rglToLattice())
