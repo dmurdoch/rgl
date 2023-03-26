@@ -354,6 +354,9 @@ rglwidget <- local({
 
     x$webGLoptions <- webGLoptions
 
+    if (inShiny())
+      x$altText <- altText
+    
     # create widget
     attr(x, "TOJSON_ARGS") <- list(na = "string")
     result <- structure(htmlwidgets::createWidget(

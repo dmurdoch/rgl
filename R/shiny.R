@@ -32,9 +32,9 @@ rm(fns)
 
 # Widget output function for use in Shiny
 
-rglwidgetOutput <- function(outputId, width = '512px', height = '512px', altText = "3D plot") {
+rglwidgetOutput <- function(outputId, width = '512px', height = '512px') {
 	registerShinyHandlers()
-	tagList(tags$p(altText, id = ariaLabelId(outputId), hidden = NA),
+	tagList(tags$p("3D plot", id = ariaLabelId(outputId), hidden = NA),
 	  shinyWidgetOutput(outputId, 'rglWebGL', width, height, package = 'rgl'))
 }
 

@@ -1223,11 +1223,17 @@
      */
     rglwidgetClass.prototype.restartCanvas = function() {
       var newcanvas = document.createElement("canvas"),
-          self = this;
+          self = this, 
+          labelid = this.el.getAttribute("aria-labelledby");
       newcanvas.width = this.el.width;
       newcanvas.height = this.el.height;
       newcanvas.setAttribute("aria-labelledby", 
-        this.el.getAttribute("aria-labelledby"));
+        labelid);
+        
+      if (typeof this.scene.altText !== "undefined")
+        // We're in Shiny, so alter the label
+        document.getElementById(labelid).innerHTML = this.scene.altText;
+
       newcanvas.addEventListener("webglcontextrestored",
         this.onContextRestored, false);
       newcanvas.addEventListener("webglcontextlost",
