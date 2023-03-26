@@ -154,9 +154,6 @@ This object can be used as the first argument to
 whether a particular location is in the selected region.  If the 
 brush becomes inactive, an object containing only the \code{state}
 field will be sent, with value \code{"inactive"}.
-
-In Shiny, the \code{altText} parameter will be ignored; 
-specify the alternate text in the call to \code{\link{rglwidgetOutput}} instead.
 }
 
 \value{
