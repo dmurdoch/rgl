@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
       </span>
     </div>
 
@@ -39,6 +39,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
+    </li>
+    <li>
+      <a href="../articles/demos.html">rgl Demos</a>
     </li>
     <li>
       <a href="../articles/deprecation.html">Deprecating the `rgl.*` interface</a>
@@ -72,6 +75,38 @@
       <small>Source: <a href="https://github.com/dmurdoch/rgl/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1.3" id="rgl-113">rgl 1.1.3<a class="anchor" aria-label="anchor" href="#rgl-113"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-1-1-3">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-1-3"></a></h3>
+<ul><li>A new function <code><a href="../reference/hover3d.html">hover3d()</a></code> has been added to display “hover hints”: labels next to points when the mouse passes near them.</li>
+<li>A new material property <code>"texmode"</code> has been added to control how textures are applied. The default is <code>"modulate"</code>, consistent with previous versions. If set to <code>"replace"</code>, the texture is displayed without any lighting effects or dependence on the original color of the surface.</li>
+<li>Many of the demos have been moved to a new vignette called <code>demos</code>.</li>
+<li>
+<code>rgl</code> now uses the <code>glad</code> loader which will eventually allow access to newer OpenGL functions in systems that support them.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-changes-1-1-3">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-1-3"></a></h3>
+<ul><li>The <code>texenvmap = TRUE</code> material property is now supported in WebGL.</li>
+<li>The method of including shader source code has changed to work around a limitation in Jupyter.</li>
+<li>The default C++ standard is now accepted, rather than requiring C++11. On R versions prior to R 4.2.0 C++11 is still requested.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-1-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-3"></a></h3>
+<ul><li>The <code><a href="../reference/as.mesh3d.rglId.html">as.mesh3d.rglId()</a></code> and <code><a href="../reference/as.triangles3d.html">as.triangles3d.rglId()</a></code> methods and the <code><a href="../reference/selectpoints3d.html">selectpoints3d()</a></code>, <code><a href="../reference/writeOBJ.html">writeOBJ()</a></code>, <code><a href="../reference/writePLY.html">writePLY()</a></code> and <code><a href="../reference/readSTL.html">writeSTL()</a></code> functions did not handle indices in the objects they were processing (issue <a href="https://github.com/dmurdoch/rgl/issues/293" class="external-link">#293</a>).</li>
+<li>Transparent planes were not always drawn properly in WebGL (issue <a href="https://github.com/dmurdoch/rgl/issues/300" class="external-link">#300</a>).</li>
+<li>
+<code><a href="../reference/viewpoint.html">view3d()</a></code> now returns a <code><a href="../reference/rglIds.html">lowlevel()</a></code> result so that it will be handled properly in WebGL vignettes with auto printing.</li>
+<li>If <code><a href="../reference/matrices.html">transform3d()</a></code> or <code><a href="../reference/matrices.html">rotate3d()</a></code> changed the orientation of a <code>mesh3d</code> object with normals, the normals ended up with the wrong sign. (Reported by Stephane Laurent.)</li>
+<li>
+<code><a href="../reference/scene3d.html">scene3d()</a></code> (and hence <code><a href="../reference/rglwidget.html">rglwidget()</a></code>) did not save the normals for unlit objects. When the objects were also indexed, this prevented proper calculation of front and back. This is fixed, and a warning is issued if normals are not provided when needed.</li>
+<li>It was possible to call <code>glVersion</code> before OpenGL was initialized; this resulted in a segfault with the new <code>glad</code> loader, and may have been the cause of some older crashes as well. This has been fixed.</li>
+<li>
+<code><a href="../reference/writeOBJ.html">readOBJ()</a></code> did not handle comments properly.</li>
+<li>Sprites consisting only of line segments (as used for example by <code><a href="../reference/pch3d.html">pch3d()</a></code>) caused rendering to fail in <code><a href="../reference/rglwidget.html">rglwidget()</a></code> (issue <a href="https://github.com/dmurdoch/rgl/issues/316" class="external-link">#316</a>).</li>
+<li>Headers have been cleaned up to fix problems identified by Rtools43.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.1" id="rgl-101">rgl 1.0.1<small>2023-01-18</small><a class="anchor" aria-label="anchor" href="#rgl-101"></a></h2>
 <div class="section level3">

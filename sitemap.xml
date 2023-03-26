@@ -16,6 +16,9 @@
     <loc>https://dmurdoch.github.io/rgl/dev/articles/WebGL.html</loc>
   </url>
   <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/articles/demos.html</loc>
+  </url>
+  <url>
     <loc>https://dmurdoch.github.io/rgl/dev/articles/deprecation.html</loc>
   </url>
   <url>
@@ -158,6 +161,9 @@
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/grid3d.html</loc>
+  </url>
+  <url>
+    <loc>https://dmurdoch.github.io/rgl/dev/reference/hover3d.html</loc>
   </url>
   <url>
     <loc>https://dmurdoch.github.io/rgl/dev/reference/identify3d.html</loc>
