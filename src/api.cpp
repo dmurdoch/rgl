@@ -1008,9 +1008,10 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.floating = idata[29];
   mat.blend[0] = idata[30];
   mat.blend[1] = idata[31];
-  mat.texmode = (Texture::Mode) idata[32]; 
+  mat.texmode = (Texture::Mode) idata[32];
+  bool deleteFile = (idata[33]) ? true : false;
   
-  int* colors   = &idata[33];
+  int* colors   = &idata[34];
   char*  pixmapfn = cdata[1];
 
   mat.shininess   = (float) ddata[0];
@@ -1036,7 +1037,8 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 
   if ( strlen(pixmapfn) > 0 ) {
     mat.texture = new Texture(pixmapfn, mat.textype, mat.texmode, 
-                              mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
+                              mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
+                              deleteFile);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;

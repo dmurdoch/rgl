@@ -29,14 +29,16 @@ public:
    , bool mipmap
    , unsigned int minfilter
    , unsigned int magfilter
-   , bool envmap);
+   , bool envmap
+   , bool deleteFile);
   virtual ~Texture();
   bool isValid() const;
   void beginUse(RenderContext* renderContext);
   void endUse(RenderContext* renderContext);
   bool is_envmap() const { return envmap; }
   bool hasAlpha() const { return (type == ALPHA || type == LUMINANCE_ALPHA || type == RGBA ); }
-  void getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, unsigned int *out_minfilter, 
+  void getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, 
+                     unsigned int *out_minfilter, 
                      unsigned int *out_magfilter, int bufsize, char *out_filename) ;
   Pixmap* getPixmap() const { return pixmap; }
 private:
@@ -53,6 +55,7 @@ private:
 #ifndef RGL_NO_OPENGL
   GLint   internalMode;
 #endif
+  bool    deleteFile;
 };
 
 } // namespace rgl

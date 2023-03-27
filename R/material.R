@@ -80,19 +80,14 @@ rgl.material0 <- function(
 
   rgl.bool(texmipmap)
 
-  if (length(texture) > 1)
-    stop("'texture' should be a single character string or NULL")
-
-  if (is.null(texture))
-    texture <- ""
-  else 
-    texture <- normalizePath(texture)
+  texture <- prepareTexture(texture)
 
   textype <- rgl.enum.textype( textype )
   texmode <- rgl.enum.texmode( texmode )
   texminfilter <- rgl.enum.texminfilter( texminfilter )
   texmagfilter <- rgl.enum.texmagfilter( texmagfilter )
   rgl.bool(texenvmap)
+  texdelete <- !is.null(attr(texture, "rgl_source"))
   
   # polygon offset
   
@@ -128,7 +123,7 @@ rgl.material0 <- function(
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
 
-                          blend, texmode, color) )
+                          blend, texmode, texdelete, color) )
   cdata <- as.character(c( tag, texture ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
@@ -224,4 +219,56 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        tag = cdata[1]
        )
                    
+}
+
+prepareTexture <- function(texture) {
+  arr <- NULL
+  src <- NULL
+  if (is.null(texture))
+    result <- ""
+  else if (is.character(texture) && length(texture) == 1) {
+    # Assume it's a filename
+    ext <- tolower(file_ext(texture))
+    if (ext %in% c("jpg", "jpeg")) {
+      if (requireNamespace("jpeg"))
+        arr <- jpeg::readJPEG(texture)
+      else
+        stop("JPEG textures require the 'jpeg' package")
+    } else
+      result <- normalizePath(texture)
+  } else if (inherits(texture, "RasterBrick")) {
+    if (requireNamespace("raster")) {
+      arr <- raster::as.array(texture)/255
+    } else
+      stop("RasterBrick textures require the 'raster' package")
+  } else {
+    raster <- as.raster(texture)
+    arr <- t(col2rgb(raster))/255
+    dim(arr) <- c(rev(dim(raster)), 3)
+    arr <- aperm(arr, c(2,1,3))
+  }
+  
+  if (!is.null(arr)) {
+    if (!requireNamespace("png"))
+      stop("non-PNG textures require the 'png' package")
+    result <- tempfile(fileext = ".png", tmpdir = .rglEnv$textureDir)
+    src <- attr(texture, "src")
+    png::writePNG(arr, target = result, 
+                  text = c(rgl_source = deparse(src)))
+  }
+  
+  structure(result, rgl_source = src)
+}
+
+textureSource <- function(texture) {
+  if (missing(texture))
+    return(.rglEnv$textureDir)
+  if (requireNamespace("png")) {
+    png <- png::readPNG(texture, info = TRUE)
+    if (!is.null(info <- attr(png, "info")) && 
+        !is.null(info$text) &&
+        !is.na(src <- info$text["rgl_source"]))
+      return(parse(text = src)[[1]])
+  }
+  texture
 }
