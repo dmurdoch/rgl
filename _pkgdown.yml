@@ -240,6 +240,7 @@ reference:
   - makeDependency
   - setGraphicsDelay
   - rglId
+  - textureSource  
   - in_pkgdown_example
   - projectDown
   - expect_known_scene

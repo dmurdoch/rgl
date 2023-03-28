@@ -4,8 +4,7 @@
 Full support in R Markdown or `knitr` requires a `knitr` update
 (https://github.com/yihui/knitr/pull/2243).
 * Support for non-PNG textures has been added.  Currently 
-supported:  JPEG files (by name), `RasterBrick` objects 
-(if the `raster` package is available), and any other object
+supported:  JPEG files and any other object
 for which `grDevices::as.raster()` works, e.g. matrices.
 (Fixes issue #196.)
 

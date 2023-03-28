@@ -236,11 +236,6 @@ prepareTexture <- function(texture) {
         stop("JPEG textures require the 'jpeg' package")
     } else
       result <- normalizePath(texture)
-  } else if (inherits(texture, "RasterBrick")) {
-    if (requireNamespace("raster")) {
-      arr <- raster::as.array(texture)/255
-    } else
-      stop("RasterBrick textures require the 'raster' package")
   } else {
     raster <- as.raster(texture)
     arr <- t(col2rgb(raster))/255
