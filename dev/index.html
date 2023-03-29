@@ -104,6 +104,8 @@
 <div class="page-header"><h1 id="rgl---3d-visualization-device-system-for-r-using-opengl">RGL - 3D visualization device system for R using OpenGL<a class="anchor" aria-label="anchor" href="#rgl---3d-visualization-device-system-for-r-using-opengl"></a>
 </h1></div>
 <p><img src="reference/figures/READMEpolyhedra-1-rgl.png"><!-- --></p>
+<!-- badges: start -->
+
 <div class="section level2">
 <h2 id="introduction">INTRODUCTION<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -130,6 +132,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install development version from Github</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
 <p>If that fails, read the instructions below.</p>
+<p>Currently installs are tested on older R versions back to R 3.5.x, but this version of <code>rgl</code> may work back as far as R 3.3.0.</p>
 </div>
 <div class="section level2">
 <h2 id="license">LICENSE<a class="anchor" aria-label="anchor" href="#license"></a>
@@ -199,7 +202,7 @@ OpenGL Utility Library (GLU)</p>
 </h2>
 <p>Binary builds of <code>rgl</code> are available for some platforms on CRAN.</p>
 <p>For source builds, install the prerequisites as described above, download the tarball and at the command line run</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL rgl_1.<span class="dv">0</span>.<span class="fl">15.</span>tar.gz</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL rgl_1.<span class="dv">1</span>.<span class="fl">6.</span>tar.gz</span></code></pre></div>
 <p>(with the appropriate version of the tarball). The build uses an <code>autoconf</code> configure script; to see the options, expand the tarball and run <code>./configure --help</code>.</p>
 <p>Alternatively, in R run</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
@@ -215,7 +218,7 @@ OpenGL Utility Library (GLU)</p>
 <h2 id="building-without-opengl">BUILDING WITHOUT OPENGL<a class="anchor" aria-label="anchor" href="#building-without-opengl"></a>
 </h2>
 <p>As of version 0.104.1, it is possible to build the package without OpenGL support on Unix-alikes (including macOS) with the configure option –disable-opengl For example,</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_1.<span class="dv">0</span>.<span class="fl">15.</span>tar.gz </span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_1.<span class="dv">1</span>.<span class="fl">6.</span>tar.gz </span></code></pre></div>
 <p>On Windows, OpenGL support cannot currently be disabled.</p>
 </div>
 <div class="section level2">
@@ -297,7 +300,13 @@ Trevor Davis for a <code>snapshot3d</code> patch. Mike Stein for pointer-handlin
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=rgl" class="external-link"><img src="https://www.r-pkg.org/badges/version/rgl" alt="CRAN status"></a></li>
+<li><a href="https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </div>
 </div>
