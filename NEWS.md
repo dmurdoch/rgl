@@ -1,12 +1,19 @@
-# rgl 1.1.6
+# rgl 1.1.7
 
-* Support for "alt" text has been added to `rglwidget()`.
-Full support in R Markdown or `knitr` requires a `knitr` update
-(https://github.com/yihui/knitr/pull/2243).
+## Major changes
+
 * Support for non-PNG textures has been added.  Currently 
 supported:  JPEG files and any other object
 for which `grDevices::as.raster()` works, e.g. matrices.
 (Fixes issue #196.)
+
+## Minor changes
+
+* Support for "alt" text has been added to `rglwidget()`.
+Full support in R Markdown or `knitr` requires a `knitr` update
+(https://github.com/yihui/knitr/pull/2243).
+* Some of the tests have been relaxed slightly so they 
+shouldn't trigger errors on the M1Mac test platform.
 
 # rgl 1.1.3
 
