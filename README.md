@@ -5,6 +5,13 @@
 
 ![](man/figures/READMEpolyhedra-1-rgl.png)<!-- -->
 
+<!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/rgl)](https://CRAN.R-project.org/package=rgl)
+[![R-CMD-check](https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 ## INTRODUCTION
 
 The RGL package is a visualization device system for R, using OpenGL or
@@ -49,6 +56,9 @@ a source install. Those aren’t easy! Try
     remotes::install_github("dmurdoch/rgl")
 
 If that fails, read the instructions below.
+
+Currently installs are tested on older R versions back to R 3.5.x, but
+this version of `rgl` may work back as far as R 3.3.0.
 
 ## LICENSE
 
@@ -134,7 +144,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_1.0.15.tar.gz
+    R CMD INSTALL rgl_1.1.6.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -164,7 +174,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.0.15.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.1.6.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 

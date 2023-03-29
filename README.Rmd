@@ -39,6 +39,11 @@ next3d()
 shade3d(tetrahedron3d(), col = col[5])
 ```
 
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/rgl)](https://CRAN.R-project.org/package=rgl)
+[![R-CMD-check](https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 INTRODUCTION
 ------------
 The RGL package is a visualization device system for R, using 
