@@ -53,7 +53,7 @@ export(.check3d,
   spheres3d, spin3d, sprites3d, subdivision3d, 
   subsceneInfo, subsceneList, Sweave.snapshot,
   surface3d, tagged3d, terrain3d, 
-  tetrahedron3d, text3d, texts3d, 
+  tetrahedron3d, text3d, texts3d, textureSource,
   thigmophobe3d, title3d, 
   tkpar3dsave, tkspinControl, tkspin3d, 
   toggleWidget, triangulate, 
@@ -167,10 +167,11 @@ export(.check3d,
  
  importFrom(graphics, legend, par, plot, plot.new, polygon,
        strwidth, strheight)
- importFrom(grDevices, col2rgb, colorRamp, dev.cur, dev.new, 
+ importFrom(grDevices, as.raster, col2rgb, colorRamp, dev.cur, dev.new, 
        dev.off, png, postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)
+ importFrom(tools, file_ext)
  importFrom(utils, capture.output, count.fields, file_test, 
             flush.console, packageVersion, read.table, head, tail)
  importFrom(R6, R6Class)

@@ -97,6 +97,10 @@
   register_compare_proxy()
   
   .rglEnv$subsceneList <- NULL
+  
+  dir <- tempfile("rgl")
+  dir.create(dir)
+  .rglEnv$textureDir <- normalizePath(dir)
 
   # Workaround for incompatibility with quartz device
   # By default only run this if we'll be using the X11 display on macOS
@@ -192,8 +196,10 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
 ##
 
 .onUnload <- function(libpath) {
+  
   unregisterShinyHandlers()
-
+  unlink(.rglEnv$textureDir, recursive = TRUE)
+  
   # shutdown
   .C( rgl_quit, success=FALSE )
   

@@ -20,7 +20,9 @@ Texture::Texture(
 , bool in_mipmap
 , unsigned int in_minfilter
 , unsigned int in_magfilter
-, bool in_envmap)
+, bool in_envmap
+, bool in_deleteFile
+)
 {
   texName = 0;
   pixmap = new Pixmap();
@@ -28,6 +30,7 @@ Texture::Texture(
   mode   = in_mode;
   mipmap = in_mipmap;
   envmap = in_envmap;
+  deleteFile = in_deleteFile;
   magfilter = (in_magfilter) ? GL_LINEAR : GL_NEAREST;
   if (mipmap) {
     switch(in_minfilter) {
@@ -79,8 +82,11 @@ Texture::~Texture()
 #endif
   if (pixmap)
     delete pixmap;
-  if (filename)
+  if (filename) {
+    if (deleteFile)
+      std::remove(filename);
     delete[] filename;
+  }
 }
 
 
@@ -89,7 +95,7 @@ bool Texture::isValid() const
   return (pixmap) ? true : false;
 }
 
-void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, 
+void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap,
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
                             int buflen, char *out_filename)
 {

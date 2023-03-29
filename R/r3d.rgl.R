@@ -100,10 +100,10 @@ rgl.material.readonly <- "isTransparent"
 warnBlackTexture <- function(...,
                              defaults = material3d(),
                              color = col, col = "missing",
-                             texture = NULL,
+                             texture = defaults$texture,
                              texmode = defaults$texmode) {
-  if (!is.null(texture) &&
-      length(color) == 1 &&
+  if (!is.null(texture)) {
+    if (length(color) == 1 &&
       !is.na(color) &&
       color == "missing" &&
       !is.na(texmode) && 
@@ -111,9 +111,18 @@ warnBlackTexture <- function(...,
       isTRUE(getOption("rgl.warnBlackTexture", TRUE)) &&
       length(defaults$color) &&
       !is.na(defaults$color[1]) &&
-      defaults$color[1] %in% c("#000000", "black")) {
-    warning("Texture will be invisible on black surface", call. = FALSE) 
+      defaults$color[1] %in% c("#000000", "black"))
+      warning("Texture will be invisible on black surface", call. = FALSE) 
   }
+}
+
+# Attach the expression for the source of a texture if
+# it is not already there
+
+addTextureSource <- function(texture, ...) {
+  if (!is.null(texture) && is.null(attr(texture, "src")))
+    attr(texture, "src") <- substitute(texture)
+  texture
 }
 
 # This function expands a list of arguments by putting
@@ -122,11 +131,14 @@ warnBlackTexture <- function(...,
 # Unrecognized args are left in place.
 
 .fixMaterialArgs <- function(..., Params = material3d(), col) {
-   warnBlackTexture(..., 
-                    col = if (missing(col)) "missing" else col,
-                    defaults = Params)
    f <- function(...) list(...)
    dots <- list(...)
+   if (!is.null(dots$texture)) {
+     warnBlackTexture(...,  
+       col = if (missing(col)) "missing" else col,
+       defaults = Params)
+     dots$texture <- addTextureSource(...)
+   }
    if (!missing(col)) 
      Params$color <- col
    formals(f) <- c(Params, formals(f))
@@ -135,7 +147,7 @@ warnBlackTexture <- function(...,
    names <- lapply(names, as.name)
    b <- as.list(body(f))
    body(f) <- as.call(c(b[1], names, b[-1]))
-   f(...)
+   do.call(f, dots)
 } 
 
 # This one just expands the argument names to match the
