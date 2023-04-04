@@ -33,4 +33,4 @@ PKG_LIBS = \
 @HIDE_IF_R42PLUS@	sed -e "s^@RGL_NO_OPENGL@^FALSE^" ../R/noOpenGL.R.in > ../R/noOpenGL.R
 
 clean:
-  rm -f $(OBJECTS) $(SHLIB)
+	rm -f $(OBJECTS) $(SHLIB)
