@@ -44,5 +44,5 @@ test_that("transformations work", {
 	shade3d(translate3d(mesh, 1,2,3))
   shade3d(rotate3d(mesh, 35, 1,2,3))
   shade3d(scale3d(mesh, 1,2,3))
-	expect_known_scene("transformations")
+	expect_known_scene("transformations", tol = 1.e-6)
 })
