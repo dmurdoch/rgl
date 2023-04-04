@@ -1,4 +1,4 @@
-# rgl 1.1.7
+# rgl 1.1.8
 
 ## Major changes
 
@@ -14,6 +14,11 @@ Full support in R Markdown or `knitr` requires a `knitr` update
 (https://github.com/yihui/knitr/pull/2243).
 * Some of the tests have been relaxed slightly so they 
 shouldn't trigger errors on the M1Mac test platform.
+
+## Bug fixes
+
+* The `Makevars.win` file was being produced incorrectly on
+older Windows versions.
 
 # rgl 1.1.3
 
