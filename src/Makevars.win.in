@@ -17,18 +17,18 @@ PKG_LIBS = \
 @HIDE_IF_R42PLUS@ CXX_STD = CXX11
 
 @HIDE_IF_R42PLUS@ PKG_CPPFLAGS = \
-@HIDE_IF_R42PLUS@ 	-DHAVE_PNG_H -DHAVE_FREETYPE -Iext -Iext/ftgl \
+@HIDE_IF_R42PLUS@	-DHAVE_PNG_H -DHAVE_FREETYPE -Iext -Iext/ftgl \
 @HIDE_IF_R42PLUS@	-I$(RWINLIB)/include -I$(RWINLIB)/include/freetype2 \
-@HIDE_IF_R42PLUS@ 	-Iext/glad/include
+@HIDE_IF_R42PLUS@	-Iext/glad/include
 
 @HIDE_IF_R42PLUS@ PKG_LIBS = -L$(RWINLIB)/lib$(R_ARCH) \
 @HIDE_IF_R42PLUS@	-lfreetype -lpng -lz -lgdi32 -lopengl32 -lglu32
 
-@HIDE_IF_R42PLUS@ all: winlibs $(SHLIB)
+@HIDE_IF_R42PLUS@all: winlibs $(SHLIB)
 
-@HIDE_IF_R42PLUS@ $(SHLIB): winlibs
+@HIDE_IF_R42PLUS@$(SHLIB): winlibs
 
-@HIDE_IF_R42PLUS@ winlibs:
+@HIDE_IF_R42PLUS@winlibs:
 @HIDE_IF_R42PLUS@	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R" $(VERSION)
 @HIDE_IF_R42PLUS@	sed -e "s^@RGL_NO_OPENGL@^FALSE^" ../R/noOpenGL.R.in > ../R/noOpenGL.R
 
