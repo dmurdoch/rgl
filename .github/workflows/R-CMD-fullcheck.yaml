@@ -28,9 +28,9 @@ jobs:
 
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: '4.1'}
+          - {os: windows-latest,   r: '4.1', rtools-version: '40'}
           - {os: ubuntu-latest,   r: '4.0'}
-          - {os: ubuntu-latest,   r: '3.6'}
+          - {os: macos-latest,    r: '3.6'}
           - {os: ubuntu-latest,   r: '3.5'}
 
     env:
