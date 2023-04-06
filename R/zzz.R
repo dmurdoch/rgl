@@ -118,7 +118,9 @@
     dev.off()
   }
   
-  ret <- rgl.init(initValue, onlyNULL)
+  rglhome <- normalizePath(file.path(lib, pkg))
+  
+  ret <- rgl.init(initValue, onlyNULL, home = rglhome)
   
   if (!ret) {
     warning("'rgl.init' failed, running with 'rgl.useNULL = TRUE'.", call. = FALSE)
@@ -179,9 +181,9 @@ setGraphicsDelay <- function(delay = Sys.getenv("RGL_SLOW_DEV", 0),
   }
 }
 
-rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.debug", FALSE)) 
+rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.debug", FALSE), home) 
   .Call( rgl_init, 
-    initValue, onlyNULL, environment(rgl.init), debug )
+    initValue, onlyNULL, environment(rgl.init), debug, home )
 
 .onAttach <- function(libname, pkgname) {
   if (noOpenGL)

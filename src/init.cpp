@@ -34,18 +34,11 @@ int gInitValue;
 void* gHandle;
 SEXP rglNamespace;
 bool rglDebug;
+std::string rglHome;
 
 //
 // FUNCTION
 //   rgl_init
-//
-// PARAMETERS
-//   ioptions - platform-specific options.
-//     Windows:
-//     [0]  multiple-document-interface console handle (MDI)
-//          or 0 (SDI)
-//     MacOSX:
-//     [0]  Formerly indicator of presence (1) or absence (0) of Carbon/Cocoa, now unused
 //
 
 #ifdef __cplusplus
@@ -53,7 +46,7 @@ extern "C" {
 #endif
 
 SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
-              SEXP debug)
+              SEXP debug, SEXP home)
 {
   int success = 0;
   bool useNULLDevice = asLogical(useNULL);
@@ -62,6 +55,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   gHandle = NULL;
   rglNamespace = in_namespace;
   rglDebug = asLogical(debug);
+  rglHome = std::string(CHAR(STRING_ELT(home, 0)));
   
   if ( isNumeric(initValue) ) {
     gInitValue =  asInteger(initValue);
@@ -247,7 +241,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
  #endif // CHECK_ARGS
 
  static const R_CallMethodDef CallEntries[]  = {
-   FUNDEF(rgl_init, 4),
+   FUNDEF(rgl_init, 5),
    FUNDEF(rgl_dev_getcurrent, 0),
    FUNDEF(rgl_dev_list, 0),
    FUNDEF(rgl_par3d, 3),
