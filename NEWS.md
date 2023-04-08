@@ -1,4 +1,4 @@
-# rgl 1.1.8
+# rgl 1.1.9
 
 ## Major changes
 
@@ -14,6 +14,8 @@ Full support in R Markdown or `knitr` requires a `knitr` update
 (https://github.com/yihui/knitr/pull/2243).
 * Some of the tests have been relaxed slightly so they 
 shouldn't trigger errors on the M1Mac test platform.
+* Internally, the C++ code has dropped the use of the internally
+defined `String` type, settling on `std::string` instead.
 
 ## Bug fixes
 

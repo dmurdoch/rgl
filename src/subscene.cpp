@@ -365,13 +365,13 @@ void Subscene::getAttribute(SceneNode* subscene, AttribID attrib, int first, int
   }
 }
 
-String Subscene::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
+std::string Subscene::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
   int n = getAttributeCount(subscene, attrib);
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     shapes[index]->getTypeName(buffer, 20);
-    return String(static_cast<int>(strlen(buffer)), buffer);
+    return buffer;
   } else
     return SceneNode::getTextAttribute(subscene, attrib, index);
 }
