@@ -90,7 +90,7 @@ rgl.material.names <- c("color", "alpha", "lit", "ambient", "specular",
     "texminfilter", "texmagfilter", "texenvmap",
     "depth_mask", "depth_test", "isTransparent",
     "polygon_offset", "margin", "floating", "tag",
-    "blend")
+    "blend", "vertex_shader", "fragment_shader")
 
 rgl.material.readonly <- "isTransparent"
 

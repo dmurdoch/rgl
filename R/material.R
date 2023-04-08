@@ -223,8 +223,10 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        blend = blendmodes[idata[32:33] + 1],
        texmode = texmodes[idata[34] + 1],
        tag = cdata[1],
-  		 vertex_shader = structure(cdata[3], class = "vertex_shader"),
-  		 fragment_shader = structure(cdata[4], class = "fragment_shader")
+  		 vertex_shader = structure(cdata[3], class = "rglShader",
+  		 													type = "vertex"),
+  		 fragment_shader = structure(cdata[4], class = "rglShader",
+  		 													type = "fragment")
        )
                    
 }

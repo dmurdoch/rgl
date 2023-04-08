@@ -6,8 +6,6 @@
 #include "init.h"
 #include "shaders.h"
 
-#undef length     /* not Rf_length! */
-
 using namespace rgl;
 
 static std::string defaultShaders[NUM_SHADERS];
@@ -17,8 +15,8 @@ static std::string shaderFilenames[NUM_SHADERS] =
 std::string rgl::defaultShader(ShaderType type)
 {
 	std::string result = defaultShaders[type];
-	if (!result.length()) {
-		std::string filename = rglHome + "/htmlwidgets/lib/rglClass/shaders/" + shaderFilenames[type];
+	if (!result.size()) {
+		std::string filename = rglHome + "/shaders/" + shaderFilenames[type];
 		std::ifstream file(filename);
 		if (!file) {
 			// Error handling: file could not be opened

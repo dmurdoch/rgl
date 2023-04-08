@@ -32,3 +32,4 @@ rglClass/README.md$
 ^R/noOpenGL.R$
 [.]JSDoc
 ^CRAN-SUBMISSION$
+^shaders.txt$

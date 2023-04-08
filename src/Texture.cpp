@@ -64,10 +64,9 @@ Texture::Texture(
     }
   }
   
-  filename = new char [1 + strlen(in_filename)];
-  memcpy(filename, in_filename, 1 + strlen(in_filename));
+  filename = in_filename;
   
-  if ( !pixmap->load(filename) ) {
+  if ( !pixmap->load(filename.c_str()) ) {
     delete pixmap;
     pixmap = NULL;
   }
@@ -82,11 +81,8 @@ Texture::~Texture()
 #endif
   if (pixmap)
     delete pixmap;
-  if (filename) {
-    if (deleteFile)
-      std::remove(filename);
-    delete[] filename;
-  }
+  if (filename.size() && deleteFile)
+    std::remove(filename.c_str());
 }
 
 
@@ -97,7 +93,7 @@ bool Texture::isValid() const
 
 void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap,
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
-                            int buflen, char *out_filename)
+                            std::string *out_filename)
 {
   *out_type = type;
   *out_mode = mode;
@@ -126,7 +122,7 @@ void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap,
         break;
   }
   *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
-  strncpy(out_filename, filename, buflen);
+  *out_filename = filename;
 }
 
 #ifndef RGL_NO_OPENGL
