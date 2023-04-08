@@ -6,8 +6,8 @@
 //   SceneNode
 //
 
+#include <string>
 #include "types.h"
-#include "String.h"
 #include "geom.h"
 
 namespace rgl {
@@ -74,7 +74,7 @@ public:
   /* Some nodes depend on the bbox, so we pass it to all */
   virtual int getAttributeCount(SceneNode* subscene, AttribID attrib) { return 0; }
   virtual void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result) { return; }
-  virtual String  getTextAttribute(SceneNode* subscene, AttribID attrib, int index) { return String(0, NULL); }
+  virtual std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index) { return ""; }
   virtual void getTypeName(char* buffer, int buflen) = 0;
 
 protected:

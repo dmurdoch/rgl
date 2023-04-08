@@ -37,7 +37,7 @@ public:
   virtual int getElementCount(void);
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
-  String getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
+  std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
   
   /**
    * location of individual items

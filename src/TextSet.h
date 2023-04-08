@@ -1,10 +1,12 @@
 #ifndef TEXTSET_H
 #define TEXTSET_H
 
+#include <vector>
+#include <string>
+
 #include "Shape.h"
 
 #include "render.h"
-#include "String.h"
 #include "glgui.h"
 #ifdef HAVE_FREETYPE
 #include "FTGL/ftgl.h"
@@ -30,7 +32,7 @@ public:
   int getElementCount(void){ return textArray.size(); }
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
-  String getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
+  std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
     
   Vertex getPrimitiveCenter(int index) { return vertexArray[index]; }
 
@@ -41,7 +43,7 @@ public:
 private:
 
   VertexArray vertexArray;
-  StringArray textArray;
+  std::vector<std::string> textArray;
   FontArray fonts;
 
   double adjx;

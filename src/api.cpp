@@ -365,11 +365,12 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
     
     if (scenenode)
       for (int i=0; i < *count; i++) {
-        String s = scenenode->getTextAttribute(subscene, *attrib, i + *first);
-        if (s.length) {
-          *result = R_alloc(s.length + 1, 1);
-          strncpy(*result, s.text, s.length);
-          (*result)[s.length] = '\0';
+        std::string s = scenenode->getTextAttribute(subscene, *attrib, i + *first);
+#undef length
+        if (s.length()) {
+          *result = R_alloc(s.length() + 1, 1);
+          strncpy(*result, s.c_str(), s.length());
+          (*result)[s.length()] = '\0';
         }
         result++;
       }
