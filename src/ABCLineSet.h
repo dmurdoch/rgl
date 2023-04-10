@@ -20,7 +20,7 @@ public:
   /**
    * tell type.
    **/
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "abclines", buflen); };
+  virtual std::string getTypeName() { return "abclines"; };
 
   /**
    * overload to update segments first.

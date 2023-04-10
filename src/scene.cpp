@@ -179,10 +179,7 @@ void Scene::removeReferences(SceneNode* node) {
         break;
       }
     } else if (itertype == SHAPE) {
-      char buffer[20];
-      buffer[19] = 0;
-      (*iter)->getTypeName(buffer, 20);
-      if (!strcmp(buffer, "sprites")) {
+      if ((*iter)->getTypeName() == "sprites") {
         // Rprintf("removing from sprites\n");
         SpriteSet* sprite = (SpriteSet*)*iter;
         sprite->remove_shape(id);
@@ -204,14 +201,10 @@ int Scene::get_id_count(TypeID type)
 
 void Scene::get_ids(TypeID type, int* ids, char** types)
 {
-  char buffer[20];
   for (std::vector<SceneNode*>::iterator iter = nodes.begin(); iter != nodes.end(); ++ iter) {
     if (type == (*iter)->getTypeID()) {
       *ids++ = (*iter)->getObjID();
-      buffer[19] = 0;
-      (*iter)->getTypeName(buffer, 20); 
-      *types = R_alloc(strlen(buffer)+1, 1);
-      strcpy(*types, buffer);        
+      *types = copyStringToR((*iter)->getTypeName());
       types++;
     }
   }

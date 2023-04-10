@@ -369,9 +369,7 @@ std::string Subscene::getTextAttribute(SceneNode* subscene, AttribID attrib, int
 {
   int n = getAttributeCount(subscene, attrib);
   if (index < n && attrib == TYPES) {
-    char* buffer = R_alloc(20, 1);    
-    shapes[index]->getTypeName(buffer, 20);
-    return buffer;
+    return shapes[index]->getTypeName();
   } else
     return SceneNode::getTextAttribute(subscene, attrib, index);
 }
@@ -441,16 +439,12 @@ int Subscene::get_id_count(TypeID type, bool recursive)
     
 int Subscene::get_ids(TypeID type, int* ids, char** types, bool recursive)
 {
-  char buffer[20];
   int count = 0;
   switch(type) {
   case SHAPE: 
     for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
       *ids++ = (*i)->getObjID();
-      buffer[19] = 0;
-      (*i)->getTypeName(buffer, 20);
-      *types = R_alloc(strlen(buffer)+1, 1);
-      strcpy(*types, buffer);
+      *types = copyStringToR((*i)->getTypeName());
       types++;
       count++;
     }

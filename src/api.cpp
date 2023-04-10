@@ -908,10 +908,7 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
 	    success++;
 	    break;
 	  default:
-	    char buffer[20];
-	    buffer[19] = 0;
-	    node->getTypeName(buffer, 20);
-	    warning("id %d is type %s; cannot hide", ids[i], buffer);
+	    warning("id %d is type %s; cannot hide", ids[i], node->getTypeName().c_str());
           }
 	else 
 	  warning("id %d not found in scene", ids[i]);
@@ -1062,16 +1059,6 @@ void rgl::rgl_getcolorcount(int* count)
   CHECKGLERROR;
 }
 
-char* copystring(std::string s) {
-	/* R has highjacked length() */
-	char* result;
-	size_t len = s.size();
-	result = R_alloc(len + 1, 1);
-	strncpy(result, s.c_str(), len);
-	result[len] = '\0';
-	return result;
-}
-
 void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
 {
   Material* mat = &currentMaterial;
@@ -1166,10 +1153,10 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   } else 
     idata[10] = 0;
   
-  cdata[0] = copystring(mat->tag);
-  cdata[1] = copystring(filename);
-  cdata[2] = copystring(mat->shaders[VERTEX_SHADER]);
-  cdata[3] = copystring(mat->shaders[FRAGMENT_SHADER]);
+  cdata[0] = copyStringToR(mat->tag);
+  cdata[1] = copyStringToR(filename);
+  cdata[2] = copyStringToR(mat->shaders[VERTEX_SHADER]);
+  cdata[3] = copyStringToR(mat->shaders[FRAGMENT_SHADER]);
   
   CHECKGLERROR;
   

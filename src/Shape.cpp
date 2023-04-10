@@ -140,3 +140,32 @@ void Shape::getAttribute(SceneNode* subscene, AttribID attrib, int first, int co
     }
   }
 }
+
+ShaderFlags Shape::getDefFlags()
+{
+	ShaderFlags result = {
+	  .fat_lines = false,
+	  .fixed_quads = false,
+	  .fixed_size = false,
+	  .has_fog = false,
+	  .has_normals = false,
+	  .has_texture = false,
+	  .is_brush = false,
+	  .is_lines = false,
+	  .is_lit = false,
+	  .is_points = false,
+	  .is_transparent = false,
+	  .is_twosided = false,
+	  .needs_vnormal = false,
+	  .rotating = false,
+	  .round_points = false
+  };
+
+	result.is_lines = 
+		
+	result.fat_lines = 	material.lwd != 1.0 && 
+		                  (result.is_lines ||
+		                   material.front == Material::LINE_FACE ||
+		                   material.back == Material::LINE_FACE);
+	return result;
+}

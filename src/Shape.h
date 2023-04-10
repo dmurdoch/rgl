@@ -64,7 +64,7 @@ public:
   
   const bool getIgnoreExtent() const { return ignoreExtent; }
 
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "shape", buflen); };
+  virtual std::string getTypeName() { return "shape"; };
   
   /**
    * invalidate display list
@@ -129,6 +129,14 @@ public:
    **/
   
   virtual bool isClipPlane() { return false; }
+  
+  /**
+   * The methods below have similar names and uses as 
+   * Javascript methods in shaders.src.js.  Make sure changes
+   * happen in both places!
+   */
+  
+  ShaderFlags getDefFlags();
   
 protected:
   /**

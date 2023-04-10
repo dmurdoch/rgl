@@ -253,10 +253,8 @@ void Background::getAttribute(SceneNode* subscene, AttribID attrib, int first, i
 std::string Background::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
   int n = getAttributeCount(subscene, attrib);
-  if (index < n && attrib == TYPES) {
-    char* buffer = R_alloc(20, 1);    
-    quad->getTypeName(buffer, 20);
-    return buffer;
-  } else
+  if (index < n && attrib == TYPES)
+    return quad->getTypeName();
+  else
     return Shape::getTextAttribute(subscene, attrib, index);
 }

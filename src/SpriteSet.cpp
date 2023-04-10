@@ -374,9 +374,7 @@ std::string SpriteSet::getTextAttribute(SceneNode* subscene, AttribID attrib, in
 {
   int n = getAttributeCount(subscene, attrib);
   if (index < n && attrib == TYPES) {
-    char* buffer = R_alloc(20, 1);    
-    scene->get_shape(shapes[index])->getTypeName(buffer, 20);
-    return buffer;
+    return scene->get_shape(shapes[index])->getTypeName();
   } else
     return Shape::getTextAttribute(subscene, attrib, index);
 }

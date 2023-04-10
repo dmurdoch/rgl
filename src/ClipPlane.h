@@ -26,7 +26,7 @@ public:
   /**
    * tell type.
    **/
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "clipplanes", buflen); };
+  virtual std::string getTypeName() { return "clipplanes"; };
   
   virtual void renderBegin(RenderContext* renderContext);
   

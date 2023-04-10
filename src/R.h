@@ -4,6 +4,8 @@
 // This define avoids a warning about ERROR redefinition in Windows
 #define STRICT_R_HEADERS
 
+#include <string>
+
 #include <R.h>
 
 /* Default for antialiasing */
@@ -13,6 +15,7 @@
 #define USE_GLGETERROR 0
 
 
+namespace rgl {
 
 #if USE_GLGETERROR
 #define SAVEGLERROR saveGLerror(__FILE__, __LINE__);
@@ -24,20 +27,18 @@
 /* Neither one can be called with glBegin() ... glEnd() pairs.                       */
 /* They are defined in glErrors.cpp                                                  */
 
-namespace rgl {
-
 extern int SaveErrnum;
 
 void saveGLerror(const char *, int);  
 void checkGLerror(const char *, int);
-
-} // namespace rgl
 
 #else
 #define SAVEGLERROR
 #define CHECKGLERROR
 #endif
 
+char* copyStringToR(std::string s);
 
+} // namespace rgl
 
 #endif /* RGL_R_H */
