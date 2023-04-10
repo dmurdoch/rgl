@@ -366,11 +366,10 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
     if (scenenode)
       for (int i=0; i < *count; i++) {
         std::string s = scenenode->getTextAttribute(subscene, *attrib, i + *first);
-#undef length
-        if (s.length()) {
-          *result = R_alloc(s.length() + 1, 1);
-          strncpy(*result, s.c_str(), s.length());
-          (*result)[s.length()] = '\0';
+        if (s.size()) {
+          *result = R_alloc(s.size() + 1, 1);
+          strncpy(*result, s.c_str(), s.size());
+          (*result)[s.size()] = '\0';
         }
         result++;
       }
@@ -909,10 +908,7 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
 	    success++;
 	    break;
 	  default:
-	    char buffer[20];
-	    buffer[19] = 0;
-	    node->getTypeName(buffer, 20);
-	    warning("id %d is type %s; cannot hide", ids[i], buffer);
+	    warning("id %d is type %s; cannot hide", ids[i], node->getTypeName().c_str());
           }
 	else 
 	  warning("id %d not found in scene", ids[i]);
@@ -1067,6 +1063,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
 {
   Material* mat = &currentMaterial;
   unsigned int i,j;
+  std::string filename;
   
   if (*id > 0) {
     Device* device;
@@ -1105,15 +1102,12 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
                                (bool*) (idata + 7),
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
-                               static_cast<int>(strlen(cdata[1])),
-                               cdata[1] );
+                               &filename);
   } else {
     idata[6] = (int)mat->textype;
     idata[7] = mat->mipmap ? 1 : 0; 
     idata[8] = mat->minfilter; 
     idata[9] = mat->magfilter; 
-    cdata[0][0] = '\0';
-    cdata[1][0] = '\0';
   }
   idata[11] = (int) mat->ambient.getRedub();
   idata[12] = (int) mat->ambient.getGreenub();
@@ -1159,11 +1153,8 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   } else 
     idata[10] = 0;
   
-  /* Can't use tag.length() here, because R has highjacked length() */
-  size_t len_tag = strlen(mat->tag.c_str());
-  cdata[0] = R_alloc(len_tag + 1, 1);
-  strncpy(cdata[0], mat->tag.c_str(), len_tag);
-  (cdata[0])[len_tag] = '\0';
+  cdata[0] = copyStringToR(mat->tag);
+  cdata[1] = copyStringToR(filename);
   
   CHECKGLERROR;
   

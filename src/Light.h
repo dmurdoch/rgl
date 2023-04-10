@@ -28,7 +28,7 @@ public:
 
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "light", buflen); };
+  virtual std::string getTypeName() { return "light"; };
 
 private:
   float position[4];

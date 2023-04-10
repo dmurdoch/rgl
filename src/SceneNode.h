@@ -75,7 +75,7 @@ public:
   virtual int getAttributeCount(SceneNode* subscene, AttribID attrib) { return 0; }
   virtual void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result) { return; }
   virtual std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index) { return ""; }
-  virtual void getTypeName(char* buffer, int buflen) = 0;
+  virtual std::string getTypeName() = 0;
 
 protected:
   SceneNode(const TypeID in_typeID) : typeID(in_typeID)

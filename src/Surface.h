@@ -27,7 +27,7 @@ public:
   
   /* Center of square with upper left at (ix, iz) */
   Vertex getCenter(int ix, int iz);  
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "surface", buflen); };
+  virtual std::string getTypeName() { return "surface"; };
   
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);

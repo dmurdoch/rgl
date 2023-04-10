@@ -23,7 +23,7 @@ public:
   /**
    * overloaded
    **/
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "primitive", buflen); }
+  virtual std::string getTypeName() { return "primitive"; }
   /**
    * overloaded
    **/
@@ -158,7 +158,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "faces", buflen); };  
+  virtual std::string getTypeName() { return "faces"; };  
   
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
@@ -215,7 +215,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "points", buflen); };
+  virtual std::string getTypeName() { return "points"; };
 };
 
 //
@@ -233,7 +233,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "lines", buflen); };
+  virtual std::string getTypeName() { return "lines"; };
 };
 
 //
@@ -257,7 +257,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "triangles", buflen); };
+  virtual std::string getTypeName() { return "triangles"; };
 };
 
 //
@@ -278,7 +278,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "quads", buflen); };
+  virtual std::string getTypeName() { return "quads"; };
 };
 
 //
@@ -295,7 +295,7 @@ public:
   /**
    * overloaded
    **/  
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "linestrip", buflen); };
+  virtual std::string getTypeName() { return "linestrip"; };
 };
 
 } // namespace rgl 

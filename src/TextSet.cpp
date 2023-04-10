@@ -107,8 +107,7 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
       font = fonts[index % fonts.size()];
       if (font) {
         std::string text = textArray[index];
-#undef length
-        font->draw( text.c_str(), text.length(), adjx, adjy, adjz,
+        font->draw( text.c_str(), text.size(), adjx, adjy, adjz,
                     pos[index % npos], *renderContext );
       }
     }
