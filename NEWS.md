@@ -1,4 +1,4 @@
-# rgl 1.1.9
+# rgl 1.1.10
 
 ## Major changes
 
@@ -21,6 +21,9 @@ defined `String` type, settling on `std::string` instead.
 
 * The `Makevars.win` file was being produced incorrectly on
 older Windows versions.
+* `rgl.window2user()` did not work correctly when multiple panes
+were showing.  This caused `arrow3d()` to fail in some panes
+(issue #354).
 
 # rgl 1.1.3
 
