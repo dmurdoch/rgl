@@ -64,7 +64,7 @@ public:
   
   const bool getIgnoreExtent() const { return ignoreExtent; }
 
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "shape", buflen); };
+  virtual std::string getTypeName() { return "shape"; };
   
   /**
    * invalidate display list

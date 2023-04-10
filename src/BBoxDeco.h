@@ -60,7 +60,7 @@ public:
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
   std::string  getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
   Material* getMaterial()  { return &material; }
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "bboxdeco", buflen); };
+  virtual std::string getTypeName() { return "bboxdeco"; };
   Vec3 marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, Material* material);
   Vec3 marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderContext, Material* material);
   void setAxisCallback(userAxisPtr fn, void * user, int axis);

@@ -225,9 +225,8 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
       adj = fabs(eyedir.y)/fabs(eyedir.x)/2.0f;
       if (eyedir.x < 0) adj = 1.0f - adj;
     }
-#undef length  
     if (renderContext->font)
-      renderContext->font->draw(string.c_str(), string.length(), adj, 0.5, 0.5, 0, 
+      renderContext->font->draw(string.c_str(), string.size(), adj, 0.5, 0.5, 0, 
                                 *renderContext);
   }      
 #endif

@@ -1,6 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include <string>
 #include "pixmap.h"
 #include "types.h"
 
@@ -39,7 +40,8 @@ public:
   bool hasAlpha() const { return (type == ALPHA || type == LUMINANCE_ALPHA || type == RGBA ); }
   void getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, 
                      unsigned int *out_minfilter, 
-                     unsigned int *out_magfilter, int bufsize, char *out_filename) ;
+                     unsigned int *out_magfilter, 
+                     std::string *out_filename);
   Pixmap* getPixmap() const { return pixmap; }
 private:
   void init(RenderContext* renderContext);
@@ -51,7 +53,7 @@ private:
   GLenum  minfilter;
   GLenum  magfilter;
   bool    envmap;
-  char*   filename;
+  std::string   filename;
 #ifndef RGL_NO_OPENGL
   GLint   internalMode;
 #endif

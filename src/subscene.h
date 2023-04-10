@@ -215,7 +215,7 @@ public:
   UserViewpoint* getUserViewpoint();
   ModelViewpoint* getModelViewpoint();
 
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "subscene", buflen); };
+  virtual std::string getTypeName() { return "subscene"; };
   
   Background* get_background(); 
   

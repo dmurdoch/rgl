@@ -21,7 +21,7 @@ public:
   /**
    * tell type.
    **/
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "planes", buflen); };
+  virtual std::string getTypeName() { return "planes"; };
 
   /**
    * overload to update triangles first.

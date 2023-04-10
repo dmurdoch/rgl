@@ -27,7 +27,7 @@ public:
   ~TextSet();
   /* Can't use display lists */
   void render(RenderContext* renderContext);
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "text", buflen); };
+  virtual std::string getTypeName() { return "text"; };
 
   int getElementCount(void){ return textArray.size(); }
   int getAttributeCount(SceneNode* subscene, AttribID attrib);

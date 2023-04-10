@@ -33,7 +33,7 @@ public:
   void	      setScale(double* src);
   void 	      getPosition(double* dest);
   void        setPosition(double* src);
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "modelviewpoint", buflen); };
+  virtual std::string getTypeName() { return "modelviewpoint"; };
 
   Vertex      scale;
   bool        scaleChanged;
@@ -61,7 +61,7 @@ public:
   Vertex      getObserver();
   void	      setObserver(bool automatic, Vertex in_eye);
   void	      setupViewer(RenderContext* rctx);
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "userviewpoint", buflen); };
+  virtual std::string getTypeName() { return "userviewpoint"; };
   Frustum     frustum;
   void        getUserProjection(double* dest);
   void        setUserProjection(double* src);

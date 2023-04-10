@@ -60,7 +60,7 @@ public:
    **/
   void drawEnd(RenderContext* renderContext);
 
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "spheres", buflen); };
+  virtual std::string getTypeName() { return "spheres"; };
 
 };
 
