@@ -21,4 +21,3 @@ test_that("rgl.user2window and rgl.window2user work", {
 	expect_equal(rgl.window2user(rgl.user2window(xyz)), xyz)
 	expect_equal(rgl.user2window(rgl.window2user(abc)), abc)
 })
-	
