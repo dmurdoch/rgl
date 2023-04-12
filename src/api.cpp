@@ -1370,3 +1370,38 @@ void rgl::rgl_postscript(int* successptr, int* idata, char** cdata)
 
   *successptr = success;
 }
+
+void rgl::rgl_getShaderFlags(int *successptr, int *id, int *sub, int *flags) {
+	Device* device;
+	*successptr = RGL_FAIL;
+	if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+		RGLView* rglview = device->getRGLView();
+		Scene* scene = rglview->getScene();
+		Subscene* subscene = scene->getSubscene(*sub);
+		Shape* shape = scene->get_shape(*id);
+		if (subscene && shape) {
+			ShaderFlags f = shape->getShaderFlags(subscene);
+			*flags++ = f.fat_lines;
+			*flags++ = f.fixed_quads;
+			*flags++ = f.fixed_size;
+			*flags++ = f.has_fog;
+			*flags++ = f.has_normals;
+			*flags++ = f.has_texture;
+			*flags++ = f.is_brush;
+			*flags++ = f.is_lines;
+			*flags++ = f.is_lit;
+			*flags++ = f.is_points;
+			*flags++ = f.is_transparent;
+			*flags++ = f.is_twosided;
+			*flags++ = f.needs_vnormal;
+			*flags++ = f.rotating;
+			*flags++ = f.round_points;
+			*flags++ = f.sprites_3d;
+			*flags++ = f.is_smooth;
+			*flags++ = f.depth_sort;
+			*flags++ = f.is_subscene;
+			*flags++ = f.is_clipplanes;
+			*successptr = RGL_SUCCESS;
+		}
+	}
+}

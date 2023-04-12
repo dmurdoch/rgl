@@ -119,6 +119,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   R_NativePrimitiveArgType aLISD[4] = {LGLSXP, INTSXP, STRSXP, REALSXP}; 
   R_NativePrimitiveArgType aIISI[4] = {INTSXP, INTSXP, STRSXP, INTSXP};
   R_NativePrimitiveArgType aLIDD[4] = {LGLSXP, INTSXP, REALSXP, REALSXP}; 
+  R_NativePrimitiveArgType aLIIL[4] = {LGLSXP, INTSXP, INTSXP, LGLSXP};
   R_NativePrimitiveArgType aIIIID[5] = {INTSXP, INTSXP, INTSXP, INTSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIIIS[5] = {INTSXP, INTSXP, INTSXP, INTSXP, STRSXP}; 
   R_NativePrimitiveArgType aLIIIS[5] = {LGLSXP, INTSXP, INTSXP, INTSXP, STRSXP}; 
@@ -183,6 +184,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {"rgl_selectstate", 		(DL_FUNC) &rgl_selectstate, 5, aIILID},
    {"rgl_setselectstate",	(DL_FUNC) &rgl_setselectstate, 4, aIILI},
    {"rgl_quit",			(DL_FUNC) &rgl_quit, 1, aL},
+   {"rgl_getShaderFlags", (DL_FUNC) &rgl_getShaderFlags, 4, aLIIL}
    
    {NULL, NULL, 0}
  };
@@ -234,6 +236,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_selectstate, 5),
    FUNDEF(rgl_setselectstate, 4),
    FUNDEF(rgl_quit, 1),
+   FUNDEF(rgl_getShaderFlags, 4),
    
    {NULL, NULL, 0}
  };

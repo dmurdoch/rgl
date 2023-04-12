@@ -136,7 +136,7 @@ public:
    * happen in both places!
    */
   
-  ShaderFlags getDefFlags();
+  ShaderFlags getShaderFlags(Subscene* subscene);
   
 protected:
   /**

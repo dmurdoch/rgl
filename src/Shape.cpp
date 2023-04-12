@@ -4,6 +4,7 @@
 
 #include "Shape.h"
 #include "SceneNode.h"
+#include "SpriteSet.h"
 #include "R.h"
 
 using namespace rgl;
@@ -141,31 +142,115 @@ void Shape::getAttribute(SceneNode* subscene, AttribID attrib, int first, int co
   }
 }
 
-ShaderFlags Shape::getDefFlags()
+ShaderFlags Shape::getShaderFlags(Subscene* subscene)
 {
-	ShaderFlags result = {
-	  .fat_lines = false,
-	  .fixed_quads = false,
-	  .fixed_size = false,
-	  .has_fog = false,
-	  .has_normals = false,
-	  .has_texture = false,
-	  .is_brush = false,
-	  .is_lines = false,
-	  .is_lit = false,
-	  .is_points = false,
-	  .is_transparent = false,
-	  .is_twosided = false,
-	  .needs_vnormal = false,
-	  .rotating = false,
-	  .round_points = false
-  };
+  ShaderFlags result;
+  
+  std::string type = getTypeName();
+  double attrib;
+  bool sphere = false;
+  if (type == "background") {
+    getAttribute(subscene, FLAGS, 0, 1, &attrib);
+    sphere = attrib > 0.0;
+  }
+  
+  result.is_lines = type == "lines" ||
+                    type == "linestrip" ||
+                    type == "abclines";
+  
+  result.fat_lines =   material.lwd != 1.0 && 
+                      (result.is_lines ||
+                       material.front == Material::LINE_FACE ||
+                       material.back == Material::LINE_FACE);
+  
+  result.sprites_3d = false;
+  result.fixed_size = type == "text";
+  if (!result.fixed_size ) {
+    SpriteSet* sprite = dynamic_cast<SpriteSet*>(this);
+    if (sprite) {
+      result.fixed_size = sprite->isFixedSize();
+      result.sprites_3d = sprite->getAttributeCount(subscene, IDS) > 0;
+    }
+  }
+  result.fixed_quads = (type == "text" || type == "sprites") && !result.sprites_3d;
+  
+  result.has_fog = material.fog;
+  result.has_normals = type == "spheres";
+  if (!result.has_normals)
+    result.has_normals = getAttributeCount(subscene, NORMALS) > 0;
 
-	result.is_lines = 
-		
-	result.fat_lines = 	material.lwd != 1.0 && 
-		                  (result.is_lines ||
-		                   material.front == Material::LINE_FACE ||
-		                   material.back == Material::LINE_FACE);
-	return result;
+  if (material.texture) {
+    result.has_texture = getAttributeCount(subscene, TEXCOORDS) > 0 ||
+     (type == "sprites" && !result.sprites_3d) ||
+     type == "spheres" ||
+     (type == "background" && sphere);
+  } else
+    result.has_texture = false;
+  
+  result.is_brush = false;  /* check: brushes only exist in WebGL? */
+
+  result.is_lit = material.lit && (
+    type == "triangles" ||
+    type == "quads" ||
+    type == "surface" ||
+    type == "planes" ||
+    type == "spheres" ||
+    type == "sprites" ||
+    type == "bboxdeco");
+
+  result.is_points = type == "points" ||
+    material.front == Material::POINT_FACE ||
+    material.back == Material::POINT_FACE;
+
+  result.is_transparent = (result.has_texture && material.isTransparent());
+  if (!result.is_transparent) {
+    int n = getAttributeCount(subscene, COLORS);
+    for (int i=0;i < n;i++) {
+      Color color = material.colors.getColor(i);
+      if (color.getAlphaf() < 1.0f) {
+        result.is_transparent = true;
+        break;
+      }
+    }
+  }
+  
+  result.is_twosided = ((type == "triangles" ||
+    type == "quads" ||
+    type == "surface" ||
+    type == "spheres" ||
+    type == "bboxdeco") && material.front != material.back) ||
+    (type == "background" && sphere);
+  
+  result.needs_vnormal = (result.is_lit && !result.sprites_3d &&
+    !result.fixed_quads && !result.is_brush) ||
+    (result.is_twosided && result.has_normals);
+  
+  if (getTypeID() == SHAPE && getAttributeCount(subscene, FLAGS) >= 3) {
+    getAttribute(subscene, FLAGS, 2, 1, &attrib);
+    result.rotating = attrib > 0.0;
+  } else
+    result.rotating = false;
+    
+  result.round_points = material.point_antialias;
+  
+  result.is_smooth = material.smooth && (
+    type == "triangles" ||
+    type == "quads" ||
+    type == "surface" ||
+    type == "planes" ||
+    type == "spheres");
+  
+  result.depth_sort = result.is_transparent && (
+    type == "triangles" ||
+    type == "quads" ||
+    type == "surface" ||
+    type == "spheres" ||
+    type == "sprites" ||
+    type == "text");
+  
+  result.is_subscene = type == "subscene";
+  
+  result.is_clipplanes = type == "clipplanes";
+  
+  return result;
 }

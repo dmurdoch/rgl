@@ -12,6 +12,7 @@ enum ShaderType {
 };
 
 struct ShaderFlags {
+	/* these ones are used in shader defines */
 	bool fat_lines;
 	bool fixed_quads;
 	bool fixed_size;
@@ -27,6 +28,12 @@ struct ShaderFlags {
 	bool needs_vnormal;
 	bool rotating;
 	bool round_points;
+	/* these ones are used elsewhere */
+	bool sprites_3d;
+	bool is_smooth;
+	bool depth_sort;
+	bool is_subscene;
+	bool is_clipplanes;
 };
 
 std::string defaultShader(ShaderType type);

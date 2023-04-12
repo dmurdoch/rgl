@@ -65,10 +65,10 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
       nlights <- nlights + (scene$objects[[i]]$type == "light")
     }
     if (is.null(vertexShader))
-      vertexShader <- readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_vertex.glsl", package = "rgl"))
+      vertexShader <- readLines(system.file("shaders/rgl_vertex.glsl", package = "rgl"))
     
     if (is.null(fragmentShader))
-      fragmentShader <- readLines(system.file("htmlwidgets/lib/rglClass/shaders/rgl_fragment.glsl", package = "rgl"))
+      fragmentShader <- readLines(system.file("shaders/rgl_fragment.glsl", package = "rgl"))
   }
   
   defines <- ctx$eval(subst(
@@ -84,7 +84,7 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
     pointSize = pointSize,
     textype = textype,
     texmode = texmode,
-    texenvmap = texenvmap,
+    texenvmap = tolower(texenvmap),
     antialias = tolower(antialias)
   ))
   
