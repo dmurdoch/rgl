@@ -49,3 +49,21 @@ getShaderFlags <- function(id, subscene = currentSubscene3d()) {
 		"is_clipplanes")
 	flags
 }
+
+getShaderDefines <- function(id, subscene = currentSubscene3d()) {
+	stopifnot(length(id) == 1, length(subscene) == 1)
+	shapes <- ids3d(subscene = subscene)
+	nclipplanes <- sum(shapes$type == "clipplanes")
+	lights <- ids3d("lights", subscene = subscene)
+	nlights <- nrow(lights)
+	ret <- .C( rgl_getShaderDefines,
+						 success = FALSE,
+						 id = as.integer(id),
+						 sub = as.integer(subscene),
+						 ndata = as.integer(c(nclipplanes, nlights)),
+						 defines = character(1))
+	if (!ret$success)
+		stop("getShaderDefines failed")
+
+	ret$defines
+}

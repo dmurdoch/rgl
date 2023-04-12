@@ -1405,3 +1405,20 @@ void rgl::rgl_getShaderFlags(int *successptr, int *id, int *sub, int *flags) {
 		}
 	}
 }
+
+void rgl::rgl_getShaderDefines(int *successptr, int *id, int *sub,
+                               int *ndata, char **defines) {
+	Device* device;
+	*successptr = RGL_FAIL;
+	if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+		RGLView* rglview = device->getRGLView();
+		Scene* scene = rglview->getScene();
+		Subscene* subscene = scene->getSubscene(*sub);
+		Shape* shape = scene->get_shape(*id);
+		if (subscene && shape) {
+			std::string defines0 = shape->getShaderDefines(subscene, ndata[0], ndata[1]);
+			defines[0] = copyStringToR(defines0);
+			*successptr = RGL_SUCCESS;
+		}
+	}
+}

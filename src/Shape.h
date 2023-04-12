@@ -138,6 +138,10 @@ public:
   
   ShaderFlags getShaderFlags(Subscene* subscene);
   
+  std::string getShaderDefines(Subscene* subscene, 
+                               int nclipplanes,
+                               int nlights);
+  
 protected:
   /**
    * bounding volume of overall geometry

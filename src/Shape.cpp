@@ -2,6 +2,9 @@
 #include <algorithm>
 #include <functional>
 
+#include <sstream>
+#include <iomanip>
+
 #include "Shape.h"
 #include "SceneNode.h"
 #include "SpriteSet.h"
@@ -253,4 +256,82 @@ ShaderFlags Shape::getShaderFlags(Subscene* subscene)
   result.is_clipplanes = type == "clipplanes";
   
   return result;
+}
+
+std::string Shape::getShaderDefines(Subscene* subscene, int nclipplanes,
+                                    int nlights)
+{
+	ShaderFlags flags = getShaderFlags(subscene);
+	
+	std::string type = getTypeName();
+	
+	std::string title = "  /* ****** "+type+" object "+std::to_string(getObjID())+" shader ****** */\n";
+	
+	std::string defines = 
+		"#define NCLIPPLANES " + std::to_string(nclipplanes) + "\n"+
+		"#define NLIGHTS " + std::to_string(nlights) + "\n";
+	
+	if (flags.fat_lines)
+		defines = defines + "#define FAT_LINES 1\n";
+	
+	if (flags.fixed_quads)
+		defines = defines + "#define FIXED_QUADS 1\n";
+	
+	if (flags.fixed_size)
+		defines = defines + "#define FIXED_SIZE 1\n";
+	
+	if (flags.has_fog)
+		defines = defines + "#define HAS_FOG 1\n";
+	
+	if (flags.has_normals)
+		defines = defines + "#define HAS_NORMALS 1\n";
+	
+	if (flags.has_texture) {
+		std::string textypes[] = {"alpha", "luminance", "luminance.alpha", "rgb", "rgba"};
+		std::string texmodes[] = {"replace", "modulate", "decal", "blend", "add"};
+		defines = defines + "#define HAS_TEXTURE 1\n";
+		defines = defines + "#define TEXTURE_" + textypes[material.textype - 1] + "\n";
+		defines = defines + "#define TEXMODE_" + texmodes[material.texmode] + "\n";
+		if (material.envmap)
+			defines = defines + "#define USE_ENVMAP 1\n";
+	}
+	
+	if (flags.is_brush)
+		defines = defines + "#define IS_BRUSH 1\n";  
+	
+	if (type == "linestrip")
+		defines = defines + "#define IS_LINESTRIP 1\n";         
+	
+	if (flags.is_lit)
+		defines = defines + "#define IS_LIT 1\n"; 
+	
+	if (flags.is_points) {
+		defines = defines + "#define IS_POINTS 1\n";
+		std::ostringstream ss;
+		ss << std::fixed << std::setprecision(1) << material.size;
+		defines = defines + "#define POINTSIZE " + ss.str() + "\n";
+	}
+	
+	if (type == "sprites")
+		defines = defines + "#define IS_SPRITES 1\n";
+	
+	if (type == "text")
+		defines = defines + "#define IS_TEXT 1\n";
+	
+	if (flags.is_transparent)
+		defines = defines + "#define IS_TRANSPARENT 1\n"; 
+	
+	if (flags.is_twosided)
+		defines = defines + "#define IS_TWOSIDED 1\n";
+	
+	if (flags.needs_vnormal)
+		defines = defines + "#define NEEDS_VNORMAL 1\n";
+	
+	if (flags.rotating)
+		defines = defines + "#define ROTATING 1\n";
+	
+	if (flags.round_points)        
+		defines = defines + "#define ROUND_POINTS 1\n";   
+
+	return title + defines;
 }

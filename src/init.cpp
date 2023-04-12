@@ -184,7 +184,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {"rgl_selectstate", 		(DL_FUNC) &rgl_selectstate, 5, aIILID},
    {"rgl_setselectstate",	(DL_FUNC) &rgl_setselectstate, 4, aIILI},
    {"rgl_quit",			(DL_FUNC) &rgl_quit, 1, aL},
-   {"rgl_getShaderFlags", (DL_FUNC) &rgl_getShaderFlags, 4, aLIIL}
+   {"rgl_getShaderFlags", (DL_FUNC) &rgl_getShaderFlags, 4, aLIIL},
+   {"rgl_getShaderDefines", (DL_FUNC) &rgl_getShaderDefines, 5, aIIIIS}
    
    {NULL, NULL, 0}
  };
@@ -237,6 +238,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_setselectstate, 4),
    FUNDEF(rgl_quit, 1),
    FUNDEF(rgl_getShaderFlags, 4),
+   FUNDEF(rgl_getShaderDefines, 5),
    
    {NULL, NULL, 0}
  };
