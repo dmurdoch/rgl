@@ -84,7 +84,7 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE) {
     pointSize = pointSize,
     textype = textype,
     texmode = texmode,
-    texenvmap = texenvmap,
+    texenvmap = tolower(texenvmap),
     antialias = tolower(antialias)
   ))
   
