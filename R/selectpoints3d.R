@@ -23,7 +23,7 @@ selectpoints3d <- function(objects = ids3d()$id, value = TRUE, closest = TRUE,
       else if (closest && dist > 0 && nrow(verts)) {
         wincoords <- rgl.user2window(verts, projection = e$proj)
         wz <- wincoords[,3]
-        keep <- (0 <= wz) && (wz <= 1)
+        keep <- (0 <= wz) & (wz <= 1)
         wincoords <- wincoords[keep,,drop=FALSE]
   
         if (!nrow(wincoords)) next 
