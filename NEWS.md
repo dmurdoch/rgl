@@ -24,7 +24,10 @@ older Windows versions.
 * `rgl.window2user()` did not work correctly when multiple panes
 were showing.  This caused `arrow3d()` to fail in some panes
 (issue #354).
+* `selectpoints3d()` had a typo which was revealed by 
+warnings in recent R versions.
 * `getShaders()` was broken in 1.1.3.
+
 
 # rgl 1.1.3
 
