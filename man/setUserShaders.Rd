@@ -18,7 +18,9 @@ setUserShaders(ids, vertexShader = NULL, fragmentShader = NULL,
                attributes = NULL, uniforms = NULL, textures = NULL,
                scene = scene3d(minimal), minimal = TRUE)
 
-getShaders(id, scene = scene3d(minimal), minimal = TRUE)
+getShaders(id, scene = scene3d(minimal), minimal = TRUE,
+           subscene = currentSubscene3d(),
+           useJavascript = FALSE)
 }
 \arguments{
   \item{ids, id}{
@@ -39,11 +41,21 @@ A named list of \dQuote{uniforms}.
 A named list of textures.
   }
   \item{scene}{
-A \code{\link{scene3d}} object to work with.
+A \code{\link{scene3d}} object to work with if \code{useJavascript}
+is \code{TRUE} or \code{NA}.
 }
   \item{minimal}{
 See \code{\link{scene3d}}.  
 }
+  \item{subscene}{
+Which subscene contains the object?  Only used if  \code{useJavascript}
+is \code{FALSE} or \code{NA}.
+  }
+  \item{useJavascript}{If \code{TRUE}, use the same Javascript
+code as is used in objects produced by \code{\link{rglwidget}}.  
+This requires the \pkg{V8} package.  If \code{FALSE}, use the
+internal C++ code.  If \code{NA}, do both, and signal an error
+if the results don't match.}
 }
 \details{
 Modern versions of OpenGL work with \dQuote{shaders}, 
