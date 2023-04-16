@@ -1,4 +1,4 @@
-# rgl 1.1.11
+# rgl 1.1.12
 
 ## Major changes
 
@@ -27,6 +27,8 @@ were showing.  This caused `arrow3d()` to fail in some panes
 * `selectpoints3d()` had a typo which was revealed by 
 warnings in recent R versions.
 * `getShaders()` was broken in 1.1.3.
+* `arc3d()` can now handle "arcs" that are straight lines along
+a radius (issue #357).
 
 
 # rgl 1.1.3

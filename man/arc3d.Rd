@@ -8,7 +8,8 @@ Given starting and ending points on a sphere and the center of the
 sphere, draw the
 great circle arc between the starting and ending points.  If
 the starting and ending points have different radii, a segment of a
-logarithmic spiral will join them.
+logarithmic spiral will join them, unless they are in the same
+direction, in which case a straight line will join them.
 }
 \usage{
 arc3d(from, to, center, radius, n, circle = 50, base = 0,
