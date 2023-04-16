@@ -2,6 +2,7 @@
 #define SHAPE_H
 
 #include <vector>
+#include <unordered_map>
 
 #include "SceneNode.h"
 #include "Material.h"
@@ -130,18 +131,25 @@ public:
   
   virtual bool isClipPlane() { return false; }
   
+  /* call this first to set the context where the next functions
+   * need to operate
+   */
+  
+  void setShapeContext(Subscene* in_subscene, int in_nclipplanes,
+                       int in_nlights);
   /**
    * The methods below have similar names and uses as 
    * Javascript methods in shaders.src.js.  Make sure changes
    * happen in both places!
    */
   
-  ShaderFlags getShaderFlags(Subscene* subscene);
   
-  std::string getShaderDefines(Subscene* subscene, 
-                               int nclipplanes,
-                               int nlights);
+  ShaderFlags getShaderFlags();
   
+  std::string getShaderDefines(ShaderFlags flags);
+  
+  virtual void initialize();
+
 protected:
   /**
    * bounding volume of overall geometry
@@ -168,7 +176,12 @@ private:
    * display list
    **/
   GLuint   displayList;
-#endif
+#endif	
+	
+	Subscene* subscene;
+	int nclipplanes;
+	int nlights;
+
   int	   drawLevel;     /* for debugging */
 protected:
   /**
@@ -176,6 +189,9 @@ protected:
    **/
   bool     doUpdate;
   bool     transparent, blended;
+#ifndef RGL_NO_OPENGL
+  std::unordered_map<std::string, GLint> glLocs;
+#endif
 };
 
 class ShapeItem {

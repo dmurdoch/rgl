@@ -237,6 +237,14 @@ void PrimitiveSet::getAttribute(SceneNode* subscene, AttribID attrib, int first,
   }
 }
 
+void PrimitiveSet::initialize()
+{
+	Shape::initialize();
+#ifndef RGL_NO_OPENGL
+	vertexArray.setAttribLocation(glLocs["aPos"]);
+#endif
+}
+
 // ===[ FACE SET ]============================================================
 
 FaceSet::FaceSet(
@@ -420,4 +428,14 @@ void FaceSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
     }
     PrimitiveSet::getAttribute(subscene, attrib, first, count, result);
   }
+}
+
+void FaceSet::initialize()
+{
+	PrimitiveSet::initialize();
+#ifndef RGL_NO_OPENGL
+	if (glLocs.find("aNorm") != glLocs.end())
+	  normalArray.setAttribLocation(glLocs["aNorm"]);
+	// FIXME:  also needs texCoordArray
+#endif
 }

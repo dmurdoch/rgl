@@ -22,6 +22,9 @@ using namespace rgl;
 VertexArray::VertexArray()
 {
   arrayptr = NULL;
+#ifndef RGL_NO_OPENGL	
+	state = GL_VERTEX_ARRAY;
+#endif
 }
 
 VertexArray::~VertexArray()
@@ -89,14 +92,22 @@ void VertexArray::setVertex(int index, Vertex v) {
 
 void VertexArray::beginUse() {
 #ifndef RGL_NO_OPENGL
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, GL_FLOAT, 0, (const GLvoid*) arrayptr );
+	if (GLAD_GL_VERSION_2_1) {
+		glEnableVertexAttribArray(location);
+		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*) arrayptr);
+	} else {
+    glEnableClientState(state);
+    glVertexPointer(3, GL_FLOAT, 0, (const GLvoid*) arrayptr );
+  }
 #endif
 }
 
 void VertexArray::endUse() {
 #ifndef RGL_NO_OPENGL
-  glDisableClientState(GL_VERTEX_ARRAY);
+	if (GLAD_GL_VERSION_2_1)
+		glDisableVertexAttribArray(location);
+	else
+    glDisableClientState(state);
 #endif
 }
 
@@ -117,22 +128,21 @@ Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
   return normal;
 }
 
+void VertexArray::setAttribLocation(GLint loc)
+{
+	location = loc;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
 //   NormalArray
 //
 
-void NormalArray::beginUse() {
-#ifndef RGL_NO_OPENGL
-  glEnableClientState(GL_NORMAL_ARRAY);
-  glNormalPointer(GL_FLOAT, 0, (const GLvoid*) arrayptr );
-#endif
-}
-
-void NormalArray::endUse() {
-#ifndef RGL_NO_OPENGL
-  glDisableClientState(GL_NORMAL_ARRAY);
+NormalArray::NormalArray() :
+	VertexArray() {
+#ifndef RGL_NO_OPENGL	
+	state = GL_NORMAL_ARRAY;
 #endif
 }
 

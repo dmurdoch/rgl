@@ -134,6 +134,10 @@ void Material::beginUse(RenderContext* renderContext)
   }
 
   SAVEGLERROR;
+  
+  /* FIXME:  the lighting calculations will all be done in the
+   * shader
+   */
 
   glShadeModel( (smooth) ? GL_SMOOTH : GL_FLAT );
 
@@ -171,6 +175,8 @@ void Material::beginUse(RenderContext* renderContext)
 
   SAVEGLERROR;
 
+  /* FIXME:  these need to be done in the shader */
+  
   if (renderContext->gl2psActive == GL2PS_NONE) {
     glPointSize( size );
     glLineWidth( lwd );
@@ -178,6 +184,8 @@ void Material::beginUse(RenderContext* renderContext)
     gl2psPointSize( size );
     gl2psLineWidth( lwd );
   }
+  
+  /* FIXME:  these too? */
   
   if (polygon_offset) {
     glPolygonOffset(polygon_offset_factor, polygon_offset_units);

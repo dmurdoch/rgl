@@ -65,6 +65,11 @@ public:
   void initPrimitiveSet(int in_nvertices, double* in_vertices,
                         int in_nindices = 0, int* in_indices = NULL);
 
+  /** 
+   * prepare for shader use
+   */
+  virtual void initialize();
+  
 protected:
 
   /**
@@ -196,6 +201,9 @@ protected:
  
   /* set up normals */
   void initNormals(double* in_normals);
+  
+  /* shader inits */
+  virtual void initialize();
 private:
   NormalArray normalArray, normalsToDraw;
   TexCoordArray texCoordArray;

@@ -31,13 +31,17 @@ public:
   Vertex& operator[](int index);
   void setVertex(int index, double* v);
   void setVertex(int index, Vertex v);
-
+  
+  void setAttribLocation(GLint loc);
+  
   Vertex getNormal(int v1, int v2, int v3);
   int size() { return nvertex; }
 
 protected:
   int nvertex;
   float* arrayptr;
+  GLint location;
+  GLenum state;
 };
 
 inline Vertex& VertexArray::operator[](int index) {
@@ -50,8 +54,7 @@ inline Vertex& VertexArray::operator[](int index) {
 class NormalArray : public VertexArray 
 {
 public:
-  void beginUse();
-  void endUse();
+  NormalArray();
 };
 
 struct TexCoord

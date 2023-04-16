@@ -1380,7 +1380,7 @@ void rgl::rgl_getShaderFlags(int *successptr, int *id, int *sub, int *flags) {
 		Subscene* subscene = scene->getSubscene(*sub);
 		Shape* shape = scene->get_shape(*id);
 		if (subscene && shape) {
-			ShaderFlags f = shape->getShaderFlags(subscene);
+			ShaderFlags f = shape->getShaderFlags();
 			*flags++ = f.fat_lines;
 			*flags++ = f.fixed_quads;
 			*flags++ = f.fixed_size;
@@ -1416,7 +1416,8 @@ void rgl::rgl_getShaderDefines(int *successptr, int *id, int *sub,
 		Subscene* subscene = scene->getSubscene(*sub);
 		Shape* shape = scene->get_shape(*id);
 		if (subscene && shape) {
-			std::string defines0 = shape->getShaderDefines(subscene, ndata[0], ndata[1]);
+			shape->setShapeContext(subscene, ndata[0], ndata[1]);
+			std::string defines0 = shape->getShaderDefines(shape->getShaderFlags());
 			defines[0] = copyStringToR(defines0);
 			*successptr = RGL_SUCCESS;
 		}

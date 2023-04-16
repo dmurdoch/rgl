@@ -145,9 +145,19 @@ void Shape::getAttribute(SceneNode* subscene, AttribID attrib, int first, int co
   }
 }
 
-ShaderFlags Shape::getShaderFlags(Subscene* subscene)
+void Shape::setShapeContext(Subscene* in_subscene, int in_nclipplanes,
+                            int in_nlights)
+{
+	subscene = in_subscene;
+	nclipplanes = in_nclipplanes;
+	nlights = in_nlights;
+}
+
+ShaderFlags Shape::getShaderFlags()
 {
   ShaderFlags result;
+	if (!subscene)
+		return result;
   
   std::string type = getTypeName();
   double attrib;
@@ -258,10 +268,10 @@ ShaderFlags Shape::getShaderFlags(Subscene* subscene)
   return result;
 }
 
-std::string Shape::getShaderDefines(Subscene* subscene, int nclipplanes,
-                                    int nlights)
+std::string Shape::getShaderDefines(ShaderFlags flags)
 {
-	ShaderFlags flags = getShaderFlags(subscene);
+	if (!subscene)
+		return "";
 	
 	std::string type = getTypeName();
 	
@@ -334,4 +344,104 @@ std::string Shape::getShaderDefines(Subscene* subscene, int nclipplanes,
 		defines = defines + "#define ROUND_POINTS 1\n";   
 
 	return title + defines;
+}
+
+void Shape::initialize()
+{
+  SceneNode::initialize();
+#ifndef RGL_NO_OPENGL
+	if (GLAD_GL_VERSION_2_1) {
+		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		ShaderFlags flags = getShaderFlags();
+		std::string defines = getShaderDefines(flags);
+		std::string source = material.shaders[VERTEX_SHADER];
+		if (source.size() == 0)
+			source = defaultShader(VERTEX_SHADER);
+		const char *sources[2];
+		sources[0] = defines.c_str();
+		sources[1] = source.c_str();
+		glShaderSource(vertexShader, 2, sources, NULL);
+		glCompileShader(vertexShader);
+		
+		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		source = material.shaders[FRAGMENT_SHADER];
+		if (source.size() == 0)
+			source = defaultShader(FRAGMENT_SHADER);
+		sources[1] = source.c_str();
+		glShaderSource(fragmentShader, 2, sources, NULL);
+		glCompileShader(fragmentShader);
+		
+		Rprintf("created shaders");
+		
+		GLuint shaderProgram = glCreateProgram();
+		glAttachShader(shaderProgram, vertexShader);
+		glAttachShader(shaderProgram, fragmentShader);
+		
+		glBindAttribLocation(shaderProgram, 0, "aPos");
+		glLocs["aPos"] = 0;
+		glBindAttribLocation(shaderProgram, 1, "aCol");
+		glLocs["aCol"] = 1;
+		
+		glLinkProgram(shaderProgram);
+		
+		if (flags.fixed_quads && !flags.sprites_3d)
+			glLocs["aOfs"] = glGetAttribLocation(shaderProgram, "aOfs");
+		
+		std::string type = getTypeName();
+		if (flags.has_texture || type == "text") {
+			glLocs["texLoc"] = glGetAttribLocation(shaderProgram, "aTexcoord");
+		  glLocs["sampler"] = glGetUniformLocation(shaderProgram, "uSampler");
+		}
+		
+		if (flags.has_fog && !flags.sprites_3d) {
+			glLocs["uFogMode"] = glGetUniformLocation(shaderProgram, "uFogMode");
+			glLocs["uFogColor"] = glGetUniformLocation(shaderProgram, "uFogColor");
+			glLocs["uFogParms"] = glGetUniformLocation(shaderProgram, "uFogParms");
+		}
+		
+		if (nclipplanes && !flags.sprites_3d) {
+			glLocs["clipLoc"] = glGetUniformLocation(shaderProgram,"vClipplane");
+		}
+		
+		if (flags.is_lit) {
+			glLocs["emissionLoc"] = glGetUniformLocation(shaderProgram, "emission");
+			glLocs["shininessLoc"] = glGetUniformLocation(shaderProgram, "shininess");
+			if (nlights > 0) {
+				glLocs["ambientLoc"] = glGetUniformLocation(shaderProgram, "ambient");
+				glLocs["specularLoc"] = glGetUniformLocation(shaderProgram, "specular");
+				glLocs["diffuseLoc"] = glGetUniformLocation(shaderProgram, "diffuse" );
+				glLocs["lightDirLoc"] = glGetUniformLocation(shaderProgram, "lightDir");
+				glLocs["viewpointLoc"] = glGetUniformLocation(shaderProgram, "viewpoint");
+				glLocs["finiteLoc"] = glGetUniformLocation(shaderProgram, "finite" );
+			}
+		}
+		
+		if (flags.fat_lines) {
+			glLocs["nextLoc"] = glGetAttribLocation(shaderProgram, "aNext");
+			glLocs["pointLoc"] = glGetAttribLocation(shaderProgram, "aPoint");
+			glLocs["aspectLoc"] = glGetUniformLocation(shaderProgram, "uAspect");
+			glLocs["lwdLoc"] = glGetUniformLocation(shaderProgram, "uLwd");
+		}
+		
+		if (!flags.sprites_3d) {
+			glLocs["mvMatLoc"] = glGetUniformLocation(shaderProgram, "mvMatrix");
+			glLocs["prMatLoc"] = glGetUniformLocation(shaderProgram, "prMatrix");
+			
+			if (flags.fixed_size) {
+				glLocs["textScaleLoc"] = glGetUniformLocation(shaderProgram, "textScale");
+			}
+		}
+		
+		if (flags.needs_vnormal) {
+			glLocs["normLoc"] = glGetAttribLocation(shaderProgram, "aNorm");
+			glLocs["normMatLoc"] = glGetUniformLocation(shaderProgram, "normMatrix");
+		}
+		
+		if (flags.is_twosided) {
+			glLocs["frontLoc"] = glGetUniformLocation(shaderProgram, "front");
+			if (flags.has_normals)
+				glLocs["invPrMatLoc"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
+		}
+	}
+#endif
 }
