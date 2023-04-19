@@ -29,6 +29,7 @@ warnings in recent R versions.
 * `getShaders()` was broken in 1.1.3.
 * `arc3d()` can now handle "arcs" that are straight lines along
 a radius (issue #357).
+* Spheres did not show textures correctly (issue #360).
 
 
 # rgl 1.1.3
