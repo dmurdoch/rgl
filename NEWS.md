@@ -1,4 +1,4 @@
-# rgl 1.1.13
+# rgl 1.1.14
 
 ## Major changes
 
@@ -30,6 +30,7 @@ warnings in recent R versions.
 * `arc3d()` can now handle "arcs" that are straight lines along
 a radius (issue #357).
 * Spheres did not show textures correctly (issue #360).
+* `hover3d()` failed to display default labels in R (issue #362).
 
 
 # rgl 1.1.3
