@@ -329,7 +329,10 @@ shade3d.mesh3d <- function( x, override = TRUE,
   doFaces <- function(vals, inds, setPrev) {
     if (!is.matrix(inds))
       inds <- matrix(inds, nrow = 1)
-    inds <- inds + prev
+    if (prev) {
+    	vals <- rep_len(vals, prev + ncol(inds))
+    	vals <- vals[-seq_len(prev)]
+    }
     if (setPrev)
       prev <<- prev + ncol(inds)
     vals <- rep_len(vals, ncol(inds))
@@ -355,7 +358,7 @@ shade3d.mesh3d <- function( x, override = TRUE,
       args$texcoords <- texcoords[as.numeric(inds),]
     if (!is.null(normals))
       args$normals <- normals[as.numeric(inds),]
-    args$color <- repfn(args$color, inds, FALSE)
+    args$color <- repfn(args$color, inds, is.null(args$alpha))
     args$alpha <- repfn(args$alpha, inds, TRUE)
     args
   }
