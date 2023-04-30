@@ -1,4 +1,4 @@
-# rgl 1.1.14
+# rgl 1.1.15
 
 ## Major changes
 
@@ -16,6 +16,8 @@ Full support in R Markdown or `knitr` requires a `knitr` update
 shouldn't trigger errors on the M1Mac test platform.
 * Internally, the C++ code has dropped the use of the internally
 defined `String` type, settling on `std::string` instead.
+* `subdivision3d()` and related functions now (optionally)
+record the original faces associated with each new one.
 
 ## Bug fixes
 
@@ -31,6 +33,10 @@ warnings in recent R versions.
 a radius (issue #357).
 * Spheres did not show textures correctly (issue #360).
 * `hover3d()` failed to display default labels in R (issue #362).
+* `shade3d()` didn't handle meshes with a mix of triangles and
+quads properly when `meshColor == "faces"`.
+* `subdivision3d()` and related functions now handle colors
+properly.
 
 
 # rgl 1.1.3

@@ -5,18 +5,60 @@ as.tmesh3d.default <- function(x, drop = FALSE, ...) {
   as.tmesh3d(as.mesh3d(x, ...), drop = drop)  
 }
 
-as.tmesh3d.mesh3d <- function(x, drop = FALSE, ...) {
+as.tmesh3d.mesh3d <- function(x, drop = FALSE, recordOrig = FALSE,
+															...) {
   mesh <- x
-  if (!is.null(mesh$ib)) {
-    nquads <- ncol(mesh$ib)
-    mesh$it <- cbind(mesh$it, 
-                     matrix(mesh$ib[rep(4*(seq_len(nquads) - 1), each = 6) + 
-                                      rep(c(1, 2, 3, 1, 3, 4), nquads)], nrow = 3))
+  ib <- mesh$ib
+  it <- mesh$it
+  np <- length(mesh$ip)
+  ns <- length(mesh$is)/2
+  nt <- length(it)/3
+  nq <- length(ib)/4
+  
+  hasColors <- FALSE
+  hasAlpha <- FALSE
+  if (!is.null(mesh$material) &&
+  	  !is.null(mesh$meshColor) &&
+  	  mesh$meshColor == "faces") {
+  	hasColors <- length(mesh$material$color) > 1
+  	hasAlpha  <- length(mesh$material$alpha) > 1
+  }
+  
+  recordOrig <- recordOrig || hasColors || hasAlpha
+  
+  if (recordOrig)
+  	orig <- getOrig(mesh)
+  
+  if (nq) {
+    mesh$it <- cbind(it, 
+                     matrix(ib[rep(4*(seq_len(nq) - 1), each = 6) + 
+                                  rep(c(1, 2, 3, 1, 3, 4), nq)], nrow = 3))
     mesh$ib <- NULL
+    ofs <- np + ns + nt
+    
+    if (hasColors) {
+    	color <- rep_len(mesh$material$color, ofs + nq)
+    	mesh$material$color[ofs + seq_len(2*nq)] <- rep(color[ofs + seq_len(nq)], each = 2)
+    }
+    
+    if (hasAlpha) {
+    	alpha <- rep_len(mesh$material$alpha, ofs + nq)
+    	mesh$material$alpha[ofs + seq_len(2*nq)] <- rep(alpha[ofs + seq_len(nq)], each = 2)
+    }
+    
+    if (recordOrig) {
+    	orig[ofs + seq_len(2*nq)] <- rep(orig[ofs + seq_len(nq)], each = 2)
+      mesh$orig <- orig
+    }
+
   }
   if (drop) {
     mesh$is <- NULL
     mesh$ip <- NULL
+    if (recordOrig && ns + np) {
+    	orig <- orig[-seq_len(ns + np)]
+    	mesh$orig <- orig
+    }
   }
   mesh
 }
@@ -37,10 +79,10 @@ as.tmesh3d.mesh3d <- function(x, drop = FALSE, ...) {
 }
 
 clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
-                       minVertices = 0, plot = FALSE, keepValues = FALSE) {
+                       minVertices = 0, plot = FALSE, keepValues = FALSE, recordOrig = FALSE) {
   stopifnot(inherits(mesh, "mesh3d"))
   # First, convert quads to triangles
-  mesh <- as.tmesh3d(mesh)
+  mesh <- as.tmesh3d(mesh, recordOrig = recordOrig)
   nverts <- ncol(mesh$vb)
   oldnverts <- nverts - 1
   while (nverts < minVertices && oldnverts < nverts && !is.numeric(fn)) {
