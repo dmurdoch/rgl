@@ -10,7 +10,8 @@ a function are bounded.
 }
 \usage{
 clipMesh3d(mesh, fn, bound = 0, greater = TRUE, 
-           minVertices = 0, plot = FALSE, keepValues = FALSE)
+           minVertices = 0, plot = FALSE, keepValues = FALSE,
+           recordOrig = FALSE)
 clipObj3d(ids = tagged3d(tags), fn, bound = 0, greater = TRUE,
            minVertices = 0,
            replace = TRUE, tags)
@@ -35,6 +36,8 @@ See Details below.
   \item{plot}{Logical; whether or not to plot the mesh.}
   \item{keepValues}{Logical; whether to save the function values at 
   each vertex when \code{plot = FALSE}.}
+  \item{recordOrig}{Whether to keep the \code{"orig"} component
+  of the result.}
   \item{ids}{
 The RGL id value(s) of objects to clip.
   }
@@ -124,6 +127,15 @@ interior).  If in addition \code{keepValues = TRUE},
 a component named \code{"values"} will be added to the 
 mesh containing the values for each vertex.
 
+If \code{recordOrig = TRUE}, an \code{"orig"} element will be 
+added to the result.  By default it shows the correspondence between
+the elements of 
+the input mesh (in the same order as used when shading with 
+\code{meshColor == "faces"}) and the output mesh, but if
+\code{mesh$orig} is non-\code{NULL}
+on input, it may be any vector with appropriate length and 
+the output will propagate values to the new mesh.
+
 If \code{plot = TRUE}, the result will be 
 plotted with \code{\link{shade3d}} and its result returned.
 
@@ -148,7 +160,7 @@ values without clipping.
 
 # Show the problem that minVertices solves:
 
-cube <- cube3d(col = "red")
+cube <- cube3d(col = rainbow(6), meshColor = "faces")
 
 # This function only has one argument, so it will 
 # be passed x, y and z in columns of a matrix

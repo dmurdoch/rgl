@@ -66,15 +66,9 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   	interpAlpha <- TRUE
   } else
     interpAlpha <- FALSE
-
-  recordOrig <- recordOrig || 
-  	            (meshColor == "faces" &&  
-  	              (hasColors || hasAlpha))
   
-  if (recordOrig) {
-  	oldorig <- getOrig(mesh)
-  	neworig <- integer(newnp + newns + newnt + newnq)
-  }
+  oldorig <- getOrig(mesh)
+  neworig <- integer(newnp + newns + newnt + newnq)
  
   nvmax <- nv + nq + ( nv*(nv+1) )/2
   outvb <- matrix(data=0,nrow=4,ncol=nvmax)  
@@ -152,8 +146,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   			# gen grid      
   			outib[, (i-1)*4+j ] <- c( ithis, enext, isurf, eprev )
   			
-  			if (recordOrig)
-  				neworig[newnp + newns + newnt + (i-1)*4+j] <- np + ns + nt + i
+  			neworig[newnp + newns + newnt + (i-1)*4+j] <- np + ns + nt + i
   			
   			# calculate surface point
   			outvb[,isurf] <- outvb[,isurf] + vb[,ithis]
@@ -226,8 +219,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   			# gen grid      
   			outit[, (i-1)*4+j ] <- c( ithis, enext, eprev )
   			
-  			if (recordOrig)
-  				neworig[newnp + newns + (i-1)*4+j ] <- np + ns + i
+  			neworig[newnp + newns + (i-1)*4+j ] <- np + ns + i
   			
   			# calculate edge point
   			outvb[,enext] <- outvb[,enext] + vb[,ithis] 
@@ -256,8 +248,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   		outit[, (i-1)*4+4 ] <- c( em[edgeindex(ithis, inext, nv)],
   															em[edgeindex(inext, iprev, nv)],
   															em[edgeindex(iprev, ithis, nv)] )
-  		if (recordOrig)
-  			neworig[newnp + newns + (i-1)*4+4] <- np + ns + i
+  		neworig[newnp + newns + (i-1)*4+4] <- np + ns + i
   	}
   	result$it <- outit
   }
@@ -288,8 +279,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   			# gen grid      
   			outis[, (i-1)*2+j ] <- c( ithis, enext)
   			
-  			if (recordOrig)
-  				neworig[newnp + (i-1)*2+j ] <- np + i
+  			neworig[newnp + (i-1)*2+j ] <- np + i
   			
   			# calculate edge point
   			outvb[,enext] <- outvb[,enext] + vb[,ithis] 
@@ -315,8 +305,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   
   if (np) {
   	result$ip <- mesh$ip
-  	if (recordOrig)
-  		neworig[seq_len(np)] <- seq_len(np)
+  	neworig[seq_len(np)] <- seq_len(np)
   }
 
   if (!is.null(newnormals) || !is.null(newtexcoords)) 
@@ -406,13 +395,15 @@ subdivision3d.mesh3d <- function(x, depth = 1, normalize = FALSE,
 																 deform = TRUE, recordOrig = FALSE, ...) {
   mesh <- x
   if (depth) {
-    mesh <- divide.mesh3d(mesh, recordOrig = recordOrig)
+    mesh <- divide.mesh3d(mesh, recordOrig = TRUE)
     if (normalize)
       mesh <- normalize.mesh3d(mesh)
     if (deform)
       mesh <- deform.mesh3d(mesh)      
     mesh<-subdivision3d.mesh3d(mesh, depth-1, normalize, deform,
-    													 recordOrig = recordOrig)
+    													 recordOrig = TRUE)
   }
+  if (!recordOrig)
+  	mesh$orig <- NULL
   return(mesh)  
 }
