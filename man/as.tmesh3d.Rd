@@ -45,13 +45,8 @@ for meshes of triangles.  That class is no longer used:
 A \code{"mesh3d"} object containing no quads.  If \code{drop = TRUE}, it will only contain triangles.  
 
 If \code{recordOrig = TRUE}, an \code{"orig"} element will be 
-added to the result.  By default it shows the correspondence between
-the elements of 
-the input mesh (in the same order as used when shading with 
-\code{meshColor == "faces"}) and the output mesh, but if
-\code{mesh$orig} is non-\code{NULL}
-on input, it may be any vector with appropriate length and 
-the output will propagate values to the new mesh.
+added to the result.  For details, see the \code{\link{clipMesh3d}}
+help page.
 }
 \author{
 Duncan Murdoch

@@ -29,8 +29,8 @@ step drags the points (refinement step).
   \item{depth}{recursion depth}
   \item{normalize}{normalize mesh3d coordinates after division if \code{deform} is \code{TRUE}}
   \item{deform}{deform mesh}
-  \item{recordOrig}{if \code{TRUE}, record the original faces
-  from which the new ones were derived}
+  \item{recordOrig}{if \code{TRUE}, add an \code{"orig"}
+  component to the output.}
   \item{is}{indices for segments}
   \item{it}{indices for triangular faces}
   \item{ib}{indices for quad faces}
@@ -55,9 +55,8 @@ weight in the deform step.)
 }
 \value{
 A modified \code{\link{mesh3d}} object.  If \code{recordOrig} is
-\code{TRUE}, it will contain a component named \code{orig} which
-records the original item corresponding to each new one for 
-segments, triangles and quads.
+\code{TRUE}, it will contain an \code{orig} component.  For
+details, see the \code{\link{clipMesh3d}} help topic.
 }
 
 \examples{
