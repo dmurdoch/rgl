@@ -16,8 +16,8 @@ Full support in R Markdown or `knitr` requires a `knitr` update
 shouldn't trigger errors on the M1Mac test platform.
 * Internally, the C++ code has dropped the use of the internally
 defined `String` type, settling on `std::string` instead.
-* `subdivision3d()` and related functions now (optionally)
-record the original faces associated with each new one.
+* `subdivision3d()`, `clipMesh3d()` and related functions now
+(optionally) record the original faces associated with each new one.
 
 ## Bug fixes
 
