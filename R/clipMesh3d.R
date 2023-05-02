@@ -5,7 +5,7 @@ as.tmesh3d.default <- function(x, drop = FALSE, ...) {
   as.tmesh3d(as.mesh3d(x, ...), drop = drop)  
 }
 
-as.tmesh3d.mesh3d <- function(x, drop = FALSE, recordOrig = FALSE,
+as.tmesh3d.mesh3d <- function(x, drop = FALSE, keepPart = FALSE,
 															...) {
   mesh <- x
   ib <- mesh$ib
@@ -24,7 +24,7 @@ as.tmesh3d.mesh3d <- function(x, drop = FALSE, recordOrig = FALSE,
   	hasAlpha  <- length(mesh$material$alpha) > 1
   }
   
-  orig <- getOrig(mesh)
+  part <- getPart(mesh)
   
   if (nq) {
     mesh$it <- cbind(it, 
@@ -43,19 +43,19 @@ as.tmesh3d.mesh3d <- function(x, drop = FALSE, recordOrig = FALSE,
     	mesh$material$alpha[ofs + seq_len(2*nq)] <- rep(alpha[ofs + seq_len(nq)], each = 2)
     }
     
-    orig[ofs + seq_len(2*nq)] <- rep(orig[ofs + seq_len(nq)], each = 2)
+    part[ofs + seq_len(2*nq)] <- rep(part[ofs + seq_len(nq)], each = 2)
 
   }
   if (drop) {
     mesh$is <- NULL
     mesh$ip <- NULL
     if (ns + np)
-    	orig <- orig[-seq_len(ns + np)]
+    	part <- part[-seq_len(ns + np)]
   }
-  if (recordOrig)
-  	mesh$orig <- orig
+  if (keepPart)
+  	mesh$part <- part
   else
-  	mesh$orig <- NULL
+  	mesh$part <- NULL
   mesh
 }
 
@@ -75,16 +75,16 @@ as.tmesh3d.mesh3d <- function(x, drop = FALSE, recordOrig = FALSE,
 }
 
 clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
-                       minVertices = 0, plot = FALSE, keepValues = FALSE, recordOrig = FALSE) {
+                       minVertices = 0, plot = FALSE, keepValues = FALSE, keepPart = FALSE) {
   stopifnot(inherits(mesh, "mesh3d"))
   # First, convert quads to triangles
-  mesh <- as.tmesh3d(mesh, recordOrig = TRUE)
+  mesh <- as.tmesh3d(mesh, keepPart = TRUE)
   nverts <- ncol(mesh$vb)
   oldnverts <- nverts - 1
   while (nverts < minVertices && oldnverts < nverts && !is.numeric(fn)) {
     oldnverts <- nverts
     mesh <- subdivision3d(mesh, deform = FALSE, 
-    											normalize = TRUE, recordOrig = TRUE)
+    											normalize = TRUE, keepPart = TRUE)
     nverts <- ncol(mesh$vb)
   }
   if (is.null(fn))
@@ -122,14 +122,14 @@ clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
   if (!is.null(mesh$normals) && nrow(mesh$normals) == 4)
     mesh$normals <- t(t(mesh$normals[1:3,])/mesh$normals[4,])
   
-  orig <- getOrig(mesh)
+  part <- getPart(mesh)
   np <- length(mesh$ip)
   ns <- length(mesh$is)/2
   nt <- length(mesh$it)/3
   # nq is zero because of as.tmesh3d
   
   ofs <- np + ns
-  origt <- orig[ofs + seq_len(nt)]
+  part0 <- part[ofs + seq_len(nt)]
   
   newVertices <- integer()
   getNewVertex <- function(good, bad) {
@@ -194,16 +194,16 @@ clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
     newVertex2 <- getNewVertex(goodVertex2, badVertex)
     mesh$it[cbind(badRow, doubles)] <- newVertex1
     mesh$it <- cbind(mesh$it, rbind(newVertex1, goodVertex2, newVertex2))
-    origt <- c(origt, origt[doubles])
+    part0 <- c(part0, part0[doubles])
   }
   zeros <- which(counts == 0)
   if (length(zeros)) {
     mesh$it <- mesh$it[, -zeros]
-    origt <- origt[-zeros]
+    part0 <- part0[-zeros]
   }
   
-  orig <- c(orig[seq_len(ofs)], origt)
-  mesh$orig <- orig
+  part <- c(part[seq_len(ofs)], part0)
+  mesh$part <- part
   
   if (plot)
     shade3d(mesh)
@@ -212,11 +212,11 @@ clipMesh3d <- function(mesh, fn = "z", bound = 0, greater = TRUE,
       if (!greater) values <- -values
       mesh$values <- values + bound
     }
-    cleanMesh3d(mesh, recordOrig = recordOrig)
+    cleanMesh3d(mesh, keepPart = keepPart)
   }
 }
 
-cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE, rejoin = FALSE, recordOrig = TRUE) {
+cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE, rejoin = FALSE, keepPart = TRUE) {
   if (rejoin) {
     ntriangs <- ncol(mesh$it)
     oldntriangs <- ntriangs + 1
@@ -226,7 +226,7 @@ cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE, rejoin = FALSE,
       ntriangs <- ncol(mesh$it)
     }    
   }
-	orig <- getOrig(mesh)
+	part <- getPart(mesh)
   nold <- ncol(mesh$vb)
   keep <- TRUE
   if (onlyFinite)
@@ -248,40 +248,40 @@ cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE, rejoin = FALSE,
       dim(newcols) <- dim(mesh$ip)
       keep <- apply(newcols, 2, function(col) !is.na(col))
       mesh$ip <- newcols[,keep, drop = FALSE]
-      origp <- orig[seq_len(np)]
-      origp <- origp[keep]
-      orig <- c(origp, orig[np + seq_len(np + nt + nq)])
-      np <- length(origp)
+      part0 <- part[seq_len(np)]
+      part0 <- part0[keep]
+      part <- c(part0, part[np + seq_len(np + nt + nq)])
+      np <- length(part0)
     }
     if (!is.null(mesh$is)) {
       newcols <- newnums[mesh$is]
       dim(newcols) <- dim(mesh$is)
       keep <- apply(newcols, 2, function(col) all(!is.na(col)))
       mesh$is <- newcols[,keep, drop = FALSE]
-      origs <- orig[np + seq_len(ns)]
-      origs <- origs[keep]
-      orig <- c(orig[seq_len(np)], origs, orig[np + ns + seq_len(nt + nq)])
-      ns <- length(origs)
+      part0 <- part[np + seq_len(ns)]
+      part0 <- part0[keep]
+      part <- c(part[seq_len(np)], part0, part[np + ns + seq_len(nt + nq)])
+      ns <- length(part0)
     }
     if (!is.null(mesh$it)) {
       newcols <- newnums[mesh$it]
       dim(newcols) <- dim(mesh$it)
       keep <- apply(newcols, 2, function(col) all(!is.na(col)))
       mesh$it <- newcols[,keep, drop = FALSE]
-      origt <- orig[np + ns + seq_len(nt)]
-      origt <- origt[keep]
-      orig <- c(orig[seq_len(np + ns)], origt, orig[np + ns + nt + seq_len(nq)])
-      nt <- length(origt)
+      part0 <- part[np + ns + seq_len(nt)]
+      part0 <- part0[keep]
+      part <- c(part[seq_len(np + ns)], part0, part[np + ns + nt + seq_len(nq)])
+      nt <- length(part0)
     }
     if (!is.null(mesh$ib)) {
       newcols <- newnums[mesh$ib]
       dim(newcols) <- dim(mesh$ib)
       keep <- apply(newcols, 2, function(col) all(!is.na(col)))
       mesh$ib <- newcols[,keep, drop = FALSE]
-      origq <- orig[np + ns + nt + seq_len(nq)]
-      origq <- origq[keep]
-      orig <- c(orig[seq_len(np + ns + nt)], origq)
-      nq <- length(origq)
+      part0 <- part[np + ns + nt + seq_len(nq)]
+      part0 <- part0[keep]
+      part <- c(part[seq_len(np + ns + nt)], part0)
+      nq <- length(part0)
     }
     if (!is.null(mesh$normals)) 
       mesh$normals <- mesh$normals[, oldnums]
@@ -294,10 +294,10 @@ cleanMesh3d <- function(mesh, onlyFinite = TRUE, allUsed = TRUE, rejoin = FALSE,
     if (!is.null(mesh$values))
       mesh$values <- mesh$values[oldnums]
   }
-  if (recordOrig)
-  	mesh$orig <- orig
+  if (keepPart)
+  	mesh$part <- part
   else
-  	mesh$orig <- NULL
+  	mesh$part <- NULL
   mesh
 }
 
@@ -359,8 +359,8 @@ rejoinMesh3d <- function(x, tol = 1.e-6) {
   ns <- length(x$is)/2
   nq <- length(x$ib)/4
   ofs <- np + ns
-  orig <- getOrig(x)
-  origt <- orig[ofs + seq_len(ntriangs)]
+  part <- getPart(x)
+  part0 <- part[ofs + seq_len(ntriangs)]
   vals <- if (nrow(x$vb) == 4) asEuclidean(t(x$vb)) else t(x$vb)
   if (!is.null(x$normals))
     vals <- cbind(vals, if(nrow(x$normals) == 4) asEuclidean(t(x$normals)) else t(x$normals))
@@ -370,8 +370,8 @@ rejoinMesh3d <- function(x, tol = 1.e-6) {
   for (j in seq_len(ntriangs)[-(1:3)]) {
     i <- j - (3:0)
     verts <- c(x$it[,i])
-    thisorig <- origt[i]
-    if ( all(thisorig == thisorig[1])
+    thispart <- part0[i]
+    if ( all(thispart == thispart[1])
     	&& !any(is.na(indices[i]))
       && verts[2] == verts[6]
       && verts[3] == verts[8]
@@ -401,9 +401,9 @@ rejoinMesh3d <- function(x, tol = 1.e-6) {
   }
   indices <- indices[!is.na(indices)]
   x$it <- x$it[,indices]
-  x$orig <- c(orig[seq_len(ofs)], 
-  						origt[indices], 
-  						orig[ofs + ntriangs + seq_len(nq)])
+  x$part <- c(part[seq_len(ofs)], 
+  						part0[indices], 
+  						part[ofs + ntriangs + seq_len(nq)])
   x
 }
 

@@ -15,10 +15,10 @@ step drags the points (refinement step).
 \usage{
   subdivision3d( x,  ...)
   \method{subdivision3d}{mesh3d}( x, depth = 1, normalize = FALSE,
-                deform = TRUE, recordOrig = FALSE, ... )
+                deform = TRUE, keepPart = FALSE, ... )
   divide.mesh3d(mesh,  vb = mesh$vb, 
                 ib = mesh$ib, it = mesh$it, is = mesh$is,
-                recordOrig = FALSE)
+                keepPart = FALSE)
   normalize.mesh3d(mesh)
   deform.mesh3d(mesh, vb = mesh$vb, ib = mesh$ib, it = mesh$it,
                 is = mesh$is)
@@ -29,7 +29,7 @@ step drags the points (refinement step).
   \item{depth}{recursion depth}
   \item{normalize}{normalize mesh3d coordinates after division if \code{deform} is \code{TRUE}}
   \item{deform}{deform mesh}
-  \item{recordOrig}{if \code{TRUE}, add an \code{"orig"}
+  \item{keepPart}{if \code{TRUE}, add a \code{"part"}
   component to the output.}
   \item{is}{indices for segments}
   \item{it}{indices for triangular faces}
@@ -54,8 +54,8 @@ normalizes the homogeneous coordinates, by setting the
 weight in the deform step.)
 }
 \value{
-A modified \code{\link{mesh3d}} object.  If \code{recordOrig} is
-\code{TRUE}, it will contain an \code{orig} component.  For
+A modified \code{\link{mesh3d}} object.  If \code{keepPart} is
+\code{TRUE}, it will contain a \code{part} component.  For
 details, see the \code{\link{clipMesh3d}} help topic.
 }
 
