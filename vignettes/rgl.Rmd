@@ -520,7 +520,7 @@ Function                             | Description
 `r indexfns("ellipse3d")`:  | generate an ellipsoid in various ways
 `r indexfns("mesh3d")`:      | generate a shape from indexed vertices
 `r indexfns("shapelist3d")`: | generate a shape by combining other shapes
-`as.mesh3d`:                 | a generic function; see below
+`r linkfn("as.mesh3d")`:   | a generic function; see below
 
 A related function is `r indexfns("triangulate")`, which takes a
 two dimensional polygon and divides it up into triangles using the 
@@ -577,9 +577,10 @@ normals      | (optional) A matrix of the same shape as vb, containing normal ve
 texcoords    | (optional) A 2 by n matrix of texture coordinates corresponding to each vertex.
 values       | (optional) A vector of length n holding values at each vertex
 meshColor    | (optional) A text value indicating how colors and texture coordinates should be interpreted.
+part         | (optional) A vector added by some functions (e.g. `r linkfn("clipMesh3d")`) to relate output parts to input parts.
 
 
-### Contouring shapes
+### Contouring and clipping shapes
 
 These functions compute and plot contours of functions
 on surfaces, or clip objects along a contour of a function.

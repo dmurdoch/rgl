@@ -10,7 +10,8 @@ a function are bounded.
 }
 \usage{
 clipMesh3d(mesh, fn, bound = 0, greater = TRUE, 
-           minVertices = 0, plot = FALSE, keepValues = FALSE)
+           minVertices = 0, plot = FALSE, keepValues = FALSE,
+           keepPart = FALSE)
 clipObj3d(ids = tagged3d(tags), fn, bound = 0, greater = TRUE,
            minVertices = 0,
            replace = TRUE, tags)
@@ -35,6 +36,8 @@ See Details below.
   \item{plot}{Logical; whether or not to plot the mesh.}
   \item{keepValues}{Logical; whether to save the function values at 
   each vertex when \code{plot = FALSE}.}
+  \item{keepPart}{Whether to keep the \code{"part"} component
+  of the result; see details below.}
   \item{ids}{
 The RGL id value(s) of objects to clip.
   }
@@ -114,6 +117,56 @@ is more accurate.  In the \code{clipObj3d} function,
 \code{minVertices} can be a vector, with entries corresponding
 to each of the entries in \code{ids}.
 }
+\section{The \code{keepPart} argument}{
+
+If \code{keepPart = TRUE}, a \code{"part"} element will be 
+added to the result.  By default it shows the correspondence between
+the parts of 
+the input mesh and output mesh in the following order: points,
+segments, triangles and
+quads.  This is the same order used for colours when 
+shading with 
+\code{meshColor == "faces"}.  Items are numbered sequentially
+over the whole sequence.
+
+For example, start with a mesh with one point, two segments, three
+triangles and four
+quads, but no \code{part} member.  
+It would implicitly number the parts from one to ten as
+
+\verb{
+  c(1,    # the point
+    2:3,  # the two segments
+    4:6,  # the three triangles
+    7:10) # the four quads
+}
+
+If clipping deleted the segments
+and the first triangle, the output would contain the seven
+element result
+
+\verb{
+  mesh$part <- c(1,    # the point remains
+                       # no segments now
+                 5:6,  # the two remaining triangles
+                       # were previously items 5 and 6
+                 7:10) # the four quads
+}
+
+The \code{part} output may contain repetitions. For example,
+when a triangle is partially clipped and replaced by several
+smaller triangles, entries for all of them will contain the value
+corresponding to the original triangle.
+
+The \code{mesh$part} component may also be used as a kind of
+tag for the parts of a mesh.  
+If \code{mesh$part} is a vector 
+on input, 
+the output will propagate values to the new mesh.  The input length
+must match the total number of points, segments, triangles and 
+quads or an error will be raised.
+}
+
 \value{
 If \code{plot = FALSE},
 \code{clipMesh3d} returns new mesh3d object in which all vertices (approximately) satisfy the
@@ -123,6 +176,8 @@ the boundary (and if \code{minVertices > 0}, in the
 interior).  If in addition \code{keepValues = TRUE},
 a component named \code{"values"} will be added to the 
 mesh containing the values for each vertex.
+If \code{keepPart = TRUE}, the \code{part} component
+described below will be added to the output mesh.
 
 If \code{plot = TRUE}, the result will be 
 plotted with \code{\link{shade3d}} and its result returned.
@@ -148,7 +203,7 @@ values without clipping.
 
 # Show the problem that minVertices solves:
 
-cube <- cube3d(col = "red")
+cube <- cube3d(col = palette.colors(6, "Accent"), meshColor = "faces")
 
 # This function only has one argument, so it will 
 # be passed x, y and z in columns of a matrix
