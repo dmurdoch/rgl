@@ -1,4 +1,4 @@
-# rgl 1.1.15
+# rgl 1.1.16
 
 ## Major changes
 
@@ -17,7 +17,8 @@ shouldn't trigger errors on the M1Mac test platform.
 * Internally, the C++ code has dropped the use of the internally
 defined `String` type, settling on `std::string` instead.
 * `subdivision3d()`, `clipMesh3d()` and related functions now
-(optionally) record the original faces associated with each new one.
+(optionally) record the original faces associated with each new one
+in a `mesh$tags` addition to the output.
 
 ## Bug fixes
 
