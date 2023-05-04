@@ -16,20 +16,20 @@ edgemap <- function( size ) {
 edgeindex <- function( from, to, size, row=min(from,to), col=max(from,to) )
   return( row*size - ( row*(row+1) )/2 - (size-col) )
 
-getPart <- function(mesh) {
+getTags <- function(mesh) {
 	len <- length(mesh$ip) + length(mesh$is)/2 +
 		     length(mesh$it)/3 + length(mesh$ib)/4
-	part <- mesh$part
-	if (is.null(part))
-	  part <- seq_len(len)
-	else if (length(part) != len)
-		stop("mesh$part length must equal total number of points, segments, triangles and quads")
-	part
+	tags <- mesh$tags
+	if (is.null(tags))
+	  tags <- seq_len(len)
+	else if (length(tags) != len)
+		stop("mesh$tags length must equal total number of points, segments, triangles and quads")
+	tags
 }
 
 divide.mesh3d <- function(mesh, vb = mesh$vb, 
 													ib = mesh$ib, it = mesh$it, is = mesh$is,
-													keepPart = FALSE) {
+													keepTags = FALSE) {
   nv    <- dim(vb)[2]
   inds <- seq_len(nv)
   np <- length(mesh$ip)
@@ -66,8 +66,8 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   } else
     interpAlpha <- FALSE
   
-  oldpart <- getPart(mesh)
-  newpart <- integer(newnp + newns + newnt + newnq)
+  oldtags <- getTags(mesh)
+  newtags <- integer(newnp + newns + newnt + newnq)
  
   nvmax <- nv + nq + ( nv*(nv+1) )/2
   outvb <- matrix(data=0,nrow=4,ncol=nvmax)  
@@ -145,7 +145,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   			# gen grid      
   			outib[, (i-1)*4+j ] <- c( ithis, enext, isurf, eprev )
   			
-  			newpart[newnp + newns + newnt + (i-1)*4+j] <- np + ns + nt + i
+  			newtags[newnp + newns + newnt + (i-1)*4+j] <- np + ns + nt + i
   			
   			# calculate surface point
   			outvb[,isurf] <- outvb[,isurf] + vb[,ithis]
@@ -218,7 +218,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   			# gen grid      
   			outit[, (i-1)*4+j ] <- c( ithis, enext, eprev )
   			
-  			newpart[newnp + newns + (i-1)*4+j ] <- np + ns + i
+  			newtags[newnp + newns + (i-1)*4+j ] <- np + ns + i
   			
   			# calculate edge point
   			outvb[,enext] <- outvb[,enext] + vb[,ithis] 
@@ -247,7 +247,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   		outit[, (i-1)*4+4 ] <- c( em[edgeindex(ithis, inext, nv)],
   															em[edgeindex(inext, iprev, nv)],
   															em[edgeindex(iprev, ithis, nv)] )
-  		newpart[newnp + newns + (i-1)*4+4] <- np + ns + i
+  		newtags[newnp + newns + (i-1)*4+4] <- np + ns + i
   	}
   	result$it <- outit
   }
@@ -278,7 +278,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   			# gen grid      
   			outis[, (i-1)*2+j ] <- c( ithis, enext)
   			
-  			newpart[newnp + (i-1)*2+j ] <- np + i
+  			newtags[newnp + (i-1)*2+j ] <- np + i
   			
   			# calculate edge point
   			outvb[,enext] <- outvb[,enext] + vb[,ithis] 
@@ -304,7 +304,7 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   
   if (np) {
   	result$ip <- mesh$ip
-  	newpart[seq_len(np)] <- seq_len(np)
+  	newtags[seq_len(np)] <- seq_len(np)
   }
 
   if (!is.null(newnormals) || !is.null(newtexcoords)) 
@@ -325,17 +325,17 @@ divide.mesh3d <- function(mesh, vb = mesh$vb,
   	result$material$color <- rgb(t(outrgb[, seq_len(vcnt)]), maxColorValue = 255)
   else if (hasColors && meshColor == "faces") {
   	colors <- rep_len(mesh$material$color, np + ns + nt + nq)
-  	result$material$color <- colors[newpart]
+  	result$material$color <- colors[newtags]
   }
   if (interpAlpha)
   	result$material$alpha <- alpha[seq_len(vcnt)]
   else if (hasAlpha && meshColor == "faces") {
   	alpha <- rep_len(mesh$material$alpha, np + ns + nt + nq)
-  	result$material$alpha <- alpha[newpart]
+  	result$material$alpha <- alpha[newtags]
   }
   
-  if (keepPart)
-    result$part <- oldpart[newpart]
+  if (keepTags)
+    result$tags <- oldtags[newtags]
 
   return( result )
 }
@@ -391,18 +391,18 @@ deform.mesh3d <- function( mesh, vb = mesh$vb,
 }
 
 subdivision3d.mesh3d <- function(x, depth = 1, normalize = FALSE,
-																 deform = TRUE, keepPart = FALSE, ...) {
+																 deform = TRUE, keepTags = FALSE, ...) {
   mesh <- x
   if (depth) {
-    mesh <- divide.mesh3d(mesh, keepPart = TRUE)
+    mesh <- divide.mesh3d(mesh, keepTags = TRUE)
     if (normalize)
       mesh <- normalize.mesh3d(mesh)
     if (deform)
       mesh <- deform.mesh3d(mesh)      
     mesh<-subdivision3d.mesh3d(mesh, depth-1, normalize, deform,
-    													 keepPart = TRUE)
+    													 keepTags = TRUE)
   }
-  if (!keepPart)
-  	mesh$part <- NULL
+  if (!keepTags)
+  	mesh$tags <- NULL
   return(mesh)  
 }
