@@ -19,7 +19,7 @@ point or segment components."><meta name="robots" content="noindex"><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.15</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.1.16</span>
       </span>
     </div>
 
@@ -89,7 +89,7 @@ point or segment components.</p>
 <span><span class="co"># S3 method for default</span></span>
 <span><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span><span class="co"># S3 method for mesh3d</span></span>
-<span><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, keepPart <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">as.tmesh3d</span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">FALSE</span>, keepTags <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -100,8 +100,8 @@ point or segment components.</p>
   <dt>drop</dt>
 <dd><p>If <code>TRUE</code>, drop any point or segment components.</p></dd>
 
-  <dt>keepPart</dt>
-<dd><p>Whether to include the <code>"part"</code> component in the output.</p></dd>
+  <dt>keepTags</dt>
+<dd><p>Whether to include the <code>"tags"</code> component in the output.</p></dd>
 
   <dt>...</dt>
 <dd><p>Ignored in the <code>mesh3d</code> method, passed to 
@@ -127,7 +127,7 @@ for meshes of triangles.  That class is no longer used:
 <p>A <code>"mesh3d"</code> object containing no quads.  If <code>drop = TRUE</code>, it will only contain triangles.</p>
 
 
-<p>If <code>keepPart = TRUE</code>, a <code>"part"</code> element will be 
+<p>If <code>keepTags = TRUE</code>, a <code>"tags"</code> element will be 
 added to the result.  For details, see the <code><a href="clipMesh3d.html">clipMesh3d</a></code></p>
 
 
