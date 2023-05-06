@@ -154,6 +154,7 @@ public:
   void setIdentity(void);
   void setRotate(const int axis, const float degree);
   void getData(double* dest);
+  void getData(float* dest);
   void loadData(const double* from);
   void loadData(const float* from);
   void loadData(const Matrix4x4& from);

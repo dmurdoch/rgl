@@ -27,12 +27,13 @@ Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool
   blended(in_material.isTransparent())
   
 {
+  	uninitialize();
 }
 
 Shape::~Shape()
 {
 #ifndef RGL_NO_OPENGL
-  if (displayList)
+  if (!GLAD_GL_VERSION_2_1 && displayList)
     glDeleteLists(displayList, 1);
 #endif
 }
@@ -60,23 +61,29 @@ void Shape::render(RenderContext* renderContext)
 #ifndef RGL_NO_OPENGL
   renderBegin(renderContext);
   
-  if (displayList == 0)
-    displayList = glGenLists(1);
-    
-  SAVEGLERROR;
-  if (doUpdate) {
-    update(renderContext);
-    SAVEGLERROR;
-    glNewList(displayList, GL_COMPILE_AND_EXECUTE);
-    SAVEGLERROR;
-    draw(renderContext);
-    SAVEGLERROR;
-    glEndList();
-    SAVEGLERROR;
+  if (GLAD_GL_VERSION_2_1) {
+  	if (doUpdate)
+  		update(renderContext);
+  	draw(renderContext);
   } else {
-    glCallList(displayList);
+    if (displayList == 0)
+      displayList = glGenLists(1);
+    
     SAVEGLERROR;
-  }  
+    if (doUpdate) {
+      update(renderContext);
+      SAVEGLERROR;
+      glNewList(displayList, GL_COMPILE_AND_EXECUTE);
+      SAVEGLERROR;
+      draw(renderContext);
+      SAVEGLERROR;
+      glEndList();
+      SAVEGLERROR;
+    } else {
+      glCallList(displayList);
+      SAVEGLERROR;
+    } 
+  }
 #endif
 }
 
@@ -277,8 +284,8 @@ std::string Shape::getShaderDefines(ShaderFlags flags)
 	
 	std::string title = "  /* ****** "+type+" object "+std::to_string(getObjID())+" shader ****** */\n";
 	
-	std::string defines = 
-		"#define NCLIPPLANES " + std::to_string(nclipplanes) + "\n"+
+	std::string defines =
+		"#line 0 3\n#define NCLIPPLANES " + std::to_string(nclipplanes) + "\n"+
 		"#define NLIGHTS " + std::to_string(nlights) + "\n";
 	
 	if (flags.fat_lines)
@@ -349,99 +356,4 @@ std::string Shape::getShaderDefines(ShaderFlags flags)
 void Shape::initialize()
 {
   SceneNode::initialize();
-#ifndef RGL_NO_OPENGL
-	if (GLAD_GL_VERSION_2_1) {
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		ShaderFlags flags = getShaderFlags();
-		std::string defines = getShaderDefines(flags);
-		std::string source = material.shaders[VERTEX_SHADER];
-		if (source.size() == 0)
-			source = defaultShader(VERTEX_SHADER);
-		const char *sources[2];
-		sources[0] = defines.c_str();
-		sources[1] = source.c_str();
-		glShaderSource(vertexShader, 2, sources, NULL);
-		glCompileShader(vertexShader);
-		
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		source = material.shaders[FRAGMENT_SHADER];
-		if (source.size() == 0)
-			source = defaultShader(FRAGMENT_SHADER);
-		sources[1] = source.c_str();
-		glShaderSource(fragmentShader, 2, sources, NULL);
-		glCompileShader(fragmentShader);
-		
-		Rprintf("created shaders");
-		
-		GLuint shaderProgram = glCreateProgram();
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		
-		glBindAttribLocation(shaderProgram, 0, "aPos");
-		glLocs["aPos"] = 0;
-		glBindAttribLocation(shaderProgram, 1, "aCol");
-		glLocs["aCol"] = 1;
-		
-		glLinkProgram(shaderProgram);
-		
-		if (flags.fixed_quads && !flags.sprites_3d)
-			glLocs["aOfs"] = glGetAttribLocation(shaderProgram, "aOfs");
-		
-		std::string type = getTypeName();
-		if (flags.has_texture || type == "text") {
-			glLocs["texLoc"] = glGetAttribLocation(shaderProgram, "aTexcoord");
-		  glLocs["sampler"] = glGetUniformLocation(shaderProgram, "uSampler");
-		}
-		
-		if (flags.has_fog && !flags.sprites_3d) {
-			glLocs["uFogMode"] = glGetUniformLocation(shaderProgram, "uFogMode");
-			glLocs["uFogColor"] = glGetUniformLocation(shaderProgram, "uFogColor");
-			glLocs["uFogParms"] = glGetUniformLocation(shaderProgram, "uFogParms");
-		}
-		
-		if (nclipplanes && !flags.sprites_3d) {
-			glLocs["clipLoc"] = glGetUniformLocation(shaderProgram,"vClipplane");
-		}
-		
-		if (flags.is_lit) {
-			glLocs["emissionLoc"] = glGetUniformLocation(shaderProgram, "emission");
-			glLocs["shininessLoc"] = glGetUniformLocation(shaderProgram, "shininess");
-			if (nlights > 0) {
-				glLocs["ambientLoc"] = glGetUniformLocation(shaderProgram, "ambient");
-				glLocs["specularLoc"] = glGetUniformLocation(shaderProgram, "specular");
-				glLocs["diffuseLoc"] = glGetUniformLocation(shaderProgram, "diffuse" );
-				glLocs["lightDirLoc"] = glGetUniformLocation(shaderProgram, "lightDir");
-				glLocs["viewpointLoc"] = glGetUniformLocation(shaderProgram, "viewpoint");
-				glLocs["finiteLoc"] = glGetUniformLocation(shaderProgram, "finite" );
-			}
-		}
-		
-		if (flags.fat_lines) {
-			glLocs["nextLoc"] = glGetAttribLocation(shaderProgram, "aNext");
-			glLocs["pointLoc"] = glGetAttribLocation(shaderProgram, "aPoint");
-			glLocs["aspectLoc"] = glGetUniformLocation(shaderProgram, "uAspect");
-			glLocs["lwdLoc"] = glGetUniformLocation(shaderProgram, "uLwd");
-		}
-		
-		if (!flags.sprites_3d) {
-			glLocs["mvMatLoc"] = glGetUniformLocation(shaderProgram, "mvMatrix");
-			glLocs["prMatLoc"] = glGetUniformLocation(shaderProgram, "prMatrix");
-			
-			if (flags.fixed_size) {
-				glLocs["textScaleLoc"] = glGetUniformLocation(shaderProgram, "textScale");
-			}
-		}
-		
-		if (flags.needs_vnormal) {
-			glLocs["normLoc"] = glGetAttribLocation(shaderProgram, "aNorm");
-			glLocs["normMatLoc"] = glGetUniformLocation(shaderProgram, "normMatrix");
-		}
-		
-		if (flags.is_twosided) {
-			glLocs["frontLoc"] = glGetUniformLocation(shaderProgram, "front");
-			if (flags.has_normals)
-				glLocs["invPrMatLoc"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
-		}
-	}
-#endif
 }

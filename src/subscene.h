@@ -225,6 +225,9 @@ public:
      
   std::vector<Subscene*> mouseListeners;
   
+  size_t countClipplanes() { return clipPlanes.size(); }
+  size_t countLights()     { return lights.size(); }
+  
   // These are set after rendering the scene
   Vec4 Zrow;
   Vec4 Wrow;

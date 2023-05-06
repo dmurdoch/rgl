@@ -321,6 +321,12 @@ void Matrix4x4::getData(double* dest)
     	dest[i] = data[i];
 }
 
+void Matrix4x4::getData(float* dest)
+{
+	for(int i=0;i<16;i++)
+		dest[i] = data[i];
+}
+
 Matrix4x4 Matrix4x4::scaleMatrix(double sx, double sy, double sz)
 {
   Matrix4x4 result;

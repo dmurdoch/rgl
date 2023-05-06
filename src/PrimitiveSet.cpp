@@ -108,6 +108,26 @@ PrimitiveSet::~PrimitiveSet ()
 void PrimitiveSet::drawBegin(RenderContext* renderContext)
 {
   Shape::drawBegin(renderContext);
+	
+#ifndef RGL_NO_OPENGL
+	if (GLAD_GL_VERSION_2_1) {
+		Subscene* subscene = renderContext->subscene;
+		if (!is_initialized() || 
+      nclipplanes < subscene->countClipplanes() || 
+      nlights < subscene->countLights() ) {
+			setShapeContext(subscene, subscene->countClipplanes(), 
+                   subscene->countLights());
+			initialize();
+		}
+		glUseProgram(shaderProgram);
+		float mat[16];
+		subscene->modelMatrix.getData(mat);
+		glUniformMatrix4fv(glLocs.at("mvMatLoc"), 1, GL_FALSE, mat);
+		subscene->projMatrix.getData(mat);
+		glUniformMatrix4fv(glLocs.at("prMatLoc"), 1, GL_FALSE, mat);
+	}
+#endif  
+	
   material.beginUse(renderContext);
   SAVEGLERROR;
   BBoxDeco* bboxdeco = 0;
@@ -237,10 +257,132 @@ void PrimitiveSet::getAttribute(SceneNode* subscene, AttribID attrib, int first,
   }
 }
 
+#ifndef RGL_NO_OPENGL
+static void checkShader(const char* type, GLuint shader)
+{
+	GLint status;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+	if (!status) {
+		GLchar infoLog[2000];
+		GLsizei len;
+		glGetShaderInfoLog(shader, sizeof(infoLog), &len, infoLog);
+		error("Compile issue for %s shader:\n%s\n", type, infoLog);
+	}
+}
+
+static void checkProgram(GLuint program)
+{
+	GLint status;
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+	if (!status) {
+		GLchar infoLog[2000];
+		GLsizei len;
+		glGetProgramInfoLog(program, sizeof(infoLog), &len, infoLog);
+		error("Shader link issue:\n%s", infoLog);
+	}
+}
+#endif
+
+
 void PrimitiveSet::initialize()
 {
 	Shape::initialize();
 #ifndef RGL_NO_OPENGL
+	if (GLAD_GL_VERSION_2_1) {
+		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		ShaderFlags flags = getShaderFlags();
+		
+		std::string defines = getShaderDefines(flags);
+		std::string source = material.shaders[VERTEX_SHADER];
+		if (source.size() == 0)
+			source = defaultShader(VERTEX_SHADER);
+		const char *sources[2];
+		sources[0] = defines.c_str();
+		sources[1] = source.c_str();
+		glShaderSource(vertexShader, 2, sources, NULL);
+		glCompileShader(vertexShader);
+		checkShader("vertex", vertexShader);
+		
+		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		source = material.shaders[FRAGMENT_SHADER];
+		if (source.size() == 0)
+			source = defaultShader(FRAGMENT_SHADER);
+		sources[1] = source.c_str();
+		glShaderSource(fragmentShader, 2, sources, NULL);
+		glCompileShader(fragmentShader);
+		checkShader("fragment", fragmentShader);
+		
+		shaderProgram = glCreateProgram();
+		glAttachShader(shaderProgram, vertexShader);
+		glAttachShader(shaderProgram, fragmentShader);
+		
+		glBindAttribLocation(shaderProgram, 0, "aPos");
+		glLocs["aPos"] = 0;
+		glBindAttribLocation(shaderProgram, 1, "aCol");
+		glLocs["aCol"] = 1;
+		
+		glLinkProgram(shaderProgram);
+		checkProgram(shaderProgram);
+		
+		if (flags.fixed_quads && !flags.sprites_3d)
+			glLocs["aOfs"] = glGetAttribLocation(shaderProgram, "aOfs");
+		
+		std::string type = getTypeName();
+		if (flags.has_texture || type == "text") {
+			glLocs["texLoc"] = glGetAttribLocation(shaderProgram, "aTexcoord");
+			glLocs["sampler"] = glGetUniformLocation(shaderProgram, "uSampler");
+		}
+		
+		if (flags.has_fog && !flags.sprites_3d) {
+			glLocs["uFogMode"] = glGetUniformLocation(shaderProgram, "uFogMode");
+			glLocs["uFogColor"] = glGetUniformLocation(shaderProgram, "uFogColor");
+			glLocs["uFogParms"] = glGetUniformLocation(shaderProgram, "uFogParms");
+		}
+		
+		if (nclipplanes && !flags.sprites_3d) {
+			glLocs["clipLoc"] = glGetUniformLocation(shaderProgram,"vClipplane");
+		}
+		
+		if (flags.is_lit) {
+			glLocs["emissionLoc"] = glGetUniformLocation(shaderProgram, "emission");
+			glLocs["shininessLoc"] = glGetUniformLocation(shaderProgram, "shininess");
+			if (nlights > 0) {
+				glLocs["ambientLoc"] = glGetUniformLocation(shaderProgram, "ambient");
+				glLocs["specularLoc"] = glGetUniformLocation(shaderProgram, "specular");
+				glLocs["diffuseLoc"] = glGetUniformLocation(shaderProgram, "diffuse" );
+				glLocs["lightDirLoc"] = glGetUniformLocation(shaderProgram, "lightDir");
+				glLocs["viewpointLoc"] = glGetUniformLocation(shaderProgram, "viewpoint");
+				glLocs["finiteLoc"] = glGetUniformLocation(shaderProgram, "finite" );
+			}
+		}
+		
+		if (flags.fat_lines) {
+			glLocs["nextLoc"] = glGetAttribLocation(shaderProgram, "aNext");
+			glLocs["pointLoc"] = glGetAttribLocation(shaderProgram, "aPoint");
+			glLocs["aspectLoc"] = glGetUniformLocation(shaderProgram, "uAspect");
+			glLocs["lwdLoc"] = glGetUniformLocation(shaderProgram, "uLwd");
+		}
+		
+		if (!flags.sprites_3d) {
+			glLocs["mvMatLoc"] = glGetUniformLocation(shaderProgram, "mvMatrix");
+			glLocs["prMatLoc"] = glGetUniformLocation(shaderProgram, "prMatrix");
+			
+			if (flags.fixed_size) {
+				glLocs["textScaleLoc"] = glGetUniformLocation(shaderProgram, "textScale");
+			}
+		}
+		
+		if (flags.needs_vnormal) {
+			glLocs["normLoc"] = glGetAttribLocation(shaderProgram, "aNorm");
+			glLocs["normMatLoc"] = glGetUniformLocation(shaderProgram, "normMatrix");
+		}
+		
+		if (flags.is_twosided) {
+			glLocs["frontLoc"] = glGetUniformLocation(shaderProgram, "front");
+			if (flags.has_normals)
+				glLocs["invPrMatLoc"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
+		}
+	}
 	vertexArray.setAttribLocation(glLocs["aPos"]);
 #endif
 }

@@ -915,7 +915,7 @@ rgl.window2user <- function( x, y = NULL, z = 0, projection = rgl.projection()) 
 
   viewport <- projection$view
 
-  normalized <- rbind( 2*xyz$x - 1,
+  normalized <- rbind( 2*(xyz$x - viewport[1]/viewport[3]) - 1,
                        2*(xyz$y - viewport[2]/viewport[4]) - 1,
                        2*xyz$z - 1,
                        1 )

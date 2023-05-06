@@ -130,7 +130,7 @@ public:
    **/
   
   virtual bool isClipPlane() { return false; }
-  
+
   /* call this first to set the context where the next functions
    * need to operate
    */
@@ -142,8 +142,7 @@ public:
    * Javascript methods in shaders.src.js.  Make sure changes
    * happen in both places!
    */
-  
-  
+
   ShaderFlags getShaderFlags();
   
   std::string getShaderDefines(ShaderFlags flags);
@@ -170,19 +169,22 @@ protected:
    * material
    **/
   Material material;
+  
+  Subscene* subscene;
+  int nclipplanes;
+  int nlights;
+  
 private:
 #ifndef RGL_NO_OPENGL  
   /**
    * display list
    **/
   GLuint   displayList;
+
 #endif	
-	
-	Subscene* subscene;
-	int nclipplanes;
-	int nlights;
 
   int	   drawLevel;     /* for debugging */
+
 protected:
   /**
    * update indicator

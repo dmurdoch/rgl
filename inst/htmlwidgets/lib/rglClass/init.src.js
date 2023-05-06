@@ -61,46 +61,39 @@
      */
     rglwidgetClass.prototype.initSphere = function(sections, segments) {
       var v = [], phi = [], theta = [], it = [], centers = [],
-           i, j, k, ind, mod1, pole, result = {};
+           i, j, k, ind, result = {};
        
-      for (i = 0; i < sections - 1; i++) {
-        phi.push((i + 1)/sections - 0.5);
+      for (i = 0; i <= sections; i++) {
+        phi.push(i/sections - 0.5);
       }
 
-      for (j = 0; j < segments; j++) {
+      for (j = 0; j <= segments; j++) {
         theta.push(2*j/segments);
-        for (i = 0; i < sections - 1; i++) {
+        for (i = 0; i <= sections; i++) {
           /* These are [x,y,z,s,t]: */
           v.push([Math.sin(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]),
                   Math.sin(Math.PI*phi[i]),
                   Math.cos(Math.PI*theta[j]) * Math.cos(Math.PI*phi[i]),                               
                   theta[j]/2,
                   phi[i] + 0.5]);
+           // console.log("xyzst="+v[v.length-1]);
         }
       }
-      pole = v.length;
-      v.push([0, -1, 0, 0, 0]); 
-      v.push([0,  1, 0, 0, 1]);
       result.values = new Float32Array(rglwidgetClass.flatten(v));
       result.vertexCount = v.length;
       
-      mod1 = segments*(sections - 1);
       for (j = 0; j < segments; j++) {
-        for (i = 0; i < sections - 2; i++) {
-          ind = i + (sections - 1)*j;
-          it.push([ind % mod1, 
-                   (ind + sections - 1) % mod1,
-                   (ind + sections) % mod1]);
-          it.push([ind % mod1, 
-                   (ind + sections) % mod1,
-                   (ind + 1) % mod1]);
+        for (i = 0; i < sections; i++) {
+          ind = i + (sections + 1)*j;
+          if (i > 0)                       // Not south pole
+            it.push([ind, 
+                     ind + sections + 1,
+                     ind + 1]);
+          if (i < sections - 1)             // Not north pole
+            it.push([ind + sections + 1, 
+                     ind + sections + 2,
+                     ind + 1]);
         }
-        it.push([pole, 
-                 ((j + 1)*(sections - 1)) % mod1,
-                 ((j + 1)*(sections - 1) - sections + 1) % mod1]);
-        it.push([pole + 1, 
-                 ((j + 1)*(sections - 1) - 1) % mod1,
-                 ((j + 1)*(sections - 1) + sections - 2) % mod1]);
       }
       result.it = new Uint16Array(rglwidgetClass.flatten(it));
       

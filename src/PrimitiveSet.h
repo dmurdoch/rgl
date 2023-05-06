@@ -140,6 +140,11 @@ protected:
   bool hasmissing; 	/* whether any vertices contain missing values */
   int nindices;
   unsigned int* indices;
+
+  /**
+   * shader program
+   */
+  GLuint   shaderProgram;
 };
 
 
