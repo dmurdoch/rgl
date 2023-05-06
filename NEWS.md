@@ -1,4 +1,5 @@
-# rgl 1.1.12
+
+# rgl 1.1.16
 
 ## Major changes
 
@@ -16,6 +17,9 @@ Full support in R Markdown or `knitr` requires a `knitr` update
 shouldn't trigger errors on the M1Mac test platform.
 * Internally, the C++ code has dropped the use of the internally
 defined `String` type, settling on `std::string` instead.
+* `subdivision3d()`, `clipMesh3d()` and related functions now
+(optionally) record the original faces associated with each new one
+in a `mesh$tags` addition to the output.
 * `getShaders()` now defaults to using internal C++ code
 instead of Javascript.
 
@@ -23,6 +27,21 @@ instead of Javascript.
 
 * The `Makevars.win` file was being produced incorrectly on
 older Windows versions.
+* `rgl.window2user()` did not work correctly when multiple panes
+were showing.  This caused `arrow3d()` to fail in some panes
+(issue #354).
+* `selectpoints3d()` had a typo which was revealed by 
+warnings in recent R versions.
+* `getShaders()` was broken in 1.1.3.
+* `arc3d()` can now handle "arcs" that are straight lines along
+a radius (issue #357).
+* Spheres did not show textures correctly (issue #360).
+* `hover3d()` failed to display default labels in R (issue #362).
+* `shade3d()` didn't handle meshes with a mix of triangles and
+quads properly when `meshColor == "faces"`.
+* `subdivision3d()` and related functions now handle colors
+properly.
+
 
 # rgl 1.1.3
 

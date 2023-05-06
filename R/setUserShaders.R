@@ -110,7 +110,6 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE,
 			  stop("differences in shaders by method")
 		}
 	}
-  
   result
 }
 
