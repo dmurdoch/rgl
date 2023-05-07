@@ -1,7 +1,12 @@
 #ifndef RENDER_H
 #define RENDER_H
 
+#include <vector>
 #include "RenderContext.h"
+
+#ifndef RGL_NO_OPENGL
+#include "glad/gl.h"
+#endif
 
 #include "types.h"
 
@@ -32,7 +37,10 @@ public:
   void setVertex(int index, double* v);
   void setVertex(int index, Vertex v);
   
+#ifndef RGL_NO_OPENGL
   void setAttribLocation(GLint loc);
+  void appendToBuffer(std::vector<GLbyte>& buffer);
+#endif
   
   Vertex getNormal(int v1, int v2, int v3);
   int size() { return nvertex; }
@@ -41,6 +49,7 @@ protected:
   int nvertex;
   float* arrayptr;
   GLint location;
+  GLint offset;
   GLenum state;
 };
 

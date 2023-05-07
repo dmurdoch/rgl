@@ -168,7 +168,6 @@ void Material::beginUse(RenderContext* renderContext)
   SAVEGLERROR;
 
   if ( (useColorArray) && ( ncolor > 1 ) ) {
-    glEnableClientState(GL_COLOR_ARRAY);
     colors.useArray();
   } else
     colors.useColor(0);
@@ -216,7 +215,7 @@ void Material::endUse(RenderContext* renderContext)
   int ncolor = colors.getLength();
 
   if ( (useColorArray) && ( ncolor > 1 ) ) {
-    glDisableClientState(GL_COLOR_ARRAY);
+  	colors.enduseArray();
     SAVEGLERROR;
   }
 

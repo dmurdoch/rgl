@@ -94,7 +94,7 @@ void VertexArray::beginUse() {
 #ifndef RGL_NO_OPENGL
 	if (GLAD_GL_VERSION_2_1) {
 		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, (const GLvoid*) arrayptr);
+		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
 	} else {
     glEnableClientState(state);
     glVertexPointer(3, GL_FLOAT, 0, (const GLvoid*) arrayptr );
@@ -111,6 +111,20 @@ void VertexArray::endUse() {
 #endif
 }
 
+#ifndef RGL_NO_OPENGL
+void VertexArray::appendToBuffer(std::vector<GLbyte>& buffer) {
+	offset = buffer.size();
+	const GLbyte* p = reinterpret_cast<const GLbyte*>(arrayptr);
+	buffer.insert(buffer.end(), p, p + 3*nvertex*sizeof(float));
+}
+
+void VertexArray::setAttribLocation(GLint loc)
+{
+	location = loc;
+}
+
+#endif
+
 Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
 {
   Vertex normal;
@@ -126,11 +140,6 @@ Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
   normal.normalize();
 
   return normal;
-}
-
-void VertexArray::setAttribLocation(GLint loc)
-{
-	location = loc;
 }
 
 //////////////////////////////////////////////////////////////////////////////

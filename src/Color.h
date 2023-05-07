@@ -10,6 +10,10 @@
 //   lighting and material color properties
 //
 
+#include <vector>
+#ifndef RGL_NO_OPENGL
+#include "glad/gl.h"
+#endif
 #include "types.h"
 
 namespace rgl {
@@ -57,16 +61,25 @@ public:
   void set( int ncolor, int* colors, int nalpha, double* alphas );
   void useColor( int index ) const;
   void useArray() const;
+  void enduseArray();
   unsigned int getLength() const;
   Color getColor( int index ) const;
   void recycle( unsigned int newsize );
   bool hasAlpha() const;
+#ifndef RGL_NO_OPENGL
+  void setAttribLocation(GLint loc);
+  void appendToBuffer(std::vector<GLbyte>& buffer);
+#endif
 private:
   bool hint_alphablend;
   unsigned int ncolor;
   unsigned int nalpha;
   u8* arrayptr;
   friend class Material;
+#ifndef RGL_NO_OPENGL
+  GLint location;
+  GLint offset;
+#endif
 };
 
 } // namespace rgl

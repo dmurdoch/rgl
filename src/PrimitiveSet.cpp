@@ -1,3 +1,4 @@
+
 #include "PrimitiveSet.h"
 #include "BBoxDeco.h"
 #include "subscene.h"
@@ -21,6 +22,9 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
   nverticesperelement = in_nverticesperelement;
   nvertices           = 0;
   nindices            = 0;
+#ifndef RGL_NO_OPENGL
+  vbo                 = 0;
+#endif
 }
 
 void PrimitiveSet::initPrimitiveSet(
@@ -120,6 +124,8 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 			initialize();
 		}
 		glUseProgram(shaderProgram);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		
 		float mat[16];
 		subscene->modelMatrix.getData(mat);
 		glUniformMatrix4fv(glLocs.at("mvMatLoc"), 1, GL_FALSE, mat);
@@ -127,7 +133,6 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 		glUniformMatrix4fv(glLocs.at("prMatLoc"), 1, GL_FALSE, mat);
 	}
 #endif  
-	
   material.beginUse(renderContext);
   SAVEGLERROR;
   BBoxDeco* bboxdeco = 0;
@@ -316,10 +321,18 @@ void PrimitiveSet::initialize()
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragmentShader);
 		
+		buffer.clear();
+		
 		glBindAttribLocation(shaderProgram, 0, "aPos");
+		vertexArray.appendToBuffer(buffer);
 		glLocs["aPos"] = 0;
+		vertexArray.setAttribLocation(glLocs["aPos"]);
+		
 		glBindAttribLocation(shaderProgram, 1, "aCol");
 		glLocs["aCol"] = 1;
+		material.colors.setAttribLocation(glLocs["aCol"]);
+		if (material.useColorArray)
+			material.colors.appendToBuffer(buffer);
 		
 		glLinkProgram(shaderProgram);
 		checkProgram(shaderProgram);
@@ -383,7 +396,13 @@ void PrimitiveSet::initialize()
 				glLocs["invPrMatLoc"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
 		}
 	}
-	vertexArray.setAttribLocation(glLocs["aPos"]);
+	
+	glDeleteBuffers(1, &vbo);
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, buffer.size()*sizeof(GLfloat), 
+               buffer.data(), GL_STATIC_DRAW);
+	
 #endif
 }
 
