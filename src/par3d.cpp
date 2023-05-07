@@ -293,6 +293,11 @@ static bool setUseFreeType(bool useFreeType, RGLView* rglview)
   return true;
 }
 
+static bool setUseShaders(bool useShaders, RGLView* rglview)
+{
+	return rglview->setUseShaders(useShaders);
+}
+
 static char* getFontname(RGLView* rglview)
 {
   char* result = NULL;
@@ -545,6 +550,12 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
     if (!setUseFreeType(LOGICAL(x)[0], rglview)) success = 0;
     UNPROTECT(1);
   }
+  else if (streql(what, "useShaders")) {
+  	lengthCheck(what, value, 1);
+  	PROTECT(x=coerceVector(value, LGLSXP));
+  	if (!setUseShaders(LOGICAL(x)[0], rglview)) success = 0;
+  	UNPROTECT(1);
+  }
   
   else warning(_("parameter \"%s\" cannot be set"), what);
   
@@ -699,6 +710,10 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   else if (streql(what, "activeSubscene")) {
     PROTECT(value = allocVector(INTSXP, 1));
     INTEGER(value)[0] = activeSubscene(rglview);
+  }
+  else if (streql(what, "useShaders")) {
+  	PROTECT(value = allocVector(LGLSXP, 1));
+    LOGICAL(value)[0] = rglview->getUseShaders();
   } else
     PROTECT(value);
   

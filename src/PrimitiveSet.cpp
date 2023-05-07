@@ -114,7 +114,7 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
   Shape::drawBegin(renderContext);
 	
 #ifndef RGL_NO_OPENGL
-	if (GLAD_GL_VERSION_2_1) {
+	if (doUseShaders) {
 		Subscene* subscene = renderContext->subscene;
 		if (!is_initialized() || 
       nclipplanes < subscene->countClipplanes() || 
@@ -293,7 +293,7 @@ void PrimitiveSet::initialize()
 {
 	Shape::initialize();
 #ifndef RGL_NO_OPENGL
-	if (GLAD_GL_VERSION_2_1) {
+	if (doUseShaders) {
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		ShaderFlags flags = getShaderFlags();
 		

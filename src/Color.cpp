@@ -247,7 +247,7 @@ void ColorArray::appendToBuffer(std::vector<GLbyte>& buffer)
 void ColorArray::useArray() const
 {
 #ifndef RGL_NO_OPENGL
-	if (GLAD_GL_VERSION_2_1) {
+	if (doUseShaders) {
 		glEnableVertexAttribArray(location); 
 		glVertexAttribPointer(location, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (GLbyte*)0 + offset);
 	} else {
@@ -260,7 +260,7 @@ void ColorArray::useArray() const
 void ColorArray::enduseArray()
 {
 #ifndef RGL_NO_OPENGL	
-	if (GLAD_GL_VERSION_2_1)
+	if (doUseShaders)
 		glDisableVertexAttribArray(location); 
 	else
 		glDisableClientState(GL_COLOR_ARRAY);
@@ -270,7 +270,7 @@ void ColorArray::enduseArray()
 void ColorArray::useColor(int index) const
 {
 #ifndef RGL_NO_OPENGL  
-	if (GLAD_GL_VERSION_2_1)
+	if (doUseShaders)
 		glVertexAttrib4ubv(location, (const GLubyte*) &arrayptr[ index * 4]);
 	else
     glColor4ubv( (const GLubyte*) &arrayptr[ index * 4] );

@@ -33,7 +33,7 @@ Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool
 Shape::~Shape()
 {
 #ifndef RGL_NO_OPENGL
-  if (!GLAD_GL_VERSION_2_1 && displayList)
+  if (!doUseShaders && displayList)
     glDeleteLists(displayList, 1);
 #endif
 }
@@ -61,7 +61,7 @@ void Shape::render(RenderContext* renderContext)
 #ifndef RGL_NO_OPENGL
   renderBegin(renderContext);
   
-  if (GLAD_GL_VERSION_2_1) {
+  if (doUseShaders) {
   	if (doUpdate)
   		update(renderContext);
   	draw(renderContext);

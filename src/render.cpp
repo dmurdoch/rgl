@@ -92,7 +92,7 @@ void VertexArray::setVertex(int index, Vertex v) {
 
 void VertexArray::beginUse() {
 #ifndef RGL_NO_OPENGL
-	if (GLAD_GL_VERSION_2_1) {
+	if (doUseShaders) {
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
 	} else {
@@ -104,7 +104,7 @@ void VertexArray::beginUse() {
 
 void VertexArray::endUse() {
 #ifndef RGL_NO_OPENGL
-	if (GLAD_GL_VERSION_2_1)
+	if (doUseShaders)
 		glDisableVertexAttribArray(location);
 	else
     glDisableClientState(state);

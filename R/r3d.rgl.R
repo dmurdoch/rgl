@@ -892,7 +892,8 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  FOV = 30,
 		  bg = list(color="white",fogtype = "none"),
 		  family = "sans",
-		  material = list(color="black", fog = TRUE))
+		  material = list(color="black", fog = TRUE),
+		  useShaders = TRUE)
 
 if (.Platform$OS.type == "windows")
 	r3dDefaults$useFreeType <- FALSE
