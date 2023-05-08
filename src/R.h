@@ -12,7 +12,7 @@
 #define RGL_ANTIALIAS 8
 
 /* Set this to 1 to turn on glGetError testing */
-#define USE_GLGETERROR 0
+#define USE_GLGETERROR 1
 
 
 namespace rgl {
@@ -29,8 +29,9 @@ namespace rgl {
 
 extern int SaveErrnum;
 
-void saveGLerror(const char *, int);  
-void checkGLerror(const char *, int);
+void saveGLerror(const char * file, int line); 
+
+void checkGLerror(const char * file, int line);
 
 #else
 #define SAVEGLERROR

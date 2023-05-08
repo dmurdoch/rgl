@@ -17,7 +17,7 @@ static const char * SaveFile;
 static int SaveLine;
 #endif
 
-void saveGLerror(const char * file, int line)
+void rgl::saveGLerror(const char * file, int line)
 {
 #ifndef RGL_NO_OPENGL
   GLenum errnum;
@@ -29,15 +29,16 @@ void saveGLerror(const char * file, int line)
 #endif
 }
 
-void checkGLerror(const char * file, int line)
+void rgl::checkGLerror(const char * file, int line)
 {
 #ifndef RGL_NO_OPENGL
-  saveGLerror(file, line);
+  rgl::saveGLerror(file, line);
   if (SaveErrnum != GL_NO_ERROR) {
     int err = SaveErrnum;
     SaveErrnum = GL_NO_ERROR;
     while (glGetError() != GL_NO_ERROR) {} /* clear other errors, if any */
-    error("OpenGL error at %s:%d: %s", SaveFile, SaveLine, gluErrorString(err));
+    error("OpenGL error at %s:%d: %#4x:%s", SaveFile, SaveLine, err, 
+          gluErrorString(err));
   }
 #endif
 }

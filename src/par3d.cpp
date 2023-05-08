@@ -153,9 +153,9 @@ static void getPosition(double* position, Subscene* subscene)
 static void setPosition(double* position, RGLView* rglview, Subscene* subscene)
 {
   subscene->setPosition(position);
-  rglview->update()
+  rglview->update();
     
-    CHECKGLERROR;
+  CHECKGLERROR;
 }
 
 static void getScale(double* scale, Subscene* subscene)
