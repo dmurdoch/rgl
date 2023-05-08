@@ -2,6 +2,7 @@
 // This file is part of RGL.
 //
 
+#include "u_math.h"
 #include "rglmath.h"
 #include "R.h"
 
@@ -390,3 +391,9 @@ Vertex PolarCoord::vector() const {
   );
 }
 
+Matrix4x4 Matrix4x4::inverse() 
+{
+	Matrix4x4 result(*this);
+	util_invert_mat4x4(result.data, data);
+	return result;
+}
