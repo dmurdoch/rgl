@@ -39,7 +39,7 @@ public:
   
 #ifndef RGL_NO_OPENGL
   void setAttribLocation(GLint loc);
-  void appendToBuffer(std::vector<GLbyte>& buffer);
+  void appendToBuffer(std::vector<GLubyte>& buffer);
 #endif
   
   Vertex getNormal(int v1, int v2, int v3);

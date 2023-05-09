@@ -134,12 +134,11 @@ void Material::beginUse(RenderContext* renderContext)
   }
 
   SAVEGLERROR;
-  
-  /* FIXME:  the lighting calculations will all be done in the
-   * shader
-   */
 
-  glShadeModel( (smooth) ? GL_SMOOTH : GL_FLAT );
+  if (doUseShaders) {
+  	/* FIXME:  needs invPrMatrix to be set */
+  } else
+    glShadeModel( (smooth) ? GL_SMOOTH : GL_FLAT );
 
   SAVEGLERROR;
 
@@ -223,9 +222,7 @@ void Material::endUse(RenderContext* renderContext)
     texture->endUse(renderContext);
     SAVEGLERROR;
   }
-  #if USE_GLGETERROR
-  saveGLerror(__FILE__, __LINE__);
-  #endif
+  SAVEGLERROR;
   glPopAttrib();
   #if USE_GLGETERROR
   if (SaveErrnum == GL_NO_ERROR) glGetError(); /* work around bug in some glX implementations */

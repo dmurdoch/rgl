@@ -193,6 +193,7 @@ protected:
   bool     transparent, blended;
 #ifndef RGL_NO_OPENGL
   std::unordered_map<std::string, GLint> glLocs;
+  bool     glLocs_has_key(std::string key);
 #endif
 };
 

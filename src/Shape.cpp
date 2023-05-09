@@ -357,3 +357,11 @@ void Shape::initialize()
 {
   SceneNode::initialize();
 }
+
+#ifndef RGL_NO_OPENGL
+
+bool Shape::glLocs_has_key(std::string key) {
+	return glLocs.find(key) != glLocs.end();
+}
+
+#endif

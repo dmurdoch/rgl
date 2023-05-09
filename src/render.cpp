@@ -24,6 +24,8 @@ VertexArray::VertexArray()
   arrayptr = NULL;
 #ifndef RGL_NO_OPENGL	
 	state = GL_VERTEX_ARRAY;
+	location = -1;
+	offset = -1;
 #endif
 }
 
@@ -92,7 +94,7 @@ void VertexArray::setVertex(int index, Vertex v) {
 
 void VertexArray::beginUse() {
 #ifndef RGL_NO_OPENGL
-	if (doUseShaders) {
+	if (doUseShaders && location >= 0) {
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
 	} else {
@@ -104,7 +106,7 @@ void VertexArray::beginUse() {
 
 void VertexArray::endUse() {
 #ifndef RGL_NO_OPENGL
-	if (doUseShaders)
+	if (doUseShaders && location >= 0)
 		glDisableVertexAttribArray(location);
 	else
     glDisableClientState(state);
@@ -112,9 +114,9 @@ void VertexArray::endUse() {
 }
 
 #ifndef RGL_NO_OPENGL
-void VertexArray::appendToBuffer(std::vector<GLbyte>& buffer) {
+void VertexArray::appendToBuffer(std::vector<GLubyte>& buffer) {
 	offset = buffer.size();
-	const GLbyte* p = reinterpret_cast<const GLbyte*>(arrayptr);
+	const GLubyte* p = reinterpret_cast<const GLubyte*>(arrayptr);
 	buffer.insert(buffer.end(), p, p + 3*nvertex*sizeof(float));
 }
 

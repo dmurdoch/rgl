@@ -143,8 +143,8 @@ ColorArray::ColorArray()
   ncolor   = 0;
   nalpha   = 0;
 #ifndef RGL_NO_OPENGL  
-  location = 0;
-  offset = 0;
+  location = -1;
+  offset = -1;
 #endif
 }
 
@@ -153,8 +153,8 @@ ColorArray::ColorArray( Color& bg, Color &fg )
   ncolor   = 2;
   nalpha   = 2;
 #ifndef RGL_NO_OPENGL  
-  location = 0;
-  offset = 0;
+  location = -1;
+  offset = -1;
 #endif
   arrayptr = (u8*) realloc( NULL, sizeof(u8) * 4 * ncolor);
   arrayptr[0] = bg.getRedub();
@@ -172,8 +172,8 @@ ColorArray::ColorArray( ColorArray& src ) {
   ncolor = src.ncolor;
   nalpha = src.nalpha;
 #ifndef RGL_NO_OPENGL  
-  location = 0;
-  offset = 0;
+  location = -1;
+  offset = -1;
 #endif
   hint_alphablend = src.hint_alphablend;
   if (ncolor > 0) {
@@ -250,10 +250,10 @@ void ColorArray::setAttribLocation(GLint loc)
 	location = loc;
 }
 
-void ColorArray::appendToBuffer(std::vector<GLbyte>& buffer)
+void ColorArray::appendToBuffer(std::vector<GLubyte>& buffer)
 {
 	offset = buffer.size();
-	const GLbyte* p = reinterpret_cast<const GLbyte*>(arrayptr);
+	const GLubyte* p = reinterpret_cast<const GLubyte*>(arrayptr);
 	buffer.insert(buffer.end(), p, p + 4*ncolor*sizeof(u8));
 }
 #endif
@@ -261,7 +261,7 @@ void ColorArray::appendToBuffer(std::vector<GLbyte>& buffer)
 void ColorArray::useArray() const
 {
 #ifndef RGL_NO_OPENGL
-	if (doUseShaders) {
+	if (doUseShaders && location >= 0) {
 		glEnableVertexAttribArray(location); 
 		SAVEGLERROR;
 		glVertexAttribPointer(location, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (GLbyte*)0 + offset);
@@ -278,7 +278,7 @@ void ColorArray::useArray() const
 void ColorArray::enduseArray()
 {
 #ifndef RGL_NO_OPENGL	
-	if (doUseShaders)
+	if (doUseShaders && location >= 0)
 		glDisableVertexAttribArray(location); 
 	else
 		glDisableClientState(GL_COLOR_ARRAY);
@@ -287,8 +287,8 @@ void ColorArray::enduseArray()
 
 void ColorArray::useColor(int index) const
 {
-#ifndef RGL_NO_OPENGL  
-	if (doUseShaders && location) {
+#ifndef RGL_NO_OPENGL 
+	if (doUseShaders && location >= 0) {
 		glVertexAttrib4ubv(location, (const GLubyte*) &arrayptr[ index * 4]);
 	} else {
     glColor4ubv( (const GLubyte*) &arrayptr[ index * 4] );

@@ -131,10 +131,13 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 		glUniformMatrix4fv(glLocs.at("mvMatLoc"), 1, GL_FALSE, mat);
 		subscene->projMatrix.getData(mat);
 		glUniformMatrix4fv(glLocs.at("prMatLoc"), 1, GL_FALSE, mat);
+		if (glLocs_has_key("invPrMatLoc")) {
+			subscene->projMatrix.inverse().getData(mat);
+			glUniformMatrix4fv(glLocs.at("invPrMatLoc"), 1, GL_FALSE, mat);
+		}
+			
 	}
 #endif  
-  material.beginUse(renderContext);
-  SAVEGLERROR;
   BBoxDeco* bboxdeco = 0;
   if (material.marginCoord >= 0) {
     Subscene* subscene = renderContext->subscene;
@@ -146,8 +149,11 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
     for (int i=0; i < vertexArray.size(); i++)
       verticesTodraw.setVertex(i, bboxdeco->marginVecToDataVec(vertexArray[i], renderContext, &material) );
     verticesTodraw.beginUse();
-  } else
+  } else {
     vertexArray.beginUse();
+  }
+  SAVEGLERROR;
+  material.beginUse(renderContext);
   SAVEGLERROR;
 }
 
@@ -321,10 +327,11 @@ void PrimitiveSet::initialize()
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragmentShader);
 		
-		buffer.clear();
+		vertexbuffer.clear();
 		
 		glBindAttribLocation(shaderProgram, 0, "aPos");
-		vertexArray.appendToBuffer(buffer);
+		vertexArray.appendToBuffer(vertexbuffer);
+		
 		glLocs["aPos"] = 0;
 		vertexArray.setAttribLocation(glLocs["aPos"]);
 		
@@ -332,8 +339,9 @@ void PrimitiveSet::initialize()
 		glLocs["aCol"] = 1;
 		material.colors.setAttribLocation(glLocs["aCol"]);
 		if (material.useColorArray)
-			material.colors.appendToBuffer(buffer);
+			material.colors.appendToBuffer(vertexbuffer);
 		
+		/* NB:  these must come after the glBindAttribLocation calls */
 		glLinkProgram(shaderProgram);
 		checkProgram(shaderProgram);
 		
@@ -400,9 +408,9 @@ void PrimitiveSet::initialize()
 	glDeleteBuffers(1, &vbo);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, buffer.size()*sizeof(GLfloat), 
-               buffer.data(), GL_STATIC_DRAW);
-	
+	glBufferData(GL_ARRAY_BUFFER, vertexbuffer.size(), 
+               vertexbuffer.data(), GL_STATIC_DRAW);
+	SAVEGLERROR;
 #endif
 }
 
@@ -595,8 +603,11 @@ void FaceSet::initialize()
 {
 	PrimitiveSet::initialize();
 #ifndef RGL_NO_OPENGL
-	if (glLocs.find("aNorm") != glLocs.end())
+	if (glLocs_has_key("aNorm")) {
 	  normalArray.setAttribLocation(glLocs["aNorm"]);
+		normalArray.appendToBuffer(vertexbuffer);
+  }
+		
 	// FIXME:  also needs texCoordArray
 #endif
 }

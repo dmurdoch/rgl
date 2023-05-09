@@ -146,7 +146,7 @@ protected:
    */
   GLuint   shaderProgram;
 #ifndef RGL_NO_OPENGL
-  std::vector<GLbyte> buffer;
+  std::vector<GLubyte> vertexbuffer;
   GLuint vbo;
 #endif
 };
