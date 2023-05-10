@@ -122,20 +122,75 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 			setShapeContext(subscene, subscene->countClipplanes(), 
                    subscene->countLights());
 			initialize();
+			loadBuffer();
 		}
 		glUseProgram(shaderProgram);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		
 		float mat[16];
 		subscene->modelMatrix.getData(mat);
-		glUniformMatrix4fv(glLocs.at("mvMatLoc"), 1, GL_FALSE, mat);
+		glUniformMatrix4fv(glLocs.at("mvMatrix"), 1, GL_FALSE, mat);
 		subscene->projMatrix.getData(mat);
-		glUniformMatrix4fv(glLocs.at("prMatLoc"), 1, GL_FALSE, mat);
-		if (glLocs_has_key("invPrMatLoc")) {
+		glUniformMatrix4fv(glLocs.at("prMatrix"), 1, GL_FALSE, mat);
+		if (glLocs_has_key("invPrMatrix")) {
 			subscene->projMatrix.inverse().getData(mat);
-			glUniformMatrix4fv(glLocs.at("invPrMatLoc"), 1, GL_FALSE, mat);
+			glUniformMatrix4fv(glLocs.at("invPrMatrix"), 1, GL_FALSE, mat);
 		}
-			
+		if (glLocs_has_key("normMatrix")) {
+			Matrix4x4 normMatrix = subscene->modelMatrix.inverse();
+			normMatrix.transpose();
+			normMatrix.getData(mat);
+			glUniformMatrix4fv(glLocs.at("normMatrix"), 1, GL_FALSE, mat);
+		}
+		if (glLocs_has_key("emission")) {
+			glUniform3fv(glLocs.at("emission"), 1, material.emission.data);
+		}
+		if (glLocs_has_key("shininess")) {
+			glUniform1f(glLocs.at("shininess"), material.shininess);
+		}
+		if (glLocs_has_key("ambient")) { // just test one, and they should all be there
+			float ambient[3*nlights], 
+            specular[3*nlights], 
+            diffuse[3*nlights],
+            lightDir[3*nlights];
+			int viewpoint[nlights], finite[nlights];
+			for (int i=0; i < subscene->countLights(); i++) {
+				Light *light = subscene->getLight(i);
+				for (int j=0; j < 3; j++) {
+					ambient[3*i + j] = light->ambient.data[j]*material.ambient.data[j];
+					specular[3*i + j] = light->specular.data[j]*material.specular.data[j];
+					diffuse[3*i + j] = light->diffuse.data[j];
+					lightDir[3*i + j] = light->position[j];
+				}
+				viewpoint[i] = light->viewpoint;
+				finite[i] = light->posisfinite;
+			}
+			for (int i=subscene->countLights(); i < nlights; i++)
+				for (int j=0; j < 3; j++) {
+					ambient[3*i + j] = 0;
+					specular[3*i + j] = 0;
+					diffuse[3*i + j] = 0;
+				}
+			glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient);
+			glUniform3fv( glLocs.at("specular"), 3*nlights, specular);
+			glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse);
+			glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir);
+			glUniform1iv( glLocs.at("viewpoint"), nlights, viewpoint);
+			glUniform1iv( glLocs.at("finite"), nlights, finite);
+		}
+		
+		if (glLocs_has_key("uFogMode")) { // If it has one, it has them all
+		  Background* bg = subscene->get_background();
+			if (bg) {
+				int fogtype = bg->fogtype - 1;
+				glUniform1i(glLocs["uFogMode"], fogtype);
+				if (fogtype != 0)
+				{
+					Color color = bg->material.colors.getColor(0);
+					glUniform3f(glLocs["uFogColor"],  color.getRedf(), color.getGreenf(), color.getBluef());
+					
+				}
+			}
+		}
 	}
 #endif  
   BBoxDeco* bboxdeco = 0;
@@ -145,7 +200,7 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
   }
   if (bboxdeco) {
     invalidateDisplaylist();
-    verticesTodraw.alloc(vertexArray.size());
+    verticesTodraw.duplicate(vertexArray);
     for (int i=0; i < vertexArray.size(); i++)
       verticesTodraw.setVertex(i, bboxdeco->marginVecToDataVec(vertexArray[i], renderContext, &material) );
     verticesTodraw.beginUse();
@@ -350,8 +405,8 @@ void PrimitiveSet::initialize()
 		
 		std::string type = getTypeName();
 		if (flags.has_texture || type == "text") {
-			glLocs["texLoc"] = glGetAttribLocation(shaderProgram, "aTexcoord");
-			glLocs["sampler"] = glGetUniformLocation(shaderProgram, "uSampler");
+			glLocs["aTexcoord"] = glGetAttribLocation(shaderProgram, "aTexcoord");
+			glLocs["uSampler"] = glGetUniformLocation(shaderProgram, "uSampler");
 		}
 		
 		if (flags.has_fog && !flags.sprites_3d) {
@@ -361,58 +416,230 @@ void PrimitiveSet::initialize()
 		}
 		
 		if (nclipplanes && !flags.sprites_3d) {
-			glLocs["clipLoc"] = glGetUniformLocation(shaderProgram,"vClipplane");
+			glLocs["vClipplane"] = glGetUniformLocation(shaderProgram,"vClipplane");
 		}
 		
 		if (flags.is_lit) {
-			glLocs["emissionLoc"] = glGetUniformLocation(shaderProgram, "emission");
-			glLocs["shininessLoc"] = glGetUniformLocation(shaderProgram, "shininess");
+			glLocs["emission"] = glGetUniformLocation(shaderProgram, "emission");
+			glLocs["shininess"] = glGetUniformLocation(shaderProgram, "shininess");
 			if (nlights > 0) {
-				glLocs["ambientLoc"] = glGetUniformLocation(shaderProgram, "ambient");
-				glLocs["specularLoc"] = glGetUniformLocation(shaderProgram, "specular");
-				glLocs["diffuseLoc"] = glGetUniformLocation(shaderProgram, "diffuse" );
-				glLocs["lightDirLoc"] = glGetUniformLocation(shaderProgram, "lightDir");
-				glLocs["viewpointLoc"] = glGetUniformLocation(shaderProgram, "viewpoint");
-				glLocs["finiteLoc"] = glGetUniformLocation(shaderProgram, "finite" );
+				glLocs["ambient"] = glGetUniformLocation(shaderProgram, "ambient");
+				glLocs["specular"] = glGetUniformLocation(shaderProgram, "specular");
+				glLocs["diffuse"] = glGetUniformLocation(shaderProgram, "diffuse" );
+				glLocs["lightDir"] = glGetUniformLocation(shaderProgram, "lightDir");
+				glLocs["viewpoint"] = glGetUniformLocation(shaderProgram, "viewpoint");
+				glLocs["finite"] = glGetUniformLocation(shaderProgram, "finite" );
 			}
 		}
 		
 		if (flags.fat_lines) {
-			glLocs["nextLoc"] = glGetAttribLocation(shaderProgram, "aNext");
-			glLocs["pointLoc"] = glGetAttribLocation(shaderProgram, "aPoint");
-			glLocs["aspectLoc"] = glGetUniformLocation(shaderProgram, "uAspect");
-			glLocs["lwdLoc"] = glGetUniformLocation(shaderProgram, "uLwd");
+			glLocs["aNext"] = glGetAttribLocation(shaderProgram, "aNext");
+			glLocs["aPoint"] = glGetAttribLocation(shaderProgram, "aPoint");
+			glLocs["uAspect"] = glGetUniformLocation(shaderProgram, "uAspect");
+			glLocs["uLwd"] = glGetUniformLocation(shaderProgram, "uLwd");
 		}
 		
 		if (!flags.sprites_3d) {
-			glLocs["mvMatLoc"] = glGetUniformLocation(shaderProgram, "mvMatrix");
-			glLocs["prMatLoc"] = glGetUniformLocation(shaderProgram, "prMatrix");
+			glLocs["mvMatrix"] = glGetUniformLocation(shaderProgram, "mvMatrix");
+			glLocs["prMatrix"] = glGetUniformLocation(shaderProgram, "prMatrix");
 			
 			if (flags.fixed_size) {
-				glLocs["textScaleLoc"] = glGetUniformLocation(shaderProgram, "textScale");
+				glLocs["textScale"] = glGetUniformLocation(shaderProgram, "textScale");
 			}
 		}
 		
 		if (flags.needs_vnormal) {
-			glLocs["normLoc"] = glGetAttribLocation(shaderProgram, "aNorm");
-			glLocs["normMatLoc"] = glGetUniformLocation(shaderProgram, "normMatrix");
+			glLocs["aNorm"] = glGetAttribLocation(shaderProgram, "aNorm");
+			glLocs["normMatrix"] = glGetUniformLocation(shaderProgram, "normMatrix");
 		}
 		
 		if (flags.is_twosided) {
-			glLocs["frontLoc"] = glGetUniformLocation(shaderProgram, "front");
+			glLocs["front"] = glGetUniformLocation(shaderProgram, "front");
 			if (flags.has_normals)
-				glLocs["invPrMatLoc"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
+				glLocs["invPrMatrix"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
 		}
 	}
-	
-	glDeleteBuffers(1, &vbo);
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertexbuffer.size(), 
-               vertexbuffer.data(), GL_STATIC_DRAW);
 	SAVEGLERROR;
 #endif
 }
+
+#ifndef RGL_NO_OPENGL
+
+void PrimitiveSet::loadBuffer()
+{
+	glDeleteBuffers(1, &vbo);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, vertexbuffer.size(), 
+              vertexbuffer.data(), GL_STATIC_DRAW);
+}
+
+void PrimitiveSet::printUniform(const char *name, int rows, int cols, int transposed,
+                                GLint type) {
+	float data[4*nlights > 16 ? 4*nlights : 16];
+	int idata[nlights];
+	
+	GLint location;
+	if (glLocs_has_key(name)) {
+		location = glLocs[name];
+		Rprintf("%s: (%d)\n", name, location);
+		if (type == GL_FLOAT)
+		  glGetUniformfv(shaderProgram, location, data);
+		else if (type == GL_INT)
+			glGetUniformiv(shaderProgram, location, idata);
+		else{
+			Rprintf("unknown type: %d", type);
+			return;
+		}
+		for (int i=0; i < rows; i++) {
+			for (int j=0; j < cols; j++) {
+				int index = transposed ? (i + cols*j) : (j + cols*i);
+				if (type == GL_FLOAT)
+				  Rprintf("%.3f ", data[index]);
+				else if (type == GL_INT)
+					Rprintf("%d ", idata[index]);
+			}
+			Rprintf("\n");
+		}
+	} else Rprintf("%s: not defined\n", name);
+	SAVEGLERROR;
+}
+
+void PrimitiveSet::printUniforms() {
+  printUniform("mvMatrix", 4, 4, true, GL_FLOAT);
+	printUniform("prMatrix", 4, 4, true, GL_FLOAT);	
+	printUniform("normMatrix", 4, 4, true, GL_FLOAT);
+  printUniform("invPrMatrix", 4, 4, true, GL_FLOAT);	
+
+  printUniform("uFogMode", 1, 1, false, GL_INT);
+  printUniform("uFogColor", 1, 3, false, GL_FLOAT);
+  printUniform("uFogParms", 1, 4, false, GL_FLOAT);
+  
+  printUniform("emission", 1, 3, false, GL_FLOAT);
+  printUniform("shininess", 1, 1, false, GL_FLOAT);
+  printUniform("ambient", nlights, 3, false, GL_FLOAT);
+  printUniform("specular", nlights, 3, false, GL_FLOAT);
+  printUniform("diffuse", nlights, 3, false, GL_FLOAT);
+  printUniform("lightDir", nlights, 3, false, GL_FLOAT);	
+  printUniform("viewpoint", 1, 1, false, GL_INT);
+  printUniform("finite", 1, 1, false, GL_INT);
+
+}
+
+void PrimitiveSet::printBufferInfo() {
+	GLint idata, vbo;
+	glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbo);
+	Rprintf("Bound array buffer: %d", vbo);
+	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &idata);
+	Rprintf(" size: %#x", idata);
+	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_USAGE, &idata);
+	Rprintf(" usage: %s", idata == GL_STATIC_DRAW ? "GL_STATIC_DRAW" : "?");
+	Rprintf("\n");
+	SAVEGLERROR;
+}
+
+void PrimitiveSet::printAttribute(const char* name) {
+	GLint idata;
+	void* pdata;
+	
+	if (glLocs_has_key(name)) {
+		GLint location = glLocs[name];
+		Rprintf("%s (%d):", name, location);
+		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,
+                         &idata);
+		if (idata)
+			Rprintf(" on vbo %d", idata);
+		else
+			Rprintf(" not bound");
+		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_ENABLED,
+                       &idata);
+		int enabled = idata;
+		if (enabled)
+			Rprintf(" enabled");
+		else
+			Rprintf(" not enabled");
+		
+		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_SIZE, &idata);
+		int size = idata;
+		
+		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &idata);
+		int stride = idata;
+		
+		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_TYPE, &idata);
+		GLint type = idata;
+		Rprintf(" %s[%d]", type == GL_FLOAT ? "GL_FLOAT" : 
+                   type == GL_INT ? "GL_INT" : 
+                   type == GL_BYTE ? "GL_BYTE" : 
+                   type == GL_UNSIGNED_BYTE ? "GL_UNSIGNED_BYTE" :
+                   "GL_??", size);
+		
+		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, &idata);
+		GLint normalized = idata;
+		if (normalized)
+			Rprintf(" normalized");
+		
+		glGetVertexAttribPointerv(location, GL_VERTEX_ATTRIB_ARRAY_POINTER, &pdata);
+		void* offset = pdata;
+		Rprintf(" offset %p", offset);
+		Rprintf("\n");
+		if (type == GL_FLOAT) {
+			
+			if (enabled) {
+				int step = 0;
+			  for (int i = 0; i < nvertices; i++) {
+					float* value = reinterpret_cast<float*>(vertexbuffer.data() + 
+						      reinterpret_cast<std::uintptr_t>(offset) + step);
+					for (int j = 0; j < size; j++, value++)
+						Rprintf("%8.4f ", *value);
+		      Rprintf("\n");
+		      if (stride)
+		      	step += stride;
+		      else
+		      	step += size*sizeof(float);
+				} 
+			} else {
+				float value[size];
+				glGetVertexAttribfv(location,  GL_CURRENT_VERTEX_ATTRIB,
+                            value);
+				for (int j = 0; j < size; j++)
+					Rprintf("%8.4f ", value[j]);
+				Rprintf("\n");
+			}
+		} else if (type == GL_UNSIGNED_BYTE) {
+			if (enabled) {
+				int step = 0;
+				for (int i = 0; i < nvertices; i++) {
+					GLubyte* value = reinterpret_cast<GLubyte*>(vertexbuffer.data() + 
+                                             reinterpret_cast<std::uintptr_t>(offset) + step);
+					for (int j = 0; j < size; j++, value++)
+						Rprintf("%02x ", *value);
+					Rprintf("\n");
+					if (stride)
+						step += stride;
+					else
+						step += size*sizeof(GLubyte);
+				} 
+			} else {
+				GLint value[size];
+				glGetVertexAttribiv(location,  GL_CURRENT_VERTEX_ATTRIB,
+                        value);
+				for (int j = 0; j < size; j++)
+					Rprintf("%02x ", value[j]);
+				Rprintf("\n");
+			}
+		}
+	} else
+		Rprintf("%s not defined\n", name);
+	SAVEGLERROR;
+}
+
+void PrimitiveSet::printAttributes() {
+	printAttribute("aPos");
+	printAttribute("aCol");
+	printAttribute("aNorm");
+}
+#endif
 
 // ===[ FACE SET ]============================================================
 
@@ -537,14 +764,22 @@ void FaceSet::drawBegin(RenderContext* renderContext)
       bboxdeco = subscene->get_bboxdeco();
     }
     if (bboxdeco) {
-      normalsToDraw.alloc(normalArray.size());
+      normalsToDraw.duplicate(normalArray);
       for (int i=0; i < normalArray.size(); i++)
         normalsToDraw.setVertex(i, bboxdeco->marginNormalToDataNormal(normalArray[i], renderContext, &material) );
       normalsToDraw.beginUse();
-    } else
+    } else {
       normalArray.beginUse();
+    }
   }
   texCoordArray.beginUse();
+  SAVEGLERROR;
+#ifndef RGL_NO_OPENGL
+  // printBufferInfo();
+  // printAttributes();
+  // printUniforms();
+  // SAVEGLERROR;
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -603,11 +838,15 @@ void FaceSet::initialize()
 {
 	PrimitiveSet::initialize();
 #ifndef RGL_NO_OPENGL
+	if (normalArray.size() < nvertices)
+		initNormals(NULL);
 	if (glLocs_has_key("aNorm")) {
 	  normalArray.setAttribLocation(glLocs["aNorm"]);
 		normalArray.appendToBuffer(vertexbuffer);
   }
-		
-	// FIXME:  also needs texCoordArray
+	if (glLocs_has_key("aTexcoord")) {
+		texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
+		texCoordArray.appendToBuffer(vertexbuffer);
+	}
 #endif
 }

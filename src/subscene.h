@@ -198,6 +198,7 @@ public:
   void getUserProjection(double* dest);
   void getScale(double* dest);
   void getPosition(double* dest);
+  Light* getLight(int i) { return lights[i]; }
   
   double* getMousePosition();
   void clearMouseListeners();

@@ -41,6 +41,7 @@ protected:
   QuadSet* quad;
 //  GLuint displayList;
   friend class Scene;
+  friend class PrimitiveSet;
 private:
   static Material defaultMaterial;
 };

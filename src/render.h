@@ -30,7 +30,7 @@ public:
   void alloc(int in_nvertex);
   void copy(int in_nvertex, double* vertices);
   void copy(int in_nvertex, float* vertices);
-  void duplicate(VertexArray source);
+  void duplicate(VertexArray& source, bool copyVertices = false);
   void beginUse();
   void endUse();
   Vertex& operator[](int index);
@@ -86,9 +86,16 @@ public:
   TexCoord& operator[](int index);
   int size() { return nvertex; };
 
+#ifndef RGL_NO_OPENGL
+  void setAttribLocation(GLint loc);
+  void appendToBuffer(std::vector<GLubyte>& buffer);
+#endif
+  
 private:
   int nvertex;
   float* arrayptr;
+  GLint location;
+  GLint offset;
 };
 
 } // namespace rgl

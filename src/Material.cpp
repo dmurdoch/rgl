@@ -143,25 +143,29 @@ void Material::beginUse(RenderContext* renderContext)
   SAVEGLERROR;
 
   if (lit) {
-    glEnable(GL_LIGHTING);
- 
-    SAVEGLERROR;
-
+  	if (doUseShaders) {
+  		
+  	} else {
+  		glEnable(GL_LIGHTING);
+  		
+  		SAVEGLERROR;
+  		
 #ifdef GL_VERSION_1_2
-    if (glVersion < 0.0) setup();
-    
-    if (glVersion >= 1.2)
-      glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR ); 
+  		if (glVersion < 0.0) setup();
+  		
+  		if (glVersion >= 1.2)
+  			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR ); 
 #endif
-
-    SAVEGLERROR;
-    
-    glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, ambient.data);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, specular.data);
-    glMaterialf (GL_FRONT_AND_BACK,GL_SHININESS, shininess);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION, emission.data);
+  		
+  		SAVEGLERROR;
+  		
+  		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+  		glEnable(GL_COLOR_MATERIAL);
+  		glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, ambient.data);
+  		glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, specular.data);
+  		glMaterialf (GL_FRONT_AND_BACK,GL_SHININESS, shininess);
+  		glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION, emission.data);
+  	}
   }
 
   SAVEGLERROR;

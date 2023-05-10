@@ -74,10 +74,14 @@ void VertexArray::copy(int in_nvertex, float* vertices)
   }
 }
 
-void VertexArray::duplicate(VertexArray source)
+void VertexArray::duplicate(VertexArray& source, bool copyVertices)
 {
   alloc(source.size());
-  copy(nvertex, source.arrayptr);
+	if (copyVertices)
+    copy(nvertex, source.arrayptr);
+  state = source.state;
+  location = source.location;
+  offset = source.offset;
 }
 
 void VertexArray::setVertex(int index, double* v) {
@@ -167,6 +171,8 @@ TexCoordArray::TexCoordArray()
 {
   arrayptr = NULL;
   nvertex = 0;
+  location = -1;
+  offset = -1;
 }
 
 TexCoordArray::~TexCoordArray()
@@ -193,15 +199,38 @@ TexCoord& TexCoordArray::operator [] (int index) {
 void TexCoordArray::beginUse() {
 #ifndef RGL_NO_OPENGL
   if (arrayptr) {
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, (const GLvoid*) arrayptr );
+  	if (doUseShaders && location >= 0) {
+  		glEnableVertexAttribArray(location);
+  		glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
+  	} else {
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      glTexCoordPointer(2, GL_FLOAT, 0, (const GLvoid*) arrayptr );
+    }
   }
 #endif
 }
 
 void TexCoordArray::endUse() {
 #ifndef RGL_NO_OPENGL
-  if (arrayptr)
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  if (arrayptr) {
+  	if (doUseShaders && location >= 0)
+  		glDisableVertexAttribArray(location);
+  	else
+      glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
 #endif
 }
+
+#ifndef RGL_NO_OPENGL
+void TexCoordArray::appendToBuffer(std::vector<GLubyte>& buffer) {
+	offset = buffer.size();
+	const GLubyte* p = reinterpret_cast<const GLubyte*>(arrayptr);
+	buffer.insert(buffer.end(), p, p + 2*nvertex*sizeof(float));
+}
+
+void TexCoordArray::setAttribLocation(GLint loc)
+{
+	location = loc;
+}
+
+#endif
