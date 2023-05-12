@@ -63,6 +63,38 @@ void Material::setup()
     glVersion = 1.0;
 }
 
+void Material::beginSide(bool drawfront)
+{
+#ifndef RGL_NO_OPENGL
+	GLenum face = GL_FRONT_AND_BACK;
+	
+	if (!doUseShaders) {
+		face = drawfront ? GL_FRONT : GL_BACK;
+	}
+	
+	// FIXME:  why is this set backwards??
+	PolygonMode mode = !drawfront ? front : back;
+	
+	SAVEGLERROR;
+	
+	switch (mode) {
+	case FILL_FACE:
+		glPolygonMode( face, GL_FILL);
+		break;
+	case LINE_FACE:
+		glPolygonMode( face, GL_LINE);
+		break;
+	case POINT_FACE:
+		glPolygonMode( face, GL_POINT);
+		break;
+	case CULL_FACE:
+		glEnable(GL_CULL_FACE);
+		glCullFace(face);
+		break;
+	}
+#endif
+}
+
 void Material::beginUse(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
@@ -108,29 +140,11 @@ void Material::beginUse(RenderContext* renderContext)
 
   glDisable(GL_CULL_FACE);
 
-  for (int i=0;i<2;i++) {
-    
-    PolygonMode mode = (i==0) ? front : back;
-    
-    GLenum face = (i==0) ? GL_FRONT : GL_BACK;
-
-    SAVEGLERROR;
-
-    switch (mode) {
-      case FILL_FACE:
-        glPolygonMode( face, GL_FILL);
-        break;
-      case LINE_FACE:
-        glPolygonMode( face, GL_LINE);
-        break;
-      case POINT_FACE:
-        glPolygonMode( face, GL_POINT);
-        break;
-      case CULL_FACE:
-        glEnable(GL_CULL_FACE);
-        glCullFace(face);
-        break;
-    }
+  if (doUseShaders)
+  	beginSide(true);  // back set in Shape::beginSideTwo
+  else {
+    for (int i=0;i<2;i++)
+      beginSide(i == 0);
   }
 
   SAVEGLERROR;

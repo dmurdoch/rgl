@@ -190,10 +190,15 @@ protected:
 	ShaderFlags flags;
 	GLuint   shaderProgram;
 	std::vector<GLubyte> vertexbuffer;
+	std::vector<GLubyte> indexbuffer;
 	GLuint vbo;
+	GLuint ibo;
+	void initShader();
+	void beginShader(RenderContext* renderContext);
+	void beginSideTwo();
 	void checkShader(const char* type, GLuint shader);
 	void checkProgram(GLuint program);
-	void loadBuffer();
+	void loadBuffers();
 	void printUniform(const char *name, int rows, int cols, int transposed,
                    GLint type);
 	void printUniforms(); /* for debugging */

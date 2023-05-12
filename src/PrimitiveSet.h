@@ -102,6 +102,7 @@ protected:
   inline Vertex getCenter(int index)
   {
     Vertex accu;
+  	size_t nindices = indices.size();
     int begin = index*nverticesperelement;
     int end   = begin+nverticesperelement;
     for (int i = begin ; i < end ; ++i ) {
@@ -133,13 +134,11 @@ protected:
 
   int type;
   int nverticesperelement;
-  int nvertices;
   int nprimitives;
   VertexArray vertexArray,  /* the vertices given by the user */
               verticesTodraw; /* the margin vertices in data coords */
   bool hasmissing; 	/* whether any vertices contain missing values */
-  int nindices;
-  unsigned int* indices;
+  std::vector<unsigned int> indices;
 };
 
 
@@ -204,7 +203,7 @@ protected:
   
   /* shader inits */
   virtual void initialize();
-private:
+protected:
   NormalArray normalArray, normalsToDraw;
   TexCoordArray texCoordArray;
 };

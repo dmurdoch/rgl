@@ -41,7 +41,7 @@ private:
   bool posisfinite;
   friend class Scene;
   friend class Subscene;
-  friend class PrimitiveSet;
+  friend class Shape;
 };
 
 } // namespace rgl

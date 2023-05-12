@@ -250,11 +250,15 @@ void ColorArray::setAttribLocation(GLint loc)
 	location = loc;
 }
 
-void ColorArray::appendToBuffer(std::vector<GLubyte>& buffer)
+void ColorArray::appendToBuffer(std::vector<GLubyte>& buffer, unsigned int nvertices)
 {
 	offset = buffer.size();
 	const GLubyte* p = reinterpret_cast<const GLubyte*>(arrayptr);
-	buffer.insert(buffer.end(), p, p + 4*ncolor*sizeof(u8));
+	while (nvertices > 0) {
+		int inserts = nvertices > ncolor ? ncolor : nvertices;
+	  buffer.insert(buffer.end(), p, p + 4*inserts*sizeof(u8));
+	  nvertices -= inserts;
+	}
 }
 #endif
 

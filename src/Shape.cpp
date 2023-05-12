@@ -29,6 +29,7 @@ Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool
 {
 #ifndef RGL_NO_OPENGL
   vbo = 0;
+  ibo = 0;
 #endif
   uninitialize();
 }
@@ -103,6 +104,99 @@ void Shape::drawBegin(RenderContext* renderContext)
   }
   drawLevel++;
 }
+
+#ifndef RGL_NO_OPENGL
+void Shape::beginShader(RenderContext* renderContext)
+{  
+	if (doUseShaders) {
+		Subscene* subscene = renderContext->subscene;
+		if (!is_initialized() || 
+      nclipplanes < subscene->countClipplanes() || 
+      nlights < subscene->countLights() ) {
+			setShapeContext(subscene, subscene->countClipplanes(), 
+                   subscene->countLights());
+			initialize();
+			loadBuffers();
+		}
+		glUseProgram(shaderProgram);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		float mat[16];
+		subscene->modelMatrix.getData(mat);
+		glUniformMatrix4fv(glLocs.at("mvMatrix"), 1, GL_FALSE, mat);
+		subscene->projMatrix.getData(mat);
+		glUniformMatrix4fv(glLocs.at("prMatrix"), 1, GL_FALSE, mat);
+		if (glLocs_has_key("invPrMatrix")) {
+			subscene->projMatrix.inverse().getData(mat);
+			glUniformMatrix4fv(glLocs.at("invPrMatrix"), 1, GL_FALSE, mat);
+		}
+		
+		if (glLocs_has_key("normMatrix")) {
+			Matrix4x4 normMatrix = subscene->modelMatrix.inverse();
+			normMatrix.transpose();
+			normMatrix.getData(mat);
+			glUniformMatrix4fv(glLocs.at("normMatrix"), 1, GL_FALSE, mat);
+		}
+		if (glLocs_has_key("emission")) {
+			glUniform3fv(glLocs.at("emission"), 1, material.emission.data);
+		}
+		if (glLocs_has_key("shininess")) {
+			glUniform1f(glLocs.at("shininess"), material.shininess);
+		}
+		if (glLocs_has_key("ambient")) { // just test one, and they should all be there
+			float ambient[3*nlights], 
+            specular[3*nlights], 
+            diffuse[3*nlights],
+            lightDir[3*nlights];
+			int viewpoint[nlights], finite[nlights];
+			for (int i=0; i < subscene->countLights(); i++) {
+				Light *light = subscene->getLight(i);
+				for (int j=0; j < 3; j++) {
+					ambient[3*i + j] = light->ambient.data[j]*material.ambient.data[j];
+					specular[3*i + j] = light->specular.data[j]*material.specular.data[j];
+					diffuse[3*i + j] = light->diffuse.data[j];
+					lightDir[3*i + j] = light->position[j];
+				}
+				viewpoint[i] = light->viewpoint;
+				finite[i] = light->posisfinite;
+			}
+			for (int i=subscene->countLights(); i < nlights; i++)
+				for (int j=0; j < 3; j++) {
+					ambient[3*i + j] = 0;
+					specular[3*i + j] = 0;
+					diffuse[3*i + j] = 0;
+				}
+				glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient);
+			glUniform3fv( glLocs.at("specular"), 3*nlights, specular);
+			glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse);
+			glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir);
+			glUniform1iv( glLocs.at("viewpoint"), nlights, viewpoint);
+			glUniform1iv( glLocs.at("finite"), nlights, finite);
+		}
+		
+		if (glLocs_has_key("uFogMode")) { // If it has one, it has them all
+			Background* bg = subscene->get_background();
+			if (bg) {
+				int fogtype = bg->fogtype - 1;
+				glUniform1i(glLocs["uFogMode"], fogtype);
+				if (fogtype != 0)
+				{
+					Color color = bg->material.colors.getColor(0);
+					glUniform3f(glLocs["uFogColor"],  color.getRedf(), color.getGreenf(), color.getBluef());
+					
+				}
+			}
+		}
+		if (glLocs_has_key("front"))
+			glUniform1i(glLocs["front"], 1);
+	}
+}
+
+void Shape::beginSideTwo()
+{
+	glUniform1i(glLocs.at("front"), 0);
+	material.beginSide(false);
+}
+#endif
 
 void Shape::drawEnd(RenderContext* renderContext)
 {
@@ -198,9 +292,8 @@ ShaderFlags Shape::getShaderFlags()
   result.fixed_quads = (type == "text" || type == "sprites") && !result.sprites_3d;
   
   result.has_fog = material.fog;
-  result.has_normals = type == "spheres";
-  if (!result.has_normals)
-    result.has_normals = getAttributeCount(subscene, NORMALS) > 0;
+  result.has_normals = (type == "spheres") ||
+  	                   getAttributeCount(subscene, NORMALS) > 0;
 
   if (material.texture) {
     result.has_texture = getAttributeCount(subscene, TEXCOORDS) > 0 ||
@@ -384,52 +477,64 @@ void Shape::checkProgram(GLuint program)
 void Shape::initialize()
 {
 	SceneNode::initialize();
-	if (doUseShaders) {
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		flags = getShaderFlags();
-		
-		std::string defines = getShaderDefines(flags);
-		std::string source = material.shaders[VERTEX_SHADER];
-		if (source.size() == 0)
-			source = defaultShader(VERTEX_SHADER);
-		const char *sources[2];
-		sources[0] = defines.c_str();
-		sources[1] = source.c_str();
-		glShaderSource(vertexShader, 2, sources, NULL);
-		glCompileShader(vertexShader);
-		checkShader("vertex", vertexShader);
-		
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		source = material.shaders[FRAGMENT_SHADER];
-		if (source.size() == 0)
-			source = defaultShader(FRAGMENT_SHADER);
-		sources[1] = source.c_str();
-		glShaderSource(fragmentShader, 2, sources, NULL);
-		glCompileShader(fragmentShader);
-		checkShader("fragment", fragmentShader);
-		
-		shaderProgram = glCreateProgram();
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		
-		vertexbuffer.clear();
-	}
 }
 
+void Shape::initShader()
+{
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	flags = getShaderFlags();
+	
+	std::string defines = getShaderDefines(flags);
+	std::string source = material.shaders[VERTEX_SHADER];
+	if (source.size() == 0)
+		source = defaultShader(VERTEX_SHADER);
+	const char *sources[2];
+	sources[0] = defines.c_str();
+	sources[1] = source.c_str();
+	glShaderSource(vertexShader, 2, sources, NULL);
+	glCompileShader(vertexShader);
+	checkShader("vertex", vertexShader);
+	
+	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	source = material.shaders[FRAGMENT_SHADER];
+	if (source.size() == 0)
+		source = defaultShader(FRAGMENT_SHADER);
+	sources[1] = source.c_str();
+	glShaderSource(fragmentShader, 2, sources, NULL);
+	glCompileShader(fragmentShader);
+	checkShader("fragment", fragmentShader);
+	
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	
+	vertexbuffer.clear();
+	indexbuffer.clear();
+}
 
 bool Shape::glLocs_has_key(std::string key) {
 	return glLocs.find(key) != glLocs.end();
 }
 
 
-void Shape::loadBuffer()
+void Shape::loadBuffers()
 {
 	glDeleteBuffers(1, &vbo);
-	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, vertexbuffer.size(), 
               vertexbuffer.data(), GL_STATIC_DRAW);
+	
+	glDeleteBuffers(1, &ibo);
+	if (indexbuffer.size()) {
+		glGenBuffers(1, &ibo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexbuffer.size(),
+               indexbuffer.data(), GL_STATIC_DRAW);
+  } else {
+  	ibo = 0;
+  	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+  }
 }
 
 void Shape::printUniform(const char *name, int rows, int cols, int transposed,
@@ -595,6 +700,8 @@ void Shape::printAttributes(int nvertices) {
 	printAttribute("aPos", nvertices);
 	printAttribute("aCol", nvertices);
 	printAttribute("aNorm", nvertices);
+	printAttribute("aPos1", nvertices);
+	printAttribute("aPos2", nvertices);
 }
 
 #endif

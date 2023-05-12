@@ -31,6 +31,7 @@ public:
 
   void beginUse(RenderContext* renderContext);
   void endUse(RenderContext* renderContext);
+  void beginSide(bool drawfront);
   void useColor(int index);
   void colorPerVertex(bool enable, int numVertices=0);
   bool isTransparent() const { return alphablend; }

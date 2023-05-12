@@ -20,6 +20,8 @@ LineStripSet::LineStripSet(Material& in_material, int in_nvertices, double* in_v
 void LineStripSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
+	size_t nindices = indices.size();
+	size_t nvertices = vertexArray.size();
   if (index < nvertices-1) {
     if (hasmissing) {
       int elt0 = index, elt1 = index + 1;
@@ -31,7 +33,7 @@ void LineStripSet::drawPrimitive(RenderContext* renderContext, int index)
           vertexArray[elt1].missing()) return;
     }
     if (nindices)
-      glDrawElements(type, 2, GL_UNSIGNED_INT, indices + index);
+      glDrawElements(type, 2, GL_UNSIGNED_INT, indices.data() + index);
     else
       glDrawArrays(type, index, 2);
   }

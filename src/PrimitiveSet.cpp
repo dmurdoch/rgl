@@ -20,8 +20,7 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
 {
   type                = in_type;
   nverticesperelement = in_nverticesperelement;
-  nvertices           = 0;
-  nindices            = 0;
+  indices.clear();
 #ifndef RGL_NO_OPENGL
   vbo                 = 0;
 #endif
@@ -33,10 +32,9 @@ void PrimitiveSet::initPrimitiveSet(
     int in_nindices,
     int* in_indices
 ) {
-  nvertices           = in_nvertices;
-  nindices            = in_nindices;
-  if (nindices)
-    nprimitives       = nindices / nverticesperelement;
+  size_t nvertices    = in_nvertices;
+  if (in_nindices)
+    nprimitives       = in_nindices / nverticesperelement;
   else
     nprimitives       = nvertices / nverticesperelement;
   vertexArray.alloc(nvertices);
@@ -48,13 +46,13 @@ void PrimitiveSet::initPrimitiveSet(
     boundingBox += vertexArray[i];
     hasmissing |= vertexArray[i].missing();
   }
-  if (nindices) {
-    indices = new GLuint[nindices];
-    for(int i=0; i < nindices; i++) {
+  if (in_nindices) {
+    indices.resize(in_nindices);
+    for(int i=0; i < in_nindices; i++) {
       indices[i] = (GLuint)in_indices[i];
     }
   } else
-    indices = NULL;
+    indices.clear();
 }
 
 PrimitiveSet::PrimitiveSet (
@@ -74,10 +72,9 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
 {
   type                = in_type;
   nverticesperelement = in_nverticesperelement;
-  nvertices           = in_nvertices;
-  nindices            = in_nindices;
-  if (nindices)
-    nprimitives       = nindices / nverticesperelement;
+  size_t nvertices    = in_nvertices;
+  if (in_nindices)
+    nprimitives       = in_nindices / nverticesperelement;
   else
     nprimitives       = nvertices / nverticesperelement;
   material.colorPerVertex(true, nvertices);
@@ -92,19 +89,17 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
     hasmissing |= vertexArray[i].missing();
   }
   
-  if (nindices) {
-    indices = new GLuint[nindices];
-    for(int i=0; i < nindices; i++) {
+  if (in_nindices) {
+    indices.resize(in_nindices);
+    for(int i=0; i < in_nindices; i++) {
       indices[i] = (GLuint)in_indices[i];
     }
   } else
-    indices = NULL;
+    indices.clear();
 }
 
 PrimitiveSet::~PrimitiveSet () 
 {
-  if (nindices)
-    delete [] indices;
 }
 
 // ---------------------------------------------------------------------------
@@ -114,84 +109,8 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
   Shape::drawBegin(renderContext);
 	
 #ifndef RGL_NO_OPENGL
-	if (doUseShaders) {
-		Subscene* subscene = renderContext->subscene;
-		if (!is_initialized() || 
-      nclipplanes < subscene->countClipplanes() || 
-      nlights < subscene->countLights() ) {
-			setShapeContext(subscene, subscene->countClipplanes(), 
-                   subscene->countLights());
-			initialize();
-			loadBuffer();
-		}
-		glUseProgram(shaderProgram);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		float mat[16];
-		subscene->modelMatrix.getData(mat);
-		glUniformMatrix4fv(glLocs.at("mvMatrix"), 1, GL_FALSE, mat);
-		subscene->projMatrix.getData(mat);
-		glUniformMatrix4fv(glLocs.at("prMatrix"), 1, GL_FALSE, mat);
-		if (glLocs_has_key("invPrMatrix")) {
-			subscene->projMatrix.inverse().getData(mat);
-			glUniformMatrix4fv(glLocs.at("invPrMatrix"), 1, GL_FALSE, mat);
-		}
-		if (glLocs_has_key("normMatrix")) {
-			Matrix4x4 normMatrix = subscene->modelMatrix.inverse();
-			normMatrix.transpose();
-			normMatrix.getData(mat);
-			glUniformMatrix4fv(glLocs.at("normMatrix"), 1, GL_FALSE, mat);
-		}
-		if (glLocs_has_key("emission")) {
-			glUniform3fv(glLocs.at("emission"), 1, material.emission.data);
-		}
-		if (glLocs_has_key("shininess")) {
-			glUniform1f(glLocs.at("shininess"), material.shininess);
-		}
-		if (glLocs_has_key("ambient")) { // just test one, and they should all be there
-			float ambient[3*nlights], 
-            specular[3*nlights], 
-            diffuse[3*nlights],
-            lightDir[3*nlights];
-			int viewpoint[nlights], finite[nlights];
-			for (int i=0; i < subscene->countLights(); i++) {
-				Light *light = subscene->getLight(i);
-				for (int j=0; j < 3; j++) {
-					ambient[3*i + j] = light->ambient.data[j]*material.ambient.data[j];
-					specular[3*i + j] = light->specular.data[j]*material.specular.data[j];
-					diffuse[3*i + j] = light->diffuse.data[j];
-					lightDir[3*i + j] = light->position[j];
-				}
-				viewpoint[i] = light->viewpoint;
-				finite[i] = light->posisfinite;
-			}
-			for (int i=subscene->countLights(); i < nlights; i++)
-				for (int j=0; j < 3; j++) {
-					ambient[3*i + j] = 0;
-					specular[3*i + j] = 0;
-					diffuse[3*i + j] = 0;
-				}
-			glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient);
-			glUniform3fv( glLocs.at("specular"), 3*nlights, specular);
-			glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse);
-			glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir);
-			glUniform1iv( glLocs.at("viewpoint"), nlights, viewpoint);
-			glUniform1iv( glLocs.at("finite"), nlights, finite);
-		}
-		
-		if (glLocs_has_key("uFogMode")) { // If it has one, it has them all
-		  Background* bg = subscene->get_background();
-			if (bg) {
-				int fogtype = bg->fogtype - 1;
-				glUniform1i(glLocs["uFogMode"], fogtype);
-				if (fogtype != 0)
-				{
-					Color color = bg->material.colors.getColor(0);
-					glUniform3f(glLocs["uFogColor"],  color.getRedf(), color.getGreenf(), color.getBluef());
-					
-				}
-			}
-		}
-	}
+  if (doUseShaders)
+  	Shape::beginShader(renderContext);
 #endif  
   BBoxDeco* bboxdeco = 0;
   if (material.marginCoord >= 0) {
@@ -217,30 +136,53 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 void PrimitiveSet::drawAll(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
+	size_t nindices = indices.size();
   if (!hasmissing) {
     if (!nindices)
       glDrawArrays(type, 0, nverticesperelement*nprimitives );
     else
-      glDrawElements(type, nindices, GL_UNSIGNED_INT, indices);
+      glDrawElements(type, nindices, GL_UNSIGNED_INT, indices.data());
   } else {
     bool missing = true;
+  	int first = 0;
     for (int i=0; i<nprimitives; i++) {
       bool skip = false;
-      int elt = nindices ? indices[nverticesperelement*i] :
-                                   nverticesperelement*i;
-      for (int j=0; j<nverticesperelement; j++)
-        skip |= vertexArray[elt + j].missing();
+    	int elt0 = nverticesperelement*i;
+      for (int j=0; j<nverticesperelement; j++) {
+      	int elt = elt0 + j;
+      	if (nindices)
+      		elt = indices[elt];
+        skip |= vertexArray[elt].missing();
+      }
       if (missing != skip) {
         missing = !missing;
-        if (missing) glEnd();
-        else glBegin(type);
-      }
-      if (!missing) 
-        for (int j=0; j<nverticesperelement; j++) {
-          glArrayElement( elt + j);
+      	if (doUseShaders) {
+      		if (missing) {
+      			glDrawElements(type, (i - first)*nverticesperelement, 
+                           GL_UNSIGNED_INT, indices.data() + first*nverticesperelement);
+      		} else
+      			first = i;
+      	} else {
+          if (missing) glEnd();
+          else glBegin(type);
         }
+      }
+      if (!missing && !doUseShaders) {
+        for (int j=0; j<nverticesperelement; j++) {
+        	int elt = elt0 + j;
+        	if (nindices)
+        		elt = indices[elt];
+          glArrayElement( elt );
+        }
+      }
     }
-    if (!missing) glEnd();
+    if (!missing) {
+    	if (doUseShaders) {
+    		glDrawElements(type, (nprimitives - first)*nverticesperelement, 
+                     GL_UNSIGNED_INT, indices.data() + first*nverticesperelement);
+    	} else
+    		glEnd();
+    }
   }              
 #endif
 }
@@ -251,6 +193,7 @@ void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
   int idx = index*nverticesperelement;
+	size_t nindices = indices.size();
   if (hasmissing) {
     bool skip = false;
     for (int j=0; j<nverticesperelement; j++) {
@@ -260,7 +203,7 @@ void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
     }
   }
   if (nindices)
-    glDrawElements(type, nverticesperelement, GL_UNSIGNED_INT, indices + idx);
+    glDrawElements(type, nverticesperelement, GL_UNSIGNED_INT, indices.data() + idx);
   else
     glDrawArrays(type, idx, nverticesperelement);
 #endif
@@ -287,6 +230,13 @@ void PrimitiveSet::draw(RenderContext* renderContext)
   drawAll(renderContext);
   SAVEGLERROR;
   
+#ifndef RGL_NO_OPENGL
+  if (doUseShaders && flags.is_twosided) {
+  	beginSideTwo();
+  	drawAll(renderContext);
+  }
+#endif
+  
   drawEnd(renderContext);
   SAVEGLERROR;
 }
@@ -294,8 +244,8 @@ void PrimitiveSet::draw(RenderContext* renderContext)
 int PrimitiveSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
-    case VERTICES: return nvertices;
-    case INDICES: return nindices;
+    case VERTICES: return vertexArray.size();
+    case INDICES: return indices.size();
   }
   return Shape::getAttributeCount(subscene, attrib);
 }
@@ -328,6 +278,8 @@ void PrimitiveSet::initialize()
 	Shape::initialize();
 #ifndef RGL_NO_OPENGL
 	if (doUseShaders) {
+		initShader();
+		
 		glBindAttribLocation(shaderProgram, 0, "aPos");
 		vertexArray.appendToBuffer(vertexbuffer);
 		
@@ -338,7 +290,7 @@ void PrimitiveSet::initialize()
 		glLocs["aCol"] = 1;
 		material.colors.setAttribLocation(glLocs["aCol"]);
 		if (material.useColorArray)
-			material.colors.appendToBuffer(vertexbuffer);
+			material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
 		
 		/* NB:  these must come after the glBindAttribLocation calls */
 		glLinkProgram(shaderProgram);
@@ -434,6 +386,7 @@ FaceSet::FaceSet(
   else
     normalArray.alloc(0);
   if (in_useTexcoords) {
+  	size_t nvertices = vertexArray.size();
     texCoordArray.alloc(nvertices);
     for(int i=0;i<nvertices;i++) {
       texCoordArray[i].s = (float) in_texcoords[i*2+0];
@@ -466,6 +419,7 @@ void FaceSet::initFaceSet(
     initNormals(in_normals);
 
   if (useTexcoords) {
+  	size_t nvertices = vertexArray.size();
     texCoordArray.alloc(nvertices);
     for(int i=0;i<nvertices;i++) {
       texCoordArray[i].s = (float) in_texcoords[i*2+0];
@@ -476,6 +430,8 @@ void FaceSet::initFaceSet(
 
 void FaceSet::initNormals(double* in_normals)
 {
+	size_t nindices = indices.size();
+	size_t nvertices = vertexArray.size();
   normalArray.alloc(nvertices);
   if (in_normals) {
     for(int i=0;i<nvertices;i++) {
@@ -512,18 +468,22 @@ void FaceSet::initNormals(double* in_normals)
     for (int i=0; i < nvertices; i++)
       normalArray[i].normalize();
   }
+#ifndef RGL_NO_OPENGL
+  flags.has_normals = true;
+#endif
 }
 
 // ---------------------------------------------------------------------------
 
 void FaceSet::drawBegin(RenderContext* renderContext)
 {  
-  PrimitiveSet::drawBegin(renderContext);
-
-  if (material.lit) {
-    if (normalArray.size() < nvertices)
+  if (material.lit && 
+      normalArray.size() < vertexArray.size())
       initNormals(NULL);
-    
+  
+  PrimitiveSet::drawBegin(renderContext);
+  
+  if (material.lit) {
     BBoxDeco* bboxdeco = 0;
     if (material.marginCoord >= 0) {
       Subscene* subscene = renderContext->subscene;
@@ -564,7 +524,7 @@ void FaceSet::drawEnd(RenderContext* renderContext)
 int FaceSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
-    case NORMALS: return nvertices;
+    case NORMALS: return normalArray.size();
     case TEXCOORDS: return texCoordArray.size();
   }
   return PrimitiveSet::getAttributeCount(subscene, attrib);
@@ -604,7 +564,7 @@ void FaceSet::initialize()
 {
 	PrimitiveSet::initialize();
 #ifndef RGL_NO_OPENGL
-	if (normalArray.size() < nvertices)
+	if (normalArray.size() < vertexArray.size())
 		initNormals(NULL);
 	if (glLocs_has_key("aNorm")) {
 	  normalArray.setAttribLocation(glLocs["aNorm"]);
