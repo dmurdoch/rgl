@@ -323,67 +323,11 @@ void PrimitiveSet::getAttribute(SceneNode* subscene, AttribID attrib, int first,
   }
 }
 
-#ifndef RGL_NO_OPENGL
-static void checkShader(const char* type, GLuint shader)
-{
-	GLint status;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-	if (!status) {
-		GLchar infoLog[2000];
-		GLsizei len;
-		glGetShaderInfoLog(shader, sizeof(infoLog), &len, infoLog);
-		error("Compile issue for %s shader:\n%s\n", type, infoLog);
-	}
-}
-
-static void checkProgram(GLuint program)
-{
-	GLint status;
-	glGetProgramiv(program, GL_LINK_STATUS, &status);
-	if (!status) {
-		GLchar infoLog[2000];
-		GLsizei len;
-		glGetProgramInfoLog(program, sizeof(infoLog), &len, infoLog);
-		error("Shader link issue:\n%s", infoLog);
-	}
-}
-#endif
-
-
 void PrimitiveSet::initialize()
 {
 	Shape::initialize();
 #ifndef RGL_NO_OPENGL
 	if (doUseShaders) {
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		ShaderFlags flags = getShaderFlags();
-		
-		std::string defines = getShaderDefines(flags);
-		std::string source = material.shaders[VERTEX_SHADER];
-		if (source.size() == 0)
-			source = defaultShader(VERTEX_SHADER);
-		const char *sources[2];
-		sources[0] = defines.c_str();
-		sources[1] = source.c_str();
-		glShaderSource(vertexShader, 2, sources, NULL);
-		glCompileShader(vertexShader);
-		checkShader("vertex", vertexShader);
-		
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		source = material.shaders[FRAGMENT_SHADER];
-		if (source.size() == 0)
-			source = defaultShader(FRAGMENT_SHADER);
-		sources[1] = source.c_str();
-		glShaderSource(fragmentShader, 2, sources, NULL);
-		glCompileShader(fragmentShader);
-		checkShader("fragment", fragmentShader);
-		
-		shaderProgram = glCreateProgram();
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		
-		vertexbuffer.clear();
-		
 		glBindAttribLocation(shaderProgram, 0, "aPos");
 		vertexArray.appendToBuffer(vertexbuffer);
 		
@@ -462,184 +406,6 @@ void PrimitiveSet::initialize()
 	SAVEGLERROR;
 #endif
 }
-
-#ifndef RGL_NO_OPENGL
-
-void PrimitiveSet::loadBuffer()
-{
-	glDeleteBuffers(1, &vbo);
-	glGenBuffers(1, &vbo);
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertexbuffer.size(), 
-              vertexbuffer.data(), GL_STATIC_DRAW);
-}
-
-void PrimitiveSet::printUniform(const char *name, int rows, int cols, int transposed,
-                                GLint type) {
-	float data[4*nlights > 16 ? 4*nlights : 16];
-	int idata[nlights];
-	
-	GLint location;
-	if (glLocs_has_key(name)) {
-		location = glLocs[name];
-		Rprintf("%s: (%d)\n", name, location);
-		if (type == GL_FLOAT)
-		  glGetUniformfv(shaderProgram, location, data);
-		else if (type == GL_INT)
-			glGetUniformiv(shaderProgram, location, idata);
-		else{
-			Rprintf("unknown type: %d", type);
-			return;
-		}
-		for (int i=0; i < rows; i++) {
-			for (int j=0; j < cols; j++) {
-				int index = transposed ? (i + cols*j) : (j + cols*i);
-				if (type == GL_FLOAT)
-				  Rprintf("%.3f ", data[index]);
-				else if (type == GL_INT)
-					Rprintf("%d ", idata[index]);
-			}
-			Rprintf("\n");
-		}
-	} else Rprintf("%s: not defined\n", name);
-	SAVEGLERROR;
-}
-
-void PrimitiveSet::printUniforms() {
-  printUniform("mvMatrix", 4, 4, true, GL_FLOAT);
-	printUniform("prMatrix", 4, 4, true, GL_FLOAT);	
-	printUniform("normMatrix", 4, 4, true, GL_FLOAT);
-  printUniform("invPrMatrix", 4, 4, true, GL_FLOAT);	
-
-  printUniform("uFogMode", 1, 1, false, GL_INT);
-  printUniform("uFogColor", 1, 3, false, GL_FLOAT);
-  printUniform("uFogParms", 1, 4, false, GL_FLOAT);
-  
-  printUniform("emission", 1, 3, false, GL_FLOAT);
-  printUniform("shininess", 1, 1, false, GL_FLOAT);
-  printUniform("ambient", nlights, 3, false, GL_FLOAT);
-  printUniform("specular", nlights, 3, false, GL_FLOAT);
-  printUniform("diffuse", nlights, 3, false, GL_FLOAT);
-  printUniform("lightDir", nlights, 3, false, GL_FLOAT);	
-  printUniform("viewpoint", 1, 1, false, GL_INT);
-  printUniform("finite", 1, 1, false, GL_INT);
-
-}
-
-void PrimitiveSet::printBufferInfo() {
-	GLint idata, vbo;
-	glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &vbo);
-	Rprintf("Bound array buffer: %d", vbo);
-	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &idata);
-	Rprintf(" size: %#x", idata);
-	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_USAGE, &idata);
-	Rprintf(" usage: %s", idata == GL_STATIC_DRAW ? "GL_STATIC_DRAW" : "?");
-	Rprintf("\n");
-	SAVEGLERROR;
-}
-
-void PrimitiveSet::printAttribute(const char* name) {
-	GLint idata;
-	void* pdata;
-	
-	if (glLocs_has_key(name)) {
-		GLint location = glLocs[name];
-		Rprintf("%s (%d):", name, location);
-		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,
-                         &idata);
-		if (idata)
-			Rprintf(" on vbo %d", idata);
-		else
-			Rprintf(" not bound");
-		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_ENABLED,
-                       &idata);
-		int enabled = idata;
-		if (enabled)
-			Rprintf(" enabled");
-		else
-			Rprintf(" not enabled");
-		
-		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_SIZE, &idata);
-		int size = idata;
-		
-		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &idata);
-		int stride = idata;
-		
-		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_TYPE, &idata);
-		GLint type = idata;
-		Rprintf(" %s[%d]", type == GL_FLOAT ? "GL_FLOAT" : 
-                   type == GL_INT ? "GL_INT" : 
-                   type == GL_BYTE ? "GL_BYTE" : 
-                   type == GL_UNSIGNED_BYTE ? "GL_UNSIGNED_BYTE" :
-                   "GL_??", size);
-		
-		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, &idata);
-		GLint normalized = idata;
-		if (normalized)
-			Rprintf(" normalized");
-		
-		glGetVertexAttribPointerv(location, GL_VERTEX_ATTRIB_ARRAY_POINTER, &pdata);
-		void* offset = pdata;
-		Rprintf(" offset %p", offset);
-		Rprintf("\n");
-		if (type == GL_FLOAT) {
-			
-			if (enabled) {
-				int step = 0;
-			  for (int i = 0; i < nvertices; i++) {
-					float* value = reinterpret_cast<float*>(vertexbuffer.data() + 
-						      reinterpret_cast<std::uintptr_t>(offset) + step);
-					for (int j = 0; j < size; j++, value++)
-						Rprintf("%8.4f ", *value);
-		      Rprintf("\n");
-		      if (stride)
-		      	step += stride;
-		      else
-		      	step += size*sizeof(float);
-				} 
-			} else {
-				float value[size];
-				glGetVertexAttribfv(location,  GL_CURRENT_VERTEX_ATTRIB,
-                            value);
-				for (int j = 0; j < size; j++)
-					Rprintf("%8.4f ", value[j]);
-				Rprintf("\n");
-			}
-		} else if (type == GL_UNSIGNED_BYTE) {
-			if (enabled) {
-				int step = 0;
-				for (int i = 0; i < nvertices; i++) {
-					GLubyte* value = reinterpret_cast<GLubyte*>(vertexbuffer.data() + 
-                                             reinterpret_cast<std::uintptr_t>(offset) + step);
-					for (int j = 0; j < size; j++, value++)
-						Rprintf("%02x ", *value);
-					Rprintf("\n");
-					if (stride)
-						step += stride;
-					else
-						step += size*sizeof(GLubyte);
-				} 
-			} else {
-				GLint value[size];
-				glGetVertexAttribiv(location,  GL_CURRENT_VERTEX_ATTRIB,
-                        value);
-				for (int j = 0; j < size; j++)
-					Rprintf("%02x ", value[j]);
-				Rprintf("\n");
-			}
-		}
-	} else
-		Rprintf("%s not defined\n", name);
-	SAVEGLERROR;
-}
-
-void PrimitiveSet::printAttributes() {
-	printAttribute("aPos");
-	printAttribute("aCol");
-	printAttribute("aNorm");
-}
-#endif
 
 // ===[ FACE SET ]============================================================
 
@@ -776,7 +542,7 @@ void FaceSet::drawBegin(RenderContext* renderContext)
   SAVEGLERROR;
 #ifndef RGL_NO_OPENGL
   // printBufferInfo();
-  // printAttributes();
+  // printAttributes(nvertices);
   // printUniforms();
   // SAVEGLERROR;
 #endif

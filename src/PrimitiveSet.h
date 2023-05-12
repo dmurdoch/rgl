@@ -140,22 +140,6 @@ protected:
   bool hasmissing; 	/* whether any vertices contain missing values */
   int nindices;
   unsigned int* indices;
-
-  /**
-   * shader program
-   */
-  GLuint   shaderProgram;
-#ifndef RGL_NO_OPENGL
-  std::vector<GLubyte> vertexbuffer;
-  GLuint vbo;
-  void loadBuffer();
-  void printUniform(const char *name, int rows, int cols, int transposed,
-                    GLint type);
-  void printUniforms(); /* for debugging */
-  void printAttribute(const char *name);
-  void printAttributes();
-  void printBufferInfo();
-#endif
 };
 
 

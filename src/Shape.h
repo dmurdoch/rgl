@@ -180,12 +180,30 @@ private:
    * display list
    **/
   GLuint   displayList;
-
+#endif
+	
+protected:	
+#ifndef RGL_NO_OPENGL
+	/**
+	 * shader program
+	 */
+	ShaderFlags flags;
+	GLuint   shaderProgram;
+	std::vector<GLubyte> vertexbuffer;
+	GLuint vbo;
+	void checkShader(const char* type, GLuint shader);
+	void checkProgram(GLuint program);
+	void loadBuffer();
+	void printUniform(const char *name, int rows, int cols, int transposed,
+                   GLint type);
+	void printUniforms(); /* for debugging */
+	void printAttribute(const char *name, int nvertices);
+	void printAttributes(int nvertices);
+	void printBufferInfo();
 #endif	
 
   int	   drawLevel;     /* for debugging */
 
-protected:
   /**
    * update indicator
    **/
