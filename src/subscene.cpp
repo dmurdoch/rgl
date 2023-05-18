@@ -911,7 +911,7 @@ void Subscene::disableLights(RenderContext* rctx)
 {
     
   //
-  // disable lights; setup will enable them
+  // disable lights; setup will enable them if not using shaders
   //
 #ifndef RGL_NO_OPENGL
   for (int i=0;i<8;i++)

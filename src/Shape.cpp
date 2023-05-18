@@ -165,7 +165,7 @@ void Shape::beginShader(RenderContext* renderContext)
 					specular[3*i + j] = 0;
 					diffuse[3*i + j] = 0;
 				}
-				glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient);
+			glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient);
 			glUniform3fv( glLocs.at("specular"), 3*nlights, specular);
 			glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse);
 			glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir);

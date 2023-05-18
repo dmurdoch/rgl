@@ -293,7 +293,7 @@ void ColorArray::useColor(int index) const
 {
 #ifndef RGL_NO_OPENGL 
 	if (doUseShaders && location >= 0) {
-		glVertexAttrib4ubv(location, (const GLubyte*) &arrayptr[ index * 4]);
+		glVertexAttrib4Nubv(location, (const GLubyte*) &arrayptr[ index * 4]);
 	} else {
     glColor4ubv( (const GLubyte*) &arrayptr[ index * 4] );
   }
