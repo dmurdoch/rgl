@@ -43,6 +43,10 @@ public:
                      unsigned int *out_magfilter, 
                      std::string *out_filename);
   Pixmap* getPixmap() const { return pixmap; }
+#ifndef RGL_NO_OPENGL
+  void setSamplerLocation(GLint loc);
+#endif
+  
 private:
   void init(RenderContext* renderContext);
   Pixmap* pixmap;
@@ -56,6 +60,7 @@ private:
   std::string   filename;
 #ifndef RGL_NO_OPENGL
   GLint   internalMode;
+  GLint   location;
 #endif
   bool    deleteFile;
 };

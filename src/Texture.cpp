@@ -1,4 +1,4 @@
-
+#include "R.h"
 #include "Texture.h"
 #include "pixmap.h"
 #include "config.h"
@@ -280,6 +280,13 @@ void Texture::init(RenderContext* renderContext)
   }
 }
 
+#ifndef RGL_NO_OPENGL
+void Texture::setSamplerLocation(GLint loc)
+{
+	location = loc;
+}
+#endif
+
 void Texture::beginUse(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
@@ -287,11 +294,13 @@ void Texture::beginUse(RenderContext* renderContext)
     init(renderContext);
   }
   glPushAttrib(GL_TEXTURE_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);
-  
-
   glEnable(GL_TEXTURE_2D);
-  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, internalMode);
-  glBindTexture(GL_TEXTURE_2D, texName);
+  if (doUseShaders) {
+  	glUniform1i(location, 0);
+  } else {
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, internalMode);
+    glBindTexture(GL_TEXTURE_2D, texName);
+  }
 
   if (type == ALPHA) {
     glEnable(GL_BLEND);

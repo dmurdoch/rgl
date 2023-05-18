@@ -303,6 +303,10 @@ void PrimitiveSet::initialize()
 		if (flags.has_texture || type == "text") {
 			glLocs["aTexcoord"] = glGetAttribLocation(shaderProgram, "aTexcoord");
 			glLocs["uSampler"] = glGetUniformLocation(shaderProgram, "uSampler");
+			if (material.texture)
+			  material.texture->setSamplerLocation(glLocs["uSampler"]);
+			else
+				Rprintf("material.texture is NULL, location not set!\n");
 		}
 		
 		if (flags.has_fog && !flags.sprites_3d) {
