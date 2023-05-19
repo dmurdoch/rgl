@@ -116,9 +116,11 @@ protected:
 
   // ---[ PRIMITIVE DRAW INTERFACE ]------------------------------------------
 
+  /* draw everything in range, assuming no missings */
+  void drawRange(int start, int stop);
   
   /**
-   * send all elements
+   * send all elements, checking for missings
    * interface
    **/
   virtual void drawAll(RenderContext* renderContext);

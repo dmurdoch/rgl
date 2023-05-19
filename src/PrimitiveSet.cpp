@@ -133,15 +133,37 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 
 // ---------------------------------------------------------------------------
 
+void PrimitiveSet::drawRange(int start, int stop)
+{
+#ifndef RGL_NO_OPENGL
+  if (start >= stop) return;
+  size_t nindices = indices.size();
+  if (doUseShaders) {
+    if (!nindices)
+      glDrawArrays(type, start, nverticesperelement*(stop - start) );
+    else
+      glDrawElements(type, stop - start, GL_UNSIGNED_INT, indices.data() + start);
+  } else {
+    glBegin(type);
+    for (int i = start; i < stop; i++) {
+      int elt0 = nverticesperelement*i;
+      for (int j = 0; j < nverticesperelement; j++) {
+        int elt = elt0 + j;
+        if (nindices)
+          elt = indices[elt];
+        glArrayElement(elt);
+      }
+    }
+    glEnd();
+  }
+#endif
+}
 void PrimitiveSet::drawAll(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
 	size_t nindices = indices.size();
   if (!hasmissing) {
-    if (!nindices)
-      glDrawArrays(type, 0, nverticesperelement*nprimitives );
-    else
-      glDrawElements(type, nindices, GL_UNSIGNED_INT, indices.data());
+    drawRange(0, nprimitives);
   } else {
     bool missing = true;
   	int first = 0;
@@ -156,33 +178,14 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
       }
       if (missing != skip) {
         missing = !missing;
-      	if (doUseShaders) {
-      		if (missing) {
-      			glDrawElements(type, (i - first)*nverticesperelement, 
-                           GL_UNSIGNED_INT, indices.data() + first*nverticesperelement);
-      		} else
-      			first = i;
-      	} else {
-          if (missing) glEnd();
-          else glBegin(type);
-        }
-      }
-      if (!missing && !doUseShaders) {
-        for (int j=0; j<nverticesperelement; j++) {
-        	int elt = elt0 + j;
-        	if (nindices)
-        		elt = indices[elt];
-          glArrayElement( elt );
-        }
+      	if (missing)
+      		drawRange(first, i);
+        else
+      		first = i;
       }
     }
-    if (!missing) {
-    	if (doUseShaders) {
-    		glDrawElements(type, (nprimitives - first)*nverticesperelement, 
-                     GL_UNSIGNED_INT, indices.data() + first*nverticesperelement);
-    	} else
-    		glEnd();
-    }
+    if (!missing)
+    	drawRange(first, nprimitives);
   }              
 #endif
 }
