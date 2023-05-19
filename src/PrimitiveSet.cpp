@@ -158,7 +158,10 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
         missing = !missing;
       	if (doUseShaders) {
       		if (missing) {
-      			glDrawElements(type, (i - first)*nverticesperelement, 
+      			if (!nindices)
+      				glDrawArrays(type, first, (i - first)*nverticesperelement);
+      		  else
+      			  glDrawElements(type, (i - first)*nverticesperelement, 
                            GL_UNSIGNED_INT, indices.data() + first*nverticesperelement);
       		} else
       			first = i;
@@ -178,7 +181,10 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
     }
     if (!missing) {
     	if (doUseShaders) {
-    		glDrawElements(type, (nprimitives - first)*nverticesperelement, 
+    		if (!nindices)
+    			glDrawArrays(type, first, (nprimitives - first)*nverticesperelement );
+    		else
+    		  glDrawElements(type, (nprimitives - first)*nverticesperelement, 
                      GL_UNSIGNED_INT, indices.data() + first*nverticesperelement);
     	} else
     		glEnd();
