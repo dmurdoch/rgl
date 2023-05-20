@@ -1,4 +1,6 @@
+#include "R.h"
 #include "SphereMesh.h"
+#include "SphereSet.h"
 #include "subscene.h"
 
 #include "opengl.h"
@@ -47,10 +49,10 @@ void SphereMesh::setupMesh()
 
   vertexArray.alloc(nvertex);
 
-  if (genNormal)
+  if (genNormal || doUseShaders)
     normalArray.alloc(nvertex);
 
-  if (genTexCoord)
+  if (genTexCoord || doUseShaders)
     texCoordArray.alloc(nvertex);  
 }
 
@@ -100,15 +102,15 @@ void SphereMesh::update(const Vertex& scale)
 
       vertexArray[i] = center + q;
 
-      if (genNormal) {
-	q.x *= scale.x*scale.x;
-	q.y *= scale.y*scale.y;
-	q.z *= scale.z*scale.z;
+      if (genNormal || doUseShaders) {
+        q.x *= scale.x*scale.x;
+        q.y *= scale.y*scale.y;
+        q.z *= scale.z*scale.z;
         normalArray[i] = q;
         normalArray[i].normalize();
       }
 
-      if (genTexCoord) {
+      if (genTexCoord || doUseShaders) {
         texCoordArray[i].s = fx;
         texCoordArray[i].t = fy;
       }
@@ -117,36 +119,68 @@ void SphereMesh::update(const Vertex& scale)
   }
 }
 
+/* Set the modelviewmatrix for a shader */
+
+Matrix4x4 SphereMesh::MVmodification(const Vertex& scale)
+{
+  return  Matrix4x4::translationMatrix(center.x, center.y, center.z) 
+        * Matrix4x4::scaleMatrix(radius/scale.x, radius/scale.y, radius/scale.z);
+}
+
 void SphereMesh::draw(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
 
-  if (genNormal)
+  if (genNormal || doUseShaders)
     normalArray.beginUse();
 
-  if (genTexCoord)
+  if (genTexCoord || doUseShaders)
     texCoordArray.beginUse();
 
+  std::vector<int> inds;
+  if (doUseShaders) {
+    inds.resize(2*(segments + 1));
+  }
+  
   for(int i=0; i<sections; i++ ) {
 
     int curr = i * (segments+1);
     int next = curr + (segments+1);
 
-    glBegin(GL_QUAD_STRIP);
-    for(int j=0;j<=segments;j++) {
-      glArrayElement( next + j );
-      glArrayElement( curr + j );
+    if (doUseShaders) {
+
+      int nextind = 0;
+      
+      for (int j=0; j<=segments; j++) {
+        inds[nextind++] = next + j;
+        inds[nextind++] = curr + j;
+      }
+      
+      if (doUseShaders)
+        glDrawElements(GL_QUAD_STRIP, inds.size(), GL_UNSIGNED_INT, inds.data());
+    } else {
+      glBegin(GL_QUAD_STRIP);
+      for(int j=0;j<=segments;j++) {
+        glArrayElement( next + j );
+        glArrayElement( curr + j );
+      }
+      glEnd();
     }
-    glEnd();
   }
+  
+
+  SAVEGLERROR;
+  
   vertexArray.endUse();
 
-  if (genNormal)
+  if (genNormal || doUseShaders)
     normalArray.endUse();
 
-  if (genTexCoord)
+  if (genTexCoord || doUseShaders)
     texCoordArray.endUse();
+  
+  SAVEGLERROR;
 #endif
 }
 
@@ -154,11 +188,11 @@ void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
 {
 #ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
-	
-  if (genNormal)
+
+  if (genNormal || doUseShaders)
     normalArray.beginUse();
-	
-  if (genTexCoord)
+
+  if (genTexCoord || doUseShaders)
     texCoordArray.beginUse();
   
   if (endcap)
@@ -167,7 +201,7 @@ void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
     glBegin(GL_QUADS);
 #endif
 }
-	
+
 void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
 {
 #ifndef RGL_NO_OPENGL
@@ -200,13 +234,33 @@ void SphereMesh::drawEnd(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
   glEnd();
-	
+
   vertexArray.endUse();
-	
-  if (genNormal)
+
+  if (genNormal || doUseShaders)
     normalArray.endUse();
-	
-  if (genTexCoord)
+
+  if (genTexCoord || doUseShaders)
     texCoordArray.endUse();
 #endif
 }
+
+#ifndef RGL_NO_OPENGL
+void SphereMesh::initialize(
+    std::unordered_map<std::string, GLint> &glLocs,
+    std::vector<GLubyte> &vertexbuffer)
+{
+  vertexArray.appendToBuffer(vertexbuffer);
+  vertexArray.setAttribLocation(glLocs["aPos"]);
+  
+  if (glLocs.find("aNorm") != glLocs.end()) {
+    normalArray.appendToBuffer(vertexbuffer);
+    normalArray.setAttribLocation(glLocs.at("aNorm"));
+  }
+  
+  if (glLocs.find("aTexcoord") != glLocs.end()) {
+    texCoordArray.appendToBuffer(vertexbuffer);
+    texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
+  }
+}
+#endif

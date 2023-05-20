@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "SceneNode.h"
+#include "render.h"
 #include "Material.h"
 #include "RenderContext.h"
 

@@ -123,8 +123,10 @@ void Shape::beginShader(RenderContext* renderContext)
 		float mat[16];
 		subscene->modelMatrix.getData(mat);
 		glUniformMatrix4fv(glLocs.at("mvMatrix"), 1, GL_FALSE, mat);
+		
 		subscene->projMatrix.getData(mat);
 		glUniformMatrix4fv(glLocs.at("prMatrix"), 1, GL_FALSE, mat);
+		
 		if (glLocs_has_key("invPrMatrix")) {
 			subscene->projMatrix.inverse().getData(mat);
 			glUniformMatrix4fv(glLocs.at("invPrMatrix"), 1, GL_FALSE, mat);
@@ -510,6 +512,75 @@ void Shape::initShader()
 	
 	vertexbuffer.clear();
 	indexbuffer.clear();
+	
+	glBindAttribLocation(shaderProgram, 0, "aPos");
+	glLocs["aPos"] = 0;
+
+	glBindAttribLocation(shaderProgram, 1, "aCol");
+	glLocs["aCol"] = 1;
+	
+	/* NB:  these must come after the glBindAttribLocation calls */
+	glLinkProgram(shaderProgram);
+	checkProgram(shaderProgram);
+	
+	if (flags.fixed_quads && !flags.sprites_3d)
+	  glLocs["aOfs"] = glGetAttribLocation(shaderProgram, "aOfs");
+	
+	std::string type = getTypeName();
+	if (flags.has_texture || type == "text") {
+	  glLocs["aTexcoord"] = glGetAttribLocation(shaderProgram, "aTexcoord");
+	  glLocs["uSampler"] = glGetUniformLocation(shaderProgram, "uSampler");
+	}
+	
+	if (flags.has_fog && !flags.sprites_3d) {
+	  glLocs["uFogMode"] = glGetUniformLocation(shaderProgram, "uFogMode");
+	  glLocs["uFogColor"] = glGetUniformLocation(shaderProgram, "uFogColor");
+	  glLocs["uFogParms"] = glGetUniformLocation(shaderProgram, "uFogParms");
+	}
+	
+	if (nclipplanes && !flags.sprites_3d) {
+	  glLocs["vClipplane"] = glGetUniformLocation(shaderProgram,"vClipplane");
+	}
+	
+	if (flags.is_lit) {
+	  glLocs["emission"] = glGetUniformLocation(shaderProgram, "emission");
+	  glLocs["shininess"] = glGetUniformLocation(shaderProgram, "shininess");
+	  if (nlights > 0) {
+	    glLocs["ambient"] = glGetUniformLocation(shaderProgram, "ambient");
+	    glLocs["specular"] = glGetUniformLocation(shaderProgram, "specular");
+	    glLocs["diffuse"] = glGetUniformLocation(shaderProgram, "diffuse" );
+	    glLocs["lightDir"] = glGetUniformLocation(shaderProgram, "lightDir");
+	    glLocs["viewpoint"] = glGetUniformLocation(shaderProgram, "viewpoint");
+	    glLocs["finite"] = glGetUniformLocation(shaderProgram, "finite" );
+	  }
+	}
+	
+	if (flags.fat_lines) {
+	  glLocs["aNext"] = glGetAttribLocation(shaderProgram, "aNext");
+	  glLocs["aPoint"] = glGetAttribLocation(shaderProgram, "aPoint");
+	  glLocs["uAspect"] = glGetUniformLocation(shaderProgram, "uAspect");
+	  glLocs["uLwd"] = glGetUniformLocation(shaderProgram, "uLwd");
+	}
+	
+	if (!flags.sprites_3d) {
+	  glLocs["mvMatrix"] = glGetUniformLocation(shaderProgram, "mvMatrix");
+	  glLocs["prMatrix"] = glGetUniformLocation(shaderProgram, "prMatrix");
+	  
+	  if (flags.fixed_size) {
+	    glLocs["textScale"] = glGetUniformLocation(shaderProgram, "textScale");
+	  }
+	}
+	
+	if (flags.needs_vnormal) {
+	  glLocs["aNorm"] = glGetAttribLocation(shaderProgram, "aNorm");
+	  glLocs["normMatrix"] = glGetUniformLocation(shaderProgram, "normMatrix");
+	}
+	
+	if (flags.is_twosided) {
+	  glLocs["front"] = glGetUniformLocation(shaderProgram, "front");
+	  if (flags.has_normals)
+	    glLocs["invPrMatrix"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
+	}
 }
 
 bool Shape::glLocs_has_key(std::string key) {
@@ -610,12 +681,14 @@ void Shape::printAttribute(const char* name, int nvertices) {
 		Rprintf("%s (%d):", name, location);
 		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,
                       &idata);
+		SAVEGLERROR;
 		if (idata)
 			Rprintf(" on vbo %d", idata);
 		else
 			Rprintf(" not bound");
 		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_ENABLED,
                       &idata);
+		SAVEGLERROR;
 		int enabled = idata;
 		if (enabled)
 			Rprintf(" enabled");
@@ -623,12 +696,15 @@ void Shape::printAttribute(const char* name, int nvertices) {
 			Rprintf(" not enabled");
 		
 		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_SIZE, &idata);
+		SAVEGLERROR;
 		int size = idata;
 		
 		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &idata);
+		SAVEGLERROR;
 		int stride = idata;
 		
 		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_TYPE, &idata);
+		SAVEGLERROR;
 		GLint type = idata;
 		Rprintf(" %s[%d]", type == GL_FLOAT ? "GL_FLOAT" : 
             type == GL_INT ? "GL_INT" : 
@@ -637,11 +713,13 @@ void Shape::printAttribute(const char* name, int nvertices) {
             "GL_??", size);
 		
 		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, &idata);
+		SAVEGLERROR;
 		GLint normalized = idata;
 		if (normalized)
 			Rprintf(" normalized");
 		
 		glGetVertexAttribPointerv(location, GL_VERTEX_ATTRIB_ARRAY_POINTER, &pdata);
+		SAVEGLERROR;
 		void* offset = pdata;
 		Rprintf(" offset %p", offset);
 		Rprintf("\n");
@@ -664,6 +742,7 @@ void Shape::printAttribute(const char* name, int nvertices) {
 				float value[size];
 				glGetVertexAttribfv(location,  GL_CURRENT_VERTEX_ATTRIB,
                         value);
+				SAVEGLERROR;
 				for (int j = 0; j < size; j++)
 					Rprintf("%8.4f ", value[j]);
 				Rprintf("\n");
@@ -686,6 +765,7 @@ void Shape::printAttribute(const char* name, int nvertices) {
 				GLint value[size];
 				glGetVertexAttribiv(location,  GL_CURRENT_VERTEX_ATTRIB,
                         value);
+				SAVEGLERROR;
 				for (int j = 0; j < size; j++)
 					Rprintf("%02x ", value[j]);
 				Rprintf("\n");

@@ -281,86 +281,20 @@ void PrimitiveSet::initialize()
 	Shape::initialize();
 #ifndef RGL_NO_OPENGL
 	if (doUseShaders) {
+	  
 		initShader();
-		
-		glBindAttribLocation(shaderProgram, 0, "aPos");
-		vertexArray.appendToBuffer(vertexbuffer);
-		
-		glLocs["aPos"] = 0;
-		vertexArray.setAttribLocation(glLocs["aPos"]);
-		
-		glBindAttribLocation(shaderProgram, 1, "aCol");
-		glLocs["aCol"] = 1;
-		material.colors.setAttribLocation(glLocs["aCol"]);
-		if (material.useColorArray)
-			material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
-		
-		/* NB:  these must come after the glBindAttribLocation calls */
-		glLinkProgram(shaderProgram);
-		checkProgram(shaderProgram);
-		
-		if (flags.fixed_quads && !flags.sprites_3d)
-			glLocs["aOfs"] = glGetAttribLocation(shaderProgram, "aOfs");
-		
-		std::string type = getTypeName();
-		if (flags.has_texture || type == "text") {
-			glLocs["aTexcoord"] = glGetAttribLocation(shaderProgram, "aTexcoord");
-			glLocs["uSampler"] = glGetUniformLocation(shaderProgram, "uSampler");
-			if (material.texture)
-			  material.texture->setSamplerLocation(glLocs["uSampler"]);
-			else
-				Rprintf("material.texture is NULL, location not set!\n");
-		}
-		
-		if (flags.has_fog && !flags.sprites_3d) {
-			glLocs["uFogMode"] = glGetUniformLocation(shaderProgram, "uFogMode");
-			glLocs["uFogColor"] = glGetUniformLocation(shaderProgram, "uFogColor");
-			glLocs["uFogParms"] = glGetUniformLocation(shaderProgram, "uFogParms");
-		}
-		
-		if (nclipplanes && !flags.sprites_3d) {
-			glLocs["vClipplane"] = glGetUniformLocation(shaderProgram,"vClipplane");
-		}
-		
-		if (flags.is_lit) {
-			glLocs["emission"] = glGetUniformLocation(shaderProgram, "emission");
-			glLocs["shininess"] = glGetUniformLocation(shaderProgram, "shininess");
-			if (nlights > 0) {
-				glLocs["ambient"] = glGetUniformLocation(shaderProgram, "ambient");
-				glLocs["specular"] = glGetUniformLocation(shaderProgram, "specular");
-				glLocs["diffuse"] = glGetUniformLocation(shaderProgram, "diffuse" );
-				glLocs["lightDir"] = glGetUniformLocation(shaderProgram, "lightDir");
-				glLocs["viewpoint"] = glGetUniformLocation(shaderProgram, "viewpoint");
-				glLocs["finite"] = glGetUniformLocation(shaderProgram, "finite" );
-			}
-		}
-		
-		if (flags.fat_lines) {
-			glLocs["aNext"] = glGetAttribLocation(shaderProgram, "aNext");
-			glLocs["aPoint"] = glGetAttribLocation(shaderProgram, "aPoint");
-			glLocs["uAspect"] = glGetUniformLocation(shaderProgram, "uAspect");
-			glLocs["uLwd"] = glGetUniformLocation(shaderProgram, "uLwd");
-		}
-		
-		if (!flags.sprites_3d) {
-			glLocs["mvMatrix"] = glGetUniformLocation(shaderProgram, "mvMatrix");
-			glLocs["prMatrix"] = glGetUniformLocation(shaderProgram, "prMatrix");
-			
-			if (flags.fixed_size) {
-				glLocs["textScale"] = glGetUniformLocation(shaderProgram, "textScale");
-			}
-		}
-		
-		if (flags.needs_vnormal) {
-			glLocs["aNorm"] = glGetAttribLocation(shaderProgram, "aNorm");
-			glLocs["normMatrix"] = glGetUniformLocation(shaderProgram, "normMatrix");
-		}
-		
-		if (flags.is_twosided) {
-			glLocs["front"] = glGetUniformLocation(shaderProgram, "front");
-			if (flags.has_normals)
-				glLocs["invPrMatrix"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
-		}
+	  
+	  vertexArray.appendToBuffer(vertexbuffer);
+	  vertexArray.setAttribLocation(glLocs["aPos"]);
+	  
+	  if (material.useColorArray) {
+	    material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
+	    material.colors.setAttribLocation(glLocs["aCol"]);
+	  }
+
+	  if (material.texture && glLocs_has_key("uSampler"))
+	    material.texture->setSamplerLocation(glLocs["uSampler"]);
+	  
 	}
 	SAVEGLERROR;
 #endif

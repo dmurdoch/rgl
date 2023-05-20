@@ -1,6 +1,7 @@
 #ifndef SPHERE_MESH_H
 #define SPHERE_MESH_H
 
+#include <unordered_map>
 #include "render.h"
 
 namespace rgl {
@@ -30,12 +31,8 @@ public:
   void setRadius      (float radius);
   void update();
   void update	      (const Vertex& scale);
-
-/*
-  void beginDraw(RenderContext* renderContext);
-  void drawSection(int section);
-  void endDraw(RenderContext* renderContext);
-*/
+  
+  Matrix4x4 MVmodification(const Vertex& scale);
 
   void draw(RenderContext* renderContext);
   
@@ -46,6 +43,11 @@ public:
   int getPrimitiveCount() { return segments*sections; }
   int getSegments() { return segments; }
   Vertex getPrimitiveCenter(int i);
+#ifndef RGL_NO_OPENGL  
+  void initialize(
+      std::unordered_map<std::string, GLint> &glLocs,
+      std::vector<GLubyte> &vertexbuffer);
+#endif
   
 private:
   
@@ -53,6 +55,8 @@ private:
   float  radius;
   float  philow;
   float  phihigh;
+  
+  Matrix4x4 origMV;
   
   VertexArray   vertexArray;
   NormalArray   normalArray;

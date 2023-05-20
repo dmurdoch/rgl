@@ -27,6 +27,12 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
     sphereMesh.setGenTexCoord(true);
 
   sphereMesh.setGlobe(16,16);
+  if (doUseShaders) {
+    Vertex pt(0., 0., 0.);
+    sphereMesh.setCenter( pt );
+    sphereMesh.setRadius( 1.0 );
+    sphereMesh.update();
+  }
   
   for (int i=0;i<center.size();i++)
     boundingBox += Sphere( center.get(i), radius.getRecycled(i) );
@@ -58,6 +64,13 @@ void SphereSet::drawBegin(RenderContext* renderContext)
   Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
   lastdrawn = -1;
+  
+#ifndef RGL_NO_OPENGL
+  if (doUseShaders) {
+    Shape::beginShader(renderContext);
+    material.colors.setAttribLocation(glLocs.at("aCol"));
+  }
+#endif  
 }
 
 void SphereSet::drawPrimitive(RenderContext* renderContext, int index) 
@@ -80,9 +93,28 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
     material.useColor(index);
     sphereMesh.setCenter( pt );
     sphereMesh.setRadius( radius.getRecycled(index) );
-    sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
+    if (doUseShaders) // Shaders work differently
+    {
+#ifndef RGL_NO_OPENGL
+      Subscene* subscene = renderContext->subscene;
+      float mat[16];
+      Matrix4x4 MV = subscene->modelMatrix 
+                   * sphereMesh.MVmodification(renderContext->subscene->getModelViewpoint()->scale) ;
+
+      MV.getData(mat);
+
+      glUniformMatrix4fv(glLocs.at("mvMatrix"), 1, GL_FALSE, mat);
+      
+      if (glLocs_has_key("normMatrix")) {
+        Matrix4x4 normMatrix = MV.inverse();
+        normMatrix.transpose();
+        normMatrix.getData(mat);
+        glUniformMatrix4fv(glLocs.at("normMatrix"), 1, GL_FALSE, mat);
+      }
+#endif
+    } else 
+      sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
     sphereMesh.draw(renderContext);
-    
   } else {
    int i1 = index / facets, i2 = index % facets;
    bool endcap = i2 < sphereMesh.getSegments() 
@@ -193,3 +225,15 @@ void SphereSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, in
   }
 }
 
+void SphereSet::initialize()
+{
+#ifndef RGL_NO_OPENGL
+  Shape::initialize();
+  
+  initShader();
+  
+  sphereMesh.initialize(glLocs, vertexbuffer);
+  
+  
+#endif  
+}
