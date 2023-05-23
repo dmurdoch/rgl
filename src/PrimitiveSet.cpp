@@ -287,10 +287,10 @@ void PrimitiveSet::initialize()
 	  vertexArray.appendToBuffer(vertexbuffer);
 	  vertexArray.setAttribLocation(glLocs["aPos"]);
 	  
-	  if (material.useColorArray) {
+	  if (material.useColorArray)
 	    material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
-	    material.colors.setAttribLocation(glLocs["aCol"]);
-	  }
+	    
+	  material.colors.setAttribLocation(glLocs["aCol"]);
 
 	  if (material.texture && glLocs_has_key("uSampler"))
 	    material.texture->setSamplerLocation(glLocs["uSampler"]);
