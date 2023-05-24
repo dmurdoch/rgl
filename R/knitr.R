@@ -2,7 +2,7 @@ in_knitr <- function()
   isTRUE(getOption("knitr.in.progress"))
 
 in_knitr_with_altText_support  <- function()
-  in_knitr() && exists("get_alt_id", environment(knitr::knit))
+  in_knitr() && packageVersion("knitr") >= "1.42.12"
 
 ##
 ## knitr hook functions
