@@ -1,4 +1,4 @@
-# rgl 1.1.16
+# rgl 1.1.17
 
 ## Major changes
 
@@ -11,7 +11,7 @@ for which `grDevices::as.raster()` works, e.g. matrices.
 
 * Support for "alt" text has been added to `rglwidget()`.
 Full support in R Markdown or `knitr` requires a `knitr` update
-(https://github.com/yihui/knitr/pull/2243).
+to version 1.42.12 or newer.
 * Some of the tests have been relaxed slightly so they 
 shouldn't trigger errors on the M1Mac test platform.
 * Internally, the C++ code has dropped the use of the internally
