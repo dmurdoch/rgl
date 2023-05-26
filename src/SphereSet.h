@@ -16,6 +16,7 @@ private:
   bool          lastendcap; 
   bool          fastTransparency;
   void          initialize();
+  void          setSphereMVmatrix(RenderContext* renderContext);
 public:
   SphereSet(Material& in_material, int nsphere, double* center, int nradius, double* radius, 
             int in_ignoreExtent, bool in_fastTransparency);

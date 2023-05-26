@@ -43,6 +43,8 @@ public:
   int getPrimitiveCount() { return segments*sections; }
   int getSegments() { return segments; }
   Vertex getPrimitiveCenter(int i);
+  /* draw the indices and clear them */
+  void   doIndices();
 #ifndef RGL_NO_OPENGL  
   void initialize(
       std::unordered_map<std::string, GLint> &glLocs,
@@ -68,6 +70,8 @@ private:
   Type   type;
   bool   genNormal;
   bool   genTexCoord;
+  std::vector<int> inds;
+
 
   void   setupMesh();
 };
