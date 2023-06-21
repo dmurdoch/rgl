@@ -75,6 +75,10 @@ pop3d <- function( type = "shapes", id = 0, tag = NULL) {
   save <- par3d(skipRedraw = TRUE)
   on.exit(par3d(save))
   for (i in id) {
+    subids <- inSubscenes(i)
+    for (j in subids)
+      delFromSubscene3d(i, subscene = j)
+    
     idata <- as.integer(c(type, i))
 
     ret <- .C( rgl_pop,

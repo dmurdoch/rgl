@@ -10,7 +10,8 @@ bg3d(color,
     back="lines",
     fogtype="none",
     fogScale = 1, 
-    col, ...)
+    col, 
+    keepPrevious = FALSE, ...)
 
 }
 \arguments{
@@ -35,6 +36,10 @@ bg3d(color,
   }
   \item{fogScale}{
   Scaling for fog.  See Details.
+  }
+  \item{keepPrevious}{
+  If \code{TRUE}, do not remove the previous background object from
+  the scene.
   }
   \item{ ... }{Additional material properties. See \code{\link{material3d}} for details.}  
 }

@@ -209,12 +209,28 @@ material3d  <- function(..., id = NULL) {
   else return(value)
 }
 
+inSubscenes <- function(id, start = "root") {
+  info <- subsceneInfo(start, recursive = TRUE)
+  result <- integer()
+  subid <- info$id
+  recurse <- function(info) {
+    ids <- ids3d("all", subscene = info$id)
+    if (id %in% ids$id)
+      result <<- c(result, info$id)
+    for (i in seq_along(info$children))
+      recurse(info$children[[i]])
+  }
+  recurse(info)
+  result
+}
+
 bg3d        <- function(color,
                         sphere=FALSE, 
                         back="lines",
                         fogtype="none", 
                         fogScale = 1, 
-                        col, ... ) {
+                        col, 
+                        keepPrevious = FALSE, ... ) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
 
   bgid <- ids3d("background")$id
@@ -227,6 +243,15 @@ bg3d        <- function(color,
       else if (flags["exp2_fog", 1]) "exp2"
       else "none"
   }
+  
+  if (!keepPrevious)
+    for (id in bgid) {
+      if (length(inSubscenes(id)) == 1)
+        pop3d(id = id)
+      else
+        delFromSubscene3d(id)
+    }
+  
   dots <- list(...)
   
   if (!missing(color)) {
