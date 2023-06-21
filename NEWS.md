@@ -1,4 +1,4 @@
-# rgl 1.1.17
+# rgl 1.1.18
 
 ## Major changes
 
@@ -38,6 +38,8 @@ a radius (issue #357).
 quads properly when `meshColor == "faces"`.
 * `subdivision3d()` and related functions now handle colors
 properly.
+* `addNormals()` sometimes gave `NaN` values due to rounding
+error (issue #372).
 
 
 # rgl 1.1.3
