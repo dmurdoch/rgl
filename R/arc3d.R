@@ -62,7 +62,7 @@ arc3d <- function(from, to, center, radius, n, circle = 50, base = 0, plot = TRU
   													 to   = (1 - p2)*logr1 + p2*logr2,
   													 length.out = n1 + 1))
   			} else
-  				radius1 <- rep_len(radius, n1)
+  				radius1 <- rep_len(radius, n1 + 1)
   			arc <- matrix(NA_real_, nrow = n1 + 1, ncol = 3)
   			p <- seq(0, 1, length.out = n1 + 1)
   			arc[1,] <- center1 + radius1[1]*A1
