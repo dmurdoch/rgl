@@ -212,7 +212,7 @@ GLFTFont::GLFTFont(const char* in_family, int in_style, double in_cex, const cha
   }
 /*  font->CharMap(ft_encoding_unicode);
   if (font->Error()) {
-    error("Cannot set unicode encoding."); 
+    Rf_error("Cannot set unicode encoding."); 
   }*/
 
 }

@@ -25,7 +25,7 @@ GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
   else if (gpWin32GUIFactory)
     return (GUIFactory*) gpWin32GUIFactory;
   else
-    error("wgl device not initialized");
+    Rf_error("wgl device not initialized");
 }
 // ---------------------------------------------------------------------------
 const char * rgl::GUIFactoryName(bool useNULLDevice)
