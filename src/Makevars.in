@@ -19,7 +19,8 @@
 
 PKG_CFLAGS=$(C_VISIBILITY)
 
-PKG_CPPFLAGS=@NULL_CPPFLAGS@
+PKG_CPPFLAGS=-DR_NO_REMAP @NULL_CPPFLAGS@
+
 PKG_LIBS=@NULL_LIBS@
 
 # These lines are only used if configure found OpenGL support

@@ -1,4 +1,4 @@
-# rgl 1.1.19
+# rgl 1.1.20
 
 ## Major changes
 
@@ -40,7 +40,9 @@ quads properly when `meshColor == "faces"`.
 properly.
 * `addNormals()` sometimes gave `NaN` values due to rounding
 error (issue #372).
-* `arc3d()` missed plotting the last segment of the arc (issue #369).
+* `arc3d()` sometimes missed plotting the last segment of the arc (issue #369).
+* `R_NO_REMAP` has been defined to prevent conflict between 
+R internals and C++17 library.
 
 
 # rgl 1.1.3

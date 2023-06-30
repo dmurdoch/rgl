@@ -2,7 +2,7 @@
 # when this file is used instead of Makevars.ucrt:
 
 PKG_CPPFLAGS = \
-	-DHAVE_PNG_H -DHAVE_FREETYPE -Iext -Iext/ftgl -Iext/glad/include \
+	-DHAVE_PNG_H -DHAVE_FREETYPE -DR_NO_REMAP -Iext -Iext/ftgl -Iext/glad/include \
 	-I$(LOCAL_SOFT)/include/freetype2 \
 	-DRGL_W32
 
