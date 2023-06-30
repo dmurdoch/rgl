@@ -37,7 +37,7 @@ void checkGLerror(const char * file, int line)
     int err = SaveErrnum;
     SaveErrnum = GL_NO_ERROR;
     while (glGetError() != GL_NO_ERROR) {} /* clear other errors, if any */
-    error("OpenGL error at %s:%d: %s", SaveFile, SaveLine, gluErrorString(err));
+    Rf_error("OpenGL error at %s:%d: %s", SaveFile, SaveLine, gluErrorString(err));
   }
 #endif
 }

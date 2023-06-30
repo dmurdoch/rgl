@@ -119,16 +119,16 @@ SEXP rgl::rgl_dev_getcurrent(void)
   SEXP result;
   if (deviceManager) {
     int id = deviceManager->getCurrent();
-    PROTECT(result = ScalarInteger(id));
+    PROTECT(result = Rf_ScalarInteger(id));
     if (id) {
-      PROTECT(result = namesgets(result, ScalarString(mkChar(deviceManager->getDevice(id)->getDevtype()))));
+      PROTECT(result = Rf_namesgets(result, Rf_ScalarString(Rf_mkChar(deviceManager->getDevice(id)->getDevtype()))));
       CHECKGLERROR;     
       UNPROTECT(1);
     }
     UNPROTECT(1);
     return result;
   }
-  return ScalarInteger(0);
+  return Rf_ScalarInteger(0);
 }
 
 //
@@ -144,19 +144,19 @@ SEXP rgl::rgl_dev_list(void)
   SEXP result, names;
   if (deviceManager) {
     int n = deviceManager->getDeviceCount();
-    PROTECT(result = allocVector(INTSXP, n));
+    PROTECT(result = Rf_allocVector(INTSXP, n));
     deviceManager->getDeviceIds(INTEGER(result), n);
-    PROTECT(names = allocVector(STRSXP, n));
+    PROTECT(names = Rf_allocVector(STRSXP, n));
     for (int i = 0; i < n; i++) {
       Device* device = deviceManager->getDevice(INTEGER(result)[i]);
-      SET_STRING_ELT(names, i, mkChar(device->getDevtype()));
+      SET_STRING_ELT(names, i, Rf_mkChar(device->getDevtype()));
     }
-    PROTECT(result = namesgets(result, names));
+    PROTECT(result = Rf_namesgets(result, names));
     CHECKGLERROR;
     UNPROTECT(3);
     return result;
   }
-  return allocVector(INTSXP, 0);
+  return Rf_allocVector(INTSXP, 0);
 }
 
 
@@ -583,7 +583,7 @@ SEXP rgl::rgl_primitive(SEXP idata, SEXP vertex, SEXP normals, SEXP texcoords)
     CHECKGLERROR;
   }
 
-  return ScalarInteger(success);
+  return Rf_ScalarInteger(success);
 }
 
 void rgl::rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, 
@@ -860,7 +860,7 @@ void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
 	  subscene->add(node);
 	  success = RGL_SUCCESS;
 	} else 
-	  warning("id %d not found in scene", ids[i]);
+	  Rf_warning("id %d not found in scene", ids[i]);
       }
       rglview->update();
     }
@@ -908,10 +908,10 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
 	    success++;
 	    break;
 	  default:
-	    warning("id %d is type %s; cannot hide", ids[i], node->getTypeName().c_str());
+	    Rf_warning("id %d is type %s; cannot hide", ids[i], node->getTypeName().c_str());
           }
 	else 
-	  warning("id %d not found in scene", ids[i]);
+	  Rf_warning("id %d not found in scene", ids[i]);
       }
       rglview->update();
     }

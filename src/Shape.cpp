@@ -85,7 +85,7 @@ void Shape::drawBegin(RenderContext* renderContext)
 {
   if (drawLevel) {
     drawLevel = 0;
-    error("Internal error:  nested Shape::drawBegin");
+    Rf_error("Internal error:  nested Shape::drawBegin");
   }
   drawLevel++;
 }
@@ -94,7 +94,7 @@ void Shape::drawEnd(RenderContext* renderContext)
 {
   if (drawLevel != 1) {
     drawLevel = 0;
-    error("Internal error: Shape::drawEnd without drawBegin");
+    Rf_error("Internal error: Shape::drawEnd without drawBegin");
   }
   drawLevel--;
 }

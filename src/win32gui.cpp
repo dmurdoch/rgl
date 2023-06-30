@@ -310,9 +310,9 @@ bool Win32WindowImpl::initGL () {
 #ifdef WGL_ARB_pixel_format
     // Setup antialiasing based on "rgl.antialias" option
     int aa;
-    SEXP rgl_aa = GetOption(install("rgl.antialias"),R_BaseEnv);
+    SEXP rgl_aa = Rf_GetOption(Rf_install("rgl.antialias"),R_BaseEnv);
     if (Rf_isNull(rgl_aa)) aa = RGL_ANTIALIAS;
-    else aa = asInteger(rgl_aa);
+    else aa = Rf_asInteger(rgl_aa);
     
     if (aa > 0) {
       float fAttributes[] = { 0, 0 };
@@ -384,10 +384,10 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
     // Not found, so create it.  This is based on code from graphapp gdraw.c
     if (strcmp(family, "NA") && beginGL()) {  // User passes NA_character_ for default, looks like "NA" here
       
-      SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("windowsFonts"), 
-                                          ScalarString(mkChar(family))), rglNamespace)),
+      SEXP Rfontname = VECTOR_ELT(PROTECT(Rf_eval(Rf_lang2(Rf_install("windowsFonts"), 
+                                          Rf_ScalarString(Rf_mkChar(family))), rglNamespace)),
                                           0);
-      if (isString(Rfontname)) {
+      if (Rf_isString(Rfontname)) {
         const char* fontname = CHAR(STRING_ELT(Rfontname, 0)); 
         GLBitmapFont* font = new GLBitmapFont(family, style, cex, fontname);
         HFONT hf;
@@ -450,10 +450,10 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
 #ifdef HAVE_FREETYPE
     char fontname_absolute[MAX_PATH+1] = "";
     int len=0;
-    SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
-                                          ScalarString(mkChar(family))), rglNamespace)),
+    SEXP Rfontname = VECTOR_ELT(PROTECT(Rf_eval(Rf_lang2(Rf_install("rglFonts"), 
+                                          Rf_ScalarString(Rf_mkChar(family))), rglNamespace)),
                                           0);
-    if (isString(Rfontname) && length(Rfontname) >= style) {
+    if (Rf_isString(Rfontname) && Rf_length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
       if (!IS_ABSOLUTE_PATH(fontname)) {
         LPITEMIDLIST pidlFonts;
@@ -473,20 +473,20 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
         UNPROTECT(1);
         return font;
       } else {
-        warning(font->errmsg);
+        Rf_warning(font->errmsg);
         delete font;
       }
     }
     UNPROTECT(1);
 #endif
   }
-  if (strcmp(family, fonts[0]->family)) warning("font family \"%s\" not found, using \"%s\"", 
+  if (strcmp(family, fonts[0]->family)) Rf_warning("font family \"%s\" not found, using \"%s\"", 
                                          family, fonts[0]->family);
-  else if (style != fonts[0]->style) warning("\"%s\" family only supports font %d", 
+  else if (style != fonts[0]->style) Rf_warning("\"%s\" family only supports font %d", 
                                         fonts[0]->family, fonts[0]->style);
-  else if (cex != fonts[0]->cex) warning("\"%s\" family only supports cex = %g",
+  else if (cex != fonts[0]->cex) Rf_warning("\"%s\" family only supports cex = %g",
   					fonts[0]->family, fonts[0]->cex);
-  else if (useFreeType) warning("FreeType font not available");
+  else if (useFreeType) Rf_warning("FreeType font not available");
   return fonts[0];
 }
 
@@ -704,7 +704,7 @@ Win32GUIFactory::Win32GUIFactory()
   } else
     gDefWindowProc   = &DefWindowProc;
   if ( !Win32WindowImpl::registerClass() )
-    error("window class registration failed");
+    Rf_error("window class registration failed");
   
 #if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
   HANDLE saveHandle = gHandle;
@@ -782,7 +782,7 @@ WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
     );
   }
   if (!success)
-    error("window creation failed");
+    Rf_error("window creation failed");
 
   return impl;
 }

@@ -127,7 +127,7 @@ NULLGUIFactory* gpNULLGUIFactory = NULL;
 }
 
 void rgl::printMessage( const char* string ) {
-  warning("RGL: %s\n", string);
+  Rf_warning("RGL: %s\n", string);
 }
 
 GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
@@ -135,7 +135,7 @@ GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
   if (useNULLDevice)
     return (GUIFactory*) gpNULLGUIFactory;
   else
-    error("OpenGL is not available in this build");  
+    Rf_error("OpenGL is not available in this build");  
 }
 
 const char * rgl::GUIFactoryName(bool useNULLDevice)

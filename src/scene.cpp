@@ -144,7 +144,7 @@ void Scene::hide(int id)
           case MODELVIEWPOINT:
             subscene->hideViewpoint(id);
             break;
-          default: error("hiding type %d not implemented", type);
+          default: Rf_error("hiding type %d not implemented", type);
         }
       }
     }
