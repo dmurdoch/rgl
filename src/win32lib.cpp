@@ -36,7 +36,7 @@ const char * rgl::GUIFactoryName(bool useNULLDevice)
 // printMessage
 // ---------------------------------------------------------------------------
 void rgl::printMessage( const char* string ) {
-  warning("RGL: %s\n", string);
+  Rf_warning("RGL: %s\n", string);
 }
 // ---------------------------------------------------------------------------
 // getTime

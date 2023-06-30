@@ -259,7 +259,7 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
         windowImpl->endGL();
       } else
 #else
-      warning("this build of rgl does not support snapshots");
+      Rf_warning("this build of rgl does not support snapshots");
 #endif
         snapshot.clear();
       
@@ -513,7 +513,7 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
   }
   setlocale(LC_NUMERIC, oldlocale);
 #else
-  warning("this build of rgl does not support postscript");
+  Rf_warning("this build of rgl does not support postscript");
 #endif  
   fclose(fp);
   return success;
