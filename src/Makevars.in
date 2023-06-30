@@ -25,7 +25,7 @@ PKG_LIBS=@NULL_LIBS@
 
 # These lines are only used if configure found OpenGL support
 
-@HIDE_IF_NO_OPENGL@ PKG_CPPFLAGS=@CPPFLAGS@ -Iext -Iext/glad/include
+@HIDE_IF_NO_OPENGL@ PKG_CPPFLAGS=@CPPFLAGS@ -DR_NO_REMAP -Iext -Iext/glad/include
 @HIDE_IF_NO_OPENGL@ PKG_LIBS=@LIBS@
 
 all: $(SHLIB) @HIDE_IF_NO_OPENGL@ ../inst/useNULL$(R_ARCH)/$(SHLIB) 

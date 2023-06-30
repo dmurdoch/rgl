@@ -28,7 +28,7 @@ GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
   else if (gpX11GUIFactory)
     return (GUIFactory*) gpX11GUIFactory;
   else
-    error("glX device not initialized");  
+    Rf_error("glX device not initialized");  
 }
 // ---------------------------------------------------------------------------
 const char * rgl::GUIFactoryName(bool useNULLDevice)
@@ -113,7 +113,7 @@ void rgl::quit()
 //
 
 void rgl::printMessage( const char* string ) {
-  warning("RGL: %s\n", string);
+  Rf_warning("RGL: %s\n", string);
 }
 
 //

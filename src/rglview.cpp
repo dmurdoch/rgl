@@ -16,7 +16,7 @@
 #include "fps.h"
 #include "gl2ps.h"
 
-#include "R.h"		// for error()
+#include "R.h"		// for Rf_error()
 
 using namespace rgl;
 
@@ -265,9 +265,9 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
       
       success = snapshot.save( pixmapFormat[formatID], filename );
       
-    } else error("unable to create pixmap");
+    } else Rf_error("unable to create pixmap");
     	
-  } else error("pixmap save format not supported in this build");
+  } else Rf_error("pixmap save format not supported in this build");
   return success;
 }
 
@@ -374,14 +374,14 @@ void RGLView::setDefaultFont(const char* family, int style, double cex, bool use
 {
     GLFont* font = View::windowImpl->getFont(family, style, cex, useFreeType);
     if (!font)
-	error("font not available");
+	Rf_error("font not available");
     renderContext.font = font;
 }
   
 const char* RGLView::getFontFamily() const 
 {
   if (!renderContext.font)
-    error("font not available");
+    Rf_error("font not available");
       
   return renderContext.font->family;
 }
@@ -394,7 +394,7 @@ void RGLView::setFontFamily(const char *family)
 int RGLView::getFontStyle() const 
 {
   if (!renderContext.font)
-    error("font not available");
+    Rf_error("font not available");
   return renderContext.font->style;
 }
 
@@ -406,7 +406,7 @@ void RGLView::setFontStyle(int style)
 double RGLView::getFontCex() const 
 {
   if (!renderContext.font)
-    error("font not available");
+    Rf_error("font not available");
   return renderContext.font->cex;
 }
 
@@ -418,14 +418,14 @@ void RGLView::setFontCex(double cex)
 const char* RGLView::getFontname() const 
 {
   if (!renderContext.font)
-    error("font not available");
+    Rf_error("font not available");
   return renderContext.font->fontname;
 }
 
 bool RGLView::getFontUseFreeType() const
 {
   if (!renderContext.font)
-    error("font not available");
+    Rf_error("font not available");
   return renderContext.font->useFreeType;
 }
 
