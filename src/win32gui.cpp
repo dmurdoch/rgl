@@ -311,7 +311,7 @@ bool Win32WindowImpl::initGL () {
     // Setup antialiasing based on "rgl.antialias" option
     int aa;
     SEXP rgl_aa = Rf_GetOption(Rf_install("rgl.antialias"),R_BaseEnv);
-    if (Rf_isNULL(rgl_aa)) aa = RGL_ANTIALIAS;
+    if (Rf_isNull(rgl_aa)) aa = RGL_ANTIALIAS;
     else aa = Rf_asInteger(rgl_aa);
     
     if (aa > 0) {
