@@ -536,8 +536,9 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   if (!xfont) {
     // Try the first available
     xfont = XLoadQueryFont(xdisplay, "*");
-    if (!xfont)
+    if (!xfont) {
       throw_error("unable to load X11 font"); return;
+    }
   }
   
   // Obtain display atoms
