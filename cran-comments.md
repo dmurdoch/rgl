@@ -18,5 +18,5 @@ use of the deprecated function is present for back compatibility.
 There are also other changes described in NEWS.md, but none of them
 are very large.
 
-I have run checks on R-devel for `rgl` and for a subset of the
+I have run checks on R-devel for `rgl` and for most of the
 reverse dependencies.  Nothing new has turned up.
