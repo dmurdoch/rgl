@@ -25,7 +25,7 @@ plot3d or persp3d, or a low level function created the objects.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1</span>
       </span>
     </div>
 
@@ -156,7 +156,7 @@ sense.)</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">3</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="plot3d.html">plot3d</a></span><span class="op">(</span><span class="va">x</span>, type <span class="op">=</span> <span class="st">"s"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  'rglHighlevel' Named num [1:5] 1565 1566 1567 1568 1569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  'rglHighlevel' Named num [1:5] 1553 1554 1555 1556 1557</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "names")= chr [1:5] "data" "axes" "xlab" "ylab" ...</span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="in_pkgdown_example.html">in_pkgdown_example</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span>, rglwidget <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1</span>
       </span>
     </div>
 
@@ -76,13 +76,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.2.0" id="rgl-120">rgl 1.2.0<a class="anchor" aria-label="anchor" href="#rgl-120"></a></h2>
+<h2 class="page-header" data-toc-text="1.2.1" id="rgl-121">rgl 1.2.1<a class="anchor" aria-label="anchor" href="#rgl-121"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-1-2-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-2-0"></a></h3>
+<h3 id="major-changes-1-2-1">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-2-1"></a></h3>
 <ul><li>Support for non-PNG textures has been added. Currently supported: JPEG files and any other object for which <code><a href="https://rdrr.io/r/grDevices/as.raster.html" class="external-link">grDevices::as.raster()</a></code> works, e.g. matrices. (Fixes issue <a href="https://github.com/dmurdoch/rgl/issues/196" class="external-link">#196</a>.)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-changes-1-2-0">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-0"></a></h3>
+<h3 id="minor-changes-1-2-1">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-1"></a></h3>
 <ul><li>Support for “alt” text has been added to <code><a href="../reference/rglwidget.html">rglwidget()</a></code>. Full support in R Markdown or <code>knitr</code> requires a <code>knitr</code> update to version 1.42.12 or newer.</li>
 <li>Some of the tests have been relaxed slightly so they shouldn’t trigger errors on the M1Mac test platform.</li>
 <li>Internally, the C++ code has dropped the use of the internally defined <code>String</code> type, settling on <code>std::string</code> instead.</li>
@@ -90,7 +90,7 @@
 <code><a href="../reference/subdivision3d.html">subdivision3d()</a></code>, <code><a href="../reference/clipMesh3d.html">clipMesh3d()</a></code> and related functions now (optionally) record the original faces associated with each new one in a <code>mesh$tags</code> addition to the output.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-2-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-0"></a></h3>
+<h3 id="bug-fixes-1-2-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-1"></a></h3>
 <ul><li>The <code>Makevars.win</code> file was being produced incorrectly on older Windows versions.</li>
 <li>
 <code><a href="../reference/rgl.user2window.html">rgl.window2user()</a></code> did not work correctly when multiple panes were showing. This caused <code><a href="../reference/arrow3d.html">arrow3d()</a></code> to fail in some panes (issue <a href="https://github.com/dmurdoch/rgl/issues/354" class="external-link">#354</a>).</li>
@@ -112,7 +112,7 @@
 <li>
 <code><a href="../reference/arc3d.html">arc3d()</a></code> sometimes missed plotting the last segment of the arc (issue <a href="https://github.com/dmurdoch/rgl/issues/369" class="external-link">#369</a>).</li>
 <li>
-<code>R_NO_REMAP</code> has been defined to prevent conflict between R internals and C++17 library.</li>
+<code>R_NO_REMAP</code> has been defined and header includes have been rearranged to prevent conflict between R internals and C++17 library. (Thanks to Prof. B. D. Ripley and G. Csardi for suggested fixes.)</li>
 </ul></div>
 </div>
     <div class="section level2">
