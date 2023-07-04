@@ -1,6 +1,5 @@
 
 #include <ctype.h>
-#include <Rinternals.h>
 #include "config.h"
 // C++ source
 // This file is part of RGL.
@@ -13,6 +12,7 @@
 
 #include "assert.h"
 #include "R.h"
+#include <Rinternals.h>
 
 // ---------------------------------------------------------------------------
 

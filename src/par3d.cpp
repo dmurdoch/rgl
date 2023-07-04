@@ -14,7 +14,6 @@
 #define _  
 #define streql(s, t)  (!strcmp((s), (t)))
 
-#include <Rdefines.h>
 #include <Rinternals.h>
 
 namespace rgl {
