@@ -1,4 +1,4 @@
-# rgl 1.2.0
+# rgl 1.2.1
 
 ## Major changes
 
@@ -41,8 +41,10 @@ properly.
 * `addNormals()` sometimes gave `NaN` values due to rounding
 error (issue #372).
 * `arc3d()` sometimes missed plotting the last segment of the arc (issue #369).
-* `R_NO_REMAP` has been defined to prevent conflict between 
-R internals and C++17 library.
+* `R_NO_REMAP` has been defined and header includes have been
+rearranged to prevent conflict between R internals and C++17
+library.  (Thanks to Prof. B. D. Ripley and G. Csardi for 
+suggested fixes.)
 
 
 # rgl 1.1.3

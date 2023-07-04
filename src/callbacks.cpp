@@ -1,7 +1,6 @@
-#include "api.h"
 #include "rglview.h"
-
 #include "DeviceManager.h"
+#include "api.h"
 
 using namespace rgl;
 
@@ -12,7 +11,6 @@ extern DeviceManager* deviceManager;
 /* These defines are not in the installed version of R */
 #include "R.h"
 
-#include <Rdefines.h>
 #include <Rinternals.h>
 
 static void userControl(void *userData, int mouseX, int mouseY)

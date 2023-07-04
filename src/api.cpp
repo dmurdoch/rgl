@@ -8,8 +8,8 @@
 
 #include "lib.h"
 #include "R.h"
-#include "api.h"
 #include "platform.h"
+#include "api.h"
 
 using namespace rgl;
 //

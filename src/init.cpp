@@ -2,8 +2,6 @@
 #include <unistd.h>
 #include "lib.h"
 #include "DeviceManager.h"
-#include "init.h"
-#include "api.h"
 
 /* libfreetype 2.6 defines a conflicting TYPEOF macro */
 
@@ -14,6 +12,8 @@
 #include <R_ext/Visibility.h>
 #include <R_ext/Rdynload.h>
 #include "R.h"
+#include "init.h"
+#include "api.h"
 
 using namespace rgl;
 

@@ -13,9 +13,9 @@
 #include <shlobj.h>
 #include "assert.h"
 #include "R.h"
+#include <ctype.h>
 #include <Rinternals.h>
 
-#include <ctype.h>
 
 namespace rgl {
 

@@ -12,10 +12,10 @@
 #include "opengl.h"
 #include <X11/keysym.h>
 #include <cstdio>
-#include <Rinternals.h>
 #include "x11gui.h"
 #include "lib.h"
 #include "R.h"
+#include <Rinternals.h>
 
 namespace rgl {
 

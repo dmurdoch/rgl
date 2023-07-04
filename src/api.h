@@ -1,14 +1,14 @@
 #ifndef RGL_API_H
 #define RGL_API_H
 
-#include "R.h"
-#include <Rinternals.h>
 #include "ABCLineSet.h"
 #include "PlaneSet.h"
 #include "SphereSet.h"
 #include "SpriteSet.h"
 #include "Surface.h"
 #include "TextSet.h"
+#include "R.h"
+#include <Rinternals.h>
 
 
 namespace rgl {

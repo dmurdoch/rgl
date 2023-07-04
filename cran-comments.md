@@ -1,3 +1,8 @@
+# 1.2.1
+
+In addition to the changes below, this version rearranges header 
+include order.
+
 # 1.2.0
 
 This release is at the request of Prof Ripley, largely because of C++17
