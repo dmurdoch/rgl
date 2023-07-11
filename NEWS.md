@@ -1,3 +1,9 @@
+# rgl 1.2.2
+
+## Minor changes
+
+* ARIA support now declares `rgl` scenes with `role = "img"`.
+
 # rgl 1.2.1
 
 ## Major changes
