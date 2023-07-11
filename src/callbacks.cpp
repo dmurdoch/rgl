@@ -1,7 +1,6 @@
-#include "api.h"
 #include "rglview.h"
-
 #include "DeviceManager.h"
+#include "api.h"
 
 using namespace rgl;
 
@@ -12,7 +11,6 @@ extern DeviceManager* deviceManager;
 /* These defines are not in the installed version of R */
 #include "R.h"
 
-#include <Rdefines.h>
 #include <Rinternals.h>
 
 static void userControl(void *userData, int mouseX, int mouseY)
@@ -20,7 +18,7 @@ static void userControl(void *userData, int mouseX, int mouseY)
   SEXP fn = (SEXP)userData;
   if (fn) {
   // Rprintf("userControl called with mouseX=%d userData=%p\n", mouseX, userData);
-    eval(PROTECT(lang3(fn, PROTECT(ScalarInteger(mouseX)), PROTECT(ScalarInteger(mouseY)))), R_GlobalEnv);
+    Rf_eval(PROTECT(Rf_lang3(fn, PROTECT(Rf_ScalarInteger(mouseX)), PROTECT(Rf_ScalarInteger(mouseY)))), R_GlobalEnv);
     UNPROTECT(3);
   }
 }
@@ -29,7 +27,7 @@ static void userControlEnd(void *userData)
 {
   SEXP fn = (SEXP)userData;
   if (fn) {
-    eval(PROTECT(lang1(fn)), R_GlobalEnv);
+    Rf_eval(PROTECT(Rf_lang1(fn)), R_GlobalEnv);
     UNPROTECT(1);
   }
 }
@@ -47,7 +45,7 @@ static void userCleanup(void **userData)
 static void userWheel(void *wheelData, int dir)
 {
   SEXP fn = (SEXP)wheelData;
-  eval(PROTECT(lang2(fn, PROTECT(ScalarInteger(dir)))), R_GlobalEnv);
+  Rf_eval(PROTECT(Rf_lang2(fn, PROTECT(Rf_ScalarInteger(dir)))), R_GlobalEnv);
   UNPROTECT(2);
 }
 
@@ -55,41 +53,41 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end,
                                 SEXP dev, SEXP sub)
 {
   Device* device;
-  if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
+  if (deviceManager && (device = deviceManager->getDevice(Rf_asInteger(dev)))) {
     RGLView* rglview = device->getRGLView();
     void* userData[3] = {0, 0, 0};
     userControlPtr beginCallback, updateCallback;
     userControlEndPtr endCallback;
     userCleanupPtr cleanupCallback;
     
-    int b = asInteger(button);
-    if (b < 0 || b > 4) error("button must be 1=left, 2=right, 3=middle, 4=wheel, or 0 for no button");
+    int b = Rf_asInteger(button);
+    if (b < 0 || b > 4) Rf_error("button must be 1=left, 2=right, 3=middle, 4=wheel, or 0 for no button");
 
     Scene* scene = rglview->getScene();
-    Subscene* subscene = scene->getSubscene(asInteger(sub));
-    if (!subscene) error("subscene not found");
+    Subscene* subscene = scene->getSubscene(Rf_asInteger(sub));
+    if (!subscene) Rf_error("subscene not found");
     subscene->getMouseCallbacks(b, &beginCallback, &updateCallback, &endCallback, 
                                &cleanupCallback, (void**)&userData);
-    if (isFunction(begin)) {
+    if (Rf_isFunction(begin)) {
       beginCallback = &userControl;
       userData[0] = (void*)begin;
       R_PreserveObject(begin);
     } else if (begin == R_NilValue) beginCallback = 0;
-    else error("callback must be a function");
+    else Rf_error("callback must be a function");
     
-    if (isFunction(update)) {
+    if (Rf_isFunction(update)) {
       updateCallback = &userControl;
       userData[1] = (void*)update;
       R_PreserveObject(update);
     } else if (update == R_NilValue) updateCallback = 0;
-    else error("callback must be a function");
+    else Rf_error("callback must be a function");
     
-    if (isFunction(end)) {
+    if (Rf_isFunction(end)) {
       endCallback = &userControlEnd;
       userData[2] = (void*)end;
       R_PreserveObject(end);
     } else if (end == R_NilValue) endCallback = 0;
-    else error("callback must be a function");
+    else Rf_error("callback must be a function");
     rglview->captureLost();
     // Rprintf("setting mouse callbacks\n");
     subscene->setMouseCallbacks(b, beginCallback, updateCallback, endCallback, 
@@ -97,30 +95,30 @@ SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end,
     if (b == bnNOBUTTON)
       rglview->windowImpl->watchMouse(subscene->getRootSubscene()->mouseNeedsWatching());
     
-  } else error("rgl device is not open");
+  } else Rf_error("rgl device is not open");
   return R_NilValue;
 }      
 
 SEXP rgl::rgl_getMouseCallbacks(SEXP button, SEXP dev, SEXP sub)
 {
   Device* device;
-  if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
+  if (deviceManager && (device = deviceManager->getDevice(Rf_asInteger(dev)))) {
     RGLView* rglview = device->getRGLView();
     void* userData[3] = {0, 0, 0};
     userControlPtr beginCallback, updateCallback;
     userControlEndPtr endCallback;
     userCleanupPtr cleanupCallback;
     
-    int b = asInteger(button);
-    if (b < 0 || b > 4) error("button must be 1=left, 2=right, 3=middle, 4=wheel, or 0 for no button");
+    int b = Rf_asInteger(button);
+    if (b < 0 || b > 4) Rf_error("button must be 1=left, 2=right, 3=middle, 4=wheel, or 0 for no button");
 
     Scene* scene = rglview->getScene();
-    Subscene* subscene = scene->getSubscene(asInteger(sub));
-    if (!subscene) error("subscene not found");
+    Subscene* subscene = scene->getSubscene(Rf_asInteger(sub));
+    if (!subscene) Rf_error("subscene not found");
     subscene->getMouseCallbacks(b, &beginCallback, &updateCallback, &endCallback, 
                                &cleanupCallback, (void**)&userData);
     SEXP result;
-    PROTECT(result = allocVector(VECSXP, 3));
+    PROTECT(result = Rf_allocVector(VECSXP, 3));
     
     if (beginCallback == &userControl) 
       SET_VECTOR_ELT(result, 0, (SEXP)userData[0]);
@@ -133,30 +131,30 @@ SEXP rgl::rgl_getMouseCallbacks(SEXP button, SEXP dev, SEXP sub)
 
     UNPROTECT(1);
     return result;
-  } else error("rgl device is not open");
+  } else Rf_error("rgl device is not open");
   return R_NilValue;
 }      
  
 SEXP rgl::rgl_setWheelCallback(SEXP rotate, SEXP dev, SEXP sub)
 {
   Device* device;
-  if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
+  if (deviceManager && (device = deviceManager->getDevice(Rf_asInteger(dev)))) {
     RGLView* rglview = device->getRGLView();
     void* wheelData = 0;
     userWheelPtr wheelCallback;
       
-    if (isFunction(rotate)) {
+    if (Rf_isFunction(rotate)) {
       wheelCallback = &userWheel;
       wheelData = (void*)rotate;
       R_PreserveObject(rotate);
     } else if (rotate == R_NilValue) wheelCallback = 0;
-    else error("callback must be a function");
+    else Rf_error("callback must be a function");
 
     Scene* scene = rglview->getScene();
-    Subscene* subscene = scene->getSubscene(asInteger(sub));
-    if (!subscene) error("subscene not found");
+    Subscene* subscene = scene->getSubscene(Rf_asInteger(sub));
+    if (!subscene) Rf_error("subscene not found");
     subscene->setWheelCallback(wheelCallback, wheelData);
-  } else error("rgl device is not open");
+  } else Rf_error("rgl device is not open");
   return R_NilValue;
 }
 
@@ -164,18 +162,18 @@ SEXP rgl::rgl_getWheelCallback(SEXP dev, SEXP sub)
 {
   Device* device;
   SEXP result = R_NilValue;
-  if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
+  if (deviceManager && (device = deviceManager->getDevice(Rf_asInteger(dev)))) {
     RGLView* rglview = device->getRGLView();
     void* wheelData = 0;
     userWheelPtr wheelCallback;
     
     Scene* scene = rglview->getScene();
-    Subscene* subscene = scene->getSubscene(asInteger(sub));
-    if (!subscene) error("subscene not found");
+    Subscene* subscene = scene->getSubscene(Rf_asInteger(sub));
+    if (!subscene) Rf_error("subscene not found");
     subscene->getWheelCallback(&wheelCallback, (void**)&wheelData);
     if (wheelCallback == &userWheel)
       result = (SEXP)wheelData;
-  } else error("rgl device is not open");
+  } else Rf_error("rgl device is not open");
   return result;
 }      
 
@@ -193,35 +191,35 @@ static void userAxis(void *axisData, int axis, int edge[3])
   }
   margin[j] = 0;
   // Rprintf("margin=%s\n", margin);
-  eval(PROTECT(lang2(fn, PROTECT(ScalarString(mkChar(margin))))), R_GlobalEnv);
+  Rf_eval(PROTECT(Rf_lang2(fn, PROTECT(Rf_ScalarString(Rf_mkChar(margin))))), R_GlobalEnv);
   UNPROTECT(2);
 }
 
 SEXP rgl::rgl_setAxisCallback(SEXP draw, SEXP dev, SEXP sub, SEXP axis)
 {
   Device* device;
-  if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
+  if (deviceManager && (device = deviceManager->getDevice(Rf_asInteger(dev)))) {
     RGLView* rglview = device->getRGLView();
     void* axisData = 0;
     userAxisPtr axisCallback;
     
-    if (isFunction(draw)) {
+    if (Rf_isFunction(draw)) {
       axisCallback = &userAxis;
       axisData = (void*)draw;
       R_PreserveObject(draw);
     } else if (draw == R_NilValue) axisCallback = 0;
-    else error("callback must be a function");
+    else Rf_error("callback must be a function");
     
     Scene* scene = rglview->getScene();
-    Subscene* subscene = scene->getSubscene(asInteger(sub));
-    if (!subscene) error("subscene not found");
+    Subscene* subscene = scene->getSubscene(Rf_asInteger(sub));
+    if (!subscene) Rf_error("subscene not found");
     BBoxDeco* bboxdeco = subscene->get_bboxdeco();
-    if (!bboxdeco) error("no bbox decoration");
-    int a = asInteger(axis);
-    if (a < 0 || a > 2) error("axis must be 0=x, 1=y, or 2=z");
+    if (!bboxdeco) Rf_error("no bbox decoration");
+    int a = Rf_asInteger(axis);
+    if (a < 0 || a > 2) Rf_error("axis must be 0=x, 1=y, or 2=z");
     bboxdeco->setAxisCallback(axisCallback, axisData, a);
     rglview->update();
-  } else error("rgl device is not open");
+  } else Rf_error("rgl device is not open");
   return R_NilValue;
 }
 
@@ -229,20 +227,20 @@ SEXP rgl::rgl_getAxisCallback(SEXP dev, SEXP sub, SEXP axis)
 {
   Device* device;
   SEXP result = R_NilValue;
-  if (deviceManager && (device = deviceManager->getDevice(asInteger(dev)))) {
+  if (deviceManager && (device = deviceManager->getDevice(Rf_asInteger(dev)))) {
     RGLView* rglview = device->getRGLView();
     void* axisData = 0;
     userAxisPtr axisCallback;
     
     Scene* scene = rglview->getScene();
-    Subscene* subscene = scene->getSubscene(asInteger(sub));
-    if (!subscene) error("subscene not found");
+    Subscene* subscene = scene->getSubscene(Rf_asInteger(sub));
+    if (!subscene) Rf_error("subscene not found");
     BBoxDeco* bboxdeco = subscene->get_bboxdeco();
-    if (!bboxdeco) error("bboxdeco not found");
-    bboxdeco->getAxisCallback(&axisCallback, (void**)&axisData, asInteger(axis));
+    if (!bboxdeco) Rf_error("bboxdeco not found");
+    bboxdeco->getAxisCallback(&axisCallback, (void**)&axisData, Rf_asInteger(axis));
     
     if (axisCallback == &userAxis)
       result = (SEXP)axisData;
-  } else error("rgl device is not open");
+  } else Rf_error("rgl device is not open");
   return result;
 }      

@@ -126,7 +126,7 @@ bool Subscene::add(SceneNode* node)
       {
 	Subscene* subscene = static_cast<Subscene*>(node);
 	if (subscene->parent)
-	  error("Subscene %d is already a child of subscene %d.", subscene->getObjID(),
+	  Rf_error("Subscene %d is already a child of subscene %d.", subscene->getObjID(),
 	        subscene->parent->getObjID());
 	addSubscene(subscene);
 	success = true;
@@ -562,7 +562,7 @@ UserViewpoint* Subscene::getUserViewpoint()
   if (userviewpoint && do_projection > EMBED_INHERIT)
     return userviewpoint;
   else if (parent) return parent->getUserViewpoint();
-  else error("must have a user viewpoint");
+  else Rf_error("must have a user viewpoint");
 }
 
 ModelViewpoint* Subscene::getModelViewpoint()
@@ -570,7 +570,7 @@ ModelViewpoint* Subscene::getModelViewpoint()
   if (modelviewpoint && do_model > EMBED_INHERIT)
     return modelviewpoint;
   else if (parent) return parent->getModelViewpoint();
-  else error("must have a model viewpoint");
+  else Rf_error("must have a model viewpoint");
 }
 
 void Subscene::update(RenderContext* renderContext)
@@ -1064,7 +1064,7 @@ Embedding Subscene::getEmbedding(Embedded which)
     case EM_PROJECTION:    return do_projection;
     case EM_MODEL:         return do_model;
     case EM_MOUSEHANDLERS: return do_mouseHandlers;
-    default: error("Bad embedding requested");
+    default: Rf_error("Bad embedding requested");
   }
 }
 

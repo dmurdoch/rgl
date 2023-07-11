@@ -550,7 +550,7 @@ struct BBoxDeco::BBoxDecoImpl {
       if (match)
         return &axisedge[j];
     }
-    error("fixedEdge: material->floating=%d marginCoord=%d edge=%d %d %d\n", material->floating,
+    Rf_error("fixedEdge: material->floating=%d marginCoord=%d edge=%d %d %d\n", material->floating,
              material->marginCoord, material->edge[0], material->edge[1], material->edge[2]);
     return axisedge;
   }

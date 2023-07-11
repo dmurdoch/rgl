@@ -1,4 +1,12 @@
-# rgl 1.1.18
+# rgl 1.2.3
+
+## Minor changes
+
+* ARIA support now declares `rgl` scenes with `role = "img"`.
+* `bg3d()` now removes previous background object if it is not used
+elsewhere.
+
+# rgl 1.2.1
 
 ## Major changes
 
@@ -19,8 +27,6 @@ defined `String` type, settling on `std::string` instead.
 * `subdivision3d()`, `clipMesh3d()` and related functions now
 (optionally) record the original faces associated with each new one
 in a `mesh$tags` addition to the output.
-* `bg3d()` now removes previous background object if it is not used
-elsewhere.
 
 ## Bug fixes
 
@@ -40,6 +46,13 @@ a radius (issue #357).
 quads properly when `meshColor == "faces"`.
 * `subdivision3d()` and related functions now handle colors
 properly.
+* `addNormals()` sometimes gave `NaN` values due to rounding
+error (issue #372).
+* `arc3d()` sometimes missed plotting the last segment of the arc (issue #369).
+* `R_NO_REMAP` has been defined and header includes have been
+rearranged to prevent conflict between R internals and C++17
+library.  (Thanks to Prof. B. D. Ripley and G. Csardi for 
+suggested fixes.)
 
 
 # rgl 1.1.3

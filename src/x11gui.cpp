@@ -12,10 +12,10 @@
 #include "opengl.h"
 #include <X11/keysym.h>
 #include <cstdio>
-#include <Rinternals.h>
 #include "x11gui.h"
 #include "lib.h"
 #include "R.h"
+#include <Rinternals.h>
 
 namespace rgl {
 
@@ -410,10 +410,10 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
   
   if (useFreeType) {
 #ifdef HAVE_FREETYPE
-    SEXP Rfontname = VECTOR_ELT(PROTECT(eval(PROTECT(lang2(PROTECT(install("rglFonts")), 
-                                          PROTECT(ScalarString(mkChar(family))))), rglNamespace)),
+    SEXP Rfontname = VECTOR_ELT(PROTECT(Rf_eval(PROTECT(Rf_lang2(PROTECT(Rf_install("rglFonts")), 
+                                          PROTECT(Rf_ScalarString(Rf_mkChar(family))))), rglNamespace)),
                                           0);
-    if (isString(Rfontname) && length(Rfontname) >= style) {
+    if (Rf_isString(Rfontname) && Rf_length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
       GLFTFont* font=new GLFTFont(family, style, cex, fontname);
       if (font->font) {
@@ -421,22 +421,22 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
         UNPROTECT(4);
         return font;
       } else {
-        warning(font->errmsg);
+        Rf_warning(font->errmsg);
         delete font;
       }
     }
     UNPROTECT(4);
 #else
-    warning("FreeType not available");
+    Rf_warning("FreeType not available");
 #endif
   }
-  if (strcmp(family, fonts.back()->family)) warning("font family \"%s\" not found, using \"%s\"", 
+  if (strcmp(family, fonts.back()->family)) Rf_warning("font family \"%s\" not found, using \"%s\"", 
                                          family, fonts.back()->family);
-  else if (style != fonts.back()->style) warning("\"%s\" family only supports font %d", 
+  else if (style != fonts.back()->style) Rf_warning("\"%s\" family only supports font %d", 
                                         fonts.back()->family, fonts.back()->style);
-  else if (cex != fonts.back()->cex) warning("\"%s\" family only supports cex = %g",
+  else if (cex != fonts.back()->cex) Rf_warning("\"%s\" family only supports cex = %g",
   					fonts.back()->family, fonts.back()->cex);
-  else if (useFreeType) warning("FreeType font not available");
+  else if (useFreeType) Rf_warning("FreeType font not available");
   if (useFreeType)
     return fonts.back();
   else
@@ -536,8 +536,9 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   if (!xfont) {
     // Try the first available
     xfont = XLoadQueryFont(xdisplay, "*");
-    if (!xfont)
+    if (!xfont) {
       throw_error("unable to load X11 font"); return;
+    }
   }
   
   // Obtain display atoms
@@ -652,9 +653,9 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
 #ifdef GLX_SAMPLE_BUFFERS
   // Setup antialiasing based on "rgl.antialias" option
   int aa;
-  SEXP rgl_aa = GetOption(install("rgl.antialias"),R_BaseEnv);
-  if (isNull(rgl_aa)) aa = RGL_ANTIALIAS;
-  else aa = asInteger(rgl_aa);
+  SEXP rgl_aa = Rf_GetOption(Rf_install("rgl.antialias"),R_BaseEnv);
+  if (Rf_isNull(rgl_aa)) aa = RGL_ANTIALIAS;
+  else aa = Rf_asInteger(rgl_aa);
   
   if(aa > 0) {
     attribList[12] = GLX_SAMPLE_BUFFERS;

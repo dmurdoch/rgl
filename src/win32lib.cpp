@@ -25,7 +25,7 @@ GUIFactory* rgl::getGUIFactory(bool useNULLDevice)
   else if (gpWin32GUIFactory)
     return (GUIFactory*) gpWin32GUIFactory;
   else
-    error("wgl device not initialized");
+    Rf_error("wgl device not initialized");
 }
 // ---------------------------------------------------------------------------
 const char * rgl::GUIFactoryName(bool useNULLDevice)
@@ -36,7 +36,7 @@ const char * rgl::GUIFactoryName(bool useNULLDevice)
 // printMessage
 // ---------------------------------------------------------------------------
 void rgl::printMessage( const char* string ) {
-  warning("RGL: %s\n", string);
+  Rf_warning("RGL: %s\n", string);
 }
 // ---------------------------------------------------------------------------
 // getTime

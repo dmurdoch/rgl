@@ -402,7 +402,7 @@ ariaLabelId <- function(id)
   paste0(id, "-aria")
 
 widget_html.rglWebGL <- function(id, style, class, ...){
-  tags$div(id = id, style = style, class = class, 
+  tags$div(id = id, style = style, class = class, role = "img",
            "aria-labelledby" = ariaLabelId(id))
 }
 
