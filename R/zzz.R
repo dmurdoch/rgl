@@ -22,17 +22,17 @@
   
   getDir <- function(useNULL) {
     if (in_pkgload_loadall()) {
-      dir <- if (useNULL) "inst/useNULL" else "src"
+      dir <- if (useNULL) file.path("inst", "useNULL") else "src"
     } else {
       dir <- if (useNULL) "useNULL" else "libs"
       if (nchar(.Platform$r_arch))
-        dir <- paste0(dir, "/", .Platform$r_arch)
+        dir <- file.path(dir, .Platform$r_arch)
     }
     dir
   }
     
   getDynlib <- function(dir)
-    system.file(paste0(dir, "/rgl", .Platform$dynlib.ext), 
+    system.file(dir, paste0("rgl", .Platform$dynlib.ext), 
                 package = pkg, lib.loc = lib,
                 mustWork = TRUE)
   
@@ -83,10 +83,10 @@
   if (onlyNULL) {
     rglFonts(serif = rep("serif", 4), sans = rep("sans", 4), mono = rep("mono", 4), symbol = rep("symbol", 4))
   } else {
-    rglFonts(serif = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4),
-             sans  = rep(system.file("fonts/FreeSans.ttf", package="rgl"), 4),
-             mono  = rep(system.file("fonts/FreeMono.ttf", package="rgl"), 4),
-             symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4))
+    rglFonts(serif = rep(system.file("fonts", "FreeSerif.ttf", package="rgl"), 4),
+             sans  = rep(system.file("fonts", "FreeSans.ttf", package="rgl"), 4),
+             mono  = rep(system.file("fonts", "FreeMono.ttf", package="rgl"), 4),
+             symbol = rep(system.file("fonts", "FreeSerif.ttf", package="rgl"), 4))
     if (requireNamespace("extrafont", quietly = TRUE))
       suppressWarnings(
         rglExtrafonts(sans = c("Helvetica", "Arial"), 
