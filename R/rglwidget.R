@@ -402,8 +402,14 @@ ariaLabelId <- function(id)
   paste0(id, "-aria")
 
 widget_html.rglWebGL <- function(id, style, class, ...){
-  tags$div(id = id, style = style, class = class, role = "img",
+  result <- tags$div(id = id, style = style, class = class, role = "img",
            "aria-labelledby" = ariaLabelId(id))
+  # In shiny, we need to write the alt text label.
+  if (inShiny())
+    result <- tags$div(tags$p("3D plot 1", id = ariaLabelId(id),
+                                                 hidden = NA),
+                       result)
+  result
 }
 
 print.rglMouseSelection <- function(x, verbose = FALSE, ...) {
