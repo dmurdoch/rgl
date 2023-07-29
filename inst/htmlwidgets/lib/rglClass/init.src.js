@@ -1223,10 +1223,12 @@
       newcanvas.setAttribute("aria-labelledby", 
         labelid);
         
-      if (typeof this.scene.altText !== "undefined")
+      if (typeof this.scene.altText !== "undefined") {
         // We're in Shiny, so alter the label
-        document.getElementById(labelid).innerHTML = this.scene.altText;
-
+        var label = document.getElementById(labelid);
+        if (label)
+          label.innerHTML = this.scene.altText;
+      }
       newcanvas.addEventListener("webglcontextrestored",
         this.onContextRestored, false);
       newcanvas.addEventListener("webglcontextlost",

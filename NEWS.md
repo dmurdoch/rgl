@@ -1,8 +1,13 @@
-# rgl 1.2.2
+# rgl 1.2.3
 
 ## Minor changes
 
 * ARIA support now declares `rgl` scenes with `role = "img"`.
+
+## Bug fixes
+
+* The ARIA support didn't work with `htmlwidgets::saveWidget()` when
+run in a Shiny session.
 
 # rgl 1.2.1
 
