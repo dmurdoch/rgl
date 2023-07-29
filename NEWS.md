@@ -6,7 +6,7 @@
 
 ## Bug fixes
 
-* The ARIA support didn't work with `htmlwidgets::saveWidget()` when
+* The ARIA support caused `htmlwidgets::saveWidget()` to fail when
 run in a Shiny session.
 
 # rgl 1.2.1
