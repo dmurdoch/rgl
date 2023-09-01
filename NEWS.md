@@ -1,4 +1,4 @@
-# rgl 1.2.3
+# rgl 1.2.4
 
 ## Minor changes
 
@@ -8,6 +8,8 @@
 
 * The ARIA support caused `htmlwidgets::saveWidget()` to fail when
 run in a Shiny session.
+* `text3d()` and `mtext3d()` did not pass the `cex` argument to 
+`plotmath3d()` (pull request #384).
 
 # rgl 1.2.1
 
