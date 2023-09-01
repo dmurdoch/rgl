@@ -496,7 +496,7 @@ text3d      <- function(x, y = NULL, z = NULL,
 			...) {
   if (usePlotmath) 
     return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, 
-                      pos = pos, offset = offset, ...))
+                      pos = pos, offset = offset, cex = cex, ...))
   .check3d(); save <- material3d(); on.exit(material3d(save))
   do.call("rgl.material0", .fixMaterialArgs(..., Params = save))
   # Force evaluation
