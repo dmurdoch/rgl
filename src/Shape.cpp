@@ -460,7 +460,7 @@ void Shape::checkShader(const char* type, GLuint shader)
 		GLchar infoLog[2000];
 		GLsizei len;
 		glGetShaderInfoLog(shader, sizeof(infoLog), &len, infoLog);
-		error("Compile issue for %s shader:\n%s\n", type, infoLog);
+		Rf_error("Compile issue for %s shader:\n%s\n", type, infoLog);
 	}
 }
 
@@ -472,7 +472,7 @@ void Shape::checkProgram(GLuint program)
 		GLchar infoLog[2000];
 		GLsizei len;
 		glGetProgramInfoLog(program, sizeof(infoLog), &len, infoLog);
-		error("Shader link issue:\n%s", infoLog);
+		Rf_error("Shader link issue:\n%s", infoLog);
 	}
 }
 

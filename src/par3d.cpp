@@ -551,7 +551,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
   }
   else if (streql(what, "useShaders")) {
   	lengthCheck(what, value, 1);
-  	PROTECT(x=coerceVector(value, LGLSXP));
+  	PROTECT(x=Rf_coerceVector(value, LGLSXP));
   	if (!setUseShaders(LOGICAL(x)[0], rglview)) success = 0;
   	UNPROTECT(1);
   }
@@ -711,7 +711,7 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     INTEGER(value)[0] = activeSubscene(rglview);
   }
   else if (streql(what, "useShaders")) {
-  	PROTECT(value = allocVector(LGLSXP, 1));
+  	PROTECT(value = Rf_allocVector(LGLSXP, 1));
     LOGICAL(value)[0] = rglview->getUseShaders();
   } else
     PROTECT(value);
