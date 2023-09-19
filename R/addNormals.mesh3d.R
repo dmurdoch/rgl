@@ -62,5 +62,5 @@ xprod <- function(v, w) c( v[2]*w[3] - v[3]*w[2],
 
 angle <- function(a,b) {
   dot <- sum(a*b)
-  acos(dot/veclen(a)/veclen(b))
+  acos(pmin(1, pmax(-1, dot/veclen(a)/veclen(b))))
 }

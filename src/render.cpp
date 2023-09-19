@@ -49,7 +49,7 @@ void VertexArray::alloc(int in_nvertex)
 void VertexArray::copy(int in_nvertex, double* vertices)
 {
   if (in_nvertex > nvertex) {
-    warning("Only %d values copied", nvertex);
+    Rf_warning("Only %d values copied", nvertex);
     in_nvertex = nvertex;
   }
     
@@ -63,7 +63,7 @@ void VertexArray::copy(int in_nvertex, double* vertices)
 void VertexArray::copy(int in_nvertex, float* vertices)
 {
   if (in_nvertex > nvertex) {
-    warning("Only %d values copied", nvertex);
+    Rf_warning("Only %d values copied", nvertex);
     in_nvertex = nvertex;
   }
   

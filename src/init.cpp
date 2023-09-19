@@ -2,8 +2,6 @@
 #include <unistd.h>
 #include "lib.h"
 #include "DeviceManager.h"
-#include "init.h"
-#include "api.h"
 
 /* libfreetype 2.6 defines a conflicting TYPEOF macro */
 
@@ -14,6 +12,8 @@
 #include <R_ext/Visibility.h>
 #include <R_ext/Rdynload.h>
 #include "R.h"
+#include "init.h"
+#include "api.h"
 
 using namespace rgl;
 
@@ -49,23 +49,23 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
               SEXP debug, SEXP home)
 {
   int success = 0;
-  bool useNULLDevice = asLogical(useNULL);
+  bool useNULLDevice = Rf_asLogical(useNULL);
 
   gInitValue = 0;
   gHandle = NULL;
   rglNamespace = in_namespace;
-  rglDebug = asLogical(debug);
+  rglDebug = Rf_asLogical(debug);
   rglHome = std::string(CHAR(STRING_ELT(home, 0)));
   
-  if ( isNumeric(initValue) ) {
-    gInitValue =  asInteger(initValue);
+  if ( Rf_isNumeric(initValue) ) {
+    gInitValue =  Rf_asInteger(initValue);
   }
   else if ( TYPEOF(initValue) == EXTPTRSXP ) {
     gHandle = R_ExternalPtrAddr(initValue);
   }
-  else if ( !isNull(initValue) )
+  else if ( !Rf_isNull(initValue) )
   {
-    return ScalarInteger( 0 );
+    return Rf_ScalarInteger( 0 );
   }  
   /* Some systems write useless messages to stderr.  We'll
    * hide those
@@ -96,7 +96,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
     dup2(stderr_copy, STDERR_FILENO);
     close(stderr_copy);
   }
-  return(ScalarInteger(success));
+  return(Rf_ScalarInteger(success));
 }
 
 #define FUNDEF(name, n)  {#name, (DL_FUNC) &name, n}

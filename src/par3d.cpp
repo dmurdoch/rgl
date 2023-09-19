@@ -14,7 +14,6 @@
 #define _  
 #define streql(s, t)  (!strcmp((s), (t)))
 
-#include <Rdefines.h>
 #include <Rinternals.h>
 
 namespace rgl {
@@ -345,20 +344,20 @@ static int activeSubscene(RGLView* rglview)
 
 static void par_error(const char *what)
 {
-  error(_("invalid value specified for rgl parameter \"%s\""),  what);
+  Rf_error(_("invalid value specified for rgl parameter \"%s\""),  what);
 }
 
 static void lengthCheck(const char *what, SEXP v, int n)
 {
-  if (length(v) != n)
-    error(_("parameter \"%s\" has the wrong length"), what);
+  if (Rf_length(v) != n)
+    Rf_error(_("parameter \"%s\" has the wrong length"), what);
 }
 
 static void dimCheck(const char *what, SEXP v, int r, int c)
 {
-  SEXP dim = coerceVector(getAttrib(v, R_DimSymbol), INTSXP);
-  if (length(dim) != 2 || INTEGER(dim)[0] != r || INTEGER(dim)[1] != c)
-    error(_("parameter \"%s\" has the wrong dimension"), what);
+  SEXP dim = Rf_coerceVector(Rf_getAttrib(v, R_DimSymbol), INTSXP);
+  if (Rf_length(dim) != 2 || INTEGER(dim)[0] != r || INTEGER(dim)[1] != c)
+    Rf_error(_("parameter \"%s\" has the wrong dimension"), what);
 }
 
 #ifdef UNUSED
@@ -419,7 +418,7 @@ const char* viewportlabels[] = {"x", "y", "width", "height"};
 #define mmLAST 10
 #define wmLAST 13
 
-/* At R 2.6.0, the type of the first arg to psmatch changed to const char *.  Conditionally cast 
+/* At R 2.6.0, the type of the first arg to Rf_psmatch changed to const char *.  Conditionally cast 
  to char * if we're in an old version */
 #if defined(R_VERSION) && R_VERSION < R_Version(2, 6, 0)
 #define OLDCAST (char *)
@@ -440,23 +439,23 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
   int success = 1;
   
   if (streql(what, "FOV")) {
-    lengthCheck(what, value, 1);  v = asReal(value);
+    lengthCheck(what, value, 1);  v = Rf_asReal(value);
     BoundsCheck(v, 0.0, 179.0, what);
     setFOV(&v, rglview, sub);
   }
   else if (streql(what, "ignoreExtent")) {
-    lengthCheck(what, value, 1);  iv = asLogical(value);
+    lengthCheck(what, value, 1);  iv = Rf_asLogical(value);
     setIgnoreExtent(&iv, dev);
   }    
   else if (streql(what, "mouseMode")) {
-    PROTECT(value = coerceVector(value, STRSXP));
-    if (length(value) > 5) par_error(what);   
-    for (int i=bnNOBUTTON; i<=bnWHEEL && i < length(value); i++) {
+    PROTECT(value = Rf_coerceVector(value, STRSXP));
+    if (Rf_length(value) > 5) par_error(what);   
+    for (int i=bnNOBUTTON; i<=bnWHEEL && i < Rf_length(value); i++) {
       if (STRING_ELT(value, i) != NA_STRING) {
         success = 0;
         /* check exact first, then partial */
         for (int mode = 0; mode < (i != bnWHEEL ? mmLAST : wmLAST) ; mode++) {
-          if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i)), (Rboolean)TRUE)) {
+          if (Rf_psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i)), (Rboolean)TRUE)) {
             setMouseMode(&i, &mode, rglview, sub);
             success = 1;
             break;
@@ -464,7 +463,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
         }
         if (!success) {
           for (int mode = 0; mode < (i != 4 ? mmLAST : wmLAST) ; mode++) {
-            if (psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i)), (Rboolean)FALSE)) {
+            if (Rf_psmatch(OLDCAST mouseModes[mode], CHAR(STRING_ELT(value, i)), (Rboolean)FALSE)) {
               setMouseMode(&i, &mode, rglview, sub);
               success = 1;
               break;
@@ -477,75 +476,75 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
     UNPROTECT(1);
   }
   else if (streql(what, "listeners")) {
-    x = coerceVector(value, INTSXP);
-    rglview->setMouseListeners(sub, length(x), INTEGER(x));
+    x = Rf_coerceVector(value, INTSXP);
+    rglview->setMouseListeners(sub, Rf_length(x), INTEGER(x));
   }
   else if (streql(what, "skipRedraw")) {
-    lengthCheck(what, value, 1);  iv = asLogical(value);
+    lengthCheck(what, value, 1);  iv = Rf_asLogical(value);
     setSkipRedraw(&iv, dev);
   }
   else if (streql(what, "userMatrix")) {
     dimCheck(what, value, 4, 4);
-    x = coerceVector(value, REALSXP);
+    x = Rf_coerceVector(value, REALSXP);
     
     setUserMatrix(REAL(x), rglview, sub);
   }
   else if (streql(what, "userProjection")) {
     dimCheck(what, value, 4, 4);
-    x = coerceVector(value, REALSXP);
+    x = Rf_coerceVector(value, REALSXP);
     setUserProjection(REAL(x), rglview, sub);
   }
   else if (streql(what, "scale")) {
     lengthCheck(what, value, 3);
-    x = coerceVector(value, REALSXP);
+    x = Rf_coerceVector(value, REALSXP);
     
     setScale(REAL(x), rglview, sub);
   }
   else if (streql(what, "viewport")) {
     lengthCheck(what, value, 4);
-    x = coerceVector(value, REALSXP);
+    x = Rf_coerceVector(value, REALSXP);
     setViewport(REAL(x), dev, rglview, sub);
   }
   else if (streql(what, "zoom")) {
-    lengthCheck(what, value, 1);  v = asReal(value);
+    lengthCheck(what, value, 1);  v = Rf_asReal(value);
     posRealCheck(v, what);
     setZoom(&v, rglview, sub);
   }
   else if (streql(what, ".position")) {
     lengthCheck(what, value, 2);
-    x = coerceVector(value, REALSXP);
+    x = Rf_coerceVector(value, REALSXP);
     
     setPosition(REAL(x), rglview, sub);
   }
   else if (streql(what, "windowRect")) {
     lengthCheck(what, value, 4);
-    x = coerceVector(value, INTSXP);
+    x = Rf_coerceVector(value, INTSXP);
     
     setWindowRect(INTEGER(x), dev);
   }    
   else if (streql(what, "family")) {
     lengthCheck(what, value, 1);
-    x = coerceVector(value, STRSXP);
+    x = Rf_coerceVector(value, STRSXP);
     if (!setFamily(CHAR(STRING_ELT(x, 0)), rglview)) success = 0;
   }
   else if (streql(what, "font")) {
     lengthCheck(what, value, 1);
-    x=coerceVector(value, INTSXP);
+    x=Rf_coerceVector(value, INTSXP);
     if (INTEGER(x)[0] < 1 || INTEGER(x)[0] > 5) { par_error(what); }
     if (!setFont(INTEGER(x)[0], rglview)) success = 0;
   }
   else if (streql(what, "cex")) {
     lengthCheck(what, value, 1);
-    x=coerceVector(value, REALSXP);
+    x=Rf_coerceVector(value, REALSXP);
     if (REAL(x)[0] <= 0) { par_error(what); }
     if (!setCex(REAL(x)[0],rglview)) success = 0;
   }
   else if (streql(what, "useFreeType")) {
     lengthCheck(what, value, 1);
-    PROTECT(x=coerceVector(value, LGLSXP));
+    PROTECT(x=Rf_coerceVector(value, LGLSXP));
 #ifndef HAVE_FREETYPE
     if (LOGICAL(x)[0] && strcmp( dev->getDevtype(), "null" ))
-      warning("FreeType not supported in this build");
+      Rf_warning("FreeType not supported in this build");
 #endif
     if (!setUseFreeType(LOGICAL(x)[0], rglview)) success = 0;
     UNPROTECT(1);
@@ -557,7 +556,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
   	UNPROTECT(1);
   }
   
-  else warning(_("parameter \"%s\" cannot be set"), what);
+  else Rf_warning(_("parameter \"%s\" cannot be set"), what);
   
   if (!success) par_error(what);
   
@@ -578,109 +577,109 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   value = R_NilValue;
   
   if (streql(what, "FOV")) {
-    PROTECT(value = allocVector(REALSXP, 1));
+    PROTECT(value = Rf_allocVector(REALSXP, 1));
     getFOV(REAL(value), sub);
   }
   else if (streql(what, "ignoreExtent")) {
-    PROTECT(value = allocVector(LGLSXP, 1));
+    PROTECT(value = Rf_allocVector(LGLSXP, 1));
     getIgnoreExtent(LOGICAL(value), dev);
   }    
   else if (streql(what, "modelMatrix")) {
-    PROTECT(value = allocMatrix(REALSXP, 4, 4));
+    PROTECT(value = Rf_allocMatrix(REALSXP, 4, 4));
     sub->modelMatrix.getData(REAL(value));
   }
   else if (streql(what, "mouseMode")) {
-    PROTECT(value = allocVector(STRSXP, 5));
+    PROTECT(value = Rf_allocVector(STRSXP, 5));
     for (i=0; i<5; i++) {
       getMouseMode(&i, &mode, sub); 
       if (mode < 0 || mode >= wmLAST) mode = 0;
-      SET_STRING_ELT(value, i, mkChar(mouseModes[mode]));
+      SET_STRING_ELT(value, i, Rf_mkChar(mouseModes[mode]));
     }
 
-    PROTECT(names = allocVector(STRSXP, 5));
-    SET_STRING_ELT(names, 0, mkChar("none"));
-    SET_STRING_ELT(names, 1, mkChar("left"));
-    SET_STRING_ELT(names, 2, mkChar("right"));  
-    SET_STRING_ELT(names, 3, mkChar("middle"));
-    SET_STRING_ELT(names, 4, mkChar("wheel"));
-    value = namesgets(value, names);
+    PROTECT(names = Rf_allocVector(STRSXP, 5));
+    SET_STRING_ELT(names, 0, Rf_mkChar("none"));
+    SET_STRING_ELT(names, 1, Rf_mkChar("left"));
+    SET_STRING_ELT(names, 2, Rf_mkChar("right"));  
+    SET_STRING_ELT(names, 3, Rf_mkChar("middle"));
+    SET_STRING_ELT(names, 4, Rf_mkChar("wheel"));
+    value = Rf_namesgets(value, names);
     UNPROTECT(2); /* names and old values */
     PROTECT(value);
   }
   else if (streql(what, "observer")) {
-    PROTECT(value = allocVector(REALSXP, 3));
+    PROTECT(value = Rf_allocVector(REALSXP, 3));
     rgl::getObserver(REAL(value), sub);
   }
   else if (streql(what, "projMatrix")) {
-    PROTECT(value = allocMatrix(REALSXP, 4, 4));
+    PROTECT(value = Rf_allocMatrix(REALSXP, 4, 4));
     sub->projMatrix.getData(REAL(value));    
   }
   else if (streql(what, "listeners")) {
-    PROTECT(value = allocVector(INTSXP, sub->mouseListeners.size()));
-    sub->getMouseListeners(length(value), INTEGER(value));
+    PROTECT(value = Rf_allocVector(INTSXP, sub->mouseListeners.size()));
+    sub->getMouseListeners(Rf_length(value), INTEGER(value));
   }
   else if (streql(what, "skipRedraw")) {
-    PROTECT(value = allocVector(LGLSXP, 1));
+    PROTECT(value = Rf_allocVector(LGLSXP, 1));
     getSkipRedraw(LOGICAL(value), dev);
   }
   else if (streql(what, "userMatrix")) {
-    PROTECT(value = allocMatrix(REALSXP, 4, 4));
+    PROTECT(value = Rf_allocMatrix(REALSXP, 4, 4));
     getUserMatrix(REAL(value), sub);
   }
   else if (streql(what, "userProjection")) {
-    PROTECT(value = allocMatrix(REALSXP, 4, 4));
+    PROTECT(value = Rf_allocMatrix(REALSXP, 4, 4));
     getUserProjection(REAL(value), sub);
   }
   else if (streql(what, "scale")) {
-    PROTECT(value = allocVector(REALSXP, 3));
+    PROTECT(value = Rf_allocVector(REALSXP, 3));
     getScale(REAL(value), sub);
   }
   else if (streql(what, "viewport")) {
-    PROTECT(value = allocVector(INTSXP, 4));
+    PROTECT(value = Rf_allocVector(INTSXP, 4));
     getViewport(INTEGER(value), sub);
-    PROTECT(names = allocVector(STRSXP, 4));
+    PROTECT(names = Rf_allocVector(STRSXP, 4));
     for (i=0; i<4; i++)
-      SET_STRING_ELT(names, i, mkChar(viewportlabels[i]));
-    value = namesgets(value, names);
+      SET_STRING_ELT(names, i, Rf_mkChar(viewportlabels[i]));
+    value = Rf_namesgets(value, names);
     UNPROTECT(2);
     PROTECT(value);
   }
   else if (streql(what, "zoom")) {
-    PROTECT(value = allocVector(REALSXP, 1));
+    PROTECT(value = Rf_allocVector(REALSXP, 1));
     getZoom(REAL(value), sub);
   }
   else if (streql(what, "bbox")) {
-    PROTECT(value = allocVector(REALSXP, 6));
+    PROTECT(value = Rf_allocVector(REALSXP, 6));
     getBoundingbox(REAL(value), sub);
   }
   else if (streql(what, ".position")) {
-    PROTECT(value = allocVector(REALSXP, 2));
+    PROTECT(value = Rf_allocVector(REALSXP, 2));
     getPosition(REAL(value), sub);
   }
   else if (streql(what, "windowRect")) {
-    PROTECT(value = allocVector(INTSXP, 4));
+    PROTECT(value = Rf_allocVector(INTSXP, 4));
     getWindowRect(INTEGER(value), dev);
   }
   else if (streql(what, "family")) {
     buf = getFamily(rglview);
     if (buf) {
-      value = mkString(buf);
+      value = Rf_mkString(buf);
     }
     PROTECT(value);
   }
   else if (streql(what, "font")) {
-    PROTECT(value = allocVector(INTSXP, 1));
+    PROTECT(value = Rf_allocVector(INTSXP, 1));
     INTEGER(value)[0] = getFont(rglview);
     success = INTEGER(value)[0] >= 0;
   }
   else if (streql(what, "cex")) {
-    PROTECT(value = allocVector(REALSXP, 1));
+    PROTECT(value = Rf_allocVector(REALSXP, 1));
     REAL(value)[0] = getCex(rglview);
     success = REAL(value)[0] >= 0;
   }    
   else if (streql(what, "useFreeType")) {
     int useFreeType = getUseFreeType(rglview);
-    PROTECT(value = allocVector(LGLSXP, 1));
+    PROTECT(value = Rf_allocVector(LGLSXP, 1));
     if (useFreeType < 0) {
       LOGICAL(value)[0] = false;
       success = 0;
@@ -691,24 +690,24 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   else if (streql(what, "fontname")) {
     buf = getFontname(rglview);
     if (buf) {
-      value = mkString(buf);
+      value = Rf_mkString(buf);
     } 
     PROTECT(value);
   }
   else if (streql(what, "antialias")) {
-    PROTECT(value = allocVector(INTSXP, 1));
+    PROTECT(value = Rf_allocVector(INTSXP, 1));
     INTEGER(value)[0] = getAntialias(rglview);
   }
   else if (streql(what, "maxClipPlanes")) {
-    PROTECT(value = allocVector(INTSXP, 1));
+    PROTECT(value = Rf_allocVector(INTSXP, 1));
     INTEGER(value)[0] = getMaxClipPlanes(rglview);
   }
   else if (streql(what, "glVersion")) {
-    PROTECT(value = allocVector(REALSXP, 1));
+    PROTECT(value = Rf_allocVector(REALSXP, 1));
     REAL(value)[0] = getGlVersion();
   }
   else if (streql(what, "activeSubscene")) {
-    PROTECT(value = allocVector(INTSXP, 1));
+    PROTECT(value = Rf_allocVector(INTSXP, 1));
     INTEGER(value)[0] = activeSubscene(rglview);
   }
   else if (streql(what, "useShaders")) {
@@ -719,7 +718,7 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   
   UNPROTECT(1);
   
-  if (! success) error(_("unknown error getting rgl parameter \"%s\""),  what);
+  if (! success) Rf_error(_("unknown error getting rgl parameter \"%s\""),  what);
   
   return value;
 }
@@ -732,26 +731,26 @@ SEXP rgl::rgl_par3d(SEXP device, SEXP subscene, SEXP args)
 {
   Device* dev;
   
-  if (!deviceManager || !(dev = deviceManager->getDevice(asInteger(device))))
-    error(_("rgl device %d cannot be found"), asInteger(device));
+  if (!deviceManager || !(dev = deviceManager->getDevice(Rf_asInteger(device))))
+    Rf_error(_("rgl device %d cannot be found"), Rf_asInteger(device));
   
   RGLView* rglview = dev->getRGLView();
   Scene* scene = rglview->getScene();
-  Subscene* sub = scene->getSubscene(asInteger(subscene));
+  Subscene* sub = scene->getSubscene(Rf_asInteger(subscene));
   
   if (!sub)
-    error(_("rgl subscene %d cannot be found"), asInteger(subscene));
+    Rf_error(_("rgl subscene %d cannot be found"), Rf_asInteger(subscene));
   
   SEXP value;
   int nargs;
   
-  nargs = length(args);
-  if (isNewList(args)) {
+  nargs = Rf_length(args);
+  if (Rf_isNewList(args)) {
     SEXP oldnames, newnames, tag, val;
     int i;
-    PROTECT(newnames = allocVector(STRSXP, nargs));
-    PROTECT(value = allocVector(VECSXP, nargs));
-    PROTECT(oldnames = getAttrib(args, R_NamesSymbol));
+    PROTECT(newnames = Rf_allocVector(STRSXP, nargs));
+    PROTECT(value = Rf_allocVector(VECSXP, nargs));
+    PROTECT(oldnames = Rf_getAttrib(args, R_NamesSymbol));
     for (i = 0 ; i < nargs ; i++) {
       if (oldnames != R_NilValue)
         tag = STRING_ELT(oldnames, i);
@@ -764,7 +763,7 @@ SEXP rgl::rgl_par3d(SEXP device, SEXP subscene, SEXP args)
         Specify(dev, rglview, sub, CHAR(tag), val);
         CHECKGLERROR;
       }
-      else if (isString(val) && length(val) > 0) {
+      else if (Rf_isString(val) && Rf_length(val) > 0) {
         tag = STRING_ELT(val, 0);
         if (tag != R_NilValue && CHAR(tag)[0]) {
           SET_VECTOR_ELT(value, i, Query(dev, rglview, sub, CHAR(tag)));
@@ -777,11 +776,11 @@ SEXP rgl::rgl_par3d(SEXP device, SEXP subscene, SEXP args)
         SET_STRING_ELT(newnames, i, R_BlankString);
       }
     }
-    setAttrib(value, R_NamesSymbol, newnames);
+    Rf_setAttrib(value, R_NamesSymbol, newnames);
     UNPROTECT(3);
   }
   else {
-    error(_("invalid parameter passed to par3d()"));
+    Rf_error(_("invalid parameter passed to par3d()"));
     return R_NilValue/* -Wall */;
   }
   return value;

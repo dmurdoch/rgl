@@ -3,7 +3,6 @@
 
 #include <string>
 #include "R.h"
-#include <Rdefines.h> 
 #include <Rinternals.h> 
 
 namespace rgl {
