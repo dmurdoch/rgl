@@ -100,6 +100,8 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
   		}
   	}
   }
+  nprimitives = indices.size()/4;
+  
   if ( !user_normals ) {
     normalArray.alloc(nvertex);
     iy = 0;

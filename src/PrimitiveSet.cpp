@@ -142,7 +142,9 @@ void PrimitiveSet::drawRange(int start, int stop)
     if (!nindices)
       glDrawArrays(type, start, nverticesperelement*(stop - start) );
     else
-      glDrawElements(type, stop - start, GL_UNSIGNED_INT, indices.data() + start);
+      glDrawElements(type, nverticesperelement*(stop - start), 
+                     GL_UNSIGNED_INT, 
+                     indices.data() + nverticesperelement*start);
   } else {
     glBegin(type);
     for (int i = start; i < stop; i++) {
