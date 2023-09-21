@@ -43,6 +43,7 @@ triangulateSimple <- function(x,y, random=TRUE, plot=FALSE, partial=NA) {
   
   it <- matrix(NA_integer_, nrow=3, ncol=n-2)
   verts <- seq_len(n)
+  good <- TRUE  # 3 vertices are always good PR#388
   while((m <- length(verts)) > 3) {
     i1 <- 1:m
     i2 <- i1 %% m + 1
