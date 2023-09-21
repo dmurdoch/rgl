@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.5</span>
       </span>
     </div>
 
@@ -76,16 +76,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.2.4" id="rgl-124">rgl 1.2.4<a class="anchor" aria-label="anchor" href="#rgl-124"></a></h2>
+<h2 class="page-header" data-toc-text="1.2.5" id="rgl-125">rgl 1.2.5<a class="anchor" aria-label="anchor" href="#rgl-125"></a></h2>
 <div class="section level3">
-<h3 id="minor-changes-1-2-4">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-4"></a></h3>
+<h3 id="minor-changes-1-2-5">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-5"></a></h3>
 <ul><li>ARIA support now declares <code>rgl</code> scenes with <code>role = "img"</code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-2-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-4"></a></h3>
+<h3 id="bug-fixes-1-2-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-5"></a></h3>
 <ul><li>The ARIA support caused <code><a href="https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html" class="external-link">htmlwidgets::saveWidget()</a></code> to fail when run in a Shiny session.</li>
 <li>
 <code><a href="../reference/texts.html">text3d()</a></code> and <code><a href="../reference/axes3d.html">mtext3d()</a></code> did not pass the <code>cex</code> argument to <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> (pull request <a href="https://github.com/dmurdoch/rgl/issues/384" class="external-link">#384</a>).</li>
+<li>
+<code><a href="../reference/polygon3d.html">polygon3d()</a></code> failed when given exactly 3 points (issue <a href="https://github.com/dmurdoch/rgl/issues/388" class="external-link">#388</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
