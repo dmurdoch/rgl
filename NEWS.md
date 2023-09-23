@@ -1,4 +1,4 @@
-# rgl 1.2.5
+# rgl 1.2.6
 
 ## Minor changes
 
@@ -11,6 +11,7 @@ run in a Shiny session.
 * `text3d()` and `mtext3d()` did not pass the `cex` argument to 
 `plotmath3d()` (pull request #384).
 * `polygon3d()` failed when given exactly 3 points (issue #388).
+* `snapshot3d()` failed on Windows with some versions of `webshot2` (issue #391).
 
 # rgl 1.2.1
 

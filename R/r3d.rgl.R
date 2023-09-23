@@ -1070,6 +1070,8 @@ snapshot3d <- function(filename = tempfile(fileext = ".png"),
       scene <- scene3d()
     rect <- par3d("windowRect")
     f1 <- tempfile(fileext = ".html")
+    # Work around path issue in webshot2:
+    f1 <- normalizePath(f1, winslash = "/", mustWork = FALSE)
     on.exit(unlink(f1), add = TRUE)
     width <- rect[3] - rect[1]
     height <- rect[4] - rect[2]
