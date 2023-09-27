@@ -6,13 +6,13 @@ export(.check3d,
   bbox3d, bg3d, bgplot3d, 
   Buffer,
   checkDeldir,
-
   clear3d, clearSubsceneList, clipplanes3d, 
   clipMesh3d, clipObj3d, close3d, compare_proxy.mesh3d,
   contourLines3d,
   cube3d, cuboctahedron3d, cur3d, 
   currentSubscene3d, cylinder3d,
-  decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, drape3d, ellipse3d, 
+  decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, 
+  dot3d, drape3d, drawToBitmap, ellipse3d, 
   expect_known_scene, extrude3d,
   facing3d, figWidth, figHeight, filledContour3d,
   gc3d, getBoundary3d,
@@ -197,3 +197,5 @@ importFrom(knitr, asis_output, fig_path, hook_plot_custom, include_graphics,
 importFrom(magrittr, "%>%")
 importFrom(stats, coef, predict, residuals)
 importFrom(base64enc, base64encode)
+importFrom(ragg, agg_capture)
+importFrom(systemfonts, font_fallback, shape_string)

@@ -1,92 +1,227 @@
 idToBitmap <- function(id, ...) {
   stopifnot(length(id) == 1)
   
-  texts <- rgl.attrib(id, "texts")
+  texts <- c(rgl.attrib(id, "texts"))
   if (!length(texts))
     return(NULL)
   
-  cex <- rgl.attrib(id, "cex")
-  family <- rgl.attrib(id, "family")
-  font <- rgl.attrib(id, "font")
+  cex <- c(rgl.attrib(id, "cex"))
+  family <- c(rgl.attrib(id, "family"))
+  font <- c(rgl.attrib(id, "font"))
   
   drawToBitmap(texts, cex = cex, family = family, font = font, ...)
 }
 
-drawToBitmap <- function(texts, cex = par3d(cex), family = par3d("family"), font = par3d("font"), background = "transparent",
-                         verbose = FALSE) {
+# This function computes ascent and descent of each of a vector
+# of strings using systemfonts::shape_string().  shape_string()
+# alone gives incorrect results when some of the string 
+# entries include glyphs that are not in the specified font;
+# this function recursively uses systemfonts::font_fallback()
+# to do the correct calculation for the whole thing.
+
+bbox_with_subs <- function(strings, family = "", 
+                           italic = FALSE,
+                           bold = FALSE, 
+                           size = 12,
+                           path = NULL, index = 0, 
+                           ...) {
   
-  n <- length(texts)
-  if (!n)
+  # Function to make an empty result dataframe
+  
+  ascent_descent_df <- function(n) 
+    data.frame(string = character(n), width = numeric(n),
+               ascent = numeric(n), descent = numeric(n),
+               pen_x = numeric(n))
+  
+  # Function to compute ascent and descent from the shape_string() results
+  
+  extract_ascent_descent <- function(metrics)
+    with(metrics, 
+         data.frame(string = string, 
+                    width = width, 
+                    ascent = top_border - top_bearing,
+                    descent = height - 2*top_border -
+                      bottom_bearing,
+                    pen_x = pen_x))
+  
+  # Try shape_string() on the whole vector.  If no glyphs are
+  # missing, trust the result
+  
+  shape0 <- shape_string(strings, family = family, path = path, index = index, italic = italic, bold = bold, size = size, ...)
+  
+  shape <- shape0$shape
+  if (all(shape$index > 0))
+    result <- extract_ascent_descent(shape0$metrics)
+  
+  else {
+    # Some glyphs are missing.
+    
+    # We're going to be subsetting the strings, so all vectors
+    # should be the same length
+    
+    n <- length(strings)
+    stopifnot(nrow(shape0$metrics) == n)
+    
+    family <- rep_len(family, n)
+    italic <- rep_len(italic, n)
+    bold <- rep_len(bold, n)
+    size <- rep_len(size, n)
+    if (!is.null(path)) path <- rep_len(path, n)
+    index <- rep_len(index, n)
+    
+    result <- ascent_descent_df(n)
+    
+    missings <- unique(shape$metric_id[shape$index == 0]) + 1
+    nonmissings <- setdiff(unique(shape$metric_id) + 1, missings)
+    
+    # The nonmissings are fine; just extract those results
+    if (length(nonmissings))
+      result[nonmissings, ] <- extract_ascent_descent(shape0$metrics[nonmissings,])
+    
+    # For the missings, we need to find fallbacks.  Do them
+    # one at a time.
+    
+    for (m in missings) {
+      # Choose the glyph entries corresponding to this string
+      rows <- which(shape$metric_id == m - 1)
+        
+      # Some glyphs are missing.  Break the string up into 
+      # sequences of non-missing and missing glyphs
+        
+      parts <- rle(shape[rows, "index"] == 0)
+      lens <- parts$lengths
+      starts <- c(1, 1 + cumsum(lens)[-length(lens)])
+      subs <- parts$values
+      indx <- seq_along(parts$lengths)
+      parts <- substring(shape0$metrics[m,"string"], 
+                         starts, starts + lens - 1)
+        
+      n0 <- length(parts)
+      result0 <- ascent_descent_df(n0)
+      
+      # Redo shape_string() on the parts with non-missing glyphs,
+      # and save those results
+      if (!all(subs)) {
+        shape1 <- shape_string(parts[!subs], 
+                                          family = family[m], 
+                                          italic = italic[m], 
+                                          bold = bold[m],
+                                          size = size[m],
+                                          path = if (!is.null(path)) path[m], 
+                                          index = index[m], ...)
+        
+
+        result0[!subs, ] <- extract_ascent_descent(shape1$metrics)
+      }
+      
+      # Find the fallback fonts for missing parts, and use them
+      # in a recursive call
+        
+      fallback <- font_fallback(parts[subs], 
+                                             family = family[m],
+                                             italic = italic[m],
+                                             bold = bold[m],
+                                             path = if (!is.null(path)) path[m], 
+                                             index = index[m])
+      result0[subs, ] <- bbox_with_subs(parts[subs], path = fallback$path, index = fallback$index, size = size[m])
+        
+      # Combine the results from the parts of the string
+      # back into a single result for the whole string
+      result[m, ] <- data.frame(string = shape0$metrics[m, "string"],
+                                width = sum(result0$pen_x[-n0]) + result0$width[n0],
+                                ascent = max(result0$ascent),
+                                descent = max(result0$descent),
+                                pen_x = sum(result0$pen_x))
+    }
+  }
+  result
+}
+
+getPowerOfTwo <- function(n) {
+  2^ceiling(log(n, 2))
+}
+
+drawToBitmap <- function(texts, cex = par3d(cex), family = par3d("family"), font = par3d("font"), background = "transparent",
+                         verbose = FALSE, powerOfTwo = TRUE) {
+  
+  if (!length(texts))
     return(NULL)
   
-  shaping <- textshaping::shape_text(texts, family = family,
-                          italic = font > 2,
-                          bold = font %in% c(2, 4),
-                          size = cex * 12,
-                          align = "left",
-                          hjust = 0,
-                          vjust = 0)
+  df0 <- data.frame(texts = texts, cex = cex, family = family, font = font)
+  keys0 <- paste(texts, cex, family, font, sep = "_")
+  
+  uniq <- !duplicated(keys0)
+  df <- df0[uniq, ]
+  keys <- keys0[uniq]
+  n <- length(keys)
+  
+  texts <- df$texts
+  cex <- df$cex
+  family <- df$family
+  font <- df$font
+  italic <- font %in% 3:4
+  bold <- font %in% c(2, 4)
+  
+  # Measure the text
+  
+  measures <- bbox_with_subs(texts, family = family, italic = italic,
+                             bold = bold, size = cex*12)
   if (verbose)
-    print(shaping)
-
-  metrics <- shaping$metrics
-  x0 <- 0
-  x1 <- metrics$width + pmax(0, -metrics$left_bearing) +
-                        pmax(0, -metrics$right_bearing)
-
+    print(measures)
   
-  # First pass:  measure the text
+  bmWidth <- max(ceiling(measures$width))
+  if (powerOfTwo)
+    bmWidth <- getPowerOfTwo(bmWidth)
   
-  ragg::agg_capture(width = 480, height = 480)
+  heights <- ceiling(measures$ascent) + ceiling(measures$descent) 
+  
+  # Try to pack them in with several on each line.  Order
+  # by increasing height so lines don't have too much white
+  # space on top.
+  x <- y <- numeric(n)
+  h0 <- x0 <- y0 <- 0
+  o <- order(heights)
+  for (i in o) {
+    width <- measures$width[i]
+    if (x0 + width > bmWidth) {
+      y0 <- y0 + h0
+      h0 <- x0 <- 0
+    }
+    x[i] <- x0
+    x0 <- x0 + width
+    y[i] <- y0 + measures$descent[i]
+    h0 <- max(h0, heights[i])
+  }
+  bmHeight <- y0 + h0
+  if (powerOfTwo)
+    bmHeight <- getPowerOfTwo(bmHeight)
+
+  getraster <- agg_capture(width = bmWidth, height = bmHeight, units = "px", background = background)
+  
+  if (verbose)
+    cat("width=", bmWidth, " height=", bmHeight, "\n")
+  
   on.exit(dev.off())
-  
-  pixels <- function(size) ceiling(as.numeric(grid::convertUnit(size, "npc"))*480)
-  
-  widths <- numeric(n)
-  ascents <- numeric(n)
-  descents <- numeric(n)
   
   for (fam in unique(family)) {
     gp <- fam == family
     grid::pushViewport(grid::viewport(gp = grid::gpar(cex = cex[gp], font = font[gp], fontfamily = fam)))
-    widths[gp] <- pixels(grid::stringWidth(texts[gp]))
-    ascents[gp] <- pixels(grid::stringAscent(texts[gp])) + 1
-    descents[gp] <- pixels(grid::stringDescent(texts[gp])) + 1
+    grid::grid.text(texts[gp], 
+                    x = grid::unit(x[gp]/bmWidth, "npc"), 
+                    y = grid::unit(y[gp]/bmHeight, "npc"), 
+                    just = c(0,0))
     grid::popViewport()
   }
-  on.exit(NULL)
-  dev.off()
   
-  maxwidth <- max(ceiling(widths))
+  df$x <- x
+  df$y <- y
+  df$width <- measures$width
+  df$descent <- measures$descent
+  df$ascent <- measures$ascent
   
-  heights <- ceiling(ascents) + ceiling(descents) 
-  totalheight <- sum(heights)
-  y <- c(0, cumsum(heights[-n])) + descents
-
-  getraster <- ragg::agg_capture(width = maxwidth, height = totalheight, units = "px", background = background)
-  
-  if (verbose)
-    cat("width=", maxwidth, "height=", totalheight, "\n")
-  
-  on.exit(dev.off())
-  
-  for (fam in unique(family)) {
-    gp <- fam == family
-    grid::pushViewport(grid::viewport(gp = grid::gpar(cex = cex[gp], font = font[gp], fontfamily = fam)))
-    grid::grid.text(texts[gp], x = 0, y = grid::unit(y[gp]/totalheight, "npc"), just = c(0,0))
-    if (verbose)
-      cat("width = ", widths[gp], "\n",
-          "ascent = ", ascents[gp], "\n",
-          "descent = ", descents[gp], "\n")
-    grid::popViewport()
-  }
+  df <- df[match(keys0, keys),]
   
   # grid::grid.lines(x = rep(c(0,1,NA), n), y = grid::unit(rep(y/totalheight, each = 3), "npc")) # baselines
   
-  getraster(TRUE)
+  structure(getraster(TRUE), metrics = df)
 }
-
-library(rgl)
-x <- text3d(1:4, 1:4, 1:4, c("xxx", "yyy", "xxx", "xxM"), cex=5)
-y <- idToBitmap(x, verbose = TRUE)
-grid::grid.raster(y)
