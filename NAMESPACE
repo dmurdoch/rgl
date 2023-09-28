@@ -165,8 +165,8 @@ export(.check3d,
    importFrom(utils, getWindowsHandle)
  }
  
- importFrom(graphics, legend, par, plot, plot.new, polygon,
-       strwidth, strheight)
+ importFrom(graphics, legend, par, plot, plot.new, plot.window, polygon,
+       segments, strwidth, strheight, text)
  importFrom(grDevices, as.raster, col2rgb, colorRamp, dev.cur, dev.new, 
        dev.off, png, postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 

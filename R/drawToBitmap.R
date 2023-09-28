@@ -88,12 +88,12 @@ bbox_with_subs <- function(strings, family = "",
       # Some glyphs are missing.  Break the string up into 
       # sequences of non-missing and missing glyphs
         
-      parts <- rle(shape[rows, "index"] == 0)
+      parts <- rle(shape$index[rows] == 0)
       lens <- parts$lengths
       starts <- c(1, 1 + cumsum(lens)[-length(lens)])
       subs <- parts$values
       indx <- seq_along(parts$lengths)
-      parts <- substring(shape0$metrics[m,"string"], 
+      parts <- substring(shape0$metrics$string[m], 
                          starts, starts + lens - 1)
         
       n0 <- length(parts)
@@ -141,8 +141,14 @@ getPowerOfTwo <- function(n) {
   2^ceiling(log(n, 2))
 }
 
-drawToBitmap <- function(texts, cex = par3d(cex), family = par3d("family"), font = par3d("font"), background = "transparent",
-                         verbose = FALSE, powerOfTwo = TRUE) {
+drawToBitmap <- function(texts, cex = par3d(cex), 
+                         family = par3d("family"), 
+                         font = par3d("font"), 
+                         background = "transparent",
+                         powerOfTwo = TRUE,
+                         verbose = FALSE,
+                         showBaselines = FALSE,
+                         onePerLine = FALSE) {
   
   if (!length(texts))
     return(NULL)
@@ -183,7 +189,7 @@ drawToBitmap <- function(texts, cex = par3d(cex), family = par3d("family"), font
   o <- order(heights)
   for (i in o) {
     width <- measures$width[i]
-    if (x0 + width > bmWidth) {
+    if (x0 + width > bmWidth || onePerLine) {
       y0 <- y0 + h0
       h0 <- x0 <- 0
     }
@@ -196,22 +202,26 @@ drawToBitmap <- function(texts, cex = par3d(cex), family = par3d("family"), font
   if (powerOfTwo)
     bmHeight <- getPowerOfTwo(bmHeight)
 
-  getraster <- agg_capture(width = bmWidth, height = bmHeight, units = "px", background = background)
-  
   if (verbose)
     cat("width=", bmWidth, " height=", bmHeight, "\n")
   
+  getraster <- agg_capture(width = bmWidth, height = bmHeight, units = "px", background = background)
   on.exit(dev.off())
+  
+  par(mar = c(0,0,0,0))
+  plot.new()
+  plot.window(xlim = c(0, bmWidth),
+              ylim = c(0, bmHeight),
+              xaxs = "i", yaxs = "i")
   
   for (fam in unique(family)) {
     gp <- fam == family
-    grid::pushViewport(grid::viewport(gp = grid::gpar(cex = cex[gp], font = font[gp], fontfamily = fam)))
-    grid::grid.text(texts[gp], 
-                    x = grid::unit(x[gp]/bmWidth, "npc"), 
-                    y = grid::unit(y[gp]/bmHeight, "npc"), 
-                    just = c(0,0))
-    grid::popViewport()
+    text(x[gp], y[gp], texts[gp], adj = c(0,0),
+         cex = cex[gp], font = font[gp], family = fam)
   }
+  
+  if (showBaselines)
+    segments(x, y, x + measures$width, y)
   
   df$x <- x
   df$y <- y
@@ -220,8 +230,6 @@ drawToBitmap <- function(texts, cex = par3d(cex), family = par3d("family"), font
   df$ascent <- measures$ascent
   
   df <- df[match(keys0, keys),]
-  
-  # grid::grid.lines(x = rep(c(0,1,NA), n), y = grid::unit(rep(y/totalheight, each = 3), "npc")) # baselines
   
   structure(getraster(TRUE), metrics = df)
 }
