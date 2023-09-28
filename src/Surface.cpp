@@ -1,3 +1,4 @@
+#include "R.h"
 #include "Surface.h"
 #include "Material.h"
 
@@ -15,7 +16,7 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
                  double* in_normal_x, double* in_normal_z, double* in_normal_y,
                  double* in_texture_s, double* in_texture_t,
 	         int* in_coords, int in_orientation, int* in_flags, int in_ignoreExtent)
-: Shape(in_material, in_ignoreExtent)
+: FaceSet(in_material, GL_QUADS, 4, in_ignoreExtent, false)
 {
   nx = in_nx;
   nz = in_nz;
@@ -49,18 +50,19 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
   user_normals = in_flags[2];
   user_textures = in_flags[3];
   
-  if (user_normals)
-    normalArray.alloc(nvertex);
-    
+  normalArray.alloc(nvertex);
+  
+  hasmissing = false;
+  
   int iy  = 0;
   for(int iz=0;iz<nz;iz++) {
-    for(int ix=0;ix<nx;ix++,iy++) {    
+    for(int ix=0;ix<nx;ix++,iy++) {  
       *z = (float) in_z[zmat ? iy : iz];
       *x = (float) in_x[xmat ? iy : ix];
       *y = (float) in_y[iy];
-
       vertexArray[iy] = v;
-
+      hasmissing |= v.missing();
+      
       boundingBox += v;
 	
       if ( user_normals ) {
@@ -83,15 +85,30 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
       }
     }
   }
-  use_normal    = user_normals || material.lit || ( material.texture && material.texture->is_envmap() );
-  if ( use_normal && !user_normals ) {
+  for(int iz=1;iz<nz;iz++) {
+  	for(int ix=1;ix<nx;ix++) {
+  		int i1 = iz*nx + ix, i2 = i1 - 1, i3 = i2 - nx, i4 = i3 + 1;
+  		if (!hasmissing || 
+          (!vertexArray[i1].missing() &&
+           !vertexArray[i2].missing() &&
+           !vertexArray[i3].missing() &&
+           !vertexArray[i4].missing())) {
+  			indices.push_back(i1);
+  			indices.push_back(i2);
+  			indices.push_back(i3);
+  			indices.push_back(i4);
+  		}
+  	}
+  }
+  nprimitives = indices.size()/4;
+  
+  if ( !user_normals ) {
     normalArray.alloc(nvertex);
     iy = 0;
     for(int iz=0;iz<nz;iz++) 
       for(int ix=0;ix<nx;ix++,iy++) 
         normalArray[iy] = getNormal(ix, iz);
   }    
-  use_texcoord  = user_textures || ( material.texture && !(material.texture->is_envmap() ) ); 
   if ((material.point_antialias && ( material.front == material.POINT_FACE 
                                   || material.back  == material.POINT_FACE))
    || (material.line_antialias  && ( material.front == material.LINE_FACE 
@@ -135,42 +152,6 @@ Vertex Surface::getNormal(int ix, int iz)
   return total;
 }
 
-void Surface::draw(RenderContext* renderContext)
-{
-#ifndef RGL_NO_OPENGL
-  bool missing;
-  drawBegin(renderContext);
-
-  for(int iz=0;iz<nz-1;iz++) {
-
-    missing = true;
-    
-    for(int ix=0;ix<nx;ix++) {
-
-      int i;
-      
-      if ( missing != (vertexArray[iz*nx+ix].missing() || vertexArray[(iz+1)*nx+ix].missing()) ) {
-        missing = !missing;
-        if (missing) glEnd();
-        else glBegin(GL_QUAD_STRIP);
-      }
-      if (!missing) {
-        // If orientation == 1, we draw iz+1 first, otherwise iz first      
-        i = (iz+  orientation)*nx+ix;
-  
-        glArrayElement( i );
-  
-        i = (iz+ !orientation)*nx+ix;
-        glArrayElement( i );
-      }
-    }
-    if (!missing) glEnd();
-  }
-
-  drawEnd(renderContext);
-#endif
-}
-
 Vertex Surface::getCenter(int ix, int iz)
 {
   Vertex accu(0.0f,0.0f,0.0f);
@@ -200,74 +181,14 @@ Vertex Surface::getPrimitiveCenter(int index)
   return getCenter( index % (nx-1), index / (nx-1) );
 }
 
-void Surface::drawBegin(RenderContext* renderContext)
-{
-  Shape::drawBegin(renderContext);
-  material.beginUse(renderContext);
-  vertexArray.beginUse();
-
-  if (use_texcoord)
-    texCoordArray.beginUse();
-    
-  if (use_normal)
-    normalArray.beginUse();
-
-}
-
-void Surface::drawPrimitive(RenderContext* renderContext, int index)
-{
-#ifndef RGL_NO_OPENGL
-  int ix = index % (nx-1), iz = index / (nx-1),
-      s = iz*nx + ix;
-  if (!vertexArray[s].missing() &&
-      !vertexArray[s+1].missing() &&
-      !vertexArray[s+nx].missing() &&
-      !vertexArray[s+nx+1].missing()) {
-    glBegin(GL_QUAD_STRIP);
-    for (int i = 0 ; i < 2; ++i ) {
-      ix = s % nx + i;
-      for (int j = 0 ; j < 2; ++j ) {
-        if (orientation)
-          iz = s / nx + !j;
-        else
-          iz = s / nx + j;
-        glArrayElement( iz*nx + ix );       
-      }
-    }
-    glEnd();
-  }
-#endif
-}  
-  
-void Surface::drawEnd(RenderContext* renderContext) 
-{
-#ifndef RGL_NO_OPENGL
-  if (use_normal)
-    normalArray.endUse();
-    
-  if (use_texcoord)
-    texCoordArray.endUse();
-
-  vertexArray.endUse();
-
-  material.endUse(renderContext);
-  Shape::drawEnd(renderContext);
-#endif
-}
 
 int Surface::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
-    case VERTICES: return nx*nz;
-    case NORMALS: if (use_normal)
-    		    return nx*nz;
-    		  else
-    		    return 0;
-    case TEXCOORDS: return texCoordArray.size();
     case SURFACEDIM: return 1;
     case FLAGS: return 2; 
   }
-  return Shape::getAttributeCount(subscene, attrib);
+  return FaceSet::getAttributeCount(subscene, attrib);
 }
 
 void Surface::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
@@ -276,32 +197,6 @@ void Surface::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
   if (first + count < n) n = first + count;
   if (first < n) {
     switch (attrib) {
-      case VERTICES: {
-        while (first < n) {
-          *result++ = vertexArray[first].x;
-          *result++ = vertexArray[first].y;
-          *result++ = vertexArray[first].z;
-          first++;
-        }
-        return;
-      }        
-      case NORMALS: {
-        while (first < n) {
-          *result++ = normalArray[first].x;
-          *result++ = normalArray[first].y;
-          *result++ = normalArray[first].z;
-          first++;
-        }
-        return;
-      }
-      case TEXCOORDS: {
-        while (first < n) {
-          *result++ = texCoordArray[first].s;
-          *result++ = texCoordArray[first].t;
-          first++;
-        }
-        return;
-      }
       case SURFACEDIM: {
         *result++ = nx;
         *result++ = nz;
@@ -312,6 +207,6 @@ void Surface::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
         *result++ = (double) orientation;
         return;
       }
-    Shape::getAttribute(subscene, attrib, first, count, result);
+    FaceSet::getAttribute(subscene, attrib, first, count, result);
   }
 }

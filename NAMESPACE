@@ -143,12 +143,14 @@ export(.check3d,
  S3method(print, shapelist3d)
  S3method(print, rglMouseSelection)
  S3method(print, rglshaders)
+ S3method(print, rglShader)
  
  S3method(knit_print, rglId)
  S3method(knit_print, rglOpen3d)
  
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)
+ S3method(summary, rglShader)
  
  S3method(drape3d, default)
  S3method(drape3d, mesh3d)

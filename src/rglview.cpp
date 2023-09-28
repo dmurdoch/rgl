@@ -20,8 +20,10 @@
 
 using namespace rgl;
 
+bool rgl::doUseShaders = false;
+
 RGLView::RGLView(Scene* in_scene)
- : View(0,0,256,256,0), autoUpdate(false)
+ : View(0,0,256,256,0), autoUpdate(false), useShaders(false)
 {
   scene = in_scene;
   flags = 0;
@@ -87,6 +89,8 @@ void RGLView::paint(void) {
   
   renderContext.time = t;
   renderContext.deltaTime = dt;
+  
+  doUseShaders = useShaders; /* Make useShaders globally visible during painting */
   
   /* This doesn't do any actual plotting, but it calculates matrices etc.,
   and may call user callbacks */
@@ -527,4 +531,16 @@ void RGLView::setMouseListeners(Subscene* sub, unsigned int n, int* ids)
     if (subscene)
       sub->addMouseListener(subscene);
   }
+}
+
+bool RGLView::setUseShaders(bool in_useShaders)
+{
+#ifndef RGL_NO_OPENGL
+	if (in_useShaders && !GLAD_GL_VERSION_2_1) {
+		useShaders = false;
+		return false;
+	}
+#endif
+	useShaders = in_useShaders;
+	return true;
 }

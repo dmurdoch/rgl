@@ -90,7 +90,7 @@ rgl.material.names <- c("color", "alpha", "lit", "ambient", "specular",
     "texminfilter", "texmagfilter", "texenvmap",
     "depth_mask", "depth_test", "isTransparent",
     "polygon_offset", "margin", "floating", "tag",
-    "blend")
+    "blend", "vertex_shader", "fragment_shader")
 
 rgl.material.readonly <- "isTransparent"
 
@@ -892,7 +892,8 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  FOV = 30,
 		  bg = list(color="white",fogtype = "none"),
 		  family = "sans",
-		  material = list(color="black", fog = TRUE))
+		  material = list(color="black", fog = TRUE),
+		  useShaders = TRUE)
 
 if (.Platform$OS.type == "windows")
 	r3dDefaults$useFreeType <- FALSE

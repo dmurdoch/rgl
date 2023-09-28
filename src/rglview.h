@@ -48,6 +48,8 @@ public:
   void	      setDefaultFont(const char *family, int style, double cex, bool useFreeType);
   const char* getFontname() const;
   int         getActiveSubscene() {return activeSubscene;}
+  bool        getUseShaders() { return useShaders; };
+  bool        setUseShaders(bool in_useShaders);
   
   /* NB:  these functions do not maintain consistency with userMatrix */
   
@@ -95,6 +97,8 @@ private:
   };
 
   int  flags;
+  
+  bool useShaders;
 };
 
 } // namespace rgl

@@ -270,12 +270,14 @@ Subscene* Scene::setCurrentSubscene(Subscene* subscene)
 void Scene::setupLightModel()
 {
 #ifndef RGL_NO_OPENGL
-  Color global_ambient(0.0f,0.0f,0.0f,1.0f);
+	if (!doUseShaders) {
+    Color global_ambient(0.0f,0.0f,0.0f,1.0f);
 
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient.data );
-  glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE );
-  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
-  SAVEGLERROR;  
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient.data );
+    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE );
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
+    SAVEGLERROR;  
+  }
 #endif
 }
   

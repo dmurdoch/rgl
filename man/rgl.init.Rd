@@ -6,12 +6,14 @@ Initializing the RGL system.
 }
 \usage{
 rgl.init(initValue = 0, onlyNULL = FALSE, 
-         debug = getOption("rgl.debug", FALSE))
+         debug = getOption("rgl.debug", FALSE),
+         home)
 }
 \arguments{
   \item{initValue}{value for internal use only}
   \item{onlyNULL}{only initialize the null (no display) device}
   \item{debug}{enable some debugging messages}
+  \item{home}{the home directory of \pkg{rgl}}
 }
 
 \value{

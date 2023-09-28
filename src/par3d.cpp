@@ -152,9 +152,9 @@ static void getPosition(double* position, Subscene* subscene)
 static void setPosition(double* position, RGLView* rglview, Subscene* subscene)
 {
   subscene->setPosition(position);
-  rglview->update()
+  rglview->update();
     
-    CHECKGLERROR;
+  CHECKGLERROR;
 }
 
 static void getScale(double* scale, Subscene* subscene)
@@ -290,6 +290,11 @@ static bool setUseFreeType(bool useFreeType, RGLView* rglview)
   rglview->setFontUseFreeType(useFreeType);
   CHECKGLERROR;
   return true;
+}
+
+static bool setUseShaders(bool useShaders, RGLView* rglview)
+{
+	return rglview->setUseShaders(useShaders);
 }
 
 static char* getFontname(RGLView* rglview)
@@ -544,6 +549,12 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
     if (!setUseFreeType(LOGICAL(x)[0], rglview)) success = 0;
     UNPROTECT(1);
   }
+  else if (streql(what, "useShaders")) {
+  	lengthCheck(what, value, 1);
+  	PROTECT(x=Rf_coerceVector(value, LGLSXP));
+  	if (!setUseShaders(LOGICAL(x)[0], rglview)) success = 0;
+  	UNPROTECT(1);
+  }
   
   else Rf_warning(_("parameter \"%s\" cannot be set"), what);
   
@@ -698,6 +709,10 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
   else if (streql(what, "activeSubscene")) {
     PROTECT(value = Rf_allocVector(INTSXP, 1));
     INTEGER(value)[0] = activeSubscene(rglview);
+  }
+  else if (streql(what, "useShaders")) {
+  	PROTECT(value = Rf_allocVector(LGLSXP, 1));
+    LOGICAL(value)[0] = rglview->getUseShaders();
   } else
     PROTECT(value);
   

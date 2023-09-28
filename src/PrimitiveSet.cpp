@@ -1,3 +1,4 @@
+
 #include "PrimitiveSet.h"
 #include "BBoxDeco.h"
 #include "subscene.h"
@@ -19,8 +20,10 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
 {
   type                = in_type;
   nverticesperelement = in_nverticesperelement;
-  nvertices           = 0;
-  nindices            = 0;
+  indices.clear();
+#ifndef RGL_NO_OPENGL
+  vbo                 = 0;
+#endif
 }
 
 void PrimitiveSet::initPrimitiveSet(
@@ -29,10 +32,9 @@ void PrimitiveSet::initPrimitiveSet(
     int in_nindices,
     int* in_indices
 ) {
-  nvertices           = in_nvertices;
-  nindices            = in_nindices;
-  if (nindices)
-    nprimitives       = nindices / nverticesperelement;
+  size_t nvertices    = in_nvertices;
+  if (in_nindices)
+    nprimitives       = in_nindices / nverticesperelement;
   else
     nprimitives       = nvertices / nverticesperelement;
   vertexArray.alloc(nvertices);
@@ -44,13 +46,13 @@ void PrimitiveSet::initPrimitiveSet(
     boundingBox += vertexArray[i];
     hasmissing |= vertexArray[i].missing();
   }
-  if (nindices) {
-    indices = new GLuint[nindices];
-    for(int i=0; i < nindices; i++) {
+  if (in_nindices) {
+    indices.resize(in_nindices);
+    for(int i=0; i < in_nindices; i++) {
       indices[i] = (GLuint)in_indices[i];
     }
   } else
-    indices = NULL;
+    indices.clear();
 }
 
 PrimitiveSet::PrimitiveSet (
@@ -70,10 +72,9 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
 {
   type                = in_type;
   nverticesperelement = in_nverticesperelement;
-  nvertices           = in_nvertices;
-  nindices            = in_nindices;
-  if (nindices)
-    nprimitives       = nindices / nverticesperelement;
+  size_t nvertices    = in_nvertices;
+  if (in_nindices)
+    nprimitives       = in_nindices / nverticesperelement;
   else
     nprimitives       = nvertices / nverticesperelement;
   material.colorPerVertex(true, nvertices);
@@ -88,19 +89,17 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
     hasmissing |= vertexArray[i].missing();
   }
   
-  if (nindices) {
-    indices = new GLuint[nindices];
-    for(int i=0; i < nindices; i++) {
+  if (in_nindices) {
+    indices.resize(in_nindices);
+    for(int i=0; i < in_nindices; i++) {
       indices[i] = (GLuint)in_indices[i];
     }
   } else
-    indices = NULL;
+    indices.clear();
 }
 
 PrimitiveSet::~PrimitiveSet () 
 {
-  if (nindices)
-    delete [] indices;
 }
 
 // ---------------------------------------------------------------------------
@@ -108,8 +107,11 @@ PrimitiveSet::~PrimitiveSet ()
 void PrimitiveSet::drawBegin(RenderContext* renderContext)
 {
   Shape::drawBegin(renderContext);
-  material.beginUse(renderContext);
-  SAVEGLERROR;
+	
+#ifndef RGL_NO_OPENGL
+  if (doUseShaders)
+  	Shape::beginShader(renderContext);
+#endif  
   BBoxDeco* bboxdeco = 0;
   if (material.marginCoord >= 0) {
     Subscene* subscene = renderContext->subscene;
@@ -117,44 +119,75 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
   }
   if (bboxdeco) {
     invalidateDisplaylist();
-    verticesTodraw.alloc(vertexArray.size());
+    verticesTodraw.duplicate(vertexArray);
     for (int i=0; i < vertexArray.size(); i++)
       verticesTodraw.setVertex(i, bboxdeco->marginVecToDataVec(vertexArray[i], renderContext, &material) );
     verticesTodraw.beginUse();
-  } else
+  } else {
     vertexArray.beginUse();
+  }
+  SAVEGLERROR;
+  material.beginUse(renderContext);
   SAVEGLERROR;
 }
 
 // ---------------------------------------------------------------------------
 
+void PrimitiveSet::drawRange(int start, int stop)
+{
+#ifndef RGL_NO_OPENGL
+  if (start >= stop) return;
+  size_t nindices = indices.size();
+  if (doUseShaders) {
+    if (!nindices)
+      glDrawArrays(type, start, nverticesperelement*(stop - start) );
+    else
+      glDrawElements(type, nverticesperelement*(stop - start), 
+                     GL_UNSIGNED_INT, 
+                     indices.data() + nverticesperelement*start);
+  } else {
+    glBegin(type);
+    for (int i = start; i < stop; i++) {
+      int elt0 = nverticesperelement*i;
+      for (int j = 0; j < nverticesperelement; j++) {
+        int elt = elt0 + j;
+        if (nindices)
+          elt = indices[elt];
+        glArrayElement(elt);
+      }
+    }
+    glEnd();
+  }
+#endif
+}
 void PrimitiveSet::drawAll(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
+	size_t nindices = indices.size();
   if (!hasmissing) {
-    if (!nindices)
-      glDrawArrays(type, 0, nverticesperelement*nprimitives );
-    else
-      glDrawElements(type, nindices, GL_UNSIGNED_INT, indices);
+    drawRange(0, nprimitives);
   } else {
     bool missing = true;
+  	int first = 0;
     for (int i=0; i<nprimitives; i++) {
       bool skip = false;
-      int elt = nindices ? indices[nverticesperelement*i] :
-                                   nverticesperelement*i;
-      for (int j=0; j<nverticesperelement; j++)
-        skip |= vertexArray[elt + j].missing();
+    	int elt0 = nverticesperelement*i;
+      for (int j=0; j<nverticesperelement; j++) {
+      	int elt = elt0 + j;
+      	if (nindices)
+      		elt = indices[elt];
+        skip |= vertexArray[elt].missing();
+      }
       if (missing != skip) {
         missing = !missing;
-        if (missing) glEnd();
-        else glBegin(type);
+      	if (missing)
+      		drawRange(first, i);
+        else
+      		first = i;
       }
-      if (!missing) 
-        for (int j=0; j<nverticesperelement; j++) {
-          glArrayElement( elt + j);
-        }
     }
-    if (!missing) glEnd();
+    if (!missing)
+    	drawRange(first, nprimitives);
   }              
 #endif
 }
@@ -165,6 +198,7 @@ void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
   int idx = index*nverticesperelement;
+	size_t nindices = indices.size();
   if (hasmissing) {
     bool skip = false;
     for (int j=0; j<nverticesperelement; j++) {
@@ -174,7 +208,7 @@ void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
     }
   }
   if (nindices)
-    glDrawElements(type, nverticesperelement, GL_UNSIGNED_INT, indices + idx);
+    glDrawElements(type, nverticesperelement, GL_UNSIGNED_INT, indices.data() + idx);
   else
     glDrawArrays(type, idx, nverticesperelement);
 #endif
@@ -201,6 +235,13 @@ void PrimitiveSet::draw(RenderContext* renderContext)
   drawAll(renderContext);
   SAVEGLERROR;
   
+#ifndef RGL_NO_OPENGL
+  if (doUseShaders && flags.is_twosided) {
+  	beginSideTwo();
+  	drawAll(renderContext);
+  }
+#endif
+  
   drawEnd(renderContext);
   SAVEGLERROR;
 }
@@ -208,8 +249,8 @@ void PrimitiveSet::draw(RenderContext* renderContext)
 int PrimitiveSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
-    case VERTICES: return nvertices;
-    case INDICES: return nindices;
+    case VERTICES: return vertexArray.size();
+    case INDICES: return indices.size();
   }
   return Shape::getAttributeCount(subscene, attrib);
 }
@@ -235,6 +276,30 @@ void PrimitiveSet::getAttribute(SceneNode* subscene, AttribID attrib, int first,
     }
     Shape::getAttribute(subscene, attrib, first, count, result);
   }
+}
+
+void PrimitiveSet::initialize()
+{
+	Shape::initialize();
+#ifndef RGL_NO_OPENGL
+	if (doUseShaders) {
+	  
+		initShader();
+	  
+	  vertexArray.appendToBuffer(vertexbuffer);
+	  vertexArray.setAttribLocation(glLocs["aPos"]);
+	  
+	  if (material.useColorArray)
+	    material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
+	    
+	  material.colors.setAttribLocation(glLocs["aCol"]);
+
+	  if (material.texture && glLocs_has_key("uSampler"))
+	    material.texture->setSamplerLocation(glLocs["uSampler"]);
+	  
+	}
+	SAVEGLERROR;
+#endif
 }
 
 // ===[ FACE SET ]============================================================
@@ -264,6 +329,7 @@ FaceSet::FaceSet(
   else
     normalArray.alloc(0);
   if (in_useTexcoords) {
+  	size_t nvertices = vertexArray.size();
     texCoordArray.alloc(nvertices);
     for(int i=0;i<nvertices;i++) {
       texCoordArray[i].s = (float) in_texcoords[i*2+0];
@@ -296,6 +362,7 @@ void FaceSet::initFaceSet(
     initNormals(in_normals);
 
   if (useTexcoords) {
+  	size_t nvertices = vertexArray.size();
     texCoordArray.alloc(nvertices);
     for(int i=0;i<nvertices;i++) {
       texCoordArray[i].s = (float) in_texcoords[i*2+0];
@@ -306,6 +373,8 @@ void FaceSet::initFaceSet(
 
 void FaceSet::initNormals(double* in_normals)
 {
+	size_t nindices = indices.size();
+	size_t nvertices = vertexArray.size();
   normalArray.alloc(nvertices);
   if (in_normals) {
     for(int i=0;i<nvertices;i++) {
@@ -342,32 +411,44 @@ void FaceSet::initNormals(double* in_normals)
     for (int i=0; i < nvertices; i++)
       normalArray[i].normalize();
   }
+#ifndef RGL_NO_OPENGL
+  flags.has_normals = true;
+#endif
 }
 
 // ---------------------------------------------------------------------------
 
 void FaceSet::drawBegin(RenderContext* renderContext)
 {  
-  PrimitiveSet::drawBegin(renderContext);
-
-  if (material.lit) {
-    if (normalArray.size() < nvertices)
+  if (material.lit && 
+      normalArray.size() < vertexArray.size())
       initNormals(NULL);
-    
+  
+  PrimitiveSet::drawBegin(renderContext);
+  
+  if (material.lit) {
     BBoxDeco* bboxdeco = 0;
     if (material.marginCoord >= 0) {
       Subscene* subscene = renderContext->subscene;
       bboxdeco = subscene->get_bboxdeco();
     }
     if (bboxdeco) {
-      normalsToDraw.alloc(normalArray.size());
+      normalsToDraw.duplicate(normalArray);
       for (int i=0; i < normalArray.size(); i++)
         normalsToDraw.setVertex(i, bboxdeco->marginNormalToDataNormal(normalArray[i], renderContext, &material) );
       normalsToDraw.beginUse();
-    } else
+    } else {
       normalArray.beginUse();
+    }
   }
   texCoordArray.beginUse();
+  SAVEGLERROR;
+#ifndef RGL_NO_OPENGL
+  // printBufferInfo();
+  // printAttributes(nvertices);
+  // printUniforms();
+  // SAVEGLERROR;
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -386,7 +467,7 @@ void FaceSet::drawEnd(RenderContext* renderContext)
 int FaceSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
-    case NORMALS: return nvertices;
+    case NORMALS: return normalArray.size();
     case TEXCOORDS: return texCoordArray.size();
   }
   return PrimitiveSet::getAttributeCount(subscene, attrib);
@@ -420,4 +501,21 @@ void FaceSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
     }
     PrimitiveSet::getAttribute(subscene, attrib, first, count, result);
   }
+}
+
+void FaceSet::initialize()
+{
+	PrimitiveSet::initialize();
+#ifndef RGL_NO_OPENGL
+	if (normalArray.size() < vertexArray.size())
+		initNormals(NULL);
+	if (glLocs_has_key("aNorm")) {
+	  normalArray.setAttribLocation(glLocs["aNorm"]);
+		normalArray.appendToBuffer(vertexbuffer);
+  }
+	if (glLocs_has_key("aTexcoord")) {
+		texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
+		texCoordArray.appendToBuffer(vertexbuffer);
+	}
+#endif
 }

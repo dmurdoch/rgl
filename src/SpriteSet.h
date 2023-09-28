@@ -70,6 +70,8 @@ public:
    */
   void remove_shape(int id);
   
+  bool isFixedSize() {return fixedSize;};
+  
 private:
   GLdouble userMatrix[16]; /* Transformation for 3D sprites */
   Matrix4x4 m;             /* Modelview matrix cache */

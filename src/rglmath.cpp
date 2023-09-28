@@ -2,6 +2,7 @@
 // This file is part of RGL.
 //
 
+#include "u_math.h"
 #include "rglmath.h"
 #include "R.h"
 
@@ -321,6 +322,12 @@ void Matrix4x4::getData(double* dest)
     	dest[i] = data[i];
 }
 
+void Matrix4x4::getData(float* dest)
+{
+	for(int i=0;i<16;i++)
+		dest[i] = data[i];
+}
+
 Matrix4x4 Matrix4x4::scaleMatrix(double sx, double sy, double sz)
 {
   Matrix4x4 result;
@@ -384,3 +391,9 @@ Vertex PolarCoord::vector() const {
   );
 }
 
+Matrix4x4 Matrix4x4::inverse() 
+{
+	Matrix4x4 result(*this);
+	util_invert_mat4x4(result.data, data);
+	return result;
+}

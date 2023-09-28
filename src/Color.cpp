@@ -1,5 +1,6 @@
 #include "Color.h"
 #include "types.h"
+#include "R.h"
 
 #include <cstdlib>
 #include <cstring> // for memcpy
@@ -125,6 +126,7 @@ void Color::useColor() const
 {
 #ifndef RGL_NO_OPENGL
   glColor4fv(data);
+	SAVEGLERROR;
 #endif
 }
 
@@ -140,12 +142,20 @@ ColorArray::ColorArray()
   arrayptr = NULL;
   ncolor   = 0;
   nalpha   = 0;
+#ifndef RGL_NO_OPENGL  
+  location = -1;
+  offset = -1;
+#endif
 }
 
 ColorArray::ColorArray( Color& bg, Color &fg )
 {
   ncolor   = 2;
   nalpha   = 2;
+#ifndef RGL_NO_OPENGL  
+  location = -1;
+  offset = -1;
+#endif
   arrayptr = (u8*) realloc( NULL, sizeof(u8) * 4 * ncolor);
   arrayptr[0] = bg.getRedub();
   arrayptr[1] = bg.getBlueub();
@@ -161,6 +171,10 @@ ColorArray::ColorArray( Color& bg, Color &fg )
 ColorArray::ColorArray( ColorArray& src ) {
   ncolor = src.ncolor;
   nalpha = src.nalpha;
+#ifndef RGL_NO_OPENGL  
+  location = -1;
+  offset = -1;
+#endif
   hint_alphablend = src.hint_alphablend;
   if (ncolor > 0) {
     arrayptr = (u8*) realloc( NULL, sizeof(u8) * 4 * ncolor);
@@ -230,17 +244,60 @@ bool ColorArray::hasAlpha() const
   return hint_alphablend;
 }
 
+#ifndef RGL_NO_OPENGL
+void ColorArray::setAttribLocation(GLint loc)
+{
+	location = loc;
+}
+
+void ColorArray::appendToBuffer(std::vector<GLubyte>& buffer, unsigned int nvertices)
+{
+	offset = buffer.size();
+	const GLubyte* p = reinterpret_cast<const GLubyte*>(arrayptr);
+	while (nvertices > 0) {
+		int inserts = nvertices > ncolor ? ncolor : nvertices;
+	  buffer.insert(buffer.end(), p, p + 4*inserts*sizeof(u8));
+	  nvertices -= inserts;
+	}
+}
+#endif
+
 void ColorArray::useArray() const
 {
 #ifndef RGL_NO_OPENGL
-  glColorPointer(4, GL_UNSIGNED_BYTE, 0, (const GLvoid*) arrayptr );
+	if (doUseShaders && location >= 0) {
+		glEnableVertexAttribArray(location); 
+		SAVEGLERROR;
+		glVertexAttribPointer(location, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (GLbyte*)0 + offset);
+		SAVEGLERROR;
+	} else {
+		glEnableClientState(GL_COLOR_ARRAY);
+		SAVEGLERROR;
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, (const GLvoid*) arrayptr );
+		SAVEGLERROR;
+  }
+#endif
+}
+
+void ColorArray::enduseArray()
+{
+#ifndef RGL_NO_OPENGL	
+	if (doUseShaders && location >= 0)
+		glDisableVertexAttribArray(location); 
+	else
+		glDisableClientState(GL_COLOR_ARRAY);
 #endif
 }
 
 void ColorArray::useColor(int index) const
 {
-#ifndef RGL_NO_OPENGL  
-  glColor4ubv( (const GLubyte*) &arrayptr[ index * 4] );
+#ifndef RGL_NO_OPENGL 
+	if (doUseShaders && location >= 0) {
+		glVertexAttrib4Nubv(location, (const GLubyte*) &arrayptr[ index * 4]);
+	} else {
+    glColor4ubv( (const GLubyte*) &arrayptr[ index * 4] );
+  }
+	SAVEGLERROR;
 #endif
 }
 

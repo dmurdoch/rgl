@@ -27,6 +27,12 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
     sphereMesh.setGenTexCoord(true);
 
   sphereMesh.setGlobe(16,16);
+  if (doUseShaders) {
+    Vertex pt(0., 0., 0.);
+    sphereMesh.setCenter( pt );
+    sphereMesh.setRadius( 1.0 );
+    sphereMesh.update();
+  }
   
   for (int i=0;i<center.size();i++)
     boundingBox += Sphere( center.get(i), radius.getRecycled(i) );
@@ -58,6 +64,39 @@ void SphereSet::drawBegin(RenderContext* renderContext)
   Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
   lastdrawn = -1;
+  
+#ifndef RGL_NO_OPENGL
+  if (doUseShaders) {
+    Shape::beginShader(renderContext);
+    material.colors.setAttribLocation(glLocs.at("aCol"));
+    sphereMesh.drawBegin(renderContext, 0);
+  }
+#endif  
+}
+ 
+
+void SphereSet::setSphereMVmatrix(RenderContext* renderContext)
+{
+#ifndef RGL_NO_OPENGL
+  Subscene* subscene = renderContext->subscene;
+  float mat[16];
+  Matrix4x4 MV = subscene->modelMatrix 
+  * sphereMesh.MVmodification(renderContext->subscene->getModelViewpoint()->scale) ;
+  
+  MV.getData(mat);
+  
+  if (doUseShaders) {
+
+    glUniformMatrix4fv(glLocs.at("mvMatrix"), 1, GL_FALSE, mat);
+  
+    if (glLocs_has_key("normMatrix")) {
+      Matrix4x4 normMatrix = MV.inverse();
+      normMatrix.transpose();
+      normMatrix.getData(mat);
+      glUniformMatrix4fv(glLocs.at("normMatrix"), 1, GL_FALSE, mat);
+    }
+  }
+#endif
 }
 
 void SphereSet::drawPrimitive(RenderContext* renderContext, int index) 
@@ -80,34 +119,43 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
     material.useColor(index);
     sphereMesh.setCenter( pt );
     sphereMesh.setRadius( radius.getRecycled(index) );
-    sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
+    if (doUseShaders) // Shaders work differently
+      setSphereMVmatrix(renderContext);
+    else 
+      sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
     sphereMesh.draw(renderContext);
-    
   } else {
    int i1 = index / facets, i2 = index % facets;
    bool endcap = i2 < sphereMesh.getSegments() 
    	      || i2 >= facets - sphereMesh.getSegments();
 	
    if (i1 != lastdrawn) {
+     if (lastdrawn >= 0) {
+       if (doUseShaders)
+         sphereMesh.doIndices( );
+       else
+         sphereMesh.drawEnd( renderContext );
+     }
      if (bboxdeco) {
        invalidateDisplaylist();
        pt = bboxdeco->marginVecToDataVec(center.get(i1), renderContext, &material);
      } else
-       pt = center.get(index);
+       pt = center.get(i1);
      if ( pt.missing() || ISNAN(radius.getRecycled(i1)) ) return;
 
      material.useColor(i1);
-     if (lastdrawn >= 0)
-       sphereMesh.drawEnd( renderContext );
      
      sphereMesh.setCenter( pt );
      sphereMesh.setRadius( radius.getRecycled(i1) );
-   
-     sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
-     sphereMesh.drawBegin( renderContext, endcap);
+     if (doUseShaders)
+       setSphereMVmatrix(renderContext);
+     else
+       sphereMesh.update( renderContext->subscene->getModelViewpoint()->scale );
+     if (!doUseShaders)
+       sphereMesh.drawBegin( renderContext, endcap);
      lastdrawn = i1;
      lastendcap = endcap;
-   } else if (endcap != lastendcap) {
+   } else if (endcap != lastendcap && !doUseShaders) {
      sphereMesh.drawEnd( renderContext );
      sphereMesh.drawBegin( renderContext, endcap);
      lastendcap = endcap;
@@ -118,8 +166,11 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
 
 void SphereSet::drawEnd(RenderContext* renderContext)
 {
-  if (lastdrawn >= 0)
+  if (lastdrawn >= 0) {
+    if (doUseShaders)
+      sphereMesh.doIndices();
     sphereMesh.drawEnd( renderContext );
+  }
   lastdrawn = -1;
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);  
@@ -193,3 +244,15 @@ void SphereSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, in
   }
 }
 
+void SphereSet::initialize()
+{
+#ifndef RGL_NO_OPENGL
+  Shape::initialize();
+  
+  initShader();
+  
+  sphereMesh.initialize(glLocs, vertexbuffer);
+  
+  
+#endif  
+}

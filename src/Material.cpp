@@ -63,6 +63,38 @@ void Material::setup()
     glVersion = 1.0;
 }
 
+void Material::beginSide(bool drawfront)
+{
+#ifndef RGL_NO_OPENGL
+	GLenum face = GL_FRONT_AND_BACK;
+	
+	if (!doUseShaders) {
+		face = drawfront ? GL_FRONT : GL_BACK;
+	}
+	
+	// FIXME:  why is this set backwards??
+	PolygonMode mode = !drawfront ? front : back;
+	
+	SAVEGLERROR;
+	
+	switch (mode) {
+	case FILL_FACE:
+		glPolygonMode( face, GL_FILL);
+		break;
+	case LINE_FACE:
+		glPolygonMode( face, GL_LINE);
+		break;
+	case POINT_FACE:
+		glPolygonMode( face, GL_POINT);
+		break;
+	case CULL_FACE:
+		glEnable(GL_CULL_FACE);
+		glCullFace(face);
+		break;
+	}
+#endif
+}
+
 void Material::beginUse(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
@@ -108,69 +140,59 @@ void Material::beginUse(RenderContext* renderContext)
 
   glDisable(GL_CULL_FACE);
 
-  for (int i=0;i<2;i++) {
-    
-    PolygonMode mode = (i==0) ? front : back;
-    
-    GLenum face = (i==0) ? GL_FRONT : GL_BACK;
-
-    SAVEGLERROR;
-
-    switch (mode) {
-      case FILL_FACE:
-        glPolygonMode( face, GL_FILL);
-        break;
-      case LINE_FACE:
-        glPolygonMode( face, GL_LINE);
-        break;
-      case POINT_FACE:
-        glPolygonMode( face, GL_POINT);
-        break;
-      case CULL_FACE:
-        glEnable(GL_CULL_FACE);
-        glCullFace(face);
-        break;
-    }
+  if (doUseShaders)
+  	beginSide(true);  // back set in Shape::beginSideTwo
+  else {
+    for (int i=0;i<2;i++)
+      beginSide(i == 0);
   }
 
   SAVEGLERROR;
 
-  glShadeModel( (smooth) ? GL_SMOOTH : GL_FLAT );
+  if (doUseShaders) {
+  	/* FIXME:  needs invPrMatrix to be set */
+  } else
+    glShadeModel( (smooth) ? GL_SMOOTH : GL_FLAT );
 
   SAVEGLERROR;
 
   if (lit) {
-    glEnable(GL_LIGHTING);
- 
-    SAVEGLERROR;
-
+  	if (doUseShaders) {
+  		
+  	} else {
+  		glEnable(GL_LIGHTING);
+  		
+  		SAVEGLERROR;
+  		
 #ifdef GL_VERSION_1_2
-    if (glVersion < 0.0) setup();
-    
-    if (glVersion >= 1.2)
-      glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR ); 
+  		if (glVersion < 0.0) setup();
+  		
+  		if (glVersion >= 1.2)
+  			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR ); 
 #endif
-
-    SAVEGLERROR;
-    
-    glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, ambient.data);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, specular.data);
-    glMaterialf (GL_FRONT_AND_BACK,GL_SHININESS, shininess);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION, emission.data);
+  		
+  		SAVEGLERROR;
+  		
+  		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+  		glEnable(GL_COLOR_MATERIAL);
+  		glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, ambient.data);
+  		glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, specular.data);
+  		glMaterialf (GL_FRONT_AND_BACK,GL_SHININESS, shininess);
+  		glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION, emission.data);
+  	}
   }
 
   SAVEGLERROR;
 
   if ( (useColorArray) && ( ncolor > 1 ) ) {
-    glEnableClientState(GL_COLOR_ARRAY);
     colors.useArray();
   } else
     colors.useColor(0);
 
   SAVEGLERROR;
 
+  /* FIXME:  these need to be done in the shader */
+  
   if (renderContext->gl2psActive == GL2PS_NONE) {
     glPointSize( size );
     glLineWidth( lwd );
@@ -178,6 +200,8 @@ void Material::beginUse(RenderContext* renderContext)
     gl2psPointSize( size );
     gl2psLineWidth( lwd );
   }
+  
+  /* FIXME:  these too? */
   
   if (polygon_offset) {
     glPolygonOffset(polygon_offset_factor, polygon_offset_units);
@@ -208,7 +232,7 @@ void Material::endUse(RenderContext* renderContext)
   int ncolor = colors.getLength();
 
   if ( (useColorArray) && ( ncolor > 1 ) ) {
-    glDisableClientState(GL_COLOR_ARRAY);
+  	colors.enduseArray();
     SAVEGLERROR;
   }
 
@@ -216,9 +240,7 @@ void Material::endUse(RenderContext* renderContext)
     texture->endUse(renderContext);
     SAVEGLERROR;
   }
-  #if USE_GLGETERROR
-  saveGLerror(__FILE__, __LINE__);
-  #endif
+  SAVEGLERROR;
   glPopAttrib();
   #if USE_GLGETERROR
   if (SaveErrnum == GL_NO_ERROR) glGetError(); /* work around bug in some glX implementations */

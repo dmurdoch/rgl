@@ -1,3 +1,4 @@
+#include "R.h"
 #include "Light.h"
 
 using namespace rgl;
@@ -43,6 +44,8 @@ Light::Light( PolarCoord in_position, Vertex in_finposition,
 void Light::setup(RenderContext* renderContext) 
 {
 #ifndef RGL_NO_OPENGL
+	if (doUseShaders)
+		return;
   glLightfv(id, GL_AMBIENT,   ambient.data  );
   glLightfv(id, GL_DIFFUSE,   diffuse.data  );
   glLightfv(id, GL_SPECULAR,  specular.data );

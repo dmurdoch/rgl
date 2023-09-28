@@ -1,4 +1,6 @@
+#include "R.h"
 #include "SphereMesh.h"
+#include "SphereSet.h"
 #include "subscene.h"
 
 #include "opengl.h"
@@ -47,10 +49,10 @@ void SphereMesh::setupMesh()
 
   vertexArray.alloc(nvertex);
 
-  if (genNormal)
+  if (genNormal || doUseShaders)
     normalArray.alloc(nvertex);
 
-  if (genTexCoord)
+  if (genTexCoord || doUseShaders)
     texCoordArray.alloc(nvertex);  
 }
 
@@ -73,11 +75,12 @@ void SphereMesh::update()
 
 void SphereMesh::update(const Vertex& scale)
 {
+  
   int i = 0;
 
   for(int iy=0;iy<=sections;iy++) {
 
-    Vertex p(0.0f,0.0f,radius);
+    Vertex p(0.0f,0.0f,1.0f);
 
     float fy = ((float)iy)/((float)sections);
 
@@ -94,21 +97,28 @@ void SphereMesh::update(const Vertex& scale)
 
       q.rotateY( theta );
       
-      q.x /= scale.x;
-      q.y /= scale.y;
-      q.z /= scale.z;
-
-      vertexArray[i] = center + q;
-
-      if (genNormal) {
-	q.x *= scale.x*scale.x;
-	q.y *= scale.y*scale.y;
-	q.z *= scale.z*scale.z;
+      if (doUseShaders) 
+        
+        vertexArray[i] = q;
+     
+      else {
+        
+        q.x *= radius / scale.x;
+        q.y *= radius / scale.y;
+        q.z *= radius / scale.z;
+        
+        vertexArray[i] = center + q;
+      }
+      
+      if (genNormal || doUseShaders) {
+        q.x *= scale.x*scale.x;
+        q.y *= scale.y*scale.y;
+        q.z *= scale.z*scale.z;
         normalArray[i] = q;
         normalArray[i].normalize();
       }
 
-      if (genTexCoord) {
+      if (genTexCoord || doUseShaders) {
         texCoordArray[i].s = fx;
         texCoordArray[i].t = fy;
       }
@@ -117,36 +127,66 @@ void SphereMesh::update(const Vertex& scale)
   }
 }
 
+/* Set the modelviewmatrix for a shader */
+
+Matrix4x4 SphereMesh::MVmodification(const Vertex& scale)
+{
+  return  Matrix4x4::translationMatrix(center.x, center.y, center.z) 
+        * Matrix4x4::scaleMatrix(radius/scale.x, radius/scale.y, radius/scale.z);
+}
+
 void SphereMesh::draw(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
 
-  if (genNormal)
+  if (genNormal || doUseShaders)
     normalArray.beginUse();
 
-  if (genTexCoord)
+  if (genTexCoord || doUseShaders)
     texCoordArray.beginUse();
-
+  
+  if (doUseShaders) {
+    inds.resize(2*(segments + 1));
+  }
+  
   for(int i=0; i<sections; i++ ) {
 
     int curr = i * (segments+1);
     int next = curr + (segments+1);
 
-    glBegin(GL_QUAD_STRIP);
-    for(int j=0;j<=segments;j++) {
-      glArrayElement( next + j );
-      glArrayElement( curr + j );
+    if (doUseShaders) {
+
+      int nextind = 0;
+      
+      for (int j=0; j<=segments; j++) {
+        inds[nextind++] = next + j;
+        inds[nextind++] = curr + j;
+      }
+      if (doUseShaders)
+        glDrawElements(GL_QUAD_STRIP, inds.size(), GL_UNSIGNED_INT, inds.data());
+    } else {
+      glBegin(GL_QUAD_STRIP);
+      for(int j=0;j<=segments;j++) {
+        glArrayElement( next + j );
+        glArrayElement( curr + j );
+      }
+      glEnd();
     }
-    glEnd();
   }
+  
+
+  SAVEGLERROR;
+  
   vertexArray.endUse();
 
-  if (genNormal)
+  if (genNormal || doUseShaders)
     normalArray.endUse();
 
-  if (genTexCoord)
+  if (genTexCoord || doUseShaders)
     texCoordArray.endUse();
+  
+  SAVEGLERROR;
 #endif
 }
 
@@ -154,38 +194,47 @@ void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
 {
 #ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
-	
-  if (genNormal)
+
+  if (genNormal || doUseShaders)
     normalArray.beginUse();
-	
-  if (genTexCoord)
+
+  if (genTexCoord || doUseShaders)
     texCoordArray.beginUse();
   
-  if (endcap)
-    glBegin(GL_TRIANGLES);
-  else
-    glBegin(GL_QUADS);
+  if (!doUseShaders) {
+    if (endcap)
+      glBegin(GL_TRIANGLES);
+    else
+      glBegin(GL_QUADS);
+  }
 #endif
 }
-	
+
 void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
 {
 #ifndef RGL_NO_OPENGL
   int ll = (segments + 1)*(i/segments) + i % segments;
 
-  if (i < segments) {
-    glArrayElement(ll);
-    glArrayElement(ll + segments + 2);
-    glArrayElement(ll + segments + 1);
-  } else if (i < segments*(sections - 1)) {
-    glArrayElement(ll);
-    glArrayElement(ll + 1);
-    glArrayElement(ll + segments + 2);
-    glArrayElement(ll + segments + 1);
+  if (doUseShaders) {
+    inds.push_back(ll);
+    inds.push_back(ll + 1);
+    inds.push_back(ll + segments + 2);
+    inds.push_back(ll + segments + 1);
   } else {
-    glArrayElement(ll);
-    glArrayElement(ll + 1);
-    glArrayElement(ll + segments + 1);
+    if (i < segments) {
+      glArrayElement(ll);
+      glArrayElement(ll + segments + 2);
+      glArrayElement(ll + segments + 1);
+    } else if (i < segments*(sections - 1)) {
+      glArrayElement(ll);
+      glArrayElement(ll + 1);
+      glArrayElement(ll + segments + 2);
+      glArrayElement(ll + segments + 1);
+    } else {
+      glArrayElement(ll);
+      glArrayElement(ll + 1);
+      glArrayElement(ll + segments + 1);
+    }
   }
 #endif
 }
@@ -193,20 +242,54 @@ void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
 Vertex SphereMesh::getPrimitiveCenter(int i) 
 {
   int ll = (segments + 1)*(i/segments) + i % segments;
-  return vertexArray[ll];
+  if (doUseShaders)
+    return center + vertexArray[ll]*radius;
+  else
+    return vertexArray[ll];
+}
+
+void SphereMesh::doIndices() {
+#ifndef RGL_NO_OPENGL
+  if (inds.size()) {
+    glDrawElements(GL_QUADS, inds.size(), GL_UNSIGNED_INT, inds.data());
+    inds.clear();
+  } 
+#endif
 }
 
 void SphereMesh::drawEnd(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
-  glEnd();
-	
+  
+  if (!doUseShaders)
+    glEnd();
+
   vertexArray.endUse();
-	
-  if (genNormal)
+
+  if (genNormal || doUseShaders)
     normalArray.endUse();
-	
-  if (genTexCoord)
+
+  if (genTexCoord || doUseShaders)
     texCoordArray.endUse();
 #endif
 }
+
+#ifndef RGL_NO_OPENGL
+void SphereMesh::initialize(
+    std::unordered_map<std::string, GLint> &glLocs,
+    std::vector<GLubyte> &vertexbuffer)
+{
+  vertexArray.appendToBuffer(vertexbuffer);
+  vertexArray.setAttribLocation(glLocs["aPos"]);
+  
+  if (glLocs.find("aNorm") != glLocs.end()) {
+    normalArray.appendToBuffer(vertexbuffer);
+    normalArray.setAttribLocation(glLocs.at("aNorm"));
+  }
+  
+  if (glLocs.find("aTexcoord") != glLocs.end()) {
+    texCoordArray.appendToBuffer(vertexbuffer);
+    texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
+  }
+}
+#endif

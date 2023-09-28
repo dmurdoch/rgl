@@ -1,10 +1,13 @@
 #ifndef RGL_INIT_H
 #define RGL_INIT_H
 
+#include <string>
 #include "R.h"
 #include <Rinternals.h> 
 
 namespace rgl {
+
+extern std::string rglHome;
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,7 +20,8 @@ extern "C" {
 
 /* library service */
 
-SEXP rgl_init (SEXP initValue, SEXP onlyNULL, SEXP in_namespace, SEXP debug);
+SEXP rgl_init (SEXP initValue, SEXP onlyNULL, SEXP in_namespace, 
+               SEXP debug, SEXP home);
 
 #ifdef __cplusplus
 }

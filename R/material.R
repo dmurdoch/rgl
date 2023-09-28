@@ -38,6 +38,8 @@ rgl.material0 <- function(
   floating = FALSE,
   tag = "",
   blend = c("src_alpha", "one_minus_src_alpha"),
+  vertex_shader = "", 
+  fragment_shader = "",
   col,
   ...
 ) {
@@ -113,6 +115,10 @@ rgl.material0 <- function(
   
   tag <- as.character(tag)
   rgl.string(tag)
+  
+  # shaders
+  rgl.string(vertex_shader)
+  rgl.string(fragment_shader)
 
   # pack data
 
@@ -124,7 +130,7 @@ rgl.material0 <- function(
                           margin$coord - 1, margin$edge, floating,
 
                           blend, texmode, texdelete, color) )
-  cdata <- as.character(c( tag, texture ))
+  cdata <- as.character(c( tag, texture, vertex_shader, fragment_shader ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
   ret <- .C( rgl_material,
@@ -152,7 +158,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   idata[1] <- ncolors
   idata[11] <- ncolors
   
-  cdata <- rep(paste(rep(" ", 512), collapse=""), 2)
+  cdata <- character(4)
   ddata <- rep(0, 5+ncolors)
   
   ret <- .C( rgl_getmaterial,
@@ -216,7 +222,11 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        floating = idata[31] == 1,
        blend = blendmodes[idata[32:33] + 1],
        texmode = texmodes[idata[34] + 1],
-       tag = cdata[1]
+       tag = cdata[1],
+  		 vertex_shader = structure(cdata[3], class = "rglShader",
+  		 													type = "vertex"),
+  		 fragment_shader = structure(cdata[4], class = "rglShader",
+  		 													type = "fragment")
        )
                    
 }

@@ -2,6 +2,7 @@
 #define SURFACE_H
 
 #include "Shape.h"
+#include "PrimitiveSet.h"
 
 #include "render.h"
 
@@ -14,7 +15,7 @@ namespace rgl {
 //   Surface
 //
 
-class Surface : public Shape {
+class Surface : public FaceSet {
 public:
   Surface(Material& material, int nx, int nz, double* x, double* z, double* y,
 	         double* normal_x, double* normal_z, double* normal_y,
@@ -23,9 +24,6 @@ public:
   /**
    * overload
    **/
-  virtual void draw(RenderContext* renderContext);
-  
-  /* Center of square with upper left at (ix, iz) */
   Vertex getCenter(int ix, int iz);  
   virtual std::string getTypeName() { return "surface"; };
   
@@ -39,30 +37,11 @@ public:
    **/
   
   virtual Vertex getPrimitiveCenter(int item) ;
-
-  /**
-   * begin sending items 
-   **/
-  virtual void drawBegin(RenderContext* renderContext) ;
-
-  /**
-   * send one item
-   **/
-  virtual void drawPrimitive(RenderContext* renderContext, int index) ;
-
-  /**
-   * end sending items
-   **/
-  virtual void drawEnd(RenderContext* renderContext) ;
   
 private:
   Vertex getNormal(int ix, int iz);
 
-  VertexArray vertexArray;
-  NormalArray normalArray;
-  TexCoordArray texCoordArray;
   int nx, nz, coords[3], orientation, user_normals, user_textures;
-  bool use_normal, use_texcoord; 
 };
 
 } // namespace rgl

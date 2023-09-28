@@ -225,16 +225,11 @@ as.mesh3d.rglId <- function(x, type = NA, subscene = NA,
                        matrix(indices[4*rep(seq_len(nquads) - 1, each = 6) + c(1,2,3,1,3,4)] + prev, nrow = 3)
                      },
                      surface = {
-                       dim <- rgl.attrib(id, "dim")
-                       ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1)
-                       if (rgl.attrib(id, "flags")["flipped",])
-                         rbind(indices[c(ul-1, ul-1+dim[1])] + prev,
-                               indices[c(ul, ul)] + prev ,
-                               indices[c(ul-1+dim[1], ul+dim[1])] + prev)
-                       else
-                         rbind(indices[c(ul, ul)] + prev,
-                               indices[c(ul-1, ul-1+dim[1])] + prev,
-                               indices[c(ul-1+dim[1], ul+dim[1])] + prev)
+                       # surfaces are made up of quads;
+                       # convert them to triangles
+                       nquads <- length(indices)/4
+                       offsets <- rep(4*(seq_len(nquads) - 1), each = 6)
+                       matrix(indices[c(1,2,3,1,3,4) + offsets] + prev, nrow = 3)
                      },
                      NULL)
       if (length(inds)) {

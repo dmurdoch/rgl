@@ -1155,6 +1155,8 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   
   cdata[0] = copyStringToR(mat->tag);
   cdata[1] = copyStringToR(filename);
+  cdata[2] = copyStringToR(mat->shaders[VERTEX_SHADER]);
+  cdata[3] = copyStringToR(mat->shaders[FRAGMENT_SHADER]);
   
   CHECKGLERROR;
   
@@ -1367,4 +1369,57 @@ void rgl::rgl_postscript(int* successptr, int* idata, char** cdata)
   }
 
   *successptr = success;
+}
+
+void rgl::rgl_getShaderFlags(int *successptr, int *id, int *sub, int *flags) {
+	Device* device;
+	*successptr = RGL_FAIL;
+	if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+		RGLView* rglview = device->getRGLView();
+		Scene* scene = rglview->getScene();
+		Subscene* subscene = scene->getSubscene(*sub);
+		Shape* shape = scene->get_shape(*id);
+		if (subscene && shape) {
+			ShaderFlags f = shape->getShaderFlags();
+			*flags++ = f.fat_lines;
+			*flags++ = f.fixed_quads;
+			*flags++ = f.fixed_size;
+			*flags++ = f.has_fog;
+			*flags++ = f.has_normals;
+			*flags++ = f.has_texture;
+			*flags++ = f.is_brush;
+			*flags++ = f.is_lines;
+			*flags++ = f.is_lit;
+			*flags++ = f.is_points;
+			*flags++ = f.is_transparent;
+			*flags++ = f.is_twosided;
+			*flags++ = f.needs_vnormal;
+			*flags++ = f.rotating;
+			*flags++ = f.round_points;
+			*flags++ = f.sprites_3d;
+			*flags++ = f.is_smooth;
+			*flags++ = f.depth_sort;
+			*flags++ = f.is_subscene;
+			*flags++ = f.is_clipplanes;
+			*successptr = RGL_SUCCESS;
+		}
+	}
+}
+
+void rgl::rgl_getShaderDefines(int *successptr, int *id, int *sub,
+                               int *ndata, char **defines) {
+	Device* device;
+	*successptr = RGL_FAIL;
+	if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+		RGLView* rglview = device->getRGLView();
+		Scene* scene = rglview->getScene();
+		Subscene* subscene = scene->getSubscene(*sub);
+		Shape* shape = scene->get_shape(*id);
+		if (subscene && shape) {
+			shape->setShapeContext(subscene, ndata[0], ndata[1]);
+			std::string defines0 = shape->getShaderDefines(shape->getShaderFlags());
+			defines[0] = copyStringToR(defines0);
+			*successptr = RGL_SUCCESS;
+		}
+	}
 }

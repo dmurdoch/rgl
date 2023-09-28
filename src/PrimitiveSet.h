@@ -65,6 +65,11 @@ public:
   void initPrimitiveSet(int in_nvertices, double* in_vertices,
                         int in_nindices = 0, int* in_indices = NULL);
 
+  /** 
+   * prepare for shader use
+   */
+  virtual void initialize();
+  
 protected:
 
   /**
@@ -97,6 +102,7 @@ protected:
   inline Vertex getCenter(int index)
   {
     Vertex accu;
+  	size_t nindices = indices.size();
     int begin = index*nverticesperelement;
     int end   = begin+nverticesperelement;
     for (int i = begin ; i < end ; ++i ) {
@@ -110,9 +116,11 @@ protected:
 
   // ---[ PRIMITIVE DRAW INTERFACE ]------------------------------------------
 
+  /* draw everything in range, assuming no missings */
+  void drawRange(int start, int stop);
   
   /**
-   * send all elements
+   * send all elements, checking for missings
    * interface
    **/
   virtual void drawAll(RenderContext* renderContext);
@@ -128,13 +136,11 @@ protected:
 
   int type;
   int nverticesperelement;
-  int nvertices;
   int nprimitives;
   VertexArray vertexArray,  /* the vertices given by the user */
               verticesTodraw; /* the margin vertices in data coords */
   bool hasmissing; 	/* whether any vertices contain missing values */
-  int nindices;
-  unsigned int* indices;
+  std::vector<unsigned int> indices;
 };
 
 
@@ -196,7 +202,10 @@ protected:
  
   /* set up normals */
   void initNormals(double* in_normals);
-private:
+  
+  /* shader inits */
+  virtual void initialize();
+protected:
   NormalArray normalArray, normalsToDraw;
   TexCoordArray texCoordArray;
 };

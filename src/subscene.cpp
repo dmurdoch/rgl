@@ -911,7 +911,7 @@ void Subscene::disableLights(RenderContext* rctx)
 {
     
   //
-  // disable lights; setup will enable them
+  // disable lights; setup will enable them if not using shaders
   //
 #ifndef RGL_NO_OPENGL
   for (int i=0;i<8;i++)
@@ -922,46 +922,48 @@ void Subscene::disableLights(RenderContext* rctx)
 void Subscene::setupLights(RenderContext* rctx) 
 {  
 #ifndef RGL_NO_OPENGL
-  int nlights = 0;
-  bool anyviewpoint = false;
-  std::vector<Light*>::const_iterator iter;
-  
-  disableLights(rctx);
-
-  for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
-
-    Light* light = *iter;
-    light->id = GL_LIGHT0 + (nlights++);
-    if (!light->viewpoint)
-      light->setup(rctx);
-    else
-      anyviewpoint = true;
-  }
-
-  SAVEGLERROR;
-  
-  if (nlights == 0 && parent)
-    parent->setupLights(rctx);
-
-  if (anyviewpoint) {
-    //
-    // viewpoint lights
-    //
-
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-
-    for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
-
-      Light* light = *iter;
-
-      if (light->viewpoint)
-        light->setup(rctx);
-    }
-    glPopMatrix();
-  }
-  SAVEGLERROR;
+	if (!doUseShaders) {
+		int nlights = 0;
+		bool anyviewpoint = false;
+		std::vector<Light*>::const_iterator iter;
+		
+		disableLights(rctx);
+		
+		for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
+			
+			Light* light = *iter;
+			light->id = GL_LIGHT0 + (nlights++);
+			if (!light->viewpoint)
+				light->setup(rctx);
+			else
+				anyviewpoint = true;
+		}
+		
+		SAVEGLERROR;
+		
+		if (nlights == 0 && parent)
+			parent->setupLights(rctx);
+		
+		if (anyviewpoint) {
+			//
+			// viewpoint lights
+			//
+			
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glLoadIdentity();
+			
+			for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
+				
+				Light* light = *iter;
+				
+				if (light->viewpoint)
+					light->setup(rctx);
+			}
+			glPopMatrix();
+		}
+		SAVEGLERROR;
+	}
 #endif
 }
 

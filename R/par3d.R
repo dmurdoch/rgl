@@ -4,7 +4,8 @@ rgl.par3d.names <- c("antialias", "FOV", "ignoreExtent", "listeners",
             "userProjection",
             "scale", "viewport", "zoom", "bbox", "windowRect",
             "family", "font", "cex", "useFreeType", "fontname",
-            "maxClipPlanes", "glVersion", "activeSubscene"
+            "maxClipPlanes", "glVersion", "activeSubscene",
+					  "useShaders"
 )
 
 rgl.par3d.readonly <- c( 

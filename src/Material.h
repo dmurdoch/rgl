@@ -1,10 +1,11 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include <string>
+#include "shaders.h"
 #include "Color.h"
 #include "Texture.h"
 #include "RenderContext.h"
-#include <string>
 
 namespace rgl {
 
@@ -30,6 +31,7 @@ public:
 
   void beginUse(RenderContext* renderContext);
   void endUse(RenderContext* renderContext);
+  void beginSide(bool drawfront);
   void useColor(int index);
   void colorPerVertex(bool enable, int numVertices=0);
   bool isTransparent() const { return alphablend; }
@@ -67,6 +69,7 @@ public:
   bool         floating;
   std::string       tag;
   int          blend[2];
+  std::string  shaders[NUM_SHADERS];
   
   double       glVersion;
 };

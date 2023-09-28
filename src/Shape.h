@@ -2,8 +2,10 @@
 #define SHAPE_H
 
 #include <vector>
+#include <unordered_map>
 
 #include "SceneNode.h"
+#include "render.h"
 #include "Material.h"
 #include "RenderContext.h"
 
@@ -129,7 +131,25 @@ public:
    **/
   
   virtual bool isClipPlane() { return false; }
+
+  /* call this first to set the context where the next functions
+   * need to operate
+   */
   
+  void setShapeContext(Subscene* in_subscene, int in_nclipplanes,
+                       int in_nlights);
+  /**
+   * The methods below have similar names and uses as 
+   * Javascript methods in shaders.src.js.  Make sure changes
+   * happen in both places!
+   */
+
+  ShaderFlags getShaderFlags();
+  
+  std::string getShaderDefines(ShaderFlags flags);
+  
+  virtual void initialize();
+
 protected:
   /**
    * bounding volume of overall geometry
@@ -150,6 +170,11 @@ protected:
    * material
    **/
   Material material;
+  
+  Subscene* subscene;
+  int nclipplanes;
+  int nlights;
+  
 private:
 #ifndef RGL_NO_OPENGL  
   /**
@@ -157,13 +182,43 @@ private:
    **/
   GLuint   displayList;
 #endif
+	
+protected:	
+#ifndef RGL_NO_OPENGL
+	/**
+	 * shader program
+	 */
+	ShaderFlags flags;
+	GLuint   shaderProgram;
+	std::vector<GLubyte> vertexbuffer;
+	std::vector<GLubyte> indexbuffer;
+	GLuint vbo;
+	GLuint ibo;
+	void initShader();
+	void beginShader(RenderContext* renderContext);
+	void beginSideTwo();
+	void checkShader(const char* type, GLuint shader);
+	void checkProgram(GLuint program);
+	void loadBuffers();
+	void printUniform(const char *name, int rows, int cols, int transposed,
+                   GLint type);
+	void printUniforms(); /* for debugging */
+	void printAttribute(const char *name, int nvertices);
+	void printAttributes(int nvertices);
+	void printBufferInfo();
+#endif	
+
   int	   drawLevel;     /* for debugging */
-protected:
+
   /**
    * update indicator
    **/
   bool     doUpdate;
   bool     transparent, blended;
+#ifndef RGL_NO_OPENGL
+  std::unordered_map<std::string, GLint> glLocs;
+  bool     glLocs_has_key(std::string key);
+#endif
 };
 
 class ShapeItem {

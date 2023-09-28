@@ -34,6 +34,8 @@ defined `String` type, settling on `std::string` instead.
 * `subdivision3d()`, `clipMesh3d()` and related functions now
 (optionally) record the original faces associated with each new one
 in a `mesh$tags` addition to the output.
+* `getShaders()` now defaults to using internal C++ code
+instead of Javascript.
 
 ## Bug fixes
 

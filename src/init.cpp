@@ -34,18 +34,11 @@ int gInitValue;
 void* gHandle;
 SEXP rglNamespace;
 bool rglDebug;
+std::string rglHome;
 
 //
 // FUNCTION
 //   rgl_init
-//
-// PARAMETERS
-//   ioptions - platform-specific options.
-//     Windows:
-//     [0]  multiple-document-interface console handle (MDI)
-//          or 0 (SDI)
-//     MacOSX:
-//     [0]  Formerly indicator of presence (1) or absence (0) of Carbon/Cocoa, now unused
 //
 
 #ifdef __cplusplus
@@ -53,7 +46,7 @@ extern "C" {
 #endif
 
 SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
-              SEXP debug)
+              SEXP debug, SEXP home)
 {
   int success = 0;
   bool useNULLDevice = Rf_asLogical(useNULL);
@@ -62,6 +55,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   gHandle = NULL;
   rglNamespace = in_namespace;
   rglDebug = Rf_asLogical(debug);
+  rglHome = std::string(CHAR(STRING_ELT(home, 0)));
   
   if ( Rf_isNumeric(initValue) ) {
     gInitValue =  Rf_asInteger(initValue);
@@ -125,6 +119,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   R_NativePrimitiveArgType aLISD[4] = {LGLSXP, INTSXP, STRSXP, REALSXP}; 
   R_NativePrimitiveArgType aIISI[4] = {INTSXP, INTSXP, STRSXP, INTSXP};
   R_NativePrimitiveArgType aLIDD[4] = {LGLSXP, INTSXP, REALSXP, REALSXP}; 
+  R_NativePrimitiveArgType aLIIL[4] = {LGLSXP, INTSXP, INTSXP, LGLSXP};
   R_NativePrimitiveArgType aIIIID[5] = {INTSXP, INTSXP, INTSXP, INTSXP, REALSXP}; 
   R_NativePrimitiveArgType aIIIIS[5] = {INTSXP, INTSXP, INTSXP, INTSXP, STRSXP}; 
   R_NativePrimitiveArgType aLIIIS[5] = {LGLSXP, INTSXP, INTSXP, INTSXP, STRSXP}; 
@@ -189,6 +184,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {"rgl_selectstate", 		(DL_FUNC) &rgl_selectstate, 5, aIILID},
    {"rgl_setselectstate",	(DL_FUNC) &rgl_setselectstate, 4, aIILI},
    {"rgl_quit",			(DL_FUNC) &rgl_quit, 1, aL},
+   {"rgl_getShaderFlags", (DL_FUNC) &rgl_getShaderFlags, 4, aLIIL},
+   {"rgl_getShaderDefines", (DL_FUNC) &rgl_getShaderDefines, 5, aIIIIS}
    
    {NULL, NULL, 0}
  };
@@ -240,6 +237,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_selectstate, 5),
    FUNDEF(rgl_setselectstate, 4),
    FUNDEF(rgl_quit, 1),
+   FUNDEF(rgl_getShaderFlags, 4),
+   FUNDEF(rgl_getShaderDefines, 5),
    
    {NULL, NULL, 0}
  };
@@ -247,7 +246,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
  #endif // CHECK_ARGS
 
  static const R_CallMethodDef CallEntries[]  = {
-   FUNDEF(rgl_init, 4),
+   FUNDEF(rgl_init, 5),
    FUNDEF(rgl_dev_getcurrent, 0),
    FUNDEF(rgl_dev_list, 0),
    FUNDEF(rgl_par3d, 3),
