@@ -13,7 +13,8 @@ idToBitmap <- function(id, ...) {
 }
 
 # This function computes ascent and descent of each of a vector
-# of strings using systemfonts::shape_string().  shape_string()
+# of strings using textshaping::shape_text().  
+# (systemfonts::shape_string() aborts).  shape_text()
 # alone gives incorrect results when some of the string 
 # entries include glyphs that are not in the specified font;
 # this function recursively uses systemfonts::font_fallback()
@@ -33,25 +34,24 @@ bbox_with_subs <- function(strings, family = "",
                ascent = numeric(n), descent = numeric(n),
                pen_x = numeric(n))
   
-  # Function to compute ascent and descent from the shape_string() results
+  # Function to compute ascent and descent from the shape_text() results
   
-  extract_ascent_descent <- function(metrics)
+  extract_ascent_descent <- function(metrics, size)
     with(metrics, 
          data.frame(string = string, 
                     width = width, 
                     ascent = top_border - top_bearing,
-                    descent = height - 2*top_border -
-                      bottom_bearing,
+                    descent = height - 2*top_border - bottom_bearing,
                     pen_x = pen_x))
   
-  # Try shape_string() on the whole vector.  If no glyphs are
+  # Try shape_text() on the whole vector.  If no glyphs are
   # missing, trust the result
   
-  shape0 <- shape_string(strings, family = family, path = path, index = index, italic = italic, bold = bold, size = size, ...)
+  shape0 <- shape_text(strings, family = family, path = path, index = index, italic = italic, bold = bold, size = size, ...)
   
   shape <- shape0$shape
   if (all(shape$index > 0))
-    result <- extract_ascent_descent(shape0$metrics)
+    result <- extract_ascent_descent(shape0$metrics, size)
   
   else {
     # Some glyphs are missing.
@@ -71,19 +71,19 @@ bbox_with_subs <- function(strings, family = "",
     
     result <- ascent_descent_df(n)
     
-    missings <- unique(shape$metric_id[shape$index == 0]) + 1
-    nonmissings <- setdiff(unique(shape$metric_id) + 1, missings)
+    missings <- unique(shape$metric_id[shape$index == 0])
+    nonmissings <- setdiff(unique(shape$metric_id), missings)
     
     # The nonmissings are fine; just extract those results
     if (length(nonmissings))
-      result[nonmissings, ] <- extract_ascent_descent(shape0$metrics[nonmissings,])
+      result[nonmissings, ] <- extract_ascent_descent(shape0$metrics[nonmissings,], size[nonmissings])
     
     # For the missings, we need to find fallbacks.  Do them
     # one at a time.
     
     for (m in missings) {
       # Choose the glyph entries corresponding to this string
-      rows <- which(shape$metric_id == m - 1)
+      rows <- which(shape$metric_id == m)
         
       # Some glyphs are missing.  Break the string up into 
       # sequences of non-missing and missing glyphs
@@ -99,10 +99,10 @@ bbox_with_subs <- function(strings, family = "",
       n0 <- length(parts)
       result0 <- ascent_descent_df(n0)
       
-      # Redo shape_string() on the parts with non-missing glyphs,
+      # Redo shape_text() on the parts with non-missing glyphs,
       # and save those results
       if (!all(subs)) {
-        shape1 <- shape_string(parts[!subs], 
+        shape1 <- shape_text(parts[!subs], 
                                           family = family[m], 
                                           italic = italic[m], 
                                           bold = bold[m],
@@ -111,7 +111,7 @@ bbox_with_subs <- function(strings, family = "",
                                           index = index[m], ...)
         
 
-        result0[!subs, ] <- extract_ascent_descent(shape1$metrics)
+        result0[!subs, ] <- extract_ascent_descent(shape1$metrics, size[m])
       }
       
       # Find the fallback fonts for missing parts, and use them
@@ -175,11 +175,19 @@ drawToBitmap <- function(texts, cex = par3d(cex),
   if (verbose)
     print(measures)
   
-  bmWidth <- max(ceiling(measures$width))
+  # Change to integers, add a measure of safety
+  measures$width <- ceiling(measures$width)
+  measures$descent <- ceiling(measures$descent) + 1
+  measures$ascent <- ceiling(measures$ascent) + 1
+  
+  bmWidth <- max(measures$width)
   if (powerOfTwo)
     bmWidth <- getPowerOfTwo(bmWidth)
   
-  heights <- ceiling(measures$ascent) + ceiling(measures$descent) 
+  # The + 1 values here and in the y[i] calculation below are
+  # there just to give a measure of safety
+  
+  heights <- measures$ascent + measures$descent 
   
   # Try to pack them in with several on each line.  Order
   # by increasing height so lines don't have too much white
@@ -220,8 +228,11 @@ drawToBitmap <- function(texts, cex = par3d(cex),
          cex = cex[gp], font = font[gp], family = fam)
   }
   
-  if (showBaselines)
+  if (showBaselines) {
     segments(x, y, x + measures$width, y)
+    segments(x, y - measures$descent, x + measures$width, y - measures$descent, col = "#FF000080")
+    segments(x, y + measures$ascent, x + measures$width, y + measures$ascent, col = "#0000FF80")
+  }
   
   df$x <- x
   df$y <- y
