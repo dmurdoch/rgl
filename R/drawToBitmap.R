@@ -141,14 +141,16 @@ getPowerOfTwo <- function(n) {
   2^ceiling(log(n, 2))
 }
 
-drawToBitmap <- function(texts, cex = par3d(cex), 
+drawToBitmap <- function(texts, cex = par3d("cex"), 
                          family = par3d("family"), 
                          font = par3d("font"), 
                          background = "transparent",
                          powerOfTwo = TRUE,
                          verbose = FALSE,
                          showBaselines = FALSE,
-                         onePerLine = FALSE) {
+                         onePerLine = FALSE,
+                         minWidth = 0,
+                         minHeight = 0) {
   
   if (!length(texts))
     return(NULL)
@@ -180,7 +182,7 @@ drawToBitmap <- function(texts, cex = par3d(cex),
   measures$descent <- ceiling(measures$descent) + 1
   measures$ascent <- ceiling(measures$ascent) + 1
   
-  bmWidth <- max(measures$width)
+  bmWidth <- max(measures$width, minWidth)
   if (powerOfTwo)
     bmWidth <- getPowerOfTwo(bmWidth)
   
@@ -206,7 +208,7 @@ drawToBitmap <- function(texts, cex = par3d(cex),
     y[i] <- y0 + measures$descent[i]
     h0 <- max(h0, heights[i])
   }
-  bmHeight <- y0 + h0
+  bmHeight <- max(y0 + h0, minHeight)
   if (powerOfTwo)
     bmHeight <- getPowerOfTwo(bmHeight)
 
