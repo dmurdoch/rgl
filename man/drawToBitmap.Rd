@@ -15,7 +15,8 @@ drawToBitmap(texts,
              powerOfTwo = TRUE,
              verbose = FALSE,
              showBaselines = FALSE,
-             onePerLine = FALSE)
+             onePerLine = FALSE,
+             minWidth = 0, minHeight = 0)
 }
 \arguments{
   \item{texts}{
@@ -45,6 +46,9 @@ Whether to render the baselines of the text (for debugging purposes).
   \item{onePerLine}{
 Whether to force all strings onto separate lines in the result.
   }
+  \item{minWidth, minHeight}{
+Min dimensions for bitmap.
+  }
 }
 \details{
 Renders the text to a bitmap in memory, and returns locations
@@ -52,6 +56,10 @@ to be used when drawing texture.
 
 If any strings (plus formatting for them) are exactly repeated,
 only one copy will be written to the bitmap.
+
+The bitmap width (number of columns) is initially the width of the
+widest string, but may be increased if \code{minWidth} is bigger
+or \code{powerOfTwo} is \code{TRUE}.
 }
 \value{
 A native raster with attribute \code{metrics}, containing information about each string given in the input, plus these computed values:

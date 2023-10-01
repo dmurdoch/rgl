@@ -535,7 +535,10 @@ text3d      <- function(x, y = NULL, z = NULL,
     cex <- rep(cex, length.out = nfonts)  
     
     family[font == 5] <- "symbol"
-    font <- ifelse( font < 0 | font > 4, 1, font)  
+    font <- ifelse( font <= 0 | font > 4, 1, font) 
+    
+    texture <- drawToBitmap(texts, cex = cex, family = family,
+                            font = font, verbose = TRUE)
     
     ret <- .C( rgl_texts,
                success = as.integer(FALSE),
