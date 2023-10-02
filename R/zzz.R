@@ -115,7 +115,7 @@
            !(.Platform$GUI %in% c("AQUA", "RStudio"))) &&
          exists("quartz", getNamespace("grDevices"))) {
     grDevices::quartz()
-    dev.off()
+    safe.dev.off()
   }
   
   ret <- rgl.init(initValue, onlyNULL)

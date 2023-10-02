@@ -1,4 +1,4 @@
-# rgl 1.2.6
+# rgl 1.2.7
 
 ## Minor changes
 
@@ -12,6 +12,8 @@ run in a Shiny session.
 `plotmath3d()` (pull request #384).
 * `polygon3d()` failed when given exactly 3 points (issue #388).
 * `snapshot3d()` failed on Windows with some versions of `webshot2` (issue #391).
+* Fixed issues caused by misuse of `dev.off()` using new function
+`safe.dev.off()`.
 
 # rgl 1.2.1
 

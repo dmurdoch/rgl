@@ -1,3 +1,12 @@
+safe.dev.off  <- function(which = dev.cur(), prev = dev.prev()) {
+  force(prev)
+  grDevices::dev.off(which)
+  if (length(dev.list()))
+    dev.set(prev)
+}
+
+dev.off <- function(...) stop("Use safe.dev.off() instead!")
+  
 legend3d <- function(...) {
   args <- list(...)
   bgargs <- setdiff(names(formals(bgplot3d)),
@@ -26,7 +35,7 @@ bgplot3d <- function(expression, bg.color = getr3dDefaults("bg", "color"),
         bg = bg.color)
     grDevices::devAskNewPage(FALSE)
     value <- try(expression)  
-    dev.off()
+    safe.dev.off()
     result <- bg3d(texture = filename, col = "white", lit = FALSE, ...)
   } else {
     value <- NULL
@@ -61,7 +70,7 @@ show2d <- function(expression,
     filename <- tempfile(fileext = ".png")
     png(filename = filename, width=width, height=height)
     value <- try(expression)  
-    dev.off()
+    safe.dev.off()
   } else
     value <- filename
   face <- c(strsplit(face, '')[[1]], '-')[1:2]

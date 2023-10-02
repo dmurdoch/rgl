@@ -248,6 +248,7 @@ reference:
   - checkDeldir
   - Buffer
   - gltfTypes
+  - safe.dev.off
 - title: General documentation
 - contents:
   - rgl-package
