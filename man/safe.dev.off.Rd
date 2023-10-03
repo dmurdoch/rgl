@@ -20,7 +20,7 @@ Which device to set as current after closing.
 }
 \details{
 This function closes device \code{which} if it is not device 1,
-then calls \code{\link{dev.set(prev)}} if there are any devices still
+then calls \code{\link{dev.set}(prev)} if there are any devices still
 open.
 }
 \value{
