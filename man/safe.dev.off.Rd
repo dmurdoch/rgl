@@ -18,8 +18,14 @@ Which device to close.
 Which device to set as current after closing.
 }
 }
+\details{
+This function closes device \code{which} if it is not device 1,
+then calls \code{\link{dev.set}(prev)} if there are any devices still
+open.
+}
 \value{
-The number and name of the new active device.
+The number and name of the new active device.  It will not 
+necessarily be \code{prev} if that device isn't already open.
 }
 \references{
 \url{https://bugs.r-project.org/show_bug.cgi?id=18604}

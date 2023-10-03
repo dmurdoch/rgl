@@ -1,8 +1,12 @@
 safe.dev.off  <- function(which = dev.cur(), prev = dev.prev()) {
-  force(prev)
-  grDevices::dev.off(which)
+  if (which != 1) {
+    force(prev)
+    grDevices::dev.off(which)
+  }
   if (length(dev.list()))
     dev.set(prev)
+  else
+    c("null device" = 1)
 }
 
 dev.off <- function(...) stop("Use safe.dev.off() instead!")
