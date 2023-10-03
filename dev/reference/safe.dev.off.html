@@ -95,11 +95,18 @@ the previous graphics device when called.  This function does.</p>
 <dd><p>Which device to set as current after closing.</p></dd>
 
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>This function closes device <code>which</code> if it is not device 1,
+then calls <code><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.set</a>(prev)</code> if there are any devices still
+open.</p>
+    </div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>The number and name of the new active device.</p>
+<p>The number and name of the new active device.  It will not 
+necessarily be <code>prev</code> if that device isn't already open.</p>
     </div>
     <div id="references">
     <h2>References</h2>
