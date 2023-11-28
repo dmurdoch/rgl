@@ -1,4 +1,4 @@
-# rgl 1.2.7
+# rgl 1.2.8
 
 ## Minor changes
 
@@ -14,6 +14,7 @@ run in a Shiny session.
 * `snapshot3d()` failed on Windows with some versions of `webshot2` (issue #391).
 * Fixed issues caused by misuse of `dev.off()` using new function
 `safe.dev.off()`.
+* Fixed issue with `warning()` call reported by CRAN.
 
 # rgl 1.2.1
 
