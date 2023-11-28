@@ -421,7 +421,7 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
         UNPROTECT(4);
         return font;
       } else {
-        Rf_warning(font->errmsg);
+        Rf_warning("Error creating font: %s", font->errmsg);
         delete font;
       }
     }
