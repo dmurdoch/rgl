@@ -3,6 +3,9 @@ title: "A Note on Transparency"
 author: "Duncan Murdoch"
 date: "24/10/2020"
 output:
+  markdown::html_format:
+    options:
+      toc: true
   rmarkdown::html_vignette:
     fig_height: 5
     fig_width: 5
@@ -62,8 +65,9 @@ respectively.
 ## Incorrect sorting
 
 If the objects are drawn in the wrong order, the actual 
-proportions of each colour will be $N = [(1-\alpha_1)(1-\alpha_2),
-\alpha_1, \alpha_2(1-\alpha_1)]$ if no masking occurs. 
+proportions of each colour will be 
+$N = [(1-\alpha_1)(1-\alpha_2),\alpha_1, \alpha_2(1-\alpha_1)]$ 
+if no masking occurs. 
 
 `rgl` currently defaults to depth masking using `glDepthMask(GL_TRUE)`.  This means that depths are saved 
 when the objects are drawn, and if an attempt is made to 
@@ -82,14 +86,14 @@ qualitative comments below.)
 
 So we have 
 
-\[|C-N|^2 = 2\alpha_1^2\alpha_2^2\], 
+$$|C-N|^2 = 2\alpha_1^2\alpha_2^2,$$
 
 and 
 
-\[|C-M|^2 = 2\alpha_1^2(1-\alpha_2)^2\].
+$$|C-M|^2 = 2\alpha_1^2(1-\alpha_2)^2.$$
 
-Thus the error is larger with $N$ when $\alpha_2 > 1/2$, and 
-larger with $M$ when $\alpha_2 < 1/2$.  The value of $\alpha_1$
+Thus the error is larger with $N$ when $\alpha_2 > 1 / 2$, and 
+larger with $M$ when $\alpha_2 < 1 / 2$.  The value of $\alpha_1$
 doesn't affect the preference, though small values of $\alpha_1$ will be associated with smaller errors.  
 
 Depending on the colours of the background and the two
