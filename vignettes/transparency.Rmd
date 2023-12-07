@@ -22,15 +22,15 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-if (!requireNamespace("rmarkdown", quietly = TRUE) ||
-    !rmarkdown::pandoc_available("1.14")) {
-  warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
+if (!requireNamespace("rmarkdown", quietly = TRUE)) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown is installed.  This was not found.")
   knitr::knit_exit()
 }
 knitr::opts_chunk$set(echo = TRUE)
 library(rgl)
 options(rgl.useNULL = TRUE)
 setupKnitr(autoprint = TRUE)
+
 M <- structure(c(0.997410774230957, 0.0707177817821503, -0.0130676832050085, 
 0, -0.0703366547822952, 0.99714070558548, 0.02762770652771, 0, 
 0.0149840852245688, -0.0266370177268982, 0.999532878398895, 0, 

@@ -69,9 +69,9 @@ hook_rgl <- function(before, options, envir) {
     margin <- options$rgl.margin
     if (is.null(margin)) margin <- 100
     par3d(windowRect = margin + options$dpi * 
-                                c(0, 0, options$fig.width, options$fig.height))
+            c(0, 0, options$fig.width, options$fig.height))
     Sys.sleep(.05) # need time to respond to window size change
-
+    
     dir <- knitr::opts_knit$get("base_dir")
     if (is.character(dir)) {
       if (!file_test("-d", dir)) dir.create(dir, recursive = TRUE)
@@ -114,9 +114,9 @@ save_rgl <- function(name, devices) {
 # Evaluate an expression using our own private stream of
 # randomness (not affected by set.seed).
 withPrivateSeed <- local({
-
+  
   ownSeed <- NULL
-
+  
   function(expr) {
     # Save the old seed if present.
     if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
@@ -125,7 +125,7 @@ withPrivateSeed <- local({
     } else {
       hasOrigSeed <- FALSE
     }
-
+    
     # Swap in the private seed.
     if (is.null(ownSeed)) {
       if (hasOrigSeed) {
@@ -135,11 +135,11 @@ withPrivateSeed <- local({
     } else {
       .GlobalEnv$.Random.seed <- ownSeed
     }
-
+    
     # On exit, save the modified private seed, and put the old seed back.
     on.exit({
       ownSeed <<- .GlobalEnv$.Random.seed
-
+      
       if (hasOrigSeed) {
         .GlobalEnv$.Random.seed <- origSeed
       } else {
@@ -149,7 +149,7 @@ withPrivateSeed <- local({
       # commented it out.
       # Need to call this to make sure that the value of .Random.seed gets put
       # into R's internal RNG state. (Issue #1763)
-
+      
       # httpuv::getRNGState() # nolint
     })
     
@@ -177,32 +177,20 @@ fns <- local({
   setupKnitr <- function(autoprint = FALSE, 
                          rgl.newwindow = autoprint,
                          rgl.closewindows = autoprint) {
+    
+    # R produces multiple vignettes in the same session.
+    # Watch out for leftovers
+    
     if (!is.null(setupDone)) {
-      if (setupDone$autoprint) {
-        message("undoing setup")
-        options(saveopts)
-        saveopts <<- NULL
-        setupDone <<- NULL
-      }
-    }
-
-      if (!is.null(setupDone)) {
-        if (setupDone$autoprint != autoprint ||
-            setupDone$rgl.newwindow != rgl.newwindow ||
-            setupDone$rgl.closewindows != rgl.closewindows) {
-          warning("Already set autoprint = ", setupDone$autoprint,
-                  ", rgl.newwindow = ", setupDone$rgl.newwindow,
-                  ", rgl.closewindows = ", setupDone$rgl.closewindows)
-        }
-        return()
-      }
+      options(saveopts)
+      saveopts <<- NULL
       counter <<- 0L
+    }
 
     setupDone <<- list(autoprint = autoprint,
                        rgl.newwindow = rgl.newwindow,
                        rgl.closewindows = rgl.closewindows)
     
-    # R produces multiple vignettes in the same session.
     knitr::opts_chunk$set(rgl.newwindow = rgl.newwindow, 
                           rgl.closewindows = rgl.closewindows,
                           rgl.chunk = TRUE)
@@ -239,49 +227,49 @@ fns <- local({
     } else
       invisible(x)
   }
-    
-    sew.rglRecordedplot <- function(x, options = list(), ...)  {
-      latex <- identical(opts_knit$get("out.format"), "latex") || identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
-      scene <- x$scene
-      doSnapshot <- knitrNeedsSnapshot(options)
-      content <- rglwidget(scene,
-                           width = x$width,
-                           height = x$height,
-                           webgl = !doSnapshot)
-      if (inherits(content, "knit_image_paths")) {
-        # # We've done a snapshot, put it in the right place.
-        name <- fig_path("-rgl.png", options, rgl_counter())
-        if (!file_test("-d", dirname(name)))
-          dir.create(dirname(name), recursive = TRUE)
-        file.copy(content, name, overwrite = TRUE)
-        unlink(content)
-        content <- structure(list(file = name,
-                                  extension = "png"),
-                             class = "html_screenshot")
-      }
-      fig.align <- options$fig.align
-      if (length(fig.align) ==  1 && fig.align != "default")
-        content <- prependContent(content,
-                                  tags$style(sprintf(
-                                    "#%s {%s}",
-                                    content$elementId,
-                                    switch(fig.align,
-                                           center = "margin:auto;",
-                                           left   = "margin-left:0;margin-right:auto;",
-                                           right  = "margin-left:auto;margin-right:0;",
-                                           ""))))
-      result <- do.call("knit_print", c(list(content, options), x$args))
-      if (!latex)
-        class(result) <- c(class(result), "knit_asis_htmlwidget")
-      
-      sew(result, options)
+  
+  sew.rglRecordedplot <- function(x, options = list(), ...)  {
+    latex <- identical(opts_knit$get("out.format"), "latex") || identical(opts_knit$get("rmarkdown.pandoc.to"), "latex")
+    scene <- x$scene
+    doSnapshot <- knitrNeedsSnapshot(options)
+    content <- rglwidget(scene,
+                         width = x$width,
+                         height = x$height,
+                         webgl = !doSnapshot)
+    if (inherits(content, "knit_image_paths")) {
+      # # We've done a snapshot, put it in the right place.
+      name <- fig_path("-rgl.png", options, rgl_counter())
+      if (!file_test("-d", dirname(name)))
+        dir.create(dirname(name), recursive = TRUE)
+      file.copy(content, name, overwrite = TRUE)
+      unlink(content)
+      content <- structure(list(file = name,
+                                extension = "png"),
+                           class = "html_screenshot")
     }
+    fig.align <- options$fig.align
+    if (length(fig.align) ==  1 && fig.align != "default")
+      content <- prependContent(content,
+                                tags$style(sprintf(
+                                  "#%s {%s}",
+                                  content$elementId,
+                                  switch(fig.align,
+                                         center = "margin:auto;",
+                                         left   = "margin-left:0;margin-right:auto;",
+                                         right  = "margin-left:auto;margin-right:0;",
+                                         ""))))
+    result <- do.call("knit_print", c(list(content, options), x$args))
+    if (!latex)
+      class(result) <- c(class(result), "knit_asis_htmlwidget")
     
-    list(
-      setupKnitr = setupKnitr,
-      knit_print.rglOpen3d = knit_print.rglOpen3d,
-      knit_print.rglId = knit_print.rglId,
-      sew.rglRecordedplot = sew.rglRecordedplot)
+    sew(result, options)
+  }
+  
+  list(
+    setupKnitr = setupKnitr,
+    knit_print.rglOpen3d = knit_print.rglOpen3d,
+    knit_print.rglId = knit_print.rglId,
+    sew.rglRecordedplot = sew.rglRecordedplot)
 })
 
 setupKnitr <- fns[["setupKnitr"]]

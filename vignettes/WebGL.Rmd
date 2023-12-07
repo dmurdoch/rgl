@@ -3,6 +3,9 @@ title: "User Interaction in WebGL (updated)"
 author: "Duncan Murdoch"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
+  markdown::html_format:
+    options:
+      toc: true
   rmarkdown::html_vignette:
     toc: yes
     fig_width: 5

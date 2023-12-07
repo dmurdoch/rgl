@@ -1,8 +1,11 @@
-# rgl 1.2.8
+# rgl 1.2.9
 
 ## Minor changes
 
 * ARIA support now declares `rgl` scenes with `role = "img"`.
+* The vignettes in this package now use
+`markdown::html_format`, so they no longer require Pandoc
+(though Pandoc-using output formats like `html_document` will still be supported).
 
 ## Bug fixes
 
