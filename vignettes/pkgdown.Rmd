@@ -17,7 +17,7 @@ output:
     default
 vignette: >
   %\VignetteIndexEntry{Using RGL in pkgdown web sites}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
 ---
 
 ```{r setup, include=FALSE}

@@ -19,7 +19,7 @@ output:
     toc: yes
 vignette: >
   %\VignetteIndexEntry{rgl Overview}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
 ---
 
 ```{r setup, echo=FALSE, results="asis"}
