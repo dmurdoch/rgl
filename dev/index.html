@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.8</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.9</span>
       </span>
     </div>
 
@@ -105,7 +105,6 @@
 </h1></div>
 <p><img src="reference/figures/READMEpolyhedra-1-rgl.png"><!-- --></p>
 <!-- badges: start -->
-
 <div class="section level2">
 <h2 id="introduction">INTRODUCTION<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -126,11 +125,11 @@
 <h2 id="installation">INSTALLATION<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>Most users will want to install the latest CRAN release. For Windows, macOS and some Linux platforms, installation can be easy, as CRAN distributes binary versions:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install latest release from CRAN</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># Install latest release from CRAN</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
 <p>To install the latest development version from Github, you’ll need to do a source install. Those aren’t easy! Try</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install development version from Github</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># Install development version from Github</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
 <p>If that fails, read the instructions below.</p>
 <p>Currently installs are tested on older R versions back to R 3.5.x, but this version of <code>rgl</code> may work back as far as R 3.3.0.</p>
 </div>
@@ -183,9 +182,9 @@ OpenGL Utility Library (GLU)</p>
 <h2 id="installing-opengl-support">Installing OpenGL support<a class="anchor" aria-label="anchor" href="#installing-opengl-support"></a>
 </h2>
 <p><strong>Debian and variants including Ubuntu:</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>aptitude install libgl1<span class="sc">-</span>mesa<span class="sc">-</span>dev libglu1<span class="sc">-</span>mesa<span class="sc">-</span>dev</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>aptitude install libgl1<span class="op">-</span>mesa<span class="op">-</span>dev libglu1<span class="op">-</span>mesa<span class="op">-</span>dev</span></code></pre></div>
 <p><strong>Fedora:</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yum install mesa<span class="sc">-</span>libGL<span class="sc">-</span>devel mesa<span class="sc">-</span>libGLU<span class="sc">-</span>devel libpng<span class="sc">-</span>devel</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>yum install mesa<span class="op">-</span>libGL<span class="op">-</span>devel mesa<span class="op">-</span>libGLU<span class="op">-</span>devel libpng<span class="op">-</span>devel</span></code></pre></div>
 <p><strong>macOS:</strong></p>
 <p>Install XQuartz.<br><code>rgl</code> should work with XQuartz 2.7.11 or newer, but it will probably need rebuilding if the XQuartz version changes. XQuartz normally needs re-installation whenever the macOS version changes.</p>
 <p><strong>Windows:</strong></p>
@@ -202,31 +201,31 @@ OpenGL Utility Library (GLU)</p>
 </h2>
 <p>Binary builds of <code>rgl</code> are available for some platforms on CRAN.</p>
 <p>For source builds, install the prerequisites as described above, download the tarball and at the command line run</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL rgl_1.<span class="dv">1</span>.<span class="fl">6.</span>tar.gz</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>R CMD INSTALL rgl_<span class="dv">1</span>.<span class="dv">1</span>.<span class="fl">6.</span>tar.gz</span></code></pre></div>
 <p>(with the appropriate version of the tarball). The build uses an <code>autoconf</code> configure script; to see the options, expand the tarball and run <code>./configure --help</code>.</p>
 <p>Alternatively, in R run</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
 <p>to install from CRAN, or</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"dmurdoch/rgl"</span>)</span></code></pre></div>
 <p>to install the development version from Github.</p>
 <p>Sometimes binary development versions are available for Windows and macOS using</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>, <span class="at">repos =</span> <span class="st">"https://dmurdoch.github.io/drat"</span>,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type =</span> <span class="st">"binary"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">install.packages</span>(<span class="st">"rgl"</span>, <span class="dt">repos =</span> <span class="st">"https://dmurdoch.github.io/drat"</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>                 <span class="dt">type =</span> <span class="st">"binary"</span>)</span></code></pre></div>
 <p>but these are not always kept up to date.</p>
 </div>
 <div class="section level2">
 <h2 id="building-without-opengl">BUILDING WITHOUT OPENGL<a class="anchor" aria-label="anchor" href="#building-without-opengl"></a>
 </h2>
 <p>As of version 0.104.1, it is possible to build the package without OpenGL support on Unix-alikes (including macOS) with the configure option –disable-opengl For example,</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_1.<span class="dv">1</span>.<span class="fl">6.</span>tar.gz </span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>R CMD INSTALL <span class="op">--</span>configure<span class="op">-</span>args=<span class="st">"--disable-opengl"</span> rgl_<span class="dv">1</span>.<span class="dv">1</span>.<span class="fl">6.</span>tar.gz </span></code></pre></div>
 <p>On Windows, OpenGL support cannot currently be disabled.</p>
 </div>
 <div class="section level2">
 <h2 id="documentation-and-demos">DOCUMENTATION and DEMOS:<a class="anchor" aria-label="anchor" href="#documentation-and-demos"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgl)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">browseVignettes</span>(<span class="st">"rgl"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">demo</span>(rgl)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">library</span>(rgl)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="kw">browseVignettes</span>(<span class="st">"rgl"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="kw">demo</span>(rgl)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="credits">CREDITS<a class="anchor" aria-label="anchor" href="#credits"></a>

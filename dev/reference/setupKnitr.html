@@ -40,7 +40,7 @@ deletion of RGL scenes."><meta name="robots" content="noindex"><!-- mathjax --><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.8</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.9</span>
       </span>
     </div>
 
@@ -143,10 +143,6 @@ auto-printing of objects produced by the <code><a href="rglIds.html">lowlevel</a
 or <code><a href="rglIds.html">highlevel</a></code> functions.  All RGL functions that
 produce graphics do this, but functions in other packages that
 call them may not return values appropriately.</p>
-<p>If you have multiple calls to <code>setupKnitr()</code>, all
-should have the same arguments.  If any differ, a 
-warning will be issued, and the first set of arguments
-will be used.</p>
 <p>Mixing explicit calls
 to <code><a href="rglwidget.html">rglwidget</a></code> with auto-printing is likely to lead to failure of some
 scenes to display.  To avoid this, set <code>options(rgl.printRglwidget = FALSE)</code> before using such explicit calls.  Similarly,
