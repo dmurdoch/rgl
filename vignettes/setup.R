@@ -3,9 +3,8 @@ suppressPackageStartupMessages(library(rgl))
 options(rgl.useNULL=TRUE)
 options(rgl.printRglwidget=FALSE)
 
-if (!requireNamespace("rmarkdown", quietly = TRUE) || 
-    !rmarkdown::pandoc_available("1.14")) {
-  warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
+if (!requireNamespace("rmarkdown", quietly = TRUE)) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown is installed.  It was not found.")
   knitr::knit_exit()
 }
 

@@ -1079,8 +1079,9 @@ snapshot3d <- function(filename = tempfile(fileext = ".png"),
                          elementId = "webshot",
                          width = width,
                          height = height,
-                         webgl = TRUE), 
-               f1)
+                         webgl = TRUE),
+               f1,
+               selfcontained = FALSE)
     unlink(filename)
     res <- try(capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
                         vwidth = width + 100, vheight = height, ...),
