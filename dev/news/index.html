@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.8</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.10</span>
       </span>
     </div>
 
@@ -76,13 +76,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.2.8" id="rgl-128">rgl 1.2.8<small>2023-11-28</small><a class="anchor" aria-label="anchor" href="#rgl-128"></a></h2>
+<h2 class="page-header" data-toc-text="1.2.10" id="rgl-1210">rgl 1.2.10<a class="anchor" aria-label="anchor" href="#rgl-1210"></a></h2>
 <div class="section level3">
-<h3 id="minor-changes-1-2-8">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-8"></a></h3>
+<h3 id="minor-changes-1-2-10">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-10"></a></h3>
 <ul><li>ARIA support now declares <code>rgl</code> scenes with <code>role = "img"</code>.</li>
+<li>The vignettes in this package now use <code><a href="https://rdrr.io/pkg/markdown/man/html_format.html" class="external-link">markdown::html_format</a></code>, so they no longer require Pandoc (though Pandoc-using output formats like <code>html_document</code> will still be supported).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-2-8">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-8"></a></h3>
+<h3 id="bug-fixes-1-2-10">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-10"></a></h3>
 <ul><li>The ARIA support caused <code><a href="https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html" class="external-link">htmlwidgets::saveWidget()</a></code> to fail when run in a Shiny session.</li>
 <li>
 <code><a href="../reference/texts.html">text3d()</a></code> and <code><a href="../reference/axes3d.html">mtext3d()</a></code> did not pass the <code>cex</code> argument to <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> (pull request <a href="https://github.com/dmurdoch/rgl/issues/384" class="external-link">#384</a>).</li>
@@ -92,14 +93,14 @@
 <code><a href="../reference/snapshot.html">snapshot3d()</a></code> failed on Windows with some versions of <code>webshot2</code> (issue <a href="https://github.com/dmurdoch/rgl/issues/391" class="external-link">#391</a>).</li>
 <li>Fixed issues caused by misuse of <code><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off()</a></code> using new function <code><a href="../reference/safe.dev.off.html">safe.dev.off()</a></code>.</li>
 <li>Fixed issue with <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code> call reported by CRAN.</li>
+<li>Smooth shapes were not rendered correctly by <code><a href="../reference/rglwidget.html">rglwidget()</a></code>. This was especially noticeable for spheres with <code>fov = 0</code>, but was present in other cases as well (issue <a href="https://github.com/dmurdoch/rgl/issues/401" class="external-link">#401</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.1" id="rgl-121">rgl 1.2.1<small>2023-07-05</small><a class="anchor" aria-label="anchor" href="#rgl-121"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-1-2-1">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-2-1"></a></h3>
-<ul><li>Support for non-PNG textures has been added. Currently supported: JPEG files and any other object for which <code><a href="https://rdrr.io/r/grDevices/as.raster.html" class="external-link">grDevices::as.raster()</a></code> works, e.g. matrices. (Fixes issue <a href="https://github.com/dmurdoch/rgl/issues/196" class="external-link">#196</a>.)</li>
-</ul></div>
+<ul><li>Support for non-PNG textures has been added. Currently supported: JPEG files and any other object for which <code><a href="https://rdrr.io/r/grDevices/as.raster.html" class="external-link">grDevices::as.raster()</a></code> works, e.g. matrices. (Fixes issue <a href="https://github.com/dmurdoch/rgl/issues/196" class="external-link">#196</a>.)</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-1-2-1">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-1"></a></h3>
 <ul><li>Support for “alt” text has been added to <code><a href="../reference/rglwidget.html">rglwidget()</a></code>. Full support in R Markdown or <code>knitr</code> requires a <code>knitr</code> update to version 1.42.12 or newer.</li>
@@ -208,8 +209,7 @@
 <h2 class="page-header" data-toc-text="0.110.2" id="rgl-01102">rgl 0.110.2<small>2022-09-26</small><a class="anchor" aria-label="anchor" href="#rgl-01102"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-110-2">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-110-2"></a></h3>
-<ul><li>Material property <code>"blend"</code> has been added, to allow various kinds of blending for semi-transparent objects (issue <a href="https://github.com/dmurdoch/rgl/issues/245" class="external-link">#245</a>).</li>
-</ul></div>
+<ul><li>Material property <code>"blend"</code> has been added, to allow various kinds of blending for semi-transparent objects (issue <a href="https://github.com/dmurdoch/rgl/issues/245" class="external-link">#245</a>).</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-110-2">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-110-2"></a></h3>
 <ul><li>The <code>Buffer</code> object now handles reading of sparse accessors.</li>
@@ -239,8 +239,7 @@
 <div class="section level3">
 <h3 id="minor-changes-0-109-6">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-109-6"></a></h3>
 <ul><li>
-<code><a href="../reference/rglwidget.html">rglwidget()</a></code> displays now act on “pointer” events, not just “mouse” events, so they should be more usable on touch screens and tablets (PR <a href="https://github.com/dmurdoch/rgl/issues/240" class="external-link">#240</a>).</li>
-</ul></div>
+<code><a href="../reference/rglwidget.html">rglwidget()</a></code> displays now act on “pointer” events, not just “mouse” events, so they should be more usable on touch screens and tablets (PR <a href="https://github.com/dmurdoch/rgl/issues/240" class="external-link">#240</a>).</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-109-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-109-6"></a></h3>
 <ul><li>Plotting <code><a href="../reference/scene3d.html">scene3d()</a></code> objects didn’t handle suppressed axes properly, drawing the default axis instead (issue <a href="https://github.com/dmurdoch/rgl/issues/241" class="external-link">#241</a>).</li>
@@ -252,8 +251,7 @@
 <h2 class="page-header" data-toc-text="0.109.2" id="rgl-01092">rgl 0.109.2<small>2022-06-10</small><a class="anchor" aria-label="anchor" href="#rgl-01092"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-109-2">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-109-2"></a></h3>
-<ul><li>Changes to support glTF animation:
-<ul><li>Handling of <code>embedding = "modify"</code> for the model matrix has changed. Now the centering step is only done for <code>embedding = "replace"</code>. In addition, various bugs have been fixed.</li>
+<ul><li>Changes to support glTF animation:<ul><li>Handling of <code>embedding = "modify"</code> for the model matrix has changed. Now the centering step is only done for <code>embedding = "replace"</code>. In addition, various bugs have been fixed.</li>
 <li>If a subscene has no lights defined, the lights from the parent are used.</li>
 <li>
 <code>plot.rglscene()</code> now ends with the root subscene as current. It also allows specification of <code><a href="../reference/open3d.html">open3d()</a></code> parameters in a list.</li>
@@ -453,15 +451,13 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-106-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-106-6"></a></h3>
-<ul><li>The width and height of an <code><a href="../reference/rglwidget.html">rglwidget()</a></code> once again adapt to the viewer window in RStudio (issue <a href="https://github.com/dmurdoch/rgl/issues/74" class="external-link">#74</a>).</li>
-</ul></div>
+<ul><li>The width and height of an <code><a href="../reference/rglwidget.html">rglwidget()</a></code> once again adapt to the viewer window in RStudio (issue <a href="https://github.com/dmurdoch/rgl/issues/74" class="external-link">#74</a>).</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.105.22" id="rgl-010522">rgl 0.105.22<small>2021-03-04</small><a class="anchor" aria-label="anchor" href="#rgl-010522"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-105-22">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-105-22"></a></h3>
-<ul><li>Add <code>Biarch</code> to <code>DESCRIPTION</code> so both architectures are built on Windows.</li>
-</ul></div>
+<ul><li>Add <code>Biarch</code> to <code>DESCRIPTION</code> so both architectures are built on Windows.</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-105-22">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-105-22"></a></h3>
 <ul><li>Fixed error in new args to <code><a href="../reference/snapshot.html">snapshot3d()</a></code> (reported by Tony Hirst: <a href="https://github.com/dmurdoch/rgl/issues/21" class="external-link uri">https://github.com/dmurdoch/rgl/issues/21</a> .)</li>
@@ -499,8 +495,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-105-13">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-105-13"></a></h3>
-<ul><li>Some bugs in <code><a href="../reference/thigmophobe3d.html">thigmophobe3d()</a></code>, <code><a href="../reference/mergeVertices.html">mergeVertices()</a></code> and <code><a href="../reference/as.mesh3d.default.html">as.mesh3d.default()</a></code> have been fixed.</li>
-</ul></div>
+<ul><li>Some bugs in <code><a href="../reference/thigmophobe3d.html">thigmophobe3d()</a></code>, <code><a href="../reference/mergeVertices.html">mergeVertices()</a></code> and <code><a href="../reference/as.mesh3d.default.html">as.mesh3d.default()</a></code> have been fixed.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.104.16" id="rgl-010416">rgl 0.104.16<small>2021-01-10</small><a class="anchor" aria-label="anchor" href="#rgl-010416"></a></h2>
@@ -602,8 +597,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-100-50">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-100-50"></a></h3>
-<ul><li>Rewrote the initialization code to deal with problems related to indirect GLX and <code>Xvfb</code>.</li>
-</ul></div>
+<ul><li>Rewrote the initialization code to deal with problems related to indirect GLX and <code>Xvfb</code>.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.100.47" id="rgl-010047">rgl 0.100.47<small>2020-02-12</small><a class="anchor" aria-label="anchor" href="#rgl-010047"></a></h2>
@@ -665,8 +659,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-100-26">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-100-26"></a></h3>
-<ul><li>Fixed the startup code so that systems that don’t provide <code>uname</code> still work. (Suggestion of Settra Khemri.)</li>
-</ul></div>
+<ul><li>Fixed the startup code so that systems that don’t provide <code>uname</code> still work. (Suggestion of Settra Khemri.)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.100.24" id="rgl-010024">rgl 0.100.24<small>2019-06-26</small><a class="anchor" aria-label="anchor" href="#rgl-010024"></a></h2>
@@ -681,8 +674,7 @@
 <div class="section level3">
 <h3 id="bug-fixes-0-100-19">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-100-19"></a></h3>
 <ul><li>Fix some bugs detected by <code>valgrind</code>
-</li>
-</ul></div>
+</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.100.18" id="rgl-010018">rgl 0.100.18<small>2019-03-08</small><a class="anchor" aria-label="anchor" href="#rgl-010018"></a></h2>
@@ -816,8 +808,7 @@ Line endings and joins are rounded, not squared as in OpenGL.</li>
 <h2 class="page-header" data-toc-text="0.97.0" id="rgl-0970">rgl 0.97.0<small>2017-01-10</small><a class="anchor" aria-label="anchor" href="#rgl-0970"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-97-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-97-0"></a></h3>
-<ul><li>Added <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> function, and set <code><a href="../reference/texts.html">text3d()</a></code> to use it when necessary.</li>
-</ul></div>
+<ul><li>Added <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> function, and set <code><a href="../reference/texts.html">text3d()</a></code> to use it when necessary.</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-97-0">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-97-0"></a></h3>
 <ul><li>Added <code>fixedSize</code> argument to <code><a href="../reference/rgl.fns.html">rgl.sprites()</a></code> and related functions.</li>
@@ -883,8 +874,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.95.1441" id="rgl-0951441">rgl 0.95.1441<small>2016-01-04</small><a class="anchor" aria-label="anchor" href="#rgl-0951441"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-95-1441">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-95-1441"></a></h3>
-<ul><li>Changed <code><a href="../reference/rgl.pixels.html">rgl.pixels()</a></code> to attempt to avoid segfault on OSX. (Thanks to Greg Jefferis for testing and workaround.)</li>
-</ul></div>
+<ul><li>Changed <code><a href="../reference/rgl.pixels.html">rgl.pixels()</a></code> to attempt to avoid segfault on OSX. (Thanks to Greg Jefferis for testing and workaround.)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.95.1435" id="rgl-0951435">rgl 0.95.1435<small>2015-12-28</small><a class="anchor" aria-label="anchor" href="#rgl-0951435"></a></h2>
@@ -988,15 +978,13 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="minor-changes-0-95-1158">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-95-1158"></a></h3>
 <ul><li>
-<code><a href="../reference/snapshot.html">rgl.snapshot()</a></code> now works with the <code>NULL</code> device (but produces a black snapshot). This allows testing with <code>RGL_USE_NULL</code>.</li>
-</ul></div>
+<code><a href="../reference/snapshot.html">rgl.snapshot()</a></code> now works with the <code>NULL</code> device (but produces a black snapshot). This allows testing with <code>RGL_USE_NULL</code>.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.95.1157" id="rgl-0951157">rgl 0.95.1157<small>2014-10-28</small><a class="anchor" aria-label="anchor" href="#rgl-0951157"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-95-1157">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-95-1157"></a></h3>
-<ul><li>Allowed background of window to show bitmap; added <code><a href="../reference/bgplot3d.html">bgplot3d()</a></code> and <code><a href="../reference/bgplot3d.html">legend3d()</a></code> functions.</li>
-</ul></div>
+<ul><li>Allowed background of window to show bitmap; added <code><a href="../reference/bgplot3d.html">bgplot3d()</a></code> and <code><a href="../reference/bgplot3d.html">legend3d()</a></code> functions.</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-95-1157">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-95-1157"></a></h3>
 <ul><li>Reverted misguided changes to <code>par3d("modelMatrix")</code> from 0.94. This affects <code><a href="../reference/rgl.user2window.html">rgl.projection()</a></code> as well.</li>
@@ -1034,8 +1022,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-94">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-94"></a></h3>
-<ul><li>The <code>NULL</code> device was not removed from the device list when it was closed. (Reported by Henrik Bengtsson.)</li>
-</ul></div>
+<ul><li>The <code>NULL</code> device was not removed from the device list when it was closed. (Reported by Henrik Bengtsson.)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.1098" id="rgl-0931098">rgl 0.93.1098<small>2014-07-02</small><a class="anchor" aria-label="anchor" href="#rgl-0931098"></a></h2>
@@ -1063,12 +1050,10 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.93.991" id="rgl-093991">rgl 0.93.991<small>2013-11-04</small><a class="anchor" aria-label="anchor" href="#rgl-093991"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-93-991">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-93-991"></a></h3>
-<ul><li>Added <code><a href="../reference/planes.html">clipplanes3d()</a></code> function to implement clip planes. (Still only partially implemented.)</li>
-</ul></div>
+<ul><li>Added <code><a href="../reference/planes.html">clipplanes3d()</a></code> function to implement clip planes. (Still only partially implemented.)</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-93-991">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-93-991"></a></h3>
-<ul><li>Some cleanup of the declarations (submitted by Karl Millar).</li>
-</ul></div>
+<ul><li>Some cleanup of the declarations (submitted by Karl Millar).</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.986" id="rgl-093986">rgl 0.93.986<small>2013-10-11</small><a class="anchor" aria-label="anchor" href="#rgl-093986"></a></h2>
@@ -1088,8 +1073,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-93-984">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-984"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> and the other write methods did not handle material information properly after 0.93.975.</li>
-</ul></div>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> and the other write methods did not handle material information properly after 0.93.975.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.975" id="rgl-093975">rgl 0.93.975<small>2013-10-02</small><a class="anchor" aria-label="anchor" href="#rgl-093975"></a></h2>
@@ -1102,15 +1086,13 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-93-975">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-975"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl-deprecated.html">rgl.texts()</a></code> without a window failed because it queried the window before opening it.</li>
-</ul></div>
+<code><a href="../reference/rgl-deprecated.html">rgl.texts()</a></code> without a window failed because it queried the window before opening it.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.963" id="rgl-093963">rgl 0.93.963<small>2013-09-04</small><a class="anchor" aria-label="anchor" href="#rgl-093963"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-93-963">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-93-963"></a></h3>
-<ul><li>font selection assumed <code>rgl</code> was on the search path; now it may be imported but not attached. Similarly, <code>r3dDefaults</code> need not be on the search path.</li>
-</ul></div>
+<ul><li>font selection assumed <code>rgl</code> was on the search path; now it may be imported but not attached. Similarly, <code>r3dDefaults</code> need not be on the search path.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.960" id="rgl-093960">rgl 0.93.960<small>2013-08-31</small><a class="anchor" aria-label="anchor" href="#rgl-093960"></a></h2>
@@ -1144,15 +1126,13 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-93-952">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-952"></a></h3>
-<ul><li>fixed formatting of vertex reference numbers in <code><a href="../reference/writeOBJ.html">writeOBJ()</a></code> (issue 4732, reported by Alejandro Baranek).</li>
-</ul></div>
+<ul><li>fixed formatting of vertex reference numbers in <code><a href="../reference/writeOBJ.html">writeOBJ()</a></code> (issue 4732, reported by Alejandro Baranek).</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.944" id="rgl-093944">rgl 0.93.944<a class="anchor" aria-label="anchor" href="#rgl-093944"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-93-944">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-93-944"></a></h3>
-<ul><li>added <code><a href="../reference/identify3d.html">identify3d()</a></code> function</li>
-</ul></div>
+<ul><li>added <code><a href="../reference/identify3d.html">identify3d()</a></code> function</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-93-944">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-93-944"></a></h3>
 <ul><li>write the <code>rgl</code> version into the WebGL file</li>
@@ -1174,15 +1154,13 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.93.935" id="rgl-093935">rgl 0.93.935<small>2013-04-28</small><a class="anchor" aria-label="anchor" href="#rgl-093935"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-93-935">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-935"></a></h3>
-<ul><li>in certain circumstances since 0.93.930, text would fail to appear. (Reported by Karline Soetaert.)</li>
-</ul></div>
+<ul><li>in certain circumstances since 0.93.930, text would fail to appear. (Reported by Karline Soetaert.)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.932" id="rgl-093932">rgl 0.93.932<small>2013-04-05</small><a class="anchor" aria-label="anchor" href="#rgl-093932"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-93-932">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-932"></a></h3>
-<ul><li>calling <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> before any rendering caused a crash on OSX. (Reported by Dan Tenenbaum.)</li>
-</ul></div>
+<ul><li>calling <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> before any rendering caused a crash on OSX. (Reported by Dan Tenenbaum.)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.930" id="rgl-093930">rgl 0.93.930<a class="anchor" aria-label="anchor" href="#rgl-093930"></a></h2>
@@ -1195,8 +1173,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-93-930">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93-930"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> did not handle <code>snapshot=FALSE</code> properly. (Reported by Yihui Xie.)</li>
-</ul></div>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> did not handle <code>snapshot=FALSE</code> properly. (Reported by Yihui Xie.)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93.928" id="rgl-093928">rgl 0.93.928<small>2013-02-07</small><a class="anchor" aria-label="anchor" href="#rgl-093928"></a></h2>
@@ -1210,8 +1187,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.92.879" id="rgl-092879">rgl 0.92.879<small>2012-04-08</small><a class="anchor" aria-label="anchor" href="#rgl-092879"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-92-879">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-92-879"></a></h3>
-<ul><li>Added <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> function, to allow scenes to be viewed in a web browser.</li>
-</ul></div>
+<ul><li>Added <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> function, to allow scenes to be viewed in a web browser.</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-92-879">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-92-879"></a></h3>
 <ul><li>Removed <code>rgl.save.texture()</code>: textures are not saveable!</li>
@@ -1222,58 +1198,50 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.92.880" id="rgl-092880">rgl 0.92.880<small>2012-05-08</small><a class="anchor" aria-label="anchor" href="#rgl-092880"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-92-880">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-92-880"></a></h3>
-<ul><li>Rearranged declarations for compatibility with gcc 4.7.</li>
-</ul></div>
+<ul><li>Rearranged declarations for compatibility with gcc 4.7.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.881" id="rgl-092881">rgl 0.92.881<a class="anchor" aria-label="anchor" href="#rgl-092881"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-92-881">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-92-881"></a></h3>
-<ul><li>Fixed degenerate (e.g. straight line) cases in <code><a href="../reference/cylinder3d.html">cylinder3d()</a></code>.</li>
-</ul></div>
+<ul><li>Fixed degenerate (e.g. straight line) cases in <code><a href="../reference/cylinder3d.html">cylinder3d()</a></code>.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.883" id="rgl-092883">rgl 0.92.883<a class="anchor" aria-label="anchor" href="#rgl-092883"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-92-883">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-92-883"></a></h3>
-<ul><li>Added 3d “sprites” – shapes that maintain their initial orientation.</li>
-</ul></div>
+<ul><li>Added 3d “sprites” – shapes that maintain their initial orientation.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.887" id="rgl-092887">rgl 0.92.887<a class="anchor" aria-label="anchor" href="#rgl-092887"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-92-887">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-92-887"></a></h3>
-<ul><li>Added “caps” to the end of <code><a href="../reference/cylinder3d.html">cylinder3d()</a></code> objects.</li>
-</ul></div>
+<ul><li>Added “caps” to the end of <code><a href="../reference/cylinder3d.html">cylinder3d()</a></code> objects.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.891" id="rgl-092891">rgl 0.92.891<small>2012-07-17</small><a class="anchor" aria-label="anchor" href="#rgl-092891"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-92-891">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-92-891"></a></h3>
-<ul><li>Added support for 3d sprites to <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code>.</li>
-</ul></div>
+<ul><li>Added support for 3d sprites to <code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code>.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.892" id="rgl-092892">rgl 0.92.892<small>2012-07-19</small><a class="anchor" aria-label="anchor" href="#rgl-092892"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-92-892">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-92-892"></a></h3>
-<ul><li>Added declaration needed by Solaris.</li>
-</ul></div>
+<ul><li>Added declaration needed by Solaris.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.893" id="rgl-092893">rgl 0.92.893<a class="anchor" aria-label="anchor" href="#rgl-092893"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-92-893">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-92-893"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl-deprecated.html">rgl.light()</a></code> and <code><a href="../reference/light.html">light3d()</a></code> did not return the light ID value.</li>
-</ul></div>
+<code><a href="../reference/rgl-deprecated.html">rgl.light()</a></code> and <code><a href="../reference/light.html">light3d()</a></code> did not return the light ID value.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.894" id="rgl-092894">rgl 0.92.894<small>2012-10-22</small><a class="anchor" aria-label="anchor" href="#rgl-092894"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-92-894">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-92-894"></a></h3>
-<ul><li>remove debugging code from <code>configure.win</code> that was causing problems on the CRAN WinBuilder system</li>
-</ul></div>
+<ul><li>remove debugging code from <code>configure.win</code> that was causing problems on the CRAN WinBuilder system</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.93" id="rgl-093">rgl 0.93<a class="anchor" aria-label="anchor" href="#rgl-093"></a></h2>
@@ -1299,19 +1267,16 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-93">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-93"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> did not render semi-transparent surfaces properly. (Reported by Robert Esswein.)</li>
-</ul></div>
+<code><a href="../reference/rgl-deprecated.html">writeWebGL()</a></code> did not render semi-transparent surfaces properly. (Reported by Robert Esswein.)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.861" id="rgl-092861">rgl 0.92.861<small>2012-03-26</small><a class="anchor" aria-label="anchor" href="#rgl-092861"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-92-861">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-92-861"></a></h3>
-<ul><li>Added <code>rgl.save.texture()</code> to get texture from an object.</li>
-</ul></div>
+<ul><li>Added <code>rgl.save.texture()</code> to get texture from an object.</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-92-861">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-92-861"></a></h3>
-<ul><li>Fixed segfault on startup on Windows in MDI mode.</li>
-</ul></div>
+<ul><li>Fixed segfault on startup on Windows in MDI mode.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.92.858" id="rgl-092858">rgl 0.92.858<small>2012-03-20</small><a class="anchor" aria-label="anchor" href="#rgl-092858"></a></h2>
@@ -1357,8 +1322,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.91" id="rgl-091">rgl 0.91<small>2010-04-05</small><a class="anchor" aria-label="anchor" href="#rgl-091"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-91">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-91"></a></h3>
-<ul><li>Added <code>R_ARCH*</code> macros to <code>configure.win</code> for Win64 compatibility</li>
-</ul></div>
+<ul><li>Added <code>R_ARCH*</code> macros to <code>configure.win</code> for Win64 compatibility</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-91">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-91"></a></h3>
 <ul><li>Fixed bug in <code><a href="../reference/rgl-deprecated.html">rgl.texts()</a></code>: zero-length texts argument caused crash. (Reported by Michael Friendly.)</li>
@@ -1376,15 +1340,13 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-90">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-90"></a></h3>
-<ul><li>An off-by-one error caused the <code>"alpha"</code> component of the material properties to be messed up. (Bug <a href="https://github.com/dmurdoch/rgl/issues/809" class="external-link">#809</a>)</li>
-</ul></div>
+<ul><li>An off-by-one error caused the <code>"alpha"</code> component of the material properties to be messed up. (Bug <a href="https://github.com/dmurdoch/rgl/issues/809" class="external-link">#809</a>)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.89" id="rgl-089">rgl 0.89<small>2010-01-01</small><a class="anchor" aria-label="anchor" href="#rgl-089"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-89">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-89"></a></h3>
-<ul><li>Fixed rounding errors and <code>Xvfb</code> errors in <code><a href="../reference/rgl.pixels.html">rgl.pixels()</a></code> examples and demo.</li>
-</ul></div>
+<ul><li>Fixed rounding errors and <code>Xvfb</code> errors in <code><a href="../reference/rgl.pixels.html">rgl.pixels()</a></code> examples and demo.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.88" id="rgl-088">rgl 0.88<a class="anchor" aria-label="anchor" href="#rgl-088"></a></h2>
@@ -1423,8 +1385,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-85">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-85"></a></h3>
-<ul><li>Fixed <code>material3d("color")</code> bug introduced in 0.82.</li>
-</ul></div>
+<ul><li>Fixed <code>material3d("color")</code> bug introduced in 0.82.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.84" id="rgl-084">rgl 0.84<small>2009-03-15</small><a class="anchor" aria-label="anchor" href="#rgl-084"></a></h2>
@@ -1435,15 +1396,13 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-84">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-84"></a></h3>
-<ul><li>Bug fix to stop crashes when material is set before the first window is opened.</li>
-</ul></div>
+<ul><li>Bug fix to stop crashes when material is set before the first window is opened.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.83-3" id="rgl-083-3">rgl 0.83-3<small>2009-02-24</small><a class="anchor" aria-label="anchor" href="#rgl-083-3"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-83-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-83-3"></a></h3>
-<ul><li>Quick fix for R 2.9.x compatibility, and to remove accidental change introduced in v0.83 which caused errors on plotting without <code><a href="../reference/open3d.html">open3d()</a></code>.</li>
-</ul></div>
+<ul><li>Quick fix for R 2.9.x compatibility, and to remove accidental change introduced in v0.83 which caused errors on plotting without <code><a href="../reference/open3d.html">open3d()</a></code>.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.83-1" id="rgl-083-1">rgl 0.83-1<small>2009-02-19</small><a class="anchor" aria-label="anchor" href="#rgl-083-1"></a></h2>
@@ -1464,8 +1423,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.82" id="rgl-082">rgl 0.82<small>2009-01-30</small><a class="anchor" aria-label="anchor" href="#rgl-082"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-82">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-82"></a></h3>
-<ul><li>added <code><a href="../reference/rgl.pixels.html">rgl.pixels()</a></code> to read the generated image, and <code>demo("stereo")</code> to illustrate its use.</li>
-</ul></div>
+<ul><li>added <code><a href="../reference/rgl.pixels.html">rgl.pixels()</a></code> to read the generated image, and <code>demo("stereo")</code> to illustrate its use.</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-82">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-82"></a></h3>
 <ul><li>rewrote internal rendering of transparent and anti-aliased shapes, so they will be rendered better when there are several in the same scene</li>
@@ -1494,8 +1452,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.81" id="rgl-081">rgl 0.81<small>2008-08-05</small><a class="anchor" aria-label="anchor" href="#rgl-081"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-81">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-81"></a></h3>
-<ul><li>converted Freetype font error into warning</li>
-</ul></div>
+<ul><li>converted Freetype font error into warning</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-81">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-81"></a></h3>
 <ul><li>
@@ -1523,8 +1480,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <div class="section level3">
 <h3 id="bug-fixes-0-79">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-79"></a></h3>
 <ul><li>
-<code><a href="../reference/rgl-duplicated.html">rgl.pop()</a></code> could cause corruption when multiple windows were open.</li>
-</ul></div>
+<code><a href="../reference/rgl-duplicated.html">rgl.pop()</a></code> could cause corruption when multiple windows were open.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.76" id="rgl-076">rgl 0.76<small>2007-12-02</small><a class="anchor" aria-label="anchor" href="#rgl-076"></a></h2>
@@ -1535,8 +1491,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-76">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-76"></a></h3>
-<ul><li>put our own <code>assert()</code> macro in place to avoid crashing R.</li>
-</ul></div>
+<ul><li>put our own <code>assert()</code> macro in place to avoid crashing R.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.77" id="rgl-077">rgl 0.77<small>2008-03-11</small><a class="anchor" aria-label="anchor" href="#rgl-077"></a></h2>
@@ -1571,8 +1526,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.75" id="rgl-075">rgl 0.75<small>2007-10-15</small><a class="anchor" aria-label="anchor" href="#rgl-075"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-75">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-75"></a></h3>
-<ul><li>add <code><a href="../reference/play3d.html">play3d()</a></code>, <code><a href="../reference/play3d.html">movie3d()</a></code>, <code><a href="../reference/par3dinterp.html">par3dinterp()</a></code>, and <code><a href="../reference/spin3d.html">spin3d()</a></code> functions, with flag demo</li>
-</ul></div>
+<ul><li>add <code><a href="../reference/play3d.html">play3d()</a></code>, <code><a href="../reference/play3d.html">movie3d()</a></code>, <code><a href="../reference/par3dinterp.html">par3dinterp()</a></code>, and <code><a href="../reference/spin3d.html">spin3d()</a></code> functions, with flag demo</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-75">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-75"></a></h3>
 <ul><li>rounding error could cause <code>par3d("userMatrix")</code> to generate NaNs and fail</li>
@@ -1583,8 +1537,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.74" id="rgl-074">rgl 0.74<small>2007-08-13</small><a class="anchor" aria-label="anchor" href="#rgl-074"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-74">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-74"></a></h3>
-<ul><li>add <code><a href="../reference/callbacks.html">rgl.setMouseCallbacks()</a></code> to allow user actions</li>
-</ul></div>
+<ul><li>add <code><a href="../reference/callbacks.html">rgl.setMouseCallbacks()</a></code> to allow user actions</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-74">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-74"></a></h3>
 <ul><li>clean up <code>#include</code>s</li>
@@ -1604,15 +1557,13 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.72" id="rgl-072">rgl 0.72<small>2007-06-03</small><a class="anchor" aria-label="anchor" href="#rgl-072"></a></h2>
 <div class="section level3">
 <h3 id="minor-changes-0-72">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-72"></a></h3>
-<ul><li>declaration changes for compatibility with R 2.6.0 (from Brian Ripley)</li>
-</ul></div>
+<ul><li>declaration changes for compatibility with R 2.6.0 (from Brian Ripley)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.71" id="rgl-071">rgl 0.71<small>2007-04-23</small><a class="anchor" aria-label="anchor" href="#rgl-071"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-71">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-71"></a></h3>
-<ul><li>allowed normals and texture coordinates to be specified in triangles, quads and surfaces</li>
-</ul></div>
+<ul><li>allowed normals and texture coordinates to be specified in triangles, quads and surfaces</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-71">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-71"></a></h3>
 <ul><li>changes to configure script from Laszlo Kajan and Brian Ripley: should now be much more portable</li>
@@ -1670,8 +1621,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <h2 class="page-header" data-toc-text="0.68" id="rgl-068">rgl 0.68<small>2006-09-12</small><a class="anchor" aria-label="anchor" href="#rgl-068"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-68">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-68"></a></h3>
-<ul><li>added <code><a href="../reference/grid3d.html">grid3d()</a></code>, added <code>nticks</code> argument to <code><a href="../reference/bbox.html">bbox3d()</a></code>, <code><a href="../reference/axes3d.html">axis3d()</a></code> and <code><a href="../reference/axes3d.html">axes3d()</a></code>.</li>
-</ul></div>
+<ul><li>added <code><a href="../reference/grid3d.html">grid3d()</a></code>, added <code>nticks</code> argument to <code><a href="../reference/bbox.html">bbox3d()</a></code>, <code><a href="../reference/axes3d.html">axis3d()</a></code> and <code><a href="../reference/axes3d.html">axes3d()</a></code>.</li></ul></div>
 <div class="section level3">
 <h3 id="minor-changes-0-68">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-68"></a></h3>
 <ul><li>fixed sphere drawing so spheres are spheres regardless of <code>par3d("scale")</code>
@@ -1689,8 +1639,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.67-2" id="rgl-067-2">rgl 0.67-2<small>2006-07-11</small><a class="anchor" aria-label="anchor" href="#rgl-067-2"></a></h2>
-<ul><li>minor correction</li>
-</ul></div>
+<ul><li>minor correction</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.67" id="rgl-067">rgl 0.67<small>2006-07-10</small><a class="anchor" aria-label="anchor" href="#rgl-067"></a></h2>
 <ul><li>added support for png files with palettes, and grayscale pngs with 1, 2 or 4 bits per pixel</li>
@@ -1748,12 +1697,10 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64-13" id="rgl-064-13">rgl 0.64-13<small>2004-06-18</small><a class="anchor" aria-label="anchor" href="#rgl-064-13"></a></h2>
-<ul><li>DESCRIPTION fix: moved R 1.41 -&gt; R 1.4.1 dependency</li>
-</ul></div>
+<ul><li>DESCRIPTION fix: moved R 1.41 -&gt; R 1.4.1 dependency</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64-12" id="rgl-064-12">rgl 0.64-12<small>2004-06-18</small><a class="anchor" aria-label="anchor" href="#rgl-064-12"></a></h2>
-<ul><li>CRAN bugfix: permissions of cleanup fixed.</li>
-</ul></div>
+<ul><li>CRAN bugfix: permissions of cleanup fixed.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64-11" id="rgl-064-11">rgl 0.64-11<a class="anchor" aria-label="anchor" href="#rgl-064-11"></a></h2>
 <ul><li>removed several redundant semicolons, required by gcc 3.4 ansi-pedantic mode.</li>
@@ -1808,8 +1755,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64-5" id="rgl-064-5">rgl 0.64-5<a class="anchor" aria-label="anchor" href="#rgl-064-5"></a></h2>
-<ul><li>macOS X/X11 port</li>
-</ul></div>
+<ul><li>macOS X/X11 port</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64-4" id="rgl-064-4">rgl 0.64-4<a class="anchor" aria-label="anchor" href="#rgl-064-4"></a></h2>
 <ul><li>manual update</li>
@@ -1828,8 +1774,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64-2" id="rgl-064-2">rgl 0.64-2<a class="anchor" aria-label="anchor" href="#rgl-064-2"></a></h2>
 <ul><li>
-<code><a href="../reference/rgl-deprecated.html">rgl.quads()</a></code>: <code>enum</code> id was broken, fixed (“quads” -&gt; “quadrangles”)</li>
-</ul></div>
+<code><a href="../reference/rgl-deprecated.html">rgl.quads()</a></code>: <code>enum</code> id was broken, fixed (“quads” -&gt; “quadrangles”)</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.64" id="rgl-064">rgl 0.64<a class="anchor" aria-label="anchor" href="#rgl-064"></a></h2>
 <ul><li>autoconf build system</li>
@@ -1852,8 +1797,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 <ul><li>modified sphere set</li>
 <li>support R color strings</li>
 <li>use <code>system.file( &lt;subpath&gt;, package="rgl" )</code> in examples to retrieve texture files</li>
-<li>rewrote R code :
-<ul><li>clear <code>enum</code> types</li>
+<li>rewrote R code :<ul><li>clear <code>enum</code> types</li>
 <li>vertex vector datatype (internal representation matrix)</li>
 </ul></li>
 </ul></div>
@@ -1867,8 +1811,7 @@ It now uses the same mesh as the one used inside R. (The lack of support was poi
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.60" id="rgl-060">rgl 0.60<a class="anchor" aria-label="anchor" href="#rgl-060"></a></h2>
-<ul><li>(mini-thesis release)</li>
-</ul></div>
+<ul><li>(mini-thesis release)</li></ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

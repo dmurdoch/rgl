@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.8</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.10</span>
       </span>
     </div>
 
@@ -94,15 +94,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="deprecation_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Deprecating the <code>rgl.*</code>
-interface</h1>
-                        <h4 data-toc-skip class="author">Duncan
-Murdoch</h4>
+      <h1 data-toc-skip>Deprecating the <code>rgl.*</code> interface</h1>
+                        <h4 data-toc-skip class="author">Duncan Murdoch</h4>
             
-            <h4 data-toc-skip class="date">2023-12-14</h4>
+            <h4 data-toc-skip class="date">2024-01-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dmurdoch/rgl/blob/HEAD/vignettes/deprecation.Rmd" class="external-link"><code>vignettes/deprecation.Rmd</code></a></small>
       <div class="hidden name"><code>deprecation.Rmd</code></div>
@@ -114,16 +112,8 @@ Murdoch</h4>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Since at least 2004, <code>rgl</code> has had two interfaces for many
-of the primitive functions: <code>rgl.*</code> and <code>*3d</code>. For
-example, to draw points you could use <code><a href="../reference/rgl-deprecated.html">rgl.points()</a></code> or
-<code><a href="../reference/primitives.html">points3d()</a></code>. With the upcoming version 1.0.0 release of
-<code>rgl</code>, most of the duplication will be removed. The first
-step will be to deprecate a large number of <code>rgl.*</code> functions
-so they give warnings when they are called, and a few months later they
-will be removed from the package exports.</p>
-<p>This document describes the differences and changes needed by users
-of the <code>rgl.*</code> interface.</p>
+<p>Since at least 2004, <code>rgl</code> has had two interfaces for many of the primitive functions: <code>rgl.*</code> and <code>*3d</code>. For example, to draw points you could use <code><a href="../reference/rgl-deprecated.html">rgl.points()</a></code> or <code><a href="../reference/primitives.html">points3d()</a></code>. With the upcoming version 1.0.0 release of <code>rgl</code>, most of the duplication will be removed. The first step will be to deprecate a large number of <code>rgl.*</code> functions so they give warnings when they are called, and a few months later they will be removed from the package exports.</p>
+<p>This document describes the differences and changes needed by users of the <code>rgl.*</code> interface.</p>
 </div>
 <div class="section level2">
 <h2 id="differences-between-the-interfaces">Differences between the interfaces<a class="anchor" aria-label="anchor" href="#differences-between-the-interfaces"></a>
@@ -131,20 +121,13 @@ of the <code>rgl.*</code> interface.</p>
 <div class="section level3">
 <h3 id="opening-a-window">Opening a window<a class="anchor" aria-label="anchor" href="#opening-a-window"></a>
 </h3>
-<p>The <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> function has a single argument,
-<code>useNULL</code>. If set to <code>TRUE</code>, the NULL
-<code>rgl</code> device will be used. The <code><a href="../reference/par3d.html">par3d()</a></code> settings
-will be set to their defaults.</p>
+<p>The <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> function has a single argument, <code>useNULL</code>. If set to <code>TRUE</code>, the NULL <code>rgl</code> device will be used. The <code><a href="../reference/par3d.html">par3d()</a></code> settings will be set to their defaults.</p>
 <p>The <code><a href="../reference/open3d.html">open3d()</a></code> function has arguments</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(..., </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">params =</span> <span class="fu">getr3dDefaults</span>(), </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">useNULL =</span> <span class="fu">rgl.useNULL</span>(), </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">silent =</span> <span class="cn">FALSE</span> )</span></code></pre></div>
-<p>and allows <code><a href="../reference/par3d.html">par3d()</a></code> values to be specified, and uses the
-<code>r3dDefaults</code> variable to set default values for
-<code><a href="../reference/par3d.html">par3d()</a></code>, <code><a href="../reference/material.html">material3d()</a></code>, and
-<code><a href="../reference/bg.html">bg3d()</a></code>. Initially <code>r3dDefaults</code> is defined
-as</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cf">function</span>(..., </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>         <span class="dt">params =</span> <span class="kw">getr3dDefaults</span>(), </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>         <span class="dt">useNULL =</span> <span class="kw">rgl.useNULL</span>(), </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>         <span class="dt">silent =</span> <span class="ot">FALSE</span> )</span></code></pre></div>
+<p>and allows <code><a href="../reference/par3d.html">par3d()</a></code> values to be specified, and uses the <code>r3dDefaults</code> variable to set default values for <code><a href="../reference/par3d.html">par3d()</a></code>, <code><a href="../reference/material.html">material3d()</a></code>, and <code><a href="../reference/bg.html">bg3d()</a></code>. Initially <code>r3dDefaults</code> is defined as</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>userMatrix <span class="op">=</span> <span class="fu"><a href="../reference/matrices.html">rotationMatrix</a></span><span class="op">(</span><span class="fl">290</span><span class="op">*</span><span class="va">pi</span><span class="op">/</span><span class="fl">180</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>     mouseMode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"trackball"</span>, <span class="st">"zoom"</span>, <span class="st">"fov"</span>, <span class="st">"pull"</span><span class="op">)</span>,</span>
@@ -154,8 +137,7 @@ as</p>
 <span>               fogtype <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>,</span>
 <span>     material <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color<span class="op">=</span><span class="st">"black"</span>, fog <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Users can create their own default lists; e.g. to get the same result
-as <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> would give, use</p>
+<p>Users can create their own default lists; e.g. to get the same result as <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> would give, use</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/open3d.html">open3d</a></span><span class="op">(</span>params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>or</p>
@@ -166,106 +148,68 @@ as <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> would 
 <div class="section level3">
 <h3 id="material-properties">Material properties<a class="anchor" aria-label="anchor" href="#material-properties"></a>
 </h3>
-<p>The <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> function has a large number of
-parameters. The pre-deprecation arguments were:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">color        =</span> <span class="st">"white"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha        =</span> <span class="fl">1.0</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lit          =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ambient      =</span> <span class="st">"black"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">specular     =</span> <span class="st">"white"</span>, </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">emission     =</span> <span class="st">"black"</span>, </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">shininess    =</span> <span class="fl">50.0</span>, </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">smooth       =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">texture      =</span> <span class="cn">NULL</span>, </span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">textype      =</span> <span class="st">"rgb"</span>, </span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">texmipmap    =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">texminfilter =</span> <span class="st">"linear"</span>, </span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">texmagfilter =</span> <span class="st">"linear"</span>,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">texenvmap    =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">front        =</span> <span class="st">"filled"</span>, </span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">back         =</span> <span class="st">"filled"</span>,</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">size         =</span> <span class="fl">3.0</span>,</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd          =</span> <span class="fl">1.0</span>, </span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">fog          =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">point_antialias =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">line_antialias =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">depth_mask   =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">depth_test   =</span> <span class="st">"less"</span>,</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">polygon_offset =</span> <span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">0.0</span>),</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">margin =</span> <span class="st">""</span>,</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">floating =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">tag =</span> <span class="st">""</span>,</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">blend =</span> <span class="fu">c</span>(<span class="st">"src_alpha"</span>, <span class="st">"one_minus_src_alpha"</span>),</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  col,</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  ...</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>Thus a call like <code>rgl.material(color = "black")</code> will set
-the color to black, and will also set all of the other parameters to the
-default values listed above.</p>
+<p>The <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> function has a large number of parameters. The pre-deprecation arguments were:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="cf">function</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  <span class="dt">color        =</span> <span class="st">"white"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="dt">alpha        =</span> <span class="fl">1.0</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>  <span class="dt">lit          =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>  <span class="dt">ambient      =</span> <span class="st">"black"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>  <span class="dt">specular     =</span> <span class="st">"white"</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>  <span class="dt">emission     =</span> <span class="st">"black"</span>, </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>  <span class="dt">shininess    =</span> <span class="fl">50.0</span>, </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>  <span class="dt">smooth       =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>  <span class="dt">texture      =</span> <span class="ot">NULL</span>, </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>  <span class="dt">textype      =</span> <span class="st">"rgb"</span>, </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>  <span class="dt">texmipmap    =</span> <span class="ot">FALSE</span>, </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a>  <span class="dt">texminfilter =</span> <span class="st">"linear"</span>, </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>  <span class="dt">texmagfilter =</span> <span class="st">"linear"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a>  <span class="dt">texenvmap    =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a>  <span class="dt">front        =</span> <span class="st">"filled"</span>, </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a>  <span class="dt">back         =</span> <span class="st">"filled"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a>  <span class="dt">size         =</span> <span class="fl">3.0</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a>  <span class="dt">lwd          =</span> <span class="fl">1.0</span>, </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a>  <span class="dt">fog          =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a>  <span class="dt">point_antialias =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true"></a>  <span class="dt">line_antialias =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true"></a>  <span class="dt">depth_mask   =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true"></a>  <span class="dt">depth_test   =</span> <span class="st">"less"</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true"></a>  <span class="dt">polygon_offset =</span> <span class="kw">c</span>(<span class="fl">0.0</span>, <span class="fl">0.0</span>),</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true"></a>  <span class="dt">margin =</span> <span class="st">""</span>,</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true"></a>  <span class="dt">floating =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true"></a>  <span class="dt">tag =</span> <span class="st">""</span>,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true"></a>  <span class="dt">blend =</span> <span class="kw">c</span>(<span class="st">"src_alpha"</span>, <span class="st">"one_minus_src_alpha"</span>),</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true"></a>  col,</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true"></a>  ...</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true"></a>)</span></code></pre></div>
+<p>Thus a call like <code>rgl.material(color = "black")</code> will set the color to black, and will also set all of the other parameters to the default values listed above.</p>
 <p>On the other hand, the arguments to <code><a href="../reference/material.html">material3d()</a></code> are</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span> (..., <span class="at">id =</span> <span class="cn">NULL</span>)  </span></code></pre></div>
-<p>Calling <code>material3d(color = "black")</code> will set the color
-to black and leave all other parameters unchanged.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="cf">function</span> (..., <span class="dt">id =</span> <span class="ot">NULL</span>)  </span></code></pre></div>
+<p>Calling <code>material3d(color = "black")</code> will set the color to black and leave all other parameters unchanged.</p>
 </div>
 <div class="section level3">
 <h3 id="primitive-shapes">Primitive shapes<a class="anchor" aria-label="anchor" href="#primitive-shapes"></a>
 </h3>
-<p>The primitive shapes (points etc.) can be set using calls like
-<code>rgl.points(x, y, z, color = "black")</code> or
-<code>points3d(x, y, z, color = "black")</code>.</p>
-<p>The first difference is that <code>rgl.*</code> primitives will call
-<code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> to set the material properties: in this
-example <code>color</code> will be set to <code>black</code>, and all
-other parameters will be set to their defaults. The <code>*3d</code>
-versions of the primitives use <code><a href="../reference/material.html">material3d()</a></code> to set material
-properties, so only those that were specified will be changed, and the
-original values will be restored afterwards.</p>
-<p>The second difference is what happens if there is no window already
-open. The <code>rgl.*</code> functions will call <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code>
-(ignoring <code>r3dDefaults</code>), whereas the <code>*3d</code>
-functions will call <code><a href="../reference/open3d.html">open3d()</a></code>.</p>
+<p>The primitive shapes (points etc.) can be set using calls like <code>rgl.points(x, y, z, color = "black")</code> or <code>points3d(x, y, z, color = "black")</code>.</p>
+<p>The first difference is that <code>rgl.*</code> primitives will call <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> to set the material properties: in this example <code>color</code> will be set to <code>black</code>, and all other parameters will be set to their defaults. The <code>*3d</code> versions of the primitives use <code><a href="../reference/material.html">material3d()</a></code> to set material properties, so only those that were specified will be changed, and the original values will be restored afterwards.</p>
+<p>The second difference is what happens if there is no window already open. The <code>rgl.*</code> functions will call <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> (ignoring <code>r3dDefaults</code>), whereas the <code>*3d</code> functions will call <code><a href="../reference/open3d.html">open3d()</a></code>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="why-deprecate-rgl-">Why deprecate <code>rgl.*</code>?<a class="anchor" aria-label="anchor" href="#why-deprecate-rgl-"></a>
 </h2>
-<p>Both of the systems worked, but they do not work together. For
-example, calling <code><a href="../reference/rgl-deprecated.html">rgl.points()</a></code> will have carry-on effects on
-later <code><a href="../reference/primitives.html">points3d()</a></code> calls, whereas each
-<code><a href="../reference/primitives.html">points3d()</a></code> call will just draw the points, it won’t affect
-future calls.</p>
-<p>Users have found this confusing, and it makes their code hard to
-debug, and the <code>rgl</code> package hard to maintain. The
-<code>*3d</code> interface is more flexible, and more similar to the
-base graphics interface in R, so I’ve decided it will be the only one
-available going forward.</p>
+<p>Both of the systems worked, but they do not work together. For example, calling <code><a href="../reference/rgl-deprecated.html">rgl.points()</a></code> will have carry-on effects on later <code><a href="../reference/primitives.html">points3d()</a></code> calls, whereas each <code><a href="../reference/primitives.html">points3d()</a></code> call will just draw the points, it won’t affect future calls.</p>
+<p>Users have found this confusing, and it makes their code hard to debug, and the <code>rgl</code> package hard to maintain. The <code>*3d</code> interface is more flexible, and more similar to the base graphics interface in R, so I’ve decided it will be the only one available going forward.</p>
 <div class="section level3">
 <h3 id="some-rgl--functions-are-not-deprecated">Some <code>rgl.*</code> functions are not deprecated<a class="anchor" aria-label="anchor" href="#some-rgl--functions-are-not-deprecated"></a>
 </h3>
-<p>There will still be some <code>rgl.*</code> functions in the package.
-These are functions that are mainly intended for programming, such as
-<code><a href="../reference/attributes.html">rgl.attrib()</a></code> and <code><a href="../reference/rgl.user2window.html">rgl.user2window()</a></code>, and a few
-legacy functions like <code><a href="../reference/rgl.Sweave.html">rgl.Sweave()</a></code> supporting older
-approaches of using <code>rgl</code>.</p>
-<p>In a few cases both function versions are identical
-(<code>rgl.cur</code>, <code>rgl.ids</code>, and <code>rgl.pop</code>
-are identical to <code>cur3d</code>, <code>ids3d</code> and
-<code>pop3d</code> respectively), and for those the <code>rgl.*</code>
-versions will be kept, but the documentation will concentrate on the
-<code>*3d</code> functions.</p>
+<p>There will still be some <code>rgl.*</code> functions in the package. These are functions that are mainly intended for programming, such as <code><a href="../reference/attributes.html">rgl.attrib()</a></code> and <code><a href="../reference/rgl.user2window.html">rgl.user2window()</a></code>, and a few legacy functions like <code><a href="../reference/rgl.Sweave.html">rgl.Sweave()</a></code> supporting older approaches of using <code>rgl</code>.</p>
+<p>In a few cases both function versions are identical (<code>rgl.cur</code>, <code>rgl.ids</code>, and <code>rgl.pop</code> are identical to <code>cur3d</code>, <code>ids3d</code> and <code>pop3d</code> respectively), and for those the <code>rgl.*</code> versions will be kept, but the documentation will concentrate on the <code>*3d</code> functions.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="my-package-uses-rgl---what-do-i-need-to-do">My package uses <code>rgl.*</code>. What do I need to do?<a class="anchor" aria-label="anchor" href="#my-package-uses-rgl---what-do-i-need-to-do"></a>
 </h2>
-<p>If your package is using <code>rgl.*</code> functions, the first step
-is to just make the substitutions suggested by the deprecation warning
-message. For example, if you use
-<code>rgl.points(rnorm(10), rnorm(10), rnorm(10))</code> try using
-<code>points3d(rnorm(10), rnorm(10), rnorm(10))</code> instead. In most
-cases this will give you what you want. In some cases more changes will
-be needed.</p>
+<p>If your package is using <code>rgl.*</code> functions, the first step is to just make the substitutions suggested by the deprecation warning message. For example, if you use <code>rgl.points(rnorm(10), rnorm(10), rnorm(10))</code> try using <code>points3d(rnorm(10), rnorm(10), rnorm(10))</code> instead. In most cases this will give you what you want. In some cases more changes will be needed.</p>
 <div class="section level3">
 <h3 id="rgl-open-and-rgl-material">
 <code>rgl.open</code> and <code>rgl.material</code><a class="anchor" aria-label="anchor" href="#rgl-open-and-rgl-material"></a>
@@ -275,20 +219,13 @@ be needed.</p>
 <div class="section level3">
 <h3 id="textures">Textures<a class="anchor" aria-label="anchor" href="#textures"></a>
 </h3>
-<p>The default color after <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> was white, whereas
-with <code><a href="../reference/open3d.html">open3d()</a></code> the default color is black, with a white
-background. Textures multiplicatively modify the color of the object, so
-after <code><a href="../reference/open3d.html">open3d()</a></code>, a texture on an object will still appear
-black. Explicitly specifying <code>color = "white"</code> when a texture
-is used will fix this.</p>
+<p>The default color after <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> was white, whereas with <code><a href="../reference/open3d.html">open3d()</a></code> the default color is black, with a white background. Textures multiplicatively modify the color of the object, so after <code><a href="../reference/open3d.html">open3d()</a></code>, a texture on an object will still appear black. Explicitly specifying <code>color = "white"</code> when a texture is used will fix this.</p>
 </div>
 <div class="section level3">
 <h3 id="rgl-surface">
 <code>rgl.surface()</code><a class="anchor" aria-label="anchor" href="#rgl-surface"></a>
 </h3>
-<p>The arguments to <code><a href="../reference/rgl-deprecated.html">rgl.surface()</a></code> and
-<code><a href="../reference/surface3d.html">surface3d()</a></code> functions are different. The argument lists
-are</p>
+<p>The arguments to <code><a href="../reference/rgl-deprecated.html">rgl.surface()</a></code> and <code><a href="../reference/surface3d.html">surface3d()</a></code> functions are different. The argument lists are</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rgl-deprecated.html">rgl.surface</a></span><span class="op">(</span> <span class="va">x</span>, <span class="va">z</span>, <span class="va">y</span>, </span>
 <span>             coords <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,  <span class="va">...</span>, </span>
@@ -299,48 +236,27 @@ are</p>
 <span>          normal_x <span class="op">=</span> <span class="cn">NULL</span>, normal_y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>          normal_z <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>          texture_s <span class="op">=</span> <span class="cn">NULL</span>, texture_t<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
-<p>Notice that the arguments are in a different order. Another
-difference is that <code><a href="../reference/rgl-deprecated.html">rgl.surface()</a></code> expects the surface to be
-defined in the <code>y</code> coordinate and viewed in the orientation
-produced by <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code>, not the one produced by
-<code><a href="../reference/open3d.html">open3d()</a></code>. Up until very recently, <code><a href="../reference/surface3d.html">surface3d()</a></code>
-didn’t allow both <code>x</code> and <code>z</code> to be vectors.</p>
-<p>The excellent <a href="https://www.rayshader.com" class="external-link"><code>rayshader</code> package</a> used
-the convention that the <code>y</code> argument held the surface, so the
-<code>y</code> direction should point up. Using
-<code>view3d(theta = 45, phi = 45)</code> (which it was already doing)
-gives a reasonable view.</p>
+<p>Notice that the arguments are in a different order. Another difference is that <code><a href="../reference/rgl-deprecated.html">rgl.surface()</a></code> expects the surface to be defined in the <code>y</code> coordinate and viewed in the orientation produced by <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code>, not the one produced by <code><a href="../reference/open3d.html">open3d()</a></code>. Up until very recently, <code><a href="../reference/surface3d.html">surface3d()</a></code> didn’t allow both <code>x</code> and <code>z</code> to be vectors.</p>
+<p>The excellent <a href="https://www.rayshader.com" class="external-link"><code>rayshader</code> package</a> used the convention that the <code>y</code> argument held the surface, so the <code>y</code> direction should point up. Using <code>view3d(theta = 45, phi = 45)</code> (which it was already doing) gives a reasonable view.</p>
 </div>
 <div class="section level3">
 <h3 id="lists-of-material-names-and-par3d-properties">Lists of material names and par3d properties<a class="anchor" aria-label="anchor" href="#lists-of-material-names-and-par3d-properties"></a>
 </h3>
-<p>Many functions in <code>rgl</code> and other packages use
-<code>...</code> to set material or <code>par3d</code> properties in a
-call, and for some, <code>...</code> will contain other optional
-arguments. Some packages used the argument list of
-<code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> to identify the material property names.
-Going forward, packages should use the variables</p>
+<p>Many functions in <code>rgl</code> and other packages use <code>...</code> to set material or <code>par3d</code> properties in a call, and for some, <code>...</code> will contain other optional arguments. Some packages used the argument list of <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> to identify the material property names. Going forward, packages should use the variables</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rgl.material.names</span></span>
 <span><span class="va">rgl.material.readonly</span></span></code></pre></div>
-<p>These are character variables holding all the material property
-names. (<code>rgl.material.names</code> contains all names;
-<code>rgl.material.readonly</code> is the read-only subset of that
-list.) There are also variables</p>
+<p>These are character variables holding all the material property names. (<code>rgl.material.names</code> contains all names; <code>rgl.material.readonly</code> is the read-only subset of that list.) There are also variables</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rgl.par3d.names</span></span>
 <span><span class="va">rgl.par3d.readonly</span></span></code></pre></div>
 <p>which give the same information for <code>par3d</code>.</p>
-<p>Since these variables are recently added, you will need to add a
-dependence on <code>rgl (&gt;= 0.111.5)</code> if you use them.</p>
+<p>Since these variables are recently added, you will need to add a dependence on <code>rgl (&gt;= 0.111.5)</code> if you use them.</p>
 </div>
 <div class="section level3">
 <h3 id="others">Others<a class="anchor" aria-label="anchor" href="#others"></a>
 </h3>
-<p>If you have particular problems adapting other <code>rgl.*</code> to
-the <code>*3d</code> interface, please post them as issues on <a href="https://github.com/dmurdoch/rgl/issues" class="external-link uri">https://github.com/dmurdoch/rgl/issues</a> . I’ll explain
-how to get what you want or fix things in <code>rgl</code> so you can do
-it.</p>
+<p>If you have particular problems adapting other <code>rgl.*</code> to the <code>*3d</code> interface, please post them as issues on <a href="https://github.com/dmurdoch/rgl/issues" class="external-link uri">https://github.com/dmurdoch/rgl/issues</a> . I’ll explain how to get what you want or fix things in <code>rgl</code> so you can do it.</p>
 </div>
 </div>
   </div>
