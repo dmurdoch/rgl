@@ -101,7 +101,7 @@ void main(void) {
 #endif // IS_TWOSIDED
   
 #ifdef NEEDS_VNORMAL
-  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
+  vNormal = vec4(normalize(vNormal.xyz), 1);
 #endif
   
 #if defined(HAS_TEXTURE) || defined(IS_TEXT)

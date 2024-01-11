@@ -106,11 +106,19 @@ void main(void) {
 #endif
     
 #if NLIGHTS > 0
+    // Simulate two-sided lighting
+    if (n.z < 0.0)
+      n = -n;
     for (int i=0;i<NLIGHTS;i++) {
       colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
       lightdir = lightDir[i];
-      if (!viewpoint[i])
-        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
+      if (!viewpoint[i]) {
+        if (finite[i]) {
+          lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
+        } else {
+          lightdir = (mvMatrix * vec4(lightdir, 0.)).xyz;
+        }
+      }
       if (!finite[i]) {
         halfVec = normalize(lightdir + eye);
       } else {

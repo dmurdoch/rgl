@@ -1,4 +1,4 @@
-# rgl 1.2.9
+# rgl 1.2.10
 
 ## Minor changes
 
@@ -18,6 +18,8 @@ run in a Shiny session.
 * Fixed issues caused by misuse of `dev.off()` using new function
 `safe.dev.off()`.
 * Fixed issue with `warning()` call reported by CRAN.
+* Smooth shapes were not rendered correctly by `rglwidget()`.
+  This was especially noticeable for spheres with `fov = 0`, but was present in other cases as well (issue #401).
 
 # rgl 1.2.1
 
