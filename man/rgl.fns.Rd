@@ -34,9 +34,6 @@ or normals for the planes.
   \item{fixedSize, rotating}{Fixed size, changing orientation.}
   \item{fastTransparency}{Sphere drawing strategy.}
   \item{adj, pos, offset}{Positioning.}
-  \item{tag}{Select objects with material property
-  \code{tag} in this vector.}
-  \item{tags}{Whether to return tags.}
   \item{...}{
 Material properties.
 }

@@ -1,27 +1,23 @@
-# 1.2.1
+# 1.2.8
 
-In addition to the changes below, this version rearranges header 
-include order.
+This small release is at the request of CRAN to address issues
+shown in the CRAN checks.
 
-# 1.2.0
+- A call to Rf_warning() passed a variable; it now has a
+separate constant format string.
 
-This release is at the request of Prof Ripley, largely because of C++17
-conflicts.  His log listed a lot of them, but I think they are all
-consequences of `length` being defined as a macro as part of the R API
-and also used in some C++ header file.
+- Some old documentation of arguments that were not present
+has been removed.
 
-I have also increased the tolerance for changes in some of the test
-code, hopefully enough to pass the tests on the M1mac.
+These warnings/notes have not been addressed:
 
-I have not been able to reproduce the segfault in the M1mac tests,
-so I haven't dealt with it.
+- The installed package size has not been improved.
 
-There's a warning in the Mac tests about using a deprecated function,
-but in fact the recommended function is used when available.  The
-use of the deprecated function is present for back compatibility.
+- Some deprecated function warnings on MacOS are still
+present, as those functions are still needed.  I hope that
+the major changes I am in the process of making will allow
+me to address these finally, but those changes are months
+away from being done.
 
-There are also other changes described in NEWS.md, but none of them
-are very large.
+In addition to those changes, there are some minor improvements and bug fixes mentioned in the NEWS file.
 
-I have run checks on R-devel for `rgl` and for most of the
-reverse dependencies.  Nothing new has turned up.

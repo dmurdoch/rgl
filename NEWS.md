@@ -1,8 +1,11 @@
-# rgl 1.2.6
+# rgl 1.2.10
 
 ## Minor changes
 
 * ARIA support now declares `rgl` scenes with `role = "img"`.
+* The vignettes in this package now use
+`markdown::html_format`, so they no longer require Pandoc
+(though Pandoc-using output formats like `html_document` will still be supported).
 
 ## Bug fixes
 
@@ -12,6 +15,11 @@ run in a Shiny session.
 `plotmath3d()` (pull request #384).
 * `polygon3d()` failed when given exactly 3 points (issue #388).
 * `snapshot3d()` failed on Windows with some versions of `webshot2` (issue #391).
+* Fixed issues caused by misuse of `dev.off()` using new function
+`safe.dev.off()`.
+* Fixed issue with `warning()` call reported by CRAN.
+* Smooth shapes were not rendered correctly by `rglwidget()`.
+  This was especially noticeable for spheres with `fov = 0`, but was present in other cases as well (issue #401).
 
 # rgl 1.2.1
 

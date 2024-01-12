@@ -33,7 +33,7 @@ plotmath3d <- function(x, y = NULL, z = NULL,
     w <- strwidth(thistext, cex = initCex, ...)
     w1 <- strwidth("m", cex = initCex, ...)
     h <- strheight(thistext, cex = initCex, ...)
-    dev.off()
+    safe.dev.off()
 
     # Now make a smaller bitmap
     expand <- 1.5
@@ -44,7 +44,7 @@ plotmath3d <- function(x, y = NULL, z = NULL,
         usr = c(0, 1, 0, 1))
     plot.new()
     text(0.5, 0.5, thistext, adj = c(0.5,0.5), cex = initCex, ...)
-    dev.off()
+    safe.dev.off()
     # The 0.4 tries to match the text3d offset
     offseti <- 0.4*offset*h/w
     posi <- if (is.null(pos)) NULL else pos[i]

@@ -3,6 +3,9 @@ title: "A Note on Transparency"
 author: "Duncan Murdoch"
 date: "24/10/2020"
 output:
+  markdown::html_format:
+    options:
+      toc: true
   rmarkdown::html_vignette:
     fig_height: 5
     fig_width: 5
@@ -15,19 +18,19 @@ output:
     default
 vignette: >
   %\VignetteIndexEntry{A Note on Transparency}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
 ---
 
 ```{r setup, include=FALSE}
-if (!requireNamespace("rmarkdown", quietly = TRUE) ||
-    !rmarkdown::pandoc_available("1.14")) {
-  warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
+if (!requireNamespace("rmarkdown", quietly = TRUE)) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown is installed.  This was not found.")
   knitr::knit_exit()
 }
 knitr::opts_chunk$set(echo = TRUE)
 library(rgl)
 options(rgl.useNULL = TRUE)
 setupKnitr(autoprint = TRUE)
+
 M <- structure(c(0.997410774230957, 0.0707177817821503, -0.0130676832050085, 
 0, -0.0703366547822952, 0.99714070558548, 0.02762770652771, 0, 
 0.0149840852245688, -0.0266370177268982, 0.999532878398895, 0, 
@@ -62,8 +65,9 @@ respectively.
 ## Incorrect sorting
 
 If the objects are drawn in the wrong order, the actual 
-proportions of each colour will be $N = [(1-\alpha_1)(1-\alpha_2),
-\alpha_1, \alpha_2(1-\alpha_1)]$ if no masking occurs. 
+proportions of each colour will be 
+$N = [(1-\alpha_1)(1-\alpha_2),\alpha_1, \alpha_2(1-\alpha_1)]$ 
+if no masking occurs. 
 
 `rgl` currently defaults to depth masking using `glDepthMask(GL_TRUE)`.  This means that depths are saved 
 when the objects are drawn, and if an attempt is made to 
@@ -82,14 +86,14 @@ qualitative comments below.)
 
 So we have 
 
-\[|C-N|^2 = 2\alpha_1^2\alpha_2^2\], 
+$$|C-N|^2 = 2\alpha_1^2\alpha_2^2,$$
 
 and 
 
-\[|C-M|^2 = 2\alpha_1^2(1-\alpha_2)^2\].
+$$|C-M|^2 = 2\alpha_1^2(1-\alpha_2)^2.$$
 
-Thus the error is larger with $N$ when $\alpha_2 > 1/2$, and 
-larger with $M$ when $\alpha_2 < 1/2$.  The value of $\alpha_1$
+Thus the error is larger with $N$ when $\alpha_2 > 1 / 2$, and 
+larger with $M$ when $\alpha_2 < 1 / 2$.  The value of $\alpha_1$
 doesn't affect the preference, though small values of $\alpha_1$ will be associated with smaller errors.  
 
 Depending on the colours of the background and the two

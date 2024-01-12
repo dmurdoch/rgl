@@ -45,6 +45,7 @@ export(.check3d,
   scale3d, scaleMatrix, scene3d, segments3d, 
   select3d, selectionFunction3d, selectpoints3d,
   rgl.setAxisCallback, rgl.setMouseCallbacks, rgl.setWheelCallback,
+  safe.dev.off,
   set3d, setAxisCallbacks, setGraphicsDelay, setupKnitr, 
   setUserCallbacks, setUserShaders, shade3d, shadow3d,
 
