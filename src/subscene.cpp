@@ -657,6 +657,10 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   setupLights(renderContext);
   
   if (opaquePass) {
+    
+    if (renderContext->gl2psActive > GL2PS_NONE)
+      gl2psSorting(GL2PS_SIMPLE_SORT);
+    
     if (background) {
     //
     // RENDER BACKGROUND
@@ -698,6 +702,10 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   renderClipplanes(renderContext);
   
   if (opaquePass) {
+    
+    if (renderContext->gl2psActive > GL2PS_NONE)
+      gl2psSorting(GL2PS_SIMPLE_SORT);
+    
     renderUnsorted(renderContext);
 
 // #define NO_BLEND
@@ -708,6 +716,9 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
     //
     // render shapes in bounding-box sorted order according to z value
     //
+    
+    if (renderContext->gl2psActive > GL2PS_NONE)
+      gl2psSorting(GL2PS_NO_SORT);
 
     // DISABLE Z-BUFFER FOR WRITING
     glDepthMask(GL_FALSE);
