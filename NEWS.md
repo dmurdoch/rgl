@@ -1,4 +1,4 @@
-# rgl 1.2.11
+# rgl 1.2.12
 
 ## Minor changes
 
