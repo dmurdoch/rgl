@@ -1,4 +1,4 @@
-# rgl 1.2.10
+# rgl 1.2.11
 
 ## Minor changes
 
@@ -6,6 +6,9 @@
 * The vignettes in this package now use
 `markdown::html_format`, so they no longer require Pandoc
 (though Pandoc-using output formats like `html_document` will still be supported).
+*  Christophe Geuzaine's GL2PS library (used by `rgl.postscript()`)
+   updated to version 1.4.2, and blending (transparency)
+   has been enabled in formats that support it.
 
 ## Bug fixes
 
