@@ -468,7 +468,7 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
   
   GLint buffsize = 0, state = GL2PS_OVERFLOW;
   GLint vp[4];
-  GLint options = GL2PS_SILENT | GL2PS_SIMPLE_LINE_OFFSET | GL2PS_NO_BLENDING |
+  GLint options = GL2PS_SILENT | GL2PS_SIMPLE_LINE_OFFSET |
                   GL2PS_OCCLUSION_CULL | GL2PS_BEST_ROOT;
 
   if (!drawText) options |= GL2PS_NO_TEXT;
@@ -483,7 +483,7 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
                    formatID, GL2PS_BSP_SORT, options,
                    GL_RGBA, 0, NULL, 0, 0, 0, buffsize,
                    fp, filename );
-
+      gl2psSorting(GL2PS_NO_SORT); /* we handle sorting */
     
       if ( drawText ) {
         // signal gl2ps for text
