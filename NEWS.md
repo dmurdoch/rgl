@@ -1,4 +1,9 @@
-# rgl 1.2.12
+# rgl 1.2.13
+
+## Major changes
+
+* `sprites3d()` now supports plotting different 3D symbols
+at each location (issue #406).
 
 ## Minor changes
 
