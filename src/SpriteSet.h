@@ -20,7 +20,10 @@ private:
 
 public:
   SpriteSet(Material& material, int nvertex, double* vertex, int nsize, double* size, 
-            int ignoreExtent, int count = 0, Shape** shapelist = NULL, double* userMatrix = NULL,
+            int ignoreExtent, int count = 0, 
+            Shape** shapelist = NULL, 
+            int nshapelens = 0, int* shapelens = NULL,
+            double* userMatrix = NULL,
             bool fixedSize = false, 
             bool rotating = false, 
             Scene* scene = NULL, double* adj = NULL,
@@ -77,7 +80,7 @@ private:
 #ifndef RGL_NO_OPENGL  
   bool doTex;
 #endif
-  std::vector<int> shapes;
+  std::vector<int> shapes, shapefirst, shapelens;
   bool fixedSize;
   bool rotating;
   Scene* scene;

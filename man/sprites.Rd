@@ -11,6 +11,7 @@ sprites3d(x, y = NULL, z = NULL, radius = 1,
           fixedSize = FALSE, 
           adj = 0.5, pos = NULL, offset = 0.25, 
           rotating = FALSE, ...)
+          
 particles3d(x, y = NULL, z = NULL, radius = 1, ...)
 }
 \arguments{
@@ -18,8 +19,9 @@ particles3d(x, y = NULL, z = NULL, radius = 1, ...)
     coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{ radius }{vector or single value defining the sprite radius}
-  \item{ shapes }{\code{NULL} for a simple square, or a vector of
-    identifiers of shapes in the scene}
+  \item{ shapes }{\code{NULL} for a simple square, a vector of
+    identifiers of shapes in the scene, or a list of 
+    such vectors.  See Details.}
   \item{ userMatrix }{if \code{shape} is not \code{NULL}, the transformation matrix 
     for the shapes}
   \item{ fixedSize }{should sprites remain at a fixed size,
@@ -57,20 +59,35 @@ fraction of the sprite size to separate it from the point.
 
   When \code{shapes} is not \code{NULL}, it should be a vector of
   identifiers of objects to plot in the scene (e.g. as returned by
-  plotting functions or by \code{\link{ids3d}}).  These objects will
-  be removed from the scene and duplicated as a sprite image in a
+  plotting functions or by \code{\link{ids3d}}), or a list of such vectors.  The referenced objects will
+  be removed from the scene and duplicated as sprite images in a
   constant orientation, as specified by \code{userMatrix}.  By default the 
   origin \code{(0, 0, 0)} will be plotted at the coordinates given by \code{(x, y, z)}, perhaps modified by \code{adj}
   or \code{pos}.
   
+    If \code{shapes} is a vector all entries in it will be plotted at every
+location.  If \code{shapes} is a list, different shapes
+will be plotted at each location. All entries in list 
+entry 1 will be plotted
+at location 1, all entries in entry 2 at location 2, etc.
+Entries will be recycled as needed.
+
   The \code{userMatrix} argument is ignored for \code{shapes = NULL}.  For
   shapes, \code{sprites3d} defaults the matrix to \code{r3dDefaults$userMatrix}.
   
   If any coordinate is \code{NA}, the sprite is not plotted.
   
   The id values of the shapes may be retrieved after plotting
-using \code{rgl.attrib(id, "ids")};
+using \code{rgl.attrib(id, "ids")}, the associated vertex
+is retrievable in \code{rgl.attrib(id, "indices")}, and
 the user matrix is retrieved using \code{rgl.attrib(id, "usermatrix")}.
+}
+\note{
+While any rgl objects can be used as 3D sprites, spheres
+produced by \code{\link{spheres3d}} and other objects that
+adapt to the coordinate system
+may not render properly.  To plot spheres, construct them
+as mesh objects as shown in the example.
 }
 \value{
   These functions are called for the side effect of displaying the sprites.
@@ -84,9 +101,27 @@ sprites3d( rnorm(100), rnorm(100), rnorm(100), color = rainbow(100),
   lit = FALSE, alpha = .2,
   textype = "alpha", texture = system.file("textures/particle.png", package = "rgl") )
 sprites3d( rnorm(10) + 6, rnorm(10), rnorm(10), shape = shade3d(tetrahedron3d(), col = "red") )
+
+
+open3d()
+
+# Since the symbols are objects in the scene, they need
+# to be added to the scene after calling plot3d()
+
+plot3d(iris, type = "n")
+
+# Use list(...) to apply different symbols to different points.
+
+symbols <- list(shade3d(cube3d(), col = "red"),
+                shade3d(tetrahedron3d(), col = "blue"),
+                # Construct spheres
+                shade3d(addNormals(subdivision3d(icosahedron3d(), 2)),
+                        col = "yellow"))
+                
+sprites3d(iris, shape = symbols[iris$Species], radius = 0.1)
 }
 \seealso{
-  \code{\link{material3d}}, \code{\link{text3d}}
+  \code{\link{material3d}}, \code{\link{text3d}}, \code{\link{pch3d}}
 }
 \keyword{dynamic}
 

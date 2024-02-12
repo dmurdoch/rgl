@@ -702,9 +702,11 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex,
     bool fixedSize = (bool)idata[3];
     int npos = idata[4];
     bool rotating = (bool)idata[5];
+    int nshapelens = idata[6];
     int count = 0;
     Shape** shapelist;
     Scene* scene = NULL;
+    int* shapelens = NULL;
     if (nshapes) {
       shapelist = (Shape**) R_alloc(nshapes, sizeof(Shape*));
       RGLView* rglview = device->getRGLView();
@@ -716,17 +718,21 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex,
         if (shape) {
           scene->hide(id);
           shapelist[count++] = shape; 
-        }
+        } else
+          Rf_error("shape %d not found", id);
       }
-      if (!count) {
-        *successptr = RGL_FAIL;
-        return;
+      if (nshapelens) {
+        shapelens = (int *)R_alloc(nshapelens, sizeof(int));
+        for (int i=0; i < nshapelens; i++) {
+          shapelens[i] = idata[7 + i];
+        }
       }
     } else 
       shapelist = NULL;
+    
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
                      device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
-    						     count, shapelist, userMatrix,
+    						     count, shapelist, nshapelens, shapelens, userMatrix,
     						     fixedSize, rotating, scene, adj, npos, pos, *offset) ) );
     CHECKGLERROR;
   }

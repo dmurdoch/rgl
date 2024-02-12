@@ -639,7 +639,8 @@
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
         nextofs = -1, pointofs = -1, alias, colors, key, selection,
-        filter, adj, offset, attr, last, options;
+        filter, adj, offset, attr, last, options, 
+        len, current;
 
     obj.alias = undefined;
     
@@ -856,11 +857,30 @@
       obj.objects = rglwidgetClass.flatten([].concat(obj.ids));
       fl.is_lit = false;
       obj.adj = rglwidgetClass.flatten(obj.adj);
+      
       if (typeof obj.pos !== "undefined") {
         obj.pos = rglwidgetClass.flatten(obj.pos);
         obj.offset = obj.adj[0];
       } else
         obj.offset = 0;
+        
+      obj.indices = rglwidgetClass.flatten(obj.indices);
+      obj.shapelens = [];
+      obj.shapefirst = [];
+      obj.shapefirst.push(0);
+      len = 0;
+      current = 0;
+      for (i = 0; i < obj.indices.length; i++) {
+        if (obj.indices[i] === obj.indices[current]) {
+          len++;
+        } else {
+          obj.shapelens.push(len);
+          len = 1;
+          current = i;
+          obj.shapefirst.push(i);
+        }
+      }
+      obj.shapelens.push(len);
         
       for (i=0; i < obj.objects.length; i++)
         this.initObjId(obj.objects[i]);
