@@ -121,7 +121,7 @@ symbols <- list(shade3d(cube3d(), col = "red"),
 sprites3d(iris, shape = symbols[iris$Species], radius = 0.1)
 }
 \seealso{
-  \code{\link{material3d}}, \code{\link{text3d}, \code{\link{pch3d}}}
+  \code{\link{material3d}}, \code{\link{text3d}}, \code{\link{pch3d}}
 }
 \keyword{dynamic}
 
