@@ -315,7 +315,7 @@ int SpriteSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
     case VERTICES: return vertex.size();
     case RADII:    return size.size();
     case IDS:	
-    case INDICES:
+    case SHAPENUM:
     case TYPES:    return static_cast<int>(shapes.size());
     case USERMATRIX: {
       if (!shapes.size()) return 0;
@@ -356,7 +356,7 @@ void SpriteSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, in
           ind++;
         }
         return;
-      case INDICES:
+      case SHAPENUM:
         ind = 1;
         for (int i = 0; i < shapelens.size(); i++) {
           res++;

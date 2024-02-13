@@ -78,8 +78,9 @@ Entries will be recycled as needed.
   If any coordinate is \code{NA}, the sprite is not plotted.
   
   The id values of the shapes may be retrieved after plotting
-using \code{rgl.attrib(id, "ids")}, the associated vertex
-is retrievable in \code{rgl.attrib(id, "indices")}, and
+using \code{rgl.attrib(id, "ids")}, the associated entry
+in \code{shapes}
+is retrievable in \code{rgl.attrib(id, "shapenum")}, and
 the user matrix is retrieved using \code{rgl.attrib(id, "usermatrix")}.
 }
 \note{
