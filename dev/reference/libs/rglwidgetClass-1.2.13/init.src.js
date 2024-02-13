@@ -864,14 +864,14 @@
       } else
         obj.offset = 0;
         
-      obj.indices = rglwidgetClass.flatten(obj.indices);
+      var shapenum = rglwidgetClass.flatten(obj.shapenum);
       obj.shapelens = [];
       obj.shapefirst = [];
       obj.shapefirst.push(0);
       len = 0;
       current = 0;
-      for (i = 0; i < obj.indices.length; i++) {
-        if (obj.indices[i] === obj.indices[current]) {
+      for (i = 0; i < shapenum.length; i++) {
+        if (shapenum[i] === shapenum[current]) {
           len++;
         } else {
           obj.shapelens.push(len);
