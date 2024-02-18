@@ -76,19 +76,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.2.13" id="rgl-1213">rgl 1.2.13<a class="anchor" aria-label="anchor" href="#rgl-1213"></a></h2>
+<h2 class="page-header" data-toc-text="1.2.14" id="rgl-1214">rgl 1.2.14<a class="anchor" aria-label="anchor" href="#rgl-1214"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-1-2-13">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-2-13"></a></h3>
+<h3 id="major-changes-1-2-14">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-2-14"></a></h3>
 <ul><li>
 <code><a href="../reference/sprites.html">sprites3d()</a></code> now supports plotting different 3D symbols at each location (issue <a href="https://github.com/dmurdoch/rgl/issues/406" class="external-link">#406</a>).</li></ul></div>
 <div class="section level3">
-<h3 id="minor-changes-1-2-13">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-13"></a></h3>
+<h3 id="minor-changes-1-2-14">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-2-14"></a></h3>
 <ul><li>ARIA support now declares <code>rgl</code> scenes with <code>role = "img"</code>.</li>
 <li>The vignettes in this package now use <code><a href="https://rdrr.io/pkg/markdown/man/html_format.html" class="external-link">markdown::html_format</a></code>, so they no longer require Pandoc (though Pandoc-using output formats like <code>html_document</code> will still be supported).</li>
 <li>Christophe Geuzaine’s GL2PS library (used by <code><a href="../reference/postscript.html">rgl.postscript()</a></code>) updated to version 1.4.2, and blending (transparency) has been enabled in formats that support it.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-2-13">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-13"></a></h3>
+<h3 id="bug-fixes-1-2-14">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-14"></a></h3>
 <ul><li>The ARIA support caused <code><a href="https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html" class="external-link">htmlwidgets::saveWidget()</a></code> to fail when run in a Shiny session.</li>
 <li>
 <code><a href="../reference/texts.html">text3d()</a></code> and <code><a href="../reference/axes3d.html">mtext3d()</a></code> did not pass the <code>cex</code> argument to <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> (pull request <a href="https://github.com/dmurdoch/rgl/issues/384" class="external-link">#384</a>).</li>
@@ -99,6 +99,8 @@
 <li>Fixed issues caused by misuse of <code><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off()</a></code> using new function <code><a href="../reference/safe.dev.off.html">safe.dev.off()</a></code>.</li>
 <li>Fixed issue with <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code> call reported by CRAN.</li>
 <li>Smooth shapes were not rendered correctly by <code><a href="../reference/rglwidget.html">rglwidget()</a></code>. This was especially noticeable for spheres with <code>fov = 0</code>, but was present in other cases as well (issue <a href="https://github.com/dmurdoch/rgl/issues/401" class="external-link">#401</a>).</li>
+<li>
+<code>textype = "alpha"</code> was not rendered correctly by <code><a href="../reference/rglwidget.html">rglwidget()</a></code> (issue <a href="https://github.com/dmurdoch/rgl/issues/408" class="external-link">#408</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">

@@ -356,15 +356,17 @@ return  "#line 2 2\n"+
 "#endif //TEXTURE_rgba\n"+
 "    \n"+
 "#ifdef TEXTURE_alpha\n"+
+"    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;\n"+
+"\n"+
 "#if defined(TEXMODE_replace) || defined(TEXMODE_decal)\n"+
-"    textureColor = vec4(lighteffect.rgb, textureColor.a);\n"+
+"    textureColor = vec4(lighteffect.rgb, luminance);\n"+
 "#endif \n"+
 "\n"+
 "#if defined(TEXMODE_modulate) || defined(TEXMODE_blend) || defined(TEXMODE_add)\n"+
-"    textureColor = vec4(lighteffect.rgb, lighteffect.a*textureColor.a);\n"+
+"    textureColor = vec4(lighteffect.rgb, lighteffect.a*luminance);\n"+
 "#endif\n"+
 " \n"+
-"#endif\n"+
+"#endif // TEXTURE_alpha\n"+
 "    \n"+
 "// The TEXTURE_luminance values are not from that reference    \n"+
 "#ifdef TEXTURE_luminance\n"+
