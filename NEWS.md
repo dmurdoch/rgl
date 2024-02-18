@@ -1,4 +1,4 @@
-# rgl 1.2.13
+# rgl 1.2.14
 
 ## Major changes
 
@@ -28,6 +28,7 @@ run in a Shiny session.
 * Fixed issue with `warning()` call reported by CRAN.
 * Smooth shapes were not rendered correctly by `rglwidget()`.
   This was especially noticeable for spheres with `fov = 0`, but was present in other cases as well (issue #401).
+* `textype = "alpha"` was not rendered correctly by `rglwidget()` (issue #408).
 
 # rgl 1.2.1
 

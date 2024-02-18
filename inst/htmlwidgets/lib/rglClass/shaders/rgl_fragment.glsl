@@ -204,14 +204,14 @@ void main(void) {
     
 #ifdef TEXTURE_alpha
 #if defined(TEXMODE_replace) || defined(TEXMODE_decal)
-    textureColor = vec4(lighteffect.rgb, textureColor.a);
+    textureColor = vec4(lighteffect.rgb, textureColor.r);
 #endif 
 
 #if defined(TEXMODE_modulate) || defined(TEXMODE_blend) || defined(TEXMODE_add)
-    textureColor = vec4(lighteffect.rgb, lighteffect.a*textureColor.a);
+    textureColor = vec4(lighteffect.rgb, lighteffect.a*textureColor.r);
 #endif
  
-#endif
+#endif // TEXTURE_alpha
     
 // The TEXTURE_luminance values are not from that reference    
 #ifdef TEXTURE_luminance
