@@ -117,7 +117,8 @@ of objects in an \pkg{rgl} scene.
 in the display within R versus the WebGL display using
 \code{rglwidget()}.  In particular, in WebGL 
 \code{textype = "alpha"} will always take the alpha value from
-the red channel of the texture, whereas the R display bases
+the luminance (i.e. the average of the R, G and B channels) 
+of the texture, whereas the R display bases
 the choice on the internal format of the texture file.
   }
   \item{texmode}{
