@@ -6,7 +6,7 @@ findSubscene <- function(subscene, id) {
   subscenes <- subscene$subscenes
   if (!is.null(subscenes)) {
     for (i in seq_along(subscenes)) {
-      if (!is.null(result <- findSubscene(subscenes[[i]])))
+      if (!is.null(result <- findSubscene(subscenes[[i]], id)))
         return(result)
     }
   }
