@@ -1,4 +1,4 @@
-# rgl 1.2.14
+# rgl 1.2.15
 
 ## Major changes
 
@@ -29,6 +29,9 @@ run in a Shiny session.
 * Smooth shapes were not rendered correctly by `rglwidget()`.
   This was especially noticeable for spheres with `fov = 0`, but was present in other cases as well (issue #401).
 * `textype = "alpha"` was not rendered correctly by `rglwidget()` (issue #408).
+* `setUserCallbacks()` and related functions failed when
+the `subscene` argument was anything other than the root
+subscene.
 
 # rgl 1.2.1
 
