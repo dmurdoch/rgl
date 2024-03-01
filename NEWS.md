@@ -1,4 +1,4 @@
-# rgl 1.2.15
+# rgl 1.2.16
 
 ## Major changes
 
@@ -14,6 +14,8 @@ at each location (issue #406).
 *  Christophe Geuzaine's GL2PS library (used by `rgl.postscript()`)
    updated to version 1.4.2, and blending (transparency)
    has been enabled in formats that support it.
+*  The `Makevars.ucrt` file has been changed for compatibility
+   with an upcoming change to Windows Rtools. (Pull request #412 submitted by Tomas Kalibera).
 
 ## Bug fixes
 
