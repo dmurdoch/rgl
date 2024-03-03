@@ -75,7 +75,6 @@ with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length,
                   type="s", col=as.numeric(Species)))
 ```
 
-\noindent
 can be used to plot three columns of the `iris` data.
 Allowed plot types include `"p", "l", "h", "s"`,
 meaning points, lines, segments from z=0, and spheres.  There's
