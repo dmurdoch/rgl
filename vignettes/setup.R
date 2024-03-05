@@ -8,6 +8,12 @@ if (!requireNamespace("rmarkdown", quietly = TRUE)) {
   knitr::knit_exit()
 }
 
+# If Pandoc is not installed, the output format won't be set
+# knitr needs this; see https://github.com/rstudio/markdown/issues/115
+if (is.null(knitr::opts_knit$get("rmarkdown.output.format"))){
+  knitr::opts_knit$set(rmarkdown.pandoc.to = "html")
+}
+  
 # knitr::opts_chunk$set(snapshot = TRUE)  # for snapshots instead of dynamic
 
 documentedfns <- c()
