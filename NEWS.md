@@ -1,4 +1,11 @@
-# rgl 1.3.0
+# rgl 1.3.2
+
+## Bug fixes
+
+* `bbox3d()` objects ignored the `xlen`, `ylen` and `zlen`
+settings when rendered using `rglwidget()` (issue #415).
+
+# rgl 1.3.1
 
 ## Major changes
 
