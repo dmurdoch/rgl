@@ -1,9 +1,11 @@
-# rgl 1.3.2
+# rgl 1.3.3
 
 ## Bug fixes
 
 * `bbox3d()` objects ignored the `xlen`, `ylen` and `zlen`
 settings when rendered using `rglwidget()` (issue #415).
+* In certain cases, the `WebGL` vignette started with the
+mouse mode set to "selecting".
 
 # rgl 1.3.1
 
