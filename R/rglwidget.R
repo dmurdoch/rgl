@@ -267,7 +267,8 @@ rglwidget <- local({
            snapshot,
            shinyBrush = NULL, 
            altText = "3D plot", ...,
-           oldConvertBBox = FALSE) {
+           oldConvertBBox = FALSE,
+           fastTransparency = getOption("rgl.fastTransparency", TRUE)) {
     
   if (missing(snapshot)) {
     if (missing(webgl)) {
@@ -353,6 +354,8 @@ rglwidget <- local({
     x$players <- upstream$players
 
     x$webGLoptions <- webGLoptions
+    
+    x$fastTransparency <- fastTransparency
 
     if (inShiny())
       x$altText <- altText

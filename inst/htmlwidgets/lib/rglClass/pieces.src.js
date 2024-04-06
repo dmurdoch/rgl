@@ -117,9 +117,10 @@
      * @param { array } pieces - array of pieces 
      */
     rglwidgetClass.prototype.sortPieces = function(pieces) {
-      var compare = function(i,j) {
+      var fastTransparency = this.scene.fastTransparency,
+          compare = function(i,j) {
           var c1, c2,
-              diff = j.meandepth - i.meandepth;
+              diff = fastTransparency ? j.meandepth - i.meandepth : j.depth - i.depth;
               
         // Check for different object depths     
         if (diff !== 0.0)
@@ -147,6 +148,9 @@
           
         // Both pieces are in the same object, so
         // check for different piece depths
+        // If fastTransparency is not set, this is redundant,
+        // but a test would probably be slower.
+        
         diff = j.depth - i.depth;
 
         return diff;

@@ -1,4 +1,4 @@
-# rgl 1.3.3
+# rgl 1.3.4
 
 ## Bug fixes
 
@@ -6,6 +6,10 @@
 settings when rendered using `rglwidget()` (issue #415).
 * In certain cases, the `WebGL` vignette started with the
 mouse mode set to "selecting".
+* The `rglwidget()` function gets a new argument `fastTransparency`
+which makes WebGL mimic the `rgl` device when drawing transparent
+objects.  The default value is `TRUE` unless option
+`rgl.fastTransparency` is set to `FALSE`.
 
 # rgl 1.3.1
 

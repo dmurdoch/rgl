@@ -20,7 +20,8 @@ rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           shinyBrush = NULL, 
           altText = "3D plot",
           ...,
-          oldConvertBBox = FALSE)
+          oldConvertBBox = FALSE,
+          fastTransparency = getOption("rgl.fastTransparency", TRUE))
 }
 \arguments{
   \item{x}{
@@ -49,7 +50,7 @@ component that will hold the scene.
   to receive information about mouse selections.}
   \item{altText}{Text to include for screen-readers or browsers
   that don't handle WebGL.  See Details below.}
-  \item{oldConvertBBox}{See Details below.}
+  \item{oldConvertBBox, fastTransparency}{See Details below.}
   \item{...}{Additional arguments
 to pass to \code{htmlwidgets::\link{createWidget}}.}
 }
@@ -83,7 +84,7 @@ For a snapshot, you can use
 
 The \code{webGLoptions} argument is a list which will
 be passed when the WebGL context is created.  See
-the WebGL 1.0 specification on \url{https://registry.khronos.org/webgl/specs/} for possible
+the WebGL 1.0 specification on \url{https://registry.khronos.org/webgl} for possible
 settings.  The default in \code{rglwidget} differs
 from the WebGL default by setting \code{preserveDrawingBuffer = TRUE} in order to allow other tools to read
 the image, but please note that some implementations
@@ -110,6 +111,12 @@ for the labels, segments for the ticks.  By default it now
 generates these in Javascript, allowing axis labels to move as
 they do in the display in \R.  If you prefer the old conversion,
 set \code{oldConvertBBox = TRUE}.
+
+In version 1.3.4, the handling of transparent objects was 
+changed to match the \pkg{rgl} device more closely.  The new
+method of rendering is quite a bit faster, though sometimes 
+less accurate.  To get the older drawing method set 
+\code{fastTransparency = FALSE}.
 }
 \section{R Markdown specifics}{
 In an R Markdown document, you would normally call
