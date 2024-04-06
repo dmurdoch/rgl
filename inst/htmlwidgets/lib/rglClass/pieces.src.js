@@ -20,7 +20,8 @@
       var n = obj.centers.length,
           depth,
           result = new Array(n),
-          z, w, i;
+          z, w, i,
+          meandepth = 0;
       context = context.slice();
           
       for(i=0; i<n; i++) {
@@ -33,12 +34,17 @@
             this.prmvMatrix.m34*obj.centers[i][2] +
             this.prmvMatrix.m44;
         depth = z/w;
+        meandepth += depth;
         result[i] = {context: context, 
                      objid: objid,
                      subid: subid,
                      index: i, 
-                     depth: depth};
+                     depth: depth,
+                     meandepth: 0};
       }
+      meandepth /= n;
+      for (i=0; i<n; i++)
+        result[i].meandepth = meandepth;
       return result;    
     };
     
@@ -112,20 +118,26 @@
      */
     rglwidgetClass.prototype.sortPieces = function(pieces) {
       var compare = function(i,j) {
-          var c1 = j.context.slice(),
-              c2 = i.context.slice(),
-              diff = j.subid - i.subid;
+          var c1, c2,
+              diff = j.meandepth - i.meandepth;
               
-        // Check for different subscenes       
-        if (diff !== 0)
+        // Check for different object depths     
+        if (diff !== 0.0)
           return diff;
           
+        // At this point we are either on the same object or
+        // two different objects that are at the same mean
+        // depth.  Context changes are expensive so arbitrarily
+        // split the two objects.
+        
         // Check for different objects
         diff = j.objid - i.objid;
         if (diff !== 0)
           return diff;
           
-        // Check for different nested objects    
+        // Check for different nested objects 
+        c1 = j.context.slice();
+        c2 = i.context.slice();
         diff = c1.length - c2.length; 
         while (diff === 0 && c1.length > 0) {
           diff = c1.pop() - c2.pop();
@@ -133,8 +145,10 @@
         if (diff !== 0)
           return diff;
           
-        // Check for different depth
+        // Both pieces are in the same object, so
+        // check for different piece depths
         diff = j.depth - i.depth;
+
         return diff;
         
       }, result = [];
