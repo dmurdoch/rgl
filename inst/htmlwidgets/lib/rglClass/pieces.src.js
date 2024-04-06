@@ -112,22 +112,31 @@
      */
     rglwidgetClass.prototype.sortPieces = function(pieces) {
       var compare = function(i,j) {
-        var diff = j.depth - i.depth;
-        // We want to avoid context or obj changes,
-        // so sort on those next.
-        if (diff === 0) {
           var c1 = j.context.slice(),
-              c2 = i.context.slice();
-          diff = c1.length - c2.length; 
-          while (diff === 0 && c1.length > 0) {
-            diff = c1.pop() - c2.pop();
-          }
-          if (diff === 0)
-            diff = j.objid - i.objid;
-          if (diff === 0)
-            diff = j.subid - i.subid;
+              c2 = i.context.slice(),
+              diff = j.subid - i.subid;
+              
+        // Check for different subscenes       
+        if (diff !== 0)
+          return diff;
+          
+        // Check for different objects
+        diff = j.objid - i.objid;
+        if (diff !== 0)
+          return diff;
+          
+        // Check for different nested objects    
+        diff = c1.length - c2.length; 
+        while (diff === 0 && c1.length > 0) {
+          diff = c1.pop() - c2.pop();
         }
+        if (diff !== 0)
+          return diff;
+          
+        // Check for different depth
+        diff = j.depth - i.depth;
         return diff;
+        
       }, result = [];
       if (pieces.length) 
         result = pieces.sort(compare);
