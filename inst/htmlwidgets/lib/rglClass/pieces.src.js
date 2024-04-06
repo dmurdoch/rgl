@@ -20,7 +20,8 @@
       var n = obj.centers.length,
           depth,
           result = new Array(n),
-          z, w, i;
+          z, w, i,
+          meandepth = 0;
       context = context.slice();
           
       for(i=0; i<n; i++) {
@@ -33,12 +34,17 @@
             this.prmvMatrix.m34*obj.centers[i][2] +
             this.prmvMatrix.m44;
         depth = z/w;
+        meandepth += depth;
         result[i] = {context: context, 
                      objid: objid,
                      subid: subid,
                      index: i, 
-                     depth: depth};
+                     depth: depth,
+                     meandepth: 0};
       }
+      meandepth /= n;
+      for (i=0; i<n; i++)
+        result[i].meandepth = meandepth;
       return result;    
     };
     
@@ -111,23 +117,44 @@
      * @param { array } pieces - array of pieces 
      */
     rglwidgetClass.prototype.sortPieces = function(pieces) {
-      var compare = function(i,j) {
-        var diff = j.depth - i.depth;
-        // We want to avoid context or obj changes,
-        // so sort on those next.
-        if (diff === 0) {
-          var c1 = j.context.slice(),
-              c2 = i.context.slice();
-          diff = c1.length - c2.length; 
-          while (diff === 0 && c1.length > 0) {
-            diff = c1.pop() - c2.pop();
-          }
-          if (diff === 0)
-            diff = j.objid - i.objid;
-          if (diff === 0)
-            diff = j.subid - i.subid;
+      var fastTransparency = this.scene.fastTransparency,
+          compare = function(i,j) {
+          var c1, c2,
+              diff = fastTransparency ? j.meandepth - i.meandepth : j.depth - i.depth;
+              
+        // Check for different object depths     
+        if (diff !== 0.0)
+          return diff;
+          
+        // At this point we are either on the same object or
+        // two different objects that are at the same mean
+        // depth.  Context changes are expensive so arbitrarily
+        // split the two objects.
+        
+        // Check for different objects
+        diff = j.objid - i.objid;
+        if (diff !== 0)
+          return diff;
+          
+        // Check for different nested objects 
+        c1 = j.context.slice();
+        c2 = i.context.slice();
+        diff = c1.length - c2.length; 
+        while (diff === 0 && c1.length > 0) {
+          diff = c1.pop() - c2.pop();
         }
+        if (diff !== 0)
+          return diff;
+          
+        // Both pieces are in the same object, so
+        // check for different piece depths
+        // If fastTransparency is not set, this is redundant,
+        // but a test would probably be slower.
+        
+        diff = j.depth - i.depth;
+
         return diff;
+        
       }, result = [];
       if (pieces.length) 
         result = pieces.sort(compare);

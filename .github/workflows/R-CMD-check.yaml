@@ -19,8 +19,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release', rtools-version: '42'}
-          - {os: windows-latest, r: 'devel', rtools-version: '43'}
+          - {os: windows-latest, r: 'release'}
+          - {os: windows-latest, r: 'devel'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: macos-latest, r: 'devel'}
 
@@ -45,7 +45,6 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          rtools-version: ${{ matrix.config.rtools-version }}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
       
