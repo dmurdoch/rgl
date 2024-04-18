@@ -1,3 +1,9 @@
+# rgl 1.3.5
+
+## Minor changes
+
+* `readSTL()` can now read (some) ASCII format STL files.
+
 # rgl 1.3.4
 
 ## Bug fixes

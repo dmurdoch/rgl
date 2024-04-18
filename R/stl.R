@@ -194,13 +194,24 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
   invisible(filename)
 }
 
-readSTL <- function(con, ascii=FALSE, plot=TRUE, ...) {
+readSTL <- function(con, ascii=NA, plot=TRUE, ...) {
  
   # Utility functions and constants defined first; execution starts way down there...
   
   triangles <- NULL
   
   readHeader <- function() {
+    if (is.na(ascii)) {
+      summ <- summary(con)
+      if (summ$class != "file" || readChar(con, 5) != "solid")
+        ascii <<- FALSE
+      else {
+        ascii <<- TRUE
+        filename <- summ$description
+        close(con)
+        con <<- file(filename, "rt")
+      }
+    }
     if (ascii) {
       ident <- readLines(con, 1)
       if (!grepl("^solid ", ident)) stop("This does not appear to be an ASCII STL file")
@@ -215,12 +226,27 @@ readSTL <- function(con, ascii=FALSE, plot=TRUE, ...) {
     
     if (ascii) {
       lines <- readLines(con)
-      if (is.null(n)) n <- lines %/% 7
+      facet <- c(grep("^ *facet", lines),
+                 length(lines) + 1) # sentinel
+      n <- length(facet) - 1
+      vertex <- grep("^ *vertex ", lines)
     }
    
     vertices <- matrix(NA, 3*n, 3)
     
-    if (!ascii) {
+    if (ascii) {
+      for (i in seq_len(n)) {
+        j <- vertex[facet[i] < vertex & vertex < facet[i+1]]
+
+        if (any(is.na(j)) || length(j) != 3) {
+          warning("problem on triangle ", i, " j = ", j)
+          j <- j[1:3]
+        }
+        v <- read.table(text = lines[j],
+                        colClasses = c("character", "numeric", "numeric", "numeric"))
+        vertices[3*i + c(-2, -1, 0),] <- as.matrix(v[, 2:4])
+      }
+    } else {
       for (i in seq_len(n)) {
         m <- matrix(readBin(con, "double", n=12, size=4, endian="little"), 4, 3, byrow=TRUE)
         vertices[3*i + c(-2,-1,0),] <- m[2:4,]
@@ -231,11 +257,9 @@ readSTL <- function(con, ascii=FALSE, plot=TRUE, ...) {
   }
       
   #  Execution starts here!
-  
-  if (ascii) stop("ASCII input not yet supported")
 
   if (is.character(con)) {
-    con <- file(con, if (ascii) "rt" else "rb")
+    con <- file(con, if (isTRUE(ascii)) "rt" else "rb")
     on.exit(close(con))
   }
   
