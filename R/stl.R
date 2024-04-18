@@ -226,8 +226,9 @@ readSTL <- function(con, ascii=NA, plot=TRUE, ...) {
     
     if (ascii) {
       lines <- readLines(con)
-      facet <- grep("^ *facet", lines)
-      if (is.null(n)) n <- length(facet)
+      facet <- c(grep("^ *facet", lines),
+                 length(lines) + 1) # sentinel
+      n <- length(facet) - 1
       vertex <- grep("^ *vertex ", lines)
     }
    
@@ -235,10 +236,13 @@ readSTL <- function(con, ascii=NA, plot=TRUE, ...) {
     
     if (ascii) {
       for (i in seq_len(n)) {
-        j <- vertex[vertex > facet[i]][1:3]
-        if (any(is.na(j)))
+        j <- vertex[facet[i] < vertex & vertex < facet[i+1]]
+
+        if (any(is.na(j)) || length(j) != 3) {
           warning("problem on triangle ", i, " j = ", j)
-        v <- read.table(textConnection(lines[j]),
+          j <- j[1:3]
+        }
+        v <- read.table(text = lines[j],
                         colClasses = c("character", "numeric", "numeric", "numeric"))
         vertices[3*i + c(-2, -1, 0),] <- as.matrix(v[, 2:4])
       }
