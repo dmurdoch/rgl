@@ -226,6 +226,7 @@ bg3d        <- function(color,
       else if (flags["exp_fog", 1]) "exp"
       else if (flags["exp2_fog", 1]) "exp2"
       else "none"
+    pop3d(type = "background", id = bgid)
   }
   dots <- list(...)
   

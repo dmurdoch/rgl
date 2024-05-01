@@ -1167,14 +1167,17 @@
         savepr = this.prMatrix;
         saveinvpr = this.invPrMatrix;
         savemv = this.mvMatrix;
+        savenorm = this.normMatrix;
         this.prMatrix = new CanvasMatrix4();
         this.invPrMatrix = new CanvasMatrix4();
         this.mvMatrix = new CanvasMatrix4();
+        this.normMatrix = new CanvasMatrix4();
         for (i=0; i < obj.quad.length; i++)
           result = result.concat(this.drawObjId(obj.quad[i], subsceneid));
         this.prMatrix = savepr;
         this.invPrMatrix = saveinvpr;
         this.mvMatrix = savemv;
+        this.normMatrix = savenorm;
 
       } else if (obj.sphere) {
         subscene = this.getObj(subsceneid);
