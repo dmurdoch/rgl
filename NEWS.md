@@ -1,8 +1,14 @@
-# rgl 1.3.5
+# rgl 1.3.6
 
 ## Minor changes
 
 * `readSTL()` can now read (some) ASCII format STL files.
+
+## Bug fixes
+
+* Background plots did not always appear (issue #421).
+* Changing the background resulted in an additional background
+object instead of replacing the current one.
 
 # rgl 1.3.4
 

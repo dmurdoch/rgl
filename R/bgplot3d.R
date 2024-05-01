@@ -40,7 +40,8 @@ bgplot3d <- function(expression, bg.color = getr3dDefaults("bg", "color"),
     grDevices::devAskNewPage(FALSE)
     value <- try(expression)  
     safe.dev.off()
-    result <- bg3d(texture = filename, col = "white", lit = FALSE, ...)
+    result <- bg3d(texture = filename, col = "white", lit = FALSE,
+                   front = "filled", back = "filled", ...)
   } else {
     value <- NULL
     result <- bg3d(col = bg.color, ...)
