@@ -144,7 +144,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_1.1.6.tar.gz
+    R CMD INSTALL rgl_1.3.6.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -160,21 +160,31 @@ to install from CRAN, or
 
 to install the development version from Github.
 
-Sometimes binary development versions are available for Windows and
-macOS using
+### BUILDING ON MACOS
 
-    install.packages("rgl", repos = "https://dmurdoch.github.io/drat",
-                     type = "binary")
+To build on MacOS using one of the ARM64 chips (currently M1, M2 or M3),
+follow the instructions on <https://mac.r-project.org/tools/> to install
+the tools and libraries into `/opt/R/arm64`. It is important that
+`/opt/R/arm64/bin` appear in your PATH before `/usr/local/bin` if the
+latter directory has been used for x86_64 installs. If you don’t do
+this, or have some other error in setting things up, you’ll get a
+warning during `rgl` installation saying that some configure test
+failed, and `rgl` will be installed without OpenGL support.
 
-but these are not always kept up to date.
+Some versions of RStudio (including 2024.04.2+764) have a bug that
+modifies your PATH on startup and again after every package
+installation, putting `/usr/local/bin` at the head of the PATH. If you
+are building `rgl` in such a system you need to remove files from
+`/usr/local/bin` if there’s a file with the same name in
+`/opt/R/arm64/bin`. Hopefully this bug will be fixed soon!
 
-## BUILDING WITHOUT OPENGL
+### BUILDING WITHOUT OPENGL
 
 As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.1.6.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.3.6.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
@@ -207,7 +217,7 @@ Fernandez i Marin for help debugging the build.
 George Helffrich for draping code.  
 Ivan Krylov for window_group code in X11.  
 Michael Sumner for as.mesh3d.default enhancement.  
-Tomas Kalibera for `winutf8` help.  
+Tomas Kalibera for `winutf8` and other help.  
 David Hugh-Jones for documentation improvements.  
 Trevor Davis for a `snapshot3d` patch. Mike Stein for pointer-handling
 code.
