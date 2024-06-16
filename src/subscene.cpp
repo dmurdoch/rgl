@@ -991,7 +991,6 @@ void Subscene::renderZsort(RenderContext* renderContext)
 {  
   std::vector<Shape*>::iterator iter;
   std::multimap<float, ShapeItem*> distanceMap;
-  int index = 0;
 
   for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
     Shape* shape = *iter;
@@ -1000,7 +999,6 @@ void Subscene::renderZsort(RenderContext* renderContext)
       ShapeItem* item = new ShapeItem(shape, j);
       float distance = getDistance( shape->getPrimitiveCenter(j) );
       distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
-      index++;
     }
   }
 
