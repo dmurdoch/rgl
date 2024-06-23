@@ -1,4 +1,4 @@
-# rgl 1.3.7
+# rgl 1.3.8
 
 ## Minor changes
 
@@ -11,6 +11,7 @@ support files have been updated.
 * Background plots did not always appear (issue #421).
 * Changing the background resulted in an additional background
 object instead of replacing the current one.
+* Colors weren't handled correctly by `writePLY()` (issue #425).
 
 # rgl 1.3.4
 
