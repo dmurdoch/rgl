@@ -137,7 +137,7 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
     Vertices <<- rbind(Vertices, vertices)
     Colors <<- rbind(Colors, colors)
     Quads <<- rbind(Quads, matrix(base + getIndices(id) - 1,
-                    ncol=4, byrow=TRUE))
+                        ncol=4, byrow=TRUE))
   }
 
   writeSurface <- function(id) {
@@ -303,8 +303,8 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
   }
 
   knowntypes <- c("triangles", "quads",
-    "surface", "spheres", "linestrip", "lines", "planes",
-    "points")
+                  "surface", "spheres", "linestrip", "lines", "planes",
+                  "points")
   
   Vertices <- matrix(0, 0, 3 + 3 * withNormals)
   Colors <- matrix(0L, 0, 4 * withColors)
@@ -352,7 +352,7 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
     warning(gettextf("Object type(s) %s not handled",
-      paste("'", unknowntypes, "'", sep = "", collapse = ", ")), domain = NA)
+      paste("'", unknowntypes, "'", sep="", collapse=", ")), domain = NA)
 
   keep <- types %in% knowntypes
   ids <- ids[keep]
