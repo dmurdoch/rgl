@@ -33,3 +33,4 @@ rglClass/README.md$
 [.]JSDoc
 ^CRAN-SUBMISSION$
 ^shaders.txt$
+^rgl\.Rproj$
