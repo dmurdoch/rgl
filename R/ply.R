@@ -211,8 +211,7 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
     if (pointsAsEdges) {
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
-      if (withColors)
-        Colors <<- rbind(Colors, colors)
+      Colors <<- rbind(Colors, colors)
       Edges <<- rbind(Edges, base + cbind(inds, inds) - 1)
     } else {
       radius <- pointRadius*avgScale()
@@ -236,8 +235,7 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
     if (linesAsEdges) {
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
-      if (withColors)
-        Colors <<- rbind(Colors, colors)
+      Colors <<- rbind(Colors, colors)
       Edges <<- rbind(Edges, base + matrix(inds, ncol = 2, byrow = TRUE) - 1)
     } else {
       radius <- lineRadius*avgScale()
@@ -270,8 +268,7 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
       n <- length(inds)
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
-      if (withColors) 
-        Colors <<- rbind(Colors, colors)
+      Colors <<- rbind(Colors, colors)
       Edges <<- rbind(Edges, base + cbind(inds[-n], inds[-1]) - 1)
     } else {
       n <- nrow(vertices) - 1
@@ -354,8 +351,7 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
 
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
-    warning(gettextf(
-      "Object type(s) %s not handled",
+    warning(gettextf("Object type(s) %s not handled",
       paste("'", unknowntypes, "'", sep = "", collapse = ", ")), domain = NA)
 
   keep <- types %in% knowntypes
