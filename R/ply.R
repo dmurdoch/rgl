@@ -1,5 +1,5 @@
-writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
-                     pointRadius = 0.005,
+writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
+                     pointRadius=0.005,
                      pointShape = icosahedron3d(),
                      lineRadius = pointRadius,
                      lineSides = 20,
@@ -9,6 +9,10 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
                      withNormals = !(pointsAsEdges || linesAsEdges),
                      ids = tagged3d(tags), tags = NULL) {
   
+  ##############################################################################
+  #### DEFINE INTERNAL FUNCTIONS ###############################################
+  ##############################################################################
+  
   writeData <- function() {
     cat("ply\n", file = con)
     
@@ -17,29 +21,29 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
       big_endian = "binary_big_endian",
       ascii = "ascii")
 
-    cat("format", fmt, "1.0\n", file = con)
-    cat("element vertex", nrow(Vertices), "\n", file = con)
-    cat("property float x\nproperty float y\nproperty float z\n", file = con)
+    cat("format", fmt, "1.0\n", file=con)
+    cat("element vertex", nrow(Vertices), "\n", file=con)
+    cat("property float x\nproperty float y\nproperty float z\n", file=con)
     
     if (withNormals)
       cat(
         "property float nx\nproperty float ny\nproperty float nz\n",
-        file = con
+        file=con
       )
     
     if (withColors)
       cat(
         "property uchar red\nproperty uchar green
          property uchar blue\nproperty uchar alpha\n",
-        file = con
+        file=con
       )
     
-    cat("element face", nrow(Triangles) + nrow(Quads), "\n", file = con)
-    cat("property list uchar int vertex_indices\n", file = con)
+    cat("element face", nrow(Triangles) + nrow(Quads), "\n", file=con)
+    cat("property list uchar int vertex_indices\n", file=con)
     
     if (nrow(Edges) > 0) {
-      cat("element edge", nrow(Edges), "\n", file = con)
-      cat("property int vertex1\nproperty int vertex2\n", file = con)
+      cat("element edge", nrow(Edges), "\n", file=con)
+      cat("property int vertex1\nproperty int vertex2\n", file=con)
     }
     
     cat("end_header\n", file = con)
@@ -49,17 +53,22 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
       for (i in seq_len(nrow(Vertices))) {
         cat(Vertices[i,], file = con)
         if (withColors)
-          cat("", Colors[i,], file = con)
+          cat("", Colors[i,], file=con)
         cat("\n", file = con)
       }
+      
       for (i in seq_len(nrow(Triangles)))
-        cat("3", Triangles[i,], "\n", file = con)
+        cat("3", Triangles[i,], "\n", file=con)
+      
       for (i in seq_len(nrow(Quads))) 
-        cat("4", Quads[i,], "\n", file = con)
+        cat("4", Quads[i,], "\n", file=con)
+      
       for (i in seq_len(nrow(Edges))) 
-        cat(Edges[i,], "\n", file = con)
+        cat(Edges[i,], "\n", file=con)
+      
     } else {
       endian <- if (format == "little_endian") "little" else "big"
+      
       if (nrow(Vertices)) {
         for (i in seq_len(nrow(Vertices))) {
           writeBin(as.numeric(Vertices[i,]), con, size=4, endian=endian)
@@ -67,18 +76,21 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
             writeBin(as.integer(Colors[i,]), con, size=1, endian=endian)
         }
       }
+      
       if (nrow(Triangles)) {
         for (i in seq_len(nrow(Triangles))) {
-          writeBin(3L, con, size = 1, endian = endian)
+          writeBin(3L, con, size = 1, endian=endian)
           writeBin(as.integer(Triangles[i,]), con, size=4, endian=endian)
         }
       }
+      
       if (nrow(Quads)) {
         for (i in seq_len(nrow(Quads))) {
           writeBin(4L, con, size=1, endian = endian)
           writeBin(as.integer(Quads[i,]), con, size=4, endian=endian)
         }
       }
+      
       if (nrow(Edges)) 
         writeBin(as.integer(t(Edges)), con, size=4, endian=endian)
     }
@@ -140,23 +152,23 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
     rows <- seq_len(nx)
     for (i in seq_len(nz)[-nz]) {
       indices <- getIndices(id)[(i-1)*nx +
-                                c(rows[-nx], rows[-nx],
-                                rows[-1] + nx, rows[-nx] + nx,
-                                rows[-1], rows[-1] + nx)]
+                                c(rows[-nx],rows[-nx],
+                                  rows[-1]+nx,rows[-nx]+nx,
+                                  rows[-1],rows[-1]+nx)]
       Triangles <<- rbind(Triangles,
                         matrix(base + indices - 1,
                                ncol=3))
     }
   }
 
-  writeMesh <- function(mesh, scale = 1, offset = c(0, 0, 0)) {
+  writeMesh <- function(mesh, scale=1, offset=c(0,0,0)) {
     vertices <- asEuclidean(t(mesh$vb))*scale
-    vertices <- vertices + rep(offset, each = nrow(vertices))
+    vertices <- vertices + rep(offset, each=nrow(vertices))
     if (withColors) {
       colors <- mesh$material$col
       if (!length(colors)) colors <- material3d("color")
       colors <- rep(colors, length.out = nrow(vertices))
-      colors <- t(col2rgb(colors, alpha = TRUE))
+      colors <- t(col2rgb(colors, alpha=TRUE))
       Colors <<- rbind(Colors, colors)
     }
     if (withNormals) 
@@ -177,10 +189,10 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
     n <- nrow(vertices)
     colors <- expandColors(id)
     if (nrow(colors) == 1)
-      colors <- colors[rep(1, n), , drop = FALSE]
+      colors <- colors[rep(1, n),, drop = FALSE]
     radii <- expandAttrib(id, "radii")
-    radii <- rep(radii, length.out = n)
-    x <- subdivision3d(icosahedron3d(), 3)
+    radii <- rep(radii, length.out=n)
+    x <- subdivision3d(icosahedron3d(),3)
     r <- sqrt(x$vb[1,]^2 + x$vb[2,]^2 + x$vb[3,]^2)
     x$vb[4,] <- r
     x$normals <- x$vb
@@ -220,7 +232,7 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
     vertices <- getVertices(id)
     colors <- getColors(id)
     inds <- getIndices(id)
-    n <- length(inds) / 2
+    n <- length(inds)/2
     if (linesAsEdges) {
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
@@ -228,16 +240,16 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
         Colors <<- rbind(Colors, colors)
       Edges <<- rbind(Edges, base + matrix(inds, ncol = 2, byrow = TRUE) - 1)
     } else {
-      radius <- lineRadius * avgScale()
+      radius <- lineRadius*avgScale()
       for (i in seq_len(n)) {
         cyl <- cylinder3d( vertices[inds[(2*i-1):(2*i)],1:3],
                            radius = radius,
                            sides = lineSides,
                            closed = -2 )
         if (withColors) {
-          col1 <- colors[inds[2 * i - 1],]
+          col1 <- colors[inds[2*i-1],]
           col1 <- rgb(col1[1], col1[2], col1[3], col1[4], maxColorValue = 255)
-          col2 <- colors[inds[2 * i],]
+          col2 <- colors[inds[2*i],]
           col2 <- rgb(col2[1], col2[2], col2[3], col2[4], maxColorValue = 255)
 
           cyl$material$col <- c(rep(col1, lineSides),
@@ -273,7 +285,7 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
         if (withColors) {
           col1 <- colors[inds[i],]
           col1 <- rgb(col1[1], col1[2], col1[3], col1[4], maxColorValue = 255)
-          col2 <- colors[inds[i + 1],]
+          col2 <- colors[inds[i+1],]
           col2 <- rgb(col2[1], col2[2], col2[3], col2[4], maxColorValue = 255)
 
           cyl$material$col <- c(rep(col1, lineSides),
@@ -304,6 +316,10 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
   Quads <- matrix(1L, 0, 4)
   Edges <- matrix(1L, 0, 2)
   
+  ##############################################################################
+  #### RUN WRITEPLY ############################################################
+  ##############################################################################
+  
   format <- match.arg(format)
 
   if (is.character(con)) {
@@ -317,7 +333,7 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
     ids <- setdiff(ids, bbox$id)
     save <- par3d(skipRedraw = TRUE)
     bbox <- convertBBox(bbox$id)
-    on.exit({ pop3d(id = bbox); par3d(save) }, add=TRUE) # nolint
+    on.exit({ pop3d(id=bbox); par3d(save) }, add=TRUE) # nolint
     dobbox <- TRUE
   } else dobbox <- FALSE
 
@@ -330,18 +346,17 @@ writePLY <- function(con, format = c("little_endian", "big_endian", "ascii"),
     allids <- ids3d()
     ind <- match(ids, allids$id)
     keep <- !is.na(ind)
-    if (any(!keep)) warning(gettextf("Object(s) with id %s not found", paste(ids[!keep], collapse = " ")),
+    if (any(!keep)) warning(gettextf("Object(s) with id %s not found", paste(ids[!keep], collapse=" ")),
                             domain = NA)
     ids <- ids[keep]
     types <- allids$type[ind[keep]]
   }
 
   unknowntypes <- setdiff(types, knowntypes)
-  if (length(unknowntypes)) {
+  if (length(unknowntypes))
     warning(gettextf(
       "Object type(s) %s not handled",
       paste("'", unknowntypes, "'", sep = "", collapse = ", ")), domain = NA)
-  }
 
   keep <- types %in% knowntypes
   ids <- ids[keep]
