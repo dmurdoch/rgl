@@ -14,7 +14,7 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
   ##############################################################################
   
   writeData <- function() {
-    cat("ply\n", file = con)
+    cat("ply\n", file=con)
     
     fmt <- switch(format,
       little_endian = "binary_little_endian",
@@ -51,10 +51,10 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
     if (format == "ascii") {
       
       for (i in seq_len(nrow(Vertices))) {
-        cat(Vertices[i,], file = con)
+        cat(Vertices[i,], file=con)
         if (withColors)
           cat("", Colors[i,], file=con)
-        cat("\n", file = con)
+        cat("\n", file=con)
       }
       
       for (i in seq_len(nrow(Triangles)))
