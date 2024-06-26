@@ -55,27 +55,27 @@ property int vertex2\n", file=con)
     } else {
       endian <- if (format == "little_endian") "little" else "big"
       if (nrow(Vertices)) {
-        if (!nrow(Colors))
-          writeBin(as.numeric(t(Vertices)), con, size=4, endian=endian)
+        if (!withColors)
+          writeBin(as.numeric(t(Vertices)), con, size = 4, endian=endian)
         else {
           for (i in seq_len(nrow(Vertices))) {
-            writeBin(Vertices[i,], con, size=4, endian=endian)
-            writeBin(Colors[i,], con, size=1)
+            writeBin(Vertices[i,], con, size = 4, endian = endian)
+            writeBin(Colors[i,], con, size = 1)
           }
         }
       }
       if (nrow(Triangles)) {
         for (i in seq_len(nrow(Triangles))) {
           writeBin(3L, con, size = 1)
-          writeBin(as.integer(Triangles[i,]), con, size=4, 
-                   endian=endian)
+          writeBin(as.integer(Triangles[i,]), con, size = 4, 
+                   endian = endian)
         }
       }
       if (nrow(Quads)) {
         for (i in seq_len(nrow(Quads))) {
           writeBin(4L, con, size = 1)
-          writeBin(as.integer(Quads[i,]), con, size=4, 
-                   endian=endian)
+          writeBin(as.integer(Quads[i,]), con, size = 4, 
+                   endian = endian)
         }
       }
       if (nrow(Edges))
@@ -84,7 +84,7 @@ property int vertex2\n", file=con)
   }  
     
   Vertices <- matrix(0, 0, 3 + 3*withNormals)
-  Colors <- matrix(0L, 0, 4*withColors)
+  Colors <- matrix(0L, 0, 4)
   
   Triangles <- matrix(1L, 0, 3)
   Quads <- matrix(1L, 0, 4)
@@ -171,6 +171,7 @@ property int vertex2\n", file=con)
     base <- nrow(Vertices)
     Vertices <<- rbind(Vertices, cbind(vertices, 
                                        if (withNormals) normals))
+    
     nt <- length(mesh$it)/3
     nq <- length(mesh$ib)/4
     if (nt) 
