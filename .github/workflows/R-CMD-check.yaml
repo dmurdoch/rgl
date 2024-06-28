@@ -38,6 +38,9 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install libjpeg
+          export LDFLAGS="-L/opt/homebrew/opt/jpeg/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/jpeg/include"
+          export PKG_CONFIG_PATH="/opt/homebrew/opt/jpeg/lib/pkgconfig"
           brew install xquartz
           brew install fribidi
 
