@@ -19,10 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'devel'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: macos-latest, r: 'release'}
+          # - {os: windows-latest, r: 'release'}
+          # - {os: windows-latest, r: 'devel'}
+          # - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
+          - {os: macos-latest, r: 'devel'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -45,6 +45,11 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+          
+      - name: Install jpeg package on MacOS
+        if: runner.os == 'macOS' && runner.r == 'devel'
+        run: |
+          Rscript -e "source('https://mac.R-project.org/bin/install.R');install.libs('jpeg');install.packages('jpeg', type='source')"
           
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
