@@ -21,17 +21,17 @@ writePLY <- function(con, format=c("little_endian", "big_endian", "ascii"),
     cat("property float x
 property float y
 property float z\n", file=con)
-    if (withColors)
-      cat("property float red
-property float green
-property float blue
-property float alpha\n", file=con)
     if (withNormals)
       cat("property float nx
 property float ny
 property float nz\n", file=con)
+    if (withColors)
+      cat("property uchar red
+property uchar green
+property uchar blue
+property uchar alpha\n", file=con)
     cat("element face", nrow(Triangles)+nrow(Quads), "\n", file=con)
-    cat("property list int int vertex_indices\n", file=con)
+    cat("property list uchar int vertex_indices\n", file=con)
     if (nrow(Edges) > 0) {
       cat("element edge", nrow(Edges), "\n", file=con)
       cat("property int vertex1
@@ -40,8 +40,12 @@ property int vertex2\n", file=con)
     cat("end_header\n", file=con)
     
     if (format == "ascii") {
-      for (i in seq_len(nrow(Vertices))) 
-        cat(Vertices[i,], "\n", file=con)
+      for (i in seq_len(nrow(Vertices))) {
+        cat(Vertices[i,], file=con)
+        if (withColors)
+          cat("", Colors[i,], file=con)
+        cat("\n", file=con)
+      }
       for (i in seq_len(nrow(Triangles))) 
         cat("3", Triangles[i,], "\n", file=con)
       for (i in seq_len(nrow(Quads)))
@@ -50,64 +54,96 @@ property int vertex2\n", file=con)
         cat(Edges[i,], "\n", file=con)
     } else {
       endian <- if (format == "little_endian") "little" else "big"
-      if (nrow(Vertices))
-        writeBin(as.numeric(t(Vertices)), con, size=4, endian=endian)
-      if (nrow(Triangles))
-        writeBin(as.integer(t(cbind(3L, Triangles))), con, size=4, endian=endian)
-      if (nrow(Quads))
-        writeBin(as.integer(t(cbind(4L, Quads))), con, size=4, endian=endian)
+      if (nrow(Vertices)) {
+        if (!withColors)
+          writeBin(as.numeric(t(Vertices)), con, size = 4, endian=endian)
+        else {
+          for (i in seq_len(nrow(Vertices))) {
+            writeBin(Vertices[i,], con, size = 4, endian = endian)
+            writeBin(Colors[i,], con, size = 1)
+          }
+        }
+      }
+      if (nrow(Triangles)) {
+        for (i in seq_len(nrow(Triangles))) {
+          writeBin(3L, con, size = 1)
+          writeBin(as.integer(Triangles[i,]), con, size = 4, 
+                   endian = endian)
+        }
+      }
+      if (nrow(Quads)) {
+        for (i in seq_len(nrow(Quads))) {
+          writeBin(4L, con, size = 1)
+          writeBin(as.integer(Quads[i,]), con, size = 4, 
+                   endian = endian)
+        }
+      }
       if (nrow(Edges))
         writeBin(as.integer(t(Edges)), con, size=4, endian=endian)
     }  
   }  
     
-  Vertices <- matrix(0, 0, 3 + 4*withColors + 3*withNormals)
+  Vertices <- matrix(0, 0, 3 + 3*withNormals)
+  Colors <- matrix(0L, 0, 4)
+  
   Triangles <- matrix(1L, 0, 3)
   Quads <- matrix(1L, 0, 4)
   Edges <- matrix(1L, 0, 2)
 
   getVertices <- function(id) {
     vertices <- rgl.attrib(id, "vertices")
-    if (withColors) {
-      colors <- rgl.attrib(id, "colors")
-      if (nrow(colors) == 1)
-        colors <- colors[rep(1, nrow(vertices)),, drop = FALSE]
-    }
     if (withNormals) {
       normals <- rgl.attrib(id, "normals")
       if (!nrow(normals))
       	normals <- 0*vertices
     }
     cbind(vertices, 
-          if (withColors) 255*colors,
           if (withNormals) normals)
+  }
+  
+  getColors <- function(id) {
+    vertices <- rgl.attrib(id, "vertices")
+    if (withColors) {
+      colors <- rgl.attrib(id, "colors")
+      if (nrow(colors) == 1)
+        colors <- colors[rep(1, nrow(vertices)),, drop = FALSE]
+      colors <- round(255*colors)
+      mode(colors) <- "integer"
+      colors
+    } else NULL
   }
   
   writeTriangles <- function(id) {
     vertices <- getVertices(id)
+    colors <- getColors(id)
     n <- nrow(vertices)      
     base <- nrow(Vertices)
     Vertices <<- rbind(Vertices, vertices)
+    Colors <<- rbind(Colors, colors)
     Triangles <<- rbind(Triangles, matrix(base + getIndices(id) - 1, 
                         ncol=3, byrow=TRUE))
   }
   
   writeQuads <- function(id) {
     vertices <- getVertices(id)
+    colors <- getColors(id)
     n <- nrow(vertices)
     base <- nrow(Vertices)
     Vertices <<- rbind(Vertices, vertices)
+    Colors <<- rbind(Colors, colors)
     Quads <<- rbind(Quads, matrix(base + getIndices(id) - 1, 
                         ncol=4, byrow=TRUE))
   }
       
   writeSurface <- function(id) {
     vertices <- getVertices(id)
+    colors <- getColors(id)
     dims <- rgl.attrib(id, "dim")
     nx <- dims[1]
     nz <- dims[2]
     base <- nrow(Vertices)
     Vertices <<- rbind(Vertices, vertices)
+    Colors <<- rbind(Colors, colors)
     rows <- seq_len(nx)
     for (i in seq_len(nz)[-nz]) {
       indices <- getIndices(id)[(i-1)*nx + 
@@ -128,12 +164,12 @@ property int vertex2\n", file=con)
       if (!length(colors)) colors <- material3d("color")
       colors <- rep(colors, length.out = nrow(vertices))
       colors <- t(col2rgb(colors, alpha=TRUE))
+      Colors <<- rbind(Colors, colors)
     }
     if (withNormals) 
       normals <- asEuclidean(t(mesh$normals))
     base <- nrow(Vertices)
     Vertices <<- rbind(Vertices, cbind(vertices, 
-                                       if (withColors) colors,
                                        if (withNormals) normals))
     
     nt <- length(mesh$it)/3
@@ -172,11 +208,13 @@ property int vertex2\n", file=con)
    
   writePoints <- function(id) {
     vertices <- getVertices(id)
+    colors <- getColors(id)
     n <- nrow(vertices)
     inds <- getIndices(id)    
     if (pointsAsEdges) {
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
+      Colors <<- rbind(Colors, colors)
       Edges <<- rbind(Edges, base + cbind(inds, inds) - 1 )  
     } else {
       radius <- pointRadius*avgScale()
@@ -194,15 +232,13 @@ property int vertex2\n", file=con)
   
   writeSegments <- function(id) {
     vertices <- getVertices(id)
-    if (withColors) {
-      colors <- vertices[, 4:7, drop=FALSE]
-      vertices <- vertices[, 1:3, drop=FALSE]
-    }
+    colors <- getColors(id)
     inds <- getIndices(id)
     n <- length(inds)/2
     if (linesAsEdges) {
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
+      Colors <<- rbind(Colors, colors)
       Edges <<- rbind(Edges, base + matrix(inds, ncol = 2, byrow = TRUE) - 1)  
     } else {
       radius <- lineRadius*avgScale()
@@ -229,11 +265,13 @@ property int vertex2\n", file=con)
   
   writeLines <- function(id) {
     vertices <- getVertices(id)
+    colors <- getColors(id)
     if (linesAsEdges) {
       inds <- getIndices(id)
       n <- length(inds)   
       base <- nrow(Vertices)
       Vertices <<- rbind(Vertices, vertices)
+      Colors <<- rbind(Colors, colors)
       Edges <<- rbind(Edges, base + cbind(inds[-n], inds[-1]) - 1)  
     } else {
       n <- nrow(vertices) - 1
