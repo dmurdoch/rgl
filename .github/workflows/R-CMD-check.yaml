@@ -38,9 +38,6 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install libjpeg
-          export LDFLAGS="-L/opt/homebrew/opt/jpeg/lib"
-          export CPPFLAGS="-I/opt/homebrew/opt/jpeg/include"
-          export PKG_CONFIG_PATH="/opt/homebrew/opt/jpeg/lib/pkgconfig"
           brew install xquartz
           brew install fribidi
 
@@ -49,6 +46,15 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+          
+      - name: Install jpeg on MacOS
+        if: runner.os == 'macOS'
+        run: |
+          LDFLAGS="-L/opt/homebrew/opt/jpeg/lib" \
+          CPPFLAGS="-I/opt/homebrew/opt/jpeg/include" \
+          PKG_CONFIG_PATH="/opt/homebrew/opt/jpeg/lib/pkgconfig" \
+          R_CRAN_SRC="https://cloud.r-project.org" \
+          Rscript -e "install.packages('jpeg', repos='https://cloud.r-project.org/')"
         
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
