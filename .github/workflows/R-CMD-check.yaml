@@ -22,7 +22,7 @@ jobs:
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'devel'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: macos-latest, r: 'devel'}
+          - {os: macos-latest, r: 'release'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -37,7 +37,6 @@ jobs:
       - name: Install dependencies on MacOS
         if: runner.os == 'macOS'
         run: |
-          brew install libjpeg
           brew install xquartz
           brew install fribidi
 
@@ -47,15 +46,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           
-      - name: Install jpeg on MacOS
-        if: runner.os == 'macOS'
-        run: |
-          LDFLAGS="-L/opt/homebrew/opt/jpeg/lib" \
-          CPPFLAGS="-I/opt/homebrew/opt/jpeg/include" \
-          PKG_CONFIG_PATH="/opt/homebrew/opt/jpeg/lib/pkgconfig" \
-          R_CRAN_SRC="https://cloud.r-project.org" \
-          Rscript -e "install.packages('jpeg', repos='https://cloud.r-project.org/')"
-        
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
