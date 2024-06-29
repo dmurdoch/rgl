@@ -51,7 +51,7 @@ jobs:
         run: |
           ARCH=`uname -m`
           if [ ! -e /opt/R/$ARCH ]; then sudo mkdir -p /opt/R/$ARCH; sudo chown -R $USER /opt/R; fi
-          sudo Rscript -e 'dep="c("fribidi", "jpeg"); source("https://mac.R-project.org/bin/install.R"); install.libs(dep)'
+          sudo Rscript -e 'dep=c("fribidi", "jpeg"); source("https://mac.R-project.org/bin/install.R"); install.libs(dep)'
           if ! echo $PATH | grep /opt/R/$ARCH/bin >/dev/null; then echo /opt/R/$ARCH/bin > newPATH; cat $GITHUB_PATH >> newPATH; cat newPATH > $GITHUB_PATH; fi
         shell: bash
 
