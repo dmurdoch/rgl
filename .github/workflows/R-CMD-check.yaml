@@ -47,9 +47,9 @@ jobs:
           use-public-rspm: true
           
       - name: Install jpeg package on MacOS
-        if: runner.os == 'macOS' && runner.r == 'devel'
+        if: runner.os == 'macOS'
         run: |
-          Rscript -e "source('https://mac.R-project.org/bin/install.R');install.libs('jpeg');install.packages('jpeg', type='source')"
+          Rscript -e "source('https://mac.R-project.org/bin/install.R');install.libs('jpeg');install.packages('jpeg')"
           
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
