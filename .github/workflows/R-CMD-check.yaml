@@ -48,11 +48,11 @@ jobs:
           
       - name: Install jpeg package on MacOS
         if: runner.os == 'macOS'
-          run: |
-            ARCH=`uname -m`
-            if [ ! -e /opt/R/$ARCH ]; then sudo mkdir -p /opt/R/$ARCH; sudo chown -R $USER /opt/R; fi
-            Rscript -e 'dep="jpeg"; source("https://mac.R-project.org/bin/install.R"); install.libs(dep)'
-            if ! echo $PATH | grep /opt/R/$ARCH/bin >/dev/null; then echo /opt/R/$ARCH/bin > newPATH; cat $GITHUB_PATH >> newPATH; cat newPATH > $GITHUB_PATH; fi
+        run: |
+          ARCH=`uname -m`
+          if [ ! -e /opt/R/$ARCH ]; then sudo mkdir -p /opt/R/$ARCH; sudo chown -R $USER /opt/R; fi
+          Rscript -e 'dep="jpeg"; source("https://mac.R-project.org/bin/install.R"); install.libs(dep)'
+          if ! echo $PATH | grep /opt/R/$ARCH/bin >/dev/null; then echo /opt/R/$ARCH/bin > newPATH; cat $GITHUB_PATH >> newPATH; cat newPATH > $GITHUB_PATH; fi
         shell: bash
 
       - uses: r-lib/actions/setup-r-dependencies@v2
