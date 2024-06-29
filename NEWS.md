@@ -12,11 +12,6 @@ support files have been updated.
 * Changing the background resulted in an additional background
 object instead of replacing the current one.
 * Colors weren't handled correctly by `writePLY()` (issue #425).
-
-# rgl 1.3.4
-
-## Bug fixes
-
 * `bbox3d()` objects ignored the `xlen`, `ylen` and `zlen`
 settings when rendered using `rglwidget()` (issue #415).
 * In certain cases, the `WebGL` vignette started with the
