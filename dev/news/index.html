@@ -88,13 +88,7 @@
 <ul><li>Background plots did not always appear (issue <a href="https://github.com/dmurdoch/rgl/issues/421" class="external-link">#421</a>).</li>
 <li>Changing the background resulted in an additional background object instead of replacing the current one.</li>
 <li>Colors weren’t handled correctly by <code><a href="../reference/writePLY.html">writePLY()</a></code> (issue <a href="https://github.com/dmurdoch/rgl/issues/425" class="external-link">#425</a>).</li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="1.3.4" id="rgl-134">rgl 1.3.4<a class="anchor" aria-label="anchor" href="#rgl-134"></a></h2>
-<div class="section level3">
-<h3 id="bug-fixes-1-3-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-4"></a></h3>
-<ul><li>
+<li>
 <code><a href="../reference/bbox.html">bbox3d()</a></code> objects ignored the <code>xlen</code>, <code>ylen</code> and <code>zlen</code> settings when rendered using <code><a href="../reference/rglwidget.html">rglwidget()</a></code> (issue <a href="https://github.com/dmurdoch/rgl/issues/415" class="external-link">#415</a>).</li>
 <li>In certain cases, the <code>WebGL</code> vignette started with the mouse mode set to “selecting”.</li>
 <li>The <code><a href="../reference/rglwidget.html">rglwidget()</a></code> function gets a new argument <code>fastTransparency</code> which makes WebGL mimic the <code>rgl</code> device when drawing transparent objects. The default value is <code>TRUE</code> unless option <code>rgl.fastTransparency</code> is set to <code>FALSE</code>.</li>
