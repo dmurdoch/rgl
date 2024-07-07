@@ -3,15 +3,15 @@
 numerical id.  These ids are normally stored
 in vectors of class c("rglIds", "numeric"), which
 will also have class "rglHighlevel"
-or "rglLowlevel" depending on 
-whether a high level function like 
+or "rglLowlevel" depending on
+whether a high level function like
 plot3d or persp3d, or a low level function created the objects.
 
 '><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -25,7 +25,7 @@ plot3d or persp3d, or a low level function created the objects.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.8</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.10</span>
       </span>
     </div>
 
@@ -42,7 +42,7 @@ plot3d or persp3d, or a low level function created the objects.
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -67,20 +67,20 @@ plot3d or persp3d, or a low level function created the objects.
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/dmurdoch/rgl/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>RGL id values</h1>
-    
+
     <div class="hidden name"><code>rglIds.Rd</code></div>
     </div>
 
@@ -89,8 +89,8 @@ plot3d or persp3d, or a low level function created the objects.
 numerical id.  These ids are normally stored
 in vectors of class <code>c("rglIds", "numeric")</code>, which
 will also have class <code>"rglHighlevel"</code>
-or <code>"rglLowlevel"</code> depending on 
-whether a high level function like 
+or <code>"rglLowlevel"</code> depending on
+whether a high level function like
 <code><a href="plot3d.html">plot3d</a></code> or <code><a href="persp3d.html">persp3d</a></code>, or a low level function created the objects.</p>
 
 
@@ -100,7 +100,7 @@ whether a high level function like
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rglId</span><span class="op">(</span>ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">lowlevel</span><span class="op">(</span>ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">highlevel</span><span class="op">(</span>ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># S3 method for rglId</span></span>
+<span><span class="co"># S3 method for class 'rglId'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, </span>
 <span>      rglwidget <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"rgl.printRglwidget"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>      <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -108,17 +108,18 @@ whether a high level function like
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>ids</dt>
+    <p></p>
+<dl><dt id="arg-ids">ids<a class="anchor" aria-label="anchor" href="#arg-ids"></a></dt>
 <dd><p>A vector of object ids.</p></dd>
 
-  <dt>x</dt>
+  <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>An <code>"rglId"</code> object to print.</p></dd>
 
-  <dt>rglwidget</dt>
+  <dt id="arg-rglwidget">rglwidget<a class="anchor" aria-label="anchor" href="#arg-rglwidget"></a></dt>
 <dd><p>Whether to create and print an RGL widget.
 If false, nothing is printed.</p></dd>
 
-  <dt>...</dt>
+  <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Other arguments which will be passed to
 <code><a href="rglwidget.html">rglwidget</a></code> if it is used.</p></dd>
 
@@ -126,7 +127,7 @@ If false, nothing is printed.</p></dd>
     <div id="details">
     <h2>Details</h2>
     <p>These functions and classes are intended to allow
-RGL scenes to be automatically 
+RGL scenes to be automatically
 displayed in R Markdown documents.  See <code><a href="setupKnitr.html">setupKnitr</a></code> for details on enabling auto-printing.</p>
 <p>Note that <em>all</em> objects in the current
 scene will be printed by default, not just
@@ -137,14 +138,10 @@ sense.)</p>
     </div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>Objects of class <code>"rglId"</code>, <code>c("rglHighlevel", "rglId",
+    <p>Objects of class <code>"rglId"</code>, <code>c("rglHighlevel", "rglId",
 "numeric")</code> or <code>c("rglLowlevel", "rglId",
-"numeric")</code> for <code>rglId</code>, <code>lowlevel</code> or <code>highlevel</code></p>
- 
-
-<p>respectively.</p>
+"numeric")</code> for <code>rglId</code>, <code>lowlevel</code> or <code>highlevel</code>
+respectively.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -174,15 +171,15 @@ sense.)</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
