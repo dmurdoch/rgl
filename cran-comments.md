@@ -1,3 +1,7 @@
+# 1.3.10
+
+Responded to the issues raised on the first submission.
+
 # 1.3.9
 
 This is a minor release, containing several bug fixes and minor 

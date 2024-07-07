@@ -1,4 +1,4 @@
-# rgl 1.3.9
+# rgl 1.3.10
 
 ## Minor changes
 
