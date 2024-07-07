@@ -25,7 +25,7 @@ if (!requireNamespace("rmarkdown", quietly = TRUE)) {
   warning(call. = FALSE, "These vignettes assume rmarkdown.  This was not found.")
   knitr::knit_exit()
 }
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, snapshot = FALSE, screenshot.force = FALSE)
 library(rgl)
 options(rgl.useNULL = TRUE)
 setupKnitr(autoprint = TRUE)

@@ -1,14 +1,13 @@
-# 1.3.1
+# 1.3.10
 
-This adds a workaround to a bug in the interaction of the
-`markdown` and `knitr` packages that caused the vignettes
-to attempt to produce snapshots if Pandoc was not available,
-even though Pandoc is not needed.
+Responded to the issues raised on the first submission.
 
-# 1.3.0
+# 1.3.9
 
-This small release is at the request of Tomas to adapt to
-upcoming changes in Rtools on Windows.  It also contains
-a number of other changes (mostly bug fixes and minor
-improvements, described in the NEWS.md file).  I ran revdep
-checks and didn't see any problems.
+This is a minor release, containing several bug fixes and minor 
+updates.
+
+The CRAN checks identify a non-API reference to R_InputHandlers.  I haven't done
+anything about this yet; it isn't mentioned in the "Moving into C API
+compliance" section of WRE.  It's needed for the X11 display, and I
+don't know an alternative.
