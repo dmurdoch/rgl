@@ -1,6 +1,7 @@
 # 1.3.10
 
-Responded to the issues raised on the first submission.
+Responded to the issues raised on the first submission.  Luke Tierney has
+said that the R_InputHandlers reference is a false positive.
 
 # 1.3.9
 
