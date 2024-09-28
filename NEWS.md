@@ -1,4 +1,4 @@
-# rgl 1.3.8
+# rgl 1.3.9
 
 ## Minor changes
 
@@ -20,6 +20,7 @@ mouse mode set to "selecting".
 which makes WebGL mimic the `rgl` device when drawing transparent
 objects.  The default value is `TRUE` unless option
 `rgl.fastTransparency` is set to `FALSE`.
+* `writeSTL()` now writes `endsolid`, which is required by some apps.
 
 # rgl 1.3.1
 
