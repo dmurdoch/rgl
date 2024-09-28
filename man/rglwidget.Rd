@@ -52,7 +52,7 @@ component that will hold the scene.
   that don't handle WebGL.  See Details below.}
   \item{oldConvertBBox, fastTransparency}{See Details below.}
   \item{...}{Additional arguments
-to pass to \code{htmlwidgets::\link{createWidget}}.}
+to pass to \code{htmlwidgets::\link[htmlwidgets]{createWidget}}.}
 }
 \details{
 This produces a WebGL version of an RGL scene using the \pkg{htmlwidgets}
@@ -77,14 +77,14 @@ If \code{elementId} is \code{NULL} and we are not in a Shiny app,
 \code{elementId} is set to a random value to facilitate re-use
 of information.
 
-To save the display to a file, use \code{htmlwidgets::\link{saveWidget}}.
+To save the display to a file, use \code{htmlwidgets::\link[htmlwidgets]{saveWidget}}.
 This requires \command{pandoc} to be installed.  
 For a snapshot, you can use
 \code{htmltools::save_html(img(src=rglwidget(snapshot=TRUE)), file = ...)}.
 
 The \code{webGLoptions} argument is a list which will
 be passed when the WebGL context is created.  See
-the WebGL 1.0 specification on \url{https://registry.khronos.org/webgl} for possible
+the WebGL 1.0 specification on \url{https://registry.khronos.org/webgl/} for possible
 settings.  The default in \code{rglwidget} differs
 from the WebGL default by setting \code{preserveDrawingBuffer = TRUE} in order to allow other tools to read
 the image, but please note that some implementations

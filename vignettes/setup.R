@@ -14,7 +14,7 @@ if (!requireNamespace("rmarkdown", quietly = TRUE)) {
 # knitr uses it to determine whether to do
 # screenshots; we don't want those. see https://github.com/rstudio/markdown/issues/115
 
-knitr::opts_knit$set(screenshot.force = FALSE)
+knitr::opts_chunk$set(screenshot.force = FALSE, snapshot = FALSE)
   
 # knitr::opts_chunk$set(snapshot = TRUE)  # for snapshots instead of dynamic
 
