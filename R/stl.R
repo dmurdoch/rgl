@@ -16,6 +16,14 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
       writeBin(0L, con, size=4, endian="little")
     }
   }
+  
+  finish  <- function()
+  {  if (!ascii) {
+      seek(con, 80)
+      writeBin(as.integer(triangles), con, size=4, endian="little")
+     } else
+       cat("endsolid\n", file = con)
+  }
       
   triangles <- 0
   
@@ -186,10 +194,7 @@ writeSTL <- function(con, ascii=FALSE, pointRadius=0.005,
       linestrip = writeLines(ids[i])
     )
   
-  if (!ascii) {
-    seek(con, 80)
-    writeBin(as.integer(triangles), con, size=4, endian="little")
-  }
+  finish()
     
   invisible(filename)
 }
