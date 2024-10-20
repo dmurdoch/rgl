@@ -45,15 +45,8 @@
   dir <- getDir(useNULL)
   
   unixos <- "none"
-  if (.Platform$OS.type == "unix") {
-    if (Sys.info()["sysname"] == "Darwin") {
-      unixos <- "Darwin"
-    } else {
-      unixos <- system("uname", intern=TRUE)
-      if (!length(unixos))
-        unixos <- "unknown"
-    }
-  }
+  if (.Platform$OS.type == "unix")
+    unixos <- Sys.info()["sysname"]
   
   dll <- try(dyn.load(dynlib <- getDynlib(dir)))
   if (inherits(dll, "try-error")) {
