@@ -46,9 +46,13 @@
   
   unixos <- "none"
   if (.Platform$OS.type == "unix") {
-    unixos <- system("uname", intern=TRUE)
-    if (!length(unixos))
-      unixos <- "unknown"    
+    if (Sys.info()["sysname"] == "Darwin") {
+      unixos <- "Darwin"
+    } else {
+      unixos <- system("uname", intern=TRUE)
+      if (!length(unixos))
+        unixos <- "unknown"
+    }
   }
   
   dll <- try(dyn.load(dynlib <- getDynlib(dir)))
