@@ -154,7 +154,7 @@
 setGraphicsDelay <- function(delay = Sys.getenv("RGL_SLOW_DEV", 0), 
                              unixos = "none") {
   if (unixos == "Darwin") {
-    version <- try(numeric_version(system("uname -r", intern = TRUE)))
+    version <- try(numeric_version(Sys.info()['release']))
     if (missing(delay) &&
         !inherits(version, "try-error") && 
         !is.na(version) && 
