@@ -1,10 +1,12 @@
-# rgl 1.3.11
+# rgl 1.3.12
 
 ## Minor changes
 
 * `readSTL()` can now read (some) ASCII format STL files.
 * The configure script has had minor changes, and autoconf
 support files have been updated.
+* `uname` is no longer used during startup (PR #435
+submitted by Jonathon Love).
 
 ## Bug fixes
 
