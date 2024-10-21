@@ -45,11 +45,8 @@
   dir <- getDir(useNULL)
   
   unixos <- "none"
-  if (.Platform$OS.type == "unix") {
-    unixos <- system("uname", intern=TRUE)
-    if (!length(unixos))
-      unixos <- "unknown"    
-  }
+  if (.Platform$OS.type == "unix")
+    unixos <- Sys.info()["sysname"]
   
   dll <- try(dyn.load(dynlib <- getDynlib(dir)))
   if (inherits(dll, "try-error")) {
@@ -150,7 +147,7 @@
 setGraphicsDelay <- function(delay = Sys.getenv("RGL_SLOW_DEV", 0), 
                              unixos = "none") {
   if (unixos == "Darwin") {
-    version <- try(numeric_version(system("uname -r", intern = TRUE)))
+    version <- try(numeric_version(Sys.info()["release"]))
     if (missing(delay) &&
         !inherits(version, "try-error") && 
         !is.na(version) && 
