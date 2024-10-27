@@ -11,7 +11,7 @@ only triangles.  The \code{writeSTL} function converts some RGL object
 types to triangles.
 }
 \usage{
-readSTL(con, ascii = FALSE, plot = TRUE, ...)
+readSTL(con, ascii = NA, plot = TRUE, ...)
 writeSTL(con, ascii = FALSE, 
          pointRadius = 0.005, 
          pointShape = icosahedron3d(),
@@ -25,7 +25,10 @@ writeSTL(con, ascii = FALSE,
 A connection or filename.
 }
   \item{ascii}{
-Whether to use the ASCII format or the binary format.
+Whether to use the ASCII format or the binary format.  The
+default \code{NA} setting for \code{readSTL()} causes it
+to detect the format.  This only works for files, not other
+connections, which default to binary.
 }
   \item{plot}{
 On reading, should the object be plotted?

@@ -657,6 +657,10 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   setupLights(renderContext);
   
   if (opaquePass) {
+    
+    if (renderContext->gl2psActive > GL2PS_NONE)
+      gl2psSorting(GL2PS_SIMPLE_SORT);
+    
     if (background) {
     //
     // RENDER BACKGROUND
@@ -698,6 +702,10 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   renderClipplanes(renderContext);
   
   if (opaquePass) {
+    
+    if (renderContext->gl2psActive > GL2PS_NONE)
+      gl2psSorting(GL2PS_SIMPLE_SORT);
+    
     renderUnsorted(renderContext);
 
 // #define NO_BLEND
@@ -708,6 +716,9 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
     //
     // render shapes in bounding-box sorted order according to z value
     //
+    
+    if (renderContext->gl2psActive > GL2PS_NONE)
+      gl2psSorting(GL2PS_NO_SORT);
 
     // DISABLE Z-BUFFER FOR WRITING
     glDepthMask(GL_FALSE);
@@ -982,7 +993,6 @@ void Subscene::renderZsort(RenderContext* renderContext)
 {  
   std::vector<Shape*>::iterator iter;
   std::multimap<float, ShapeItem*> distanceMap;
-  int index = 0;
 
   for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
     Shape* shape = *iter;
@@ -991,7 +1001,6 @@ void Subscene::renderZsort(RenderContext* renderContext)
       ShapeItem* item = new ShapeItem(shape, j);
       float distance = getDistance( shape->getPrimitiveCenter(j) );
       distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
-      index++;
     }
   }
 

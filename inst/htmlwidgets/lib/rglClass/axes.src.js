@@ -123,8 +123,8 @@
             result[dim].push(i*delta/range);
           break;
         case "pretty":
-          locations = this.R_pretty(limits[0], limits[1], 5,
-                                  2, // min_n
+          locations = this.R_pretty(limits[0], limits[1], obj.axes.nticks[dim],
+                                  3, // min_n
                                   0.75, // shrink_sml
                                   [1.5, 2.75], // high_u_fact
                                   0, // eps_correction

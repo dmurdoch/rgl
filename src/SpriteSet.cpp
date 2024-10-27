@@ -13,7 +13,10 @@ using namespace rgl;
 //
 
 SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, int in_nsize, double* in_size,
-                     int in_ignoreExtent, int count, Shape** in_shapelist, double* in_userMatrix,
+                     int in_ignoreExtent, int count, 
+                     Shape** in_shapelist, 
+                     int nshapelens, int* in_shapelens,
+                     double* in_userMatrix,
                      bool in_fixedSize, bool in_rotating,
                      Scene *in_scene, double* in_adj,
                      int in_npos, int *in_pos, double in_offset)
@@ -34,6 +37,19 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
       shapes.push_back(in_shapelist[i]->getObjID());
       blended |= in_shapelist[i]->isBlended();
     }
+    
+    if (nshapelens) {
+      int first = 0;
+      for (int i=0;i < nshapelens;i++) {
+        shapefirst.push_back(first);
+        shapelens.push_back(in_shapelens[i]);
+        first += in_shapelens[i];
+      }
+    } else {
+      shapefirst.push_back(0);
+      shapelens.push_back(count);
+    }
+
     for (int i=0;i<16;i++)
       userMatrix[i] = *(in_userMatrix++);
   }
@@ -181,9 +197,12 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
 
     /* Since we modified modelMatrix, we need to reload it */
     renderContext->subscene->loadMatrices();    
+
+    int j = index % shapefirst.size();
+    int first = shapefirst.at(j);
     
-    for (std::vector<int>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) 
-      scene->get_shape(*i)->draw(renderContext);  
+    for (int i = 0; i < shapelens.at(j) ; ++ i ) 
+      scene->get_shape(shapes.at(first + i))->draw(renderContext);  
     
     Shape::drawBegin(renderContext);
  }  else {
@@ -295,7 +314,8 @@ int SpriteSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
   switch (attrib) {
     case VERTICES: return vertex.size();
     case RADII:    return size.size();
-    case IDS:	   
+    case IDS:	
+    case SHAPENUM:
     case TYPES:    return static_cast<int>(shapes.size());
     case USERMATRIX: {
       if (!shapes.size()) return 0;
@@ -311,7 +331,7 @@ int SpriteSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 void SpriteSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
   int n = getAttributeCount(subscene, attrib);
-  int ind = 0;
+  int ind = 0, res = 0;
 
   if (first + count < n) n = first + count;
   if (first < n) {
@@ -336,6 +356,16 @@ void SpriteSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, in
           ind++;
         }
         return;
+      case SHAPENUM:
+        ind = 1;
+        for (int i = 0; i < shapelens.size(); i++) {
+          res++;
+          for (int j = 0; j < shapelens.at(i); j++, ind++) {
+            if (first < ind && ind <= n)
+              *result++ = res;
+          }
+        }
+        return;
       case USERMATRIX:
         while (first < n) {
           *result++ = userMatrix[4*first];
@@ -358,7 +388,7 @@ void SpriteSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, in
         } else {
           *result++ = adj.x;
           *result++ = adj.y;
-    	  *result++ = adj.z;
+    	    *result++ = adj.z;
         }
       	return;
       case POS:

@@ -19,8 +19,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release', rtools-version: '42'}
-          - {os: windows-latest, r: 'devel', rtools-version: '43'}
+          - {os: windows-latest, r: 'release'}
+          - {os: windows-latest, r: 'devel'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: macos-latest, r: 'devel'}
 
@@ -32,7 +32,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Install dependencies on MacOS
         if: runner.os == 'macOS'
@@ -45,10 +45,17 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          rtools-version: ${{ matrix.config.rtools-version }}
+          
+      - name: Install CRAN libjpeg on MacOS
+        if: runner.os == 'macOS'
+        run: |
+          ARCH=`uname -m`
+          if [ ! -e /opt/R/$ARCH ]; then sudo mkdir -p /opt/R/$ARCH; sudo chown -R $USER /opt/R; fi
+          sudo Rscript -e 'dep="jpeg"; source("https://mac.R-project.org/bin/install.R"); install.libs(dep)'
+          if ! echo $PATH | grep /opt/R/$ARCH/bin >/dev/null; then echo /opt/R/$ARCH/bin > newPATH; cat $GITHUB_PATH >> newPATH; cat newPATH > $GITHUB_PATH; fi
+        shell: bash
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-      
         with:
           extra-packages: any::rcmdcheck
           needs: check

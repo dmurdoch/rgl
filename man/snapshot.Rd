@@ -29,10 +29,13 @@ Ignored if \code{webshot = TRUE}.}
 \details{
 \code{rgl.snapshot()} is a low-level function
 that copies the current RGL window from the screen.  Users
-should use \code{snapshot3d()} instead; it is more flexible,
+should usually use \code{snapshot3d()} instead; it is more flexible,
 and (if \pkg{webshot2} is installed) can take images even if
 no window is showing, and they can be larger than the physical
-screen.
+screen.  On some systems \pkg{webshot2} doesn't work reliably; if
+you find \code{snapshot3d()} failing or taking a very long time
+I'd recommend using \code{snapshot3d(..., webshot = FALSE)}.  See
+the note below about \code{RGL_USE_WEBSHOT} to make this the default.
 
 Animations can be created in a loop modifying the scene and saving 
 each screenshot to a file. Various graphics programs (e.g. ImageMagick)

@@ -27,17 +27,8 @@ fi
 AC_PROG_CPP
 AC_PROG_CC
 
-
-
 if test `uname` = "Darwin" ; then
   darwin="yes"
-  ## we want the *build* cputype and not the host one.
-  cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64|-m64'`
-  if test -n "$cmd"; then
-    have_64bit="yes"
-  else
-    have_64bit="no"
-  fi 
 else
   darwin="no"
 fi

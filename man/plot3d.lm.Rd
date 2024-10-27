@@ -75,7 +75,7 @@ Three plots are possible, depending on the value(s) in \code{which}:
 If \code{clip_to_density} is positive, then the
 surface, plane or grid will be clipped to 
 the region where a non-parametric density estimate
-(using \code{MASS::\link{kde2d}}), normalized to have a
+(using \code{MASS::\link[MASS]{kde2d}}), normalized to have a
 maximum value of 1, is greater than the given value.
 This will suppress parts of the plot that aren't 
 supported by the observed data.  

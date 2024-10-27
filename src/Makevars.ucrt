@@ -1,11 +1,20 @@
-
+PKG_LIBS = -lgdi32 -lopengl32 -lglu32
 PKG_CPPFLAGS = \
 	-DHAVE_PNG_H -DHAVE_FREETYPE -DR_NO_REMAP -Iext -Iext/ftgl -Iext/glad/include \
-	-I$(LOCAL_SOFT)/include/freetype2 \
 	-DRGL_W32
 
-PKG_LIBS = \
-	-lfreetype -lharfbuzz -lfreetype -lpng -lbz2 -lz -lgdi32 -lopengl32 -lglu32
+ifeq (,$(shell pkg-config --version 2>/dev/null))
+  LIBBROTLI = $(or $(and $(wildcard $(R_TOOLS_SOFT)/lib/libbrotlidec.a),-lbrotlidec -lbrotlicommon),)
+  PKG_LIBS += \
+	-lfreetype -lharfbuzz -lfreetype $(LIBBROTLI) -lpng -lbz2 -lz 
+  PKG_CPPFLAGS += -I$(R_TOOLS_SOFT)/include/freetype2
+else
+  PKG_LIBS += $(shell pkg-config --libs freetype2)
+  PKG_CPPFLAGS += $(shell pkg-config --cflags freetype2)
+
+  # work-around for freetype2 pkg-config file in Rtools43
+  PKG_CPPFLAGS += -I$(R_TOOLS_SOFT)/include/freetype2
+endif
 
 all: winlibs $(SHLIB)
 

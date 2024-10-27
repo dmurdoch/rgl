@@ -203,15 +203,17 @@ void main(void) {
 #endif //TEXTURE_rgba
     
 #ifdef TEXTURE_alpha
+    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
+
 #if defined(TEXMODE_replace) || defined(TEXMODE_decal)
-    textureColor = vec4(lighteffect.rgb, textureColor.a);
+    textureColor = vec4(lighteffect.rgb, luminance);
 #endif 
 
 #if defined(TEXMODE_modulate) || defined(TEXMODE_blend) || defined(TEXMODE_add)
-    textureColor = vec4(lighteffect.rgb, lighteffect.a*textureColor.a);
+    textureColor = vec4(lighteffect.rgb, lighteffect.a*luminance);
 #endif
  
-#endif
+#endif // TEXTURE_alpha
     
 // The TEXTURE_luminance values are not from that reference    
 #ifdef TEXTURE_luminance

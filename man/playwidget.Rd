@@ -82,7 +82,7 @@ be shown on the \code{"Play"} button while playing.
 The height of the widget in pixels.  In a pipe, this is a relative height.
   }
   \item{...}{Additional arguments to pass to
-to \code{htmlwidgets::\link{createWidget}}.}
+to \code{htmlwidgets::\link[htmlwidgets]{createWidget}}.}
 }
 \details{
 The \code{components} are buttons to control the animation,

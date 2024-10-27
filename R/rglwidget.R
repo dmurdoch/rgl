@@ -241,12 +241,25 @@ asRow <- function(..., last = NA, height = NULL, colsize = 1) {
 newElementId <- function(prefix)
   paste0(prefix, p_sample(100000, 1))
 
+isMarkdownHTMLformat <- function() {
+  output <- rmarkdown::metadata$output
+  
+  if (is.list(output))
+    output <- names(output)
+  
+  is.character(output) && 
+    length(output) >= 1 &&
+    output[1] == "markdown::html_format"
+}
+
 knitrNeedsSnapshot <- function(options = knitr::opts_current$get()) {
   if (!is.null(options$snapshot))
     return(options$snapshot)
   if (isFALSE(options$screenshot.force))
     return(FALSE)
   force <- isTRUE(options$screenshot.force)
+  if (isMarkdownHTMLformat())
+    return(FALSE)
   fmt <- pandoc_to()
   if (!length(fmt) || force)
     return(TRUE)
@@ -267,7 +280,8 @@ rglwidget <- local({
            snapshot,
            shinyBrush = NULL, 
            altText = "3D plot", ...,
-           oldConvertBBox = FALSE) {
+           oldConvertBBox = FALSE,
+           fastTransparency = getOption("rgl.fastTransparency", TRUE)) {
     
   if (missing(snapshot)) {
     if (missing(webgl)) {
@@ -351,6 +365,8 @@ rglwidget <- local({
     x$players <- upstream$players
 
     x$webGLoptions <- webGLoptions
+    
+    x$fastTransparency <- fastTransparency
 
     if (inShiny())
       x$altText <- altText

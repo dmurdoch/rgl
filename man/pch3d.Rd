@@ -83,8 +83,10 @@ symbols.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{points3d}}, \code{\link{text3d}},
-\code{\link{plot3d}}, \code{\link{points}}.
+\code{\link{points3d}}, \code{\link{text3d}} and
+\code{\link{sprites3d}} for other ways to label points,
+\code{\link{points}} for the base graphics symbol
+definitions.
 }
 \examples{
 open3d()

@@ -1,23 +1,13 @@
-# 1.2.8
+# 1.3.10
 
-This small release is at the request of CRAN to address issues
-shown in the CRAN checks.
+Responded to the issues raised on the first submission.
 
-- A call to Rf_warning() passed a variable; it now has a
-separate constant format string.
+# 1.3.9
 
-- Some old documentation of arguments that were not present
-has been removed.
+This is a minor release, containing several bug fixes and minor 
+updates.
 
-These warnings/notes have not been addressed:
-
-- The installed package size has not been improved.
-
-- Some deprecated function warnings on MacOS are still
-present, as those functions are still needed.  I hope that
-the major changes I am in the process of making will allow
-me to address these finally, but those changes are months
-away from being done.
-
-In addition to those changes, there are some minor improvements and bug fixes mentioned in the NEWS file.
-
+The CRAN checks identify a non-API reference to R_InputHandlers.  I haven't done
+anything about this yet; it isn't mentioned in the "Moving into C API
+compliance" section of WRE.  It's needed for the X11 display, and I
+don't know an alternative.

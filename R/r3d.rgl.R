@@ -226,6 +226,7 @@ bg3d        <- function(color,
       else if (flags["exp_fog", 1]) "exp"
       else if (flags["exp2_fog", 1]) "exp2"
       else "none"
+    pop3d(type = "background", id = bgid)
   }
   dots <- list(...)
   
@@ -689,7 +690,6 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
   }
   savepar <- par3d(skipRedraw=TRUE, ignoreExtent=TRUE)
   on.exit(par3d(savepar), add=TRUE)
-  force(shapes)
   
   par3d(ignoreExtent=savepar$ignoreExtent)
   # Force evaluation of args
@@ -702,6 +702,26 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
   
+  if (is.list(shapes)) {
+    nshapelens <- length(shapes)
+    if (!nshapelens)
+      stop("Must have at least one shape")
+    
+    shapelens <- vapply(shapes, length, 1L)
+    shapes <- unlist(shapes)
+  } else if (length(shapes)) {
+    nshapelens <- 1
+    shapelens <- length(shapes)
+  } else {
+    nshapelens <- 0
+    shapelens <- NULL
+  }
+  
+  if (any(is.na(shapes)))
+    stop("shapes must not be NA")
+  
+  nshapes <- length(shapes)
+    
   pos <- as.integer(pos)
   npos <- length(pos)
   if (npos) {
@@ -712,8 +732,9 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
   if (ncenter && nradius) {
     if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
     if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
-    idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos, rotating) )
-    
+
+    idata   <- as.integer( c(ncenter,nradius,nshapes, fixedSize, npos, rotating, 
+                             nshapelens, shapelens ) )
     ret <- .C( rgl_sprites,
                success = as.integer(FALSE),
                idata,

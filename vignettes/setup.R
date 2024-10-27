@@ -2,12 +2,20 @@ options(rgl.useNULL=FALSE)
 suppressPackageStartupMessages(library(rgl))
 options(rgl.useNULL=TRUE)
 options(rgl.printRglwidget=FALSE)
+open3d()
 
 if (!requireNamespace("rmarkdown", quietly = TRUE)) {
   warning(call. = FALSE, "These vignettes assume rmarkdown is installed.  It was not found.")
   knitr::knit_exit()
 }
 
+
+# If Pandoc is not installed, the output format won't be set.
+# knitr uses it to determine whether to do
+# screenshots; we don't want those. see https://github.com/rstudio/markdown/issues/115
+
+knitr::opts_chunk$set(screenshot.force = FALSE, snapshot = FALSE)
+  
 # knitr::opts_chunk$set(snapshot = TRUE)  # for snapshots instead of dynamic
 
 documentedfns <- c()

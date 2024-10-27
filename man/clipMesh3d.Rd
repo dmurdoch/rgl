@@ -206,7 +206,7 @@ values without clipping.
 
 # Show the problem that minVertices solves:
 
-cube <- cube3d(col = palette.colors(6, "Accent"), meshColor = "faces")
+cube <- cube3d(col = rainbow(6), meshColor = "faces")
 
 # This function only has one argument, so it will 
 # be passed x, y and z in columns of a matrix
