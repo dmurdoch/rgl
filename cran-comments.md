@@ -1,14 +1,4 @@
-# 1.3.10
+# 1.3.12
 
-Responded to the issues raised on the first submission.  Luke Tierney has
-said that the R_InputHandlers reference is a false positive.
-
-# 1.3.9
-
-This is a minor release, containing several bug fixes and minor 
-updates.
-
-The CRAN checks identify a non-API reference to R_InputHandlers.  I haven't done
-anything about this yet; it isn't mentioned in the "Moving into C API
-compliance" section of WRE.  It's needed for the X11 display, and I
-don't know an alternative.
+This contains a number of bug fixes and minor changes.  Among
+other things, it fixes the notes shown on CRAN.
