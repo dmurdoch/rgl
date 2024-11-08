@@ -394,7 +394,6 @@ void rgl::rgl_bg(int* successptr, int* idata, double* fogScale)
   Device* device;
   
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
-
     bool sphere    = as_bool( idata[0] );
     int  fogtype   = idata[1];
     Background* bg = new Background(currentMaterial, sphere, fogtype, static_cast<float>(fogScale[0]));
