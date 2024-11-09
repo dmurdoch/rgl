@@ -1,3 +1,18 @@
+# rgl 1.3.13
+
+## Minor changes
+
+* `rgl.incrementID()` has been added.
+
+## Bug fixes
+
+* `clear3d("all")`, calling `bg3d()` on the root 
+subscene, and some cases of `pop3d()` involving the 
+background could create a leak of a background object
+(issue #439).  For back compatibility, these cases
+still increment the object ID number, but don't
+actually create a new object.
+
 # rgl 1.3.12
 
 ## Minor changes

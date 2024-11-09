@@ -189,6 +189,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {"rgl_selectstate", 		(DL_FUNC) &rgl_selectstate, 5, aIILID},
    {"rgl_setselectstate",	(DL_FUNC) &rgl_setselectstate, 4, aIILI},
    {"rgl_quit",			(DL_FUNC) &rgl_quit, 1, aL},
+   {"rgl_incrementID", (DL_FUNC) &rgl_incrementID, 1, aI},
    
    {NULL, NULL, 0}
  };
@@ -240,6 +241,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_selectstate, 5),
    FUNDEF(rgl_setselectstate, 4),
    FUNDEF(rgl_quit, 1),
+   FUNDEF(rgl_incrementID, 1),
    
    {NULL, NULL, 0}
  };
