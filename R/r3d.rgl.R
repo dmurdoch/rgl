@@ -275,7 +275,8 @@ bg3d        <- function(color,
   if (! ret$success)
     stop("'rgl_bg' failed")
   
-  pop3d(type = "background", id = bgid)
+  if (length(bgid))
+    pop3d(type = "background", id = bgid)
   
   lowlevel(ret$success)
 }
