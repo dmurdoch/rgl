@@ -115,6 +115,8 @@ SEXP rgl_par3d(SEXP device, SEXP subscene, SEXP args);
 /* These may be removed if observer is set completely by par3d */
 void rgl_getObserver(int* successptr, double* ddata);
 void rgl_setObserver(int* successptr, double* ddata);
+void rgl_incrementID(int* n);
+
 #ifdef __cplusplus
 }
 #endif

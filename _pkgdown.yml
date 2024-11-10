@@ -249,6 +249,7 @@ reference:
   - Buffer
   - gltfTypes
   - safe.dev.off
+  - rgl.incrementID
 - title: General documentation
 - contents:
   - rgl-package

@@ -31,11 +31,14 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
   type <- names(typeid)
   
   if (subscene == 0) {
-    idata <- as.integer(c(length(typeid), typeid))    	
+    nobg <- setdiff(typeid, 6)
+    idata <- as.integer(c(length(nobg), nobg))
     ret <- .C( rgl_clear, 
       success = FALSE,
       idata
     )$success
+    if (6 %in% typeid)
+      rgl.incrementID()  # For back compatibility
   } else {
     sceneids <- ids3d(type=type, subscene = 0)$id
     thisids <- ids3d(type=type, subscene = subscene)$id

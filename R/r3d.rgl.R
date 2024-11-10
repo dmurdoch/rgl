@@ -41,11 +41,14 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
   type <- names(typeid)
   
   if (subscene == 0) {
-    idata <- as.integer(c(length(typeid), typeid))    	
+    nobg <- setdiff(typeid, 6)
+    idata <- as.integer(c(length(nobg), nobg))    	
     ret <- .C( rgl_clear, 
                success = FALSE,
                idata
     )$success
+    if (6 %in% typeid)
+      rgl.incrementID()  # for back compatibility
     
     if (! ret)
       stop("'rgl_clear' failed")
@@ -226,7 +229,8 @@ bg3d        <- function(color,
       else if (flags["exp_fog", 1]) "exp"
       else if (flags["exp2_fog", 1]) "exp2"
       else "none"
-    pop3d(type = "background", id = bgid)
+    if (currentSubscene3d() == rootSubscene())
+      rgl.incrementID()  # for back compatibility
   }
   dots <- list(...)
   
@@ -275,6 +279,9 @@ bg3d        <- function(color,
   
   if (! ret$success)
     stop("'rgl_bg' failed")
+  
+  if (length(bgid))
+    pop3d(type = "background", id = bgid)
   
   lowlevel(ret$success)
 }
@@ -1113,4 +1120,8 @@ snapshot3d <- function(filename = tempfile(fileext = ".png"),
     warning("webshot2::webshot() failed; trying rgl.snapshot()")
   }
   rgl.snapshot(filename, fmt, top)
+}
+     
+rgl.incrementID <- function(n = 1L) {
+  .C(rgl_incrementID, n = as.integer(n))$n
 }

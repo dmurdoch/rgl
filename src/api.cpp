@@ -1374,3 +1374,10 @@ void rgl::rgl_postscript(int* successptr, int* idata, char** cdata)
 
   *successptr = success;
 }
+
+void rgl::rgl_incrementID(int* n)
+{
+  if (*n > 0)
+    SceneNode::nextID += *n;
+  *n = SceneNode::nextID;
+}
