@@ -1,15 +1,32 @@
-Notes on rglwidget processing:
+Notes on shader branch:
 
-Use cases:
+Text is not being displayed properly, maybe because FTGL isn't
+updating in the new framework.
 
-At the command line through auto printing or explicit rglwidget
-call, in RStudio or not.
+These steps happen when drawing a quad with useShaders:
 
-In a knitr/rmarkdown document, through auto printing, an
-rglwidget call, or by way of a hook function.
+  Initialization:
+    sets vertices and indices
+  DrawBegin:
+    starts to use the vertexArray
+    starts to use the material
+  DrawRange:
+    calls glDrawArrays or glDrawElements
+    
+These steps happen when drawing text:
 
-When should snapshots be converted to URIs? -- <img> links with
-file source won't display properly in RStudio, but URIs do.
-URIs don't display in Github Markdown as used in README (but
-Pandoc knows that, so it's not a big deal:  put the filename
-in the Markdown, and let Pandoc produce the HTML.)
+  Initialization:
+    same, plus some other variables
+    fonts are FTGLPixmapFont objects, which are really
+      FTPixmapFont objects
+  DrawBegin:
+    start to use the material
+  DrawPrimitive:
+    call glRasterPos, glGetBooleanv (for validity),
+    asks the font to draw the text.
+    The drawing happens around FTPixmapFont.cpp:98 .
+    
+    
+    
+Using lldb: glBegin is being called by AxisInfo::draw to draw
+the ticks.
