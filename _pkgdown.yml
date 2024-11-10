@@ -193,7 +193,6 @@ reference:
   - set3d
   - rgl.bringtotop
   - rgl.dev.list
-  - rgl.incrementID
 - subtitle: Manipulating objects in the display
 - contents:
   - pop3d
@@ -250,6 +249,7 @@ reference:
   - Buffer
   - gltfTypes
   - safe.dev.off
+  - rgl.incrementID
 - title: General documentation
 - contents:
   - rgl-package
