@@ -131,7 +131,10 @@ objects added to the scene.
 \author{ Duncan Murdoch }
 
 \seealso{Classic graphics functions \code{\link{axis}}, \code{\link{box}},
-\code{\link{title}}, \code{\link{mtext}}, and RGL function \code{\link{bbox3d}}.}
+\code{\link{title}}, \code{\link{mtext}} are related.
+See RGL functions \code{\link{bbox3d}} for drawing the 
+box around the plot, and
+\code{\link{setAxisCallbacks}} for customized axes.}
 
 \examples{
   open3d()

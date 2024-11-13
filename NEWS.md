@@ -1,4 +1,4 @@
-# rgl 1.3.13
+# rgl 1.3.14
 
 ## Minor changes
 
@@ -12,6 +12,8 @@ background could create a leak of a background object
 (issue #439).  For back compatibility, these cases
 still increment the object ID number, but don't
 actually create a new object.
+* `rglwidget()` displays didn't support objects with
+`smooth = FALSE`.
 
 # rgl 1.3.12
 
