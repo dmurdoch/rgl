@@ -108,7 +108,7 @@ arrowAxis <- local({
       to <- mean(c(center, range[2]))
       # margin should agree with suggestion, so use "x++" etc.
       margin <- gsub("-", "+", margin)
-      ids[dim] <- arrow3d(p0 = c(from, 1, 1), 
+      ids[dim] <<- arrow3d(p0 = c(from, 1, 1), 
                          p1 = c(to, 1, 1),
                          n = 4,
                          type = "lines",
