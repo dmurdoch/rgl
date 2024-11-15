@@ -1,4 +1,6 @@
-# 1.3.12
+# 1.3.14
 
-This contains a number of bug fixes and minor changes.  Among
-other things, it fixes the notes shown on CRAN.
+This small release fixes a memory leak that was
+introduced in the last release.
+
+Other minor changes are described in the NEWS.
