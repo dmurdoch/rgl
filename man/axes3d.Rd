@@ -157,6 +157,7 @@ box around the plot, and
   x <- rnorm(10)
   y <- rnorm(10)
   z <- exp(rnorm(10, mean = 3, sd = 2))
+  
   logz <- log10(z)
   zticks <- axisTicks(range(logz), log = TRUE)
   zat <- log10(zticks)

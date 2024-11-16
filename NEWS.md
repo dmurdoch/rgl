@@ -3,13 +3,15 @@
 ## Minor changes
 
 * `rgl.incrementID()` has been added.
+* An example using log axes has been added to the
+help page for `axes3d()`.
 
 ## Bug fixes
 
 * `clear3d("all")`, calling `bg3d()` on the root 
 subscene, and some cases of `pop3d()` involving the 
 background could create a leak of a background object
-(issue #439).  For back compatibility, these cases
+(issue #439).  For back compatibility of saved results, these cases
 still increment the object ID number, but don't
 actually create a new object.
 * `rglwidget()` displays didn't support objects with
