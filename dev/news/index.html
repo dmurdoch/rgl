@@ -81,11 +81,12 @@
 <h3 id="minor-changes-1-3-14">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-3-14"></a></h3>
 <ul><li>
 <code><a href="../reference/rgl.incrementID.html">rgl.incrementID()</a></code> has been added.</li>
+<li>An example using log axes has been added to the help page for <code><a href="../reference/axes3d.html">axes3d()</a></code>.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-1-3-14">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-14"></a></h3>
 <ul><li>
-<code>clear3d("all")</code>, calling <code><a href="../reference/bg.html">bg3d()</a></code> on the root subscene, and some cases of <code><a href="../reference/scene.html">pop3d()</a></code> involving the background could create a leak of a background object (issue <a href="https://github.com/dmurdoch/rgl/issues/439" class="external-link">#439</a>). For back compatibility, these cases still increment the object ID number, but don’t actually create a new object.</li>
+<code>clear3d("all")</code>, calling <code><a href="../reference/bg.html">bg3d()</a></code> on the root subscene, and some cases of <code><a href="../reference/scene.html">pop3d()</a></code> involving the background could create a leak of a background object (issue <a href="https://github.com/dmurdoch/rgl/issues/439" class="external-link">#439</a>). For back compatibility of saved results, these cases still increment the object ID number, but don’t actually create a new object.</li>
 <li>
 <code><a href="../reference/rglwidget.html">rglwidget()</a></code> displays didn’t support objects with <code>smooth = FALSE</code>.</li>
 </ul></div>
