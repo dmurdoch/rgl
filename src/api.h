@@ -117,6 +117,8 @@ void rgl_getObserver(int* successptr, double* ddata);
 void rgl_setObserver(int* successptr, double* ddata);
 void rgl_incrementID(int* n);
 
+SEXP rgl_earcut(SEXP x, SEXP y);
+
 #ifdef __cplusplus
 }
 #endif

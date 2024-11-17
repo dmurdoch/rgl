@@ -281,6 +281,8 @@ Ivan Krylov for window_group code in X11.
 Michael Sumner for as.mesh3d.default enhancement.  
 Tomas Kalibera for `winutf8` and other help.  
 David Hugh-Jones for documentation improvements.  
-Trevor Davis for a `snapshot3d` patch.
-Mike Stein for pointer-handling code.
-Jonathon Love for the `uname` patch.
+Trevor Davis for a `snapshot3d` patch.  
+Mike Stein for pointer-handling code.  
+Jonathon Love for the `uname` patch.  
+The Mapbox team for the triangulation code.  
+

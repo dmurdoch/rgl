@@ -1,3 +1,12 @@
+# rgl 1.3.15
+
+## Bug fixes
+
+* `triangulate()` now uses the `earcut` library
+from https://github.com/mapbox/earcut.hpp, which
+should be faster and more reliable than the 
+previous R implementation.
+
 # rgl 1.3.14
 
 ## Minor changes

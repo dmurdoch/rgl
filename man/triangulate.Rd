@@ -14,16 +14,19 @@ triangulate(x, y = NULL, z = NULL, random = TRUE, plot = FALSE, partial = NA)
 \arguments{
   \item{x, y, z}{
 Coordinates of a two-dimensional polygon in a format supported by \code{\link{xyz.coords}}.  
-See Details for how \code{z} is handled.
+See Details for a description of proper input and
+how \code{z} is handled.
 }
   \item{random}{
-Whether to use a random or deterministic triangulation.
+Currently ignored, the triangulation
+is deterministic.
 }
   \item{plot}{
 Whether to plot the triangulation; mainly for debugging purposes.
 }
   \item{partial}{
-If the triangulation fails, should partial results be returned?
+Currently ignored. Improper input will lead to undefined 
+results.
 }
 }
 \details{
@@ -34,13 +37,23 @@ with the \code{z} coordinate if present.
 The algorithm works as follows.  First, it breaks the polygon into 
 pieces separated by \code{NA} values in \code{x} or \code{y}.
 Each of these pieces should be a simple, non-self-intersecting
-polygon, separate from the other pieces. 
+polygon, not intersecting the other pieces. 
 (Though some minor exceptions to this rule may work, none
-are guaranteed).  The nesting of these pieces is determined.
+are guaranteed).  The nesting of these pieces is
+determined:  polygons may contain holes, and the
+holes may contain other polygons.  
+
+Vertex order around the polygons does not affect
+the results:  whether a polygon is on the outside 
+or inside of a region is determined by nesting.
+
+Polygons should not repeat vertices.  An attempt is 
+made to detect if the final vertex matches the first
+one.  If so, it will be deleted with a warning.
 
 The \dQuote{outer} polygon(s) are then merged with the
 polygons that they immediately contain, and each of these
-pieces is triangulated using the ear-clipping algorithm.  
+pieces is triangulated using the ear-clipping algorithm from the references.
 
 Finally, all the triangulated pieces are put together into one
 result.
@@ -56,17 +69,16 @@ vertex to proceed counter-clockwise around outer
 polygon boundaries, clockwise around inner boundaries.
 }
 \references{
-See the Wikipedia article \dQuote{polygon triangulation}
-for a description of the ear-clipping algorithm. 
+This function uses the C++ version of the
+\code{earcut} library from \url{https://github.com/mapbox/earcut.hpp}.
 }
 \author{
-Duncan Murdoch
+R wrapper code written by Duncan Murdoch; the
+\code{earcut} library has numerous authors.
 }
 \note{
-Not all inputs will succeed, even when a triangulation is
-possible.  Generally using \code{random = TRUE} will find
-a successful triangulation if one exists, but it may
-occasionally take more than one try.
+Not all inputs will succeed, though inputs satisfying
+the rules listed in the Details section should.
 }
 \seealso{
 \code{\link{extrude3d}} for a solid extrusion of a polygon, \code{\link{polygon3d}} for
