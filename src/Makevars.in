@@ -19,19 +19,21 @@
 
 PKG_CFLAGS=$(C_VISIBILITY)
 
-PKG_CPPFLAGS=@NULL_CPPFLAGS@ -DR_NO_REMAP 
+PKG_CPPFLAGS=@NULL_CPPFLAGS@ -DR_NO_REMAP -Iext/earcut
 
 PKG_LIBS=@NULL_LIBS@
 
 # These lines are only used if configure found OpenGL support
 
-@HIDE_IF_NO_OPENGL@ PKG_CPPFLAGS=@CPPFLAGS@ -DR_NO_REMAP -Iext -Iext/glad/include
+@HIDE_IF_NO_OPENGL@ PKG_CPPFLAGS=@CPPFLAGS@ -DR_NO_REMAP -Iext -Iext/glad/include -Iext/earcut
 @HIDE_IF_NO_OPENGL@ PKG_LIBS=@LIBS@
 
 all: $(SHLIB) @HIDE_IF_NO_OPENGL@ ../inst/useNULL$(R_ARCH)/$(SHLIB) 
 
 ../inst/useNULL$(R_ARCH)/$(SHLIB): $(SHLIB)
 	cp -Rp OpenGL useNULL && \
+	mkdir -p useNULL/ext && \
+	cp -Rp ext/earcut useNULL/ext/earcut && \
 	cp -p *.c *.h *.cpp useNULL/ && \
 	cd useNULL && \
 	$(R_HOME)/bin/R CMD SHLIB -o useNULL.so *.cpp *.c && \

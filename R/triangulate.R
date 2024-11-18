@@ -19,7 +19,6 @@ intersectSegSeg <- function(seg1,seg2) {
   all(zapsmall(coeffs) >= 0) && all(zapsmall(1-coeffs) >= 0)
 }
   
-  
 intersectTriSeg <- function(tri, seg) {
   # intersect a triangle with a segment
   # tri is 2 x 3, columns are vertices
@@ -36,66 +35,7 @@ intersectTriSeg <- function(tri, seg) {
   lb <= ub
 }
 
-triangulateSimple <- function(x,y, random=TRUE, plot=FALSE, partial=NA) {
-  n <- length(x)
-  stopifnot(n == length(y))
-  stopifnot(n > 2)
-  
-  it <- matrix(NA_integer_, nrow=3, ncol=n-2)
-  verts <- seq_len(n)
-  good <- TRUE  # 3 vertices are always good PR#388
-  while((m <- length(verts)) > 3) {
-    i1 <- 1:m
-    i2 <- i1 %% m + 1
-    i3 <- i2 %% m + 1
-    theta3 <- atan2(y[verts[i3]]-y[verts[i1]], x[verts[i3]]-x[verts[i1]])
-    theta2 <- atan2(y[verts[i2]]-y[verts[i1]], x[verts[i2]]-x[verts[i1]])
-    diff <- ( (theta3-theta2)/pi + 4 ) %% 2
-    convex <- which(diff < 1) 
-    if (random && length(convex) > 1)
-      convex <- sample(convex)
-    good <- FALSE  # just in case none are convex
-    for (k in convex) {
-      i <- c(i1[k],i2[k],i3[k])
-      tri <- rbind(x[verts[i]], y[verts[i]])
-      good <- TRUE
-      for (j in 2:(m-1)) {
-        i4 <- (i1[k] + j - 1) %% m + 1
-        i5 <- (i1[k] + j) %% m + 1
-        j <- c(i4,i5)
-        if (intersectTriSeg(tri, rbind(x[verts[j]], y[verts[j]]))) {
-	  good <- FALSE
-	  break
-        }
-      }
-      if (good) {
-        if (plot)
-          polygon(x[verts[i]], y[verts[i]], col=m)
-        it[, m-2] <- verts[i]
-        verts <- verts[-i2[k]]
-        break
-      }
-    }
-    if (!good) break
-  }
-  if (!good) {
-    if (is.na(partial)) {
-      warning("Triangulation is incomplete")
-      partial <- TRUE
-    }
-    if (partial)
-      it <- it[,seq_len(n-m)+m-2, drop=FALSE]
-    else
-      it <- NULL
-  } else {
-    if (plot)
-      polygon(x[verts], y[verts], col=3)
-    it[, 1] <- verts
-  }
-  it
-}
-
-triangulate <- function(x, y = NULL, z = NULL, random=TRUE, plot=FALSE, partial=NA) {
+triangulate <- function(x, y = NULL, z = NULL, random = TRUE, plot = FALSE, partial = NA) {
   xyz <- xyz.coords(x, y, z)
   if (xyz$xlab == "Index" && is.null(z) && (is.null(ncol(x)) || ncol(x) == 2L)) {
     x <- xyz$y
@@ -108,85 +48,65 @@ triangulate <- function(x, y = NULL, z = NULL, random=TRUE, plot=FALSE, partial=
     else if (!diff(range(y, na.rm = TRUE))) 
       y <- xyz$z
   } 
+  
   nesting <- nestPolys(x, y)
   verts <- nesting$verts
-  nextvert <- rep(NA, length(x))
   
   processInside <- function(v) {
-    for (i in nesting$nesting[[v]])
-      processOutside(i)
+    result <- matrix(NA, ncol = 0, nrow = 3)
+    indices <- verts[[v]]
+    for (i in nesting$nesting[[v]]) {
+      result <- cbind(result, processOutside(i))
+      indices <- c(indices, NA, verts[[i]])
+      
+    }
+    res0 <- .Call(rgl_earcut, x[indices], y[indices])
+    result <- cbind(result, 
+                matrix(indices[res0+1], nrow = 3))
   }
   
   processOutside <- function(fwd) {
-    fwd1 <- verts[[fwd]]
-    nextvert[fwd1] <<- c(fwd1[-1], fwd1[1])
-    reversed <- nesting$nesting[[fwd]]   
-    for (rev in reversed) {
-      rev1 <- rev(verts[[rev]])
-      nextvert[rev1] <<- c(rev1[-1], rev1[1])
-      
-      processInside(rev)
-      done <- FALSE
-      # we know at least one point of rev is in fwd, so merge them.
-      # If this fails, the polygons are messed up.
-      # We look for a segment from fwd to rev that intersects no other segments 
-      # in either loop.
-      pairs <- expand.grid(seq_along(fwd1), seq_along(rev1))
-      if (random)
-        pairs <- pairs[sample(nrow(pairs)),]
-      for (p in seq_len(nrow(pairs))) {
-        i <- fwd1[pairs[p,1]]
-	j <- rev1[pairs[p,2]]
-	seg <- cbind( c(x[i], y[i]),
-	              c(x[j], y[j]) )
-	clear <- TRUE
-	for (q in seq_along(verts)) {
-	  i1 <- verts[[q]]
-	  if (!length(i1)) next
-	  i2 <- c(i1[-1], i1[1])
-	  for (v in seq_along(i1)) 
-	    if (length(intersect(c(i1[v], i2[v]), c(i,j))) == 0
-		&& intersectSegSeg(seg, cbind( c(x[i1[v]], y[i1[v]]), c(x[i2[v]], y[i2[v]]) ))) {
-	      clear <- FALSE
-	      break
-	    }
-	  if (!clear) break
-	}
-	if (clear) {  # Found a segment that doesn't intersect anything, so join the two polys
-	  i <- pairs[p,1]
-	  j <- pairs[p,2]
-	  ind <- c(fwd1[seq_len(i)], rev1[j:length(rev1)], rev1[seq_len(j)])
-	  if (i < length(fwd1))
-	    ind <- c(ind, fwd1[i:length(fwd1)])
-	  verts[[fwd]] <<- fwd1 <- ind
-	  verts[[rev]] <<- integer(0)
-	  done <- TRUE
-	  break
-	}
-      }
-      if (!done)
-        stop("Cannot simplify polygon")
-    }
-    ind <- verts[[fwd]]
-    tri <- triangulateSimple(x[ind], y[ind], random, plot, partial=FALSE)
-    if (is.null(tri)) 
-      stop("Cannot triangulate polygon")
-    # Convert back to original numbering
-    dim <- dim(tri)
-    tri <- ind[tri]
-    dim(tri) <- dim
-    # Put in place as triangulation of the forward poly
-    subtri[[fwd]] <<- tri
+    result <- matrix(NA, ncol = 0, nrow = 3)
+    for (i in nesting$nesting[[fwd]])
+      result <- cbind(result, processInside(i))
+    
+    result
   }
-  
-  subtri <- list()
-  for (i in nesting$toplevel)
-    processOutside(i)
   
   # Done all polys, now combine
   res <- matrix(nrow=3, ncol=0)
-  for (i in seq_along(subtri))
-    res <- cbind(res, subtri[[i]])
+  for (i in nesting$toplevel)
+    res <- cbind(res, processInside(i))
+  
+  # Get vertex order
+  nextvert <- rep(NA, length(x))
+  for (i in seq_along(verts)) {
+    poly <- verts[[i]]
+    first <- poly[1]
+    second <- poly[2]
+
+    # Find first triangle holding first 
+    # and second
+    tri <- intersect(col(res)[res == first],
+                     col(res)[res == second])
+    if (!length(tri))
+      warning("edge not found:", first, " ", second)
+    else {
+      tri <- tri[1]
+      counter <- (which(res[,tri] == first) - which(res[,tri] == second) + 3) %% 3 == 2
+      if (counter) {
+        nextvert[poly[-length(poly)]] <- poly[-1]
+        nextvert[poly[length(poly)]] <- poly[1]
+      } else {
+        nextvert[poly[-1]] <- poly[-length(poly)]
+        nextvert[poly[1]] <- poly[length(poly)]
+      }
+    }
+  }
+  if (plot) {
+    for (i in seq_len(ncol(res)))
+      polygon(x[res[,i]], y[res[,i]], col = i)
+  }
   attr(res, "nextvert") <- nextvert
   res
 }
@@ -203,10 +123,7 @@ nestPolys <- function(x,y = NULL) {
   prev <- 0L
   verts <- list()
   for (i in seq_along(nas)) {
-    verts[[i]] <- ind <- (prev + 1L):(nas[i] - 1L)
-    tri <- triangulateSimple(x[ind], y[ind], random=TRUE, plot=FALSE, partial=FALSE)
-    if (is.null(tri))
-      verts[[i]] <- rev(verts[[i]])
+    verts[[i]] <- (prev + 1L):(nas[i] - 1L)
     prev <- nas[i]
   }
   # nesting is a list of vectors
@@ -219,16 +136,16 @@ nestPolys <- function(x,y = NULL) {
     contains <- integer()
     if (length(nesting[[toplevel]])) {
       newverts <- rbind(x[verts[[new]]], y[verts[[new]]])
-    
+      
       for (j in nesting[[toplevel]]) {
         prev <- rbind(x[verts[[j]]], y[verts[[j]]])    
         if (pointInPoly(prev, newverts[,1])) {
-	  place(new, j)
-	  placed <- TRUE
-	  break
+          place(new, j)
+          placed <- TRUE
+          break
         }
         if (pointInPoly(newverts, prev[,1]))
-	  contains <- c(contains, j)
+          contains <- c(contains, j)
       }
     }
     if (!placed) {
@@ -236,7 +153,7 @@ nestPolys <- function(x,y = NULL) {
       nesting[[new]] <<- contains
     }
   }
-    
+  
   for (i in seq_along(verts)) {
     place(i, length(verts)+1)
   }
@@ -244,13 +161,12 @@ nestPolys <- function(x,y = NULL) {
   list(verts=verts, nesting=nesting[-length(nesting)], 
        toplevel=nesting[length(nesting)])
 } 
-      
-      
+
 extrude3d <- function(x,y = NULL, thickness=1, smooth=FALSE, ...) {
   xy <- xy.coords(x, y)
   x <- xy$x
   y <- xy$y
-  it <- triangulate(x, y, partial=FALSE)
+  it <- triangulate(x, y)
   nextvert <- attr(it, "nextvert")
   n <- length(x)
   res <- tmesh3d(rbind(c(x,x), c(y,y), c(rep(thickness,n), rep(0,n)), 1),
@@ -297,12 +213,12 @@ polygon3d <- function(x, y = NULL, z = NULL, fill = TRUE, plot = TRUE,
       res
   } else {
     if (missing(coords)) 
-      tri <- triangulate(xyz, random = random)
+      tri <- triangulate(xyz)
     else {
       cnames <- c("x", "y", "z")
       x <- xyz[[cnames[coords[1]]]]
       y <- xyz[[cnames[coords[2]]]]
-      tri <- triangulate(x, y, random = random)
+      tri <- triangulate(x, y)
     }
     shape <- tmesh3d(rbind(xyz$x, xyz$y, xyz$z, 1), indices = tri)
     if (plot)
