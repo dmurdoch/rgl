@@ -1,7 +1,7 @@
 #include "R.h"
 #include <Rinternals.h>
+#include <array>
 #include "api.h"
-
 #include "earcut.h"
 
 // The number type to use for tessellation
