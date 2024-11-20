@@ -123,6 +123,23 @@ the minified file will be used in the dependency object,
 hints won't be given, and syntax errors will lead to an
 uninformative failure to minify.</p>
     </div>
+    <div id="note">
+    <h2>Note</h2>
+    <p>The usual way to use <code>makeDependency</code> is
+to call it in a <code class="file">.R</code> file in a package, saving
+the result in a variable that will be used when an
+HTML widget is created.  This way it is only run
+during package installation, when it is safe to
+write to the R library holding the package.</p>
+<p>Do not call it to write to the R library from
+code the user can run, as that is not allowed in
+general.</p>
+<p>If your package uses Roxygen, you may have problems
+because by default Roxygen will run the code, and it
+is likely to fail.  The current workaround is to
+specify Roxygen option <code>load = "installed"</code>
+which prevents it from running your <code class="file">.R</code> code.</p>
+    </div>
     <div id="value">
     <h2>Value</h2>
     <p>An object that can be included in a list of dependencies passed to <code>htmltools::<a href="https://rstudio.github.io/htmltools/reference/htmlDependencies.html" class="external-link">attachDependencies</a></code>.</p>
