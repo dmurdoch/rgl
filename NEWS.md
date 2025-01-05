@@ -1,4 +1,4 @@
-# rgl 1.3.15
+# rgl 1.3.16
 
 ## Bug fixes
 
@@ -6,6 +6,10 @@
 from https://github.com/mapbox/earcut.hpp, which
 should be faster and more reliable than the 
 previous R implementation.
+* In cases where the X11 server did not provide sufficient
+support, `rgl.init()` could sometimes segfault.  That has
+been fixed, and warning messages have been made more 
+informative.
 
 # rgl 1.3.14
 
