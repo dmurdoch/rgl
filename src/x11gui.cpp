@@ -796,7 +796,37 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   
   flushX();
   
-  if (error_code) impl = NULL;
+  if (error_code) {
+    switch (error_code) {
+    case RGL_ERROR_CODE + 1: 
+      Rf_warning("no conforming visual");
+      break;
+    case RGL_ERROR_CODE + 2:
+      Rf_warning("no root window");
+      break;
+    case RGL_ERROR_CODE + 3:
+      Rf_warning("XCreateColormap failed");
+      break;
+    case RGL_ERROR_CODE + 4:
+      Rf_warning("XCreateWindow failed");
+      break; 
+    case RGL_ERROR_CODE + 5:
+      Rf_warning("XAllocClassHint failed");
+      break;
+    case RGL_ERROR_CODE + 6:
+      Rf_warning("X11WindowImpl failed");
+      break;
+    default: 
+      if (error_code > RGL_ERROR_CODE)
+        Rf_warning("rgl error %d", error_code - RGL_ERROR_CODE);
+      else {
+        char error_text[1024];
+        XGetErrorText(xdisplay, error_code, error_text, sizeof(error_text));
+        Rf_warning("X11 error: %s",error_text);
+      }
+    }
+    impl = NULL;
+  }
   
   // register instance
   if (xwindow)

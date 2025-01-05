@@ -118,12 +118,12 @@
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
-    warning("'rgl.init' failed, running with 'rgl.useNULL = TRUE'.", call. = FALSE)
-    options(rgl.useNULL = TRUE)
+    warning("'rgl.init' failed, will use the null device.\nSee '?rgl.useNULL' for ways to avoid this warning.", call. = FALSE)
+    onlyNULL <- TRUE
     rgl.init(initValue, TRUE)	
   }
 
-  if (!rgl.useNULL()) 
+  if (!rgl.useNULL() && !onlyNULL) 
     setGraphicsDelay(unixos = unixos)
   
   # Are we running in reprex::reprex?  If so, do
