@@ -1,6 +1,7 @@
-# 1.3.14
+# 1.3.16
 
-This small release fixes a memory leak that was
-introduced in the last release.
+This small release fixes a segfault when running under Xvfb on
+MacOS, and improves some triangulation code.
 
-Other minor changes are described in the NEWS.
+I think the segfault is probably not the one BDR has been seeing
+in his MacOS runs, but it might be.
