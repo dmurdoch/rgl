@@ -4962,7 +4962,7 @@ printf "%s\n" "no" >&6; }
 fi
 
 
-    if test "x$HAVE_PKG_CONFIG" = "xyes" -a "x`pkg-config freetype2 --cflags`" != "x"; then
+    if test "x$HAVE_PKG_CONFIG" = "xyes" && test "x`pkg-config freetype2 --cflags`" != "x"; then
       CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
       LIBS="${LIBS} `pkg-config freetype2 --static --libs`"
       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: using Freetype and FTGL" >&5

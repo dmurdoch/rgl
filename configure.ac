@@ -197,7 +197,7 @@ if test "x$enable_opengl" != "xno"; then
     fi
     ## new pkg-config bit
     AC_CHECK_PROG([HAVE_PKG_CONFIG],[pkg-config],[yes],[no])
-    if test "x$HAVE_PKG_CONFIG" = "xyes" -a "x`pkg-config freetype2 --cflags`" != "x"; then
+    if test "x$HAVE_PKG_CONFIG" = "xyes" && test "x`pkg-config freetype2 --cflags`" != "x"; then
       CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
       LIBS="${LIBS} `pkg-config freetype2 --static --libs`"
       AC_MSG_NOTICE([using Freetype and FTGL])
