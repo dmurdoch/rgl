@@ -1,7 +1,6 @@
-# 1.3.16
+# 1.3.17
 
-This small release fixes a segfault when running under Xvfb on
-MacOS, and improves some triangulation code.
-
-I think the segfault is probably not the one BDR has been seeing
-in his MacOS runs, but it might be.
+Unfortunately the recent 1.3.16 release introduced a new bug
+which caused segfaults for users who didn't have DISPLAY
+set properly.  This version should fix the new issue while
+keeping the 1.3.16 fix.

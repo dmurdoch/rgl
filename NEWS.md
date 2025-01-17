@@ -1,3 +1,11 @@
+# rgl 1.3.17
+
+## Bug fix
+
+* The previous fix for `rgl.init()` introduced a new possible
+segfault for users who had DISPLAY unset or set to a non-existent
+server.  
+
 # rgl 1.3.16
 
 ## Bug fixes
