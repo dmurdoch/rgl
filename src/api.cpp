@@ -1034,6 +1034,7 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
     strncpy(in_tag, cdata[0], len_tag);
     in_tag[len_tag] = '\0';
     mat.tag = std::string(in_tag);
+    delete[] in_tag;
   } else
     mat.tag = std::string();
   
