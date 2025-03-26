@@ -8,11 +8,11 @@ output:
   rmarkdown::html_vignette:
     fig_height: 5
     fig_width: 5
-    toc: yes
+    toc: true
   pdf_document:
     fig_height: 5
     fig_width: 5
-    toc: yes
+    toc: true
   html_document:
     default
 vignette: >
