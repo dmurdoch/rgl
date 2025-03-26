@@ -235,6 +235,9 @@ as.mesh3d.tri <- function(x, z, col = "gray",
   result  
 }
 
+# NO OP (issue #454)
+as.mesh3d.mesh3d <- function(x, ...) x
+
 # rendering support
 
 dot3d.mesh3d <- function(x, ..., front = "points", back = "points") {
