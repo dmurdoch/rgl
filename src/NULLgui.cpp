@@ -30,7 +30,7 @@ public:
   void hide() {};
   void bringToTop(int stay) {};
   void update() { if (window && !window->skipRedraw) window->paint(); };
-  void destroy() { if (window) window->notifyDestroy(); };
+  void destroy() { delete this; }
   void captureMouse(View* pView) {};
   void releaseMouse() {};
   void watchMouse(bool withoutButton) {};
