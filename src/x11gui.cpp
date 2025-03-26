@@ -629,7 +629,7 @@ void X11GUIFactory::processEvents()
   } 
 }
 // ---------------------------------------------------------------------------
-WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
+WindowImpl* X11GUIFactory::createWindowImpl(Window* window, int antialias)
 {
   X11WindowImpl* impl = NULL;
   XVisualInfo* xvisualinfo;
@@ -651,17 +651,14 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   };
 
 #ifdef GLX_SAMPLE_BUFFERS
-  // Setup antialiasing based on "rgl.antialias" option
-  int aa;
-  SEXP rgl_aa = Rf_GetOption(Rf_install("rgl.antialias"),R_BaseEnv);
-  if (Rf_isNull(rgl_aa)) aa = RGL_ANTIALIAS;
-  else aa = Rf_asInteger(rgl_aa);
+  // Setup antialiasing 
+  if (antialias == -1) antialias = RGL_ANTIALIAS;
   
-  if(aa > 0) {
+  if(antialias > 0) {
     attribList[12] = GLX_SAMPLE_BUFFERS;
     attribList[13] = 1;
     attribList[14] = GLX_SAMPLES;
-    attribList[15] = aa;
+    attribList[15] = antialias;
   }
 #endif
   
@@ -679,7 +676,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
 #ifdef GLX_SAMPLE_BUFFERS
   // Try to set up visual without MSAA if it failed
-  if (xvisualinfo == 0 && aa > 0 && !error_code) {
+  if (xvisualinfo == 0 && antialias > 0 && !error_code) {
     attribList[12] = None;
     xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
   }

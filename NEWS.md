@@ -1,3 +1,7 @@
+# rgl 1.3.18
+
+* Internal code changes to satisfy `R CMD check` requirements.
+
 # rgl 1.3.17
 
 ## Bug fix

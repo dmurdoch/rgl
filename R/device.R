@@ -30,7 +30,8 @@ rgl.open <- function(useNULL = rgl.useNULL()) {
 
   .Deprecated("open3d")
   
-  ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL )
+  ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL,
+             antialias = as.integer(getOption("rgl.antialias", -1L)))
 
   if (! ret$success)
     stop("'rgl.open' failed")

@@ -9,11 +9,11 @@
 using namespace rgl;
 
 // ---------------------------------------------------------------------------
-Device::Device(int id, bool useNULL) : id_(id)
+Device::Device(int id, bool useNULL, int antialias) : id_(id)
 {
   scene   = new Scene();
   rglview = new RGLView(scene);
-  window  = new Window( rglview, getGUIFactory(useNULL) );
+  window  = new Window( rglview, getGUIFactory(useNULL), antialias );
   if (window && !window->windowImpl) {
     delete window;
     window = NULL;

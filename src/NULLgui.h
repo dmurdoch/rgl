@@ -11,7 +11,7 @@ class NULLGUIFactory : public GUIFactory
 public:
   NULLGUIFactory();
   virtual ~NULLGUIFactory();
-  WindowImpl* createWindowImpl(Window* window);
+  WindowImpl* createWindowImpl(Window* window, int antialias);
 };
 // ---------------------------------------------------------------------------
 

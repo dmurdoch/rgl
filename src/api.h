@@ -35,7 +35,7 @@ void rgl_quit          (int* successptr);
 
 /* device management */
 
-void rgl_dev_open      (int* successptr, int* useNULL);
+void rgl_dev_open      (int* successptr, int* useNULL, int* antialias);
 void rgl_dev_close      (int* successptr);
 SEXP rgl_dev_getcurrent(void);
 SEXP rgl_dev_list        (void);

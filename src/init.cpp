@@ -120,7 +120,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   R_NativePrimitiveArgType aIID[3] = {INTSXP, INTSXP, REALSXP};
   R_NativePrimitiveArgType aLII[3] = {LGLSXP, INTSXP, INTSXP}; 
   R_NativePrimitiveArgType aLIS[3] = {LGLSXP, INTSXP, STRSXP}; 
-  R_NativePrimitiveArgType aLID[3] = {LGLSXP, INTSXP, REALSXP}; 
+  R_NativePrimitiveArgType aLID[3] = {LGLSXP, INTSXP, REALSXP};
+  R_NativePrimitiveArgType aLLI[3] = {LGLSXP, LGLSXP, INTSXP};
   R_NativePrimitiveArgType aIIDD[4] = {INTSXP, INTSXP, REALSXP, REALSXP}; 
   R_NativePrimitiveArgType aLISD[4] = {LGLSXP, INTSXP, STRSXP, REALSXP}; 
   R_NativePrimitiveArgType aIISI[4] = {INTSXP, INTSXP, STRSXP, INTSXP};
@@ -145,7 +146,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
                                              REALSXP, REALSXP, REALSXP, REALSXP, INTSXP, INTSXP, INTSXP}; 
 
  static const R_CMethodDef CEntries[] = { 
-   {"rgl_dev_open", 		(DL_FUNC) &rgl_dev_open, 2, aLL},
+   {"rgl_dev_open", 		(DL_FUNC) &rgl_dev_open, 3, aLLI},
    {"rgl_dev_close", 		(DL_FUNC) &rgl_dev_close, 1, aL},
    {"rgl_dev_setcurrent", 	(DL_FUNC) &rgl_dev_setcurrent, 2, aLI},
    {"rgl_snapshot", 		(DL_FUNC) &rgl_snapshot, 3, aLIS},
@@ -197,7 +198,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
 #else  // don't CHECK_ARGS
 
  static const R_CMethodDef CEntries[] = { 
-   FUNDEF(rgl_dev_open, 2),
+   FUNDEF(rgl_dev_open, 3),
    FUNDEF(rgl_dev_close, 1),
    FUNDEF(rgl_dev_setcurrent, 2),
    FUNDEF(rgl_snapshot, 3),

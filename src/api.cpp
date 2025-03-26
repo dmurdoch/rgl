@@ -60,9 +60,9 @@ void rgl::rgl_quit(int* successptr)
 //   rgl::rgl_dev_open
 //
 
-void rgl::rgl_dev_open(int* successptr, int* useNULL)
+void rgl::rgl_dev_open(int* successptr, int* useNULL, int* antialias)
 {
-  *successptr = as_success( deviceManager && deviceManager->openDevice(*useNULL) );
+  *successptr = as_success( deviceManager && deviceManager->openDevice(*useNULL, *antialias) );
   CHECKGLERROR;
 }
 

@@ -24,7 +24,7 @@ class X11GUIFactory : public GUIFactory
 public:
   X11GUIFactory (const char* displayname);
   virtual ~X11GUIFactory ();
-  WindowImpl* createWindowImpl(Window* window);
+  WindowImpl* createWindowImpl(Window* window, int antialias);
   inline bool isConnected() { return (xdisplay) ? true : false; }
   inline int  getFD()     { return ConnectionNumber(xdisplay); }
   

@@ -939,14 +939,17 @@ open3d <- function(..., params = getr3dDefaults(),
       silent <- params$silent
       params$silent <- NULL
     }
+    antialias <- -1L
     if (!is.null(args$antialias) 
         || !is.null(args$antialias <- r3dDefaults$antialias)) {
     	saveopt <- options(rgl.antialias = args$antialias)
+    	antialias <- args$antialias
     	on.exit(options(saveopt))
     	args$antialias <- NULL
     }
     
-    ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL )
+    ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL,
+               antialias = as.integer(antialias))
     
     if (! ret$success)
       stop("open failed") 

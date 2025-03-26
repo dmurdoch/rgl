@@ -122,7 +122,7 @@ public:
   void endGL();
   void swap();
 private:
-  bool initGL();
+  bool initGL(int antialias);
   void shutdownGL();
   GLBitmapFont* initGLBitmapFont(u8 firstGlyph, u8 lastGlyph);
   HDC   dcHandle;               // temporary variable setup by lock
@@ -301,20 +301,17 @@ void Win32WindowImpl::releaseMouse(void)
   ReleaseCapture();
 }
 
-bool Win32WindowImpl::initGL () {
+bool Win32WindowImpl::initGL (int antialias) {
   bool success = false;
   // obtain a device context for the window
   dcHandle = GetDC(windowHandle);
   if (dcHandle) {
     int  iPixelFormat;
 #ifdef WGL_ARB_pixel_format
-    // Setup antialiasing based on "rgl.antialias" option
-    int aa;
-    SEXP rgl_aa = Rf_GetOption(Rf_install("rgl.antialias"),R_BaseEnv);
-    if (Rf_isNull(rgl_aa)) aa = RGL_ANTIALIAS;
-    else aa = Rf_asInteger(rgl_aa);
+    // Setup antialiasing
+    if (antialias == -1) antialias = RGL_ANTIALIAS;
     
-    if (aa > 0) {
+    if (antialias > 0) {
       float fAttributes[] = { 0, 0 };
       int iAttributes[] = {
         WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
@@ -326,7 +323,7 @@ bool Win32WindowImpl::initGL () {
         WGL_STENCIL_BITS_ARB,   0,
         WGL_DOUBLE_BUFFER_ARB,  GL_TRUE,
         WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
-        WGL_SAMPLES_ARB,        aa,
+        WGL_SAMPLES_ARB,        antialias,
         0, 0 };
       UINT numFormats = 0;
       if (!wglChoosePixelFormatARB || !wglChoosePixelFormatARB(dcHandle, iAttributes, fAttributes, 1, &iPixelFormat, &numFormats) || numFormats < 1) {
@@ -518,7 +515,7 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
   switch(message) {
     case WM_CREATE:
       windowHandle = hwnd;
-      initGL();
+      initGL(antialias);
       fonts[0] = initGLBitmapFont(GL_BITMAP_FONT_FIRST_GLYPH, GL_BITMAP_FONT_LAST_GLYPH);
       if (gHandle) {
         refreshMenu = true;
@@ -738,7 +735,7 @@ Win32GUIFactory::~Win32GUIFactory() {
 }
 // ---------------------------------------------------------------------------
 
-WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
+WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window, int antialias)
 {
   Win32WindowImpl* impl = new Win32WindowImpl(in_window);
 #if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)

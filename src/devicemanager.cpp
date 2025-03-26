@@ -32,9 +32,9 @@ DeviceManager::~DeviceManager()
   }
 }
 
-bool DeviceManager::openDevice(bool useNULL) 
+bool DeviceManager::openDevice(bool useNULL, int antialias) 
 {
-  Device* pDevice = new Device(newID, useNULL);  
+  Device* pDevice = new Device(newID, useNULL, antialias);  
   if ( pDevice->open() ) {
     ++newID;
     pDevice->addDisposeListener(this);
@@ -59,7 +59,7 @@ Device* DeviceManager::getAnyDevice()
 {
   Device* pDevice = getCurrentDevice();
   if (pDevice == NULL) {
-    if (openDevice(useNULLDevice))
+    if (openDevice(useNULLDevice, RGL_ANTIALIAS))
       pDevice = getCurrentDevice();
   }
   return pDevice;
@@ -164,7 +164,7 @@ void DeviceManager::previousDevice()
 bool DeviceManager::createTestWindow()
 {
   bool result = false;
-  Device* pDevice = new Device(newID, false);  
+  Device* pDevice = new Device(newID, false, RGL_ANTIALIAS);  
   if ( pDevice ) {
     if ( pDevice->hasWindow() )
       result = true;

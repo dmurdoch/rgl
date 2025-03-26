@@ -20,7 +20,7 @@ class DeviceManager : protected IDisposeListener {
 public:
   DeviceManager(bool in_useNULLDevice);	
   virtual ~DeviceManager();
-  bool    openDevice(bool useNULL);
+  bool    openDevice(bool useNULL, int antialias);
   Device* getCurrentDevice(void);
   Device* getAnyDevice(void);
   Device* getDevice(int id);

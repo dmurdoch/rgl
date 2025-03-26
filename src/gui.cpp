@@ -149,7 +149,7 @@ void View::captureLost()
 // ---------------------------------------------------------------------------
 // Window Implementation
 // ---------------------------------------------------------------------------
-Window::Window(View* in_child, GUIFactory* factory)
+Window::Window(View* in_child, GUIFactory* factory, int antialias)
 : View(0,0,in_child->width, in_child->height,WINDOW_IMPL_OWNER)
 , child(in_child)
 , title("untitled")
@@ -159,7 +159,7 @@ Window::Window(View* in_child, GUIFactory* factory)
   if (!factory){
     return;
   }
-  windowImpl = factory->createWindowImpl(this);
+  windowImpl = factory->createWindowImpl(this, antialias);
   if (!windowImpl) {
     return;
   } 
