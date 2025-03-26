@@ -7,7 +7,7 @@ output:
     options:
       toc: true
   rmarkdown::html_vignette:
-    toc: yes
+    toc: true
     fig_width: 5
     fig_height: 5
 vignette: >
