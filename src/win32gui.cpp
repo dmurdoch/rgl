@@ -83,7 +83,7 @@ static int translate_key(int wParam)
 class Win32WindowImpl : public WindowImpl
 { 
 public:
-  Win32WindowImpl(Window* in_window);
+  Win32WindowImpl(Window* in_window, int in_antialias);
   ~Win32WindowImpl();
   void setTitle(const char* title);
   void setWindowRect(int left, int top, int right, int bottom);
@@ -116,6 +116,7 @@ private:
   PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;
 #endif
   friend class Win32GUIFactory;
+  int   antialias;
 
 public:
   bool beginGL();
@@ -135,8 +136,8 @@ using namespace rgl;
 // ----------------------------------------------------------------------------
 // constructor
 // ----------------------------------------------------------------------------
-Win32WindowImpl::Win32WindowImpl(Window* in_window)
-: WindowImpl(in_window)
+Win32WindowImpl::Win32WindowImpl(Window* in_window, int in_antialias)
+: WindowImpl(in_window), antialias(in_antialias)
 {
   windowHandle = NULL;
   captureView = NULL;
