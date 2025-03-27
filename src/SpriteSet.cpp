@@ -360,7 +360,7 @@ void SpriteSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, in
         return;
       case SHAPENUM:
         ind = 1;
-        for (int i = 0; i < shapelens.size(); i++) {
+        for (unsigned int i = 0; i < shapelens.size(); i++) {
           res++;
           for (int j = 0; j < shapelens.at(i); j++, ind++) {
             if (first < ind && ind <= n)

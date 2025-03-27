@@ -54,7 +54,7 @@ SEXP rgl::rgl_earcut(SEXP x, SEXP y) {
   
   SEXP value;
   PROTECT(value = Rf_allocVector(INTSXP, indices.size()));
-  for (int i = 0; i < indices.size(); i++)
+  for (unsigned int i = 0; i < indices.size(); i++)
     INTEGER(value)[i] = orig[indices[i]];
   
   UNPROTECT(3);
