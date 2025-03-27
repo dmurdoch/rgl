@@ -738,7 +738,7 @@ Win32GUIFactory::~Win32GUIFactory() {
 
 WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window, int antialias)
 {
-  Win32WindowImpl* impl = new Win32WindowImpl(in_window);
+  Win32WindowImpl* impl = new Win32WindowImpl(in_window, antialias);
 #if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
   impl->wglChoosePixelFormatARB = wglChoosePixelFormatARB;
 #endif  
