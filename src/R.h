@@ -14,6 +14,7 @@
 /* Set this to 1 to turn on glGetError testing */
 #define USE_GLGETERROR 0
 
+#define NA_FLOAT static_cast<float>(NA_REAL)
 
 namespace rgl {
 

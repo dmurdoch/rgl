@@ -3611,8 +3611,8 @@ static void gl2psPutPDFTextBL(GL2PSstring *text, int cnt, GLfloat x, GLfloat y,
   else{
     GLfloat a, ca, sa;
     GLfloat pi = 3.141593F;
-    GLfloat i = atan2(y - ybl, x - xbl);
-    GLfloat r = sqrt((y - ybl) * (y - ybl) + (x - xbl) * (x - xbl));
+    GLfloat i = atan2f(y - ybl, x - xbl);
+    GLfloat r = sqrtf((y - ybl) * (y - ybl) + (x - xbl) * (x - xbl));
 
     a = (GLfloat)(pi * text->angle / 180.0F);
     sa = (GLfloat)sin(a);

@@ -29,7 +29,7 @@ public:
   void render(RenderContext* renderContext);
   virtual std::string getTypeName() { return "text"; };
 
-  int getElementCount(void){ return textArray.size(); }
+  int getElementCount(void){ return static_cast<int>(textArray.size()); }
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
   std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index);

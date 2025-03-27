@@ -1,6 +1,5 @@
-# 1.3.17
+# 1.3.18
 
-Unfortunately the recent 1.3.16 release introduced a new bug
-which caused segfaults for users who didn't have DISPLAY
-set properly.  This version should fix the new issue while
-keeping the 1.3.16 fix.
+This is a small release requested by CRAN to fix two issues:
+ - complaint about a define in the FTGL library
+ - complain about using Rf_GetOption.

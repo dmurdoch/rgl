@@ -24,7 +24,7 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
   vertex(in_nvertex, in_vertex),
    size(in_nsize, in_size),
    pos(in_npos, in_pos),
-   offset(in_offset),
+   offset(static_cast<float>(in_offset)),
    fixedSize(in_fixedSize),
    rotating(in_rotating),
    scene(in_scene)
@@ -58,7 +58,9 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
   if (!in_adj)
     adj = Vec3(0.5, 0.5, 0.5);
   else
-    adj = Vec3(in_adj[0], in_adj[1], in_adj[2]);
+    adj = Vec3(static_cast<float>(in_adj[0]), 
+               static_cast<float>(in_adj[1]), 
+               static_cast<float>(in_adj[2]));
 }
 
 SpriteSet::~SpriteSet()
@@ -212,27 +214,27 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
     glBegin(GL_QUADS);
     if (doTex)
       glTexCoord2f(0.0f,0.0f);
-    glVertex3f(s*(0.0 - 2.0*adj.x), 
-               s*(0.0 - 2.0*adj.y), 
-               s*(1.0 - 2.0*adj.z));
+    glVertex3f(s*(0.0f - 2.0f*adj.x), 
+               s*(0.0f - 2.0f*adj.y), 
+               s*(1.0f - 2.0f*adj.z));
  
     if (doTex)
       glTexCoord2f(1.0f,0.0f);
-    glVertex3f(s*(2.0 - 2.0*adj.x), 
-               s*(0.0 - 2.0*adj.y), 
-               s*(1.0 - 2.0*adj.z));
+    glVertex3f(s*(2.0f - 2.0f*adj.x), 
+               s*(0.0f - 2.0f*adj.y), 
+               s*(1.0f - 2.0f*adj.z));
 
     if (doTex)
       glTexCoord2f(1.0f,1.0f);
-    glVertex3f(s*(2.0 - 2.0*adj.x), 
-               s*(2.0 - 2.0*adj.y), 
-               s*(1.0 - 2.0*adj.z));
+    glVertex3f(s*(2.0f - 2.0f*adj.x), 
+               s*(2.0f - 2.0f*adj.y), 
+               s*(1.0f - 2.0f*adj.z));
 
     if (doTex)
       glTexCoord2f(0.0f,1.0f);
-    glVertex3f(s*(0.0 - 2.0*adj.x), 
-               s*(2.0 - 2.0*adj.y), 
-               s*(1.0 - 2.0*adj.z)); 
+    glVertex3f(s*(0.0f - 2.0f*adj.x), 
+               s*(2.0f - 2.0f*adj.y), 
+               s*(1.0f - 2.0f*adj.z)); 
   
     glEnd();
   }

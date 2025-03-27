@@ -843,7 +843,7 @@ void rgl::rgl_getsubscenechildren(int* id, int* children)
     const Subscene* subscene = scene->getSubscene(*id);
     if (subscene) {
       for (size_t i = 0; i < subscene->getChildCount(); i++) {
-        Subscene* child = subscene->getChild(i);
+        Subscene* child = subscene->getChild(static_cast<int>(i));
         children[i] = child ? child->getObjID() : 0;
       }
     }
