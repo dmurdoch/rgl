@@ -1,3 +1,8 @@
+# rgl 1.3.19
+
+* The `shapelist3d()` function did not handle material names
+properly (issue #462).
+
 # rgl 1.3.18
 
 * Internal code changes to satisfy `R CMD check` requirements.
