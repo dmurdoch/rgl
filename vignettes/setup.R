@@ -4,8 +4,10 @@ options(rgl.useNULL=TRUE)
 options(rgl.printRglwidget=FALSE)
 open3d()
 
-if (!requireNamespace("rmarkdown", quietly = TRUE)) {
-  warning(call. = FALSE, "These vignettes assume rmarkdown is installed.  It was not found.")
+if (!requireNamespace("rmarkdown", quietly = TRUE) ||
+    !rmarkdown::pandoc_available("1.14")) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown and Pandoc
+          version 1.14.  These were not found. Older versions will not work.")
   knitr::knit_exit()
 }
 
