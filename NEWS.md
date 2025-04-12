@@ -1,7 +1,10 @@
-# rgl 1.3.19
+# rgl 1.3.20
 
 * The `shapelist3d()` function did not handle material names
 properly (issue #462).
+* The `markdown` package no longer supports `rgl`, so the change
+in `rgl` 1.3.1 to use it has been reverted.  This means Pandoc
+is once again necessary to build the vignettes.
 
 # rgl 1.3.18
 

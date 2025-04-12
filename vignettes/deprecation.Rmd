@@ -3,9 +3,6 @@ title: "Deprecating the `rgl.*` interface"
 author: "Duncan Murdoch"
 date: "`r Sys.Date()`"
 output: 
-  markdown::html_format:
-    options:
-      toc: true
   rmarkdown::html_vignette:
     toc: true
 vignette: >
