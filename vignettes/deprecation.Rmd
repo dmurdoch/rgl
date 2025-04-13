@@ -7,7 +7,7 @@ output:
     toc: true
 vignette: >
   %\VignetteIndexEntry{Deprecating the `rgl.*` interface}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 

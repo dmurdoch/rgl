@@ -9,7 +9,7 @@ output:
     fig_height: 5
 vignette: >
   %\VignetteIndexEntry{User Interaction in WebGL (updated)} 
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{crosstalk}
 ---
 
