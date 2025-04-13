@@ -1,4 +1,4 @@
-# rgl 1.3.20
+# rgl 1.3.21
 
 * The `shapelist3d()` function did not handle material names
 properly (issue #462).

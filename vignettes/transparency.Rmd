@@ -15,7 +15,7 @@ output:
     default
 vignette: >
   %\VignetteIndexEntry{A Note on Transparency}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r setup, include=FALSE}
