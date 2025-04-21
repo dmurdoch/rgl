@@ -178,6 +178,9 @@ fns <- local({
                          rgl.newwindow = autoprint,
                          rgl.closewindows = autoprint) {
     
+    if (!in_knitr() && isNamespaceLoaded("litedown"))
+      return(setupLitedown(autoprint))
+    
     # R produces multiple vignettes in the same session.
     # Watch out for leftovers
     
@@ -289,7 +292,13 @@ figWidth <- function() {
     return(pkgdown_dims()$width)
   else if (in_knitr())
     opts <- opts_current$get(c("fig.width", "dpi", "fig.retina"))
-  else
+  else if (in_litedown()) {
+    opts <- as.list(litedown::reactor(c("fig.width", "dpi", "fig.retina")))
+    if (is.null(opts$dpi))
+      opts$dpi <- 84
+    if (is.null(opts$fig.retina))
+      opts$fig.retina <- 1
+  } else
     opts <- NULL
   if (length(opts)) {
     result <- with(opts, fig.width*dpi/fig.retina)
@@ -302,7 +311,13 @@ figHeight <- function() {
     return(pkgdown_dims()$height)
   else if (in_knitr())
     opts <- opts_current$get(c("fig.height", "dpi", "fig.retina"))
-  else
+  else if (in_litedown()) {
+    opts <- as.list(litedown::reactor(c("fig.height", "dpi", "fig.retina")))
+    if (is.null(opts$dpi))
+      opts$dpi <- 84
+    if (is.null(opts$fig.retina))
+      opts$fig.retina <- 1
+  } else
     opts <- NULL
   if (length(opts)) {
     result <- with(opts, fig.height*dpi/fig.retina)
