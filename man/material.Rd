@@ -276,8 +276,8 @@ Other aspects of texture display are controlled by the material
 properties \code{textype, texmode, texmipmap, texmagfilter,
 texminfilter} and \code{texenvmap} described above.
 
-For an extensive discussion of textures, see the \href{../articles/rgl.html#textures}{Textures} section of the 
-\href{../articles/rgl.html}{rgl Overview}
+For an extensive discussion of textures, see the \href{https://dmurdoch.github.io/rgl/articles/rgl.html#textures}{Textures} section of the 
+\href{https://dmurdoch.github.io/rgl/articles/rgl.html}{rgl Overview}
 vignette.
 }
 \section{Display of objects}{
