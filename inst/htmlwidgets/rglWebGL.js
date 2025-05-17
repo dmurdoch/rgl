@@ -3,6 +3,49 @@
    x is the JSON encoded rglwidget.
 */
 
+function removeHiddenOutput(rglDiv) {
+
+  if (rglDiv) {
+    // Step 1: Remove associated aria label if it exists
+    const ariaId = rglDiv.getAttribute("aria-labelledby");
+    if (ariaId) {
+      const ariaElement = document.getElementById(ariaId);
+      if (ariaElement) {
+        ariaElement.remove();
+      }
+    }
+
+    // Step 2: Find the previous and next <code class="language-r"> blocks
+    const prevCode = findAdjacentCodeBlock(rglDiv, -1);
+    const nextCode = findAdjacentCodeBlock(rglDiv, 1);
+
+    // Step 3: Merge if both exist
+    if (prevCode && nextCode) {
+      const mergedText = [prevCode.textContent.trim(), nextCode.textContent.trim()].join('\n');
+      prevCode.textContent = mergedText;
+
+      // Remove the next code block and its <pre> wrapper
+      nextCode.parentElement.remove();
+    }
+
+    // Step 4: Remove the rgl widget div itself
+    rglDiv.remove();
+  }
+}
+
+// Helper: Find nearest sibling <code class="language-r"> inside a <pre>
+function findAdjacentCodeBlock(startNode, direction) {
+  let current = startNode;
+  while ((current = direction === -1 ? current.previousSibling : current.nextSibling)) {
+    if (current.nodeType === Node.ELEMENT_NODE &&
+        current.tagName === "PRE" &&
+        current.firstElementChild?.tagName === "CODE" &&
+        current.firstElementChild.classList.contains("language-r")) {
+      return current.firstElementChild;
+    }
+  }
+  return null;
+}
 
 HTMLWidgets.widget({
 
@@ -27,7 +70,17 @@ HTMLWidgets.widget({
       renderValue: function(x) {
         var i, pel, player, groups,
             inShiny = (typeof Shiny !== "undefined");
-      
+            
+        if (x.length === 0) {
+          // In litedown, we may have a div which we don't want
+          // to display.  We signal this by setting the x entry
+          // in its data to [].  This code removes the div and
+          // related items.  We first set it to display "none" in case 
+          // the removal fails.
+          el.style.display = "none";
+          removeHiddenOutput(el);
+          return;
+        }
         x.crosstalk.group = groups = [].concat(x.crosstalk.group);
         x.crosstalk.id = [].concat(x.crosstalk.id);
         x.crosstalk.key = [].concat(x.crosstalk.key);

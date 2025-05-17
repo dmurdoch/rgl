@@ -3,21 +3,26 @@
 \alias{hook_webgl}
 \alias{hook_rglchunk}
 \alias{setupKnitr}
+\alias{setupLitedown}
 \title{
-Displaying RGL scenes in \pkg{knitr} documents
+Displaying RGL scenes in \pkg{knitr} or \pkg{liteDown} documents
 }
 \description{
 These functions allow RGL graphics to be embedded in \pkg{knitr}
-documents.
+and \pkg{litedown} documents.
 
 The simplest method is to run \code{setupKnitr(autoprint = TRUE)}
+or \code{setupLitedown(autoprint = TRUE)}
 early in the document.  That way RGL commands act a lot
 like base graphics commands:  plots will be automatically inserted
-where appropriate, according to the \code{fig.keep} chunk option.
+where appropriate.  In \pkg{knitr}, this is according to the 
+\code{fig.keep} chunk option.
 By default (\code{fig.keep = "high"}), only high-level plots
 are kept, after low-level changes have been merged into them.
 See the \pkg{knitr} documentation 
 \url{https://yihui.org/knitr/options/#plots} for more details.
+In \pkg{litedown}, \code{fig.keep} is ignored and behaviour
+always follows the \code{fig.keep = "high"} rules.
 To suppress auto-printing, the RGL calls
 can be wrapped in \code{\link{invisible}()}.  
 Similarly to \pkg{grid} graphics (used by \pkg{lattice}
@@ -28,7 +33,8 @@ packages, auto-printing is the only way to get this to
 work:  calling \code{\link{print}} explicitly doesn't
 work.
 
-Other functions allow embedding either as bitmaps (\code{hook_rgl} with format \code{"png"}),
+In \pkg{knitr} (but not \pkg{litedown}),
+other functions allow embedding either as bitmaps (\code{hook_rgl} with format \code{"png"}),
 fixed vector graphics (\code{hook_rgl} with format \code{"eps"}, \code{"pdf"} or
 \code{"postscript"}), or interactive WebGL graphics (\code{hook_webgl}).  \code{hook_rglchunk} is not normally invoked by the 
 user; it is the hook that supports automatic creation and 
@@ -53,6 +59,7 @@ in a code chunk if the example prints RGL objects.
 setupKnitr(autoprint = FALSE,
            rgl.newwindow = autoprint,
            rgl.closewindows = autoprint)
+setupLitedown(autoprint = FALSE)
 hook_rgl(before, options, envir)
 hook_webgl(before, options, envir)
 hook_rglchunk(before, options, envir)
@@ -72,6 +79,10 @@ The \code{setupKnitr()} function needs to be called once
 at the start of the document to install the \pkg{knitr} hooks.
 If it is called twice in the same session the second call 
 will override the first.
+
+If \code{setupKnitr()} is called in a \pkg{litedown} document,
+it will pass \code{autoprint} to \code{setupLitedown()}.  The reverse
+is not true.
 
 The following chunk options are supported:
 \itemize{
@@ -109,6 +120,9 @@ to successive plots within the chunk.
 (This is due to a limitation in \pkg{knitr}, and may
 change in the future.)
 }
+In \pkg{litedown}, only \code{dpi}, \code{fig.align}, 
+\code{fig.retina}, \code{fig.width}, \code{fig.height} and 
+\code{rgl.margin} are respected.
 }
 \value{
 A string to be embedded into the output, or \code{NULL} if called
