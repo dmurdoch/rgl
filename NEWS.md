@@ -6,7 +6,8 @@ properly (issue #462).
 in `rgl` 1.3.1 to use it has been reverted.  This means Pandoc
 is once again necessary to build the vignettes.
 * Links from help pages to vignettes have been repaired
-and added.
+and added, using new `\HTMLVignette{}{}{}` and
+`\HTMLVignetteCRAN{}{}{}{}` macros.
 
 # rgl 1.3.18
 

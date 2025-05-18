@@ -59,7 +59,7 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{toggleButton}} for the older style
-of HTML control.  The \HTMLVignette{rgl}{WebGL}{}{User Interaction in WebGL} vignette
+of HTML control.  The \HTMLVignette{WebGL}{}{User Interaction in WebGL} vignette
 gives more details.
 }
 \examples{
