@@ -1,5 +1,5 @@
 ---
-title: "User Interaction in WebGL (updated)"
+title: "User Interaction in WebGL"
 author: "Duncan Murdoch"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:

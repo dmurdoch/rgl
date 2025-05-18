@@ -57,7 +57,8 @@ Duncan Murdoch
 }
 
 \seealso{
-\link{pipe} for the \code{\%>\%} operator.
+\link{pipe} for the \code{\%>\%} operator.  The \HTMLVignette{rgl}{WebGL}{}{User Interaction in WebGL} vignette
+gives more details.
 }
 \examples{
 if (requireNamespace("manipulateWidget", quietly = TRUE) &&

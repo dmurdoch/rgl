@@ -83,6 +83,10 @@ with the given \code{id}.
 \author{
 Duncan Murdoch
 }
+\seealso{
+The \HTMLVignette{rgl}{WebGL}{}{User Interaction in WebGL} vignette
+gives more details.
+}
 
 \examples{
   save <- options(rgl.useNULL = TRUE)

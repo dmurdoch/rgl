@@ -20,7 +20,7 @@ export(.check3d,
   GramSchmidt, grid3d, 
   highlevel, hook_rgl, hook_webgl, hover3d,
   icosahedron3d, identify3d, identityMatrix, ids3d,
-  in_pkgdown_example,
+  in_pkgdown, in_pkgdown_example,
   layout3d, legend3d, light3d, lines3d, lowlevel, makeDependency, material3d, 
   mergeVertices, mesh3d, mfrow3d, movie3d, mtext3d, 
   newSubscene3d, next3d, normalize.mesh3d, observer3d, octahedron3d, oh3d, open3d, 
@@ -174,9 +174,10 @@ export(.check3d,
        dev.off, dev.prev, dev.set, png, postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)
- importFrom(tools, file_ext)
+ importFrom(tools, file_ext, startDynamicHelp)
  importFrom(utils, capture.output, count.fields, file_test, 
-            flush.console, packageVersion, read.table, head, tail)
+            flush.console, packageVersion, read.table, head, tail,
+            vignette)
  importFrom(R6, R6Class)
  
 # These were in rglwidget

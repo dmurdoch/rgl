@@ -92,7 +92,8 @@ of objects in an \pkg{rgl} scene.
     numerical.
   }
   \item{alpha}{ 
-    vector of alpha values between 0.0 (fully transparent) .. 1.0 (opaque).
+    vector of alpha values between 0.0 (fully transparent) and 1.0 (opaque).  See \HTMLVignette{rgl}{transparency}{}{A Note on Transparency} 
+for a discussion of some issues with transparency.
   }
   \item{smooth}{
     logical, specifying whether smooth shading or flat shading
@@ -276,8 +277,9 @@ Other aspects of texture display are controlled by the material
 properties \code{textype, texmode, texmipmap, texmagfilter,
 texminfilter} and \code{texenvmap} described above.
 
-For an extensive discussion of textures, see the \href{https://dmurdoch.github.io/rgl/articles/rgl.html#textures}{Textures} section of the 
-\href{https://dmurdoch.github.io/rgl/articles/rgl.html}{rgl Overview}
+For an extensive discussion of textures, see the 
+\HTMLVignette{rgl}{rgl}{textures}{Textures} section of the 
+\HTMLVignette{rgl}{rgl}{}{rgl Overview}
 vignette.
 }
 \section{Display of objects}{
