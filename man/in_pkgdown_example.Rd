@@ -9,7 +9,7 @@ This is mainly for internal use to decide whether results
 should be automatically included in a \pkg{pkgdown} web
 page.
 
-See the \HTMLVignette{rgl}{pkgdown}{}{Using RGL in pkgdown web sites}
+See the \HTMLVignette{pkgdown}{}{Using RGL in pkgdown web sites}
 vignette for details about using \pkg{pkgdown}.
 }
 \usage{

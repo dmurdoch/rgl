@@ -85,7 +85,7 @@ A browsable value to put in a web page.
 Duncan Murdoch
 }
 \seealso{
-The \HTMLVignette{rgl}{WebGL}{}{User Interaction in WebGL} vignette
+The \HTMLVignette{WebGL}{}{User Interaction in WebGL} vignette
 gives more details.
 }
 \examples{

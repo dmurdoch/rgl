@@ -1,26 +1,33 @@
-% Macro to create link to an HTML vignette from a help page.
+% Macro to create link to an HTML vignette from a help page.  In
+% this version the vignette must be in the same package as the help
+% page
+% arg 1 is the name of the vignette (without .html)
+% arg 2 is an optional anchor within the vignette (without the leading #)
+% arg 3 is the text to show on the link.
+
+\newcommand{\HTMLVignette}{\Sexpr[stage=build,results=rd]{
+  local({anchor <- "#2"
+         if (nchar(anchor)) 
+           anchor <- paste0("#", anchor)  
+         if (rgl::in_pkgdown())
+           vigparent <- "articles"
+         else 
+           vigparent <- "doc"
+         paste0("\\\\\\\\href{../", vigparent, "/#1.html", 
+                anchor, "}{#3}")
+         })}}
+
+% Macro to create link to an HTML vignette in another package on CRAN
+% from a help page.
 % arg 1 is the package name
 % arg 2 is the name of the vignette (without .html)
 % arg 3 is an optional anchor within the vignette (without the leading #)
 % arg 4 is the text to show on the link.
-% If a link isn't possible, just arg 4 will be shown.
 
-\newcommand{\HTMLVignette}{\Sexpr[stage=render,results=rd]{
-  local({vig <- suppressWarnings(utils::vignette("#2", package="#1"))
-         exists <- is.list(vig) && nzchar(vig$PDF)
-         if (exists)
-           port <- suppressMessages(tools::startDynamicHelp(NA))
-         else
-           port <- 0L
-         anchor <- "#3"
+\newcommand{\HTMLVignetteCRAN}{\Sexpr[stage=build,results=rd]{
+  local({anchor <- "#3"
          if (nchar(anchor)) 
-           anchor <- paste0("#", anchor)   
-         if (!exists || port <= 0L || rgl::in_pkgdown())
-           paste0("\\\\\\\\href{https://dmurdoch.github.io/#1/articles/#2.html", 
+           anchor <- paste0("#", anchor)  
+         paste0("\\\\\\\\href{https://cran.r-project.org/package=#1/vignettes/#2.html", 
                 anchor, "}{#4}")
-         else {
-           paste0("\\\\\\\\href{http://localhost:", 
-                port, "/library/", 
-                basename(vig$Dir), "/doc/",
-                vig$PDF, anchor, "}{#4}")
-          }})}}
+         })}}

@@ -186,7 +186,7 @@ but you can add your own.)
 Duncan Murdoch
 }
 \seealso{
-\code{\link{hook_webgl}} for an earlier approach to this problem. \code{\link{rglwidgetOutput}} for Shiny details.  The \HTMLVignette{rgl}{WebGL}{}{User Interaction in WebGL} vignette
+\code{\link{hook_webgl}} for an earlier approach to this problem. \code{\link{rglwidgetOutput}} for Shiny details.  The \HTMLVignette{WebGL}{}{User Interaction in WebGL} vignette
 gives more details.
 }
 \examples{
