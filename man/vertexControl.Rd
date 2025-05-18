@@ -76,7 +76,10 @@ values, to be used in an RGL widget.
 \author{
 Duncan Murdoch
 }
-
+\seealso{
+The \HTMLVignette{rgl}{WebGL}{}{User Interaction in WebGL} vignette
+gives more details.
+}
 \examples{
   saveopts <- options(rgl.useNULL = TRUE)
 

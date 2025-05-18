@@ -30,6 +30,10 @@ Returns controller data in a list of class "rglControl".
 \author{
 Duncan Murdoch
 }
+\seealso{
+The \HTMLVignette{rgl}{WebGL}{}{User Interaction in WebGL} vignette
+gives more details.
+}
 \examples{
 example(plot3d)
 M <- r3dDefaults$userMatrix
