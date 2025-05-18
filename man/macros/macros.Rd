@@ -9,13 +9,13 @@
   local({vig <- suppressWarnings(utils::vignette("#2", package="#1"))
          exists <- is.list(vig) && nzchar(vig$PDF)
          if (exists)
-           port <- tools::startDynamicHelp(NA)
+           port <- suppressMessages(tools::startDynamicHelp(NA))
          else
            port <- 0L
          anchor <- "#3"
          if (nchar(anchor)) 
            anchor <- paste0("#", anchor)   
-         if (!exists || port == 0L || rgl::in_pkgdown())
+         if (!exists || port <= 0L || rgl::in_pkgdown())
            paste0("\\\\\\\\href{https://dmurdoch.github.io/#1/articles/#2.html", 
                 anchor, "}{#4}")
          else {

@@ -174,9 +174,10 @@ export(.check3d,
        dev.off, dev.prev, dev.set, png, postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)
- importFrom(tools, file_ext)
+ importFrom(tools, file_ext, startDynamicHelp)
  importFrom(utils, capture.output, count.fields, file_test, 
-            flush.console, packageVersion, read.table, head, tail)
+            flush.console, packageVersion, read.table, head, tail,
+            vignette)
  importFrom(R6, R6Class)
  
 # These were in rglwidget
