@@ -80,6 +80,7 @@
 <ul><li>The <code><a href="../reference/shapelist3d.html">shapelist3d()</a></code> function did not handle material names properly (issue <a href="https://github.com/dmurdoch/rgl/issues/462" class="external-link">#462</a>).</li>
 <li>The <code>markdown</code> package no longer supports <code>rgl</code>, so the change in <code>rgl</code> 1.3.1 to use it has been reverted. This means Pandoc is once again necessary to build the vignettes.</li>
 <li>Links from help pages to vignettes have been repaired and added, using new <code>\HTMLVignette{}{}{}</code> and <code>\HTMLVignetteCRAN{}{}{}{}</code> macros.</li>
+<li>To support those macros, two environment variables are used. <code>VignetteRdPath</code> (default <code>"../html/"</code>) should be the lead-in of the URL for the HTML version of an Rd help file referenced from a vignette, and <code>RdVignettePath</code> (default <code>"../doc/"</code>) should be the lead-in of the URL for a vignette referenced from an Rd file.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.18" id="rgl-1318">rgl 1.3.18<small>2025-03-28</small><a class="anchor" aria-label="anchor" href="#rgl-1318"></a></h2>
