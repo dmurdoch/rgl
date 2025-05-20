@@ -8,6 +8,12 @@ is once again necessary to build the vignettes.
 * Links from help pages to vignettes have been repaired
 and added, using new `\HTMLVignette{}{}{}` and
 `\HTMLVignetteCRAN{}{}{}{}` macros.
+* To support those macros, two environment variables are used.
+`VignetteRdPath` (default `"../html/"`) should be the lead-in of
+the URL for the HTML version of an Rd help file referenced from a 
+vignette, and `RdVignettePath`
+(default `"../doc/"`) should be the lead-in of the URL for a vignette
+referenced from an Rd file.
 
 # rgl 1.3.18
 
