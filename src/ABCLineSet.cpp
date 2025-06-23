@@ -19,8 +19,8 @@ ABCLineSet::ABCLineSet(Material& in_material, int in_nbase, double* in_base, int
 {
   /* We'll set up 1 segment per line.  Each segment has 2 vertices, and each vertex
    gets 3 color components and 1 alpha component. */
-  ARRAY<int> colors(3*nLines);
-  ARRAY<double> alphas(nLines);
+  ARRAY<int> colors(6*nLines);
+  ARRAY<double> alphas(2*nLines);
   
   if (material.colors.getLength() > 1) {
     material.colors.recycle(nLines); 

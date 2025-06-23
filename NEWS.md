@@ -1,4 +1,4 @@
-# rgl 1.3.22
+# rgl 1.3.23
 
 * The `shapelist3d()` function did not handle material names
 properly (issue #462).
@@ -14,6 +14,7 @@ the URL for the HTML version of an Rd help file referenced from a
 vignette, and `RdVignettePath`
 (default `"../doc/"`) should be the lead-in of the URL for a vignette
 referenced from an Rd file.
+* `abclines3d()` did not handle multiple colors properly, sometimes causing a crash (issue #476).
 
 # rgl 1.3.18
 
