@@ -1,3 +1,8 @@
+# 1.3.24
+
+The `COPYING.GL2PS` license file has been moved to
+`inst`.
+
 # 1.3.23
 
 This release fixes some minor bugs, and one R-crashing bug.
