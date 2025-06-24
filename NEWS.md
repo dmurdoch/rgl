@@ -1,4 +1,4 @@
-# rgl 1.3.23
+# rgl 1.3.24
 
 * The `shapelist3d()` function did not handle material names
 properly (issue #462).
@@ -15,6 +15,10 @@ vignette, and `RdVignettePath`
 (default `"../doc/"`) should be the lead-in of the URL for a vignette
 referenced from an Rd file.
 * `abclines3d()` did not handle multiple colors properly, sometimes causing a crash (issue #476).
+* The `COPYING.GL2PS` file containing the license for
+the code used in `rgl.postscript()` has been moved so
+that it will be installed at the top level of the
+package.
 
 # rgl 1.3.18
 

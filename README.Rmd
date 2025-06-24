@@ -105,7 +105,7 @@ back as far as R 3.3.0.
 LICENSE
 -------
 The software is released under the GNU Public License. 
-See [COPYING](./COPYING) for details.
+See [COPYING](./COPYING) for details.  
 
 
 FEATURES
