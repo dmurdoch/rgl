@@ -1,13 +1,14 @@
-# 1.3.18
+# 1.3.23
 
-This is a small release requested by CRAN to fix these issues:
- - complaint about a define in the FTGL library
- - complaint about using Rf_GetOption.
- - numerous implicit type conversions leading to warnings from the compiler.
-It also includes:
- - some memory leaks reported on the rgl web site.
- - some updates to software that it uses.
- 
-As far as I can tell, all issues have been fixed.  Since almost
-nothing affects the exports, I haven't run full reverse dependency
-checks.
+This release fixes some minor bugs, and one R-crashing bug.
+
+It also fixes links from help pages to vignettes and 
+vice versa.
+
+There are no CRAN check issues other than the size, and
+that's only on MacOS.  I believe it's because that
+platform retains debug info.
+
+I haven't run a full revdep check, but on a 10% random 
+sample no issues came up.  Since there are no API
+changes, that's not a surprise.
