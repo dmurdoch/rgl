@@ -99,22 +99,7 @@ if (haveinterp) {
   # Do it without smoothing and with a different orientation.
   persp3d(dxy, z, col = col, coords = c("z", "x", "y"), smooth = FALSE)
 }
-if (haveinterp) {
-  if (is.null(save))
-    save <- options(rgl.meshColorWarning = FALSE)
 
-  # Leave a circular hole around (3, 0)
-  theta <- seq(0, 2*pi, length.out = 30)[-1]
-  cx <- 2*cos(theta) + 3
-  cy <- 2*sin(theta)
-  keep <- (x - 3)^2 + y^2 > 4
-  dxy2 <- interp::tri.mesh(x[keep], y[keep])
-  dxy2 <- interp::add.constraint(dxy2, cx, cy)
-  z <- dxy2$x^2 - dxy2$y^2
-  col <- terrain.colors(20)[1 + round(19*(z - min(z))/diff(range(z)))]
-  open3d()
-  persp3d(dxy2, z, col = col)
-}
 options(save)
 }
 \keyword{graphics}
