@@ -1,5 +1,10 @@
 # rgl 1.3.25
 
+* Support for classes defined in the `tripack` package
+has been dropped at the request of CRAN.
+
+# rgl 1.3.24
+
 * The `shapelist3d()` function did not handle material names
 properly (issue #462).
 * The `markdown` package no longer supports `rgl`, so the change
@@ -19,8 +24,6 @@ referenced from an Rd file.
 the code used in `rgl.postscript()` has been moved so
 that it will be installed at the top level of the
 package.
-* Support for classes defined in the `tripack` package
-has been dropped at the request of CRAN.
 
 # rgl 1.3.18
 
