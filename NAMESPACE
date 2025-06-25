@@ -88,7 +88,6 @@ export(.check3d,
  S3method(all.equal, rglscene)
  
  S3method(as.mesh3d, deldir)
- S3method(as.mesh3d, tri)
  S3method(as.mesh3d, triSht)
  S3method(as.mesh3d, ashape3d)
  S3method(as.mesh3d, rglId)
@@ -118,7 +117,6 @@ export(.check3d,
  S3method(persp3d, default)
  S3method(persp3d, "function")
  S3method(persp3d, deldir)
- S3method(persp3d, tri)
  S3method(persp3d, triSht)
  S3method(persp3d, ashape3d)
  S3method(persp3d, formula)
@@ -131,7 +129,6 @@ export(.check3d,
  S3method(plot3d, rglWebGL)
  S3method(plot3d, "function")
  S3method(plot3d, deldir)
- S3method(plot3d, tri)
  S3method(plot3d, triSht)
  S3method(plot3d, ashape3d)
  S3method(plot3d, formula)

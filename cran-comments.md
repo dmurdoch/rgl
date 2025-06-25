@@ -1,3 +1,7 @@
+# 1.3.25
+
+Support for the tripack package has been dropped.
+
 # 1.3.24
 
 The `COPYING.GL2PS` license file has been moved to
