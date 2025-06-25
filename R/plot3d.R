@@ -132,8 +132,7 @@ plot3d.function <- function(x, ...) persp3d(x, ...)
 
 plot3d.deldir <- function(x, ...) persp3d(x, ...)
 
-plot3d.triSht <-
-plot3d.tri <- function(x, z, ...) persp3d(x, z, ...)
+plot3d.triSht <- function(x, z, ...) persp3d(x, z, ...)
 
 plot3d.formula <- function(x, data = NULL, xlab = xyz$xlab, ylab = xyz$ylab, zlab = xyz$zlab, ...) {
   if (!is.null(data))

@@ -194,14 +194,11 @@ as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"),
   result
 }
 
-as.mesh3d.triSht <-
-as.mesh3d.tri <- function(x, z, col = "gray", 
+as.mesh3d.triSht <- function(x, z, col = "gray", 
                           coords = c("x", "y", "z"), 
                           smooth = TRUE, normals = NULL, texcoords = NULL,
                           ...) {
-  if (inherits(x, "tri")) 
-    triangles <- tripack::triangles
-  else if (inherits(x, "triSht")) {
+  if (inherits(x, "triSht")) {
     triangles <- interp::triangles
   }
   if (!identical(sort(coords), c("x", "y", "z")))

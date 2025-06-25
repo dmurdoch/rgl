@@ -1,3 +1,8 @@
+# rgl 1.3.25
+
+* Support for classes defined in the `tripack` package
+has been dropped at the request of CRAN.
+
 # rgl 1.3.24
 
 * The `shapelist3d()` function did not handle material names
