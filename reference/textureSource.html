@@ -136,12 +136,10 @@ holding the temporary texture files will be returned.</p>
 <span class="r-in"><span>               texture <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/as.raster.html" class="external-link">as.raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colors.html" class="external-link">colors</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">120</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>, </span></span>
 <span class="r-in"><span>               col<span class="op">=</span><span class="st">"white"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: png</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in prepareTexture(texture):</span> non-PNG textures require the 'png' package</span>
 <span class="r-in"><span><span class="fu"><a href="material.html">material3d</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span>, <span class="st">"texture"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'id' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/0d/lm5nf_791193x0hxv5gvw5s40000gn/T/RtmpkFNEcT/rgl3023b240367/file302fc11f8.png"</span>
 <span class="r-in"><span><span class="fu">textureSource</span><span class="op">(</span><span class="fu"><a href="material.html">material3d</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span>, <span class="st">"texture"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: png</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'id' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> as.raster(matrix(colors()[1:120], ncol = 10))</span>
 </code></pre></div>
     </div>
   </div>
