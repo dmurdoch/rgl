@@ -20,7 +20,7 @@ lower-level function more likely to be used in programming."><!-- mathjax --><sc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.18</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.24</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@ lower-level function more likely to be used in programming."><!-- mathjax --><sc
       <a href="../articles/transparency.html">A Note on Transparency</a>
     </li>
     <li>
-      <a href="../articles/WebGL.html">User Interaction in WebGL (updated)</a>
+      <a href="../articles/WebGL.html">User Interaction in WebGL</a>
     </li>
   </ul></li>
 <li>
@@ -141,44 +141,44 @@ by <code><a href="attributes.html">rgl.attrib</a></code> for this attribute.</p>
 <span class="r-in"><span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="primitives.html">points3d</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">rgl.attrib.info</span><span class="op">(</span><span class="va">id</span>, showAll <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id     attrib nrow ncol</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1575   vertices  100    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1575    normals    0    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1575     colors    1    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1575  texcoords    0    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1575        dim    0    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1575      texts    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1575        cex    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1575        adj    0    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1575      radii    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1575    centers  100    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1575        ids    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1575 usermatrix    0    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1575      types    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1575      flags    1    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1575    offsets    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1575     family    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 1575       font    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1575        pos    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 1575   fogscale    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1575       axes    0    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 1575    indices    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 1575   shapenum    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1526   vertices  100    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1526    normals    0    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1526     colors    1    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1526  texcoords    0    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1526        dim    0    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1526      texts    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1526        cex    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1526        adj    0    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1526      radii    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1526    centers  100    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1526        ids    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1526 usermatrix    0    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1526      types    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1526      flags    1    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1526    offsets    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1526     family    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 1526       font    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1526        pos    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 1526   fogscale    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1526       axes    0    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 1526    indices    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 1526   shapenum    0    1</span>
 <span class="r-in"><span><span class="fu">rgl.attrib.count</span><span class="op">(</span><span class="va">id</span>, <span class="st">"vertices"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 100</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="fu">rgl.attrib.info</span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="scene.html">ids3d</a></span><span class="op">(</span><span class="st">"all"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id   attrib nrow ncol       type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1572   colors    3    4      light</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1572    flags    2    1      light</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1572 vertices    1    3      light</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1574    flags    4    1 background</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1574 fogscale    1    1 background</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1574   colors    1    4 background</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1574  centers    1    3 background</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1575   colors    1    4     points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1575  centers  100    3     points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1575 vertices  100    3     points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1575    flags    1    1     points</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1523   colors    3    4      light</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1523    flags    2    1      light</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1523 vertices    1    3      light</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1525    flags    4    1 background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1525 fogscale    1    1 background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1525   colors    1    4 background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1525  centers    1    3 background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1526   colors    1    4     points</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  1526  centers  100    3     points</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1526 vertices  100    3     points</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1526    flags    1    1     points</span>
 </code></pre></div>
     </div>
   </div>
@@ -193,7 +193,7 @@ by <code><a href="attributes.html">rgl.attrib</a></code> for this attribute.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>
