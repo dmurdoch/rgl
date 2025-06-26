@@ -134,15 +134,23 @@ use RGL on a system with no graphics support.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; col &lt;- colorlut[ z - zlim[1] + 1 ] # assign colors to heights for each point</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; open3d()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> glX </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 265 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  113 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> srfc3d&gt; surface3d(x, y, z, color = col, back = "lines")</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">plot3d</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   open3d()</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>X11 error: GLXBadContext</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in open3d():</span> open failed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> null </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  114 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   x &lt;- sort(rnorm(1000))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   y &lt;- rnorm(1000)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   z &lt;- rnorm(1000) + atan2(x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> plot3d&gt;   plot3d(x, y, z, col = rainbow(1000))</span>
 </code></pre></div>
     </div>
   </div>
