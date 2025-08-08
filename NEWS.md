@@ -1,3 +1,8 @@
+# rgl 1.3.25
+
+* Added the `latex3d()` function to draw LaTeX text using the
+`xdvir` package.
+
 # rgl 1.3.24
 
 * The `shapelist3d()` function did not handle material names
