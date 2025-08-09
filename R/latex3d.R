@@ -18,7 +18,7 @@ latex3d <- function(x, y = NULL, z = NULL,
     pos <- rep_len(pos, n)
   adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
   save3d <- par3d(skipRedraw = TRUE)
-  save <- options(device.ask.default = FALSE, tinytex.verbose = verbose)
+  save <- options(device.ask.default = FALSE, tinytex.verbose = verbose, xdvir.engine = "xetex")
   on.exit({options(save); par3d(save3d)}) # nolint
   result <- integer(n)
   if (verbose) {
