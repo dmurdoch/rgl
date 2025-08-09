@@ -48,6 +48,11 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           
+      - uses: r-lib/actions/setup-tinytex@v2
+        env:
+          # install full prebuilt version
+          TINYTEX_INSTALLER: TinyTeX
+          
       - name: Install CRAN libjpeg on MacOS
         if: runner.os == 'macOS'
         run: |
