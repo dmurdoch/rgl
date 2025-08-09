@@ -160,8 +160,7 @@ persp3d.deldir <- function(x, ..., add = FALSE) {
   plot3d(as.mesh3d(x, ...), add = add, ...)
 }
 
-persp3d.triSht <-
-persp3d.tri <- function(x, z, ..., add = FALSE) {
+persp3d.triSht <- function(x, z, ..., add = FALSE) {
   plot3d(as.mesh3d(x, z, ...), add = add, ...)
 }
 
