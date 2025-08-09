@@ -19,7 +19,8 @@ plotmath3d(x, y = NULL, z = NULL, text, cex = par("cex"),
 latex3d(x, y = NULL, z = NULL, text, cex = par("cex"), 
            adj = 0.5, pos = NULL, offset = 0.5,
            fixedSize = TRUE, startsize = 480, initCex = 5, 
-           margin = "", floating = FALSE, tag = "", ...)
+           margin = "", floating = FALSE, tag = "", 
+           verbose = FALSE, ...)
 }
 \arguments{
   \item{x, y, z}{Coordinates.  Any reasonable way of defining the
@@ -53,6 +54,8 @@ at the desired size.
   \item{margin, floating, tag}{
 \code{\link{material3d}} properties for the sprites.
   }
+  \item{verbose}{If \code{TRUE}, \code{latex3d} will print
+  intermediate results for debugging.}
   \item{\dots}{
 For \code{plotmath3d}, additional arguments to pass to  
 \code{\link[graphics]{text}} when drawing the text.  For
