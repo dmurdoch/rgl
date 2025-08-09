@@ -87,14 +87,14 @@ plotmath3d(1:3, 1:3, 1:3, expression(x[1] == 1, x[2] == 2, x[3] == 3))
 # This lets the text resize with the plot
 text3d(4, 4, 4, "resizeable text", usePlotmath = TRUE, fixedSize = FALSE)
 
-\donttest{
 if (requireNamespace("xdvir")) {
+
+  xdvir::TeXstatus()
   
   # Do the same plot using latex3d()
   
   open3d()
   latex3d(1:3, 1:3, 1:3, c("$x_1 = 1$", "$x_2 = 2$", "$x_3 = 3$"))
   latex3d(4, 4, 4, "resizeable text", fixedSize = FALSE)
-}
 }
 }

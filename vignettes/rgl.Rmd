@@ -188,6 +188,7 @@ Function                      | Description
 `r indexfns("arrow3d")`:      | add an arrow to a scene
 `r indexfns("pch3d")`:	      | draw base-style plotting symbols
 `r indexfns("plotmath3d")`:   | used by `r linkfn("text3d")` for math text
+`r indexfns("latex3d")`:      | render LaTeX fragments
 
 ### Axes and other "decorations"
 
@@ -343,9 +344,16 @@ at a lower level; users should avoid it.
 ### Textures
 
 As described in the previous section, one of the material
-properties is `texture`, the name of a bitmap file (in `.png`
-format) containing an image to be displayed on the surface. 
+properties is `texture`, the name of a bitmap file 
+containing an image to be displayed on the surface. 
 This section gives more details about textures.
+
+Internally, `rgl` always uses PNG files for textures.  JPEG
+files or raster objects may be specified, in which case `rgl`
+will convert
+them to PNG.  The `r indexfns("textureSource")` function can
+be used to retrieve the original expression that provided
+the bitmap.
 
 In `OpenGL`, each vertex in a polygon may be associated with a
 particular location in the bitmap.  The interior of the
@@ -954,7 +962,7 @@ Some functions are mainly for internal use:
 `r indexfns(c("elementId2Prefix", "playwidgetOutput", "renderPlaywidget", "rglwidgetOutput", "renderRglwidget", "registerSceneChange"))`. 
 More details are given in the vignette 
 [User Interaction in WebGL](WebGL.html).
-The functions `r indexfns(c("lowlevel", "highlevel", "rglId"))` are also for internal use,
+The functions `r indexfns(c("lowlevel", "highlevel", "rglId", "rgl.incrementID"))` are also for internal use,
 marking function results for automatic
 printing.  Finally, the function
 `r indexfns("setUserShaders")` allows you to
@@ -1066,7 +1074,7 @@ available for these functions to work.
 
 The ["Using RGL in pkgdown web sites"](pkgdown.html) vignette
 describes how to use `rgl` in a `pkgdown` web site.  The
-utility function `r indexfns("in_pkgdown_example")` can be used
+utility functions `r indexfns(c("in_pkgdown", "in_pkgdown_example"))` can be used
 to detect that `pkgdown` is being used.
 
 ### Working with `testthat`
@@ -1102,6 +1110,9 @@ delay when it appears to be needed.
 
 The `r indexfns("gltfTypes")` vector contains
 constants used in OpenGL and glTF.
+
+The `r indexfns("safe.dev.off")` function closes a base
+graphics display and sets the previous display as current.
 
 ## Warning:  Work in Progress!
 
