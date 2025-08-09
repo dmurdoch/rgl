@@ -50,7 +50,8 @@ SystemRequirements: OpenGL and GLU Library (Required for
     display in R.  See "Installing OpenGL support" in README.md.  
     Not needed if only browser displays using rglwidget() are wanted.),
     zlib (optional), libpng (>=1.2.9, optional), FreeType (optional),
-    pandoc (>=1.14, needed for vignettes)
+    pandoc (>=1.14, needed for vignettes), LaTeX needed
+    for optional latex3d() examples.
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr, rmarkdown
 Biarch: true
