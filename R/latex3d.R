@@ -28,7 +28,6 @@ latex3d <- function(x, y = NULL, z = NULL,
   for (i in seq_len(n)) {
     # Open the device twice.  The first one is to measure the text...
     f <- tempfile(fileext = ".png")
-    on.exit(unlink(f), add = TRUE)
     png(f, bg = "transparent", width = initCex*startsize, height = initCex*startsize, res = initCex*72)
     if (is.vector(text))
       thistext <- text[i]
