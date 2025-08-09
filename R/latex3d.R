@@ -40,7 +40,7 @@ latex3d <- function(x, y = NULL, z = NULL,
     png(f, bg = "transparent", 
         width = size, height = size+1, 
         pointsize = 12, res = initCex*72)
-    grid.draw(g)
+    grid::grid.draw(g)
     
     safe.dev.off()
     # The 0.4 tries to match the text3d offset

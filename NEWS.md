@@ -1,12 +1,9 @@
-# rgl 1.3.25
+# rgl 1.3.26
 
-<<<<<<< HEAD
-* Added the `latex3d()` function to draw LaTeX text using the
-`xdvir` package.
-=======
 * Support for classes defined in the `tripack` package
 has been dropped at the request of CRAN.
->>>>>>> master
+* Added the `latex3d()` function to draw LaTeX text using the
+`xdvir` package.
 
 # rgl 1.3.24
 
