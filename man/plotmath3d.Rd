@@ -91,6 +91,8 @@ if (requireNamespace("xdvir")) {
 
   xdvir::TeXstatus()
   
+  options(tinytex.verbose = TRUE)
+  
   # Do the same plot using latex3d()
   
   open3d()
