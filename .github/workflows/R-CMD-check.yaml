@@ -53,7 +53,9 @@ jobs:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
       - run: tlmgr update --self
-      - run: tlmgr --version                
+      - run: tlmgr --version    
+      - run: tlmgr install luatex xetex standalone
+      - run: tlmgr list --only-installed
           
       - name: Install CRAN libjpeg on MacOS
         if: runner.os == 'macOS'
