@@ -5,6 +5,7 @@ latex3d <- function(x, y = NULL, z = NULL,
 		       fixedSize = TRUE,
 		       startsize = 480, initCex = 5, 
 		       margin = "", floating = FALSE, tag = "",
+		       verbose = FALSE,
 		       ...) {
   if (!requireNamespace("xdvir"))
     stop("This function requires the `xdvir` package.")
@@ -29,7 +30,16 @@ latex3d <- function(x, y = NULL, z = NULL,
       thistext <- text[i]
     else
       thistext <- text
-    g <- xdvir::latexGrob(thistext, ...)
+    if (verbose) {
+      doc <- xdvir::author(thistext, ...)
+      cat("Generated LaTeX:\n")
+      print(doc)
+      dvi <- xdvir::typeset(doc, ...)
+      cat("\nGenerated DVI:\n")
+      print(dvi)
+      g <- xdvir::dviGrob(dvi, ...)
+    } else 
+      g <- xdvir::latexGrob(thistext, ...)
     w_npc <- grid::convertWidth(grid::grobWidth(g), "npc", valueOnly = TRUE)
     h_npc <- grid::convertHeight(grid::grobHeight(g), "npc", valueOnly = TRUE)
     safe.dev.off()

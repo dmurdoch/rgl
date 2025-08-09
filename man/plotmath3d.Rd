@@ -96,7 +96,8 @@ if (requireNamespace("xdvir")) {
   # Do the same plot using latex3d()
   
   open3d()
+  latex3d(4, 4, 4, "resizeable text", fixedSize = FALSE, verbose = TRUE)
   latex3d(1:3, 1:3, 1:3, c("$x_1 = 1$", "$x_2 = 2$", "$x_3 = 3$"))
-  latex3d(4, 4, 4, "resizeable text", fixedSize = FALSE)
+
 }
 }
