@@ -18,9 +18,13 @@ latex3d <- function(x, y = NULL, z = NULL,
     pos <- rep_len(pos, n)
   adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
   save3d <- par3d(skipRedraw = TRUE)
-  save <- options(device.ask.default = FALSE)
+  save <- options(device.ask.default = FALSE, tinytex.verbose = verbose)
   on.exit({options(save); par3d(save3d)}) # nolint
   result <- integer(n)
+  if (verbose) {
+    cat("TeX status:\n")
+    xdvir::TeXstatus()
+  }
   for (i in seq_len(n)) {
     # Open the device twice.  The first one is to measure the text...
     f <- tempfile(fileext = ".png")
@@ -32,7 +36,7 @@ latex3d <- function(x, y = NULL, z = NULL,
       thistext <- text
     if (verbose) {
       doc <- xdvir::author(thistext, ...)
-      cat("Generated LaTeX:\n")
+      cat("\nGenerated LaTeX:\n")
       print(doc)
       dvi <- xdvir::typeset(doc, ...)
       cat("\nGenerated DVI:\n")

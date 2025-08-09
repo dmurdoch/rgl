@@ -92,11 +92,7 @@ text3d(4, 4, 4, "resizeable text", usePlotmath = TRUE, fixedSize = FALSE)
 
 if (requireNamespace("xdvir")) {
 
-  xdvir::TeXstatus()
-  
-  options(tinytex.verbose = TRUE)
-  
-  # Do the same plot using latex3d()
+# Do the same plot using latex3d()
   
   open3d()
   latex3d(4, 4, 4, "resizeable text", fixedSize = FALSE, verbose = TRUE)

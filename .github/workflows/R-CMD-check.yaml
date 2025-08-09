@@ -52,6 +52,8 @@ jobs:
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
+      - run: tlmgr update --self
+      - run: tlmgr --version                
           
       - name: Install CRAN libjpeg on MacOS
         if: runner.os == 'macOS'
