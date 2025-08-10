@@ -38,6 +38,8 @@ latex3d <- function(x, y = NULL, z = NULL,
       cat("\nGenerated LaTeX:\n")
       print(doc)
       texfile <- tempfile("t", fileext=".tex")
+      if (.Platform$OS.type == "windows")
+        gsub("/", "\\", texfile, fixed = TRUE)
       cat("\nWriting tex to ", texfile, "\n")
       dvi <- xdvir::typeset(doc, texFile = texfile, ...)
       cat("\nGenerated DVI:\n")
