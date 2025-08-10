@@ -42,4 +42,4 @@ jobs:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
           
-      - run: Rscript -e "options(tinytex.verbose=TRUE); install.packages('xdvir'); f <- tempfile(fileext = '.tex'); writeLines('x', f); xdvir::grid.latex('text', texFile = normalizePath(f) )"
+      - run: Rscript -e "options(tinytex.verbose=TRUE); install.packages('xdvir'); f <- tempfile(fileext = '.tex'); writeLines('x', f); f <- normalizePath(f); print(f); xdvir::grid.latex('text', f )"
