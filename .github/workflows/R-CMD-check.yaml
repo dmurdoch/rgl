@@ -41,7 +41,5 @@ jobs:
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
-      - run: tlmgr update --self --all
-      - run: tlmgr --version    
           
-      - run: Rscript -e "options(tinytex.verbose=TRUE); install.packages('xdvir'); f <- normalizePath(tempfile(fileext = '.tex')); xdvir::grid.latex('text', texFile = f )"
+      - run: Rscript -e "options(tinytex.verbose=TRUE); install.packages('xdvir'); f <- tempfile(fileext = '.tex'); writeLines('x', f); xdvir::grid.latex('text', texFile = normalizePath(f) )"
