@@ -12,11 +12,11 @@ file as a texture in a sprite.  \code{latex3d} uses the
 the same approach to display it in \pkg{rgl}.
 }
 \usage{
-plotmath3d(x, y = NULL, z = NULL, text, cex = par("cex"),
+plotmath3d(x, y = NULL, z = NULL, text, cex = par3d("cex"),
            adj = 0.5, pos = NULL, offset = 0.5,
            fixedSize = TRUE, startsize = 480, initCex = 5, 
            margin = "", floating = FALSE, tag = "", ...)
-latex3d(x, y = NULL, z = NULL, text, cex = par("cex"), 
+latex3d(x, y = NULL, z = NULL, text, cex = par3d("cex"), 
            adj = 0.5, pos = NULL, offset = 0.5,
            fixedSize = TRUE, startsize = 480, initCex = 5, 
            margin = "", floating = FALSE, tag = "", 
