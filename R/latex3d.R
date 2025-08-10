@@ -18,7 +18,11 @@ latex3d <- function(x, y = NULL, z = NULL,
     pos <- rep_len(pos, n)
   adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
   save3d <- par3d(skipRedraw = TRUE)
-  save <- options(device.ask.default = FALSE, tinytex.verbose = verbose, xdvir.engine = "xetex")
+  save <- options(device.ask.default = FALSE, tinytex.verbose = verbose)
+  
+  # Github windows runners have trouble with the tempdir() path,
+  # so we'll set it as the working directory.
+  
   olddir <- setwd(tempdir())
   on.exit({options(save); par3d(save3d); setwd(olddir)}) # nolint
   result <- integer(n)
@@ -40,12 +44,14 @@ latex3d <- function(x, y = NULL, z = NULL,
       cat("\nGenerated LaTeX:\n")
       print(doc)
       cat("\nWriting tex to ", texfile, " in ", getwd(), "\n")
-      dvi <- xdvir::typeset(doc, texFile = texfile, ...)
+      dvi <- xdvir::typeset(doc, texFile = texfile, 
+                            ...)
       cat("\nGenerated DVI:\n")
       print(dvi)
       g <- xdvir::dviGrob(dvi, ...)
     } else 
-      g <- xdvir::latexGrob(thistext, ...)
+      g <- xdvir::latexGrob(thistext, texFile = texfile,
+                            ...)
     w_npc <- grid::convertWidth(grid::grobWidth(g), "npc", valueOnly = TRUE)
     h_npc <- grid::convertHeight(grid::grobHeight(g), "npc", valueOnly = TRUE)
     safe.dev.off()
