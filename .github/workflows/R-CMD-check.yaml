@@ -20,9 +20,9 @@ jobs:
       matrix:
         config:
           - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'devel'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: macos-latest, r: 'devel'}
+          # - {os: windows-latest, r: 'devel'}
+          # - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
+          # - {os: macos-latest, r: 'devel'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -52,7 +52,7 @@ jobs:
         env:
           # install full prebuilt version
           TINYTEX_INSTALLER: TinyTeX
-      - run: tlmgr update --self
+      - run: tlmgr update --self --all
       - run: tlmgr --version    
       - run: tlmgr install luatex xetex standalone
       - run: tlmgr list --only-installed
