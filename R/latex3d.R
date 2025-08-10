@@ -19,7 +19,8 @@ latex3d <- function(x, y = NULL, z = NULL,
   adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
   save3d <- par3d(skipRedraw = TRUE)
   save <- options(device.ask.default = FALSE, tinytex.verbose = verbose, xdvir.engine = "xetex")
-  on.exit({options(save); par3d(save3d)}) # nolint
+  olddir <- setwd(tempdir())
+  on.exit({options(save); par3d(save3d); setwd(olddir)}) # nolint
   result <- integer(n)
   if (verbose) {
     cat("TeX status:\n")
@@ -33,14 +34,12 @@ latex3d <- function(x, y = NULL, z = NULL,
       thistext <- text[i]
     else
       thistext <- text
+    texfile <- basename(tempfile(fileext = ".tex"))
     if (verbose) {
       doc <- xdvir::author(thistext, ...)
       cat("\nGenerated LaTeX:\n")
       print(doc)
-      texfile <- tempfile("t", fileext=".tex")
-      if (.Platform$OS.type == "windows")
-        gsub("/", "\\", texfile, fixed = TRUE)
-      cat("\nWriting tex to ", texfile, "\n")
+      cat("\nWriting tex to ", texfile, " in ", getwd(), "\n")
       dvi <- xdvir::typeset(doc, texFile = texfile, ...)
       cat("\nGenerated DVI:\n")
       print(dvi)

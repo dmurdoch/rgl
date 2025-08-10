@@ -51,10 +51,9 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v2
         env:
           # install full prebuilt version
-          TINYTEX_INSTALLER: TinyTeX-0
+          TINYTEX_INSTALLER: TinyTeX
       - run: tlmgr update --self --all
       - run: tlmgr --version    
-      - run: tlmgr install luatex xetex standalone unicode-math
           
       - name: Install CRAN libjpeg on MacOS
         if: runner.os == 'macOS'
