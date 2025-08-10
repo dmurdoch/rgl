@@ -37,8 +37,9 @@ latex3d <- function(x, y = NULL, z = NULL,
       doc <- xdvir::author(thistext, ...)
       cat("\nGenerated LaTeX:\n")
       print(doc)
-      dvi <- xdvir::typeset(doc, ...)
-      cat("\nGenerated DVI:\n")
+      texfile <- tempfile(fileext=".tex")
+      dvi <- xdvir::typeset(doc, texFile = texfile, ...)
+      cat("\nGenerated DVI from ", texfile, ":\n")
       print(dvi)
       g <- xdvir::dviGrob(dvi, ...)
     } else 
