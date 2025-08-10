@@ -1,6 +1,6 @@
 latex3d <- function(x, y = NULL, z = NULL,
 		       text, 
-		       cex = par("cex"), adj = 0.5,
+		       cex = par3d("cex"), adj = 0.5,
 		       pos = NULL, offset = 0.5,
 		       fixedSize = TRUE,
 		       startsize = 480, initCex = 5, 
