@@ -43,4 +43,4 @@ jobs:
       - run: tlmgr update --self --all
       - run: tlmgr --version    
           
-      - run: Rscript -e "install.packages('xdvir'); xdvir::latexGrob('text')"
+      - run: Rscript -e "install.packages('xdvir'); xdvir::grid.latex('text')"
