@@ -44,4 +44,4 @@ jobs:
       - run: tlmgr update --self --all
       - run: tlmgr --version    
           
-      - run: Rscript -e "options(tinytex.verbose=TRUE); install.packages('xdvir'); f <- gsub("\\", "/", tempfile(fileext = ".tex"), fixed = TRUE); xdvir::grid.latex('text', texFile = f )"
+      - run: Rscript -e "options(tinytex.verbose=TRUE); install.packages('xdvir'); f <- gsub('\\', '/', tempfile(fileext = '.tex'), fixed = TRUE); xdvir::grid.latex('text', texFile = f )"
