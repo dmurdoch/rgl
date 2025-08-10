@@ -102,7 +102,7 @@ for a discussion of some issues with transparency.
     in WebGL.
   }
   \item{texture}{ 
-    path to a texture image file. See the Textures section
+    path to a texture image specification. See the Textures section
     below for details.
   }
   \item{textype}{
@@ -264,7 +264,9 @@ returned directly.
 \section{Textures}{
 The \code{texture} material property may be \code{NULL} or the name of
 a bitmap file to be displayed on the surface being rendered.
-Currently only PNG format files are supported.
+Currently PNG and JPEG format files are supported.  It may
+also be any other object for which 
+\code{\link[grDevices]{as.raster}()} works, e.g. a matrix.
 
 By default, the colors in the bitmap will modify the color of the
 object being plotted.  If the color is black (a common default), you
