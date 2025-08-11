@@ -43,4 +43,5 @@ jobs:
           TINYTEX_INSTALLER: TinyTeX
           
       - run: Rscript -e "install.packages(c('tinytex', 'xdvir'))"
-      - run: Rscript -e "trace(system2, tracer = quote(cat(paste(c(env, shQuote(command), args), collapse = ' '))),print = FALSE); xdvir::grid.latex('text')"
+
+      - run: Rscript -e "f <- tempfile(fileext = '.tex');writeLines('x', f); f <- normalizePath(f, winslash = '\\');trace(system2, tracer = quote(cat(paste(c(env, shQuote(command), args), collapse = ' '))),print = FALSE);xdvir::grid.latex('text', texFile = f )"
