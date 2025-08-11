@@ -15,11 +15,13 @@ the same approach to display it in \pkg{rgl}.
 plotmath3d(x, y = NULL, z = NULL, text, cex = par3d("cex"),
            adj = 0.5, pos = NULL, offset = 0.5,
            fixedSize = TRUE, startsize = 480, initCex = 5, 
-           margin = "", floating = FALSE, tag = "", ...)
+           margin = "", floating = FALSE, tag = "",
+           polygon_offset = material3d("polygon_offset"), ...)
 latex3d(x, y = NULL, z = NULL, text, cex = par3d("cex"), 
            adj = 0.5, pos = NULL, offset = 0.5,
            fixedSize = TRUE, startsize = 480, initCex = 5, 
-           margin = "", floating = FALSE, tag = "", 
+           margin = "", floating = FALSE, tag = "",
+           polygon_offset = material3d("polygon_offset"), 
            verbose = FALSE, ...)
 }
 \arguments{
@@ -51,7 +53,7 @@ are cut off.  \code{initCex} is the size of text used
 to form the bitmap.  Increase this if letters look too blurry
 at the desired size.
 }
-  \item{margin, floating, tag}{
+  \item{margin, floating, tag, polygon_offset}{
 \code{\link{material3d}} properties for the sprites.
   }
   \item{verbose}{If \code{TRUE}, \code{latex3d} will print
@@ -89,14 +91,15 @@ open3d()
 plotmath3d(1:3, 1:3, 1:3, expression(x[1] == 1, x[2] == 2, x[3] == 3))
 # This lets the text resize with the plot
 text3d(4, 4, 4, "resizeable text", usePlotmath = TRUE, fixedSize = FALSE)
-
+\donttest{
 if (requireNamespace("xdvir")) {
 
-# Do the same plot using latex3d()
+# Do the same plot using latex3d(). This example runs slowly!
   
   open3d()
   latex3d(1:3, 1:3, 1:3, c("$x_1 = 1$", "$x_2 = 2$", "$x_3 = 3$"))
   latex3d(4, 4, 4, "resizeable text", fixedSize = FALSE)
 
+}
 }
 }
