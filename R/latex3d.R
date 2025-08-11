@@ -5,6 +5,7 @@ latex3d <- function(x, y = NULL, z = NULL,
 		       fixedSize = TRUE,
 		       startsize = 480, initCex = 5, 
 		       margin = "", floating = FALSE, tag = "",
+		       polygon_offset = material3d("polygon_offset"),
 		       verbose = FALSE,
 		       ...) {
   if (!requireNamespace("xdvir"))
@@ -72,7 +73,8 @@ latex3d <- function(x, y = NULL, z = NULL,
             col = "white", lit = FALSE, radius = cex[i]*size/initCex/20,
             adj = adj, pos = posi, offset = offseti,
             fixedSize = fixedSize,
-            margin = margin, floating = floating, tag = tag))
+            margin = margin, floating = floating, tag = tag,
+            polygon_offset = polygon_offset))
   }
   lowlevel(result)
 }

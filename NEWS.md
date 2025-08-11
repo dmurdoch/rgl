@@ -1,11 +1,11 @@
-# rgl 1.3.27
+# rgl 1.3.28
 
 * Support for classes defined in the `tripack` package
 has been dropped at the request of CRAN.
 * Added the `latex3d()` function to draw LaTeX text using the
 `xdvir` package.
 * Both `plotmath3d()` and `latex3d()` now use default
-`cex = par3d("cex")`.
+`cex = par3d("cex")`, and have new argument `polygon_offset`.
 
 # rgl 1.3.24
 
