@@ -1,4 +1,4 @@
-# rgl 1.3.28
+# rgl 1.3.29
 
 * Support for classes defined in the `tripack` package
 has been dropped at the request of CRAN.
@@ -6,6 +6,7 @@ has been dropped at the request of CRAN.
 `xdvir` package.
 * Both `plotmath3d()` and `latex3d()` now use default
 `cex = par3d("cex")`, and have new argument `polygon_offset`.
+* `arrow3d(type = "extrusion")` was broken by the changes to triangulation in version 1.3.16.
 
 # rgl 1.3.24
 
