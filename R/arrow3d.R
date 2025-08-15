@@ -81,7 +81,8 @@ arrow3d <- function(p0=c(1,1,1), p1=c(0,0,0), barblen, s=1/3, theta=pi/12,
    xyz <- xyz %*% t(gs)
    if (type == "extrusion") {
      thickness <- thickness*sqrt(sum((xyz[2,]-xyz[8,])^2))
-     ext <- extrude3d(xyz[,c(1,3)], thickness = thickness)
+     # extrude3d no longer accepts repeated vertices
+     ext <- extrude3d(xyz[-1,c(1,3)], thickness = thickness)
    } else {
      mid <- xyz[1,3]
      xyz[,3] <- abs(xyz[,3] - mid)
