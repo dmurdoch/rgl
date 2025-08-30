@@ -45,6 +45,24 @@ the minified file will be used in the dependency object,
 hints won't be given, and syntax errors will lead to an
 uninformative failure to minify.
 }
+\note{
+The usual way to use \code{makeDependency} is 
+to call it in a \file{.R} file in a package, saving
+the result in a variable that will be used when an
+HTML widget is created.  This way it is only run
+during package installation, when it is safe to
+write to the R library holding the package.  
+
+Do not call it to write to the R library from 
+code the user can run, as that is not allowed in
+general.
+
+If your package uses Roxygen, you may have problems
+because by default Roxygen will run the code, and it
+is likely to fail.  The current workaround is to
+specify Roxygen option \code{load = "installed"}
+which prevents it from running your \file{.R} code.
+}
 \value{
 An object that can be included in a list of dependencies passed to \code{htmltools::\link[htmltools:htmlDependencies]{attachDependencies}}.
 }

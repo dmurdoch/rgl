@@ -1,10 +1,11 @@
 plotmath3d <- function(x, y = NULL, z = NULL,
 		       text, 
-		       cex = par("cex"), adj = 0.5,
+		       cex = par3d("cex"), adj = 0.5,
 		       pos = NULL, offset = 0.5,
 		       fixedSize = TRUE,
 		       startsize = 480, initCex = 5, 
 		       margin = "", floating = FALSE, tag = "",
+		       polygon_offset = material3d("polygon_offset"),
 		       ...) {
   xyz <- xyz.coords(x, y, z, recycle = TRUE)
   n <- length(xyz$x)
@@ -52,7 +53,8 @@ plotmath3d <- function(x, y = NULL, z = NULL,
             col = "white", lit = FALSE, radius = cex[i]*size/initCex/20,
             adj = adj, pos = posi, offset = offseti,
             fixedSize = fixedSize,
-            margin = margin, floating = floating, tag = tag))
+            margin = margin, floating = floating, tag = tag,
+            polygon_offset = polygon_offset))
   }
   lowlevel(result)
 }

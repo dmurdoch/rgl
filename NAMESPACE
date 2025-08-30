@@ -20,7 +20,7 @@ export(.check3d,
   GramSchmidt, grid3d, 
   highlevel, hook_rgl, hook_webgl, hover3d,
   icosahedron3d, identify3d, identityMatrix, ids3d,
-  in_pkgdown_example,
+  in_pkgdown, in_pkgdown_example, latex3d,
   layout3d, legend3d, light3d, lines3d, lowlevel, makeDependency, material3d, 
   mergeVertices, mesh3d, mfrow3d, movie3d, mtext3d, 
   newSubscene3d, next3d, normalize.mesh3d, observer3d, octahedron3d, oh3d, open3d, 
@@ -38,7 +38,8 @@ export(.check3d,
   rgl.primitive, rgl.projection, rgl.quads, rgl.quit, rgl.Sweave, rgl.Sweave.off,
   rgl.select, rgl.select3d, rgl.set, rgl.snapshot, rgl.spheres, rgl.sprites,
   rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
-  rgl.attrib, rgl.attrib.count, rgl.attrib.info, rgl.dev.list, rgl.useNULL,
+  rgl.attrib, rgl.attrib.count, rgl.attrib.info, 
+  rgl.dev.list, rgl.incrementID, rgl.useNULL,
   rgl.viewpoint, rgl.window2user, rglExtrafonts,
   rglFonts, rglId, rglMouse, rglShared, rglToLattice, rglToBase,
   r3dDefaults, rotate3d, rotationMatrix,
@@ -87,13 +88,13 @@ export(.check3d,
  S3method(all.equal, rglscene)
  
  S3method(as.mesh3d, deldir)
- S3method(as.mesh3d, tri)
  S3method(as.mesh3d, triSht)
  S3method(as.mesh3d, ashape3d)
  S3method(as.mesh3d, rglId)
  S3method(as.mesh3d, rglobject)
  S3method(as.mesh3d, rglsubscene)
  S3method(as.mesh3d, rglscene)
+ S3method(as.mesh3d, mesh3d)
  
  S3method(as.mesh3d, default)
  
@@ -116,7 +117,6 @@ export(.check3d,
  S3method(persp3d, default)
  S3method(persp3d, "function")
  S3method(persp3d, deldir)
- S3method(persp3d, tri)
  S3method(persp3d, triSht)
  S3method(persp3d, ashape3d)
  S3method(persp3d, formula)
@@ -129,7 +129,6 @@ export(.check3d,
  S3method(plot3d, rglWebGL)
  S3method(plot3d, "function")
  S3method(plot3d, deldir)
- S3method(plot3d, tri)
  S3method(plot3d, triSht)
  S3method(plot3d, ashape3d)
  S3method(plot3d, formula)

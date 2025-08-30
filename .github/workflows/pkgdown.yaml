@@ -22,6 +22,8 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       RGL_USE_NULL: true
+      RdVignettePath: ../articles/
+      VignetteRdPath: ../reference/
     permissions: 
       contents: write
     steps:

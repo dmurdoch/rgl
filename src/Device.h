@@ -26,7 +26,7 @@ class Device : public Disposable, protected IDisposeListener
 {
 public: // -- all methods are blocking until action completed
 
-  Device(int id, bool useNULL);
+  Device(int id, bool useNULL, int antialias);
   virtual ~Device();
   int  getID();
   void setName(const char* string);

@@ -1,18 +1,15 @@
 ---
-title: "User Interaction in WebGL (updated)"
+title: "User Interaction in WebGL"
 author: "Duncan Murdoch"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  markdown::html_format:
-    options:
-      toc: true
   rmarkdown::html_vignette:
-    toc: yes
+    toc: true
     fig_width: 5
     fig_height: 5
 vignette: >
-  %\VignetteIndexEntry{User Interaction in WebGL (updated)} 
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{User Interaction in WebGL} 
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{crosstalk}
 ---
 

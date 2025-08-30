@@ -247,12 +247,8 @@ void Subscene::hideBBoxDeco(int id)
 
 void Subscene::hideBackground(int id)
 {
-  if (background && sameID(background, id)) {
-    if (parent)
-      background = NULL;
-    else
-      background = new( Background );  /* The root must always have a background */
-  }
+  if (background && sameID(background, id) && parent)
+    background = NULL; /* The root must always have a background */
 }
 
 Subscene* Subscene::hideSubscene(int id, Subscene* current)

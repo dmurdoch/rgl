@@ -30,7 +30,7 @@ public:
   void hide() {};
   void bringToTop(int stay) {};
   void update() { if (window && !window->skipRedraw) window->paint(); };
-  void destroy() { if (window) window->notifyDestroy(); };
+  void destroy() { delete this; }
   void captureMouse(View* pView) {};
   void releaseMouse() {};
   void watchMouse(bool withoutButton) {};
@@ -113,7 +113,7 @@ NULLGUIFactory::~NULLGUIFactory() {
 }
 // ---------------------------------------------------------------------------
 
-WindowImpl* NULLGUIFactory::createWindowImpl(Window* in_window)
+WindowImpl* NULLGUIFactory::createWindowImpl(Window* in_window, int antialias)
 {
   NULLWindowImpl* impl = new NULLWindowImpl(in_window);
   return impl;

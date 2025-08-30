@@ -11,7 +11,7 @@ shapelist3d <- function(shapes,x=0,y=NULL,z=NULL,size=1,matrix=NULL,override=TRU
   
   if (inherits(shapes, "shape3d")) shapes <- list(shapes)
   
-  material <- list(...)
+  material <- .fixMaterialArgs2(...)
   
   if (!is.null(matrix)) {
     if (!is.list(matrix)) matrix <- list(matrix)

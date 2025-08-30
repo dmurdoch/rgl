@@ -114,7 +114,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   R_NativePrimitiveArgType aIID[3] = {INTSXP, INTSXP, REALSXP};
   R_NativePrimitiveArgType aLII[3] = {LGLSXP, INTSXP, INTSXP}; 
   R_NativePrimitiveArgType aLIS[3] = {LGLSXP, INTSXP, STRSXP}; 
-  R_NativePrimitiveArgType aLID[3] = {LGLSXP, INTSXP, REALSXP}; 
+  R_NativePrimitiveArgType aLID[3] = {LGLSXP, INTSXP, REALSXP};
+  R_NativePrimitiveArgType aLLI[3] = {LGLSXP, LGLSXP, INTSXP};
   R_NativePrimitiveArgType aIIDD[4] = {INTSXP, INTSXP, REALSXP, REALSXP}; 
   R_NativePrimitiveArgType aLISD[4] = {LGLSXP, INTSXP, STRSXP, REALSXP}; 
   R_NativePrimitiveArgType aIISI[4] = {INTSXP, INTSXP, STRSXP, INTSXP};
@@ -140,7 +141,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
                                              REALSXP, REALSXP, REALSXP, REALSXP, INTSXP, INTSXP, INTSXP}; 
 
  static const R_CMethodDef CEntries[] = { 
-   {"rgl_dev_open", 		(DL_FUNC) &rgl_dev_open, 2, aLL},
+   {"rgl_dev_open", 		(DL_FUNC) &rgl_dev_open, 3, aLLI},
    {"rgl_dev_close", 		(DL_FUNC) &rgl_dev_close, 1, aL},
    {"rgl_dev_setcurrent", 	(DL_FUNC) &rgl_dev_setcurrent, 2, aLI},
    {"rgl_snapshot", 		(DL_FUNC) &rgl_snapshot, 3, aLIS},
@@ -186,14 +187,14 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    {"rgl_quit",			(DL_FUNC) &rgl_quit, 1, aL},
    {"rgl_getShaderFlags", (DL_FUNC) &rgl_getShaderFlags, 4, aLIIL},
    {"rgl_getShaderDefines", (DL_FUNC) &rgl_getShaderDefines, 5, aIIIIS}
-   
+   {"rgl_incrementID", (DL_FUNC) &rgl_incrementID, 1, aI},
    {NULL, NULL, 0}
  };
 
 #else  // don't CHECK_ARGS
 
  static const R_CMethodDef CEntries[] = { 
-   FUNDEF(rgl_dev_open, 2),
+   FUNDEF(rgl_dev_open, 3),
    FUNDEF(rgl_dev_close, 1),
    FUNDEF(rgl_dev_setcurrent, 2),
    FUNDEF(rgl_snapshot, 3),
@@ -239,6 +240,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_quit, 1),
    FUNDEF(rgl_getShaderFlags, 4),
    FUNDEF(rgl_getShaderDefines, 5),
+   FUNDEF(rgl_incrementID, 1),
    
    {NULL, NULL, 0}
  };
@@ -249,6 +251,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_init, 5),
    FUNDEF(rgl_dev_getcurrent, 0),
    FUNDEF(rgl_dev_list, 0),
+   FUNDEF(rgl_earcut, 2),
    FUNDEF(rgl_par3d, 3),
    FUNDEF(rgl_setMouseCallbacks, 6),
    FUNDEF(rgl_setWheelCallback, 3),

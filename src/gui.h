@@ -5,6 +5,7 @@
 // This file is part of RGL
 //
 // ---------------------------------------------------------------------------
+#include "R.h"
 #include "types.h"
 #include "glgui.h"
 #include "Disposable.h"
@@ -102,7 +103,7 @@ class GUIFactory
 {
 public:
   virtual ~GUIFactory() { }    
-  virtual WindowImpl* createWindowImpl(Window*) = 0;
+  virtual WindowImpl* createWindowImpl(Window*, int antialias) = 0;
 };
 // ---------------------------------------------------------------------------
 //
@@ -167,7 +168,8 @@ class Window : public View, public Disposable
 {
 public:
 
-  Window(View* child=NULL, GUIFactory* factory=rgl::getGUIFactory(0) );
+  Window(View* child=NULL, GUIFactory* factory=rgl::getGUIFactory(0),
+         int antialias = RGL_ANTIALIAS);
   ~Window();
 
 // overloaded view methods:

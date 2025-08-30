@@ -39,6 +39,10 @@ values, to be used in an RGL widget.
 \author{
 Duncan Murdoch
 }
+\seealso{
+The \HTMLVignette{WebGL}{}{User Interaction in WebGL} vignette
+gives more details.
+}
 \examples{
   open3d()
   saveopts <- options(rgl.useNULL = TRUE)

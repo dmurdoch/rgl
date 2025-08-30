@@ -27,7 +27,7 @@ polygon.  If missing, \code{\link{triangulate}} makes
 an automatic choice.
 }
   \item{random}{
-Should a random triangulation be used?
+Currently ignored.  The triangulation is deterministic.
 }
   \item{\dots}{
 Other parameters to pass to \code{\link{lines3d}} or \code{\link{shade3d}} if \code{plot = TRUE}.

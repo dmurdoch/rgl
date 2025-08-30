@@ -9,7 +9,7 @@ Plot a function \code{z(x, y)} or a parametric function
 \code{(x(s, t), y(s, t), z(s, t))}.
 }
 \usage{
-\method{persp3d}{function}(x, 
+\method{persp3d}{`function`}(x, 
   xlim = c(0, 1), ylim = c(0, 1), 
   slim = NULL, tlim = NULL, 
   n = 101, 
@@ -20,7 +20,7 @@ Plot a function \code{z(x, y)} or a parametric function
   xlab, ylab, zlab, 
   col = "gray", otherargs = list(), 
   normal = NULL, texcoords = NULL, \dots)
-\method{plot3d}{function}(x, \ldots)
+\S3method{plot3d}{`function`}(x, \ldots)
 }
 \arguments{
   \item{x}{

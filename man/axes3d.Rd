@@ -131,7 +131,10 @@ objects added to the scene.
 \author{ Duncan Murdoch }
 
 \seealso{Classic graphics functions \code{\link{axis}}, \code{\link{box}},
-\code{\link{title}}, \code{\link{mtext}}, and RGL function \code{\link{bbox3d}}.}
+\code{\link{title}}, \code{\link{mtext}} are related.
+See RGL functions \code{\link{bbox3d}} for drawing the 
+box around the plot, and
+\code{\link{setAxisCallbacks}} for customized axes.}
 
 \examples{
   open3d()
@@ -146,21 +149,22 @@ objects added to the scene.
 
   # add titles
   title3d('main', 'sub', 'xlab', 'ylab', 'zlab')
-
-  rgl.bringtotop()
   
+  # Use a log scale for z
+    
   open3d()
-  points3d(rnorm(10), rnorm(10), rnorm(10))
   
-  # Use fixed axes
+  x <- rnorm(10)
+  y <- rnorm(10)
+  z <- exp(rnorm(10, mean = 3, sd = 2))
   
-  axes3d(c('x', 'y', 'z'))
-         
-  # Put 4 x-axes on the plot
-  axes3d(c('x--', 'x-+', 'x+-', 'x++'))         
+  logz <- log10(z)
+  zticks <- axisTicks(range(logz), log = TRUE)
+  zat <- log10(zticks)
   
-  axis3d('x', pos = c(NA, 0, 0))     
-  title3d('main', 'sub', 'xlab', 'ylab', 'zlab')
+  plot3d(x, y, logz, zlab = "z")
+  axes3d(zat = zat, zlab = zticks, box = TRUE)
+  
 }
 
 

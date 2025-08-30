@@ -145,7 +145,7 @@ void Background::render(RenderContext* renderContext)
      * from the scale and range, by undoing aspect3d()
      */
     Vec3 ranges = bbox.vmax - bbox.vmin;
-    float avgscale = ranges.getLength()/sqrt(3.0);
+    float avgscale = ranges.getLength()/sqrtf(3.0f);
     Vec3 aspect(ranges.x*scale.x/avgscale, ranges.y*scale.y/avgscale, ranges.z*scale.z/avgscale);
     float maxaspect = std::max(aspect.x, std::max(aspect.y, aspect.z));
     m.multLeft(Matrix4x4::scaleMatrix(zoom*2.0*maxaspect*ranges.x/aspect.x,

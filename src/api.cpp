@@ -60,9 +60,9 @@ void rgl::rgl_quit(int* successptr)
 //   rgl::rgl_dev_open
 //
 
-void rgl::rgl_dev_open(int* successptr, int* useNULL)
+void rgl::rgl_dev_open(int* successptr, int* useNULL, int* antialias)
 {
-  *successptr = as_success( deviceManager && deviceManager->openDevice(*useNULL) );
+  *successptr = as_success( deviceManager && deviceManager->openDevice(*useNULL, *antialias) );
   CHECKGLERROR;
 }
 
@@ -843,7 +843,7 @@ void rgl::rgl_getsubscenechildren(int* id, int* children)
     const Subscene* subscene = scene->getSubscene(*id);
     if (subscene) {
       for (size_t i = 0; i < subscene->getChildCount(); i++) {
-        Subscene* child = subscene->getChild(i);
+        Subscene* child = subscene->getChild(static_cast<int>(i));
         children[i] = child ? child->getObjID() : 0;
       }
     }
@@ -1034,6 +1034,7 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
     strncpy(in_tag, cdata[0], len_tag);
     in_tag[len_tag] = '\0';
     mat.tag = std::string(in_tag);
+    delete[] in_tag;
   } else
     mat.tag = std::string();
   
@@ -1428,4 +1429,11 @@ void rgl::rgl_getShaderDefines(int *successptr, int *id, int *sub,
 			*successptr = RGL_SUCCESS;
 		}
 	}
+}
+
+void rgl::rgl_incrementID(int* n)
+{
+  if (*n > 0)
+    SceneNode::nextID += *n;
+  *n = SceneNode::nextID;
 }

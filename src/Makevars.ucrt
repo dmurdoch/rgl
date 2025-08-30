@@ -1,6 +1,6 @@
 PKG_LIBS = -lgdi32 -lopengl32 -lglu32
 PKG_CPPFLAGS = \
-	-DHAVE_PNG_H -DHAVE_FREETYPE -DR_NO_REMAP -Iext -Iext/ftgl -Iext/glad/include \
+	-DHAVE_PNG_H -DHAVE_FREETYPE -DR_NO_REMAP -Iext -Iext/ftgl -Iext/glad/include -Iext/earcut \
 	-DRGL_W32
 
 ifeq (,$(shell pkg-config --version 2>/dev/null))

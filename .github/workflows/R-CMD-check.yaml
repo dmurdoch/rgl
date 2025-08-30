@@ -34,6 +34,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - uses: r-lib/actions/setup-pandoc@v2
+      
       - name: Install dependencies on MacOS
         if: runner.os == 'macOS'
         run: |
@@ -46,13 +48,20 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           
+      - uses: r-lib/actions/setup-tinytex@v2
+        env:
+          # install full prebuilt version
+          TINYTEX_INSTALLER: TinyTeX
+      - run: tlmgr update --self --all
+      - run: tlmgr --version    
+          
       - name: Install CRAN libjpeg on MacOS
         if: runner.os == 'macOS'
         run: |
           ARCH=`uname -m`
           if [ ! -e /opt/R/$ARCH ]; then sudo mkdir -p /opt/R/$ARCH; sudo chown -R $USER /opt/R; fi
           sudo Rscript -e 'dep="jpeg"; source("https://mac.R-project.org/bin/install.R"); install.libs(dep)'
-          if ! echo $PATH | grep /opt/R/$ARCH/bin >/dev/null; then echo /opt/R/$ARCH/bin > newPATH; cat $GITHUB_PATH >> newPATH; cat newPATH > $GITHUB_PATH; fi
+          if ! echo $PATH | grep /opt/R/$ARCH/bin >/dev/null; then echo /opt/R/$ARCH/bin > newPATH; cat $GITHUB_PATH >> newPATH; cat newPATH > $GITHUB_PATH; rm newPATH; fi
         shell: bash
 
       - uses: r-lib/actions/setup-r-dependencies@v2

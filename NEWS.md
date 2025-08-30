@@ -1,3 +1,83 @@
+# rgl 1.3.29
+
+* Support for classes defined in the `tripack` package
+has been dropped at the request of CRAN.
+* Added the `latex3d()` function to draw LaTeX text using the
+`xdvir` package.
+* Both `plotmath3d()` and `latex3d()` now use default
+`cex = par3d("cex")`, and have new argument `polygon_offset`.
+* `arrow3d(type = "extrusion")` was broken by the changes to triangulation in version 1.3.16.
+
+# rgl 1.3.24
+
+* The `shapelist3d()` function did not handle material names
+properly (issue #462).
+* The `markdown` package no longer supports `rgl`, so the change
+in `rgl` 1.3.1 to use it has been reverted.  This means Pandoc
+is once again necessary to build the vignettes.
+* Links from help pages to vignettes have been repaired
+and added, using new `\HTMLVignette{}{}{}` and
+`\HTMLVignetteCRAN{}{}{}{}` macros.
+* To support those macros, two environment variables are used.
+`VignetteRdPath` (default `"../html/"`) should be the lead-in of
+the URL for the HTML version of an Rd help file referenced from a 
+vignette, and `RdVignettePath`
+(default `"../doc/"`) should be the lead-in of the URL for a vignette
+referenced from an Rd file.
+* `abclines3d()` did not handle multiple colors properly, sometimes causing a crash (issue #476).
+* The `COPYING.GL2PS` file containing the license for
+the code used in `rgl.postscript()` has been moved so
+that it will be installed at the top level of the
+package.
+
+# rgl 1.3.18
+
+* Internal code changes to satisfy `R CMD check` requirements.
+* Some memory leaks reported in issue #451 have been fixed.
+* The OpenGL "glad" loader has been updated to version 2.0.8.
+* A number of implicit type conversions have been made explicit
+to avoid compiler warnings.
+
+# rgl 1.3.17
+
+## Bug fix
+
+* The previous fix for `rgl.init()` introduced a new possible
+segfault for users who had DISPLAY unset or set to a non-existent
+server.  
+
+# rgl 1.3.16
+
+## Bug fixes
+
+* `triangulate()` now uses the `earcut` library
+from https://github.com/mapbox/earcut.hpp, which
+should be faster and more reliable than the 
+previous R implementation.
+* In cases where the X11 server did not provide sufficient
+support, `rgl.init()` could sometimes segfault.  That has
+been fixed, and warning messages have been made more 
+informative.
+
+# rgl 1.3.14
+
+## Minor changes
+
+* `rgl.incrementID()` has been added.
+* An example using log axes has been added to the
+help page for `axes3d()`.
+
+## Bug fixes
+
+* `clear3d("all")`, calling `bg3d()` on the root 
+subscene, and some cases of `pop3d()` involving the 
+background could create a leak of a background object
+(issue #439).  For back compatibility of saved results, these cases
+still increment the object ID number, but don't
+actually create a new object.
+* `rglwidget()` displays didn't support objects with
+`smooth = FALSE`.
+
 # rgl 1.3.12
 
 ## Minor changes

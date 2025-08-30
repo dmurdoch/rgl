@@ -120,7 +120,7 @@
   ret <- rgl.init(initValue, onlyNULL, home = rglhome)
   
   if (!ret) {
-    warning("'rgl.init' failed, running with 'rgl.useNULL = TRUE'.", call. = FALSE)
+    warning("'rgl.init' failed, will use the null device.\nSee '?rgl.useNULL' for ways to avoid this warning.", call. = FALSE)
     options(rgl.useNULL = TRUE)
     rgl.init(initValue, TRUE)	
   }

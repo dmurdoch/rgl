@@ -13,7 +13,7 @@ class Win32GUIFactory : public GUIFactory
 public:
   Win32GUIFactory();
   virtual ~Win32GUIFactory();
-  WindowImpl* createWindowImpl(Window* window);
+  WindowImpl* createWindowImpl(Window* window, int antialias);
 #ifndef WGL_WGLEXT_PROTOTYPES
   PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;
 #endif

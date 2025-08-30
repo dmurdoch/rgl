@@ -59,7 +59,8 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{toggleButton}} for the older style
-of HTML control.
+of HTML control.  The \HTMLVignette{WebGL}{}{User Interaction in WebGL} vignette
+gives more details.
 }
 \examples{
 theplot <- plot3d(rnorm(100), rnorm(100), rnorm(100), col = "red")

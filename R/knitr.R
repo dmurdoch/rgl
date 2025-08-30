@@ -258,9 +258,6 @@ fns <- local({
                                          left   = "margin-left:0;margin-right:auto;",
                                          right  = "margin-left:auto;margin-right:0;",
                                          ""))))
-    # Not sure why this wasn't there for our vignettes...
-    if (!("screenshot.force" %in% names(options)))
-      options$screenshot.force <- FALSE
     
     result <- do.call("knit_print", c(list(x = content, options = options), x$args))
     if (!latex)

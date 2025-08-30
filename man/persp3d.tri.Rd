@@ -2,15 +2,12 @@
 \alias{persp3d.triSht}
 \alias{plot3d.triSht}
 \alias{as.mesh3d.triSht}
-\alias{persp3d.tri}
-\alias{plot3d.tri}
-\alias{as.mesh3d.tri}
 \title{
-Plot an interp or tripack Delaunay triangulation
+Plot an interp Delaunay triangulation
 }
 \description{
-The \code{\link[interp]{tri.mesh}()} functions in the
-\pkg{interp} and \pkg{tripack} packages compute a Delaunay triangulation of a set
+The \code{\link[interp]{tri.mesh}()} function in the
+\pkg{interp} package computes a Delaunay triangulation of a set
 of points.  These functions display it as a surface.
 }
 \usage{
@@ -18,14 +15,10 @@ of points.  These functions display it as a surface.
 \method{persp3d}{triSht}(x, z, ..., add = FALSE)
 \method{as.mesh3d}{triSht}(x, z, col = "gray", coords = c("x", "y", "z"), 
     smooth = TRUE, normals = NULL, texcoords = NULL, ...)
-\method{plot3d}{tri}(x, z, ...)
-\method{persp3d}{tri}(x, z, ..., add = FALSE)
-\method{as.mesh3d}{tri}(x, z, col = "gray", coords = c("x", "y", "z"), 
-    smooth = TRUE, normals = NULL, texcoords = NULL, ...)    
 }
 \arguments{
   \item{x}{
-A \code{"triSht"} or \code{"tri"} object, produced by the \code{\link[interp]{tri.mesh}()} function in the \pkg{interp} or \pkg{tripack} packages respectively.  
+A \code{"triSht"} object, produced by the \code{\link[interp]{tri.mesh}()} function in the \pkg{interp} package.  
 }
   \item{z}{
 z coordinate values corresponding to each of the nodes in \code{x}.  
@@ -106,22 +99,7 @@ if (haveinterp) {
   # Do it without smoothing and with a different orientation.
   persp3d(dxy, z, col = col, coords = c("z", "x", "y"), smooth = FALSE)
 }
-if (requireNamespace("tripack", quietly = TRUE)) {
-  if (is.null(save))
-    save <- options(rgl.meshColorWarning = FALSE)
 
-  # Leave a circular hole around (3, 0)
-  theta <- seq(0, 2*pi, length.out = 30)[-1]
-  cx <- 2*cos(theta) + 3
-  cy <- 2*sin(theta)
-  keep <- (x - 3)^2 + y^2 > 4
-  dxy2 <- tripack::tri.mesh(x[keep], y[keep])
-  dxy2 <- tripack::add.constraint(dxy2, cx, cy)
-  z <- dxy2$x^2 - dxy2$y^2
-  col <- terrain.colors(20)[1 + round(19*(z - min(z))/diff(range(z)))]
-  open3d()
-  persp3d(dxy2, z, col = col)
-}
 options(save)
 }
 \keyword{graphics}

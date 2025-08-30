@@ -9,11 +9,11 @@
 using namespace rgl;
 
 // ---------------------------------------------------------------------------
-Device::Device(int id, bool useNULL) : id_(id)
+Device::Device(int id, bool useNULL, int antialias) : id_(id)
 {
   scene   = new Scene();
   rglview = new RGLView(scene);
-  window  = new Window( rglview, getGUIFactory(useNULL) );
+  window  = new Window( rglview, getGUIFactory(useNULL), antialias );
   if (window && !window->windowImpl) {
     delete window;
     window = NULL;
@@ -43,7 +43,8 @@ void Device::notifyDisposed(Disposable* disposable)
 // ---------------------------------------------------------------------------
 void Device::setName(const char* string)
 {
-  window->setTitle(string);
+  if (window)
+    window->setTitle(string);
 }
 // ---------------------------------------------------------------------------
 void Device::update()
@@ -62,23 +63,27 @@ bool Device::open(void)
 // ---------------------------------------------------------------------------
 void Device::close(void)
 {
+  if (window)
     window->on_close(); 
 }
 // ---------------------------------------------------------------------------
 
 void Device::bringToTop(int stay)
 {
-  window->bringToTop(stay);
+  if (window)
+    window->bringToTop(stay);
 }
 
 void Device::setWindowRect(int left, int top, int right, int bottom)
 {
-  window->setWindowRect(left, top, right, bottom);
+  if (window)
+    window->setWindowRect(left, top, right, bottom);
 }
 
 void Device::getWindowRect(int *left, int *top, int *right, int *bottom)
 {
-  window->getWindowRect(left, top, right, bottom);
+  if (window)
+    window->getWindowRect(left, top, right, bottom);
 }
 
 // ---------------------------------------------------------------------------
@@ -94,12 +99,16 @@ void Device::setIgnoreExtent(int in_ignoreExtent)
 // ---------------------------------------------------------------------------
 int Device::getSkipRedraw(void)
 {
-  return window->getSkipRedraw();
+  if (window)
+    return window->getSkipRedraw();
+  else
+    return 0;
 }
 // ---------------------------------------------------------------------------
 void Device::setSkipRedraw(int in_skipRedraw)
 {
-  window->setSkipRedraw(in_skipRedraw);
+  if (window)
+    window->setSkipRedraw(in_skipRedraw);
 }
 // ---------------------------------------------------------------------------
 bool Device::clear(TypeID stackTypeID)
@@ -155,7 +164,8 @@ bool Device::postscript(int format, const char* filename, bool drawText)
 void Device::getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex, 
                       bool useFreeType)
 {
-  window->getFonts(outfonts, nfonts, family, style, cex, useFreeType);
+  if (window)
+    window->getFonts(outfonts, nfonts, family, style, cex, useFreeType);
 }
 // ---------------------------------------------------------------------------
 const char * Device::getDevtype()

@@ -182,7 +182,7 @@ static void userAxis(void *axisData, int axis, int edge[3])
   SEXP fn = (SEXP)axisData;
   char margin[4] = "   ";
   int i, j = 1;
-  margin[0] = 'x' + axis;
+  margin[0] = static_cast<char>('x' + axis);
   for (i = 0; i < 3 && j < 3; i++) {
     if (edge[i] == 1)
       margin[j++] = '+';

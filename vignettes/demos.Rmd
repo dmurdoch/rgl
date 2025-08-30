@@ -2,12 +2,13 @@
 title: "rgl Demos"
 date: "`r Sys.Date()`"
 output: 
-  markdown::html_format:
-    options:
-      toc: true
+  rmarkdown::html_vignette:
+    toc: true
+    fig_height: 5
+    fig_width: 5
 vignette: >
   %\VignetteIndexEntry{rgl Demos}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 

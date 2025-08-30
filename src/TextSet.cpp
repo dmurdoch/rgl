@@ -107,7 +107,7 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
       font = fonts[index % fonts.size()];
       if (font) {
         std::string text = textArray[index];
-        font->draw( text.c_str(), text.size(), adjx, adjy, adjz,
+        font->draw( text.c_str(), static_cast<int>(text.size()), adjx, adjy, adjz,
                     pos[index % npos], *renderContext );
       }
     }
@@ -130,7 +130,7 @@ int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
     case FONT:
     case CEX: return static_cast<int>(fonts.size());
     case TEXTS:
-    case VERTICES: return textArray.size();
+    case VERTICES: return static_cast<int>(textArray.size());
     case ADJ: return 1;
     case POS: return pos[0] ? npos : 0;
   }

@@ -226,7 +226,9 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
       if (eyedir.x < 0) adj = 1.0f - adj;
     }
     if (renderContext->font)
-      renderContext->font->draw(string.c_str(), string.size(), adj, 0.5, 0.5, 0, 
+      renderContext->font->draw(string.c_str(), 
+                                static_cast<int>(string.size()), 
+                                adj, 0.5, 0.5, 0, 
                                 *renderContext);
   }      
 #endif
@@ -729,9 +731,9 @@ void BBoxDeco::render(RenderContext* renderContext)
           if (axisCallback[i]) {
             int e[3];
             if (edge) {
-              e[0] = edge->code[0];
-              e[1] = edge->code[1];
-              e[2] = edge->code[2];
+              e[0] = static_cast<int>(edge->code[0]);
+              e[1] = static_cast<int>(edge->code[1]);
+              e[2] = static_cast<int>(edge->code[2]);
             } else{
               e[0] = 0;
               e[1] = 0;
@@ -848,7 +850,7 @@ Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, 
   BBoxDecoImpl::setMarginParameters(renderContext, *this, material,
         &at, &line, &level,
         &trans, &scale); 
-  if (at == NA_INTEGER) return Vertex(NA_REAL, NA_REAL, NA_REAL);
+  if (at == NA_INTEGER) return Vertex(NA_FLOAT, NA_FLOAT, NA_FLOAT);
   /* It might make more sense to do this by
    * modifying the MODELVIEW matrix, but 
    * I couldn't get that right for some reason...
@@ -856,7 +858,7 @@ Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, 
   Vertex result;
   AABox bbox = renderContext->subscene->getBoundingBox();
   if (marginvec.missing())
-    result[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0;
+    result[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0f;
   else if (marginvec.x == -INFINITY)
     result[at] = bbox.vmin[at];
   else if (marginvec.x == INFINITY)
@@ -875,7 +877,7 @@ Vec3 BBoxDeco::marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderCon
                                     &at, &line, &level,
                                     &trans, &scale); 
   if (at == NA_INTEGER)
-    return Vertex(NA_REAL, NA_REAL, NA_REAL);
+    return Vertex(NA_FLOAT, NA_FLOAT, NA_FLOAT);
   Vertex result;
   result[at] = marginvec.x/scale[at];
   result[line] = marginvec.y/scale[line];

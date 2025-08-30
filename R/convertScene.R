@@ -422,7 +422,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       }
       if (!is.null(obj$material)) # Never use material$color
         obj$material$color <- NULL
-      
+      if (!is.null(obj$material) && !is.null(obj$material$smooth) && !obj$material$smooth)
+        obj <- nonSmooth(obj)
     } else if (obj$type == "subscene") {
       obj$par3d$viewport$x <- obj$par3d$viewport$x/fullviewport$width
       obj$par3d$viewport$width <- obj$par3d$viewport$width/fullviewport$width
@@ -501,4 +502,62 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
 
   result
+}
+
+# Modify objects that have smooth = FALSE.  Convert
+# surfaces to triangles, add vertices so that we can
+# set all triangles or quads to solid colours.
+
+nonSmooth <- function(obj) {
+  oldcolors <- obj$colors
+  ncolors <- NROW(oldcolors)
+  if (ncolors > 1) {
+    if (obj$type == "surface") {
+      dim <- obj$dim
+      ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1) 
+      if (obj$flipped) 
+        indices <- c(rbind(ul-1,
+                           ul, 
+                           ul-1+dim[1],
+                           ul+dim[1],
+                           ul-1+dim[1],
+                           ul
+                           ))
+      else
+        indices <- c(rbind(ul, 
+                           ul-1,
+                           ul-1+dim[1],
+                           ul-1+dim[1],
+                           ul+dim[1],
+                           ul))
+    } else
+      indices <- obj$indices
+    
+    if (!is.null(indices)) {
+      obj$vertices <- obj$vertices[indices,]
+      oldcolors <- obj$colors[indices,]
+      obj$normals <- obj$normals[indices,]
+      if (!is.null(obj$texcoords))
+        obj$texcoords <- obj$texcoords[indices,]
+      obj$indices <- NULL
+    }
+    newcolors <- oldcolors
+    i <- seq_len(NROW(newcolors))
+    nverts <- switch(obj$type,
+                    "triangles" = 3,
+                    "quads"     = 4,
+                    "surface"   = 6)
+    
+    for (j in seq_len(nverts-1))
+      newcolors[i %% nverts == j] <- newcolors[i %% nverts == 0]
+    obj$colors <- newcolors
+    if (obj$type == "surface") {
+      obj$type <- "triangles"
+      obj$dim <- NULL
+      obj$centers <- (obj$vertices[i %% 3 == 0,] +
+                      obj$vertices[i %% 3 == 1,] +
+                      obj$vertices[i %% 3 == 2,])/3
+    }
+  }
+  obj
 }

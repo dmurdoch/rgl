@@ -4,8 +4,10 @@ options(rgl.useNULL=TRUE)
 options(rgl.printRglwidget=FALSE)
 open3d()
 
-if (!requireNamespace("rmarkdown", quietly = TRUE)) {
-  warning(call. = FALSE, "These vignettes assume rmarkdown is installed.  It was not found.")
+if (!requireNamespace("rmarkdown", quietly = TRUE) ||
+    !rmarkdown::pandoc_available("1.14")) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown and Pandoc
+          version 1.14.  These were not found. Older versions will not work.")
   knitr::knit_exit()
 }
 
@@ -58,13 +60,17 @@ linkfn <- function(fn, text = backticked(fn), pkg = NA) {
   if (is.na(pkg))
     paste0('<a href="#', fn, '">', text, '</a>')
   else {
-    if (requireNamespace("downlit", quietly = TRUE))
-      url <- downlit::autolink_url(paste0(pkg, "::", fn))
-    else
-      url <- NA
-    if (is.na(url))
-      url <- paste0('../../', pkg, '/help/', fn)
-
+    text <- rep_len(text, length(fn))
+    url <- rep_len(NA, length(fn))
+    for (i in seq_along(fn)) {
+      if (pkg == "rgl") {
+        rdpath <- Sys.getenv("VignetteRdPath", unset = "../html/")
+        url[i] <- paste0(rdpath, basename(help(fn[i])), ".html")
+      } else if (requireNamespace("downlit", quietly = TRUE))
+        url[i] <- downlit::autolink_url(paste0(pkg, "::", fn[i]))
+      if (is.na(url[i]))
+        url[i] <- paste0('../../', pkg, '/help/', fn[i], ".html")
+    }
     paste0('<a href="', url, '">', text, '</a>')
   }
 }

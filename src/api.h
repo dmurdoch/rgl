@@ -35,7 +35,7 @@ void rgl_quit          (int* successptr);
 
 /* device management */
 
-void rgl_dev_open      (int* successptr, int* useNULL);
+void rgl_dev_open      (int* successptr, int* useNULL, int* antialias);
 void rgl_dev_close      (int* successptr);
 SEXP rgl_dev_getcurrent(void);
 SEXP rgl_dev_list        (void);
@@ -116,6 +116,10 @@ SEXP rgl_par3d(SEXP device, SEXP subscene, SEXP args);
 /* These may be removed if observer is set completely by par3d */
 void rgl_getObserver(int* successptr, double* ddata);
 void rgl_setObserver(int* successptr, double* ddata);
+void rgl_incrementID(int* n);
+
+SEXP rgl_earcut(SEXP x, SEXP y);
+
 #ifdef __cplusplus
 }
 #endif

@@ -84,6 +84,10 @@ A browsable value to put in a web page.
 \author{
 Duncan Murdoch
 }
+\seealso{
+The \HTMLVignette{WebGL}{}{User Interaction in WebGL} vignette
+gives more details.
+}
 \examples{
 if (interactive() || in_pkgdown_example()) {
   open3d()
