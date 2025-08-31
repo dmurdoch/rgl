@@ -293,18 +293,30 @@ void Texture::beginUse(RenderContext* renderContext)
   if (!texName) {
     init(renderContext);
   }
+  
+  SAVEGLERROR;
+  
   glPushAttrib(GL_TEXTURE_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);
+
+  SAVEGLERROR;
+  
   glEnable(GL_TEXTURE_2D);
+  
+  SAVEGLERROR;
+  
   if (doUseShaders) {
   	glUniform1i(location, 0);
+    SAVEGLERROR;
   } else {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, internalMode);
     glBindTexture(GL_TEXTURE_2D, texName);
+    SAVEGLERROR;
   }
 
   if (type == ALPHA) {
     glEnable(GL_BLEND);
   }
+  SAVEGLERROR;
 #endif
 }
 

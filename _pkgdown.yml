@@ -250,6 +250,7 @@ reference:
   - gltfTypes
   - safe.dev.off
   - rgl.incrementID
+  - drawToBitmap
 - title: General documentation
 - contents:
   - rgl-package

@@ -83,6 +83,17 @@ void TextSet::drawBegin(RenderContext* renderContext)
 {
   Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
+#ifndef RGL_NO_OPENGL
+  /* We use FTGL, which uses the old OpenGL 1.x fixed function scheme.
+   * This temporarily restores that scheme just
+   * to draw the text.
+   */ 
+  if (doUseShaders)
+    glUseProgram(0);
+  glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_COLOR_BUFFER_BIT
+                 | GL_DEPTH_BUFFER_BIT | GL_LIGHTING_BIT);
+  glPushClientAttrib(GL_CLIENT_VERTEX_ARRAY_BIT | GL_CLIENT_PIXEL_STORE_BIT);
+#endif
 }
 
 void TextSet::drawPrimitive(RenderContext* renderContext, int index) 
@@ -118,9 +129,11 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
 void TextSet::drawEnd(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
+  glPopClientAttrib();
+  glPopAttrib();
+#endif
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);
-#endif
 }
 
 int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 

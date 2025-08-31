@@ -208,6 +208,8 @@ void Material::beginUse(RenderContext* renderContext)
     glEnable(GL_POLYGON_OFFSET_FILL);
   }
   
+  SAVEGLERROR;
+  
   if (texture)
     texture->beginUse(renderContext);
 
