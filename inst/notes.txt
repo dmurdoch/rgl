@@ -1,7 +1,10 @@
 Notes on shader branch:
 
-Text is not being displayed properly, maybe because FTGL isn't
-updating in the new framework.
+Text is being displayed using the old OpenGL 1.x
+fixed function scheme.  This will stop us from
+being able to update to OpenGL 3.x or higher
+without updating FTGL or switching to a
+different library.
 
 These steps happen when drawing a quad with useShaders:
 
