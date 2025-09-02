@@ -12,12 +12,6 @@ namespace rgl {
 //
 
 class SpriteSet : public Shape {
-private:
-  ARRAY<Vertex> vertex;
-  ARRAY<float>  size;
-  ARRAY<int>    pos;
-  float         offset;
-
 public:
   SpriteSet(Material& material, int nvertex, double* vertex, int nsize, double* size, 
             int ignoreExtent, int count = 0, 
@@ -49,6 +43,12 @@ public:
   virtual Vertex getPrimitiveCenter(int index);
   
   /**
+   * draw everything
+   **/
+  
+  virtual void draw(RenderContext* renderContext);
+  
+  /**
    * begin sending items 
    **/
   virtual void drawBegin(RenderContext* renderContext);
@@ -75,7 +75,17 @@ public:
   
   bool isFixedSize() {return fixedSize;};
   
+  /** 
+   * prepare for shader use
+   */
+  virtual void initialize();
+  
 private:
+  ARRAY<Vertex> vertex;
+  ARRAY<float>  size;
+  ARRAY<int>    pos;
+  float         offset;
+  
   GLdouble userMatrix[16]; /* Transformation for 3D sprites */
   Matrix4x4 m;             /* Modelview matrix cache */
   Matrix4x4 p;             /* Projection matrix cache */
@@ -83,13 +93,17 @@ private:
   bool doTex;
 #endif
   std::vector<int> shapes, shapefirst, shapelens;
+  std::vector<unsigned int> indices;
   bool fixedSize;
   bool rotating;
+  bool is3D;
   Scene* scene;
   Vec3 adj;
   void getAdj(int index);
+  VertexArray posArray; /* repeated copies of vertices */
+  VertexArray adjArray; /* in shader aOfs, location ofsLoc */
+  TexCoordArray texCoordArray;
 };
-
 } // namespace rgl
 
 #endif // SPRITE_SET_H

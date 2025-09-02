@@ -119,14 +119,17 @@ void Color::useClearColor() const
 {
 #ifndef RGL_NO_OPENGL
   glClearColor(data[0],data[1],data[2], data[3]);
+  SAVEGLERROR;
 #endif
 }
 
 void Color::useColor() const
 {
 #ifndef RGL_NO_OPENGL
-  glColor4fv(data);
-	SAVEGLERROR;
+  if (!doUseShaders) {
+    glColor4fv(data);
+    SAVEGLERROR;
+  }
 #endif
 }
 

@@ -441,7 +441,8 @@ void FaceSet::drawBegin(RenderContext* renderContext)
       normalArray.beginUse();
     }
   }
-  texCoordArray.beginUse();
+  if (texCoordArray.size())
+    texCoordArray.beginUse();
   SAVEGLERROR;
 #ifndef RGL_NO_OPENGL
   // printBufferInfo();

@@ -72,7 +72,8 @@ Background::~Background()
 GLbitfield Background::getClearFlags(RenderContext* renderContext)
 {
   if (clearColorBuffer) {
-    material.colors.getColor(0).useClearColor();
+    if (!doUseShaders)
+      material.colors.getColor(0).useClearColor();
     return GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
   } else
     return GL_DEPTH_BUFFER_BIT;

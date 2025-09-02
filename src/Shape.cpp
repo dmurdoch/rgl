@@ -66,8 +66,6 @@ void Shape::render(RenderContext* renderContext)
   renderBegin(renderContext);
   
   if (doUseShaders) {
-  	if (doUpdate)
-  		update(renderContext);
   	draw(renderContext);
   } else {
     if (displayList == 0)
@@ -590,13 +588,15 @@ bool Shape::glLocs_has_key(std::string key) {
 
 void Shape::loadBuffers()
 {
-	glDeleteBuffers(1, &vbo);
+  if (vbo)
+	  glDeleteBuffers(1, &vbo);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, vertexbuffer.size(), 
               vertexbuffer.data(), GL_STATIC_DRAW);
 	
-	glDeleteBuffers(1, &ibo);
+	if (ibo)
+	  glDeleteBuffers(1, &ibo);
 	if (indexbuffer.size()) {
 		glGenBuffers(1, &ibo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -621,8 +621,10 @@ void Shape::printUniform(const char *name, int rows, int cols, int transposed,
 			glGetUniformfv(shaderProgram, location, data);
 		else if (type == GL_INT)
 			glGetUniformiv(shaderProgram, location, idata);
+		else if (type == -1)
+		  Rprintf("sampler2D\n");
 		else{
-			Rprintf("unknown type: %d", type);
+			Rprintf("  unknown type: %d\n", type);
 			return;
 		}
 		for (int i=0; i < rows; i++) {
@@ -644,7 +646,7 @@ void Shape::printUniforms() {
 	printUniform("prMatrix", 4, 4, true, GL_FLOAT);	
 	printUniform("normMatrix", 4, 4, true, GL_FLOAT);
 	printUniform("invPrMatrix", 4, 4, true, GL_FLOAT);	
-	
+	printUniform("uSampler", 0, 0, false, -1);
 	printUniform("uFogMode", 1, 1, false, GL_INT);
 	printUniform("uFogColor", 1, 3, false, GL_FLOAT);
 	printUniform("uFogParms", 1, 4, false, GL_FLOAT);
@@ -782,6 +784,8 @@ void Shape::printAttributes(int nvertices) {
 	printAttribute("aNorm", nvertices);
 	printAttribute("aPos1", nvertices);
 	printAttribute("aPos2", nvertices);
+	printAttribute("aOfs", nvertices);
+	printAttribute("aTexcoord", nvertices);
 }
 
 #endif

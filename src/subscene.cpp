@@ -610,17 +610,19 @@ void Subscene::update(RenderContext* renderContext)
 
 void Subscene::loadMatrices()
 {
-#ifndef RGL_NO_OPENGL  
-  double mat[16];
-  projMatrix.getData(mat);
-  glMatrixMode(GL_PROJECTION);
-  glLoadMatrixd(mat);  
-  SAVEGLERROR; 
-  
-  modelMatrix.getData(mat);
-  glMatrixMode(GL_MODELVIEW);  
-  glLoadMatrixd(mat);
-  SAVEGLERROR;
+#ifndef RGL_NO_OPENGL
+  if (!doUseShaders) {
+    double mat[16];
+    projMatrix.getData(mat);
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixd(mat);  
+    SAVEGLERROR; 
+    
+    modelMatrix.getData(mat);
+    glMatrixMode(GL_MODELVIEW);  
+    glLoadMatrixd(mat);
+    SAVEGLERROR;
+  }
 #endif
 }
 

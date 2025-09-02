@@ -57,7 +57,7 @@ This section describes the steps in setting up and using shaders.
 
 - Setting `flags`.
   - done by `Shape::getShaderFlags`.
-  - callers:  `PrimitiveSet::initialize -> Shape::initShader -> Shape::getShaderFlags`, `SphereSet::initialize -> Shape::initShader -> Shape::getShaderFlags` and 
+  - callers:  `PrimitiveSet::initialize -> Shape::initShader -> Shape::getShaderFlags`, `SphereSet::initialize -> Shape::initShader -> Shape::getShaderFlags`, `SpriteSet::initialize -> Shape::initShader -> Shape::getShaderFlags` and 
   `rgl::rgl_getShaderDefines` in the API.
 - Compiling and linking the shaders.
   - done by `Shape::initShader`.

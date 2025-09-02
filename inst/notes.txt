@@ -6,6 +6,10 @@ being able to update to OpenGL 3.x or higher
 without updating FTGL or switching to a
 different library.
 
+2D sprites are not working yet, maybe because 
+the offset (aOfs) attribute isn't being set.  Where
+should that happen?
+
 These steps happen when drawing a quad with useShaders:
 
   Initialization:

@@ -310,7 +310,7 @@ void Scene::render(RenderContext* renderContext)
 
   // The subscenes use the scissor test to limit where they draw, but we want to clear everything here
   // clear
-  glDisable(GL_SCISSOR_TEST);																																																																																																																																																																															
+  glDisable(GL_SCISSOR_TEST);
   glClear(clearFlags);  
   glEnable(GL_SCISSOR_TEST);
 

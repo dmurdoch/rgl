@@ -20,10 +20,8 @@
 
 using namespace rgl;
 
-bool rgl::doUseShaders = false;
-
 RGLView::RGLView(Scene* in_scene)
- : View(0,0,256,256,0), autoUpdate(false), useShaders(false)
+ : View(0,0,256,256,0), autoUpdate(false), useShaders(true)
 {
   scene = in_scene;
   flags = 0;
@@ -89,8 +87,6 @@ void RGLView::paint(void) {
   
   renderContext.time = t;
   renderContext.deltaTime = dt;
-  
-  doUseShaders = useShaders; /* Make useShaders globally visible during painting */
   
   /* This doesn't do any actual plotting, but it calculates matrices etc.,
   and may call user callbacks */

@@ -29,7 +29,8 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
    rotating(in_rotating),
    scene(in_scene)
 { 
-  if (!count)
+  is3D = count > 0;
+  if (!is3D)
     material.colorPerVertex(false);
   else {
     blended = false;
@@ -111,11 +112,35 @@ static void printPRMatrix(const char* msg) {
 }
 */
 
+void SpriteSet::draw(RenderContext* renderContext)
+{
+  if (doUseShaders && !is3D) {
+#ifndef RGL_NO_OPENGL  
+    drawBegin(renderContext);
+    glDrawElements(GL_TRIANGLES, 6*getElementCount(), GL_UNSIGNED_INT, indices.data()) ;
+    drawEnd(renderContext);
+#endif
+  } else 
+    Shape::draw(renderContext);
+}
 void SpriteSet::drawBegin(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
   
   Shape::drawBegin(renderContext);
+  
+  /* Only use shaders if not 3D */
+  if (doUseShaders && !is3D) {
+    Shape::beginShader(renderContext);
+    if (adjArray.size())
+      adjArray.beginUse();
+    else if (glLocs_has_key("aOfs"))
+      glVertexAttrib3f(glLocs["aOfs"], adj.x, adj.y, adj.z);
+    if (posArray.size())
+      posArray.beginUse();
+    if (texCoordArray.size())
+      texCoordArray.beginUse();
+  }
 
   m = Matrix4x4(renderContext->subscene->modelMatrix);
   
@@ -128,7 +153,7 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
     glMatrixMode(GL_MODELVIEW);
   }
 
-  if (!shapes.size()) {
+  if (!is3D) {
     doTex = (material.texture) ? true : false;
     glNormal3f(0.0f,0.0f,1.0f);
     material.beginUse(renderContext);
@@ -139,111 +164,117 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
 void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
-  Vertex o;
-  BBoxDeco* bboxdeco = 0;
-  if (material.marginCoord >= 0) {
-    Subscene* subscene = renderContext->subscene;
-    bboxdeco = subscene->get_bboxdeco();
-  }  
-  if (bboxdeco) 
-    o = bboxdeco->marginVecToDataVec(vertex.get(index), renderContext, &material);
-  else
-    o = vertex.get(index);
-  float   s = size.getRecycled(index);
-  if (o.missing() || ISNAN(s)) return;
-
-  Vec3 v3;
-  /* We need to modify the variable rather than the GPU's
-   * copy, because some objects refer to it
-   */
-  Matrix4x4 *modelMatrix = &renderContext->subscene->modelMatrix;
-  
-  if (fixedSize) {
-    Subscene* subscene = renderContext->subscene;
-    float winwidth  = (float) subscene->pviewport.width;
-    float winheight = (float) subscene->pviewport.height;
-    // The magic number 27 is chosen so that plotmath3d matches text3d.
-    float scalex = 27.0f/winwidth, scaley = 27.0f/winheight;
-    if (!rotating) {
-      v3 =  p * (m * o);
-      *modelMatrix = Matrix4x4::translationMatrix(v3.x, v3.y, v3.z)*
-                   Matrix4x4::scaleMatrix(scalex, scaley, (scalex + scaley)/2.0f);
-    } else {
-      UserViewpoint* userviewpoint = subscene->getUserViewpoint();
-      /* FIXME: The magic value below is supposed to approximate the non-rotating size. */
-      float zoom = userviewpoint->getZoom(),
-        scale = zoom * sqrt(scalex * scaley) * 4.0f;
-      *modelMatrix = m * Matrix4x4::translationMatrix(o.x, o.y, o.z)*
-        Matrix4x4::scaleMatrix(scale, scale, scale);
-    }
+  if (doUseShaders && !is3D) {
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices.data() + 6*index);
   } else {
-    s = s * 0.5f;	
-    if (!rotating) {
-      v3 = m * o;
-      *modelMatrix = Matrix4x4::translationMatrix(v3.x, v3.y, v3.z);
-    } else
-      *modelMatrix = m * Matrix4x4::translationMatrix(o.x, o.y, o.z);
-  }
+    Vertex o;
+    BBoxDeco* bboxdeco = 0;
+    if (material.marginCoord >= 0) {
+      Subscene* subscene = renderContext->subscene;
+      bboxdeco = subscene->get_bboxdeco();
+    }  
+    if (bboxdeco) 
+      o = bboxdeco->marginVecToDataVec(vertex.get(index), renderContext, &material);
+    else
+      o = vertex.get(index);
+    float   s = size.getRecycled(index);
+    if (o.missing() || ISNAN(s)) return;
     
-  if (pos.size())
-    getAdj(index);
-  
-  if (shapes.size()) {
-    Shape::drawEnd(renderContext);  // The shape will call drawBegin/drawEnd
-    *modelMatrix = (*modelMatrix)*
-                   Matrix4x4::scaleMatrix(2*s,2*s,2*s)*
-                   Matrix4x4::translationMatrix((1.0 - 2.0*adj.x), 
-                                                (1.0 - 2.0*adj.y),
-                                                (1.0 - 2.0*adj.z))*
-                   Matrix4x4(userMatrix);
-
-    /* Since we modified modelMatrix, we need to reload it */
-    renderContext->subscene->loadMatrices();    
-
-    int j = index % shapefirst.size();
-    int first = shapefirst.at(j);
+    Vec3 v3;
+    /* We need to modify the variable rather than the GPU's
+     * copy, because some objects refer to it
+     */
+    Matrix4x4 *modelMatrix = &renderContext->subscene->modelMatrix;
     
-    for (int i = 0; i < shapelens.at(j) ; ++ i ) 
-      scene->get_shape(shapes.at(first + i))->draw(renderContext);  
+    if (fixedSize) {
+      Subscene* subscene = renderContext->subscene;
+      float winwidth  = (float) subscene->pviewport.width;
+      float winheight = (float) subscene->pviewport.height;
+      // The magic number 27 is chosen so that plotmath3d matches text3d.
+      float scalex = 27.0f/winwidth, scaley = 27.0f/winheight;
+      if (!rotating) {
+        v3 =  p * (m * o);
+        *modelMatrix = Matrix4x4::translationMatrix(v3.x, v3.y, v3.z)*
+          Matrix4x4::scaleMatrix(scalex, scaley, (scalex + scaley)/2.0f);
+      } else {
+        UserViewpoint* userviewpoint = subscene->getUserViewpoint();
+        /* FIXME: The magic value below is supposed to approximate the non-rotating size. */
+        float zoom = userviewpoint->getZoom(),
+          scale = zoom * sqrt(scalex * scaley) * 4.0f;
+        *modelMatrix = m * Matrix4x4::translationMatrix(o.x, o.y, o.z)*
+          Matrix4x4::scaleMatrix(scale, scale, scale);
+      }
+    } else {
+      s = s * 0.5f;	
+      if (!rotating) {
+        v3 = m * o;
+        *modelMatrix = Matrix4x4::translationMatrix(v3.x, v3.y, v3.z);
+      } else
+        *modelMatrix = m * Matrix4x4::translationMatrix(o.x, o.y, o.z);
+    }
     
-    Shape::drawBegin(renderContext);
- }  else {
-    material.useColor(index);
-    /* Since we modified modelMatrix, we need to reload it */
-    renderContext->subscene->loadMatrices();
-    glBegin(GL_QUADS);
-    if (doTex)
-      glTexCoord2f(0.0f,0.0f);
-    glVertex3f(s*(0.0f - 2.0f*adj.x), 
-               s*(0.0f - 2.0f*adj.y), 
-               s*(1.0f - 2.0f*adj.z));
- 
-    if (doTex)
-      glTexCoord2f(1.0f,0.0f);
-    glVertex3f(s*(2.0f - 2.0f*adj.x), 
-               s*(0.0f - 2.0f*adj.y), 
-               s*(1.0f - 2.0f*adj.z));
-
-    if (doTex)
-      glTexCoord2f(1.0f,1.0f);
-    glVertex3f(s*(2.0f - 2.0f*adj.x), 
-               s*(2.0f - 2.0f*adj.y), 
-               s*(1.0f - 2.0f*adj.z));
-
-    if (doTex)
-      glTexCoord2f(0.0f,1.0f);
-    glVertex3f(s*(0.0f - 2.0f*adj.x), 
-               s*(2.0f - 2.0f*adj.y), 
-               s*(1.0f - 2.0f*adj.z)); 
-  
-    glEnd();
+    if (pos.size())
+      getAdj(index);
+    
+    if (is3D) {
+      Shape::drawEnd(renderContext);  // The shape will call drawBegin/drawEnd
+      *modelMatrix = (*modelMatrix)*
+        Matrix4x4::scaleMatrix(2*s,2*s,2*s)*
+        Matrix4x4::translationMatrix((1.0 - 2.0*adj.x), 
+                                     (1.0 - 2.0*adj.y),
+                                     (1.0 - 2.0*adj.z))*
+                                       Matrix4x4(userMatrix);
+      
+      /* Since we modified modelMatrix, we need to reload it */
+      renderContext->subscene->loadMatrices();    
+      
+      int j = index % shapefirst.size();
+      int first = shapefirst.at(j);
+      
+      for (int i = 0; i < shapelens.at(j) ; ++ i ) 
+        scene->get_shape(shapes.at(first + i))->draw(renderContext);  
+      
+      Shape::drawBegin(renderContext);
+    }  else {
+      material.useColor(index);
+      /* Since we modified modelMatrix, we need to reload it */
+      renderContext->subscene->loadMatrices();
+      glBegin(GL_QUADS);
+      if (doTex)
+        glTexCoord2f(0.0f,0.0f);
+      glVertex3f(s*(0.0f - 2.0f*adj.x), 
+                 s*(0.0f - 2.0f*adj.y), 
+                 s*(1.0f - 2.0f*adj.z));
+      
+      if (doTex)
+        glTexCoord2f(1.0f,0.0f);
+      glVertex3f(s*(2.0f - 2.0f*adj.x), 
+                 s*(0.0f - 2.0f*adj.y), 
+                 s*(1.0f - 2.0f*adj.z));
+      
+      if (doTex)
+        glTexCoord2f(1.0f,1.0f);
+      glVertex3f(s*(2.0f - 2.0f*adj.x), 
+                 s*(2.0f - 2.0f*adj.y), 
+                 s*(1.0f - 2.0f*adj.z));
+      
+      if (doTex)
+        glTexCoord2f(0.0f,1.0f);
+      glVertex3f(s*(0.0f - 2.0f*adj.x), 
+                 s*(2.0f - 2.0f*adj.y), 
+                 s*(1.0f - 2.0f*adj.z)); 
+      
+      glEnd();
+    }
   }
 #endif
 }
   
 void SpriteSet::getAdj(int index)
 {
-  int p = pos.get(index);
+  if (pos.size() == 0)
+    return;
+  int p = pos.getRecycled(index);
   switch(p) {
     case 0:
     case 1:
@@ -300,15 +331,24 @@ void SpriteSet::drawEnd(RenderContext* renderContext)
   renderContext->subscene->modelMatrix = Matrix4x4(m);
   /* Restore the original GPU matrices */
   renderContext->subscene->loadMatrices();  
-  if (!shapes.size())
+  if (!is3D) {
+    if (doUseShaders) {
+      if (posArray.size())
+        posArray.endUse();
+      if (adjArray.size()) 
+        adjArray.endUse();
+      if (texCoordArray.size())
+        texCoordArray.endUse();
+    }
     material.endUse(renderContext);
+  }
   Shape::drawEnd(renderContext);
 #endif
 }
 
 void SpriteSet::render(RenderContext* renderContext)
 { 
-    draw(renderContext);
+  draw(renderContext);
 }
 
 int SpriteSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 
@@ -320,7 +360,7 @@ int SpriteSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
     case SHAPENUM:
     case TYPES:    return static_cast<int>(shapes.size());
     case USERMATRIX: {
-      if (!shapes.size()) return 0;
+      if (!is3D) return 0;
       else return 4;
     }
     case FLAGS:	   return 3;
@@ -419,4 +459,87 @@ Shape* SpriteSet::get_shape(int id)
 void SpriteSet::remove_shape(int id)
 {
   shapes.erase(std::remove(shapes.begin(), shapes.end(), id), shapes.end());
+}
+
+void SpriteSet::initialize()
+{
+  Shape::initialize();
+#ifndef RGL_NO_OPENGL
+  if (doUseShaders) {
+    bool has_texture = false;
+    
+    initShader();
+    
+    material.colors.setAttribLocation(glLocs["aCol"]);
+    
+    if (material.texture && 
+        glLocs_has_key("uSampler") &&
+        glLocs_has_key("aTexcoord")) {
+      has_texture = true;
+      material.texture->setSamplerLocation(glLocs["uSampler"]);
+    }
+    
+    if (!is3D) {
+      double rescale = fixedSize ? 72 : 1;
+      adjArray.alloc(4*getElementCount());
+      posArray.alloc(4*getElementCount());
+      indices.resize(6*getElementCount());
+      if (has_texture) 
+        texCoordArray.alloc(4*getElementCount());
+      else
+        texCoordArray.alloc(0);
+      for (int i=0; i < getElementCount(); i++ ) {
+        posArray.setVertex(4*i, vertex.get(i));
+        posArray.setVertex(4*i+1, vertex.get(i));
+        posArray.setVertex(4*i+2, vertex.get(i));
+        posArray.setVertex(4*i+3, vertex.get(i));
+        
+        double s = rescale * size.getRecycled(i) / 2.0;
+        getAdj(i);
+        Vec3 adj0;
+        adj0.x = 2.0*s*(adj.x - 0.5);
+        adj0.y = 2.0*s*(adj.y - 0.5);
+        adj0.z = 2.0*s*(adj.z - 0.5);
+        
+        adjArray.setVertex(4*i, Vertex(-s-adj0.x,
+                                       -s-adj0.y,
+                                       -adj0.z) );
+        adjArray.setVertex(4*i+1, Vertex(s-adj0.x,
+                                         -s-adj0.y,
+                                         -adj0.z));
+        adjArray.setVertex(4*i+2, Vertex(s-adj0.x,
+                                         s-adj0.y,
+                                         -adj0.z));
+        adjArray.setVertex(4*i+3, Vertex(-s-adj0.x,
+                                         s-adj0.y,
+                                         -adj0.z));
+        indices[6*i]   = 4*i;
+        indices[6*i+1] = 4*i + 1;
+        indices[6*i+2] = 4*i + 2;
+        indices[6*i+3] = 4*i;
+        indices[6*i+4] = 4*i + 2;
+        indices[6*i+5] = 4*i + 3;
+        if (has_texture) {
+          texCoordArray[4*i].s = 0.0;
+          texCoordArray[4*i].t = 0.0;
+          texCoordArray[4*i+1].s = 1.0;
+          texCoordArray[4*i+1].t = 0.0;
+          texCoordArray[4*i+2].s = 1.0;
+          texCoordArray[4*i+2].t = 1.0;
+          texCoordArray[4*i+3].s = 0.0;
+          texCoordArray[4*i+3].t = 1.0;
+        }
+      }
+      posArray.appendToBuffer(vertexbuffer);
+      posArray.setAttribLocation(glLocs["aPos"]);
+      adjArray.appendToBuffer(vertexbuffer);
+      adjArray.setAttribLocation(glLocs["aOfs"]);
+      if (has_texture) {
+        texCoordArray.appendToBuffer(vertexbuffer);
+        texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
+      }
+    }
+  }
+  SAVEGLERROR;
+#endif
 }

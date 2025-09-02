@@ -161,13 +161,13 @@ void Texture::init(RenderContext* renderContext)
   switch(type)
   {
   case ALPHA:
-    internalFormat = GL_ALPHA;
+    internalFormat = GL_R8;
     break;
   case LUMINANCE:
-    internalFormat = GL_LUMINANCE;
+    internalFormat = GL_R8;
     break;
   case LUMINANCE_ALPHA:
-    internalFormat = GL_LUMINANCE_ALPHA;
+    internalFormat = GL_RGBA;
     break;
   case RGB:
     internalFormat = GL_RGB;
@@ -201,15 +201,7 @@ void Texture::init(RenderContext* renderContext)
   case GRAY8:
     ualign = 1;
     bytesperpixel = 1;
-    switch(internalFormat)
-    {
-    case GL_ALPHA:
-      format = GL_ALPHA;
-      break;
-    default:
-      format = GL_LUMINANCE;
-      break;
-    }
+    format = GL_RED;
     break;
   case RGB24:
     ualign = 1;
@@ -312,11 +304,6 @@ void Texture::beginUse(RenderContext* renderContext)
     glBindTexture(GL_TEXTURE_2D, texName);
     SAVEGLERROR;
   }
-
-  if (type == ALPHA) {
-    glEnable(GL_BLEND);
-  }
-  SAVEGLERROR;
 #endif
 }
 
