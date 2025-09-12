@@ -20,6 +20,8 @@
 
 using namespace rgl;
 
+bool rgl::doUseShaders = true;
+
 RGLView::RGLView(Scene* in_scene)
  : View(0,0,256,256,0), autoUpdate(false), useShaders(true)
 {

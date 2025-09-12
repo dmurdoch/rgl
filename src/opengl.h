@@ -5,7 +5,7 @@
 
 namespace rgl {
 
-#define doUseShaders 1
+extern bool doUseShaders;
 
 } // namespace rgl
 
