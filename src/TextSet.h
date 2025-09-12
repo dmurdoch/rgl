@@ -45,6 +45,7 @@ private:
   VertexArray vertexArray;
   std::vector<std::string> textArray;
   FontArray fonts;
+  bool saveShaders;  /* save doUseShaders while drawing */
 
   double adjx;
   double adjy;

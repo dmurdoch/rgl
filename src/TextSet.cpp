@@ -28,6 +28,9 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
  : Shape(in_material, in_ignoreExtent),
    npos(in_npos)
 {
+  saveShaders = doUseShaders;
+  doUseShaders = false;
+  
   int i;
 
   material.lit = false;
@@ -67,6 +70,7 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
   for (i=0; i<npos; i++)
     pos[i] = in_pos[i];
 
+  doUseShaders = saveShaders;
 }
 
 TextSet::~TextSet()
@@ -81,6 +85,8 @@ void TextSet::render(RenderContext* renderContext)
 
 void TextSet::drawBegin(RenderContext* renderContext) 
 {
+  saveShaders = doUseShaders;
+  doUseShaders = false;
   Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
 #ifndef RGL_NO_OPENGL
@@ -134,6 +140,7 @@ void TextSet::drawEnd(RenderContext* renderContext)
 #endif
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);
+  doUseShaders = saveShaders;
 }
 
 int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 
