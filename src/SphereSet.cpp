@@ -167,9 +167,13 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
 void SphereSet::drawEnd(RenderContext* renderContext)
 {
   if (lastdrawn >= 0) {
-    if (doUseShaders)
+    if (doUseShaders) 
       sphereMesh.doIndices();
     sphereMesh.drawEnd( renderContext );
+#ifndef RGL_NO_OPENGL
+    if (doUseShaders) 
+      Shape::endShader();
+#endif
   }
   lastdrawn = -1;
   material.endUse(renderContext);

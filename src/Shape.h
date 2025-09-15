@@ -197,6 +197,7 @@ protected:
 	void initShader();
 	void beginShader(RenderContext* renderContext);
 	void beginSideTwo();
+	void endShader();
 	void checkShader(const char* type, GLuint shader);
 	void checkProgram(GLuint program);
 	void loadBuffers();

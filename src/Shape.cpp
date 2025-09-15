@@ -196,7 +196,14 @@ void Shape::beginSideTwo()
 	glUniform1i(glLocs.at("front"), 0);
 	material.beginSide(false);
 }
+
+void Shape::endShader()
+{
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glUseProgram(0);
+}
 #endif
+
 
 void Shape::drawEnd(RenderContext* renderContext)
 {
