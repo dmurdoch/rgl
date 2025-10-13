@@ -1,3 +1,28 @@
+Plans for updates:
+
+ - Handle text finally (see shaders vignette and ftglnotes.txt)
+ - Possibly use ragg as a model for drawing text to a bitmap
+ which will then be used as a texture.  It uses textshaping
+ and systemfonts.
+ - Possibly use cairo graphics.  rasterText package is
+ an experiment in that.
+   - Modify drawToBitmap to work with rasterText functions.
+   - Font fallbacks will only be supported in R; C functions
+     will assume all fonts are specified properly.  This may
+     need a way to say "string 1 followed by string 2 on the
+     same line, treated as one big string for centering"
+ - Read and update docs
+ - Test and fix until everything is covered.
+ 
+ - Think about this idea:  given a particular view of a scene,
+ items are sorted from front to back.  But in many cases items
+ have a range of depths, and the ranges overlap.  Approach:
+ if two items overlap, split each into pieces, and consider 
+ the pieces.  Splits could be natural splits depending on
+ the object, or intersections with splits of the screen.  (The
+ latter would mean potentially fewer objects to worry about.)
+
+
 Notes on shader branch:
 
 Text is being displayed using the old OpenGL 1.x

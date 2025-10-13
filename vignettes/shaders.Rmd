@@ -84,5 +84,24 @@ This section describes the steps in setting up and using shaders.
 - Do the drawing
   - done by `primitiveSet::drawAll`
   
-  
-  
+## Text
+
+Current `rgl` uses the FTGL library to display text.  It's 
+written for the fixed pipeline, so is not compatible with 
+shader use. 
+
+In compatibility mode, I got FTGL partially working using
+fixed pipeline code, but updates weren't happening properly.
+
+Possible fixes:
+
+ - Figure out what's going wrong with updates and stick with
+ FTGL, more or less unchanged.
+ - Update FTGL to use shader based code.
+ - Drop FTGL, and draw text using the methods the WebGL code
+ is using:  draw to a bitmap, use the bitmap as a texture on
+ a 2D sprite.  
+ - Similar to the above, but write individual glyphs to the 
+ texture instead of whole strings.
+
+ - See about using ragg or agg to write the text
