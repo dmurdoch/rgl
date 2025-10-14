@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rgl</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.29</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.30</span>
       </span>
     </div>
 
@@ -76,13 +76,17 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.3.29" id="rgl-1329">rgl 1.3.29<a class="anchor" aria-label="anchor" href="#rgl-1329"></a></h2>
+<h2 class="page-header" data-toc-text="1.3.30" id="rgl-1330">rgl 1.3.30<a class="anchor" aria-label="anchor" href="#rgl-1330"></a></h2>
 <ul><li>Support for classes defined in the <code>tripack</code> package has been dropped at the request of CRAN.</li>
 <li>Added the <code><a href="../reference/plotmath3d.html">latex3d()</a></code> function to draw LaTeX text using the <code>xdvir</code> package.</li>
 <li>Both <code><a href="../reference/plotmath3d.html">plotmath3d()</a></code> and <code><a href="../reference/plotmath3d.html">latex3d()</a></code> now use default <code>cex = par3d("cex")</code>, and have new argument <code>polygon_offset</code>.</li>
 <li>
 <code>arrow3d(type = "extrusion")</code> was broken by the changes to triangulation in version 1.3.16.</li>
+</ul><div class="section level3">
+<h3 id="bug-fixes-1-3-30">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-30"></a></h3>
+<ul><li>Changes last year to <code><a href="../reference/writePLY.html">writePLY()</a></code> introduced an error in some cases (issue <a href="https://github.com/dmurdoch/rgl/issues/489" class="external-link">#489</a>).</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.24" id="rgl-1324">rgl 1.3.24<small>2025-06-25</small><a class="anchor" aria-label="anchor" href="#rgl-1324"></a></h2>
 <ul><li>The <code><a href="../reference/shapelist3d.html">shapelist3d()</a></code> function did not handle material names properly (issue <a href="https://github.com/dmurdoch/rgl/issues/462" class="external-link">#462</a>).</li>
