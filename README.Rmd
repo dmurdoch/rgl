@@ -134,15 +134,15 @@ FEATURES
 
 PLATFORMS
 ---------
-macOS
-Windows 7/10
-Unix-derivatives
+macOS (with only partial support on Tahoe, as OpenGL support is currently deficient on that platform)  
+Windows 7+  
+Unix-derivatives  
 
 
 BUILD TOOLS
 -----------
 R recommended tools (gcc toolchain)
-On Windows, Rtools40 (or earlier versions for pre-R-4.0.0)
+On Windows, Rtools is needed.
 
 REQUIREMENTS
 ------------
@@ -173,6 +173,10 @@ Install XQuartz.
 `rgl` should work with XQuartz 2.7.11 or newer, but it will probably
 need rebuilding if the XQuartz version changes. XQuartz normally needs
 re-installation whenever the macOS version changes.
+
+Currently Tahoe, the most recent version of macOS, does not
+support OpenGL in XQuartz, and it appears unlikely such 
+support will be coming.  
 
 **Windows:**  
 

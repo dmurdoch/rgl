@@ -87,12 +87,14 @@ The software is released under the GNU Public License. See
 
 ## PLATFORMS
 
-macOS Windows 7/10 Unix-derivatives
+macOS (with only partial support on Tahoe, as OpenGL support is
+currently deficient on that platform)  
+Windows 7+  
+Unix-derivatives
 
 ## BUILD TOOLS
 
-R recommended tools (gcc toolchain) On Windows, Rtools40 (or earlier
-versions for pre-R-4.0.0)
+R recommended tools (gcc toolchain) On Windows, Rtools is needed.
 
 ## REQUIREMENTS
 
@@ -123,6 +125,9 @@ Install XQuartz.
 need rebuilding if the XQuartz version changes. XQuartz normally needs
 re-installation whenever the macOS version changes.
 
+Currently Tahoe, the most recent version of macOS, does not support
+OpenGL in XQuartz, and it appears unlikely such support will be coming.
+
 **Windows:**
 
 Windows normally includes OpenGL support, but to get the appropriate
@@ -144,7 +149,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_1.3.15.tar.gz
+    R CMD INSTALL rgl_1.3.30.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -184,7 +189,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.3.15.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.3.30.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
@@ -222,4 +227,4 @@ David Hugh-Jones for documentation improvements.
 Trevor Davis for a `snapshot3d` patch.  
 Mike Stein for pointer-handling code.  
 Jonathon Love for the `uname` patch.  
-The Mapbox team for the triangulation code.
+Volodymyr Agafonkin and many others for the `earcut` triangulation code.
