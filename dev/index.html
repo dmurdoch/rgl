@@ -158,12 +158,14 @@
 <div class="section level2">
 <h2 id="platforms">PLATFORMS<a class="anchor" aria-label="anchor" href="#platforms"></a>
 </h2>
-<p>macOS Windows 7/10 Unix-derivatives</p>
+<p>macOS (with only partial support on Tahoe, as OpenGL support is currently deficient on that platform)<br>
+Windows 7+<br>
+Unix-derivatives</p>
 </div>
 <div class="section level2">
 <h2 id="build-tools">BUILD TOOLS<a class="anchor" aria-label="anchor" href="#build-tools"></a>
 </h2>
-<p>R recommended tools (gcc toolchain) On Windows, Rtools40 (or earlier versions for pre-R-4.0.0)</p>
+<p>R recommended tools (gcc toolchain) On Windows, Rtools is needed.</p>
 </div>
 <div class="section level2">
 <h2 id="requirements">REQUIREMENTS<a class="anchor" aria-label="anchor" href="#requirements"></a>
@@ -184,6 +186,7 @@ OpenGL Utility Library (GLU)</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>yum install mesa<span class="sc">-</span>libGL<span class="sc">-</span>devel mesa<span class="sc">-</span>libGLU<span class="sc">-</span>devel libpng<span class="sc">-</span>devel</span></code></pre></div>
 <p><strong>macOS:</strong></p>
 <p>Install XQuartz.<br><code>rgl</code> should work with XQuartz 2.7.11 or newer, but it will probably need rebuilding if the XQuartz version changes. XQuartz normally needs re-installation whenever the macOS version changes.</p>
+<p>Currently Tahoe, the most recent version of macOS, does not support OpenGL in XQuartz, and it appears unlikely such support will be coming.</p>
 <p><strong>Windows:</strong></p>
 <p>Windows normally includes OpenGL support, but to get the appropriate include files etc., you will need the appropriate version of <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> matched to your R version.</p>
 </div>
@@ -198,7 +201,7 @@ OpenGL Utility Library (GLU)</p>
 </h2>
 <p>Binary builds of <code>rgl</code> are available for some platforms on CRAN.</p>
 <p>For source builds, install the prerequisites as described above, download the tarball and at the command line run</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>R CMD INSTALL rgl_1.<span class="dv">3</span>.<span class="fl">15.</span>tar.gz</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>R CMD INSTALL rgl_1.<span class="dv">3</span>.<span class="fl">30.</span>tar.gz</span></code></pre></div>
 <p>(with the appropriate version of the tarball). The build uses an <code>autoconf</code> configure script; to see the options, expand the tarball and run <code>./configure --help</code>.</p>
 <p>Alternatively, in R run</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rgl"</span>)</span></code></pre></div>
@@ -215,7 +218,7 @@ OpenGL Utility Library (GLU)</p>
 <h3 id="building-without-opengl">BUILDING WITHOUT OPENGL<a class="anchor" aria-label="anchor" href="#building-without-opengl"></a>
 </h3>
 <p>As of version 0.104.1, it is possible to build the package without OpenGL support on Unix-alikes (including macOS) with the configure option –disable-opengl For example,</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_1.<span class="dv">3</span>.<span class="fl">15.</span>tar.gz </span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>R CMD INSTALL <span class="sc">--</span>configure<span class="sc">-</span>args<span class="ot">=</span><span class="st">"--disable-opengl"</span> rgl_1.<span class="dv">3</span>.<span class="fl">30.</span>tar.gz </span></code></pre></div>
 <p>On Windows, OpenGL support cannot currently be disabled.</p>
 </div>
 </div>
@@ -253,7 +256,7 @@ David Hugh-Jones for documentation improvements.<br>
 Trevor Davis for a <code>snapshot3d</code> patch.<br>
 Mike Stein for pointer-handling code.<br>
 Jonathon Love for the <code>uname</code> patch.<br>
-The Mapbox team for the triangulation code.</p>
+Volodymyr Agafonkin and many others for the <code>earcut</code> triangulation code.</p>
 </div>
 </div>
   </div>
@@ -320,7 +323,7 @@ The Mapbox team for the triangulation code.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
