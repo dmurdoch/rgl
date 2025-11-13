@@ -1,7 +1,9 @@
-# 1.3.30
+# 1.3.31
 
 This is a relatively minor release.
 
+* A warning specific to macOS Tahoe (which no longer
+supports OpenGL) has been added.
 * Support for classes defined in the `tripack` package
 has been dropped at the request of CRAN.
 * Added the `latex3d()` function to draw LaTeX text using the
