@@ -1,5 +1,7 @@
-# rgl 1.3.30
+# rgl 1.3.31
 
+* macOS Tahoe 26.1 does not support `rgl` displays.  Give
+a more informative failure warning.
 * Support for classes defined in the `tripack` package
 has been dropped at the request of CRAN.
 * Added the `latex3d()` function to draw LaTeX text using the

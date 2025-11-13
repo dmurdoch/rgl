@@ -59,7 +59,7 @@ The current implementation only outputs triangles, quads, planes, spheres,
 points, line segments, line strips and surfaces.
 
 The defaults for \code{pointsAsEdges} and \code{linesAsEdges} have been
-chosen because Blender (\url{https://www.blender.org}) does not import
+chosen because \code{Blender} does not import
 lines, only polygons.  If you are exporting to other software you
 may want to change them.
 
@@ -78,6 +78,9 @@ data was written.
 The file format was found on \code{www.mathworks.com} on November 10, 2012
 at a URL that no longer exists; currently the
 format is described at \code{www.mathworks.com/help/vision/ug/the-ply-format.html}.
+
+Blender is an open source 3D object editor.  See
+\code{www.blender.org} for details.
 }
 \author{
 Duncan Murdoch
