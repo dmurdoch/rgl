@@ -79,7 +79,7 @@ specify it in the \code{material} argument, e.g.
 multiple textures.
 
 The defaults for \code{pointsAsPoints} and \code{linesAsLines} have been
-chosen because Blender (\url{https://www.blender.org}) does not import
+chosen because \code{Blender} does not import
 points or lines, only polygons.  If you are exporting to other software you
 may want to change them.
 
@@ -102,6 +102,9 @@ from the input file.
 \references{
 The file format was found at \url{http://www.martinreddy.net/gfx/3d/OBJ.spec}
 on November 11, 2012.  
+
+Blender is an open source 3D object editor.  See
+\code{www.blender.org} for details.
 }
 \author{
 Duncan Murdoch
