@@ -1,3 +1,8 @@
+# rgl 1.3.32
+
+* `rglwidget()` now detects Positron and modifies the
+display so it appears properly in the PLOTS window.
+
 # rgl 1.3.31
 
 * macOS Tahoe 26.1 does not support `rgl` displays.  Give
