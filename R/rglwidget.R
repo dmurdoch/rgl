@@ -533,4 +533,4 @@ image_uri <- function(filename) {
          ";base64,", base64encode(filename))
 }
 
-in_positron <- function() "tools:positron" %in% search()
+in_positron <- function() nchar(Sys.getenv("POSITRON")) > 0
