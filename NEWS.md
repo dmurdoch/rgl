@@ -1,3 +1,9 @@
+# rgl 1.3.32
+
+* The WebGL code did not handle the case of lit objects
+with no lights properly.  Now they display the emission
+color only.  (Issue #494).
+
 # rgl 1.3.31
 
 * macOS Tahoe 26.1 does not support `rgl` displays.  Give
