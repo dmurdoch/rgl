@@ -131,6 +131,8 @@ void main(void) {
       col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
       lighteffect = lighteffect + vec4(col, colDiff.a);
     }
+#else
+    lighteffect.a = 1.;
 #endif
     
 #else // not IS_LIT
