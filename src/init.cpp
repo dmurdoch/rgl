@@ -260,6 +260,7 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_getWheelCallback, 2),
    FUNDEF(rgl_getAxisCallback, 3),
    FUNDEF(rgl_primitive, 4),
+   FUNDEF(rgl_texture_from_array, 1),
 
    {NULL, NULL, 0}
  };

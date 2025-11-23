@@ -84,6 +84,12 @@ rgl.material0 <- function(
 
   texture <- prepareTexture(texture)
 
+  if (is.array(texture)) {
+    arr <- texture
+    texture <- ""
+  } else
+    arr <- NULL
+  
   textype <- rgl.enum.textype( textype )
   texmode <- rgl.enum.texmode( texmode )
   texminfilter <- rgl.enum.texminfilter( texminfilter )
@@ -138,7 +144,12 @@ rgl.material0 <- function(
     idata,
     cdata,
     ddata
-  )
+  )$success
+  
+  if (ret && !is.null(arr))
+    ret <- .Call(rgl_texture_from_array, arr)
+  
+  ret
 }
 
 rgl.material <- function(...) {
@@ -244,22 +255,20 @@ prepareTexture <- function(texture) {
         arr <- jpeg::readJPEG(texture)
       else
         stop("JPEG textures require the 'jpeg' package")
+      src <- texture
     } else
       result <- normalizePath(texture)
   } else {
     raster <- as.raster(texture)
-    arr <- t(col2rgb(raster))/255
-    dim(arr) <- c(rev(dim(raster)), 3)
-    arr <- aperm(arr, c(2,1,3))
+    arr <- col2rgb(raster)/255
+    dim(arr) <- c(dim(raster), 3)
   }
   
   if (!is.null(arr)) {
-    if (!requireNamespace("png"))
-      stop("non-PNG textures require the 'png' package")
-    result <- tempfile(fileext = ".png", tmpdir = .rglEnv$textureDir)
-    src <- attr(texture, "src")
-    png::writePNG(arr, target = result, 
-                  text = c(rgl_source = deparse(src)))
+    result <- arr
+    origsrc <- attr(texture, "src")
+    if (!is.null(origsrc))
+      src <- origsrc
   }
   
   structure(result, rgl_source = src)

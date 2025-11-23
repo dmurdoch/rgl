@@ -120,6 +120,8 @@ void rgl_incrementID(int* n);
 
 SEXP rgl_earcut(SEXP x, SEXP y);
 
+SEXP rgl_texture_from_array(SEXP values);
+
 #ifdef __cplusplus
 }
 #endif

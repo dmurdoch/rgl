@@ -66,10 +66,11 @@ Texture::Texture(
   
   filename = in_filename;
   
-  if ( !pixmap->load(filename.c_str()) ) {
-    delete pixmap;
-    pixmap = NULL;
-  }
+  if (filename.length() > 0) 
+    if ( !pixmap->load(filename.c_str()) ) {
+      delete pixmap;
+      pixmap = NULL;
+    }
 }
 
 Texture::~Texture()

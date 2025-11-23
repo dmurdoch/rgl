@@ -8,6 +8,7 @@
 
 #include "lib.h"
 #include "R.h"
+#include <Rinternals.h>
 #include "platform.h"
 #include "api.h"
 
@@ -1439,4 +1440,44 @@ void rgl::rgl_incrementID(int* n)
   if (*n > 0)
     SceneNode::nextID += *n;
   *n = SceneNode::nextID;
+}
+
+
+SEXP rgl::rgl_texture_from_array(SEXP values)
+{
+  int height, width;
+  PixmapTypeID typeID;
+  Material& mat = currentMaterial;
+  SEXP dim = Rf_getAttrib(values, Rf_install("dim"));
+  if (Rf_isInteger(dim)) {
+    if (Rf_length(dim) >= 2) {
+      height = INTEGER(dim)[0];
+      width = INTEGER(dim)[1];
+    }
+    if (Rf_length(dim) == 2) 
+      typeID = GRAY8;
+    else if (Rf_length(dim) == 3) {
+      if (INTEGER(dim)[2] == 3)
+        typeID = RGB24;
+      else if (INTEGER(dim)[2] == 4)
+        typeID = RGBA32;
+      else
+        return Rf_ScalarInteger(RGL_FAIL);
+    } else
+      return Rf_ScalarInteger(RGL_FAIL);
+  } else
+    return Rf_ScalarInteger(RGL_FAIL);
+  
+  mat.texture = new Texture("", mat.textype, mat.texmode, 
+                            mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
+                            false);
+  if ( !mat.texture->isValid() ||
+       !mat.texture->getPixmap()->init(typeID, width, height, 8) ||
+        !mat.texture->getPixmap()->load(REAL(values))) {
+      mat.texture->unref();
+      mat.texture = NULL;
+      return Rf_ScalarInteger(RGL_FAIL);
+  }
+  mat.alphablend = mat.alphablend || typeID == RGBA32;
+  return Rf_ScalarInteger(RGL_SUCCESS);
 }
