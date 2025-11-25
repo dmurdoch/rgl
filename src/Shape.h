@@ -147,8 +147,6 @@ public:
   ShaderFlags getShaderFlags();
   
   std::string getShaderDefines(ShaderFlags flags);
-  
-  virtual void initialize();
 
 protected:
   /**
@@ -202,10 +200,10 @@ protected:
 	void checkProgram(GLuint program);
 	void loadBuffers();
 	void printUniform(const char *name, int rows, int cols, int transposed,
-                   GLint type);
-	void printUniforms(); /* for debugging */
-	void printAttribute(const char *name, int nvertices);
-	void printAttributes(int nvertices);
+                   GLint type, bool verbose = false);
+	void printUniforms(bool verbose = false); /* for debugging */
+	void printAttribute(const char *name, int nvertices, bool verbose = false);
+	void printAttributes(int nvertices, bool verbose = false);
 	void printBufferInfo();
 #endif	
 

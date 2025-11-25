@@ -173,6 +173,46 @@ bool Pixmap::load(const double* _data)
   return true;
 }
 
+bool Pixmap::load(const unsigned char* _data)
+{
+  if (!_data) {
+    char buffer[256];
+    snprintf(buffer, 256, "Pixmap load: null data");
+    printMessage(buffer);
+    return false;
+  }
+  if (bits_per_channel != 8) {
+    char buffer[256];
+    snprintf(buffer, 256, "Pixmap load: bits_per_channel=%d, must be 8", bits_per_channel);
+    printMessage(buffer);
+    return false;
+  }
+  if (typeID == INVALID) {
+    char buffer[256];
+    snprintf(buffer, 256, "Pixmap load: typeID is INVALID");
+    printMessage(buffer);
+    return false;
+  }
+  unsigned char *byte = data;
+  const unsigned char *value = _data;
+  switch(typeID) {
+  case GRAY8: memcpy(data, _data, width*height); break;
+  case RGB24: memcpy(data, _data, width*height*3); break;
+  case RGBA32:memcpy(data, _data, width*height*4); break;
+  case RGB32: 
+  for (int i=0; i<width; i++)
+    for (int j=0; j<height; j++) {
+      *byte++ = *value++;
+      *byte++ = *value++;
+      *byte++ = *value++;
+      *byte++ = 0;
+    }
+    break;
+  case INVALID: break; /* do nothing */
+  }
+  return true;
+}
+
 bool Pixmap::save(PixmapFormat* format, const char* filename)
 {
   std::FILE* file = NULL;

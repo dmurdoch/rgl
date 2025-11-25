@@ -286,3 +286,16 @@ textureSource <- function(texture) {
   }
   texture
 }
+
+rgl.textureRaster <- function(id = NULL) {
+  if (length(id) == 0L) id <- 0L
+  stopifnot(length(id) == 1L)
+  
+  res <- .Call( rgl_textureRaster, 
+                id = as.integer(id) )
+  if (is.null(res))
+    return(res);
+  if (dim(res)[3L] == 1L)
+    res <- res[,,1L]
+  as.raster(res, max = 255)
+}

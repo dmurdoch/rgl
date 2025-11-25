@@ -31,21 +31,21 @@ public:
     memcpy(fontname, in_fontname, strlen(in_fontname) + 1);    
   };
   
-  virtual ~GLFont()
-  {
-    delete [] family;
-    delete [] fontname;
-  }
-  
+  virtual ~GLFont();
+
+  /*
   virtual void draw(const char* text, int length, 
                     double adjx, double adjy, double adjz,
                     int pos, const RenderContext& rc) = 0;
   virtual void draw(const wchar_t* text, int length, 
                     double adjx, double adjy, double adjz,
                     int pos, const RenderContext& rc) = 0;
-  virtual double width(const char* text) = 0;
+  */ 
+  virtual double width(const char* text);
+  /*
   virtual double width(const wchar_t* text) = 0;
   virtual double height() = 0;
+   */
   virtual bool valid(const char* text) { return true; };
   // justify returns false if justification puts the text outside the viewport
   GLboolean justify(double width, double height, 

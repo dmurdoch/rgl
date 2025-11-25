@@ -188,6 +188,11 @@ void Shape::beginShader(RenderContext* renderContext)
 		}
 		if (glLocs_has_key("front"))
 			glUniform1i(glLocs["front"], 1);
+		if (glLocs_has_key("textScale"))
+		  glUniform3f(glLocs["textScale"],
+                0.75/subscene->pviewport.width, 
+                0.75/subscene->pviewport.height, 
+                1.0);
 	}
 }
 
@@ -288,15 +293,16 @@ ShaderFlags Shape::getShaderFlags()
                        material.back == Material::LINE_FACE);
   
   result.sprites_3d = false;
-  result.fixed_size = type == "text";
-  if (!result.fixed_size ) {
+  result.fixed_size = false;
+  result.fixed_quads = false;
+  if (type == "sprites" || type == "text") {
     SpriteSet* sprite = dynamic_cast<SpriteSet*>(this);
     if (sprite) {
       result.fixed_size = sprite->isFixedSize();
       result.sprites_3d = sprite->getAttributeCount(subscene, IDS) > 0;
     }
+    result.fixed_quads = !result.sprites_3d;
   }
-  result.fixed_quads = (type == "text" || type == "sprites") && !result.sprites_3d;
   
   result.has_fog = material.fog;
   result.has_normals = (type == "spheres") ||
@@ -305,6 +311,7 @@ ShaderFlags Shape::getShaderFlags()
   if (material.texture) {
     result.has_texture = getAttributeCount(subscene, TEXCOORDS) > 0 ||
      (type == "sprites" && !result.sprites_3d) ||
+     type == "text" ||
      type == "spheres" ||
      (type == "background" && sphere);
   } else
@@ -432,11 +439,8 @@ std::string Shape::getShaderDefines(ShaderFlags flags)
 		defines = defines + "#define POINTSIZE " + ss.str() + "\n";
 	}
 	
-	if (type == "sprites")
+	if (type == "sprites" || type == "text")
 		defines = defines + "#define IS_SPRITES 1\n";
-	
-	if (type == "text")
-		defines = defines + "#define IS_TEXT 1\n";
 	
 	if (flags.is_transparent)
 		defines = defines + "#define IS_TRANSPARENT 1\n"; 
@@ -479,11 +483,6 @@ void Shape::checkProgram(GLuint program)
 		glGetProgramInfoLog(program, sizeof(infoLog), &len, infoLog);
 		Rf_error("Shader link issue:\n%s", infoLog);
 	}
-}
-
-void Shape::initialize()
-{
-	SceneNode::initialize();
 }
 
 void Shape::initShader()
@@ -570,10 +569,6 @@ void Shape::initShader()
 	if (!flags.sprites_3d) {
 	  glLocs["mvMatrix"] = glGetUniformLocation(shaderProgram, "mvMatrix");
 	  glLocs["prMatrix"] = glGetUniformLocation(shaderProgram, "prMatrix");
-	  
-	  if (flags.fixed_size) {
-	    glLocs["textScale"] = glGetUniformLocation(shaderProgram, "textScale");
-	  }
 	}
 	
 	if (flags.needs_vnormal) {
@@ -586,6 +581,10 @@ void Shape::initShader()
 	  if (flags.has_normals)
 	    glLocs["invPrMatrix"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
 	}
+	if (flags.fixed_size) {
+	  glLocs["textScale"] = glGetUniformLocation(shaderProgram, "textScale");
+	}
+;
 }
 
 bool Shape::glLocs_has_key(std::string key) {
@@ -616,7 +615,8 @@ void Shape::loadBuffers()
 }
 
 void Shape::printUniform(const char *name, int rows, int cols, int transposed,
-                                GLint type) {
+                                GLint type, 
+                                bool verbose) {
 	float data[4*nlights > 16 ? 4*nlights : 16];
 	int idata[nlights];
 	
@@ -644,28 +644,34 @@ void Shape::printUniform(const char *name, int rows, int cols, int transposed,
 			}
 			Rprintf("\n");
 		}
-	} else Rprintf("%s: not defined\n", name);
+	} else if (verbose) 
+	  Rprintf("%s: not defined\n", name);
 	SAVEGLERROR;
 }
 
-void Shape::printUniforms() {
-	printUniform("mvMatrix", 4, 4, true, GL_FLOAT);
-	printUniform("prMatrix", 4, 4, true, GL_FLOAT);	
-	printUniform("normMatrix", 4, 4, true, GL_FLOAT);
-	printUniform("invPrMatrix", 4, 4, true, GL_FLOAT);	
-	printUniform("uSampler", 0, 0, false, -1);
-	printUniform("uFogMode", 1, 1, false, GL_INT);
-	printUniform("uFogColor", 1, 3, false, GL_FLOAT);
-	printUniform("uFogParms", 1, 4, false, GL_FLOAT);
-	
-	printUniform("emission", 1, 3, false, GL_FLOAT);
-	printUniform("shininess", 1, 1, false, GL_FLOAT);
-	printUniform("ambient", nlights, 3, false, GL_FLOAT);
-	printUniform("specular", nlights, 3, false, GL_FLOAT);
-	printUniform("diffuse", nlights, 3, false, GL_FLOAT);
-	printUniform("lightDir", nlights, 3, false, GL_FLOAT);	
-	printUniform("viewpoint", 1, 1, false, GL_INT);
-	printUniform("finite", 1, 1, false, GL_INT);
+void Shape::printUniforms(bool verbose) {
+  Rprintf("Uniforms:\n");
+	printUniform("mvMatrix", 4, 4, true, GL_FLOAT, verbose);
+	printUniform("prMatrix", 4, 4, true, GL_FLOAT, verbose);	
+	printUniform("normMatrix", 4, 4, true, GL_FLOAT, verbose);
+	printUniform("textScale", 1, 3, false, GL_FLOAT, verbose);
+	printUniform("invPrMatrix", 4, 4, true, GL_FLOAT, verbose);
+	printUniform("uAspect", 1, 1, false, GL_FLOAT, verbose);
+	printUniform("uLwd", 1, 1, false, GL_FLOAT, verbose);
+	printUniform("uSampler", 0, 0, false, -1, verbose);
+	printUniform("uFogMode", 1, 1, false, GL_INT, verbose);
+	printUniform("uFogColor", 1, 3, false, GL_FLOAT, verbose);
+	printUniform("uFogParms", 1, 4, false, GL_FLOAT, verbose);
+	printUniform("vClipPlane", nclipplanes, 4, false, GL_FLOAT, verbose);
+	printUniform("emission", 1, 3, false, GL_FLOAT, verbose);
+	printUniform("shininess", 1, 1, false, GL_FLOAT, verbose);
+	printUniform("ambient", nlights, 3, false, GL_FLOAT, verbose);
+	printUniform("specular", nlights, 3, false, GL_FLOAT, verbose);
+	printUniform("diffuse", nlights, 3, false, GL_FLOAT, verbose);
+	printUniform("lightDir", nlights, 3, false, GL_FLOAT, verbose);	
+	printUniform("viewpoint", 1, 1, false, GL_INT, verbose);
+	printUniform("finite", 1, 1, false, GL_INT, verbose);
+	printUniform("front", 1, 1, false, GL_BOOL, verbose);
 	
 }
 
@@ -681,7 +687,7 @@ void Shape::printBufferInfo() {
 	SAVEGLERROR;
 }
 
-void Shape::printAttribute(const char* name, int nvertices) {
+void Shape::printAttribute(const char* name, int nvertices, bool verbose) {
 	GLint idata;
 	void* pdata;
 	
@@ -780,19 +786,19 @@ void Shape::printAttribute(const char* name, int nvertices) {
 				Rprintf("\n");
 			}
 		}
-	} else
+	} else if (verbose)
 		Rprintf("%s not defined\n", name);
 	SAVEGLERROR;
 }
 
-void Shape::printAttributes(int nvertices) {
-	printAttribute("aPos", nvertices);
-	printAttribute("aCol", nvertices);
-	printAttribute("aNorm", nvertices);
-	printAttribute("aPos1", nvertices);
-	printAttribute("aPos2", nvertices);
-	printAttribute("aOfs", nvertices);
-	printAttribute("aTexcoord", nvertices);
+void Shape::printAttributes(int nvertices, bool verbose) {
+	printAttribute("aPos", nvertices, verbose);
+	printAttribute("aCol", nvertices, verbose);
+	printAttribute("aNorm", nvertices, verbose);
+	printAttribute("aPos1", nvertices, verbose);
+	printAttribute("aPos2", nvertices, verbose);
+	printAttribute("aOfs", nvertices, verbose);
+	printAttribute("aTexcoord", nvertices, verbose);
 }
 
 #endif

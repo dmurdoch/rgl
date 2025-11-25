@@ -4,7 +4,8 @@
 #include <vector>
 #include <string>
 
-#include "Shape.h"
+#include "SpriteSet.h"
+
 
 #include "render.h"
 #include "glgui.h"
@@ -14,45 +15,74 @@
 
 namespace rgl {
 
+typedef struct text_extents
+{
+  double height, width,
+  x_advance, x_bearing,
+  y_advance, y_bearing,
+  ascent, descent;
+} text_extents_t;
+
+typedef struct text_placement
+{
+  double x, y;
+} text_placement_t;
+
+typedef int (*rasterText_version_func) (void);
+
+typedef text_extents_t* (*rasterText_measure_text_func)(
+        int n, const char *text[], /* must be UTF-8! */
+        const char *family,
+        int font,
+        const char *fontfile,
+        double size,
+        text_extents_t *result);
+
+typedef int (*rasterText_pack_text_func)(int n, const char * texts[], 
+             text_extents_t *measures, text_placement_t *placement, int width);
+
+typedef int (*rasterText_get_buffer_stride_func)(int width);
+
+typedef void (*rasterText_draw_text_to_buffer_func)(int n,
+              const text_placement_t *xy,
+              const char *text[],
+              const char *family, int font,
+              const char *fontfile, double size,
+              int width, int height, int stride,
+              unsigned char *buffer);
+
 //
 // TEXTSET
 //
 
-class TextSet : public Shape {
+class TextSet : public SpriteSet {
 public:
   TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, 
-          double in_adjx, double in_adjy, double in_adjz,
+          double *in_adj,
           int in_ignoreExtent, FontArray& in_fonts,
-          int in_npos, const int* in_pos);
+          double* in_cex,
+          int in_npos, int* in_pos);
   ~TextSet();
-  /* Can't use display lists */
-  void render(RenderContext* renderContext);
-  virtual std::string getTypeName() { return "text"; };
+  std::string getTypeName() override { return "text"; };
 
-  int getElementCount(void){ return static_cast<int>(textArray.size()); }
-  int getAttributeCount(SceneNode* subscene, AttribID attrib);
-  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
-  std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
-    
-  Vertex getPrimitiveCenter(int index) { return vertexArray[index]; }
-
-  void drawBegin(RenderContext* renderContext);
-  void drawPrimitive(RenderContext* renderContext, int index);
-  void drawEnd(RenderContext* renderContext);
+  int getAttributeCount(SceneNode* subscene, AttribID attrib) override;
+  void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result) override;
+  std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index) override;
+  
+  void initialize() override;
 
 private:
 
-  VertexArray vertexArray;
   std::vector<std::string> textArray;
   FontArray fonts;
-  bool saveShaders;  /* save doUseShaders while drawing */
-
-  double adjx;
-  double adjy;
-  double adjz;
+  std::vector<text_extents_t> measures;
+  std::vector<text_placement_t> placement;
+  GLuint texture_width, texture_height;
   
-  int npos;
-  int* pos;
+  void do_measure_text();
+  void do_pack_text();
+  void draw_to_texture();
+  void set_coordinates();
 };
 
 } // namespace rgl

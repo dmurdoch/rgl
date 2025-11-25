@@ -226,10 +226,11 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
       if (eyedir.x < 0) adj = 1.0f - adj;
     }
     if (renderContext->font)
-      renderContext->font->draw(string.c_str(), 
-                                static_cast<int>(string.size()), 
-                                adj, 0.5, 0.5, 0, 
-                                *renderContext);
+      Rprintf("fix bboxdeco labelling");
+      // renderContext->font->draw(string.c_str(), 
+      //                           static_cast<int>(string.size()), 
+      //                           adj, 0.5, 0.5, 0, 
+      //                           *renderContext);
   }      
 #endif
 }

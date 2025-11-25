@@ -237,6 +237,14 @@ void ColorArray::set( int in_ncolor, int* in_color, int in_nalpha, double* in_al
   }
 }
 
+void ColorArray::set(ColorArray src) {
+  ncolor = src.ncolor;
+  nalpha = src.nalpha;
+  arrayptr = (u8*) realloc( arrayptr, sizeof(u8) * 4 * ncolor);
+  memcpy(arrayptr, src.arrayptr, sizeof(u8) * 4 * ncolor);
+  hint_alphablend = false;
+}
+
 unsigned int ColorArray::getLength() const
 {
   return ncolor;
@@ -273,7 +281,7 @@ void ColorArray::useArray() const
 		SAVEGLERROR;
 		glVertexAttribPointer(location, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (GLbyte*)0 + offset);
 		SAVEGLERROR;
-	} else {
+	} else if (!doUseShaders) {
 		glEnableClientState(GL_COLOR_ARRAY);
 		SAVEGLERROR;
     glColorPointer(4, GL_UNSIGNED_BYTE, 0, (const GLvoid*) arrayptr );
@@ -332,3 +340,18 @@ void ColorArray::recycle(unsigned int newsize)
   }
 }
 
+void ColorArray::replicate(unsigned int each)
+{
+  size_t newsize = each*ncolor;
+  if (newsize > 0) {
+    arrayptr = (u8*) realloc(arrayptr, sizeof(u8)*4*newsize);
+    for(int i0=0;i0<ncolor;i0++) {
+      int i = ncolor - 1 - i0;
+      for (int j=0; j<each; j++)
+        for (int k=0; k<4; k++) 
+          arrayptr[4*each*i + 4*j + k] = arrayptr[4*i + k];
+    }
+  } else 
+    arrayptr = NULL;
+  ncolor = newsize;
+}

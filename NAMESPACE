@@ -12,7 +12,7 @@ export(.check3d,
   cube3d, cuboctahedron3d, cur3d, 
   currentSubscene3d, cylinder3d,
   decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, 
-  dot3d, drape3d, drawToBitmap, ellipse3d, 
+  dot3d, drape3d, ellipse3d, 
   expect_known_scene, extrude3d,
   facing3d, figWidth, figHeight, filledContour3d,
   gc3d, getBoundary3d,
@@ -35,7 +35,8 @@ export(.check3d,
   rgl.material.names, rgl.material.readonly,
   rgl.par3d.names, rgl.par3d.readonly,
   rgl.open, rgl.pixels, rgl.planes, rgl.points, rgl.pop, rgl.postscript,
-  rgl.primitive, rgl.projection, rgl.quads, rgl.quit, rgl.Sweave, rgl.Sweave.off,
+  rgl.primitive, rgl.projection, rgl.quads, rgl.quit,
+  rgl.textureRaster, rgl.Sweave, rgl.Sweave.off,
   rgl.select, rgl.select3d, rgl.set, rgl.snapshot, rgl.spheres, rgl.sprites,
   rgl.surface, rgl.texts, rgl.triangles, rgl.user2window,
   rgl.attrib, rgl.attrib.count, rgl.attrib.info, 
@@ -199,6 +200,6 @@ importFrom(knitr, asis_output, fig_path, hook_plot_custom, include_graphics,
 importFrom(magrittr, "%>%")
 importFrom(stats, coef, predict, residuals)
 importFrom(base64enc, base64encode)
-importFrom(ragg, agg_capture)
-importFrom(systemfonts, font_fallback)
-importFrom(textshaping, shape_text)
+# importFrom(ragg, agg_capture)
+# importFrom(systemfonts, font_fallback)
+# importFrom(textshaping, shape_text)

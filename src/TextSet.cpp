@@ -4,11 +4,23 @@
 #include "R.h"
 #include "BBoxDeco.h"
 #include "subscene.h"
+#include "Texture.h"
 #ifdef HAVE_FREETYPE
 #include <map>
 #endif
 
 using namespace rgl;
+
+#define PT_X(i) xy + i 
+#define PT_Y(i) xy + i + n
+
+
+extern "C" {
+  rasterText_measure_text_func        measure_text;
+  rasterText_pack_text_func           pack_text;
+  rasterText_get_buffer_stride_func   get_buffer_stride;
+  rasterText_draw_text_to_buffer_func draw_text_to_buffer;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -21,29 +33,31 @@ using namespace rgl;
 //
 
 TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, 
-                 double in_adjx, double in_adjy, double in_adjz,
+                 double* in_adj,
                  int in_ignoreExtent, FontArray& in_fonts,
+                 double* in_cex,
                  int in_npos,
-                 const int* in_pos)
- : Shape(in_material, in_ignoreExtent),
-   npos(in_npos)
+                 int* in_pos)
+ : SpriteSet(in_material, in_ntexts, in_center, 
+   in_fonts.size(), in_cex,     // nsize, size
+   in_ignoreExtent, 
+   0, NULL,                 // count, shapelist
+   0, NULL,                 // nshapelens, shapelens
+   NULL,                    // userMatrix
+   true, false,             // fixedSize, rotating
+   NULL,                    // scene,
+   in_adj,
+   in_npos, in_pos,
+   0.0),                     // offset
+   measures(in_ntexts),
+   placement(in_ntexts)
 {
-  saveShaders = doUseShaders;
-  doUseShaders = false;
-  
-  int i;
-
   material.lit = false;
-  material.colorPerVertex(false);
+  material.colorPerVertex(true, in_ntexts);
 
-  adjx = in_adjx;
-  adjy = in_adjy;
-  adjz = in_adjz;
+  // init arrays
 
-  // init vertex array
-
-  vertexArray.alloc(in_ntexts);
-  for (i = 0; i < in_ntexts; i++) {
+  for (int i = 0; i < in_ntexts; i++) {
   	textArray.push_back(in_texts[i]);
   }
 
@@ -51,96 +65,26 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
 #ifdef HAVE_FREETYPE  
   blended = true;
 #endif  
-    
-  for (i=0;i<in_ntexts;i++) {
+  int fsize = fonts.size();
+  for (int i=0;i<in_ntexts;i++) {
 
-    vertexArray[i].x = (float) in_center[i*3+0];
-    vertexArray[i].y = (float) in_center[i*3+1];
-    vertexArray[i].z = (float) in_center[i*3+2];
-
-    boundingBox += vertexArray[i];
-      
-    if (!fonts[i % fonts.size()])
+    if (!fonts[i % fsize])
       Rf_error("font not available");
-    if (!fonts[i % fonts.size()]->valid(textArray[i].c_str()))
+    if (!fonts[i % fsize]->valid(textArray[i].c_str()))
       Rf_error("text %d contains unsupported character", i+1);
   }
-  
-  pos = new int[npos];
-  for (i=0; i<npos; i++)
-    pos[i] = in_pos[i];
 
-  doUseShaders = saveShaders;
+  // Measure the texts
+  do_measure_text();
+
+  do_pack_text();
+
+  // Draw the texts to the texture
+  draw_to_texture();
 }
 
 TextSet::~TextSet()
 {
-  delete [] pos;
-}
-
-void TextSet::render(RenderContext* renderContext) 
-{
-  draw(renderContext);
-}
-
-void TextSet::drawBegin(RenderContext* renderContext) 
-{
-  saveShaders = doUseShaders;
-  doUseShaders = false;
-  Shape::drawBegin(renderContext);
-  material.beginUse(renderContext);
-#ifndef RGL_NO_OPENGL
-  /* We use FTGL, which uses the old OpenGL 1.x fixed function scheme.
-   * This temporarily restores that scheme just
-   * to draw the text.
-   */ 
-  if (doUseShaders)
-    glUseProgram(0);
-  glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_COLOR_BUFFER_BIT
-                 | GL_DEPTH_BUFFER_BIT | GL_LIGHTING_BIT);
-  glPushClientAttrib(GL_CLIENT_VERTEX_ARRAY_BIT | GL_CLIENT_PIXEL_STORE_BIT);
-#endif
-}
-
-void TextSet::drawPrimitive(RenderContext* renderContext, int index) 
-{
-#ifndef RGL_NO_OPENGL
-  BBoxDeco* bboxdeco = 0;
-  if (material.marginCoord >= 0) {
-    Subscene* subscene = renderContext->subscene;
-    bboxdeco = subscene->get_bboxdeco();
-  } 
-  
-  GLFont* font;
-  Vertex pt = vertexArray[index];
-  if (bboxdeco)
-    pt = bboxdeco->marginVecToDataVec(pt, renderContext, &material);
-  if (!pt.missing()) {
-    GLboolean valid;
-    material.useColor(index);
-    glRasterPos3f( pt.x, pt.y, pt.z );
-    glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
-    if (valid) {
-      font = fonts[index % fonts.size()];
-      if (font) {
-        std::string text = textArray[index];
-        font->draw( text.c_str(), static_cast<int>(text.size()), adjx, adjy, adjz,
-                    pos[index % npos], *renderContext );
-      }
-    }
-  }
-#endif
-}
-
-void TextSet::drawEnd(RenderContext* renderContext)
-{
-#ifndef RGL_NO_OPENGL
-  glPopClientAttrib();
-  glPopAttrib();
-#endif
-  material.endUse(renderContext);
-  Shape::drawEnd(renderContext);
-  doUseShaders = saveShaders;
 }
 
 int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 
@@ -149,61 +93,230 @@ int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
     case FAMILY: 
     case FONT:
     case CEX: return static_cast<int>(fonts.size());
-    case TEXTS:
-    case VERTICES: return static_cast<int>(textArray.size());
-    case ADJ: return 1;
-    case POS: return pos[0] ? npos : 0;
+    case TEXTS: return static_cast<int>(textArray.size());
   }
-  return Shape::getAttributeCount(subscene, attrib);
+  return SpriteSet::getAttributeCount(subscene, attrib);
 }
 
 void TextSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
   int n = getAttributeCount(subscene, attrib);
+  int fsize = fonts.size();
   if (first + count < n) n = first + count;
   if (first < n) {
     switch(attrib) {
-    case VERTICES:
-      while (first < n) {
-        *result++ = vertexArray[first].x;
-        *result++ = vertexArray[first].y;
-        *result++ = vertexArray[first].z;
-        first++;
-      }
-      return;
     case CEX:
       while (first < n) 
-        *result++ = fonts[first++]->cex;
+        *result++ = fonts[first++ % fsize]->cex;
       return;
     case FONT:
       while (first < n)
-      	*result++ = fonts[first++]->style;
-      return;
-    case ADJ:
-      *result++ = adjx;
-      *result++ = adjy;
-      *result++ = adjz;
-      return;
-    case POS:
-      while (first < n)
-        *result++ = pos[first++];
+      	*result++ = fonts[first++ % fsize]->style;
       return;
     }
-    Shape::getAttribute(subscene, attrib, first, count, result);
+    SpriteSet::getAttribute(subscene, attrib, first, count, result);
   }
 }
 
 std::string TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
   int n = getAttributeCount(subscene, attrib);
+  int fsize = fonts.size();
   if (index < n) {
     switch (attrib) {
     case TEXTS: 
       return textArray[index];
     case FAMILY:
-      char* family = fonts[index]->family;
+      char* family = fonts[index % fsize]->family;
       return family;
     }
   }
-  return Shape::getTextAttribute(subscene, attrib, index);
+  return SpriteSet::getTextAttribute(subscene, attrib, index);
+}
+
+void TextSet::do_measure_text()
+{
+  int n = getElementCount();
+  const char * texts[n];
+  int done = 0; /* the count of entries done */
+  text_extents_t *res = measures.data();
+  int fsize = fonts.size();
+  
+  for (int i = 0; i < n; i++) {
+    
+    texts[i] = textArray[i].c_str();
+    
+    if (i == n-1 || fonts[i % fsize] !=
+                  fonts[(i+1) % fsize]) {
+      int fnt = done % fsize;
+      res = measure_text(i - done + 1,
+                           texts + done,
+                           fonts[fnt]->family,
+                           fonts[fnt]->style,
+                           fonts[fnt]->fontname,
+                           20*fonts[fnt]->cex,
+                           res);
+      done = i + 1;
+    }
+  }
+}
+
+static inline GLuint NextPowerOf2(GLuint in)
+{
+  in -= 1;
+  
+  in |= in >> 16;
+  in |= in >> 8;
+  in |= in >> 4;
+  in |= in >> 2;
+  in |= in >> 1;
+  
+  return in + 1;
+}
+
+void TextSet::do_pack_text()
+{
+  int n = getElementCount();
+  text_extents_t *m = measures.data();
+  text_placement_t *xy = placement.data();
+  const char * texts[n];
+  for (int i = 0; i < n; i++)
+    texts[i] = textArray[i].c_str();
+  texture_width = 0;
+  for (int i=0; i < n; i++) {
+    if (texture_width < measures[i].width) texture_width = measures[i].width;
+  }
+  texture_width = NextPowerOf2(texture_width);
+  texture_height = pack_text(n, texts, 
+                             m, xy, texture_width);
+
+  texture_height = NextPowerOf2(texture_height);
+
+  placement.assign(xy, xy + n);
+}
+
+void TextSet::draw_to_texture() {
+  int n = getElementCount();
+  const char *texts[n];
+
+  for (int i = 0; i < n; i++)
+    texts[i] = textArray[i].c_str();
+  
+  int stride = get_buffer_stride(texture_width);
+  
+  unsigned char *buffer = new unsigned char[stride*texture_height](); /* init'd to zero */
+  
+  int done = 0;
+  text_placement_t *xy = placement.data();
+  int fsize = fonts.size();
+  for (int i = 0; i < n; i++) {
+    if (i == n-1 ||
+        fonts[i % fsize] != fonts[(i+1) % fsize]) {
+      int fnt = done % fsize;
+      draw_text_to_buffer(i - done + 1, 
+                          xy + done, 
+                          texts + done,
+                          fonts[fnt]->family,
+                          fonts[fnt]->style,
+                          fonts[fnt]->fontname,
+                          20*fonts[fnt]->cex,
+                          texture_width, 
+                          texture_height, 
+                          stride,
+                          buffer);
+      done = i + 1;
+    }
+  }
+  
+  // load buffer into texture's pixmap
+  
+  material.textype = Texture::ALPHA;
+  material.texmode = Texture::REPLACE;
+  material.texture = new Texture("", 
+                            /* type= */ material.textype, 
+                            /* mode= */ material.texmode,
+                            /* mipmap= */ false,
+                            /* minfilter= */GL_LINEAR, 
+                            /* magfilter= */GL_LINEAR, 
+                            /* envmap= */ false,
+                            /* deleteFile= */ false);
+
+  if ( !material.texture->isValid() ||
+       !material.texture->getPixmap()->init(GRAY8, stride, texture_height, 8) ||
+       !material.texture->getPixmap()->load(buffer)) {
+       Rprintf("some error in the texture!\n");
+    material.texture->unref();
+    material.texture = NULL;
+    Rf_error("Texture not loaded.");
+  }
+  material.alphablend = true;
+  
+  delete[] buffer;
+}
+
+void TextSet::initialize() {
+  SpriteSet::initialize();
+  
+  // Set the vertex and texture coordinates
+  
+  set_coordinates();
+}
+
+void TextSet::set_coordinates() {
+#ifndef RGL_NO_OPENGL
+  int n = getElementCount();
+  /* There are two important boxes
+   * here.  The bounding box is used
+   * for the texture coordinates,
+   * and the inner box is used for 
+   * placement of the text.
+   */
+  
+  // Set texcoords
+  for (int i=0; i < n; i++) {
+    texCoordArray[4*i].s = (placement[i].x + measures[i].x_bearing)/texture_width;
+    texCoordArray[4*i + 1].s = texCoordArray[4*i].s + measures[i].width/texture_width;
+    texCoordArray[4*i + 2].s = texCoordArray[4*i + 1].s;
+    texCoordArray[4*i + 3].s = texCoordArray[4*i].s;
+    
+    texCoordArray[4*i].t = (placement[i].y + measures[i].y_bearing + measures[i].height)/texture_height;
+    texCoordArray[4*i + 1].t = texCoordArray[4*i].t;
+    texCoordArray[4*i + 2].t = texCoordArray[4*i].t - measures[i].height/texture_height;
+    texCoordArray[4*i + 3].t = texCoordArray[4*i + 2].t;
+  }
+  texCoordArray.appendToBuffer(vertexbuffer);
+  texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
+  
+  float rescale = fixedSize ? 1.8 : 0.013; /* Adjust to match rglwidget */
+  // Set offsets for the corners
+  for (int i=0; i < n; i++ ) {
+    getAdj(i); /* The value specified by the user */
+    text_extents_t m = measures[i];
+    adjArray.setVertex(4*i, 
+                       Vertex(
+                         -adj.x*m.width*rescale,
+                         (-adj.y*(m.ascent + m.descent) 
+                           + m.descent - m.y_bearing - m.height)*rescale,
+                         0) );
+    adjArray.setVertex(4*i+1, 
+                       Vertex(
+                         adjArray[4*i].x + m.width*rescale,
+                         adjArray[4*i].y,
+                         adjArray[4*i].z));
+    adjArray.setVertex(4*i+2, 
+                       Vertex(
+                         adjArray[4*i+1].x,
+                         adjArray[4*i].y + m.height*rescale,
+                         adjArray[4*i].z));
+    adjArray.setVertex(4*i+3, 
+                       Vertex(
+                         adjArray[4*i].x,
+                         adjArray[4*i+2].y,
+                         adjArray[4*i].z));
+
+  }
+  adjArray.appendToBuffer(vertexbuffer);
+  adjArray.setAttribLocation(glLocs["aOfs"]);
+
+#endif
 }

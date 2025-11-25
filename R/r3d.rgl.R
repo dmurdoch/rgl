@@ -521,8 +521,8 @@ text3d      <- function(x, y = NULL, z = NULL,
     stopifnot(length(offset) == 1)
     adj <- offset
   } else {
-    pos <- 0
-    npos <- 1
+    pos <- integer()
+    npos <- 0
   }
   if (length(adj) > 3) warning("Only the first three entries of 'adj' are used")
   adj <- c(adj, 0.5, 0.5, 0.5)[1:3]

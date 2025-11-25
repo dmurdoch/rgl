@@ -80,7 +80,7 @@ public:
    */
   virtual void initialize();
   
-private:
+protected:
   ARRAY<Vertex> vertex;
   ARRAY<float>  size;
   ARRAY<int>    pos;
@@ -102,6 +102,7 @@ private:
   void getAdj(int index);
   VertexArray posArray; /* repeated copies of vertices */
   VertexArray adjArray; /* in shader aOfs, location ofsLoc */
+  ColorArray colArray;  /* repeated copies of colors */
   TexCoordArray texCoordArray;
 };
 } // namespace rgl

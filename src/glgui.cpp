@@ -22,6 +22,16 @@ using namespace rgl;
 //   GLFont
 //
 
+GLFont::~GLFont() {
+  delete [] family;
+  delete [] fontname;
+}
+
+double GLFont::width(const char* text) {
+  /* FIXME!!! */
+  return 1;
+}
+
 GLboolean GLFont::justify(double twidth, double theight, 
                           double adjx, double adjy, double adjz,
                           int pos, const RenderContext& rc) {

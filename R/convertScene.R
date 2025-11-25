@@ -154,7 +154,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       warning("Object ", obj$id, " is two-sided and indexed.  It requires normals.")
       result["is_twosided"] <- FALSE
     }
-    result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
+    result["fixed_size"]  <- isTRUE(obj$fixedSize)
     result["rotating"] <- isTRUE(obj$rotating)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
                   "lines" %in% unlist(mat[c("front", "back")]))
@@ -416,8 +416,10 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       else
         texture <- result$material$texture
       if (!is.null(texture) && nchar(texture)) {
-        texturefile <- texture
-        obj$material$uri <- image_uri(texturefile)
+        if (texture != "<raster>") {
+          texturefile <- texture
+          obj$material$uri <- image_uri(texturefile)
+        }
         obj$material$texture <- NULL
       }
       if (!is.null(obj$material)) # Never use material$color

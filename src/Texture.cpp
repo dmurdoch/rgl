@@ -123,7 +123,10 @@ void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap,
         break;
   }
   *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
-  *out_filename = filename;
+  if (!filename.size())
+    *out_filename = "<raster>";
+  else
+    *out_filename = filename;
 }
 
 #ifndef RGL_NO_OPENGL
@@ -267,10 +270,10 @@ void Texture::init(RenderContext* renderContext)
     glEnable(GL_TEXTURE_GEN_T);
   }
 #endif
-  if (pixmap) {
-    delete pixmap;
-    pixmap = NULL;
-  }
+  // if (pixmap) {
+  //   delete pixmap;
+  //   pixmap = NULL;
+  // }
 }
 
 #ifndef RGL_NO_OPENGL
@@ -298,7 +301,8 @@ void Texture::beginUse(RenderContext* renderContext)
   SAVEGLERROR;
   
   if (doUseShaders) {
-  	glUniform1i(location, 0);
+    glBindTexture(GL_TEXTURE_2D, texName);
+  	glUniform1i(location, 0); 
     SAVEGLERROR;
   } else {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, internalMode);

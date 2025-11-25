@@ -30,9 +30,15 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
    scene(in_scene)
 { 
   is3D = count > 0;
-  if (!is3D)
-    material.colorPerVertex(false);
-  else {
+  if (!is3D) {
+    if (material.colors.getLength() <= 1)
+      material.colorPerVertex(false);
+    else {
+      colArray.set(material.colors);
+      colArray.replicate(4);
+      colArray.recycle(4*in_nvertex);
+    }
+  } else {
     blended = false;
     for (int i=0;i<count;i++) {
       shapes.push_back(in_shapelist[i]->getObjID());
@@ -54,8 +60,10 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
     for (int i=0;i<16;i++)
       userMatrix[i] = *(in_userMatrix++);
   }
-  for(int i=0;i<vertex.size();i++)
-    boundingBox += Sphere( vertex.get(i), static_cast<float>(size.getRecycled(i)/1.414) );
+  for(int i=0;i<vertex.size();i++) {
+    float radius = size.getRecycled(i)/1.414;
+    boundingBox += Sphere( vertex.get(i), radius);
+  }
   if (!in_adj)
     adj = Vec3(0.5, 0.5, 0.5);
   else
@@ -157,7 +165,11 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
     doTex = (material.texture) ? true : false;
     glNormal3f(0.0f,0.0f,1.0f);
     material.beginUse(renderContext);
+    if (material.useColorArray)
+      colArray.useArray();
   }
+  // printAttributes(8);
+  // printUniforms();
 #endif
 }
 
@@ -339,6 +351,8 @@ void SpriteSet::drawEnd(RenderContext* renderContext)
         adjArray.endUse();
       if (texCoordArray.size())
         texCoordArray.endUse();
+      if (material.useColorArray)
+        colArray.enduseArray();
     }
     material.endUse(renderContext);
   }
@@ -470,7 +484,11 @@ void SpriteSet::initialize()
     
     initShader();
     
-    material.colors.setAttribLocation(glLocs["aCol"]);
+    material.useColorArray = material.colors.getLength() > 1; 
+    if (!material.useColorArray)
+      material.colors.setAttribLocation(glLocs["aCol"]);
+    else
+      colArray.setAttribLocation(glLocs["aCol"]);
     
     if (material.texture && 
         glLocs_has_key("uSampler") &&
@@ -481,6 +499,8 @@ void SpriteSet::initialize()
     
     if (!is3D) {
       double rescale = fixedSize ? 72 : 1;
+      bool is_sprites = (getTypeName() == "sprites"); // Might be text
+      
       adjArray.alloc(4*getElementCount());
       posArray.alloc(4*getElementCount());
       indices.resize(6*getElementCount());
@@ -519,7 +539,7 @@ void SpriteSet::initialize()
         indices[6*i+3] = 4*i;
         indices[6*i+4] = 4*i + 2;
         indices[6*i+5] = 4*i + 3;
-        if (has_texture) {
+        if (has_texture && is_sprites) {
           texCoordArray[4*i].s = 0.0;
           texCoordArray[4*i].t = 0.0;
           texCoordArray[4*i+1].s = 1.0;
@@ -534,10 +554,13 @@ void SpriteSet::initialize()
       posArray.setAttribLocation(glLocs["aPos"]);
       adjArray.appendToBuffer(vertexbuffer);
       adjArray.setAttribLocation(glLocs["aOfs"]);
-      if (has_texture) {
+      if (has_texture && is_sprites) {
         texCoordArray.appendToBuffer(vertexbuffer);
         texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
       }
+      
+      if (material.useColorArray) 
+        colArray.appendToBuffer(vertexbuffer, 4*getElementCount());
     }
   }
   SAVEGLERROR;

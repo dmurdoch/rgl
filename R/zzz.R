@@ -48,6 +48,10 @@
   if (.Platform$OS.type == "unix")
     unixos <- Sys.info()["sysname"]
   
+  # Make sure rasterText is loaded
+  if (!requireNamespace("rasterText", quietly = TRUE))
+    stop("rasterText not found")
+  
   dll <- try(dyn.load(dynlib <- getDynlib(dir)))
   if (inherits(dll, "try-error")) {
     warning(paste("\tLoading rgl's DLL failed.", 

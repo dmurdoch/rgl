@@ -11,6 +11,16 @@ Plans for updates:
      will assume all fonts are specified properly.  This may
      need a way to say "string 1 followed by string 2 on the
      same line, treated as one big string for centering"
+     
+ - bboxdeco objects were using FTGL directly for adding annotations to plots.  This needs to switch to using TextSet
+ objects.
+ - TextSet should descend from SpriteSet as 2D sprites.  The initialize
+ method should modify the vertex array to take account of the
+ fact that text is not 1x1, it will have varying dimensions.
+ However, most of the initialization should be fine, we just
+ need to adjust the pos values to take account of the fact
+ that the bounding box of text is not the same as the
+ reference box, and the reference box is not square.
  - Read and update docs
  - Test and fix until everything is covered.
  
@@ -62,3 +72,23 @@ These steps happen when drawing text:
     
 Using lldb: glBegin is being called by AxisInfo::draw to draw
 the ticks.
+
+How are textures handled?
+
+material3d(texture = "filename") calls rgl_material.  If 
+it sees a filename, it calls new Texture(...) with the
+filename and all the other related args.  That is stored
+in material.texture, unless it wasn't successful:
+then NULL is put there.
+
+The Texture() constructor saves all the args, creates
+a Pixmap and calls pixmap->load() for the filename.
+It leaves texName as 0.
+
+Pixmap::init creates the data storage Pixmap::data.
+Pixmap::load() reads the file into Pixmap::data.
+
+When rendering, Material::beginUse calls Texture::beginUse.
+Texture::beginUse checks for texName; if not set,
+it calls Texture::init.
+Texture::init does all sorts of GL texture initialization, then deletes the Pixmap.

@@ -1183,14 +1183,14 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
 
     int ntext   = idata[0];
     bool saveShaders = doUseShaders;
-    doUseShaders = false;
+    doUseShaders = true;
     
-    FontArray fonts;
+    FontArray fonts(0);
     device->getFonts(fonts, *nfonts, family, style, cex, (bool) *useFreeType);
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
-                                                   adj[0], adj[1], adj[2],
-                   device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
-    						   fonts, *npos, pos) ) );
+                                                   adj,
+          device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
+    						   fonts, cex, *npos, pos) ) );
     CHECKGLERROR;
     doUseShaders = saveShaders;
 
@@ -1480,4 +1480,65 @@ SEXP rgl::rgl_texture_from_array(SEXP values)
   }
   mat.alphablend = mat.alphablend || typeID == RGBA32;
   return Rf_ScalarInteger(RGL_SUCCESS);
+}
+
+SEXP rgl::rgl_textureRaster(SEXP Rid) {
+  Material* mat = &currentMaterial;
+  int id = INTEGER(Rid)[0];
+  if (id > 0) {
+    Device* device;
+    if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      
+      Shape* shape = scene->get_shape(id);
+      if (shape) 
+        mat = shape->getMaterial(); /* success! successptr will be set below */
+      else {
+        BBoxDeco* bboxdeco = scene->get_bboxdeco(id);
+        if (bboxdeco)
+          mat = bboxdeco->getMaterial();
+        else {
+          Background* background = scene->get_background(id);
+          if (background)
+            mat = background->getMaterial();
+          else
+            return R_NilValue;
+        }
+      }
+    } else
+      return R_NilValue;
+  }
+  
+  Ref<Texture> tex = mat->texture;
+  if (!tex)
+    return R_NilValue;
+
+  Pixmap *pix = tex->getPixmap();
+  if (!pix)
+    return R_NilValue;
+  
+  int bytes, planes;
+  switch(pix->typeID) {
+  case RGB24: 
+    bytes = planes = 3; break;
+  case RGB32:
+    bytes = 4; planes = 3; break;
+  case RGBA32:
+    bytes = 4; planes = 4; break;
+  case GRAY8:
+    bytes = 1; planes = 1; break;
+  case INVALID:
+    return R_NilValue;
+  }
+  if (pix->bits_per_channel != 8) {
+    Rf_error("%d bits_per_channel not supported", pix->bits_per_channel);
+  }
+  int h = pix->height, w = pix->width;
+  SEXP result = Rf_alloc3DArray(INTSXP, h, w, planes);
+  for (int i=0; i < h; i++)
+    for (int j=0; j < w; j++)
+      for (int k=0; k < planes; k++)
+        INTEGER(result)[i + j*h + k*h*w] = pix->data[i*pix->bytesperrow + j*bytes + k];
+  return result;
 }

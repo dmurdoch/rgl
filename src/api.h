@@ -122,6 +122,8 @@ SEXP rgl_earcut(SEXP x, SEXP y);
 
 SEXP rgl_texture_from_array(SEXP values);
 
+SEXP rgl_textureRaster(SEXP Rid);
+
 #ifdef __cplusplus
 }
 #endif

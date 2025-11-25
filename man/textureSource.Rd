@@ -4,11 +4,14 @@
 Retrieve source code used to produce texture file.
 }
 \description{
-Internally, \pkg{rgl} works with PNG files for textures.
+Internally, \pkg{rgl} mainly works with PNG files for textures.
 If a texture is requested using a different format, a temporary
 PNG file of the image will be saved.  This function allows
 you to retrieve the original expression used to produce
 the texture.
+
+Note that some textures have no corresponding PNG file.
+For those, use \code{\link{rgl.textureRaster}}.
 }
 \usage{
 textureSource(texture)
