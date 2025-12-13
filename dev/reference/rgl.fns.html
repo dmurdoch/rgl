@@ -83,14 +83,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.abclines</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
-<span><span class="fu">rgl.planes</span><span class="op">(</span><span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, d <span class="op">=</span> <span class="fl">0</span>, <span class="va">...</span><span class="op">)</span></span>
-<span><span class="fu">rgl.clipplanes</span><span class="op">(</span><span class="va">a</span>, b <span class="op">=</span> <span class="cn">NULL</span>, c <span class="op">=</span> <span class="cn">NULL</span>, d <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span><span class="fu">rgl.sprites</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, radius <span class="op">=</span> <span class="fl">1</span>, </span>
-<span>            shapes <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">userMatrix</span>, fixedSize <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>            adj <span class="op">=</span> <span class="fl">0.5</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, offset <span class="op">=</span> <span class="fl">0.25</span>, </span>
-<span>            rotating <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
-<span><span class="fu">rgl.spheres</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">radius</span>, fastTransparency <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rgl.spheres</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">radius</span>, fastTransparency <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -99,24 +92,11 @@
 <dl><dt id="arg-x-y-z">x, y, z<a class="anchor" aria-label="anchor" href="#arg-x-y-z"></a></dt>
 <dd><p>Coordinates of points</p></dd>
 
-  <dt id="arg-a-b-c">a, b, c<a class="anchor" aria-label="anchor" href="#arg-a-b-c"></a></dt>
-<dd><p>Coordinates of the direction vectors for the lines,
-or normals for the planes.</p></dd>
-
-  <dt id="arg-d">d<a class="anchor" aria-label="anchor" href="#arg-d"></a></dt>
-<dd><p>Plane offset.</p></dd>
-
   <dt id="arg-radius">radius<a class="anchor" aria-label="anchor" href="#arg-radius"></a></dt>
 <dd><p>Size of sprites or spheres.</p></dd>
 
-  <dt id="arg-fixedsize-rotating">fixedSize, rotating<a class="anchor" aria-label="anchor" href="#arg-fixedsize-rotating"></a></dt>
-<dd><p>Fixed size, changing orientation.</p></dd>
-
   <dt id="arg-fasttransparency">fastTransparency<a class="anchor" aria-label="anchor" href="#arg-fasttransparency"></a></dt>
 <dd><p>Sphere drawing strategy.</p></dd>
-
-  <dt id="arg-adj-pos-offset">adj, pos, offset<a class="anchor" aria-label="anchor" href="#arg-adj-pos-offset"></a></dt>
-<dd><p>Positioning.</p></dd>
 
   <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Material properties.</p></dd>

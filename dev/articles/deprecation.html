@@ -101,7 +101,7 @@ interface</h1>
                         <h4 data-toc-skip class="author">Duncan
 Murdoch</h4>
             
-            <h4 data-toc-skip class="date">2025-11-21</h4>
+            <h4 data-toc-skip class="date">2025-12-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/dmurdoch/rgl/blob/master/vignettes/deprecation.Rmd" class="external-link"><code>vignettes/deprecation.Rmd</code></a></small>
       <div class="hidden name"><code>deprecation.Rmd</code></div>
@@ -115,7 +115,7 @@ Murdoch</h4>
 </h2>
 <p>Since at least 2004, <code>rgl</code> has had two interfaces for many
 of the primitive functions: <code>rgl.*</code> and <code>*3d</code>. For
-example, to draw points you could use <code><a href="../reference/rgl-deprecated.html">rgl.points()</a></code> or
+example, to draw points you could use <code><a href="../reference/rgl-defunct.html">rgl.points()</a></code> or
 <code><a href="../reference/primitives.html">points3d()</a></code>. With the upcoming version 1.0.0 release of
 <code>rgl</code>, most of the duplication will be removed. The first
 step will be to deprecate a large number of <code>rgl.*</code> functions
@@ -130,7 +130,7 @@ of the <code>rgl.*</code> interface.</p>
 <div class="section level3">
 <h3 id="opening-a-window">Opening a window<a class="anchor" aria-label="anchor" href="#opening-a-window"></a>
 </h3>
-<p>The <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> function has a single argument,
+<p>The <code><a href="../reference/rgl-defunct.html">rgl.open()</a></code> function has a single argument,
 <code>useNULL</code>. If set to <code>TRUE</code>, the NULL
 <code>rgl</code> device will be used. The <code><a href="../reference/par3d.html">par3d()</a></code> settings
 will be set to their defaults.</p>
@@ -154,7 +154,7 @@ as</p>
 <span>     material <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color<span class="op">=</span><span class="st">"black"</span>, fog <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Users can create their own default lists; e.g. to get the same result
-as <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> would give, use</p>
+as <code><a href="../reference/rgl-defunct.html">rgl.open()</a></code> would give, use</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/open3d.html">open3d</a></span><span class="op">(</span>params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>or</p>
@@ -165,7 +165,7 @@ as <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> would 
 <div class="section level3">
 <h3 id="material-properties">Material properties<a class="anchor" aria-label="anchor" href="#material-properties"></a>
 </h3>
-<p>The <code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> function has a large number of
+<p>The <code><a href="../reference/rgl-defunct.html">rgl.material()</a></code> function has a large number of
 parameters. The pre-deprecation arguments were:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="cf">function</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">color        =</span> <span class="st">"white"</span>,</span>
@@ -214,14 +214,14 @@ to black and leave all other parameters unchanged.</p>
 <code>rgl.points(x, y, z, color = "black")</code> or
 <code>points3d(x, y, z, color = "black")</code>.</p>
 <p>The first difference is that <code>rgl.*</code> primitives will call
-<code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> to set the material properties: in this
+<code><a href="../reference/rgl-defunct.html">rgl.material()</a></code> to set the material properties: in this
 example <code>color</code> will be set to <code>black</code>, and all
 other parameters will be set to their defaults. The <code>*3d</code>
 versions of the primitives use <code><a href="../reference/material.html">material3d()</a></code> to set material
 properties, so only those that were specified will be changed, and the
 original values will be restored afterwards.</p>
 <p>The second difference is what happens if there is no window already
-open. The <code>rgl.*</code> functions will call <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code>
+open. The <code>rgl.*</code> functions will call <code><a href="../reference/rgl-defunct.html">rgl.open()</a></code>
 (ignoring <code>r3dDefaults</code>), whereas the <code>*3d</code>
 functions will call <code><a href="../reference/open3d.html">open3d()</a></code>.</p>
 </div>
@@ -230,7 +230,7 @@ functions will call <code><a href="../reference/open3d.html">open3d()</a></code>
 <h2 id="why-deprecate-rgl-">Why deprecate <code>rgl.*</code>?<a class="anchor" aria-label="anchor" href="#why-deprecate-rgl-"></a>
 </h2>
 <p>Both of the systems worked, but they do not work together. For
-example, calling <code><a href="../reference/rgl-deprecated.html">rgl.points()</a></code> will have carry-on effects on
+example, calling <code><a href="../reference/rgl-defunct.html">rgl.points()</a></code> will have carry-on effects on
 later <code><a href="../reference/primitives.html">points3d()</a></code> calls, whereas each
 <code><a href="../reference/primitives.html">points3d()</a></code> call will just draw the points, it won’t affect
 future calls.</p>
@@ -274,7 +274,7 @@ be needed.</p>
 <div class="section level3">
 <h3 id="textures">Textures<a class="anchor" aria-label="anchor" href="#textures"></a>
 </h3>
-<p>The default color after <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code> was white, whereas
+<p>The default color after <code><a href="../reference/rgl-defunct.html">rgl.open()</a></code> was white, whereas
 with <code><a href="../reference/open3d.html">open3d()</a></code> the default color is black, with a white
 background. Textures multiplicatively modify the color of the object, so
 after <code><a href="../reference/open3d.html">open3d()</a></code>, a texture on an object will still appear
@@ -285,11 +285,11 @@ is used will fix this.</p>
 <h3 id="rgl-surface">
 <code>rgl.surface()</code><a class="anchor" aria-label="anchor" href="#rgl-surface"></a>
 </h3>
-<p>The arguments to <code><a href="../reference/rgl-deprecated.html">rgl.surface()</a></code> and
+<p>The arguments to <code><a href="../reference/rgl-defunct.html">rgl.surface()</a></code> and
 <code><a href="../reference/surface3d.html">surface3d()</a></code> functions are different. The argument lists
 are</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/rgl-deprecated.html">rgl.surface</a></span><span class="op">(</span> <span class="va">x</span>, <span class="va">z</span>, <span class="va">y</span>, </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/rgl-defunct.html">rgl.surface</a></span><span class="op">(</span> <span class="va">x</span>, <span class="va">z</span>, <span class="va">y</span>, </span>
 <span>             coords <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,  <span class="va">...</span>, </span>
 <span>             normal_x <span class="op">=</span> <span class="cn">NULL</span>, normal_y <span class="op">=</span> <span class="cn">NULL</span>, normal_z <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>             texture_s <span class="op">=</span> <span class="cn">NULL</span>, texture_t <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
@@ -299,9 +299,9 @@ are</p>
 <span>          normal_z <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>          texture_s <span class="op">=</span> <span class="cn">NULL</span>, texture_t<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 <p>Notice that the arguments are in a different order. Another
-difference is that <code><a href="../reference/rgl-deprecated.html">rgl.surface()</a></code> expects the surface to be
+difference is that <code><a href="../reference/rgl-defunct.html">rgl.surface()</a></code> expects the surface to be
 defined in the <code>y</code> coordinate and viewed in the orientation
-produced by <code><a href="../reference/rgl-deprecated.html">rgl.open()</a></code>, not the one produced by
+produced by <code><a href="../reference/rgl-defunct.html">rgl.open()</a></code>, not the one produced by
 <code><a href="../reference/open3d.html">open3d()</a></code>. Up until very recently, <code><a href="../reference/surface3d.html">surface3d()</a></code>
 didn’t allow both <code>x</code> and <code>z</code> to be vectors.</p>
 <p>The excellent <a href="https://www.rayshader.com" class="external-link"><code>rayshader</code> package</a> used
@@ -317,7 +317,7 @@ gives a reasonable view.</p>
 <code>...</code> to set material or <code>par3d</code> properties in a
 call, and for some, <code>...</code> will contain other optional
 arguments. Some packages used the argument list of
-<code><a href="../reference/rgl-deprecated.html">rgl.material()</a></code> to identify the material property names.
+<code><a href="../reference/rgl-defunct.html">rgl.material()</a></code> to identify the material property names.
 Going forward, packages should use the variables</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rgl.material.names</span></span>
