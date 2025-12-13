@@ -15,50 +15,7 @@
 ##
 
 rgl.clear <- function( type = "shapes", subscene = 0 )  {
-  .Deprecated("clear3d")
-  
-  if (is.na(subscene)) 
-    subscene <- currentSubscene3d()
-
-  typeid <- rgl.enum.nodetype(type)
-  
-  userviewpoint <- 4 %in% typeid
-  material  <- 5 %in% typeid
-  modelviewpoint <- 8 %in% typeid
-
-  drop <- typeid %in% c(4:5, 8)
-  typeid <- typeid[!drop]
-  type <- names(typeid)
-  
-  if (subscene == 0) {
-    nobg <- setdiff(typeid, 6)
-    idata <- as.integer(c(length(nobg), nobg))
-    ret <- .C( rgl_clear, 
-      success = FALSE,
-      idata
-    )$success
-    if (6 %in% typeid)
-      rgl.incrementID()  # For back compatibility
-  } else {
-    sceneids <- ids3d(type=type, subscene = 0)$id
-    thisids <- ids3d(type=type, subscene = subscene)$id
-    if (length(thisids)) {
-      delFromSubscene3d(ids = thisids, subscene = subscene)
-      gc3d(protect = setdiff(sceneids, thisids))
-    }
-    ret <- 1
-  }
-  
-  if ( userviewpoint || modelviewpoint) 
-    view3d(type = c("userviewpoint", "modelviewpoint")[c(userviewpoint, modelviewpoint)])
-    
-  if ( material ) 
-    rgl.material0()
-  
-  if (! ret)
-    stop("'rgl_clear' failed")
-  
-  lowlevel()
+  .Defunct("clear3d")
 }
 
 
@@ -250,28 +207,7 @@ rgl.attrib <- function( id, attrib, first=1,
 
 rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scale = par3d("scale"),
                            interactive = TRUE, userMatrix, type = c("userviewpoint", "modelviewpoint") ) {
-  .Deprecated("view3d")
-  
-  zoom <- rgl.clamp(zoom,0,Inf)
-  phi  <- rgl.clamp(phi,-90,90)
-  fov  <- rgl.clamp(fov,0,179)
-  
-  type <- match.arg(type, several.ok = TRUE)
-
-  polar <- missing(userMatrix)
-  if (polar) userMatrix <- diag(4)
-  
-  idata <- as.integer(c(interactive,polar, "userviewpoint" %in% type, "modelviewpoint" %in% type))
-  ddata <- as.numeric(c(theta,phi,fov,zoom,scale,userMatrix[1:16]))
-
-  ret <- .C( rgl_viewpoint,
-    success = FALSE,
-    idata,
-    ddata
-  )
-
-  if (! ret$success)
-    stop("'rgl_viewpoint' failed")
+  .Defunct("view3d")
 }
 
 ##
@@ -281,27 +217,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
 
 rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back="lines", 
                    fogScale = 1, ... ) {
-  .Deprecated("bg3d")
-  
-  rgl.material0( color=color, back=back, ... )
-
-  fogtype <- rgl.enum.fogtype(fogtype)
-
-  idata   <- as.integer(c(sphere,fogtype))
-  
-  fogScale <- as.numeric(fogScale)
-  stopifnot(length(fogScale) == 1, fogScale > 0)
-
-  ret <- .C( rgl_bg, 
-    success = as.integer(FALSE),
-    idata,
-    fogScale
-  )
-
-  if (! ret$success)
-    stop("'rgl_bg' failed")
-    
-  lowlevel(ret$success)
+  .Defunct("bg3d")
 }
 
 
@@ -317,76 +233,7 @@ rgl.bbox <- function(
   marklen=15.0, marklen.rel=TRUE, expand=1, draw_front=FALSE,
   ...) {
 
-  .Deprecated("bbox3d")
-  
-  rgl.material0( ... )
-
-  if (is.null(xat)) 
-    xlab <- NULL
-  else {
-    xlen <- length(xat)
-    if (is.null(xlab)) 
-      xlab <- format(xat)
-    else 
-      xlab <- rep(xlab, length.out=xlen)
-  }
-  if (is.null(yat)) 
-    ylab <- NULL
-  else {
-    ylen <- length(yat)
-    if (is.null(ylab)) 
-      ylab <- format(yat)
-    else 
-      ylab <- rep(ylab, length.out=ylen)
-  }
-  if (is.null(zat)) 
-    zlab <- NULL
-  else {
-    zlen <- length(zat)
-    if (is.null(zlab)) 
-      zlab <- format(zat)
-    else 
-      zlab <- rep(zlab,length.out=length(zat))
-  }
-  xticks <- length(xat)
-  yticks <- length(yat)
-  zticks <- length(zat)
-
-  if (identical(xunit, "pretty")) xunit <- -1
-  if (identical(yunit, "pretty")) yunit <- -1
-  if (identical(zunit, "pretty")) zunit <- -1
-
-  length(xlen)        <- 1
-  length(ylen)        <- 1
-  length(zlen)        <- 1
-  length(marklen.rel) <- 1
-  length(draw_front)  <- 1
-  length(xunit)       <- 1
-  length(yunit)       <- 1
-  length(zunit)       <- 1
-  length(marklen)     <- 1
-  length(expand)      <- 1
-
-  idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel, draw_front))
-  ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
-
-  ret <- .C( rgl_bbox,
-    success = as.integer(FALSE),
-    idata,
-    ddata,
-    as.numeric(xat),
-    as.character(xlab),
-    as.numeric(yat),
-    as.character(ylab),
-    as.numeric(zat),
-    as.character(zlab)
-  )
-
-  if (! ret$success)
-    stop("'rgl_bbox' failed")
-    
-  lowlevel(ret$success)
-
+  .Defunct("bbox3d")
 }
 
 ##
@@ -396,49 +243,7 @@ rgl.bbox <- function(
 
 rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", diffuse = "#FFFFFF", specular = "#FFFFFF", x = NULL, y = NULL, z = NULL) {
   
-  .Deprecated("light3d")
-  
-  ambient  <- rgl.color(ambient)
-  diffuse  <- rgl.color(diffuse)
-  specular <- rgl.color(specular)
-  
-  # if a complete set of x, y, z is given, the light source is assumed to be part of the scene, theta and phi are ignored
-  # else the light source is infinitely far away and its direction is determined by theta, phi (default) 
-  if ( !is.null(x) ) {
-    if ( !missing(theta) || !missing(phi) )
-      warning("'theta' and 'phi' ignored when 'x' is present")
-    xyz <- xyz.coords(x,y,z, recycle = TRUE)
-    x <- xyz$x
-    y <- xyz$y
-    z <- xyz$z
-    if (length(x) > 1) stop("A light can only be in one place at a time")
-    finite.pos <- TRUE
-  }
-  else {
-    
-    if ( !is.null(y) || !is.null(z) ) 
-      warning("'y' and 'z' ignored, spherical coordinates used")
-    finite.pos <- FALSE
-    x <- 0
-    y <- 0
-    z <- 0
-    
-  }
-    
-
-  idata <- as.integer(c(viewpoint.rel, ambient, diffuse, specular, finite.pos))
-  ddata <- as.numeric(c(theta, phi, x, y, z))
-
-  ret <- .C( rgl_light,
-    success = as.integer(FALSE),
-    idata,
-    ddata
-  )
-
-  if (! ret$success)
-    stop("Too many lights; maximum is 8 sources per scene")
-    
-  lowlevel(ret$success)
+  .Defunct("light3d")
 }
 
 ##
@@ -510,33 +315,27 @@ rgl.primitive0 <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NUL
 }
 
 rgl.primitive <- function(...) {
-  .Deprecated("", msg = "Please call the primitive directly, e.g. points3d(...).")
-  rgl.primitive0(...)
+  .Defunct("", msg = "Please call the primitive directly, e.g. points3d(...).")
 }
 
 rgl.points <- function( x, y=NULL, z=NULL, ... ) {
-  .Deprecated("points3d")
-  rgl.primitive0( "points", x, y, z, ... )
+  .Defunct("points3d")
 }
 
 rgl.lines <- function(x, y=NULL, z=NULL, ... ) {
-  .Deprecated("segments3d")
-  rgl.primitive0( "lines", x, y, z, ... )
+  .Defunct("segments3d")
 }
 
 rgl.triangles <- function(x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
-  .Deprecated("triangles3d")
-  rgl.primitive0( "triangles", x, y, z, normals, texcoords, ... )
+  .Defunct("triangles3d")
 }
 
 rgl.quads <- function( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
-  .Deprecated("quads3d")
-  rgl.primitive0( "quadrangles", x, y, z, normals, texcoords, ... )
+  .Defunct("quads3d")
 }
 
 rgl.linestrips<- function( x, y=NULL, z=NULL, ... ) {
-  .Deprecated("lines3d")
-  rgl.primitive0( "linestrips", x, y, z, ... )
+  .Defunct("lines3d")
 }
 
 ##
@@ -561,97 +360,7 @@ perm_parity <- function(p) {
 
 rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL, normal_z=NULL,
                          texture_s=NULL, texture_t=NULL) {
-  .Deprecated("surface3d")
-  
-  rgl.material0(...)
-  
-  flags <- rep(FALSE, 4)
-  
-  if (is.matrix(x)) {
-    nx <- nrow(x)
-    flags[1] <- TRUE
-    if ( !identical( dim(x), dim(y) ) ) stop(gettextf("Bad dimension for %s", "rows"),
-    					     domain = NA)
-  } else nx <- length(x)
-  
-  if (is.matrix(z)) {
-    nz <- ncol(z)
-    flags[2] <- TRUE
-  } else nz <- length(z)
-  
-  if (is.matrix(y)) {
-    if (any(dim(y) != c(nx, nz)))
-      stop(gettextf("Bad dimension for %s", "y"))
-  } else if (is.matrix(x)) {
-    if (length(y) != nx)
-      stop(gettextf("Bad length for %s", "y"))
-    y <- matrix(y, nx, nz)
-  } else 
-    y <- matrix(y, nx, nz, byrow = TRUE)
-  
-  ny <- length(y)
-
-  if ( nx*nz != ny)
-    stop("'y' length != 'x' rows * 'z' cols")
-
-  if ( nx < 2 )
-    stop("rows < 2")
-  
-  if ( nz < 2 )   
-    stop("cols < 2")
-    
-  if ( length(coords) != 3 || !identical(all.equal(sort(coords), 1:3), TRUE) )
-    stop("'coords' must be a permutation of 1:3")
-  
-  nulls <- c(is.null(normal_x), is.null(normal_y), is.null(normal_z))
-  if (!all( nulls ) ) {
-    if (any( nulls )) stop("All normals must be supplied")
-    if ( !identical(dim(y), dim(normal_x)) 
-      || !identical(dim(y), dim(normal_y))
-      || !identical(dim(y), dim(normal_z)) ) stop(gettextf("Bad dimension for %s", "normals"),
-      					    domain = NA)
-    flags[3] <- TRUE
-  }
-  
-  nulls <- c(is.null(texture_s), is.null(texture_t))
-  if (!all( nulls ) ) {
-    if (any( nulls )) stop("Both texture coordinates must be supplied")
-    if ( !identical(dim(y), dim(texture_s))
-      || !identical(dim(y), dim(texture_t)) ) stop(gettextf("Bad dimension for %s", "textures"),
-      					     domain = NA)
-    flags[4] <- TRUE
-  }
-
-  idata <- as.integer( c( nx, nz ) )
-
-  xdecreasing <- diff(x[!is.na(x)][1:2]) < 0
-  zdecreasing <- diff(z[!is.na(z)][1:2]) < 0
-  parity <- (perm_parity(coords) + xdecreasing + zdecreasing ) %% 2
-  
-  if (is.na(parity))
-    parity <- 0
-  
-  ret <- .C( rgl_surface,
-    success = as.integer(FALSE),
-    idata,
-    as.numeric(x),
-    as.numeric(z),
-    as.numeric(y),
-    as.numeric(normal_x),
-    as.numeric(normal_z),
-    as.numeric(normal_y),
-    as.numeric(texture_s),
-    as.numeric(texture_t),
-    as.integer(coords),
-    as.integer(parity),
-    as.integer(flags),
-    NAOK=TRUE
-  )
-
-  if (! ret$success)
-    stop("'rgl_surface' failed")
-    
-  lowlevel(ret$success)
+  .Defunct("surface3d")
 }
 
 ##
@@ -690,31 +399,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE,
 ##
 
 rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
-  .Deprecated("planes3d")
-  
-  rgl.material0(...)
-  
-  normals  <- rgl.vertex(a, b, c)
-  nnormals <- rgl.nvertex(normals)
-  noffsets <- length(d)
-  
-  if (nnormals && noffsets) {
-    
-    idata <- as.integer( c( nnormals, noffsets ) )
-    
-    ret <- .C( rgl_planes,
-               success = as.integer(FALSE),
-               idata,
-               as.numeric(normals),    
-               as.numeric(d),
-               NAOK=TRUE
-    )
-    
-    if (! ret$success)
-      stop("'rgl_planes' failed")
-    
-    lowlevel(ret$success)
-  }
+  .Defunct("planes3d")
 }
 
 ##
@@ -722,27 +407,7 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
 ##
 
 rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
-  .Deprecated("clipplanes3d")
-  
-  normals  <- rgl.vertex(a, b, c)
-  nnormals <- rgl.nvertex(normals)
-  noffsets <- length(d)
-  if (nnormals && noffsets) {
-    idata <- as.integer( c( nnormals, noffsets ) )
-    
-    ret <- .C( rgl_clipplanes,
-               success = as.integer(FALSE),
-               idata,
-               as.numeric(normals),    
-               as.numeric(d),
-               NAOK=TRUE
-    )
-    
-    if (! ret$success)
-      stop("'rgl_clipplanes' failed")
-    
-    lowlevel(ret$success)
-  }
+  .Defunct("clipplanes3d")
 }
 
 
@@ -751,30 +416,7 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
 ##
 
 rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
-  .Deprecated("abclines3d")
-  
-  rgl.material0(...)
-  
-  bases  <- rgl.vertex(x, y, z)
-  nbases <- rgl.nvertex(bases)
-  directions <- rgl.vertex(a, b, c)
-  ndirs <-  rgl.nvertex(directions)
-  if (nbases && ndirs) {
-    idata <- as.integer( c( nbases, ndirs ) )
-    
-    ret <- .C( rgl_abclines,
-               success = as.integer(FALSE),
-               idata,
-               as.numeric(bases),    
-               as.numeric(directions),
-               NAOK=TRUE
-    )
-    
-    if (! ret$success)
-      stop("'rgl_abclines' failed")
-    
-    lowlevel(ret$success)
-  }
+  .Defunct("abclines3d")
 }
 
 
@@ -786,65 +428,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
                       family=par3d("family"), font=par3d("font"), 
                       cex=par3d("cex"), useFreeType=par3d("useFreeType"), 
                       ... ) {
-  
-  .Deprecated("text3d")
-  
-  rgl.material0( ... )
-  
-  vertex  <- rgl.vertex(x,y,z)
-  nvertex <- rgl.nvertex(vertex)
-  
-  if (!is.null(pos)) {
-    npos <- length(pos)
-    stopifnot(all(pos %in% 0:6))
-    stopifnot(length(offset) == 1)
-    adj <- offset
-  } else {
-    pos <- 0
-    npos <- 1
-  }
-  if (length(adj) > 3) warning("Only the first three entries of 'adj' are used")
-  adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
-  
-  if (!length(text)) {
-    if (nvertex)
-      warning("No text to plot")
-    return(invisible(integer(0)))
-  }
-  if (nvertex) {
-    text    <- rep(text, length.out=nvertex)
-    
-    idata <- as.integer(nvertex)
-    
-    nfonts <- max(length(family), length(font), length(cex)) 
-    family <- rep(family, length.out = nfonts)
-    font <- rep(font, length.out = nfonts)
-    cex <- rep(cex, length.out = nfonts)  
-    
-    family[font == 5] <- "symbol"
-    font <- ifelse( font < 0 | font > 4, 1, font)  
-    
-    ret <- .C( rgl_texts,
-               success = as.integer(FALSE),
-               idata,
-               as.double(adj),
-               as.character(text),
-               as.numeric(vertex),
-               as.integer(nfonts),
-               as.character(family), 
-               as.integer(font),
-               as.numeric(cex),
-               as.integer(useFreeType),
-               as.integer(npos),
-               as.integer(pos),
-               NAOK=TRUE
-    )
-    
-    if (! ret$success)
-      stop("'rgl_texts' failed")
-    
-    lowlevel(ret$success)
-  }
+  .Defunct("text3d")
 }
 
 ##
@@ -855,45 +439,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
                          userMatrix=diag(4), fixedSize = FALSE,
                          adj = 0.5, pos = NULL, offset = 0.25, rotating = FALSE, 
                          ... ) {
-  .Deprecated("sprites3d")
-  
-  rgl.material0(...)
-  
-  center  <- rgl.vertex(x,y,z)
-  ncenter <- rgl.nvertex(center)
-  radius  <- rgl.attr(radius, ncenter)
-  nradius <- length(radius)
-  
-  pos <- as.integer(pos)
-  npos <- length(pos)
-  if (npos) {
-    pos <- rep(pos, length.out = ncenter)
-    adj <- offset
-  }
-  adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
-  if (ncenter && nradius) {
-    if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
-    if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
-    idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos, rotating) )
-    
-    ret <- .C( rgl_sprites,
-               success = as.integer(FALSE),
-               idata,
-               as.numeric(center),
-               as.numeric(radius),
-               as.integer(shapes),
-               as.numeric(t(userMatrix)),
-               as.numeric(adj),
-               pos,
-               as.numeric(offset),
-               NAOK=TRUE
-    )
-    
-    if (! ret$success)
-      stop("'rgl_sprites' failed")
-    
-    lowlevel(ret$success)
-  }
+  .Defunct("sprites3d")
 }
 
 ##
@@ -995,17 +541,7 @@ rgl.projection <- function(dev = cur3d(), subscene = currentSubscene3d(dev)) {
      
 rgl.select3d <- function(button = c("left", "middle", "right"), 
                          dev = cur3d(), subscene = currentSubscene3d(dev)) {
-  .Deprecated("select3d")
-  rect <- rgl.select(button = button, dev = dev, subscene = subscene)
-  if (is.null(rect)) return(NULL)
-  proj <- rgl.projection(dev = dev, subscene = subscene)
-  
-  llx <- rect[1]
-  lly <- rect[2]
-  urx <- rect[3]
-  ury <- rect[4]
-
-  selectionFunction3d(proj, region = c(llx, lly, urx, ury))
+  .Defunct("select3d")
 }
 
 selectionFunction3d <- function(proj, region = proj$region) {
