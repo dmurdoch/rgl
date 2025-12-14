@@ -16,9 +16,28 @@ void WindowImpl::getFonts(FontArray& outfonts, int nfonts, char** family, int* s
 {
   GLFont* font;
   outfonts.resize(nfonts);
-  for (int i = 0; i < nfonts; i++) {
-    font = getFont(*(family++), *(style++), *(cex++), useFreeType);
-    outfonts[i] = font;
+  for (int i=0; i < nfonts; i++) {
+    outfonts[i] = 0;
+    for (int j=0; j < fonts.size();j++) {
+    if (fonts[j]->cex == cex[i] &&
+        fonts[j]->style == style[i] &&
+        !strcmp(fonts[j]->family, family[i]) && 
+        fonts[j]->useFreeType == useFreeType)
+      outfonts[i] = fonts[j];
+    }
+    if (!outfonts[i]) {
+      if (useFreeType) 
+        font = getFont(family[i], style[i], cex[i], useFreeType);
+      else {
+        font = new GLFont(family[i],
+                          style[i],
+                          cex[i], 
+                          NULL, 
+                          false);
+        fonts.push_back(font);
+      }
+      outfonts[i] = font;
+    }
   }  
 }
 

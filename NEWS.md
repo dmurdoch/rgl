@@ -1,3 +1,12 @@
+# rgl 1.4.0
+
+* Major changes:  now attempts to use shaders for
+all drawing.
+* The `par3d("useFreeType")` parameter has changed 
+meaning, now defaulting to `FALSE`, meaning Cairo 
+graphics is used with default fonts.  `TRUE` now
+means to use specified font files.
+
 # rgl 1.3.29
 
 * Support for classes defined in the `tripack` package

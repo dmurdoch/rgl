@@ -89,7 +89,6 @@ public:
                 bool useFreeType);
   virtual int getAntialias();
   virtual int getMaxClipPlanes();
-  // OpenGL support (FIXME: remove)
   FontArray fonts;
 protected:
   Window*      window;

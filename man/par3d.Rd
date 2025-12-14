@@ -105,8 +105,8 @@ queries, they do not set anything.
     Applies to the whole device.}
    \item{\code{font}}{integer.  The default font number (from 1 to 4; see \code{\link{text3d}}).
     Applies to the whole device.}
-    \item{\code{useFreeType}}{logical.  Should FreeType fonts be used?
-    Applies to the whole device.}
+    \item{\code{useFreeType}}{logical.  Should the
+    FreeType fonts fonts specified in \code{\link{rglFonts}} be used? Applies to the whole device.}
     \item{\code{fontname}}{\emph{\bold{R.O.}}; the system-dependent name of the current font.
     Applies to the whole device.}
     \item{\code{FOV}}{real.  The field of view, from 0 to 179 degrees.  This controls

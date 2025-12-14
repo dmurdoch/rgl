@@ -13,7 +13,13 @@ rglFonts(...)
   \item{ ... }{Device dependent font definitions for use with FreeType.}  
 }
 \details{
-FreeType fonts are specified using the \code{rglFonts} function.  This function
+By default, \pkg{rgl} uses system fonts on all platforms.
+This function allows the defaults to be overridden by
+specifying 
+FreeType font files.  These files are only used if
+\code{par3d("useFreeType")} is set to \code{TRUE}.
+
+\code{rglFonts}
 takes a vector of four filenames of TrueType font files which
 will be used for the four styles regular, bold, italic and bold italic.  The
 vector is passed with a name to be used as the family name, e.g.

@@ -921,10 +921,8 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  bg = list(color="white",fogtype = "none"),
 		  family = "sans",
 		  material = list(color="black", fog = TRUE),
-		  useShaders = TRUE)
-
-if (.Platform$OS.type == "windows")
-	r3dDefaults$useFreeType <- FALSE
+		  useShaders = TRUE,
+      useFreeType = FALSE)
 
 open3d <- function(..., params = getr3dDefaults(), 
                    useNULL = rgl.useNULL(), silent = FALSE	) {

@@ -1,12 +1,16 @@
 Plans for updates:
 
- - Handle text finally (see shaders vignette and ftglnotes.txt)
+The par3d("useFreeType") setting doesn't make sense
+now, and will be set to FALSE on all platforms.  This means that Cairo fonts will be used.  If set to TRUE,
+the rglFonts() files will be used.
+
+ - Handle text finally (see shaders vignette and ftglnotes.txt) DONE
  - Possibly use ragg as a model for drawing text to a bitmap
  which will then be used as a texture.  It uses textshaping
- and systemfonts.
+ and systemfonts. NOT DONE
  - Possibly use cairo graphics.  rasterText package is
- an experiment in that.
-   - Modify drawToBitmap to work with rasterText functions.
+ an experiment in that. DONE
+   - Modify drawToBitmap to work with rasterText functions. NOT DONE
    - Font fallbacks will only be supported in R; C functions
      will assume all fonts are specified properly.  This may
      need a way to say "string 1 followed by string 2 on the

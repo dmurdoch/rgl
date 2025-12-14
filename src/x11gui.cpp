@@ -51,7 +51,6 @@ public:
 
 private:
   void initGL();
-  GLBitmapFont* initGLFont();
   void shutdownGL();
   static int translate_key(KeySym keysym);
   void on_init();
@@ -378,7 +377,7 @@ void X11WindowImpl::initGL()
           };
         };
         
-        fonts[0] = initGLFont();
+        fonts[0] = new GLFont("sans", 1, 1, NULL, false);
       } else {
         Rprintf("Unable to load GL");
         shutdownGL();
@@ -400,14 +399,7 @@ void X11WindowImpl::shutdownGL()
 }
 // ---------------------------------------------------------------------------
 GLFont* X11WindowImpl::getFont(const char* family, int style, double cex, 
-                                 bool useFreeType)
-{
-  for (unsigned int i=0; i < fonts.size(); i++) {
-    if (fonts[i] && fonts[i]->cex == cex && fonts[i]->style == style && !strcmp(fonts[i]->family, family)
-     && fonts[i]->useFreeType == useFreeType)
-      return fonts[i];
-  }
-  
+                                 bool useFreeType) {
   if (useFreeType) {
 #ifdef HAVE_FREETYPE
     SEXP Rfontname = VECTOR_ELT(PROTECT(Rf_eval(PROTECT(Rf_lang2(PROTECT(Rf_install("rglFonts")), 
@@ -443,26 +435,6 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
     return fonts[0];
 }
 
-GLBitmapFont* X11WindowImpl::initGLFont()
-{
-  GLBitmapFont* font = NULL; 
-  if (factory->xfont && beginGL()) {
-    font = new GLBitmapFont("bitmap", 1, 1, "fixed");  
-    font->nglyph     = GL_BITMAP_FONT_COUNT;
-    font->firstGlyph = GL_BITMAP_FONT_FIRST_GLYPH;
-    GLuint listBase = glGenLists(font->nglyph);
-    font->listBase   = listBase - font->firstGlyph;
-    glXUseXFont(factory->xfont->fid, font->firstGlyph, font->nglyph, listBase);
-
-    font->widths = new unsigned int[font->nglyph];
-
-    for(unsigned int i=0;i<font->nglyph;i++)
-      font->widths[i] = 9;
-    font->ascent = factory->xfont->ascent;
-    endGL();  // Should this be added?
-  }
-  return font;
-}
 // ---------------------------------------------------------------------------
 void X11WindowImpl::on_init()
 {

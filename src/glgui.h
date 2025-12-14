@@ -27,8 +27,11 @@ public:
   {
     family = new char[strlen(in_family) + 1];
     memcpy(family, in_family, strlen(in_family) + 1);
-    fontname = new char[strlen(in_fontname) + 1];
-    memcpy(fontname, in_fontname, strlen(in_fontname) + 1);    
+    if (in_fontname) {
+      fontname = new char[strlen(in_fontname) + 1];
+      memcpy(fontname, in_fontname, strlen(in_fontname) + 1);
+    } else
+      fontname = 0;
   };
   
   virtual ~GLFont();
