@@ -7,15 +7,30 @@ meaning, now defaulting to `FALSE`, meaning Cairo
 graphics is used with default fonts.  `TRUE` now
 means to use specified font files.
 
-# rgl 1.3.29
+# rgl 1.3.32
 
+* The WebGL code did not handle the case of lit objects
+with no lights properly.  Now they display the emission
+color only.  (Issue #494).
+* Many deprecated functions have been made defunct.
+
+# rgl 1.3.31
+
+* macOS Tahoe 26.1 does not support `rgl` displays.  Give
+a more informative failure warning.
 * Support for classes defined in the `tripack` package
 has been dropped at the request of CRAN.
 * Added the `latex3d()` function to draw LaTeX text using the
 `xdvir` package.
 * Both `plotmath3d()` and `latex3d()` now use default
 `cex = par3d("cex")`, and have new argument `polygon_offset`.
+
+## Bug fixes
+
 * `arrow3d(type = "extrusion")` was broken by the changes to triangulation in version 1.3.16.
+* Changes last year to `writePLY()` introduced an error
+in some cases (issue #489).
+
 
 # rgl 1.3.24
 

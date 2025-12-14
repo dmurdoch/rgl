@@ -153,8 +153,7 @@ rgl.material0 <- function(
 }
 
 rgl.material <- function(...) {
-  .Deprecated("material3d")
-  rgl.material0(...)
+  .Defunct("material3d")
 }
 
 rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count

@@ -222,7 +222,7 @@ property int vertex2\n", file=con)
         pointShape <- addNormals(pointShape)
       for (i in inds) {
         if (withColors) {
-          col <- vertices[i,4:7]
+          col <- colors[i,1:4]
           pointShape$material$col <- rgb(col[1], col[2], col[3], col[4], maxColorValue = 255)
         }
         writeMesh(pointShape, radius, vertices[i,1:3])
@@ -276,7 +276,7 @@ property int vertex2\n", file=con)
     } else {
       n <- nrow(vertices) - 1
       radius <- lineRadius*avgScale()
-      colors <- vertices[, 4:7, drop = FALSE]
+      colors <- colors[, 1:4, drop = FALSE]
       for (i in seq_len(n)) {
         cyl <- cylinder3d( vertices[inds[i:(i+1)],1:3],
      			   radius = radius,

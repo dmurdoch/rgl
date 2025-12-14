@@ -28,13 +28,7 @@ rgl.useNULL <- function() {
 
 rgl.open <- function(useNULL = rgl.useNULL()) {
 
-  .Deprecated("open3d")
-  
-  ret <- .C( rgl_dev_open, success=FALSE, useNULL=useNULL,
-             antialias = as.integer(getOption("rgl.antialias", -1L)))
-
-  if (! ret$success)
-    stop("'rgl.open' failed")
+  .Defunct("open3d")
 
 }
 
@@ -45,19 +39,7 @@ rgl.open <- function(useNULL = rgl.useNULL()) {
 ##
 
 rgl.close <- function() {
-
-  .Deprecated("close3d")
-  
-  if (length(hook <- getHook("on.rgl.close"))) {
-    if (is.list(hook)) hook <- hook[[1]]  # test is for compatibility with R < 3.0.0
-    hook()
-  }
-  
-  ret <- .C( rgl_dev_close, success=FALSE )
-
-  if (! ret$success)
-    stop("No device opened")
-
+  .Defunct("close3d")
 }
 
 ## 
@@ -75,18 +57,7 @@ rgl.dev.list <- function()
 ##
 
 rgl.set <- function(which, silent = FALSE) {
-  
-  .Deprecated("set3d")
-
-  idata <- c( as.integer(which), as.integer(silent) )
-
-  ret <- .C( rgl_dev_setcurrent, 
-    success=FALSE, 
-    idata
-  )
-
-  if (! ret$success)
-    stop(gettextf("No device opened with id %s", which), domain = NA)
+  .Defunct("set3d")
 }
 
 

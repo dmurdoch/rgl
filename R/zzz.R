@@ -36,6 +36,13 @@
                 package = pkg, lib.loc = lib,
                 mustWork = TRUE)
   
+  is_tahoe <- function() {
+    mac_version_string <- system("sw_vers -productVersion", intern = TRUE)
+    mac_version <- as.numeric_version(mac_version_string)
+    tahoe_version <- as.numeric_version("26.0")
+    mac_version >= tahoe_version
+  }
+  
   # OS-specific 
   initValue <- 0  
   
@@ -54,10 +61,12 @@
   
   dll <- try(dyn.load(dynlib <- getDynlib(dir)))
   if (inherits(dll, "try-error")) {
-    warning(paste("\tLoading rgl's DLL failed.", 
+    if (unixos == "Darwin" && !onlyNULL)
+      warning(paste("\tLoading rgl's DLL failed.", 
     	       if (unixos == "Darwin" && !onlyNULL) {
-    	         paste("\n\tThis build of rgl depends on XQuartz, which failed to load.\n",
-    	           "See the discussion in https://stackoverflow.com/a/66127391/2554330")
+    	         paste(if (is_tahoe()) "\n\tYou appear to be running macOS Tahoe or newer.
+    	               Tahoe 26.1 is known not to support OpenGL." else "\n\tThis build of rgl depends on XQuartz, which failed to load.\n",
+    	           "See the discussion in https://stackoverflow.com/a/66127391")
              }),
          call. = FALSE)
     if (!onlyNULL) {
