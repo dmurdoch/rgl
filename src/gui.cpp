@@ -11,7 +11,7 @@ using namespace rgl;
 // ---------------------------------------------------------------------------
 // WindowImpl common code
 // ---------------------------------------------------------------------------
-void WindowImpl::getFonts(FontArray& outfonts, int nfonts, char** family, int* style, 
+void WindowImpl::getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, 
                           double* cex, bool useFreeType)
 {
   GLFont* font;
@@ -326,7 +326,7 @@ void Window::on_close()
     windowImpl->destroy();
 }
 // ---------------------------------------------------------------------------
-void Window::getFonts(FontArray& outfonts, int nfonts, char** family, int* style, 
+void Window::getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, 
                       double* cex, bool useFreeType)
 {
   windowImpl->getFonts(outfonts, nfonts, family, style, cex, useFreeType);

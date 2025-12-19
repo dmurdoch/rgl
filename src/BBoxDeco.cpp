@@ -1,4 +1,7 @@
 #include "BBoxDeco.h"
+#include "TextSet.h"
+#include "Device.h"
+#include "DeviceManager.h"
 
 #ifndef RGL_NO_OPENGL
 #include "gl2ps.h"
@@ -127,7 +130,6 @@ AxisInfo::AxisInfo()
 {
   mode  = AXIS_LENGTH;
   nticks = 0;
-  ticks = NULL;
   len   = 2;
   unit  = 0;
 }
@@ -142,13 +144,13 @@ AxisInfo::AxisInfo(int in_nticks, double* in_ticks, char** in_texts, int in_len,
   	textArray.push_back(in_texts[i]);
   len    = in_len;
   unit   = in_unit;
-  ticks  = NULL;
+  ticks.clear();
 
   if (nticks > 0) {
 
     mode = AXIS_CUSTOM;
 
-    ticks = new float [nticks];
+    ticks.resize(nticks);
 
     for(i=0;i<nticks;i++)
       ticks[i] = (float) in_ticks[i];
@@ -175,17 +177,14 @@ AxisInfo::AxisInfo(AxisInfo& from)
   len  = from.len;
   unit = from.unit;
   if (nticks > 0) {
-    ticks = new float [nticks];
-    memcpy (ticks, from.ticks, sizeof(float)*nticks);
+    ticks.resize(nticks);
+    memcpy (ticks.data(), from.ticks.data(), sizeof(float)*nticks);
   } else
-    ticks = NULL;
+    ticks.clear();
 }
 
 AxisInfo::~AxisInfo()
 {
-  if (ticks) {
-    delete [] ticks;
-  }
 }
 
 void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matrix4x4& modelview, 
@@ -370,36 +369,6 @@ static Edge zaxisedge[4] = {
 AxisInfo BBoxDeco::defaultAxis(0,NULL,NULL,0,5);
 Material BBoxDeco::defaultMaterial( Color(0.6f,0.6f,0.6f,0.5f), Color(1.0f,1.0f,1.0f) );
 
-BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis, AxisInfo& in_zaxis, float in_marklen_value, bool in_marklen_fract,
-                   float in_expand, bool in_front)
-: SceneNode(BBOXDECO), material(in_material), xaxis(in_xaxis), yaxis(in_yaxis), zaxis(in_zaxis), marklen_value(in_marklen_value), marklen_fract(in_marklen_fract),
-  expand(in_expand), draw_front(in_front)
-#ifndef RGL_NO_OPENGL  
-  , axisBusy(false)
-#endif
-{
-  material.colors.recycle(2);
-}
-
-Vertex BBoxDeco::getMarkLength(const AABox& boundingBox) const
-{
-  return (marklen_fract) ? (boundingBox.vmax - boundingBox.vmin) * (1 / marklen_value) : Vertex(1,1,1) * marklen_value;
-}
-
-AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
-{
-  AABox bbox2(in_bbox);
-
-  Vertex marklen = getMarkLength(bbox2);
-
-  Vertex v = marklen * 2;
-
-  bbox2 += bbox2.vmin - v;
-  bbox2 += bbox2.vmax + v;
-
-  return bbox2;
-}
-
 struct BBoxDeco::BBoxDecoImpl {
   
   static Edge* chooseEdge(RenderContext* renderContext, BBoxDeco& bboxdeco, int coord) 
@@ -477,19 +446,19 @@ struct BBoxDeco::BBoxDecoImpl {
     
     switch(coord)
     {
-      case 0:
-        axisedge = xaxisedge;
-        nedges   = 4;
-        break;
-      case 1:
-        axisedge = yaxisedge;
-        nedges   = 8;
-        break;
-      case 2:
-      default:
-        axisedge = zaxisedge;
-        nedges   = 4;
-        break;
+    case 0:
+      axisedge = xaxisedge;
+      nedges   = 4;
+      break;
+    case 1:
+      axisedge = yaxisedge;
+      nedges   = 8;
+      break;
+    case 2:
+    default:
+      axisedge = zaxisedge;
+      nedges   = 4;
+      break;
     }
     
     // search z-nearest contours
@@ -529,19 +498,19 @@ struct BBoxDeco::BBoxDecoImpl {
     int i,j, lim = 4, coord = material->marginCoord;
     bool match;
     switch(coord) {
-      case 0: 
-        // Initialized to this case to suppress "may be unused" message
-        // axisedge = xaxisedge;
-        // lim = 4;
-        break;
-      case 1: 
-        axisedge = yaxisedge; 
-        lim = 8;
-        break;
-      case 2: 
-        axisedge = zaxisedge;
-        lim = 4;
-        break;
+    case 0: 
+      // Initialized to this case to suppress "may be unused" message
+      // axisedge = xaxisedge;
+      // lim = 4;
+      break;
+    case 1: 
+      axisedge = yaxisedge; 
+      lim = 8;
+      break;
+    case 2: 
+      axisedge = zaxisedge;
+      lim = 4;
+      break;
     }
     for (j = 0; j < lim; j++) {
       match = true;
@@ -550,8 +519,8 @@ struct BBoxDeco::BBoxDecoImpl {
           match = false;
           break;
         }
-      if (match)
-        return &axisedge[j];
+        if (match)
+          return &axisedge[j];
     }
     Rf_error("fixedEdge: material->floating=%d marginCoord=%d edge=%d %d %d\n", material->floating,
              material->marginCoord, material->edge[0], material->edge[1], material->edge[2]);
@@ -602,19 +571,93 @@ struct BBoxDeco::BBoxDecoImpl {
       }
     }
   };
+  QuadSet *cube;
+  LineSet *ticks;
+  TextSet *labels;
 };
 
-void BBoxDeco::render(RenderContext* renderContext)
-{
+BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis, AxisInfo& in_zaxis, float in_marklen_value, bool in_marklen_fract,
+                   float in_expand, bool in_front)
+: SceneNode(BBOXDECO), 
+  impl(std::make_unique<BBoxDecoImpl>()),
+  material(in_material), xaxis(in_xaxis), yaxis(in_yaxis), zaxis(in_zaxis), marklen_value(in_marklen_value), marklen_fract(in_marklen_fract),
+  expand(in_expand), draw_front(in_front)
 #ifndef RGL_NO_OPENGL  
-  AABox bbox = renderContext->subscene->getBoundingBox();
-  
+  , axisBusy(false)
+#endif
+{
+  material.colors.recycle(2);
+  impl->cube = new QuadSet(material,
+                           0, NULL, NULL, 
+                           NULL, /* in_texcoords */
+                           true, /* ignoreExtent */
+                           0, NULL, /* indices */
+                           true, false);
+  impl->cube->owner = this;
+  impl->ticks = new LineSet(material, 
+                              true, /* in_ignoreExtent */ 
+                              false);
+  /* bboxChange */
+  for (int i = 0; i < 3; i++)
+    impl->ticks->material.edge[i] = 1;
+  impl->ticks->material.floating = true;
+  impl->ticks->owner = this;
+
+  FontArray fonts(0);
+  const char * family[] = { "sans" };
+  int style[] = { 1 };
+  double cex[] = { 1.0 };
+  Device* device;
+  extern DeviceManager* deviceManager;
+  if (deviceManager && (device = deviceManager->getAnyDevice()))
+    device->getFonts(fonts, 1, family, style, cex, true);
+  impl->labels = new TextSet(material, 
+                                  0, NULL, NULL, 
+                                  NULL,
+                                  true, /* ignoreExtent */
+                                  fonts,
+                                  cex,
+                                  0, NULL);
+}
+
+Vertex BBoxDeco::getMarkLength(const AABox& boundingBox) const
+{
+  return (marklen_fract) ? (boundingBox.vmax - boundingBox.vmin) * (1 / marklen_value) : Vertex(1,1,1) * marklen_value;
+}
+
+AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
+{
+  AABox bbox2(in_bbox);
+
+  Vertex marklen = getMarkLength(bbox2);
+
+  Vertex v = marklen * 2;
+
+  bbox2 += bbox2.vmin - v;
+  bbox2 += bbox2.vmax + v;
+
+  return bbox2;
+}
+
+bool BBoxDeco::hasNewBBox(RenderContext* renderContext)
+{
+  AABox data_bbox = renderContext->subscene->getBoundingBox();
+  bool result = data_bbox.vmin.x != bbox.vmin.x ||
+                data_bbox.vmin.y != bbox.vmin.y ||
+                data_bbox.vmin.z != bbox.vmin.z ||
+                data_bbox.vmax.x != bbox.vmax.x ||
+                data_bbox.vmax.y != bbox.vmax.y ||
+                data_bbox.vmax.z != bbox.vmax.z
+                ;
+  if (result)
+    bbox = data_bbox;
+  return result;
+}
+
+void BBoxDeco::setCube()
+{
   if (bbox.isValid()) {
-    
-    glPushAttrib(GL_ENABLE_BIT);
-    
-    int i,j;
-    
+
     // vertex array:
     
     Vertex4 boxv[8] = {
@@ -627,219 +670,230 @@ void BBoxDeco::render(RenderContext* renderContext)
       Vertex4( bbox.vmin.x, bbox.vmax.y, bbox.vmax.z ),
       Vertex4( bbox.vmax.x, bbox.vmax.y, bbox.vmax.z )
     };
-    
-    // 
-    // // transform vertices: used for edge distance criterion and text justification
-    // 
-    Matrix4x4 modelview(renderContext->subscene->modelMatrix);
-    
-    // setup material
-    
-    material.beginUse(renderContext);
-    
-    if (material.line_antialias || material.isTransparent()) {
-      // ENABLE BLENDING
-      glEnable(GL_BLEND);
-      
-    }
-    
-    // draw back faces
-    
-    glBegin(GL_QUADS);
-    
-    for(i=0;i<6;i++) {
-      
-      const Vertex4 q = modelview * side[i].normal;
-      const Vertex4 view(0.0f,0.0f,1.0f,0.0f);
-      
-      float cos_a = view * q;
-      
-      if (cos_a == 0.0f) {
-        Vertex4 view2(1.0f,0.0f,0.0f,0.0f);
-        cos_a = view2 * q;
-      }
-      
-      const bool front = (cos_a >= 0.0f) ? true : false;
-      
-      if (draw_front || !front) {
-        
-        // draw face
-        
-        glNormal3f(side[i].normal.x, side[i].normal.y, side[i].normal.z);
-        
-        for(j=0;j<4;j++) {
-          
-          // feed vertex
-          
-          Vertex4& v = boxv[ side[i].vidx[j] ];
-          glVertex3f(v.x, v.y, v.z);
-          
-        }
-        
+    int nverts = 6*4;
+    double vertices[nverts*3], normals[nverts*3];
+    for (int i = 0; i < 6; i++) {
+      Vertex4 n = side[i].normal;
+      for (int j = 0; j < 4; j++) {
+        Vertex4 v = boxv[side[i].vidx[j]];
+        int k = 12*i + 3*j;
+        vertices[k] = v.x;
+        vertices[k + 1] = v.y;
+        vertices[k + 2] = v.z;
+        normals[k] = n.x;
+        normals[k + 1] = n.y;
+        normals[k + 2] = n.z;
       }
     }
-    
-    glEnd();
-    
-    // setup mark length
-    
-    Vertex marklen = getMarkLength(bbox);
-    
-    
-    // draw axis and tickmarks
-    // find contours
-    
-    glDisable(GL_LIGHTING);
-    
-    material.useColor(1);
-    
-    for(i=0;i<3;i++) {
-      Vertex4 v;
+    impl->cube = new QuadSet(material,
+                             nverts, vertices, normals,
+                             NULL, /* in_texcoords */
+                             true, /* ignoreExtent */
+                             0, NULL, /* indices */
+                             true, false);
+  }
+  impl->cube->material.colors.recycle(1);
+  if (!draw_front)
+    impl->cube->material.front = Material::CULL_FACE;
+}
+
+void BBoxDeco::setAxes()
+{
+  if (bbox.isValid()) {
+    for(int i=0;i<3;i++) {
       AxisInfo*  axis;
-      float* valueptr;
       float  low, high;
       switch(i)
       {
-        case 0:
-          axis     = &xaxis;       
-          valueptr = &v.x;
-          low      = bbox.vmin.x;
-          high     = bbox.vmax.x;
-          break;
-        case 1:
-          axis     = &yaxis;
-          valueptr = &v.y;
-          low      = bbox.vmin.y;
-          high     = bbox.vmax.y;
-          break;
-        case 2:
-        default:
-          axis     = &zaxis;
-          valueptr = &v.z;
-          low      = bbox.vmin.z;
-          high     = bbox.vmax.z;
-          break;
+      case 0:
+        axis     = &xaxis;       
+        low      = bbox.vmin.x;
+        high     = bbox.vmax.x;
+        break;
+      case 1:
+        axis     = &yaxis;
+        low      = bbox.vmin.y;
+        high     = bbox.vmax.y;
+        break;
+      case 2:
+      default:
+        axis     = &zaxis;
+        low      = bbox.vmin.z;
+        high     = bbox.vmax.z;
+        break;
       }
       if (axis->mode == AXIS_NONE)
         continue;
       
-      Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, *this, i); 
+      // 
+      // Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, *this, i); 
+      // 
+      // if (axis->mode == AXIS_USER) {
+      //   
+      //   if (!axisBusy) {
+      //     axisBusy = true;
+      //     if (axisCallback[i]) {
+      //       int e[3];
+      //       if (edge) {
+      //         e[0] = static_cast<int>(edge->code[0]);
+      //         e[1] = static_cast<int>(edge->code[1]);
+      //         e[2] = static_cast<int>(edge->code[2]);
+      //       } else{
+      //         e[0] = 0;
+      //         e[1] = 0;
+      //         e[2] = 0;
+      //       }
+      //       axisCallback[i](axisData[i], i, e);
+      //       axisBusy = false;
+      //     }
+      //   }
+      // } else if (edge) {
+      //   
+      //   v = boxv[edge->from];
       
-      if (axis->mode == AXIS_USER) {
+      switch (axis->mode) {
+      case AXIS_CUSTOM:
+      {
+        // compute axis locations and tickmarks
         
-        if (!axisBusy) {
-          axisBusy = true;
-          if (axisCallback[i]) {
-            int e[3];
-            if (edge) {
-              e[0] = static_cast<int>(edge->code[0]);
-              e[1] = static_cast<int>(edge->code[1]);
-              e[2] = static_cast<int>(edge->code[2]);
-            } else{
-              e[0] = 0;
-              e[1] = 0;
-              e[2] = 0;
-            }
-            axisCallback[i](axisData[i], i, e);
-            axisBusy = false;
-          }
-        }
-      } else if (edge) {
-        
-        v = boxv[edge->from];
-        
-        switch (axis->mode) {
-        case AXIS_CUSTOM:
-        {
-          // draw axis and tickmarks
+        std::vector<std::string>::iterator  iter;
+        int j;
+        for (iter = axis->textArray.begin(), j=0; (j<axis->nticks) && (iter != axis->textArray.end());++iter, j++) {
           
-          std::vector<std::string>::iterator  iter;
+          // float value = axis->ticks[j];
           
+          // // clip marks
+          // 
+          // if ((value >= low) && (value <= high)) {
+          //   
+          //   *valueptr = value;
+          //   axis->draw(renderContext, v, edge->dir, modelview, marklen, *iter);
+          // }
           
-          for (iter = axis->textArray.begin(), j=0; (j<axis->nticks) && (iter != axis->textArray.end());++iter, j++) {
-            
-            float value = axis->ticks[j];
-            
-            // clip marks
-            
-            if ((value >= low) && (value <= high)) {
-              
-              *valueptr = value;
-              axis->draw(renderContext, v, edge->dir, modelview, marklen, *iter);
-            }
-            
-          }
         }
+      }
         break;
-        case AXIS_LENGTH:
+      case AXIS_LENGTH:
+      {
+        float delta = (axis->len>1) ? (high-low)/((axis->len)-1) : 0;
+        axis->ticks.clear();
+        axis->textArray.clear();
+        for(int k=0;k<axis->len;k++)
         {
-          float delta = (axis->len>1) ? (high-low)/((axis->len)-1) : 0;
-  
-          for(int k=0;k<axis->len;k++)
-          {
-            float value = low + delta * (float)k;
-  
-            *valueptr = value;
-  
-            char text[32];
-            snprintf(text, 32, "%.4g", value);
-              
-            std::string string = text;
-              
-            axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
-          }
+          float value = low + delta * (float)k;
+          
+          axis->ticks.push_back(value);
+          
+          char text[32];
+          snprintf(text, 32, "%.4g", value);
+          
+          axis->textArray.push_back(text);
+          
         }
+      }
         break;
-        case AXIS_UNIT:
-        {
-          float value =  ( (float) ( (int) ( ( low+(axis->unit-1) ) / (axis->unit) ) ) ) * (axis->unit);
-          while(value < high) {
-                
-            *valueptr = value;
-                
-            char text[32];
-            snprintf(text, 32, "%.4g", value);
-                
-            std::string s = text;
-                
-            axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
-                
-            value += axis->unit;
-          }
+      case AXIS_UNIT:
+      {
+        float value =  ( (float) ( (int) ( ( low+(axis->unit-1) ) / (axis->unit) ) ) ) * (axis->unit);
+        axis->ticks.clear();
+        axis->textArray.clear();
+        while(value < high) {
+          
+          axis->ticks.push_back(value);
+          
+          char text[32];
+          snprintf(text, 32, "%.4g", value);
+          
+          axis->textArray.push_back(text);
+          
+          // std::string s = text;
+          // 
+          // axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
+          
+          value += axis->unit;
         }
+      }
         break;
-        case AXIS_PRETTY:
-        {
+      case AXIS_PRETTY:
+      {
         /* These are the defaults from the R pretty() function, except min_n is 3 */
-          double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
-          int ndiv=axis->len, min_n=3, eps_correction=0;
-                
-          high_u_fact[0] = 1.5;
-          high_u_fact[1] = 2.75;
-          axis->unit = static_cast<float>(R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
-                                                    eps_correction, 0));
-                
-          for (int i=(int)lo; i<=up; i++) {
-            float value = i*axis->unit;
-            if (value >= low && value <= high) {
-              *valueptr = value;
-                    
-              char text[32];
-              snprintf(text, 32, "%.4g", value);
-                    
-              std::string s = text;
-                    
-              axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
-            }
+        double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
+        int ndiv=axis->len, min_n=3, eps_correction=0;
+        
+        high_u_fact[0] = 1.5;
+        high_u_fact[1] = 2.75;
+        axis->unit = static_cast<float>(R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+                                                  eps_correction, 0));
+        
+        axis->ticks.clear();
+        axis->textArray.clear();
+        for (int i=(int)lo; i<=up; i++) {
+          float value = i*axis->unit;
+          if (value >= low && value <= high) {
+            axis->ticks.push_back(value);
+            
+            char text[32];
+            snprintf(text, 32, "%.4g", value);
+            axis->textArray.push_back(text);
+            // std::string s = text;
+            // 
+            // axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
           }
         }
+      }
         break;
-        }
-        
-       }
+      }
+      axis->nticks = axis->ticks.size();
     }
-    material.endUse(renderContext);
-    glPopAttrib();
+    // material.useColor(1);
+  }
+}
+
+void BBoxDeco::render(RenderContext* renderContext)
+{
+#ifndef RGL_NO_OPENGL
+  // The cube only changes when the bbox changes.  
+  // Some aspects of the ticks and labels change then,
+  // but others may change in every rendering, and the
+  // labels move to a different edge of the cube.
+  
+  if (hasNewBBox(renderContext)) {
+    
+    setCube();
+    setAxes();
+  }
+  impl->cube->render(renderContext);
+  for (int i = 0; i < 3; i++) {
+    AxisInfo*  axis;
+    switch(i)
+    {
+    case 0:
+      axis     = &xaxis; 
+      break;
+    case 1:
+      axis     = &yaxis;
+      break;
+    case 2:
+    default:
+      axis     = &zaxis;
+      break;
+    }
+    if (axis->mode == AXIS_NONE || axis->nticks == 0)
+      continue;
+    impl->ticks->uninitialize();
+    impl->ticks->material.marginCoord = i;
+    double values[6*axis->nticks];
+    for (int j = 0; j < axis->nticks; j++) {
+      values[6*j]   = axis->ticks[j];
+      values[6*j+1] = 0.0;
+      values[6*j+2] = 0.0;
+      
+      values[6*j+3] = axis->ticks[j];
+      values[6*j+4] = 1.0;
+      values[6*j+5] = 0.0;
+    }
+    impl->ticks->initPrimitiveSet(2*axis->nticks, values);
+    impl->ticks->render(renderContext);
   }
 #endif  
 }

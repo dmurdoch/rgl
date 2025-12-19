@@ -124,6 +124,17 @@ void VertexArray::appendToBuffer(std::vector<GLubyte>& buffer) {
 	buffer.insert(buffer.end(), p, p + 3*nvertex*sizeof(float));
 }
 
+void VertexArray::replaceInBuffer(std::vector<GLubyte>& buffer) {
+  const GLubyte* p = reinterpret_cast<const GLubyte*>(arrayptr);
+  size_t size = 3*nvertex*sizeof(float);
+  if (offset < 0 || offset + size > buffer.size())
+    Rf_error("can't replace what's not there!");
+  /* the next line is only for debugging... */
+  std::copy(p, p + size, buffer.begin() + offset);
+  glBufferSubData(GL_ARRAY_BUFFER, offset,
+                  size, p);
+}
+
 void VertexArray::setAttribLocation(GLint loc)
 {
 	location = loc;

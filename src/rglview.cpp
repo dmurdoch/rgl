@@ -421,7 +421,10 @@ const char* RGLView::getFontname() const
 {
   if (!renderContext.font)
     Rf_error("font not available");
-  return renderContext.font->fontname;
+  if (renderContext.font->fontname)
+    return renderContext.font->fontname;
+  else
+    return "";
 }
 
 bool RGLView::getFontUseFreeType() const

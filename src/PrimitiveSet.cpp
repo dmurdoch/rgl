@@ -111,21 +111,24 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
 #ifndef RGL_NO_OPENGL
   if (doUseShaders)
   	Shape::beginShader(renderContext);
-#endif  
+ 
   BBoxDeco* bboxdeco = 0;
   if (material.marginCoord >= 0) {
     Subscene* subscene = renderContext->subscene;
     bboxdeco = subscene->get_bboxdeco();
   }
   if (bboxdeco) {
-    invalidateDisplaylist();
+    if (!doUseShaders)
+      invalidateDisplaylist();
     verticesTodraw.duplicate(vertexArray);
     for (int i=0; i < vertexArray.size(); i++)
       verticesTodraw.setVertex(i, bboxdeco->marginVecToDataVec(vertexArray[i], renderContext, &material) );
+    verticesTodraw.replaceInBuffer(vertexbuffer);
     verticesTodraw.beginUse();
   } else {
     vertexArray.beginUse();
   }
+#endif
   SAVEGLERROR;
   material.beginUse(renderContext);
   SAVEGLERROR;
@@ -283,9 +286,7 @@ void PrimitiveSet::initialize()
 	Shape::initialize();
 #ifndef RGL_NO_OPENGL
 	if (doUseShaders) {
-	  
 		initShader();
-	  
 	  vertexArray.appendToBuffer(vertexbuffer);
 	  vertexArray.setAttribLocation(glLocs["aPos"]);
 	  
@@ -373,9 +374,13 @@ void FaceSet::initFaceSet(
 
 void FaceSet::initNormals(double* in_normals)
 {
+
 	size_t nindices = indices.size();
 	size_t nvertices = vertexArray.size();
   normalArray.alloc(nvertices);
+  if (!nvertices)
+    return;
+  
   if (in_normals) {
     for(int i=0;i<nvertices;i++) {
       normalArray[i].x = (float) in_normals[i*3+0];

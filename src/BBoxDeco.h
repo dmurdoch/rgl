@@ -40,7 +40,7 @@ struct AxisInfo {
 
   int    mode;
   int    nticks;
-  float* ticks;
+  std::vector<float> ticks;
   int    len;
   float  unit;
   std::vector<std::string> textArray;
@@ -65,15 +65,22 @@ public:
   Vec3 marginNormalToDataNormal(Vec3 marginvec, RenderContext* renderContext, Material* material);
   void setAxisCallback(userAxisPtr fn, void * user, int axis);
   void getAxisCallback(userAxisPtr *fn, void ** user, int axis);
+  /* Has the bbox in the renderContext changed from
+   * the one recorded here? */
+  bool hasNewBBox(RenderContext* renderContext);
+  /* Create or modify the box, ticks and labels */
+  void setCube();
+  void setAxes();
 private:
   struct BBoxDecoImpl;
+  std::unique_ptr<BBoxDecoImpl> impl;
   Material material;
   AxisInfo xaxis, yaxis, zaxis;
   float marklen_value;
   bool  marklen_fract;
   float expand;
   bool  draw_front;
-  
+  AABox bbox;
 #ifndef RGL_NO_OPENGL
   bool axisBusy;
 #endif
@@ -82,6 +89,7 @@ private:
 
   static Material defaultMaterial;
   static AxisInfo defaultAxis;
+
 };
 
 } // namespace rgl

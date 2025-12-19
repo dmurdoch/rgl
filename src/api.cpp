@@ -1172,7 +1172,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
 }
 
 void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex,
-               int* nfonts, char** family, int* style, double* cex, 
+               int* nfonts, const char** family, int* style, double* cex, 
                int* useFreeType, int* npos, int* pos)
 {
   int success = RGL_FAIL;

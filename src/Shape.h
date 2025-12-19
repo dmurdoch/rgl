@@ -21,6 +21,8 @@ namespace rgl {
 
 class Shape : public SceneNode
 {
+friend class BBoxDeco;
+  
 public:
   Shape(Material& in_material,bool in_ignoreExtent, TypeID in_typeID=SHAPE, bool in_bboxChanges=false);
   ~Shape();
@@ -198,6 +200,8 @@ protected:
 	void endShader();
 	void checkShader(const char* type, GLuint shader);
 	void checkProgram(GLuint program);
+	
+	/* create and load buffers */
 	void loadBuffers();
 	void printUniform(const char *name, int rows, int cols, int transposed,
                    GLint type, bool verbose = false);

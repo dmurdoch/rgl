@@ -85,7 +85,7 @@ public:
   virtual void watchMouse(bool withoutButton) = 0;
   virtual GLFont* getFont(const char* family, int style, double cex, 
                           bool useFreeType) = 0;
-  void getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex, 
+  void getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, double* cex, 
                 bool useFreeType);
   virtual int getAntialias();
   virtual int getMaxClipPlanes();
@@ -205,7 +205,7 @@ public:
   void bringToTop(int stay);
   void setWindowRect(int left, int top, int right, int bottom);
   void getWindowRect(int *left, int *top, int *right, int *bottom);
-  void getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex,
+  void getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, double* cex,
                 bool useFreeType);
 
 // data:

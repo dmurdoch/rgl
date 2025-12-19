@@ -56,7 +56,7 @@ public: // -- all methods are blocking until action completed
   void setWindowRect(int left, int top, int right, int bottom);
   void getWindowRect(int *left, int *top, int *right, int *bottom);
   
-  void getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex, 
+  void getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, double* cex, 
                 bool useFreeType);
   const char* getDevtype(void);
 

@@ -137,6 +137,8 @@ std::string TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int 
 void TextSet::do_measure_text()
 {
   int n = getElementCount();
+  if (!n) return;
+  
   const char * texts[n];
   int done = 0; /* the count of entries done */
   text_extents_t *res = measures.data();
@@ -177,6 +179,8 @@ static inline GLuint NextPowerOf2(GLuint in)
 void TextSet::do_pack_text()
 {
   int n = getElementCount();
+  if (!n) return;
+  
   text_extents_t *m = measures.data();
   text_placement_t *xy = placement.data();
   const char * texts[n];
@@ -197,6 +201,8 @@ void TextSet::do_pack_text()
 
 void TextSet::draw_to_texture() {
   int n = getElementCount();
+  if (!n) return;
+    
   const char *texts[n];
 
   for (int i = 0; i < n; i++)

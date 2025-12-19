@@ -105,7 +105,7 @@ void Shape::drawBegin(RenderContext* renderContext)
 
 #ifndef RGL_NO_OPENGL
 void Shape::beginShader(RenderContext* renderContext)
-{  
+{
 	if (doUseShaders) {
 		Subscene* subscene = renderContext->subscene;
 		if (!is_initialized() || 
@@ -590,7 +590,6 @@ void Shape::initShader()
 bool Shape::glLocs_has_key(std::string key) {
 	return glLocs.find(key) != glLocs.end();
 }
-
 
 void Shape::loadBuffers()
 {

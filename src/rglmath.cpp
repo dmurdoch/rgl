@@ -82,7 +82,7 @@ float& Vec3::operator [] (int i) {
   case 1: return y;
   case 2: return z;
   }
-  Rf_error("out of bounds");
+  Rf_error("Vec3 out of bounds");
 }
 
 Vec3 Vec3::scale(const Vec3& op2) const
@@ -175,7 +175,7 @@ float& Vec4::operator [] (int i) {
     case 2: return z;
     case 3: return w;
   }
-  Rf_error("out of bounds");
+  Rf_error("Vec4 out of bounds");
 }
 
 
