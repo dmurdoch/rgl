@@ -454,7 +454,7 @@ bbox        | read-only | Current bounding-box of the scene
 viewport    |       | Dimensions in pixels of the scene within the window
 windowRect  |           | Dimensions in pixels of the window on the whole screen
 listeners   |           | Which subscenes respond to mouse actions in the current one
-mouseMode   |       | What the mouse buttons do.  See `r linkfn("mouseMode", '<code>"mouseMode"</code>')`
+mouseMode   |       | What the mouse buttons do.  See [User interaction](#user-interaction)
 observer    | read-only | The position of the observer; set by `r indexfns("observer3d")`
 scale       |           | Rescaling for each coordinate; see `r linkfn("aspect3d")`
 zoom        |           | Magnification of the scene
@@ -780,7 +780,7 @@ actions that take place when the mouse is moved
 without pressing any button.
 
 The button actions generally correspond to click and drag operations.
-Possible values for `r indexfns("mouseMode", '<code>"mouseMode"</code>')` for the mouse pointer or wheel are as follows:
+Possible values for `"mouseMode"` for the mouse pointer or wheel are as follows:
 
 Mode           | Description
 -------------- | ---------
