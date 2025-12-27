@@ -32,8 +32,6 @@ struct AxisInfo {
   AxisInfo(int in_nticks, double* in_values, char** in_texts, int xlen, float xunit);
   AxisInfo(AxisInfo& from);
   ~AxisInfo();
-  void draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matrix4x4& modelview, 
-            Vertex& marklen, std::string& string);
             
   int getNticks(float low, float high);
   double getTick(float low, float high, int index); /* double since it might be NA_REAL */
@@ -80,7 +78,7 @@ private:
   bool  marklen_fract;
   float expand;
   bool  draw_front;
-  AABox bbox;
+  AABox bbox0, bbox; /* data bbox and expanded bbox */
 #ifndef RGL_NO_OPENGL
   bool axisBusy;
 #endif

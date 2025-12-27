@@ -100,7 +100,8 @@ protected:
   Scene* scene;
   Vec3 adj;
   void getAdj(int index);
-  VertexArray posArray; /* repeated copies of vertices */
+  VertexArray posArray,
+    verticesTodraw; /* repeated copies of vertices */
   VertexArray adjArray; /* in shader aOfs, location ofsLoc */
   ColorArray colArray;  /* repeated copies of colors */
   TexCoordArray texCoordArray;

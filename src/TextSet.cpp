@@ -261,11 +261,15 @@ void TextSet::draw_to_texture() {
 }
 
 void TextSet::initialize() {
+#ifndef RGL_NO_OPENGL
   SpriteSet::initialize();
   
   // Set the vertex and texture coordinates
   
   set_coordinates();
+//  printUniforms(true);
+//  printAttributes(8, true);
+#endif
 }
 
 void TextSet::set_coordinates() {

@@ -1,0 +1,82 @@
+---
+title: "BBoxDeco"
+author: "Duncan Murdoch"
+date: "2025-12-25"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+These are notes for me, likely not very useful to others.
+
+## Handling BBoxDeco in Javascript
+
+In `axes.src.js`:
+
+* `getTickEdges`: choose edges for ticks
+* `getTickLocations`: choose pretty (or other) locations for ticks
+* `getTickVertices`: compute xyz for ticks
+* `placeTickLabels`: compute locations for tick labels
+* `setTickLabels`: set strings for tick labels
+* `setBbox`: set bbox and centre vector for box
+* `setBBoxMatrices`: set norm, MV and PRMV matrices for bounding box
+* `restoreBBoxMatrices`: restore saved norm, MV and PRMV matrices
+* `getMarginParameters`: use `setBBoxMatrices`, `getTickEdges` and `restoreBBoxMatrices` to get parameters for drawing in the margins. 
+* `fixVertex`: convert marginal vertex coordinates
+* `fixNormal`: convert normal vectors correspondingly
+* `marginVecToDataVec`: fix vector of marginal parameters
+to be data parameters.
+* `doAxisCallback`: do a callback when drawing axes.
+
+In `init.src.js`:
+
+* `initObj` calls `initBBox`.
+* `initBBox` calls `initCube`, then sets up `cube`, `ticks` and `labels`.
+
+In `draw.src.js`:
+
+* `drawObj` calls `drawBBox`.
+* `drawBBox` 
+    * calls `initBBox`, then `setBbox`, `setBBoxMatrices`, initializes the cube, draws it.
+    * calls `getTickLocations`, `getTickEdges`, `getTickVertices`, `placeTickLabels`, `setTickLabels`.
+    * It then initializes the ticks and labels and draws them.
+    * Finally calls `restoreBBoxMatrices`.
+    
+## Handling BBoxDeco in C++ (not fully updated)
+
+In `BBoxDeco.cpp`:
+
+* The `AxisInfo` type holds a description of one axis.
+* `AxisInfo::draw` draws ticks with length
+`AxisInfo::marklen`, and labels relative to twice that distance, with a complicated calculation for `pos`.
+* `AxisInfo::getNticks` reports how many ticks are needed.
+* `AxisInfo::getTick` gets one tick location.
+* The `Side` class is a face of the bbox cube. `side[6]` is
+an array of all faces.
+* The `Edge` class is an edge of the bbox cube.
+`xaxisedge[4]`, `yaxisedge[8]` and `zaxisedge[4]` give 
+the edges corresponding to each axis direction. 
+`yaxisedge` is longer because it includes each edge twice,
+once for each direction.
+* The `BBoxDeco::BBoxDecoImpl` struct contains functions
+for choosing edges (`chooseEdge`), for finding the edge
+for an object with margin coordinates (`fixedEdge`),
+and for setting up the whole display (`setMarginParameters`).
+* `BBoxDeco::getMarkLength` gets the length of the ticks
+in data coordinate values.
+* `BBoxDeco::getBoundingBox` gets the bbox for the whole display including labels.
+* `BBoxDeco::hasNewBBox` checks whether the bbox has been
+changed since the last display time.
+* `BBoxDeco::setCube` sets up the box part of the BBoxDeco.
+* `BBoxDeco::setAxes` sets up the ticks and labels.
+* `BBoxDeco::render` renders the display by setting up 
+the parts after a bbox change, then rendering each part.
+* `BBoxDeco::marginVecToDataVec` converts margin coordinates to data coordinates.
+* `BBoxDeco::marginNormalToDataNormal` converts normal 
+coordinates in the margin to normals in data coordinates.
+* `BBoxDeco::setAxisCallback` and `BBoxDeco::getAxisCallback` handle callbacks.
+* Other `BBoxDeco` methods are standard.

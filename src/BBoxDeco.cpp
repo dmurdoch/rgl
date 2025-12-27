@@ -13,110 +13,6 @@
 #include "R.h"
 #include "pretty.h"
 
-#if 0
-// This is debugging code to track down font problems.
-
-#include "R.h"
-
-static GLenum flags[] = {
-GL_ALPHA_TEST ,
-GL_AUTO_NORMAL ,
-GL_MAP2_VERTEX_4,
-GL_BLEND,
-
-GL_CLIP_PLANE0,
-GL_CLIP_PLANE1,
-GL_CLIP_PLANE2,
-GL_COLOR_LOGIC_OP,
-
-GL_COLOR_MATERIAL,
-GL_COLOR_TABLE,
-GL_CONVOLUTION_1D,
-GL_CONVOLUTION_2D,
-
-GL_CULL_FACE,
-GL_DEPTH_TEST,
-GL_DITHER,
-GL_FOG,
-
-GL_HISTOGRAM,
-GL_INDEX_LOGIC_OP,
-GL_LIGHT0,
-GL_LIGHT1,
-
-GL_LIGHT2,
-GL_LIGHTING,
-GL_LINE_SMOOTH,
-GL_LINE_STIPPLE,
-
-GL_MAP1_COLOR_4,
-GL_MAP1_INDEX,
-GL_MAP1_NORMAL,
-GL_MAP1_TEXTURE_COORD_1,
-
-GL_MAP1_TEXTURE_COORD_2,
-GL_MAP1_TEXTURE_COORD_3,
-GL_MAP1_TEXTURE_COORD_4,
-GL_MAP1_VERTEX_3,
-
-GL_MAP1_VERTEX_4,
-GL_MAP2_COLOR_4,
-GL_MAP2_INDEX,
-GL_MAP2_NORMAL,
-
-GL_MAP2_TEXTURE_COORD_1,
-GL_MAP2_TEXTURE_COORD_2,
-GL_MAP2_TEXTURE_COORD_3,
-GL_MAP2_TEXTURE_COORD_4,
-
-GL_MAP2_VERTEX_3,
-GL_MAP2_VERTEX_4,
-GL_MINMAX,
-GL_NORMALIZE,
-
-GL_POINT_SMOOTH,
-GL_POLYGON_OFFSET_FILL,
-GL_POLYGON_OFFSET_LINE,
-GL_POLYGON_OFFSET_POINT,
-
-GL_POINT,
-GL_POLYGON_SMOOTH,
-GL_POLYGON_STIPPLE,
-GL_POST_COLOR_MATRIX_COLOR_TABLE,
-
-GL_POST_CONVOLUTION_COLOR_TABLE,
-GL_RESCALE_NORMAL,
-GL_SEPARABLE_2D,
-GL_SCISSOR_TEST,
-
-GL_STENCIL_TEST,
-GL_TEXTURE_1D,
-GL_TEXTURE_2D,
-GL_TEXTURE_3D,
-
-GL_TEXTURE_GEN_Q,
-GL_TEXTURE_GEN_R,
-GL_TEXTURE_GEN_S,
-GL_TEXTURE_GEN_T};
-
-void Rpf(const char * msg)
-{
-  int flag1=0, flag2 = 0;
-  for (int i=0; i< 32; i++) {
-    GLboolean f;
-    glGetBooleanv( flags[i], &f);
-    if (f) flag1 += (1 << i);
-    glGetBooleanv( flags[i+32], &f);
-    if (f) flag2 += (1 << i);
-    }
-  
-  Rprintf("%s: Flags 0 to 31: %x 32 to 63: %x\n", msg, flag1, flag2);
-  GLint modes[2];
-  glGetIntegerv( GL_POLYGON_MODE, modes);
-  Rprintf("    Polygon modes: %X %X\n", modes[0], modes[1]);
- }  
-#endif 
-
 using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -185,53 +81,6 @@ AxisInfo::AxisInfo(AxisInfo& from)
 
 AxisInfo::~AxisInfo()
 {
-}
-
-void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matrix4x4& modelview, 
-                    Vertex& marklen, std::string& string) {
-#ifndef RGL_NO_OPENGL
-  Vertex4 p;
-  GLboolean valid;
-    
-  // draw mark ( 1 time ml away )
-
-  p.x = v.x + dir.x * marklen.x;
-  p.y = v.y + dir.y * marklen.y;
-  p.z = v.z + dir.z * marklen.z;  
-  
-  glBegin(GL_LINES);
-  glVertex3f(v.x,v.y,v.z);
-  glVertex3f(p.x,p.y,p.z);
-  glEnd();
-  
-  // draw text ( 2 times ml away )
-
-  p.x = v.x + 2 * dir.x * marklen.x;
-  p.y = v.y + 2 * dir.y * marklen.y;
-  p.z = v.z + 2 * dir.z * marklen.z; 
-
-  glRasterPos3f( p.x, p.y, p.z );
-  
-  glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
-  if (valid) {  
-    // Work out the text adjustment 
-  
-    float adj = 0.5;  
-    Vertex4 eyedir = modelview * dir;
-    bool  xlarge = fabs(eyedir.x) > fabs(eyedir.y);
-  
-    if (xlarge) {
-      adj = fabs(eyedir.y)/fabs(eyedir.x)/2.0f;
-      if (eyedir.x < 0) adj = 1.0f - adj;
-    }
-    if (renderContext->font)
-      Rprintf("fix bboxdeco labelling");
-      // renderContext->font->draw(string.c_str(), 
-      //                           static_cast<int>(string.size()), 
-      //                           adj, 0.5, 0.5, 0, 
-      //                           *renderContext);
-  }      
-#endif
 }
 
 int AxisInfo::getNticks(float low, float high) {
@@ -335,196 +184,166 @@ static Side side[6] = {
 };
 
 struct Edge{
-  Edge(int in_from, int in_to, Vertex4 in_dir, Vertex3 in_code) : from(in_from), to(in_to), dir(in_dir), code(in_code) { }
-  int from, to;
+  Edge(int in_from, int in_to, Vertex4 in_dir, Vertex3 in_code, int in_coord) : from(in_from), to(in_to), coord(in_coord), dir(in_dir), code(in_code){ }
+  int from, to, coord;
   Vertex4 dir;
   Vertex3 code;
 };
 
-static Edge xaxisedge[4] = { 
-  Edge( 5,4, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3( 0.0f, -1.0f,  1.0f) ), 
-  Edge( 0,1, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3( 0.0f, -1.0f, -1.0f) ),
-  Edge( 6,7, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3( 0.0f,  1.0f,  1.0f) ),
-  Edge( 3,2, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3( 0.0f,  1.0f, -1.0f) )
-};
+static Edge axisedges[12] = { 
+  Edge( 5,4, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3( 0.0f, -1.0f,  1.0f), 0 ), 
+  Edge( 0,1, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3( 0.0f, -1.0f, -1.0f), 0 ),
+  Edge( 6,7, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3( 0.0f,  1.0f,  1.0f), 0 ),
+  Edge( 3,2, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3( 0.0f,  1.0f, -1.0f), 0 ),
 
-static Edge yaxisedge[8] = { 
-  Edge( 5,7, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 0.0f, 1.0f) ),
-  Edge( 7,5, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3( 1.0f, 0.0f, 1.0f) ), 
-  Edge( 6,4, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f, 0.0f, 1.0f) ), 
-  Edge( 4,6, Vertex4( 0.0f, 0.0f, 1.0f, 0.0f), Vertex3(-1.0f, 0.0f, 1.0f) ), 
-  Edge( 2,0, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3(-1.0f, 0.0f, -1.0f)  ), 
-  Edge( 0,2, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f, 0.0f, -1.0f)  ),
-  Edge( 3,1, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 0.0f, -1.0f)  ), 
-  Edge( 1,3, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3( 1.0f, 0.0f, -1.0f)  )
-};
-static Edge zaxisedge[4] = { 
-  Edge( 1,5, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f,-1.0f, 0.0f)  ), 
-  Edge( 4,0, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f,-1.0f, 0.0f)  ), 
-  Edge( 7,3, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 1.0f, 0.0f)  ), 
-  Edge( 2,6, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f, 1.0f, 0.0f)  ) 
+  Edge( 5,7, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 0.0f, 1.0f), 1 ),
+  Edge( 6,4, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f, 0.0f, 1.0f), 1 ), 
+  Edge( 2,0, Vertex4( 0.0f, 0.0f,-1.0f, 0.0f), Vertex3(-1.0f, 0.0f, -1.0f), 1  ), 
+  Edge( 3,1, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 0.0f, -1.0f), 1  ),
+
+  Edge( 1,5, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f,-1.0f, 0.0f), 2  ), 
+  Edge( 4,0, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f,-1.0f, 0.0f), 2  ), 
+  Edge( 7,3, Vertex4( 1.0f, 0.0f, 0.0f, 0.0f), Vertex3( 1.0f, 1.0f, 0.0f), 2  ), 
+  Edge( 2,6, Vertex4(-1.0f, 0.0f, 0.0f, 0.0f), Vertex3(-1.0f, 1.0f, 0.0f), 2  ) 
 };
 
 
 AxisInfo BBoxDeco::defaultAxis(0,NULL,NULL,0,5);
 Material BBoxDeco::defaultMaterial( Color(0.6f,0.6f,0.6f,0.5f), Color(1.0f,1.0f,1.0f) );
 
+struct BBoxVertex {
+  int index;
+  float x, y;
+  bool onhull;
+  BBoxVertex(int i, Vertex4 v) {
+    index = i;
+    x = v.x/v.w;
+    y = v.y/v.w;
+    onhull = false;
+  }
+  bool operator<(const BBoxVertex& other) const {
+    return x < other.x || (x == other.x && y < other.y );
+  }
+};
+
 struct BBoxDeco::BBoxDecoImpl {
+  static float crossprod(BBoxVertex a, BBoxVertex b, BBoxVertex c) {
+    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+  }
   
-  static Edge* chooseEdge(RenderContext* renderContext, BBoxDeco& bboxdeco, int coord) 
+  static std::vector<BBoxVertex> chull(std::vector<BBoxVertex> points) {
+    
+    int n = points.size();
+    if (n <= 2) return points;
+    
+    std::sort(points.begin(), points.end());
+    std::vector<BBoxVertex> hull;
+    // 1. Build Lower Hull
+    for (int i = 0; i < n; ++i) {
+      while (hull.size() >= 2 && crossprod(hull[hull.size() - 2], hull.back(), points[i]) <= 0) {
+        hull.pop_back();
+      }
+      hull.push_back(points[i]);
+    }
+    
+    // 2. Build Upper Hull
+    int lower_hull_size = hull.size();
+    for (int i = n - 2; i >= 0; --i) {
+      while (hull.size() > lower_hull_size && crossprod(hull[hull.size() - 2], hull.back(), points[i]) <= 0) {
+        hull.pop_back();
+      }
+      hull.push_back(points[i]);
+    }
+    hull.pop_back(); // The last point is duplicated
+    return hull;
+  }
+  
+  static Edge* getTickEdges(RenderContext* renderContext, BBoxDeco& bboxdeco, int coord) 
   {
-    
-    AABox bbox = renderContext->subscene->getBoundingBox();
-    
-    Vertex center = bbox.getCenter();
-    bbox += center + (bbox.vmin - center)*bboxdeco.expand;
-    bbox += center + (bbox.vmax - center)*bboxdeco.expand;
-    
-    // edge adjacent matrix
-    
-    int adjacent[8][8] = { { 0 } };
-    
-    int i,j;
-    
+    /* First we find which vertices are on the
+     * convex hull after transforming */
+
     // vertex array:
     
-    Vertex4 boxv[8] = {
-      Vertex4( bbox.vmin.x, bbox.vmin.y, bbox.vmin.z ),
-      Vertex4( bbox.vmax.x, bbox.vmin.y, bbox.vmin.z ),
-      Vertex4( bbox.vmin.x, bbox.vmax.y, bbox.vmin.z ),
-      Vertex4( bbox.vmax.x, bbox.vmax.y, bbox.vmin.z ),
-      Vertex4( bbox.vmin.x, bbox.vmin.y, bbox.vmax.z ),
-      Vertex4( bbox.vmax.x, bbox.vmin.y, bbox.vmax.z ),
-      Vertex4( bbox.vmin.x, bbox.vmax.y, bbox.vmax.z ),
-      Vertex4( bbox.vmax.x, bbox.vmax.y, bbox.vmax.z )
+    std::vector<Vertex4> boxv = {
+      Vertex4( bboxdeco.bbox.vmin.x, bboxdeco.bbox.vmin.y, bboxdeco.bbox.vmin.z ),
+      Vertex4( bboxdeco.bbox.vmax.x, bboxdeco.bbox.vmin.y, bboxdeco.bbox.vmin.z ),
+      Vertex4( bboxdeco.bbox.vmin.x, bboxdeco.bbox.vmax.y, bboxdeco.bbox.vmin.z ),
+      Vertex4( bboxdeco.bbox.vmax.x, bboxdeco.bbox.vmax.y, bboxdeco.bbox.vmin.z ),
+      Vertex4( bboxdeco.bbox.vmin.x, bboxdeco.bbox.vmin.y, bboxdeco.bbox.vmax.z ),
+      Vertex4( bboxdeco.bbox.vmax.x, bboxdeco.bbox.vmin.y, bboxdeco.bbox.vmax.z ),
+      Vertex4( bboxdeco.bbox.vmin.x, bboxdeco.bbox.vmax.y, bboxdeco.bbox.vmax.z ),
+      Vertex4( bboxdeco.bbox.vmax.x, bboxdeco.bbox.vmax.y, bboxdeco.bbox.vmax.z )
     };
     
-    Vertex4 eyev[8];
+    Matrix4x4 PMV = renderContext->subscene->projMatrix * renderContext->subscene->modelMatrix;
     
-    // transform vertices: used for edge distance criterion and text justification
-    
-    Matrix4x4 modelview(renderContext->subscene->modelMatrix);
-    
-    for(i=0;i<8;i++)
-      eyev[i] = modelview * boxv[i];
-    
-    for(i=0;i<6;i++) {
-      
-      const Vertex4 q = modelview * side[i].normal;
-      const Vertex4 view(0.0f,0.0f,1.0f,0.0f);
-      
-      float cos_a = view * q;
+    std::vector<BBoxVertex> boxvertex, hull;
+    for (int i = 0; i < boxv.size(); i++) {
+      boxvertex.push_back(BBoxVertex(i, PMV * boxv[i]));
+    }
+    hull = chull(boxvertex);
+    for (int i = 0; i < hull.size(); i++) {
+      boxvertex[hull[i].index].onhull = true;
+    }
+      /* Indices of possible edges. Start with them all for this coordinate */
+      int best = -1;
+      float dist = INFINITY;
+      bool foundonhull = false;
+      for (int i = 4*coord; i < 4*coord+4; i++) {
+        Edge* e = &axisedges[i];
+        /* only consider edges on the convex hull */
+        bool onhull =
+          boxvertex[e->from].onhull &&
+          boxvertex[e->to].onhull;
+        if (onhull && !foundonhull) {
+          foundonhull = true;
+          dist = INFINITY;
+        }
+        if (onhull || !foundonhull) {
+          /* find the one with a point 
+           * closest to the bottom left 
+           * corner */
+          float newdist = std::min(boxvertex[e->from].x + boxvertex[e->from].y,
+                             boxvertex[e->to].x + boxvertex[e->to].y);
+          if (newdist < dist) {
+            dist = newdist;
+            best = i;
+          }
+        }
+      }
 
-      /* break tie using x coordinate */
-      if (cos_a == 0.0f) {
-        const Vertex4 view2(1.0f,0.0f,0.0f,0.0f);
-        cos_a = view2 * q;
-      }
-      
-      const bool front = (cos_a >= 0.0f) ? true : false;
-      
-      if (bboxdeco.draw_front || !front) {
-        
-        for(j=0;j<4;j++) {
-          
-          if (!front) {
-            // modify adjacent matrix
-            
-            int from = side[i].vidx[j];
-            int to   = side[i].vidx[(j+1)%4];
-            
-            adjacent[from][to] = 1;
-          }          
-          
-        }
-        
-      }
-    }
-    
-    Edge*  axisedge;
-    int    nedges;
-    
-    switch(coord)
-    {
-    case 0:
-      axisedge = xaxisedge;
-      nedges   = 4;
-      break;
-    case 1:
-      axisedge = yaxisedge;
-      nedges   = 8;
-      break;
-    case 2:
-    default:
-      axisedge = zaxisedge;
-      nedges   = 4;
-      break;
-    }
-    
-    // search z-nearest contours
-    
-    float d = FLT_MAX;
-    Edge* edge = NULL;
-    
-    for(j=0;j<nedges;j++) {
-      
-      int from = axisedge[j].from;
-      int to   = axisedge[j].to;
-      
-      if ((adjacent[from][to] == 1) && (adjacent[to][from] == 0)) {
-        
-        // found contour
-        
-        float dtmp = -(eyev[from].z + eyev[to].z)/2.0f;
-        
-        if (dtmp < d) {
-          
-          // found near contour
-          
-          d = dtmp;
-          edge = &axisedge[j];
-          
-        }
-        
-      } 
-      
-    }
-    return edge;
+    return &axisedges[best];
   }
   
   static Edge* fixedEdge(Material* material)
   {
-    Edge* axisedge = xaxisedge;
-    int i,j, lim = 4, coord = material->marginCoord;
+    int i,j, lim = 4, coord = material->marginCoord, first;
     bool match;
     switch(coord) {
-    case 0: 
-      // Initialized to this case to suppress "may be unused" message
-      // axisedge = xaxisedge;
-      // lim = 4;
+    case 0:
+      first = 0;
       break;
-    case 1: 
-      axisedge = yaxisedge; 
-      lim = 8;
+    case 1:
+      first = 4;
       break;
-    case 2: 
-      axisedge = zaxisedge;
-      lim = 4;
+    case 2:
+      first = 8;
       break;
     }
     for (j = 0; j < lim; j++) {
       match = true;
       for (i = 0; i < 3; i++)
-        if (coord != i && axisedge[j].code[i] != material->edge[i]) {
+        if (coord != i && axisedges[j + first].code[i] != material->edge[i]) {
           match = false;
           break;
         }
         if (match)
-          return &axisedge[j];
+          return &axisedges[j+first];
     }
     Rf_error("fixedEdge: material->floating=%d marginCoord=%d edge=%d %d %d\n", material->floating,
              material->marginCoord, material->edge[0], material->edge[1], material->edge[2]);
-    return axisedge;
+    return axisedges;
   }
   
   static void setMarginParameters(RenderContext* renderContext, BBoxDeco& bboxdeco, Material* material,
@@ -534,7 +353,7 @@ struct BBoxDeco::BBoxDecoImpl {
     int j;
     *at = material->marginCoord;
     if (material->floating)
-      edge = BBoxDecoImpl::chooseEdge(renderContext, bboxdeco, *at);
+      edge = BBoxDecoImpl::getTickEdges(renderContext, bboxdeco, *at);
     else
       edge = BBoxDecoImpl::fixedEdge(material);
     if (!edge) {
@@ -555,7 +374,7 @@ struct BBoxDeco::BBoxDecoImpl {
       }
     }
     /* Set up translation and scaling */
-    AABox bbox = renderContext->subscene->getBoundingBox();
+    AABox bbox = bboxdeco.bbox;
     Vertex marklen = bboxdeco.getMarkLength(bbox);
     for (j = 0; j < 3; j++) {
       if (j != *at) {
@@ -571,9 +390,9 @@ struct BBoxDeco::BBoxDecoImpl {
       }
     }
   };
-  QuadSet *cube;
-  LineSet *ticks;
-  TextSet *labels;
+  QuadSet* cube;
+  LineSet* ticks[3];
+  TextSet* labels[3];
 };
 
 BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis, AxisInfo& in_zaxis, float in_marklen_value, bool in_marklen_fract,
@@ -594,30 +413,11 @@ BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis
                            0, NULL, /* indices */
                            true, false);
   impl->cube->owner = this;
-  impl->ticks = new LineSet(material, 
-                              true, /* in_ignoreExtent */ 
-                              false);
-  /* bboxChange */
-  for (int i = 0; i < 3; i++)
-    impl->ticks->material.edge[i] = 1;
-  impl->ticks->material.floating = true;
-  impl->ticks->owner = this;
+  for (int i=0; i<3; i++) {
+    impl->ticks[i] = nullptr;
+    impl->labels[i] = nullptr;
+  }
 
-  FontArray fonts(0);
-  const char * family[] = { "sans" };
-  int style[] = { 1 };
-  double cex[] = { 1.0 };
-  Device* device;
-  extern DeviceManager* deviceManager;
-  if (deviceManager && (device = deviceManager->getAnyDevice()))
-    device->getFonts(fonts, 1, family, style, cex, true);
-  impl->labels = new TextSet(material, 
-                                  0, NULL, NULL, 
-                                  NULL,
-                                  true, /* ignoreExtent */
-                                  fonts,
-                                  cex,
-                                  0, NULL);
 }
 
 Vertex BBoxDeco::getMarkLength(const AABox& boundingBox) const
@@ -642,15 +442,20 @@ AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
 bool BBoxDeco::hasNewBBox(RenderContext* renderContext)
 {
   AABox data_bbox = renderContext->subscene->getBoundingBox();
-  bool result = data_bbox.vmin.x != bbox.vmin.x ||
-                data_bbox.vmin.y != bbox.vmin.y ||
-                data_bbox.vmin.z != bbox.vmin.z ||
-                data_bbox.vmax.x != bbox.vmax.x ||
-                data_bbox.vmax.y != bbox.vmax.y ||
-                data_bbox.vmax.z != bbox.vmax.z
+  bool result = data_bbox.vmin.x != bbox0.vmin.x ||
+                data_bbox.vmin.y != bbox0.vmin.y ||
+                data_bbox.vmin.z != bbox0.vmin.z ||
+                data_bbox.vmax.x != bbox0.vmax.x ||
+                data_bbox.vmax.y != bbox0.vmax.y ||
+                data_bbox.vmax.z != bbox0.vmax.z
                 ;
-  if (result)
-    bbox = data_bbox;
+  if (result) {
+    bbox = bbox0 = data_bbox;
+    Vertex center = bbox.getCenter();
+    bbox += center + (bbox0.vmin - center)*expand;
+    bbox += center + (bbox0.vmax - center)*expand;
+  }
+    
   return result;
 }
 
@@ -700,7 +505,15 @@ void BBoxDeco::setCube()
 void BBoxDeco::setAxes()
 {
   if (bbox.isValid()) {
+    
     for(int i=0;i<3;i++) {
+      if (impl->ticks[i]) {
+        delete impl->ticks[i];
+        impl->ticks[i] = nullptr;
+        delete impl->labels[i];
+        impl->labels[i] = nullptr;
+      }
+        
       AxisInfo*  axis;
       float  low, high;
       switch(i)
@@ -725,54 +538,10 @@ void BBoxDeco::setAxes()
       if (axis->mode == AXIS_NONE)
         continue;
       
-      // 
-      // Edge* edge = BBoxDecoImpl::chooseEdge(renderContext, *this, i); 
-      // 
-      // if (axis->mode == AXIS_USER) {
-      //   
-      //   if (!axisBusy) {
-      //     axisBusy = true;
-      //     if (axisCallback[i]) {
-      //       int e[3];
-      //       if (edge) {
-      //         e[0] = static_cast<int>(edge->code[0]);
-      //         e[1] = static_cast<int>(edge->code[1]);
-      //         e[2] = static_cast<int>(edge->code[2]);
-      //       } else{
-      //         e[0] = 0;
-      //         e[1] = 0;
-      //         e[2] = 0;
-      //       }
-      //       axisCallback[i](axisData[i], i, e);
-      //       axisBusy = false;
-      //     }
-      //   }
-      // } else if (edge) {
-      //   
-      //   v = boxv[edge->from];
-      
       switch (axis->mode) {
       case AXIS_CUSTOM:
-      {
-        // compute axis locations and tickmarks
-        
-        std::vector<std::string>::iterator  iter;
-        int j;
-        for (iter = axis->textArray.begin(), j=0; (j<axis->nticks) && (iter != axis->textArray.end());++iter, j++) {
-          
-          // float value = axis->ticks[j];
-          
-          // // clip marks
-          // 
-          // if ((value >= low) && (value <= high)) {
-          //   
-          //   *valueptr = value;
-          //   axis->draw(renderContext, v, edge->dir, modelview, marklen, *iter);
-          // }
-          
-        }
-      }
         break;
+        
       case AXIS_LENGTH:
       {
         float delta = (axis->len>1) ? (high-low)/((axis->len)-1) : 0;
@@ -806,10 +575,6 @@ void BBoxDeco::setAxes()
           
           axis->textArray.push_back(text);
           
-          // std::string s = text;
-          // 
-          // axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
-          
           value += axis->unit;
         }
       }
@@ -835,17 +600,69 @@ void BBoxDeco::setAxes()
             char text[32];
             snprintf(text, 32, "%.4g", value);
             axis->textArray.push_back(text);
-            // std::string s = text;
-            // 
-            // axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
           }
         }
       }
         break;
       }
       axis->nticks = axis->ticks.size();
+      if (axis->mode == AXIS_NONE || axis->nticks == 0)
+        continue;
+      
+      double values[6*axis->nticks];
+      for (int j = 0; j < axis->nticks; j++) {
+        values[6*j]   = axis->ticks[j];
+        values[6*j+1] = 0.0;
+        values[6*j+2] = 0.0;
+        
+        values[6*j+3] = axis->ticks[j];
+        values[6*j+4] = 1.0;
+        values[6*j+5] = 0.0;
+      }
+      
+      impl->ticks[i] = new LineSet(material, 2*axis->nticks, values, 
+                                   true /* in_ignoreExtent */, 0, nullptr);
+      
+      char* label_ptrs[axis->nticks]; 
+      for (int j = 0; j < axis->nticks; j++)
+      {
+        values[3*j] = axis->ticks[j];
+        values[3*j+1] = 2.0;
+        values[3*j+2] = 0.0;
+        
+        label_ptrs[j] = (char*)axis->textArray[j].c_str();
+      }      
+      FontArray fonts(0);
+      const char * family[] = { "sans" };
+      int style[] = { 1 };
+      double cex[] = { 1.0 };
+      Device* device;
+      extern DeviceManager* deviceManager;
+      if (deviceManager && (device = deviceManager->getAnyDevice()))
+        device->getFonts(fonts, 1, family, style, cex, false);
+      impl->labels[i] = new TextSet(material, axis->nticks, label_ptrs, values, 
+                                    nullptr /*in_adj*/,
+                                    true  /*in_ignoreExtent*/, 
+                                    fonts,
+                                    cex,
+                                    0, nullptr /*in_pos*/);
+      impl->ticks[i]->material.marginCoord = i;
+      impl->labels[i]->material.marginCoord = i;
+      for (int j = 0; j < 3; j++) {
+        impl->labels[i]->material.edge[j] =
+          impl->ticks[i]->material.edge[j] = (i == j) ? 0 : 1;
+      }
+      impl->labels[i]->material.floating =
+        impl->ticks[i]->material.floating = true;
+      impl->labels[i]->material.front = Material::FILL_FACE;
+      impl->labels[i]->material.back = Material::FILL_FACE;
+      impl->ticks[i]->material.colors.setColor(0, material.colors.getColor(1));
+      impl->ticks[i]->material.colors.recycle(1);
+      impl->labels[i]->material.colors.setColor(0, material.colors.getColor(1));
+      impl->labels[i]->material.colors.recycle(1);
+      impl->labels[i]->owner =
+        impl->ticks[i]->owner = this;
     }
-    // material.useColor(1);
   }
 }
 
@@ -858,43 +675,19 @@ void BBoxDeco::render(RenderContext* renderContext)
   // labels move to a different edge of the cube.
   
   if (hasNewBBox(renderContext)) {
-    
     setCube();
     setAxes();
   }
   impl->cube->render(renderContext);
-  for (int i = 0; i < 3; i++) {
-    AxisInfo*  axis;
-    switch(i)
-    {
-    case 0:
-      axis     = &xaxis; 
-      break;
-    case 1:
-      axis     = &yaxis;
-      break;
-    case 2:
-    default:
-      axis     = &zaxis;
-      break;
-    }
-    if (axis->mode == AXIS_NONE || axis->nticks == 0)
-      continue;
-    impl->ticks->uninitialize();
-    impl->ticks->material.marginCoord = i;
-    double values[6*axis->nticks];
-    for (int j = 0; j < axis->nticks; j++) {
-      values[6*j]   = axis->ticks[j];
-      values[6*j+1] = 0.0;
-      values[6*j+2] = 0.0;
-      
-      values[6*j+3] = axis->ticks[j];
-      values[6*j+4] = 1.0;
-      values[6*j+5] = 0.0;
-    }
-    impl->ticks->initPrimitiveSet(2*axis->nticks, values);
-    impl->ticks->render(renderContext);
-  }
+  for (int i=0; i < 3; i++)
+    if (impl->ticks[i])
+      impl->ticks[i]->render(renderContext);
+    
+  glEnable(GL_BLEND);  
+  for (int i=0; i < 3; i++)
+    if (impl->labels[i])
+      impl->labels[i]->render(renderContext);
+  glDisable(GL_BLEND);
 #endif  
 }
 
@@ -911,7 +704,6 @@ Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, 
    * I couldn't get that right for some reason...
    */
   Vertex result;
-  AABox bbox = renderContext->subscene->getBoundingBox();
   if (marginvec.missing())
     result[at] = (bbox.vmin[at] + bbox.vmax[at])/2.0f;
   else if (marginvec.x == -INFINITY)
@@ -922,6 +714,7 @@ Vec3 BBoxDeco::marginVecToDataVec(Vec3 marginvec, RenderContext* renderContext, 
     result[at] = marginvec.x*scale[at] + trans[at];
   result[line] = marginvec.y*scale[line] + trans[line];
   result[level] = marginvec.z*scale[level] + trans[level];
+
   return result;
 }
 

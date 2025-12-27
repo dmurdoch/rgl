@@ -65,6 +65,7 @@ public:
   void enduseArray();
   unsigned int getLength() const;
   Color getColor( int index ) const;
+  void setColor( int index, Color color);
   void recycle( unsigned int newsize );
   void replicate(unsigned int each );
   bool hasAlpha() const;

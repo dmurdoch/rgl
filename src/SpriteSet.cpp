@@ -134,7 +134,6 @@ void SpriteSet::draw(RenderContext* renderContext)
 void SpriteSet::drawBegin(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
-  
   Shape::drawBegin(renderContext);
   
   /* Only use shaders if not 3D */
@@ -144,8 +143,28 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
       adjArray.beginUse();
     else if (glLocs_has_key("aOfs"))
       glVertexAttrib3f(glLocs["aOfs"], adj.x, adj.y, adj.z);
-    if (posArray.size())
-      posArray.beginUse();
+    
+    if (posArray.size()) {
+      BBoxDeco* bboxdeco = 0;
+      if (material.marginCoord >= 0) {
+        Subscene* subscene = renderContext->subscene;
+        bboxdeco = subscene->get_bboxdeco();
+      }
+      if (bboxdeco) {
+        verticesTodraw.duplicate(posArray);
+        for (int i=0; i < getElementCount(); i++) {
+          Vertex v = bboxdeco->marginVecToDataVec(vertex.get(i), renderContext, &material);
+          verticesTodraw.setVertex(4*i, v);
+          verticesTodraw.setVertex(4*i+1, v);
+          verticesTodraw.setVertex(4*i+2, v);
+          verticesTodraw.setVertex(4*i+3, v);
+        }
+        verticesTodraw.replaceInBuffer(vertexbuffer);
+        verticesTodraw.beginUse();      
+      } else
+        posArray.beginUse();
+    }
+    
     if (texCoordArray.size())
       texCoordArray.beginUse();
   }

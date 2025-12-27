@@ -317,6 +317,16 @@ Color ColorArray::getColor(int index) const
   return Color( arrayptr[index*4], arrayptr[index*4+1], arrayptr[index*4+2], arrayptr[index*4+3] );
 }
 
+void ColorArray::setColor(int index, Color color)
+{
+  if (index < 0 || index >= getLength())
+    Rf_error("can't set color %d", index);
+  arrayptr[index*4] = color.getRedub();
+  arrayptr[index*4+1] = color.getGreenub();
+  arrayptr[index*4+2] = color.getBlueub();
+  arrayptr[index*4+3] = color.getAlphaub();
+}
+
 void ColorArray::recycle(unsigned int newsize)
 {
   if (ncolor != newsize) {
