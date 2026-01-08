@@ -1,9 +1,10 @@
-# rgl 1.3.32
+# rgl 1.3.33
 
 * The WebGL code did not handle the case of lit objects
 with no lights properly.  Now they display the emission
 color only.  (Issue #494).
 * Several deprecated functions have been made defunct.
+* Some bad links from the vignettes have been fixed.
 
 # rgl 1.3.31
 
