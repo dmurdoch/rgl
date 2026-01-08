@@ -201,12 +201,7 @@ par3dinterpControl <- function(fn, from, to, steps, subscene = NULL,
 # imports those into the real scene object.
 
 elementId2Prefix <- function(elementId, prefix = elementId) {
-  .Deprecated("", msg = "This function is not needed if you use rglwidget().")
-  cat(paste0("<script>var ", prefix, "rgl = {};</script>"))
-  playwidget(elementId, structure(list(type = "oldBridge",
-                                       prefix = prefix),
-                                  class = "rglControl"),
-             components = character(0))
+  .Defunct("", msg = "This function is not needed if you use rglwidget().")
 }
 
 # This puts together a custom message for a more extensive change

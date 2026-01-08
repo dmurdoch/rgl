@@ -1,5 +1,10 @@
-# rgl 1.3.32
+# rgl 1.3.33
 
+* The WebGL code did not handle the case of lit objects
+with no lights properly.  Now they display the emission
+color only.  (Issue #494).
+* Several deprecated functions have been made defunct.
+* Some bad links from the vignettes have been fixed.
 * `rglwidget()` now detects Positron and modifies the
 display so it appears properly in the PLOTS window.
 
@@ -19,6 +24,7 @@ has been dropped at the request of CRAN.
 * `arrow3d(type = "extrusion")` was broken by the changes to triangulation in version 1.3.16.
 * Changes last year to `writePLY()` introduced an error
 in some cases (issue #489).
+* Many deprecated functions have been made defunct.
 
 # rgl 1.3.24
 
