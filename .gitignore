@@ -12,3 +12,4 @@ dev
 src-i386
 src-x64
 shaders.txt
+/.quarto/

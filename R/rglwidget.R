@@ -402,6 +402,9 @@ rglwidget <- local({
       result <- x
   }
     
+  if (in_positron())
+    result$sizingPolicy$browser$fill <- TRUE
+  
   if (is.list(upstream$objects)) {
   	if (requireNamespace("manipulateWidget", quietly = TRUE))
       result <- do.call(manipulateWidget::combineWidgets, c(upstream$objects, 
@@ -529,3 +532,5 @@ image_uri <- function(filename) {
   paste0("data:", mime::guess_type(filename),
          ";base64,", base64encode(filename))
 }
+
+in_positron <- function() nchar(Sys.getenv("POSITRON")) > 0
