@@ -1,18 +1,5 @@
-# 1.3.31
+# 1.3.33
 
-This is a relatively minor release.
-
-* A warning specific to macOS Tahoe (which no longer
-supports OpenGL) has been added.
-* Support for classes defined in the `tripack` package
-has been dropped at the request of CRAN.
-* Added the `latex3d()` function to draw LaTeX text using the
-`xdvir` package.
-* Both `plotmath3d()` and `latex3d()` now use default
-`cex = par3d("cex")`, and have new argument `polygon_offset`.
-
-## Bug fixes
-
-* `arrow3d(type = "extrusion")` was broken by the changes to triangulation in version 1.3.16.
-* Changes last year to `writePLY()` introduced an error
-in some cases (issue #489).
+This is a small update requested by CRAN to fix some links
+in one of the vignettes.  It also contains some small bug
+fixes.
