@@ -348,6 +348,43 @@ Matrix4x4 Matrix4x4::translationMatrix(double x, double y, double z)
   return result;
 }
 
+/* This is based on the Javascript CanvasMatrix.src.js
+ * source; see that file for copyright */
+Matrix4x4 Matrix4x4::rotationMatrix(double angle, double x, double y, double z)
+{
+  // Convert to radians
+  angle = angle / 180 * M_PI;
+  angle /= 2;
+  double sinA = sin(angle),
+         cosA = cos(angle),
+         sinA2 = sinA * sinA,
+         length = sqrt(x * x + y * y + z * z);
+  if (length == 0.0) {
+    // bad vector, just use something reasonable
+    x = 0.0;
+    y = 0.0;
+    z = 1.0;
+  } else if (length != 1.0) {
+    x /= length;
+    y /= length;
+    z /= length;
+  }
+  double x2 = x*x, y2 = y*y, z2 = z*z;
+  
+  Matrix4x4 result;
+  result.setIdentity();
+  result.ref(0,0) = 1.0 - 2.0 * (y2 + z2) * sinA2;
+  result.ref(0,1) = 2.0 * (x * y * sinA2 + z * sinA * cosA);
+  result.ref(0,2) = 2.0 * (x * z * sinA2 - y * sinA * cosA);
+  result.ref(1,0) = 2.0 * (y * x * sinA2 - z * sinA * cosA);
+  result.ref(1,1) = 1.0 - 2.0 * (z2 + x2) * sinA2;
+  result.ref(1,2) = 2.0 * (y * z * sinA2 + x * sinA * cosA);
+  result.ref(2,0) = 2.0 * (z * x * sinA2 + y * sinA * cosA);
+  result.ref(2,1) = 2.0 * (z * y * sinA2 - x * sinA * cosA);
+  result.ref(2,2) = 1.0 - 2.0 * (x2 + y2) * sinA2;
+  return result;
+}
+
 void Matrix4x4::multRight(const Matrix4x4& M) {
   Matrix4x4 result;
   for (int i = 0; i < 4; i++ )

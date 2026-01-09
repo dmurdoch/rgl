@@ -20,9 +20,6 @@ using namespace rgl;
 
 Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool in_bboxChanges)
 : SceneNode(in_typeID), bboxChanges(in_bboxChanges), ignoreExtent(in_ignoreExtent), material(in_material),
-#ifndef RGL_NO_OPENGL  
-  displayList(0), 
-#endif
   drawLevel(0), doUpdate(true), transparent(in_material.isTransparent()),
   blended(in_material.isTransparent())
   
@@ -36,10 +33,6 @@ Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool
 
 Shape::~Shape()
 {
-#ifndef RGL_NO_OPENGL
-  if (!doUseShaders && displayList)
-    glDeleteLists(displayList, 1);
-#endif
 }
 
 void Shape::update(RenderContext* renderContext)
@@ -65,27 +58,7 @@ void Shape::render(RenderContext* renderContext)
 #ifndef RGL_NO_OPENGL
   renderBegin(renderContext);
   
-  if (doUseShaders) {
-  	draw(renderContext);
-  } else {
-    if (displayList == 0)
-      displayList = glGenLists(1);
-    
-    SAVEGLERROR;
-    if (doUpdate) {
-      update(renderContext);
-      SAVEGLERROR;
-      glNewList(displayList, GL_COMPILE_AND_EXECUTE);
-      SAVEGLERROR;
-      draw(renderContext);
-      SAVEGLERROR;
-      glEndList();
-      SAVEGLERROR;
-    } else {
-      glCallList(displayList);
-      SAVEGLERROR;
-    } 
-  }
+  draw(renderContext);
 #endif
 }
 
@@ -106,94 +79,92 @@ void Shape::drawBegin(RenderContext* renderContext)
 #ifndef RGL_NO_OPENGL
 void Shape::beginShader(RenderContext* renderContext)
 {
-	if (doUseShaders) {
-		Subscene* subscene = renderContext->subscene;
-		if (!is_initialized() || 
+  Subscene* subscene = renderContext->subscene;
+  if (!is_initialized() || 
       nclipplanes < subscene->countClipplanes() || 
       nlights < subscene->countLights() ) {
-			setShapeContext(subscene, subscene->countClipplanes(), 
-                   subscene->countLights());
-			initialize();
-			loadBuffers();
-		}
-		glUseProgram(shaderProgram);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		float mat[16];
-		subscene->modelMatrix.getData(mat);
-		glUniformMatrix4fv(glLocs.at("mvMatrix"), 1, GL_FALSE, mat);
-		
-		subscene->projMatrix.getData(mat);
-		glUniformMatrix4fv(glLocs.at("prMatrix"), 1, GL_FALSE, mat);
-		
-		if (glLocs_has_key("invPrMatrix")) {
-			subscene->projMatrix.inverse().getData(mat);
-			glUniformMatrix4fv(glLocs.at("invPrMatrix"), 1, GL_FALSE, mat);
-		}
-		
-		if (glLocs_has_key("normMatrix")) {
-			Matrix4x4 normMatrix = subscene->modelMatrix.inverse();
-			normMatrix.transpose();
-			normMatrix.getData(mat);
-			glUniformMatrix4fv(glLocs.at("normMatrix"), 1, GL_FALSE, mat);
-		}
-		if (glLocs_has_key("emission")) {
-			glUniform3fv(glLocs.at("emission"), 1, material.emission.data);
-		}
-		if (glLocs_has_key("shininess")) {
-			glUniform1f(glLocs.at("shininess"), material.shininess);
-		}
-		if (glLocs_has_key("ambient")) { // just test one, and they should all be there
-			float ambient[3*nlights], 
-            specular[3*nlights], 
-            diffuse[3*nlights],
-            lightDir[3*nlights];
-			int viewpoint[nlights], finite[nlights];
-			for (int i=0; i < subscene->countLights(); i++) {
-				Light *light = subscene->getLight(i);
-				for (int j=0; j < 3; j++) {
-					ambient[3*i + j] = light->ambient.data[j]*material.ambient.data[j];
-					specular[3*i + j] = light->specular.data[j]*material.specular.data[j];
-					diffuse[3*i + j] = light->diffuse.data[j];
-					lightDir[3*i + j] = light->position[j];
-				}
-				viewpoint[i] = light->viewpoint;
-				finite[i] = light->posisfinite;
-			}
-			for (int i=subscene->countLights(); i < nlights; i++)
-				for (int j=0; j < 3; j++) {
-					ambient[3*i + j] = 0;
-					specular[3*i + j] = 0;
-					diffuse[3*i + j] = 0;
-				}
-			glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient);
-			glUniform3fv( glLocs.at("specular"), 3*nlights, specular);
-			glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse);
-			glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir);
-			glUniform1iv( glLocs.at("viewpoint"), nlights, viewpoint);
-			glUniform1iv( glLocs.at("finite"), nlights, finite);
-		}
-		
-		if (glLocs_has_key("uFogMode")) { // If it has one, it has them all
-			Background* bg = subscene->get_background();
-			if (bg) {
-				int fogtype = bg->fogtype - 1;
-				glUniform1i(glLocs["uFogMode"], fogtype);
-				if (fogtype != 0)
-				{
-					Color color = bg->material.colors.getColor(0);
-					glUniform3f(glLocs["uFogColor"],  color.getRedf(), color.getGreenf(), color.getBluef());
-					
-				}
-			}
-		}
-		if (glLocs_has_key("front"))
-			glUniform1i(glLocs["front"], 1);
-		if (glLocs_has_key("textScale"))
-		  glUniform3f(glLocs["textScale"],
+    setShapeContext(subscene, subscene->countClipplanes(), 
+                    subscene->countLights());
+    initialize();
+    loadBuffers();
+  }
+  glUseProgram(shaderProgram);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  float mat[16];
+  subscene->modelMatrix.getData(mat);
+  glUniformMatrix4fv(glLocs.at("mvMatrix"), 1, GL_FALSE, mat);
+  
+  subscene->projMatrix.getData(mat);
+  glUniformMatrix4fv(glLocs.at("prMatrix"), 1, GL_FALSE, mat);
+  
+  if (glLocs_has_key("invPrMatrix")) {
+    subscene->projMatrix.inverse().getData(mat);
+    glUniformMatrix4fv(glLocs.at("invPrMatrix"), 1, GL_FALSE, mat);
+  }
+  
+  if (glLocs_has_key("normMatrix")) {
+    Matrix4x4 normMatrix = subscene->modelMatrix.inverse();
+    normMatrix.transpose();
+    normMatrix.getData(mat);
+    glUniformMatrix4fv(glLocs.at("normMatrix"), 1, GL_FALSE, mat);
+  }
+  if (glLocs_has_key("emission")) {
+    glUniform3fv(glLocs.at("emission"), 1, material.emission.data);
+  }
+  if (glLocs_has_key("shininess")) {
+    glUniform1f(glLocs.at("shininess"), material.shininess);
+  }
+  if (glLocs_has_key("ambient")) { // just test one, and they should all be there
+    float ambient[3*nlights], 
+                 specular[3*nlights], 
+                         diffuse[3*nlights],
+                                lightDir[3*nlights];
+    int viewpoint[nlights], finite[nlights];
+    for (int i=0; i < subscene->countLights(); i++) {
+      Light *light = subscene->getLight(i);
+      for (int j=0; j < 3; j++) {
+        ambient[3*i + j] = light->ambient.data[j]*material.ambient.data[j];
+        specular[3*i + j] = light->specular.data[j]*material.specular.data[j];
+        diffuse[3*i + j] = light->diffuse.data[j];
+        lightDir[3*i + j] = light->position[j];
+      }
+      viewpoint[i] = light->viewpoint;
+      finite[i] = light->posisfinite;
+    }
+    for (int i=subscene->countLights(); i < nlights; i++)
+      for (int j=0; j < 3; j++) {
+        ambient[3*i + j] = 0;
+        specular[3*i + j] = 0;
+        diffuse[3*i + j] = 0;
+      }
+      glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient);
+    glUniform3fv( glLocs.at("specular"), 3*nlights, specular);
+    glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse);
+    glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir);
+    glUniform1iv( glLocs.at("viewpoint"), nlights, viewpoint);
+    glUniform1iv( glLocs.at("finite"), nlights, finite);
+  }
+  
+  if (glLocs_has_key("uFogMode")) { // If it has one, it has them all
+    Background* bg = subscene->get_background();
+    if (bg) {
+      int fogtype = bg->fogtype - 1;
+      glUniform1i(glLocs["uFogMode"], fogtype);
+      if (fogtype != 0)
+      {
+        Color color = bg->material.colors.getColor(0);
+        glUniform3f(glLocs["uFogColor"],  color.getRedf(), color.getGreenf(), color.getBluef());
+        
+      }
+    }
+  }
+  if (glLocs_has_key("front"))
+    glUniform1i(glLocs["front"], 1);
+  if (glLocs_has_key("textScale"))
+    glUniform3f(glLocs["textScale"],
                 0.75/subscene->pviewport.width, 
                 0.75/subscene->pviewport.height, 
                 1.0);
-	}
 }
 
 void Shape::beginSideTwo()

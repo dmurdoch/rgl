@@ -67,20 +67,13 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
 #endif  
   int fsize = fonts.size();
   for (int i=0;i<in_ntexts;i++) {
-
+    
     if (!fonts[i % fsize])
       Rf_error("font not available");
     if (!fonts[i % fsize]->valid(textArray[i].c_str()))
       Rf_error("text %d contains unsupported character", i+1);
   }
-
-  // Measure the texts
-  do_measure_text();
-
-  do_pack_text();
-
-  // Draw the texts to the texture
-  draw_to_texture();
+  texture_initialized = false;
 }
 
 TextSet::~TextSet()
@@ -262,6 +255,19 @@ void TextSet::draw_to_texture() {
 
 void TextSet::initialize() {
 #ifndef RGL_NO_OPENGL
+  if (!texture_initialized) {
+    
+    // Measure the texts
+    do_measure_text();
+    
+    do_pack_text();
+    
+    // Draw the texts to the texture
+    draw_to_texture(); 
+    
+    texture_initialized = true;
+  }
+  
   SpriteSet::initialize();
   
   // Set the vertex and texture coordinates

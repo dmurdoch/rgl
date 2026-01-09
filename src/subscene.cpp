@@ -608,24 +608,6 @@ void Subscene::update(RenderContext* renderContext)
     
 }
 
-void Subscene::loadMatrices()
-{
-#ifndef RGL_NO_OPENGL
-  if (!doUseShaders) {
-    double mat[16];
-    projMatrix.getData(mat);
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixd(mat);  
-    SAVEGLERROR; 
-    
-    modelMatrix.getData(mat);
-    glMatrixMode(GL_MODELVIEW);  
-    glLoadMatrixd(mat);
-    SAVEGLERROR;
-  }
-#endif
-}
-
 void Subscene::render(RenderContext* renderContext, bool opaquePass)
 {
 #ifndef RGL_NO_OPENGL  
@@ -647,12 +629,6 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   // Make sure bounding boxes are up to date.
   
   getBoundingBox();
-  
-  // Now render the current scene.  First we load the projection matrix, then the modelview matrix.
-  
-  loadMatrices();
-  
-  setupLights(renderContext);
   
   if (opaquePass) {
     
@@ -914,66 +890,6 @@ Sphere Subscene::getViewSphere()
     } else
     total_bsphere = Sphere( Vertex(0,0,0), 1 );
   return total_bsphere;
-}
-
-void Subscene::disableLights(RenderContext* rctx)
-{
-    
-  //
-  // disable lights; setup will enable them if not using shaders
-  //
-#ifndef RGL_NO_OPENGL
-  for (int i=0;i<8;i++)
-    glDisable(GL_LIGHT0 + i);  
-#endif
-}  
-
-void Subscene::setupLights(RenderContext* rctx) 
-{  
-#ifndef RGL_NO_OPENGL
-	if (!doUseShaders) {
-		int nlights = 0;
-		bool anyviewpoint = false;
-		std::vector<Light*>::const_iterator iter;
-		
-		disableLights(rctx);
-		
-		for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
-			
-			Light* light = *iter;
-			light->id = GL_LIGHT0 + (nlights++);
-			if (!light->viewpoint)
-				light->setup(rctx);
-			else
-				anyviewpoint = true;
-		}
-		
-		SAVEGLERROR;
-		
-		if (nlights == 0 && parent)
-			parent->setupLights(rctx);
-		
-		if (anyviewpoint) {
-			//
-			// viewpoint lights
-			//
-			
-			glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
-			glLoadIdentity();
-			
-			for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
-				
-				Light* light = *iter;
-				
-				if (light->viewpoint)
-					light->setup(rctx);
-			}
-			glPopMatrix();
-		}
-		SAVEGLERROR;
-	}
-#endif
 }
 
 void Subscene::renderUnsorted(RenderContext* renderContext)

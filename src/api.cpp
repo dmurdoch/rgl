@@ -1182,8 +1182,6 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int ntext   = idata[0];
-    bool saveShaders = doUseShaders;
-    doUseShaders = true;
     
     FontArray fonts(0);
     device->getFonts(fonts, *nfonts, family, style, cex, false);
@@ -1192,7 +1190,6 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
           device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
     						   fonts, cex, *npos, pos) ) );
     CHECKGLERROR;
-    doUseShaders = saveShaders;
 
   }
   *successptr = success;

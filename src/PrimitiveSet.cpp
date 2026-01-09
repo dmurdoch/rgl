@@ -109,8 +109,7 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
   Shape::drawBegin(renderContext);
 	
 #ifndef RGL_NO_OPENGL
-  if (doUseShaders)
-  	Shape::beginShader(renderContext);
+  Shape::beginShader(renderContext);
  
   BBoxDeco* bboxdeco = 0;
   if (material.marginCoord >= 0) {
@@ -118,8 +117,6 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
     bboxdeco = subscene->get_bboxdeco();
   }
   if (bboxdeco) {
-    if (!doUseShaders)
-      invalidateDisplaylist();
     verticesTodraw.duplicate(vertexArray);
     for (int i=0; i < vertexArray.size(); i++)
       verticesTodraw.setVertex(i, bboxdeco->marginVecToDataVec(vertexArray[i], renderContext, &material) );
@@ -141,26 +138,14 @@ void PrimitiveSet::drawRange(int start, int stop)
 #ifndef RGL_NO_OPENGL
   if (start >= stop) return;
   size_t nindices = indices.size();
-  if (doUseShaders) {
+
     if (!nindices)
       glDrawArrays(type, start, nverticesperelement*(stop - start) );
     else
       glDrawElements(type, nverticesperelement*(stop - start), 
                      GL_UNSIGNED_INT, 
                      indices.data() + nverticesperelement*start);
-  } else {
-    glBegin(type);
-    for (int i = start; i < stop; i++) {
-      int elt0 = nverticesperelement*i;
-      for (int j = 0; j < nverticesperelement; j++) {
-        int elt = elt0 + j;
-        if (nindices)
-          elt = indices[elt];
-        glArrayElement(elt);
-      }
-    }
-    glEnd();
-  }
+
 #endif
 }
 void PrimitiveSet::drawAll(RenderContext* renderContext)
@@ -239,7 +224,7 @@ void PrimitiveSet::draw(RenderContext* renderContext)
   SAVEGLERROR;
   
 #ifndef RGL_NO_OPENGL
-  if (doUseShaders && flags.is_twosided) {
+  if (flags.is_twosided) {
   	beginSideTwo();
   	drawAll(renderContext);
   }
@@ -285,20 +270,19 @@ void PrimitiveSet::initialize()
 {
 	Shape::initialize();
 #ifndef RGL_NO_OPENGL
-	if (doUseShaders) {
-		initShader();
-	  vertexArray.appendToBuffer(vertexbuffer);
-	  vertexArray.setAttribLocation(glLocs["aPos"]);
-	  
-	  if (material.useColorArray)
-	    material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
-	    
-	  material.colors.setAttribLocation(glLocs["aCol"]);
-
-	  if (material.texture && glLocs_has_key("uSampler"))
-	    material.texture->setSamplerLocation(glLocs["uSampler"]);
-	  
-	}
+  
+  initShader();
+  vertexArray.appendToBuffer(vertexbuffer);
+  vertexArray.setAttribLocation(glLocs["aPos"]);
+  
+  if (material.useColorArray)
+    material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
+  
+  material.colors.setAttribLocation(glLocs["aCol"]);
+  
+  if (material.texture && glLocs_has_key("uSampler"))
+    material.texture->setSamplerLocation(glLocs["uSampler"]);
+  
 	SAVEGLERROR;
 #endif
 }

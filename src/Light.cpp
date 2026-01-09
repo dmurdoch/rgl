@@ -41,27 +41,6 @@ Light::Light( PolarCoord in_position, Vertex in_finposition,
   }
 }
 
-void Light::setup(RenderContext* renderContext) 
-{
-#ifndef RGL_NO_OPENGL
-	if (doUseShaders)
-		return;
-  glLightfv(id, GL_AMBIENT,   ambient.data  );
-  glLightfv(id, GL_DIFFUSE,   diffuse.data  );
-  glLightfv(id, GL_SPECULAR,  specular.data );
-  glLightfv(id, GL_POSITION,  position );
-
-  glLightf(id, GL_SPOT_EXPONENT, 0.0f);
-  glLightf(id, GL_SPOT_CUTOFF, 180.0f);
-
-  glLightf(id, GL_CONSTANT_ATTENUATION, 1.0f);
-  glLightf(id, GL_LINEAR_ATTENUATION, 0.0f);
-  glLightf(id, GL_QUADRATIC_ATTENUATION, 0.0f);
-
-  glEnable(id);
-#endif
-}
-
 int Light::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {

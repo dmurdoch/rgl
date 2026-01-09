@@ -70,6 +70,7 @@ public:
 
 private:
 
+  bool texture_initialized;
   std::vector<std::string> textArray;
   FontArray fonts;
   std::vector<text_extents_t> measures;

@@ -371,8 +371,6 @@ void X11WindowImpl::initGL()
           case GL_INVALID_ENUM: Rprintf("cleared GL_INVALID_ENUM\n"); break;
           case GL_INVALID_VALUE:Rprintf("cleared GL_INVALID_VALUE\n"); break;
           case GL_INVALID_OPERATION:Rprintf("cleared GL_INVALID_OPERATION\n"); break;
-          case GL_STACK_OVERFLOW:Rprintf("cleared GL_STACK_OVERFLOW\n"); break;
-          case GL_STACK_UNDERFLOW:Rprintf("cleared GL_STACK_UNDERFLOW\n"); break;
           default: Rprintf("cleared GL error %d\n", error_code);
           };
         };

@@ -164,6 +164,8 @@ public:
   static Matrix4x4 scaleMatrix(double sx, double sy, double sz); 
   static Matrix4x4 translationMatrix(double x, double y, double z);
   static Matrix4x4 permutationMatrix(int newx, int newy, int newz);
+  // angle is in degrees
+  static Matrix4x4 rotationMatrix(double angle, double x, double y, double z);
   Matrix4x4 inverse();
 private:
   inline float  val(int row, int column) const { return data[4*column+row]; }

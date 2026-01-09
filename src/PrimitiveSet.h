@@ -9,6 +9,8 @@
 
 namespace rgl {
 
+#define RGL_QUADS 0x0007
+
 //
 // ABSTRACT CLASS
 //   PrimitiveSet
@@ -281,7 +283,7 @@ public:
           double* in_texcoords, bool in_ignoreExtent, int in_nindices, int* in_indices,
           int in_useNormals, int in_useTexcoords)
     : FaceSet(in_material,in_nvertex,in_vertex, in_normals, in_texcoords, 
-              GL_QUADS, 4, in_ignoreExtent, in_nindices, in_indices, in_useNormals, in_useTexcoords)
+              RGL_QUADS, 4, in_ignoreExtent, in_nindices, in_indices, in_useNormals, in_useTexcoords)
   { }
   
   /**

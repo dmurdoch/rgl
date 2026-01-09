@@ -3,12 +3,6 @@
 
 #include "config.h"
 
-namespace rgl {
-
-extern bool doUseShaders;
-
-} // namespace rgl
-
 #ifdef RGL_NO_OPENGL
 
 #include "OpenGL/gl.h"

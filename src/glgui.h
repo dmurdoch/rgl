@@ -75,36 +75,6 @@ private:
 #define GL2PS_LEFT_ONLY	 1
 #define GL2PS_POSITIONAL 2
 
-//
-// CLASS
-//   GLBitmapFont
-//
-
-class GLBitmapFont : public GLFont
-{
-public:
-  // Most initialization of this object is done by the system-specific driver
-  GLBitmapFont(const char* in_family, int in_style, double in_cex, const char* in_fontname): 
-    GLFont(in_family, in_style, in_cex, in_fontname, false) {};
-  ~GLBitmapFont();
-
-  void draw(const char* text, int length, 
-            double adjx, double adjy, double adjz,
-            int draw, const RenderContext& rc);
-  void draw(const wchar_t* text, int length, 
-            double adjx, double adjy, double adjz,
-            int draw, const RenderContext& rc); 
-  double width(const char* text);
-  double width(const wchar_t* text);
-  double height();
-  bool valid(const char* text);
-  
-  GLuint listBase;
-  GLuint firstGlyph;
-  GLuint nglyph;
-  unsigned int* widths;
-  unsigned int ascent;
-};
 
 //
 // CLASS

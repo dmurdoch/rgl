@@ -188,13 +188,8 @@ void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
 
 	float angle = dragStart.angle(dragCurrent);
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	if (axis.getLength() > 0)
-	  glRotatef((GLfloat)angle, (GLfloat)axis.x, (GLfloat)axis.y, (GLfloat)axis.z);
-	glGetDoublev(GL_MODELVIEW_MATRIX,mouseMatrix);
-	glPopMatrix();
+	Matrix4x4::rotationMatrix(-angle, axis.x, axis.y, axis.z).getData(mouseMatrix);
+
 #endif
 }
 
@@ -213,12 +208,7 @@ void ModelViewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axi
     float angle = math::rad2deg(dragCurrent.x-dragStart.x);
     Matrix4x4 M((double *)userMatrix);
     Vec4 v = M * Vec4(axis.x, axis.y, axis.z);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    glRotatef((GLfloat)angle, (GLfloat)v.x/v.w, (GLfloat)v.y/v.w, (GLfloat)v.z/v.w);
-    glGetDoublev(GL_MODELVIEW_MATRIX,mouseMatrix);
-    glPopMatrix();
+    Matrix4x4::rotationMatrix(-angle, v.x/v.w, v.y/v.w, v.z/v.w).getData(mouseMatrix);
 #endif
 }
 

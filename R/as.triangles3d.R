@@ -50,23 +50,10 @@ as.triangles3d.rglId <- function(obj,
       result <- rbind(result, switch(as.character(type),
         triangles =,              
         planes = attrib,
+        surface =,
         quads = {
           nquads <- nrow(attrib)/4
           attrib[4*rep(seq_len(nquads) - 1, each = 6) + c(1,2,3,1,3,4),,drop=FALSE]
-        },
-        surface = {
-          dim <- rgl.attrib(id, "dim")
-          ul <- rep(2:dim[1], dim[2]-1) + dim[1]*rep(0:(dim[2]-2), each=dim[1]-1) 
-          if (rgl.attrib(id, "flags")["flipped",]) 
-            indices <- c(rbind(c(ul-1, ul-1+dim[1]),
-                               c(ul, ul), 
-                               c(ul-1+dim[1], ul+dim[1])))
-          else
-            indices <- c(rbind(c(ul, ul), 
-                               c(ul-1, ul-1+dim[1]),
-                               c(ul-1+dim[1], ul+dim[1])))
-
-          attrib[indices,,drop = FALSE]
         }, 
         NULL))
     }

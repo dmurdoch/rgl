@@ -52,7 +52,6 @@ void ClipPlaneSet::getAttribute(SceneNode* subscene, AttribID attrib, int first,
 
 void ClipPlaneSet::renderBegin(RenderContext* renderContext)
 {
-  firstPlane = GL_CLIP_PLANE0 + num_planes;
   num_planes += nPlanes;
 }
 
@@ -64,19 +63,11 @@ void ClipPlaneSet::drawPrimitive(RenderContext* renderContext, int index)
   eqn[1] = normal.getRecycled(index).y;
   eqn[2] = normal.getRecycled(index).z;
   eqn[3] = offset.getRecycled(index);
-  glClipPlane(firstPlane + index, eqn);
-  glEnable(firstPlane + index);
 #endif
 }
 
 void ClipPlaneSet::enable(bool show)
 {
-#ifndef RGL_NO_OPENGL  
-  for (int i=0; i<nPlanes; i++) {
-    if (show) glEnable(firstPlane + i);
-    else      glDisable(firstPlane + i);
-  }
-#endif
 }
 
 void ClipPlaneSet::intersectBBox(AABox& bbox)

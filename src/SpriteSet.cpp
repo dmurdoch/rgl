@@ -122,7 +122,7 @@ static void printPRMatrix(const char* msg) {
 
 void SpriteSet::draw(RenderContext* renderContext)
 {
-  if (doUseShaders && !is3D) {
+  if (!is3D) {
 #ifndef RGL_NO_OPENGL  
     drawBegin(renderContext);
     glDrawElements(GL_TRIANGLES, 6*getElementCount(), GL_UNSIGNED_INT, indices.data()) ;
@@ -137,7 +137,7 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
   Shape::drawBegin(renderContext);
   
   /* Only use shaders if not 3D */
-  if (doUseShaders && !is3D) {
+  if (!is3D) {
     Shape::beginShader(renderContext);
     if (adjArray.size())
       adjArray.beginUse();
@@ -176,13 +176,11 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
     p = Matrix4x4(renderContext->subscene->projMatrix);
   
     renderContext->subscene->projMatrix.setIdentity();
-  
-    glMatrixMode(GL_MODELVIEW);
+
   }
 
   if (!is3D) {
     doTex = (material.texture) ? true : false;
-    glNormal3f(0.0f,0.0f,1.0f);
     material.beginUse(renderContext);
     if (material.useColorArray)
       colArray.useArray();
@@ -195,7 +193,7 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
 void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
-  if (doUseShaders && !is3D) {
+  if (!is3D) {
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices.data() + 6*index);
   } else {
     Vertex o;
@@ -256,9 +254,6 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
                                      (1.0 - 2.0*adj.z))*
                                        Matrix4x4(userMatrix);
       
-      /* Since we modified modelMatrix, we need to reload it */
-      renderContext->subscene->loadMatrices();    
-      
       int j = index % shapefirst.size();
       int first = shapefirst.at(j);
       
@@ -268,34 +263,33 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
       Shape::drawBegin(renderContext);
     }  else {
       material.useColor(index);
-      /* Since we modified modelMatrix, we need to reload it */
-      renderContext->subscene->loadMatrices();
-      glBegin(GL_QUADS);
-      if (doTex)
-        glTexCoord2f(0.0f,0.0f);
-      glVertex3f(s*(0.0f - 2.0f*adj.x), 
-                 s*(0.0f - 2.0f*adj.y), 
-                 s*(1.0f - 2.0f*adj.z));
-      
-      if (doTex)
-        glTexCoord2f(1.0f,0.0f);
-      glVertex3f(s*(2.0f - 2.0f*adj.x), 
-                 s*(0.0f - 2.0f*adj.y), 
-                 s*(1.0f - 2.0f*adj.z));
-      
-      if (doTex)
-        glTexCoord2f(1.0f,1.0f);
-      glVertex3f(s*(2.0f - 2.0f*adj.x), 
-                 s*(2.0f - 2.0f*adj.y), 
-                 s*(1.0f - 2.0f*adj.z));
-      
-      if (doTex)
-        glTexCoord2f(0.0f,1.0f);
-      glVertex3f(s*(0.0f - 2.0f*adj.x), 
-                 s*(2.0f - 2.0f*adj.y), 
-                 s*(1.0f - 2.0f*adj.z)); 
-      
-      glEnd();
+
+      // glBegin(RGL_QUADS);
+      // if (doTex)
+      //   glTexCoord2f(0.0f,0.0f);
+      // glVertex3f(s*(0.0f - 2.0f*adj.x), 
+      //            s*(0.0f - 2.0f*adj.y), 
+      //            s*(1.0f - 2.0f*adj.z));
+      // 
+      // if (doTex)
+      //   glTexCoord2f(1.0f,0.0f);
+      // glVertex3f(s*(2.0f - 2.0f*adj.x), 
+      //            s*(0.0f - 2.0f*adj.y), 
+      //            s*(1.0f - 2.0f*adj.z));
+      // 
+      // if (doTex)
+      //   glTexCoord2f(1.0f,1.0f);
+      // glVertex3f(s*(2.0f - 2.0f*adj.x), 
+      //            s*(2.0f - 2.0f*adj.y), 
+      //            s*(1.0f - 2.0f*adj.z));
+      // 
+      // if (doTex)
+      //   glTexCoord2f(0.0f,1.0f);
+      // glVertex3f(s*(0.0f - 2.0f*adj.x), 
+      //            s*(2.0f - 2.0f*adj.y), 
+      //            s*(1.0f - 2.0f*adj.z)); 
+      // 
+      // glEnd();
     }
   }
 #endif
@@ -360,19 +354,15 @@ void SpriteSet::drawEnd(RenderContext* renderContext)
     renderContext->subscene->projMatrix = Matrix4x4(p);
   }
   renderContext->subscene->modelMatrix = Matrix4x4(m);
-  /* Restore the original GPU matrices */
-  renderContext->subscene->loadMatrices();  
   if (!is3D) {
-    if (doUseShaders) {
-      if (posArray.size())
-        posArray.endUse();
-      if (adjArray.size()) 
-        adjArray.endUse();
-      if (texCoordArray.size())
-        texCoordArray.endUse();
-      if (material.useColorArray)
-        colArray.enduseArray();
-    }
+    if (posArray.size())
+      posArray.endUse();
+    if (adjArray.size()) 
+      adjArray.endUse();
+    if (texCoordArray.size())
+      texCoordArray.endUse();
+    if (material.useColorArray)
+      colArray.enduseArray();
     material.endUse(renderContext);
   }
   Shape::drawEnd(renderContext);
@@ -498,89 +488,88 @@ void SpriteSet::initialize()
 {
   Shape::initialize();
 #ifndef RGL_NO_OPENGL
-  if (doUseShaders) {
-    bool has_texture = false;
+  
+  bool has_texture = false;
+  
+  initShader();
+  
+  material.useColorArray = material.colors.getLength() > 1; 
+  if (!material.useColorArray)
+    material.colors.setAttribLocation(glLocs["aCol"]);
+  else
+    colArray.setAttribLocation(glLocs["aCol"]);
+  
+  if (material.texture && 
+      glLocs_has_key("uSampler") &&
+      glLocs_has_key("aTexcoord")) {
+    has_texture = true;
+    material.texture->setSamplerLocation(glLocs["uSampler"]);
+  }
+  
+  if (!is3D) {
+    double rescale = fixedSize ? 72 : 1;
+    bool is_sprites = (getTypeName() == "sprites"); // Might be text
     
-    initShader();
-    
-    material.useColorArray = material.colors.getLength() > 1; 
-    if (!material.useColorArray)
-      material.colors.setAttribLocation(glLocs["aCol"]);
+    adjArray.alloc(4*getElementCount());
+    posArray.alloc(4*getElementCount());
+    indices.resize(6*getElementCount());
+    if (has_texture) 
+      texCoordArray.alloc(4*getElementCount());
     else
-      colArray.setAttribLocation(glLocs["aCol"]);
-    
-    if (material.texture && 
-        glLocs_has_key("uSampler") &&
-        glLocs_has_key("aTexcoord")) {
-      has_texture = true;
-      material.texture->setSamplerLocation(glLocs["uSampler"]);
+      texCoordArray.alloc(0);
+    for (int i=0; i < getElementCount(); i++ ) {
+      posArray.setVertex(4*i, vertex.get(i));
+      posArray.setVertex(4*i+1, vertex.get(i));
+      posArray.setVertex(4*i+2, vertex.get(i));
+      posArray.setVertex(4*i+3, vertex.get(i));
+      
+      double s = rescale * size.getRecycled(i) / 2.0;
+      getAdj(i);
+      Vec3 adj0;
+      adj0.x = 2.0*s*(adj.x - 0.5);
+      adj0.y = 2.0*s*(adj.y - 0.5);
+      adj0.z = 2.0*s*(adj.z - 0.5);
+      
+      adjArray.setVertex(4*i, Vertex(-s-adj0.x,
+                                     -s-adj0.y,
+                                     -adj0.z) );
+                                     adjArray.setVertex(4*i+1, Vertex(s-adj0.x,
+                                                                      -s-adj0.y,
+                                                                      -adj0.z));
+                                                                      adjArray.setVertex(4*i+2, Vertex(s-adj0.x,
+                                                                                                       s-adj0.y,
+                                                                                                       -adj0.z));
+                                                                      adjArray.setVertex(4*i+3, Vertex(-s-adj0.x,
+                                                                                                       s-adj0.y,
+                                                                                                       -adj0.z));
+                                                                      indices[6*i]   = 4*i;
+                                                                      indices[6*i+1] = 4*i + 1;
+                                                                      indices[6*i+2] = 4*i + 2;
+                                                                      indices[6*i+3] = 4*i;
+                                                                      indices[6*i+4] = 4*i + 2;
+                                                                      indices[6*i+5] = 4*i + 3;
+                                                                      if (has_texture && is_sprites) {
+                                                                        texCoordArray[4*i].s = 0.0;
+                                                                        texCoordArray[4*i].t = 0.0;
+                                                                        texCoordArray[4*i+1].s = 1.0;
+                                                                        texCoordArray[4*i+1].t = 0.0;
+                                                                        texCoordArray[4*i+2].s = 1.0;
+                                                                        texCoordArray[4*i+2].t = 1.0;
+                                                                        texCoordArray[4*i+3].s = 0.0;
+                                                                        texCoordArray[4*i+3].t = 1.0;
+                                                                      }
+    }
+    posArray.appendToBuffer(vertexbuffer);
+    posArray.setAttribLocation(glLocs["aPos"]);
+    adjArray.appendToBuffer(vertexbuffer);
+    adjArray.setAttribLocation(glLocs["aOfs"]);
+    if (has_texture && is_sprites) {
+      texCoordArray.appendToBuffer(vertexbuffer);
+      texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
     }
     
-    if (!is3D) {
-      double rescale = fixedSize ? 72 : 1;
-      bool is_sprites = (getTypeName() == "sprites"); // Might be text
-      
-      adjArray.alloc(4*getElementCount());
-      posArray.alloc(4*getElementCount());
-      indices.resize(6*getElementCount());
-      if (has_texture) 
-        texCoordArray.alloc(4*getElementCount());
-      else
-        texCoordArray.alloc(0);
-      for (int i=0; i < getElementCount(); i++ ) {
-        posArray.setVertex(4*i, vertex.get(i));
-        posArray.setVertex(4*i+1, vertex.get(i));
-        posArray.setVertex(4*i+2, vertex.get(i));
-        posArray.setVertex(4*i+3, vertex.get(i));
-        
-        double s = rescale * size.getRecycled(i) / 2.0;
-        getAdj(i);
-        Vec3 adj0;
-        adj0.x = 2.0*s*(adj.x - 0.5);
-        adj0.y = 2.0*s*(adj.y - 0.5);
-        adj0.z = 2.0*s*(adj.z - 0.5);
-        
-        adjArray.setVertex(4*i, Vertex(-s-adj0.x,
-                                       -s-adj0.y,
-                                       -adj0.z) );
-        adjArray.setVertex(4*i+1, Vertex(s-adj0.x,
-                                         -s-adj0.y,
-                                         -adj0.z));
-        adjArray.setVertex(4*i+2, Vertex(s-adj0.x,
-                                         s-adj0.y,
-                                         -adj0.z));
-        adjArray.setVertex(4*i+3, Vertex(-s-adj0.x,
-                                         s-adj0.y,
-                                         -adj0.z));
-        indices[6*i]   = 4*i;
-        indices[6*i+1] = 4*i + 1;
-        indices[6*i+2] = 4*i + 2;
-        indices[6*i+3] = 4*i;
-        indices[6*i+4] = 4*i + 2;
-        indices[6*i+5] = 4*i + 3;
-        if (has_texture && is_sprites) {
-          texCoordArray[4*i].s = 0.0;
-          texCoordArray[4*i].t = 0.0;
-          texCoordArray[4*i+1].s = 1.0;
-          texCoordArray[4*i+1].t = 0.0;
-          texCoordArray[4*i+2].s = 1.0;
-          texCoordArray[4*i+2].t = 1.0;
-          texCoordArray[4*i+3].s = 0.0;
-          texCoordArray[4*i+3].t = 1.0;
-        }
-      }
-      posArray.appendToBuffer(vertexbuffer);
-      posArray.setAttribLocation(glLocs["aPos"]);
-      adjArray.appendToBuffer(vertexbuffer);
-      adjArray.setAttribLocation(glLocs["aOfs"]);
-      if (has_texture && is_sprites) {
-        texCoordArray.appendToBuffer(vertexbuffer);
-        texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
-      }
-      
-      if (material.useColorArray) 
-        colArray.appendToBuffer(vertexbuffer, 4*getElementCount());
-    }
+    if (material.useColorArray) 
+      colArray.appendToBuffer(vertexbuffer, 4*getElementCount());
   }
   SAVEGLERROR;
 #endif

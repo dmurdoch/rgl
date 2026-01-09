@@ -35,7 +35,7 @@ Material::Material(Color bg, Color fg)
   depth_mask(true),
   depth_test(1),  // "less"
   textype(Texture::RGB),
-  texmode(Texture::MODULATE),
+  texmode(Texture::BLEND),
   mipmap(false),
   minfilter(1),
   magfilter(1),
@@ -67,10 +67,6 @@ void Material::beginSide(bool drawfront)
 {
 #ifndef RGL_NO_OPENGL
 	GLenum face = GL_FRONT_AND_BACK;
-	
-	if (!doUseShaders) {
-		face = drawfront ? GL_FRONT : GL_BACK;
-	}
 	
 	// FIXME:  why is this set backwards??
 	PolygonMode mode = !drawfront ? front : back;
@@ -118,10 +114,6 @@ void Material::beginUse(RenderContext* renderContext)
   
   SAVEGLERROR;
 
-  glPushAttrib( GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_POLYGON_BIT );
-  
-  SAVEGLERROR;
-
   if (!alphablend)
     glDepthMask(GL_TRUE);
   else {
@@ -133,56 +125,27 @@ void Material::beginUse(RenderContext* renderContext)
 
   SAVEGLERROR;
 
-  if (point_antialias) glEnable(GL_POINT_SMOOTH);
   if (line_antialias)  glEnable(GL_LINE_SMOOTH);
   
   SAVEGLERROR;
 
   glDisable(GL_CULL_FACE);
 
-  if (doUseShaders)
-  	beginSide(true);  // back set in Shape::beginSideTwo
-  else {
-    for (int i=0;i<2;i++)
-      beginSide(i == 0);
-  }
+  beginSide(true);  // back set in Shape::beginSideTwo
 
   SAVEGLERROR;
 
-  if (doUseShaders) {
-  	/* FIXME:  needs invPrMatrix to be set */
-  } else
-    glShadeModel( (smooth) ? GL_SMOOTH : GL_FLAT );
+  /* FIXME:  needs invPrMatrix to be set */
 
   SAVEGLERROR;
 
   if (lit) {
-  	if (doUseShaders) {
-  		
-  	} else {
-  		glEnable(GL_LIGHTING);
-  		
-  		SAVEGLERROR;
   		
 #ifdef GL_VERSION_1_2
   		if (glVersion < 0.0) setup();
-  		
-  		if (glVersion >= 1.2)
-  			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR ); 
 #endif
-  		
-  		SAVEGLERROR;
-  		
-  		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-  		glEnable(GL_COLOR_MATERIAL);
-  		glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, ambient.data);
-  		glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, specular.data);
-  		glMaterialf (GL_FRONT_AND_BACK,GL_SHININESS, shininess);
-  		glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION, emission.data);
-  	}
-  }
 
-  SAVEGLERROR;
+  }
 
   if ( (useColorArray) && ( ncolor > 1 ) ) {
     colors.useArray();
@@ -214,9 +177,6 @@ void Material::beginUse(RenderContext* renderContext)
     texture->beginUse(renderContext);
 
   SAVEGLERROR;
-
-  if (!fog)
-    glDisable(GL_FOG);
   
   SAVEGLERROR;  
 #endif
@@ -243,7 +203,7 @@ void Material::endUse(RenderContext* renderContext)
     SAVEGLERROR;
   }
   SAVEGLERROR;
-  glPopAttrib();
+
   #if USE_GLGETERROR
   if (SaveErrnum == GL_NO_ERROR) glGetError(); /* work around bug in some glX implementations */
   #endif

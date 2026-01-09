@@ -45,9 +45,6 @@ private:
   void setupModelViewMatrix(RenderContext* rctx);
   void setDefaultMouseMode();
   
-  void disableLights(RenderContext* rctx);
-  void setupLights(RenderContext* rctx);
-  
   void newEmbedding();
 
   /* These lists contain pointers to lights and shapes, but don't actually manage them:  the Scene does that. */
@@ -164,9 +161,6 @@ public:
 
   /* Update matrices etc. in preparation for rendering */
   void update(RenderContext* renderContext);
-  
-  /* load the matrices into OpenGL */
-  void loadMatrices();
   
   /* Do the OpenGL rendering */
   void render(RenderContext* renderContext, bool opaquePass);

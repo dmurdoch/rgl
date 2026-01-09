@@ -79,9 +79,7 @@ private:
   float expand;
   bool  draw_front;
   AABox bbox0, bbox; /* data bbox and expanded bbox */
-#ifndef RGL_NO_OPENGL
-  bool axisBusy;
-#endif
+
   userAxisPtr axisCallback[3];
   void* axisData[3];
 

@@ -349,13 +349,13 @@ int WindowImpl::getAntialias()
 
 int WindowImpl::getMaxClipPlanes()
 {
-#ifndef RGL_NO_OPENGL
-  int result;
-  glGetError();
-  glGetIntegerv(GL_MAX_CLIP_PLANES, &result);
-  if (glGetError() == GL_NO_ERROR)
-    return result;
-  else
-#endif
+// #ifndef RGL_NO_OPENGL
+//   int result;
+//   glGetError();
+//   glGetIntegerv(GL_MAX_CLIP_PLANES, &result);
+//   if (glGetError() == GL_NO_ERROR)
+//     return result;
+//   else
+// #endif
     return 6;
 }

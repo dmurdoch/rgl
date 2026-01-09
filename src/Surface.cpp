@@ -16,7 +16,7 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
                  double* in_normal_x, double* in_normal_z, double* in_normal_y,
                  double* in_texture_s, double* in_texture_t,
 	         int* in_coords, int in_orientation, int* in_flags, int in_ignoreExtent)
-: FaceSet(in_material, GL_QUADS, 4, in_ignoreExtent, false)
+: FaceSet(in_material, RGL_QUADS, 4, in_ignoreExtent, false)
 {
   nx = in_nx;
   nz = in_nz;

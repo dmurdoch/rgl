@@ -401,9 +401,6 @@ BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis
   impl(std::make_unique<BBoxDecoImpl>()),
   material(in_material), xaxis(in_xaxis), yaxis(in_yaxis), zaxis(in_zaxis), marklen_value(in_marklen_value), marklen_fract(in_marklen_fract),
   expand(in_expand), draw_front(in_front)
-#ifndef RGL_NO_OPENGL  
-  , axisBusy(false)
-#endif
 {
   material.colors.recycle(2);
   impl->cube = new QuadSet(material,

@@ -20,7 +20,7 @@
 
 using namespace rgl;
 
-bool rgl::doUseShaders = true;
+#define RGL_LUMINANCE 0x1909
 
 RGLView::RGLView(Scene* in_scene)
  : View(0,0,256,256,0), autoUpdate(false), useShaders(true)
@@ -250,13 +250,9 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
       if ( windowImpl->beginGL() ) {
         // read back buffer
 
-        glPushAttrib(GL_PIXEL_MODE_BIT);
-
         glReadBuffer(GL_BACK);
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
-
-        glPopAttrib();
   
         windowImpl->endGL();
       } else
@@ -278,7 +274,7 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
   bool success = false;
 #ifndef RGL_NO_OPENGL
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
-                      GL_DEPTH_COMPONENT, GL_LUMINANCE}; 
+                      GL_DEPTH_COMPONENT, RGL_LUMINANCE}; 
   paint();
   if ( windowImpl->beginGL() ) {
     /*
@@ -294,8 +290,6 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
     glDepthMask(GL_TRUE);
   
     // read front buffer
-
-    glPushAttrib(GL_PIXEL_MODE_BIT);
  
     glReadBuffer(GL_BACK);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -312,7 +306,6 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
       for (int i=0; i<n; i++)
         result[i] = buffer[i];
     }
-    glPopAttrib();
     success = true;
 
     windowImpl->endGL();

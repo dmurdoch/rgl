@@ -123,16 +123,6 @@ void Color::useClearColor() const
 #endif
 }
 
-void Color::useColor() const
-{
-#ifndef RGL_NO_OPENGL
-  if (!doUseShaders) {
-    glColor4fv(data);
-    SAVEGLERROR;
-  }
-#endif
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -276,38 +266,29 @@ void ColorArray::appendToBuffer(std::vector<GLubyte>& buffer, unsigned int nvert
 void ColorArray::useArray() const
 {
 #ifndef RGL_NO_OPENGL
-	if (doUseShaders && location >= 0) {
+	if (location >= 0) {
 		glEnableVertexAttribArray(location); 
 		SAVEGLERROR;
 		glVertexAttribPointer(location, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (GLbyte*)0 + offset);
 		SAVEGLERROR;
-	} else if (!doUseShaders) {
-		glEnableClientState(GL_COLOR_ARRAY);
-		SAVEGLERROR;
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, (const GLvoid*) arrayptr );
-		SAVEGLERROR;
-  }
+	}
 #endif
 }
 
 void ColorArray::enduseArray()
 {
 #ifndef RGL_NO_OPENGL	
-	if (doUseShaders && location >= 0)
-		glDisableVertexAttribArray(location); 
-	else
-		glDisableClientState(GL_COLOR_ARRAY);
+	if (location >= 0)
+		glDisableVertexAttribArray(location);
 #endif
 }
 
 void ColorArray::useColor(int index) const
 {
 #ifndef RGL_NO_OPENGL 
-	if (doUseShaders && location >= 0) {
+	if (location >= 0) {
 		glVertexAttrib4Nubv(location, (const GLubyte*) &arrayptr[ index * 4]);
-	} else {
-    glColor4ubv( (const GLubyte*) &arrayptr[ index * 4] );
-  }
+	}
 	SAVEGLERROR;
 #endif
 }

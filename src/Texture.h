@@ -59,7 +59,6 @@ private:
   bool    envmap;
   std::string   filename;
 #ifndef RGL_NO_OPENGL
-  GLint   internalMode;
   GLint   location;
 #endif
   bool    deleteFile;

@@ -174,14 +174,6 @@ protected:
   Subscene* subscene;
   int nclipplanes;
   int nlights;
-  
-private:
-#ifndef RGL_NO_OPENGL  
-  /**
-   * display list
-   **/
-  GLuint   displayList;
-#endif
 	
 protected:	
 #ifndef RGL_NO_OPENGL

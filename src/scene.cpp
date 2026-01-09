@@ -266,20 +266,6 @@ Subscene* Scene::setCurrentSubscene(Subscene* subscene)
   currentSubscene = subscene;
   return prev;
 }
-
-void Scene::setupLightModel()
-{
-#ifndef RGL_NO_OPENGL
-	if (!doUseShaders) {
-    Color global_ambient(0.0f,0.0f,0.0f,1.0f);
-
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient.data );
-    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE );
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
-    SAVEGLERROR;  
-  }
-#endif
-}
   
 void Scene::update(RenderContext* renderContext)
 {
@@ -316,10 +302,6 @@ void Scene::render(RenderContext* renderContext)
 
   // userMatrix and scale might change the length of normals.  If this slows us
   // down, we should test for that instead of just enabling GL_NORMALIZE
-  
-  glEnable(GL_NORMALIZE);
-
-  setupLightModel();
   
   SAVEGLERROR;
 

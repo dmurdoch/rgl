@@ -8,6 +8,8 @@
 
 using namespace rgl;
 
+#define RGL_QUAD_STRIP 0x0008
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
@@ -49,11 +51,9 @@ void SphereMesh::setupMesh()
 
   vertexArray.alloc(nvertex);
 
-  if (genNormal || doUseShaders)
-    normalArray.alloc(nvertex);
+  normalArray.alloc(nvertex);
 
-  if (genTexCoord || doUseShaders)
-    texCoordArray.alloc(nvertex);  
+  texCoordArray.alloc(nvertex);  
 }
 
 void SphereMesh::setCenter(const Vertex& in_center)
@@ -97,32 +97,17 @@ void SphereMesh::update(const Vertex& scale)
 
       q.rotateY( theta );
       
-      if (doUseShaders) 
-        
-        vertexArray[i] = q;
-     
-      else {
-        
-        q.x *= radius / scale.x;
-        q.y *= radius / scale.y;
-        q.z *= radius / scale.z;
-        
-        vertexArray[i] = center + q;
-      }
+      vertexArray[i] = q;
       
-      if (genNormal || doUseShaders) {
-        q.x *= scale.x*scale.x;
-        q.y *= scale.y*scale.y;
-        q.z *= scale.z*scale.z;
-        normalArray[i] = q;
-        normalArray[i].normalize();
-      }
-
-      if (genTexCoord || doUseShaders) {
-        texCoordArray[i].s = fx;
-        texCoordArray[i].t = fy;
-      }
-
+      q.x *= scale.x*scale.x;
+      q.y *= scale.y*scale.y;
+      q.z *= scale.z*scale.z;
+      normalArray[i] = q;
+      normalArray[i].normalize();
+      
+      texCoordArray[i].s = fx;
+      texCoordArray[i].t = fy;
+      
     }
   }
 }
@@ -140,39 +125,24 @@ void SphereMesh::draw(RenderContext* renderContext)
 #ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
 
-  if (genNormal || doUseShaders)
-    normalArray.beginUse();
+  normalArray.beginUse();
 
-  if (genTexCoord || doUseShaders)
-    texCoordArray.beginUse();
+  texCoordArray.beginUse();
   
-  if (doUseShaders) {
-    inds.resize(2*(segments + 1));
-  }
+  inds.resize(2*(segments + 1));
   
   for(int i=0; i<sections; i++ ) {
 
     int curr = i * (segments+1);
     int next = curr + (segments+1);
 
-    if (doUseShaders) {
-
-      int nextind = 0;
-      
-      for (int j=0; j<=segments; j++) {
-        inds[nextind++] = next + j;
-        inds[nextind++] = curr + j;
-      }
-      if (doUseShaders)
-        glDrawElements(GL_QUAD_STRIP, inds.size(), GL_UNSIGNED_INT, inds.data());
-    } else {
-      glBegin(GL_QUAD_STRIP);
-      for(int j=0;j<=segments;j++) {
-        glArrayElement( next + j );
-        glArrayElement( curr + j );
-      }
-      glEnd();
+    int nextind = 0;
+    
+    for (int j=0; j<=segments; j++) {
+      inds[nextind++] = next + j;
+      inds[nextind++] = curr + j;
     }
+    glDrawElements(RGL_QUAD_STRIP, inds.size(), GL_UNSIGNED_INT, inds.data());
   }
   
 
@@ -180,11 +150,9 @@ void SphereMesh::draw(RenderContext* renderContext)
   
   vertexArray.endUse();
 
-  if (genNormal || doUseShaders)
-    normalArray.endUse();
+  normalArray.endUse();
 
-  if (genTexCoord || doUseShaders)
-    texCoordArray.endUse();
+  texCoordArray.endUse();
   
   SAVEGLERROR;
 #endif
@@ -195,18 +163,10 @@ void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
 #ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
 
-  if (genNormal || doUseShaders)
-    normalArray.beginUse();
+  normalArray.beginUse();
 
-  if (genTexCoord || doUseShaders)
-    texCoordArray.beginUse();
+  texCoordArray.beginUse();
   
-  if (!doUseShaders) {
-    if (endcap)
-      glBegin(GL_TRIANGLES);
-    else
-      glBegin(GL_QUADS);
-  }
 #endif
 }
 
@@ -214,44 +174,24 @@ void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
 {
 #ifndef RGL_NO_OPENGL
   int ll = (segments + 1)*(i/segments) + i % segments;
-
-  if (doUseShaders) {
-    inds.push_back(ll);
-    inds.push_back(ll + 1);
-    inds.push_back(ll + segments + 2);
-    inds.push_back(ll + segments + 1);
-  } else {
-    if (i < segments) {
-      glArrayElement(ll);
-      glArrayElement(ll + segments + 2);
-      glArrayElement(ll + segments + 1);
-    } else if (i < segments*(sections - 1)) {
-      glArrayElement(ll);
-      glArrayElement(ll + 1);
-      glArrayElement(ll + segments + 2);
-      glArrayElement(ll + segments + 1);
-    } else {
-      glArrayElement(ll);
-      glArrayElement(ll + 1);
-      glArrayElement(ll + segments + 1);
-    }
-  }
+  
+  inds.push_back(ll);
+  inds.push_back(ll + 1);
+  inds.push_back(ll + segments + 2);
+  inds.push_back(ll + segments + 1);
 #endif
 }
 
 Vertex SphereMesh::getPrimitiveCenter(int i) 
 {
   int ll = (segments + 1)*(i/segments) + i % segments;
-  if (doUseShaders)
-    return center + vertexArray[ll]*radius;
-  else
-    return vertexArray[ll];
+  return center + vertexArray[ll]*radius;
 }
 
 void SphereMesh::doIndices() {
 #ifndef RGL_NO_OPENGL
   if (inds.size()) {
-    glDrawElements(GL_QUADS, inds.size(), GL_UNSIGNED_INT, inds.data());
+    glDrawElements(RGL_QUADS, inds.size(), GL_UNSIGNED_INT, inds.data());
     inds.clear();
   } 
 #endif
@@ -260,17 +200,12 @@ void SphereMesh::doIndices() {
 void SphereMesh::drawEnd(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
-  
-  if (!doUseShaders)
-    glEnd();
 
   vertexArray.endUse();
 
-  if (genNormal || doUseShaders)
-    normalArray.endUse();
+  normalArray.endUse();
 
-  if (genTexCoord || doUseShaders)
-    texCoordArray.endUse();
+  texCoordArray.endUse();
 #endif
 }
 

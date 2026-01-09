@@ -23,7 +23,6 @@ VertexArray::VertexArray()
 {
   arrayptr = NULL;
 #ifndef RGL_NO_OPENGL	
-	state = GL_VERTEX_ARRAY;
 	location = -1;
 	offset = -1;
 #endif
@@ -98,22 +97,17 @@ void VertexArray::setVertex(int index, Vertex v) {
 
 void VertexArray::beginUse() {
 #ifndef RGL_NO_OPENGL
-	if (doUseShaders && location >= 0) {
+	if (location >= 0) {
 		glEnableVertexAttribArray(location);
 		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
-	} else {
-    glEnableClientState(state);
-    glVertexPointer(3, GL_FLOAT, 0, (const GLvoid*) arrayptr );
-  }
+	}
 #endif
 }
 
 void VertexArray::endUse() {
 #ifndef RGL_NO_OPENGL
-	if (doUseShaders && location >= 0)
+	if (location >= 0)
 		glDisableVertexAttribArray(location);
-	else
-    glDisableClientState(state);
 #endif
 }
 
@@ -167,9 +161,6 @@ Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
 
 NormalArray::NormalArray() :
 	VertexArray() {
-#ifndef RGL_NO_OPENGL	
-	state = GL_NORMAL_ARRAY;
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -210,13 +201,10 @@ TexCoord& TexCoordArray::operator [] (int index) {
 void TexCoordArray::beginUse() {
 #ifndef RGL_NO_OPENGL
   if (arrayptr) {
-  	if (doUseShaders && location >= 0) {
+  	if (location >= 0) {
   		glEnableVertexAttribArray(location);
   		glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
-  	} else {
-      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-      glTexCoordPointer(2, GL_FLOAT, 0, (const GLvoid*) arrayptr );
-    }
+  	}
   }
 #endif
 }
@@ -224,10 +212,8 @@ void TexCoordArray::beginUse() {
 void TexCoordArray::endUse() {
 #ifndef RGL_NO_OPENGL
   if (arrayptr) {
-  	if (doUseShaders && location >= 0)
+  	if (location >= 0)
   		glDisableVertexAttribArray(location);
-  	else
-      glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   }
 #endif
 }

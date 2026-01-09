@@ -11,7 +11,6 @@ namespace rgl {
 class ClipPlaneSet : public Shape {
 private:		/* Use parametrization ax + by + cz + d = 0 */
   int		nPlanes;
-  GLenum	firstPlane;
   ARRAY<Vertex> normal; /* (a,b,c) */
   ARRAY<float>  offset; /* d */  
   

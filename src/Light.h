@@ -24,7 +24,6 @@ public:
   	 bool in_viewpoint=true, bool in_posisfinite=false, 
   	 Color ambient=Color(1.0f,1.0f,1.0f), Color diffuse=Color(1.0,1.0,1.0), 
   	 Color specular=Color(1.0,1.0,1.0) );
-  void setup(RenderContext* renderContext);
 
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);

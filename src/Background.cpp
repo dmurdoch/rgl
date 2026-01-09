@@ -72,8 +72,6 @@ Background::~Background()
 GLbitfield Background::getClearFlags(RenderContext* renderContext)
 {
   if (clearColorBuffer) {
-    if (!doUseShaders)
-      material.colors.getColor(0).useClearColor();
     return GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
   } else
     return GL_DEPTH_BUFFER_BIT;
@@ -85,42 +83,6 @@ void Background::render(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
   Subscene* subscene = renderContext->subscene;
-  UserViewpoint* userviewpoint = subscene->getUserViewpoint();
-  
-  const AABox& bbox = subscene->getBoundingBox();
-
-  // setup fog
-  
-  if ((fogtype != FOG_NONE) && (bbox.isValid() )) {
-    // Sphere bsphere(bbox);
-    glFogfv(GL_FOG_COLOR, material.colors.getColor(0).getFloatPtr() );
-
-    switch(fogtype) {
-    case FOG_LINEAR:
-      glFogi(GL_FOG_MODE, GL_LINEAR);
-      glFogf(GL_FOG_START, userviewpoint->frustum.znear /*bsphere.radius*2*/);
-      // glFogf(GL_FOG_END,   userviewpoint->frustum.zfar /*bsphere.radius*3*/ );
-      // Scale fog density up by fogScale
-      glFogf(GL_FOG_END, (userviewpoint->frustum.zfar - userviewpoint->frustum.znear)/fogScale + 
-                          userviewpoint->frustum.znear);
-      break;
-    case FOG_EXP:
-      glFogi(GL_FOG_MODE, GL_EXP);
-      // glFogf(GL_FOG_DENSITY, 1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
-      // Multiply fog density parameter by fogScale
-      glFogf(GL_FOG_DENSITY, fogScale*1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
-      break;
-    case FOG_EXP2:
-      glFogi(GL_FOG_MODE, GL_EXP2);
-      // Multiply fog density parameter by fogScale
-      glFogf(GL_FOG_DENSITY, fogScale*1.0f/userviewpoint->frustum.zfar /*(bsphere.radius*3)*/ );
-      break;
-    }
-
-    glEnable(GL_FOG);
-  } else {
-    glDisable(GL_FOG);
-  }
 
   // render bg sphere 
   
@@ -161,28 +123,15 @@ void Background::render(RenderContext* renderContext)
     m.multLeft(Matrix4x4::scaleMatrix(1.0, 1.0, 0.25/zoom));
     m.multLeft(Matrix4x4::translationMatrix(center.x, center.y, center.z));
     subscene->modelMatrix.loadData(m);
-    subscene->loadMatrices();
     
     Shape::render(renderContext);
     
     subscene->modelMatrix.loadData(savedModelMatrix);
-    subscene->loadMatrices();
     
   } else if (quad) {
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
     
     quad->draw(renderContext);
 
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
   }
 #endif    
 }
@@ -190,8 +139,6 @@ void Background::render(RenderContext* renderContext)
 void Background::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL  
-  
-  glPushAttrib(GL_ENABLE_BIT);
 
   material.beginUse(renderContext);
   
@@ -204,7 +151,6 @@ void Background::drawPrimitive(RenderContext* renderContext, int index)
 
   material.endUse(renderContext);
 
-  glPopAttrib();
 #endif
 }
 

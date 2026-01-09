@@ -180,25 +180,6 @@ void Texture::init(RenderContext* renderContext)
     internalFormat = GL_RGBA;
     break;
   }
-  
-  switch(mode)
-  {
-  case REPLACE:
-    internalMode = GL_REPLACE;
-    break;
-  case MODULATE:
-    internalMode = GL_MODULATE;
-    break;
-  case DECAL:
-    internalMode = GL_DECAL;
-    break;
-  case BLEND:
-    internalMode = GL_BLEND;
-    break;
-  case ADD:
-    internalMode = GL_ADD;
-    break;
-  }
 
   switch(pixmap->typeID)
   {
@@ -263,12 +244,12 @@ void Texture::init(RenderContext* renderContext)
     }
   }
   
-  if (envmap) {
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-    glEnable(GL_TEXTURE_GEN_S);
-    glEnable(GL_TEXTURE_GEN_T);
-  }
+  // if (envmap) {
+  //   glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+  //   glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+  //   glEnable(GL_TEXTURE_GEN_S);
+  //   glEnable(GL_TEXTURE_GEN_T);
+  // }
 #endif
   // if (pixmap) {
   //   delete pixmap;
@@ -289,10 +270,6 @@ void Texture::beginUse(RenderContext* renderContext)
   if (!texName) {
     init(renderContext);
   }
-  
-  SAVEGLERROR;
-  
-  glPushAttrib(GL_TEXTURE_BIT|GL_ENABLE_BIT|GL_CURRENT_BIT);
 
   SAVEGLERROR;
   
@@ -300,23 +277,15 @@ void Texture::beginUse(RenderContext* renderContext)
   
   SAVEGLERROR;
   
-  if (doUseShaders) {
-    glBindTexture(GL_TEXTURE_2D, texName);
-  	glUniform1i(location, 0); 
-    SAVEGLERROR;
-  } else {
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, internalMode);
-    glBindTexture(GL_TEXTURE_2D, texName);
-    SAVEGLERROR;
-  }
+  glBindTexture(GL_TEXTURE_2D, texName);
+  glUniform1i(location, 0); 
+  SAVEGLERROR;
+  
 #endif
 }
 
 void Texture::endUse(RenderContext* renderContext)
 {
-#ifndef RGL_NO_OPENGL
-  glPopAttrib();
-#endif
 }
 
 

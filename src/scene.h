@@ -132,8 +132,6 @@ private:
   
   bool doIgnoreExtent;
 
-  void setupLightModel();
-
   // --- [ Subscenes ]-------------------------------------------------------
 
   Subscene* currentSubscene;

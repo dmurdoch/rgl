@@ -37,7 +37,6 @@ public:
   /// set by integer ptr
   void   set3iv(int* color);
   void useClearColor() const;
-  void useColor() const;
   float data[4];
 };
 
