@@ -4,7 +4,6 @@
 
 #include <cstdio>
 #ifdef HAVE_FREETYPE
-#include "FTGL/ftgl.h"
 #include "R.h"
 #endif
 #include "types.h"
@@ -201,69 +200,3 @@ void GLBitmapFont::draw(const wchar_t* text, int length,
 #endif
 }
 
-#ifdef HAVE_FREETYPE
-
-GLFTFont::GLFTFont(const char* in_family, int in_style, double in_cex, const char* in_fontname) 
-: GLFont(in_family, in_style, in_cex, in_fontname, true)
-{
-  font=new FTGLPixmapFont(fontname);
-  if (font->Error()) { 
-    errmsg = "Cannot create Freetype font";
-    delete font;
-    font = NULL;
-  } else {
-    unsigned int size = static_cast<unsigned int>(16*cex + 0.5);
-    if (size<1) { size=1; }
-    if (!font->FaceSize(size)) {
-      errmsg = "Cannot create Freetype font of requested size";
-      delete font;
-      font = NULL;
-    }
-  }
-/*  font->CharMap(ft_encoding_unicode);
-  if (font->Error()) {
-    Rf_error("Cannot set unicode encoding."); 
-  }*/
-
-}
-
-GLFTFont::~GLFTFont()
-{
-  if (font) delete font;
-}
-
-double GLFTFont::width(const char* text) {
-  return font->Advance(text);
-}
-
-double GLFTFont::width(const wchar_t* text) {
-  return font->Advance(text);
-}
-  
-double GLFTFont::height() {
-  return font->Ascender();
-}
-
-void GLFTFont::draw(const char* text, int length, 
-                    double adjx, double adjy, double adjz,
-                    int pos, const RenderContext& rc) {
-  
-  if ( justify( width(text), height(), adjx, adjy, adjz, pos, rc ) ) {
-    if (rc.gl2psActive == GL2PS_NONE)
-      font->Render(text);
-    else
-      gl2psTextOpt(text, GL2PS_FONT, static_cast<GLshort>(GL2PS_FONTSIZE*cex), gl2ps_centering, 0.0);
-  }
-}
-
-void GLFTFont::draw(const wchar_t* text, int length, 
-                    double adjx, double adjy, double adjz,
-                    int pos, const RenderContext& rc) {
-  
-  if ( justify( width(text), height(), adjx, adjy, adjz, pos, rc ) ) {
-    if (rc.gl2psActive == GL2PS_NONE) 
-      font->Render(text);
-  }      
-}
-      
-#endif

@@ -54,7 +54,7 @@ void RGLView::setWindowImpl(WindowImpl* impl) {
   View::setWindowImpl(impl);
 
 #if defined HAVE_FREETYPE
-  renderContext.font = impl->getFont("sans", 1, 1, true);
+  renderContext.font = impl->getFont("sans", 1, 1, false);
 #else
   renderContext.font = impl->fonts[0];
 #endif

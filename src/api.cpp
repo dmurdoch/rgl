@@ -1186,7 +1186,7 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
     doUseShaders = true;
     
     FontArray fonts(0);
-    device->getFonts(fonts, *nfonts, family, style, cex, (bool) *useFreeType);
+    device->getFonts(fonts, *nfonts, family, style, cex, false);
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
                                                    adj,
           device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 

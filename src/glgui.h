@@ -6,9 +6,6 @@
 
 #include "opengl.h"
 #include <vector>
-#ifdef HAVE_FREETYPE
-#include "FTGL/ftgl.h"
-#endif
 
 #include "RenderContext.h"
 
@@ -107,33 +104,6 @@ public:
   GLuint nglyph;
   unsigned int* widths;
   unsigned int ascent;
-};
-
-//
-// CLASS
-//   GLFTFont
-//
-
-class GLFTFont : public GLFont
-{
-public:
-  GLFTFont(const char* in_family, int in_style, double in_cex, const char* in_fontname);
-  
-  ~GLFTFont();
-#ifdef HAVE_FREETYPE
-  void draw(const char* text, int length, 
-            double adjx, double adjy, double adjz,
-            int pos, const RenderContext& rc);
-  void draw(const wchar_t* text, int length, 
-            double adjx, double adjy, double adjz,
-            int pos, const RenderContext& rc);
-  double width(const char* text);
-  double width(const wchar_t* text);
-  double height();
-  
-  FTFont *font;
-  const char *errmsg;
-#endif
 };
 
 //

@@ -9,9 +9,6 @@
 
 #include "render.h"
 #include "glgui.h"
-#ifdef HAVE_FREETYPE
-#include "FTGL/ftgl.h"
-#endif
 
 namespace rgl {
 

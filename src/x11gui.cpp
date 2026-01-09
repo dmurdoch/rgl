@@ -400,28 +400,6 @@ void X11WindowImpl::shutdownGL()
 // ---------------------------------------------------------------------------
 GLFont* X11WindowImpl::getFont(const char* family, int style, double cex, 
                                  bool useFreeType) {
-  if (useFreeType) {
-#ifdef HAVE_FREETYPE
-    SEXP Rfontname = VECTOR_ELT(PROTECT(Rf_eval(PROTECT(Rf_lang2(PROTECT(Rf_install("rglFonts")), 
-                                          PROTECT(Rf_ScalarString(Rf_mkChar(family))))), rglNamespace)),
-                                          0);
-    if (Rf_isString(Rfontname) && Rf_length(Rfontname) >= style) {
-      const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
-      GLFTFont* font=new GLFTFont(family, style, cex, fontname);
-      if (font->font) {
-        fonts.push_back(font);
-        UNPROTECT(4);
-        return font;
-      } else {
-        Rf_warning("Error creating font: %s", font->errmsg);
-        delete font;
-      }
-    }
-    UNPROTECT(4);
-#else
-    Rf_warning("FreeType not available");
-#endif
-  }
   if (strcmp(family, fonts.back()->family)) Rf_warning("font family \"%s\" not found, using \"%s\"", 
                                          family, fonts.back()->family);
   else if (style != fonts.back()->style) Rf_warning("\"%s\" family only supports font %d", 
