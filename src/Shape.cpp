@@ -278,6 +278,10 @@ ShaderFlags Shape::getShaderFlags()
   result.has_fog = material.fog;
   result.has_normals = (type == "spheres") ||
   	                   getAttributeCount(subscene, NORMALS) > 0;
+  if (type == "background") {
+    Background* background = dynamic_cast<Background*>(this);
+    result.has_normals |= background->sphere;
+  }
 
   if (material.texture) {
     result.has_texture = getAttributeCount(subscene, TEXCOORDS) > 0 ||
@@ -593,11 +597,24 @@ void Shape::printUniform(const char *name, int rows, int cols, int transposed,
 	GLint location;
 	if (glLocs_has_key(name)) {
 		location = glLocs[name];
-		Rprintf("%s: (%d)\n", name, location);
+		Rprintf("%s: (%d) ", name, location);
+		Rprintf("%s", type == GL_FLOAT ? "GL_FLOAT" : 
+            type == GL_INT ? "GL_INT" : 
+            type == GL_BYTE ? "GL_BYTE" : 
+            type == GL_UNSIGNED_BYTE ? "GL_UNSIGNED_BYTE" :
+            type == GL_BOOL ? "GL_BOOL" :
+            "GL_??");
+		if (rows <= 1)
+		  Rprintf("[%d]\n", cols);
+		else
+		  Rprintf("[%d,%d]\n", rows, cols);
 		if (type == GL_FLOAT)
 			glGetUniformfv(shaderProgram, location, data);
 		else if (type == GL_INT)
 			glGetUniformiv(shaderProgram, location, idata);
+		else if (type == GL_BOOL)
+		  glGetUniformiv(shaderProgram,
+location, idata);
 		else if (type == -1)
 		  Rprintf("sampler2D\n");
 		else{
@@ -609,7 +626,7 @@ void Shape::printUniform(const char *name, int rows, int cols, int transposed,
 				int index = transposed ? (i + cols*j) : (j + cols*i);
 				if (type == GL_FLOAT)
 					Rprintf("%.3f ", data[index]);
-				else if (type == GL_INT)
+				else if (type == GL_INT || type == GL_BOOL)
 					Rprintf("%d ", idata[index]);
 			}
 			Rprintf("\n");
@@ -695,6 +712,7 @@ void Shape::printAttribute(const char* name, int nvertices, bool verbose) {
             type == GL_INT ? "GL_INT" : 
             type == GL_BYTE ? "GL_BYTE" : 
             type == GL_UNSIGNED_BYTE ? "GL_UNSIGNED_BYTE" :
+            type == GL_BOOL ? "GL_BOOL" :
             "GL_??", size);
 		
 		glGetVertexAttribiv(location, GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, &idata);

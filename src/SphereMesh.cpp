@@ -123,42 +123,32 @@ Matrix4x4 SphereMesh::MVmodification(const Vertex& scale)
 void SphereMesh::draw(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
-  vertexArray.beginUse();
-
-  normalArray.beginUse();
-
-  texCoordArray.beginUse();
+  drawBegin(renderContext);
   
-  inds.resize(2*(segments + 1));
+  inds.clear();
   
-  for(int i=0; i<sections; i++ ) {
-
-    int curr = i * (segments+1);
-    int next = curr + (segments+1);
-
-    int nextind = 0;
-    
-    for (int j=0; j<=segments; j++) {
-      inds[nextind++] = next + j;
-      inds[nextind++] = curr + j;
-    }
-    glDrawElements(RGL_QUAD_STRIP, inds.size(), GL_UNSIGNED_INT, inds.data());
-  }
-  
-
   SAVEGLERROR;
   
-  vertexArray.endUse();
-
-  normalArray.endUse();
-
-  texCoordArray.endUse();
+  /* A primitive here is a rectangular cell in the mesh */
+  
+  int facets = getPrimitiveCount();
+  
+  /* This just collects the indices */
+  for (int i=0; i < facets; i++)
+    drawPrimitive(renderContext, i);
+  
+  /* This does the drawing */
+  doIndices();
+  
+  SAVEGLERROR;
+  
+  drawEnd(renderContext);
   
   SAVEGLERROR;
 #endif
 }
 
-void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
+void SphereMesh::drawBegin(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
   vertexArray.beginUse();
@@ -173,12 +163,19 @@ void SphereMesh::drawBegin(RenderContext* renderContext, bool endcap)
 void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
 {
 #ifndef RGL_NO_OPENGL
-  int ll = (segments + 1)*(i/segments) + i % segments;
+  int section = i/segments,
+    ll = (segments + 1)*section + i % segments;
   
-  inds.push_back(ll);
-  inds.push_back(ll + 1);
-  inds.push_back(ll + segments + 2);
-  inds.push_back(ll + segments + 1);
+  if (section > 0) {
+    inds.push_back(ll);
+    inds.push_back(ll + 1);
+    inds.push_back(ll + segments + 1);
+  }
+  if (section < sections - 1) {
+    inds.push_back(ll + 1);
+    inds.push_back(ll + segments + 2);
+    inds.push_back(ll + segments + 1);
+  }
 #endif
 }
 
@@ -191,7 +188,7 @@ Vertex SphereMesh::getPrimitiveCenter(int i)
 void SphereMesh::doIndices() {
 #ifndef RGL_NO_OPENGL
   if (inds.size()) {
-    glDrawElements(RGL_QUADS, inds.size(), GL_UNSIGNED_INT, inds.data());
+    glDrawElements(GL_TRIANGLES, inds.size(), GL_UNSIGNED_INT, inds.data());
     inds.clear();
   } 
 #endif

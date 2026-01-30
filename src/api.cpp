@@ -1416,20 +1416,24 @@ void rgl::rgl_getShaderFlags(int *successptr, int *id, int *sub, int *flags) {
 
 void rgl::rgl_getShaderDefines(int *successptr, int *id, int *sub,
                                int *ndata, char **defines) {
-	Device* device;
-	*successptr = RGL_FAIL;
-	if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-		RGLView* rglview = device->getRGLView();
-		Scene* scene = rglview->getScene();
-		Subscene* subscene = scene->getSubscene(*sub);
-		Shape* shape = scene->get_shape(*id);
-		if (subscene && shape) {
-			shape->setShapeContext(subscene, ndata[0], ndata[1]);
-			std::string defines0 = shape->getShaderDefines(shape->getShaderFlags());
-			defines[0] = copyStringToR(defines0);
-			*successptr = RGL_SUCCESS;
-		}
-	}
+  Device* device;
+  *successptr = RGL_FAIL;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    Subscene* subscene = scene->getSubscene(*sub);
+    if (subscene) {
+      Shape* shape = scene->get_shape(*id);
+      if (!shape)
+        shape = scene->get_background(*id);
+      if (shape) {
+        shape->setShapeContext(subscene, ndata[0], ndata[1]);
+        std::string defines0 = shape->getShaderDefines(shape->getShaderFlags());
+        defines[0] = copyStringToR(defines0);
+        *successptr = RGL_SUCCESS;
+      }
+    }
+  }
 }
 
 void rgl::rgl_incrementID(int* n)

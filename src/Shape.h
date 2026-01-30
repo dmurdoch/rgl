@@ -79,7 +79,7 @@ public:
    * access to individual items
    **/
    
-  virtual int getElementCount(void) = 0; 
+  virtual int getElementCount(void) { return 1; } 
   
   /**
    * access to primitives (e.g. facets of sphere)
@@ -111,7 +111,7 @@ public:
   /**
    * send one item
    **/
-  virtual void drawPrimitive(RenderContext* renderContext, int index) = 0;
+  virtual void drawPrimitive(RenderContext* renderContext, int index) { };
 
   /**
    * end sending items
@@ -119,7 +119,8 @@ public:
   virtual void drawEnd(RenderContext* renderContext);
   
   /**
-   * Some shapes (currently just sprites) contain others.  Do a recursive search
+   * Some shapes (currently just sprites
+   * and bboxdecos) contain others.  Do a recursive search
    */
   virtual Shape* get_shape(int id) { return NULL; }
   

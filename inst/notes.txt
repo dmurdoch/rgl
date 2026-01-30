@@ -4,7 +4,7 @@ The par3d("useFreeType") setting doesn't make sense
 now, and will be set to FALSE on all platforms.  This means that Cairo fonts will be used.  If set to TRUE,
 the rglFonts() files will be used.
 
- - Handle text finally (see shaders vignette and ftglnotes.txt) DONE
+ - Handle text finally (see shaders vignette) DONE
  - Possibly use ragg as a model for drawing text to a bitmap
  which will then be used as a texture.  It uses textshaping
  and systemfonts. NOT DONE

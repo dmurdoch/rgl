@@ -132,6 +132,14 @@ bool Vec3::missing() const
   return ISNAN(x) || ISNAN(y) || ISNAN(z);
 }
 
+void Vec3::Rprint(const char * format)
+{
+  Rprintf(format, x);
+  Rprintf(format, y);
+  Rprintf(format, z);
+  Rprintf("\n");
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
@@ -416,6 +424,14 @@ Matrix4x4 Matrix4x4::permutationMatrix(int newx, int newy, int newz) {
   result.ref(2, newz) = 1.0f;
   result.ref(3, 3) = 1.0f;
   return result;
+}
+
+void Matrix4x4::Rprint(const char* format) {
+  for (int i=0; i < 4; i++) {
+    for (int j=0; j < 4; j++) 
+      Rprintf(format, ref(i,j));
+    Rprintf("\n");
+  }
 }
 
 Vertex PolarCoord::vector() const { 

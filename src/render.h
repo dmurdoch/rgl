@@ -86,7 +86,7 @@ public:
   void endUse();
   TexCoord& operator[](int index);
   int size() { return nvertex; };
-
+  void Rprint(const char * format = "%.3f ");
 #ifndef RGL_NO_OPENGL
   void setAttribLocation(GLint loc);
   void appendToBuffer(std::vector<GLubyte>& buffer);

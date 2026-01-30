@@ -110,6 +110,7 @@ struct Vec3
   static inline Vec3& asVec3(float* ptr) {
     return *( reinterpret_cast<Vec3*>( ptr ) );
   }
+  void Rprint(const char* format="%.3f ");
 };
 
 template<>
@@ -167,6 +168,7 @@ public:
   // angle is in degrees
   static Matrix4x4 rotationMatrix(double angle, double x, double y, double z);
   Matrix4x4 inverse();
+  void Rprint(const char* format = "%.3f ");
 private:
   inline float  val(int row, int column) const { return data[4*column+row]; }
   inline float& ref(int row, int column) { return data[4*column+row]; }

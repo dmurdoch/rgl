@@ -36,12 +36,13 @@ public:
 
   void draw(RenderContext* renderContext);
   
-  void drawBegin(RenderContext* renderContext, bool endcap);
+  void drawBegin(RenderContext* renderContext);
   void drawPrimitive(RenderContext* renderContext, int i);
   void drawEnd(RenderContext* renderContext);
 
   int getPrimitiveCount() { return segments*sections; }
   int getSegments() { return segments; }
+  int getNvertex() { return nvertex; }
   Vertex getPrimitiveCenter(int i);
   /* draw the indices and clear them */
   void   doIndices();
@@ -70,7 +71,7 @@ private:
   Type   type;
   bool   genNormal;
   bool   genTexCoord;
-  std::vector<int> inds;
+  std::vector<GLuint> inds;
 
 
   void   setupMesh();

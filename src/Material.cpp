@@ -175,10 +175,7 @@ void Material::beginUse(RenderContext* renderContext)
   
   if (texture)
     texture->beginUse(renderContext);
-
-  SAVEGLERROR;
-  
-  SAVEGLERROR;  
+ 
 #endif
 }
 

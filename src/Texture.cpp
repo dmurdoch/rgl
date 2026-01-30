@@ -71,6 +71,9 @@ Texture::Texture(
       delete pixmap;
       pixmap = NULL;
     }
+#ifndef RGL_NO_OPENGL
+    location = -1;
+#endif    
 }
 
 Texture::~Texture()
@@ -274,10 +277,14 @@ void Texture::beginUse(RenderContext* renderContext)
   SAVEGLERROR;
   
   glEnable(GL_TEXTURE_2D);
+  SAVEGLERROR;
   
+  glActiveTexture(GL_TEXTURE0);
   SAVEGLERROR;
   
   glBindTexture(GL_TEXTURE_2D, texName);
+  SAVEGLERROR;
+
   glUniform1i(location, 0); 
   SAVEGLERROR;
   

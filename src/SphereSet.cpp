@@ -67,7 +67,6 @@ void SphereSet::drawBegin(RenderContext* renderContext)
 #ifndef RGL_NO_OPENGL
   Shape::beginShader(renderContext);
   material.colors.setAttribLocation(glLocs.at("aCol"));
-  sphereMesh.drawBegin(renderContext, 0);
 #endif  
 }
  
@@ -94,8 +93,10 @@ void SphereSet::setSphereMVmatrix(RenderContext* renderContext)
 #endif
 }
 
+/* A primitive here is a whole sphere */
 void SphereSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
+#ifndef RGL_NO_OPENGL
   Vertex pt;
   BBoxDeco* bboxdeco = 0;
   if (material.marginCoord >= 0) {
@@ -104,7 +105,6 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
   }
   if (fastTransparency) {
     if (bboxdeco) {
-      invalidateDisplaylist();
       pt = bboxdeco->marginVecToDataVec(center.get(index), renderContext, &material);
     } else
       pt = center.get(index);
@@ -142,6 +142,7 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
    }
    sphereMesh.drawPrimitive(renderContext, i2);
   }
+#endif
 }
 
 void SphereSet::drawEnd(RenderContext* renderContext)

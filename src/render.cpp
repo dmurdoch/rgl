@@ -230,4 +230,12 @@ void TexCoordArray::setAttribLocation(GLint loc)
 	location = loc;
 }
 
+void TexCoordArray::Rprint(const char * format) {
+  for (int i=0; i < nvertex; i++) {
+    Rprintf(format, arrayptr[2*i]);
+    Rprintf(format, arrayptr[2*i+1]);
+    Rprintf("\n");
+  }
+}
+
 #endif

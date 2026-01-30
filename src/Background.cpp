@@ -23,7 +23,6 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
 
   if (sphere) {
     material.colors.recycle(2);
-    material.front = Material::CULL_FACE;
 
     material.colorPerVertex(false);
 
@@ -34,9 +33,6 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
       sphereMesh.setGenNormal(true);
     if ( (material.texture) && (!material.texture->is_envmap() ) )
       sphereMesh.setGenTexCoord(true);
-    
-    material.depth_mask = false;
-    material.depth_test = false;
 
     sphereMesh.setGlobe (16,16);
 
@@ -55,6 +51,8 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
                             0, 1 };
     material.colorPerVertex(false);
     material.colors.recycle(1);
+    material.depth_test = 7;
+    material.back = Material::FILL_FACE;
     quad = new QuadSet(material, 4, vertices, NULL, texcoords, true, 0, NULL, 0, 1);
     quad->owner = this;
   } else
@@ -77,16 +75,23 @@ GLbitfield Background::getClearFlags(RenderContext* renderContext)
     return GL_DEPTH_BUFFER_BIT;
 }
 
-// FIXME:  this doesn't follow the pattern of other render methods.
-
-void Background::render(RenderContext* renderContext)
+void Background::draw(RenderContext* renderContext)
 {
+  // Scene::render clears to the 
+  // background color first.
+  
+  // NB:  spheres and quads are different!
+  // quads are a Shape, but spheres let
+  // the background handle some stuff.
+  
 #ifndef RGL_NO_OPENGL
-  Subscene* subscene = renderContext->subscene;
 
   // render bg sphere 
-  
+  Matrix4x4 savedModelMatrix,
+            savedProjMatrix; 
   if (sphere) { 
+    Subscene* subscene = renderContext->subscene;
+    savedModelMatrix = subscene->modelMatrix;
     /* The way we draw a background sphere is to start by rotating
      * the sphere so the pole is at (0, 1, 0) instead of (0, 0, 1),
      * then scale it to 4 times the radius of the bounding box,
@@ -94,8 +99,6 @@ void Background::render(RenderContext* renderContext)
      * the model-view transformation to it.  After that, 
      * flatten it to zero thickness in the z direction.
      */
-
-    Matrix4x4 savedModelMatrix = subscene->modelMatrix;
     
     AABox bbox = subscene->getBoundingBox();
     Vec3 center = bbox.getCenter();
@@ -123,34 +126,79 @@ void Background::render(RenderContext* renderContext)
     m.multLeft(Matrix4x4::scaleMatrix(1.0, 1.0, 0.25/zoom));
     m.multLeft(Matrix4x4::translationMatrix(center.x, center.y, center.z));
     subscene->modelMatrix.loadData(m);
-    
-    Shape::render(renderContext);
-    
+  
+    drawBegin(renderContext);
+    drawPrimitive(renderContext);
+    drawEnd(renderContext);
+ 
     subscene->modelMatrix.loadData(savedModelMatrix);
-    
   } else if (quad) {
+    Subscene* subscene = renderContext->subscene;
+    savedModelMatrix = subscene->modelMatrix;
+    subscene->modelMatrix.setIdentity();
+    savedProjMatrix = subscene->projMatrix;
+    subscene->projMatrix.setIdentity();
     
     quad->draw(renderContext);
-
+    
+    subscene->projMatrix.loadData(savedProjMatrix);
+    subscene->modelMatrix.loadData(savedModelMatrix);
   }
+    
 #endif    
 }
 
+void Background::drawBegin(RenderContext* renderContext) {
+#ifndef RGL_NO_OPENGL
+  if (sphere) {
+    Shape::drawBegin(renderContext);
+    Shape::beginShader(renderContext);
+    material.beginUse(renderContext);
+    material.colors.setAttribLocation(glLocs.at("aCol"));
+  }
+#endif
+}
+ 
 void Background::drawPrimitive(RenderContext* renderContext, int index)
 {
-#ifndef RGL_NO_OPENGL  
+#ifndef RGL_NO_OPENGL
 
-  material.beginUse(renderContext);
-  
   material.useColor(1);
- 
-  glDisable(GL_DEPTH_TEST);
-  glDepthMask(GL_FALSE);
+  
+  if (sphere) 
+    sphereMesh.draw(renderContext);
 
-  sphereMesh.draw(renderContext);
+#endif
+}
 
-  material.endUse(renderContext);
+void Background::drawEnd(RenderContext* renderContext) {
+#ifndef RGL_NO_OPENGL
+  if (sphere) {
+    Shape::endShader();
+    material.endUse(renderContext);
+    Shape::drawEnd(renderContext);
+  }
+#endif
+}
 
+
+void Background::initialize()
+{
+  Shape::initialize();
+#ifndef RGL_NO_OPENGL
+  
+  initShader();
+  glVertexAttrib3f(glLocs["aPos"], 0.0, 0.0, 0.0);
+  
+  material.colors.setAttribLocation(glLocs["aCol"]);
+  
+  if (material.texture && glLocs_has_key("uSampler"))
+    material.texture->setSamplerLocation(glLocs["uSampler"]);
+  
+  if (sphere)
+    sphereMesh.initialize(glLocs, vertexbuffer);
+  
+  SAVEGLERROR;
 #endif
 }
 
@@ -170,19 +218,21 @@ int Background::getAttributeCount(SceneNode* subscene, AttribID attrib)
 void Background::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
   int n = getAttributeCount(subscene, attrib);
-
   if (first + count < n) n = first + count;
+  
   if (first < n) {
     switch(attrib) {
     case FLAGS:
-      if (first <= 0)  
-        *result++ = (double) sphere;
-      if (first <= 1)
-	*result++ = (double) fogtype == FOG_LINEAR;
-      if (first <= 2)
-	*result++ = (double) fogtype == FOG_EXP;
-      if (first <= 3)
-	*result++ = (double) fogtype == FOG_EXP2;
+      for (int i = first; i < first+count; i++) {
+        if (i == 0)  
+          result[i-first] = (double) sphere;
+        if (i == 1)
+	        result[i-first] = (double) fogtype == FOG_LINEAR;
+        if (i == 2)
+	        result[i-first] = (double) fogtype == FOG_EXP;
+        if (i == 3)
+	        result[i-first] = (double) fogtype == FOG_EXP2;
+      }
       return;
     case FOGSCALE:
       if (first <= 0)

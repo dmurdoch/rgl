@@ -21,7 +21,10 @@ bg3d(color,
   logical:  if \code{TRUE}, an environmental sphere geometry is used for the background decoration.
   }
   \item{back}{
-  Specifies the fill style of the sphere geometry. See \code{\link{material3d}} for details.
+  Specifies the fill style of the sphere geometry. See
+  \code{\link{material3d}} for details.  For \code{sphere = FALSE}
+  this parameter is ignored, and the background is always
+  filled.
   }
   \item{fogtype}{fog type:
     \describe{
@@ -65,13 +68,10 @@ to change the density of the fog in the plot.  For
 fog; for the exponential fog types it multiplies the density
 parameter used in the display.  
 
-See 
-\href{https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/glFog.xml}{the OpenGL 2.1 reference} 
-for the formulas used in the fog calculations within \R (though the
-\code{"exp2"} formula appears to be wrong, at least on my
-system).  In WebGL displays,
-the following rules are used.  They appear to match the
-rules used in \R on my system.
+The following rules are used to compute the fog display.
+These are designed for compatibility with
+older versions of \pkg{rgl} which used the OpenGL fixed
+pipeline.
 \itemize{
 \item{For \code{"linear"} fog, the near clipping plane is
 taken as \eqn{c=0}, and the 

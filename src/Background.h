@@ -22,9 +22,12 @@ public:
   Background( Material& in_material = defaultMaterial, bool sphere=false, int fogtype=FOG_NONE,
               float in_fogScale = 1.0);
   ~Background();
-  void render(RenderContext* renderContext);
+  void draw(RenderContext* renderContext);
+  void drawBegin(RenderContext* renderContext);
+  void drawPrimitive(RenderContext* renderContext, int index = 0);  
+  void drawEnd(RenderContext* renderContext);
+  void initialize();
   int getElementCount(void) { return 1; }
-  void drawPrimitive(RenderContext* renderContext, int index);  
   GLbitfield getClearFlags(RenderContext* renderContext);
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);

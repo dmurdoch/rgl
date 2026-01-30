@@ -84,24 +84,71 @@ This section describes the steps in setting up and using shaders.
 - Do the drawing
   - done by `primitiveSet::drawAll`
   
+For example, a PointSet object is created and drawn
+in these steps:
+
+  - The api function `rgl_primitive()` calls `PointSet()`
+  to create the object.  `PointSet()` calls `PrimitiveSet()` which calls `Shape()`; these just store
+  the data.
+  - The `Subscene` has lists of objects that need to be 
+  sorted (because of transparency) and others that don't.
+  Drawing objects from each list is similar:  For each
+  object, the `render()` method is called.
+  - `PointSet` and `PrimitiveSet` have no `render()` method, so `Shape::render()` is used.
+  - `Shape::render()` first calls `renderBegin()`, which does nothing for `PointSet` objects.  It then calls `draw()`, which goes to `PrimitiveSet::draw()`.
+      - `PrimitiveSet::draw()` first calls `drawBegin()`, which goes to `PrimitiveSet::drawBegin()`.
+          - `PrimitiveSet::drawBegin()` first calls `Shape::drawBegin()`.
+              - `Shape::drawBegin()` just checks that we aren't nesting `drawBegin()` calls.
+          - It then calls `Shape::beginShader()`.
+              - `Shape::beginShader()` checks whether the
+              object has been initialized, and if not, calls `initialize()` and `loadBuffers()`.
+                  - `PrimitiveSet::initialize()` first calls `Shape::initialize()`.
+                      - `Shape::initialize()` just marks the object as being initialized.
+                  - It then calls `initShader()`, which goes to `Shape::initShader()`.
+                      - `Shape::initShader()` compiles
+                      and attaches the shaders, clears the buffers, and gets
+                      the attribute and uniform
+                      locations.
+                  - Then it appends data to the buffers
+                    and if necessary attaches the texture. 
+              - `Shape::beginShader()` then uses the
+              programs, binds the buffers and attaches the
+              uniforms.
+          - `PrimitiveSet::drawBegin()` then checks if it
+          is drawing in the margin.  If so, it modifies
+          the data to draw there.
+          - Next, it calls `VertexArray::beginUse()` and
+          `Material::beginUse()` which set some globals
+          and attributes.
+      - `PrimitiveSet::draw()` then calls `drawAll()`,
+      which draws all the points, taking care to skip missings.
+      - It then calls `drawEnd()`, which resets all the
+      `drawBegin()` settings.
+      
+And that's it!
+  
+  
 ## Text
 
-Current `rgl` uses the FTGL library to display text.  It's 
+Previously `rgl` uses the FTGL library to display text.  It's 
 written for the fixed pipeline, so is not compatible with 
 shader use. 
 
-In compatibility mode, I got FTGL partially working using
-fixed pipeline code, but updates weren't happening properly.
+Currently text is handled similarly to the WebGL way.  
+The text is drawn to a bitmap using the Cairo lib in 
+the textraster
+package, and the bitmap is used as a 
+texture on a quad (which is drawn as two triangles, since
+modern OpenGL does it that way).  
 
-Possible fixes:
+Limitation:  the
+textraster package doesn't handle mixed fonts as well as
+ragg does, and should probably be rewritten:  but I think 
+ragg doesn't offer a C interface to draw to a raster, so it 
+would be a big deal.
 
- - Figure out what's going wrong with updates and stick with
- FTGL, more or less unchanged.
- - Update FTGL to use shader based code.
- - Drop FTGL, and draw text using the methods the WebGL code
- is using:  draw to a bitmap, use the bitmap as a texture on
- a 2D sprite.  
- - Similar to the above, but write individual glyphs to the 
- texture instead of whole strings.
+The bbox is also rewritten to be somewhat like WebGL.  It
+is a container with several objects:  a set of quads for
+the box, segments for the ticks, and text for the labels.
 
- - See about using ragg or agg to write the text
+FTGL is completely gone now.
