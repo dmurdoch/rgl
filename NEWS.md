@@ -1,4 +1,4 @@
-# rgl 1.3.33
+# rgl 1.3.34
 
 * The WebGL code did not handle the case of lit objects
 with no lights properly.  Now they display the emission
