@@ -165,6 +165,10 @@ void Shape::beginShader(RenderContext* renderContext)
                 0.75/subscene->pviewport.width, 
                 0.75/subscene->pviewport.height, 
                 1.0);
+  if (glLocs_has_key("uAspect"))
+    glUniform1f(glLocs["uAspect"], subscene->pviewport.width/subscene->pviewport.height);
+  if (glLocs_has_key("uLwd"))
+    glUniform1f(glLocs["uLwd"], material.lwd/subscene->pviewport.height);
 }
 
 void Shape::beginSideTwo()
@@ -787,6 +791,8 @@ void Shape::printAttributes(int nvertices, bool verbose) {
 	printAttribute("aPos2", nvertices, verbose);
 	printAttribute("aOfs", nvertices, verbose);
 	printAttribute("aTexcoord", nvertices, verbose);
+	printAttribute("aNext", nvertices, verbose);
+	printAttribute("aPoint", nvertices, verbose);
 }
 
 #endif

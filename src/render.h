@@ -46,6 +46,7 @@ public:
   Vertex getNormal(int v1, int v2, int v3);
   int size() { return nvertex; }
 
+  void Rprint(const char * format = "%.3f ");
 protected:
   int nvertex;
   float* arrayptr;
@@ -67,24 +68,28 @@ public:
   NormalArray();
 };
 
-struct TexCoord
+struct Vec2
 {
+public:
   float s,t;
+  Vec2() { s = 0; t = 0; }
+  Vec2(float s_in, float t_in) { s = s_in; t = t_in; }
+
 };
 
 /**
- * TexCoordArray
+ * Vec2Array
  **/
-class TexCoordArray 
+class Vec2Array 
 {
 public:
-  TexCoordArray();
-  ~TexCoordArray();
+  Vec2Array();
+  ~Vec2Array();
 
   void alloc(int in_nvertex);
   void beginUse();
   void endUse();
-  TexCoord& operator[](int index);
+  Vec2& operator[](int index);
   int size() { return nvertex; };
   void Rprint(const char * format = "%.3f ");
 #ifndef RGL_NO_OPENGL
@@ -98,6 +103,9 @@ private:
   GLint location;
   GLint offset;
 };
+
+typedef Vec2 TexCoord;
+typedef Vec2Array TexCoordArray;
 
 } // namespace rgl
 

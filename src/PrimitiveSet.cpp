@@ -122,9 +122,13 @@ void PrimitiveSet::drawBegin(RenderContext* renderContext)
       verticesTodraw.setVertex(i, bboxdeco->marginVecToDataVec(vertexArray[i], renderContext, &material) );
     verticesTodraw.replaceInBuffer(vertexbuffer);
     verticesTodraw.beginUse();
-  } else {
+  } else if (flags.fat_lines){
+    verticesTodraw.beginUse();
+    nextVertex.beginUse();
+    pointArray.beginUse();
+  } else
     vertexArray.beginUse();
-  }
+
 #endif
   SAVEGLERROR;
   material.beginUse(renderContext);
@@ -137,7 +141,8 @@ void PrimitiveSet::drawRange(int start, int stop)
 {
 #ifndef RGL_NO_OPENGL
   if (start >= stop) return;
-  size_t nindices = indices.size();
+  if (!flags.fat_lines) {
+    size_t nindices = indices.size();
 
     if (!nindices)
       glDrawArrays(type, start, nverticesperelement*(stop - start) );
@@ -145,38 +150,74 @@ void PrimitiveSet::drawRange(int start, int stop)
       glDrawElements(type, nverticesperelement*(stop - start), 
                      GL_UNSIGNED_INT, 
                      indices.data() + nverticesperelement*start);
+  } else { 
+    // fat lines
+    glDrawElements(GL_TRIANGLES,
+                   3*(stop - start),
+                   GL_UNSIGNED_INT,
+                   indicesTodraw.data() + 3*start);
+  }
 
 #endif
 }
+
 void PrimitiveSet::drawAll(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
-	size_t nindices = indices.size();
-  if (!hasmissing) {
-    drawRange(0, nprimitives);
-  } else {
-    bool missing = true;
-  	int first = 0;
-    for (int i=0; i<nprimitives; i++) {
-      bool skip = false;
-    	int elt0 = nverticesperelement*i;
-      for (int j=0; j<nverticesperelement; j++) {
-      	int elt = elt0 + j;
-      	if (nindices)
-      		elt = indices[elt];
-        skip |= vertexArray[elt].missing();
+  if (!flags.fat_lines) {
+    size_t nindices = indices.size();
+    if (!hasmissing) {
+      drawRange(0, nprimitives);
+    } else {
+      bool missing = true;
+      int first = 0;
+      for (int i=0; i<nprimitives; i++) {
+        bool skip = false;
+        int elt0 = nverticesperelement*i;
+        for (int j=0; j<nverticesperelement; j++) {
+          int elt = elt0 + j;
+          if (nindices)
+            elt = indices[elt];
+          skip |= vertexArray[elt].missing();
+        }
+        if (missing != skip) {
+          missing = !missing;
+          if (missing)
+            drawRange(first, i);
+          else
+            first = i;
+        }
       }
-      if (missing != skip) {
-        missing = !missing;
-      	if (missing)
-      		drawRange(first, i);
-        else
-      		first = i;
-      }
+      if (!missing)
+        drawRange(first, nprimitives);
     }
-    if (!missing)
-    	drawRange(first, nprimitives);
-  }              
+  } else {
+    size_t nindices = indicesTodraw.size();
+    if (!hasmissing) {
+      drawRange(0, nindices/3);
+    } else {
+      bool missing = true;
+      int first = 0;
+      for (int i=0; i<nindices/3; i++) {
+        bool skip = false;
+        int elt0 = 3*i;
+        for (int j=0; j<3; j++) {
+          int elt = indicesTodraw[elt0 + j];
+          skip |= verticesTodraw[elt].missing();
+        }
+        if (missing != skip) {
+          missing = !missing;
+          if (missing)
+            drawRange(first, i);
+          else
+            first = i;
+        }
+      }
+      if (!missing)
+        drawRange(first, nindices/3);
+    }
+    
+  }
 #endif
 }
 
@@ -185,20 +226,33 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
 void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
-  int idx = index*nverticesperelement;
-	size_t nindices = indices.size();
-  if (hasmissing) {
-    bool skip = false;
-    for (int j=0; j<nverticesperelement; j++) {
-      int elt = nindices ? indices[idx + j] : idx + j;
-      skip |= vertexArray[elt].missing();
-      if (skip) return;
+  if (!flags.fat_lines) {
+    int idx = index*nverticesperelement;
+    size_t nindices = indices.size();
+    if (hasmissing) {
+      bool skip = false;
+      for (int j=0; j<nverticesperelement; j++) {
+        int elt = nindices ? indices[idx + j] : idx + j;
+        skip |= vertexArray[elt].missing();
+        if (skip) return;
+      }
     }
+    if (nindices)
+      glDrawElements(type, nverticesperelement, GL_UNSIGNED_INT, indices.data() + idx);
+    else
+      glDrawArrays(type, idx, nverticesperelement);
+  } else {
+    int idx = 3*index;
+    if (hasmissing) {
+      bool skip = false;
+      for (int j=0; j<3; j++) {
+        int elt = indicesTodraw[idx + j];
+        skip |= verticesTodraw[elt].missing();
+        if (skip) return;
+      }
+    }
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, indicesTodraw.data() + idx);
   }
-  if (nindices)
-    glDrawElements(type, nverticesperelement, GL_UNSIGNED_INT, indices.data() + idx);
-  else
-    glDrawArrays(type, idx, nverticesperelement);
 #endif
 }
 
@@ -206,11 +260,18 @@ void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 
 void PrimitiveSet::drawEnd(RenderContext* renderContext)
 {
-  vertexArray.endUse();
+#ifndef RGL_NO_OPENGL  
+  if (flags.fat_lines) {
+    verticesTodraw.endUse();
+    nextVertex.endUse();
+    pointArray.endUse();
+  } else
+    vertexArray.endUse();
   SAVEGLERROR;
   material.endUse(renderContext);
   SAVEGLERROR;
   Shape::drawEnd(renderContext);
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -272,9 +333,7 @@ void PrimitiveSet::initialize()
 #ifndef RGL_NO_OPENGL
   
   initShader();
-  vertexArray.appendToBuffer(vertexbuffer);
-  vertexArray.setAttribLocation(glLocs["aPos"]);
-  
+
   if (material.useColorArray)
     material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
   
@@ -283,9 +342,95 @@ void PrimitiveSet::initialize()
   if (material.texture && glLocs_has_key("uSampler"))
     material.texture->setSamplerLocation(glLocs["uSampler"]);
   
+  if (!flags.fat_lines) {
+    vertexArray.appendToBuffer(vertexbuffer);
+    vertexArray.setAttribLocation(glLocs["aPos"]);
+  } else 
+    initFatLines();
+
 	SAVEGLERROR;
 #endif
 }
+
+void PrimitiveSet::initFatLines() {
+#ifndef RGL_NO_OPENGL
+  int oldsize = indices.size();
+  /* To simplify the code, we make sure
+   * we always have indices */
+  if (!oldsize) {
+    oldsize = vertexArray.size();
+    indices.resize(oldsize);
+    for (int i=0; i < oldsize; i++)
+      indices[i] = i;
+  }
+  std::string type = getTypeName();
+  int newsize;
+  if (type == "lines")
+    newsize = 2*oldsize;
+  else if (type == "linestrip")
+    newsize = 4*(oldsize - 1);
+  else
+    Rf_error("fat lines not implemented for type %s", type.c_str());
+  
+  verticesTodraw.alloc(newsize); 
+  nextVertex.alloc(newsize);
+  pointArray.alloc(newsize);
+  
+  indicesTodraw.resize(1.5*newsize);
+  
+  /* Each segment becomes two triangles,
+   making the segment into a rectangle.
+   The shaders will draw it with rounded ends.
+   */
+  for (int i = 0; i < indices.size() - 1; i++) {
+    int k, j;
+    if (type == "lines") {
+      if (i % 2 == 1)
+        continue;
+      k = 2*i;
+      j = 3*i;
+    } else {
+      k = 4*i;
+      j = 6*i;
+    }
+    
+    verticesTodraw[k] = vertexArray[indices[i]];
+    nextVertex[k] = vertexArray[indices[i+1]];
+    pointArray[k] = Vec2(-1.0, -1.0);
+    
+    verticesTodraw[k+1] = verticesTodraw[k];
+    nextVertex[k+1] = nextVertex[k];
+    pointArray[k+1] = Vec2(1.0, -1.0);
+    
+    verticesTodraw[k+2] = nextVertex[k];
+    nextVertex[k+2] = verticesTodraw[k];
+    pointArray[k+2] = Vec2(-1.0, 1.0);
+    
+    verticesTodraw[k+3] = nextVertex[k];
+    nextVertex[k+3] = verticesTodraw[k];
+    pointArray[k+3] = Vec2(1.0, 1.0);
+    
+    indicesTodraw[j] = k;
+    indicesTodraw[j+1] = k+2;
+    indicesTodraw[j+2] = k+1;
+    
+    indicesTodraw[j+3] = k+2;
+    indicesTodraw[j+4] = k+3;
+    indicesTodraw[j+5] = k+1;
+  }
+  verticesTodraw.setAttribLocation(glLocs["aPos"]);
+  verticesTodraw.appendToBuffer(vertexbuffer);
+  if (glLocs_has_key("aNext")) {
+    nextVertex.setAttribLocation(glLocs["aNext"]);
+    nextVertex.appendToBuffer(vertexbuffer);
+  }
+  if (glLocs_has_key("aPoint")) {
+    pointArray.setAttribLocation(glLocs["aPoint"]);
+    pointArray.appendToBuffer(vertexbuffer);
+  }
+#endif
+}
+
 
 // ===[ FACE SET ]============================================================
 

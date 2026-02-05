@@ -153,6 +153,15 @@ Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
   return normal;
 }
 
+void VertexArray::Rprint(const char * format) {
+  for (int i=0; i < nvertex; i++) {
+    Rprintf(format, arrayptr[3*i]);
+    Rprintf(format, arrayptr[3*i+1]);
+    Rprintf(format, arrayptr[3*i+2]);
+    Rprintf("\n");
+  }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
@@ -166,10 +175,10 @@ NormalArray::NormalArray() :
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
-//   TexCoordArray
+//   Vec2Array
 //
 
-TexCoordArray::TexCoordArray()
+Vec2Array::Vec2Array()
 {
   arrayptr = NULL;
   nvertex = 0;
@@ -177,13 +186,13 @@ TexCoordArray::TexCoordArray()
   offset = -1;
 }
 
-TexCoordArray::~TexCoordArray()
+Vec2Array::~Vec2Array()
 {
   if (arrayptr)
     delete[] arrayptr;
 }
 
-void TexCoordArray::alloc(int in_nvertex)
+void Vec2Array::alloc(int in_nvertex)
 {
   if (arrayptr) {
     delete[] arrayptr;
@@ -194,11 +203,11 @@ void TexCoordArray::alloc(int in_nvertex)
     arrayptr = new float[2*nvertex];
 }
 
-TexCoord& TexCoordArray::operator [] (int index) {
-  return (TexCoord&) arrayptr[index*2];
+Vec2& Vec2Array::operator [] (int index) {
+  return (Vec2&) arrayptr[index*2];
 }
 
-void TexCoordArray::beginUse() {
+void Vec2Array::beginUse() {
 #ifndef RGL_NO_OPENGL
   if (arrayptr) {
   	if (location >= 0) {
@@ -209,7 +218,7 @@ void TexCoordArray::beginUse() {
 #endif
 }
 
-void TexCoordArray::endUse() {
+void Vec2Array::endUse() {
 #ifndef RGL_NO_OPENGL
   if (arrayptr) {
   	if (location >= 0)
@@ -219,18 +228,18 @@ void TexCoordArray::endUse() {
 }
 
 #ifndef RGL_NO_OPENGL
-void TexCoordArray::appendToBuffer(std::vector<GLubyte>& buffer) {
+void Vec2Array::appendToBuffer(std::vector<GLubyte>& buffer) {
 	offset = buffer.size();
 	const GLubyte* p = reinterpret_cast<const GLubyte*>(arrayptr);
 	buffer.insert(buffer.end(), p, p + 2*nvertex*sizeof(float));
 }
 
-void TexCoordArray::setAttribLocation(GLint loc)
+void Vec2Array::setAttribLocation(GLint loc)
 {
 	location = loc;
 }
 
-void TexCoordArray::Rprint(const char * format) {
+void Vec2Array::Rprint(const char * format) {
   for (int i=0; i < nvertex; i++) {
     Rprintf(format, arrayptr[2*i]);
     Rprintf(format, arrayptr[2*i+1]);

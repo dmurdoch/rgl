@@ -135,14 +135,22 @@ protected:
       bool in_ignoreExtent,
       bool in_bboxChange 
   );
+  
+  /* Special handling for fat lines */
+  void initFatLines();
 
   int type;
   int nverticesperelement;
   int nprimitives;
   VertexArray vertexArray,  /* the vertices given by the user */
-              verticesTodraw; /* the margin vertices in data coords */
+              verticesTodraw, /* the margin vertices in data coords, and 
+  vertices in fat lines */
+              nextVertex;   /* the next vertex in fat lines */
+  Vec2Array pointArray; /* position in 
+   fat line triangulation */
   bool hasmissing; 	/* whether any vertices contain missing values */
-  std::vector<unsigned int> indices;
+  std::vector<unsigned int> indices,
+    indicesTodraw;
 };
 
 
