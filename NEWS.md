@@ -7,12 +7,15 @@ meaning, now defaulting to `FALSE`, meaning Cairo
 graphics is used with default fonts.  `TRUE` now
 means to use specified font files.
 
-# rgl 1.3.32
+# rgl 1.3.34
 
 * The WebGL code did not handle the case of lit objects
 with no lights properly.  Now they display the emission
 color only.  (Issue #494).
-* Many deprecated functions have been made defunct.
+* Several deprecated functions have been made defunct.
+* Some bad links from the vignettes have been fixed.
+* `rglwidget()` now detects Positron and modifies the
+display so it appears properly in the PLOTS window.
 
 # rgl 1.3.31
 
@@ -30,7 +33,6 @@ has been dropped at the request of CRAN.
 * `arrow3d(type = "extrusion")` was broken by the changes to triangulation in version 1.3.16.
 * Changes last year to `writePLY()` introduced an error
 in some cases (issue #489).
-
 
 # rgl 1.3.24
 

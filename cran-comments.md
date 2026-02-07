@@ -1,18 +1,17 @@
-# 1.3.31
+# 1.3.34
 
-This is a relatively minor release.
+This is mostly a small update requested by CRAN to fix
+some links in one of the vignettes.  It also contains some
+small bug fixes.  
 
-* A warning specific to macOS Tahoe (which no longer
-supports OpenGL) has been added.
-* Support for classes defined in the `tripack` package
-has been dropped at the request of CRAN.
-* Added the `latex3d()` function to draw LaTeX text using the
-`xdvir` package.
-* Both `plotmath3d()` and `latex3d()` now use default
-`cex = par3d("cex")`, and have new argument `polygon_offset`.
+The largest change is that some functions that
+were marked deprecated have been made defunct.  Package
+maintainers were notified about this change on Jan 10. 
+As far as I can see, the following packages have not made
+any change to drop the use of the now-defunct functions:
 
-## Bug fixes
+  SimCop, gifti, nat.nblast, radviz3d
+  
+These have updated:
 
-* `arrow3d(type = "extrusion")` was broken by the changes to triangulation in version 1.3.16.
-* Changes last year to `writePLY()` introduced an error
-in some cases (issue #489).
+  cifti, hyperoverlap, msir
