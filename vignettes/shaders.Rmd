@@ -1,7 +1,7 @@
 ---
 title: "Notes on Shaders"
 author: "Duncan Murdoch"
-date: "2023-05-20"
+date: "2026-02-08"
 output:
   rmarkdown::html_vignette:
     fig_height: 5
@@ -38,18 +38,6 @@ introduced with OpenGL 2.0, and have been used in `rgl` for WebGL
 rendering, and are now used in `rgl` when running within R
 as well.
 
-I have chosen to limit features to those present in OpenGL 2.1
-for the following reasons:
-
- - This is the only "compatibility" version of OpenGL that is 
- supported on MacOS.  I want the compatibility version so that 
- older code is supported during the transition.
- - I'm hoping that most systems support 2.1, but haven't tested this
- yet.  If it turns out that all systems support it, I will 
- eventually drop the fixed pipeline.
- - OpenGL 2.1 uses GLSL 1.20.8, indicated as `#version 120` in the code.  WebGL 1 uses GLSL ES 1.00 which is similar.  It is indicated as
-`#version 100` in the code.  The main difference is the use of
-precision modifiers in GLSL ES.
 
 ## Steps in shader use in R
 
@@ -130,7 +118,7 @@ And that's it!
   
 ## Text
 
-Previously `rgl` uses the FTGL library to display text.  It's 
+Previously `rgl` used the FTGL library to display text.  It's 
 written for the fixed pipeline, so is not compatible with 
 shader use. 
 

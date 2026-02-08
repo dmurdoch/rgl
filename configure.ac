@@ -185,10 +185,10 @@ if test "x$enable_opengl" != "xno"; then
     LIBS="${L_LIB} ${LIBS}"
   fi
 
-  ## --- FTGL ------------------------------------------------------------------
+  ## --- Freetype ---------------------------------------------------------
 
   AC_ARG_ENABLE([ftgl],
-  [  --disable-ftgl             compile without FTGL font support]
+  [  --disable-ftgl             compile without Freetype font support]
   )
   if test "x$enable_ftgl" != "xno"; then
     if test "x$darwin" = "xyes"; then
@@ -200,19 +200,10 @@ if test "x$enable_opengl" != "xno"; then
     if test "x$HAVE_PKG_CONFIG" = "xyes" && test "x`pkg-config freetype2 --cflags`" != "x"; then
       CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
       LIBS="${LIBS} `pkg-config freetype2 --static --libs`"
-      AC_MSG_NOTICE([using Freetype and FTGL])
-    else
-      AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
-      if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
-        CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
-        LIBS="${LIBS} `freetype-config --static --libs`"
-        AC_MSG_NOTICE([using Freetype and FTGL])
-      else
-        AC_MSG_NOTICE([compiling without FTGL support])
-      fi
+      AC_MSG_NOTICE([using Freetype])
     fi
   else
-    AC_MSG_NOTICE([compiling without FTGL support])
+    AC_MSG_NOTICE([compiling without Freetype support])
   fi
 fi
 
