@@ -473,7 +473,7 @@ void BBoxDeco::setCube()
       Vertex4( bbox.vmax.x, bbox.vmax.y, bbox.vmax.z )
     };
     int nverts = 6*4;
-    double vertices[nverts*3], normals[nverts*3];
+    double *vertices = new double[nverts*3], *normals = new double[nverts*3];
     for (int i = 0; i < 6; i++) {
       Vertex4 n = side[i].normal;
       for (int j = 0; j < 4; j++) {
@@ -493,6 +493,8 @@ void BBoxDeco::setCube()
                              true, /* ignoreExtent */
                              0, NULL, /* indices */
                              true, false);
+    delete[] vertices;
+    delete[] normals;
   }
   impl->cube->material.colors.recycle(1);
   if (!draw_front)

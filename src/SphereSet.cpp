@@ -16,7 +16,6 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
    center(in_ncenter, in_center), 
    radius(in_nradius, in_radius),
    lastdrawn(-1),
-   lastendcap(true),
    fastTransparency(in_fastTransparency)
 {
   material.colorPerVertex(false);
@@ -118,9 +117,6 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
     sphereMesh.draw(renderContext);
   } else {
    int i1 = index / facets, i2 = index % facets;
-   bool endcap = i2 < sphereMesh.getSegments() 
-   	      || i2 >= facets - sphereMesh.getSegments();
-	
    if (i1 != lastdrawn) {
      if (lastdrawn >= 0) {
        sphereMesh.doIndices( );
@@ -138,7 +134,6 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
      sphereMesh.setRadius( radius.getRecycled(i1) );
      setSphereMVmatrix(renderContext);
      lastdrawn = i1;
-     lastendcap = endcap;
    }
    sphereMesh.drawPrimitive(renderContext, i2);
   }

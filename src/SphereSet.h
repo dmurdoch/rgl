@@ -13,7 +13,6 @@ private:
   ARRAY<float>  radius;
   SphereMesh    sphereMesh;
   int           facets, lastdrawn;
-  bool          lastendcap; 
   bool          fastTransparency;
   void          initialize();
   void          setSphereMVmatrix(RenderContext* renderContext);

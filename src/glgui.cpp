@@ -35,9 +35,8 @@ GLboolean GLFont::justify(double twidth, double theight,
                           double adjx, double adjy, double adjz,
                           int pos, const RenderContext& rc) {
 #ifndef RGL_NO_OPENGL
-  GLdouble pos1[4], pos2[4];
-  double basex = 0.0, basey = 0.0, basez = 0.5, scaling = 1.0;
-  GLboolean valid;
+  double basex = 0.0, basey = 0.0, basez = 0.5;
+  GLboolean valid = true;
   gl2ps_centering = GL2PS_TEXT_BL;
   
   if (pos) {
@@ -90,8 +89,6 @@ GLboolean GLFont::justify(double twidth, double theight,
   }
   
   if (adjx > 0) {
-
-    if (rc.gl2psActive > GL2PS_NONE) scaling = GL2PS_SCALING;
      
     if ( adjx > 0.25 && rc.gl2psActive == GL2PS_POSITIONAL) {
       if (adjx < 0.75) {
