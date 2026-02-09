@@ -79,8 +79,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   
   rasterText_version_func ver = (rasterText_version_func)
     R_GetCCallable("rasterText", "API_version");
-  if (ver() != 5) {
-    Rprintf("This version of rgl was written for rasterText API version 5, not %d\n", ver());
+  if (ver() != 6) {
+    Rprintf("This version of rgl was written for rasterText API version 6, not %d\n", ver());
     return Rf_ScalarInteger( 0 );
   }
   measure_text = (rasterText_measure_text_func)

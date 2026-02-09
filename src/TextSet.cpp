@@ -295,7 +295,7 @@ void TextSet::set_coordinates() {
     texCoordArray[4*i + 2].s = texCoordArray[4*i + 1].s;
     texCoordArray[4*i + 3].s = texCoordArray[4*i].s;
     
-    texCoordArray[4*i].t = (placement[i].y + measures[i].y_bearing + measures[i].height)/texture_height;
+    texCoordArray[4*i].t = (placement[i].y + measures[i].y_bearing + measures[i].height + measures[i].ascent)/texture_height;
     texCoordArray[4*i + 1].t = texCoordArray[4*i].t;
     texCoordArray[4*i + 2].t = texCoordArray[4*i].t - measures[i].height/texture_height;
     texCoordArray[4*i + 3].t = texCoordArray[4*i + 2].t;
