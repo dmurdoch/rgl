@@ -17,7 +17,8 @@ typedef struct text_extents
   double height, width,
   x_advance, x_bearing,
   y_advance, y_bearing,
-  ascent, descent;
+  ascent, descent,
+  baseline;
 } text_extents_t;
 
 typedef struct text_placement

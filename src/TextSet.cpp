@@ -311,8 +311,9 @@ void TextSet::set_coordinates() {
     adjArray.setVertex(4*i, 
                        Vertex(
                          -adj.x*m.width*rescale,
-                         (-adj.y*(m.ascent + m.descent) 
-                           + m.descent - m.y_bearing - m.height)*rescale,
+                         (-adj.y*(m.ascent - m.descent) 
+                           + m.baseline - m.ascent
+                           - m.y_bearing - m.height)*rescale,
                          0) );
     adjArray.setVertex(4*i+1, 
                        Vertex(
