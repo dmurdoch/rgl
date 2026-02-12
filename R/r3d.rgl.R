@@ -500,7 +500,7 @@ text3d      <- function(x, y = NULL, z = NULL,
 			texts, adj = 0.5, pos = NULL, offset = 0.5,
 			usePlotmath = is.language(texts),
 			family = par3d("family"), font = par3d("font"), 
-			cex = par3d("cex"), useFreeType = par3d("useFreeType"),
+			cex = par3d("cex"), 
 			...) {
   if (usePlotmath) 
     return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, 
@@ -555,7 +555,6 @@ text3d      <- function(x, y = NULL, z = NULL,
                as.character(family), 
                as.integer(font),
                as.numeric(cex),
-               as.integer(useFreeType),
                as.integer(npos),
                as.integer(pos),
                NAOK=TRUE
@@ -921,8 +920,7 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  bg = list(color="white",fogtype = "none"),
 		  family = "sans",
 		  material = list(color="black", fog = TRUE),
-		  useShaders = TRUE,
-      useFreeType = FALSE)
+		  useShaders = TRUE)
 
 open3d <- function(..., params = getr3dDefaults(), 
                    useNULL = rgl.useNULL(), silent = FALSE	) {

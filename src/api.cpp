@@ -1173,7 +1173,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
 
 void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, double* vertex,
                int* nfonts, const char** family, int* style, double* cex, 
-               int* useFreeType, int* npos, int* pos)
+               int* npos, int* pos)
 {
   int success = RGL_FAIL;
 
@@ -1184,7 +1184,7 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
     int ntext   = idata[0];
     
     FontArray fonts(0);
-    device->getFonts(fonts, *nfonts, family, style, cex, false);
+    device->getFonts(fonts, *nfonts, family, style, cex);
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
                                                    adj,
           device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 

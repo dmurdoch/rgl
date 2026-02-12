@@ -43,9 +43,7 @@ public:
   void        setFontStyle(int style);
   double      getFontCex() const;
   void        setFontCex(double cex);
-  bool        getFontUseFreeType() const;
-  void        setFontUseFreeType(bool useFreeType);
-  void	      setDefaultFont(const char *family, int style, double cex, bool useFreeType);
+  void	      setDefaultFont(const char *family, int style, double cex);
   const char* getFontname() const;
   int         getActiveSubscene() {return activeSubscene;}
   bool        getUseShaders() { return useShaders; };

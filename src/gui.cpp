@@ -12,7 +12,7 @@ using namespace rgl;
 // WindowImpl common code
 // ---------------------------------------------------------------------------
 void WindowImpl::getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, 
-                          double* cex, bool useFreeType)
+                          double* cex)
 {
   GLFont* font;
   outfonts.resize(nfonts);
@@ -21,21 +21,11 @@ void WindowImpl::getFonts(FontArray& outfonts, int nfonts, const char** family, 
     for (int j=0; j < fonts.size();j++) {
     if (fonts[j]->cex == cex[i] &&
         fonts[j]->style == style[i] &&
-        !strcmp(fonts[j]->family, family[i]) && 
-        fonts[j]->useFreeType == useFreeType)
+        !strcmp(fonts[j]->family, family[i]))
       outfonts[i] = fonts[j];
     }
     if (!outfonts[i]) {
-      if (useFreeType) 
-        font = getFont(family[i], style[i], cex[i], useFreeType);
-      else {
-        font = new GLFont(family[i],
-                          style[i],
-                          cex[i], 
-                          NULL, 
-                          false);
-        fonts.push_back(font);
-      }
+      font = getFont(family[i], style[i], cex[i]);
       outfonts[i] = font;
     }
   }  
@@ -327,9 +317,9 @@ void Window::on_close()
 }
 // ---------------------------------------------------------------------------
 void Window::getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, 
-                      double* cex, bool useFreeType)
+                      double* cex)
 {
-  windowImpl->getFonts(outfonts, nfonts, family, style, cex, useFreeType);
+  windowImpl->getFonts(outfonts, nfonts, family, style, cex);
 }
 // ---------------------------------------------------------------------------
 

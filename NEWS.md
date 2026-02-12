@@ -2,10 +2,9 @@
 
 * Major changes:  now attempts to use shaders for
 all drawing.
-* The `par3d("useFreeType")` parameter has changed 
-meaning, now defaulting to `FALSE`, meaning Cairo 
-graphics is used with default fonts.  `TRUE` now
-means to use specified font files.
+* The `par3d("useFreeType")` parameter is now ignored.
+The pangocairo set of libraries are used for display
+in all cases.  On some platforms that involves Freetype.
 
 # rgl 1.3.34
 

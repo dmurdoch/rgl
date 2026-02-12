@@ -278,20 +278,6 @@ static bool setCex(double cex, RGLView* rglview)
   return true;
 }
 
-static int getUseFreeType(RGLView* rglview)
-{
-  int result = (int) rglview->getFontUseFreeType();
-  CHECKGLERROR;  
-  return result;
-}
-
-static bool setUseFreeType(bool useFreeType, RGLView* rglview)
-{
-  rglview->setFontUseFreeType(useFreeType);
-  CHECKGLERROR;
-  return true;
-}
-
 static bool setUseShaders(bool useShaders, RGLView* rglview)
 {
 	return rglview->setUseShaders(useShaders);
@@ -540,14 +526,7 @@ static void Specify(Device* dev, RGLView* rglview, Subscene* sub, const char *wh
     if (!setCex(REAL(x)[0],rglview)) success = 0;
   }
   else if (streql(what, "useFreeType")) {
-    lengthCheck(what, value, 1);
-    PROTECT(x=Rf_coerceVector(value, LGLSXP));
-#ifndef HAVE_FREETYPE
-    if (LOGICAL(x)[0] && strcmp( dev->getDevtype(), "null" ))
-      Rf_warning("FreeType not supported in this build");
-#endif
-    if (!setUseFreeType(LOGICAL(x)[0], rglview)) success = 0;
-    UNPROTECT(1);
+    Rf_warning("useFreeType is ignored");
   }
   else if (streql(what, "useShaders")) {
   	lengthCheck(what, value, 1);
@@ -678,14 +657,8 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     success = REAL(value)[0] >= 0;
   }    
   else if (streql(what, "useFreeType")) {
-    int useFreeType = getUseFreeType(rglview);
-    PROTECT(value = Rf_allocVector(LGLSXP, 1));
-    if (useFreeType < 0) {
-      LOGICAL(value)[0] = false;
-      success = 0;
-    } else {
-      LOGICAL(value)[0] = (bool)useFreeType;
-    }
+    LOGICAL(value)[0] = true;
+    success = true;
   }    
   else if (streql(what, "fontname")) {
     buf = getFontname(rglview);

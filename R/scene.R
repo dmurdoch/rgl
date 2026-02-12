@@ -426,7 +426,7 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
 
 rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0.5, 
                       family=par3d("family"), font=par3d("font"), 
-                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), 
+                      cex=par3d("cex"), 
                       ... ) {
   .Defunct("text3d")
 }

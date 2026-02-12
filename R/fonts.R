@@ -1,6 +1,3 @@
-# The rgl font database is only used when rgl is configured for FreeType.  
-# Since 0.105.13 this is always true on Windows, but since 0.106.2
-# r3dDefaults sets useFreeType to FALSE, so the windowsFonts() are used instead.
 
 # This code is closely modelled on the Quartz font database.
 

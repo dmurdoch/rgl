@@ -638,7 +638,7 @@ void BBoxDeco::setAxes()
       Device* device;
       extern DeviceManager* deviceManager;
       if (deviceManager && (device = deviceManager->getAnyDevice()))
-        device->getFonts(fonts, 1, family, style, cex, false);
+        device->getFonts(fonts, 1, family, style, cex);
       impl->labels[i] = new TextSet(material, axis->nticks, label_ptrs, values, 
                                     nullptr /*in_adj*/,
                                     true  /*in_ignoreExtent*/, 

@@ -46,8 +46,7 @@ public:
   void captureMouse(View* captureview);
   void releaseMouse();
   void watchMouse(bool withoutButton);
-  GLFont* getFont(const char* family, int style, double cex, 
-                  bool useFreeType);
+  GLFont* getFont(const char* family, int style, double cex);
 
 private:
   void initGL();
@@ -375,7 +374,7 @@ void X11WindowImpl::initGL()
           };
         };
         
-        fonts[0] = new GLFont("sans", 1, 1, NULL, false);
+        fonts[0] = new GLFont("sans", 1, 1, NULL);
       } else {
         Rprintf("Unable to load GL");
         shutdownGL();
@@ -396,19 +395,15 @@ void X11WindowImpl::shutdownGL()
   }
 }
 // ---------------------------------------------------------------------------
-GLFont* X11WindowImpl::getFont(const char* family, int style, double cex, 
-                                 bool useFreeType) {
+GLFont* X11WindowImpl::getFont(const char* family, int style, double cex) {
   if (strcmp(family, fonts.back()->family)) Rf_warning("font family \"%s\" not found, using \"%s\"", 
                                          family, fonts.back()->family);
   else if (style != fonts.back()->style) Rf_warning("\"%s\" family only supports font %d", 
                                         fonts.back()->family, fonts.back()->style);
   else if (cex != fonts.back()->cex) Rf_warning("\"%s\" family only supports cex = %g",
   					fonts.back()->family, fonts.back()->cex);
-  else if (useFreeType) Rf_warning("FreeType font not available");
-  if (useFreeType)
-    return fonts.back();
-  else
-    return fonts[0];
+  else Rf_warning("font not available");
+  return fonts.back();
 }
 
 // ---------------------------------------------------------------------------

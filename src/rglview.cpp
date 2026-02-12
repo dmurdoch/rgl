@@ -53,11 +53,7 @@ void RGLView::hide()
 void RGLView::setWindowImpl(WindowImpl* impl) {
   View::setWindowImpl(impl);
 
-#if defined HAVE_FREETYPE
-  renderContext.font = impl->getFont("sans", 1, 1, false);
-#else
-  renderContext.font = impl->fonts[0];
-#endif
+  renderContext.font = impl->getFont("sans", 1, 1);
 }
 
 Scene* RGLView::getScene() {
@@ -365,9 +361,9 @@ void RGLView::setScale(double* src)
   View::update();
 }
 
-void RGLView::setDefaultFont(const char* family, int style, double cex, bool useFreeType)
+void RGLView::setDefaultFont(const char* family, int style, double cex)
 {
-    GLFont* font = View::windowImpl->getFont(family, style, cex, useFreeType);
+    GLFont* font = View::windowImpl->getFont(family, style, cex);
     if (!font)
 	Rf_error("font not available");
     renderContext.font = font;
@@ -383,7 +379,7 @@ const char* RGLView::getFontFamily() const
 
 void RGLView::setFontFamily(const char *family)
 {
-  setDefaultFont(family, getFontStyle(), getFontCex(), getFontUseFreeType());
+  setDefaultFont(family, getFontStyle(), getFontCex());
 }
 
 int RGLView::getFontStyle() const 
@@ -395,7 +391,7 @@ int RGLView::getFontStyle() const
 
 void RGLView::setFontStyle(int style)
 {
-  setDefaultFont(getFontFamily(), style, getFontCex(), getFontUseFreeType());
+  setDefaultFont(getFontFamily(), style, getFontCex());
 }
 
 double RGLView::getFontCex() const 
@@ -407,7 +403,7 @@ double RGLView::getFontCex() const
 
 void RGLView::setFontCex(double cex)
 {
-  setDefaultFont(getFontFamily(), getFontStyle(), cex, getFontUseFreeType());
+  setDefaultFont(getFontFamily(), getFontStyle(), cex);
 }
 
 const char* RGLView::getFontname() const 
@@ -418,18 +414,6 @@ const char* RGLView::getFontname() const
     return renderContext.font->fontname;
   else
     return "";
-}
-
-bool RGLView::getFontUseFreeType() const
-{
-  if (!renderContext.font)
-    Rf_error("font not available");
-  return renderContext.font->useFreeType;
-}
-
-void RGLView::setFontUseFreeType(bool useFreeType)
-{
-  setDefaultFont(getFontFamily(), getFontStyle(), getFontCex(), useFreeType);
 }
 
 void RGLView::getPosition(double* dest)

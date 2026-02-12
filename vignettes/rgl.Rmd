@@ -442,7 +442,7 @@ antialias   | fixed | Amount of hardware antialiasing
 cex         |       | Default size for text
 family      |       | Device-independent font family name; see `r linkfn("text3d", text="?text3d", pkg="rgl")`
 font        |       | Integer font number
-useFreeType |       | Should FreeType fonts be used if available?
+useFreeType |       | No longer used
 fontname    | read-only | System-dependent font name set by `r linkfn("rglFonts")`
 FOV         |       | Field of view, in degrees.  Zero means isometric perspective
 ignoreExtent |      | Should `rgl` ignore the size of new objects when computing the bounding box?

@@ -19,8 +19,8 @@ class GLFont
 {
 public:
   GLFont(const char* in_family, int in_style, double in_cex, 
-         const char* in_fontname, bool in_useFreeType):
-  style(in_style), cex(in_cex), useFreeType(in_useFreeType) 
+         const char* in_fontname):
+  style(in_style), cex(in_cex)
   {
     family = new char[strlen(in_family) + 1];
     memcpy(family, in_family, strlen(in_family) + 1);
@@ -56,7 +56,6 @@ public:
   int style;
   double cex;
   char* fontname;
-  bool useFreeType;
   int gl2ps_centering;
 private:
   GLFont(const GLFont &);
@@ -84,8 +83,8 @@ private:
 class NULLFont : public GLFont
 {
 public:
-  NULLFont(const char* in_family, int in_style, double in_cex, bool useFreeType): 
-    GLFont(in_family, in_style, in_cex, "NULL", useFreeType) {};
+  NULLFont(const char* in_family, int in_style, double in_cex): 
+    GLFont(in_family, in_style, in_cex, "NULL") {};
 
   void draw(const char* text, int length, 
             double adjx, double adjy, double adjz,
