@@ -1182,13 +1182,12 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     int ntext   = idata[0];
-    
-    FontArray fonts(0);
-    device->getFonts(fonts, *nfonts, family, style, cex);
-    success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
-                                                   adj,
-          device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
-    						   fonts, cex, *npos, pos) ) );
+
+    success = as_success( device->add( new TextSet(currentMaterial, 
+                                                   ntext, text, vertex, adj,
+       device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
+    	 *nfonts, family, style, cex, 
+    	 *npos, pos) ) );
     CHECKGLERROR;
 
   }

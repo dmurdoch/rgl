@@ -7,7 +7,6 @@
 // ---------------------------------------------------------------------------
 #include "R.h"
 #include "types.h"
-#include "glgui.h"
 #include "Disposable.h"
 
 namespace rgl {
@@ -59,7 +58,6 @@ public:
   inline WindowImpl(Window* in_window)
   : window(in_window)
   { 
-    fonts.resize(1);
   }
 
   virtual ~WindowImpl() { }
@@ -83,11 +81,8 @@ public:
   virtual void captureMouse(View* captureView) = 0;
   virtual void releaseMouse(void) = 0;
   virtual void watchMouse(bool withoutButton) = 0;
-  virtual GLFont* getFont(const char* family, int style, double cex) = 0;
-  void getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, double* cex);
   virtual int getAntialias();
   virtual int getMaxClipPlanes();
-  FontArray fonts;
 protected:
   Window*      window;
 };
@@ -203,7 +198,6 @@ public:
   void bringToTop(int stay);
   void setWindowRect(int left, int top, int right, int bottom);
   void getWindowRect(int *left, int *top, int *right, int *bottom);
-  void getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, double* cex);
 
 // data:
   View* child;

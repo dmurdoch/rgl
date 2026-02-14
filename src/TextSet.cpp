@@ -1,6 +1,5 @@
 #include "TextSet.h"
 
-#include "glgui.h"
 #include "R.h"
 #include "BBoxDeco.h"
 #include "subscene.h"
@@ -32,14 +31,20 @@ extern "C" {
 //   a separate length buffer holds string lengths in order
 //
 
-TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, 
+TextSet::TextSet(Material& in_material, 
+                 int in_ntexts, 
+                 char** in_texts, 
+                 double *in_center, 
                  double* in_adj,
-                 int in_ignoreExtent, FontArray& in_fonts,
+                 int in_ignoreExtent, 
+                 int in_nfonts,
+                 const char** in_family,
+                 int* in_style,
                  double* in_cex,
                  int in_npos,
                  int* in_pos)
  : SpriteSet(in_material, in_ntexts, in_center, 
-   in_fonts.size(), in_cex,     // nsize, size
+   in_nfonts, in_cex,       // nsize, size
    in_ignoreExtent, 
    0, NULL,                 // count, shapelist
    0, NULL,                 // nshapelens, shapelens
@@ -61,18 +66,18 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
   	textArray.push_back(in_texts[i]);
   }
 
-  fonts = in_fonts;
+  family.clear();
+  style.clear();
+  cex.clear();
+  for (int i = 0; i < in_nfonts; i++) {
+    family.push_back(in_family[i]);
+    style.push_back(in_style[i]);
+    cex.push_back(in_cex[i]);
+    fontname.push_back("");
+  }
 #ifdef HAVE_FREETYPE  
   blended = true;
 #endif  
-  int fsize = fonts.size();
-  for (int i=0;i<in_ntexts;i++) {
-    
-    if (!fonts[i % fsize])
-      Rf_error("font not available");
-    if (!fonts[i % fsize]->valid(textArray[i].c_str()))
-      Rf_error("text %d contains unsupported character", i+1);
-  }
   texture_initialized = false;
 }
 
@@ -85,7 +90,7 @@ int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
   switch (attrib) {
     case FAMILY: 
     case FONT:
-    case CEX: return static_cast<int>(fonts.size());
+    case CEX: return static_cast<int>(family.size());
     case TEXTS: return static_cast<int>(textArray.size());
   }
   return SpriteSet::getAttributeCount(subscene, attrib);
@@ -94,17 +99,17 @@ int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
 void TextSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
   int n = getAttributeCount(subscene, attrib);
-  int fsize = fonts.size();
+  int fsize = family.size();
   if (first + count < n) n = first + count;
   if (first < n) {
     switch(attrib) {
     case CEX:
       while (first < n) 
-        *result++ = fonts[first++ % fsize]->cex;
+        *result++ = cex[first++ % fsize];
       return;
     case FONT:
       while (first < n)
-      	*result++ = fonts[first++ % fsize]->style;
+      	*result++ = style[first++ % fsize];
       return;
     }
     SpriteSet::getAttribute(subscene, attrib, first, count, result);
@@ -114,14 +119,14 @@ void TextSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
 std::string TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
   int n = getAttributeCount(subscene, attrib);
-  int fsize = fonts.size();
+  int fsize = family.size();
   if (index < n) {
     switch (attrib) {
     case TEXTS: 
       return textArray[index];
     case FAMILY:
-      char* family = fonts[index % fsize]->family;
-      return family;
+      std::string fam = family[index % fsize];
+      return fam;
     }
   }
   return SpriteSet::getTextAttribute(subscene, attrib, index);
@@ -135,21 +140,23 @@ void TextSet::do_measure_text()
   const char * texts[n];
   int done = 0; /* the count of entries done */
   text_extents_t *res = measures.data();
-  int fsize = fonts.size();
-  
+  int fsize = family.size();
+
   for (int i = 0; i < n; i++) {
     
     texts[i] = textArray[i].c_str();
     
-    if (i == n-1 || fonts[i % fsize] !=
-                  fonts[(i+1) % fsize]) {
+    if (i == n-1 || 
+        family[i % fsize] != family[(i+1) % fsize] ||
+        style[i % fsize]  != style[(i+1) % fsize] ||
+        cex[i % fsize]    != cex[(i+1) % fsize]) {
       int fnt = done % fsize;
       res = measure_text(i - done + 1,
                            texts + done,
-                           fonts[fnt]->family,
-                           fonts[fnt]->style,
-                           fonts[fnt]->fontname,
-                           20*fonts[fnt]->cex,
+                           family[fnt].c_str(),
+                           style[fnt],
+                           fontname[fnt].c_str(),
+                           20*cex[fnt],
                            res);
       done = i + 1;
     }
@@ -207,18 +214,20 @@ void TextSet::draw_to_texture() {
   
   int done = 0;
   text_placement_t *xy = placement.data();
-  int fsize = fonts.size();
+  int fsize = family.size();
   for (int i = 0; i < n; i++) {
     if (i == n-1 ||
-        fonts[i % fsize] != fonts[(i+1) % fsize]) {
+        family[i % fsize] != family[(i+1) % fsize] ||
+        style[i % fsize] != style[i % fsize] ||
+        cex[i % fsize] != cex[i % fsize]) {
       int fnt = done % fsize;
       draw_text_to_buffer(i - done + 1, 
                           xy + done, 
                           texts + done,
-                          fonts[fnt]->family,
-                          fonts[fnt]->style,
-                          fonts[fnt]->fontname,
-                          20*fonts[fnt]->cex,
+                          family[fnt].c_str(),
+                          style[fnt],
+                          fontname[fnt].c_str(),
+                          20*cex[fnt],
                           texture_width, 
                           texture_height, 
                           stride,

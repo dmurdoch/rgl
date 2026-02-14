@@ -8,7 +8,6 @@
 
 
 #include "render.h"
-#include "glgui.h"
 
 namespace rgl {
 
@@ -55,11 +54,18 @@ typedef void (*rasterText_draw_text_to_buffer_func)(int n,
 
 class TextSet : public SpriteSet {
 public:
-  TextSet(Material& in_material, int in_ntexts, char** in_texts, double *in_center, 
+  TextSet(Material& in_material, 
+          int in_ntexts, 
+          char** in_texts, 
+          double *in_center, 
           double *in_adj,
-          int in_ignoreExtent, FontArray& in_fonts,
+          int in_ignoreExtent,
+          int in_nfonts,
+          const char** in_family,
+          int* in_style,
           double* in_cex,
-          int in_npos, int* in_pos);
+          int in_npos, 
+          int* in_pos);
   ~TextSet();
   std::string getTypeName() override { return "text"; };
 
@@ -73,7 +79,10 @@ private:
 
   bool texture_initialized;
   std::vector<std::string> textArray;
-  FontArray fonts;
+  std::vector<std::string> family;
+  std::vector<int> style;
+  std::vector<double> cex;
+  std::vector<std::string> fontname; // the font filename, or ""
   std::vector<text_extents_t> measures;
   std::vector<text_placement_t> placement;
   GLuint texture_width, texture_height;

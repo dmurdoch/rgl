@@ -4,8 +4,6 @@
 
 #include "fps.h"
 
-#include "glgui.h"
-
 #include <cstdio>
 
 using namespace rgl;

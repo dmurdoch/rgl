@@ -7,7 +7,6 @@
 #include "win32gui.h"
 
 #include "lib.h"
-#include "glgui.h"
 
 #include <winuser.h>
 #include <shlobj.h>
@@ -97,7 +96,6 @@ public:
   void captureMouse(View* pView);
   void releaseMouse();
   void watchMouse(bool withoutButton) {};
-  GLFont* getFont(const char* family, int style, double cex);
 
 private:
   LRESULT processMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -366,79 +364,6 @@ void Win32WindowImpl::shutdownGL()
   wglMakeCurrent(NULL,NULL);
   ReleaseDC(windowHandle, dcHandle);
   wglDeleteContext(glrcHandle);
-}
-
-GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex)
-{
-  for (unsigned int i=0; i < fonts.size(); i++) {
-    if (fonts[i]->cex == cex && fonts[i]->style == style && !strcmp(fonts[i]->family, family))
-      return fonts[i];
-  }
-  
-#ifdef HAVE_FREETYPE
-    char fontname_absolute[MAX_PATH+1] = "";
-    int len=0;
-    SEXP Rfontname = VECTOR_ELT(PROTECT(Rf_eval(Rf_lang2(Rf_install("rglFonts"), 
-                                          Rf_ScalarString(Rf_mkChar(family))), rglNamespace)),
-                                          0);
-    if (Rf_isString(Rfontname) && Rf_length(Rfontname) >= style) {
-      const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
-      if (!IS_ABSOLUTE_PATH(fontname)) {
-        LPITEMIDLIST pidlFonts;
-        assert(SUCCEEDED(SHGetSpecialFolderLocation(0, CSIDL_FONTS, &pidlFonts))
-            && SUCCEEDED(SHGetPathFromIDList(pidlFonts, fontname_absolute)) );
-        len = strlen(fontname_absolute);
-        if (len && fontname_absolute[len-1] != '\\') {
-          strcat(fontname_absolute, "\\");
-          len++;
-        }
-      }
-      assert(len + strlen(fontname) <= MAX_PATH);
-      strcat(fontname_absolute, fontname);  
-      GLFTFont* font=new GLFTFont(family, style, cex, fontname_absolute);
-      if (font->font) {
-        fonts.push_back(font);
-        UNPROTECT(1);
-        return font;
-      } else {
-        Rf_warning(font->errmsg);
-        delete font;
-      }
-    }
-    UNPROTECT(1);
-#endif
-  }
-  if (strcmp(family, fonts[0]->family)) Rf_warning("font family \"%s\" not found, using \"%s\"", 
-                                         family, fonts[0]->family);
-  else if (style != fonts[0]->style) Rf_warning("\"%s\" family only supports font %d", 
-                                        fonts[0]->family, fonts[0]->style);
-  else if (cex != fonts[0]->cex) Rf_warning("\"%s\" family only supports cex = %g",
-  					fonts[0]->family, fonts[0]->cex);
-  else Rf_warning("font not available");
-  return fonts[0];
-}
-
-GLBitmapFont* Win32WindowImpl::initGLBitmapFont(u8 firstGlyph, u8 lastGlyph) 
-{
-  GLBitmapFont* font = NULL; 
-  if (beginGL()) {
-    font = new GLBitmapFont("bitmap", 1, 1, "System");
-    SelectObject (dcHandle, GetStockObject (SYSTEM_FONT) );
-    font->nglyph     = lastGlyph-firstGlyph+1;
-    font->widths     = new unsigned int [font->nglyph];
-    GLuint listBase = glGenLists(font->nglyph);
-    font->firstGlyph = firstGlyph;
-    font->listBase   = listBase - firstGlyph;
-    GetCharWidth32( dcHandle, font->firstGlyph, lastGlyph,  (LPINT) font->widths );
-    {  
-      TEXTMETRIC tm;
-      GetTextMetrics( dcHandle, &tm);
-      font->ascent = tm.tmAscent;
-    }    
-    wglUseFontBitmaps(dcHandle, font->firstGlyph, font->nglyph, listBase);
-    endGL();
-  }
-  return font;
 }
 
 LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {

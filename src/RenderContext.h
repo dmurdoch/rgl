@@ -3,9 +3,9 @@
 
 namespace rgl {
 class Subscene;
-class GLFont;
 } // namespace rgl
 
+#include <string>
 #include "rglmath.h"
 #include "opengl.h"
 
@@ -17,7 +17,10 @@ public:
   RenderContext()
   : subscene(0)
   , rect(0,0,256,256)
-  , font(0)
+  , family("sans")
+  , style(1)
+  , cex(1.0)
+  , fontname("")
   , time(0.0)
   , lastTime(0.0)
   , deltaTime(0.0)
@@ -26,7 +29,10 @@ public:
   Subscene* subscene;
   Rect2   rect;  // This is the full window rectangle in pixels
   // RectSize size;
-  GLFont* font;
+  std::string family;
+  int style;
+  double cex;
+  std::string fontname;
   double time;
   double lastTime;
   double deltaTime;

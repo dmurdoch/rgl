@@ -6,7 +6,6 @@
 #ifndef RGL_NO_OPENGL
 #include "gl2ps.h"
 #endif
-#include "glgui.h"
 #include "scene.h"
 #include <cstdio>
 #include <cmath>
@@ -631,18 +630,14 @@ void BBoxDeco::setAxes()
         
         label_ptrs[j] = (char*)axis->textArray[j].c_str();
       }      
-      FontArray fonts(0);
       const char * family[] = { "sans" };
       int style[] = { 1 };
       double cex[] = { 1.0 };
-      Device* device;
-      extern DeviceManager* deviceManager;
-      if (deviceManager && (device = deviceManager->getAnyDevice()))
-        device->getFonts(fonts, 1, family, style, cex);
+
       impl->labels[i] = new TextSet(material, axis->nticks, label_ptrs, values, 
                                     nullptr /*in_adj*/,
                                     true  /*in_ignoreExtent*/, 
-                                    fonts,
+                                    1, family, style,
                                     cex,
                                     0, nullptr /*in_pos*/);
       impl->ticks[i]->material.marginCoord = i;

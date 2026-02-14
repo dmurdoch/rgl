@@ -161,12 +161,6 @@ bool Device::postscript(int format, const char* filename, bool drawText)
   return rglview->postscript( format, filename, drawText);
 }
 // ---------------------------------------------------------------------------
-void Device::getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, double* cex)
-{
-  if (window)
-    window->getFonts(outfonts, nfonts, family, style, cex);
-}
-// ---------------------------------------------------------------------------
 const char * Device::getDevtype()
 {
   return devtype;

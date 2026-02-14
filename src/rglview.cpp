@@ -52,8 +52,6 @@ void RGLView::hide()
 
 void RGLView::setWindowImpl(WindowImpl* impl) {
   View::setWindowImpl(impl);
-
-  renderContext.font = impl->getFont("sans", 1, 1);
 }
 
 Scene* RGLView::getScene() {
@@ -363,18 +361,15 @@ void RGLView::setScale(double* src)
 
 void RGLView::setDefaultFont(const char* family, int style, double cex)
 {
-    GLFont* font = View::windowImpl->getFont(family, style, cex);
-    if (!font)
-	Rf_error("font not available");
-    renderContext.font = font;
+    renderContext.family = family;
+    renderContext.style = style;
+    renderContext.cex = cex;
+    renderContext.fontname = "";
 }
   
 const char* RGLView::getFontFamily() const 
 {
-  if (!renderContext.font)
-    Rf_error("font not available");
-      
-  return renderContext.font->family;
+  return renderContext.family.c_str();
 }
 
 void RGLView::setFontFamily(const char *family)
@@ -384,9 +379,7 @@ void RGLView::setFontFamily(const char *family)
 
 int RGLView::getFontStyle() const 
 {
-  if (!renderContext.font)
-    Rf_error("font not available");
-  return renderContext.font->style;
+  return renderContext.style;
 }
 
 void RGLView::setFontStyle(int style)
@@ -396,9 +389,7 @@ void RGLView::setFontStyle(int style)
 
 double RGLView::getFontCex() const 
 {
-  if (!renderContext.font)
-    Rf_error("font not available");
-  return renderContext.font->cex;
+  return renderContext.cex;
 }
 
 void RGLView::setFontCex(double cex)
@@ -408,12 +399,7 @@ void RGLView::setFontCex(double cex)
 
 const char* RGLView::getFontname() const 
 {
-  if (!renderContext.font)
-    Rf_error("font not available");
-  if (renderContext.font->fontname)
-    return renderContext.font->fontname;
-  else
-    return "";
+  return renderContext.fontname.c_str();
 }
 
 void RGLView::getPosition(double* dest)

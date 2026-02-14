@@ -8,7 +8,6 @@
 #include "NULLgui.h"
 
 #include "lib.h"
-#include "glgui.h"
 
 #include "assert.h"
 #include "R.h"
@@ -34,7 +33,6 @@ public:
   void captureMouse(View* pView) {};
   void releaseMouse() {};
   void watchMouse(bool withoutButton) {};
-  GLFont* getFont(const char* family, int style, double cex);
   int getAntialias() { return 8; }
   int getMaxClipPlanes() { return INT_MAX; }
 
@@ -58,7 +56,6 @@ NULLWindowImpl::NULLWindowImpl(Window* in_window)
 : WindowImpl(in_window)
 {
   setWindowRect(0, 0, 256, 256);
-  fonts[0] = new NULLFont("sans", 1, 1.0);
 }
 
 NULLWindowImpl::~NULLWindowImpl()
@@ -82,17 +79,6 @@ void NULLWindowImpl::getWindowRect(int *left, int *top, int *right, int *bottom)
     *top = rect[1];
     *right = rect[2];
     *bottom = rect[3];
-}
-
-GLFont* NULLWindowImpl::getFont(const char* family, int style, double cex)
-{
-  for (unsigned int i=0; i < fonts.size(); i++) {
-    if (fonts[i]->cex == cex && fonts[i]->style == style && !strcmp(fonts[i]->family, family))
-      return fonts[i];
-  }
-  GLFont* font = new NULLFont(family, style, cex);
-  fonts.push_back(font);
-  return font;
 }
   
 // ---------------------------------------------------------------------------

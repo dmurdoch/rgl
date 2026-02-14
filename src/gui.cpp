@@ -5,31 +5,13 @@
 #include "gui.h"
 #include "lib.h"
 #include "R.h"
+#include "opengl.h"
 
 using namespace rgl;
 
 // ---------------------------------------------------------------------------
 // WindowImpl common code
 // ---------------------------------------------------------------------------
-void WindowImpl::getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, 
-                          double* cex)
-{
-  GLFont* font;
-  outfonts.resize(nfonts);
-  for (int i=0; i < nfonts; i++) {
-    outfonts[i] = 0;
-    for (int j=0; j < fonts.size();j++) {
-    if (fonts[j]->cex == cex[i] &&
-        fonts[j]->style == style[i] &&
-        !strcmp(fonts[j]->family, family[i]))
-      outfonts[i] = fonts[j];
-    }
-    if (!outfonts[i]) {
-      font = getFont(family[i], style[i], cex[i]);
-      outfonts[i] = font;
-    }
-  }  
-}
 
 int WindowImpl::setSkipRedraw(int in_skipRedraw)
 {
@@ -315,12 +297,7 @@ void Window::on_close()
   if (windowImpl)
     windowImpl->destroy();
 }
-// ---------------------------------------------------------------------------
-void Window::getFonts(FontArray& outfonts, int nfonts, const char** family, int* style, 
-                      double* cex)
-{
-  windowImpl->getFonts(outfonts, nfonts, family, style, cex);
-}
+
 // ---------------------------------------------------------------------------
 
 int WindowImpl::getAntialias()
