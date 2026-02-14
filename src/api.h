@@ -71,7 +71,7 @@ void rgl_bbox     (int* successptr, int* idata, double* ddata, double* xat, char
 
 SEXP rgl_primitive(SEXP idata, SEXP vertex, SEXP normals, SEXP texcoords);
 void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex,
-                                 int* nfonts, const char** family, int* style, double* cex, 
+                                 int* nfonts, const char** family, int* style, double* cex, const char ** fontfile,
                                  int* npos, int* pos);
 void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius, int* fastTransparency);
 void rgl_planes   (int* successptr, int* idata, double* normals, double* offsets);

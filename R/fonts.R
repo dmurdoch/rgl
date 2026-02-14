@@ -7,8 +7,8 @@ assign(".rglFonts", list(), envir = .rglEnv)
 
 # Check that the font has the correct structure and information
 checkrglFont <- function(font) {
-    if (!is.character(font) || length(font) != 4)
-        stop("Invalid rgl font:  must be 4 filenames")
+    if (!is.character(font) || !(length(font) %in% c(1,4)))
+        stop("Invalid rgl font:  must be 1 family name or 4 filenames")
     font
 }
 
@@ -62,4 +62,20 @@ rglFonts <- function(...) {
 
 rglFont <- function(family) {
   checkrglFont(family)
+}
+
+fixFonts <- function(family, font) {
+  stopifnot(length(family) == length(font))
+  fontfile <- rep("", length(family))
+  knownfonts <- rglFonts()
+  for (f in unique(family)) {
+    if (f %in% names(knownfonts)) {
+      known <- knownfonts[[f]]
+      if (length(known) == 1)
+        family[family == f] <- known
+      else if (length(known) == 4)
+        fontfile[family == f] <- known[font[family == f]]
+    }
+  }
+  list(family = family, fontfile = fontfile)
 }

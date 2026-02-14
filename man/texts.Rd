@@ -10,7 +10,7 @@
 text3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
        usePlotmath = is.language(texts), 
        family = par3d("family"), font = par3d("font"), 
-			 cex = par3d("cex"), useFreeType = par3d("useFreeType"),
+			 cex = par3d("cex"),
 			...) 
 texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
        usePlotmath = is.language(texts),
@@ -30,7 +30,7 @@ texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
   overrides any \code{adj} value given. Values of 0, 1, 2, 3, 4, 5, 6 respectively indicate positions at, below, to the left of, above, to the right of, in front of, and behind the specified coordinates.}
   \item{offset}{ when \code{pos} is specified, this value gives the offset of the label from the specified coordinate in fractions of a character width.}
   \item{ usePlotmath }{logical.  Should \code{\link{plotmath3d}} be used for the text?}
-  \item{ family }{A device-independent font family name, or "" }
+  \item{ family }{A device-independent font family name }
   \item{ font }{A numeric font number from 1 to 4 }
   \item{ cex }{A numeric character expansion value }
   \item{ useFreeType }{logical.  Should FreeType be used to draw text? (See details below.)}
@@ -60,12 +60,11 @@ parameter is \dQuote{language}, e.g. the result of
 a call to \code{\link{expression}} or \code{\link{quote}}.
 }
 \section{Fonts}{
-Fonts are specified using the \code{family}, \code{font}, \code{cex}, 
-and \code{useFreeType} arguments.  Defaults for the currently active
+Fonts are specified using the \code{family}, \code{font} and \code{cex} arguments.  Defaults for the currently active
 device may be set using \code{\link{par3d}}, or for future devices
 using \code{\link{r3dDefaults}}.
 
-The \code{family} specification is the same as for standard graphics, i.e.
+The \code{family} specification is similar to base graphics, i.e.
 families \cr
 \code{c("serif", "sans", "mono", "symbol")} \cr
 are normally
@@ -75,15 +74,12 @@ respectively.  Font 5 is recoded as family \code{"symbol"}
 font 1, but that is not supported unless specifically
 installed, so should be avoided.
 
-Using an unrecognized value for \code{"family"} will result in
-the system standard font as used in RGL up to version 0.76.  That font
-is not resizable and \code{font} values are ignored.
+The standard list of families can be extended using the
+\code{\link{rglFonts}} function.  See
+\code{\link{rglExtrafonts}} for other options.
 
-If \code{useFreeType} is \code{TRUE}, then RGL will use the FreeType
-anti-aliased fonts for drawing.  This is generally desirable, and it is the
-default on non-Windows systems if RGL was built to support FreeType.
-
-FreeType fonts are specified using the \code{\link{rglFonts}} function. 
+Using an unrecognized string for \code{"family"} will 
+cause \pkg{rgl} to pass the string to the \code{pangocairo} functions to interpret.
 }
 \value{
   The text drawing functions return the object ID of the text object (or sprites, in case of \code{usePlotmath = TRUE})

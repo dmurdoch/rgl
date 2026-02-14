@@ -41,6 +41,7 @@ TextSet::TextSet(Material& in_material,
                  const char** in_family,
                  int* in_style,
                  double* in_cex,
+                 const char** in_fontfile,
                  int in_npos,
                  int* in_pos)
  : SpriteSet(in_material, in_ntexts, in_center, 
@@ -69,11 +70,12 @@ TextSet::TextSet(Material& in_material,
   family.clear();
   style.clear();
   cex.clear();
+  fontfile.clear();
   for (int i = 0; i < in_nfonts; i++) {
     family.push_back(in_family[i]);
     style.push_back(in_style[i]);
     cex.push_back(in_cex[i]);
-    fontname.push_back("");
+    fontfile.push_back(in_fontfile[i]);
   }
 #ifdef HAVE_FREETYPE  
   blended = true;
@@ -155,7 +157,7 @@ void TextSet::do_measure_text()
                            texts + done,
                            family[fnt].c_str(),
                            style[fnt],
-                           fontname[fnt].c_str(),
+                           fontfile[fnt].c_str(),
                            20*cex[fnt],
                            res);
       done = i + 1;
@@ -226,7 +228,7 @@ void TextSet::draw_to_texture() {
                           texts + done,
                           family[fnt].c_str(),
                           style[fnt],
-                          fontname[fnt].c_str(),
+                          fontfile[fnt].c_str(),
                           20*cex[fnt],
                           texture_width, 
                           texture_height, 

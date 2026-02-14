@@ -657,6 +657,7 @@ static SEXP Query(Device* dev, RGLView* rglview, Subscene* sub, const char *what
     success = REAL(value)[0] >= 0;
   }    
   else if (streql(what, "useFreeType")) {
+    PROTECT(value = Rf_allocVector(LGLSXP, 1));
     LOGICAL(value)[0] = true;
     success = true;
   }    

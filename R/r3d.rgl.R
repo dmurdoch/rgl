@@ -545,6 +545,10 @@ text3d      <- function(x, y = NULL, z = NULL,
     family[font == 5] <- "symbol"
     font <- ifelse( font <= 0 | font > 4, 1, font) 
     
+    familyfont <- fixFonts(family, font)
+    family <- familyfont$family
+    fontfile <- familyfont$fontfile
+    
     ret <- .C( rgl_texts,
                success = as.integer(FALSE),
                idata,
@@ -555,6 +559,7 @@ text3d      <- function(x, y = NULL, z = NULL,
                as.character(family), 
                as.integer(font),
                as.numeric(cex),
+               as.character(fontfile),
                as.integer(npos),
                as.integer(pos),
                NAOK=TRUE

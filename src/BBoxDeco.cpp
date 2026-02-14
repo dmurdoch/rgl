@@ -633,12 +633,14 @@ void BBoxDeco::setAxes()
       const char * family[] = { "sans" };
       int style[] = { 1 };
       double cex[] = { 1.0 };
+      const char * fontfile[] = { "" };
 
       impl->labels[i] = new TextSet(material, axis->nticks, label_ptrs, values, 
                                     nullptr /*in_adj*/,
                                     true  /*in_ignoreExtent*/, 
                                     1, family, style,
                                     cex,
+                                    fontfile,
                                     0, nullptr /*in_pos*/);
       impl->ticks[i]->material.marginCoord = i;
       impl->labels[i]->material.marginCoord = i;

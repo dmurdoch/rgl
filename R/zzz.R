@@ -90,19 +90,9 @@
     if ( !is.null(frame) ) initValue <- getWindowsHandle("Console") # nolint
   } 
  
-  if (onlyNULL) {
-    rglFonts(serif = rep("serif", 4), sans = rep("sans", 4), mono = rep("mono", 4), symbol = rep("symbol", 4))
-  } else {
-    rglFonts(serif = rep(system.file("fonts", "FreeSerif.ttf", package="rgl"), 4),
-             sans  = rep(system.file("fonts", "FreeSans.ttf", package="rgl"), 4),
-             mono  = rep(system.file("fonts", "FreeMono.ttf", package="rgl"), 4),
-             symbol = rep(system.file("fonts", "FreeSerif.ttf", package="rgl"), 4))
-    if (requireNamespace("extrafont", quietly = TRUE))
-      suppressWarnings(
-        rglExtrafonts(sans = c("Helvetica", "Arial"), 
-                      serif = c("Times", "Times New Roman"), 
-                      mono = c("Courier", "Courier New")))
-  }
+  rglFonts(serif = "serif", 
+           sans = "sans", 
+           mono = "monospace")
   
   register_compare_proxy()
   

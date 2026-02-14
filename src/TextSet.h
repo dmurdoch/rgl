@@ -64,6 +64,7 @@ public:
           const char** in_family,
           int* in_style,
           double* in_cex,
+          const char** in_fontfile,
           int in_npos, 
           int* in_pos);
   ~TextSet();
@@ -82,7 +83,7 @@ private:
   std::vector<std::string> family;
   std::vector<int> style;
   std::vector<double> cex;
-  std::vector<std::string> fontname; // the font filename, or ""
+  std::vector<std::string> fontfile; // the font filename, or ""
   std::vector<text_extents_t> measures;
   std::vector<text_placement_t> placement;
   GLuint texture_width, texture_height;
