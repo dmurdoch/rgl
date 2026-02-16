@@ -7,6 +7,7 @@
 #include "Background.h"
 #include "BBoxDeco.h"
 #include "Light.h"
+#include "select.h"
 #include <map>
 
 
@@ -298,6 +299,8 @@ private:
   MouseModeID mouseMode[5];
   
   MouseSelectionID selectState;
+  
+  SelectionBox* selectbox = NULL; /* The selection box */
   
   void noneBegin(int mouseX, int mouseY) {};
   void noneUpdate(int mouseX, int mouseY)  {};

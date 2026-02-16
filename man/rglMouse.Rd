@@ -97,9 +97,11 @@ if (interactive() || in_pkgdown_example()) {
   share <- rglShared(id)
 
 # This puts the selector below the widget.
-  rglwidget(shared = share, width = 300, height = 300) \%>\% rglMouse()
+  rglwidget(shared = share, width = 300, height = 300) |> rglMouse() |> print()
   
 # This puts the selector above the widget.
-  rglMouse() \%>\% rglwidget(shared = share, width = 300, height = 300, controllers = .) 
+  rglMouse() |> rglwidget(shared = share, width = 300, height = 300, controllers = _) |> print()
+  
+  par3d(mouseMode = "trackball")
 }
 }

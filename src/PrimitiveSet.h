@@ -72,6 +72,11 @@ public:
    */
   virtual void initialize();
   
+  /**
+   * update data in vertex buffer
+   */
+  virtual void updateBuffer();
+  
 protected:
 
   /**

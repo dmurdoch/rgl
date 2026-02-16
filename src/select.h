@@ -1,10 +1,10 @@
-#ifndef PLX_SELECT_H
-#define PLX_SELECT_H
+#ifndef SELECT_H
+#define SELECT_H
 
 // C++ header file
 // This file is part of RGL
 
-#include "scene.h"
+#include "PrimitiveSet.h"
 
 namespace rgl {
 
@@ -12,14 +12,22 @@ namespace rgl {
 // Mouse selection rectangle
 //
 
-class SELECT
+class SelectionBox : public LineStripSet
 {
 public:
-  inline SELECT() { };
-  void render(double* position);
+  SelectionBox(Material& material, int in_nvertex, double* in_vertex);
+  void drawBegin(RenderContext* renderContext);
+  void drawEnd(RenderContext* renderContext);
+  /**
+   * overloaded
+   **/  
+  virtual std::string getTypeName() { return "selectionbox"; };
+  
+private:
+  Matrix4x4 savedModelMatrix, savedProjMatrix;
 };
 
 } // namespace rgl
 
-#endif // PLX_SELECT_H
+#endif // SELECT_H
 

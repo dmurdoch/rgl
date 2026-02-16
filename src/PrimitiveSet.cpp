@@ -352,6 +352,15 @@ void PrimitiveSet::initialize()
 #endif
 }
 
+void PrimitiveSet::updateBuffer() {
+#ifndef RGL_NO_OPENGL
+  if (material.useColorArray)
+    material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
+  
+  vertexArray.replaceInBuffer(vertexbuffer);
+#endif
+}
+
 void PrimitiveSet::initFatLines() {
 #ifndef RGL_NO_OPENGL
   int oldsize = indices.size();

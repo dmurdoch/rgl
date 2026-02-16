@@ -87,6 +87,8 @@ Subscene::~Subscene()
   for (int i=0; i<5; i++) 
     if (cleanupCallback[i]) 
       (*cleanupCallback[i])(userData + 3*i);
+    
+  delete selectbox;
 }
 
 bool Subscene::add(SceneNode* node)
@@ -649,7 +651,7 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
       background->render(renderContext);
       SAVEGLERROR;
     }
- 
+    
     //
     // RENDER SOLID SHAPES
     //
@@ -731,9 +733,8 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
     (*iter)->render(renderContext, opaquePass);
   
-  if (selectState == msCHANGING) {
-    SELECT select;
-    select.render(mousePosition);
+  if (selectState == msCHANGING && selectbox) {
+    selectbox->render(renderContext);
   }
 #endif
 }
@@ -1181,6 +1182,20 @@ void Subscene::setMouseMode(int button, MouseModeID mode)
         ButtonEndFunc[button] = &Subscene::polarEnd;
         break;
       case mmSELECTING:
+        if (!selectbox) {
+          Material mat(Color("gray50"),
+                       Color("gray50"));
+          mat.lit = false;
+          mat.depth_test = 7; // GL_ALWAYS
+          double v[] = {0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0};
+          selectbox = new SelectionBox(mat,
+                                       5, v);
+        }
+        
         ButtonBeginFunc[button] = &Subscene::mouseSelectionBegin;
         ButtonUpdateFunc[button] = &Subscene::mouseSelectionUpdate;
         ButtonEndFunc[button] = &Subscene::mouseSelectionEnd;
