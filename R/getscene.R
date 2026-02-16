@@ -204,6 +204,8 @@ plot3d.rglscene <- function(x, add=FALSE, open3dParams = getr3dDefaults(), ...) 
       ind <- !(names(root$par3d) %in% rgl.par3d.readonly)
       params[names(root$par3d)[ind]] <- root$par3d[ind]
     }
+    # Avoid the warning
+    params$useFreeType <- NULL
     open3d(params = params)
     
     # Some older scenes might not have a light in them, so only clear if one is there

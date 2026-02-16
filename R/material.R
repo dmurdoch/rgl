@@ -247,16 +247,20 @@ prepareTexture <- function(texture) {
   if (is.null(texture))
     result <- ""
   else if (is.character(texture) && length(texture) == 1) {
-    # Assume it's a filename
-    ext <- tolower(file_ext(texture))
-    if (ext %in% c("jpg", "jpeg")) {
-      if (requireNamespace("jpeg"))
-        arr <- jpeg::readJPEG(texture)
-      else
-        stop("JPEG textures require the 'jpeg' package")
-      src <- texture
-    } else
-      result <- normalizePath(texture)
+    if (texture == "<raster>") 
+      result <- ""
+    else {
+      # Assume it's a filename
+      ext <- tolower(file_ext(texture))
+      if (ext %in% c("jpg", "jpeg")) {
+        if (requireNamespace("jpeg"))
+          arr <- jpeg::readJPEG(texture)
+        else
+          stop("JPEG textures require the 'jpeg' package")
+        src <- texture
+      } else
+        result <- normalizePath(texture)
+    }
   } else {
     raster <- as.raster(texture)
     arr <- col2rgb(raster)/255

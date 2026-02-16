@@ -105,8 +105,12 @@ y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
 persp3d(x, y, z, col = "green3", aspect = "iso")
 
 s <- scene3d()
-# Make it bigger
-s$par3d$windowRect <- 1.5*s$par3d$windowRect
+
+# Make it bigger.  
+s$rootSubscene$par3d$windowRect <- 1.5*s$rootSubscene$par3d$windowRect
+# Use the default viewport, which fills the window
+s$rootSubscene$par3d$viewport <- NULL
+
 # and draw it again
 plot3d(s)
 }
