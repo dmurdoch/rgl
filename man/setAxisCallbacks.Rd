@@ -66,8 +66,8 @@ The functions should have a header of the form
 \code{function(margin)}.  The \code{margin} argument
 will be a string like \code{"x++"} indicating which margin
 would be chosen by R.  If RGL would not choose to draw any
-axis annotations (which happens with \code{\link{rglwidget}}, though
-not currently in R itself), only the letter will be passed,
+axis annotations (which can happen if all edges along that
+axis are hidden), only the letter will be passed,
 e.g. \code{"x"}.
 
 }

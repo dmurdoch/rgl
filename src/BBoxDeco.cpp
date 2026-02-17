@@ -741,6 +741,12 @@ void BBoxDeco::setAxisCallback(userAxisPtr fn, void* user, int axis)
     case 2: zaxis.mode = AXIS_USER;
             break;
   }
+  if (impl->ticks[axis])
+    delete impl->ticks[axis];
+  impl->ticks[axis] = nullptr;
+  if (impl->labels[axis])
+    delete impl->labels[axis];
+  impl->labels[axis] = nullptr;
 }
 
 void BBoxDeco::getAxisCallback(userAxisPtr *fn, void** user, int axis)
