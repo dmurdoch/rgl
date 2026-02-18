@@ -33,6 +33,10 @@
 \concept{blend}
 \concept{isTransparent}
 \concept{rgl.warnBlackTexture}
+\concept{vertex_shader}
+\concept{fragment_shader}
+\concept{user_attributes}
+\concept{user_uniforms}
 
 \title{Get or set material properties}
 \description{
@@ -237,6 +241,16 @@ destination alpha or its opposite.}
   "src_alpha_saturate"}{These are allowed, but to be useful
   they require other settings which \pkg{rgl} doesn't
   support.}
+  \item{"vertex_shader", "fragment_shader"}{
+  User-defined shaders.  See \code{\link{getShaders}}.
+  }
+  \item{"user_attributes"}{A list of matrices to be
+  used in shaders, with one row per vertex.  (If fewer
+  rows are given, they will be recycled as necessary.)
+  Vectors of values are assumed to be column matrices.}
+  \item{"user_uniforms"}{A list of matrices to be used
+  for all vertices in a shader.  Vectors of values
+  are assumed to be row matrices.}
   }
   }
   \item{col}{An allowed abbreviation of \code{color}.}

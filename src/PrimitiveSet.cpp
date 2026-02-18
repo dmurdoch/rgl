@@ -347,6 +347,16 @@ void PrimitiveSet::initialize()
     vertexArray.setAttribLocation(glLocs["aPos"]);
   } else 
     initFatLines();
+  
+  if (material.userAttributes.size()) {
+    int n = verticesTodraw.size();
+    if (!n) n = vertexArray.size();
+    for (auto it = material.userAttributes.begin(); it != material.userAttributes.end(); ++it) {
+      it->second->recycle(n);
+      it->second->appendToBuffer(vertexbuffer);
+      it->second->setLocation(glLocs[it->first]);
+    }
+  }
 
 	SAVEGLERROR;
 #endif

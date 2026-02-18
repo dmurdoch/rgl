@@ -124,6 +124,10 @@ SEXP rgl_texture_from_array(SEXP values);
 
 SEXP rgl_textureRaster(SEXP Rid);
 
+SEXP rgl_set_user_data(SEXP user_attributes, SEXP is_attribute);
+
+SEXP rgl_get_user_data(SEXP id, SEXP get_attr);
+
 #ifdef __cplusplus
 }
 #endif
@@ -131,4 +135,3 @@ SEXP rgl_textureRaster(SEXP Rid);
 } // namespace rgl
 
 #endif /* RGL_API_H */
-

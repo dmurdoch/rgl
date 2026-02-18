@@ -520,8 +520,8 @@
     if (!obj.vertexCount) return;
 
     if (fl.is_twosided && !fl.has_normals && type !== "background") {
-      if (typeof obj.userAttributes === "undefined")
-        obj.userAttributes = {};
+      if (typeof obj.material.user_attributes === "undefined")
+        obj.material.user_attributes = {};
       v1 = Array(v.length);
       v2 = Array(v.length);
       if (obj.type === "triangles" || obj.type === "quads") {
@@ -553,8 +553,8 @@
           }
         }
       }
-      obj.userAttributes.aPos1 = v1;
-      obj.userAttributes.aPos2 = v2;
+      obj.material.user_attributes.aPos1 = v1;
+      obj.material.user_attributes.aPos2 = v2;
     }
 
     if (!sprites_3d) {
@@ -812,15 +812,15 @@
     
     obj.alias = alias;
                           
-    if (typeof obj.userAttributes !== "undefined") {
+    if (typeof obj.material.user_attributes !== "undefined") {
       obj.userAttribOffsets = {};
       obj.userAttribLocations = {};
       obj.userAttribSizes = {};
-      for (attr in obj.userAttributes) {
+      for (attr in obj.material.user_attributes) {
       	obj.userAttribLocations[attr] = gl.getAttribLocation(obj.prog, attr);
       	if (obj.userAttribLocations[attr] >= 0) { // Attribute may not have been used
       	  obj.userAttribOffsets[attr] = stride;
-      	  v = rglwidgetClass.cbind(v, obj.userAttributes[attr]);
+      	  v = rglwidgetClass.cbind(v, obj.material.user_attributes[attr]);
       	  stride = v[0].length;
       	  obj.userAttribSizes[attr] = stride - obj.userAttribOffsets[attr];
       	} else
@@ -828,16 +828,16 @@
       }
     }
 
-    if (typeof obj.userUniforms !== "undefined" ||
-        typeof obj.userTextures !== "undefined") {
+    if (typeof obj.material.user_uniforms !== "undefined" ||
+        typeof obj.material.user_textures !== "undefined") {
       obj.userUniformLocations = {};
-      for (attr in obj.userUniforms) {
+      for (attr in obj.material.user_uniforms) {
         obj.userUniformLocations[attr] = gl.getUniformLocation(obj.prog, attr);
         if (obj.userUniformLocations[attr] === null)
           console.warn("uniform '"+attr+"' not found in object "+obj.id+".");
       }
-      for (attr in obj.userTextures) {
-        var texture = obj.userTextures[attr];
+      for (attr in obj.material.user_textures) {
+        var texture = obj.material.user_textures[attr];
         texture.texture = gl.createTexture();
         // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
         gl.bindTexture(gl.TEXTURE_2D, texture.texture);

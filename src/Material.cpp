@@ -175,6 +175,13 @@ void Material::beginUse(RenderContext* renderContext)
   
   if (texture)
     texture->beginUse(renderContext);
+  
+  SAVEGLERROR;
+  
+  for (auto it = userAttributes.begin(); it != userAttributes.end(); ++it)
+    it->second->beginUse();
+  
+  SAVEGLERROR;
  
 #endif
 }
@@ -211,6 +218,11 @@ void Material::endUse(RenderContext* renderContext)
   
   if (polygon_offset)
     glDisable(GL_POLYGON_OFFSET_FILL);
+  
+  for (auto it = userAttributes.begin(); it != userAttributes.end(); ++it)
+    it->second->endUse();
+  
+  SAVEGLERROR;
 #endif
 }
 

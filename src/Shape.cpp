@@ -169,6 +169,14 @@ void Shape::beginShader(RenderContext* renderContext)
     glUniform1f(glLocs["uAspect"], subscene->pviewport.width/subscene->pviewport.height);
   if (glLocs_has_key("uLwd"))
     glUniform1f(glLocs["uLwd"], material.lwd/subscene->pviewport.height);
+  
+  for (auto it = material.userUniforms.begin(); it != material.userUniforms.end(); ++it) 
+    if (glLocs_has_key(it->first.c_str())) {
+      it->second->setLocation(glLocs[it->first.c_str()]);
+      it->second->uploadUniform();
+    }
+  
+  SAVEGLERROR;
 }
 
 void Shape::beginSideTwo()
@@ -563,7 +571,17 @@ void Shape::initShader()
 	if (flags.fixed_size) {
 	  glLocs["textScale"] = glGetUniformLocation(shaderProgram, "textScale");
 	}
-;
+	
+	for (auto it = material.userAttributes.begin(); it != material.userAttributes.end(); ++it)
+	  glLocs[it->first.c_str()] =
+	  glGetAttribLocation(shaderProgram, it->first.c_str());
+	
+	SAVEGLERROR;
+	
+	for (auto it = material.userUniforms.begin(); it != material.userUniforms.end(); ++it)
+	  glLocs[it->first.c_str()] = glGetUniformLocation(shaderProgram, it->first.c_str());
+	
+	SAVEGLERROR;
 }
 
 bool Shape::glLocs_has_key(std::string key) {

@@ -139,7 +139,7 @@
         if (enabled[objLocs[i]]) gl.disableVertexAttribArray(obj[objLocs[i]]);
       for (i = 0; i < thisLocs.length; i++)
         if (enabled[thisLocs[i]]) gl.disableVertexAttribArray(this[objLocs[i]]);
-      if (typeof obj.userAttributes !== "undefined") {
+      if (typeof obj.material.user_attributes !== "undefined") {
       	for (attr in obj.userAttribSizes) {  // Not all attributes may have been used
       	  gl.disableVertexAttribArray( obj.userAttribLocations[attr] );
       	}
@@ -346,7 +346,7 @@
      * @param { object } obj - Object to work with
      */    
     rglwidgetClass.prototype.doUserAttributes = function(obj) {
-      if (typeof obj.userAttributes !== "undefined") {
+      if (typeof obj.material.user_attributes !== "undefined") {
         var gl = this.gl;
       	for (var attr in obj.userAttribSizes) {  // Not all attributes may have been used
       	  gl.enableVertexAttribArray( obj.userAttribLocations[attr] );
@@ -362,11 +362,11 @@
      */    
     rglwidgetClass.prototype.doUserUniforms = function(obj) {
       var gl = this.gl, attr;
-      if (typeof obj.userUniforms !== "undefined") {
+      if (typeof obj.material.user_uniforms !== "undefined") {
       	for (attr in obj.userUniformLocations) {
       	  var loc = obj.userUniformLocations[attr];
       	  if (loc !== null) {
-      	    var uniform = obj.userUniforms[attr];
+      	    var uniform = obj.material.user_uniforms[attr];
       	    if (typeof uniform !== "undefined") {
       	      var dim = rglwidgetClass.arrayDim(uniform);
       	      if (dim.length === 0)

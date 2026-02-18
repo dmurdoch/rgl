@@ -93,7 +93,8 @@ rgl.material.names <- c("color", "alpha", "lit", "ambient", "specular",
     "texminfilter", "texmagfilter", "texenvmap",
     "depth_mask", "depth_test", "isTransparent",
     "polygon_offset", "margin", "floating", "tag",
-    "blend", "vertex_shader", "fragment_shader")
+    "blend", "vertex_shader", "fragment_shader", "user_attributes",
+    "user_uniforms")
 
 rgl.material.readonly <- "isTransparent"
 
@@ -194,8 +195,8 @@ material3d  <- function(..., id = NULL) {
       args <- NULL
     }
     
-    if (length(args) == 1) {
-      if (is.list(args[[1]]) | is.null(args[[1]])) {
+    if (is.null(argnames) && length(args) == 1) {
+      if (is.list(args[[1]]) || is.null(args[[1]])) {
         args <- args[[1]]
         argnames <- names(args)
       }

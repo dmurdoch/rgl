@@ -1055,6 +1055,9 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 
   mat.colors.set( ncolor, colors, nalpha, alpha);
   mat.alphablend  = mat.alphablend || mat.colors.hasAlpha();
+  
+  mat.shaders[VERTEX_SHADER] = cdata[2];
+  mat.shaders[FRAGMENT_SHADER] = cdata[3];
 
   CHECKGLERROR;
 
@@ -1540,5 +1543,105 @@ SEXP rgl::rgl_textureRaster(SEXP Rid) {
     for (int j=0; j < w; j++)
       for (int k=0; k < planes; k++)
         INTEGER(result)[i + j*h + k*h*w] = pix->data[i*pix->bytesperrow + j*bytes + k];
+  return result;
+}
+
+SEXP rgl::rgl_set_user_data(SEXP user_data, SEXP is_attribute) {
+  /* We've already checked that we have a 
+   * named list, and all entries are numeric
+   */
+  
+  int is_attr = LOGICAL_ELT(is_attribute, 0);
+  Material* mat = &currentMaterial;
+  if (is_attr)
+    mat->userAttributes.clear();
+  else
+    mat->userUniforms.clear();
+  SEXP names = Rf_getAttrib(user_data, R_NamesSymbol);
+  for (int i=0; i<Rf_length(user_data); i++) {
+    SEXP attr = VECTOR_ELT(user_data, i);
+    const char *name = CHAR(STRING_ELT(names, i));
+    SEXP rdim = Rf_getAttrib(attr, R_DimSymbol);
+    /* NB:  number of rows of the attribute
+     *      is the dim, number of columns
+     *      is the size.
+     */
+    
+    int dim[2];
+    if (Rf_isNull(rdim)) {
+      dim[0] = 1; 
+      dim[1] = Rf_length(attr);
+    } else {
+      dim[0] = INTEGER_ELT(rdim,0);
+      dim[1] = INTEGER_ELT(rdim,1);
+    }
+    PROTECT(attr);
+    UserData* userdat = new UserData(dim[1], dim[0], REAL(attr));
+    UNPROTECT(1);
+    if (is_attr)
+      mat->userAttributes[name] = userdat;
+    else
+      mat->userUniforms[name] = userdat;
+  }
+  return Rf_ScalarInteger(RGL_SUCCESS);
+}
+
+SEXP rgl::rgl_get_user_data(SEXP id, SEXP get_attr) {
+  Material* mat = &currentMaterial;
+  int idval = INTEGER_ELT(id, 0);
+  if (idval > 0) {
+    Device* device;
+    if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      Shape* shape = scene->get_shape(idval);
+      if (shape) 
+        mat = shape->getMaterial(); 
+      else {
+        BBoxDeco* bboxdeco = scene->get_bboxdeco(idval);
+        if (bboxdeco)
+          mat = bboxdeco->getMaterial();
+        else {
+          Background* background = scene->get_background(idval);
+          if (background)
+            mat = background->getMaterial();
+          else
+            Rf_error("id not found");
+        }
+      }
+    } else
+      Rf_error("internal error");
+  }
+  
+  std::unordered_map<std::string, UserData*>* userData;
+  if (LOGICAL_ELT(get_attr, 0))
+    userData = &mat->userAttributes;
+  else
+    userData = &mat->userUniforms;
+  int n = userData->size();
+  if (!n)
+    return R_NilValue;
+  SEXP result, names;
+  PROTECT(result = Rf_allocVector(VECSXP, n));
+  PROTECT(names = Rf_allocVector(STRSXP, n));
+  int j = 0;
+  for (const auto& kv : *userData) {
+    const std::string& name = kv.first;
+    SET_STRING_ELT(names, j, Rf_mkChar(name.c_str()));
+    UserData* data = kv.second;
+    SEXP dat;
+    int dim = data->getDim(),
+        size = data->getSize(),
+        nelem = dim*size; 
+    PROTECT(dat = Rf_allocMatrix(REALSXP, dim, size));
+    float* values = data->getData();
+    for (int i=0; i<nelem; i++)
+      SET_REAL_ELT(dat, i, *values++);
+    SET_VECTOR_ELT(result, j, dat);
+    j++;
+    UNPROTECT(1);
+  }
+  Rf_setAttrib(result, R_NamesSymbol, names);
+  UNPROTECT(2);
   return result;
 }

@@ -1,10 +1,9 @@
+#include "shaders.h"
+#include "init.h"
 
 #include <string>
 #include <fstream>
 #include <iostream>
-
-#include "init.h"
-#include "shaders.h"
 
 using namespace rgl;
 
@@ -29,3 +28,58 @@ std::string rgl::defaultShader(ShaderType type)
 	}
 	return result;
 }
+
+UserData::UserData(int in_size, int in_dim, double* values) {
+  size = in_size;
+  dim = in_dim;
+  location = -1;
+  offset = -1;
+  floats.reserve(size*dim);
+  for (int i = 0; i < size*dim; i++)
+    floats.push_back(static_cast<float>(*values++));
+}
+
+void UserData::recycle(unsigned int newsize) {
+  floats.resize(newsize*dim);
+  if (newsize > size) {
+    for (int i=size; i < newsize; i++) {
+      int i0 = i % size;
+      for (int j=0; j < dim; j++)
+        floats[i*dim + j] = floats[i0*dim + j];
+    }
+  }
+  size = newsize;
+}
+
+#ifndef RGL_NO_OPENGL
+void UserData::beginUse() {
+  if (location >= 0) {
+    glEnableVertexAttribArray(location);
+    glVertexAttribPointer(location, dim, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
+  }
+}
+
+void UserData::endUse() {
+  if (location >= 0)
+    glDisableVertexAttribArray(location);
+}
+
+void UserData::appendToBuffer(std::vector<GLubyte>& buffer)
+{
+  offset = buffer.size();
+  const GLubyte* p;
+  p = reinterpret_cast<const GLubyte*>(floats.data());
+  buffer.insert(buffer.end(), p, p + floats.size()*sizeof(float));
+}
+
+void UserData::uploadUniform() {
+  switch(dim) {
+  case 1: glUniform1fv(location, size, floats.data()); break;
+  case 2: glUniform2fv(location, size, floats.data()); break;
+  case 3: glUniform3fv(location, size, floats.data()); break;
+  case 4: glUniform4fv(location, size, floats.data()); break;
+  case 16: glUniformMatrix4fv(location, size, false, floats.data()); break;
+  default: Rf_error("Only scalar floats, vec2, vec3, vec4 and mat4 are supported.");
+  }
+}
+#endif

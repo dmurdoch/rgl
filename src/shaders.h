@@ -1,6 +1,8 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
+#include "opengl.h"
+#include <vector>
 #include <string>
 
 namespace rgl {
@@ -34,6 +36,29 @@ struct ShaderFlags {
 	bool depth_sort;
 	bool is_subscene;
 	bool is_clipplanes;
+};
+
+class UserData {
+public:
+  UserData(int in_size, int in_dim, double* values);
+  int getSize() { return size;}
+  int getDim()  { return dim; }
+  float* getData() { return floats.data(); }
+  void recycle( unsigned int newsize );
+#ifndef RGL_NO_OPENGL
+  void setLocation(GLint loc) { location = loc; };
+  /* These are used for attributes */
+  void beginUse();
+  void endUse();
+  void appendToBuffer(std::vector<GLubyte>& buffer);
+  /* These are used for uniforms */
+  void uploadUniform();
+#endif  
+  
+private:
+  int size, dim, offset;
+  std::vector<float> floats;
+  GLint location;
 };
 
 std::string defaultShader(ShaderType type);

@@ -292,6 +292,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    FUNDEF(rgl_primitive, 4),
    FUNDEF(rgl_texture_from_array, 1),
    FUNDEF(rgl_textureRaster, 1),
+   FUNDEF(rgl_set_user_data, 2),
+   FUNDEF(rgl_get_user_data, 2),
 
    {NULL, NULL, 0}
  };

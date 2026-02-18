@@ -134,8 +134,8 @@
      */
     rglwidgetClass.prototype.getShaders = function(obj) {
       var header, 
-        vertex = obj.userVertexShader, 
-        fragment = obj.userFragmentShader;
+        vertex = obj.material.vertex_shader, 
+        fragment = obj.material.fragment_shader;
       
       header = rglwidgetClass.getDefines(
         obj.id, obj.type, obj.flags, 

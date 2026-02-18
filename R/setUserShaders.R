@@ -2,18 +2,22 @@ setUserShaders <- function(ids, vertexShader = NULL, fragmentShader = NULL,
 			   attributes = NULL, uniforms = NULL, textures = NULL,
 			   scene = scene3d(minimal),
 			   minimal = TRUE) {
+  .Deprecated("material3d", "rgl",
+              msg = "Set material properties instead of using setUserShaders().")
   stopifnot(inherits(scene, "rglscene"))
   for (i in ids) {
     id <- as.character(i)
     obj <- scene$objects[[id]]
     if (!is.null(vertexShader))
-      obj$userVertexShader <- paste(vertexShader, collapse = "\n")
+      obj$material$vertex_shader <- paste(vertexShader, collapse = "\n")
     if (!is.null(fragmentShader))
-      obj$userFragmentShader <- paste(fragmentShader, collapse = "\n")
-    obj$userAttributes <- attributes
-    obj$userUniforms <- uniforms
-    obj$userTextures <- textures
-    alldata <- c(obj$userAttributes, obj$userUniforms, obj$userTextures)
+      obj$material$fragment_shader <- paste(fragmentShader, collapse = "\n")
+    obj$material$user_attributes <- attributes
+    obj$material$user_uniforms <- uniforms
+    obj$material$user_textures <- textures
+    alldata <- c(obj$material$user_attributes,
+                 obj$material$user_uniforms,
+                 obj$material$user_textures)
     allnames <- names(alldata)
     if (length(allnames) != length(alldata) ||
         any(nchar(allnames) == 0) ||
@@ -38,8 +42,8 @@ getShaders <- function(id, scene = scene3d(minimal), minimal = TRUE,
 	}
 	if (is.na(useJavascript) || useJavascript) {
 		obj <- scene$objects[[as.character(id)]]
-		vertexShader <- obj$userVertexShader
-		fragmentShader <- obj$userFragmentShader
+		vertexShader <- obj$material$vertex_shader
+		fragmentShader <- obj$material$fragment_shader
 		if (is.null(vertexShader) || is.null(fragmentShader)) {
 			if (!requireNamespace("V8"))
 				stop("This function requires the V8 package.")

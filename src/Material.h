@@ -1,11 +1,13 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include <string>
 #include "shaders.h"
 #include "Color.h"
 #include "Texture.h"
 #include "RenderContext.h"
+
+#include <string>
+#include <unordered_map>
 
 namespace rgl {
 
@@ -70,7 +72,7 @@ public:
   std::string       tag;
   int          blend[2];
   std::string  shaders[NUM_SHADERS];
-  
+  std::unordered_map<std::string, UserData*> userAttributes, userUniforms;
   double       glVersion;
 };
 

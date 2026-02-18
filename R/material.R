@@ -40,6 +40,8 @@ rgl.material0 <- function(
   blend = c("src_alpha", "one_minus_src_alpha"),
   vertex_shader = "", 
   fragment_shader = "",
+  user_attributes = NULL,
+  user_uniforms = NULL,
   col,
   ...
 ) {
@@ -149,6 +151,26 @@ rgl.material0 <- function(
   if (ret && !is.null(arr))
     ret <- .Call(rgl_texture_from_array, arr)
   
+  # Make sure attributes and uniforms
+  # are stored as doubles and contain
+  # cases in each column
+  
+  if (ret) {
+    stopifnot(is.null(user_attributes) || is.list(user_attributes), 
+              length(user_attributes) == length(names(user_attributes)))
+    user_attributes <- lapply(user_attributes, function(x) {storage.mode(x) <- "double"; t(x)})
+    ret <- .Call(rgl_set_user_data,
+                 user_attributes, TRUE)
+  }
+    
+  if (ret) {
+    stopifnot(is.null(user_uniforms) || is.list(user_uniforms),
+              length(user_uniforms) == length(names(user_uniforms)))
+    user_uniforms <- lapply(user_uniforms, function(x) {storage.mode(x) <- "double"; if (is.matrix(x)) t(x) else t(t(x))})
+    ret <- .Call(rgl_set_user_data,
+                 user_uniforms, FALSE)
+  }
+  
   ret
 }
 
@@ -201,6 +223,15 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
+  # extract attributes and uniforms,
+  # and transpose them back to the usual
+  # form
+  
+  user_attributes <- .Call(rgl_get_user_data, as.integer(id), TRUE)
+  user_attributes <- lapply(user_attributes, t) 
+  user_uniforms <- .Call(rgl_get_user_data, as.integer(id), FALSE)
+  user_uniforms <- lapply(user_uniforms,t)  
+  
   list(color = rgb(idata[32 + 3*(seq_len(idata[1]))], 
                    idata[33 + 3*(seq_len(idata[1]))], 
                    idata[34 + 3*(seq_len(idata[1]))], maxColorValue = 255),
@@ -236,9 +267,11 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   		 vertex_shader = structure(cdata[3], class = "rglShader",
   		 													type = "vertex"),
   		 fragment_shader = structure(cdata[4], class = "rglShader",
-  		 													type = "fragment")
+  		 													type = "fragment"),
+  		 user_attributes = user_attributes,
+  		 user_uniforms = user_uniforms
        )
-                   
+            
 }
 
 prepareTexture <- function(texture) {
