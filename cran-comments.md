@@ -1,17 +1,8 @@
-# 1.3.34
+# 1.4.0
 
-This is mostly a small update requested by CRAN to fix
-some links in one of the vignettes.  It also contains some
-small bug fixes.  
+This is a major re-write of rgl internals to support more modern OpenGL implementations.  Currently OpenGL 3.3
+is targeted, and the code should be compatible with all
+newer versions as well.
 
-The largest change is that some functions that
-were marked deprecated have been made defunct.  Package
-maintainers were notified about this change on Jan 10. 
-As far as I can see, the following packages have not made
-any change to drop the use of the now-defunct functions:
-
-  SimCop, gifti, nat.nblast, radviz3d
-  
-These have updated:
-
-  cifti, hyperoverlap, msir
+The main advantage of the change is to support shaders
+within R as well as in WebGL.
