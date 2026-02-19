@@ -6,6 +6,10 @@ all drawing.
 The pangocairo set of libraries are used for display
 in all cases.  On some platforms that involves Freetype.
 
+# rgl 1.3.35
+
+* Fixed a typo that triggered a C++20 warning.
+
 # rgl 1.3.34
 
 * The WebGL code did not handle the case of lit objects
