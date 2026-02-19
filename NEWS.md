@@ -1,3 +1,7 @@
+# rgl 1.3.35
+
+* Fixed a typo that triggered a C++20 warning.
+
 # rgl 1.3.34
 
 * The WebGL code did not handle the case of lit objects

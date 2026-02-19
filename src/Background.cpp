@@ -231,11 +231,11 @@ void Background::getAttribute(SceneNode* subscene, AttribID attrib, int first, i
       if (first <= 0)  
         *result++ = (double) sphere;
       if (first <= 1)
-	*result++ = (double) fogtype == FOG_LINEAR;
+	*result++ = (double) (fogtype == FOG_LINEAR);
       if (first <= 2)
-	*result++ = (double) fogtype == FOG_EXP;
+	*result++ = (double) (fogtype == FOG_EXP);
       if (first <= 3)
-	*result++ = (double) fogtype == FOG_EXP2;
+	*result++ = (double) (fogtype == FOG_EXP2);
       return;
     case FOGSCALE:
       if (first <= 0)
