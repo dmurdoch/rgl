@@ -372,28 +372,31 @@ std::string Subscene::getTextAttribute(SceneNode* subscene, AttribID attrib, int
     return SceneNode::getTextAttribute(subscene, attrib, index);
 }
 
-void Subscene::renderClipplanes(RenderContext* renderContext)
+void Subscene::uploadClipplanes(int location)
 {
-  std::vector<ClipPlaneSet*>::iterator iter;
-  
-  ClipPlaneSet::num_planes = 0;
-	
-  for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
-    ClipPlaneSet* plane = *iter;
-    plane->render(renderContext);
-    SAVEGLERROR;
+#ifndef RGL_NO_OPENGL
+  int n = countClipplanes(),
+    k = 0;
+  std::vector<GLfloat> values;
+  values.resize(4*n);
+  Matrix4x4 invMV = modelMatrix.inverse();
+  invMV.transpose();
+  for (int i=0; i < clipPlanes.size(); i++) {
+    ClipPlaneSet* clip = clipPlanes[i];
+    for (int j=0; j < clip->getElementCount(); j++) {
+      Vertex4 norm = invMV*clip->getVals(j);
+      values[k] = norm[0];
+      values[k+1] = norm[1];
+      values[k+2] = norm[2];
+      values[k+3] = norm[3];
+      k += 4;
+    }
   }
-}
-
-void Subscene::disableClipplanes(RenderContext* renderContext)
-{
-  std::vector<ClipPlaneSet*>::iterator iter;
-	
-  for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
-    ClipPlaneSet* plane = *iter;
-    plane->enable(false);
-    SAVEGLERROR;
-  }
+  glUniform4fv(location,
+               n,
+               values.data());
+  SAVEGLERROR;
+#endif
 }
  
 int Subscene::get_id_count(TypeID type, bool recursive)
@@ -674,8 +677,6 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
 
     SAVEGLERROR;
   }
-  // CLIP PLANES
-  renderClipplanes(renderContext);
   
   if (opaquePass) {
     
@@ -722,10 +723,6 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
   }
   /* Reset flag(s) now that scene has been rendered */
   getModelViewpoint()->scaleChanged = false;
-
-  /* Reset clipplanes */
-  disableClipplanes(renderContext);
-  SAVEGLERROR;
   
   // Render subscenes
     

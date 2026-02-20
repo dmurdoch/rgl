@@ -166,8 +166,7 @@ public:
   /* Do the OpenGL rendering */
   void render(RenderContext* renderContext, bool opaquePass);
 
-  void renderClipplanes(RenderContext* renderContext);
-  void disableClipplanes(RenderContext* renderContext);
+  void uploadClipplanes(int location);
   
   void renderUnsorted(RenderContext* renderContext);
   void renderZsort(RenderContext* renderContext);

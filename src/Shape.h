@@ -128,11 +128,6 @@ public:
   
   const bool isBlended() const { return blended; }
   
-  /**
-   * Does this shape need to go at the head of the shape list, rather than the tail?
-   * (e.g. clip planes need to come first 
-   **/
-  
   virtual bool isClipPlane() { return false; }
 
   /* call this first to set the context where the next functions
@@ -189,6 +184,7 @@ protected:
 	GLuint ibo;
 	void initShader();
 	void beginShader(RenderContext* renderContext);
+	void beginClipplanes(RenderContext* renderContext);
 	void beginSideTwo();
 	void endShader();
 	void checkShader(const char* type, GLuint shader);

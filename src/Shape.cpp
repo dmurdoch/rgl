@@ -170,6 +170,9 @@ void Shape::beginShader(RenderContext* renderContext)
   if (glLocs_has_key("uLwd"))
     glUniform1f(glLocs["uLwd"], material.lwd/subscene->pviewport.height);
   
+  if (glLocs_has_key("vClipplane"))
+    subscene->uploadClipplanes(glLocs["vClipplane"]);
+  
   for (auto it = material.userUniforms.begin(); it != material.userUniforms.end(); ++it) 
     if (glLocs_has_key(it->first.c_str())) {
       it->second->setLocation(glLocs[it->first.c_str()]);

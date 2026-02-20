@@ -11,8 +11,6 @@ using namespace rgl;
 //   ClipPlaneSet
 //
 
-int ClipPlaneSet::num_planes = 0;
-
 ClipPlaneSet::ClipPlaneSet(Material& in_material, int in_nnormal, double* in_normal, int in_noffset, double* in_offset)
  : 
    Shape(in_material,true),
@@ -50,24 +48,13 @@ void ClipPlaneSet::getAttribute(SceneNode* subscene, AttribID attrib, int first,
   }
 }
 
-void ClipPlaneSet::renderBegin(RenderContext* renderContext)
+Vec4 ClipPlaneSet::getVals(int index)
 {
-  num_planes += nPlanes;
-}
-
-void ClipPlaneSet::drawPrimitive(RenderContext* renderContext, int index)
-{
-#ifndef RGL_NO_OPENGL   
-  GLdouble eqn[4];
-  eqn[0] = normal.getRecycled(index).x;
-  eqn[1] = normal.getRecycled(index).y;
-  eqn[2] = normal.getRecycled(index).z;
-  eqn[3] = offset.getRecycled(index);
-#endif
-}
-
-void ClipPlaneSet::enable(bool show)
-{
+  Vec4 result(normal.getRecycled(index).x,
+              normal.getRecycled(index).y,
+              normal.getRecycled(index).z,
+              offset.getRecycled(index));
+  return result;
 }
 
 void ClipPlaneSet::intersectBBox(AABox& bbox)
