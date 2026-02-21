@@ -185,15 +185,25 @@ void TextSet::do_pack_text()
   
   text_extents_t *m = measures.data();
   text_placement_t *xy = placement.data();
-  const char * texts[n];
+  
+  std::vector<std::string> keys;
+
   for (int i = 0; i < n; i++)
-    texts[i] = textArray[i].c_str();
+    keys.push_back(textArray[i] + "_" +
+              family[i % family.size()] + "_" + 
+              std::to_string(style[i % style.size()]) + "_" + 
+              fontfile[i % fontfile.size()] + "_" +
+              std::to_string(cex[i % cex.size()]));
+  std::vector<const char*> c_strs;
+  c_strs.reserve(n);
+  for (int i = 0; i < n; i++)
+    c_strs.push_back(keys[i].c_str());
   texture_width = 0;
   for (int i=0; i < n; i++) {
     if (texture_width < measures[i].width) texture_width = measures[i].width;
   }
   texture_width = NextPowerOf2(texture_width);
-  texture_height = pack_text(n, texts, 
+  texture_height = pack_text(n, c_strs.data(), 
                              m, xy, texture_width);
 
   texture_height = NextPowerOf2(texture_height);

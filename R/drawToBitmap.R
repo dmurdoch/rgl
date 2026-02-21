@@ -69,8 +69,10 @@ drawToBitmap <- function(texts, cex = par3d("cex"),
     heights <- measures[, "ascent"] + measures[,"descent"]
     xy <- cbind(x = 1 - measures[, "x_bearing"], y = cumsum(c(1, heights[-n])))
     attr(xy, "height") <- max(xy[,2] + measures[, "ascent"] + measures[, "descent"])
-  } else
-    xy <- pack_text(texts, measures, bmWidth)
+  } else {
+    key <- paste(texts, family, font, cex, sep="_")
+    xy <- pack_text(key, measures, bmWidth)
+  }
 
   bmHeight <- max(attr(xy, "height"), minHeight)
   
