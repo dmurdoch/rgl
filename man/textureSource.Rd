@@ -4,14 +4,17 @@
 Retrieve source code used to produce texture file.
 }
 \description{
-Internally, \pkg{rgl} mainly works with PNG files for textures.
-If a texture is requested using a different format, a temporary
-PNG file of the image will be saved.  This function allows
-you to retrieve the original expression used to produce
-the texture.
+This function is deprecated.
 
-Note that some textures have no corresponding PNG file.
-For those, use \code{\link{rgl.textureRaster}}.
+Previous versions of \pkg{rgl} mainly worked with PNG files for textures.
+If a texture was requested using a different format, a temporary
+PNG file of the image was saved.  This function allows
+you to retrieve the original expression used to produce
+the texture in that case.
+
+Note that in this version of \pkg{rgl} such textures have
+no corresponding PNG file.
+Use \code{\link{rgl.textureRaster}} instead.
 }
 \usage{
 textureSource(texture)
@@ -34,7 +37,8 @@ be deleted sooner.
 }
 \value{
 If \code{texture} is specified and it is the name of a 
-temporary PNG texture file produced by \pkg{rgl}, the 
+temporary PNG texture file produced by an older version of 
+\pkg{rgl}, the 
 expression used to specify the texture will be returned.  
 If it is the name of some other file, \code{texture} will
 be returned.
@@ -45,15 +49,4 @@ holding the temporary texture files will be returned.
 
 \seealso{
 \code{\link{material3d}}
-}
-\examples{
-xyz <- cbind(c(0,1,1,0), c(0,0,1,1), c(0,0,0,0))
-st <- xyz[,1:2]
-
-open3d()
-id <- quads3d(xyz, texcoords = st, 
-               texture = as.raster(matrix(colors()[1:120], ncol = 10)), 
-               col="white")
-material3d(id = id, "texture")
-textureSource(material3d(id = id, "texture"))
 }

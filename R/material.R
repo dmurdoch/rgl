@@ -311,8 +311,11 @@ prepareTexture <- function(texture) {
 }
 
 textureSource <- function(texture) {
+  .Deprecated("rgl.textureRaster")
   if (missing(texture))
     return(.rglEnv$textureDir)
+  else if (texture == "<raster>")
+    stop("No texture source.")
   if (requireNamespace("png")) {
     png <- png::readPNG(texture, info = TRUE)
     if (!is.null(info <- attr(png, "info")) && 
