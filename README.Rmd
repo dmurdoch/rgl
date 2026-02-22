@@ -45,6 +45,25 @@ shade3d(tetrahedron3d(), col = col[5])
 [![R-CMD-check](https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
+
+NOTES ON THIS BRANCH
+--------------------
+
+This is the "shader" branch of the development version
+of rgl.  The goal of this branch is to support OpenGL
+3.3.  Currently development is taking place within
+XQuartz on macOS, so functions are limited to OpenGL
+2.1; however, I am avoiding fixed pipeline calls.
+
+Still to do:
+
+  - bug checking
+  - documentation updates
+  - adding a native macOS backend instead of using
+  XQuartz, so 3.3 is available.
+  - updating the configure script
+  - moving the rasterText code into rgl
+
 INTRODUCTION
 ------------
 The RGL package is a visualization device system for R, using 

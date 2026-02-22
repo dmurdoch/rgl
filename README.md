@@ -12,6 +12,22 @@ status](https://www.r-pkg.org/badges/version/rgl)](https://CRAN.R-project.org/pa
 [![R-CMD-check](https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dmurdoch/rgl/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
+## NOTES ON THIS BRANCH
+
+This is the “shader” branch of the development version of rgl. The goal
+of this branch is to support OpenGL 3.3. Currently development is taking
+place within XQuartz on macOS, so functions are limited to OpenGL 2.1;
+however, I am avoiding fixed pipeline calls.
+
+Still to do:
+
+- bug checking
+- documentation updates
+- adding a native macOS backend instead of using XQuartz, so 3.3 is
+  available.
+- updating the configure script
+- moving the rasterText code into rgl
+
 ## INTRODUCTION
 
 The RGL package is a visualization device system for R, using OpenGL or
@@ -149,7 +165,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_1.3.30.tar.gz
+    R CMD INSTALL rgl_1.4.0.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -189,7 +205,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.3.30.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_1.4.0.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
