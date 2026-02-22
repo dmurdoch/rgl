@@ -9,7 +9,7 @@ as is used to draw text via textures.
 }
 \usage{
 drawToBitmap(texts, 
-             cex = par3d(cex), 
+             cex = par3d("cex"), 
              family = par3d("family"), 
              fontfile = NULL,
              font = par3d("font"), 
@@ -17,7 +17,7 @@ drawToBitmap(texts,
              onePerLine = FALSE,
              unique = !onePerLine,
              minWidth = 0, minHeight = 0,
-             powerOfTwo = TRUE,
+             powerOfTwo = FALSE,
              verbose = FALSE)
 }
 \arguments{

@@ -27,6 +27,9 @@ being used as the texture.
 A raster object holding the bitmap.
 }
 \examples{
-id <- text3d(1:4, 1:4, 1:4, c("This is text.", "This too.", "And this.", "And this."), col=rainbow(4), cex=3)
+id <- text3d(1:4, 1:4, 1:4, 
+             c("This is text.", "This too.", 
+               "And this.", "And this."), 
+             col=rainbow(4), cex=3)
 plot(rgl.textureRaster(id))
 }

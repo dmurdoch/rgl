@@ -171,8 +171,10 @@ export(.check3d,
  
  importFrom(graphics, legend, par, plot, plot.new, plot.window, polygon,
        segments, strwidth, strheight, text)
- importFrom(grDevices, as.raster, col2rgb, colorRamp, dev.cur, dev.new, 
-       dev.off, png, postscript, rgb, xy.coords, xyz.coords)
+ importFrom(grDevices, as.raster, col2rgb, colorRamp,
+            dev.cur, dev.list, dev.new, dev.off, 
+            dev.prev, dev.set,
+            png, postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, get_all_vars, model.frame, 
       qchisq, qf, splinefun, terms, var)
  importFrom(tools, file_ext)

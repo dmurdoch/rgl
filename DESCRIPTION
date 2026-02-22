@@ -27,7 +27,7 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
               person("Mike", "Stein", role = "ctb"),
               person("Jonathon", "Love", role = "ctb"),
               person("Mapbox team", role = c("ctb", "cph")))
-Depends: R (>= 3.6.0)
+Depends: R (>= 4.2.0)
 Suggests: MASS, rmarkdown (>= 2.16), deldir (>= 1.0-4), orientlib, lattice, misc3d,
           magick, plotrix (>= 3.7-3), interp, alphashape3d, tcltk,
           js (>= 1.2), webshot2 (>= 0.1.0), downlit (>= 0.4.0), pkgdown (>= 2.0.0), extrafont,

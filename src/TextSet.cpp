@@ -139,14 +139,14 @@ void TextSet::do_measure_text()
   int n = getElementCount();
   if (!n) return;
   
-  const char * texts[n];
+  std::vector<const char *> texts;
   int done = 0; /* the count of entries done */
   text_extents_t *res = measures.data();
   int fsize = family.size();
 
   for (int i = 0; i < n; i++) {
     
-    texts[i] = textArray[i].c_str();
+    texts.push_back(textArray[i].c_str());
     
     if (i == n-1 || 
         family[i % fsize] != family[(i+1) % fsize] ||
@@ -154,7 +154,7 @@ void TextSet::do_measure_text()
         cex[i % fsize]    != cex[(i+1) % fsize]) {
       int fnt = done % fsize;
       res = measure_text(i - done + 1,
-                           texts + done,
+                           texts.data() + done,
                            family[fnt].c_str(),
                            style[fnt],
                            fontfile[fnt].c_str(),
@@ -215,10 +215,10 @@ void TextSet::draw_to_texture() {
   int n = getElementCount();
   if (!n) return;
     
-  const char *texts[n];
+  std::vector<const char *> texts;
 
   for (int i = 0; i < n; i++)
-    texts[i] = textArray[i].c_str();
+    texts.push_back(textArray[i].c_str());
   
   int stride = get_buffer_stride(texture_width);
   
@@ -235,7 +235,7 @@ void TextSet::draw_to_texture() {
       int fnt = done % fsize;
       draw_text_to_buffer(i - done + 1, 
                           xy + done, 
-                          texts + done,
+                          texts.data() + done,
                           family[fnt].c_str(),
                           style[fnt],
                           fontfile[fnt].c_str(),

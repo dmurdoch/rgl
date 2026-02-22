@@ -15,7 +15,7 @@ text3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
 texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
        usePlotmath = is.language(texts),
        family = par3d("family"), font = par3d("font"), 
-			 cex = par3d("cex"), useFreeType = par3d("useFreeType"),
+			 cex = par3d("cex"), 
 			...)       
 }
 \arguments{
@@ -33,7 +33,6 @@ texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
   \item{ family }{A device-independent font family name }
   \item{ font }{A numeric font number from 1 to 4 }
   \item{ cex }{A numeric character expansion value }
-  \item{ useFreeType }{logical.  Should FreeType be used to draw text? (See details below.)}
   \item{ ... }{Material properties; see \code{\link{material3d}} for details.} 
 }
 \details{
