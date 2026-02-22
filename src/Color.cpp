@@ -269,7 +269,7 @@ void ColorArray::useArray() const
 	if (location >= 0) {
 		glEnableVertexAttribArray(location); 
 		SAVEGLERROR;
-		glVertexAttribPointer(location, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (GLbyte*)0 + offset);
+		glVertexAttribPointer(location, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, reinterpret_cast<void*>(offset));
 		SAVEGLERROR;
 	}
 #endif

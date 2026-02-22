@@ -55,7 +55,7 @@ void UserData::recycle(unsigned int newsize) {
 void UserData::beginUse() {
   if (location >= 0) {
     glEnableVertexAttribArray(location);
-    glVertexAttribPointer(location, dim, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
+    glVertexAttribPointer(location, dim, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
   }
 }
 

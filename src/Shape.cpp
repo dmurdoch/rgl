@@ -115,11 +115,11 @@ void Shape::beginShader(RenderContext* renderContext)
     glUniform1f(glLocs.at("shininess"), material.shininess);
   }
   if (glLocs_has_key("ambient")) { // just test one, and they should all be there
-    float ambient[3*nlights], 
-                 specular[3*nlights], 
-                         diffuse[3*nlights],
-                                lightDir[3*nlights];
-    int viewpoint[nlights], finite[nlights];
+    std::vector<float> ambient(3*nlights), 
+                 specular(3*nlights), 
+                 diffuse(3*nlights),
+                 lightDir(3*nlights);
+    std::vector<int> viewpoint(nlights), finite(nlights);
     for (int i=0; i < subscene->countLights(); i++) {
       Light *light = subscene->getLight(i);
       for (int j=0; j < 3; j++) {
@@ -137,12 +137,12 @@ void Shape::beginShader(RenderContext* renderContext)
         specular[3*i + j] = 0;
         diffuse[3*i + j] = 0;
       }
-      glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient);
-    glUniform3fv( glLocs.at("specular"), 3*nlights, specular);
-    glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse);
-    glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir);
-    glUniform1iv( glLocs.at("viewpoint"), nlights, viewpoint);
-    glUniform1iv( glLocs.at("finite"), nlights, finite);
+      glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient.data());
+    glUniform3fv( glLocs.at("specular"), 3*nlights, specular.data());
+    glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse.data());
+    glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir.data());
+    glUniform1iv( glLocs.at("viewpoint"), nlights, viewpoint.data());
+    glUniform1iv( glLocs.at("finite"), nlights, finite.data());
   }
   
   if (glLocs_has_key("uFogMode")) { // If it has one, it has them all
@@ -616,8 +616,8 @@ void Shape::loadBuffers()
 void Shape::printUniform(const char *name, int rows, int cols, int transposed,
                                 GLint type, 
                                 bool verbose) {
-	float data[4*nlights > 16 ? 4*nlights : 16];
-	int idata[nlights];
+	std::vector<float> data(4*nlights > 16 ? 4*nlights : 16);
+	std::vector<int> idata(nlights);
 	
 	GLint location;
 	if (glLocs_has_key(name)) {
@@ -634,12 +634,12 @@ void Shape::printUniform(const char *name, int rows, int cols, int transposed,
 		else
 		  Rprintf("[%d,%d]\n", rows, cols);
 		if (type == GL_FLOAT)
-			glGetUniformfv(shaderProgram, location, data);
+			glGetUniformfv(shaderProgram, location, data.data());
 		else if (type == GL_INT)
-			glGetUniformiv(shaderProgram, location, idata);
+			glGetUniformiv(shaderProgram, location, idata.data());
 		else if (type == GL_BOOL)
 		  glGetUniformiv(shaderProgram,
-location, idata);
+location, idata.data());
 		else if (type == -1)
 		  Rprintf("sampler2D\n");
 		else{
@@ -767,9 +767,9 @@ void Shape::printAttribute(const char* name, int nvertices, bool verbose) {
 						step += size*sizeof(float);
 				} 
 			} else {
-				float value[size];
+				std::vector<float> value(size);
 				glGetVertexAttribfv(location,  GL_CURRENT_VERTEX_ATTRIB,
-                        value);
+                        value.data());
 				SAVEGLERROR;
 				for (int j = 0; j < size; j++)
 					Rprintf("%8.4f ", value[j]);
@@ -790,9 +790,9 @@ void Shape::printAttribute(const char* name, int nvertices, bool verbose) {
 						step += size*sizeof(GLubyte);
 				} 
 			} else {
-				GLint value[size];
+				std::vector<GLint> value(size);
 				glGetVertexAttribiv(location,  GL_CURRENT_VERTEX_ATTRIB,
-                        value);
+                        value.data());
 				SAVEGLERROR;
 				for (int j = 0; j < size; j++)
 					Rprintf("%02x ", value[j]);

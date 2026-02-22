@@ -9,6 +9,7 @@
 #include "scene.h"
 #include <cstdio>
 #include <cmath>
+#include <vector>
 #include "R.h"
 #include "pretty.h"
 
@@ -607,7 +608,7 @@ void BBoxDeco::setAxes()
       if (axis->mode == AXIS_NONE || axis->nticks == 0)
         continue;
       
-      double values[6*axis->nticks];
+      std::vector<double> values(6*axis->nticks);
       for (int j = 0; j < axis->nticks; j++) {
         values[6*j]   = axis->ticks[j];
         values[6*j+1] = 0.0;
@@ -618,10 +619,10 @@ void BBoxDeco::setAxes()
         values[6*j+5] = 0.0;
       }
       
-      impl->ticks[i] = new LineSet(material, 2*axis->nticks, values, 
+      impl->ticks[i] = new LineSet(material, 2*axis->nticks, values.data(), 
                                    true /* in_ignoreExtent */, 0, nullptr);
       
-      char* label_ptrs[axis->nticks]; 
+      std::vector<char*> label_ptrs(axis->nticks);
       for (int j = 0; j < axis->nticks; j++)
       {
         values[3*j] = axis->ticks[j];
@@ -635,7 +636,7 @@ void BBoxDeco::setAxes()
       double cex[] = { 1.0 };
       const char * fontfile[] = { "" };
 
-      impl->labels[i] = new TextSet(material, axis->nticks, label_ptrs, values, 
+      impl->labels[i] = new TextSet(material, axis->nticks, label_ptrs.data(), values.data(), 
                                     nullptr /*in_adj*/,
                                     true  /*in_ignoreExtent*/, 
                                     1, family, style,

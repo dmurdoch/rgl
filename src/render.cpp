@@ -99,7 +99,7 @@ void VertexArray::beginUse() {
 #ifndef RGL_NO_OPENGL
 	if (location >= 0) {
 		glEnableVertexAttribArray(location);
-		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
+		glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
 	}
 #endif
 }
@@ -212,7 +212,7 @@ void Vec2Array::beginUse() {
   if (arrayptr) {
   	if (location >= 0) {
   		glEnableVertexAttribArray(location);
-  		glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, 0, (GLbyte*)0 + offset);
+  		glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(offset));
   	}
   }
 #endif
