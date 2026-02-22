@@ -27,12 +27,18 @@ Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool
 #ifndef RGL_NO_OPENGL
   vbo = 0;
   ibo = 0;
+  shaderProgram = 0;
 #endif
   uninitialize();
 }
 
 Shape::~Shape()
 {
+#ifndef RGL_NO_OPENGL
+  if (shaderProgram) glDeleteProgram(shaderProgram);
+  if (vbo) glDeleteBuffers(1, &vbo);
+  if (ibo) glDeleteBuffers(1, &ibo);
+#endif  
 }
 
 void Shape::update(RenderContext* renderContext)
@@ -137,10 +143,10 @@ void Shape::beginShader(RenderContext* renderContext)
         specular[3*i + j] = 0;
         diffuse[3*i + j] = 0;
       }
-      glUniform3fv( glLocs.at("ambient"), 3*nlights, ambient.data());
-    glUniform3fv( glLocs.at("specular"), 3*nlights, specular.data());
-    glUniform3fv( glLocs.at("diffuse"), 3*nlights, diffuse.data());
-    glUniform3fv( glLocs.at("lightDir"), 3*nlights, lightDir.data());
+      glUniform3fv( glLocs.at("ambient"), nlights, ambient.data());
+    glUniform3fv( glLocs.at("specular"), nlights, specular.data());
+    glUniform3fv( glLocs.at("diffuse"), nlights, diffuse.data());
+    glUniform3fv( glLocs.at("lightDir"), nlights, lightDir.data());
     glUniform1iv( glLocs.at("viewpoint"), nlights, viewpoint.data());
     glUniform1iv( glLocs.at("finite"), nlights, finite.data());
   }
@@ -500,12 +506,18 @@ void Shape::initShader()
 	glCompileShader(fragmentShader);
 	checkShader("fragment", fragmentShader);
 	
+	// Delete old program if one exists
+	if (shaderProgram) {
+	  glDeleteProgram(shaderProgram);
+	  shaderProgram = 0;
+	}
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 	
 	vertexbuffer.clear();
 	indexbuffer.clear();
+	glLocs.clear();
 	
 	glBindAttribLocation(shaderProgram, 0, "aPos");
 	glLocs["aPos"] = 0;
@@ -515,6 +527,14 @@ void Shape::initShader()
 	
 	/* NB:  these must come after the glBindAttribLocation calls */
 	glLinkProgram(shaderProgram);
+	
+	// After linking, the program holds its own references.
+	// The shader objects are no longer needed.
+	glDetachShader(shaderProgram, vertexShader);
+	glDetachShader(shaderProgram, fragmentShader);
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+	
 	checkProgram(shaderProgram);
 	
 	if (flags.fixed_quads && !flags.sprites_3d)
@@ -593,30 +613,28 @@ bool Shape::glLocs_has_key(std::string key) {
 
 void Shape::loadBuffers()
 {
-  if (vbo)
-	  glDeleteBuffers(1, &vbo);
+  // Clean up old VBO/IBO
+  if (vbo) { glDeleteBuffers(1, &vbo); vbo = 0; }
+  if (ibo) { glDeleteBuffers(1, &ibo); ibo = 0; }
+  
+  
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, vertexbuffer.size(), 
               vertexbuffer.data(), GL_STATIC_DRAW);
 	
-	if (ibo)
-	  glDeleteBuffers(1, &ibo);
 	if (indexbuffer.size()) {
 		glGenBuffers(1, &ibo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexbuffer.size(),
                indexbuffer.data(), GL_STATIC_DRAW);
-  } else {
-  	ibo = 0;
-  	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
   }
 }
 
 void Shape::printUniform(const char *name, int rows, int cols, int transposed,
                                 GLint type, 
                                 bool verbose) {
-	std::vector<float> data(4*nlights > 16 ? 4*nlights : 16);
+	std::vector<float> data(std::max(16, 4*nlights));
 	std::vector<int> idata(nlights);
 	
 	GLint location;
@@ -674,7 +692,7 @@ void Shape::printUniforms(bool verbose) {
 	printUniform("uFogMode", 1, 1, false, GL_INT, verbose);
 	printUniform("uFogColor", 1, 3, false, GL_FLOAT, verbose);
 	printUniform("uFogParms", 1, 4, false, GL_FLOAT, verbose);
-	printUniform("vClipPlane", nclipplanes, 4, false, GL_FLOAT, verbose);
+	printUniform("vClipplane", nclipplanes, 4, false, GL_FLOAT, verbose);
 	printUniform("emission", 1, 3, false, GL_FLOAT, verbose);
 	printUniform("shininess", 1, 1, false, GL_FLOAT, verbose);
 	printUniform("ambient", nlights, 3, false, GL_FLOAT, verbose);

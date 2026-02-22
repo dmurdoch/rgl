@@ -21,9 +21,6 @@ Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
   type                = in_type;
   nverticesperelement = in_nverticesperelement;
   indices.clear();
-#ifndef RGL_NO_OPENGL
-  vbo                 = 0;
-#endif
 }
 
 void PrimitiveSet::initPrimitiveSet(
@@ -270,6 +267,8 @@ void PrimitiveSet::drawEnd(RenderContext* renderContext)
   SAVEGLERROR;
   material.endUse(renderContext);
   SAVEGLERROR;
+  Shape::endShader();
+  SAVEGLERROR;
   Shape::drawEnd(renderContext);
 #endif
 }
@@ -401,6 +400,7 @@ void PrimitiveSet::initFatLines() {
    making the segment into a rectangle.
    The shaders will draw it with rounded ends.
    */
+  if (indices.size() < 2) return;
   for (int i = 0; i < indices.size() - 1; i++) {
     int k, j;
     if (type == "lines") {
