@@ -240,7 +240,7 @@ void TextSet::draw_to_texture() {
                           style[fnt],
                           fontfile[fnt].c_str(),
                           20*cex[fnt],
-                          TRUE,
+                          1,
                           NULL,
                           texture_width, 
                           texture_height, 
