@@ -5,7 +5,7 @@
 #include <string>
 
 #include "SpriteSet.h"
-
+#include "R.h"
 
 #include "render.h"
 
@@ -45,6 +45,8 @@ typedef void (*rasterText_draw_text_to_buffer_func)(int n,
               const char *text[],
               const char *family, int font,
               const char *fontfile, double size,
+              Rboolean mono,
+              int *color,
               int width, int height, int stride,
               unsigned char *buffer);
 
