@@ -81,35 +81,55 @@ Duncan Murdoch
 }
 
 \examples{
-if (interactive() && !in_pkgdown_example() && requireNamespace("shiny")) {
-  save <- options(rgl.useNULL = TRUE)
+\dontrun{
 
-  xyz <- matrix(rnorm(300), ncol = 3)
+# This example shows how to retrieve the result of user
+# interaction back into R from WebGL
 
-  app = shiny::shinyApp(
-    ui = shiny::bootstrapPage(
-      shiny::actionButton("redraw", "Redraw"),
-      rglwidgetOutput("rglPlot")
-    ),
-    server = function(input, output, session) {
-      # This waits until the user to click on the "redraw" 
-      # button, then sends a request for the current userMatrix
-      shiny::observeEvent(input$redraw, {
-        shinyGetPar3d("userMatrix", session)
-      })
+# Draw an rgl plot
+
+xyz <- matrix(rnorm(300), ncol = 3)
+plot3d(xyz, type = "s")
+
+# This function displays the plot in WebGL, with a
+# button to capture the userMatrix and zoom values
+
+CapturePar3dVals <- function(thescene = scene3d()) {
+  ui <- shiny::fluidPage(
+    shiny::sidebarLayout(
+      shiny::sidebarPanel(
+        shiny::actionButton("get_vals", "Capture par3d")
+      ),
+      shiny::mainPanel(
+        rglwidgetOutput("the_plot")
+      )
+    )
+  )
+  
+  server <- function(input, output, session) {
     
-      # This draws the plot whenever input$par3d changes,
-      # i.e. whenever a response to the request above is
-      # received.
-      output$rglPlot <- renderRglwidget({
-        if (length(rgl.dev.list())) close3d()
-        col <- sample(colors(), 1)
-        plot3d(xyz, col = col, type = "s", main = col)
-        par3d(userMatrix = input$par3d$userMatrix)
-        rglwidget()
-      })
+    output$the_plot <- renderRglwidget({
+      rglwidget(thescene)
     })
-  shiny::runApp(app)
-  options(save)
+    
+    shiny::observeEvent(input$get_vals, {
+      shinyGetPar3d(c("zoom", "userMatrix"), session)
+    })
+    
+    shiny::observe({
+      shiny::req(input$par3d)
+      shiny::stopApp(returnValue = input$par3d[c("userMatrix", "zoom")])
+    })
+  }
+  
+  shiny::runApp(shiny::shinyApp(ui, server))
+}
+
+# Run it to capture the parameters
+
+par3dvals <- CapturePar3dVals()
+
+# Mirror them in the local plot
+par3d(par3dvals)
 }
 }
