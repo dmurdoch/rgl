@@ -7,6 +7,7 @@
 #include <vector>
 #include "types.h"
 #include "subscene.h"
+#include "atlasrgl.h"
 
 namespace rgl {
 
@@ -125,6 +126,12 @@ public:
   void invalidateDisplaylists();
 
   Subscene rootSubscene;  
+  
+  /**
+   * These are atlases of the glyphs in any TextSet in the
+   * scene.
+   */
+  Glyph_atlas mono_atlas, color_atlas;
 
 private:
 
@@ -145,6 +152,7 @@ private:
 
   void deleteAll(std::vector<SceneNode*> list);
   void removeReferences(SceneNode* node);
+
 
 };
 

@@ -14,6 +14,7 @@
 #include "R.h"
 #include "init.h"
 #include "api.h"
+#include <rasterText.h>
 
 using namespace rgl;
 
@@ -45,10 +46,6 @@ std::string rglHome;
 extern "C" {
 #endif
   
-extern rasterText_measure_text_func       measure_text;
-extern rasterText_get_buffer_stride_func  get_buffer_stride;  
-extern rasterText_draw_text_to_buffer_func draw_text_to_buffer;
-extern rasterText_pack_text_func          pack_text;
 
 SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
               SEXP debug, SEXP home)
@@ -77,22 +74,8 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
    * NB:  need to make sure rasterText is loaded before
    * this will work! */
   
-  rasterText_version_func ver = (rasterText_version_func)
-    R_GetCCallable("rasterText", "API_version");
-  if (ver() != 7) {
-    Rprintf("This version of rgl was written for rasterText API version 6, not %d\n", ver());
-    return Rf_ScalarInteger( 0 );
-  }
-  measure_text = (rasterText_measure_text_func)
-    R_GetCCallable("rasterText", "measure_text");
-  pack_text = (rasterText_pack_text_func)
-    R_GetCCallable("rasterText", "pack_text");
-  get_buffer_stride = (rasterText_get_buffer_stride_func) 
-    R_GetCCallable("rasterText", "get_buffer_stride");
-  draw_text_to_buffer = (rasterText_draw_text_to_buffer_func)
-    R_GetCCallable("rasterText", "draw_text_to_buffer");
-  if (!measure_text || !pack_text || !get_buffer_stride || !draw_text_to_buffer) {
-    Rprintf("Text drawing functions not loaded.\n");
+  if (rasterText_API_version() != 8) {
+    Rprintf("This version of rgl was written for rasterText API version 8, not %d\n", rasterText_API_version());
     return Rf_ScalarInteger( 0 );
   }
   
