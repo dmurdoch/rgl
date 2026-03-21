@@ -14,7 +14,6 @@
 #include "R.h"
 #include "init.h"
 #include "api.h"
-#include <rasterText.h>
 
 using namespace rgl;
 
@@ -69,15 +68,6 @@ SEXP rgl_init(SEXP initValue, SEXP useNULL, SEXP in_namespace,
   {
     return Rf_ScalarInteger( 0 );
   }  
-
-  /* Get access to the rasterText functions.
-   * NB:  need to make sure rasterText is loaded before
-   * this will work! */
-  
-  if (rasterText_API_version() != 8) {
-    Rprintf("This version of rgl was written for rasterText API version 8, not %d\n", rasterText_API_version());
-    return Rf_ScalarInteger( 0 );
-  }
   
   /* Some systems write useless messages to stderr.  We'll
    * hide those

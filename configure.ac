@@ -207,6 +207,39 @@ if test "x$enable_opengl" != "xno"; then
   fi
 fi
 
+## --- PangoCairo ---
+  if pkg-config --exists pangocairo; then
+    CPPFLAGS="${CPPFLAGS} `pkg-config --cflags pangocairo`"
+    LIBS="${LIBS} `pkg-config --libs pangocairo`"
+  else
+    echo "----------------------------------------------------"
+    echo "ERROR: PangoCairo was not found via pkg-config."
+    echo "Please install the PangoCairo development libraries."
+    echo "  Debian/Ubuntu:  sudo apt-get install libpango1.0-dev"
+    echo "  Fedora/RHEL:    sudo dnf install pango-devel"
+    echo "  macOS:          See https://mac.r-project.org/bin/"
+    echo "----------------------------------------------------"
+    exit 1
+  fi
+
+  # --- fontconfig ---
+  if pkg-config --exists fontconfig; then
+    CPPFLAGS="${CPPFLAGS} `pkg-config --cflags fontconfig`"
+    LIBS="${LIBS} `pkg-config --libs fontconfig`"
+  else
+    echo "----------------------------------------------------"
+    echo "ERROR: fontconfig was not found via pkg-config."
+    echo "Please install the fontconfig development libraries."
+    echo "  Debian/Ubuntu:  sudo apt-get install libfontconfig1-dev"
+    echo "  Fedora/RHEL:    sudo dnf install fontconfig-devel"
+    echo "  macOS:          See https://mac.r-project.org/bin/"
+    echo "----------------------------------------------------"
+    exit 1
+  fi
+
+echo LIBS=${LIBS}
+echo CPPFLAGS=${CPPFLAGS}
+
 if test "x$enable_opengl" = "xno"; then
   AC_MSG_NOTICE([compiling without OpenGL support])
   HIDE_IF_NO_OPENGL="#"

@@ -25,8 +25,8 @@ ObjID SceneNode::nextID = 1;
 
 Scene::Scene()
 : rootSubscene(EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, false),
-  mono_atlas(32, 32, true),
-  color_atlas(32, 32, false),
+  mono_atlas(8, 8, true),
+  color_atlas(8, 8, false),
   doIgnoreExtent(false)
 {
   nodes.reserve(6);

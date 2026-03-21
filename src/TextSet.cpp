@@ -74,11 +74,18 @@ TextSet::TextSet(Material& in_material,
 #ifdef HAVE_FREETYPE  
   blended = true;
 #endif  
-  texture_generation = -1;
 }
 
 TextSet::~TextSet()
 {
+}
+
+/* Count glyphs if initialized, else strings */
+int TextSet::getElementCount(void) {
+  if (is_initialized())
+    return posArray.size() >> 2;
+  else
+    return SpriteSet::getElementCount();
 }
 
 int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 
@@ -128,27 +135,52 @@ std::string TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int 
   return SpriteSet::getTextAttribute(subscene, attrib, index);
 }
 
+void TextSet::set_texture(Glyph_atlas& atlas) {
+  int n = getElementCount();
+  if (!n) return;
+
+  atlas.updateTexture();
+  material.alphablend = true;
+}
 
 void TextSet::initialize() {
 #ifndef RGL_NO_OPENGL
   getScene();
   Glyph_atlas& atlas = scene->mono_atlas;
-  if (texture_generation < atlas.getGeneration()) {
-    string_num.clear();
-    for (int i=0; i < textArray.size(); i++) {
-      void *font = atlas.getFont(family[i].c_str(), style[i],
-                                 nullptr, cex[i]*20.0);
-      size_t fontnum = atlas.find_font(font);
-      string_num.push_back(atlas.find_string(textArray[i].c_str(), fontnum));
-    }
-    
-    texture_generation = atlas.getGeneration();
+
+  string_num.clear();
+  for (int i=0; i < textArray.size(); i++) {
+    void *font = atlas.getFont(get_family(i), get_style(i),
+                                 nullptr, get_cex(i)*20.0);
+    size_t fontnum = atlas.find_font(font);
+    string_num.push_back(atlas.find_string(textArray[i].c_str(), fontnum));
   }
   
-  SpriteSet::initialize();
+  material.textype = Texture::ALPHA;
+  material.texmode = Texture::REPLACE;
+  material.alphablend = true;
   
-//  printUniforms(true);
-//  printAttributes(8, true);
+  SpriteSet::initialize();
+
+  set_coordinates(atlas);
+  atlas.updateTexture();
+  
+  if (glLocs_has_key("uSampler") &&
+      glLocs_has_key("aTexcoord")) {
+    atlas.texture->setSamplerLocation(glLocs["uSampler"]);
+  }
+  material.texture = atlas.texture;
+  
+  posArray.appendToBuffer(vertexbuffer);
+  posArray.setAttribLocation(glLocs["aPos"]);
+  adjArray.appendToBuffer(vertexbuffer);
+  adjArray.setAttribLocation(glLocs["aOfs"]);
+  texCoordArray.appendToBuffer(vertexbuffer);
+  texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
+  
+  if (material.useColorArray) 
+    colArray.appendToBuffer(vertexbuffer, colArray.getLength());
+
 #endif
 }
 
@@ -162,4 +194,87 @@ Scene* TextSet::getScene() {
       Rf_error("Can't determine scene.");
   }
   return scene;
+}
+
+void TextSet::set_coordinates(Glyph_atlas& atlas) {
+#ifndef RGL_NO_OPENGL
+  int n = string_num.size();
+  // Count the glyphs
+  int n_glyphs = 0;
+  for (int i=0; i < n; i++) {
+    String_record& s = atlas.strings[string_num[i]];
+    n_glyphs += s.glyphnum.size();
+  }
+  
+  float rescale = fixedSize ? 1.8 : 0.013; /* Adjust to match rglwidget */
+  float texture_width = atlas.width;
+  
+  posArray.alloc(4*n_glyphs);
+  texCoordArray.alloc(4*n_glyphs);
+  adjArray.alloc(4*n_glyphs);
+  indices.resize(6*n_glyphs);
+  int ncolor = material.colors.getLength();
+  if (material.useColorArray)
+    colArray.resize(4*n_glyphs);
+  int g = 0, h = 0;
+  for (int i=0; i < n; i++) {
+    String_record& s = atlas.strings[string_num[i]];
+    getAdj(i); /* The value specified by the user */
+    Vertex& v = vertex.get(i);
+    Color c = material.colors.getColor(i % ncolor);
+    for (int j=0; j < s.glyphnum.size(); j++) {
+      for (int k=0; k < 4; k++) {
+        posArray.setVertex(g + k, v);
+        if (ncolor > 1)
+          colArray.setColor(g + k, c);
+      }
+      
+      Glyph_record& glyph = atlas.glyphs[s.glyphnum[j]];
+
+      // Set texcoords
+      texCoordArray[g].s = (glyph.x_atlas)/texture_width;
+      texCoordArray[g + 1].s = texCoordArray[g].s + glyph.width/texture_width;
+      texCoordArray[g + 2].s = texCoordArray[g + 1].s;
+      texCoordArray[g + 3].s = texCoordArray[g].s;
+
+      double texture_height = atlas.height;
+      texCoordArray[g].t = (glyph.y_atlas + glyph.height)/texture_height;
+      texCoordArray[g + 1].t = texCoordArray[g].t;
+      texCoordArray[g + 2].t = texCoordArray[g].t - glyph.height/texture_height;
+      texCoordArray[g + 3].t = texCoordArray[g + 2].t;
+      
+      // Set adjustments
+      adjArray.setVertex(g,
+        Vertex((-adj.x*s.width + s.x_offset[j] + glyph.x)*rescale,
+                (-adj.y*s.height + s.y_offset[j] - glyph.y - glyph.height)*rescale,
+                0) );      
+      adjArray.setVertex(g + 1,
+        Vertex(adjArray[g].x + glyph.width*rescale,
+               adjArray[g].y,
+               0));
+      adjArray.setVertex(g + 2,
+        Vertex(adjArray[g + 1].x,
+               adjArray[g].y + glyph.height*rescale,
+               0));
+      adjArray.setVertex(g + 3,
+        Vertex(adjArray[g].x,
+               adjArray[g + 2].y,
+               0));
+      
+      indices[h] = g;
+      indices[h + 1] = g + 1;
+      indices[h + 2] = g + 2;
+      indices[h + 3] = g;
+      indices[h + 4] = g + 2;
+      indices[h + 5] = g + 3;
+      g += 4;
+      h += 6;
+    }
+  }
+  texCoordArray.appendToBuffer(vertexbuffer);
+  texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
+  adjArray.appendToBuffer(vertexbuffer);
+  adjArray.setAttribLocation(glLocs["aOfs"]);
+
+#endif
 }

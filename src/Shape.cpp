@@ -304,7 +304,7 @@ ShaderFlags Shape::getShaderFlags()
     result.has_normals |= background->sphere;
   }
 
-  if (material.texture) {
+  if (material.texture || type == "text") {
     result.has_texture = getAttributeCount(subscene, TEXCOORDS) > 0 ||
      (type == "sprites" && !result.sprites_3d) ||
      type == "text" ||
@@ -679,6 +679,9 @@ location, idata.data());
 	SAVEGLERROR;
 }
 
+/* These may not be valid until we execute
+ * drawBegin...
+ * */
 void Shape::printUniforms(bool verbose) {
   Rprintf("Uniforms:\n");
 	printUniform("mvMatrix", 4, 4, true, GL_FLOAT, verbose);
@@ -822,6 +825,9 @@ void Shape::printAttribute(const char* name, int nvertices, bool verbose) {
 	SAVEGLERROR;
 }
 
+/* These may not be valid until we execute
+ * drawBegin...
+ * */
 void Shape::printAttributes(int nvertices, bool verbose) {
 	printAttribute("aPos", nvertices, verbose);
 	printAttribute("aCol", nvertices, verbose);

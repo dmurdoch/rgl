@@ -84,12 +84,16 @@ void VertexArray::duplicate(VertexArray& source, bool copyVertices)
 }
 
 void VertexArray::setVertex(int index, double* v) {
+  if (index >= nvertex)
+    Rf_error("Vertex %d out of bounds!", index);
   arrayptr[index*3+0] = (float) v[0];
   arrayptr[index*3+1] = (float) v[1];
   arrayptr[index*3+2] = (float) v[2];
 }
 
 void VertexArray::setVertex(int index, Vertex v) {
+  if (index >= nvertex)
+    Rf_error("Vertex %d out of bounds!", index);
   arrayptr[index*3+0] = (float) v.x;
   arrayptr[index*3+1] = (float) v.y;
   arrayptr[index*3+2] = (float) v.z;
@@ -204,6 +208,8 @@ void Vec2Array::alloc(int in_nvertex)
 }
 
 Vec2& Vec2Array::operator [] (int index) {
+  if (index >= nvertex)
+    Rf_error("Vertex %d out of bounds!", index);
   return (Vec2&) arrayptr[index*2];
 }
 

@@ -235,6 +235,13 @@ void ColorArray::set(ColorArray src) {
   hint_alphablend = false;
 }
 
+void ColorArray::resize(int newsize) {
+  ncolor = newsize;
+  nalpha = newsize;
+  arrayptr = (u8*) realloc(arrayptr, sizeof(u8) * 4 * ncolor);
+  hint_alphablend = false;  /* may be changed later... */
+}
+
 unsigned int ColorArray::getLength() const
 {
   return ncolor;
@@ -306,6 +313,7 @@ void ColorArray::setColor(int index, Color color)
   arrayptr[index*4+1] = color.getGreenub();
   arrayptr[index*4+2] = color.getBlueub();
   arrayptr[index*4+3] = color.getAlphaub();
+  hint_alphablend = hint_alphablend || arrayptr[index*4+3] < 255;
 }
 
 void ColorArray::recycle(unsigned int newsize)

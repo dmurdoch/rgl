@@ -5082,6 +5082,41 @@ printf "%s\n" "$as_me: compiling without Freetype support" >&6;}
   fi
 fi
 
+## --- PangoCairo ---
+  if pkg-config --exists pangocairo; then
+    CPPFLAGS="${CPPFLAGS} `pkg-config --cflags pangocairo`"
+    LIBS="${LIBS} `pkg-config --libs pangocairo`"
+  else
+    echo "----------------------------------------------------"
+    echo "ERROR: PangoCairo was not found via pkg-config."
+    echo "Please install the PangoCairo development libraries."
+    echo "  Debian/Ubuntu:  sudo apt-get install libpango1.0-dev"
+    echo "  Fedora/RHEL:    sudo dnf install pango-devel"
+    echo "  macOS:          See https://mac.r-project.org/bin/"
+    echo "----------------------------------------------------"
+    exit 1
+  fi
+
+  # --- fontconfig ---
+  if pkg-config --exists fontconfig; then
+    CPPFLAGS="${CPPFLAGS} `pkg-config --cflags fontconfig`"
+    LIBS="${LIBS} `pkg-config --libs fontconfig`"
+    echo "Found fontconfig: CFLAGS=${FONTCONFIG_CFLAGS}"
+    echo "                  LIBS=${FONTCONFIG_LIBS}"
+  else
+    echo "----------------------------------------------------"
+    echo "ERROR: fontconfig was not found via pkg-config."
+    echo "Please install the fontconfig development libraries."
+    echo "  Debian/Ubuntu:  sudo apt-get install libfontconfig1-dev"
+    echo "  Fedora/RHEL:    sudo dnf install fontconfig-devel"
+    echo "  macOS:          See https://mac.r-project.org/bin/"
+    echo "----------------------------------------------------"
+    exit 1
+  fi
+
+echo LIBS=${LIBS}
+echo CPPFLAGS=${CPPFLAGS}
+
 if test "x$enable_opengl" = "xno"; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: compiling without OpenGL support" >&5
 printf "%s\n" "$as_me: compiling without OpenGL support" >&6;}

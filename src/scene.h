@@ -7,7 +7,7 @@
 #include <vector>
 #include "types.h"
 #include "subscene.h"
-#include "atlasrgl.h"
+#include "atlas.h"
 
 namespace rgl {
 
