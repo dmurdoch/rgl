@@ -27,7 +27,7 @@ using namespace rgl;
 //   a separate length buffer holds string lengths in order
 //
 
-TextSet::TextSet(Material& in_material, 
+TextSet* TextSet::create(Material& in_material, 
                  int in_ntexts, 
                  char** in_texts, 
                  double *in_center, 
@@ -39,28 +39,85 @@ TextSet::TextSet(Material& in_material,
                  double* in_cex,
                  const char** in_fontfile,
                  int in_npos,
-                 int* in_pos)
- : SpriteSet(in_material, in_ntexts, in_center, 
-   in_nfonts, in_cex,       // nsize, size
-   in_ignoreExtent, 
-   0, NULL,                 // count, shapelist
-   0, NULL,                 // nshapelens, shapelens
-   NULL,                    // userMatrix
-   true, false,             // fixedSize, rotating
-   NULL,                    // scene,
-   in_adj,
-   in_npos, in_pos,
-   0.0)                    // offset
-{
-  material.lit = false;
-  material.colorPerVertex(true, in_ntexts);
-
-  // init arrays
-
-  for (int i = 0; i < in_ntexts; i++) {
-  	textArray.push_back(in_texts[i]);
+                 int* in_pos) {
+  Scene* scene = getScene();
+  Glyph_atlas& atlas = scene->mono_atlas;
+  std::vector<size_t> string_nums;
+  std::vector<double> vertices;
+  int nglyphs = 0;
+  for (int i=0; i < in_ntexts; i++) {
+    int j = i % in_nfonts;
+    void *font = atlas.getFont(in_family[j],
+                               in_style[j], 
+                               nullptr, 
+                               in_cex[j]*20.0);
+    size_t fontnum = atlas.find_font(font);
+    string_nums.push_back(atlas.find_string(in_texts[i], fontnum));
+    int n = atlas.strings[string_nums.back()].glyphnum.size();
+    nglyphs += n;
+    for (int g=0; g < n; g++) {
+      vertices.push_back(in_center[3*i]);
+      vertices.push_back(in_center[3*i+1]);
+      vertices.push_back(in_center[3*i+2]);
+    }
   }
+  atlas.updateTexture();
+  
+  Material material = in_material;
+  material.lit = false;  
+  material.colorPerVertex(true, 4*nglyphs);
+  material.alphablend = true; 
+  material.textype = Texture::ALPHA;
+  material.texmode = Texture::REPLACE;
+  material.texture = atlas.texture;
+  material.depth_test = 3; /* LEQUAL */
+  
+  return new TextSet(material, in_ntexts, in_texts,
+                 vertices.data(), in_adj, in_ignoreExtent,
+                 in_nfonts, in_family, in_style, 
+                 in_cex, in_fontfile, 
+                 in_npos, in_pos,
+                 atlas, string_nums);
+}
 
+TextSet::TextSet(Material& in_material, 
+                 int in_ntexts,
+                 char** in_texts, 
+                 double *in_center, 
+                 double *in_adj,
+                 int in_ignoreExtent,
+                 int in_nfonts,
+                 const char** in_family,
+                 int* in_style,
+                 double* in_cex,
+                 const char** in_fontfile,
+                 int in_npos, int* in_pos,                 
+                 Glyph_atlas& in_atlas,
+                 std::vector<size_t>& in_stringnum)
+  : SpriteSet(in_material, 
+    in_atlas.glyphCount(in_stringnum),
+    in_center, 
+    in_atlas.glyphCount(in_stringnum), in_cex,       // nsize, size
+    in_ignoreExtent, 
+    0, NULL,                 // count, shapelist
+    0, NULL,                 // nshapelens, shapelens
+    NULL,                    // userMatrix
+    true, false,             // fixedSize, rotating
+    NULL,                    // scene,
+    in_adj,
+    in_npos, in_pos,
+    0.0),
+    string_num(in_stringnum),
+    atlas(in_atlas),
+    texture_generation(-1) {
+  
+  // init arrays
+  if (in_ntexts != in_stringnum.size())
+    Rf_error("ntexts not consistent!");
+  for (int i = 0; i < in_ntexts; i++) {
+    textArray.push_back(in_texts[i]);
+  } 
+  
   family.clear();
   style.clear();
   cex.clear();
@@ -71,21 +128,10 @@ TextSet::TextSet(Material& in_material,
     cex.push_back(in_cex[i]);
     fontfile.push_back(in_fontfile[i]);
   }
-#ifdef HAVE_FREETYPE  
-  blended = true;
-#endif  
-}
+}                   // offset
 
 TextSet::~TextSet()
 {
-}
-
-/* Count glyphs if initialized, else strings */
-int TextSet::getElementCount(void) {
-  if (is_initialized())
-    return posArray.size() >> 2;
-  else
-    return SpriteSet::getElementCount();
 }
 
 int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib) 
@@ -135,7 +181,7 @@ std::string TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int 
   return SpriteSet::getTextAttribute(subscene, attrib, index);
 }
 
-void TextSet::set_texture(Glyph_atlas& atlas) {
+void TextSet::set_texture() {
   int n = getElementCount();
   if (!n) return;
 
@@ -143,33 +189,22 @@ void TextSet::set_texture(Glyph_atlas& atlas) {
   material.alphablend = true;
 }
 
+bool TextSet::is_initialized() {
+  return texture_generation == atlas.buffer_generation && SpriteSet::is_initialized();
+}
+
 void TextSet::initialize() {
 #ifndef RGL_NO_OPENGL
-  getScene();
-  Glyph_atlas& atlas = scene->mono_atlas;
-
-  string_num.clear();
-  for (int i=0; i < textArray.size(); i++) {
-    void *font = atlas.getFont(get_family(i), get_style(i),
-                                 nullptr, get_cex(i)*20.0);
-    size_t fontnum = atlas.find_font(font);
-    string_num.push_back(atlas.find_string(textArray[i].c_str(), fontnum));
-  }
-  
-  material.textype = Texture::ALPHA;
-  material.texmode = Texture::REPLACE;
-  material.alphablend = true;
-  
   SpriteSet::initialize();
 
-  set_coordinates(atlas);
+  set_coordinates();
   atlas.updateTexture();
+  texture_generation = atlas.buffer_generation;
   
   if (glLocs_has_key("uSampler") &&
       glLocs_has_key("aTexcoord")) {
     atlas.texture->setSamplerLocation(glLocs["uSampler"]);
   }
-  material.texture = atlas.texture;
   
   posArray.appendToBuffer(vertexbuffer);
   posArray.setAttribLocation(glLocs["aPos"]);
@@ -185,27 +220,21 @@ void TextSet::initialize() {
 }
 
 Scene* TextSet::getScene() {
-  if (!scene) {
-    extern DeviceManager* deviceManager;
-    Device* device;
-    if (deviceManager && (device = deviceManager->getCurrentDevice()))
-      scene = device->getScene();
-    else
-      Rf_error("Can't determine scene.");
-  }
+  Scene* scene = nullptr;
+  extern DeviceManager* deviceManager;
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice()))
+    scene = device->getScene();
+  else
+    Rf_error("Can't determine scene.");
   return scene;
 }
 
-void TextSet::set_coordinates(Glyph_atlas& atlas) {
+void TextSet::set_coordinates() {
 #ifndef RGL_NO_OPENGL
   int n = string_num.size();
   // Count the glyphs
-  int n_glyphs = 0;
-  for (int i=0; i < n; i++) {
-    String_record& s = atlas.strings[string_num[i]];
-    n_glyphs += s.glyphnum.size();
-  }
-  
+  int n_glyphs = atlas.glyphCount(string_num);
   float rescale = fixedSize ? 1.8 : 0.013; /* Adjust to match rglwidget */
   float texture_width = atlas.width;
   
@@ -220,54 +249,54 @@ void TextSet::set_coordinates(Glyph_atlas& atlas) {
   for (int i=0; i < n; i++) {
     String_record& s = atlas.strings[string_num[i]];
     getAdj(i); /* The value specified by the user */
-    Vertex& v = vertex.get(i);
     Color c = material.colors.getColor(i % ncolor);
     for (int j=0; j < s.glyphnum.size(); j++) {
+      Vertex& v = vertex.get(g);
       for (int k=0; k < 4; k++) {
-        posArray.setVertex(g + k, v);
+        posArray.setVertex(4*g + k, v);
         if (ncolor > 1)
-          colArray.setColor(g + k, c);
+          colArray.setColor(4*g + k, c);
       }
       
       Glyph_record& glyph = atlas.glyphs[s.glyphnum[j]];
 
       // Set texcoords
-      texCoordArray[g].s = (glyph.x_atlas)/texture_width;
-      texCoordArray[g + 1].s = texCoordArray[g].s + glyph.width/texture_width;
-      texCoordArray[g + 2].s = texCoordArray[g + 1].s;
-      texCoordArray[g + 3].s = texCoordArray[g].s;
+      texCoordArray[4*g].s = (glyph.x_atlas)/texture_width;
+      texCoordArray[4*g + 1].s = texCoordArray[4*g].s + glyph.width/texture_width;
+      texCoordArray[4*g + 2].s = texCoordArray[4*g + 1].s;
+      texCoordArray[4*g + 3].s = texCoordArray[4*g].s;
 
       double texture_height = atlas.height;
-      texCoordArray[g].t = (glyph.y_atlas + glyph.height)/texture_height;
-      texCoordArray[g + 1].t = texCoordArray[g].t;
-      texCoordArray[g + 2].t = texCoordArray[g].t - glyph.height/texture_height;
-      texCoordArray[g + 3].t = texCoordArray[g + 2].t;
+      texCoordArray[4*g].t = (glyph.y_atlas + glyph.height)/texture_height;
+      texCoordArray[4*g + 1].t = texCoordArray[4*g].t;
+      texCoordArray[4*g + 2].t = texCoordArray[4*g].t - glyph.height/texture_height;
+      texCoordArray[4*g + 3].t = texCoordArray[4*g + 2].t;
       
       // Set adjustments
-      adjArray.setVertex(g,
+      adjArray.setVertex(4*g,
         Vertex((-adj.x*s.width + s.x_offset[j] + glyph.x)*rescale,
                 (-adj.y*s.height + s.y_offset[j] - glyph.y - glyph.height)*rescale,
                 0) );      
-      adjArray.setVertex(g + 1,
-        Vertex(adjArray[g].x + glyph.width*rescale,
-               adjArray[g].y,
+      adjArray.setVertex(4*g + 1,
+        Vertex(adjArray[4*g].x + glyph.width*rescale,
+               adjArray[4*g].y,
                0));
-      adjArray.setVertex(g + 2,
-        Vertex(adjArray[g + 1].x,
-               adjArray[g].y + glyph.height*rescale,
+      adjArray.setVertex(4*g + 2,
+        Vertex(adjArray[4*g + 1].x,
+               adjArray[4*g].y + glyph.height*rescale,
                0));
-      adjArray.setVertex(g + 3,
-        Vertex(adjArray[g].x,
-               adjArray[g + 2].y,
+      adjArray.setVertex(4*g + 3,
+        Vertex(adjArray[4*g].x,
+               adjArray[4*g + 2].y,
                0));
       
-      indices[h] = g;
-      indices[h + 1] = g + 1;
-      indices[h + 2] = g + 2;
-      indices[h + 3] = g;
-      indices[h + 4] = g + 2;
-      indices[h + 5] = g + 3;
-      g += 4;
+      indices[h] = 4*g;
+      indices[h + 1] = 4*g + 1;
+      indices[h + 2] = 4*g + 2;
+      indices[h + 3] = 4*g;
+      indices[h + 4] = 4*g + 2;
+      indices[h + 5] = 4*g + 3;
+      g++;
       h += 6;
     }
   }

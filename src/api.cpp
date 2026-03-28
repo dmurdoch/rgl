@@ -1186,7 +1186,7 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
 
     int ntext   = idata[0];
 
-    success = as_success( device->add( new TextSet(currentMaterial, 
+    success = as_success( device->add( TextSet::create(currentMaterial, 
                                                    ntext, text, vertex, adj,
        device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
     	 *nfonts, family, style, cex, fontfile,

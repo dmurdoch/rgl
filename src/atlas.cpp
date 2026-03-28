@@ -183,3 +183,9 @@ void Glyph_atlas::copy_glyphs_to_buffer(int old_width,
   has_new_glyphs = true;
 }
 
+int Glyph_atlas::glyphCount(std::vector<size_t> stringnums) {
+  int result = 0;
+  for (int i=0; i < stringnums.size(); i++)
+    result += strings[stringnums[i]].glyphnum.size();
+  return result;
+}

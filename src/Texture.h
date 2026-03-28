@@ -34,6 +34,7 @@ public:
    , bool deleteFile);
   virtual ~Texture();
   bool isValid() const;
+  void notifyChanged() { changed = true; }
   void beginUse(RenderContext* renderContext);
   void endUse(RenderContext* renderContext);
   bool is_envmap() const { return envmap; }
@@ -62,6 +63,7 @@ private:
   GLint   location;
 #endif
   bool    deleteFile;
+  bool    changed;
 };
 
 } // namespace rgl

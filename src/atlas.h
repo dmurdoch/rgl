@@ -145,6 +145,8 @@ struct Glyph_atlas
   void initContext();
   void clearContext();
   
+  int glyphCount(std::vector<size_t> stringnums);
+  
   Texture* texture;
 };
 

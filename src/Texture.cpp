@@ -73,7 +73,8 @@ Texture::Texture(
     }
 #ifndef RGL_NO_OPENGL
     location = -1;
-#endif    
+#endif   
+  changed = false;
 }
 
 Texture::~Texture()
@@ -153,7 +154,10 @@ static void printGluErrorMessage(GLint error)
 void Texture::init(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
-  glGenTextures(1, &texName);
+  if (!texName)
+    glGenTextures(1, &texName);
+  else
+    glDeleteTextures(1, &texName);
   glBindTexture(GL_TEXTURE_2D, texName);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -270,7 +274,7 @@ void Texture::setSamplerLocation(GLint loc)
 void Texture::beginUse(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
-  if (!texName) {
+  if (!texName || changed) {
     init(renderContext);
   }
 

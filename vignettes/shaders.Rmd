@@ -122,21 +122,29 @@ Previously `rgl` used the FTGL library to display text.  It's
 written for the fixed pipeline, so is not compatible with 
 shader use. 
 
-Currently text is handled similarly to the WebGL way.  
-The text is drawn to a bitmap using the Cairo lib in 
-the textraster
-package, and the bitmap is used as a 
-texture on a quad (which is drawn as two triangles, since
-modern OpenGL does it that way).  
+Currently text is handled internally.
 
-Limitation:  the
-textraster package doesn't handle mixed fonts as well as
-ragg does, and should probably be rewritten:  but I think 
-ragg doesn't offer a C interface to draw to a raster, so it 
-would be a big deal.
+First, requested text is broken up into individual
+glyphs using Pango/Cairo (which uses harfbuzz).  
+
+The glyphs are drawn to a bitmap atlas which is used as a 
+texture.  The atlas is held by the scene, and shared
+by all TextSet objects in the scene.
+
+Each string is also stored in the atlas, after being
+decomposed into glyphs.
 
 The bbox is also rewritten to be somewhat like WebGL.  It
 is a container with several objects:  a set of quads for
 the box, segments for the ticks, and text for the labels.
 
 FTGL is completely gone now.
+
+Still to do:  
+
+- fine tune the sizing:  text looks a little too large now.
+- handle colored emojis
+- switch to using the Cairo package instead of using
+the Pango/Cairo libs.
+- add functions to display the atlas for debugging, decide about function interfaces (e.g. build_atlasC).
+- merge atlas changes back into rasterText?

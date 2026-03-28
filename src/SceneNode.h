@@ -77,7 +77,7 @@ public:
   virtual void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result) { return; }
   virtual std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index) { return ""; }
   virtual std::string getTypeName() = 0;
-  bool is_initialized() { return initialized; }
+  virtual bool is_initialized() { return initialized; }
   virtual void initialize() { initialized = true; }
   virtual void uninitialize() { initialized = false; }
 

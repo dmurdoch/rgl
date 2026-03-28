@@ -636,7 +636,7 @@ void BBoxDeco::setAxes()
       double cex[] = { 1.0 };
       const char * fontfile[] = { "" };
 
-      impl->labels[i] = new TextSet(material, axis->nticks, label_ptrs.data(), values.data(), 
+      impl->labels[i] = TextSet::create(material, axis->nticks, label_ptrs.data(), values.data(), 
                                     nullptr /*in_adj*/,
                                     true  /*in_ignoreExtent*/, 
                                     1, family, style,

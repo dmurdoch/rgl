@@ -10,6 +10,7 @@
 using namespace rgl;
 
 void Glyph_atlas::updateTexture() {
+#ifndef RGL_NO_OPENGL
   if (!texture) {
     texture = new Texture("",
                           /* type= */ Texture::ALPHA,
@@ -36,5 +37,8 @@ void Glyph_atlas::updateTexture() {
     prev_generation = buffer_generation;
     prev_last_x = last_x;
     prev_last_y = last_y;
+    
+    texture->notifyChanged();
   }
+#endif
 }
