@@ -13,7 +13,7 @@ void Glyph_atlas::updateTexture() {
 #ifndef RGL_NO_OPENGL
   if (!texture) {
     texture = new Texture("",
-                          /* type= */ Texture::ALPHA,
+                          /* type= */ mono ? Texture::ALPHA : Texture::RGBA,
                           /* mode= */ Texture::REPLACE,
                           /* mipmap= */ false,
                           /* minfilter= */GL_LINEAR,
@@ -25,10 +25,20 @@ void Glyph_atlas::updateTexture() {
   if (buffer_generation > prev_generation ||
       last_x != prev_last_x ||
       last_y != prev_last_y) {
-    int stride = width*(mono ? 1 : 4);
     bool okay = texture->isValid();
-    okay = okay && texture->getPixmap()->init(GRAY8, stride, height, 8);
-    okay = okay && texture->getPixmap()->load(buffer.data());
+    okay = okay && texture->getPixmap()->init(mono ? GRAY8 : RGBA32, width, height, 8);
+    if (mono)
+      okay = okay && texture->getPixmap()->load(buffer.data());
+    else {
+      uint32_t* view = reinterpret_cast<uint32_t*>(buffer.data());
+      size_t view_size = buffer.size() / sizeof(uint32_t);
+      std::vector<uint32_t> rgba;
+      for (int i=0; i < view_size; i++) {
+        rgba.push_back(rgl::unmultiply(view[i]));
+      }
+      unsigned char* rgbabytes = reinterpret_cast<unsigned char*>(rgba.data());
+      okay = okay && texture->getPixmap()->load(rgbabytes);
+    }
     if (!okay) {
       Rprintf("some error in the text atlas texture!\n");
       texture = NULL;

@@ -25,16 +25,7 @@ Glyph_record::Glyph_record(const Glyph_record& prev) :
   width(prev.width),
   height(prev.height),
   x(prev.x),
-  y(prev.y){
-  setUV();
-};
-
-void Glyph_record::setUV() {
-  u[0] = u[3] = x_atlas;
-  u[1] = u[2] = x_atlas + width;
-  v[0] = v[1] = y_atlas;
-  v[2] = v[3] = y_atlas + height;
-}
+  y(prev.y){};
 
 String_record::String_record(Glyph_atlas& in_atlas,
               const char* in_text,
@@ -177,7 +168,6 @@ void Glyph_atlas::copy_glyphs_to_buffer(int old_width,
     }
     g.x_atlas = last_x + 1;
     g.y_atlas = last_y + 1;
-    g.setUV();
     last_x += g.width + 2;
   }
   has_new_glyphs = true;

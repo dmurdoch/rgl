@@ -39,9 +39,10 @@ TextSet* TextSet::create(Material& in_material,
                  double* in_cex,
                  const char** in_fontfile,
                  int in_npos,
-                 int* in_pos) {
+                 int* in_pos,
+                 bool mono) {
   Scene* scene = getScene();
-  Glyph_atlas& atlas = scene->mono_atlas;
+  Glyph_atlas& atlas = mono ? scene->mono_atlas : scene->color_atlas;
   std::vector<size_t> string_nums;
   std::vector<double> vertices;
   int nglyphs = 0;
@@ -52,7 +53,16 @@ TextSet* TextSet::create(Material& in_material,
                                nullptr, 
                                in_cex[j]*20.0);
     size_t fontnum = atlas.find_font(font);
-    string_nums.push_back(atlas.find_string(in_texts[i], fontnum));
+    if (mono)
+      string_nums.push_back(atlas.find_string(in_texts[i], fontnum));
+    else {
+      Color col = in_material.colors.getColor(i);
+      uint32_t rgba = (col.getRedub() << 24) + 
+        (col.getGreenub() << 16) +
+        (col.getBlueub() << 8) +
+        col.getAlphaub();
+      string_nums.push_back(atlas.find_string(in_texts[i], fontnum, rgba));
+    }
     int n = atlas.strings[string_nums.back()].glyphnum.size();
     nglyphs += n;
     for (int g=0; g < n; g++) {
@@ -67,7 +77,7 @@ TextSet* TextSet::create(Material& in_material,
   material.lit = false;  
   material.colorPerVertex(true, 4*nglyphs);
   material.alphablend = true; 
-  material.textype = Texture::ALPHA;
+  material.textype = mono ? Texture::ALPHA : Texture::RGBA;
   material.texmode = Texture::REPLACE;
   material.texture = atlas.texture;
   material.depth_test = 3; /* LEQUAL */
@@ -235,7 +245,7 @@ void TextSet::set_coordinates() {
   int n = string_num.size();
   // Count the glyphs
   int n_glyphs = atlas.glyphCount(string_num);
-  float rescale = fixedSize ? 1.8 : 0.013; /* Adjust to match rglwidget */
+  float rescale = fixedSize ? 1.55 : 0.013; /* Adjust to match rglwidget */
   float texture_width = atlas.width;
   
   posArray.alloc(4*n_glyphs);

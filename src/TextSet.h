@@ -31,7 +31,8 @@ public:
           double* in_cex,
           const char** in_fontfile,
           int in_npos, 
-          int* in_pos);
+          int* in_pos,
+          bool mono);
   ~TextSet();
   std::string getTypeName() override { return "text"; };
   int getAttributeCount(SceneNode* subscene, AttribID attrib) override;
@@ -40,7 +41,7 @@ public:
   
   bool is_initialized() override;
   void initialize() override;
-
+  static Scene* getScene();
 private:
   TextSet(Material& in_material, 
           int in_ntexts,
@@ -67,7 +68,6 @@ private:
   Glyph_atlas& atlas;
   int texture_generation;
   
-  static Scene* getScene(); 
   void set_coordinates();
   void set_texture();
   const char* get_family(int i) {

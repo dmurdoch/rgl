@@ -142,9 +142,8 @@ FTGL is completely gone now.
 
 Still to do:  
 
-- fine tune the sizing:  text looks a little too large now.
-- handle colored emojis
+- handle colored emojis -- still need to detect them.
 - switch to using the Cairo package instead of using
 the Pango/Cairo libs.
-- add functions to display the atlas for debugging, decide about function interfaces (e.g. build_atlasC).
 - merge atlas changes back into rasterText?
+- handle variable sized text (i.e. fixedSize = FALSE)

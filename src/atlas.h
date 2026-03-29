@@ -1,6 +1,7 @@
 #ifndef ATLAS_H
 #define ATLAS_H
 
+#include "Rinternals.h"
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -12,6 +13,11 @@ void build_atlasC(void* patlas,
                   int rfont,
                   float size, int color);
 
+  
+SEXP rgl_build_atlasR(SEXP text, SEXP family, 
+                  SEXP font, SEXP cex, 
+                  SEXP rgb, SEXP monochrome, 
+                  SEXP prevatlas);
 }
 namespace rgl {
 
@@ -55,9 +61,6 @@ struct Glyph_record
   int x_atlas, y_atlas;
   int width, height;
   double x, y;
-
-  void setUV();
-  float u[4], v[4];
 };
 
 struct String_record
@@ -149,6 +152,11 @@ struct Glyph_atlas
   
   Texture* texture;
 };
+
+/* Convert pango-cairo premultiplied argb format to
+ * rgba format
+ */
+uint32_t unmultiply(uint32_t argb);
 
 };
 

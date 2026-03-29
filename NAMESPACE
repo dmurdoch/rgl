@@ -12,13 +12,13 @@ export(.check3d,
   cube3d, cuboctahedron3d, cur3d, 
   currentSubscene3d, cylinder3d,
   decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, 
-  dot3d, drape3d, drawToBitmap,
+  dot3d, drape3d, 
   ellipse3d, 
   expect_known_scene, extrude3d,
   facing3d, figWidth, figHeight, filledContour3d,
   gc3d, getBoundary3d,
   getr3dDefaults, getShaders, getWidgetId, gltfTypes,
-  GramSchmidt, grid3d, 
+  glyphAtlas, GramSchmidt, grid3d, 
   highlevel, hook_rgl, hook_webgl, hover3d,
   icosahedron3d, identify3d, identityMatrix, ids3d,
   in_pkgdown, in_pkgdown_example, latex3d,
@@ -146,6 +146,9 @@ export(.check3d,
  S3method(print, rglMouseSelection)
  S3method(print, rglshaders)
  S3method(print, rglShader)
+ S3method(print, glyph_atlas)
+ 
+ S3method(plot, glyph_atlas)
  
  S3method(knit_print, rglId)
  S3method(knit_print, rglOpen3d)
@@ -204,4 +207,3 @@ importFrom(magrittr, "%>%")
 importFrom(stats, coef, predict, residuals)
 importFrom(base64enc, base64encode)
 
-importFrom(rasterText, measure_text, pack_text, draw_text_to_raster)

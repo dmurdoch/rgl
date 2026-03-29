@@ -642,7 +642,7 @@ void BBoxDeco::setAxes()
                                     1, family, style,
                                     cex,
                                     fontfile,
-                                    0, nullptr /*in_pos*/);
+                                    0, nullptr /*in_pos*/, true);
       impl->ticks[i]->material.marginCoord = i;
       impl->labels[i]->material.marginCoord = i;
       for (int j = 0; j < 3; j++) {

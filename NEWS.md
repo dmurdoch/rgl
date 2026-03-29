@@ -5,6 +5,10 @@ all drawing.
 * The `par3d("useFreeType")` parameter is now ignored.
 The pangocairo set of libraries are used for display
 in all cases.  On some platforms that involves Freetype.
+* Text drawing is now done using internal code 
+instead of the FTGL library.  The internal code draws
+text one glyph at a time; the `glyphAtlas()` function
+has been added to help with debugging.
 
 # rgl 1.3.35
 

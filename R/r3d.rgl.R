@@ -497,11 +497,14 @@ quads3d     <- function(x,y=NULL,z=NULL,...) {
   do.call("rgl.primitive0", c(list(type = "quadrangles", x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
+is.monochrome <- function(texts) 
+  getOption("rgl.monochrome", FALSE)
+
 text3d      <- function(x, y = NULL, z = NULL,
 			texts, adj = 0.5, pos = NULL, offset = 0.5,
 			usePlotmath = is.language(texts),
 			family = par3d("family"), font = par3d("font"), 
-			cex = par3d("cex"), 
+			cex = par3d("cex"), monochrome = is.monochrome(texts),
 			...) {
   if (usePlotmath) 
     return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, 
@@ -563,6 +566,7 @@ text3d      <- function(x, y = NULL, z = NULL,
                as.character(fontfile),
                as.integer(npos),
                as.integer(pos),
+               as.integer(monochrome),
                NAOK=TRUE
     )
     

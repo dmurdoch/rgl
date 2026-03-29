@@ -10,12 +10,12 @@
 text3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
        usePlotmath = is.language(texts), 
        family = par3d("family"), font = par3d("font"), 
-			 cex = par3d("cex"),
+			 cex = par3d("cex"), monochrome = is.monochrome(texts),
 			...) 
 texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
        usePlotmath = is.language(texts),
        family = par3d("family"), font = par3d("font"), 
-			 cex = par3d("cex"), 
+			 cex = par3d("cex"), monochrome = is.monochrome(texts),
 			...)       
 }
 \arguments{
@@ -33,6 +33,8 @@ texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, pos = NULL, offset = 0.5,
   \item{ family }{A device-independent font family name }
   \item{ font }{A numeric font number from 1 to 4 }
   \item{ cex }{A numeric character expansion value }
+  \item{ monochrome }{A logical value: should text be
+  monochrome?  See Details below.}
   \item{ ... }{Material properties; see \code{\link{material3d}} for details.} 
 }
 \details{
@@ -57,6 +59,16 @@ by the \code{\link{plotmath3d}} function.  This is the default
 if the \code{texts}
 parameter is \dQuote{language}, e.g. the result of
 a call to \code{\link{expression}} or \code{\link{quote}}.
+
+By default, \pkg{rgl} uses multi-coloured text, so
+emojis can appear in full colour.  However, this is
+somewhat inefficient in terms of graphics memory.
+Setting \code{monochrome = TRUE} will save memory,
+and colours specified via the material properties 
+will still be applied.
+(There are plans to make this setting automatically
+when emojis are detected in the text, but at present
+the setting needs to be done manually.)
 }
 \section{Fonts}{
 Fonts are specified using the \code{family}, \code{font} and \code{cex} arguments.  Defaults for the currently active

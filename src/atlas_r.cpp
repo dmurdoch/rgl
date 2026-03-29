@@ -4,9 +4,26 @@
 
 #include "atlas.h"
 #include "Rinternals.h"
+#include "TextSet.h"
 #include <numeric>
 
 using namespace rgl;
+
+/* This both unmultiplies argb from pango cairo,
+ * and reverses the byte order
+ */
+
+uint32_t rgl::unmultiply(uint32_t argb) {
+  uint8_t a = (argb) >> 24;
+  if (a > 0) {
+    uint8_t
+    r = ((((argb) >> 16) & 0xFF) * 255) / a,
+      g = ((((argb) >> 8) & 0xFF) * 255) / a,
+      b = (((argb) & 0xFF) * 255) / a;
+    return (a << 24) + (b << 16) + (g << 8) + r;
+  }
+  return 0;
+}
 
 void Font_record::Rprint(bool verbose) {
   Rprintf("%8x %s\n", hash, description.c_str());
@@ -100,22 +117,11 @@ SEXP get_buffer(Glyph_atlas& atlas) {
       uint32_t *row32 = (uint32_t*)(atlas.buffer.data() + i*stride);
       for (int j = 0; j < w; j++) {
         uint32_t* argb = row32 + j;
-        uint8_t a = (*argb) >> 24;
-        if (a == 0) {
-          res[k++] = 0;
-          res[k++] = 0;
-          res[k++] = 0;
-          res[k++] = 0;
-        } else {
-          uint8_t
-          r = ((((*argb) >> 16) & 0xFF) * 255) / a,
-            g = ((((*argb) >> 8) & 0xFF) * 255) / a,
-            b = (((*argb) & 0xFF) * 255) / a;
-          res[k++] = r;
-          res[k++] = g;
-          res[k++] = b;
-          res[k++] = a;
-        }
+        uint32_t  rgba = rgl::unmultiply(*argb);
+        res[k++] = rgba >> 24;
+        res[k++] = rgba >> 16 & 0xFF;
+        res[k++] = rgba >> 8 & 0xFF;
+        res[k++] = rgba & 0xFF;
       }
     }
   }
@@ -379,12 +385,25 @@ void set_atlas(Glyph_atlas& atlas, SEXP Ratlas) {
 
 extern "C" {
 
-  SEXP build_atlasR(SEXP text, SEXP family, SEXP font, SEXP cex, SEXP rgb, SEXP monochrome, SEXP prevatlas);
-
-  SEXP build_atlasR(SEXP text, SEXP family, SEXP font, SEXP cex, SEXP rgb, SEXP monochrome, SEXP prevatlas){
-    Glyph_atlas atlas(32, 32, LOGICAL_ELT(monochrome, 0));
-    if (!Rf_isNull(prevatlas)) {
-      set_atlas(atlas, prevatlas);
+  SEXP rgl_build_atlasR(SEXP text, SEXP family, SEXP font, SEXP cex, SEXP rgb, SEXP monochrome, SEXP prevatlas){
+    Glyph_atlas* atlas = nullptr;
+    bool mono = LOGICAL_ELT(monochrome, 0), 
+         allocated = false;
+    if (Rf_isString(prevatlas)) {
+      if (Rf_length(prevatlas) == 1 &&
+          !strcmp(CHAR(STRING_ELT(prevatlas, 0)), "scene")) {
+        Scene* scene = TextSet::getScene();
+        if (scene)
+          atlas = mono ? &(scene->mono_atlas) :
+                         &(scene->color_atlas);
+      }
+      if (!atlas)
+        Rf_error("Unrecognized string value for atlas");
+    } else {
+      atlas = new Glyph_atlas(32, 32, mono);
+      allocated = true;
+      if (!Rf_isNull(prevatlas))
+        set_atlas(*atlas, prevatlas);
     }
 
     for (int i=0; i < Rf_length(text); i++) {
@@ -392,13 +411,16 @@ extern "C" {
         (INTEGER_ELT(rgb, 4*i+1) << 16) +
         (INTEGER_ELT(rgb, 4*i+2) << 8) +
         INTEGER_ELT(rgb, 4*i+3);
-      build_atlasC(&atlas, CHAR(STRING_ELT(text, i)),
+      build_atlasC(atlas, CHAR(STRING_ELT(text, i)),
                   CHAR(STRING_ELT(family, i)),
                   INTEGER_ELT(font, i),
                   20*REAL_ELT(cex, i),
                   col);
     }
-    atlas.clearContext();
-    return get_atlas(atlas);
+    atlas->clearContext();
+    SEXP result = get_atlas(*atlas);
+    if (allocated)
+      delete atlas;
+    return result;
   }
 }
