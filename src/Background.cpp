@@ -21,6 +21,7 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
 {
   clearColorBuffer = true;
 
+  Texture* texture = material.getTexture("uSampler");
   if (sphere) {
     material.colors.recycle(2);
 
@@ -29,9 +30,9 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
     if (material.back == Material::FILL_FACE)
       clearColorBuffer = false;
 
-    if ( (material.lit) || ( (material.texture) && (material.texture->is_envmap() ) ) )
+    if ( (material.lit) || ( texture && (texture->is_envmap() ) ) )
       sphereMesh.setGenNormal(true);
-    if ( (material.texture) && (!material.texture->is_envmap() ) )
+    if ( texture && (!texture->is_envmap() ) )
       sphereMesh.setGenTexCoord(true);
 
     sphereMesh.setGlobe (16,16);
@@ -40,7 +41,7 @@ Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
     sphereMesh.setRadius( 1.0f );
     sphereMesh.update();
   }
-  else if (material.texture) {
+  else if (texture) {
     double vertices[12] = { -1, -1, 1,
                              1, -1, 1,
                              1,  1, 1,
@@ -192,8 +193,10 @@ void Background::initialize()
   
   material.colors.setAttribLocation(glLocs["aCol"]);
   
-  if (material.texture && glLocs_has_key("uSampler"))
-    material.texture->setSamplerLocation(glLocs["uSampler"]);
+  Texture* texture = material.getTexture("uSampler");
+  
+  if (texture && glLocs_has_key("uSampler"))
+    texture->setSamplerLocation(glLocs["uSampler"]);
   
   if (sphere)
     sphereMesh.initialize(glLocs, vertexbuffer);

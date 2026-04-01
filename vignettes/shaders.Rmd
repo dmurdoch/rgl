@@ -140,10 +140,12 @@ the box, segments for the ticks, and text for the labels.
 
 FTGL is completely gone now.
 
-Still to do:  
+## To-do list
 
 - handle colored emojis -- still need to detect them.
 - switch to using the Cairo package instead of using
 the Pango/Cairo libs.
 - merge atlas changes back into rasterText?
 - handle variable sized text (i.e. fixedSize = FALSE)
+- `setUserShaders()` isn't completely replaced yet:  it 
+can handle multiple textures, while `material3d()` can't.

@@ -106,7 +106,7 @@ for a discussion of some issues with transparency.
     in WebGL.
   }
   \item{texture}{ 
-    path to a texture image specification. See the Textures section
+    path to one or more texture image specifications. See the Textures section
     below for details.
   }
   \item{textype}{
@@ -280,7 +280,16 @@ The \code{texture} material property may be \code{NULL} or the name of
 a bitmap file to be displayed on the surface being rendered.
 Currently PNG and JPEG format files are supported.  It may
 also be any other object for which 
-\code{\link[grDevices]{as.raster}()} works, e.g. a matrix.
+\code{\link[grDevices]{as.raster}()} works, e.g. a
+matrix.
+
+\code{texture} may also be a named character vector or
+list of any of the above things.
+The names will be used in the shader for the sampler
+name (default "uSampler").  The default fragment
+shader only supports one texture, but user shaders can
+be specified via \code{fragment_shader} or
+\code{vertex_shader} material properties to support more.
 
 By default, the colors in the bitmap will modify the color of the
 object being plotted.  If the color is black (a common default), you

@@ -302,6 +302,7 @@ void ColorArray::useColor(int index) const
 
 Color ColorArray::getColor(int index) const
 {
+  index = index % ncolor;
   return Color( arrayptr[index*4], arrayptr[index*4+1], arrayptr[index*4+2], arrayptr[index*4+3] );
 }
 

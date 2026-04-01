@@ -62,6 +62,7 @@ public:
   ~Ref() { if (ptr) ptr->unref(); }
   Ref& operator = (T* in_ptr) { if (ptr) ptr->unref(); ptr = in_ptr; if (ptr) ptr->ref(); return *this; }
   T* operator -> () { return ptr; }
+  T* get() const { return ptr; } // Returns the raw pointer
   operator bool () { return (ptr) ? true : false; }
 private:
   T* ptr;

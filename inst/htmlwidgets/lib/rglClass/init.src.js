@@ -212,7 +212,6 @@
               }; 
       shape.ofsLoc = obj.ofsLoc;
       shape.texLoc = obj.texLoc;
-      shape.texture = obj.texture;
       shape.sampler = obj.sampler;
       shape.uFogMode = obj.uFogMode;
       shape.uFogColor = obj.uFogColor;
@@ -397,7 +396,14 @@
                      flags: rglwidgetClass.f_has_fog + 
                             rglwidgetClass.f_fixed_size + 
                             rglwidgetClass.f_fixed_quads,
-                     material: {lit: false},
+                     material: {
+                       lit: false,
+                       textures: {
+                         uSampler: {
+                           filename: "<raster>"
+                         }
+                       }
+                     },
                      colors: (obj.colors.length > 1 ? [obj.colors[1]] : [obj.colors[0]]),
                      cex: [[1]],
                      family: [["sans"]],
@@ -455,7 +461,7 @@
           fl, polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
           i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
-          dim, nx, nz, nrow, shaders;
+          dim, nx, nz, nrow, shaders, sampler, texture;
 
     obj.initialized = true;
     
@@ -599,15 +605,21 @@
     }
 
     if (fl.has_texture || type === "text") {
-      if (!obj.texture) {
-        obj.texture = gl.createTexture();
-        // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
-        gl.bindTexture(gl.TEXTURE_2D, obj.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-              new Uint8Array([255,255,255, 255])); // white
-      }
       obj.texLoc = gl.getAttribLocation(obj.prog, "aTexcoord");
-      obj.sampler = gl.getUniformLocation(obj.prog, "uSampler");
+      for (sampler in obj.material.textures) {
+        if (obj.material.textures.hasOwnProperty(sampler)) {
+          texture = obj.material.textures[sampler];
+
+          if (!texture.texture) {
+            texture.texture = gl.createTexture();
+            // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
+            gl.bindTexture(gl.TEXTURE_2D, texture.texture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([255,255,255, 255])); // white
+          }
+          texture.uSampler = gl.getUniformLocation(obj.prog, sampler);
+        }
+      }
     }
     
     if (fl.has_fog && !sprites_3d) {
@@ -618,23 +630,28 @@
 
     if (fl.has_texture) {
       mat = obj.material;
-      if (typeof mat.uri !== "undefined")
-        uri = mat.uri;
-      else if (typeof mat.uriElementId === "undefined") {
-        matobj = this.getObj(mat.uriId);
-        if (typeof matobj !== "undefined") {
-          uri = matobj.material.uri;
-        } else {
-          uri = "";
-        }
-      } else
-        uri = document.getElementById(mat.uriElementId).rglinstance.getObj(mat.uriId).material.uri;
+      for (sampler in mat.textures) {
+        if (mat.textures.hasOwnProperty(sampler)) {
+          texture = mat.textures[sampler];
+          if (typeof texture.uri !== "undefined")
+            uri = texture.uri;
+          else if (typeof texture.uriElementId === "undefined") {
+            matobj = this.getObj(texture.uriId);
+            if (typeof matobj !== "undefined") {
+              uri = matobj.material.uri;
+            } else {
+              uri = "";
+            }
+          } else
+            uri = document.getElementById(mat.uriElementId).rglinstance.getObj(mat.uriId).material.uri;
 
-      this.loadImageToTexture(uri, obj.texture);
+          this.loadImageToTexture(uri, texture.texture);
+        }
+      }
     }
 
     if (type === "text") {
-      this.handleLoadedTexture(obj.texture, this.textureCanvas);
+      this.handleLoadedTexture(obj.material.textures.uSampler.texture, this.textureCanvas);
     }
 
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
@@ -836,8 +853,8 @@
         if (obj.userUniformLocations[attr] === null)
           console.warn("uniform '"+attr+"' not found in object "+obj.id+".");
       }
-      for (attr in obj.material.user_textures) {
-        var texture = obj.material.user_textures[attr];
+      for (attr in obj.material.textures) {
+        texture = obj.material.textures[attr];
         texture.texture = gl.createTexture();
         // This is a trick from https://stackoverflow.com/a/19748905/2554330 to avoid warnings
         gl.bindTexture(gl.TEXTURE_2D, texture.texture);

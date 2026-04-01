@@ -1013,10 +1013,8 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.blend[0] = idata[30];
   mat.blend[1] = idata[31];
   mat.texmode = (Texture::Mode) idata[32];
-  bool deleteFile = (idata[33]) ? true : false;
   
-  int* colors   = &idata[34];
-  char*  pixmapfn = cdata[1];
+  int* colors   = &idata[33];
 
   mat.shininess   = (float) ddata[0];
   mat.size      = (float) ddata[1];
@@ -1038,26 +1036,12 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
     delete[] in_tag;
   } else
     mat.tag = std::string();
-  
-
-  if ( strlen(pixmapfn) > 0 ) {
-    mat.texture = new Texture(pixmapfn, mat.textype, mat.texmode, 
-                              mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
-                              deleteFile);
-    if ( !mat.texture->isValid() ) {
-      mat.texture->unref();
-      // delete mat.texture;
-      mat.texture = NULL;
-    } else
-      mat.alphablend = mat.alphablend || mat.texture->hasAlpha();
-  } else
-    mat.texture = NULL;
 
   mat.colors.set( ncolor, colors, nalpha, alpha);
   mat.alphablend  = mat.alphablend || mat.colors.hasAlpha();
   
-  mat.shaders[VERTEX_SHADER] = cdata[2];
-  mat.shaders[FRAGMENT_SHADER] = cdata[3];
+  mat.shaders[VERTEX_SHADER] = cdata[1];
+  mat.shaders[FRAGMENT_SHADER] = cdata[2];
 
   CHECKGLERROR;
 
@@ -1107,8 +1091,9 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[3] = (int) mat->front;
   idata[4] = (int) mat->back;
   idata[5] = mat->fog ? 1 : 0;
-  if (mat->texture) {
-    mat->texture->getParameters( (Texture::Type*) (idata + 6),
+  Texture* texture = mat->getTexture("uSampler");
+  if (texture) {
+    texture->getParameters( (Texture::Type*) (idata + 6),
                                (Texture::Mode*) (idata + 33),   
                                (bool*) (idata + 7),
                                (unsigned int*) (idata + 8),
@@ -1446,47 +1431,102 @@ void rgl::rgl_incrementID(int* n)
   *n = SceneNode::nextID;
 }
 
-
-SEXP rgl::rgl_texture_from_array(SEXP values)
+static SEXP getListElement(SEXP list, const char *str)
 {
-  int height, width;
-  PixmapTypeID typeID;
-  Material& mat = currentMaterial;
-  SEXP dim = Rf_getAttrib(values, Rf_install("dim"));
-  if (Rf_isInteger(dim)) {
-    if (Rf_length(dim) >= 2) {
-      height = INTEGER(dim)[0];
-      width = INTEGER(dim)[1];
-    }
-    if (Rf_length(dim) == 2) 
-      typeID = GRAY8;
-    else if (Rf_length(dim) == 3) {
-      if (INTEGER(dim)[2] == 3)
-        typeID = RGB24;
-      else if (INTEGER(dim)[2] == 4)
-        typeID = RGBA32;
-      else
-        return Rf_ScalarInteger(RGL_FAIL);
-    } else
-      return Rf_ScalarInteger(RGL_FAIL);
-  } else
-    return Rf_ScalarInteger(RGL_FAIL);
+  SEXP elmt = R_NilValue, names = Rf_getAttrib(list, R_NamesSymbol);
   
-  mat.texture = new Texture("", mat.textype, mat.texmode, 
+  for (int i = 0; i < Rf_length(list); i++)
+    if(strcmp(CHAR(STRING_ELT(names, i)), str) == 0) {
+      /* ASCII only */
+      elmt = VECTOR_ELT(list, i);
+      break;
+    }
+    return elmt;
+}
+
+SEXP rgl::rgl_textures_from_list(SEXP values, SEXP deletefiles)
+{
+  Material& mat = currentMaterial;  
+  if (!Rf_length(values)) {
+    mat.clearTextures();
+    return Rf_ScalarInteger(RGL_SUCCESS);
+  }
+  if (!Rf_isVectorList(values)) 
+    Rf_error("textures must be NULL or a list");
+  
+  bool do_delete = Rf_asBool(deletefiles);
+  
+  SEXP names = Rf_getAttrib(values, R_NamesSymbol);
+  if (Rf_isNull(names))
+    Rf_error("textures must be named");
+  
+  for (int i=0; i < Rf_length(values); i++) {
+    PixmapTypeID typeID;
+    Texture* texture = nullptr;
+    SEXP value = VECTOR_ELT(values, i),
+      name = STRING_ELT(names, i);
+    if (!Rf_isVectorList(value))
+      Rf_error("texture '%s' is not in standard form as a list.", CHAR(name));
+    SEXP filename = getListElement(value, "filename");
+    if (Rf_isString(filename)) {
+      if (Rf_length(filename) != 1)
+        Rf_error("texture '%s' should have a length 1 filename", CHAR(name));
+      const char *pixmapfn = CHAR(STRING_ELT(filename, 0));
+      if ( !strlen(pixmapfn) )
+        Rf_error("invalid texture filename for '%s'", CHAR(name));
+      texture = new Texture(pixmapfn, mat.textype, mat.texmode, 
+                            mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
+                            do_delete);
+      if ( !texture->isValid() ) {
+        delete texture;
+        texture = nullptr;
+      } else
+        mat.alphablend = mat.alphablend || texture->hasAlpha();
+    } else if (Rf_isArray(value)) {
+      int height, width;
+      SEXP dim = Rf_getAttrib(values, Rf_install("dim"));
+      if (Rf_isInteger(dim)) {
+        if (Rf_length(dim) >= 2) {
+          height = INTEGER(dim)[0];
+          width = INTEGER(dim)[1];
+        }
+        if (Rf_length(dim) == 2) 
+          typeID = GRAY8;
+        else if (Rf_length(dim) == 3) {
+          if (INTEGER(dim)[2] == 3)
+            typeID = RGB24;
+          else if (INTEGER(dim)[2] == 4)
+            typeID = RGBA32;
+          else
+            return Rf_ScalarInteger(RGL_FAIL);
+        } else
+          return Rf_ScalarInteger(RGL_FAIL);
+      } else
+        return Rf_ScalarInteger(RGL_FAIL);
+      
+      texture = new Texture("", mat.textype, mat.texmode, 
                             mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
                             false);
-  if ( !mat.texture->isValid() ||
-       !mat.texture->getPixmap()->init(typeID, width, height, 8) ||
-        !mat.texture->getPixmap()->load(REAL(values))) {
-      mat.texture->unref();
-      mat.texture = NULL;
-      return Rf_ScalarInteger(RGL_FAIL);
+      if ( !texture->isValid() ||
+           !texture->getPixmap()->init(typeID, width, height, 8) ||
+           !texture->getPixmap()->load(REAL(value))) {
+           delete texture;
+        texture = nullptr;
+        return Rf_ScalarInteger(RGL_FAIL);
+      }
+    } else
+      Rf_warning("Unrecognized texture type for %s\n", CHAR(name));
+    
+    if (texture) {
+      mat.setTexture(CHAR(name), texture);
+      mat.alphablend = mat.alphablend || typeID == RGBA32;
+    }
   }
-  mat.alphablend = mat.alphablend || typeID == RGBA32;
+  
   return Rf_ScalarInteger(RGL_SUCCESS);
 }
 
-SEXP rgl::rgl_textureRaster(SEXP Rid) {
+SEXP rgl::rgl_textureRaster(SEXP Rid, SEXP name) {
   Material* mat = &currentMaterial;
   int id = INTEGER(Rid)[0];
   if (id > 0) {
@@ -1514,7 +1554,7 @@ SEXP rgl::rgl_textureRaster(SEXP Rid) {
       return R_NilValue;
   }
   
-  Ref<Texture> tex = mat->texture;
+  Texture* tex = mat->getTexture(CHAR(STRING_ELT(name, 0)));
   if (!tex)
     return R_NilValue;
 
@@ -1640,6 +1680,79 @@ SEXP rgl::rgl_get_user_data(SEXP id, SEXP get_attr) {
       SET_REAL_ELT(dat, i, *values++);
     SET_VECTOR_ELT(result, j, dat);
     j++;
+    UNPROTECT(1);
+  }
+  Rf_setAttrib(result, R_NamesSymbol, names);
+  UNPROTECT(2);
+  return result;
+}
+
+SEXP rgl::rgl_get_textures(SEXP id) {
+  Material* mat = &currentMaterial;
+  int idval = INTEGER_ELT(id, 0);
+  if (idval > 0) {
+    Device* device;
+    if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+      Shape* shape = scene->get_shape(idval);
+      if (shape) 
+        mat = shape->getMaterial(); 
+      else {
+        BBoxDeco* bboxdeco = scene->get_bboxdeco(idval);
+        if (bboxdeco)
+          mat = bboxdeco->getMaterial();
+        else {
+          Background* background = scene->get_background(idval);
+          if (background)
+            mat = background->getMaterial();
+          else
+            Rf_error("id not found");
+        }
+      }
+    } else
+      Rf_error("internal error");
+  }
+  
+  auto textures = &mat->textures;
+  
+  int n = textures->size();
+  if (!n)
+    return R_NilValue;
+  
+  if (textures->size() != mat->texnames.size()) {
+    Rf_error("internal error with textures");
+  }
+
+  SEXP result = PROTECT(Rf_allocVector(VECSXP, n)),
+       names = PROTECT(Rf_allocVector(STRSXP, n));
+
+  for (int i=0; i<n; i++) {
+    std::string& name = (mat->texnames[i]);
+    SET_STRING_ELT(names, i, Rf_mkChar(name.c_str()));
+    Ref<rgl::Texture> texture = (mat->textures[i]);
+    Texture::Type textype;
+    Texture::Mode texmode;
+    bool mipmap;
+    unsigned int minfilter, magfilter;
+    std::string filename;
+    texture.get()->getParameters(&textype,
+                           &texmode,
+                           &mipmap,
+                           &minfilter,
+                           &magfilter,
+                           &filename);
+    const char *nms[] = {"textype", "texmode", "mipmap", "minfilter", "magfilter", "filename", "envmap", ""};                           
+    SEXP rtexture = PROTECT(Rf_mkNamed(VECSXP, nms));
+    SET_VECTOR_ELT(rtexture, 0, Rf_ScalarInteger((int)textype));
+    SET_VECTOR_ELT(rtexture, 1, Rf_ScalarInteger((int)texmode));
+    SET_VECTOR_ELT(rtexture, 2, Rf_ScalarLogical(mipmap));
+    SET_VECTOR_ELT(rtexture, 3, Rf_ScalarInteger(minfilter));    
+    SET_VECTOR_ELT(rtexture, 4, Rf_ScalarInteger(magfilter));  
+    SET_VECTOR_ELT(rtexture, 5, Rf_mkString(filename.c_str()));
+    SET_VECTOR_ELT(rtexture, 6,
+Rf_ScalarLogical(texture.get()->is_envmap()));
+    SET_VECTOR_ELT(result, i, rtexture);
     UNPROTECT(1);
   }
   Rf_setAttrib(result, R_NamesSymbol, names);

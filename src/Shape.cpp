@@ -304,7 +304,7 @@ ShaderFlags Shape::getShaderFlags()
     result.has_normals |= background->sphere;
   }
 
-  if (material.texture || type == "text") {
+  if (material.textures.size() || type == "text") {
     result.has_texture = getAttributeCount(subscene, TEXCOORDS) > 0 ||
      (type == "sprites" && !result.sprites_3d) ||
      type == "text" ||
@@ -543,8 +543,9 @@ void Shape::initShader()
 	std::string type = getTypeName();
 	if (flags.has_texture || type == "text") {
 	  glLocs["aTexcoord"] = glGetAttribLocation(shaderProgram, "aTexcoord");
-	  glLocs["uSampler"] = glGetUniformLocation(shaderProgram, "uSampler");
 	}
+	for (int i=0; i < material.texnames.size(); i++)
+	  glLocs[material.texnames[i]] = glGetUniformLocation(shaderProgram, material.texnames[i].c_str());
 	
 	if (flags.has_fog && !flags.sprites_3d) {
 	  glLocs["uFogMode"] = glGetUniformLocation(shaderProgram, "uFogMode");
@@ -646,11 +647,16 @@ void Shape::printUniform(const char *name, int rows, int cols, int transposed,
             type == GL_BYTE ? "GL_BYTE" : 
             type == GL_UNSIGNED_BYTE ? "GL_UNSIGNED_BYTE" :
             type == GL_BOOL ? "GL_BOOL" :
+            type == -1 ? "sampler2D" :
             "GL_??");
-		if (rows <= 1)
+		if (type == -1)
+		  Rprintf("\n");
+		else if (rows <= 1)
 		  Rprintf("[%d]\n", cols);
 		else
 		  Rprintf("[%d,%d]\n", rows, cols);
+		if (location < 0)
+		  return;
 		if (type == GL_FLOAT)
 			glGetUniformfv(shaderProgram, location, data.data());
 		else if (type == GL_INT)
@@ -658,8 +664,7 @@ void Shape::printUniform(const char *name, int rows, int cols, int transposed,
 		else if (type == GL_BOOL)
 		  glGetUniformiv(shaderProgram,
 location, idata.data());
-		else if (type == -1)
-		  Rprintf("sampler2D\n");
+		else if (type == -1) {} /* skip */
 		else{
 			Rprintf("  unknown type: %d\n", type);
 			return;
@@ -676,7 +681,6 @@ location, idata.data());
 		}
 	} else if (verbose) 
 	  Rprintf("%s: not defined\n", name);
-	SAVEGLERROR;
 }
 
 /* These may not be valid until we execute
@@ -685,26 +689,53 @@ location, idata.data());
 void Shape::printUniforms(bool verbose) {
   Rprintf("Uniforms:\n");
 	printUniform("mvMatrix", 4, 4, true, GL_FLOAT, verbose);
-	printUniform("prMatrix", 4, 4, true, GL_FLOAT, verbose);	
+	SAVEGLERROR;
+	printUniform("prMatrix", 4, 4, true, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("normMatrix", 4, 4, true, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("textScale", 1, 3, false, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("invPrMatrix", 4, 4, true, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("uAspect", 1, 1, false, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("uLwd", 1, 1, false, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("uSampler", 0, 0, false, -1, verbose);
+	SAVEGLERROR;
+	for (int i=0; i < material.texnames.size(); i++)
+	  if (material.texnames[i] != "uSampler")
+	    printUniform(material.texnames[i].c_str(), 0, 0, false, -1, verbose);
+	SAVEGLERROR;
 	printUniform("uFogMode", 1, 1, false, GL_INT, verbose);
+	SAVEGLERROR;
 	printUniform("uFogColor", 1, 3, false, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("uFogParms", 1, 4, false, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("vClipplane", nclipplanes, 4, false, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("emission", 1, 3, false, GL_FLOAT, verbose);
+	SAVEGLERROR;
 	printUniform("shininess", 1, 1, false, GL_FLOAT, verbose);
-	printUniform("ambient", nlights, 3, false, GL_FLOAT, verbose);
-	printUniform("specular", nlights, 3, false, GL_FLOAT, verbose);
-	printUniform("diffuse", nlights, 3, false, GL_FLOAT, verbose);
-	printUniform("lightDir", nlights, 3, false, GL_FLOAT, verbose);	
+	SAVEGLERROR;
+	if (nlights > 0) {
+	  printUniform("ambient", nlights, 3, false, GL_FLOAT, verbose);
+	  SAVEGLERROR;
+	  printUniform("specular", nlights, 3, false, GL_FLOAT, verbose);
+	  SAVEGLERROR;
+	  printUniform("diffuse", nlights, 3, false, GL_FLOAT, verbose);
+	  SAVEGLERROR;
+	  printUniform("lightDir", nlights, 3, false, GL_FLOAT, verbose);
+	  SAVEGLERROR;
+	}
 	printUniform("viewpoint", 1, 1, false, GL_INT, verbose);
+	SAVEGLERROR;
 	printUniform("finite", 1, 1, false, GL_INT, verbose);
+	SAVEGLERROR;
 	printUniform("front", 1, 1, false, GL_BOOL, verbose);
+	SAVEGLERROR;
 	
 }
 

@@ -79,7 +79,7 @@ TextSet* TextSet::create(Material& in_material,
   material.alphablend = true; 
   material.textype = mono ? Texture::ALPHA : Texture::RGBA;
   material.texmode = Texture::REPLACE;
-  material.texture = atlas.texture;
+  material.setTexture("uSampler", atlas.texture);
   material.depth_test = 3; /* LEQUAL */
   
   return new TextSet(material, in_ntexts, in_texts,

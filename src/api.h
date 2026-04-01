@@ -123,13 +123,15 @@ void rgl_incrementID(int* n);
 
 SEXP rgl_earcut(SEXP x, SEXP y);
 
-SEXP rgl_texture_from_array(SEXP values);
+SEXP rgl_textures_from_list(SEXP values, SEXP texdelete);
 
-SEXP rgl_textureRaster(SEXP Rid);
+SEXP rgl_textureRaster(SEXP Rid, SEXP name);
 
 SEXP rgl_set_user_data(SEXP user_attributes, SEXP is_attribute);
 
 SEXP rgl_get_user_data(SEXP id, SEXP get_attr);
+
+SEXP rgl_get_textures(SEXP id);
 
 #ifdef __cplusplus
 }

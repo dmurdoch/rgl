@@ -6,7 +6,14 @@ test_that("tags work", {
 
   file <- normalizePath(system.file("textures/worldsmall.png",                              package = "rgl"))
   material3d(texture = file)
-  expect_equal(material3d("texture"), file)
+  expect_equal(material3d("textures"), 
+               list(uSampler = 
+                      list(filename = file,
+                           textype = "rgb",
+                           texmipmap = FALSE,
+                           texminfilter = "nearest",
+                           texmagfilter = "nearest",
+                           texenvmap = FALSE)))
   expect_equal(material3d("tag"), "hello")
 
   open3d()

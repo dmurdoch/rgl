@@ -338,8 +338,13 @@ void PrimitiveSet::initialize()
   
   material.colors.setAttribLocation(glLocs["aCol"]);
   
-  if (material.texture && glLocs_has_key("uSampler"))
-    material.texture->setSamplerLocation(glLocs["uSampler"]);
+  for (int i = 0; i < material.texnames.size(); i++) {
+    std::string& name = material.texnames[i];
+    Texture* texture = nullptr;
+    if (glLocs_has_key(name) &&
+        (texture = material.getTexture(name))) 
+      texture->setSamplerLocation(glLocs[name]);
+  }
   
   if (!flags.fat_lines) {
     vertexArray.appendToBuffer(vertexbuffer);

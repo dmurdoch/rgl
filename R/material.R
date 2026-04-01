@@ -17,7 +17,7 @@ rgl.material0 <- function(
   emission     = "black", 
   shininess    = 50.0, 
   smooth       = TRUE,
-  texture      = NULL, 
+  textures     = NULL, 
   textype      = "rgb",
   texmode      = "modulate",
   texmipmap    = FALSE, 
@@ -56,6 +56,9 @@ rgl.material0 <- function(
   if (length(color) < 1)
     stop("There must be at least one color")
 
+  if (!missing(textures))
+    textures <- fixTextures(textures)
+
   # light properties
 
   ambient   <- rgl.color(ambient)
@@ -84,20 +87,14 @@ rgl.material0 <- function(
 
   rgl.bool(texmipmap)
 
-  texture <- prepareTexture(texture)
-
-  if (is.array(texture)) {
-    arr <- texture
-    texture <- ""
-  } else
-    arr <- NULL
+  textures <- lapply(textures, prepareTexture)
   
   textype <- rgl.enum.textype( textype )
   texmode <- rgl.enum.texmode( texmode )
   texminfilter <- rgl.enum.texminfilter( texminfilter )
   texmagfilter <- rgl.enum.texmagfilter( texmagfilter )
   rgl.bool(texenvmap)
-  texdelete <- !is.null(attr(texture, "rgl_source"))
+  texdelete <- !is.null(attr(textures, "rgl_source"))
   
   # polygon offset
   
@@ -137,8 +134,8 @@ rgl.material0 <- function(
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
 
-                          blend, texmode, texdelete, color) )
-  cdata <- as.character(c( tag, texture, vertex_shader, fragment_shader ))
+                          blend, texmode, color) )
+  cdata <- as.character(c( tag, vertex_shader, fragment_shader ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
   ret <- .C( rgl_material,
@@ -148,8 +145,8 @@ rgl.material0 <- function(
     ddata
   )$success
   
-  if (ret && !is.null(arr))
-    ret <- .Call(rgl_texture_from_array, arr)
+  if (ret)
+    ret <- .Call(rgl_textures_from_list, textures, texdelete)
   
   # Make sure attributes and uniforms
   # are stored as doubles and contain
@@ -232,6 +229,17 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   user_uniforms <- .Call(rgl_get_user_data, as.integer(id), FALSE)
   user_uniforms <- lapply(user_uniforms,t)  
   
+  textures <- .Call(rgl_get_textures, as.integer(id))
+  
+  textures <- lapply(textures, function(tex) list(
+    filename = tex$filename,
+    textype = textypes[tex$textype],
+    texmipmap = tex$mipmap,
+    texminfilter = minfilters[tex$minfilter],
+    texmagfilter = magfilters[tex$magfilter],
+    texenvmap = tex$envmap
+  ))
+  
   list(color = rgb(idata[32 + 3*(seq_len(idata[1]))], 
                    idata[33 + 3*(seq_len(idata[1]))], 
                    idata[34 + 3*(seq_len(idata[1]))], maxColorValue = 255),
@@ -242,7 +250,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        emission = rgb(idata[18], idata[19], idata[20], maxColorValue = 255),
        shininess = ddata[1],
        smooth = idata[3] > 0,
-       texture = if (cdata[2] == "") NULL else cdata[2],
+       textures = textures,
        textype      = textypes[idata[7]], 
        texmipmap    = idata[8] == 1,
        texminfilter = minfilters[idata[9] + 1],
@@ -274,11 +282,16 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
             
 }
 
+# This just handles one component of the 
+# texture list
+
 prepareTexture <- function(texture) {
   arr <- NULL
   src <- NULL
   if (is.null(texture))
     result <- ""
+  else if (is.list(texture))
+    result <- texture
   else if (is.character(texture) && length(texture) == 1) {
     if (texture == "<raster>") 
       result <- ""
@@ -326,12 +339,13 @@ textureSource <- function(texture) {
   texture
 }
 
-rgl.textureRaster <- function(id = NULL) {
+rgl.textureRaster <- function(id = NULL, name = "uSampler") {
   if (length(id) == 0L) id <- 0L
   stopifnot(length(id) == 1L)
   
   res <- .Call( rgl_textureRaster, 
-                id = as.integer(id) )
+                id = as.integer(id),
+                name = as.character(name))
   if (is.null(res))
     return(res);
   if (dim(res)[3L] == 1L)

@@ -46,6 +46,7 @@ public:
   Pixmap* getPixmap() const { return pixmap; }
 #ifndef RGL_NO_OPENGL
   void setSamplerLocation(GLint loc);
+  GLint getLocation() { return location; }
 #endif
   
 private:

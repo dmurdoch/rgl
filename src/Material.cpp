@@ -23,7 +23,8 @@ Material::Material(Color bg, Color fg)
   polygon_offset_factor(0.0f),
   polygon_offset_units(0.0f),
   colors(bg,fg),
-  texture(),
+  texnames(),
+  textures(),
   front(FILL_FACE),
   back(FILL_FACE),
   smooth(true),
@@ -172,9 +173,9 @@ void Material::beginUse(RenderContext* renderContext)
   }
   
   SAVEGLERROR;
-  
-  if (texture)
-    texture->beginUse(renderContext);
+  for (int i = 0; i < textures.size(); i++)
+    if (textures[i]->getLocation() >= 0)
+      textures[i]->beginUse(renderContext);
   
   SAVEGLERROR;
   
@@ -192,6 +193,39 @@ void Material::useColor(int index)
     colors.useColor( index % colors.getLength() );
 }
 
+int Material::getTexnum(std::string name) {
+  for (int i=0; i < texnames.size(); i++)
+    if (texnames[i] == name)
+      return i;
+  return -1;
+}
+
+Texture* Material::getTexture(std::string name) {
+  int num = getTexnum(name);
+  if (num >= 0) {
+    if ((int)textures.size() - 1 < num)
+      Rf_error("Internal error:  not enough textures");
+    else
+      return textures[num].get();
+  }
+  return nullptr;
+}
+
+void Material::setTexture(std::string name, Texture* texture) {
+  int num = getTexnum(name);
+  if (num >= 0)
+    textures[num] = texture;
+  else {
+    texnames.push_back(name);
+    textures.push_back(texture);
+  }
+}
+
+void Material::clearTextures() {
+  textures.clear();
+  texnames.clear();
+}
+
 void Material::endUse(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
@@ -202,10 +236,9 @@ void Material::endUse(RenderContext* renderContext)
     SAVEGLERROR;
   }
 
-  if (texture) {
-    texture->endUse(renderContext);
-    SAVEGLERROR;
-  }
+  for (int i = 0; i < textures.size(); i++)
+    textures[i]->endUse(renderContext);
+
   SAVEGLERROR;
 
   #if USE_GLGETERROR

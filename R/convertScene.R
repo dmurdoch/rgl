@@ -132,7 +132,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
 
     result["sprites_3d"] <- sprites_3d <- type == "sprites" && length(obj$ids)
     
-    result["has_texture"] <- has_texture <- !is.null(mat$texture) &&
+    result["has_texture"] <- has_texture <- length(mat$textures) > 0 &&
                                             (!is.null(obj$texcoords) 
                                              || (type == "sprites" && !sprites_3d)
                                              || (type == "background" && obj$sphere)
@@ -411,16 +411,18 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     obj$flags <- nflags[i]
     if (obj$type != "subscene") {
       texturefile <- ""
-      if (!is.null(obj$material) && "texture" %in% names(obj$material))
-        texture <- obj$material$texture
-      else
-        texture <- result$material$texture
-      if (!is.null(texture) && nchar(texture)) {
-        if (texture != "<raster>") {
-          texturefile <- texture
-          obj$material$uri <- image_uri(texturefile)
+      if (length(obj$material) && "textures" %in% names(obj$material)) {
+        for (j in seq_along(obj$material$textures)) {
+          texture <- obj$material$textures[[j]]
+          if (!is.null(texture) &&
+              !is.null(texture$filename) &&
+              nchar(texture$filename)) {
+            if (texture$filename != "<raster>") {
+              texturefile <- texture$filename
+              obj$material$textures[[j]]$uri <- image_uri(texturefile)
+            }
+          }
         }
-        obj$material$texture <- NULL
       }
       if (!is.null(obj$material)) # Never use material$color
         obj$material$color <- NULL
@@ -442,19 +444,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       obj$material$margin <- margin$coord - 1
       obj$material$floating <- margin$floating
       obj$material$edge <- margin$edge
-    }
-    if (is.list(obj$userTextures) && 
-        length(obj$userTextures) &&
-        !is.list(obj$userTextures[[1]])) {
-      textureNames <- names(obj$userTextures)
-      userTextures <- as.character(obj$userTextures)
-      obj$userTextures <- list()
-      for (j in seq_along(userTextures)) {
-        texturefile <- userTextures[j]
-        obj$userTextures[[j]] <- list(file = texturefile,
-                                      uri = image_uri(texturefile))
-      }
-      names(obj$userTextures) <- textureNames
     }
     setObj(cids[i], obj)
   }

@@ -89,7 +89,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 rgl.material.names <- c("color", "alpha", "lit", "ambient", "specular",
     "emission", "shininess", "smooth", "front", "back", "size", 
     "lwd", "fog", "point_antialias", "line_antialias",
-    "texture", "textype", "texmode", "texmipmap",
+    "textures", "textype", "texmode", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap",
     "depth_mask", "depth_test", "isTransparent",
     "polygon_offset", "margin", "floating", "tag",
@@ -121,11 +121,59 @@ warnBlackTexture <- function(...,
 }
 
 # Attach the expression for the source of a texture if
-# it is not already there
+# it is not already there,
+# add names,
+# convert to a list.
 
-addTextureSource <- function(texture, ...) {
-  if (!is.null(texture) && is.null(attr(texture, "src")))
-    attr(texture, "src") <- substitute(texture)
+fixTextures <- function(textures, ...) {
+  if (length(textures)) {
+    srcattr <- attr(textures, "src")
+    if (is.null(srcattr))
+      srcattr <- substitute(texture)
+    
+    if (isOneTexture(textures))
+      textures <- list(uSampler = textures)
+    
+    textures <- lapply(textures, fixTexture)
+    names <- names(textures)
+    if (!length(names)) {
+      if (length(textures) == 1)
+        names(textures) <- "uSampler"
+      else
+        stop("Multiple textures must be named.")
+    } else 
+      if (any(duplicated(names)))
+        stop("Texture names must be unique")
+  }
+  textures
+}
+    
+textureComponents <- c("filename", "textype",
+                    "texmode", "mipmap",
+                    "minfilter", "magfilter",
+                    "envmap")  
+    
+isOneTexture <- function(textures) {
+  (is.character(textures) && length(textures) == 1) ||
+  (is.list(textures) && 
+     all(names(textures %in% textureComponents)) &&
+     !any(vapply(textures, is.list, TRUE)))
+}
+
+fixTexture <- function(texture) {
+  if (is.character(texture))
+    texture <- list(filename = texture)
+  if (!is.list(texture))
+    stop("Unrecognized form for texture")
+  names <- names(texture)
+  if (is.null(names)) {
+    if (length(texture) > 1) 
+      stop("textures must have named components")
+    names(texture) <- names <- "filename"
+  }
+  if (any(duplicated(names)) ||
+      !all(names %in% textureComponents))
+    stop("Unrecognized or duplicated texture component")
   texture
 }
 
@@ -137,11 +185,10 @@ addTextureSource <- function(texture, ...) {
 .fixMaterialArgs <- function(..., Params = material3d(), col) {
    f <- function(...) list(...)
    dots <- list(...)
-   if (!is.null(dots$texture)) {
+   if (!is.null(dots$textures)) {
      warnBlackTexture(...,  
        col = if (missing(col)) "missing" else col,
        defaults = Params)
-     dots$texture <- addTextureSource(...)
    }
    if (!missing(col)) 
      Params$color <- col

@@ -335,9 +335,15 @@
           gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*this.sphere.vOffsets.stride, 4*this.sphere.vOffsets.tofs);
         else
           gl.vertexAttribPointer(obj.texLoc, 2, gl.FLOAT, false, 4*obj.vOffsets.stride, 4*obj.vOffsets.tofs);
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, obj.texture);
-        gl.uniform1i( obj.sampler, 0);
+        var mat = obj.material, i = 0;
+        for (var sampler in mat.textures) {
+          if (mat.textures.hasOwnProperty(sampler)) {
+            var texture = mat.textures[sampler];
+            gl.activeTexture(gl.TEXTURE0 + i);
+            gl.bindTexture(gl.TEXTURE_2D, texture.texture);
+            gl.uniform1i( texture.uSampler, texture.location);
+          }
+        }
         return true;
     };
     
@@ -393,19 +399,6 @@
       	      } else
       	        console.warn("unsupported uniform shape");
       	    }
-      	  }
-      	}
-      }
-      if (typeof obj.userTextures !== "undefined") {
-        var has_texture = rglwidgetClass.isSet(obj.flags, rglwidgetClass.f_has_texture),
-              texnum = has_texture - 1;
-        for (attr in obj.userTextures) {
-      	  var texture = obj.userTextures[attr];
-      	  if (texture.sampler !== null) {
-      	    texnum += 1;
-      	    gl.activeTexture(gl.TEXTURE0 + texnum);
-            gl.bindTexture(gl.TEXTURE_2D, texture.texture);
-            gl.uniform1i( texture.sampler, texnum);
       	  }
       	}
       }

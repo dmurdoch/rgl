@@ -177,7 +177,8 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
   }
 
   if (!is3D) {
-    doTex = (material.texture) ? true : false;
+    Texture* texture = material.getTexture("uSampler");
+    doTex = texture ? true : false;
     material.beginUse(renderContext);
     if (material.useColorArray)
       colArray.useArray();
@@ -496,11 +497,12 @@ void SpriteSet::initialize()
   else
     colArray.setAttribLocation(glLocs["aCol"]);
   
-  if (material.texture && 
+  Texture* texture = material.getTexture("uSampler");
+  if (texture && 
       glLocs_has_key("uSampler") &&
       glLocs_has_key("aTexcoord")) {
     has_texture = true;
-    material.texture->setSamplerLocation(glLocs["uSampler"]);
+    texture->setSamplerLocation(glLocs["uSampler"]);
   }
   
   if (!is3D) {

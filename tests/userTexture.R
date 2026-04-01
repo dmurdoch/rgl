@@ -1,13 +1,7 @@
 library(rgl)
 open3d()
 set.seed(3)
- x <- cube3d(col="white", texture = system.file("textures/rgl2.png",
-                                                package = "rgl"),
-             texcoords = matrix(runif(16), ncol=2))
-id <- shade3d(x)
-# rglwidget()
-
-
+ 
 
 vShader <- "
 /* ****** quads object 13 vertex shader ****** */
@@ -50,8 +44,8 @@ precision mediump float;
 varying vec4 vCol; // carries alpha
 varying vec4 vPosition;
 varying vec2 vTexcoord;
-uniform sampler2D uSampler;
 uniform sampler2D userSampler;
+uniform sampler2D unusedSampler;
 uniform int uFogMode;
 uniform vec3 uFogColor;
 uniform vec4 uFogParms;
@@ -59,12 +53,12 @@ varying vec4 vNormal;
 uniform mat4 mvMatrix;
 uniform vec3 emission;
 uniform float shininess;
-uniform vec3 ambient0;
-uniform vec3 specular0; // light*material
-uniform vec3 diffuse0;
-uniform vec3 lightDir0;
-uniform bool viewpoint0;
-uniform bool finite0;
+uniform vec3 ambient[1];
+uniform vec3 specular[1]; // light*material
+uniform vec3 diffuse[1];
+uniform vec3 lightDir[1];
+uniform bool viewpoint[1];
+uniform bool finite[1];
 void main(void) {
   vec4 fragColor;
   vec3 n = normalize(vNormal.xyz + texture2D(userSampler, vTexcoord).rgb);
@@ -76,20 +70,20 @@ void main(void) {
   vec3 col;
   float nDotL;
   n = -faceforward(n, n, eye);
-  colDiff = vec4(vCol.rgb * diffuse0, vCol.a);
-  lightdir = lightDir0;
-  if (!viewpoint0)
+  colDiff = vec4(vCol.rgb * diffuse[0], vCol.a);
+  lightdir = lightDir[0];
+  if (!viewpoint[0])
     lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
-  if (!finite0) {
+  if (!finite[0]) {
     halfVec = normalize(lightdir + eye);
   } else {
     lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
     halfVec = normalize(lightdir + eye);
   }
-  col = ambient0;
+  col = ambient[0];
   nDotL = dot(n, lightdir);
   col = col + max(nDotL, 0.) * colDiff.rgb;
-  col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular0;
+  col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[0];
   lighteffect = lighteffect + vec4(col, colDiff.a);
   vec4 textureColor = lighteffect*vec4(1.,1.,1.,1.);
   fragColor = textureColor;
@@ -109,12 +103,16 @@ void main(void) {
 }
 "
 
-s <- setUserShaders(id, vertexShader = vShader,
-                        fragmentShader = fShader,
-               textures = c(userSampler = system.file("textures/rgl2.png",
+x <- cube3d(col="white", 
+            texcoords = matrix(runif(16), ncol=2),
+            vertex_shader = vShader,
+            fragment_shader = fShader,
+            textures = c(userSampler = system.file("textures/rgl2.png",
                                       package = "rgl"),
-                            unusedSampler = system.file("textures/rgl2.png",
+                          unusedSampler = system.file("textures/rgl2.png",
                                                         package = "rgl")),
-               uniforms = list(unusedUniform = 3),
-               attributes = list(unusedAttribute = 1:10))
-rglwidget(s)
+             uniforms = list(unusedUniform = 3),
+             attributes = list(unusedAttribute = 1:10))
+id <- shade3d(x)
+
+rglwidget()

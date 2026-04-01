@@ -18,9 +18,17 @@ std::string rgl::defaultShader(ShaderType type)
 		std::string filename = rglHome + "/shaders/" + shaderFilenames[type];
 		std::ifstream file(filename);
 		if (!file) {
-			// Error handling: file could not be opened
-				return "";
-			}
+			// Error handling: file could not be opened.
+			// Maybe we're running a testthat test?
+			file.close();
+		  file.clear();
+			filename = rglHome + "/inst/shaders/" + shaderFilenames[type];
+		  file.open(filename);
+		}
+		if (!file) {
+		  Rf_warning("Default shader not found.");
+			return "";
+		}
 			
 		std::string file_contents((std::istreambuf_iterator<char>(file)),
                    std::istreambuf_iterator<char>());

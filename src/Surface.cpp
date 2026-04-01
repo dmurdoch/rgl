@@ -31,7 +31,8 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
 
   vertexArray.alloc(nvertex);
 
-  if (material.texture)
+  Texture* texture = material.getTexture("uSampler");
+  if (texture)
     texCoordArray.alloc(nvertex);
 
   Vertex v;
@@ -74,7 +75,7 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
         normalArray[iy] = v;
       }
       
-      if ( (material.texture) && (! material.texture->is_envmap() ) ) {
+      if ( (texture) && (!texture->is_envmap() ) ) {
         if (!user_textures) {
           texCoordArray[iy].s = ((float)ix)/((float)(nx-1));
           texCoordArray[iy].t = 1.0f - ((float)iz)/((float)(nz-1));

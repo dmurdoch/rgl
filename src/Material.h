@@ -47,7 +47,12 @@ public:
   float        polygon_offset_factor;
   float        polygon_offset_units;
   ColorArray   colors;        // color or if lit, represents diffuse color
-  Ref<Texture> texture;
+  Texture*     getTexture(std::string name);
+  int          getTexnum(std::string name);
+  void         setTexture(std::string name, Texture* texture);
+  void         clearTextures();
+  std::vector<std::string> texnames;
+  std::vector<Ref<Texture>> textures;
   PolygonMode  front;
   PolygonMode  back;
   bool         alphablend;
