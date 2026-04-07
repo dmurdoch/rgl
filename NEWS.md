@@ -9,6 +9,10 @@ in all cases.  On some platforms that involves Freetype.
 instead of the FTGL library.  The internal code draws
 text one glyph at a time; the `glyphAtlas()` function
 has been added to help with debugging.
+* Materials are now allowed to contain multiple
+textures.  The standard shaders always work with 
+the texture labelled `uSampler`, but user-supplied
+shaders can work with others.
 
 # rgl 1.3.35
 

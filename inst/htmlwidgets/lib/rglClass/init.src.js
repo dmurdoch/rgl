@@ -944,7 +944,7 @@
         else if (pmode === "points") {
           // stay with default
         } else if ((type === "quads" || type === "text" ||
-             type === "sprites") && !sprites_3d) {
+             type === "sprites" || type === "surface") && !sprites_3d) {
           nrows = Math.floor(obj.vertexCount/4);
           if (pmode === "filled") {
             fnew = Array(6*nrows);

@@ -368,30 +368,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
 ##
 
 rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE, ...) {
-  rgl.material0(...)
-  
-  vertex  <- rgl.vertex(x,y,z)
-  nvertex <- rgl.nvertex(vertex)
-  radius  <- rgl.attr(radius, nvertex)
-  nradius <- length(radius)
-  if (nvertex && nradius) {
-    
-    idata <- as.integer( c( nvertex, nradius ) )
-    
-    ret <- .C( rgl_spheres,
-               success = as.integer(FALSE),
-               idata,
-               as.numeric(vertex),    
-               as.numeric(radius),
-               as.integer(fastTransparency),
-               NAOK=TRUE
-    )
-    
-    if (! ret$success)
-      stop("'rgl_spheres' failed")
-    
-    lowlevel(ret$success)
-  }
+  .Defunct("spheres3d")
 }
 
 ##

@@ -343,9 +343,14 @@
       var mat;
       if (typeof obj.material === "undefined")
         console.error("material undefined");
-      mat = obj.material[property];
-      if (typeof mat === "undefined")
+      if (typeof obj.material.textures !== "undefined" &&
+          typeof obj.material.textures.uSampler !== "undefined")
+        mat = obj.material.textures.uSampler[property];
+      if (typeof mat === "undefined") {
+        mat = obj.material[property];
+        if (typeof mat === "undefined")
           mat = this.scene.material[property];
+      }
       return mat;
     };
     

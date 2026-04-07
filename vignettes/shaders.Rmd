@@ -147,5 +147,6 @@ FTGL is completely gone now.
 the Pango/Cairo libs.
 - merge atlas changes back into rasterText?
 - handle variable sized text (i.e. fixedSize = FALSE)
-- `setUserShaders()` isn't completely replaced yet:  it 
-can handle multiple textures, while `material3d()` can't.
+- integrate rglFonts() into the font handling
+system again
+- fix support of bitmaps as textures.

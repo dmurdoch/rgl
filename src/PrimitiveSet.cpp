@@ -480,6 +480,8 @@ FaceSet::FaceSet(
 {
   if (in_useNormals)
     initNormals(in_normals);
+  else if (material.lit)
+    initNormals(NULL);
   else
     normalArray.alloc(0);
   if (in_useTexcoords) {
@@ -514,6 +516,8 @@ void FaceSet::initFaceSet(
 
   if (in_normals)
     initNormals(in_normals);
+  else 
+    initNormals(NULL);
 
   if (useTexcoords) {
   	size_t nvertices = vertexArray.size();
@@ -577,11 +581,7 @@ void FaceSet::initNormals(double* in_normals)
 // ---------------------------------------------------------------------------
 
 void FaceSet::drawBegin(RenderContext* renderContext)
-{  
-  if (material.lit && 
-      normalArray.size() < vertexArray.size())
-      initNormals(NULL);
-  
+{
   PrimitiveSet::drawBegin(renderContext);
   
   if (material.lit) {
@@ -639,8 +639,6 @@ void FaceSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
   if (first < n) {
     switch (attrib) {
       case NORMALS: {
-        if (normalArray.size() < n)
-          initNormals(NULL);
         while (first < n) {
           *result++ = normalArray[first].x;
           *result++ = normalArray[first].y;
@@ -666,8 +664,6 @@ void FaceSet::initialize()
 {
 	PrimitiveSet::initialize();
 #ifndef RGL_NO_OPENGL
-	if (normalArray.size() < vertexArray.size())
-		initNormals(NULL);
 	if (glLocs_has_key("aNorm")) {
 	  normalArray.setAttribLocation(glLocs["aNorm"]);
 		normalArray.appendToBuffer(vertexbuffer);
