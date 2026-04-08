@@ -34,3 +34,5 @@ rglClass/README.md$
 ^CRAN-SUBMISSION$
 ^shaders.txt$
 ^vignettes/shaders.Rmd$
+^\.positai$
+^\.claude$

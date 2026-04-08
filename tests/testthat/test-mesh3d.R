@@ -15,7 +15,7 @@ test_that("tmesh3d works", {
 										"normals", "texcoords", "meshColor"),
 							 ignore.order = TRUE)
 	shade3d(m)
-	expect_known_scene("tmesh3d")
+	expect_snapshot_scene()
 })
 
 test_that("qmesh3d works", {
@@ -26,7 +26,8 @@ test_that("qmesh3d works", {
 										"normals", "texcoords", "meshColor"),
 							 ignore.order = TRUE)
 	shade3d(m)
-	expect_known_scene("qmesh3d")
+	expect_snapshot_scene()
+	# expect_known_scene("qmesh3d")
 })
 
 test_that("shade3d, wire3d and dot3d work", {
@@ -35,7 +36,8 @@ test_that("shade3d, wire3d and dot3d work", {
 	shade3d(mesh)
 	wire3d(translate3d(mesh, 1,1,1))
 	dot3d(translate3d(mesh, 2,2,2))
-	expect_known_scene("shade3detc")
+	expect_snapshot_scene()
+	# expect_known_scene("shade3detc")
 })
 
 test_that("transformations work", {
@@ -44,5 +46,6 @@ test_that("transformations work", {
 	shade3d(translate3d(mesh, 1,2,3))
   shade3d(rotate3d(mesh, 35, 1,2,3))
   shade3d(scale3d(mesh, 1,2,3))
-	expect_known_scene("transformations", tolerance = 1.e-5)
+  expect_snapshot_scene(tolerance = 1.e-5)
+	# expect_known_scene("transformations", tolerance = 1.e-5)
 })

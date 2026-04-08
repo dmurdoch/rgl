@@ -1054,37 +1054,37 @@ void rgl::rgl_getcolorcount(int* count)
   CHECKGLERROR;
 }
 
-void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
-{
+static Material* findMaterial(int id) {
   Material* mat = &currentMaterial;
-  unsigned int i,j;
-  std::string filename;
-  
-  if (*id > 0) {
+  if (id > 0) {
     Device* device;
-    *successptr = RGL_FAIL;
     if (deviceManager && (device = deviceManager->getCurrentDevice())) {
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
-
-      Shape* shape = scene->get_shape(*id);
+      
+      Shape* shape = scene->get_shape(id);
       if (shape) 
-        mat = shape->getMaterial(); /* success! successptr will be set below */
+        mat = shape->getMaterial(); 
       else {
-        BBoxDeco* bboxdeco = scene->get_bboxdeco(*id);
+        BBoxDeco* bboxdeco = scene->get_bboxdeco(id);
         if (bboxdeco)
           mat = bboxdeco->getMaterial();
         else {
-          Background* background = scene->get_background(*id);
+          Background* background = scene->get_background(id);
           if (background)
             mat = background->getMaterial();
-          else
-            return;
         }
       }
-    } else
-      return;
+    }
   }
+  return mat;
+}
+
+void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
+{
+  Material* mat = findMaterial(*id);
+  unsigned int i,j;
+  std::string filename;
   
   idata[1] = mat->lit ? 1 : 0;
   idata[2] = mat->smooth ? 1 : 0;
@@ -1444,9 +1444,9 @@ static SEXP getListElement(SEXP list, const char *str)
     return elmt;
 }
 
-SEXP rgl::rgl_textures_from_list(SEXP values, SEXP deletefiles)
+SEXP rgl::rgl_textures_from_list(SEXP values, SEXP id)
 {
-  Material& mat = currentMaterial;  
+  Material& mat = *findMaterial(Rf_asInteger(id)); 
   if (!Rf_length(values)) {
     mat.clearTextures();
     return Rf_ScalarInteger(RGL_SUCCESS);
@@ -1454,10 +1454,8 @@ SEXP rgl::rgl_textures_from_list(SEXP values, SEXP deletefiles)
   if (!Rf_isVectorList(values)) 
     Rf_error("textures must be NULL or a list");
   
-  bool do_delete = Rf_asBool(deletefiles);
-  
-  SEXP names = Rf_getAttrib(values, R_NamesSymbol);
-  if (Rf_isNull(names))
+  SEXP names = PROTECT(Rf_getAttrib(values, R_NamesSymbol));
+  if (Rf_isNull(names)) 
     Rf_error("textures must be named");
   
   for (int i=0; i < Rf_length(values); i++) {
@@ -1465,25 +1463,29 @@ SEXP rgl::rgl_textures_from_list(SEXP values, SEXP deletefiles)
     Texture* texture = nullptr;
     SEXP value = VECTOR_ELT(values, i),
       name = STRING_ELT(names, i);
-    if (!Rf_isVectorList(value))
-      Rf_error("texture '%s' is not in standard form as a list.", CHAR(name));
-    SEXP filename = getListElement(value, "filename");
+    if (!Rf_inherits(value, "rglTexture"))
+      Rf_error("texture '%s' is not an rgl texture object.", CHAR(name));
+    SEXP filename = getListElement(value, "filename"),
+         raster = getListElement(value, "raster"),
+         textype = getListElement(value, "textype"),
+         texmode = getListElement(value, "texmode"),
+         texmipmap = getListElement(value, "texmipmap"),
+         texminfilter = getListElement(value, "texminfilter"),
+         texmagfilter = getListElement(value, "texmagfilter"),
+         texenvmap = getListElement(value, "texenvmap"),
+         R_delete = getListElement(value, "do_delete");
+    bool do_delete = false;
+    const char* pixmapfn;
+    int height, width;
+    bool fromfile = false;
     if (Rf_isString(filename)) {
-      if (Rf_length(filename) != 1)
-        Rf_error("texture '%s' should have a length 1 filename", CHAR(name));
-      const char *pixmapfn = CHAR(STRING_ELT(filename, 0));
+      pixmapfn = CHAR(STRING_ELT(filename, 0));
       if ( !strlen(pixmapfn) )
         Rf_error("invalid texture filename for '%s'", CHAR(name));
-      texture = new Texture(pixmapfn, mat.textype, mat.texmode, 
-                            mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
-                            do_delete);
-      if ( !texture->isValid() ) {
-        delete texture;
-        texture = nullptr;
-      } else
-        mat.alphablend = mat.alphablend || texture->hasAlpha();
-    } else if (Rf_isArray(value)) {
-      int height, width;
+      fromfile = true;
+      if (!Rf_isNull(R_delete))
+        do_delete = Rf_asBool(R_delete);
+    } else if (Rf_isArray(raster)) {
       SEXP dim = Rf_getAttrib(values, Rf_install("dim"));
       if (Rf_isInteger(dim)) {
         if (Rf_length(dim) >= 2) {
@@ -1503,19 +1505,31 @@ SEXP rgl::rgl_textures_from_list(SEXP values, SEXP deletefiles)
           return Rf_ScalarInteger(RGL_FAIL);
       } else
         return Rf_ScalarInteger(RGL_FAIL);
-      
-      texture = new Texture("", mat.textype, mat.texmode, 
-                            mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
-                            false);
-      if ( !texture->isValid() ||
-           !texture->getPixmap()->init(typeID, width, height, 8) ||
-           !texture->getPixmap()->load(REAL(value))) {
-           delete texture;
-        texture = nullptr;
-        return Rf_ScalarInteger(RGL_FAIL);
-      }
+      pixmapfn = "";
     } else
-      Rf_warning("Unrecognized texture type for %s\n", CHAR(name));
+      Rf_error("Unrecognized texture object");
+    texture = new Texture(pixmapfn, 
+                          (Texture::Type)Rf_asInteger(textype), 
+                          (Texture::Mode)Rf_asInteger(texmode), 
+                          Rf_asBool(texmipmap),
+                          (unsigned int)Rf_asInteger(texminfilter),
+                          (unsigned int)Rf_asInteger(texmagfilter),
+                          Rf_asBool(texenvmap),
+                          do_delete);
+    bool success = true;
+    if ( !texture->isValid() )
+      success = false;
+    if ( success && 
+         !fromfile &&
+         (!texture->getPixmap()->init(typeID, width, height, 8) ||
+          !texture->getPixmap()->load(REAL(value))))
+          success = false;
+    if (!success) {
+      delete texture;
+      texture = nullptr;
+      return Rf_ScalarInteger(RGL_FAIL);
+    } else
+      mat.alphablend = mat.alphablend || texture->hasAlpha();
     
     if (texture) {
       mat.setTexture(CHAR(name), texture);
@@ -1523,6 +1537,7 @@ SEXP rgl::rgl_textures_from_list(SEXP values, SEXP deletefiles)
     }
   }
   
+  UNPROTECT(1);
   return Rf_ScalarInteger(RGL_SUCCESS);
 }
 
@@ -1688,31 +1703,7 @@ SEXP rgl::rgl_get_user_data(SEXP id, SEXP get_attr) {
 }
 
 SEXP rgl::rgl_get_textures(SEXP id) {
-  Material* mat = &currentMaterial;
-  int idval = INTEGER_ELT(id, 0);
-  if (idval > 0) {
-    Device* device;
-    if (deviceManager && (device = deviceManager->getCurrentDevice())) {
-      RGLView* rglview = device->getRGLView();
-      Scene* scene = rglview->getScene();
-      Shape* shape = scene->get_shape(idval);
-      if (shape) 
-        mat = shape->getMaterial(); 
-      else {
-        BBoxDeco* bboxdeco = scene->get_bboxdeco(idval);
-        if (bboxdeco)
-          mat = bboxdeco->getMaterial();
-        else {
-          Background* background = scene->get_background(idval);
-          if (background)
-            mat = background->getMaterial();
-          else
-            Rf_error("id not found");
-        }
-      }
-    } else
-      Rf_error("internal error");
-  }
+  Material* mat = findMaterial(Rf_asInteger(id));
   
   auto textures = &mat->textures;
   
@@ -1742,7 +1733,7 @@ SEXP rgl::rgl_get_textures(SEXP id) {
                            &minfilter,
                            &magfilter,
                            &filename);
-    const char *nms[] = {"textype", "texmode", "mipmap", "minfilter", "magfilter", "filename", "envmap", ""};                           
+    const char *nms[] = {"textype", "texmode", "texmipmap", "texminfilter", "texmagfilter", "filename", "texenvmap", ""};                           
     SEXP rtexture = PROTECT(Rf_mkNamed(VECSXP, nms));
     SET_VECTOR_ELT(rtexture, 0, Rf_ScalarInteger((int)textype));
     SET_VECTOR_ELT(rtexture, 1, Rf_ScalarInteger((int)texmode));

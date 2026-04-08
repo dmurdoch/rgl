@@ -147,6 +147,8 @@ FTGL is completely gone now.
 the Pango/Cairo libs.
 - merge atlas changes back into rasterText?
 - handle variable sized text (i.e. fixedSize = FALSE)
-- integrate rglFonts() into the font handling
-system again
-- fix support of bitmaps as textures.
+- Some scenes don't appear until moved, or never, e.g. tests/bbox3dtests.R final plots.  This seems to be sphere-specific now:  maybe the triangles are
+drawn clockwise?  Some info:  in R, rgl uses
+culling to remove polygons.  That is supposed to ignore the normals and assumes the front is the CCW side.  However, the shader is written for WebGL, and it does culling based on the normals.  We probably want to use the WebGL method.
+- should have verbose option for printing scenes
+so that expect_snapshot will be easier to read.

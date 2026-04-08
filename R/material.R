@@ -56,9 +56,6 @@ rgl.material0 <- function(
   if (length(color) < 1)
     stop("There must be at least one color")
 
-  if (!missing(textures))
-    textures <- fixTextures(textures)
-
   # light properties
 
   ambient   <- rgl.color(ambient)
@@ -87,12 +84,10 @@ rgl.material0 <- function(
 
   rgl.bool(texmipmap)
 
-  textures <- lapply(textures, prepareTexture)
-  
-  textype <- rgl.enum.textype( textype )
-  texmode <- rgl.enum.texmode( texmode )
-  texminfilter <- rgl.enum.texminfilter( texminfilter )
-  texmagfilter <- rgl.enum.texmagfilter( texmagfilter )
+  tmp <- encodeTexture(list(textype = textype,
+              texmode = texmode,
+              texminfilter = texminfilter,
+              texmagfilter = texmagfilter))
   rgl.bool(texenvmap)
   texdelete <- !is.null(attr(textures, "rgl_source"))
   
@@ -128,13 +123,13 @@ rgl.material0 <- function(
   # pack data
 
   idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, 
-                          textype, texmipmap, texminfilter, texmagfilter, 
+                          tmp$textype, texmipmap, tmp$texminfilter, tmp$texmagfilter, 
                           nalpha, ambient, specular, emission, texenvmap, 
                           point_antialias, line_antialias, 
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
 
-                          blend, texmode, color) )
+                          blend, tmp$texmode, color) )
   cdata <- as.character(c( tag, vertex_shader, fragment_shader ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
@@ -145,8 +140,21 @@ rgl.material0 <- function(
     ddata
   )$success
   
-  if (ret)
+  if (ret) {
+    
+    if (!missing(textures))
+      textures <- fixTextures(textures)
+    
+    for (i in seq_along(textures))
+      if (is.list(textures[[i]]) &&
+          is.null(textures[[i]]$filename) &&
+          is.null(textures[[i]]$raster))
+        stop("Bad texture specification.")
+    
+    textures <- lapply(textures, prepareTexture)
+    textures <- encodeTextures(textures)
     ret <- .Call(rgl_textures_from_list, textures, texdelete)
+  }
   
   # Make sure attributes and uniforms
   # are stored as doubles and contain
@@ -201,11 +209,6 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   if (!ret$success) stop('rgl.getmaterial failed')
   
   polymodes <- c("filled", "lines", "points", "culled")
-  textypes <- c("alpha", "luminance", "luminance.alpha", "rgb", "rgba")
-  texmodes <- c("replace", "modulate", "decal", "blend", "add")
-  minfilters <- c("nearest", "linear", "nearest.mipmap.nearest", "nearest.mipmap.linear", 
-                  "linear.mipmap.nearest", "linear.mipmap.linear")
-  magfilters <- c("nearest", "linear")
   depthtests <- c("never", "less", "equal", "lequal", "greater", 
                   "notequal", "gequal", "always")
   blendmodes <- c("zero", "one", 
@@ -216,6 +219,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
                   "constant_color", "one_minus_constant_color",
                   "constant_alpha", "one_minus_constant_alpha",
                   "src_alpha_saturate")
+  
   idata <- ret$idata
   ddata <- ret$ddata
   cdata <- ret$cdata
@@ -231,16 +235,17 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   
   textures <- .Call(rgl_get_textures, as.integer(id))
   
-  textures <- lapply(textures, function(tex) list(
-    filename = tex$filename,
-    textype = textypes[tex$textype],
-    texmipmap = tex$mipmap,
-    texminfilter = minfilters[tex$minfilter],
-    texmagfilter = magfilters[tex$magfilter],
-    texenvmap = tex$envmap
-  ))
+  textures <- decodeTextures(textures, id)
   
-  list(color = rgb(idata[32 + 3*(seq_len(idata[1]))], 
+  tmp <- list(textype = idata[7],
+              texmode = idata[34],
+              texmipmap = idata[8],
+              texminfilter = idata[9],
+              texmagfilter = idata[10],
+              texenvmap = idata[21])
+  tmp <- decodeTexture(tmp, withClass = FALSE)
+
+  c(tmp, list(color = rgb(idata[32 + 3*(seq_len(idata[1]))], 
                    idata[33 + 3*(seq_len(idata[1]))], 
                    idata[34 + 3*(seq_len(idata[1]))], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=6, length.out = idata[11])] else 1,
@@ -251,11 +256,6 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        shininess = ddata[1],
        smooth = idata[3] > 0,
        textures = textures,
-       textype      = textypes[idata[7]], 
-       texmipmap    = idata[8] == 1,
-       texminfilter = minfilters[idata[9] + 1],
-       texmagfilter = magfilters[idata[10] + 1],
-       texenvmap    = idata[21] == 1,
        front = polymodes[idata[4]],
        back = polymodes[idata[5]],
        size = ddata[2],
@@ -270,7 +270,6 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        margin = deparseMargin(list(coord = idata[27] + 1, edge = idata[28:30])),
        floating = idata[31] == 1,
        blend = blendmodes[idata[32:33] + 1],
-       texmode = texmodes[idata[34] + 1],
        tag = cdata[1],
   		 vertex_shader = structure(cdata[3], class = "rglShader",
   		 													type = "vertex"),
@@ -278,49 +277,8 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   		 													type = "fragment"),
   		 user_attributes = user_attributes,
   		 user_uniforms = user_uniforms
-       )
+       ))
             
-}
-
-# This just handles one component of the 
-# texture list
-
-prepareTexture <- function(texture) {
-  arr <- NULL
-  src <- NULL
-  if (is.null(texture))
-    result <- ""
-  else if (is.list(texture))
-    result <- texture
-  else if (is.character(texture) && length(texture) == 1) {
-    if (texture == "<raster>") 
-      result <- ""
-    else {
-      # Assume it's a filename
-      ext <- tolower(file_ext(texture))
-      if (ext %in% c("jpg", "jpeg")) {
-        if (requireNamespace("jpeg"))
-          arr <- jpeg::readJPEG(texture)
-        else
-          stop("JPEG textures require the 'jpeg' package")
-        src <- texture
-      } else
-        result <- normalizePath(texture)
-    }
-  } else {
-    raster <- as.raster(texture)
-    arr <- col2rgb(raster)/255
-    dim(arr) <- c(dim(raster), 3)
-  }
-  
-  if (!is.null(arr)) {
-    result <- arr
-    origsrc <- attr(texture, "src")
-    if (!is.null(origsrc))
-      src <- origsrc
-  }
-  
-  structure(result, rgl_source = src)
 }
 
 textureSource <- function(texture) {

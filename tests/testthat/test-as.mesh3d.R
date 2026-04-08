@@ -11,5 +11,5 @@ test_that("mergeVertices works", {
 	shade3d(translate3d(mesh2, 3, 0, 0))
 	(mesh3 <- mergeVertices(mesh2))
 	shade3d(translate3d(mesh3, 6, 0, 0))
-	expect_known_scene("mergeVertices")
+	expect_snapshot_scene()
 })

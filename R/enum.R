@@ -9,9 +9,9 @@ rgl.enum <- function( name, ..., multi = FALSE) {
  
   max <- length(names)
 
-  if ( any( is.na(pos) ) )
+  if ( any( is.na(pos) ) ) {
     stop(gettextf("Symbolic value must be chosen from: %s", list(names)), domain = NA)
-  else if ( (max+1) %in% pos )
+  } else if ( (max+1) %in% pos )
     pos <- seq_along(names)
     
   id  <- unlist(choices[pos])

@@ -266,6 +266,3 @@ void Material::colorPerVertex(bool enable, int numVertices)
     colors.recycle(numVertices);
 }
 
-
-
-

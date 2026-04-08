@@ -43,6 +43,13 @@ public:
                      unsigned int *out_minfilter, 
                      unsigned int *out_magfilter, 
                      std::string *out_filename);
+  Type getType() { return type; };
+  Mode getMode() { return mode; };
+  bool getMipmap() { return mipmap; };
+  unsigned int getMinfilter();
+  unsigned int getMagfilter();
+  std::string getFilename();
+  
   Pixmap* getPixmap() const { return pixmap; }
 #ifndef RGL_NO_OPENGL
   void setSamplerLocation(GLint loc);

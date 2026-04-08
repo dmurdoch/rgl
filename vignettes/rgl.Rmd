@@ -260,7 +260,7 @@ this position:
   from the top. If you increase `phi` above 0, you continue over and 
   start to see the graph from the "back" (and upside down).
 
-You can also use `r indexfns("observer3d")` to change the camera 
+You can also use `r linkfn("observer3d")` to change the camera 
 location using `x,y,z` coordinates. In particular, increasing
 the `z` coordinate lets you zoom out, and decreasing it zooms you in.
 
@@ -451,7 +451,7 @@ FOV         |       | Field of view, in degrees.  Zero means isometric perspecti
 ignoreExtent |      | Should `rgl` ignore the size of new objects when computing the bounding box?
 skipRedraw   |      | Should `rgl` suppress updates to the display? 
 maxClipPlanes | read-only | How many clip planes can be defined?
-modelMatrix | read-only | The OpenGL ModelView matrix; partly set by `r indexfns("view3d")`
+modelMatrix | read-only | The OpenGL ModelView matrix; partly set by `r linkfn("view3d")`
 projMatrix  | read-only | The OpenGL Projection matrix
 bbox        | read-only | Current bounding-box of the scene
 viewport    |       | Dimensions in pixels of the scene within the window
@@ -1086,12 +1086,22 @@ output.
 A known issue with `testthat` is that it doesn't
 install a package before running the code; it
 simulates installation using the
+<<<<<<< Updated upstream
 `devtools::load_all()` function.  This doesn't 
 install files that are stored in a package's 
 `inst` directory.  `rgl` depends on those `inst`
 files, so may not behave properly in `testthat` 
 tests.  A workaround is in place to load the
 default shaders, but other content will not be
+=======
+`pkgload::load_all()` function.  This doesn't 
+install files that are stored in a package's 
+`inst` directory.  `rgl` depends on those `inst`
+files (for shaders, textures and Javascript), 
+so may not behave properly in `testthat` 
+tests.  A workaround is in place to load the
+default shaders, but other content may not be
+>>>>>>> Stashed changes
 found.
 
 ### Working with Javascript
@@ -1119,8 +1129,13 @@ constants used in OpenGL and glTF.
 The `r indexfns("safe.dev.off")` function closes a base
 graphics display and sets the previous display as current.
 
+<<<<<<< Updated upstream
 The `r indexfns(c("glyphAtlas", "rgl.textureRaster"))` functions are used for 
 debugging `rgl`'s text handling.
+=======
+The functions `r indexfns(c("glyphAtlas", "rgl.textureRaster", "renderFromAtlas"))` 
+are used for debugging `rgl`'s text handling.
+>>>>>>> Stashed changes
 
 These functions are defunct and no longer used:
 `r deprecated(c("rgl.clear", "rgl.close",

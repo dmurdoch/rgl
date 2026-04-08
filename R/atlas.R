@@ -1,4 +1,3 @@
-
 glyphAtlas <- function(text, family = "sans", font = 1,
                        cex = 1, col = "black",
                        monochrome = TRUE,
@@ -16,9 +15,6 @@ glyphAtlas <- function(text, family = "sans", font = 1,
   .Call(rgl_build_atlasR, text, family, font, cex, rgb, monochrome, atlas)
 }
 
-#' @rdname glyphAtlas
-#' @param verbose Whether to give a verbose display.
-#' @export
 print.glyph_atlas <- function(x, verbose = FALSE, ...) {
   dim <- dim(x$buffer)
   monochrome <- x$monochrome
@@ -60,38 +56,18 @@ plot.glyph_atlas <- function(x, y, interpolate = FALSE, ...) {
   plot(raster, interpolate = interpolate, ...)
 }
 
-#' Convert buffer to raster
-#'
-#' This function converts the buffer component from
-#' a \code{\link{glyphAtlas}} result to a raster object
-#' that can be plotted in R.
-#' @param buffer The buffer component of a glyph atlas.
-#'
-#' @export
 bufferToRaster <- function(buffer) {
   if (length(dim(buffer)) == 2)
-    as.raster(t(buffer), max = 255)
-  else
-    as.raster(aperm(buffer, c(3,2,1)), max = 255)
+    # reverse black and white 
+    as.raster(t(255 - buffer), max = 255)
+  else {
+    raster <- aperm(buffer, c(3,2,1))
+    # put in rgba order instead of abgr
+    raster <- raster[,,4:1]
+    as.raster(raster, max = 255)
+  }
 }
 
-#' @title Render strings from atlas
-#' @description
-#' The glyph atlas holds one copy of each glyph, and
-#' information about where each should be rendered.  This
-#' function uses that information to render selected
-#' strings.
-#'
-#' @param atlas The glyph atlas holding the glyphs,
-#' produced by \code{\link{glyphAtlas}}.
-#' @param num Which glyph numbers to plot?
-#' @param x,y The origin at which to plot each string.
-#' @param verbose Print information about each string?
-#' @param interpolate Smooth the rendering?
-#' @param showBaselines Show the baselines for each string?
-#' @param ... Additional plot parameters.
-#' @importFrom graphics rasterImage segments
-#' @export
 renderFromAtlas <- function(atlas, num, x = 0, y = 0,
                             verbose = FALSE,
                             interpolate = FALSE,
@@ -122,8 +98,6 @@ renderFromAtlas <- function(atlas, num, x = 0, y = 0,
     }
     fragment <- frags[[i]]
     glyphs <- cbind(fragment, atlas$glyphs[fragment$glyphnum,])
-    if (showBaselines)
-      segments(xlims[[i]][1], y[i], xlims[[i]][2], y[i])
     for (j in seq_len(nrow(glyphs))) {
       g <- glyphs[j,]
       r <- raster[g$y_atlas + 1:g$height, g$x_atlas + 1:g$width]
@@ -133,5 +107,7 @@ renderFromAtlas <- function(atlas, num, x = 0, y = 0,
                   ybottom = y[i] + g$y_offset - g$y- g$height,
                   interpolate = interpolate)
     }
+    if (showBaselines)
+      segments(xlims[[i]][1], y[i], xlims[[i]][2], y[i])
   }
 }

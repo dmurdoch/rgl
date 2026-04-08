@@ -36,5 +36,5 @@ f 5/9 6/10 2/11 1/12"
 	unlink(filename)
 	open3d()
 	shade3d(mesh)
-	expect_known_scene("obj")
+	expect_snapshot_scene()
 })

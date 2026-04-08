@@ -18,6 +18,8 @@ scene3d <- function(minimal = TRUE) {
     
     if (!(type %in% c("light", "clipplanes"))) {
       mat <- rgl.getmaterial(id=id)
+      if (type == "text") # don't save the text atlas
+        mat$textures <- NULL
       lit <- mat$lit
       result$material <- matdiff(mat)
     } else
@@ -513,7 +515,8 @@ old_compare_proxy.rglscene <- function(x) {
 			obj$par3d$glVersion <- NULL
 		}
 		if (!is.null(obj$material)) {
-			obj$material$texture <- NULL
+		  for (i in seq_along(obj$material$textures))
+			  obj$material$textures[[i]]$filename <- NULL
 		}
 		obj$subscenes <- fixvec(obj$subscenes)
 		obj

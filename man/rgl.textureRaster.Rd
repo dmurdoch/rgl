@@ -9,18 +9,24 @@ item, this function can be used to retrieve it as a
 raster object.
 }
 \usage{
-rgl.textureRaster(id = NULL)
+rgl.textureRaster(id = NULL, name = "uSampler")
 }
 \arguments{
   \item{id}{
 The id of an object, or \code{NULL} for the default
 material.
 }
+  \item{name}{
+The shader name for the sampler associated with
+the requested texture.
+  }
 }
 \details{
 Textures are bitmaps that are displayed on surfaces
-in OpenGL.  Currently \pkg{rgl} supports a single
-texture per item.  This function retrieves the bitmap
+in OpenGL.  The default shaders in \pkg{rgl}
+support a single
+texture per item, named \code{"uSampler"}.  This
+function retrieves the bitmap
 being used as the texture.
 }
 \value{

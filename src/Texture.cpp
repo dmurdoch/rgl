@@ -96,41 +96,47 @@ bool Texture::isValid() const
   return (pixmap) ? true : false;
 }
 
+unsigned int Texture::getMinfilter() 
+{
+  switch(minfilter) {
+  case GL_NEAREST:
+    return 0;
+  case GL_LINEAR:
+    return 1;      
+  case GL_NEAREST_MIPMAP_NEAREST:
+    return 2;
+  case GL_NEAREST_MIPMAP_LINEAR:
+    return 3;
+  case GL_LINEAR_MIPMAP_NEAREST:
+    return 4;
+  case GL_LINEAR_MIPMAP_LINEAR:
+    return 5;
+  default:
+    return 6;
+  }
+}
+
+unsigned int Texture::getMagfilter() {
+  return (magfilter == GL_LINEAR) ? 1 : 0;
+}
+
+std::string Texture::getFilename() {
+  if (!filename.size())
+    return "<raster>";
+  else
+    return filename;
+}
+
 void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap,
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
                             std::string *out_filename)
 {
-  *out_type = type;
-  *out_mode = mode;
-  *out_mipmap = mipmap;
-  switch(minfilter) {
-      case GL_NEAREST:
-        *out_minfilter = 0;
-        break;
-      case GL_LINEAR:
-        *out_minfilter = 1;      
-        break;
-      case GL_NEAREST_MIPMAP_NEAREST:
-        *out_minfilter = 2;
-        break;
-      case GL_NEAREST_MIPMAP_LINEAR:
-        *out_minfilter = 3;
-        break;
-      case GL_LINEAR_MIPMAP_NEAREST:
-        *out_minfilter = 4;
-        break;
-      case GL_LINEAR_MIPMAP_LINEAR:
-        *out_minfilter = 5;
-        break;
-      default:
-        *out_minfilter = 6;
-        break;
-  }
-  *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
-  if (!filename.size())
-    *out_filename = "<raster>";
-  else
-    *out_filename = filename;
+  *out_type = getType();
+  *out_mode = getMode();
+  *out_mipmap = getMipmap();
+  *out_minfilter = getMinfilter();
+  *out_magfilter = getMagfilter();
+  *out_filename = getFilename();
 }
 
 #ifndef RGL_NO_OPENGL
