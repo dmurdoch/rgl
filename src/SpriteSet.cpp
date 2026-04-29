@@ -489,8 +489,6 @@ void SpriteSet::initialize()
   
   bool has_texture = false;
   
-  initShader();
-  
   material.useColorArray = material.colors.getLength() > 1; 
   if (!material.useColorArray)
     material.colors.setAttribLocation(glLocs["aCol"]);

@@ -146,6 +146,8 @@ public:
   
   std::string getShaderDefines(ShaderFlags flags);
 
+  void initialize();
+  
 protected:
   /**
    * bounding volume of overall geometry
@@ -207,8 +209,11 @@ protected:
    **/
   bool     doUpdate;
   bool     transparent, blended;
+  Indices indices;
 #ifndef RGL_NO_OPENGL
   std::unordered_map<std::string, GLint> glLocs;
+  IndicesToDraw indicesToDraw;
+  int      drawSide;  /* which side are we drawing, 0 or 1? */
   bool     glLocs_has_key(std::string key);
 #endif
 };

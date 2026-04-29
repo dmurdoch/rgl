@@ -144,8 +144,8 @@ protected:
   /* Special handling for fat lines */
   void initFatLines();
 
-  int type;
-  int nverticesperelement;
+  int type, glmode[2];
+  int nverticesperelement, glverticesperelement[2];
   int nprimitives;
   VertexArray vertexArray,  /* the vertices given by the user */
               verticesTodraw, /* the margin vertices in data coords, and 
@@ -154,8 +154,6 @@ protected:
   Vec2Array pointArray; /* position in 
    fat line triangulation */
   bool hasmissing; 	/* whether any vertices contain missing values */
-  std::vector<unsigned int> indices,
-    indicesTodraw;
 };
 
 
@@ -282,6 +280,7 @@ public:
    * overloaded
    **/  
   virtual std::string getTypeName() { return "triangles"; };
+  virtual void initialize();
 };
 
 //
@@ -303,6 +302,8 @@ public:
    * overloaded
    **/  
   virtual std::string getTypeName() { return "quads"; };
+  
+  virtual void initialize();
 };
 
 //

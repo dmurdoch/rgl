@@ -111,32 +111,38 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
     
     if ( pt.missing() || ISNAN(radius.getRecycled(index)) ) return;
     
-    material.useColor(index);
-    sphereMesh.setCenter( pt );
-    sphereMesh.setRadius( radius.getRecycled(index) );
-    setSphereMVmatrix(renderContext);
-    sphereMesh.draw(renderContext);
+    int sides = flags.is_twosided ? 2 : 1;
+    for (int side = 0; side < sides; side++) {
+      Material::PolygonMode mode = side == 0 ? material.front : material.back;         if (mode == Material::CULL_FACE)
+        continue;
+      material.useColor(index);
+      sphereMesh.setMode( mode );
+      sphereMesh.setCenter( pt );
+      sphereMesh.setRadius( radius.getRecycled(index) );
+      setSphereMVmatrix(renderContext);
+      sphereMesh.draw(renderContext);
+    }
   } else {
-   int i1 = index / facets, i2 = index % facets;
-   if (i1 != lastdrawn) {
-     if (lastdrawn >= 0) {
-       sphereMesh.doIndices( );
-     }
-     if (bboxdeco) {
-       invalidateDisplaylist();
-       pt = bboxdeco->marginVecToDataVec(center.get(i1), renderContext, &material);
-     } else
-       pt = center.get(i1);
-     if ( pt.missing() || ISNAN(radius.getRecycled(i1)) ) return;
-
-     material.useColor(i1);
-     
-     sphereMesh.setCenter( pt );
-     sphereMesh.setRadius( radius.getRecycled(i1) );
-     setSphereMVmatrix(renderContext);
-     lastdrawn = i1;
-   }
-   sphereMesh.drawPrimitive(renderContext, i2);
+    int i1 = index / facets, i2 = index % facets;
+    if (i1 != lastdrawn) {
+      if (lastdrawn >= 0) {
+        sphereMesh.doIndices( );
+      }
+      if (bboxdeco) {
+        invalidateDisplaylist();
+        pt = bboxdeco->marginVecToDataVec(center.get(i1), renderContext, &material);
+      } else
+        pt = center.get(i1);
+      if ( pt.missing() || ISNAN(radius.getRecycled(i1)) ) return;
+      
+      material.useColor(i1);
+      
+      sphereMesh.setCenter( pt );
+      sphereMesh.setRadius( radius.getRecycled(i1) );
+      setSphereMVmatrix(renderContext);
+      lastdrawn = i1;
+    }
+    sphereMesh.drawPrimitive(renderContext, i2);
   }
 #endif
 }
@@ -228,10 +234,7 @@ void SphereSet::initialize()
 #ifndef RGL_NO_OPENGL
   Shape::initialize();
   
-  initShader();
-  
   sphereMesh.initialize(glLocs, vertexbuffer);
-  
   
 #endif  
 }

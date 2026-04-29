@@ -12,6 +12,15 @@
 
 namespace rgl {
 
+/* These may be user specified or computed */
+typedef std::vector<unsigned int> Indices;
+
+/* This is one or two sets of indices
+ * used during rendering.  Two sets when
+ * front and back are different. */
+
+typedef std::vector<Indices> IndicesToDraw;
+
 //
 // CLASS
 //   VertexArray

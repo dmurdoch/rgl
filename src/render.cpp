@@ -148,7 +148,7 @@ Vertex VertexArray::getNormal(int iv1, int iv2, int iv3)
   Vertex& v2 = (*this)[iv2];
   Vertex& v3 = (*this)[iv3];
 
-  Vertex a(v3-v2), b(v1-v2);
+  Vertex a(v3-v2), b(v2-v1);
 
   normal = a.cross(b);
 

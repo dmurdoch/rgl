@@ -99,9 +99,9 @@ void SphereMesh::update(const Vertex& scale)
       
       vertexArray[i] = q;
       
-      q.x *= scale.x*scale.x;
-      q.y *= scale.y*scale.y;
-      q.z *= scale.z*scale.z;
+      q.x *= -scale.x*scale.x;
+      q.y *= -scale.y*scale.y;
+      q.z *= -scale.z*scale.z;
       normalArray[i] = q;
       normalArray[i].normalize();
       
@@ -166,15 +166,58 @@ void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
   int section = i/segments,
     ll = (segments + 1)*section + i % segments;
   
-  if (section > 0) {
-    inds.push_back(ll);
-    inds.push_back(ll + 1);
-    inds.push_back(ll + segments + 1);
-  }
-  if (section < sections - 1) {
-    inds.push_back(ll + 1);
-    inds.push_back(ll + segments + 2);
-    inds.push_back(ll + segments + 1);
+  switch (mode) {
+  case Material::FILL_FACE:
+    if (section > 0) {
+      inds.push_back(ll);
+      inds.push_back(ll + 1);
+      inds.push_back(ll + segments + 1);
+    }
+    if (section < sections - 1) {
+      inds.push_back(ll + 1);
+      inds.push_back(ll + segments + 2);
+      inds.push_back(ll + segments + 1);
+    }
+    break;
+  case Material::LINE_FACE:
+    if (section == 0) {
+      inds.push_back(ll + 1);
+      inds.push_back(ll + segments + 2);
+      inds.push_back(ll + segments + 2);
+      inds.push_back(ll + segments + 1);
+      inds.push_back(ll + segments + 1);
+      inds.push_back(ll + 1);
+    } else if (section == sections - 1) {
+      inds.push_back(ll);
+      inds.push_back(ll + 1);
+      inds.push_back(ll + 1);
+      inds.push_back(ll + segments + 1);
+      inds.push_back(ll + segments + 1);
+      inds.push_back(ll);      
+    } else {
+      inds.push_back(ll);
+      inds.push_back(ll + 1);
+      inds.push_back(ll + 1);
+      inds.push_back(ll + segments + 2);
+      inds.push_back(ll + segments + 2);
+      inds.push_back(ll + segments + 1);
+      inds.push_back(ll + segments + 1);
+      inds.push_back(ll);       
+    }
+    break;
+  case Material::POINT_FACE:
+    if (section == 0) {
+      if (i % segments == 0)
+        inds.push_back(ll + 1);
+    } else if (section == sections - 1) {
+      if (i % segments == 0)
+        inds.push_back(ll + segments + 1);
+      inds.push_back(ll);
+    } else
+      inds.push_back(ll);
+    break;
+  case Material::CULL_FACE:
+    break;
   }
 #endif
 }
@@ -188,7 +231,20 @@ Vertex SphereMesh::getPrimitiveCenter(int i)
 void SphereMesh::doIndices() {
 #ifndef RGL_NO_OPENGL
   if (inds.size()) {
-    glDrawElements(GL_TRIANGLES, inds.size(), GL_UNSIGNED_INT, inds.data());
+    int glmode;
+    switch(mode){
+    case Material::FILL_FACE:
+      glmode = GL_TRIANGLES;
+      break;
+    case Material::LINE_FACE:
+      glmode = GL_LINES;
+      break;
+    case Material::CULL_FACE:
+    case Material::POINT_FACE:
+      glmode = GL_POINTS;
+      break;
+    }
+    glDrawElements(glmode, inds.size(), GL_UNSIGNED_INT, inds.data());
     inds.clear();
   } 
 #endif

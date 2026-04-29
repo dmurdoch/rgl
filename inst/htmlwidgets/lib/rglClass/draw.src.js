@@ -673,6 +673,12 @@
 
         gl.drawElements(gl[mode], count, obj.index_uint ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
       }
+/*      
+      if (type === "triangles") {
+        this.printAttributes(obj, 3);
+        this.printUniforms(obj);
+      }
+*/
       this.disableArrays(obj, enabled);
       return [];
     };

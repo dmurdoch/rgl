@@ -28,6 +28,8 @@ Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool
   vbo = 0;
   ibo = 0;
   shaderProgram = 0;
+  indicesToDraw.resize(1, Indices(0));
+  indicesToDraw[0].clear();
 #endif
   uninitialize();
 }
@@ -191,7 +193,7 @@ void Shape::beginShader(RenderContext* renderContext)
 void Shape::beginSideTwo()
 {
 	glUniform1i(glLocs.at("front"), 0);
-	material.beginSide(false);
+  drawSide = 1;
 }
 
 void Shape::endShader()
@@ -588,6 +590,8 @@ void Shape::initShader()
 	}
 	
 	if (flags.is_twosided) {
+	  indicesToDraw.resize(2, Indices(0));
+	  
 	  glLocs["front"] = glGetUniformLocation(shaderProgram, "front");
 	  if (flags.has_normals)
 	    glLocs["invPrMatrix"] = glGetUniformLocation(shaderProgram, "invPrMatrix");
@@ -606,6 +610,15 @@ void Shape::initShader()
 	  glLocs[it->first.c_str()] = glGetUniformLocation(shaderProgram, it->first.c_str());
 	
 	SAVEGLERROR;
+}
+
+void Shape::initialize()
+{
+  SceneNode::initialize();
+#ifndef RGL_NO_OPENGL
+  initShader();
+#endif
+  
 }
 
 bool Shape::glLocs_has_key(std::string key) {

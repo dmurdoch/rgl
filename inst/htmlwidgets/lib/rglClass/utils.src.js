@@ -657,3 +657,108 @@
       }
       return result;
     };
+
+    /**
+     * Print uniform to console
+     */ 
+    rglwidgetClass.prototype.printUniform = function(obj, name) {
+      var value,
+        location = this.gl.getUniformLocation(obj.prog, name);
+        
+      if (location) {
+        console.log("Uniform "+ name + ":");
+        value = this.gl.getUniform(obj.prog, location);  
+        console.log(value);
+      }
+    };
+    
+    /**
+     * Print all uniforms to console
+     */ 
+    rglwidgetClass.prototype.printUniforms = function(obj) {
+      this.printUniform(obj, "mvMatrix");
+      this.printUniform(obj, "prMatrix");
+      this.printUniform(obj, "normMatrix");
+      this.printUniform(obj, "textScale");
+      this.printUniform(obj, "invPrMatrix");
+      this.printUniform(obj, "uAspect");
+      this.printUniform(obj, "uLwd");
+      this.printUniform(obj, "uSampler");
+      this.printUniform(obj, "uFogMode");
+      this.printUniform(obj, "uFogColor");
+      this.printUniform(obj, "uFogParms");
+      this.printUniform(obj, "vClipPlane");
+      this.printUniform(obj, "emission");
+      this.printUniform(obj, "shininess");
+      this.printUniform(obj, "ambient");
+      this.printUniform(obj, "specular");
+      this.printUniform(obj, "diffuse");
+      this.printUniform(obj, "lightDir");
+      this.printUniform(obj, "viewpoint");
+      this.printUniform(obj, "finite");
+      this.printUniform(obj, "front");
+    };
+    
+    rglwidgetClass.prototype.printAttribute = function(obj, name, nvertices) {
+    var vbo, enabled, size, stride, effectiveStride, 
+        type, typename, typesize,
+        normalized, offset, i, vertexStart, vertexData,
+        elementsPerStride, startElement, result,
+        gl = this.gl,
+        location = this.gl.getAttribLocation(obj.prog, name);  
+      if (location >= 0) {
+        console.log("Attribute "+name+" ("+location+")");
+        vbo = gl.getVertexAttrib(location,
+          gl.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING);
+        
+        enabled = gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_ENABLED);
+        
+        console.log("  vbo: "+vbo+" enabled: "+enabled);
+        
+        size = gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_SIZE);
+		
+		    stride = gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_STRIDE);
+		
+		    type = gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_TYPE);
+		    typename = (type === gl.FLOAT) ? "gl.FLOAT" :
+		               (type === gl.UNSIGNED_BYTE) ? "gl.UNSIGNED_BYTE" :
+		               (type === gl.BYTE) ? "gl.BYTE" :
+		               (type === gl.SHORT) ? "gl.SHORT" :
+		               (type === gl.UNSIGNED_SHORT) ? "gl.UNSIGNED_SHORT" :
+		               "gl.???";
+		    normalized = gl.getVertexAttrib(location, gl.VERTEX_ATTRIB_ARRAY_NORMALIZED);
+		    if (normalized) normalized = "normalized";
+		    else normalized = "";
+		    
+		    offset = gl.getVertexAttribOffset(location, gl.VERTEX_ATTRIB_ARRAY_POINTER);
+		    
+		    console.log("  "+typename+"["+size+"] "+normalized+" offset "+offset);
+		    
+		    if (type === gl.FLOAT) {
+		      typesize = 4;
+		      effectiveStride = stride === 0 ? size*typesize : stride;
+		      elementsPerStride = effectiveStride/typesize;
+		      startElement = offset/typesize;
+		      result = [];
+		      for (i = 0; i < nvertices; i++) {
+		        vertexStart = startElement + (i*elementsPerStride);
+		        vertexData = obj.values.slice(vertexStart, vertexStart + size);
+		        result.push(Array.from(vertexData));
+		      }
+		      console.log(result);
+		    }
+
+      }
+    };
+    
+    rglwidgetClass.prototype.printAttributes = function(obj, nvertices) {
+      this.printAttribute(obj, "aPos", nvertices);
+	    this.printAttribute(obj, "aCol", nvertices);
+	    this.printAttribute(obj, "aNorm", nvertices);
+	    this.printAttribute(obj, "aPos1", nvertices);
+	    this.printAttribute(obj, "aPos2", nvertices);
+	    this.printAttribute(obj, "aOfs", nvertices);
+	    this.printAttribute(obj, "aTexcoord", nvertices);
+	    this.printAttribute(obj, "aNext", nvertices);
+	    this.printAttribute(obj, "aPoint", nvertices);
+    };

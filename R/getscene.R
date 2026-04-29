@@ -19,7 +19,7 @@ scene3d <- function(minimal = TRUE) {
     if (!(type %in% c("light", "clipplanes"))) {
       mat <- rgl.getmaterial(id=id)
       if (type == "text") # don't save the text atlas
-        mat$textures <- NULL
+        mat$textures$uSampler$raster <- NULL
       lit <- mat$lit
       result$material <- matdiff(mat)
     } else

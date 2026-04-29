@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include "render.h"
+#include "Material.h"
 
 namespace rgl {
 
@@ -29,6 +30,7 @@ public:
 
   void setCenter      (const Vertex& center);
   void setRadius      (float radius);
+  void setMode        (Material::PolygonMode in_mode) { mode = in_mode; };
   void update();
   void update	      (const Vertex& scale);
   
@@ -56,6 +58,7 @@ private:
   
   Vertex center;
   float  radius;
+  Material::PolygonMode mode;
   float  philow;
   float  phihigh;
   
@@ -71,8 +74,8 @@ private:
   Type   type;
   bool   genNormal;
   bool   genTexCoord;
-  std::vector<GLuint> inds;
-
+  Indices inds;
+  IndicesToDraw indsToDraw;
 
   void   setupMesh();
 };

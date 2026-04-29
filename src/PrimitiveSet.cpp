@@ -19,7 +19,9 @@ PrimitiveSet::PrimitiveSet (
 Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
 {
   type                = in_type;
+  glmode[0] = glmode[1] = in_type;
   nverticesperelement = in_nverticesperelement;
+  glverticesperelement[0] = glverticesperelement[1] = in_nverticesperelement;
   indices.clear();
 }
 
@@ -68,7 +70,9 @@ PrimitiveSet::PrimitiveSet (
 Shape(in_material, in_ignoreExtent, SHAPE, in_bboxChange)
 {
   type                = in_type;
+  glmode[0] = glmode[1] = in_type;
   nverticesperelement = in_nverticesperelement;
+  glverticesperelement[0 ]= glverticesperelement[1] = in_nverticesperelement;
   size_t nvertices    = in_nvertices;
   if (in_nindices)
     nprimitives       = in_nindices / nverticesperelement;
@@ -139,20 +143,23 @@ void PrimitiveSet::drawRange(int start, int stop)
 #ifndef RGL_NO_OPENGL
   if (start >= stop) return;
   if (!flags.fat_lines) {
-    size_t nindices = indices.size();
-
-    if (!nindices)
+    if (!flags.is_twosided)
       glDrawArrays(type, start, nverticesperelement*(stop - start) );
-    else
-      glDrawElements(type, nverticesperelement*(stop - start), 
+    else {
+      int first = glverticesperelement[drawSide]*start,
+        len = glverticesperelement[drawSide]*(stop - start),
+        size = indicesToDraw[drawSide].size();
+      if ( first + len <= size)
+        glDrawElements(glmode[drawSide], glverticesperelement[drawSide]*(stop - start), 
                      GL_UNSIGNED_INT, 
-                     indices.data() + nverticesperelement*start);
+                     indicesToDraw[drawSide].data() + glverticesperelement[drawSide]*start);
+    }
   } else { 
     // fat lines
     glDrawElements(GL_TRIANGLES,
-                   3*(stop - start),
+                   6*(stop - start),
                    GL_UNSIGNED_INT,
-                   indicesTodraw.data() + 3*start);
+                   indicesToDraw[drawSide].data() + 6*start);
   }
 
 #endif
@@ -162,7 +169,6 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
   if (!flags.fat_lines) {
-    size_t nindices = indices.size();
     if (!hasmissing) {
       drawRange(0, nprimitives);
     } else {
@@ -170,11 +176,11 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
       int first = 0;
       for (int i=0; i<nprimitives; i++) {
         bool skip = false;
-        int elt0 = nverticesperelement*i;
-        for (int j=0; j<nverticesperelement; j++) {
+        int elt0 = glverticesperelement[drawSide]*i;
+        for (int j=0; j<glverticesperelement[drawSide]; j++) {
           int elt = elt0 + j;
-          if (nindices)
-            elt = indices[elt];
+          if (indicesToDraw[drawSide].size())
+            elt = indicesToDraw[drawSide][elt];
           skip |= vertexArray[elt].missing();
         }
         if (missing != skip) {
@@ -189,7 +195,7 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
         drawRange(first, nprimitives);
     }
   } else {
-    size_t nindices = indicesTodraw.size();
+    size_t nindices = indicesToDraw[drawSide].size();
     if (!hasmissing) {
       drawRange(0, nindices/3);
     } else {
@@ -199,7 +205,7 @@ void PrimitiveSet::drawAll(RenderContext* renderContext)
         bool skip = false;
         int elt0 = 3*i;
         for (int j=0; j<3; j++) {
-          int elt = indicesTodraw[elt0 + j];
+          int elt = indicesToDraw[drawSide][elt0 + j];
           skip |= verticesTodraw[elt].missing();
         }
         if (missing != skip) {
@@ -224,18 +230,19 @@ void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
 {
 #ifndef RGL_NO_OPENGL
   if (!flags.fat_lines) {
-    int idx = index*nverticesperelement;
-    size_t nindices = indices.size();
+    int idx = index*glverticesperelement[drawSide];
+    size_t nindices = indicesToDraw[drawSide].size();
     if (hasmissing) {
       bool skip = false;
-      for (int j=0; j<nverticesperelement; j++) {
-        int elt = nindices ? indices[idx + j] : idx + j;
+      for (int j=0; j<glverticesperelement[drawSide]; j++) {
+        int elt = nindices ? indicesToDraw[drawSide][idx + j] : idx + j;
         skip |= vertexArray[elt].missing();
         if (skip) return;
       }
     }
     if (nindices)
-      glDrawElements(type, nverticesperelement, GL_UNSIGNED_INT, indices.data() + idx);
+      glDrawElements(glmode[drawSide], glverticesperelement[drawSide], GL_UNSIGNED_INT, 
+                     indicesToDraw[drawSide].data() + idx);
     else
       glDrawArrays(type, idx, nverticesperelement);
   } else {
@@ -243,12 +250,12 @@ void PrimitiveSet::drawPrimitive(RenderContext* renderContext, int index)
     if (hasmissing) {
       bool skip = false;
       for (int j=0; j<3; j++) {
-        int elt = indicesTodraw[idx + j];
+        int elt = indicesToDraw[drawSide][idx + j];
         skip |= verticesTodraw[elt].missing();
         if (skip) return;
       }
     }
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, indicesTodraw.data() + idx);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, indicesToDraw[drawSide].data() + idx);
   }
 #endif
 }
@@ -277,6 +284,10 @@ void PrimitiveSet::drawEnd(RenderContext* renderContext)
 
 void PrimitiveSet::draw(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
+  drawSide = 0;
+#endif
+  
   drawBegin(renderContext);
   SAVEGLERROR;
 
@@ -330,8 +341,6 @@ void PrimitiveSet::initialize()
 {
 	Shape::initialize();
 #ifndef RGL_NO_OPENGL
-  
-  initShader();
 
   if (material.useColorArray)
     material.colors.appendToBuffer(vertexbuffer, vertexArray.size());
@@ -399,7 +408,7 @@ void PrimitiveSet::initFatLines() {
   nextVertex.alloc(newsize);
   pointArray.alloc(newsize);
   
-  indicesTodraw.resize(1.5*newsize);
+  indicesToDraw[0].resize(1.5*newsize);
   
   /* Each segment becomes two triangles,
    making the segment into a rectangle.
@@ -434,13 +443,13 @@ void PrimitiveSet::initFatLines() {
     nextVertex[k+3] = verticesTodraw[k];
     pointArray[k+3] = Vec2(1.0, 1.0);
     
-    indicesTodraw[j] = k;
-    indicesTodraw[j+1] = k+2;
-    indicesTodraw[j+2] = k+1;
+    indicesToDraw[0][j] = k;
+    indicesToDraw[0][j+1] = k+2;
+    indicesToDraw[0][j+2] = k+1;
     
-    indicesTodraw[j+3] = k+2;
-    indicesTodraw[j+4] = k+3;
-    indicesTodraw[j+5] = k+1;
+    indicesToDraw[0][j+3] = k+2;
+    indicesToDraw[0][j+4] = k+3;
+    indicesToDraw[0][j+5] = k+1;
   }
   verticesTodraw.setAttribLocation(glLocs["aPos"]);
   verticesTodraw.appendToBuffer(vertexbuffer);
@@ -491,6 +500,11 @@ FaceSet::FaceSet(
       texCoordArray[i].s = (float) in_texcoords[i*2+0];
       texCoordArray[i].t = (float) in_texcoords[i*2+1];      
     }
+  }
+  if (!in_nindices) {
+    int nindices = vertexArray.size();
+    for (int i=0; i < nindices; i++)
+      indices.push_back(i);
   }
 }
 
@@ -672,5 +686,93 @@ void FaceSet::initialize()
 		texCoordArray.setAttribLocation(glLocs["aTexcoord"]);
 		texCoordArray.appendToBuffer(vertexbuffer);
 	}
+#endif
+}
+
+void TriangleSet::initialize() {
+  FaceSet::initialize();
+#ifndef RGL_NO_OPENGL
+  
+  int sides = flags.is_twosided ? 2 : 1;
+  for (int side = 0; side < sides; side++) {
+    Material::PolygonMode mode = side == 0 ? material.front : material.back;
+    switch(mode) {
+    case Material::CULL_FACE: 
+      indicesToDraw[side].clear();
+      break;
+    case Material::POINT_FACE:
+      indicesToDraw[side] = indices;
+      glverticesperelement[side] = 3;
+      glmode[side] = GL_POINTS;
+      break;
+    case Material::FILL_FACE:
+      indicesToDraw[side] = indices;
+      glverticesperelement[side] = 3;
+      glmode[side] = GL_TRIANGLES;
+      break;
+    case Material::LINE_FACE:
+      indicesToDraw[side].resize(2*indices.size());
+      for (int i=0; i < indices.size() / 3; i++) {
+        indicesToDraw[side][6*i] = indices[3*i];
+        indicesToDraw[side][6*i + 1] = indices[3*i + 1];
+        indicesToDraw[side][6*i + 2] = indices[3*i + 1];
+        indicesToDraw[side][6*i + 3] = indices[3*i + 2];
+        indicesToDraw[side][6*i + 4] = indices[3*i + 2];
+        indicesToDraw[side][6*i + 5] = indices[3*i];
+      }
+      glverticesperelement[side] = 6;
+      glmode[side] = GL_LINES;
+      break;
+    }
+  }
+#endif
+}
+
+void QuadSet::initialize() {
+  FaceSet::initialize();
+#ifndef RGL_NO_OPENGL
+  
+  int sides = flags.is_twosided ? 2 : 1;
+  for (int side = 0; side < sides; side++) {
+    Material::PolygonMode mode = side == 0 ? material.front : material.back;
+    switch(mode) {
+    case Material::CULL_FACE: 
+      indicesToDraw[side].clear();
+      break;
+    case Material::POINT_FACE:
+      indicesToDraw[side] = indices;
+      glverticesperelement[side] = 4;
+      glmode[side] = GL_POINTS;
+      break;
+    case Material::LINE_FACE:
+      indicesToDraw[side].resize(2*indices.size());
+      for (int i=0; i < indices.size() / 4; i++) {
+        indicesToDraw[side][8*i] = indices[4*i];
+        indicesToDraw[side][8*i + 1] = indices[4*i + 1];
+        indicesToDraw[side][8*i + 2] = indices[4*i + 1];
+        indicesToDraw[side][8*i + 3] = indices[4*i + 2];
+        indicesToDraw[side][8*i + 4] = indices[4*i + 2];
+        indicesToDraw[side][8*i + 5] = indices[4*i + 3];
+        indicesToDraw[side][8*i + 6] = indices[4*i + 3];
+        indicesToDraw[side][8*i + 7] = indices[4*i];
+      }
+      glverticesperelement[side] = 8;
+      glmode[side] = GL_LINES;
+      break;
+    case Material::FILL_FACE:
+      indicesToDraw[side].resize(6*(indices.size()/4));
+      for (int i=0; i < indices.size() / 4; i++) {
+        indicesToDraw[side][6*i] = indices[4*i];
+        indicesToDraw[side][6*i + 1] = indices[4*i + 1];
+        indicesToDraw[side][6*i + 2] = indices[4*i + 2];
+        indicesToDraw[side][6*i + 3] = indices[4*i];
+        indicesToDraw[side][6*i + 4] = indices[4*i + 2];
+        indicesToDraw[side][6*i + 5] = indices[4*i + 3];
+      }
+      glverticesperelement[side] = 6;
+      glmode[side] = GL_TRIANGLES;
+      break;      
+    }
+  }
 #endif
 }

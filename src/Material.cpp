@@ -64,34 +64,6 @@ void Material::setup()
     glVersion = 1.0;
 }
 
-void Material::beginSide(bool drawfront)
-{
-#ifndef RGL_NO_OPENGL
-	GLenum face = GL_FRONT_AND_BACK;
-	
-	// FIXME:  why is this set backwards??
-	PolygonMode mode = !drawfront ? front : back;
-	
-	SAVEGLERROR;
-	
-	switch (mode) {
-	case FILL_FACE:
-		glPolygonMode( face, GL_FILL);
-		break;
-	case LINE_FACE:
-		glPolygonMode( face, GL_LINE);
-		break;
-	case POINT_FACE:
-		glPolygonMode( face, GL_POINT);
-		break;
-	case CULL_FACE:
-		glEnable(GL_CULL_FACE);
-		glCullFace(face);
-		break;
-	}
-#endif
-}
-
 void Material::beginUse(RenderContext* renderContext)
 {
 #ifndef RGL_NO_OPENGL
@@ -131,8 +103,6 @@ void Material::beginUse(RenderContext* renderContext)
   SAVEGLERROR;
 
   glDisable(GL_CULL_FACE);
-
-  beginSide(true);  // back set in Shape::beginSideTwo
 
   SAVEGLERROR;
 

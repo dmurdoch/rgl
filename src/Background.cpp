@@ -188,7 +188,6 @@ void Background::initialize()
   Shape::initialize();
 #ifndef RGL_NO_OPENGL
   
-  initShader();
   glVertexAttrib3f(glLocs["aPos"], 0.0, 0.0, 0.0);
   
   material.colors.setAttribLocation(glLocs["aCol"]);
