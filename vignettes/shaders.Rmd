@@ -164,5 +164,4 @@ indices to start, start with those, otherwise with
 - should have verbose option for printing scenes
 so that expect_snapshot will be easier to read.
 
-- Somehow the front vs back distinction is different
-in the WebGL display vs the R display (e.g. back = "lines" works in WebGL, but makes the front get lines in R)
+- Still need to check front vs back for surfaces

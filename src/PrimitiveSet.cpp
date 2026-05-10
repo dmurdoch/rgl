@@ -695,7 +695,7 @@ void TriangleSet::initialize() {
   
   int sides = flags.is_twosided ? 2 : 1;
   for (int side = 0; side < sides; side++) {
-    Material::PolygonMode mode = side == 0 ? material.front : material.back;
+    Material::PolygonMode mode = side == 0 ? material.back : material.front;
     switch(mode) {
     case Material::CULL_FACE: 
       indicesToDraw[side].clear();
@@ -734,7 +734,7 @@ void QuadSet::initialize() {
   
   int sides = flags.is_twosided ? 2 : 1;
   for (int side = 0; side < sides; side++) {
-    Material::PolygonMode mode = side == 0 ? material.front : material.back;
+    Material::PolygonMode mode = side == 0 ? material.back : material.front;
     switch(mode) {
     case Material::CULL_FACE: 
       indicesToDraw[side].clear();
