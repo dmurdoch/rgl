@@ -142,24 +142,25 @@ void PrimitiveSet::drawRange(int start, int stop)
 {
 #ifndef RGL_NO_OPENGL
   if (start >= stop) return;
+  Indices *inds = getIndices();
   if (!flags.fat_lines) {
-    if (!flags.is_twosided)
+    if (!inds)
       glDrawArrays(type, start, nverticesperelement*(stop - start) );
     else {
       int first = glverticesperelement[drawSide]*start,
         len = glverticesperelement[drawSide]*(stop - start),
-        size = indicesToDraw[drawSide].size();
+        size = inds->size();
       if ( first + len <= size)
         glDrawElements(glmode[drawSide], glverticesperelement[drawSide]*(stop - start), 
                      GL_UNSIGNED_INT, 
-                     indicesToDraw[drawSide].data() + glverticesperelement[drawSide]*start);
+                     inds->data() + glverticesperelement[drawSide]*start);
     }
   } else { 
     // fat lines
     glDrawElements(GL_TRIANGLES,
                    6*(stop - start),
                    GL_UNSIGNED_INT,
-                   indicesToDraw[drawSide].data() + 6*start);
+                   inds->data() + 6*start);
   }
 
 #endif

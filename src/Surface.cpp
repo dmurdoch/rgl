@@ -211,3 +211,52 @@ void Surface::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
     FaceSet::getAttribute(subscene, attrib, first, count, result);
   }
 }
+
+void Surface::initialize() {
+  FaceSet::initialize();
+#ifndef RGL_NO_OPENGL
+  
+  int sides = flags.is_twosided ? 2 : 1;
+  for (int side = 0; side < sides; side++) {
+    Material::PolygonMode mode = side == 0 ? material.back : material.front;
+    switch(mode) {
+    case Material::CULL_FACE: 
+      indicesToDraw[side].clear();
+      break;
+    case Material::POINT_FACE:
+      indicesToDraw[side] = indices;
+      glverticesperelement[side] = 4;
+      glmode[side] = GL_POINTS;
+      break;
+    case Material::LINE_FACE:
+      indicesToDraw[side].resize(2*indices.size());
+      for (int i=0; i < indices.size() / 4; i++) {
+        indicesToDraw[side][8*i] = indices[4*i];
+        indicesToDraw[side][8*i + 1] = indices[4*i + 1];
+        indicesToDraw[side][8*i + 2] = indices[4*i + 1];
+        indicesToDraw[side][8*i + 3] = indices[4*i + 2];
+        indicesToDraw[side][8*i + 4] = indices[4*i + 2];
+        indicesToDraw[side][8*i + 5] = indices[4*i + 3];
+        indicesToDraw[side][8*i + 6] = indices[4*i + 3];
+        indicesToDraw[side][8*i + 7] = indices[4*i];
+      }
+      glverticesperelement[side] = 8;
+      glmode[side] = GL_LINES;
+      break;
+    case Material::FILL_FACE:
+      indicesToDraw[side].resize(6*(indices.size()/4));
+      for (int i=0; i < indices.size() / 4; i++) {
+        indicesToDraw[side][6*i] = indices[4*i];
+        indicesToDraw[side][6*i + 1] = indices[4*i + 1];
+        indicesToDraw[side][6*i + 2] = indices[4*i + 2];
+        indicesToDraw[side][6*i + 3] = indices[4*i];
+        indicesToDraw[side][6*i + 4] = indices[4*i + 2];
+        indicesToDraw[side][6*i + 5] = indices[4*i + 3];
+      }
+      glverticesperelement[side] = 6;
+      glmode[side] = GL_TRIANGLES;
+      break;      
+    }
+  }
+#endif
+}

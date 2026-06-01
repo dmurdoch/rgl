@@ -214,6 +214,7 @@ protected:
   std::unordered_map<std::string, GLint> glLocs;
   IndicesToDraw indicesToDraw;
   int      drawSide;  /* which side are we drawing, 0 or 1? */
+  Indices* getIndices();
   bool     glLocs_has_key(std::string key);
 #endif
 };

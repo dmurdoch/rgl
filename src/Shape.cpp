@@ -459,6 +459,16 @@ std::string Shape::getShaderDefines(ShaderFlags flags)
 }
 
 #ifndef RGL_NO_OPENGL
+
+Indices* Shape::getIndices() {
+  Indices* result = 0;
+  if (indicesToDraw.size() > drawSide)
+    result = &indicesToDraw[drawSide];
+  if (!result || !result->size())
+    result = &indices;
+  return result;
+}
+
 void Shape::checkShader(const char* type, GLuint shader)
 {
 	GLint status;

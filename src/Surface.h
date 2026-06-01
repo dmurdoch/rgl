@@ -42,6 +42,11 @@ private:
   Vertex getNormal(int ix, int iz);
 
   int nx, nz, coords[3], orientation, user_normals, user_textures;
+
+protected:
+  /* shader inits */
+  virtual void initialize();  
+
 };
 
 } // namespace rgl
