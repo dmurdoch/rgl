@@ -230,7 +230,7 @@
                 "names": {
                   "type": "character",
                   "attributes": {},
-                  "value": ["id", "type", "material", "vertices", "colors", "texcoords", "centers", "normals", "ignoreExtent"]
+                  "value": ["id", "type", "material", "vertices", "colors", "texcoords", "centers", "indices", "normals", "ignoreExtent"]
                 },
                 "class": {
                   "type": "character",
@@ -366,6 +366,31 @@
                     "dim": {
                       "type": "integer",
                       "attributes": {},
+                      "value": [24, 1]
+                    },
+                    "dimnames": {
+                      "type": "list",
+                      "attributes": {},
+                      "value": [
+                        {
+                          "type": "NULL"
+                        },
+                        {
+                          "type": "character",
+                          "attributes": {},
+                          "value": ["vertex"]
+                        }
+                      ]
+                    }
+                  },
+                  "value": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+                },
+                {
+                  "type": "double",
+                  "attributes": {
+                    "dim": {
+                      "type": "integer",
+                      "attributes": {},
                       "value": [24, 3]
                     },
                     "dimnames": {
@@ -383,7 +408,7 @@
                       ]
                     }
                   },
-                  "value": [0, 0, 0, 0, -0, -0, -0, -0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -0, -0, -0, -0, 1, 1, 1, 1, -0, -0, -0, -0, -1, -1, -1, -1, 1, 1, 1, 1, 0, 0, 0, 0, -0, -0, -0, -0, 0, 0, 0, 0, 0, 0, 0, 0]
+                  "value": [0, 0, 0, 0, -0, -0, -0, -0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, -0, -0, -0, -0, 1, 1, 1, 1, -0, -0, -0, -0, -1, -1, -1, -1, -0, -0, -0, -0, 1, 1, 1, 1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0, -0, -0, -0]
                 },
                 {
                   "type": "logical",

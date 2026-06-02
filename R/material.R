@@ -142,14 +142,17 @@ rgl.material0 <- function(
   
   if (ret) {
     
-    if (!missing(textures))
+    if (!missing(textures)) {
+      otextures <- textures
       textures <- fixTextures(textures)
+    }
     
     for (i in seq_along(textures))
       if (is.list(textures[[i]]) &&
           is.null(textures[[i]]$filename) &&
-          is.null(textures[[i]]$raster))
+          is.null(textures[[i]]$raster)) {
         stop("Bad texture specification.")
+      }
     
     textures <- lapply(textures, prepareTexture)
     textures <- encodeTextures(textures)

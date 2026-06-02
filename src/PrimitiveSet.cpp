@@ -144,7 +144,7 @@ void PrimitiveSet::drawRange(int start, int stop)
   if (start >= stop) return;
   Indices *inds = getIndices();
   if (!flags.fat_lines) {
-    if (!inds)
+    if (!inds || !inds->size())
       glDrawArrays(type, start, nverticesperelement*(stop - start) );
     else {
       int first = glverticesperelement[drawSide]*start,

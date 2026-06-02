@@ -375,6 +375,13 @@ plot3d.rglobject <- function(x, ...) {
       
   mat <- x$material
   if (is.null(mat)) mat <- list()
+  # Remove textures with no filename or raster
+  for (i in rev(seq_along(mat$textures))) {
+    texture <- mat$textures[[i]]
+    if (is.null(texture$filename) &&
+        is.null(texture$raster))
+      mat$textures[[i]] <- NULL
+  }
   if (!is.null(col <- x$colors)) {
     mat$color <- rgb(col[,1], col[,2], col[,3])
     mat$alpha <- col[,4]

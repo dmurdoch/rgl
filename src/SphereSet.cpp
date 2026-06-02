@@ -113,7 +113,8 @@ void SphereSet::drawPrimitive(RenderContext* renderContext, int index)
     
     int sides = flags.is_twosided ? 2 : 1;
     for (int side = 0; side < sides; side++) {
-      glUniform1i(glLocs.at("front"), side);
+      if (glLocs_has_key("front"))
+        glUniform1i(glLocs.at("front"), side);
       Material::PolygonMode mode = side == 0 ? material.back : material.front; 
       if (mode == Material::CULL_FACE)
         continue;
