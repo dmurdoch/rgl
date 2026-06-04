@@ -163,3 +163,4 @@ indices to start, start with those, otherwise with
     for that pass, and use the indices to draw.
 - should have verbose option for printing scenes
 so that expect_snapshot will be easier to read.
+- example(bbox3d) shows the front, not the back.
