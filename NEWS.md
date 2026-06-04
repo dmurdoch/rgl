@@ -1,3 +1,8 @@
+# rgl 1.3.37
+
+* Fixed a typo that caused the font number to be
+ignored in `rglwidget()` displays. (Issue #502).
+
 # rgl 1.3.36
 
 * Fixed a typo that triggered a C++20 warning.
