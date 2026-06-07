@@ -1,7 +1,9 @@
-# rgl 1.3.37
+# rgl 1.3.38
 
 * Fixed a typo that caused the font number to be
 ignored in `rglwidget()` displays. (Issue #502).
+* Improved handling of slanted text in WebGL displays.
+(Issue #503).
 
 # rgl 1.3.36
 
