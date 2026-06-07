@@ -57,15 +57,20 @@ plot.glyph_atlas <- function(x, y, interpolate = FALSE, ...) {
 }
 
 bufferToRaster <- function(buffer) {
-  if (length(dim(buffer)) == 2)
-    # reverse black and white 
-    as.raster(t(255 - buffer), max = 255)
-  else {
+  if (length(dim(buffer)) == 2) {
+    # Use buffer value as alpha
+    buffer <- t(buffer)
+    buffer <- array(c(rep(0, 3*length(buffer)), 
+                      buffer),
+                    dim = c(dim(buffer), 4))
+    result <- as.raster(buffer, max = 255)
+  } else {
     raster <- aperm(buffer, c(3,2,1))
     # put in rgba order instead of abgr
     raster <- raster[,,4:1]
-    as.raster(raster, max = 255)
+    result <- as.raster(raster, max = 255)
   }
+  result
 }
 
 renderFromAtlas <- function(atlas, num, x = 0, y = 0,
