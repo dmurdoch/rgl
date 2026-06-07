@@ -1,0 +1,180 @@
+---
+title: "Rendering Text"
+author: "Duncan Murdoch"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Rendering Text}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+These are notes about the internal details of rendering text
+in `rgl`.
+
+# General notes
+
+Whether rendering single glyphs or strings, the following
+concepts apply.
+
+- the "baseline" is the reference line all letters sit on.
+Letters with "descenders" go below the baseline.
+
+- the "actual bounding box" covers the leftmost to rightmost
+and topmost to bottommost pixels that will be drawn.
+
+The actual bounding box is used when packing characters 
+into a texture.  It is generally safest to expand the actual bounding box by at least one pixel on each side, so that 
+anti-aliasing doesn't respond to other nearby pixels.
+
+
+- the "reference point" is the point specified for the
+start of text when drawing.  It's generally on the baseline.  
+Sometimes it will be different (in either direction) from 
+the leftmost side of the actual bounding box.
+
+- the "advance" is the amount by which the imagined cursor
+should advance to position another glyph or string after the
+current one.
+
+- the "font bounding box" runs horizontally from the reference point to that point plus the advance. The verticals run from
+the baseline up to the ascent of the font (essentially the 
+topmost location for any character in
+the font, but fonts are allowed to write outside these bounds).
+
+The font bounding box is used to set positioning of the text.
+The convention in `rgl` is similar to base graphics:  vertical 
+position 0 is the baseline, vertical position 1 is the top of
+the font bounding box.  Horizontal position 0 is the left side
+and position 1 is the right side of that box.
+
+These plots show font bounding boxes for strings
+rendered in the Times New Roman italic font.  In each case the
+baseline is at $y=0$ and the reference point is $(0,0)$.
+
+```{r echo = FALSE}
+library(rgl)
+plotBox <- function(text, family = "Times New Roman", 
+                    font = 3, cex = 5, 
+                    box = c("font", "actual"), 
+                    xlab = "", ylab = "",
+                    col = if (box == "font") "red" else "blue"
+                    ) {
+  box <- match.arg(box)
+  atlas <- glyphAtlas(text, family=family, font=font, 
+                      cex = cex)
+  xlim <- c()
+  ylim <- c()
+  s <- atlas$strings
+  if (box == "font") {
+    bottom <- 0
+    left <- 0
+    right <- left + atlas$strings[1, "width"]
+    top <- bottom + s[1, "height"]
+    ylim <- range(c(bottom, top))
+  }
+  for (i in seq_len(nrow(atlas$fragments))) {
+    fragment <- atlas$fragments[i,]
+    glyphs <- cbind(fragment, atlas$glyphs[fragment$glyphnum,])
+    xlim <- range(c(xlim, 
+                    glyphs$x_offset + glyphs$x,
+                    glyphs$x_offset + glyphs$x + glyphs$width))
+    ylim <- range(c(ylim,
+                   glyphs$y_offset - glyphs$y,
+                   glyphs$y_offset - glyphs$y - glyphs$height))
+  }
+  if (box == "actual") {
+    left <- xlim[1]
+    right <- xlim[2]
+    bottom <- ylim[1]
+    top <- ylim[2]
+  }
+  ylim <- range(c(ylim, 0,  s[1, "height"]))
+  renderFromAtlas(atlas, 1,
+                  ylim = ylim, xlab = xlab, ylab = ylab)
+  segments(c(left, right, right, left),
+          c(bottom, bottom, top, top),
+          c(right, right, left, left),
+          c(bottom, top, top, bottom), col=col)
+}
+plotBox("Mf")
+plotBox("Âg")
+```
+
+The actual bounding box is used internally to set the limits
+of the textures holding the strings.
+These plots show actual bounding boxes:
+
+```{r echo=FALSE}
+plotBox("Mf", box="actual")
+plotBox("Âg", box="actual")
+```
+
+# Implementation in `rgl` master branch
+
+The master branch of `rgl` currently uses the `FTGL` library
+to render text.  It uses Freetype to render to a texture
+and then displays the text using the texture.
+
+See the FTGL source for implementation details.
+
+# Implementation in `rgl` shaders branch
+
+The shaders branch (to become `rgl` version 1.4.x) implements
+text drawing internally in C++ code.
+
+Currently it uses `Pango`, `Cairo` and `freetype` for
+rendering and font handling, and
+`harfbuzz` for shaping.  This may change before release.
+
+An atlas of glyphs (characters) is maintained; see the
+declarations in
+`src/atlas.h` for the parts.  The R function `glyphAtlas`
+provides an interface to this code, mainly used for debugging.
+Its man page gives an overview of the layout of the atlas.
+
+For rendering, each character is drawn separately, at positions
+determined by `harfbuzz` and stored in the glyph atlas 
+structure.
+
+The function `pango_font_metrics_get_ascent()` is used to
+determine the top of the font bounding box and it is stored
+for string `i` as `Glyph_atlas.strings[i].height` (in R, `atlas$strings$height[i]`).
+
+The function `pango_font_get_glyph_extents()` is used to 
+determine the size and positioning of each glyph; these
+are stored in `Glyph_atlas.glyphs` (in R, `atlas$glyphs`). 
+The width and height are rounded
+up to the next whole pixel, but fractional positioning is
+kept.  Positioning in the texture is also stored here.
+
+The function `hb_buffer_get_glyph_positions()` is used to
+determine positioning of each glyph in the output; the results
+are stored in `atlas$fragments`.
+
+The atlas stores information about its current state in
+`atlas$position`; this is updated as new glyphs are added.
+
+# Implementation in WebGL
+
+The WebGL implementation used by `rglwidget()` is written
+in Javascript.  Currently it doesn't use the glyph atlas
+described above, it stores whole strings in the texture.
+
+This code uses the `CanvasRenderingContext2D: measureText()` 
+function to measure text, but doesn't use it for height, where
+it bases the height of the font bounding box on twenty times
+the `cex` value.  The actual bounding box width is used for 
+the font bounding box width.
+
+Eventually these calculations should be made
+consistent with the ones used in the shaders branch.

@@ -291,18 +291,25 @@ void set_fragments(Glyph_atlas& atlas, SEXP fragments) {
 
 SEXP get_strings(Glyph_atlas& atlas) {
   SEXP result;
-  const char *nms[] = { "text", "fontnum", "color", ""};
+  const char *nms[] = { "text", "fontnum", "color",
+                        "width", "height", ""};
   PROTECT(result = Rf_mkNamed(VECSXP, nms));
   int size = atlas.strings.size();
   SET_VECTOR_ELT(result, 0, Rf_allocVector(STRSXP, size));
   SET_VECTOR_ELT(result, 1, Rf_allocVector(INTSXP, size));
   SET_VECTOR_ELT(result, 2, Rf_allocVector(INTSXP, size));
   Rf_classgets(VECTOR_ELT(result, 2), Rf_mkString("hexmode"));
+  SET_VECTOR_ELT(result, 3, Rf_allocVector(REALSXP,
+                 size));
+  SET_VECTOR_ELT(result, 4, Rf_allocVector(REALSXP,
+                 size));
   for (int i=0; i < atlas.strings.size(); i++) {
     String_record& s = atlas.strings[i];
     SET_STRING_ELT(VECTOR_ELT(result, 0), i, Rf_mkChar(s.text.c_str()));
     SET_INTEGER_ELT(VECTOR_ELT(result, 1), i, s.fontnum + 1);
     SET_INTEGER_ELT(VECTOR_ELT(result, 2), i, s.color);
+    SET_REAL_ELT(VECTOR_ELT(result, 3), i, s.width);
+    SET_REAL_ELT(VECTOR_ELT(result, 4), i, s.height);
   }
   Rf_classgets(result, Rf_mkString("data.frame"));
   SEXP rownames = PROTECT(Rf_allocVector(INTSXP, 2));
