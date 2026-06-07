@@ -597,7 +597,7 @@
       texinfo = this.drawTextToCanvas(obj.texts,
                                       rglwidgetClass.flatten(obj.cex),
                                       rglwidgetClass.flatten(obj.family),
-                                      rglwidgetClass.flatten(obj.family));
+                                      rglwidgetClass.flatten(obj.font));
     }
 
     if (fl.fixed_quads && !sprites_3d) {
