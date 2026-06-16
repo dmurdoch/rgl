@@ -300,6 +300,21 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   getSnapshot <- function() 
     knitr::include_graphics(snapshot3d(scene = x, width = width, height = height))
   
+  fixText <- function(result) {
+    for (i in seq_along(types)) {
+      if (types[i] == "text") {
+        obj <- result$objects[[i]]
+        first_glyph <- obj$first_glyph
+        obj$first_glyph <- NULL
+        obj$vertices <- obj$vertices[first_glyph,,drop=FALSE]
+        obj$radii    <- obj$radii[first_glyph,,drop=FALSE]
+        obj$centers  <- obj$centers[first_glyph,,drop=FALSE]
+        result$objects[[i]] <- obj
+      }
+    }
+    result
+  }
+  
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
       "surface", "text", "abclines", "planes", "spheres",
       "sprites", "clipplanes", "light", "background", "bboxdeco",
@@ -372,6 +387,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       set3d(dev)
     options(saveNULL)
   }
+  
+  result <- fixText(result)
   
   if (length(shared)) {
     saveNULL <- options(rgl.useNULL = TRUE)

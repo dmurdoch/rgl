@@ -42,6 +42,7 @@ public:
   bool is_initialized() override;
   void initialize() override;
   static Scene* getScene();
+
 private:
   TextSet(Material& in_material, 
           int in_ntexts,
@@ -57,14 +58,16 @@ private:
           int in_npos, 
           int* in_pos,
           Glyph_atlas& in_atlas,
-          std::vector<size_t>& in_stringnum);
+          std::vector<size_t>& in_stringnum,
+          std::vector<size_t>& in_first_glyph);
 
   std::vector<std::string> textArray;
   std::vector<std::string> family;
   std::vector<int> style;
   std::vector<double> cex;
   std::vector<std::string> fontfile; // the font filename, or ""
-  std::vector<size_t> string_num;
+  std::vector<size_t> string_num; // the string number in the atlas
+  std::vector<size_t> first_glyph; // the element number of the first glyph for a string
   Glyph_atlas& atlas;
   int texture_generation;
   

@@ -44,6 +44,7 @@ TextSet* TextSet::create(Material& in_material,
   Scene* scene = getScene();
   Glyph_atlas& atlas = mono ? scene->mono_atlas : scene->color_atlas;
   std::vector<size_t> string_nums;
+  std::vector<size_t> first_glyph;
   std::vector<double> vertices;
   int nglyphs = 0;
   for (int i=0; i < in_ntexts; i++) {
@@ -64,11 +65,17 @@ TextSet* TextSet::create(Material& in_material,
       string_nums.push_back(atlas.find_string(in_texts[i], fontnum, rgba));
     }
     int n = atlas.strings[string_nums.back()].glyphnum.size();
-    nglyphs += n;
-    for (int g=0; g < n; g++) {
-      vertices.push_back(in_center[3*i]);
-      vertices.push_back(in_center[3*i+1]);
-      vertices.push_back(in_center[3*i+2]);
+    if (!n)
+      first_glyph.push_back(NA_INTEGER);
+    else {
+      first_glyph.push_back(nglyphs);
+      nglyphs += n;
+    
+      for (int g=0; g < n; g++) {
+        vertices.push_back(in_center[3*i]);
+        vertices.push_back(in_center[3*i+1]);
+        vertices.push_back(in_center[3*i+2]);
+      }
     }
   }
   atlas.updateTexture();
@@ -87,7 +94,7 @@ TextSet* TextSet::create(Material& in_material,
                  in_nfonts, in_family, in_style, 
                  in_cex, in_fontfile, 
                  in_npos, in_pos,
-                 atlas, string_nums);
+                 atlas, string_nums, first_glyph);
 }
 
 TextSet::TextSet(Material& in_material, 
@@ -103,7 +110,8 @@ TextSet::TextSet(Material& in_material,
                  const char** in_fontfile,
                  int in_npos, int* in_pos,                 
                  Glyph_atlas& in_atlas,
-                 std::vector<size_t>& in_stringnum)
+                 std::vector<size_t>& in_stringnum,
+                 std::vector<size_t>& in_first_glyph)
   : SpriteSet(in_material, 
     in_atlas.glyphCount(in_stringnum),
     in_center, 
@@ -118,6 +126,7 @@ TextSet::TextSet(Material& in_material,
     in_npos, in_pos,
     0.0),
     string_num(in_stringnum),
+    first_glyph(in_first_glyph),
     atlas(in_atlas),
     texture_generation(-1) {
   
@@ -150,6 +159,7 @@ int TextSet::getAttributeCount(SceneNode* subscene, AttribID attrib)
     case FAMILY: 
     case FONT:
     case CEX: return static_cast<int>(family.size());
+    case FIRST_GLYPH:
     case TEXTS: return static_cast<int>(textArray.size());
   }
   return SpriteSet::getAttributeCount(subscene, attrib);
@@ -170,6 +180,9 @@ void TextSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
       while (first < n)
       	*result++ = style[first++ % fsize];
       return;
+    case FIRST_GLYPH:
+      while (first < n)
+        *result++ = first_glyph[first++];
     }
     SpriteSet::getAttribute(subscene, attrib, first, count, result);
   }

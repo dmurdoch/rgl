@@ -92,7 +92,7 @@ rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
             texts=1, cex=1, adj=3, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
 	    family=1, font=1, pos=1, fogscale=1, axes=3,
-	    indices=1, shapenum=1)
+	    indices=1, shapenum=1, first_glyph=1)
 
 rgl.attrib.info <- function( id = ids3d("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
@@ -167,7 +167,8 @@ rgl.attrib <- function( id, attrib, first=1,
 			                     "fogscale",        # fogscale
 			                     c("x", "y", "z"),   # axes
 			                     "vertex",          # indices
-			                     "shape"
+			                     "shape",
+			                     "first_glyph"
                            )[[attrib]]
   if (attrib == 14 && count) # flags
     if (id %in% ids3d("lights", subscene = 0)$id)
@@ -191,6 +192,8 @@ rgl.attrib <- function( id, attrib, first=1,
     result <- as.data.frame(t(result))
     result$mode <- c("custom", "fixednum", "fixedstep", "pretty", "user", "none")[result$mode + 1]
   }
+  if (attrib == 23 && count)  # first_glyph
+    result <- result + 1  # switch to 1-based indexing
   result
 }
 

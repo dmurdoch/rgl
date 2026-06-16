@@ -60,6 +60,7 @@ typedef int ObjID;
 #define AXES 20
 #define INDICES 21
 #define SHAPENUM 22
+#define FIRST_GLYPH 23
 
 typedef unsigned int AttribID;
 

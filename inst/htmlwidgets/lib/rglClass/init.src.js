@@ -460,7 +460,7 @@
           gl = this.gl || this.initGL(),
           fl, polygon_offset,
           texinfo, drawtype, nclipplanes, f, nrows, oldrows,
-          i,j,v,v1,v2, mat, uri, matobj, pass, pmode,
+          i,j,v,v1,v2,v3,v4, mat, uri, matobj, pass, pmode,
           dim, nx, nz, nrow, shaders, sampler, texture;
 
     obj.initialized = true;
@@ -657,7 +657,7 @@
     var stride = 3, nc, cofs, nofs, radofs, oofs, tofs, vnew, fnew,
         nextofs = -1, pointofs = -1, alias, colors, key, selection,
         filter, adj, offset, attr, last, options, 
-        len, current;
+        len, current, rescale;
 
     obj.alias = undefined;
     
@@ -738,8 +738,8 @@
       vnew = new Array(4*v.length);
       fnew = new Array(4*v.length);
       alias = new Array(v.length);
-      var rescale = fl.fixed_size ? 72 : 1,
-          size = obj.radii, s = rescale*size[0]/2;
+      rescale = fl.fixed_size ? 72 : 1;
+      var size = obj.radii, s = rescale*size[0]/2;
       last = v.length;
       f = obj.f[0];
       obj.adj = rglwidgetClass.flatten(obj.adj);
@@ -792,27 +792,41 @@
         offset = adj[0];
       } else
         offset = 0;
+      rescale = fl.fixed_size ? 2 : 0.013;
       for (i=0; i < v.length; i++) {
         adj = this.getAdj(obj, i, offset, obj.texts[i]);
-        vnew[i]  = v[i].concat([0,-0.5]).concat(adj);
+        vnew[i]  = v[i].concat([0,0]).concat(adj);
         fnew[4*i] = f[i];
-        vnew[last] = v[i].concat([1,-0.5]).concat(adj);
+        vnew[last] = vnew[i].slice();
         fnew[4*i+1] = last++;
-        vnew[last] = v[i].concat([1, 1.5]).concat(adj);
+        vnew[last] = vnew[i].slice();
         fnew[4*i+2] = last++;
-        vnew[last] = v[i].concat([0, 1.5]).concat(adj);
+        vnew[last] = vnew[i].slice();
         fnew[4*i+3] = last++;
         alias[i] = [last-3, last-2, last-1];
-        for (j=0; j < 4; j++) {
-          v1 = vnew[fnew[4*i+j]];
-          v1[oofs] = 2*(v1[tofs]-v1[oofs])*texinfo.widths[i];
-          v1[oofs+1] = 2*(v1[tofs+1]-v1[oofs+1])*texinfo.textHeights[i];
-          v1[oofs+2] = 2*(0.5-v1[oofs+2])*texinfo.textHeights[i]/1000.0;
-          v1[tofs] = (texinfo.offsetsx[i] + v1[tofs]*texinfo.widths[i])/texinfo.canvasX;
-          v1[tofs+1] = 1.0-(texinfo.offsetsy[i] -
-              v1[tofs+1]*texinfo.textHeights[i])/texinfo.canvasY;
-          vnew[fnew[4*i+j]] = v1;
-        }
+        v1 = vnew[fnew[4*i]];
+        v1[oofs] = (-adj[0]*texinfo.fwidths[i] - texinfo.offsetX[i])*rescale;
+        v1[oofs+1] = (-adj[1]*texinfo.fheights[i] -
+                      texinfo.heights[i] + texinfo.offsetY[i])*rescale;
+        v1[oofs+2] = 0;
+        v1[tofs] = texinfo.canvasX[i]/texinfo.canvasWidth;
+        v1[tofs+1] = 1 - (texinfo.canvasY[i] + texinfo.heights[i])/texinfo.canvasHeight;
+        vnew[fnew[4*i]] = v1; // Not necessary?
+        
+        v2 = v1.slice();
+        v2[oofs] = v2[oofs] + texinfo.widths[i]*rescale;
+        v2[tofs] = v1[tofs] + texinfo.widths[i]/texinfo.canvasWidth;
+        vnew[fnew[4*i+1]] = v2;
+        
+        v3 = v2.slice();
+        v3[oofs+1] = v3[oofs+1] + texinfo.heights[i]*rescale;
+        v3[tofs+1] = v1[tofs+1] + texinfo.heights[i]/texinfo.canvasHeight;
+        vnew[fnew[4*i+2]] = v3;
+        
+        v4 = v1.slice();
+        v4[oofs+1] = v3[oofs+1];
+        v4[tofs+1] = v3[tofs+1];
+        vnew[fnew[4*i+3]] = v4;
       }
       v = vnew;
       obj.vertexCount = v.length;

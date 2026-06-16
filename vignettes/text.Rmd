@@ -164,6 +164,40 @@ are stored in `atlas$fragments`.
 The atlas stores information about its current state in
 `atlas$position`; this is updated as new glyphs are added.
 
+This is the code used to set the texture coordinates and 
+adjustment offsets:
+```
+      // Set texcoords
+      texCoordArray[4*g].s = (glyph.x_atlas)/texture_width;
+      texCoordArray[4*g + 1].s = texCoordArray[4*g].s + glyph.width/texture_width;
+      texCoordArray[4*g + 2].s = texCoordArray[4*g + 1].s;
+      texCoordArray[4*g + 3].s = texCoordArray[4*g].s;
+
+      double texture_height = atlas.height;
+      texCoordArray[4*g].t = (glyph.y_atlas + glyph.height)/texture_height;
+      texCoordArray[4*g + 1].t = texCoordArray[4*g].t;
+      texCoordArray[4*g + 2].t = texCoordArray[4*g].t - glyph.height/texture_height;
+      texCoordArray[4*g + 3].t = texCoordArray[4*g + 2].t;
+      
+      // Set adjustments
+      adjArray.setVertex(4*g,
+        Vertex((-adj.x*s.width + s.x_offset[j] + glyph.x)*rescale,
+                (-adj.y*s.height + s.y_offset[j] - glyph.y - glyph.height)*rescale,
+                0) );      
+      adjArray.setVertex(4*g + 1,
+        Vertex(adjArray[4*g].x + glyph.width*rescale,
+               adjArray[4*g].y,
+               0));
+      adjArray.setVertex(4*g + 2,
+        Vertex(adjArray[4*g + 1].x,
+               adjArray[4*g].y + glyph.height*rescale,
+               0));
+      adjArray.setVertex(4*g + 3,
+        Vertex(adjArray[4*g].x,
+               adjArray[4*g + 2].y,
+               0));
+```
+
 # Implementation in WebGL
 
 The WebGL implementation used by `rglwidget()` is written
@@ -174,7 +208,56 @@ This code uses the `CanvasRenderingContext2D: measureText()`
 function to measure text, but doesn't use it for height, where
 it bases the height of the font bounding box on twenty times
 the `cex` value.  The actual bounding box width is used for 
-the font bounding box width.
+the font bounding box width.  (Prior to `rgl` 1.3.38 the font
+bounding box width was used where the actual width should have
+been used, which led to the clipping described in issue #503).
 
 Eventually these calculations should be made
-consistent with the ones used in the shaders branch.
+consistent with the ones used in the main display shaders branch.
+
+This is the code used to set the texture coordinates and 
+offsets in the shaders branch of the rglwidget Javascript code:
+```
+      rescale = fl.fixed_size ? 2 : 0.013;
+      for (i=0; i < v.length; i++) {
+        adj = this.getAdj(obj, i, offset, obj.texts[i]);
+        vnew[i]  = v[i].concat([0,0]).concat(adj);
+        fnew[4*i] = f[i];
+        vnew[last] = vnew[i].slice();
+        fnew[4*i+1] = last++;
+        vnew[last] = vnew[i].slice();
+        fnew[4*i+2] = last++;
+        vnew[last] = vnew[i].slice();
+        fnew[4*i+3] = last++;
+        alias[i] = [last-3, last-2, last-1];
+        v1 = vnew[fnew[4*i]];
+        v1[oofs] = (-adj[0]*texinfo.fwidths[i] - texinfo.offsetX[i])*rescale;
+        v1[oofs+1] = (-adj[1]*texinfo.fheights[i] 
+                      - texinfo.heights[i] + texinfo.offsetY[i]
+                      )*rescale;
+        v1[oofs+2] = 0;
+        v1[tofs] = texinfo.canvasX[i]/texinfo.canvasWidth;
+        v1[tofs+1] = 1 - (texinfo.canvasY[i] + texinfo.heights[i])/texinfo.canvasHeight;
+        vnew[fnew[4*i]] = v1; // Not necessary?
+        
+        v2 = v1.slice();
+        v2[oofs] = v2[oofs] + texinfo.widths[i]*rescale;
+        v2[tofs] = v1[tofs] + texinfo.widths[i]/texinfo.canvasWidth;
+        vnew[fnew[4*i+1]] = v2;
+        
+        v3 = v2.slice();
+        v3[oofs+1] = v3[oofs+1] + texinfo.heights[i]*rescale;
+        v3[tofs+1] = v1[tofs+1] + texinfo.heights[i]/texinfo.canvasHeight;
+        vnew[fnew[4*i+2]] = v3;
+        
+        v4 = v1.slice();
+        v4[oofs+1] = v3[oofs+1];
+        v4[tofs+1] = v3[tofs+1];
+        vnew[fnew[4*i+3]] = v4;
+      }
+      v = vnew;
+      obj.vertexCount = v.length;
+      obj.f = [fnew, fnew];
+```
+The master branch WebGL code pays less attention to actual 
+text measurements.

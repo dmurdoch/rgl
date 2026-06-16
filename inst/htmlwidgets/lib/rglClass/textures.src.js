@@ -92,21 +92,21 @@
      * @param { number } font - font number
      */
     rglwidgetClass.prototype.drawTextToCanvas = function(text, cex, family, font) {
-       var canvasX, canvasY,
+       var canvasX = [], canvasY = [],
            scaling = 20,
            textColour = "white",
 
            backgroundColour = "rgba(0,0,0,0)",
            canvas = this.textureCanvas,
            ctx = canvas.getContext("2d"),
-           i, textHeight = 0, textHeights = [], measure, 
-           width, widths = [], outdents = [],
-           offsetx, offsety = 0, line, lines = [], offsetsx = [],
-           offsetsy = [], lineoffsetsy = [], fontStrings = [],
+           i, rowHeight, maxWidth, measure, X, Y,
+           width, widths = [], fwidths = [], 
+           heights = [], fheights = [],
+           offsetX = [], offsetY = [], fontStrings = [],
            maxTexSize = this.getMaxTexSize(),
            getFontString = function(i) {
-             textHeights[i] = scaling*cex[i];
-             var fontString = textHeights[i] + "px",
+             var textHeight = scaling*cex[i],
+                 fontString = textHeight + "px",
                  family0 = family[i],
                  font0 = font[i];
              if (family0 === "sans")
@@ -124,55 +124,54 @@
        family = rglwidgetClass.repeatToLen(family, text.length);
        font = rglwidgetClass.repeatToLen(font, text.length);
 
-       canvasX = 1;
-       line = -1;
-       offsetx = maxTexSize;
+       X = 1;
+       Y = 1;
+       rowHeight = 0;
+       maxWidth = 0;
        for (i = 0; i < text.length; i++)  {
          ctx.font = fontStrings[i] = getFontString(i);
          measure = ctx.measureText(text[i]);
+         fheights[i] = measure.fontBoundingBoxAscent;
+         fwidths[i] = measure.width;
+         heights[i] = measure.actualBoundingBoxAscent +
+                      measure.actualBoundingBoxDescent;
          width = widths[i] = measure.actualBoundingBoxLeft +
                               measure.actualBoundingBoxRight;
-         outdents[i] = measure.actualBoundingBoxLeft;
-         if (offsetx + width > maxTexSize) {
-           offsety = offsety + 2*textHeight;
-           if (line >= 0)
-             lineoffsetsy[line] = offsety;
-           line += 1;
-           if (offsety > maxTexSize)
+         offsetX[i] = measure.actualBoundingBoxLeft;
+         offsetY[i] = measure.actualBoundingBoxAscent;
+         if (X + width + 1 > maxTexSize) {
+           Y += rowHeight + 1;
+           if (Y > maxTexSize)
              console.error("Too many strings for texture.");
-           textHeight = 0;
-           offsetx = 0;
+           rowHeight = 0;
+           X = 1;
          }
-         textHeight = Math.max(textHeight, textHeights[i]);
-         offsetsx[i] = offsetx;
-         offsetx += width;
-         canvasX = Math.max(canvasX, offsetx);
-         lines[i] = line;
-       }
-       offsety = lineoffsetsy[line] = offsety + 2*textHeight;
-       for (i = 0; i < text.length; i++) {
-       	 offsetsy[i] = lineoffsetsy[lines[i]];
+         rowHeight = Math.max(rowHeight, heights[i]);
+         canvasX[i] = X;
+         canvasY[i] = Y;
+         X += width + 1;
+         maxWidth = Math.max(maxWidth, X);
        }
        
-       canvasX = this.getPowerOfTwo(canvasX);
-       canvasY = this.getPowerOfTwo(offsety);
-
-       canvas.width = canvasX;
-       canvas.height = canvasY;
+       canvas.width = this.getPowerOfTwo(maxWidth);
+       canvas.height = this.getPowerOfTwo(Y + rowHeight + 1);
 
        ctx.fillStyle = backgroundColour;
-       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
        ctx.textBaseline = "alphabetic";
        for(i = 0; i < text.length; i++) {
          ctx.font = fontStrings[i];
          ctx.fillStyle = textColour;
          ctx.textAlign = "left";
-         ctx.fillText(text[i], offsetsx[i] + outdents[i],  offsetsy[i]);
+         ctx.fillText(text[i], canvasX[i] + offsetX[i],  
+                               canvasY[i] + offsetY[i]);
        }
-       return {canvasX:canvasX, canvasY:canvasY,
-               widths:widths, 
-               textHeights:textHeights,
-               offsetsx:offsetsx, offsetsy:offsetsy};
+       return {canvasWidth:canvas.width,
+               canvasHeight:canvas.height,
+               canvasX:canvasX, canvasY:canvasY,
+               widths:widths, fwidths:fwidths,
+               heights:heights, fheights:fheights,
+               offsetX:offsetX, offsetY:offsetY};
      };
 
