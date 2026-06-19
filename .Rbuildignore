@@ -28,6 +28,7 @@ rglClass/README.md$
 ^pkgdown$
 ^CRAN-RELEASE$
 ^revdep/
+^[.]git
 ^\.github$
 ^R/noOpenGL.R$
 [.]JSDoc
