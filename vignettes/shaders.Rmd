@@ -163,7 +163,7 @@ indices to start, start with those, otherwise with
     for that pass, and use the indices to draw.
 - should have verbose option for printing scenes
 so that expect_snapshot will be easier to read.
-- example(bbox3d) shows the front, not the back.
+- example(bbox3d) shows filled faces when they should be culled. FIXED.
 - text3d() objects currently display one vertex per glyph, not
 one per text.  FIXED using "first_glyph" attribute
 - radii for text looks wrong:  5, 0, 0 in example.

@@ -144,16 +144,17 @@ void PrimitiveSet::drawRange(int start, int stop)
   if (start >= stop) return;
   Indices *inds = getIndices();
   if (!flags.fat_lines) {
-    if (!inds || !inds->size())
+    if (!inds || !inds->size()) {
       glDrawArrays(type, start, nverticesperelement*(stop - start) );
-    else {
+    } else {
       int first = glverticesperelement[drawSide]*start,
         len = glverticesperelement[drawSide]*(stop - start),
         size = inds->size();
-      if ( first + len <= size)
+      if ( first + len <= size && glmode[drawSide] != GL_CULL_FACE) {
         glDrawElements(glmode[drawSide], glverticesperelement[drawSide]*(stop - start), 
                      GL_UNSIGNED_INT, 
                      inds->data() + glverticesperelement[drawSide]*start);
+      }
     }
   } else { 
     // fat lines
@@ -739,6 +740,7 @@ void QuadSet::initialize() {
     switch(mode) {
     case Material::CULL_FACE: 
       indicesToDraw[side].clear();
+      glmode[side] = GL_CULL_FACE;
       break;
     case Material::POINT_FACE:
       indicesToDraw[side] = indices;
