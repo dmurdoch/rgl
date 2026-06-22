@@ -132,11 +132,11 @@ necessarily be <code>prev</code> if that device isn't already open.</p>
 <span class="r-in"><span><span class="co"># Open another one, and close it using dev.off()</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.new</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> agg_record_3256cda51dc </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> agg_record_32a27aa18c2e </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       2 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.cur</a></span><span class="op">(</span><span class="op">)</span> <span class="op">==</span> <span class="va">second</span> <span class="co"># Not the same as second!</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> agg_record_3256cda51dc </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  FALSE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> agg_record_32a27aa18c2e </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   FALSE </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Try again with safe.dev.off()</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.set</a></span><span class="op">(</span><span class="va">second</span><span class="op">)</span></span></span>
@@ -147,8 +147,8 @@ necessarily be <code>prev</code> if that device isn't already open.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> agg_png </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       5 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.cur</a></span><span class="op">(</span><span class="op">)</span> <span class="op">==</span> <span class="va">second</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> agg_record_3256cda51dc </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  FALSE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> agg_record_32a27aa18c2e </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   FALSE </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Close the other two devs</span></span></span>
 <span class="r-in"><span><span class="fu">safe.dev.off</span><span class="op">(</span><span class="op">)</span></span></span>
