@@ -1044,7 +1044,6 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
                               mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
                               deleteFile);
     if ( !mat.texture->isValid() ) {
-      mat.texture->unref();
       // delete mat.texture;
       mat.texture = NULL;
     } else
