@@ -142,28 +142,9 @@ FTGL is completely gone now.
 
 ## To-do list
 
-- handle colored emojis -- still need to detect them.
 - switch to using the Cairo package instead of using
 the Pango/Cairo libs.
-- merge atlas changes back into rasterText?
 - handle variable sized text (i.e. fixedSize = FALSE)
-- Some scenes don't appear until moved, or never, e.g. tests/bbox3dtests.R final plots.  This seems to be sphere-specific now:  maybe the triangles are
-drawn clockwise?  Some info:  in R, rgl uses
-culling to remove polygons.  That is supposed to ignore the normals and assumes the front is the CCW side.  However, the shader is written for WebGL, and it does culling based on the normals.  We probably want to use the WebGL method.
-This is the WebGL method:
-    - Figure out one pass or two (based on same both sides or not).  If there are two sides, 
-    definitely need normals; those are used to decide the side, not the winding order. (We never
-    enable GL_CULL_FACE.)
-    - Create indices for each pass.  If there were 
-indices to start, start with those, otherwise with
-0 to nverts-1.
-    - For each pass:  If culled, delete all indices.  If points, use indices as given.  If lines, create indices for segments, e.g. 0-1, 1-2, 2-0 for a triangle.  If filled, triangles are fine,
-    others need to be rewritten to use triangles.
-    - When drawing, choose the "pmode" as the mode
-    for that pass, and use the indices to draw.
 - should have verbose option for printing scenes
 so that expect_snapshot will be easier to read.
-- example(bbox3d) shows filled faces when they should be culled. FIXED.
-- text3d() objects currently display one vertex per glyph, not
-one per text.  FIXED using "first_glyph" attribute
 - radii for text looks wrong:  5, 0, 0 in example.
