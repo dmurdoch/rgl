@@ -147,4 +147,3 @@ the Pango/Cairo libs.
 - handle variable sized text (i.e. fixedSize = FALSE)
 - should have verbose option for printing scenes
 so that expect_snapshot will be easier to read.
-- radii for text looks wrong:  5, 0, 0 in example.

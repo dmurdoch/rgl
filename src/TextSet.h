@@ -54,6 +54,7 @@ private:
           const char** in_family,
           int* in_style,
           double* in_cex,
+          double* in_cex_by_glyph, 
           const char** in_fontfile,
           int in_npos, 
           int* in_pos,

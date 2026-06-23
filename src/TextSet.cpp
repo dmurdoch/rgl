@@ -46,6 +46,7 @@ TextSet* TextSet::create(Material& in_material,
   std::vector<size_t> string_nums;
   std::vector<size_t> first_glyph;
   std::vector<double> vertices;
+  std::vector<double> cex_by_glyph;
   int nglyphs = 0;
   for (int i=0; i < in_ntexts; i++) {
     int j = i % in_nfonts;
@@ -75,6 +76,7 @@ TextSet* TextSet::create(Material& in_material,
         vertices.push_back(in_center[3*i]);
         vertices.push_back(in_center[3*i+1]);
         vertices.push_back(in_center[3*i+2]);
+        cex_by_glyph.push_back(in_cex[i]);
       }
     }
   }
@@ -92,7 +94,7 @@ TextSet* TextSet::create(Material& in_material,
   return new TextSet(material, in_ntexts, in_texts,
                  vertices.data(), in_adj, in_ignoreExtent,
                  in_nfonts, in_family, in_style, 
-                 in_cex, in_fontfile, 
+                 in_cex, cex_by_glyph.data(), in_fontfile, 
                  in_npos, in_pos,
                  atlas, string_nums, first_glyph);
 }
@@ -107,6 +109,7 @@ TextSet::TextSet(Material& in_material,
                  const char** in_family,
                  int* in_style,
                  double* in_cex,
+                 double* in_cex_by_glyph,
                  const char** in_fontfile,
                  int in_npos, int* in_pos,                 
                  Glyph_atlas& in_atlas,
@@ -115,7 +118,7 @@ TextSet::TextSet(Material& in_material,
   : SpriteSet(in_material, 
     in_atlas.glyphCount(in_stringnum),
     in_center, 
-    in_atlas.glyphCount(in_stringnum), in_cex,       // nsize, size
+    in_atlas.glyphCount(in_stringnum), in_cex_by_glyph,       // nsize, size
     in_ignoreExtent, 
     0, NULL,                 // count, shapelist
     0, NULL,                 // nshapelens, shapelens
