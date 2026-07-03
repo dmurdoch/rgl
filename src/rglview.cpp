@@ -187,11 +187,14 @@ void RGLView::mouseMove(int mouseX, int mouseY)
     mouseX = clamp(mouseX, 0, vwidth-1);
     mouseY = clamp(mouseY, 0, vheight-1);
     if (windowImpl->beginGL()) {
-      subscene->buttonUpdate(subscene->drag, mouseX, mouseY);
-      windowImpl->endGL();
-      
-      View::update();
-    }
+  MouseModeID rgl_mouse_mode = subscene->getMouseMode(subscene->drag);
+  subscene->buttonUpdate(subscene->drag, mouseX, mouseY);
+  windowImpl->endGL();
+
+  if (rgl_mouse_mode != mmUSER) {
+    View::update();
+  }
+}
   } else {
     ModelViewpoint* modelviewpoint = scene->getCurrentSubscene()->getModelViewpoint();
     if ( modelviewpoint->isInteractive() ) {
@@ -200,8 +203,12 @@ void RGLView::mouseMove(int mouseX, int mouseY)
       if (subscene && subscene->getMouseMode(bnNOBUTTON) != mmNONE) {
         subscene->translateCoords(&mouseX, &mouseY);
         subscene->drag = bnNOBUTTON;
-        subscene->buttonUpdate(bnNOBUTTON, mouseX, mouseY);
-        View::update();
+MouseModeID rgl_mouse_mode = subscene->getMouseMode(bnNOBUTTON);
+subscene->buttonUpdate(bnNOBUTTON, mouseX, mouseY);
+
+if (rgl_mouse_mode != mmUSER) {
+  View::update();
+}
       }
     }
   }
