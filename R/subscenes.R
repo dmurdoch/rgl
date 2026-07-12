@@ -35,7 +35,7 @@ subsceneInfo <- function(id = NA, embeddings, recursive = FALSE) {
     if (any(is.na(embeddings)) || length(embeddings) != 4)
       stop(gettextf("Four embeddings must be specified; names chosen from %s", 
       	            paste(dQuote(embeddingNames), collapse=", ")), domain = NA)
-    if (embeddings[4] == "modify")
+    if (embeddings[4] == 2L)
       stop("The mouseMode embedding cannot be 'modify'")
     .C(rgl_setEmbeddings, id = id, embeddings = as.integer(embeddings))
   }
