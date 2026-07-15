@@ -31,11 +31,11 @@ identify3d <- function(x, y = NULL, z = NULL, labels = seq_along(x),
         
     buttons <- match.arg(buttons, c("left", "right", "middle"), several.ok = TRUE)
     
-    if (length(buttons > 1))
+    if (length(buttons) > 1)
       cat(gettextf("Use the %s button to select, the %s button to quit\n", 
       	           buttons[1], buttons[2]))
     else
-      cat(gettextf("Use the %s button to select\n"), buttons[1])
+      cat(gettextf("Use the %s button to select\n", buttons[1]))
 
     buttons <- c(left=1, right=2, middle=3)[buttons]
     
